@@ -5,8 +5,16 @@ namespace Imagely\NGG\Util;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Settings\GlobalSettings;
 
+/**
+ * Installer utility class.
+ */
 class Installer {
 
+	/**
+	 * Installers array.
+	 *
+	 * @var array
+	 */
 	protected static $_installers = [];
 
 	/**
@@ -36,6 +44,8 @@ class Installer {
 	}
 
 	/**
+	 * Gets all registered installation handlers.
+	 *
 	 * @return array
 	 */
 	protected static function get_all_handlers() {
@@ -68,13 +78,11 @@ class Installer {
 		$proceed = false;
 
 		// Proceed if no other process has started the installer routines.
-		if ( ! ( $doing_upgrade = \get_option( 'ngg_doing_upgrade', false ) ) ) {
+		$doing_upgrade = \get_option( 'ngg_doing_upgrade', false );
+		if ( ! $doing_upgrade ) {
 			\update_option( 'ngg_doing_upgrade', \time() );
 			$proceed = true;
-		}
-
-		// Or, force proceeding if we have a stale ngg_doing_upgrade record.
-		elseif ( $doing_upgrade === true or \time() - $doing_upgrade > 120 ) {
+		} elseif ( $doing_upgrade === true || \time() - $doing_upgrade > 120 ) {
 			\update_option( 'ngg_doing_upgrade', \time() );
 			$proceed = true;
 		}
@@ -115,6 +123,7 @@ class Installer {
 		if ( $can_upgrade && $do_upgrade ) {
 			// Clear APC cache.
 			if ( \function_exists( 'apc_clear_cache' ) ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				@\apc_clear_cache( 'opcode' );
 				\apc_clear_cache();
 			}
@@ -193,9 +202,11 @@ class Installer {
 
 		foreach ( $products as $product_id ) {
 			foreach ( $registry->get_module_list( $product_id ) as $module_id ) {
-				if ( ( $module = $registry->get_module( $module_id ) ) ) {
+				$module = $registry->get_module( $module_id );
+				if ( $module ) {
 					$module_version = $module->module_version;
 					$module_string  = "{$module_id}|{$module_version}";
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( ! \in_array( $module_string, $retval ) ) {
 						$retval[] = $module_string;
 					}
@@ -208,7 +219,7 @@ class Installer {
 
 	public static function refresh_cron() {
 		if ( ! \extension_loaded( 'suhosin' ) ) {
-			@\ini_set( 'memory_limit', -1 );
+			\wp_raise_memory_limit();
 		}
 
 		// Remove all cron jobs created by NextGEN Gallery.

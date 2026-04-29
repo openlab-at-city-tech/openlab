@@ -14,36 +14,212 @@ use Imagely\NGG\DisplayType\ControllerFactory;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Displayed gallery data type.
+ */
 class DisplayedGallery extends Model {
 
+	/**
+	 * Displayed gallery ID.
+	 *
+	 * @var int|string
+	 */
 	public $ID;
+
+	/**
+	 * Album IDs.
+	 *
+	 * @var array
+	 */
 	public $album_ids;
+
+	/**
+	 * Container IDs.
+	 *
+	 * @var array
+	 */
 	public $container_ids;
+
+	/**
+	 * Display type name.
+	 *
+	 * @var string
+	 */
 	public $display;
+
+	/**
+	 * Display settings.
+	 *
+	 * @var array
+	 */
 	public $display_settings;
+
+	/**
+	 * Display type identifier.
+	 *
+	 * @var string
+	 */
 	public $display_type;
+
+	/**
+	 * Effect code for lightbox.
+	 *
+	 * @var string
+	 */
 	public $effect_code;
+
+	/**
+	 * Entity IDs.
+	 *
+	 * @var array
+	 */
 	public $entity_ids;
+
+	/**
+	 * Excluded container IDs.
+	 *
+	 * @var array
+	 */
 	public $excluded_container_ids;
+
+	/**
+	 * Exclusions list.
+	 *
+	 * @var array
+	 */
 	public $exclusions;
+
+	/**
+	 * Gallery IDs.
+	 *
+	 * @var array
+	 */
 	public $gallery_ids;
+
+	/**
+	 * Gallery ID.
+	 *
+	 * @var int|string
+	 */
 	public $id;
+
+	/**
+	 * IDs list.
+	 *
+	 * @var array
+	 */
 	public $ids;
+
+	/**
+	 * Image IDs.
+	 *
+	 * @var array
+	 */
 	public $image_ids;
+
+	/**
+	 * Images list count.
+	 *
+	 * @var int
+	 */
 	public $images_list_count;
+
+	/**
+	 * Inner content.
+	 *
+	 * @var string
+	 */
 	public $inner_content;
+
+	/**
+	 * Whether this is an album gallery.
+	 *
+	 * @var bool
+	 */
 	public $is_album_gallery;
+
+	/**
+	 * Maximum entity count.
+	 *
+	 * @var int
+	 */
 	public $maximum_entity_count;
+
+	/**
+	 * Order by field.
+	 *
+	 * @var string
+	 */
 	public $order_by;
+
+	/**
+	 * Order direction (ASC/DESC).
+	 *
+	 * @var string
+	 */
 	public $order_direction;
+
+	/**
+	 * Returns type.
+	 *
+	 * @var string
+	 */
 	public $returns;
+
+	/**
+	 * Skip excluding globally excluded images.
+	 *
+	 * @var bool
+	 */
 	public $skip_excluding_globally_excluded_images;
+
+	/**
+	 * Slug.
+	 *
+	 * @var string
+	 */
 	public $slug;
+
+	/**
+	 * Sort order.
+	 *
+	 * @var string
+	 */
 	public $sortorder;
+
+	/**
+	 * Source type.
+	 *
+	 * @var string
+	 */
 	public $source;
+
+	/**
+	 * Source identifier.
+	 *
+	 * @var string
+	 */
 	public $src;
+
+	/**
+	 * Tag IDs.
+	 *
+	 * @var array
+	 */
 	public $tag_ids;
+
+	/**
+	 * Tag cloud data.
+	 *
+	 * @var array
+	 */
 	public $tagcloud;
+
+	/**
+	 * Transient ID.
+	 *
+	 * @var string
+	 */
 	public $transient_id;
 
 	// The "alternative" approach to using "ORDER BY RAND()" works by finding X image PID in a kind of shotgun-blast
@@ -53,8 +229,9 @@ class DisplayedGallery extends Model {
 	// for NextGen Pro's galleria module in order to 'localize' the results of get_entities() to JSON.
 	protected static $_random_image_ids_cache = [];
 
-	public function __construct( \stdClass $object = null ) {
-		parent::__construct( $object );
+	// phpcs:ignore PHPCompatibility.FunctionDeclarations.NewNullableTypes -- Explicit nullable required for PHP 8.4.
+	public function __construct( ?\stdClass $obj = null ) {
+		parent::__construct( $obj );
 
 		// Apply the default display type settings.
 		if ( isset( $this->display_type ) ) {
@@ -66,13 +243,14 @@ class DisplayedGallery extends Model {
 			$mapper       = DisplayTypeMapper::get_instance();
 			$display_type = $mapper->find_by_name( $this->display_type );
 			if ( $display_type ) {
-				$this->display_settings = array_merge( $display_type->settings, $this->display_settings );
+				$this->display_settings = $this->merge_display_settings( $display_type );
 				$this->display_type     = $display_type->name;
 			}
 		}
 
 		// Only some sources should have their own maximum_entity_count.
 		if ( ! empty( $this->display_settings['maximum_entity_count'] )
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		&& in_array( $this->source, [ 'tag', 'tags', 'random_images', 'recent_images', 'random', 'recent' ] ) ) {
 			$this->maximum_entity_count = $this->display_settings['maximum_entity_count'];
 		}
@@ -86,11 +264,53 @@ class DisplayedGallery extends Model {
 		\do_action( 'ngg_displayed_gallery_construct', $this );
 	}
 
+	/**
+	 * Merges display type settings with per-gallery display settings.
+	 *
+	 * Uses the display type (global) settings as the base. Per-gallery values are applied only when
+	 * they represent an explicit user override (i.e., differ from the controller's original default).
+	 * This prevents stale defaults baked into galleries at creation time from overriding subsequent
+	 * changes to the global display type settings (e.g., "Maximum image width" for Masonry).
+	 *
+	 * Note: A limitation is that if a user explicitly sets a per-gallery value to match the
+	 * controller default (e.g., 240) and the admin later changes the global to 300, the gallery
+	 * will render with 300 since there is no way to distinguish "explicit default" from "stale copy."
+	 *
+	 * @param \Imagely\NGG\DataTypes\DisplayType $display_type The display type entity.
+	 * @return array The merged display settings.
+	 */
+	private function merge_display_settings( $display_type ) {
+		$base      = (array) $display_type->settings;
+		$overrides = is_array( $this->display_settings ) ? $this->display_settings : [];
+
+		// Get the controller's original defaults to detect explicit overrides.
+		$defaults = [];
+		if ( ControllerFactory::has_controller( $display_type->name ) ) {
+			$controller = ControllerFactory::get_controller( $display_type->name );
+			if ( method_exists( $controller, 'get_default_settings' ) ) {
+				$defaults = $controller->get_default_settings();
+			}
+		}
+
+		foreach ( $overrides as $key => $value ) {
+			// Only apply per-gallery value if it represents an explicit override
+			// (differs from the original default). Values matching the default were likely
+			// copied at gallery creation and should not override global display type changes.
+			if ( ! array_key_exists( $key, $defaults ) || (string) $defaults[ $key ] !== (string) $value ) {
+				$base[ $key ] = $value;
+			}
+		}
+
+		return $base;
+	}
+
 	public function get_mapper() {
 		return Mapper::get_instance();
 	}
 
 	/**
+	 * Gets entities for the displayed gallery.
+	 *
 	 * @param int    $limit Limit
 	 * @param int    $offset Offset
 	 * @param bool   $id_only ID Only
@@ -109,16 +329,15 @@ class DisplayedGallery extends Model {
 		// Ensure that all parameters have values that are expected.
 		if ( $this->_parse_parameters() ) {
 			// Is this an image query?
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( 'image', $source_obj->returns ) ) {
 				$retval = $this->_get_image_entities( $source_obj, $limit, $offset, $id_only, $returns );
-			}
-
-			// Is this a gallery/album query?
-			elseif ( in_array( 'gallery', $source_obj->returns ) ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			} elseif ( in_array( 'gallery', $source_obj->returns ) ) {
+				// Is this a gallery/album query?
 				$retval = $this->_get_album_and_gallery_entities( $source_obj, $limit, $offset, $id_only, $returns );
 			}
 		}
-
 		return $retval;
 	}
 
@@ -143,10 +362,12 @@ class DisplayedGallery extends Model {
 			$this->order_direction = 'DESC';
 		}
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$sort_direction = in_array( strtoupper( $this->order_direction ), [ 'ASC', 'DESC' ] )
 			? $this->order_direction
 			: $settings->get( 'galSortDir' );
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$sort_by = in_array( strtolower( $this->order_by ), array_merge( ImageMapper::get_instance()->get_column_names(), [ 'rand()' ] ) )
 			? $this->order_by
 			: $settings->get( 'galSort' );
@@ -176,7 +397,7 @@ class DisplayedGallery extends Model {
 				$excluded_set = $this->exclusions;
 			}
 
-			$sortorder_set = $this->sortorder ?: $excluded_set;
+			$sortorder_set = $this->sortorder ? $this->sortorder : $excluded_set;
 
 			// Add sortorder column.
 			if ( $sortorder_set ) {
@@ -246,7 +467,9 @@ class DisplayedGallery extends Model {
 			// Remove the exclusions always takes precedence over entity_ids, so we adjust the list of ids.
 			if ( $this->exclusions ) {
 				foreach ( $this->exclusions as $excluded_entity_id ) {
-					if ( ( $index = array_search( $excluded_entity_id, $exclusions ) ) !== false ) {
+     // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+					$index = array_search( $excluded_entity_id, $exclusions );
+					if ( $index !== false ) {
 						unset( $exclusions[ $index ] );
 					}
 				}
@@ -255,10 +478,8 @@ class DisplayedGallery extends Model {
 			// Filter based on exclusions selection.
 			if ( $exclusions ) {
 				$mapper->where( [ "{$image_key} NOT IN %s", $exclusions ] );
-			}
-
-			// Filter based on selected exclusions.
-			elseif ( $this->exclusions ) {
+			} elseif ( $this->exclusions ) {
+				// Filter based on selected exclusions.
 				$mapper->where( [ "{$image_key} IN %s", $this->exclusions ] );
 			}
 
@@ -291,6 +512,7 @@ class DisplayedGallery extends Model {
 		}
 
 		// Adjust the query more based on what source was selected.
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( $this->source, [ 'recent', 'recent_images' ] ) ) {
 			$sort_direction = 'DESC';
 			$sort_by        = apply_filters( 'ngg_recent_images_sort_by_column', 'imagedate' );
@@ -332,19 +554,21 @@ class DisplayedGallery extends Model {
 					// Prevent infinite loops: retrieve the image count and if needed just pull in every image available.
 					// PHP-CS flags this but it is a false positive, the $old_where_sql is an already prepared SQL string.
 					//
-					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+					// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 					$total     = $wpdb->get_var( "SELECT COUNT(`pid`) FROM {$wpdb->nggpictures} {$old_where_sql}" );
 					$image_ids = [];
 
 					if ( $total <= $limit ) {
-						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 						$image_ids = $wpdb->get_col( "SELECT `pictures`.`pid` FROM {$wpdb->nggpictures} `pictures` {$old_where_sql} LIMIT {$total}" );
 					} else {
 						// Start retrieving random ID from the DB and hope they exist; continue looping until our count is full.
-						$segments = ceil( $limit / 4 );
-						while ( count( $image_ids ) < $limit ) {
-							$newID     = $this->_query_random_ids_for_cache( $segments, $old_where_sql );
-							$image_ids = array_merge( array_unique( $image_ids ), $newID );
+						$segments        = ceil( $limit / 4 );
+						$image_ids_count = count( $image_ids );
+						while ( $image_ids_count < $limit ) {
+							$newID           = $this->_query_random_ids_for_cache( $segments, $old_where_sql );
+							$image_ids       = array_merge( array_unique( $image_ids ), $newID );
+							$image_ids_count = count( $image_ids );
 						}
 					}
 
@@ -388,6 +612,7 @@ class DisplayedGallery extends Model {
 
 		$results = $mapper->run_query();
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! is_admin() && in_array( 'image', $source_obj->returns ) ) {
 			foreach ( $results as $entity ) {
 				if ( ! empty( $entity->description ) ) {
@@ -403,13 +628,15 @@ class DisplayedGallery extends Model {
 	}
 
 	/**
+	 * Queries random IDs for cache.
+	 *
 	 * @param int    $limit
 	 * @param string $where_sql Must be the full "WHERE x=y" string
 	 * @return int[]
 	 */
 	public function _query_random_ids_for_cache( $limit = 10, $where_sql = '' ) {
 		global $wpdb;
-		$mod = rand( 3, 9 );
+		$mod = wp_rand( 3, 9 );
 
 		if ( empty( $where_sql ) ) {
 			$where_sql = 'WHERE 1=1';
@@ -418,6 +645,7 @@ class DisplayedGallery extends Model {
 		// The following query uses $where_sql which is an already prepared clause generated by the DataMapper
 		//
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		return $wpdb->get_col(
 			"SELECT `pictures`.`pid` from {$wpdb->nggpictures} `pictures`
                     JOIN (SELECT CEIL(MAX(`pid`) * RAND()) AS `pid` FROM {$wpdb->nggpictures}) AS `x` ON `pictures`.`pid` >= `x`.`pid`
@@ -489,7 +717,9 @@ class DisplayedGallery extends Model {
 				// Determine the real list of included entity ids. Exclusions always take precedence.
 				$included_ids = $this->entity_ids;
 				foreach ( $this->exclusions as $excluded_id ) {
-					if ( ( $index = array_search( $excluded_id, $included_ids ) ) !== false ) {
+     // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+					$index = array_search( $excluded_id, $included_ids );
+					if ( $index !== false ) {
 						unset( $included_ids[ $index ] );
 					}
 				}
@@ -506,15 +736,11 @@ class DisplayedGallery extends Model {
 			// We've built our two groups. Let's determine how we'll focus on them.  We're interested in only the included ids.
 			if ( $returns == 'included' ) {
 				$retval = $this->_entities_to_galleries_and_albums( $included_ids, $id_only, [], $limit, $offset );
-			}
-
-			// We're interested in only the excluded ids.
-			elseif ( $returns == 'excluded' ) {
+			} elseif ( $returns == 'excluded' ) {
+				// We're interested in only the excluded ids.
 				$retval = $this->_entities_to_galleries_and_albums( $excluded_ids, $id_only, $excluded_ids, $limit, $offset );
-			}
-
-			// We're interested in both groups.
-			else {
+			} else {
+				// We're interested in both groups.
 				$retval = $this->_entities_to_galleries_and_albums( $entity_ids, $id_only, $excluded_ids, $limit, $offset );
 			}
 		}
@@ -648,18 +874,16 @@ class DisplayedGallery extends Model {
 		// Is this an image query?
 		$source_obj = $this->get_source();
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( 'image', $source_obj->returns ) ) {
 			$retval = count( $this->_get_image_entities( $source_obj, false, false, true, $returns ) );
-		}
-
-		// Is this a gallery/album query?
-		elseif ( in_array( 'gallery', $source_obj->returns ) ) {
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		} elseif ( in_array( 'gallery', $source_obj->returns ) ) {
+			// Is this a gallery/album query?
 			$retval = count( $this->_get_album_and_gallery_entities( $source_obj, false, false, true, $returns ) );
 		}
 
-		$max = $this->get_maximum_entity_count();
-
-		if ( $retval > $max ) {
+		$max = $this->get_maximum_entity_count();       if ( $retval > $max ) {
 			$retval = $max;
 		}
 
@@ -675,6 +899,7 @@ class DisplayedGallery extends Model {
 
 		$sources    = SourceManager::get_instance();
 		$source_obj = $this->get_source();
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( $source_obj, [ $sources->get( 'random' ), $sources->get( 'random_images' ), $sources->get( 'recent' ), $sources->get( 'recent_images' ) ] ) ) {
 			$max = intval( $this->maximum_entity_count );
 		}
@@ -699,14 +924,14 @@ class DisplayedGallery extends Model {
 	 *
 	 * @param string  $select
 	 * @param string  $key
-	 * @param array   $array
+	 * @param array   $values
 	 * @param string  $alias
 	 * @param boolean $add_column
 	 * @return string
 	 */
-	public function _add_find_in_set_column( $select, $key, $array, $alias, $add_column = false ) {
-		$array = array_map( 'intval', $array );
-		$set   = implode( ',', array_reverse( $array ) );
+	public function _add_find_in_set_column( $select, $key, $values, $alias, $add_column = false ) {
+		$values = array_map( 'intval', $values );
+		$set    = implode( ',', array_reverse( $values ) );
 
 		if ( ! $select ) {
 			$select = '1';
@@ -721,11 +946,11 @@ class DisplayedGallery extends Model {
 		return $select;
 	}
 
-	public function _add_if_column( $select, $alias, $true = 1, $false = 0 ) {
+	public function _add_if_column( $select, $alias, $true_value = 1, $false_value = 0 ) {
 		if ( ! $select ) {
 			$select = '1';
 		}
-		$select .= ", IF(@{$alias} = 0, {$true}, {$false}) AS {$alias}";
+		$select .= ", IF(@{$alias} = 0, {$true_value}, {$false_value}) AS {$alias}";
 		return $select;
 	}
 
@@ -774,6 +999,7 @@ class DisplayedGallery extends Model {
 
 		// Convert container ids to a string suitable for WHERE IN.
 		$container_ids = [];
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( is_array( $tags ) && ! in_array( 'all', array_map( 'strtolower', $tags ) ) ) {
 			foreach ( $tags as $ndx => $container ) {
 				$container       = esc_sql( str_replace( '%', '%%', $container ) );
@@ -805,7 +1031,7 @@ class DisplayedGallery extends Model {
 
 		// This is a false positive
 		//
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$results = $wpdb->get_results( $query );
 		if ( is_array( $results ) && ! empty( $results ) ) {
 			foreach ( $results as $row ) {
@@ -848,7 +1074,9 @@ class DisplayedGallery extends Model {
 	 */
 	public function get_albums() {
 		$retval = [];
-		if ( ( $source = $this->get_source() ) ) {
+		$source = $this->get_source();
+		if ( $source ) {
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( 'album', $source->returns ) ) {
 				$mapper    = AlbumMapper::get_instance();
 				$album_key = $mapper->get_primary_key_column();
@@ -966,7 +1194,9 @@ class DisplayedGallery extends Model {
 	 */
 	public function get_galleries() {
 		$retval = [];
-		if ( ( $source = $this->get_source() ) ) {
+		$source = $this->get_source();
+		if ( $source ) {
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( 'image', $source->returns ) ) {
 				$mapper      = GalleryMapper::get_instance();
 				$gallery_key = $mapper->get_primary_key_column();

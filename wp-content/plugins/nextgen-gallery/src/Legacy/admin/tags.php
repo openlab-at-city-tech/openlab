@@ -15,21 +15,24 @@ if ( isset( $_POST['tag_action'] ) ) {
 
 	check_admin_referer( 'nggallery_admin_tags' );
 
-	if ( $_POST['tag_action'] == 'renametag' ) {
-		$oldtag        = ( isset( $_POST['renametag_old'] ) ) ? $_POST['renametag_old'] : '';
-		$newtag        = ( isset( $_POST['renametag_new'] ) ) ? $_POST['renametag_new'] : '';
-		$action_status = nggTags::rename_tags( $oldtag, $newtag );
-		Transient::flush( 'displayed_gallery_rendering' );
-	} elseif ( $_POST['tag_action'] == 'deletetag' ) {
-		$todelete      = ( isset( $_POST['deletetag_name'] ) ) ? $_POST['deletetag_name'] : '';
-		$action_status = nggTags::delete_tags( $todelete );
-		Transient::flush( 'displayed_gallery_rendering' );
-	} elseif ( $_POST['tag_action'] == 'editslug' ) {
-		$matchtag      = esc_html( ( isset( $_POST['tagname_match'] ) ) ? $_POST['tagname_match'] : '' );
-		$newslug       = ( isset( $_POST['tagslug_new'] ) ) ? $_POST['tagslug_new'] : '';
-		$newslug       = esc_html( \Imagely\NGG\DataStorage\Sanitizer::strip_html( $newslug ) );
-		$action_status = nggTags::edit_tag_slug( $matchtag, $newslug );
-		Transient::flush( 'displayed_gallery_rendering' );
+	if ( isset( $_POST['tag_action'] ) ) {
+		$tag_action = sanitize_text_field( wp_unslash( $_POST['tag_action'] ) );
+		if ( $tag_action == 'renametag' ) {
+			$oldtag        = ( isset( $_POST['renametag_old'] ) ) ? sanitize_text_field( wp_unslash( $_POST['renametag_old'] ) ) : '';
+			$newtag        = ( isset( $_POST['renametag_new'] ) ) ? sanitize_text_field( wp_unslash( $_POST['renametag_new'] ) ) : '';
+			$action_status = nggTags::rename_tags( $oldtag, $newtag );
+			Transient::flush( 'displayed_gallery_rendering' );
+		} elseif ( $tag_action == 'deletetag' ) {
+			$todelete      = ( isset( $_POST['deletetag_name'] ) ) ? sanitize_text_field( wp_unslash( $_POST['deletetag_name'] ) ) : '';
+			$action_status = nggTags::delete_tags( $todelete );
+			Transient::flush( 'displayed_gallery_rendering' );
+		} elseif ( $tag_action == 'editslug' ) {
+			$matchtag      = esc_html( ( isset( $_POST['tagname_match'] ) ) ? sanitize_text_field( wp_unslash( $_POST['tagname_match'] ) ) : '' );
+			$newslug       = ( isset( $_POST['tagslug_new'] ) ) ? sanitize_text_field( wp_unslash( $_POST['tagslug_new'] ) ) : '';
+			$newslug       = esc_html( \Imagely\NGG\DataStorage\Sanitizer::strip_html( $newslug ) );
+			$action_status = nggTags::edit_tag_slug( $matchtag, $newslug );
+			Transient::flush( 'displayed_gallery_rendering' );
+		}
 	}
 }
 
@@ -39,8 +42,8 @@ $nb_tags        = 50; // Number of tags to show on a single page.
 
 // Manage URL.
 
-$sort_order = ( isset( $_GET['tag_sortorder'] ) ) ? esc_attr( stripslashes( $_GET['tag_sortorder'] ) ) : 'desc';
-$search_url = ( isset( $_GET['search'] ) ) ? '&amp;search=' . esc_attr( stripslashes( $_GET['search'] ) ) : '';
+$sort_order = ( isset( $_GET['tag_sortorder'] ) ) ? esc_attr( sanitize_text_field( wp_unslash( $_GET['tag_sortorder'] ) ) ) : 'desc';
+$search_url = ( isset( $_GET['search'] ) ) ? '&amp;search=' . esc_attr( sanitize_text_field( wp_unslash( $_GET['search'] ) ) ) : '';
 $action_url = $admin_base_url . '&amp;tag_sortorder=' . $sort_order . $search_url;
 
 // Tags Filters.
@@ -107,8 +110,8 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 	.disabled, .disabled:hover { border-color: #E5E5E5; color: #999999; cursor: default; }
 </style>
 <?php if ( $action_status['message'] != '' ) : ?>
-		<div id="message" class="<?php echo ( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ); ?> fade">
-			<p><strong><?php echo $action_status['message']; ?></strong></p>
+		<div id="message" class="<?php echo esc_attr( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ); ?> fade">
+			<p><strong><?php echo esc_html( $action_status['message'] ); ?></strong></p>
 		</div>
 <?php endif; ?>
 <div class="wrap ngg_wrap ngg_manage_tags">
@@ -124,12 +127,12 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 
 						<form method="get">
 							<p>
-								<input type="hidden" name="page" value="<?php echo esc_attr( stripslashes( $_GET['page'] ) ); ?>" />
-								<input type="hidden" name="tag_sortorder" value="<?php echo $sort_order; ?>" />
+								<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ); ?>" />
+								<input type="hidden" name="tag_sortorder" value="<?php echo esc_attr( $sort_order ); ?>" />
 								<input type="text" name="search" id="search" size="10" value="
 								<?php
 								if ( isset( $_GET['search'] ) ) {
-									echo esc_attr( stripslashes( $_GET['search'] ) );}
+									echo esc_attr( sanitize_text_field( wp_unslash( $_GET['search'] ) ) );}
 								?>
 								" />
 								<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Go', 'nggallery' ); ?>" />
@@ -143,6 +146,7 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 							foreach ( $order_array as $sort => $title ) {
 								$output[] = ( $sort == $sort_order ) ? '<span style="color: #76a934; font-weight: bold;">' . $title . '</span>' : '<a href="' . $admin_base_url . '&amp;tag_sortorder=' . $sort . $search_url . '">' . $title . '</a>';
 							}
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output contains safe HTML for sort order links
 							echo implode( ' | ', $output );
 							$output = [];
 							unset( $output );
@@ -156,7 +160,7 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 								foreach ( $tags as $tag ) {
 									// TODO:Tag link should be call a list of images in manage gallery
 									// echo '<li><span>' . $tag->name . '</span>&nbsp;<a href="'.(ngg_get_tag_link( $tag->term_id )).'" title="'.sprintf(__('View all images tagged with %s', 'nggallery'), $tag->name).'">('.$tag->count.')</a></li>'."\n";.
-									echo '<li><span>' . esc_html( $tag->name ) . '</span>&nbsp;' . '(' . esc_html( $tag->count ) . ')</li>' . "\n";
+									echo '<li><span>' . esc_html( $tag->name ) . '</span>&nbsp;(' . esc_html( $tag->count ) . ")</li>\n";
 
 								}
 								unset( $tags );
@@ -169,9 +173,9 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 								<?php if ( $prev_offset != '' ) { ?>
 								<form method="get" style="display: inline;">
 									<span>
-										<input type="hidden" name="page" value="<?php echo esc_attr( stripslashes( $_GET['page'] ) ); ?>" />
-										<input type="hidden" name="tag_sortorder" value="<?php echo $sort_order; ?>" />
-										<input type="hidden" name="offset" value="<?php echo $prev_offset; ?>" />
+										<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ); ?>" />
+										<input type="hidden" name="tag_sortorder" value="<?php echo esc_attr( $sort_order ); ?>" />
+										<input type="hidden" name="offset" value="<?php echo esc_attr( $prev_offset ); ?>" />
 										<input class="button-primary" type="submit" value="&laquo; <?php esc_attr_e( 'Previous tags', 'nggallery' ); ?>" />
 									</span>
 								</form>
@@ -182,9 +186,9 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 								<?php if ( $next_offset != '' ) { ?>
 								<form method="get" style="display: inline;">
 									<span>
-										<input type="hidden" name="page" value="<?php echo esc_attr( stripslashes( $_GET['page'] ) ); ?>" />
-										<input type="hidden" name="tag_sortorder" value="<?php echo $sort_order; ?>" />
-										<input type="hidden" name="offset" value="<?php echo $next_offset; ?>" />
+										<input type="hidden" name="page" value="<?php echo esc_attr( isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '' ); ?>" />
+										<input type="hidden" name="tag_sortorder" value="<?php echo esc_attr( $sort_order ); ?>" />
+										<input type="hidden" name="offset" value="<?php echo esc_attr( $next_offset ); ?>" />
 										<input class="button-primary" type="submit" value="<?php esc_attr_e( 'Next tags', 'nggallery' ); ?> &raquo;" />
 									</span>
 								</form>
@@ -198,7 +202,7 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 				</td>
 				<td class="forms_manage">
 					<h3><?php esc_html_e( 'Rename Tag', 'nggallery' ); ?></h3>
-					<form action="<?php echo $action_url; ?>" method="post">
+					<form action="<?php echo esc_url( $action_url ); ?>" method="post">
 						<input type="hidden" name="tag_action" value="renametag" />
 						<?php wp_nonce_field( 'nggallery_admin_tags' ); ?>
 
@@ -223,7 +227,7 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 					</form>
 
 					<h3><?php esc_html_e( 'Delete Tag', 'nggallery' ); ?></h3>
-					<form action="<?php echo $action_url; ?>" method="post">
+					<form action="<?php echo esc_url( $action_url ); ?>" method="post">
 						<input type="hidden" name="tag_action" value="deletetag" />
 						<?php wp_nonce_field( 'nggallery_admin_tags' ); ?>
 
@@ -244,7 +248,7 @@ if ( $nb_tags < $tag_count && $offset > 0 ) {
 					</form>
 
 					<h3><?php esc_html_e( 'Edit Tag Slug', 'nggallery' ); ?></h3>
-					<form action="<?php echo $action_url; ?>" method="post">
+					<form action="<?php echo esc_url( $action_url ); ?>" method="post">
 						<input type="hidden" name="tag_action" value="editslug" />
 						<?php wp_nonce_field( 'nggallery_admin_tags' ); ?>
 

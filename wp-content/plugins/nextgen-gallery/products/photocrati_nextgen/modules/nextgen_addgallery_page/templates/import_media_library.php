@@ -1,15 +1,15 @@
 <div id="ngg-importML-gallery-selection">
-	<label for="ngg-importML-gallery-id"><?php _e( 'Gallery', 'nggallery' ); ?></label>
+	<label for="ngg-importML-gallery-id"><?php esc_html_e( 'Gallery', 'nggallery' ); ?></label>
 	<select id="ngg-importML-gallery-id">
-		<option value="0"><?php _e( 'Create a new gallery', 'nggallery' ); ?></option>
+		<option value="0"><?php esc_html_e( 'Create a new gallery', 'nggallery' ); ?></option>
 		<?php foreach ( $galleries as $gallery ) : ?>
 			<option value="<?php echo esc_attr( $gallery->{$gallery->id_field} ); ?>"><?php echo esc_attr( $gallery->title ); ?></option>
 		<?php endforeach ?>
 	</select>
-	<input type="text" id="ngg-importML-gallery-name" name="gallery_name" placeholder="<?php _e( 'Gallery title', 'nggallery' ); ?>"/>
+	<input type="text" id="ngg-importML-gallery-name" name="gallery_name" placeholder="<?php esc_attr_e( 'Gallery title', 'nggallery' ); ?>"/>
 </div>
 
 <button id='ngg-importML-select-opener'
-		class='button-primary'><?php echo $i18n['select-opener']; ?></button>
+		class='button-primary'><?php echo esc_html( $i18n['select-opener'] ); ?></button>
 <button id='ngg-importML-selected-image-import'
 		class='button-primary hidden'></button>

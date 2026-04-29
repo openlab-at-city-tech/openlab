@@ -7,6 +7,11 @@
  */
 class A_NextGen_Album_Breadcrumbs extends Mixin
 {
+    /**
+     * Breadcrumb cache.
+     *
+     * @var array
+     */
     public $breadcrumb_cache = array();
     public function are_breadcrumbs_enabled($display_settings)
     {
@@ -31,9 +36,11 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
     public function render_object()
     {
         $root_element = $this->call_parent('render_object');
-        if ($displayed_gallery = $this->object->get_param('displayed_gallery')) {
+        $displayed_gallery = $this->object->get_param('displayed_gallery');
+        if ($displayed_gallery) {
             $ds = $displayed_gallery->display_settings;
-            if ($this->are_breadcrumbs_enabled($ds) && ($original_entities = $this->get_original_album_entities($ds))) {
+            $original_entities = $this->get_original_album_entities($ds);
+            if ($this->are_breadcrumbs_enabled($ds) && $original_entities) {
                 $original_entities = $this->get_original_album_entities($ds);
                 if (!empty($ds['original_album_id'])) {
                     $ids = $ds['original_album_id'];
@@ -88,6 +95,7 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
                 if (empty($this->breadcrumb_cache[$order])) {
                     $album = $map->find($album_id);
                     $this->breadcrumb_cache[$order] = $album;
+                    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
                     if (in_array($gallery_id, $album->sortorder)) {
                         $found[] = $album;
                         break;
@@ -117,6 +125,7 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
         foreach ($entities as $ndx => $entity) {
             $tmpid = (isset($entity->albumdesc) ? 'a' : '') . $entity->{$entity->id_field};
             $this->breadcrumb_cache[$tmpid] = $entity;
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             if (isset($entity->albumdesc) && in_array($gallery_id, $entity->sortorder)) {
                 $found[] = $entity;
                 break;
@@ -176,6 +185,7 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
                 if ($type == 'album') {
                     $name = $entity->name;
                     if ($entity->pageid > 0) {
+                        // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                         $link = @get_page_link($entity->pageid);
                     }
                     if (empty($link) && $found_item !== $end) {
@@ -205,7 +215,17 @@ class A_NextGen_Album_Breadcrumbs extends Mixin
  */
 class A_NextGen_Album_Child_Entities extends Mixin
 {
+    /**
+     * Run once flag.
+     *
+     * @var bool
+     */
     protected static $_runonce = false;
+    /**
+     * Entities cache.
+     *
+     * @var array
+     */
     public static $_entities = array();
     /**
      * The album controller will invoke this filter when its _render_album() method is called
@@ -242,6 +262,7 @@ class A_NextGen_Album_Child_Entities extends Mixin
     }
     public function is_basic_album($displayed_gallery)
     {
+        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         return in_array($displayed_gallery->display_type, [NGG_BASIC_COMPACT_ALBUM, NGG_BASIC_EXTENDED_ALBUM]);
     }
     /**
@@ -250,7 +271,7 @@ class A_NextGen_Album_Child_Entities extends Mixin
      * @param $display_settings
      * @return bool
      */
-    static function are_child_entities_enabled($display_settings)
+    public static function are_child_entities_enabled($display_settings)
     {
         $retval = false;
         if (empty($display_settings['open_gallery_in_lightbox'])) {
@@ -267,7 +288,8 @@ class A_NextGen_Album_Child_Entities extends Mixin
     public function render_object()
     {
         $root_element = $this->call_parent('render_object');
-        if ($displayed_gallery = $this->object->get_param('displayed_gallery')) {
+        $displayed_gallery = $this->object->get_param('displayed_gallery');
+        if ($displayed_gallery) {
             if (!$this->is_basic_album($displayed_gallery)) {
                 return $root_element;
             }
@@ -287,13 +309,13 @@ class A_NextGen_Album_Child_Entities extends Mixin
      * @param array $galleries
      * @return string
      */
-    static function generate_script($galleries)
+    public static function generate_script($galleries)
     {
         $retval = '<script type="text/javascript">window.addEventListener("load", function() {';
         foreach ($galleries as $gallery) {
             $dg = $gallery->displayed_gallery;
             $id = $dg->id();
-            $retval .= 'galleries.gallery_' . $id . ' = ' . json_encode($dg->get_entity()) . ';';
+            $retval .= 'galleries.gallery_' . $id . ' = ' . wp_json_encode($dg->get_entity()) . ';';
             $retval .= 'galleries.gallery_' . $id . '.wordpress_page_root = "' . get_permalink() . '";';
         }
         $retval .= '}, false);</script>';
@@ -324,7 +346,8 @@ class A_NextGen_Album_Descriptions extends Mixin
     public function render_object()
     {
         $root_element = $this->call_parent('render_object');
-        if ($displayed_gallery = $this->object->get_param('displayed_gallery')) {
+        $displayed_gallery = $this->object->get_param('displayed_gallery');
+        if ($displayed_gallery) {
             $ds = $displayed_gallery->display_settings;
             if ($this->are_descriptions_enabled($ds)) {
                 $description = $this->object->generate_description($displayed_gallery);

@@ -4,15 +4,51 @@ namespace Imagely\NGG\Util;
 
 use Imagely\NGG\Settings\Settings;
 
+/**
+ * Routing application utility class.
+ */
 class RoutingApp {
 
+	/**
+	 * Instances cache.
+	 *
+	 * @var array
+	 */
 	public static $_instances = [];
-	public $_request_uri      = false;
-	public $_settings         = null;
 
+	/**
+	 * Request URI.
+	 *
+	 * @var string|false
+	 */
+	public $_request_uri = false;
+
+	/**
+	 * Settings object.
+	 *
+	 * @var object|null
+	 */
+	public $_settings = null;
+
+	/**
+	 * Rewrite patterns.
+	 *
+	 * @var array
+	 */
 	protected $_rewrite_patterns = [];
+
+	/**
+	 * Routing patterns.
+	 *
+	 * @var array
+	 */
 	protected $_routing_patterns = [];
 
+	/**
+	 * Context.
+	 *
+	 * @var string|false
+	 */
 	public $context = false;
 
 	public function __construct( $context ) {
@@ -141,11 +177,14 @@ class RoutingApp {
 
 		if ( $this->_request_uri ) {
 			$retval = $this->_request_uri;
-		} elseif ( ( $retval = $this->does_app_serve_request() ) ) {
-			if ( strpos( $retval, '/' ) !== 0 ) {
-				$retval = '/' . $retval;
+		} else {
+			$retval = $this->does_app_serve_request();
+			if ( $retval ) {
+				if ( strpos( $retval, '/' ) !== 0 ) {
+					$retval = '/' . $retval;
+				}
+				$this->set_app_request_uri( $retval );
 			}
-			$this->set_app_request_uri( $retval );
 		}
 
 		return $retval;
@@ -180,9 +219,10 @@ class RoutingApp {
 		$request_uri = $this->get_router()->get_request_uri( true );
 
 		// Is the context present in the uri?
-		if ( ( $index = strpos( $request_uri, $this->context ) ) !== false ) {
+		$index = strpos( $request_uri, $this->context );
+		if ( $index !== false ) {
 			$starts_with_slash = strpos( $this->context, '/' ) === 0;
-			if ( ( $starts_with_slash && $index === 0 ) or ( ! $starts_with_slash ) ) {
+			if ( ( $starts_with_slash && $index === 0 ) || ( ! $starts_with_slash ) ) {
 				$regex  = implode(
 					'',
 					[
@@ -267,10 +307,7 @@ class RoutingApp {
 
 						}
 					}
-				}
-
-				// Normal rewrite pattern.
-				elseif ( preg_match_all( $pattern, $request_uri, $matches, PREG_SET_ORDER ) ) {
+				} elseif ( preg_match_all( $pattern, $request_uri, $matches, PREG_SET_ORDER ) ) {
 					// Assign new request URI.
 					$request_uri = $details['dst'];
 
@@ -324,7 +361,8 @@ class RoutingApp {
 		}
 
 		// if the application root matches, then we'll try to route the request.
-		if ( ( $request_uri = $this->get_app_request_uri() ) ) {
+		$request_uri = $this->get_app_request_uri();
+		if ( $request_uri ) {
 			// Perform URL rewrites.
 			$redirect = $this->do_rewrites( $request_uri );
 
@@ -356,23 +394,25 @@ class RoutingApp {
 						// 'method'     => array('GET') (optional)
 						// ).
 
-						if ( $handler && $handler = $this->parse_route_handler( $handler ) ) {
-							// Is this handler for the current HTTP request method?
-							if ( isset( $handler['method'] ) ) {
-								if ( ! is_array( $handler['method'] ) ) {
-									$handler['$method'] = [ $handler['method'] ];
-								}
-								if ( in_array( $this->get_router()->get_request_method(), $handler['method'] ) ) {
+						if ( $handler ) {
+							$handler = $this->parse_route_handler( $handler );
+							if ( $handler ) {
+								// Is this handler for the current HTTP request method?
+								if ( isset( $handler['method'] ) ) {
+									if ( ! is_array( $handler['method'] ) ) {
+										$handler['$method'] = [ $handler['method'] ];
+									}
+         // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+									if ( in_array( $this->get_router()->get_request_method(), $handler['method'] ) ) {
+										$this->execute_route_handler( $handler );
+									}
+								} else {
+									// This handler is for all request methods.
 									$this->execute_route_handler( $handler );
 								}
+							} elseif ( ! $handler ) {
+								$this->passthru();
 							}
-
-							// This handler is for all request methods.
-							else {
-								$this->execute_route_handler( $handler );
-							}
-						} elseif ( ! $handler ) {
-							$this->passthru();
 						}
 					}
 				}
@@ -400,10 +440,7 @@ class RoutingApp {
 
 		if ( class_exists( $handler['controller'] ) ) {
 			$controller = new $handler['controller']();
-		}
-
-		// TODO: Remove when Pro's minimum supported version supports v1 of the POPE removal compat.
-		elseif ( class_exists( '\C_Component_Registry' ) ) {
+		} elseif ( class_exists( '\C_Component_Registry' ) ) {
 			$controller = \C_Component_Registry::get_instance()->get_utility( $handler['controller'], $handler['context'] );
 		}
 
@@ -420,6 +457,7 @@ class RoutingApp {
 	 * @return array
 	 */
 	public function parse_route_handler( $handler ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- $handler is a method parameter, not user input
 		if ( is_string( $handler ) ) {
 			$handler = array_combine( [ 'controller', 'action' ], explode( '#', $handler ) );
 		}
@@ -503,11 +541,11 @@ class RoutingApp {
 	 *
 	 * @param string $key
 	 * @param mixed  $id
-	 * @param mixed  $default
+	 * @param mixed  $default_value
 	 * @return mixed
 	 */
-	public function get_parameter( $key, $id = null, $default = null, $segment = false, $url = false ) {
-		$retval       = $default;
+	public function get_parameter( $key, $id = null, $default_value = null, $segment = false, $url = false ) {
+		$retval       = $default_value;
 		$settings     = $this->_settings;
 		$quoted_key   = preg_quote( $key, '#' );
 		$id           = $id ? preg_quote( $id, '#' ) : '[^/]+';
@@ -533,20 +571,40 @@ class RoutingApp {
 		}
 
 		// Lastly, check the $_REQUEST.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Router method, nonce verified by individual handlers
 		if ( ! $found && ! $url && isset( $_REQUEST[ $key ] ) ) {
-			$found  = true;
-			$retval = $this->recursive_stripslashes( $_REQUEST[ $key ] );
+			$found = true;
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Router method, nonce verified by individual handlers; sanitization applied below based on value type
+			$value = wp_unslash( $_REQUEST[ $key ] );
+			// Handle array values (e.g., form settings arrays).
+			if ( is_array( $value ) ) {
+				$retval = $this->recursive_stripslashes( $value );
+			} elseif ( 'nggsearch' === $key ) {
+				// Preserve spaces in free-text search; sanitize_text_field can alter the string for display-type search.
+				$retval = $this->recursive_stripslashes( wp_strip_all_tags( $value ) );
+			} else {
+				$retval = $this->recursive_stripslashes( sanitize_text_field( $value ) );
+			}
 		}
 
 		if ( ! $found && isset( $_SERVER['REQUEST_URI'] ) ) {
 			$params = [];
-			$parsed = parse_url( $_SERVER['REQUEST_URI'], PHP_URL_QUERY );
+			$parsed = wp_parse_url( Router::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ), PHP_URL_QUERY );
 			if ( is_string( $parsed ) ) {
 				parse_str( $parsed, $params );
 			}
 
 			if ( isset( $params[ $key ] ) ) {
-				$retval = $this->recursive_stripslashes( $params[ $key ] );
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- $params comes from parse_url/parse_str of sanitized REQUEST_URI
+				$value = $params[ $key ];
+				if ( is_array( $value ) ) {
+					$retval = $this->recursive_stripslashes( $value );
+				} elseif ( 'nggsearch' === $key ) {
+					// Preserve free-text search; sanitize_request_uri_for_routing() already stripped tags/control chars from REQUEST_URI.
+					$retval = $this->recursive_stripslashes( $value );
+				} else {
+					$retval = $this->recursive_stripslashes( sanitize_text_field( $value ) );
+				}
 			}
 		}
 
@@ -706,8 +764,8 @@ class RoutingApp {
 	public function passthru() {
 		$router = Router::get_instance();
 
-		$_SERVER['NGG_ORIG_REQUEST_URI'] = $_SERVER['REQUEST_URI'];
-		$base_parts                      = parse_url( $router->get_base_url( 'root' ) );
+		$_SERVER['NGG_ORIG_REQUEST_URI'] = isset( $_SERVER['REQUEST_URI'] ) ? Router::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ) : '';
+		$base_parts                      = wp_parse_url( $router->get_base_url( 'root' ) );
 		$new_request_uri                 = $router->join_paths(
 			( ! empty( $base_parts['path'] ) ? $base_parts['path'] : '' ),
 			$this->strip_param_segments( $router->get_request_uri() )
@@ -723,15 +781,18 @@ class RoutingApp {
 			$new_request_uri = implode( '/', $uri_array );
 		}
 
-		$_SERVER['UNENCODED_URL'] = $_SERVER['HTTP_X_ORIGINAL_URL'] = $_SERVER['REQUEST_URI'] = '/' . trailingslashit( $new_request_uri );
+		$request_uri                    = '/' . trailingslashit( Router::sanitize_request_uri_for_routing( $new_request_uri ) );
+		$_SERVER['REQUEST_URI']         = $request_uri;
+		$_SERVER['HTTP_X_ORIGINAL_URL'] = $request_uri;
+		$_SERVER['UNENCODED_URL']       = $request_uri;
 		if ( isset( $_SERVER['PATH_INFO'] ) ) {
-			$_SERVER['ORIG_PATH_INFO'] = $_SERVER['PATH_INFO'];
+			$_SERVER['ORIG_PATH_INFO'] = isset( $_SERVER['PATH_INFO'] ) ? Router::sanitize_request_uri_for_routing( $_SERVER['PATH_INFO'] ) : '';
 			unset( $_SERVER['PATH_INFO'] );
 		}
 	}
 
-	public function parse_url( $url ) {
-		$parts = parse_url( $url );
+	public function wp_parse_url( $url ) {
+		$parts = wp_parse_url( $url );
 		if ( ! isset( $parts['path'] ) ) {
 			$parts['path'] = '/';
 		}
@@ -772,7 +833,8 @@ class RoutingApp {
 			$parts          = explode( '?', $generated_parts[1] );
 			$ngg_parameters = array_shift( $parts );
 		}
-		$post_permalink = get_permalink( isset( $_REQUEST['p'] ) ? $_REQUEST['p'] : 0 );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only request parameter for routing
+		$post_permalink = get_permalink( isset( $_REQUEST['p'] ) ? intval( sanitize_text_field( wp_unslash( $_REQUEST['p'] ) ) ) : 0 );
 		if ( $post_permalink == '/' ) {
 			$post_permalink = $base_url;
 		}
@@ -792,8 +854,8 @@ class RoutingApp {
 		// differ, then we'll return post_permalink + nggallery parameters appended. Otherwise, we'll
 		// just return the generated url.
 		$generated_url           = str_replace( $base_url, home_url(), $generated_url );
-		$generated_parts         = $this->parse_url( $generated_url );
-		$post_parts              = $this->parse_url( $post_permalink );
+		$generated_parts         = $this->wp_parse_url( $generated_url );
+		$post_parts              = $this->wp_parse_url( $post_permalink );
 		$generated_parts['path'] = trailingslashit( $generated_parts['path'] );
 		if ( isset( $generated_parts['query'] ) ) {
 			$generated_parts['query'] = untrailingslashit( $generated_parts['query'] );
@@ -817,7 +879,7 @@ class RoutingApp {
 		} else {
 			// The post permalink differs from the generated url.
 			$post_permalink     = str_replace( home_url(), $base_url, $post_permalink );
-			$post_parts         = $this->parse_url( $post_permalink );
+			$post_parts         = $this->wp_parse_url( $post_permalink );
 			$post_parts['path'] = $this->join_paths( $post_parts['path'], $settings->get( 'router_param_slug', 'nggallery' ), $ngg_parameters );
 			$post_parts['path'] = str_replace( 'index.php/index.php', 'index.php', $post_parts['path'] ); // incase permalink_structure contains index.php.
 			if ( ! empty( $generated_parts['query'] ) && empty( $post_parts['query'] ) ) {
@@ -847,7 +909,7 @@ class RoutingApp {
 	 */
 	public function remove_url_segment( $segment, $url ) {
 		$retval = $url;
-		$parts  = parse_url( $url );
+		$parts  = wp_parse_url( $url );
 
 		// If the url has a path, then we can remove a segment.
 		if ( isset( $parts['path'] ) && $segment != '/' ) {
@@ -870,48 +932,47 @@ class RoutingApp {
 	/**
 	 * Flattens an array of arrays to a single array
 	 *
-	 * @param array $array
-	 * @param array $parent (optional)
+	 * @param array $items
+	 * @param array $parent_array (optional)
 	 * @param bool  $exclude_duplicates (optional - defaults to TRUE)
 	 * @return array
 	 */
-	public function _flatten_array( $array, $parent = null, $exclude_duplicates = true ) {
-		if ( is_array( $array ) ) {
+	public function _flatten_array( $items, $parent_array = null, $exclude_duplicates = true ) {
+		if ( is_array( $items ) ) {
 
 			// We're to add each element to the parent array.
-			if ( $parent ) {
-				foreach ( $array as $index => $element ) {
-					foreach ( $this->_flatten_array( $array ) as $sub_element ) {
+			if ( $parent_array ) {
+				foreach ( $items as $index => $element ) {
+					foreach ( $this->_flatten_array( $items ) as $sub_element ) {
 						if ( $exclude_duplicates ) {
-							if ( ! in_array( $sub_element, $parent ) ) {
-								$parent[] = $sub_element;
+       // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+							if ( ! in_array( $sub_element, $parent_array ) ) {
+								$parent_array[] = $sub_element;
 							}
 						} else {
-							$parent[] = $sub_element;
+							$parent_array[] = $sub_element;
 						}
 					}
 				}
-				$array = $parent;
-			}
-
-			// We're starting the process..
-			else {
+				$items = $parent_array;
+			} else {
+				// We're starting the process..
 				$index = 0;
-				while ( isset( $array[ $index ] ) ) {
-					$element = $array[ $index ];
+				while ( isset( $items[ $index ] ) ) {
+					$element = $items[ $index ];
 					if ( is_array( $element ) ) {
-						$array = $this->_flatten_array( $element, $array );
-						unset( $array[ $index ] );
+						$items = $this->_flatten_array( $element, $items );
+						unset( $items[ $index ] );
 					}
-					$index += 1;
+					++$index;
 				}
-				$array = array_values( $array );
+				$items = array_values( $items );
 			}
 		} else {
-			$array = [ $array ];
+			$items = [ $items ];
 		}
 
-		return $array;
+		return $items;
 	}
 
 	/**
@@ -957,12 +1018,14 @@ class RoutingApp {
 		$slug_regex  = '#' . $slug . '/?$#';
 
 		// Remove all parameters.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		while ( @preg_match( $param_regex, $retval, $matches ) ) {
 			$match_regex = '#' . preg_quote( array_shift( $matches ), '#' ) . '$#';
 			$retval      = preg_replace( $match_regex, '', $retval );
 		}
 
 		// Remove the slug or trailing slash.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( @preg_match( $slug_regex, $retval, $matches ) ) {
 			$match_regex = '#' . preg_quote( array_shift( $matches ), '#' ) . '$#';
 			$retval      = preg_replace( $match_regex, '', $retval );
@@ -1042,7 +1105,8 @@ class RoutingApp {
 		$param_slug   = $settings->router_param_slug ? preg_quote( $settings->router_param_slug, '#' ) : false;
 
 		// Is the parameter already part of the request? If so, modify that parameter.
-		if ( ( $segment = $this->get_parameter_segment( $key, $id, $url ) ) && is_array( $segment ) ) {
+		$segment = $this->get_parameter_segment( $key, $id, $url );
+		if ( $segment && is_array( $segment ) ) {
 			extract( $segment );
 
 			if ( $source == 'querystring' ) {
@@ -1079,7 +1143,7 @@ class RoutingApp {
 			$retval = rtrim( $retval, ' ?&' );
 		}
 
-		$retval = ( is_null( $retval ) or is_numeric( $retval ) or is_array( $retval ) ) ? $retval : Router::esc_url( $retval );
+		$retval = ( is_null( $retval ) || is_numeric( $retval ) || is_array( $retval ) ) ? $retval : Router::esc_url( $retval );
 
 		$retval = $this->add_post_permalink_to_url( $retval );
 		$retval = $this->_set_tag_cloud_parameters( $retval, $key, $id );
@@ -1224,7 +1288,7 @@ class RoutingApp {
 
 		// We're modifying a url passed in.
 		if ( $url ) {
-			$parts = parse_url( $retval );
+			$parts = wp_parse_url( $retval );
 			if ( ! isset( $parts['path'] ) ) {
 				$parts['path'] = '';
 			}
@@ -1235,10 +1299,8 @@ class RoutingApp {
 			);
 			$parts['path'] = str_replace( '//', '/', $parts['path'] );
 			$retval        = $this->construct_url_from_parts( $parts );
-		}
-
-		// We're modifying the current request.
-		else {
+		} else {
+			// We're modifying the current request.
 			// This parameter is being appended to the current request uri.
 			$this->add_parameter_to_app_request_uri( $key, $value, $id, $use_prefix );
 

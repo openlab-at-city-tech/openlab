@@ -1,0 +1,42 @@
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+
+### First, test with a small set of images
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-move
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [123, 124, 125],
+    "destination_gallery_id": 5
+}
+
+### Test with a single image
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-move
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [126],
+    "destination_gallery_id": 5
+}
+
+### Test error case: non-existent gallery
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-move
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [123],
+    "destination_gallery_id": 99999
+}
+
+### Test error case: invalid image IDs
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-move
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [99999, 99998],
+    "destination_gallery_id": 5
+}

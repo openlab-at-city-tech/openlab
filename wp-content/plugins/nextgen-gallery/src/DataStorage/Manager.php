@@ -11,28 +11,76 @@ use Imagely\NGG\IGW\EventPublisher;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\{ Filesystem, Router, Security };
 
+/**
+ * Data storage manager.
+ */
 class Manager {
 
+	/**
+	 * Instance cache.
+	 *
+	 * @var Manager|null
+	 */
 	public static $instance = null;
 
+	/**
+	 * Gallery mapper instance.
+	 *
+	 * @var object
+	 */
 	protected $gallery_mapper;
+
+	/**
+	 * Image mapper instance.
+	 *
+	 * @var object
+	 */
 	protected $image_mapper;
 
-	/** @deprecated */
+	/**
+	 * Image mapper instance (deprecated).
+	 *
+	 * @deprecated
+	 * @var object
+	 */
 	public $_image_mapper;
 
-	/** @deprecated */
+	/**
+	 * Object instance (deprecated).
+	 *
+	 * @deprecated
+	 * @var object
+	 */
 	public $object;
 
+	/**
+	 * Gallery absolute path cache.
+	 *
+	 * @var array
+	 */
 	protected static $gallery_abspath_cache = [];
-	protected static $image_abspath_cache   = [];
-	protected static $image_url_cache       = [];
+
+	/**
+	 * Image absolute path cache.
+	 *
+	 * @var array
+	 */
+	protected static $image_abspath_cache = [];
+
+	/**
+	 * Image URL cache.
+	 *
+	 * @var array
+	 */
+	protected static $image_url_cache = [];
 
 	public function __construct() {
 		$this->gallery_mapper = GalleryMapper::get_instance();
 		$this->image_mapper   = ImageMapper::get_instance();
 
 		/**
+		 * TODO comment for Imagify compatibility fix.
+		 *
 		 * @TODO Remove in a later release - this fixes an issue with Imagify at the time of 3.50's release.
 		 */
 		$this->object        = $this;
@@ -40,9 +88,11 @@ class Manager {
 	}
 
 	/**
+	 * Gets an instance of the manager.
+	 *
 	 * @return Manager
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new Manager();
 		}
@@ -54,11 +104,13 @@ class Manager {
 	}
 
 	/**
+	 * Magic method for delegating calls.
+	 *
 	 * @TODO: Remove this 'magic' method so that our code is always understandable without needing deep context
 	 * @param string $method
 	 * @param array  $args
 	 * @return mixed
-	 * @throws \Exception
+	 * @throws \Exception When method delegation fails
 	 */
 	public function __call( $method, $args ) {
 		if ( preg_match( '/^get_(\w+)_(abspath|url|dimensions|html|size_params)$/', $method, $match ) ) {
@@ -95,7 +147,7 @@ class Manager {
 		$retval     = false;
 		$image_path = $this->get_image_abspath( $image );
 
-		if ( $image_path && @file_exists( $image_path ) ) {
+		if ( $image_path && @file_exists( $image_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$retval = copy( $image_path, $this->get_backup_abspath( $image ) );
 
 			// Store the dimensions of the image.
@@ -126,6 +178,8 @@ class Manager {
 	}
 
 	/**
+	 * Extracts a zip file.
+	 *
 	 * @param string $zipfile
 	 * @param string $dest_path
 	 * @return bool false on failure
@@ -202,6 +256,23 @@ class Manager {
 	}
 
 	/**
+	 * Flushes the cache for the gallery that contains the given image.
+	 *
+	 * @param int|object $image Image ID or image object.
+	 */
+	public function flush_image_cache( $image ) {
+		if ( is_numeric( $image ) ) {
+			$image = $this->image_mapper->find( $image );
+		}
+
+		if ( ! $image ) {
+			return;
+		}
+
+		$this->flush_cache( $image->galleryid );
+	}
+
+	/**
 	 * Returns an array of dimensional properties (width, height, real_width, real_height) of a resulting clone image if and when generated
 	 *
 	 * @param object|int $image Image ID or an image object
@@ -255,7 +326,7 @@ class Manager {
 		$settings = apply_filters( 'ngg_settings_during_image_generation', Settings::get_instance()->to_array() );
 
 		// Ensure we have a valid image.
-		if ( $image_path && @file_exists( $image_path ) && null != $result && ! isset( $result['error'] ) ) {
+		if ( $image_path && @file_exists( $image_path ) && null != $result && ! isset( $result['error'] ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$image_dir    = dirname( $image_path );
 			$clone_path   = $result['clone_path'];
 			$clone_dir    = $result['clone_directory'];
@@ -263,7 +334,7 @@ class Manager {
 			$format_list  = $this->get_image_format_list();
 
 			// Ensure target directory exists, but only create 1 subdirectory.
-			if ( ! @file_exists( $clone_dir ) ) {
+			if ( ! @file_exists( $clone_dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				if ( strtolower( realpath( $image_dir ) ) != strtolower( realpath( $clone_dir ) ) ) {
 					if ( strtolower( realpath( $image_dir ) ) == strtolower( realpath( dirname( $clone_dir ) ) ) ) {
 						wp_mkdir_p( $clone_dir );
@@ -310,7 +381,7 @@ class Manager {
 			}
 
 			// We successfully generated the thumbnail.
-			if ( is_string( $destpath ) && ( @file_exists( $destpath ) || $thumbnail != null ) ) {
+			if ( is_string( $destpath ) && ( @file_exists( $destpath ) || $thumbnail != null ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				if ( $clone_format != null ) {
 					if ( isset( $format_list[ $clone_format ] ) ) {
 						$clone_format_extension     = $format_list[ $clone_format ];
@@ -328,7 +399,7 @@ class Manager {
 							$destpath_basename = $destpath_info['filename'];
 							$destpath_new      = $destpath_dir . DIRECTORY_SEPARATOR . $destpath_basename . $clone_format_extension_str;
 
-							if ( ( @file_exists( $destpath ) && rename( $destpath, $destpath_new ) ) || $thumbnail != null ) {
+							if ( ( @file_exists( $destpath ) && rename( $destpath, $destpath_new ) ) || $thumbnail != null ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename, WordPress.PHP.NoSilencedErrors.Discouraged
 								$destpath = $destpath_new;
 							}
 						}
@@ -417,12 +488,13 @@ class Manager {
 
 				// Always retrieve metadata from the backup when possible.
 				$backup_path  = $image_path . '_backup';
-				$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_path;
+				$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_path; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 				$exif_iptc = EXIFWriter::read_metadata( $exif_abspath );
 
 				$thumbnail->save( $destpath, $quality );
 
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				@EXIFWriter::write_metadata( $destpath, $exif_iptc );
 			}
 		}
@@ -475,7 +547,7 @@ class Manager {
 		$result     = null;
 
 		// Ensure we have a valid image.
-		if ( $image_path && @file_exists( $image_path ) ) {
+		if ( $image_path && @file_exists( $image_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			// Ensure target directory exists, but only create 1 subdirectory.
 			$image_dir           = dirname( $image_path );
 			$clone_dir           = dirname( $clone_path );
@@ -560,7 +632,9 @@ class Manager {
 						$type = strtolower( $type );
 
 						// Indexes in the $format_list array correspond to IMAGETYPE_XXX values appropriately.
-						if ( ( $index = array_search( $type, $format_list ) ) !== false ) {
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+						$index = array_search( $type, $format_list );
+						if ( $index !== false ) {
 							$type = $index;
 
 							if ( $type != $image_format ) {
@@ -584,19 +658,43 @@ class Manager {
 			// that our image could become to what it currently is. '3' is important here as JPEG uses 3 bytes per pixel.
 			//
 			// First we attempt to use ImageMagick if we can; it has a more robust method of calculation.
+			// Note: Some hosting environments have ImageMagick installed but without JPEG support,
+			// which causes "NoDecodeDelegateForThisImageFormat" errors. This code handles that gracefully.
 			if ( ! empty( $dimensions['mime'] ) && $dimensions['mime'] == 'image/jpeg' ) {
 				$possible_quality = null;
 				$try_image_magick = true;
 
 				if ( ( defined( 'NGG_DISABLE_IMAGICK' ) && NGG_DISABLE_IMAGICK )
-				|| ( function_exists( 'is_wpe' ) && ( $dimensions[0] >= 8000 || $dimensions[1] >= 8000 ) ) ) {
+				|| ( function_exists( 'is_wpe' ) && ( $dimensions[0] >= 8000 || $dimensions[1] >= 8000 ) )
+				|| ! apply_filters( 'ngg_use_imagick_for_quality', true ) ) {
 					$try_image_magick = false;
 				}
 
 				if ( $try_image_magick && extension_loaded( 'imagick' ) && class_exists( 'Imagick' ) ) {
-					$img = new \Imagick( $image_path );
-					if ( method_exists( $img, 'getImageCompressionQuality' ) ) {
-						$possible_quality = $img->getImageCompressionQuality();
+					// Check if ImageMagick supports JPEG before attempting to use it
+					if ( $this->imagick_supports_jpeg() ) {
+						try {
+							$img = new \Imagick( $image_path );
+							if ( method_exists( $img, 'getImageCompressionQuality' ) ) {
+								$possible_quality = $img->getImageCompressionQuality();
+							}
+							// Clean up the Imagick object
+							if ( isset( $img ) ) {
+								$img->clear();
+								$img->destroy();
+							}
+						} catch ( \ImagickException $e ) {
+							// ImageMagick doesn't support this image format, fall back to GD calculation
+							error_log( 'NextGEN Gallery: ImageMagick JPEG support not available, falling back to GD: ' . $e->getMessage() );
+							$try_image_magick = false;
+						} catch ( \Exception $e ) {
+							// Any other ImageMagick error, fall back to GD calculation
+							error_log( 'NextGEN Gallery: ImageMagick error, falling back to GD: ' . $e->getMessage() );
+							$try_image_magick = false;
+						}
+					} else {
+						// ImageMagick doesn't support JPEG, skip to GD calculation
+						$try_image_magick = false;
 					}
 				}
 
@@ -623,11 +721,11 @@ class Manager {
 			// - fails if the dimensions are unchanged
 			// - doesn't support filename prefix, only suffix so names like thumbs_original_name.jpg for $clone_path are not supported
 			// also suffix cannot be null as that will make WordPress use a default suffix...we could use an object that returns empty string from __toString() but for now just fallback to ngg generator.
+		// phpcs:ignore Generic.CodeAnalysis.UnconditionalIfStatement.Found
 			if ( false ) {
 				// phpcs:ignore WordPress.WP.CapitalPDangit.MisspelledInText
 				$result['method'] = 'wordpress';
-
-				$new_dims = image_resize_dimensions( $dimensions[0], $dimensions[1], $width, $height, $crop );
+				$new_dims         = image_resize_dimensions( $dimensions[0], $dimensions[1], $width, $height, $crop );
 
 				if ( $new_dims ) {
 					list($dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h) = $new_dims;
@@ -666,11 +764,9 @@ class Manager {
 						$crop_ratio_x = $crop_width / $width;
 						$crop_ratio_y = $crop_height / $height;
 
-						if ( $algo == 'adapt' ) {
-							// XXX not sure about this...don't use for now
-							// $crop_width = (int) round($width * $crop_factor_x);
-							// $crop_height = (int) round($height * $crop_factor_y);.
-						} elseif ( $algo == 'shrink' ) {
+						// XXX not sure about this...don't use for now
+						// The 'adapt' algorithm is not implemented yet.
+						if ( $algo == 'shrink' ) {
 							if ( $crop_ratio_x < $crop_ratio_y ) {
 								$crop_width  = max( $crop_width, $width );
 								$crop_height = (int) round( $crop_width / $aspect_ratio );
@@ -798,7 +894,7 @@ class Manager {
 			'md5'    => $this->get_image_checksum( $image, 'full' ),
 		];
 
-		if ( ! isset( $image->meta_data ) or ( is_string( $image->meta_data ) && strlen( $image->meta_data ) == 0 ) or is_bool( $image->meta_data ) ) {
+		if ( ! isset( $image->meta_data ) || ( is_string( $image->meta_data ) && strlen( $image->meta_data ) == 0 ) || is_bool( $image->meta_data ) ) {
 			$image->meta_data = [];
 		}
 
@@ -807,6 +903,56 @@ class Manager {
 
 		// Don't forget to append the 'full' entry in meta_data in the db.
 		$this->image_mapper->save( $image );
+	}
+
+	/**
+	 * Apply EXIF orientation using ImageMagick when available to avoid legacy GD imagerotate() memory issues.
+	 *
+	 * @param string $image_abspath Absolute path to JPEG.
+	 * @return bool Whether the file was re-oriented successfully.
+	 */
+	private function correct_exif_rotation_with_imagick( $image_abspath ) {
+		if ( defined( 'NGG_DISABLE_IMAGICK' ) && NGG_DISABLE_IMAGICK ) {
+			return false;
+		}
+
+		static $imagick_supports_jpeg = null;
+
+		if ( null === $imagick_supports_jpeg ) {
+			$imagick_supports_jpeg = $this->imagick_supports_jpeg();
+		}
+
+		if ( ! extension_loaded( 'imagick' ) || ! class_exists( 'Imagick' ) || ! $imagick_supports_jpeg ) {
+			return false;
+		}
+
+		$backup_path    = $image_abspath . '_backup';
+		$exif_from_path = @file_exists( $backup_path ) ? $backup_path : $image_abspath; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$exif_iptc      = EXIFWriter::read_metadata( $exif_from_path );
+
+		try {
+			$imagick = new \Imagick( $image_abspath );
+			if ( ! method_exists( $imagick, 'autoOrient' ) ) {
+				return false;
+			}
+			$imagick->autoOrient();
+			$imagick->writeImage( $image_abspath );
+		} catch ( \Exception $e ) {
+			error_log( 'NextGEN Gallery: Imagick EXIF auto-orient failed: ' . $e->getMessage() );
+			return false;
+		} finally {
+			if ( isset( $imagick ) && $imagick instanceof \Imagick ) {
+				$imagick->clear();
+				$imagick->destroy();
+			}
+		}
+
+		if ( ! empty( $exif_iptc ) && is_array( $exif_iptc ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			@EXIFWriter::write_metadata( $image_abspath, $exif_iptc );
+		}
+
+		return true;
 	}
 
 	/**
@@ -832,19 +978,37 @@ class Manager {
 		}
 
 		// We only need to continue if the Orientation tag is set.
-		$exif = @exif_read_data( $image_abspath, 'exif' );
-		if ( empty( $exif['Orientation'] ) || $exif['Orientation'] == 1 ) {
+		$exif = @exif_read_data( $image_abspath, 'exif' ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( empty( $exif['Orientation'] ) || 1 === (int) $exif['Orientation'] ) {
+			return;
+		}
+
+		// Only orientations 3/6/8 are pure rotations. Others (2, 4, 5, 7) involve flips
+		// which we don't support; skip them to avoid unnecessary image cloning.
+		$orientation = (int) $exif['Orientation'];
+		if ( ! in_array( $orientation, [ 3, 6, 8 ], true ) ) {
+			return;
+		}
+
+		if ( function_exists( 'wp_raise_memory_limit' ) ) {
+			wp_raise_memory_limit( 'image' );
+		}
+
+		if ( $this->correct_exif_rotation_with_imagick( $image_abspath ) ) {
+			if ( $save ) {
+				$this->update_image_dimension_metadata( $image, $image_abspath );
+			}
 			return;
 		}
 
 		$degree = 0;
-		if ( $exif['Orientation'] == 3 ) {
+		if ( 3 === $orientation ) {
 			$degree = 180;
 		}
-		if ( $exif['Orientation'] == 6 ) {
+		if ( 6 === $orientation ) {
 			$degree = 90;
 		}
-		if ( $exif['Orientation'] == 8 ) {
+		if ( 8 === $orientation ) {
 			$degree = 270;
 		}
 
@@ -1012,8 +1176,10 @@ class Manager {
 
 		// Ensure we have the image entity - user could have passed in an incorrect id.
 		if ( is_object( $image ) ) {
-			if ( ( $gallery_path = $this->get_gallery_abspath( $image->galleryid ) ) ) {
-				$folder = $prefix = $size;
+			$gallery_path = $this->get_gallery_abspath( $image->galleryid );
+			if ( $gallery_path ) {
+				$folder = $size;
+				$prefix = $size;
 				switch ( $size ) {
 
 					// Images are stored in the associated gallery folder.
@@ -1023,7 +1189,7 @@ class Manager {
 
 					case 'backup':
 						$retval = \path_join( $gallery_path, $image->filename . '_backup' );
-						if ( ! @file_exists( $retval ) ) {
+						if ( ! @file_exists( $retval ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 							$retval = \path_join( $gallery_path, $image->filename );
 						}
 						break;
@@ -1046,10 +1212,8 @@ class Manager {
 								$image_path = \path_join( $gallery_path, $folder );
 								$image_path = \path_join( $image_path, $image->meta_data[ $size ]['filename'] );
 							}
-						}
-
-						// Filename not found in meta, but is dynamic.
-						elseif ( $dynthumbs && $dynthumbs->is_size_dynamic( $size ) ) {
+						} elseif ( $dynthumbs && $dynthumbs->is_size_dynamic( $size ) ) {
+							// Filename not found in meta, but is dynamic.
 							$params     = $dynthumbs->get_params_from_name( $size, true );
 							$image_path = \path_join( $this->get_cache_abspath( $image->galleryid ), $dynthumbs->get_image_name( $image, $params ) );
 
@@ -1075,33 +1239,30 @@ class Manager {
 								} else { // The thumbnail file does not exist, default to thumbs-.
 									$image_path = $new_thumb_path;
 								}
-							} else {
+							} elseif ( file_exists( $old_thumb_path ) ) {
 								// Reversed: the option is disabled so check for thumbs_.
-								if ( file_exists( $old_thumb_path ) ) {
-									$image_path = $old_thumb_path;
-								} elseif ( file_exists( $new_thumb_path ) ) {
-									// In case the user has switched back and forth, check for thumbs-.
-									$image_path = $new_thumb_path;
-								} else { // Default to thumbs_ per the site setting.
-									$image_path = $old_thumb_path;
-								}
+								$image_path = $old_thumb_path;
+							} elseif ( file_exists( $new_thumb_path ) ) {
+								// In case the user has switched back and forth, check for thumbs-.
+								$image_path = $new_thumb_path;
+							} else { // Default to thumbs_ per the site setting.
+								$image_path = $old_thumb_path;
 							}
-						}
-
-						$retval = $image_path;
+						}                       $retval = $image_path;
 						break;
 				}
 			}
 		}
-		if ( $retval && $check_existance && ! @file_exists( $retval ) ) {
+		if ( $retval && $check_existance && ! @file_exists( $retval ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$retval = null;
 		}
 		return $retval;
 	}
 
 	public function get_image_checksum( $image, $size = 'full' ) {
-		$retval = null;
-		if ( ( $image_abspath = $this->get_image_abspath( $image, $size, true ) ) ) {
+		$retval        = null;
+		$image_abspath = $this->get_image_abspath( $image, $size, true );
+		if ( $image_abspath ) {
 			$retval = md5_file( $image_abspath );
 		}
 		return $retval;
@@ -1134,16 +1295,14 @@ class Manager {
 			// property for all implementations.
 			if ( isset( $image->meta_data ) && isset( $image->meta_data[ $size ] ) ) {
 				$retval = $image->meta_data[ $size ];
-			}
-
-			// Didn't exist for meta data. We'll have to compute
-			// dimensions in the meta_data after computing? This is most likely
-			// due to a dynamic image size being calculated for the first time.
-			else {
+			} else {
+				// Didn't exist for meta data. We'll have to compute
+				// dimensions in the meta_data after computing? This is most likely
+				// due to a dynamic image size being calculated for the first time.
 				$dynthumbs = \Imagely\NGG\DynamicThumbnails\Manager::get_instance();
 				$abspath   = $this->get_image_abspath( $image, $size, true );
 				if ( $abspath ) {
-					$dims = @getimagesize( $abspath );
+					$dims = @getimagesize( $abspath ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					if ( $dims ) {
 						$retval['width']  = $dims[0];
 						$retval['height'] = $dims[1];
@@ -1173,8 +1332,10 @@ class Manager {
 			IMAGETYPE_GIF  => 'gif',
 			IMAGETYPE_JPEG => 'jpg',
 			IMAGETYPE_PNG  => 'png',
-			IMAGETYPE_WEBP => 'webp',
 		];
+		if ( defined( 'IMAGETYPE_WEBP' ) ) {
+			$format_list[ IMAGETYPE_WEBP ] = 'webp'; // phpcs:ignore PHPCompatibility.Constants.NewConstants.imagetype_webpFound
+		}
 
 		return $format_list;
 	}
@@ -1207,7 +1368,7 @@ class Manager {
 			}
 
 			// Set the dimensions if not set already.
-			if ( ! isset( $attributes['width'] ) or ! isset( $attributes['height'] ) ) {
+			if ( ! isset( $attributes['width'] ) || ! isset( $attributes['height'] ) ) {
 				$dimensions = $this->get_image_dimensions( $image, $size );
 				if ( ! isset( $attributes['width'] ) ) {
 					$attributes['width'] = $dimensions['width'];
@@ -1242,7 +1403,7 @@ class Manager {
 
 		// Get the image abspath.
 		$image_abspath = $this->get_image_abspath( $image, $size );
-		if ( $dynthumbs->is_size_dynamic( $size ) && ! file_exists( $image_abspath ) ) {
+		if ( $dynthumbs->is_size_dynamic( $size ) && $image_abspath && ! file_exists( $image_abspath ) ) {
 			if ( defined( 'NGG_DISABLE_DYNAMIC_IMG_URLS' ) && constant( 'NGG_DISABLE_DYNAMIC_IMG_URLS' ) ) {
 				$params = [
 					'watermark'  => false,
@@ -1278,6 +1439,13 @@ class Manager {
 			$gallery_root = trailingslashit( NGG_GALLERY_ROOT_TYPE == 'site' ? site_url() : WP_CONTENT_URL );
 			$gallery_root = is_ssl() ? str_replace( 'http:', 'https:', $gallery_root ) : $gallery_root;
 			$retval       = $gallery_root . $image_uri;
+		}
+
+		// Append cache-busting query param so browsers refetch after image edits
+		// (rotate, crop, recover). The base URL is unchanged—only the ?t= changes
+		// when updated_at is bumped by ImageMapper::save_entity().
+		if ( $retval && is_object( $image ) && ! empty( $image->updated_at ) ) {
+			$retval = \add_query_arg( 't', $image->updated_at, $retval );
 		}
 
 		return $retval;
@@ -1318,6 +1486,7 @@ class Manager {
 			if ( $image->meta_data ) {
 				$meta_data = is_object( $image->meta_data ) ? get_object_vars( $image->meta_data ) : $image->meta_data;
 				foreach ( $meta_data as $key => $value ) {
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( is_array( $value ) && isset( $value['width'] ) && ! in_array( $key, $retval ) ) {
 						$retval[] = $key;
 					}
@@ -1379,9 +1548,8 @@ class Manager {
 					if ( ! isset( $params['height'] ) ) {
 						$params['height'] = $settings->thumbheight;
 					}
-				}
-				// ...and then full, which is the size specified in the global resize options.
-				elseif ( $size == 'full' ) {
+				} elseif ( $size == 'full' ) {
+					// ...and then full, which is the size specified in the global resize options.
 					if ( ! isset( $params['width'] ) ) {
 						if ( $settings->imgAutoResize ) {
 							$params['width'] = $settings->imgWidth;
@@ -1393,9 +1561,8 @@ class Manager {
 							$params['height'] = $settings->imgHeight;
 						}
 					}
-				}
-				// Only re-use old sizes as last resort.
-				elseif ( isset( $image->meta_data ) && isset( $image->meta_data[ $size ] ) ) {
+				} elseif ( isset( $image->meta_data ) && isset( $image->meta_data[ $size ] ) ) {
+					// Only re-use old sizes as last resort.
 					$dimensions = $image->meta_data[ $size ];
 
 					if ( ! isset( $params['width'] ) ) {
@@ -1451,6 +1618,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets the upload absolute path.
+	 *
 	 * @param object|bool $gallery (optional)
 	 * @return string
 	 */
@@ -1503,13 +1672,14 @@ class Manager {
 		}
 
 		foreach ( $iterator as $file ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $file->getBasename(), [ '.', '..' ] ) ) {
 				continue;
 
 			} elseif ( $file->isFile() || $file->isLink() ) {
 				$extension = strtolower( pathinfo( $file->getPathname(), PATHINFO_EXTENSION ) );
 				if ( in_array( $extension, $removable_extensions, true ) ) {
-					@unlink( $file->getPathname() );
+					@unlink( $file->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
 				}
 			} elseif ( $file->isDir() ) {
 				$this->delete_gallery_directory( $file->getPathname() );
@@ -1519,17 +1689,20 @@ class Manager {
 		// DO NOT remove directories that still have files in them. Note: '.' and '..' are included with getSize().
 		$empty = true;
 		foreach ( $iterator as $file ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $file->getBasename(), [ '.', '..' ] ) ) {
 				continue;
 			}
 			$empty = false;
 		}
 		if ( $empty ) {
-			@rmdir( $iterator->getPath() );
+			@rmdir( $iterator->getPath() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 	}
 
 	/**
+	 * Copies images to another gallery.
+	 *
 	 * @param Image[]     $images
 	 * @param Gallery|int $dst_gallery
 	 *
@@ -1545,7 +1718,8 @@ class Manager {
 				$image = $image_mapper->find( $image );
 			}
 
-			$image_abspath = $this->get_image_abspath( $image, 'backup' ) ?: $this->get_image_abspath( $image );
+			$backup_abspath = $this->get_image_abspath( $image, 'backup' );
+			$image_abspath  = $backup_abspath ? $backup_abspath : $this->get_image_abspath( $image );
 
 			if ( $image_abspath ) {
 				// Import the image; this will copy the main file.
@@ -1555,6 +1729,7 @@ class Manager {
 					// Copy the properties of the old image.
 					$new_image = $image_mapper->find( $new_image_id );
 					foreach ( get_object_vars( $image ) as $key => $value ) {
+						// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 						if ( in_array( $key, [ 'pid', 'galleryid', 'meta_data', 'filename', 'sortorder', 'extras_post_id' ] ) ) {
 							continue;
 						}
@@ -1569,18 +1744,19 @@ class Manager {
 
 					// Copy all of the generated versions (resized versions, watermarks, etc).
 					foreach ( $this->get_image_sizes( $image ) as $named_size ) {
+						// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 						if ( in_array( $named_size, [ 'full', 'thumbnail' ] ) ) {
 							continue;
 						}
 						$old_abspath = $this->get_image_abspath( $image, $named_size );
 						$new_abspath = $this->get_image_abspath( $new_image, $named_size );
-						if ( is_array( @stat( $old_abspath ) ) ) {
+						if ( is_array( @stat( $old_abspath ) ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 							$new_dir = dirname( $new_abspath );
 							// Ensure the target directory exists.
-							if ( @stat( $new_dir ) === false ) {
+							if ( @stat( $new_dir ) === false ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 								wp_mkdir_p( $new_dir );
 							}
-							@copy( $old_abspath, $new_abspath );
+							@copy( $old_abspath, $new_abspath ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						}
 					}
 
@@ -1613,13 +1789,15 @@ class Manager {
 	}
 
 	/**
+	 * Deletes a directory.
+	 *
 	 * @param string $abspath
 	 * @return bool
 	 */
 	public function delete_directory( $abspath ) {
 		$retval = false;
 
-		if ( @file_exists( $abspath ) ) {
+		if ( @file_exists( $abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$files = scandir( $abspath );
 			array_shift( $files );
 			array_shift( $files );
@@ -1628,11 +1806,11 @@ class Manager {
 				if ( is_dir( $file_abspath ) ) {
 					$this->delete_directory( $file_abspath );
 				} else {
-					unlink( $file_abspath );
+					unlink( $file_abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
 				}
 			}
-			rmdir( $abspath );
-			$retval = @file_exists( $abspath );
+			rmdir( $abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir
+			$retval = @file_exists( $abspath ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		}
 
 		return $retval;
@@ -1653,12 +1831,15 @@ class Manager {
 
 		$abspath = $this->get_gallery_abspath( $gallery );
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( $abspath && file_exists( $abspath ) && ! in_array( stripslashes( $abspath ), $safe_dirs ) ) {
 			$this->delete_gallery_directory( $abspath );
 		}
 	}
 
 	/**
+	 * Deletes an image.
+	 *
 	 * @param Image        $image
 	 * @param string|false $size
 	 * @return bool
@@ -1678,20 +1859,19 @@ class Manager {
 			// Delete only a particular image size.
 			if ( $size ) {
 				$abspath = $this->get_image_abspath( $image, $size );
-				if ( $abspath && @file_exists( $abspath ) ) {
-					@unlink( $abspath );
+				if ( $abspath && @file_exists( $abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					@unlink( $abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
 				}
 				if ( isset( $image->meta_data ) && isset( $image->meta_data[ $size ] ) ) {
 					unset( $image->meta_data[ $size ] );
 					$this->image_mapper->save( $image );
 				}
-			}
-			// Delete all sizes of the image.
-			else {
+			} else {
+				// Delete all sizes of the image.
 				foreach ( $this->get_image_sizes( $image ) as $named_size ) {
 
 					$image_abspath = $this->get_image_abspath( $image, $named_size );
-					@unlink( $image_abspath );
+					@unlink( $image_abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
 				}
 
 				// Delete the entity.
@@ -1724,7 +1904,7 @@ class Manager {
 		}
 
 		if ( $abspath != null ) {
-			$data   = @getimagesize( $abspath );
+			$data   = @getimagesize( $abspath ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$format = 'jpg';
 
 			if ( $data != null && is_array( $data ) && isset( $format_list[ $data[2] ] ) ) {
@@ -1740,7 +1920,7 @@ class Manager {
 
 			// output image and headers.
 			header( 'Content-type: image/' . $format );
-			readfile( $abspath );
+			readfile( $abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
 
 			return true;
 		}
@@ -1765,15 +1945,16 @@ class Manager {
 			$full_abspath   = $this->get_image_abspath( $image );
 			$backup_abspath = $this->get_image_abspath( $image, 'backup' );
 
-			if ( $backup_abspath != $full_abspath && @file_exists( $backup_abspath ) ) {
-				if ( is_writable( $full_abspath ) && is_writable( dirname( $full_abspath ) ) ) {
+			if ( $backup_abspath != $full_abspath && @file_exists( $backup_abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				if ( \wp_is_writable( $full_abspath ) && \wp_is_writable( dirname( $full_abspath ) ) ) {
 					// Copy the backup.
-					if ( @copy( $backup_abspath, $full_abspath ) ) {
+					if ( @copy( $backup_abspath, $full_abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						// Backup images are not altered at all; we must re-correct the EXIF/Orientation tag.
 						$this->correct_exif_rotation( $image, true );
 
 						// Re-create non-fullsize image sizes.
 						foreach ( $this->get_image_sizes( $image ) as $named_size ) {
+							// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 							if ( in_array( $named_size, [ 'full', 'backup' ] ) ) {
 								continue;
 							}
@@ -1843,7 +2024,7 @@ class Manager {
 				$new_file_path = $path . DIRECTORY_SEPARATOR . $i . '-' . $image->filename;
 			}
 
-			if ( @copy( $image_abspath, $new_file_path ) ) {
+			if ( @copy( $image_abspath, $new_file_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$upload_id = wp_insert_attachment(
 					[
 						'guid'           => $new_file_path,
@@ -1884,7 +2065,8 @@ class Manager {
 			$imageId = $image->pid;
 		}
 
-		if ( ( $postId = $this->is_in_media_library( $imageId ) ) ) {
+		$postId = $this->is_in_media_library( $imageId );
+		if ( $postId ) {
 			wp_delete_post( $postId );
 		}
 	}
@@ -1923,6 +2105,8 @@ class Manager {
 	}
 
 	/**
+	 * Checks if the image extension is allowed.
+	 *
 	 * @param string $filename
 	 * @return bool
 	 */
@@ -1936,6 +2120,7 @@ class Manager {
 			$allowed_extensions[] = $extension . '_backup';
 		}
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return in_array( $extension, $allowed_extensions );
 	}
 
@@ -1952,6 +2137,8 @@ class Manager {
 	}
 
 	/**
+	 * Checks if the file is an image file.
+	 *
 	 * @param string? $filename
 	 * @return bool
 	 */
@@ -1962,12 +2149,14 @@ class Manager {
 		//
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens below
 		if ( ! $filename
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens below
 			&& isset( $_FILES['file']['error'] )
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens below
 			&& isset( $_FILES['file']['tmp_name'] )
-			&& 0 === $_FILES['file']['error']
-			&& isset( $_REQUEST['nonce'] )
-			&& Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
+			&& 0 === $_FILES['file']['error'] ) {
+
 			// Windows' use of backslash characters for file paths means wp_unslash() here is destructive.
 			if ( 0 === strncasecmp( PHP_OS, 'WIN', 3 ) ) {
 				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
@@ -1983,12 +2172,15 @@ class Manager {
 
 		// If we can, we'll verify the mime type.
 		if ( function_exists( 'exif_imagetype' ) ) {
-			if ( ( $image_type = @exif_imagetype( $filename ) ) !== false ) {
+			$image_type = @exif_imagetype( $filename ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( $image_type !== false ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$retval = in_array( image_type_to_mime_type( $image_type ), $allowed_mime );
 			}
 		} else {
-			$file_info = @getimagesize( $filename );
+			$file_info = @getimagesize( $filename ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			if ( isset( $file_info[2] ) ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$retval = in_array( image_type_to_mime_type( $file_info[2] ), $allowed_mime );
 			}
 		}
@@ -1996,17 +2188,21 @@ class Manager {
 		return $retval;
 	}
 
-	public function is_zip(): bool {
+	public function is_zip( bool $skip_nonce_check = false ): bool {
 		$retval = false;
 
-		// Security::verify_nonce() is a wrapper to wp_verify_nonce().
-		//
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_FILES['file']['error'] )
-			&& 0 === $_FILES['file']['error']
-			&& isset( $_REQUEST['nonce'] )
-			&& Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
+		if ( isset( $_FILES['file']['error'] ) && 0 === $_FILES['file']['error'] ) {
+			// Check nonce only if not skipping (for non-REST calls)
+			if ( ! $skip_nonce_check ) {
+				if ( ! isset( $_REQUEST['nonce'] )
+					|| ! Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
+					return false;
+				}
+			}
+
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File data cannot be sanitized
 			$file_info = $_FILES['file'];
 
 			if ( isset( $file_info['type'] ) ) {
@@ -2018,6 +2214,8 @@ class Manager {
 					$spec_parts = explode( '-', $spec );
 					$spec_parts = array_map( 'strtolower', $spec_parts );
 
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( in_array( $spec, [ 'zip', 'octet-stream' ] ) || in_array( 'zip', $spec_parts ) ) {
 						$retval = true;
 					}
@@ -2030,13 +2228,15 @@ class Manager {
 		return $retval;
 	}
 
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- false positive, no user input here
 	public function get_unique_abspath( $file_abspath ) {
 		$filename    = basename( $file_abspath );
 		$dir_abspath = dirname( $file_abspath );
 		$num         = 1;
 
 		$pattern = path_join( $dir_abspath, "*_{$filename}" );
-		if ( ( $found = glob( $pattern ) ) ) {
+		$found   = glob( $pattern );
+		if ( $found ) {
 			natsort( $found );
 			$last = array_pop( $found );
 			$last = basename( $last );
@@ -2057,13 +2257,16 @@ class Manager {
 	 */
 	public function is_animated_webp( $filename ) {
 		$retval = false;
-		$handle = fopen( $filename, 'rb' );
+		$handle = fopen( $filename, 'rb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 		fseek( $handle, 12 );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 		if ( fread( $handle, 4 ) === 'VP8X' ) {
 			fseek( $handle, 20 );
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
 			$flag   = fread( $handle, 1 );
 			$retval = (bool) ( ( ( ord( $flag ) >> 1 ) & 1 ) );
 		}
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $handle );
 
 		return $retval;
@@ -2083,11 +2286,12 @@ class Manager {
 			$gallery_abspath = $this->get_gallery_abspath( $dst_gallery );
 
 			// If we can't write to the directory, then there's no point in continuing.
-			if ( ! @file_exists( $gallery_abspath ) ) {
-				@wp_mkdir_p( $gallery_abspath );
+			if ( ! @file_exists( $gallery_abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				@wp_mkdir_p( $gallery_abspath ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			}
-			if ( ! is_writable( $gallery_abspath ) ) {
-				throw new \E_InsufficientWriteAccessException( false, $gallery_abspath, false );
+			if ( ! \wp_is_writable( $gallery_abspath ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Path is escaped in exception constructor
+				throw new \E_InsufficientWriteAccessException( false, esc_html( $gallery_abspath ), false );
 			}
 
 			// Sanitize the filename for storing in the DB.
@@ -2099,10 +2303,12 @@ class Manager {
 			$ext_list     = implode( '|', $extensions );
 
 			if ( ! preg_match( "/({$ext_list})\$/i", $filename ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Translated string is safe
 				throw new \E_UploadException( __( 'Invalid image file. Acceptable formats: JPG, GIF, and PNG.', 'nggallery' ) );
 			}
 			// GD does not support animated WebP and will generate a fatal error when we try to create thumbnails or resize.
 			if ( $this->is_animated_webp( $image_abspath ) ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Translated string is safe
 				throw new \E_UploadException( __( 'Animated WebP images are not supported.', 'nggallery' ) );
 			}
 
@@ -2112,7 +2318,7 @@ class Manager {
 			// Are the src and dst the same? If so, we don't have to copy or move files.
 			if ( $image_abspath != $new_image_abspath ) {
 				// If we're not to override, ensure that the filename is unique.
-				if ( ! $override && @file_exists( $new_image_abspath ) ) {
+				if ( ! $override && @file_exists( $new_image_abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					$new_image_abspath = $this->get_unique_abspath( $new_image_abspath );
 					$filename          = $this->sanitize_filename_for_db( basename( $new_image_abspath ) );
 				}
@@ -2120,15 +2326,16 @@ class Manager {
 				// Try storing the file.
 				$copied = copy( $image_abspath, $new_image_abspath );
 				if ( $copied && $move ) {
-					unlink( $image_abspath );
+					unlink( $image_abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
 				}
 
 				// Ensure that we're not vulerable to CVE-2017-2416 exploit.
-				if ( ( $dimensions = getimagesize( $new_image_abspath ) ) !== false ) {
+				$dimensions = getimagesize( $new_image_abspath );
+				if ( $dimensions !== false ) {
 					if ( ( isset( $dimensions[0] ) && intval( $dimensions[0] ) > 30000 )
 						|| ( isset( $dimensions[1] ) && intval( $dimensions[1] ) > 30000 ) ) {
-						unlink( $new_image_abspath );
-						throw new \E_UploadException( esc_html( __( 'Image file too large. Maximum image dimensions supported are 30k x 30k.' ) ) );
+						unlink( $new_image_abspath ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
+						throw new \E_UploadException( esc_html( __( 'Image file too large. Maximum image dimensions supported are 30k x 30k.', 'nggallery' ) ) );
 					}
 				}
 			}
@@ -2159,14 +2366,15 @@ class Manager {
 							if ( ! empty( $exception ) ) {
 								$exception .= '<br/>';
 							}
-							$exception .= __( sprintf( 'Error while uploading %s: %s', $filename, $error ), 'nextgen-gallery' );
+							/* translators: 1: filename, 2: error message */
+							$exception .= sprintf( __( 'Error while uploading %1$s: %2$s', 'nggallery' ), esc_html( $filename ), esc_html( $error ) );
 						}
 					}
+					// Exception message contains HTML for formatting and is handled by WordPress error handlers.
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, WordPress.Security.EscapeOutput.ExceptionNotEscaped
 					throw new \E_UploadException( $exception );
 				}
-			}
-
-			// Important: do not remove this line. The image mapper's save() routine imports metadata
+			}           // Important: do not remove this line. The image mapper's save() routine imports metadata
 			// meaning we must re-acquire a new $image object after saving it above; if we do not our
 			// existing $image object will lose any metadata retrieved during said save() method.
 			$image = $image_mapper->find( $image_id );
@@ -2246,7 +2454,7 @@ class Manager {
 			// Get the image filename.
 			$filename = $this->get_image_abspath( $image, 'full' );
 
-			if ( ! @file_exists( $filename ) ) {
+			if ( ! $filename || ! @file_exists( $filename ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				return false; // bail out if the file doesn't exist.
 			}
 
@@ -2255,8 +2463,8 @@ class Manager {
 			if ( $size == 'full' && $settings->get( 'imgBackup' ) == 1 ) {
 				$backup_path = $this->get_backup_abspath( $image );
 
-				if ( ! @file_exists( $backup_path ) ) {
-					@copy( $filename, $backup_path );
+				if ( ! @file_exists( $backup_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					@copy( $filename, $backup_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				}
 			}
 
@@ -2264,7 +2472,24 @@ class Manager {
 			$existing_image_abpath = $this->get_image_abspath( $image, $size );
 			$existing_image_dir    = dirname( $existing_image_abpath );
 
-			\wp_mkdir_p( $existing_image_dir );
+			// Ensure directory exists with proper error handling
+			if ( ! \wp_mkdir_p( $existing_image_dir ) ) {
+				// Fallback: try to create directory with different permissions
+				if ( ! @mkdir( $existing_image_dir, 0755, true ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.PHP.NoSilencedErrors.Discouraged
+					error_log( 'NextGEN Gallery: Failed to create thumbnail directory: ' . $existing_image_dir );
+					return false;
+				}
+			}
+
+			// Verify directory is writable
+			if ( ! \wp_is_writable( $existing_image_dir ) ) {
+				// Try to fix permissions
+				@chmod( $existing_image_dir, 0755 ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.PHP.NoSilencedErrors.Discouraged
+				if ( ! \wp_is_writable( $existing_image_dir ) ) {
+					error_log( 'NextGEN Gallery: Thumbnail directory not writable: ' . $existing_image_dir );
+					return false;
+				}
+			}
 
 			$clone_path = $existing_image_abpath;
 			$thumbnail  = $this->generate_image_clone( $filename, $clone_path, $params );
@@ -2294,6 +2519,7 @@ class Manager {
 					$size_meta['crop_frame'] = $params['crop_frame'];
 				}
 
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
 				$image->meta_data[ $size ] = $size_meta;
 
 				if ( $size == 'full' ) {
@@ -2305,10 +2531,12 @@ class Manager {
 
 				\do_action( 'ngg_generated_image', $image, $size, $params );
 
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- false positive, no user input here
 				if ( $retval == 0 ) {
 					$retval = false;
 				}
 
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
 				if ( $retval ) {
 					$retval = $thumbnail;
 				}
@@ -2324,7 +2552,20 @@ class Manager {
 	 * @param Image $image
 	 * @return bool
 	 */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- false positive, no user input here
 	public function generate_thumbnail( $image, $params = null, $skip_defaults = false ) {
+		static $generating = [];
+
+		// Get image ID for recursion tracking
+		$image_id = is_numeric( $image ) ? $image : ( isset( $image->pid ) ? $image->pid : 0 );
+
+		// Prevent infinite recursion
+		if ( isset( $generating[ $image_id ] ) ) {
+			return false;
+		}
+
+		$generating[ $image_id ] = true;
+
 		$sized_image = $this->generate_image_size( $image, 'thumbnail', $params, $skip_defaults );
 		$retval      = false;
 
@@ -2333,29 +2574,35 @@ class Manager {
 			$sized_image->destruct();
 		}
 
-		if ( is_admin() && ( $image = ImageMapper::get_instance()->find( $image ) ) ) {
-			$app = Router::get_instance()->get_routed_app();
+		if ( is_admin() ) {
+			$image = ImageMapper::get_instance()->find( $image );
+			if ( $image ) {
+				$app = Router::get_instance()->get_routed_app();
 
-			$image->thumb_url = $app->set_parameter_value(
-				'timestamp',
-				time(),
-				null,
-				$this->get_image_url( $image, 'thumb' ),
-				$app->get_routed_url( true )
-			);
+				$image->thumb_url = $app->set_parameter_value(
+					'timestamp',
+					time(),
+					null,
+					$this->get_image_url( $image, 'thumb' ),
+					$app->get_routed_url( true )
+				);
 
-			$event            = new \stdClass();
-			$event->pid       = $image->{$image->id_field};
-			$event->id_field  = $image->id_field;
-			$event->thumb_url = $image->thumb_url;
+				$event            = new \stdClass();
+				$event->pid       = $image->{$image->id_field};
+				$event->id_field  = $image->id_field;
+				$event->thumb_url = $image->thumb_url;
 
-			EventPublisher::get_instance()->add_event(
-				[
-					'event' => 'thumbnail_modified',
-					'image' => $event,
-				]
-			);
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
+				EventPublisher::get_instance()->add_event(
+					[
+						'event' => 'thumbnail_modified',
+						'image' => $event,
+					]
+				);
+			}
 		}
+
+		unset( $generating[ $image_id ] );
 
 		return $retval;
 	}
@@ -2366,10 +2613,12 @@ class Manager {
 	 * @param object|string $image
 	 * @return null|string
 	 */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- false positive, no user input here
 	public function get_backup_abspath( $image ) {
 		$retval = null;
 
-		if ( ( $image_path = $this->get_image_abspath( $image ) ) ) {
+		$image_path = $this->get_image_abspath( $image );
+		if ( $image_path ) {
 			$retval = $image_path . '_backup';
 		}
 
@@ -2436,6 +2685,28 @@ class Manager {
 			}
 		}
 
+		// Fallback: If thumbnail URL is still null and we're requesting a thumbnail,
+		// try to generate it on-the-fly (useful for fresh installations)
+		if ( ! $retval && ( $size === 'thumbnail' || $size === 'thumb' ) ) {
+			// Attempt to generate the thumbnail
+			if ( $this->generate_thumbnail( $image ) ) {
+				// Clear the cache and try again
+				unset( self::$image_url_cache[ $key ] );
+				$url = $this->get_computed_image_url( $image, $size );
+				if ( $url ) {
+					self::$image_url_cache[ $key ] = $url;
+					$retval                        = $url;
+				}
+			}
+		}
+
+		// Append cache-busting query param so browsers refetch after image edits
+		// (rotate, crop, recover). The base URL is unchanged—only the ?t= changes
+		// when updated_at is bumped by ImageMapper::save_entity().
+		if ( $retval && is_object( $image ) && ! empty( $image->updated_at ) ) {
+			$retval = \add_query_arg( 't', $image->updated_at, $retval );
+		}
+
 		return apply_filters( 'ngg_get_image_url', $retval, $image, $size );
 	}
 
@@ -2451,15 +2722,48 @@ class Manager {
 	}
 
 	/**
-	 * @param string        $abspath
-	 * @param int           $gallery_id
-	 * @param bool          $create_new_gallerypath
-	 * @param null|string   $gallery_title
-	 * @param array[string] $filenames
+	 * Check if ImageMagick supports JPEG format
+	 *
+	 * @return bool
+	 */
+	private function imagick_supports_jpeg() {
+		static $supports_jpeg = null;
+
+		if ( $supports_jpeg !== null ) {
+			return $supports_jpeg;
+		}
+
+		$supports_jpeg = false;
+
+		if ( extension_loaded( 'imagick' ) && class_exists( 'Imagick' ) ) {
+			try {
+				$imagick       = new \Imagick();
+				$formats       = $imagick->queryFormats( 'JPEG' );
+				$supports_jpeg = ! empty( $formats );
+				$imagick->clear();
+				$imagick->destroy();
+			} catch ( \Exception $e ) {
+				// ImageMagick error, assume no JPEG support
+				error_log( 'NextGEN Gallery: ImageMagick JPEG support check failed: ' . $e->getMessage() );
+				$supports_jpeg = false;
+			}
+		}
+
+		return (bool) $supports_jpeg;
+	}
+
+	/**
+	 * Imports images from a directory path.
+	 *
+	 * @param string        $abspath The absolute path to the directory.
+	 * @param int           $gallery_id The gallery ID to import to.
+	 * @param bool          $create_new_gallerypath Whether to create a new gallery path.
+	 * @param null|string   $gallery_title The gallery title.
+	 * @param array[string] $filenames Array of filenames to import.
 	 * @return array|bool false on failure
 	 */
 	public function import_gallery_from_fs( $abspath, $gallery_id = null, $create_new_gallerypath = true, $gallery_title = null, $filenames = [] ) {
-		if ( @ ! file_exists( $abspath ) ) {
+		if ( ! @file_exists( $abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			return false;
 		}
 
@@ -2481,6 +2785,7 @@ class Manager {
 			if ( is_dir( $file_abspath ) && strpos( $file, '.' ) !== 0 ) {
 				$directories[] = $file_abspath;
 			} elseif ( $this->is_image_file( $file_abspath ) ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( $filenames && array_search( $file_abspath, $filenames ) !== false ) {
 					$files[] = $file_abspath;
 				} elseif ( ! $filenames ) {
@@ -2540,6 +2845,7 @@ class Manager {
 			if ( preg_match( '#_backup$#', $file_abspath ) ) {
 				$files_to_import[] = $file_abspath;
 				continue;
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			} elseif ( in_array( [ $file_abspath . '_backup', 'thumbs_' . $file_abspath, 'thumbs-' . $file_abspath ], $files ) ) {
 				continue;
 			}
@@ -2550,7 +2856,8 @@ class Manager {
 		foreach ( $files_to_import as $file_abspath ) {
 			$basename = preg_replace( '#_backup$#', '', pathinfo( $file_abspath, PATHINFO_BASENAME ) );
 			if ( $this->is_image_file( $file_abspath ) ) {
-				if ( ( $image_id = $this->import_image_file( $gallery_id, $file_abspath, $basename, false, false, false ) ) ) {
+				$image_id = $this->import_image_file( $gallery_id, $file_abspath, $basename, false, false, false );
+				if ( $image_id ) {
 					$retval['image_ids'][] = $image_id;
 				}
 			}
@@ -2681,6 +2988,7 @@ class Manager {
 	 * @param string|bool        $data (optional) If specified, expects base64 encoded string of data
 	 *
 	 * @return array|array[]|bool|int $image
+	 * @throws \E_UploadException When file upload fails or invalid file format
 	 */
 	public function upload_image( $gallery, $filename = false, $data = false ) {
 
@@ -2690,11 +2998,14 @@ class Manager {
 		//
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens below
 		if ( isset( $_FILES['file'] )
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens below
+			&& isset( $_FILES['file']['error'] )
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verification happens below
 			&& 0 === $_FILES['file']['error']
-			&& isset( $_FILES['file']['tmp_name'] )
-			&& isset( $_REQUEST['nonce'] )
-			&& Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
+			&& isset( $_FILES['file']['tmp_name'] ) ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- File data cannot be sanitized
 			$file = $_FILES['file'];
 
 			if ( $this->is_zip() ) {
@@ -2710,10 +3021,12 @@ class Manager {
 				);
 			} else {
 				// Remove the non-valid (and potentially insecure) file from the PHP upload directory.
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
 				if ( isset( $_FILES['file']['tmp_name'] ) ) {
-					$filename = $_FILES['file']['tmp_name'];
-					@unlink( $filename );
+					$filename = sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) );
+					@unlink( $filename ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
 				}
+				// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Translated string is safe
 				throw new \E_UploadException( __( 'Invalid image file. Acceptable formats: JPG, GIF, and PNG.', 'nggallery' ) );
 			}
 		} elseif ( $data ) {
@@ -2747,38 +3060,45 @@ class Manager {
 		$temp_abspath = tempnam( sys_get_temp_dir(), '' );
 
 		// Try writing the image.
-		$fp = fopen( $temp_abspath, 'wb' );
-		fwrite( $fp, $this->maybe_base64_decode( $data ) );
+		$fp = fopen( $temp_abspath, 'wb' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		fwrite( $fp, $this->maybe_base64_decode( $data ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		fclose( $fp );
 
 		return $this->import_image_file( $gallery, $temp_abspath, $filename, $image_id, $override, $move );
 	}
 
 	/**
-	 * @param int $gallery_id
+	 * Uploads a zip file.
+	 *
+	 * @param int  $gallery_id
+	 * @param bool $skip_nonce_check Whether to skip nonce verification (true for REST API calls)
 	 * @return array|bool
 	 */
-	public function upload_zip( $gallery_id ) {
-		if ( ! $this->is_zip() ) {
+	public function upload_zip( $gallery_id, $skip_nonce_check = false ) {
+		if ( ! $this->is_zip( $skip_nonce_check ) ) {
 			return false;
 		}
 
-		// Security::verify_nonce() is a wrapper to wp_verify_nonce().
-		//
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_REQUEST['nonce'] )
-			|| ! Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
-			return false;
+		// Skip nonce check for REST API calls (they have their own authentication via permission callbacks)
+		// For traditional form posts, verify the nonce
+		if ( ! $skip_nonce_check ) {
+			// Security::verify_nonce() is a wrapper to wp_verify_nonce().
+			//
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
+			if ( ! isset( $_REQUEST['nonce'] )
+				|| ! Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
+				return false;
+			}
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		}
-		// phpcs:enable WordPress.Security.NonceVerification.Missing
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		$retval = false;
 
-		$memory_limit = intval( ini_get( 'memory_limit' ) );
-		if ( ! extension_loaded( 'suhosin' ) && $memory_limit < 256 ) {
-			@ini_set( 'memory_limit', '256M' );
+		if ( ! extension_loaded( 'suhosin' ) ) {
+			wp_raise_memory_limit();
 		}
 
 		$fs = Filesystem::get_instance();
@@ -2794,7 +3114,8 @@ class Manager {
 		// line when using phpcs:ignore, thus the disable/enable pairing found here.
 		//
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
-		$zipfile = $_FILES['file']['tmp_name'];
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified above
+		$zipfile = isset( $_FILES['file']['tmp_name'] ) ? sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) ) : '';
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		$dest_path = implode(
@@ -2829,7 +3150,7 @@ class Manager {
 				DIRECTORY_SEPARATOR,
 				[
 					rtrim( $destination_path, '/\\' ),
-					rand(),
+					wp_rand(),
 					'unpacked-' . I18N::mb_basename( $zipfile ),
 				]
 			);
@@ -2842,10 +3163,6 @@ class Manager {
 		}
 
 		$this->delete_directory( $dest_path );
-
-		if ( ! extension_loaded( 'suhosin' ) ) {
-			@ini_set( 'memory_limit', $memory_limit . 'M' );
-		}
 
 		return $retval;
 	}
@@ -2870,7 +3187,7 @@ class Manager {
 	 * @return null|int
 	 * @deprecated
 	 */
-	function _get_image_id( $image_obj_or_id ) {
+	private function _get_image_id( $image_obj_or_id ) {
 		$retval = null;
 
 		$image_key = $this->_image_mapper->get_primary_key_column();

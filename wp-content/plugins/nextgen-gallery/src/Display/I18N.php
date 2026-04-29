@@ -6,25 +6,44 @@ use Imagely\NGG\DataMappers\DisplayedGallery as DisplayedGalleryMapper;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\Util\URL;
 
+/**
+ * Internationalization helper class.
+ */
 class I18N {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var I18N|null
+	 */
 	protected static $instance = null;
 
 	/**
+	 * Get the singleton instance.
+	 *
 	 * @return I18N
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new I18N();
 		}
 		return self::$instance;
 	}
 
+	/**
+	 * Register WordPress hooks.
+	 */
 	public function register_hooks() {
+		// Load translations early to avoid WordPress 6.7+ warnings about translations loading too early
+		// This must happen before admin_menu where translation functions are used
+		add_action( 'plugins_loaded', [ $this, 'load_textdomain' ], 10 );
 		add_action( 'init', [ $this, 'register_translation_hooks' ], 2 );
 	}
 
-	public function register_translation_hooks() {
+	/**
+	 * Register translation hooks for WPML and other translation plugins.
+	 */
+	public function load_textdomain() {
 		$dir = \str_replace(
 			\wp_normalize_path( WP_PLUGIN_DIR ),
 			'',
@@ -33,6 +52,9 @@ class I18N {
 
 		// Load text domain.
 		\load_plugin_textdomain( 'nggallery', false, $dir );
+	}
+
+	public function register_translation_hooks() {
 
 		// Hooks to register image, gallery, and album name & description with WPML.
 		\add_action( 'ngg_image_updated', [ $this, 'register_image_strings' ] );
@@ -57,7 +79,7 @@ class I18N {
 	 * When QTranslate is active we must add its language & url-mode settings as display parameters
 	 * so as to generate a unique cache for each language.
 	 *
-	 * @param array $arr
+	 * @param array $arr Display parameters.
 	 * @return array
 	 */
 	public function set_qtranslate_cache_parameters( $arr ) {
@@ -75,7 +97,7 @@ class I18N {
 	/**
 	 * See notes on set_qtranslate_cache_paramters()
 	 *
-	 * @param array $arr
+	 * @param array $arr Display parameters.
 	 * @return array
 	 */
 	public function set_wpml_cache_parameters( $arr ) {
@@ -113,7 +135,7 @@ class I18N {
 	/**
 	 * Registers image strings with WPML
 	 *
-	 * @param object $image
+	 * @param object $image Image object.
 	 */
 	public function register_image_strings( $image ) {
 		if ( \function_exists( 'icl_register_string' ) ) {
@@ -129,7 +151,7 @@ class I18N {
 	/**
 	 * Registers album strings with WPML
 	 *
-	 * @param object $album
+	 * @param object $album Album object.
 	 */
 	public function register_album_strings( $album ) {
 		if ( \function_exists( 'icl_register_string' ) ) {
@@ -145,7 +167,7 @@ class I18N {
 	/**
 	 * NextGEN stores some data in custom posts that MUST NOT be automatically translated by WPML
 	 *
-	 * @param array $icl_post_types
+	 * @param array $icl_post_types Array of post types that can be translated.
 	 * @return array $icl_post_types without any NextGEN custom posts
 	 */
 	public function wpml_translatable_documents( $icl_post_types = [] ) {
@@ -167,8 +189,16 @@ class I18N {
 		return $icl_post_types;
 	}
 
+	/**
+	 * Adjust gallery ID for WPML when duplicating posts.
+	 *
+	 * @param int    $master_post_id The master post ID.
+	 * @param string $lang The language code.
+	 * @param array  $post_array The post data.
+	 * @param int    $id The new post ID.
+	 */
 	public function wpml_adjust_gallery_id( $master_post_id, $lang, $post_array, $id ) {
-		if ( ! isset( $post_array['post_type'] ) || $post_array['post_type'] == 'displayed_gallery' ) {
+		if ( ! isset( $post_array['post_type'] ) || 'displayed_gallery' === $post_array['post_type'] ) {
 			return;
 		}
 
@@ -191,6 +221,11 @@ class I18N {
 		}
 	}
 
+	/**
+	 * Set gallery language on save post for WPML.
+	 *
+	 * @param int $post_id The post ID.
+	 */
 	public function wpml_set_gallery_language_on_save_post( $post_id ) {
 		if ( \wp_is_post_revision( $post_id ) ) {
 			return;
@@ -205,7 +240,7 @@ class I18N {
 
 		$post = \get_post( $post_id );
 
-		if ( $post->post_type == 'displayed_gallery' ) {
+		if ( 'displayed_gallery' === $post->post_type ) {
 			return;
 		}
 
@@ -245,6 +280,13 @@ class I18N {
 		}
 	}
 
+	/**
+	 * Translate a string using various translation plugins.
+	 *
+	 * @param string      $in The string to translate.
+	 * @param string|null $name Optional name for WPML string.
+	 * @return string The translated string.
+	 */
 	public static function translate( $in, $name = null ) {
 		if ( \function_exists( 'langswitch_filter_langs_with_message' ) ) {
 			$in = \langswitch_filter_langs_with_message( $in );
@@ -261,7 +303,7 @@ class I18N {
 		if ( \is_string( $name )
 		&& ! empty( $name )
 		&& \function_exists( 'icl_translate' )
-		&& \apply_filters( 'wpml_default_language', null ) != \apply_filters( 'wpml_current_language', null ) ) {
+		&& \apply_filters( 'wpml_current_language', null ) !== \apply_filters( 'wpml_default_language', null ) ) {
 			$in = \icl_translate( 'plugin_ngg', $name, $in, true );
 		}
 
@@ -270,6 +312,13 @@ class I18N {
 		return $in;
 	}
 
+	/**
+	 * Multibyte-safe pathinfo() implementation.
+	 *
+	 * @param string   $path The file path.
+	 * @param int|null $options Optional pathinfo options.
+	 * @return array|string Path information.
+	 */
 	public static function mb_pathinfo( $path, $options = null ) {
 		$ret      = [
 			'dirname'   => '',
@@ -310,6 +359,12 @@ class I18N {
 		}
 	}
 
+	/**
+	 * Multibyte-safe basename() implementation.
+	 *
+	 * @param string $path The file path.
+	 * @return string The basename.
+	 */
 	public static function mb_basename( $path ) {
 		$separator = ' qq ';
 		$path      = \preg_replace( '/[^ ]/u', $separator . '$0' . $separator, $path );
@@ -317,6 +372,11 @@ class I18N {
 		return \str_replace( $separator, '', $base );
 	}
 
+	/**
+	 * Get allowed HTML tags for wp_kses.
+	 *
+	 * @return array Allowed HTML tags and attributes.
+	 */
 	public static function get_kses_allowed_html() {
 		global $allowedtags;
 
@@ -328,7 +388,7 @@ class I18N {
 			],
 			'br'     => [],
 			'em'     => [],
-			'i' 		=> [],
+			'i'      => [],
 			'strong' => [],
 			'b'      => [],
 			'u'      => [],
@@ -340,7 +400,7 @@ class I18N {
 			'span'   => [
 				'class' => [],
 				'id'    => [],
-			]
+			],
 		];
 
 		return \array_merge_recursive( $allowedtags, $our_keys );
@@ -384,7 +444,7 @@ class I18N {
 		$content = preg_replace( '/(eval|window\.location|document\.cookie|document\.write)/i', '', $content );
 
 		// Remove HTML entities.
-		$content = preg_replace('/\&[^;]*;/', '', $content);
+		$content = preg_replace( '/\&[^;]*;/', '', $content );
 
 		// Strip remaining unwanted HTML tags and attributes (you can customize this further).
 		$allowed_tags = self::get_kses_allowed_html();
@@ -399,8 +459,8 @@ class I18N {
 	/**
 	 * Function to decode sanitized HTML content before render.
 	 *
-	 * @param  mixed $content
-	 * @return void
+	 * @param  mixed $content The content to decode.
+	 * @return string The decoded content.
 	 */
 	public static function ngg_decode_sanitized_html_content( $content ) {
 		$content = self::ngg_sanitize_text_alt_title_desc( $content );
@@ -411,19 +471,19 @@ class I18N {
 	/**
 	 * Function to return plain text for alt or title attributes.
 	 *
-	 * @param  mixed $text
-	 * @return void
+	 * @param  mixed $text The text to process.
+	 * @return string The plain text.
 	 */
 	public static function ngg_plain_text_alt_title_attributes( $text ) {
-		$text = esc_attr( strip_tags( html_entity_decode( $text, ENT_QUOTES, 'UTF-8' ) ) );
+		$text = esc_attr( strip_tags( html_entity_decode( $text, ENT_QUOTES, 'UTF-8' ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 		return $text;
 	}
 
 	/**
 	 * Function to decode HTML entities recursively.
 	 *
-	 * @param  mixed $content
-	 * @return void
+	 * @param  mixed $content The content to decode.
+	 * @return string The decoded content.
 	 */
 	public static function ngg_decode_html_entities( $content ) {
 		$previous_content = '';
@@ -431,8 +491,9 @@ class I18N {
 		// Keep decoding until no changes occur (i.e., fully decoded).
 		do {
 			$previous_content = $content;
-			$content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
-		} while ($previous_content !== $content);
+			$content          = html_entity_decode( $content, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+		} while ( $previous_content !== $content );
 
 		return $content;
 	}

@@ -2,6 +2,7 @@
 
 namespace Imagely\NGG\DisplayedGallery;
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * The Trigger Manager displays "trigger buttons" for a displayed gallery.
  *
@@ -12,24 +13,71 @@ namespace Imagely\NGG\DisplayedGallery;
  */
 class TriggerManager {
 
-	static $_instance                      = null;
-	private $_triggers                     = [];
-	private $_trigger_order                = [];
-	private $_display_type_handlers        = [];
-	private $_default_display_type_handler = null;
-	private $css_class                     = 'ngg-trigger-buttons';
+	/**
+	 * Instance cache.
+	 *
+	 * @var TriggerManager|null
+	 */
+	public static $_instance = null;
 
+	/**
+	 * Triggers array.
+	 *
+	 * @var array
+	 */
+	private $_triggers = [];
+
+	/**
+	 * Trigger order array.
+	 *
+	 * @var array
+	 */
+	private $_trigger_order = [];
+
+	/**
+	 * Display type handlers.
+	 *
+	 * @var array
+	 */
+	private $_display_type_handlers = [];
+
+	/**
+	 * Default display type handler.
+	 *
+	 * @var object|null
+	 */
+	private $_default_display_type_handler = null;
+
+	/**
+	 * CSS class name.
+	 *
+	 * @var string
+	 */
+	private $css_class = 'ngg-trigger-buttons';
+
+	/**
+	 * View instance.
+	 *
+	 * @var object
+	 */
 	public $view;
 
+	/**
+	 * Default image types array.
+	 *
+	 * @var array
+	 */
 	private $_default_image_types = [
 		'photocrati-nextgen_basic_thumbnails',
 		'photocrati-nextgen_basic_singlepic',
 	];
 
 	/**
+	 * Gets an instance of the trigger manager.
+	 *
 	 * @return TriggerManager
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( ! self::$_instance ) {
 			self::$_instance = new TriggerManager();
 		}
@@ -96,10 +144,12 @@ class TriggerManager {
 	}
 
 	public function increment_position( $name ) {
-		if ( ( $current_index = array_search( $name, $this->_trigger_order ) ) !== false ) {
-			$next_index = $current_index += 1;
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$current_index = array_search( $name, $this->_trigger_order );
+		if ( $current_index !== false ) {
+			++$current_index;
+			$next_index = $current_index;
 
-			// 1,2,3,4,5 => 1,2,4,3,5
 			if ( isset( $this->_trigger_order[ $next_index ] ) ) {
 				$next                                   = $this->_trigger_order[ $next_index ];
 				$this->_trigger_order[ $next_index ]    = $name;
@@ -111,8 +161,11 @@ class TriggerManager {
 	}
 
 	public function decrement_position( $name ) {
-		if ( ( $current_index = array_search( $name, $this->_trigger_order ) ) !== false ) {
-			$previous_index = $current_index -= 1;
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$current_index = array_search( $name, $this->_trigger_order );
+		if ( $current_index !== false ) {
+			--$current_index;
+			$previous_index = $current_index;
 			if ( isset( $this->_trigger_order[ $previous_index ] ) ) {
 				$previous                                = $this->_trigger_order[ $previous_index ];
 				$this->_trigger_order[ $previous_index ] = $name;
@@ -124,11 +177,13 @@ class TriggerManager {
 	}
 
 	public function position_of( $name ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return array_search( $name, $this->_trigger_order );
 	}
 
 	public function move_to_position( $name, $position_index ) {
-		if ( ( $current_index = $this->position_of( $name ) ) !== false ) {
+		$current_index = $this->position_of( $name );
+		if ( $current_index !== false ) {
 			$func = 'increment_position';
 			if ( $current_index < $position_index ) {
 				$func = 'decrement_position';
@@ -142,7 +197,8 @@ class TriggerManager {
 	}
 
 	public function move_to_start( $name ) {
-		if ( ( $index = $this->position_of( $name ) ) ) {
+		$index = $this->position_of( $name );
+		if ( $index ) {
 			unset( $this->_trigger_order[ $index ] );
 			array_unshift( $this->_trigger_order, $name );
 			$this->_rebuild_index();
@@ -157,7 +213,7 @@ class TriggerManager {
 
 	public function move_to_end( $name ) {
 		$index = $this->position_of( $name );
-		if ( $index !== false or $index != $this->count() - 1 ) {
+		if ( $index !== false || $index != $this->count() - 1 ) {
 			unset( $this->_trigger_order[ $index ] );
 			$this->_trigger_order[] = $name;
 			$this->_rebuild_index();
@@ -185,7 +241,8 @@ class TriggerManager {
 	}
 
 	public function render( $view, $displayed_gallery ) {
-		if ( ( $klass = $this->get_handler_for_displayed_gallery( $displayed_gallery ) ) ) {
+		$klass = $this->get_handler_for_displayed_gallery( $displayed_gallery );
+		if ( $klass ) {
 			$handler                    = new $klass();
 			$handler->view              = $view;
 			$handler->displayed_gallery = $displayed_gallery;
@@ -206,7 +263,8 @@ class TriggerManager {
 			if ( call_user_func( [ $klass, 'is_renderable' ], $name, $displayed_gallery ) ) {
 				$handler                    = new $klass();
 				$handler->name              = $name;
-				$handler->view              = $this->view = $view;
+				$this->view                 = $view;
+				$handler->view              = $view;
 				$handler->displayed_gallery = $displayed_gallery;
 				$retval                     = $handler->render();
 			}
@@ -221,7 +279,8 @@ class TriggerManager {
 		$retval    = [ "<div class='{$css_class}'>" ];
 
 		foreach ( $this->_trigger_order as $name ) {
-			if ( ( $markup = $this->render_trigger( $name, $view, $displayed_gallery ) ) ) {
+			$markup = $this->render_trigger( $name, $view, $displayed_gallery );
+			if ( $markup ) {
 				$output   = true;
 				$retval[] = $markup;
 			}
@@ -238,7 +297,8 @@ class TriggerManager {
 	}
 
 	public function enqueue_resources( $displayed_gallery ) {
-		if ( ( $handler = $this->get_handler_for_displayed_gallery( $displayed_gallery ) ) ) {
+		$handler = $this->get_handler_for_displayed_gallery( $displayed_gallery );
+		if ( $handler ) {
 			wp_enqueue_style( 'fontawesome' );
 			wp_enqueue_style( 'ngg_trigger_buttons' );
 
@@ -260,10 +320,31 @@ class TriggerManager {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+/**
+ * Image trigger handler.
+ */
 class ImageTriggerHandler {
 
+	/**
+	 * Displayed gallery instance.
+	 *
+	 * @var object
+	 */
 	public $displayed_gallery;
+
+	/**
+	 * Manager instance.
+	 *
+	 * @var object
+	 */
 	public $manager;
+
+	/**
+	 * View instance.
+	 *
+	 * @var object
+	 */
 	public $view;
 
 	public function render() {
@@ -273,10 +354,31 @@ class ImageTriggerHandler {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+/**
+ * Trigger handler.
+ */
 class TriggerHandler {
 
+	/**
+	 * Displayed gallery instance.
+	 *
+	 * @var object
+	 */
 	public $displayed_gallery;
+
+	/**
+	 * Manager instance.
+	 *
+	 * @var object
+	 */
 	public $manager;
+
+	/**
+	 * View instance.
+	 *
+	 * @var object
+	 */
 	public $view;
 
 	public function render() {

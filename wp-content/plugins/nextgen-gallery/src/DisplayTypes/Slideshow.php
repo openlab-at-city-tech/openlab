@@ -12,11 +12,15 @@ use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Router;
 
 /**
+ * Slideshow display type.
+ *
  * @implements \Imagely\NGG\DisplayType\ControllerAbstract
  */
 class Slideshow extends ParentController {
 
 	/**
+	 * Gets an alternative displayed gallery.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
 	 * @return DisplayedGallery
 	 */
@@ -46,11 +50,13 @@ class Slideshow extends ParentController {
 	}
 
 	/**
+	 * Renders the slideshow.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
-	 * @param bool             $return (optional)
+	 * @param bool             $return_output (optional)
 	 * @return string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		$router = Router::get_instance();
 
 		// We now hide option for triggers on this display type. This ensures they do not show based on past settings.
@@ -59,7 +65,8 @@ class Slideshow extends ParentController {
 		// Get the images to be displayed.
 		$current_page = (int) $router->get_parameter( 'nggpage', 1 );
 
-		if ( ( $images = $displayed_gallery->get_included_entities() ) ) {
+		$images = $displayed_gallery->get_included_entities();
+		if ( $images ) {
 			// Get the gallery storage component.
 			$storage = StorageManager::get_instance();
 
@@ -70,7 +77,7 @@ class Slideshow extends ParentController {
 			$params['displayed_gallery_id'] = $displayed_gallery->id();
 			$params['current_page']         = $current_page;
 			$params['effect_code']          = $this->get_effect_code( $displayed_gallery );
-			$params['anchor']               = 'ngg-slideshow-' . $displayed_gallery->id() . '-' . rand( 1, getrandmax() ) . $current_page;
+			$params['anchor']               = 'ngg-slideshow-' . $displayed_gallery->id() . '-' . wp_rand( 1, getrandmax() ) . $current_page;
 			$params['placeholder']          = StaticAssets::get_url( 'Slideshow/placeholder.gif', 'photocrati-nextgen_basic_gallery#slideshow/placeholder.gif' );
 
 			// This was not set correctly in previous versions.
@@ -100,10 +107,12 @@ class Slideshow extends ParentController {
 
 		}
 
-		return $view->render( $return );
+		return $view->render( $return_output );
 	}
 
 	/**
+	 * Enqueues frontend resources for the slideshow.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
 	 */
 	public function enqueue_frontend_resources( $displayed_gallery ) {
@@ -130,6 +139,7 @@ class Slideshow extends ParentController {
 			NGG_SCRIPT_VERSION
 		);
 
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'ngg_slick',
 			StaticAssets::get_url( 'Slideshow/slick/slick-1.8.0-modded.js', 'photocrati-nextgen_basic_gallery#slideshow/slick/slick-1.8.0-modded.js' ),

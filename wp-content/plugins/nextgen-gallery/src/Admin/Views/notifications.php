@@ -15,7 +15,7 @@ $notifications = new Notifications();
 					<?php
 					printf(
 						wp_kses_post(
-						// Translators: Placeholder for the number of active notifications.
+							/* translators: %s: number of active notifications */
 							__( 'New Notifications (%s)', 'nggallery' )
 						),
 						'<span id="nextgen-notifications-count">' . absint( $notifications->get_count() ) . '</span>'
@@ -26,7 +26,7 @@ $notifications = new Notifications();
 					<?php
 					printf(
 						wp_kses_post(
-						// Translators: Placeholder for the number of dismissed notifications.
+							/* translators: %s: number of dismissed notifications */
 							__( 'Notifications (%s)', 'nggallery' )
 						),
 						'<span id="nextgen-notifications-dismissed-count">' . absint( $notifications->get_dismissed_count() ) . '</span>'

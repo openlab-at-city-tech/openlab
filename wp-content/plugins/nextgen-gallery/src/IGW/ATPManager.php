@@ -10,12 +10,30 @@ use Imagely\NGG\DisplayedGallery\Renderer;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\{Security, URL};
 
+/**
+ * Attach to Post manager.
+ */
 class ATPManager {
 
+	/**
+	 * TinyMCE plugin name.
+	 *
+	 * @var string
+	 */
 	public $attach_to_post_tinymce_plugin = 'NextGEN_AttachToPost';
 
+	/**
+	 * Whether to substitute placeholders.
+	 *
+	 * @var bool
+	 */
 	public static $substitute_placeholders = true;
 
+	/**
+	 * Instance cache.
+	 *
+	 * @var ATPManager|null
+	 */
 	protected static $instance = null;
 
 	public static function get_instance() {
@@ -26,7 +44,7 @@ class ATPManager {
 	}
 
 	public static function is_atp_url() {
-		return strpos( strtolower( $_SERVER['REQUEST_URI'] ), NGG_ATTACH_TO_POST_SLUG ) !== false;
+		return isset( $_SERVER['REQUEST_URI'] ) && strpos( strtolower( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ), NGG_ATTACH_TO_POST_SLUG ) !== false;
 	}
 
 	public function register_hooks() {
@@ -60,10 +78,11 @@ class ATPManager {
 	/**
 	 * Route the IGW requests using wp-admin
 	 */
-	function route_insert_gallery_window() {
+	public function route_insert_gallery_window() {
 		if ( isset( $_REQUEST[ NGG_ATTACH_TO_POST_SLUG ] )
 			&& isset( $_REQUEST['nonce'] )
 			&& \wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'ngg_attach_to_post_iframe' ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Controller()->index_action() returns safe HTML
 			print ( new Controller() )->index_action();
 			exit();
 		}
@@ -75,7 +94,7 @@ class ATPManager {
 	public function print_tinymce_placeholder_template() {
 		$view     = new View( 'AttachToPost/tinymce_placeholder', [], 'photocrati-attach_to_post#tinymce_placeholder' );
 		$template = $view->find_template_abspath( 'AttachToPost/tinymce_placeholder', 'photocrati-attach_to_post#tinymce_placeholder' );
-		readfile( $template );
+		readfile( $template ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
 	}
 
 	/**
@@ -104,34 +123,31 @@ class ATPManager {
 		foreach ( $images as $image ) {
 			if ( strpos( $image['src'], NGG_ATTACH_TO_POST_SLUG ) === false ) {
 				$retval[] = $image;
-			} else {
+			} elseif ( preg_match( '/(\d+)$/', $image['src'], $match ) ) {
 				// Lookup images for the displayed gallery.
-				if ( preg_match( '/(\d+)$/', $image['src'], $match ) ) {
-					$displayed_gallery_id = $match[1];
-					$mapper               = DisplayedGalleryMapper::get_instance();
-					$displayed_gallery    = $mapper->find( $displayed_gallery_id, true );
-					if ( $displayed_gallery ) {
-						$gallery_storage = StorageManager::get_instance();
-						$settings        = Settings::get_instance();
-						$source_obj      = $displayed_gallery->get_source();
-						if ( in_array( 'image', $source_obj->returns ) ) {
-							foreach ( $displayed_gallery->get_entities() as $image ) {
-								$named_image_size = $settings->get( 'imgAutoResize' ) ? 'full' : 'thumb';
+				$displayed_gallery_id = $match[1];
+				$mapper               = DisplayedGalleryMapper::get_instance();
+				$displayed_gallery    = $mapper->find( $displayed_gallery_id, true );
+				if ( $displayed_gallery ) {
+					$gallery_storage = StorageManager::get_instance();
+					$settings        = Settings::get_instance();
+					$source_obj      = $displayed_gallery->get_source();
+     // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+					if ( in_array( 'image', $source_obj->returns ) ) {
+						foreach ( $displayed_gallery->get_entities() as $image ) {
+							$named_image_size = $settings->get( 'imgAutoResize' ) ? 'full' : 'thumb';
 
-								$sitemap_image = [
-									'src'   => $gallery_storage->get_image_url( $image, $named_image_size ),
-									'alt'   => $image->alttext,
-									'title' => $image->description ? $image->description : $image->alttext,
-								];
-								$retval[]      = $sitemap_image;
-							}
+							$sitemap_image = [
+								'src'   => $gallery_storage->get_image_url( $image, $named_image_size ),
+								'alt'   => $image->alttext,
+								'title' => $image->description ? $image->description : $image->alttext,
+							];
+							$retval[]      = $sitemap_image;
 						}
 					}
 				}
 			}
-		}
-
-		return $retval;
+		}       return $retval;
 	}
 
 	/**
@@ -162,6 +178,7 @@ class ATPManager {
 			Security::is_allowed( 'NextGEN Use TinyMCE' ),
 		];
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( false, $search ) ) {
 			return;
 		}
@@ -172,7 +189,8 @@ class ATPManager {
 		$igw_url   .= '&nonce=' . \wp_create_nonce( 'ngg_attach_to_post_iframe' );
 		$igw_url   .= '&KeepThis=true&TB_iframe=true&height=600&width=1000';
 
-		printf( '<a href="%s" data-editor="content" class="button ngg-add-gallery thickbox" id="ngg-media-button" class="button" ><img src="%s" style="padding:0 4px 0 0; margin-left: -2px; margin-top:-3px; max-width: 20px;">%s</a>', $igw_url, $button_url, $label );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- printf with esc_url and esc_html for safe output
+		printf( '<a href="%s" data-editor="content" class="button ngg-add-gallery thickbox" id="ngg-media-button" class="button" ><img src="%s" style="padding:0 4px 0 0; margin-left: -2px; margin-top:-3px; max-width: 20px;">%s</a>', esc_url( $igw_url ), esc_url( $button_url ), esc_html( $label ) );
 	}
 
 	/**
@@ -193,12 +211,12 @@ class ATPManager {
 				$displayed_gallery    = $mapper->find( $displayed_gallery_id, true );
 
 				// Get the content for the displayed gallery.
-				$retval = '<p>' . _( 'Invalid Displayed Gallery' ) . '</p>';
+				$retval = '<p>' . __( 'Invalid Displayed Gallery' ) . '</p>';
 				if ( $displayed_gallery ) {
 					$retval   = '';
 					$renderer = Renderer::get_instance();
 					if ( defined( 'NGG_SHOW_DISPLAYED_GALLERY_ERRORS' ) && NGG_SHOW_DISPLAYED_GALLERY_ERRORS && ! $displayed_gallery->is_valid() ) {
-						$retval .= var_export( $displayed_gallery->validation(), true );
+						$retval .= wp_json_encode( $displayed_gallery->validation() );
 					}
 					if ( self::$substitute_placeholders ) {
 						$retval .= $renderer->render( $displayed_gallery, true );
@@ -218,12 +236,15 @@ class ATPManager {
 	public function enqueue_static_resources() {
 		// Enqueue resources needed at post/page level.
 		if ( $this->is_new_or_edit_post_screen() ) {
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			\wp_enqueue_script( 'nextgen_admin_js' );
 			\wp_enqueue_style( 'nextgen_admin_css' );
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			\wp_enqueue_script( 'frame_event_publisher' );
 
 			DisplayManager::enqueue_fontawesome();
 
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			\wp_register_script(
 				'Base64',
 				StaticAssets::get_url( 'AttachToPost/base64.js', 'photocrati-attach_to_post#base64.js' ),
@@ -238,6 +259,7 @@ class ATPManager {
 				NGG_SCRIPT_VERSION
 			);
 
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			\wp_enqueue_script(
 				'ngg-igw',
 				StaticAssets::get_url( 'AttachToPost/igw.js', 'photocrati-attach_to_post#igw.js' ),
@@ -258,8 +280,9 @@ class ATPManager {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		} elseif ( isset( $_REQUEST['attach_to_post'] )
 					|| isset( $_REQUEST['nextgen-attach_to_post'] )
-					|| ( isset( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'nggallery' ) ) ) {
+					|| ( isset( $_REQUEST['page'] ) && false !== strpos( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ), 'nggallery' ) ) ) {
 			// phpcs:enable WordPress.Security.NonceVerification.Recommended
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			\wp_enqueue_script(
 				'iframely',
 				StaticAssets::get_url( 'AttachToPost/iframely.js', 'photocrati-attach_to_post#iframely.js' ),
@@ -281,7 +304,7 @@ class ATPManager {
 	}
 
 	public function is_new_or_edit_post_screen() {
-		return preg_match( '/\/wp-admin\/(post|post-new|site-editor)\.php$/', $_SERVER['SCRIPT_NAME'] );
+		return isset( $_SERVER['SCRIPT_NAME'] ) && preg_match( '/\/wp-admin\/(post|post-new|site-editor)\.php$/', sanitize_text_field( wp_unslash( $_SERVER['SCRIPT_NAME'] ) ) );
 	}
 
 	public function can_use_tinymce() {
@@ -290,6 +313,7 @@ class ATPManager {
 			Security::is_allowed( 'NextGEN Use TinyMCE' ),
 			\get_user_option( 'rich_editing' ) == 'true',
 		];
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return ! in_array( false, $checks );
 	}
 

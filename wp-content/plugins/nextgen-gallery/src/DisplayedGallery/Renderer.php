@@ -11,14 +11,35 @@ use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Router;
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Renderer for displayed galleries.
+ */
 class Renderer {
 
+	/**
+	 * Instances cache.
+	 *
+	 * @var array
+	 */
 	protected static $instances = [];
-	protected static $cache     = [];
 
+	/**
+	 * Cache array.
+	 *
+	 * @var array
+	 */
+	protected static $cache = [];
+
+	/**
+	 * Whether app rewrite has been done.
+	 *
+	 * @var bool
+	 */
 	protected static $has_done_app_rewrite = false;
 
 	/**
+	 * Gets an instance of the renderer.
+	 *
 	 * @param bool|string $context
 	 * @return Renderer
 	 */
@@ -30,11 +51,13 @@ class Renderer {
 	}
 
 	/**
+	 * Converts parameters to a displayed gallery.
+	 *
 	 * @param array $params
 	 * @return DisplayedGallery
 	 */
 	public function params_to_displayed_gallery( $params ) {
-		$hash = crc32( serialize( $params ) );
+		$hash = crc32( wp_json_encode( $params ) );
 		if ( isset( self::$cache[ $hash ] ) ) {
 			return self::$cache[ $hash ];
 		}
@@ -82,13 +105,11 @@ class Renderer {
 		if ( ! is_null( $args['id'] ) ) {
 			$displayed_gallery = $mapper->find( $args['id'], true );
 			unset( $mapper );
-		}
-
-		// We're generating a new displayed gallery.
-		else {
+		} else {
+			// We're generating a new displayed gallery.
 			// Galleries?
 			if ( $args['gallery_ids'] ) {
-				if ( $args['source'] != 'albums' and $args['source'] != 'album' ) {
+				if ( $args['source'] != 'albums' && $args['source'] != 'album' ) {
 					$args['source']        = 'galleries';
 					$args['container_ids'] = $args['gallery_ids'];
 					if ( $args['image_ids'] ) {
@@ -98,31 +119,27 @@ class Renderer {
 					$args['entity_ids'] = $args['gallery_ids'];
 				}
 				unset( $args['gallery_ids'] );
-			}
-
-			// Albums ?
-			elseif ( $args['album_ids'] || $args['album_ids'] === '0' ) {
+			} elseif ( $args['album_ids'] || $args['album_ids'] === '0' ) {
+				// Albums ?
 				$args['source']        = 'albums';
 				$args['container_ids'] = $args['album_ids'];
 				unset( $args['albums_ids'] );
-			}
-
-			// Tags ?
-			elseif ( $args['tag_ids'] ) {
+			} elseif ( 'albums' === $args['src'] || 'albums' === $args['source'] ) {
+				// Modern album format: src="albums" (before ids conversion)
+				$args['source'] = 'albums';
+				// container_ids will be set by ids conversion later
+			} elseif ( $args['tag_ids'] ) {
+				// Tags ?
 				$args['source']        = 'tags';
 				$args['container_ids'] = $args['tag_ids'];
 				unset( $args['tag_ids'] );
-			}
-
-			// Specific images selected.
-			elseif ( $args['image_ids'] ) {
+			} elseif ( $args['image_ids'] ) {
+				// Specific images selected.
 				$args['source']     = 'galleries';
 				$args['entity_ids'] = $args['image_ids'];
 				unset( $args['image_ids'] );
-			}
-
-			// Tagcloud support.
-			elseif ( $args['tagcloud'] ) {
+			} elseif ( $args['tagcloud'] ) {
+				// Tagcloud support.
 				$args['source'] = 'tags';
 			}
 
@@ -264,7 +281,9 @@ class Renderer {
 				print_r( $msg );
 				echo '</pre>';
 			} else {
-				var_dump( $msg );
+				// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
+				// var_dump( $msg );
+				null; // Intentionally empty - debug code commented out.
 			}
 
 			$retval = ob_get_clean();
@@ -274,34 +293,37 @@ class Renderer {
 	}
 
 	/**
+	 * Checks if the request is a REST request.
+	 *
 	 * @return bool
 	 */
 	public function is_rest_request() {
-		return defined( 'REST_REQUEST' ) || strpos( $_SERVER['REQUEST_URI'], 'wp-json' ) !== false;
+		return defined( 'REST_REQUEST' ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'wp-json' ) !== false );
 	}
 
 	/**
 	 * Renders a displayed gallery on the frontend
 	 *
 	 * @param DisplayedGallery $displayed_gallery
-	 * @param bool             $return
+	 * @param bool             $return_output
 	 * @return string
 	 */
-	public function render( $displayed_gallery, $return = false ) {
+	public function render( $displayed_gallery, $return_output = false ) {
 		// Simply throwing our rendered gallery into a feed will most likely not work correctly.
 		// The MediaRSS option in NextGEN is available as an alternative.
 		if ( ! Settings::get_instance()->get( 'galleries_in_feeds' ) && is_feed() ) {
 			return sprintf(
+				/* translators: 1: permalink URL, 2: server name */
 				__( ' [<a href="%1$s">See image gallery at %2$s</a>] ', 'nggallery' ),
 				esc_url( apply_filters( 'the_permalink_rss', get_permalink() ) ),
-				$_SERVER['SERVER_NAME']
+				isset( $_SERVER['SERVER_NAME'] ) ? esc_html( sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) ) ) : ''
 			);
 		}
 
 		$retval = '';
 
 		if ( is_null( $displayed_gallery->id() ) ) {
-			$displayed_gallery->id( md5( json_encode( $displayed_gallery->get_entity() ) ) );
+			$displayed_gallery->id( md5( wp_json_encode( $displayed_gallery->get_entity() ) ) );
 		}
 
 		$this->do_app_rewrites( $displayed_gallery );
@@ -330,10 +352,12 @@ class Renderer {
 		$lookup = true;
 
 		// Should we check the cache?
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( is_array( $displayed_gallery->container_ids ) && in_array( 'All', $displayed_gallery->container_ids ) ) {
 			$lookup = false;
-		} elseif ( $displayed_gallery->source == 'albums' && ( $app->get_parameter( 'gallery' ) ) or $app->get_parameter( 'album' ) ) {
+		} elseif ( $displayed_gallery->source == 'albums' && ( $app->get_parameter( 'gallery' ) ) || $app->get_parameter( 'album' ) ) {
 			$lookup = false;
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		} elseif ( in_array( $displayed_gallery->source, [ 'random', 'random_images' ] ) ) {
 			$lookup = false;
 		} elseif ( $app->get_parameter( 'show' ) ) {
@@ -349,6 +373,7 @@ class Renderer {
 		// cause issues with displays adding their JS or CSS after the <body> has began or finished.
 		if ( ( ! defined( 'NGG_SKIP_LOAD_SCRIPTS' ) || ! NGG_SKIP_LOAD_SCRIPTS )
 		&& ! $this->is_rest_request()
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		&& ! in_array( $displayed_gallery->id(), DisplayManager::$enqueued_displayed_gallery_ids ) ) {
 			DisplayManager::$enqueued_displayed_gallery_ids[] = $displayed_gallery->id();
 			$controller->enqueue_frontend_resources( $displayed_gallery );
@@ -392,7 +417,7 @@ class Renderer {
 			);
 
 			// Any displayed gallery links on the home page will need to be regenerated if the permalink structure changes.
-			if ( is_home() or is_front_page() ) {
+			if ( is_home() || is_front_page() ) {
 				$key_params[] = get_option( 'permalink_structure' );
 			}
 
@@ -432,7 +457,8 @@ class Renderer {
 
 		$retval .= $html;
 
-		if ( ! $return ) {
+		if ( ! $return_output ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $retval contains safe HTML from gallery rendering
 			echo $retval;
 		}
 
@@ -485,6 +511,7 @@ class Renderer {
 				'photocrati-nextgen_pro_list_album',
 			];
 
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $displayed_gallery->display_type, $pro_album_types ) ) {
 				$do_rewrites = true;
 
@@ -497,6 +524,7 @@ class Renderer {
 				$app->rewrite( '{*}' . $slug . '/{\w}', '{1}' . $slug . '/album--{2}' );
 				$app->rewrite( '{*}' . $slug . '/{\w}/{\w}', '{1}' . $slug . '/album--{2}/gallery--{3}' );
 				$app->rewrite( '{*}' . $slug . '/{\w}/{\w}/{\w}{*}', '{1}' . $slug . '/album--{2}/gallery--{3}/{4}{5}' );
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			} elseif ( in_array( $original_display_type, $pro_album_types ) ) {
 				$do_rewrites = true;
 

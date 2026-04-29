@@ -56,7 +56,7 @@ class Block extends \WP_REST_Controller {
 	 */
 	public function get_item_permissions_check( $request ): bool {
 		// Verify the nonce.
-		$nonce = $request->get_header('X-WP-Nonce');
+		$nonce = $request->get_header( 'X-WP-Nonce' );
 
 		if ( ! $nonce || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
 			return false;

@@ -224,7 +224,7 @@ class MenuNudge {
 					top: -1 * $tooltip.innerHeight() / 2 + 'px'
 				});
 
-				function hideTooltip() {
+				public function hideTooltip() {
 					$tooltip.addClass('nggallery-admin-menu-tooltip-hide');
 					$.post(ajaxurl, {
 						action: 'ngg_hide_admin_menu_tooltip',

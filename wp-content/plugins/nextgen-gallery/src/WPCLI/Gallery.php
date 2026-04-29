@@ -5,6 +5,9 @@ namespace Imagely\NGG\WPCLI;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\Image as ImageMapper;
 
+/**
+ * WP-CLI gallery commands.
+ */
 class Gallery {
 
 	/**
@@ -32,7 +35,8 @@ class Gallery {
 		);
 
 		if ( $gallery && $gallery->save() ) {
-			$gallery_id = $retval = $gallery->id();
+			$retval     = $gallery->id();
+			$gallery_id = $retval;
 			\WP_CLI::success( "Created gallery with id #{$gallery_id}" );
 		} else {
 			\WP_CLI::error( 'Unable to create gallery' );
@@ -89,6 +93,8 @@ class Gallery {
 	}
 
 	/**
+	 * Lists all galleries.
+	 *
 	 * @param array $args
 	 * @param array $assoc_args
 	 * @subcommand list
@@ -109,6 +115,8 @@ class Gallery {
 	}
 
 	/**
+	 * Lists all children (images) of a gallery.
+	 *
 	 * @param $args
 	 * @param $assoc_args
 	 * @synopsis <gallery_id>

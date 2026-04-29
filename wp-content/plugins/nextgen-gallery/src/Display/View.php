@@ -6,15 +6,53 @@ use Imagely\NGG\DisplayType\ControllerFactory;
 use Imagely\NGG\DisplayedGallery\TriggerManager;
 use Imagely\NGG\Util\Filesystem;
 
+/**
+ * View class for rendering templates
+ */
 class View {
 
-	public $template        = '';
-	public $params          = [];
-	public $queue           = [];
+	/**
+	 * Template path
+	 *
+	 * @var string
+	 */
+	public $template = '';
+
+	/**
+	 * Template parameters
+	 *
+	 * @var array
+	 */
+	public $params = [];
+
+	/**
+	 * Element queue
+	 *
+	 * @var array
+	 */
+	public $queue = [];
+
+	/**
+	 * Legacy template path
+	 *
+	 * @var string
+	 */
 	public $legacy_template = '';
 
+	/**
+	 * Default root directory
+	 *
+	 * @var string
+	 */
 	public static $default_root_dir = NGG_PLUGIN_DIR;
 
+	/**
+	 * Constructor
+	 *
+	 * @param string $template The template path.
+	 * @param array  $params Template parameters.
+	 * @param string $legacy_template_filename Legacy template filename.
+	 */
 	public function __construct( $template, $params = [], $legacy_template_filename = '' ) {
 		$this->template        = $template;
 		$this->params          = (array) $params;
@@ -51,7 +89,9 @@ class View {
 	}
 
 	/**
-	 * @param string $filename
+	 * Validates if a template filename is valid and secure.
+	 *
+	 * @param string $filename The filename to validate.
 	 * @return bool
 	 */
 	public function is_valid_template_filename( $filename ) {
@@ -105,7 +145,15 @@ class View {
 		return true;
 	}
 
-	public function get_template_abspath( string $template = null ): string {
+	/**
+	 * Gets the absolute path to a template
+	 *
+	 * @param string|null $template The template name.
+	 * @return string
+	 * @throws \RuntimeException If template is not valid or doesn't exist.
+	 */
+	// phpcs:ignore PHPCompatibility.FunctionDeclarations.NewNullableTypes -- Explicit nullable required for PHP 8.4.
+	public function get_template_abspath( ?string $template = null ): string {
 		if ( ! $template ) {
 			$template = $this->template;
 		}
@@ -114,6 +162,7 @@ class View {
 
 		if ( 0 === strpos( $template, DIRECTORY_SEPARATOR ) ) {
 			// $value is an absolute path, but it must be validated first
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			if ( ! $this->is_valid_template_filename( $template ) || ! @file_exists( $template ) ) {
 				$display_name = esc_html( $template );
 				throw new \RuntimeException( esc_html( $display_name ) . ' is not a valid MVC template' );
@@ -125,25 +174,33 @@ class View {
 		return $template;
 	}
 
+	/**
+	 * Rasterizes a view element
+	 *
+	 * @param ViewElement $element The element to rasterize.
+	 * @return string
+	 */
 	public function rasterize_object( ViewElement $element ) {
 		return $element->rasterize();
 	}
 
 	/**
-	 * @param $id
-	 * @param $type
-	 * @param $context
+	 * Starts a new element
+	 *
+	 * @param string      $id The element ID.
+	 * @param string|null $type The element type.
+	 * @param mixed|null  $context The element context.
 	 * @return ViewElement
 	 */
 	public function start_element( $id, $type = null, $context = null ) {
-		if ( $type == null ) {
+		if ( null === $type ) {
 			$type = 'element';
 		}
 
 		$count   = count( $this->queue );
 		$element = new ViewElement( $id, $type );
 
-		if ( $context != null ) {
+		if ( null !== $context ) {
 			if ( ! is_array( $context ) ) {
 				$context = [ 'object' => $context ];
 			}
@@ -170,12 +227,17 @@ class View {
 		return $element;
 	}
 
+	/**
+	 * Ends the current element
+	 *
+	 * @return ViewElement
+	 */
 	public function end_element() {
 		$content = ob_get_clean();
 
 		$element = array_pop( $this->queue );
 
-		if ( $content != null ) {
+		if ( null !== $content ) {
 			$element->append( $content );
 		}
 
@@ -185,14 +247,14 @@ class View {
 	/**
 	 * Renders a sub-template for the view
 	 *
-	 * @param string $__template
-	 * @param array  $__params
-	 * @param bool   $__return Unused
+	 * @param string     $__template The template path.
+	 * @param array|null $__params Template parameters.
+	 * @param bool       $__return Unused.
 	 * @return NULL
 	 */
 	public function include_template( $__template, $__params = null, $__return = false ) {
 		// Use underscores to prefix local variables to avoid conflicts wth template vars.
-		if ( $__params === null ) {
+		if ( $__params === null ) { // phpcs:ignore WordPress.PHP.YodaConditions.NotYoda
 			$__params = [];
 		}
 
@@ -219,12 +281,12 @@ class View {
 		$__image_after_target  = $this->get_template_abspath( 'GalleryDisplay/ImageAfter' );
 
 		if ( $__origin_target !== $__target ) {
-			if ( $__target == $__image_before_target ) {
+			if ( $__image_before_target === $__target ) {
 				$__image = isset( $__params['image'] ) ? $__params['image'] : null;
 				$this->start_element( 'nextgen_gallery.image_panel', 'item', $__image );
 			}
 
-			if ( $__target == $__image_after_target ) {
+			if ( $__image_after_target === $__target ) {
 				$this->end_element();
 			}
 
@@ -232,12 +294,12 @@ class View {
 
 			include $__target;
 
-			if ( $__target == $__image_before_target ) {
+			if ( $__image_before_target === $__target ) {
 				$__image = isset( $__params['image'] ) ? $__params['image'] : null;
 				$this->start_element( 'nextgen_gallery.image', 'item', $__image );
 			}
 
-			if ( $__target == $__image_after_target ) {
+			if ( $__image_after_target === $__target ) {
 				$this->end_element();
 			}
 		}
@@ -248,10 +310,10 @@ class View {
 	/**
 	 * Gets the absolute path of an MVC template file
 	 *
-	 * @param string       $template
-	 * @param string|false $module (optional)
-	 * @param string       $legacy_template Non-POPE path coming from 'templates' in the plugin root.
+	 * @param string       $template The template path.
+	 * @param string|false $legacy_template Non-POPE path coming from 'templates' in the plugin root.
 	 * @return string
+	 * @throws \RuntimeException If template is not found or invalid.
 	 */
 	public function find_template_abspath( $template, $legacy_template = '' ) {
 		$fs = Filesystem::get_instance();
@@ -290,6 +352,7 @@ class View {
 		}
 
 		if ( ! file_exists( $retval ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Exception message for debugging only
 			throw new \RuntimeException( "{$retval} is not a valid MVC template" );
 		}
 
@@ -297,29 +360,35 @@ class View {
 	}
 
 	/**
-	 * @param null|string $module_id
+	 * Gets the template override directory
+	 *
+	 * @param null|string $module_id The module ID.
 	 * @return string
 	 */
 	public function get_template_override_dir( $module_id = null ) {
 		$root = \trailingslashit( path_join( WP_CONTENT_DIR, 'ngg' ) );
-		if ( ! @file_exists( $root ) && is_writable( \trailingslashit( WP_CONTENT_DIR ) ) ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! @file_exists( $root ) && \wp_is_writable( \trailingslashit( WP_CONTENT_DIR ) ) ) {
 			\wp_mkdir_p( $root );
 		}
 
 		$modules = \trailingslashit( path_join( $root, 'modules' ) );
 
-		if ( ! @file_exists( $modules ) && is_writable( $root ) ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! @file_exists( $modules ) && \wp_is_writable( $root ) ) {
 			\wp_mkdir_p( $modules );
 		}
 
 		if ( $module_id ) {
 			$module_dir = \trailingslashit( path_join( $modules, $module_id ) );
-			if ( ! @file_exists( $module_dir ) && is_writable( $modules ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( ! @file_exists( $module_dir ) && \wp_is_writable( $modules ) ) {
 				\wp_mkdir_p( $module_dir );
 			}
 
 			$template_dir = \trailingslashit( \path_join( $module_dir, 'templates' ) );
-			if ( ! @file_exists( $template_dir ) && is_writable( $module_dir ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( ! @file_exists( $template_dir ) && \wp_is_writable( $module_dir ) ) {
 				\wp_mkdir_p( $template_dir );
 			}
 
@@ -330,12 +399,15 @@ class View {
 	}
 
 	/**
-	 * @param $module
-	 * @param $filename
+	 * Gets the absolute path to a template override
+	 *
+	 * @param string $module The module name.
+	 * @param string $filename The template filename.
 	 * @return string|null
 	 */
 	public function get_template_override_abspath( $module, $filename ) {
 		$abspath = FileSystem::get_instance()->join_paths( $this->get_template_override_dir( $module ), $filename );
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( @file_exists( $abspath ) ) {
 			return $abspath;
 		}
@@ -346,13 +418,14 @@ class View {
 	/**
 	 * Renders the view (template)
 	 *
-	 * @param bool $return (optional)
+	 * @param bool $return_output (optional) Whether to return the content or echo it.
 	 * @return string|NULL
 	 */
-	public function render( $return = false ) {
+	public function render( $return_output = false ) {
 		$content = $this->rasterize_object( $this->render_object() );
 
-		if ( ! $return ) {
+		if ( ! $return_output ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content is escaped in templates
 			echo $content;
 		}
 
@@ -360,6 +433,8 @@ class View {
 	}
 
 	/**
+	 * Renders the view object
+	 *
 	 * @return ViewElement
 	 */
 	public function render_object() {
@@ -373,7 +448,8 @@ class View {
 
 		$this->end_element();
 
-		if ( ( $displayed_gallery = $this->get_param( 'displayed_gallery' ) ) && $this->get_param( 'display_type_rendering' ) ) {
+		$displayed_gallery = $this->get_param( 'displayed_gallery' );
+		if ( $displayed_gallery && $this->get_param( 'display_type_rendering' ) ) {
 			$triggers = TriggerManager::get_instance();
 			$triggers->render( $__element, $displayed_gallery );
 
@@ -387,8 +463,9 @@ class View {
 	/**
 	 * Adds a template parameter
 	 *
-	 * @param $key
-	 * @param $value
+	 * @param string $key The parameter key.
+	 * @param mixed  $value The parameter value.
+	 * @return void
 	 */
 	public function set_param( $key, $value ) {
 		$this->params[ $key ] = $value;
@@ -397,7 +474,8 @@ class View {
 	/**
 	 * Removes a template parameter
 	 *
-	 * @param $key
+	 * @param string $key The parameter key.
+	 * @return void
 	 */
 	public function remove_param( $key ) {
 		unset( $this->params[ $key ] );
@@ -406,15 +484,15 @@ class View {
 	/**
 	 * Gets the value of a template parameter
 	 *
-	 * @param $key
-	 * @param null $default
+	 * @param string $key The parameter key.
+	 * @param mixed  $default_value The default value.
 	 * @return mixed
 	 */
-	public function get_param( $key, $default = null ) {
+	public function get_param( $key, $default_value = null ) {
 		if ( isset( $this->params[ $key ] ) ) {
 			return $this->params[ $key ];
 		} else {
-			return $default;
+			return $default_value;
 		}
 	}
 }

@@ -4,20 +4,80 @@ namespace Imagely\NGG\DataMapper;
 
 use Imagely\NGG\Util\Serializable;
 
+/**
+ * Table driver for data mapper.
+ */
 class TableDriver extends DriverBase {
 
-	public $where_clauses    = [];
-	public $order_clauses    = [];
-	public $group_by_columns = [];
-	public $limit_clause     = '';
-	public $select_clause    = '';
-	public $delete_clause    = '';
-	public $use_cache        = true;
-	public $debug            = false;
+	/**
+	 * Where clauses array.
+	 *
+	 * @var array
+	 */
+	public $where_clauses = [];
 
+	/**
+	 * Order clauses array.
+	 *
+	 * @var array
+	 */
+	public $order_clauses = [];
+
+	/**
+	 * Group by columns array.
+	 *
+	 * @var array
+	 */
+	public $group_by_columns = [];
+
+	/**
+	 * Limit clause.
+	 *
+	 * @var string
+	 */
+	public $limit_clause = '';
+
+	/**
+	 * Select clause.
+	 *
+	 * @var string
+	 */
+	public $select_clause = '';
+
+	/**
+	 * Delete clause.
+	 *
+	 * @var string
+	 */
+	public $delete_clause = '';
+
+	/**
+	 * Whether to use cache.
+	 *
+	 * @var bool
+	 */
+	public $use_cache = true;
+
+	/**
+	 * Debug flag.
+	 *
+	 * @var bool
+	 */
+	public $debug = false;
+
+	/**
+	 * Custom post mapper instance.
+	 *
+	 * @var object|null
+	 */
 	public $_custom_post_mapper;
 
 	// Necessary for backwards compatibility.
+	/**
+	 * Custom post name.
+	 *
+	 * @var string
+	 */
 	public $custom_post_name = __CLASS__;
 
 	public function __construct( $object_name = '' ) {
@@ -30,6 +90,8 @@ class TableDriver extends DriverBase {
 
 			$this->migrate();
 		} catch ( \Exception $exception ) {
+			// Exception is silently caught here as the table may not exist yet during initial setup.
+			unset( $exception );
 		}
 
 		// Each record in a NextGEN Gallery table has an associated custom post in the wp_posts table.
@@ -51,11 +113,12 @@ class TableDriver extends DriverBase {
 	/**
 	 * Looks up the primary key column for this table
 	 *
-	 * @throws \Exception
+	 * @throws \Exception When primary key cannot be found
 	 */
 	public function _lookup_primary_key_column() {
 		$key = $this->_wpdb()->get_row( "SHOW INDEX FROM {$this->get_table_name()} WHERE Key_name='PRIMARY'", ARRAY_A );
 		if ( ! $key ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Table name is internal and safe
 			throw new \Exception( "Please specify the primary key for {$this->get_table_name ()}" );
 		}
 		return $key['Column_name'];
@@ -210,7 +273,11 @@ class TableDriver extends DriverBase {
 
 		$key = $this->get_primary_key_column();
 
-		/** @noinspection SqlResolve */
+		/**
+		 * SQL query results.
+		 *
+		 * @noinspection SqlResolve
+		 */
 		$results = $this->run_query( "SELECT COUNT(`{$key}`) AS `{$key}` FROM `{$this->get_table_name()}`" );
 
 		if ( $results && isset( $results[0]->$key ) ) {
@@ -240,7 +307,9 @@ class TableDriver extends DriverBase {
 		// If we have a SQL statement to execute, then heck, execute it!.
 		if ( $sql ) {
 			if ( $this->debug ) {
-				var_dump( $sql );
+				// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
+				// var_dump( $sql );
+				null; // Intentionally empty - debug code commented out.
 			}
 
 			// Try getting the result from cache first.
@@ -250,6 +319,7 @@ class TableDriver extends DriverBase {
 		}
 
 		if ( ! $results ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$this->_wpdb()->query( $sql );
 			$results = $this->_wpdb()->last_result;
 			if ( $this->is_select_statement() ) {
@@ -277,7 +347,9 @@ class TableDriver extends DriverBase {
 				}
 			}
 		} elseif ( $this->debug ) {
-			var_dump( 'No entities returned from query' );
+			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
+			// var_dump( 'No entities returned from query' );
+			null; // Intentionally empty - debug code commented out.
 		}
 
 		// Just a safety check.
@@ -316,10 +388,11 @@ class TableDriver extends DriverBase {
 	/**
 	 * Migrates the schema of the database
 	 *
-	 * @throws \Exception
+	 * @throws \Exception When columns are not defined
 	 */
 	public function migrate() {
 		if ( ! $this->_columns ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Table name is internal and safe
 			throw new \Exception( "Columns not defined for {$this->get_table_name()}" );
 		}
 
@@ -328,6 +401,7 @@ class TableDriver extends DriverBase {
 
 		// Add any missing columns.
 		foreach ( $this->_columns as $key => $properties ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $key, $this->_table_columns ) ) {
 				if ( $this->_add_column( $key, $properties['type'], $properties['default_value'] ) ) {
 					$added = true;
@@ -335,7 +409,7 @@ class TableDriver extends DriverBase {
 			}
 		}
 
-		if ( $added or $removed ) {
+		if ( $added || $removed ) {
 			$this->lookup_columns();
 		}
 	}
@@ -358,7 +432,7 @@ class TableDriver extends DriverBase {
 	public function select( $fields = null ) {
 		// Create a fresh slate.
 		$this->_init();
-		if ( ! $fields or $fields == '*' ) {
+		if ( ! $fields || $fields == '*' ) {
 			$fields = $this->get_table_name() . '.*';
 		}
 		$this->select_clause = "SELECT {$fields}";
@@ -444,6 +518,8 @@ class TableDriver extends DriverBase {
 	}
 
 	/**
+	 * Creates an entity in the database.
+	 *
 	 * @param object $entity
 	 * @return boolean
 	 */
@@ -453,7 +529,8 @@ class TableDriver extends DriverBase {
 		$custom_post_entity = $this->create_custom_post_entity( $entity );
 
 		// Try persisting the custom post type record first.
-		if ( ( $custom_post_id = $this->_custom_post_mapper->save( $custom_post_entity ) ) ) {
+		$custom_post_id = $this->_custom_post_mapper->save( $custom_post_entity );
+		if ( $custom_post_id ) {
 			$entity->extras_post_id = $custom_post_id;
 		}
 
@@ -508,6 +585,8 @@ class TableDriver extends DriverBase {
 	}
 
 	/**
+	 * Adds a column to the table.
+	 *
 	 * @param string        $column_name
 	 * @param string        $datatype
 	 * @param string|number $default_value
@@ -518,13 +597,29 @@ class TableDriver extends DriverBase {
 			return false;
 		}
 
-		/** @noinspection SqlResolve */
-		$sql = "ALTER TABLE `{$this->get_table_name()}` ADD COLUMN `{$column_name}` {$datatype}";
+		$table_name = esc_sql( $this->get_table_name() );
+
+		// Direct database check to avoid duplicate column error if transient cache is stale.
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$exists = $this->_wpdb()->get_results( $this->_wpdb()->prepare( "SHOW COLUMNS FROM `{$table_name}` LIKE %s", $column_name ) );
+		if ( ! empty( $exists ) ) {
+			return false;
+		}
+
 		if ( $default_value ) {
 			if ( is_string( $default_value ) ) {
-				$default_value = str_replace( "'", "\\'", $default_value );
+				$sql = $this->_wpdb()->prepare(
+					"ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` {$datatype} NOT NULL DEFAULT %s",
+					str_replace( "'", "\\'", $default_value )
+				);
+			} else {
+				$sql = $this->_wpdb()->prepare(
+					"ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` {$datatype} NOT NULL DEFAULT %d",
+					$default_value
+				);
 			}
-			$sql .= ' NOT NULL DEFAULT ' . ( is_string( $default_value ) ? "'{$default_value}" : "{$default_value}" );
+		} else {
+			$sql = "ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` {$datatype}";
 		}
 
 		$return = (bool) $this->_wpdb()->query( $sql );
@@ -533,6 +628,8 @@ class TableDriver extends DriverBase {
 	}
 
 	/**
+	 * Gets the generated query.
+	 *
 	 * @param bool $no_entities Default: false
 	 * @return array|string|string[]
 	 */
@@ -571,6 +668,8 @@ class TableDriver extends DriverBase {
 	}
 
 	/**
+	 * Gets the actual generated query.
+	 *
 	 * @param bool $no_entities Default = false
 	 * @return string
 	 */
@@ -609,6 +708,8 @@ class TableDriver extends DriverBase {
 	}
 
 	/**
+	 * Gets extra columns.
+	 *
 	 * @return array
 	 */
 	public function get_extra_columns() {

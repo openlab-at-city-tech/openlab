@@ -2,6 +2,9 @@
 
 namespace Imagely\NGG\Util;
 
+/**
+ * Serializable utility class.
+ */
 class Serializable {
 
 	/**
@@ -12,11 +15,13 @@ class Serializable {
 	 */
 	public static function serialize( $value ) {
 		// Try encoding using JSON. It's usually Unicode safe but still, sometimes trips over things.
-		$serialized = @\json_encode( $value );
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$serialized = @\wp_json_encode( $value );
 
 		if ( ! $serialized ) {
 			$serialized = \preg_replace( '/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F-\x9F]/u', '', $value );
-			$serialized = @\json_encode( $serialized );
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$serialized = @\wp_json_encode( $serialized );
 		}
 
 		// Using json_encode here because PHP's serialize is not Unicode safe.
@@ -40,21 +45,18 @@ class Serializable {
 				// claims so check if $retval begins with a: as that indicates we have a serialized PHP object.
 				if ( \strpos( $retval, 'a:' ) === 0 ) {
 					if ( self::check_for_serialized_objects( $value ) ) {
+						// phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Translated string is safe
 						throw new \Exception( \__( 'NextGEN Gallery will not unserialize data with objects', 'nggallery' ) );
 					}
 
-					// Record this for later.
-					$er = \error_reporting( 0 );
-
 					// The second parameter was added by PHP 7.0.
 					if ( \version_compare( \phpversion(), '7.0', '>=' ) ) {
-						$retval = \unserialize( $value, [ 'allowed_classes' => false ] );
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- Required for legacy data handling
+						$retval = @\unserialize( $value, [ 'allowed_classes' => false ] );
 					} else {
-						$retval = \unserialize( $value );
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- Required for legacy data handling
+						$retval = @\unserialize( $value );
 					}
-
-					// Restore error reporting level.
-					\error_reporting( $er );
 				} else {
 					// We use json_decode() here because PHP's unserialize() is not Unicode safe.
 					$retval = \json_decode( \base64_decode( $retval ), true );
@@ -68,14 +70,14 @@ class Serializable {
 	/**
 	 * Determines if a string may hold a serialized PHP object
 	 *
-	 * @param $string
+	 * @param $value
 	 * @return bool
 	 */
-	public static function check_for_serialized_objects( $string ) {
-		if ( ! \is_string( $string ) ) {
+	public static function check_for_serialized_objects( $value ) {
+		if ( ! \is_string( $value ) ) {
 			return false;
 		}
-		$string = \trim( $string );
-		return (bool) \preg_match( '/(O|C):\+?[0-9]+:/is', $string );
+		$value = \trim( $value );
+		return (bool) \preg_match( '/(O|C):\+?[0-9]+:/is', $value );
 	}
 }

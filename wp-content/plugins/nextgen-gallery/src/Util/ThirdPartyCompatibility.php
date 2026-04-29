@@ -11,12 +11,32 @@ use Imagely\NGG\IGW\ATPManager;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\URL;
 
+/**
+ * ThirdPartyCompatibility class.
+ *
+ * Handles compatibility fixes and integrations with third-party plugins and themes.
+ */
 class ThirdPartyCompatibility {
 
+	/**
+	 * Array of WordPress SEO images.
+	 *
+	 * @var array
+	 */
 	protected $wpseo_images = [];
 
+	/**
+	 * Singleton instance of the ThirdPartyCompatibility class.
+	 *
+	 * @var ThirdPartyCompatibility|null
+	 */
 	protected static $instance = null;
 
+	/**
+	 * Gets the singleton instance of the ThirdPartyCompatibility class.
+	 *
+	 * @return ThirdPartyCompatibility The ThirdPartyCompatibility instance.
+	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new ThirdPartyCompatibility();
@@ -24,6 +44,11 @@ class ThirdPartyCompatibility {
 		return self::$instance;
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * Defines legacy constants for backward compatibility.
+	 */
 	public function __construct() {
 		// The following constants were renamed for 2.0.41 and are kept here for legacy compatibility.
 		$changed_constants = [
@@ -66,6 +91,9 @@ class ThirdPartyCompatibility {
 		}
 	}
 
+	/**
+	 * Registers WordPress hooks for third-party compatibility.
+	 */
 	public function register_hooks() {
 		\add_action( 'init', [ $this, 'colorbox' ], PHP_INT_MAX );
 		\add_action( 'init', [ $this, 'flattr' ], PHP_INT_MAX );
@@ -144,10 +172,12 @@ class ThirdPartyCompatibility {
 
 		foreach ( $matches as $match ) {
 			// Only process our shortcodes.
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $match[2], $shortcodes ) ) {
 				continue;
 			}
 			$params = shortcode_parse_atts( trim( $match[0], '[]' ) );
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $params[0], $shortcodes ) ) {
 				unset( $params[0] );
 			}
@@ -180,19 +210,24 @@ class ThirdPartyCompatibility {
 	public function fix_page_parameter() {
 		global $post;
 
-		if ( $post and isset( $post->post_content ) and ( strpos( $post->post_content, '<!--nextpage-->' ) === false ) and ( strpos( $_SERVER['REQUEST_URI'], '/page/' ) !== false ) ) {
-			if ( preg_match( '#/page/(\\d+)#', $_SERVER['REQUEST_URI'], $match ) ) {
-				$_REQUEST['page'] = $match[1];
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only server parameter for routing
+		if ( $post && isset( $post->post_content ) && ( strpos( $post->post_content, '<!--nextpage-->' ) === false ) && isset( $_SERVER['REQUEST_URI'] ) && ( strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), '/page/' ) !== false ) ) {
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only server parameter for routing
+			if ( preg_match( '#/page/(\\d+)#', sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), $match ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Internal routing parameter, not user input
+				$_REQUEST['page'] = sanitize_text_field( wp_unslash( $match[1] ) );
 			}
 		}
 	}
 
 	/**
-	 * @param string $placeholder
-	 * @param string $shortcode
-	 * @param array  $params
-	 * @param string $inner_content
-	 * @return string
+	 * Handles Nimble Builder shortcode processing.
+	 *
+	 * @param string $placeholder    The placeholder string.
+	 * @param string $shortcode       The shortcode name.
+	 * @param array  $params          The shortcode parameters.
+	 * @param string $inner_content   The inner content of the shortcode.
+	 * @return string The processed placeholder or shortcode output.
 	 */
 	public function nimble_builder_shortcodes( $placeholder, $shortcode, $params, $inner_content ) {
 		if ( ! defined( 'NIMBLE_PLUGIN_FILE' ) ) {
@@ -208,7 +243,9 @@ class ThirdPartyCompatibility {
 	}
 
 	/**
-	 * @param array $collection
+	 * Finds NextGEN content in Nimble Builder collections.
+	 *
+	 * @param array $collection The collection array to search.
 	 */
 	public function nimble_find_content( $collection ) {
 		if ( ! is_array( $collection ) ) {
@@ -226,6 +263,9 @@ class ThirdPartyCompatibility {
 		}
 	}
 
+	/**
+	 * Enqueues frontend resources for Nimble Builder compatibility.
+	 */
 	public function enqueue_nimble_builder_frontend_resources() {
 		if ( ! defined( 'NIMBLE_PLUGIN_FILE' ) ) {
 			return;
@@ -259,10 +299,19 @@ class ThirdPartyCompatibility {
 		}
 	}
 
+	/**
+	 * Checks if the current page is a NextGEN admin page.
+	 *
+	 * @return bool True if it's a NextGEN admin page, false otherwise.
+	 */
 	public function is_ngg_page(): bool {
-		return ( \is_admin() && isset( $_REQUEST['page'] ) && false !== strpos( $_REQUEST['page'], 'ngg' ) );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only request parameter for routing
+		return ( \is_admin() && isset( $_REQUEST['page'] ) && false !== strpos( sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ), 'ngg' ) );
 	}
 
+	/**
+	 * Dequeues Spider Calendar resources to prevent conflicts.
+	 */
 	public function dequeue_spider_calendar_resources() {
 		\remove_filter( 'admin_head', 'spide_ShowTinyMCE' );
 	}
@@ -303,6 +352,7 @@ class ThirdPartyCompatibility {
 			$gallery_storage = StorageManager::get_instance();
 			$settings        = Settings::get_instance();
 			$source          = $displayed_gallery->get_source();
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( 'image', $source->returns ) ) {
 				foreach ( $displayed_gallery->get_entities() as $image ) {
 					$named_image_size     = $settings->get( 'imgAutoResize' ) ? 'full' : 'thumb';
@@ -321,16 +371,25 @@ class ThirdPartyCompatibility {
 	 * This style causes problems with Excellent Themes admin settings
 	 */
 	public function excellent_themes_admin() {
-		if ( \is_admin() && ( isset( $_GET['page'] ) && 0 == strpos( $_GET['page'], 'et_' ) ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
+		if ( \is_admin() && ( isset( $_GET['page'] ) && 0 == strpos( sanitize_text_field( wp_unslash( $_GET['page'] ) ), 'et_' ) ) ) {
 			\wp_deregister_style( 'ngg-jquery-ui' );
 		}
 	}
 
+	/**
+	 * Checks if Pro albums are available for the given display type.
+	 *
+	 * @param bool        $available    Whether the display type is currently available.
+	 * @param DisplayType $display_type The display type to check.
+	 * @return bool True if Pro albums are available, false otherwise.
+	 */
 	public function atp_check_pro_albums( $available, $display_type ) {
 		if ( ! defined( 'NGG_PRO_ALBUMS' ) ) {
 			return $available;
 		}
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( $display_type->name, [ NGG_PRO_LIST_ALBUM, NGG_PRO_GRID_ALBUM ] )
 		&& in_array( 'C_Component_Registry', get_declared_classes(), true )
 		&& \C_Component_Registry::get_instance()->is_module_loaded( NGG_PRO_ALBUMS ) ) {
@@ -340,14 +399,21 @@ class ThirdPartyCompatibility {
 		return $available;
 	}
 
+	/**
+	 * Disables debug bar console for ATP URLs.
+	 */
 	public function no_debug_bar() {
 		if ( ATPManager::is_atp_url() ) {
 			\wp_dequeue_script( 'debug-bar-console' );
 		}
 	}
 
-	// A lot of routing issues start occuring with WordPress SEO when the routing system is
-	// initialized by the excerpt, and then again from the post content.
+	/**
+	 * Disables gallery rendering in excerpts when WordPress SEO is active.
+	 *
+	 * @param string $excerpt The excerpt content.
+	 * @return string The excerpt content.
+	 */
 	public function disable_galleries_in_excerpts( $excerpt ) {
 		if ( in_array( 'WPSEO_OpenGraph', get_declared_classes(), true ) ) {
 			ATPManager::$substitute_placeholders = false;
@@ -356,6 +422,12 @@ class ThirdPartyCompatibility {
 		return $excerpt;
 	}
 
+	/**
+	 * Re-enables gallery rendering in excerpts after WordPress SEO processing.
+	 *
+	 * @param string $excerpt The excerpt content.
+	 * @return string The excerpt content.
+	 */
 	public function enable_galleries_in_excerpts( $excerpt ) {
 		if ( in_array( 'WPSEO_OpenGraph', get_declared_classes(), true ) ) {
 			ATPManager::$substitute_placeholders = true;
@@ -364,16 +436,19 @@ class ThirdPartyCompatibility {
 		return $excerpt;
 	}
 
+	/**
+	 * Fixes WPML canonical redirect issues.
+	 */
 	public function fix_wpml_canonical_redirect() {
 		Router::$use_canonical_redirect = false;
 		Router::$use_old_slugs          = false;
 	}
 
 	/**
-	 * NGG automatically purges unused terms when managing a gallery, but this also ensnares WPML translations
+	 * Prevents auto-purging of WPML translation terms.
 	 *
-	 * @param $term_id
-	 * @return bool
+	 * @param int $term_id The term ID to check.
+	 * @return bool|int False if it's a WPML translation term, otherwise the term ID.
 	 */
 	public function dont_auto_purge_wpml_terms( $term_id ) {
 		$args               = [
@@ -407,11 +482,10 @@ class ThirdPartyCompatibility {
 	}
 
 	/**
-	 * CKEditor features a custom NextGEN shortcode generator that unfortunately relies on parts of the NextGEN
-	 * 1.9x API that has been deprecated in NextGEN 2.0
+	 * Handles CKEditor plugin compatibility.
 	 *
-	 * @param $plugins
-	 * @return mixed
+	 * @param array $plugins The plugins array.
+	 * @return array The modified plugins array.
 	 */
 	public function ckeditor_plugins( $plugins ) {
 		if ( ! in_array( 'add_ckeditor_button', get_declared_classes(), true ) ) {
@@ -425,6 +499,9 @@ class ThirdPartyCompatibility {
 		return $plugins;
 	}
 
+	/**
+	 * Handles jQuery Lightbox plugin compatibility.
+	 */
 	public function check_for_jquery_lightbox() {
 		// Fix for jQuery Lightbox: http://wordpress.org/plugins/wp-jquery-lightbox/
 		// jQuery Lightbox tries to modify the content of a post, but it does so before we modify
@@ -535,11 +612,10 @@ class ThirdPartyCompatibility {
 	}
 
 	/**
-	 * Headway themes offer gzip compression, but it causes problems with NextGEN output. Disable that feature while
-	 * NextGEN is active.
+	 * Handles Headway theme gzip compression compatibility.
 	 *
-	 * @param $option
-	 * @return bool
+	 * @param bool $option The gzip option value.
+	 * @return bool False to disable gzip compression.
 	 */
 	public function headway_gzip( $option ) {
 		if ( ! in_array( 'HeadwayOption', get_declared_classes(), true ) ) {

@@ -2,6 +2,11 @@
 
 namespace Imagely\NGG\Util;
 
+/**
+ * Utility class for data sanitization operations.
+ *
+ * Provides methods for cleaning and sanitizing various types of data.
+ */
 class Sanitization {
 
 	/**

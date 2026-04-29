@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * DataMapper module.
+ */
 class M_DataMapper extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(
@@ -35,7 +43,7 @@ class M_DataMapper extends C_Base_Module {
 	 * @deprecated Used only by the Pro Lightbox
 	 * @param string $value
 	 * @return mixed
-	 * @throws Exception
+	 * @throws Exception When deserialization fails
 	 */
 	public static function unserialize( $value ) {
 		return \Imagely\NGG\Util\Serializable::unserialize( $value );

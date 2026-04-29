@@ -6,14 +6,24 @@ use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\Display\I18N;
 use Imagely\NGG\Settings\Settings;
 
+/**
+ * Dynamic thumbnails manager.
+ */
 class Manager {
 
+	/**
+	 * Instance cache.
+	 *
+	 * @var Manager|null
+	 */
 	protected static $instance;
 
 	/**
+	 * Gets an instance of the dynamic thumbnails manager.
+	 *
 	 * @return Manager
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new Manager();
 		}
@@ -21,6 +31,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets the route name for dynamic thumbnails.
+	 *
 	 * @return string
 	 */
 	public function get_route_name() {
@@ -28,6 +40,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets sanitized parameters.
+	 *
 	 * @param array $params
 	 * @return array
 	 */
@@ -35,6 +49,7 @@ class Manager {
 		if ( isset( $params['rotation'] ) ) {
 			$rotation = intval( $params['rotation'] );
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( $rotation && in_array( abs( $rotation ), [ 90, 180, 270 ] ) ) {
 				$rotation = $rotation % 360;
 
@@ -51,6 +66,7 @@ class Manager {
 		if ( isset( $params['flip'] ) ) {
 			$flip = strtolower( $params['flip'] );
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $flip, [ 'h', 'v', 'hv' ] ) ) {
 				$params['flip'] = $flip;
 			} else {
@@ -62,6 +78,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets URI from parameters.
+	 *
 	 * @param array $params
 	 * @return string
 	 */
@@ -120,6 +138,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets image URI from image and parameters.
+	 *
 	 * @param \Imagely\NGG\DataTypes\Image $image
 	 * @param array                        $params
 	 * @return string
@@ -138,6 +158,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets parameters from URI.
+	 *
 	 * @param string $uri
 	 * @return array|null
 	 */
@@ -148,6 +170,7 @@ class Manager {
 		$uri = preg_replace( '/\\/index.php\\//', '/', $uri, 1 );
 		$uri = trim( $uri, '/' );
 
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( @preg_match( $regex, $uri, $match ) > 0 ) {
 			$image_id = $match[1];
 			$uri_args = isset( $match[2] ) ? explode( '/', $match[2] ) : [];
@@ -169,6 +192,7 @@ class Manager {
 					$params['reflection'] = true;
 				} elseif ( $uri_arg == 'crop' ) {
 					$params['crop'] = true;
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				} elseif ( in_array( strtolower( $uri_arg ), apply_filters( 'ngg_allowed_file_types', NGG_DEFAULT_ALLOWED_FILE_TYPES ) ) ) {
 					$params['type'] = $uri_arg;
 				} elseif ( preg_match( '/(\\d+)x(\\d+)(?:x(\\d+))?/i', $uri_arg, $size_match ) > 0 ) {
@@ -188,6 +212,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets the name prefix list for dynamic thumbnails.
+	 *
 	 * @return array
 	 */
 	public function _get_name_prefix_list() {
@@ -212,6 +238,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets a thumbnail name from parameters.
+	 *
 	 * @param array $params
 	 * @param bool  $only_size_name
 	 * @param bool  $id_in_name
@@ -306,6 +334,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets size name from parameters.
+	 *
 	 * @param array $params
 	 * @return string
 	 */
@@ -314,6 +344,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets image name from image and parameters.
+	 *
 	 * @param \Imagely\NGG\DataTypes\Image $image
 	 * @param array                        $params
 	 * @return string
@@ -324,6 +356,8 @@ class Manager {
 	}
 
 	/**
+	 * Gets parameters from a thumbnail name.
+	 *
 	 * @param string $name
 	 * @param bool   $is_only_size_name
 	 * @return array
@@ -449,6 +483,8 @@ class Manager {
 	}
 
 	/**
+	 * Checks if a size name is dynamic.
+	 *
 	 * @param string $name
 	 * @param bool   $is_only_size_name
 	 * @return bool

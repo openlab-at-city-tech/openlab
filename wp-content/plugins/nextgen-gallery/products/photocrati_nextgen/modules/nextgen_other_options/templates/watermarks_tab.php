@@ -1,5 +1,7 @@
 <?php
 /**
+ * Template for watermarks tab.
+ *
  * @var array $watermark_fields
  * @var array $watermark_sources
  * @var int $offset_x
@@ -19,6 +21,7 @@
  * @var string $watermark_source
  * @var string $watermark_source_label
  */
+
 ?>
 <table>
 	<tr>
@@ -68,7 +71,7 @@
 
 	<tr class="watermark_field hidden">
 		<td>
-			<?php echo $position_label; ?>
+			<?php echo esc_html( $position_label ); ?>
 		</td>
 		<td>
 			<table class='nextgen_settings_position' border='1'>
@@ -93,7 +96,7 @@
 
 	<tr class="watermark_field hidden">
 		<td>
-			<?php echo $offset_label; ?>
+			<?php echo esc_html( $offset_label ); ?>
 		</td>
 		<td>
 			<label for='nextgen_settings_wmXpos'>w</label>
@@ -116,11 +119,11 @@
 	<?php if ( ! is_null( $thumbnail_url ) ) { ?>
 		<tr class="watermark_field hidden">
 			<td>
-				<?php echo $preview_label; ?>
+				<?php echo esc_html( $preview_label ); ?>
 			</td>
 			<td>
-				<img src='<?php echo esc_url( $thumbnail_url . '?' .time() ); ?>'/>
-				<button id='nextgen_settings_preview_refresh' class="button-primary" data-refresh-url='<?php echo $refresh_url; ?>'><?php echo $refresh_label; ?></button>
+				<img src='<?php echo esc_url( $thumbnail_url . '?' . time() ); ?>'/>
+				<button id='nextgen_settings_preview_refresh' class="button-primary" data-refresh-url='<?php echo esc_attr( $refresh_url ); ?>'><?php echo esc_html( $refresh_label ); ?></button>
 			</td>
 		</tr>
 	<?php } ?>
@@ -140,7 +143,10 @@
 	</tr>
 	<?php foreach ( $watermark_fields as $source_name => $fields ) : ?>
 	<tbody class="hidden" id="watermark_<?php echo esc_attr( $source_name ); ?>_source">
-		<?php echo $fields; ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $fields contains safe HTML form elements
+		echo $fields;
+		?>
 	</tbody>
 	<?php endforeach ?>
 </table>

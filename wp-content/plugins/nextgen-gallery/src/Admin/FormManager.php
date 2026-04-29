@@ -2,14 +2,31 @@
 
 namespace Imagely\NGG\Admin;
 
+/**
+ * Form Manager for NextGEN Gallery admin forms.
+ *
+ * Manages form registration and ordering in the admin interface.
+ */
 class FormManager {
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @var FormManager|null
+	 */
 	protected static $instance = null;
 
+	/**
+	 * Registered forms array.
+	 *
+	 * @var array
+	 */
 	protected $forms = [];
 
 	/**
-	 * @return FormManager
+	 * Gets the singleton instance.
+	 *
+	 * @return FormManager The FormManager instance.
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
@@ -45,8 +62,10 @@ class FormManager {
 	}
 
 	/**
-	 * @param string       $type
-	 * @param array|string $form_names
+	 * Adds one or more forms to a form type.
+	 *
+	 * @param string       $type       The form type.
+	 * @param array|string $form_names Form name(s) to add.
 	 * @return int Results of get_form_count($type)
 	 */
 	public function add_form( $type, $form_names ) {
@@ -66,9 +85,11 @@ class FormManager {
 	}
 
 	/**
-	 * @param string $type
-	 * @param bool   $instantiate (optional).
-	 * @return array
+	 * Gets forms of a specific type.
+	 *
+	 * @param string $type        The form type.
+	 * @param bool   $instantiate Whether to instantiate the forms (optional).
+	 * @return array Array of forms.
 	 */
 	public function get_forms( $type, $instantiate = false ) {
 		$retval = [];
@@ -87,8 +108,10 @@ class FormManager {
 	}
 
 	/**
+	 * Gets the count of forms for a specific type.
+	 *
 	 * @param string $type Form type.
-	 * @return int
+	 * @return int Number of forms.
 	 */
 	public function get_form_count( $type ) {
 		return ( isset( $this->forms[ $type ] ) ) ? count( $this->forms[ $type ] ) : 0;

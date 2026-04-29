@@ -12,14 +12,14 @@ $onboarding = new Onboarding_Wizard();
 ?>
 <div class="nextgen-gallery-onboarding-form-step " id="features">
 	<div class="nextgen-gallery-onboarding-wizard-body nextgen-gallery-wizard-features">
-		<div class="steps"><?php esc_html_e( 'Step - 2 of 5', 'nextgen-gallery' ); ?></div>
+		<div class="steps"><?php esc_html_e( 'Step - 2 of 5', 'nggallery' ); ?></div>
 		<div class="nextgen-gallery-onboarding-settings-row no-border no-margin">
 			<div class="settings-name">
-				<h2><?php esc_html_e( 'What Gallery features do you want to enable?', 'nextgen-gallery' ); ?></h2>
+				<h2><?php esc_html_e( 'What Gallery Features Do You Want to Enable?', 'nggallery' ); ?></h2>
 				<div class="name small-margin">
 				</div>
 				<div class="nextgen-gallery-onboarding-description">
-					<?php esc_html_e( 'We have already selected our recommended features based on your site category, but you can use the following features to fine-tune your site.', 'nextgen-gallery' ); ?>
+					<?php esc_html_e( 'We have already selected recommended features based on your site category, but you can use the following features to fine-tune your site.', 'nggallery' ); ?>
 				</div>
 			</div>
 		</div>
@@ -28,10 +28,10 @@ $onboarding = new Onboarding_Wizard();
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<?php esc_html_e( 'Basic Slideshows', 'nextgen-gallery' ); ?>
+							<?php esc_html_e( 'Basic Slideshows', 'nggallery' ); ?>
 							<!---->
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Pre-made gallery themes will enhance the look of your galleries.', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Display your galleries in a classic slideshow.', 'nggallery' ); ?></div>
 						<!---->
 					</div>
 				</div>
@@ -61,9 +61,9 @@ $onboarding = new Onboarding_Wizard();
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<?php esc_html_e( 'Albums', 'nextgen-gallery' ); ?>
+							<?php esc_html_e( 'Albums', 'nggallery' ); ?>
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Create albums, add galleries, manage cover photos, show tag clouds etc.', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Showcase multiple galleries & display cover photos in a clean, organized album.', 'nggallery' ); ?></div>
 					</div>
 				</div>
 				<div class="nextgen-gallery-col col-xs-1 text-xs-left">
@@ -88,18 +88,18 @@ $onboarding = new Onboarding_Wizard();
 			</div>
 		</div>
 		<?php
-		$is_installed = $onboarding->is_recommended_plugin_installed( 'ngg-gallery-themes' );
-		$checked      = $is_installed ? 'checked="checked"' : '';
-		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nextgen-gallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nextgen-gallery' );
+		$is_installed  = $onboarding->is_recommended_plugin_installed( 'ngg-gallery-themes' );
+		$checked       = $is_installed ? 'checked="checked"' : '';
+		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nggallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nggallery' );
 		?>
 		<div class="feature-grid small-padding medium-margin">
 			<div class="nextgen-gallery-row">
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<label for="ngg-gallery-themes"><?php esc_html_e( 'Gallery Themes', 'nextgen-gallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
+							<label for="ngg-gallery-themes"><?php esc_html_e( 'Gallery Layouts', 'nggallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Stylise your gallery with slideshows, multiple layouts, thumbnail', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Access all of our beautiful gallery layouts, customize thumbnails, stylize your lightbox, and more.', 'nggallery' ); ?></div>
 						<div class="nextgen-desc" id="ngg-gallery-themes-desc" style="display: none"><?php echo esc_html( $installs_text ); ?></div>
 					</div>
 				</div>
@@ -107,7 +107,7 @@ $onboarding = new Onboarding_Wizard();
 					<label class="nextgen-gallery-checkbox round <?php echo esc_attr( $is_installed ); ?>" >
 				<span class="form-checkbox-wrapper">
 					<span class="form-checkbox">
-						<input type="checkbox" name="ngg-gallery-themes"  value="ngg-gallery-themes" id="ngg-gallery-themes" data-name="<?php esc_attr_e( 'Gallery Themes', 'nextgen-gallery' ); ?>" class="feature <?php echo esc_attr( $is_installed ); ?>" <?php echo esc_attr( $checked ); ?> />
+						<input type="checkbox" name="ngg-gallery-themes"  value="ngg-gallery-themes" id="ngg-gallery-themes" data-name="<?php esc_attr_e( 'Gallery Themes', 'nggallery' ); ?>" class="feature <?php echo esc_attr( $is_installed ); ?>" <?php echo esc_attr( $checked ); ?> />
 						<span class="fancy-checkbox blue">
 							<svg viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="nextgen-gallery-checkmark">
 								<path
@@ -125,18 +125,18 @@ $onboarding = new Onboarding_Wizard();
 			</div>
 		</div>
 		<?php
-		$is_installed = $onboarding->is_recommended_plugin_installed( 'ngg-ecommerce' );
-		$checked      = $is_installed ? 'checked="checked"' : '';
-		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nextgen-gallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nextgen-gallery' );
+		$is_installed  = $onboarding->is_recommended_plugin_installed( 'ngg-ecommerce' );
+		$checked       = $is_installed ? 'checked="checked"' : '';
+		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nggallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nggallery' );
 		?>
 		<div class="feature-grid small-padding medium-margin">
 			<div class="nextgen-gallery-row">
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<label for="ngg-ecommerce"><?php esc_html_e( 'Built-in Ecommerce', 'nextgen-gallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
+							<label for="ngg-ecommerce"><?php esc_html_e( 'Built-In eCommerce', 'nggallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Features transform your website into e-commerce to sell your photos.', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Turn your website into a professional online store and start selling digital photos and prints directly to clients.', 'nggallery' ); ?></div>
 						<div class="nextgen-desc" id="ngg-ecommerce-desc" style="display: none"><?php echo esc_html( $installs_text ); ?></div>
 					</div>
 				</div>
@@ -163,18 +163,18 @@ $onboarding = new Onboarding_Wizard();
 			</div>
 		</div>
 		<?php
-		$is_installed = $onboarding->is_recommended_plugin_installed( 'ngg-ecom-management' );
-		$checked      = $is_installed ? 'checked="checked"' : '';
-		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nextgen-gallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nextgen-gallery' );
+		$is_installed  = $onboarding->is_recommended_plugin_installed( 'ngg-ecom-management' );
+		$checked       = $is_installed ? 'checked="checked"' : '';
+		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nggallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nggallery' );
 		?>
 		<div class="feature-grid small-padding medium-margin">
 			<div class="nextgen-gallery-row">
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<label for="ngg-ecom-management"><?php esc_html_e( 'E-commerce Management', 'nextgen-gallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
+							<label for="ngg-ecom-management"><?php esc_html_e( 'eCommerce Management', 'nggallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Manage your online store with automated tax calculations, coupons, print sell, price list', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Easily manage, price lists, coupons, taxes, and automated print fulfillment for your online store.', 'nggallery' ); ?></div>
 						<div class="nextgen-desc" id="ngg-ecom-management-desc" style="display: none"><?php echo esc_html( $installs_text ); ?></div>
 					</div>
 				</div>
@@ -183,7 +183,7 @@ $onboarding = new Onboarding_Wizard();
 					<label class="nextgen-gallery-checkbox round <?php echo esc_attr( $is_installed ); ?>">
 				<span class="form-checkbox-wrapper">
 					<span class="form-checkbox">
-						<input type="checkbox" data-name="<?php esc_attr_e( 'E-commerce Management', 'nextgen-gallery' ); ?>" name="ngg-ecom-management" value="ngg-ecom-management" id="ngg-ecom-management" class="feature" <?php echo esc_attr( $checked ); ?>/>
+						<input type="checkbox" data-name="<?php esc_attr_e( 'E-commerce Management', 'nggallery' ); ?>" name="ngg-ecom-management" value="ngg-ecom-management" id="ngg-ecom-management" class="feature" <?php echo esc_attr( $checked ); ?>/>
 						<span class="fancy-checkbox blue">
 							<svg viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="nextgen-gallery-checkmark">
 								<path
@@ -201,18 +201,18 @@ $onboarding = new Onboarding_Wizard();
 			</div>
 		</div>
 		<?php
-		$is_installed = $onboarding->is_recommended_plugin_installed( 'ngg-safe-checkout' );
-		$checked      = $is_installed ? 'checked="checked"' : '';
-		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nextgen-gallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nextgen-gallery' );
+		$is_installed  = $onboarding->is_recommended_plugin_installed( 'ngg-safe-checkout' );
+		$checked       = $is_installed ? 'checked="checked"' : '';
+		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nggallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nggallery' );
 		?>
 		<div class="feature-grid small-padding medium-margin">
 			<div class="nextgen-gallery-row">
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<label for="ngg-safe-checkout"><?php esc_html_e( 'Secure Checkout', 'nextgen-gallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
+							<label for="ngg-safe-checkout"><?php esc_html_e( 'Secure Checkout', 'nggallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Grow your online business with multiple payment system provider and safe checkout', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Build trust with your clients using fast, reliable checkout options and secure payment gateways like Stripe and PayPal.', 'nggallery' ); ?></div>
 						<div class="nextgen-desc" id="ngg-safe-checkout-desc" style="display: none"><?php echo esc_html( $installs_text ); ?></div>
 					</div>
 				</div>
@@ -239,18 +239,18 @@ $onboarding = new Onboarding_Wizard();
 			</div>
 		</div>
 		<?php
-		$is_installed = $onboarding->is_recommended_plugin_installed( 'ngg-image-proofing' );
-		$checked      = $is_installed ? 'checked="checked"' : '';
-		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nextgen-gallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nextgen-gallery' );
+		$is_installed  = $onboarding->is_recommended_plugin_installed( 'ngg-image-proofing' );
+		$checked       = $is_installed ? 'checked="checked"' : '';
+		$installs_text = ! $is_installed ? esc_html__( 'Installs NextGEN Gallery Pro', 'nggallery' ) : esc_html__( 'NextGEN Pro is already installed', 'nggallery' );
 		?>
 		<div class="feature-grid small-padding medium-margin">
 			<div class="nextgen-gallery-row">
 				<div class="nextgen-gallery-col col-xs-11 text-xs-left">
 					<div class="settings-name">
 						<div class="name small-margin">
-							<label for="ngg-image-proofing"><?php esc_html_e( 'Image Proofing', 'nextgen-gallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
+							<label for="ngg-image-proofing"><?php esc_html_e( 'Image Proofing', 'nggallery' ); ?><span class="nextgen-gallery-pro-badge">PRO</span></label>
 						</div>
-						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Enhance the speed of image selection and streamline sharing with the client', 'nextgen-gallery' ); ?></div>
+						<div class="nextgen-gallery-description-text"><?php esc_html_e( 'Streamline client workflows by letting customers favorite, comment on, approve photos directly in your proofing galleries.', 'nggallery' ); ?></div>
 						<div class="nextgen-desc" id="ngg-image-proofing-desc" style="display: none"><?php echo esc_html( $installs_text ); ?></div>
 					</div>
 				</div>
@@ -259,7 +259,7 @@ $onboarding = new Onboarding_Wizard();
 					<label class="nextgen-gallery-checkbox round <?php echo esc_attr( $is_installed ); ?>">
 				<span class="form-checkbox-wrapper">
 					<span class="form-checkbox">
-						<input type="checkbox" data-name="<?php esc_attr_e( 'Image Proofing', 'nextgen-gallery' ); ?>" name="ngg-image-proofing" value="ngg-image-proofing" id="ngg-image-proofing" class="feature" <?php echo esc_attr( $checked ); ?> />
+						<input type="checkbox" data-name="<?php esc_attr_e( 'Image Proofing', 'nggallery' ); ?>" name="ngg-image-proofing" value="ngg-image-proofing" id="ngg-image-proofing" class="feature" <?php echo esc_attr( $checked ); ?> />
 						<span class="fancy-checkbox blue">
 							<svg viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="nextgen-gallery-checkmark">
 								<path
@@ -280,7 +280,7 @@ $onboarding = new Onboarding_Wizard();
 
 	</div>
 	<div class="nextgen-gallery-onboarding-wizard-footer">
-		<div class="go-back"><a href="#general" data-prev="0" class="nextgen-gallery-onboarding-wizard-back-btn nextgen-gallery-onboarding-btn-prev" id="" >←&nbsp;<?php esc_html_e( 'Go back', 'nextgen-gallery' ); ?></a></div>
-		<div class="spacer"></div><button type="submit" data-next="2" class="btn nextgen-gallery-onboarding-wizard-primary-btn nextgen-gallery-onboarding-btn-next "  id="nextgen-gallery-save-features" ><?php esc_html_e( 'Save and Continue', 'nextgen-gallery' ); ?>&nbsp; →</button>
+		<div class="go-back"><a href="#general" data-prev="0" class="nextgen-gallery-onboarding-wizard-back-btn nextgen-gallery-onboarding-btn-prev" id="" >←&nbsp;<?php esc_html_e( 'Go back', 'nggallery' ); ?></a></div>
+		<div class="spacer"></div><button type="submit" data-next="2" class="btn nextgen-gallery-onboarding-wizard-primary-btn nextgen-gallery-onboarding-btn-next "  id="nextgen-gallery-save-features" ><?php esc_html_e( 'Save and Continue', 'nggallery' ); ?>&nbsp; →</button>
 	</div>
 </div>

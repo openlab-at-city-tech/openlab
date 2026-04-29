@@ -5,21 +5,45 @@ namespace Imagely\NGG\Admin\Notifications;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\URL;
 
+/**
+ * Manager for admin notifications.
+ */
 class Manager {
 
-	public $_notifications    = [];
-	public $_displayed_notice = false;
-	public $_dismiss_url      = null;
+	/**
+	 * Notifications array.
+	 *
+	 * @var array
+	 */
+	public $_notifications = [];
 
 	/**
+	 * Whether a notice has been displayed.
+	 *
+	 * @var bool
+	 */
+	public $_displayed_notice = false;
+
+	/**
+	 * Dismiss URL.
+	 *
+	 * @var string|null
+	 */
+	public $_dismiss_url = null;
+
+	/**
+	 * Manager instance.
+	 *
 	 * @var Manager
 	 */
-	static $_instance = null;
+	public static $_instance = null;
 
 	/**
+	 * Gets an instance of the manager.
+	 *
 	 * @return Manager
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( ! isset( self::$_instance ) ) {
 			self::$_instance = new Manager();
 		}
@@ -46,11 +70,13 @@ class Manager {
 		$output = [];
 
 		foreach ( array_keys( $this->_notifications ) as $notice ) {
-			if ( ( $html = $this->render_notice( $notice ) ) ) {
+			$html = $this->render_notice( $notice );
+			if ( $html ) {
 				$output[] = $html;
 			}
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output contains safe HTML from notification rendering
 		echo implode( "\n", $output );
 	}
 
@@ -61,9 +87,12 @@ class Manager {
 		$dismissed = $settings->get( 'dismissed_notifications', [] );
 
 		if ( isset( $dismissed[ $name ] ) ) {
-			if ( ( $id = get_current_user_id() ) ) {
+			$id = get_current_user_id();
+			if ( $id ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $id, $dismissed[ $name ] ) ) {
 					$retval = true;
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				} elseif ( in_array( 'unknown', $dismissed[ $name ] ) ) {
 					$retval = true;
 				}
@@ -76,7 +105,8 @@ class Manager {
 	public function dismiss( $name, $dismiss_code = 1 ) {
 		$response = [];
 
-		if ( ( $handler = $this->get_handler_instance( $name ) ) ) {
+		$handler = $this->get_handler_instance( $name );
+		if ( $handler ) {
 			$has_method = method_exists( $handler, 'is_dismissable' );
 			if ( ( $has_method && $handler->is_dismissable() ) || ! $has_method ) {
 				if ( method_exists( $handler, 'dismiss' ) ) {
@@ -150,6 +180,7 @@ class Manager {
 	public function enqueue_scripts() {
 		if ( $this->has_displayed_notice() ) {
 			$router = \Imagely\NGG\Util\Router::get_instance();
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_enqueue_script(
 				'ngg_admin_notices',
 				$router->get_static_url( 'photocrati-nextgen_admin#admin_notices.js' ),
@@ -199,7 +230,7 @@ class Manager {
 
 			ob_end_clean();
 
-			echo json_encode( $retval );
+			echo wp_json_encode( $retval );
 
 			exit();
 		}
@@ -208,7 +239,8 @@ class Manager {
 	public function render_notice( $name ) {
 		$retval = '';
 
-		if ( ( $handler = $this->get_handler_instance( $name ) ) && ! $this->is_dismissed( $name ) ) {
+		$handler = $this->get_handler_instance( $name );
+		if ( $handler && ! $this->is_dismissed( $name ) ) {
 			// Does the handler want to render?
 			$has_method = method_exists( $handler, 'is_renderable' );
 			if ( ( $has_method && $handler->is_renderable() ) || ! $has_method ) {

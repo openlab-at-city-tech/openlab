@@ -11,9 +11,14 @@ use Imagely\NGG\Display\{StaticAssets, View};
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Router;
 
+/**
+ * Thumbnails display type controller.
+ */
 class Thumbnails extends ParentController {
 
 	/**
+	 * Gets an alternative displayed gallery.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
 	 * @return DisplayedGallery
 	 */
@@ -50,11 +55,13 @@ class Thumbnails extends ParentController {
 	}
 
 	/**
+	 * Renders thumbnails.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
-	 * @param bool             $return (optional)
+	 * @param bool             $return_output (optional)
 	 * @return string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		$router = Router::get_instance();
 
 		$storage   = StorageManager::get_instance();
@@ -63,43 +70,58 @@ class Thumbnails extends ParentController {
 		$display_settings = $displayed_gallery->display_settings;
 		$gallery_id       = $displayed_gallery->id();
 
+		// Sanitize numeric fields to prevent fatal ops when blank strings are present
+		$images_per_page = 0;
+		if ( isset( $display_settings['images_per_page'] ) && $display_settings['images_per_page'] !== '' ) {
+			$images_per_page = (int) $display_settings['images_per_page'];
+		}
+		$display_settings['images_per_page'] = $images_per_page;
+
+		$number_of_columns = 0;
+		if ( isset( $display_settings['number_of_columns'] ) && $display_settings['number_of_columns'] !== '' ) {
+			$number_of_columns = (int) $display_settings['number_of_columns'];
+		}
+		$display_settings['number_of_columns'] = $number_of_columns;
+
 		if ( ! $display_settings['disable_pagination'] ) {
 			$current_page = (int) $router->get_parameter( 'nggpage', $gallery_id, 1 );
 		} else {
 			$current_page = 1;
 		}
 
-		$offset = $display_settings['images_per_page'] * ( $current_page - 1 );
+		$offset = $images_per_page * ( $current_page - 1 );
 		$total  = $displayed_gallery->get_entity_count();
 
 		// Get the images to be displayed.
-		if ( $display_settings['images_per_page'] > 0 && $display_settings['show_all_in_lightbox'] ) {
+		if ( $images_per_page > 0 && $display_settings['show_all_in_lightbox'] ) {
 			// the "Add Hidden Images" feature works by loading ALL images and then marking the ones not on this page
 			// as hidden (style="display: none").
 			$images = $displayed_gallery->get_included_entities();
 			$i      = 0;
 			foreach ( $images as &$image ) {
-				if ( $i < $display_settings['images_per_page'] * ( $current_page - 1 ) ) {
+				if ( $i < $images_per_page * ( $current_page - 1 ) ) {
 					$image->hidden = true;
-				} elseif ( $i >= $display_settings['images_per_page'] * ( $current_page ) ) {
+				} elseif ( $i >= $images_per_page * ( $current_page ) ) {
 					$image->hidden = true;
 				}
 				++$i;
 			}
 		} else {
 			// just display the images for this page, as normal.
-			$images = $displayed_gallery->get_included_entities( $display_settings['images_per_page'], $offset );
+			$images = $displayed_gallery->get_included_entities( $images_per_page, $offset );
 		}
 
 		// Are there images to display?.
 		if ( $images ) {
+			// Check and regenerate missing thumbnails for fresh installations
+			$this->ensure_thumbnails_exist( $images, $storage );
 			// Create pagination.
-			if ( $display_settings['images_per_page'] && ! $display_settings['disable_pagination'] ) {
+			if ( $images_per_page > 0 && ! $display_settings['disable_pagination'] ) {
 				$pagination_result = $this->create_pagination(
 					$current_page,
 					$total,
-					$display_settings['images_per_page'],
-					urldecode( $router->get_parameter( 'ajax_pagination_referrer' ) ?: '' )
+					$images_per_page,
+					urldecode( $router->get_parameter( 'ajax_pagination_referrer' ) ? $router->get_parameter( 'ajax_pagination_referrer' ) : '' )
 				);
 				$app               = $router->get_routed_app();
 				$app->remove_parameter( 'ajax_pagination_referrer' );
@@ -151,12 +173,11 @@ class Thumbnails extends ParentController {
 			if ( $display_settings['use_imagebrowser_effect'] ) {
 				if ( ! empty( $displayed_gallery->display_settings['original_display_type'] )
 				&& ! empty( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-					$origin_url = $_SERVER['NGG_ORIG_REQUEST_URI'];
+					$origin_url = Router::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
 				}
 
 				$app = $router->get_routed_app();
 				$url = ( ! empty( $origin_url ) ? $origin_url : $app->get_routed_url() );
-				$url = $app->remove_parameter( $url, null, 'image' );
 				$url = $this->set_param_for( $url, 'image', '%STUB%' );
 
 				$effect_code = "class='use_imagebrowser_effect' data-imagebrowser-url='{$url}'";
@@ -177,7 +198,7 @@ class Thumbnails extends ParentController {
 						'effect_code'    => $effect_code,
 					]
 				);
-				return $this->legacy_render( $display_settings['template'], $params, $return, 'gallery' );
+				return $this->legacy_render( $display_settings['template'], $params, $return_output, 'gallery' );
 			} else {
 				$params = $display_settings;
 
@@ -214,7 +235,7 @@ class Thumbnails extends ParentController {
 					'photocrati-nextgen_basic_gallery#thumbnails/index'
 				);
 
-				return $view->render( $return );
+				return $view->render( $return_output );
 			}
 		} elseif ( $display_settings['display_no_images_error'] ) {
 			$view = new View(
@@ -223,13 +244,15 @@ class Thumbnails extends ParentController {
 				'photocrati-nextgen_gallery_display#no_images_found'
 			);
 
-			return $view->render( $return );
+			return $view->render( $return_output );
 		}
 
 		return '';
 	}
 
 	/**
+	 * Enqueues frontend resources for thumbnails.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
 	 */
 	public function enqueue_frontend_resources( $displayed_gallery ) {
@@ -243,6 +266,7 @@ class Thumbnails extends ParentController {
 			NGG_SCRIPT_VERSION
 		);
 
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script(
 			'nextgen_basic_thumbnails_script',
 			StaticAssets::get_url( 'Thumbnails/nextgen_basic_thumbnails.js', 'photocrati-nextgen_basic_gallery#thumbnails/nextgen_basic_thumbnails.js' ),
@@ -251,6 +275,7 @@ class Thumbnails extends ParentController {
 		);
 
 		if ( $displayed_gallery->display_settings['ajax_pagination'] ) {
+			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			\wp_enqueue_script(
 				'nextgen-basic-thumbnails-ajax-pagination',
 				StaticAssets::get_url( 'Thumbnails/ajax_pagination.js', 'photocrati-nextgen_basic_gallery#thumbnails/ajax_pagination.js' ),
@@ -343,5 +368,33 @@ class Thumbnails extends ParentController {
 			],
 			$reset
 		);
+	}
+
+	/**
+	 * Ensures thumbnails exist for images, regenerating them if necessary
+	 * This is particularly useful for fresh installations where thumbnails might not have been generated
+	 *
+	 * @param array          $images Array of image objects
+	 * @param StorageManager $storage Storage manager instance
+	 */
+	private function ensure_thumbnails_exist( $images, $storage ) {
+		// Only run this check on fresh installations or when thumbnails are missing
+		// Limit to first 10 images to avoid performance issues
+		$images_to_check = array_slice( $images, 0, 10 );
+
+		foreach ( $images_to_check as $image ) {
+			// Skip if image is hidden
+			if ( isset( $image->hidden ) && $image->hidden ) {
+				continue;
+			}
+
+			// Check if thumbnail exists
+			$thumbnail_path = $storage->get_image_abspath( $image, 'thumbnail', true );
+
+			// If thumbnail doesn't exist, try to generate it
+			if ( ! $thumbnail_path ) {
+				$storage->generate_thumbnail( $image );
+			}
+		}
 	}
 }

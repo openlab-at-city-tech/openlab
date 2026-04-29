@@ -47,7 +47,7 @@ class UsageTracking {
 	 */
 	public function hooks() {
 		$onboarding_data = get_option( 'ngg_onboarding_data', [] );
-		$enabled         = $onboarding_data['_usage_tracking'] ?? false;
+		$enabled         = isset( $onboarding_data['_usage_tracking'] ) ? $onboarding_data['_usage_tracking'] : false;
 		$enabled         = filter_var( $enabled, FILTER_VALIDATE_BOOLEAN );
 
 		// Check the license type.
@@ -111,7 +111,7 @@ class UsageTracking {
 
 		$data['php_version']    = phpversion();
 		$data['wp_version']     = get_bloginfo( 'version' );
-		$data['server']         = $_SERVER['SERVER_SOFTWARE'] ?? 'CLI'; // phpcs:ignore
+		$data['server']         = isset( $_SERVER['SERVER_SOFTWARE'] ) ? $_SERVER['SERVER_SOFTWARE'] : 'CLI'; // phpcs:ignore
 		$data['over_time']      = get_option( 'nextgen_over_time', [] );
 		$data['multisite']      = is_multisite();
 		$data['url']            = home_url();
@@ -236,7 +236,7 @@ class UsageTracking {
 
 		$schedules['weekly'] = [
 			'interval' => 604800,
-			'display'  => __( 'Once Weekly', 'nextgen-gallery' ),
+			'display'  => __( 'Once Weekly', 'nggallery' ),
 		];
 
 		return $schedules;

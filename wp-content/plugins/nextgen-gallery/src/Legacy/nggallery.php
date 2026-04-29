@@ -1,15 +1,44 @@
 <?php
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 
+/**
+ * NextGEN Gallery loader class.
+ */
 class nggLoader {
 
+	/**
+	 * Plugin version.
+	 *
+	 * @var string
+	 */
 	public $version = NGG_PLUGIN_VERSION;
+
+	/**
+	 * Options array.
+	 *
+	 * @var array
+	 */
 	public $options = [];
 
+	/**
+	 * Admin panel instance.
+	 *
+	 * @var object|null
+	 */
 	public $nggAdminPanel = null;
 
+	/**
+	 * Manage album instance.
+	 *
+	 * @var object|null
+	 */
 	public $manage_album;
 
-	/** @var nggManageGallery|nggManageAlbum $manage_page */
+	/**
+	 * Manage page instance.
+	 *
+	 * @var nggManageGallery|nggManageAlbum
+	 */
 	public $manage_page;
 
 	public function __construct() {
@@ -103,7 +132,7 @@ class nggLoader {
 	}
 
 	public function is_rest_url(): bool {
-		return strpos( $_SERVER['REQUEST_URI'], 'wp-json' ) !== false;
+		return isset( $_SERVER['REQUEST_URI'] ) && strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'wp-json' ) !== false;
 	}
 
 	public function load_options() {
@@ -129,7 +158,7 @@ class nggLoader {
 			$links[] = '<a target="_blank" href="https://wordpress.org/support/plugin/nextgen-gallery">' . __( 'Get help', 'nggallery' ) . '</a>';
 			foreach ( $links as $key => $link ) {
 				if ( false !== strpos( $link, 'Imagely' ) ) {
-					$links[$key] = str_replace( '<a ', '<a target="_blank" ', $link );
+					$links[ $key ] = str_replace( '<a ', '<a target="_blank" ', $link );
 				}
 			}
 		}
@@ -138,6 +167,10 @@ class nggLoader {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+/**
+ * Legacy installer class.
+ */
 class C_NGG_Legacy_Installer {
 
 	public function install() {
@@ -147,8 +180,9 @@ class C_NGG_Legacy_Installer {
 		$this->remove_transients();
 
 		if ( is_multisite() ) {
-			$network      = isset( $_SERVER['SCRIPT_NAME'] ) ? $_SERVER['SCRIPT_NAME'] : '';
-			$activate     = isset( $_GET['action'] ) ? $_GET['action'] : '';
+			$network = isset( $_SERVER['SCRIPT_NAME'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SCRIPT_NAME'] ) ) : '';
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for activation check
+			$activate     = isset( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 			$isNetwork    = $network == '/wp-admin/network/plugins.php';
 			$isActivation = ! ( ( $activate == 'deactivate' ) );
 
@@ -159,8 +193,8 @@ class C_NGG_Legacy_Installer {
 				//
 				// TODO: Once NextGEN's minimum WP version is 6.2 or higher use wpdb->prepare() here.
 				//
-				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$blogids = $wpdb->get_col( $wpdb->prepare( "SELECT blog_id FROM $wpdb->blogs", null ) );
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+				$blogids = $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs" );
 				foreach ( $blogids as $blog_id ) {
 					\switch_to_blog( $blog_id );
 					\nggallery_install( $this );
@@ -204,6 +238,7 @@ class C_NGG_Legacy_Installer {
 		global $wpdb, $_wp_using_ext_object_cache;
 
 		// Fetch all transients
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$transient_names = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT option_name FROM {$wpdb->options}
@@ -215,6 +250,7 @@ class C_NGG_Legacy_Installer {
 		);
 
 		// Delete all transients in the database
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query(
 			$wpdb->prepare(
 				"DELETE FROM {$wpdb->options}
@@ -243,6 +279,7 @@ class C_NGG_Legacy_Installer {
 		// add charset & collate like wp core.
 		$charset_collate = '';
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		if ( version_compare( $wpdb->get_var( 'SELECT VERSION() AS `mysql_version`' ), '4.1.0', '>=' ) ) {
 			if ( ! empty( $wpdb->charset ) ) {
 				$charset_collate = "DEFAULT CHARACTER SET $wpdb->charset";

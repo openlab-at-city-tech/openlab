@@ -18,6 +18,7 @@ if ( ! is_user_logged_in() ) {
 	die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 }
 
+// phpcs:ignore WordPress.WP.Capabilities.Unknown
 if ( ! current_user_can( 'NextGEN Manage gallery' ) ) {
 	die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 }
@@ -58,6 +59,7 @@ $dynamic_size      = $thumbnail_manager->get_size_name(
 $preview_image     = $storage->get_image_url( $id, $dynamic_size );
 
 
+// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 $imageInfo = @getimagesize( $picture->imagePath );
 $rr        = round( $imageInfo[0] / $resizedPreviewInfo['newWidth'], 2 );
 
@@ -66,15 +68,13 @@ if ( ( $ngg_options['thumbfix'] == 1 ) ) {
 	$WidthHtmlPrev  = $ngg_options['thumbwidth'];
 	$HeightHtmlPrev = $ngg_options['thumbheight'];
 
-} else {
+} elseif ( $imageInfo[1] > $imageInfo[0] ) {
 	// H > W.
-	if ( $imageInfo[1] > $imageInfo[0] ) {
-		$HeightHtmlPrev = $ngg_options['thumbheight'];
-		$WidthHtmlPrev  = round( $imageInfo[0] / ( $imageInfo[1] / $ngg_options['thumbheight'] ), 0 );
-	} else {
-		$WidthHtmlPrev  = $ngg_options['thumbwidth'];
-		$HeightHtmlPrev = round( $imageInfo[1] / ( $imageInfo[0] / $ngg_options['thumbwidth'] ), 0 );
-	}
+	$HeightHtmlPrev = $ngg_options['thumbheight'];
+	$WidthHtmlPrev  = round( $imageInfo[0] / ( $imageInfo[1] / $ngg_options['thumbheight'] ), 0 );
+} else {
+	$WidthHtmlPrev  = $ngg_options['thumbwidth'];
+	$HeightHtmlPrev = round( $imageInfo[1] / ( $imageInfo[0] / $ngg_options['thumbwidth'] ), 0 );
 }
 
 $thumbnail_crop_frame      = isset( $picture->meta_data['thumbnail']['crop_frame'] ) ? $picture->meta_data['thumbnail']['crop_frame'] : null;
@@ -91,14 +91,20 @@ if ( $thumbnail_crop_frame != null ) {
 	$default_crop_js_parameter = 'setSelect: [' . $crop_x . ',' . $crop_y . ',' . $crop_x2 . ',' . $crop_y2 . '],';
 }
 
+// phpcs:disable WordPress.WP.EnqueuedResources.NonEnqueuedScript
+// phpcs:disable WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
 ?>
-<script src="<?php echo NGGALLERY_URLPATH; ?>/admin/js/Jcrop/js/jquery.Jcrop.js"></script>
-<link rel="stylesheet" href="<?php echo NGGALLERY_URLPATH; ?>/admin/js/Jcrop/css/jquery.Jcrop.css" type="text/css" />
+<script src="<?php echo esc_url( NGGALLERY_URLPATH ); ?>/admin/js/Jcrop/js/jquery.Jcrop.js"></script>
+<link rel="stylesheet" href="<?php echo esc_url( NGGALLERY_URLPATH ); ?>/admin/js/Jcrop/css/jquery.Jcrop.css" type="text/css" />
+<?php
+// phpcs:enable WordPress.WP.EnqueuedResources.NonEnqueuedScript
+// phpcs:enable WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
+?>
 
 <script type="text/javascript">
 	var status = 'edit';
 	var xT, yT, wT, hT, selectedCoords;
-	var selectedImage = "thumb<?php echo $id; ?>";
+	var selectedImage = "thumb<?php echo esc_js( $id ); ?>";
 
 	function showPreview(coords) {
 		if (status != 'edit') {
@@ -107,12 +113,12 @@ if ( $thumbnail_crop_frame != null ) {
 			status = 'edit';
 		}
 
-		var rx = <?php echo $WidthHtmlPrev; ?> / coords.w;
-		var ry = <?php echo $HeightHtmlPrev; ?> / coords.h;
+		var rx = <?php echo esc_js( $WidthHtmlPrev ); ?> / coords.w;
+		var ry = <?php echo esc_js( $HeightHtmlPrev ); ?> / coords.h;
 
 		jQuery('#imageToEditPreview').css({
-			width: Math.round(rx * <?php echo $resizedPreviewInfo['newWidth']; ?>) + 'px',
-			height: Math.round(ry * <?php echo $resizedPreviewInfo['newHeight']; ?>) + 'px',
+			width: Math.round(rx * <?php echo esc_js( $resizedPreviewInfo['newWidth'] ); ?>) + 'px',
+			height: Math.round(ry * <?php echo esc_js( $resizedPreviewInfo['newHeight'] ); ?>) + 'px',
 			marginLeft: '-' + Math.round(rx * coords.x) + 'px',
 			marginTop: '-' + Math.round(ry * coords.y) + 'px'
 		});
@@ -140,7 +146,7 @@ if ( $thumbnail_crop_frame != null ) {
 				w: wT,
 				h: hT,
 				action: 'createNewThumb',
-				id: <?php echo $id; ?>, rr: <?php echo str_replace( ',', '.', $rr ); ?>,
+				id: <?php echo esc_js( $id ); ?>, rr: <?php echo esc_js( str_replace( ',', '.', $rr ) ); ?>,
 				nonce: nonce
 			},
 			cache: false,
@@ -166,7 +172,7 @@ if ( $thumbnail_crop_frame != null ) {
 	<tr>
 		<td rowspan="3" valign="middle" align="center" id="ngg-overlay-dialog-main">
 			<small><?php esc_html_e( 'Select the area for the thumbnail from the picture below.', 'nggallery' ); ?></small>
-			<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $preview_image ); ?>" alt="" id="imageToEdit" />
+			<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $preview_image ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Using NGG's URL escaping function ?>" alt="" id="imageToEdit" />
 		</td>
 		<td style="display:none;">
 			<small><?php esc_html_e( 'Select the area for the thumbnail from the picture on the left.', 'nggallery' ); ?></small>
@@ -174,11 +180,11 @@ if ( $thumbnail_crop_frame != null ) {
 	</tr>
 	<tr style="display:none;">
 		<td align="center">
-			<div id="previewNewThumb" style="display:none;width:<?php echo $WidthHtmlPrev; ?>px;height:<?php echo $HeightHtmlPrev; ?>px;overflow:hidden; margin-left:5px;">
-				<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $preview_image ); ?>" id="imageToEditPreview" />
+			<div id="previewNewThumb" style="display:none;width:<?php echo esc_attr( $WidthHtmlPrev ); ?>px;height:<?php echo esc_attr( $HeightHtmlPrev ); ?>px;overflow:hidden; margin-left:5px;">
+				<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $preview_image ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Using NGG's URL escaping function ?>" id="imageToEditPreview" />
 			</div>
 			<div id="actualThumb">
-				<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $picture->thumbURL ); ?>?<?php echo time(); ?>" />
+				<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $picture->thumbURL ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Using NGG's URL escaping function ?>?<?php echo esc_attr( time() ); ?>" />
 			</div>
 		</td>
 	</tr>
@@ -195,8 +201,8 @@ if ( $thumbnail_crop_frame != null ) {
 			jQuery('#imageToEdit').Jcrop({
 				onChange: showPreview,
 				onSelect: showPreview,
-				<?php echo $default_crop_js_parameter; ?>
-				aspectRatio: <?php echo str_replace( ',', '.', round( $WidthHtmlPrev / $HeightHtmlPrev, 3 ) ); ?>
+				<?php echo $default_crop_js_parameter; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contains safe JavaScript parameters ?>
+				aspectRatio: <?php echo esc_js( str_replace( ',', '.', round( $WidthHtmlPrev / $HeightHtmlPrev, 3 ) ) ); ?>
 			});
 		});
 	})(jQuery);

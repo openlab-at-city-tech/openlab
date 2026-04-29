@@ -111,10 +111,12 @@ class ngg_Thumbnail {
 	 *
 	 * @var string
 	 */
-	function __construct( $fileName, $no_ErrorImage = false ) {
+	public function __construct( $fileName, $no_ErrorImage = false ) {
 		// make sure the GD library is installed
 		if (!function_exists( "gd_info" )) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Error messages are safe hardcoded strings
 			echo 'You do not have the GD Library installed.  This class requires the GD library to function properly.' . "\n";
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Error messages are safe hardcoded strings
 			echo 'visit http://us2.php.net/manual/en/ref.image.php for more information';
 			exit();
 		}
@@ -143,8 +145,11 @@ class ngg_Thumbnail {
 
 		// if there are no errors, determine the file format
 		if ($this->error == false) {
-			@ini_set( 'memory_limit', -1 );
+			if ( ! extension_loaded( 'suhosin' ) ) {
+				wp_raise_memory_limit();
+			}
 
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$data = @getimagesize( $this->fileName );
 			if (isset( $data ) && is_array( $data )) {
 				$extensions = [
@@ -211,7 +216,7 @@ class ngg_Thumbnail {
 	/**
 	 * Calculate the memory limit
 	 */
-	function checkMemoryForImage( $filename ) {
+	public function checkMemoryForImage( $filename ) {
 
 		if ( ( function_exists( 'memory_get_usage' ) ) && ( ini_get( 'memory_limit' ) ) ) {
 			$imageInfo = getimagesize( $filename );
@@ -270,16 +275,19 @@ class ngg_Thumbnail {
 	/**
 	 * Must be called to free up allocated memory after all manipulations are done
 	 */
-	function destruct() {
+	public function destruct() {
 		if (is_resource( $this->newImage ) || $this->newImage instanceof GdImage) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@imagedestroy( $this->newImage );
 		}
 
 		if (is_resource( $this->oldImage ) || $this->oldImage instanceof GdImage) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@imagedestroy( $this->oldImage );
 		}
 
 		if (is_resource( $this->workingImage ) || $this->workingImage instanceof GdImage) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@imagedestroy( $this->workingImage );
 		}
 	}
@@ -289,7 +297,7 @@ class ngg_Thumbnail {
 	 *
 	 * @return int
 	 */
-	function getCurrentWidth() {
+	public function getCurrentWidth() {
 		return $this->currentDimensions['width'];
 	}
 
@@ -298,7 +306,7 @@ class ngg_Thumbnail {
 	 *
 	 * @return int
 	 */
-	function getCurrentHeight() {
+	public function getCurrentHeight() {
 		return $this->currentDimensions['height'];
 	}
 
@@ -309,7 +317,7 @@ class ngg_Thumbnail {
 	 * @param int $height
 	 * @return array
 	 */
-	function calcWidth( $width, $height ) {
+	public function calcWidth( $width, $height ) {
 		$newWp     = ( 100 * $this->maxWidth ) / $width;
 		$newHeight = ( $height * $newWp ) / 100;
 		return array( 'newWidth'=>intval( $this->maxWidth ), 'newHeight'=>intval( $newHeight ) );
@@ -322,7 +330,7 @@ class ngg_Thumbnail {
 	 * @param int $height
 	 * @return array
 	 */
-	function calcHeight( $width, $height ) {
+	public function calcHeight( $width, $height ) {
 		$newHp    = ( 100 * $this->maxHeight ) / $height;
 		$newWidth = ( $width * $newHp ) / 100;
 		return array( 'newWidth'=>intval( $newWidth ), 'newHeight'=>intval( $this->maxHeight ) );
@@ -335,7 +343,7 @@ class ngg_Thumbnail {
 	 * @param int $height
 	 * @return array
 	 */
-	function calcPercent( $width, $height ) {
+	public function calcPercent( $width, $height ) {
 		$newWidth  = ( $width * $this->percent ) / 100;
 		$newHeight = ( $height * $this->percent ) / 100;
 		return array( 'newWidth'=>intval( $newWidth ), 'newHeight'=>intval( $newHeight ) );
@@ -347,7 +355,7 @@ class ngg_Thumbnail {
 	 * @param int $width
 	 * @param int $height
 	 */
-	function calcImageSize( $width, $height ) {
+	public function calcImageSize( $width, $height ) {
 		$newSize = array( 'newWidth'=>$width, 'newHeight'=>$height );
 
 		if ($this->maxWidth > 0) {
@@ -358,6 +366,7 @@ class ngg_Thumbnail {
 				$newSize = $this->calcHeight( $newSize['newWidth'], $newSize['newHeight'] );
 			}
 
+			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Code intentionally commented out.
 			// $this->newDimensions = $newSize;
 		}
 
@@ -368,6 +377,7 @@ class ngg_Thumbnail {
 				$newSize = $this->calcWidth( $newSize['newWidth'], $newSize['newHeight'] );
 			}
 
+			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Code intentionally commented out.
 			// $this->newDimensions = $newSize;
 		}
 
@@ -380,7 +390,7 @@ class ngg_Thumbnail {
 	 * @param int $width
 	 * @param int $height
 	 */
-	function calcImageSizePercent( $width, $height ) {
+	public function calcImageSizePercent( $width, $height ) {
 		if ($this->percent > 0) {
 			$this->newDimensions = $this->calcPercent( $width, $height );
 		}
@@ -389,7 +399,7 @@ class ngg_Thumbnail {
 	/**
 	 * Displays error image
 	 */
-	function showErrorImage() {
+	public function showErrorImage() {
 		header( 'Content-type: image/png' );
 		$errImg   = ImageCreate( 220, 25 );
 		$bgColor  = imagecolorallocate( $errImg, 0, 0, 0 );
@@ -407,7 +417,7 @@ class ngg_Thumbnail {
 	 * @param int $Width
 	 * @param int $Height
 	 */
-	function resizeFix( $Width = 0, $Height = 0, $deprecated = 3 ) {
+	public function resizeFix( $Width = 0, $Height = 0, $deprecated = 3 ) {
 		$this->newWidth  = $Width;
 		$this->newHeight = $Height;
 
@@ -417,6 +427,7 @@ class ngg_Thumbnail {
 			$this->workingImage = ImageCreate( $this->newWidth, $this->newHeight );
 		}
 
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Comment explains the function call below.
 		// ImageCopyResampled(
 		$this->imagecopyresampled(
 			$this->workingImage,
@@ -444,7 +455,7 @@ class ngg_Thumbnail {
 	 * @param int $maxWidth
 	 * @param int $maxHeight
 	 */
-	function resize( $maxWidth = 0, $maxHeight = 0, $deprecated = 3 ) {
+	public function resize( $maxWidth = 0, $maxHeight = 0, $deprecated = 3 ) {
 		$this->maxWidth  = $maxWidth;
 		$this->maxHeight = $maxHeight;
 
@@ -456,6 +467,7 @@ class ngg_Thumbnail {
 			$this->workingImage = ImageCreate( $this->newDimensions['newWidth'], $this->newDimensions['newHeight'] );
 		}
 
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Comment explains the function call below.
 		// ImageCopyResampled(
 		$this->imagecopyresampled(
 			$this->workingImage,
@@ -481,7 +493,7 @@ class ngg_Thumbnail {
 	 *
 	 * @param int $percent
 	 */
-	function resizePercent( $percent = 0 ) {
+	public function resizePercent( $percent = 0 ) {
 		$this->percent = $percent;
 
 		$this->calcImageSizePercent( $this->currentDimensions['width'], $this->currentDimensions['height'] );
@@ -516,7 +528,7 @@ class ngg_Thumbnail {
 	 *
 	 * @param int $cropSize
 	 */
-	function cropFromCenter( $cropSize ) {
+	public function cropFromCenter( $cropSize ) {
 		if ($cropSize > $this->currentDimensions['width']) {
 			$cropSize = $this->currentDimensions['width'];
 		}
@@ -560,7 +572,7 @@ class ngg_Thumbnail {
 	 * @param int $width
 	 * @param int $height
 	 */
-	function crop( $startX, $startY, $width, $height ) {
+	public function crop( $startX, $startY, $width, $height ) {
 		// make sure the cropped area is not greater than the size of the image
 		if ($width > $this->currentDimensions['width']) {
 			$width = $this->currentDimensions['width'];
@@ -613,10 +625,11 @@ class ngg_Thumbnail {
 	 * @param int    $quality
 	 * @param string $name
 	 */
-	function show( $quality = 100, $name = '' ) {
+	public function show( $quality = 100, $name = '' ) {
 		switch ($this->format) {
 			case 'GIF':
 				if ($name != '') {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					@ImageGif( $this->newImage, $name ) or $this->error = true;
 				} else {
 					header( 'Content-type: image/gif' );
@@ -625,6 +638,7 @@ class ngg_Thumbnail {
 				break;
 			case 'JPG':
 				if ($name != '') {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					@ImageJpeg( $this->newImage, $name, $quality ) or $this->error = true;
 				} else {
 					header( 'Content-type: image/jpeg' );
@@ -633,6 +647,7 @@ class ngg_Thumbnail {
 				break;
 			case 'PNG':
 				if ($name != '') {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					@ImagePng( $this->newImage, $name ) or $this->error = true;
 				} else {
 					header( 'Content-type: image/png' );
@@ -641,6 +656,7 @@ class ngg_Thumbnail {
 				break;
 			case 'WEBP':
 				if ($name != '') {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					$this->error = !@imagewebp( $this->newImage, $name );
 				} else {
 					header( 'Content-type: image/webp' );
@@ -657,7 +673,7 @@ class ngg_Thumbnail {
 	 * @param int    $quality
 	 * @return bool errorstate
 	 */
-	function save( $name, $quality = 100 ) {
+	public function save( $name, $quality = 100 ) {
 		$this->show( $quality, $name );
 		if ($this->error == true) {
 			$this->errmsg = 'Create Image failed. Check safe mode settings';
@@ -680,7 +696,7 @@ class ngg_Thumbnail {
 	 * @param bool   $border
 	 * @param string $borderColor
 	 */
-	function createReflection( $percent, $reflection, $white, $border = true, $borderColor = '#a4a4a4' ) {
+	public function createReflection( $percent, $reflection, $white, $border = true, $borderColor = '#a4a4a4' ) {
 		$width  = $this->currentDimensions['width'];
 		$height = $this->currentDimensions['height'];
 
@@ -739,7 +755,7 @@ class ngg_Thumbnail {
 	 * @param bool $horz flip the image in horizontal mode
 	 * @param bool $vert flip the image in vertical mode
 	 */
-	function flipImage( $horz = false, $vert = false ) {
+	public function flipImage( $horz = false, $vert = false ) {
 
 		$sx = $vert ? ( $this->currentDimensions['width'] - 1 ) : 0;
 		$sy = $horz ? ( $this->currentDimensions['height'] - 1 ) : 0;
@@ -760,7 +776,7 @@ class ngg_Thumbnail {
 	 *
 	 * @param string $dir Either CW or CCW
 	 */
-	function rotateImage( $dir = 'CW' ) {
+	public function rotateImage( $dir = 'CW' ) {
 		$angle = ( $dir == 'CW' ) ? 90 : -90;
 
 		if (function_exists( 'imagerotate' )) {
@@ -816,7 +832,7 @@ class ngg_Thumbnail {
 	 *
 	 * @access  private
 	 */
-	function imageFlipVertical() {
+	public function imageFlipVertical() {
 		$x_i = imagesx( $this->workingImage );
 		$y_i = imagesy( $this->workingImage );
 
@@ -834,7 +850,7 @@ class ngg_Thumbnail {
 	 * @param bool   $asString
 	 * @return array|string
 	 */
-	function hex2rgb( $hex, $asString = false ) {
+	public function hex2rgb( $hex, $asString = false ) {
 		// strip off any leading #
 		if (0 === strpos( $hex, '#' )) {
 			$hex = substr( $hex, 1 );
@@ -863,7 +879,7 @@ class ngg_Thumbnail {
 	 * @param int    $wmSize
 	 * @param int    $wmOpaque
 	 */
-	function watermarkCreateText( $color, $wmFont, $wmSize = 10, $wmOpaque = 90 ) {
+	public function watermarkCreateText( $color, $wmFont, $wmSize = 10, $wmOpaque = 90 ) {
 		if ( empty( $this->watermarkText ) ) {
 			return;
 		}
@@ -883,6 +899,7 @@ class ngg_Thumbnail {
 			return;
 		}
 
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$TextSize   = @ImageTTFBBox( $wmSize, 0, $wmFontPath, $this->watermarkText ) or die;
 		$TextWidth  = abs( $TextSize[2] ) + abs( $TextSize[0] );
 		$TextHeight = abs( $TextSize[7] ) + abs( $TextSize[1] );
@@ -911,13 +928,14 @@ class ngg_Thumbnail {
 	 * @param int    $xPOS
 	 * @param int    $yPOS
 	 */
-	function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
+	public function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
 
 		// if it's a resource ID take it as watermark text image
 		if (is_resource( $this->watermarkImgPath ) || $this->watermarkImgPath instanceof GdImage) {
 			$this->workingImage = $this->watermarkImgPath;
 		} else {
 			// Would you really want to use anything other than a png?
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
 			// if it's not a valid file die...
 			if (empty( $this->workingImage ) or ( !$this->workingImage )) {
@@ -960,6 +978,7 @@ class ngg_Thumbnail {
 				break;
 		}
 
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
 		// debug
 		// $this->errmsg = 'X '.$dest_x.' Y '.$dest_y;
 		// $this->showErrorImage();
@@ -971,6 +990,11 @@ class ngg_Thumbnail {
 			$this->newImage = $tempimage;
 		}
 
+		// PNG/WEBP: enable alpha on destination so watermark transparency is respected.
+		if ( $this->format === 'PNG' || $this->format === 'WEBP' ) {
+			imagealphablending( $this->newImage, true );
+			imagesavealpha( $this->newImage, true );
+		}
 		imagecopy( $this->newImage, $this->workingImage, $dest_x, $dest_y, 0, 0, $watermarkfile_width, $watermarkfile_height );
 	}
 
@@ -992,7 +1016,7 @@ class ngg_Thumbnail {
 	 * @param int      $src_h
 	 * @return bool
 	 */
-	function imagecopyresampled( &$dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) {
+	public function imagecopyresampled( &$dst_image, $src_image, $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) {
 
 		// Check if this image is PNG or GIF, then set if Transparent
 		if ( $this->format == 'GIF' || $this->format == 'PNG') {

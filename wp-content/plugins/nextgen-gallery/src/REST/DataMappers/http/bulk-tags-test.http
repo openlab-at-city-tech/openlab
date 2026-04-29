@@ -1,0 +1,72 @@
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+
+### Add new tags to images (append mode - default)
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [123, 124, 125],
+    "tags": ["nature", "landscape", "photography"],
+    "append": true
+}
+
+### Replace all existing tags with new ones
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [123, 124, 125],
+    "tags": ["wedding", "portrait"],
+    "append": false
+}
+
+### Add single tag to multiple images
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [126, 127, 128],
+    "tags": ["featured"]
+}
+
+### Test error case: invalid image IDs
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [99999, 99998],
+    "tags": ["test"]
+}
+
+### Test error case: empty tags array
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [123],
+    "tags": []
+}
+
+### Bulk remove all tags from images
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-remove-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [123, 124, 125]
+}
+
+### Test error case: remove tags from invalid image IDs
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-remove-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [99999, 99998]
+}

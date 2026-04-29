@@ -283,7 +283,7 @@ class SharedController extends ParentController {
 					if ( is_array( $album->sortorder ) && in_array( $gallery_id, $album->sortorder ) ) {
 						$found[] = $album;
 						break;
-					} else {
+					} elseif ( is_array( $album->sortorder ) ) {
 						$found = $this->find_gallery_parent( (int) $gallery_id, $album->sortorder );
 						if ( $found ) {
 							$found[] = $album;
@@ -318,6 +318,10 @@ class SharedController extends ParentController {
 		}
 
 		foreach ( $entities as $ndx => $entity ) {
+			// Skip null entities
+			if ( ! $entity || ! isset( $entity->id_field ) ) {
+				continue;
+			}
 			$tmpid                            = ( isset( $entity->albumdesc ) ? 'a' : '' ) . $entity->{$entity->id_field};
 			$this->breadcrumb_cache[ $tmpid ] = $entity;
 			// Using strict comparison here breaks the breadcrumb generation.
@@ -380,15 +384,27 @@ class SharedController extends ParentController {
 			$end = end( $found );
 			reset( $found );
 			foreach ( $found as $ndx => $found_item ) {
-				$type   = isset( $found_item->albumdesc ) ? 'album' : 'gallery';
-				$id     = ( 'album' === $type ? 'a' : '' ) . $found_item->{$found_item->id_field};
+				// Skip null or invalid items
+				if ( ! $found_item || ! isset( $found_item->id_field ) || empty( $found_item->id_field ) ) {
+					continue;
+				}
+				$type = isset( $found_item->albumdesc ) ? 'album' : 'gallery';
+				$id   = ( 'album' === $type ? 'a' : '' ) . $found_item->{$found_item->id_field};
+
+				// Skip if entity not found in cache
+				if ( ! isset( $this->breadcrumb_cache[ $id ] ) ) {
+					continue;
+				}
 				$entity = $this->breadcrumb_cache[ $id ];
 				$link   = null;
 
 				if ( 'album' === $type ) {
-					$name = $entity->name;
-					if ( $entity->pageid > 0 ) {
-						$link = get_page_link( $entity->pageid );
+					$name = isset( $entity->name ) ? $entity->name : '';
+					if ( isset( $entity->pageid ) && $entity->pageid > 0 ) {
+						$page = get_post( $entity->pageid );
+						if ( $page && isset( $page->ID ) ) {
+							$link = get_page_link( $page->ID );
+						}
 					}
 					if ( empty( $link ) && $found_item !== $end ) {
 						$link = $app->get_routed_url();
@@ -399,7 +415,7 @@ class SharedController extends ParentController {
 						}
 					}
 				} else {
-					$name = $entity->title;
+					$name = isset( $entity->title ) ? $entity->title : '';
 				}
 
 				$crumbs[] = [
@@ -560,6 +576,74 @@ class SharedController extends ParentController {
 	}
 
 	/**
+	 * Get the first available image ID from an album's children (galleries or nested albums).
+	 *
+	 * @param object $album The album object with sortorder property.
+	 * @param object $image_mapper The image mapper instance.
+	 *
+	 * @return int|null The first image ID found, or null if none available.
+	 */
+	protected function get_first_image_from_album( $album, $image_mapper ) {
+		if ( empty( $album->sortorder ) ) {
+			return null;
+		}
+
+		$gallery_mapper = GalleryMapper::get_instance();
+		$album_mapper   = AlbumMapper::get_instance();
+
+		// Iterate through sortorder to find the first available image.
+		foreach ( $album->sortorder as $entity_id ) {
+			// Check if this is a nested album (prefixed with 'a').
+			if ( is_string( $entity_id ) && substr( $entity_id, 0, 1 ) === 'a' ) {
+				$nested_album_id = intval( substr( $entity_id, 1 ) );
+				$nested_album    = $album_mapper->find( $nested_album_id );
+
+				if ( $nested_album ) {
+					// If nested album has a preview pic, use it.
+					if ( ! empty( $nested_album->previewpic ) && $nested_album->previewpic > 0 ) {
+						return $nested_album->previewpic;
+					}
+
+					// Recursively check nested album's children.
+					if ( ! empty( $nested_album->sortorder ) ) {
+						$nested_preview = $this->get_first_image_from_album( $nested_album, $image_mapper );
+						if ( $nested_preview ) {
+							return $nested_preview;
+						}
+					}
+				}
+			} else {
+				// This is a gallery ID.
+				$gallery_id = intval( $entity_id );
+				$gallery    = $gallery_mapper->find( $gallery_id );
+
+				if ( $gallery ) {
+					if ( ! empty( $gallery->previewpic ) && $gallery->previewpic > 0 ) {
+						return $gallery->previewpic;
+					}
+
+					// If gallery has no preview pic, try to get its first image.
+					$image_mapper_instance = ImageMapper::get_instance();
+					$images                = $image_mapper_instance->find_all(
+						[
+							'galleryid' => $gallery_id,
+							'exclude'   => 0,
+							'limit'     => 1,
+							'order'     => 'ASC',
+						]
+					);
+
+					if ( ! empty( $images ) ) {
+						return $images[0]->pid;
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Returns the order that Album display types appear in the IGW selector.
 	 *
 	 * @return float
@@ -610,11 +694,11 @@ class SharedController extends ParentController {
 	 * Renders the displayed gallery.
 	 *
 	 * @param DisplayedGallery $displayed_gallery DisplayedGallery object.
-	 * @param bool             $return Return or print the result.
+	 * @param bool             $return_output Return or print the result.
 	 *
 	 * @return ?string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		$router = Router::get_instance();
 
 		// We need to fetch the selected album containers. We need to do this, because once we fetch the included
@@ -644,7 +728,7 @@ class SharedController extends ParentController {
 				\add_filter( 'ngg_displayed_gallery_rendering', [ $this, 'add_breadcrumbs_to_legacy_templates' ], 9, 2 );
 				\add_filter( 'ngg_display_type_rendering_object', [ $this, 'add_breadcrumbs_and_descriptions' ], 10, 2 );
 
-				$output = $renderer->display_images( $alternate_displayed_gallery, $return );
+				$output = $renderer->display_images( $alternate_displayed_gallery, $return_output );
 
 				\remove_filter( 'ngg_display_type_rendering_object', [ $this, 'add_breadcrumbs_and_descriptions' ], 10 );
 				\remove_filter( 'ngg_displayed_gallery_rendering', [ $this, 'add_description_to_legacy_templates' ], 8 );
@@ -664,7 +748,7 @@ class SharedController extends ParentController {
 			// Preserve the original album list before altering the DisplayedGallery.
 			$original_albums = $displayed_gallery->get_albums();
 
-			if ( in_array( $album, $displayed_gallery->container_ids, false ) ) {
+			if ( in_array( $album, $displayed_gallery->container_ids, true ) ) {
 				$viewing_original_album = true;
 			}
 
@@ -699,7 +783,7 @@ class SharedController extends ParentController {
 				$description = $this->render_legacy_template_description( $displayed_gallery );
 
 				// If enabled enqueue the child entities as JSON for lightboxes to read.
-				$retval = $this->legacy_render( $display_settings['template'], $display_settings, $return, 'album' );
+				$retval = $this->legacy_render( $display_settings['template'], $display_settings, $return_output, 'album' );
 
 				if ( ! empty( $description ) ) {
 					$retval = $description . $retval;
@@ -723,7 +807,7 @@ class SharedController extends ParentController {
 				}
 				$content = $view->rasterize_object( $view_element );
 
-				if ( ! $return ) {
+				if ( ! $return_output ) {
 					// We cannot truly escape this content as it may come from user-supplied or 3rd party templates.
 					echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				}
@@ -736,7 +820,7 @@ class SharedController extends ParentController {
 				[],
 				'photocrati-nextgen_gallery_display#no_images_found'
 			);
-			return $view->render( $return );
+			return $view->render( $return_output );
 		}
 	}
 
@@ -790,7 +874,6 @@ class SharedController extends ParentController {
 
 		DisplayManager::add_script_data(
 			'ngg_common',
-
 			'galleries.gallery_' . $displayed_gallery->id() . '.wordpress_page_root',
 			get_permalink(),
 			false
@@ -818,11 +901,12 @@ class SharedController extends ParentController {
 
 		$app = $router->get_routed_app();
 
-		$pagination_result = $this->create_pagination(
+		$ajax_pagination_referrer = $router->get_parameter( 'ajax_pagination_referrer' );
+		$pagination_result        = $this->create_pagination(
 			$this->get_current_page( $displayed_gallery ),
 			$displayed_gallery->get_entity_count(),
 			$params['galleries_per_page'],
-			urldecode( $router->get_parameter( 'ajax_pagination_referrer' ) ?: '' )
+			urldecode( $ajax_pagination_referrer ? $ajax_pagination_referrer : '' )
 		);
 
 		$params['displayed_gallery'] = $displayed_gallery;
@@ -860,8 +944,15 @@ class SharedController extends ParentController {
 
 			// Get the preview image url.
 			$gallery->previewurl = '';
-			if ( $gallery->previewpic && $gallery->previewpic > 0 ) {
-				$image = $image_mapper->find( intval( $gallery->previewpic ) );
+			$preview_image_id    = $gallery->previewpic;
+
+			// If no preview is set for an album, try to get the first image from its children.
+			if ( ( ! $preview_image_id || $preview_image_id <= 0 ) && $gallery->is_album && ! empty( $gallery->sortorder ) ) {
+				$preview_image_id = $this->get_first_image_from_album( $gallery, $image_mapper );
+			}
+
+			if ( $preview_image_id && $preview_image_id > 0 ) {
+				$image = $image_mapper->find( intval( $preview_image_id ) );
 				if ( $image ) {
 					$gallery->previewpic_image         = $image;
 					$gallery->previewpic_fullsized_url = $storage->get_image_url( $image );
@@ -878,8 +969,12 @@ class SharedController extends ParentController {
 			$id_field = $gallery->id_field;
 			if ( $gallery->is_album ) {
 				if ( $gallery->pageid > 0 ) {
-					$gallery->pagelink = get_page_link( $gallery->pageid );
-				} else {
+					$page = get_post( $gallery->pageid );
+					if ( $page && isset( $page->ID ) ) {
+						$gallery->pagelink = get_page_link( $page->ID );
+					}
+				}
+				if ( empty( $gallery->pagelink ) ) {
 					$pagelink          = $app->get_routed_url( true );
 					$pagelink          = $app->remove_parameter( 'album', null, $pagelink );
 					$pagelink          = $app->remove_parameter( 'gallery', null, $pagelink );
@@ -892,7 +987,10 @@ class SharedController extends ParentController {
 				// /nggallery/album--slug/gallery--slug.
 
 				if ( $gallery->pageid > 0 ) {
-					$gallery->pagelink = get_page_link( $gallery->pageid );
+					$page = get_post( $gallery->pageid );
+					if ( $page && isset( $page->ID ) ) {
+						$gallery->pagelink = get_page_link( $page->ID );
+					}
 				}
 
 				if ( empty( $gallery->pagelink ) ) {

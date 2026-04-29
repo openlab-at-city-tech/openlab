@@ -1,0 +1,167 @@
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+@galleryId = 60
+@image1Id = 119
+@image2Id = 131
+
+### Get user
+GET {{baseUrl}}
+
+### Get all images
+GET {{baseUrl}}/wp-json/imagely/v1/images/
+Authorization: {{authHeader}}
+
+### Get images from specific gallery
+GET {{baseUrl}}/wp-json/imagely/v1/images?gallery_id={{galleryId}}
+Authorization: {{authHeader}}
+
+### Get single image
+GET {{baseUrl}}/wp-json/imagely/v1/images/{{image1Id}}
+Authorization: {{authHeader}}
+
+### Create new image
+POST {{baseUrl}}/wp-json/imagely/v1/images
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: {{authHeader}}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+--boundary
+Content-Disposition: form-data; name="galleryid"
+
+{{galleryId}}
+--boundary--
+
+### Update image
+PUT {{baseUrl}}/wp-json/imagely/v1/images/{{image1Id}}
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "alttext": "New alt text",
+  "description": "New description",
+  "exclude": false,
+  "image_slug": "new-slug",
+  "sortorder": 1,
+  "tags": "tag1,tag2"
+}
+
+### Delete image
+DELETE {{baseUrl}}/wp-json/imagely/v1/images/1
+Authorization: {{authHeader}}
+
+### Bulk update images
+PUT {{baseUrl}}/wp-json/imagely/v1/images/bulk
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "images": [
+    {
+      "id": {{image1Id}},
+      "alttext": "New Alt 1"
+    },
+    {
+      "id": {{image2Id}},
+      "alttext": "New Alt 2"
+    }
+  ]
+}
+
+### Upload image to gallery (single image)
+POST {{baseUrl}}/wp-json/imagely/v1/images/upload
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: {{authHeader}}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+--boundary
+Content-Disposition: form-data; name="gallery_id"
+
+{{galleryId}}
+--boundary--
+
+### Upload ZIP to gallery
+POST {{baseUrl}}/wp-json/imagely/v1/images/upload
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: {{authHeader}}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="images.zip"
+Content-Type: application/zip
+
+< ./images.zip
+--boundary
+Content-Disposition: form-data; name="gallery_id"
+
+{{galleryId}}
+--boundary--
+
+
+
+### Browse import folder (root)
+GET {{baseUrl}}/wp-json/imagely/v1/folders/browse
+Authorization: {{authHeader}}
+
+### Browse import folder (subdir)
+GET {{baseUrl}}/wp-json/imagely/v1/folders/browse?dir=uploads
+Authorization: {{authHeader}}
+
+### Browse import folder (subdir)
+GET {{baseUrl}}/wp-json/imagely/v1/folders/browse?dir=uploads/2025
+Authorization: {{authHeader}}
+
+### Import images from WordPress media library to gallery
+POST {{baseUrl}}/wp-json/imagely/v1/images/import-media-library
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "gallery_id": {{galleryId}},
+  "attachment_ids": [101, 102, 103]
+}
+
+### Create gallery selecting folder path
+POST {{baseUrl}}/wp-json/imagely/v1/folders/import
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "folder": "subfolder",
+  "keep_location": true,
+  "gallery_title": "Imported Gallery"
+}
+
+
+### Create gallery using media import
+POST {{baseUrl}}/wp-json/imagely/v1/images/import-media-library
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "gallery_name": "Media Library Import Gallery",
+  "attachment_ids": [33, 32]
+}
+
+
+### Create gallery uploading images.
+POST {{baseUrl}}/wp-json/imagely/v1/images/upload
+Content-Type: multipart/form-data; boundary=boundary
+Authorization: {{authHeader}}
+
+--boundary
+Content-Disposition: form-data; name="file"; filename="test.jpg"
+Content-Type: image/jpeg
+
+< ./test.jpg
+--boundary
+Content-Disposition: form-data; name="gallery_name"
+
+New Gallery Name
+--boundary--

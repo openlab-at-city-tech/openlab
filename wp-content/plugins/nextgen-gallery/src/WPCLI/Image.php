@@ -7,6 +7,9 @@ use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
 use Imagely\NGG\Display\I18N;
 
+/**
+ * WP-CLI image commands.
+ */
 class Image {
 
 	/**
@@ -20,7 +23,9 @@ class Image {
 		$mapper  = GalleryMapper::get_instance();
 		$storage = StorageManager::get_instance();
 
-		if ( ( $gallery = $mapper->find( $assoc_args['gallery'], true ) ) ) {
+		$gallery = $mapper->find( $assoc_args['gallery'], true );
+		if ( $gallery ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$file_data = @file_get_contents( $assoc_args['filename'] );
 			$file_name = I18N::mb_basename( $assoc_args['filename'] );
 

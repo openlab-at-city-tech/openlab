@@ -1,4 +1,7 @@
 <?php
+/**
+ * DataMapper factory adapter.
+ */
 class A_DataMapper_Factory extends Mixin
 {
     public function datamapper_model($mapper, $properties = array(), $context = false)
@@ -14,6 +17,7 @@ class A_DataMapper_Factory extends Mixin
         return new C_CustomPost_DataMapper_Driver($object_name, $context);
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_DataMapper_Driver_Base
  *
@@ -22,11 +26,36 @@ class A_DataMapper_Factory extends Mixin
  */
 class C_DataMapper_Driver_Base extends C_Component
 {
-    var $_object_name;
-    var $_model_factory_method = false;
-    var $_columns = array();
-    var $_table_columns = array();
-    var $_serialized_columns = array();
+    /**
+     * Object name for this driver.
+     *
+     * @var string
+     */
+    public $_object_name;
+    /**
+     * Model factory method.
+     *
+     * @var bool|string
+     */
+    public $_model_factory_method = false;
+    /**
+     * Column definitions.
+     *
+     * @var array
+     */
+    public $_columns = array();
+    /**
+     * Table columns cache.
+     *
+     * @var array
+     */
+    public $_table_columns = array();
+    /**
+     * Serialized columns list.
+     *
+     * @var array
+     */
+    public $_serialized_columns = array();
     public function define($object_name = false, $context = false)
     {
         parent::define($context);
@@ -70,6 +99,8 @@ class C_DataMapper_Driver_Base extends C_Component
     }
     /**
      * Looks up using SQL the columns existing in the database, result is cached.
+     *
+     * @throws \Exception When database query fails
      */
     public function lookup_columns()
     {
@@ -83,6 +114,8 @@ class C_DataMapper_Driver_Base extends C_Component
     }
     /**
      * Looks up using SQL the columns existing in the database
+     *
+     * @throws \Exception When database query fails
      */
     public function update_columns_cache()
     {
@@ -94,7 +127,7 @@ class C_DataMapper_Driver_Base extends C_Component
         //
         // TODO: Once NextGEN's minimum WP version is 6.2 or higher use wpdb->prepare() here.
         //
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
         foreach ($wpdb->get_results("SHOW COLUMNS FROM {$this->get_table_name()}") as $row) {
             $this->_table_columns[] = $row->Field;
         }
@@ -111,6 +144,7 @@ class C_DataMapper_Driver_Base extends C_Component
         if (empty($this->object->_table_columns)) {
             $this->object->lookup_columns();
         }
+        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         return array_search($column_name, $this->object->_table_columns) !== false;
     }
     /**
@@ -153,12 +187,12 @@ class C_DataMapper_Driver_Base extends C_Component
             $this->_cache[$key] = $results;
         }
     }
-    public function get_from_cache($key, $default = null)
+    public function get_from_cache($key, $default_value = null)
     {
         if ($this->object->_use_cache && isset($this->_cache[$key])) {
             return $this->_cache[$key];
         } else {
-            return $default;
+            return $default_value;
         }
     }
     public function flush_query_cache()
@@ -184,11 +218,11 @@ class C_DataMapper_Driver_Base extends C_Component
     {
         $this->object->_serialized_columns[] = $column;
     }
-    public function unserialize_columns($object)
+    public function unserialize_columns($obj)
     {
         foreach ($this->object->_serialized_columns as $column) {
-            if (isset($object->{$column}) && is_string($object->{$column})) {
-                $object->{$column} = \Imagely\NGG\Util\Serializable::unserialize($object->{$column});
+            if (isset($obj->{$column}) && is_string($obj->{$column})) {
+                $obj->{$column} = \Imagely\NGG\Util\Serializable::unserialize($obj->{$column});
             }
         }
     }
@@ -250,6 +284,8 @@ class C_DataMapper_Driver_Base extends C_Component
         return $this->object->_where($conditions, 'AND');
     }
     /**
+     * Adds OR conditions to the query.
+     *
      * @param array $conditions (optional)
      * @return self
      */
@@ -258,6 +294,8 @@ class C_DataMapper_Driver_Base extends C_Component
         return $this->object->where($conditions, 'OR');
     }
     /**
+     * Adds WHERE conditions to the query.
+     *
      * @param array $conditions (optional)
      * @return self
      */
@@ -268,7 +306,7 @@ class C_DataMapper_Driver_Base extends C_Component
     /** Parses the where clauses
      * They could look like the following:
      *
-     * array(
+     * Array(
      *  "post_id = 1"
      *  array("post_id = %d", 1),
      * )
@@ -319,6 +357,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @global wpdb $wpdb
      * @param string $condition
      * @return array
+     * @throws \Exception When parsing fails
      */
     public function _parse_where_clause($condition)
     {
@@ -407,6 +446,7 @@ class C_DataMapper_Driver_Base extends C_Component
         $processed_objects[] = $stdObject_or_array_or_string;
         if (is_string($stdObject_or_array_or_string)) {
             $stdObject_or_array_or_string = str_replace("\\'", "'", str_replace('\\"', '"', str_replace('\\\\', '\\', $stdObject_or_array_or_string)));
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         } elseif (is_object($stdObject_or_array_or_string) && !in_array($stdObject_or_array_or_string, $processed_objects)) {
             foreach (get_object_vars($stdObject_or_array_or_string) as $key => $val) {
                 if ($val != $stdObject_or_array_or_string && $key != '_mapper') {
@@ -433,6 +473,7 @@ class C_DataMapper_Driver_Base extends C_Component
      * @param object      $stdObject
      * @param string|bool $context (optional)
      * @return object
+     * @throws \E_InvalidEntityException When entity conversion fails
      */
     public function convert_to_model($stdObject, $context = false)
     {
@@ -441,7 +482,7 @@ class C_DataMapper_Driver_Base extends C_Component
         try {
             $this->object->_convert_to_entity($stdObject);
         } catch (Exception $ex) {
-            throw new E_InvalidEntityException($ex);
+            throw new E_InvalidEntityException(esc_html($ex->getMessage()));
         }
         $retval = $this->object->create($stdObject, $context);
         return $retval;
@@ -454,51 +495,50 @@ class C_DataMapper_Driver_Base extends C_Component
      */
     public function is_model($obj)
     {
-        return is_subclass_of($obj, 'C_DataMapper_Model') or get_class($obj) == 'C_DataMapper_Model';
+        return is_subclass_of($obj, 'C_DataMapper_Model') || get_class($obj) == 'C_DataMapper_Model';
     }
     /**
      * If a field has no value, then use the default value.
      *
-     * @param stdClass|C_DataMapper_Model $object
+     * @param mixed ...$args Variable arguments: first argument must be stdClass|C_DataMapper_Model object.
+     * @throws \E_InvalidEntityException When object is not an object
      */
-    public function _set_default_value($object)
+    public function _set_default_value(...$args)
     {
         $array = null;
         $field = null;
         $default_value = null;
+        $obj = $args[0] ?? null;
         // The first argument MUST be an object.
-        if (!is_object($object)) {
+        if (!is_object($obj)) {
             throw new E_InvalidEntityException();
         }
-        // This method has two signatures:
-        // 1) _set_default_value($object, $field, $default_value)
-        // 2) _set_default_value($object, $array_field, $field, $default_value).
         // Handle #1.
-        $args = func_get_args();
         if (count($args) == 4) {
-            list($object, $array, $field, $default_value) = $args;
-            if (!isset($object->{$array})) {
-                $object->{$array} = [];
-                $object->{$array}[$field] = null;
+            list($obj, $array, $field, $default_value) = $args;
+            if (!isset($obj->{$array})) {
+                $obj->{$array} = [];
+                $obj->{$array}[$field] = null;
             } else {
-                $arr =& $object->{$array};
+                $arr =& $obj->{$array};
                 if (!isset($arr[$field])) {
                     $arr[$field] = null;
                 }
             }
-            $array =& $object->{$array};
+            $array =& $obj->{$array};
             $value =& $array[$field];
-            if ($value === '' or is_null($value)) {
+            if ($value === '' || is_null($value)) {
                 $value = $default_value;
             }
         } else {
-            list($object, $field, $default_value) = $args;
-            if (!isset($object->{$field})) {
-                $object->{$field} = null;
+            // Handle #2.
+            list($obj, $field, $default_value) = $args;
+            if (!isset($obj->{$field})) {
+                $obj->{$field} = null;
             }
-            $value = $object->{$field};
-            if ($value === '' or is_null($value)) {
-                $object->{$field} = $default_value;
+            $value = $obj->{$field};
+            if ($value === '' || is_null($value)) {
+                $obj->{$field} = $default_value;
             }
         }
     }
@@ -530,6 +570,7 @@ class C_DataMapper_Driver_Base extends C_Component
                     $entity->{$key} = $value ? true : false;
                 }
             } else {
+                // Add property and default value.
                 $entity->{$key} = $default_value;
             }
         }
@@ -537,12 +578,13 @@ class C_DataMapper_Driver_Base extends C_Component
     }
 }
 /**
- * Provides instance methods for C_CustomPost_DataMapper_Driver
+ * Provides instance methods for C_CustomPost_DataMapper_Driver.
  *
  * @mixin C_CustomPost_DataMapper_Driver
  */
 class Mixin_CustomPost_DataMapper_Driver extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
      * Used to select which fields should be returned. NOT currently used by
      * this implementation of the datamapper driver
@@ -594,7 +636,9 @@ class Mixin_CustomPost_DataMapper_Driver extends Mixin
         $primary_key = $this->object->get_primary_key_column();
         // TODO: unsilence this. WordPress 3.9-beta2 is generating an error that should be corrected before its
         // final release.
-        if ($post_id = @wp_insert_post($post)) {
+        // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+        $post_id = @wp_insert_post($post);
+        if ($post_id) {
             $new_entity = $this->object->find($post_id, true);
             if ($new_entity) {
                 foreach ($new_entity->get_entity() as $key => $value) {
@@ -641,6 +685,7 @@ class Mixin_CustomPost_DataMapper_Driver extends Mixin
         return '';
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_CustomTable_DataMapper_Driver
  *
@@ -654,11 +699,41 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
      * @var wpdb
      */
     public $_where_clauses = array();
+    /**
+     * Order clauses.
+     *
+     * @var array
+     */
     public $_order_clauses = array();
+    /**
+     * Group by columns.
+     *
+     * @var array
+     */
     public $_group_by_columns = array();
+    /**
+     * Limit clause.
+     *
+     * @var string
+     */
     public $_limit_clause = '';
+    /**
+     * Select clause.
+     *
+     * @var string
+     */
     public $_select_clause = '';
+    /**
+     * Delete clause.
+     *
+     * @var string
+     */
     public $_delete_clause = '';
+    /**
+     * Whether to use cache.
+     *
+     * @var bool
+     */
     public $_use_cache = true;
     public function define($object_name = false, $context = false)
     {
@@ -687,11 +762,14 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
     }
     /**
      * Looks up the primary key column for this table
+     *
+     * @throws Exception When primary key cannot be found
      */
     public function _lookup_primary_key_column()
     {
         $key = $this->_wpdb()->get_row("SHOW INDEX FROM {$this->get_table_name()} WHERE Key_name='PRIMARY'", ARRAY_A);
         if (!$key) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Table name is internal and safe
             throw new Exception("Please specify the primary key for {$this->get_table_name()}");
         }
         return $key['Column_name'];
@@ -848,7 +926,10 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
         // If we have a SQL statement to execute, then heck, execute it!
         if ($sql) {
             if ($this->object->debug) {
-                var_dump($sql);
+                // phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
+                // var_dump( $sql );
+                null;
+                // Intentionally empty - debug code commented out.
             }
             // Try getting the result from cache first.
             if ($this->is_select_statement() && $this->object->_use_cache) {
@@ -882,7 +963,10 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
                 }
             }
         } elseif ($this->object->debug) {
-            var_dump('No entities returned from query');
+            // phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
+            // var_dump( 'No entities returned from query' );
+            null;
+            // Intentionally empty - debug code commented out.
         }
         // Just a safety check.
         if (!$retval) {
@@ -932,23 +1016,27 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
     }
     /**
      * Migrates the schema of the database
+     *
+     * @throws \E_ColumnsNotDefinedException When columns are not defined
      */
     public function migrate()
     {
         if (!$this->object->_columns) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Table name is internal and safe
             throw new E_ColumnsNotDefinedException("Columns not defined for {$this->get_table_name()}");
         }
         $added = false;
         $removed = false;
         // Add any missing columns.
         foreach ($this->object->_columns as $key => $properties) {
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             if (!in_array($key, $this->object->_table_columns)) {
                 if ($this->object->_add_column($key, $properties['type'], $properties['default_value'])) {
                     $added = true;
                 }
             }
         }
-        if ($added or $removed) {
+        if ($added || $removed) {
             $this->object->lookup_columns();
         }
     }
@@ -962,12 +1050,13 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
     }
 }
 /**
- * Provides instance methods for C_CustomTable_DataMapper_Driver
+ * Provides instance methods for C_CustomTable_DataMapper_Driver.
  *
  * @mixin C_CustomTable_DataMapper_Driver
  */
 class C_CustomTable_DataMapper_Driver_Mixin extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
      * Selects which fields to collect from the table.
      * NOTE: Not protected from SQL injection - DO NOT let your users specify DB columns
@@ -979,7 +1068,7 @@ class C_CustomTable_DataMapper_Driver_Mixin extends Mixin
     {
         // Create a fresh slate.
         $this->object->_init();
-        if (!$fields or $fields == '*') {
+        if (!$fields || $fields == '*') {
             $fields = $this->get_table_name() . '.*';
         }
         $this->object->_select_clause = "SELECT {$fields}";
@@ -1078,7 +1167,14 @@ class C_CustomTable_DataMapper_Driver_Mixin extends Mixin
     }
     public function _add_column($column_name, $datatype, $default_value = null)
     {
-        $sql = "ALTER TABLE `{$this->get_table_name()}` ADD COLUMN `{$column_name}` {$datatype}";
+        $table_name = esc_sql($this->get_table_name());
+        // Direct database check to avoid duplicate column error if transient cache is stale.
+        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+        $exists = $this->object->_wpdb()->get_results($this->object->_wpdb()->prepare("SHOW COLUMNS FROM `{$table_name}` LIKE %s", $column_name));
+        if (!empty($exists)) {
+            return false;
+        }
+        $sql = "ALTER TABLE `{$table_name}` ADD COLUMN `{$column_name}` {$datatype}";
         if ($default_value) {
             if (is_string($default_value)) {
                 $default_value = str_replace("'", "\\'", $default_value);
@@ -1132,6 +1228,7 @@ class C_CustomTable_DataMapper_Driver_Mixin extends Mixin
         return implode(' ', $sql);
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_CustomPost_DataMapper_Driver
  *
@@ -1140,10 +1237,35 @@ class C_CustomTable_DataMapper_Driver_Mixin extends Mixin
  */
 class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
 {
+    /**
+     * Query arguments.
+     *
+     * @var array
+     */
     public $_query_args = array();
+    /**
+     * Primary key column name.
+     *
+     * @var string
+     */
     public $_primary_key_column = 'ID';
+    /**
+     * Whether to use cache.
+     *
+     * @var bool
+     */
     public $_use_cache = true;
+    /**
+     * Cache array.
+     *
+     * @var array
+     */
     public $_cache;
+    /**
+     * Post table columns cache.
+     *
+     * @var array
+     */
     public static $_post_table_columns = array();
     public function define($object_name = false, $context = false)
     {
@@ -1198,6 +1320,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
     {
         // Make an exception for the rand() method.
         $order_by = preg_replace('/rand\\(\\s*\\)/', 'rand', $order_by);
+        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         if (in_array($order_by, $this->object->_get_querable_table_columns())) {
             $this->object->_query_args['orderby'] = $order_by;
         } else {
@@ -1330,6 +1453,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
                     $clause['key'] = $clause['column'];
                     unset($clause['column']);
                     // Convert values to array, when required.
+                    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
                     if (in_array($clause['compare'], ['IN', 'BETWEEN'])) {
                         $clause['value'] = explode(',', $clause['value']);
                         foreach ($clause['value'] as &$val) {
@@ -1366,7 +1490,8 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
         $entity = new stdClass();
         // Unserialize the post_content_filtered field.
         if (is_string($post->post_content_filtered)) {
-            if ($post_content = $this->object->unserialize($post->post_content_filtered)) {
+            $post_content = $this->object->unserialize($post->post_content_filtered);
+            if ($post_content) {
                 foreach ($post_content as $key => $value) {
                     $post->{$key} = $value;
                 }
@@ -1374,7 +1499,8 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
         }
         // Unserialize the post content field.
         if (is_string($post->post_content)) {
-            if ($post_content = $this->object->unserialize($post->post_content)) {
+            $post_content = $this->object->unserialize($post->post_content);
+            if ($post_content) {
                 foreach ($post_content as $key => $value) {
                     $post->{$key} = $value;
                 }
@@ -1417,6 +1543,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
         // Those will be removed from the post, and serialized in the
         // post_content field.
         foreach ($post as $key => $value) {
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             if (in_array(strtolower(gettype($value)), ['object', 'array'])) {
                 unset($post->{$key});
             }
@@ -1453,7 +1580,6 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
         // Unfortunately, that means flushing all existing postmeta
         // and then inserting new values. Depending on the number of
         // properties, this could be slow. So, we directly access the database.
-        /* @var $wpdb wpdb */
         global $wpdb;
         if (!is_array($omit)) {
             $omit = [$omit];
@@ -1461,21 +1587,23 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
         // By default, we omit creating meta values for columns in the posts table.
         $omit = array_merge($omit, $this->object->_table_columns);
         // Delete the existing meta values.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE post_id = %s", $post_id));
         // Create query for new meta values.
         $sql_parts = [];
         foreach ($entity as $key => $value) {
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             if (in_array($key, $omit)) {
                 continue;
             }
-            if (is_array($value) or is_object($value)) {
+            if (is_array($value) || is_object($value)) {
                 $value = $this->object->serialize($value);
             }
             $sql_parts[] = $wpdb->prepare('(%s, %s, %s)', $post_id, $key, $value);
         }
         // The following $sql_parts is already sent through $wpdb->prepare() -- look directly above this line
         //
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
         $wpdb->query("INSERT INTO {$wpdb->postmeta} (post_id, meta_key, meta_value) VALUES " . implode(',', $sql_parts));
     }
     /**
@@ -1520,7 +1648,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
             $this->object->_query_args['custom_sql'] = $sql;
         }
         // If this is a select query, then try fetching the results from cache.
-        $cache_key = md5(json_encode($this->object->_query_args));
+        $cache_key = md5(wp_json_encode($this->object->_query_args));
         if ($this->is_select_statement() && $this->object->_use_cache) {
             $results = $this->object->get_from_cache($cache_key);
         }
@@ -1609,12 +1737,13 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
     }
 }
 /**
- * Provides instance methods for C_DataMapper_Driver_Base
+ * Provides instance methods for C_DataMapper_Driver_Base.
  *
  * @mixin C_DataMapper_Driver_Base
  */
 class Mixin_DataMapper_Driver_Base extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
      * Serializes the data
      *
@@ -1669,7 +1798,8 @@ class Mixin_DataMapper_Driver_Base extends Mixin
     {
         // Add name of the id_field to the entity, and convert
         // the ID to an integer.
-        $stdObject->id_field = $key = $this->object->get_primary_key_column();
+        $key = $this->object->get_primary_key_column();
+        $stdObject->id_field = $key;
         // Cast columns to their appropriate data type.
         $this->cast_columns($stdObject);
         // Strip slashes.
@@ -1707,6 +1837,7 @@ class Mixin_DataMapper_Driver_Base extends Mixin
      *
      * @param stdClass|C_DataMapper_Model $entity
      * @return bool|int Resulting ID or false upon failure
+     * @throws \E_InvalidEntityException When entity is an array instead of object
      */
     public function save($entity)
     {
@@ -1719,6 +1850,8 @@ class Mixin_DataMapper_Driver_Base extends Mixin
         if (is_array($entity)) {
             throw new E_InvalidEntityException();
         } elseif (!$this->object->is_model($entity)) {
+            // We can work with what we have. But we need to ensure that we've got
+            // a model.
             unset($entity->__defaults_set);
             $model = $this->object->convert_to_model($entity);
         }
@@ -1771,6 +1904,7 @@ class Mixin_DataMapper_Driver_Base extends Mixin
         $this->object->_columns[$name] = ['type' => $type, 'default_value' => $default_value];
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_DataMapper_Model
  *
@@ -1780,8 +1914,18 @@ class Mixin_DataMapper_Driver_Base extends Mixin
  */
 class C_DataMapper_Model extends C_Component
 {
-    var $_mapper;
-    var $_stdObject;
+    /**
+     * The data mapper instance.
+     *
+     * @var C_DataMapper_Driver_Base
+     */
+    public $_mapper;
+    /**
+     * Standard object containing entity data.
+     *
+     * @var \stdClass
+     */
+    public $_stdObject;
     /**
      * Define the model
      */
@@ -1874,11 +2018,11 @@ class C_DataMapper_Model extends C_Component
     /**
      * Updates the attributes for an object
      *
-     * @param array $array (optional)
+     * @param array $attributes (optional)
      */
-    public function update_attributes($array = array())
+    public function update_attributes($attributes = array())
     {
-        foreach ($array as $key => $value) {
+        foreach ($attributes as $key => $value) {
             $this->_stdObject->{$key} = $value;
         }
     }
@@ -1924,17 +2068,26 @@ class C_DataMapper_Model extends C_Component
     }
 }
 /**
- * This mixin should be overwritten by other modules
+ * DataMapper model validation mixin.
+ *
+ * This mixin should be overwritten by other modules.
  */
 class Mixin_DataMapper_Model_Validation extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     public function validation()
     {
         return $this->object->is_valid();
     }
 }
+/**
+ * DataMapper model instance methods mixin.
+ *
+ * Provides instance methods for DataMapper models.
+ */
 class Mixin_DataMapper_Model_Instance_Methods extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
      * Returns the associated entity
      */

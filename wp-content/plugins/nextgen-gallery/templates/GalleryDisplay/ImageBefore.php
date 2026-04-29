@@ -1,5 +1,8 @@
 <?php
 /**
+ * Gallery Display Image Before Template.
+ *
+ * @package Nextgen Gallery
  * @var int $index
  * @var string $class
  * @var Image $image
@@ -14,6 +17,6 @@ if ( ! isset( $id ) ) {
 <div id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( $class ); ?>" 
 					<?php
 					if ( isset( $image->style ) ) {
-						echo $image->style;}
+						echo esc_attr( $image->style );}
 					?>
 >

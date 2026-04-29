@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * Marketing module.
+ */
 class M_Marketing extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(
@@ -25,8 +33,18 @@ class M_Marketing extends C_Base_Module {
 		);
 	}
 
+	/**
+	 * Big hitters block two cache.
+	 *
+	 * @var array
+	 */
 	public static $big_hitters_block_two_cache = [];
 
+	/**
+	 * Display setting blocks.
+	 *
+	 * @var array
+	 */
 	protected static $display_setting_blocks = [ 'tile', 'mosaic', 'masonry' ];
 
 	public static function is_plus_or_pro_enabled() {
@@ -37,18 +55,23 @@ class M_Marketing extends C_Base_Module {
 	}
 
 	/**
+	 * Gets i18n strings.
+	 *
 	 * @return stdClass
 	 */
 	public static function get_i18n() {
-		$i18n                        = new stdClass();
-		$i18n->lite_coupon           = __( 'NextGEN Basic users get a discount of 50% off regular price', 'nggallery' );
-		$i18n->bonus                 = __( 'Bonus', 'nggallery' );
+		$i18n              = new stdClass();
+		$i18n->lite_coupon = __( 'NextGEN Basic users get a discount of 50% off regular price', 'nggallery' );
+		$i18n->bonus       = __( 'Bonus', 'nggallery' );
+		/* translators: %s: feature name */
 		$i18n->feature_not_available = __( "We're sorry, but %s is not available in the lite version of NextGEN Gallery. Please upgrade to NextGEN Pro to unlock these awesome features.", 'nggallery' );
 
 		return $i18n;
 	}
 
 	/**
+	 * Gets i18n fragment.
+	 *
 	 * @return string
 	 */
 	public static function get_i18n_fragment( $msg ) {
@@ -94,6 +117,7 @@ class M_Marketing extends C_Base_Module {
 			'ngg_manage_albums_marketing_block',
 			function () {
 				self::enqueue_blocks_style();
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self::get_big_hitters_block_albums() returns safe HTML for marketing block
 				print self::get_big_hitters_block_albums();
 			}
 		);
@@ -102,6 +126,7 @@ class M_Marketing extends C_Base_Module {
 			'ngg_manage_galleries_marketing_block',
 			function () {
 				self::enqueue_blocks_style();
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self::get_big_hitters_block_two() returns safe HTML for marketing block
 				print self::get_big_hitters_block_two( 'managegalleries' );
 			}
 		);
@@ -110,6 +135,7 @@ class M_Marketing extends C_Base_Module {
 			'ngg_manage_images_marketing_block',
 			function () {
 				self::enqueue_blocks_style();
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self::get_big_hitters_block_two() returns safe HTML for marketing block
 				print self::get_big_hitters_block_two( 'manageimages' );
 			}
 		);
@@ -118,6 +144,7 @@ class M_Marketing extends C_Base_Module {
 			'ngg_sort_images_marketing_block',
 			function () {
 				self::enqueue_blocks_style();
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- self::get_big_hitters_block_two() returns safe HTML for marketing block
 				print self::get_big_hitters_block_two( 'sortgallery' );
 			}
 		);
@@ -127,6 +154,7 @@ class M_Marketing extends C_Base_Module {
 			function () {
 				$title = __( 'Want to sell your images online?', 'nggallery' );
 				$block = new C_Marketing_Block_Single_Line( $title, 'managegalleries', 'wanttosell' );
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $block->render() returns safe HTML for marketing block
 				print $block->render();
 			}
 		);
@@ -178,6 +206,7 @@ class M_Marketing extends C_Base_Module {
 						NGG_SCRIPT_VERSION
 					);
 
+     // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 					wp_register_script(
 						'jquery-modal',
 						C_Router::get_instance()->get_static_url( 'photocrati-marketing#jquery.modal.min.js' ),
@@ -234,7 +263,7 @@ class M_Marketing extends C_Base_Module {
 					'unlock_url'                 => esc_url( $this->get_utm_link( 'https://enviragallery.com/pricing', 'listgallery', 'unlock' ) ),
 					'unlock_title'               => esc_html__( 'Unlock All Features', 'nggallery' ),
 					'unlock_text'                => esc_html__( 'Upgrade to Pro to get access to Albums, Protected Images,  Video Galleries, and more!', 'nggallery' ),
-					'unlock_btn'                 => esc_html__( 'Unlock Gallery Features ' ),
+					'unlock_btn'                 => esc_html__( 'Unlock Gallery Features ', 'nggallery' ),
 				]
 			);
 
@@ -282,6 +311,7 @@ class M_Marketing extends C_Base_Module {
 		$url = self::get_utm_link( 'https://www.imagely.com/lite', 'topbar', 'getnextgenpro' );
 
 		$message = sprintf(
+			/* translators: %s: upgrade URL */
 			__( 'You are using NextGEN Gallery. To unlock more features, consider <a href="%s" target="_blank">upgrading to NextGEN Pro</a>.', 'nggallery' ),
 			$url
 		);
@@ -303,6 +333,7 @@ class M_Marketing extends C_Base_Module {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe hardcoded CSS styles
 		echo '<style>
 			.nextgen-sidebar-upgrade-pro {
 				background-color: #37993B;
@@ -363,7 +394,7 @@ class M_Marketing extends C_Base_Module {
 			array_filter(
 				$submenu[ NGGFOLDER ],
 				static function ( $item ) {
-					return str_contains( $item[2], 'http://www.imagely.com/lite/' ) !== false;
+					return isset( $item[2] ) && str_contains( (string) $item[2], 'http://www.imagely.com/lite/' );
 				}
 			)
 		);
@@ -412,12 +443,14 @@ class M_Marketing extends C_Base_Module {
 		if ( is_nextgen_admin_page() ) {
 			$url = 'https://wordpress.org/plugins/nextgen-gallery/reviews/?filter=5#new-post';
 			/* translators: %s: url */
-			$text = sprintf( __( 'Please rate <strong>NextGEN Gallery by Imagely</strong> <a href="%1$s" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%2$s" target="_blank">WordPress.org</a> to help us spread the word. Thank you from the NextGEN Gallery team!', 'nggallery' ), $url, $url );
+			$text = sprintf( __( 'Please rate <strong>Imagely</strong> <a href="%1$s" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%2$s" target="_blank">WordPress.org</a> to help us spread the word. Thank you from the Imagely team!', 'nggallery' ), $url, $url );
 		}
 		return $text;
 	}
 
 	/**
+	 * Gets big hitter link URL.
+	 *
 	 * @param string $path
 	 * @param string $medium
 	 * @param string $campaign
@@ -520,6 +553,8 @@ class M_Marketing extends C_Base_Module {
 	}
 
 	/**
+	 * Gets big hitters block two.
+	 *
 	 * @param string $medium
 	 * @return string
 	 */
@@ -557,9 +592,10 @@ class M_Marketing extends C_Base_Module {
 	 * @param string $medium
 	 * @param string $campaign
 	 * @param string $source
+	 * @param string $content UTM content parameter. Defaults to get_utm_version().
 	 * @return string
 	 */
-	public static function get_utm_link( $url, $medium = 'default', $campaign = 'default', $source = 'ngg' ) {
+	public static function get_utm_link( $url, $medium = 'default', $campaign = 'default', $source = 'ngg', $content = '' ) {
 		$params = apply_filters(
 			'ngg_marketing_parameters',
 			[
@@ -567,12 +603,16 @@ class M_Marketing extends C_Base_Module {
 				'medium'   => $medium,
 				'campaign' => $campaign,
 				'source'   => $source,
+				'content'  => ! empty( $content ) ? $content : \Imagely\NGG\Admin\App::get_utm_version(),
 			]
 		);
 
 		$url .= '?utm_source=' . $params['source'];
 		$url .= '&utm_medium=' . $params['medium'];
 		$url .= '&utm_campaign=' . $params['campaign'];
+		if ( ! empty( $params['content'] ?? '' ) ) {
+			$url .= '&utm_content=' . $params['content'];
+		}
 
 		return $url;
 	}
@@ -582,6 +622,8 @@ class M_Marketing extends C_Base_Module {
 	}
 
 	/**
+	 * Gets type list.
+	 *
 	 * @return array
 	 */
 	public function get_type_list() {

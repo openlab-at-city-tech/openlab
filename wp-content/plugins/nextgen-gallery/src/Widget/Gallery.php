@@ -13,8 +13,16 @@ use Imagely\NGG\DisplayedGallery\Renderer;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Gallery widget.
+ */
 class Gallery extends \WP_Widget {
 
+	/**
+	 * Displayed gallery IDs cache.
+	 *
+	 * @var array
+	 */
 	protected static $displayed_gallery_ids = [];
 
 	public function __construct() {
@@ -24,6 +32,18 @@ class Gallery extends \WP_Widget {
 		];
 
 		parent::__construct( 'ngg-images', \__( 'NextGEN Widget', 'nggallery' ), $widget_ops );
+
+		// Add templates directory to legacy template locator so Widget templates can be found.
+		// The regex in LegacyTemplateLocator is case-sensitive, so View-based templates like
+		// Widget/Display/Gallery.php won't appear in the legacy template dropdown (they use
+		// uppercase naming, while legacy templates use lowercase like gallery.php).
+		\add_filter(
+			'ngg_legacy_template_directories',
+			function ( $dirs ) {
+				$dirs['NextGEN Templates'] = NGG_PLUGIN_DIR . 'templates' . DIRECTORY_SEPARATOR;
+				return $dirs;
+			}
+		);
 
 		// Determine what widgets will exist in the future, create their displayed galleries, enqueue their resources,
 		// and cache the resulting displayed gallery for later rendering to avoid the ID changing due to misc attributes
@@ -91,6 +111,8 @@ class Gallery extends \WP_Widget {
 	}
 
 	/**
+	 * Gets default widget settings.
+	 *
 	 * @return array
 	 */
 	public function get_defaults() {
@@ -108,6 +130,8 @@ class Gallery extends \WP_Widget {
 	}
 
 	/**
+	 * Displays the widget form.
+	 *
 	 * @param array $instance
 	 */
 	public function form( $instance ) {
@@ -131,6 +155,8 @@ class Gallery extends \WP_Widget {
 	}
 
 	/**
+	 * Updates widget settings.
+	 *
 	 * @param array $new_instance
 	 * @param array $old_instance
 	 * @return array
@@ -149,6 +175,7 @@ class Gallery extends \WP_Widget {
 		}
 
 		// remove gallery ids that do not exist.
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( \in_array( $new_instance['exclude'], [ 'denied', 'allow' ] ) ) {
 			// do search.
 			$mapper = GalleryMapper::get_instance();
@@ -180,6 +207,8 @@ class Gallery extends \WP_Widget {
 	}
 
 	/**
+	 * Gets the displayed gallery for the widget.
+	 *
 	 * @param array $args
 	 * @param array $instance
 	 * @return \Imagely\NGG\DataTypes\DisplayedGallery $displayed_gallery
@@ -200,8 +229,6 @@ class Gallery extends \WP_Widget {
 		// Used later.
 		$renderer = Renderer::get_instance();
 
-		$view = new View( 'Widget/Display/Gallery', [], 'photocrati-widget#display_gallery' );
-
 		// IE8 webslice support if needed.
 		if ( ! empty( $instance['webslice'] ) ) {
 			$before_widget .= '<div class="hslice" id="ngg-webslice">';
@@ -210,10 +237,13 @@ class Gallery extends \WP_Widget {
 		}
 
 		$source   = ( $instance['type'] == 'random' ? 'random_images' : 'recent' );
-		$template = ! empty( $instance['template'] ) ? $instance['template'] : $view->find_template_abspath( 'Widget/Display/Gallery', 'photocrati-widget#display_gallery' );
+		$template = ! empty( $instance['template'] ) ? $instance['template'] : 'Widget/Display/Gallery';
+
+		// Ensure widget_id is available
+		$widget_id_slug = isset( $args['widget_id'] ) && ! empty( $args['widget_id'] ) ? $args['widget_id'] : 'ngg-widget';
 
 		$params = [
-			'slug'                         => 'widget-' . $args['widget_id'],
+			'slug'                         => 'widget-' . $widget_id_slug,
 			'source'                       => $source,
 			'display_type'                 => NGG_BASIC_THUMBNAILS,
 			'images_per_page'              => $instance['items'],
@@ -247,6 +277,7 @@ class Gallery extends \WP_Widget {
 				$gallery_ids = [];
 				$list        = \explode( ',', $instance['list'] );
 				foreach ( $mapper->find_all() as $gallery ) {
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( ! \in_array( $gallery->{$gallery->id_field}, $list ) ) {
 						$gallery_ids[] = $gallery->{$gallery->id_field};
 					}
@@ -263,11 +294,12 @@ class Gallery extends \WP_Widget {
 		// HTML of random galleries the following is a bit of a workaround: for random widgets we create a displayed
 		// gallery object and then cache the results of get_entities() so that, for at least as long as
 		// NGG_RENDERING_CACHE_TTL seconds, widgets will be temporarily cached.
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( \in_array( $params['source'], [ 'random', 'random_images' ] )
 		&& (float) $settings->get( 'random_widget_cache_ttl' ) > 0 ) {
 			$displayed_gallery = $renderer->params_to_displayed_gallery( $params );
 			if ( \is_null( $displayed_gallery->id() ) ) {
-				$displayed_gallery->id( \md5( \json_encode( $displayed_gallery->get_entity() ) ) );
+				$displayed_gallery->id( \md5( \wp_json_encode( $displayed_gallery->get_entity() ) ) );
 			}
 
 			$cache_group  = 'random_widget_gallery_ids';
@@ -293,26 +325,31 @@ class Gallery extends \WP_Widget {
 
 		$final_displayed_gallery = $renderer->params_to_displayed_gallery( $params );
 		if ( is_null( $final_displayed_gallery->id() ) ) {
-			$final_displayed_gallery->id( \md5( \json_encode( $final_displayed_gallery->get_entity() ) ) );
+			$final_displayed_gallery->id( \md5( \wp_json_encode( $final_displayed_gallery->get_entity() ) ) );
 		}
 
 		return $final_displayed_gallery;
 	}
 
 	/**
+	 * Displays the widget.
+	 *
 	 * @param array $args
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
+		$widget_id = ! empty( $args['widget_id'] ) ? $args['widget_id'] : ( ! empty( $this->id ) ? $this->id : 'ngg-images-' . $this->number );
+
 		// This displayed gallery is created dynamically at runtime.
-		if ( empty( self::$displayed_gallery_ids[ $args['widget_id'] ] ) ) {
+		if ( empty( self::$displayed_gallery_ids[ $widget_id ] ) ) {
 			$displayed_gallery                                       = $this->get_displayed_gallery( $args, $instance );
 			self::$displayed_gallery_ids[ $displayed_gallery->id() ] = $displayed_gallery;
 		} else {
 			// The displayed gallery was created during the action wp_enqueue_resources and was cached to avoid ID conflicts.
-			$displayed_gallery = self::$displayed_gallery_ids[ $args['widget_id'] ];
+			$displayed_gallery = self::$displayed_gallery_ids[ $widget_id ];
 		}
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Renderer::get_instance()->display_images() returns safe HTML
 		print Renderer::get_instance()->display_images( $displayed_gallery );
 	}
 }

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Template for NextGEN admin page.
+ *
  * @var array $errors
  * @var array $forms
  * @var string $logo
@@ -12,6 +14,7 @@
 
 if ( $errors ) {
 	foreach ( $errors as $msg ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $msg contains safe HTML for error messages
 		print $msg;
 	}
 }
@@ -27,19 +30,28 @@ if ( $success && empty( $errors ) ) { ?>
 
 	<div class="ngg_page_content_header">
 		<h3><?php echo esc_html( $page_heading ); ?></h3>
-		<?php echo $header_message; ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $header_message contains safe HTML for admin page header
+		echo $header_message;
+		?>
 	</div>
 
 	<form method="POST"
-			action="<?php echo \Imagely\NGG\Util\Router::esc_url( $_SERVER['REQUEST_URI'] ); ?>">
+			action="
+			<?php
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is properly unslashed and sanitized via sanitize_text_field(wp_unslash()) on next line
+			$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- \Imagely\NGG\Util\Router::esc_url() provides safe URL escaping
+			echo \Imagely\NGG\Util\Router::esc_url( sanitize_text_field( wp_unslash( $request_uri ) ) );
+			?>
+			">
 		<?php
 		if ( isset( $form_header ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $form_header contains safe HTML for form header
 			print $form_header . "\n";
 		}
 
-		if ( isset( $nonce ) ) {
-
-		}
+		// Nonce is output below in the hidden input field.
 		?>
 			<input type="hidden" name="nonce" value="<?php echo esc_attr( $nonce ); ?>"/>
 
@@ -59,7 +71,10 @@ if ( $success && empty( $errors ) ) { ?>
 				<div data-id='<?php echo esc_attr( $form->get_id() ); ?>'>
 					<?php $this->start_element( 'admin_page.content_main_form', 'container', $form ); ?>
 						<h3><?php print esc_html( str_replace( [ 'NextGEN ', 'NextGen ' ], '', $form->get_title() ) ); ?></h3>
-						<?php echo $form->render( true ); ?>
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $form->render() returns safe HTML for form rendering
+						echo $form->render( true );
+						?>
 					<?php $this->end_element(); ?>
 				</div>
 			<?php } ?>
@@ -72,7 +87,7 @@ if ( $success && empty( $errors ) ) { ?>
 						data-proxy-value="save"
 						value="Save"
 						class="button-primary ngg_save_settings_button">
-					<?php _e( 'Save Options', 'nggallery' ); ?>
+					<?php esc_html_e( 'Save Options', 'nggallery' ); ?>
 				</button>
 				<input type="hidden" name="ngg_errors_in_tab" id="ngg_errors_in_tab">
 			</p>

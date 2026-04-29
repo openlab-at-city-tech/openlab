@@ -2,44 +2,39 @@
 
 namespace Imagely\NGG\Util;
 
+/**
+ * Security utility class.
+ */
 class Security {
 
 	public static function get_mapped_cap( $capability_name ) {
 		switch ( $capability_name ) {
 			case 'nextgen_edit_display_settings':
-			case 'nextgen_edit_settings': {
+			case 'nextgen_edit_settings':
 				$capability_name = 'NextGEN Change options';
 				break;
-			}
-			case 'nextgen_edit_style': {
+			case 'nextgen_edit_style':
 				$capability_name = 'NextGEN Change style';
 				break;
-			}
-			case 'nextgen_edit_displayed_gallery': {
+			case 'nextgen_edit_displayed_gallery':
 				$capability_name = 'NextGEN Attach Interface';
 				break;
-			}
-			case 'nextgen_edit_gallery': {
+			case 'nextgen_edit_gallery':
 				$capability_name = 'NextGEN Manage gallery';
 				break;
-			}
-			case 'nextgen_edit_gallery_unowned': {
+			case 'nextgen_edit_gallery_unowned':
 				$capability_name = 'NextGEN Manage others gallery';
 				break;
-			}
 			case 'nextgen_upload_image':
-			case 'nextgen_upload_images': {
+			case 'nextgen_upload_images':
 				$capability_name = 'NextGEN Upload images';
 				break;
-			}
-			case 'nextgen_edit_album_settings': {
+			case 'nextgen_edit_album_settings':
 				$capability_name = 'NextGEN Edit album settings';
 				break;
-			}
-			case 'nextgen_edit_album': {
+			case 'nextgen_edit_album':
 				$capability_name = 'NextGEN Edit album';
 				break;
-			}
 		}
 
 		return $capability_name;

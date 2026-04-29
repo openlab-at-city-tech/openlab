@@ -1,0 +1,167 @@
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+@xdebugCookie = XDEBUG_SESSION=VSCODE
+
+### Get all galleries (default order by gid ASC)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries
+Authorization: {{authHeader}}
+
+### Get all galleries with Xdebug
+GET {{baseUrl}}/wp-json/imagely/v1/galleries
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+### Order by title ascending
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=title&order=ASC
+Authorization: {{authHeader}}
+
+### Order by title descending
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=title&order=DESC
+Authorization: {{authHeader}}
+
+### Order by author
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=author&order=ASC
+Authorization: {{authHeader}}
+
+### Order by ecommerce status (enabled first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=is_ecommerce_enabled&order=DESC
+Authorization: {{authHeader}}
+
+### Order by is_private (public first, private last)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=is_private&order=ASC
+Authorization: {{authHeader}}
+
+### Order by creation date (newest first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=date_created&order=DESC
+Authorization: {{authHeader}}
+
+### Order by creation date (oldest first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=date_created&order=ASC
+Authorization: {{authHeader}}
+
+### Order by modification date (newest first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=date_modified&order=DESC
+Authorization: {{authHeader}}
+
+### Order by modification date (oldest first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?orderby=date_modified&order=ASC
+Authorization: {{authHeader}}
+
+### Filter by ecommerce enabled
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?ecommerce_filter=enabled
+Authorization: {{authHeader}}
+
+### Filter by ecommerce disabled
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?ecommerce_filter=disabled
+Authorization: {{authHeader}}
+
+### Filter by is_private Public (0)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?is_private_filter=0
+Authorization: {{authHeader}}
+
+### Filter by is_private Private (1)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?is_private_filter=1
+Authorization: {{authHeader}}
+
+### Combined filters: Public ecommerce-enabled galleries ordered by creation date (newest first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?is_private_filter=0&ecommerce_filter=enabled&orderby=date_created&order=DESC
+Authorization: {{authHeader}}
+
+### Combined filters: Public ecommerce-enabled galleries ordered by last modified (newest first)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?is_private_filter=0&ecommerce_filter=enabled&orderby=date_modified&order=DESC
+Authorization: {{authHeader}}
+
+### Get single gallery
+GET {{baseUrl}}/wp-json/imagely/v1/galleries/20
+Authorization: {{authHeader}}
+
+### Get single gallery with Xdebug
+GET {{baseUrl}}/wp-json/imagely/v1/galleries/20
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+### Create new gallery
+POST {{baseUrl}}/wp-json/imagely/v1/galleries
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "title": "Test Gallery",
+  "galdesc": "Test Description"
+}
+
+### Create new gallery with Xdebug
+POST {{baseUrl}}/wp-json/imagely/v1/galleries
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "title": "Test Gallery with Debug",
+  "galdesc": "Test Description"
+}
+
+
+### Update is_ecommerce_enabled to 1
+PUT {{baseUrl}}/wp-json/imagely/v1/galleries/20
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "is_ecommerce_enabled": 1
+}
+
+### Update is_private to 1 (Private)
+PUT {{baseUrl}}/wp-json/imagely/v1/galleries/20
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "is_private": 1
+}
+
+### Update is_private to 0 (Public)
+PUT {{baseUrl}}/wp-json/imagely/v1/galleries/20
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "is_private": 0
+}
+
+### Update gallery with Xdebug
+PUT {{baseUrl}}/wp-json/imagely/v1/galleries/20
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "display_type_settings": null
+}
+
+### Delete gallery
+DELETE {{baseUrl}}/wp-json/imagely/v1/galleries/1
+Authorization: {{authHeader}}
+
+### Search galleries by title
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?search=ka
+Authorization: {{authHeader}}
+
+### Search galleries with ordering (search + order by date)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?search=vacation&orderby=date_created&order=DESC
+Authorization: {{authHeader}}
+
+### Combined search with filters (search + is_private + ecommerce)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?search=vacation&is_private_filter=0&ecommerce_filter=enabled
+Authorization: {{authHeader}}
+
+### Full combined example (search + is_private + ecommerce + ordering)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?search=vacation&is_private_filter=0&ecommerce_filter=enabled&orderby=date_modified&order=DESC
+Authorization: {{authHeader}}
+
+### Pagination example (20 items per page)
+GET {{baseUrl}}/wp-json/imagely/v1/galleries?per_page=2&page=2
+Authorization: {{authHeader}}

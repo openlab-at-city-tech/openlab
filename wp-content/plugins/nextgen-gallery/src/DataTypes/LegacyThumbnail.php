@@ -98,7 +98,18 @@ class LegacyThumbnail {
 	 */
 	public $watermarkText;
 
+	/**
+	 * New width of the image.
+	 *
+	 * @var int
+	 */
 	public $newWidth;
+
+	/**
+	 * New height of the image.
+	 *
+	 * @var int
+	 */
 	public $newHeight;
 
 	/**
@@ -106,10 +117,19 @@ class LegacyThumbnail {
 	 *
 	 * @var string
 	 */
+	/**
+	 * Constructor for LegacyThumbnail
+	 *
+	 * @param string $fileName
+	 * @param bool   $no_ErrorImage
+	 * @throws \E_No_Image_Library_Exception When GD library is not installed
+	 */
 	public function __construct( $fileName, $no_ErrorImage = false ) {
 		// make sure the GD library is installed.
 		if ( ! function_exists( 'gd_info' ) ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Error messages are safe hardcoded strings
 			echo 'You do not have the GD Library installed.  This class requires the GD library to function properly.' . "\n";
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Error messages are safe hardcoded strings
 			echo 'visit http://us2.php.net/manual/en/ref.image.php for more information';
 			throw new \E_No_Image_Library_Exception();
 		}
@@ -126,30 +146,33 @@ class LegacyThumbnail {
 		$this->watermarkText     = '';
 
 		// check to see if file exists.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( ! @file_exists( $this->fileName ) ) {
 			$this->errmsg = 'File not found';
 			$this->error  = true;
-		}
-		// check to see if file is readable.
-		elseif ( ! is_readable( $this->fileName ) ) {
+		} elseif ( ! is_readable( $this->fileName ) ) {
+			// check to see if file is readable.
 			$this->errmsg = 'File is not readable';
 			$this->error  = true;
-		}
-
-		$image_size = null;
+		}       $image_size = null;
 
 		// if there are no errors, determine the file format.
 		if ( $this->error == false ) {
-			@ini_set( 'memory_limit', -1 );
+			if ( ! extension_loaded( 'suhosin' ) ) {
+				wp_raise_memory_limit();
+			}
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$image_size = @getimagesize( $this->fileName );
 			if ( isset( $image_size ) && is_array( $image_size ) ) {
 				$extensions = [
 					IMAGETYPE_GIF  => 'GIF',
 					IMAGETYPE_JPEG => 'JPG',
 					IMAGETYPE_PNG  => 'PNG',
-					IMAGETYPE_WEBP => 'WEBP',
 				];
-				$extension  = array_key_exists( $image_size[2], $extensions ) ? $extensions[ $image_size[2] ] : '';
+				if ( defined( 'IMAGETYPE_WEBP' ) ) {
+					$extensions[ IMAGETYPE_WEBP ] = 'WEBP'; // phpcs:ignore PHPCompatibility.Constants.NewConstants.imagetype_webpFound
+				}
+				$extension = array_key_exists( $image_size[2], $extensions ) ? $extensions[ $image_size[2] ] : '';
 				if ( $extension ) {
 					$this->format = $extension;
 				} else {
@@ -164,7 +187,7 @@ class LegacyThumbnail {
 
 		// increase memory-limit if possible, GD needs this for large images.
 		if ( ! extension_loaded( 'suhosin' ) ) {
-			@ini_set( 'memory_limit', '512M' );
+			wp_raise_memory_limit();
 		}
 
 		if ( $this->error == false ) {
@@ -179,6 +202,7 @@ class LegacyThumbnail {
 			switch ( $this->format ) {
 				case 'GIF':
 					if ( function_exists( 'ImageCreateFromGif' ) ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						$this->oldImage = @ImageCreateFromGif( $this->fileName );
 					} else {
 						$img_err = __( 'Support for GIF format is missing.', 'nggallery' );
@@ -186,6 +210,7 @@ class LegacyThumbnail {
 					break;
 				case 'JPG':
 					if ( function_exists( 'ImageCreateFromJpeg' ) ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						$this->oldImage = @ImageCreateFromJpeg( $this->fileName );
 					} else {
 						$img_err = __( 'Support for JPEG format is missing.', 'nggallery' );
@@ -193,6 +218,7 @@ class LegacyThumbnail {
 					break;
 				case 'PNG':
 					if ( function_exists( 'ImageCreateFromPng' ) ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						$this->oldImage = @ImageCreateFromPng( $this->fileName );
 					} else {
 						$img_err = __( 'Support for PNG format is missing.', 'nggallery' );
@@ -200,6 +226,7 @@ class LegacyThumbnail {
 					break;
 				case 'WEBP':
 					if ( function_exists( 'imagecreatefromwebp' ) ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						$this->oldImage = @imagecreatefromwebp( $this->fileName );
 					} else {
 						$img_err = __( 'Support for WEBP format is missing.', 'nggallery' );
@@ -208,10 +235,11 @@ class LegacyThumbnail {
 			}
 
 			if ( ! $this->oldImage ) {
-				if ( $img_err == null ) {
+				if ( null === $img_err ) {
 					$img_err = __( 'Check memory limit', 'nggallery' );
 				}
 
+				/* translators: %1$s: error message */
 				$this->errmsg = sprintf( __( 'Create Image failed. %1$s', 'nggallery' ), $img_err );
 				$this->error  = true;
 			} else {
@@ -262,7 +290,7 @@ class LegacyThumbnail {
 	public function checkMemoryForData( $width, $height, $channels = null, $bits = null ) {
 		$imageInfo = getimagesize( $this->fileName );
 
-		if ( $channels == null ) {
+		if ( null === $channels ) {
 			switch ( $this->format ) {
 				case 'GIF':
 					// measured factor 1 is better.
@@ -280,7 +308,7 @@ class LegacyThumbnail {
 					break;
 			}
 		}
-		if ( $bits == null ) {
+		if ( null === $bits ) {
 			$bits = ( ! empty( $imageInfo['bits'] ) ? $imageInfo['bits'] : 32 ); // imgInfo[bits] is not always available.
 		}
 
@@ -328,14 +356,17 @@ class LegacyThumbnail {
 	 */
 	public function destruct() {
 		if ( is_resource( $this->newImage ) || $this->newImage instanceof \GdImage ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@imagedestroy( $this->newImage );
 		}
 
 		if ( is_resource( $this->oldImage ) || $this->oldImage instanceof \GdImage ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@imagedestroy( $this->oldImage );
 		}
 
 		if ( is_resource( $this->workingImage ) || $this->workingImage instanceof \GdImage ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@imagedestroy( $this->workingImage );
 		}
 	}
@@ -492,6 +523,7 @@ class LegacyThumbnail {
 			$this->workingImage = ImageCreate( $this->newWidth, $this->newHeight );
 		}
 
+		// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Comment explains the function call below.
 		// ImageCopyResampled(.
 		$this->imagecopyresampled(
 			$this->workingImage,
@@ -722,7 +754,10 @@ class LegacyThumbnail {
 		switch ( $this->format ) {
 			case 'GIF':
 				if ( $name != '' ) {
-					@ImageGif( $this->newImage, $name ) or $this->error = true;
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					if ( ! @ImageGif( $this->newImage, $name ) ) {
+						$this->error = true;
+					}
 				} else {
 					header( 'Content-type: image/gif' );
 					ImageGif( $this->newImage );
@@ -730,7 +765,10 @@ class LegacyThumbnail {
 				break;
 			case 'JPG':
 				if ( $name != '' ) {
-					@ImageJpeg( $this->newImage, $name, $quality ) or $this->error = true;
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					if ( ! @ImageJpeg( $this->newImage, $name, $quality ) ) {
+						$this->error = true;
+					}
 				} else {
 					header( 'Content-type: image/jpeg' );
 					ImageJpeg( $this->newImage, null, $quality );
@@ -738,7 +776,10 @@ class LegacyThumbnail {
 				break;
 			case 'PNG':
 				if ( $name != '' ) {
-					@ImagePng( $this->newImage, $name ) or $this->error = true;
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					if ( ! @ImagePng( $this->newImage, $name ) ) {
+						$this->error = true;
+					}
 				} else {
 					header( 'Content-type: image/png' );
 					ImagePng( $this->newImage );
@@ -746,6 +787,7 @@ class LegacyThumbnail {
 				break;
 			case 'WEBP':
 				if ( $name != '' ) {
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					$this->error = ! @imagewebp( $this->newImage, $name );
 				} else {
 					header( 'Content-type: image/webp' );
@@ -885,6 +927,7 @@ class LegacyThumbnail {
 			$this->currentDimensions['height'] = imagesy( $this->workingImage );
 			$this->oldImage                    = $this->workingImage;
 
+			// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Comment explains function behavior.
 			// imagerotate() rotates CCW ;.
 			// See for help: https://evertpot.com/115/.
 			$this->newImage = imagerotate( $this->oldImage, 360 - $angle, 0 );
@@ -1056,14 +1099,12 @@ class LegacyThumbnail {
 		}
 
 		$this->watermarkImgPath = $this->workingImage;
-
-		return;
 	}
 
 	/**
 	 * Returns a path that can be used with imagettftext() and ImageTTFBBox()
 	 *
-	 * imagettftext() and ImageTTFBBox() cannot load resources from Windows UNC paths
+	 * The imagettftext() and ImageTTFBBox() functions cannot load resources from Windows UNC paths
 	 * and require they be mangled to be like //server\filename instead of \\server\filename
 	 *
 	 * @param string $path Absolute file path
@@ -1089,6 +1130,7 @@ class LegacyThumbnail {
 	 * @return array
 	 */
 	public function ImageTTFBBoxDimensions( $wmSize, $fontAngle, $wmFontPath, $text ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$box   = @ImageTTFBBox( $wmSize, $fontAngle, $this->correct_gd_unc_path( $wmFontPath ), $text );
 		$max_x = max( [ $box[0], $box[2], $box[4], $box[6] ] );
 		$max_y = max( [ $box[1], $box[3], $box[5], $box[7] ] );
@@ -1135,9 +1177,10 @@ class LegacyThumbnail {
 			}
 
 			// Would you really want to use anything other than a png?
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
 			// if it's not a valid file die...
-			if ( empty( $this->workingImage ) or ( ! $this->workingImage ) ) {
+			if ( empty( $this->workingImage ) || ( ! $this->workingImage ) ) {
 				return;
 			}
 		}
@@ -1185,17 +1228,24 @@ class LegacyThumbnail {
 			$this->newImage = $tempimage;
 		}
 
-		$this->imagecopymerge_alpha(
-			$this->newImage,
-			$this->workingImage,
-			$dest_x,
-			$dest_y,
-			0,
-			0,
-			$watermarkfile_width,
-			$watermarkfile_height,
-			100
-		);
+		// PNG/WEBP: use alpha-aware compositing so transparent watermark stays transparent.
+		if ( $this->format === 'PNG' || $this->format === 'WEBP' ) {
+			imagealphablending( $this->newImage, true );
+			imagesavealpha( $this->newImage, true );
+			imagecopy( $this->newImage, $this->workingImage, $dest_x, $dest_y, 0, 0, $watermarkfile_width, $watermarkfile_height );
+		} else {
+			$this->imagecopymerge_alpha(
+				$this->newImage,
+				$this->workingImage,
+				$dest_x,
+				$dest_y,
+				0,
+				0,
+				$watermarkfile_width,
+				$watermarkfile_height,
+				100
+			);
+		}
 	}
 
 	/**

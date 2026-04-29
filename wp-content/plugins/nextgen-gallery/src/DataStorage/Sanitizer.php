@@ -2,8 +2,20 @@
 
 namespace Imagely\NGG\DataStorage;
 
+/**
+ * Data sanitization utility class.
+ *
+ * Provides methods for sanitizing and cleaning data, particularly HTML content.
+ */
 class Sanitizer {
 
+	/**
+	 * Strips HTML from data with various options.
+	 *
+	 * @param string $data         The data to sanitize.
+	 * @param bool   $just_scripts Whether to only remove script/style tags. Default false.
+	 * @return string The sanitized data.
+	 */
 	public static function strip_html( $data, $just_scripts = false ) {
 		// NGG 3.3.11 fix. Some of the data persisted with 3.3.11 didn't strip out all HTML.
 		if ( strpos( $data, 'ngg_data_strip_html_placeholder' ) !== false ) {
@@ -16,6 +28,7 @@ class Sanitizer {
 						$part = $dom->saveHTML( $el );
 						return $part instanceof \DOMText ? $part->data : (string) $part;
 					},
+					// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					$el->childNodes ? iterator_to_array( $el->childNodes ) : []
 				);
 				return self::strip_html( implode( ' ', $parts ), $just_scripts );

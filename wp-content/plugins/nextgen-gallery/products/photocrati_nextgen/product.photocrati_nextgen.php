@@ -2,10 +2,23 @@
 
 define( 'NGG_CHANGE_OPTIONS_CAP', 'NextGEN Manage gallery' );
 
+/**
+ * Photocrati NextGen product class.
+ */
 class P_Photocrati_NextGen extends C_Base_Product {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
+	/**
+	 * Modules provided by this product.
+	 *
+	 * @var array
+	 */
 	public static $modules_provided = [
 		'photocrati-mvc'                     => 'always',
 		'photocrati-ajax'                    => 'always',
@@ -41,7 +54,7 @@ class P_Photocrati_NextGen extends C_Base_Product {
 				// This only determines which modules to load based on the URL; nonce verification is not necessary here.
 				//
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				case ( 'backend' === $condition && ( is_admin() || false !== strpos( $_SERVER['REQUEST_URI'], 'ajax' ) || isset( $_REQUEST['photocrati_ajax'] ) ) ):
+				case ( 'backend' === $condition && ( is_admin() || ( isset( $_SERVER['REQUEST_URI'] ) && false !== strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), 'ajax' ) ) || isset( $_REQUEST['photocrati_ajax'] ) ) ):
 					$retval[] = $module_name;
 					break;
 

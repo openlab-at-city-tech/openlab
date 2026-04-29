@@ -11,10 +11,11 @@
 class NextGEN_shortcodes {
 
 	// register the new shortcodes
-	function __construct() {
+	public function __construct() {
 		// Long posts should require a higher limit, see http://core.trac.wordpress.org/ticket/8553
 		$pcre_limit = 500000;
 		if ((int) ini_get( 'pcre.backtrack_limit' ) < $pcre_limit) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@ini_set( 'pcre.backtrack_limit', $pcre_limit );
 		}
 
@@ -25,7 +26,7 @@ class NextGEN_shortcodes {
 		add_filter( 'loop_start', array( &$this, 'reset_globals' ) );
 	}
 
-	function reset_globals() {
+	public function reset_globals() {
 		unset( $GLOBALS['subalbum'] );
 		unset( $GLOBALS['nggShowGallery'] );
 	}
@@ -38,7 +39,7 @@ class NextGEN_shortcodes {
 	 * @param string $content Content to search for shortcodes
 	 * @return string Content with new shortcodes.
 	 */
-	static function convert_shortcode( $content ) {
+public static function convert_shortcode( $content ) {
 
 		$ngg_options = nggGallery::get_option( 'ngg_options' );
 

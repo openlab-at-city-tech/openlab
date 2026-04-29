@@ -1,0 +1,205 @@
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin y8UguMymEdgH55SFoV7U4ZVV
+@xdebugCookie = XDEBUG_SESSION=VSCODE
+
+### Get all albums (default order by id ASC)
+GET {{baseUrl}}/wp-json/imagely/v1/albums
+Authorization: {{authHeader}}
+
+### Get all albums with Xdebug
+GET {{baseUrl}}/wp-json/imagely/v1/albums
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+### Order by name ascending
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=name&order=ASC
+Authorization: {{authHeader}}
+
+### Order by name descending
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=name&order=DESC
+Authorization: {{authHeader}}
+
+### Order by creation date (newest first)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=date_created&order=DESC
+Authorization: {{authHeader}}
+
+### Order by creation date (oldest first)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=date_created&order=ASC
+Authorization: {{authHeader}}
+
+### Order by modification date (newest first)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=date_modified&order=DESC
+Authorization: {{authHeader}}
+
+### Order by modification date (oldest first)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=date_modified&order=ASC
+Authorization: {{authHeader}}
+
+### Order by slug
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=slug&order=ASC
+Authorization: {{authHeader}}
+
+### Order by preview image ID
+GET {{baseUrl}}/wp-json/imagely/v1/albums?orderby=previewpic&order=ASC
+Authorization: {{authHeader}}
+
+### Search albums by name
+GET {{baseUrl}}/wp-json/imagely/v1/albums?search=nature
+Authorization: {{authHeader}}
+
+### Search albums with ordering (search + order by date)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?search=test&orderby=date_created&order=DESC
+Authorization: {{authHeader}}
+
+### Pagination example (1 item per page, page 1)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?per_page=1&page=1
+Authorization: {{authHeader}}
+
+### Pagination example (1 item per page, page 2)
+GET {{baseUrl}}/wp-json/imagely/v1/albums?per_page=1&page=2
+Authorization: {{authHeader}}
+
+### Pagination with larger page size
+GET {{baseUrl}}/wp-json/imagely/v1/albums?per_page=5&page=1
+Authorization: {{authHeader}}
+
+### Combined search with pagination
+GET {{baseUrl}}/wp-json/imagely/v1/albums?search=album&per_page=2&page=1
+Authorization: {{authHeader}}
+
+### Get single album
+GET {{baseUrl}}/wp-json/imagely/v1/albums/1
+Authorization: {{authHeader}}
+
+### Get single album with Xdebug
+GET {{baseUrl}}/wp-json/imagely/v1/albums/1
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+### Create new album
+POST {{baseUrl}}/wp-json/imagely/v1/albums
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Test Album API",
+  "description": "Test album created via API",
+  "preview_image_id": 1
+}
+
+### Create new album with Xdebug
+POST {{baseUrl}}/wp-json/imagely/v1/albums
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "name": "Test Album Debug",
+  "description": "Test album with debug",
+  "preview_image_id": 1
+}
+
+### Create new album with display type settings
+POST {{baseUrl}}/wp-json/imagely/v1/albums
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Advanced Album",
+  "description": "Album with display type settings",
+  "preview_image_id": 1,
+  "display_type": "photocrati-nextgen_pro_grid_album",
+  "display_type_settings": {
+    "photocrati-nextgen_pro_grid_album": {
+      "gallery_display_type": "photocrati-nextgen_pro_thumbnail_grid",
+      "background_color": "#FFFFFF",
+      "border_color": "#CCCCCC",
+      "border_size": 1,
+      "caption_color": "#333333"
+    }
+  }
+}
+
+### Update album
+PUT {{baseUrl}}/wp-json/imagely/v1/albums/1
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Updated Album Name",
+  "description": "Updated album description"
+}
+
+### Update album with preview image
+PUT {{baseUrl}}/wp-json/imagely/v1/albums/1
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Updated Album with Preview",
+  "description": "Updated description",
+  "preview_image_id": 2
+}
+
+### Update album with display type settings
+PUT {{baseUrl}}/wp-json/imagely/v1/albums/1
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "display_type": "photocrati-nextgen_basic_compact_album",
+  "display_type_settings": {
+    "photocrati-nextgen_basic_compact_album": {
+      "galleries_per_page": 10,
+      "enable_descriptions": 1,
+      "thumbnail_width": 200,
+      "thumbnail_height": 150
+    }
+  }
+}
+
+### Update album with Xdebug
+PUT {{baseUrl}}/wp-json/imagely/v1/albums/1
+Content-Type: application/json
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+{
+  "name": "Debug Updated Album",
+  "description": "Updated with debug enabled"
+}
+
+### Delete album
+DELETE {{baseUrl}}/wp-json/imagely/v1/albums/1
+Authorization: {{authHeader}}
+
+### Delete album with Xdebug
+DELETE {{baseUrl}}/wp-json/imagely/v1/albums/1
+Authorization: {{authHeader}}
+Cookie: {{xdebugCookie}}
+
+### Test error handling - Get non-existent album
+GET {{baseUrl}}/wp-json/imagely/v1/albums/9999
+Authorization: {{authHeader}}
+
+### Test error handling - Update non-existent album
+PUT {{baseUrl}}/wp-json/imagely/v1/albums/9999
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Non-existent Album"
+}
+
+### Test error handling - Delete non-existent album
+DELETE {{baseUrl}}/wp-json/imagely/v1/albums/9999
+Authorization: {{authHeader}}
+
+### Test validation error - Create album without name
+POST {{baseUrl}}/wp-json/imagely/v1/albums
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "description": "Album without name"
+}

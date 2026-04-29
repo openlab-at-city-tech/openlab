@@ -228,3 +228,5 @@ body.hidden-scroll {
   100% {
     transform: scale(1.2);
     opacity: 0; } }
+
+/* TikTok Video Integration Styles are now handled in nextgen_tiktok.css */

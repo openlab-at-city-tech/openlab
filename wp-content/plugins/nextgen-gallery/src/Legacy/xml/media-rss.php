@@ -30,15 +30,17 @@ require_once __DIR__ . '/../ngg-config.php';
 require_once __DIR__ . '/../lib/media-rss.php';
 
 // Check we have the required GET parameters
-$mode = isset( $_GET['mode'] ) ? $_GET['mode'] : 'last_pictures';
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for RSS feed mode
+$mode = isset( $_GET['mode'] ) ? sanitize_text_field( wp_unslash( $_GET['mode'] ) ) : 'last_pictures';
 
 // Act according to the required mode
 $rss = '';
 
 if ( $mode == 'last_pictures' ) {
-
 	// Get additional parameters
-	$page = isset( $_GET['page'] ) ? (int) $_GET['page'] : 0;
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for RSS feed pagination
+	$page = isset( $_GET['page'] ) ? (int) $_GET['page'] : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for RSS feed count
 	$show = isset( $_GET['show'] ) ? (int) $_GET['show'] : 10;
 
 	$rss = nggMediaRss::get_last_pictures_mrss( $page, $show );
@@ -55,6 +57,7 @@ if ( $mode == 'last_pictures' ) {
 	}
 
 	// Get additional parameters
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for RSS feed gallery ID
 	$gid = isset( $_GET['gid'] ) ? (int) $_GET['gid'] : 0;
 
 	// if no gid is present, take the first gallery
@@ -75,13 +78,16 @@ if ( $mode == 'last_pictures' ) {
 
 	if ( ! isset( $gallery ) || $gallery == null ) {
 		header( 'content-type:text/plain;charset=utf-8' );
+		/* translators: %s: gallery ID */
 		print esc_html( sprintf( __( 'The gallery ID=%s does not exist.', 'nggallery' ), intval( $gid ) ) );
 		exit;
 	}
 
 	// show other galleries if needed
-	$prev_next    = 'true' === $_GET['prev_next'];
-	$prev_gallery = $next_gallery = null;
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for RSS feed navigation
+	$prev_next    = isset( $_GET['prev_next'] ) && 'true' === $_GET['prev_next'];
+	$prev_gallery = null;
+	$next_gallery = null;
 
 	// Get previous and next galleries if required
 	if ( $prev_next ) {
@@ -105,6 +111,7 @@ if ( $mode == 'last_pictures' ) {
 } elseif ( $mode == 'album' ) {
 
 	// Get additional parameters
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for RSS feed album ID
 	$aid = isset( $_GET['aid'] ) ? (int) $_GET['aid'] : 0;
 
 	if ( $aid == 0 ) {
@@ -118,18 +125,20 @@ if ( $mode == 'last_pictures' ) {
 	$album = $nggdb->find_album( $aid );
 	if ( ! isset( $album ) || $album == null ) {
 		header( 'content-type:text/plain;charset=utf-8' );
-		printf( __( 'The album ID=%s does not exist.', 'nggallery' ), intval( $aid ) );
+		/* translators: %s: album ID */
+		echo esc_html( sprintf( __( 'The album ID=%s does not exist.', 'nggallery' ), intval( $aid ) ) );
 		exit;
 	}
 
 	$rss = nggMediaRss::get_album_mrss( $album );
 } else {
 	header( 'content-type:text/plain;charset=utf-8' );
-	echo __( 'Invalid MediaRSS command', 'nggallery' );
+	echo esc_html( __( 'Invalid MediaRSS command', 'nggallery' ) );
 	exit;
 }
 
 // Output header for media RSS
 header( 'content-type:text/xml;charset=utf-8' );
 echo "<?xml version='1.0' encoding='UTF-8' standalone='yes'?>\n";
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $rss contains safe XML content for media RSS feed
 echo $rss;

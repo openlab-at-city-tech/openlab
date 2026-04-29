@@ -75,6 +75,7 @@ if ( $settings != null ) {
 		$size_select_html .= '>' . __( 'Custom', 'nggallery' ) . '</option>';
 		$size_select_html .= '</select>';
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $size_select_html contains safe HTML for select dropdown
 		echo $size_select_html;
 	}
 }
@@ -83,7 +84,12 @@ if ( ! is_null( $nextgen_thumb_size_custom_style ) ) {
 	$nextgen_thumb_size_custom_style = ' style="' . $nextgen_thumb_size_custom_style . '"';
 }
 
-?><span class="nextgen-thumb-size-custom" <?php echo $nextgen_thumb_size_custom_style; ?>>
+?><span class="nextgen-thumb-size-custom" 
+<?php
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $nextgen_thumb_size_custom_style contains safe CSS style attributes
+echo $nextgen_thumb_size_custom_style;
+?>
+>
 	<input type="text"
 			size="5"
 			maxlength="5"

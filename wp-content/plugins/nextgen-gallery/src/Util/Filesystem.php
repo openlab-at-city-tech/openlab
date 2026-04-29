@@ -6,13 +6,28 @@ use Imagely\NGG\DataStorage\Manager as StorageManager;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\Display\StaticPopeAssets;
 
+/**
+ * Filesystem utility class.
+ */
 class Filesystem {
 
+	/**
+	 * Instances cache.
+	 *
+	 * @var array
+	 */
 	protected static $_instances = [];
 
+	/**
+	 * Document root path.
+	 *
+	 * @var string
+	 */
 	public $_document_root;
 
 	/**
+	 * Gets a filesystem instance.
+	 *
 	 * @return Filesystem
 	 */
 	public static function get_instance( $context = false ) {
@@ -107,7 +122,8 @@ class Filesystem {
 			$value = \rtrim( $value, '/\\' );
 		}
 
-		return ( $this->_document_root = $value );
+		$this->_document_root = $value;
+		return $this->_document_root;
 	}
 
 	public function add_trailing_slash( $path ) {
@@ -134,8 +150,6 @@ class Filesystem {
 	 *
 	 * @param string       $path
 	 * @param string|false $module (optional)
-	 * @param bool         $relpath (optional)
-	 * @param array        $search_paths (optional)
 	 * @deprecated This is only used by NextGEN Pro's comments module and should not be adopted in new code.
 	 * @return string|NULL
 	 */
@@ -154,7 +168,9 @@ class Filesystem {
 			die(
 				\sprintf(
 					'find_abspath requires a path and module. Received %s and %s',
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $path is used in exception message for debugging
 					$path,
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- strval() returns safe string for exception message
 					\strval( $module )
 				)
 			);
@@ -173,6 +189,8 @@ class Filesystem {
 	}
 
 	/**
+	 * Deletes a file or directory.
+	 *
 	 * @param string $abspath
 	 * @return bool
 	 */
@@ -182,10 +200,12 @@ class Filesystem {
 		if ( \file_exists( $abspath ) ) {
 			// Delete single file.
 			if ( \is_file( $abspath ) ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				@\wp_delete_file( $abspath );
 			} else {
 				// Delete directory.
 				foreach ( \scandir( $abspath ) as $relpath ) {
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( \in_array( $relpath, [ '.', '..' ] ) ) {
 						continue;
 					}
@@ -296,9 +316,9 @@ class Filesystem {
 
 		foreach ( $iterator as $file ) {
 			if ( $file->isFile() || $file->isLink() ) {
-				@unlink( $file->getPathname() );
+				@unlink( $file->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
 			} elseif ( $file->isDir() && ! $file->isDot() && $recursive ) {
-				@rmdir( $file->getPathname() );
+				@rmdir( $file->getPathname() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.PHP.NoSilencedErrors.Discouraged
 			}
 		}
 	}
@@ -320,6 +340,7 @@ class Filesystem {
 		}
 
 		// Remove images still in the DB whose gallery no longer exists.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( "DELETE FROM `{$wpdb->nggpictures}` WHERE `galleryid` NOT IN (SELECT `gid` FROM `{$wpdb->nggallery}`)" );
 	}
 }

@@ -4,17 +4,45 @@ namespace Imagely\NGG\DisplayedGallery;
 
 use Imagely\NGG\DataTypes\DisplayType;
 
+/**
+ * Source Manager for displayed galleries.
+ *
+ * Manages sources and entity types for displayed galleries.
+ */
 class SourceManager {
 
-	private $sources             = [];
-	private $entity_types        = [];
+	/**
+	 * Registered sources array.
+	 *
+	 * @var array
+	 */
+	private $sources = [];
+
+	/**
+	 * Registered entity types array.
+	 *
+	 * @var array
+	 */
+	private $entity_types = [];
+
+	/**
+	 * Registered defaults array.
+	 *
+	 * @var array
+	 */
 	private $registered_defaults = [];
 
-	/* @var SourceManager */
+	/**
+	 * Singleton instance.
+	 *
+	 * @var SourceManager
+	 */
 	private static $instance = null;
 
 	/**
-	 * @return SourceManager
+	 * Gets the singleton instance.
+	 *
+	 * @return SourceManager The SourceManager instance.
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
@@ -23,6 +51,9 @@ class SourceManager {
 		return self::$instance;
 	}
 
+	/**
+	 * Registers default sources and entity types.
+	 */
 	public function register_defaults() {
 		// Entity types must be registered first!!!.
 		// ----------------------------------------.
@@ -74,6 +105,8 @@ class SourceManager {
 	}
 
 	/**
+	 * Registers a source.
+	 *
 	 * @param string    $name
 	 * @param \stdClass $properties
 	 * @return void
@@ -107,6 +140,9 @@ class SourceManager {
 		}
 	}
 
+	/**
+	 * Registers an entity type with optional aliases.
+	 */
 	public function register_entity_type() {
 		$aliases              = func_get_args();
 		$name                 = array_shift( $aliases );
@@ -117,10 +153,13 @@ class SourceManager {
 	}
 
 	/**
-	 * @param string $name
+	 * Deregisters a source by name.
+	 *
+	 * @param string $name The source name to deregister.
 	 */
 	public function deregister( $name ) {
-		if ( ( $source = $this->get( $name ) ) ) {
+		$source = $this->get( $name );
+		if ( $source ) {
 			unset( $this->sources[ $name ] );
 			foreach ( $source->aliases as $alias ) {
 				unset( $this->sources[ $alias ] );
@@ -129,8 +168,10 @@ class SourceManager {
 	}
 
 	/**
-	 * @param string $name_or_alias
-	 * @return \stdClass
+	 * Gets a source by name or alias.
+	 *
+	 * @param string $name_or_alias The source name or alias.
+	 * @return \stdClass The source object.
 	 */
 	public function get( $name_or_alias ) {
 		if ( ! $this->registered_defaults ) {
@@ -152,13 +193,16 @@ class SourceManager {
 	}
 
 	/**
-	 * @param string $name
-	 * @return \stdClass|null
+	 * Gets an entity type by name.
+	 *
+	 * @param string $name The entity type name.
+	 * @return \stdClass|null The entity type object or null.
 	 */
 	public function get_entity_type( $name ) {
 		if ( ! $this->registered_defaults ) {
 			$this->register_defaults();
 		}
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$found = array_search( $name, $this->entity_types );
 		if ( $found ) {
 			return $this->entity_types[ $found ];
@@ -168,6 +212,8 @@ class SourceManager {
 	}
 
 	/**
+	 * Gets all registered sources.
+	 *
 	 * @return \stdClass[]
 	 */
 	public function get_all() {
@@ -176,6 +222,7 @@ class SourceManager {
 		}
 		$retval = [];
 		foreach ( array_values( $this->sources ) as $source_obj ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $source_obj, $retval ) ) {
 				$retval[] = $source_obj;
 			}
@@ -185,6 +232,8 @@ class SourceManager {
 	}
 
 	/**
+	 * Compares two source names for sorting.
+	 *
 	 * @param string $a
 	 * @param string $b
 	 * @return int
@@ -194,6 +243,8 @@ class SourceManager {
 	}
 
 	/**
+	 * Checks if a source is registered.
+	 *
 	 * @param string $name
 	 * @return bool
 	 */
@@ -202,6 +253,8 @@ class SourceManager {
 	}
 
 	/**
+	 * Checks if a source is compatible with a display type.
+	 *
 	 * @param \stdClass   $source
 	 * @param DisplayType $display_type
 	 * @return bool
@@ -209,7 +262,8 @@ class SourceManager {
 	public function is_compatible( $source, $display_type ) {
 		$retval = false;
 
-		if ( ( $source = $this->get( $source->name ) ) && is_object( $display_type ) ) {
+		$source = $this->get( $source->name );
+		if ( $source && is_object( $display_type ) ) {
 
 			// Get the real entity type names for the display type.
 			$display_type_entity_types = [];

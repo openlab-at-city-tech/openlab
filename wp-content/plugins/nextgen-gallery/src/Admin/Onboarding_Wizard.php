@@ -153,6 +153,7 @@ class Onboarding_Wizard {
 		$router = \Imagely\NGG\Util\Router::get_instance();
 
 		// TODO: Add minified js file and check nonces.
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'nextgen-gallery-onboarding-wizard',
 			plugins_url( 'assets/js/dist/onboarding-wizard.js', NGG_PLUGIN_FILE ),
@@ -198,7 +199,7 @@ class Onboarding_Wizard {
 			<title>
 				<?php
 				// translators: %s is the plugin name.
-				printf( esc_html__( '%1$s &rsaquo; Onboarding Wizard', 'nextgen-gallery-gallery' ), esc_html( 'NextGEN Gallery' ) );
+				printf( esc_html__( '%1$s &rsaquo; Onboarding Wizard', 'nggallery' ), esc_html( 'Imagely' ) );
 				?>
 			</title>
 		</head>
@@ -226,7 +227,7 @@ class Onboarding_Wizard {
 			</div>
 			<div class="nextgen-gallery-onboarding-wizard-pages" style="display: none">
 				<!-- logo -->
-				<img width="339" src="<?php echo esc_url( trailingslashit( NGG_PLUGIN_URI ) . 'assets/images/logo.svg' ); ?>" alt="nextgen-gallery Gallery" class="nextgen-gallery-onboarding-wizard-logo" style="width:339px;">
+				<img width="339" src="<?php echo esc_url( trailingslashit( NGG_PLUGIN_URI ) . 'assets/images/logo.png' ); ?>" alt="nextgen-gallery Gallery" class="nextgen-gallery-onboarding-wizard-logo" style="width:339px;">
 				<!-- Progress Bar  -->
 				<div class="nextgen-gallery-onboarding-progressbar">
 					<div class="nextgen-gallery-onboarding-progress" id="nextgen-gallery-onboarding-progress"></div>
@@ -248,7 +249,7 @@ class Onboarding_Wizard {
 				}
 				?>
 				<div class="nextgen-gallery-onboarding-close-and-exit">
-					<a href="<?php echo esc_url( admin_url( '/admin.php?page=ngg_other_options' ) ); ?>"><?php esc_html_e( 'Close and Exit Wizard Without Saving', 'nextgen-gallery-gallery' ); ?></a>
+					<a href="<?php echo esc_url( admin_url( '/admin.php?page=imagely&tab=general' ) ); ?>"><?php esc_html_e( 'Close and Exit Wizard Without Saving', 'nextgen-gallery-gallery' ); ?></a>
 				</div>
 			</div>
 		</div>
@@ -384,7 +385,7 @@ class Onboarding_Wizard {
 			$onboarding_data = $this->sanitize_and_assign( '_user_type', 'sanitize_text_field', $onboarding_data );
 			$onboarding_data = $this->sanitize_and_assign( '_others', 'sanitize_text_field', $onboarding_data );
 
-			$stats_sent     = $onboarding_data['usage_stats_init'] ?? false;
+			$stats_sent     = isset( $onboarding_data['usage_stats_init'] ) ? $onboarding_data['usage_stats_init'] : false;
 			$usage_tracking = filter_var( $onboarding_data['_usage_tracking'], FILTER_VALIDATE_BOOLEAN );
 
 			if ( $usage_tracking && ! $stats_sent ) {
@@ -525,21 +526,13 @@ class Onboarding_Wizard {
 	/**
 	 * Get the license type for the current plugin.
 	 *
+	 * @deprecated Use \Imagely\NGG\Util\LicenseHelper::get_license_type() instead
 	 * @since 3.59.4
 	 *
 	 * @return string
 	 */
 	public function get_license_type() {
-
-		if ( defined( 'NGG_PRO_PLUGIN_BASENAME' ) ) {
-			return 'pro';
-		} elseif ( defined( 'NGG_PLUS_PLUGIN_BASENAME' ) ) {
-			return 'plus';
-		} elseif ( defined( 'NGG_STARTER_PLUGIN_BASENAME' ) ) {
-			return 'starter';
-		}
-
-		return 'lite';
+		return \Imagely\NGG\Util\LicenseHelper::get_license_type();
 	}
 
 	/**
@@ -582,55 +575,24 @@ class Onboarding_Wizard {
 	/**
 	 * Helper function to install the free plugins.
 	 *
+	 * @deprecated Use \Imagely\NGG\Util\LicenseHelper::install_plugin() instead
 	 * @param string $download_url The download URL.
 	 *
 	 * @return void
 	 */
 	public function install_helper( string $download_url ) {
-
 		if ( empty( $download_url ) ) {
 			return;
 		}
 
-		global $hook_suffix;
+		// Install without activation (silent mode, no activation)
+		// Free plugins are not auto-activated to let users configure them first
+		$result = \Imagely\NGG\Util\LicenseHelper::install_plugin( $download_url, false, false );
 
-		// Set the current screen to avoid undefined notices.
-		set_current_screen();
-
-		$method = '';
-		$url    = esc_url( admin_url( 'index.php?page=nextgen-gallery-setup-wizard' ) );
-
-		// Start output buffering to catch the filesystem form if credentials are needed.
-		ob_start();
-		$creds = request_filesystem_credentials( $url, $method, false, false, null );
-		if ( false === $creds ) {
-			$form = ob_get_clean();
-			echo wp_json_encode( [ 'form' => $form ] );
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
 			die;
 		}
-
-		// If we are not authenticated, make it happen now.
-		if ( ! WP_Filesystem( $creds ) ) {
-			ob_start();
-			request_filesystem_credentials( $url, $method, true, false, null );
-			$form = ob_get_clean();
-			echo wp_json_encode( [ 'form' => $form ] );
-			die;
-		}
-
-		// We do not need any extra credentials if we have gotten this far, so let's install the plugin.
-		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
-
-		// Create the plugin upgrader with our custom skin.
-		$skin      = new \Imagely\NGG\Util\Installer_Skin();
-		$installer = new \Plugin_Upgrader( $skin );
-		$status    = $installer->install( $download_url );
-		if ( is_wp_error( $status ) ) {
-			wp_send_json_error( $status->get_error_message() );
-		}
-
-		// Flush the cache and return.
-		wp_cache_flush();
 	}
 
 	/**
@@ -640,8 +602,7 @@ class Onboarding_Wizard {
 	 *
 	 * @return void
 	 *
-	 * Copy of maybe_verify_key in License class.
-	 * Modified to return wp_send_json_success and wp_send_json_error.
+	 * Uses shared LicenseHelper utility for license verification and installation.
 	 */
 	public function ngg_plugin_verify_license_key() {
 		if (
@@ -652,8 +613,6 @@ class Onboarding_Wizard {
 			wp_die();
 		}
 
-		$url = 'https://members.photocrati.com/wp-json/licensing/v1/register_site';
-
 		$license_key = isset( $_POST['nextgen-gallery-license-key'] ) ? sanitize_text_field( wp_unslash( $_POST['nextgen-gallery-license-key'] ) ) : null;
 
 		if ( empty( $license_key ) ) {
@@ -661,119 +620,82 @@ class Onboarding_Wizard {
 			wp_die();
 		}
 
-		$query_args = [
-			'license_key' => $license_key,
-			'site_url'    => site_url(),
-		];
+		// Verify license with external server using shared helper
+		$verification_result = \Imagely\NGG\Util\LicenseHelper::verify_license_with_server( $license_key );
 
-		$args = [
-			'method'      => 'POST',
-			'timeout'     => 45,
-			'redirection' => 5,
-			'httpversion' => '1.0',
-			'body'        => $query_args,
-			'user-agent'  => 'ImagelyUpdates/' . NGG_PLUGIN_VERSION . '; ' . get_bloginfo( 'url' ),
-			'blocking'    => true,
-
-		];
-
-		$response = wp_safe_remote_post( $url, $args );
- 		if ( is_wp_error( $response ) ) {
-			$error_message = $response->get_error_message();
-			wp_send_json_error( $error_message );
+		if ( is_wp_error( $verification_result ) ) {
+			wp_send_json_error( $verification_result->get_error_message() );
 			wp_die();
-		} else {
-			$http_code = wp_remote_retrieve_response_code( $response );
- 			$result    = json_decode( wp_remote_retrieve_body( $response ) );
-			// check if the response has error and bail out.
- 			// check if the response has error and bail out.
-			if ( isset( $result->error ) && '' !== $result->error ) {
-				wp_send_json_error( $this->get_error_message( $result->error ) );
-				wp_die();
-			}
-
-			$valid = in_array( $result->status ?? '', ['active', 'inactive','disabled'], true ) ?? false;
-
-			// Check if status is active/inactive not expired or disabled.
-			if ( 200 === $http_code && $valid ) {
-
-				$product = $result->level ?? false;
-
-				if ( ! $product ) {
-					wp_send_json_error( 'Product not found.' );
-					wp_die();
-				}
-
-				// Check if the product is already installed.
-				$current_level = $this->get_license_type();
-				if ( $current_level === $product ) {
-					// If the product is already installed, return success.
-					wp_send_json_success( 'Congratulations! This site is now receiving automatic updates.' );
-					wp_die();
-				}
-
-				// Check if limit is reached.
-				if ( '' === $result->is_at_limit ) {
-					wp_send_json_error( 'Sorry, you have reached the limit of sites for this license key.' );
-					wp_die();
-				}
-
-				$url = $this->download_pro( $license_key, $product );
-
-				if ( isset( $url ) ) {
-					$this->install_helper( $url );
-				}
-
-				wp_send_json_success( 'Congratulations! This site is now receiving automatic updates.' );
-				wp_die();
-			} else {
-
-				// if license is expired, throw error.
-				if ( 'expired' === $result->status ) {
-					wp_send_json_error( $this->get_error_message( 'license_expired' ) );
-					wp_die();
-				}
-				// if license is invalid, throw error.
-				wp_send_json_error( $this->get_error_message( null ) );
-				wp_die();
-			}
 		}
+
+		$product = $verification_result['level'];
+
+		// Check if the product is already active
+		$current_level = \Imagely\NGG\Util\LicenseHelper::get_license_type();
+		if ( $current_level === $product ) {
+			wp_send_json_success( 'Congratulations! This site is now receiving automatic updates.' );
+			wp_die();
+		}
+
+		// Check if the product is installed but not activated
+		$plugin_basenames = [
+			'pro'     => 'nextgen-gallery-pro/nggallery-pro.php',
+			'plus'    => 'nextgen-gallery-plus/nggallery-plus.php',
+			'starter' => 'nextgen-gallery-starter/nggallery-starter.php',
+		];
+
+		if ( \Imagely\NGG\Util\LicenseHelper::is_product_installed( $product ) ) {
+			// Plugin is installed but not active - just activate it
+			$plugin_basename = $plugin_basenames[ $product ];
+			$activate        = activate_plugin( $plugin_basename, false, false, true );
+
+			if ( is_wp_error( $activate ) ) {
+				wp_send_json_error( $activate->get_error_message() );
+				wp_die();
+			}
+
+			wp_send_json_success( 'Congratulations! This site is now receiving automatic updates.' );
+			wp_die();
+		}
+
+		// Get download URL using shared helper
+		$download_url = \Imagely\NGG\Util\LicenseHelper::get_download_url( $license_key, $product );
+
+		if ( is_wp_error( $download_url ) ) {
+			wp_send_json_error( $download_url->get_error_message() );
+			wp_die();
+		}
+
+		// Install and activate Pro plugin (non-silent mode for AJAX, with activation)
+		// Pro plugins should be activated immediately since user has valid license
+		$install_result = \Imagely\NGG\Util\LicenseHelper::install_plugin( $download_url, false, true );
+
+		if ( is_wp_error( $install_result ) ) {
+			wp_send_json_error( $install_result->get_error_message() );
+			wp_die();
+		}
+
+		wp_send_json_success( 'Congratulations! This site is now receiving automatic updates.' );
+		wp_die();
 	}
 
 	/**
 	 * Download the pro version of the plugin.
 	 *
+	 * @deprecated Use \Imagely\NGG\Util\LicenseHelper::get_download_url() instead
 	 * @param string $key The license key.
 	 * @param string $product The product name.
 	 *
 	 * @return boolean|string
 	 */
 	public function download_pro( string $key, string $product ) {
-
 		// Check if the product already exist in the installed plugins.
-		if( 'no-clicks disabled' === $this->is_recommended_plugin_installed( 'nextgen-gallery-' . $product ) ){
+		if ( 'no-clicks disabled' === $this->is_recommended_plugin_installed( 'nextgen-gallery-' . $product ) ) {
 			return false;
 		}
 
-		$url      = 'https://members.photocrati.com/wp-json/licensing/v1/get_update?product=nextgen-gallery-' . $product . '&license_key=' . $key . '&site_url=' . site_url();
-		$args     = [
-			'method'      => 'GET',
-			'timeout'     => 45,
-			'redirection' => 5,
-			'httpversion' => '1.0',
-			'user-agent'  => 'ImagelyUpdates/' . NGG_PLUGIN_VERSION . '; ' . get_bloginfo( 'url' ),
-			'blocking'    => true,
-		];
-		$response = wp_safe_remote_get( $url, $args );
-		if ( ! is_wp_error( $response ) ) {
-			$http_code = wp_remote_retrieve_response_code( $response );
-			$body      = wp_remote_retrieve_body( $response );
-			if ( 200 === $http_code ) {
-				return json_decode( $body )->download_url ?? '';
-			} else {
-				return false;
-			}
-		}
+		$result = \Imagely\NGG\Util\LicenseHelper::get_download_url( $key, $product );
+		return is_wp_error( $result ) ? false : $result;
 	}
 
 	/**
@@ -802,47 +724,14 @@ class Onboarding_Wizard {
 	/**
 	 * Get error messages.
 	 *
+	 * @deprecated Use \Imagely\NGG\Util\LicenseHelper::get_error_message() instead
 	 * @since 3.59.4
 	 *
 	 * @param string|null $code The error message.
 	 *
 	 * @return string
 	 */
-	public function get_error_message( ?string $code ): string {
-
-		if ( ! isset( $code ) ) {
-			return 'Something went wrong, please try again later.';
-		}
-
- 		$message = '';
-		switch ( $code ) {
-			case 'empty_site_url':
-				$message = __( 'The site URL is missing. Please provide a valid URL.', 'nextgen-gallery' );
-				break;
-			case 'license_not_found':
-				$message = __( 'The license key was not found. Please verify and try again.', 'nextgen-gallery' );
-				break;
-			case 'license_status_expired':
-			case 'license_expired':
-				$message = __( 'The license key has expired. Please renew your license.', 'nextgen-gallery' );
-				break;
-			case 'license_status_disabled':
-			case 'license_disabled':
-				$message = __( 'The license key has not been activated yet. Please contact support.', 'nextgen-gallery' );
-				break;
-			case 'license_status_revoked':
-			case 'license_revoked':
-				$message = __( 'The license key has been revoked. Please contact support.', 'nextgen-gallery' );
-				break;
-			case 'license_limit_installations':
-				$message = __( 'The license key has reached the maximum number of installations.', 'nextgen-gallery' );
-				break;
-			default:
-				$message = __( 'An unknown error occurred. Please try again.', 'nextgen-gallery' );
-				break;
-
-		}
-
-		return $message;
+	public function get_error_message( $code ) {
+		return \Imagely\NGG\Util\LicenseHelper::get_error_message( $code );
 	}
 }

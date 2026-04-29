@@ -1,15 +1,15 @@
-<p><?php _e( 'Select a folder to import.', 'nggallery' ); ?></p>
+<p><?php esc_html_e( 'Select a folder to import.', 'nggallery' ); ?></p>
 <div id="file_browser">
 </div>
 <p>
 	<label for="import_gallery_title">
 		Gallery title
-		<input type="text" name="import_gallery_title" id="import_gallery_title" placeholder="<?php _e( 'Leave blank for folder name', 'nggallery' ); ?>"/>
+		<input type="text" name="import_gallery_title" id="import_gallery_title" placeholder="<?php esc_attr_e( 'Leave blank for folder name', 'nggallery' ); ?>"/>
 	</label>
 </p>
 <p>
 	<input type="checkbox" id="import_keep_location" name="keep_location" value="on" /> <label for="import_keep_location"> <?php esc_html_e( 'Keep images in original location. Caution: If you keep images in the original folder and later delete the gallery, the images in that folder might be deleted depending on your settings.', 'nggallery' ); ?></label><br/><br/>
-	<input type="button" id="import_button" name="import_folder" value="<?php _e( 'Import Folder', 'nggallery' ); ?>" class="button-primary"/>
+	<input type="button" id="import_button" name="import_folder" value="<?php esc_attr_e( 'Import Folder', 'nggallery' ); ?>" class="button-primary"/>
 </p>
 <script type="text/javascript">
 	var selected_folder = null;
@@ -22,7 +22,7 @@
 		// Post params
 		var browse_params = {
 			action: 'browser_folder',
-			nonce: '<?php echo $browse_nonce; ?>'        
+			nonce: '<?php echo esc_js( $browse_nonce ); ?>'
 		};
 		browse_params.action = 'browse_folder';
 
@@ -49,14 +49,14 @@
 
 			// Show progress bar
 			var progress_bar =  $.nggProgressBar({
-				title: '<?php _e( 'Importing gallery', 'nggallery' ); ?>',
+				title: '<?php esc_html_e( 'Importing gallery', 'nggallery' ); ?>',
 				infinite: true,
-				starting_value: '<?php _e( 'In Progress...', 'nggallery' ); ?>'
+				starting_value: '<?php esc_html_e( 'In Progress...', 'nggallery' ); ?>'
 			});
 
 			// Start importing process
 			var post_params = {
-				nonce: '<?php echo $import_nonce; ?>',
+				nonce: '<?php echo esc_js( $import_nonce ); ?>',
 				action: "import_folder",
 				folder: selected_folder,
 				keep_location: $('#import_keep_location').is(":checked") ? 'on' : 'off',
@@ -70,13 +70,20 @@
 					progress_bar.close(4000);
 				}
 				else {
-					<?php $url = admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid={gid}'; ?>
-					var message = '<?php printf( __( 'Done! Successfully imported {count} images. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery' ), $url ); ?>';
+					<?php
+					$url     = admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid={gid}';
+					$message = sprintf(
+						/* translators: %s: URL to manage the gallery */
+						__( 'Done! Successfully imported {count} images. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery' ),
+						esc_url( $url )
+					);
+					?>
+					var message = '<?php echo wp_kses_post( $message ); ?>';
 					message = message.replace('{count}', response.image_ids.length);
 					message = message.replace('{gid}', response.gallery_id);
 					progress_bar.close(100);
 					$.gritter.add({
-						title: '<?php _e( 'Upload complete', 'nggallery' ); ?>',
+						title: '<?php esc_html_e( 'Upload complete', 'nggallery' ); ?>',
 						text: message,
 						sticky: true
 					});

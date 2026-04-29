@@ -2,6 +2,7 @@
 
 namespace Imagely\NGG\Lightroom;
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 use Imagely\NGG\DataMappers\Album as AlbumMapper;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\Image as ImageMapper;
@@ -9,10 +10,30 @@ use Imagely\NGG\DataStorage\Manager as StorageManager;
 
 use Imagely\NGG\Util\{Filesystem, Security};
 
+/**
+ * Controller for Lightroom integration.
+ */
 class Controller {
 
-	protected $nextgen_api         = null;
-	protected $nextgen_api_locked  = false;
+	/**
+	 * NextGEN API instance.
+	 *
+	 * @var object|null
+	 */
+	protected $nextgen_api = null;
+
+	/**
+	 * Whether NextGEN API is locked.
+	 *
+	 * @var bool
+	 */
+	protected $nextgen_api_locked = false;
+
+	/**
+	 * Whether shutdown is registered.
+	 *
+	 * @var bool
+	 */
 	protected $shutdown_registered = false;
 
 	// Nonce verification not possible: the Lightroom client never requests or sends back a nonce. All actions are
@@ -57,10 +78,43 @@ class Controller {
 		wp_send_json( $response );
 	}
 
+	/**
+	 * Gets a request parameter value.
+	 *
+	 * @param string $key
+	 * @return mixed
+	 */
 	public function param( $key ) {
 		if ( isset( $_REQUEST[ $key ] ) ) {
-			return $this->recursive_stripslashes( $_REQUEST[ $key ] );
+			return $this->recursive_stripslashes( sanitize_text_field( wp_unslash( $_REQUEST[ $key ] ) ) );
 		}
+	}
+
+	/**
+	 * Gets a JSON parameter value, undoes WordPress magic-quoting, and decodes it.
+	 *
+	 * Unlike param(), this method calls wp_unslash() exactly once (to undo WordPress's
+	 * wp_magic_quotes() which runs addslashes() on $_REQUEST at startup), but does NOT
+	 * call recursive_stripslashes() a second time. That second call in param() corrupts
+	 * JSON-encoded Windows paths: C:\\Users\\ becomes C:\Users\, leaving invalid JSON
+	 * escape sequences (\U, \A, etc.) that cause json_decode() to return null.
+	 *
+	 * @param string $key
+	 * @return mixed Decoded value, or null if the parameter is absent or not valid JSON.
+	 */
+	public function param_json( $key ) {
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$raw = isset( $_REQUEST[ $key ] ) ? $_REQUEST[ $key ] : null;
+		if ( is_string( $raw ) ) {
+			// WordPress's wp_magic_quotes() applies addslashes() to $_REQUEST at startup,
+			// escaping all " to \" and \ to \\. We must call wp_unslash() once to undo
+			// that and restore valid JSON. We must NOT call recursive_stripslashes() a
+			// second time (as param() does), because that strips the path backslashes again
+			// (C:\\Users\\ -> C:\Users\), leaving invalid escape sequences (\U, \A, etc.)
+			// that cause json_decode() to return null on Windows paths.
+			return json_decode( wp_unslash( $raw ), true );
+		}
+		return $raw;
 	}
 
 	/**
@@ -88,6 +142,11 @@ class Controller {
 		return $value;
 	}
 
+	/**
+	 * Enqueues a NextGEN API task list action.
+	 *
+	 * @return array
+	 */
 	public function enqueue_nextgen_api_task_list_action() {
 		$api      = $this->get_nextgen_api();
 		$user_obj = $this->authenticate_user();
@@ -95,21 +154,12 @@ class Controller {
 
 		if ( $user_obj != null && ! is_a( $user_obj, 'WP_Error' ) ) {
 			wp_set_current_user( $user_obj->ID );
-			$app_config = $this->param( 'app_config' );
-			$task_list  = $this->param( 'task_list' );
-			$extra_data = $this->param( 'extra_data' );
-
-			if ( is_string( $app_config ) ) {
-				$app_config = json_decode( $app_config, true );
-			}
-
-			if ( is_string( $task_list ) ) {
-				$task_list = json_decode( $task_list, true );
-			}
-
-			if ( is_string( $extra_data ) ) {
-				$extra_data = json_decode( $extra_data, true );
-			}
+			// Use param_json() instead of param() for JSON fields: param() applies wp_unslash()/
+			// stripslashes() which converts \\ to \ in JSON strings, leaving invalid escape
+			// sequences (e.g. \U, \J) that cause json_decode() to return null on Windows paths.
+			$app_config = $this->param_json( 'app_config' );
+			$task_list  = $this->param_json( 'task_list' );
+			$extra_data = $this->param_json( 'extra_data' ) ?? [];
 
 			foreach ( $_FILES as $key => $file ) {
 				if ( substr( $key, 0, strlen( 'file_data_' ) ) == 'file_data_' ) {
@@ -129,12 +179,11 @@ class Controller {
 					$task_auth = false;
 
 					switch ( $task_type ) {
-						case 'gallery_add': {
+						case 'gallery_add':
 							$task_auth = Security::is_allowed( 'nextgen_edit_gallery' );
 							break;
-						}
 						case 'gallery_remove':
-						case 'gallery_edit': {
+						case 'gallery_edit':
 							$query_id = $api->get_query_id( $task_query['id'], $task_list );
 							$gallery  = null;
 
@@ -151,16 +200,13 @@ class Controller {
 							}
 
 							break;
-						}
 						case 'album_remove':
 						case 'album_edit':
-						case 'album_add': {
+						case 'album_add':
 							$task_auth = Security::is_allowed( 'nextgen_edit_album' );
 							break;
-						}
-						case 'image_list_move': {
+						case 'image_list_move':
 							break;
-						}
 					}
 
 					if ( $task_auth ) {
@@ -212,6 +258,8 @@ class Controller {
 										$api->remove_job( $job_id );
 									}
 								} catch ( \Exception $e ) {
+									// Exception is silently caught here as job execution errors are handled by the API.
+									unset( $e );
 								}
 
 								$this->stop_locked_execute();
@@ -249,6 +297,11 @@ class Controller {
 		return $response;
 	}
 
+	/**
+	 * Executes a NextGEN API task list action.
+	 *
+	 * @return array
+	 */
 	public function execute_nextgen_api_task_list_action() {
 		$api      = $this->get_nextgen_api();
 		$job_list = $api->get_job_list();
@@ -264,14 +317,10 @@ class Controller {
 			$this->start_locked_execute();
 
 			try {
-				$extra_data    = $this->param( 'extra_data' );
+				$extra_data    = $this->param_json( 'extra_data' ) ?? [];
 				$job_count     = count( $job_list );
 				$done_count    = 0;
 				$client_result = [];
-
-				if ( is_string( $extra_data ) ) {
-					$extra_data = json_decode( $extra_data, true );
-				}
 
 				foreach ( $_FILES as $key => $file ) {
 					if ( substr( $key, 0, strlen( 'file_data_' ) ) == 'file_data_' ) {
@@ -300,6 +349,8 @@ class Controller {
 					}
 				}
 			} catch ( \Exception $e ) {
+				// Exception is silently caught here as job execution errors are handled by the API.
+				unset( $e );
 			}
 
 			$this->stop_locked_execute();
@@ -332,6 +383,11 @@ class Controller {
 		return $response;
 	}
 
+	/**
+	 * Gets the NextGEN API path list action.
+	 *
+	 * @return array
+	 */
 	public function get_nextgen_api_path_list_action() {
 		$api        = $this->get_nextgen_api();
 		$app_config = $this->param( 'app_config' );
@@ -423,6 +479,11 @@ class Controller {
 		return $response;
 	}
 
+	/**
+	 * Gets the NextGEN API token action.
+	 *
+	 * @return array
+	 */
 	public function get_nextgen_api_token_action() {
 		$regen    = $this->param( 'regenerate_token' ) ? true : false;
 		$user_obj = $this->authenticate_user( $regen );
@@ -444,6 +505,11 @@ class Controller {
 		return $response;
 	}
 
+	/**
+	 * Gets the NextGEN API instance.
+	 *
+	 * @return API
+	 */
 	protected function get_nextgen_api() {
 		if ( is_null( $this->nextgen_api ) ) {
 			$this->nextgen_api = API::get_instance();
@@ -452,6 +518,12 @@ class Controller {
 		return $this->nextgen_api;
 	}
 
+	/**
+	 * Authenticates a user for the API.
+	 *
+	 * @param bool $regenerate_token
+	 * @return object|null
+	 */
 	protected function authenticate_user( $regenerate_token = false ) {
 		$api      = $this->get_nextgen_api();
 		$username = $this->param( 'q' );
@@ -461,6 +533,11 @@ class Controller {
 		return $api->authenticate_user( $username, $password, $token, $regenerate_token );
 	}
 
+	/**
+	 * Gets the maximum upload size.
+	 *
+	 * @return int
+	 */
 	protected function get_max_upload_size() {
 		static $max_size = -1;
 
@@ -478,6 +555,12 @@ class Controller {
 		return $max_size;
 	}
 
+	/**
+	 * Parses a size string to bytes.
+	 *
+	 * @param string $size
+	 * @return int
+	 */
 	protected function parse_size( $size ) {
 		$unit = preg_replace( '/[^bkmgtpezy]/i', '', $size );
 		$size = preg_replace( '/[^0-9\.]/', '', $size );
@@ -488,16 +571,27 @@ class Controller {
 		}
 	}
 
+	/**
+	 * Gets the maximum number of upload files.
+	 *
+	 * @return int
+	 */
 	protected function get_max_upload_files() {
 		return intval( ini_get( 'max_file_uploads' ) );
 	}
 
+	/**
+	 * Handles shutdown callback.
+	 */
 	public function do_shutdown() {
 		if ( $this->nextgen_api_locked ) {
 			$this->get_nextgen_api()->set_execution_locked( false );
 		}
 	}
 
+	/**
+	 * Starts locked execution mode.
+	 */
 	protected function start_locked_execute() {
 		if ( ! $this->shutdown_registered ) {
 			\register_shutdown_function( [ $this, 'do_shutdown' ] );
@@ -508,12 +602,19 @@ class Controller {
 		$this->nextgen_api_locked = true;
 	}
 
+	/**
+	 * Stops locked execution mode.
+	 */
 	protected function stop_locked_execute() {
 		$this->get_nextgen_api()->set_execution_locked( false );
 		$this->nextgen_api_locked = false;
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+/**
+ * Lightroom API class.
+ */
 class API {
 
 	// NOTE: these constants' numeric values MUST remain the same, do NOT change the values.
@@ -531,11 +632,23 @@ class API {
 	const INFO_JOB_LIST_UNFINISHED = 6003;
 	const INFO_EXECUTION_LOCKED    = 6004;
 
+	/**
+	 * Instances cache.
+	 *
+	 * @var array
+	 */
 	public static $_instances = [];
 
+	/**
+	 * Start time for execution tracking.
+	 *
+	 * @var int
+	 */
 	public $_start_time;
 
 	/**
+	 * Gets an API instance.
+	 *
 	 * @param bool|string $context
 	 * @return API
 	 */
@@ -546,10 +659,20 @@ class API {
 		return self::$_instances[ $context ];
 	}
 
+	/**
+	 * Constructs the API instance.
+	 *
+	 * @param string|bool $context
+	 */
 	public function __construct( $context ) {
 		$this->_start_time = time();
 	}
 
+	/**
+	 * Determines if execution should stop.
+	 *
+	 * @return bool
+	 */
 	public function should_stop_execution() {
 		$timeout = defined( 'NGG_API_JOB_HANDLER_TIMEOUT' ) ? intval( NGG_API_JOB_HANDLER_TIMEOUT ) : ( intval( ini_get( 'max_execution_time' ) ) - 3 );
 		$timeout = $timeout > 0 ? $timeout : 27; /* most hosts have a limit of 30 seconds execution time, so 27 should be a safe default */
@@ -557,6 +680,11 @@ class API {
 		return ( time() - $this->_start_time >= $timeout );
 	}
 
+	/**
+	 * Checks if execution is locked.
+	 *
+	 * @return bool
+	 */
 	public function is_execution_locked() {
 		$lock_time = get_option( 'ngg_api_execution_lock', 0 );
 
@@ -576,6 +704,11 @@ class API {
 		return true;
 	}
 
+	/**
+	 * Sets the execution locked state.
+	 *
+	 * @param bool $locked
+	 */
 	public function set_execution_locked( $locked ) {
 		if ( $locked ) {
 			update_option( 'ngg_api_execution_lock', time(), false );
@@ -584,10 +717,23 @@ class API {
 		}
 	}
 
+	/**
+	 * Gets the job list.
+	 *
+	 * @return array|null
+	 */
 	public function get_job_list() {
 		return get_option( 'ngg_api_job_list' );
 	}
 
+	/**
+	 * Adds a job to the job list.
+	 *
+	 * @param array $job_data
+	 * @param array $app_config
+	 * @param array $task_list
+	 * @return string|null
+	 */
 	public function add_job( $job_data, $app_config, $task_list ) {
 		$job_list = $this->get_job_list();
 		$job_id   = uniqid();
@@ -613,6 +759,12 @@ class API {
 		return $job_id;
 	}
 
+	/**
+	 * Updates a job in the job list.
+	 *
+	 * @param string $job_id
+	 * @param array  $job
+	 */
 	public function _update_job( $job_id, $job ) {
 		$job_list = $this->get_job_list();
 
@@ -623,6 +775,11 @@ class API {
 		}
 	}
 
+	/**
+	 * Removes a job from the job list.
+	 *
+	 * @param string $job_id
+	 */
 	public function remove_job( $job_id ) {
 		$job_list = $this->get_job_list();
 
@@ -633,6 +790,12 @@ class API {
 		}
 	}
 
+	/**
+	 * Gets a job by ID.
+	 *
+	 * @param string $job_id
+	 * @return array|null
+	 */
 	public function get_job( $job_id ) {
 		$job_list = $this->get_job_list();
 
@@ -643,6 +806,12 @@ class API {
 		return null;
 	}
 
+	/**
+	 * Gets job data by job ID.
+	 *
+	 * @param string $job_id
+	 * @return array|null
+	 */
 	public function get_job_data( $job_id ) {
 		$job = $this->get_job( $job_id );
 
@@ -653,6 +822,12 @@ class API {
 		return null;
 	}
 
+	/**
+	 * Gets the task list for a job.
+	 *
+	 * @param string $job_id
+	 * @return array|null
+	 */
 	public function get_job_task_list( $job_id ) {
 		$job = $this->get_job( $job_id );
 
@@ -663,6 +838,13 @@ class API {
 		return null;
 	}
 
+	/**
+	 * Sets the task list for a job.
+	 *
+	 * @param string $job_id
+	 * @param array  $task_list
+	 * @return bool
+	 */
 	public function set_job_task_list( $job_id, $task_list ) {
 		$job = $this->get_job( $job_id );
 
@@ -677,6 +859,12 @@ class API {
 		return false;
 	}
 
+	/**
+	 * Gets the post-back data for a job.
+	 *
+	 * @param string $job_id
+	 * @return array|null
+	 */
 	public function get_job_post_back( $job_id ) {
 		$job = $this->get_job( $job_id );
 
@@ -687,6 +875,15 @@ class API {
 		return null;
 	}
 
+	/**
+	 * Authenticates a user for the API.
+	 *
+	 * @param string      $username
+	 * @param string      $password
+	 * @param string|null $token
+	 * @param bool        $regenerate_token
+	 * @return object|null
+	 */
 	public function authenticate_user( $username, $password, $token, $regenerate_token = false ) {
 		$user_obj = null;
 
@@ -728,7 +925,7 @@ class API {
 					$token = bin2hex( openssl_random_pseudo_bytes( 16 ) );
 				} else {
 					for ( $i = 0; $i < 16; $i++ ) {
-						$token .= bin2hex( mt_rand( 0, 15 ) );
+						$token .= bin2hex( wp_rand( 0, 15 ) );
 					}
 				}
 
@@ -739,6 +936,13 @@ class API {
 		return $user_obj;
 	}
 
+	/**
+	 * Creates filesystem access for FTP/SSH operations.
+	 *
+	 * @param array       $args
+	 * @param string|null $method
+	 * @return object|false
+	 */
 	public function create_filesystem_access( $args, $method = null ) {
 		// taken from wp-admin/includes/file.php but with modifications.
 		if ( ! $method && isset( $args['connection_type'] ) && 'ssh' == $args['connection_type'] && extension_loaded( 'ssh2' ) && function_exists( 'stream_get_contents' ) ) {
@@ -813,7 +1017,13 @@ class API {
 		return $wp_filesystem;
 	}
 
-	// returns an actual scalar ID based on parametric ID (e.g. a parametric ID could represent the query ID from another task).
+	/**
+	 * Returns an actual scalar ID based on parametric ID (e.g. a parametric ID could represent the query ID from another task).
+	 *
+	 * @param mixed $id
+	 * @param array $task_list
+	 * @return mixed
+	 */
 	public function get_query_id( $id, &$task_list ) {
 		$task_id = $id;
 
@@ -835,7 +1045,13 @@ class API {
 		return $id;
 	}
 
-	// returns an actual scalar ID based on parametric ID (e.g. a parametric ID could represent the resulting object ID from another task).
+	/**
+	 * Returns an actual scalar ID based on parametric ID (e.g. a parametric ID could represent the resulting object ID from another task).
+	 *
+	 * @param mixed $id
+	 * @param array $result_list
+	 * @return mixed
+	 */
 	public function get_object_id( $id, &$result_list ) {
 		$task_id = $id;
 
@@ -857,6 +1073,14 @@ class API {
 		return $id;
 	}
 
+	/**
+	 * Finds an array entry by key and value.
+	 *
+	 * @param array  $array_target
+	 * @param string $entry_key
+	 * @param mixed  $entry_value
+	 * @return int|string|null
+	 */
 	public function _array_find_by_entry( array $array_target, $entry_key, $entry_value ) {
 		foreach ( $array_target as $key => $value ) {
 			$item = $value;
@@ -869,6 +1093,14 @@ class API {
 		return null;
 	}
 
+	/**
+	 * Filters an array by entry key.
+	 *
+	 * @param array  $array_target
+	 * @param array  $array_source
+	 * @param string $entry_key
+	 * @return array
+	 */
 	public function _array_filter_by_entry( array $array_target, array $array_source, $entry_key ) {
 		foreach ( $array_source as $key => $value ) {
 			$item = $value;
@@ -885,12 +1117,19 @@ class API {
 		return $array_target;
 	}
 
+	/**
+	 * Checks if a filename is valid and safe.
+	 *
+	 * @param string $filename
+	 * @return bool
+	 */
 	public function is_valid_filename( string $filename ): bool {
 		$fs = Filesystem::get_instance();
 
-		$root     = $fs->get_document_root( 'galleries' );
-		$tmp      = ini_get( 'upload_tmp_dir' ) ?: sys_get_temp_dir();
-		$filename = str_replace( '\\', '/', $filename );
+		$root           = $fs->get_document_root( 'galleries' );
+		$upload_tmp_dir = ini_get( 'upload_tmp_dir' );
+		$tmp            = $upload_tmp_dir ? $upload_tmp_dir : sys_get_temp_dir();
+		$filename       = str_replace( '\\', '/', $filename );
 
 		// Do not allow phar:// streams, and block ".phar" filenames as well.
 		if ( false !== strpos( $filename, '.phar' ) || false !== strpos( $filename, 'phar://' ) ) {
@@ -924,7 +1163,18 @@ class API {
 		return true;
 	}
 
-	// Note: handle_job only worries about processing the job, it does NOT remove finished jobs anymore, the responsibility is on the caller to remove the job when handle_job returns true, this is to allow calling get_job_*() methods after handle_job has been called.
+	/**
+	 * Handles a job execution.
+	 *
+	 * Note: handle_job only worries about processing the job, it does NOT remove finished jobs anymore, the responsibility is on the caller to remove the job when handle_job returns true, this is to allow calling get_job_*() methods after handle_job has been called.
+	 *
+	 * @param string     $job_id
+	 * @param array      $job_data
+	 * @param array      $app_config
+	 * @param array      $task_list
+	 * @param array|null $extra_data
+	 * @return bool
+	 */
 	public function handle_job( $job_id, $job_data, $app_config, $task_list, $extra_data = null ) {
 		$job_user         = $job_data['user'];
 		$task_count       = count( $task_list );
@@ -1026,7 +1276,6 @@ class API {
 
 			switch ( $task_type ) {
 				case 'gallery_add':
-				{
 					$mapper     = GalleryMapper::get_instance();
 					$gallery    = null;
 					$gal_errors = '';
@@ -1044,7 +1293,7 @@ class API {
 								$gal_errors = $gallery->validation();
 
 								if ( is_array( $gal_errors ) ) {
-									$gal_errors = ' [' . json_encode( $gal_errors ) . ']';
+									$gal_errors = ' [' . wp_json_encode( $gal_errors ) . ']';
 								}
 							}
 
@@ -1059,15 +1308,14 @@ class API {
 						$task_status = 'error';
 						$task_error  = [
 							'level'   => 'fatal',
+							/* translators: 1: gallery title, 2: error details */
 							'message' => sprintf( __( 'Gallery creation failed for "%1$s"%2$s.', 'nggallery' ), $title, $gal_errors ),
 						];
 					}
 
 					break;
-				}
 				case 'gallery_remove':
 				case 'gallery_edit':
-				{
 					if ( isset( $task_query['id'] ) ) {
 						$mapper  = GalleryMapper::get_instance();
 						$gallery = $mapper->find( $task_query['id'], true );
@@ -1076,9 +1324,12 @@ class API {
 						if ( $gallery != null ) {
 							if ( $task_type == 'gallery_remove' ) {
 								/**
+								 * Gallery mapper instance.
+								 *
 								 * @var GalleryMapper $mapper.
 								 */
 								if ( ! $mapper->destroy( $gallery, true ) ) {
+									/* translators: %1$s: gallery ID */
 									$error = __( 'Failed to remove gallery (%1$s).', 'nggallery' );
 								}
 							} elseif ( $task_type == 'gallery_edit' ) {
@@ -1155,9 +1406,11 @@ class API {
 
 												if ( $settings->get( 'deleteImg' ) ) {
 													if ( ! $storage->delete_image( $ngg_image ) ) {
+														/* translators: %1$s: image filename */
 														$image_error = __( 'Could not delete image file(s) from disk (%1$s).', 'nggallery' );
 													}
 												} elseif ( ! $image_mapper->destroy( $ngg_image ) ) {
+													/* translators: %1$s: image filename */
 													$image_error = __( 'Could not remove image from gallery (%1$s).', 'nggallery' );
 												}
 
@@ -1167,6 +1420,7 @@ class API {
 													$image_status = 'done';
 												}
 											} else {
+												/* translators: %1$s: image filename */
 												$image_error = __( 'Could not remove image because image was not found (%1$s).', 'nggallery' );
 											}
 										} else {
@@ -1184,6 +1438,7 @@ class API {
 													}
 
 													if ( $image_data == null ) {
+														/* translators: %1$s: image filename */
 														$image_error = __( 'Could not obtain data for image (%1$s).', 'nggallery' );
 													}
 												} else {
@@ -1197,8 +1452,10 @@ class API {
 													// delete temporary image.
 													$wp_fs->delete( $image_path );
 												} elseif ( is_multisite() ) {
+														/* translators: %1$s: image filename */
 														$image_error = __( 'Could not find image file for image (%1$s). Using FTP Upload Method in Multisite is not recommended.', 'nggallery' );
 												} else {
+													/* translators: %1$s: image filename */
 													$image_error = __( 'Could not find image file for image (%1$s).', 'nggallery' );
 												}
 											}
@@ -1213,24 +1470,29 @@ class API {
 														$image_id     = is_int( $ngg_image ) ? $ngg_image : $ngg_image->{$ngg_image->id_field};
 													}
 												} catch ( \E_NoSpaceAvailableException $e ) {
+													/* translators: %1$s: image filename */
 													$image_error = __( 'No space available for image (%1$s).', 'nggallery' );
 												} catch ( \E_UploadException $e ) {
-													$image_error = $e->getMessage . __( ' (%1$s).', 'nggallery' );
+													/* translators: %1$s: image filename */
+													$upload_error_message = str_replace( '%', '%%', $e->getMessage() );
+													$image_error          = $upload_error_message . __( ' (%1$s).', 'nggallery' );
 												} catch ( \E_No_Image_Library_Exception $e ) {
+													/* translators: %1$s: image filename */
 													$image_error = __( 'No image library present, image uploads will fail (%1$s).', 'nggallery' );
 
 													// no point in continuing if the image library is not present but we don't break here to ensure that all images are processed (otherwise they'd be processed in further fruitless handle_job calls).
 												} catch ( \E_InsufficientWriteAccessException $e ) {
+													/* translators: %1$s: image filename */
 													$image_error = __( 'Inadequate system permissions to write image (%1$s).', 'nggallery' );
 												} catch ( \E_InvalidEntityException $e ) {
+													/* translators: 1: image filename, 2: image ID */
 													$image_error = __( 'Requested image with id (%2$s) doesn\'t exist (%1$s).', 'nggallery' );
 												} catch ( \E_EntityNotFoundException $e ) {
-													// gallery doesn't exist - already checked above so this should never happen.
+													// Gallery doesn't exist - already checked above so this should never happen.
+													unset( $e );
 												}
 											}
-										}
-
-										if ( $image_error != null ) {
+										}                                       if ( $image_error != null ) {
 											$image_status = 'error';
 
 											$image['error'] = [
@@ -1265,21 +1527,28 @@ class API {
 										$wp_fs->rmdir( $images_folder );
 									}
 								} elseif ( $wp_fs == null ) {
+									/* translators: %1$s: gallery ID */
 									$error = __( 'Could not access file system for gallery (%1$s).', 'nggallery' );
 								}
 
 								if ( ! $gallery->save() ) {
-									if ( $error == null ) {
-										$gal_errors = '[' . json_encode( $gallery->validation() ) . ']';
-										$error      = __( 'Failed to save modified gallery (%1$s). ' . $gal_errors, 'nggallery' );
+									// wpdb->update() returns 0 (falsy) when no columns changed,
+									// even though the save succeeded. Only treat as error when
+									// validation failed (array) or a real DB error occurred.
+									// flush_query_cache() after save_entity() clears only a PHP
+									// array, so $wpdb->last_error still reflects the DB result.
+									global $wpdb;
+									if ( $error == null && ( is_array( $gallery->validation() ) || ! empty( $wpdb->last_error ) ) ) {
+										$gal_errors = '[' . wp_json_encode( $gallery->validation() ) . ']';
+										/* translators: %1$s: gallery ID */
+										$error = __( 'Failed to save modified gallery (%1$s). ', 'nggallery' ) . $gal_errors;
 									}
 								}
 							}
 						} else {
+							/* translators: %1$s: gallery ID */
 							$error = __( 'Could not find gallery (%1$s).', 'nggallery' );
 						}
-
-						// XXX workaround for $gallery->save() returning false even if successful.
 						if ( isset( $task_result['image_list'] ) && $gallery != null ) {
 							$task_result['object_id'] = $gallery->id();
 						}
@@ -1308,9 +1577,7 @@ class API {
 					}
 
 					break;
-				}
 				case 'album_add':
-				{
 					$mapper = AlbumMapper::get_instance();
 
 					$name       = isset( $task_object['name'] ) ? $task_object['name'] : '';
@@ -1353,10 +1620,8 @@ class API {
 					}
 
 					break;
-				}
 				case 'album_remove':
 				case 'album_edit':
-				{
 					if ( isset( $task_query['id'] ) ) {
 						$mapper = AlbumMapper::get_instance();
 						$album  = $mapper->find( $task_query['id'], true );
@@ -1365,6 +1630,7 @@ class API {
 						if ( $album ) {
 							if ( $task_type == 'album_remove' ) {
 								if ( ! $mapper->destroy( $album ) ) {
+									/* translators: %1$s: album ID */
 									$error = __( 'Failed to remove album (%1$s).', 'nggallery' );
 								}
 							} elseif ( $task_type == 'album_edit' ) {
@@ -1420,10 +1686,12 @@ class API {
 								}
 
 								if ( ! $mapper->save( $album ) ) {
+									/* translators: %1$s: album ID */
 									$error = __( 'Failed to save modified album (%1$s).', 'nggallery' );
 								}
 							}
 						} else {
+							/* translators: %1$s: album ID */
 							$error = __( 'Could not find album (%1$s).', 'nggallery' );
 						}
 
@@ -1446,9 +1714,7 @@ class API {
 					}
 
 					break;
-				}
 				case 'gallery_list_get':
-				{
 					$mapper       = GalleryMapper::get_instance();
 					$gallery_list = $mapper->find_all();
 					$result_list  = [];
@@ -1469,11 +1735,8 @@ class API {
 					$task_result['gallery_list'] = $result_list;
 
 					break;
-				}
 				case 'image_list_move':
-				{
 					break;
-				}
 			}
 
 			$task_item['result'] = $task_result;
@@ -1506,7 +1769,7 @@ class API {
 			if ( 'ftp' == $upload_method ) {
 				// everything was finished, write status file.
 				$status_file    = '_ngg_job_status_' . strval( $job_id ) . '.txt';
-				$status_content = json_encode( $task_list );
+				$status_content = wp_json_encode( $task_list );
 
 				if ( null != $wp_fs ) {
 					$status_path = $path_prefix . $fs_sep . $status_file;
@@ -1516,7 +1779,7 @@ class API {
 					// if WP_Filesystem failed try one last desperate attempt at direct file writing.
 					$status_path = str_replace( $ftp_path, $root_path, $full_path ) . DIRECTORY_SEPARATOR . $status_file;
 					$status_path = str_replace( [ '\\', '/' ], DIRECTORY_SEPARATOR, $status_path );
-					file_put_contents( $status_path, $status_content );
+					file_put_contents( $status_path, $status_content ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 				}
 			}
 

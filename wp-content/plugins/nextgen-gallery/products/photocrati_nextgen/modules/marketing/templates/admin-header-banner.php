@@ -1,7 +1,10 @@
 <?php
 /**
+ * Template for admin header banner.
+ *
  * @var string $message
  */
+
 // The following CSS *should* be placed in a shared CSS file, but that will require making several more updates
 // to ensure it loads on "new" and legacy pages; it's just far easier to embed it here.
 ?>
@@ -39,5 +42,5 @@
 	}
 </style>
 <div id="ngg-admin-marketing-header-banner">
-	<p><?php print $message; ?></p>
+	<p><?php echo wp_kses_post( $message ); ?></p>
 </div>

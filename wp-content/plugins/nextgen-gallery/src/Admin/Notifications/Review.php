@@ -6,20 +6,45 @@ use Imagely\NGG\Display\View;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\URL;
 
+/**
+ * Review notification class.
+ *
+ * Handles display of review request notifications in the admin interface.
+ */
 class Review {
 
+	/**
+	 * Notification data.
+	 *
+	 * @var array
+	 */
 	public $_data;
 
+	/**
+	 * Constructor.
+	 *
+	 * @param array $params Notification parameters.
+	 */
 	public function __construct( $params = [] ) {
 		$this->_data['name']    = $params['name'];
 		$this->_data['range']   = $params['range'];
 		$this->_data['follows'] = $params['follows'];
 	}
 
+	/**
+	 * Gets the notification name.
+	 *
+	 * @return string The notification name.
+	 */
 	public function get_name() {
 		return $this->_data['name'];
 	}
 
+	/**
+	 * Gets the current gallery count.
+	 *
+	 * @return int The gallery count.
+	 */
 	public function get_gallery_count() {
 		// Get the total # of galleries if we don't have them
 		$settings = Settings::get_instance();
@@ -30,10 +55,20 @@ class Review {
 		return $count;
 	}
 
+	/**
+	 * Gets the gallery count range for this notification.
+	 *
+	 * @return array The gallery count range.
+	 */
 	public function get_range() {
 		return $this->_data['range'];
 	}
 
+	/**
+	 * Checks if the notification should be rendered.
+	 *
+	 * @return bool Whether the notification is renderable.
+	 */
 	public function is_renderable() {
 		return ( $this->is_on_dashboard() || $this->is_on_ngg_admin_page() )
 			&& $this->is_at_gallery_count()
@@ -41,6 +76,11 @@ class Review {
 			&& $this->gallery_created_flag_check();
 	}
 
+	/**
+	 * Checks if gallery was created after reviews were introduced.
+	 *
+	 * @return bool Whether gallery creation flag is set.
+	 */
 	public function gallery_created_flag_check() {
 		$settings = Settings::get_instance();
 		return $settings->get( 'gallery_created_after_reviews_introduced' );
@@ -94,7 +134,7 @@ class Review {
 		if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
 			return false;
 		}
-		return preg_match( '#/wp-admin/?(index\.php)?$#', $_SERVER['REQUEST_URI'] ) == true;
+		return preg_match( '#/wp-admin/?(index\.php)?$#', sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) ) == true;
 	}
 
 	public function is_on_ngg_admin_page(): bool {
@@ -107,12 +147,12 @@ class Review {
 		// Nonce verification is not necessary here, and should be performed by methods invoking this method.
 		//
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		return ( preg_match( '/wp-admin.*(ngg|nextgen).*/', $_SERVER['REQUEST_URI'] )
+		return ( preg_match( '/wp-admin.*(ngg|nextgen).*/', isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' )
 				|| (
 					isset( $_REQUEST['page'] )
 					&& preg_match( '/ngg|nextgen/', sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) )
 				) )
-				&& ( false === strpos( strtolower( $_SERVER['REQUEST_URI'] ), '&attach_to_post' ) );
+				&& ( false === strpos( strtolower( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' ), '&attach_to_post' ) );
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 

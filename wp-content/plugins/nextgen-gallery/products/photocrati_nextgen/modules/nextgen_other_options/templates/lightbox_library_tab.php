@@ -1,11 +1,14 @@
 <?php
 /**
+ * Template for lightbox library tab.
+ *
  * @var string $lightbox_library_label
  * @var C_NGG_Lightbox[] $libs
  * @var string $selected
  * @var string[] $sub_fields
  * @var string $lightbox_global
  */
+
 ?>
 <?php $this->start_element( 'admin_page.other_options_lightbox_libraries', 'container' ); ?>
 <table>
@@ -19,7 +22,7 @@
 				<?php foreach ( $libs as $lib ) { ?>
 					<option value="<?php echo esc_attr( $lib->name ); ?>"
 							<?php selected( $lib->name, $selected, true ); ?>
-							data-library-name='<?php echo $lib->name; ?>'>
+							data-library-name='<?php echo esc_attr( $lib->name ); ?>'>
 						<?php if ( isset( $lib->title ) && $lib->title ) { ?>
 							<?php echo esc_html( $lib->title ); ?>
 						<?php } else { ?>
@@ -49,7 +52,10 @@
 
 	<?php foreach ( $sub_fields as $name => $form ) { ?>
 		<tbody class="lightbox_library_settings hidden" id="lightbox_library_<?php echo esc_attr( $name ); ?>">
-			<?php echo $form; ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $form contains safe HTML form elements
+			echo $form;
+			?>
 		</tbody>
 	<?php } ?>
 </table>

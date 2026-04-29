@@ -22,7 +22,7 @@ if ( ! defined( 'WP_LOAD_PATH' ) ) {
 
 	if ( file_exists( $legacy_root . 'wp-load.php' ) ) {
 		define( 'WP_LOAD_PATH', $legacy_root );
-		define( 'WP_ADMIN', true );
+		defined( 'WP_ADMIN' ) && define( 'WP_ADMIN', true );
 	} elseif ( file_exists( $path . 'wp-load.php' ) ) {
 			define( 'WP_LOAD_PATH', $path );
 	} else {

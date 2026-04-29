@@ -1,24 +1,52 @@
 <?php
 use Imagely\NGG\Display\I18N;
 
+$_caption_gallery_id = null;
+if ( isset( $displayed_gallery->container_ids ) && ! empty( $displayed_gallery->container_ids ) ) {
+	$_caption_gallery_id = reset( $displayed_gallery->container_ids );
+}
+$_caption_data_gallery_id = $_caption_gallery_id ? $_caption_gallery_id : $displayed_gallery_id;
+
+$_caption_gallery_name = '';
+if ( isset( $gallery ) && ! empty( $gallery->title ) ) {
+	$_caption_gallery_name = $gallery->title;
+} elseif ( $_caption_gallery_id ) {
+	$_ngg_caption_gallery = \Imagely\NGG\DataMappers\Gallery::get_instance()->find( intval( $_caption_gallery_id ) );
+	if ( $_ngg_caption_gallery ) {
+		$_caption_gallery_name = $_ngg_caption_gallery->title;
+	}
+}
+
 $this->start_element( 'nextgen_gallery.gallery_container', 'container', $displayed_gallery ); ?>
 
 <div class="ngg-galleryoverview caption-view
 <?php
 if ( ! intval( $ajax_pagination ) ) {
-	echo ' ngg-ajax-pagination-none';}
+	echo esc_attr( ' ngg-ajax-pagination-none' );}
 ?>
 "
-	id="ngg-gallery-<?php echo esc_attr( $displayed_gallery_id ); ?>-<?php echo esc_attr( $current_page ); ?>">
+	id="ngg-gallery-<?php echo esc_attr( $displayed_gallery_id ); ?>-<?php echo esc_attr( $current_page ); ?>"
+	data-nextgen-gallery-id="<?php echo esc_attr( $_caption_data_gallery_id ); ?>"
+	data-gallery-id="<?php echo esc_attr( $_caption_data_gallery_id ); ?>"
+	<?php if ( $_caption_gallery_name ) : ?>
+	data-gallery-name="<?php echo esc_attr( $_caption_gallery_name ); ?>"
+	<?php endif; ?>>
 
 	<div class="ngg-caption-view-wrapper">
 		<?php $this->start_element( 'nextgen_gallery.image_list_container', 'container', $images ); ?>
 			<?php
-			for ( $i = 0; $i < count( $images ); $i++ ) {
-				$image        = $images[ $i ];
-				$thumb_size   = $storage->get_image_dimensions( $image, $thumbnail_size_name );
-				$style        = isset( $image->style ) ? $image->style : null;
-				$column_class = 'ngg-' . $number_of_columns . '-columns';
+			$image_count = count( $images );
+			for ( $i = 0; $i < $image_count; $i++ ) {
+				$image                   = $images[ $i ];
+				$thumb_size              = $storage->get_image_dimensions( $image, $thumbnail_size_name );
+				$show_tiktok_play_button = (
+					! empty( $image->meta_data ) &&
+					is_array( $image->meta_data ) &&
+					! empty( $image->meta_data['imagely_tiktok_id'] ) &&
+					! empty( $image->meta_data['imagely_tiktok_show_play_button'] )
+				);
+				$style                   = isset( $image->style ) ? $image->style : null;
+				$column_class            = 'ngg-' . $number_of_columns . '-columns';
 
 				if ( isset( $image->hidden ) && $image->hidden ) {
 					$style = 'style="display: none;"';
@@ -31,12 +59,12 @@ if ( ! intval( $ajax_pagination ) ) {
 					<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box
 										<?php
 										if ( $number_of_columns > 0 && empty( $show_all_in_lightbox ) ) {
-											echo $column_class; }
+											echo esc_attr( $column_class ); }
 										?>
 					"
 					<?php
 					if ( $style ) {
-										echo $style;}
+										echo esc_attr( $style );}
 					?>
 >
 						<?php $this->start_element( 'nextgen_gallery.image', 'item', $image ); ?>
@@ -46,10 +74,27 @@ if ( ! intval( $ajax_pagination ) ) {
 									data-src="<?php echo esc_attr( $storage->get_image_url( $image ) ); ?>"
 									data-thumbnail="<?php echo esc_attr( $storage->get_image_url( $image, 'thumb' ) ); ?>"
 									data-image-id="<?php echo esc_attr( $image->{$image->id_field} ); ?>"
+									data-image-name="<?php echo esc_attr( $image->filename ?? '' ); ?>"
 									data-title="<?php echo esc_attr( $image->alttext ); ?>"
-									data-description="<?php echo esc_attr( stripslashes( $image->description ) ); ?>"
+									data-description="<?php echo esc_attr( stripslashes( $image->description ?? '' ) ); ?>"
 									data-image-slug="<?php echo esc_attr( $image->image_slug ); ?>"
-									<?php echo $effect_code; ?>>
+									<?php if ( ! empty( $image->meta_data['imagely_tiktok_play_url'] ) ) : ?>
+										data-tiktok-play-url="<?php echo esc_attr( $image->meta_data['imagely_tiktok_play_url'] ); ?>"
+									<?php endif; ?>
+									<?php if ( ! empty( $image->meta_data['imagely_tiktok_share_url'] ) ) : ?>
+										data-tiktok-share-url="<?php echo esc_attr( $image->meta_data['imagely_tiktok_share_url'] ); ?>"
+									<?php endif; ?>
+									<?php if ( ! empty( $image->meta_data['imagely_tiktok_embed_link'] ) ) : ?>
+										data-tiktok-embed-url="<?php echo esc_attr( $image->meta_data['imagely_tiktok_embed_link'] ); ?>"
+									<?php endif; ?>
+									<?php if ( ! empty( $image->meta_data['video_link'] ) ) : ?>
+										data-video-url="<?php echo esc_attr( $image->meta_data['video_link'] ); ?>"
+									<?php endif; ?>
+
+									<?php echo $effect_code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- effect_code is safe HTML attributes from display settings ?>>
+									<?php if ( $show_tiktok_play_button || ! empty( $image->meta_data['video_link'] ) ) { ?>
+										<span class="ngg-video-play-overlay" aria-hidden="true"></span>
+									<?php } ?>
 									<img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 										alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 										src="<?php echo esc_attr( $storage->get_image_url( $image, $thumbnail_size_name ) ); ?>"
@@ -77,7 +122,7 @@ if ( ! intval( $ajax_pagination ) ) {
 	<?php } ?>
 
 	<?php if ( $pagination ) { ?>
-		<?php echo $pagination; ?>
+		<?php echo wp_kses_post( $pagination ); ?>
 	<?php } ?>
 </div>
 

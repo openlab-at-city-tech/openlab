@@ -1,6 +1,9 @@
 <?php
+// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Legacy file structure.
 
 /**
+ * Displays the picture list for gallery/album management.
+ *
  * @param nggManageGallery|nggManageAlbum $controller
  */
 function nggallery_picturelist( $controller ) {
@@ -14,14 +17,17 @@ function nggallery_picturelist( $controller ) {
 	];
 
 	// Look if its a search result.
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for search
 	$is_search = isset( $_GET['s'] ) ? true : false;
 	$counter   = 0;
 
 	$wp_list_table = new _NGG_Images_List_Table( 'nggallery-manage-images' );
 
 	// look for pagination.
-	$paged          = isset( $_GET['paged'] ) && ( $_GET['paged'] > 0 ) ? absint( $_GET['paged'] ) : 1;
-	$items_per_page = ( ! empty( $_GET['items'] ) ? $_GET['items'] : apply_filters( 'ngg_manage_images_items_per_page', 50 ) );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for pagination
+	$paged = isset( $_GET['paged'] ) && ( $_GET['paged'] > 0 ) ? absint( $_GET['paged'] ) : 1;
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for items per page
+	$items_per_page = ( ! empty( $_GET['items'] ) ? sanitize_text_field( wp_unslash( $_GET['items'] ) ) : apply_filters( 'ngg_manage_images_items_per_page', 50 ) );
 
 	if ( 'all' === $items_per_page ) {
 		$items_per_page = 1;
@@ -71,7 +77,9 @@ function nggallery_picturelist( $controller ) {
 
 		$image_mapper->select()->where( [ 'galleryid = %d', $act_gid ] );
 
-		if ( ( $galSort = $settings->get( 'galSort', false ) ) && ( $galSortDir = $settings->get( 'galSortDir', false ) ) ) {
+		$galSort    = $settings->get( 'galSort', false );
+		$galSortDir = $settings->get( 'galSortDir', false );
+		if ( $galSort && $galSortDir ) {
 			$image_mapper->order_by( $galSort, $galSortDir );
 		}
 		$picturelist = $image_mapper->limit( $max, $start )->run_query();
@@ -89,9 +97,9 @@ function nggallery_picturelist( $controller ) {
 
 	<?php if ( $action_status['message'] != '' ) { ?>
 		<div id="message"
-			class="<?php echo ( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ); ?> fade">
+			class="<?php echo ( $action_status['status'] == 'ok' ? 'updated' : esc_attr( $action_status['status'] ) ); ?> fade">
 			<p>
-				<strong><?php echo $action_status['message']; ?></strong>
+				<strong><?php echo esc_html( $action_status['message'] ); ?></strong>
 			</p>
 		</div>
 	<?php } ?>
@@ -102,7 +110,10 @@ function nggallery_picturelist( $controller ) {
 
 		<div class="ngg_page_content_header">
 			<h3>
-				<?php printf( __( 'Search results for &#8220;%s&#8221;', 'nggallery' ), esc_html( get_search_query() ) ); ?>
+				<?php
+				/* translators: %s: search query */
+				echo esc_html( sprintf( __( 'Search results for &#8220;%s&#8221;', 'nggallery' ), get_search_query() ) );
+				?>
 			</h3>
 		</div>
 
@@ -123,7 +134,7 @@ function nggallery_picturelist( $controller ) {
 					<input type="text"
 							id="media-search-input"
 							name="s"
-							placeholder="<?php _e( 'Search Images', 'nggallery' ); ?>"
+							placeholder="<?php esc_attr_e( 'Search Images', 'nggallery' ); ?>"
 							value="<?php the_search_query(); ?>"/>
 
 					<input type="submit"
@@ -137,7 +148,7 @@ function nggallery_picturelist( $controller ) {
 			<form id="updategallery"
 					class="nggform"
 					method="POST"
-					action="<?php echo $ngg->manage_page->base_page . '&amp;mode=edit&amp;s=' . get_search_query(); ?>"
+					action="<?php echo esc_url( $ngg->manage_page->base_page . '&amp;mode=edit&amp;s=' . get_search_query() ); ?>"
 					accept-charset="utf-8">
 
 				<?php wp_nonce_field( 'ngg_updategallery' ); ?>
@@ -151,7 +162,7 @@ function nggallery_picturelist( $controller ) {
 
 				<div class="ngg_page_content_header">
 					<h3>
-						<?php echo _n( 'Gallery: ', 'Galleries: ', 1, 'nggallery' ); ?>
+						<?php echo esc_html( _n( 'Gallery: ', 'Galleries: ', 1, 'nggallery' ) ); ?>
 						<?php echo esc_html( \Imagely\NGG\Display\I18N::translate( $gallery->title ) ); ?>
 					</h3>
 				</div>
@@ -161,7 +172,7 @@ function nggallery_picturelist( $controller ) {
 					<form id="updategallery"
 							class="nggform"
 							method="POST"
-							action="<?php echo $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $act_gid . '&amp;paged=' . esc_attr( $paged ); ?>"
+							action="<?php echo esc_url( $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $act_gid . '&amp;paged=' . $paged ); ?>"
 							accept-charset="utf-8">
 
 						<?php wp_nonce_field( 'ngg_updategallery' ); ?>
@@ -172,7 +183,12 @@ function nggallery_picturelist( $controller ) {
 							<div id="poststuff" class="meta-box-sortables">
 								<?php wp_nonce_field( 'closedpostboxes', 'closedpostboxesnonce', false ); ?>
 								<div id="gallerydiv"
-									class="postbox closed <?php echo postbox_classes( 'gallerydiv', 'ngg-manage-gallery' ); ?>">
+									class="postbox closed 
+									<?php
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- postbox_classes() returns safe HTML class names
+									echo postbox_classes( 'gallerydiv', 'ngg-manage-gallery' );
+									?>
+					">
 									<div class="handlediv" title="<?php esc_attr_e( 'Click to toggle', 'nggallery' ); ?>">
 										<span class="toggle-indicator"></span>
 										<h3>
@@ -235,13 +251,15 @@ function nggallery_picturelist( $controller ) {
 								<?php foreach ( $items_per_page_array as $val => $label ) { ?>
 									<?php
 									$selected = '';
+									// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for items per page
 									if ( ! empty( $_GET['items'] ) && $val == $_GET['items'] ) {
 										$selected = 'selected';
+										// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for items per page
 									} elseif ( empty( $_GET['items'] ) && $val == $items_per_page ) {
 										$selected = 'selected';
 									}
 									?>
-									<option value="<?php echo esc_attr( $val ); ?>" <?php echo $selected; ?>>
+									<option value="<?php echo esc_attr( $val ); ?>" <?php echo esc_attr( $selected ); ?>>
 										<?php echo esc_html( $label ); ?>
 									</option>
 								<?php } ?>
@@ -320,13 +338,14 @@ function nggallery_picturelist( $controller ) {
 										$picture->thumbURL  = $storage->get_image_url( $picture, 'thumb' );
 										$picture->imagePath = $storage->get_image_abspath( $picture );
 										$picture->thumbPath = $storage->get_image_abspath( $picture, 'thumb' );
+										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- apply_filters() returns safe HTML for image row
 										echo apply_filters( 'ngg_manage_images_row', $picture, $counter );
 									}
 								}
 
 								// In the case you have no capaptibility to see the search result.
 								if ( $counter == 0 ) {
-									echo '<tr><td colspan="' . $num_columns . '" align="center"><strong>' . esc_html__( 'No entries found', 'nggallery' ) . '</strong></td></tr>';
+									echo '<tr><td colspan="' . esc_attr( $num_columns ) . '" align="center"><strong>' . esc_html__( 'No entries found', 'nggallery' ) . '</strong></td></tr>';
 								}
 								?>
 
@@ -378,7 +397,7 @@ function nggallery_picturelist( $controller ) {
 								value="<?php esc_attr_e( 'OK', 'nggallery' ); ?>"/>
 						<input class="button-primary dialog-cancel"
 								type="reset"
-								value="&nbsp;<?php _e( 'Cancel', 'nggallery' ); ?>&nbsp;"/>
+								value="&nbsp;<?php esc_html_e( 'Cancel', 'nggallery' ); ?>&nbsp;"/>
 					</td>
 				</tr>
 			</table>
@@ -449,12 +468,12 @@ function nggallery_picturelist( $controller ) {
 						<input type="text"
 								size="5"
 								name="imgWidth"
-								value="<?php echo $settings->get( 'imgWidth' ); ?>"/>
+								value="<?php echo esc_attr( $settings->get( 'imgWidth' ) ); ?>"/>
 						x
 						<input type="text"
 								size="5"
 								name="imgHeight"
-								value="<?php echo $settings->get( 'imgHeight' ); ?>"/>
+								value="<?php echo esc_attr( $settings->get( 'imgHeight' ) ); ?>"/>
 						<br/>
 						<small><?php esc_html_e( 'Width x height (in pixel). NextGEN Gallery will keep ratio size', 'nggallery' ); ?></small>
 					</td>
@@ -736,7 +755,13 @@ function nggallery_picturelist( $controller ) {
 						break;
 				}
 
-				return confirm('<?php printf( esc_js( __( "You are about to start the bulk edit for %s images \n \n 'Cancel' to stop, 'OK' to proceed.", 'nggallery' ) ), "' + numchecked + '" ); ?>');
+				var message = 
+				<?php
+				/* translators: %s: number of images */
+				echo wp_json_encode( sprintf( __( "You are about to start the bulk edit for %s images \n \n 'Cancel' to stop, 'OK' to proceed.", 'nggallery' ), '%s' ) );
+				?>
+				;
+				return confirm(message.replace('%s', numchecked));
 			}
 
 			if ($(this).data('ready')) {
@@ -788,10 +813,21 @@ function nggallery_picturelist( $controller ) {
  */
 class _NGG_Images_List_Table extends WP_List_Table {
 
+	/**
+	 * Screen instance.
+	 *
+	 * @var object
+	 */
 	public $_screen;
+
+	/**
+	 * Columns array.
+	 *
+	 * @var array
+	 */
 	public $_columns;
 
-	function __construct( $screen ) {
+	public function __construct( $screen ) {
 		if ( is_string( $screen ) ) {
 			$screen = convert_to_screen( $screen );
 		}
@@ -802,7 +838,7 @@ class _NGG_Images_List_Table extends WP_List_Table {
 		add_filter( 'manage_' . $screen->id . '_columns', [ $this, 'get_columns' ], 0 );
 	}
 
-	function get_column_info() {
+	public function get_column_info() {
 		$columns   = get_column_headers( $this->_screen );
 		$hidden    = get_hidden_columns( $this->_screen );
 		$_sortable = $this->get_sortable_columns();
@@ -825,7 +861,7 @@ class _NGG_Images_List_Table extends WP_List_Table {
 	}
 
 	// define the columns to display, the syntax is 'internal name' => 'display name'.
-	function get_columns() {
+	public function get_columns() {
 		$columns = [];
 
 		$columns['cb']             = '<input name="checkall" type="checkbox" onclick="checkAll(document.getElementById(\'updategallery\'));"/>';
@@ -840,11 +876,11 @@ class _NGG_Images_List_Table extends WP_List_Table {
 		return $columns;
 	}
 
-	function get_sortable_columns() {
+	public function get_sortable_columns() {
 		return [];
 	}
 
-	function the_list() {
+	public function the_list() {
 	}
 }
 

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Template for single-line marketing block.
+ *
  * @var C_Marketing_Block_Single_Line $block
  * @var string $link_text
  */
@@ -7,13 +9,13 @@
 ?>
 <div class="ngg-marketing-single-line">
 	<p>
-		<?php print $block->title; ?>
+		<?php echo esc_html( $block->title ); ?>
 		&nbsp;
 		<a class="ngg-marketing-single-line-link"
-			href="<?php print esc_attr( $block->get_upgrade_link() ); ?>"
+			href="<?php echo esc_url( $block->get_upgrade_link() ); ?>"
 			target="_blank"
 			rel="noreferrer noopener">
-			<?php print $link_text; ?>
+			<?php echo esc_html( $link_text ); ?>
 		</a>
 	</p>
 </div>

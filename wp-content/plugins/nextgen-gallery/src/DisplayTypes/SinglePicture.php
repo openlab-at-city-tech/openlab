@@ -10,14 +10,19 @@ use Imagely\NGG\DataTypes\DisplayedGallery;
 use Imagely\NGG\Display\StaticAssets;
 use Imagely\NGG\Display\View;
 
+/**
+ * Single picture display type controller.
+ */
 class SinglePicture extends ParentController {
 
 	/**
+	 * Renders a single picture.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
-	 * @param bool             $return (optional)
+	 * @param bool             $return_output (optional)
 	 * @return string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		$storage          = StorageManager::get_instance();
 		$dynthumbs        = DynThumbs::get_instance();
 		$display_settings = $displayed_gallery->display_settings;
@@ -30,7 +35,7 @@ class SinglePicture extends ParentController {
 
 		if ( ! $image ) {
 			$view = new View( 'GalleryDisplay/NoImagesFound', [], 'photocrati-nextgen_gallery_display#no_images_found' );
-			return $view->render( $return );
+			return $view->render( $return_output );
 		}
 
 		switch ( $display_settings['float'] ) {
@@ -64,9 +69,11 @@ class SinglePicture extends ParentController {
 		if ( ! is_array( $display_settings['mode'] ) ) {
 			$display_settings['mode'] = explode( ',', $display_settings['mode'] );
 		}
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( 'web20', $display_settings['mode'] ) ) {
 			$display_settings['display_reflection'] = true;
 		}
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( 'watermark', $display_settings['mode'] ) ) {
 			$display_settings['display_watermark'] = true;
 		}
@@ -121,7 +128,7 @@ class SinglePicture extends ParentController {
 				add_filter( 'ngg_get_thumbcode', [ $this, 'strip_thumbcode' ], 10 );
 			}
 
-			$retval = $this->legacy_render( $display_settings['template'], $params, $return, 'singlepic' );
+			$retval = $this->legacy_render( $display_settings['template'], $params, $return_output, 'singlepic' );
 
 			if ( empty( $effect_code ) ) {
 				remove_filter( 'ngg_get_thumbcode', [ $this, 'strip_thumbcode' ], 10 );
@@ -146,7 +153,7 @@ class SinglePicture extends ParentController {
 				'photocrati-nextgen_basic_singlepic#nextgen_basic_singlepic'
 			);
 
-			return $view->render( $return );
+			return $view->render( $return_output );
 		}
 	}
 

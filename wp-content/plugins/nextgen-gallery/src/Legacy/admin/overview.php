@@ -1,4 +1,7 @@
 <?php
+/**
+ * NextGEN Gallery Admin Overview
+ */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -6,9 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * nggallery_admin_overview()
- *
- * Add the admin overview the dashboard style
+ * Adds the admin overview the dashboard style
  *
  * @return NULL
  */
@@ -21,8 +22,8 @@ function nggallery_admin_overview() {
 	\Imagely\NGG\Display\DisplayManager::enqueue_fontawesome();
 
 	if ( $action_status['message'] != '' ) { ?>
-		<div id="message" class="<?php echo ( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ); ?> fade">
-			<p><strong><?php echo $action_status['message']; ?></strong></p>
+		<div id="message" class="<?php echo esc_attr( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ); ?> fade">
+			<p><strong><?php echo esc_html( $action_status['message'] ); ?></strong></p>
 		</div>
 	<?php } ?>
 
@@ -34,11 +35,12 @@ function nggallery_admin_overview() {
 
 		<?php
 		/*
-		Disabled 2020-10-16 - the wizard is broken and needs to be fixed or replaced
-		<div class="about-text" id="ngg-gallery-wizard">
-			<span><?php echo __("Need help getting started? ", 'nggallery')?></span>
-			<?php echo ' <a data-ngg-wizard="nextgen.beginner.gallery_creation_igw" class="ngg-wizard-invoker button-primary" href="' . esc_url(add_query_arg('ngg_wizard', 'nextgen.beginner.gallery_creation_igw')) . '">' . __('Launch Gallery Wizard', 'nggallery') . '</a>'; ?>
-		</div> */
+		 * Disabled 2020-10-16 - the wizard is broken and needs to be fixed or replaced
+		 * <div class="about-text" id="ngg-gallery-wizard">
+		 *  <span><?php echo esc_html( __( 'Need help getting started? ', 'nggallery' ) ); ?></span>
+		 *  <?php echo ' <a data-ngg-wizard="nextgen.beginner.gallery_creation_igw" class="ngg-wizard-invoker button-primary" href="' . esc_url(add_query_arg('ngg_wizard', 'nextgen.beginner.gallery_creation_igw')) . '">' . __('Launch Gallery Wizard', 'nggallery') . '</a>'; ?>
+		 * </div>
+		 */
 		?>
 
 		<div class='ngg_page_content_menu'>
@@ -68,11 +70,11 @@ function nggallery_admin_overview() {
 
 			<div data-id="welcome-link">
 
-				<div class="about-text"><strong><?php printf( __( "Congrats! You're now running the most popular WordPress gallery plugin of all time.", 'nggallery' ) ); ?></strong><br><?php printf( __( 'To get started, watch our two minute intro below.', 'nggallery' ) ); ?>
+				<div class="about-text"><strong><?php printf( esc_html__( "Congrats! You're now running the most popular WordPress gallery plugin of all time.", 'nggallery' ) ); ?></strong><br><?php printf( esc_html__( 'To get started, watch our two minute intro below.', 'nggallery' ) ); ?>
 				</div>
 
 				<div class="about-text">
-					<a href="<?php echo get_admin_url(get_current_blog_id(), '/index.php?page=nextgen-gallery-setup-wizard');?>" class="button-primary ngg-pro-upgrade" style="background-color: #9ebc1b">
+					<a href="<?php echo esc_url( get_admin_url( get_current_blog_id(), '/index.php?page=nextgen-gallery-setup-wizard' ) ); ?>" class="button-primary ngg-pro-upgrade" style="background-color: #9ebc1b">
 						<?php esc_html_e( 'Launch Setup Wizard', 'nggallery' ); ?>
 					</a>
 				</div>
@@ -90,7 +92,11 @@ function nggallery_admin_overview() {
 
 			<div data-id="videos-link" style="display:none;">
 
-				<p class="about-text"><?php printf( __( 'We have a growing list of video tutorials to get you started. Watch some below or head over to <a href="%s" target="_blank">NextGEN Gallery University on YouTube</a> to see all available vidoes.', 'nggallery' ), esc_url( 'https://www.youtube.com/playlist?list=PL9cmsdHslD0vIcJjBggJ-XMjtwvqrRgoM' ) ); ?>
+				<p class="about-text">
+				<?php
+				/* translators: %s: YouTube playlist URL */
+				echo wp_kses_post( sprintf( __( 'We have a growing list of video tutorials to get you started. Watch some below or head over to <a href="%s" target="_blank">NextGEN Gallery University on YouTube</a> to see all available vidoes.', 'nggallery' ), esc_url( 'https://www.youtube.com/playlist?list=PL9cmsdHslD0vIcJjBggJ-XMjtwvqrRgoM' ) ) );
+				?>
 				</p>
 
 				<div class="headline-feature feature-video">
@@ -123,7 +129,11 @@ function nggallery_admin_overview() {
 					</div>
 				</div>
 
-				<p class="about-text"><?php printf( __( 'Want more? Head over to <a href="%s" target="_blank">NextGEN Gallery University on YouTube</a>.', 'nggallery' ), esc_url( 'https://www.youtube.com/playlist?list=PL9cmsdHslD0vIcJjBggJ-XMjtwvqrRgoM' ) ); ?>
+				<p class="about-text">
+				<?php
+				/* translators: %s: YouTube playlist URL */
+				echo wp_kses_post( sprintf( __( 'Want more? Head over to <a href="%s" target="_blank">NextGEN Gallery University on YouTube</a>.', 'nggallery' ), esc_url( 'https://www.youtube.com/playlist?list=PL9cmsdHslD0vIcJjBggJ-XMjtwvqrRgoM' ) ) );
+				?>
 				</p>
 
 			</div>
@@ -285,12 +295,12 @@ function nggallery_admin_overview() {
 					<?php foreach ( $stupid as $block_label => $block ) { ?>
 						<tbody>
 							<tr>
-								<th colspan="3"><h3><?php print $block_label; ?></h3></th>
+								<th colspan="3"><h3><?php print esc_html( $block_label ); ?></h3></th>
 							</tr>
 							<?php foreach ( $block as $label => $supports ) { ?>
 								<tr>
 									<td>
-										<?php print $label; ?>
+										<?php print esc_html( $label ); ?>
 									</td>
 									<td class="ngg-features-column">
 										<?php if ( $supports[0] ) { ?>

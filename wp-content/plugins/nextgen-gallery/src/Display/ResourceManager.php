@@ -4,18 +4,72 @@ namespace Imagely\NGG\Display;
 
 use Imagely\NGG\Util\URL;
 
+/**
+ * Manager for handling resource buffering and positioning.
+ */
 class ResourceManager {
 
-	static $instance = null;
+	/**
+	 * Singleton instance.
+	 *
+	 * @var ResourceManager|null
+	 */
+	public static $instance = null;
 
+	/**
+	 * Marker string for resource positioning.
+	 *
+	 * @var string
+	 */
 	public $marker = '<!-- ngg_resource_manager_marker -->';
 
-	public $buffer        = '';
-	public $styles        = '';
-	public $scripts       = '';
-	public $other_output  = '';
-	public $wrote_footer  = false;
-	public $run_shutdown  = false;
+	/**
+	 * Output buffer.
+	 *
+	 * @var string
+	 */
+	public $buffer = '';
+
+	/**
+	 * Buffered styles.
+	 *
+	 * @var string
+	 */
+	public $styles = '';
+
+	/**
+	 * Buffered scripts.
+	 *
+	 * @var string
+	 */
+	public $scripts = '';
+
+	/**
+	 * Other buffered output.
+	 *
+	 * @var string
+	 */
+	public $other_output = '';
+
+	/**
+	 * Whether footer has been written.
+	 *
+	 * @var bool
+	 */
+	public $wrote_footer = false;
+
+	/**
+	 * Whether to run shutdown callback.
+	 *
+	 * @var bool
+	 */
+	public $run_shutdown = false;
+
+	/**
+	 * Whether this is a valid request.
+	 *
+	 * @var bool
+	 */
 	public $valid_request = true;
 
 	/**
@@ -31,6 +85,11 @@ class ResourceManager {
 		add_action( 'wp_footer', [ $this, 'print_marker' ], -1 );
 	}
 
+	/**
+	 * Initialize the resource manager.
+	 *
+	 * @return ResourceManager The initialized instance.
+	 */
 	public static function init() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new ResourceManager();
@@ -49,7 +108,7 @@ class ResourceManager {
 
 		// is_feed() is important to not break WordPress feeds and the WooCommerce api.
 		if ( $this->valid_request && ! is_feed() ) {
-			print $this->marker;
+			print wp_kses_post( $this->marker );
 		}
 	}
 
@@ -80,15 +139,17 @@ class ResourceManager {
 	}
 
 	/**
-	 * @return bool
+	 * Check if resource manager is disabled.
+	 *
+	 * @return bool Whether the resource manager is disabled.
 	 */
 	public static function is_disabled(): bool {
 		// This is admittedly an ugly hack, but much easier than reworking the entire nextgen_admin modules.
 		//
 		// Nonce verification is not necessary here.
 		//
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( isset( $_GET['page'] ) && 'ngg_addgallery' === $_GET['page'] && isset( $_GET['attach_to_post'] ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( isset( $_GET['page'] ) && 'ngg_addgallery' === wp_unslash( $_GET['page'] ) && isset( $_GET['attach_to_post'] ) ) {
 			return false;
 		}
 
@@ -100,73 +161,67 @@ class ResourceManager {
 		return self::addons_version_check();
 	}
 
+	/**
+	 * Determines if the resource manager should perform it's routines for this request
+	 *
+	 * @return bool Whether the request is valid.
+	 */
 	public function is_valid_request() {
 		$retval = true;
 
 		// Nonce check is not necessary: this is not processing a form, but determining if this class' main feature
 		// should be executed or not.
 		//
-        // phpcs:disable WordPress.Security.NonceVerification.Recommended
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		// Do not apply to NextGEN's admin page.
-		if ( is_admin() && isset( $_REQUEST['page'] ) && ! preg_match( '#^(ngg|nextgen)#', $_REQUEST['page'] ) ) {
+		if ( is_admin() && isset( $_REQUEST['page'] ) && ! preg_match( '#^(ngg|nextgen)#', wp_unslash( $_REQUEST['page'] ) ) ) {
 			$retval = false;
 		}
 
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '';
+
 		// Skip anything found in the WP-Admin.
-		if ( preg_match( '#wp-admin/#', $_SERVER['REQUEST_URI'] ) ) {
+		if ( preg_match( '#wp-admin/#', $request_uri ) ) {
 			$retval = false;
-		}
-		// Legacy custom-post based displayed galleries loaded in an iframe.
-		elseif ( isset( $_GET['display_gallery_iframe'] ) ) {
+		} elseif ( isset( $_GET['display_gallery_iframe'] ) ) { // Legacy custom-post based displayed galleries loaded in an iframe.
 			$retval = false;
-		}
-		// Skip XHR requests.
-		elseif ( defined( 'WP_ADMIN' ) && WP_ADMIN && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		} elseif ( defined( 'WP_ADMIN' ) && WP_ADMIN && defined( 'DOING_AJAX' ) && DOING_AJAX ) { // Skip XHR requests.
 			$retval = false;
-		}
-		// Skip NGG's 'dynamic thumbnails' URL endpoints.
-		elseif ( strpos( $_SERVER['REQUEST_URI'], '/nextgen-image/' ) !== false ) {
+		} elseif ( strpos( $request_uri, '/nextgen-image/' ) !== false ) { // Skip NGG's 'dynamic thumbnails' URL endpoints.
 			$retval = false;
-		}
-		// Do not process proxy loaders of static resources.
-		elseif ( preg_match( '/(js|css|xsl|xml|kml)$/', $_SERVER['REQUEST_URI'] ) ) {
+		} elseif ( preg_match( '/(js|css|xsl|xml|kml)$/', $request_uri ) ) { // Do not process proxy loaders of static resources.
 			$retval = false;
-		}
-		// Skip the RSS feed.
-		elseif ( preg_match( '#/feed(/?)$#i', $_SERVER['REQUEST_URI'] ) || ! empty( $_GET['feed'] ) ) {
+		} elseif ( preg_match( '#/feed(/?)$#i', $request_uri ) || ! empty( $_GET['feed'] ) ) { // Skip the RSS feed.
 			$retval = false;
-		}
-		// Skip the 'dynamic stylesheets' URL endpoints used by Pro.
-		elseif ( false !== strpos( $_SERVER['REQUEST_URI'], 'nextgen-dcss?name' ) ) {
+		} elseif ( false !== strpos( $request_uri, 'nextgen-dcss?name' ) ) { // Skip the 'dynamic stylesheets' URL endpoints used by Pro.
 			return false;
-		}
-		// Skip any files belonging to the NGG 1.x days.
-		elseif ( false !== strpos( $_SERVER['REQUEST_URI'], 'nextgen-gallery/src/Legacy/' ) ) {
+		} elseif ( false !== strpos( $request_uri, 'nextgen-gallery/src/Legacy/' ) ) { // Skip any files belonging to the NGG 1.x days.
 			return false;
-		}
-		// Do not process requests made directly to files.
-		elseif ( preg_match( '/\\.(\\w{3,4})$/', $_SERVER['REQUEST_URI'], $match ) ) {
+		} elseif ( preg_match( '/\\.(\\w{3,4})$/', $request_uri, $match ) ) { // Do not process requests made directly to files.
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $match[1], [ 'htm', 'html', 'php' ] ) ) {
 				$retval = false;
 			}
-		}
-		// Skip legacy versions of the Pro Lightbox.
-		elseif ( ( isset( $_SERVER['PATH_INFO'] ) && strpos( $_SERVER['PATH_INFO'], 'nextgen-pro-lightbox-gallery' ) !== false ) or strpos( $_SERVER['REQUEST_URI'], 'nextgen-pro-lightbox-gallery' ) !== false ) {
+		} elseif ( ( isset( $_SERVER['PATH_INFO'] ) && strpos( wp_unslash( $_SERVER['PATH_INFO'] ), 'nextgen-pro-lightbox-gallery' ) !== false ) || strpos( $request_uri, 'nextgen-pro-lightbox-gallery' ) !== false ) { // Skip legacy versions of the Pro Lightbox.
 			$retval = false;
-		}
-		// And lastly skip all REST endpoints.
-		elseif ( $this->is_rest_request() ) {
+		} elseif ( $this->is_rest_request() ) { // And lastly skip all REST endpoints.
 			$retval = false;
 		}
 
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		return $retval;
 	}
 
+	/**
+	 * Check if this is a REST request.
+	 *
+	 * @return bool Whether this is a REST request.
+	 */
 	public function is_rest_request() {
-		return defined( 'REST_REQUEST' ) || strpos( $_SERVER['REQUEST_URI'], 'wp-json' ) !== false;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		return defined( 'REST_REQUEST' ) || ( isset( $_SERVER['REQUEST_URI'] ) && strpos( wp_unslash( $_SERVER['REQUEST_URI'] ), 'wp-json' ) !== false );
 	}
 
 	/**
@@ -187,6 +242,9 @@ class ResourceManager {
 		}
 	}
 
+	/**
+	 * Get buffered resources.
+	 */
 	public function get_resources() {
 		ob_start();
 		wp_print_styles();
@@ -205,7 +263,7 @@ class ResourceManager {
 	/**
 	 * Output the buffer after PHP execution has ended (but before shutdown)
 	 *
-	 * @param $content
+	 * @param string $content The buffer content.
 	 * @return string
 	 */
 	public function output_buffer_handler( $content ) {
@@ -216,7 +274,7 @@ class ResourceManager {
 	 * Removes the closing </html> tag from the output buffer. We'll then write our own closing tag
 	 * in the shutdown function after running wp_print_footer_scripts()
 	 *
-	 * @param $content
+	 * @param string $content The buffer content.
 	 * @return mixed
 	 */
 	public function get_buffer( $content ) {
@@ -249,7 +307,7 @@ class ResourceManager {
 	/**
 	 * When PHP has finished, we output the footer scripts and closing tags
 	 *
-	 * @param bool $in_shutdown
+	 * @param bool $in_shutdown Whether this is being called during shutdown.
 	 * @return string
 	 */
 	public function output_buffer( $in_shutdown = false ) {
@@ -266,16 +324,11 @@ class ResourceManager {
 				} else {
 					error_log( "We're sorry, but your theme's page template didn't make a call to wp_print_footer_scripts(), which is required by NextGEN Gallery. Please add this call to your page templates." );
 				}
-			}
-
-			// We don't want to manipulate the buffer if it doesn't contain HTML.
-			elseif ( strpos( $this->buffer, '</body>' ) === false ) {
+			} elseif ( strpos( $this->buffer, '</body>' ) === false ) { // We don't want to manipulate the buffer if it doesn't contain HTML.
 				$this->valid_request = false;
-			}
-
-			// The output_buffer() function has been called in the PHP shutdown callback
+			}           // The output_buffer() function has been called in the PHP shutdown callback
 			// This will allow us to print the scripts ourselves and manipulate the buffer.
-			if ( $in_shutdown === true && $this->valid_request ) {
+			if ( true === $in_shutdown && $this->valid_request ) {
 				ob_start();
 				if ( ! did_action( 'wp_footer' ) ) {
 					wp_footer();
@@ -284,10 +337,7 @@ class ResourceManager {
 				}
 				$this->other_output = ob_get_clean();
 				$this->buffer       = str_ireplace( '</body>', $this->marker . '</body>', $this->buffer );
-			}
-
-			// W3TC isn't activated and we're not in the shutdown callback. We'll therefore add a shutdown callback to print the scripts.
-			else {
+			} else { // W3TC isn't activated and we're not in the shutdown callback. We'll therefore add a shutdown callback to print the scripts.
 				$this->run_shutdown = true;
 				return '';
 			}
@@ -306,6 +356,7 @@ class ResourceManager {
 	 */
 	public function shutdown() {
 		if ( $this->run_shutdown ) {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Outputting entire processed HTML buffer
 			echo $this->output_buffer( true );
 		}
 	}

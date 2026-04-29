@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * Ajax module.
+ */
 class M_Ajax extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(
@@ -58,11 +66,11 @@ class M_Ajax extends C_Base_Module {
 	 * @param string       $var_name
 	 * @param object|array $data
 	 */
-	static function pass_data_to_js( $handle, $var_name, $data ) {
+	public static function pass_data_to_js( $handle, $var_name, $data ) {
 		$var_name = esc_js( $var_name );
 		return wp_add_inline_script(
 			$handle,
-			"let {$var_name} = " . json_encode( $data, JSON_NUMERIC_CHECK )
+			"let {$var_name} = " . wp_json_encode( $data, JSON_NUMERIC_CHECK )
 		);
 	}
 

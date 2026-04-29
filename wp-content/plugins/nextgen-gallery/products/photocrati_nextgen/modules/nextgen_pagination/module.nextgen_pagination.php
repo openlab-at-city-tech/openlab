@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * NextGen pagination module.
+ */
 class M_NextGen_Pagination extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(

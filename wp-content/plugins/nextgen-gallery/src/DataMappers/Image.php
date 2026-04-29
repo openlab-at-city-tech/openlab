@@ -9,17 +9,47 @@ use Imagely\NGG\DataMapper\TableDriver;
 use Imagely\NGG\Display\I18N;
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Image data mapper class.
+ *
+ * Handles database operations for image entities, including CRUD operations
+ * and image-specific functionality.
+ */
 class Image extends TableDriver {
 
+	/**
+	 * Singleton instance of the Image mapper.
+	 *
+	 * @var Image|\Imagely\NGGPro\Commerce\DataMappers\Image|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * The model class this mapper handles.
+	 *
+	 * @var string
+	 */
 	public $model_class = 'Imagely\NGG\DataTypes\Image';
 
+	/**
+	 * The primary key column name.
+	 *
+	 * @var string
+	 */
 	public $primary_key_column = 'pid';
 
-	// Necessary for legacy compatibility.
+	/**
+	 * Custom post name for legacy compatibility.
+	 *
+	 * @var string
+	 */
 	public $custom_post_name = 'mixin_nextgen_table_extras';
 
+	/**
+	 * Constructor.
+	 *
+	 * Defines the database table structure and initializes the mapper.
+	 */
 	public function __construct() {
 		$this->define_column( 'alttext', 'TEXT' );
 		$this->define_column( 'description', 'TEXT' );
@@ -45,9 +75,11 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @return Image|\Imagely\NGGPro\Commerce\DataMappers\Image
+	 * Gets the singleton instance of the Image mapper.
+	 *
+	 * @return Image|\Imagely\NGGPro\Commerce\DataMappers\Image The Image mapper instance.
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( is_null( self::$instance ) ) {
 			$class          = apply_filters( 'ngg_datamapper_client_image', __CLASS__ );
 			self::$instance = new $class();
@@ -56,20 +88,28 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param int|ImageType $entity
-	 * @return ImageType
+	 * Finds an image by ID or entity.
+	 *
+	 * @param int|ImageType $entity The image ID or image entity to find.
+	 * @return ImageType The image entity.
 	 */
 	public function find( $entity ) {
-		/** @var ImageType $result */
+		/**
+		 * Image result.
+		 *
+		 * @var ImageType $result
+		 */
 		$result = parent::find( $entity );
 		return $result;
 	}
 
 	/**
-	 * @param GalleryType $gallery
-	 * @param bool        $model
+	 * Finds all images for a gallery.
 	 *
-	 * @return ImageType[]
+	 * @param GalleryType $gallery The gallery entity or gallery ID.
+	 * @param bool        $model   Whether to return model objects. Default true.
+	 *
+	 * @return ImageType[] Array of image entities.
 	 */
 	public function find_all_for_gallery( $gallery, $model = true ) {
 		$retval     = [];
@@ -95,6 +135,12 @@ class Image extends TableDriver {
 		return $retval;
 	}
 
+	/**
+	 * Reimports metadata for an image.
+	 *
+	 * @param int|ImageType $image_or_id The image ID or image entity.
+	 * @return mixed The result of the save operation.
+	 */
 	public function reimport_metadata( $image_or_id ) {
 		if ( is_int( $image_or_id ) ) {
 			$image = $this->find( $image_or_id );
@@ -112,8 +158,10 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param ImageType $image
-	 * @return bool
+	 * Gets the ID of an image entity.
+	 *
+	 * @param ImageType $image The image entity.
+	 * @return bool|int The image ID or false if not found.
 	 */
 	public function get_id( $image ) {
 		$retval = false;
@@ -136,8 +184,10 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param ImageType $entity
-	 * @return bool
+	 * Destroys an image entity.
+	 *
+	 * @param ImageType $entity The image entity to destroy.
+	 * @return bool True if the image was successfully destroyed, false otherwise.
 	 */
 	public function destroy( $entity ) {
 		$retval = parent::destroy( $entity );
@@ -154,8 +204,10 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param ImageType $entity
-	 * @return bool|TableDriver
+	 * Saves an image entity to the database.
+	 *
+	 * @param ImageType $entity The image entity to save.
+	 * @return bool|TableDriver The result of the save operation.
 	 */
 	public function save_entity( $entity ) {
 		$entity->updated_at = time();
@@ -174,13 +226,20 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param ImageType $entity
-	 * @return string
+	 * Gets the post title for an image entity.
+	 *
+	 * @param ImageType $entity The image entity.
+	 * @return string The post title (alttext).
 	 */
 	public function get_post_title( $entity ) {
 		return $entity->alttext;
 	}
 
+	/**
+	 * Sets default values for an image entity.
+	 *
+	 * @param ImageType $entity The image entity to set defaults for.
+	 */
 	public function set_defaults( $entity ) {
 		$this->set_default_value( $entity, 'post_id', 0 );
 		$this->set_default_value( $entity, 'exclude', 0 );
@@ -190,7 +249,7 @@ class Image extends TableDriver {
 		$this->set_default_value( $entity, 'alttext', '' );
 
 		if ( ( ! isset( $entity->imagedate ) ) || $entity->imagedate == '0000-00-00 00:00:00' ) {
-			$entity->imagedate = date( 'Y-m-d H:i:s' );
+			$entity->imagedate = current_time( 'mysql' );
 		}
 
 		// If a filename is set and no 'alttext' is set; then set the 'alttext' to the basename of the filename.
@@ -226,10 +285,12 @@ class Image extends TableDriver {
 	}
 
 	/**
-	 * @param string $value
-	 * @return mixed|null
-	 * @throws \Exception
-	 * @deprecated
+	 * Unserializes a value.
+	 *
+	 * @param string $value The serialized value to unserialize.
+	 * @return mixed|null The unserialized value or null on failure.
+	 * @throws \Exception When unserialization fails.
+	 * @deprecated This method is deprecated and should not be used.
 	 * @todo Remove this when the minimum Pro API level is 4.0 or higher.
 	 */
 	public function unserialize( string $value ) {

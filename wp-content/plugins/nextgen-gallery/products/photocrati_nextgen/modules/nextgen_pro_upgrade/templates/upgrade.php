@@ -1,5 +1,7 @@
 <?php
 /**
+ * Template for upgrade page.
+ *
  * @var stdClass $i18n
  * @var string $header_image_url
  * @var array $marketing_blocks
@@ -12,7 +14,7 @@
 		<img src="<?php print esc_attr( $header_image_url ); ?>"
 			alt=""/>
 		<h3>
-			<?php print $i18n->page_title; ?>
+			<?php print esc_html( $i18n->page_title ); ?>
 		</h3>
 	</div>
 
@@ -31,7 +33,11 @@
 		$blocks_per_column = 2;
 		$current           = 1;
 		foreach ( $marketing_blocks as $block ) {
-			/** @var C_Marketing_Block_Card $block */
+			/**
+			 * Marketing block card.
+			 *
+			 * @var C_Marketing_Block_Card $block
+			 */
 			?>
 
 			<!-- start new block -->
@@ -39,7 +45,10 @@
 				<div class="wp-block-columns">
 			<?php } ?>
 
-			<?php print $block->render(); ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $block->render() returns safe HTML for UI rendering
+			print $block->render();
+			?>
 
 			<?php if ( $current === $blocks_per_column ) { ?>
 				</div>

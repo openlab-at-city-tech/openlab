@@ -7,6 +7,12 @@
  * @author Alex Rabe
  */
 
+/**
+ * Legacy metadata handling class for NextGEN Gallery.
+ *
+ * Handles reading and processing of image metadata including EXIF, IPTC, and XMP data.
+ * This is the legacy version maintained for backward compatibility.
+ */
 class nggMeta {
 
 	/**** Image Data ****/
@@ -23,13 +29,13 @@ class nggMeta {
 	public $sanitize =   false;  // sanitize meta data on request
 
 	/**
-	 * Parses the nggMeta data only if needed
+	 * Parses the nggMeta data only if needed.
 	 *
-	 * @param object|int $image_or_id An image object or an image ID
-	 * @param bool       $onlyEXIF Parse only exif if needed
-	 * @return bool
+	 * @param object|int $image_or_id An image object or an image ID.
+	 * @param bool       $onlyEXIF Parse only EXIF if needed.
+	 * @return bool True if metadata was successfully parsed, false otherwise.
 	 */
-	function __construct( $image_or_id, $onlyEXIF = false ) {
+	public function __construct( $image_or_id, $onlyEXIF = false ) {
 		if (is_int( $image_or_id )) {
 			// get the path and other data about the image
 			$this->image = \Imagely\NGG\DataMappers\Image::get_instance()->find( $image_or_id );
@@ -43,11 +49,13 @@ class nggMeta {
 			return false;
 		}
 
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$this->size = @getimagesize( $imagePath, $metadata );
 
 		if ($this->size && is_array( $metadata )) {
 			// get exif data
 			if (is_callable( 'exif_read_data' ) && \Imagely\NGG\DataStorage\EXIFWriter::is_jpeg_file( $imagePath )) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$this->exif_data = @exif_read_data( $imagePath, null, true );
 			}
 
@@ -58,6 +66,7 @@ class nggMeta {
 
 			// get the iptc data - should be in APP13
 			if ( is_callable( 'iptcparse' ) && isset( $metadata['APP13'] ) ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$this->iptc_data = @iptcparse( $metadata['APP13'] );
 			}
 
@@ -73,13 +82,13 @@ class nggMeta {
 	}
 
 	/**
-	 * return the saved meta data from the database
+	 * Return the saved metadata from the database.
 	 *
 	 * @since 1.4.0
-	 * @param string $object (optional)
-	 * @return array|mixed return either the complete array or the single object
+	 * @param string|false $object Optional object key to get specific metadata.
+	 * @return array|mixed Return either the complete array or the single object.
 	 */
-	function get_saved_meta( $object = false ) {
+	public function get_saved_meta( $object = false ) {
 
 		$meta = $this->image->meta_data;
 
@@ -112,12 +121,15 @@ class nggMeta {
 	}
 
 	/**
-	 * nggMeta::get_EXIF()
+	 * Get EXIF data from the image.
+	 *
 	 * See also http://trac.wordpress.org/changeset/6313
 	 *
-	 * @return bool|array Structured EXIF data
+	 * @param string|false $object Optional object key to get specific EXIF data.
+	 * @return bool|array Returns EXIF array or false if no data available.
 	 */
-	function get_EXIF( $object = false ) {
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- EXIF is an acronym
+	public function get_EXIF( $object = false ) {
 
 		if ( !$this->exif_data ) {
 			return false;
@@ -220,8 +232,14 @@ class nggMeta {
 		return $this->exif_array;
 	}
 
-	// convert a fraction string to a decimal
-	function exif_frac2dec( $str ) {
+	/**
+	 * Convert a fraction string to a decimal.
+	 *
+	 * @param string $str Fraction string in format "numerator/denominator".
+	 * @return float|string Decimal value or original string if invalid.
+	 */
+	public function exif_frac2dec( $str ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		@list( $n, $d ) = explode( '/', $str );
 		if ( !empty( $d ) ) {
 			return $n / $d;
@@ -229,11 +247,19 @@ class nggMeta {
 		return $str;
 	}
 
-	// convert the exif date format to a unix timestamp
-	function exif_date2ts( $str ) {
+	/**
+	 * Convert the EXIF date format to a Unix timestamp.
+	 *
+	 * @param string $str Date string in EXIF format.
+	 * @return int|false Unix timestamp or false if conversion fails.
+	 */
+	public function exif_date2ts( $str ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$retval = is_numeric( $str ) ? $str : @strtotime( $str );
 		if (!$retval && $str) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@list( $date, $time ) = explode( ' ', trim( $str ) );
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@list( $y, $m, $d )   = explode( ':', $date );
 			$retval               =  strtotime( "{$y}-{$m}-{$d} {$time}" );
 
@@ -242,12 +268,13 @@ class nggMeta {
 	}
 
 	/**
-	 * nggMeta::readIPTC() - IPTC Data Information for EXIF Display
+	 * Get IPTC Data Information for EXIF display.
 	 *
-	 * @param mixed $object (optional)
-	 * @return null|bool|array
+	 * @param string|false $object Optional object key to get specific IPTC data.
+	 * @return null|bool|array Returns IPTC array, specific value, or false if no data.
 	 */
-	function get_IPTC( $object = false ) {
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- IPTC is an acronym
+	public function get_IPTC( $object = false ) {
 
 		if (!$this->iptc_data) {
 			return false;
@@ -301,18 +328,18 @@ class nggMeta {
 	}
 
 	/**
-	 * nggMeta::extract_XMP()
-	 * get XMP DATA
-	 * code by Pekka Saarinen http://photography-on-the.net
+	 * Get XMP data from image file.
 	 *
-	 * @param mixed $filename
-	 * @return bool|string XML data
+	 * Code by Pekka Saarinen http://photography-on-the.net
+	 *
+	 * @param string $filename Path to the image file.
+	 * @return bool|string XMP data string or false if not found.
 	 */
-	function extract_XMP( $filename ) {
+	public function extract_XMP( $filename ) {
 
 		// TODO:Require a lot of memory, could be better
 		ob_start();
-		@readfile( $filename );
+		@readfile( $filename ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile, WordPress.PHP.NoSilencedErrors.Discouraged
 		$source = ob_get_contents();
 		ob_end_clean();
 
@@ -330,13 +357,16 @@ class nggMeta {
 	}
 
 	/**
-	 * nggMeta::get_XMP()
+	 * Get XMP metadata from the image.
 	 *
-	 * @package Taken from http://php.net/manual/en/function.xml-parse-into-struct.php
+	 * Taken from http://php.net/manual/en/function.xml-parse-into-struct.php
+	 *
 	 * @author Alf Marius Foss Olsen & Alex Rabe
-	 * @return bool|array|object XML Array or object
+	 * @param string|false $object Optional object key to get specific XMP data.
+	 * @return bool|array XMP data array or false if no data available.
 	 */
-	function get_XMP( $object = false ) {
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- XMP is an acronym
+	public function get_XMP( $object = false ) {
 
 		if (!$this->xmp_data) {
 			return false;
@@ -450,7 +480,15 @@ class nggMeta {
 		return $this->xmp_array;
 	}
 
-	function setArrayValue( &$array, $stack, $value ) {
+	/**
+	 * Set array value using a stack of keys.
+	 *
+	 * @param array $array Array to modify (passed by reference).
+	 * @param array $stack Stack of keys for nested array access.
+	 * @param mixed $value Value to set.
+	 * @return array The modified array.
+	 */
+	public function setArrayValue( &$array, $stack, $value ) {
 		if ($stack) {
 			$key = array_shift( $stack );
 			$this->setArrayValue( $array[$key], $stack, $value );
@@ -462,12 +500,12 @@ class nggMeta {
 	}
 
 	/**
-	 * nggMeta::get_META() - return a meta value form the available list
+	 * Return a meta value from the available list.
 	 *
-	 * @param string $object
-	 * @return mixed $value
+	 * @param string|false $object The meta key to retrieve.
+	 * @return mixed The meta value or false if not found.
 	 */
-	function get_META( $object = false ) {
+	public function get_META( $object = false ) {
 		if ($value = $this->get_saved_meta( $object )) {
 			return $value;
 		}
@@ -489,12 +527,12 @@ class nggMeta {
 	}
 
 	/**
-	 * nggMeta::i8n_name() -  localize the tag name
+	 * Localize the tag name.
 	 *
-	 * @param mixed $key
-	 * @return string Translated $key
+	 * @param string $key The tag name to translate.
+	 * @return string Translated tag name.
 	 */
-	function i18n_name( $key ) {
+	public function i18n_name( $key ) {
 
 		$tagnames = [
 			'aperture'          => __( 'Aperture', 'nggallery' ),
@@ -521,6 +559,7 @@ class nggMeta {
 			'last_modfied'      => __( 'Last modified', 'nggallery' ),
 			'location'          => __( 'Location', 'nggallery' ),
 			'make'              => __( 'Make', 'nggallery' ),
+			'Orientation'       => __( 'Orientation', 'nggallery' ),
 			'position'          => __( 'Author Position', 'nggallery' ),
 			'shutter_speed'     => __( 'Shutter speed', 'nggallery' ),
 			'source'            => __( 'Source', 'nggallery' ),
@@ -541,11 +580,11 @@ class nggMeta {
 	}
 
 	/**
-	 * Return the Timestamp from the image , if possible it's read from exif data
+	 * Return the timestamp from the image, if possible it's read from EXIF data.
 	 *
-	 * @return string
+	 * @return string MySQL formatted date string.
 	 */
-	function get_date_time() {
+	public function get_date_time() {
 		$date = $this->exif_date2ts( $this->get_META( 'created_timestamp' ) );
 		if (!$date) {
 			$image_path = \Imagely\NGG\DataStorage\Manager::get_instance()->get_backup_abspath( $this->image );
@@ -566,13 +605,14 @@ class nggMeta {
 	}
 
 	/**
-	 * This function return the most common metadata, via a filter we can add more
-	 * Reason : GD manipulation removes that options
+	 * This function returns the most common metadata, via a filter we can add more.
+	 *
+	 * Reason: GD manipulation removes these options.
 	 *
 	 * @since V1.4.0
-	 * @return bool|array
+	 * @return bool|array Array of common metadata or false if failed.
 	 */
-	function get_common_meta() {
+	public function get_common_meta() {
 		global $wpdb;
 
 		$meta = array(
@@ -588,6 +628,7 @@ class nggMeta {
 			'flash' => 0,
 			'title' => '',
 			'keywords' => '',
+			'Orientation' => 0,
 		);
 
 		$meta = apply_filters( 'ngg_read_image_metadata', $meta );
@@ -613,21 +654,21 @@ class nggMeta {
 	 *
 	 * @return void
 	 */
-	function sanitize() {
+	public function sanitize() {
 		$this->sanitize = true;
 	}
 
 	/**
-	 * Wrapper to utf8_encode() that avoids double encoding
+	 * Wrapper to utf8_encode() that avoids double encoding.
 	 *
 	 * Regex adapted from http://www.w3.org/International/questions/qa-forms-utf-8.en.php
 	 * to determine if the given string is already UTF-8. mb_detect_encoding() is not
-	 * always available and is limited in accuracy
+	 * always available and is limited in accuracy.
 	 *
-	 * @param string $str
-	 * @return string
+	 * @param string $str The string to encode.
+	 * @return string UTF-8 encoded string.
 	 */
-	function utf8_encode( $str ) {
+	public function utf8_encode( $str ) {
 		$is_utf8 = preg_match(
 			'%^(?:
               [\x09\x0A\x0D\x20-\x7E]            # ASCII

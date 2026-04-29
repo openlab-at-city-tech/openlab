@@ -1,10 +1,18 @@
 <?php
 
+/**
+ * Display type admin module.
+ */
 class M_DisplayType_Admin extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
-	function define(
+	public function define(
 		$id = 'pope-module',
 		$name = 'Pope Module',
 		$description = '',
@@ -25,7 +33,7 @@ class M_DisplayType_Admin extends C_Base_Module {
 		);
 	}
 
-	function initialize() {
+	public function initialize() {
 		parent::initialize();
 
 		if ( is_admin() ) {
@@ -40,7 +48,7 @@ class M_DisplayType_Admin extends C_Base_Module {
 		}
 	}
 
-	function _register_adapters() {
+	public function _register_adapters() {
 		if ( \Imagely\NGG\IGW\ATPManager::is_atp_url() || is_admin() ) {
 			$registry = C_Component_Registry::get_instance();
 			$registry->add_adapter( 'I_Form', 'A_NextGen_Basic_Template_Form' );
@@ -61,9 +69,10 @@ class M_DisplayType_Admin extends C_Base_Module {
 		add_action( 'init', [ $this, 'register_resources' ], 12 );
 	}
 
-	function register_resources() {
+	public function register_resources() {
 		$router = \Imagely\NGG\Util\Router::get_instance();
 
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'nextgen_gallery_display_settings',
 			$router->get_static_url( 'imagely-displaytype_admin#nextgen_gallery_display_settings.js' ),
@@ -79,7 +88,7 @@ class M_DisplayType_Admin extends C_Base_Module {
 		);
 	}
 
-	function get_type_list() {
+	public function get_type_list() {
 		return [
 			'A_Display_Settings_Controller'       => 'adapter.display_settings_controller.php',
 			'A_Display_Settings_Page'             => 'adapter.display_settings_page.php',

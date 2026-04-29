@@ -20,17 +20,45 @@ use Imagely\NGG\Util\Router;
 use Imagely\NGG\Util\Security;
 use Imagely\NGG\Util\URL;
 
+/**
+ * IGW controller.
+ */
 class Controller {
 
+	/**
+	 * Instances cache.
+	 *
+	 * @var array
+	 */
 	public static $_instances = [];
 
+	/**
+	 * Displayed gallery instance.
+	 *
+	 * @var object|null
+	 */
 	protected $displayed_gallery;
 
-	/** @var \C_NextGen_Admin_Page_Controller|null $parent */
+	/**
+	 * Parent controller instance.
+	 *
+	 * @var \C_NextGen_Admin_Page_Controller|null
+	 */
 	protected $parent = null;
 
+	/**
+	 * Attach to post scripts.
+	 *
+	 * @var array
+	 */
 	protected $attach_to_post_scripts = [];
-	protected $attach_to_post_styles  = [];
+
+	/**
+	 * Attach to post styles.
+	 *
+	 * @var array
+	 */
+	protected $attach_to_post_styles = [];
 
 	public function __construct() {
 		$this->parent = \C_NextGen_Admin_Page_Controller::get_instance();
@@ -45,7 +73,7 @@ class Controller {
 		}
 	}
 
-	static function get_instance( string $context = 'all' ): Controller {
+	public static function get_instance( string $context = 'all' ): Controller {
 		if ( ! isset( self::$_instances[ $context ] ) ) {
 			self::$_instances[ $context ] = new Controller( $context );
 		}
@@ -65,13 +93,14 @@ class Controller {
 		$mapper = DisplayedGalleryMapper::get_instance();
 
 		// Fetch the displayed gallery by ID.
-		if ( ( $id = $this->parent->param( 'id' ) ) ) {
+		$id = $this->parent->param( 'id' );
+		if ( $id ) {
 			$this->displayed_gallery = $mapper->find( $id );
 		} elseif ( isset( $_REQUEST['shortcode'] )
 					&& isset( $_REQUEST['nonce'] )
 					&& \wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'ngg_attach_to_post_iframe' ) ) {
 			// Fetch the displayed gallery by shortcode.
-			$shortcode = base64_decode( $_REQUEST['shortcode'] );
+			$shortcode = base64_decode( isset( $_REQUEST['shortcode'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['shortcode'] ) ) : '' );
 
 			// $shortcode lacks the opening and closing brackets but still begins with 'ngg ' or 'ngg_images ' which are not parameters.
 			$params = preg_replace( '/^(ngg|ngg_images) /i', '', $shortcode, 1 );
@@ -101,7 +130,9 @@ class Controller {
 
 		$wp_resources = $GLOBALS[ $type ];
 
-		if ( ( $index = array_search( $handle, $wp_resources->registered ) ) !== false ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$index = array_search( $handle, $wp_resources->registered );
+		if ( $index !== false ) {
 			$registered_script = $wp_resources->registered[ $index ];
 			if ( $registered_script->deps ) {
 				foreach ( $registered_script->deps as $dep ) {
@@ -242,6 +273,7 @@ class Controller {
 		$approved      = $this->get_igw_allowed_scripts();
 
 		foreach ( $current_queue as $handle ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $handle, $approved ) ) {
 				$new_queue[] = $handle;
 			}
@@ -258,6 +290,7 @@ class Controller {
 		$approved      = $this->get_igw_allowed_styles();
 
 		foreach ( $current_queue as $handle ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $handle, $approved ) ) {
 				$new_queue[] = $handle;
 			}
@@ -292,6 +325,7 @@ class Controller {
 
 		// Get the nextgen tags.
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$tags           = $wpdb->get_results(
 			"SELECT DISTINCT name AS 'id', name FROM {$wpdb->terms}
                         WHERE term_id IN (
@@ -345,6 +379,7 @@ class Controller {
 					$available = \C_Component_Registry::get_instance()->is_module_loaded( $display_type->name );
 					if ( ! $available
 						&& defined( 'NGG_PRO_ALBUMS' )
+						// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 						&& in_array( $display_type->name, [ \NGG_PRO_LIST_ALBUM, \NGG_PRO_GRID_ALBUM ] ) ) {
 						$available = true;
 					}
@@ -367,6 +402,7 @@ class Controller {
 
 		usort( $display_types, [ $this, '_display_type_list_sort' ] );
 
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script(
 			'ngg_display_tab',
 			StaticAssets::get_url( 'AttachToPost/display_tab.js', 'photocrati-attach_to_post#display_tab.js' ),
@@ -392,7 +428,7 @@ class Controller {
 				'display_type_priority_step'    => NGG_DISPLAY_PRIORITY_STEP,
 				// Nonce verification has already been performed by the methods that invoke this method.
 				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				'shortcode_ref'                 => isset( $_REQUEST['ref'] ) ? floatval( $_REQUEST['ref'] ) : null,
+				'shortcode_ref'                 => isset( $_REQUEST['ref'] ) ? floatval( sanitize_text_field( wp_unslash( $_REQUEST['ref'] ) ) ) : null,
 				'shortcode_defaults'            => [
 					'order_by'             => $settings->get( 'galSort' ),
 					'order_direction'      => $settings->get( 'galSortDir' ),
@@ -441,6 +477,7 @@ class Controller {
 		// Enqueue frame event publishing.
 		\wp_enqueue_script( 'frame_event_publisher' );
 
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script(
 			'ngg_tabs',
 			StaticAssets::get_url( 'AttachToPost/ngg_tabs.js', 'photocrati-attach_to_post#ngg_tabs.js' ),
@@ -458,6 +495,7 @@ class Controller {
 		\wp_enqueue_script( 'photocrati_ajax' );
 
 		// Enqueue logic for the Attach to Post interface as a whole.
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script(
 			'ngg_attach_to_post_js',
 			StaticAssets::get_url( 'AttachToPost/attach_to_post.js', 'photocrati-attach_to_post#attach_to_post.js' ),
@@ -491,10 +529,10 @@ class Controller {
 	/**
 	 * Renders the interface
 	 *
-	 * @param bool $return
+	 * @param bool $return_output
 	 * @return string
 	 */
-	public function index_action( $return = true ) {
+	public function index_action( $return_output = true ) {
 		$parent = \C_NextGen_Admin_Page_Controller::get_instance();
 		$parent->enqueue_backend_resources();
 		$parent->do_not_cache();
@@ -519,7 +557,7 @@ class Controller {
 			'photocrati-attach_to_post#attach_to_post'
 		);
 
-		return $view->render( $return );
+		return $view->render( $return_output );
 	}
 
 	/**
@@ -663,7 +701,7 @@ class Controller {
 		// Because it's such an important feature of NextGEN Gallery, we temporarily disable
 		// any memory limits.
 		if ( ! extension_loaded( 'suhosin' ) ) {
-			@ini_set( 'memory_limit', -1 );
+			wp_raise_memory_limit();
 		}
 
 		return [

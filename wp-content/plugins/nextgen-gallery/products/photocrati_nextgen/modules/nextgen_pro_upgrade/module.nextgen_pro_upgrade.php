@@ -1,13 +1,21 @@
 <?php
-/*
+/**
 {
 	Module: photocrati-nextgen_pro_upgrade,
 	Depends: { photocrati-nextgen_admin }
 }
-*/
+ */
 
+/**
+ * NextGen Pro Upgrade Module
+ */
 class M_NextGen_Pro_Upgrade extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(

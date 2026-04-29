@@ -1,10 +1,33 @@
 <?php
 
+/**
+ * Legacy Compatibility Module.
+ *
+ * Provides wrappers and compatibility shims for legacy code.
+ */
 class M_Legacy_Compat extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
-	function define(
+	/**
+	 * Defines the module.
+	 *
+	 * @param string $id          Module ID.
+	 * @param string $name        Module name.
+	 * @param string $description Module description.
+	 * @param string $version     Module version.
+	 * @param string $uri         Module URI.
+	 * @param string $author      Module author.
+	 * @param string $author_uri  Author URI.
+	 * @param bool   $context     Context flag.
+	 * @return void
+	 */
+	public function define(
 		$id = 'pope-module',
 		$name = 'Pope Module',
 		$description = '',
@@ -25,7 +48,12 @@ class M_Legacy_Compat extends C_Base_Module {
 		);
 	}
 
-	function _register_utilities() {
+	/**
+	 * Registers utilities.
+	 *
+	 * @return void
+	 */
+	public function _register_utilities() {
 		$registry = $this->get_registry();
 		$registry->add_utility( 'I_Display_Type_Controller', 'C_Display_Type_Controller' );
 		$registry->add_utility( 'I_Display_Type_Mapper', 'C_Display_Type_Mapper' );
@@ -34,10 +62,20 @@ class M_Legacy_Compat extends C_Base_Module {
 		$registry->add_utility( 'I_Router', 'C_Router_Wrapper' );
 	}
 
-	function _register_adapters() {
+	/**
+	 * Registers adapters.
+	 *
+	 * @return void
+	 */
+	public function _register_adapters() {
 		$this->get_registry()->add_adapter( 'I_Component_Factory', 'A_Gallery_Display_Factory' );
 	}
 
+	/**
+	 * Gets the type list.
+	 *
+	 * @return array Array of type mappings.
+	 */
 	public function get_type_list() {
 		return [
 			'A_Gallery_Display_Factory'            => 'adapter.gallery_display_factory.php',

@@ -4,12 +4,28 @@ namespace Imagely\NGG\DataTypes;
 
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 
+/**
+ * Legacy image collection data type.
+ */
 class LegacyImageCollection implements \ArrayAccess {
 
+	/**
+	 * Container array.
+	 *
+	 * @var array
+	 */
 	public $container = [];
+
+	/**
+	 * Galleries array.
+	 *
+	 * @var array
+	 */
 	public $galleries = [];
 
 	/**
+	 * Checks if an offset exists.
+	 *
 	 * @param $offset
 	 * @return bool
 	 */
@@ -19,6 +35,8 @@ class LegacyImageCollection implements \ArrayAccess {
 	}
 
 	/**
+	 * Gets the value at an offset.
+	 *
 	 * @param $offset
 	 * @return mixed|null
 	 */
@@ -28,6 +46,8 @@ class LegacyImageCollection implements \ArrayAccess {
 	}
 
 	/**
+	 * Sets the value at an offset.
+	 *
 	 * @param $offset
 	 * @param $value
 	 */
@@ -45,6 +65,8 @@ class LegacyImageCollection implements \ArrayAccess {
 	}
 
 	/**
+	 * Unsets the value at an offset.
+	 *
 	 * @param $offset
 	 * @return void
 	 */

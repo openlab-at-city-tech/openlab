@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * MVC module.
+ */
 class M_MVC extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(

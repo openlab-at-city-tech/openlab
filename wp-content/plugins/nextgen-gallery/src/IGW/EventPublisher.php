@@ -7,10 +7,23 @@ use Imagely\NGG\Display\StaticAssets;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Settings\GlobalSettings;
 
+/**
+ * Event publisher for IGW.
+ */
 class EventPublisher {
 
+	/**
+	 * Instance cache.
+	 *
+	 * @var EventPublisher|null
+	 */
 	protected static $instance = null;
 
+	/**
+	 * Setting name.
+	 *
+	 * @var string|null
+	 */
 	protected $setting_name = null;
 
 	public function __construct() {
@@ -48,8 +61,9 @@ class EventPublisher {
 	 * @param array $data
 	 * @return string
 	 */
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- false positive, no user input here
 	protected function encode( $data ) {
-		return \rawurlencode( \json_encode( $data ) );
+		return \rawurlencode( \wp_json_encode( $data ) );
 	}
 
 	/**
@@ -69,7 +83,7 @@ class EventPublisher {
 	 * @return array
 	 */
 	public function add_event( $data ) {
-		$id              = \md5( \serialize( $data ) );
+		$id              = \md5( \wp_json_encode( $data ) );
 		$data['context'] = 'attach_to_post';
 
 		$write_cookie = true;
@@ -78,7 +92,7 @@ class EventPublisher {
 		}
 
 		if ( $write_cookie ) {
-			\setrawcookie( $this->setting_name . '_' . $id, $this->encode( $data ), \time() + 10800, '/', \parse_url( \site_url(), PHP_URL_HOST ) );
+			\setrawcookie( $this->setting_name . '_' . $id, $this->encode( $data ), \time() + 10800, '/', \wp_parse_url( \site_url(), PHP_URL_HOST ) );
 		}
 
 		return $data;
@@ -91,15 +105,17 @@ class EventPublisher {
 	}
 
 	public function enqueue_script() {
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_enqueue_script( 'frame_event_publisher' );
 		wp_localize_script(
 			'frame_event_publisher',
 			'frame_event_publisher_domain',
-			[ parse_url( site_url(), PHP_URL_HOST ) ]
+			[ wp_parse_url( site_url(), PHP_URL_HOST ) ]
 		);
 	}
 
 	public function register_script() {
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'frame_event_publisher',
 			StaticAssets::get_url( 'IGW/frame_event_publisher.js', 'photocrati-frame_communication#frame_event_publisher.js' ),
@@ -110,7 +126,11 @@ class EventPublisher {
 
 	public function does_request_require_frame_communication(): bool {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		return ( strpos( $_SERVER['REQUEST_URI'], 'attach_to_post' ) !== false or ( isset( $_SERVER['HTTP_REFERER'] ) && strpos( $_SERVER['HTTP_REFERER'], 'attach_to_post' ) !== false ) or array_key_exists( 'attach_to_post', $_REQUEST ) );
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- $_SERVER['HTTP_REFERER'] is sanitized with wp_unslash on line 114
+		$http_referer = isset( $_SERVER['HTTP_REFERER'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_REFERER'] ) ) : '';
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only request parameter for routing
+		return ( strpos( $request_uri, 'attach_to_post' ) !== false || ( $http_referer !== '' && strpos( $http_referer, 'attach_to_post' ) !== false ) || array_key_exists( 'attach_to_post', $_REQUEST ) );
 	}
 
 	/**

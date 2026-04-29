@@ -3,7 +3,7 @@
 use Imagely\NGG\Admin\AMNotifications as Notifications;
 
 /**
- * nggAdminPanel - Admin Section for NextGEN Gallery
+ * Admin Section for NextGEN Gallery
  *
  * @package NextGEN Gallery
  * @author Alex Rabe
@@ -20,7 +20,9 @@ class nggAdminPanel {
 
 		// Add the admin menu.
 		add_action( 'admin_menu', [ $this, 'add_menu' ] );
-		add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ], 99 );
+		if ( self::show_legacy_settings() ) {
+			add_action( 'admin_bar_menu', [ $this, 'admin_bar_menu' ], 99 );
+		}
 		add_action( 'network_admin_menu', [ $this, 'add_network_admin_menu' ] );
 
 		// Add the script and style files.
@@ -35,6 +37,7 @@ class nggAdminPanel {
 	public function enqueue_progress_bars() {
 		// Enqueue the new Gritter-based progress bars.
 		wp_enqueue_style( 'ngg_progressbar' );
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_enqueue_script( 'ngg_progressbar' );
 	}
 
@@ -45,7 +48,7 @@ class nggAdminPanel {
 		// Nonce verification here is not necessary: this is a general router to methods that may or may not have their
 		// own authentication & nonce verification checks.
 		//
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
 		if ( isset( $_REQUEST['page'] ) && ! empty( $_POST ) ) {
 
 			$event = [
@@ -62,18 +65,15 @@ class nggAdminPanel {
 
 			// Do we have a list of galleries that are being affected?
 			if ( isset( $_REQUEST['doaction'] ) ) {
-				$event['gallery_ids'] = $_REQUEST['doaction'];
+				$event['gallery_ids'] = sanitize_text_field( wp_unslash( $_REQUEST['doaction'] ) );
+			} elseif ( isset( $_REQUEST['gid'] ) ) {
+				// Do we have a particular gallery id?
+				$event['gallery_id'] = sanitize_text_field( wp_unslash( $_REQUEST['gid'] ) );
+			} elseif ( isset( $_REQUEST['act_album'] ) ) {
+				// Do we have an album id?
+				$event['album_id'] = sanitize_text_field( wp_unslash( $_REQUEST['act_album'] ) );
 			}
-
-			// Do we have a particular gallery id?
-			elseif ( isset( $_REQUEST['gid'] ) ) {
-				$event['gallery_id'] = $_REQUEST['gid'];
-			}
-
-			// Do we have an album id?
-			elseif ( isset( $_REQUEST['act_album'] ) ) {
-				$event['album_id'] = $_REQUEST['act_album'];
-			}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
 
 			if ( strpos( $event['event'], '_' ) === 0 ) {
 				$event['event'] = substr( $event['event'], 1 );
@@ -83,31 +83,45 @@ class nggAdminPanel {
 		}
 
 		ob_start();
-	}
-
-	// integrate the menu.
+	}   // integrate the menu.
 	public function add_menu() {
 		$notifications = new Notifications();
 
 		// Notification count HTML to append to the menu.
 		$nav_append_count = '';
 		if ( absint( $notifications->get_count() ) > 0 ) {
-			$nav_append_count = "<span class='ngg-menu-notification-indicator update-plugins'>" . absint( $notifications->get_count() ) . "</span>";
+			$nav_append_count = "<span class='ngg-menu-notification-indicator update-plugins'>" . absint( $notifications->get_count() ) . '</span>';
 		}
 
-		add_menu_page(
-			__( 'NextGEN Gallery', 'nggallery' ),
-			_n( 'NextGEN Gallery', 'NextGen Galleries', 1, 'nggallery' ) . $nav_append_count,
-			'NextGEN Gallery overview',
-			NGGFOLDER,
-			[ $this, 'show_menu' ],
-			path_join( NGGALLERY_URLPATH, 'admin/images/imagely_icon.png' ),
-			11
-		);
-		add_submenu_page( NGGFOLDER, __( 'Overview', 'nggallery' ), __( 'Overview', 'nggallery' ), 'NextGEN Gallery overview', NGGFOLDER, [ &$this, 'show_menu' ] );
-		add_submenu_page( NGGFOLDER, __( 'Manage Galleries', 'nggallery' ), __( 'Manage Galleries', 'nggallery' ), 'NextGEN Manage gallery', 'nggallery-manage-gallery', [ &$this, 'show_menu' ] );
-		add_submenu_page( NGGFOLDER, _n( 'Manage Albums', 'Albums', 1, 'nggallery' ), _n( 'Manage Albums', 'Manage Albums', 1, 'nggallery' ), 'NextGEN Edit album', 'nggallery-manage-album', [ &$this, 'show_menu' ] );
-		add_submenu_page( NGGFOLDER, __( 'Manage Tags', 'nggallery' ), __( 'Manage Tags', 'nggallery' ), 'NextGEN Manage tags', 'nggallery-tags', [ &$this, 'show_menu' ] );
+		$show_old_settings = self::show_legacy_settings();
+		$name              = $show_old_settings ? NGGFOLDER : '';
+
+		if ( $show_old_settings ) {
+			add_menu_page(
+				__( 'NextGEN Gallery', 'nggallery' ),
+				_n( 'NextGEN Gallery', 'NextGen Galleries', 1, 'nggallery' ) . $nav_append_count,
+    // phpcs:ignore WordPress.WP.Capabilities.Unknown
+				'NextGEN Gallery overview',
+				NGGFOLDER,
+				[ $this, 'show_menu' ],
+				path_join( NGGALLERY_URLPATH, 'admin/images/imagely_icon.png' ),
+				11
+			);
+		}
+
+		// Legacy pages - hidden from menu but accessible via direct URL.
+		// Using empty string '' as parent creates hidden pages without PHP 8.1+ deprecation warnings.
+  // phpcs:ignore WordPress.WP.Capabilities.Unknown
+		add_submenu_page( $name, __( 'NextGEN Gallery Overview', 'nggallery' ), __( 'Overview', 'nggallery' ), 'NextGEN Gallery overview', NGGFOLDER, [ $this, 'show_menu' ] );
+  // phpcs:ignore WordPress.WP.Capabilities.Unknown
+		add_submenu_page( $name, __( 'Manage Galleries', 'nggallery' ), __( 'Manage Galleries', 'nggallery' ), 'NextGEN Manage gallery', 'nggallery-manage-gallery', [ $this, 'show_menu' ] );
+  // phpcs:ignore WordPress.WP.Capabilities.Unknown
+		add_submenu_page( $name, _n( 'Manage Albums', 'Albums', 1, 'nggallery' ), _n( 'Manage Albums', 'Manage Albums', 1, 'nggallery' ), 'NextGEN Edit album', 'nggallery-manage-album', [ $this, 'show_menu' ] );
+  // phpcs:ignore WordPress.WP.Capabilities.Unknown
+		add_submenu_page( $name, __( 'Manage Tags', 'nggallery' ), __( 'Manage Tags', 'nggallery' ), 'NextGEN Manage tags', 'nggallery-tags', [ $this, 'show_menu' ] );
+
+		// Set page title for hidden pages to avoid strip_tags() deprecation warning.
+		add_action( 'admin_head', [ $this, 'set_legacy_page_titles' ] );
 
 		// register the column fields.
 		$this->register_columns();
@@ -116,7 +130,9 @@ class nggAdminPanel {
 	// integrate the network menu.
 	public function add_network_admin_menu() {
 
+  // phpcs:ignore WordPress.WP.Capabilities.Unknown
 		add_menu_page( _n( 'Gallery', 'Galleries', 1, 'nggallery' ), _n( 'Gallery', 'Galleries', 1, 'nggallery' ), 'nggallery-wpmu', NGGFOLDER, [ &$this, 'show_network_settings' ], path_join( NGGALLERY_URLPATH, 'admin/images/imagely_icon.png' ) );
+  // phpcs:ignore WordPress.WP.Capabilities.Unknown
 		add_submenu_page( NGGFOLDER, __( 'Network settings', 'nggallery' ), __( 'Network settings', 'nggallery' ), 'nggallery-wpmu', NGGFOLDER, [ &$this, 'show_network_settings' ] );
 	}
 
@@ -129,6 +145,7 @@ class nggAdminPanel {
 	 */
 	public function admin_bar_menu() {
 		// If the current user can't write posts, this is all of no use, so let's not output an admin menu.
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
 		if ( ! current_user_can( 'NextGEN Gallery overview' ) ) {
 			return;
 		}
@@ -150,6 +167,7 @@ class nggAdminPanel {
 				'href'   => admin_url( 'admin.php?page=' . NGGFOLDER ),
 			]
 		);
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
 		if ( current_user_can( 'NextGEN Upload images' ) ) {
 			$wp_admin_bar->add_menu(
 				[
@@ -160,6 +178,7 @@ class nggAdminPanel {
 				]
 			);
 		}
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
 		if ( current_user_can( 'NextGEN Manage gallery' ) ) {
 			$wp_admin_bar->add_menu(
 				[
@@ -170,6 +189,7 @@ class nggAdminPanel {
 				]
 			);
 		}
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
 		if ( current_user_can( 'NextGEN Edit album' ) ) {
 			$wp_admin_bar->add_menu(
 				[
@@ -180,6 +200,7 @@ class nggAdminPanel {
 				]
 			);
 		}
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
 		if ( current_user_can( 'NextGEN Manage tags' ) ) {
 			$wp_admin_bar->add_menu(
 				[
@@ -209,7 +230,8 @@ class nggAdminPanel {
 		}
 
 		echo '<div id="ngg_page_content">';
-		switch ( $_GET['page'] ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
+		switch ( isset( $_GET['page'] ) ? $_GET['page'] : '' ) {
 			case 'nggallery-manage-gallery':
 				include_once __DIR__ . '/functions.php'; // admin functions.
 				include_once __DIR__ . '/manage.php';    // nggallery_admin_manage_gallery.
@@ -239,6 +261,7 @@ class nggAdminPanel {
 		global $wp_version;
 
 		// no need to go on if it's not a plugin page.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
 		if ( ! isset( $_GET['page'] ) ) {
 			return;
 		}
@@ -246,6 +269,7 @@ class nggAdminPanel {
 		// used to retrieve the uri of some module resources.
 		$router = \Imagely\NGG\Util\Router::get_instance();
 
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script( 'ngg-ajax', NGGALLERY_URLPATH . 'admin/js/ngg.ajax.js', [ 'jquery' ], NGG_SCRIPT_VERSION );
 		wp_localize_script(
 			'ngg-ajax',
@@ -261,12 +285,16 @@ class nggAdminPanel {
 				'failure'    => __( 'A failure occurred', 'nggallery' ),
 			]
 		);
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script( 'ngg-progressbar', NGGALLERY_URLPATH . 'admin/js/ngg.progressbar.js', [ 'jquery' ], NGG_SCRIPT_VERSION );
 
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_enqueue_script( 'wp-color-picker' );
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
 		switch ( $_GET['page'] ) {
 			case NGGFOLDER:
+				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 				wp_enqueue_script(
 					'ngg_overview',
 					\Imagely\NGG\Display\StaticAssets::get_url(
@@ -283,6 +311,7 @@ class nggAdminPanel {
 				wp_enqueue_script( 'ngg-progressbar' );
 				wp_enqueue_script( 'jquery-ui-dialog' );
 				wp_enqueue_script( 'jquery-ui-sortable' );
+				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 				wp_register_script(
 					'shutter',
 					\Imagely\NGG\Display\StaticAssets::get_url( 'Lightbox/shutter/shutter.js', 'photocrati-lightbox#shutter/shutter.js' ),
@@ -333,6 +362,7 @@ class nggAdminPanel {
 		wp_register_style( 'ngg-jqueryui', NGGALLERY_URLPATH . 'admin/css/jquery.ui.css', [], NGG_SCRIPT_VERSION, 'screen' );
 
 		// no need to go on if it's not a plugin page.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
 		if ( ! isset( $_GET['page'] ) ) {
 			return;
 		}
@@ -340,6 +370,7 @@ class nggAdminPanel {
 		// used to retrieve the uri of some module resources.
 		$router = \Imagely\NGG\Util\Router::get_instance();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
 		switch ( $_GET['page'] ) {
 			case NGGFOLDER:
 				wp_add_inline_style(
@@ -351,11 +382,14 @@ class nggAdminPanel {
 						)
 					)
 				);
+				// Fall through to enqueue nggadmin.
 			case 'nggallery-about':
 				wp_enqueue_style( 'nggadmin' );
 				break;
 			case 'nggallery-manage-gallery':
+				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 				wp_enqueue_script( 'jquery-ui-tooltip' );
+				// Fall through to enqueue theme and nggadmin.
 			case 'nggallery-roles':
 			case 'nggallery-manage-album':
 				$this->enqueue_jquery_ui_theme();
@@ -386,14 +420,17 @@ class nggAdminPanel {
 		// Nonce verification is not necessary here: we are inspecting the URL and manually setting attributes, not
 		// accepting any user input here.
 		//
-		// phpcs:disable WordPress.Security.NonceVerification.Missing
+		// phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
 		switch ( $screen->id ) {
 			case "{$i18n}_page_nggallery-manage-gallery":
 				// we would like to have screen option only at the manage images / gallery page.
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for routing
 				if ( ( isset( $_GET['mode'] ) && 'edit' === $_GET['mode'] ) || isset( $_POST['backToGallery'] ) ) {
-					$screen->base = $screen->id = 'nggallery-manage-images';
+					$screen->id   = 'nggallery-manage-images';
+					$screen->base = $screen->id;
 				} else {
-					$screen->base = $screen->id = 'nggallery-manage-gallery';
+					$screen->id   = 'nggallery-manage-gallery';
+					$screen->base = $screen->id;
 				}
 				break;
 		}
@@ -420,5 +457,41 @@ class nggAdminPanel {
 		include_once __DIR__ . '/manage-galleries.php';
 
 		$wp_list_table = new _NGG_Galleries_List_Table( 'nggallery-manage-gallery' );
+	}
+
+	/**
+	 * Set page titles for legacy hidden pages to avoid deprecation warnings.
+	 *
+	 * @since 3.0.0
+	 * @return void
+	 */
+	public function set_legacy_page_titles() {
+		global $title;
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! isset( $_GET['page'] ) ) {
+			return;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = sanitize_text_field( wp_unslash( $_GET['page'] ) );
+
+		// Set title based on page.
+		$page_titles = [
+			NGGFOLDER                  => __( 'NextGEN Gallery Overview', 'nggallery' ),
+			'nggallery-manage-gallery' => __( 'Manage Galleries', 'nggallery' ),
+			'nggallery-manage-album'   => _n( 'Manage Albums', 'Manage Albums', 1, 'nggallery' ),
+			'nggallery-tags'           => __( 'Manage Tags', 'nggallery' ),
+		];
+
+		if ( isset( $page_titles[ $page ] ) ) {
+			$title = $page_titles[ $page ];
+		}
+	}
+
+	public static function show_legacy_settings() {
+		// Get from main settings array instead of separate option
+		$settings = \Imagely\NGG\Settings\Settings::get_instance();
+		return filter_var( $settings->get( 'ngg_show_old_settings', false ), FILTER_VALIDATE_BOOLEAN );
 	}
 }

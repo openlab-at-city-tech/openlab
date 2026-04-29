@@ -1,8 +1,11 @@
 <?php
 /**
+ * Template for MailChimp opt-in notice.
+ *
  * @var array $i18n
  * @var string $dismiss_url
  */
+
 ?>
 <style>
 	#ngg_mailchimp_optin_parent {
@@ -43,10 +46,10 @@
 			class="">
 		<div id="ngg_mailchimp_optin_wrapper">
 			<h2>
-				<?php print $i18n['headline']; ?>
+				<?php print esc_html( $i18n['headline'] ); ?>
 			</h2>
 			<p>
-				<?php print $i18n['message']; ?>
+				<?php print wp_kses_post( $i18n['message'] ); ?>
 			</p>
 			<div class="ngg_mailchimp_optin_fields_wrapper">
 				<input type="email"
@@ -117,18 +120,18 @@
 
 			error: function(error) {
 				submit.disabled = false;
-				handleError('<?php print $i18n['connect_error']; ?>');
+				handleError('<?php print esc_js( $i18n['connect_error'] ); ?>');
 			},
 
 			success: function(result) {
 				if (result.result === "success") {
-					fetch('<?php print $dismiss_url; ?>', {
+					fetch('<?php print esc_js( $dismiss_url ); ?>', {
 						method: 'post',
 						cache: 'no-cache'
 					}).then(function(result) { return result.json(); }).then(function(data) {
 						if (data.success) {
 							response_wrapper.classList.remove('hidden');
-							response_message.innerHTML = '<?php print $i18n['confirmation']; ?>';
+							response_message.innerHTML = '<?php print esc_js( $i18n['confirmation'] ); ?>';
 							setTimeout(function() {
 								response_wrapper.classList.add('hidden');
 								notice.classList.add('hidden');

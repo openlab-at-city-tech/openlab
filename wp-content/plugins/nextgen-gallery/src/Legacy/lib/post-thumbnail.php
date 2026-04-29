@@ -9,7 +9,7 @@ class nggPostThumbnail {
 	/**
 	 * Main constructor - Add filter and action hooks
 	 */
-	function __construct() {
+	public function __construct() {
 
 		add_filter( 'admin_post_thumbnail_html', array( $this, 'admin_post_thumbnail' ), 10, 2 );
 		add_action( 'wp_ajax_ngg_set_post_thumbnail', array( $this, 'ajax_set_post_thumbnail' ) );
@@ -24,7 +24,7 @@ class nggPostThumbnail {
 	 * @param string $content
 	 * @return string html output
 	 */
-	function admin_post_thumbnail( $content, $post_id = null ) {
+	public function admin_post_thumbnail( $content, $post_id = null ) {
 		if ($post_id == null) {
 			global $post;
 
@@ -71,7 +71,7 @@ class nggPostThumbnail {
 	 * @param string|array $attr Optional. Query string or array of attributes.
 	 * @return string html output
 	 */
-	function ngg_post_thumbnail( $html, $post_id, $post_thumbnail_id, $size = 'post-thumbnail', $attr = '' ) {
+	public function ngg_post_thumbnail( $html, $post_id, $post_thumbnail_id, $size = 'post-thumbnail', $attr = '' ) {
 
 		global $post, $_wp_additional_image_sizes;
 
@@ -143,7 +143,7 @@ class nggPostThumbnail {
 	 *
 	 * @return void
 	 */
-	function ajax_set_post_thumbnail() {
+	public function ajax_set_post_thumbnail() {
 		// This function does the following:
 		// 1) Check if the user is logged in and has permission to edit the post
 		// 2) Get the thumbnail id from the POST request. The thumbnail id is actually the NGG image id
@@ -175,7 +175,8 @@ class nggPostThumbnail {
 			die( '1' );
 		}
 
-		if ( ( $attachment_id = StorageManager::get_instance()->set_post_thumbnail( $post_ID, $thumbnail_id, TRUE ) ) ) {
+		$attachment_id = StorageManager::get_instance()->set_post_thumbnail( $post_ID, $thumbnail_id, TRUE );
+		if ( $attachment_id ) {
 			die( strval( $attachment_id ) );
 		}
 		die( strval( 0 ) );
@@ -188,7 +189,7 @@ class nggPostThumbnail {
 	 * @param int $thumbnail_id ID of the image used for thumbnail
 	 * @return string html output
 	 */
-	function _wp_post_thumbnail_html( $thumbnail_id = null ) {
+	public function _wp_post_thumbnail_html( $thumbnail_id = null ) {
 
 		global $_wp_additional_image_sizes, $post_ID;
 
@@ -221,7 +222,7 @@ class nggPostThumbnail {
 			if ( !empty( $thumbnail_html ) ) {
 				$ajax_nonce = wp_create_nonce( "set_post_thumbnail-$post_ID" );
 				$content    = sprintf( $set_thumbnail_link, $thumbnail_html );
-				$content   .= '<p class="hide-if-no-js"><a href="#" id="remove-post-thumbnail" onclick="WPRemoveThumbnail(\'' . $ajax_nonce . '\');return false;">' . esc_html__( 'Remove featured image' ) . '</a></p>';
+				$content   .= '<p class="hide-if-no-js"><a href="#" id="remove-post-thumbnail" onclick="WPRemoveThumbnail(\'' . $ajax_nonce . '\');return false;">' . esc_html__( 'Remove featured image' , 'nggallery') . '</a></p>';
 			}
 		}
 

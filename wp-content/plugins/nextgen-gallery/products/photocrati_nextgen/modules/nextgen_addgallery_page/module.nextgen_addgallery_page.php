@@ -13,11 +13,19 @@ if ( ! defined( 'NGG_UPLOAD_TIMEOUT' ) ) {
 	define( 'NGG_UPLOAD_TIMEOUT', 40 );
 }
 
+/**
+ * NextGen add gallery page module.
+ */
 class M_NextGen_AddGallery_Page extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
-	function define(
+	public function define(
 		$id = 'pope-module',
 		$name = 'Pope Module',
 		$description = '',
@@ -38,7 +46,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 		);
 	}
 
-	function initialize() {
+	public function initialize() {
 		$forms    = \Imagely\NGG\Admin\FormManager::get_instance();
 		$settings = \Imagely\NGG\Settings\Settings::get_instance();
 		$forms->add_form( NGG_ADD_GALLERY_SLUG, 'upload_images' );
@@ -56,7 +64,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 		return class_exists( 'DOMDocument' );
 	}
 
-	function get_type_list() {
+	public function get_type_list() {
 		return [
 			'A_Import_Media_Library_Form'     => 'adapter.import_media_library_form.php',
 			'A_Import_Folder_Form'            => 'adapter.import_folder_form.php',
@@ -67,7 +75,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 		];
 	}
 
-	function _register_adapters() {
+	public function _register_adapters() {
 		// AJAX operations aren't admin requests.
 		$this->get_registry()->add_adapter( 'I_Ajax_Controller', 'A_NextGen_AddGallery_Ajax' );
 
@@ -82,7 +90,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 		}
 	}
 
-	function _register_hooks() {
+	public function _register_hooks() {
 		add_action( 'admin_init', [ $this, 'register_requirements' ] );
 		add_action( 'admin_init', [ $this, 'register_scripts' ] );
 	}
@@ -100,11 +108,12 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 			'add_gallery_upload_dir_permission',
 			'dirperms',
 			[ $this, 'check_upload_dir_permissions_requirement' ],
+			/* translators: %s: upload directory path */
 			[ 'message' => sprintf( __( 'Cannot write to %s: new galleries cannot be created', 'nggallery' ), $directory ) ]
 		);
 	}
 
-	function register_scripts() {
+	public function register_scripts() {
 		if ( is_admin() ) {
 			$router              = \Imagely\NGG\Util\Router::get_instance();
 			$add_gallery_page_id = 'photocrati-nextgen_addgallery_page';
@@ -115,6 +124,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 				NGG_SCRIPT_VERSION
 			);
 
+   // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_register_script(
 				'uppy',
 				$router->get_static_url( $add_gallery_page_id . '#uppy/uppy.min.js' ),
@@ -127,6 +137,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 				[],
 				'1.21.1'
 			);
+   // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_register_script(
 				'uppy_i18n',
 				$router->get_static_url( $add_gallery_page_id . '#uppy/i18n.min.js' ),
@@ -134,6 +145,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 				'1.21.1'
 			);
 
+   // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_register_script(
 				'toastify',
 				$router->get_static_url( $add_gallery_page_id . '#toastify.js' ),
@@ -147,6 +159,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 				'1.9.2'
 			);
 
+   // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_register_script(
 				'jquery.filetree',
 				$router->get_static_url( $add_gallery_page_id . '#jquery.filetree/jquery.filetree.js' ),
@@ -160,6 +173,7 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 				NGG_SCRIPT_VERSION
 			);
 
+   // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 			wp_register_script(
 				'nextgen_media_library_import-js',
 				$router->get_static_url( $add_gallery_page_id . '#media-library-import.js' ),

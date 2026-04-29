@@ -1,22 +1,26 @@
 <?php
 /**
+ * Template for two-columns marketing block.
+ *
  * @var C_Marketing_BLock_Two_Columns $block
  * @var string $link_text
- */ ?>
+ */
+
+?>
 <div class="ngg-marketing-block-two-columns">
 	<div class="wp-block-group has-background upsell" style="background-color:#fbfbfb">
 		<div class="wp-block-group__inner-container">
-			<h3><?php print $block->title; ?></h3>
+			<h3><?php print esc_html( $block->title ); ?></h3>
 			<?php
 			if ( is_array( $block->description ) ) {
 				foreach ( $block->description as $description ) {
 					?>
-					<p><?php print $description; ?></p>
+					<p><?php print wp_kses_post( $description ); ?></p>
 					<?php
 				}
 			} else {
 				?>
-				<p><?php print $block->description; ?></p>
+				<p><?php print wp_kses_post( $block->description ); ?></p>
 			<?php } ?>
 
 			<div class="wp-block-columns">
@@ -32,10 +36,10 @@
 									<?php if ( is_array( $link ) ) { ?>
 										<a href="<?php print esc_attr( $link['href'] ); ?>"
 											target="_blank"
-											rel="noreferrer noopener"><?php print $link['title']; ?></a>
+											rel="noreferrer noopener"><?php print esc_html( $link['title'] ); ?></a>
 										<?php
 									} else {
-										print $link;
+										print esc_html( $link );
 									}
 									?>
 								</li>
@@ -45,7 +49,7 @@
 				<?php } ?>
 			</div>
 
-			<p><?php print $block->footer; ?></p>
+			<p><?php print wp_kses_post( $block->footer ); ?></p>
 
 			<div class="wp-block-buttons">
 				<div class="wp-block-button">
@@ -53,7 +57,7 @@
 						href="<?php print esc_attr( $block->get_upgrade_link() ); ?>"
 						style="background-color: #9ebc1b; color:#ffffff"
 						target="_blank"
-						rel="noreferrer noopener"><?php print $link_text; ?></a>
+						rel="noreferrer noopener"><?php print esc_html( $link_text ); ?></a>
 				</div>
 			</div>
 		</div>

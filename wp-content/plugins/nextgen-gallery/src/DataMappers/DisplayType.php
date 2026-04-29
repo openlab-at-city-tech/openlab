@@ -5,12 +5,33 @@ namespace Imagely\NGG\DataMappers;
 use Imagely\NGG\DataMapper\WPPostDriver;
 use Imagely\NGG\DisplayType\ControllerFactory;
 
+/**
+ * DisplayType data mapper class.
+ *
+ * Handles database operations for display type entities, including CRUD operations
+ * and display type-specific functionality.
+ */
 class DisplayType extends WPPostDriver {
 
+	/**
+	 * Singleton instance of the DisplayType mapper.
+	 *
+	 * @var DisplayType|\Imagely\NGGPro\DataMappers\DisplayType|null
+	 */
 	public static $instance;
 
+	/**
+	 * The model class this mapper handles.
+	 *
+	 * @var string
+	 */
 	public $model_class = 'Imagely\NGG\DataTypes\DisplayType';
 
+	/**
+	 * Constructor.
+	 *
+	 * Defines the database table structure and initializes the mapper.
+	 */
 	public function __construct() {
 		// Define columns.
 		$this->define_column( 'ID', 'BIGINT', 0 );
@@ -28,7 +49,9 @@ class DisplayType extends WPPostDriver {
 	}
 
 	/**
-	 * @return DisplayType|\Imagely\NGGPro\DataMappers\DisplayType
+	 * Gets the singleton instance of the DisplayType mapper.
+	 *
+	 * @return DisplayType|\Imagely\NGGPro\DataMappers\DisplayType The DisplayType mapper instance.
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
@@ -39,8 +62,10 @@ class DisplayType extends WPPostDriver {
 	}
 
 	/**
-	 * @param string $name
-	 * @return null|\Imagely\NGG\DataTypes\DisplayType
+	 * Finds a display type by its name.
+	 *
+	 * @param string $name The display type name to search for.
+	 * @return null|\Imagely\NGG\DataTypes\DisplayType The display type entity or null if not found.
 	 */
 	public function find_by_name( $name ) {
 		$retval = null;
@@ -51,6 +76,7 @@ class DisplayType extends WPPostDriver {
 
 		if ( ! $results ) {
 			foreach ( $this->find_all() as $entity ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( $entity->name == $name || ( isset( $entity->aliases ) && is_array( $entity->aliases ) && in_array( $name, $entity->aliases ) ) ) {
 					$retval = $entity;
 					break;
@@ -64,8 +90,10 @@ class DisplayType extends WPPostDriver {
 	}
 
 	/**
-	 * @param string|array $entity_type e.g. image, gallery, album
-	 * @return null|\Imagely\NGG\DataTypes\DisplayType[]
+	 * Finds display types by entity type.
+	 *
+	 * @param string|array $entity_type The entity type(s) to search for, e.g. image, gallery, album.
+	 * @return null|\Imagely\NGG\DataTypes\DisplayType[] Array of display types or null if none found.
 	 */
 	public function find_by_entity_type( $entity_type ) {
 		$find_entity_types = is_array( $entity_type ) ? $entity_type : [ $entity_type ];
@@ -73,6 +101,7 @@ class DisplayType extends WPPostDriver {
 		$retval = null;
 		foreach ( $this->find_all() as $display_type ) {
 			foreach ( $find_entity_types as $entity_type ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( isset( $display_type->entity_types ) && in_array( $entity_type, $display_type->entity_types ) ) {
 					$retval[] = $display_type;
 					break;
@@ -84,15 +113,19 @@ class DisplayType extends WPPostDriver {
 	}
 
 	/**
-	 * @param \Imagely\NGG\DataTypes\DisplayType $entity
-	 * @return string
+	 * Gets the post title for a display type entity.
+	 *
+	 * @param \Imagely\NGG\DataTypes\DisplayType $entity The display type entity.
+	 * @return string The post title.
 	 */
 	public function get_post_title( $entity ) {
 		return $entity->title;
 	}
 
 	/**
-	 * @param \Imagely\NGG\DataTypes\DisplayType $entity
+	 * Sets default values for a display type entity.
+	 *
+	 * @param \Imagely\NGG\DataTypes\DisplayType $entity The display type entity to set defaults for.
 	 */
 	public function set_defaults( $entity ) {
 		if ( ! isset( $entity->settings ) ) {
@@ -106,10 +139,6 @@ class DisplayType extends WPPostDriver {
 		$this->set_default_value( $entity, 'preview_image_relpath', '' );
 		$this->set_default_value( $entity, 'settings', 'use_lightbox_effect', true );
 		$this->set_default_value( $entity, 'view_order', NGG_DISPLAY_PRIORITY_BASE );
-
-		if ( \C_NextGEN_Bootstrap::get_pro_api_version() < 4.0 ) {
-			$this->set_default_value( $entity, 'settings', 'is_ecommerce_enabled', false );
-		}
 
 		// Ensure that no display settings are ever missing if the controller provides defaults.
 		if ( ControllerFactory::has_controller( $entity->name ) ) {

@@ -1,0 +1,28 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "imagely/main-block",
+	"title": "Imagely",
+	"category": "media",
+	"description": "Insert an Imagely Gallery or Album using the simplified shortcode.",
+	"keywords": ["gallery", "album", "images", "nextgen", "imagely"],
+	"textdomain": "nggallery",
+	"attributes": {
+		"content": {
+			"type": "string",
+			"source": "html"
+		}
+	},
+	"supports": {
+		"className": false,
+		"customClassName": false,
+		"html": false,
+		"reusable": true,
+		"inserter": true
+	},
+	"example": {
+		"attributes": {
+			"content": "[imagely id=\"1\"]"
+		}
+	}
+}

@@ -11,7 +11,7 @@ class nggTags {
 	/**
 	 * Copy tags
 	 */
-	static function copy_tags( $src_pid, $dest_pid ) {
+	public static function copy_tags( $src_pid, $dest_pid ) {
 		$tags = wp_get_object_terms( $src_pid, 'ngg_tag', 'fields=ids' );
 		$tags = array_map( 'intval', $tags );
 		wp_set_object_terms( $dest_pid, $tags, 'ngg_tag', true );
@@ -22,7 +22,7 @@ class nggTags {
 	/**
 	 * Rename tags
 	 */
-	static function rename_tags( $old = '', $new = '' ) {
+	public static function rename_tags( $old = '', $new = '' ) {
 
 		$return_value = array(
 			'status' => 'ok',
@@ -152,7 +152,7 @@ class nggTags {
 	/**
 	 * Delete tags
 	 */
-	static function delete_tags( $delete ) {
+	public static function delete_tags( $delete ) {
 		$return_value = array(
 			'status' => 'ok',
 			'message' => '',
@@ -195,7 +195,7 @@ class nggTags {
 	/**
 	 * Edit tag slug given the name of the tag
 	 */
-	static function edit_tag_slug( $names = '', $slugs = '' ) {
+	public static function edit_tag_slug( $names = '', $slugs = '' ) {
 		$return_value = array(
 			'status' => 'ok',
 			'message' => '',
@@ -243,6 +243,7 @@ class nggTags {
 		if ( $counter == 0  ) {
 			$return_value['message'] = __( 'No slug edited.', 'nggallery' );
 		} else {
+			/* translators: %s: number of slugs edited */
 			$return_value['message'] = sprintf( __( '%s slug(s) edited.', 'nggallery' ), $counter );
 		}
 
@@ -252,14 +253,14 @@ class nggTags {
 	/**
 	 * Get a list of the tags used by the images
 	 */
-	static function find_all_tags() {
+	public static function find_all_tags() {
 		return get_terms( 'ngg_tag', '' );
 	}
 
 	/**
 	 *
 	 */
-	static function find_tags( $args = '', $skip_cache = false ) {
+	public static function find_tags( $args = '', $skip_cache = false ) {
 		$taxonomy = 'ngg_tag';
 
 		if ( $skip_cache == true ) {
@@ -300,7 +301,7 @@ class nggTags {
 	 *
 	 * @return array of images
 	 */
-	static function find_images_for_tags( $taglist, $mode = "ASC" ) {
+	public static function find_images_for_tags( $taglist, $mode = "ASC" ) {
 		// return the images based on the tag
 		global $wpdb;
 
@@ -319,6 +320,7 @@ class nggTags {
 		$sluglist = str_replace( "%", "%%", $sluglist );
 
 		// first get all $term_ids with this tag
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$term_ids = $wpdb->get_col( $wpdb->prepare( "SELECT term_id FROM $wpdb->terms WHERE slug IN (%s) ORDER BY term_id ASC ", $sluglist ) );
 		$picids   = get_objects_in_term( $term_ids, 'ngg_tag' );
 

@@ -1,4 +1,7 @@
 <?php
+/**
+ * NextGEN Gallery WordPress Multisite Setup
+ */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -35,7 +38,7 @@ function nggallery_wpmu_setup() {
 		}
 
 		if ( isset( $_POST['gallerypath'] ) ) {
-			$new_gallerypath = trailingslashit( $_POST['gallerypath'] );
+			$new_gallerypath = trailingslashit( sanitize_text_field( wp_unslash( $_POST['gallerypath'] ) ) );
 			$fs              = \Imagely\NGG\Util\Filesystem::get_instance();
 			$root            = $fs->get_document_root( 'galleries' );
 			if ( $root[0] != DIRECTORY_SEPARATOR ) {
@@ -49,6 +52,7 @@ function nggallery_wpmu_setup() {
 			}
 
 			if ( strpos( $gallery_abspath, $root ) === false ) {
+				/* translators: %s: root directory path */
 				$messagetext[] = sprintf( __( 'Gallery path must be located in %s.', 'nggallery' ), $root );
 			} elseif ( preg_match( '\.+[/\\]', $new_gallerypath ) ) {
 				$messagetext[] = __( 'Gallery path cannot include relative paths.', 'nggallery' );
@@ -77,9 +81,12 @@ function nggallery_wpmu_setup() {
 			<table class="form-table">
 				<tr valign="top">
 					<th align="left"><?php esc_html_e( 'Gallery path', 'nggallery' ); ?></th>
-					<td><input type="text" size="50" name="gallerypath" value="<?php echo $ngg_options->get( 'gallerypath' ); ?>" /><br />
+					<td><input type="text" size="50" name="gallerypath" value="<?php echo esc_attr( $ngg_options->get( 'gallerypath' ) ); ?>" /><br />
 				<?php esc_html_e( 'This is the default path for all blogs. With the placeholder %BLOG_ID% you can organize the folder structure better.', 'nggallery' ); ?>
-				<?php echo str_replace( '%s', '<code>wp-content/uploads/sites/%BLOG_ID%/nggallery/</code>', __( 'The default setting should be %s', 'nggallery' ) ); ?>
+				<?php
+				/* translators: %s: default gallery path */
+				echo wp_kses_post( str_replace( '%s', '<code>wp-content/uploads/sites/%BLOG_ID%/nggallery/</code>', __( 'The default setting should be %s', 'nggallery' ) ) );
+				?>
 					</td>
 				</tr>
 				<tr>

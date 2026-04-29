@@ -7,12 +7,30 @@ namespace Imagely\NGG\Util;
  */
 class Transient {
 
-	private $_groups          = [];
+	/**
+	 * Groups array.
+	 *
+	 * @var array
+	 */
+	private $_groups = [];
+
+	/**
+	 * Instance cache.
+	 *
+	 * @var Transient|null
+	 */
 	private static $_instance = null;
 
+	/**
+	 * Tracker array.
+	 *
+	 * @var array
+	 */
 	protected $_tracker;
 
 	/**
+	 * Gets the singleton instance.
+	 *
 	 * @return Transient
 	 */
 	public static function get_instance() {
@@ -72,8 +90,8 @@ class Transient {
 		$groups  = is_array( $group_or_groups ) ? $group_or_groups : [ $group_or_groups ];
 
 		// Initialize the groups array if it doesn't exist or is not an array.
-		//  If the 'ngg_transient_groups' option is set and is not an array, this could cause fatal error.
-		if( !is_array( $this->_groups ) ) {
+		// If the 'ngg_transient_groups' option is set and is not an array, this could cause fatal error.
+		if ( ! is_array( $this->_groups ) ) {
 			$this->_groups = [];
 		}
 
@@ -106,7 +124,8 @@ class Transient {
 
 		if ( is_array( $params ) ) {
 			foreach ( $params as &$param ) {
-				$param = @json_encode( $param );
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$param = @wp_json_encode( $param );
 			}
 			$params = implode( '', $params );
 		}
@@ -114,8 +133,8 @@ class Transient {
 		return $this->get_group_id( $group ) . '__' . str_replace( '-', '_', crc32( $params ) );
 	}
 
-	public function get( $key, $default = null, $lookup = null ) {
-		$retval = $default;
+	public function get( $key, $default_value = null, $lookup = null ) {
+		$retval = $default_value;
 
 		if ( is_null( $lookup ) && defined( 'PHOTOCRATI_CACHE' ) ) {
 			$lookup = PHOTOCRATI_CACHE;
@@ -127,7 +146,7 @@ class Transient {
 				$retval = (array) $retval;
 			}
 			if ( is_null( $retval ) ) {
-				$retval = $default;
+				$retval = $default_value;
 			}
 		}
 
@@ -144,6 +163,7 @@ class Transient {
 			if ( ! isset( $this->_tracker[ $group ] ) ) {
 				$this->_tracker[ $group ] = [];
 			}
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $id, $this->_tracker[ $group ] ) ) {
 				$this->_tracker[ $group ][] = $id;
 			}
@@ -163,7 +183,7 @@ class Transient {
 		}
 
 		if ( $enabled ) {
-			$retval = set_transient( $key, json_encode( $value ), $ttl );
+			$retval = set_transient( $key, wp_json_encode( $value ), $ttl );
 			if ( $retval ) {
 				$this->_track_key( $key );
 			}
@@ -213,7 +233,7 @@ class Transient {
 
 			// This is a false positive.
 			//
-			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$wpdb->query( $wpdb->prepare( $sql, $params ) );
 
 			// Clear transients for the main site of a multisite network.
@@ -238,7 +258,7 @@ class Transient {
 
 				// This is a false positive.
 				//
-				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$wpdb->query( $wpdb->prepare( $sql, $params ) );
 			}
 
@@ -256,8 +276,8 @@ class Transient {
 		return self::get_instance()->set( $key, $value, $ttl );
 	}
 
-	public static function fetch( $key, $default = null ) {
-		return self::get_instance()->get( $key, $default );
+	public static function fetch( $key, $default_value = null ) {
+		return self::get_instance()->get( $key, $default_value );
 	}
 
 	public static function flush( $group = null ) {

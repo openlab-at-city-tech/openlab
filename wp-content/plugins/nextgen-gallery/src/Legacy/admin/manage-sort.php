@@ -1,10 +1,13 @@
 <?php
-
 /**
+ * Legacy admin sort management.
+ *
  * @author Alex Rabe
  */
 
 /**
+ * Sorts gallery images by order.
+ *
  * @param int $galleryID
  */
 function nggallery_sortorder( $galleryID = 0 ) {
@@ -26,7 +29,7 @@ function nggallery_sortorder( $galleryID = 0 ) {
 
 		// get variable new sortorder.
 		if ( ! empty( $_POST['sortorder'] ) ) {
-			$sortArray = explode( ',', $_POST['sortorder'] );
+			$sortArray = explode( ',', sanitize_text_field( wp_unslash( $_POST['sortorder'] ) ) );
 		}
 
 		if ( is_array( $sortArray ) ) {
@@ -39,6 +42,7 @@ function nggallery_sortorder( $galleryID = 0 ) {
 			$sortindex = 1;
 
 			foreach ( $neworder as $pic_id ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$wpdb->query(
 					$wpdb->prepare(
 						"UPDATE `{$wpdb->nggpictures}` SET `sortorder` = %s WHERE `pid` = %d",
@@ -60,11 +64,12 @@ function nggallery_sortorder( $galleryID = 0 ) {
 	}
 
 	// look for presort args.
-	$presort   = isset( $_GET['presort'] ) ? $_GET['presort'] : false;
-	$dir       = ( isset( $_GET['dir'] ) && $_GET['dir'] == 'DESC' ) ? 'DESC' : 'ASC';
+	$presort   = isset( $_GET['presort'] ) ? sanitize_text_field( wp_unslash( $_GET['presort'] ) ) : false;
+	$dir       = ( isset( $_GET['dir'] ) && sanitize_text_field( wp_unslash( $_GET['dir'] ) ) == 'DESC' ) ? 'DESC' : 'ASC';
 	$sortitems = [ 'pid', 'filename', 'alttext', 'imagedate' ];
 
 	// ensure that nobody added some evil sorting :-).
+	// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 	if ( in_array( $presort, $sortitems ) ) {
 		$picturelist = $nggdb->get_gallery( $galleryID, $presort, $dir, false );
 	} else {
@@ -79,7 +84,7 @@ function nggallery_sortorder( $galleryID = 0 ) {
 
 	// In the case somebody presort, then we take this url.
 	if ( isset( $_GET['dir'] ) || isset( $_GET['presort'] ) ) {
-		$base_url = $_SERVER['REQUEST_URI'];
+		$base_url = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 	} else {
 		$base_url = $clean_url;
 	}
@@ -123,7 +128,7 @@ function nggallery_sortorder( $galleryID = 0 ) {
 	<?php if ( $action_status['message'] != '' ) { ?>
 		<div id="message"
 			class="<?php echo esc_attr( ( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ) ); ?> fade">
-			<p><strong><?php print $action_status['message']; ?></strong></p>
+			<p><strong><?php echo esc_html( $action_status['message'] ); ?></strong></p>
 		</div>
 	<?php } ?>
 
@@ -136,7 +141,7 @@ function nggallery_sortorder( $galleryID = 0 ) {
 
 			<form id="sortGallery"
 					method="POST"
-					action="<?php print $clean_url; ?>" accept-charset="utf-8">
+					action="<?php echo esc_url( $clean_url ); ?>" accept-charset="utf-8">
 
 				<div class="tablenav">
 					<div class="alignleft actions">
@@ -144,10 +149,15 @@ function nggallery_sortorder( $galleryID = 0 ) {
 						<input class="button-primary action"
 								type="submit"
 								name="updateSortorder"
-								value="<?php print __( 'Update Sort Order', 'nggallery' ); ?>"/>
+								value="<?php echo esc_attr( __( 'Update Sort Order', 'nggallery' ) ); ?>"/>
 					</div>
 					<div class="alignright actions">
-						<a href="<?php print \Imagely\NGG\Util\Router::esc_url( $back_url ); ?>"
+						<a href="
+						<?php
+						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- \Imagely\NGG\Util\Router::esc_url() provides safe URL escaping
+						print \Imagely\NGG\Util\Router::esc_url( $back_url );
+						?>
+						"
 							class="button-primary">
 							<?php esc_html_e( 'Back to gallery', 'nggallery' ); ?>
 						</a>
@@ -212,10 +222,15 @@ function nggallery_sortorder( $galleryID = 0 ) {
 						<div class="imageBox"
 							id="pid-<?php print esc_attr( $picture->pid ); ?>">
 							<div class="imageBox_theImage"
-								style="background-image:url('<?php print \Imagely\NGG\Util\Router::esc_url( $picture->thumbURL ); ?>')">
+								style="background-image:url('
+								<?php
+								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- \Imagely\NGG\Util\Router::esc_url() provides safe URL escaping
+								print \Imagely\NGG\Util\Router::esc_url( $picture->thumbURL );
+								?>
+								')">
 							</div>
 							<div class="imageBox_label">
-								<span><?php print esc_html( stripslashes( $picture->alttext ) ); ?></span>
+								<span><?php print esc_html( stripslashes( $picture->alttext ?? '' ) ); ?></span>
 							</div>
 						</div>
 						<?php

@@ -19,6 +19,8 @@ class A_Custom_Lightbox_Form extends Mixin
         return ['lightbox_library_code', 'lightbox_library_styles', 'lightbox_library_scripts'];
     }
     /**
+     * Renders the lightbox library code field.
+     *
      * @param $lightbox
      * @return mixed
      */
@@ -27,6 +29,8 @@ class A_Custom_Lightbox_Form extends Mixin
         return $this->_render_text_field($lightbox, 'code', __('Code', 'nggallery'), $lightbox->code);
     }
     /**
+     * Renders the lightbox library styles field.
+     *
      * @param $lightbox
      * @return mixed
      */
@@ -35,6 +39,8 @@ class A_Custom_Lightbox_Form extends Mixin
         return $this->_render_textarea_field($lightbox, 'styles', __('Stylesheet URL', 'nggallery'), implode("\n", $lightbox->styles));
     }
     /**
+     * Renders the lightbox library scripts field.
+     *
      * @param $lightbox
      * @return mixed
      */
@@ -61,7 +67,8 @@ class A_Custom_Lightbox_Form extends Mixin
     {
         $settings = \Imagely\NGG\Settings\Settings::get_instance();
         $modified = false;
-        if ($params = $this->param('custom_lightbox')) {
+        $params = $this->param('custom_lightbox');
+        if ($params) {
             if (array_key_exists('scripts', $params)) {
                 $settings->thumbEffectScripts = $this->_convert_to_urls($params['scripts']);
                 $modified = true;
@@ -132,8 +139,11 @@ class A_Image_Options_Form extends Mixin
         $gallerypath = $this->object->get_model()->get('gallerypath');
         $gallerypath = $fs->join_paths($fs->get_document_root('galleries'), $gallerypath);
         if (!@file_exists($gallerypath)) {
+            // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
             @mkdir($gallerypath);
+            // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.PHP.NoSilencedErrors.Discouraged
             return @file_exists($gallerypath);
+            // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
         }
         return true;
     }
@@ -159,6 +169,7 @@ class A_Image_Options_Form extends Mixin
                     $gallery_abspath = DIRECTORY_SEPARATOR . $gallery_abspath;
                 }
                 if (strpos($gallery_abspath, $root) === false) {
+                    /* translators: %s: root directory path */
                     $this->object->get_model()->add_error(sprintf(__('Gallery path must be located in %s', 'nggallery'), $root), 'gallerypath');
                     $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
                     $image_options['gallerypath'] = trailingslashit($storage->get_upload_relpath());
@@ -182,12 +193,14 @@ class A_Image_Options_Form extends Mixin
                         break;
                     case 'galSort':
                         $value = esc_html($value);
+                        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
                         if (!in_array(strtolower($value), array_values($this->_get_image_sorting_options()))) {
                             $value = 'sortorder';
                         }
                         break;
                     case 'galSortDir':
                         $value = esc_html($value);
+                        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
                         if (!in_array(strtoupper($value), ['ASC', 'DESC'])) {
                             $value = 'ASC';
                         }
@@ -215,6 +228,8 @@ class A_Image_Options_Form extends Mixin
         $retval = true;
         $dir = opendir($src);
         @mkdir($dst);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.PHP.NoSilencedErrors.Discouraged
+        // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
         while (false !== ($file = readdir($dir))) {
             if ($file != '.' && $file != '..') {
                 if (is_dir($src . '/' . $file)) {
@@ -241,6 +256,7 @@ class A_Image_Options_Form extends Mixin
     {
         $retval = false;
         $fp = opendir($dir);
+        // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
         while (false !== ($file = readdir($fp))) {
             if ($file != '.' && $file != '..') {
                 $file = $dir . '/' . $file;
@@ -248,16 +264,26 @@ class A_Image_Options_Form extends Mixin
                     $retval = $this->object->recursive_delete($file);
                 } else {
                     $retval = unlink($file);
+                    // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
                 }
             }
         }
         closedir($fp);
         @rmdir($dir);
+        // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.PHP.NoSilencedErrors.Discouraged
         return $retval;
     }
 }
+/**
+ * Lightbox manager form adapter.
+ */
 class A_Lightbox_Manager_Form extends Mixin
 {
+    /**
+     * Options slug.
+     *
+     * @var string
+     */
     protected $options_slug = 'ngg_lightbox_options';
     public function get_model()
     {
@@ -280,6 +306,7 @@ class A_Lightbox_Manager_Form extends Mixin
         // Highslide and jQuery.Lightbox were removed in 2.0.73 due to licensing. If a user has selected
         // either of those options we silently make their selection fallback to Fancybox.
         $selected = \Imagely\NGG\Display\LightboxManager::get_instance()->get_selected()->name;
+        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
         if (in_array($selected, ['highslide', 'lightbox'])) {
             $selected = 'fancybox';
         }
@@ -292,7 +319,8 @@ class A_Lightbox_Manager_Form extends Mixin
     {
         $settings = $this->get_model();
         // Ensure that a lightbox library was selected.
-        if ($id = $this->object->param('lightbox_library_id')) {
+        $id = $this->object->param('lightbox_library_id');
+        if ($id) {
             $lightboxes = \Imagely\NGG\Display\LightboxManager::get_instance();
             if (!$lightboxes->get($id)) {
                 $settings->add_error('Invalid lightbox effect selected');
@@ -301,7 +329,8 @@ class A_Lightbox_Manager_Form extends Mixin
             }
         }
         // Get thumb effect context.
-        if ($thumbEffectContext = $this->object->param('thumbEffectContext')) {
+        $thumbEffectContext = $this->object->param('thumbEffectContext');
+        if ($thumbEffectContext) {
             $settings->thumbEffectContext = $thumbEffectContext;
         }
         $settings->save();
@@ -316,6 +345,8 @@ class A_Lightbox_Manager_Form extends Mixin
     }
 }
 /**
+ * Miscellaneous form adapter.
+ *
  * @mixin C_Form
  * @property C_MVC_Controller $object
  * @adapts I_Form using "miscellaneous" context
@@ -348,8 +379,13 @@ class A_Miscellaneous_Form extends Mixin
     }
     public function save_action()
     {
-        /** @var array $settings */
-        if ($settings = $this->object->param('misc_settings')) {
+        /**
+         * Miscellaneous settings.
+         *
+         * @var array $settings
+         */
+        $settings = $this->object->param('misc_settings');
+        if ($settings) {
             // The Media RSS setting is actually a local setting, not a global one.
             $local_settings = \Imagely\NGG\Settings\Settings::get_instance();
             $local_settings->set('useMediaRSS', intval($settings['useMediaRSS']));
@@ -387,6 +423,7 @@ class A_Other_Options_Controller extends Mixin
     public function enqueue_backend_resources()
     {
         $this->call_parent('enqueue_backend_resources');
+        // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
         wp_enqueue_script('nextgen_settings_page', $this->get_static_url('photocrati-nextgen_other_options#nextgen_settings_page.js'), ['jquery-ui-accordion', 'jquery-ui-tooltip', 'wp-color-picker', 'jquery.nextgen_radio_toggle'], NGG_SCRIPT_VERSION);
         wp_enqueue_style('nextgen_settings_page', $this->get_static_url('photocrati-nextgen_other_options#nextgen_settings_page.css'), [], NGG_SCRIPT_VERSION);
     }
@@ -400,31 +437,37 @@ class A_Other_Options_Controller extends Mixin
     }
 }
 /**
+ * Other options miscellaneous tab AJAX adapter.
+ *
  * @property A_Other_Options_Misc_Tab_Ajax $object
  */
 class A_Other_Options_Misc_Tab_Ajax extends Mixin
 {
     public function get_legacy_featured_images_count_action()
     {
-        if (!current_user_can('administrator')) {
+        if (!current_user_can('manage_options')) {
             return ['error' => __('This request requires an authenticated administrator', 'nggallery')];
         }
-        if (!wp_verify_nonce($_REQUEST['nonce'], 'ngg_update_legacy_featured_images')) {
+        if (!isset($_REQUEST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['nonce'])), 'ngg_update_legacy_featured_images')) {
             return ['error' => __('Permission denied', 'nggallery')];
         }
         global $wpdb;
-        return ['remaining' => (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(`post_id`)\n                            FROM  `%s`\n                            WHERE `meta_key` = '_thumbnail_id'\n                            AND   `meta_value` LIKE %s", [$wpdb->postmeta, 'ngg-%']))];
+        return [
+            // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+            'remaining' => (int) $wpdb->get_var($wpdb->prepare("SELECT COUNT(`post_id`)\n                            FROM  `{$wpdb->postmeta}`\n                            WHERE `meta_key` = '_thumbnail_id'\n                            AND   `meta_value` LIKE %s", 'ngg-%')),
+        ];
     }
     public function update_legacy_featured_images_action()
     {
-        if (!current_user_can('administrator')) {
+        if (!current_user_can('manage_options')) {
             return ['error' => __('This request requires an authenticated administrator', 'nggallery')];
         }
-        if (!wp_verify_nonce($_REQUEST['nonce'], 'ngg_update_legacy_featured_images')) {
+        if (!isset($_REQUEST['nonce']) || !wp_verify_nonce(sanitize_text_field(wp_unslash($_REQUEST['nonce'])), 'ngg_update_legacy_featured_images')) {
             return ['error' => __('Permission denied', 'nggallery')];
         }
         global $wpdb;
-        $results = $wpdb->get_results($wpdb->prepare("SELECT `post_id`, `meta_value`\n                    FROM   `%s`\n                    WHERE  `meta_key` = '_thumbnail_id'\n                    AND    `meta_value` LIKE %s\n                    LIMIT  1", [$wpdb->postmeta, 'ngg-%']));
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+        $results = $wpdb->get_results($wpdb->prepare("SELECT `post_id`, `meta_value`\n                    FROM   `{$wpdb->postmeta}`\n                    WHERE  `meta_key` = '_thumbnail_id'\n                    AND    `meta_value` LIKE %s\n                    LIMIT  1", 'ngg-%'));
         $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
         // There's only at most one entry in $results.
         foreach ($results as $post) {
@@ -484,22 +527,15 @@ class A_Reset_Form extends Mixin
         // Some installations of NextGen that upgraded from 1.9x to 2.0x have duplicates installed,
         // so for now (as of 2.0.21) we explicitly remove all display types and lightboxes from the
         // db as a way of fixing this.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->posts} WHERE post_type = %s", 'display_type'));
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
         $wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->posts} WHERE post_type = %s", 'lightbox_library'));
         // the installation will run on the next page load; so make our own request before reloading the browser.
         wp_remote_get(admin_url('plugins.php'), ['timeout' => 180, 'blocking' => true, 'sslverify' => false]);
-        wp_redirect(get_admin_url());
+        wp_safe_redirect(get_admin_url());
         exit;
     }
-    /*
-    public function uninstall_action()
-    {
-    	$installer = \Imagely\NGG\Util\Installer::get_instance();
-    	$installer->uninstall(NGG_PLUGIN_BASENAME, TRUE);
-    	deactivate_plugins(NGG_PLUGIN_BASENAME);
-    	wp_redirect(admin_url('/plugins.php'));
-    }
-    */
 }
 /**
  * Class A_Roles_Form
@@ -547,7 +583,8 @@ class A_Thumbnail_Options_Form extends Mixin
     }
     public function save_action()
     {
-        if ($settings = $this->object->param('thumbnail_settings')) {
+        $settings = $this->object->param('thumbnail_settings');
+        if ($settings) {
             // Sanitize.
             foreach ($settings as $key => &$value) {
                 $value = intval($value);
@@ -576,7 +613,11 @@ class A_Watermarking_Ajax_Actions extends Mixin
             $mapper = \Imagely\NGG\DataMappers\Image::get_instance();
             $image = $mapper->find_first();
             $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
-            /** @var array $watermark_options */
+            /**
+             * Watermark options.
+             *
+             * @var array $watermark_options
+             */
             $watermark_options = $this->param('watermark_options');
             $sizeinfo = ['crop' => false, 'height' => 250, 'quality' => 100, 'watermark' => true, 'wmColor' => trim(esc_sql($watermark_options['wmColor'])), 'wmFont' => trim(esc_sql($watermark_options['wmFont'])), 'wmOpaque' => intval(trim($watermark_options['wmOpaque'])), 'wmPath' => trim(esc_sql($watermark_options['wmPath'])), 'wmPos' => trim(esc_sql($watermark_options['wmPos'])), 'wmSize' => intval(trim($watermark_options['wmSize'])), 'wmText' => trim(esc_sql($watermark_options['wmText'])), 'wmType' => trim(esc_sql($watermark_options['wmType'])), 'wmXpos' => intval(trim($watermark_options['wmXpos'])), 'wmYpos' => intval(trim($watermark_options['wmYpos']))];
             $size = $imagegen->get_size_name($sizeinfo);
@@ -700,7 +741,11 @@ class A_Watermarks_Form extends Mixin
     }
     public function render()
     {
-        /** @var \Imagely\NGG\Settings\Settings $settings */
+        /**
+         * Settings instance.
+         *
+         * @var \Imagely\NGG\Settings\Settings $settings
+         */
         $settings = $this->get_model();
         $image = $this->object->_get_preview_image();
         return $this->render_partial('photocrati-nextgen_other_options#watermarks_tab', ['watermark_automatically_at_upload_value' => $settings->get('watermark_automatically_at_upload', 0), 'watermark_automatically_at_upload_label' => __('Automatically watermark images during upload:', 'nggallery'), 'watermark_automatically_at_upload_label_yes' => __('Yes', 'nggallery'), 'watermark_automatically_at_upload_label_no' => __('No', 'nggallery'), 'notice' => __('Please note: You can only activate the watermark under Manage Gallery. This action cannot be undone.', 'nggallery'), 'watermark_source_label' => __('How will you generate a watermark?', 'nggallery'), 'watermark_sources' => $this->object->_get_watermark_sources(), 'watermark_fields' => $this->object->_get_watermark_source_fields($settings), 'watermark_source' => $settings->get('wmType'), 'position_label' => __('Position:', 'nggallery'), 'position' => $settings->get('wmPos'), 'offset_label' => __('Offset:', 'nggallery'), 'offset_x' => $settings->get('wmXpos'), 'offset_y' => $settings->get('wmYpos'), 'hidden_label' => __('(Show Customization Options)', 'nggallery'), 'active_label' => __('(Hide Customization Options)', 'nggallery'), 'thumbnail_url' => $image['url'], 'preview_label' => __('Preview of saved settings:', 'nggallery'), 'refresh_label' => __('Refresh preview image', 'nggallery'), 'refresh_url' => $settings->get('ajax_url')], true);
@@ -755,11 +800,20 @@ class A_Watermarks_Form extends Mixin
 class C_Settings_Model extends C_Component
 {
     /**
+     * Settings wrapper instance.
+     *
      * @var \Imagely\NGG\Settings\Settings
      */
-    var $wrapper = null;
-    static $_instances = array();
+    public $wrapper = null;
     /**
+     * Instances cache.
+     *
+     * @var array
+     */
+    public static $_instances = array();
+    /**
+     * Gets an instance of the settings model.
+     *
      * @param bool|string $context
      * @return C_Settings_Model
      */

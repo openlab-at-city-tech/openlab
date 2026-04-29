@@ -6,11 +6,18 @@ use Imagely\NGG\Util\Transient;
 use Imagely\NGG\Util\Installer;
 use Imagely\NGG\Settings\Settings as SettingsManager;
 
+/**
+ * WP-CLI Settings management commands for NextGEN Gallery.
+ *
+ * Provides settings-related WP-CLI commands for NextGEN Gallery.
+ */
 class Settings {
 
 	/**
-	 * @param array $args
-	 * @param array $assoc_args
+	 * Lists all NextGEN Gallery settings.
+	 *
+	 * @param array $args       Command arguments.
+	 * @param array $assoc_args Associative arguments.
 	 * @subcommand list
 	 */
 	public function _list( $args, $assoc_args ) {
@@ -27,8 +34,10 @@ class Settings {
 	}
 
 	/**
-	 * @param array $args
-	 * @param array $assoc_args
+	 * Edits a specific NextGEN Gallery setting.
+	 *
+	 * @param array $args       Command arguments.
+	 * @param array $assoc_args Associative arguments.
 	 * @synopsis <key> <value>
 	 */
 	public function edit( $args, $assoc_args ) {
@@ -41,21 +50,21 @@ class Settings {
 	/**
 	 * Export all NextGen settings to a file in JSON format
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args       Command arguments.
+	 * @param array $assoc_args Associative arguments.
 	 * @synopsis <json-file-path>
 	 */
 	public function export( $args, $assoc_args ) {
 		$settings = SettingsManager::get_instance();
-		file_put_contents( $args[0], $settings->to_json() );
+		file_put_contents( $args[0], $settings->to_json() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
 		\WP_CLI::success( "Settings have been stored in {$args[0]}" );
 	}
 
 	/**
 	 * Import settings from a JSON file
 	 *
-	 * @param array $args
-	 * @param array $assoc_args
+	 * @param array $args       Command arguments.
+	 * @param array $assoc_args Associative arguments.
 	 * @synopsis <json-file-path>
 	 */
 	public function import( $args, $assoc_args ) {
@@ -101,7 +110,9 @@ class Settings {
 		$settings->destroy();
 
 		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->posts} WHERE post_type = %s", 'display_type' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->posts} WHERE post_type = %s", 'lightbox_library' ) );
 
 		\WP_CLI::success( 'All NextGen settings have been reset' );

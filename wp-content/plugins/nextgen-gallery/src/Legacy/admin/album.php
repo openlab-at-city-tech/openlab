@@ -1,4 +1,7 @@
 <?php
+/**
+ * NextGEN Gallery Album Management
+ */
 
 // Exit if accessed directly.
 use Imagely\NGG\DataMappers\Album as AlbumMapper;
@@ -11,6 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Album management class.
+ */
 class nggManageAlbum {
 
 	/**
@@ -96,16 +102,15 @@ class nggManageAlbum {
 	 * Init the album output
 	 */
 	public function __construct() {
-		return true;
 	}
 
 	public function controller() {
 
-		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'ngg_album' ) && isset( $_POST['update'] ) || isset( $_POST['delete'] ) || isset( $_POST['add'] ) ) {
+		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_album' ) && isset( $_POST['update'] ) || isset( $_POST['delete'] ) || isset( $_POST['add'] ) ) {
 			$this->processor();
 		}
 
-		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'ngg_edit_album' ) && isset( $_POST['update_album'] ) ) {
+		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_edit_album' ) && isset( $_POST['update_album'] ) ) {
 			$this->update_album();
 		}
 
@@ -170,7 +175,8 @@ class nggManageAlbum {
 
 		while ( ! $album->previewpic ) {
 			// If the album is missing a preview pic, set one.
-			if ( ( $first_entity = array_pop( $sortorder ) ) ) {
+			$first_entity = array_pop( $sortorder );
+			if ( $first_entity ) {
 
 				// Is the first entity a gallery or album.
 				if ( substr( $first_entity, 0, 1 ) == 'a' ) {
@@ -203,10 +209,10 @@ class nggManageAlbum {
 			$allowed_html_tags = apply_filters( 'ngg_title_desc_custom_allowed_html_tags', $this->allowed_html_tags );
 
 			// sanitize the album name.
-			$name = wp_kses( $_POST['newalbum'], $allowed_html_tags );
+			$name = wp_kses( wp_unslash( $_POST['newalbum'] ), $allowed_html_tags );
 			$name = stripslashes( $name );
 
-			if( empty( $name ) ) {
+			if ( empty( $name ) ) {
 				nggGallery::show_message( __( 'Album name is invalid', 'nggallery' ) );
 				return;
 			}
@@ -218,16 +224,19 @@ class nggManageAlbum {
 			$album       = new stdClass();
 			$album->name = $name;
 			if ( AlbumMapper::get_instance()->save( $album ) ) {
-				$this->currentID = $_REQUEST['act_album'] = $album->{$album->id_field};
-
+				$_REQUEST['act_album'] = $album->{$album->id_field};
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value is set internally from $album object above and is numeric
+				$this->currentID                  = $_REQUEST['act_album'];
 				$this->albums[ $this->currentID ] = $album;
 
 				do_action( 'ngg_add_album', $this->currentID );
 				wp_safe_redirect( admin_url( 'admin.php?page=nggallery-manage-album&act_album=' . $album->{$album->id_field} ) );
 			} else {
-				$this->currentID = $_REQUEST['act_album'] = 0;
+				$_REQUEST['act_album'] = 0;
+				$this->currentID       = 0;
 			}
-		} elseif ( isset( $_POST['update'] ) && isset( $_REQUEST['act_album'] ) && $this->currentID = intval( $_REQUEST['act_album'] ) ) {
+		} elseif ( isset( $_POST['update'] ) && isset( $_REQUEST['act_album'] ) ) {
+			$this->currentID = intval( $_REQUEST['act_album'] );
 
 			$sortorder = [];
 
@@ -235,7 +244,10 @@ class nggManageAlbum {
 			$album = $this->_get_album( $this->currentID );
 
 			// Get the list of galleries/sub-albums to be added to this album.
-			parse_str( $_REQUEST['sortorder'], $sortorder );
+			$sortorder = [];
+			if ( isset( $_REQUEST['sortorder'] ) ) {
+				parse_str( sanitize_text_field( wp_unslash( $_REQUEST['sortorder'] ) ), $sortorder );
+			}
 
 			// Set the new sortorder.
 			if ( isset( $sortorder['gid'] ) ) {
@@ -270,7 +282,8 @@ class nggManageAlbum {
 				do_action( 'ngg_delete_album', $this->currentID );
 
 				// jump back to main selection.
-				$this->currentID = $_REQUEST['act_album'] = 0;
+				$_REQUEST['act_album'] = 0;
+				$this->currentID       = 0;
 
 				nggGallery::show_message( __( 'Album deleted', 'nggallery' ) );
 			}
@@ -288,19 +301,19 @@ class nggManageAlbum {
 		$allowed_html_tags = apply_filters( 'ngg_title_desc_custom_allowed_html_tags', $this->allowed_html_tags );
 
 		// Sanitize the album name.
-		$album_name = wp_kses( $_POST['album_name'], $allowed_html_tags );
+		$album_name = wp_kses( wp_unslash( isset( $_POST['album_name'] ) ? $_POST['album_name'] : '' ), $allowed_html_tags );
 		$album_name = stripslashes( $album_name );
 
 		// Sanitize the album description.
-		$album_desc = wp_kses( $_POST['album_desc'], $allowed_html_tags );
+		$album_desc = wp_kses( wp_unslash( isset( $_POST['album_desc'] ) ? $_POST['album_desc'] : '' ), $allowed_html_tags );
 		$album_desc = stripslashes( $album_desc );
 
-		$this->currentID   = $_REQUEST['act_album'];
+		$this->currentID   = isset( $_REQUEST['act_album'] ) ? intval( sanitize_text_field( wp_unslash( $_REQUEST['act_album'] ) ) ) : 0;
 		$album             = $this->_get_album( $this->currentID );
 		$album->name       = $album_name;
 		$album->albumdesc  = $album_desc;
-		$album->previewpic = (int) $_POST['previewpic'];
-		$album->pageid     = (int) $_POST['pageid'];
+		$album->previewpic = isset( $_POST['previewpic'] ) ? (int) $_POST['previewpic'] : 0;
+		$album->pageid     = isset( $_POST['pageid'] ) ? (int) $_POST['pageid'] : 0;
 		$result            = AlbumMapper::get_instance()->save( $album );
 
 		// hook for other plugin to update the fields.
@@ -504,7 +517,7 @@ function showDialog() {
 
 // Redirect to edit the chosen album when the ngg_select_album field changes
 function ngg_redirect_to_album(album_field) {
-	var this_page_url = '<?php print admin_url( 'admin.php?page=nggallery-manage-album' ); ?>';
+	var this_page_url = '<?php print esc_js( admin_url( 'admin.php?page=nggallery-manage-album' ) ); ?>';
 	var value = jQuery(album_field).val();
 	if (value !== 0 && value !== '0') {
 		this_page_url += '&act_album=' + value;
@@ -515,7 +528,7 @@ function ngg_redirect_to_album(album_field) {
 function ngg_confirm_delete_album(form) {
 	var check = confirm('<?php echo esc_js( 'Delete album ?', 'nggallery' ); ?>');
 	if (check) {
-		jQuery(form).attr('action', '<?php print admin_url( 'admin.php?page=nggallery-manage-album' ); ?>');
+		jQuery(form).attr('action', '<?php print esc_js( admin_url( 'admin.php?page=nggallery-manage-album' ) ); ?>');
 	}
 	return check;
 }
@@ -541,7 +554,7 @@ function ngg_confirm_delete_album(form) {
 						if ( is_array( $this->albums ) ) {
 							foreach ( $this->albums as $a ) {
 								$selected = ( $this->currentID == $a->id ) ? 'selected="selected" ' : '';
-								echo '<option value="' . esc_attr( $a->id ) . '" ' . $selected . '>' . esc_html( $a->id . ' - ' . wp_strip_all_tags( $a->name ) ) . '</option>' . "\n";
+								echo '<option value="' . esc_attr( $a->id ) . '" ' . esc_attr( $selected ) . '>' . esc_html( $a->id . ' - ' . wp_strip_all_tags( $a->name ) ) . '</option>' . "\n";
 							}
 						}
 						?>
@@ -595,7 +608,7 @@ function ngg_confirm_delete_album(form) {
 			<div class="widget target-album widget-left">
 			<?php if ( $album && $this->currentID ) { ?>
 					<div class="widget-top">
-						<h3><?php esc_html_e( 'Album ID', 'nggallery' ); ?> <?php echo $album->id . ' : ' . esc_html( wp_strip_all_tags( $album->name ) ); ?> </h3>
+						<h3><?php esc_html_e( 'Album ID', 'nggallery' ); ?> <?php echo esc_html( $album->id . ' : ' . wp_strip_all_tags( $album->name ) ); ?> </h3>
 					</div>
 					<div id="galleryContainer" class="widget-holder target">
 					<?php
@@ -626,7 +639,9 @@ function ngg_confirm_delete_album(form) {
 						// get the array of galleries.
 						$sort_array = $album ? $album->sortorder : [];
 						foreach ( $this->galleries as $gallery ) {
+       // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 							if ( ! in_array( $gallery->gid, $sort_array ) ) {
+        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 								if ( in_array( $gallery->gid, $used_list ) ) {
 									$this->get_container( $gallery->gid, true );
 								} else {
@@ -647,8 +662,23 @@ function ngg_confirm_delete_album(form) {
 				<div id="albumContainer" class="widget-holder">
 					<?php
 					if ( is_array( $this->albums ) ) {
+						// get the array of albums in the current album's sortorder.
+						$sort_array = $album ? $album->sortorder : [];
 						foreach ( $this->albums as $a ) {
-							$this->get_container( 'a' . $a->id );
+							// Don't show the current album in the selection
+							if ( $album && $a->id == $album->id ) {
+								continue;
+							}
+							// Check if this album is already in the current album's sortorder
+       // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+							if ( ! in_array( 'a' . $a->id, $sort_array ) ) {
+        // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+								if ( in_array( 'a' . $a->id, $used_list ) ) {
+									$this->get_container( 'a' . $a->id, true );
+								} else {
+									$this->get_container( 'a' . $a->id, false );
+								}
+							}
 						}
 					}
 					?>
@@ -716,6 +746,7 @@ function ngg_confirm_delete_album(form) {
 						$dropdown = ob_get_contents();
 						ob_end_clean();
 						if ( ! empty( $dropdown ) ) {
+							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $dropdown contains safe HTML from wp_dropdown_pages()
 							echo $dropdown;
 						} else {
 							echo '<input type="hidden" id="pageid" name="pageid" value="0"/>';
@@ -761,14 +792,16 @@ function ngg_confirm_delete_album(form) {
 		// if the id started with a 'a', then it's a sub album.
 		if ( substr( $id, 0, 1 ) == 'a' ) {
 
-			if ( ! $album = $this->_get_album( substr( $id, 1 ) ) ) {
+			$album = $this->_get_album( substr( $id, 1 ) );
+			if ( ! $album ) {
 				return $retval;
 			}
 
-			$obj['id']   = $album->id;
-			$obj['name'] = $obj['title'] = $album->name;
-			$obj['type'] = 'album';
-			$class       = 'album_obj';
+			$obj['id']    = $album->id;
+			$obj['name']  = $album->name;
+			$obj['title'] = $album->name;
+			$obj['type']  = 'album';
+			$class        = 'album_obj';
 
 			// get the post name.
 			$post             = get_post( $album->pageid );
@@ -780,6 +813,7 @@ function ngg_confirm_delete_album(form) {
 				if ( $album->previewpic ) {
 					$image = $nggdb->find_image( $album->previewpic );
 					if ( $image && $image->thumbURL ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						$thumbURL = @add_query_arg( 'timestamp', time(), $image->thumbURL );
 					}
 				}
@@ -812,6 +846,7 @@ function ngg_confirm_delete_album(form) {
 				if ( $gallery->previewpic ) {
 					$image = $nggdb->find_image( $gallery->previewpic );
 					if ( $image && $image->thumbURL ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 						$thumbURL = @add_query_arg( 'timestamp', time(), $image->thumbURL );
 					}
 				}
@@ -842,14 +877,15 @@ function ngg_confirm_delete_album(form) {
 						</div>
 				</div>
 			   	</div>';
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $retval contains safe HTML for album display
 				echo $retval;
 				return $retval;
 	}
 
 	/**
-	 * get all used galleries from all albums
+	 * Gets all used galleries from all albums
 	 *
-	 * @return array $used_galleries_ids
+	 * @return array $used_galleries_and_albums_ids
 	 */
 	public function get_used_galleries() {
 
@@ -860,9 +896,11 @@ function ngg_confirm_delete_album(form) {
 				if ( ! is_array( $album->sortorder ) ) {
 					continue;
 				}
-				foreach ( $album->sortorder as $galleryid ) {
-					if ( ! in_array( $galleryid, $used ) ) {
-						$used[] = $galleryid;
+				foreach ( $album->sortorder as $item_id ) {
+					// Add both galleries (numeric) and albums (prefixed with 'a') to the used list
+     // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+					if ( ! in_array( $item_id, $used ) ) {
+						$used[] = $item_id;
 					}
 				}
 			}
@@ -873,10 +911,7 @@ function ngg_confirm_delete_album(form) {
 
 	/**
 	 * PHP5 style destructor
-	 *
-	 * @return bool Always true
 	 */
 	public function __destruct() {
-		return true;
 	}
 }

@@ -7,15 +7,15 @@
  */
 class A_MVC_Validation extends Mixin
 {
-    public function show_errors_for($entity, $return = false)
+    public function show_errors_for($entity, $return_output = false)
     {
         $retval = '';
         if (!$entity->is_valid()) {
-            $retval = $this->object->render_partial('photocrati-nextgen_admin#entity_errors', ['entity' => $entity], $return);
+            $retval = $this->object->render_partial('photocrati-nextgen_admin#entity_errors', ['entity' => $entity], $return_output);
         }
         return $retval;
     }
-    public function show_success_for($entity, $message, $return = false)
+    public function show_success_for($entity, $message, $return_output = false)
     {
         $retval = '';
         if ($entity->is_valid()) {
@@ -24,6 +24,7 @@ class A_MVC_Validation extends Mixin
         return $retval;
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_Form
  *
@@ -33,8 +34,18 @@ class A_MVC_Validation extends Mixin
  */
 class C_Form extends C_MVC_Controller
 {
-    static $_instances = array();
-    var $page = null;
+    /**
+     * Instances cache.
+     *
+     * @var array
+     */
+    public static $_instances = array();
+    /**
+     * Page instance.
+     *
+     * @var object|null
+     */
+    public $page = null;
     /**
      * Gets an instance of a form
      *
@@ -61,8 +72,14 @@ class C_Form extends C_MVC_Controller
         $this->implement('I_Form');
     }
 }
+/**
+ * Form instance methods mixin.
+ *
+ * Provides instance methods for form handling.
+ */
 class Mixin_Form_Instance_Methods extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
      * Enqueues any static resources required by the form
      */
@@ -129,11 +146,16 @@ class Mixin_Form_Instance_Methods extends Mixin
     }
 }
 /**
- * Provides some default field generators for forms to use
+ * Provides default field generators for forms to use.
+ *
+ * Contains methods for generating form fields.
  */
 class Mixin_Form_Field_Generators extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
+     * Renders a select field.
+     *
      * @param stdClass|C_Display_Type $display_type
      * @param string                  $name
      * @param string                  $label
@@ -182,11 +204,20 @@ class Mixin_Form_Field_Generators extends Mixin
         return ['first_image' => __('First Image', 'nggallery'), 'image_average' => __('Average', 'nggallery'), '1.5' => '3:2 [1.5]', '1.333' => '4:3 [1.333]', '1.777' => '16:9 [1.777]', '1.6' => '16:10 [1.6]', '1.85' => '1.85:1 [1.85]', '2.39' => '2.39:1 [2.39]', '1.81' => '1.81:1 [1.81]', '1' => '1:1 (Square) [1]'];
     }
 }
+/**
+ * Mailchimp opt-in notice class.
+ */
 class C_Mailchimp_OptIn_Notice
 {
-    /** @var C_Mailchimp_OptIn_Notice $_instance */
-    static $_instance = null;
     /**
+     * Instance cache.
+     *
+     * @var C_Mailchimp_OptIn_Notice $_instance
+     */
+    public static $_instance = null;
+    /**
+     * Gets an instance of the notice.
+     *
      * @return C_Mailchimp_OptIn_Notice
      */
     public static function get_instance()
@@ -197,6 +228,8 @@ class C_Mailchimp_OptIn_Notice
         return self::$_instance;
     }
     /**
+     * Gets the CSS class for the notice.
+     *
      * @return string
      */
     public function get_css_class()
@@ -204,6 +237,8 @@ class C_Mailchimp_OptIn_Notice
         return 'notice notice-success';
     }
     /**
+     * Checks if the notice is dismissable.
+     *
      * @return bool
      */
     public function is_dismissable()
@@ -211,6 +246,8 @@ class C_Mailchimp_OptIn_Notice
         return true;
     }
     /**
+     * Dismisses the notice.
+     *
      * @param $code
      * @return array
      */
@@ -219,11 +256,13 @@ class C_Mailchimp_OptIn_Notice
         return ['handled' => true];
     }
     /**
+     * Checks if the notice is renderable.
+     *
      * @return bool
      */
     public function is_renderable()
     {
-        if (isset($_SERVER['HTTP_REFERER']) && strpos($_SERVER['HTTP_REFERER'], 'attach_to_post') !== false) {
+        if (isset($_SERVER['HTTP_REFERER']) && strpos(sanitize_text_field(wp_unslash($_SERVER['HTTP_REFERER'])), 'attach_to_post') !== false) {
             return false;
         }
         if (!C_NextGen_Admin_Page_Manager::is_requested()) {
@@ -242,10 +281,14 @@ class C_Mailchimp_OptIn_Notice
                 return true;
             }
         } catch (Exception $exception) {
+            // Silently fail if DateTime creation fails - we're returning FALSE right away anyway.
+            unset($exception);
         }
         return false;
     }
     /**
+     * Renders the notice.
+     *
      * @return string
      */
     public function render()
@@ -255,16 +298,32 @@ class C_Mailchimp_OptIn_Notice
         return $view->render(true);
     }
 }
-if (!class_exists('C_NextGen_Admin_Installer')) {
-}
 /**
+ * Class C_NextGen_Admin_Installer is defined in module.nextgen_admin.php
+ */
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
+/**
+ * NextGEN admin page controller.
+ *
  * @mixin Mixin_NextGen_Admin_Page_Instance_Methods
  */
 class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
 {
-    static $_instances = array();
+    /**
+     * Instances cache.
+     *
+     * @var array
+     */
+    public static $_instances = array();
+    /**
+     * Page name.
+     *
+     * @var string
+     */
     public $name;
     /**
+     * Gets an instance of the admin page controller.
+     *
      * @param bool|string $context
      * @return C_NextGen_Admin_Page_Controller
      */
@@ -288,11 +347,16 @@ class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
     }
 }
 /**
+ * Mixin for NextGEN admin page instance methods.
+ *
  * @property Mixin_NextGen_Admin_Page_Instance_Methods|C_MVC_Controller|A_MVC_Validation $object
  */
 class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     /**
+     * Authorizes the request.
+     *
      * @param string $privilege
      * @return bool
      *
@@ -432,7 +496,8 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
      */
     public function _get_action()
     {
-        $action = $this->object->param('action') ?: '';
+        $action_param = $this->object->param('action');
+        $action = $action_param ? $action_param : '';
         $retval = preg_quote($action, '/');
         $retval = strtolower(preg_replace('/[^\\w]/', '_', $retval));
         return preg_replace('/_{2,}/', '_', $retval) . '_action';
@@ -465,7 +530,8 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
     public function index_action()
     {
         $this->object->enqueue_backend_resources();
-        if ($token = $this->object->is_authorized_request()) {
+        $token = $this->object->is_authorized_request();
+        if ($token) {
             // Get each form. Validate it and save any changes if this is a post
             // request.
             $tabs = [];
@@ -501,7 +567,8 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
                 $forms[] = $form;
                 if ($form->has_method('get_model') && $form->get_model()) {
                     if (!$form->get_model()->is_valid()) {
-                        if ($form_errors = $this->object->show_errors_for($form->get_model(), true)) {
+                        $form_errors = $this->object->show_errors_for($form->get_model(), true);
+                        if ($form_errors) {
                             $errors[] = $form_errors;
                         }
                         $form->get_model()->clear_errors();
@@ -513,10 +580,12 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
             $index_params = array_merge($index_params, $this->object->get_index_params());
             $this->object->render_partial($index_template, $index_params);
         } else {
+            // The user is not authorized to view this page.
             $this->object->render_view('photocrati-nextgen_admin#not_authorized', ['name' => $this->object->name, 'title' => $this->object->get_page_title()]);
         }
     }
 }
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * Class C_NextGen_Admin_Page_Manager
  *
@@ -525,8 +594,18 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
  */
 class C_NextGen_Admin_Page_Manager extends C_Component
 {
-    static $_instance = null;
-    var $_pages = array();
+    /**
+     * Instance cache.
+     *
+     * @var C_NextGen_Admin_Page_Manager|null
+     */
+    public static $_instance = null;
+    /**
+     * Pages array.
+     *
+     * @var array
+     */
+    public $_pages = array();
     /**
      * Gets an instance of the Page Manager
      *
@@ -571,7 +650,7 @@ class C_NextGen_Admin_Page_Manager extends C_Component
      *
      * @return bool|string
      */
-    static function is_requested_page()
+    public static function is_requested_page()
     {
         $retval = false;
         // First, check the screen for the "ngg" property. This is how legacy pages register themselves.
@@ -579,6 +658,7 @@ class C_NextGen_Admin_Page_Manager extends C_Component
         if (property_exists($screen, 'ngg') && $screen->ngg) {
             $retval = $screen->id;
         } else {
+            // Check if it's a registered page.
             foreach (self::get_instance()->get_all() as $slug => $properties) {
                 // Are we rendering a NGG added page?
                 if (isset($properties['hook_suffix'])) {
@@ -611,8 +691,14 @@ class C_NextGen_Admin_Page_Manager extends C_Component
         return $retval;
     }
 }
+/**
+ * Page manager mixin.
+ *
+ * Provides page management functionality for admin pages.
+ */
 class Mixin_Page_Manager extends Mixin
 {
+    // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
     public function add($slug, $properties = array())
     {
         if (!isset($properties['adapter'])) {
@@ -638,12 +724,14 @@ class Mixin_Page_Manager extends Mixin
         if (isset($page_list[$slug]) && isset($page_list[$other_slug])) {
             $slug_list = array_keys($page_list);
             $item_list = array_values($page_list);
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             $slug_idx = array_search($slug, $slug_list);
             $item = $page_list[$slug];
             unset($slug_list[$slug_idx]);
             unset($item_list[$slug_idx]);
             $slug_list = array_values($slug_list);
             $item_list = array_values($item_list);
+            // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
             $other_idx = array_search($other_slug, $slug_list);
             array_splice($slug_list, $other_idx, 0, [$slug]);
             array_splice($item_list, $other_idx, 0, [$item]);
@@ -678,6 +766,7 @@ class Mixin_Page_Manager extends Mixin
                 $permission = $controllers[$slug]->get_required_permission();
                 $callback = [&$controllers[$slug], 'index_action'];
             } elseif ($properties['url']) {
+                // Is this page powered by another url, such as one that WordPress provides?
                 $url = $properties['url'];
                 if (preg_match('/post_type=([^&]+)/', $url, $matches)) {
                     $this->object->_pages[$slug]['post_type'] = $matches[1];
@@ -704,8 +793,6 @@ class Mixin_Page_Manager extends Mixin
                     $before_index = -1;
                     if ($parent != null) {
                         foreach ($parent as $index => $menu) {
-                            // under add_submenu_page, $menu_slug is index 2
-                            // $submenu[$parent_slug][] = array ( $menu_title, $capability, $menu_slug, $page_title );.
                             if ($menu[2] == $slug) {
                                 $item_index = $index;
                             } elseif ($menu[2] == $properties['before']) {
@@ -729,17 +816,33 @@ class Mixin_Page_Manager extends Mixin
         do_action('ngg_pages_setup');
     }
 }
+/**
+ * NextGen first run notification wizard class.
+ */
 class C_NextGen_First_Run_Notification_Wizard
 {
+    /**
+     * Instance cache.
+     *
+     * @var C_NextGen_First_Run_Notification_Wizard|null
+     */
     protected static $_instance = null;
     /**
+     * Checks if the wizard is renderable.
+     *
      * @return bool
      */
     public function is_renderable()
     {
-        return true;
+        // Don't show the wizard if user already has galleries.
+        $gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
+        $gallery_count = $gallery_mapper->count();
+        // Only show if there are no galleries.
+        return $gallery_count === 0;
     }
     /**
+     * Renders the wizard.
+     *
      * @return string
      */
     public function render()
@@ -760,7 +863,7 @@ class C_NextGen_First_Run_Notification_Wizard
                     allowfullscreen></iframe>
         </div>
 EOT;
-        return __('Thanks for installing NextGEN Gallery! Want help creating your first gallery?', 'nggallery') . ' <a href="' . esc_url(admin_url('index.php?page=nextgen-gallery-setup-wizard')) . '" >' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=nextgen-gallery')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
+        return __('Thanks for installing Imagely! Want help creating your first gallery?', 'nggallery') . ' <a href="' . esc_url(admin_url('index.php?page=nextgen-gallery-setup-wizard')) . '" >' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=imagely&tab=general')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
     }
     public function get_css_class()
     {
@@ -780,6 +883,8 @@ EOT;
         wp_enqueue_style('jquery-modal');
     }
     /**
+     * Gets an instance of the wizard.
+     *
      * @return C_NextGen_First_Run_Notification_Wizard
      */
     public static function get_instance()

@@ -58,6 +58,10 @@ function is_nextgen_admin_page() {
 		return false;
 	}
 
+	if ( ! $current_screen || empty( $current_screen->id ) ) {
+		return false;
+	}
+
 	$keys = [ 'ngg', 'nggallery', 'nextgen-gallery', 'nextgen' ];
 
 	foreach ( $keys as $key ) {

@@ -5,6 +5,9 @@ namespace Imagely\NGG\IGW;
 use Imagely\NGG\Display\StaticAssets;
 use Imagely\NGG\Display\View;
 
+/**
+ * Marketing class for IGW.
+ */
 class Marketing {
 
 	public function new_pro_display_type_upsell( $id, $name, $title = '', $preview_mvc_path = null ) {
@@ -96,6 +99,7 @@ class Marketing {
 
 		\wp_enqueue_style( 'jquery-modal' );
 
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script(
 			'igw_display_type_upsells',
 			StaticAssets::get_url( 'IGW/Marketing/igw_display_type_upsells.js' ),

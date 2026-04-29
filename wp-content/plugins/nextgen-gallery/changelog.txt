@@ -1,6 +1,12 @@
 NextGEN Gallery
 by Imagely
 
+= V4.1.1 - 03.13.2025 =
+* Fixed: PNG and WEBP watermarks no longer lose transparency when applied to images.
+* Fixed: Fatal error when using NextGen Gallery with older Pro add-on versions that reference the legacy C_NextGen_Settings class.
+* Fixed: SinglePicture display no longer crashes when width/height settings are not configured.
+* Fixed: Imagebrowser now opens to the correct image when viewing images within albums (Thumbnails display type).
+
 * Fixed: Updated permission check
 
 = V3.59  - 03.14.2024 =

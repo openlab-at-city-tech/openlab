@@ -4,20 +4,54 @@ namespace Imagely\NGG\Admin;
 
 use Imagely\NGG\Admin\Notifications\Manager as NotificationsManager;
 
+/**
+ * RequirementsManager class.
+ *
+ * Manages system requirements checks and displays notices for missing requirements.
+ */
 class RequirementsManager {
 
+	/**
+	 * Singleton instance of the RequirementsManager.
+	 *
+	 * @var RequirementsManager|null
+	 */
 	private static $instance = null;
 
-	protected $requirements  = [];
-	protected $groups        = [];
+	/**
+	 * Array of requirement checks.
+	 *
+	 * @var array
+	 */
+	protected $requirements = [];
+
+	/**
+	 * Array of requirement groups.
+	 *
+	 * @var array
+	 */
+	protected $groups = [];
+
+	/**
+	 * Array of notifications.
+	 *
+	 * @var array
+	 */
 	protected $notifications = [];
 
+	/**
+	 * Constructor.
+	 *
+	 * Initializes the requirement groups.
+	 */
 	public function __construct() {
 		$this->set_initial_groups();
 	}
 
 	/**
-	 * @return RequirementsManager
+	 * Gets the singleton instance of the RequirementsManager.
+	 *
+	 * @return RequirementsManager The RequirementsManager instance.
 	 */
 	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
@@ -26,6 +60,9 @@ class RequirementsManager {
 		return self::$instance;
 	}
 
+	/**
+	 * Sets the initial requirement groups.
+	 */
 	protected function set_initial_groups() {
 		// Requirements can be added with any group key desired but only registered groups will be displayed.
 		$this->groups = apply_filters(
@@ -38,6 +75,9 @@ class RequirementsManager {
 		);
 	}
 
+	/**
+	 * Registers default system requirements.
+	 */
 	public static function register_requirements() {
 		$manager = self::get_instance();
 		$manager->add(
@@ -75,22 +115,29 @@ class RequirementsManager {
 	}
 
 	/**
-	 * @param string   $name Unique notification ID
-	 * @param string   $group Choose one of phpext | phpver | dirperms
-	 * @param callable $callback Method that determines whether the notification should display
-	 * @param array    $data Possible keys: className, message, dismissable
+	 * Adds a requirement check.
+	 *
+	 * @param string   $name     Unique notification ID.
+	 * @param string   $group    Requirement group: phpext, phpver, or dirperms.
+	 * @param callable $callback Method that determines whether the notification should display.
+	 * @param array    $data     Optional data with keys: className, message, dismissable.
 	 */
 	public function add( $name, $group, $callback, $data ) {
 		$this->requirements[ $group ][ $name ] = new RequirementsNotice( $name, $callback, $data );
 	}
 
 	/**
-	 * @param string $name
+	 * Removes a requirement notification.
+	 *
+	 * @param string $name The notification name to remove.
 	 */
 	public function remove( $name ) {
 		unset( $this->notifications[ $name ] );
 	}
 
+	/**
+	 * Creates and registers notifications for failed requirement checks.
+	 */
 	public function create_notification() {
 		foreach ( $this->groups as $groupID => $groupLabel ) {
 

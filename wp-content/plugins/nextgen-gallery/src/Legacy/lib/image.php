@@ -14,7 +14,7 @@ class nggImage {
 
 	public $thumbURL;
 
-	function __construct( $image ) {
+	public function __construct( $image ) {
 		$image->meta_data = \Imagely\NGG\Util\Serializable::unserialize( $image->meta_data );
 		$this->_ngiw      = new \Imagely\NGG\DataTypes\LegacyImage( $image, null, true );
 	}
@@ -41,27 +41,27 @@ class nggImage {
 		return $this->$name;
 	}
 
-	function get_thumbcode( $galleryname = '' ) {
+	public function get_thumbcode( $galleryname = '' ) {
 		return $this->_ngiw->get_thumbcode( $galleryname );
 	}
 
-	function get_href_link() {
+	public function get_href_link() {
 		return $this->_ngiw->get_href_link();
 	}
 
-	function get_href_thumb_link() {
+	public function get_href_thumb_link() {
 		return $this->_ngiw->get_href_thumb_link();
 	}
 
-	function cached_singlepic_file( $width = '', $height = '', $mode = '' ) {
+	public function cached_singlepic_file( $width = '', $height = '', $mode = '' ) {
 		return $this->_ngiw->cached_singlepic_file( $width, $height, $mode );
 	}
 
-	function get_tags() {
+	public function get_tags() {
 		return $this->_ngiw->get_tags();
 	}
 
-	function get_permalink() {
+	public function get_permalink() {
 		return $this->_ngiw->get_permalink();
 	}
 }

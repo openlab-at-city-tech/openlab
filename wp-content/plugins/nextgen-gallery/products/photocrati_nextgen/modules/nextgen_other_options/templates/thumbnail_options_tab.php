@@ -96,6 +96,7 @@
 			</select>
 			<?php
 		} else {
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe hardcoded HTML message
 			echo '<i>No default sizes present.</i>';
 		}
 		?>

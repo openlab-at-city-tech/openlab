@@ -9,9 +9,14 @@ use Imagely\NGG\Display\{StaticAssets, View};
 use Imagely\NGG\DisplayedGallery\Renderer;
 use Imagely\NGG\Util\Router;
 
+/**
+ * Tag cloud display type controller.
+ */
 class TagCloud extends ParentController {
 
 	/**
+	 * Gets an alternative displayed gallery.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
 	 *
 	 * @return DisplayedGallery
@@ -47,7 +52,7 @@ class TagCloud extends ParentController {
 			$renderer                    = Renderer::get_instance();
 			$alternate_displayed_gallery = $renderer->params_to_displayed_gallery( $params );
 			if ( is_null( $alternate_displayed_gallery->id() ) ) {
-				$alternate_displayed_gallery->id( md5( json_encode( $alternate_displayed_gallery->get_entity() ) ) );
+				$alternate_displayed_gallery->id( md5( wp_json_encode( $alternate_displayed_gallery->get_entity() ) ) );
 			}
 			self::$alternate_displayed_galleries[ $id ] = $alternate_displayed_gallery;
 			return $alternate_displayed_gallery;
@@ -57,12 +62,14 @@ class TagCloud extends ParentController {
 	}
 
 	/**
+	 * Renders the tag cloud.
+	 *
 	 * @param DisplayedGallery $displayed_gallery
-	 * @param bool             $return (optional)
+	 * @param bool             $return_output (optional)
 	 *
 	 * @return string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		$router = Router::get_instance();
 
 		// we're looking at a tag, so show images w/that tag as a thumbnail gallery.
@@ -90,7 +97,6 @@ class TagCloud extends ParentController {
 
 		// Always query top tags.
 		$tags = \get_terms(
-			$args['taxonomy'],
 			array_merge(
 				$args,
 				[
@@ -124,7 +130,7 @@ class TagCloud extends ParentController {
 			'photocrati-nextgen_basic_tagcloud#nextgen_basic_tagcloud'
 		);
 
-		return $view->render( $return );
+		return $view->render( $return_output );
 	}
 
 	/**

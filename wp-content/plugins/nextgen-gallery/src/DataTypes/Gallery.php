@@ -10,30 +10,206 @@ use Imagely\NGG\DataMapper\Model;
 use Imagely\NGG\DataStorage\Sanitizer;
 use Imagely\NGG\Util\Filesystem;
 
+/**
+ * Gallery data type.
+ */
 class Gallery extends Model {
 
+	/**
+	 * Gallery author.
+	 *
+	 * @var int|string
+	 */
 	public $author;
+
+	/**
+	 * Extras post ID.
+	 *
+	 * @var int
+	 */
 	public $extras_post_id;
+
+	/**
+	 * Gallery description.
+	 *
+	 * @var string
+	 */
 	public $galdesc;
+
+	/**
+	 * Gallery ID.
+	 *
+	 * @var int|string
+	 */
 	public $gid;
+
+	/**
+	 * ID field name.
+	 *
+	 * @var string
+	 */
 	public $id_field = 'gid';
+
+	/**
+	 * Gallery name.
+	 *
+	 * @var string
+	 */
 	public $name;
+
+	/**
+	 * Page ID.
+	 *
+	 * @var int
+	 */
 	public $pageid;
+
+	/**
+	 * Gallery path.
+	 *
+	 * @var string
+	 */
 	public $path;
+
+	/**
+	 * Preview picture ID.
+	 *
+	 * @var int
+	 */
 	public $previewpic;
+
+	/**
+	 * Gallery slug.
+	 *
+	 * @var string
+	 */
 	public $slug;
+
+	/**
+	 * Gallery title.
+	 *
+	 * @var string
+	 */
 	public $title;
 
+	/**
+	 * Date when the gallery was created.
+	 *
+	 * @var string
+	 */
+	public $date_created;
+
+	/**
+	 * Date when the gallery was last modified.
+	 *
+	 * @var string
+	 */
+	public $date_modified;
+
+	/**
+	 * Display type for the gallery.
+	 *
+	 * @var string
+	 */
+	public $display_type = 'photocrati-nextgen_basic_thumbnails';
+
+	/**
+	 * Settings for the display type.
+	 *
+	 * @var array
+	 */
+	public $display_type_settings = [];
+
+	/**
+	 * Whether the gallery is private.
+	 *
+	 * @var bool
+	 */
+	public $is_private = false;
+
+	/**
+	 * External source
+	 *
+	 * @var array
+	 */
+	public $external_source = [];
+
+	/**
+	 * Whether ecommerce is enabled for this gallery.
+	 *
+	 * @var bool
+	 */
+	public $is_ecommerce_enabled = false;
+
 	// TODO: remove this when get_pro_compat_level() >= 1.
+	/**
+	 * Price list ID.
+	 *
+	 * @var int
+	 */
 	public $pricelist_id;
 
+	/**
+	 * Closed postboxes nonce.
+	 *
+	 * @var string
+	 */
 	public $closedpostboxesnonce;
+
+	/**
+	 * Parent ID.
+	 *
+	 * @var int
+	 */
 	public $parent_id;
+
+	/**
+	 * Post paged.
+	 *
+	 * @var int
+	 */
 	public $post_paged;
+
+ // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+ // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+ // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+ // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+ // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+	/**
+	 * Bulk action.
+	 *
+	 * @var string
+	 */
 	public $bulkaction;
+
+	/**
+	 * Images array.
+	 *
+	 * @var array
+	 */
 	public $images = [];
+
+	/**
+	 * Update pictures flag.
+	 *
+	 * @var bool
+	 */
 	public $updatepictures;
+
+	/**
+	 * Attach to post flag.
+	 *
+	 * @var bool
+	 */
 	public $attach_to_post;
+
+	/**
+	 * Gallery counter.
+	 *
+	 * @var int
+	 */
+	public $counter;
+
 
 	public function get_primary_key_column() {
 		return 'gid';
@@ -91,6 +267,7 @@ class Gallery extends Model {
 		$storage->flush_gallery_path_cache( $this );
 		$gallery_abspath = $storage->get_gallery_abspath( $this );
 		if ( strpos( $gallery_abspath, $root ) === false ) {
+			/* translators: %s: root directory path */
 			$retval['gallerypath'][] = sprintf( __( 'Gallery path must be located in %s', 'nggallery' ), $root );
 			$this->path              = $storage->get_upload_relpath( $this );
 		}
@@ -113,12 +290,13 @@ class Gallery extends Model {
 		];
 
 		if ( ! empty( $_SERVER['DOCUMENT_ROOT'] ) ) {
-			$not_directly_in['document root'] = $_SERVER['DOCUMENT_ROOT'];
+			$not_directly_in['document root'] = sanitize_text_field( wp_unslash( $_SERVER['DOCUMENT_ROOT'] ) );
 		}
 
 		foreach ( $not_directly_in as $label => $dir ) {
 			if ( $abspath == $dir ) {
 				$retval['gallerypath'][] = sprintf(
+					/* translators: %s: directory label */
 					__( 'Gallery path must be a sub-directory under the %s directory', 'nggallery' ),
 					$label
 				);
@@ -139,6 +317,7 @@ class Gallery extends Model {
 		foreach ( $not_ever_in as $label => $dir ) {
 			if ( strpos( $abspath, $dir ) === 0 ) {
 				$retval['gallerypath'][] = sprintf(
+					/* translators: %s: directory label */
 					__( 'Gallery path cannot be under %s directory', 'nggallery' ),
 					$label
 				);
@@ -154,6 +333,7 @@ class Gallery extends Model {
 		foreach ( $never_named as $name ) {
 			if ( $name === end( $sections ) ) {
 				$retval['gallerypath'][] = sprintf(
+					/* translators: %s: directory name */
 					__( 'Gallery path cannot end with a directory named %s', 'nggallery' ),
 					$name
 				);

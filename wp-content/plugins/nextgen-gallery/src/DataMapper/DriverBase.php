@@ -4,20 +4,74 @@ namespace Imagely\NGG\DataMapper;
 
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Abstract base driver class for data mappers.
+ *
+ * Provides common functionality for database operations and entity management.
+ */
 abstract class DriverBase {
 
+	/**
+	 * Object name for this driver.
+	 *
+	 * @var string
+	 */
 	public $_object_name;
-	public $_columns            = [];
-	public $_table_columns      = [];
+
+	/**
+	 * Column definitions.
+	 *
+	 * @var array
+	 */
+	public $_columns = [];
+
+	/**
+	 * Table columns cache.
+	 *
+	 * @var array
+	 */
+	public $_table_columns = [];
+
+	/**
+	 * Serialized columns list.
+	 *
+	 * @var array
+	 */
 	public $_serialized_columns = [];
 
+	/**
+	 * Primary key column name.
+	 *
+	 * @var string
+	 */
 	public $primary_key_column = '';
 
+	/**
+	 * Whether to use cache.
+	 *
+	 * @var bool
+	 */
 	public $use_cache;
+
+	/**
+	 * Cache array.
+	 *
+	 * @var array
+	 */
 	public $cache = [];
 
+	/**
+	 * Model class name.
+	 *
+	 * @var string
+	 */
 	public $model_class = '';
 
+	/**
+	 * Constructor.
+	 *
+	 * @param string $object_name The object name.
+	 */
 	public function __construct( $object_name = '' ) {
 		$this->_object_name = $object_name;
 		$this->lookup_columns();
@@ -28,15 +82,19 @@ abstract class DriverBase {
 	abstract public function select( $fields = null );
 
 	/**
-	 * @return string
+	 * Gets the object name.
+	 *
+	 * @return string The object name.
 	 */
 	public function get_object_name() {
 		return $this->_object_name;
 	}
 
 	/**
+	 * Gets the table name.
+	 *
 	 * @global string $table_prefix
-	 * @return string
+	 * @return string The table name.
 	 */
 	public function get_table_name() {
 		global $table_prefix;
@@ -44,7 +102,7 @@ abstract class DriverBase {
 
 		$prefix = $table_prefix;
 
-		if ( $wpdb != null && $wpdb->prefix != null ) {
+		if ( null !== $wpdb && null !== $wpdb->prefix ) {
 			$prefix = $wpdb->prefix;
 		}
 
@@ -52,7 +110,11 @@ abstract class DriverBase {
 	}
 
 	/**
-	 * Looks up using SQL the columns existing in the database, result is cached
+	 * Looks up using SQL the columns existing in the database.
+	 *
+	 * Result is cached.
+	 *
+	 * @return array Array of column names.
 	 */
 	public function lookup_columns() {
 		// Avoid doing multiple SHOW COLUMNS if we can help it.
@@ -67,7 +129,9 @@ abstract class DriverBase {
 	}
 
 	/**
-	 * Looks up using SQL the columns existing in the database
+	 * Looks up using SQL the columns existing in the database.
+	 *
+	 * @return void
 	 */
 	public function update_columns_cache() {
 		global $wpdb;
@@ -81,7 +145,7 @@ abstract class DriverBase {
 		//
 		// TODO: Once NextGEN's minimum WP version is 6.2 or higher use wpdb->prepare() here.
 		//
-        // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		foreach ( $wpdb->get_results( "SHOW COLUMNS FROM {$this->get_table_name()}" ) as $row ) {
 			$this->_table_columns[] = $row->Field;
 		}
@@ -90,17 +154,22 @@ abstract class DriverBase {
 	}
 
 	/**
-	 * @param string $column_name
-	 * @return bool
+	 * Checks if a column exists in the table.
+	 *
+	 * @param string $column_name The column name to check.
+	 * @return bool True if the column exists, false otherwise.
 	 */
 	public function has_column( $column_name ) {
 		if ( empty( $this->_table_columns ) ) {
 			$this->lookup_columns();
 		}
+	  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return array_search( $column_name, $this->_table_columns ) !== false;
 	}
 
 	/**
+	 * Gets the primary key column name.
+	 *
 	 * @return string
 	 */
 	public function get_primary_key_column() {
@@ -113,11 +182,11 @@ abstract class DriverBase {
 		}
 	}
 
-	public function get_from_cache( $key, $default = null ) {
+	public function get_from_cache( $key, $default_value = null ) {
 		if ( $this->use_cache && isset( $this->cache[ $key ] ) ) {
 			return $this->cache[ $key ];
 		} else {
-			return $default;
+			return $default_value;
 		}
 	}
 
@@ -144,17 +213,24 @@ abstract class DriverBase {
 		$this->_serialized_columns[] = $column;
 	}
 
-	public function deserialize_columns( $object ) {
+	/**
+	 * Deserializes columns for an object
+	 *
+	 * @param object $obj
+	 * @throws \Exception When deserialization fails
+	 */
+	public function deserialize_columns( $obj ) {
 		foreach ( $this->_serialized_columns as $column ) {
-			if ( isset( $object->$column ) && is_string( $object->$column ) ) {
-				$object->$column = \Imagely\NGG\Util\Serializable::unserialize( $object->$column );
+			if ( isset( $obj->$column ) && is_string( $obj->$column ) ) {
+				$obj->$column = \Imagely\NGG\Util\Serializable::unserialize( $obj->$column );
 			}
 		}
 	}
 
 	/**
-	 * @param array       $conditions (optional)
-	 * @param object|bool $model (optional)
+	 * Finds the first entity matching the conditions.
+	 *
+	 * @param array $conditions (optional)
 	 * @return null|object
 	 */
 	public function find_first( $conditions = [] ) {
@@ -167,6 +243,8 @@ abstract class DriverBase {
 	}
 
 	/**
+	 * Finds all entities matching the conditions.
+	 *
 	 * @param array $conditions (optional)
 	 * @return array
 	 */
@@ -197,6 +275,8 @@ abstract class DriverBase {
 	}
 
 	/**
+	 * Adds WHERE conditions to the query.
+	 *
 	 * @param array $conditions (optional)
 	 * @return self
 	 */
@@ -211,7 +291,7 @@ abstract class DriverBase {
 	 *  array("post_id = %d", 1),
 	 * )
 	 *
-	 * or simply "post_id = 1"
+	 * Or simply "post_id = 1"
 	 *
 	 * @param array|string $conditions
 	 * @param string       $operator
@@ -223,9 +303,8 @@ abstract class DriverBase {
 		// If conditions is not an array, make it one.
 		if ( ! is_array( $conditions ) ) {
 			$conditions = [ $conditions ];
-		}
-		// Just a single condition was passed, but with a bind.
-		elseif ( ! empty( $conditions ) && ! is_array( $conditions[0] ) ) {
+		} elseif ( ! empty( $conditions ) && ! is_array( $conditions[0] ) ) {
+			// Just a single condition was passed, but with a bind.
 			$conditions = [ $conditions ];
 		}
 
@@ -300,7 +379,7 @@ abstract class DriverBase {
 		if ( $binds ) {
 			// PHP-CS triggers a false positive on this; $condition is a string that contains the placeholders.
 			//
-            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$condition = $wpdb->prepare( $condition, $binds );
 		}
 
@@ -321,9 +400,9 @@ abstract class DriverBase {
 		// If the value is part of an IN clause or BETWEEN clause and
 		// has multiple values, we attempt to split the values apart into an
 		// array and iterate over them individually.
-		if ( $operator == 'in' ) {
+		if ( 'in' === $operator ) {
 			$values = preg_split( "/'?\s?(,)\s?'?/i", $value );
-		} elseif ( $operator == 'between' ) {
+		} elseif ( 'between' === $operator ) {
 			$values = preg_split( "/'?\s?(AND)\s?'?/i", $value );
 		}
 
@@ -353,6 +432,12 @@ abstract class DriverBase {
 		return $retval;
 	}
 
+	/**
+	 * Strips slashes from a string, object, or array recursively.
+	 *
+	 * @param mixed $stdObject_or_array_or_string The value to strip slashes from.
+	 * @return mixed The value with slashes stripped.
+	 */
 	public function strip_slashes( $stdObject_or_array_or_string ) {
 		/**
 		 * Some objects have properties that are recursive objects. To avoid this we have to keep track of what objects
@@ -366,23 +451,26 @@ abstract class DriverBase {
 
 		if ( is_string( $stdObject_or_array_or_string ) ) {
 			$stdObject_or_array_or_string = str_replace( "\\'", "'", str_replace( '\"', '"', str_replace( '\\\\', '\\', $stdObject_or_array_or_string ) ) );
-		} elseif ( is_object( $stdObject_or_array_or_string ) && ! in_array( $stdObject_or_array_or_string, $processed_objects ) ) {
-			foreach ( get_object_vars( $stdObject_or_array_or_string ) as $key => $val ) {
-				if ( $val != $stdObject_or_array_or_string && $key != '_mapper' ) {
-					$stdObject_or_array_or_string->$key = $this->strip_slashes( $val );
+		} elseif ( is_object( $stdObject_or_array_or_string ) ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			if ( ! in_array( $stdObject_or_array_or_string, $processed_objects ) ) {
+				foreach ( get_object_vars( $stdObject_or_array_or_string ) as $key => $val ) {
+					if ( $stdObject_or_array_or_string !== $val && '_mapper' !== $key ) {
+						$stdObject_or_array_or_string->$key = $this->strip_slashes( $val );
+					}
 				}
+				$processed_objects[] = $stdObject_or_array_or_string;
 			}
-			$processed_objects[] = $stdObject_or_array_or_string;
 		} elseif ( is_array( $stdObject_or_array_or_string ) ) {
 			foreach ( $stdObject_or_array_or_string as $key => $val ) {
-				if ( $key != '_mixins' ) {
+				if ( '_mixins' !== $key ) {
 					$stdObject_or_array_or_string[ $key ] = $this->strip_slashes( $val );
 				}
 			}
 		}
 
 		--$level;
-		if ( $level == 0 ) {
+		if ( 0 === $level ) {
 			$processed_objects = [];
 		}
 
@@ -395,12 +483,13 @@ abstract class DriverBase {
 	 * @param object      $stdObject
 	 * @param string|bool $context (optional)
 	 * @return object
+	 * @throws \E_InvalidEntityException When entity conversion fails
 	 */
 	public function convert_to_model( $stdObject, $context = false ) {
 		try {
 			$this->_convert_to_entity( $stdObject );
 		} catch ( \Exception $ex ) {
-			throw new \E_InvalidEntityException( $ex );
+			throw new \E_InvalidEntityException( esc_html( $ex->getMessage() ) );
 		}
 
 		return $this->create( $stdObject );
@@ -419,51 +508,46 @@ abstract class DriverBase {
 	/**
 	 * If a field has no value, then use the default value.
 	 *
-	 * @param \stdClass|Model $object
+	 * @param mixed ...$args Variable arguments: first argument must be \stdClass|Model object.
+	 * @throws \E_InvalidEntityException When object is not an object
 	 */
-	public function set_default_value( $object ) {
+	public function set_default_value( ...$args ) {
 		$array         = null;
 		$field         = null;
 		$default_value = null;
+		$obj           = $args[0] ?? null;
 
 		// The first argument MUST be an object.
-		if ( ! is_object( $object ) ) {
+		if ( ! is_object( $obj ) ) {
 			throw new \E_InvalidEntityException();
 		}
 
-		// This method has two signatures:
-		// 1) _set_default_value($object, $field, $default_value)
-		// 2) _set_default_value($object, $array_field, $field, $default_value).
-
 		// Handle #1.
-		$args = func_get_args();
 		if ( count( $args ) == 4 ) {
-			list($object, $array, $field, $default_value) = $args;
-			if ( ! isset( $object->{$array} ) ) {
-				$object->{$array}           = [];
-				$object->{$array}[ $field ] = null;
+			list($obj, $array, $field, $default_value) = $args;
+			if ( ! isset( $obj->{$array} ) || ! is_array( $obj->{$array} ) ) {
+				$obj->{$array}           = [];
+				$obj->{$array}[ $field ] = null;
 			} else {
-				$arr = &$object->{$array};
+				$arr = &$obj->{$array};
 				if ( ! isset( $arr[ $field ] ) ) {
 					$arr[ $field ] = null;
 				}
 			}
-			$array = &$object->{$array};
+			$array = &$obj->{$array};
 			$value = &$array[ $field ];
-			if ( $value === '' or is_null( $value ) ) {
+			if ( $value === '' || is_null( $value ) ) {
 				$value = $default_value;
 			}
-		}
-
-		// Handle #2.
-		else {
-			list($object, $field, $default_value) = $args;
-			if ( ! isset( $object->$field ) ) {
-				$object->$field = null;
+		} else {
+			// Handle #2.
+			list($obj, $field, $default_value) = $args;
+			if ( ! isset( $obj->$field ) ) {
+				$obj->$field = null;
 			}
-			$value = $object->$field;
-			if ( $value === '' or is_null( $value ) ) {
-				$object->$field = $default_value;
+			$value = $obj->$field;
+			if ( $value === '' || is_null( $value ) ) {
+				$obj->$field = $default_value;
 			}
 		}
 	}
@@ -591,6 +675,7 @@ abstract class DriverBase {
 	 *
 	 * @param \stdClass|Model $entity
 	 * @return bool|int Resulting ID or false upon failure
+	 * @throws \E_InvalidEntityException When entity is an array instead of object
 	 */
 	public function save( $entity ) {
 		$retval = false;
@@ -630,15 +715,19 @@ abstract class DriverBase {
 	}
 
 	/**
-	 * @param object $entity
+	 * Sets default values for an entity.
+	 *
+	 * @param object $entity The entity object.
 	 */
 	public function set_defaults( $entity ) {}
 
 	/**
-	 * @param string        $name
-	 * @param string        $type
-	 * @param string|number $default_value
-	 * @param bool          $extra
+	 * Defines a column for this mapper.
+	 *
+	 * @param string        $name          The column name.
+	 * @param string        $type          The column type.
+	 * @param string|number $default_value The default value.
+	 * @param bool          $extra         Whether this is an extra column.
 	 * @return void
 	 */
 	public function define_column( $name, $type, $default_value = null, $extra = false ) {

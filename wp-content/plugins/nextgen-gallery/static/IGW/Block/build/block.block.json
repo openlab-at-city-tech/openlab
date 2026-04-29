@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "imagely/nextgen-gallery",
+	"title": "NextGEN Gallery (Legacy)",
+	"category": "media",
+	"icon": "format-gallery",
+	"description": "Legacy NextGEN Gallery block - Use new blocks for better features",
+	"keywords": ["nextgen", "gallery", "images", "photos", "legacy"],
+	"textdomain": "nggallery",
+	"editorScript": "file:./block.min.js",
+	"editorStyle": "file:../editor.css",
+	"attributes": {
+		"content": {
+			"type": "string",
+			"source": "html",
+			"default": ""
+		}
+	},
+	"supports": {
+		"html": false,
+		"className": false,
+		"customClassName": false
+	},
+	"example": {
+		"attributes": {
+			"content": "[ngg id=\"1\"]"
+		}
+	}
+}

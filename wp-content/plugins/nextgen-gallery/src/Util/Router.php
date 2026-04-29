@@ -5,27 +5,80 @@ namespace Imagely\NGG\Util;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Router utility class.
+ */
 class Router {
 
+	/**
+	 * Instances cache.
+	 *
+	 * @var array
+	 */
 	public static $_instances = [];
-	public static $_lookups   = [];
 
+	/**
+	 * Lookups cache.
+	 *
+	 * @var array
+	 */
+	public static $_lookups = [];
+
+	/**
+	 * Router context.
+	 *
+	 * @var string|false
+	 */
 	public $context;
+
+	/**
+	 * Request method.
+	 *
+	 * @var string
+	 */
 	public $_request_method = '';
+
+	/**
+	 * Routed app instance.
+	 *
+	 * @var object|null
+	 */
 	public $_routed_app;
 
-	public $_apps        = [];
+	/**
+	 * Apps array.
+	 *
+	 * @var array
+	 */
+	public $_apps = [];
+
+	/**
+	 * Default app instance.
+	 *
+	 * @var object|null
+	 */
 	public $_default_app = null;
 
+	/**
+	 * Whether to use canonical redirect.
+	 *
+	 * @var bool
+	 */
 	public static $use_canonical_redirect = true;
-	public static $use_old_slugs          = true;
+
+	/**
+	 * Whether to use old slugs.
+	 *
+	 * @var bool
+	 */
+	public static $use_old_slugs = true;
 
 	public function __construct( $context = false ) {
 		if ( ! $context || $context === 'all' ) {
 			$this->context = '/';
 		}
 
-		$this->_request_method = ! empty( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : null;
+		$this->_request_method = ! empty( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : null;
 
 		self::$_lookups = Transient::fetch( $this->_get_cache_key(), [] );
 
@@ -34,6 +87,8 @@ class Router {
 	}
 
 	/**
+	 * Gets a router instance.
+	 *
 	 * @param string|false $context (optional)
 	 * @return Router
 	 */
@@ -44,6 +99,9 @@ class Router {
 		return self::$_instances[ $context ];
 	}
 
+	/**
+	 * Registers router hooks.
+	 */
 	public function register_hooks() {
 		\add_action( 'template_redirect', [ $this, 'restore_request_uri' ], 1 );
 
@@ -66,10 +124,12 @@ class Router {
 	 */
 	public function restore_request_uri() {
 		if ( isset( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-			$request_uri              = $_SERVER['NGG_ORIG_REQUEST_URI'];
-			$_SERVER['UNENCODED_URL'] = $_SERVER['HTTP_X_ORIGINAL_URL'] = $_SERVER['REQUEST_URI'] = $request_uri;
+			$request_uri                    = self::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
+			$_SERVER['REQUEST_URI']         = $request_uri;
+			$_SERVER['HTTP_X_ORIGINAL_URL'] = $request_uri;
+			$_SERVER['UNENCODED_URL']       = $request_uri;
 			if ( isset( $_SERVER['ORIG_PATH_INFO'] ) ) {
-				$_SERVER['PATH_INFO'] = $_SERVER['ORIG_PATH_INFO'];
+				$_SERVER['PATH_INFO'] = self::sanitize_request_uri_for_routing( $_SERVER['ORIG_PATH_INFO'] );
 			}
 		} else {
 			// This is the proper behavior, but it causes problems with WPML.
@@ -82,6 +142,11 @@ class Router {
 		}
 	}
 
+	/**
+	 * Joins multiple path segments together.
+	 *
+	 * @return string
+	 */
 	public function join_paths() {
 		$args  = func_get_args();
 		$parts = $this->_flatten_array( $args );
@@ -100,7 +165,7 @@ class Router {
 	 */
 	public function remove_url_segment( $segment, $url ) {
 		$retval = $url;
-		$parts  = parse_url( $url );
+		$parts  = wp_parse_url( $url );
 
 		// If the url has a path, then we can remove a segment.
 		if ( isset( $parts['path'] ) && $segment != '/' ) {
@@ -119,47 +184,53 @@ class Router {
 	/**
 	 * Flattens an array of arrays to a single array
 	 *
-	 * @param array $array
-	 * @param array $parent (optional)
+	 * @param array $items
+	 * @param array $parent_array (optional)
 	 * @param bool  $exclude_duplicates (optional - defaults to TRUE)
 	 * @return array
 	 */
-	public function _flatten_array( $array, $parent = null, $exclude_duplicates = true ) {
-		if ( is_array( $array ) ) {
+	public function _flatten_array( $items, $parent_array = null, $exclude_duplicates = true ) {
+		if ( is_array( $items ) ) {
 			// We're to add each element to the parent array.
-			if ( $parent ) {
-				foreach ( $array as $index => $element ) {
-					foreach ( $this->_flatten_array( $array ) as $sub_element ) {
+			if ( $parent_array ) {
+				foreach ( $items as $index => $element ) {
+					foreach ( $this->_flatten_array( $items ) as $sub_element ) {
 						if ( $exclude_duplicates ) {
-							if ( ! in_array( $sub_element, $parent ) ) {
-								$parent[] = $sub_element;
+							// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+							if ( ! in_array( $sub_element, $parent_array ) ) {
+								$parent_array[] = $sub_element;
 							}
 						} else {
-							$parent[] = $sub_element;
+							$parent_array[] = $sub_element;
 						}
 					}
 				}
-				$array = $parent;
+				$items = $parent_array;
 			} else {
 				// We're starting the process..
 				$index = 0;
-				while ( isset( $array[ $index ] ) ) {
-					$element = $array[ $index ];
+				while ( isset( $items[ $index ] ) ) {
+					$element = $items[ $index ];
 					if ( is_array( $element ) ) {
-						$array = $this->_flatten_array( $element, $array );
-						unset( $array[ $index ] );
+						$items = $this->_flatten_array( $element, $items );
+						unset( $items[ $index ] );
 					}
-					$index += 1;
+					++$index;
 				}
-				$array = array_values( $array );
+				$items = array_values( $items );
 			}
 		} else {
-			$array = [ $array ];
+			$items = [ $items ];
 		}
 
-		return $array;
+		return $items;
 	}
 
+	/**
+	 * Joins multiple query strings together.
+	 *
+	 * @return string
+	 */
 	public function join_querystrings() {
 		$retval = [];
 		$params = func_get_args();
@@ -177,6 +248,12 @@ class Router {
 		return $this->assoc_array_to_querystring( $retval );
 	}
 
+	/**
+	 * Converts an associative array to a query string.
+	 *
+	 * @param array $arr
+	 * @return string
+	 */
 	public function assoc_array_to_querystring( $arr ) {
 		$retval = [];
 		foreach ( $arr as $key => $val ) {
@@ -230,12 +307,14 @@ class Router {
 		$slug_regex  = '#' . $slug . '/?$#';
 
 		// Remove all parameters.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		while ( @preg_match( $param_regex, $retval, $matches ) ) {
 			$match_regex = '#' . preg_quote( array_shift( $matches ), '#' ) . '$#';
 			$retval      = preg_replace( $match_regex, '', $retval );
 		}
 
 		// Remove the slug or trailing slash.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( @preg_match( $slug_regex, $retval, $matches ) ) {
 			$match_regex = '#' . preg_quote( array_shift( $matches ), '#' ) . '$#';
 			$retval      = preg_replace( $match_regex, '', $retval );
@@ -257,6 +336,8 @@ class Router {
 	}
 
 	/**
+	 * Gets the routed app instance.
+	 *
 	 * @return RoutingApp
 	 */
 	public function get_routed_app() {
@@ -264,6 +345,8 @@ class Router {
 	}
 
 	/**
+	 * Gets the default routing app instance.
+	 *
 	 * @return RoutingApp
 	 */
 	public function get_default_app() {
@@ -282,12 +365,12 @@ class Router {
 		$this->get_default_app()->rewrite( $src, $dst, $redirect );
 	}
 
-	public function get_parameter( $key, $prefix = null, $default = null ) {
-		return $this->get_routed_app()->get_parameter( $key, $prefix, $default );
+	public function get_parameter( $key, $prefix = null, $default_value = null ) {
+		return $this->get_routed_app()->get_parameter( $key, $prefix, $default_value );
 	}
 
-	public function param( $key, $prefix = null, $default = null ) {
-		return $this->get_parameter( $key, $prefix, $default );
+	public function param( $key, $prefix = null, $default_value = null ) {
+		return $this->get_parameter( $key, $prefix, $default_value );
 	}
 
 	public function has_parameter_segments() {
@@ -308,7 +391,7 @@ class Router {
 		} else {
 			$retval = $this->join_paths( $this->get_base_url( $site_url ), $uri );
 			if ( $with_qs ) {
-				$parts = parse_url( $retval );
+				$parts = wp_parse_url( $retval );
 				if ( ! isset( $parts['query'] ) ) {
 					$parts['query'] = $this->get_querystring();
 				} else {
@@ -330,6 +413,7 @@ class Router {
 				$retval
 			);
 
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			if ( $retval && $retval != $base_url && @file_exists( $filename ) ) {
 				// Remove index.php from the url.
 				$retval = $this->remove_url_segment( '/index.php', $retval );
@@ -362,7 +446,8 @@ class Router {
 	public function get_routed_url() {
 		$retval = $this->get_url( $this->get_request_uri() );
 
-		if ( ( $app = $this->get_routed_app() ) ) {
+		$app = $this->get_routed_app();
+		if ( $app ) {
 			$retval = $this->get_url( $app->get_app_uri() );
 		}
 
@@ -384,27 +469,36 @@ class Router {
 	}
 
 	/**
-	 * Determines if the current request is over HTTPs or not
+	 * Determines if the current request is over HTTPs or not.
+	 *
+	 * @return bool
 	 */
 	public function is_https() {
 		return (
-			( ! empty( $_SERVER['HTTPS'] ) && strtolower( $_SERVER['HTTPS'] ) !== 'off' ) ||
-			( ! empty( $_SERVER['HTTP_USESSL'] ) && strtolower( $_SERVER['HTTP_USESSL'] ) !== 'off' ) ||
-			( ! empty( $_SERVER['REDIRECT_HTTPS'] ) && strtolower( $_SERVER['REDIRECT_HTTPS'] ) !== 'off' ) ||
-			( ! empty( $_SERVER['SERVER_PORT'] ) && $_SERVER['SERVER_PORT'] == 443 )
+			( ! empty( $_SERVER['HTTPS'] ) && strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTPS'] ) ) ) !== 'off' ) ||
+			( ! empty( $_SERVER['HTTP_USESSL'] ) && strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_USESSL'] ) ) ) !== 'off' ) ||
+			( ! empty( $_SERVER['REDIRECT_HTTPS'] ) && strtolower( sanitize_text_field( wp_unslash( $_SERVER['REDIRECT_HTTPS'] ) ) ) !== 'off' ) ||
+			( ! empty( $_SERVER['SERVER_PORT'] ) && intval( sanitize_text_field( wp_unslash( $_SERVER['SERVER_PORT'] ) ) ) == 443 )
 		);
 	}
 
 	/**
-	 * Serve request using defined Routing Apps
+	 * Serves request using defined Routing Apps.
+	 *
+	 * @return bool
 	 */
 	public function serve_request() {
 		$served = false;
 
 		// iterate over all apps, and serve the route.
-		/** @var \Imagely\NGG\Util\RoutingApp $app */
+		/**
+		 * Routing application instance.
+		 *
+		 * @var \Imagely\NGG\Util\RoutingApp $app
+		 */
 		foreach ( $this->get_apps() as $app ) {
-			if ( ( $served = $app->serve_request( $this->context ) ) ) {
+			$served = $app->serve_request( $this->context );
+			if ( $served ) {
 				break;
 			}
 		}
@@ -413,14 +507,48 @@ class Router {
 	}
 
 	/**
-	 * Gets the querystring of the current request
+	 * Prepares REQUEST_URI (or path) for routing. Do not use sanitize_text_field():
+	 * WordPress _sanitize_text_fields() strips percent-encoded octets (e.g. %20),
+	 * corrupting path segments (brick%20store becomes brickstore).
 	 *
-	 * @return null|bool
+	 * @since 4.1.2
+	 *
+	 * @param string $uri Raw request URI or path fragment.
+	 * @return string
 	 */
-	public function get_querystring() {
-		return isset( $_SERVER['QUERY_STRING'] ) ? $_SERVER['QUERY_STRING'] : null;
+	public static function sanitize_request_uri_for_routing( $uri ) {
+		if ( ! is_string( $uri ) || $uri === '' ) {
+			return '';
+		}
+		$uri = wp_unslash( $uri );
+		$uri = wp_check_invalid_utf8( $uri );
+		if ( false === $uri || '' === $uri ) {
+			return '';
+		}
+		$uri = wp_strip_all_tags( $uri );
+		// Strip NUL bytes explicitly.
+		$uri = str_replace( "\0", '', $uri );
+		// Strip remaining ASCII control characters (including CR/LF) to avoid
+		// header or log injection issues when this value is reused.
+		$uri = preg_replace( '/[\x00-\x1F\x7F]+/u', '', $uri );
+
+		return $uri;
 	}
 
+	/**
+	 * Gets the querystring of the current request
+	 *
+	 * @return string|null
+	 */
+	public function get_querystring() {
+		return isset( $_SERVER['QUERY_STRING'] ) ? self::sanitize_request_uri_for_routing( $_SERVER['QUERY_STRING'] ) : null;
+	}
+
+	/**
+	 * Sets the query string for the current request.
+	 *
+	 * @param string $value
+	 */
 	public function set_querystring( $value ) {
 		$_SERVER['QUERY_STRING'] = $value;
 	}
@@ -433,15 +561,16 @@ class Router {
 	 */
 	public function get_request_uri( $with_params = true ) {
 		if ( ! empty( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-			$retval = $_SERVER['NGG_ORIG_REQUEST_URI'];
+			$retval = self::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
 		} elseif ( ! empty( $_SERVER['PATH_INFO'] ) ) {
-			$retval = $_SERVER['PATH_INFO'];
+			$retval = self::sanitize_request_uri_for_routing( $_SERVER['PATH_INFO'] );
 		} else {
-			$retval = $_SERVER['REQUEST_URI'];
+			$retval = isset( $_SERVER['REQUEST_URI'] ) ? self::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ) : '';
 		}
 
 		// Remove the querystring.
-		if ( ( $index = strpos( $retval, '?' ) ) !== false ) {
+		$index = strpos( $retval, '?' );
+		if ( $index !== false ) {
 			$retval = substr( $retval, 0, $index );
 		}
 
@@ -471,6 +600,8 @@ class Router {
 	}
 
 	/**
+	 * Creates a new routing app instance.
+	 *
 	 * @param string $name
 	 * @return RoutingApp
 	 */
@@ -491,30 +622,58 @@ class Router {
 	}
 
 	/**
-	 * Sorts apps.This is needed because we want the most specific app to be executed first
+	 * Sorts apps. This is needed because we want the most specific app to be executed first.
 	 *
+	 * @param RoutingApp $a
+	 * @param RoutingApp $b
 	 * @return int
 	 */
 	public function _sort_apps( RoutingApp $a, RoutingApp $b ) {
 		return strnatcmp( $a->context, $b->context );
 	}
 
+	/**
+	 * Gets the cache key for router lookups.
+	 *
+	 * @return string
+	 */
 	public function _get_cache_key() {
 		return Transient::create_key( 'WordPress-Router', 'get_base_url' );
 	}
 
+	/**
+	 * Caches router lookups.
+	 */
 	public function cache_lookups() {
 		Transient::update( $this->_get_cache_key(), self::$_lookups );
 	}
 
+	/**
+	 * Checks if a base URL is cached.
+	 *
+	 * @param bool $type
+	 * @return bool
+	 */
 	public function has_cached_base_url( $type = false ) {
 		return isset( self::$_lookups[ $type ] );
 	}
 
+	/**
+	 * Gets a cached base URL.
+	 *
+	 * @param bool $type
+	 * @return string|null
+	 */
 	public function get_cached_base_url( $type = false ) {
 		return self::$_lookups[ $type ];
 	}
 
+	/**
+	 * Computes the base URL for the router.
+	 *
+	 * @param bool|string $site_url
+	 * @return string
+	 */
 	public function get_computed_base_url( $site_url = false ) {
 		$retval            = null;
 		$add_index_dot_php = true;
@@ -545,7 +704,7 @@ class Router {
 			if ( is_ssl() ) {
 				$scheme = 'https';
 			} else {
-				$scheme = parse_url( $retval, PHP_URL_SCHEME );
+				$scheme = wp_parse_url( $retval, PHP_URL_SCHEME );
 			}
 			$retval = set_url_scheme( $retval, $scheme );
 		} elseif ( in_array( $site_url, [ 'gallery', 'galleries' ], true ) ) {
@@ -571,10 +730,16 @@ class Router {
 		return $retval;
 	}
 
+	/**
+	 * Adds index.php to a URL if needed.
+	 *
+	 * @param string $url
+	 * @return string
+	 */
 	public function _add_index_dot_php_to_url( $url ) {
 		if ( strpos( $url, '/index.php' ) === false ) {
 			$pattern = get_option( 'permalink_structure' );
-			if ( ! $pattern or strpos( $pattern, '/index.php' ) !== false ) {
+			if ( ! $pattern || strpos( $pattern, '/index.php' ) !== false ) {
 				$url = $this->join_paths( $url, '/index.php' );
 			}
 		}
@@ -583,6 +748,8 @@ class Router {
 	}
 
 	/**
+	 * Fixes the page parameter for pagination.
+	 *
 	 * This code was originally added to correct a bug in Pro 1.0.10 and was meant to be temporary. However now the
 	 * albums' pagination relies on this to function correctly, and fixing it properly would require more time than
 	 * it is worth.
@@ -594,9 +761,10 @@ class Router {
 			&& is_object( $post )
 			&& is_string( $post->post_content )
 			&& ( strpos( $post->post_content, '<!--nextpage-->' ) === false )
-			&& ( strpos( $_SERVER['REQUEST_URI'], '/page/' ) !== false )
-			&& preg_match( '#/page/(\\d+)#', $_SERVER['REQUEST_URI'], $match ) ) {
-			$_REQUEST['page'] = $match[1];
+			&& isset( $_SERVER['REQUEST_URI'] )
+			&& ( strpos( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), '/page/' ) !== false )
+			&& preg_match( '#/page/(\\d+)#', sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ), $match ) ) {
+			$_REQUEST['page'] = sanitize_text_field( wp_unslash( $match[1] ) );
 		}
 	}
 
@@ -624,6 +792,7 @@ class Router {
 
 		// If the URL doesn't appear to contain a scheme, we presume it needs https:// prepended (unless a relative
 		// link starting with /, # or ? or a php file).
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( strpos( $url, ':' ) === false && ! in_array( $url[0], [ '/', '#', '?' ] ) && ! preg_match( '/^[a-z0-9-]+?\.php/i', $url ) ) {
 			$url = \is_ssl() ? 'https://' : 'http://' . $url;
 		}

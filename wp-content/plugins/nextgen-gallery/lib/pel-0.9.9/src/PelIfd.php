@@ -473,6 +473,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
 
         /* The format of the thumbnail is stored in this tag. */
         // TODO: handle TIFF thumbnail.
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Code intentionally commented out.
         // if ($tag == PelTag::COMPRESSION) {
         // $this->thumb_format = $data->getShort();
         // }
@@ -530,6 +531,7 @@ class PelIfd implements \IteratorAggregate, \ArrayAccess
 
         /* The format of the thumbnail is stored in this tag. */
         // TODO: handle TIFF thumbnail.
+        // phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Code intentionally commented out.
         // if ($tag == PelTag::COMPRESSION) {
         // $this->thumb_format = $data->getShort();
         // }

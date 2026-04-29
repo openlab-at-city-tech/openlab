@@ -6,8 +6,18 @@ use Imagely\NGG\DisplayTypes\Taxonomy;
 use Imagely\NGG\Display\Shortcodes;
 use Imagely\NGG\Settings\Settings;
 
+/**
+ * Display Type Manager
+ *
+ * Manages registration of display type controllers and legacy shortcodes.
+ */
 class Manager {
 
+	/**
+	 * Registers all display type controllers and shortcodes
+	 *
+	 * @return void
+	 */
 	public static function register() {
 		ControllerFactory::register_controller(
 			'photocrati-nextgen_basic_imagebrowser',
@@ -110,6 +120,12 @@ class Manager {
 		\add_action( 'ngg_routes', [ $self, 'define_routes' ] );
 	}
 
+	/**
+	 * Defines URL rewrite routes for NextGEN Gallery.
+	 *
+	 * @param object $router Router instance.
+	 * @return void
+	 */
 	public function define_routes( $router ) {
 		$slug = '/' . Settings::get_instance()->get( 'router_param_slug', 'nggallery' );
 
@@ -132,14 +148,20 @@ class Manager {
 	 * Gets a value from the parameter array, and if not available, uses the default value
 	 *
 	 * @param string $name
-	 * @param mixed  $default
+	 * @param mixed  $default_value
 	 * @param array  $params
 	 * @return mixed
 	 */
-	public function get_param( $name, $default, $params ) {
-		return ( isset( $params[ $name ] ) ) ? $params[ $name ] : $default;
+	public function get_param( $name, $default_value, $params ) {
+		return ( isset( $params[ $name ] ) ) ? $params[ $name ] : $default_value;
 	}
 
+	/**
+	 * Transforms legacy album shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_album_shortcode( $params ) {
 		$params['source']        = $this->get_param( 'source', 'albums', $params );
 		$params['container_ids'] = $this->get_param( 'id', null, $params );
@@ -149,6 +171,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy imagebrowser shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_imagebrowser_shortcode( $params ) {
 		$params['gallery_ids']  = $this->get_param( 'id', null, $params );
 		$params['source']       = $this->get_param( 'source', 'galleries', $params );
@@ -158,6 +186,18 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy single picture shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 *
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+	 */
 	public function render_legacy_single_picture_shortcode( $params ) {
 		$params['display_type'] = $this->get_param( 'display_type', NGG_BASIC_SINGLEPIC, $params );
 		$params['image_ids']    = $this->get_param( 'id', null, $params );
@@ -165,6 +205,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy tag cloud shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_tag_cloud_shortcode( $params ) {
 		$params['tagcloud']     = $this->get_param( 'tagcloud', 'yes', $params );
 		$params['source']       = $this->get_param( 'source', 'tags', $params );
@@ -172,6 +218,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy nggallery shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_nggallery( $params ) {
 		$params['gallery_ids']  = $this->get_param( 'id', null, $params );
 		$params['display_type'] = $this->get_param( 'display_type', NGG_BASIC_THUMBNAILS, $params );
@@ -183,6 +235,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy tags-based shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_based_on_tags( $params ) {
 		$params['tag_ids']      = $this->get_param( 'gallery', $this->get_param( 'album', [], $params ), $params );
 		$params['source']       = $this->get_param( 'source', 'tags', $params );
@@ -191,6 +249,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy random images shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_random_images( $params ) {
 		$params['source']             = $this->get_param( 'source', 'random', $params );
 		$params['images_per_page']    = $this->get_param( 'max', null, $params );
@@ -207,6 +271,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy recent images shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_recent_images( $params ) {
 		$params['source']             = $this->get_param( 'source', 'recent', $params );
 		$params['images_per_page']    = $this->get_param( 'max', null, $params );
@@ -222,6 +292,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy thumbnail shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_thumb_shortcode( $params ) {
 		$params['entity_ids']   = $this->get_param( 'id', null, $params );
 		$params['source']       = $this->get_param( 'source', 'galleries', $params );
@@ -230,6 +306,12 @@ class Manager {
 		return $params;
 	}
 
+	/**
+	 * Transforms legacy slideshow shortcode parameters.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array Modified parameters.
+	 */
 	public function render_legacy_slideshow( $params ) {
 		$params['gallery_ids']    = $this->get_param( 'id', null, $params );
 		$params['display_type']   = $this->get_param( 'display_type', NGG_BASIC_SLIDESHOW, $params );

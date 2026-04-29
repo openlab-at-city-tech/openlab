@@ -5,12 +5,19 @@ namespace Imagely\NGG\Display;
 use Imagely\NGG\DataMapper\WPModel;
 use Imagely\NGG\Settings\Settings;
 
+/**
+ * Static POPE Assets management class for NextGEN Gallery.
+ *
+ * Handles static asset path resolution for legacy POPE modules.
+ */
 class StaticPopeAssets extends StaticAssets {
 
 	/**
-	 * @param $filename
-	 * @param false|string $legacy_module_id
-	 * @return string
+	 * Computes the absolute path for a POPE static asset file.
+	 *
+	 * @param string       $filename         The filename to get path for.
+	 * @param false|string $legacy_module_id Legacy module ID for compatibility.
+	 * @return string The computed absolute path to the static asset.
 	 */
 	public static function get_computed_abspath( $filename, $legacy_module_id = false ) {
 		if ( strpos( $filename, '#' ) !== false ) {
@@ -34,6 +41,7 @@ class StaticPopeAssets extends StaticAssets {
 
 		$override_dir = \wp_normalize_path( self::get_override_dir( $legacy_module_id ) );
 		$override     = \path_join( $override_dir, $filename );
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( @\stream_resolve_include_path( $override ) ) {
 			return $override;
 		}
@@ -69,29 +77,35 @@ class StaticPopeAssets extends StaticAssets {
 	}
 
 	/**
-	 * @param string|null $module_id
-	 * @return string $dir
+	 * Gets the override directory for a module.
+	 *
+	 * @param string|null $module_id The module ID to get override directory for.
+	 * @return string The override directory path.
 	 */
 	public static function get_override_dir( $module_id = null ) {
 		$root = \trailingslashit( \path_join( WP_CONTENT_DIR, 'ngg' ) );
-		if ( ! @\file_exists( $root ) && \is_writable( \trailingslashit( WP_CONTENT_DIR ) ) ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! @\file_exists( $root ) && \wp_is_writable( \trailingslashit( WP_CONTENT_DIR ) ) ) {
 			\wp_mkdir_p( $root );
 		}
 
 		$modules = \trailingslashit( \path_join( $root, 'modules' ) );
 
-		if ( ! @\file_exists( $modules ) && \is_writable( $root ) ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( ! @\file_exists( $modules ) && \wp_is_writable( $root ) ) {
 			\wp_mkdir_p( $modules );
 		}
 
 		if ( $module_id ) {
 			$module_dir = \trailingslashit( \path_join( $modules, $module_id ) );
-			if ( ! @\file_exists( $module_dir ) && \is_writable( $modules ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( ! @\file_exists( $module_dir ) && \wp_is_writable( $modules ) ) {
 				\wp_mkdir_p( $module_dir );
 			}
 
 			$static_dir = \trailingslashit( \path_join( $module_dir, 'static' ) );
-			if ( ! @\file_exists( $static_dir ) && \is_writable( $module_dir ) ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( ! @\file_exists( $static_dir ) && \wp_is_writable( $module_dir ) ) {
 				\wp_mkdir_p( $static_dir );
 			}
 
@@ -102,8 +116,10 @@ class StaticPopeAssets extends StaticAssets {
 	}
 
 	/**
-	 * @param string $str
-	 * @return string
+	 * Trims preceding slashes from a string.
+	 *
+	 * @param string $str The string to trim.
+	 * @return string The trimmed string.
 	 */
 	public static function trim_preceding_slash( $str ) {
 		return \preg_replace( '#^/{1,2}#', '', $str, 1 );

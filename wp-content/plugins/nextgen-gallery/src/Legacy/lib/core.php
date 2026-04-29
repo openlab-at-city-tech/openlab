@@ -9,15 +9,15 @@ class nggGallery {
 	/**
 	 * Show a error messages
 	 */
-	static function show_error( $message ) {
-		echo '<div class="wrap"><h2></h2><div class="error" id="error"><p>' . $message . '</p></div></div>' . "\n";
+public static function show_error( $message ) {
+		echo '<div class="wrap"><h2></h2><div class="error" id="error"><p>' . wp_kses_post( $message ) . '</p></div></div>' . "\n";
 	}
 
 	/**
 	 * Show a system messages
 	 */
-	static function show_message( $message, $message_id = null ) {
-		echo '<div class="wrap"><h2></h2><div class="updated fade ' . $message_id . '" id="message"><p>' . $message . '</p></div></div>' . "\n";
+public static function show_message( $message, $message_id = null ) {
+		echo '<div class="wrap"><h2></h2><div class="updated fade ' . esc_attr( $message_id ) . '" id="message"><p>' . wp_kses_post( $message ) . '</p></div></div>' . "\n";
 	}
 
 	/**
@@ -26,7 +26,7 @@ class nggGallery {
 	 * @param string $key
 	 * @return array $options
 	 */
-	static function get_option( $key ) {
+public static function get_option( $key ) {
 		global $post;
 
 		// get first the options from the database
@@ -114,8 +114,9 @@ class nggGallery {
 	 * @param bool   $callback In case we check we didn't find template we tested it one time more (optional)
 	 * @return void
 	 **/
-	static function render( $template_name, $vars = array(), $callback = false ) {
+public static function render( $template_name, $vars = array(), $callback = false ) {
 		$vars['template'] = $template_name;
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Renderer::get_instance()->display_images() returns safe HTML
 		echo \Imagely\NGG\DisplayedGallery\Renderer::get_instance()->display_images( $vars );
 	}
 
@@ -128,7 +129,7 @@ class nggGallery {
 	 * @deprecated Use Imagely\NGG\DisplayedGallery\Renderer class
 	 * @return string
 	 **/
-	static function capture( $template_name, $vars = array() ) {
+public static function capture( $template_name, $vars = array() ) {
 		$vars['template'] = $template_name;
 		return \Imagely\NGG\DisplayedGallery\Renderer::get_instance()->display_images( $vars );
 	}
@@ -138,7 +139,7 @@ class nggGallery {
 	 *
 	 * @return string Path to the selected library
 	 */
-	static function graphic_library() {
+public static function graphic_library() {
 		return NGGALLERY_ABSPATH . '/lib/gd.thumbnail.inc.php';
 	}
 
@@ -149,7 +150,7 @@ class nggGallery {
 	 * @param string $name (optional) required for wpml to determine the type of translation
 	 * @return string $in localized
 	 */
-	static function i18n( $in, $name = null ) {
+public static function i18n( $in, $name = null ) {
 
 		if ( function_exists( 'langswitch_filter_langs_with_message' ) ) {
 			$in = langswitch_filter_langs_with_message( $in );
@@ -178,7 +179,7 @@ class nggGallery {
 	 * @since V1.2.0
 	 * @return string message about recommended image size
 	 */
-	static function check_memory_limit() {
+public static function check_memory_limit() {
 
 		if ( ( function_exists( 'memory_get_usage' ) ) && ( ini_get( 'memory_limit' ) ) ) {
 
@@ -205,6 +206,7 @@ class nggGallery {
 			foreach ($sizes as $size) {
 				// very, very rough estimation
 				if ($freeMemory < round( $size['width'] * $size['height'] * 5.09 )) {
+					/* translators: 1: image width, 2: image height */
 					$result = sprintf( __( 'Note : Based on your server memory limit you should not upload larger images then <strong>%d x %d</strong> pixel', 'nggallery' ), $size['width'], $size['height'] );
 					return $result;
 				}
@@ -220,7 +222,7 @@ class nggGallery {
 	 * @param string $capability
 	 * @return bool $result of capability check
 	 */
-	static function current_user_can( $capability ) {
+public static function current_user_can( $capability ) {
 
 		global $_ngg_capabilites;
 

@@ -2,25 +2,57 @@
 
 namespace Imagely\NGG\WPCLI;
 
+/**
+ * WP-CLI command manager for NextGEN Gallery.
+ *
+ * Registers and manages WP-CLI commands for NextGEN Gallery operations.
+ */
 class Manager {
 
+	/**
+	 * Registers all NextGEN Gallery WP-CLI commands.
+	 */
 	public static function register() {
-		/** @noinspection PhpUndefinedClassInspection */
+		/**
+		 * Add album command.
+		 *
+		 * @noinspection PhpUndefinedClassInspection
+		 */
 		\WP_CLI::add_command( 'ngg album', '\Imagely\NGG\WPCLI\Album' );
 
-		/** @noinspection PhpUndefinedClassInspection */
+		/**
+		 * Add cache command.
+		 *
+		 * @noinspection PhpUndefinedClassInspection
+		 */
 		\WP_CLI::add_command( 'ngg cache', '\Imagely\NGG\WPCLI\Cache' );
 
-		/** @noinspection PhpUndefinedClassInspection */
+		/**
+		 * Add gallery command.
+		 *
+		 * @noinspection PhpUndefinedClassInspection
+		 */
 		\WP_CLI::add_command( 'ngg gallery', '\Imagely\NGG\WPCLI\Gallery' );
 
-		/** @noinspection PhpUndefinedClassInspection */
+		/**
+		 * Add image command.
+		 *
+		 * @noinspection PhpUndefinedClassInspection
+		 */
 		\WP_CLI::add_command( 'ngg image', '\Imagely\NGG\WPCLI\Image' );
 
-		/** @noinspection PhpUndefinedClassInspection */
+		/**
+		 * Add notifications command.
+		 *
+		 * @noinspection PhpUndefinedClassInspection
+		 */
 		\WP_CLI::add_command( 'ngg notifications', '\Imagely\NGG\WPCLI\Notifications' );
 
-		/** @noinspection PhpUndefinedClassInspection */
+		/**
+		 * Add settings command.
+		 *
+		 * @noinspection PhpUndefinedClassInspection
+		 */
 		\WP_CLI::add_command( 'ngg settings', '\Imagely\NGG\WPCLI\Settings' );
 	}
 }

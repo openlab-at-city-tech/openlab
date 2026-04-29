@@ -1,15 +1,18 @@
 <?php
 /**
+ * Template for updating legacy featured images field.
+ *
  * @var array $i18n
  * @var string $nonce
  */
+
 ?>
 <tr>
 	<td class='column1'>
 		<label class="tooltip"
 				for="ngg_update_legacy_featured_images_button"
-				title="<?php print $i18n['tooltip']; ?>">
-			<?php print $i18n['label']; ?>
+				title="<?php print esc_attr( $i18n['tooltip'] ); ?>">
+			<?php print esc_html( $i18n['label'] ); ?>
 		</label>
 	</td>
 	<td>
@@ -17,7 +20,7 @@
 				name="update_legacy_featured_images"
 				id="ngg_update_legacy_featured_images_button"
 				class="button delete button-primary"
-				value='<?php print $i18n['label']; ?>'
+				value='<?php print esc_attr( $i18n['label'] ); ?>'
 		/>
 	</td>
 	<script>

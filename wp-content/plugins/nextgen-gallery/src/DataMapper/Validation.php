@@ -2,6 +2,7 @@
 
 namespace Imagely\NGG\DataMapper;
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 trait Validation {
 
 	/**
@@ -18,8 +19,10 @@ trait Validation {
 	}
 
 	/**
-	 * @param string $validator
-	 * @return string
+	 * Gets the default error message for a validator.
+	 *
+	 * @param string $validator The validator name.
+	 * @return string|false The error message or false if not found.
 	 */
 	public function _get_default_error_message_for( $validator ) {
 		$retval = false;
@@ -32,8 +35,10 @@ trait Validation {
 	}
 
 	/**
-	 * @param string $formatter
-	 * @return string
+	 * Gets the default pattern for a formatter.
+	 *
+	 * @param string $formatter The formatter name.
+	 * @return string|false The pattern or false if not found.
 	 */
 	public function get_default_pattern_for( $formatter ) {
 		$retval = false;
@@ -46,8 +51,10 @@ trait Validation {
 	}
 
 	/**
-	 * @param string|array<string> $str
-	 * @return string
+	 * Humanizes a string or array of strings.
+	 *
+	 * @param string|array<string> $str The string or array of strings to humanize.
+	 * @return string The humanized string.
 	 */
 	public function humanize_string( $str ) {
 		$retval = [];
@@ -65,27 +72,30 @@ trait Validation {
 	 * Returns TRUE if a property is empty.
 	 *
 	 * @deprecated Don't use this, it's silly.
-	 * @param string $var
-	 * @return bool
+	 * @param string          $variable The variable to check.
+	 * @param string|int|bool $element Optional element key if $variable is an array.
+	 * @return bool True if empty, false otherwise.
 	 */
-	public function is_empty( $var, $element = false ) {
-		if ( is_array( $var ) && $element ) {
-			if ( isset( $var[ $element ] ) ) {
-				$var = $var[ $element ];
+	public function is_empty( $variable, $element = false ) {
+		if ( is_array( $variable ) && $element ) {
+			if ( isset( $variable[ $element ] ) ) {
+				$variable = $variable[ $element ];
 			} else {
-				$var = false;
+				$variable = false;
 			}
 		}
 
-		return ( is_null( $var ) or ( is_string( $var ) and strlen( $var ) == 0 ) or $var === false );
+		return ( is_null( $variable ) || ( is_string( $variable ) && strlen( $variable ) == 0 ) || $variable === false );
 	}
 
 	/**
-	 * @param string      $property
-	 * @param int         $length
-	 * @param string      $comparison_operator ===, !=, <, >, <=, or >=
-	 * @param bool|string $msg
-	 * @return array
+	 * Validates the length of a property.
+	 *
+	 * @param string      $property           The property name to validate.
+	 * @param int         $length             The expected length.
+	 * @param string      $comparison_operator The comparison operator: ===, !=, <, >, <=, or >=.
+	 * @param bool|string $msg                Optional custom error message.
+	 * @return array Array of validation errors if invalid, empty array if valid.
 	 */
 	public function validates_length_of( $property, $length, $comparison_operator = '=', $msg = false ) {
 		$valid       = true;
@@ -138,9 +148,12 @@ trait Validation {
 	}
 
 	/**
+	 * Validates numericality of a property.
+	 *
 	 * @param string    $property
 	 * @param int|float $comparison
 	 * @param string    $comparison_operator
+	 * @param bool      $int_only
 	 * @param string    $msg
 	 * @return array
 	 */
@@ -205,6 +218,8 @@ trait Validation {
 	}
 
 	/**
+	 * Validates inclusion of a property value.
+	 *
 	 * @param string $property
 	 * @param array  $values
 	 * @param string $msg
@@ -215,6 +230,7 @@ trait Validation {
 			$values = [ $values ];
 		}
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! in_array( $this->$property, $values ) ) {
 			if ( ! $msg ) {
 				$msg = $this->_get_default_error_message_for( __METHOD__ );
@@ -228,6 +244,8 @@ trait Validation {
 	}
 
 	/**
+	 * Validates format of a property.
+	 *
 	 * @param string|array $property
 	 * @param string       $pattern
 	 * @param string       $msg
@@ -252,6 +270,8 @@ trait Validation {
 	}
 
 	/**
+	 * Validates exclusion of a property value.
+	 *
 	 * @param string $property
 	 * @param array  $exclusions
 	 * @param string $msg (optional)
@@ -280,6 +300,8 @@ trait Validation {
 	}
 
 	/**
+	 * Validates confirmation of a property.
+	 *
 	 * @param string $property
 	 * @param string $confirmation
 	 * @param string $msg
@@ -299,6 +321,8 @@ trait Validation {
 	}
 
 	/**
+	 * Validates uniqueness of a property.
+	 *
 	 * @param string $property
 	 * @param array  $scope
 	 * @param string $msg
@@ -336,6 +360,8 @@ trait Validation {
 		return [];
 	}
 	/**
+	 * Validates presence of a property.
+	 *
 	 * @param string $property
 	 * @param array  $with
 	 * @param string $msg
@@ -392,12 +418,18 @@ trait Validation {
 	}
 }
 
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * This class exists to prevent the Validation trait from adding any new attributes to the classes that use it and is
  * only used by the above Validation trait.
  */
 class ValidationMessages {
 
+	/**
+	 * Default validation messages.
+	 *
+	 * @var array
+	 */
 	public static $default_messages = [
 		'validates_presence_of'     => '%s should be present',
 		'validates_presence_with'   => '%s should be present with %s',
@@ -412,6 +444,11 @@ class ValidationMessages {
 		'validates_equals'          => '%s is invalid',
 	];
 
+	/**
+	 * Default validation patterns.
+	 *
+	 * @var array
+	 */
 	public static $default_patterns = [
 		'email_address' => '//',
 	];

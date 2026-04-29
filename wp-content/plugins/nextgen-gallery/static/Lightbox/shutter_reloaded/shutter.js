@@ -44,6 +44,8 @@ shutterReloaded = {
 
     Init : function (a) {
         var L, T, ext, i, setid, inset, shfile, shMenuPre, k, img;
+        shutterLinks = {};
+        shutterSets = {};
         for ( i = 0; i < document.links.length; i++ ) {
             L = document.links[i];
             ext = ( L.href.indexOf('?') == -1 ) ? L.href.slice(-4).toLowerCase() : L.href.substring( 0, L.href.indexOf('?') ).slice(-4).toLowerCase();

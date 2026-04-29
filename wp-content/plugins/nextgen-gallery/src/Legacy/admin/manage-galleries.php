@@ -1,4 +1,5 @@
 <?php
+// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Legacy file structure.
 
 function nggallery_manage_gallery_main() {
 	global $ngg;
@@ -9,35 +10,42 @@ function nggallery_manage_gallery_main() {
 	];
 
 	// Build the pagination for more than 25 galleries.
-	$_GET['paged'] = isset( $_GET['paged'] ) && ( $_GET['paged'] > 0 ) ? absint( $_GET['paged'] ) : 1;
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for pagination
+	$paged = isset( $_GET['paged'] ) && ( absint( wp_unslash( $_GET['paged'] ) ) > 0 ) ? absint( wp_unslash( $_GET['paged'] ) ) : 1;
 
 	$items_per_page = apply_filters( 'ngg_manage_galleries_items_per_page', 25 );
 
-	$start = ( $_GET['paged'] - 1 ) * $items_per_page;
+	$start = ( $paged - 1 ) * $items_per_page;
 
-	if ( ! empty( $_GET['order'] ) && in_array( strtoupper( $_GET['order'] ), [ 'DESC', 'ASC' ] ) ) {
-		$order = $_GET['order'];
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for sorting
+	if ( ! empty( $_GET['order'] ) && in_array( strtoupper( sanitize_text_field( wp_unslash( $_GET['order'] ) ) ), [ 'DESC', 'ASC' ] ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$order = sanitize_text_field( wp_unslash( $_GET['order'] ) );
 	} else {
 		$order = apply_filters( 'ngg_manage_galleries_items_order', 'ASC' );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
-	if ( ! empty( $_GET['orderby'] ) && in_array( $_GET['orderby'], [ 'gid', 'title', 'author' ] ) ) {
-		$orderby = $_GET['orderby'];
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for sorting
+	if ( ! empty( $_GET['orderby'] ) && in_array( sanitize_text_field( wp_unslash( $_GET['orderby'] ) ), [ 'gid', 'title', 'author' ] ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$orderby = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
 	} else {
 		$orderby = apply_filters( 'ngg_manage_galleries_items_orderby', 'gid' );
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$gallery_mapper            = \Imagely\NGG\DataMappers\Gallery::get_instance();
 	$total_number_of_galleries = $gallery_mapper->count();
 
 	$query = $gallery_mapper->select();
 
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for search
 	if ( ! empty( $_GET['gs'] ) ) {
 		$gs = sanitize_text_field( wp_unslash( $_GET['gs'] ) );
 		$query->where( [ 'title LIKE %s', '%' . trim( $gs ) . '%' ] );
 	} else {
 		$gs = null;
 	}
+	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$gallerylist = $query->order_by( $orderby, $order )
 						->limit( $items_per_page, $start )
@@ -127,7 +135,11 @@ function nggallery_manage_gallery_main() {
 			}
 
 			return confirm(
-				'<?php printf( esc_js( __( "You are about to start the bulk edit for %s galleries \n \n 'Cancel' to stop, 'OK' to proceed.", 'nggallery' ) ), "' + numchecked + '" ); ?>'
+				<?php
+				/* translators: %s: number of galleries */
+				echo wp_json_encode( sprintf( __( "You are about to start the bulk edit for %s galleries \n \n 'Cancel' to stop, 'OK' to proceed.", 'nggallery' ), '__NUM__' ) );
+				?>
+				.replace('__NUM__', numchecked)
 			);
 		}
 
@@ -189,9 +201,9 @@ function nggallery_manage_gallery_main() {
 
 	<?php if ( isset( $action_status ) && $action_status['message'] != '' ) { ?>
 	<div id="message"
-		class="<?php echo ( $action_status['status'] == 'ok' ? 'updated' : $action_status['status'] ); ?> fade">
+		class="<?php echo ( $action_status['status'] == 'ok' ? 'updated' : esc_attr( $action_status['status'] ) ); ?> fade">
 		<p>
-			<strong><?php echo $action_status['message']; ?></strong>
+			<strong><?php echo esc_html( $action_status['message'] ); ?></strong>
 		</p>
 	</div>
 <?php } ?>
@@ -199,7 +211,7 @@ function nggallery_manage_gallery_main() {
 	<div class="wrap ngg_manage_galleries">
 		<div class="ngg_page_content_header">
 			<h3>
-				<?php echo _n( 'Manage Galleries', 'Manage Galleries', 2, 'nggallery' ); ?>
+				<?php echo esc_html( _n( 'Manage Galleries', 'Manage Galleries', 2, 'nggallery' ) ); ?>
 			</h3>
 		</div>
 
@@ -234,7 +246,7 @@ function nggallery_manage_gallery_main() {
 								id="gallery-search-input"
 								name="gs"
 								placeholder="<?php esc_attr_e( 'Search Galleries', 'nggallery' ); ?>"
-								value="<?php print ! empty( $_GET['gs'] ) ? esc_attr( trim( $_GET['gs'] ) ) : ''; ?>"/>
+								value="<?php print ! empty( $gs ) ? esc_attr( trim( $gs ) ) : ''; ?>"/>
 						<input type="submit"
 								value="<?php esc_attr_e( 'Search Galleries', 'nggallery' ); ?>"
 								class="button-primary"/>
@@ -246,7 +258,7 @@ function nggallery_manage_gallery_main() {
 			<form id="editgalleries"
 					class="nggform"
 					method="POST"
-					action="<?php echo \Imagely\NGG\Util\Router::esc_url( $ngg->manage_page->base_page . '&orderby=' . $orderby . '&order=' . $order . '&paged=' . $_GET['paged'] ); ?>"
+					action="<?php echo \Imagely\NGG\Util\Router::esc_url( $ngg->manage_page->base_page . '&orderby=' . esc_attr( $orderby ) . '&order=' . esc_attr( $order ) . '&paged=' . esc_attr( $paged ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Using NGG's URL escaping function ?>"
 					accept-charset="utf-8">
 
 				<?php wp_nonce_field( 'ngg_bulkgallery' ); ?>
@@ -280,7 +292,10 @@ function nggallery_manage_gallery_main() {
 									onclick="if (!checkSelected()) return false;"/>
 						<?php } ?>
 
-						<?php if ( current_user_can( 'NextGEN Upload images' ) && nggGallery::current_user_can( 'NextGEN Add new gallery' ) ) { ?>
+						<?php
+						// phpcs:ignore WordPress.WP.Capabilities.Unknown
+						if ( current_user_can( 'NextGEN Upload images' ) && nggGallery::current_user_can( 'NextGEN Add new gallery' ) ) {
+							?>
 							<input name="doaction"
 									class="button-primary action"
 									type="submit"
@@ -290,7 +305,7 @@ function nggallery_manage_gallery_main() {
 
 					</div>
 
-					<?php $ngg->manage_page->pagination( 'top', $_GET['paged'], $total_number_of_galleries, $items_per_page ); ?>
+					<?php $ngg->manage_page->pagination( 'top', $paged, $total_number_of_galleries, $items_per_page ); ?>
 
 				</div>
 
@@ -326,11 +341,12 @@ function nggallery_manage_gallery_main() {
 								$name        = ( empty( $gallery->title ) ) ? $gallery->name : $gallery->title;
 								$author_user = get_userdata( (int) $gallery->author );
 								?>
-								<tr id="gallery-<?php echo $gid; ?>" <?php echo $alternate; ?>>
+								<tr id="gallery-<?php echo esc_attr( $gid ); ?>" <?php echo $alternate; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $alternate contains safe CSS class ?>>
 									<?php
 									foreach ( $gallery_columns as $gallery_column_key => $column_display_name ) {
 										$class = "class='{$gallery_column_key} column-{$gallery_column_key}'";
 										$style = '';
+										// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 										if ( in_array( $gallery_column_key, $hidden_columns ) ) {
 											$style = ' style="display:none;"';
 										}
@@ -342,15 +358,15 @@ function nggallery_manage_gallery_main() {
 												?>
 												<th scope="row" class="column-cb check-column">
 													<?php if ( nggAdmin::can_manage_this_gallery( $gallery->author ) ) { ?>
-														<input name="doaction[]" type="checkbox" value="<?php echo $gid; ?>"/>
+														<input name="doaction[]" type="checkbox" value="<?php echo esc_attr( $gid ); ?>"/>
 													<?php } ?>
 												</th>
 												<?php
 												break;
 											case 'id':
 												?>
-												<td <?php echo $attributes; ?>>
-													<?php echo $gid; ?>
+												<td <?php echo $attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attributes contains safe HTML attributes ?>>
+													<?php echo esc_html( $gid ); ?>
 												</td>
 												<?php
 												break;
@@ -358,7 +374,7 @@ function nggallery_manage_gallery_main() {
 												?>
 												<td class="title column-title">
 													<?php if ( nggAdmin::can_manage_this_gallery( $gallery->author ) ) { ?>
-														<a href="<?php echo wp_nonce_url( $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $gid, 'ngg_editgallery' ); ?>"
+														<a href="<?php echo esc_url( wp_nonce_url( $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $gid, 'ngg_editgallery' ) ); ?>"
 															class='edit'
 															title="<?php esc_attr_e( 'Edit', 'nggallery' ); ?>">
 															<?php echo esc_html( \Imagely\NGG\Display\I18N::translate( $name ) ); ?>
@@ -372,7 +388,7 @@ function nggallery_manage_gallery_main() {
 												break;
 											case 'description':
 												?>
-												<td <?php echo $attributes; ?>>
+												<td <?php echo $attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attributes contains safe HTML attributes ?>>
 													<?php echo esc_html( \Imagely\NGG\Display\I18N::translate( $gallery->galdesc ) ); ?>
 													&nbsp;
 												</td>
@@ -381,20 +397,21 @@ function nggallery_manage_gallery_main() {
 											case 'author':
 												$author_string = $author_user === false ? __( 'Deleted user', 'nggallery' ) : $author_user->display_name;
 												?>
-												<td <?php echo $attributes; ?>>
+												<td <?php echo $attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attributes contains safe HTML attributes ?>>
 													<?php echo esc_html( $author_string ); ?>
 												</td>
 												<?php
 												break;
 											case 'page_id':
 												?>
-												<td <?php echo $attributes; ?>>
-													<?php echo $gallery->pageid; ?>
+												<td <?php echo $attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attributes contains safe HTML attributes ?>>
+													<?php echo esc_html( $gallery->pageid ); ?>
 												</td>
 												<?php
 												break;
 											case 'quantity':
 												global $wpdb;
+												// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 												$gallery->counter = $wpdb->get_var(
 													$wpdb->prepare(
 														"SELECT COUNT(*) FROM {$wpdb->nggpictures} WHERE galleryid = %d",
@@ -402,14 +419,14 @@ function nggallery_manage_gallery_main() {
 													)
 												);
 												?>
-												<td <?php echo $attributes; ?>>
-													<?php echo $gallery->counter; ?>
+												<td <?php echo $attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attributes contains safe HTML attributes ?>>
+													<?php echo esc_html( $gallery->counter ); ?>
 												</td>
 												<?php
 												break;
 											default:
 												?>
-												<td <?php echo $attributes; ?>>
+												<td <?php echo $attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $attributes contains safe HTML attributes ?>>
 													<?php do_action( 'ngg_manage_gallery_custom_column', $gallery_column_key, $gid ); ?>
 												</td>
 												<?php
@@ -428,7 +445,7 @@ function nggallery_manage_gallery_main() {
 				</table>
 
 				<div class="tablenav bottom">
-					<?php $ngg->manage_page->pagination( 'bottom', $_GET['paged'], $total_number_of_galleries, $items_per_page ); ?>
+					<?php $ngg->manage_page->pagination( 'bottom', $paged, $total_number_of_galleries, $items_per_page ); ?>
 				</div>
 			</form>
 
@@ -464,7 +481,7 @@ function nggallery_manage_gallery_main() {
 						<br/>
 						<?php if ( ! is_multisite() ) { ?>
 							<?php esc_html_e( 'Create a new , empty gallery below the folder', 'nggallery' ); ?>
-							<strong><?php echo $ngg->options['gallerypath']; ?></strong>
+							<strong><?php echo esc_html( $ngg->options['gallerypath'] ); ?></strong>
 							<br/>
 						<?php } ?>
 						<i>(<?php esc_html_e( 'Allowed characters for file and folder names are', 'nggallery' ); ?>: a-z, A-Z, 0-9, -, _)</i>
@@ -632,10 +649,21 @@ function nggallery_manage_gallery_main() {
  */
 class _NGG_Galleries_List_Table extends WP_List_Table {
 
+	/**
+	 * Screen instance.
+	 *
+	 * @var object
+	 */
 	public $_screen;
+
+	/**
+	 * Columns array.
+	 *
+	 * @var array
+	 */
 	public $_columns;
 
-	function __construct( $screen ) {
+	public function __construct( $screen ) {
 		if ( is_string( $screen ) ) {
 			$screen = convert_to_screen( $screen );
 		}
@@ -646,7 +674,7 @@ class _NGG_Galleries_List_Table extends WP_List_Table {
 		add_filter( 'manage_' . $screen->id . '_columns', [ &$this, 'get_columns' ], 0 );
 	}
 
-	function get_column_info() {
+	public function get_column_info() {
 		$columns   = get_column_headers( $this->_screen );
 		$hidden    = get_hidden_columns( $this->_screen );
 		$_sortable = $this->get_sortable_columns();
@@ -668,7 +696,7 @@ class _NGG_Galleries_List_Table extends WP_List_Table {
 	}
 
 	// define the columns to display, the syntax is 'internal name' => 'display name'.
-	function get_columns() {
+	public function get_columns() {
 		$columns = [];
 
 		$columns['cb']          = '<input name="checkall" type="checkbox" onclick="checkAll(document.getElementById(\'editgalleries\'));"/>';
@@ -684,7 +712,7 @@ class _NGG_Galleries_List_Table extends WP_List_Table {
 		return $columns;
 	}
 
-	function get_sortable_columns() {
+	public function get_sortable_columns() {
 		return [
 			'id'     => [ 'gid', true ],
 			'title'  => 'title',

@@ -2,14 +2,42 @@
 
 namespace Imagely\NGG\Settings;
 
+/**
+ * Installer for NextGEN Gallery settings.
+ */
 class Installer {
 
+	/**
+	 * Global settings.
+	 *
+	 * @var array
+	 */
 	private $global_settings = [];
-	private $local_settings  = [];
 
+	/**
+	 * Local settings.
+	 *
+	 * @var array
+	 */
+	private $local_settings = [];
+
+	/**
+	 * Blog settings instance.
+	 *
+	 * @var Settings|null
+	 */
 	public $blog_settings = null;
+
+	/**
+	 * Site settings instance.
+	 *
+	 * @var GlobalSettings|null
+	 */
 	public $site_settings = null;
 
+	/**
+	 * Constructor.
+	 */
 	public function __construct() {
 		$existing_options = \get_option( 'ngg_options', [] );
 
@@ -60,7 +88,7 @@ class Installer {
 				'imgAutoResize'                     => true, // Resize after upload.
 
 			// Gallery Settings.
-				'galImages'                         => '24',  // Number of images per page.
+				'galImages'                         => 24,  // Number of images per page.
 				'galPagedGalleries'                 => 0,     // Number of galleries per page (in a album).
 				'galColumns'                        => 0,     // Number of columns for the gallery.
 				'galShowSlide'                      => false, // Show slideshow.
@@ -90,7 +118,7 @@ class Installer {
 				'wmSize'                            => 30,                      // Font Size.
 				'wmText'                            => \get_option( 'blogname' ), // Text.
 				'wmColor'                           => 'ffffff',                // Font Color.
-				'wmOpaque'                          => '33',                    // Font Opaque.
+				'wmOpaque'                          => 33,                    // Font Opaque.
 
 			// Image Rotator settings.
 				'slideFX'                           => 'fade',
@@ -131,12 +159,26 @@ class Installer {
 				'mvc_static_dirname'                => '/static',
 				'mvc_static_dir'                    => '/static',
 				'jquery_ui_theme'                   => 'jquery-ui-nextgen',
-				'jquery_ui_theme_version'           => '1.8',
-			]
+				'jquery_ui_theme_version'           => 1.8,
+
+				// Legacy options (disabled by default for new installations).
+				'ngg_show_old_settings'             => false,  // Do not show legacy admin pages by default.
+				'ngg_installation_type'             => 'fresh', // Default to fresh installation (new blocks).
+
+			// Admin table pagination.
+				'admin_table_per_page'              => 20, // Default number of items per page in admin tables (albums, galleries, tags, orders, etc.).
+			// Item details pagination.
+			'item_details_per_page'              => 50, // Default number of items per page in items details of gallery and album.
+
+			// Admin table column visibility (Manage Albums / Manage Galleries). Empty = use frontend defaults.
+			'admin_albums_visible_columns'       => [],
+			'admin_galleries_visible_columns'    => [],
+		]
 		);
 
 		if ( \is_multisite() ) {
-			if ( $options = \get_site_option( 'ngg_options' ) ) {
+			$options = \get_site_option( 'ngg_options' );
+			if ( $options ) {
 				$gallerypath = $options['gallerypath'];
 			} else {
 				$gallerypath = $this->global_settings['gallerypath'];
@@ -146,6 +188,11 @@ class Installer {
 		}
 	}
 
+	/**
+	 * Install global settings.
+	 *
+	 * @param bool $reset Whether to reset existing settings.
+	 */
 	public function install_global_settings( $reset = false ) {
 		foreach ( $this->global_settings as $key => $value ) {
 			if ( $reset ) {
@@ -155,6 +202,11 @@ class Installer {
 		}
 	}
 
+	/**
+	 * Install local settings.
+	 *
+	 * @param bool $reset Whether to reset existing settings.
+	 */
 	public function install_local_settings( $reset = false ) {
 		foreach ( $this->local_settings as $key => $value ) {
 			if ( $reset ) {
@@ -167,7 +219,8 @@ class Installer {
 			// If this is already network activated we just need to use the existing setting
 			// Note: attempting to use Imagely\NGG\Settings\GlobalSettings here may result in an infinite loop,
 			// so get_site_option() is used to check.
-			if ( $options = \get_site_option( 'ngg_options' ) ) {
+			$options = \get_site_option( 'ngg_options' );
+			if ( $options ) {
 				$gallerypath = $options['gallerypath'];
 			} else {
 				$gallerypath = $this->global_settings['gallerypath'];
@@ -183,19 +236,40 @@ class Installer {
 		}
 	}
 
+	/**
+	 * Install both global and local settings.
+	 *
+	 * @param bool $reset Whether to reset existing settings.
+	 */
 	public function install( $reset = false ) {
 		$this->install_global_settings( $reset );
 		$this->install_local_settings( $reset );
 	}
 
+	/**
+	 * Get global default settings.
+	 *
+	 * @return array Global settings.
+	 */
 	public function get_global_defaults() {
 		return $this->global_settings;
 	}
 
+	/**
+	 * Get local default settings.
+	 *
+	 * @return array Local settings.
+	 */
 	public function get_local_defaults() {
 		return $this->local_settings;
 	}
 
+	/**
+	 * Replace placeholders in gallery path.
+	 *
+	 * @param string $gallerypath The gallery path with placeholders.
+	 * @return string The processed gallery path.
+	 */
 	public function gallerypath_replace( $gallerypath ) {
 		$gallerypath = str_replace( '%BLOG_NAME%', \get_bloginfo( 'name' ), $gallerypath );
 		$gallerypath = str_replace( '%BLOG_ID%', \get_current_blog_id(), $gallerypath );

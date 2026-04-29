@@ -6,6 +6,11 @@
  */
 class C_Ajax_Controller extends C_MVC_Controller
 {
+    /**
+     * Instances cache.
+     *
+     * @var array
+     */
     public static $_instances = array();
     /**
      * Returns an instance of this class
@@ -25,7 +30,7 @@ class C_Ajax_Controller extends C_MVC_Controller
         parent::define($context);
         $this->implement('I_Ajax_Controller');
     }
-    public function index_action($return = false)
+    public function index_action($return_output = false)
     {
         $retval = null;
         define('DOING_AJAX', true);
@@ -34,7 +39,8 @@ class C_Ajax_Controller extends C_MVC_Controller
         // Start an output buffer to avoid displaying any PHP warnings/errors.
         ob_start();
         // Get the action requested & find and execute the related method.
-        if ($action = $this->param('action')) {
+        $action = $this->param('action');
+        if ($action) {
             $method = "{$action}_action";
             if ($this->has_method($method)) {
                 $retval = $this->call_method($method);

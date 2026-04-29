@@ -1,0 +1,179 @@
+@name image-operations
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+@imageId = 300
+
+### Create new thumbnail with custom cropping
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/crop-thumbnail
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "x": 51,
+    "y": 124,
+    "w": 152,
+    "h": 105,
+    "rr": 2.67
+}
+
+### Rotate image clockwise
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/rotate
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "rotation": "cw"
+}
+
+### Rotate image counter-clockwise
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/rotate
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "rotation": "ccw"
+}
+
+### Flip image vertically
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/rotate
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "rotation": "fv"
+}
+
+### Flip image horizontally
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/rotate
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "rotation": "fh"
+}
+
+### Create thumbnail
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/create-thumbnail
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{}
+
+### Resize image
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/resize
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{}
+
+### Set watermark
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/set-watermark
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{}
+
+### Recover image
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/recover
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{}
+
+### Import metadata
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/import-metadata
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{}
+
+### Strip orientation tag
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/strip-orientation
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{}
+
+### Bulk resize multiple images with custom dimensions
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-resize
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302],
+    "width": 800,
+    "height": 600
+}
+
+### Bulk resize multiple images using global settings
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-resize
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302]
+}
+
+### Bulk import metadata for multiple images
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-import-metadata
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302]
+}
+
+### Bulk copy images to another gallery
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-copy
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302],
+    "destination_gallery_id": 45
+}
+
+### Bulk move images to another gallery
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-move
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302],
+    "destination_gallery_id": 45
+}
+
+### Bulk add tags to images (append mode)
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302],
+    "tags": ["nature", "landscape", "photography"],
+    "append": true
+}
+
+### Bulk add tags to images (replace mode)
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-add-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302],
+    "tags": ["wedding", "portrait"],
+    "append": false
+}
+
+### Bulk remove all tags from images
+POST {{baseUrl}}/wp-json/imagely/v1/images/bulk-remove-tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+    "image_ids": [300, 301, 302]
+}
+
+### Crop image and regenerate all sizes
+POST {{baseUrl}}/wp-json/imagely/v1/images/{{imageId}}/crop
+Content-Type: application/json

@@ -31,15 +31,40 @@ use Imagely\NGG\DisplayedGallery\Renderer;
  */
 class Shortcodes {
 
-	private static $_instance  = null;
-	private $_shortcodes       = [];
-	private $_found            = [];
+	/**
+	 * Singleton instance of the Shortcodes class.
+	 *
+	 * @var Shortcodes|null
+	 */
+	private static $_instance = null;
+
+	/**
+	 * Array of registered shortcodes.
+	 *
+	 * @var array
+	 */
+	private $_shortcodes = [];
+
+	/**
+	 * Array of found shortcodes in content.
+	 *
+	 * @var array
+	 */
+	private $_found = [];
+
+	/**
+	 * Placeholder text template for shortcode replacement.
+	 *
+	 * @var string
+	 */
 	private $_placeholder_text = 'ngg_shortcode_%d_placeholder';
 
 	/**
+	 * Gets the singleton instance of the Shortcodes class.
+	 *
 	 * @return Shortcodes
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( \is_null( self::$_instance ) ) {
 			self::$_instance = new Shortcodes();
 		}
@@ -49,22 +74,29 @@ class Shortcodes {
 	/**
 	 * Adds a shortcode
 	 *
-	 * @param $name
-	 * @param $callback
-	 * @param callable|null Parameters transformer
+	 * @param string        $name The shortcode name.
+	 * @param callable      $callback The callback function.
+	 * @param callable|null $transformer Parameters transformer.
 	 */
-	static function add( $name, $callback, $transformer = null ) {
+	public static function add( $name, $callback, $transformer = null ) {
 		$manager = self::get_instance();
 		$manager->add_shortcode( $name, $callback, $transformer );
 	}
 
 	/**
+	 * Gets the list of registered shortcodes.
+	 *
 	 * @return string[]
 	 */
 	public function get_shortcodes() {
 		return $this->_shortcodes;
 	}
 
+	/**
+	 * Checks if shortcode manager is disabled
+	 *
+	 * @return bool
+	 */
 	public function is_disabled(): bool {
 		return defined( 'NGG_DISABLE_SHORTCODE_MANAGER' ) && NGG_DISABLE_SHORTCODE_MANAGER;
 	}
@@ -72,13 +104,18 @@ class Shortcodes {
 	/**
 	 * Removes a previously added shortcode
 	 *
-	 * @param $name
+	 * @param string $name The shortcode name.
 	 */
-	static function remove( $name ) {
+	public static function remove( $name ) {
 		$manager = self::get_instance();
 		$manager->remove_shortcode( $name );
 	}
 
+	/**
+	 * Registers hooks for shortcode management
+	 *
+	 * @return void
+	 */
 	public function register_hooks() {
 		if ( $this->is_disabled() ) {
 			return;
@@ -96,7 +133,7 @@ class Shortcodes {
 	/**
 	 * We're parsing our own shortcodes because WP can't yet handle nested shortcodes [ngg param="[slideshow]"]
 	 *
-	 * @param string $content
+	 * @param string $content The content to parse for nested shortcodes.
 	 * @return string
 	 */
 	public function fix_nested_shortcodes( $content ) {
@@ -107,7 +144,9 @@ class Shortcodes {
 			$offset              = 0;
 
 			// Find each occurrence of the shortcode.
-			while ( ( $start_of_shortcode = \strpos( $content, $shortcode_start_tag, $offset ) ) !== false ) {
+			$start_of_shortcode = \strpos( $content, $shortcode_start_tag, $offset );
+			// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
+			while ( $start_of_shortcode !== false ) {
 
 				$index                       = $start_of_shortcode + \strlen( $shortcode_start_tag );
 				$found_attribute_assignment  = false;
@@ -118,16 +157,16 @@ class Shortcodes {
 				while ( true ) {
 					// Parse out the shortcode, character-by-character.
 					$char = $content[ $index ];
-					if ( $char == '"' || $char == "'" && $last_found_char == '=' ) {
+					if ( '"' === $char || "'" === $char && '=' === $last_found_char ) {
 						// Is this the closing quote for an already found attribute assignment?
-						if ( $found_attribute_assignment && $current_attribute_enclosure == $char ) {
+						if ( $found_attribute_assignment && $char === $current_attribute_enclosure ) {
 							$found_attribute_assignment  = false;
 							$current_attribute_enclosure = null;
 						} else {
 							$found_attribute_assignment  = true;
 							$current_attribute_enclosure = $char;
 						}
-					} elseif ( $char == ']' ) {
+					} elseif ( ']' === $char ) {
 						// we've found a shortcode closing tag. But, we need to ensure
 						// that this ] isn't within the value of a shortcode attribute.
 						if ( ! $found_attribute_assignment ) {
@@ -138,7 +177,7 @@ class Shortcodes {
 					$last_found_char = $char;
 
 					// Prevent infinite loops in our while(TRUE).
-					if ( $index == $content_length ) {
+					if ( $content_length === $index ) {
 						break;
 					}
 
@@ -146,22 +185,20 @@ class Shortcodes {
 				}
 
 				// Get the shortcode.
-				$shortcode             = \substr( $content, $start_of_shortcode + 1, --$index - $start_of_shortcode );
+				--$index;
+				$shortcode             = \substr( $content, $start_of_shortcode + 1, $index - $start_of_shortcode );
 				$shortcode_replacement = \str_replace(
 					[ '[', ']' ],
 					[ '&#91;', '&#93;' ],
 					$shortcode
-				);
-
-				// Replace the shortcode with one that doesn't have nested shortcodes.
-				$content = \str_replace(
+				);          // Replace the shortcode with one that doesn't have nested shortcodes.
+				$content               = \str_replace(
 					$shortcode,
 					$shortcode_replacement,
 					$content
-				);
-
-				// Calculate the offset for the next loop iteration.
-				$offset = $index + 1 + \strlen( $shortcode_replacement ) - \strlen( $shortcode );
+				);              // Calculate the offset for the next loop iteration.
+				$offset                = $index + 1 + \strlen( $shortcode_replacement ) - \strlen( $shortcode );
+				$start_of_shortcode    = \strpos( $content, $shortcode_start_tag, $offset );
 			}
 		}
 		\reset( $this->_shortcodes );
@@ -171,6 +208,8 @@ class Shortcodes {
 
 	/**
 	 * Deactivates all shortcodes
+	 *
+	 * @return void
 	 */
 	public function deactivate_all() {
 		foreach ( \array_keys( $this->_shortcodes ) as $shortcode ) {
@@ -181,7 +220,7 @@ class Shortcodes {
 	/**
 	 * Parses the content for shortcodes and returns the substituted content
 	 *
-	 * @param $content
+	 * @param string $content The content to parse.
 	 * @return string
 	 */
 	public function parse_content( $content ) {
@@ -217,10 +256,23 @@ class Shortcodes {
 		return $content;
 	}
 
+	/**
+	 * Renders a legacy shortcode
+	 *
+	 * @param array  $params The shortcode parameters.
+	 * @param string $inner_content The inner content.
+	 * @return string
+	 */
 	public function render_legacy_shortcode( $params, $inner_content ) {
 		return Renderer::get_instance()->display_images( $params, $inner_content );
 	}
 
+	/**
+	 * Executes a found shortcode by ID
+	 *
+	 * @param int $found_id The ID of the found shortcode.
+	 * @return string
+	 */
 	public function execute_found_shortcode( $found_id ) {
 		return isset( $this->_found[ $found_id ] )
 			? $this->render_shortcode(
@@ -234,9 +286,10 @@ class Shortcodes {
 	/**
 	 * Adds a shortcode
 	 *
-	 * @param $name
-	 * @param $callback
-	 * @param callable|null $transformer
+	 * @param string        $name The shortcode name.
+	 * @param callable      $callback The callback function.
+	 * @param callable|null $transformer Parameters transformer.
+	 * @return void
 	 */
 	public function add_shortcode( $name, $callback, $transformer = null ) {
 		$this->_shortcodes[ $name ] = [
@@ -260,7 +313,8 @@ class Shortcodes {
 	/**
 	 * Removes a shortcode
 	 *
-	 * @param $name
+	 * @param string $name The shortcode name.
+	 * @return void
 	 */
 	public function remove_shortcode( $name ) {
 		unset( $this->_shortcodes[ $name ] );
@@ -270,7 +324,8 @@ class Shortcodes {
 	/**
 	 * De-activates a shortcode
 	 *
-	 * @param $shortcode
+	 * @param string $shortcode The shortcode name.
+	 * @return void
 	 */
 	public function deactivate( $shortcode ) {
 		if ( isset( $this->_shortcodes[ $shortcode ] ) ) {
@@ -278,10 +333,23 @@ class Shortcodes {
 		}
 	}
 
+	/**
+	 * Checks if this is a REST request
+	 *
+	 * @return bool
+	 */
 	public function is_rest_request() {
-		return \defined( 'REST_REQUEST' ) || \strpos( $_SERVER['REQUEST_URI'], 'wp-json' ) !== false;
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated,WordPress.Security.ValidatedSanitizedInput.MissingUnslash,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only checking for string presence
+		return \defined( 'REST_REQUEST' ) || ( isset( $_SERVER['REQUEST_URI'] ) && \strpos( $_SERVER['REQUEST_URI'], 'wp-json' ) !== false );
 	}
 
+	/**
+	 * Magic method for handling shortcode wrapper calls
+	 *
+	 * @param string $method The method name.
+	 * @param array  $args The method arguments.
+	 * @return string
+	 */
 	public function __call( $method, $args ) {
 		$params        = \array_shift( $args );
 		$inner_content = \array_shift( $args );
@@ -297,6 +365,14 @@ class Shortcodes {
 		return $retval;
 	}
 
+	/**
+	 * Renders a shortcode
+	 *
+	 * @param string $shortcode The shortcode name.
+	 * @param array  $params The shortcode parameters.
+	 * @param string $inner_content The inner content.
+	 * @return string
+	 */
 	public function render_shortcode( $shortcode, $params = [], $inner_content = '' ) {
 		if ( isset( $this->_shortcodes[ $shortcode ] ) ) {
 			$shortcode = $this->_shortcodes[ $shortcode ];
@@ -318,9 +394,9 @@ class Shortcodes {
 	/**
 	 * Prevents wptexturize
 	 *
-	 * @param $shortcode
-	 * @param array     $params
-	 * @param string    $inner_content
+	 * @param string $shortcode The shortcode name.
+	 * @param array  $params The shortcode parameters.
+	 * @param string $inner_content The inner content.
 	 * @return mixed|void
 	 */
 	public function replace_with_placeholder( $shortcode, $params = [], $inner_content = '' ) {
@@ -337,6 +413,8 @@ class Shortcodes {
 	}
 
 	/**
+	 * Gets the shortcode regex pattern
+	 *
 	 * @return string
 	 */
 	public function get_shortcode_regex() {

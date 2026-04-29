@@ -42,12 +42,33 @@ class A_Import_Media_Library_Form extends Mixin
         wp_enqueue_script('nextgen_media_library_import-js');
         wp_enqueue_style('nextgen_media_library_import-css');
         $url = admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid={gid}';
-        $i18n_array = ['admin_url' => admin_url(), 'title' => __('Import Images into NextGen Gallery', 'nggallery'), 'import_multiple' => __('Import %s images', 'nggallery'), 'import_singular' => __('Import 1 image', 'nggallery'), 'imported_multiple' => sprintf(__('{count} images were uploaded successfully. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery'), $url), 'imported_singular' => sprintf(__('1 image was uploaded successfully. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery'), $url), 'imported_none' => __('0 images were uploaded', 'nggallery'), 'progress_title' => __('Importing gallery', 'nggallery'), 'in_progress' => __('In Progress...', 'nggallery'), 'gritter_title' => __('Upload complete. Great job!', 'nggallery'), 'gritter_error' => __('Oops! Sorry, but an error occured. This may be due to a server misconfiguration. Check your PHP error log or ask your hosting provider for assistance.', 'nggallery'), 'nonce' => \Imagely\NGG\Util\Security::create_nonce('nextgen_upload_image')];
+        $i18n_array = [
+            'admin_url' => admin_url(),
+            'title' => __('Import Images into NextGen Gallery', 'nggallery'),
+            /* translators: %s: number of images */
+            'import_multiple' => __('Import %s images', 'nggallery'),
+            'import_singular' => __('Import 1 image', 'nggallery'),
+            /* translators: %s: gallery management URL */
+            'imported_multiple' => sprintf(__('{count} images were uploaded successfully. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery'), $url),
+            /* translators: %s: gallery management URL */
+            'imported_singular' => sprintf(__('1 image was uploaded successfully. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery'), $url),
+            'imported_none' => __('0 images were uploaded', 'nggallery'),
+            'progress_title' => __('Importing gallery', 'nggallery'),
+            'in_progress' => __('In Progress...', 'nggallery'),
+            'gritter_title' => __('Upload complete. Great job!', 'nggallery'),
+            'gritter_error' => __('Oops! Sorry, but an error occured. This may be due to a server misconfiguration. Check your PHP error log or ask your hosting provider for assistance.', 'nggallery'),
+            'nonce' => \Imagely\NGG\Util\Security::create_nonce('nextgen_upload_image'),
+        ];
         wp_localize_script('nextgen_media_library_import-js', 'ngg_importml_i18n', $i18n_array);
     }
     public function render()
     {
-        $i18n = ['select-images-to-continue' => __('Please make a selection to continue', 'nggallery'), 'select-opener' => __('Select images', 'nggallery'), 'selected-image-import' => __('Import %d image(s)', 'nggallery')];
+        $i18n = [
+            'select-images-to-continue' => __('Please make a selection to continue', 'nggallery'),
+            'select-opener' => __('Select images', 'nggallery'),
+            /* translators: %d: number of images */
+            'selected-image-import' => __('Import %d image(s)', 'nggallery'),
+        ];
         return $this->object->render_partial('photocrati-nextgen_addgallery_page#import_media_library', ['i18n' => $i18n, 'galleries' => $this->object->get_galleries()], true);
     }
     public function get_galleries()
@@ -141,28 +162,33 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                     $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
                     try {
                         if ($storage->is_zip()) {
-                            if ($results = $storage->upload_zip($gallery_id)) {
+                            $results = $storage->upload_zip($gallery_id);
+                            if ($results) {
                                 $retval = $results;
                             } else {
                                 $retval['error'] = __('Failed to extract images from ZIP', 'nggallery');
                             }
-                        } elseif ($image_id = $storage->upload_image($gallery_id)) {
-                            $retval['image_ids'] = [$image_id];
-                            // check if image was resized correctly.
-                            if ($settings->get('imgAutoResize')) {
-                                $image_path = $storage->get_full_abspath($image_id);
-                                $image_thumb = new \Imagely\NGG\DataTypes\LegacyThumbnail($image_path, true);
-                                if ($image_thumb->error) {
-                                    $retval['error'] = sprintf(__('Automatic image resizing failed [%1$s].', 'nggallery'), $image_thumb->errmsg);
-                                }
-                            }
-                            // check if thumb was generated correctly.
-                            $thumb_path = $storage->get_image_abspath($image_id, 'thumb');
-                            if (!file_exists($thumb_path)) {
-                                $retval['error'] = __('Thumbnail generation failed.', 'nggallery');
-                            }
                         } else {
-                            $retval['error'] = __('Image generation failed', 'nggallery');
+                            $image_id = $storage->upload_image($gallery_id);
+                            if ($image_id) {
+                                $retval['image_ids'] = [$image_id];
+                                // check if image was resized correctly.
+                                if ($settings->get('imgAutoResize')) {
+                                    $image_path = $storage->get_full_abspath($image_id);
+                                    $image_thumb = new \Imagely\NGG\DataTypes\LegacyThumbnail($image_path, true);
+                                    if ($image_thumb->error) {
+                                        /* translators: %1$s: error message */
+                                        $retval['error'] = sprintf(__('Automatic image resizing failed [%1$s].', 'nggallery'), $image_thumb->errmsg);
+                                    }
+                                }
+                                // check if thumb was generated correctly.
+                                $thumb_path = $storage->get_image_abspath($image_id, 'thumb');
+                                if (!file_exists($thumb_path)) {
+                                    $retval['error'] = __('Thumbnail generation failed.', 'nggallery');
+                                }
+                            } else {
+                                $retval['error'] = __('Image generation failed', 'nggallery');
+                            }
                         }
                     } catch (E_NggErrorException $ex) {
                         $retval['error'] = $ex->getMessage();
@@ -170,6 +196,7 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                             $gallery_mapper->destroy($gallery_id);
                         }
                     } catch (Exception $ex) {
+                        /* translators: %s: error message */
                         $retval['error'] = sprintf(__('An unexpected error occurred: %s', 'nggallery'), $ex->getMessage());
                     }
                 }
@@ -186,7 +213,7 @@ class A_NextGen_AddGallery_Ajax extends Mixin
         }
         return $retval;
     }
-    public function get_import_root_abspath()
+    private function get_import_root_abspath()
     {
         if (is_multisite()) {
             $root = \Imagely\NGG\DataStorage\Manager::get_instance()->get_upload_abspath();
@@ -201,11 +228,13 @@ class A_NextGen_AddGallery_Ajax extends Mixin
         $retval = [];
         $html = [];
         if ($this->validate_ajax_request('nextgen_upload_image', true)) {
-            if ($dir = urldecode($this->param('dir'))) {
+            $dir = urldecode($this->param('dir'));
+            if ($dir) {
                 $fs = \Imagely\NGG\Util\Filesystem::get_instance();
                 $root = $this->get_import_root_abspath();
                 $browse_path = $fs->join_paths($root, $dir);
                 if (strpos(realpath($browse_path), realpath($root)) !== false) {
+                    // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                     if (@file_exists($browse_path)) {
                         $files = scandir($browse_path);
                         natcasesort($files);
@@ -215,6 +244,7 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                             foreach ($files as $file) {
                                 $file_path = $fs->join_paths($browse_path, $file);
                                 $rel_file_path = str_replace($root, '', $file_path);
+                                // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                                 if (@file_exists($file_path) && $file != '.' && $file != '..' && is_dir($file_path)) {
                                     $html[] = '<li class="directory collapsed"><a href="#" rel="' . htmlentities($rel_file_path) . '/">' . htmlentities($file) . '</a></li>';
                                 }
@@ -240,7 +270,8 @@ class A_NextGen_AddGallery_Ajax extends Mixin
     {
         $retval = [];
         if ($this->validate_ajax_request('nextgen_upload_image', true)) {
-            if ($folder = $this->param('folder')) {
+            $folder = $this->param('folder');
+            if ($folder) {
                 $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
                 $fs = \Imagely\NGG\Util\Filesystem::get_instance();
                 try {
@@ -281,10 +312,19 @@ class A_NextGen_AddGallery_Ajax extends Mixin
         $gallery_name = urldecode($this->param('gallery_name'));
         $gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
         $image_mapper = \Imagely\NGG\DataMappers\Image::get_instance();
-        $attachment_ids = $this->param('attachment_ids');
+        // Get attachment_ids directly from $_REQUEST since param() doesn't handle arrays correctly
+        // phpcs:disable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended -- Nonce is verified in validate_ajax_request
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Values are sanitized via array_map('intval') on line 262
+        $attachment_ids = isset($_REQUEST['attachment_ids']) ? wp_unslash($_REQUEST['attachment_ids']) : [];
+        if (!is_array($attachment_ids)) {
+            $attachment_ids = [$attachment_ids];
+        }
+        $attachment_ids = array_map('intval', $attachment_ids);
+        // phpcs:enable WordPress.Security.NonceVerification.Missing,WordPress.Security.NonceVerification.Recommended
         if ($this->validate_ajax_request('nextgen_upload_image', true)) {
             if (empty($attachment_ids) || !is_array($attachment_ids)) {
-                $retval['error'] = __('An unexpected error occured.', 'nggallery');
+                $retval['error'] = __('An unexpected error occured.', 'nggallery') . ' No attachment IDs provided.';
+                return $retval;
             }
             if (empty($retval['error']) && $gallery_id == 0) {
                 if (strlen($gallery_name) > 0) {
@@ -305,11 +345,16 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                 foreach ($attachment_ids as $id) {
                     try {
                         $abspath = get_attached_file($id);
+                        if (empty($abspath) || !file_exists($abspath)) {
+                            $retval['error'] = __('Image file not found for attachment ID: ', 'nggallery') . $id;
+                            break;
+                        }
+                        // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                         $file_data = @file_get_contents($abspath);
                         $file_name = \Imagely\NGG\Display\I18N::mb_basename($abspath);
                         $attachment = get_post($id);
                         if (empty($file_data)) {
-                            $retval['error'] = __('Image generation failed', 'nggallery');
+                            $retval['error'] = __('Image generation failed. Could not read file: ', 'nggallery') . $abspath;
                             break;
                         }
                         $image = $storage->upload_image($gallery_id, $file_name, $file_data);
@@ -334,9 +379,13 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                         if ($created_gallery) {
                             $gallery_mapper->destroy($gallery_id);
                         }
+                        break;
                     } catch (Exception $ex) {
-                        $retval['error'] = __('An unexpected error occured.', 'nggallery');
-                        $retval['error_details'] = $ex->getMessage();
+                        $retval['error'] = __('An unexpected error occured.', 'nggallery') . ' ' . $ex->getMessage();
+                        if ($created_gallery) {
+                            $gallery_mapper->destroy($gallery_id);
+                        }
+                        break;
                     }
                 }
             }
@@ -423,6 +472,7 @@ class A_Upload_Images_Form extends Mixin
         $core_settings = $this->object->get_uppy_core_settings();
         $max_size = $core_settings['restrictions']['maxfileSize'];
         $max_size_megabytes = round((int) $max_size / (1024 * 1024));
+        /* translators: %d: maximum file size in megabytes */
         return sprintf(__('You may select files up to %dMB', 'nggallery'), $max_size_megabytes);
     }
     public function get_uppy_xhr_settings()

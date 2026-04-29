@@ -10,7 +10,7 @@ class nggSitemaps {
 
 	public $images = [];
 
-	function __construct() {
+	public function __construct() {
 		add_filter( 'wpseo_sitemap_urlimages', array( &$this, 'add_wpseo_xml_sitemap_images' ), 10, 2 );
 	}
 
@@ -22,7 +22,7 @@ class nggSitemaps {
 	 * @param int   $post_id
 	 * @return array $image list of all founded images
 	 */
-	function add_wpseo_xml_sitemap_images( $images, $post_id ) {
+	public function add_wpseo_xml_sitemap_images( $images, $post_id ) {
 
 		$this->images = $images;
 
@@ -55,7 +55,7 @@ class nggSitemaps {
 	 * @param string $atts
 	 * @return string
 	 */
-	function add_gallery( $atts ) {
+	public function add_gallery( $atts ) {
 
 		global $wpdb;
 
@@ -65,7 +65,8 @@ class nggSitemaps {
 		$gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
 		if (!is_numeric( $id )) {
 			$tmp = $gallery_mapper->select()->where( array( 'name = %s', $id ) )->limit( 1 )->run_query();
-			if (( $gallery = array_shift( $tmp ) )) {
+			$gallery = array_shift( $tmp );
+			if ( $gallery ) {
 				$id = $gallery->{$gallery->id_field};
 			} else {
 				$id = null;
@@ -93,7 +94,7 @@ class nggSitemaps {
 	 * @param array $atts
 	 * @return string
 	 */
-	function add_images( $atts ) {
+	public function add_images( $atts ) {
 
 		$tmp = shortcode_atts( array( 'id' => 0 ), $atts, 'ngg' );
 		extract( $tmp );

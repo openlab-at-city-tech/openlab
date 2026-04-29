@@ -1,0 +1,108 @@
+### NextGEN Gallery License API Tests
+### Base URL: http://your-wordpress-site.com/wp-json/imagely/v1
+
+@baseUrl = http://host.docker.internal:8982/wp-json/imagely/v1
+@licenseKey = 48b18798122351b3c1182e745f95d119
+@nonce = your-wp-nonce-here
+
+### 1. Get License Status
+GET {{baseUrl}}/license
+X-WP-Nonce: {{nonce}}
+Content-Type: application/json
+
+###
+
+### 2. Verify/Activate License
+POST {{baseUrl}}/license/manage
+X-WP-Nonce: {{nonce}}
+Content-Type: application/json
+
+{
+  "license_key": "{{licenseKey}}",
+  "action_perform": "verify"
+}
+
+###
+
+### 3. Refresh License Status
+POST {{baseUrl}}/license/manage
+X-WP-Nonce: {{nonce}}
+Content-Type: application/json
+
+{
+  "license_key": "{{licenseKey}}",
+  "action_perform": "refresh"
+}
+
+###
+
+### 4. Deactivate License
+POST {{baseUrl}}/license/manage
+X-WP-Nonce: {{nonce}}
+Content-Type: application/json
+
+{
+  "license_key": "{{licenseKey}}",
+  "action_perform": "deactivate"
+}
+
+###
+
+### 5. Clear License Data
+POST {{baseUrl}}/license/clear
+X-WP-Nonce: {{nonce}}
+Content-Type: application/json
+
+###
+
+### Test with cURL commands:
+
+### Get License Status
+# curl -X GET "http://localhost/wp-json/imagely/v1/license" \
+#   -H "X-WP-Nonce: your-nonce-here" \
+#   -H "Content-Type: application/json"
+
+### Verify License
+# curl -X POST "http://localhost/wp-json/imagely/v1/license/manage" \
+#   -H "X-WP-Nonce: your-nonce-here" \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#     "license_key": "48b18798122351b3c1182e745f95d119",
+#     "action_perform": "verify"
+#   }'
+
+### Deactivate License
+# curl -X POST "http://localhost/wp-json/imagely/v1/license/manage" \
+#   -H "X-WP-Nonce: your-nonce-here" \
+#   -H "Content-Type: application/json" \
+#   -d '{
+#     "license_key": "48b18798122351b3c1182e745f95d119",
+#     "action_perform": "deactivate"
+#   }'
+
+### Clear License
+# curl -X POST "http://localhost/wp-json/imagely/v1/license/clear" \
+#   -H "X-WP-Nonce: your-nonce-here" \
+#   -H "Content-Type: application/json"
+
+###
+
+### Expected Response Format:
+# {
+#   "status": "success|error",
+#   "message": "Human readable message",
+#   "data": {
+#     "license_key": "48b18798122351b3c1182e745f95d119",
+#     "status": "valid|invalid|expired|disabled|revoked",
+#     "level": "pro|plus|starter|free",
+#     "last_check": 1640995200,
+#     "plugin_level": "pro",
+#     "is_valid": true
+#   }
+# }
+
+### Notes:
+# 1. Replace {{baseUrl}} with your actual WordPress site URL
+# 2. Replace {{nonce}} with a valid WordPress REST API nonce
+# 3. You can get a nonce by visiting wp-admin and checking the browser console for 'wpApiSettings.nonce'
+# 4. Or use this JavaScript in browser console: wp.apiFetch.nonceMiddleware.nonce

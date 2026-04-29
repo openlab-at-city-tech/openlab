@@ -4,22 +4,83 @@ namespace Imagely\NGG\DataStorage;
 
 use Imagely\NGG\DataMappers\Image as ImageMapper;
 
+/**
+ * Handles reading and processing of image metadata including EXIF, IPTC, and XMP data.
+ *
+ * This class extracts and processes various metadata formats from image files
+ * and provides sanitized access to the metadata information.
+ */
 class MetaData {
 
-	// Image data.
-	public $image     = '';    // The image object.
-	public $file_path = '';    // Path to the image file.
-	public $size      = false; // The image size.
-	public $exif_data = false; // EXIF data array.
-	public $iptc_data = false; // IPTC data array.
-	public $xmp_data  = false; // XMP data array.
+	/**
+	 * The image object.
+	 *
+	 * @var mixed
+	 */
+	public $image = '';
 
-	// Filtered Data.
-	public $exif_array = false; // EXIF data array.
-	public $iptc_array = false; // IPTC data array.
-	public $xmp_array  = false; // XMP data array.
+	/**
+	 * Path to the image file.
+	 *
+	 * @var string
+	 */
+	public $file_path = '';
 
-	public $sanitize = false; // sanitize meta data on request.
+	/**
+	 * The image size.
+	 *
+	 * @var array|false
+	 */
+	public $size = false;
+
+	/**
+	 * EXIF data array.
+	 *
+	 * @var array|false
+	 */
+	public $exif_data = false;
+
+	/**
+	 * IPTC data array.
+	 *
+	 * @var array|false
+	 */
+	public $iptc_data = false;
+
+	/**
+	 * XMP data array.
+	 *
+	 * @var array|false
+	 */
+	public $xmp_data = false;
+
+	/**
+	 * Filtered EXIF data array.
+	 *
+	 * @var array|false
+	 */
+	public $exif_array = false;
+
+	/**
+	 * Filtered IPTC data array.
+	 *
+	 * @var array|false
+	 */
+	public $iptc_array = false;
+
+	/**
+	 * Filtered XMP data array.
+	 *
+	 * @var array|false
+	 */
+	public $xmp_array = false;
+
+	/**
+	 * Flag to sanitize meta data on request.
+	 *
+	 * @var bool
+	 */
+	public $sanitize = false;
 
 	/**
 	 * Class constructor
@@ -37,25 +98,29 @@ class MetaData {
 
 		$this->file_path = Manager::get_instance()->get_image_abspath( $this->image );
 
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( ! @file_exists( $this->file_path ) ) {
-			return false;
+			return;
 		}
 
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$this->size = @getimagesize( $this->file_path, $metadata );
 
 		if ( $this->size && is_array( $metadata ) ) {
 			// get exif - data.
 			if ( is_callable( 'exif_read_data' ) ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$this->exif_data = @exif_read_data( $this->file_path, null, true );
 			}
 
 			// stop here if we didn't need other meta data.
 			if ( $onlyEXIF ) {
-				return true;
+				return;
 			}
 
 			// get the iptc data - should be in APP13.
 			if ( is_callable( 'iptcparse' ) && isset( $metadata['APP13'] ) ) {
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$this->iptc_data = @iptcparse( $metadata['APP13'] );
 			}
 
@@ -63,21 +128,17 @@ class MetaData {
 			if ( is_callable( 'xml_parser_create' ) ) {
 				$this->xmp_data = $this->extract_XMP( $this->file_path );
 			}
-
-			return true;
 		}
-
-		return false;
 	}
 
 	/**
-	 * return the saved metadata from the database
+	 * Return the saved metadata from the database.
 	 *
 	 * @since 1.4.0
-	 * @param string $object (optional)
-	 * @return array|mixed return either the complete array or the single object
+	 * @param string $key (optional)
+	 * @return array|mixed Return either the complete array or the single object.
 	 */
-	public function get_saved_meta( $object = false ) {
+	public function get_saved_meta( $key = false ) {
 
 		$meta = $this->image->meta_data;
 
@@ -87,8 +148,8 @@ class MetaData {
 		}
 
 		// return one element if requested.
-		if ( $object ) {
-			return $meta[ $object ];
+		if ( $key ) {
+			return $meta[ $key ];
 		}
 
 		// removed saved parameter we don't need that to show.
@@ -96,7 +157,7 @@ class MetaData {
 
 		// and remove empty tags or arrays.
 		foreach ( $meta as $key => $value ) {
-			if ( empty( $value ) or is_array( $value ) ) {
+			if ( empty( $value ) || is_array( $value ) ) {
 				unset( $meta[ $key ] );
 			}
 		}
@@ -110,12 +171,15 @@ class MetaData {
 	}
 
 	/**
-	 * nggMeta::get_EXIF()
+	 * Get EXIF data from the image.
+	 *
 	 * See also http://trac.wordpress.org/changeset/6313
 	 *
-	 * @return bool|array
+	 * @param string|false $key Optional object key to get specific EXIF data.
+	 * @return bool|array Returns EXIF array or false if no data available.
 	 */
-	public function get_EXIF( $object = false ) {
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- EXIF is an acronym
+	public function get_EXIF( $key = false ) {
 		if ( ! $this->exif_data ) {
 			return false;
 		}
@@ -147,7 +211,7 @@ class MetaData {
 				}
 				if ( ! empty( $exif['ExposureTime'] ) ) {
 					$meta['shutter_speed']  = $this->exif_frac2dec( $exif['ExposureTime'] );
-					$meta['shutter_speed']  = ( $meta['shutter_speed'] > 0.0 and $meta['shutter_speed'] < 1.0 ) ? ( '1/' . round( 1 / $meta['shutter_speed'], -1 ) ) : ( $meta['shutter_speed'] );
+					$meta['shutter_speed']  = ( $meta['shutter_speed'] > 0.0 && $meta['shutter_speed'] < 1.0 ) ? ( '1/' . round( 1 / $meta['shutter_speed'], -1 ) ) : ( $meta['shutter_speed'] );
 					$meta['shutter_speed'] .= __( ' sec', 'nggallery' );
 				}
 
@@ -203,8 +267,8 @@ class MetaData {
 		}
 
 		// return one element if requested.
-		if ( $object == true ) {
-			$value = isset( $this->exif_array[ $object ] ) ? $this->exif_array[ $object ] : false;
+		if ( $key == true ) {
+			$value = isset( $this->exif_array[ $key ] ) ? $this->exif_array[ $key ] : false;
 			return $value;
 		}
 
@@ -216,8 +280,14 @@ class MetaData {
 		return $this->exif_array;
 	}
 
-	// convert a fraction string to a decimal.
+	/**
+	 * Convert a fraction string to a decimal.
+	 *
+	 * @param string $str Fraction string in format "numerator/denominator".
+	 * @return float|string Decimal value or original string if invalid.
+	 */
 	public function exif_frac2dec( $str ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		@list( $n, $d ) = explode( '/', $str );
 		if ( ! empty( $d ) ) {
 			return $n / $d;
@@ -225,25 +295,34 @@ class MetaData {
 		return $str;
 	}
 
-	// convert the exif date format to a unix timestamp.
+	/**
+	 * Convert the EXIF date format to a Unix timestamp.
+	 *
+	 * @param string $str Date string in EXIF format.
+	 * @return int|false Unix timestamp or false if conversion fails.
+	 */
 	public function exif_date2ts( $str ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$retval = is_numeric( $str ) ? $str : @strtotime( $str );
 		if ( ! $retval && $str ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			@list( $date, $time ) = explode( ' ', trim( $str ) );
-			@list( $y, $m, $d )   = explode( ':', $date );
-			$retval               = strtotime( "{$y}-{$m}-{$d} {$time}" );
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			@list( $y, $m, $d ) = explode( ':', $date );
+			$retval             = strtotime( "{$y}-{$m}-{$d} {$time}" );
 
 		}
 		return $retval;
 	}
 
 	/**
-	 * nggMeta::readIPTC() - IPTC Data Information for EXIF Display
+	 * Get IPTC Data Information for EXIF display.
 	 *
-	 * @param object $object (optional)
-	 * @return null|bool|array
+	 * @param string|false $key Optional object key to get specific IPTC data.
+	 * @return null|bool|array Returns IPTC array, specific value, or false if no data.
 	 */
-	public function get_IPTC( $object = false ) {
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- IPTC is an acronym
+	public function get_IPTC( $key = false ) {
 		if ( ! $this->iptc_data ) {
 			return false;
 		}
@@ -274,17 +353,17 @@ class MetaData {
 			];
 
 			$meta = [];
-			foreach ( $iptcTags as $key => $value ) {
-				if ( isset( $this->iptc_data[ $key ] ) ) {
-					$meta[ $value ] = trim( $this->utf8_encode( implode( ', ', $this->iptc_data[ $key ] ) ) );
+			foreach ( $iptcTags as $iptc_tag => $iptc_field ) {
+				if ( isset( $this->iptc_data[ $iptc_tag ] ) ) {
+					$meta[ $iptc_field ] = trim( $this->utf8_encode( implode( ', ', $this->iptc_data[ $iptc_tag ] ) ) );
 				}
 			}
 			$this->iptc_array = $meta;
 		}
 
 		// return one element if requested.
-		if ( $object ) {
-			return ( isset( $this->iptc_array[ $object ] ) ) ? $this->iptc_array[ $object ] : null;
+		if ( $key ) {
+			return ( isset( $this->iptc_array[ $key ] ) ) ? $this->iptc_array[ $key ] : null;
 		}
 
 		// on request sanitize the output.
@@ -296,18 +375,18 @@ class MetaData {
 	}
 
 	/**
-	 * nggMeta::extract_XMP()
-	 * get XMP DATA
-	 * code by Pekka Saarinen http://photography-on-the.net
+	 * Get XMP data from image file.
 	 *
-	 * @param mixed $filename
-	 * @return bool|string
+	 * Code by Pekka Saarinen http://photography-on-the.net
+	 *
+	 * @param string $filename Path to the image file.
+	 * @return bool|string XMP data string or false if not found.
 	 */
 	public function extract_XMP( $filename ) {
 
 		// TODO:Require a lot of memory, could be better.
 		ob_start();
-		@readfile( $filename );
+		@readfile( $filename ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile, WordPress.PHP.NoSilencedErrors.Discouraged
 		$source = ob_get_contents();
 		ob_end_clean();
 
@@ -325,13 +404,16 @@ class MetaData {
 	}
 
 	/**
-	 * nggMeta::get_XMP()
+	 * Get XMP metadata from the image.
 	 *
-	 * @package Taken from http://php.net/manual/en/function.xml-parse-into-struct.php
+	 * Taken from http://php.net/manual/en/function.xml-parse-into-struct.php
+	 *
 	 * @author Alf Marius Foss Olsen & Alex Rabe
-	 * @return bool|array
+	 * @param string|false $key Optional object key to get specific XMP data.
+	 * @return bool|array XMP data array or false if no data available.
 	 */
-	public function get_XMP( $object = false ) {
+	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid -- XMP is an acronym
+	public function get_XMP( $key = false ) {
 
 		if ( ! $this->xmp_data ) {
 			return false;
@@ -379,12 +461,12 @@ class MetaData {
 						$list_array[] = $val['value'];
 						// in the case it's a list element we seralize it.
 						$value = implode( ',', $list_array );
-						$this->setArrayValue( $xmlarray, $stack, $value );
+						$this->set_array_value( $xmlarray, $stack, $value );
 					} else {
 						array_push( $stack, $val['tag'] );
 						// do not parse empty tags.
 						if ( ! empty( $val['value'] ) ) {
-							$this->setArrayValue( $xmlarray, $stack, $val['value'] );
+							$this->set_array_value( $xmlarray, $stack, $val['value'] );
 						}
 						array_pop( $stack );
 					}
@@ -400,7 +482,7 @@ class MetaData {
 			$xmlarray = $xmlarray['x:xmpmeta']['rdf:RDF']['rdf:Description'];
 
 			// --------- Some values from the XMP format--------- //
-			$xmpTags = [
+			$xmp_tags = [
 				'xap:CreateDate'            => 'created_timestamp',
 				'xap:ModifyDate'            => 'last_modfied',
 				'xap:CreatorTool'           => 'tool',
@@ -414,24 +496,23 @@ class MetaData {
 				'photoshop:Country'         => 'country',
 			];
 
-			foreach ( $xmpTags as $key => $value ) {
-				// if the kex exist.
-				if ( isset( $xmlarray[ $key ] ) ) {
-					switch ( $key ) {
+			foreach ( $xmp_tags as $xmp_tag => $xmp_field ) {
+				if ( isset( $xmlarray[ $xmp_tag ] ) ) {
+					switch ( $xmp_tag ) {
 						case 'xap:CreateDate':
 						case 'xap:ModifyDate':
-							$this->xmp_array[ $value ] = strtotime( $xmlarray[ $key ] );
+							$this->xmp_array[ $xmp_field ] = strtotime( $xmlarray[ $xmp_tag ] );
 							break;
 						default:
-							$this->xmp_array[ $value ] = $xmlarray[ $key ];
+							$this->xmp_array[ $xmp_field ] = $xmlarray[ $xmp_tag ];
 					}
 				}
 			}
 		}
 
 		// return one element if requested.
-		if ( $object != false ) {
-			return isset( $this->xmp_array[ $object ] ) ? $this->xmp_array[ $object ] : false;
+		if ( $key != false ) {
+			return isset( $this->xmp_array[ $key ] ) ? $this->xmp_array[ $key ] : false;
 		}
 
 		// on request sanitize the output.
@@ -442,30 +523,41 @@ class MetaData {
 		return $this->xmp_array;
 	}
 
-	public function setArrayValue( &$array, $stack, $value ) {
+	/**
+	 * Set array value using a stack of keys.
+	 *
+	 * @param array $data Array to modify (passed by reference).
+	 * @param array $stack Stack of keys for nested array access.
+	 * @param mixed $value Value to set.
+	 * @return array The modified array.
+	 */
+	public function set_array_value( &$data, $stack, $value ) {
 		if ( $stack ) {
 			$key = array_shift( $stack );
-			$this->setArrayValue( $array[ $key ], $stack, $value );
-			return $array;
+			$this->set_array_value( $data[ $key ], $stack, $value );
+			return $data;
 		} else {
-			$array = $value;
+			$data = $value;
 		}
 
-		return $array;
+		return $data;
 	}
 
 	/**
-	 * nggMeta::get_META() - return a meta value form the available list
+	 * Return a meta value from the available list.
 	 *
-	 * @param string $object
-	 * @return mixed $value
+	 * @param string|false $key The meta key to retrieve.
+	 * @return mixed The meta value or false if not found.
 	 */
-	public function get_META( $object = false ) {
-		if ( $value = $this->get_saved_meta( $object ) ) {
+	public function get_meta( $key = false ) {
+		$value = $this->get_saved_meta( $key );
+		if ( $value ) {
 			return $value;
 		}
 
-		if ( $object == 'created_timestamp' && ( $d = $this->get_IPTC( 'created_date' ) ) && ( $t = $this->get_IPTC( 'created_time' ) ) ) {
+		$d = $this->get_IPTC( 'created_date' );
+		$t = $this->get_IPTC( 'created_time' );
+		if ( 'created_timestamp' == $key && $d && $t ) {
 			return $this->exif_date2ts( $d . ' ' . $t );
 		}
 
@@ -473,7 +565,11 @@ class MetaData {
 
 		foreach ( $order as $method ) {
 			$method = 'get_' . $method;
-			if ( method_exists( $this, $method ) && $value = $this->$method( $object ) ) {
+			$value  = null;
+			if ( method_exists( $this, $method ) ) {
+				$value = $this->$method( $key );
+			}
+			if ( $value ) {
 				return $value;
 			}
 		}
@@ -482,7 +578,7 @@ class MetaData {
 	}
 
 	/**
-	 * nggMeta::i8n_name() -  localize the tag name
+	 * Localizes the tag name
 	 *
 	 * @param mixed $key
 	 * @return string Translated $key
@@ -540,10 +636,11 @@ class MetaData {
 	 */
 	public function get_date_time() {
 		// Try getting the created_timestamp field.
-		$date = $this->exif_date2ts( $this->get_META( 'created_timestamp' ) );
+		$date = $this->exif_date2ts( $this->get_meta( 'created_timestamp' ) );
 		if ( ! $date ) {
 			$image_path = Manager::get_instance()->get_backup_abspath( $this->image );
-			$date       = @filectime( $image_path );
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$date = @filectime( $image_path );
 		}
 
 		// Failback.
@@ -552,7 +649,7 @@ class MetaData {
 		}
 
 		// Return the MySQL format.
-		$date_time = date( 'Y-m-d H:i:s', $date );
+		$date_time = gmdate( 'Y-m-d H:i:s', $date );
 
 		return $date_time;
 	}
@@ -590,7 +687,7 @@ class MetaData {
 		}
 
 		foreach ( $meta as $key => $value ) {
-			$meta[ $key ] = $this->get_META( $key );
+			$meta[ $key ] = $this->get_meta( $key );
 		}
 
 		// let's add now the size of the image.
@@ -634,7 +731,7 @@ class MetaData {
 			$str
 		);
 		if ( ! $is_utf8 ) {
-			utf8_encode( $str );
+			$str = mb_convert_encoding( $str, 'UTF-8', 'ISO-8859-1' );
 		}
 		return $str;
 	}

@@ -1,7 +1,8 @@
 <?php
+// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Legacy file structure.
 
 /**
- * nggAdmin - Class for admin operation
+ * Class for admin operation
  *
  * @package NextGEN Gallery
  * @author Alex Rabe
@@ -17,18 +18,21 @@ class nggAdmin {
 	 * @param string $dirname
 	 * @return array $files list of image filenames
 	 */
-	static function scandir( $dirname = '.' ) {
+	public static function scandir( $dirname = '.' ) {
 		$ext = apply_filters( 'ngg_allowed_file_types', NGG_DEFAULT_ALLOWED_FILE_TYPES );
 
-		$files = [];
-		if ( $handle = opendir( $dirname ) ) {
+		$files  = [];
+		$handle = opendir( $dirname );
+		if ( $handle ) {
+			// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 			while ( false !== ( $file = readdir( $handle ) ) ) {
 				$info = \Imagely\NGG\Display\I18N::mb_pathinfo( $file );
 				// just look for images with the correct extension.
 				if ( isset( $info['extension'] ) ) {
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( in_array( strtolower( $info['extension'] ), $ext ) ) {
 						if ( ! seems_utf8( $file ) ) {
-							$file = utf8_encode( $file );
+							$file = mb_convert_encoding( $file, 'UTF-8', 'ISO-8859-1' );
 						}
 
 						$files[] = $file;
@@ -43,14 +47,14 @@ class nggAdmin {
 	}
 
 	/**
-	 * nggAdmin::createThumbnail() - function to create or recreate a thumbnail
+	 * Creates or recreates a thumbnail
 	 *
 	 * @class nggAdmin
 	 * @param object|int $image Contain all information about the image or the id
 	 * @return string result code
 	 * @since v1.0.0
 	 */
-	static function create_thumbnail( $image ) {
+	public static function create_thumbnail( $image ) {
 
 		if ( is_object( $image ) ) {
 			if ( isset( $image->id ) ) {
@@ -78,7 +82,7 @@ class nggAdmin {
 	}
 
 	/**
-	 * nggAdmin::resize_image() - create a new image, based on the height /width
+	 * Creates a new image, based on the height /width
 	 *
 	 * @class nggAdmin
 	 * @param object|int $image Contain all information about the image or the id
@@ -86,7 +90,7 @@ class nggAdmin {
 	 * @param integer    $height optional
 	 * @return string result code
 	 */
-	static function resize_image( $image, $width = 0, $height = 0 ) {
+	public static function resize_image( $image, $width = 0, $height = 0 ) {
 		if ( is_object( $image ) ) {
 			if ( isset( $image->id ) ) {
 				$image = $image->id;
@@ -136,7 +140,7 @@ class nggAdmin {
 	 * @param string|bool $flip (optional) Either false | V (flip vertical) | H (flip horizontal)
 	 * @return string result code
 	 */
-	static function rotate_image( $image, $dir = false, $flip = false ) {
+	public static function rotate_image( $image, $dir = false, $flip = false ) {
 		if ( is_object( $image ) ) {
 			if ( isset( $image->id ) ) {
 				$image = $image->id;
@@ -157,9 +161,8 @@ class nggAdmin {
 			$rotation = 90;
 		} elseif ( $dir === 'CCW' ) {
 			$rotation = -90;
-		}
-		// if you didn't define a rotation, we look for the orientation flag in EXIF.
-		elseif ( $dir === false ) {
+		} elseif ( $dir === false ) {
+			// if you didn't define a rotation, we look for the orientation flag in EXIF.
 			$meta = new nggMeta( $image );
 			$exif = $meta->get_EXIF();
 
@@ -168,11 +171,13 @@ class nggAdmin {
 				switch ( $exif['Orientation'] ) {
 					case 5: // vertical flip + 90 rotate right.
 						$flip = 'V';
+						// Fall through to set rotation.
 					case 6: // 90 rotate right
 						$rotation = 90;
 						break;
 					case 7: // horizontal flip + 90 rotate right.
 						$flip = 'H';
+						// Fall through to set rotation.
 					case 8: // 90 rotate left.
 						$rotation = -90;
 						break;
@@ -188,7 +193,6 @@ class nggAdmin {
 					case 1: // no action in the case it doesn't need a rotation.
 					default:
 						return '0';
-						break;
 				}
 			} else {
 				return '0';
@@ -215,13 +219,13 @@ class nggAdmin {
 	}
 
 	/**
-	 * nggAdmin::set_watermark() - set the watermark for the image
+	 * Sets the watermark for the image
 	 *
 	 * @class nggAdmin
 	 * @param object|int $image Contain all information about the image or the id
 	 * @return string result code
 	 */
-	static function set_watermark( $image ) {
+	public static function set_watermark( $image ) {
 
 		if ( is_object( $image ) ) {
 			if ( isset( $image->id ) ) {
@@ -258,7 +262,7 @@ class nggAdmin {
 	 * @param object|int $image Contain all information about the image or the id
 	 * @return string result code
 	 */
-	static function recover_image( $image ) {
+	public static function recover_image( $image ) {
 		return \Imagely\NGG\DataStorage\Manager::get_instance()->recover_image( $image );
 	}
 
@@ -305,7 +309,8 @@ class nggAdmin {
 
 				// Autoresize image if required.
 				if ( $ngg->options['imgAutoResize'] ) {
-					$imagetmp  = nggdb::find_image( $pic_id );
+					$imagetmp = nggdb::find_image( $pic_id );
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					$sizetmp   = @getimagesize( $imagetmp->imagePath );
 					$widthtmp  = $ngg->options['imgWidth'];
 					$heighttmp = $ngg->options['imgHeight'];
@@ -339,7 +344,7 @@ class nggAdmin {
 	 * @param array|int $imagesIds
 	 * @return string result code
 	 */
-	static function import_MetaData( $imagesIds ) {
+	public static function import_MetaData( $imagesIds ) {
 
 		global $wpdb;
 
@@ -373,6 +378,7 @@ class nggAdmin {
 				$timestamp = $meta['timestamp'];
 
 				// first update database.
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$result = $wpdb->query(
 					$wpdb->prepare(
 						"UPDATE $wpdb->nggpictures SET
@@ -413,14 +419,14 @@ class nggAdmin {
 	}
 
 	/**
-	 * nggAdmin::get_MetaData()
+	 * Gets metadata for an image
 	 *
 	 * @class nggAdmin
 	 * @require NextGEN Meta class
 	 * @param int|object $image_or_id
 	 * @return array metadata
 	 */
-	static function get_MetaData( $image_or_id ) {
+	public static function get_MetaData( $image_or_id ) {
 
 		require_once NGGALLERY_ABSPATH . '/lib/meta.php';
 
@@ -441,7 +447,7 @@ class nggAdmin {
 	}
 
 	/**
-	 * nggAdmin::import_gallery()
+	 * Imports a gallery
 	 * TODO: Check permission of existing thumb folder & images
 	 *
 	 * @param string $galleryfolder contains relative path to the gallery itself
@@ -468,6 +474,7 @@ class nggAdmin {
 		}
 
 		if ( ! is_dir( $gallerypath ) ) {
+			/* translators: %s: directory path */
 			nggGallery::show_error( sprintf( __( 'Directory <strong>%s</strong> doesn&#96;t exist!', 'nggallery' ), esc_html( $gallerypath ) ) );
 			return;
 		}
@@ -476,6 +483,7 @@ class nggAdmin {
 		$new_imageslist = self::scandir( $gallerypath );
 
 		if ( empty( $new_imageslist ) ) {
+			/* translators: %s: directory path */
 			nggGallery::show_message( sprintf( __( 'Directory <strong>%s</strong> contains no pictures', 'nggallery' ), esc_html( $gallerypath ) ) );
 			return;
 		}
@@ -486,6 +494,7 @@ class nggAdmin {
 
 		// check for existing gallery folder.
 		if ( is_null( $gallery_id ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$gallery_id = $wpdb->get_var( $wpdb->prepare( "SELECT gid FROM {$wpdb->nggallery} WHERE path = %s", [ $galleryfolder ] ) );
 		}
 
@@ -501,12 +510,14 @@ class nggAdmin {
 			}
 
 			$created_msg = sprintf(
+				/* translators: %s: gallery name */
 				_n( 'Gallery <strong>%s</strong> successfully created!', 'Galleries <strong>%s</strong> successfully created!', 1, 'nggallery' ),
 				esc_html( $galleryname )
 			);
 		}
 
 		// Look for existing image list.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$old_imageslist = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT `filename` FROM {$wpdb->nggpictures} WHERE `galleryid` = %d",
@@ -530,9 +541,10 @@ class nggAdmin {
 			$picture            = apply_filters( 'ngg_pre_add_new_image', $picture, $gallery_id );
 			$new_images[ $key ] = $picture;
 
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			if ( ! @getimagesize( $gallerypath . '/' . $picture ) ) {
 				unset( $new_images[ $key ] );
-				@unlink( $gallerypath . '/' . $picture );
+				@unlink( $gallerypath . '/' . $picture ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
 			}
 		}
 
@@ -547,14 +559,13 @@ class nggAdmin {
 		self::do_ajax_operation( 'create_thumbnail', $image_ids, __( 'Create new thumbnails', 'nggallery' ) );
 
 		// TODO:Message will not shown, because AJAX routine require more time, message should be passed to AJAX.
+		/* translators: %s: number of pictures */
 		$message  = $created_msg . sprintf( _n( '%s picture successfully added', '%s pictures successfully added', count( $image_ids ), 'nggallery' ), count( $image_ids ) );
 		$message .= ' [<a href="' . admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid=' . $gallery_id . '" >';
 		$message .= __( 'Edit gallery', 'nggallery' );
 		$message .= '</a>]';
 
 		nggGallery::show_message( $message );
-
-		return;
 	}
 
 	/**
@@ -564,10 +575,11 @@ class nggAdmin {
 	 * @param int $check_ID is the user_id
 	 * @return bool $result
 	 */
-	static function can_manage_this_gallery( $check_ID ) {
+	public static function can_manage_this_gallery( $check_ID ) {
 
 		global $user_ID, $wp_roles;
 
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown
 		if ( ! current_user_can( 'NextGEN Manage others gallery' ) ) {
 			// get the current user ID.
 			wp_get_current_user();
@@ -589,7 +601,7 @@ class nggAdmin {
 	 * @param string $title name of the operation
 	 * @return string the javascript output
 	 */
-	static function do_ajax_operation( $operation, $image_array, $title = '' ) {
+	public static function do_ajax_operation( $operation, $image_array, $title = '' ) {
 
 		if ( ! is_array( $image_array ) || empty( $image_array ) ) {
 			return '';
@@ -602,12 +614,12 @@ class nggAdmin {
 		?>
 		<script type="text/javascript">
 
-			Images = new Array("<?php echo $js_array; ?>");
+			Images = new Array("<?php echo esc_js( $js_array ); ?>");
 
 			nggAjaxOptions = {
-				operation: "<?php echo $operation; ?>",
+				operation: "<?php echo esc_js( $operation ); ?>",
 				ids: Images,
-				header: "<?php echo $title; ?>",
+				header: "<?php echo esc_js( $title ); ?>",
 				maxStep: Images.length
 			};
 
@@ -620,20 +632,22 @@ class nggAdmin {
 		</script>
 		<?php
 		$script = ob_get_clean();
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $script contains safe JavaScript for AJAX operations
 		echo $script;
 		return $script;
 	}
 
 	/**
-	 * nggAdmin::set_gallery_preview() - define a preview pic after the first upload, can be changed in the gallery settings
+	 * Defines a preview pic after the first upload, can be changed in the gallery settings
 	 *
 	 * @class nggAdmin
 	 * @param int $galleryID
 	 * @return void
 	 */
-	static function set_gallery_preview( $galleryID ) {
+	public static function set_gallery_preview( $galleryID ) {
 		$gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
-		if ( ( $gallery = $gallery_mapper->find( $galleryID ) ) ) {
+		$gallery        = $gallery_mapper->find( $galleryID );
+		if ( $gallery ) {
 			if ( ! $gallery->previewpic ) {
 				$image_mapper = \Imagely\NGG\DataMappers\Image::get_instance();
 				$image        = $image_mapper->select()
@@ -657,7 +671,7 @@ class nggAdmin {
 	 * @param int $galleryID
 	 * @return string|int (JSON)
 	 */
-	static function get_image_ids( $galleryID ) {
+	public static function get_image_ids( $galleryID ) {
 		if ( ! function_exists( 'json_encode' ) ) {
 			return( -2 );
 		}
@@ -665,7 +679,7 @@ class nggAdmin {
 		$gallery = nggdb::get_ids_from_gallery( $galleryID, 'pid', 'ASC', false );
 
 		header( 'Content-Type: text/plain; charset=' . get_option( 'blog_charset' ), true );
-		return json_encode( $gallery );
+		return wp_json_encode( $gallery );
 	}
 
 	/**
@@ -676,10 +690,11 @@ class nggAdmin {
 	 * @param string $filename
 	 * @return bool $result
 	 */
-	function chmod( $filename = '' ) {
+	public function chmod( $filename = '' ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$stat  = @stat( dirname( $filename ) );
 		$perms = $stat['mode'] & 0000666;
-		if ( @chmod( $filename, $perms ) ) {
+		if ( @chmod( $filename, $perms ) ) { // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_chmod, WordPress.PHP.NoSilencedErrors.Discouraged
 			return true;
 		}
 		return false;
@@ -696,6 +711,7 @@ function ngg_refreshSavedSettings(): bool {
 		$new_dimension = "{$width}x{$height}";
 		$dimensions    = (array) $settings->get( 'thumbnail_dimensions' );
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! in_array( $new_dimension, $dimensions ) ) {
 			$dimensions[] = $new_dimension;
 			$settings->set( 'thumbnail_dimensions', $dimensions );

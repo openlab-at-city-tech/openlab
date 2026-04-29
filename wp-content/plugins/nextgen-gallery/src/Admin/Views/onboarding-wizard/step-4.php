@@ -11,14 +11,14 @@ use Imagely\NGG\Admin\Onboarding_Wizard;
 $onboarding = new Onboarding_Wizard();
 
 // Check if license key is already verified.
-$ngg_pro_key = get_option('photocrati_license_default', null);
+$ngg_pro_key = get_option( 'photocrati_license_default', null );
 ?>
 <div class="nextgen-gallery-onboarding-form-step nextgen-gallery-wizard-license-key" id="summary">
 	<div class="nextgen-gallery-onboarding-wizard-body">
-		<div class="steps"><?php esc_html_e( 'Step - 4 of 5', 'nextgen-gallery' ); ?></div>
+		<div class="steps"><?php esc_html_e( 'Step - 4 of 5', 'nggallery' ); ?></div>
 		<div class="nextgen-gallery-onboarding-settings-row no-border no-margin">
 			<div class="settings-name">
-				<h2><?php esc_html_e( 'Upgrade to Pro', 'nextgen-gallery' ); ?></h2>
+				<h2><?php esc_html_e( 'Upgrade to Pro', 'nggallery' ); ?></h2>
 				<div class="name small-margin">
 				</div>
 				<?php
@@ -28,8 +28,8 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 				<div class="nextgen-gallery-onboarding-description">
 
 					<?php
-					// Translators: %s is the license type.
-					printf( __( 'You are currently using NextGEN <strong>%s</strong>.', 'nextgen-gallery' ), esc_html( ucfirst( $license_type ) ) ); // // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					/* translators: %s: license type */
+					printf( __( 'You are currently using NextGEN <strong>%s</strong>.', 'nggallery' ), esc_html( ucfirst( $license_type ) ) ); // // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 				</div>
 			</div>
@@ -39,8 +39,8 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 				<?php
 				printf(
 				// Translators: %s is the link to upgrade to PRO.
-					__( 'To Unlock below features, <strong><a target="_blank" href="%s">Upgrade to PRO</a></strong> and Enter your license key below', 'nextgen-gallery' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					esc_url( 'https://imagely.com/lite/?utm_source=liteplugin&utm_medium=wizard&utm_campaign=wizard' )
+					__( 'To unlock these features, <strong><a target="_blank" href="%s">Upgrade to PRO</a></strong> and enter your license key below', 'nggallery' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					esc_url( 'https://imagely.com/lite/?utm_source=liteplugin&utm_medium=wizard&utm_campaign=wizard&utm_content=' . \Imagely\NGG\Admin\App::get_utm_version() )
 				);
 				?>
 			</div>
@@ -54,7 +54,7 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 							fill="currentColor"
 						></path>
 					</svg>
-					<?php esc_html_e( 'Built-in Ecommerce', 'nextgen-gallery' ); ?>
+					<?php esc_html_e( 'Built-in Ecommerce', 'nggallery' ); ?>
 				</div>
 				<div class="nextgen-gallery-col col-xs-12 col-sm-6 text-xs-left">
 					<svg viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="nextgen-gallery-checkmark">
@@ -65,7 +65,7 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 							fill="currentColor"
 						></path>
 					</svg>
-					<?php esc_html_e( 'Accept PayPal, Stripe and Check', 'nextgen-gallery' ); ?>
+					<?php esc_html_e( 'Accept PayPal, Stripe and Check', 'nggallery' ); ?>
 				</div>
 				<div class="nextgen-gallery-col col-xs-12 col-sm-6 text-xs-left">
 					<svg viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="nextgen-gallery-checkmark">
@@ -76,7 +76,7 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 							fill="currentColor"
 						></path>
 					</svg>
-					<?php esc_html_e( 'Advance Selling Features', 'nextgen-gallery' ); ?>
+					<?php esc_html_e( 'Advance Selling Features', 'nggallery' ); ?>
 				</div>
 				<div class="nextgen-gallery-col col-xs-12 col-sm-6 text-xs-left">
 					<svg viewBox="0 0 14 11" fill="none" xmlns="http://www.w3.org/2000/svg" class="nextgen-gallery-checkmark">
@@ -87,22 +87,22 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 							fill="currentColor"
 						></path>
 					</svg>
-					<?php esc_html_e( 'Secure Checkout', 'nextgen-gallery' ); ?>
+					<?php esc_html_e( 'Secure Checkout', 'nggallery' ); ?>
 				</div>
 			</div>
 		</div>
 		<div class="nextgen-gallery-onboarding-settings-row no-border ">
 			<div class=" ">
 				<p>
-					<?php esc_html_e( 'Already purchased? Simply enter your license key below to connect with NextGEN Pro!', 'nextgen-gallery' ); ?>
+					<?php esc_html_e( 'Already purchased? Simply enter your license key below to connect with NextGEN Pro!', 'nggallery' ); ?>
 				</p>
 				<form id="nextgen-gallery-settings-verify-key" method="post">
 					<div class="nextgen-gallery-row ">
 						<div class="nextgen-gallery-col col-xs-12 col-sm-8 text-xs-left nextgen-gallery-onboarding-input">
-							<input type="password" required name="nextgen-gallery-license-key" id="nextgen-gallery-settings-key" value="<?php echo esc_html( $ngg_pro_key ) ?>" placeholder="<?php esc_attr_e( 'Enter your license key', 'nextgen-gallery' ); ?>"/>
+							<input type="password" required name="nextgen-gallery-license-key" id="nextgen-gallery-settings-key" value="<?php echo esc_html( $ngg_pro_key ); ?>" placeholder="<?php esc_attr_e( 'Enter your license key', 'nggallery' ); ?>"/>
 						</div>
 						<div class="nextgen-gallery-col col-xs-12 col-sm-2 text-xs-left">
-							<input type="submit" name="nextgen-gallery-verify-submit" value="<?php esc_attr_e( 'Connect', 'nextgen-gallery' ); ?>" class=" btn nextgen-gallery-onboarding-wizard-primary-btn nextgen-gallery-verify-submit" id="nextgen-gallery-settings-connect-btn"/>
+							<input type="submit" name="nextgen-gallery-verify-submit" value="<?php esc_attr_e( 'Connect', 'nggallery' ); ?>" class=" btn nextgen-gallery-onboarding-wizard-primary-btn nextgen-gallery-verify-submit" id="nextgen-gallery-settings-connect-btn"/>
 						</div>
 						<div class="nextgen-gallery-col col-xs-12 col-sm-1 text-xs-right">
 							<span class="spinner nextgen-gallery-onboarding-spinner"></span>
@@ -118,7 +118,7 @@ $ngg_pro_key = get_option('photocrati_license_default', null);
 	</div>
 	</div>
 	<div class="nextgen-gallery-onboarding-wizard-footer">
-		<div class="go-back"><a href="#recommended" data-prev="2" class="nextgen-gallery-onboarding-wizard-back-btn nextgen-gallery-onboarding-btn-prev" id="" >←&nbsp;<?php esc_html_e( 'Go back', 'nextgen-gallery' ); ?></a></div>
-		<div class="spacer"></div><button type="button" data-next="4" class="btn nextgen-gallery-onboarding-wizard-primary-btn nextgen-gallery-onboarding-btn-next " id="install-nextgen-gallery-addons-btn"><?php esc_html_e( 'Save and Continue', 'nextgen-gallery' ); ?>&nbsp; →</button>
+		<div class="go-back"><a href="#recommended" data-prev="2" class="nextgen-gallery-onboarding-wizard-back-btn nextgen-gallery-onboarding-btn-prev" id="" >←&nbsp;<?php esc_html_e( 'Go back', 'nggallery' ); ?></a></div>
+		<div class="spacer"></div><button type="button" data-next="4" class="btn nextgen-gallery-onboarding-wizard-primary-btn nextgen-gallery-onboarding-btn-next " id="install-nextgen-gallery-addons-btn"><?php esc_html_e( 'Save and Continue', 'nggallery' ); ?>&nbsp; →</button>
 	</div>
 </div>

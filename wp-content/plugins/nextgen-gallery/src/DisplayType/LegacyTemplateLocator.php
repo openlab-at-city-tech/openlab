@@ -2,14 +2,26 @@
 
 namespace Imagely\NGG\DisplayType;
 
+/**
+ * Legacy Template Locator
+ *
+ * Helps locate legacy template files for backward compatibility.
+ */
 class LegacyTemplateLocator {
 
-	static $instance = null;
+	/**
+	 * Singleton instance
+	 *
+	 * @var LegacyTemplateLocator|null
+	 */
+	public static $instance = null;
 
 	/**
+	 * Gets the singleton instance
+	 *
 	 * @return LegacyTemplateLocator
 	 */
-	static function get_instance() {
+	public static function get_instance() {
 		if ( ! isset( self::$instance ) ) {
 			self::$instance = new LegacyTemplateLocator();
 		}
@@ -44,6 +56,7 @@ class LegacyTemplateLocator {
 	/**
 	 * Returns an array of all available template files
 	 *
+	 * @param bool|string|array $prefix Optional prefix filter.
 	 * @return array All available template files
 	 */
 	public function find_all( $prefix = false ) {
@@ -62,7 +75,8 @@ class LegacyTemplateLocator {
 	/**
 	 * Recursively scans $dir for files ending in .php
 	 *
-	 * @param string $dir Directory
+	 * @param string            $dir Directory to scan.
+	 * @param bool|string|array $prefix Optional prefix filter.
 	 * @return array All php files in $dir
 	 */
 	public function get_templates_from_dir( $dir, $prefix = false ) {
@@ -79,13 +93,15 @@ class LegacyTemplateLocator {
 		}
 
 		// we can filter results by allowing a set of prefixes, one prefix, or by showing all available files.
+		// Note: Legacy templates use lowercase naming (e.g., gallery.php, gallery-caption.php).
+		// The regex is case-SENSITIVE to avoid matching View-based templates like Gallery.php.
 		if ( is_array( $prefix ) ) {
 			$str            = implode( '|', $prefix );
-			$regex_iterator = new \RegexIterator( $iterator, "/({$str})-.+\\.php$/i", \RecursiveRegexIterator::GET_MATCH );
+			$regex_iterator = new \RegexIterator( $iterator, "/({$str})-.+\\.php$/", \RecursiveRegexIterator::GET_MATCH );
 		} elseif ( is_string( $prefix ) ) {
-			$regex_iterator = new \RegexIterator( $iterator, "#(.*)[/\\\\]{$prefix}\\-?.*\\.php$#i", \RecursiveRegexIterator::GET_MATCH );
+			$regex_iterator = new \RegexIterator( $iterator, "#(.*)[/\\\\]{$prefix}\\-?.*\\.php$#", \RecursiveRegexIterator::GET_MATCH );
 		} else {
-			$regex_iterator = new \RegexIterator( $iterator, '/^.+\.php$/i', \RecursiveRegexIterator::GET_MATCH );
+			$regex_iterator = new \RegexIterator( $iterator, '/^.+\.php$/', \RecursiveRegexIterator::GET_MATCH );
 		}
 
 		$files = [];
@@ -127,13 +143,28 @@ class LegacyTemplateLocator {
 			$custom_template .= '.php';
 		}
 
+		// SECURITY: Check for directory traversal patterns in ALL cases BEFORE processing.
+		// This prevents LFI attacks via shortcode template parameters like "../../../../../../poc".
+		// Normalize slashes first to catch mixed separator bypass attempts.
+		$normalized_for_check = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $custom_template );
+		if ( preg_match( '#\.\.' . preg_quote( DIRECTORY_SEPARATOR, '#' ) . '#', $normalized_for_check ) ) {
+			// Directory traversal attempt detected - do not load this template.
+			return false;
+		}
+
+		// Get allowed template directories once for reuse.
+		$template_dirs = $this->get_template_directories();
+
 		// Find the abspath of the template to render.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		if ( ! @file_exists( $custom_template ) ) {
-			foreach ( $this->get_template_directories() as $dir ) {
+			// Template doesn't exist as an absolute path, search through registered directories.
+			foreach ( $template_dirs as $dir ) {
 				if ( $template_abspath ) {
 					break;
 				}
 				$filename = implode( DIRECTORY_SEPARATOR, [ rtrim( $dir, '/\\' ), $custom_template ] );
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				if ( @file_exists( $filename ) ) {
 					$template_abspath = $filename;
 				} elseif ( strpos( $custom_template, '-template' ) === false ) {
@@ -144,14 +175,54 @@ class LegacyTemplateLocator {
 							str_replace( '.php', '', $custom_template ) . '-template.php',
 						]
 					);
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					if ( @file_exists( $filename ) ) {
 						$template_abspath = $filename;
 					}
 				}
 			}
-		} elseif ( ! preg_match( '#\.\.[/\\\]#', $custom_template ) ) {
-			// An absolute path was already given.
-			$template_abspath = $custom_template;
+		} else {
+			// An absolute path was given. Normalize before security checks to prevent bypass via mixed separators.
+			$normalized_template = str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $custom_template );
+
+			// Check for directory traversal patterns AFTER normalization to catch all bypass attempts.
+			if ( preg_match( '#\.\.' . preg_quote( DIRECTORY_SEPARATOR, '#' ) . '#', $normalized_template ) ) {
+				// Directory traversal attempt detected - do not load this template.
+				return false;
+			}
+
+			// Check if it's within an allowed template directory.
+			foreach ( $template_dirs as $dir ) {
+				$normalized_dir = rtrim( str_replace( [ '/', '\\' ], DIRECTORY_SEPARATOR, $dir ), DIRECTORY_SEPARATOR );
+
+				if ( strpos( $normalized_template, $normalized_dir ) === 0 ) {
+					// This template is within an allowed directory.
+					$template_abspath = $custom_template;
+					break;
+				}
+			}
+
+			if ( ! $template_abspath ) {
+				/*
+				 * Historically, NextGEN Gallery allowed absolute paths here so that templates could be loaded from
+				 * arbitrary locations on disk. This created a local file inclusion vulnerability via the `template`
+				 * parameter on shortcodes.
+				 *
+				 * For security reasons we no longer load templates using arbitrary absolute paths. Site owners should
+				 * instead move custom templates into their theme or child theme `nggallery` directory and reference them
+				 * by file name (without a full path).
+				 */
+				_doing_it_wrong(
+					__METHOD__,
+					sprintf(
+						// Translators: %s is the absolute path that was provided.
+						'Using an absolute path for a NextGEN Gallery legacy template (%s) is deprecated and no longer supported for security reasons. Please move this template file into your active theme or child theme "nggallery" directory and reference it by file name instead.',
+						esc_html( $custom_template )
+					),
+					'3.59.13'
+				);
+				// Intentionally do not set $template_abspath for absolute paths outside allowed directories.
+			}
 		}
 
 		return $template_abspath;

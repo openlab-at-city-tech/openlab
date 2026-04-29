@@ -4,20 +4,64 @@ namespace Imagely\NGG\DataMapper;
 
 use Imagely\NGG\Util\Serializable;
 
+/**
+ * WordPress post driver for data mapper.
+ */
 class WPPostDriver extends DriverBase {
 
+	/**
+	 * Cache array.
+	 *
+	 * @var array
+	 */
 	public $cache;
-	public $primary_key_column = 'ID';
-	public $query_args         = [];
-	public $use_cache          = true;
 
+	/**
+	 * Primary key column name.
+	 *
+	 * @var string
+	 */
+	public $primary_key_column = 'ID';
+
+	/**
+	 * Query arguments.
+	 *
+	 * @var array
+	 */
+	public $query_args = [];
+
+	/**
+	 * Whether to use cache.
+	 *
+	 * @var bool
+	 */
+	public $use_cache = true;
+
+	/**
+	 * Post table columns cache.
+	 *
+	 * @var array
+	 */
 	public static $post_table_columns = [];
 
+	/**
+	 * Post ID.
+	 *
+	 * @var int
+	 */
 	public $ID;
+
+	/**
+	 * Post parent ID.
+	 *
+	 * @var int
+	 */
 	public $post_parent;
 
 	/**
-	 * @throws \Exception
+	 * Constructor for WPPostDriver.
+	 *
+	 * @throws \Exception When object name exceeds 20 characters
 	 */
 	public function __construct( $object_name = '' ) {
 		if ( strlen( $object_name ) > 20 ) {
@@ -70,6 +114,7 @@ class WPPostDriver extends DriverBase {
 		// Make an exception for the rand() method.
 		$order_by = preg_replace( '/rand\(\s*\)/', 'rand', $order_by );
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( in_array( $order_by, $this->_get_querable_table_columns() ) ) {
 			$this->query_args['orderby'] = $order_by;
 		} else {
@@ -147,16 +192,16 @@ class WPPostDriver extends DriverBase {
 				case 'category_id':
 					switch ( $clause['compare'] ) {
 						case '=':
-						case 'BETWEEN';
-						case 'IN';
+						case 'BETWEEN':
+						case 'IN':
 							if ( ! isset( $this->query_args['category__in'] ) ) {
 								$this->query_args['category__in'] = [];
 							}
 							$this->query_args['category__in'][] = $clause['value'];
 							break;
 						case '!=':
-						case 'NOT BETWEEN';
-						case 'NOT IN';
+						case 'NOT BETWEEN':
+						case 'NOT IN':
 							if ( ! isset( $this->query_args['category__not_in'] ) ) {
 								$this->query_args['category__not_in'] = [];
 							}
@@ -171,8 +216,8 @@ class WPPostDriver extends DriverBase {
 				case $this->get_primary_key_column():
 					switch ( $clause['compare'] ) {
 						case '=':
-						case 'IN';
-						case 'BETWEEN';
+						case 'IN':
+						case 'BETWEEN':
 							if ( ! isset( $this->query_args['post__in'] ) ) {
 								$this->query_args['post__in'] = [];
 							}
@@ -212,6 +257,7 @@ class WPPostDriver extends DriverBase {
 					unset( $clause['column'] );
 
 					// Convert values to array, when required.
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( in_array( $clause['compare'], [ 'IN', 'BETWEEN' ] ) ) {
 						$clause['value'] = explode( ',', $clause['value'] );
 						foreach ( $clause['value'] as &$val ) {
@@ -252,7 +298,8 @@ class WPPostDriver extends DriverBase {
 
 		// Unserialize the post_content_filtered field.
 		if ( is_string( $post->post_content_filtered ) ) {
-			if ( ( $post_content = Serializable::unserialize( $post->post_content_filtered ) ) ) {
+			$post_content = Serializable::unserialize( $post->post_content_filtered );
+			if ( $post_content ) {
 				foreach ( $post_content as $key => $value ) {
 					$post->$key = $value;
 				}
@@ -261,7 +308,8 @@ class WPPostDriver extends DriverBase {
 
 		// Unserialize the post content field.
 		if ( is_string( $post->post_content ) ) {
-			if ( ( $post_content = Serializable::unserialize( $post->post_content ) ) ) {
+			$post_content = Serializable::unserialize( $post->post_content );
+			if ( $post_content ) {
 				foreach ( $post_content as $key => $value ) {
 					$post->$key = $value;
 				}
@@ -306,6 +354,7 @@ class WPPostDriver extends DriverBase {
 		// Those will be removed from the post, and serialized in the
 		// post_content field.
 		foreach ( $post as $key => $value ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( strtolower( gettype( $value ) ), [ 'object', 'array' ] ) ) {
 				unset( $post->$key );
 			}
@@ -345,7 +394,6 @@ class WPPostDriver extends DriverBase {
 		// Unfortunately, that means flushing all existing postmeta
 		// and then inserting new values. Depending on the number of
 		// properties, this could be slow. So, we directly access the database.
-		/* @var \wpdb $wpdb */
 		global $wpdb;
 		if ( ! is_array( $omit ) ) {
 			$omit = [ $omit ];
@@ -355,15 +403,17 @@ class WPPostDriver extends DriverBase {
 		$omit = array_merge( $omit, $this->_table_columns );
 
 		// Delete the existing meta values.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( $wpdb->prepare( "DELETE FROM {$wpdb->postmeta} WHERE post_id = %s", $post_id ) );
 
 		// Create query for new meta values.
 		$sql_parts = [];
 		foreach ( $entity as $key => $value ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $key, $omit ) ) {
 				continue;
 			}
-			if ( is_array( $value ) or is_object( $value ) ) {
+			if ( is_array( $value ) || is_object( $value ) ) {
 				$value = Serializable::serialize( $value );
 			}
 			$sql_parts[] = $wpdb->prepare( '(%s, %s, %s)', $post_id, $key, $value );
@@ -371,7 +421,7 @@ class WPPostDriver extends DriverBase {
 
 		// The following $sql_parts is already sent through $wpdb->prepare() -- look directly above this line
 		//
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( "INSERT INTO {$wpdb->postmeta} (post_id, meta_key, meta_value) VALUES " . implode( ',', $sql_parts ) );
 	}
 
@@ -408,14 +458,19 @@ class WPPostDriver extends DriverBase {
 		}
 
 		// If this is a select query, then try fetching the results from cache.
-		$cache_key = md5( json_encode( $this->query_args ) );
+		$cache_key = md5( wp_json_encode( $this->query_args ) );
 		if ( $this->is_select_statement() && $this->use_cache ) {
 			$results = $this->get_from_cache( $cache_key );
 		}
 
 		// Execute the query.
 		if ( ! $results ) {
-			$query = new \WP_Query( [ 'datamapper' => true, 'fields' => '*' ] );
+			$query = new \WP_Query(
+				[
+					'datamapper' => true,
+					'fields'     => '*',
+				]
+			);
 			if ( isset( $this->debug ) ) {
 				$this->query_args['debug'] = true;
 			}
@@ -545,7 +600,8 @@ class WPPostDriver extends DriverBase {
 		}
 
 		// TODO: unsilence this. WordPress 3.9-beta2 is generating an error that should be corrected before its final release.
-		if ( ( $post_id = wp_insert_post( (array) $post ) ) ) {
+		$post_id = wp_insert_post( (array) $post );
+		if ( $post_id ) {
 			$new_entity = $this->find( $post_id, true );
 			if ( $new_entity ) {
 				foreach ( get_object_vars( $new_entity ) as $key => $value ) {

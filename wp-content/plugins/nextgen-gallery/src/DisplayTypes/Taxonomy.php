@@ -6,13 +6,28 @@ use Imagely\NGG\DataMappers\DisplayType as DisplayTypeMapper;
 use Imagely\NGG\DataStorage\Sanitizer;
 use Imagely\NGG\DisplayType\Controller as ParentController;
 
+/**
+ * Taxonomy display type controller.
+ */
 class Taxonomy extends ParentController {
 
+	/**
+	 * Instance cache.
+	 *
+	 * @var Taxonomy|null
+	 */
 	public static $instance = null;
 
+	/**
+	 * Whether NGG tag detection has run.
+	 *
+	 * @var bool
+	 */
 	protected $ngg_tag_detection_has_run = false;
 
 	/**
+	 * Gets an instance of the taxonomy display type.
+	 *
 	 * @return Taxonomy
 	 */
 	public static function get_instance() {
@@ -64,11 +79,6 @@ class Taxonomy extends ParentController {
 		) {
 			$this->ngg_tag_detection_has_run = true;
 
-			// WordPress somewhat-correctly generates several notices, so silence them as they're really unnecessary.
-			if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-				error_reporting( 0 );
-			}
-
 			// Without this all url generated from this page lacks the /ngg_tag/(slug) section of the URL.
 			add_filter( 'ngg_wprouting_add_post_permalink', '__return_false' );
 
@@ -95,13 +105,14 @@ class Taxonomy extends ParentController {
 	}
 
 	public function create_ngg_tag_post( $tag ) {
+		/* translators: %s: tag name */
 		$title = sprintf( __( 'Images tagged &quot;%s&quot;', 'nggallery' ), $tag );
 		$title = \apply_filters( 'ngg_basic_tagcloud_title', $title, $tag );
 
 		$post                 = new \stdClass();
 		$post->post_author    = false;
 		$post->post_name      = 'ngg_tag';
-		$post->guid           = \get_bloginfo( 'wpurl' ) . '/' . 'ngg_tag';
+		$post->guid           = \get_bloginfo( 'wpurl' ) . '/ngg_tag';
 		$post->post_title     = $title;
 		$post->post_content   = $this->render_tag( $tag );
 		$post->ID             = false;

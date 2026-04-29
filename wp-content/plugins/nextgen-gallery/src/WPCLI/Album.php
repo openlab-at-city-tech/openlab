@@ -5,6 +5,9 @@ namespace Imagely\NGG\WPCLI;
 use Imagely\NGG\DataMappers\Album as AlbumMapper;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 
+/**
+ * WP-CLI album commands.
+ */
 class Album {
 
 	/**
@@ -32,7 +35,8 @@ class Album {
 		);
 
 		if ( $album && $album->save() ) {
-			$album_id = $retval = $album->id();
+			$retval   = $album->id();
+			$album_id = $retval;
 			\WP_CLI::success( "Created album with id #{$album_id}" );
 		} else {
 			\WP_CLI::error( 'Unable to create album' );
@@ -87,6 +91,8 @@ class Album {
 	}
 
 	/**
+	 * Lists all albums.
+	 *
 	 * @param array $args
 	 * @param array $assoc_args
 	 * @subcommand list
@@ -132,6 +138,7 @@ class Album {
 				if ( ! $gallery ) {
 					\WP_CLI::error( "Unable to find gallery {$gallery_id}" );
 				}
+    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $gallery_id, $album->sortorder ) ) {
 					\WP_CLI::error( "Gallery with id {$gallery_id} already belongs to this album" );
 				}
@@ -146,6 +153,7 @@ class Album {
 				if ( ! $new_album ) {
 					\WP_CLI::error( "Unable to find album {$album_id}" );
 				}
+    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $album_id, $album->sortorder ) ) {
 					\WP_CLI::error( "Album with id {$album_id} already belongs to this album" );
 				}

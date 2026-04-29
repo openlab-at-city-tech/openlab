@@ -1,4 +1,7 @@
 <?php
+/**
+ * NextGEN Gallery Show Metadata
+ */
 
 // look up for the path.
 require_once dirname( __DIR__ ) . '/ngg-config.php';
@@ -10,6 +13,7 @@ if ( ! is_user_logged_in() ) {
 	die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 }
 
+// phpcs:ignore WordPress.WP.Capabilities.Unknown
 if ( ! current_user_can( 'NextGEN Manage gallery' ) ) {
 	die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 }
@@ -24,7 +28,7 @@ if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_uns
 
 global $wpdb;
 
-$id = (int) $_GET['id'];
+$id = (int) ( isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : 0 );
 // let's get the meta data'.
 
 $meta     = new nggMeta( $id );
@@ -48,6 +52,7 @@ $class    = '';
 			</thead>
 		<?php
 		foreach ( $dbdata as $key => $value ) {
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $key, [ 'created_timestamp', 'timestamp' ] ) && is_numeric( $value ) ) {
 				$value = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $value );
 			}
@@ -55,10 +60,10 @@ $class    = '';
 				continue;
 			}
 			$class = ( $class == 'class="alternate"' ) ? '' : 'class="alternate"';
-			echo '<tr ' . $class . '>
-						<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
-						<td>' . esc_html( $value ) . '</td>
-					</tr>';
+			echo '<tr ' . esc_attr( $class ) . '>
+					<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
+					<td>' . esc_html( $value ) . '</td>
+				</tr>';
 		}
 		?>
 		</table>
@@ -82,6 +87,7 @@ $class    = '';
 			</thead>
 			<?php
 			foreach ( $exifdata as $key => $value ) {
+    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( in_array( $key, [ 'created_timestamp', 'timestamp' ] ) && is_numeric( $value ) ) {
 					$value = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $value );
 				}
@@ -89,10 +95,10 @@ $class    = '';
 					$value = date_i18n( get_option( 'date_format' ), strtotime( $value ) );
 				}
 				$class = ( $class == 'class="alternate"' ) ? '' : 'class="alternate"';
-				echo '<tr ' . $class . '>
-						<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
-						<td>' . esc_html( $value ) . '</td>
-					</tr>';
+				echo '<tr ' . esc_attr( $class ) . '>
+					<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
+					<td>' . esc_html( $value ) . '</td>
+				</tr>';
 			}
 			?>
 		</table>
@@ -116,14 +122,15 @@ $class    = '';
 			</thead>
 		<?php
 		foreach ( $iptcdata as $key => $value ) {
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $key, [ 'created_timestamp', 'timestamp' ] ) && is_numeric( $value ) ) {
 				$value = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $value );
 			}
 			$class = ( $class == 'class="alternate"' ) ? '' : 'class="alternate"';
-			echo '<tr ' . $class . '>
-						<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
-						<td>' . esc_html( $value ) . '</td>
-					</tr>';
+			echo '<tr ' . esc_attr( $class ) . '>
+					<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
+					<td>' . esc_html( $value ) . '</td>
+				</tr>';
 		}
 		?>
 		</table>
@@ -143,14 +150,15 @@ $class    = '';
 			</thead>
 		<?php
 		foreach ( $xmpdata as $key => $value ) {
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $key, [ 'created_timestamp', 'timestamp' ] ) && is_numeric( $value ) ) {
 				$value = date_i18n( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), $value );
 			}
 			$class = ( $class == 'class="alternate"' ) ? '' : 'class="alternate"';
-			echo '<tr ' . $class . '>
-						<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
-						<td>' . esc_html( $value ) . '</td>
-					</tr>';
+			echo '<tr ' . esc_attr( $class ) . '>
+					<td style="width:230px">' . esc_html( $meta->i18n_name( $key ) ) . '</td>
+					<td>' . esc_html( $value ) . '</td>
+				</tr>';
 		}
 		?>
 		</table>

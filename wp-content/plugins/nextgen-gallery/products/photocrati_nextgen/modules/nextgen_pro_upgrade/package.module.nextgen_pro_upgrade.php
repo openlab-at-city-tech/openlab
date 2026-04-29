@@ -27,6 +27,8 @@ class A_NextGen_Pro_Plus_Upgrade_Page extends Mixin
     }
 }
 /**
+ * NextGEN Pro upgrade controller adapter.
+ *
  * @property C_NextGen_Admin_Page_Controller|A_NextGen_Pro_Upgrade_Controller $object
  */
 class A_NextGen_Pro_Upgrade_Controller extends Mixin
@@ -51,6 +53,8 @@ class A_NextGen_Pro_Upgrade_Controller extends Mixin
         return $i18n;
     }
     /**
+     * Gets marketing blocks.
+     *
      * @return C_Marketing_Block_Card[]
      */
     public function get_marketing_blocks()
@@ -88,7 +92,18 @@ class A_NextGen_Pro_Upgrade_Controller extends Mixin
         $this->object->enqueue_backend_resources();
         $router = \Imagely\NGG\Util\Router::get_instance();
         $template = 'photocrati-nextgen_pro_upgrade#upgrade';
-        print $this->object->render_view($template, ['i18n' => $this->get_i18n_strings(), 'header_image_url' => $router->get_static_url('photocrati-nextgen_admin#imagely_icon.png'), 'marketing_blocks' => $this->object->get_marketing_blocks()], true);
+        print $this->object->render_view(
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $this->object->render_view() returns safe HTML for admin page
+            $template,
+            [
+                'i18n' => $this->get_i18n_strings(),
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe method call
+                'header_image_url' => $router->get_static_url('photocrati-nextgen_admin#imagely_icon.png'),
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe method call
+                'marketing_blocks' => $this->object->get_marketing_blocks(),
+            ],
+            true
+        );
     }
 }
 /**

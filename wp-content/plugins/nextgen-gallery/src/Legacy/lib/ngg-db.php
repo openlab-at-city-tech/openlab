@@ -47,7 +47,7 @@ class nggdb {
 	/**
 	 * Init the Database Abstraction layer for NextGEN Gallery
 	 */
-	function __construct() {
+	public function __construct() {
 		global $wpdb;
 
 		$this->galleries = array();
@@ -63,7 +63,7 @@ class nggdb {
 	 *
 	 * @return bool Always true
 	 */
-	function __destruct() {
+	public function __destruct() {
 		return true;
 	}
 
@@ -80,7 +80,7 @@ class nggdb {
 	 * @param bool       $json remove the key for associative array in json request
 	 * @return array An array containing the LegacyImage objects representing the images in the gallery.
 	 */
-	static function get_gallery( $id, $order_by = 'sortorder', $order_dir = 'ASC', $exclude = true, $limit = 0, $start = 0, $json = false ) {
+public static function get_gallery( $id, $order_by = 'sortorder', $order_dir = 'ASC', $exclude = true, $limit = 0, $start = 0, $json = false ) {
 		$retval = array();
 
 		$image_mapper = \Imagely\NGG\DataMappers\Image::get_instance();
@@ -118,7 +118,7 @@ class nggdb {
 	 * @param bool       $exclude
 	 * @return array An array containing the nggImage objects representing the images in the gallery.
 	 */
-	static function get_ids_from_gallery( $id, $order_by = 'sortorder', $order_dir = 'ASC', $exclude = true ) {
+public static function get_ids_from_gallery( $id, $order_by = 'sortorder', $order_dir = 'ASC', $exclude = true ) {
 
 		global $wpdb;
 
@@ -131,8 +131,10 @@ class nggdb {
 
 		// Query database
 		if ( is_numeric( $id ) ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$result = $wpdb->get_col( $wpdb->prepare( "SELECT tt.pid FROM $wpdb->nggallery AS t INNER JOIN $wpdb->nggpictures AS tt ON t.gid = tt.galleryid WHERE t.gid = %d $exclude_clause ORDER BY tt.{$order_by} $order_dir", $id ) );
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$result = $wpdb->get_col( $wpdb->prepare( "SELECT tt.pid FROM $wpdb->nggallery AS t INNER JOIN $wpdb->nggpictures AS tt ON t.gid = tt.galleryid WHERE t.slug = %s $exclude_clause ORDER BY tt.{$order_by} $order_dir", $id ) );
 		}
 
@@ -144,10 +146,11 @@ class nggdb {
 	 *
 	 * @id The gallery ID
 	 */
-	function delete_gallery( $id ) {
+	public function delete_gallery( $id ) {
 		$mapper  = \Imagely\NGG\DataMappers\Gallery::get_instance();
 		$gallery = $mapper->find( $id );
-		$mapper->destroy( $gallery );
+		// Always delete with dependencies to prevent orphaned image records
+		$mapper->destroy( $gallery, true );
 		wp_cache_delete( $id, 'ngg_gallery' );
 
 		return true;
@@ -159,7 +162,7 @@ class nggdb {
 	 * @id The album ID or name
 	 * @return object|bool A nggGallery object (false if not found)
 	 */
-	function find_album( $id ) {
+	public function find_album( $id ) {
 		global $wpdb;
 
 		// Query database
@@ -168,6 +171,7 @@ class nggdb {
 				return $album;
 			}
 
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$album = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->nggalbum WHERE id = %d", $id ) );
 		} elseif ( $id == 'all' || ( is_numeric( $id ) && $id == 0 ) ) {
 			// init the object and fill it
@@ -176,8 +180,10 @@ class nggdb {
 			$album->name       = __( 'Album overview', 'nggallery' );
 			$album->albumdesc  = __( 'Album overview', 'nggallery' );
 			$album->previewpic = 0;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$album->sortorder  = \Imagely\NGG\Util\Serializable::serialize( $wpdb->get_col( "SELECT gid FROM $wpdb->nggallery" ) );
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$album = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM $wpdb->nggalbum WHERE slug = %s", $id ) );
 		}
 
@@ -189,8 +195,8 @@ class nggdb {
 			}
 
 			// it was a bad idea to use a object, stripslashes_deep() could not used here, learn from it
-			$album->albumdesc = stripslashes( $album->albumdesc );
-			$album->name      = stripslashes( $album->name );
+			$album->albumdesc = stripslashes( $album->albumdesc ?? '' );
+			$album->name      = stripslashes( $album->name ?? '' );
 
 			wp_cache_add( $album->id, $album, 'ngg_album' );
 			return $album;
@@ -205,7 +211,7 @@ class nggdb {
 	 * @param int|string $id The image ID or Slug
 	 * @return bool|object A nggImage object representing the image (false if not found)
 	 */
-	static function find_image( $id ) {
+public static function find_image( $id ) {
 		global $wpdb;
 
 		if ( is_numeric( $id ) ) {
@@ -214,8 +220,10 @@ class nggdb {
 				return $image;
 			}
 
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$result = $wpdb->get_row( $wpdb->prepare( "SELECT tt.*, t.* FROM $wpdb->nggallery AS t INNER JOIN $wpdb->nggpictures AS tt ON t.gid = tt.galleryid WHERE tt.pid = %d ", $id ) );
 		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$result = $wpdb->get_row( $wpdb->prepare( "SELECT tt.*, t.* FROM $wpdb->nggallery AS t INNER JOIN $wpdb->nggpictures AS tt ON t.gid = tt.galleryid WHERE tt.image_slug = %s ", $id ) );
 		}
 
@@ -234,7 +242,7 @@ class nggdb {
 	 * @param int[] $pids array of picture_ids
 	 * @return nggImage[]
 	 */
-	static function find_images_in_list( $pids, $exclude = false, $order = 'ASC' ): array {
+public static function find_images_in_list( $pids, $exclude = false, $order = 'ASC' ): array {
 		global $wpdb;
 
 		$result = [];
@@ -257,6 +265,7 @@ class nggdb {
 			...$pids
 		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$images = $wpdb->get_results( $sql, OBJECT_K );
 
 		// Build the image objects from the query result
@@ -295,6 +304,7 @@ class nggdb {
 		$slug = self::get_unique_slug( sanitize_title( $alttext ), 'image' );
 
 		// Add the image
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		if (false === $wpdb->query(
 			$wpdb->prepare(
 				"INSERT INTO {$wpdb->nggpictures} (
@@ -347,13 +357,14 @@ class nggdb {
 	 * @param int    $author (optional)
 	 * @return int result of the ID of the inserted gallery
 	 */
-	static function add_gallery( $title = '', $path = '', $description = '', $pageid = 0, $previewpic = 0, $author = 0 ) {
+public static function add_gallery( $title = '', $path = '', $description = '', $pageid = 0, $previewpic = 0, $author = 0 ) {
 		global $wpdb;
 
 		// slug must be unique, we use the title for that
 		$slug = self::get_unique_slug( sanitize_title( $title ), 'gallery' );
 
 		// Note : The field 'name' is deprecated, it's currently kept only for compat reason with older shortcodes, we copy the slug into this field
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		if ( false === $wpdb->query(
 			$wpdb->prepare(
 				"INSERT INTO $wpdb->nggallery (name, slug, path, title, galdesc, pageid, previewpic, author)
@@ -391,7 +402,7 @@ class nggdb {
 	 * @deprecated
 	 * @return bool|array
 	 */
-	static function find_last_images( $page = 0, $limit = 30, $exclude = true, $galleryId = 0, $orderby = "pid" ) {
+public static function find_last_images( $page = 0, $limit = 30, $exclude = true, $galleryId = 0, $orderby = "pid" ) {
 		// Determine ordering
 		$order_field     = $orderby;
 		$order_direction = 'DESC';
@@ -440,7 +451,7 @@ class nggdb {
 	/**
 	 * @return nggImage[] An array containing the nggImage objects representing the images in the album.
 	 */
-	function find_images_in_album(
+	public function find_images_in_album(
 		$album,
 		string $order_by = 'galleryid',
 		string $order_dir = 'ASC',
@@ -473,6 +484,7 @@ class nggdb {
 			...$album->gallery_ids
 		);
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$result = $wpdb->get_results( $sql );
 
 		// Return the object from the query result
@@ -491,7 +503,7 @@ class nggdb {
 	 * @param int $limit Number of results, 0 shows all results
 	 * @return \Imagely\NGG\DataTypes\Image[]
 	 */
-	function search_for_images( string $request, int $limit = 0 ): array {
+	public function search_for_images( string $request, int $limit = 0 ): array {
 		global $wpdb;
 
 		// If a search pattern is specified, load the posts that match
@@ -544,6 +556,7 @@ class nggdb {
 			return [];
 		}
 
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$result = $wpdb->get_col(
 			$wpdb->prepare(
 				"SELECT `tt`.`pid` FROM `{$wpdb->nggallery}` AS `t`
@@ -557,6 +570,7 @@ class nggdb {
 		);
 
 		// TODO: Currently we don't support a proper pagination
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$this->paged['total_objects']        = $this->paged['objects_per_page'] = intval( $wpdb->get_var( "SELECT FOUND_ROWS()" ) );
 		$this->paged['max_objects_per_page'] = 1;
 
@@ -573,7 +587,7 @@ class nggdb {
 		return [];
 	}
 
-	function trim_quotes_and_whitespace( $str ): string {
+	public function trim_quotes_and_whitespace( $str ): string {
 		return trim( $str, "\"'\n\r" );
 	}
 
@@ -585,15 +599,17 @@ class nggdb {
 	 * @param array $new_values An array with existing or new values
 	 * @return bool result of query
 	 */
-	static function update_image_meta( $id, $new_values ) {
+public static function update_image_meta( $id, $new_values ) {
 		global $wpdb;
 
 		// Query database for existing values
 		// Use cache object
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$old_values      = $wpdb->get_var( $wpdb->prepare( "SELECT meta_data FROM $wpdb->nggpictures WHERE pid = %d ", $id ) );
 		$old_values      = \Imagely\NGG\Util\Serializable::unserialize( $old_values );
 		$meta            = array_merge( (array) $old_values, (array) $new_values );
 		$serialized_meta = \Imagely\NGG\Util\Serializable::serialize( $meta );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$result          = $wpdb->query( $wpdb->prepare( "UPDATE $wpdb->nggpictures SET meta_data = %s WHERE pid = %d", $serialized_meta, $id ) );
 
 		do_action( 'ngg_updated_image_meta', $id, $meta );
@@ -612,7 +628,7 @@ class nggdb {
 	 * @param int    $id ID of the object, so that it's not checked against itself (optional)
 	 * @return string unique slug for the object, based on $slug (with a -1, -2, etc. suffix)
 	 */
-	static function get_unique_slug( $slug, $type ) {
+public static function get_unique_slug( $slug, $type ) {
 		global $wpdb;
 
 		$slug   = stripslashes( $slug );
@@ -652,7 +668,9 @@ class nggdb {
 		);
 
 		// If the above query returns a result, it means that the slug is already taken
-		if (( $last_slug = $wpdb->get_var( $query ) )) {
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+		$last_slug = $wpdb->get_var( $query );
+		if ( $last_slug ) {
 
 			// If the last known slug has an integer attached, then it means that we need to increment that integer
 			$quoted_slug = preg_quote( $slug, '/' );

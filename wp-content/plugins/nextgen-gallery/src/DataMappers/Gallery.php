@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:disable Squiz.Commenting,Generic.Commenting
 
 namespace Imagely\NGG\DataMappers;
 
@@ -11,17 +11,47 @@ use Imagely\NGG\Display\I18N;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Util\Transient;
 
+/**
+ * Gallery data mapper class.
+ *
+ * Handles database operations for gallery entities, including CRUD operations
+ * and gallery-specific functionality.
+ */
 class Gallery extends TableDriver {
 
+	/**
+	 * Singleton instance of the Gallery mapper.
+	 *
+	 * @var Gallery|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * The model class this mapper handles.
+	 *
+	 * @var string
+	 */
 	public $model_class = 'Imagely\NGG\DataTypes\Gallery';
 
+	/**
+	 * The primary key column name.
+	 *
+	 * @var string
+	 */
 	public $primary_key_column = 'gid';
 
-	// Necessary for legacy compatibility.
+	/**
+	 * Custom post name for legacy compatibility.
+	 *
+	 * @var string
+	 */
 	public $custom_post_name = 'mixin_nextgen_table_extras';
 
+	/**
+	 * Constructor.
+	 *
+	 * Defines the database table structure and initializes the mapper.
+	 */
 	public function __construct() {
 		$this->define_column( 'author', 'INT', 0 );
 		$this->define_column( 'extras_post_id', 'BIGINT', 0 );
@@ -34,9 +64,25 @@ class Gallery extends TableDriver {
 		$this->define_column( 'slug', 'VARCHAR(255)' );
 		$this->define_column( 'title', 'TEXT' );
 
+		// Add date columns
+		$this->define_column( 'date_created', 'DATETIME' );
+		$this->define_column( 'date_modified', 'DATETIME' );
+
+		// Add display type related columns
+		$this->define_column( 'display_type', 'VARCHAR(255)', 'photocrati-nextgen_basic_thumbnails' );
+		$this->define_column( 'display_type_settings', 'MEDIUMTEXT' );
+		$this->define_column( 'external_source', 'MEDIUMTEXT' );
+		$this->define_column( 'is_private', 'TINYINT', 0 );
+
+		$this->define_column( 'is_ecommerce_enabled', 'TINYINT', 0 );
+
 		if ( \C_NextGEN_Bootstrap::get_pro_api_version() < 4.0 ) {
 			$this->define_column( 'pricelist_id', 'BIGINT', 0, true );
 		}
+
+		// Add serialized column for display type settings and external source
+		$this->add_serialized_column( 'display_type_settings' );
+		$this->add_serialized_column( 'external_source' );
 
 		apply_filters( 'ngg_gallery_mapper_columns', $this );
 
@@ -44,7 +90,9 @@ class Gallery extends TableDriver {
 	}
 
 	/**
-	 * @return Gallery|\Imagely\NGGPro\Commerce\DataMappers\Gallery
+	 * Gets the singleton instance of the Gallery mapper.
+	 *
+	 * @return Gallery|\Imagely\NGGPro\Commerce\DataMappers\Gallery The Gallery mapper instance.
 	 */
 	public static function get_instance() {
 		if ( ! self::$instance ) {
@@ -55,18 +103,31 @@ class Gallery extends TableDriver {
 	}
 
 	/**
-	 * @param int|GalleryType
-	 * @return GalleryType|null
+	 * Finds a gallery by ID or entity.
+	 *
+	 * @param int|GalleryType $entity The gallery ID or gallery entity to find.
+	 * @return GalleryType|null The gallery entity or null if not found.
 	 */
 	public function find( $entity ) {
-		/** @var GalleryType $result */
+		/**
+		 * Gallery result.
+		 *
+		 * @var GalleryType $result
+		 */
 		$result = parent::find( $entity );
+
+		if ( $result ) {
+			$this->initialize_display_type_settings( $result );
+		}
+
 		return $result;
 	}
 
 	/**
-	 * @param string $slug
-	 * @return GalleryType|null
+	 * Gets a gallery by its slug.
+	 *
+	 * @param string $slug The gallery slug to search for.
+	 * @return GalleryType|null The gallery entity or null if not found.
 	 */
 	public function get_by_slug( $slug ) {
 		$sanitized_slug = sanitize_title( $slug );
@@ -82,6 +143,14 @@ class Gallery extends TableDriver {
 		return reset( $retval );
 	}
 
+	/**
+	 * Sets the preview image for a gallery.
+	 *
+	 * @param int|GalleryType $gallery       The gallery ID or gallery entity.
+	 * @param int|object      $image         The image ID or image entity to set as preview.
+	 * @param bool            $only_if_empty Whether to only set if no preview exists. Default false.
+	 * @return bool True if the preview image was set successfully, false otherwise.
+	 */
 	public function set_preview_image( $gallery, $image, $only_if_empty = false ) {
 		$retval = false;
 
@@ -100,7 +169,7 @@ class Gallery extends TableDriver {
 		}
 
 		if ( $gallery && $image ) {
-			if ( ( $only_if_empty && ! $gallery->previewpic ) or ! $only_if_empty ) {
+			if ( ( $only_if_empty && ! $gallery->previewpic ) || ! $only_if_empty ) {
 				$gallery->previewpic = $image;
 				$retval              = $this->save( $gallery );
 			}
@@ -110,17 +179,84 @@ class Gallery extends TableDriver {
 	}
 
 	/**
-	 * Uses the title property as the post title when the Custom Post driver is used
+	 * Uses the title property as the post title when the Custom Post driver is used.
 	 *
-	 * @param object $entity
-	 * @return string
+	 * @param GalleryType $entity The gallery entity.
+	 * @return string The post title.
 	 */
 	public function get_post_title( $entity ) {
 		return $entity->title;
 	}
 
+	/**
+	 * Gets all available display types and their default settings
+	 *
+	 * @return array Array of display types and their default settings
+	 */
+	private function get_all_display_type_defaults() {
+		$display_mapper = \Imagely\NGG\DataMappers\DisplayType::get_instance();
+		$display_types  = $display_mapper->find_all();
+		$defaults       = [];
+
+		foreach ( $display_types as $display_type ) {
+			if ( ! empty( $display_type->hidden_from_ui ) ) {
+				continue;
+			}
+			$defaults[ $display_type->name ] = $display_type->settings;
+		}
+
+		return $defaults;
+	}
+
+	/**
+	 * Ensures display type settings are properly initialized with defaults, this will also guaratee that new fields are not added to the display type settings.
+	 *
+	 * @param object $entity The gallery entity
+	 * @return void
+	 */
+	private function initialize_display_type_settings( $entity ) {
+		// Initialize display type settings if not set
+		if ( ! is_array( $entity->display_type_settings ) ) {
+			$entity->display_type_settings = [];
+		}
+
+		// Get defaults for all display types
+		$all_defaults = $this->get_all_display_type_defaults();
+
+		// Ensure all display types have settings
+		foreach ( $all_defaults as $type_name => $defaults ) {
+			if ( ! isset( $entity->display_type_settings[ $type_name ] ) ) {
+				$sanitized_defaults = array_map(
+					function ( $value ) {
+						return is_bool( $value ) ? (int) $value : $value;
+					},
+					$defaults
+				);
+
+				// Not removed from actual display type settings, because of old admin UI.
+				unset( $sanitized_defaults['is_ecommerce_enabled'] );
+
+				$entity->display_type_settings[ $type_name ] = $sanitized_defaults;
+			}
+		}
+	}
+
 	public function save_entity( $entity ) {
 		$storage = StorageManager::get_instance();
+
+		// Set dates using WordPress functions.
+		$current_time = current_time( 'mysql', true );
+
+		// Only set date_created for new galleries.
+		if ( empty( $entity->{$entity->id_field} ) ) {
+			$entity->date_created = $current_time;
+		}
+
+		// Always update modified date.
+		$entity->date_modified = $current_time;
+
+		// Initialize display type settings before saving.
+		$this->initialize_display_type_settings( $entity );
 
 		// A bug in NGG 2.1.24 allowed galleries to be created with spaces in the directory name, unreplaced by dashes
 		// This causes a few problems everywhere, so we here allow users a way to fix those galleries by just re-saving.
@@ -134,10 +270,12 @@ class Gallery extends TableDriver {
 			$new_abspath = str_replace( $pre_path, $entity->path, $abspath );
 
 			// Begin adding -1, -2, etc. until we have a safe target: rename() will overwrite existing directories.
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			if ( @file_exists( $new_abspath ) ) {
 				$max_count         = 100;
 				$count             = 0;
 				$corrected_abspath = $new_abspath;
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				while ( @file_exists( $corrected_abspath ) && $count <= $max_count ) {
 					++$count;
 					$corrected_abspath = $new_abspath . '-' . $count;
@@ -146,7 +284,7 @@ class Gallery extends TableDriver {
 				$entity->path = $entity->path . '-' . $count;
 			}
 
-			if( ! class_exists( 'WP_Filesystem_Direct' ) ) {
+			if ( ! class_exists( 'WP_Filesystem_Direct' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
 				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
 			}
@@ -172,11 +310,19 @@ class Gallery extends TableDriver {
 				do_action( 'ngg_created_new_gallery', $entity->{$entity->id_field} );
 			}
 			Transient::flush( 'displayed_gallery_rendering' );
+			Transient::flush( 'rest_galleries' );
 		}
 
 		return $retval;
 	}
 
+	/**
+	 * Destroys a gallery entity and optionally its dependencies.
+	 *
+	 * @param int|GalleryType $entity             The gallery ID or entity to destroy.
+	 * @param bool            $with_dependencies Whether to also delete associated images and files. Default false.
+	 * @return bool True if the gallery was successfully destroyed, false otherwise.
+	 */
 	public function destroy( $entity, $with_dependencies = false ) {
 		$retval = false;
 
@@ -194,6 +340,7 @@ class Gallery extends TableDriver {
 
 				// Delete the image files from the filesystem.
 				$settings = Settings::get_instance();
+				// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 				if ( $settings->deleteImg ) {
 					$storage = StorageManager::get_instance();
 					$storage->delete_gallery( $entity );
@@ -217,6 +364,7 @@ class Gallery extends TableDriver {
 				// TODO: Once NextGEN's minimum WP version is 6.2 or higher use wpdb->prepare() here.
 				//
 				// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$wpdb->query(
 					"
                     DELETE wptr.* FROM {$wpdb->term_relationships} wptr
@@ -234,6 +382,7 @@ class Gallery extends TableDriver {
 			if ( $retval ) {
 				do_action( 'ngg_delete_gallery', $entity );
 				Transient::flush( 'displayed_gallery_rendering' );
+				Transient::flush( 'rest_galleries' );
 			}
 		}
 
@@ -241,7 +390,9 @@ class Gallery extends TableDriver {
 	}
 
 	/**
-	 * @param GalleryType $entity
+	 * Sets default values for a gallery entity.
+	 *
+	 * @param GalleryType $entity The gallery entity to set defaults for.
 	 */
 	public function set_defaults( $entity ) {
 		// If author is missing, then set to the current user id.

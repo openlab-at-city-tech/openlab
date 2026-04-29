@@ -13,13 +13,51 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Gallery management class.
+ */
 class nggManageGallery {
 
-	public $mode          = 'main';
-	public $gid           = false;
-	public $gallery       = null;
-	public $pid           = false;
-	public $base_page     = 'admin.php?page=nggallery-manage-gallery';
+	/**
+	 * Mode.
+	 *
+	 * @var string
+	 */
+	public $mode = 'main';
+
+	/**
+	 * Gallery ID.
+	 *
+	 * @var int|false
+	 */
+	public $gid = false;
+
+	/**
+	 * Gallery object.
+	 *
+	 * @var object|null
+	 */
+	public $gallery = null;
+
+	/**
+	 * Picture ID.
+	 *
+	 * @var int|false
+	 */
+	public $pid = false;
+
+	/**
+	 * Base page URL.
+	 *
+	 * @var string
+	 */
+	public $base_page = 'admin.php?page=nggallery-manage-gallery';
+
+	/**
+	 * Search result.
+	 *
+	 * @var bool|array
+	 */
 	public $search_result = false;
 
 	// initiate the manage page.
@@ -45,7 +83,7 @@ class nggManageGallery {
 		//
 		// phpcs:disable WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST['post_paged'] ) && ! isset( $_GET['s'] ) ) {
-			if ( $_GET['paged'] != $_POST['post_paged'] ) {
+			if ( isset( $_GET['paged'] ) && $_GET['paged'] != $_POST['post_paged'] ) {
 				$_GET['paged'] = absint( $_POST['post_paged'] );
 				return;
 			}
@@ -53,12 +91,12 @@ class nggManageGallery {
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		// Should be only called via manage galleries overview.
-		if ( isset( $_POST['nggpage'] ) && 'manage-galleries' === $_POST['nggpage'] && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_bulkgallery' ) ) {
+		if ( isset( $_POST['nggpage'] ) && 'manage-galleries' === $_POST['nggpage'] && isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_bulkgallery' ) ) {
 			$this->post_processor_galleries();
 		}
 
 		// Should be only called via a edit single gallery page.
-		if ( isset( $_POST['nggpage'] ) && 'manage-images' === $_POST['nggpage'] && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_updategallery' ) ) {
+		if ( isset( $_POST['nggpage'] ) && 'manage-images' === $_POST['nggpage'] && isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_updategallery' ) ) {
 			$this->post_processor_images();
 		}
 
@@ -203,8 +241,8 @@ class nggManageGallery {
 	}
 
 	public function render_image_column_3( $output = '', $picture = [] ) {
-		$image_url = add_query_arg( 'i', mt_rand(), $picture->imageURL );
-		$thumb_url = add_query_arg( 'i', mt_rand(), $picture->thumbURL );
+		$image_url = add_query_arg( 'i', wp_rand(), $picture->imageURL );
+		$thumb_url = add_query_arg( 'i', wp_rand(), $picture->thumbURL );
 		$filename  = esc_attr( $picture->filename );
 
 		$output = [];
@@ -213,7 +251,8 @@ class nggManageGallery {
 		$output[] = "<img class='thumb' src='{$thumb_url}' id='thumb{$picture->pid}'/>";
 		$output[] = '</a>';
 
-		return ( $output = implode( "\n", $output ) );
+		$output = implode( "\n", $output );
+		return $output;
 	}
 
 	public function render_image_column_4( $output = '', $picture = [] ) {
@@ -239,7 +278,8 @@ class nggManageGallery {
 		$output[] = "<input type='checkbox' id='exclude_{$picture->pid}' value='1' name='images[{$picture->pid}][exclude]' {$excluded}/> {$exclude_label}";
 		$output[] = '</label>';
 
-		return ( $output = implode( "\n", $output ) );
+		$output = implode( "\n", $output );
+		return $output;
 	}
 
 	public function render_image_column_5( $output = '', $picture = [] ) {
@@ -251,7 +291,8 @@ class nggManageGallery {
 		$output[] = "<input title='Alt/Title Text' type='text' name='images[{$picture->pid}][alttext]' value='{$alttext}'/>";
 		$output[] = "<textarea title='Description' rows='3' name='images[$picture->pid][description]'>{$desc}</textarea>";
 
-		return ( $output = implode( "\n", $output ) );
+		$output = implode( "\n", $output );
+		return $output;
 	}
 
 	public function render_image_column_6( $output = '', $picture = [] ) {
@@ -294,20 +335,22 @@ class nggManageGallery {
 		}
 
 		// Output row columns.
-		echo "<tr class='{$class} iedit' valign='top'>";
+		echo '<tr class="' . esc_attr( $class ) . ' iedit" valign="top">';
 		for ( $i = 1; $i <= $columns; $i++ ) {
 			$rowspan = $i > 4 ? "rowspan='2'" : '';
-			echo "<td class='column column-{$i}' {$rowspan}>";
+			echo '<td class="column column-' . esc_attr( $i ) . '" ' . esc_attr( $rowspan ) . '>';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- apply_filters() returns safe HTML for column content
 			echo apply_filters( "ngg_manage_images_column_{$i}_content", '', $picture );
 			echo '</td>';
 		}
 		echo '</tr>';
 
 		// Actions row.
-		echo "<tr class='{$class} row_actions'>";
+		echo '<tr class="' . esc_attr( $class ) . ' row_actions">';
 		echo '<td colspan="2"></td>';
-		echo "<td colspan='" . ( $columns - 2 ) . "'>";
+		echo '<td colspan="' . esc_attr( $columns - 2 ) . '">';
 		echo "<div class='row-actions'>";
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $actions contains safe HTML for row actions
 		echo implode( ' | ', $actions );
 		echo '</div>';
 		echo '</td>';
@@ -398,7 +441,8 @@ class nggManageGallery {
 		$columns = apply_filters( 'ngg_manage_images_number_of_columns', 6 );
 		echo '<tr>';
 		for ( $i = 1; $i <= $columns; $i++ ) {
-			echo "<th class='column column-{$i}'>";
+			echo '<th class="column column-' . esc_attr( $i ) . '">';
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- apply_filters() returns safe HTML for column header
 			echo apply_filters( 'ngg_manage_images_column_' . $i . '_header', "Column #{$i}" );
 			echo '</th>';
 		}
@@ -461,14 +505,14 @@ class nggManageGallery {
 		return $fields;
 	}
 
-	public function render_gallery_field_label_column( $text, $for, $tooltip = null ) {
-		$for = esc_attr( $for );
+	public function render_gallery_field_label_column( $text, $for_attribute, $tooltip = null ) {
+		$for_attribute = esc_attr( $for_attribute );
 
 		if ( ! empty( $tooltip ) ) {
 			$tooltip = "title='{$tooltip}' class='tooltip'";
 		}
 
-		echo "<td><label {$tooltip} for='{$for}'>{$text}</label></td>";
+		echo '<td><label ' . esc_attr( $tooltip ) . ' for="' . esc_attr( $for_attribute ) . '">' . esc_html( $text ) . '</label></td>';
 	}
 
 	public function render_gallery_fields() {
@@ -502,7 +546,7 @@ class nggManageGallery {
 					call_user_func( $callback, $gallery );
 					echo '</td>';
 				} elseif ( WP_DEBUG ) {
-					echo "<p>Could not render {$left_keys[$i]} field. No callback exists</p>";
+					echo '<p>Could not render ' . esc_html( $left_keys[ $i ] ) . ' field. No callback exists</p>';
 				}
 			} else {
 				$output[] = '<td colspan="2"></td>';
@@ -520,7 +564,7 @@ class nggManageGallery {
 					call_user_func( $callback, $gallery );
 					echo '</td>';
 				} elseif ( WP_DEBUG ) {
-					echo "<p>Could not render {$right_keys[$i]} field. No callback exists</p>";
+					echo '<p>Could not render ' . esc_html( $right_keys[ $i ] ) . ' field. No callback exists</p>';
 				}
 			} else {
 				$output[] = '<td colspan="2"></td>';
@@ -577,33 +621,36 @@ class nggManageGallery {
 		if ( isset( $_POST['bulkaction'] ) && isset( $_POST['doaction'] ) ) {
 
 			switch ( $_POST['bulkaction'] ) {
-				case 'no_action';
+				case 'no_action':
 					// No action.
 					break;
 				case 'recover_images':
 					// Recover images from backup.
 					// A prefix 'gallery_' will first fetch all ids from the selected galleries.
-					nggAdmin::do_ajax_operation( 'gallery_recover_image', $_POST['doaction'], __( 'Recover from backup', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'gallery_recover_image', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Recover from backup', 'nggallery' ) );
 					break;
 				case 'set_watermark':
 					// Set watermark
 					// A prefix 'gallery_' will first fetch all ids from the selected galleries.
-					nggAdmin::do_ajax_operation( 'gallery_set_watermark', $_POST['doaction'], __( 'Set watermark', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'gallery_set_watermark', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Set watermark', 'nggallery' ) );
 					break;
 				case 'import_meta':
 					// Import Metadata
 					// A prefix 'gallery_' will first fetch all ids from the selected galleries.
-					nggAdmin::do_ajax_operation( 'gallery_import_metadata', $_POST['doaction'], __( 'Import metadata', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'gallery_import_metadata', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Import metadata', 'nggallery' ) );
 					break;
 				case 'delete_gallery':
 					// Delete gallery.
 					if ( is_array( $_POST['doaction'] ) ) {
 						$deleted = false;
 						$mapper  = GalleryMapper::get_instance();
-						foreach ( $_POST['doaction'] as $id ) {
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash only removes slashes, values are sanitized on line 607
+						foreach ( wp_unslash( $_POST['doaction'] ) as $id ) {
+							$id = sanitize_text_field( wp_unslash( $id ) );
 
 							$gallery = $mapper->find( $id );
 							if ( $gallery->path == '../' || false !== strpos( $gallery->path, '/../' ) ) {
+								/* translators: %s: gallery ID */
 								nggGallery::show_message( sprintf( __( 'One or more "../" in Gallery paths could be unsafe and NextGen Gallery will not delete gallery %s automatically', 'nggallery' ), $gallery->{$gallery->id_field} ) );
 							} elseif ( $mapper->destroy( $id, true ) ) {
 									$deleted = true;
@@ -626,12 +673,13 @@ class nggManageGallery {
 			}
 
 			// get the default path for a new gallery.
-			$newgallery = $_POST['galleryname'];
+			$newgallery = isset( $_POST['galleryname'] ) ? sanitize_text_field( wp_unslash( $_POST['galleryname'] ) ) : '';
 			if ( ! empty( $newgallery ) ) {
 				$gallery_mapper = GalleryMapper::get_instance();
 				$gallery        = $gallery_mapper->create( [ 'title' => $newgallery ] );
 				if ( $gallery->save() && ! isset( $_REQUEST['attach_to_post'] ) ) {
-					$url     = admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid=' . $gallery->gid;
+					$url = admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid=' . $gallery->gid;
+					/* translators: %s: gallery management URL */
 					$message = sprintf( __( 'Gallery successfully created. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery' ), $url );
 					nggGallery::show_message( $message, 'gallery_created_msg' );
 				}
@@ -643,12 +691,12 @@ class nggManageGallery {
 		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_ResizeImages'] ) ) {
 
 			// save the new values for the next operation.
-			$ngg->options['imgWidth']  = (int) $_POST['imgWidth'];
-			$ngg->options['imgHeight'] = (int) $_POST['imgHeight'];
+			$ngg->options['imgWidth']  = isset( $_POST['imgWidth'] ) ? (int) $_POST['imgWidth'] : 0;
+			$ngg->options['imgHeight'] = isset( $_POST['imgHeight'] ) ? (int) $_POST['imgHeight'] : 0;
 			// What is in the case the user has no if cap 'NextGEN Change options' ? Check feedback.
 			update_option( 'ngg_options', $ngg->options );
 
-			$gallery_ids = explode( ',', $_POST['TB_imagelist'] );
+			$gallery_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 			// A prefix 'gallery_' will first fetch all ids from the selected galleries.
 			nggAdmin::do_ajax_operation( 'gallery_resize_image', $gallery_ids, __( 'Resize images', 'nggallery' ) );
 		}
@@ -657,14 +705,14 @@ class nggManageGallery {
 
 			// save the new values for the next operation.
 			$settings = Settings::get_instance();
-			$settings->set( 'thumbwidth', (int) $_POST['thumbwidth'] );
-			$settings->set( 'thumbheight', (int) $_POST['thumbheight'] );
+			$settings->set( 'thumbwidth', isset( $_POST['thumbwidth'] ) ? (int) $_POST['thumbwidth'] : 0 );
+			$settings->set( 'thumbheight', isset( $_POST['thumbheight'] ) ? (int) $_POST['thumbheight'] : 0 );
 			$settings->set( 'thumbfix', isset( $_POST['thumbfix'] ) );
 			$settings->save();
 			ngg_refreshSavedSettings();
 
 			// What is in the case the user has no if cap 'NextGEN Change options' ? Check feedback.
-			$gallery_ids = explode( ',', $_POST['TB_imagelist'] );
+			$gallery_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 
 			// A prefix 'gallery_' will first fetch all ids from the selected galleries.
 			nggAdmin::do_ajax_operation( 'gallery_create_thumbnail', $gallery_ids, __( 'Create new thumbnails', 'nggallery' ) );
@@ -682,27 +730,29 @@ class nggManageGallery {
 			check_admin_referer( 'ngg_updategallery' );
 
 			switch ( $_POST['bulkaction'] ) {
-				case 'no_action';
+				case 'no_action':
 					break;
 				case 'rotate_cw':
-					nggAdmin::do_ajax_operation( 'rotate_cw', $_POST['doaction'], __( 'Rotate images', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'rotate_cw', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Rotate images', 'nggallery' ) );
 					break;
 				case 'rotate_ccw':
-					nggAdmin::do_ajax_operation( 'rotate_ccw', $_POST['doaction'], __( 'Rotate images', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'rotate_ccw', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Rotate images', 'nggallery' ) );
 					break;
 				case 'recover_images':
-					nggAdmin::do_ajax_operation( 'recover_image', $_POST['doaction'], __( 'Recover from backup', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'recover_image', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Recover from backup', 'nggallery' ) );
 					break;
 				case 'set_watermark':
-					nggAdmin::do_ajax_operation( 'set_watermark', $_POST['doaction'], __( 'Set watermark', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'set_watermark', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Set watermark', 'nggallery' ) );
 					break;
 				case 'strip_orientation_tag':
-					nggAdmin::do_ajax_operation( 'strip_orientation_tag', $_POST['doaction'], __( 'Remove EXIF Orientation', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'strip_orientation_tag', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Remove EXIF Orientation', 'nggallery' ) );
 					break;
 				case 'delete_images':
 					if ( is_array( $_POST['doaction'] ) ) {
-						foreach ( $_POST['doaction'] as $imageID ) {
-							$image = $nggdb->find_image( $imageID );
+						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash only removes slashes, values are sanitized on line 709
+						foreach ( wp_unslash( $_POST['doaction'] ) as $imageID ) {
+							$imageID = sanitize_text_field( wp_unslash( $imageID ) );
+							$image   = $nggdb->find_image( $imageID );
 							if ( $image ) {
 								do_action( 'ngg_delete_picture', $image->pid, $image );
 								if ( $ngg->options['deleteImg'] ) {
@@ -718,7 +768,7 @@ class nggManageGallery {
 					}
 					break;
 				case 'import_meta':
-					nggAdmin::do_ajax_operation( 'import_metadata', $_POST['doaction'], __( 'Import metadata', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'import_metadata', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Import metadata', 'nggallery' ) );
 					break;
 			}
 		}
@@ -726,12 +776,12 @@ class nggManageGallery {
 		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_ResizeImages'] ) ) {
 
 			// save the new values for the next operation.
-			$ngg->options['imgWidth']  = (int) $_POST['imgWidth'];
-			$ngg->options['imgHeight'] = (int) $_POST['imgHeight'];
+			$ngg->options['imgWidth']  = isset( $_POST['imgWidth'] ) ? (int) $_POST['imgWidth'] : 0;
+			$ngg->options['imgHeight'] = isset( $_POST['imgHeight'] ) ? (int) $_POST['imgHeight'] : 0;
 
 			update_option( 'ngg_options', $ngg->options );
 
-			$pic_ids = explode( ',', $_POST['TB_imagelist'] );
+			$pic_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 			nggAdmin::do_ajax_operation( 'resize_image', $pic_ids, __( 'Resize images', 'nggallery' ) );
 		}
 
@@ -739,22 +789,22 @@ class nggManageGallery {
 
 			// save the new values for the next operation.
 			$settings = Settings::get_instance();
-			$settings->set( 'thumbwidth', (int) $_POST['thumbwidth'] );
-			$settings->set( 'thumbheight', (int) $_POST['thumbheight'] );
+			$settings->set( 'thumbwidth', isset( $_POST['thumbwidth'] ) ? (int) $_POST['thumbwidth'] : 0 );
+			$settings->set( 'thumbheight', isset( $_POST['thumbheight'] ) ? (int) $_POST['thumbheight'] : 0 );
 			$settings->set( 'thumbfix', isset( $_POST['thumbfix'] ) );
 			$settings->save();
 			ngg_refreshSavedSettings();
 
-			$pic_ids = explode( ',', $_POST['TB_imagelist'] );
+			$pic_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 			nggAdmin::do_ajax_operation( 'create_thumbnail', $pic_ids, __( 'Create new thumbnails', 'nggallery' ) );
 		}
 
 		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_SelectGallery'] ) ) {
 
-			$pic_ids  = explode( ',', $_POST['TB_imagelist'] );
-			$dest_gid = (int) $_POST['dest_gid'];
+			$pic_ids  = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
+			$dest_gid = isset( $_POST['dest_gid'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['dest_gid'] ) ) : 0;
 
-			switch ( $_POST['TB_bulkaction'] ) {
+			switch ( isset( $_POST['TB_bulkaction'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_bulkaction'] ) ) : '' ) {
 				case 'copy_to':
 					$destination = GalleryMapper::get_instance()->find( $dest_gid );
 					$new_ids     = StorageManager::get_instance()->copy_images( $pic_ids, $dest_gid );
@@ -764,6 +814,7 @@ class nggManageGallery {
 						$title     = esc_html( $destination->title );
 						$link      = "<a href='{$admin_url}admin.php?page=nggallery-manage-gallery&mode=edit&gid={$destination->gid}'>{$title}</a>";
 						nggGallery::show_message(
+							/* translators: 1: number of pictures, 2: gallery link */
 							sprintf( __( 'Copied %1$s picture(s) to gallery: %2$s .', 'nggallery' ), count( $new_ids ), $link )
 						);
 					} else {
@@ -782,6 +833,7 @@ class nggManageGallery {
 						$title     = esc_html( $destination->title );
 						$link      = "<a href='{$admin_url}admin.php?page=nggallery-manage-gallery&mode=edit&gid={$destination->gid}'>{$title}</a>";
 						nggGallery::show_message(
+							/* translators: 1: number of pictures, 2: gallery link */
 							sprintf( __( 'Moved %1$s picture(s) to gallery: %2$s .', 'nggallery' ), count( $new_ids ), $link )
 						);
 					} else {
@@ -797,8 +849,8 @@ class nggManageGallery {
 			// do tags update.
 
 			// get the images list.
-			$pic_ids = explode( ',', $_POST['TB_imagelist'] );
-			$taglist = explode( ',', $_POST['taglist'] );
+			$pic_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
+			$taglist = explode( ',', isset( $_POST['taglist'] ) ? sanitize_text_field( wp_unslash( $_POST['taglist'] ) ) : '' );
 			$taglist = array_map( 'trim', $taglist );
 
 			if ( is_array( $pic_ids ) ) {
@@ -807,7 +859,7 @@ class nggManageGallery {
 
 					// which action should be performed ?
 					switch ( $_POST['TB_bulkaction'] ) {
-						case 'no_action';
+						case 'no_action':
 							// No action.
 							break;
 						case 'overwrite_tags':
@@ -835,7 +887,7 @@ class nggManageGallery {
 			}
 		}
 
-		if ( isset( $_POST['updatepictures'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_updategallery' ) ) {
+		if ( isset( $_POST['updatepictures'] ) && isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_updategallery' ) ) {
 			// Update pictures.
 			$success = false;
 
@@ -845,10 +897,10 @@ class nggManageGallery {
 
 				// Sanitize fields.
 				foreach ( $fields as $field ) {
-					$html            = stripslashes( $_POST[ $field ] );
+					$html            = isset( $_POST[ $field ] ) ? stripslashes( sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) ) : '';
 					$html            = preg_replace( '/\\s+on\\w+=(["\']).*?\\1/i', '', $html );
 					$html            = preg_replace( '/(<\/[^>]+?>)(<[^>\/][^>]*?>)/', '$1 $2', $html );
-					$html            = strip_tags( $html, implode( '', $tags ) );
+					$html            = strip_tags( $html, implode( '', $tags ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 					$_POST[ $field ] = $html;
 				}
 
@@ -899,6 +951,7 @@ class nggManageGallery {
 		// Rescan folder.
 		if ( isset( $_POST['scanfolder'] ) ) {
 
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$gallerypath = $wpdb->get_var(
 				$wpdb->prepare(
 					"SELECT `path` FROM `{$wpdb->nggallery}` WHERE `gid` = %d",
@@ -914,8 +967,8 @@ class nggManageGallery {
 		// Add a new page.
 		if ( isset( $_POST['addnewpage'] ) ) {
 
-			$parent_id     = esc_attr( $_POST['parent_id'] );
-			$gallery_title = esc_attr( $_POST['title'] );
+			$parent_id     = isset( $_POST['parent_id'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['parent_id'] ) ) ) : '';
+			$gallery_title = isset( $_POST['title'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['title'] ) ) ) : '';
 			$mapper        = GalleryMapper::get_instance();
 			$gallery       = $mapper->find( $this->gid );
 			$gallery_name  = $gallery->name;
@@ -967,11 +1020,14 @@ class nggManageGallery {
 			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_updategallery' ) ) {
 			$image_mapper = ImageMapper::get_instance();
 
-			foreach ( $_POST['images'] as $pid => $data ) {
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash only removes slashes, values are sanitized on line 976 and later
+			foreach ( wp_unslash( $_POST['images'] ) as $pid => $data ) {
+				$pid = sanitize_text_field( wp_unslash( $pid ) );
 				if ( ! isset( $data['exclude'] ) ) {
 					$data['exclude'] = 0;
 				}
-				if ( ( $image = $image_mapper->find( $pid ) ) ) {
+				$image = $image_mapper->find( $pid );
+				if ( $image ) {
 					// Strip slashes from title/description/alttext fields.
 					if ( isset( $data['description'] ) ) {
 						$data['description'] = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $data['description'] );
@@ -985,7 +1041,7 @@ class nggManageGallery {
 
 					// Generate new slug if the alttext has changed.
 					if ( isset( $data['alttext'] ) && $image->alttext != $data['alttext'] ) {
-						$data['slug'] = null; // will cause a new slug to be generated.
+						$data['image_slug'] = null; // will cause a new slug to be generated.
 					}
 
 					// Update all fields.
@@ -993,7 +1049,7 @@ class nggManageGallery {
 						$image->$key = $value;
 					}
 					if ( $image_mapper->save( $image ) ) {
-						$updated += 1;
+						++$updated;
 
 						// Update the tags for the image.
 						if ( isset( $data['tags'] ) ) {
@@ -1018,6 +1074,7 @@ class nggManageGallery {
 
 			// Determine if any WP terms have been orphaned and clean them up.
 			global $wpdb;
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$results = $wpdb->get_col(
 				"SELECT t.`term_id` FROM `{$wpdb->term_taxonomy}` tt
                                        LEFT JOIN `{$wpdb->terms}` t ON tt.`term_id` = t.`term_id`
@@ -1039,11 +1096,13 @@ class nggManageGallery {
 	public function search_images() {
 		global $nggdb;
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for search
 		if ( empty( $_GET['s'] ) ) {
 			return;
 		}
 		// on what ever reason I need to set again the query var.
-		set_query_var( 's', $_GET['s'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for search
+		set_query_var( 's', isset( $_GET['s'] ) ? sanitize_text_field( wp_unslash( $_GET['s'] ) ) : '' );
 		$request = get_search_query();
 
 		// look now for the images.
@@ -1054,13 +1113,15 @@ class nggManageGallery {
 		$merged              = array_merge( $search_for_images, $search_for_tags );
 		$this->search_result = [];
 		foreach ( $merged as $result ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $result, $this->search_result ) ) {
 				$this->search_result[] = $result;
 			}
 		}
 
 		// TODO: Currently we didn't support a proper pagination.
-		$nggdb->paged['total_objects']        = $nggdb->paged['objects_per_page'] = count( $this->search_result );
+		$nggdb->paged['objects_per_page']     = count( $this->search_result );
+		$nggdb->paged['total_objects']        = $nggdb->paged['objects_per_page'];
 		$nggdb->paged['max_objects_per_page'] = 1;
 
 		// show pictures page.
@@ -1078,15 +1139,17 @@ class nggManageGallery {
 
 		$total_pages = ( $per_page > 0 ) ? ceil( $total_items / $per_page ) : 1;
 
-		$output = '<span class="displaying-num">' . sprintf( _n( '1 item', '%s items', $total_items ), number_format_i18n( $total_items ) ) . '</span>';
+		/* translators: %s: number of items */
+		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'nggallery' ), number_format_i18n( $total_items ) ) . '</span>';
 
-		$current_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+		$current_url = ( is_ssl() ? 'https://' : 'http://' ) . ( isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '' ) . ( isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' );
 
 		$current_url = remove_query_arg( [ 'hotkeys_highlight_last', 'hotkeys_highlight_first' ], $current_url );
 
 		$page_links = [];
 
-		$disable_first = $disable_last = '';
+		$disable_first = '';
+		$disable_last  = '';
 		if ( $current == 1 ) {
 			$disable_first = ' disabled';
 		}
@@ -1097,7 +1160,7 @@ class nggManageGallery {
 		$page_links[] = sprintf(
 			"<a class='%s' title='%s' href='%s'>%s</a>",
 			'first-page' . $disable_first,
-			esc_attr__( 'Go to the first page' ),
+			esc_attr__( 'Go to the first page', 'nggallery' ),
 			Router::esc_url( remove_query_arg( 'paged', $current_url ) ),
 			'&laquo;'
 		);
@@ -1123,7 +1186,8 @@ class nggManageGallery {
 		}
 
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
-		$page_links[]     = '<span class="paging-input">' . sprintf( _x( '%1$s of %2$s', 'paging' ), $html_current_page, $html_total_pages ) . '</span>';
+		/* translators: 1: current page number, 2: total pages */
+		$page_links[] = '<span class="paging-input">' . sprintf( _x( '%1$s of %2$s', 'paging', 'nggallery' ), $html_current_page, $html_total_pages ) . '</span>';
 
 		$page_links[] = sprintf(
 			"<a class='%s' title='%s' href='%s'>%s</a>",
@@ -1151,6 +1215,7 @@ class nggManageGallery {
 
 		$pagination = "<div class='tablenav-pages{$page_class}'>$output</div>";
 
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $pagination contains safe HTML for pagination display
 		echo $pagination;
 		return $pagination;
 	}

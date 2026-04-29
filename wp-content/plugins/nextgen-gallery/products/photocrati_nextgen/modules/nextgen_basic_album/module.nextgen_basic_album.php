@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * NextGen basic album module.
+ */
 class M_NextGen_Basic_Album extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(

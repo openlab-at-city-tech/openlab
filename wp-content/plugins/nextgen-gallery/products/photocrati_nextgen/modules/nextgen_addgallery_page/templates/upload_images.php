@@ -1,21 +1,24 @@
 <?php
 /**
+ * Template for upload images page.
+ *
  * @var array $galleries
  * @var string $nonce
  * @var int $max_size
  * @var \Imagely\NGG\Settings\Settings $settings
  */
+
 ?>
 <div id="gallery_selection">
 
 	<label for="gallery_id">
-		<?php _e( 'Gallery', 'nggallery' ); ?>
+		<?php esc_html_e( 'Gallery', 'nggallery' ); ?>
 	</label>
 
 	<select id="gallery_id" autocomplete="off">
 
 		<option value="0">
-			<?php _e( 'Create a new gallery', 'nggallery' ); ?>
+			<?php esc_html_e( 'Create a new gallery', 'nggallery' ); ?>
 		</option>
 
 		<?php foreach ( $galleries as $gallery ) { ?>
@@ -29,16 +32,16 @@
 	<input type="text"
 			id="gallery_name"
 			name="gallery_name"
-			placeholder="<?php _e( 'Gallery title', 'nggallery' ); ?>"
+			placeholder="<?php esc_attr_e( 'Gallery title', 'nggallery' ); ?>"
 			autocomplete="off"/>
 
 	<button id="gallery_create" disabled="disabled">
 		<span id="ngg-create-gallery-default-text">
-			<?php print __( 'Create &amp; select', 'nggallery' ); ?>
+			<?php echo esc_html( __( 'Create &amp; select', 'nggallery' ) ); ?>
 		</span>
 		<span id="ngg-create-gallery-waiting-text" class="hidden">
 			<i class="fas fa-spinner fa-spin"></i>
-			<?php print __( 'Creating...', 'nggallery' ); ?>
+			<?php echo esc_html( __( 'Creating...', 'nggallery' ) ); ?>
 		</span>
 	</button>
 </div>
@@ -63,7 +66,7 @@
 	window.set_ngg_upload_url = function(gallery_id, gallery_name) {
 		var qs = "&action=upload_image&gallery_id=" + urlencode(gallery_id);
 		qs += "&gallery_name=" + urlencode(gallery_name);
-		qs += "&nonce=" + urlencode("<?php echo $nonce; ?>");
+		qs += "&nonce=" + urlencode("<?php echo esc_js( $nonce ); ?>");
 		return photocrati_ajax.url + qs;
 	};
 
@@ -156,7 +159,7 @@
 						uppy.reset();
 					}, 2000);
 
-					const gallery_url = '<?php echo admin_url( '/admin.php?page=nggallery-manage-gallery&mode=edit&gid=' ); ?>' + gallery_select.value;
+					const gallery_url = '<?php echo esc_js( admin_url( '/admin.php?page=nggallery-manage-gallery&mode=edit&gid=' ) ); ?>' + gallery_select.value;
 					const chosen_name = String(gallery_select.selectedOptions[0].dataset.originalValue);
 
 					let upload_count = result.successful.length;
@@ -293,7 +296,7 @@
 				const postData = new FormData();
 				postData.append('action', 'create_new_gallery');
 				postData.append('gallery_name', gallery_name.value);
-				postData.append('nonce', urlencode("<?php echo $nonce; ?>"));
+				postData.append('nonce', urlencode("<?php echo esc_js( $nonce ); ?>"));
 
 				fetch(photocrati_ajax.url, {
 					method: 'POST',

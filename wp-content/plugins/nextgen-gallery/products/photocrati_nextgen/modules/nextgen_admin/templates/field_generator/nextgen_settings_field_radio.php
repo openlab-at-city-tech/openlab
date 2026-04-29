@@ -9,7 +9,7 @@
 				if ( ! empty( $text ) ) {
 					?>
 					class='tooltip'<?php } ?>>
-			<?php print $label; ?>
+			<?php print esc_html( $label ); ?>
 		</label>
 	</td>
 	<td>
@@ -19,7 +19,7 @@
 				class="<?php print esc_attr( $display_type_name . '_' . $name ); ?>"
 				value="1"
 				<?php checked( true, ! empty( $value ) ); ?>/>
-		<label for="<?php print esc_attr( $display_type_name . '_' . $name ); ?>"><?php _e( 'Yes' ); ?></label>
+		<label for="<?php print esc_attr( $display_type_name . '_' . $name ); ?>"><?php esc_html_e( 'Yes', 'nggallery' ); ?></label>
 		&nbsp;
 		<input type="radio"
 				id="<?php print esc_attr( $display_type_name . '_' . $name ); ?>_no"
@@ -27,6 +27,6 @@
 				class="<?php print esc_attr( $display_type_name . '_' . $name ); ?>"
 				value="0"
 				<?php checked( true, empty( $value ) ); ?>/>
-		<label for="<?php print esc_attr( $display_type_name . '_' . $name ); ?>_no"><?php _e( 'No' ); ?></label>
+		<label for="<?php print esc_attr( $display_type_name . '_' . $name ); ?>_no"><?php esc_html_e( 'No', 'nggallery' ); ?></label>
 	</td>
 </tr>

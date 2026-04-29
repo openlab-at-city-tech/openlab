@@ -1,0 +1,48 @@
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+
+### Get all settings
+GET {{baseUrl}}/wp-json/imagely/v1/settings
+Authorization: {{authHeader}}
+
+### Update settings
+PUT {{baseUrl}}/wp-json/imagely/v1/settings
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "gallerypath": "wp-content/gallery/",
+  "deleteFiles": true,
+  "usePermalinks": true,
+  "graphicsLibrary": "gd",
+  "imageMagickDir": "/usr/bin",
+  "enableMediaRSS": true,
+  "galleryAsThumbnail": false,
+  "maxImages": 20,
+  "useRightClick": true,
+  "useSlimbox": true,
+  "thumbWidth": 120,
+  "thumbHeight": 90,
+  "thumbQuality": 100,
+  "thumbCrop": true,
+  "imgWidth": 800,
+  "imgHeight": 600,
+  "imgQuality": 85,
+  "imgBackup": true,
+  "imgWatermark": false
+}
+
+### Get global settings (multisite)
+GET {{baseUrl}}/wp-json/imagely/v1/settings/global
+Authorization: {{authHeader}}
+
+### Update global settings (multisite)
+PUT {{baseUrl}}/wp-json/imagely/v1/settings/global
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "networkGalleryPath": "wp-content/gallery/",
+  "networkDeleteFiles": true,
+  "networkUsePermalinks": true
+}

@@ -2,8 +2,16 @@
 
 namespace Imagely\NGG\DataMapper;
 
+/**
+ * DataMapper Manager class.
+ *
+ * Manages WordPress query modifications for custom post data mapper implementations.
+ */
 class Manager {
 
+	/**
+	 * Registers WordPress hooks for custom query modifications.
+	 */
 	public static function register_hooks() {
 		$self = new Manager();
 		add_filter( 'posts_request', [ $self, 'set_custom_wp_query' ], 50, 2 );
@@ -22,16 +30,18 @@ class Manager {
 	public function set_custom_wp_query( $sql, $wp_query ) {
 		if ( $wp_query->get( 'datamapper' ) ) {
 			// Set the custom query.
-			if ( ( $custom_sql = $wp_query->get( 'custom_sql' ) ) ) {
+			$custom_sql = $wp_query->get( 'custom_sql' );
+			if ( $custom_sql ) {
 				$sql = $custom_sql;
-			}
-			// Perhaps we're to initiate a delete query instead?
-			elseif ( $wp_query->get( 'is_delete' ) ) {
+			} elseif ( $wp_query->get( 'is_delete' ) ) {
+				// Perhaps we're to initiate a delete query instead?
 				$sql = preg_replace( '/^SELECT.*FROM/i', 'DELETE FROM', $sql );
 			}
 
 			if ( $wp_query->get( 'debug' ) ) {
-				var_dump( $sql );
+				// phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Debug code intentionally commented out.
+				// var_dump( $sql );
+				null; // Intentionally empty - debug code commented out.
 			}
 		}
 
@@ -47,7 +57,8 @@ class Manager {
 	 */
 	public function set_custom_wp_query_fields( $fields, $wp_query ) {
 		if ( $wp_query->get( 'datamapper' ) ) {
-			if ( ( $custom_fields = $wp_query->get( 'fields' ) ) && $custom_fields != 'ids' ) {
+			$custom_fields = $wp_query->get( 'fields' );
+			if ( $custom_fields && $custom_fields != 'ids' ) {
 				$fields = $custom_fields;
 			}
 		}
@@ -130,12 +141,16 @@ class Manager {
 		global $wpdb;
 
 		// Handle post_title query var.
-		if ( ( $titles = $wp_query->get( 'post_title' ) ) ) {
+		$titles = $wp_query->get( 'post_title' );
+		if ( $titles ) {
 			$titles = $this->format_where_in_value( $titles );
 			$where .= " AND {$wpdb->posts}.post_title IN ({$titles})";
-		} elseif ( ( $value = $wp_query->get( 'post_title__like' ) ) ) {
-			// Handle post_title_like query var.
-			$where .= " AND {$wpdb->posts}.post_title LIKE '{$value}'";
+		} else {
+			$value = $wp_query->get( 'post_title__like' );
+			if ( $value ) {
+				// Handle post_title_like query var.
+				$where .= " AND {$wpdb->posts}.post_title LIKE '{$value}'";
+			}
 		}
 
 		return $where;
@@ -150,11 +165,15 @@ class Manager {
 	public function add_post_name_where_clauses( &$where, &$wp_query ) {
 		global $wpdb;
 
-		if ( ( $name = $wp_query->get( 'page_name__like' ) ) ) {
+		$name = $wp_query->get( 'page_name__like' );
+		if ( $name ) {
 			$where .= " AND {$wpdb->posts}.post_name LIKE '{$name}'";
-		} elseif ( ( $names = $wp_query->get( 'page_name__in' ) ) ) {
-			$names  = $this->format_where_in_value( $names );
-			$where .= " AND {$wpdb->posts}.post_name IN ({$names})";
+		} else {
+			$names = $wp_query->get( 'page_name__in' );
+			if ( $names ) {
+				$names  = $this->format_where_in_value( $names );
+				$where .= " AND {$wpdb->posts}.post_name IN ({$names})";
+			}
 		}
 	}
 }

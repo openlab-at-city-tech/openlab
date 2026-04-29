@@ -1,7 +1,7 @@
 <?php
 
 /**
- * creates all tables for the gallery called during register_activation hook
+ * Creates all tables for the gallery called during register_activation hook
  */
 function nggallery_install( $installer ) {
 	global $wpdb;
@@ -41,6 +41,8 @@ function nggallery_install( $installer ) {
         previewpic BIGINT(20) DEFAULT '0' NOT NULL ,
         author BIGINT(20) DEFAULT '0' NOT NULL  ,
         extras_post_id BIGINT(20) DEFAULT '0' NOT NULL,
+        date_created DATETIME NULL,
+        date_modified DATETIME NULL,
         PRIMARY KEY  (gid),
         KEY extras_post_id_key (extras_post_id)
 	)";
@@ -56,18 +58,23 @@ function nggallery_install( $installer ) {
         sortorder LONGTEXT NOT NULL,
         pageid BIGINT(20) DEFAULT '0' NOT NULL,
         extras_post_id BIGINT(20) DEFAULT '0' NOT NULL,
+        date_created DATETIME NULL,
+        date_modified DATETIME NULL,
         PRIMARY KEY  (id),
         KEY extras_post_id_key (extras_post_id)
 	)";
 	$installer->upgrade_schema( $sql );
 
 	// check one table again, to be sure.
+	// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 	if ( ! $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', [ $wpdb->esc_like( $nggpictures ) ] ) ) ) {
 		update_option( 'ngg_init_check', __( 'NextGEN Gallery : Tables could not created, please check your database settings', 'nggallery' ) );
 	}
 }
 
 /**
+ * Removes a capability from classic roles.
+ *
  * @param string $capability name of the capability which should be de-registered
  */
 function ngg_remove_capability( $capability ) {

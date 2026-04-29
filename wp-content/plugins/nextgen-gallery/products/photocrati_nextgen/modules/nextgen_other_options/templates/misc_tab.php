@@ -1,5 +1,7 @@
 <?php
 /**
+ * Template for miscellaneous options tab.
+ *
  * @var string $alternate_random_method_field
  * @var string $cache_confirmation
  * @var string $cache_label
@@ -21,6 +23,7 @@
  * @var string $update_legacy_featured_images_field
  * @var string $dynamic_image_filename_separator_use_dash
  */
+
 ?>
 <table>
 
@@ -92,32 +95,56 @@
 
 	<tr>
 		<td class='column1'>
-			<?php echo $cache_label; ?>
+			<?php echo esc_html( $cache_label ); ?>
 		</td>
 		<td>
 			<input type='submit'
 					name="action_proxy"
 					class="button delete button-primary"
 					data-proxy-value="cache"
-					data-confirm="<?php echo $cache_confirmation; ?>"
-					value='<?php echo $cache_label; ?>'
+					data-confirm="<?php echo esc_attr( $cache_confirmation ); ?>"
+					value='<?php echo esc_attr( $cache_label ); ?>'
 				/>
 		</td>
 	</tr>
 
-	<?php print $update_legacy_featured_images_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $update_legacy_featured_images_field contains safe HTML form elements
+	print $update_legacy_featured_images_field;
+	?>
 
-	<?php print $slug_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $slug_field contains safe HTML form elements
+	print $slug_field;
+	?>
 
-	<?php print $maximum_entity_count_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $maximum_entity_count_field contains safe HTML form elements
+	print $maximum_entity_count_field;
+	?>
 
-	<?php print $random_widget_cache_ttl_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $random_widget_cache_ttl_field contains safe HTML form elements
+	print $random_widget_cache_ttl_field;
+	?>
 
-	<?php print $alternate_random_method_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $alternate_random_method_field contains safe HTML form elements
+	print $alternate_random_method_field;
+	?>
 
-	<?php print $disable_fontawesome_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $disable_fontawesome_field contains safe HTML form elements
+	print $disable_fontawesome_field;
+	?>
 
-	<?php print $disable_ngg_tags_page_field; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $disable_ngg_tags_page_field contains safe HTML form elements
+	print $disable_ngg_tags_page_field;
+	?>
 
-	<?php print $dynamic_image_filename_separator_use_dash; ?>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $dynamic_image_filename_separator_use_dash contains safe HTML form elements
+	print $dynamic_image_filename_separator_use_dash;
+	?>
 </table>

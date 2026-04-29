@@ -12,15 +12,34 @@ use Imagely\NGG\Display\{DisplayManager, LightboxManager, StaticAssets};
 use Imagely\NGG\DisplayedGallery\{Renderer, TriggerManager};
 use Imagely\NGG\Util\{Filesystem, Router, Transient};
 
+/**
+ * Base Controller for Display Types
+ *
+ * Provides common functionality for all display type controllers including
+ * resource enqueueing, template rendering, effect code generation, and parameter preparation.
+ */
 class Controller {
 
+	/**
+	 * Flag to ensure certain operations run only once
+	 *
+	 * @var bool
+	 */
 	public $run_once = false;
 
+	/**
+	 * Array of alternate displayed galleries
+	 *
+	 * @var array
+	 */
 	public static $alternate_displayed_galleries = [];
 
 	/**
+	 * Enqueues resources for displayed gallery trigger buttons.
+	 *
 	 * @deprecated This method is only used by NextGEN Pro
-	 * @param DisplayedGallery $displayed_gallery
+	 *
+	 * @param DisplayedGallery|false $displayed_gallery The displayed gallery object.
 	 * @return bool
 	 */
 	public function enqueue_displayed_gallery_trigger_buttons_resources( $displayed_gallery = false ) {
@@ -52,10 +71,20 @@ class Controller {
 		return $retval;
 	}
 
+	/**
+	 * Checks if the display type is cachable
+	 *
+	 * @return bool
+	 */
 	public function is_cachable() {
 		return true;
 	}
 
+	/**
+	 * Enqueues pagination resources
+	 *
+	 * @return void
+	 */
 	public function enqueue_pagination_resources() {
 		wp_enqueue_style(
 			'nextgen_pagination_style',
@@ -65,9 +94,26 @@ class Controller {
 		);
 	}
 
+	/**
+	 * Enqueues frontend resources for the displayed gallery
+	 *
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
+	 * @return void
+	 */
 	public function enqueue_frontend_resources( $displayed_gallery ) {
 		// This script provides common JavaScript among all display types.
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script( 'ngg_common' );
+
+		\wp_enqueue_style( 'ngg_video_play_overlay' );
+		\wp_enqueue_script( 'ngg_tiktok_video' );
+
+		// Video: helper script for multi-platform video support.
+		\wp_enqueue_script( 'ngg_video_helper' );
+
+		// Video: lightbox styles for multi-platform video support.
+		\wp_enqueue_style( 'ngg_video_lightbox' );
+
 		\wp_add_inline_script(
 			'ngg_common',
 			'
@@ -94,6 +140,11 @@ class Controller {
 		// Add "galleries.gallery_1 = {};"..
 		DisplayManager::add_script_data(
 			'ngg_common',
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			'galleries.gallery_' . $displayed_gallery->id(),
 			(array) $displayed_gallery->get_entity(),
 			false
@@ -105,6 +156,116 @@ class Controller {
 			get_permalink(),
 			false
 		);
+
+		$settings_instance = \Imagely\NGG\Settings\Settings::get_instance();
+		$external_defaults = $settings_instance->get( 'external_source_default_settings' );
+
+		$tiktok_settings = [
+			'global' => [
+				'link'        => '0',
+				'link_target' => '0',
+			],
+		];
+
+		if ( ! empty( $external_defaults ) && isset( $external_defaults['tiktok'] ) && is_array( $external_defaults['tiktok'] ) ) {
+			$tiktok_defaults                          = $external_defaults['tiktok'];
+			$tiktok_settings['global']['link']        = isset( $tiktok_defaults['tiktok_link'] ) ? (string) $tiktok_defaults['tiktok_link'] : '0';
+			$tiktok_settings['global']['link_target'] = isset( $tiktok_defaults['tiktok_link_target'] ) ? (string) $tiktok_defaults['tiktok_link_target'] : '0';
+		}
+
+		$gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
+		$container_ids  = $displayed_gallery->container_ids;
+
+		if ( ! empty( $container_ids ) && is_array( $container_ids ) ) {
+			$first_gallery_id = intval( $container_ids[0] );
+			$gallery          = $gallery_mapper->find( $first_gallery_id, true );
+
+			if ( $gallery && isset( $gallery->external_source ) && is_array( $gallery->external_source ) ) {
+				$external_source = $gallery->external_source;
+				$settings_mode   = isset( $external_source['settings_mode'] ) ? $external_source['settings_mode'] : 'default';
+
+				if ( 'custom' === $settings_mode ) {
+					$gallery_id = (string) $gallery->gid;
+
+					$gallery_link = isset( $external_source['tiktok_link'] ) ? (string) $external_source['tiktok_link'] : $tiktok_settings['global']['link'];
+
+					$gallery_link_target = isset( $external_source['tiktok_link_target'] ) ? (string) $external_source['tiktok_link_target'] : $tiktok_settings['global']['link_target'];
+
+					$tiktok_settings[ 'gallery_' . $gallery_id ] = [
+						'link'        => $gallery_link,
+						'link_target' => $gallery_link_target,
+					];
+				}
+			}
+		}
+
+		DisplayManager::add_script_data(
+			'ngg_common',
+			'ngg_tiktok_gallery_settings',
+			$tiktok_settings,
+			true,
+			false
+		);
+
+		if ( \wp_script_is( 'ngg_tiktok_video', 'registered' ) ) {
+			DisplayManager::add_script_data(
+				'ngg_tiktok_video',
+				'ngg_tiktok_gallery_settings',
+				$tiktok_settings,
+				true,
+				true
+			);
+		}
+
+		$video_settings = [
+			'default' => [
+				'show_video_controls'      => true,
+				'show_play_pause_controls' => true,
+				'autoplay_videos'          => false,
+			],
+		];
+		// Get gallery-specific video settings if available
+		if ( ! empty( $container_ids ) && is_array( $container_ids ) ) {
+			$first_gallery_id = intval( $container_ids[0] );
+			$gallery          = $gallery_mapper->find( $first_gallery_id, true );
+
+			if ( $gallery && isset( $gallery->external_source ) && is_array( $gallery->external_source ) ) {
+				$external_source = $gallery->external_source;
+
+				if ( isset( $external_source['type'] ) && 'video' === $external_source['type'] ) {
+					$gallery_id                       = (string) $gallery->gid;
+					$gallery_show_video_controls      = isset( $external_source['show_video_controls'] ) ? (bool) $external_source['show_video_controls'] : $video_settings['default']['show_video_controls'];
+					$gallery_show_play_pause_controls = isset( $external_source['show_play_pause_controls'] ) ? (bool) $external_source['show_play_pause_controls'] : $video_settings['default']['show_play_pause_controls'];
+					$gallery_autoplay_videos          = isset( $external_source['autoplay_videos'] ) ? (bool) $external_source['autoplay_videos'] : $video_settings['default']['autoplay_videos'];
+
+					$video_settings[ 'gallery_' . $gallery_id ] = [
+						'show_video_controls'      => $gallery_show_video_controls,
+						'show_play_pause_controls' => $gallery_show_play_pause_controls,
+						'autoplay_videos'          => $gallery_autoplay_videos,
+					];
+				}
+			}
+		}
+
+		// Output video settings to JavaScript
+		DisplayManager::add_script_data(
+			'ngg_common',
+			'ngg_video_gallery_settings',
+			$video_settings,
+			true,
+			false
+		);
+
+		// Also add to ngg_video_helper script if it's registered
+		if ( \wp_script_is( 'ngg_video_helper', 'registered' ) ) {
+			DisplayManager::add_script_data(
+				'ngg_video_helper',
+				'ngg_video_gallery_settings',
+				$video_settings,
+				true,
+				true // override if already exists
+			);
+		}
 
 		// Enqueue trigger button resources.
 		TriggerManager::get_instance()->enqueue_resources( $displayed_gallery );
@@ -121,6 +282,11 @@ class Controller {
 		\do_action( 'ngg_display_type_controller_enqueue_frontend_resources', $displayed_gallery );
 	}
 
+	/**
+	 * Gets the template directory name.
+	 *
+	 * @return string Template directory name.
+	 */
 	public function get_template_directory_name(): string {
 		return '';
 	}
@@ -132,6 +298,11 @@ class Controller {
 		return path_join( NGG_PLUGIN_DIR, 'templates' . DIRECTORY_SEPARATOR . $this->get_template_directory_name() );
 	}
 
+	/**
+	 * Gets the preview image URL for the display type
+	 *
+	 * @return string
+	 */
 	public function get_preview_image_url() {
 		return '';
 	}
@@ -139,8 +310,8 @@ class Controller {
 	/**
 	 * Ensures that the minimum configuration of parameters are sent to a view
 	 *
-	 * @param DisplayedGallery $displayed_gallery
-	 * @param null|array       $params
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
+	 * @param null|array       $params Optional parameters.
 	 * @return array|null
 	 */
 	public function prepare_display_parameters( $displayed_gallery, $params = null ) {
@@ -157,17 +328,18 @@ class Controller {
 	/**
 	 * Renders the frontend display of the display type
 	 *
-	 * @param bool $return (optional)
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
+	 * @param bool             $return_output (optional) Whether to return or echo the output.
 	 * @return string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		return '';
 	}
 
 	/**
 	 * This effectively busts the standard template rendering cache
 	 *
-	 * @param DisplayedGallery $displayed_gallery
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
 	 * @return string Rendered HTML
 	 */
 	public function cache_action( $displayed_gallery ) {
@@ -177,6 +349,8 @@ class Controller {
 	/**
 	 * Returns the effect "effect code" used to inject lightbox attributes into image anchor elements
 	 *
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
+	 * @param bool             $legacy_compat Whether to use legacy compatibility mode.
 	 * @return string
 	 */
 	public function get_effect_code( $displayed_gallery, $legacy_compat = true ) {
@@ -208,20 +382,26 @@ class Controller {
 	/**
 	 * Returns the longest and widest dimensions from a list of entities. Only used by Pro Film.
 	 *
-	 * @param $entities
-	 * @param $named_size
-	 * @param bool       $style_images Unused
+	 * @param array  $entities Entities to process.
+	 * @param string $named_size Named image size.
+	 * @param bool   $style_images Unused.
 	 * @deprecated This should be moved into the Pro Film controller and removed when POPE-compat level 1 is reached
 	 * @return array
 	 */
 	public function get_entity_statistics( $entities, $named_size, $style_images = false ) {
-		$longest      = $widest = 0;
+		$longest      = 0;
+		$widest       = 0;
 		$storage      = StorageManager::get_instance();
 		$image_mapper = ImageMapper::get_instance();
+ // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 
+  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		foreach ( $entities as $entity ) {
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$image = null;
+   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( isset( $entity->pid ) ) {
+    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$image = $entity;
 			} elseif ( isset( $entity->previewpic ) ) {
 				$image = $image_mapper->find( $entity->previewpic );
@@ -249,8 +429,8 @@ class Controller {
 	/**
 	 * Finds the absolute path of template given file name and list of possible directories
 	 *
-	 * @param string $template
-	 * @param array  $params
+	 * @param string $template Template filename.
+	 * @param array  $params Parameters including displayed_gallery.
 	 * @return string $template
 	 */
 	public function get_display_type_view_abspath( $template, $params ) {
@@ -289,10 +469,11 @@ class Controller {
 			}
 
 			foreach ( $dirs as $category => $dir ) {
-				$category = preg_quote( $category . DIRECTORY_SEPARATOR );
+				$category = preg_quote( $category . DIRECTORY_SEPARATOR, '#' );
 				if ( preg_match( "#^{$category}(.*)$#", $display_type_view, $match ) ) {
 					$display_type_view = $match[1];
 					$template_abspath  = $fs->join_paths( $dir, $display_type_view );
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					if ( @file_exists( $template_abspath ) ) {
 						$template = $template_abspath;
 						break;
@@ -310,13 +491,21 @@ class Controller {
 	 * of course display child of an entirely different kind. Implementing this method allows displays to alter
 	 * the displayed gallery passed to their index_action() method.
 	 *
-	 * @param DisplayedGallery $displayed_gallery
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
 	 * @return DisplayedGallery
 	 */
 	public function get_alternative_displayed_gallery( $displayed_gallery ) {
 		return $displayed_gallery;
 	}
 
+	/**
+	 * Sets an alternative displayed gallery.
+	 *
+	 * @param array            $params Parameters for the new display.
+	 * @param DisplayedGallery $displayed_gallery The original displayed gallery.
+	 * @param string           $new_display_type The new display type.
+	 * @return DisplayedGallery
+	 */
 	public function set_alternative_displayed_gallery(
 		array $params,
 		DisplayedGallery $displayed_gallery,
@@ -333,7 +522,7 @@ class Controller {
 
 		$alt_displayed_gallery = $renderer->params_to_displayed_gallery( $params );
 		if ( is_null( $alt_displayed_gallery->id() ) ) {
-			$alt_displayed_gallery->id( md5( json_encode( $alt_displayed_gallery->get_entity() ) ) );
+			$alt_displayed_gallery->id( md5( wp_json_encode( $alt_displayed_gallery->get_entity() ) ) );
 		}
 		self::$alternate_displayed_galleries[ $id ] = $alt_displayed_gallery;
 
@@ -345,11 +534,11 @@ class Controller {
 	 *
 	 * @param string $template_name File name
 	 * @param array  $vars (optional) Specially formatted array of parameters
-	 * @param bool   $return (optional)
+	 * @param bool   $return_output (optional)
 	 * @param string $prefix (optional)
 	 * @return string
 	 */
-	public function legacy_render( $template_name, $vars = [], $return = false, $prefix = null ) {
+	public function legacy_render( $template_name, $vars = [], $return_output = false, $prefix = null ) {
 		$retval           = '[Not a valid template]';
 		$template_locator = LegacyTemplateLocator::get_instance();
 
@@ -362,13 +551,13 @@ class Controller {
 		if ( $template_abspath ) {
 			// render the template.
 			extract( $vars );
-			if ( $return ) {
+			if ( $return_output ) {
 				ob_start();
 			}
 
 			include $template_abspath;
 
-			if ( $return ) {
+			if ( $return_output ) {
 				$retval = ob_get_contents();
 				ob_end_clean();
 			}
@@ -380,9 +569,9 @@ class Controller {
 	/**
 	 * Returns the parameter objects necessary for legacy template rendering using legacy_render()
 	 *
-	 * @param array            $images
-	 * @param DisplayedGallery $displayed_gallery
-	 * @param array            $params
+	 * @param array            $images Images to process.
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
+	 * @param array            $params Additional parameters.
 	 *
 	 * @return array
 	 */
@@ -401,6 +590,7 @@ class Controller {
 		$current_pid  = null;
 
 		// begin processing.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$current_page = ( @\get_the_ID() == false ) ? 0 : @\get_the_ID();
 
 		// determine what the "current image" is; used mostly for carousel.
@@ -439,19 +629,21 @@ class Controller {
 		}
 
 		// find our gallery to build the new one on.
-		$orig_gallery = $gallery_map->find( current( $picture_list->container )->galleryid );
+		$current_image = current( $picture_list->container );
+		$orig_gallery  = $current_image ? $gallery_map->find( $current_image->galleryid ) : null;
 
 		// create the 'gallery' object.
 		$gallery                    = new \stdclass();
 		$gallery->ID                = $displayed_gallery->id();
-		$gallery->name              = stripslashes( $orig_gallery->name );
-		$gallery->title             = stripslashes( $orig_gallery->title );
-		$gallery->description       = \html_entity_decode( \stripslashes( $orig_gallery->galdesc ) );
-		$gallery->pageid            = $orig_gallery->pageid;
+		$gallery->name              = $orig_gallery ? stripslashes( $orig_gallery->name ?? '' ) : '';
+		$gallery->title             = $orig_gallery ? stripslashes( $orig_gallery->title ?? '' ) : '';
+		$gallery->description       = $orig_gallery ? html_entity_decode( stripslashes( $orig_gallery->galdesc ?? '' ) ) : '';
+		$gallery->pageid            = $orig_gallery ? ( $orig_gallery->pageid ?? 0 ) : 0;
 		$gallery->anchor            = 'ngg-gallery-' . $gallery_id . '-' . $current_page;
 		$gallery->displayed_gallery = &$displayed_gallery;
-		$gallery->columns           = @intval( $displayed_gallery->display_settings['number_of_columns'] );
-		$gallery->imagewidth        = ( $gallery->columns > 0 ) ? 'style="width:' . floor( 100 / $gallery->columns ) . '%;"' : '';
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$gallery->columns    = @intval( $displayed_gallery->display_settings['number_of_columns'] );
+		$gallery->imagewidth = ( $gallery->columns > 0 ) ? 'style="width:' . floor( 100 / $gallery->columns ) . '%;"' : '';
 
 		if ( ! empty( $displayed_gallery->display_settings['show_slideshow_link'] ) ) {
 			$gallery->show_slideshow      = true;
@@ -499,8 +691,9 @@ class Controller {
 	/**
 	 * Returns an url to view the displayed gallery using an alternate display type
 	 *
-	 * @param DisplayedGallery $displayed_gallery
-	 * @param string           $display_type
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.
+	 * @param string           $display_type The alternate display type.
+	 * @param string|false     $origin_url The origin URL.
 	 * @return string
 	 */
 	public function get_url_for_alternate_display_type( $displayed_gallery, $display_type, $origin_url = false ) {
@@ -509,10 +702,10 @@ class Controller {
 		if ( ! $origin_url
 		&& ! empty( $displayed_gallery->display_settings['original_display_type'] )
 		&& ! empty( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-			$origin_url = $_SERVER['NGG_ORIG_REQUEST_URI'];
+			$origin_url = Router::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
 		}
 
-		$url = ( $origin_url ?: $app->get_app_url( false, true ) );
+		$url = $origin_url ? $origin_url : $app->get_app_url( false, true );
 
 		$url = $app->remove_parameter( 'show', $displayed_gallery->id(), $url );
 		$url = $app->set_parameter( 'show', $display_type, $displayed_gallery->id(), false, $url );
@@ -523,10 +716,10 @@ class Controller {
 	/**
 	 * Returns a formatted HTML string of a pagination widget
 	 *
-	 * @param mixed       $selected_page
-	 * @param int         $number_of_entities
-	 * @param int         $entities_per_page
-	 * @param string|null $current_url (optional)
+	 * @param mixed       $selected_page Currently selected page.
+	 * @param int         $number_of_entities Total number of entities.
+	 * @param int         $entities_per_page Number of entities per page.
+	 * @param string|null $current_url (optional) Current URL.
 	 * @return array Of data holding prev & next url locations and a formatted HTML string
 	 */
 	public function create_pagination( $selected_page, $number_of_entities, $entities_per_page = 0, $current_url = null ) {
@@ -565,9 +758,10 @@ class Controller {
 		}
 
 		// Construct array of page urls.
-		$ending_ellipsis = $starting_ellipsis = false;
-		$number_of_pages = ceil( $number_of_entities / $entities_per_page );
-		$pages           = [];
+		$ending_ellipsis   = false;
+		$starting_ellipsis = false;
+		$number_of_pages   = ceil( $number_of_entities / $entities_per_page );
+		$pages             = [];
 
 		for ( $i = 1; $i <= $number_of_pages; $i++ ) {
 
@@ -604,15 +798,17 @@ class Controller {
 		if ( $pages && count( $pages ) > 1 ) {
 			// Next page.
 			if ( $selected_page + 1 <= $number_of_pages ) {
-				$next_page = $selected_page + 1;
-				$link      = $return['next'] = $app->set_parameter( 'nggpage', $next_page, null, false, $current_url );
-				$pages[]   = "<a class='prev' href='{$link}' data-pageid={$next_page}>{$next_symbol}</a>";
+				$next_page      = $selected_page + 1;
+				$return['next'] = $app->set_parameter( 'nggpage', $next_page, null, false, $current_url );
+				$link           = $return['next'];
+				$pages[]        = "<a class='prev' href='{$link}' data-pageid={$next_page}>{$next_symbol}</a>";
 			}
 
 			// Prev page.
 			if ( $selected_page - 1 > 0 ) {
-				$prev_page = $selected_page - 1;
-				$link      = $return['next'] = $app->set_parameter( 'nggpage', $prev_page, null, false, $current_url );
+				$prev_page      = $selected_page - 1;
+				$return['next'] = $app->set_parameter( 'nggpage', $prev_page, null, false, $current_url );
+				$link           = $return['next'];
 				array_unshift( $pages, "<a class='next' href='{$link}' data-pageid={$prev_page}>{$prev_symbol}</a>" );
 			}
 
@@ -677,6 +873,8 @@ class Controller {
 	/*  The following methods manage the installation and removal of display types */
 
 	/**
+	 * Deletes duplicate display types.
+	 *
 	 * @param $name
 	 */
 	public function delete_duplicates( $name ) {
@@ -737,12 +935,16 @@ class Controller {
 	}
 
 	/**
+	 * Installs the display type controller.
+	 *
 	 * @param bool $reset (optional) Unused
 	 */
 	public function install( $reset = false ) {
 	}
 
 	/**
+	 * Uninstalls the display type controller.
+	 *
 	 * @param bool $hard (optional) Unused
 	 */
 	public function uninstall( $hard = false ) {

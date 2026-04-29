@@ -12,8 +12,18 @@ namespace Imagely\NGG\DisplayType;
  */
 class InstallerProxy {
 
-	static $_proxy = null;
+	/**
+	 * Proxy instance
+	 *
+	 * @var Installer|null
+	 */
+	public static $_proxy = null;
 
+	/**
+	 * Gets the proxy installer instance
+	 *
+	 * @return Installer
+	 */
 	public function get_proxy() {
 		if ( ! self::$_proxy ) {
 			self::$_proxy = new Installer();
@@ -21,15 +31,32 @@ class InstallerProxy {
 		return self::$_proxy;
 	}
 
+	/**
+	 * Installs the display type
+	 *
+	 * @param bool $reset Whether to reset the installation.
+	 * @return void
+	 */
 	public function install( $reset = false ) {
 		$this->get_proxy()->install( $reset );
 	}
 
+	/**
+	 * Uninstalls the display type
+	 *
+	 * @return void
+	 */
 	public function uninstall() {
 		$this->get_proxy()->uninstall();
 	}
 
-
+	/**
+	 * Magic method to proxy calls to the installer
+	 *
+	 * @param string $method The method name.
+	 * @param array  $args The method arguments.
+	 * @return mixed|null
+	 */
 	public function __call( $method, $args ) {
 		try {
 			$klass = new \ReflectionMethod( $this->get_proxy(), $method );

@@ -8,6 +8,11 @@ use Imagely\NGG\DataMappers\Image as ImageMapper;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
 use Imagely\NGG\Util\Security;
 
+/**
+ * XMLRPC Controller for NextGEN Gallery
+ *
+ * Handles XMLRPC requests for gallery, image, and album operations.
+ */
 class Controller {
 
 	/**
@@ -22,15 +27,16 @@ class Controller {
 	/**
 	 * Login a user
 	 *
-	 * @param string $username
-	 * @param string $password
-	 * @param int    $blog_id
+	 * @param string $username The username.
+	 * @param string $password The password.
+	 * @param int    $blog_id The blog ID for multisite.
 	 * @return bool|\WP_Error|\WP_User
 	 */
 	public function _login( $username, $password, $blog_id = 1 ) {
 		$retval = false;
 
-		if ( ! is_a( ( $user_obj = wp_authenticate( $username, $password ) ), 'WP_Error' ) ) {
+		$user_obj = wp_authenticate( $username, $password );
+		if ( ! is_a( $user_obj, 'WP_Error' ) ) {
 			wp_set_current_user( $user_obj->ID );
 			$retval = $user_obj;
 			if ( is_multisite() ) {
@@ -41,6 +47,13 @@ class Controller {
 		return $retval;
 	}
 
+	/**
+	 * Checks if a user can manage a gallery
+	 *
+	 * @param int|object $gallery_id_or_obj The gallery ID or gallery object.
+	 * @param bool       $check_upload_capability Whether to check upload capability.
+	 * @return bool
+	 */
 	public function _can_manage_gallery( $gallery_id_or_obj, $check_upload_capability = false ) {
 		$retval = false;
 
@@ -68,6 +81,12 @@ class Controller {
 		return $retval;
 	}
 
+	/**
+	 * Adds additional properties to a gallery object
+	 *
+	 * @param object $gallery The gallery object to add properties to.
+	 * @return bool
+	 */
 	public function _add_gallery_properties( $gallery ) {
 		if ( is_object( $gallery ) ) {
 			$image_mapper = ImageMapper::get_instance();
@@ -108,19 +127,21 @@ class Controller {
 		if ( $this->_login( $username, $password, $blog_id ) ) {
 			// Try to find the image.
 			$image_mapper = ImageMapper::get_instance();
-			if ( ( $image = $image_mapper->find( $image_id, true ) ) ) {
+			$image        = $image_mapper->find( $image_id, true );
+			if ( $image ) {
 				// Try to find the gallery that the image belongs to.
 				$gallery_mapper = GalleryMapper::get_instance();
-				if ( ( $gallery = $gallery_mapper->find( $image->galleryid ) ) ) {
+				$gallery        = $gallery_mapper->find( $image->galleryid );
+				if ( $gallery ) {
 					// Does the user have sufficient capabilities?
 					if ( $this->_can_manage_gallery( $gallery ) ) {
-						$storage         = StorageManager::get_instance();
-						$image->imageURL = $storage->get_image_url( $image, 'full', true );
-						$image->thumbURL = $storage->get_image_url( $image, 'thumb' );
+						$storage          = StorageManager::get_instance();
+						$image->image_url = $storage->get_image_url( $image, 'full', true );
+						$image->thumb_url = $storage->get_image_url( $image, 'thumb' );
 
-						$image->imagePath = $storage->get_image_abspath( $image );
-						$image->thumbPath = $storage->get_thumb_abspath( $image );
-						$retval           = $image;
+						$image->image_path = $storage->get_image_abspath( $image );
+						$image->thumb_path = $storage->get_thumb_abspath( $image );
+						$retval            = $image;
 					} else {
 						$retval = new \IXR_Error( 403, "You don't have permission to manage gallery #{$image->galleryid}" );
 					}
@@ -153,18 +174,16 @@ class Controller {
 		// Authenticate the user.
 		if ( $this->_login( $username, $password, $blog_id ) ) {
 			// Try to find the gallery.
-			$mapper = GalleryMapper::get_instance();
-			if ( ( $gallery = $mapper->find( $gallery_id, true ) ) ) {
+			$mapper  = GalleryMapper::get_instance();
+			$gallery = $mapper->find( $gallery_id, true );
+			if ( $gallery ) {
 				// Does the user have sufficient capabilities?
 				if ( $this->_can_manage_gallery( $gallery ) ) {
 					$retval = $gallery->get_images();
 				} else {
 					$retval = new \IXR_Error( 403, "You don't have permission to manage gallery #{$gallery_id}" );
 				}
-			}
-
-			// No gallery found.
-			else {
+			} else { // No gallery found.
 				$retval = new \IXR_Error( 404, "Gallery not found (with id #{$gallery_id}" );
 			}
 		}
@@ -175,7 +194,7 @@ class Controller {
 	/**
 	 * Uploads an image to a particular gallery
 	 *
-	 * @param $args (blog_id, username, password, data)
+	 * @param array $args (blog_id, username, password, data)
 	 *
 	 * Data is an assoc array:
 	 *            o string name
@@ -207,8 +226,9 @@ class Controller {
 		// Authenticate the user.
 		if ( $this->_login( $username, $password, $blog_id ) ) {
 			// Try to find the gallery.
-			$mapper = GalleryMapper::get_instance();
-			if ( ( $gallery = $mapper->find( $gallery_id, true ) ) ) {
+			$mapper  = GalleryMapper::get_instance();
+			$gallery = $mapper->find( $gallery_id, true );
+			if ( $gallery ) {
 				// Does the user have sufficient capabilities?
 				if ( $this->_can_manage_gallery( $gallery, true ) ) {
 					// Upload the image.
@@ -222,13 +242,13 @@ class Controller {
 							$data['override']
 						);
 						if ( $image ) {
-							$image            = is_int( $image ) ? ImageMapper::get_instance()->find( $image, true ) : $image;
-							$storage          = StorageManager::get_instance();
-							$image->imageURL  = $storage->get_image_url( $image );
-							$image->thumbURL  = $storage->get_image_url( $image, 'thumb' );
-							$image->imagePath = $storage->get_image_abspath( $image );
-							$image->thumbPath = $storage->get_thumb_abspath( $image );
-							$retval           = $image->get_entity();
+							$image             = is_int( $image ) ? ImageMapper::get_instance()->find( $image, true ) : $image;
+							$storage           = StorageManager::get_instance();
+							$image->image_url  = $storage->get_image_url( $image );
+							$image->thumb_url  = $storage->get_image_url( $image, 'thumb' );
+							$image->image_path = $storage->get_image_abspath( $image );
+							$image->thumb_path = $storage->get_thumb_abspath( $image );
+							$retval            = $image->get_entity();
 						} else {
 							$retval = new \IXR_Error( 500, 'Could not upload image' );
 						}
@@ -250,7 +270,7 @@ class Controller {
 	/**
 	 * Edits an image object
 	 *
-	 * @param $args (blog_id, username, password, image_id, alttext, description, exclude, other_properties
+	 * @param array $args (blog_id, username, password, image_id, alttext, description, exclude, other_properties)
 	 * @return \IXR_Error|object
 	 */
 	public function edit_image( $args ) {
@@ -313,8 +333,9 @@ class Controller {
 		// Authenticate the user.
 		if ( $this->_login( $username, $password, $blog_id ) ) {
 			if ( Security::is_allowed( 'nextgen_edit_gallery' ) ) {
-				$mapper = GalleryMapper::get_instance();
-				if ( ( $gallery = $mapper->create( [ 'title' => $title ] ) ) && $gallery->save() ) {
+				$mapper  = GalleryMapper::get_instance();
+				$gallery = $mapper->create( [ 'title' => $title ] );
+				if ( $gallery && $gallery->save() ) {
 					$retval = $gallery->id();
 				} else {
 					$retval = new \IXR_Error( 500, 'Unable to create gallery' );
@@ -347,8 +368,9 @@ class Controller {
 
 		// Authenticate the user.
 		if ( $this->_login( $username, $password, $blog_id ) ) {
-			$mapper = GalleryMapper::get_instance();
-			if ( ( $gallery = $mapper->find( $gallery_id, true ) ) ) {
+			$mapper  = GalleryMapper::get_instance();
+			$gallery = $mapper->find( $gallery_id, true );
+			if ( $gallery ) {
 				if ( $this->_can_manage_gallery( $gallery ) ) {
 					$gallery->name       = $name;
 					$gallery->title      = $title;
@@ -397,7 +419,7 @@ class Controller {
 					$retval[ $gallery->{$gallery->id_field} ] = (array) $gallery;
 				}
 			} else {
-				$retval = new \IXR_Error( 401, __( 'Sorry, you must be able to manage galleries' ) );
+				$retval = new \IXR_Error( 401, __( 'Sorry, you must be able to manage galleries', 'nggallery' ) );
 			}
 		}
 
@@ -408,7 +430,7 @@ class Controller {
 	 * Gets a single gallery instance
 	 *
 	 * @param array $args (blog_id, username, password, gallery_id)
-	 * @param bool  $return_model
+	 * @param bool  $return_model Whether to return the model or the entity.
 	 * @return object|bool|\IXR_Error
 	 */
 	public function get_gallery( $args, $return_model = false ) {
@@ -420,8 +442,9 @@ class Controller {
 
 		// Authenticate the user.
 		if ( $this->_login( $username, $password, $blog_id ) ) {
-			$mapper = GalleryMapper::get_instance();
-			if ( ( $gallery = $mapper->find( $gallery_id, true ) ) ) {
+			$mapper  = GalleryMapper::get_instance();
+			$gallery = $mapper->find( $gallery_id, true );
+			if ( $gallery ) {
 				if ( $this->_can_manage_gallery( $gallery ) ) {
 					$this->_add_gallery_properties( $gallery );
 					$retval = $gallery;
@@ -446,7 +469,8 @@ class Controller {
 		$gallery = $this->get_gallery( $args, true );
 
 		if ( ! ( $gallery instanceof \IXR_Error ) && is_object( $gallery ) ) {
-			return GalleryMapper::get_instance()->destroy( $gallery );
+			// Always delete with dependencies to prevent orphaned image records
+			return GalleryMapper::get_instance()->destroy( $gallery, true );
 		}
 
 		return false;
@@ -455,7 +479,7 @@ class Controller {
 	/**
 	 * Creates a new album
 	 *
-	 * @param array $args (blog_id, username, password, title, previewpic, description, galleries
+	 * @param array $args (blog_id, username, password, title, previewpic, description, galleries)
 	 * @return int|\IXR_Error
 	 */
 	public function create_album( $args ) {
@@ -498,7 +522,7 @@ class Controller {
 	/**
 	 * Returns all albums
 	 *
-	 * @param $args (blog_id, username, password)
+	 * @param array $args (blog_id, username, password)
 	 * @return \IXR_Error
 	 */
 	public function get_albums( $args ) {
@@ -550,7 +574,8 @@ class Controller {
 			// Are we allowed?
 			if ( Security::is_allowed( 'nextgen_edit_album' ) ) {
 				$mapper = AlbumMapper::get_instance();
-				if ( ( $album = $mapper->find( $album_id, true ) ) ) {
+				$album  = $mapper->find( $album_id, true );
+				if ( $album ) {
 					// Vladimir's Lightroom plugins requires the 'id' to be a string
 					// Ask if he can accept integers as well. Currently, integers break
 					// his plugin.
@@ -615,7 +640,7 @@ class Controller {
 	/**
 	 * Sets the post thumbnail for a post to a NextGEN Gallery image
 	 *
-	 * @param $args (blog_id, username, password, post_id, image_id)
+	 * @param array $args (blog_id, username, password, post_id, image_id)
 	 * @return \IXR_Error|int attachment id
 	 */
 	public function set_post_thumbnail( $args ) {

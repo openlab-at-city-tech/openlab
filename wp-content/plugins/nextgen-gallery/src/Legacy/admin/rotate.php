@@ -16,6 +16,7 @@ if ( ! is_user_logged_in() ) {
 	die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 }
 
+// phpcs:ignore WordPress.WP.Capabilities.Unknown
 if ( ! current_user_can( 'NextGEN Manage gallery' ) ) {
 	die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 }
@@ -43,7 +44,7 @@ $preview_image = $storage->get_image_url( $id, 'full' );
 ?>
 
 <script type='text/javascript'>
-	var selectedImage = "thumb<?php echo $id; ?>";
+	var selectedImage = "thumb<?php echo esc_js( $id ); ?>";
 	var rotateImageNonce = '<?php print esc_attr( wp_create_nonce( 'ngg-rotate-image' ) ); ?>';
 
 	function rotateImage() {
@@ -88,7 +89,12 @@ $preview_image = $storage->get_image_url( $id, 'full' );
 <table align="center">
 	<tr>
 		<td valign="middle" align="center" id="ngg-overlay-dialog-main">
-			<img src="<?php echo \Imagely\NGG\Util\Router::esc_url( $preview_image ) . '?' . time() . rand( 1, 100 ); ?>"
+			<img src="
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- \Imagely\NGG\Util\Router::esc_url() provides safe URL escaping
+			echo \Imagely\NGG\Util\Router::esc_url( $preview_image ) . '?' . esc_attr( time() ) . esc_attr( wp_rand( 1, 100 ) );
+			?>
+			"
 				alt=""
 				id="imageToEdit"
 				style="max-width: 450px;

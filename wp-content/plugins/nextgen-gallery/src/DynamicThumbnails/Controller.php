@@ -5,15 +5,19 @@ namespace Imagely\NGG\DynamicThumbnails;
 use Imagely\NGG\DataStorage\Manager as StorageManager;
 use Imagely\NGG\Display\StaticAssets;
 
+/**
+ * Dynamic thumbnails controller.
+ */
 class Controller {
 
-	public function index_action( $return = false ) {
+	public function index_action( $return_output = false ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		@set_time_limit( 0 );
-		@ini_set( 'memory_limit', '-1' );
+		wp_raise_memory_limit();
 
 		$dynthumbs = Manager::get_instance();
 
-		$uri            = $_SERVER['REQUEST_URI'];
+		$uri            = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		$params         = $dynthumbs->get_params_from_uri( $uri );
 		$request_params = $params;
 
@@ -33,7 +37,7 @@ class Controller {
 				if ( strpos( $uri, $hash ) === false ) {
 					$valid    = false;
 					$filename = StaticAssets::get_abspath( 'DynamicThumbnails/invalid_image.png' );
-					readfile( $filename );
+					readfile( $filename ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
 				}
 			}
 

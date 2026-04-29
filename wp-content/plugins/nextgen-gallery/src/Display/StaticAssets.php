@@ -2,15 +2,33 @@
 
 namespace Imagely\NGG\Display;
 
+/**
+ * Static Assets management class for NextGEN Gallery.
+ *
+ * Handles static asset URL and path resolution with override support.
+ */
 class StaticAssets {
 
-	public static $default_plugin_root    = NGG_PLUGIN_DIR;
+	/**
+	 * Default plugin root directory.
+	 *
+	 * @var string
+	 */
+	public static $default_plugin_root = NGG_PLUGIN_DIR;
+
+	/**
+	 * New override path name for static assets.
+	 *
+	 * @var string
+	 */
 	public static $new_override_path_name = 'nextgen-gallery-static-overrides';
 
 	/**
-	 * @param string       $filename
-	 * @param false|string $legacy_module_id
-	 * @return string
+	 * Gets the URL for a static asset file.
+	 *
+	 * @param string       $filename         The filename to get URL for.
+	 * @param false|string $legacy_module_id Legacy module ID for compatibility.
+	 * @return string The URL to the static asset.
 	 */
 	public static function get_url( $filename, $legacy_module_id = false ) {
 		$retval = self::get_abspath( $filename, $legacy_module_id );
@@ -27,9 +45,11 @@ class StaticAssets {
 	}
 
 	/**
-	 * @param string       $filename
-	 * @param false|string $legacy_module_id
-	 * @return string
+	 * Gets the absolute path for a static asset file with caching.
+	 *
+	 * @param string       $filename         The filename to get path for.
+	 * @param false|string $legacy_module_id Legacy module ID for compatibility.
+	 * @return string The absolute path to the static asset.
 	 */
 	public static function get_abspath( $filename, $legacy_module_id = false ) {
 		static $cache = [];
@@ -44,9 +64,11 @@ class StaticAssets {
 	}
 
 	/**
-	 * @param string       $filename
-	 * @param false|string $legacy_module_id
-	 * @return string
+	 * Computes the absolute path for a static asset file.
+	 *
+	 * @param string       $filename         The filename to get path for.
+	 * @param false|string $legacy_module_id Legacy module ID for compatibility.
+	 * @return string The computed absolute path to the static asset.
 	 */
 	public static function get_computed_abspath( $filename, $legacy_module_id = false ) {
 		$files = [
@@ -61,6 +83,7 @@ class StaticAssets {
 		$retval = '';
 
 		foreach ( $files as $label => $filename ) {
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			if ( @\stream_resolve_include_path( $filename ) ) {
 				$retval = $filename;
 				break;

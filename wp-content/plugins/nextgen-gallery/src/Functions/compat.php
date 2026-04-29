@@ -19,6 +19,6 @@ if ( ! function_exists( 'str_contains' ) ) {
 	 * @return bool
 	 */
 	function str_contains( $haystack, $needle ) {
-		return '' !== $needle && false !== mb_strpos( $haystack, $needle );
+		return '' !== $needle && false !== mb_strpos( (string) $haystack, $needle );
 	}
 }

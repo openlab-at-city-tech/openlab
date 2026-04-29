@@ -1,8 +1,12 @@
 <?php
 /**
+ * Template for popup marketing block.
+ *
  * @var C_Marketing_Block_Popup $block
  * @var string $link_text
- */ ?>
+ */
+
+?>
 <div class="wp-block-group has-very-dark-gray-color has-text-color has-background upsell ngg-block-popup"
 	style="border: none">
 	<div class="wp-block-group__inner-container">
@@ -14,7 +18,7 @@
 				if ( strpos( $block->thumbnail_url, 'fa-' ) === 0 ) {
 					?>
 					<div style="text-align: center;">
-						<i class="fas <?php print $block->thumbnail_url; ?>"></i>
+						<i class="fas <?php echo esc_attr( $block->thumbnail_url ); ?>"></i>
 					</div>
 				<?php } else { ?>
 					<div class="wp-block-image">
@@ -29,24 +33,24 @@
 			</div>
 			<div class="wp-block-column" style="flex-basis:66.66%">
 				<h3 class="has-very-dark-gray-color has-text-color">
-					<?php print $block->title; ?>
+					<?php echo esc_html( $block->title ); ?>
 				</h3>
 				<p class="has-text-color has-very-dark-gray-color">
-					<?php print $block->description; ?>
+					<?php echo wp_kses_post( $block->description ); ?>
 				</p>
 				<p>
-					<?php print $block->footer; ?>
+					<?php echo wp_kses_post( $block->footer ); ?>
 				</p>
 			</div>
 		</div>
 		<div class="wp-block-buttons">
 			<div class="wp-block-button">
 				<a class="wp-block-button__link has-text-color has-background no-border-radius"
-					href="<?php print $block->get_upgrade_link(); ?>"
+					href="<?php echo esc_url( $block->get_upgrade_link() ); ?>"
 					style="background-color: #9ebc1b; color:#ffffff"
 					target="_blank"
 					rel="noreferrer noopener">
-					<?php print $link_text; ?>
+					<?php echo esc_html( $link_text ); ?>
 				</a>
 			</div>
 		</div>

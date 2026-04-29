@@ -1,4 +1,7 @@
 <?php
+/**
+ * NextGEN Gallery Roles Management
+ */
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -12,16 +15,16 @@ function nggallery_admin_roles() {
 		check_admin_referer( 'ngg_addroles' );
 
 		// now set or remove the capability.
-		ngg_set_capability( $_POST['general'], 'NextGEN Gallery overview' );
-		ngg_set_capability( $_POST['tinymce'], 'NextGEN Use TinyMCE' );
-		ngg_set_capability( $_POST['add_gallery'], 'NextGEN Upload images' );
-		ngg_set_capability( $_POST['manage_gallery'], 'NextGEN Manage gallery' );
-		ngg_set_capability( $_POST['manage_others'], 'NextGEN Manage others gallery' );
-		ngg_set_capability( $_POST['manage_tags'], 'NextGEN Manage tags' );
-		ngg_set_capability( $_POST['edit_album'], 'NextGEN Edit album' );
-		ngg_set_capability( $_POST['change_style'], 'NextGEN Change style' );
-		ngg_set_capability( $_POST['change_options'], 'NextGEN Change options' );
-		ngg_set_capability( $_POST['attach_interface'], 'NextGEN Attach Interface' );
+		ngg_set_capability( isset( $_POST['general'] ) ? sanitize_text_field( wp_unslash( $_POST['general'] ) ) : '', 'NextGEN Gallery overview' );
+		ngg_set_capability( isset( $_POST['tinymce'] ) ? sanitize_text_field( wp_unslash( $_POST['tinymce'] ) ) : '', 'NextGEN Use TinyMCE' );
+		ngg_set_capability( isset( $_POST['add_gallery'] ) ? sanitize_text_field( wp_unslash( $_POST['add_gallery'] ) ) : '', 'NextGEN Upload images' );
+		ngg_set_capability( isset( $_POST['manage_gallery'] ) ? sanitize_text_field( wp_unslash( $_POST['manage_gallery'] ) ) : '', 'NextGEN Manage gallery' );
+		ngg_set_capability( isset( $_POST['manage_others'] ) ? sanitize_text_field( wp_unslash( $_POST['manage_others'] ) ) : '', 'NextGEN Manage others gallery' );
+		ngg_set_capability( isset( $_POST['manage_tags'] ) ? sanitize_text_field( wp_unslash( $_POST['manage_tags'] ) ) : '', 'NextGEN Manage tags' );
+		ngg_set_capability( isset( $_POST['edit_album'] ) ? sanitize_text_field( wp_unslash( $_POST['edit_album'] ) ) : '', 'NextGEN Edit album' );
+		ngg_set_capability( isset( $_POST['change_style'] ) ? sanitize_text_field( wp_unslash( $_POST['change_style'] ) ) : '', 'NextGEN Change style' );
+		ngg_set_capability( isset( $_POST['change_options'] ) ? sanitize_text_field( wp_unslash( $_POST['change_options'] ) ) : '', 'NextGEN Change options' );
+		ngg_set_capability( isset( $_POST['attach_interface'] ) ? sanitize_text_field( wp_unslash( $_POST['attach_interface'] ) ) : '', 'NextGEN Attach Interface' );
 	}
 
 	?>

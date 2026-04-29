@@ -1,7 +1,10 @@
 <?php
+// phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- Legacy compatibility class mixed with deprecated functions.
 
 
 /**
+ * Escapes a URL for safe output.
+ *
  * Remove once get_pro_api_version() is > 4.0
  *
  * @deprecated
@@ -11,6 +14,8 @@ function nextgen_esc_url( $url, $protocols = null, $context = 'display' ) {
 }
 
 /**
+ * Shows related gallery by tags.
+ *
  * @depecated
  */
 function nggShowRelatedGallery( $taglist, $maxImages = 0 ) {
@@ -18,6 +23,8 @@ function nggShowRelatedGallery( $taglist, $maxImages = 0 ) {
 }
 
 /**
+ * Shows related images.
+ *
  * @depecated
  */
 function nggShowRelatedImages( $type = null, $maxImages = 0 ) {
@@ -25,6 +32,8 @@ function nggShowRelatedImages( $type = null, $maxImages = 0 ) {
 }
 
 /**
+ * Displays related images.
+ *
  * @deprecated
  */
 function the_related_images( $type = 'tags', $maxNumbers = 7 ) {
@@ -32,6 +41,8 @@ function the_related_images( $type = 'tags', $maxNumbers = 7 ) {
 }
 
 /**
+ * Shows image browser.
+ *
  * @depecated
  */
 function nggShowImageBrowser( $galleryID, $template = '' ) {
@@ -48,6 +59,8 @@ function nggShowImageBrowser( $galleryID, $template = '' ) {
 }
 
 /**
+ * Creates image browser.
+ *
  * @deprecated
  */
 function nggCreateImageBrowser( $picturelist, $template = '' ) {
@@ -66,6 +79,8 @@ function nggCreateImageBrowser( $picturelist, $template = '' ) {
 }
 
 /**
+ * Shows slideshow.
+ *
  * @deprecated
  */
 function nggShowSlideshow( $galleryID, $width, $height ) {
@@ -77,10 +92,13 @@ function nggShowSlideshow( $galleryID, $width, $height ) {
 		'display_type'   => NGG_BASIC_SLIDESHOW,
 	];
 
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Deprecated function outputting safe rendered gallery content
 	echo \Imagely\NGG\DisplayedGallery\Renderer::get_instance()->display_images( $args );
 }
 
 /**
+ * Shows gallery.
+ *
  * @deprecated
  */
 function nggShowGallery( $galleryID, $template = '', $images_per_page = false ) {
@@ -102,10 +120,13 @@ function nggShowGallery( $galleryID, $template = '', $images_per_page = false ) 
 		$args['images_per_page'] = $images_per_page;
 	}
 
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Deprecated function outputting safe rendered gallery content
 	echo \Imagely\NGG\DisplayedGallery\Renderer::get_instance()->display_images( $args );
 }
 
 /**
+ * Shows album.
+ *
  * @deprecated
  */
 function nggShowAlbum( $albumID, $template = 'extend', $gallery_template = '' ) {
@@ -129,6 +150,11 @@ function nggShowAlbum( $albumID, $template = 'extend', $gallery_template = '' ) 
  * @depecated
  */
 class C_Lightbox_Library_Manager {
+	/**
+	 * Instance cache.
+	 *
+	 * @var C_Lightbox_Library_Manager|null
+	 */
 	public static $instance = null;
 
 	public static function get_instance() {

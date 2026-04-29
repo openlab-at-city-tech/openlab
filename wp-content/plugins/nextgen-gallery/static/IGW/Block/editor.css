@@ -11,20 +11,30 @@
 
 /* Customize the overall block */
 
-div[data-type="imagely/nextgen-gallery"] {
+div[data-type="imagely/nextgen-gallery"],
+div[data-type="imagely/nextgen-gallery-simple"],
+div[data-type="imagely/nextgen-album-simple"] {
     z-index: 30;
 }
 
 div[data-type="imagely/nextgen-gallery"].is-selected>.editor-block-list__block-edit:before,
-div[data-type="imagely/nextgen-gallery"].is-hovered>.editor-block-list__block-edit:before {
+div[data-type="imagely/nextgen-gallery"].is-hovered>.editor-block-list__block-edit:before,
+div[data-type="imagely/nextgen-gallery-simple"].is-selected>.editor-block-list__block-edit:before,
+div[data-type="imagely/nextgen-gallery-simple"].is-hovered>.editor-block-list__block-edit:before,
+div[data-type="imagely/nextgen-album-simple"].is-selected>.editor-block-list__block-edit:before,
+div[data-type="imagely/nextgen-album-simple"].is-hovered>.editor-block-list__block-edit:before {
 	outline: none !important;
 }
 
-div[data-type="imagely/nextgen-gallery"] .editor-block-list__breadcrumb {
+div[data-type="imagely/nextgen-gallery"] .editor-block-list__breadcrumb,
+div[data-type="imagely/nextgen-gallery-simple"] .editor-block-list__breadcrumb,
+div[data-type="imagely/nextgen-album-simple"] .editor-block-list__breadcrumb {
 	display: none !important;
 }
 
-div[data-type="imagely/nextgen-gallery"]:focus::after {
+div[data-type="imagely/nextgen-gallery"]:focus::after,
+div[data-type="imagely/nextgen-gallery-simple"]:focus::after,
+div[data-type="imagely/nextgen-album-simple"]:focus::after {
     box-shadow: none !important;
 }
 
@@ -50,13 +60,17 @@ div[data-type="imagely/nextgen-gallery"]:focus::after {
     opacity: 70%;
 }
 
-#add-ngg-gallery-modal p {
-    color: white;
-}
-
+/* Legacy iframe support */
 #add-ngg-gallery-modal iframe {
     height: 100%;
     width: 100%;
+}
+
+/* Direct React rendering support */
+#add-ngg-gallery-modal .add-ngg-gallery-modal-content {
+    height: 100%;
+    width: 100%;
+    overflow: auto;
 }
 
 #add-ngg-gallery-modal-close {
@@ -67,6 +81,7 @@ div[data-type="imagely/nextgen-gallery"]:focus::after {
     border-radius: 50%;
     color: white;
     padding: 1px;
+	  z-index: 50;
 }
 
 #add-ngg-gallery-modal-spinner {
@@ -98,11 +113,15 @@ div[data-type="imagely/nextgen-gallery"]:focus::after {
 
 /* Customize the NextGEN Gallery placeholder */
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-parent {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-parent,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-parent,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-parent {
     outline: none !important;
 }
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-block {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-block,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-block,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-block {
     background-color: #ffffff;
     border-radius: 2px;
     box-shadow: 0 0 4px 2px rgba(0,0,0,.05);
@@ -120,7 +139,9 @@ div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-block {
     flex-wrap: wrap;
 }
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-block h3 {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-block h3,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-block h3,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-block h3 {
     color: black !important;
     font-family: "Lato", sans-serif !important;
     font-size: 21px;
@@ -135,7 +156,9 @@ div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-block h3 {
 
 /* Styling for Add NextGEN Gallery buttons */
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-button,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-button {
     font-size: 14px;
     letter-spacing: 1.2px;
     line-height: 20px;
@@ -154,16 +177,22 @@ div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button {
     margin: 0 0 0 15px;
 }
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button:only-of-type {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button:only-of-type,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-button:only-of-type,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-button:only-of-type {
     flex-grow: 1;
     width: 300px;
     max-width: 300px;
 }
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button:first-of-type {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button:first-of-type,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-button:first-of-type,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-button:first-of-type {
     margin-left: 0;
 }
 
-div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button:hover {
+div[data-type="imagely/nextgen-gallery"] .add-ngg-gallery-button:hover,
+div[data-type="imagely/nextgen-gallery-simple"] .add-ngg-gallery-button:hover,
+div[data-type="imagely/nextgen-album-simple"] .add-ngg-gallery-button:hover {
     background: #383838;
 }

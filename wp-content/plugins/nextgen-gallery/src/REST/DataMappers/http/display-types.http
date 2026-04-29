@@ -1,0 +1,123 @@
+@name display-types
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+
+### Get all display types
+GET {{baseUrl}}/wp-json/imagely/v1/display-types
+Authorization: {{authHeader}}
+
+### Get single display type (Basic Thumbnails)
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_basic_thumbnails
+Authorization: {{authHeader}}
+
+### Get single display type (Pro Slideshow)
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_slideshow
+Authorization: {{authHeader}}
+
+### Test Save #1: Update Basic Thumbnails settings
+PUT {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_basic_thumbnails
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "settings": {
+    "override_thumbnail_settings": true,
+    "thumbnail_width": "240",
+    "thumbnail_height": "160",
+    "thumbnail_quality": "100",
+    "thumbnail_crop": true,
+    "images_per_page": "20",
+    "number_of_columns": "3",
+    "ajax_pagination": true,
+    "show_all_in_lightbox": false,
+    "use_imagebrowser_effect": false,
+    "template": "",
+    "display_no_images_error": true,
+    "test_save_timestamp": "{{$timestamp}}"
+  }
+}
+
+### Verify Save #1: Fetch Basic Thumbnails to confirm changes
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_basic_thumbnails
+Authorization: {{authHeader}}
+
+### Test Save #2: Update Pro Slideshow settings
+PUT {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_slideshow
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "settings": {
+    "aspect_ratio": "1.5",
+    "border_color": "#ff0000",
+    "border_size": "2",
+    "caption_class": "caption_overlay_bottom",
+    "caption_height": "80",
+    "image_crop": false,
+    "image_pan": true,
+    "show_playback_controls": true,
+    "slideshow_speed": "7",
+    "transition": "slide",
+    "transition_speed": "2",
+    "width": "90",
+    "width_unit": "%",
+    "use_lightbox_effect": true,
+    "is_ecommerce_enabled": false,
+    "test_save_timestamp": "{{$timestamp}}"
+  }
+}
+
+### Verify Save #2: Fetch Pro Slideshow to confirm changes
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_slideshow
+Authorization: {{authHeader}}
+
+### Test Save #3: Update Pro Thumbnail Grid with caption settings
+PUT {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_thumbnail_grid
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "settings": {
+    "border_color": "#00ff00",
+    "border_size": "1",
+    "spacing": "5",
+    "number_of_columns": "4",
+    "images_per_page": "16",
+    "captions_enabled": true,
+    "captions_animation": "slideup",
+    "captions_display_title": true,
+    "captions_display_description": false,
+    "captions_display_sharing": true,
+    "use_lightbox_effect": true,
+    "is_ecommerce_enabled": false,
+    "test_save_timestamp": "{{$timestamp}}"
+  }
+}
+
+### Verify Save #3: Fetch Pro Thumbnail Grid to confirm changes
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_thumbnail_grid
+Authorization: {{authHeader}}
+
+### Reset Test #1: Reset Basic Thumbnails to defaults
+POST {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_basic_thumbnails/reset
+Authorization: {{authHeader}}
+
+### Verify Reset #1: Confirm Basic Thumbnails was reset
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_basic_thumbnails
+Authorization: {{authHeader}}
+
+### Reset Test #2: Reset Pro Slideshow to defaults
+POST {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_slideshow/reset
+Authorization: {{authHeader}}
+
+### Verify Reset #2: Confirm Pro Slideshow was reset
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_slideshow
+Authorization: {{authHeader}}
+
+### Reset Test #3: Reset Pro Thumbnail Grid to defaults
+POST {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_basic_thumbnails/reset
+Authorization: {{authHeader}}
+
+### Verify Reset #3: Confirm Pro Thumbnail Grid was reset
+GET {{baseUrl}}/wp-json/imagely/v1/display-types/photocrati-nextgen_pro_thumbnail_grid
+Authorization: {{authHeader}}

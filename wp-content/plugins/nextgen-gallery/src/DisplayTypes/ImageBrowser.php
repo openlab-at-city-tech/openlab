@@ -11,12 +11,17 @@ use Imagely\NGG\Display\View;
 use Imagely\NGG\Util\Router;
 use Imagely\NGG\Util\URL;
 
+/**
+ * Image browser display type controller.
+ */
 class ImageBrowser extends ParentController {
 
 	/**
+	 * Handles the index action for image browser.
+	 *
 	 * @return string
 	 */
-	public function index_action( $displayed_gallery, $return = false ) {
+	public function index_action( $displayed_gallery, $return_output = false ) {
 		// Force the trigger icon display off, regardless of past settings.
 		$displayed_gallery->display_settings['ngg_triggers_display'] = 'never';
 
@@ -28,7 +33,7 @@ class ImageBrowser extends ParentController {
 
 		if ( ! $picture_list ) {
 			$view = new View( 'GalleryDisplay/NoImagesFound', [], 'photocrati-nextgen_gallery_display#no_images_found' );
-			return $view->render( $return );
+			return $view->render( $return_output );
 		}
 
 		$settings    = $displayed_gallery->display_settings;
@@ -54,7 +59,7 @@ class ImageBrowser extends ParentController {
 			} else {
 				// in the case it's a slug we need to search for the pid.
 				foreach ( $picture_list as $key => $picture ) {
-					if ( $picture->image_slug == $pid || strtoupper( $picture->image_slug ) === strtoupper( urlencode( $pid ) ) ) {
+					if ( $picture->image_slug == $pid || strtoupper( $picture->image_slug ) === strtoupper( rawurlencode( $pid ) ) ) {
 						$numeric_pid = $key;
 						break;
 					}
@@ -67,13 +72,13 @@ class ImageBrowser extends ParentController {
 
 		// get ids to the next and previous images.
 		$total = count( $picture_array );
-		$key   = array_search( $numeric_pid, $picture_array );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$key = array_search( $numeric_pid, $picture_array );
 		if ( ! $key ) {
 			$numeric_pid = reset( $picture_array );
 			$key         = key( $picture_array );
 		}
 
-		// for "viewing image #13 of $total".
 		$picture_list_pos = $key + 1;
 
 		// our image to display
@@ -179,7 +184,7 @@ class ImageBrowser extends ParentController {
 				'photocrati-nextgen_basic_imagebrowser#nextgen_basic_imagebrowser'
 			);
 
-			return $view->render( $return );
+			return $view->render( $return_output );
 		}
 
 		return '';
@@ -194,6 +199,7 @@ class ImageBrowser extends ParentController {
 			[],
 			NGG_SCRIPT_VERSION
 		);
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_enqueue_script(
 			'nextgen_basic_imagebrowser_script',
 			StaticAssets::get_url( 'ImageBrowser/imagebrowser.js', 'photocrati-nextgen_basic_imagebrowser#imagebrowser.js' ),

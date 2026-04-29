@@ -1,0 +1,56 @@
+@name tags
+@baseUrl = https://host.docker.internal:8982
+@authHeader = Basic admin ySA2uhTHepRoOr7BziKd3M0W
+
+### Get all tags
+GET {{baseUrl}}/wp-json/imagely/v1/tags
+Authorization: {{authHeader}}
+
+### Get tag by ID
+GET {{baseUrl}}/wp-json/imagely/v1/tags/1
+Authorization: {{authHeader}}
+
+### Get tag by slug
+GET {{baseUrl}}/wp-json/imagely/v1/tags/test-tag
+Authorization: {{authHeader}}
+
+### Create new tag
+POST {{baseUrl}}/wp-json/imagely/v1/tags
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Test Tag",
+  "description": "Test Description",
+  "slug": "test-tag"
+}
+
+### Update tag by ID
+PUT {{baseUrl}}/wp-json/imagely/v1/tags/1
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Updated Tag",
+  "description": "Updated Description",
+  "slug": "updated-tag"
+}
+
+### Update tag by slug
+PUT {{baseUrl}}/wp-json/imagely/v1/tags/test-tag
+Content-Type: application/json
+Authorization: {{authHeader}}
+
+{
+  "name": "Updated Tag",
+  "description": "Updated Description",
+  "slug": "updated-tag"
+}
+
+### Delete tag by ID
+DELETE {{baseUrl}}/wp-json/imagely/v1/tags/1
+Authorization: {{authHeader}}
+
+### Delete tag by slug
+DELETE {{baseUrl}}/wp-json/imagely/v1/tags/test-tag
+Authorization: {{authHeader}}

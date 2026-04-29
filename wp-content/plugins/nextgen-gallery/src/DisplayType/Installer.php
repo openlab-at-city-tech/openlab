@@ -8,11 +8,19 @@ use Imagely\NGG\DataTypes\DisplayType;
 use Imagely\NGG\Util\Transient;
 
 /**
+ * Display Type Installer (Deprecated)
+ *
  * @deprecated
  * @TODO Remove this when get_pro_api_version() is at least 4.0
  */
 class Installer {
 
+	/**
+	 * Deletes duplicate display types by name
+	 *
+	 * @param string $name The display type name.
+	 * @return void
+	 */
 	public function delete_duplicates( $name ) {
 		$mapper  = DisplayTypeMapper::get_instance();
 		$results = $mapper->find_all( [ 'name = %s', $name ] );
@@ -28,8 +36,9 @@ class Installer {
 	/**
 	 * Installs a display type
 	 *
-	 * @param string $name
-	 * @param array  $properties
+	 * @param string $name The display type name.
+	 * @param array  $properties Properties for the display type.
+	 * @return mixed Result of the save operation.
 	 */
 	public function install_display_type( $name, $properties = [] ) {
 		$this->delete_duplicates( $name );

@@ -1,7 +1,15 @@
 <?php
 
+/**
+ * Gallery display module.
+ */
 class M_Gallery_Display extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	public function define(
@@ -26,9 +34,11 @@ class M_Gallery_Display extends C_Base_Module {
 	}
 
 	/**
+	 * Enqueues FontAwesome.
+	 *
 	 * @TODO Remove this method when the minimum Pro version has an API version of 4.0 or higher.
 	 */
-	static function enqueue_fontawesome() {
+	public static function enqueue_fontawesome() {
 		\Imagely\NGG\Display\DisplayManager::enqueue_fontawesome();
 	}
 

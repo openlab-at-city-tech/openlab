@@ -204,6 +204,7 @@ class PelCanonMakerNotes extends PelMakerNotes
                     $this->parsePanorama($mkNotesIfd, $this->data, $data, $components);
                     break;
                 case PelTag::CANON_PICTURE_INFO:
+                    // phpcs:ignore Squiz.PHP.CommentedOutCode.Found -- Code intentionally commented out.
                     // $this->parsePictureInfo($mkNotesIfd, $this->data, $data, $components);
                     break;
                 case PelTag::CANON_FILE_INFO:

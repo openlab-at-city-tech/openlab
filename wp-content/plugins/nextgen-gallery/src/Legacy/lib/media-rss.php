@@ -8,6 +8,7 @@
 class nggMediaRss {
 
 	public static function add_mrss_alternate_link() {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Safe HTML link tag with escaped URL from self::get_mrss_url()
 		echo "<link id='MediaRSS' rel='alternate' type='application/rss+xml' title='NextGEN Gallery RSS Feed' href='" . self::get_mrss_url() . "' />\n";
 	}
 
@@ -64,8 +65,8 @@ class nggMediaRss {
 		$ngg_options['galSort']    = ( $ngg_options['galSort'] ) ? $ngg_options['galSort'] : 'pid';
 		$ngg_options['galSortDir'] = ( $ngg_options['galSortDir'] == 'DESC' ) ? 'DESC' : 'ASC';
 
-		$title       = stripslashes( \Imagely\NGG\Display\I18N::translate( $gallery->title ) );
-		$description = stripslashes( \Imagely\NGG\Display\I18N::translate( $gallery->galdesc ) );
+		$title       = stripslashes( \Imagely\NGG\Display\I18N::translate( $gallery->title ?? '' ) );
+		$description = stripslashes( \Imagely\NGG\Display\I18N::translate( $gallery->galdesc ?? '' ) );
 		$link        = self::get_permalink( $gallery->pageid );
 		$prev_link   = ( $prev_gallery != null ) ? self::get_gallery_mrss_url( $prev_gallery->gid, true ) : '';
 		$next_link   = ( $next_gallery != null ) ? self::get_gallery_mrss_url( $next_gallery->gid, true ) : '';
@@ -82,7 +83,7 @@ class nggMediaRss {
 	public static function get_album_mrss( $album ) {
 		$nggdb    = new nggdb();
 
-		$title       = stripslashes( \Imagely\NGG\Display\I18N::translate( $album->name ) );
+		$title       = stripslashes( \Imagely\NGG\Display\I18N::translate( $album->name ?? '' ) );
 		$description = '';
 		$link        = self::get_permalink( 0 );
 		$prev_link   = '';
@@ -188,31 +189,49 @@ class nggMediaRss {
 		$settings = \Imagely\NGG\Settings\Settings::get_instance();
 		$storage  = \Imagely\NGG\DataStorage\Manager::get_instance();
 
-		$tags = wp_get_object_terms( $image->pid, 'ngg_tag', 'fields=names' );
+		// Handle both object and array formats
+		if ( is_array( $image ) ) {
+			$image = (object) $image;
+		}
+
+		// Ensure we have a valid image object with required properties
+		if ( ! is_object( $image ) || ! isset( $image->pid ) ) {
+			return ''; // Skip invalid images
+		}
+
+		$image_id = $image->pid;
+		$tags = wp_get_object_terms( $image_id, 'ngg_tag', 'fields=names' );
 		if (is_array( $tags )) {
 			$tags = implode( ', ', $tags );
 		}
 
-		$title     = html_entity_decode( stripslashes( $image->alttext ) );
-		$desc      = html_entity_decode( stripslashes( $image->description ) );
+		$title     = isset( $image->alttext ) ? html_entity_decode( stripslashes( $image->alttext ) ) : '';
+		$desc      = isset( $image->description ) ? html_entity_decode( stripslashes( $image->description ) ) : '';
 		$image_url = $storage->get_image_url( $image );
 		$thumb_url = $storage->get_image_url( $image, 'thumb' );
 
+		// Get thumbnail dimensions from meta_data or use defaults
 		$thumbwidth  = 80;
 		$thumbheight = 80;
-		if (( $dimensions = $storage->get_thumb_dimensions( $image ) )) {
-			$thumbwidth  = $dimensions['width'];
-			$thumbheight = $dimensions['height'];
+		$thumb_dims = $storage->get_image_dimensions( $image, 'thumb' );
+		if ( $thumb_dims && isset( $thumb_dims['width'] ) && isset( $thumb_dims['height'] ) ) {
+			$thumbwidth  = (int) $thumb_dims['width'];
+			$thumbheight = (int) $thumb_dims['height'];
+		} elseif ( isset( $image->meta_data ) && is_array( $image->meta_data ) ) {
+			if ( isset( $image->meta_data['thumbnail']['width'] ) && isset( $image->meta_data['thumbnail']['height'] ) ) {
+				$thumbwidth  = (int) $image->meta_data['thumbnail']['width'];
+				$thumbheight = (int) $image->meta_data['thumbnail']['height'];
+			}
 		}
 
 		$out  = $indent . "<item>\n";
-		$out .= $indent . "\t<title><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $title, 'pic_' . $image->pid . '_alttext' ) . "]]></title>\n";
-		$out .= $indent . "\t<description><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $desc, 'pic_' . $image->pid . '_description' ) . "]]></description>\n";
+		$out .= $indent . "\t<title><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $title, 'pic_' . $image_id . '_alttext' ) . "]]></title>\n";
+		$out .= $indent . "\t<description><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $desc, 'pic_' . $image_id . '_description' ) . "]]></description>\n";
 		$out .= $indent . "\t<link><![CDATA[" . \Imagely\NGG\Util\Router::esc_url( $image_url ) . "]]></link>\n";
-		$out .= $indent . "\t<guid>image-id:" . $image->pid . "</guid>\n";
+		$out .= $indent . "\t<guid>image-id:" . $image_id . "</guid>\n";
 		$out .= $indent . "\t<media:content url='" . \Imagely\NGG\Util\Router::esc_url( $image_url ) . "' medium='image' />\n";
-		$out .= $indent . "\t<media:title><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $title, 'pic_' . $image->pid . '_alttext' ) . "]]></media:title>\n";
-		$out .= $indent . "\t<media:description><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $desc, 'pic_' . $image->pid . '_description' ) . "]]></media:description>\n";
+		$out .= $indent . "\t<media:title><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $title, 'pic_' . $image_id . '_alttext' ) . "]]></media:title>\n";
+		$out .= $indent . "\t<media:description><![CDATA[" . \Imagely\NGG\Display\I18N::translate( $desc, 'pic_' . $image_id . '_description' ) . "]]></media:description>\n";
 		$out .= $indent . "\t<media:thumbnail url='" . \Imagely\NGG\Util\Router::esc_url( $thumb_url ) . "' width='" . $thumbwidth . "' height='" . $thumbheight . "' />\n";
 		$out .= $indent . "\t<media:keywords><![CDATA[" . esc_html( \Imagely\NGG\Display\I18N::translate( $tags ) ) . "]]></media:keywords>\n";
 		$out .= $indent . "\t<media:copyright><![CDATA[Copyright (c) " . get_option( "blogname" ) . " (" . site_url() . ")]]></media:copyright>\n";

@@ -11,18 +11,20 @@ add_action( 'wp_ajax_ngg_ajax_operation', 'ngg_ajax_operation' );
 function ngg_ajax_operation() {
 
 	// if nonce is not correct it returns -1.
-	check_ajax_referer( 'ngg-ajax' );
+	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- check_ajax_referer handles nonce verification internally
+	check_ajax_referer( 'ngg-ajax', 'nonce' );
 
 	// check for correct capability.
 	if ( ! is_user_logged_in() ) {
 		die( '-1' );
 	}
 
-	if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'ngg-ajax' ) ) {
+	if ( ! wp_verify_nonce( isset( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : '', 'ngg-ajax' ) ) {
 		die( '-1' );
 	}
 
 	// check for correct NextGEN capability.
+ // phpcs:ignore WordPress.WP.Capabilities.Unknown
 	if ( ! current_user_can( 'NextGEN Upload images' ) && ! current_user_can( 'NextGEN Manage gallery' ) ) {
 		die( '-1' );
 	}
@@ -32,11 +34,13 @@ function ngg_ajax_operation() {
 
 	// Get the image id.
 	if ( isset( $_POST['image'] ) ) {
-		$id = (int) $_POST['image'];
+		$id = (int) sanitize_text_field( wp_unslash( $_POST['image'] ) );
 		// let's get the image data.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- $_POST['image'] is sanitized on line 36
 		$picture = nggdb::find_image( $id );
 		// what do you want to do ?
-		switch ( $_POST['operation'] ) {
+		$operation = isset( $_POST['operation'] ) ? sanitize_text_field( wp_unslash( $_POST['operation'] ) ) : '';
+		switch ( $operation ) {
 			case 'create_thumbnail':
 				$result = nggAdmin::create_thumbnail( $picture );
 				break;
@@ -66,29 +70,30 @@ function ngg_ajax_operation() {
 
 			// This will read the EXIF and then write it with the Orientation tag reset.
 			case 'strip_orientation_tag':
-				$storage      = \Imagely\NGG\DataStorage\Manager::get_instance();
-				$image_path   = $storage->get_image_abspath( $id );
-				$backup_path  = $image_path . '_backup';
+				$storage     = \Imagely\NGG\DataStorage\Manager::get_instance();
+				$image_path  = $storage->get_image_abspath( $id );
+				$backup_path = $image_path . '_backup';
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_path;
-				$exif_iptc    = @\Imagely\NGG\DataStorage\EXIFWriter::read_metadata( $exif_abspath );
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$exif_iptc = @\Imagely\NGG\DataStorage\EXIFWriter::read_metadata( $exif_abspath );
 				foreach ( $storage->get_image_sizes( $id ) as $size ) {
 					if ( $size === 'backup' ) {
 						continue;
 					}
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					@\Imagely\NGG\DataStorage\EXIFWriter::write_metadata( $storage->get_image_abspath( $id, $size ), $exif_iptc );
 				}
 				$result = '1';
 				break;
 			default:
-				do_action( 'ngg_ajax_' . $_POST['operation'] );
+				do_action( 'ngg_ajax_' . $operation );
 				die( '-1' );
-			break;
 		}
 		// A success should return a '1'.
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $result contains safe response data for AJAX
 		die( $result );
-	}
-
-	// The script should never stop here.
+	}   // The script should never stop here.
 	die( '0' );
 }
 
@@ -102,20 +107,21 @@ function createNewThumb() {
 	}
 
 	// check for correct NextGEN capability.
+ // phpcs:ignore WordPress.WP.Capabilities.Unknown
 	if ( ! current_user_can( 'NextGEN Manage gallery' ) ) {
 		die( '-1' );
 	}
 
-	if ( ! wp_verify_nonce( $_POST['nonce'], 'ngg_update_thumbnail' ) ) {
+	if ( ! wp_verify_nonce( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '', 'ngg_update_thumbnail' ) ) {
 		die( '-1' );
 	}
 
-	$id = (int) $_POST['id'];
+	$id = (int) ( isset( $_POST['id'] ) ? sanitize_text_field( wp_unslash( $_POST['id'] ) ) : 0 );
 
-	$x          = round( $_POST['x'] * $_POST['rr'], 0 );
-	$y          = round( $_POST['y'] * $_POST['rr'], 0 );
-	$w          = round( $_POST['w'] * $_POST['rr'], 0 );
-	$h          = round( $_POST['h'] * $_POST['rr'], 0 );
+	$x          = round( ( isset( $_POST['x'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['x'] ) ) ) : 0 ) * ( isset( $_POST['rr'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['rr'] ) ) ) : 1 ), 0 );
+	$y          = round( ( isset( $_POST['y'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['y'] ) ) ) : 0 ) * ( isset( $_POST['rr'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['rr'] ) ) ) : 1 ), 0 );
+	$w          = round( ( isset( $_POST['w'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['w'] ) ) ) : 0 ) * ( isset( $_POST['rr'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['rr'] ) ) ) : 1 ), 0 );
+	$h          = round( ( isset( $_POST['h'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['h'] ) ) ) : 0 ) * ( isset( $_POST['rr'] ) ? floatval( sanitize_text_field( wp_unslash( $_POST['rr'] ) ) ) : 1 ), 0 );
 	$crop_frame = [
 		'x'      => $x,
 		'y'      => $y,
@@ -153,11 +159,12 @@ function ngg_rotateImage() {
 		die( '-1' );
 	}
 
-	if ( ! wp_verify_nonce( $_POST['nonce'], 'ngg-rotate-image' ) ) {
+	if ( ! wp_verify_nonce( isset( $_POST['nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['nonce'] ) ) : '', 'ngg-rotate-image' ) ) {
 		die( '-1' );
 	}
 
 	// check for correct NextGEN capability.
+ // phpcs:ignore WordPress.WP.Capabilities.Unknown
 	if ( ! current_user_can( 'NextGEN Manage gallery' ) ) {
 		die( '-1' );
 	}
@@ -167,10 +174,11 @@ function ngg_rotateImage() {
 	// include the ngg function.
 	include_once __DIR__ . '/functions.php';
 
-	$id     = (int) $_POST['id'];
+	$id     = (int) ( isset( $_POST['id'] ) ? sanitize_text_field( wp_unslash( $_POST['id'] ) ) : 0 );
 	$result = '-1';
 
-	switch ( $_POST['ra'] ) {
+	$ra = isset( $_POST['ra'] ) ? sanitize_text_field( wp_unslash( $_POST['ra'] ) ) : '';
+	switch ( $ra ) {
 		case 'cw':
 			$result = nggAdmin::rotate_image( $id, 'CW' );
 			break;
@@ -195,5 +203,6 @@ function ngg_rotateImage() {
 	}
 
 	header( 'HTTP/1.1 500 Internal Server Error' );
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $result contains safe error response data
 	die( $result );
 }

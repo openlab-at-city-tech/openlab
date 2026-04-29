@@ -6,15 +6,31 @@ use Imagely\NGG\Display\View;
 use Imagely\NGG\Display\StaticAssets;
 use Imagely\NGG\Settings\Settings;
 
+/**
+ * Manager for dynamic stylesheets.
+ */
 class Manager {
 
+	/**
+	 * Instances of the manager.
+	 *
+	 * @var array
+	 */
 	protected static $_instances = [];
 
 	/**
+	 * Registered templates.
+	 *
 	 * @var array<string>
 	 */
 	protected $templates = [];
 
+	/**
+	 * Get an instance of the manager.
+	 *
+	 * @param string|bool $context The context for the instance.
+	 * @return Manager The manager instance.
+	 */
 	public static function get_instance( $context = false ) {
 		if ( ! isset( self::$_instances[ $context ] ) ) {
 			self::$_instances[ $context ] = new Manager();
@@ -25,13 +41,19 @@ class Manager {
 	/**
 	 * Registers a template with the dynamic stylesheet utility. A template must be registered before it can be loaded.
 	 *
-	 * @param string $name
-	 * @param string $template
+	 * @param string $name The template name.
+	 * @param string $template The template path.
 	 */
 	public function register( $name, $template ) {
 		$this->templates[ $name ] = $template;
 	}
 
+	/**
+	 * Get the CSS template by name.
+	 *
+	 * @param string $name The template name.
+	 * @return string|false The template path or false if not found.
+	 */
 	public function get_css_template( $name ) {
 		return $this->templates[ $name ];
 	}
@@ -39,11 +61,12 @@ class Manager {
 	/**
 	 * Loads a template, along with the dynamic variables to be interpolated.
 	 *
-	 * @param string $name
-	 * @param array  $data (optional)
+	 * @param string $name The template name.
+	 * @param array  $data The data to pass to the template (optional).
 	 */
 	public function enqueue( $name, $data = [] ) {
-		if ( ( $template_name = $this->get_css_template( $name ) ) !== false ) {
+		$template_name = $this->get_css_template( $name );
+		if ( false !== $template_name ) {
 			if ( is_subclass_of( $data, 'C_DataMapper_Model' ) ) {
 				$data = $data->get_entity();
 			}
@@ -69,7 +92,7 @@ class Manager {
 				$encoded_data = $this->encode( $data );
 				\wp_enqueue_style(
 					'dyncss-' . $template_name . $encoded_data . '@dynamic',
-					"/{$slug}" . "?name={$name}&data={$encoded_data}",
+					"/{$slug}?name={$name}&data={$encoded_data}",
 					[],
 					NGG_SCRIPT_VERSION
 				);
@@ -82,11 +105,11 @@ class Manager {
 	 *
 	 * Base64 encoding uses '==' to denote the end of the sequence, but keep it out of the url
 	 *
-	 * @param $data
-	 * @return string
+	 * @param mixed $data The data to encode.
+	 * @return string The encoded data.
 	 */
 	public function encode( $data ) {
-		$data = json_encode( $data );
+		$data = wp_json_encode( $data );
 		$data = base64_encode( $data );
 		$data = str_replace( '/', '\\', $data );
 		$data = rtrim( $data, '=' );
@@ -96,8 +119,8 @@ class Manager {
 	/**
 	 * Decodes $data
 	 *
-	 * @param $data
-	 * @return array|mixed
+	 * @param mixed $data The data to decode.
+	 * @return array|mixed The decoded data.
 	 */
 	public function decode( $data ) {
 		$data = str_replace( '\\', '/', $data );

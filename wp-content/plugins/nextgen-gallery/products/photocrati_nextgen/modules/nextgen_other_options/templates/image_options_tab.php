@@ -21,7 +21,7 @@
 				<br/>
 				<div class="error">
 					<p>
-						<?php print $gallery_path_error_message; ?>
+						<?php print esc_html( $gallery_path_error_message ); ?>
 					</p>
 				</div>
 			<?php } ?>

@@ -1,7 +1,16 @@
 <?php
+// phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 
+/**
+ * NextGen admin module.
+ */
 class M_NextGen_Admin extends C_Base_Module {
 
+	/**
+	 * Object instance.
+	 *
+	 * @var object
+	 */
 	public $object;
 
 	/**
@@ -62,14 +71,14 @@ class M_NextGen_Admin extends C_Base_Module {
 		$this->get_registry()->add_adapter( 'I_MVC_Controller', 'A_MVC_Validation' );
 	}
 
-	public function get_common_admin_css_handlers( $array ) {
-		$array['nextgen_admin_css'] = $this->module_version;
-		return $array;
+	public function get_common_admin_css_handlers( $handlers ) {
+		$handlers['nextgen_admin_css'] = $this->module_version;
+		return $handlers;
 	}
 
-	public function get_common_admin_js_handlers( $array ) {
-		$array['nextgen_admin_js'] = $this->module_version;
-		return $array;
+	public function get_common_admin_js_handlers( $handlers ) {
+		$handlers['nextgen_admin_js'] = $this->module_version;
+		return $handlers;
 	}
 
 	// Enqueues static resources that should be enqueued in the HEADER on a NextGEN Admin Page.
@@ -79,7 +88,8 @@ class M_NextGen_Admin extends C_Base_Module {
 		$style_handles_filter  = 'ngg_admin_style_handles';
 		$enqueue_action        = $footer ? 'ngg_admin_footer_enqueue_scripts' : 'ngg_admin_enqueue_scripts';
 
-		if ( $slug = C_NextGen_Admin_Page_Manager::is_requested() ) {
+		$slug = C_NextGen_Admin_Page_Manager::is_requested();
+		if ( $slug ) {
 			$script_handles = apply_filters( $script_handles_filter, [], $slug );
 			$style_handles  = apply_filters( $style_handles_filter, [], $slug );
 
@@ -88,6 +98,7 @@ class M_NextGen_Admin extends C_Base_Module {
 				if ( has_action( $hook ) ) {
 					do_action( $hook, $handle, $version );
 				} else {
+     // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 					wp_enqueue_script( $handle, '', [], $version );
 				}
 			}
@@ -240,6 +251,7 @@ class M_NextGen_Admin extends C_Base_Module {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		return ( is_admin()
 				&& isset( $_REQUEST['page'] )
+    // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				&& in_array(
 					sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ),
 					[
@@ -257,7 +269,7 @@ class M_NextGen_Admin extends C_Base_Module {
 	 * Emits the 'do_ngg_notices' action
 	 * Used by the notification manager to render all notices
 	 */
-	static function emit_do_notices_action() {
+	public static function emit_do_notices_action() {
 		if ( ! did_action( 'do_ngg_notices' ) ) {
 			do_action( 'do_ngg_notices' );
 		}
@@ -299,6 +311,7 @@ class M_NextGen_Admin extends C_Base_Module {
 
 	public function register_scripts() {
 		$router = \Imagely\NGG\Util\Router::get_instance();
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'gritter',
 			$router->get_static_url( 'photocrati-nextgen_admin#gritter/gritter.js' ),
@@ -311,6 +324,7 @@ class M_NextGen_Admin extends C_Base_Module {
 			[],
 			NGG_SCRIPT_VERSION
 		);
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'ngg_progressbar',
 			$router->get_static_url( 'photocrati-nextgen_admin#ngg_progressbar.js' ),
@@ -329,12 +343,14 @@ class M_NextGen_Admin extends C_Base_Module {
 			[],
 			NGG_SCRIPT_VERSION
 		);
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'ngg_select2',
 			$router->get_static_url( 'photocrati-nextgen_admin#select2-4.0.13/dist/js/select2.full.js' ),
 			[],
 			NGG_SCRIPT_VERSION
 		);
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'jquery.nextgen_radio_toggle',
 			$router->get_static_url( 'photocrati-nextgen_admin#jquery.nextgen_radio_toggle.js' ),
@@ -355,6 +371,7 @@ class M_NextGen_Admin extends C_Base_Module {
 			NGG_SCRIPT_VERSION
 		);
 
+  // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		wp_register_script(
 			'nextgen_admin_js',
 			$router->get_static_url( 'photocrati-nextgen_admin#nextgen_admin_page.js' ),
@@ -368,10 +385,11 @@ class M_NextGen_Admin extends C_Base_Module {
 			'
             #adminmenu li.toplevel_page_nextgen-gallery img,
             #adminmenu li[class*=toplevel_page_nextgen-gallery] img,
+            #adminmenu li[class*=toplevel_page_imagely] img,
             #adminmenu li[class*=toplevel_page_ngg] img {
                 opacity: 1;
-                max-width: 18px;
-                padding-top: 7px;
+                max-width: 20px;
+                padding-top: 8px;
             }
         '
 		);
@@ -407,7 +425,7 @@ class M_NextGen_Admin extends C_Base_Module {
 	public function custom_post_type_markup_top() {
 		global $title;
 		if ( C_NextGen_Admin_Page_Manager::is_requested_post_type() && ! $this->is_ngg_post_type_with_template() ) {
-			echo '<div id="ngg_page_content"><div class="ngg_page_content_header "><h3>' . $title . '</h3></div><div class="ngg_page_content_main">';
+			echo '<div id="ngg_page_content"><div class="ngg_page_content_header "><h3>' . esc_html( $title ) . '</h3></div><div class="ngg_page_content_main">';
 		}
 	}
 
@@ -420,7 +438,7 @@ class M_NextGen_Admin extends C_Base_Module {
 
 	/* Conditional returns true if is post type and uses custom template */
 	public function is_ngg_post_type_with_template() {
-		$url = $_SERVER['REQUEST_URI'];
+		$url = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		if ( C_NextGen_Admin_Page_Manager::is_requested_post_type() && strpos( $url, '&ngg_edit' ) ) {
 			return true;
 		}
@@ -493,7 +511,13 @@ class M_NextGen_Admin extends C_Base_Module {
 	}
 }
 
+/**
+ * NextGen admin installer class.
+ *
+ * Handles installation and upgrade tasks for the NextGen admin module.
+ */
 class C_NextGen_Admin_Installer {
+ // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 
 	public function install() {
 		$settings = \Imagely\NGG\Settings\Settings::get_instance();
@@ -533,14 +557,20 @@ class C_NextGen_Admin_Installer {
 	}
 }
 
+/**
+ * NextGen admin option handler class.
+ *
+ * Handles option retrieval and management for the NextGen admin module.
+ */
 class C_NextGen_Admin_Option_Handler {
+ // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 
 	public function get_router() {
 		return \Imagely\NGG\Util\Router::get_instance();
 	}
 
-	public function get( $key, $default = null ) {
-		$retval = $default;
+	public function get( $key, $default_value = null ) {
+		$retval = $default_value;
 
 		if ( $key == 'jquery_ui_theme_url' ) {
 			$retval = $this->get_router()->get_static_url( 'photocrati-nextgen_admin#jquery-ui/jquery-ui-1.10.4.custom.css' );

@@ -9,7 +9,7 @@
 				if ( ! empty( $text ) ) {
 					?>
 					class='tooltip'<?php } ?>>
-			<?php print $label; ?>
+			<?php print esc_html( $label ); ?>
 		</label>
 	</td>
 	<td>
