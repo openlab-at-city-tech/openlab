@@ -225,6 +225,7 @@ foreach ( $s2tabs as $tab_key => $tab_caption ) {
 echo '</h2>';
 echo '<form method="post">' . "\r\n";
 echo '<input type="hidden" name="s2_admin" />' . "\r\n";
+echo wp_nonce_field( 's2-export-csv', 's2-export-csv' );
 
 $exclude = array();
 switch ( $current_tab ) {

@@ -1,3 +1,7 @@
+= 10.45 (29th Dec, 2025) =
+
+* Enhance: Capability checks added for better security.
+
 = 10.44 (20th Jan, 2025) =
 
 * Fix: Security related issues.

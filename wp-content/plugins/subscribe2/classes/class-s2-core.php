@@ -2364,6 +2364,19 @@ class S2_Core {
 
 			// Capture CSV export.
 			if ( isset( $_POST['s2_admin'] ) && isset( $_POST['csv'] ) ) {
+                // Security check: Verify user has proper capabilities.
+                if ( ! current_user_can( apply_filters( 's2_capability', 'manage_options', 'manage' ) ) ) {
+                    wp_die( 'Not permitted.' );
+                }
+
+                // Security check: Verify nonce.
+                if (
+                    ! isset( $_REQUEST['s2-export-csv'] ) ||
+                    ! wp_verify_nonce( sanitize_key( $_REQUEST['s2-export-csv'] ), 's2-export-csv' )
+                ) {
+                    wp_die( 'Request cannot be completed.' );
+                }
+
 				$date = gmdate( 'Y-m-d' );
 				header( 'Content-Description: File Transfer' );
 				header( 'Content-type: application/octet-stream' );
