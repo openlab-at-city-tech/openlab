@@ -1,9 +1,9 @@
 === CV Portfolio Blocks ===
 Contributors: wpradiant
-Tags: grid-layout, one-column, two-columns, right-sidebar, left-sidebar, custom-colors, sticky-post, threaded-comments, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, rtl-language-support, news, portfolio, education
+Tags: grid-layout, one-column, two-columns, right-sidebar, left-sidebar, custom-colors, sticky-post, threaded-comments, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, rtl-language-support, news, portfolio, three-columns, four-columns, footer-widgets, education
 Requires at least: 6.0
-Tested up to: 6.8
-Stable tag: 1.3.4
+Tested up to: 6.9
+Stable tag: 1.4.2
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -12,9 +12,52 @@ CV Portfolio Blocks is like a stylish digital resume for people who want to show
 
 == Description ==
 
-CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you.
+CV Portfolio Blocks is a sleek and modern digital resume theme designed for job seekers, freelancers, consultants, and professionals looking to showcase their skills, experience, and work online. Ideal for creating a professional online presence, it supports sections for portfolios, CVs, resumes, career highlights, personal branding, networking, consultancy services, employment history, talent showcases, education, work experience, and expertise. With a clean, responsive design, CV Portfolio Blocks ensures your content is visually appealing and easily accessible across desktops, tablets, and mobile devices. The theme allows customization of colors, fonts, and layouts to reflect your personal style while offering intuitive sections for “About Me,” “Work Experience,” portfolios, and contact information. Visitors can quickly view your professional achievements, download your CV, or reach out via integrated contact forms, making it ideal for networking and career growth. Its user-friendly interface ensures even non-technical users can build a polished, professional website efficiently.
 
 == Changelog ==
+
+= Version 1.4.2 =
+- Resolved css error.
+
+= Version 1.4.1 =
+- Resolved responsive error on activation notice.
+- Added Quick link option in getstarted.
+- Added links to quick link option.
+- Added tags blog in sidebar.
+- Added live demo link in get started page.
+- Added buy bundle link in get started page.
+
+= Version 1.4 = 
+- Added sidebar in search template.
+- Resolved the activation notice error.
+- Added id to main tag.
+- Set the all heading in h2 tag.
+- Updated pot file.
+
+= Version 1.3.9 =
+- Resolved css error.
+
+= Version 1.3.8 =
+- Added visit site button in get started.
+- Added blog listing template.
+- Resolved css error get pro navigation menu.
+- Resolved css error footer credit links.
+- Added tags three-columns, four-columns,footer-widgets.
+- Resolved tgm error.
+- Updated pot file.
+
+= Version 1.3.7 =
+- Updated decription.
+
+= Version 1.3.6 =
+* Added hover effect to single post image.
+* Added pages blog in sidebar.
+* Fixed the inner pages in container.
+* Tested upto WP v6.9. 
+* Updated pot file.
+
+= Version 1.3.5 =
+- Resolved minor css issues.
 
 = Version 1.3.4 =
 - Resolved minor css errors.

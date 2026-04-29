@@ -59,6 +59,9 @@ function cv_portfolio_blocks_do_admin_page() {
 				<span>
 					<a class="button button-demo" href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_LIVE_DEMO ); ?>" target="_blank"><?php esc_html_e( 'Demo', 'cv-portfolio-blocks' ); ?></a>
 				</span>
+         <span>
+					<a class="button btn-bundle" href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_BUY_BUNDLE ); ?>" target="_blank"><?php esc_html_e( 'Buy Bundle', 'cv-portfolio-blocks' ); ?></a>
+				</span>
 				<span>
 					<a class="button button-doc" href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_PRO_DOC ); ?>" target="_blank"><?php esc_html_e( 'Documentation', 'cv-portfolio-blocks' ); ?></a>
 				</span>
@@ -73,6 +76,9 @@ function cv_portfolio_blocks_do_admin_page() {
 					$main_description = explode( 'Official', $description_raw );
 					?>
 				<?php echo wp_kses_post( $main_description[0] ); ?>
+        <p>
+			    <a class="button button-primary" href="<?php echo esc_url( home_url() ); ?>" target="_blank"><?php esc_html_e( 'Visit Site', 'cv-portfolio-blocks' ); ?></a>
+		    </p>
 			</div><!-- .col -->
 
 			<div class="about-img">
@@ -160,7 +166,71 @@ function cv_portfolio_blocks_main_screen() {
 		</p>
 
 	</div><!-- .col -->
+<div class="col">
 
+		<h3><i class="dashicons dashicons-visibility"></i><?php esc_html_e( 'Live Demo', 'cv-portfolio-blocks' ); ?></h3>
+
+		<p>
+			<?php esc_html_e( 'Preview the live demo to explore the homepage, inner pages, and overall design flow before setup.', 'cv-portfolio-blocks' ); ?>
+		</p>
+
+		<p>
+			<a class="button button-primary" href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_LIVE_DEMO ); ?>" target="_blank"><?php esc_html_e( 'View Live Demo', 'cv-portfolio-blocks' ); ?></a>
+		</p>
+
+	</div><!-- .col -->
+
+	<?php $theme_slug = get_stylesheet(); ?>
+
+	<div class="col">
+			<h3>
+				<i class="dashicons dashicons-admin-links"></i>
+				<?php esc_html_e( 'Quick Link', 'cv-portfolio-blocks' ); ?>
+			</h3>
+
+			<div class="cv-portfolio-blocks-card-body">
+				<div class="cv-portfolio-blocks-card-btn-grp">
+
+					<a class="button button-hero btn-col"
+					   href="<?php echo esc_url( admin_url( 'site-editor.php?postType=wp_template_part&postId=' . $theme_slug . '//header&canvas=edit' ) ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Edit Header', 'cv-portfolio-blocks' ); ?>
+					</a>
+
+					<a class="button button-hero btn-col"
+					   href="<?php echo esc_url( admin_url( 'site-editor.php?postType=wp_template_part&postId=' . $theme_slug . '//footer&canvas=edit' ) ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Edit Footer', 'cv-portfolio-blocks' ); ?>
+					</a>
+
+					<a class="button button-hero btn-col"
+					   href="<?php echo esc_url( admin_url( 'site-editor.php?postType=wp_template_part&postId=' . $theme_slug . '//sidebar&canvas=edit' ) ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Edit Sidebar', 'cv-portfolio-blocks' ); ?>
+					</a>
+
+					<a class="button button-hero btn-col"
+					   href="<?php echo esc_url( admin_url( 'site-editor.php?postType=wp_template_part' ) ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'All Template Parts', 'cv-portfolio-blocks' ); ?>
+					</a>
+
+					<a class="button button-hero btn-col"
+					   href="<?php echo esc_url( admin_url( 'site-editor.php?postType=wp_template&postId=' . $theme_slug . '//front-page&canvas=edit' ) ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Edit Frontpage', 'cv-portfolio-blocks' ); ?>
+					</a>
+
+					<a class="button button-hero btn-col"
+					   href="<?php echo esc_url( admin_url( 'site-editor.php?postType=wp_template&postId=' . $theme_slug . '//archive&canvas=edit' ) ); ?>"
+					   target="_blank">
+						<?php esc_html_e( 'Edit Archive Page', 'cv-portfolio-blocks' ); ?>
+					</a>         
+
+				</div>
+			</div>
+	</div>
+</div>
 </div><!-- .four-col -->
   <?php
   }

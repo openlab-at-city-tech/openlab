@@ -61,7 +61,7 @@ if ( ! function_exists( 'cv_portfolio_blocks_styles' ) ) :
 		);
 
 		wp_enqueue_style( 
-			'cv-portfolio-blocks-animate-css', 
+			'animate-css', 
 			esc_url(get_template_directory_uri()).'/assets/css/animate.css' 
 		);
 
@@ -72,7 +72,7 @@ if ( ! function_exists( 'cv_portfolio_blocks_styles' ) ) :
 
 		wp_style_add_data( 'cv-portfolio-blocks-style', 'rtl', 'replace' );
 
-		wp_enqueue_style('cv-portfolio-blocks-swiper-css',
+		wp_enqueue_style('swiper-css',
 		esc_url(get_template_directory_uri()) . '/assets/css/swiper-bundle.css',
 		array()
 		);
@@ -85,7 +85,7 @@ add_action( 'wp_enqueue_scripts', 'cv_portfolio_blocks_styles' );
 /* Enqueue Wow Js */
 function cv_portfolio_blocks_scripts() {
 	wp_enqueue_script( 
-		'cv-portfolio-blocks-wow', esc_url(get_template_directory_uri()) . '/assets/js/wow.js', 
+		'wow', esc_url(get_template_directory_uri()) . '/assets/js/wow.js', 
 		array('jquery') 
 	);
 	wp_enqueue_script(
@@ -101,7 +101,7 @@ function cv_portfolio_blocks_scripts() {
 		array('jquery') 
 	);
 	wp_enqueue_script(
-		'cv-portfolio-blocks-swiper-js',
+		'swiper-js',
 		esc_url(get_template_directory_uri()) . '/assets/js/swiper-bundle.js',
 		array(),
 		true

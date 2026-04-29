@@ -6,7 +6,10 @@
  * title: Footer Default
  * categories: cv-portfolio-blocks
  */
-
+$theme_data = wp_get_theme();
+$theme_uri = $theme_data->get( 'ThemeURI' );
+$author_uri = $theme_data->get( 'AuthorURI' );
+$wordpress_uri = '//wordpress.org/';
 return array(
     'title'      =>__( 'Footer Default', 'cv-portfolio-blocks' ),
     'categories' => array( 'cv-portfolio-blocks' ),
@@ -80,7 +83,7 @@ return array(
 <!-- wp:group {"style":{"elements":{"link":{"color":{"text":"var:preset|color|background"}}}},"backgroundColor":"accent","className":"footertext","layout":{"type":"constrained"}} -->
 <div class="wp-block-group footertext has-accent-background-color has-background has-link-color"><!-- wp:paragraph {"align":"center","textColor":"background","className":"has-link-color","fontSize":"medium"} -->
 
-<p class="has-text-align-center has-link-color has-background-color has-text-color has-medium-font-size"><a href="https://www.wpradiant.net/products/free-portfolio-wordpress-theme">'. esc_html__('Portfolio WordPress Theme ','cv-portfolio-blocks') .'</a> '. esc_html__(' By ','cv-portfolio-blocks') .'<a href="https://www.wpradiant.net/">'. esc_html__('WP Radiant','cv-portfolio-blocks') .'</a> | '. esc_html__('Proudly powered by','cv-portfolio-blocks') .' <a href="https://wordpress.org/">'. esc_html__('WordPress','cv-portfolio-blocks') .'</a></p>
+<p class="has-text-align-center has-link-color has-background-color has-text-color has-medium-font-size"><a href="' . esc_url( $theme_uri ) . '" target="_blank">' . esc_html__( 'Portfolio WordPress Theme ', 'cv-portfolio-blocks' ) . '</a> ' . esc_html__( ' By ', 'cv-portfolio-blocks' ) . '<a href="' . esc_url( $author_uri ) . '" target="_blank">' . esc_html__( 'WP Radiant', 'cv-portfolio-blocks' ) . '</a> | ' . esc_html__( 'Proudly powered by', 'cv-portfolio-blocks' ) . ' <a href="' . esc_url( $wordpress_uri ) . '" target="_blank">' . esc_html__( 'WordPress', 'cv-portfolio-blocks' ) . '</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 
@@ -88,5 +91,5 @@ return array(
 <div class="wp-block-buttons"><!-- wp:button {"className":"scroll-top-button"} -->
 <div class="wp-block-button scroll-top-button"><a class="wp-block-button__link wp-element-button"><span class="dashicons dashicons-arrow-up-alt"></span></a></div>
 <!-- /wp:button --></div>
-<!-- /wp:buttons -->',
+<!-- /wp:buttons -->'
 );

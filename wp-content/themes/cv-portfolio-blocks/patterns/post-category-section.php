@@ -27,8 +27,8 @@ return array(
 <p class="has-accent-color has-text-color has-poppins-font-family has-normal-font-size" style="margin-top:0;margin-bottom:0"><strong>'. esc_html__('ABOUT ME','cv-portfolio-blocks') .'</strong></p>
 <!-- /wp:paragraph -->
 
-<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"700"},"spacing":{"margin":{"top":"var:preset|spacing|30","bottom":"0"}}},"textColor":"primary","fontSize":"large","fontFamily":"poppins"} -->
-<h3 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-large-font-size" style="margin-top:var(--wp--preset--spacing--30);margin-bottom:0;font-style:normal;font-weight:700">'. esc_html__('I am a UI/UX Designer Based in USA','cv-portfolio-blocks') .'</h3>
+<!-- wp:heading {"style":{"typography":{"fontStyle":"normal","fontWeight":"700"},"spacing":{"margin":{"top":"var:preset|spacing|30","bottom":"0"}}},"textColor":"primary","fontSize":"large","fontFamily":"poppins"} -->
+<h2 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-large-font-size" style="margin-top:var(--wp--preset--spacing--30);margin-bottom:0;font-style:normal;font-weight:700">'. esc_html__('I am a UI/UX Designer Based in USA','cv-portfolio-blocks') .'</h2>
 <!-- /wp:heading -->
 
 <!-- wp:paragraph {"style":{"typography":{"lineHeight":"2"},"color":{"text":"#1a1a1e"}},"fontSize":"upper-heading","fontFamily":"poppins"} -->
