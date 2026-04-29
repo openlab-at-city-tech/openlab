@@ -560,6 +560,33 @@ function openlab_delete_group() {
 }
 
 /**
+ * Delete the site associated with a group when the group is deleted.
+ *
+ * For portfolios, this happens unconditionally. For other group types, the site
+ * is only deleted if the 'delete-group-site' checkbox was checked on the delete
+ * admin screen.
+ *
+ * @param int $group_id ID of the group being deleted.
+ */
+function openlab_delete_group_site_on_group_deletion( $group_id ) {
+	if ( ! openlab_is_portfolio( $group_id ) && empty( $_POST['delete-group-site'] ) ) {
+		return;
+	}
+
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $site_id ) {
+		return;
+	}
+
+	if ( ! function_exists( 'wpmu_delete_blog' ) ) {
+		require_once ABSPATH . 'wp-admin/includes/ms.php';
+	}
+
+	wpmu_delete_blog( $site_id );
+}
+add_action( 'groups_before_delete_group', 'openlab_delete_group_site_on_group_deletion' );
+
+/**
  * This function prints out the departments for the course archives ( non ajax )
  *
  * @param string $school The id of the school to return a course list for
