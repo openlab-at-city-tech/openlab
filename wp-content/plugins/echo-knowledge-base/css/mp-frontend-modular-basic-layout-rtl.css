@@ -257,7 +257,7 @@
   text-align: right;
 }
 
-#epkb-ml__module-faqs .epkb-faqs-container .epkb-faqs__item-container .epkb-faqs__item__question .epkb-faqs__item__question__icon-closed.ep_font_icon_arrow_carrot_right {
+.epkb-faqs-container .epkb-faqs__item-container .epkb-faqs__item__question .epkb-faqs__item__question__icon-closed.ep_font_icon_arrow_carrot_right {
   transform: rotate(180deg);
 }
 

@@ -1,0 +1,96 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "ja",
+                "plural-forms": "nplurals=1; plural=0;"
+            },
+            "Learn More": [
+                "さらに詳しく"
+            ],
+            "Cancel": [
+                "キャンセル"
+            ],
+            "Delete": [
+                "削除"
+            ],
+            "Saving...": [
+                "保存中..."
+            ],
+            "Note deleted successfully": [
+                "ノートを正常に削除しました。"
+            ],
+            "Additional Notes": [
+                "追加ノート"
+            ],
+            "Add additional support and miscellaneous information not found in articles, posts, and pages that AI should also know about.": [
+                "AIが知っておくべき、記事・投稿・ページには含まれない追加のサポート情報やその他の情報を追加してください。."
+            ],
+            "Examples: business hours, contact information, company policies, product details, or any other information you want the AI to reference.": [
+                "例: 営業時間、連絡先、会社方針、製品の詳細、または AI が参照することを望むその他の情報。."
+            ],
+            "Got it": [
+                "了解しました"
+            ],
+            "Failed to load note content": [
+                "ノートの内容の読み込みに失敗しました"
+            ],
+            "Please enter both title and content for the note": [
+                "ノートのタイトルと内容の両方を入力してください"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "ノートを削除できません。ページを更新してもう一度お試しください。."
+            ],
+            "Delete Note": [
+                "ノートを削除"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "このノートを削除してもよろしいですか？この操作は元に戻せません。."
+            ],
+            "Failed to delete note": [
+                "ノートの削除に失敗しました"
+            ],
+            "Edit Note": [
+                "ノートを編集"
+            ],
+            "Add Note": [
+                "ノートを追加"
+            ],
+            "View and manage notes and PDFs (opens in new tab)": [
+                "ノートとPDFを表示・管理します（新しいタブで開きます）"
+            ],
+            "Manage Notes and PDFs": [
+                "ノートとPDFを管理"
+            ],
+            "Loading note content...": [
+                "ノートの内容を読み込み中..."
+            ],
+            "Note Title": [
+                "ノートのタイトル"
+            ],
+            "Enter note title...": [
+                "ノートのタイトルを入力..."
+            ],
+            "Note Content": [
+                "ノートの内容"
+            ],
+            "Enter note content...": [
+                "ノートの内容を入力..."
+            ],
+            "Deleting...": [
+                "削除中..."
+            ],
+            "Save Note": [
+                "ノートを保存"
+            ],
+            "Add Notes and PDFs": [
+                "ノートとPDFを追加"
+            ],
+            "added": [
+                "追加済み"
+            ]
+        }
+    }
+}

@@ -13,14 +13,44 @@
             "Cancel": [
                 "Annuller"
             ],
+            "Next": [
+                "Næste"
+            ],
+            "AI Features": [
+                "AI-funktioner"
+            ],
+            "OFF": [
+                "FRA"
+            ],
+            "Use code:": [
+                "Brug kode:"
+            ],
+            "Copy": [
+                "Kopier"
+            ],
+            "Documentation": [
+                "Dokumentation"
+            ],
+            "Copied!": [
+                "Kopieret!"
+            ],
+            "Got it!": [
+                "Forstået!"
+            ],
+            "Show Me": [
+                "Vis mig"
+            ],
             "Loading...": [
                 "Indlæser..."
             ],
-            "General Settings": [
-                "Generelle indstillinger"
+            "Go to General Settings": [
+                "Gå til Generelle indstillinger"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Din session er udløbet. Opdater venligst siden."
+            "Go to Settings": [
+                "Gå til Indstillinger"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Din session er udløbet. Opdater siden venligst for at logge ind igen."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "For mange forespørgsler. Vent venligst et øjeblik og prøv igen."
@@ -37,8 +67,8 @@
             "Confirm": [
                 "Bekræft"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "For at bruge AI-funktioner, konfigurer venligst din API-nøgle og accepter databeskyttelsesaftalen i"
+            "Setup Steps": [
+                "Opsætningstrin"
             ],
             "Session Expired": [
                 "Sessionen er udløbet"
@@ -48,21 +78,6 @@
             ],
             "No results found": [
                 "Ingen resultater fundet"
-            ],
-            "Tutorial": [
-                "Vejledning"
-            ],
-            "Learn how to use this feature": [
-                "Lær hvordan du bruger denne funktion"
-            ],
-            "Tutorial Screenshot": [
-                "Vejledningsskærmbillede"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Dette er en vejledning, der forklarer, hvordan man bruger denne funktion."
-            ],
-            "Close Tutorial": [
-                "Luk vejledningen"
             ]
         }
     }

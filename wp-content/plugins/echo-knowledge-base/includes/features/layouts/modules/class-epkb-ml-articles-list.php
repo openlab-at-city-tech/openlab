@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  *  Outputs the Featured Articles module for Modular Main Page.
@@ -96,14 +96,14 @@ class EPKB_ML_Articles_List {
 		$popular_articles = $this->execute_search( 'meta_value_num', 'epkb-article-views' );
 		
 		// Get shadow class from configuration
-		$shadow_class = '';
+		$shadow_class_escaped = '';
 		if ( isset( $this->kb_config['section_box_shadow'] ) && $this->kb_config['section_box_shadow'] !== 'no_shadow' ) {
-			$shadow_class = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
+			$shadow_class_escaped = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
 		}	?>
 
 		<!-- Popular Articles -->
-		<section id="epkb-ml-popular-articles" class="epkb-ml-article-section<?php echo $shadow_class; ?>">
-			<div class="epkb-ml-article-section__head"><?php echo esc_html( $this->kb_config['ml_articles_list_popular_articles_msg'] ); ?></div>
+		<section id="epkb-ml-popular-articles" class="epkb-ml-article-section<?php echo $shadow_class_escaped; ?>">
+			<div class="epkb-ml-article-section__head" role="heading" aria-level="3"><?php echo esc_html( $this->kb_config['ml_articles_list_popular_articles_msg'] ); ?></div>
 			<div class="epkb-ml-article-section__body">
 				<ul class="epkb-ml-articles-list">    <?php
 					if ( empty( $popular_articles ) ) {
@@ -128,14 +128,14 @@ class EPKB_ML_Articles_List {
 		$newest_articles = $this->execute_search( 'date' );
 		
 		// Get shadow class from configuration
-		$shadow_class = '';
+		$shadow_class_escaped = '';
 		if ( isset( $this->kb_config['section_box_shadow'] ) && $this->kb_config['section_box_shadow'] !== 'no_shadow' ) {
-			$shadow_class = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
+			$shadow_class_escaped = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
 		}	?>
 
 		<!-- Newest Articles -->
-		<section id="epkb-ml-newest-articles" class="epkb-ml-article-section<?php echo $shadow_class; ?>">
-			<div class="epkb-ml-article-section__head"><?php echo esc_html( $this->kb_config['ml_articles_list_newest_articles_msg'] ); ?></div>
+		<section id="epkb-ml-newest-articles" class="epkb-ml-article-section<?php echo $shadow_class_escaped; ?>">
+			<div class="epkb-ml-article-section__head" role="heading" aria-level="3"><?php echo esc_html( $this->kb_config['ml_articles_list_newest_articles_msg'] ); ?></div>
 			<div class="epkb-ml-article-section__body">
 				<ul class="epkb-ml-articles-list">    <?php
 					if ( empty( $newest_articles) ) {   ?>
@@ -157,14 +157,14 @@ class EPKB_ML_Articles_List {
 		$recent_articles = $this->execute_search( 'modified' );
 		
 		// Get shadow class from configuration
-		$shadow_class = '';
+		$shadow_class_escaped = '';
 		if ( isset( $this->kb_config['section_box_shadow'] ) && $this->kb_config['section_box_shadow'] !== 'no_shadow' ) {
-			$shadow_class = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
+			$shadow_class_escaped = ' ' . esc_attr( $this->kb_config['section_box_shadow'] );
 		}	?>
 
 		<!-- Recent Articles -->
-		<section id="epkb-ml-recent-articles" class="epkb-ml-article-section<?php echo $shadow_class; ?>">
-			<div class="epkb-ml-article-section__head"><?php echo esc_html( $this->kb_config['ml_articles_list_recent_articles_msg'] ); ?></div>
+		<section id="epkb-ml-recent-articles" class="epkb-ml-article-section<?php echo $shadow_class_escaped; ?>">
+			<div class="epkb-ml-article-section__head" role="heading" aria-level="3"><?php echo esc_html( $this->kb_config['ml_articles_list_recent_articles_msg'] ); ?></div>
 			<div class="epkb-ml-article-section__body">
 				<ul class="epkb-ml-articles-list">    <?php
 					if ( empty( $recent_articles) ) {   ?>
@@ -237,6 +237,8 @@ class EPKB_ML_Articles_List {
 			EPKB_Layout::BASIC_LAYOUT,
 			EPKB_Layout::TABS_LAYOUT,
 			EPKB_Layout::CATEGORIES_LAYOUT,
+			EPKB_Layout::CLASSIC_LAYOUT,
+			EPKB_Layout::DRILL_DOWN_LAYOUT,
 			EPKB_Layout::SIDEBAR_LAYOUT,
 			EPKB_Layout::GRID_LAYOUT,
 		];
@@ -350,6 +352,55 @@ class EPKB_ML_Articles_List {
 
 		if ( $kb_config['ml_articles_list_title_location'] != 'none' ) {
 			$output .= '#epkb-ml__module-articles-list .epkb-ml-articles-list__title { text-align: ' . esc_attr( $kb_config['ml_articles_list_title_location'] ) . '!important; }';
+		}
+
+		// Article hover effect (only under shortcode modular wrapper — Gutenberg Featured block reuses #epkb-ml__module-articles-list outside this container).
+		$ml_art_list_modular = '#epkb-modular-main-page-container #epkb-ml__module-articles-list';
+		$hover_on = ( ! empty( $kb_config['article_list_hover_toggle'] ) && $kb_config['article_list_hover_toggle'] == 'on' )
+			|| ( isset( $kb_config['kb_main_page_layout'] ) && $kb_config['kb_main_page_layout'] === EPKB_Layout::DRILL_DOWN_LAYOUT );
+		$is_sidebar_or_grid = isset( $kb_config['kb_main_page_layout'] )
+			&& in_array( $kb_config['kb_main_page_layout'], [ EPKB_Layout::SIDEBAR_LAYOUT, EPKB_Layout::GRID_LAYOUT ], true );
+		if ( $hover_on && ! $is_sidebar_or_grid ) {
+			$spacing = intval( $kb_config['article_list_spacing'] );
+			$hover_bg = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_background_color'] );
+			$hover_text = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_font_color'] );
+			$output .= '
+				' . $ml_art_list_modular . ' .epkb-ml-article-container {
+					padding: ' . $spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				' . $ml_art_list_modular . ' .epkb-ml-article-container:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				' . $ml_art_list_modular . ' .epkb-ml-article-container:hover .epkb-article-inner {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $ml_art_list_modular . ' .epkb-ml-article-container:hover .epkb-article__icon {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $ml_art_list_modular . ' .epkb-ml-article-container:hover .epkb-article__text {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $ml_art_list_modular . ' .epkb-ml-articles-list li {
+					padding-top: 0px !important;
+					padding-bottom: 0px !important;
+				}';
+		}
+
+		// Space between article sections -----------------------------------------/
+		$section_gap = isset( $kb_config['section_box_gap'] ) ? intval( $kb_config['section_box_gap'] ) : 20;
+		$output .= '
+			#epkb-ml__module-articles-list .epkb-ml-articles-list__row {
+				gap: ' . $section_gap . 'px !important;
+			}';
+
+		// Section padding -----------------------------------------/
+		if ( ! empty( $kb_config['category_box_padding'] ) ) {
+			$output .= '
+				#epkb-ml__module-articles-list .epkb-ml-article-section {
+					padding: ' . intval( $kb_config['category_box_padding'] ) . 'px !important;
+				}';
 		}
 
 		return $output;

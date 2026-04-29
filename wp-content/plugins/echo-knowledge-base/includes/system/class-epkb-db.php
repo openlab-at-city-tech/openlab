@@ -271,7 +271,7 @@ abstract class EPKB_DB {
 			}
 		}
 
-		$result = $wpdb->get_var( "SELECT SUM({$select_column}) AS total FROM {$this->table_name} WHERE {$where_clause}" );
+		$result = $wpdb->get_var( "SELECT SUM(" . esc_sql( $select_column ) . ") AS total FROM {$this->table_name} WHERE {$where_clause}" );
 		if ( $result === null && ! empty( $wpdb->last_error ) ) {
 			$wpdb_last_error = $wpdb->last_error;   // store it first
 			return new WP_Error( 'DB failure', $wpdb_last_error, array( 'table' => $this->table_name, 'column' => $select_column ) );
@@ -428,7 +428,7 @@ abstract class EPKB_DB {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
-		$where_between = $wpdb->prepare(" {$date_column_name} between %s and %s {$where_condition}", $date_from, $date_to );
+		$where_between = $wpdb->prepare( " " . esc_sql( $date_column_name ) . " between %s and %s {$where_condition}", $date_from, $date_to );
 		$result = $wpdb->get_var( "SELECT count(*) FROM $this->table_name WHERE {$where_between};" );
 		if ( $result === null && ! empty( $wpdb->last_error ) ) {
 			$wpdb_last_error = $wpdb->last_error;   // store it first
@@ -457,8 +457,8 @@ abstract class EPKB_DB {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
-		$where_between = $wpdb->prepare( " {$date_column_name} between %s and %s {$where_condition} ", $date_from, $date_to );
-		$result = $wpdb->get_results( "SELECT *, count(*) as times FROM $this->table_name WHERE {$where_between}  GROUP BY {$group_by} ORDER BY {$order_by} LIMIT {$limit};" );
+		$where_between = $wpdb->prepare( " " . esc_sql( $date_column_name ) . " between %s and %s {$where_condition} ", $date_from, $date_to );
+		$result = $wpdb->get_results( "SELECT *, count(*) as times FROM $this->table_name WHERE {$where_between}  GROUP BY " . esc_sql( $group_by ) . " ORDER BY " . esc_sql( $order_by ) . " LIMIT " . absint( $limit ) . ";" );
 		if ( ! empty( $wpdb->last_error ) ) {
 			$wpdb_last_error = $wpdb->last_error;   // store it first
 			return new WP_Error( 'DB failure', $wpdb_last_error, array( 'date_from' => $date_from, 'date_to' => $date_to, 'table' => $this->table_name ) );
@@ -476,7 +476,7 @@ abstract class EPKB_DB {
 		/** @var $wpdb Wpdb */
 		global $wpdb;
 
-		$result = $wpdb->get_results( "SELECT DISTINCT {$column_name} FROM $this->table_name WHERE {$column_name} != '' " );
+		$result = $wpdb->get_results( "SELECT DISTINCT " . esc_sql( $column_name ) . " FROM $this->table_name WHERE " . esc_sql( $column_name ) . " != '' " );
 		if ( ! empty( $wpdb->last_error ) ) {
 			$wpdb_last_error = $wpdb->last_error;   // store it first
 			return new WP_Error( 'DB failure', $wpdb_last_error, array( 'column' => $column_name, 'table' => $this->table_name ) );

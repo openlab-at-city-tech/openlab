@@ -7,8 +7,14 @@
                 "lang": "da_DK",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Restore": [
+                "Gendan"
+            ],
             "Settings": [
                 "Indstillinger"
+            ],
+            "All": [
+                "Alle"
             ],
             "Page": [
                 "Side"
@@ -19,14 +25,38 @@
             "Cancel": [
                 "Annuller"
             ],
+            "Save Settings": [
+                "Gem indstillinger"
+            ],
+            "Delete": [
+                "Slet"
+            ],
             "Next": [
                 "Næste"
             ],
             "Previous": [
                 "Forrige"
             ],
+            "OFF": [
+                "FRA"
+            ],
+            "Errors": [
+                "Fejl"
+            ],
+            "Email": [
+                "E-mail"
+            ],
+            "Feedback": [
+                "Feedback"
+            ],
+            "Reset": [
+                "Nulstil"
+            ],
             "Saving...": [
                 "Gemmer..."
+            ],
+            "Error": [
+                "Fejl"
             ],
             "Go to General Settings": [
                 "Gå til Generelle indstillinger"
@@ -40,11 +70,11 @@
             "AI Assistant": [
                 "AI-assistent"
             ],
-            "Save Settings": [
-                "Gem indstillinger"
+            "Name": [
+                "Navn"
             ],
-            "Delete": [
-                "Slet"
+            "Message": [
+                "Besked"
             ],
             "Delete Selected": [
                 "Slet valgte"
@@ -52,8 +82,35 @@
             "of": [
                 "af"
             ],
-            "Reset": [
-                "Nulstil"
+            "Phone": [
+                "Telefon"
+            ],
+            "Requires AI Features PRO": [
+                "AI-funktioner PRO kræves"
+            ],
+            "with code": [
+                "med kode"
+            ],
+            "Thumbs up (%d)": [
+                "Tommel op (%d)"
+            ],
+            "Thumbs up": [
+                "Tommel op"
+            ],
+            "Thumbs down (%d)": [
+                "Tommel ned (%d)"
+            ],
+            "Thumbs down": [
+                "Tommel ned"
+            ],
+            "Contact an Agent clicked": [
+                "Kontakt en agent klikket"
+            ],
+            "Agent handover request submitted": [
+                "Overdragelsesforespørgsel til agent indsendt"
+            ],
+            "Trigger": [
+                "Udløser"
             ],
             "Are you sure you want to delete the selected conversations?": [
                 "Er du sikker på, at du vil slette de valgte samtaler?"
@@ -67,6 +124,36 @@
             "Conversations refreshed successfully": [
                 "Samtaler opdateret med succes"
             ],
+            "Archive Conversations": [
+                "Arkiver samtaler"
+            ],
+            "Are you sure you want to archive the selected conversations?": [
+                "Er du sikker på, at du vil arkivere de valgte samtaler?"
+            ],
+            "Archive": [
+                "Arkiver"
+            ],
+            "Archiving conversations...": [
+                "Arkiverer samtaler..."
+            ],
+            "Restore Conversations": [
+                "Gendan samtaler"
+            ],
+            "Are you sure you want to restore the selected conversations?": [
+                "Er du sikker på, at du vil gendanne de valgte samtaler?"
+            ],
+            "Restoring conversations...": [
+                "Gendanner samtaler..."
+            ],
+            "Agent handover request": [
+                "Anmodning om overdragelse til agent"
+            ],
+            "Active": [
+                "Aktiv"
+            ],
+            "Archived": [
+                "Arkiveret"
+            ],
             "Search conversations...": [
                 "Søg i samtaler..."
             ],
@@ -75,6 +162,12 @@
             ],
             "Refresh": [
                 "Opdater"
+            ],
+            "Archive Selected": [
+                "Arkiver valgte"
+            ],
+            "Restore Selected": [
+                "Gendan valgte"
             ],
             "Loading conversations...": [
                 "Indlæser samtaler..."
@@ -91,8 +184,26 @@
             "Conversation": [
                 "Samtale"
             ],
+            "Message Count": [
+                "Antal beskeder"
+            ],
+            "Agent Handover": [
+                "Overdragelse til agent"
+            ],
+            "Number of messages": [
+                "Antal beskeder"
+            ],
             "Searching server for more results...": [
                 "Søger serveren efter flere resultater..."
+            ],
+            "Deleting conversation...": [
+                "Sletter samtale..."
+            ],
+            "Archiving conversation...": [
+                "Arkiverer samtale..."
+            ],
+            "Restoring conversation...": [
+                "Gendanner samtale..."
             ],
             "Conversation Details": [
                 "Samtaledetaljer"
@@ -100,29 +211,17 @@
             "Select a conversation to view details": [
                 "Vælg en samtale for at vise detaljer"
             ],
-            "Conversation Info": [
-                "Samtaleoplysninger"
-            ],
-            "User:": [
-                "Bruger:"
-            ],
-            "Started:": [
-                "Startet:"
-            ],
-            "Messages:": [
-                "Beskeder:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
-            "Rating:": [
-                "Bedømmelse:"
+            "Conversation Summary": [
+                "Samtaleoversigt"
             ],
             "Full Conversation": [
                 "Hele samtalen"
             ],
             "No messages in this conversation.": [
                 "Ingen beskeder i denne samtale."
+            ],
+            "Collection": [
+                "Samling"
             ],
             "Are you sure you want to reset to default instructions?": [
                 "Er du sikker på, at du vil nulstille til standardinstruktioner?"
@@ -136,6 +235,12 @@
             "Reset to Default": [
                 "Nulstil til standard"
             ],
+            "Training data issues detected": [
+                "Problemer i maskinlæringsdata opdaget"
+            ],
+            "AI Chat cannot use the selected collection until these issues are fixed in Training Data.": [
+                "AI Chat kan ikke bruge den valgte samling, før disse problemer er løst i maskinlæringsdata."
+            ],
             "Failed to load conversations": [
                 "Kunne ikke indlæse samtaler"
             ],
@@ -148,6 +253,18 @@
             "Failed to delete conversations": [
                 "Kunne ikke slette samtaler"
             ],
+            "Conversations archived successfully": [
+                "Samtaler arkiveret med succes"
+            ],
+            "Failed to archive conversations": [
+                "Kunne ikke arkivere samtaler"
+            ],
+            "Conversations restored successfully": [
+                "Samtaler gendannet med succes"
+            ],
+            "Failed to restore conversations": [
+                "Kunne ikke gendanne samtaler"
+            ],
             "AI Chat is Disabled": [
                 "AI chat er deaktiveret"
             ],
@@ -157,8 +274,8 @@
             "Go to Settings": [
                 "Gå til Indstillinger"
             ],
-            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
-                "OpenAI API-nøglen er ikke konfigureret. Konfigurer den i Generelle indstillinger for at bruge AI chat-funktioner."
+            "API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "API-nøgle er ikke konfigureret. Konfigurer den i Generelle indstillinger for at bruge AI Chat-funktioner."
             ],
             "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
                 "Accepter venligst dataprivatlivsaftalen i Generelle indstillinger for at bruge AI chat-funktioner."

@@ -7,6 +7,9 @@
                 "lang": "sv_SE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Learn More": [
+                "Lär dig mer"
+            ],
             "to": [
                 "till"
             ],
@@ -16,11 +19,47 @@
             "Save": [
                 "Spara"
             ],
+            "Close": [
+                "Stäng"
+            ],
             "Cancel": [
                 "Avbryt"
             ],
+            "selected": [
+                "Vald"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
+            "Updated": [
+                "Uppdaterad"
+            ],
+            "OFF": [
+                "AV"
+            ],
+            "Optional": [
+                "Valfri"
+            ],
+            "View Full Documentation": [
+                "Visa fullständig dokumentation"
+            ],
             "Saving...": [
                 "Sparar …"
+            ],
+            "Error": [
+                "Fel"
+            ],
+            "OK": [
+                "OK"
+            ],
+            "Add Training Data": [
+                "Lägg till maskininlärningsdata"
+            ],
+            "Choose Training Data": [
+                "Välj maskininlärningsdata"
+            ],
+            "Send Data to AI": [
+                "Skicka data till AI"
             ],
             "Collection name cannot be empty": [
                 "Samlingens namn får inte vara tomt"
@@ -31,86 +70,128 @@
             "Note updated successfully": [
                 "Anteckningen uppdaterades framgångsrikt"
             ],
-            "Note deleted successfully": [
-                "Anteckningen raderades framgångsrikt"
+            "Name": [
+                "Namn"
             ],
-            "Delete": [
-                "Ta bort"
+            "Pending": [
+                "Väntande"
+            ],
+            "All Categories": [
+                "Alla kategorier"
             ],
             "Delete Selected": [
                 "Ta bort valda"
             ],
+            "of": [
+                "av"
+            ],
+            "Skipped": [
+                "Hoppade över"
+            ],
             "Failed to create collection": [
                 "Misslyckades med att skapa en insamling"
             ],
-            "How to get started": [
-                "Kom igång"
+            "errors": [
+                "fel"
             ],
-            "Choose Training Data": [
-                "Välj maskininlärningsdata"
+            "Outdated": [
+                "Föråldrad"
             ],
-            "Pick the content types to include.": [
-                "Välj vilka innehållstyper som ska ingå."
-            ],
-            "Send Data to AI": [
-                "Skicka data till AI"
-            ],
-            "Select items in the table, then sync them.": [
-                "Välj objekten i tabellen och synkronisera dem."
-            ],
-            "Other Actions": [
-                "Andra åtgärder"
-            ],
-            "Rename the collection or delete items.": [
-                "Byt namn på samlingen eller ta bort objekt."
-            ],
-            "Tip: Start with a small set to test the flow.": [
-                "Tips: Börja med ett litet urval för att testa flödet."
-            ],
-            "Failed to load note content": [
-                "Misslyckades med att ladda anteckningsinnehåll"
-            ],
-            "Please enter both title and content for the note": [
-                "Ange både titel och innehåll för anteckningen"
-            ],
-            "Unable to delete note. Please refresh the page and try again.": [
-                "Kunde inte ta bort anteckningen. Uppdatera sidan och försök igen."
-            ],
-            "Delete Note": [
-                "Radera anteckning"
-            ],
-            "Are you sure you want to delete this note? This action cannot be undone.": [
-                "Är du säker på att du vill radera denna anteckning? Denna åtgärd kan inte ångras."
-            ],
-            "Failed to delete note": [
-                "Misslyckades med att radera anteckningen"
-            ],
-            "Edit Note": [
-                "Redigera anteckning"
-            ],
-            "Add Note": [
-                "Lägg till anteckning"
-            ],
-            "Loading note content...": [
-                "Laddar anteckningens innehåll..."
-            ],
-            "Note Title": [
-                "Anteckningstitel"
-            ],
-            "Enter note title...": [
-                "Ange anteckningstitel..."
-            ],
-            "Note Content": [
-                "Anteckningens innehåll"
-            ],
-            "Enter note content...": [
-                "Ange anteckningens innehåll..."
+            "Added": [
+                "Tillagt"
             ],
             "Deleting...": [
                 "Raderar..."
             ],
-            "Save Note": [
-                "Spara anteckning"
+            "added": [
+                "tillagd"
+            ],
+            "How to get started": [
+                "Kom igång"
+            ],
+            "Other Actions": [
+                "Andra åtgärder"
+            ],
+            "Failed to load available items": [
+                "Misslyckades med att ladda tillgängliga objekt"
+            ],
+            "Please select one content type first": [
+                "Välj först en innehållstyp"
+            ],
+            "Please select at least one item to add": [
+                "Välj minst ett objekt att lägga till"
+            ],
+            "Data added successfully": [
+                "Data tillagades framgångsrikt"
+            ],
+            "Failed to add selected items": [
+                "Misslyckades med att lägga till valda objekt"
+            ],
+            "available": [
+                "tillgänglig"
+            ],
+            "Select Individual Items": [
+                "Välj enskilda objekt"
+            ],
+            "Choose one content type, then select the individual items you want to add to this collection.": [
+                "Välj en innehållstyp, och välj sedan de enskilda objekten du vill lägga till i den här samlingen."
+            ],
+            "Content Type": [
+                "Innehållstyp"
+            ],
+            "No content types are currently available.": [
+                "Inga innehållstyper är för närvarande tillgängliga."
+            ],
+            "Select a content type to load its available items.": [
+                "Välj en innehållstyp för att ladda dess tillgängliga objekt."
+            ],
+            "Loading available items...": [
+                "Laddar in tillgängliga objekt..."
+            ],
+            "Unable to load the available items for this content type.": [
+                "Det gick inte att ladda de tillgängliga objekten för den här innehållstypen."
+            ],
+            "Search by name": [
+                "Sök efter namn"
+            ],
+            "Select All": [
+                "Markera alla"
+            ],
+            "Clear All": [
+                "Rensa allt"
+            ],
+            "No available items were found for this content type.": [
+                "Inga tillgängliga objekt hittades för den här innehållstypen."
+            ],
+            "No items match the current filters.": [
+                "Inga objekt matchar de aktuella filtren."
+            ],
+            "Adding Items...": [
+                "Lägger till objekt..."
+            ],
+            "Add Selected Items": [
+                "Lägg till valda objekt"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Kan inte ändra åtgärder medan synkronisering pågår"
+            ],
+            "Cannot change actions while validation is in progress": [
+                "Kan inte ändra åtgärder medan validering pågår"
+            ],
+            "Checking available WordPress items...": [
+                "Kontrollerar tillgängliga WordPress-objekt..."
+            ],
+            "Unable to load available WordPress items": [
+                "Kunde inte ladda tillgängliga WordPress-objekt"
+            ],
+            "Click Refresh to try again.": [
+                "Klicka på Uppdatera för att försöka igen."
+            ],
+            "Available WordPress items to add: %s": [
+                "Tillgängliga WordPress-objekt att lägga till: %s"
+            ],
+            "Created in WordPress and not yet added to this collection.": [
+                "Skapad i WordPress och ännu inte tillagd i denna samling."
             ],
             "Collection name updated successfully": [
                 "Namn på samlingen uppdaterades"
@@ -139,29 +220,101 @@
             "Please select at least one data type": [
                 "Välj minst en datatyp"
             ],
-            "Data added successfully": [
-                "Data tillagades framgångsrikt"
-            ],
             "Failed to add data": [
                 "Misslyckades med att lägga till data"
+            ],
+            "Checking AI store for orphaned files...": [
+                "Kontrollerar AI-lagringen efter övergivna filer..."
+            ],
+            "Verifying": [
+                "Verifierar"
+            ],
+            "items": [
+                "objekt"
+            ],
+            "Verification complete:": [
+                "Verifiering slutförd:"
+            ],
+            "marked outdated": [
+                "markerad som föråldrad"
+            ],
+            "WordPress items": [
+                "WordPress-objekt"
+            ],
+            "PDFs": [
+                "PDF-filer"
+            ],
+            "AI Notes": [
+                "AI-anteckningar"
+            ],
+            "other files": [
+                "andra filer"
+            ],
+            "orphan files removed from AI store": [
+                "föräldralösa filer borttagna från AI-lagringen"
+            ],
+            "Run sync to re-upload outdated items.": [
+                "Kör synkronisering för att ladda upp föråldrade objekt igen."
             ],
             "Choose an Action": [
                 "Välj en åtgärd"
             ],
-            "Cannot change actions while sync is in progress": [
-                "Kan inte ändra åtgärder medan synkronisering pågår"
+            "Recommended: Validate & Fix Synced Items": [
+                "Rekommenderas: Validera och åtgärda synkroniserade objekt"
             ],
-            "Add Training Data": [
-                "Lägg till maskininlärningsdata"
+            "Recent plugin updates fixed issues that may have left orphan files in your AI Vector Store. Run the \"Validate & Fix\" option below once to reconcile synced items with what is stored in the AI.": [
+                "Senaste uppdateringar av tillägget åtgärdade problem som kan ha lämnat kvar föräldralösa filer i din AI-vektorlagring. Kör alternativet ”Validera och åtgärda” nedan en gång för att stämma av synkroniserade objekt med det som lagras i AI:n."
             ],
-            "Cannot navigate while sync is in progress": [
-                "Kan inte navigera medan synkronisering pågår"
+            "Dismiss": [
+                "Stäng"
             ],
-            "Adding data to:": [
-                "Lägger till data till:"
+            "Validate & Fix": [
+                "Validera och åtgärda"
+            ],
+            "Choose content types (KB Articles, Posts, Pages) to load into the table. This does not send anything to AI yet.": [
+                "Välj innehållstyper (KB-artiklar, Inlägg, Sidor) som laddas in i tabellen. Detta skickar inget till AI än."
+            ],
+            "To exclude specific items, search for them in the table, select them, then use Other Actions > Delete Selected.": [
+                "För att utesluta specifika poster, sök efter dem i tabellen, markera dem och använd sedan Övriga åtgärder > Ta bort markerade."
+            ],
+            "Select items from the table and send them to train the AI. Use the status tabs to filter, then select all and send.": [
+                "Välj poster från tabellen och skicka dem för att träna AI:n. Använd statusflikarna för filtrering, markera sedan allt och skicka."
+            ],
+            "Keep Content in Sync": [
+                "Håll innehållet synkroniserat"
+            ],
+            "When you edit content on your site, its status changes to \"Outdated\". Filter by Outdated, select, and re-send to update the AI.": [
+                "När du redigerar innehåll på din webbplats ändras dess status till 'Föråldrad'. Filtrera efter Föråldrad, markera och skicka igen för att uppdatera AI:n."
+            ],
+            "Statuses": [
+                "Statusar"
+            ],
+            "In the table but not yet sent to AI.": [
+                "I tabellen men ännu inte skickats till AI."
+            ],
+            "Sent to AI successfully.": [
+                "Skickat till AI."
+            ],
+            "Re-sent after changes.": [
+                "Återsänt efter ändringar."
+            ],
+            "Content changed since last sync. Re-send to update.": [
+                "Innehållet har ändrats sedan senaste synkronisering. Skicka igen för att uppdatera."
+            ],
+            "Could not be synced because the content is empty or the source no longer exists.": [
+                "Kunde inte synkroniseras eftersom innehållet är tomt eller källan inte längre existerar."
+            ],
+            "Sync failed. Re-send to retry. Check the content exists and is not empty.": [
+                "Synkronisering misslyckades. Skicka igen för att försöka igen. Kontrollera att innehållet finns och inte är tomt."
+            ],
+            "Validate & Fix Synced Items": [
+                "Verifiera och åtgärda synkroniserade objekt"
             ],
             "Choose which content types you want to include in your AI training data.": [
                 "Välj vilka innehållstyper du vill inkludera i din maskininlärningsdata."
+            ],
+            "Only Published content is included. Drafts, Private, and Pending posts are not available for AI training.": [
+                "Endast publicerat innehåll ingår. Utkast, Privata och Väntande inlägg är inte tillgängliga för AI-träning."
             ],
             "Access Manager Notice": [
                 "Åtkomsthanterarens meddelande"
@@ -172,26 +325,47 @@
             "Loading content types...": [
                 "Laddar innehållstyper..."
             ],
-            "available": [
-                "tillgänglig"
-            ],
-            "added": [
-                "tillagd"
+            "No content types available.": [
+                "Inga innehållstyper tillgängliga."
             ],
             "excluded": [
                 "exkluderad"
             ],
-            "No eligible content": [
-                "Inget lämpligt innehåll"
-            ],
-            "No published content available": [
-                "Inget publicerat innehåll tillgängligt"
-            ],
             "All eligible items already added to collection": [
                 "Alla giltiga objekt har redan lagts till i samlingen"
             ],
-            "No content types available.": [
-                "Inga innehållstyper tillgängliga."
+            "No eligible content": [
+                "Inget lämpligt innehåll"
+            ],
+            "No articles for %s found. First create and publish articles.": [
+                "Inga artiklar för %s hittades. Skapa och publicera artiklar först."
+            ],
+            "No %s found. First create and publish %s.": [
+                "Inga %s hittades. Skapa och publicera %s först."
+            ],
+            "Already in Collection": [
+                "Redan i samlingen"
+            ],
+            "These content types have been added": [
+                "Dessa innehållstyper har lagts till"
+            ],
+            "Available to Add": [
+                "Tillgängliga att lägga till"
+            ],
+            "Select items to include in training data": [
+                "Välj objekt att inkludera i maskininlärningsdata"
+            ],
+            "All available content types have been added.": [
+                "Alla tillgängliga innehållstyper har lagts till."
+            ],
+            "No Content Available": [
+                "Inget innehåll tillgängligt"
+            ],
+            "Create and publish content first": [
+                "Skapa och publicera innehåll först"
+            ],
+            "Requires AI Pro": [
+                "Kräver AI Pro"
             ],
             "Adding Data...": [
                 "Lägger till data..."
@@ -199,14 +373,29 @@
             "Add Data": [
                 "Lägg till data"
             ],
-            "Notes": [
-                "Anteckningar"
-            ],
-            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
-                "Lägg till anpassade anteckningar för att hjälpa till att träna AI med specifik information, riktlinjer eller kontext som kanske inte finns i ditt vanliga innehåll."
-            ],
             "Select items from the table and choose a sync method to update your AI training data.": [
                 "Välj objekt från tabellen och välj en synkroniseringsmetod för att uppdatera din maskininlärningsdata."
+            ],
+            "Run an extra validation pass to make sure the local database and the AI store stay in sync. If a file is missing from the AI store, it will be marked as outdated so it can be re-sent.": [
+                "Kör en extra valideringsomgång för att se till att den lokala databasen och AI-lagringen förblir synkroniserade. Om en fil saknas i AI-lagringen kommer den att markeras som inaktuell så att den kan skickas om."
+            ],
+            "This checks Added and Updated items already tracked in this collection and removes orphaned WordPress items, PDFs, and AI Notes found only in the AI store. No local database items are deleted.": [
+                "Detta kontrollerar tillagda och uppdaterade objekt som redan spåras i denna samling och tar bort föräldralösa WordPress-objekt, PDF-filer och AI-anteckningar som endast finns i AI-lagringen. Inga lokala databasobjekt raderas."
+            ],
+            "Collection:": [
+                "Samling:"
+            ],
+            "synced items ready to validate": [
+                "synkroniserade objekt redo att valideras"
+            ],
+            "No Added or Updated items are available yet. Validation can still remove orphaned WordPress items, PDFs, and AI Notes left only in the AI store.": [
+                "Inga tillagda eller uppdaterade objekt är tillgängliga ännu. Validering kan fortfarande ta bort föräldralösa WordPress-objekt, PDF-filer och AI-anteckningar som finns kvar i AI-lagringen."
+            ],
+            "Cancel Verify": [
+                "Avbryt verifiering"
+            ],
+            "Validation in Progress...": [
+                "Validering pågår..."
             ],
             "Manage your collection settings and data.": [
                 "Hantera dina samlingsinställningar och data."

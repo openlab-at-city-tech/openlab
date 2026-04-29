@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handles display of AI Search Results in dialog or page context
@@ -35,7 +35,7 @@ class EPKB_AI_Search_Results_Display {
 		}
 
 		// Check if AI search results feature is enabled
-		if ( ! EPKB_AI_Utilities::is_ai_search_advanced_enabled() ) {
+		if ( ! EPKB_AI_Utilities::is_ai_search_smart_enabled() ) {
 			return;
 		}
 
@@ -86,17 +86,20 @@ class EPKB_AI_Search_Results_Display {
 	 * Sets up window.epkbAISearchResults and window.epkbAISearchResultsShortcode
 	 */
 	public static function output_inline_script_data() {
-		$script_data = self::get_script_data();		?>
+		$script_data = self::get_script_data();
+		$is_admin = current_user_can( 'manage_options' );		?>
 		<script type="text/javascript">
 			window.epkbAISearchResults = window.epkbAISearchResults || {};
 			window.epkbAISearchResults.rest_url = <?php echo wp_json_encode( esc_url_raw( rest_url() ) ); ?>;
 			window.epkbAISearchResults.rest_nonce = <?php echo wp_json_encode( epkb_get_instance()->security_obj->get_nonce() ); ?>;
 			window.epkbAISearchResults.i18n = <?php echo wp_json_encode( $script_data ); ?>;
+			window.epkbAISearchResults.is_admin = <?php echo wp_json_encode( $is_admin ); ?>;
 
 			window.epkbAISearchResultsShortcode = window.epkbAISearchResultsShortcode || {};
 			window.epkbAISearchResultsShortcode.rest_url = window.epkbAISearchResults.rest_url;
 			window.epkbAISearchResultsShortcode.rest_nonce = window.epkbAISearchResults.rest_nonce;
 			window.epkbAISearchResultsShortcode.i18n = window.epkbAISearchResults.i18n;
+			window.epkbAISearchResultsShortcode.is_admin = window.epkbAISearchResults.is_admin;
 		</script>		<?php
 	}
 
@@ -107,7 +110,7 @@ class EPKB_AI_Search_Results_Display {
 	 */
 	public function render_dialog( $kb_id ) {
 
-		if ( ! EPKB_AI_Utilities::is_ai_search_advanced_enabled() ) {
+		if ( ! EPKB_AI_Utilities::is_ai_search_smart_enabled() ) {
 			return '';
 		}
 
@@ -225,26 +228,47 @@ class EPKB_AI_Search_Results_Display {
 		$column_widths_string = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_column_widths', '30-70' );
 		$column_widths = self::parse_column_widths( $column_widths_string, $num_columns );
 
-		// Add destination class for context-specific styling
-		$destination_class = ' epkb-ai-sr-columns--' . esc_attr( $destination );
-		$output = '<div class="epkb-ai-sr-columns epkb-ai-sr-columns--' . esc_attr( $num_columns ) . ' epkb-ai-sr-separator--' . esc_attr( $separator ) . $destination_class . '">';
-
-		// Render each column
+		// Collect columns that have sections - skip empty columns
+		$columns_with_sections = array();
 		for ( $i = 1; $i <= $num_columns; $i++ ) {
 			$sections = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_column_' . $i . '_sections', array() );
-			$width = isset( $column_widths[$i - 1] ) ? (float) $column_widths[$i - 1] : ( 100 / $num_columns );
+			if ( ! empty( $sections ) && is_array( $sections ) ) {
+				$columns_with_sections[$i] = array(
+					'sections' => $sections,
+					'original_width' => isset( $column_widths[$i - 1] ) ? (float) $column_widths[$i - 1] : ( 100 / $num_columns )
+				);
+			}
+		}
+
+		// If no columns have sections, return empty
+		if ( empty( $columns_with_sections ) ) {
+			return '';
+		}
+
+		// Calculate proportional widths for remaining columns
+		$total_original_width = array_sum( array_column( $columns_with_sections, 'original_width' ) );
+		$actual_column_count = count( $columns_with_sections );
+
+		// Add destination class for context-specific styling - use actual column count
+		$destination_class = ' epkb-ai-sr-columns--' . esc_attr( $destination );
+		$output = '<div class="epkb-ai-sr-columns epkb-ai-sr-columns--' . esc_attr( $actual_column_count ) . ' epkb-ai-sr-separator--' . esc_attr( $separator ) . $destination_class . '">';
+
+		// Render only columns with sections
+		foreach ( $columns_with_sections as $column_index => $column_data ) {
+			// Recalculate width proportionally so remaining columns fill 100%
+			$proportional_width = ( $column_data['original_width'] / $total_original_width ) * 100;
 
 			// Dialog uses calc() for proper gap handling, page contexts use simple percentage
 			if ( $destination === self::DESTINATION_DIALOG ) {
-				$ratio = $width / 100.0;
-				$total_gap_expr = $gap_px . 'px * ' . max( 0, $num_columns - 1 );
+				$ratio = $proportional_width / 100.0;
+				$total_gap_expr = $gap_px . 'px * ' . max( 0, $actual_column_count - 1 );
 				$flex_basis = 'calc( (100% - (' . $total_gap_expr . ')) * ' . $ratio . ' )';
 			} else {
-				$flex_basis = $width . '%';
+				$flex_basis = $proportional_width . '%';
 			}
 
-			$output .= '<div class="epkb-ai-sr-column epkb-ai-sr-column--' . $i . '" style="flex: 0 0 ' . esc_attr( $flex_basis ) . ';" data-column="' . $i . '">';
-			$output .= self::render_sections( $sections, $destination );
+			$output .= '<div class="epkb-ai-sr-column epkb-ai-sr-column--' . $column_index . '" style="flex: 0 0 ' . esc_attr( $flex_basis ) . ';" data-column="' . $column_index . '">';
+			$output .= self::render_sections( $column_data['sections'], $destination );
 			$output .= '</div>';
 		}
 

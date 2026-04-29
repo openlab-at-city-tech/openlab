@@ -96,17 +96,18 @@ class EPKB_Categories_DB {
 	}
 
 	/**
-	 * Count articles in category (direct articles only, not including sub-categories)
+	 * Count articles in category
 	 *
 	 * @param $kb_id
 	 * @param $category_id
+	 * @param $include_sub_categories - if true, count articles in sub-categories as well
 	 * @return int
 	 */
-	public static function get_category_count( $kb_id, $category_id ) {
+	public static function get_category_count( $kb_id, $category_id, $include_sub_categories = false ) {
 
 		$article_db = new EPKB_Articles_DB();
 
-		$articles = $article_db->get_articles_by_sub_or_category( $kb_id, $category_id, 'date', 500, false, false );
+		$articles = $article_db->get_articles_by_sub_or_category( $kb_id, $category_id, 'date', 500, $include_sub_categories );
 
 		return count( $articles );
 	}

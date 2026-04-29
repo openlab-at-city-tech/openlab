@@ -7,8 +7,8 @@
                 "lang": "pl_PL",
                 "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
             },
-            "The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?": [
-                "Edytor Bazy Wiedzy jest wyłączony, gdy aktywny jest ${ builderName }. Czy chcesz przejść do ustawień Bazy Wiedzy zamiast tego?"
+            "The Knowledge Base Editor is disabled while the %s is active. Do you want to go to the Knowledge Base settings instead?": [
+                "Edytor Bazy wiedzy jest wyłączony, gdy %s jest aktywny. Czy chcesz przejść do ustawień Bazy wiedzy zamiast tego?"
             ]
         }
     }

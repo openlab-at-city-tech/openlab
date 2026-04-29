@@ -31,6 +31,9 @@
             "selected": [
                 "selezionato"
             ],
+            "Delete": [
+                "Elimina"
+            ],
             "Article": [
                 "Articolo"
             ],
@@ -49,14 +52,32 @@
             "Error": [
                 "Errore"
             ],
+            "Choose Training Data": [
+                "Scegli dati di addestramento"
+            ],
+            "Send Data to AI": [
+                "Invia dati all'IA"
+            ],
+            "Thank you! Your report has been submitted successfully.": [
+                "Grazie! Il tuo rapporto è stato inviato con successo."
+            ],
+            "Never": [
+                "Mai"
+            ],
+            "Submitting...": [
+                "Invio in corso..."
+            ],
             "Pending": [
                 "In attesa"
             ],
-            "Delete": [
-                "Elimina"
-            ],
             "of": [
                 "di"
+            ],
+            "Canceled": [
+                "Annullato"
+            ],
+            "Skipped": [
+                "Saltato"
             ],
             "Refreshing...": [
                 "Aggiornamento in corso..."
@@ -91,32 +112,29 @@
             "Added": [
                 "Aggiunto"
             ],
+            "Added:": [
+                "Aggiunti:"
+            ],
+            "Manage Notes and PDFs": [
+                "Gestisci Note e PDF"
+            ],
+            "Deleting...": [
+                "Eliminazione in corso..."
+            ],
             "Failed to load training data": [
                 "Impossibile caricare dati di addestramento"
             ],
             "Failed to delete items": [
                 "Impossibile eliminare gli elementi"
             ],
-            "Delete Items": [
-                "Elimina elementi"
-            ],
             "Syncing": [
                 "Sincronizzazione in corso"
-            ],
-            "Canceled": [
-                "Annullato"
             ],
             "How to get started": [
                 "Come iniziare"
             ],
-            "Choose Training Data": [
-                "Scegli dati di addestramento"
-            ],
             "Pick the content types to include.": [
                 "Seleziona i tipi di contenuto da includere."
-            ],
-            "Send Data to AI": [
-                "Invia dati all'IA"
             ],
             "Select items in the table, then sync them.": [
                 "Seleziona gli elementi nella tabella, poi sincronizzali."
@@ -157,14 +175,26 @@
             "View Error": [
                 "Visualizza errore"
             ],
+            "View Info": [
+                "Visualizza informazioni"
+            ],
             "View content": [
                 "Visualizza contenuto"
             ],
-            "KB Files": [
-                "File KB"
+            "Failed to submit report.": [
+                "Impossibile inviare la segnalazione."
             ],
-            "Never": [
-                "Mai"
+            "An error occurred. Please try again.": [
+                "Si è verificato un errore. Per favore riprova."
+            ],
+            "Submit this issue if you need help:": [
+                "Invia questa segnalazione se hai bisogno di aiuto:"
+            ],
+            "Your email (optional)": [
+                "La tua email (facoltativa)"
+            ],
+            "Submit to Us": [
+                "Invia a noi"
             ],
             "Error Details": [
                 "Dettagli dell'errore"
@@ -172,26 +202,71 @@
             "Failed to load content": [
                 "Impossibile caricare il contenuto"
             ],
+            "Delete Items": [
+                "Elimina elementi"
+            ],
             "Post ID:": [
                 "ID post:"
             ],
             "Loading content...": [
                 "Caricamento contenuto..."
             ],
-            "Error Processing Content": [
-                "Errore nell'elaborazione del contenuto"
+            "Content Processing Warning": [
+                "Avviso sull'elaborazione dei contenuti"
             ],
-            "Original Content": [
-                "Contenuto originale"
+            "The HTML content of this post produced empty text after processing. This usually means the post contains only non-text elements (scripts, styles, embeds, etc.). The original HTML is shown below for inspection.": [
+                "Il contenuto HTML di questo post ha prodotto testo vuoto dopo l'elaborazione. Ciò di solito significa che il post contiene solo elementi non testuali (script, stili, embed, ecc.). L'HTML originale è mostrato di seguito per l'ispezione."
             ],
-            "Processed Content": [
-                "Contenuto elaborato"
+            "Original HTML Content": [
+                "HTML originale"
             ],
             "No content available": [
                 "Nessun contenuto disponibile"
             ],
-            "No processed content available": [
-                "Nessun contenuto elaborato disponibile"
+            "Error Processing Content": [
+                "Errore nell'elaborazione del contenuto"
+            ],
+            "Delete from Training Data": [
+                "Elimina dai dati di addestramento"
+            ],
+            "File Name:": [
+                "Nome file:"
+            ],
+            "Unknown file": [
+                "File sconosciuto"
+            ],
+            "Stored as:": [
+                "Salvato come:"
+            ],
+            "HTML": [
+                "HTML"
+            ],
+            "PDF": [
+                "PDF"
+            ],
+            "Original PDF:": [
+                "PDF originale:"
+            ],
+            "Open PDF": [
+                "Apri PDF"
+            ],
+            "If this stored URL no longer works, the original PDF is no longer available from this training data record.": [
+                "Se questo URL salvato non funziona più, il PDF originale non è più disponibile in questo record di dati di addestramento."
+            ],
+            "No original URL is stored for this upload. Only the saved file information is available here.": [
+                "Nessun URL originale è stato memorizzato per questo caricamento. Qui sono disponibili solo le informazioni del file salvato."
+            ],
+            "Provider:": [
+                "Fornitore:"
+            ],
+            "AI File ID:": [
+                "ID file IA:"
+            ],
+            "Last Synced:": [
+                "Ultima sincronizzazione:"
+            ],
+            "Original Content": [
+                "Contenuto originale"
             ]
         }
     }

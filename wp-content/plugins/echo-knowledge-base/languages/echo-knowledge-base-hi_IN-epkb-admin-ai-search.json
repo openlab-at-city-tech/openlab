@@ -19,14 +19,23 @@
             "Cancel": [
                 "रद्द करें"
             ],
-            "Date:": [
-                "तारीख:"
+            "Save Settings": [
+                "सेटिंग्स सहेजें"
+            ],
+            "Delete": [
+                "हटाएं"
             ],
             "Next": [
                 "अगला"
             ],
             "Previous": [
                 "पिछला"
+            ],
+            "Feedback": [
+                "प्रतिक्रिया"
+            ],
+            "Reset": [
+                "रीसेट"
             ],
             "Saving...": [
                 "सहेजा जा रहा है..."
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "मध्य स्तंभ"
             ],
-            "Feedback": [
-                "प्रतिक्रिया"
-            ],
             "AI Assistant": [
                 "एआई सहायक"
-            ],
-            "Save Settings": [
-                "सेटिंग्स सहेजें"
-            ],
-            "Delete": [
-                "हटाएं"
             ],
             "Delete Selected": [
                 "चयनित को हटाएं"
             ],
             "of": [
                 "में से"
-            ],
-            "Reset": [
-                "रीसेट"
             ],
             "Refreshing...": [
                 "ताज़ा किया जा रहा है..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "अधिक परिणामों के लिए सर्वर खोज रहा है..."
             ],
-            "User:": [
-                "उपयोगकर्ता:"
-            ],
-            "Status:": [
-                "स्थिति:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "क्या आप सुनिश्चित हैं कि आप डिफ़ॉल्ट निर्देशों पर रीसेट करना चाहते हैं?"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "डिफ़ॉल्ट पर रीसेट करें"
             ],
+            "Training data issues detected": [
+                "मशीन लर्निंग डेटा मुद्दे पाए गए"
+            ],
             "Failed to save settings": [
                 "सेटिंग्स सहेजने में असफल"
             ],
             "Go to Settings": [
                 "सेटिंग्स पर जाएँ"
+            ],
+            "Deleting search...": [
+                "खोज हटाई जा रही है..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "क्या आप चयनित खोजों को हटाना चाहते हैं?"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "विस्तार देखने के लिए एक खोज चुनें"
             ],
-            "Search Information": [
-                "खोज जानकारी"
-            ],
-            "Query:": [
-                "प्रश्न:"
-            ],
-            "Results Count:": [
-                "परिणामों की संख्या:"
-            ],
             "Contact Request": [
                 "संपर्क अनुरोध"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "अनुभाग जोड़ें"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "क्या आप डिफ़ॉल्ट प्रॉम्प्ट पर रीसेट करना चाहते हैं?"
+            ],
+            "Reset Prompt": [
+                "प्रॉम्प्ट रीसेट करें"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "क्या आप डिफ़ॉल्ट प्रॉम्प्ट पर रीसेट करना चाहते हैं? आपका कस्टम प्रॉम्प्ट खो जाएगा।."
+            ],
+            "Select Section:": [
+                "खंड चुनें:"
+            ],
+            "Prompt:": [
+                "प्रॉम्प्ट:"
+            ],
+            "Using custom prompt": [
+                "कस्टम प्रॉम्प्ट का उपयोग कर रहा है"
+            ],
+            "Using default prompt": [
+                "डिफ़ॉल्ट प्रॉम्प्ट का उपयोग किया जा रहा है"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "AI खोज को एक मान्य प्रशिक्षण डेटा संग्रह की आवश्यकता है. नीचे दी गई समस्याओं को प्रशिक्षण डेटा या KB कॉन्फ़िगरेशन में हल करें."
             ],
             "Failed to load search history": [
                 "खोज इतिहास लोड करने में विफल"

@@ -19,6 +19,8 @@ class EPKB_Reset {
 	 */
 	public static function reset_articles_and_categories_sequence() {
 
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
+
 		// is set in request
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
 
@@ -131,6 +133,8 @@ class EPKB_Reset {
 
 	public static function show_articles_and_categories_sequence() {
 
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
+
 		// is set in request
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
 		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
@@ -152,7 +156,7 @@ class EPKB_Reset {
 		<div class="epkb-show-sequence-header"><?php esc_html_e( 'Article Sequence', 'echo-knowledge-base' ); ?></div>
 		<div class="epkb-show-sequence-list">
 			<div class="epkb-show-sequence-item epkb-show-sequence-item--title">
-				<div class="epkb-show-sequence-category_name"><?php esc_html( _x( 'Category', 'taxonomy singular name' ) ); ?></div>
+				<div class="epkb-show-sequence-category_name"><?php esc_html( _x( 'Category', 'taxonomy singular name', 'echo-knowledge-base' ) ); ?></div>
 				<div class="epkb-show-sequence-category_articles"><?php esc_html_e( 'Articles', 'echo-knowledge-base' ); ?></div>
 			</div>
 			<?php self::show_categories_sequence_tree( $category_seq_data, $article_sequence ); ?>

@@ -20,7 +20,7 @@ class EPKB_AI_Content_Analysis_DB extends EPKB_DB {
 	/**
 	 * Get things started
 	 */
-	public function __construct( $db_check = true ) {
+	public function __construct( $db_check=false ) {
 		parent::__construct();
 
 		global $wpdb;
@@ -98,6 +98,11 @@ class EPKB_AI_Content_Analysis_DB extends EPKB_DB {
 	 */
 	public function get_article_analysis( $article_id ) {
 
+		// Return null if table doesn't exist yet (prevents DB error logs)
+		if ( ! $this->installed() ) {
+			return null;
+		}
+
 		$row = $this->get_a_row_by_where_clause( array( 'post_id' => $article_id ) );
 		$this->handle_db_error( $row, 'get_article_analysis' );
 		if ( is_wp_error( $row ) ) {
@@ -126,7 +131,7 @@ class EPKB_AI_Content_Analysis_DB extends EPKB_DB {
 		$data = wp_parse_args( $analysis_data, array( 'post_id' => $article_id ) );
 		$data['updated'] = gmdate( 'Y-m-d H:i:s' );
 
-		if ( $existing ) {
+		if ( $existing && ! is_wp_error( $existing ) ) {
 			// Update existing record
 			$result = $this->update_record( $existing->id, $data );
 			$this->handle_db_error( $result, 'save_article_analysis' );
@@ -314,9 +319,10 @@ class EPKB_AI_Content_Analysis_DB extends EPKB_DB {
 		// Build query
 		$where_clause = ! empty( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '';
 
-		// Validate orderby
+		// Validate orderby - use sanitized column name
 		$allowed_orderby = array( 'analyzed_at', 'overall_score', 'importance', 'created', 'updated' );
-		$orderby = in_array( $args['orderby'], $allowed_orderby ) ? $args['orderby'] : 'analyzed_at';
+		$orderby = in_array( $args['orderby'], $allowed_orderby, true ) ? $args['orderby'] : 'analyzed_at';
+		$orderby = esc_sql( $orderby );
 
 		$order = strtoupper( $args['order'] ) === 'ASC' ? 'ASC' : 'DESC';
 
@@ -325,7 +331,8 @@ class EPKB_AI_Content_Analysis_DB extends EPKB_DB {
 		$per_page = max( 1, min( 100, absint( $args['per_page'] ) ) );
 		$offset = ( $page - 1 ) * $per_page;
 
-		$sql = "SELECT * FROM {$this->table_name} {$where_clause} ORDER BY {$orderby} {$order} LIMIT %d OFFSET %d";
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $orderby and $order are validated above
+		$sql = "SELECT * FROM {$this->table_name} {$where_clause} ORDER BY `{$orderby}` {$order} LIMIT %d OFFSET %d";
 		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $per_page, $offset ) );
 
 		$this->handle_db_error( $rows, 'get_analysis_list' );
@@ -366,8 +373,10 @@ class EPKB_AI_Content_Analysis_DB extends EPKB_DB {
 		}
 
 		$where_clause = ! empty( $where ) ? ' WHERE ' . implode( ' AND ', $where ) : '';
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where_clause is built from $wpdb->prepare() calls
 		$sql = "SELECT COUNT(*) FROM {$this->table_name} {$where_clause}";
 
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql uses prepared values in $where_clause
 		$count = $wpdb->get_var( $sql );
 		$this->handle_db_error( $count, 'get_analysis_count' );
 

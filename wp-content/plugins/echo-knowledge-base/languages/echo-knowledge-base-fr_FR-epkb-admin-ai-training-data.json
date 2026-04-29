@@ -7,6 +7,9 @@
                 "lang": "fr_FR",
                 "plural-forms": "nplurals=2; plural=(n > 1);"
             },
+            "Learn More": [
+                "En savoir plus"
+            ],
             "to": [
                 "à"
             ],
@@ -16,11 +19,47 @@
             "Save": [
                 "Enregistrer"
             ],
+            "Close": [
+                "Fermer"
+            ],
             "Cancel": [
                 "Annuler"
             ],
+            "selected": [
+                "sélectionné"
+            ],
+            "Delete": [
+                "Supprimer"
+            ],
+            "Updated": [
+                "Mis à jour"
+            ],
+            "OFF": [
+                "Désactivé"
+            ],
+            "Optional": [
+                "Optionnel"
+            ],
+            "View Full Documentation": [
+                "Voir la documentation complète"
+            ],
             "Saving...": [
                 "Sauvegarde en cours..."
+            ],
+            "Error": [
+                "Erreur"
+            ],
+            "OK": [
+                "OK"
+            ],
+            "Add Training Data": [
+                "Ajouter des données d'apprentissage"
+            ],
+            "Choose Training Data": [
+                "Choisir les données d'apprentissage"
+            ],
+            "Send Data to AI": [
+                "Envoyer les données à l'IA"
             ],
             "Collection name cannot be empty": [
                 "Le nom de la collection ne peut pas être vide"
@@ -31,86 +70,128 @@
             "Note updated successfully": [
                 "Note mise à jour avec succès"
             ],
-            "Note deleted successfully": [
-                "Note supprimée avec succès"
+            "Name": [
+                "Nom"
             ],
-            "Delete": [
-                "Supprimer"
+            "Pending": [
+                "En attente"
+            ],
+            "All Categories": [
+                "Toutes les catégories"
             ],
             "Delete Selected": [
                 "Supprimer la sélection"
             ],
+            "of": [
+                "de"
+            ],
+            "Skipped": [
+                "Ignoré"
+            ],
             "Failed to create collection": [
                 "Échec de la création de la collection"
             ],
-            "How to get started": [
-                "Comment démarrer"
+            "errors": [
+                "erreurs"
             ],
-            "Choose Training Data": [
-                "Choisir les données d'apprentissage"
+            "Outdated": [
+                "Obsolète"
             ],
-            "Pick the content types to include.": [
-                "Sélectionnez les types de contenu à inclure."
-            ],
-            "Send Data to AI": [
-                "Envoyer les données à l'IA"
-            ],
-            "Select items in the table, then sync them.": [
-                "Sélectionnez les éléments dans le tableau, puis synchronisez-les."
-            ],
-            "Other Actions": [
-                "Autres actions"
-            ],
-            "Rename the collection or delete items.": [
-                "Renommer la collection ou supprimer des éléments."
-            ],
-            "Tip: Start with a small set to test the flow.": [
-                "Astuce : Commencez avec un petit ensemble pour tester le flux."
-            ],
-            "Failed to load note content": [
-                "Échec du chargement du contenu de la note"
-            ],
-            "Please enter both title and content for the note": [
-                "Veuillez saisir à la fois le titre et le contenu de la note"
-            ],
-            "Unable to delete note. Please refresh the page and try again.": [
-                "Impossible de supprimer la note. Veuillez actualiser la page et réessayer."
-            ],
-            "Delete Note": [
-                "Supprimer la note"
-            ],
-            "Are you sure you want to delete this note? This action cannot be undone.": [
-                "Êtes-vous sûr de vouloir supprimer cette note ? Cette action ne peut pas être annulée."
-            ],
-            "Failed to delete note": [
-                "Échec de la suppression de la note"
-            ],
-            "Edit Note": [
-                "Modifier la note"
-            ],
-            "Add Note": [
-                "Ajouter une note"
-            ],
-            "Loading note content...": [
-                "Chargement du contenu de la note..."
-            ],
-            "Note Title": [
-                "Titre de la note"
-            ],
-            "Enter note title...": [
-                "Saisissez le titre de la note..."
-            ],
-            "Note Content": [
-                "Contenu de la note"
-            ],
-            "Enter note content...": [
-                "Saisissez le contenu de la note..."
+            "Added": [
+                "Ajouté"
             ],
             "Deleting...": [
                 "Suppression en cours..."
             ],
-            "Save Note": [
-                "Enregistrer la note"
+            "added": [
+                "ajouté"
+            ],
+            "How to get started": [
+                "Comment démarrer"
+            ],
+            "Other Actions": [
+                "Autres actions"
+            ],
+            "Failed to load available items": [
+                "Échec lors du chargement des éléments disponibles"
+            ],
+            "Please select one content type first": [
+                "Veuillez d'abord sélectionner un type de contenu"
+            ],
+            "Please select at least one item to add": [
+                "Veuillez sélectionner au moins un élément à ajouter"
+            ],
+            "Data added successfully": [
+                "Données ajoutées avec succès"
+            ],
+            "Failed to add selected items": [
+                "Échec lors de l'ajout des éléments sélectionnés"
+            ],
+            "available": [
+                "disponible"
+            ],
+            "Select Individual Items": [
+                "Sélectionner des éléments individuels"
+            ],
+            "Choose one content type, then select the individual items you want to add to this collection.": [
+                "Choisissez un type de contenu, puis sélectionnez les éléments individuels que vous souhaitez ajouter à cette collection."
+            ],
+            "Content Type": [
+                "Type de contenu"
+            ],
+            "No content types are currently available.": [
+                "Aucun type de contenu n'est actuellement disponible."
+            ],
+            "Select a content type to load its available items.": [
+                "Sélectionnez un type de contenu pour charger ses éléments disponibles."
+            ],
+            "Loading available items...": [
+                "Chargement des éléments disponibles..."
+            ],
+            "Unable to load the available items for this content type.": [
+                "Impossible de charger les éléments disponibles pour ce type de contenu."
+            ],
+            "Search by name": [
+                "Rechercher par nom"
+            ],
+            "Select All": [
+                "Tout sélectionner"
+            ],
+            "Clear All": [
+                "Effacer tout"
+            ],
+            "No available items were found for this content type.": [
+                "Aucun élément disponible n'a été trouvé pour ce type de contenu."
+            ],
+            "No items match the current filters.": [
+                "Aucun élément ne correspond aux filtres actuels."
+            ],
+            "Adding Items...": [
+                "Ajout des éléments..."
+            ],
+            "Add Selected Items": [
+                "Ajouter les éléments sélectionnés"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Impossible de modifier les actions pendant la synchronisation en cours"
+            ],
+            "Cannot change actions while validation is in progress": [
+                "Impossible de modifier les actions pendant que la validation est en cours"
+            ],
+            "Checking available WordPress items...": [
+                "Vérification des éléments WordPress disponibles..."
+            ],
+            "Unable to load available WordPress items": [
+                "Impossible de charger les éléments WordPress disponibles"
+            ],
+            "Click Refresh to try again.": [
+                "Cliquez sur Actualiser pour réessayer."
+            ],
+            "Available WordPress items to add: %s": [
+                "Éléments WordPress disponibles à ajouter : %s"
+            ],
+            "Created in WordPress and not yet added to this collection.": [
+                "Créé dans WordPress et pas encore ajouté à cette collection."
             ],
             "Collection name updated successfully": [
                 "Le nom de la collection a été mis à jour avec succès"
@@ -139,29 +220,101 @@
             "Please select at least one data type": [
                 "Veuillez sélectionner au moins un type de données"
             ],
-            "Data added successfully": [
-                "Données ajoutées avec succès"
-            ],
             "Failed to add data": [
                 "Échec de l'ajout des données"
+            ],
+            "Checking AI store for orphaned files...": [
+                "Vérification du stockage de l'IA pour les fichiers orphelins..."
+            ],
+            "Verifying": [
+                "Vérification en cours"
+            ],
+            "items": [
+                "éléments"
+            ],
+            "Verification complete:": [
+                "Vérification terminée :"
+            ],
+            "marked outdated": [
+                "marqué comme obsolète"
+            ],
+            "WordPress items": [
+                "Éléments WordPress"
+            ],
+            "PDFs": [
+                "PDF"
+            ],
+            "AI Notes": [
+                "Notes de l'IA"
+            ],
+            "other files": [
+                "autres fichiers"
+            ],
+            "orphan files removed from AI store": [
+                "fichiers orphelins supprimés du stockage de l'IA"
+            ],
+            "Run sync to re-upload outdated items.": [
+                "Exécutez la synchronisation pour téléverser à nouveau les éléments obsolètes."
             ],
             "Choose an Action": [
                 "Choisir une action"
             ],
-            "Cannot change actions while sync is in progress": [
-                "Impossible de modifier les actions pendant la synchronisation en cours"
+            "Recommended: Validate & Fix Synced Items": [
+                "Recommandé : Valider et corriger les éléments synchronisés"
             ],
-            "Add Training Data": [
-                "Ajouter des données d'apprentissage"
+            "Recent plugin updates fixed issues that may have left orphan files in your AI Vector Store. Run the \"Validate & Fix\" option below once to reconcile synced items with what is stored in the AI.": [
+                "Les récentes mises à jour de l'extension ont corrigé des problèmes qui auraient pu laisser des fichiers orphelins dans votre stockage vectoriel d'IA. Exécutez l'option « Valider et corriger » ci-dessous une fois pour réconcilier les éléments synchronisés avec ce qui est stocké dans l'IA."
             ],
-            "Cannot navigate while sync is in progress": [
-                "Impossible de naviguer pendant la synchronisation en cours"
+            "Dismiss": [
+                "Fermer"
             ],
-            "Adding data to:": [
-                "Ajouter des données à :"
+            "Validate & Fix": [
+                "Valider et corriger"
+            ],
+            "Choose content types (KB Articles, Posts, Pages) to load into the table. This does not send anything to AI yet.": [
+                "Choisissez les types de contenu (Articles KB, Articles, Pages) à charger dans le tableau. Cela n'envoie encore rien à l'IA."
+            ],
+            "To exclude specific items, search for them in the table, select them, then use Other Actions > Delete Selected.": [
+                "Pour exclure des éléments spécifiques, recherchez-les dans le tableau, sélectionnez-les, puis utilisez Autres actions > Supprimer la sélection."
+            ],
+            "Select items from the table and send them to train the AI. Use the status tabs to filter, then select all and send.": [
+                "Sélectionnez des éléments dans le tableau et envoyez-les pour entraîner l'IA. Utilisez les onglets d'état pour filtrer, puis sélectionnez tout et envoyez."
+            ],
+            "Keep Content in Sync": [
+                "Maintenir le contenu synchronisé"
+            ],
+            "When you edit content on your site, its status changes to \"Outdated\". Filter by Outdated, select, and re-send to update the AI.": [
+                "Lorsque vous modifiez le contenu de votre site, son statut passe à « Obsolète ». Filtrez par Obsolète, sélectionnez-le, puis renvoyez pour mettre à jour l'IA."
+            ],
+            "Statuses": [
+                "Statuts"
+            ],
+            "In the table but not yet sent to AI.": [
+                "Dans le tableau mais pas encore envoyé à l'IA."
+            ],
+            "Sent to AI successfully.": [
+                "Envoyé à l'IA avec succès."
+            ],
+            "Re-sent after changes.": [
+                "Renvoyé après modifications."
+            ],
+            "Content changed since last sync. Re-send to update.": [
+                "Le contenu a été modifié depuis la dernière synchronisation. Renvoyez pour mettre à jour."
+            ],
+            "Could not be synced because the content is empty or the source no longer exists.": [
+                "N'a pas pu être synchronisé car le contenu est vide ou la source n'existe plus."
+            ],
+            "Sync failed. Re-send to retry. Check the content exists and is not empty.": [
+                "Échec de la synchronisation. Renvoyez pour réessayer. Vérifiez que le contenu existe et n'est pas vide."
+            ],
+            "Validate & Fix Synced Items": [
+                "Valider et corriger les éléments synchronisés"
             ],
             "Choose which content types you want to include in your AI training data.": [
                 "Choisissez les types de contenu que vous souhaitez inclure dans vos données d'apprentissage pour l'IA."
+            ],
+            "Only Published content is included. Drafts, Private, and Pending posts are not available for AI training.": [
+                "Seul le contenu publié est inclus. Les brouillons, privés et les articles en attente ne sont pas disponibles pour l'entraînement de l'IA."
             ],
             "Access Manager Notice": [
                 "Avis du Gestionnaire d'accès"
@@ -172,26 +325,47 @@
             "Loading content types...": [
                 "Chargement des types de contenu..."
             ],
-            "available": [
-                "disponible"
-            ],
-            "added": [
-                "ajouté"
+            "No content types available.": [
+                "Aucun type de contenu disponible."
             ],
             "excluded": [
                 "exclu"
             ],
-            "No eligible content": [
-                "Aucun contenu éligible"
-            ],
-            "No published content available": [
-                "Aucun contenu publié disponible"
-            ],
             "All eligible items already added to collection": [
                 "Tous les éléments éligibles ont déjà été ajoutés à la collection"
             ],
-            "No content types available.": [
-                "Aucun type de contenu disponible."
+            "No eligible content": [
+                "Aucun contenu éligible"
+            ],
+            "No articles for %s found. First create and publish articles.": [
+                "Aucun article pour %s trouvé. Créez et publiez d'abord des articles."
+            ],
+            "No %s found. First create and publish %s.": [
+                "Aucun %s trouvé. Créez et publiez d'abord %s."
+            ],
+            "Already in Collection": [
+                "Déjà dans la collection"
+            ],
+            "These content types have been added": [
+                "Ces types de contenu ont été ajoutés"
+            ],
+            "Available to Add": [
+                "Disponible pour l'ajout"
+            ],
+            "Select items to include in training data": [
+                "Sélectionnez les éléments à inclure dans les données d'apprentissage"
+            ],
+            "All available content types have been added.": [
+                "Tous les types de contenu disponibles ont été ajoutés."
+            ],
+            "No Content Available": [
+                "Aucun contenu disponible"
+            ],
+            "Create and publish content first": [
+                "Créez et publiez d'abord du contenu"
+            ],
+            "Requires AI Pro": [
+                "Nécessite AI Pro"
             ],
             "Adding Data...": [
                 "Ajout de données..."
@@ -199,14 +373,29 @@
             "Add Data": [
                 "Ajouter des données"
             ],
-            "Notes": [
-                "Notes"
-            ],
-            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
-                "Ajoutez des notes personnalisées pour aider à entraîner l'IA avec des informations, des directives ou du contexte spécifiques qui ne figurent pas dans votre contenu habituel."
-            ],
             "Select items from the table and choose a sync method to update your AI training data.": [
                 "Sélectionnez des éléments du tableau et choisissez une méthode de synchronisation pour mettre à jour vos données d'apprentissage automatique."
+            ],
+            "Run an extra validation pass to make sure the local database and the AI store stay in sync. If a file is missing from the AI store, it will be marked as outdated so it can be re-sent.": [
+                "Exécutez une passe de validation supplémentaire pour vous assurer que la base de données locale et le stockage de l'IA restent synchronisés. Si un fichier est manquant dans le stockage de l'IA, il sera marqué comme obsolète afin de pouvoir être renvoyé."
+            ],
+            "This checks Added and Updated items already tracked in this collection and removes orphaned WordPress items, PDFs, and AI Notes found only in the AI store. No local database items are deleted.": [
+                "Ceci vérifie les éléments ajoutés et mis à jour déjà suivis dans cette collection et supprime les éléments WordPress, les PDF et les notes de l'IA orphelins trouvés uniquement dans le stockage de l'IA. Aucun élément de la base de données locale n'est supprimé."
+            ],
+            "Collection:": [
+                "Collection :"
+            ],
+            "synced items ready to validate": [
+                "éléments synchronisés prêts à être validés"
+            ],
+            "No Added or Updated items are available yet. Validation can still remove orphaned WordPress items, PDFs, and AI Notes left only in the AI store.": [
+                "Aucun élément ajouté ou mis à jour n'est encore disponible. La validation peut tout de même supprimer les éléments WordPress, les PDF et les notes de l'IA orphelins restés uniquement dans le stockage de l'IA."
+            ],
+            "Cancel Verify": [
+                "Annuler la vérification"
+            ],
+            "Validation in Progress...": [
+                "Validation en cours..."
             ],
             "Manage your collection settings and data.": [
                 "Gérez les paramètres et les données de votre collection."

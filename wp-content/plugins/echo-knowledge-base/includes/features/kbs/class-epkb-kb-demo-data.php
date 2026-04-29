@@ -243,60 +243,7 @@ class EPKB_KB_Demo_Data {
 		EPKB_Utilities::save_kb_option( $new_kb_id, EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, $articles_seq_meta );
 		EPKB_Utilities::save_kb_option( $new_kb_id, EPKB_Categories_Admin::KB_CATEGORIES_SEQ_META, $categories_seq_meta );
 
-		// save new icons
-		$new_categories_icons = array();
-		$new_categories_icons[$category_id_1] = array(
-			'type' => 'image',
-			'name' => 'epkbfa-book',
-			'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
-			'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
-			'image_thumbnail_url' => Echo_Knowledge_Base::$plugin_url . 'img/demo-icons/icons/pink-kb-icon-laptop-100.png',
-			'color' => '#000000'    // FUTURE
-		);
-		$new_categories_icons[$category_id_2] = array(
-			'type' => 'image',
-			'name' => 'ep_font_icon_gears',
-			'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
-			'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
-			'image_thumbnail_url' => Echo_Knowledge_Base::$plugin_url . 'img/demo-icons/icons/pink-kb-icon-bar-chart-100.png',
-			'color' => '#000000'    // FUTURE
-		);
-		$new_categories_icons[$category_id_3] = array(
-			'type' => 'image',
-			'name' => 'epkbfa-cube',
-			'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
-			'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
-			'image_thumbnail_url' => Echo_Knowledge_Base::$plugin_url . 'img/demo-icons/icons/pink-kb-icon-notepad-100.png',
-			'color' => '#000000'    // FUTURE
-		);
-		$new_categories_icons[$category_id_4] = array(
-			'type' => 'image',
-			'name' => 'epkbfa-book',
-			'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
-			'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
-			'image_thumbnail_url' => Echo_Knowledge_Base::$plugin_url . 'img/demo-icons/icons/pink-kb-icon-lightbulb-100.png',
-			'color' => '#000000'    // FUTURE
-		);
-		$new_categories_icons[$category_id_5] = array(
-			'type' => 'image',
-			'name' => 'ep_font_icon_gears',
-			'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
-			'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
-			'image_thumbnail_url' => Echo_Knowledge_Base::$plugin_url . 'img/demo-icons/icons/pink-kb-icon-briefcase-100.png',
-			'color' => '#000000'    // FUTURE
-		);
-		$new_categories_icons[$category_id_6] = array(
-			'type' => 'image',
-			'name' => 'epkbfa-cube',
-			'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
-			'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
-			'image_thumbnail_url' => Echo_Knowledge_Base::$plugin_url . 'img/demo-icons/icons/pink-kb-icon-handshake-100.png',
-			'color' => '#000000'    // FUTURE
-		);
-		$result = EPKB_Utilities::save_kb_option( $new_kb_id, EPKB_Icons::CATEGORIES_ICONS, $new_categories_icons );
-		if ( is_wp_error( $result ) ) {
-			return;
-		}
+		// don't set custom icons for demo categories - let them use default icons based on KB configuration/theme
 	}
 
 	private static function get_tab_top_categories() {
@@ -312,6 +259,14 @@ class EPKB_KB_Demo_Data {
 				esc_html__( 'Finance and Expenses', 'echo-knowledge-base' ),
 				esc_html__( 'IT Support', 'echo-knowledge-base' ),
 				esc_html__( 'Professional Development', 'echo-knowledge-base' ) ];
+	}
+
+	/**
+	 * Get all demo category names for both tab and non-tab layouts
+	 * @return array
+	 */
+	public static function get_all_demo_category_names() {
+		return array_merge( self::get_tab_top_categories(), self::get_non_tab_top_categories() );
 	}
 
 	private static function get_category_description( $category_name ) {
@@ -346,6 +301,25 @@ class EPKB_KB_Demo_Data {
 		}
 	}
 
+	/**
+	 * Adapts DEMO data category structure when switching between Tab and non-Tab layouts.
+	 *
+	 * Tab layouts require a 3-tier hierarchy: Tab categories → Sub-categories → Articles
+	 * Non-Tab layouts use a 2-tier hierarchy: Top categories → Articles
+	 *
+	 * Handles these transitions:
+	 * - Non-Tab → Tab: Creates Tab parent categories ("Department Resources", etc.) and
+	 *                  re-parents existing demo categories under them
+	 * - Tab → Non-Tab: Removes Tab parent categories and promotes their children to top-level
+	 *
+	 * Returns empty array if:
+	 * - Categories don't match demo data (user has custom content)
+	 * - Structure already matches the target layout (no changes needed)
+	 *
+	 * @param int    $kb_id              Knowledge Base ID
+	 * @param string $kb_main_page_layout Target layout name (e.g., EPKB_Layout::TABS_LAYOUT)
+	 * @return array Empty array if no changes, or ['articles_seq_meta' => ..., 'categories_seq_meta' => ...]
+	 */
 	public static function reassign_categories_to_articles_based_on_layout( $kb_id, $kb_main_page_layout ) {
 
 		$articles_seq_meta = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, null, true );
@@ -529,60 +503,412 @@ class EPKB_KB_Demo_Data {
 
 	public static function get_sample_post_content() {
 
-		$demo_img = Echo_Knowledge_Base::$plugin_url.'img/guy-on-laptop.jpg';
+		$features_img = 'https://www.echoknowledgebase.com/wp-content/uploads/2025/07/modules-features-image.png';
 		$youtube_vid = '<iframe width="560" height="315" src="https://www.youtube.com/embed/gOLT-IDT3UY?si=amjYFxs-Cf_CHqFM" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>';
 
+		$style =
+			"<style>"  .
+				".epkb-demo-content h2 {" .
+					"font-size: 1.6em;" .
+					"font-weight: 600;" .
+					"color: #1e293b;" .
+					"margin: 40px 0 12px !important;" .
+					"padding-bottom: 10px;" .
+					"border-bottom: 2px solid #e2e8f0;" .
+				"}" .
+				".epkb-demo-content h2:first-of-type {" .
+					"margin-top: 0;" .
+				"}" .
+				".epkb-demo-content h3 {" .
+					"font-size: 1.25em;" .
+					"font-weight: 600;" .
+					"color: #334155;" .
+					"margin: 5px 0 10px;" .
+				"}" .
+				".epkb-demo-content p {" .
+					"color: #475569;" .
+					"line-height: 1.7;" .
+					"margin: 0 0 14px;" .
+				"}" .
+				".epkb-demo-content ul {" .
+					"margin: 0 0 20px;" .
+					"padding-left: 0;" .
+					"list-style: none;" .
+				"}" .
+				".epkb-demo-content ul li {" .
+					"position: relative;" .
+					"padding: 6px 0 6px 24px;" .
+					"color: #475569;" .
+					"line-height: 1.6;" .
+				"}" .
+				".epkb-demo-content ul li::before {" .
+					"content: '';" .
+					"position: absolute;" .
+					"left: 4px;" .
+					"top: 14px;" .
+					"width: 8px;" .
+					"height: 8px;" .
+					"background: #3b82f6;" .
+					"border-radius: 50%;" .
+				"}" .
+				".epkb-demo-notice {" .
+					"position: relative;" .
+					"padding: 16px 20px 16px 56px;" .
+					"border-radius: 8px;" .
+					"margin: 20px 0;" .
+					"font-size: 0.95em;" .
+					"line-height: 1.6;" .
+				"}" .
+				".epkb-demo-notice::before {" .
+					"content: '';" .
+					"position: absolute;" .
+					"left: 16px;" .
+					"top: 16px;" .
+					"width: 22px;" .
+					"height: 22px;" .
+					"background-size: contain;" .
+					"background-repeat: no-repeat;" .
+					"background-position: center;" .
+				"}" .
+				".epkb-demo-notice p {" .
+					"margin: 0;" .
+				"}" .
+				".epkb-demo-notice--info {" .
+					"background: #eff6ff;" .
+					"border-left: 4px solid #3b82f6;" .
+					"color: #1e40af;" .
+				"}" .
+				".epkb-demo-notice--info::before {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%231e40af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cline x1='12' y1='16' x2='12' y2='12'/%3E%3Cline x1='12' y1='8' x2='12.01' y2='8'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-notice--tip {" .
+					"background: #f0fdf4;" .
+					"border-left: 4px solid #22c55e;" .
+					"color: #166534;" .
+				"}" .
+				".epkb-demo-notice--tip::before {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23166534' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 11.08V12a10 10 0 1 1-5.93-9.14'/%3E%3Cpolyline points='22 4 12 14.01 9 11.01'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-notice--note {" .
+					"background: #fffbeb;" .
+					"border-left: 4px solid #f59e0b;" .
+					"color: #92400e;" .
+				"}" .
+				".epkb-demo-notice--note::before {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%2392400e' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z'/%3E%3Cline x1='12' y1='9' x2='12' y2='13'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-notice--ai {" .
+					"background: #faf5ff;" .
+					"border-left: 4px solid #a855f7;" .
+					"color: #6b21a8;" .
+				"}" .
+				".epkb-demo-notice--ai::before {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236b21a8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-video-wrapper {" .
+					"margin: 24px auto;" .
+					"border-radius: 10px;" .
+					"overflow: hidden;" .
+					"box-shadow: 0 4px 16px rgba(0,0,0,0.08);" .
+					"max-width: 560px;" .
+				"}" .
+				".epkb-demo-video-wrapper iframe {" .
+					"display: block;" .
+				"}" .
+				".epkb-demo-img-wrapper {" .
+					"margin: 28px 0;" .
+					"border-radius: 10px;" .
+					"overflow: hidden;" .
+					"box-shadow: 0 4px 16px rgba(0,0,0,0.08);" .
+					"display: inline-block;" .
+				"}" .
+				".epkb-demo-img-wrapper img {" .
+					"display: block;" .
+					"max-width: 100%;" .
+					"height: auto;" .
+				"}" .
+				".epkb-demo-cta-link {" .
+					"display: inline-block;" .
+					"padding: 10px 24px;" .
+					"background: #3b82f6;" .
+					"color: #ffffff !important;" .
+					"text-decoration: none !important;" .
+					"border-radius: 6px;" .
+					"font-weight: 600;" .
+					"font-size: 0.95em;" .
+					"transition: background 0.2s ease;" .
+					"margin: 4px 0 8px;" .
+				"}" .
+				".epkb-demo-cta-link:hover {" .
+					"background: #2563eb;" .
+				"}" .
+				".epkb-demo-help-box {" .
+					"background: #f8fafc;" .
+					"border: 1px solid #e2e8f0;" .
+					"border-radius: 10px;" .
+					"padding: 24px 28px;" .
+					"margin: 28px 0 0;" .
+					"text-align: center;" .
+				"}" .
+				".epkb-demo-help-box h3 {" .
+					"margin: 0 0 8px;" .
+					"color: #1e293b;" .
+				"}" .
+				".epkb-demo-help-box p {" .
+					"margin: 0 0 16px;" .
+				"}" .
+				".epkb-demo-divider {" .
+					"border: none;" .
+					"border-top: 1px solid #e2e8f0;" .
+					"margin: 32px 0;" .
+				"}" .
+				".epkb-demo-features-grid {" .
+					"display: grid;" .
+					"grid-template-columns: repeat(2, 1fr);" .
+					"gap: 16px;" .
+					"margin: 20px 0 24px;" .
+				"}" .
+				"@media (max-width: 600px) {" .
+					".epkb-demo-features-grid {" .
+						"grid-template-columns: 1fr;" .
+					"}" .
+				"}" .
+				".epkb-demo-feature-card {" .
+					"position: relative;" .
+					"overflow: hidden;" .
+					"background: linear-gradient(135deg, #ffffff 0%, #f0f5ff 100%);" .
+					"border-radius: 10px;" .
+					"padding: 20px 20px 18px;" .
+					"box-shadow: 0 2px 12px rgba(59,130,246,0.08), 0 1px 3px rgba(0,0,0,0.04);" .
+					"transition: box-shadow 0.2s ease, transform 0.2s ease;" .
+				"}" .
+				".epkb-demo-feature-card:hover {" .
+					"box-shadow: 0 6px 24px rgba(59,130,246,0.13), 0 2px 6px rgba(0,0,0,0.06);" .
+					"transform: translateY(-2px);" .
+				"}" .
+				".epkb-demo-feature-card::after {" .
+					"content: '';" .
+					"position: absolute;" .
+					"top: 12px;" .
+					"right: 14px;" .
+					"width: 36px;" .
+					"height: 36px;" .
+					"background-size: contain;" .
+					"background-repeat: no-repeat;" .
+					"background-position: center;" .
+					"opacity: 0.18;" .
+				"}" .
+				".epkb-demo-feature-card strong {" .
+					"display: block;" .
+					"color: #1e293b;" .
+					"margin-bottom: 6px;" .
+					"font-size: 0.95em;" .
+				"}" .
+				".epkb-demo-feature-card span {" .
+					"display: block;" .
+					"color: #64748b;" .
+					"font-size: 0.88em;" .
+					"line-height: 1.5;" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='editor']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'/%3E%3Cpath d='m15 5 4 4'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='layouts']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='7' height='7'/%3E%3Crect x='14' y='3' width='7' height='7'/%3E%3Crect x='14' y='14' width='7' height='7'/%3E%3Crect x='3' y='14' width='7' height='7'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='organize']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 2 7 12 12 22 7 12 2'/%3E%3Cpolyline points='2 17 12 22 22 17'/%3E%3Cpolyline points='2 12 12 17 22 12'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='search']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='faq']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3'/%3E%3Cline x1='12' y1='17' x2='12.01' y2='17'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='toc']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%233b82f6' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='8' y1='6' x2='21' y2='6'/%3E%3Cline x1='8' y1='12' x2='21' y2='12'/%3E%3Cline x1='8' y1='18' x2='21' y2='18'/%3E%3Cline x1='3' y1='6' x2='3.01' y2='6'/%3E%3Cline x1='3' y1='12' x2='3.01' y2='12'/%3E%3Cline x1='3' y1='18' x2='3.01' y2='18'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='shield']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='books']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z'/%3E%3Cpath d='M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='search-plus']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3Cline x1='11' y1='8' x2='11' y2='14'/%3E%3Cline x1='8' y1='11' x2='14' y2='11'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='transfer']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='23 4 23 10 17 10'/%3E%3Cpolyline points='1 20 1 14 7 14'/%3E%3Cpath d='M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='star']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolygon points='12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-feature-card[data-icon='sidebar']::after {" .
+					"background-image: url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='18' height='18' rx='2' ry='2'/%3E%3Cline x1='9' y1='3' x2='9' y2='21'/%3E%3C/svg%3E\");" .
+				"}" .
+				".epkb-demo-badge {" .
+					"display: inline-block;" .
+					"background: #dbeafe;" .
+					"color: #1e40af;" .
+					"font-size: 0.7em;" .
+					"font-weight: 700;" .
+					"padding: 2px 8px;" .
+					"border-radius: 4px;" .
+					"margin-left: 6px;" .
+					"vertical-align: middle;" .
+					"letter-spacing: 0.5px;" .
+				"}" .
+				".epkb-demo-badge--pro {" .
+					"background: #faf5ff;" .
+					"color: #7c3aed;" .
+				"}" .
+			"</style>";
+
 		return
-			"<h2 style='padding-top: 20px;'>" . esc_html__( 'Welcome to Echo Knowledge Base!', 'echo-knowledge-base' ) . "</h2>" .
-			"<p>" . esc_html__( "We're thrilled that you've chosen our plugin to enhance your Knowledge Base. We're here to assist you in making your Knowledge Base exceptional. If you need any help or have questions, just let us know!", 'echo-knowledge-base' ) . "</p>" .
+			$style .
+			"<div class='epkb-demo-content'>" .
 
-			"<h3 style='padding-top: 20px;'>" . esc_html__( 'Create Articles Just Like You Create Posts', 'echo-knowledge-base' ) . "</h3>" .
-			"<p>" . esc_html__( 'Add instructional videos or product demos. Example of embedded video:', 'echo-knowledge-base' ) . "</p>" .
+			"<h2>" . esc_html__( 'Welcome to Echo Knowledge Base', 'echo-knowledge-base' ) . "</h2>" .
+			"<p>" . esc_html__( 'Echo Knowledge Base is a powerful documentation tool that helps you create and organize your documentation, FAQs, and articles.', 'echo-knowledge-base' ) . "</p>" .
+
+			"<div class='epkb-demo-notice epkb-demo-notice--info'>" .
+				"<p>" . esc_html__( 'This is a demo article to help you explore your new Knowledge Base. You can edit or delete this article at any time, and replace it with your own content.', 'echo-knowledge-base' ) . "</p>" .
+			"</div>" .
+
+			"<div class='epkb-demo-video-wrapper'>" .
 				$youtube_vid .
+			"</div>" .
 
-			"<p>" . esc_html__( 'Enhance your articles with visuals. Example of an image:', 'echo-knowledge-base' ) . "</p>" .
-			"<img src='" . esc_url( $demo_img ) . "' " . "alt='" . esc_attr__( 'Sample Image', 'echo-knowledge-base' ) . "' width='500'>" .
+		
 
-			"<p>" . esc_html__( 'Effortlessly embed PDFs and other media using your page builder or blocks.', 'echo-knowledge-base' ) . "</p>" .
+			"<h2>" . esc_html__( 'Core Features', 'echo-knowledge-base' ) . "</h2>" .
+			"<p>" . esc_html__( 'Everything you need to build a professional documentation site is included for free:', 'echo-knowledge-base' ) . "</p>" .
 
-			"<h3 style='padding-top: 20px;'>" . esc_html__( 'Main Features', 'echo-knowledge-base' ) . "</h3>" .
-			"<p>" . esc_html__( 'Our plugin includes the following features to make your Knowledge Base stand out:', 'echo-knowledge-base' ) . "</p>" .
+			"<div class='epkb-demo-features-grid'>" .
+				"<div class='epkb-demo-feature-card' data-icon='editor'>" .
+					"<strong>" . esc_html__( 'Frontend Visual Editor', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Customize your KB pages live on the front-end with our intuitive visual editor or Gutenberg blocks.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='layouts'>" .
+					"<strong>" . esc_html__( 'Pre-made Layout Designs', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Choose from 26 beautiful designs and multiple layouts. Find the perfect look with dozens of combinations.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='organize'>" .
+					"<strong>" . esc_html__( 'Deep Content Organization', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Organize articles into categories and subcategories up to five levels deep with tabs or drill-down navigation.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='search'>" .
+					"<strong>" . esc_html__( 'Fast Search Bar', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Enable users to find articles quickly with an AJAX-powered search bar that delivers instant results.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='faq'>" .
+					"<strong>" . esc_html__( 'FAQs Module', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Deploy FAQs anywhere on your site with various eye-catching designs. Group questions logically for easy browsing.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='toc'>" .
+					"<strong>" . esc_html__( 'Table of Contents', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Enhance navigation with a customizable table of contents on article pages for better user experience.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+			"</div>" .
+
+			"<p>" . esc_html__( 'Additional built-in features include:', 'echo-knowledge-base' ) . "</p>" .
 			"<ul>" .
-			    "<li>" . esc_html__('Fast search bar with listed results', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Five levels of hierarchical documentation', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Article view counter with Popular and Recent Articles', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Frequently Asked Questions (FAQ) Module and shortcode.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Customizable Category Archive Page', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('AI Content Writing', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Organize articles and categories alphabetically, chronologically, or in any custom order with drag and drop.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Optimized for the best SEO results to boost online visibility', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Analytics to track your Knowledge Base usage', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Supports RTL languages, WCAG accessibility standards, and works with WPML and Polylang', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Glossary with auto-highlighted terms and interactive tooltips', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Article views counter and analytics', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Breadcrumbs, print and PDF export, next/previous navigation', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Customizable category archive pages', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'SEO optimized, WCAG accessible, and RTL ready', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Gutenberg blocks and page builder compatible', 'echo-knowledge-base' ) . "</li>" .
 			"</ul>" .
 
-			"<h3 style='padding-top: 20px;'>" . esc_html__( 'PRO Features', 'echo-knowledge-base' ) . "</h3>" .
-			"<p>" . esc_html__( 'Expand your Knowledge Base using our cost-effective add-ons:', 'echo-knowledge-base' ) . "</p>" .
+			"<div class='epkb-demo-notice epkb-demo-notice--tip'>" .
+				"<p>" . esc_html__( 'All core features are included for free and work out of the box with no additional configuration required.', 'echo-knowledge-base' ) . "</p>" .
+			"</div>" .
+
+		
+
+			"<h2>" . esc_html__( 'AI-Powered Features', 'echo-knowledge-base' ) . "</h2>" .
+			"<p>" . esc_html__( 'All AI features are completely optional and disabled by default. Enable them at any time to unlock AI-powered capabilities.', 'echo-knowledge-base' ) . "</p>" .
+
+			"<div class='epkb-demo-notice epkb-demo-notice--ai'>" .
+				"<p>" . esc_html__( 'Give your users instant answers. The AI Chatbot and AI Search use your Knowledge Base content to deliver accurate, context-aware responses in real time.', 'echo-knowledge-base' ) . "</p>" .
+			"</div>" .
+
+			"<h3>" . esc_html__( 'Free AI Features', 'echo-knowledge-base' ) . "</h3>" .
 			"<ul>" .
-			    "<li>" . esc_html__('Control access and permissions based on groups, WordPress users and roles, and custom roles.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Manage public and private articles and control who can read, write, and edit articles.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Create unlimited Knowledge Bases with separate articles, categories, tags, and more.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Choose from Sidebar and Grid layouts.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Import and export articles and categories using CSV and XML', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Add article voting, a feedback form, and learn from analytics.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('More widgets and shortcodes for categories, popular articles, and the search bar.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Replace articles with links to PDFs, external docs, video links, and more.', 'echo-knowledge-base' ) . "</li>" .
-			    "<li>" . esc_html__('Utilize Advanced search analytics to identify popular and empty searches.', 'echo-knowledge-base' ) . "</li>" .
+				"<li><strong>" . esc_html__( 'AI Chat (Chatbot)', 'echo-knowledge-base' ) . "</strong> - " . esc_html__( 'A frontend chat dialog where visitors ask questions and get instant AI-powered answers based on your KB content.', 'echo-knowledge-base' ) . "</li>" .
+				"<li><strong>" . esc_html__( 'AI Search', 'echo-knowledge-base' ) . "</strong> - " . esc_html__( 'When users search, results show relevant articles plus an Ask AI button to dive deeper with AI.', 'echo-knowledge-base' ) . "</li>" .
+				"<li><strong>" . esc_html__( 'AI Content Analysis', 'echo-knowledge-base' ) . "</strong> - " . esc_html__( 'Automatically analyze articles for tags optimization and readability scoring.', 'echo-knowledge-base' ) . "</li>" .
 			"</ul>" .
 
-			"<h3 style='padding-top: 20px;'>" . esc_html__( 'Need Help or Looking for a Feature?', 'echo-knowledge-base' ) . "</h3>" .
+			"<h3>" . esc_html__( 'PRO AI Features', 'echo-knowledge-base' ) . "<span class='epkb-demo-badge epkb-demo-badge--pro'>" . esc_html__( 'PRO', 'echo-knowledge-base' ) . "</span></h3>" .
+			"<ul>" .
+				"<li>" . esc_html__( 'AI Smart Search with multi-panel results and customizable layout', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Content Gap Analysis to identify missing documentation', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'PDF to Articles - upload and convert PDFs into KB articles', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'PDF to Notes - expand AI training data from PDF uploads', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Human Agent Handoff - escalate from AI to your support team', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'AI Chat Access Control - restrict by user roles and location', 'echo-knowledge-base' ) . "</li>" .
+				"<li>" . esc_html__( 'Email notifications summarizing AI Chat and Search activity', 'echo-knowledge-base' ) . "</li>" .
+			"</ul>" .
+
+		
+
+			"<h2>" . esc_html__( 'PRO Features', 'echo-knowledge-base' ) . "</h2>" .
+			"<p>" . esc_html__( 'Unlock advanced capabilities for teams and businesses that need more:', 'echo-knowledge-base' ) . "</p>" .
+
+			"<div class='epkb-demo-features-grid'>" .
+				"<div class='epkb-demo-feature-card' data-icon='shield'>" .
+					"<strong>" . esc_html__( 'Content Protection', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Control access based on user groups, WordPress roles, or custom permissions for private and internal documentation.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='books'>" .
+					"<strong>" . esc_html__( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Create separate KBs with their own articles, categories, and tags for multiple products or departments.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='search-plus'>" .
+					"<strong>" . esc_html__( 'Advanced Search', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Highlight search terms, filter by category, and use advanced search analytics to discover popular queries.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='transfer'>" .
+					"<strong>" . esc_html__( 'Import and Export', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Bulk import and export articles and categories using CSV or XML formats for easy migration and backup.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='star'>" .
+					"<strong>" . esc_html__( 'User Feedback System', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Gather insights with article upvote/downvote and feedback forms, with analytics on your best and worst content.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+				"<div class='epkb-demo-feature-card' data-icon='sidebar'>" .
+					"<strong>" . esc_html__( 'Additional Layouts', 'echo-knowledge-base' ) . "</strong>" .
+					"<span>" . esc_html__( 'Sidebar and Grid layouts for your knowledge base main page and articles.', 'echo-knowledge-base' ) . "</span>" .
+				"</div>" .
+			"</div>" .
+
+		
+
 			"<p>" .
-			    sprintf(
-			        esc_html__( "Please don't hesitate to contact us %shere%s.", 'echo-knowledge-base' ),
-			        '<a href="https://www.echoknowledgebase.com/pre-sale-question/" target="_blank">',
-			        '</a>'
-			    ) .
+				sprintf(
+					esc_html__( '%1$sView PRO Features%2$s', 'echo-knowledge-base' ),
+					'<a href="' . esc_url( admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=epkb-add-ons' ) ) . '" class="epkb-demo-cta-link">',
+					'</a>'
+				) .
 			"</p>" .
-			"<p>" . esc_html__( "We're always eager to help and are open to suggestions for new features.", 'echo-knowledge-base' ) . "</p>";
+
+			"<hr class='epkb-demo-divider'>" .
+
+			"<div class='epkb-demo-help-box'>" .
+				"<h3>" . esc_html__( 'Need Help Getting Started?', 'echo-knowledge-base' ) . "</h3>" .
+				"<p>" . esc_html__( 'Our support team is ready to assist you with any questions or issues. We typically respond within one business day.', 'echo-knowledge-base' ) . "</p>" .
+				"<p>" .
+					sprintf(
+						esc_html__( '%1$sContact Support%2$s', 'echo-knowledge-base' ),
+						'<a href="https://www.echoknowledgebase.com/pre-sale-question/" target="_blank" class="epkb-demo-cta-link">',
+						'</a>'
+					) .
+				"</p>" .
+			"</div>" .
+
+			"</div>";
 	}
 
 	public static function create_sample_faqs( $new_kb_id ) {
@@ -1023,42 +1349,6 @@ class EPKB_KB_Demo_Data {
 	}
 
 	/**
-	 * Get demo category analytics data
-	 *
-	 * @return array Array of categories with article count and total views
-	 */
-	public static function get_demo_category_analytics() {
-
-		return array(
-			array( 'category' => 'Sales and Marketing', 'article_count' => 3, 'total_views' => 3326 ),
-			array( 'category' => 'Operations and Logistics', 'article_count' => 3, 'total_views' => 2328 ),
-			array( 'category' => 'Human Resources', 'article_count' => 3, 'total_views' => 1751 ),
-			array( 'category' => 'Finance and Expenses', 'article_count' => 3, 'total_views' => 1377 ),
-			array( 'category' => 'IT Support', 'article_count' => 3, 'total_views' => 1069 ),
-			array( 'category' => 'Professional Development', 'article_count' => 3, 'total_views' => 819 ),
-		);
-	}
-
-	/**
-	 * Get demo tag analytics data
-	 *
-	 * @return array Array of tags with article count and total views
-	 */
-	public static function get_demo_tag_analytics() {
-
-		return array(
-			array( 'tag' => 'Getting Started', 'article_count' => 5, 'total_views' => 3847 ),
-			array( 'tag' => 'Best Practices', 'article_count' => 4, 'total_views' => 2892 ),
-			array( 'tag' => 'Guidelines', 'article_count' => 6, 'total_views' => 2567 ),
-			array( 'tag' => 'Policies', 'article_count' => 4, 'total_views' => 1923 ),
-			array( 'tag' => 'Training', 'article_count' => 3, 'total_views' => 1456 ),
-			array( 'tag' => 'Procedures', 'article_count' => 5, 'total_views' => 1234 ),
-			array( 'tag' => 'Quick Reference', 'article_count' => 3, 'total_views' => 987 ),
-			array( 'tag' => 'Advanced', 'article_count' => 2, 'total_views' => 542 ),
-		);
-	}
-
-	/**
 	 * Get demo best rated articles data
 	 *
 	 * @return array Array of articles with ratings
@@ -1126,142 +1416,6 @@ class EPKB_KB_Demo_Data {
 			array( 'title' => 'Office Furniture Replacement Procedures', 'times' => 21 ),
 			array( 'title' => 'Conference Room Booking Guidelines', 'times' => 24 ),
 			array( 'title' => 'Annual Compliance Training Requirements', 'times' => 27 ),
-		);
-	}
-
-	/**
-	 * Check if a specific article is a demo article
-	 *
-	 * @param int $article_id Article ID to check
-	 * @return bool True if article is a demo article, false otherwise
-	 */
-	public static function is_demo_article( $article_id ) {
-
-		// Get the article
-		$article = get_post( $article_id );
-		if ( ! $article ) {
-			return false;
-		}
-
-		// Get KB ID from article post type
-		$kb_id = EPKB_KB_Handler::get_kb_id_from_post_type( $article->post_type );
-		if ( empty( $kb_id ) ) {
-			return false;
-		}
-
-		// First check if this KB has demo data
-		if ( ! self::is_demo_data( $kb_id ) ) {
-			return false;
-		}
-
-		// Get list of demo article titles
-		$demo_article_titles = self::get_demo_article_titles();
-
-		// Check if article title matches any demo article title
-		return in_array( $article->post_title, $demo_article_titles );
-	}
-
-	/**
-	 * Get all demo article titles
-	 *
-	 * @return array Array of demo article title strings
-	 */
-	private static function get_demo_article_titles() {
-		return array(
-			esc_html__('Introduction to Our Sales Process', 'echo-knowledge-base' ),
-			esc_html__('Creating Effective Marketing Campaigns', 'echo-knowledge-base' ),
-			esc_html__('Using the CRM Software', 'echo-knowledge-base' ),
-			esc_html__('Inventory Management Best Practices', 'echo-knowledge-base' ),
-			esc_html__('Understanding the Supply Chain', 'echo-knowledge-base' ),
-			esc_html__('Safety Protocols in the Workplace', 'echo-knowledge-base' ),
-			esc_html__('Onboarding Checklist for New Hires', 'echo-knowledge-base' ),
-			esc_html__('Understanding Your Benefits Package', 'echo-knowledge-base' ),
-			esc_html__('Performance Review Guidelines', 'echo-knowledge-base' ),
-			esc_html__('Submitting Expense Reports', 'echo-knowledge-base' ),
-			esc_html__('Travel Expense Guidelines', 'echo-knowledge-base' ),
-			esc_html__('Year-End Tax Information for Employees', 'echo-knowledge-base' ),
-			esc_html__('Getting Started with Your Work Computer', 'echo-knowledge-base' ),
-			esc_html__('How to Request IT Support', 'echo-knowledge-base' ),
-			esc_html__('Security Protocols for Safe Computing', 'echo-knowledge-base' ),
-			esc_html__('Identifying Training Opportunities', 'echo-knowledge-base' ),
-			esc_html__('Mentorship Programs Overview', 'echo-knowledge-base' ),
-			esc_html__('Setting Career Goals', 'echo-knowledge-base' ),
-		);
-	}
-
-	/**
-	 * Get demo Tags Usage analytics data
-	 *
-	 * @return array Demo tags usage data
-	 */
-	public static function get_demo_tags_usage_data() {
-		return array(
-			'version' => '1.0',
-			'score' => 85,
-			'kb_category_count' => 1,
-			'tag_count' => 5,
-			'tags' => array( 'Getting Started', 'Best Practices', 'Guidelines', 'Training', 'Procedures' ),
-			'current_tags' => array(),
-			'suggested_tags' => array( 'Employee Resources', 'Onboarding', 'Workplace' ),
-			'recommended_tags' => array(
-				array(
-					'priority' => 'medium',
-					'type' => 'ai_suggestions',
-					'message' => __( 'AI-powered tag suggestions based on content analysis:', 'echo-knowledge-base' ),
-					'suggested_tags' => array( 'Employee Resources', 'Onboarding', 'Workplace' )
-				)
-			),
-			'tag_analysis' => array(
-				'count_score' => array( 'score' => 100, 'issues' => array() ),
-				'format_score' => array( 'score' => 100, 'issues' => array() ),
-				'duplicate_score' => array( 'score' => 100, 'issues' => array(), 'duplicates' => array() ),
-				'category_score' => array( 'score' => 100, 'issues' => array() ),
-				'relevance_score' => array(
-					'score' => 85,
-					'issues' => array(),
-					'irrelevant_tags' => array(),
-					'weak_tags' => array(),
-					'strong_matches' => 4,
-					'weak_matches' => 1
-				),
-				'ai_suggestions' => array(
-					'score' => 100,
-					'issues' => array(),
-					'suggestions' => array( 'Employee Resources', 'Onboarding', 'Workplace' ),
-					'ai_feature_unavailable' => false,
-					'ai_error' => null
-				)
-			),
-			'analyzed_at' => current_time( 'mysql' ),
-			'is_demo' => true
-		);
-	}
-
-	/**
-	 * Get demo Readability analytics data
-	 *
-	 * @return array Demo readability data
-	 */
-	public static function get_demo_readability_data() {
-		return array(
-			'version' => '1.0',
-			'score' => 90,
-			'status' => 'analyzed',
-			'issues' => array(
-				array(
-					'issue_type' => 'Complexity',
-					'problematic_text' => 'The comprehensive onboarding process encompasses a multitude of procedural steps and documentation requirements.',
-					'explanation' => 'This sentence is overly complex and could be simplified. Suggested rewrite: "The onboarding process includes several steps and required documents."'
-				),
-				array(
-					'issue_type' => 'Jargon',
-					'problematic_text' => 'Utilize the synergistic framework for optimal stakeholder engagement.',
-					'explanation' => 'This sentence contains business jargon that may confuse readers. Suggested rewrite: "Use the framework to engage with stakeholders effectively."'
-				)
-			),
-			'ai_feature_unavailable' => false,
-			'analyzed_at' => current_time( 'mysql' ),
-			'is_demo' => true
 		);
 	}
 
@@ -1336,6 +1490,7 @@ class EPKB_KB_Demo_Data {
 				$section_name = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_ai_answer_name' );
 
 				$html  = '<div class="epkb-ai-sr-ai-answer-text">';
+				// translators: %s is the search query
 				$html .= '<p>' . sprintf( esc_html__( 'Based on your search for "%s", here\'s what your team should focus on:', 'echo-knowledge-base' ), esc_html( $query_display ) ) . '</p>';
 				$html .= '<p>' . esc_html__( 'Use this quick summary to keep the onboarding process on track:', 'echo-knowledge-base' ) . '</p>';
 				$html .= '<ul>';
@@ -1351,7 +1506,7 @@ class EPKB_KB_Demo_Data {
 				$demo_answer = wp_strip_all_tags( $html );
 				$session_id = EPKB_AI_Security::get_or_create_session();
 				$language = EPKB_Language_Utilities::detect_current_language();
-				$mode = EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? 'advanced_search' : 'search';
+				$mode = EPKB_AI_Utilities::is_ai_search_smart_enabled() ? 'smart_search' : 'search';
 
 				$conversation = new EPKB_AI_Conversation_Model( array(
 					'user_id'    => get_current_user_id(),

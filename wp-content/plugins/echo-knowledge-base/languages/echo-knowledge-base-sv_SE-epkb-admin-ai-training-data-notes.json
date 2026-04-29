@@ -1,0 +1,96 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "sv_SE",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "Lär dig mer"
+            ],
+            "Cancel": [
+                "Avbryt"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
+            "Saving...": [
+                "Sparar …"
+            ],
+            "Note deleted successfully": [
+                "Anteckningen raderades framgångsrikt"
+            ],
+            "Additional Notes": [
+                "Ytterligare anteckningar"
+            ],
+            "Add additional support and miscellaneous information not found in articles, posts, and pages that AI should also know about.": [
+                "Lägg till ytterligare stöd och övrig information som AI också bör känna till och som inte finns i artiklar, inlägg och sidor."
+            ],
+            "Examples: business hours, contact information, company policies, product details, or any other information you want the AI to reference.": [
+                "Exempel: öppettider, kontaktinformation, företagspolicyer, produktuppgifter eller annan information som du vill att AI ska referera till."
+            ],
+            "Got it": [
+                "Klart"
+            ],
+            "Failed to load note content": [
+                "Misslyckades med att ladda anteckningsinnehåll"
+            ],
+            "Please enter both title and content for the note": [
+                "Ange både titel och innehåll för anteckningen"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "Kunde inte ta bort anteckningen. Uppdatera sidan och försök igen."
+            ],
+            "Delete Note": [
+                "Radera anteckning"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "Är du säker på att du vill radera denna anteckning? Denna åtgärd kan inte ångras."
+            ],
+            "Failed to delete note": [
+                "Misslyckades med att radera anteckningen"
+            ],
+            "Edit Note": [
+                "Redigera anteckning"
+            ],
+            "Add Note": [
+                "Lägg till anteckning"
+            ],
+            "View and manage notes and PDFs (opens in new tab)": [
+                "Visa och hantera anteckningar och PDF-filer (öppnas i en ny flik)"
+            ],
+            "Manage Notes and PDFs": [
+                "Hantera anteckningar och PDF-filer"
+            ],
+            "Loading note content...": [
+                "Laddar anteckningens innehåll..."
+            ],
+            "Note Title": [
+                "Anteckningstitel"
+            ],
+            "Enter note title...": [
+                "Ange anteckningstitel..."
+            ],
+            "Note Content": [
+                "Anteckningens innehåll"
+            ],
+            "Enter note content...": [
+                "Ange anteckningens innehåll..."
+            ],
+            "Deleting...": [
+                "Raderar..."
+            ],
+            "Save Note": [
+                "Spara anteckning"
+            ],
+            "Add Notes and PDFs": [
+                "Lägg till anteckningar och PDF-filer"
+            ],
+            "added": [
+                "tillagd"
+            ]
+        }
+    }
+}

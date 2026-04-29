@@ -87,7 +87,8 @@ class EPKB_Layout_Category_Sidebar {
 					foreach ( $top_categories as $top_category_id => $top_category_name ) {
 						$term_link = EPKB_Utilities::get_term_url( $top_category_id, $tax_name );
 						$active = ! empty( $active_id ) && $active_id == $top_category_id;
-						$count = EPKB_Categories_DB::get_category_count( $kb_id, $top_category_id ); ?>
+						$include_sub_categories = $kb_config['section_article_count_mode'] == 'current_and_sub_categories';
+						$count = EPKB_Categories_DB::get_category_count( $kb_id, $top_category_id, $include_sub_categories ); ?>
 
 						<li class="eckb--acll__cat-item <?php echo ( $active ? 'eckb--acll__cat-item--active' : '' ); ?>">
 							<a href="<?php echo esc_url( $term_link ); ?>">

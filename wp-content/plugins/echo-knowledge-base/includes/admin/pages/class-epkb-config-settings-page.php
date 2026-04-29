@@ -13,6 +13,7 @@ class EPKB_Config_Settings_Page {
 	private $is_frontend_editor;
 	private $elay_enabled;
 	private $asea_enabled;
+	private $ai_search_enabled;
 	private $eprf_enabled;
 	private $widg_enabled;
 	private $kblk_enabled;
@@ -38,13 +39,14 @@ class EPKB_Config_Settings_Page {
 		// retrieve add-ons configuration
 		$this->kb_config = apply_filters( 'eckb_kb_config', $kb_config );
 
-		$this->kb_config_specs = EPKB_Core_Utilities::retrieve_all_kb_specs( $this->kb_config['id'] );
+		$this->kb_config_specs = EPKB_Core_Utilities::retrieve_all_kb_specs_with_labels( $this->kb_config['id'] );
 
 		$this->kb_main_pages = EPKB_KB_Handler::get_kb_main_pages( $this->kb_config );
 		$this->kb_main_page_has_kb_blocks = EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $this->kb_config );
 
 		$this->elay_enabled = EPKB_Utilities::is_elegant_layouts_enabled();
 		$this->asea_enabled = EPKB_Utilities::is_advanced_search_enabled();
+		$this->ai_search_enabled = EPKB_AI_Utilities::is_ai_search_enabled();
 		$this->eprf_enabled = EPKB_Utilities::is_article_rating_enabled();
 		$this->widg_enabled = EPKB_Utilities::is_kb_widgets_enabled();
 		$this->kblk_enabled = EPKB_Utilities::is_link_editor_enabled();
@@ -234,7 +236,7 @@ class EPKB_Config_Settings_Page {
 
 		// Archive Page
 		$tabs_config['archive-page'] = array(
-			'title'  => esc_html__( 'Category Archive Page', 'echo-knowledge-base' ),
+			'title'  => esc_html__( 'Category Page', 'echo-knowledge-base' ),
 			'icon'   => 'epkb-archive-page-icon',
 			'key'    => 'archive-page',
 			'active' => false,
@@ -352,7 +354,8 @@ class EPKB_Config_Settings_Page {
 			'ml_resource_links_1_settings_tab_content', 'ml_resource_links_2_settings_tab_content', 'ml_resource_links_3_settings_tab_content', 'ml_resource_links_4_settings_tab_content',
 			'ml_resource_links_5_settings_tab_content', 'ml_resource_links_6_settings_tab_content', 'ml_resource_links_7_settings_tab_content', 'ml_resource_links_8_settings_tab_content',
 			'general_typography', 'sidebar_main_page_intro_text_link', 'article_search_sidebar_layout_msg', 'article_list_spacing', 'ml_categories_articles_sidebar_desktop_width',
-			'archive_header_desktop_width', 'archive_content_desktop_width', 'article-container-desktop-width-v2', 'article-body-desktop-width-v2', 'article_sidebar_settings_link', 'categories_articles_preset', 'kb_ai_collection_id'] ) ) {
+			'archive_header_desktop_width', 'archive_content_desktop_width', 'article-container-desktop-width-v2', 'article-body-desktop-width-v2', 'article_sidebar_settings_link', 'categories_articles_preset',
+			'template_main_page_display_title_info'] ) ) {
 			$this->show_custom_display_fields( $setting_name, $show_included );
 			return;
 		}
@@ -630,18 +633,6 @@ class EPKB_Config_Settings_Page {
 			) );
 		}
 
-		if ( $setting_name == 'kb_ai_collection_id' ) {
-			EPKB_HTML_Elements::custom_dropdown( array(
-				'input_group_class' => 'epkb-admin__input-field' . ' ' . $input_group_class . ' ',
-				'group_data'        => $group_data,
-				'label'             => esc_html__( 'AI Training Data Collection', 'echo-knowledge-base' ),
-				'label_class'       => 'epkb-main_label',
-				'name'              => $setting_name,
-				'value'             => $this->kb_config[$setting_name],
-				'options'           => EPKB_AI_Utilities::get_collection_options()
-			) );
-		}
-
 		if ( in_array( $setting_name, [ 'advanced_search_mp_presets', 'advanced_search_ap_presets' ] ) ) {
 			EPKB_HTML_Elements::radio_buttons_horizontal( [
 				'name'              => $setting_name,
@@ -766,7 +757,8 @@ class EPKB_Config_Settings_Page {
 						} else {
 							EPKB_HTML_Forms::dialog_pro_feature_ad( [
 								'id' => 'epkb-dialog-pro-feature-ad-kb_main_page_layout',
-							'title' => sprintf( esc_html__( "Unlock %sGrid and Sidebar Layout%s By Upgrading to PRO", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+							// translators: %1$s and %2$s are HTML strong tags
+							'title' => sprintf( esc_html__( "Unlock %1\$sGrid and Sidebar Layout%2\$s By Upgrading to PRO", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 							'btn_text' => esc_html__( 'Upgrade Now', 'echo-knowledge-base' ),
 							'img_list' =>  [
 									[ 'Click to view demo',
@@ -1130,8 +1122,9 @@ class EPKB_Config_Settings_Page {
 				$group_data_escaped = EPKB_HTML_Elements::get_data_escaped( $group_data );  ?>
 				<div class="epkb-admin__input-field <?php echo esc_attr( $input_group_class ); ?>" <?php echo $group_data_escaped; ?>>  <?php
 					//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					// translators: %1$s and %2$s are HTML strong tags
 					EPKB_HTML_Forms::pro_feature_ad_box( array(
-						'title'      	=> sprintf( esc_html__( "Get %sArticle Ratings and Feedback%s Feature", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+						'title'      	=> sprintf( esc_html__( "Get %1\$sArticle Ratings and Feedback%2\$s Feature", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 						'list'       	=> array(
 							esc_html__( 'Let your readers rate the quality of your articles', 'echo-knowledge-base' ),
 							esc_html__( 'Enable users to provide valuable feedback on your articles', 'echo-knowledge-base' ),
@@ -1162,8 +1155,9 @@ class EPKB_Config_Settings_Page {
 				$group_data_escaped = EPKB_HTML_Elements::get_data_escaped( $group_data );  ?>
 			<div class="epkb-admin__input-field <?php echo esc_attr( $input_group_class ); ?>" <?php echo $group_data_escaped; ?>>  <?php
 				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// translators: %1$s and %2$s are HTML strong tags
 				EPKB_HTML_Forms::pro_feature_ad_box( array(
-					'title'        	=> sprintf( esc_html__( "Upgrade To %sAdvanced Search%s", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+					'title'        	=> sprintf( esc_html__( "Upgrade To %1\$sAdvanced Search%2\$s", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 					'list'       	=> array(
 						esc_html__( 'Filter search results by categories', 'echo-knowledge-base' ),
 						esc_html__( 'Add a description under the search input', 'echo-knowledge-base' ),
@@ -1185,8 +1179,9 @@ class EPKB_Config_Settings_Page {
 				$group_data_escaped = EPKB_HTML_Elements::get_data_escaped( $group_data );  ?>
 				<div class="epkb-admin__input-field <?php echo esc_attr( $input_group_class ); ?>" <?php echo $group_data_escaped; ?>>  <?php
 					//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// translators: %1$s and %2$s are HTML strong tags
 				EPKB_HTML_Forms::pro_feature_ad_box( array(
-					'title'      	=> sprintf( esc_html__( "Upgrade To %sElegant Layouts%s", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+					'title'      	=> sprintf( esc_html__( "Upgrade To %1\$sElegant Layouts%2\$s", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 					'list'       	=> array(
 						esc_html__( 'Use a Grid Layout for the Main Page', 'echo-knowledge-base' ),
 						esc_html__( 'Use a Sidebar Layout for the Main Page', 'echo-knowledge-base' ),
@@ -1237,11 +1232,12 @@ class EPKB_Config_Settings_Page {
 			</div>  <?php
 		}
 
-		if ( $setting_name == 'article_search_sidebar_layout_msg' ) {   
+		if ( $setting_name == 'article_search_sidebar_layout_msg' ) {
 			$main_page_url = EPKB_KB_Handler::get_first_kb_main_page_url( $this->kb_config ); ?>
 			<div class="epkb-admin__input-field">
-				<p><?php 
-					echo sprintf( esc_html__( 'You have chosen the Sidebar layout. The Sidebar layout search box is controlled by the %ssearch settings on the Main Page%s.', 'echo-knowledge-base' ), '<a class="epkb-admin__form-tab-content-desc__link" href="' . esc_url( $main_page_url ) . '" target="_blank" rel="noopener noreferrer">', '</a>' ); ?>
+				<p><?php
+					// translators: %1$s and %2$s are HTML anchor tags
+					echo sprintf( esc_html__( 'You have chosen the Sidebar layout. The Sidebar layout search box is controlled by the %1$ssearch settings on the Main Page%2$s.', 'echo-knowledge-base' ), '<a class="epkb-admin__form-tab-content-desc__link" href="' . esc_url( $main_page_url ) . '" target="_blank" rel="noopener noreferrer">', '</a>' ); ?>
 				</p>
 			</div>  <?php
 		}
@@ -1254,12 +1250,14 @@ class EPKB_Config_Settings_Page {
 				'10' => esc_html__( 'Standard', 'echo-knowledge-base' ) . ' ' . '#3',
 				'12' => esc_html__( 'Spacious', 'echo-knowledge-base' ),
 				'14' => esc_html__( 'Large', 'echo-knowledge-base' ),
+				'20' => esc_html__( 'Extra Large', 'echo-knowledge-base' ),
 			);
 			$tooltip_body = esc_html__( 'Spacing between articles in a list', 'echo-knowledge-base' ) . ':<br>' .
 				__( 'Compact', 'echo-knowledge-base' ) . ' 8px' . '<br>' .
 				__( 'Standard', 'echo-knowledge-base' ) . ' 12/16/20px' . '<br>' .
 				__( 'Spacious', 'echo-knowledge-base' ) . ' 24px' . '<br>' .
-				__( 'Large', 'echo-knowledge-base' ) . ' 28px' . '<br>';
+				__( 'Large', 'echo-knowledge-base' ) . ' 28px' . '<br>' .
+				__( 'Extra Large', 'echo-knowledge-base' ) . ' 40px' . '<br>';
 			if ( ! key_exists( $this->kb_config[$setting_name], $spacing_range ) ) {
 				$spacing_range[$this->kb_config[$setting_name]] = esc_html__( 'Custom', 'echo-knowledge-base' ) . ' ' . ( 2 * $this->kb_config[$setting_name] );
 			}
@@ -1314,22 +1312,17 @@ class EPKB_Config_Settings_Page {
 			}
 		}
 
-		if ( $setting_name == 'categories_articles_preset' && ( ! in_array( $this->kb_config['kb_main_page_layout'], [ 'Sidebar', 'Grid' ] ) || $this->elay_enabled ) ) {
-			$all_module_presets = EPKB_KB_Wizard_Setup::get_modules_presets_config( $this->kb_config['kb_main_page_layout'] );
-			$current_layout_themes['current'] = '-----';
-			foreach ( $all_module_presets['categories_articles'][ $this->kb_config['kb_main_page_layout'] ]['presets'] as $preset_key => $preset_config ) {
-				$current_layout_themes[ $preset_key ] = $preset_config['title'];
-			}
-			EPKB_HTML_Elements::custom_dropdown( array(
-				'input_group_class' => 'epkb-admin__input-field' . ' ' . $input_group_class . ' ',
-				'group_data'        => $group_data,
-				'label'             => esc_html__( 'Apply Preset', 'echo-knowledge-base' ),
-				'label_class'       => 'epkb-main_label',
-				'name'              => $setting_name,
-				'value'             => 'current',
-				'options'           => $current_layout_themes,
-			) );
+		// Page Title info message for Current Theme Template
+		if ( $setting_name == 'template_main_page_display_title_info' ) {
+			$group_data_escaped = EPKB_HTML_Elements::get_data_escaped( $group_data );  ?>
+			<div class="epkb-admin__input-field <?php echo esc_attr( $input_group_class ); ?>" id="<?php echo esc_attr( $setting_name ); ?>" <?php echo $group_data_escaped; ?>>
+				<?php EPKB_HTML_Forms::notification_box_middle( [
+					'type' => 'info',
+					'desc' => esc_html__( 'The page title is controlled by your theme.', 'echo-knowledge-base' ),
+				] ); ?>
+			</div>  <?php
 		}
+
 	}
 
 	/**
@@ -1461,7 +1454,7 @@ class EPKB_Config_Settings_Page {
 			],
 			'data'    	=> [ 'target' => 'content-archive' ],
 			/* FUTURE TODO as info icon 'learn_more_links' => [ // title => url
-				__( 'Category Archive Page', 'echo-knowledge-base' ) => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
+				__( 'Category Page', 'echo-knowledge-base' ) => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
 				__( 'Additional Styling of Category Page', 'echo-knowledge-base' ) => 'https://www.echoknowledgebase.com/documentation/additional-styling-for-category-page/',
 			], */
 		);
@@ -1533,7 +1526,7 @@ class EPKB_Config_Settings_Page {
 					'template_category_archive_categories' => [ 'only_archive_kb_templates', 'not_archive_page_v3' ],
 				],
 			'learn_more_links' => [ // title => url
-				__( 'Category Archive Page', 'echo-knowledge-base' ) => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
+				__( 'Category Page', 'echo-knowledge-base' ) => 'https://www.echoknowledgebase.com/documentation/category-archive-page/',
 				__( 'Additional Styling of Category Page', 'echo-knowledge-base' ) => 'https://www.echoknowledgebase.com/documentation/additional-styling-for-category-page/',
 				],
 		);
@@ -1546,6 +1539,7 @@ class EPKB_Config_Settings_Page {
 				'title'     => esc_html__( 'KB Main Page Page Title', 'echo-knowledge-base' ),
 				'fields'    => [
 					'template_main_page_display_title' => 'only_kb_templates',
+					'template_main_page_display_title_info' => 'not_kb_templates',
 				],
 			),
 			array(
@@ -1604,8 +1598,19 @@ class EPKB_Config_Settings_Page {
 					'title'     => esc_html__( 'Article Content', 'echo-knowledge-base' ),
 					'fields'    => [
 						'article-body-desktop-width-v2' => '',
+						'article-content-padding-v2' => '',
+						'article-content-background-color-v2' => '',
 					],
-                    'data'      => [ 'target' => 'article_content' ],
+					'data'      => [ 'target' => 'article_content' ],
+				),
+				array(
+					'title'     => esc_html__( 'Article Page Spacing', 'echo-knowledge-base' ),
+					'desc'      => '',
+					'fields'    => [
+						'template_article_padding_top' => '',
+						'template_article_margin_top' => '',
+					],
+					'data'      => [ 'target' => 'article_template_spacing' ],
 				),
 				array(
 					'title'     => esc_html__( 'Article Views Counter', 'echo-knowledge-base' ),
@@ -1616,8 +1621,7 @@ class EPKB_Config_Settings_Page {
 						'article_views_counter_text' => '',
 					],
 					'data'      => [ 'target' => 'article_views_counter' ],
-					'desc' => esc_html__( 'The counter provides an approximate measure of user views, but bot-generated views cannot be fully filtered out. ' .
-						'Comparing view counts between articles can be more practical than relying on absolute view counts.',  'echo-knowledge-base' ),
+					'desc'      => esc_html__( 'The counter provides an approximate measure of user views, but bot-generated views cannot be fully filtered out. Comparing view counts between articles can be more practical than relying on absolute view counts.', 'echo-knowledge-base' ),
 				),
 				array(
 					'title'     => esc_html__( 'Article Features - Top', 'echo-knowledge-base' ),
@@ -1632,7 +1636,7 @@ class EPKB_Config_Settings_Page {
 						'last_updated_on_text' => '',
 						'author_text' => '',
 					],
-                    'data'      => [ 'target' => 'article_features_top' ],
+					'data'      => [ 'target' => 'article_features_top' ],
 				),
 				array(
 					'title'     => esc_html__( 'Article Features - Bottom', 'echo-knowledge-base' ),
@@ -1695,11 +1699,11 @@ class EPKB_Config_Settings_Page {
 					'data'      => [ 'target' => 'print_button' ]
 				),
 				array(
-					'title'         => esc_html__( 'Widgets/Shortcodes', 'echo-knowledge-base' ),
-					'fields'        => [
+					'title'       => esc_html__( 'Widgets/Shortcodes', 'echo-knowledge-base' ),
+					'fields'      => [
 						'widg_search_results_limit' => 'widg',
 					],
-					'requirement'     => 'widg',
+					'requirement' => 'widg',
 				)
 			],
 			'article-page-sidebar' => [
@@ -1742,7 +1746,7 @@ class EPKB_Config_Settings_Page {
 						'sidebar_expand_articles_icon' => '',
 						'sidebar_article_icon_toggle' => '',
 						'elay_sidebar_article_icon' => 'elay',
-						'article_list_spacing' => [ 'elay', ['only_sidebar', 'only_block_main_page'] ],
+						'article_list_spacing' => '',
 						'sidebar_article_active_bold' => '',
 						'sidebar_side_bar_height_mode' => '',
 						'sidebar_side_bar_height' => '',
@@ -1984,8 +1988,7 @@ class EPKB_Config_Settings_Page {
 			case 'width':
 				if ( ! $this->is_kb_templates ) {
 					$field_specs['desc'] = '<div class="epkb-editor__info"><span class="epkbfa epkbfa-info-circle"></span> ' .
-						esc_html__( 'We have detected that you are using the Current Theme Template option. If your width is not expanding the way you want, it is because the theme is controlling the total width. ' .
-							'You have two options: either switch to the KB Template option or check your theme settings to expand the width.', 'echo-knowledge-base' ) .
+						esc_html__( 'We have detected that you are using the Current Theme Template option. If your width is not expanding the way you want, it is because the theme is controlling the total width. You have two options: either switch to the KB Template option or check your theme settings to expand the width.', 'echo-knowledge-base' ) .
 						' <a href="https://www.echoknowledgebase.com/documentation/current-theme-template-vs-kb-template/" target="_blank"><span class="epkbfa epkbfa-external-link"></span></a></div>';
 				}
 				break;
@@ -2000,11 +2003,22 @@ class EPKB_Config_Settings_Page {
 				$field_specs['enable_on'] = ['on'];
 				break;
 
+			case 'article_list_hover_background_color':
+			case 'article_list_hover_font_color':
+				if ( ! $this->is_drill_down_layout ) {
+					$field_specs['dependency'] = ['article_list_hover_toggle'];
+					$field_specs['enable_on'] = ['on'];
+				}
+				break;
+
 			case 'nav_sidebar_left':
 			case 'nav_sidebar_right':
 			case 'rating_mode':
 			case 'section_head_category_icon_location':
 			case 'section_desc_text_on':
+			case 'glossary_enable':
+			case 'article_list_hover_toggle':
+			case 'quizzes_enable':
 				$field_specs['input_group_class'] = 'eckb-conditional-setting-input' . ' ';
 				break;
 
@@ -2015,7 +2029,7 @@ class EPKB_Config_Settings_Page {
 			case 'advanced_search_ap_input_box_radius':
 			case 'advanced_search_mp_input_box_radius':
 				if ( $this->is_frontend_editor ) {
-					$field_specs['label'] = esc_html__( 'Search Input Radius', 'echo-advanced-search' );
+					$field_specs['label'] = esc_html__( 'Search Input Radius', 'echo-knowledge-base' );
 				}
 				break;
 
@@ -2047,8 +2061,7 @@ class EPKB_Config_Settings_Page {
 		switch ( $input_args['specs'] ) {
 
 			case 'ml_categories_articles_sidebar_desktop_width':
-				$input_args['tooltip_body'] =  esc_html__( 'The width of the sidebar is determined by the Row Width setting. If the Row Width is set to 100%, the Sidebar Width can be assigned, ' .
-													'for example, as 30% (Large), leaving the remaining 70% for the rest of the row.', 'echo-knowledge-base' ) . '<br/><br/>' .
+				$input_args['tooltip_body'] =  esc_html__( 'The width of the sidebar is determined by the Row Width setting. If the Row Width is set to 100%, the Sidebar Width can be assigned, for example, as 30% (Large), leaving the remaining 70% for the rest of the row.', 'echo-knowledge-base' ) . '<br/><br/>' .
 													'<a target="_blank" href="https://www.echoknowledgebase.com/documentation/modular-layout/">' . esc_html__( 'Learn More', 'echo-knowledge-base' ) . '</a>';
 				break;
 
@@ -2117,6 +2130,16 @@ class EPKB_Config_Settings_Page {
 				$input_args['setting_help_text'] = [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/article-views-counter/' ] ];
 				break;
 
+			// Glossary
+			case 'glossary_enable':
+				$input_args['tooltip_body'] = esc_html__( 'Enable or disable the Glossary feature. When enabled, glossary terms will be highlighted in articles with tooltip definitions. When disabled, the Glossary menu is hidden; turn it back on here then save and reload the page to see the Glossary in the admin menu.', 'echo-knowledge-base' );
+				break;
+
+			// Quizzes
+			case 'quizzes_enable':
+				$input_args['tooltip_body'] = esc_html__( 'Enable or disable the Quizzes feature. When enabled, the Quizzes menu appears in the KB admin and published quizzes can render on article pages. When disabled, the Quizzes menu is hidden; turn it back on here in the default KB, then save and reload the page to see Quizzes in the admin menu.', 'echo-knowledge-base' );
+				break;
+
 			//Left Sidebar
 			case 'article-left-sidebar-toggle': // Left Sidebar
 				$input_args['setting_help_text'] = [ [ 'link_text' => esc_html__( 'Learn More', 'echo-knowledge-base' ), 'link_url' => 'https://www.echoknowledgebase.com/documentation/article-sidebars/' ] ];
@@ -2143,11 +2166,13 @@ class EPKB_Config_Settings_Page {
 				break;
 
 			case 'ml_faqs_title_location':
-				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change FAQ Title %sclick here%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
+				// translators: %1$s and %2$s are HTML anchor tags
+				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change FAQ Title %1$sclick here%2$s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
 				break;
 
 			case 'ml_articles_list_title_location':
-				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change Featured Articles Title %sclick here%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
+				// translators: %1$s and %2$s are HTML anchor tags
+				$input_args['tooltip_body'] =  sprintf( esc_html__( 'To change Featured Articles Title %1$sclick here%2$s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' );
 				break;
 
 			case 'ml_row_1_desktop_width':
@@ -2265,9 +2290,10 @@ class EPKB_Config_Settings_Page {
 				break;
 
 			case 'section_head_category_icon_location':
+				// translators: %1$s and %2$s are HTML anchor tags
 				$input_args['tooltip_body'] = sprintf(
 					esc_html__(
-						'Set Image and Font Icons for Categories. %sLearn More%s',
+						'Set Image and Font Icons for Categories. %1$sLearn More%2$s',
 						'echo-knowledge-base'
 					),
 					'<a target="_blank" rel="noopener noreferrer" href="https://www.echoknowledgebase.com/documentation/how-do-you-change-icons-for-the-categories/" class="epkb-admin__form-tab-content-desc__link">',
@@ -2370,8 +2396,7 @@ class EPKB_Config_Settings_Page {
 
 			'search' => [
 				'module-settings' => [
-					'ml_search_layout' => 'not_asea',
-					'kb_ai_collection_id' => ''
+					'ml_search_layout' => 'not_asea'
 				],
 				'main-page-search-box-presets' => [
 					'advanced_search_mp_presets' => 'asea',
@@ -2386,6 +2411,7 @@ class EPKB_Config_Settings_Page {
 					'advanced_search_mp_box_input_width' => 'asea',
 					'advanced_search_mp_input_box_radius' => 'asea',
 					'advanced_search_mp_input_box_search_icon_placement' => 'asea',
+					'advanced_search_faqs_toggle' => 'asea',
 					'advanced_search_mp_filter_toggle' => 'asea',
 
 					'search_box_padding_top' => 'not_asea',
@@ -2407,14 +2433,20 @@ class EPKB_Config_Settings_Page {
 					// PRO feature ad
 					'asea_pro_description' => 'not_asea',
 				],
-				'main-page-search-results-list' => [
-					'advanced_search_mp_results_list_size' => 'asea',
-					'advanced_search_mp_show_top_category' => 'asea',
-					'advanced_search_context_toggle' => 'asea',
-					'advanced_search_context_highlight_font_color' => 'asea',
-					'advanced_search_context_characters' => 'asea',
-				],
-				'main-page-search-labels-box' => [
+			'main-page-search-results-list' => [
+				'advanced_search_mp_results_list_size' => [ 'asea', 'not_ai_search' ],
+				'advanced_search_mp_show_top_category' => 'asea',
+				'advanced_search_context_toggle' => 'asea',
+				'advanced_search_context_highlight_font_color' => 'asea',
+				'advanced_search_context_characters' => 'asea',
+			],
+			'main-page-search-button' => [
+				'advanced_search_mp_ai_search_button_background_color' => 'asea',
+				'advanced_search_mp_ai_search_button_text_color' => 'asea',
+				'advanced_search_mp_ai_search_button_background_hover_color' => 'asea',
+				'advanced_search_mp_ai_search_button_text_hover_color' => 'asea',
+			],
+			'main-page-search-labels-box' => [
 					// Search Title - Main Page
 					'search_title' => [ 'not_asea', 'not_block_main_page' ],
 					'search_button_name' => [ 'not_asea', 'not_block_main_page' ],
@@ -2465,11 +2497,12 @@ class EPKB_Config_Settings_Page {
 					'categories_articles_preset'                            => '',
 					'grid_nof_columns'                                      => [ 'elay', 'only_grid' ],
 					'nof_columns'                                           => [ 'not_grid', 'not_sidebar' ],
-					'background_color'                                      => 'not_sidebar',
+					'background_color'                                      => [ 'not_sidebar', 'not_drill_down' ],
 					'article-content-background-color-v2'                   => [ 'elay', 'only_sidebar' ],
 
 					// Drill Down Layout
 					'ml_categories_articles_back_button_bg_color'           => 'only_drill_down',
+					'ml_categories_articles_category_box_bg_color'          => 'only_drill_down',
 
 					// Other
 					'ml_categories_articles_kblk_pro'                       => 'not_kblk',
@@ -2654,11 +2687,12 @@ class EPKB_Config_Settings_Page {
 		if ( $this->is_frontend_editor ) {
 			$sub_contents_configs['main-page-settings'] = array(
 				'main-page-page-title' => array(
-					'title'     => __( 'Pate Title', 'echo-knowledge-base' ),
+					'title'     => __( 'Page Title', 'echo-knowledge-base' ),
 					'desc'      => '',
 					'css_class'	=> 'epkb-admin__form-tab-content--main-page-page-title epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--main-page-settings-box epkb-admin__form-tab-content--hide',
 					'fields'    => [
 						'template_main_page_display_title' => '',
+						'template_main_page_display_title_info' => '',
 					],
 					'data'		=> [ 'target' => 'main-page-page-title' ],
 				),
@@ -2670,6 +2704,16 @@ class EPKB_Config_Settings_Page {
 						'templates_for_kb' => 'Choose Template',
 					],
 					'data'		=> [ 'target' => 'theme-compatibility-mode' ],
+				),
+				'main-page-template-spacing' => array(
+					'title'     => __( 'KB Page Spacing', 'echo-knowledge-base' ),
+					'desc'      => '',
+					'css_class'	=> 'epkb-admin__form-tab-content--main-page-template-spacing epkb-admin__form-tab-content--module-box epkb-admin__form-tab-content--main-page-settings-box epkb-admin__form-tab-content--hide',
+					'fields'    => [
+						'template_main_page_padding_top' => '',
+						'template_main_page_margin_top' => '',
+					],
+					'data'		=> [ 'target' => 'main-page-template-spacing' ],
 				),
 				'main-page-general-typography' => array(
 					'title'     => __( 'Font Family', 'echo-knowledge-base' ),
@@ -2844,10 +2888,16 @@ class EPKB_Config_Settings_Page {
 					'ml_categories_articles_collapse_categories' => [ 'only_classic' ],
 					'section_box_height_mode' => [ 'not_drill_down', 'not_grid', 'not_sidebar' ],
 					'section_body_height' => [ 'not_drill_down', 'not_grid', 'not_sidebar' ],
-					// 'sidebar_background_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_background_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_border_width' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_border_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_border_radius' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_box_shadow' => [ 'elay', 'only_sidebar' ],
 					'section_border_width' => [ 'not_sidebar' ],
 					'section_border_color' => [ 'not_sidebar' ],
 					'section_border_radius' => [ 'not_sidebar' ],
+					'category_box_padding' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
+					'section_box_gap' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
 				],
 				'data'          => [ 'insert-box-after' => '.epkb-admin__form-tab-content--module-settings' ],
 			),
@@ -2860,9 +2910,19 @@ class EPKB_Config_Settings_Page {
 					'grid_section_desc_text_on' => [ 'elay', 'only_grid' ],     // category description on/off
 					'grid_section_divider' => [ 'elay', 'only_grid' ],
 
+					// Sidebar Layout
+					'sidebar_section_head_alignment' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_head_font_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_head_background_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_head_description_font_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_divider' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_divider_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_top_categories_collapsed' => [ 'elay', 'only_sidebar' ],
+
 					// core layouts
 					'section_head_alignment' => [ [ 'only_basic', 'only_tabs', 'only_categories' ] ],
 					'section_hyperlink_on' => [ [ 'only_basic', 'only_tabs', 'only_categories' ] ],     // link to category archive page
+					'section_article_count_mode' => [ 'only_categories' ],
 					'section_head_font_color' => [ 'not_sidebar' ],     // Category Name Color
 					'section_desc_text_on' => [ 'not_grid', 'not_sidebar' ],
 					'section_head_description_font_color' => [ 'not_sidebar' ],
@@ -2871,6 +2931,8 @@ class EPKB_Config_Settings_Page {
 					'section_divider_color' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_grid' ] ],
 					'section_head_background_color' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_grid' ] ],
 					'ml_categories_articles_category_title_html_tag' => [ [ 'only_classic', 'only_drill_down' ] ],
+					'section_head_font_size' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
+					'section_head_description_font_size' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
 				],
 				'data'          => [ 'insert-box-after' => '.epkb-admin__form-tab-content--module-settings' ],
 			),
@@ -2893,6 +2955,12 @@ class EPKB_Config_Settings_Page {
 				'fields'        => [
 					'grid_category_icon_location' => [ 'elay', 'only_grid' ],
 					'grid_section_icon_size' => [ 'elay', 'only_grid' ],
+					'grid_section_icon_padding_top' => [ 'elay', 'only_grid' ],
+					'grid_section_icon_padding_bottom' => [ 'elay', 'only_grid' ],
+					'grid_section_icon_padding_left' => [ 'elay', 'only_grid' ],
+					'grid_section_icon_padding_right' => [ 'elay', 'only_grid' ],
+					'sidebar_section_category_icon_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_section_category_font_color' => [ 'elay', 'only_sidebar' ],
 					'section_head_category_icon_location' => [ 'not_grid', 'not_sidebar' ],
 					'section_head_category_icon_size' => [ 'not_grid', 'not_sidebar' ],
 					'section_head_category_icon_color' => [ 'not_sidebar' ],    // Category Icon
@@ -2915,12 +2983,20 @@ class EPKB_Config_Settings_Page {
 					'article_icon_toggle' => ['not_grid', 'not_sidebar'],
 					'elay_article_icon' => ['elay', 'not_sidebar'],
 					'article_icon_color' => [ 'not_sidebar' ],
-					// 'sidebar_article_icon_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_article_icon_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_article_icon_toggle' => [ 'elay', 'only_sidebar' ],
 					'article_font_color' => [ 'not_grid', 'not_sidebar' ],
-					// 'sidebar_article_font_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_article_font_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_article_active_font_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_article_active_background_color' => [ 'elay', 'only_sidebar' ],
+					'sidebar_show_articles_before_categories' => [ 'elay', 'only_sidebar' ],
+					'sidebar_article_list_margin' => [ 'elay', 'only_sidebar' ],
 					'ml_categories_articles_article_bg_color' => [ 'only_drill_down' ],
 					'article_list_spacing' => 'not_sidebar', // article spacing
-					'article_sidebar_settings_link' => 'only_sidebar',
+					'article_list_hover_toggle' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic' ] ],
+					'article_list_hover_background_color' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
+					'article_list_hover_font_color' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
+					'article_font_size' => [ [ 'only_basic', 'only_tabs', 'only_categories', 'only_classic', 'only_drill_down' ] ],
 					'collapse_articles_msg' => 'not_block_main_page',
 					'sidebar_show_sub_category_articles_msg' => '',
 					'show_all_articles_msg' => '',
@@ -2971,14 +3047,23 @@ class EPKB_Config_Settings_Page {
 			];
 		}
 
-		// Main Page Search Box
-		$dedicated_module_boxes_config['main-page-search-box'] = [
-			'module'    => 'search',
-			'title'     => esc_html__( 'Search Box', 'echo-knowledge-base' ),
-			'data'    	=> [ 'target' => 'search-options-mp' ],
-		];
+	// Main Page Search Box
+	$dedicated_module_boxes_config['main-page-search-box'] = [
+		'module'    => 'search',
+		'title'     => esc_html__( 'Search Box', 'echo-knowledge-base' ),
+		'data'    	=> [ 'target' => 'search-options-mp' ],
+	];
 
-		// Search Results List
+	// Main Page Search Button (AI Search) - only show if AI Search is enabled
+	if ( $this->asea_enabled && EPKB_AI_Utilities::is_ai_search_smart_enabled() ) {
+		$dedicated_module_boxes_config['main-page-search-button'] = [
+			'module'    => 'search',
+			'title'     => esc_html__( 'Search Button', 'echo-knowledge-base' ),
+			'data'      => [ 'target' => 'search-button-mp' ],
+		];
+	}
+
+	// Search Results List
 		$dedicated_module_boxes_config['main-page-search-results-list'] = [
 			'module'    => 'search',
 			'title'     => esc_html__( 'Search Results List', 'echo-knowledge-base' ),
@@ -3108,107 +3193,117 @@ class EPKB_Config_Settings_Page {
 					),
 				];
 			}
-			// if Article Page search is enabled and NOT synced with Main Page then show all Article Page settings
-			//		- always show for block Main Page (ignore sync toggle value)
-			//		- always show for Article Page FE (related settings visibility is handled in FE without settings reload)
-			if ( $this->is_frontend_editor || ( $this->kb_config['article_search_toggle'] == 'on' && ( $this->kb_config['article_search_sync_toggle'] != 'on' || $this->kb_main_page_has_kb_blocks ) ) ) {
-				$sub_contents_configs['article-page-search-box'] = [
-					array(
-						'title'     => esc_html__( 'Settings', 'echo-knowledge-base' ),
-						'fields'    => [
-							'article_search_toggle' => '',
-							'article_search_sync_toggle' => 'not_block_main_page',
-							'article-container-desktop-width-v2' => '',
-							'ml_article_search_layout' => 'not_asea',
-						],
-                        'data'      => ['target' => 'search-settings-ap'],
-					),
-					array(
-						'title'         => esc_html__( 'Search Box Designs', 'echo-knowledge-base' ),
-						'fields'        => [
-							'advanced_search_ap_presets' => 'asea',
-						],
-					),
-					array(
-						'title'     => esc_html__( 'Article Page Search Box', 'echo-knowledge-base' ),
-						'fields'    => [
-							'article_search_title_font_color' => 'not_asea',
-							'article_search_background_color' => 'not_asea',
-							'advanced_search_ap_box_padding_top' => 'asea',
-							'advanced_search_ap_box_padding_bottom' => 'asea',
-							'advanced_search_ap_box_margin_top' => 'asea',
-							'advanced_search_ap_box_margin_bottom' => 'asea',
-							'advanced_search_ap_box_input_width' => 'asea',
-							'advanced_search_ap_input_box_radius' => 'asea',
-							'advanced_search_ap_input_box_search_icon_placement' => 'asea',
-							'advanced_search_ap_filter_toggle' => 'asea',
+		// if Article Page search is enabled and NOT synced with Main Page then show all Article Page settings
+		//		- always show for block Main Page (ignore sync toggle value)
+		//		- always show for Article Page FE (related settings visibility is handled in FE without settings reload)
+		if ( $this->is_frontend_editor || ( $this->kb_config['article_search_toggle'] == 'on' && ( $this->kb_config['article_search_sync_toggle'] != 'on' || $this->kb_main_page_has_kb_blocks ) ) ) {
+			$sub_contents_configs['article-page-search-box'] = [
+				array(
+					'title'     => esc_html__( 'Settings', 'echo-knowledge-base' ),
+					'fields'    => [
+						'article_search_toggle' => '',
+						'article_search_sync_toggle' => 'not_block_main_page',
+						'article-container-desktop-width-v2' => '',
+						'ml_article_search_layout' => 'not_asea',
+					],
+                    'data'      => ['target' => 'search-settings-ap'],
+				),
+				array(
+					'title'         => esc_html__( 'Search Box Designs', 'echo-knowledge-base' ),
+					'fields'        => [
+						'advanced_search_ap_presets' => 'asea',
+					],
+				),
+				array(
+					'title'     => esc_html__( 'Article Page Search Box', 'echo-knowledge-base' ),
+					'fields'    => [
+						'article_search_title_font_color' => 'not_asea',
+						'article_search_background_color' => 'not_asea',
+						'advanced_search_ap_box_padding_top' => 'asea',
+						'advanced_search_ap_box_padding_bottom' => 'asea',
+						'advanced_search_ap_box_margin_top' => 'asea',
+						'advanced_search_ap_box_margin_bottom' => 'asea',
+						'advanced_search_ap_box_input_width' => 'asea',
+						'advanced_search_ap_input_box_radius' => 'asea',
+						'advanced_search_ap_input_box_search_icon_placement' => 'asea',
+						'advanced_search_ap_filter_toggle' => 'asea',
 
-							'article_search_box_padding_top' => 'not_asea',
-							'article_search_box_padding_bottom' => 'not_asea',
+						'article_search_box_padding_top' => 'not_asea',
+						'article_search_box_padding_bottom' => 'not_asea',
 
-							'article_search_box_input_width' => 'not_asea',
-							'article_search_text_input_background_color' => 'not_asea',
-							'article_search_text_input_border_color' => 'not_asea',
-							'article_search_btn_background_color' => 'not_asea',
-							'article_search_title_html_tag' => 'not_asea',
-							'article_search_result_mode' => 'not_asea',
+						'article_search_box_input_width' => 'not_asea',
+						'article_search_text_input_background_color' => 'not_asea',
+						'article_search_text_input_border_color' => 'not_asea',
+						'article_search_btn_background_color' => 'not_asea',
+						'article_search_title_html_tag' => 'not_asea',
+						'article_search_result_mode' => 'not_asea',
 
-							'advanced_search_ap_filter_category_level' => 'asea',
-							'advanced_search_ap_show_top_category' => 'asea',
-							'advanced_search_ap_results_list_size' => 'asea',
+						'advanced_search_ap_filter_category_level' => 'asea',
+						'advanced_search_ap_show_top_category' => 'asea',
+						'advanced_search_ap_results_list_size' => [ 'asea', 'not_ai_search' ],
 
-							// PRO feature ad
-							'asea_pro_description' => 'not_asea',
-						],
-						'data'      => [ 'target' => 'search-options-ap' ],
-					),
-					array(
-						'title'     => esc_html__( 'Search Labels', 'echo-knowledge-base' ),
-						'fields'    => [
-							// Search Title - Article Page
-							'article_search_title' => ['not_asea', 'not_sidebar'],
-							'article_search_button_name' => ['not_asea', 'not_sidebar'],
+						// PRO feature ad
+						'asea_pro_description' => 'not_asea',
+				],
+				'data'      => [ 'target' => 'search-options-ap' ],
+			),
+			array(
+				'title'     => esc_html__( 'Search Button', 'echo-knowledge-base' ),
+				'fields'    => [
+					'advanced_search_ap_ai_search_button_background_color' => 'asea',
+					'advanced_search_ap_ai_search_button_text_color' => 'asea',
+					'advanced_search_ap_ai_search_button_background_hover_color' => 'asea',
+					'advanced_search_ap_ai_search_button_text_hover_color' => 'asea',
+				],
+				'data'      => ['target' => 'search-button-ap'],
+			),
+			array(
+				'title'     => esc_html__( 'Search Labels', 'echo-knowledge-base' ),
+					'fields'    => [
+						// Search Title - Article Page
+						'article_search_title' => ['not_asea', 'not_sidebar'],
+						'article_search_button_name' => ['not_asea', 'not_sidebar'],
 						// Search Input Box - Article Page
 						'advanced_search_ap_title_toggle' => 'asea',
 						'advanced_search_ap_title' => 'asea',
 						'advanced_search_ap_title_font_size' => 'asea',
 						'advanced_search_ap_title_font_color' => 'asea',
 						'advanced_search_ap_button_name' => ['asea', 'not_sidebar'],
-							'article_search_box_hint' => ['not_sidebar'],
-							'article_search_results_msg' => ['not_sidebar'],
-							'advanced_search_ap_description_below_title_toggle' => 'asea',
-							'advanced_search_ap_description_below_title' => 'asea',
-							'advanced_search_ap_description_below_input_toggle' => 'asea',
-							'advanced_search_ap_description_below_input' => 'asea',
-							'advanced_search_ap_title_by_filter' => ['asea', 'not_sidebar'],
-							'advanced_search_ap_title_clear_results' => ['asea', 'not_sidebar'],
-							'advanced_search_ap_filter_indicator_text' => ['asea', 'not_sidebar'],
-							'advanced_search_ap_results_msg' => ['asea', 'not_sidebar'],
-							'advanced_search_ap_no_results_found' => ['asea', 'not_sidebar'],
-							'advanced_search_ap_more_results_found' => ['asea', 'not_sidebar'],
-							'advanced_search_ap_box_hint' => ['asea', 'not_sidebar'],
-						],
-						'data'      => ['target' => 'search-labels-ap'],
-					),
-					array(
-						'title'     => esc_html__( 'Search Style', 'echo-knowledge-base' ),
-						'fields'    => [
-							'advanced_search_ap_link_font_color' => 'asea',
-							'advanced_search_ap_background_color' => 'asea',
-							'advanced_search_ap_background_image_url' => 'asea',
-							'advanced_search_ap_background_gradient_toggle' => 'asea',
-							'advanced_search_ap_background_gradient_from_color' => 'asea',
-							'advanced_search_ap_background_gradient_to_color' => 'asea',
-							'advanced_search_ap_background_gradient_degree' => 'asea',
-							'advanced_search_ap_background_gradient_opacity' => 'asea',
-						],
-						'data'      => ['target' => 'search-style-ap'],
-					),
-				];
-			}
+						'article_search_box_hint' => ['not_sidebar'],
+						'article_search_results_msg' => ['not_sidebar'],
+						'advanced_search_ap_description_below_title_toggle' => 'asea',
+						'advanced_search_ap_description_below_title' => 'asea',
+						'advanced_search_ap_description_below_input_toggle' => 'asea',
+						'advanced_search_ap_description_below_input' => 'asea',
+						'advanced_search_ap_title_by_filter' => ['asea', 'not_sidebar'],
+						'advanced_search_ap_title_clear_results' => ['asea', 'not_sidebar'],
+						'advanced_search_ap_filter_indicator_text' => ['asea', 'not_sidebar'],
+						'advanced_search_ap_results_msg' => ['asea', 'not_sidebar'],
+						'advanced_search_ap_no_results_found' => ['asea', 'not_sidebar'],
+						'advanced_search_ap_more_results_found' => ['asea', 'not_sidebar'],
+						'advanced_search_ap_box_hint' => ['asea', 'not_sidebar'],
+					],
+					'data'      => ['target' => 'search-labels-ap'],
+				),
+				array(
+					'title'     => esc_html__( 'Search Style', 'echo-knowledge-base' ),
+					'fields'    => [
+						'advanced_search_ap_link_font_color' => 'asea',
+						'advanced_search_ap_background_color' => 'asea',
+						'advanced_search_ap_background_image_url' => 'asea',
+						'advanced_search_ap_background_gradient_toggle' => 'asea',
+						'advanced_search_ap_background_gradient_from_color' => 'asea',
+						'advanced_search_ap_background_gradient_to_color' => 'asea',
+						'advanced_search_ap_background_gradient_degree' => 'asea',
+						'advanced_search_ap_background_gradient_opacity' => 'asea',
+					],
+					'data'      => ['target' => 'search-style-ap'],
+				),
+			];
 		}
+	}
 
-		return $sub_contents_configs;
+	return $sub_contents_configs;
 	}
 
 	/**
@@ -3912,6 +4007,11 @@ class EPKB_Config_Settings_Page {
 				$field_specs['enable_on'] = ['kb_templates'];
 				break;
 
+			case 'template_main_page_display_title_info':
+				$field_specs['dependency'] = ['templates_for_kb'];
+				$field_specs['enable_on'] = ['current_theme_templates'];
+				break;
+
 			default:
 				break;
 		}
@@ -3935,6 +4035,7 @@ class EPKB_Config_Settings_Page {
 		// a field might require an add-on plugins, layout, Main page, KB Templates enabled
 		if ( ( ( in_array( 'not_elay', $requirements ) && $this->elay_enabled ) || ( in_array( 'elay', $requirements ) && ! $this->elay_enabled ) )
 			|| ( ( in_array( 'not_asea', $requirements ) && $this->asea_enabled ) || ( in_array( 'asea', $requirements ) && ! $this->asea_enabled ) )
+			|| ( ( in_array( 'not_ai_search', $requirements ) && $this->ai_search_enabled ) || ( in_array( 'ai_search', $requirements ) && ! $this->ai_search_enabled ) )
 			|| ( ( in_array( 'not_eprf', $requirements ) && $this->eprf_enabled ) || ( in_array( 'eprf', $requirements ) && ! $this->eprf_enabled ) )
 			|| ( ( in_array( 'not_widg', $requirements ) && $this->widg_enabled ) || ( in_array( 'widg', $requirements ) && ! $this->widg_enabled ) )
 			|| ( ( in_array( 'not_kblk', $requirements ) && $this->kblk_enabled ) || ( in_array( 'kblk', $requirements ) && ! $this->kblk_enabled ) )
@@ -3967,6 +4068,7 @@ class EPKB_Config_Settings_Page {
 		// a field might require an add-on plugins, layout, Main page, KB Templates enabled
 		if ( ( ( in_array( 'not_elay', $requirements ) && ! $this->elay_enabled ) || ( in_array( 'elay', $requirements ) && $this->elay_enabled ) )
 			|| ( ( in_array( 'not_asea', $requirements ) && ! $this->asea_enabled ) || ( in_array( 'asea', $requirements ) && $this->asea_enabled ) )
+			|| ( ( in_array( 'not_ai_search', $requirements ) && ! $this->ai_search_enabled ) || ( in_array( 'ai_search', $requirements ) && $this->ai_search_enabled ) )
 			|| ( ( in_array( 'not_eprf', $requirements ) && ! $this->eprf_enabled ) || ( in_array( 'eprf', $requirements ) && $this->eprf_enabled ) )
 			|| ( ( in_array( 'not_widg', $requirements ) && ! $this->widg_enabled ) || ( in_array( 'widg', $requirements ) && $this->widg_enabled ) )
 			|| ( ( in_array( 'not_kblk', $requirements ) && ! $this->kblk_enabled ) || ( in_array( 'kblk', $requirements ) && $this->kblk_enabled ) )

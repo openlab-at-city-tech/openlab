@@ -4242,8 +4242,8 @@
   width: auto !important;
 }
 [dir=rtl] .epkb-term-options-wrap .epkb-categories-icons__tabs-header .epkb-categories-icons__button {
-  margin-right: unset;
-  margin-left: 10px;
+  margin-right: 0;
+  margin-left: 0;
 }
 [dir=rtl] .epkb-term-options-wrap .epkb-categories-icons .epkb-category-image__dropdown label span {
   margin-right: unset;

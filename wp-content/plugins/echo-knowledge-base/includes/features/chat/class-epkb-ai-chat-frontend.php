@@ -49,14 +49,27 @@ class EPKB_AI_Chat_Frontend {
 		// Get the active collection for this page
 		self::$active_collection = self::get_active_chat_collection_for_current_page();
 
+		// Check access control before showing widget
+		if ( ! self::is_user_allowed_to_access_chat( self::$active_collection ) ) {
+			return false;
+		}
+
 		// If collection_id is 0, don't show the chat
-		return ! empty( self::$active_collection['collection_id'] );
+		if ( empty( self::$active_collection['collection_id'] ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
 	 * Output the HTML for the chat widget
 	 */
 	private function output_chat_widget_html() {
+
+		// Build collection info with any configuration errors
+		$collection_info = self::$active_collection;
+		$collection_info['configuration_error'] = self::get_configuration_error_for_frontend();
 
 		// Use output buffering to ensure clean output
 		ob_start();		?>
@@ -67,13 +80,73 @@ class EPKB_AI_Chat_Frontend {
 		<script>
 			// Initialize the chat widget root element ID and collection info for the script
 			window.epkbChatWidgetRoot = 'epkb-ai-chat-widget-root';
-			window.epkbChatCollectionInfo = <?php echo wp_json_encode( self::$active_collection ); ?>;
+			window.epkbChatCollectionInfo = <?php echo wp_json_encode( $collection_info ); ?>;
 		</script>   <?php
 
 		$output = ob_get_clean();
 
 		// Use wp_footer action to ensure proper placement
 		echo $output;
+	}
+
+	/**
+	 * Get configuration error formatted for frontend display
+	 *
+	 * @return array|null Error info or null if no error
+	 */
+	private static function get_configuration_error_for_frontend() {
+
+		$collection_id = self::$active_collection['collection_id'];
+		$is_admin = EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_ai_feature' );
+
+		// Check for provider mismatch first
+		$provider_mismatch = EPKB_AI_Training_Data_Config_Specs::get_active_and_selected_provider_if_mismatched( $collection_id );
+		if ( $provider_mismatch !== null ) {
+			return array(
+				'type'    => 'provider_mismatch',
+				// translators: %1$s is the collection provider, %2$s is the active provider
+				'message' => $is_admin
+					? sprintf(
+						__( 'AI Chat unavailable: Collection uses %1$s but active provider is %2$s.', 'echo-knowledge-base' ),
+						$provider_mismatch['collection_provider'],
+						$provider_mismatch['active_provider']
+					)
+					: __( 'AI Chat is temporarily unavailable. Please try again later.', 'echo-knowledge-base' ),
+			);
+		}
+
+		// Check for collection/vector store issues
+		$vector_store_result = EPKB_AI_Training_Data_Config_Specs::get_vector_store_id_by_collection( $collection_id );
+		if ( is_wp_error( $vector_store_result ) ) {
+			$error_code = $vector_store_result->get_error_code();
+
+			// Provide helpful messages for specific error types
+			if ( $error_code === 'collection_not_found' ) {
+				return array(
+					'type'    => $error_code,
+					'message' => $is_admin
+						? __( 'The selected AI data collection no longer exists. Please select a different collection in KB Configuration.', 'echo-knowledge-base' )
+						: __( 'AI Chat is temporarily unavailable. Please try again later.', 'echo-knowledge-base' ),
+				);
+			}
+
+			if ( $error_code === 'no_vector_store' ) {
+				return array(
+					'type'    => $error_code,
+					'message' => $is_admin
+						? __( 'The selected collection has not been synced yet. Please sync it in the Training Data settings.', 'echo-knowledge-base' )
+						: __( 'AI Chat is temporarily unavailable. Please try again later.', 'echo-knowledge-base' ),
+				);
+			}
+
+			// Fallback for other errors
+			return array(
+				'type'    => $error_code,
+				'message' => $is_admin ? $vector_store_result->get_error_message() : __( 'AI Chat is temporarily unavailable. Please try again later.', 'echo-knowledge-base' ),
+			);
+		}
+
+		return null;
 	}
 
 	/**
@@ -93,14 +166,15 @@ class EPKB_AI_Chat_Frontend {
 		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
 		$display_mode = isset( $ai_config['ai_chat_display_mode'] ) ? $ai_config['ai_chat_display_mode'] : 'all_pages';
 
-		// If display mode is 'all_pages', use collection 1 by default
+		// If display mode is 'all_pages', use collection from config
 		if ( $display_mode === 'all_pages' ) {
 			return array(
-				'collection_id'   => isset( $ai_config['ai_chat_display_collection'] ) ? absint( $ai_config['ai_chat_display_collection'] ) : 1,
+				'collection_id'   => isset( $ai_config['ai_chat_display_collection'] ) ? absint( $ai_config['ai_chat_display_collection'] ) : 0,
 				'display_mode'    => $display_mode,
 				'page_rules'      => array(),
 				'post_types'      => array(),
-				'url_patterns'    => ''
+				'url_patterns'    => '',
+				'slot'            => 1
 			);
 		}
 
@@ -111,7 +185,7 @@ class EPKB_AI_Chat_Frontend {
 
 			// Get collection ID and rules for this slot
 			if ( $slot_num === 1 ) {
-				$collection_id = isset( $ai_config['ai_chat_display_collection'] ) ? absint( $ai_config['ai_chat_display_collection'] ) : 1;
+				$collection_id = isset( $ai_config['ai_chat_display_collection'] ) ? absint( $ai_config['ai_chat_display_collection'] ) : 0;
 				$page_rules = isset( $ai_config['ai_chat_display_page_rules'] ) ? $ai_config['ai_chat_display_page_rules'] : array();
 				$post_types = isset( $ai_config['ai_chat_display_other_post_types'] ) ? $ai_config['ai_chat_display_other_post_types'] : array();
 				$url_patterns = isset( $ai_config['ai_chat_display_url_patterns'] ) ? $ai_config['ai_chat_display_url_patterns'] : '';
@@ -131,12 +205,6 @@ class EPKB_AI_Chat_Frontend {
 			// Check if any rules are configured for this slot
 			$has_rules = ! empty( $page_rules ) || ! empty( $post_types ) || ! empty( $url_patterns );
 
-			// For 'selected_only' and 'all_except' modes: only check Location 1, skip all other locations
-			// Multiple locations are only used when display_mode is 'all_pages'
-			if ( ( $display_mode === 'selected_only' || $display_mode === 'all_except' ) && $slot_num !== 1 ) {
-				continue;
-			}
-
 			if ( ! $has_rules && $slot_num !== 1 ) {
 				continue; // Skip slots 2-5 if they have no rules configured
 			}
@@ -153,7 +221,8 @@ class EPKB_AI_Chat_Frontend {
 					'display_mode'    => $display_mode,
 					'page_rules'      => $page_rules,
 					'post_types'      => $post_types,
-					'url_patterns'    => $url_patterns
+					'url_patterns'    => $url_patterns,
+					'slot'            => $slot_num
 				);
 			}
 		}
@@ -165,17 +234,19 @@ class EPKB_AI_Chat_Frontend {
 				'display_mode'    => $display_mode,
 				'page_rules'      => array(),
 				'post_types'      => array(),
-				'url_patterns'    => ''
+				'url_patterns'    => '',
+				'slot'            => 1
 			);
 		}
 
-		// Default to collection 1
+		// Default to configured collection (0 if not set)
 		return array(
-			'collection_id'   => isset( $ai_config['ai_chat_display_collection'] ) ? absint( $ai_config['ai_chat_display_collection'] ) : 1,
+			'collection_id'   => isset( $ai_config['ai_chat_display_collection'] ) ? absint( $ai_config['ai_chat_display_collection'] ) : 0,
 			'display_mode'    => $display_mode,
 			'page_rules'      => isset( $ai_config['ai_chat_display_page_rules'] ) ? $ai_config['ai_chat_display_page_rules'] : array(),
 			'post_types'      => isset( $ai_config['ai_chat_display_other_post_types'] ) ? $ai_config['ai_chat_display_other_post_types'] : array(),
-			'url_patterns'    => isset( $ai_config['ai_chat_display_url_patterns'] ) ? $ai_config['ai_chat_display_url_patterns'] : ''
+			'url_patterns'    => isset( $ai_config['ai_chat_display_url_patterns'] ) ? $ai_config['ai_chat_display_url_patterns'] : '',
+			'slot'            => 1
 		);
 	}
 
@@ -195,8 +266,8 @@ class EPKB_AI_Chat_Frontend {
 			if ( in_array( 'posts', $page_rules ) && is_single() && get_post_type() === 'post' ) {
 				return true;
 			}
-			// Check Pages
-			if ( in_array( 'pages', $page_rules ) && is_page() ) {
+			// Check Pages (includes home page)
+			if ( in_array( 'pages', $page_rules ) && ( is_page() || is_front_page() ) ) {
 				return true;
 			}
 		}
@@ -265,6 +336,160 @@ class EPKB_AI_Chat_Frontend {
 				if ( preg_match( $regex_pattern, $current_url ) ) {
 					return true;
 				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get a URL where AI Chat will be displayed based on current settings
+	 *
+	 * @return string URL where AI Chat is visible, or home_url as fallback
+	 */
+	public static function get_ai_chat_preview_url() {
+
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
+		$display_mode = isset( $ai_config['ai_chat_display_mode'] ) ? $ai_config['ai_chat_display_mode'] : 'all_pages';
+
+		// For 'all_pages' or 'all_except' mode, home page usually works
+		if ( $display_mode === 'all_pages' || $display_mode === 'all_except' ) {
+			return home_url( '/' );
+		}
+
+		// For 'selected_only' mode, find a matching page based on rules
+		$page_rules = isset( $ai_config['ai_chat_display_page_rules'] ) ? $ai_config['ai_chat_display_page_rules'] : array();
+		$post_types = isset( $ai_config['ai_chat_display_other_post_types'] ) ? $ai_config['ai_chat_display_other_post_types'] : array();
+
+		// If 'pages' is selected, home/front page will work
+		if ( in_array( 'pages', $page_rules ) ) {
+			return home_url( '/' );
+		}
+
+		// If KB post types are selected, get the KB main page URL
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $kb_post_type ) {
+				if ( preg_match( '/epkb_post_type_(\d+)/', $kb_post_type, $matches ) ) {
+					$kb_id = intval( $matches[1] );
+					$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+					$kb_main_page_url = EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config );
+					if ( ! empty( $kb_main_page_url ) ) {
+						return $kb_main_page_url;
+					}
+				}
+			}
+		}
+
+		// If 'posts' is selected, get a recent post URL
+		if ( in_array( 'posts', $page_rules ) ) {
+			$recent_post = get_posts( array( 'numberposts' => 1, 'post_status' => 'publish' ) );
+			if ( ! empty( $recent_post ) ) {
+				return get_permalink( $recent_post[0]->ID );
+			}
+		}
+
+		// Fallback to home page
+		return home_url( '/' );
+	}
+
+	/**
+	 * Check if the current user is allowed to access chat based on access control settings
+	 *
+	 * @param array $active_collection Active collection data with 'slot' key
+	 * @return bool
+	 */
+	public static function is_user_allowed_to_access_chat( $active_collection = array() ) {
+
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
+		$display_mode = isset( $ai_config['ai_chat_display_mode'] ) ? $ai_config['ai_chat_display_mode'] : 'all_pages';
+
+		// For selected_only, use the matched location's settings; otherwise use global (slot 1)
+		$slot = 1;
+		if ( $display_mode === 'selected_only' && ! empty( $active_collection['slot'] ) ) {
+			$slot = $active_collection['slot'];
+		}
+		$suffix = $slot === 1 ? '' : "_{$slot}";
+
+		$access_mode = isset( $ai_config["ai_chat_access_mode{$suffix}"] ) ? $ai_config["ai_chat_access_mode{$suffix}"] : 'all';
+
+		return self::check_access_for_current_user( $access_mode, $ai_config, $suffix );
+	}
+
+	/**
+	 * Check if current user passes the given access mode
+	 *
+	 * @param string $access_mode 'all', 'logged_in', or 'wp_role'
+	 * @param array $ai_config Full AI configuration
+	 * @param string $suffix Setting suffix for the location slot
+	 * @return bool
+	 */
+	private static function check_access_for_current_user( $access_mode, $ai_config, $suffix ) {
+
+		if ( $access_mode === 'all' ) {
+			return true;
+		}
+
+		if ( $access_mode === 'logged_in' ) {
+			return is_user_logged_in();
+		}
+
+		if ( $access_mode === 'wp_role' ) {
+			if ( ! is_user_logged_in() ) {
+				return false;
+			}
+			$allowed_roles = isset( $ai_config["ai_chat_access_roles{$suffix}"] ) ? $ai_config["ai_chat_access_roles{$suffix}"] : array();
+			if ( empty( $allowed_roles ) ) {
+				return true; // No roles configured = allow all logged-in users
+			}
+			$user = wp_get_current_user();
+			return ! empty( array_intersect( $allowed_roles, $user->roles ) );
+		}
+
+		return true;
+	}
+
+	/**
+	 * Check if the current user is allowed to access a specific collection based on access control settings.
+	 * Used by REST API to gate access by collection_id rather than URL.
+	 *
+	 * @param int $collection_id The collection ID being accessed
+	 * @return bool
+	 */
+	public static function is_user_allowed_for_collection( $collection_id ) {
+
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
+		$display_mode = isset( $ai_config['ai_chat_display_mode'] ) ? $ai_config['ai_chat_display_mode'] : 'all_pages';
+
+		// For all_pages/all_except, only global (slot 1) access settings apply
+		if ( $display_mode !== 'selected_only' ) {
+			$access_mode = isset( $ai_config['ai_chat_access_mode'] ) ? $ai_config['ai_chat_access_mode'] : 'all';
+			return self::check_access_for_current_user( $access_mode, $ai_config, '' );
+		}
+
+		// For selected_only, find slots that use this collection and allow if any slot permits the user.
+		// If collection_id is 0 (missing/spoofed), check ALL slots — user must pass at least one.
+		$collection_id = absint( $collection_id );
+		for ( $slot = 1; $slot <= 5; $slot++ ) {
+			$suffix = $slot === 1 ? '' : "_{$slot}";
+
+			if ( $collection_id > 0 ) {
+				$slot_collection = isset( $ai_config["ai_chat_display_collection{$suffix}"] ) ? absint( $ai_config["ai_chat_display_collection{$suffix}"] ) : 0;
+				if ( $slot_collection !== $collection_id ) {
+					continue;
+				}
+			}
+
+			$access_mode = isset( $ai_config["ai_chat_access_mode{$suffix}"] ) ? $ai_config["ai_chat_access_mode{$suffix}"] : 'all';
+			if ( self::check_access_for_current_user( $access_mode, $ai_config, $suffix ) ) {
+				return true;
 			}
 		}
 

@@ -11,6 +11,7 @@ jQuery(document).ready(function($) {
 		kb_id: 1,
 		step: 1,
 		selected_array: [],
+		selected_term_filters: {},
 		$wrap: [],
 		post_type: 'post',
 		convert_terms_mode: 'copy_terms',
@@ -41,6 +42,7 @@ jQuery(document).ready(function($) {
 				kb_id: $(this).data('kb_id'),
 				step: 1,
 				selected_array: [],
+				selected_term_filters: {},
 				$wrap: $(this).closest('.epkb-form-wrap'),
 				post_type: $(this).closest('.epkb-form-wrap').find('[name=epkb_convert_post_type]').val(),
 				convert_terms_mode: 'copy_terms',
@@ -87,16 +89,19 @@ jQuery(document).ready(function($) {
 	// select category
 	$(document).on( 'change keyup', '.epkb-convert-form--posts .epkb-convert-categories-select select, .epkb-convert-form--posts .epkb-convert-categories-filters--name-filter input', function(){
 
-		// deselect all
-		$('[name=row_id]').prop('checked', false);
-		$('#check_all_convert').prop('checked', false);
+		let $wrap = $(this).closest('.epkb-form-wrap');
+		epkb_convert_data.selected_term_filters = epkb_get_selected_term_filters( $wrap );
 
-		epkb_convert_data.$wrap.find('.epkb-dsl__article-list__body .epkb-admin-row').each(function(){
+		// deselect all
+		$wrap.find('[name=row_id]').prop('checked', false);
+		$wrap.find('#check_all_convert').prop('checked', false);
+
+		$wrap.find('.epkb-dsl__article-list__body .epkb-admin-row').each(function(){
 
 			let active = true;
 			let row = $(this);
 
-			epkb_convert_data.$wrap.find('.epkb-convert-categories-select select').each(function(){
+			$wrap.find('.epkb-convert-categories-select select').each(function(){
 				if ( $(this).val() == '' ) {
 					return true;
 				}
@@ -115,7 +120,7 @@ jQuery(document).ready(function($) {
 			});
 
 			// text search
-			let search = epkb_convert_data.$wrap.find('.epkb-convert-categories-filters--name-filter input').val().toLowerCase();
+			let search = $wrap.find('.epkb-convert-categories-filters--name-filter input').val().toLowerCase();
 
 			if ( search && row.find('.title').text().toLowerCase().indexOf(search) == -1 ) {
 				active = false;
@@ -133,20 +138,37 @@ jQuery(document).ready(function($) {
 	// select all script
 	$('.epkb-convert-form--posts').on('change', '#check_all_convert', function(){
 
+		let $wrap = $(this).closest('.epkb-form-wrap');
+
 		if ( ! $(this).prop('checked') ) {
-			epkb_convert_data.$wrap.find('.epkb-dsl__article-list__body .epkb-admin-row [name=row_id]').prop('checked', false);
+			$wrap.find('.epkb-dsl__article-list__body .epkb-admin-row [name=row_id]').prop('checked', false);
 			return;
 		}
 
-		epkb_convert_data.$wrap.find('.epkb-dsl__article-list__body .epkb-admin-row').each(function(){
-
-			if ( ! epkb_convert_data.current_category || $(this).find( '[data-kb-import-cat-id='+epkb_convert_data.current_category+']' ).length ) {
-				$(this).find('[name=row_id]').prop('checked', 'checked');
-			} else {
-				$(this).find('[name=row_id]').prop('checked', false);
-			}
+		$wrap.find('.epkb-dsl__article-list__body .epkb-admin-row').each(function(){
+			$(this).find('[name=row_id]').prop('checked', ! $(this).hasClass('hidden') );
 		});
 	});
+
+	function epkb_get_selected_term_filters( $wrap = epkb_convert_data.$wrap ) {
+
+		let selected_term_filters = {};
+
+		if ( ! $wrap || $wrap.length == 0 ) {
+			return selected_term_filters;
+		}
+
+		$wrap.find('.epkb-convert-categories-select select').each(function(){
+			let term_id = $(this).val();
+			let taxonomy = $(this).data('taxonomy-name');
+
+			if ( term_id && taxonomy ) {
+				selected_term_filters[taxonomy] = term_id;
+			}
+		});
+
+		return selected_term_filters;
+	}
 
 	// Validate current step
 	// Return true/false and show notice with the reason
@@ -390,6 +412,7 @@ jQuery(document).ready(function($) {
 			epkb_convert_data.selected_array.push($(this).val());
 		});
 
+		epkb_convert_data.selected_term_filters = epkb_get_selected_term_filters();
 		epkb_convert_data.selected_count = epkb_convert_data.selected_array.length;
 
 		// read settings
@@ -445,6 +468,7 @@ jQuery(document).ready(function($) {
 			epkb_kb_id: epkb_convert_data.kb_id,
 			epkb_convert_post_type: epkb_convert_data.post_type,
 			selected_rows: JSON.stringify( current_batch ),
+			selected_term_filters: JSON.stringify( epkb_convert_data.selected_term_filters ),
 			convert_terms_mode: epkb_convert_data.convert_terms_mode,
 			epkb_convert_step: epkb_convert_data.step,
 			category_taxonomy: epkb_convert_data.category_taxonomy,

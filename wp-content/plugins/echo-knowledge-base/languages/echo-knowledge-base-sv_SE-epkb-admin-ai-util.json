@@ -13,14 +13,44 @@
             "Cancel": [
                 "Avbryt"
             ],
+            "Next": [
+                "Nästa"
+            ],
+            "AI Features": [
+                "AI-funktioner"
+            ],
+            "OFF": [
+                "AV"
+            ],
+            "Use code:": [
+                "Använd kod:"
+            ],
+            "Copy": [
+                "Kopiera"
+            ],
+            "Documentation": [
+                "Dokumentation"
+            ],
+            "Copied!": [
+                "Kopierad!"
+            ],
+            "Got it!": [
+                "Klart!"
+            ],
+            "Show Me": [
+                "Visa mig"
+            ],
             "Loading...": [
                 "Laddar in …"
             ],
-            "General Settings": [
-                "Allmänna inställningar"
+            "Go to General Settings": [
+                "Gå till allmänna inställningar"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Din session har gått ut. Uppdatera sidan."
+            "Go to Settings": [
+                "Gå till Inställningar"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Din session har gått ut. Uppdatera sidan för att logga in igen."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "För många förfrågningar. Vänta en stund och försök igen."
@@ -37,8 +67,11 @@
             "Confirm": [
                 "Bekräfta"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "För att använda AI-funktioner, vänligen konfigurera din API-nyckel och acceptera dataskyddsavtalet i"
+            "Setup Steps": [
+                "Installationssteg"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings.": [
+                "För att använda AI-funktioner, vänligen konfigurera din API-nyckel och godkänn datasekretessavtalet i Allmänna inställningar."
             ],
             "Session Expired": [
                 "Sessionen har gått ut"
@@ -48,21 +81,6 @@
             ],
             "No results found": [
                 "Inga resultat hittades"
-            ],
-            "Tutorial": [
-                "Handledning"
-            ],
-            "Learn how to use this feature": [
-                "Lär dig hur du använder den här funktionen"
-            ],
-            "Tutorial Screenshot": [
-                "Skärmdump av handledning"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Detta är en handledning som förklarar hur man använder den här funktionen."
-            ],
-            "Close Tutorial": [
-                "Stäng handledning"
             ]
         }
     }

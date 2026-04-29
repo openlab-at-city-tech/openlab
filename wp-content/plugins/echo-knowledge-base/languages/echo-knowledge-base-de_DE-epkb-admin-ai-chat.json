@@ -7,8 +7,14 @@
                 "lang": "de_DE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Restore": [
+                "Wiederherstellen"
+            ],
             "Settings": [
                 "Einstellungen"
+            ],
+            "All": [
+                "Alle"
             ],
             "Page": [
                 "Seite"
@@ -19,14 +25,38 @@
             "Cancel": [
                 "Abbrechen"
             ],
+            "Save Settings": [
+                "Einstellungen speichern"
+            ],
+            "Delete": [
+                "Löschen"
+            ],
             "Next": [
                 "Weiter"
             ],
             "Previous": [
                 "Zurück"
             ],
+            "OFF": [
+                "AUS"
+            ],
+            "Errors": [
+                "Fehler"
+            ],
+            "Email": [
+                "E-Mail"
+            ],
+            "Feedback": [
+                "Feedback"
+            ],
+            "Reset": [
+                "Zurücksetzen"
+            ],
             "Saving...": [
                 "Speichern..."
+            ],
+            "Error": [
+                "Fehler"
             ],
             "Go to General Settings": [
                 "Gehen Sie zu den allgemeinen Einstellungen"
@@ -40,11 +70,11 @@
             "AI Assistant": [
                 "KI-Assistent"
             ],
-            "Save Settings": [
-                "Einstellungen speichern"
+            "Name": [
+                "Name"
             ],
-            "Delete": [
-                "Löschen"
+            "Message": [
+                "Nachricht"
             ],
             "Delete Selected": [
                 "Auswahl löschen"
@@ -52,8 +82,35 @@
             "of": [
                 "von"
             ],
-            "Reset": [
-                "Zurücksetzen"
+            "Phone": [
+                "Telefon"
+            ],
+            "Requires AI Features PRO": [
+                "Erfordert KI-Funktionen PRO"
+            ],
+            "with code": [
+                "mit Code"
+            ],
+            "Thumbs up (%d)": [
+                "Daumen hoch (%d)"
+            ],
+            "Thumbs up": [
+                "Daumen hoch"
+            ],
+            "Thumbs down (%d)": [
+                "Daumen runter (%d)"
+            ],
+            "Thumbs down": [
+                "Daumen runter"
+            ],
+            "Contact an Agent clicked": [
+                "Kontakt zu einem Agenten angeklickt"
+            ],
+            "Agent handover request submitted": [
+                "Anfrage zur Agenten-Übergabe eingereicht"
+            ],
+            "Trigger": [
+                "Auslöser"
             ],
             "Are you sure you want to delete the selected conversations?": [
                 "Möchten Sie die ausgewählten Konversationen wirklich löschen?"
@@ -67,6 +124,36 @@
             "Conversations refreshed successfully": [
                 "Konversationen wurden erfolgreich aktualisiert"
             ],
+            "Archive Conversations": [
+                "Konversationen archivieren"
+            ],
+            "Are you sure you want to archive the selected conversations?": [
+                "Möchten Sie die ausgewählten Konversationen wirklich archivieren?"
+            ],
+            "Archive": [
+                "Archivieren"
+            ],
+            "Archiving conversations...": [
+                "Konversationen werden archiviert..."
+            ],
+            "Restore Conversations": [
+                "Konversationen wiederherstellen"
+            ],
+            "Are you sure you want to restore the selected conversations?": [
+                "Möchten Sie die ausgewählten Konversationen wirklich wiederherstellen?"
+            ],
+            "Restoring conversations...": [
+                "Konversationen werden wiederhergestellt..."
+            ],
+            "Agent handover request": [
+                "Anfrage zur Agenten-Übergabe"
+            ],
+            "Active": [
+                "Aktiv"
+            ],
+            "Archived": [
+                "Archiviert"
+            ],
             "Search conversations...": [
                 "Gespräche suchen..."
             ],
@@ -75,6 +162,12 @@
             ],
             "Refresh": [
                 "Aktualisieren"
+            ],
+            "Archive Selected": [
+                "Ausgewählte archivieren"
+            ],
+            "Restore Selected": [
+                "Ausgewählte wiederherstellen"
             ],
             "Loading conversations...": [
                 "Gespräche werden geladen..."
@@ -91,8 +184,26 @@
             "Conversation": [
                 "Konversation"
             ],
+            "Message Count": [
+                "Nachrichtenanzahl"
+            ],
+            "Agent Handover": [
+                "Agenten-Übergabe"
+            ],
+            "Number of messages": [
+                "Anzahl der Nachrichten"
+            ],
             "Searching server for more results...": [
                 "Server sucht nach weiteren Ergebnissen..."
+            ],
+            "Deleting conversation...": [
+                "Gespräch wird gelöscht..."
+            ],
+            "Archiving conversation...": [
+                "Konversation wird archiviert..."
+            ],
+            "Restoring conversation...": [
+                "Konversation wird wiederhergestellt..."
             ],
             "Conversation Details": [
                 "Details zur Konversation"
@@ -100,29 +211,17 @@
             "Select a conversation to view details": [
                 "Wählen Sie eine Konversation aus, um Details anzuzeigen"
             ],
-            "Conversation Info": [
-                "Informationen zur Konversation"
-            ],
-            "User:": [
-                "Benutzer:"
-            ],
-            "Started:": [
-                "Gestartet:"
-            ],
-            "Messages:": [
-                "Nachrichten:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
-            "Rating:": [
-                "Bewertung:"
+            "Conversation Summary": [
+                "Gesprächszusammenfassung"
             ],
             "Full Conversation": [
                 "Vollständige Konversation"
             ],
             "No messages in this conversation.": [
                 "Keine Nachrichten in dieser Konversation."
+            ],
+            "Collection": [
+                "Sammlung"
             ],
             "Are you sure you want to reset to default instructions?": [
                 "Möchten Sie wirklich die Standardanweisungen zurücksetzen?"
@@ -136,6 +235,12 @@
             "Reset to Default": [
                 "Auf Standard zurücksetzen"
             ],
+            "Training data issues detected": [
+                "Trainingsdatenprobleme erkannt"
+            ],
+            "AI Chat cannot use the selected collection until these issues are fixed in Training Data.": [
+                "AI Chat kann die ausgewählte Sammlung nicht verwenden, bis diese Probleme in Trainingsdaten behoben sind."
+            ],
             "Failed to load conversations": [
                 "Fehler beim Laden von Gesprächen"
             ],
@@ -148,6 +253,18 @@
             "Failed to delete conversations": [
                 "Fehler beim Löschen der Gespräche"
             ],
+            "Conversations archived successfully": [
+                "Konversationen erfolgreich archiviert"
+            ],
+            "Failed to archive conversations": [
+                "Fehler beim Archivieren der Konversationen"
+            ],
+            "Conversations restored successfully": [
+                "Konversationen erfolgreich wiederhergestellt"
+            ],
+            "Failed to restore conversations": [
+                "Fehler beim Wiederherstellen der Konversationen"
+            ],
             "AI Chat is Disabled": [
                 "AI Chat ist deaktiviert"
             ],
@@ -157,8 +274,8 @@
             "Go to Settings": [
                 "Zu den Einstellungen"
             ],
-            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
-                "OpenAI-API-Schlüssel ist nicht konfiguriert. Bitte konfigurieren Sie ihn in den Allgemeinen Einstellungen, um AI-Chat-Funktionen zu verwenden."
+            "API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "API-Schlüssel ist nicht konfiguriert. Bitte konfigurieren Sie ihn in den AI-General-Einstellungen, um AI-Chat-Funktionen zu verwenden."
             ],
             "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
                 "Bitte akzeptieren Sie die Datenschutzvereinbarung in den Allgemeinen Einstellungen, um AI-Chat-Funktionen zu verwenden."

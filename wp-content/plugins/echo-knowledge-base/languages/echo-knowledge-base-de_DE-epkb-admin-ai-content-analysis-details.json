@@ -7,14 +7,23 @@
                 "lang": "de_DE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Demo Article": [
-                "Demo-Dokumentationsseite"
-            ],
             "Categories": [
                 "Kategorien"
             ],
+            "OFF": [
+                "AUS"
+            ],
+            "Use code:": [
+                "Code verwenden:"
+            ],
+            "Copy": [
+                "Kopieren"
+            ],
             "Article Content": [
                 "Artikelinhalt"
+            ],
+            "Copied!": [
+                "Kopiert!"
             ],
             "Analyzing...": [
                 "Analysieren..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "Inhaltslückenanalyse"
             ],
+            "Identifies unanswered user questions": [
+                "Identifiziert unbeantwortete Nutzerfragen"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "Erkennt fehlende oder unterentwickelte Themen"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "Bietet umsetzbare Empfehlungen zur Verbesserung"
+            ],
             "AI-Powered Tag Suggestions": [
                 "KI-gestützte Tag-Vorschläge"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "Die Lückenanalyse ist nur mit dem KI-Funktionen-Add-on verfügbar."
             ],
             "Readability": [
                 "Lesbarkeit"
             ],
-            "Tag added successfully": [
-                "Tag erfolgreich hinzugefügt"
-            ],
-            "Tag removed successfully": [
-                "Tag erfolgreich entfernt"
-            ],
             "Tag updated successfully": [
                 "Tag erfolgreich aktualisiert"
+            ],
+            "Get AI Features PRO": [
+                "KI-Funktionen PRO erhalten"
             ],
             "Add New Tag": [
                 "Neues Schlagwort hinzufügen"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "Schlagwörter"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "Artikel anzeigen"
             ],
+            "Saving tags...": [
+                "Tags werden gespeichert..."
+            ],
             "Failed to save tag changes": [
                 "Fehler beim Speichern der Tag-Änderungen"
-            ],
-            "Failed to add tag": [
-                "Fehler beim Hinzufügen des Tags"
-            ],
-            "Failed to remove tag": [
-                "Fehler beim Entfernen des Tags"
-            ],
-            "Failed to remove tags": [
-                "Fehler beim Entfernen von Tags"
             ],
             "Failed to update tag": [
                 "Fehler beim Aktualisieren des Tags"
             ],
             "Not Analyzed": [
                 "Nicht analysiert"
-            ],
-            "Demo Analysis Data": [
-                "Beispieldaten zur Analyse"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "Dies ist ein Demo-Artikel mit Beispielldaten zur Inhaltsanalyse zu Demonstrationszwecken. Erstellen Sie Ihre eigenen Artikel, um echte Ergebnisse der Inhaltsanalyse zu sehen."
             ],
             "Loading analysis details...": [
                 "Lade Analysedetails..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "Bei der Inhaltslücken-Analyse ist ein Fehler aufgetreten."
             ],
-            "Learn More About AI Features": [
-                "Mehr über KI-Funktionen erfahren"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "KI identifiziert fehlende Informationen und unbeantwortete Fragen in Ihren Artikeln. Finden Sie heraus, welche Themen noch stärker abgedeckt werden müssen."
             ],
             "Analyzing article for content gaps...": [
                 "Analysieren Sie den Artikel auf Inhaltslücken..."

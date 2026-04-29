@@ -381,10 +381,17 @@ class EPKB_HTML_Elements {
 						self::display_pro_setting_tag_pro_feature_ad( $args['pro_tooltip_args'] );
 					}   ?>
 				</label>
-				<div class="epkb-settings-control__input <?php echo esc_attr( $args['input_class'] ); ?>">
-					<label class="epkb-settings-control-toggle">
+				<div class="epkb-settings-control__input <?php echo esc_attr( $args['input_class'] ); ?>">     <?php
+						$toggle_on_text  = $args['toggleOnText'];
+						$toggle_off_text = $args['toggleOffText'];
+						$longest_text    = mb_strtoupper( mb_strlen( $toggle_off_text ) > mb_strlen( $toggle_on_text ) ? $toggle_off_text : $toggle_on_text );
+						$char_count      = mb_strlen( $longest_text );
+						$toggle_width      = max( 54, ( $char_count * 7 ) + 24 );
+						$toggle_text_offset = $toggle_width > 54 ? (int) round( 3 + ( $toggle_width - 54 ) / 2 ) : 3;
+						$toggle_style      = $toggle_width > 54 ? 'style="width: ' . esc_attr( $toggle_width ) . 'px; --epkb-toggle-text-offset: ' . esc_attr( $toggle_text_offset ) . 'px;"' : '';    ?>
+					<label class="epkb-settings-control-toggle" <?php echo $toggle_style; ?>>
 						<input type="checkbox" class="epkb-settings-control__input__toggle" value="on" name="<?php echo esc_attr( $args['name'] ); ?>" <?php checked( true, $args['checked'] ); ?>>
-						<span class="epkb-settings-control__input__label" data-on="<?php echo esc_attr( $args['toggleOnText'] ); ?>" data-off="<?php echo esc_attr( $args['toggleOffText'] ); ?>"></span>
+						<span class="epkb-settings-control__input__label" data-on="<?php echo esc_attr( $toggle_on_text ); ?>" data-off="<?php echo esc_attr( $toggle_off_text ); ?>"></span>
 						<span class="epkb-settings-control__input__handle"></span>
 					</label>
 				</div>
@@ -995,26 +1002,26 @@ class EPKB_HTML_Elements {
 	 */
 	public static function get_copy_to_clipboard_box( $copy_text, $label='', $return_html=true ) {
 
+		$label_html = empty( $label ) ? '' : "<span>" . esc_html( $label ) . "</span> ";
+
+		$html = $label_html .
+				"<span class='epkb-copy-to-clipboard-box-container'>" .
+					"<span class='epkb-ctc__embed-content'>" .
+						"<span class='epkb-ctc__embed-notification'>" . esc_html__( 'Copied to clipboard', 'echo-knowledge-base' ) . "</span>" .
+						"<span class='epkb-ctc__embed-code'>" . esc_html( $copy_text ) . "</span>" .
+					"</span>" .
+					"<a class='epkb-ctc__copy-button' href='#'>" .
+						"<span>" . esc_html__( 'Copy', 'echo-knowledge-base' ) . "</span>" .
+					"</a>" .
+				"</span>";
+
 		if ( ! empty( $return_html ) ) {
-			ob_start();
-		}
-        if ( ! empty( $label ) ) {  ?>
-            <span class=""><?php echo esc_html( $label ); ?></span> <?php
-		}   ?>
-        <span class="epkb-copy-to-clipboard-box-container">
-            <span class="epkb-ctc__embed-content">
-                <span class="epkb-ctc__embed-notification"><?php echo esc_html__( 'Copied to clipboard', 'echo-knowledge-base' ); ?></span>
-                <span class="epkb-ctc__embed-code"><?php echo esc_html( $copy_text ); ?></span>
-            </span>
-			<a class="epkb-ctc__copy-button" href="#">
-                <span><?php echo esc_html__( 'Copy', 'echo-knowledge-base' ); ?></span>
-            </a>
-        </span>  <?php
-		if ( ! empty( $return_html ) ) {
-			return ob_get_clean();
+			return $html;
 		}
 
-        return '';
+		echo $html;  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped above
+
+		return '';
 	}
 
 	/**
@@ -1314,8 +1321,7 @@ class EPKB_HTML_Elements {
 		}
 
 		$specs_name = $args['specs'];
-		$field_specs = EPKB_Core_Utilities::retrieve_all_kb_specs( EPKB_KB_Config_DB::DEFAULT_KB_ID );
-
+		$field_specs = EPKB_Core_Utilities::retrieve_all_kb_specs_with_labels( EPKB_KB_Config_DB::DEFAULT_KB_ID );
 		if ( empty( $field_specs[$specs_name] ) ) {
 			return $args;
 		}

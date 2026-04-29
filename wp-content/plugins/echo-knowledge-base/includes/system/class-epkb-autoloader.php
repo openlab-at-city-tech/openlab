@@ -18,6 +18,7 @@ class EPKB_Autoloader {
 
 				// CORE
 				'epkb_utilities'                    =>  'includes/class-epkb-utilities.php',
+				'epkb_pdf_utilities'                =>  'includes/class-epkb-pdf-utilities.php',
 				'epkb_core_utilities'               =>  'includes/class-epkb-core-utilities.php',
 				'epkb_html_elements'                =>  'includes/class-epkb-html-elements.php',
 				'epkb_html_admin'                   =>  'includes/class-epkb-html-admin.php',
@@ -48,6 +49,9 @@ class EPKB_Autoloader {
 				'epkb_admin_notices'                =>  'includes/admin/class-epkb-admin-notices.php',
 				'epkb_site_builders'                =>  'includes/admin/class-epkb-site-builders.php',
 				'epkb_debug_controller'             =>  'includes/admin/settings/class-epkb-debug-controller.php',
+				'epkb_help_resources_page'	        =>  'includes/admin/settings/class-epkb-help-resources-page.php',
+				'epkb_setup_steps'                  =>  'includes/admin/settings/class-epkb-setup-steps.php',
+				'epkb_setup_pointers'               =>  'includes/admin/settings/class-epkb-setup-pointers.php',
 
 				// ADMIN PAGES
 				'epkb_config_page'                  =>  'includes/admin/pages/class-epkb-config-page.php',
@@ -61,6 +65,7 @@ class EPKB_Autoloader {
 				// CONVERT
 				'epkb_convert'                      =>  'includes/admin/convert/class-epkb-convert.php',
 				'epkb_convert_ctrl'                 =>  'includes/admin/convert/class-epkb-convert-ctrl.php',
+				'epkb_pdf_import_ctrl'              =>  'includes/admin/convert/class-epkb-pdf-import-ctrl.php',
 
 				// KB CONFIGURATION
 				'epkb_kb_config_specs'              =>  'includes/admin/kb-configuration/class-epkb-kb-config-specs.php',
@@ -81,6 +86,19 @@ class EPKB_Autoloader {
 				'epkb_faqs_page'                    =>  'includes/admin/faqs/class-epkb-faqs-page.php',
 				'epkb_faqs_utilities'               =>  'includes/admin/faqs/class-epkb-faqs-utilities.php',
 				'epkb_faqs_ajax'               		=>  'includes/admin/faqs/class-epkb-faqs-ajax.php',
+
+				// Glossary
+				'epkb_glossary_taxonomy_setup'      =>  'includes/features/glossary/class-epkb-glossary-taxonomy-setup.php',
+				'epkb_glossary_frontend'            =>  'includes/features/glossary/class-epkb-glossary-frontend.php',
+				'epkb_glossary_page'                =>  'includes/admin/glossary/class-epkb-glossary-page.php',
+				'epkb_glossary_ctrl'                =>  'includes/admin/glossary/class-epkb-glossary-ctrl.php',
+
+				// Quizzes
+				'epkb_quizzes_page'                 =>  'includes/admin/quizzes/class-epkb-quizzes-page.php',
+				'epkb_quizzes_ctrl'                 =>  'includes/admin/quizzes/class-epkb-quizzes-ctrl.php',
+				'epkb_quizzes_cpt_setup'            =>  'includes/features/quizzes/class-epkb-quizzes-cpt-setup.php',
+				'epkb_quizzes_setup'                =>  'includes/features/quizzes/class-epkb-quizzes-setup.php',
+				'epkb_quizzes_utilities'            =>  'includes/features/quizzes/class-epkb-quizzes-utilities.php',
 
 				// WIZARDS
 				'epkb_kb_wizard_setup'              =>  'includes/admin/wizard/class-epkb-kb-wizard-setup.php',
@@ -138,8 +156,9 @@ class EPKB_Autoloader {
 				// FEATURES - SHORTCODES
 				'epkb_shortcodes'                   =>  'includes/features/shortcodes/class-epkb-shortcodes.php',
 				'epkb_articles_index_shortcode'     =>  'includes/features/shortcodes/class-epkb-articles-index-shortcode.php',
+				'epkb_glossary_index_shortcode'     =>  'includes/features/shortcodes/class-epkb-glossary-index-shortcode.php',
 				'epkb_faqs_shortcode'               =>  'includes/features/shortcodes/class-epkb-faqs-shortcode.php',
-				'epkb_ai_advanced_search_shortcode' =>  'includes/features/shortcodes/class-epkb-ai-advanced-search-shortcode.php',
+				'epkb_ai_smart_search_shortcode' =>  'includes/features/shortcodes/class-epkb-ai-smart-search-shortcode.php',
 
 				// FEATURES - ARTICLE VIEWS
 				'epkb_article_count_cntrl'          =>  'includes/features/article-counter/class-epkb-article-count-cntrl.php',
@@ -175,10 +194,15 @@ class EPKB_Autoloader {
 				'epkb_ai_training_data_db'          =>  'includes/ai/db/class-epkb-ai-training-data-db.php',
 				'epkb_ai_content_analysis_db'       =>  'includes/ai/db/class-epkb-ai-content-analysis-db.php',
 
-				// AI OpenAI
-				'epkb_openai_client'                =>  'includes/ai/openai/class-epkb-openai-client.php',
-				'epkb_ai_openai_handler'            =>  'includes/ai/openai/class-epkb-ai-openai-handler.php',
-				'epkb_ai_openai_vector_store'	    =>  'includes/ai/openai/class-epkb-ai-openai-vector-store.php',
+				// AI ChatGPT
+				'epkb_chatgpt_model_catalog'        =>  'includes/ai/chatgpt/class-epkb-chatgpt-model-catalog.php',
+				'epkb_chatgpt_client'               =>  'includes/ai/chatgpt/class-epkb-chatgpt-client.php',
+				'epkb_ai_chatgpt_vector_store'	    =>  'includes/ai/chatgpt/class-epkb-ai-chatgpt-vector-store.php',
+
+				// AI Gemini
+				'epkb_gemini_model_catalog'         =>  'includes/ai/gemini/class-epkb-gemini-model-catalog.php',
+				'epkb_gemini_client'                =>  'includes/ai/gemini/class-epkb-gemini-client.php',
+				'epkb_ai_gemini_vector_store'	    =>  'includes/ai/gemini/class-epkb-ai-gemini-vector-store.php',
 
 				// AI REST
 				'epkb_ai_rest_admin_controller'         =>  'includes/ai/rest/class-epkb-ai-rest-admin-controller.php',
@@ -190,11 +214,15 @@ class EPKB_Autoloader {
 				'epkb_ai_rest_sync_controller'          =>  'includes/ai/rest/class-epkb-ai-rest-sync-controller.php',
 				'epkb_ai_rest_support_controller'       =>  'includes/ai/rest/class-epkb-ai-rest-support-controller.php',
 				'epkb_ai_rest_search_results_controller' => 'includes/ai/rest/class-epkb-ai-rest-search-results-controller.php',
+				'epkb_ai_rest_pdf_extract_controller'   =>  'includes/ai/rest/class-epkb-ai-rest-pdf-extract-controller.php',
 
 				// AI Services
 				'epkb_ai_base_handler'              	=>  'includes/ai/services/class-epkb-ai-base-handler.php',
 				'epkb_ai_chat_handler'              	=>  'includes/ai/services/class-epkb-ai-chat-handler.php',
 				'epkb_ai_search_handler'            	=>  'includes/ai/services/class-epkb-ai-search-handler.php',
+				'epkb_ai_provider'				        =>  'includes/ai/services/class-epkb-ai-provider.php',
+				'epkb_ai_model_catalog_interface'       =>  'includes/ai/services/class-epkb-ai-model-catalog-interface.php',
+				'epkb_ai_pdf_extractor'                 =>  'includes/ai/services/class-epkb-ai-pdf-extractor.php',
 
 				// AI Support
 				'epkb_ai_content_processor'             =>  'includes/ai/support/class-epkb-ai-content-processor.php',
@@ -236,7 +264,8 @@ class EPKB_Autoloader {
 				'epkb_grid_layout_block'            =>  'includes/admin/blocks/class-epkb-grid-layout-block.php',
 				'epkb_sidebar_layout_block'         =>  'includes/admin/blocks/class-epkb-sidebar-layout-block.php',
 				'epkb_advanced_search_block'        =>  'includes/admin/blocks/class-epkb-advanced-search-block.php',
-				'epkb_ai_advanced_search_block'     =>  'includes/admin/blocks/class-epkb-ai-advanced-search-block.php',
+				'epkb_articles_index_directory_block' =>  'includes/admin/blocks/class-epkb-articles-index-directory-block.php',
+				'epkb_glossary_index_block'         =>  'includes/admin/blocks/class-epkb-glossary-index-block.php',
 			);
 		}
 

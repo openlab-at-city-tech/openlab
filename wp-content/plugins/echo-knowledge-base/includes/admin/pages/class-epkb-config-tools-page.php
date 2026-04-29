@@ -26,7 +26,7 @@ class EPKB_Config_Tools_Page {
 			'active'     => true,
 
 			// Secondary Panel Item
-			'label_text' => esc_html__( 'Export KB', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Export', 'echo-knowledge-base' ),
 
 			// Secondary Boxes List
 			'boxes_list' => self::get_export_boxes( $kb_config )
@@ -39,7 +39,7 @@ class EPKB_Config_Tools_Page {
 			'list_key'   => 'import',
 
 			// Secondary Panel Item
-			'label_text' => esc_html__( 'Import KB', 'echo-knowledge-base' ),
+			'label_text' => esc_html__( 'Import', 'echo-knowledge-base' ),
 
 			// Secondary Boxes List
 			'boxes_list' => self::get_import_boxes( $kb_config )
@@ -69,6 +69,13 @@ class EPKB_Config_Tools_Page {
 
 			// Secondary Boxes List
 			'boxes_list' => self::get_other_boxes( $kb_config )
+		);
+
+		// SECONDARY VIEW: ADD-ONS (redirects to Add-ons page)
+		$secondary_tabs[] = array(
+			'list_key'   => 'add-ons',
+			'label_text' => '<span style="color:#5cb85c;">' . esc_html__( 'Add-ons', 'echo-knowledge-base' ) . '</span>',
+			'url'        => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) . '&page=epkb-add-ons#add-ons' ),
 		);
 
 		// SECONDARY VIEW: MENU ACCESS CONTROL
@@ -144,7 +151,7 @@ class EPKB_Config_Tools_Page {
 					<input class="epkb-form-label__input epkb-form-label__input--text" type="file" name="import_file"
 						   required><br>
 					<input type="button" class="epkb-kbnh-back-btn epkb-default-btn"
-						   value="<?php esc_attr_e( 'Back', 'echo-knowledge-base' ); ?>"/>
+						   value="<?php echo esc_attr( '< ' . __( 'Back', 'echo-knowledge-base' ) ); ?>"/>
 					<input type="submit" class="epkb-primary-btn"
 						   value="<?php esc_attr_e( 'Import Configuration', 'echo-knowledge-base' ); ?>"/><br/>
 				</form>
@@ -236,7 +243,7 @@ class EPKB_Config_Tools_Page {
 			[
 				'plugin'       => 'epie',
 				'icon'         => 'epkbfa epkbfa-upload',
-				'title'        => esc_html__( 'Export Articles as CSV', 'echo-knowledge-base' ),
+				'title'        => esc_html__( 'Export Articles to CSV', 'echo-knowledge-base' ),
 				'title_class'  => 'epkb-kbnh__feature-name',
 				'desc'         => esc_html__( 'Export basic article information: title, content, categories, and tags.', 'echo-knowledge-base' ),
 				'button_id'    => EPKB_Utilities::is_export_import_enabled() ? 'epie_export_data_csv' : '',
@@ -247,7 +254,7 @@ class EPKB_Config_Tools_Page {
 			[
 				'plugin'       => 'epie',
 				'icon'         => 'epkbfa epkbfa-upload',
-				'title'        => esc_html__( 'Export Articles as XML', 'echo-knowledge-base' ),
+				'title'        => esc_html__( 'Export Articles to XML', 'echo-knowledge-base' ),
 				'title_class'  => 'epkb-kbnh__feature-name',
 				'desc'         => esc_html__( 'Export articles, including content, comments, authors, categories, meta data, and references to attachments.', 'echo-knowledge-base' ),
 				'button_id'    => EPKB_Utilities::is_export_import_enabled() ? 'epie_export_data_xml' : '',
@@ -349,7 +356,7 @@ class EPKB_Config_Tools_Page {
 			[
 				'plugin'       => 'epie',
 				'icon'         => 'epkbfa epkbfa-download',
-				'title'        => esc_html__( 'Import Articles as CSV', 'echo-knowledge-base' ),
+				'title'        => esc_html__( 'Import Articles from CSV', 'echo-knowledge-base' ),
 				'title_class'  => 'epkb-kbnh__feature-name',
 				'desc'         => esc_html__( 'Import basic article information: title, content, categories and tags.', 'echo-knowledge-base' ),
 				'button_id'    => EPKB_Utilities::is_export_import_enabled() ? 'epie_import_data_csv' : '',
@@ -360,7 +367,7 @@ class EPKB_Config_Tools_Page {
 			[
 				'plugin'       => 'epie',
 				'icon'         => 'epkbfa epkbfa-download',
-				'title'        => esc_html__( 'Import Articles as XML', 'echo-knowledge-base' ),
+				'title'        => esc_html__( 'Import Articles from XML', 'echo-knowledge-base' ),
 				'title_class'  => 'epkb-kbnh__feature-name',
 				'desc'         => esc_html__( 'Import articles including content, comments, authors, categories, meta data, attachments.', 'echo-knowledge-base' ),
 				'button_id'    => EPKB_Utilities::is_export_import_enabled() ? 'epie_import_data_xml' : '',
@@ -380,6 +387,21 @@ class EPKB_Config_Tools_Page {
 		$boxes = [];
 
 		foreach ( self::get_convert_boxes_config() as $box ) {
+
+			if ( $box['plugin'] == 'ai' . 'fp' ) {
+				if ( EPKB_Utilities::is_ai_features_pro_enabled() ) {
+					$box['active_status'] = true;
+				} else {
+					$box['upgrade_link'] = EPKB_Core_Utilities::get_plugin_sales_page( 'ai' . 'fp' );
+					$box['corner_label'] = esc_html__( 'Add-on', 'echo-knowledge-base' );
+				}
+			}
+
+			// add pro tag
+			if ( ! empty( $box['title_class'] ) && empty( $box['active_status'] ) ) {
+				$box['title_class'] .= '--pro';
+			}
+
 			$boxes[] = [
 				'class' => 'epkb-kbnh__feature-container',
 				'html'  => EPKB_HTML_Forms::get_feature_box_html( $box )
@@ -408,6 +430,10 @@ class EPKB_Config_Tools_Page {
 				$panel_html = self::get_convert_cpt_box( $kb_config );
 			}
 
+			if ( ! empty( $box['button_id'] ) && $box['button_id'] == 'epkb_import_pdf' ) {
+				$panel_html = self::get_import_pdf_panel( $kb_config );
+			}
+
 			$boxes[] = [
 				'title' => $box['title'],
 				'class' => $box_panel_class,
@@ -424,6 +450,8 @@ class EPKB_Config_Tools_Page {
 	 */
 	private static function get_convert_boxes_config() {
 
+		$is_ai_features_pro_enabled = EPKB_Utilities::is_ai_features_pro_enabled();
+
 		return [
 			[
 				'plugin'        => 'core',
@@ -438,7 +466,7 @@ class EPKB_Config_Tools_Page {
 			[
 				'plugin'        => 'core',
 				'icon'          => 'epkbfa epkbfa-download',
-				'title'         => esc_html__( 'Convert From Other Documentation KB to Echo KB', 'echo-knowledge-base' ),
+				'title'         => esc_html__( 'Import Articles from Other Knowledge Base Plugins', 'echo-knowledge-base' ),
 				'desc'          => esc_html__( 'Convert your blog or custom post types into Knowledge Base articles.', 'echo-knowledge-base' ),
 				'button_id'     => 'epkb_convert_cpt',
 				'button_title'  => esc_html__( 'Convert From Another KB', 'echo-knowledge-base' ),
@@ -452,6 +480,17 @@ class EPKB_Config_Tools_Page {
 				'button_id'     => 'epkb_convert_articles',
 				'button_title'  => esc_html__( 'Convert Articles', 'echo-knowledge-base' ),
 				'active_status' => true
+			],
+			[
+				'plugin'        => 'ai' . 'fp',
+				'icon'          => 'epkbfa epkbfa-file-pdf-o',
+				'title'         => esc_html__( 'Convert PDFs to Articles', 'echo-knowledge-base' ),
+				'title_class'   => 'epkb-kbnh__feature-name',
+				'desc'          => esc_html__( 'Upload PDF files and convert them into Knowledge Base articles.', 'echo-knowledge-base' ),
+				'desc_escaped'  => self::get_pdf_import_features_list_html( ! $is_ai_features_pro_enabled ),
+				'button_id'     => $is_ai_features_pro_enabled ? 'epkb_import_pdf' : '',
+				'button_title'  => esc_html__( 'Import PDF', 'echo-knowledge-base' ),
+				'learn_more'    => $is_ai_features_pro_enabled ? '' : self::get_ai_pro_features_admin_url(),
 			],
 		];
 	}
@@ -498,13 +537,13 @@ class EPKB_Config_Tools_Page {
 		<form class="convert-main-form">
 			<div class="epkb-form-field-instruction-wrap">
 				<div class="epkb-form-field-instruction-column">
-					<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Features', 'echo-kb-import-export' ); ?></div>
+					<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Features', 'echo-knowledge-base' ); ?></div>
 					<div class="epkb-form-field-instruction-item">
 						<div class="epkb-form-field-instruction-icon">
 							<i class="epkbfa epkbfa-check"></i>
 						</div>
 						<div class="epkb-form-field-instruction-text">
-							<?php esc_html_e( 'Convert Posts', 'echo-kb-import-export' ); ?>
+							<?php esc_html_e( 'Convert Posts', 'echo-knowledge-base' ); ?>
 						</div>
 					</div>
 					<div class="epkb-form-field-instruction-item">
@@ -512,19 +551,19 @@ class EPKB_Config_Tools_Page {
 							<i class="epkbfa epkbfa-check"></i>
 						</div>
 						<div class="epkb-form-field-instruction-text">
-							<?php esc_html_e( 'Copy or Move Categories', 'echo-kb-import-export' ); ?>
+							<?php esc_html_e( 'Copy or Move Categories', 'echo-knowledge-base' ); ?>
 						</div>
 					</div>
 				</div>
 
 				<div class="epkb-form-field-instruction-column">
-					<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Not Supported', 'echo-kb-import-export' ); ?></div>
+					<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Not Supported', 'echo-knowledge-base' ); ?></div>
 					<div class="epkb-form-field-instruction-item">
 						<div class="epkb-form-field-instruction-icon">
 							<i class="epkbfa epkbfa-close"></i>
 						</div>
 						<div class="epkb-form-field-instruction-text">
-							<?php esc_html_e( 'Categories hierarchy', 'echo-kb-import-export' ); ?>
+							<?php esc_html_e( 'Categories hierarchy', 'echo-knowledge-base' ); ?>
 						</div>
 					</div>
 				</div>
@@ -548,7 +587,7 @@ class EPKB_Config_Tools_Page {
 				<label class="epkb-form-label">
 				<input class="epkb-form-label__input epkb-form-label__input--checkbox import-kb-name-checkbox"
 				       type="checkbox" name="epkb_convert_post" required>
-				<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I want to convert posts into this KB:', 'echo-kb-import-export' ); ?>
+				<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I want to convert posts into this KB:', 'echo-knowledge-base' ); ?>
 	                <span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle"><?php echo esc_html( $kb_config['kb_name'] ); ?></span></span>
 				</label><?php
 			} ?>
@@ -556,7 +595,7 @@ class EPKB_Config_Tools_Page {
 			<label class="epkb-form-label">
 				<input class="epkb-form-label__input epkb-form-label__input--checkbox import-backup-checkbox"
 				       type="checkbox" name="epkb_convert_backup" required>
-				<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I have backed up my database and read all import instructions above.', 'echo-kb-import-export' ); ?></span>
+				<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I have backed up my database and read all import instructions above.', 'echo-knowledge-base' ); ?></span>
 			</label>
 		</form><?php
 	}
@@ -637,13 +676,13 @@ class EPKB_Config_Tools_Page {
 		<form class="convert-main-form">
 		<div class="epkb-form-field-instruction-wrap">
 			<div class="epkb-form-field-instruction-column">
-				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Features', 'echo-kb-import-export' ); ?></div>
+				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Features', 'echo-knowledge-base' ); ?></div>
 				<div class="epkb-form-field-instruction-item">
 					<div class="epkb-form-field-instruction-icon">
 						<i class="epkbfa epkbfa-check"></i>
 					</div>
 					<div class="epkb-form-field-instruction-text">							<?php
-						esc_html_e( 'Convert CPT', 'echo-kb-import-export' ); ?>
+						esc_html_e( 'Convert CPT', 'echo-knowledge-base' ); ?>
 					</div>
 				</div>
 				<div class="epkb-form-field-instruction-item">
@@ -651,19 +690,19 @@ class EPKB_Config_Tools_Page {
 						<i class="epkbfa epkbfa-check"></i>
 					</div>
 					<div class="epkb-form-field-instruction-text">							<?php
-						esc_html_e( 'Copy or Move Categories', 'echo-kb-import-export' ); ?>
+						esc_html_e( 'Copy or Move Categories', 'echo-knowledge-base' ); ?>
 					</div>
 				</div>
 			</div>
 
 			<div class="epkb-form-field-instruction-column">
-				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Not Supported', 'echo-kb-import-export' ); ?></div>
+				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Not Supported', 'echo-knowledge-base' ); ?></div>
 				<div class="epkb-form-field-instruction-item">
 					<div class="epkb-form-field-instruction-icon">
 						<i class="epkbfa epkbfa-close"></i>
 					</div>
 					<div class="epkb-form-field-instruction-text">							<?php
-						esc_html_e( 'Categories hierarchy', 'echo-kb-import-export' ); ?>
+						esc_html_e( 'Categories hierarchy', 'echo-knowledge-base' ); ?>
 					</div>
 				</div>
 			</div>
@@ -683,9 +722,9 @@ class EPKB_Config_Tools_Page {
 		</div>
 
 		<label class="epkb-form-label">
-			<span class="epkb-form-label__select"><?php esc_html_e( 'Convert CPT:', 'echo-kb-import-export' ); ?></span>
+			<span class="epkb-form-label__select"><?php esc_html_e( 'Convert CPT:', 'echo-knowledge-base' ); ?></span>
 			<select name="epkb_convert_post_type">
-				<option value="" selected><?php esc_html_e( 'Select Post Type', 'echo-kb-import-export' ); ?></option><?php
+				<option value="" selected><?php esc_html_e( 'Select Post Type', 'echo-knowledge-base' ); ?></option><?php
 				foreach ( $custom_post_types as $post_type => $post_label ) { ?>
 					<option value="<?php echo esc_attr( $post_type ); ?>"><?php echo esc_html( $post_label ); ?></option><?php
 				} ?>
@@ -696,7 +735,7 @@ class EPKB_Config_Tools_Page {
 			<label class="epkb-form-label">
 			<input class="epkb-form-label__input epkb-form-label__input--checkbox import-kb-name-checkbox"
 			       type="checkbox" name="epkb_convert_post" required>
-			<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I want to convert articles into this KB:', 'echo-kb-import-export' ); ?> <strong
+			<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I want to convert articles into this KB:', 'echo-knowledge-base' ); ?> <strong
 						class="epkb-admin__distinct-box epkb-admin__distinct-box--middle"><?php echo esc_html( $kb_config['kb_name'] ); ?></strong></span>
 			</label><?php
 		} ?>
@@ -704,7 +743,7 @@ class EPKB_Config_Tools_Page {
 		<label class="epkb-form-label">
 			<input class="epkb-form-label__input epkb-form-label__input--checkbox import-backup-checkbox"
 			       type="checkbox" name="epkb_convert_backup" required>
-			<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I have backed up my database and read all import instructions above.', 'echo-kb-import-export' ); ?></span>
+			<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I have backed up my database and read all import instructions above.', 'echo-knowledge-base' ); ?></span>
 		</label>
 		</form><?php
 	}
@@ -751,13 +790,13 @@ class EPKB_Config_Tools_Page {
 		<form class="convert-main-form">
 		<div class="epkb-form-field-instruction-wrap">
 			<div class="epkb-form-field-instruction-column">
-				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Features', 'echo-kb-import-export' ); ?></div>
+				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Features', 'echo-knowledge-base' ); ?></div>
 				<div class="epkb-form-field-instruction-item">
 					<div class="epkb-form-field-instruction-icon">
 						<i class="epkbfa epkbfa-check"></i>
 					</div>
 					<div class="epkb-form-field-instruction-text">
-						<?php esc_html_e( 'Convert Articles', 'echo-kb-import-export' ); ?>
+						<?php esc_html_e( 'Convert Articles', 'echo-knowledge-base' ); ?>
 					</div>
 				</div>
 				<div class="epkb-form-field-instruction-item">
@@ -765,19 +804,19 @@ class EPKB_Config_Tools_Page {
 						<i class="epkbfa epkbfa-check"></i>
 					</div>
 					<div class="epkb-form-field-instruction-text">
-						<?php esc_html_e( 'Copy or Move Categories', 'echo-kb-import-export' ); ?>
+						<?php esc_html_e( 'Copy or Move Categories', 'echo-knowledge-base' ); ?>
 					</div>
 				</div>
 			</div>
 
 			<div class="epkb-form-field-instruction-column">
-				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Not Supported', 'echo-kb-import-export' ); ?></div>
+				<div class="epkb-form-field-instruction-title"><?php esc_html_e( 'Not Supported', 'echo-knowledge-base' ); ?></div>
 				<div class="epkb-form-field-instruction-item">
 					<div class="epkb-form-field-instruction-icon">
 						<i class="epkbfa epkbfa-close"></i>
 					</div>
 					<div class="epkb-form-field-instruction-text">
-						<?php esc_html_e( 'Categories hierarchy', 'echo-kb-import-export' ); ?>
+						<?php esc_html_e( 'Categories hierarchy', 'echo-knowledge-base' ); ?>
 					</div>
 				</div>
 			</div>
@@ -795,7 +834,7 @@ class EPKB_Config_Tools_Page {
 		<label class="epkb-form-label">
 			<input class="epkb-form-label__input epkb-form-label__input--checkbox import-backup-checkbox"
 			       type="checkbox" name="epkb_convert_backup" required>
-			<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I have backed up my database and read all import instructions above.', 'echo-kb-import-export' ); ?></span>
+			<span class="epkb-form-label__checkbox"><?php esc_html_e( 'I have backed up my database and read all import instructions above.', 'echo-knowledge-base' ); ?></span>
 		</label>
 		</form><?php
 	}
@@ -836,6 +875,206 @@ class EPKB_Config_Tools_Page {
 	}
 
 
+	/*******         Convert PDFs to Articles        *****************/
+
+	/**
+	 * Get features list HTML for the PDF import feature box.
+	 *
+	 * @param bool $show_discount_coupon
+	 * @return string
+	 */
+	private static function get_pdf_import_features_list_html( $show_discount_coupon = false ) {
+		$features = [
+			esc_html__( 'PDF to Article', 'echo-knowledge-base' ),
+			esc_html__( 'PDF to Article using AI', 'echo-knowledge-base' ),
+			esc_html__( 'Bulk PDF to Articles', 'echo-knowledge-base' ),
+		];
+		$html = '<div class="epkb-pdf-import__box-features"><div class="epkb-form-field-instruction-title">' . esc_html__( 'Features', 'echo-knowledge-base' ) . '</div>';
+		foreach ( $features as $feature ) {
+			$html .= '<div class="epkb-form-field-instruction-item">' .
+				'<div class="epkb-form-field-instruction-icon"><i class="epkbfa epkbfa-check"></i></div>' .
+				'<div class="epkb-form-field-instruction-text">' . $feature . '</div></div>';
+		}
+
+		if ( $show_discount_coupon ) {
+			$html .= self::get_pdf_import_discount_coupon_html();
+		}
+
+		$html .= '</div>';
+
+		return $html;
+	}
+
+	/**
+	 * Get the admin URL for the AI PRO Features tab.
+	 *
+	 * @return string
+	 */
+	private static function get_ai_pro_features_admin_url() {
+		return admin_url( 'edit.php?post_type=epkb_post_type_1&page=epkb-kb-ai-features&active_tab=pro-features' );
+	}
+
+	/**
+	 * Get discount coupon HTML for the gated PDF import feature box.
+	 *
+	 * @return string
+	 */
+	private static function get_pdf_import_discount_coupon_html() {
+		$coupon = EPKB_AI_PRO_Features_Tab::get_discount_coupon();
+
+		return EPKB_HTML_Forms::get_discount_coupon_box_html( $coupon, 'epkb-pdf-import__discount-coupon' );
+	}
+
+	/**
+	 * Render the Import PDF panel.
+	 *
+	 * @param $kb_config
+	 * @return false|string
+	 */
+	private static function get_import_pdf_panel( $kb_config ) {
+
+		$categories = EPKB_Core_Utilities::get_kb_categories_visible( $kb_config['id'] );
+		$categories = is_array( $categories ) ? $categories : [];
+
+		ob_start(); ?>
+
+		<div class="epkb-form-wrap epkb-import-form epkb-pdf-import-form">
+			<div class="epkb-import-body">
+
+				<!-- Step 1: Options -->
+				<div class="epkb-pdf-import-step epkb-pdf-import-step--1">
+
+					<!-- Conversion Mode -->
+					<div class="epkb-pdf-import__option-group">
+						<label class="epkb-pdf-import__option-label"><?php esc_html_e( 'Conversion Mode', 'echo-knowledge-base' ); ?></label>
+						<label class="epkb-form-label">
+							<input type="radio" name="epkb_pdf_conversion_mode" value="basic" checked>
+							<span><?php esc_html_e( 'Basic formatting', 'echo-knowledge-base' ); ?></span><?php
+							EPKB_HTML_Elements::display_tooltip( '', esc_html__( 'Extracts text from PDF and wraps it in paragraphs. Fast and preserves all content as-is.', 'echo-knowledge-base' ) ); ?>
+						</label>
+						<label class="epkb-form-label">
+							<input type="radio" name="epkb_pdf_conversion_mode" value="ai">
+							<span><?php esc_html_e( 'AI-structured', 'echo-knowledge-base' ); ?></span><?php
+							EPKB_HTML_Elements::display_tooltip( '', esc_html__( 'Uses AI to organize the extracted text into headings, lists, and paragraphs. Cleans up PDF artifacts like broken words and page numbers.', 'echo-knowledge-base' ) ); ?>
+						</label>
+					</div>
+
+					<!-- File Upload -->
+					<div class="epkb-pdf-import__option-group">
+						<label class="epkb-pdf-import__option-label"><?php esc_html_e( 'Select PDF Files', 'echo-knowledge-base' ); ?></label>
+						<div class="epkb-pdf-import__dropzone" id="epkb-pdf-dropzone">
+							<input type="file" id="epkb-pdf-file-input" class="epkb-pdf-import__file-input" accept=".pdf" multiple="multiple" style="display:none;">
+							<i class="epkbfa epkbfa-file-pdf-o epkb-pdf-import__dropzone-icon"></i>
+							<p class="epkb-pdf-import__dropzone-text"><?php esc_html_e( 'Drag and drop PDF files here, or click the buttons below', 'echo-knowledge-base' ); ?></p>
+							<div style="display: flex; gap: 10px; justify-content: center;">
+								<button type="button" class="epkb-pdf-import__dropzone-btn" id="epkb-pdf-select-btn">
+									<i class="epkbfa epkbfa-upload"></i>
+									<?php esc_html_e( 'Select PDFs', 'echo-knowledge-base' ); ?>
+								</button>
+								<button type="button" class="epkb-pdf-import__dropzone-btn epkb-pdf-import__dropzone-btn--secondary" id="epkb-pdf-media-library-btn">
+									<i class="epkbfa epkbfa-image"></i>
+									<?php esc_html_e( 'Media Library', 'echo-knowledge-base' ); ?>
+								</button>
+							</div>
+						</div>
+						<div class="epkb-pdf-import__file-list" id="epkb-pdf-file-list"></div>
+					</div>
+
+					<!-- Category -->
+					<div class="epkb-pdf-import__option-group">
+						<label class="epkb-pdf-import__option-label"><?php esc_html_e( 'Category', 'echo-knowledge-base' ); ?></label>
+						<select id="epkb-pdf-category">
+							<option value="0"><?php esc_html_e( '-- No Category --', 'echo-knowledge-base' ); ?></option><?php
+							foreach ( $categories as $category ) { ?>
+								<option value="<?php echo esc_attr( $category->term_id ); ?>"><?php echo esc_html( $category->name ); ?></option><?php
+							} ?>
+						</select>
+					</div>
+
+					<!-- Status of Imported Articles -->
+					<div class="epkb-pdf-import__option-group">
+						<label class="epkb-pdf-import__option-label"><?php esc_html_e( 'Status of Imported Articles', 'echo-knowledge-base' ); ?></label>
+						<label class="epkb-form-label">
+							<input type="radio" name="epkb_pdf_post_status" value="draft" checked>
+							<span><?php esc_html_e( 'Draft', 'echo-knowledge-base' ); ?></span>
+						</label>
+						<label class="epkb-form-label">
+							<input type="radio" name="epkb_pdf_post_status" value="publish">
+							<span><?php esc_html_e( 'Published', 'echo-knowledge-base' ); ?></span>
+						</label>
+					</div>
+
+					<!-- Debug Mode -->
+					<div class="epkb-pdf-import__option-group">
+						<label class="epkb-form-label">
+							<input type="checkbox" id="epkb-pdf-debug-toggle">
+							<span><?php esc_html_e( 'Debug Mode', 'echo-knowledge-base' ); ?></span>
+						</label>
+					</div>
+
+				</div>
+
+				<!-- Step 2: Review -->
+				<div class="epkb-pdf-import-step epkb-pdf-import-step--2 epkb-hidden">
+					<h3><?php esc_html_e( 'Convert PDFs', 'echo-knowledge-base' ); ?></h3>
+					<div class="epkb-pdf-import__batch-summary">
+						<div class="epkb-pdf-import__batch-summary-status">
+							<strong id="epkb-pdf-batch-status-label"><?php esc_html_e( 'Ready to convert', 'echo-knowledge-base' ); ?></strong>
+							<span id="epkb-pdf-batch-status-detail"></span>
+						</div>
+						<div class="epkb-pdf-import__batch-summary-counts" id="epkb-pdf-batch-summary-counts"></div>
+					</div>
+					<div class="epkb-pdf-import__review-layout">
+						<div class="epkb-pdf-import__review-sidebar" id="epkb-pdf-review-sidebar"></div>
+						<div class="epkb-pdf-import__review-panel">
+							<div class="epkb-pdf-import__review-header">
+								<strong id="epkb-pdf-review-counter"></strong>
+								<span id="epkb-pdf-review-file-name"></span>
+							</div>
+							<div class="epkb-pdf-import__review-status" id="epkb-pdf-review-status"></div>
+							<div class="epkb-pdf-import__option-group">
+								<label class="epkb-pdf-import__option-label" for="epkb-pdf-review-title"><?php esc_html_e( 'Article Title', 'echo-knowledge-base' ); ?></label>
+								<input type="text" id="epkb-pdf-review-title" class="epkb-input epkb-pdf-import__title-input" />
+							</div>
+							<div class="epkb-pdf-import__option-group">
+								<span class="epkb-pdf-import__option-label"><?php esc_html_e( 'HTML Preview', 'echo-knowledge-base' ); ?></span>
+								<div class="epkb-pdf-import__preview" id="epkb-pdf-review-preview"></div>
+							</div>
+							<div class="epkb-pdf-import__review-actions">
+								<button type="button" class="epkb-default-btn epkb-pdf-import__review-retry-btn epkb-hidden"><?php esc_html_e( 'Retry', 'echo-knowledge-base' ); ?></button>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<!-- Step 3: Results -->
+				<div class="epkb-pdf-import-step epkb-pdf-import-step--3 epkb-hidden">
+					<h3><?php esc_html_e( 'Import Complete', 'echo-knowledge-base' ); ?></h3>
+					<div class="epkb-pdf-import__results" id="epkb-pdf-results"></div>
+				</div>
+
+				<!-- Debug Output -->
+				<div class="epkb-pdf-import__debug-wrap epkb-hidden" id="epkb-pdf-debug-wrap">
+					<label class="epkb-pdf-import__option-label"><?php esc_html_e( 'Debug Log', 'echo-knowledge-base' ); ?></label>
+					<textarea class="epkb-pdf-import__debug-log" id="epkb-pdf-debug-log" readonly></textarea>
+				</div>
+
+			</div>
+
+			<div class="epkb-import-footer">
+				<button type="button" class="epkb-default-btn epkb-pdf-import__back-btn"><?php echo '< ' . esc_html__( 'Back', 'echo-knowledge-base' ); ?></button>
+				<button type="button" class="epkb-error-btn epkb-hidden epkb-pdf-import__cancel-btn"><?php esc_html_e( 'Cancel', 'echo-knowledge-base' ); ?></button>
+				<button type="button" class="epkb-primary-btn epkb-hidden epkb-pdf-import__save-all-btn"><?php esc_html_e( 'Save All Selected', 'echo-knowledge-base' ); ?></button>
+				<button type="button" class="epkb-primary-btn epkb-pdf-import__start-btn" data-kb_id="<?php echo esc_attr( $kb_config['id'] ); ?>">
+					<?php esc_html_e( 'Start Import', 'echo-knowledge-base' ); ?>
+				</button>
+			</div>
+		</div><?php
+
+		return ob_get_clean();
+	}
+
+
 	/*******         OTHER         *****************/
 
 	/**
@@ -855,7 +1094,7 @@ class EPKB_Config_Tools_Page {
 			</div>
 			<div class="epkb-import-step-label epkb-import-step--2" data-step="2">
 				<i class="epkbfa epkbfa-check"></i>
-				<span><?php esc_html_e( $step_4_text ); ?></span>
+				<span><?php echo esc_html( $step_4_text ); ?></span>
 			</div>
 			<div class="epkb-import-step-label epkb-import-step--3" data-step="3">
 				<i class="epkbfa epkbfa-check"></i>
@@ -863,7 +1102,7 @@ class EPKB_Config_Tools_Page {
 			</div>
 			<div class="epkb-import-step-label epkb-import-step--4 " data-step="4">
 				<i class="epkbfa epkbfa-check"></i>
-				<span><?php esc_html_e( $step_4_title ); ?></span>
+				<span><?php echo esc_html( $step_4_title ); ?></span>
 			</div>
 		</div><?php
 
@@ -884,8 +1123,7 @@ class EPKB_Config_Tools_Page {
 			'title'  => esc_html__( 'Old version of WordPress detected', 'echo-knowledge-base' ),
 			'type'   => 'error',
 			'static' => true,
-			'desc'   => esc_html__( 'This website is using an old version of WordPress. Unpredictable behaviour and errors during conversion can occur for this old WordPress version. Please update to the latest version of WordPress. ' .
-							'Support is very limited for old versions of WordPress.', 'echo-knowledge-base' ),
+			'desc'   => esc_html__( 'This website is using an old version of WordPress. Unpredictable behaviour and errors during conversion can occur for this old WordPress version. Please update to the latest version of WordPress. Support is very limited for old versions of WordPress.', 'echo-knowledge-base' ),
 		] );
 	}
 
@@ -895,9 +1133,7 @@ class EPKB_Config_Tools_Page {
 	 */
 	private static function show_convert_footer_html( $kb_config ) { ?>
 		<div class="epkb-import-footer">
-			<button type="button" class="epkb-default-btn epkb-convert-button-back"> <?php
-				'< ' . esc_html_e( 'Back', 'echo-knowledge-base' ); ?>
-			</button>
+			<button type="button" class="epkb-default-btn epkb-convert-button-back"><?php echo '< ' . esc_html__( 'Back', 'echo-knowledge-base' ); ?></button>
 			<button type="button" class="epkb-default-btn epkb-hidden epkb-convert-button-exit">
 				<?php esc_html_e( 'Exit', 'echo-knowledge-base' ); ?>
 			</button>
@@ -987,7 +1223,7 @@ class EPKB_Config_Tools_Page {
 	private static function get_other_boxes( $kb_config ) {
 
 		$delete_kb_handler = new EPKB_Delete_KB();
-		$specification = EPKB_Core_Utilities::retrieve_all_kb_specs( $kb_config['id'] );
+		$specification = EPKB_Core_Utilities::retrieve_all_kb_specs_with_labels( $kb_config['id'] );
 
 		// KB Nickname
 		$boxes_config[] = array(
@@ -1010,7 +1246,7 @@ class EPKB_Config_Tools_Page {
 				'html'  => EPKB_HTML_Elements::checkbox_toggle( [
 					'id'            => 'wpml_is_enabled',
 					'name'          => 'wpml_is_enabled',
-					'text'          => $specification['wpml_is_enabled']['label'],
+					'text'          => EPKB_KB_Config_Specs::get_field_label( 'wpml_is_enabled' ),
 					'textLoc'       => 'left',
 					'checked'       => ( ! empty( $kb_config['wpml_is_enabled'] ) && $kb_config['wpml_is_enabled'] == 'on' ),
 					'topDesc'       => '<a class="epkb-admin__input-field-desc" href="https://www.echoknowledgebase.com/documentation/translate-text/" target="_blank">' . esc_html__( 'Follow Polyland and WPML setup instructions here.', 'echo-knowledge-base' ) . '</a>',
@@ -1026,17 +1262,15 @@ class EPKB_Config_Tools_Page {
 			'html'  => $delete_kb_handler->get_archive_or_delete_kb_form( $kb_config ),
 		);
 
-		if ( ! EPKB_Utilities::is_wpml_enabled( $kb_config ) ) {
-			$boxes_config[] = array(
-				'title' => esc_html__( 'Category Slug', 'echo-knowledge-base' ),
-				'html'  => self::display_category_slug_html( $kb_config ),
-			);
+		$boxes_config[] = array(
+			'title' => esc_html__( 'Category Slug', 'echo-knowledge-base' ),
+			'html'  => self::display_category_slug_html( $kb_config ),
+		);
 
-			$boxes_config[] = array(
-				'title' => esc_html__( 'Tag Slug', 'echo-knowledge-base' ),
-				'html'  => self::display_tag_slug_html( $kb_config ),
-			);
-		}
+		$boxes_config[] = array(
+			'title' => esc_html__( 'Tag Slug', 'echo-knowledge-base' ),
+			'html'  => self::display_tag_slug_html( $kb_config ),
+		);
 
 		// Search Query Parameter
 		if ( EPKB_Utilities::is_advanced_search_enabled() ) {
@@ -1059,8 +1293,7 @@ class EPKB_Config_Tools_Page {
 				'text'          => esc_html__( 'Preload Fonts', 'echo-knowledge-base' ),
 				'textLoc'       => 'left',
 				'checked'       => EPKB_Core_Utilities::is_kb_flag_set( 'preload_fonts' ),
-				'topDesc'       => esc_html__( 'KB can preload its fonts for better performance. Some cache plugins preload fonts themselves, which can result in KB fonts being preloaded twice. ' .
-										'Disable this option to avoid a conflict with your cache plugin.', 'echo-knowledge-base' ),
+				'topDesc'       => esc_html__( 'KB can preload its fonts for better performance. Some cache plugins preload fonts themselves, which can result in KB fonts being preloaded twice. Disable this option to avoid a conflict with your cache plugin.', 'echo-knowledge-base' ),
 				'return_html'   => true,
 			] ),
 		);
@@ -1105,6 +1338,13 @@ class EPKB_Config_Tools_Page {
 						EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Download System Information', 'echo-knowledge-base' ), 'epkb_download_debug_info', 'epkb_download_debug_info', '', true, '' , 'epkb-primary-btn' ); ?>
 					</section>
 					<input type="hidden" name="epkb_debug_box" value="main">
+					<input type="hidden" name="kb_id" value="<?php echo esc_attr( $kb_config['id'] ); ?>">
+				</form>
+
+				<form action="<?php echo esc_url( admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::KB_POST_TYPE_PREFIX . '1&page=epkb-add-ons' ) ); ?>" method="post" dir="ltr">
+					<section class="save-settings checkbox-input"><?php
+						EPKB_HTML_Elements::submit_button_v2( esc_html__( 'Export AI Configuration', 'echo-knowledge-base' ), 'epkb_download_ai_config', 'epkb_download_ai_config', '', true, '' , 'epkb-primary-btn' ); ?>
+					</section>
 					<input type="hidden" name="kb_id" value="<?php echo esc_attr( $kb_config['id'] ); ?>">
 				</form>     <?php
 			}   ?>
@@ -1238,6 +1478,9 @@ class EPKB_Config_Tools_Page {
 		// display PHP and WP settings
 		$output .= self::get_system_info();
 
+		// retrieve AI debug data only if AI Chat or AI Search is enabled
+		$output .= self::get_ai_debug_data();
+
 		// retrieve KB config directly from the database
 		$all_kb_ids = epkb_get_instance()->kb_config_obj->get_kb_ids();
 		foreach ( $all_kb_ids as $kb_id ) {
@@ -1273,19 +1516,8 @@ class EPKB_Config_Tools_Page {
 			}
 			$output .= "\n\n";
 
-			$specs = EPKB_KB_Config_Specs::get_fields_specification( $kb_id );
 			$output .= '- KB URL  = ' . EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) . "\n";
-			foreach( $kb_config as $name => $value ) {
-
-				if ( is_array( $value ) ) {
-					$value = EPKB_Utilities::get_variable_string( $value );
-					$value = str_replace( "=>", "=", $value );
-				}
-				$label = empty($specs[$name]['label']) ? 'unknown' : $specs[$name]['label'];
-				$output .= '- ' . $label . ' [' . $name . ']' . ' = ' . $value . "\n";
-			}
-
-			$output .= "\n\n";
+			$output .= "/* KB settings output disabled. */\n\n";
 
 			// Add multilang debug info for this KB if WPML is enabled
 			if ( EPKB_Utilities::is_wpml_enabled( $kb_config ) ) {
@@ -1294,25 +1526,148 @@ class EPKB_Config_Tools_Page {
 			}
 		}
 
+		// retrieve feature usage data
+		$output .= self::get_feature_usage_debug_data();
+
+		// retrieve Setup Steps debug data
+		$output .= EPKB_Setup_Steps::get_debug_data( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+
 		// retrieve add-on data
 		$add_on_output = apply_filters( 'eckb_add_on_debug_data', '' );
 		$output .= is_string( $add_on_output ) ? $add_on_output : '';
 
+		$output .= '</textarea>';
+
+		return $output;
+	}
+
+	/**
+	 * Get Glossary and Quizzes usage stats for debug output.
+	 *
+	 * @return string
+	 */
+	private static function get_feature_usage_debug_data() {
+		global $wpdb;
+
+		$all_kb_ids = epkb_get_instance()->kb_config_obj->get_kb_ids( true );
+		$total_kbs = count( $all_kb_ids );
+		$glossary_enabled_kb_ids = array();
+		$quizzes_enabled_kb_ids = array();
+
+		foreach ( $all_kb_ids as $kb_id ) {
+			$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+
+			if ( ! empty( $kb_config['glossary_enable'] ) && $kb_config['glossary_enable'] === 'on' ) {
+				$glossary_enabled_kb_ids[] = $kb_id;
+			}
+
+			if ( ! empty( $kb_config['quizzes_enable'] ) && $kb_config['quizzes_enable'] === 'on' ) {
+				$quizzes_enabled_kb_ids[] = $kb_id;
+			}
+		}
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Internal table names from $wpdb.
+		$glossary_stats = $wpdb->get_row(
+			$wpdb->prepare(
+				"SELECT COUNT(*) AS total_count,
+						SUM( CASE WHEN COALESCE( glossary_terms.status_value, 'publish' ) = 'publish' THEN 1 ELSE 0 END ) AS published_count,
+						SUM( CASE WHEN glossary_terms.status_value = 'draft' THEN 1 ELSE 0 END ) AS draft_count,
+						SUM( CASE WHEN COALESCE( glossary_terms.sort_key_value, '' ) <> '' THEN 1 ELSE 0 END ) AS sort_key_count
+				 FROM (
+					SELECT tt.term_id,
+						   MAX( CASE WHEN tm.meta_key = 'epkb_glossary_status' THEN tm.meta_value END ) AS status_value,
+						   MAX( CASE WHEN tm.meta_key = 'epkb_glossary_sort_key' THEN tm.meta_value END ) AS sort_key_value
+					FROM {$wpdb->term_taxonomy} tt
+					LEFT JOIN {$wpdb->termmeta} tm ON tm.term_id = tt.term_id AND tm.meta_key IN ( 'epkb_glossary_status', 'epkb_glossary_sort_key' )
+					WHERE tt.taxonomy = %s
+					GROUP BY tt.term_id
+				) glossary_terms",
+				EPKB_Glossary_Taxonomy_Setup::GLOSSARY_TAXONOMY
+			)
+		);
+
+		$quiz_count_obj = wp_count_posts( EPKB_Quizzes_CPT_Setup::QUIZ_POST_TYPE );
+		$quizzes = EPKB_Quizzes_Utilities::get_quizzes();
+		$quiz_source_article_ids = array();
+		$quiz_total_questions = 0;
+		$quiz_ai_generated_count = 0;
+		$quiz_renderable_published_count = 0;
+
+		foreach ( $quizzes as $quiz ) {
+			$source_article_id = absint( get_post_meta( $quiz->ID, EPKB_Quizzes_Utilities::META_SOURCE_ARTICLE_ID, true ) );
+			if ( ! empty( $source_article_id ) ) {
+				$quiz_source_article_ids[ $source_article_id ] = $source_article_id;
+			}
+
+			$quiz_total_questions += count( EPKB_Quizzes_Utilities::get_quiz_questions( $quiz->ID ) );
+
+			$generation_meta = get_post_meta( $quiz->ID, EPKB_Quizzes_Utilities::META_GENERATION_META, true );
+			if ( ! empty( $generation_meta['generated_at'] ) ) {
+				$quiz_ai_generated_count++;
+			}
+
+			if ( $quiz->post_status === 'publish' ) {
+				$source_state = EPKB_Quizzes_Utilities::get_source_article_state( $source_article_id );
+				if ( $source_state['is_renderable'] ) {
+					$quiz_renderable_published_count++;
+				}
+			}
+		}
+
+		$output = "\n\nFeature Usage:\n";
+		$output .= "==================\n";
+
+		$output .= "\nGlossary Feature:\n";
+		$output .= "------------------\n";
+		$output .= "Glossary Terms Total: " . absint( $glossary_stats->total_count ) . "\n";
+		$output .= "Glossary Terms Published: " . absint( $glossary_stats->published_count ) . "\n";
+		$output .= "Glossary Terms Draft: " . absint( $glossary_stats->draft_count ) . "\n";
+		$output .= "Glossary Terms With Sort Key: " . absint( $glossary_stats->sort_key_count ) . "\n";
+
+		$output .= "\nQuizzes Feature:\n";
+		$output .= "------------------\n";
+		$output .= "Quizzes Total: " . count( $quizzes ) . "\n";
+		$output .= "Quizzes Published: " . absint( isset( $quiz_count_obj->publish ) ? $quiz_count_obj->publish : 0 ) . "\n";
+		$output .= "Quizzes Draft: " . absint( isset( $quiz_count_obj->draft ) ? $quiz_count_obj->draft : 0 ) . "\n";
+		$output .= "Quizzes Trashed: " . absint( isset( $quiz_count_obj->trash ) ? $quiz_count_obj->trash : 0 ) . "\n";
+		$output .= "Distinct Source Articles Used: " . count( $quiz_source_article_ids ) . "\n";
+		$output .= "Published Quizzes Renderable on Frontend: " . $quiz_renderable_published_count . "\n";
+		$output .= "Quiz Questions Total: " . $quiz_total_questions . "\n";
+		$output .= "AI-Generated Quizzes: " . $quiz_ai_generated_count . "\n";
+
+		return $output;
+	}
+
+	/**
+	 * Get AI-related debug data if AI Chat or AI Search is enabled.
+	 *
+	 * @return string
+	 */
+	private static function get_ai_debug_data() {
+
+		$ai_chat_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_chat_enabled' ) === 'on';
+		$ai_search_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_enabled' ) === 'on';
+		if ( ! $ai_chat_enabled && ! $ai_search_enabled ) {
+			return '';
+		}
+
+		$output = '';
+
 		// retrieve AI Configuration
 		$output .= "\n\nAI Configuration:\n";
 		$output .= "==================\n";
-		
+
 		// Get AI configuration
-		$ai_config = EPKB_AI_Config_Specs::get_config();
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
 		$ai_specs = EPKB_AI_Config_Specs::get_config_fields_specifications();
-		
+
 		if ( ! empty( $ai_config ) ) {
 			// Loop through all AI configuration fields
 			foreach ( $ai_specs as $field_name => $field_spec ) {
 				$value = isset( $ai_config[$field_name] ) ? $ai_config[$field_name] : $field_spec['default'];
-				
+
 				// Format the value based on field type and name
-				if ( $field_name === 'ai_key' ) {
+				if ( $field_name === 'ai_chatgpt_key' || $field_name === 'ai_gemini_key' ) {
 					// Mask API key for security
 					$formatted_value = ! empty( $value ) && $value !== '' ? 'Yes (configured)' : 'No (not configured)';
 				} elseif ( $field_name === 'ai_organization_id' ) {
@@ -1340,89 +1695,120 @@ class EPKB_Config_Tools_Page {
 					// Default formatting
 					$formatted_value = ! empty( $value ) ? $value : ( isset( $field_spec['default'] ) ? $field_spec['default'] : 'Not set' );
 				}
-				
+
 				// Ensure formatted_value is a string before concatenation
 				if ( is_array( $formatted_value ) ) {
 					$formatted_value = wp_json_encode( $formatted_value );
 				} elseif ( ! is_string( $formatted_value ) && ! is_numeric( $formatted_value ) ) {
 					$formatted_value = strval( $formatted_value );
 				}
-				
+
 				$output .= '- ' . $field_name . ' = ' . $formatted_value . "\n";
 			}
 		} else {
 			$output .= "No AI configuration found.\n";
 		}
-		
-		// AI Sync Status
-		$output .= "\n\nAI Sync Status:\n";
+
+		// Vector Store Debug Info
+		$output .= "\n\nVector Store Debug:\n";
 		$output .= "==================\n";
-		
-		// Check sync lock
-		$sync_lock = get_transient( 'epkb_ai_sync_lock' );
-		$output .= "Sync Lock: " . ( $sync_lock !== false ? 'Active (locked at ' . date( 'Y-m-d H:i:s', $sync_lock ) . ')' : 'Not active' ) . "\n";
-		
-		// Check sync status
-		$sync_status = get_transient( 'epkb_ai_sync_status' );
-		if ( ! empty( $sync_status ) && is_array( $sync_status ) ) {
-			$output .= "Sync Type: " . ( ! empty( $sync_status['type'] ) ? $sync_status['type'] : 'N/A' ) . "\n";
-			$output .= "Sync Start Time: " . ( ! empty( $sync_status['start_time'] ) ? $sync_status['start_time'] : 'N/A' ) . "\n";
-			$output .= "Current Step: " . ( ! empty( $sync_status['current_step'] ) ? $sync_status['current_step'] : 'N/A' ) . "\n";
-			$output .= "Progress: " . ( ! empty( $sync_status['current'] ) ? $sync_status['current'] : '0' ) . " / " . ( ! empty( $sync_status['total'] ) ? $sync_status['total'] : '0' ) . "\n";
+		$output .= "Active Provider: " . EPKB_AI_Provider::get_provider_label() . " (" . EPKB_AI_Provider::get_active_provider() . ")\n";
+
+		// Gather data from both sources
+		$options_data = array();
+		$db_data = array();
+		$training_data_db = new EPKB_AI_Training_Data_DB( true );
+
+		// Get collections from options table
+		$options_collections = EPKB_AI_Training_Data_Config_Specs::get_training_data_collections( false, false );
+		if ( ! is_wp_error( $options_collections ) && ! empty( $options_collections ) ) {
+			foreach ( $options_collections as $collection_id => $config ) {
+				$options_data[ $collection_id ] = array(
+					'name' => ! empty( $config['ai_training_data_store_name'] ) ? $config['ai_training_data_store_name'] : EPKB_AI_Training_Data_Config_Specs::get_default_collection_name( $collection_id ),
+					'provider' => isset( $config['ai_training_data_provider'] ) ? $config['ai_training_data_provider'] : 'unknown',
+					'vector_store_id' => isset( $config['ai_training_data_store_id'] ) ? $config['ai_training_data_store_id'] : '',
+				);
+			}
+		}
+
+		// Get collections from training data DB table
+		$db_collections = $training_data_db->get_all_collection_ids_from_db();
+		if ( ! is_wp_error( $db_collections ) && ! empty( $db_collections ) ) {
+			foreach ( $db_collections as $collection_id => $provider ) {
+				$stats = $training_data_db->get_status_statistics( $collection_id );
+				$db_data[ $collection_id ] = array(
+					'provider' => $provider,
+					'vector_store_id' => $training_data_db->get_store_id_by_collection( $collection_id, $provider ) ?: '',
+					'record_count' => $stats['total'] ?? 0,
+					'synced_count' => $stats['synced'] ?? 0,
+					'pending_count' => $stats['pending'] ?? 0,
+					'error_count' => $stats['error'] ?? 0,
+				);
+			}
+		}
+
+		// Merge and output collections
+		$all_collection_ids = array_unique( array_merge( array_keys( $options_data ), array_keys( $db_data ) ) );
+		sort( $all_collection_ids );
+
+		if ( empty( $all_collection_ids ) ) {
+			$output .= "\nNo collections found.\n";
 		} else {
-			$output .= "No active sync status.\n";
-		}
-		
-		// Last sync info
-		$last_sync_completed = get_option( 'epkb_ai_last_sync_completed', 0 );
-		if ( $last_sync_completed > 0 ) {
-			$output .= "Last Sync Completed: " . date( 'Y-m-d H:i:s', $last_sync_completed ) . " (" . human_time_diff( $last_sync_completed ) . " ago)\n";
-		} else {
-			$output .= "Last Sync Completed: Never\n";
-		}
-		
-		// Check for sync errors
-		$sync_error = get_transient( 'epkb_ai_sync_error' );
-		if ( ! empty( $sync_error ) ) {
-			$output .= "Sync Error: " . ( is_string( $sync_error ) ? $sync_error : wp_json_encode( $sync_error ) ) . "\n";
-		}
-		
-		// AI Training Data Collections
-		$output .= "\n\nAI Training Data Collections:\n";
-		$output .= "==================\n";
-		
-		$collections = get_option( 'epkb_ai_training_data_collections', array() );
-		if ( ! empty( $collections ) && is_array( $collections ) ) {
-			foreach ( $collections as $collection ) {
-				$output .= "\nCollection ID: " . ( ! empty( $collection['id'] ) ? $collection['id'] : 'N/A' ) . "\n";
-				$output .= "Name: " . ( ! empty( $collection['name'] ) ? $collection['name'] : 'N/A' ) . "\n";
-				$output .= "Vector Store ID: " . ( ! empty( $collection['vector_store_id'] ) ? $collection['vector_store_id'] : 'Not created' ) . "\n";
-				$output .= "Vector Store Status: " . ( ! empty( $collection['vector_store_status'] ) ? $collection['vector_store_status'] : 'N/A' ) . "\n";
-				$output .= "Status: " . ( ! empty( $collection['status'] ) ? $collection['status'] : 'N/A' ) . "\n";
-				$output .= "Created: " . ( ! empty( $collection['created_at'] ) ? $collection['created_at'] : 'N/A' ) . "\n";
-				$output .= "Last Modified: " . ( ! empty( $collection['last_modified'] ) ? $collection['last_modified'] : 'N/A' ) . "\n";
-				
-				// Get record counts from database if available
-				if ( ! empty( $collection['id'] ) && class_exists( 'EPKB_AI_Training_Data_DB' ) ) {
-					$db = new EPKB_AI_Training_Data_DB( true );
-					$counts = $db->get_status_counts( $collection['id'] );
-					if ( ! empty( $counts ) ) {
-						$output .= "Records - Total: " . array_sum( $counts ) . " (";
-						$status_parts = array();
-						foreach ( $counts as $status => $count ) {
-							if ( $count > 0 ) {
-								$status_parts[] = ucfirst( $status ) . ": " . $count;
-							}
-						}
-						$output .= implode( ', ', $status_parts ) . ")\n";
-					}
+			$output .= "\nCollections:\n";
+			foreach ( $all_collection_ids as $collection_id ) {
+				$in_options = isset( $options_data[ $collection_id ] );
+				$in_db = isset( $db_data[ $collection_id ] );
+				$options_store_id = $in_options ? $options_data[ $collection_id ]['vector_store_id'] : '';
+				$db_store_id = $in_db ? $db_data[ $collection_id ]['vector_store_id'] : '';
+
+				// Determine source label
+				if ( $in_options && $in_db && $options_store_id === $db_store_id ) {
+					$source = 'Options & DB';
+				} else if ( $in_options && $in_db ) {
+					$source = 'MISMATCH';
+				} else if ( $in_options ) {
+					$source = 'Options only';
+				} else {
+					$source = 'DB only';
+				}
+
+				$provider = $in_options ? $options_data[ $collection_id ]['provider'] : $db_data[ $collection_id ]['provider'];
+				$name = $in_options ? $options_data[ $collection_id ]['name'] : EPKB_AI_Training_Data_Config_Specs::get_default_collection_name( $collection_id );
+				$store_id = $in_options ? $options_store_id : $db_store_id;
+
+				$output .= "\n- Collection ID: " . $collection_id . " [" . $source . "]\n";
+				$output .= "  Name: " . $name . "\n";
+				$output .= "  Provider: " . $provider . "\n";
+				$output .= "  Store ID: " . ( ! empty( $store_id ) ? $store_id : 'Not created' ) . "\n";
+
+				// Show mismatch details
+				if ( $source === 'MISMATCH' ) {
+					$output .= "  Options Store ID: " . ( $options_store_id ?: 'Not set' ) . "\n";
+					$output .= "  DB Store ID: " . ( $db_store_id ?: 'Not set' ) . "\n";
+				}
+
+				// Show DB stats if available
+				if ( $in_db ) {
+					$output .= "  Records - Total: " . $db_data[ $collection_id ]['record_count'];
+					$output .= ", Synced: " . $db_data[ $collection_id ]['synced_count'];
+					$output .= ", Pending: " . $db_data[ $collection_id ]['pending_count'];
+					$output .= ", Error: " . $db_data[ $collection_id ]['error_count'] . "\n";
+					$collection_last_sync = $training_data_db->get_last_sync_date( $collection_id );
+					$output .= "  Last Sync: " . ( ! empty( $collection_last_sync ) ? $collection_last_sync : 'Never' ) . "\n";
 				}
 			}
-		} else {
-			$output .= "No training data collections found.\n";
 		}
-		
-		
+
+		// KB to Collection Mapping
+		$output .= "\nKB-Collection Mapping:\n";
+		$kb_config_db = new EPKB_KB_Config_DB();
+		$all_kb_configs = $kb_config_db->get_kb_configs();
+		foreach ( $all_kb_configs as $kb_id => $kb_config ) {
+			$kb_collection_id = isset( $kb_config['kb_ai_collection_id'] ) ? absint( $kb_config['kb_ai_collection_id'] ) : 0;
+			$kb_name = isset( $kb_config['kb_name'] ) ? $kb_config['kb_name'] : 'KB ' . $kb_id;
+			$output .= "- KB " . $kb_id . " (" . $kb_name . "): Collection " . ( $kb_collection_id > 0 ? $kb_collection_id : 'Not set' ) . "\n";
+		}
+
 		// AI Activity Logs
 		$output .= "\n\nAI Activity Logs (Last 50):\n";
 		$output .= "==================\n";
@@ -1442,13 +1828,11 @@ class EPKB_Config_Tools_Page {
 				$output .= "\n";
 			}
 		}
-		
+
 		// Error notification count
-		$current_date = date( 'Y-m-d' );
+		$current_date = gmdate( 'Y-m-d' );
 		$error_count = get_transient( 'epkb_ai_error_notification_count_' . $current_date );
 		$output .= "Error Notifications Today: " . ( $error_count !== false ? $error_count : '0' ) . "\n";
-
-		$output .= '</textarea>';
 
 		return $output;
 	}

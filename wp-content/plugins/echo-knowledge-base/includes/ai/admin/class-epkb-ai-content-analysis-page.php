@@ -13,7 +13,7 @@ class EPKB_AI_Content_Analysis_Page {
 		EPKB_Core_Utilities::display_missing_css_message();
 
 		// Get tab configuration
-		$tab_config = $this->get_tab_config();
+		$tab_config = self::get_tab_config();
 
 		// Get current KB ID and post type
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
@@ -34,12 +34,15 @@ class EPKB_AI_Content_Analysis_Page {
 			'ajax_url' => admin_url( 'admin-ajax.php' ),
 			'ajax_nonce' => wp_create_nonce( '_wpnonce_epkb_ajax_action' ),
 			'i18n' => $this->get_i18n_strings(),
+			'discount_coupon' => EPKB_AI_PRO_Features_Tab::get_discount_coupon(),
 		);
 
 		// Start the page output
 		echo '<div class="wrap" id="epkb-admin-content-analysis-page-wrap">'; ?>
 
 		<h1></h1> <!-- This is here for WP admin consistency -->
+
+		<?php EPKB_AI_Utilities::display_ai_pro_version_mismatch_notice(); ?>
 
 		<div class="epkb-wrap">
 			<div class="epkb-content-analysis-layout">
@@ -62,11 +65,11 @@ class EPKB_AI_Content_Analysis_Page {
 	 * Get the configuration for the Content Analysis tab
 	 * @return array
 	 */
-	public function get_tab_config() {
+	public static function get_tab_config() {
 
 		if ( ! EPKB_AI_Utilities::is_ai_configured() ) {
 			return array(
-				'error' => __( 'AI features are not configured. Please add your OpenAI API key and accept the terms to access Content Analysis.', 'echo-knowledge-base' )
+				'error' => __( 'AI features are not configured. Please add your API key and accept the terms to access Content Analysis.', 'echo-knowledge-base' )
 			);
 		}
 
@@ -90,11 +93,34 @@ class EPKB_AI_Content_Analysis_Page {
 		);
 
 		// Get preloaded content analysis data for initial display
-		$preloaded_data = $this->get_preloaded_content_analysis_data();
+		$preloaded_data = self::get_preloaded_content_analysis_data();
 
 		$kb_id = EPKB_KB_Handler::get_current_kb_id();
 		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
 			$kb_id = EPKB_KB_Config_DB::DEFAULT_KB_ID;
+		}
+
+		// Get list of KBs the user has access to
+		$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs();
+		$kb_list = array();
+		foreach ( $all_kb_configs as $one_kb_config ) {
+			$one_kb_id = $one_kb_config['id'];
+
+			// Skip archived KBs
+			if ( $one_kb_id !== EPKB_KB_Config_DB::DEFAULT_KB_ID && EPKB_Core_Utilities::is_kb_archived( $one_kb_config['status'] ) ) {
+				continue;
+			}
+
+			// Check user has access to this KB
+			$required_capability = EPKB_Admin_UI_Access::get_contributor_capability( $one_kb_id );
+			if ( ! current_user_can( $required_capability ) ) {
+				continue;
+			}
+
+			$kb_list[] = array(
+				'id' => $one_kb_id,
+				'name' => $one_kb_config['kb_name']
+			);
 		}
 
 		 /** @disregard P1011 */
@@ -103,7 +129,9 @@ class EPKB_AI_Content_Analysis_Page {
 			'title' => __( 'Content Analysis', 'echo-knowledge-base' ),
 			'sub_tabs' => $sub_tabs,
 			'ai_config' => $ai_config,
-			'kb_id' => $kb_id,  // Pass KB ID to frontend
+			'provider_label' => EPKB_AI_Provider::get_provider_label(),
+			'kb_id' => $kb_id,
+			'kb_list' => $kb_list,
 			'is_ai_features_pro_enabled' => EPKB_Utilities::is_ai_features_pro_enabled(),
 			'is_access_manager_active' => EPKB_Utilities::is_amag_on(),
 			'preloaded_data' => $preloaded_data
@@ -116,7 +144,7 @@ class EPKB_AI_Content_Analysis_Page {
 	 * Get pre-loaded content analysis data for initial page load
 	 * @return array
 	 */
-	private function get_preloaded_content_analysis_data() {
+	private static function get_preloaded_content_analysis_data() {
 
 		$preloaded = array();
 
@@ -124,6 +152,10 @@ class EPKB_AI_Content_Analysis_Page {
 		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
 			$kb_id = EPKB_KB_Config_DB::DEFAULT_KB_ID;
 		}
+
+		// Check if content analysis table exists (without creating it)
+		$db = new EPKB_AI_Content_Analysis_DB();
+		$table_exists = $db->installed();
 
 		// Status tabs to pre-load (all, to_analyse, to_improve, recent)
 		$statuses = array( 'all', 'to_analyse', 'to_improve', 'recent' );
@@ -148,14 +180,10 @@ class EPKB_AI_Content_Analysis_Page {
 			$transformed_data = array();
 			foreach ( $query->posts as $post ) {
 
-				// Check if this is a demo article
-				$is_demo_article = EPKB_KB_Demo_Data::is_demo_article( $post->ID );
-
-				// Get analysis data if available
-				// For demo articles, this will return demo data automatically
-				$analysis_data = EPKB_AI_Content_Analysis_Utilities::get_article_analysis_data( $post->ID );
-				$scores = $analysis_data['scores'];
-				$dates = $analysis_data['dates'];
+					// Get analysis data if available (only if table exists)
+				$analysis_data = $table_exists ? EPKB_AI_Content_Analysis_Utilities::get_article_analysis_data( $post->ID ) : null;
+				$scores = $analysis_data ? $analysis_data['scores'] : null;
+				$dates = $analysis_data ? $analysis_data['dates'] : array( 'analyzed' => '', 'improved' => '', 'ignored' => '', 'done' => '' );
 
 				// Get the post type object to get the label
 				$post_type_obj = get_post_type_object( $post->post_type );
@@ -170,43 +198,29 @@ class EPKB_AI_Content_Analysis_Page {
 				$transformed_item->item_id = $post->ID;
 				$transformed_item->title = $post->post_title;
 
-				// For demo articles, use demo scores
-				if ( $is_demo_article ) {
-					$demo_tags_data = EPKB_KB_Demo_Data::get_demo_tags_usage_data();
-					$transformed_item->score = $demo_tags_data['score'];
+				// Get score from analysis data or default
+				$transformed_item->score = $scores && isset( $scores['overall'] ) ? $scores['overall'] : '-';
+
+				// Get score components from analysis data
+				if ( $scores && isset( $scores['components'] ) ) {
+					$transformed_item->scoreComponents = EPKB_AI_Content_Analysis_Utilities::format_score_components( $scores['components'] );
+				} else {
 					$transformed_item->scoreComponents = array(
-						array( 'name' => 'Tags Usage', 'value' => $demo_tags_data['score'] ),
+						array( 'name' => 'Tags Usage', 'value' => '-' ),
 						array( 'name' => 'Gap Analysis', 'value' => '-' ),
 						array( 'name' => 'Readability', 'value' => '-' )
 					);
-					$transformed_item->importance = 'N/A';
-					$transformed_item->is_demo = true;
-				} else {
-					// Get score from analysis data or default
-					$transformed_item->score = $scores && isset( $scores['overall'] ) ? $scores['overall'] : '-';
-
-					// Get score components from analysis data
-					if ( $scores && isset( $scores['components'] ) ) {
-						$transformed_item->scoreComponents = EPKB_AI_Content_Analysis_Utilities::format_score_components( $scores['components'] );
-					} else {
-						$transformed_item->scoreComponents = array(
-							array( 'name' => 'Tags Usage', 'value' => '-' ),
-							array( 'name' => 'Gap Analysis', 'value' => '-' ),
-							array( 'name' => 'Readability', 'value' => '-' )
-						);
-					}
-
-					// Importance from analysis data
-					$transformed_item->importance = EPKB_AI_Content_Analysis_Utilities::calculate_article_importance( $post->ID ); ;
-					$transformed_item->is_demo = false;
 				}
+
+				// Importance from analysis data
+				$transformed_item->importance = EPKB_AI_Content_Analysis_Utilities::calculate_article_importance( $post->ID );
 
 				$transformed_item->last_analyzed = $dates['analyzed'] ? $dates['analyzed'] : 'Not analyzed';
 				$transformed_item->updated = $post->post_modified;
 				$transformed_item->type = $post->post_type;
 				$transformed_item->type_name = $type_name;
-				$transformed_item->status = $analysis_data['status'];
-				$transformed_item->display_status = EPKB_AI_Content_Analysis_Utilities::get_article_display_status( $post->ID );
+				$transformed_item->status = $analysis_data ? $analysis_data['status'] : 'not_analyzed';
+				$transformed_item->display_status = $table_exists ? EPKB_AI_Content_Analysis_Utilities::get_article_display_status( $post->ID ) : 'To Analyze';
 
 				$transformed_data[] = $transformed_item;
 			}
@@ -239,13 +253,19 @@ class EPKB_AI_Content_Analysis_Page {
 		$to_analyze_count = 0;
 		$to_improve_count = 0;
 
-		foreach ( $all_posts as $post_id ) {
-			$display_status = EPKB_AI_Content_Analysis_Utilities::get_article_display_status( $post_id );
-			if ( $display_status === 'To Analyze' ) {
-				$to_analyze_count++;
-			} elseif ( $display_status === 'To Improve' ) {
-				$to_improve_count++;
+		// Only calculate detailed stats if table exists
+		if ( $table_exists ) {
+			foreach ( $all_posts as $post_id ) {
+				$display_status = EPKB_AI_Content_Analysis_Utilities::get_article_display_status( $post_id );
+				if ( $display_status === 'To Analyze' ) {
+					$to_analyze_count++;
+				} elseif ( $display_status === 'To Improve' ) {
+					$to_improve_count++;
+				}
 			}
+		} else {
+			// If table doesn't exist, all articles need analysis
+			$to_analyze_count = count( $all_posts );
 		}
 
 		$stats = array(
@@ -285,7 +305,7 @@ class EPKB_AI_Content_Analysis_Page {
 			'analyzing' => __( 'Analyzing...', 'echo-knowledge-base' ),
 			'analysis_complete' => __( 'Analysis complete!', 'echo-knowledge-base' ),
 			'analysis_failed' => __( 'Analysis failed. Please try again.', 'echo-knowledge-base' ),
-			'ai_disabled_message' => __( 'AI features are not configured. Please add your OpenAI API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' ),
+			'ai_disabled_message' => __( 'AI features are not configured. Please add your API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' ),
 			'go_to_ai_settings' => __( 'Go to AI Settings', 'echo-knowledge-base' ),
 			'demo_analytics_badge' => __( 'Demo', 'echo-knowledge-base' ),
 			'demo_analytics_message' => __( 'This is demo analytics data for demonstration purposes.', 'echo-knowledge-base' ),
@@ -293,6 +313,5 @@ class EPKB_AI_Content_Analysis_Page {
 		);
 	}
 }
-
 
 

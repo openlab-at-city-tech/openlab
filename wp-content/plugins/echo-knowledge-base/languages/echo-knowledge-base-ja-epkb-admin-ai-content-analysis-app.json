@@ -7,11 +7,11 @@
                 "lang": "ja",
                 "plural-forms": "nplurals=1; plural=0;"
             },
-            "Loading...": [
-                "読み込み中…"
-            ],
             "AI Features Required": [
                 "AI機能が必要です"
+            ],
+            "Loading...": [
+                "読み込み中…"
             ],
             "Go to AI Settings": [
                 "AI設定へ移動"

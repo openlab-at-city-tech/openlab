@@ -23,14 +23,10 @@ class EPKB_AI_Readability {
 			return new WP_Error( 'invalid_article_id', __( 'Invalid article ID provided', 'echo-knowledge-base' ) );
 		}
 
-		// Check if this is a demo article - return demo data if it is
 		$article_id = $post->ID;
-		if ( EPKB_KB_Demo_Data::is_demo_article( $article_id ) ) {
-			return EPKB_KB_Demo_Data::get_demo_readability_data();
-		}
 
 		// Check if analysis exists in database
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$existing_analysis = $force_analysis ? null : $db->get_article_analysis( $article_id );
 		if ( ! $force_analysis && $existing_analysis && ! empty( $existing_analysis->readability_data ) ) {
 			// Return stored data
@@ -60,7 +56,7 @@ class EPKB_AI_Readability {
 		$ai_readability = self::get_ai_readability_analysis( $title, $content, $article_id );
 		if ( is_wp_error( $ai_readability ) ) {
 			// Store the error but don't fail the entire analysis
-			EPKB_Logging::add_log( 'AI readability analysis error', $ai_readability, array( 'context' => 'readability_analysis', 'article_id' => $article_id ) );
+			EPKB_AI_Log::add_log( 'AI readability analysis error: ' . $article_id, $ai_readability );
 
 			$error_result = array(
 				'version' => self::DATA_VERSION,
@@ -72,7 +68,7 @@ class EPKB_AI_Readability {
 			);
 
 			// Save error to database
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$db->update_readability( $article_id, 0, $error_result );
 
 			return $ai_readability;
@@ -90,7 +86,7 @@ class EPKB_AI_Readability {
 			);
 
 			// Save error to database
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$db->update_readability( $article_id, 0, $empty_result );
 
 			return $empty_result;
@@ -107,7 +103,7 @@ class EPKB_AI_Readability {
 		);
 
 		// Save to database
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$db->update_readability( $article_id, $result['score'], $result );
 
 		return $result;
@@ -121,7 +117,7 @@ class EPKB_AI_Readability {
 	 */
 	public static function clear_cache( $article_id ) {
 		// Clear from database table
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		return $db->delete_article_analysis( $article_id );
 	}
 
@@ -143,7 +139,7 @@ class EPKB_AI_Readability {
 	}
 
 	/**
-	 * Get AI-powered readability analysis using OpenAI
+	 * Get AI-powered readability analysis
 	 *
 	 * @param string $title Article title
 	 * @param string $content Article content
@@ -155,11 +151,6 @@ class EPKB_AI_Readability {
 		// Validate input parameters
 		if ( empty( $title ) && empty( $content ) ) {
 			return new WP_Error( 'invalid_input', __( 'Title and content cannot both be empty', 'echo-knowledge-base' ) );
-		}
-
-		// Check if OpenAI client is available
-		if ( ! class_exists( 'EPKB_OpenAI_Client' ) ) {
-			return new WP_Error( 'openai_unavailable', __( 'OpenAI client is not available', 'echo-knowledge-base' ) );
 		}
 
 		// Process article content for AI analysis
@@ -207,39 +198,41 @@ Article Title: {$title}
 Content:
 {$content_for_analysis}";
 
-		// Get the fastest model preset for content analysis
-		$fastest_preset = EPKB_OpenAI_Client::get_preset_parameters( 'fastest' );
-		$model = $fastest_preset['model'];
-		$model_params = array(
-			'verbosity' => $fastest_preset['verbosity'],
-			'reasoning' => $fastest_preset['reasoning'],
-			'max_output_tokens' => $fastest_preset['max_output_tokens']
+		$instructions = 'You are a knowledge base content expert specializing in readability analysis and content optimization.';
+		$response_format = array(
+			'type'   => 'json_schema',
+			'name'   => 'readability_analysis',
+			'schema' => array(
+				'type'                 => 'object',
+				'additionalProperties' => false,
+				'properties'           => array(
+					'issues' => array(
+						'type'  => 'array',
+						'items' => array(
+							'type'                 => 'object',
+							'additionalProperties' => false,
+							'properties'           => array(
+								'issue_type'       => array( 'type' => 'string' ),
+								'problematic_text' => array( 'type' => 'string' ),
+								'explanation'      => array( 'type' => 'string' ),
+							),
+							'required'             => array( 'issue_type', 'problematic_text', 'explanation' ),
+						),
+					),
+				),
+				'required'             => array( 'issues' ),
+			),
 		);
-
-		// Prepare the request for Responses API
-		$request = array(
-			'model' => $model,
-			'instructions' => 'You are a knowledge base content expert specializing in readability analysis and content optimization.',
-			'input' => array(
-				array(
-					'role' => 'user',
-					'content' => $prompt
-				)
-			)
+		$response_text = EPKB_AI_Provider::send_prompt_request(
+			$prompt,
+			$instructions,
+			'content_analysis_readability',
+			'content_analysis',
+			null,
+			array(),
+			array(),
+			$response_format
 		);
-
-		// Apply model parameters
-		$request = EPKB_OpenAI_Client::apply_model_parameters( $request, $model, $model_params );
-
-		// Make the API request (pass disable_retry flag and content_analysis purpose for timeout determination)
-		$client = new EPKB_OpenAI_Client();
-		$response = $client->request( '/responses', $request, 'POST', 'content_analysis_readability' );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		// Extract content from OpenAI response
-		$response_text = EPKB_AI_Content_Analysis_Utilities::extract_openai_response_content( $response );
 		if ( is_wp_error( $response_text ) ) {
 			return $response_text;
 		}

@@ -70,7 +70,16 @@ class EPKB_Add_Ons_Page {
 				<p>
 					<?php echo wp_kses_post( $values['desc'] ); ?>
 				</p>
-			</div>
+			</div>			<?php
+			if ( ! empty( $values['discount_coupon'] ) && ! empty( $values['discount_coupon']['discount_percentage'] ) ) {
+				$coupon = $values['discount_coupon']; ?>
+				<div class="epkb-ad-discount-coupon">
+					<span class="epkb-ad-discount-badge"><?php echo esc_html( $coupon['discount_percentage'] . '% ' . __( 'OFF', 'echo-knowledge-base' ) ); ?></span>
+					<br>
+					<span class="epkb-ad-discount-text"><?php echo esc_html__( 'Use code:', 'echo-knowledge-base' ); ?> <code><?php echo esc_html( $coupon['coupon_code'] ); ?></code></span>
+					<button type="button" class="epkb-ad-discount-copy-btn" data-code="<?php echo esc_attr( $coupon['coupon_code'] ); ?>"><?php esc_html_e( 'Copy', 'echo-knowledge-base' ); ?></button>
+				</div>			<?php
+			} ?>
 			<div class="button_container">				<?php
 				if ( ! empty($values['coming_when']) ) { ?>
 					<div class="coming_soon"><?php echo esc_html( $values['coming_when'] ); ?></div>				<?php
@@ -107,9 +116,9 @@ class EPKB_Add_Ons_Page {
 				'title'             => esc_html__( 'AI Features', 'echo-knowledge-base' ),
 				'special_note'      => esc_html__( 'Smart AI-powered support', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2025/08/ai-features-banner.jpg',
-				'desc'              => esc_html__( 'Enhance your site with AI training from posts, pages, custom post types, and private notes, ' .
-															'plus smart daily email notifications summarizing AI Chat and Search activity.', 'echo-knowledge-base' ),
+				'desc'              => esc_html__( 'Enhance your site with AI training from posts, pages, custom post types, and private notes, plus smart daily email notifications summarizing AI Chat and Search activity.', 'echo-knowledge-base' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/ai-features/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=ai-features',
+				'discount_coupon'   => EPKB_AI_PRO_Features_Tab::get_discount_coupon(),
 			) );
 
 			self::add_on_product( array(
@@ -117,6 +126,7 @@ class EPKB_Add_Ons_Page {
 				'title'             => esc_html__( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ),
 				'special_note'      => esc_html__( 'Expand your documentation', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-MKB-1.jpg',
+				// translators: %1$s and %2$s are HTML strong tags
 				'desc'              => sprintf( esc_html__( 'Create a separate Knowledge Base for each %1$s product, service or team %2$s.', 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/multiple-knowledge-bases/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=multiple-kbs'
 			) );
@@ -135,6 +145,7 @@ class EPKB_Add_Ons_Page {
 				'title'             => esc_html__( 'Elegant Layouts', 'echo-knowledge-base' ),
 				'special_note'      => esc_html__( 'More ways to design your KB', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-EL'.'AY-1.1.jpg',
+				// translators: %1$s, %2$s, %3$s, %4$s are HTML strong tags
 				'desc'              => sprintf( esc_html__( 'Use %1$s Grid Layout %2$s or %3$s Sidebar Layout %4$s for KB Main page or combine Basic, Tabs, Grid and Sidebar layouts in many cool ways.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=elegant-layouts',
 			) );
@@ -153,6 +164,7 @@ class EPKB_Add_Ons_Page {
 				'title'             => esc_html__( 'Custom Links for PDFs and More', 'echo-knowledge-base' ),
 				'special_note'      => esc_html__( 'Link to PDFs, posts and pages', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-LINK-2.jpg',
+				// translators: %1$s and %2$s are HTML strong tags
 				'desc'              => sprintf( esc_html__( 'Set Articles to links to %1$s PDFs, pages, posts and websites %2$s. On KB Main Page, choose icons for your articles.', 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/links-editor-for-pdfs-and-more/?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=links-editor'
 			) );
@@ -184,16 +196,6 @@ class EPKB_Add_Ons_Page {
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/edd/2022/01/KB-Import-Export-Banner-v2.jpg',
 				'desc'              => esc_html__( "Powerful import and export plugin to migrate, create and copy articles and images from your Knowledge Base. You can also import articles from CSV and other sources.", 'echo-knowledge-base' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/kb-import-export//?utm_source=plugin&utm_medium=addons&utm_content=home&utm_campaign=kb-import-export/',
-			) );
-
-			self::add_on_product( array(
-				'id'                => '',
-				'title'             => esc_html__( 'Help Dialog Chat', 'echo-knowledge-base' ),
-				'special_note'      => esc_html__( 'FAQs, Articles and Contact Form', 'echo-knowledge-base' ),
-				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2022/06/featured-help-dialog.jpg',
-				'desc'              => esc_html__( 'Engage your website visitors and gain new customers with page-specific FAQs and knowledge base articles. Help users communicate with you ' .
-										'without leaving the page by using a simple contact form shown with the Help Dialog Chat.', 'echo-knowledge-base' ),
-				'learn_more_url'    => 'https://wordpress.org/plugins/help-dialog/',
 			) );   ?>
 
 		</div>      <?php
@@ -293,6 +295,7 @@ class EPKB_Add_Ons_Page {
 		ob_start();     ?>
 
 		<p>     <?php
+			// translators: %1$s and %2$s are HTML anchor tags
 			printf( esc_html__( 'Please refer to the %1$sdocumentation%2$s for help with your license account and any other issues.', 'echo-knowledge-base' ),
 				'<a href="https://www.echoknowledgebase.com/documentation/license-account/" target="_blank" rel="noopener">',
 				'</a>' );  ?>
@@ -335,7 +338,6 @@ class EPKB_Add_Ons_Page {
 		$our_free_plugins = array();
 
 		$args_list = array(
-			array( 'slug' => 'help-dialog' ),
 			array( 'slug' => 'creative-addons-for-elementor' ),
 			array( 'slug' => 'echo-show-ids' ),
 			array( 'slug' => 'scroll-down-arrow' ),

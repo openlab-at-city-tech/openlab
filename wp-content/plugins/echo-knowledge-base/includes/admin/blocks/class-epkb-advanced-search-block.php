@@ -42,6 +42,14 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 	 */
 	protected function add_this_block_required_kb_attributes( $block_attributes ) {
 		$block_attributes['kb_main_page_layout'] = EPKB_Layout::BASIC_LAYOUT;
+
+		// Add AI collection ID from KB config for AI Search
+		$kb_id = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int)$block_attributes['kb_id'];
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+		if ( ! empty( $kb_config['kb_ai_collection_id'] ) ) {
+			$block_attributes['kb_ai_collection_id'] = $kb_config['kb_ai_collection_id'];
+		}
+
 		return $block_attributes;
 	}
 
@@ -151,6 +159,10 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 
 		$kb_id_setting = EPKB_Blocks_Settings::get_kb_id_setting();
 
+		// get FAQ groups for the faq_group_ids setting
+		$faq_groups_list = EPKB_FAQs_Utilities::get_faq_groups();
+		$faq_groups_list = is_wp_error( $faq_groups_list ) ? array() : $faq_groups_list;
+
 		// for optimization reason on the frontend the $kb_id_setting can be empty - ensure it has options before use it
 		$search_multiple_kbs_list_options = array();
 		if ( ! empty( $kb_id_setting['options'] ) ) {
@@ -159,7 +171,7 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 			}
 		}
 
-		return array(
+		$ui_config = array(
 
 			// TAB: Settings
 			'settings' => array(
@@ -172,7 +184,6 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'General', 'echo-knowledge-base' ),
 						'fields' => array(
 							'kb_id' => $kb_id_setting,
-							'kb_ai_collection_id' => EPKB_Blocks_Settings::get_kb_ai_collection_id_setting(),
 
 							// Search multiple KBs
 							'search_multiple_kbs_toggle' => array(
@@ -210,6 +221,18 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 							),
 							'advanced_search_text_highlight_enabled' => array(
 								'setting_type' => 'toggle'
+							),
+							'advanced_search_faqs_toggle' => array(
+								'setting_type' => 'toggle'
+							),
+							'faq_group_ids' => array(
+								'setting_type' => 'checkbox_multi_select',
+								'label' => esc_html__( 'FAQ Groups to Search', 'echo-knowledge-base' ),
+								'options' => $faq_groups_list,
+								'default' => array(),
+								'hide_on_dependencies' => array(
+									'advanced_search_faqs_toggle' => 'off',
+								),
 							),
 						),
 					),
@@ -293,8 +316,8 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 							'advanced_search_mp_filter_category_level'                      => array(
 								'setting_type' => 'select_buttons_string',
 								'options'     => array(
-									'top' => esc_html__( 'Top Level' ),
-									'sub' => esc_html__( 'Top + Sub Level' ),
+									'top' => esc_html__( 'Top Level', 'echo-knowledge-base' ),
+									'sub' => esc_html__( 'Top + Sub Level', 'echo-knowledge-base' ),
 								),
 								'hide_on_dependencies' => array(
 									'advanced_search_mp_filter_toggle' => 'off',
@@ -323,9 +346,6 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'Search Results List', 'echo-knowledge-base' ),
 						'fields' => array(
 							'advanced_search_mp_show_top_category'                          => array(
-								'setting_type' => 'toggle'
-							),
-							'advanced_search_context_enabled'                          => array(
 								'setting_type' => 'toggle'
 							),
 							'advanced_search_context_characters'                          => array(
@@ -372,6 +392,15 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 							'custom_css_class' => EPKB_Blocks_Settings::get_custom_css_class_setting(),
 						)
 					),
+
+					// GROUP: Help + Setup Wizard
+					'help-resources' => array(
+						'title' => esc_html__( 'Help + Setup Wizard', 'echo-knowledge-base' ),
+						'fields' => array(
+							'help_resources_link' => EPKB_Blocks_Settings::get_help_resources_link(),
+							'setup_wizard_link' => EPKB_Blocks_Settings::get_setup_wizard_link(),
+						)
+					),
 				),
 			),
 
@@ -389,12 +418,6 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 								'default' => 'on'
 							) ),
 							'block_max_width' => EPKB_Blocks_Settings::get_block_max_width_setting(),
-							'block_presets' => array(
-								'setting_type' => 'presets_dropdown',
-								'label' => esc_html__( 'Apply Preset', 'echo-knowledge-base' ),
-								'presets' => $presets,
-								'default' => 'current',
-							),
 						),
 					),
 
@@ -665,8 +688,8 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 							'advanced_search_mp_input_box_loading_icon_placement'           => array(
 								'setting_type' => 'select_buttons_string',
 								'options'     => array(
-									'left'      => esc_html__( 'Left' ),
-									'right'     => esc_html__( 'Right' )
+									'left'      => esc_html__( 'Left', 'echo-knowledge-base' ),
+									'right'     => esc_html__( 'Right', 'echo-knowledge-base' )
 								),
 							),
 							'advanced_search_mp_input_border_width'                         => array(
@@ -771,11 +794,30 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 									), 16 ),
 								),
 							),
+					),
+				),
+
+				// GROUP: AI Search Button
+				'ai_search_button' => array(
+					'title' => esc_html__( 'AI Search Button', 'echo-knowledge-base' ),
+					'fields' => array(
+						'advanced_search_mp_ai_search_button_background_color'      => array(
+							'setting_type' => 'color',
+						),
+						'advanced_search_mp_ai_search_button_text_color'            => array(
+							'setting_type' => 'color',
+						),
+						'advanced_search_mp_ai_search_button_background_hover_color' => array(
+							'setting_type' => 'color',
+						),
+						'advanced_search_mp_ai_search_button_text_hover_color'      => array(
+							'setting_type' => 'color',
 						),
 					),
+				),
 
-					// GROUP: Search Results
-					'search_results' => array(
+				// GROUP: Search Results
+				'search_results' => array(
 						'title' => esc_html__( 'Search Results Page', 'echo-knowledge-base' ),
 						'fields' => array(
 							'advanced_search_mp_filter_box_font_color'                      => array(
@@ -805,5 +847,12 @@ final class EPKB_Advanced_Search_Block extends EPKB_Abstract_Block {
 				),
 			),
 		);
+
+		// Remove AI Search Button group if AI Search is not enabled
+		if ( ! EPKB_AI_Utilities::is_ai_search_smart_enabled() ) {
+			unset( $ui_config['style']['groups']['ai_search_button'] );
+		}
+
+		return $ui_config;
 	}
 }

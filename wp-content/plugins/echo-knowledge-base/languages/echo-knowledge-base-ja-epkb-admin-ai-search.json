@@ -19,14 +19,23 @@
             "Cancel": [
                 "キャンセル"
             ],
-            "Date:": [
-                "日付:"
+            "Save Settings": [
+                "設定を保存"
+            ],
+            "Delete": [
+                "削除"
             ],
             "Next": [
                 "次"
             ],
             "Previous": [
                 "前"
+            ],
+            "Feedback": [
+                "フィードバック"
+            ],
+            "Reset": [
+                "リセット"
             ],
             "Saving...": [
                 "保存中..."
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "中央列"
             ],
-            "Feedback": [
-                "フィードバック"
-            ],
             "AI Assistant": [
                 "AIアシスタント"
-            ],
-            "Save Settings": [
-                "設定を保存"
-            ],
-            "Delete": [
-                "削除"
             ],
             "Delete Selected": [
                 "選択した項目を削除"
             ],
             "of": [
                 "の"
-            ],
-            "Reset": [
-                "リセット"
             ],
             "Refreshing...": [
                 "更新しています..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "サーバーから追加の結果を検索しています..."
             ],
-            "User:": [
-                "ユーザー:"
-            ],
-            "Status:": [
-                "ステータス:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "デフォルトの指示にリセットしてもよろしいですか？"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "デフォルトに戻す"
             ],
+            "Training data issues detected": [
+                "機械学習データの問題が検出されました"
+            ],
             "Failed to save settings": [
                 "設定の保存に失敗しました"
             ],
             "Go to Settings": [
                 "設定へ移動"
+            ],
+            "Deleting search...": [
+                "検索を削除しています..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "選択した検索を削除してもよろしいですか？"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "詳細を表示するには検索を選択してください"
             ],
-            "Search Information": [
-                "検索情報"
-            ],
-            "Query:": [
-                "クエリ："
-            ],
-            "Results Count:": [
-                "結果件数："
-            ],
             "Contact Request": [
                 "お問い合わせ"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "セクションを追加"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "デフォルトのプロンプトにリセットしてもよろしいですか？"
+            ],
+            "Reset Prompt": [
+                "プロンプトをリセット"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "デフォルトのプロンプトにリセットしてよろしいですか？カスタムプロンプトは失われます。."
+            ],
+            "Select Section:": [
+                "セクションを選択："
+            ],
+            "Prompt:": [
+                "プロンプト："
+            ],
+            "Using custom prompt": [
+                "カスタムプロンプトを使用中"
+            ],
+            "Using default prompt": [
+                "デフォルトのプロンプトを使用中"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "AI検索には有効な機械学習データのコレクションが必要です。下記の問題を機械学習データまたは KB 設定で解決してください。."
             ],
             "Failed to load search history": [
                 "検索履歴の読み込みに失敗しました"

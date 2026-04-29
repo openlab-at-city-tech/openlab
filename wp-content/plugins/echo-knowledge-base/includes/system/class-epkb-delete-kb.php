@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Delete All KB
@@ -30,19 +30,19 @@ class EPKB_Delete_KB {
 			<p><?php esc_html_e( 'All data successfully deleted', 'echo-knowledge-base' ); ?></p>
 		</div>  <?php
 
-		$delete_text = esc_html__( 'Delete All Plugin Data', 'echo-knowledge-base' );
+		$delete_text_escaped = esc_html__( 'Delete All Plugin Data', 'echo-knowledge-base' );
 
         if ( empty( $already_deleted ) ) {  ?>
 		    <form id="epkb-delete-all-data__form" class="epkb-delete-all-data__form epkb-admin__kb__form" method="POST">
                 <p class="epkb-delete-all-data__form-title">    <?php
-	                echo sprintf( esc_html__( 'Write "%s" in the input box below if you want to immediately delete every Knowledge Base instance and all plugin data. ' .
-	                                          'You cannot undo this action. Use this option only if you are removing this plugin from your site.', 'echo-knowledge-base' ), $delete_text ); ?>
+	                // translators: %s is the text that must be typed to confirm deletion
+	                echo sprintf( esc_html__( 'Write "%s" in the input box below if you want to immediately delete every Knowledge Base instance and all plugin data. You cannot undo this action. Use this option only if you are removing this plugin from your site.', 'echo-knowledge-base' ), $delete_text_escaped ); ?>
                 </p>    <?php
                 EPKB_HTML_Elements::text_basic( array(
 				    'value' => '',
 				    'name'    => 'epkb_delete_text',
 			    ) );
-                EPKB_HTML_Elements::submit_button_v2( $delete_text, 'epkb_delete_all_kb_data', '', '', false, '', 'epkb-error-btn' );  ?>
+                EPKB_HTML_Elements::submit_button_v2( $delete_text_escaped, 'epkb_delete_all_kb_data', '', '', false, '', 'epkb-error-btn' );  ?>
             </form> <?php
 
 			EPKB_HTML_Forms::dialog_confirm_action( array(
@@ -70,6 +70,7 @@ class EPKB_Delete_KB {
 		// ensure user typed delete word
         $delete_text = EPKB_Utilities::post( 'delete_text' );
 		if ( $delete_text != esc_html__( 'Delete All Plugin Data', 'echo-knowledge-base' ) ) {
+			// translators: %s is the text that must be typed to confirm deletion
 			EPKB_Utilities::ajax_show_error_die( sprintf( esc_html__( 'Write "%s" in input box to delete every Knowledge Base.', 'echo-knowledge-base' ), 'delete every KB' ) );
 		}
 

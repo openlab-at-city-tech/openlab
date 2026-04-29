@@ -13,14 +13,20 @@
             "Error": [
                 "Fejl"
             ],
-            "No posts found to sync": [
-                "Ingen indlæg fundet til synkronisering"
+            "No synced items found to verify": [
+                "Ingen synkroniserede elementer fundet til verifikation"
             ],
             "Pending": [
                 "Afventer"
             ],
             "of": [
                 "af"
+            ],
+            "Selected": [
+                "Valgt"
+            ],
+            "Processing": [
+                "Behandler"
             ],
             "errors": [
                 "fejl"
@@ -31,8 +37,14 @@
             "Sync canceled": [
                 "Synkronisering annulleret"
             ],
+            "No posts found to sync": [
+                "Ingen indlæg fundet til synkronisering"
+            ],
             "Failed to cancel sync": [
                 "Fejl ved annullering af synkronisering"
+            ],
+            "Failed to start verification": [
+                "Kunne ikke starte verifikation"
             ],
             "A sync job is already running.": [
                 "En synkroniseringsopgave kører allerede."
@@ -40,20 +52,8 @@
             "Failed to start sync": [
                 "Kunne ikke starte synkronisering"
             ],
-            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
-                "OpenAI API-nøgle er påkrævet for at synkronisere indhold. Konfigurer den i Generelle indstillinger."
-            ],
-            "Sync Method": [
-                "Synkroniseringsmetode"
-            ],
-            "Basic Timer": [
-                "Grundlæggende timer"
-            ],
-            "Select All Filtered Records": [
-                "Vælg alle filtrerede poster"
-            ],
-            "Select All Records": [
-                "Vælg alle poster"
+            "API key is required to sync content. Please configure it in General Settings.": [
+                "API-nøgle er påkrævet for at synkronisere indhold. Konfigurer den i Generelle indstillinger."
             ],
             "Outdated": [
                 "Forældet"
@@ -61,14 +61,17 @@
             "Added": [
                 "Tilføjet"
             ],
-            "Selected": [
-                "Valgt"
-            ],
             "Records": [
                 "Poster"
             ],
             "selected records": [
                 "valgte poster"
+            ],
+            "Select All Filtered Records": [
+                "Vælg alle filtrerede poster"
+            ],
+            "Select All Records": [
+                "Vælg alle poster"
             ],
             "Sync in Progress": [
                 "Synkronisering i gang"
@@ -82,8 +85,8 @@
             "Select at least one item to sync": [
                 "Vælg mindst ét element til synkronisering"
             ],
-            "Start Sync": [
-                "Start synkronisering"
+            "Send Data to AI for Training": [
+                "Send data til AI til træning"
             ],
             "Sync started successfully! ": [
                 "Synkronisering startet med succes!"
@@ -93,9 +96,6 @@
             ],
             "Retrying failed posts:": [
                 "Genforsøger mislykkede indlæg:"
-            ],
-            "Processing": [
-                "Behandler"
             ],
             "posts": [
                 "indlæg"
@@ -114,6 +114,27 @@
             ],
             "Sync scheduled, waiting to start...": [
                 "Planlagt synkronisering, venter på at starte..."
+            ],
+            "Upload completed, but the number of items doesn't match:": [
+                "Upload fuldført, men antallet af elementer stemmer ikke overens:"
+            ],
+            "items tracked locally vs": [
+                "elementer sporet lokalt vs"
+            ],
+            "items in the AI provider.": [
+                "Elementer i AI-udbyderen."
+            ],
+            "Checking for specific mismatches...": [
+                "Kontrollerer for specifikke uoverensstemmelser..."
+            ],
+            "The following items were not found in the AI provider:": [
+                "Følgende elementer blev ikke fundet i AI-udbyderen:"
+            ],
+            "items in the AI provider are not tracked locally.": [
+                "Elementer i AI-udbyderen spores ikke lokalt."
+            ],
+            "Verify & Fix": [
+                "Kontroller og ret"
             ]
         }
     }

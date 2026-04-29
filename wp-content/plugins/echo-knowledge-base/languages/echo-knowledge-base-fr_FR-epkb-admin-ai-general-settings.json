@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "Paramètres enregistrés avec succès"
             ],
-            "Saving...": [
-                "Sauvegarde en cours..."
+            "Close": [
+                "Fermer"
+            ],
+            "Cancel": [
+                "Annuler"
             ],
             "Save Settings": [
                 "Enregistrer les paramètres"
+            ],
+            "Saving...": [
+                "Sauvegarde en cours..."
             ],
             "Failed to save settings": [
                 "Échec de l'enregistrement des paramètres"
@@ -30,6 +36,33 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "Échec de l'envoi de l'e-mail de test. Veuillez vérifier votre connexion."
+            ],
+            "Change AI Provider?": [
+                "Changer de fournisseur d'IA ?"
+            ],
+            "Before you switch:": [
+                "Avant de changer :"
+            ],
+            "Read the Switching AI Providers guide →": [
+                "Lire le guide sur le changement de fournisseur d'IA →"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "Le changement de fournisseurs d'IA affectera vos paramètres IA Recherche et IA Chat :"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "Les collections de données d'apprentissage sont spécifiques au fournisseur et ne se transfèrent pas entre les fournisseurs."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "Vous devrez créer et entraîner de nouvelles collections pour le nouveau fournisseur."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "IA Recherche et IA Chat n'afficheront que les collections du fournisseur sélectionné."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "Vos collections existantes seront préservées et disponibles si vous revenez."
+            ],
+            "Change Provider": [
+                "Changer de fournisseur"
             ]
         }
     }

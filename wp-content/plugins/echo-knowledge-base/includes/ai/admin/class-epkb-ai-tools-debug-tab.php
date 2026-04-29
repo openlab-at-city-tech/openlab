@@ -112,8 +112,9 @@ class EPKB_AI_Tools_Debug_Tab {
 		// Check if the log file exists
 		if ( ! file_exists( $error_log_path ) ) {
 			$configured_path = ini_get( 'error_log' );
+			// translators: %1$s is the expected error log path, %2$s is the configured PHP error_log path
 			$message = sprintf(
-				__( 'Error log file not found at: %s. PHP error_log is configured as: %s. Enable WP_DEBUG and WP_DEBUG_LOG in wp-config.php or check your PHP error_log configuration.', 'echo-knowledge-base' ),
+				__( 'Error log file not found at: %1$s. PHP error_log is configured as: %2$s. Enable WP_DEBUG and WP_DEBUG_LOG in wp-config.php or check your PHP error_log configuration.', 'echo-knowledge-base' ),
 				$error_log_path,
 				! empty( $configured_path ) ? $configured_path : __( 'Not configured', 'echo-knowledge-base' )
 			);
@@ -204,6 +205,7 @@ class EPKB_AI_Tools_Debug_Tab {
 			return array( array(
 				'timestamp' => current_time( 'mysql' ),
 				'level' => 'info',
+				// translators: %s is the path to the WordPress debug log file
 				'message' => sprintf(
 					__( 'WordPress debug log file not found at: %s. The file will be created when WordPress encounters errors.', 'echo-knowledge-base' ),
 					$wp_error_log_path
@@ -390,6 +392,7 @@ class EPKB_AI_Tools_Debug_Tab {
 	 * @return array
 	 */
 	private static function tail( $filepath, $lines = 100 ) {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Reading log file for debugging, requires seek operations
 		$handle = @fopen( $filepath, "r" );
 		if ( ! $handle ) {
 			return array();
@@ -401,7 +404,7 @@ class EPKB_AI_Tools_Debug_Tab {
 		// If file is small, just read all lines
 		if ( $file_size < 8192 ) { // 8KB
 			$all_lines = file( $filepath, FILE_IGNORE_NEW_LINES );
-			fclose( $handle );
+			fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 			// Remove completely empty lines but keep lines with whitespace
 			$all_lines = array_filter( $all_lines, function( $line ) {
 				return $line !== '';
@@ -443,7 +446,7 @@ class EPKB_AI_Tools_Debug_Tab {
 				break;
 			}
 		}
-		fclose( $handle );
+		fclose( $handle ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 		
 		// Filter out only completely empty lines (not lines with just whitespace) and reverse
 		$text = array_filter( $text, function( $line ) {

@@ -77,6 +77,46 @@ abstract class EPKB_AI_REST_Base_Controller extends WP_REST_Controller {
 	}
 
 	/**
+	 * Validate that a public request is allowed to use the supplied KB/collection pair.
+	 *
+	 * Requests may either provide a scoped collection token or use the KB's configured default collection.
+	 *
+	 * @param WP_REST_Request $request
+	 * @param int $kb_id
+	 * @param int $collection_id
+	 * @return true|WP_Error
+	 */
+	protected function validate_public_collection_request( $request, $kb_id, $collection_id ) {
+
+		$kb_id = absint( $kb_id );
+		$collection_id = absint( $collection_id );
+		if ( empty( $kb_id ) || empty( $collection_id ) ) {
+			return new WP_Error( 'invalid_collection_context', __( 'This AI collection is not available for this request.', 'echo-knowledge-base' ), array( 'status' => 403 ) );
+		}
+
+		$collection_token = sanitize_text_field( (string) $request->get_param( 'collection_token' ) );
+		if ( ! empty( $collection_token ) ) {
+			if ( EPKB_AI_Security::validate_collection_access_token( $collection_token, $collection_id, $kb_id ) ) {
+				return true;
+			}
+
+			return new WP_Error( 'invalid_collection_context', __( 'This AI collection is not available for this request.', 'echo-knowledge-base' ), array( 'status' => 403 ) );
+		}
+
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
+		if ( is_wp_error( $kb_config ) ) {
+			return new WP_Error( 'invalid_collection_context', __( 'This AI collection is not available for this request.', 'echo-knowledge-base' ), array( 'status' => 403 ) );
+		}
+
+		$kb_collection_id = isset( $kb_config['kb_ai_collection_id'] ) ? absint( $kb_config['kb_ai_collection_id'] ) : 0;
+		if ( $kb_collection_id !== $collection_id ) {
+			return new WP_Error( 'invalid_collection_context', __( 'This AI collection is not available for this request.', 'echo-knowledge-base' ), array( 'status' => 403 ) );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Get standard collection parameters for list endpoints
 	 * 
 	 * @return array

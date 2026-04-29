@@ -7,8 +7,8 @@
                 "lang": "de_DE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?": [
-                "Der Wissensdatenbank-Editor ist deaktiviert, während der ${ builderName } aktiv ist. Möchten Sie stattdessen zu den Wissensdatenbank-Einstellungen wechseln?"
+            "The Knowledge Base Editor is disabled while the %s is active. Do you want to go to the Knowledge Base settings instead?": [
+                "Der Wissensdatenbank-Editor ist deaktiviert, während %s aktiv ist. Möchten Sie stattdessen zu den Wissensdatenbank-Einstellungen wechseln?"
             ]
         }
     }

@@ -13,14 +13,20 @@
             "Error": [
                 "Fehler"
             ],
-            "No posts found to sync": [
-                "Es wurden keine Beiträge zum Synchronisieren gefunden"
+            "No synced items found to verify": [
+                "Keine synchronisierten Elemente zum Verifizieren gefunden"
             ],
             "Pending": [
                 "Ausstehend"
             ],
             "of": [
                 "von"
+            ],
+            "Selected": [
+                "Ausgewählt"
+            ],
+            "Processing": [
+                "In Bearbeitung"
             ],
             "errors": [
                 "Fehler"
@@ -31,8 +37,14 @@
             "Sync canceled": [
                 "Synchronisierung abgebrochen"
             ],
+            "No posts found to sync": [
+                "Es wurden keine Beiträge zum Synchronisieren gefunden"
+            ],
             "Failed to cancel sync": [
                 "Fehler beim Abbrechen der Synchronisierung"
+            ],
+            "Failed to start verification": [
+                "Verifizierung konnte nicht gestartet werden"
             ],
             "A sync job is already running.": [
                 "Eine Synchronisierungsaufgabe läuft bereits."
@@ -40,20 +52,8 @@
             "Failed to start sync": [
                 "Fehler beim Starten der Synchronisierung"
             ],
-            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
-                "Für die Synchronisierung von Inhalten wird ein OpenAI-API-Schlüssel benötigt. Bitte konfigurieren Sie ihn in den Allgemeinen Einstellungen."
-            ],
-            "Sync Method": [
-                "Synchronisierungsmethode"
-            ],
-            "Basic Timer": [
-                "Basis-Timer"
-            ],
-            "Select All Filtered Records": [
-                "Alle gefilterten Datensätze auswählen"
-            ],
-            "Select All Records": [
-                "Alle Datensätze auswählen"
+            "API key is required to sync content. Please configure it in General Settings.": [
+                "API-Schlüssel ist erforderlich, um Inhalte zu synchronisieren. Bitte konfigurieren Sie ihn in den Allgemeinen Einstellungen."
             ],
             "Outdated": [
                 "Veraltet"
@@ -61,14 +61,17 @@
             "Added": [
                 "Hinzugefügt"
             ],
-            "Selected": [
-                "Ausgewählt"
-            ],
             "Records": [
                 "Datensätze"
             ],
             "selected records": [
                 "ausgewählte Datensätze"
+            ],
+            "Select All Filtered Records": [
+                "Alle gefilterten Datensätze auswählen"
+            ],
+            "Select All Records": [
+                "Alle Datensätze auswählen"
             ],
             "Sync in Progress": [
                 "Synchronisierung läuft"
@@ -82,8 +85,8 @@
             "Select at least one item to sync": [
                 "Wählen Sie mindestens einen Eintrag zur Synchronisierung aus"
             ],
-            "Start Sync": [
-                "Synchronisierung starten"
+            "Send Data to AI for Training": [
+                "Daten an die KI zum Training senden"
             ],
             "Sync started successfully! ": [
                 "Synchronisierung erfolgreich gestartet!"
@@ -93,9 +96,6 @@
             ],
             "Retrying failed posts:": [
                 "Wiederhole fehlgeschlagene Beiträge:"
-            ],
-            "Processing": [
-                "In Bearbeitung"
             ],
             "posts": [
                 "Beiträge"
@@ -114,6 +114,27 @@
             ],
             "Sync scheduled, waiting to start...": [
                 "Synchronisierung geplant, Start wird erwartet..."
+            ],
+            "Upload completed, but the number of items doesn't match:": [
+                "Upload abgeschlossen, aber die Anzahl der Elemente stimmt nicht überein:"
+            ],
+            "items tracked locally vs": [
+                "Elemente lokal verfolgt vs"
+            ],
+            "items in the AI provider.": [
+                "Elemente beim KI-Anbieter."
+            ],
+            "Checking for specific mismatches...": [
+                "Auf spezifische Abweichungen prüfen..."
+            ],
+            "The following items were not found in the AI provider:": [
+                "Die folgenden Elemente wurden beim KI-Anbieter nicht gefunden:"
+            ],
+            "items in the AI provider are not tracked locally.": [
+                "Elemente beim KI-Anbieter werden lokal nicht erfasst."
+            ],
+            "Verify & Fix": [
+                "Überprüfen und Beheben"
             ]
         }
     }

@@ -51,7 +51,7 @@ class EPKB_AI_Search_Handler extends EPKB_AI_Base_Handler {
 		}
 
 		// Make API request - collection_id should always come from caller
-		$model = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_model' );
+		$model = EPKB_AI_Provider::get_search_model();
 		$ai_response = $this->get_ai_response( $question, $model, null, $collection_id );
 		if ( is_wp_error( $ai_response ) ) {
 			return $ai_response;
@@ -61,7 +61,7 @@ class EPKB_AI_Search_Handler extends EPKB_AI_Base_Handler {
 		$language = EPKB_Language_Utilities::detect_current_language();
 		
 		// Add messages to conversation
-		$mode = EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? 'advanced_search' : 'search';
+		$mode = EPKB_AI_Utilities::is_ai_search_smart_enabled() ? 'smart_search' : 'search';
 
 		$conversation = new EPKB_AI_Conversation_Model( array(
 			'user_id'         => get_current_user_id(),
@@ -73,7 +73,7 @@ class EPKB_AI_Search_Handler extends EPKB_AI_Base_Handler {
 		) );
 
 		$conversation->add_message( 'user', $question );
-		$conversation->add_message( 'assistant', $ai_response['content'], array( 'usage' => $ai_response['usage'] ) );
+		$conversation->add_message( 'assistant', $ai_response['content'] );
 		
 		// Update conversation with response ID
 		$conversation->set_conversation_id( $ai_response['response_id'] );
@@ -84,8 +84,9 @@ class EPKB_AI_Search_Handler extends EPKB_AI_Base_Handler {
 			return new WP_Error( 'save_failed', __( 'Failed to save conversation: ', 'echo-knowledge-base' ) . $message_id->get_error_message() );
 		}
 		
-		// Record usage for tracking
-		// TODO $this->record_usage( $response['usage'] );
+		// Check if source references should be included
+		$show_sources = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_show_sources' ) === 'on';
+		$sources = $show_sources && EPKB_AI_Utilities::should_show_sources_for_answer( $ai_response['content'] ) && ! empty( $ai_response['sources'] ) ? $ai_response['sources'] : array();
 
 		// Return format matching what JavaScript expects (same as AI Chat)
 		return array(
@@ -95,7 +96,8 @@ class EPKB_AI_Search_Handler extends EPKB_AI_Base_Handler {
 			'chat_id'     => $conversation->get_chat_id(),
 			'conversation_id' => $conversation->get_chat_id(),
 			'results'     => array(), // AI search doesn't return traditional results
-			'count'       => 0        // AI search doesn't return count
+			'count'       => 0,       // AI search doesn't return count
+			'sources'     => $sources // Source article references
 		);
 	}
 }

@@ -1,12 +1,14 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * AI Sync Hooks
- * 
+ *
  * Handles WordPress hooks for automatic sync operations.
  * Monitors content changes and triggers appropriate sync actions.
  */
 class EPKB_AI_Sync_Hooks {
+
+	public static $skip_sync_hooks = false;
 
 	public function __construct() {
 
@@ -35,7 +37,12 @@ class EPKB_AI_Sync_Hooks {
 	 * @return void
 	 */
 	public function handle_post_save( $post_id, $post, $update ) {
-		
+
+		// Skip when AI Notes are being created/updated programmatically (avoids redundant sync and max_allowed_packet errors on wp_options)
+		if ( self::$skip_sync_hooks ) {
+			return;
+		}
+
 		// Skip auto saves and revisions
 		if ( wp_is_post_autosave( $post_id ) || wp_is_post_revision( $post_id ) ) {
 			return;
@@ -128,7 +135,7 @@ class EPKB_AI_Sync_Hooks {
 			return true; // Already removed
 		}
 
-		$vector_store = new EPKB_AI_OpenAI_Vector_Store();
+		$vector_store = EPKB_AI_Provider::get_vector_store_handler();
 
 		// Remove from vector store
 		if ( ! empty( $existing->store_id ) && ! empty( $existing->file_id ) ) {
@@ -138,11 +145,11 @@ class EPKB_AI_Sync_Hooks {
 			}
 		}
 
-		// Delete file from OpenAI
+		// Delete file from file storage (for OpenAI, separate from vector store; for Gemini, same as remove_file_from_vector_store)
 		if ( ! empty( $existing->file_id ) ) {
-			$result = $vector_store->delete_file_from_file_storage( $existing->file_id );
+			$result = $vector_store->delete_file_from_file_storage( $existing->file_id, $existing->store_id );
 			if ( is_wp_error( $result ) ) {
-				EPKB_AI_Log::add_log( $result, array( 'training_data_id' => $existing->id, 'file_id' => $existing->file_id, 'message' => 'Failed to delete file from OpenAI' ) );
+				EPKB_AI_Log::add_log( $result, array( 'training_data_id' => $existing->id, 'file_id' => $existing->file_id, 'message' => 'Failed to delete file from AI provider' ) );
 			}
 		}
 
@@ -170,13 +177,20 @@ class EPKB_AI_Sync_Hooks {
 			return;
 		}
 		
-		// Post unpublished - remove from sync
-		if ( $old_status === 'publish' && $new_status !== 'publish' ) {
+		// Determine allowed statuses for this post type (AI Notes allow 'private')
+		$allowed_statuses = array( 'publish' );
+		if ( $post->post_type === EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE ) {
+			$allowed_statuses[] = 'private';
+		}
+		$was_eligible = in_array( $old_status, $allowed_statuses, true );
+		$is_eligible = in_array( $new_status, $allowed_statuses, true );
+
+		// Post became ineligible - remove from sync
+		if ( $was_eligible && ! $is_eligible ) {
 			$this->handle_post_delete( $post->ID );
 		}
-		
-		// Post published - add to sync (check eligibility)
-		elseif ( $old_status !== 'publish' && $new_status === 'publish' ) {
+		// Post became eligible - add to sync (check full eligibility)
+		elseif ( ! $was_eligible && $is_eligible ) {
 			$eligibility_check = EPKB_Admin_UI_Access::is_post_eligible_for_ai_training( $post );
 			if ( ! is_wp_error( $eligibility_check ) && $this->is_auto_sync_enabled() ) {
 				$this->sync_one_post( $post );

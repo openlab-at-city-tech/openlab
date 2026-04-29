@@ -75,8 +75,8 @@ class EPKB_Article_Count_Handler {
 		EPKB_Utilities::save_postmeta( $article_id, 'epkb-article-views', $views, true );
 
 		// increase counter for year meta
-		$year = date( 'Y' );
-		$week_number = date( 'W' );
+		$year = wp_date( 'Y' );
+		$week_number = wp_date( 'W' );
 
 		$year_meta = EPKB_Utilities::get_postmeta( $article_id, 'epkb-article-views-' . $year, [] );
 		if ( ! is_array( $year_meta ) ) {
@@ -232,8 +232,8 @@ class EPKB_Article_Count_Handler {
 		}
 
 		// update this year counters
-		$year = date( 'Y' );
-		$week_number = date( 'W' );
+		$year = wp_date( 'Y' );
+		$week_number = wp_date( 'W' );
 		EPKB_Utilities::save_postmeta( $post_id, 'epkb-article-views-' . $year, [ $week_number => $views ], true );
 
 		// save new 'epkb-article-views' value

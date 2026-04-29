@@ -320,11 +320,11 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		// Check if AI is configured (API key set and terms accepted) before proceeding
 		if ( ! EPKB_AI_Utilities::is_ai_configured() ) {
 			return $this->create_rest_response( array( 'success' => false, 'error' => 'ai_not_configured',
-				'message' => __( 'Please add your OpenAI API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' ) ), 400 );
+				'message' => __( 'Please add your API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' ) ), 400 );
 		}
 
 		// Ensure Content Analysis table exists before starting analysis
-		new EPKB_AI_Content_Analysis_DB();
+		new EPKB_AI_Content_Analysis_DB( true );
 
 		$article_ids = $request->get_param( 'article_ids' );
 
@@ -370,7 +370,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 
 		if ( is_wp_error( $result ) ) {
 
-			if ( EPKB_AI_OpenAI_Handler::is_retryable_error( $result ) ) {
+			if ( EPKB_AI_Utilities::is_retryable_error( $result ) ) {
 				return $this->create_rest_response( array( 'can_retry' => true ) );
 			}
 
@@ -489,7 +489,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 			return $this->create_rest_response( array(
 				'success' => false,
 				'error' => 'ai_not_configured',
-				'message' => __( 'Please add your OpenAI API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
+				'message' => __( 'Please add your API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
 			), 400 );
 		}
 
@@ -515,7 +515,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		// Run tags analysis with force flag (force=true will run fresh analysis)
 		$tags_result = EPKB_AI_Tags_Usage::analyze( $post, true );
 		if ( is_wp_error( $tags_result ) ) {
-			if ( EPKB_AI_OpenAI_Handler::is_retryable_error( $tags_result ) ) {
+			if ( EPKB_AI_Utilities::is_retryable_error( $tags_result ) ) {
 				return $this->create_rest_response( array( 'can_retry' => true ) );
 			}
 			return $this->create_rest_response( array( 'reason' => $tags_result->get_error_code(), 'success' => false, 'message' => $tags_result->get_error_message() ), 500 );
@@ -570,7 +570,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 			return $this->create_rest_response( array(
 				'success' => false,
 				'error' => 'ai_not_configured',
-				'message' => __( 'Please add your OpenAI API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
+				'message' => __( 'Please add your API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
 			), 400 );
 		}
 
@@ -596,7 +596,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		// Run readability analysis with force flag (force=true will run fresh analysis)
 		$readability_result = EPKB_AI_Readability::analyze( $post, true );
 		if ( is_wp_error( $readability_result ) ) {
-			if ( EPKB_AI_OpenAI_Handler::is_retryable_error( $readability_result ) ) {
+			if ( EPKB_AI_Utilities::is_retryable_error( $readability_result ) ) {
 				return $this->create_rest_response( array( 'can_retry' => true ) );
 			}
 			$status_code = $readability_result->get_error_code() == 'max_retries_exceeded' ? 503 : 500;
@@ -657,7 +657,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 			return $this->create_rest_response( array(
 				'success' => false,
 				'error' => 'ai_not_configured',
-				'message' => __( 'Please add your OpenAI API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
+				'message' => __( 'Please add your API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
 			), 400 );
 		}
 
@@ -684,7 +684,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		try {
 			$gap_result = apply_filters( 'epkb_ai_gap_analysis_analyze', $post, [ 'force' => true ] );
 			if ( is_wp_error( $gap_result ) ) {
-				if ( EPKB_AI_OpenAI_Handler::is_retryable_error( $gap_result ) ) {
+				if ( EPKB_AI_Utilities::is_retryable_error( $gap_result ) ) {
 					return $this->create_rest_response( array( 'can_retry' => true ) );
 				}
 				return $this->create_rest_response( array( 'reason' => $gap_result->get_error_code(), 'success' => false, 'message' => $gap_result->get_error_message() ), 500 );
@@ -764,7 +764,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 				$content = substr( $content, 0, $pos ) . $marker . substr( $content, $pos );
 				$markers_inserted++;
 			} else {
-				EPKB_Logging::add_log( 'Readability marker not inserted', array(
+				EPKB_AI_Log::add_log( 'Readability marker not inserted', array(
 					'issue_index' => $index,
 					'problematic_text_length' => mb_strlen( $problematic_text ),
 					'content_length' => mb_strlen( $content ),
@@ -792,14 +792,34 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		$per_page = $request->get_param( 'per_page' );
 		$status = $request->get_param( 'status' );
 		$search = $request->get_param( 'search' );
-		// Default to KB #1 for now - later user will be able to choose
+		// kb_id=0 means all KBs, otherwise filter by specific KB
 		$kb_id = (int) $request->get_param( 'kb_id' );
-		if ( empty( $kb_id ) ) {
-			$kb_id = 1;
-		}
 
-		// Get KB articles for the requested KB
-		$post_type = EPKB_KB_Handler::get_post_type( $kb_id );
+		// Get KB articles - either for specific KB or all KBs
+		if ( $kb_id === 0 ) {
+			// Get all KB post types that the user has access to
+			$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs();
+			$post_types = array();
+			foreach ( $all_kb_configs as $one_kb_config ) {
+				$one_kb_id = $one_kb_config['id'];
+
+				// Skip archived KBs
+				if ( $one_kb_id !== EPKB_KB_Config_DB::DEFAULT_KB_ID && EPKB_Core_Utilities::is_kb_archived( $one_kb_config['status'] ) ) {
+					continue;
+				}
+
+				// Check user has access to this KB
+				$required_capability = EPKB_Admin_UI_Access::get_contributor_capability( $one_kb_id );
+				if ( ! current_user_can( $required_capability ) ) {
+					continue;
+				}
+
+				$post_types[] = EPKB_KB_Handler::get_post_type( $one_kb_id );
+			}
+			$post_type = ! empty( $post_types ) ? $post_types : array( EPKB_KB_Handler::get_post_type( EPKB_KB_Config_DB::DEFAULT_KB_ID ) );
+		} else {
+			$post_type = EPKB_KB_Handler::get_post_type( $kb_id );
+		}
 
 		// For 'to_analyse' and 'to_improve', get all articles and filter by display_status
 		$get_all_for_filtering = ( $status === 'to_improve' || $status === 'to_analyse' );
@@ -891,9 +911,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 				'dates' => $dates,
 				// Include ignored and done flags
 				'is_ignored' => $analysis_data['is_ignored'],
-				'is_done' => $analysis_data['is_done'],
-				// Include demo flag
-				'is_demo' => $analysis_data['is_demo']
+				'is_done' => $analysis_data['is_done']
 			);
 
 			// Add score components
@@ -991,7 +1009,7 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 			return $this->create_rest_response( array(
 				'success' => false,
 				'error' => 'ai_not_configured',
-				'message' => __( 'Please add your OpenAI API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
+				'message' => __( 'Please add your API key and accept the terms to use Content Analysis.', 'echo-knowledge-base' )
 			), 400 );
 		}
 
@@ -1243,7 +1261,6 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 
 		$article_id = $request->get_param( 'article_id' );
 		$tag_name = $request->get_param( 'tag_name' );
-		$kb_id = $request->get_param( 'kb_id' );
 
 		// Get article post
 		$post = get_post( $article_id );
@@ -1254,6 +1271,12 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		$is_post_eligible_for_ai_training = EPKB_Admin_UI_Access::is_post_eligible_for_ai_training( $post );
 		if ( ! $is_post_eligible_for_ai_training ) {
 			return $this->create_rest_response( array( 'success' => false, 'message' => __( 'Article is not eligible for AI training', 'echo-knowledge-base' ) ), 400 );
+		}
+
+		// Derive KB ID from article's post type
+		$kb_id = EPKB_KB_Handler::get_kb_id_from_post_type( $post->post_type );
+		if ( empty( $kb_id ) ) {
+			return $this->create_rest_response( array( 'success' => false, 'message' => __( 'Could not determine KB ID from article', 'echo-knowledge-base' ) ), 400 );
 		}
 
 		// Get KB tag taxonomy name
@@ -1299,7 +1322,6 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 
 		$article_id = $request->get_param( 'article_id' );
 		$tag_id = $request->get_param( 'tag_id' );
-		$kb_id = $request->get_param( 'kb_id' );
 
 		// Get article post
 		$post = get_post( $article_id );
@@ -1310,6 +1332,12 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		$is_post_eligible_for_ai_training = EPKB_Admin_UI_Access::is_post_eligible_for_ai_training( $post );
 		if ( ! $is_post_eligible_for_ai_training ) {
 			return $this->create_rest_response( array( 'success' => false, 'message' => __( 'Article is not eligible for AI training', 'echo-knowledge-base' ) ), 400 );
+		}
+
+		// Derive KB ID from article's post type
+		$kb_id = EPKB_KB_Handler::get_kb_id_from_post_type( $post->post_type );
+		if ( empty( $kb_id ) ) {
+			return $this->create_rest_response( array( 'success' => false, 'message' => __( 'Could not determine KB ID from article', 'echo-knowledge-base' ) ), 400 );
 		}
 
 		// Get KB tag taxonomy name
@@ -1350,7 +1378,6 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		$article_id = $request->get_param( 'article_id' );
 		$tag_id = $request->get_param( 'tag_id' );
 		$new_name = $request->get_param( 'new_name' );
-		$kb_id = $request->get_param( 'kb_id' );
 
 		// Get article post
 		$post = get_post( $article_id );
@@ -1361,6 +1388,12 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 		$is_post_eligible_for_ai_training = EPKB_Admin_UI_Access::is_post_eligible_for_ai_training( $post );
 		if ( ! $is_post_eligible_for_ai_training ) {
 			return $this->create_rest_response( array( 'success' => false, 'message' => __( 'Article is not eligible for AI training', 'echo-knowledge-base' ) ), 400 );
+		}
+
+		// Derive KB ID from article's post type
+		$kb_id = EPKB_KB_Handler::get_kb_id_from_post_type( $post->post_type );
+		if ( empty( $kb_id ) ) {
+			return $this->create_rest_response( array( 'success' => false, 'message' => __( 'Could not determine KB ID from article', 'echo-knowledge-base' ) ), 400 );
 		}
 
 		// Get KB tag taxonomy name
@@ -1396,6 +1429,13 @@ class EPKB_AI_REST_Content_Analysis_Controller extends EPKB_AI_REST_Base_Control
 	 * @return bool|WP_Error
 	 */
 	public function check_admin_permission( $request ) {
+
+		// Check nonce
+		$nonce_check = EPKB_AI_Security::check_rest_nonce( $request );
+		if ( is_wp_error( $nonce_check ) ) {
+			return $nonce_check;
+		}
+
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error( 'rest_forbidden', __( 'You do not have permission to perform this action.', 'echo-knowledge-base' ), array( 'status' => 403 ) );
 		}

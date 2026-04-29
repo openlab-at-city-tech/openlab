@@ -7,8 +7,8 @@
                 "lang": "de_DE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Error": [
-                "Fehler"
+            "Actions": [
+                "Aktionen"
             ],
             "Analyze Content": [
                 "Inhalt analysieren"
@@ -16,20 +16,20 @@
             "Improve Content": [
                 "Inhalt verbessern"
             ],
+            "Done": [
+                "Fertig"
+            ],
+            "Error": [
+                "Fehler"
+            ],
             "Improve": [
                 "Verbessern"
             ],
-            "Demo Analytics": [
-                "Demo-Analytik"
-            ],
-            "Actions": [
-                "Aktionen"
+            "Remove": [
+                "Entfernen"
             ],
             "Analyzing": [
                 "Analysiere"
-            ],
-            "No articles found": [
-                "Keine Dokumentationsseiten gefunden"
             ],
             "To Analyze": [
                 "Analysieren"
@@ -37,14 +37,11 @@
             "To Improve": [
                 "Verbessern"
             ],
+            "No articles found": [
+                "Keine Dokumentationsseiten gefunden"
+            ],
             "Please select exactly one article to improve": [
                 "Bitte wählen Sie genau eine Dokumentationsseite zur Verbesserung aus"
-            ],
-            "Demo Data Displayed": [
-                "Demo-Daten angezeigt"
-            ],
-            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
-                "Dies sind Demo-Nutzungsstatistiken und Berichte, die zu Demonstrationszwecken angezeigt werden. Sobald Sie neue Dokumentationsseiten erstellen, können Sie diese analysieren, um echte Inhaltsanalyse-Ergebnisse zu sehen."
             ],
             "Select All That Need Analysis": [
                 "Alle auswählen, die eine Analyse benötigen"
@@ -82,9 +79,6 @@
             "Score below 80%": [
                 "Punktzahl unter 80%"
             ],
-            "Done": [
-                "Fertig"
-            ],
             "Completed": [
                 "Abgeschlossen"
             ],
@@ -111,9 +105,6 @@
             ],
             "Ignore": [
                 "Ignorieren"
-            ],
-            "Remove": [
-                "Entfernen"
             ],
             "Loading articles...": [
                 "Lade Dokumentationsseiten..."

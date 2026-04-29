@@ -50,27 +50,6 @@ class EPKB_Blocks_Settings {
 	}
 
 	/**
-	 * Return 'kb_ai_collection_id' setting for blocks that support AI search
-	 * @return array
-	 */
-	public static function get_kb_ai_collection_id_setting() {
-
-		if ( EPKB_Utilities::is_frontend() ) {
-			return array(
-				'setting_type' => '',
-				'default' => 1,
-			);
-		}
-
-		return array(
-			'setting_type' => 'custom_dropdown',
-			'default' => 1,
-			'label' => esc_html__( 'AI Training Data Collection', 'echo-knowledge-base' ),
-			'options' => EPKB_AI_Utilities::get_collection_options( 'block' ),
-		);
-	}
-
-	/**
 	 * Return configuration array for KB Custom Block Template for this page toggle
 	 * @return array
 	 */
@@ -481,6 +460,46 @@ class EPKB_Blocks_Settings {
 					),
 				),
 			),
+		);
+	}
+
+	/**
+	 * Return configuration array for Help Resources link
+	 * @return array
+	 */
+	public static function get_help_resources_link() {
+
+		if ( EPKB_Utilities::is_frontend() ) {
+			return array(
+				'setting_type' => '',
+			);
+		}
+
+		return array(
+			'setting_type' => 'section_description',
+			'description' => esc_html__( 'Need help configuring your Knowledge Base?', 'echo-knowledge-base' ),
+			'link_text' => esc_html__( 'Setup Guide', 'echo-knowledge-base' ),
+			'link_url' => admin_url( 'edit.php?post_type=epkb_post_type_1&page=epkb-help-resources' ),
+		);
+	}
+
+	/**
+	 * Return configuration array for Setup Wizard link
+	 * @return array
+	 */
+	public static function get_setup_wizard_link() {
+
+		if ( EPKB_Utilities::is_frontend() ) {
+			return array(
+				'setting_type' => '',
+			);
+		}
+
+		return array(
+			'setting_type' => 'section_description',
+			'description' => esc_html__( 'Use our Setup Wizard to quickly configure your KB.', 'echo-knowledge-base' ),
+			'link_text' => esc_html__( 'Setup Wizard', 'echo-knowledge-base' ),
+			'link_url' => admin_url( 'edit.php?post_type=epkb_post_type_1&page=epkb-kb-configuration&setup-wizard-on=true' ),
 		);
 	}
 }

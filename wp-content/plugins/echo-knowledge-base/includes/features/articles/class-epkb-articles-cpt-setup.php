@@ -154,8 +154,7 @@ class EPKB_Articles_CPT_Setup {
 
 		/** setup Custom Post Type */
 		$categories_in_url = self::is_category_in_url( $kb_config );
-		$post_type_name = _x( $kb_config['kb_name'], 'post type general name', 'echo-knowledge-base' );
-		$post_type_name = empty( $post_type_name ) ? 'Knowledge Base' : $post_type_name;
+		$post_type_name = empty( $kb_config['kb_name'] ) ? 'Knowledge Base' : $kb_config['kb_name'];
 		$labels = [
 				'name'               => $post_type_name,
 				'singular_name'      => $post_type_name . ' - ' . _x( 'Article', 'post type singular name', 'echo-knowledge-base' ),

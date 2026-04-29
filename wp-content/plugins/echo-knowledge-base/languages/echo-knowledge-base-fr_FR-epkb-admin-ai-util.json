@@ -13,14 +13,44 @@
             "Cancel": [
                 "Annuler"
             ],
+            "Next": [
+                "Suivant"
+            ],
+            "AI Features": [
+                "Fonctionnalités d'IA"
+            ],
+            "OFF": [
+                "Désactivé"
+            ],
+            "Use code:": [
+                "Utiliser le code :"
+            ],
+            "Copy": [
+                "Copier"
+            ],
+            "Documentation": [
+                "Documentation"
+            ],
+            "Copied!": [
+                "Copié !"
+            ],
+            "Got it!": [
+                "Compris !"
+            ],
+            "Show Me": [
+                "Montrez-moi"
+            ],
             "Loading...": [
                 "Chargement..."
             ],
-            "General Settings": [
-                "Paramètres généraux"
+            "Go to General Settings": [
+                "Aller dans les Paramètres généraux"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Votre session a expiré. Veuillez actualiser la page."
+            "Go to Settings": [
+                "Aller dans les Paramètres"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Votre session a expiré. Veuillez actualiser la page pour vous reconnecter."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "Trop de requêtes. Veuillez patienter un moment et réessayer."
@@ -37,8 +67,11 @@
             "Confirm": [
                 "Confirmer"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "Pour utiliser les fonctionnalités d’IA, configurez votre clé API et acceptez l’accord de confidentialité des données dans"
+            "Setup Steps": [
+                "Étapes de configuration"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings.": [
+                "Pour utiliser les fonctionnalités d'IA, veuillez configurer votre clé API et accepter l'accord de confidentialité des données dans les réglages généraux."
             ],
             "Session Expired": [
                 "Session expirée"
@@ -48,21 +81,6 @@
             ],
             "No results found": [
                 "Aucun résultat trouvé"
-            ],
-            "Tutorial": [
-                "Tutoriel"
-            ],
-            "Learn how to use this feature": [
-                "Découvrez comment utiliser cette fonctionnalité"
-            ],
-            "Tutorial Screenshot": [
-                "Capture d’écran du tutoriel"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Voici un tutoriel expliquant comment utiliser cette fonctionnalité."
-            ],
-            "Close Tutorial": [
-                "Fermer le tutoriel"
             ]
         }
     }

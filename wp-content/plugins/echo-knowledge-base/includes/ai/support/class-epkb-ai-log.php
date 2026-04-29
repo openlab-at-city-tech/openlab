@@ -25,7 +25,7 @@ class EPKB_AI_Log {
 
 		$max_logs = 50; // FIFO - when limit reached, oldest log is removed
 		$max_message_length = 800;
-		$max_context_size = 2000; // Increased to capture full OpenAI error responses
+		$max_context_size = 2000; // Increased to capture full AI error responses
 
 		// Handle WP_Error objects
 		if ( is_wp_error( $message ) ) {
@@ -56,6 +56,9 @@ class EPKB_AI_Log {
 		if ( strlen( $message ) > $max_message_length ) {
 			$message = substr( $message, 0, $max_message_length - 3 ) . '...';
 		}
+
+		// Enrich vector store logs with collection ID
+		$context = self::maybe_add_collection_id( $context );
 
 		// Sanitize and limit context
 		$context = self::sanitize_log_context( $context, $max_context_size );
@@ -186,8 +189,10 @@ class EPKB_AI_Log {
 				// Allow debug keys to have more data (up to 1000 chars for full error responses)
 				$max_length = in_array( $key, $debug_keys, true ) ? 1000 : 100;
 				$sanitized[ $key ] = wp_strip_all_tags( substr( $value, 0, $max_length ) );
+			} elseif ( is_float( $value ) ) {
+				$sanitized[ $key ] = number_format( $value, 1, '.', '' );
 			} elseif ( is_numeric( $value ) ) {
-				$sanitized[ $key ] = $value;
+				$sanitized[ $key ] = is_float( $value ) ? round( $value, 3 ) : $value;
 			} elseif ( is_bool( $value ) ) {
 				$sanitized[ $key ] = $value;
 			} elseif ( is_array( $value ) ) {
@@ -205,8 +210,8 @@ class EPKB_AI_Log {
 		// Check serialized size
 		$serialized = serialize( $sanitized );
 		if ( strlen( $serialized ) > $max_size ) {
-			// Truncate to most important keys, including debug keys for OpenAI errors
-			$important_keys = array( 'error_code', 'status', 'user_id', 'action', 'raw_response_body', 'response_code', 'request_endpoint' );
+			// Truncate to most important keys, including debug keys for AI errors
+			$important_keys = array( 'error_code', 'status', 'user_id', 'action', 'raw_response_body', 'response_code', 'request_endpoint', 'collection_id' );
 			$truncated = array();
 			foreach ( $important_keys as $key ) {
 				if ( isset( $sanitized[ $key ] ) ) {
@@ -252,19 +257,24 @@ class EPKB_AI_Log {
 		
 		switch ( $error_code ) {
 			case 'authentication_failed':
-				$friendly_message = __( 'Authentication failed. Please check your OpenAI API key in the General Settings.', 'echo-knowledge-base' );
+				$friendly_message = __( 'Authentication failed. Please check your API key in the General Settings.', 'echo-knowledge-base' );
 				break;
 				
 			case 'rate_limit_exceeded':
 				$retry_after = isset( $error_data['retry_after'] ) ? $error_data['retry_after'] : null;
 				if ( $retry_after ) {
-					$friendly_message = sprintf( 
+					// translators: %s is the number of seconds to wait
+					$friendly_message = sprintf(
 						__( 'Rate limit exceeded. Please try again in %s seconds.', 'echo-knowledge-base' ),
 						$retry_after
 					);
 				} else {
 					$friendly_message = __( 'Rate limit exceeded. Please try again in a few minutes.', 'echo-knowledge-base' );
 				}
+				break;
+
+			case 'empty_response':
+				$friendly_message = __( 'AI did not return a response. Please try again.', 'echo-knowledge-base' );
 				break;
 				
 			case 'server_error':
@@ -275,6 +285,14 @@ class EPKB_AI_Log {
 			case 'http_request_timeout':
 				$friendly_message = __( 'The request timed out. This might be due to network issues or a long-running operation. Please try again.', 'echo-knowledge-base' );
 				break;
+
+			case 'file_processing_timeout':
+				$friendly_message = __( 'AI provider is still processing the uploaded file. Please try again.', 'echo-knowledge-base' );
+				break;
+
+			case 'file_processing_failed':
+				$friendly_message = $error_message;
+				break;
 				
 			case 'content_too_large':
 			case 'file_too_large':
@@ -282,15 +300,33 @@ class EPKB_AI_Log {
 				break;
 				
 			case 'vector_store_not_found':
+			case 'vector_store_not_configured':
 				$friendly_message = __( 'The training data store was not found. Please check your Training Data settings.', 'echo-knowledge-base' );
 				break;
-				
+
+			case 'store_access_denied':
+				$friendly_message = __( 'The AI data store is no longer accessible. This usually happens when the API key is changed. Please re-sync your training data.', 'echo-knowledge-base' );
+				break;
+
+			case 'provider_mismatch':
+				$friendly_message = __( 'The AI provider configuration needs attention. Please check your settings.', 'echo-knowledge-base' );
+				break;
+
+			case 'collection_not_found':
+			case 'no_vector_store':
+				$friendly_message = __( 'The selected data collection is not available. Please check your Training Data settings.', 'echo-knowledge-base' );
+				break;
+
+			case 'missing_api_key':
+				$friendly_message = __( 'API key is not configured. Please configure your API key in the AI General Settings.', 'echo-knowledge-base' );
+				break;
+
 			case 'invalid_api_key':
-				$friendly_message = __( 'Invalid OpenAI API key. Please check your API key in the General Settings.', 'echo-knowledge-base' );
+				$friendly_message = __( 'Invalid API key. Please check your API key in the AI General Settings.', 'echo-knowledge-base' );
 				break;
 				
 			case 'insufficient_quota':
-				$friendly_message = __( 'Your OpenAI account has insufficient credits. Please check your OpenAI account billing.', 'echo-knowledge-base' );
+				$friendly_message = __( 'Your AI account has insufficient credits. Please check your AI account billing.', 'echo-knowledge-base' );
 				break;
 				
 			case 'user_state_changed':
@@ -309,20 +345,24 @@ class EPKB_AI_Log {
 				// For validation errors, use the original error message as-is
 				$friendly_message = $error_message;
 				break;
+
+			case 'empty_markdown':
+				$friendly_message = $error_message;
+				break;
 				
 			default:
 				// For unknown errors, provide a generic message
 				if ( strpos( $error_message, 'Invalid API key' ) !== false ) {
-					$friendly_message = __( 'Invalid OpenAI API key. Please check your API key in the General Settings.', 'echo-knowledge-base' );
+					$friendly_message = __( 'Invalid API key. Please check your API key in the General Settings.', 'echo-knowledge-base' );
 				} elseif ( strpos( $error_message, 'quota' ) !== false || strpos( $error_message, 'billing' ) !== false ) {
-					$friendly_message = __( 'OpenAI account issue. Please check your OpenAI account status and billing.', 'echo-knowledge-base' );
+					$friendly_message = __( 'AI account issue. Please check your account status and billing.', 'echo-knowledge-base' );
 				} else {
 					$friendly_message = __( 'An error occurred while processing your request. Please try again.', 'echo-knowledge-base' );
 				}
 		}
 		
-		// Add technical details for admins (except for validation errors which already have clear messages)
-		if ( current_user_can( 'manage_options' ) && $error_code !== 'validation_failed' ) {
+		// Keep certain validation/content errors as plain messages for admins too.
+		if ( current_user_can( 'manage_options' ) && ! in_array( $error_code, array( 'validation_failed', 'empty_markdown' ), true ) ) {
 			$technical_details = '';
 			
 			// Add error code if available
@@ -398,15 +438,10 @@ class EPKB_AI_Log {
 		$error_data = $wp_error->get_error_data();
 		$error_code = empty( $error_data['response']['code'] ) ? 500 : $error_data['response']['code'];
 
-		// Try to map to internal error code
-		$internal_code = $wp_error->get_error_code();
-
-		// If we have a valid internal code, use it instead of the full message except for validation errors where details are important
-		if ( $internal_code && strpos( $internal_code, '_' ) !== false ) {
-			if ( $internal_code === 'validation_failed' ) {
-				// keep the detailed message
-				$error_message = $error_message ?: $internal_code;
-			} else {
+		// Keep the human-readable error message; only fall back to error code if message is empty
+		if ( empty( $error_message ) ) {
+			$internal_code = $wp_error->get_error_code();
+			if ( $internal_code ) {
 				$error_message = $internal_code;
 			}
 		}
@@ -491,8 +526,9 @@ class EPKB_AI_Log {
 
 		// For certain errors, provide different messages for admins vs regular users
 		$user_message = $friendly_message;
-		if ( $error_code === 'insufficient_quota' && ! current_user_can( 'manage_options' ) ) {
-			// Show generic message to regular users/guests for quota errors
+		$config_errors = array( 'missing_api_key', 'invalid_api_key', 'store_access_denied', 'provider_mismatch', 'collection_not_found', 'no_vector_store', 'vector_store_not_configured', 'vector_store_not_found', 'insufficient_quota' );
+		if ( in_array( $error_code, $config_errors ) && ! current_user_can( 'manage_options' ) ) {
+			// Show generic message to regular users/guests for configuration and quota errors
 			$user_message = __( 'The service is temporarily unavailable. Please try again later.', 'echo-knowledge-base' );
 		}
 
@@ -576,7 +612,13 @@ class EPKB_AI_Log {
 			'empty_message'       => 400,
 			'invalid_content'     => 400,
 			'conversation_limit_reached' => 400,
+			'provider_mismatch'   => 400,
+			'collection_not_found' => 400,
+			'no_vector_store'     => 400,
+			'vector_store_not_configured' => 400,
+			'vector_store_not_found' => 400,
 			'authentication_failed' => 401,
+			'store_access_denied' => 403,
 			'invalid_session'     => 401,
 			'no_session'          => 401,
 			'login_required'      => 401,
@@ -593,6 +635,7 @@ class EPKB_AI_Log {
 			'user_rate_limit'     => 429,
 			'global_rate_limit'   => 429,
 			'insufficient_quota'  => 429,
+			'max_retries_exceeded' => 503,
 			'version_conflict'    => 409,
 			'server_error'        => 500,
 			'db_error'           => 500,
@@ -601,6 +644,8 @@ class EPKB_AI_Log {
 			'unexpected_error'   => 500,
 			'service_unavailable' => 503,
 			'empty_response'     => 503,
+			'file_processing_timeout' => 408,
+			'file_processing_failed' => 500,
 		);
 
 		return isset( $status_map[ $error_code ] ) ? $status_map[ $error_code ] : 500;
@@ -646,7 +691,9 @@ class EPKB_AI_Log {
 			'connection_error',
 			'service_unavailable',
 			'empty_response',
-			'rate_limit_exceeded'  // Rate limits are retryable after appropriate delay
+			'rate_limit_exceeded',
+			'max_retries_exceeded',
+			'file_processing_timeout'
 		);
 		
 		if ( in_array( $error_code, $retryable_codes, true ) ) {
@@ -688,6 +735,7 @@ class EPKB_AI_Log {
 			// Authorization errors
 			'unauthorized' => 'authorization',
 			'access_denied' => 'authorization',
+			'store_access_denied' => 'configuration',
 			'ai_disabled' => 'authorization',
 			'ai_chat_disabled' => 'authorization',
 			'ai_search_disabled' => 'authorization',
@@ -705,6 +753,7 @@ class EPKB_AI_Log {
 			// Timeout errors
 			'timeout' => 'timeout',
 			'http_request_timeout' => 'timeout',
+			'file_processing_timeout' => 'timeout',
 			
 			// Network errors
 			'network_error' => 'network',
@@ -719,6 +768,7 @@ class EPKB_AI_Log {
 			'unexpected_error' => 'server_error',
 			'service_unavailable' => 'server_error',
 			'empty_response' => 'server_error',
+			'file_processing_failed' => 'server_error',
 			
 			// Content errors
 			'content_too_large' => 'content_error',
@@ -727,8 +777,16 @@ class EPKB_AI_Log {
 			'invalid_content' => 'content_error',
 			'empty_message' => 'content_error',
 			
-			// Other errors
+			// Configuration errors - shown with yellow background for non-admin users
+			'missing_api_key' => 'configuration',
 			'invalid_api_key' => 'configuration',
+			'provider_mismatch' => 'configuration',
+			'collection_not_found' => 'configuration',
+			'no_vector_store' => 'configuration',
+			'vector_store_not_configured' => 'configuration',
+			'vector_store_not_found' => 'configuration',
+
+			// Other errors
 			'insufficient_quota' => 'quota',
 			'version_conflict' => 'conflict',
 			'expired' => 'expired',
@@ -761,5 +819,46 @@ class EPKB_AI_Log {
 		return 'unknown';
 	}
 
+	/**
+	 * If the log context describes a vector store interaction, add the collection ID
+	 *
+	 * @param array $context
+	 * @return array
+	 */
+	private static function maybe_add_collection_id( $context ) {
 
+		if ( ! is_array( $context ) || empty( $context['purpose'] ) || empty( $context['request_endpoint'] ) ) {
+			return $context;
+		}
+
+		$store_purposes = array( 'vector_store', 'vector_store_file', 'file_storage_upload', 'file_storage', 'file_search_store' );
+		if ( ! in_array( $context['purpose'], $store_purposes, true ) ) {
+			return $context;
+		}
+
+		// Extract store ID from the endpoint: /vector_stores/{id}... or /fileSearchStores/{id}...
+		$store_id = '';
+		if ( preg_match( '#/vector_stores/([^/]+)#', $context['request_endpoint'], $matches ) ) {
+			$store_id = $matches[1];
+		} elseif ( preg_match( '#/fileSearchStores/([^/:]+)#', $context['request_endpoint'], $matches ) ) {
+			$store_id = $matches[1];
+		}
+
+		if ( empty( $store_id ) ) {
+			return $context;
+		}
+
+		// Look up which collection owns this store ID
+		$collections = get_option( 'epkb_ai_training_data_configuration', array() );
+		if ( is_array( $collections ) ) {
+			foreach ( $collections as $collection_id => $config ) {
+				if ( ! empty( $config['ai_training_data_store_id'] ) && $config['ai_training_data_store_id'] === $store_id ) {
+					$context['collection_id'] = $collection_id;
+					break;
+				}
+			}
+		}
+
+		return $context;
+	}
 }

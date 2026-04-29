@@ -19,14 +19,23 @@
             "Cancel": [
                 "Abbrechen"
             ],
-            "Date:": [
-                "Datum:"
+            "Save Settings": [
+                "Einstellungen speichern"
+            ],
+            "Delete": [
+                "Löschen"
             ],
             "Next": [
                 "Weiter"
             ],
             "Previous": [
                 "Zurück"
+            ],
+            "Feedback": [
+                "Feedback"
+            ],
+            "Reset": [
+                "Zurücksetzen"
             ],
             "Saving...": [
                 "Speichern..."
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "Mittlere Spalte"
             ],
-            "Feedback": [
-                "Feedback"
-            ],
             "AI Assistant": [
                 "KI-Assistent"
-            ],
-            "Save Settings": [
-                "Einstellungen speichern"
-            ],
-            "Delete": [
-                "Löschen"
             ],
             "Delete Selected": [
                 "Auswahl löschen"
             ],
             "of": [
                 "von"
-            ],
-            "Reset": [
-                "Zurücksetzen"
             ],
             "Refreshing...": [
                 "Aktualisiere..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "Server sucht nach weiteren Ergebnissen..."
             ],
-            "User:": [
-                "Benutzer:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "Möchten Sie wirklich die Standardanweisungen zurücksetzen?"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "Auf Standard zurücksetzen"
             ],
+            "Training data issues detected": [
+                "Trainingsdatenprobleme erkannt"
+            ],
             "Failed to save settings": [
                 "Fehler beim Speichern der Einstellungen"
             ],
             "Go to Settings": [
                 "Zu den Einstellungen"
+            ],
+            "Deleting search...": [
+                "Suche wird gelöscht..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "Möchten Sie die ausgewählten Suchanfragen wirklich löschen?"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "Wählen Sie eine Suchanfrage, um Details anzuzeigen"
             ],
-            "Search Information": [
-                "Suchinformationen"
-            ],
-            "Query:": [
-                "Abfrage:"
-            ],
-            "Results Count:": [
-                "Ergebnisanzahl:"
-            ],
             "Contact Request": [
                 "Kontaktanfrage"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "Abschnitt hinzufügen"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "Möchten Sie wirklich zum Standard-Prompt zurücksetzen?"
+            ],
+            "Reset Prompt": [
+                "Prompt zurücksetzen"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "Möchten Sie wirklich zum Standard-Prompt zurücksetzen? Ihr benutzerdefinierter Prompt geht verloren."
+            ],
+            "Select Section:": [
+                "Abschnitt auswählen:"
+            ],
+            "Prompt:": [
+                "Prompt:"
+            ],
+            "Using custom prompt": [
+                "Benutzerdefinierten Prompt verwenden"
+            ],
+            "Using default prompt": [
+                "Standard-Prompt verwenden"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "AI-Suche benötigt eine gültige Trainingsdaten-Sammlung. Beheben Sie die untenstehenden Probleme in Trainingsdaten oder KB-Konfiguration."
             ],
             "Failed to load search history": [
                 "Fehler beim Laden des Suchverlaufs"

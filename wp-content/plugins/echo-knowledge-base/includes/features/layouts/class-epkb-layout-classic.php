@@ -321,7 +321,7 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 				<!-- Section Footer -->
 				<div class="epkb-category-section__footer">
 					<div class="epkb-ml-article-count"><span><?php echo esc_html( $category_articles_number ); ?></span> <span><?php echo esc_html( $articles_text ); ?></span></div>
-					<div class="epkb-ml-articles-show-more">
+					<div class="epkb-ml-articles-show-more" tabindex="0" role="button" aria-expanded="false">
 						<span class="epkbfa epkbfa-plus epkb-ml-articles-show-more__show-more__icon"></span>
 					</div>
 				</div>          <?php
@@ -365,7 +365,7 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 
 		$sub_cat_icon = EPKB_KB_Config_Category::get_category_icon( $sub_cat_id, $categories_icons );   ?>
 
-		<div class="epkb-ml-<?php echo esc_attr( $cat_level ); ?>-lvl-category__name">
+		<div class="epkb-ml-<?php echo esc_attr( $cat_level ); ?>-lvl-category__name" tabindex="0" role="button" aria-expanded="false">
             <span class="epkb-ml-<?php echo esc_attr( $cat_level ); ?>-lvl-category__icon">   <?php
 	            if ( $sub_cat_icon['type'] == 'image' ) { ?>
 		            <img class="epkb-cat-icon epkb-cat-icon--image" src="<?php echo esc_url( $sub_cat_icon['image_thumbnail_url'] ); ?>" alt="<?php echo esc_attr( $sub_cat_icon['image_alt'] ); ?>"> <?php
@@ -657,6 +657,71 @@ class EPKB_Layout_Classic extends EPKB_Layout {
 		.epkb-ml-classic-layout--design-3 .epkb-ml-5-lvl-article-list {
 			padding-left: ' . ( $kb_config['sub_article_list_margin'] + 10 ) . 'px !important;
 		}	';
+
+		// Articles typography  -----------------------------------------/
+		$output .= '
+			#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-article-inner .epkb-article__text {
+				font-size: ' . ( ! empty( $kb_config['article_typography']['font-size'] ) ? $kb_config['article_typography']['font-size'] . 'px !important' : 'inherit !important' ) . ';
+				font-weight: ' . ( ! empty( $kb_config['article_typography']['font-weight'] ) ? $kb_config['article_typography']['font-weight'] : 'inherit !important' ) . ';
+			}';
+
+		$article_spacing = intval( $kb_config['article_list_spacing'] );
+		$output .= '
+			#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml-articles-coming-soon {
+				font-size: ' . ( ! empty( $kb_config['article_typography']['font-size'] ) ? $kb_config['article_typography']['font-size'] . 'px !important' : 'inherit !important' ) . ';
+				font-weight: ' . ( ! empty( $kb_config['article_typography']['font-weight'] ) ? $kb_config['article_typography']['font-weight'] : 'inherit !important' ) . ';
+				padding-top: ' . $article_spacing . 'px !important;
+				padding-bottom: ' . $article_spacing . 'px !important;
+			}';
+
+		// Article hover effect -----------------------------------------/
+		if ( ! empty( $kb_config['article_list_hover_toggle'] ) && $kb_config['article_list_hover_toggle'] == 'on' ) {
+			$spacing = intval( $kb_config['article_list_spacing'] );
+			$hover_bg = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_background_color'] );
+			$hover_text = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_font_color'] );
+			$output .= '
+				#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml-article-container {
+					padding: ' . $spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml-article-container:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml-article-container:hover .epkb-article__text {
+					color: ' . $hover_text . ' !important;
+				}
+				#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml-article-container:hover .epkb-article__icon {
+					color: ' . $hover_text . ' !important;
+				}';
+			$output .= '
+				#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-category-section__body li {
+					padding-bottom: 0px !important;
+				}';
+		}
+
+		// Space between category sections -----------------------------------------/
+		$section_gap = isset( $kb_config['section_box_gap'] ) ? intval( $kb_config['section_box_gap'] ) : 20;
+		$top_icon_row_margin_bottom = max( 60, $section_gap + 20 );
+		$output .= '
+			#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml__module-categories-articles__row {
+				gap: ' . $section_gap . 'px !important;
+				margin-bottom: ' . $section_gap . 'px !important;
+			}
+			#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml__module-categories-articles__row.epkb-icon-top-row-adj {
+				margin-bottom: ' . $top_icon_row_margin_bottom . 'px !important;
+			}
+			#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-ml__module-categories-articles__row:last-child {
+				margin-bottom: 0 !important;
+			}';
+
+		// Category box padding -----------------------------------------/
+		if ( ! empty( $kb_config['category_box_padding'] ) ) {
+			$output .= '
+				#epkb-ml__module-categories-articles #epkb-ml-classic-layout .epkb-category-section {
+					padding: ' . intval( $kb_config['category_box_padding'] ) . 'px !important;
+				}';
+		}
 
 		return $output;
 	}

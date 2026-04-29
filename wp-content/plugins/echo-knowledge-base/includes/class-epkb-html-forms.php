@@ -393,12 +393,13 @@ class EPKB_HTML_Forms {
 	 * @param: string $args['btn_text']        ( Optional ) Button Text
 	 * @param: string $args['btn_url']         ( Optional ) Button URL
 	 * @param: string $args['show_close_btn']  ( Optional | Yes / No ) Default: No
+	 * @param: string $args['cancel_btn_text'] ( Optional ) Cancel button text - shows a button that closes the dialog
 	 *
 	 */
 	public static function dialog_pro_feature_ad( $args ) {
 
 		$class = empty( $args['img_list'] ) ? 'epkb-dialog-pro-feature-ad' : 'epkb-dialog-pro-feature-ad2';		?>
-		
+
 		<div id="<?php echo esc_attr( $args[ 'id' ] ); ?>" class="<?php echo esc_attr( $class ); ?>">  <?php
 
 			if ( empty( $args['img_list'] ) ) {
@@ -408,6 +409,7 @@ class EPKB_HTML_Forms {
 					'list'              => $args['list'] ?? [],
 					'btn_text'          => $args['btn_text'] ?? '',
 					'btn_url'           => $args['btn_url'] ?? '',
+					'cancel_btn_text'   => $args['cancel_btn_text'] ?? '',
 				) );
 				if ( ! empty( $args['show_close_btn'] ) && $args['show_close_btn'] === 'yes' ) { 		?>
 					<div class="epkb-dbf__close epkbfa epkbfa-times"></div>             <?php
@@ -684,8 +686,15 @@ class EPKB_HTML_Forms {
 					<p class="epkb-body__footer_desc"><?php echo esc_html( $args['footer_desc'] ); ?></p>				<?php
 				}
 
-			if ( $args['btn_text'] || ! empty( $args['btn_text_2'] ) ) { ?>
+				if ( ! empty( $args['discount_coupon'] ) ) {
+					echo self::get_discount_coupon_box_html( $args['discount_coupon'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				}
+
+			if ( $args['btn_text'] || ! empty( $args['btn_text_2'] ) || ! empty( $args['cancel_btn_text'] ) ) { ?>
 				<div class="epkb-aa__footer-buttons">					<?php
+					if ( ! empty( $args['cancel_btn_text'] ) ) { ?>
+						<button type="button" class="epkb-btn epkb-btn--secondary epkb-dialog-pro-feature-ad__cancel-btn"><?php echo esc_html( $args['cancel_btn_text'] ); ?></button>					<?php
+					}
 					if ( ! empty( $args['btn_text_2'] ) ) { ?>
 						<a href="<?php echo esc_url( $args['btn_url_2'] ); ?>" class="epkb-btn epkb-btn--secondary" target="_blank" ><span class="epkb-btn-icon epkbfa epkbfa-external-link"></span><?php echo esc_html( $args['btn_text_2'] ); ?></a>					<?php
 					}
@@ -711,6 +720,28 @@ class EPKB_HTML_Forms {
 		}
 
 		return '';
+	}
+
+	/**
+	 * Get reusable discount coupon HTML.
+	 *
+	 * @param array  $coupon
+	 * @param string $class
+	 * @return string
+	 */
+	public static function get_discount_coupon_box_html( $coupon, $class = '' ) {
+
+		if ( empty( $coupon['discount_percentage'] ) || empty( $coupon['coupon_code'] ) ) {
+			return '';
+		}
+
+		$class = trim( 'epkb-ad-discount-coupon ' . $class );
+
+		return '<div class="' . esc_attr( $class ) . '">'
+			. '<span class="epkb-ad-discount-badge">' . esc_html( $coupon['discount_percentage'] . '% ' . __( 'OFF', 'echo-knowledge-base' ) ) . '</span>'
+			. '<span class="epkb-ad-discount-text">' . esc_html__( 'Use code:', 'echo-knowledge-base' ) . ' <code>' . esc_html( $coupon['coupon_code'] ) . '</code></span>'
+			. '<button type="button" class="epkb-ad-discount-copy-btn" data-code="' . esc_attr( $coupon['coupon_code'] ) . '">' . esc_html__( 'Copy', 'echo-knowledge-base' ) . '</button>'
+			. '</div>';
 	}
 
 	/**
@@ -880,7 +911,7 @@ class EPKB_HTML_Forms {
 		}   ?>
 
 		<!-- Admin Box -->
-		<div class="epkb-admin__boxes-list__box <?php echo esc_attr( $box_options['class'] ); ?>">  <?php
+		<div class="epkb-admin__boxes-list__box <?php echo esc_attr( $box_options['class'] ); ?>"<?php echo empty( $box_options['id'] ) ? '' : ' id="' . esc_attr( $box_options['id'] ) . '"'; ?>>  <?php
 
 			// Display header
 			if ( ! empty( $box_options['title'] ) ){    ?>

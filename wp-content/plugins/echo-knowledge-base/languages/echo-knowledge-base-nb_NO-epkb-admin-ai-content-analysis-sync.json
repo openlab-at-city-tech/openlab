@@ -37,8 +37,8 @@
             "Content analysis completed successfully!": [
                 "Innholdsanalyse fullført med suksess!"
             ],
-            "Retry limit reached while contacting OpenAI.": [
-                "Gjentaksgrensen nådd under kontakt med OpenAI."
+            "Retry limit reached while contacting AI.": [
+                "Gjentaksgrensen ved kontakt med AI er nådd."
             ],
             "Failed to start analysis": [
                 "Klarte ikke å starte analysen"

@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Various KB Core utility functions
@@ -16,8 +16,13 @@ class EPKB_Site_Builders {
 	const BEAVER_OPTION_NAME    = 'epkb_beaver_settings';
 	const SITE_ORIGIN_OPTION_NAME    = 'epkb_so_settings';
 
+	private static $processing_elementor_meta = false;
+
 	function __construct() {
 		add_action( 'admin_init', [ $this, 'add_notices' ] );
+
+		// Register Elementor hooks (only once) - called after plugins_loaded so Elementor is already available
+		add_action( 'elementor/editor/after_save', [ __CLASS__, 'maybe_convert_elementor_shortcode_widget' ], 10, 2 );
 	}
 
 	/**
@@ -92,11 +97,13 @@ class EPKB_Site_Builders {
 
 		// title
 		$link       = '<a href="' . esc_url( admin_url( $builder_admin_url ) ) . '" target="_blank">' . esc_html__( 'here', 'echo-knowledge-base' ) . '</a>';
+		/* translators: %s: page builder name (e.g., Elementor, Divi) */
 		$title      = esc_html( sprintf( esc_html__( 'Please enable KB Articles for %s.', 'echo-knowledge-base' ), $builder_name ) ) . ' ' . $link;
 
 		// message
 		$reason     = esc_html__( 'Ensure that your Knowledge Base name is checked.', 'echo-knowledge-base' );
-		$message    = sprintf( esc_html__( 'Please go to the %s settings, and then go to the %s.', 'echo-knowledge-base' ), $builder_name, $place ) . ' ' . $reason;
+		/* translators: %1$s: page builder name, %2$s: settings location */
+		$message    = sprintf( esc_html__( 'Please go to the %1$s settings, and then go to the %2$s.', 'echo-knowledge-base' ), $builder_name, $place ) . ' ' . $reason;
 
 		EPKB_Admin_Notices::add_ongoing_notice( 'large-notice', $option_name, $message, $title, '<i class="epkbfa epkbfa-exclamation-triangle"></i>' );
 	}
@@ -171,7 +178,6 @@ class EPKB_Site_Builders {
 		return true;
 	}
 
-
 	/**
 	 * Check if DIVI is enabled and has activated all epkb post types
 	 *
@@ -205,7 +211,6 @@ class EPKB_Site_Builders {
 
 		return true;
 	}
-
 
 	/**
 	 * Check if Visual Composer is enabled and has activated all epkb post types
@@ -471,5 +476,94 @@ class EPKB_Site_Builders {
 
 	public static function is_so_enabled() {
 		return defined( 'SITEORIGIN_PANELS_VERSION' );
+	}
+
+	/**
+	 * Convert Elementor text-editor widgets containing KB shortcode to shortcode widgets.
+	 * When a page with KB shortcode is converted to Elementor, the shortcode gets placed in a text-editor widget
+	 * which causes newlines to be converted to <br> tags. Converting to shortcode widget fixes this.
+	 *
+	 * @param int $post_id
+	 * @param array $editor_data
+	 */
+	public static function maybe_convert_elementor_shortcode_widget( $post_id, $editor_data ) {
+
+		if ( self::$processing_elementor_meta ) {
+			return;
+		}
+
+		if ( get_post_type( $post_id ) !== 'page' ) {
+			return;
+		}
+
+		// Get the raw meta value for quick string check
+		$meta_value = get_post_meta( $post_id, '_elementor_data', true );
+		if ( empty( $meta_value ) || strpos( $meta_value, '[epkb-knowledge-base' ) === false ) {
+			return;
+		}
+
+		// Only for new users (installed at version 15.920.0 or later)
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+		if ( empty( $kb_config ) || ! EPKB_Utilities::is_new_user( $kb_config, '15.910.0' ) ) {
+			return;
+		}
+
+		$elements = json_decode( $meta_value, true );
+		if ( empty( $elements ) || ! is_array( $elements ) ) {
+			return;
+		}
+
+		$changes_made = false;
+
+		// Loop through root elements (containers)
+		foreach ( $elements as &$container ) {
+			if ( empty( $container['elements'] ) || ! is_array( $container['elements'] ) ) {
+				continue;
+			}
+
+			// Loop through direct children of each container
+			foreach ( $container['elements'] as &$element ) {
+				if ( empty( $element['elType'] ) || $element['elType'] !== 'widget' ) {
+					continue;
+				}
+				if ( empty( $element['widgetType'] ) || $element['widgetType'] !== 'text-editor' ) {
+					continue;
+				}
+				if ( empty( $element['settings']['editor'] ) ) {
+					continue;
+				}
+				if ( strpos( $element['settings']['editor'], '[epkb-knowledge-base' ) === false ) {
+					continue;
+				}
+
+				// Convert to shortcode widget
+				$shortcode = self::extract_kb_shortcode( $element['settings']['editor'] );
+				$element['widgetType'] = 'shortcode';
+				unset( $element['settings']['editor'] );
+				$element['settings']['shortcode'] = $shortcode;
+				$changes_made = true;
+			}
+		}
+
+		if ( $changes_made ) {
+			$new_data = wp_json_encode( $elements );
+			if ( $new_data !== false ) {
+				self::$processing_elementor_meta = true;
+				update_post_meta( $post_id, '_elementor_data', wp_slash( $new_data ) );
+				self::$processing_elementor_meta = false;
+			}
+		}
+	}
+
+	/**
+	 * Extract raw KB shortcode from content, removing WordPress block comment wrappers
+	 *
+	 * @param string $content
+	 * @return string
+	 */
+	private static function extract_kb_shortcode( $content ) {
+		$content = preg_replace( '/<!--\s*wp:shortcode\s*-->/i', '', $content );
+		$content = preg_replace( '/<!--\s*\/wp:shortcode\s*-->/i', '', $content );
+		return trim( $content );
 	}
 }

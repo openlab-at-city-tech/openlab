@@ -27,13 +27,14 @@ jQuery(document).ready(function($) {
 
 
 			// Check if AI Search Results is enabled
-			if ( $( this ).attr( "data-ai-search-results" ) === "1" && typeof window.epkbAISearchResults !== "undefined" ) {
-				const query = $( ".epkb-ml-search-box__input" ).val();
-				const kbId = $( "#epkb_kb_id" ).val();
-				const collectionId = $( this ).attr( "data-collection-id" );
-				window.epkbAISearchResults.openDialog( query, kbId, collectionId );
-				return;
-			}
+				if ( $( this ).attr( "data-ai-search-results" ) === "1" && typeof window.epkbAISearchResults !== "undefined" ) {
+					const query = $( ".epkb-ml-search-box__input" ).val();
+					const kbId = $( "#epkb_kb_id" ).val();
+					const collectionId = $( this ).attr( "data-collection-id" );
+					const collectionToken = $( this ).attr( "data-collection-token" ) || null;
+					window.epkbAISearchResults.openDialog( query, kbId, collectionId, collectionToken );
+					return;
+				}
 
 			const kb_block_post_id = $( this ).data( 'kb-block-post-id' );
 
@@ -115,6 +116,50 @@ jQuery(document).ready(function($) {
 		$( document ).on( 'keyup', ".epkb-ml-search-box__input", function() {
 			if ( !this.value ) {
 				$( '#epkb-ml-search-results' ).css( 'display','none' );
+			}
+		});
+
+		// Track if mouse is down inside search module to prevent hiding on focusout during click
+		let isMouseDownInsideSearch = false;
+
+		$( '#epkb-ml__module-search' ).on( 'mousedown', function() {
+			isMouseDownInsideSearch = true;
+		});
+
+		$( document ).on( 'mouseup', function() {
+			// Reset flag after a short delay to allow focusout to check it
+			setTimeout( function() {
+				isMouseDownInsideSearch = false;
+			}, 150 );
+		});
+
+		// Hide search results when user tabs out of the search module (WCAG Accessibility)
+		$( '#epkb-ml__module-search' ).on( 'focusout', function( event ) {
+			let searchModule = $( '#epkb-ml__module-search' )[0];
+			let relatedTarget = event.relatedTarget;
+
+			// If mouse is down inside search, don't hide (user is clicking inside)
+			if ( isMouseDownInsideSearch ) {
+				return;
+			}
+
+			// If relatedTarget exists and is inside the search module, don't hide
+			if ( relatedTarget && searchModule.contains( relatedTarget ) ) {
+				return;
+			}
+
+			// If relatedTarget is null (e.g., tabbing away), check activeElement after a delay
+			if ( relatedTarget === null ) {
+				setTimeout( function() {
+					let activeElement = document.activeElement;
+					// Only hide if focus is truly outside the search module
+					if ( searchModule && !searchModule.contains( activeElement ) && !isMouseDownInsideSearch ) {
+						$( '#epkb-ml-search-results' ).hide();
+					}
+				}, 100 );
+			} else {
+				// Focus is moving outside the search module
+				$( '#epkb-ml-search-results' ).hide();
 			}
 		});
 	}
@@ -203,15 +248,39 @@ jQuery(document).ready(function($) {
 			}
 		};
 
-		$( document ).on( 'click', '#epkb-content-container .epkb-nav-tabs li', function (){
-			let tabContainerLocal = $( '#epkb-content-container' );
-			tabContainerLocal.find( '.epkb-nav-tabs li' ).removeClass('active');
+		$( document ).on( 'click keydown', '#epkb-content-container .epkb-nav-tabs li', function ( e ){
 
-			$(this).addClass('active');
+			// Only proceed if it's a click or Enter/Space key (WCAG Accessibility)
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			// Prevent default for Space key to avoid page scroll
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			let isKeyboardActivation = e.type === 'keydown';
+			let tabContainerLocal = $( '#epkb-content-container' );
+
+			// Update aria-selected for all tabs (WCAG Accessibility)
+			tabContainerLocal.find( '.epkb-nav-tabs li' ).removeClass('active').attr( 'aria-selected', 'false' );
+
+			$(this).addClass('active').attr( 'aria-selected', 'true' );
 
 			tabContainerLocal.find( '.epkb-tab-panel' ).removeClass('active');
 			changePanels ( $(this).attr('id') );
 			updateTabURL( $(this).attr('id'), $(this).data('cat-name') );
+
+			// WCAG Accessibility: Move focus to first article in the panel when activated via keyboard
+			if ( isKeyboardActivation ) {
+				let panelId = $(this).attr('id');
+				let activePanel = tabContainerLocal.find( '.' + panelId + '.epkb-tab-panel' );
+				let firstArticle = activePanel.find( '.epkb-mp-article' ).first();
+				if ( firstArticle.length ) {
+					firstArticle.focus();
+				}
+			}
 		});
 
 		// Tabs Layout: MOBILE: switch to the top category user selected
@@ -325,18 +394,49 @@ jQuery(document).ready(function($) {
 		});
 
 		/**
+		 * WCAG Accessibility: Categories Layout - Subcategory link navigation
+		 * When user presses Enter on the focused subcategory name div, navigate to the category link
+		 */
+		$( document ).on( 'keydown', '#epkb-ml-categories-layout .epkb-category-level-2-3__cat-name', function( e ) {
+
+			// Only proceed if Enter or Space key
+			if ( e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			e.preventDefault();
+
+			// Find and trigger the link inside
+			let $link = $( this ).find( 'a' ).first();
+			if ( $link.length ) {
+				window.location.href = $link.attr( 'href' );
+			}
+		});
+
+		/**
 		 * Show all articles functionality
 		 *
 		 * When user clicks on the "Show all articles" it will toggle the "hide" class on all hidden articles
 		 */
-		$( document ).on( 'click', '#epkb-modular-main-page-container .epkb-show-all-articles, .epkb-block-main-page-container .epkb-show-all-articles, #epkb-main-page-container .epkb-show-all-articles', function () {
+		$( document ).on( 'click keydown', '#epkb-modular-main-page-container .epkb-show-all-articles, .epkb-block-main-page-container .epkb-show-all-articles, #epkb-main-page-container .epkb-show-all-articles', function ( e ) {
+
+			// Only proceed if it's a click or Enter/Space key
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			if ( e.type === 'keydown' ) {
+				e.preventDefault();
+			}
 
 			$( this ).toggleClass( 'epkb-show-articles' );
 			let categoryId = $( this ).data('btn-id');
 			let article = $( '[data-list-id="' + categoryId + '"]' ).find( 'li' );
+			let isExpanding = $( this ).hasClass( 'epkb-show-articles' );
+			let firstRevealedArticle = null;
 
 			//If this has class "active" then change the text to Hide extra articles
-			if ( $( this ).hasClass( 'epkb-show-articles') ) {
+			if ( isExpanding ) {
 
 				//If Active
 				$(this).find('.epkb-show-text').addClass('epkb-hide-elem');
@@ -356,78 +456,233 @@ jQuery(document).ready(function($) {
 				if ( $(this).hasClass( 'epkb-hide-elem')) {
 					$(this).removeClass('epkb-hide-elem');
 					$(this).addClass('visible');
+
+					// Track the first revealed article for focus management (WCAG Accessibility)
+					if ( firstRevealedArticle === null ) {
+						firstRevealedArticle = $(this);
+					}
 				}else if ( $(this).hasClass( 'visible')) {
 					$(this).removeClass('visible');
 					$(this).addClass('epkb-hide-elem');
 				}
 			});
+
+			// WCAG Accessibility: Move focus to the first revealed article when expanding
+			if ( isExpanding && firstRevealedArticle !== null ) {
+				let firstLink = firstRevealedArticle.find( 'a' ).first();
+				if ( firstLink.length ) {
+					firstLink.focus();
+				}
+			}
 		});
 
 
 		// Classic Layout --------------------------------------------------------------/
 
 		// Show main content of Category.
-		$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-articles-show-more', function() {
+		$( document ).on( 'click keydown', '#epkb-ml-classic-layout .epkb-ml-articles-show-more', function( e ) {
 
-			$( this ).parent().parent().toggleClass( 'epkb-category-section--active');
+			// WCAG Accessibility: Only proceed if it's a click or Enter/Space key
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
 
-			$( this ).parent().parent().find( '.epkb-category-section__body' ).slideToggle();
+			let isKeyboardActivation = e.type === 'keydown';
+			let categorySection = $( this ).parent().parent();
+
+			categorySection.toggleClass( 'epkb-category-section--active');
+
+			categorySection.find( '.epkb-category-section__body' ).slideToggle();
 
 			$( this ).find( '.epkb-ml-articles-show-more__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
 
 			const isExpanded = $( this ).find( '.epkb-ml-articles-show-more__show-more__icon' ).hasClass( 'epkbfa-minus' );
 
+			// WCAG Accessibility: Update aria-expanded attribute
+			$( this ).attr( 'aria-expanded', isExpanded ? 'true' : 'false' );
+
 			if ( isExpanded ) {
 				$( this ).parent().find( '.epkb-ml-article-count' ).hide();
+
+				// WCAG Accessibility: Move focus to first focusable element when expanded via keyboard
+				if ( isKeyboardActivation ) {
+					let sectionBody = categorySection.find( '.epkb-category-section__body' );
+					// First check for subcategory name, then article
+					let firstFocusable = sectionBody.find( '.epkb-ml-2-lvl-category__name' ).first();
+					if ( ! firstFocusable.length ) {
+						firstFocusable = sectionBody.find( '.epkb-ml-article-container' ).first();
+					}
+					if ( firstFocusable.length ) {
+						// Use setTimeout to wait for slideToggle animation to start
+						setTimeout( function() {
+							firstFocusable.focus();
+						}, 50 );
+					}
+				}
 			} else {
 				$( this ).parent().find( '.epkb-ml-article-count' ).show();
 			}
 		} );
 
 		// Toggle Level 2 Category Articles and Level 3 Categories
-		$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-2-lvl-category-container', function( e ) {
-			// to hide Articles, use a click only on the "minus" icon
-			if ( $( this ).hasClass( 'epkb-ml-2-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-2-lvl-category__show-more__icon' ) ) return;
-			$( this ).find( '.epkb-ml-2-lvl-article-list' ).slideToggle();
-			$( this ).find( '.epkb-ml-3-lvl-categories' ).slideToggle();
-			$( this ).find( '.epkb-ml-2-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
-			$( this ).toggleClass( 'epkb-ml-2-lvl-category--active' );
+		$( document ).on( 'click keydown', '#epkb-ml-classic-layout .epkb-ml-2-lvl-category__name', function( e ) {
+
+			// WCAG Accessibility: Only proceed if it's a click or Enter/Space key
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			let isKeyboardActivation = e.type === 'keydown';
+			let container = $( this ).closest( '.epkb-ml-2-lvl-category-container' );
+			// to hide Articles, use a click only on the "minus" icon (but allow keyboard to toggle)
+			if ( e.type === 'click' && container.hasClass( 'epkb-ml-2-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-2-lvl-category__show-more__icon' ) ) return;
+			container.find( '.epkb-ml-2-lvl-article-list' ).slideToggle();
+			container.find( '.epkb-ml-3-lvl-categories' ).slideToggle();
+			container.find( '.epkb-ml-2-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+			container.toggleClass( 'epkb-ml-2-lvl-category--active' );
+
+			// WCAG Accessibility: Update aria-expanded attribute
+			let isExpanded = container.hasClass( 'epkb-ml-2-lvl-category--active' );
+			$( this ).attr( 'aria-expanded', isExpanded ? 'true' : 'false' );
+
+			// WCAG Accessibility: Move focus to first article when expanded via keyboard
+			if ( isKeyboardActivation && isExpanded ) {
+				let firstArticle = container.find( '.epkb-ml-2-lvl-article-list .epkb-ml-article-container' ).first();
+				if ( firstArticle.length ) {
+					setTimeout( function() {
+						firstArticle.focus();
+					}, 50 );
+				}
+			}
 		} );
 
 		// Toggle Level 3 Category Articles and Level 4 Categories
-		$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-3-lvl-category-container', function( e ) {
-			// to hide Articles, use a click only on the "minus" icon
-			if ( $( this ).hasClass( 'epkb-ml-3-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-3-lvl-category__show-more__icon' ) ) return;
-			$( this ).find( '.epkb-ml-3-lvl-article-list' ).slideToggle();
-			$( this ).find( '.epkb-ml-4-lvl-categories' ).slideToggle();
-			$( this ).find( '.epkb-ml-3-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
-			$( this ).toggleClass( 'epkb-ml-3-lvl-category--active' );
+		$( document ).on( 'click keydown', '#epkb-ml-classic-layout .epkb-ml-3-lvl-category__name', function( e ) {
+
+			// WCAG Accessibility: Only proceed if it's a click or Enter/Space key
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			let isKeyboardActivation = e.type === 'keydown';
+			let container = $( this ).closest( '.epkb-ml-3-lvl-category-container' );
+			// to hide Articles, use a click only on the "minus" icon (but allow keyboard to toggle)
+			if ( e.type === 'click' && container.hasClass( 'epkb-ml-3-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-3-lvl-category__show-more__icon' ) ) return;
+			container.find( '.epkb-ml-3-lvl-article-list' ).slideToggle();
+			container.find( '.epkb-ml-4-lvl-categories' ).slideToggle();
+			container.find( '.epkb-ml-3-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+			container.toggleClass( 'epkb-ml-3-lvl-category--active' );
+
+			// WCAG Accessibility: Update aria-expanded attribute
+			let isExpanded = container.hasClass( 'epkb-ml-3-lvl-category--active' );
+			$( this ).attr( 'aria-expanded', isExpanded ? 'true' : 'false' );
+
+			// WCAG Accessibility: Move focus to first article when expanded via keyboard
+			if ( isKeyboardActivation && isExpanded ) {
+				let firstArticle = container.find( '.epkb-ml-3-lvl-article-list .epkb-ml-article-container' ).first();
+				if ( firstArticle.length ) {
+					setTimeout( function() {
+						firstArticle.focus();
+					}, 50 );
+				}
+			}
 		} );
 
 		// Toggle Level 4 Category Articles and Level 5 Categories
-		$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-4-lvl-category-container', function( e ) {
-			// to hide Articles, use a click only on the "minus" icon
-			if ( $( this ).hasClass( 'epkb-ml-4-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-4-lvl-category__show-more__icon' ) ) return;
-			$( this ).find( '.epkb-ml-4-lvl-article-list' ).slideToggle();
-			$( this ).find( '.epkb-ml-5-lvl-categories' ).slideToggle();
-			$( this ).find( '.epkb-ml-4-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
-			$( this ).toggleClass( 'epkb-ml-4-lvl-category--active' );
+		$( document ).on( 'click keydown', '#epkb-ml-classic-layout .epkb-ml-4-lvl-category__name', function( e ) {
+
+			// WCAG Accessibility: Only proceed if it's a click or Enter/Space key
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			let isKeyboardActivation = e.type === 'keydown';
+			let container = $( this ).closest( '.epkb-ml-4-lvl-category-container' );
+			// to hide Articles, use a click only on the "minus" icon (but allow keyboard to toggle)
+			if ( e.type === 'click' && container.hasClass( 'epkb-ml-4-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-4-lvl-category__show-more__icon' ) ) return;
+			container.find( '.epkb-ml-4-lvl-article-list' ).slideToggle();
+			container.find( '.epkb-ml-5-lvl-categories' ).slideToggle();
+			container.find( '.epkb-ml-4-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+			container.toggleClass( 'epkb-ml-4-lvl-category--active' );
+
+			// WCAG Accessibility: Update aria-expanded attribute
+			let isExpanded = container.hasClass( 'epkb-ml-4-lvl-category--active' );
+			$( this ).attr( 'aria-expanded', isExpanded ? 'true' : 'false' );
+
+			// WCAG Accessibility: Move focus to first article when expanded via keyboard
+			if ( isKeyboardActivation && isExpanded ) {
+				let firstArticle = container.find( '.epkb-ml-4-lvl-article-list .epkb-ml-article-container' ).first();
+				if ( firstArticle.length ) {
+					setTimeout( function() {
+						firstArticle.focus();
+					}, 50 );
+				}
+			}
 		} );
 
 		// Toggle Level 5 Category Articles
-		$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-5-lvl-category-container', function( e ) {
-			// to hide Articles, use a click only on the "minus" icon
-			if ( $( this ).hasClass( 'epkb-ml-5-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-5-lvl-category__show-more__icon' ) ) return;
-			$( this ).find( '.epkb-ml-5-lvl-article-list' ).slideToggle();
-			$( this ).find( '.epkb-ml-5-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
-			$( this ).toggleClass( 'epkb-ml-5-lvl-category--active' );
+		$( document ).on( 'click keydown', '#epkb-ml-classic-layout .epkb-ml-5-lvl-category__name', function( e ) {
+
+			// WCAG Accessibility: Only proceed if it's a click or Enter/Space key
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			let isKeyboardActivation = e.type === 'keydown';
+			let container = $( this ).closest( '.epkb-ml-5-lvl-category-container' );
+			// to hide Articles, use a click only on the "minus" icon (but allow keyboard to toggle)
+			if ( e.type === 'click' && container.hasClass( 'epkb-ml-5-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-5-lvl-category__show-more__icon' ) ) return;
+			container.find( '.epkb-ml-5-lvl-article-list' ).slideToggle();
+			container.find( '.epkb-ml-5-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+			container.toggleClass( 'epkb-ml-5-lvl-category--active' );
+
+			// WCAG Accessibility: Update aria-expanded attribute
+			let isExpanded = container.hasClass( 'epkb-ml-5-lvl-category--active' );
+			$( this ).attr( 'aria-expanded', isExpanded ? 'true' : 'false' );
+
+			// WCAG Accessibility: Move focus to first article when expanded via keyboard
+			if ( isKeyboardActivation && isExpanded ) {
+				let firstArticle = container.find( '.epkb-ml-5-lvl-article-list .epkb-ml-article-container' ).first();
+				if ( firstArticle.length ) {
+					setTimeout( function() {
+						firstArticle.focus();
+					}, 50 );
+				}
+			}
 		} );
 
 
 		// Drill Down Layout --------------------------------------------------------------/
 
-		// Top Category Button Trigger
-		$( document ).on('click', '.epkb-ml-top__cat-container', function() {
+		// Top Category Button Trigger (WCAG Accessibility: added keydown for Enter/Space)
+		$( document ).on( 'click keydown', '.epkb-ml-top__cat-container', function( e ) {
+
+			// Only proceed if it's a click or Enter/Space key (WCAG Accessibility)
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			// Prevent default for Space key to avoid page scroll
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			const isKeyboardActivation = e.type === 'keydown' && ( e.keyCode === 13 || e.keyCode === 32 );
 
 			// Define frequently used selectors
 			const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
@@ -439,11 +694,14 @@ jQuery(document).ready(function($) {
 
 			const $allCatContent            = $( '.epkb-ml-all-categories-content-container' );
 
+			// Reset aria-expanded for all top category buttons
+			$( '.epkb-ml-top__cat-container' ).attr( 'aria-expanded', 'false' );
 			$( '.epkb-ml-top__cat-container' ).removeClass( $topCatButton_ActiveClass );
 
 			// Hide content when clicked on active Top Category button
 			if ( $( this ).hasClass( $topCatButton_ActiveClass ) ) {
 				$( this ).removeClass( $topCatButton_ActiveClass );
+				$( this ).attr( 'aria-expanded', 'false' );
 				$allCatContent.hide();
 				return;
 			}
@@ -456,6 +714,7 @@ jQuery(document).ready(function($) {
 			// Highlight current Top Category button
 			$( this ).removeClass( $topCatButton_ActiveClass );
 			currentTopCat.addClass( $topCatButton_ActiveClass );
+			currentTopCat.attr( 'aria-expanded', 'true' );
 
 			moveCategoriesBoxUnderTopCategoryButton( currentTopCat );
 
@@ -463,6 +722,7 @@ jQuery(document).ready(function($) {
 			$( '.epkb-ml-categories-button-container' ).removeClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
 			$( '.epkb-ml__cat-content' ).removeClass( $catContent_ShowClass );
 			$( '.epkb-ml__cat-container' ).removeClass( $catButton_ActiveClass );
+			$( '.epkb-ml__cat-container' ).attr( 'aria-expanded', 'false' );
 
 
 
@@ -476,6 +736,23 @@ jQuery(document).ready(function($) {
 
 			// Show Level 2 Categories
 			$( '.epkb-ml-2-lvl-categories-button-container[data-cat-level="1"][data-cat-id="' + catId + '"]' ).addClass( $catButtonContainers_ShowClass );
+
+			// WCAG Accessibility: Move focus to the first article or subcategory after expanding (keyboard only)
+			if ( isKeyboardActivation ) {
+				setTimeout( function() {
+					// First try to focus on a subcategory
+					let $firstSubcat = $( '.epkb-ml-2-lvl-categories-button-container[data-cat-level="1"][data-cat-id="' + catId + '"]' ).find( '.epkb-ml__cat-container' ).first();
+					if ( $firstSubcat.length && $firstSubcat.is(':visible') ) {
+						$firstSubcat.focus();
+					} else {
+						// Otherwise focus on the first article
+						let $firstArticle = $( '.epkb-ml-1-lvl__cat-content[data-cat-id="' + catId + '"]' ).find( '.epkb-ml-article-container' ).first();
+						if ( $firstArticle.length ) {
+							$firstArticle.focus();
+						}
+					}
+				}, 50 );
+			}
 		});
 
 		// Move content box under the category row
@@ -505,8 +782,20 @@ jQuery(document).ready(function($) {
 			$allCatContent.show();
 		}
 
-		// Category Button Trigger
-		$( document ).on('click', '.epkb-ml__cat-container', function() {
+		// Category Button Trigger (WCAG Accessibility: added keydown for Enter/Space)
+		$( document ).on( 'click keydown', '.epkb-ml__cat-container', function( e ) {
+
+			// Only proceed if it's a click or Enter/Space key (WCAG Accessibility)
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			// Prevent default for Space key to avoid page scroll
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
+
+			const isKeyboardActivation = e.type === 'keydown' && ( e.keyCode === 13 || e.keyCode === 32 );
 
 			// Define frequently used selectors
 			const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
@@ -534,8 +823,12 @@ jQuery(document).ready(function($) {
 			// Get Level of child Categories
 			const childCatLevel = catLevel + 1;
 
+			// Reset aria-expanded for sibling subcategories
+			$( '.epkb-ml-' + catLevel + '-lvl__cat-container' ).attr( 'aria-expanded', 'false' );
+
 			// Show current Category Header
 			$( this ).addClass( $catButton_ActiveClass );
+			$( this ).attr( 'aria-expanded', 'true' );
 			$( '.epkb-ml-' + catLevel + '-lvl-categories-button-container[data-cat-id="' + parentCatId + '"]' ).addClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
 
 			// Hide content of parent Category
@@ -546,10 +839,57 @@ jQuery(document).ready(function($) {
 			// Show content of current Category
 			$( '.epkb-ml-' + catLevel + '-lvl__cat-content[data-cat-id="' + catId + '"]' ).addClass( $catContent_ShowClass );
 			$( '.epkb-ml-' + childCatLevel + '-lvl-categories-button-container[data-cat-id="' + catId + '"]' ).addClass( $catButtonContainers_ShowClass );
+
+			// WCAG Accessibility: Move focus to the first article or subcategory after expanding (keyboard only)
+			if ( isKeyboardActivation ) {
+				setTimeout( function() {
+					// First try to focus on a subcategory
+					let $firstSubcat = $( '.epkb-ml-' + childCatLevel + '-lvl-categories-button-container[data-cat-id="' + catId + '"]' ).find( '.epkb-ml__cat-container' ).first();
+					if ( $firstSubcat.length && $firstSubcat.is(':visible') ) {
+						$firstSubcat.focus();
+					} else {
+						// Otherwise focus on the first article
+						let $firstArticle = $( '.epkb-ml-' + catLevel + '-lvl__cat-content[data-cat-id="' + catId + '"]' ).find( '.epkb-ml-article-container' ).first();
+						if ( $firstArticle.length ) {
+							$firstArticle.focus();
+						}
+					}
+				}, 50 );
+			}
+		});
+
+		// Back Button: Shift+Tab should go to the last visible subcategory button
+		$( document ).on( 'keydown', '.epkb-back-button', function( e ) {
+			// Only handle Shift+Tab
+			if ( e.keyCode === 9 && e.shiftKey ) {
+				e.preventDefault();
+
+				// Find the last visible subcategory button in a container with --show class
+				let $visibleSubcatContainer = $( '.epkb-ml-categories-button-container.epkb-ml-categories-button-container--show' ).last();
+				if ( $visibleSubcatContainer.length ) {
+					let $lastSubcat = $visibleSubcatContainer.find( '.epkb-ml__cat-container' ).last();
+					if ( $lastSubcat.length ) {
+						$lastSubcat.focus();
+						return;
+					}
+				}
+
+				// Fallback: find the last visible article in the visible content section
+				let $visibleContent = $( '.epkb-ml__cat-content.epkb-ml__cat-content--show' );
+				if ( $visibleContent.length ) {
+					let $lastArticle = $visibleContent.find( '.epkb-ml-article-container' ).last();
+					if ( $lastArticle.length ) {
+						$lastArticle.focus();
+						return;
+					}
+				}
+			}
 		});
 
 		// Back Button of Category Content
-		$( document ).on('click', '.epkb-back-button', function() {
+		// Note: Since this is a <button> element, the browser automatically triggers click on Enter/Space
+		// so we only need to handle click events - no separate keydown handling needed
+		$( document ).on( 'click', '.epkb-back-button', function( e ) {
 
 			// Define frequently used selectors
 			const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
@@ -562,6 +902,7 @@ jQuery(document).ready(function($) {
 			// Get Level of current Category
 			let currentCatContent = $( '.epkb-ml__cat-content' + '.' + $catContent_ShowClass );
 			let catLevel = parseInt( currentCatContent.data( 'cat-level' ) );
+			let currentCatId = currentCatContent.data( 'cat-id' );
 
 			// Get Level of child Categories
 			let childCatLevel = catLevel + 1;
@@ -569,7 +910,14 @@ jQuery(document).ready(function($) {
 			// Return to the Top Categories view if Level 1 Content is currently shown
 			if ( catLevel === 1 ) {
 				$( '.epkb-ml-top__cat-container' ).removeClass( $topCatButton_ActiveClass );
+				$( '.epkb-ml-top__cat-container' ).attr( 'aria-expanded', 'false' );
 				$( '.epkb-ml-all-categories-content-container' ).hide();
+
+				// WCAG Accessibility: Move focus back to the top category button
+				let $topCatButton = $( '.epkb-ml-top__cat-container[data-cat-id="' + currentCatId + '"]' );
+				if ( $topCatButton.length ) {
+					$topCatButton.focus();
+				}
 				return;
 			}
 
@@ -582,6 +930,9 @@ jQuery(document).ready(function($) {
 				$( '.epkb-ml-all-categories-content-container .epkb-back-button' ).removeClass( $backButton_ActiveClass );
 			}
 
+			// Reset aria-expanded for current category
+			$( '.epkb-ml-' + catLevel + '-lvl__cat-container' ).attr( 'aria-expanded', 'false' );
+
 			// Hide elements of the current Category
 			$( '.epkb-ml-' + catLevel + '-lvl-categories-button-container' ).removeClass( $catButtonContainers_ActiveClass );
 			$( '.epkb-ml-' + catLevel + '-lvl__cat-container' ).removeClass( $catButton_ActiveClass );
@@ -592,7 +943,13 @@ jQuery(document).ready(function($) {
 			let parentCatButton = $( '.epkb-ml-' + parentCatLevel + '-lvl__cat-container[data-cat-id="' + parentCatId + '"]' );
 			parentCatButton.closest( '.epkb-ml-categories-button-container' ).addClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
 			parentCatButton.addClass( $catButton_ActiveClass );
+			parentCatButton.attr( 'aria-expanded', 'true' );
 			$( '.epkb-ml-' + parentCatLevel + '-lvl__cat-content[data-cat-id="' + parentCatId + '"]' ).addClass( $catContent_ShowClass );
+
+			// WCAG Accessibility: Move focus back to the parent category button
+			if ( parentCatButton.length ) {
+				parentCatButton.focus();
+			}
 		});
 
 	} // if( categoriesAndArticles.length > 0 )
@@ -623,9 +980,20 @@ jQuery(document).ready(function($) {
 			}
 			container.toggleClass('epkb-faqs__item-container--active');
 		});*/
-		$( document ).on( 'click', '.epkb-faqs-accordion-mode .epkb-faqs__item__question[data-faq-type="module"]', function(){
+		$( document ).on( 'click keydown', '.epkb-faqs-accordion-mode .epkb-faqs__item__question[data-faq-type="module"]', function( e ){
+
+			// Only proceed if it's a click or Enter/Space key (WCAG Accessibility)
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			// Prevent default for Space key to avoid page scroll
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
 
 			let container = $(this).closest('.epkb-faqs__item-container').eq(0);
+			let isExpanding = !container.hasClass('epkb-faqs__item-container--active');
 
 			if (container.hasClass('epkb-faqs__item-container--active')) {
 				container.find('.epkb-faqs__item__answer').stop().slideUp(400);
@@ -633,6 +1001,9 @@ jQuery(document).ready(function($) {
 				container.find('.epkb-faqs__item__answer').stop().slideDown(400);
 			}
 			container.toggleClass('epkb-faqs__item-container--active');
+
+			// Update aria-expanded attribute (WCAG Accessibility)
+			$(this).attr( 'aria-expanded', isExpanding ? 'true' : 'false' );
 		});
 
 		// Toggle Mode
@@ -654,13 +1025,25 @@ jQuery(document).ready(function($) {
 			}
 			container.toggleClass('epkb-faqs__item-container--active');
 		});*/
-		$( document ).on( 'click', '.epkb-faqs-toggle-mode .epkb-faqs__item__question[data-faq-type="module"]', function(){
+		$( document ).on( 'click keydown', '.epkb-faqs-toggle-mode .epkb-faqs__item__question[data-faq-type="module"]', function( e ){
+
+			// Only proceed if it's a click or Enter/Space key (WCAG Accessibility)
+			if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+				return;
+			}
+
+			// Prevent default for Space key to avoid page scroll
+			if ( e.type === 'keydown' && e.keyCode === 32 ) {
+				e.preventDefault();
+			}
 
 			let container = $(this).closest('.epkb-faqs__item-container').eq(0);
+			let isExpanding = !container.hasClass('epkb-faqs__item-container--active');
 
-			// Close other opened items
+			// Close other opened items and update their aria-expanded
 			$('.epkb-faqs__item-container--active').not(container).removeClass('epkb-faqs__item-container--active')
 				.find('.epkb-faqs__item__answer').stop().slideUp(400);
+			$('.epkb-faqs__item-container--active').not(container).find('.epkb-faqs__item__question').attr( 'aria-expanded', 'false' );
 
 			// Toggle the clicked item
 			if (container.hasClass('epkb-faqs__item-container--active')) {
@@ -669,6 +1052,9 @@ jQuery(document).ready(function($) {
 				container.find('.epkb-faqs__item__answer').stop().slideDown(400);
 			}
 			container.toggleClass('epkb-faqs__item-container--active');
+
+			// Update aria-expanded attribute (WCAG Accessibility)
+			$(this).attr( 'aria-expanded', isExpanding ? 'true' : 'false' );
 		});
 		
 	}
@@ -715,7 +1101,7 @@ jQuery(document).ready(function($) {
 					let title = $articleTocLocal.find('.eckb-article-toc__title').html();
 					let html = `
 						<div class="eckb-article-toc__inner">
-							<h4 class="eckb-article-toc__title">${title}</h4>
+							<h2 class="eckb-article-toc__title">${title}</h2>
 							<nav class="eckb-article-toc-outline" role="navigation" aria-label="${epkb_vars.toc_aria_label}">
 							<ul>
 								<li>${epkb_vars.toc_editor_msg}</li>
@@ -894,7 +1280,7 @@ jQuery(document).ready(function($) {
 		},
 		
 		// return html from headers object 
-		getToCHTML: function ( headers, titleTag='h4' ) {
+		getToCHTML: function ( headers, titleTag='h2' ) {
 			let html;
 			let $articleTocLocal = $( '.eckb-article-toc' );
 				
@@ -1075,7 +1461,16 @@ jQuery(document).ready(function($) {
 		console.log('=== Article Page ===');
 
 		// Print Button ----------------------------------/
-		$('body').on("click", ".eckb-print-button-container, .eckb-print-button-meta-container", function(event) {
+		$('body').on("click keydown", ".eckb-print-button-container, .eckb-print-button-meta-container", function(event) {
+
+			// Only proceed if it's a click or Enter/Space key
+			if ( event.type === 'keydown' && event.keyCode !== 13 && event.keyCode !== 32 ) {
+				return;
+			}
+
+			if ( event.type === 'keydown' ) {
+				event.preventDefault();
+			}
 		
 			if ( $('body').hasClass('epkb-editor-preview') ) {
 				return;
@@ -1398,11 +1793,17 @@ jQuery(document).ready(function($) {
 
 				// TOP-CATEGORIES -----------------------------------/
 				// Show or hide article in sliding motion
+				// WCAG Accessibility: Added keydown for Enter/Space support
 				sidebarV2
-				.off('click.epkbTopCat')   // remove any previous bindings
-				.on('click.epkbTopCat',
+				.off('click.epkbTopCat keydown.epkbTopCat')   // remove any previous bindings
+				.on('click.epkbTopCat keydown.epkbTopCat',
 					'.epkb-top-class-collapse-on, .epkb-sidebar__cat__top-cat__heading-container',
 					function (e) {
+
+					// Only proceed if click or Enter/Space key
+					if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+						return;
+					}
 
 					/* 1. Ignore clicks coming from the block-editor tabs */
 					if ($(e.target).closest('.epkb-editor-zone__tab--active, .epkb-editor-zone__tab--parent').length) {
@@ -1424,15 +1825,25 @@ jQuery(document).ready(function($) {
 						epkb_toggle_category_icons($icon, cls);
 					}
 
+					/* 4. WCAG Accessibility: Toggle aria-expanded */
+					let isExpanded = $heading.attr( 'aria-expanded' ) === 'true';
+					$heading.attr( 'aria-expanded', isExpanded ? 'false' : 'true' );
+
 					e.preventDefault();                                       // no unwanted nav
 				});
 
 
 				// SUB-CATEGORIES -----------------------------------/
 				// Show or hide article in sliding motion
+				// WCAG Accessibility: Added keydown for Enter/Space support
 				sidebarV2
-				.off('click.epkbToggleCat')                 // ← remove any earlier copy
-				.on('click.epkbToggleCat', '.epkb-category-level-2-3', function (e) {
+				.off('click.epkbToggleCat keydown.epkbToggleCat')                 // ← remove any earlier copy
+				.on('click.epkbToggleCat keydown.epkbToggleCat', '.epkb-category-level-2-3', function (e) {
+
+				// Only proceed if click or Enter/Space key
+				if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+					return;
+				}
 			
 				/* ─── 1. toggle the sibling <ul>s ───────────────────────────── */
 				$(this)
@@ -1446,21 +1857,36 @@ jQuery(document).ready(function($) {
 					const iconClass = ($icon.attr('class').match(/ep_font_icon_\S+/) || [''])[0];
 					epkb_toggle_category_icons($icon, iconClass);
 				}
+
+				/* ─── 3. WCAG Accessibility: Toggle aria-expanded ──────────── */
+				let isExpanded = $( this ).attr( 'aria-expanded' ) === 'true';
+				$( this ).attr( 'aria-expanded', isExpanded ? 'false' : 'true' );
 			
 				e.preventDefault();                       // no unwanted navigation
 				});
 
 				// SHOW ALL articles functionality
 				sidebarV2
-				.off('click.epkbShowAll')   // remove any previous bindings
-				.on('click.epkbShowAll', '.epkb-show-all-articles', function () {
+				.off('click.epkbShowAll keydown.epkbShowAll')   // remove any previous bindings
+				.on('click.epkbShowAll keydown.epkbShowAll', '.epkb-show-all-articles', function ( e ) {
+
+					// Only proceed if it's a click or Enter/Space key
+					if ( e.type === 'keydown' && e.keyCode !== 13 && e.keyCode !== 32 ) {
+						return;
+					}
+
+					if ( e.type === 'keydown' ) {
+						e.preventDefault();
+					}
 
 					$( this ).toggleClass( 'active' );
 					let parent = $( this ).parent( 'ul' );
 					let article = parent.find( 'li');
+					let isExpanding = $(this).hasClass( 'active' );
+					let firstRevealedArticle = null;
 
 					//If this has class "active" then change the text to Hide extra articles
-					if ( $(this).hasClass( 'active') ) {
+					if ( isExpanding ) {
 
 						//If Active
 						$(this).find('.epkb-show-text').addClass('epkb-hide-elem');
@@ -1479,11 +1905,24 @@ jQuery(document).ready(function($) {
 						if ( $(this).hasClass( 'epkb-hide-elem') ) {
 							$(this).removeClass('epkb-hide-elem');
 							$(this).addClass('visible');
+
+							// Track the first revealed article for focus management (WCAG Accessibility)
+							if ( firstRevealedArticle === null ) {
+								firstRevealedArticle = $(this);
+							}
 						} else if ( $(this).hasClass( 'visible')) {
 							$(this).removeClass('visible');
 							$(this).addClass('epkb-hide-elem');
 						}
 					});
+
+					// WCAG Accessibility: Move focus to the first revealed article when expanding
+					if ( isExpanding && firstRevealedArticle !== null ) {
+						let firstLink = firstRevealedArticle.find( 'a' ).first();
+						if ( firstLink.length ) {
+							firstLink.focus();
+						}
+					}
 				});
 
 				epkb_open_and_highlight_selected_article_v2();
@@ -1619,4 +2058,3 @@ jQuery(document).ready(function($) {
 	});
 
 });
-

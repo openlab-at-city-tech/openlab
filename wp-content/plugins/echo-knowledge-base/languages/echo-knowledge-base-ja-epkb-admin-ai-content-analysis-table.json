@@ -31,6 +31,9 @@
             "selected": [
                 "選択済み"
             ],
+            "Delete": [
+                "削除"
+            ],
             "Next": [
                 "次"
             ],
@@ -45,9 +48,6 @@
             ],
             "Loading...": [
                 "読み込み中…"
-            ],
-            "Delete": [
-                "削除"
             ],
             "of": [
                 "の"
@@ -79,29 +79,8 @@
             "Unknown error occurred": [
                 "不明なエラーが発生しました"
             ],
-            "No articles need analysis": [
-                "分析が必要な記事はありません"
-            ],
-            "All articles have been analyzed. Great job!": [
-                "すべての記事が分析されました。素晴らしいです！"
-            ],
-            "No articles need improvement": [
-                "改善が必要な記事はありません"
-            ],
-            "All analyzed articles have scores above 80%. Excellent!": [
-                "分析済みの記事はすべて80％を超えるスコアです。素晴らしいです！"
-            ],
-            "No recent articles": [
-                "最近の記事はありません"
-            ],
-            "No articles have been modified recently.": [
-                "最近変更された記事はありません."
-            ],
-            "No articles found": [
-                "記事が見つかりません"
-            ],
-            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
-                "このナレッジベースには記事がありません。分析を開始するにはいくつかの記事を作成してください。."
+            "All Knowledge Bases": [
+                "すべてのナレッジベース"
             ],
             "To Analyze": [
                 "分析する"
@@ -129,6 +108,18 @@
             ],
             "No articles match your search": [
                 "検索条件に一致する記事はありません"
+            ],
+            "No articles need analysis": [
+                "分析が必要な記事はありません"
+            ],
+            "No articles need improvement": [
+                "改善が必要な記事はありません"
+            ],
+            "No recent articles": [
+                "最近の記事はありません"
+            ],
+            "No articles found": [
+                "記事が見つかりません"
             ],
             "View detailed analysis": [
                 "詳細分析を表示"

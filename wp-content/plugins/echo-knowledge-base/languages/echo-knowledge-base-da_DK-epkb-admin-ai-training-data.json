@@ -7,6 +7,9 @@
                 "lang": "da_DK",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Learn More": [
+                "Lær mere"
+            ],
             "to": [
                 "til"
             ],
@@ -16,11 +19,47 @@
             "Save": [
                 "Gem"
             ],
+            "Close": [
+                "Luk"
+            ],
             "Cancel": [
                 "Annuller"
             ],
+            "selected": [
+                "valgt"
+            ],
+            "Delete": [
+                "Slet"
+            ],
+            "Updated": [
+                "Opdateret"
+            ],
+            "OFF": [
+                "FRA"
+            ],
+            "Optional": [
+                "Valgfri"
+            ],
+            "View Full Documentation": [
+                "Se fuld dokumentation"
+            ],
             "Saving...": [
                 "Gemmer..."
+            ],
+            "Error": [
+                "Fejl"
+            ],
+            "OK": [
+                "OK"
+            ],
+            "Add Training Data": [
+                "Tilføj maskinlæringsdata"
+            ],
+            "Choose Training Data": [
+                "Vælg maskinlæringsdata"
+            ],
+            "Send Data to AI": [
+                "Send data til AI"
             ],
             "Collection name cannot be empty": [
                 "Samlingsnavnet må ikke være tomt"
@@ -31,86 +70,113 @@
             "Note updated successfully": [
                 "Noten blev opdateret"
             ],
-            "Note deleted successfully": [
-                "Noten blev slettet"
+            "Name": [
+                "Navn"
             ],
-            "Delete": [
-                "Slet"
+            "Pending": [
+                "Afventer"
+            ],
+            "All Categories": [
+                "Alle kategorier"
             ],
             "Delete Selected": [
                 "Slet valgte"
             ],
+            "of": [
+                "af"
+            ],
+            "Skipped": [
+                "Springet over"
+            ],
             "Failed to create collection": [
                 "Fejl ved oprettelse af samling"
             ],
-            "How to get started": [
-                "Sådan kommer du i gang"
+            "errors": [
+                "fejl"
             ],
-            "Choose Training Data": [
-                "Vælg maskinlæringsdata"
+            "Outdated": [
+                "Forældet"
             ],
-            "Pick the content types to include.": [
-                "Vælg de indholdstyper, der skal inkluderes."
-            ],
-            "Send Data to AI": [
-                "Send data til AI"
-            ],
-            "Select items in the table, then sync them.": [
-                "Vælg posterne i tabellen, og synkroniser dem."
-            ],
-            "Other Actions": [
-                "Andre handlinger"
-            ],
-            "Rename the collection or delete items.": [
-                "Omdøb samlingen eller slet emnerne."
-            ],
-            "Tip: Start with a small set to test the flow.": [
-                "Tip: Start med et lille sæt for at teste flowet."
-            ],
-            "Failed to load note content": [
-                "Fejl ved indlæsning af noteindhold"
-            ],
-            "Please enter both title and content for the note": [
-                "Indtast venligst både titel og indhold til noten"
-            ],
-            "Unable to delete note. Please refresh the page and try again.": [
-                "Kan ikke slette noten. Opdater venligst siden og prøv igen."
-            ],
-            "Delete Note": [
-                "Slet noten"
-            ],
-            "Are you sure you want to delete this note? This action cannot be undone.": [
-                "Er du sikker på, at du vil slette dette notat? Denne handling kan ikke fortrydes."
-            ],
-            "Failed to delete note": [
-                "Fejl ved sletning af notat"
-            ],
-            "Edit Note": [
-                "Rediger notat"
-            ],
-            "Add Note": [
-                "Tilføj notat"
-            ],
-            "Loading note content...": [
-                "Indlæser notatindhold..."
-            ],
-            "Note Title": [
-                "Notatets titel"
-            ],
-            "Enter note title...": [
-                "Indtast notatets titel..."
-            ],
-            "Note Content": [
-                "Notatets indhold"
-            ],
-            "Enter note content...": [
-                "Indtast notatets indhold..."
+            "Added": [
+                "Tilføjet"
             ],
             "Deleting...": [
                 "Sletter..."
             ],
-            "Save Note": [
-                "Gem notat"
+            "added": [
+                "tilføjet"
+            ],
+            "How to get started": [
+                "Sådan kommer du i gang"
+            ],
+            "Other Actions": [
+                "Andre handlinger"
+            ],
+            "Failed to load available items": [
+                "Kunne ikke indlæse tilgængelige elementer"
+            ],
+            "Please select one content type first": [
+                "Vælg en indholdstype først"
+            ],
+            "Please select at least one item to add": [
+                "Vælg mindst ét element, der skal tilføjes"
+            ],
+            "Data added successfully": [
+                "Data blev tilføjet"
+            ],
+            "Failed to add selected items": [
+                "Det lykkedes ikke at tilføje de valgte elementer"
+            ],
+            "available": [
+                "tilgængelig"
+            ],
+            "Select Individual Items": [
+                "Vælg enkelte elementer"
+            ],
+            "Choose one content type, then select the individual items you want to add to this collection.": [
+                "Vælg en indholdstype, og vælg derefter de enkelte elementer, du vil tilføje til denne samling."
+            ],
+            "Content Type": [
+                "Indholdstype"
+            ],
+            "No content types are currently available.": [
+                "Der er i øjeblikket ingen indholdstyper tilgængelige."
+            ],
+            "Select a content type to load its available items.": [
+                "Vælg en indholdstype for at indlæse dets tilgængelige elementer."
+            ],
+            "Loading available items...": [
+                "Indlæser tilgængelige elementer..."
+            ],
+            "Unable to load the available items for this content type.": [
+                "Kan ikke indlæse de tilgængelige elementer for denne indholdstype."
+            ],
+            "Search by name": [
+                "Søg efter navn"
+            ],
+            "Select All": [
+                "Markér alle"
+            ],
+            "Clear All": [
+                "Ryd alle"
+            ],
+            "No available items were found for this content type.": [
+                "Der blev ikke fundet nogen tilgængelige elementer for denne indholdstype."
+            ],
+            "No items match the current filters.": [
+                "Der er ingen elementer, der matcher de nuværende filtre."
+            ],
+            "Adding Items...": [
+                "Tilføjer elementer..."
+            ],
+            "Add Selected Items": [
+                "Tilføj valgte elementer"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Kan ikke ændre handlinger, mens synkronisering er i gang"
+            ],
+            "Cannot change actions while validation is in progress": [
+                "Kan ikke ændre handlinger, mens validering er i gang"
             ],
             "Collection name updated successfully": [
                 "Samlingens navn blev opdateret"
@@ -139,29 +205,77 @@
             "Please select at least one data type": [
                 "Vælg mindst én datatype"
             ],
-            "Data added successfully": [
-                "Data blev tilføjet"
-            ],
             "Failed to add data": [
                 "Fejl ved tilføjelse af data"
+            ],
+            "Checking AI store for orphaned files...": [
+                "Tjekker AI-lager for forældreløse filer..."
+            ],
+            "Verifying": [
+                "Verificerer"
+            ],
+            "items": [
+                "elementer"
+            ],
+            "Verification complete:": [
+                "Verifikation afsluttet:"
+            ],
+            "marked outdated": [
+                "markeret forældet"
+            ],
+            "Run sync to re-upload outdated items.": [
+                "Kør synkronisering for at uploade forældede elementer igen."
             ],
             "Choose an Action": [
                 "Vælg en handling"
             ],
-            "Cannot change actions while sync is in progress": [
-                "Kan ikke ændre handlinger, mens synkronisering er i gang"
+            "Dismiss": [
+                "Luk"
             ],
-            "Add Training Data": [
-                "Tilføj maskinlæringsdata"
+            "Choose content types (KB Articles, Posts, Pages) to load into the table. This does not send anything to AI yet.": [
+                "Vælg indholdstyper (KB-artikler, indlæg, sider) til at indlæses i tabellen. Dette sender endnu ikke noget til AI."
             ],
-            "Cannot navigate while sync is in progress": [
-                "Kan ikke navigere, mens synkronisering er i gang"
+            "To exclude specific items, search for them in the table, select them, then use Other Actions > Delete Selected.": [
+                "For at ekskludere specifikke elementer, søg efter dem i tabellen, vælg dem, og brug derefter Andre Handlinger > Slet valgte."
             ],
-            "Adding data to:": [
-                "Tilføjer data til:"
+            "Select items from the table and send them to train the AI. Use the status tabs to filter, then select all and send.": [
+                "Vælg elementer fra tabellen og send dem for at træne AI. Brug statusfanerne til at filtrere, vælg derefter Alle og send."
+            ],
+            "Keep Content in Sync": [
+                "Hold indholdet synkroniseret"
+            ],
+            "When you edit content on your site, its status changes to \"Outdated\". Filter by Outdated, select, and re-send to update the AI.": [
+                "Når du redigerer indhold på dit site, ændres dets status til \"Forældet\". Filtrer efter Forældet, vælg, og send igen for at opdatere AI'en."
+            ],
+            "Statuses": [
+                "Statusser"
+            ],
+            "In the table but not yet sent to AI.": [
+                "I tabellen, men endnu ikke sendt til AI."
+            ],
+            "Sent to AI successfully.": [
+                "Sendt til AI med succes."
+            ],
+            "Re-sent after changes.": [
+                "Sendt igen efter ændringer."
+            ],
+            "Content changed since last sync. Re-send to update.": [
+                "Indhold ændret siden seneste synkronisering. Send igen for at opdatere."
+            ],
+            "Could not be synced because the content is empty or the source no longer exists.": [
+                "Kunne ikke synkroniseres, fordi indholdet er tomt, eller kilden ikke længere findes."
+            ],
+            "Sync failed. Re-send to retry. Check the content exists and is not empty.": [
+                "Synkronisering mislykkedes. Send igen for at prøve igen. Kontroller, at indholdet findes og ikke er tomt."
+            ],
+            "Validate & Fix Synced Items": [
+                "Valider og ret synkroniserede elementer"
             ],
             "Choose which content types you want to include in your AI training data.": [
                 "Vælg hvilke indholdstyper du vil inkludere i dine AI-træningsdata."
+            ],
+            "Only Published content is included. Drafts, Private, and Pending posts are not available for AI training.": [
+                "Kun offentliggjort indhold er inkluderet. Udkast, Privat og Afventende indlæg er ikke tilgængelige for AI-træning."
             ],
             "Access Manager Notice": [
                 "Adgangsmanager-meddelelse"
@@ -172,26 +286,47 @@
             "Loading content types...": [
                 "Indlæser indholdstyper..."
             ],
-            "available": [
-                "tilgængelig"
-            ],
-            "added": [
-                "tilføjet"
+            "No content types available.": [
+                "Ingen indholdstyper tilgængelige."
             ],
             "excluded": [
                 "ekskluderet"
             ],
-            "No eligible content": [
-                "Intet relevant indhold"
-            ],
-            "No published content available": [
-                "Intet offentligtgjort indhold tilgængeligt"
-            ],
             "All eligible items already added to collection": [
                 "Alle berettigede elementer er allerede tilføjet til samlingen"
             ],
-            "No content types available.": [
-                "Ingen indholdstyper tilgængelige."
+            "No eligible content": [
+                "Intet relevant indhold"
+            ],
+            "No articles for %s found. First create and publish articles.": [
+                "Ingen artikler for %s fundet. Først opret og offentliggør artikler."
+            ],
+            "No %s found. First create and publish %s.": [
+                "Ingen %s fundet. Først opret og offentliggør %s."
+            ],
+            "Already in Collection": [
+                "Allerede i samlingen"
+            ],
+            "These content types have been added": [
+                "Disse indholdstyper er blevet tilføjet"
+            ],
+            "Available to Add": [
+                "Tilgængelig til tilføjelse"
+            ],
+            "Select items to include in training data": [
+                "Vælg elementer til træningsdata"
+            ],
+            "All available content types have been added.": [
+                "Alle tilgængelige indholdstyper er blevet tilføjet."
+            ],
+            "No Content Available": [
+                "Intet indhold tilgængeligt"
+            ],
+            "Create and publish content first": [
+                "Opret og udgiv indhold først"
+            ],
+            "Requires AI Pro": [
+                "AI Pro kræves"
             ],
             "Adding Data...": [
                 "Tilføjer data..."
@@ -199,14 +334,23 @@
             "Add Data": [
                 "Tilføj data"
             ],
-            "Notes": [
-                "Noter"
-            ],
-            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
-                "Tilføj brugerdefinerede noter for at hjælpe med at træne AI'en med specifik information, retningslinjer eller kontekst, der måske ikke er i dit sædvanlige indhold."
-            ],
             "Select items from the table and choose a sync method to update your AI training data.": [
                 "Vælg poster fra tabellen og vælg en synkroniseringsmetode for at opdatere dine maskinlæringsdata."
+            ],
+            "Run an extra validation pass to make sure the local database and the AI store stay in sync. If a file is missing from the AI store, it will be marked as outdated so it can be re-sent.": [
+                "Kør en ekstra valideringsgennemgang for at sikre, at den lokale database og AI-lageret forbliver synkroniseret. Hvis en fil mangler i AI-lageret, vil den blive markeret som forældet, så den kan sendes igen."
+            ],
+            "Collection:": [
+                "Samling:"
+            ],
+            "synced items ready to validate": [
+                "synkroniserede elementer klar til at blive valideret"
+            ],
+            "Cancel Verify": [
+                "Annuller kontrol"
+            ],
+            "Validation in Progress...": [
+                "Validering i gang..."
             ],
             "Manage your collection settings and data.": [
                 "Administrer dine samlingsindstillinger og data."

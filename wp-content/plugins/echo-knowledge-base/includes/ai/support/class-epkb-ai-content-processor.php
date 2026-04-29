@@ -29,7 +29,7 @@ class EPKB_AI_Content_Processor {
 		} 
 
 		if ( $post_type === EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE ) {
-			$content = EPKB_Utilities::is_ai_features_pro_enabled() ? $post->post_content : '';
+			$content = EPKB_Utilities::is_ai_features_pro_enabled() ? EPKB_PDF_Utilities::strip_html_for_ai( $post->post_content ) : '';
 			if ( empty( $content ) ) {
 				return new WP_Error( 'ai_note_empty', __( 'AI note content is empty', 'echo-knowledge-base' ) );
 			}
@@ -132,6 +132,7 @@ class EPKB_AI_Content_Processor {
 
 		} catch ( Exception $e ) {
 			// Fall back to basic stripping if conversion fails
+			// translators: %s is the error message
 			return new WP_Error( 'conversion_failed', sprintf( __( 'HTML to Markdown conversion failed: %s', 'echo-knowledge-base' ), $e->getMessage() ) );
 		}
 
@@ -405,6 +406,7 @@ class EPKB_AI_Content_Processor {
 		$max_size = $this->get_max_attachment_size( $mime_type );
 		if ( $file_size > $max_size ) {
 			EPKB_AI_Log::add_log( 'Attachment exceeds size limit', array( 'attachment_id' => $attachment_id, 'mime_type' => $mime_type, 'file_size' => $file_size, 'max_size' => $max_size ) );
+			// translators: %s is the maximum file size
 			return new WP_Error( 'attachment_too_large', sprintf( __( 'Attachment exceeds size limit (%s)', 'echo-knowledge-base' ), size_format( $max_size ) ) );
 		}
 		
@@ -549,21 +551,25 @@ class EPKB_AI_Content_Processor {
 		// Get alt text
 		$alt_text = get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
 		if ( ! empty( $alt_text ) ) {
+			// translators: %s is the image alt text
 			$content_parts[] = sprintf( __( 'Alt text: %s', 'echo-knowledge-base' ), $alt_text );
 		}
-		
+
 		// Get caption
 		if ( ! empty( $attachment->post_excerpt ) ) {
+			// translators: %s is the image caption
 			$content_parts[] = sprintf( __( 'Caption: %s', 'echo-knowledge-base' ), $attachment->post_excerpt );
 		}
-		
+
 		// Get description
 		if ( ! empty( $attachment->post_content ) ) {
+			// translators: %s is the image description
 			$content_parts[] = sprintf( __( 'Description: %s', 'echo-knowledge-base' ), $attachment->post_content );
 		}
-		
+
 		// Get title
 		if ( ! empty( $attachment->post_title ) ) {
+			// translators: %s is the image title
 			$content_parts[] = sprintf( __( 'Title: %s', 'echo-knowledge-base' ), $attachment->post_title );
 		}
 		

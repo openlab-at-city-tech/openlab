@@ -7,29 +7,29 @@
                 "lang": "sv_SE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "AI Search": [
-                "AI Sök"
-            ],
             "All": [
                 "Alla"
             ],
             "Disabled": [
                 "Inaktiverad"
             ],
+            "Debug Mode": [
+                "Felsökningsläge"
+            ],
+            "API Key": [
+                "API-nyckel"
+            ],
             "AI Chat": [
                 "AI chatt"
             ],
-            "OpenAI API Key": [
-                "OpenAI API-nyckel"
+            "AI Search": [
+                "AI Sök"
             ],
             "Debug mode updated successfully": [
                 "Felsökningsläget uppdaterades"
             ],
             "Refresh": [
                 "Uppdatera"
-            ],
-            "Status:": [
-                "Status:"
             ],
             "Warnings": [
                 "Varningar"
@@ -70,9 +70,6 @@
             "Error clearing AI logs": [
                 "Fel vid rensning av AI-loggar"
             ],
-            "Debug Mode": [
-                "Felsökningsläge"
-            ],
             "Enable Debug Mode": [
                 "Aktivera felsökningsläge"
             ],
@@ -105,6 +102,9 @@
             ],
             "Total Records:": [
                 "Totalt antal poster:"
+            ],
+            "Status:": [
+                "Status:"
             ],
             "Added:": [
                 "Lagt till:"

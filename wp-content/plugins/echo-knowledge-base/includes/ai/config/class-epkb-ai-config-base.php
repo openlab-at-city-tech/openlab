@@ -42,7 +42,7 @@ abstract class EPKB_AI_Config_Base {
 
 		$specs = static::get_config_fields_specifications();
 		foreach ( $specs as $field_name => $field_spec ) {
-			$default_config[ $field_name ] = static::get_field_default( $field_name );
+			$default_config[ $field_name ] = self::get_field_default( $field_name );
 		}
 		
 		return $default_config;
@@ -60,40 +60,17 @@ abstract class EPKB_AI_Config_Base {
 	}
 
 	/**
-	 * Get a specific configuration value
-	 *
-	 * @param string $field_name Configuration field name
-	 * @param mixed $default Default value if not found or default from specs
-	 * @return mixed
-	 */
-	public static function get_config_value( $field_name, $default = null ) {
-		$config = static::get_config();
-		
-		// If field exists in config, return it
-		if ( isset( $config[ $field_name ] ) ) {
-			return $config[ $field_name ];
-		}
-		
-		// If no default was supplied, get default from field specifications
-		if ( $default === null ) {
-			return static::get_field_default( $field_name );
-		}
-		
-		return $default;
-	}
-
-	/**
 	 * Get configuration from database
 	 *
 	 * @return array
 	 */
-	public static function get_config() {
-		
+	public static function get_ai_config() {
+
 		$option_name = static::OPTION_NAME;
 		
 		// Validate option name is defined
 		if ( empty( $option_name ) ) {
-			return static::get_default_config();
+			return self::get_default_config();
 		}
 		
 		// Return cached configuration if available
@@ -103,7 +80,7 @@ abstract class EPKB_AI_Config_Base {
 		
 		// Get the configuration from WordPress options
 		$config = get_option( $option_name, null );
-		$default_config = static::get_default_config();
+		$default_config = self::get_default_config();
 
 		// If not found, return default configuration
 		if ( $config === null ) {
@@ -114,7 +91,21 @@ abstract class EPKB_AI_Config_Base {
 		
 		// Ensure all fields exist with proper defaults
 		$config = wp_parse_args( $config, $default_config );
-		
+
+		// Migrate old api_key to ai_chatgpt_key for users who missed the upgrade
+		if ( ! empty( $config['api_key'] ) && empty( $config['ai_chatgpt_key'] ) ) {
+			$config['ai_chatgpt_key'] = $config['api_key'];
+			update_option( $option_name, $config, true );
+		}
+
+		// Mask API keys for security - only AI client classes should access the real value
+		if ( ! empty( $config['ai_chatgpt_key'] ) ) {
+			$config['ai_chatgpt_key'] = '********';
+		}
+		if ( ! empty( $config['ai_gemini_key'] ) ) {
+			$config['ai_gemini_key'] = '********';
+		}
+
 		// Cache the configuration
 		self::$cached_config[ $option_name ] = $config;
 		
@@ -140,9 +131,14 @@ abstract class EPKB_AI_Config_Base {
 	 * @param mixed $value New value
 	 * @return bool|WP_Error
 	 */
-	public static function update_config_value( $field_name, $value ) {
+	public static function update_ai_config_value( $field_name, $value ) {
 		$update_data = array( $field_name => $value );
-		$result = static::update_config( $update_data );
+		$result = self::update_config( $update_data );
+
+		// Clear the dashboard status cache when AI config is updated
+		if ( ! is_wp_error( $result ) ) {
+			delete_transient( 'epkb_ai_dashboard_status' );
+		}
 
 		return is_wp_error( $result ) ? $result : true;
 	}
@@ -163,10 +159,10 @@ abstract class EPKB_AI_Config_Base {
 		}
 
 		// Get current configuration
-		$current_config = static::get_config();
+		$current_config = self::get_ai_config();
 		
 		// Validate and sanitize new configuration
-		$validated_config = static::sanitize_config( $new_config, $current_config );
+		$validated_config = self::sanitize_config( $new_config, $current_config );
 		if ( is_wp_error( $validated_config ) ) {
 			return $validated_config;
 		}
@@ -186,9 +182,10 @@ abstract class EPKB_AI_Config_Base {
 		// Clear WordPress object cache
 		wp_cache_delete( $option_name, 'options' );
 
-		// Update our static cache with the new validated config
+		// Let subclasses invalidate any caches that derive from this option, then seed the fresh value.
+		static::clear_cache();
 		self::$cached_config[ $option_name ] = $validated_config;
-		
+
 		return $validated_config;
 	}
 
@@ -229,10 +226,22 @@ abstract class EPKB_AI_Config_Base {
 		$input_filter = new EPKB_Input_Filter();
 		
 		foreach ( $specs as $field_name => $field_spec ) {
-			
+
+			// API key fields are write-only: only update with real values, otherwise preserve existing
+			if ( in_array( $field_name, array( 'ai_chatgpt_key', 'ai_gemini_key' ), true ) ) {
+				if ( isset( $config[$field_name] ) && $config[$field_name] !== '********' && $config[$field_name] !== '' ) {
+					$validated_config[$field_name] = sanitize_text_field( $config[$field_name] );
+				} else {
+					// Preserve existing value from raw database (bypass masked $current_config)
+					$raw_config = get_option( static::OPTION_NAME, array() );
+					$validated_config[$field_name] = isset( $raw_config[$field_name] ) ? $raw_config[$field_name] : '';
+				}
+				continue;
+			}
+
 			// Skip internal fields unless explicitly provided
 			if ( isset( $field_spec['internal'] ) && $field_spec['internal'] && ! isset( $config[ $field_name ] ) ) {
-				$default_value = static::get_field_default( $field_name );
+				$default_value = self::get_field_default( $field_name );
 				$validated_config[ $field_name ] = isset( $current_config[ $field_name ] ) ? $current_config[ $field_name ] : $default_value;
 				continue;
 			}
@@ -243,7 +252,7 @@ abstract class EPKB_AI_Config_Base {
 				
 				// For fields with dynamic options, populate them now
 				if ( isset( $field_spec['type'] ) && $field_spec['type'] === EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT && empty( $field_spec['options'] ) ) {
-					$field_spec['options'] = static::get_field_options( $field_name );
+					$field_spec['options'] = self::get_field_options( $field_name );
 				}
 				
 				// Validate based on field type
@@ -251,12 +260,13 @@ abstract class EPKB_AI_Config_Base {
 				if ( is_wp_error( $validated_value ) ) {
 					$error_message = $validated_value->get_error_message();
 					$field_label = isset( $field_spec['label'] ) ? $field_spec['label'] : $field_name;
-					return new WP_Error( 'validation_failed', sprintf( __( 'Validation failed for %s: %s', 'echo-knowledge-base' ), $field_label, $error_message ) );
+					// translators: %1$s is the field label, %2$s is the error message
+					return new WP_Error( 'validation_failed', sprintf( __( 'Validation failed for %1$s: %2$s', 'echo-knowledge-base' ), $field_label, $error_message ) );
 				}
 				
 				$validated_config[ $field_name ] = $validated_value;
 			} else {
-				$default_value = static::get_field_default( $field_name );
+				$default_value = self::get_field_default( $field_name );
 				$validated_config[ $field_name ] = isset( $current_config[ $field_name ] ) ? $current_config[ $field_name ] : $default_value;
 			}
 		}
@@ -296,7 +306,7 @@ abstract class EPKB_AI_Config_Base {
 				if ( isset( $field_spec['options'] ) && is_array( $field_spec['options'] ) ) {
 					$allowed = array_keys( $field_spec['options'] );
 				}
-				// Note: Can't use static::get_field_default() here since we only have field_spec, not field_name
+				// Note: Can't use self::get_field_default() here since we only have field_spec, not field_name
 				$default_value = isset( $field_spec['default'] ) ? $field_spec['default'] : '';
 				return in_array( $value, $allowed ) ? $value : $default_value;
 				
@@ -307,15 +317,19 @@ abstract class EPKB_AI_Config_Base {
 				if ( ! is_array( $value ) ) {
 					return array();
 				}
-				
+
 				// Sanitize each value in the array
 				$sanitized = array();
 				foreach ( $value as $item ) {
 					$sanitized[] = sanitize_text_field( $item );
 				}
-				
+
 				return $sanitized;
-				
+
+			case EPKB_Input_Filter::AI_PROMPT:
+				// Strip HTML tags but preserve whitespace formatting (newlines, tabs, spaces)
+				return wp_strip_all_tags( $value );
+
 			default:
 				return sanitize_text_field( $value );
 		}

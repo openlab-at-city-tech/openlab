@@ -1,12 +1,9 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 function epkb_get_block_attributes( $block_name ) {
 	$blocks = [
 		'search' => [
 			'kb_id' => [
-				'type' => 'number'
-			],
-			'kb_ai_collection_id' => [
 				'type' => 'number'
 			],
 			'ml_search_layout' => [
@@ -251,6 +248,21 @@ function epkb_get_block_attributes( $block_name ) {
 			'article_list_spacing' => [
 				'type' => 'number'
 			],
+			'article_list_hover_toggle' => [
+				'type' => 'string'
+			],
+			'article_list_hover_background_color' => [
+				'type' => 'string'
+			],
+			'article_list_hover_font_color' => [
+				'type' => 'string'
+			],
+			'section_box_gap' => [
+				'type' => 'number'
+			],
+			'category_box_padding' => [
+				'type' => 'number'
+			],
 			'article_font_color' => [
 				'type' => 'string'
 			],
@@ -445,6 +457,21 @@ function epkb_get_block_attributes( $block_name ) {
 			'article_list_spacing' => [
 				'type' => 'number'
 			],
+			'article_list_hover_toggle' => [
+				'type' => 'string'
+			],
+			'article_list_hover_background_color' => [
+				'type' => 'string'
+			],
+			'article_list_hover_font_color' => [
+				'type' => 'string'
+			],
+			'section_box_gap' => [
+				'type' => 'number'
+			],
+			'category_box_padding' => [
+				'type' => 'number'
+			],
 			'article_font_color' => [
 				'type' => 'string'
 			],
@@ -541,6 +568,9 @@ function epkb_get_block_attributes( $block_name ) {
 				'type' => 'string'
 			],
 			'section_hyperlink_on' => [
+				'type' => 'string'
+			],
+			'section_article_count_mode' => [
 				'type' => 'string'
 			],
 			'section_box_height_mode' => [
@@ -667,6 +697,21 @@ function epkb_get_block_attributes( $block_name ) {
 				'type' => 'number'
 			],
 			'article_list_spacing' => [
+				'type' => 'number'
+			],
+			'article_list_hover_toggle' => [
+				'type' => 'string'
+			],
+			'article_list_hover_background_color' => [
+				'type' => 'string'
+			],
+			'article_list_hover_font_color' => [
+				'type' => 'string'
+			],
+			'section_box_gap' => [
+				'type' => 'number'
+			],
+			'category_box_padding' => [
 				'type' => 'number'
 			],
 			'article_font_color' => [
@@ -804,6 +849,21 @@ function epkb_get_block_attributes( $block_name ) {
 				'type' => 'number'
 			],
 			'article_list_spacing' => [
+				'type' => 'number'
+			],
+			'article_list_hover_toggle' => [
+				'type' => 'string'
+			],
+			'article_list_hover_background_color' => [
+				'type' => 'string'
+			],
+			'article_list_hover_font_color' => [
+				'type' => 'string'
+			],
+			'section_box_gap' => [
+				'type' => 'number'
+			],
+			'category_box_padding' => [
 				'type' => 'number'
 			],
 			'article_font_color' => [
@@ -946,6 +1006,21 @@ function epkb_get_block_attributes( $block_name ) {
 			'article_list_spacing' => [
 				'type' => 'number'
 			],
+			'article_list_hover_toggle' => [
+				'type' => 'string'
+			],
+			'article_list_hover_background_color' => [
+				'type' => 'string'
+			],
+			'article_list_hover_font_color' => [
+				'type' => 'string'
+			],
+			'section_box_gap' => [
+				'type' => 'number'
+			],
+			'category_box_padding' => [
+				'type' => 'number'
+			],
 			'article_font_color' => [
 				'type' => 'string'
 			],
@@ -986,6 +1061,9 @@ function epkb_get_block_attributes( $block_name ) {
 				'type' => 'string'
 			],
 			'ml_categories_articles_back_button_bg_color' => [
+				'type' => 'string'
+			],
+			'ml_categories_articles_category_box_bg_color' => [
 				'type' => 'string'
 			],
 			'ml_categories_articles_category_title_html_tag' => [
@@ -1654,25 +1732,8 @@ function epkb_get_block_attributes( $block_name ) {
 				'type' => 'string'
 			]
 		],
-		'ai-advanced-search' => [
-			'kb_id' => [
-				'type' => 'number'
-			],
-			'block_full_width_toggle' => [
-				'type' => 'string'
-			],
-			'block_max_width' => [
-				'type' => 'number'
-			],
-			'custom_css_class' => [
-				'type' => 'string'
-			]
-		],
 		'advanced-search' => [
 			'kb_id' => [
-				'type' => 'number'
-			],
-			'kb_ai_collection_id' => [
 				'type' => 'number'
 			],
 			'search_multiple_kbs_toggle' => [
@@ -1692,6 +1753,12 @@ function epkb_get_block_attributes( $block_name ) {
 			],
 			'advanced_search_text_highlight_enabled' => [
 				'type' => 'string'
+			],
+			'advanced_search_faqs_toggle' => [
+				'type' => 'string'
+			],
+			'faq_group_ids' => [
+				'type' => 'array'
 			],
 			'advanced_search_mp_auto_complete_wait' => [
 				'type' => 'number'
@@ -1861,10 +1928,22 @@ function epkb_get_block_attributes( $block_name ) {
 			'advanced_search_mp_text_input_background_color' => [
 				'type' => 'string'
 			],
-			'advanced_search_mp_text_input_border_color' => [
-				'type' => 'string'
-			],
-			'advanced_search_mp_filter_category_level' => [
+		'advanced_search_mp_text_input_border_color' => [
+			'type' => 'string'
+		],
+		'advanced_search_mp_ai_search_button_background_color' => [
+			'type' => 'string'
+		],
+		'advanced_search_mp_ai_search_button_text_color' => [
+			'type' => 'string'
+		],
+		'advanced_search_mp_ai_search_button_background_hover_color' => [
+			'type' => 'string'
+		],
+		'advanced_search_mp_ai_search_button_text_hover_color' => [
+			'type' => 'string'
+		],
+		'advanced_search_mp_filter_category_level' => [
 				'type' => 'string'
 			],
 			'advanced_search_mp_filter_toggle' => [
@@ -1974,8 +2053,46 @@ function epkb_get_block_attributes( $block_name ) {
 			'custom_css_class' => [
 				'type' => 'string'
 			]
+		],
+		'articles-index-directory' => [
+			'kb_id' => [
+				'type' => 'number'
+			],
+			'title' => [
+				'type' => 'string'
+			],
+			'block_full_width_toggle' => [
+				'type' => 'string'
+			],
+			'block_max_width' => [
+				'type' => 'number'
+			],
+			'custom_css_class' => [
+				'type' => 'string'
+			]
+		],
+		'glossary-index' => [
+			'glossary_index_accent_color' => [
+				'type' => 'string'
+			],
+			'glossary_index_back_to_top_text' => [
+				'type' => 'string'
+			],
+			'block_full_width_toggle' => [
+				'type' => 'string'
+			],
+			'block_max_width' => [
+				'type' => 'number'
+			],
+			'custom_css_class' => [
+				'type' => 'string'
+			]
 		]
 	];
+
+	if ( ! isset( $blocks[ $block_name ] ) ) {
+		return array();
+	}
 
 	return $blocks[$block_name];
 }

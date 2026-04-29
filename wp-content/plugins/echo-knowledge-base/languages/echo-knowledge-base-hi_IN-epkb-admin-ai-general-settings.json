@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "सेटिंग्स सफलतापूर्वक सहेजी गईं"
             ],
-            "Saving...": [
-                "सहेजा जा रहा है..."
+            "Close": [
+                "बंद करें"
+            ],
+            "Cancel": [
+                "रद्द करें"
             ],
             "Save Settings": [
                 "सेटिंग्स सहेजें"
+            ],
+            "Saving...": [
+                "सहेजा जा रहा है..."
             ],
             "Failed to save settings": [
                 "सेटिंग्स सहेजने में असफल"
@@ -30,6 +36,27 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "टेस्ट ईमेल भेजना विफल रहा। कृपया अपना कनेक्शन जांचें।."
+            ],
+            "Change AI Provider?": [
+                "AI प्रदाता बदलें?"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "AI प्रदाता बदलने से आपकी AI खोज और AI चैट सेटिंग्स प्रभावित होंगी:"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "मशीन लर्निंग डेटा संग्रह विशिष्ट प्रदाता के लिए होते हैं और प्रदाताओं के बीच ट्रांसफर नहीं होते।."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "नई प्रदाता के लिए नई संग्रह बनाएं और उनका प्रशिक्षण दें।."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "चयनित प्रदाता के लिए AI खोज और AI चैट केवल संग्रह दिखाएंगे."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "आपके मौजूदा संग्रह संरक्षित रहेंगे और अगर आप वापस स्विच करेंगे तो उपलब्ध होंगे."
+            ],
+            "Change Provider": [
+                "प्रदाता बदलें"
             ]
         }
     }

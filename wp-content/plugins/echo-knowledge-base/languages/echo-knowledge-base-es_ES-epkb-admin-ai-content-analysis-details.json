@@ -7,14 +7,23 @@
                 "lang": "es_ES",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Demo Article": [
-                "Artículo de demostración"
-            ],
             "Categories": [
                 "Categorías"
             ],
+            "OFF": [
+                "APAGADO"
+            ],
+            "Use code:": [
+                "Usar código:"
+            ],
+            "Copy": [
+                "Copiar"
+            ],
             "Article Content": [
                 "Contenido del artículo"
+            ],
+            "Copied!": [
+                "¡Copiado!"
             ],
             "Analyzing...": [
                 "Analizando..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "Análisis de brechas de contenido"
             ],
+            "Identifies unanswered user questions": [
+                "Identifica preguntas de los usuarios sin respuesta"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "Detecta temas faltantes o poco desarrollados"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "Proporciona recomendaciones accionables para la mejora"
+            ],
             "AI-Powered Tag Suggestions": [
                 "Sugerencias de etiquetas impulsadas por IA"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "El análisis de brechas solo está disponible con el complemento de Funciones de IA."
             ],
             "Readability": [
                 "Legibilidad"
             ],
-            "Tag added successfully": [
-                "Etiqueta añadida con éxito"
-            ],
-            "Tag removed successfully": [
-                "Etiqueta eliminada con éxito"
-            ],
             "Tag updated successfully": [
                 "Etiqueta actualizada con éxito"
+            ],
+            "Get AI Features PRO": [
+                "Obtenga AI Features PRO"
             ],
             "Add New Tag": [
                 "Añadir nueva etiqueta"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "Etiquetas"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "Ver artículo"
             ],
+            "Saving tags...": [
+                "Guardando etiquetas..."
+            ],
             "Failed to save tag changes": [
                 "No se pudieron guardar los cambios de etiqueta"
-            ],
-            "Failed to add tag": [
-                "No se pudo agregar la etiqueta"
-            ],
-            "Failed to remove tag": [
-                "No se pudo eliminar la etiqueta"
-            ],
-            "Failed to remove tags": [
-                "No se pudieron eliminar las etiquetas"
             ],
             "Failed to update tag": [
                 "No se pudo actualizar la etiqueta"
             ],
             "Not Analyzed": [
                 "No analizado"
-            ],
-            "Demo Analysis Data": [
-                "Datos de análisis de demostración"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "Este es un artículo de demostración con datos analíticos de muestra para fines de demostración. Crea tus propios artículos para ver resultados reales del análisis de contenido."
             ],
             "Loading analysis details...": [
                 "Cargando detalles del análisis..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "Se produjo un error durante el análisis de huecos de contenido."
             ],
-            "Learn More About AI Features": [
-                "Aprende más sobre las funciones de IA"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "La IA identifica información faltante y preguntas sin responder en sus artículos. Descubra qué temas requieren más cobertura."
             ],
             "Analyzing article for content gaps...": [
                 "Analizando el artículo para identificar huecos de contenido..."

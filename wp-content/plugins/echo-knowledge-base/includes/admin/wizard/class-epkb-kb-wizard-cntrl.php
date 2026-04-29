@@ -266,6 +266,7 @@ class EPKB_KB_Wizard_Cntrl {
 		$new_kb_config['section_body_background_color'] = '#f5f5f5';
 		$new_kb_config['section_head_background_color'] = '#f5f5f5';
 		$new_kb_config['background_color'] = '';
+		$new_kb_config['article_list_hover_toggle'] = 'on';
 
 		$new_kb_config['ml_row_1_module'] = 'categories_articles';
 		$new_kb_config['ml_row_2_module'] = 'none';
@@ -323,6 +324,12 @@ class EPKB_KB_Wizard_Cntrl {
 		$orig_config = EPKB_Core_Utilities::get_add_ons_config( $kb_id, $orig_config );
 		if ( $orig_config === false ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 500, EPKB_Utilities::get_variable_string( $orig_config ), false ) );
+		}
+
+		// fetch saved block attributes so config reflects block-based KB configuration (for existing block-based KBs)
+		if ( ! $is_setup_run_first_time && EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $orig_config ) ) {
+			$block_attributes = $this->get_layout_block_attributes( $orig_config );
+			$orig_config = empty( $block_attributes ) ? $orig_config : array_merge( $orig_config, $block_attributes );
 		}
 
 		$new_config = $orig_config;
@@ -458,10 +465,30 @@ class EPKB_KB_Wizard_Cntrl {
 
 		EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config, $is_theme_selected );
 
-		// update icons if user chose another theme design
+		// update demo category icons if user chose another theme design
 		if ( $is_theme_selected ) {
-			// if user selects Image theme then change font icons to image icons
-			EPKB_Core_Utilities::get_or_update_new_category_icons( $new_config, $categories_articles_preset_name, true );
+			EPKB_Core_Utilities::get_or_update_demo_category_icons( $new_config, $categories_articles_preset_name, true );
+		}
+
+		// reload saved configuration so blocks use the persisted values (including add-ons)
+		$updated_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+		if ( is_wp_error( $updated_config ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 9, $updated_config, false ) );
+		}
+
+		$updated_config = EPKB_Core_Utilities::get_add_ons_config( $kb_id, $updated_config );
+		if ( $updated_config === false ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 500, 'cannot get add-on config', false ) );
+		}
+
+		$new_config = $updated_config;
+
+		// update KB blocks on the main page if layout or style changed (for existing block-based KBs, not first-time setup)
+		if ( ! $is_setup_run_first_time && EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $orig_config ) ) {
+			$layout_changed = ! empty( $layout_name ) && $layout_name != $orig_config['kb_main_page_layout'];
+			if ( $layout_changed || $is_theme_selected ) {
+				EPKB_Block_Utilities::update_kb_blocks_on_page( $main_page_id, $new_config, $layout_name, $orig_config );
+			}
 		}
 
 		if ( $kb_slug_changed && EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_frontend_editor_write' ) ) {
@@ -485,8 +512,10 @@ class EPKB_KB_Wizard_Cntrl {
 		EPKB_Core_Utilities::remove_kb_flag( 'epkb_run_setup' );
 
 		wp_die( wp_json_encode( array(
-			'message' => 'success',
-			'redirect_to_url' => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $new_config['id'] ) . '&page=epkb-dashboard&epkb_after_kb_setup' ) ) ) );
+			'message'           => 'success',
+			'redirect_to_url'   => admin_url( 'edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $new_config['id'] ) . '&page=epkb-dashboard&epkb_after_kb_setup' ),
+			'kb_main_page_url'  => EPKB_KB_Handler::get_first_kb_main_page_url( $new_config ) . '?epkb_from_setup_wizard',
+		) ) );
 	}
 
 	/**
@@ -559,8 +588,8 @@ class EPKB_KB_Wizard_Cntrl {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 180 ) );
 		}
 
-		$layout_name = EPKB_Utilities::post( 'layout' );
-		if ( empty( $layout_name ) ) {
+		$new_layout_name = EPKB_Utilities::post( 'layout' );
+		if ( empty( $new_layout_name ) ) {
 			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid layout name', 'echo-knowledge-base' ) );
 		}
 
@@ -568,6 +597,12 @@ class EPKB_KB_Wizard_Cntrl {
 		if ( empty( $preset_name ) ) {
 			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid preset name', 'echo-knowledge-base' ) );
 		}
+
+		// Determine preview type: 'layout' for layout step preview, 'preset' for design step preset preview
+		$preview_type = EPKB_Utilities::post( 'preview_type', 'preset' );
+		$is_layout_preview = $preview_type === 'layout';
+		$is_preset_preview = $preview_type === 'preset';
+		$use_new_preset = $is_preset_preview && $preset_name != 'current';
 
 		// set global vars that the layout classes expect (same as FE line 611)
 		$eckb_is_kb_main_page = true;
@@ -584,21 +619,47 @@ class EPKB_KB_Wizard_Cntrl {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 182 ) );
 		}
 
-		// apply the preset theme to the configuration (similar to FE line 627)
-		$new_config = EPKB_KB_Wizard_Themes::get_theme( $preset_name, $orig_config );
+		// fetch saved block attributes so preview reflects block-based KB configuration
+		$has_blocks = EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $orig_config );
+		if ( $has_blocks ) {
+			$block_attributes = $this->get_layout_block_attributes( $orig_config );
+			$orig_config = empty( $block_attributes ) ? $orig_config : array_merge( $orig_config, $block_attributes );
+		}
 
-		// set the layout and enable modular page
-		$new_config['kb_main_page_layout'] = $layout_name;
-		$new_config['modular_main_page_toggle'] = 'on';
-		
-		// disable sidebar for cleaner preview
-		$new_config['ml_categories_articles_sidebar_toggle'] = 'off';
+		// apply the preset theme to the configuration if new preset selected
+		if ( $use_new_preset ) {
+			$new_config = EPKB_KB_Wizard_Themes::get_theme( $preset_name, $orig_config );
+		} else {
+			$new_config = $orig_config;
+		}
 
-		// adjust settings based on layout change - following FE lines 617-623
-		$orig_config['kb_main_page_layout'] = $layout_name; // temporarily set layout to capture change
-		$new_config_result = EPKB_Core_Utilities::adjust_settings_on_layout_change( $orig_config, $new_config );
+		// adjust settings based on layout change
+		$new_config['kb_main_page_layout'] = $new_layout_name;
+		$new_config_result = EPKB_Core_Utilities::adjust_settings_on_layout_change( $orig_config, $new_config, $use_new_preset );
 		$new_config = $new_config_result['new_config'];
 		$seq_meta = $new_config_result['seq_meta'];
+
+		// Try using actual KB data for preview; fall back to demo data only when no data exists
+		$existing_categories_seq_meta = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Categories_Admin::KB_CATEGORIES_SEQ_META, array(), true );
+		$existing_articles_seq_meta = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, array(), true );
+		if ( empty( $seq_meta ) && ! empty( $existing_categories_seq_meta ) && ! empty( $existing_articles_seq_meta ) ) {
+			$seq_meta = array(
+				'articles_seq_meta'   => $existing_articles_seq_meta,
+				'categories_seq_meta' => $existing_categories_seq_meta,
+			);
+		}
+
+		// Set demo category icons only when preset is selected; otherwise layout fetches current icons from DB
+		if ( $use_new_preset && ! empty( $seq_meta ) ) {
+			$seq_meta['category_icons'] = EPKB_Core_Utilities::get_or_update_demo_category_icons( $new_config, $preset_name, false );
+		}
+
+		// preserve search titles if not the first time
+		$is_setup_run_first_time = EPKB_Core_Utilities::run_setup_wizard_first_time() || EPKB_Utilities::post( 'emkb_admin_notice' ) == 'kb_add_success';
+		if ( ! $is_setup_run_first_time ) {
+			$new_config['search_title'] = $orig_config['search_title'];
+			$new_config['article_search_title'] = $orig_config['article_search_title'];
+		}
 
 		// define AMAG constant to bypass permission checks for demo articles
 		if ( ! defined( 'AMAG_PLUGIN_NAME' ) ) {
@@ -608,16 +669,17 @@ class EPKB_KB_Wizard_Cntrl {
 		// start output buffering (FE line 562)
 		ob_start();
 
-		// create and setup the handler (FE lines 631-632)
+		// create and set up the handler
+		// Use current KB data when available; otherwise fall back to demo data (including demo icons)
+		if ( empty( $seq_meta ) ) {
+			$seq_meta = array(
+				'articles_seq_meta'   => $this->get_demo_articles( $new_layout_name ),
+				'categories_seq_meta' => $this->get_demo_categories( $new_layout_name ),
+				'category_icons'      => $this->get_demo_category_icons( $new_config, $new_layout_name, $preset_name ),
+			);
+		}
 		$handler = new EPKB_Modular_Main_Page();
-
-		// ALWAYS use demo data for wizard preview to show consistent previews
-		$demo_seq_meta = array(
-			'articles_seq_meta' => $this->get_demo_articles( $layout_name ),
-			'categories_seq_meta' => $this->get_demo_categories( $layout_name ),
-			'category_icons' => $this->get_demo_category_icons( $new_config, $layout_name, $preset_name )
-		);
-		$handler->setup_layout_data( $new_config, $demo_seq_meta );
+		$handler->setup_layout_data( $new_config, $seq_meta );
 
 		// render the categories and articles module
 		$handler->categories_articles_module( $new_config );
@@ -635,7 +697,7 @@ class EPKB_KB_Wizard_Cntrl {
 
 		// get CSS file URL - for Grid/Sidebar layouts, use Elegant Layouts plugin URL
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		if ( ( $layout_name === 'Grid' || $layout_name === 'Sidebar' ) && class_exists( 'Echo_Elegant_Layouts' ) ) {
+		if ( ( $new_layout_name === 'Grid' || $new_layout_name === 'Sidebar' ) && class_exists( 'Echo_Elegant_Layouts' ) ) {
 			$css_file_url = Echo_Elegant_Layouts::$plugin_url . 'css/' . $css_file_slug . $suffix . '.css?ver=' . Echo_Elegant_Layouts::$version;
 		} else {
 			$css_file_url = Echo_Knowledge_Base::$plugin_url . 'css/' . $css_file_slug . $suffix . '.css?ver=' . Echo_Knowledge_Base::$version;
@@ -644,7 +706,7 @@ class EPKB_KB_Wizard_Cntrl {
 		// check for RTL - use same plugin URL as main CSS
 		$css_file_rtl_url = '';
 		if ( is_rtl() ) {
-			if ( ( $layout_name === 'Grid' || $layout_name === 'Sidebar' ) && class_exists( 'Echo_Elegant_Layouts' ) ) {
+			if ( ( $new_layout_name === 'Grid' || $new_layout_name === 'Sidebar' ) && class_exists( 'Echo_Elegant_Layouts' ) ) {
 				$css_file_rtl_url = Echo_Elegant_Layouts::$plugin_url . 'css/' . $css_file_slug . '-rtl' . $suffix . '.css?ver=' . Echo_Elegant_Layouts::$version;
 			} else {
 				$css_file_rtl_url = Echo_Knowledge_Base::$plugin_url . 'css/' . $css_file_slug . '-rtl' . $suffix . '.css?ver=' . Echo_Knowledge_Base::$version;
@@ -659,6 +721,35 @@ class EPKB_KB_Wizard_Cntrl {
 			'css_file_rtl_url' => $css_file_rtl_url,
 			'css_file_slug' => $css_file_slug
 		) );
+	}
+
+	/**
+	 * Retrieve layout block attributes for block-based KBs so the preview matches current settings.
+	 *
+	 * @param array $kb_config
+	 * @return array
+	 */
+	private function get_layout_block_attributes( $kb_config ) {
+
+		$main_page_id = EPKB_KB_Handler::get_first_kb_main_page_id( $kb_config );
+		if ( empty( $main_page_id ) ) {
+			return array();
+		}
+
+		$main_page = get_post( $main_page_id );
+		if ( empty( $main_page ) ) {
+			return array();
+		}
+
+		$block_attributes = EPKB_Block_Utilities::parse_block_attributes_from_post( $main_page, '-layout' );
+		if ( empty( $block_attributes ) || ! is_array( $block_attributes ) ) {
+			return array();
+		}
+
+		$block_attributes = array_intersect_key( $block_attributes, $kb_config );
+		unset( $block_attributes['kb_main_page_layout'], $block_attributes['kb_id'] );
+
+		return $block_attributes;
 	}
 
 	/**
@@ -761,13 +852,7 @@ class EPKB_KB_Wizard_Cntrl {
 			'epkbfa-cubes'
 		);
 
-		// map theme names that don't have explicit entries to their base themes
-		$theme_name_for_icons = $theme_name;
-		if ( in_array( $theme_name, array( 'office', 'modern', 'office_tabs', 'modern_tabs' ) ) ) {
-			$theme_name_for_icons = 'default';
-		}
-
-		$default_theme_image_icons = EPKB_Icons::get_theme_image_icons( $theme_name_for_icons );
+		$default_theme_image_icons = EPKB_Icons::get_theme_image_icons( $theme_name );
 		$is_photo_icons_preset = EPKB_Icons::is_theme_with_photo_icons( $theme_name );
 
 		// For Tabs layout, generate icons for both top categories (tabs) and sub-categories (boxes) - match frontend structure
@@ -778,24 +863,18 @@ class EPKB_KB_Wizard_Cntrl {
 			$category_ids = range( 2, 7 );
 		}
 
-		// Icon mapping for demo categories to match frontend demo data
-		// For non-tabs layouts: Sales and Marketing, Operations and Logistics, Human Resources, Finance and Expenses, IT Support, Professional Development
-		// Icon theme mapping: 1=Finance, 2=HR, 3=IT, 4=Operations, 5=ProfDev, 6=Sales
-		$icon_mapping = array(
-			2 => 6,  // Sales and Marketing => employee-onboarding
-			3 => 4,  // Operations and Logistics => feedback-form
-			4 => 2,  // Human Resources => task-assignment
-			5 => 1,  // Finance and Expenses => budget
-			6 => 3,  // IT Support => api-integration
-			7 => 5,  // Professional Development => performance-metrics
-			// For Tabs layout subcategories under Department Resources
-			10 => 6, // Sales and Marketing
-			11 => 4, // Operations and Logistics
-			12 => 2, // Human Resources => task-assignment
-			13 => 1, // Finance and Expenses => budget
-			14 => 3, // IT Support => api-integration
-			15 => 5, // Professional Development => performance-metrics
-		);
+		// Keep the special tab preview mapping. Non-tab layouts follow the preset category sequence.
+		$icon_mapping = $layout_name === 'Tabs' ? array(
+			2 => 6,
+			3 => 4,
+			4 => 2,
+			10 => 6,
+			11 => 4,
+			12 => 2,
+			13 => 1,
+			14 => 3,
+			15 => 5,
+		) : array();
 
 		$category_icons = array();
 		foreach ( $category_ids as $index => $category_id ) {

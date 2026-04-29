@@ -37,8 +37,8 @@
             "Content analysis completed successfully!": [
                 "सामग्री विश्लेषण सफलतापूर्वक पूर्ण हुआ!"
             ],
-            "Retry limit reached while contacting OpenAI.": [
-                "OpenAI से संपर्क करते समय पुनः प्रयास की सीमा पहुँच गई है।."
+            "Retry limit reached while contacting AI.": [
+                "AI से संपर्क करते समय पुनः प्रयास की सीमा पहुँच गई।."
             ],
             "Failed to start analysis": [
                 "विश्लेषण शुरू करने में असफल रहा"

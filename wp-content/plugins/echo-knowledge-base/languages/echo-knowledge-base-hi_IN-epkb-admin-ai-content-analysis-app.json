@@ -7,11 +7,11 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Loading...": [
-                "लोड हो रहा है..."
-            ],
             "AI Features Required": [
                 "AI सुविधाओं की आवश्यकता"
+            ],
+            "Loading...": [
+                "लोड हो रहा है..."
             ],
             "Go to AI Settings": [
                 "एआई सेटिंग्स पर जाएँ"

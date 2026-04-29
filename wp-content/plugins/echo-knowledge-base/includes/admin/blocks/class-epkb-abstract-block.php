@@ -53,7 +53,7 @@ abstract class EPKB_Abstract_Block {
 
 		$block_title = $this->block_title;
 		if ( EPKB_Utilities::is_advanced_search_enabled() && $this->block_name == 'search' ) {
-			$block_title = esc_html__( 'KB Basic Search', 'echo-knowledge-base' );
+			$block_title = __( 'KB Basic Search', 'echo-knowledge-base' );
 		}
 
 		register_block_type(
@@ -154,7 +154,7 @@ abstract class EPKB_Abstract_Block {
 		global $post;
 
 		// allow to register block assets only for 'page' post type
-		if ( empty( $post ) || $post->post_type != 'page' ) {
+		if ( empty( $post ) || ! ( $post instanceof WP_Post ) || $post->post_type != 'page' ) {
 			return;
 		}
 
@@ -213,7 +213,7 @@ abstract class EPKB_Abstract_Block {
 		global $post;
 
 		// allow to register block assets only for 'page' post type
-		if ( empty( $post->post_type ) || $post->post_type !== 'page' ) {
+		if ( empty( $post ) || ! ( $post instanceof WP_Post ) || $post->post_type !== 'page' ) {
 			return;
 		}
 
@@ -313,11 +313,11 @@ abstract class EPKB_Abstract_Block {
 					);
 				}
 
-				$block_attributes[ $block_setting_name ]['default'] = $block_config_defaults[ $block_setting_name ];
+				$block_attributes[ $block_setting_name ]['default'] = $this->decode_block_ui_config_strings( $block_config_defaults[ $block_setting_name ] );
 				continue;
 			}
 
-			$block_attributes[ $block_setting_name ]['default'] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $kb_config_defaults[ $block_setting_name ] : '';
+			$block_attributes[ $block_setting_name ]['default'] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $this->decode_block_ui_config_strings( $kb_config_defaults[ $block_setting_name ] ) : '';
 
 			// ensure attributes type to avoid type errors on attributes validation by WordPress blocks core
 			if ( $block_spec['type'] === 'string' ) {
@@ -345,11 +345,11 @@ abstract class EPKB_Abstract_Block {
 
 			// allow block config to set default value instead of KB config
 			if ( isset( $block_config_defaults[ $block_setting_name ] ) ) {
-				$block_attributes_defaults[ $block_setting_name ] = $block_config_defaults[ $block_setting_name ];
+				$block_attributes_defaults[ $block_setting_name ] = $this->decode_block_ui_config_strings( $block_config_defaults[ $block_setting_name ] );
 				continue;
 			}
 
-			$block_attributes_defaults[ $block_setting_name ] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $kb_config_defaults[ $block_setting_name ] : '';
+			$block_attributes_defaults[ $block_setting_name ] = isset( $kb_config_defaults[ $block_setting_name ] ) ? $this->decode_block_ui_config_strings( $kb_config_defaults[ $block_setting_name ] ) : '';
 		}
 
 		return $block_attributes_defaults;
@@ -440,6 +440,11 @@ abstract class EPKB_Abstract_Block {
 			return;
 		}
 
+		// Skip processing when Setup Wizard is updating blocks to preserve template settings
+		if ( EPKB_Utilities::post( 'action' ) == 'epkb_apply_setup_wizard_changes' ) {
+			return;
+		}
+
 		if ( ! current_user_can( 'edit_post', $post_id ) ) {
 			return;
 		}
@@ -452,10 +457,15 @@ abstract class EPKB_Abstract_Block {
 
 		$kb_id = isset( $block_attributes['kb_id'] ) ? $block_attributes['kb_id'] : EPKB_KB_Config_DB::DEFAULT_KB_ID;
 
-		// update search highlight for Advanced Search
+		// update Advanced Search settings in ASEA config when block is saved
 		if ( $this->block_name == 'advanced-search' && EPKB_Utilities::is_advanced_search_enabled() ) {
 			$text_highlight_enabled = isset( $block_attributes['advanced_search_text_highlight_enabled'] ) ? $block_attributes['advanced_search_text_highlight_enabled'] : 'on';
 			do_action( 'eckb_kb_config_save_value', $kb_id, 'advanced_search_text_highlight_enabled', $text_highlight_enabled );
+
+			// Update FAQ toggle only if user explicitly set it in the block
+			if ( isset( $block_attributes['advanced_search_faqs_toggle'] ) ) {
+				do_action( 'eckb_kb_config_save_value', $kb_id, 'advanced_search_faqs_toggle', $block_attributes['advanced_search_faqs_toggle'] );
+			}
 			return;
 		}
 
@@ -476,13 +486,6 @@ abstract class EPKB_Abstract_Block {
 		}
 
 		$updated_kb_config = epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'templates_for_kb', $templates_for_kb );
-
-		// update icons if user chose another theme design
-		if ( isset( $block_attributes['theme_name'] ) && $block_attributes['theme_name'] != 'current' && is_array( $updated_kb_config ) ) {
-			$block_attributes = array_merge( $updated_kb_config, $block_attributes );
-			// if user selects Image theme then change font icons to image icons
-			EPKB_Core_Utilities::get_or_update_new_category_icons( $block_attributes, $block_attributes['theme_name'], true );
-		}
 	}
 
 	/**
@@ -504,12 +507,29 @@ abstract class EPKB_Abstract_Block {
 		$block_attributes['id'] = $kb_config['id'];
 		$block_attributes['status'] = $kb_config['status'];
 		$block_attributes['kb_main_pages'] = $kb_config['kb_main_pages'];
+		$block_attributes['kb_articles_common_path'] = $kb_config['kb_articles_common_path'];
 		$block_attributes['first_plugin_version'] = $kb_config['first_plugin_version'];
 		$block_attributes['upgrade_plugin_version'] = $kb_config['upgrade_plugin_version'];
 		$block_attributes['show_articles_before_categories'] = $this->block_name == 'sidebar-layout' ? $kb_config['sidebar_show_articles_before_categories'] : $kb_config['show_articles_before_categories'];
 		$block_attributes['wpml_is_enabled'] = $kb_config['wpml_is_enabled'];
 		$block_attributes['frontend_editor_switch_visibility_toggle'] = $kb_config['frontend_editor_switch_visibility_toggle'];
 		$block_attributes['frontend_editor_button_shown'] = $kb_config['frontend_editor_button_shown'];
+		$block_attributes['kb_ai_collection_id'] = $kb_config['kb_ai_collection_id'];
+		if ( ! array_key_exists( 'article_list_hover_toggle', $block_attributes ) ) {
+			$block_attributes['article_list_hover_toggle'] = isset( $kb_config['article_list_hover_toggle'] ) ? $kb_config['article_list_hover_toggle'] : 'off';
+		}
+		if ( ! array_key_exists( 'article_list_hover_background_color', $block_attributes ) ) {
+			$block_attributes['article_list_hover_background_color'] = isset( $kb_config['article_list_hover_background_color'] ) ? $kb_config['article_list_hover_background_color'] : '#f5f5f5';
+		}
+		if ( ! array_key_exists( 'article_list_hover_font_color', $block_attributes ) ) {
+			$block_attributes['article_list_hover_font_color'] = isset( $kb_config['article_list_hover_font_color'] ) ? $kb_config['article_list_hover_font_color'] : '#000000';
+		}
+		if ( ! array_key_exists( 'section_box_gap', $block_attributes ) ) {
+			$block_attributes['section_box_gap'] = isset( $kb_config['section_box_gap'] ) ? $kb_config['section_box_gap'] : 20;
+		}
+		if ( ! array_key_exists( 'category_box_padding', $block_attributes ) ) {
+			$block_attributes['category_box_padding'] = isset( $kb_config['category_box_padding'] ) ? $kb_config['category_box_padding'] : 0;
+		}
 
 		// let blocks to hard-code value of certain KB settings regardless of actual KB config value
 		$block_attributes = $this->add_this_block_required_kb_attributes( $block_attributes );
@@ -550,7 +570,7 @@ abstract class EPKB_Abstract_Block {
 	private function get_block_ui_config() {
 
 		$block_ui_config = $this->get_this_block_ui_config();
-		$kb_config_specs = EPKB_Core_Utilities::retrieve_all_kb_specs( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+		$kb_config_specs = EPKB_Core_Utilities::retrieve_all_kb_specs_with_labels( EPKB_KB_Config_DB::DEFAULT_KB_ID );
 
 		foreach ( $block_ui_config as $tab_name => $tab_config ) {
 			foreach ( $tab_config['groups'] as $group_name => $group_config ) {
@@ -578,7 +598,29 @@ abstract class EPKB_Abstract_Block {
 			}
 		}
 
-		return $block_ui_config;
+		return $this->decode_block_ui_config_strings( $block_ui_config );
+	}
+
+	/**
+	 * Block editor labels are rendered by React, so they should be passed as raw text instead of HTML-escaped strings.
+	 *
+	 * @param mixed $value
+	 * @return mixed
+	 */
+	private function decode_block_ui_config_strings( $value ) {
+
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				$value[ $key ] = $this->decode_block_ui_config_strings( $item );
+			}
+			return $value;
+		}
+
+		if ( is_string( $value ) ) {
+			return htmlspecialchars_decode( $value, ENT_QUOTES );
+		}
+
+		return $value;
 	}
 
 	/**
@@ -693,14 +735,14 @@ abstract class EPKB_Abstract_Block {
 		// Localize ONCE here (only when we had to create the canonical).
 		wp_localize_script( $canonical, 'epkb_vars', array(
 			'ajaxurl'           => admin_url( 'admin-ajax.php', 'relative' ),
-			'msg_try_again'     => esc_html__( 'Please try again later.', 'echo-knowledge-base' ),
-			'error_occurred'    => esc_html__( 'Error occurred', 'echo-knowledge-base' ) . ' (1936)',
-			'unknown_error'     => esc_html__( 'Unknown error', 'echo-knowledge-base' ) . ' (1247)',
-			'reload_try_again'  => esc_html__( 'Please reload the page and try again.', 'echo-knowledge-base' ),
-			'save_config'       => esc_html__( 'Saving configuration', 'echo-knowledge-base' ),
-			'input_required'    => esc_html__( 'Input is required', 'echo-knowledge-base' ),
+			'msg_try_again'     => __( 'Please try again later.', 'echo-knowledge-base' ),
+			'error_occurred'    => __( 'Error occurred', 'echo-knowledge-base' ) . ' (1936)',
+			'unknown_error'     => __( 'Unknown error', 'echo-knowledge-base' ) . ' (1247)',
+			'reload_try_again'  => __( 'Please reload the page and try again.', 'echo-knowledge-base' ),
+			'save_config'       => __( 'Saving configuration', 'echo-knowledge-base' ),
+			'input_required'    => __( 'Input is required', 'echo-knowledge-base' ),
 			'nonce'             => wp_create_nonce( "_wpnonce_epkb_ajax_action" ),
-			'creating_demo_data'=> esc_html__( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' ),
+			'creating_demo_data'=> __( 'Creating a Knowledge Base with demo categories and articles. It will be completed shortly.', 'echo-knowledge-base' ),
 		) );
 	}
 

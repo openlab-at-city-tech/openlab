@@ -39,9 +39,9 @@ jQuery(document).ready(function($) {
 		$( 'body' ).append( dialogHtml );
 		
 		// Handle Accept button
-		$( '#epkb-no-kb-main-page-dialog .epkb-dbf__footer__accept__btn' ).on( 'click', function() {
-			window.location.href = setupWizardUrl;
-		});
+			$( '#epkb-no-kb-main-page-dialog .epkb-dbf__footer__accept__btn' ).on( 'click', function() {
+				window.location.href = setupWizardUrl;
+			});
 		
 		// Handle Cancel and Close buttons
 		$( '#epkb-no-kb-main-page-dialog .epkb-dbf__footer__cancel__btn, #epkb-no-kb-main-page-dialog .epkb-dbf__close' ).on( 'click', function() {
@@ -86,16 +86,16 @@ jQuery(document).ready(function($) {
 
 		let selected_option = $( this ).find( 'option:selected' );
 
-		// Do nothing for options added by hook (they should execute their own JS)
-		if ( selected_option.attr( 'data-plugin' ) !== 'core' ) {
-			return;
-		}
+			// Do nothing for options added by hook (they should execute their own JS)
+			if ( selected_option.attr( 'data-plugin' ) !== 'core' ) {
+				return;
+			}
 
 		// Redirect if user does not have access for the current page in the selected KB
-		if ( selected_option.val() === 'closed' ) {
-			window.location = selected_option.attr( 'data-target' );
-			return;
-		}
+			if ( selected_option.val() === 'closed' ) {
+				window.location = selected_option.attr( 'data-target' );
+				return;
+			}
 
 		let current_location_href = window.location.href;
 
@@ -142,7 +142,8 @@ jQuery(document).ready(function($) {
 				admin_eckb_access_addons_news_read: $( '#admin_eckb_access_addons_news_read input[type="radio"]:checked' ).val(),
 				admin_eckb_access_order_articles_write: $( '#admin_eckb_access_order_articles_write input[type="radio"]:checked' ).val(),
 				admin_eckb_access_frontend_editor_write: $( '#admin_eckb_access_frontend_editor_write input[type="radio"]:checked' ).val(),
-				admin_eckb_access_faqs_write: $( '#admin_eckb_access_faqs_write input[type="radio"]:checked' ).val()
+				admin_eckb_access_faqs_write: $( '#admin_eckb_access_faqs_write input[type="radio"]:checked' ).val(),
+				admin_eckb_access_quizzes_write: $( '#admin_eckb_access_quizzes_write input[type="radio"]:checked' ).val()
 			},
 			function( response ) {
 				$( '.eckb-top-notice-message' ).remove();
@@ -250,6 +251,13 @@ jQuery(document).ready(function($) {
 		}
 
 		let list_key = $( this ).attr( 'data-target' );
+
+		// Refresh Glossary Terms tab when coming from AI Generate tab
+		if ( list_key === 'glossary-terms' && $( '.epkb-admin__top-panel__item--active' ).attr( 'data-target' ) === 'glossary-ai-generate' ) {
+			window.location.hash = '#glossary-terms';
+			window.location.reload();
+			return;
+		}
 
 		// Change class for active Top Panel item
 		$( '.epkb-admin__top-panel__item' ).removeClass( active_top_panel_item_class );
@@ -383,6 +391,13 @@ jQuery(document).ready(function($) {
 
 		let active_secondary_panel_item_class = 'epkb-admin__secondary-panel__item--active';
 		let active_secondary_boxes_list_class = 'epkb-setting-box__list--active';
+
+		// If the tab has a URL, open it in a new browser tab
+		let redirect_url = $( this ).attr( 'data-url' );
+		if ( redirect_url ) {
+			window.open( redirect_url, '_blank' );
+			return;
+		}
 
 		// Do nothing for already active item, only make sure we have correct hash in URL
 		if ( $( this ).hasClass( active_secondary_panel_item_class ) ) {
@@ -743,14 +758,6 @@ jQuery(document).ready(function($) {
 		});
 
 		// KB Category Slug Parameter
-		$( '#category_slug_param' ).on( 'keyup', function( e ) {
-			let val = $( this ).val();
-			// allow only letters, numbers, dash, underscore
-			if ( ! val.match( /^[a-zA-Z0-9-_]*$/ ) ) {
-				$( this ).val( val.replace( /[^a-zA-Z0-9-_]/g, '' ) );
-			}
-		});
-
 		$( '#epkb-category-slug-parameter__form' ).on( 'submit', function( e ) {
 			let form = $( this );
 			let postData = {
@@ -771,14 +778,6 @@ jQuery(document).ready(function($) {
 		});
 
 		// KB Tag Slug Parameter
-		$( '#tag_slug_param' ).on( 'keyup', function( e ) {
-			let val = $( this ).val();
-			// allow only letters, numbers, dash, underscore
-			if ( ! val.match( /^[a-zA-Z0-9-_]*$/ ) ) {
-				$( this ).val( val.replace( /[^a-zA-Z0-9-_]/g, '' ) );
-			}
-		});
-
 		$( '#epkb-tag-slug-parameter__form' ).on( 'submit', function( e ) {
 			let form = $( this );
 			let postData = {
@@ -2611,6 +2610,23 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	function get_dashboard_redirect_url_after_feature_disable( kb_config ) {
+
+		const current_url = new URL( window.location.href );
+		const current_page = current_url.searchParams.get( 'page' );
+		const is_glossary_disabled = current_page === 'epkb-glossary' && kb_config.glossary_enable === 'off';
+		const is_quizzes_disabled = current_page === 'epkb-quizzes' && kb_config.quizzes_enable === 'off';
+
+		if ( ! is_glossary_disabled && ! is_quizzes_disabled ) {
+			return '';
+		}
+
+		current_url.searchParams.set( 'page', 'epkb-dashboard' );
+		current_url.hash = '';
+
+		return current_url.toString();
+	}
+
 	/**
 	 * Save button for config tabs
 	 */
@@ -2676,6 +2692,7 @@ jQuery(document).ready(function($) {
 		}
 
 		kb_config.epkb_kb_id = $( '#epkb-list-of-kbs' ).val();
+		let redirect_url = get_dashboard_redirect_url_after_feature_disable( kb_config );
 
 		// Force reload page if:
 		// - Main Page search module is not present
@@ -2683,6 +2700,8 @@ jQuery(document).ready(function($) {
 		if ( ! $( '.epkb-admin__form-tab-content--module-selection [data-value="search"].epkb-input-custom-dropdown__option--selected' ).length && $( '[name="article_search_sync_toggle"]:checked' ).length ) {
 			reload_page = true;
 		}
+
+		const keep_loader_until_reload = reload_page && ! redirect_url.length;
 
 		epkb_send_ajax(
 			{
@@ -2698,7 +2717,9 @@ jQuery(document).ready(function($) {
 					$( '#epkb-list-of-kbs option[value="' + kb_config.epkb_kb_id + '"]' ).html( kb_config.kb_name );
 				}
 
-				if ( reload_page ) {
+				if ( redirect_url.length ) {
+					window.location.href = redirect_url;
+				} else if ( reload_page ) {
 					location.reload();
 				} else {
 					if ( typeof response.message !== 'undefined' ) {
@@ -2707,7 +2728,7 @@ jQuery(document).ready(function($) {
 				}
 			},
 			undefined,
-			reload_page
+			keep_loader_until_reload
 		);
 
 		return false;
@@ -2819,29 +2840,6 @@ jQuery(document).ready(function($) {
 		} );
 	} );
 
-	// Enable or Disable OpenAI setting
-	$( document ).on( 'change', 'input[name="enable_legacy_open_ai"]', function() {
-
-		// Remove old messages
-		$('.eckb-top-notice-message').remove();
-
-		let postData = {
-			action: 'epkb_enable_legacy_open_ai',
-			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
-			enable_legacy_open_ai: $(this).prop('checked') ? 'on' : 'off'
-		};
-
-		epkb_send_ajax( postData, function( response ) {
-			$( '.eckb-top-notice-message' ).remove();
-			if ( typeof response.message !== 'undefined' ) {
-				$( 'body' ).append( response.message );
-			}
-
-			if ( typeof response.html !== 'undefined' ) {
-				$('.epkb-show-sequence-wrap').html( response.html );
-			}
-		} );
-	});
 
 	// Open editor tab when user want to change theme compatibility mode
 	$('[data-open-editor-link]').on('click', function(){
@@ -3496,6 +3494,12 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	// Cancel button in PRO feature ad dialog - closes the dialog
+	$( document ).on( 'click', '.epkb-dialog-pro-feature-ad__cancel-btn', function(e) {
+		e.preventDefault();
+		$( this ).closest( '.epkb-dialog-pro-feature-ad, .epkb-dialog-pro-feature-ad2' ).removeClass( 'epkb-dialog-pro-feature-ad--active' );
+	});
+
 	// If user clicks on the next or previous icon for php function: pro_feature_ad_box_with_images
 	let featureContainers = $( '.epkb-feature-container' );
 	let currentIndex = 0;
@@ -3601,114 +3605,568 @@ jQuery(document).ready(function($) {
 		e.preventDefault();
 		$( '[data-target="faq-shortcodes"]' ).trigger( 'click' );
 	} );
+
+
+	/*************************************************************************************************
+	 *
+	 *          GLOSSARY
+	 *
+	 ************************************************************************************************/
+
+	// Show form for creating a new term
+	$( document ).on( 'click', '#epkb-glossary-create-term', function() {
+		glossary_cancel_inline_edit();
+		$( '#epkb-glossary-term-id' ).val( 0 );
+		$( '#epkb-glossary-term-name' ).val( '' );
+		$( '#epkb-glossary-term-sort-key' ).val( '' );
+		$( '#epkb-glossary-term-definition' ).val( '' );
+		glossary_set_status_toggle( 'publish' );
+		glossary_update_char_counters();
+		$( this ).hide();
+		$( '.epkb-glossary-form-buttons' ).show();
+		$( '#epkb-glossary-form' ).slideDown( 200 );
+		$( '#epkb-glossary-term-name' ).focus();
+		glossary_update_bulk_button();
+	});
+
+	// Cancel form
+	$( document ).on( 'click', '.epkb-glossary-form__cancel', function() {
+		$( '#epkb-glossary-form' ).slideUp( 200 );
+		$( '.epkb-glossary-form-buttons' ).hide();
+		$( '#epkb-glossary-create-term' ).show();
+		glossary_update_bulk_button();
+	});
+
+	// Save term (Add Term form only)
+	$( document ).on( 'click', '.epkb-glossary-form__save', function() {
+
+		let term_name = $( '#epkb-glossary-term-name' ).val().trim();
+		if ( ! term_name.length ) {
+			epkb_show_error_notification( epkb_vars.glossary_name_required || 'Term name is required.' );
+			return;
+		}
+
+		let definition = $( '#epkb-glossary-term-definition' ).val().trim();
+		let status = $( '#epkb-glossary-term-status' ).data( 'value' );
+		if ( status === 'publish' && ! definition.length ) {
+			epkb_show_error_notification( epkb_vars.glossary_definition_required || 'Definition is required for published terms.' );
+			return;
+		}
+
+		let postData = {
+			action: 'epkb_glossary_save_term',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			term_id: $( '#epkb-glossary-term-id' ).val(),
+			term_name: term_name,
+			sort_key: $( '#epkb-glossary-term-sort-key' ).val() || '',
+			definition: definition,
+			status: status
+		};
+
+		epkb_send_ajax( postData, function( response ) {
+			if ( ! response.error && typeof response.message !== 'undefined' ) {
+				epkb_show_success_notification( response.message );
+
+				let data = response.data;
+				let status_label = data.status === 'publish' ? ( epkb_vars.glossary_published || 'Published' ) : ( epkb_vars.glossary_draft || 'Draft' );
+				let status_class = data.status === 'publish' ? 'epkb-glossary-status--publish' : 'epkb-glossary-status--draft';
+
+				let existing_row = $( '.epkb-glossary-term-row[data-term-id="' + data.term_id + '"]' );
+				if ( existing_row.length ) {
+					existing_row.attr( 'data-status', data.status ).attr( 'data-sort-key', data.sort_key || '' );
+					existing_row.find( '.epkb-glossary-term-row__name' ).text( data.name );
+					existing_row.find( '.epkb-glossary-term-row__definition' ).text( data.definition );
+					existing_row.find( '.epkb-glossary-term-row__status' ).html( '<span class="' + status_class + '" title="' + status_label + '"></span>' );
+				} else {
+					$( '.epkb-glossary-empty-row' ).remove();
+					let new_row = '<tr class="epkb-glossary-term-row" data-term-id="' + data.term_id + '" data-status="' + data.status + '" data-sort-key="' + $( '<span>' ).text( data.sort_key || '' ).html() + '">' +
+						'<td class="epkb-glossary-term-row__checkbox"><input type="checkbox" class="epkb-glossary-term-select"></td>' +
+						'<td class="epkb-glossary-term-row__name">' + $( '<span>' ).text( data.name ).html() + '</td>' +
+						'<td class="epkb-glossary-term-row__definition">' + $( '<span>' ).text( data.definition ).html() + '</td>' +
+						'<td class="epkb-glossary-term-row__status"><span class="' + status_class + '" title="' + status_label + '"></span></td>' +
+						'<td class="epkb-glossary-term-row__actions">' +
+							'<button class="epkb-glossary-edit-btn epkb-primary-btn" title="Edit"><span class="epkbfa epkbfa-edit"></span></button>' +
+							'<button class="epkb-glossary-delete-btn epkb-error-btn" title="Delete"><span class="epkbfa epkbfa-trash"></span></button>' +
+						'</td></tr>';
+					$( '.epkb-glossary-terms-table tbody' ).append( new_row );
+				}
+
+				glossary_sort_table();
+				glossary_apply_filters();
+				$( '#epkb-glossary-form' ).slideUp( 200 );
+				$( '.epkb-glossary-form-buttons' ).hide();
+				$( '#epkb-glossary-create-term' ).show();
+				glossary_update_bulk_button();
+			}
+		});
+	});
+
+	// Edit term — inline editing (reads data directly from DOM, no AJAX needed)
+	$( document ).on( 'click', '.epkb-glossary-edit-btn', function() {
+
+		let row = $( this ).closest( '.epkb-glossary-term-row' );
+
+		// If this row is already being edited, do nothing
+		if ( row.hasClass( 'epkb-glossary-term-row--editing' ) ) {
+			return;
+		}
+
+		// Cancel any other active inline edit
+		glossary_cancel_inline_edit();
+
+		// Close the Add Term form if open
+		$( '#epkb-glossary-form' ).slideUp( 200 );
+		$( '.epkb-glossary-form-buttons' ).hide();
+		$( '#epkb-glossary-create-term' ).show();
+
+		// Read data from the row
+		let name = row.find( '.epkb-glossary-term-row__name' ).text();
+		let definition = row.find( '.epkb-glossary-term-row__definition' ).text();
+		let status = row.attr( 'data-status' ) || 'publish';
+		let sort_key = row.attr( 'data-sort-key' ) || '';
+		let is_cjk = $( '#epkb-glossary-terms-list' ).data( 'is-cjk' ) === 1;
+
+		// Store original row HTML for cancel
+		row.data( 'original-html', row.html() );
+		row.addClass( 'epkb-glossary-term-row--editing' );
+
+		// Build inline edit cells
+		let checkbox_cell = '<td class="epkb-glossary-term-row__checkbox"><input type="checkbox" class="epkb-glossary-term-select" disabled></td>';
+		let name_cell = '<td class="epkb-glossary-term-row__name">' +
+			'<input type="text" class="epkb-glossary-inline-input epkb-glossary-inline-name" value="' + $( '<span>' ).text( name ).html() + '" maxlength="100">' +
+			( is_cjk ? '<input type="text" class="epkb-glossary-inline-input epkb-glossary-inline-sort-key" value="' + $( '<span>' ).text( sort_key ).html() + '" maxlength="100" placeholder="' + ( epkb_vars.glossary_sort_key_placeholder || 'Sort key (reading)' ) + '">' : '' ) +
+			'</td>';
+		let def_cell = '<td class="epkb-glossary-term-row__definition">' +
+			'<textarea class="epkb-glossary-inline-textarea" maxlength="500" rows="3">' + $( '<span>' ).text( definition ).html() + '</textarea></td>';
+		let publish_selected = status === 'publish' ? ' selected' : '';
+		let draft_selected = status === 'draft' ? ' selected' : '';
+		let status_cell = '<td class="epkb-glossary-term-row__status">' +
+			'<select class="epkb-glossary-status-select epkb-glossary-inline-status">' +
+				'<option value="publish"' + publish_selected + '>' + ( epkb_vars.glossary_published || 'Published' ) + '</option>' +
+				'<option value="draft"' + draft_selected + '>' + ( epkb_vars.glossary_draft || 'Draft' ) + '</option>' +
+			'</select></td>';
+		let actions_cell = '<td class="epkb-glossary-term-row__actions">' +
+			'<button class="epkb-glossary-inline-save-btn epkb-success-btn" title="Save"><span class="epkbfa epkbfa-check"></span></button>' +
+			'<button class="epkb-glossary-inline-cancel-btn epkb-primary-btn" title="Cancel"><span class="epkbfa epkbfa-times"></span></button>' +
+			'</td>';
+
+		row.html( checkbox_cell + name_cell + def_cell + status_cell + actions_cell );
+		row.find( '.epkb-glossary-inline-name' ).focus();
+	});
+
+	// Inline save
+	$( document ).on( 'click', '.epkb-glossary-inline-save-btn', function() {
+
+		let row = $( this ).closest( '.epkb-glossary-term-row' );
+		let term_id = row.data( 'term-id' );
+		let term_name = row.find( '.epkb-glossary-inline-name' ).val().trim();
+
+		if ( ! term_name.length ) {
+			epkb_show_error_notification( epkb_vars.glossary_name_required || 'Term name is required.' );
+			return;
+		}
+
+		let definition = row.find( '.epkb-glossary-inline-textarea' ).val().trim();
+		let status = row.find( '.epkb-glossary-inline-status' ).val();
+		if ( status === 'publish' && ! definition.length ) {
+			epkb_show_error_notification( epkb_vars.glossary_definition_required || 'Definition is required for published terms.' );
+			return;
+		}
+
+		let postData = {
+			action: 'epkb_glossary_save_term',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			term_id: term_id,
+			term_name: term_name,
+			sort_key: row.find( '.epkb-glossary-inline-sort-key' ).val() || '',
+			definition: definition,
+			status: status
+		};
+
+		epkb_send_ajax( postData, function( response ) {
+			if ( ! response.error && typeof response.message !== 'undefined' ) {
+				epkb_show_success_notification( response.message );
+
+				let data = response.data;
+				let status_label = data.status === 'publish' ? ( epkb_vars.glossary_published || 'Published' ) : ( epkb_vars.glossary_draft || 'Draft' );
+				let status_class = data.status === 'publish' ? 'epkb-glossary-status--publish' : 'epkb-glossary-status--draft';
+
+				// Rebuild normal row
+				row.removeClass( 'epkb-glossary-term-row--editing' ).removeData( 'original-html' );
+				row.attr( 'data-status', data.status ).attr( 'data-sort-key', data.sort_key || '' );
+				row.html(
+					'<td class="epkb-glossary-term-row__checkbox"><input type="checkbox" class="epkb-glossary-term-select"></td>' +
+					'<td class="epkb-glossary-term-row__name">' + $( '<span>' ).text( data.name ).html() + '</td>' +
+					'<td class="epkb-glossary-term-row__definition">' + $( '<span>' ).text( data.definition ).html() + '</td>' +
+					'<td class="epkb-glossary-term-row__status"><span class="' + status_class + '" title="' + status_label + '"></span></td>' +
+					'<td class="epkb-glossary-term-row__actions">' +
+						'<button class="epkb-glossary-edit-btn epkb-primary-btn" title="Edit"><span class="epkbfa epkbfa-edit"></span></button>' +
+						'<button class="epkb-glossary-delete-btn epkb-error-btn" title="Delete"><span class="epkbfa epkbfa-trash"></span></button>' +
+					'</td>'
+				);
+
+				glossary_sort_table();
+				glossary_apply_filters();
+				glossary_update_bulk_button();
+			}
+		});
+	});
+
+	// Inline cancel
+	$( document ).on( 'click', '.epkb-glossary-inline-cancel-btn', function() {
+		glossary_cancel_inline_edit();
+	});
+
+	// Cancel any active inline edit
+	function glossary_cancel_inline_edit() {
+		$( '.epkb-glossary-term-row--editing' ).each( function() {
+			let original = $( this ).data( 'original-html' );
+			if ( original ) {
+				$( this ).html( original );
+			}
+			$( this ).removeClass( 'epkb-glossary-term-row--editing' ).removeData( 'original-html' );
+		});
+	}
+
+	// Delete term
+	$( document ).on( 'click', '.epkb-glossary-delete-btn', function() {
+
+		if ( ! confirm( epkb_vars.glossary_delete_confirm || 'Are you sure you want to delete this term?' ) ) {
+			return;
+		}
+
+		let row = $( this ).closest( '.epkb-glossary-term-row' );
+		let term_id = row.data( 'term-id' );
+
+		let postData = {
+			action: 'epkb_glossary_delete_term',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			term_id: term_id
+		};
+
+		epkb_send_ajax( postData, function( response ) {
+			if ( ! response.error && typeof response.message !== 'undefined' ) {
+				epkb_show_success_notification( response.message );
+				row.remove();
+
+				if ( ! $( '.epkb-glossary-term-row' ).length ) {
+					$( '.epkb-glossary-terms-table tbody' ).append(
+						'<tr class="epkb-glossary-empty-row"><td colspan="5">' + ( epkb_vars.glossary_no_terms_found || 'No glossary terms found. Click "Add Term" to create one.' ) + '</td></tr>'
+					);
+				}
+
+				glossary_update_bulk_button();
+			}
+		});
+	});
+
+	// Filter buttons
+	$( document ).on( 'click', '.epkb-glossary-filter-btn', function() {
+		$( '.epkb-glossary-filter-btn' ).removeClass( 'epkb-glossary-filter-btn--active' );
+		$( this ).addClass( 'epkb-glossary-filter-btn--active' );
+		$( '#epkb-glossary-search-input' ).val( '' );
+		glossary_apply_filters();
+		glossary_update_bulk_button();
+	});
+
+	// Search/filter terms
+	$( document ).on( 'input', '#epkb-glossary-search-input', function() {
+		glossary_apply_filters();
+	});
+
+	// Apply both search and status filters
+	function glossary_apply_filters() {
+		let search = $( '#epkb-glossary-search-input' ).val().toLowerCase();
+		let active_filter = $( '.epkb-glossary-filter-btn--active' ).data( 'filter' ) || 'all';
+
+		$( '.epkb-glossary-term-row' ).each( function() {
+			let row = $( this );
+			let name = row.find( '.epkb-glossary-term-row__name' ).text().toLowerCase();
+			let definition = row.find( '.epkb-glossary-term-row__definition' ).text().toLowerCase();
+			let status = row.attr( 'data-status' );
+
+			let matches_search = ! search || name.indexOf( search ) > -1 || definition.indexOf( search ) > -1;
+			let matches_filter = active_filter === 'all' || status === active_filter;
+
+			row.toggle( matches_search && matches_filter );
+		});
+	}
+
+	// Select-all checkbox
+	$( document ).on( 'change', '#epkb-glossary-select-all', function() {
+		let checked = $( this ).is( ':checked' );
+		$( '.epkb-glossary-term-row:visible .epkb-glossary-term-select' ).prop( 'checked', checked );
+		glossary_update_bulk_button();
+	});
+
+	// Individual checkbox
+	$( document ).on( 'change', '.epkb-glossary-term-select', function() {
+		let all_visible = $( '.epkb-glossary-term-row:visible .epkb-glossary-term-select' );
+		let all_checked = all_visible.length > 0 && all_visible.filter( ':checked' ).length === all_visible.length;
+		$( '#epkb-glossary-select-all' ).prop( 'checked', all_checked );
+		glossary_update_bulk_button();
+	});
+
+	function glossary_get_selected_term_ids() {
+		let term_ids = [];
+		$( '.epkb-glossary-term-row' ).each( function() {
+			if ( $( this ).find( '.epkb-glossary-term-select' ).is( ':checked' ) ) {
+				term_ids.push( $( this ).data( 'term-id' ) );
+			}
+		});
+		return term_ids;
+	}
+
+	// Show/hide bulk action buttons based on selected terms
+	function glossary_update_bulk_button() {
+		let selected_term_ids = glossary_get_selected_term_ids();
+		let has_draft_checked = false;
+		$( '.epkb-glossary-term-row' ).each( function() {
+			if ( $( this ).attr( 'data-status' ) === 'draft' && $( this ).find( '.epkb-glossary-term-select' ).is( ':checked' ) ) {
+				has_draft_checked = true;
+				return false;
+			}
+		});
+		$( '.epkb-glossary-bulk-actions' ).toggle( has_draft_checked );
+		$( '#epkb-glossary-bulk-delete' ).toggle( selected_term_ids.length > 1 && $( '#epkb-glossary-create-term' ).is( ':visible' ) );
+	}
+
+	// Bulk delete
+	$( document ).on( 'click', '#epkb-glossary-bulk-delete', function() {
+
+		let term_ids = glossary_get_selected_term_ids();
+		if ( term_ids.length < 2 ) {
+			return;
+		}
+
+		if ( ! confirm( epkb_vars.glossary_bulk_delete_confirm || 'Are you sure you want to delete the selected terms?' ) ) {
+			return;
+		}
+
+		let postData = {
+			action: 'epkb_glossary_bulk_delete',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			term_ids: term_ids
+		};
+
+		epkb_send_ajax( postData, function( response ) {
+			if ( ! response.error && typeof response.message !== 'undefined' ) {
+				epkb_show_success_notification( response.message || epkb_vars.glossary_terms_deleted || 'Terms deleted' );
+
+				let deleted_term_ids = response.data && Array.isArray( response.data.term_ids ) ? response.data.term_ids : term_ids;
+				deleted_term_ids.forEach( function( id ) {
+					$( '.epkb-glossary-term-row[data-term-id="' + id + '"]' ).remove();
+				});
+
+				$( '.epkb-glossary-term-select, #epkb-glossary-select-all' ).prop( 'checked', false );
+
+				if ( ! $( '.epkb-glossary-term-row' ).length ) {
+					$( '.epkb-glossary-terms-table tbody' ).append(
+						'<tr class="epkb-glossary-empty-row"><td colspan="5">' + ( epkb_vars.glossary_no_terms_found || 'No glossary terms found. Click "Add Term" to create one.' ) + '</td></tr>'
+					);
+				}
+
+				glossary_update_bulk_button();
+				glossary_apply_filters();
+			}
+		});
+	});
+
+	// Bulk publish
+	$( document ).on( 'click', '#epkb-glossary-bulk-publish', function() {
+
+		let term_ids = [];
+		$( '.epkb-glossary-term-row' ).each( function() {
+			if ( $( this ).attr( 'data-status' ) === 'draft' && $( this ).find( '.epkb-glossary-term-select' ).is( ':checked' ) ) {
+				term_ids.push( $( this ).data( 'term-id' ) );
+			}
+		});
+
+		if ( ! term_ids.length ) {
+			return;
+		}
+
+		let postData = {
+			action: 'epkb_glossary_bulk_publish',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			term_ids: term_ids
+		};
+
+		epkb_send_ajax( postData, function( response ) {
+			if ( ! response.error && typeof response.message !== 'undefined' ) {
+				epkb_show_success_notification( response.message );
+
+				let published_label = epkb_vars.glossary_published || 'Published';
+				term_ids.forEach( function( id ) {
+					let row = $( '.epkb-glossary-term-row[data-term-id="' + id + '"]' );
+					row.attr( 'data-status', 'publish' );
+					row.find( '.epkb-glossary-term-row__status' ).html( '<span class="epkb-glossary-status--publish" title="' + published_label + '"></span>' );
+				});
+
+				// Uncheck all
+				$( '.epkb-glossary-term-select, #epkb-glossary-select-all' ).prop( 'checked', false );
+				glossary_update_bulk_button();
+				glossary_apply_filters();
+			}
+		});
+	});
+
+	// Character counters
+	$( document ).on( 'input', '#epkb-glossary-term-name, #epkb-glossary-term-sort-key, #epkb-glossary-term-definition', function() {
+		$( this ).closest( '.epkb-glossary-form-field' ).find( '.epkb-characters_left-counter' ).text( $( this ).val().length );
+	});
+
+	function glossary_update_char_counters() {
+		$( '#epkb-glossary-term-name, #epkb-glossary-term-sort-key, #epkb-glossary-term-definition' ).each( function() {
+			if ( $( this ).length ) {
+				$( this ).closest( '.epkb-glossary-form-field' ).find( '.epkb-characters_left-counter' ).text( $( this ).val().length );
+			}
+		});
+	}
+
+	// Status toggle buttons in Add Term form
+	$( document ).on( 'click', '.epkb-glossary-status-toggle__btn', function() {
+		let toggle = $( this ).closest( '.epkb-glossary-status-toggle' );
+		toggle.find( '.epkb-glossary-status-toggle__btn' ).removeClass( 'epkb-glossary-status-toggle__btn--active' );
+		$( this ).addClass( 'epkb-glossary-status-toggle__btn--active' );
+		toggle.data( 'value', $( this ).data( 'status' ) );
+	});
+
+	// Set status toggle to a specific value
+	function glossary_set_status_toggle( status ) {
+		let toggle = $( '#epkb-glossary-term-status' );
+		toggle.data( 'value', status );
+		toggle.find( '.epkb-glossary-status-toggle__btn' ).removeClass( 'epkb-glossary-status-toggle__btn--active' );
+		toggle.find( '.epkb-glossary-status-toggle__btn[data-status="' + status + '"]' ).addClass( 'epkb-glossary-status-toggle__btn--active' );
+	}
+
+	// Sort glossary table alphabetically
+	function glossary_sort_table() {
+		let tbody = $( '.epkb-glossary-terms-table tbody' );
+		let rows = tbody.find( '.epkb-glossary-term-row' ).get();
+		rows.sort( function( a, b ) {
+			let nameA = $( a ).find( '.epkb-glossary-term-row__name' ).text().toLowerCase();
+			let nameB = $( b ).find( '.epkb-glossary-term-row__name' ).text().toLowerCase();
+			return nameA.localeCompare( nameB );
+		});
+		$.each( rows, function( idx, row ) {
+			tbody.append( row );
+		});
+	}
+
 });
 
 // Dashboard Page Features - wrapped in separate jQuery ready
 jQuery(document).ready(function($) {
 	
 	/*********************************************************************************************
-	 * 
-	 * Dashboard Page - Vote for Features
-	 * 
+	 *
+	 * Dashboard Page - Enable Shared Feature
+	 *
 	 *********************************************************************************************/
-	
-	// Vote for Features dialog functionality
-	let voteDialog = null;
-	
-	$("#epkb-open-vote-dialog").on("click", function() {
-		if (!voteDialog) {
-			voteDialog = $("#epkb-vote-dialog").dialog({
-				modal: true,
-				width: 600,
-				maxWidth: "90%",
-				height: "auto",
-				maxHeight: "80vh",
-				resizable: false,
-				dialogClass: "epkb-vote-features-dialog",
-				buttons: [
-					{
-						text: "Submit Vote",
-						class: "epkb-btn-vote-submit-dialog",
-						click: function() {
-							$("#epkb-kb-vote-features-form").submit();
-						}
-					},
-					{
-						text: "Cancel",
-						click: function() {
-							$(this).dialog("close");
-						}
-					}
-				],
-				open: function() {
-					$(".ui-widget-overlay").on("click", function() {
-						voteDialog.dialog("close");
-					});
-				}
-			});
-		} else {
-			voteDialog.dialog("open");
+
+	function epkb_escape_dashboard_dialog_text( value ) {
+		return $( "<div>" ).text( value || "" ).html();
+	}
+
+	function epkb_close_dashboard_feature_dialog() {
+		$( "#epkb-dashboard-feature-enabled-dialog, .epkb-dialog-box-form-black-background--dashboard-feature" ).remove();
+	}
+
+	function epkb_show_dashboard_feature_dialog( dialogArgs ) {
+		const title = epkb_escape_dashboard_dialog_text( dialogArgs.title );
+		const message = epkb_escape_dashboard_dialog_text( dialogArgs.message );
+		const openLabel = epkb_escape_dashboard_dialog_text( dialogArgs.openLabel );
+		const cancelLabel = epkb_escape_dashboard_dialog_text( dialogArgs.cancelLabel || "Close" );
+		let dialogHtml = "";
+
+		epkb_close_dashboard_feature_dialog();
+
+		dialogHtml += '<div id="epkb-dashboard-feature-enabled-dialog" class="epkb-dialog-box-form epkb-dialog-box-form--active">';
+		dialogHtml += '<div class="epkb-dbf__header"><h4>' + title + "</h4></div>";
+		dialogHtml += '<div class="epkb-dbf__body"><p>' + message + "</p></div>";
+		dialogHtml += '<div class="epkb-dbf__footer">';
+		dialogHtml += '<div class="epkb-dbf__footer__accept epkb-dbf__footer__accept--success">';
+		dialogHtml += '<span class="epkb-accept-button epkb-dbf__footer__accept__btn">' + openLabel + "</span>";
+		dialogHtml += "</div>";
+		dialogHtml += '<div class="epkb-dbf__footer__cancel">';
+		dialogHtml += '<span class="epkb-dbf__footer__cancel__btn">' + cancelLabel + "</span>";
+		dialogHtml += "</div>";
+		dialogHtml += "</div>";
+		dialogHtml += '<div class="epkb-dbf__close epkbfa epkbfa-times"></div>';
+		dialogHtml += "</div>";
+		dialogHtml += '<div class="epkb-dialog-box-form-black-background epkb-dialog-box-form-black-background--dashboard-feature"></div>';
+
+		$( "body" ).append( dialogHtml );
+
+		$( "#epkb-dashboard-feature-enabled-dialog .epkb-dbf__footer__accept__btn" ).on( "click", function() {
+			if ( dialogArgs.openUrl ) {
+				window.location.href = dialogArgs.openUrl;
+				return;
+			}
+
+			epkb_close_dashboard_feature_dialog();
+		} );
+
+		$( "#epkb-dashboard-feature-enabled-dialog .epkb-dbf__footer__cancel__btn, #epkb-dashboard-feature-enabled-dialog .epkb-dbf__close, .epkb-dialog-box-form-black-background--dashboard-feature" ).on( "click", function() {
+			epkb_close_dashboard_feature_dialog();
+		} );
+	}
+
+	$(".epkb-btn-dashboard-feature-enable").on("click", function() {
+		const $btn = $(this);
+		const $card = $btn.closest(".epkb-dashboard-feature-promo");
+		const $message = $card.find(".epkb-dashboard-feature-promo__message");
+		const action = $btn.data("action");
+		const featureLabel = $btn.data("featureLabel") || "";
+		const buttonLabel = $btn.data("buttonLabel") || $btn.text();
+		const loadingLabel = $btn.data("loadingLabel") || "Enabling...";
+		const dialogTitle = $btn.data("dialogTitle") || ( featureLabel + " enabled" );
+		const dialogMessage = $btn.data("dialogMessage") || ( featureLabel + " is now available in the admin menu." );
+		const dialogOpenLabel = $btn.data("dialogOpenLabel") || ( "Open " + featureLabel );
+		const dialogCancelLabel = $btn.data("dialogCancelLabel") || "Close";
+		const dialogOpenUrl = $btn.data("dialogOpenUrl") || "";
+
+		if ( ! action ) {
+			return;
 		}
-	});
-	
-	// Vote form submission
-	$("#epkb-kb-vote-features-form").on("submit", function(e) {
-		e.preventDefault();
-		
-		const $form = $(this);
-		const $message = $form.find(".epkb-vote-message");
-		const $submitBtn = $(".epkb-btn-vote-submit-dialog");
-		const formData = new FormData(this);
-		
-		// Add nonce and action
-		formData.append("_wpnonce_epkb_ajax_action", epkb_vars.nonce);
-		formData.append("action", "epkb_kb_vote_for_features");
-		
-		// Disable submit button and show loading
-		$submitBtn.prop("disabled", true).html("<span class=\"epkbfa epkbfa-spinner epkb-icon-spin\"></span> Submitting...");
-		$message.hide().removeClass("epkb-vote-success epkb-vote-error");
-		
+
+		$btn.prop("disabled", true).html("<span class=\"epkbfa epkbfa-spinner epkb-icon-spin\"></span> " + loadingLabel);
+		$message.hide().removeClass("epkb-dashboard-feature-promo__message--success epkb-dashboard-feature-promo__message--error");
+
 		$.ajax({
 			url: ajaxurl,
 			type: "POST",
-			data: formData,
-			processData: false,
-			contentType: false,
+			data: {
+				action: action,
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce
+			},
 			success: function(response) {
 				if (response.success) {
-					$message.addClass("epkb-vote-success").html(response.data.message).fadeIn();
-					
-					// Close dialog after short delay
-					setTimeout(function() {
-						if (voteDialog) {
-							voteDialog.dialog("close");
-						}
-						// Reset form for next use
-						$form[0].reset();
-						$(".epkb-vote-other-input").hide();
-						$message.hide();
-					}, 2000);
+					$card.slideUp( 200, function() {
+						$( this ).remove();
+					} );
+					var openUrl = dialogOpenUrl;
+					if ( response.data && response.data.show_interest_modal && openUrl ) {
+						openUrl += ( openUrl.indexOf( '?' ) > -1 ? '&' : '?' ) + 'epkb_show_feedback=1';
+					}
+					epkb_show_dashboard_feature_dialog( {
+						title: dialogTitle,
+						message: dialogMessage,
+						openLabel: dialogOpenLabel,
+						cancelLabel: dialogCancelLabel,
+						openUrl: openUrl
+					} );
 				} else {
-					$message.addClass("epkb-vote-error").html(response.data || "An error occurred. Please try again.").fadeIn();
+					$message.addClass("epkb-dashboard-feature-promo__message--error").html(response.data || "Failed to enable " + featureLabel + ". Please try again.").fadeIn();
+					$btn.prop("disabled", false).html(buttonLabel);
 				}
 			},
 			error: function() {
-				$message.addClass("epkb-vote-error").html("Failed to submit vote. Please try again.").fadeIn();
-			},
-			complete: function() {
-				$submitBtn.prop("disabled", false).text("Submit Vote");
+				$message.addClass("epkb-dashboard-feature-promo__message--error").html("Failed to enable " + featureLabel + ". Please try again.").fadeIn();
+				$btn.prop("disabled", false).html(buttonLabel);
 			}
 		});
-	});
-	
-	// Show/hide custom feature input
-	$(document).on("change", "input[name=\"features[]\"][value=\"custom-feature\"]", function() {
-		if ($(this).is(":checked")) {
-			$(".epkb-vote-other-input").slideDown();
-		} else {
-			$(".epkb-vote-other-input").slideUp();
-			$("textarea[name=\"other_feature_text\"]").val("");
-		}
 	});
 
 	/*********************************************************************************************
@@ -3874,6 +4332,20 @@ jQuery(document).ready(function($) {
 		var totalSlides = $( '.epkb-feature-slide' ).length;
 		var carouselInterval = null;
 
+		function updateFeaturesCta() {
+			var $ctaButton = $( '.epkb-btn-features-primary' );
+			var $activeSlide = $( '.epkb-feature-slide[data-slide="' + currentSlide + '"]' );
+			var ctaUrl = $activeSlide.attr( 'data-cta-url' ) || $ctaButton.attr( 'data-default-url' );
+			var ctaText = $activeSlide.attr( 'data-cta-text' ) || $ctaButton.attr( 'data-default-text' );
+
+			if ( ! $ctaButton.length ) {
+				return;
+			}
+
+			$ctaButton.attr( 'href', ctaUrl );
+			$ctaButton.find( '.epkb-features-cta-label' ).text( ctaText );
+		}
+
 		// Function to show specific slide
 		function showSlide( slideIndex ) {
 			// Wrap around if needed
@@ -3892,7 +4364,10 @@ jQuery(document).ready(function($) {
 			// Show current slide
 			$( '.epkb-feature-slide[data-slide="' + currentSlide + '"]' ).addClass( 'epkb-feature-slide--active' );
 			$( '.epkb-carousel-dot[data-slide="' + currentSlide + '"]' ).addClass( 'epkb-carousel-dot--active' );
+			updateFeaturesCta();
 		}
+
+		updateFeaturesCta();
 
 		// Previous button click
 		$( document ).on( 'click', '.epkb-carousel-btn--prev', function() {
@@ -3977,5 +4452,1146 @@ jQuery(document).ready(function($) {
 			}
 		}
 	});
+
+	// Discount coupon Copy button
+	$( document ).on( 'click', '.epkb-ad-discount-copy-btn', function() {
+		var btn = $( this );
+		var code = btn.data( 'code' );
+		if ( ! code ) return;
+
+		var originalText = btn.text();
+		var onCopied = function() {
+			btn.text( epkb_vars.copied_text || 'Copied!' ).addClass( 'copied' );
+			setTimeout( function() { btn.text( originalText ).removeClass( 'copied' ); }, 2000 );
+		};
+
+		if ( navigator.clipboard && navigator.clipboard.writeText ) {
+			navigator.clipboard.writeText( code ).then( onCopied ).catch( function() {
+				epkbFallbackCopy( code, onCopied );
+			});
+		} else {
+			epkbFallbackCopy( code, onCopied );
+		}
+	});
+
+	function epkbFallbackCopy( text, onSuccess ) {
+		var ta = document.createElement( 'textarea' );
+		ta.value = text;
+		ta.style.position = 'fixed';
+		ta.style.left = '-999999px';
+		document.body.appendChild( ta );
+		ta.select();
+		try { if ( document.execCommand( 'copy' ) && onSuccess ) onSuccess(); } catch(e) {}
+		document.body.removeChild( ta );
+	}
+
+
+	/******************************************************************************************************************************************************************************************
+	 *
+	 *                PDF IMPORT
+	 *
+	 *****************************************************************************************************************************************************************************************/
+
+	let pdfImportFiles = [];
+	let pdfDebugEnabled = false;
+	let pdfImportQueue = [];
+	let pdfImportCurrentIndex = 0;
+	let pdfImportProcess = {
+		phase: 'idle',
+		cancelRequested: false,
+		activeIndex: -1,
+		totalCount: 0,
+		processedCount: 0
+	};
+
+	// Debug mode toggle
+	$( document ).on( 'change', '#epkb-pdf-debug-toggle', function() {
+		pdfDebugEnabled = $( this ).is( ':checked' );
+		$( '#epkb-pdf-debug-wrap' ).toggleClass( 'epkb-hidden', ! pdfDebugEnabled );
+		if ( pdfDebugEnabled ) {
+			$( '#epkb-pdf-debug-log' ).val( '' );
+		}
+	} );
+
+	function epkb_pdf_debug_log( msg ) {
+		if ( ! pdfDebugEnabled ) {
+			return;
+		}
+		let $log = $( '#epkb-pdf-debug-log' );
+		let time = new Date().toLocaleTimeString();
+		$log.val( $log.val() + '[' + time + '] ' + msg + '\n' );
+		$log[0].scrollTop = $log[0].scrollHeight;
+	}
+
+	function epkb_pdf_reset_batch_state() {
+		pdfImportQueue = [];
+		pdfImportCurrentIndex = 0;
+		pdfImportProcess = {
+			phase: 'idle',
+			cancelRequested: false,
+			activeIndex: -1,
+			totalCount: 0,
+			processedCount: 0
+		};
+	}
+
+	function epkb_pdf_is_busy() {
+		return pdfImportProcess.phase === 'preparing' || pdfImportProcess.phase === 'saving';
+	}
+
+	function epkb_pdf_show_ai_consent_dialog() {
+		return new Promise( function( resolve ) {
+			let dialogHtml =
+				'<div id="epkb-pdf-ai-consent-dialog" class="epkb-dialog-box-form epkb-dialog-box-form--active">' +
+					'<div class="epkb-dbf__header"><h4>' + ( epkb_vars.pdf_ai_consent_title || 'Use AI to Extract Text?' ) + '</h4></div>' +
+					'<div class="epkb-dbf__body">' + ( epkb_vars.pdf_ai_consent_msg || '' ) + '</div>' +
+					'<div class="epkb-dbf__footer">' +
+						'<div class="epkb-dbf__footer__accept epkb-dbf__footer__accept--success">' +
+							'<span class="epkb-accept-button epkb-dbf__footer__accept__btn">' + ( epkb_vars.pdf_ai_consent_yes || 'Yes, Use AI' ) + '</span>' +
+						'</div>' +
+						'<div class="epkb-dbf__footer__cancel">' +
+							'<span class="epkb-dbf__footer__cancel__btn">' + ( epkb_vars.cancel_text || 'Cancel' ) + '</span>' +
+						'</div>' +
+					'</div>' +
+					'<div class="epkb-dbf__close epkbfa epkbfa-times"></div>' +
+				'</div>' +
+				'<div class="epkb-dialog-box-form-black-background"></div>';
+			$( 'body' ).append( dialogHtml );
+			$( '#epkb-pdf-ai-consent-dialog .epkb-dbf__footer__accept__btn' ).on( 'click', function() {
+				$( '#epkb-pdf-ai-consent-dialog, .epkb-dialog-box-form-black-background' ).remove();
+				resolve( true );
+			} );
+			$( '#epkb-pdf-ai-consent-dialog .epkb-dbf__footer__cancel__btn, #epkb-pdf-ai-consent-dialog .epkb-dbf__close' ).on( 'click', function() {
+				$( '#epkb-pdf-ai-consent-dialog, .epkb-dialog-box-form-black-background' ).remove();
+				resolve( false );
+			} );
+		} );
+	}
+
+	function epkb_pdf_reset_form( $form ) {
+		pdfImportFiles = [];
+		epkb_pdf_reset_batch_state();
+		$form.find( '#epkb-pdf-file-list' ).empty();
+		$form.find( '.epkb-pdf-import__file-input' ).val( '' );
+		$form.find( '#epkb-pdf-debug-log' ).val( '' );
+		$form.find( '.epkb-pdf-import-step' ).addClass( 'epkb-hidden' );
+		$form.find( '.epkb-pdf-import-step--1' ).removeClass( 'epkb-hidden' );
+		$form.find( '.epkb-pdf-import__start-btn' ).removeClass( 'epkb-hidden' );
+		$form.find( '.epkb-pdf-import__save-all-btn, .epkb-pdf-import__cancel-btn' ).addClass( 'epkb-hidden' ).prop( 'disabled', false );
+		$form.find( '.epkb-pdf-import__back-btn' ).prop( 'disabled', false );
+	}
+
+	function epkb_pdf_get_active_files() {
+		return pdfImportFiles.filter( function( file ) {
+			return file !== null;
+		} );
+	}
+
+	function epkb_pdf_escape_html( text ) {
+		return $( '<span>' ).text( text || '' ).html();
+	}
+
+	function epkb_pdf_extract_ajax_error( xhr, fallbackError ) {
+		let msg = '';
+		try {
+			let json = typeof xhr.responseJSON === 'object' ? xhr.responseJSON : JSON.parse( xhr.responseText || '{}' );
+			if ( json.message ) {
+				msg = $( '<div>' ).html( json.message ).text().trim();
+			}
+		} catch ( e ) {}
+		let status = xhr.status ? ' (' + xhr.status + ')' : '';
+		return msg || ( ( fallbackError || 'AJAX error' ) + status );
+	}
+
+	function epkb_pdf_read_file_as_base64( file ) {
+		if ( window.AIPRO_PDF_Utils && typeof window.AIPRO_PDF_Utils.readFileAsBase64 === 'function' ) {
+			return window.AIPRO_PDF_Utils.readFileAsBase64( file );
+		}
+
+		return new Promise( function( resolve, reject ) {
+			let reader = new FileReader();
+			reader.onload = function() {
+				let result = typeof reader.result === 'string' ? reader.result : '';
+				resolve( result.indexOf( ',' ) !== -1 ? result.split( ',' )[1] : result );
+			};
+			reader.onerror = function() {
+				reject( new Error( epkb_vars.pdf_prepare_failed || 'Failed to prepare PDF preview' ) );
+			};
+			reader.readAsDataURL( file );
+		} );
+	}
+
+	function epkb_pdf_validate_file( file ) {
+		let fileName = file && typeof file.name === 'string' ? file.name.toLowerCase() : '';
+		let fileType = file && typeof file.type === 'string' ? file.type.toLowerCase() : '';
+		let fileSize = file && file.size !== undefined ? Number( file.size ) || 0 : 0;
+		let maxPdfFileSize = epkb_vars.max_pdf_file_size !== undefined ? Number( epkb_vars.max_pdf_file_size ) || 0 : 0;
+		let isPdf = !! ( window.AIPRO_PDF_Utils && typeof window.AIPRO_PDF_Utils.isPdfFile === 'function'
+			? window.AIPRO_PDF_Utils.isPdfFile( file )
+			: file && ( fileType.indexOf( 'pdf' ) !== -1 || fileName.slice( -4 ) === '.pdf' ) );
+
+		if ( ! isPdf ) {
+			return {
+				valid: false,
+				error: epkb_vars.pdf_invalid_file || 'Please select a valid PDF file.'
+			};
+		}
+
+		if ( maxPdfFileSize && fileSize > maxPdfFileSize ) {
+			return {
+				valid: false,
+				error: epkb_vars.pdf_too_large || 'PDF file exceeds the file size limit.'
+			};
+		}
+
+		return {
+			valid: true,
+			error: ''
+		};
+	}
+
+	function epkb_pdf_validate_media_attachment( attachment ) {
+		return epkb_pdf_validate_file( {
+			name: attachment && typeof attachment.filename === 'string' ? attachment.filename : '',
+			size: attachment && attachment.filesizeInBytes !== undefined ? Number( attachment.filesizeInBytes ) || 0 : 0,
+			type: attachment && typeof attachment.mime === 'string' ? attachment.mime : 'application/pdf'
+		} );
+	}
+
+	function epkb_pdf_format_validation_error( fileName, errorMessage ) {
+		return fileName ? fileName + ': ' + errorMessage : errorMessage;
+	}
+
+	function epkb_pdf_is_duplicate_file( file, pendingFiles ) {
+		pendingFiles = Array.isArray( pendingFiles ) ? pendingFiles : [];
+
+		return pdfImportFiles.some( function( queuedFile ) {
+			return queuedFile !== null &&
+				queuedFile.name === file.name &&
+				queuedFile.size === file.size;
+		} ) || pendingFiles.some( function( queuedFile ) {
+			return queuedFile.name === file.name &&
+				queuedFile.size === file.size;
+		} );
+	}
+
+	function epkb_pdf_get_counts() {
+		let counts = {
+			total: pdfImportQueue.length,
+			queued: 0,
+			preparing: 0,
+			ready: 0,
+			selectedReady: 0,
+			error: 0,
+			saving: 0,
+			saved: 0,
+			canceled: 0,
+			skipped: 0
+		};
+
+		pdfImportQueue.forEach( function( item ) {
+			if ( counts[ item.status ] !== undefined ) {
+				counts[ item.status ]++;
+			}
+			if ( item.status === 'ready' && item.includeInSave ) {
+				counts.selectedReady++;
+			}
+		} );
+
+		return counts;
+	}
+
+	function epkb_pdf_get_status_label( status ) {
+		switch ( status ) {
+			case 'queued':
+				return epkb_vars.pdf_status_queued || 'Queued';
+			case 'preparing':
+				return epkb_vars.pdf_processing || 'Processing';
+			case 'ready':
+				return epkb_vars.pdf_status_ready || 'Ready';
+			case 'error':
+				return epkb_vars.pdf_status_error || 'Error';
+			case 'saving':
+				return epkb_vars.pdf_status_saving || 'Saving';
+			case 'saved':
+				return epkb_vars.pdf_status_saved || 'Saved';
+			case 'canceled':
+				return epkb_vars.pdf_status_canceled || 'Canceled';
+			case 'skipped':
+				return epkb_vars.pdf_status_skipped || 'Skipped';
+			default:
+				return status || '';
+		}
+	}
+
+	function epkb_pdf_get_status_icon_class( status ) {
+		switch ( status ) {
+			case 'preparing':
+			case 'saving':
+				return 'epkbfa-spinner epkb-icon-spin';
+			case 'ready':
+			case 'saved':
+				return 'epkbfa-check-circle';
+			case 'error':
+				return 'epkbfa-exclamation-triangle';
+			case 'canceled':
+				return 'epkbfa-ban';
+			case 'skipped':
+				return 'epkbfa-forward';
+			default:
+				return 'epkbfa-clock-o';
+		}
+	}
+
+	function epkb_pdf_update_footer( $form ) {
+		let $startBtn = $form.find( '.epkb-pdf-import__start-btn' );
+		let $cancelBtn = $form.find( '.epkb-pdf-import__cancel-btn' );
+		let $saveAllBtn = $form.find( '.epkb-pdf-import__save-all-btn' );
+		let $backBtn = $form.find( '.epkb-pdf-import__back-btn' );
+		let isStepTwoVisible = $form.find( '.epkb-pdf-import-step--2:visible' ).length > 0;
+		let isStepThreeVisible = $form.find( '.epkb-pdf-import-step--3:visible' ).length > 0;
+		let counts = epkb_pdf_get_counts();
+		let hasSelectedReadyItems = counts.selectedReady > 0;
+		let saveAllLabel = $saveAllBtn.data( 'default-label' ) || $.trim( $saveAllBtn.text() ) || epkb_vars.pdf_save_all || 'Save All Selected';
+		let cancelLabel = $cancelBtn.data( 'default-label' ) || $.trim( $cancelBtn.text() ) || epkb_vars.cancel_text || 'Cancel';
+
+		$saveAllBtn.data( 'default-label', saveAllLabel );
+		$cancelBtn.data( 'default-label', cancelLabel );
+
+		if ( isStepTwoVisible ) {
+			$startBtn.addClass( 'epkb-hidden' );
+		}
+		if ( isStepThreeVisible ) {
+			$startBtn.addClass( 'epkb-hidden' );
+			$cancelBtn.addClass( 'epkb-hidden' ).prop( 'disabled', false ).text( cancelLabel );
+			$saveAllBtn.addClass( 'epkb-hidden' ).prop( 'disabled', false ).text( saveAllLabel );
+			$backBtn.prop( 'disabled', false );
+			return;
+		}
+
+		if ( ! isStepTwoVisible ) {
+			$cancelBtn.addClass( 'epkb-hidden' ).prop( 'disabled', false ).text( cancelLabel );
+			$saveAllBtn.addClass( 'epkb-hidden' ).prop( 'disabled', false ).text( saveAllLabel );
+			$backBtn.prop( 'disabled', false );
+			$startBtn.removeClass( 'epkb-hidden' );
+			return;
+		}
+
+		if ( epkb_pdf_is_busy() ) {
+			$cancelBtn.removeClass( 'epkb-hidden' );
+			$cancelBtn.prop( 'disabled', pdfImportProcess.cancelRequested );
+			$cancelBtn.text( pdfImportProcess.cancelRequested ? ( epkb_vars.pdf_canceling || 'Canceling...' ) : cancelLabel );
+			$saveAllBtn.addClass( 'epkb-hidden' ).prop( 'disabled', false ).text( saveAllLabel );
+			$backBtn.prop( 'disabled', true );
+			return;
+		}
+
+		$cancelBtn.addClass( 'epkb-hidden' ).prop( 'disabled', false ).text( cancelLabel );
+		$saveAllBtn.toggleClass( 'epkb-hidden', ! counts.ready );
+		$saveAllBtn.prop( 'disabled', ! hasSelectedReadyItems );
+		$saveAllBtn.text( saveAllLabel );
+		$backBtn.prop( 'disabled', false );
+	}
+
+	function epkb_pdf_update_batch_summary( $form ) {
+		let counts = epkb_pdf_get_counts();
+		let $label = $form.find( '#epkb-pdf-batch-status-label' );
+		let $detail = $form.find( '#epkb-pdf-batch-status-detail' );
+		let $counts = $form.find( '#epkb-pdf-batch-summary-counts' );
+		let labelText = epkb_vars.pdf_ready_to_convert || 'Ready to convert';
+		let detailText = '';
+		let currentCount = Math.min( pdfImportProcess.processedCount + ( pdfImportProcess.activeIndex !== -1 ? 1 : 0 ), pdfImportProcess.totalCount );
+
+		if ( pdfImportProcess.phase === 'preparing' ) {
+			labelText = epkb_vars.pdf_converting || 'Converting PDFs';
+			detailText = ( epkb_vars.pdf_processing || 'Processing' ) + ' ' + currentCount + ' ' + ( epkb_vars.pdf_of || 'of' ) + ' ' + pdfImportProcess.totalCount;
+		} else if ( pdfImportProcess.phase === 'prepared' ) {
+			labelText = epkb_vars.pdf_conversion_complete || 'Conversion complete';
+			detailText = counts.ready + ' ' + ( epkb_vars.pdf_ready || 'ready' ) + ', ' + counts.error + ' ' + ( epkb_vars.pdf_errors || 'errors' );
+		} else if ( pdfImportProcess.phase === 'canceled' ) {
+			labelText = epkb_vars.pdf_conversion_canceled || 'Conversion canceled';
+			detailText = counts.ready + ' ' + ( epkb_vars.pdf_ready || 'ready' ) + ', ' + counts.error + ' ' + ( epkb_vars.pdf_errors || 'errors' ) + ', ' + counts.canceled + ' ' + ( epkb_vars.pdf_canceled_label || 'canceled' );
+		} else if ( pdfImportProcess.phase === 'saving' ) {
+			labelText = epkb_vars.pdf_saving_all || 'Saving articles';
+			detailText = ( epkb_vars.pdf_saving || 'Saving' ) + ' ' + currentCount + ' ' + ( epkb_vars.pdf_of || 'of' ) + ' ' + pdfImportProcess.totalCount;
+		}
+
+		$label.text( labelText );
+		$detail.text( detailText );
+
+		$counts.html(
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.total + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_total || 'Total' ) + '</span>' +
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.ready + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_ready || 'Ready' ) + '</span>' +
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.selectedReady + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_selected_label || 'Selected' ) + '</span>' +
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.error + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_errors || 'Errors' ) + '</span>' +
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.saved + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_saved_label || 'Saved' ) + '</span>' +
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.canceled + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_canceled_label || 'Canceled' ) + '</span>' +
+				'<span class="epkb-pdf-import__batch-count"><strong>' + counts.skipped + '</strong> ' + epkb_pdf_escape_html( epkb_vars.pdf_skipped_label || 'Skipped' ) + '</span>'
+		);
+	}
+
+	function epkb_pdf_render_queue( $form ) {
+		let $sidebar = $form.find( '#epkb-pdf-review-sidebar' );
+		$sidebar.empty();
+
+		for ( let index = 0; index < pdfImportQueue.length; index++ ) {
+			let item = pdfImportQueue[index];
+			let statusText = epkb_pdf_get_status_label( item.status || 'queued' );
+			if ( item.status === 'ready' && ! item.includeInSave ) {
+				statusText += ' - ' + ( epkb_vars.pdf_not_selected_short || 'Not selected' );
+			}
+			let statusClass = item.status || 'queued';
+			let statusIconClass = epkb_pdf_get_status_icon_class( statusClass );
+			let activeClass = index === pdfImportCurrentIndex ? ' is-active' : '';
+			let isProcessing = epkb_pdf_is_busy() && index === pdfImportProcess.activeIndex;
+			let processingClass = isProcessing ? ' is-processing' : '';
+			let processingLabel = epkb_vars.pdf_processing || 'Processing';
+			let processingBadge = isProcessing ?
+				'<span class="epkb-pdf-import__queue-item-current"><i class="epkbfa epkbfa-spinner epkb-icon-spin"></i><span>' + epkb_pdf_escape_html( processingLabel ) + '</span></span>' :
+				'';
+			let includeLabel = epkb_vars.pdf_selected_label || 'Selected';
+			let checkboxDisabled = epkb_pdf_is_busy() || item.status === 'saved' ? ' disabled' : '';
+			let checkboxChecked = item.includeInSave ? ' checked' : '';
+			let selectionControl = item.status === 'ready' ?
+				'<label class="epkb-pdf-import__queue-item-selection">' +
+					'<input type="checkbox" class="epkb-pdf-import__queue-item-include" data-index="' + index + '"' + checkboxChecked + checkboxDisabled + '>' +
+					'<span>' + epkb_pdf_escape_html( includeLabel ) + '</span>' +
+				'</label>' :
+				'';
+			let statusBadge = ! isProcessing ?
+				'<span class="epkb-pdf-import__queue-item-status"><i class="epkbfa ' + epkb_pdf_escape_html( statusIconClass ) + '"></i><span>' + epkb_pdf_escape_html( statusText ) + '</span></span>' :
+				'';
+			$sidebar.append(
+				'<div class="epkb-pdf-import__queue-item epkb-pdf-import__queue-item--' + epkb_pdf_escape_html( statusClass ) + activeClass + processingClass + '" data-index="' + index + '" role="button" tabindex="0">' +
+					'<div class="epkb-pdf-import__queue-item-body">' +
+						'<div class="epkb-pdf-import__queue-item-meta">' +
+							statusBadge +
+							processingBadge +
+						'</div>' +
+						'<span class="epkb-pdf-import__queue-item-name">' + epkb_pdf_escape_html( item.title || item.fileName ) + '</span>' +
+					'</div>' +
+					selectionControl +
+				'</div>'
+			);
+		}
+	}
+
+	function epkb_pdf_render_review( $form ) {
+		let item = pdfImportQueue[pdfImportCurrentIndex];
+		if ( ! item ) {
+			epkb_pdf_update_batch_summary( $form );
+			epkb_pdf_update_footer( $form );
+			return;
+		}
+
+		epkb_pdf_render_queue( $form );
+		epkb_pdf_update_batch_summary( $form );
+		epkb_pdf_update_footer( $form );
+
+		$form.find( '#epkb-pdf-review-counter' ).text( ( pdfImportCurrentIndex + 1 ) + ' ' + ( epkb_vars.pdf_of || 'of' ) + ' ' + pdfImportQueue.length );
+		$form.find( '#epkb-pdf-review-file-name' ).text( item.fileName );
+		$form.find( '#epkb-pdf-review-title' ).val( item.title || '' ).prop( 'disabled', item.status !== 'ready' || epkb_pdf_is_busy() );
+
+		let $status = $form.find( '#epkb-pdf-review-status' );
+		let $preview = $form.find( '#epkb-pdf-review-preview' );
+		let $retryBtn = $form.find( '.epkb-pdf-import__review-retry-btn' );
+
+		$status.removeClass( 'epkb-pdf-import__review-status--error epkb-pdf-import__review-status--info' );
+		$preview.empty();
+		$retryBtn.toggleClass( 'epkb-hidden', item.status !== 'error' || epkb_pdf_is_busy() );
+
+		if ( item.status === 'preparing' ) {
+			$status.addClass( 'epkb-pdf-import__review-status--info' ).text( epkb_vars.pdf_processing || 'Processing' );
+			$preview.html( '<div class="epkb-pdf-import__preview-placeholder">' + epkb_pdf_escape_html( epkb_vars.pdf_processing || 'Processing' ) + '</div>' );
+			return;
+		}
+
+		if ( item.status === 'queued' ) {
+			$status.addClass( 'epkb-pdf-import__review-status--info' ).text( epkb_vars.pdf_status_queued || 'Queued' );
+			$preview.html( '<div class="epkb-pdf-import__preview-placeholder">' + epkb_pdf_escape_html( epkb_vars.pdf_waiting_to_convert || 'Waiting to convert this PDF.' ) + '</div>' );
+			return;
+		}
+
+		if ( item.status === 'error' ) {
+			$status.addClass( 'epkb-pdf-import__review-status--error' ).text( item.error || ( epkb_vars.pdf_prepare_failed || 'Failed to prepare PDF preview' ) );
+			$preview.html( '<div class="epkb-pdf-import__preview-placeholder">' + epkb_pdf_escape_html( item.error || ( epkb_vars.pdf_prepare_failed || 'Failed to prepare PDF preview' ) ) + '</div>' );
+			return;
+		}
+
+		if ( item.status === 'canceled' ) {
+			$status.addClass( 'epkb-pdf-import__review-status--info' ).text( epkb_vars.pdf_status_canceled || 'Canceled' );
+			$preview.html( '<div class="epkb-pdf-import__preview-placeholder">' + epkb_pdf_escape_html( item.resultMessage || ( epkb_vars.pdf_conversion_canceled_item || 'Conversion was canceled before this PDF was processed.' ) ) + '</div>' );
+			return;
+		}
+
+		if ( item.status === 'skipped' ) {
+			$status.addClass( 'epkb-pdf-import__review-status--info' ).text( epkb_vars.pdf_status_skipped || 'Skipped' );
+			$preview.html( item.html || '<div class="epkb-pdf-import__preview-placeholder">' + epkb_pdf_escape_html( item.resultMessage || ( epkb_vars.pdf_save_skipped || 'This PDF was not saved.' ) ) + '</div>' );
+			return;
+		}
+
+		let statusParts = [];
+		if ( item.formatMode !== 'ai' && item.extractedWithAi ) {
+			statusParts.push( epkb_vars.pdf_ai_extracting_done || 'Preview prepared using AI extraction.' );
+		}
+		if ( item.aiDebug ) {
+			statusParts.push( 'Model: ' + item.aiDebug.model + ' | Duration: ' + item.aiDebug.elapsed_seconds + 's' + ( item.aiDebug.chunks > 1 ? ' | Chunks: ' + item.aiDebug.chunks : '' ) );
+		}
+		if ( item.status === 'ready' && ! item.includeInSave ) {
+			statusParts.unshift( epkb_vars.pdf_not_selected_for_save || 'Not included in Save All Selected' );
+		}
+		if ( item.status === 'saved' ) {
+			statusParts.unshift( epkb_vars.pdf_status_saved || 'Saved' );
+		}
+		if ( item.status === 'saving' ) {
+			statusParts.unshift( epkb_vars.pdf_status_saving || 'Saving' );
+		}
+		if ( statusParts.length ) {
+			$status.addClass( 'epkb-pdf-import__review-status--info' ).text( statusParts.join( ' | ' ) );
+		} else {
+			$status.text( '' );
+		}
+
+		$preview.html( item.html || '<div class="epkb-pdf-import__preview-placeholder">' + epkb_pdf_escape_html( epkb_vars.pdf_processing || 'Processing' ) + '</div>' );
+	}
+
+	function epkb_pdf_show_results( $form ) {
+		let counts = epkb_pdf_get_counts();
+		let $results = $form.find( '#epkb-pdf-results' );
+
+		$form.find( '.epkb-pdf-import-step' ).addClass( 'epkb-hidden' );
+		$form.find( '.epkb-pdf-import-step--3' ).removeClass( 'epkb-hidden' );
+		epkb_pdf_update_footer( $form );
+
+		$results.empty();
+		$results.append(
+			'<p><strong>' +
+				counts.saved + ' ' + epkb_pdf_escape_html( epkb_vars.pdf_articles_created || 'articles created' ) +
+				', ' + counts.error + ' ' + epkb_pdf_escape_html( epkb_vars.pdf_failed || 'failed' ) +
+				( counts.skipped ? ', ' + counts.skipped + ' ' + epkb_pdf_escape_html( epkb_vars.pdf_skipped || 'skipped' ) : '' ) +
+				( counts.canceled ? ', ' + counts.canceled + ' ' + epkb_pdf_escape_html( epkb_vars.pdf_canceled_label || 'canceled' ) : '' ) +
+			'</strong></p>'
+		);
+
+		pdfImportQueue.forEach( function( item ) {
+			let icon = 'epkbfa-info-circle';
+			let rowClass = 'epkb-pdf-import__status-row--info';
+			let message = item.resultMessage || '';
+
+			if ( item.status === 'saved' ) {
+				icon = 'epkbfa-check';
+				rowClass = 'epkb-pdf-import__status-row--success';
+				message = message || ( epkb_vars.pdf_status_saved || 'Saved' );
+			} else if ( item.status === 'error' ) {
+				icon = 'epkbfa-exclamation-triangle';
+				rowClass = 'epkb-pdf-import__status-row--error';
+				message = message || item.error || ( epkb_vars.pdf_prepare_failed || 'Failed to prepare PDF preview' );
+			} else if ( item.status === 'skipped' ) {
+				icon = 'epkbfa-forward';
+				message = message || ( epkb_vars.pdf_save_skipped || 'This PDF was not saved.' );
+			} else if ( item.status === 'canceled' ) {
+				icon = 'epkbfa-ban';
+				message = message || ( epkb_vars.pdf_conversion_canceled_item || 'Conversion was canceled before this PDF was processed.' );
+			} else if ( item.status === 'ready' ) {
+				message = message || ( epkb_vars.pdf_prepared_not_saved || 'Prepared but not saved.' );
+			}
+
+			$results.append(
+				'<div class="epkb-pdf-import__status-row ' + rowClass + '">' +
+					'<i class="epkbfa ' + icon + '"></i>' +
+					'<span>' + epkb_pdf_escape_html( item.fileName + ' - ' + message ) + '</span>' +
+				'</div>'
+			);
+		} );
+	}
+
+	async function epkb_pdf_prepare_item( $form, index, forceExtract ) {
+		let item = pdfImportQueue[index];
+		let formatMode = $form.find( 'input[name="epkb_pdf_conversion_mode"]:checked' ).val() === 'ai' ? 'ai' : 'basic';
+
+		if ( ! item ) {
+			return;
+		}
+
+		pdfImportCurrentIndex = index;
+		pdfImportProcess.activeIndex = index;
+
+		if ( item.html && item.formatMode === formatMode && ! forceExtract ) {
+			epkb_pdf_render_review( $form );
+			return;
+		}
+
+		item.status = 'preparing';
+		item.error = '';
+		item.resultMessage = '';
+		epkb_pdf_render_review( $form );
+
+		try {
+			let previewResponse;
+
+			if ( formatMode === 'ai' ) {
+				epkb_pdf_debug_log( 'Formatting PDF with AI: ' + item.fileName );
+				let pdfBase64 = await epkb_pdf_read_file_as_base64( item.file );
+				previewResponse = await new Promise( function( resolve, reject ) {
+					$.ajax( {
+						type: 'POST',
+						dataType: 'json',
+						url: ajaxurl,
+						data: {
+							action: 'epkb_prepare_pdf_content',
+							_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+							pdf_base64: pdfBase64,
+							file_name: item.file.name,
+							format_mode: 'ai'
+						},
+						success: resolve,
+						error: function( xhr, status, error ) {
+							reject( new Error( epkb_pdf_extract_ajax_error( xhr, error ) ) );
+						}
+					} );
+				} );
+			} else {
+				if ( ! item.rawText || forceExtract ) {
+					epkb_pdf_debug_log( 'Processing: ' + item.fileName );
+					let extraction = await window.AIPRO_PDF_Utils.extractPdfTextWithFallback( item.file, {
+						requestAIConsent: epkb_pdf_show_ai_consent_dialog,
+						extractTextViaAI: function( data ) {
+							return new Promise( function( resolve, reject ) {
+								$.ajax( {
+									type: 'POST',
+									dataType: 'json',
+									url: ajaxurl,
+									data: {
+										action: 'epkb_ai_extract_pdf_text',
+										_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+										pdf_base64: data.base64Data,
+										file_name: data.file.name
+									},
+									success: resolve,
+									error: function( xhr, status, error ) {
+										reject( new Error( epkb_pdf_extract_ajax_error( xhr, error ) ) );
+									}
+								} );
+							} );
+						}
+					} );
+
+					item.rawText = extraction.text || '';
+					item.title = item.title || extraction.title || item.fileName;
+					item.extractedWithAi = !! extraction.usedAI;
+				}
+
+				if ( ! item.rawText || ! item.rawText.trim() ) {
+					throw new Error( epkb_vars.pdf_no_text || 'No text could be extracted from this PDF.' );
+				}
+
+				previewResponse = await new Promise( function( resolve, reject ) {
+					$.ajax( {
+						type: 'POST',
+						dataType: 'json',
+						url: ajaxurl,
+						data: {
+							action: 'epkb_prepare_pdf_content',
+							_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+							raw_text: item.rawText,
+							format_mode: formatMode
+						},
+						success: resolve,
+						error: function( xhr, status, error ) {
+							reject( new Error( epkb_pdf_extract_ajax_error( xhr, error ) ) );
+						}
+					} );
+				} );
+			}
+
+			if ( ! previewResponse || previewResponse.status !== 'success' ) {
+				let errorMsg = previewResponse && previewResponse.message ? $( '<div>' ).html( previewResponse.message ).text().trim() : '';
+				throw new Error( errorMsg || ( epkb_vars.unknown_error || 'Unknown error' ) );
+			}
+
+			item.html = previewResponse.content || '';
+			item.formatMode = formatMode;
+			item.aiDebug = previewResponse.ai_debug || null;
+			item.status = 'ready';
+			item.resultMessage = '';
+			item.includeInSave = item.includeInSave !== false;
+			epkb_pdf_debug_log( 'Preview ready: ' + item.fileName + ' (' + item.formatMode + ')' + ( item.aiDebug ? ' | Model: ' + item.aiDebug.model + ' | Duration: ' + item.aiDebug.elapsed_seconds + 's' : '' ) );
+		} catch ( error ) {
+			item.status = 'error';
+			item.error = error.message || ( epkb_vars.unknown_error || 'Unknown error' );
+			item.resultMessage = item.error;
+			epkb_pdf_debug_log( 'Preview error: ' + item.fileName + ' | ' + item.error );
+		}
+
+		epkb_pdf_render_review( $form );
+	}
+
+	async function epkb_pdf_run_prepare_batch( $form ) {
+		pdfImportProcess.phase = 'preparing';
+		pdfImportProcess.cancelRequested = false;
+		pdfImportProcess.activeIndex = -1;
+		pdfImportProcess.totalCount = pdfImportQueue.length;
+		pdfImportProcess.processedCount = 0;
+		epkb_pdf_render_review( $form );
+
+		for ( let index = 0; index < pdfImportQueue.length; index++ ) {
+			if ( pdfImportProcess.cancelRequested ) {
+				break;
+			}
+
+			await epkb_pdf_prepare_item( $form, index, false );
+			pdfImportProcess.processedCount++;
+			epkb_pdf_render_review( $form );
+		}
+
+		pdfImportProcess.activeIndex = -1;
+
+		if ( pdfImportProcess.cancelRequested ) {
+			pdfImportQueue.forEach( function( item ) {
+				if ( item.status === 'queued' ) {
+					item.status = 'canceled';
+					item.resultMessage = epkb_vars.pdf_conversion_canceled_item || 'Conversion was canceled before this PDF was processed.';
+				}
+			} );
+			pdfImportProcess.phase = 'canceled';
+			epkb_pdf_debug_log( 'PDF conversion canceled.' );
+		} else {
+			pdfImportProcess.phase = 'prepared';
+			epkb_pdf_debug_log( 'PDF conversion complete.' );
+		}
+
+		pdfImportProcess.cancelRequested = false;
+		epkb_pdf_render_review( $form );
+	}
+
+	async function epkb_pdf_retry_current_item( $form ) {
+		let item = pdfImportQueue[pdfImportCurrentIndex];
+		let previousPhase = pdfImportProcess.phase === 'canceled' ? 'canceled' : 'prepared';
+
+		if ( ! item ) {
+			return;
+		}
+
+		pdfImportProcess.phase = 'preparing';
+		pdfImportProcess.cancelRequested = false;
+		pdfImportProcess.activeIndex = pdfImportCurrentIndex;
+		pdfImportProcess.totalCount = 1;
+		pdfImportProcess.processedCount = 0;
+
+		item.status = 'queued';
+		item.error = '';
+		item.resultMessage = '';
+		epkb_pdf_render_review( $form );
+
+		await epkb_pdf_prepare_item( $form, pdfImportCurrentIndex, ! item.rawText );
+
+		pdfImportProcess.phase = previousPhase;
+		pdfImportProcess.cancelRequested = false;
+		pdfImportProcess.activeIndex = -1;
+		pdfImportProcess.totalCount = pdfImportQueue.length;
+		pdfImportProcess.processedCount = pdfImportQueue.filter( function( queuedItem ) {
+			return queuedItem.status !== 'queued' && queuedItem.status !== 'preparing';
+		} ).length;
+		epkb_pdf_render_review( $form );
+	}
+
+	async function epkb_pdf_save_item( $form, index ) {
+		let item = pdfImportQueue[index];
+		let kbId = $form.find( '.epkb-pdf-import__start-btn' ).data( 'kb_id' );
+
+		if ( ! item || item.status !== 'ready' ) {
+			return;
+		}
+
+		pdfImportCurrentIndex = index;
+		pdfImportProcess.activeIndex = index;
+		item.status = 'saving';
+		item.error = '';
+		item.resultMessage = '';
+		epkb_pdf_render_review( $form );
+
+		try {
+			let ajaxResult = await new Promise( function( resolve, reject ) {
+				$.ajax( {
+					type: 'POST',
+					dataType: 'json',
+					url: ajaxurl,
+					data: {
+						action: 'epkb_import_pdf_article',
+						_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+						kb_id: kbId,
+						title: item.title,
+						html_content: item.html,
+						category_id: $form.find( '#epkb-pdf-category' ).val(),
+						post_status: $form.find( 'input[name="epkb_pdf_post_status"]:checked' ).val(),
+						use_ai: item.formatMode === 'ai' ? 'yes' : 'no'
+					},
+					success: resolve,
+					error: function( xhr, status, error ) {
+						reject( new Error( epkb_pdf_extract_ajax_error( xhr, error ) ) );
+					}
+				} );
+			} );
+
+			if ( ! ajaxResult || ajaxResult.status !== 'success' ) {
+				let errorMsg = ajaxResult && ajaxResult.message ? $( '<div>' ).html( ajaxResult.message ).text().trim() : '';
+				throw new Error( errorMsg || ( epkb_vars.unknown_error || 'Unknown error' ) );
+			}
+
+			item.status = 'saved';
+			item.resultMessage = $( '<div>' ).html( ajaxResult.message ).text().trim();
+			epkb_pdf_debug_log( 'Saved article: ' + item.fileName );
+		} catch ( error ) {
+			item.status = 'error';
+			item.error = error.message || ( epkb_vars.unknown_error || 'Unknown error' );
+			item.resultMessage = item.error;
+		}
+
+		epkb_pdf_render_review( $form );
+	}
+
+	async function epkb_pdf_run_save_all( $form ) {
+		let readyIndexes = [];
+
+		pdfImportQueue.forEach( function( item, index ) {
+			if ( item.status === 'ready' && item.includeInSave ) {
+				readyIndexes.push( index );
+			}
+		} );
+
+		if ( ! readyIndexes.length ) {
+			return;
+		}
+
+		pdfImportProcess.phase = 'saving';
+		pdfImportProcess.cancelRequested = false;
+		pdfImportProcess.activeIndex = -1;
+		pdfImportProcess.totalCount = readyIndexes.length;
+		pdfImportProcess.processedCount = 0;
+		epkb_pdf_render_review( $form );
+
+		for ( let position = 0; position < readyIndexes.length; position++ ) {
+			if ( pdfImportProcess.cancelRequested ) {
+				break;
+			}
+
+			await epkb_pdf_save_item( $form, readyIndexes[ position ] );
+			pdfImportProcess.processedCount++;
+			epkb_pdf_render_review( $form );
+		}
+
+		pdfImportProcess.phase = 'prepared';
+		pdfImportProcess.cancelRequested = false;
+		pdfImportProcess.activeIndex = -1;
+		if ( pdfImportQueue.some( function( item ) { return item.status === 'ready'; } ) ) {
+			epkb_pdf_debug_log( 'Save All Selected finished. Ready PDFs remain available for saving.' );
+			epkb_pdf_render_review( $form );
+			return;
+		}
+
+		pdfImportProcess.phase = 'completed';
+		epkb_pdf_debug_log( 'Save All Selected finished.' );
+		epkb_pdf_show_results( $form );
+	}
+
+	// Select button click triggers file input
+	$( document ).on( 'click', '#epkb-pdf-select-btn', function() {
+		let $input = $( this ).closest( '.epkb-pdf-import-form' ).find( '.epkb-pdf-import__file-input' ).first();
+		let input = $input.get( 0 );
+
+		if ( ! input ) {
+			return;
+		}
+
+		input.multiple = true;
+		input.click();
+	} );
+
+	function epkb_pdf_show_error_notification( message ) {
+		$( document ).epkb( 'notice/show', {
+			message: message,
+			type: 'error'
+		} );
+	}
+
+	// Media Library button click
+	$( document ).on( 'click', '#epkb-pdf-media-library-btn', function() {
+		let $form = $( this ).closest( '.epkb-pdf-import-form' );
+
+		if ( typeof wp === 'undefined' || typeof wp.media === 'undefined' ) {
+			epkb_pdf_show_error_notification( 'Media Library is not available.' );
+			return;
+		}
+
+		let mediaFrame = wp.media( {
+			title: epkb_vars.pdf_select_from_media || 'Select PDF Files',
+			library: { type: 'application/pdf' },
+			multiple: true,
+			button: { text: epkb_vars.select_text || 'Select' }
+		} );
+
+		mediaFrame.on( 'select', async function() {
+			let selection = mediaFrame.state().get( 'selection' );
+			let nextFiles = [];
+			let selectionErrors = [];
+
+			for ( const model of selection.models ) {
+				let attachment = model.toJSON();
+
+				if ( ! attachment.url || ! attachment.filename ) {
+					continue;
+				}
+
+				let validation = epkb_pdf_validate_media_attachment( attachment );
+				if ( ! validation.valid ) {
+					selectionErrors.push( epkb_pdf_format_validation_error( attachment.filename, validation.error || ( epkb_vars.pdf_invalid_file || 'Please select a valid PDF file.' ) ) );
+					continue;
+				}
+
+				if ( epkb_pdf_is_duplicate_file( {
+					name: attachment.filename,
+					size: attachment.filesizeInBytes !== undefined ? Number( attachment.filesizeInBytes ) || 0 : 0
+				}, nextFiles ) ) {
+					continue;
+				}
+
+				try {
+					let response = await fetch( attachment.url );
+					let blob = await response.blob();
+					let file = new File( [ blob ], attachment.filename, { type: 'application/pdf' } );
+					let fileValidation = epkb_pdf_validate_file( file );
+
+					if ( ! fileValidation.valid ) {
+						selectionErrors.push( epkb_pdf_format_validation_error( attachment.filename, fileValidation.error || ( epkb_vars.pdf_invalid_file || 'Please select a valid PDF file.' ) ) );
+						continue;
+					}
+
+					nextFiles.push( file );
+				} catch ( error ) {
+					selectionErrors.push( epkb_pdf_format_validation_error( attachment.filename, epkb_vars.pdf_media_fetch_failed || 'Failed to load file from Media Library.' ) );
+				}
+			}
+
+			if ( nextFiles.length > 0 ) {
+				epkb_pdf_add_files( $form, nextFiles );
+			}
+
+			if ( selectionErrors.length > 0 ) {
+				epkb_pdf_show_error_notification( selectionErrors[0] );
+			}
+		} );
+
+		mediaFrame.open();
+	} );
+
+	// File input change
+	$( document ).on( 'change', '.epkb-pdf-import__file-input', function() {
+		epkb_pdf_add_files( $( this ).closest( '.epkb-pdf-import-form' ), this.files );
+		$( this ).val( '' );
+	} );
+
+	// Drag and drop handlers
+	$( document ).on( 'dragover', '#epkb-pdf-dropzone', function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+		$( this ).addClass( 'epkb-pdf-import__dropzone--active' );
+		$( this ).find( '.epkb-pdf-import__dropzone-text' ).text( epkb_vars.pdf_drop_here || 'Drop PDF files here' );
+	});
+
+	$( document ).on( 'dragleave', '#epkb-pdf-dropzone', function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+		$( this ).removeClass( 'epkb-pdf-import__dropzone--active' );
+		$( this ).find( '.epkb-pdf-import__dropzone-text' ).text( epkb_vars.pdf_drag_drop || 'Drag and drop PDF files here, or click below' );
+	});
+
+	$( document ).on( 'drop', '#epkb-pdf-dropzone', function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+		$( this ).removeClass( 'epkb-pdf-import__dropzone--active' );
+		$( this ).find( '.epkb-pdf-import__dropzone-text' ).text( epkb_vars.pdf_drag_drop || 'Drag and drop PDF files here, or click below' );
+		epkb_pdf_add_files( $( this ).closest( '.epkb-pdf-import-form' ), e.originalEvent.dataTransfer.files );
+	});
+
+	function epkb_pdf_add_files( $form, fileList ) {
+		let $list = $form.find( '#epkb-pdf-file-list' );
+		let nextFiles = [];
+		let validationErrors = [];
+
+		Array.from( fileList || [] ).forEach( function( file ) {
+			let validation = epkb_pdf_validate_file( file );
+
+			if ( ! validation.valid ) {
+				validationErrors.push( epkb_pdf_format_validation_error( file && file.name ? file.name : '', validation.error || ( epkb_vars.pdf_invalid_file || 'Please select a valid PDF file.' ) ) );
+				epkb_pdf_debug_log( 'Skipped invalid file: ' + ( file && file.name ? file.name : 'unknown file' ) );
+				return;
+			}
+
+			if ( epkb_pdf_is_duplicate_file( file, nextFiles ) ) {
+				return;
+			}
+
+			nextFiles.push( file );
+		} );
+
+		nextFiles.forEach( function( file ) {
+			pdfImportFiles.push( file );
+			$list.append( '<div class="epkb-pdf-import__file-item" data-index="' + ( pdfImportFiles.length - 1 ) + '">' +
+				'<span>' + $( '<span>' ).text( file.name ).html() + '</span>' +
+				'<button type="button" class="epkb-pdf-import__file-remove" data-index="' + ( pdfImportFiles.length - 1 ) + '">&times;</button>' +
+				'</div>' );
+		} );
+
+		if ( validationErrors.length > 0 ) {
+			epkb_pdf_show_error_notification( validationErrors[0] );
+		}
+	}
+
+	// Remove file
+	$( document ).on( 'click', '.epkb-pdf-import__file-remove', function() {
+		let idx = $( this ).data( 'index' );
+		pdfImportFiles[idx] = null;
+		$( this ).closest( '.epkb-pdf-import__file-item' ).remove();
+	});
+
+	// Back button
+	$( document ).on( 'click', '.epkb-pdf-import__back-btn', function() {
+		let $form = $( this ).closest( '.epkb-pdf-import-form' );
+		let $visibleStep = $form.find( '.epkb-pdf-import-step:visible' );
+
+		if ( epkb_pdf_is_busy() ) {
+			return;
+		}
+
+		if ( $visibleStep.hasClass( 'epkb-pdf-import-step--1' ) ) {
+			$( document ).epkb( 'tools/hide_panels' );
+		} else if ( $visibleStep.hasClass( 'epkb-pdf-import-step--2' ) ) {
+			epkb_pdf_reset_batch_state();
+			$form.find( '.epkb-pdf-import-step' ).addClass( 'epkb-hidden' );
+			$form.find( '.epkb-pdf-import-step--1' ).removeClass( 'epkb-hidden' );
+			$form.find( '.epkb-pdf-import__start-btn' ).removeClass( 'epkb-hidden' );
+			epkb_pdf_update_footer( $form );
+		} else if ( $visibleStep.hasClass( 'epkb-pdf-import-step--3' ) ) {
+			epkb_pdf_reset_form( $form );
+		}
+	} );
+
+	// Start import
+	$( document ).on( 'click', '.epkb-pdf-import__start-btn', function() {
+		let $btn = $( this );
+		let $form = $btn.closest( '.epkb-pdf-import-form' );
+
+		let activeFiles = epkb_pdf_get_active_files();
+		if ( activeFiles.length === 0 ) {
+			epkb_pdf_show_error_notification( epkb_vars.msg_empty_input || 'Please select at least one PDF file.' );
+			return;
+		}
+
+		let selectedMode = $form.find( 'input[name="epkb_pdf_conversion_mode"]:checked' ).val() === 'ai' ? 'ai' : 'basic';
+		if ( selectedMode !== 'ai' && ( ! window.AIPRO_PDF_Utils || typeof window.AIPRO_PDF_Utils.extractPdfTextWithFallback !== 'function' ) ) {
+			epkb_pdf_show_error_notification( epkb_vars.pdf_extraction_unavailable || 'PDF extraction is not available. Please ensure AI Features Pro is active.' );
+			return;
+		}
+
+		$form.find( '.epkb-pdf-import-step' ).addClass( 'epkb-hidden' );
+		$form.find( '.epkb-pdf-import-step--2' ).removeClass( 'epkb-hidden' );
+		$btn.addClass( 'epkb-hidden' );
+		pdfImportQueue = activeFiles.map( function( file ) {
+			return {
+				file: file,
+				fileName: file.name,
+				title: window.AIPRO_PDF_Utils && typeof window.AIPRO_PDF_Utils.generateTitle === 'function' ? window.AIPRO_PDF_Utils.generateTitle( file.name ) : file.name,
+				rawText: '',
+				html: '',
+				status: 'queued',
+				error: '',
+				formatMode: '',
+				extractedWithAi: false,
+				includeInSave: true,
+				resultMessage: '',
+				aiDebug: null
+			};
+		} );
+		pdfImportCurrentIndex = 0;
+
+		epkb_pdf_debug_log( 'Batch queue created for ' + activeFiles.length + ' PDF(s).' );
+		epkb_pdf_render_review( $form );
+		epkb_pdf_run_prepare_batch( $form );
+	} );
+
+	$( document ).on( 'click', '.epkb-pdf-import__queue-item', function( event ) {
+		if ( $( event.target ).closest( '.epkb-pdf-import__queue-item-selection' ).length ) {
+			return;
+		}
+		let index = parseInt( $( this ).data( 'index' ), 10 );
+		if ( isNaN( index ) ) {
+			return;
+		}
+		pdfImportCurrentIndex = index;
+		epkb_pdf_render_review( $( this ).closest( '.epkb-pdf-import-form' ) );
+	} );
+
+	$( document ).on( 'keydown', '.epkb-pdf-import__queue-item', function( event ) {
+		if ( event.key !== 'Enter' && event.key !== ' ' ) {
+			return;
+		}
+		if ( $( event.target ).closest( '.epkb-pdf-import__queue-item-selection' ).length ) {
+			return;
+		}
+		event.preventDefault();
+		let index = parseInt( $( this ).data( 'index' ), 10 );
+		if ( isNaN( index ) ) {
+			return;
+		}
+		pdfImportCurrentIndex = index;
+		epkb_pdf_render_review( $( this ).closest( '.epkb-pdf-import-form' ) );
+	} );
+
+	$( document ).on( 'input', '#epkb-pdf-review-title', function() {
+		let item = pdfImportQueue[pdfImportCurrentIndex];
+		if ( item ) {
+			item.title = $( this ).val();
+			epkb_pdf_render_queue( $( this ).closest( '.epkb-pdf-import-form' ) );
+		}
+	} );
+
+	$( document ).on( 'change', '.epkb-pdf-import__queue-item-include', function() {
+		let index = parseInt( $( this ).data( 'index' ), 10 );
+		let item = pdfImportQueue[index];
+		let $form = $( this ).closest( '.epkb-pdf-import-form' );
+		if ( isNaN( index ) || ! item || epkb_pdf_is_busy() || item.status === 'saved' ) {
+			return;
+		}
+		item.includeInSave = $( this ).is( ':checked' );
+		pdfImportCurrentIndex = index;
+		epkb_pdf_render_review( $form );
+	} );
+
+	$( document ).on( 'click', '.epkb-pdf-import__review-retry-btn', function() {
+		let $form = $( this ).closest( '.epkb-pdf-import-form' );
+		if ( epkb_pdf_is_busy() || ! pdfImportQueue[pdfImportCurrentIndex] ) {
+			return;
+		}
+		epkb_pdf_retry_current_item( $form );
+	} );
+
+	$( document ).on( 'click', '.epkb-pdf-import__cancel-btn', function() {
+		if ( ! epkb_pdf_is_busy() ) {
+			return;
+		}
+		pdfImportProcess.cancelRequested = true;
+		epkb_pdf_render_review( $( this ).closest( '.epkb-pdf-import-form' ) );
+	} );
+
+	$( document ).on( 'click', '.epkb-pdf-import__save-all-btn', function() {
+		let $form = $( this ).closest( '.epkb-pdf-import-form' );
+		if ( epkb_pdf_is_busy() ) {
+			return;
+		}
+		if ( ! pdfImportQueue.some( function( item ) { return item.status === 'ready' && item.includeInSave; } ) ) {
+			return;
+		}
+		epkb_pdf_run_save_all( $form );
+	} );
 
 });

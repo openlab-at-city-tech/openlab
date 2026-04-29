@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "Einstellungen erfolgreich gespeichert"
             ],
-            "Saving...": [
-                "Speichern..."
+            "Close": [
+                "Schließen"
+            ],
+            "Cancel": [
+                "Abbrechen"
             ],
             "Save Settings": [
                 "Einstellungen speichern"
+            ],
+            "Saving...": [
+                "Speichern..."
             ],
             "Failed to save settings": [
                 "Fehler beim Speichern der Einstellungen"
@@ -30,6 +36,27 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "Fehler beim Senden der Test-E-Mail. Bitte überprüfen Sie Ihre Verbindung."
+            ],
+            "Change AI Provider?": [
+                "AI-Anbieter wechseln?"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "Der Wechsel von AI-Anbietern wirkt sich auf Ihre AI-Suche- und AI-Chat-Einstellungen aus:"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "Trainingsdaten-Sammlungen sind anbieterabhängig und werden nicht zwischen Anbietern übertragen."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "Sie müssen neue Sammlungen für den neuen Anbieter erstellen und trainieren."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "AI-Suche und AI-Chat zeigen nur Sammlungen für den ausgewählten Anbieter."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "Ihre vorhandenen Sammlungen bleiben erhalten und stehen zur Verfügung, wenn Sie zurückschalten."
+            ],
+            "Change Provider": [
+                "Anbieter wechseln"
             ]
         }
     }

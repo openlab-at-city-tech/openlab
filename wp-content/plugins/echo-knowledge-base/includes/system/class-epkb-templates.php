@@ -1,8 +1,8 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle loading EP templates
- 
+
  * @copyright   Copyright (C) 2018, Echo Plugins 
  * Some code adapted from code in EDD/WooCommerce (Copyright (c) 2017, Pippin Williamson) and WP.
  */

@@ -7,6 +7,9 @@
                 "lang": "de_DE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Learn More": [
+                "Mehr erfahren"
+            ],
             "to": [
                 "zu"
             ],
@@ -16,11 +19,47 @@
             "Save": [
                 "Speichern"
             ],
+            "Close": [
+                "Schließen"
+            ],
             "Cancel": [
                 "Abbrechen"
             ],
+            "selected": [
+                "ausgewählt"
+            ],
+            "Delete": [
+                "Löschen"
+            ],
+            "Updated": [
+                "Aktualisiert"
+            ],
+            "OFF": [
+                "AUS"
+            ],
+            "Optional": [
+                "Optional"
+            ],
+            "View Full Documentation": [
+                "Vollständige Dokumentation anzeigen"
+            ],
             "Saving...": [
                 "Speichern..."
+            ],
+            "Error": [
+                "Fehler"
+            ],
+            "OK": [
+                "OK"
+            ],
+            "Add Training Data": [
+                "Trainingsdaten hinzufügen"
+            ],
+            "Choose Training Data": [
+                "Daten zum maschinellen Lernen auswählen"
+            ],
+            "Send Data to AI": [
+                "Daten an KI senden"
             ],
             "Collection name cannot be empty": [
                 "Der Sammlungsname darf nicht leer sein"
@@ -31,86 +70,113 @@
             "Note updated successfully": [
                 "Notiz erfolgreich aktualisiert"
             ],
-            "Note deleted successfully": [
-                "Notiz erfolgreich gelöscht"
+            "Name": [
+                "Name"
             ],
-            "Delete": [
-                "Löschen"
+            "Pending": [
+                "Ausstehend"
+            ],
+            "All Categories": [
+                "Alle Kategorien"
             ],
             "Delete Selected": [
                 "Auswahl löschen"
             ],
+            "of": [
+                "von"
+            ],
+            "Skipped": [
+                "Übersprungen"
+            ],
             "Failed to create collection": [
                 "Sammlung konnte nicht erstellt werden"
             ],
-            "How to get started": [
-                "So starten Sie"
+            "errors": [
+                "Fehler"
             ],
-            "Choose Training Data": [
-                "Daten zum maschinellen Lernen auswählen"
+            "Outdated": [
+                "Veraltet"
             ],
-            "Pick the content types to include.": [
-                "Wählen Sie die Inhaltstypen aus, die eingeschlossen werden sollen."
-            ],
-            "Send Data to AI": [
-                "Daten an KI senden"
-            ],
-            "Select items in the table, then sync them.": [
-                "Wählen Sie Elemente in der Tabelle aus, dann synchronisieren Sie sie."
-            ],
-            "Other Actions": [
-                "Weitere Aktionen"
-            ],
-            "Rename the collection or delete items.": [
-                "Die Sammlung umbenennen oder Elemente löschen."
-            ],
-            "Tip: Start with a small set to test the flow.": [
-                "Tipp: Beginnen Sie mit einem kleinen Datensatz, um den Ablauf zu testen."
-            ],
-            "Failed to load note content": [
-                "Fehler beim Laden des Notizinhalts"
-            ],
-            "Please enter both title and content for the note": [
-                "Bitte geben Sie sowohl Titel als auch Inhalt der Notiz ein"
-            ],
-            "Unable to delete note. Please refresh the page and try again.": [
-                "Notiz konnte nicht gelöscht werden. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut."
-            ],
-            "Delete Note": [
-                "Notiz löschen"
-            ],
-            "Are you sure you want to delete this note? This action cannot be undone.": [
-                "Möchten Sie diese Notiz wirklich löschen? Diese Aktion kann nicht rückgängig gemacht werden."
-            ],
-            "Failed to delete note": [
-                "Fehler beim Löschen der Notiz"
-            ],
-            "Edit Note": [
-                "Notiz bearbeiten"
-            ],
-            "Add Note": [
-                "Notiz hinzufügen"
-            ],
-            "Loading note content...": [
-                "Notizinhalt wird geladen..."
-            ],
-            "Note Title": [
-                "Notiztitel"
-            ],
-            "Enter note title...": [
-                "Notiztitel eingeben..."
-            ],
-            "Note Content": [
-                "Notizinhalt"
-            ],
-            "Enter note content...": [
-                "Notizinhalt eingeben..."
+            "Added": [
+                "Hinzugefügt"
             ],
             "Deleting...": [
                 "Löschen..."
             ],
-            "Save Note": [
-                "Notiz speichern"
+            "added": [
+                "hinzugefügt"
+            ],
+            "How to get started": [
+                "So starten Sie"
+            ],
+            "Other Actions": [
+                "Weitere Aktionen"
+            ],
+            "Failed to load available items": [
+                "Fehler beim Laden der verfügbaren Elemente"
+            ],
+            "Please select one content type first": [
+                "Bitte wählen Sie zuerst einen Inhaltstyp aus"
+            ],
+            "Please select at least one item to add": [
+                "Bitte wählen Sie mindestens einen Eintrag aus, den Sie hinzufügen möchten"
+            ],
+            "Data added successfully": [
+                "Daten erfolgreich hinzugefügt"
+            ],
+            "Failed to add selected items": [
+                "Fehler beim Hinzufügen der ausgewählten Elemente"
+            ],
+            "available": [
+                "verfügbar"
+            ],
+            "Select Individual Items": [
+                "Individuelle Elemente auswählen"
+            ],
+            "Choose one content type, then select the individual items you want to add to this collection.": [
+                "Wählen Sie einen Inhaltstyp aus, und wählen Sie dann die einzelnen Elemente aus, die Sie zu dieser Sammlung hinzufügen möchten."
+            ],
+            "Content Type": [
+                "Inhaltstyp"
+            ],
+            "No content types are currently available.": [
+                "Derzeit sind keine Inhaltstypen verfügbar."
+            ],
+            "Select a content type to load its available items.": [
+                "Wählen Sie einen Inhaltstyp aus, um dessen verfügbare Elemente zu laden."
+            ],
+            "Loading available items...": [
+                "Lade verfügbare Elemente..."
+            ],
+            "Unable to load the available items for this content type.": [
+                "Die verfügbaren Elemente für diesen Inhaltstyp können nicht geladen werden."
+            ],
+            "Search by name": [
+                "Nach Namen suchen"
+            ],
+            "Select All": [
+                "Alle auswählen"
+            ],
+            "Clear All": [
+                "Alle abwählen"
+            ],
+            "No available items were found for this content type.": [
+                "Für diesen Inhaltstyp wurden keine verfügbaren Elemente gefunden."
+            ],
+            "No items match the current filters.": [
+                "Keine Elemente entsprechen den aktuellen Filtern."
+            ],
+            "Adding Items...": [
+                "Elemente werden hinzugefügt..."
+            ],
+            "Add Selected Items": [
+                "Ausgewählte Elemente hinzufügen"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "Aktionen können während der Synchronisierung nicht geändert werden"
+            ],
+            "Cannot change actions while validation is in progress": [
+                "Aktionen können während der laufenden Validierung nicht geändert werden"
             ],
             "Collection name updated successfully": [
                 "Sammlungsname erfolgreich aktualisiert"
@@ -139,29 +205,77 @@
             "Please select at least one data type": [
                 "Bitte wählen Sie mindestens einen Datentyp aus"
             ],
-            "Data added successfully": [
-                "Daten erfolgreich hinzugefügt"
-            ],
             "Failed to add data": [
                 "Daten konnten nicht hinzugefügt werden"
+            ],
+            "Checking AI store for orphaned files...": [
+                "Überprüfe KI-Speicher auf verwaiste Dateien..."
+            ],
+            "Verifying": [
+                "Verifizierung läuft"
+            ],
+            "items": [
+                "Elemente"
+            ],
+            "Verification complete:": [
+                "Verifizierung abgeschlossen:"
+            ],
+            "marked outdated": [
+                "als veraltet markiert"
+            ],
+            "Run sync to re-upload outdated items.": [
+                "Synchronisieren Sie, um veraltete Elemente erneut hochzuladen."
             ],
             "Choose an Action": [
                 "Aktion auswählen"
             ],
-            "Cannot change actions while sync is in progress": [
-                "Aktionen können während der Synchronisierung nicht geändert werden"
+            "Dismiss": [
+                "Schließen"
             ],
-            "Add Training Data": [
-                "Trainingsdaten hinzufügen"
+            "Choose content types (KB Articles, Posts, Pages) to load into the table. This does not send anything to AI yet.": [
+                "Wählen Sie Inhaltstypen (KB-Artikel, Beiträge, Seiten) aus, die in die Tabelle geladen werden sollen. Dies sendet noch nichts an KI."
             ],
-            "Cannot navigate while sync is in progress": [
-                "Während der Synchronisierung kann nicht navigiert werden"
+            "To exclude specific items, search for them in the table, select them, then use Other Actions > Delete Selected.": [
+                "Um bestimmte Elemente auszuschließen, suchen Sie sie in der Tabelle, wählen Sie sie aus, und verwenden Sie anschließend Weitere Aktionen > Ausgewählte löschen."
             ],
-            "Adding data to:": [
-                "Daten hinzufügen zu:"
+            "Select items from the table and send them to train the AI. Use the status tabs to filter, then select all and send.": [
+                "Wählen Sie Elemente aus der Tabelle aus und senden Sie sie, um die KI zu trainieren. Verwenden Sie die Status-Reiter zum Filtern, dann Alles auswählen und senden."
+            ],
+            "Keep Content in Sync": [
+                "Inhalte synchron halten"
+            ],
+            "When you edit content on your site, its status changes to \"Outdated\". Filter by Outdated, select, and re-send to update the AI.": [
+                "Wenn Sie Inhalte auf Ihrer Website bearbeiten, ändert sich ihr Status zu „Veraltet“. Filtern Sie nach Veraltet, wählen Sie sie aus und senden Sie sie erneut, um die KI zu aktualisieren."
+            ],
+            "Statuses": [
+                "Status"
+            ],
+            "In the table but not yet sent to AI.": [
+                "In der Tabelle, aber noch nicht an die KI gesendet."
+            ],
+            "Sent to AI successfully.": [
+                "Erfolgreich an die KI gesendet."
+            ],
+            "Re-sent after changes.": [
+                "Nach Änderungen erneut gesendet."
+            ],
+            "Content changed since last sync. Re-send to update.": [
+                "Seit der letzten Synchronisierung wurde der Inhalt geändert. Erneut senden, um zu aktualisieren."
+            ],
+            "Could not be synced because the content is empty or the source no longer exists.": [
+                "Konnte nicht synchronisiert werden, da der Inhalt leer ist oder die Quelle nicht mehr existiert."
+            ],
+            "Sync failed. Re-send to retry. Check the content exists and is not empty.": [
+                "Synchronisierung fehlgeschlagen. Erneut senden, um es erneut zu versuchen. Prüfen Sie, dass der Inhalt vorhanden ist und nicht leer ist."
+            ],
+            "Validate & Fix Synced Items": [
+                "Synchronisierte Elemente validieren und reparieren"
             ],
             "Choose which content types you want to include in your AI training data.": [
                 "Wählen Sie aus, welche Inhaltstypen Sie in Ihre KI-Trainingsdaten aufnehmen möchten."
+            ],
+            "Only Published content is included. Drafts, Private, and Pending posts are not available for AI training.": [
+                "Nur veröffentlichte Inhalte sind enthalten. Entwürfe, Private und ausstehende Beiträge stehen nicht für das KI-Training zur Verfügung."
             ],
             "Access Manager Notice": [
                 "Hinweis zum Zugriff-Manager"
@@ -172,26 +286,47 @@
             "Loading content types...": [
                 "Lade Inhaltstypen..."
             ],
-            "available": [
-                "verfügbar"
-            ],
-            "added": [
-                "hinzugefügt"
+            "No content types available.": [
+                "Keine Inhaltstypen verfügbar."
             ],
             "excluded": [
                 "ausgeschlossen"
             ],
-            "No eligible content": [
-                "Kein geeigneter Inhalt vorhanden"
-            ],
-            "No published content available": [
-                "Kein veröffentlichter Inhalt verfügbar"
-            ],
             "All eligible items already added to collection": [
                 "Alle berechtigten Elemente wurden bereits der Sammlung hinzugefügt"
             ],
-            "No content types available.": [
-                "Keine Inhaltstypen verfügbar."
+            "No eligible content": [
+                "Kein geeigneter Inhalt vorhanden"
+            ],
+            "No articles for %s found. First create and publish articles.": [
+                "Für %s wurden keine Artikel gefunden. Erstellen und veröffentlichen Sie zuerst Artikel."
+            ],
+            "No %s found. First create and publish %s.": [
+                "Keine %s gefunden. Erstelle zuerst und veröffentliche %s."
+            ],
+            "Already in Collection": [
+                "Bereits in der Sammlung"
+            ],
+            "These content types have been added": [
+                "Diese Inhaltstypen wurden hinzugefügt"
+            ],
+            "Available to Add": [
+                "Zum Hinzufügen verfügbar"
+            ],
+            "Select items to include in training data": [
+                "Elemente auswählen, die in die Trainingsdaten aufgenommen werden sollen"
+            ],
+            "All available content types have been added.": [
+                "Alle verfügbaren Inhaltstypen wurden hinzugefügt."
+            ],
+            "No Content Available": [
+                "Kein Inhalt verfügbar"
+            ],
+            "Create and publish content first": [
+                "Erstellen und veröffentlichen Sie zuerst Inhalte"
+            ],
+            "Requires AI Pro": [
+                "Erfordert KI Pro"
             ],
             "Adding Data...": [
                 "Daten werden hinzugefügt..."
@@ -199,14 +334,23 @@
             "Add Data": [
                 "Daten hinzufügen"
             ],
-            "Notes": [
-                "Notizen"
-            ],
-            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
-                "Fügen Sie benutzerdefinierte Notizen hinzu, um die KI mit spezifischen Informationen, Richtlinien oder Kontext zu trainieren, der möglicherweise nicht in Ihren regulären Inhalten enthalten ist."
-            ],
             "Select items from the table and choose a sync method to update your AI training data.": [
                 "Wählen Sie Elemente aus der Tabelle aus und wählen Sie eine Synchronisierungsmethode, um Ihre KI-Trainingsdaten zu aktualisieren."
+            ],
+            "Run an extra validation pass to make sure the local database and the AI store stay in sync. If a file is missing from the AI store, it will be marked as outdated so it can be re-sent.": [
+                "Führen Sie einen zusätzlichen Validierungsdurchlauf aus, um sicherzustellen, dass die lokale Datenbank und der KI-Speicher synchron bleiben. Wenn eine Datei im KI-Speicher fehlt, wird sie als veraltet markiert, damit sie erneut gesendet werden kann."
+            ],
+            "Collection:": [
+                "Sammlung:"
+            ],
+            "synced items ready to validate": [
+                "synchronisierte Elemente bereit zur Validierung"
+            ],
+            "Cancel Verify": [
+                "Überprüfung abbrechen"
+            ],
+            "Validation in Progress...": [
+                "Validierung läuft..."
             ],
             "Manage your collection settings and data.": [
                 "Verwalten Sie Ihre Sammlungs-Einstellungen und -Daten."

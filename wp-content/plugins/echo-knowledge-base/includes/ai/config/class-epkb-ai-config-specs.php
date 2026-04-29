@@ -15,6 +15,14 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 	const OPTION_NAME = 'epkb_ai_configuration';
 
 	/**
+	 * Clear cached AI configuration plus any derived caches.
+	 */
+	public static function clear_cache() {
+		parent::clear_cache();
+		EPKB_AI_Provider::clear_cache();
+	}
+
+	/**
 	 * Get AI refusal message (translatable)
 	 *
 	 * @return string
@@ -39,21 +47,8 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 	 */
 	public static function get_config_fields_specifications() {
 
-		// Get available models from OpenAI client
-		$models_data = EPKB_OpenAI_Client::get_models_and_default_params();
-		$ai_models = array();
-		foreach ( $models_data as $model_key => $model_info ) {
-			$ai_models[$model_key] = $model_info['name'];
-		}
-		
-		// Get default model specs for default values
-		$default_model_spec = EPKB_OpenAI_Client::get_models_and_default_params( EPKB_OpenAI_Client::DEFAULT_MODEL );
-		$default_params = $default_model_spec['default_params'];
-
-		$default_instructions = __( 'You may ONLY answer using information from the vector store. Do not mention references, documents, files, or sources. ' .
-				'Do not reveal retrieval, guess, speculate, or use outside knowledge. If no relevant information is found, reply exactly:' . ' ' . self::get_ai_refusal_prompt() . ' ' .
-				'If relevant information is found, you may give structured explanations, including comparisons, pros and cons, or decision factors, ' .
-				'but only if they are in the data. Answer only what the data supports; when unsure, leave it out.', 'echo-knowledge-base' );
+		// translators: %s is the AI refusal prompt message
+		$default_instructions = sprintf( __( 'You may ONLY answer using information from the vector store. Do not mention references, documents, files, or sources. Do not reveal retrieval, guess, speculate, or use outside knowledge. If no relevant information is found, reply exactly: %s If relevant information is found, you may give structured explanations, including comparisons, pros and cons, or decision factors, but only if they are in the data. Answer only what the data supports; when unsure, leave it out.', 'echo-knowledge-base' ), self::get_ai_refusal_prompt() );
 
 		$ai_specs = array(
 
@@ -63,19 +58,45 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 				'type'      => EPKB_Input_Filter::CHECKBOX,
 				'default'   => 'off'
 			),
-			'ai_key' => array(
+			'ai_key' => array(	// TODO legacy remove in April 2026
 				'name'        => 'ai_key',
 				'type'        => EPKB_Input_Filter::TEXT,
 				'default'     => '',
 				'min'         => 20,
 				'max'         => 2500
 			),
+			'ai_chatgpt_key' => array(
+				'name'        => 'ai_chatgpt_key',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => '',
+				'min'         => 20,
+				'max'         => 2500
+			),
+			'ai_gemini_key' => array(
+				'name'        => 'ai_gemini_key',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => '',
+				'min'         => 20,
+				'max'         => 2500
+			),
+			'ai_provider' => array(
+				'name'    => 'ai_provider',
+				'type'    => EPKB_Input_Filter::SELECTION,
+				'options' => EPKB_AI_Provider::get_provider_options(),
+				'default' => EPKB_AI_Provider::PROVIDER_GEMINI
+			),
+
 			'ai_organization_id' => array(
 				'name'        => 'ai_organization_id',
 				'type'        => EPKB_Input_Filter::TEXT,
 				'default'     => '',
 				'min'		  => 3,
 				'max'  => 256
+			),
+			'ai_show_sources' => array(
+				'name'        => 'ai_show_sources',
+				'type'        => EPKB_Input_Filter::CHECKBOX,
+				'default'     => 'off'
 			),
 
 			/***  AI Chat Settings ***/
@@ -89,66 +110,25 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 				),
 				'default'     => 'off'
 			),
-			'ai_chat_widgets' => array(
-				'name'        => 'ai_chat_widgets',
-				'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
-				'default'     => array( 1 ),
-			),
-			'ai_chat_model' => array(
-				'name'         => 'ai_chat_model',
-				'type'         => EPKB_Input_Filter::SELECTION,
-				'options'      => $ai_models,
-				'default'      => EPKB_OpenAI_Client::DEFAULT_MODEL
-			),
-			'ai_chat_instructions' => array(
-				'name'        => 'ai_chat_instructions',
-				'type'        => EPKB_Input_Filter::WP_EDITOR,
-				'default'     => $default_instructions,
+			'ai_chat_preset' => array(
+				'name'        => 'ai_chat_preset',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => EPKB_AI_Provider::BALANCED_PRESET,
 				'min'         => 0,
-				'max'         => 10000
+				'max'         => 50
 			),
-			// Chat-specific tuning parameters
-			'ai_chat_temperature' => array(
-				'name'        => 'ai_chat_temperature',
-				'type'        => EPKB_Input_Filter::FLOAT_NUMBER,
-				'default'     => isset( $default_params['temperature'] ) ? $default_params['temperature'] : 0.2,
-				'min'         => 0.0,
-				'max'         => 2.0
-			),
-			'ai_chat_top_p' => array(
-				'name'        => 'ai_chat_top_p',
-				'type'        => EPKB_Input_Filter::FLOAT_NUMBER,
-				'default'     => isset( $default_params['top_p'] ) ? $default_params['top_p'] : 1.0,
-				'min'         => 0.0,
-				'max'         => 1.0
-			),
-			'ai_chat_max_output_tokens' => array(
-				'name'        => 'ai_chat_max_output_tokens',
-				'type'        => EPKB_Input_Filter::NUMBER,
-				'default'     => isset( $default_params['max_output_tokens'] ) ? $default_params['max_output_tokens'] : EPKB_OpenAI_Client::DEFAULT_MAX_OUTPUT_TOKENS,
-				'min'         => 500,
-				'max'         => 16384
-			),
-			'ai_chat_verbosity' => array(
-				'name'        => 'ai_chat_verbosity',
-				'type'        => EPKB_Input_Filter::SELECTION,
-				'options'     => array(
-					'low'    => __( 'Low', 'echo-knowledge-base' ),
-					'medium' => __( 'Medium', 'echo-knowledge-base' ),
-					'high'   => __( 'High', 'echo-knowledge-base' ),
+				'ai_chat_widgets' => array(
+					'name'        => 'ai_chat_widgets',
+					'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
+					'default'     => array( 1 ),
 				),
-				'default'     => 'low'
-			),
-			'ai_chat_reasoning' => array(
-				'name'        => 'ai_chat_reasoning',
-				'type'        => EPKB_Input_Filter::SELECTION,
-				'options'     => array(
-					'low'    => __( 'Low', 'echo-knowledge-base' ),
-					'medium' => __( 'Medium', 'echo-knowledge-base' ),
-					'high'   => __( 'High', 'echo-knowledge-base' ),
+				'ai_chat_instructions' => array(
+					'name'        => 'ai_chat_instructions',
+					'type'        => EPKB_Input_Filter::AI_PROMPT,
+					'default'     => $default_instructions,
+					'min'         => 0,
+					'max'         => 10000
 				),
-				'default'     => 'low'
-			),
 
 			/***  AI Chat Display Settings ***/
 			'ai_chat_display_mode' => array(
@@ -160,6 +140,15 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 					'all_except'     => __( "Don't Show On", 'echo-knowledge-base' )
 				),
 				'default'     => 'all_pages'
+			),
+
+			// AI Chat - Collection 1 Display Rules
+			'ai_chat_display_collection' => array(
+				'name'        => 'ai_chat_display_collection',
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 0,
+				'min'         => 0,
+				'max'         => 999
 			),
 			'ai_chat_display_page_rules' => array(
 				'name'        => 'ai_chat_display_page_rules',
@@ -183,134 +172,242 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 				'max'         => 1000
 			),
 
-		// AI Chat - Collection 1 Display Rules
-		'ai_chat_display_collection' => array(
-			'name'        => 'ai_chat_display_collection',
-			'type'        => EPKB_Input_Filter::NUMBER,
-			'default'     => 1,
-			'min'         => 1,
-			'max'         => 999
-		),
-		
-		// AI Chat - Collection 2 Display Rules
-		'ai_chat_display_collection_2' => array(
-			'name'        => 'ai_chat_display_collection_2',
-			'type'        => EPKB_Input_Filter::NUMBER,
-			'default'     => 1,
-			'min'         => 1,
-			'max'         => 999
-		),
-		'ai_chat_display_page_rules_2' => array(
-			'name'        => 'ai_chat_display_page_rules_2',
-			'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
-			'options'     => array(
-				'posts'       => __( 'Posts', 'echo-knowledge-base' ),
-				'pages'       => __( 'Pages', 'echo-knowledge-base' )
+			// AI Chat - Collection 2 Display Rules
+			'ai_chat_display_collection_2' => array(
+				'name'        => 'ai_chat_display_collection_2',
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 0,
+				'min'         => 0,
+				'max'         => 999
 			),
-			'default'     => array()
-		),
-		'ai_chat_display_other_post_types_2' => array(
-			'name'        => 'ai_chat_display_other_post_types_2',
-			'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
-			'default'     => array()
-		),
-		'ai_chat_display_url_patterns_2' => array(
-			'name'        => 'ai_chat_display_url_patterns_2',
-			'type'        => EPKB_Input_Filter::TEXT,
-			'default'     => '',
-			'min'         => 0,
-			'max'         => 1000
-		),
+			'ai_chat_display_page_rules_2' => array(
+				'name'        => 'ai_chat_display_page_rules_2',
+				'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
+				'options'     => array(
+					'posts'       => __( 'Posts', 'echo-knowledge-base' ),
+					'pages'       => __( 'Pages', 'echo-knowledge-base' )
+				),
+				'default'     => array()
+			),
+			'ai_chat_display_other_post_types_2' => array(
+				'name'        => 'ai_chat_display_other_post_types_2',
+				'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
+				'default'     => array()
+			),
+			'ai_chat_display_url_patterns_2' => array(
+				'name'        => 'ai_chat_display_url_patterns_2',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 1000
+			),
 
-		// AI Chat - Collection 3 Display Rules
-		'ai_chat_display_collection_3' => array(
-			'name'        => 'ai_chat_display_collection_3',
-			'type'        => EPKB_Input_Filter::NUMBER,
-			'default'     => 1,
-			'min'         => 1,
-			'max'         => 999
-		),
-		'ai_chat_display_page_rules_3' => array(
-			'name'        => 'ai_chat_display_page_rules_3',
-			'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
-			'options'     => array(
-				'posts'       => __( 'Posts', 'echo-knowledge-base' ),
-				'pages'       => __( 'Pages', 'echo-knowledge-base' )
+			// AI Chat - Collection 3 Display Rules
+			'ai_chat_display_collection_3' => array(
+				'name'        => 'ai_chat_display_collection_3',
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 0,
+				'min'         => 0,
+				'max'         => 999
 			),
-			'default'     => array()
-		),
-		'ai_chat_display_other_post_types_3' => array(
-			'name'        => 'ai_chat_display_other_post_types_3',
-			'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
-			'default'     => array()
-		),
-		'ai_chat_display_url_patterns_3' => array(
-			'name'        => 'ai_chat_display_url_patterns_3',
-			'type'        => EPKB_Input_Filter::TEXT,
-			'default'     => '',
-			'min'         => 0,
-			'max'         => 1000
-		),
+			'ai_chat_display_page_rules_3' => array(
+				'name'        => 'ai_chat_display_page_rules_3',
+				'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
+				'options'     => array(
+					'posts'       => __( 'Posts', 'echo-knowledge-base' ),
+					'pages'       => __( 'Pages', 'echo-knowledge-base' )
+				),
+				'default'     => array()
+			),
+			'ai_chat_display_other_post_types_3' => array(
+				'name'        => 'ai_chat_display_other_post_types_3',
+				'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
+				'default'     => array()
+			),
+			'ai_chat_display_url_patterns_3' => array(
+				'name'        => 'ai_chat_display_url_patterns_3',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 1000
+			),
 
-		// AI Chat - Collection 4 Display Rules
-		'ai_chat_display_collection_4' => array(
-			'name'        => 'ai_chat_display_collection_4',
-			'type'        => EPKB_Input_Filter::NUMBER,
-			'default'     => 1,
-			'min'         => 1,
-			'max'         => 999
-		),
-		'ai_chat_display_page_rules_4' => array(
-			'name'        => 'ai_chat_display_page_rules_4',
-			'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
-			'options'     => array(
-				'posts'       => __( 'Posts', 'echo-knowledge-base' ),
-				'pages'       => __( 'Pages', 'echo-knowledge-base' )
+			// AI Chat - Collection 4 Display Rules
+			'ai_chat_display_collection_4' => array(
+				'name'        => 'ai_chat_display_collection_4',
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 0,
+				'min'         => 0,
+				'max'         => 999
 			),
-			'default'     => array()
-		),
-		'ai_chat_display_other_post_types_4' => array(
-			'name'        => 'ai_chat_display_other_post_types_4',
-			'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
-			'default'     => array()
-		),
-		'ai_chat_display_url_patterns_4' => array(
-			'name'        => 'ai_chat_display_url_patterns_4',
-			'type'        => EPKB_Input_Filter::TEXT,
-			'default'     => '',
-			'min'         => 0,
-			'max'         => 1000
-		),
+			'ai_chat_display_page_rules_4' => array(
+				'name'        => 'ai_chat_display_page_rules_4',
+				'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
+				'options'     => array(
+					'posts'       => __( 'Posts', 'echo-knowledge-base' ),
+					'pages'       => __( 'Pages', 'echo-knowledge-base' )
+				),
+				'default'     => array()
+			),
+			'ai_chat_display_other_post_types_4' => array(
+				'name'        => 'ai_chat_display_other_post_types_4',
+				'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
+				'default'     => array()
+			),
+			'ai_chat_display_url_patterns_4' => array(
+				'name'        => 'ai_chat_display_url_patterns_4',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 1000
+			),
 
-		// AI Chat - Collection 5 Display Rules
-		'ai_chat_display_collection_5' => array(
-			'name'        => 'ai_chat_display_collection_5',
-			'type'        => EPKB_Input_Filter::NUMBER,
-			'default'     => 1,
-			'min'         => 1,
-			'max'         => 999
-		),
-		'ai_chat_display_page_rules_5' => array(
-			'name'        => 'ai_chat_display_page_rules_5',
-			'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
-			'options'     => array(
-				'posts'       => __( 'Posts', 'echo-knowledge-base' ),
-				'pages'       => __( 'Pages', 'echo-knowledge-base' )
+			// AI Chat - Collection 5 Display Rules
+			'ai_chat_display_collection_5' => array(
+				'name'        => 'ai_chat_display_collection_5',
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 0,
+				'min'         => 0,
+				'max'         => 999
 			),
-			'default'     => array()
-		),
-		'ai_chat_display_other_post_types_5' => array(
-			'name'        => 'ai_chat_display_other_post_types_5',
-			'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
-			'default'     => array()
-		),
-		'ai_chat_display_url_patterns_5' => array(
-			'name'        => 'ai_chat_display_url_patterns_5',
-			'type'        => EPKB_Input_Filter::TEXT,
-			'default'     => '',
-			'min'         => 0,
-			'max'         => 1000
-		),
+			'ai_chat_display_page_rules_5' => array(
+				'name'        => 'ai_chat_display_page_rules_5',
+				'type'        => EPKB_Input_Filter::CHECKBOXES_MULTI_SELECT,
+				'options'     => array(
+					'posts'       => __( 'Posts', 'echo-knowledge-base' ),
+					'pages'       => __( 'Pages', 'echo-knowledge-base' )
+				),
+				'default'     => array()
+			),
+			'ai_chat_display_other_post_types_5' => array(
+				'name'        => 'ai_chat_display_other_post_types_5',
+				'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
+				'default'     => array()
+			),
+			'ai_chat_display_url_patterns_5' => array(
+				'name'        => 'ai_chat_display_url_patterns_5',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 1000
+			),
+
+			/***  AI Chat Access Control Settings ***/
+			'ai_chat_access_mode' => array(
+				'name' => 'ai_chat_access_mode', 'type' => EPKB_Input_Filter::SELECTION,
+				'options' => array( 'all' => 'Everyone', 'logged_in' => 'Logged-in Users Only', 'wp_role' => 'Specific WordPress Roles' ),
+				'default' => 'all'
+			),
+			'ai_chat_access_roles' => array(
+				'name' => 'ai_chat_access_roles', 'type' => EPKB_Input_Filter::INTERNAL_ARRAY, 'default' => array()
+			),
+			'ai_chat_access_mode_2' => array(
+				'name' => 'ai_chat_access_mode_2', 'type' => EPKB_Input_Filter::SELECTION,
+				'options' => array( 'all' => 'Everyone', 'logged_in' => 'Logged-in Users Only', 'wp_role' => 'Specific WordPress Roles' ),
+				'default' => 'all'
+			),
+			'ai_chat_access_roles_2' => array(
+				'name' => 'ai_chat_access_roles_2', 'type' => EPKB_Input_Filter::INTERNAL_ARRAY, 'default' => array()
+			),
+			'ai_chat_access_mode_3' => array(
+				'name' => 'ai_chat_access_mode_3', 'type' => EPKB_Input_Filter::SELECTION,
+				'options' => array( 'all' => 'Everyone', 'logged_in' => 'Logged-in Users Only', 'wp_role' => 'Specific WordPress Roles' ),
+				'default' => 'all'
+			),
+			'ai_chat_access_roles_3' => array(
+				'name' => 'ai_chat_access_roles_3', 'type' => EPKB_Input_Filter::INTERNAL_ARRAY, 'default' => array()
+			),
+			'ai_chat_access_mode_4' => array(
+				'name' => 'ai_chat_access_mode_4', 'type' => EPKB_Input_Filter::SELECTION,
+				'options' => array( 'all' => 'Everyone', 'logged_in' => 'Logged-in Users Only', 'wp_role' => 'Specific WordPress Roles' ),
+				'default' => 'all'
+			),
+			'ai_chat_access_roles_4' => array(
+				'name' => 'ai_chat_access_roles_4', 'type' => EPKB_Input_Filter::INTERNAL_ARRAY, 'default' => array()
+			),
+			'ai_chat_access_mode_5' => array(
+				'name' => 'ai_chat_access_mode_5', 'type' => EPKB_Input_Filter::SELECTION,
+				'options' => array( 'all' => 'Everyone', 'logged_in' => 'Logged-in Users Only', 'wp_role' => 'Specific WordPress Roles' ),
+				'default' => 'all'
+			),
+			'ai_chat_access_roles_5' => array(
+				'name' => 'ai_chat_access_roles_5', 'type' => EPKB_Input_Filter::INTERNAL_ARRAY, 'default' => array()
+			),
+
+			/***  AI Chat Handoff Settings ***/
+			'ai_chat_feedback_enabled' => array(
+				'name'        => 'ai_chat_feedback_enabled',
+				'type'        => EPKB_Input_Filter::CHECKBOX,
+				'default'     => 'off'
+			),
+			'ai_chat_feedback_with_handoff' => array(
+				'name'        => 'ai_chat_feedback_with_handoff',
+				'type'        => EPKB_Input_Filter::CHECKBOX,
+				'default'     => 'off'
+			),
+			'ai_chat_handoff_enabled' => array(
+				'name'        => 'ai_chat_handoff_enabled',
+				'type'        => EPKB_Input_Filter::CHECKBOX,
+				'default'     => 'off'
+			),
+			'ai_chat_handoff_phone_enabled' => array(
+				'name'        => 'ai_chat_handoff_phone_enabled',
+				'type'        => EPKB_Input_Filter::CHECKBOX,
+				'default'     => 'off'
+			),
+			'ai_chat_handoff_method' => array(
+				'name'        => 'ai_chat_handoff_method',
+				'type'        => EPKB_Input_Filter::SELECTION,
+				'options'     => array(
+					'email' => __( 'Email (Contact Form)', 'echo-knowledge-base' )
+				),
+				'default'     => 'email'
+			),
+			'ai_chat_handoff_button_display' => array(
+				'name'        => 'ai_chat_handoff_button_display',
+				'type'        => EPKB_Input_Filter::SELECTION,
+				'options'     => array(
+					'always'              => __( 'Always show', 'echo-knowledge-base' ),
+					'after_first_response' => __( 'After first response', 'echo-knowledge-base' ),
+					'after_keyword'        => __( 'After keyword trigger', 'echo-knowledge-base' )
+				),
+				'default'     => 'always'
+			),
+			'ai_chat_handoff_button_text' => array(
+				'name'        => 'ai_chat_handoff_button_text',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => __( 'Contact an Agent', 'echo-knowledge-base' ),
+				'min'         => 1,
+				'max'         => 100
+			),
+			'ai_chat_handoff_heading' => array(
+				'name'        => 'ai_chat_handoff_heading',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => __( 'Contact an Agent', 'echo-knowledge-base' ),
+				'min'         => 1,
+				'max'         => 100
+			),
+			'ai_chat_handoff_keywords' => array(
+				'name'        => 'ai_chat_handoff_keywords',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => 'human,agent,representative,support,customer support,live agent,real person,talk to a human,contact support',
+				'min'         => 0,
+				'max'         => 1000
+			),
+			'ai_chat_handoff_destination_email' => array(
+				'name'        => 'ai_chat_handoff_destination_email',
+				'type'        => EPKB_Input_Filter::EMAIL,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 100
+			),
+			'ai_chat_handoff_consent_text' => array(
+				'name'        => 'ai_chat_handoff_consent_text',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => __( 'By submitting this form, you agree that your contact details and chat transcript will be shared with our support team.', 'echo-knowledge-base' ),
+				'min'         => 0,
+				'max'         => 1000
+			),
 
 			/***  AI Sync Custom Settings ***/
 			'ai_auto_sync_enabled' => array(
@@ -330,69 +427,27 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 				),
 				'default'     => 'off'
 			),
+			'ai_search_preset' => array(
+				'name'        => 'ai_search_preset',
+				'type'        => EPKB_Input_Filter::TEXT,
+				'default'     => EPKB_AI_Provider::BALANCED_PRESET,
+				'min'         => 0,
+				'max'         => 50
+			),
 			'ai_search_mode' => array(
 				'name'        => 'ai_search_mode',
 				'type'        => EPKB_Input_Filter::SELECTION,
 				'options'     => array(
-					'simple_search'   => __( 'Simple Search Results', 'echo-knowledge-base' ),
-					'advanced_search' => __( 'Advanced Search Results', 'echo-knowledge-base' )
+					'simple_search' => __( 'Simple Search', 'echo-knowledge-base' ),
+					'smart_search'  => __( 'Smart Search', 'echo-knowledge-base' )
 				),
 				'default'     => 'simple_search'
 			),
 
-			/**   AI Search Model */
-			'ai_search_model' => array(
-				'name'        => 'ai_search_model',
-				'type'        => EPKB_Input_Filter::SELECTION,
-				'options'     => $ai_models,
-				'default'     => EPKB_OpenAI_Client::DEFAULT_MODEL
-			),
-			'ai_search_temperature' => array(
-				'name'        => 'ai_search_temperature',
-				'type'        => EPKB_Input_Filter::FLOAT_NUMBER,
-				'default'     => isset( $default_params['temperature'] ) ? $default_params['temperature'] : 0.2,
-				'min'         => 0.0,
-				'max'         => 2.0
-			),
-			'ai_search_top_p' => array(
-				'name'        => 'ai_search_top_p',
-				'type'        => EPKB_Input_Filter::FLOAT_NUMBER,
-				'default'     => isset( $default_params['top_p'] ) ? $default_params['top_p'] : 1.0,
-				'min'         => 0.0,
-				'max'         => 1.0
-			),
-			'ai_search_max_output_tokens' => array(
-				'name'        => 'ai_search_max_output_tokens',
-				'type'        => EPKB_Input_Filter::NUMBER,
-				'default'     => isset( $default_params['max_output_tokens'] ) ? $default_params['max_output_tokens'] : EPKB_OpenAI_Client::DEFAULT_MAX_OUTPUT_TOKENS,
-				'min'         => 500,
-				'max'         => 16384
-			),
-			'ai_search_verbosity' => array(
-				'name'        => 'ai_search_verbosity',
-				'type'        => EPKB_Input_Filter::SELECTION,
-				'options'     => array(
-					'low'    => __( 'Low', 'echo-knowledge-base' ),
-					'medium' => __( 'Medium', 'echo-knowledge-base' ),
-					'high'   => __( 'High', 'echo-knowledge-base' ),
-				),
-				'default'     => 'low'
-			),
-			'ai_search_reasoning' => array(
-				'name'        => 'ai_search_reasoning',
-				'type'        => EPKB_Input_Filter::SELECTION,
-				'options'     => array(
-					'low'    => __( 'Low', 'echo-knowledge-base' ),
-					'medium' => __( 'Medium', 'echo-knowledge-base' ),
-					'high'   => __( 'High', 'echo-knowledge-base' ),
-				),
-				'default'     => 'low'
-			),
-
-			/**   AI Search - Ask AI */
+				/**   AI Search - Ask AI */
 			'ai_search_instructions' => array(
 				'name'        => 'ai_search_instructions',
-				'type'        => EPKB_Input_Filter::WP_EDITOR,
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
 				'default'     => $default_instructions,
 				'min'         => 0,
 				'max'         => 10000
@@ -459,6 +514,18 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 				'name'        => 'ai_search_results_column_3_sections',
 				'type'        => EPKB_Input_Filter::INTERNAL_ARRAY,
 				'default'     => array()
+			),
+			'ai_search_results_articles_count' => array(
+				'name'        => 'ai_search_results_articles_count',
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 5,
+				'min'         => 1,
+				'max'         => 20
+			),
+			'ai_search_results_continue_in_chat' => array(
+				'name'        => 'ai_search_results_continue_in_chat',
+				'type'        => EPKB_Input_Filter::CHECKBOX,
+				'default'     => 'off'
 			),
 
 			/***  AI Search Results - Section Names ***/
@@ -541,7 +608,51 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 			),
 			'ai_search_results_custom_prompt_text' => array(
 				'name'        => 'ai_search_results_custom_prompt_text',
-				'type'        => EPKB_Input_Filter::WP_EDITOR,
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 10000
+			),
+
+			/***  AI Search Results - Section Prompts ***/
+			'ai_search_results_tips_prompt' => array(
+				'name'        => 'ai_search_results_tips_prompt',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 10000
+			),
+			'ai_search_results_steps_prompt' => array(
+				'name'        => 'ai_search_results_steps_prompt',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 10000
+			),
+			'ai_search_results_glossary_prompt' => array(
+				'name'        => 'ai_search_results_glossary_prompt',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 10000
+			),
+			'ai_search_results_you_can_also_ask_prompt' => array(
+				'name'        => 'ai_search_results_you_can_also_ask_prompt',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 10000
+			),
+			'ai_search_results_tasks_list_prompt' => array(
+				'name'        => 'ai_search_results_tasks_list_prompt',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
+				'default'     => '',
+				'min'         => 0,
+				'max'         => 10000
+			),
+			'ai_search_results_related_keywords_prompt' => array(
+				'name'        => 'ai_search_results_related_keywords_prompt',
+				'type'        => EPKB_Input_Filter::AI_PROMPT,
 				'default'     => '',
 				'min'         => 0,
 				'max'         => 10000
@@ -604,38 +715,40 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 
 	/**
 	 * Get a specific AI configuration value
-	 * Wrapper method for backward compatibility
 	 *
 	 * @param string $field_name Configuration field name
 	 * @param mixed $default Default value if not found
 	 * @return mixed
 	 */
 	public static function get_ai_config_value( $field_name, $default = null ) {
-		$value = parent::get_config_value( $field_name, $default );
-		
-		// Mask the API key for security - only internal methods should access the real value
-		if ( $field_name === 'ai_key' && ! empty( $value ) ) {
-			return '********';
-		}
-		
-		return $value;
-	}
 
-	/**
-	 * Get AI configuration from database
-	 * Wrapper method for backward compatibility
-	 *
-	 * @return array
-	 */
-	public static function get_ai_config() {
-		$config = parent::get_config();
-		
-		// Mask the API key for security - only the OpenAI client should access the real value
-		if ( ! empty( $config['ai_key'] ) ) {
-			$config['ai_key'] = '********';
+		if ( in_array( $field_name, array( 'ai_chat_handoff_enabled', 'ai_chat_handoff_phone_enabled', 'ai_chat_feedback_enabled', 'ai_chat_feedback_with_handoff' ), true ) && ! EPKB_Utilities::is_ai_features_pro_enabled() ) {
+			return 'off';
 		}
-		
-		return $config;
+
+		if ( $field_name === 'ai_search_mode' && ! EPKB_Utilities::is_ai_features_pro_enabled() ) {
+			return 'simple_search';
+		}
+
+		$config = static::get_ai_config();
+
+		// If field exists in config, return it
+		if ( isset( $config[ $field_name ] ) ) {
+
+			// Mask API keys for security - only internal methods should access the real value
+			if ( in_array( $field_name, array( 'ai_chatgpt_key', 'ai_gemini_key' ), true ) && ! empty( $config[ $field_name ] ) ) {
+				return '********';
+			}
+
+			return $config[ $field_name ];
+		}
+
+		// If no default was supplied, get default from field specifications
+		if ( $default === null ) {
+			return static::get_field_default( $field_name );
+		}
+
+		return $default;
 	}
 
 	/**
@@ -655,37 +768,28 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 	}
 
 	/**
-	 * Update a specific AI configuration value
-	 * Wrapper method for backward compatibility
-	 *
-	 * @param string $field_name Configuration field name
-	 * @param mixed $value New value
-	 * @return bool|WP_Error
-	 */
-	public static function update_ai_config_value( $field_name, $value ) {
-		$result = parent::update_config_value( $field_name, $value );
-		
-		// Clear the dashboard status cache when AI config is updated
-		if ( ! is_wp_error( $result ) ) {
-			delete_transient( 'epkb_ai_dashboard_status' );
-		}
-		
-		return $result;
-	}
-
-	/**
 	 * Update AI configuration in database
-	 * Wrapper method for backward compatibility
 	 *
 	 * @param array $new_config New configuration values
 	 * @return array|WP_Error Updated configuration or error
 	 */
 	public static function update_ai_config( $original_config, $new_config ) {
 
-		// If user doesn't have ai-features-pro active, don't save advanced_search mode
-		if ( ! EPKB_Utilities::is_ai_features_pro_enabled() && isset( $new_config['ai_search_mode'] ) && $new_config['ai_search_mode'] === 'advanced_search' ) {
-			return new WP_Error( 'epkb_ai_features_required', __( 'Advanced Search Results requires AI Features add-on to be installed and active.', 'echo-knowledge-base' ) );
+		$original_config['ai_provider'] = EPKB_AI_Provider::normalize_provider( isset( $original_config['ai_provider'] ) ? $original_config['ai_provider'] : '' );
+		if ( isset( $new_config['ai_provider'] ) ) {
+			$new_config['ai_provider'] = EPKB_AI_Provider::normalize_provider( $new_config['ai_provider'] );
 		}
+
+		if ( ! EPKB_Utilities::is_ai_features_pro_enabled() && isset( $new_config['ai_search_mode'] ) && $new_config['ai_search_mode'] === 'smart_search' ) {
+			return new WP_Error( 'validation_failed', __( 'Smart Search requires AI Features PRO.', 'echo-knowledge-base' ) );
+		}
+
+		// If provider is changing, reset collection settings that belong to the now-inactive provider
+		if ( isset( $new_config['ai_provider'] ) && $new_config['ai_provider'] !== $original_config['ai_provider'] ) {
+			$new_config = self::reset_inactive_provider_collections( $original_config, $new_config );
+		}
+
+		$new_config = EPKB_AI_Provider::migrate_ai_config( array_merge( $original_config, $new_config ) );
 
 		$new_config = parent::update_config( $new_config );
 		if ( is_wp_error( $new_config ) ) {
@@ -714,26 +818,20 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 	}
 	
 	/**
-	 * Get all AI configuration specifications
-	 * Wrapper method for backward compatibility
+	 * Get the unmasked API key for a specific provider - for internal use only
 	 *
-	 * @return array
-	 */
-	public static function get_ai_config_fields_specifications() {
-		return self::get_config_fields_specifications();
-	}
-	
-	/**
-	 * Get the unmasked API key - for internal use only
-	 * This method should only be used by the OpenAI client class
-	 *
+	 * @param string $provider Provider constant (chatgpt or gemini)
 	 * @return string Encrypted API key value
 	 */
-	public static function get_unmasked_api_key() {
-		// Get directly from parent to bypass masking
-		return parent::get_config_value( 'ai_key', '' );
+	public static function get_unmasked_api_key_for_provider( $provider ) {
+		$key_field = $provider === EPKB_AI_Provider::PROVIDER_GEMINI ? 'ai_gemini_key' : 'ai_chatgpt_key';
+
+		// Bypass get_ai_config() which masks the keys - read directly from database
+		$config = get_option( self::OPTION_NAME, array() );
+
+		return isset( $config[$key_field] ) ? $config[$key_field] : '';
 	}
-	
+
 	/**
 	 * Get the default value for a specific field
 	 *
@@ -743,5 +841,97 @@ class EPKB_AI_Config_Specs extends EPKB_AI_Config_Base {
 	public static function get_default_value( $field_name ) {
 		$specs = self::get_config_fields_specifications();
 		return isset( $specs[$field_name]['default'] ) ? $specs[$field_name]['default'] : null;
+	}
+
+	/**
+	 * Reset collection settings that belong to the now-inactive provider when provider changes
+	 *
+	 * @param array $original_config Original configuration before the update
+	 * @param array $new_config New configuration being saved
+	 * @return array Updated new_config with inactive provider collections reset to 0
+	 */
+	private static function reset_inactive_provider_collections( $original_config, $new_config ) {
+		$old_provider = $original_config['ai_provider'];
+
+		// Get all collections to determine which belong to which provider
+		$all_collections = EPKB_AI_Training_Data_Config_Specs::get_training_data_collections( false, false );
+		if ( is_wp_error( $all_collections ) || empty( $all_collections ) ) {
+			return $new_config;
+		}
+
+		// Collection settings that may need to be reset
+		$collection_fields = array(
+			'ai_chat_display_collection',
+			'ai_chat_display_collection_2',
+			'ai_chat_display_collection_3',
+			'ai_chat_display_collection_4',
+			'ai_chat_display_collection_5'
+		);
+
+		// Check each collection field
+		foreach ( $collection_fields as $field ) {
+			// Get the current value from new_config if set, otherwise from original_config
+			$collection_id = isset( $new_config[$field] ) ? absint( $new_config[$field] ) : absint( $original_config[$field] ?? 0 );
+
+			if ( empty( $collection_id ) ) {
+				continue;
+			}
+
+			// Check if this collection belongs to the old (now inactive) provider
+			if ( ! isset( $all_collections[$collection_id] ) ) {
+				continue;
+			}
+
+			$collection_provider = self::get_collection_provider_for_provider_switch( $all_collections[$collection_id] );
+			if ( empty( $collection_provider ) ) {
+				continue;
+			}
+
+			// If collection belongs to the old provider, reset it to 0
+			if ( $collection_provider === $old_provider ) {
+				$new_config[$field] = 0;
+			}
+		}
+
+		// Reset kb_ai_collection_id in any KB config whose selected collection belongs to the old provider
+		$kb_config_obj = new EPKB_KB_Config_DB();
+		$all_kb_configs = $kb_config_obj->get_kb_configs();
+		foreach ( $all_kb_configs as $kb_id => $kb_config ) {
+			$kb_collection_id = isset( $kb_config['kb_ai_collection_id'] ) ? absint( $kb_config['kb_ai_collection_id'] ) : 0;
+			if ( empty( $kb_collection_id ) || ! isset( $all_collections[$kb_collection_id] ) ) {
+				continue;
+			}
+
+			$kb_collection_provider = self::get_collection_provider_for_provider_switch( $all_collections[$kb_collection_id] );
+			if ( empty( $kb_collection_provider ) ) {
+				continue;
+			}
+
+			if ( $kb_collection_provider !== $old_provider ) {
+				continue;
+			}
+
+			$kb_config['kb_ai_collection_id'] = 0;
+			$update_result = $kb_config_obj->update_kb_configuration( $kb_id, $kb_config );
+			if ( is_wp_error( $update_result ) ) {
+				EPKB_AI_Log::add_log( 'Failed to reset kb_ai_collection_id on provider switch - KB ID: ' . $kb_id . ' - Collection ID: ' . $kb_collection_id . ' - ' . $update_result->get_error_message() );
+			}
+		}
+
+		return $new_config;
+	}
+
+	/**
+	 * Resolve one collection provider for provider-switch cleanup.
+	 *
+	 * @param array $collection_config
+	 * @return string
+	 */
+	private static function get_collection_provider_for_provider_switch( $collection_config ) {
+		if ( empty( $collection_config['ai_training_data_provider'] ) ) {
+			return '';
+		}
+
+		return EPKB_AI_Provider::normalize_provider( $collection_config['ai_training_data_provider'] );
 	}
 }

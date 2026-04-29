@@ -7,8 +7,8 @@
                 "lang": "sv_SE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?": [
-                "Kunskapsbasredigeraren är inaktiverad medan ${ builderName } är aktiv. Vill du gå till Kunskapsbasens inställningar istället?"
+            "The Knowledge Base Editor is disabled while the %s is active. Do you want to go to the Knowledge Base settings instead?": [
+                "Kunskapsbasredigeraren är inaktiverad medan %s är aktiv. Vill du gå till kunskapsbasens inställningar istället?"
             ]
         }
     }

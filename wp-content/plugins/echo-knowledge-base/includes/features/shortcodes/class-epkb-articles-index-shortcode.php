@@ -12,9 +12,34 @@ class EPKB_Articles_Index_Shortcode {
 		add_shortcode( 'epkb-articles-index-directory', array( $this, 'output_shortcode' ) );
 	}
 
+	/**
+	 * Shortcode callback.
+	 *
+	 * @param array $attributes Shortcode attributes.
+	 * @return string HTML output.
+	 */
 	public function output_shortcode( $attributes ) {
+		return self::render_directory( $attributes );
+	}
 
-		wp_enqueue_style( 'epkb-shortcodes' );
+	/**
+	 * Render the articles index directory. Shared between shortcode and block.
+	 *
+	 * @param array $attributes {
+	 *     Rendering parameters.
+	 *
+	 *     @type string $title Title for the directory.
+	 *     @type int    $kb_id Knowledge base ID.
+	 *     @type bool   $is_block Whether called from block context (skips shortcode CSS enqueue).
+	 * }
+	 * @return string HTML output.
+	 */
+	public static function render_directory( $attributes ) {
+
+		// Only enqueue shortcodes CSS when used as shortcode, not block
+		if ( empty( $attributes['is_block'] ) ) {
+			wp_enqueue_style( 'epkb-shortcodes' );
+		}
 
 		// allows to adjust the widget title
 		$title = empty( $attributes['title'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['title'] ) ) );
@@ -24,8 +49,7 @@ class EPKB_Articles_Index_Shortcode {
 		$kb_id = empty( $attributes['kb_id'] ) ? EPKB_Utilities::get_eckb_kb_id() : $attributes['kb_id'];
 		$kb_id = EPKB_Utilities::sanitize_int( $kb_id, EPKB_KB_Config_DB::DEFAULT_KB_ID );
 
-		$indexed_articles_list = $this->get_indexed_articles_list( $kb_id );
-
+		$indexed_articles_list = self::get_indexed_articles_list( $kb_id );
 		if ( empty( $indexed_articles_list ) ) {
 			ob_start(); ?>
 			<div id="epkb-article-index-dir-container">
@@ -44,7 +68,7 @@ class EPKB_Articles_Index_Shortcode {
 		$icon_class = 'ep_font_icon_document';
 
 		// custom article list icon
-		if ( empty( $link ) && EPKB_Utilities::is_elegant_layouts_enabled() && has_filter( 'eckb_article_list_icon_filter' ) ) {
+		if ( EPKB_Utilities::is_elegant_layouts_enabled() && has_filter( 'eckb_article_list_icon_filter' ) ) {
 			$result = apply_filters( 'eckb_article_list_icon_filter', 0, array( $kb_config['id'], $kb_config['kb_main_page_layout'] ) );
 			if ( ! empty( $result['icon'] ) ) {
 				$icon_class = $result['icon'];
@@ -56,17 +80,24 @@ class EPKB_Articles_Index_Shortcode {
 		<div id="epkb-article-index-dir-container">
 
             <div class="epkb-aid__header-container">
-                <h2 class="epkb-aid__header__title" aria-label="<?php echo esc_html( $title ); ?>"><?php echo esc_html( $title ); ?></h2>
+                <h2 class="epkb-aid__header__title" aria-label="<?php echo esc_attr( $title ); ?>"><?php 
+					echo esc_html( $title ); ?>
+				</h2>
             </div>
 
             <div class="epkb-aid__body-container">                <?php
 	            foreach ( $indexed_articles_list as $indexed_result ) { ?>
 
-                    <section id="epkb-aid__section-<?php echo esc_html( $indexed_result['index'] ); ?>" class="epkb-aid__section-container"
-                             role="contentinfo" aria-label="Article List for Letter <?php echo esc_html( $indexed_result['index'] ); ?>">
+    				
+                    <section id="epkb-aid__section-<?php echo esc_attr( $indexed_result['index'] ); ?>" class="epkb-aid__section-container" role="contentinfo"
+						aria-label="<?php
+							// translators: %s is the letter for the article index section
+							printf( esc_attr__( 'Article List for Letter %s', 'echo-knowledge-base' ), esc_html( $indexed_result['index'] ) ); ?>">
 
                         <div class="epkb-aid-section__header">
-                            <div class="epkb-aid-section__header__title"><?php echo esc_html( $indexed_result['index'] ); ?></div>
+                            <div class="epkb-aid-section__header__title"><?php 
+								echo esc_html( $indexed_result['index'] ); ?>
+							</div>
                         </div>
 
                         <div class="epkb-aid-section__body">
@@ -81,12 +112,14 @@ class EPKB_Articles_Index_Shortcode {
                                     if ( empty( $article_url ) || is_wp_error( $article_url ) ) {
                                         continue;
                                     }  ?>
-                                    <li id="epkb-aid-article-<?php echo esc_html( $article_id ); ?>" class="epkb-aid-list__item">
+                                    <li id="epkb-aid-article-<?php echo esc_attr( $article_id ); ?>" class="epkb-aid-list__item">
                                         <a href="<?php echo esc_url( $article_url ); ?>" <?php echo $article_color_escaped; ?>>
                                             <span class="epkb-aid-list__item__icon" <?php echo $icon_color_escaped; ?> >
                                                 <span aria-hidden="true" class="epkbfa epkb-aid-article-icon <?php echo esc_attr( $icon_class ); ?>"></span>
                                             </span>
-                                            <span class="epkb-aid-list__item__text"><?php echo esc_html( $article_title ); ?></span>
+                                            <span class="epkb-aid-list__item__text"><?php 
+												echo esc_html( $article_title ); ?>
+											</span>
                                         </a>
                                     </li>  <?php
                                 } ?>
@@ -98,6 +131,7 @@ class EPKB_Articles_Index_Shortcode {
             </div>
 
 		</div>  <?php
+
 		return ob_get_clean();
 	}
 
@@ -108,12 +142,12 @@ class EPKB_Articles_Index_Shortcode {
 	 *
 	 * @return array
 	 */
-	private function get_indexed_articles_list( $kb_id ) {
+	private static function get_indexed_articles_list( $kb_id ) {
 
 		// name for non-alphabetic indexes
 		$other_index_char = esc_html__( 'Other', 'echo-knowledge-base' );
 
-		$articles_list = $this->get_articles_list( $kb_id );
+		$articles_list = self::get_articles_list( $kb_id );
 
         // Sort results alphabetically excluding all special characters
 		uasort( $articles_list, function ( $a, $b ) {
@@ -131,8 +165,8 @@ class EPKB_Articles_Index_Shortcode {
 			}
 
 			// CASE: if both articles start with letter or both articles start with non-letter character, then sort alphabetically by first letter
-			$a = $this->clean_string_for_alphabetically_sorting( $a );
-			$b = $this->clean_string_for_alphabetically_sorting( $b );
+			$a = self::clean_string_for_alphabetically_sorting( $a );
+			$b = self::clean_string_for_alphabetically_sorting( $b );
 
 			if ( $a == $b ) {
 				return 0;
@@ -152,7 +186,7 @@ class EPKB_Articles_Index_Shortcode {
 			}
 
 			// get first letter; if no letters found, then set to default index
-			$index_char = mb_substr( $this->clean_string_for_alphabetically_sorting( $article ), 0, 1 );
+			$index_char = mb_substr( self::clean_string_for_alphabetically_sorting( $article ), 0, 1 );
 			if ( empty( $index_char ) ) {
 				$index_char = $other_index_char;
 			}
@@ -186,7 +220,7 @@ class EPKB_Articles_Index_Shortcode {
 	 *
 	 * @return array
 	 */
-	private function get_articles_list( $kb_id ) {
+	private static function get_articles_list( $kb_id ) {
 
 		$articles_seq_data = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, array(), true );
 
@@ -209,7 +243,7 @@ class EPKB_Articles_Index_Shortcode {
 	 *
 	 * @return string
 	 */
-    private function clean_string_for_alphabetically_sorting( $string ) {
+    private static function clean_string_for_alphabetically_sorting( $string ) {
 
 	    $string = mb_strtoupper( trim( $string ) );
 

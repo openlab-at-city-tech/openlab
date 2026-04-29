@@ -7,8 +7,14 @@
                 "lang": "sv_SE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Restore": [
+                "Återställ"
+            ],
             "Settings": [
                 "Inställningar"
+            ],
+            "All": [
+                "Alla"
             ],
             "Page": [
                 "Sida"
@@ -19,14 +25,38 @@
             "Cancel": [
                 "Avbryt"
             ],
+            "Save Settings": [
+                "Spara inställningar"
+            ],
+            "Delete": [
+                "Ta bort"
+            ],
             "Next": [
                 "Nästa"
             ],
             "Previous": [
                 "Föregående"
             ],
+            "OFF": [
+                "AV"
+            ],
+            "Errors": [
+                "Fel"
+            ],
+            "Email": [
+                "E-post"
+            ],
+            "Feedback": [
+                "Återkoppling"
+            ],
+            "Reset": [
+                "Återställ"
+            ],
             "Saving...": [
                 "Sparar …"
+            ],
+            "Error": [
+                "Fel"
             ],
             "Go to General Settings": [
                 "Gå till allmänna inställningar"
@@ -40,11 +70,11 @@
             "AI Assistant": [
                 "AI-assistent"
             ],
-            "Save Settings": [
-                "Spara inställningar"
+            "Name": [
+                "Namn"
             ],
-            "Delete": [
-                "Ta bort"
+            "Message": [
+                "Meddelande"
             ],
             "Delete Selected": [
                 "Ta bort valda"
@@ -52,8 +82,38 @@
             "of": [
                 "av"
             ],
-            "Reset": [
-                "Återställ"
+            "Phone": [
+                "Telefon"
+            ],
+            "Requires AI Features PRO": [
+                "Kräver AI-funktioner PRO"
+            ],
+            "with code": [
+                "med kod"
+            ],
+            "Thumbs up (%d)": [
+                "Tummen upp (%d)"
+            ],
+            "Thumbs up": [
+                "Tummen upp"
+            ],
+            "Thumbs down (%d)": [
+                "Tummen ned (%d)"
+            ],
+            "Thumbs down": [
+                "Tummen ned"
+            ],
+            "Contact an Agent clicked": [
+                "Kontakta en agent klickades"
+            ],
+            "Agent handover request submitted": [
+                "Överföringsförfrågan till agenten skickad"
+            ],
+            "Trigger": [
+                "Utlösare"
+            ],
+            "AI error recorded in this conversation": [
+                "AI-fel registrerat i denna konversation"
             ],
             "Are you sure you want to delete the selected conversations?": [
                 "Är du säker på att du vill ta bort de valda konversationerna?"
@@ -67,6 +127,36 @@
             "Conversations refreshed successfully": [
                 "Konversationer uppdaterades"
             ],
+            "Archive Conversations": [
+                "Arkivera samtal"
+            ],
+            "Are you sure you want to archive the selected conversations?": [
+                "Är du säker på att du vill arkivera de valda samtalen?"
+            ],
+            "Archive": [
+                "Arkivera"
+            ],
+            "Archiving conversations...": [
+                "Arkiverar samtal..."
+            ],
+            "Restore Conversations": [
+                "Återställ samtal"
+            ],
+            "Are you sure you want to restore the selected conversations?": [
+                "Är du säker på att du vill återställa de valda samtalen?"
+            ],
+            "Restoring conversations...": [
+                "Återställer samtal..."
+            ],
+            "Agent handover request": [
+                "Överföringsförfrågan till agenten"
+            ],
+            "Active": [
+                "Aktiv"
+            ],
+            "Archived": [
+                "Arkiverad"
+            ],
             "Search conversations...": [
                 "Sök konversationer..."
             ],
@@ -75,6 +165,12 @@
             ],
             "Refresh": [
                 "Uppdatera"
+            ],
+            "Archive Selected": [
+                "Arkivera markerade"
+            ],
+            "Restore Selected": [
+                "Återställ markerade"
             ],
             "Loading conversations...": [
                 "Laddar konversationer..."
@@ -91,8 +187,38 @@
             "Conversation": [
                 "Samtal"
             ],
+            "Message Count": [
+                "Antal meddelanden"
+            ],
+            "Agent Handover": [
+                "Agentöverföring"
+            ],
+            "The most recent AI request failed for this conversation": [
+                "Den senaste AI-begäran misslyckades för denna konversation"
+            ],
+            "An earlier AI request failed during this conversation": [
+                "En tidigare AI-begäran misslyckades under denna konversation"
+            ],
+            "Failed": [
+                "Misslyckades"
+            ],
+            "Error Logged": [
+                "Fel loggat"
+            ],
+            "Number of messages": [
+                "Antal meddelanden"
+            ],
             "Searching server for more results...": [
                 "Söker efter fler resultat från servern..."
+            ],
+            "Deleting conversation...": [
+                "Raderar konversation..."
+            ],
+            "Archiving conversation...": [
+                "Arkiverar samtal..."
+            ],
+            "Restoring conversation...": [
+                "Återställer samtal..."
             ],
             "Conversation Details": [
                 "Samtalsdetaljer"
@@ -100,29 +226,20 @@
             "Select a conversation to view details": [
                 "Välj ett samtal för att visa detaljer"
             ],
-            "Conversation Info": [
-                "Samtalsinformation"
-            ],
-            "User:": [
-                "Användare:"
-            ],
-            "Started:": [
-                "Startade:"
-            ],
-            "Messages:": [
-                "Meddelanden:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
-            "Rating:": [
-                "Betyg:"
+            "Conversation Summary": [
+                "Samtalsöversikt"
             ],
             "Full Conversation": [
                 "Hela konversationen"
             ],
+            "AI Error": [
+                "AI-fel"
+            ],
             "No messages in this conversation.": [
                 "Inga meddelanden i denna konversation."
+            ],
+            "Collection": [
+                "Samling"
             ],
             "Are you sure you want to reset to default instructions?": [
                 "Är du säker på att du vill återställa till standardinstruktioner؟"
@@ -136,6 +253,12 @@
             "Reset to Default": [
                 "Återställ till standard"
             ],
+            "Training data issues detected": [
+                "Problem med maskininlärningsdata har upptäckts"
+            ],
+            "AI Chat cannot use the selected collection until these issues are fixed in Training Data.": [
+                "AI-chatt kan inte använda den valda samlingen förrän dessa problem är åtgärdade i maskininlärningsdata."
+            ],
             "Failed to load conversations": [
                 "Misslyckades med att ladda konversationer"
             ],
@@ -148,6 +271,18 @@
             "Failed to delete conversations": [
                 "Misslyckades med att radera konversationer"
             ],
+            "Conversations archived successfully": [
+                "Samtal arkiverades framgångsrikt"
+            ],
+            "Failed to archive conversations": [
+                "Misslyckades med att arkivera samtal"
+            ],
+            "Conversations restored successfully": [
+                "Samtal återställdes framgångsrikt"
+            ],
+            "Failed to restore conversations": [
+                "Misslyckades med att återställa samtal"
+            ],
             "AI Chat is Disabled": [
                 "AI Chatt är inaktiverad"
             ],
@@ -157,8 +292,8 @@
             "Go to Settings": [
                 "Gå till Inställningar"
             ],
-            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
-                "OpenAI API-nyckel är inte konfigurerad. Konfigurera den i Allmänna inställningar för att använda AI Chatt-funktioner."
+            "API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "API-nyckel är inte konfigurerad. Vänligen konfigurera den i Allmänna inställningar för att använda AI-chattfunktioner."
             ],
             "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
                 "Vänligen acceptera dataskyddsavtalet i Allmänna inställningar för att använda AI Chatt-funktioner."

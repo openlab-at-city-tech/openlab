@@ -19,14 +19,16 @@ class EPKB_Shortcodes {
 		'widg-tags-list',
 		'widg-tag-articles',
 		'epkb-faqs',
+		'epkb-glossary-index',
 		'widg-popular-articles',
-		'ai-advanced-search'
+		'ai-smart-search'
 	);
 
 	public function __construct() {
 		new EPKB_Articles_Index_Shortcode();
+		new EPKB_Glossary_Index_Shortcode();
 		new EPKB_Faqs_Shortcode();
-		new EPKB_AI_Advanced_Search_Shortcode();
+		new EPKB_AI_Smart_Search_Shortcode();
     }
 
 	/**

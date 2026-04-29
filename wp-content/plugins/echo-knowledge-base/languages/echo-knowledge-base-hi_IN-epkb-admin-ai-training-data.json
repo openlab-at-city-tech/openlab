@@ -7,6 +7,9 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Learn More": [
+                "अधिक जानकारी"
+            ],
             "to": [
                 "तक"
             ],
@@ -16,11 +19,47 @@
             "Save": [
                 "सहेजें"
             ],
+            "Close": [
+                "बंद करें"
+            ],
             "Cancel": [
                 "रद्द करें"
             ],
+            "selected": [
+                "चयनित"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "Updated": [
+                "अपडेट किया गया"
+            ],
+            "OFF": [
+                "ऑफ"
+            ],
+            "Optional": [
+                "वैकल्पिक"
+            ],
+            "View Full Documentation": [
+                "पूरा डॉक्यूमेंटेशन देखें"
+            ],
             "Saving...": [
                 "सहेजा जा रहा है..."
+            ],
+            "Error": [
+                "त्रुटि"
+            ],
+            "OK": [
+                "ठीक है"
+            ],
+            "Add Training Data": [
+                "प्रशिक्षण डेटा जोड़ें"
+            ],
+            "Choose Training Data": [
+                "Machine learning data चुनें"
+            ],
+            "Send Data to AI": [
+                "एआई में डेटा भेजें"
             ],
             "Collection name cannot be empty": [
                 "संग्रह का नाम खाली नहीं हो सकता"
@@ -31,86 +70,113 @@
             "Note updated successfully": [
                 "नोट सफलतापूर्वक अपडेट किया गया।"
             ],
-            "Note deleted successfully": [
-                "नोट सफलतापूर्वक हटाई गई।"
+            "Name": [
+                "नाम"
             ],
-            "Delete": [
-                "हटाएं"
+            "Pending": [
+                "स्थगित"
+            ],
+            "All Categories": [
+                "सभी श्रेणियाँ"
             ],
             "Delete Selected": [
                 "चयनित को हटाएं"
             ],
+            "of": [
+                "में से"
+            ],
+            "Skipped": [
+                "छोड़ दिया गया"
+            ],
             "Failed to create collection": [
                 "संग्रह बनाने में असफल रहा।"
             ],
-            "How to get started": [
-                "शुरू कैसे करें"
+            "errors": [
+                "त्रुटियाँ"
             ],
-            "Choose Training Data": [
-                "Machine learning data चुनें"
+            "Outdated": [
+                "पुराना"
             ],
-            "Pick the content types to include.": [
-                "शामिल करने के लिए सामग्री प्रकार चुनें।."
-            ],
-            "Send Data to AI": [
-                "एआई में डेटा भेजें"
-            ],
-            "Select items in the table, then sync them.": [
-                "तालिका में आइटम चुनें, फिर उन्हें सिंक करें."
-            ],
-            "Other Actions": [
-                "अन्य क्रियाएं"
-            ],
-            "Rename the collection or delete items.": [
-                "संग्रह का नाम बदलें या आइटम हटाएं."
-            ],
-            "Tip: Start with a small set to test the flow.": [
-                "टिप: प्रवाह का परीक्षण करने के लिए छोटे सेट से शुरू करें."
-            ],
-            "Failed to load note content": [
-                "नोट सामग्री लोड करने में विफल रहा"
-            ],
-            "Please enter both title and content for the note": [
-                "कृपया नोट के लिए शीर्षक और सामग्री दोनों दर्ज करें"
-            ],
-            "Unable to delete note. Please refresh the page and try again.": [
-                "नोट हटाने में असमर्थ। कृपया पृष्ठ को फिर से लोड करें और फिर से प्रयास करें।."
-            ],
-            "Delete Note": [
-                "नोट हटाएं"
-            ],
-            "Are you sure you want to delete this note? This action cannot be undone.": [
-                "क्या आप सच में इस नोट को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।."
-            ],
-            "Failed to delete note": [
-                "नोट हटाने में विफल रहा"
-            ],
-            "Edit Note": [
-                "नोट संपादित करें"
-            ],
-            "Add Note": [
-                "नोट जोड़ें"
-            ],
-            "Loading note content...": [
-                "नोट की सामग्री लोड हो रही है..."
-            ],
-            "Note Title": [
-                "नोट का शीर्षक"
-            ],
-            "Enter note title...": [
-                "नोट शीर्षक दर्ज करें..."
-            ],
-            "Note Content": [
-                "नोट की सामग्री"
-            ],
-            "Enter note content...": [
-                "नोट सामग्री दर्ज करें..."
+            "Added": [
+                "जोड़ा गया"
             ],
             "Deleting...": [
                 "हटाया जा रहा है..."
             ],
-            "Save Note": [
-                "नोट सहेजें"
+            "added": [
+                "जोड़ा गया"
+            ],
+            "How to get started": [
+                "शुरू कैसे करें"
+            ],
+            "Other Actions": [
+                "अन्य क्रियाएं"
+            ],
+            "Failed to load available items": [
+                "उपलब्ध आइटम लोड करने में विफल रहा।"
+            ],
+            "Please select one content type first": [
+                "कृपया पहले एक सामग्री प्रकार चुनें"
+            ],
+            "Please select at least one item to add": [
+                "कृपया जोड़ने के लिए कम से कम एक आइटम चुनें"
+            ],
+            "Data added successfully": [
+                "डेटा सफलतापूर्वक जोड़ा गया"
+            ],
+            "Failed to add selected items": [
+                "चयनित आइटम जोड़ने में विफल रहा।"
+            ],
+            "available": [
+                "उपलब्ध"
+            ],
+            "Select Individual Items": [
+                "व्यक्तिगत आइटम चुनें"
+            ],
+            "Choose one content type, then select the individual items you want to add to this collection.": [
+                "एक सामग्री प्रकार चुनें, फिर उन व्यक्तिगत आइटमों को चुनें जिन्हें आप इस संग्रह में जोड़ना चाहते हैं।."
+            ],
+            "Content Type": [
+                "सामग्री प्रकार"
+            ],
+            "No content types are currently available.": [
+                "वर्तमान में कोई सामग्री प्रकार उपलब्ध नहीं हैं।."
+            ],
+            "Select a content type to load its available items.": [
+                "अपनी उपलब्ध आइटम लोड करने के लिए एक सामग्री प्रकार चुनें।."
+            ],
+            "Loading available items...": [
+                "उपलब्ध आइटम लोड हो रहे हैं..."
+            ],
+            "Unable to load the available items for this content type.": [
+                "इस सामग्री प्रकार के लिए उपलब्ध आइटम लोड करने में असमर्थ।."
+            ],
+            "Search by name": [
+                "नाम से खोजें"
+            ],
+            "Select All": [
+                "सब चुनें"
+            ],
+            "Clear All": [
+                "सब साफ करें"
+            ],
+            "No available items were found for this content type.": [
+                "इस सामग्री प्रकार के लिए कोई उपलब्ध आइटम नहीं मिला।."
+            ],
+            "No items match the current filters.": [
+                "वर्तमान फ़िल्टर से कोई आइटम नहीं मिला।."
+            ],
+            "Adding Items...": [
+                "आइटम जोड़े जा रहे हैं..."
+            ],
+            "Add Selected Items": [
+                "चयनित आइटम जोड़ें"
+            ],
+            "Cannot change actions while sync is in progress": [
+                "सिंक प्रगति के दौरान क्रियाओं को बदला नहीं जा सकता"
+            ],
+            "Cannot change actions while validation is in progress": [
+                "सत्यापन प्रगति पर होने के दौरान कार्रवाइयां नहीं बदली जा सकतीं"
             ],
             "Collection name updated successfully": [
                 "संग्रह का नाम सफलतापूर्वक अपडेट किया गया"
@@ -139,29 +205,77 @@
             "Please select at least one data type": [
                 "कृपया कम से कम एक डेटा प्रकार चुनें"
             ],
-            "Data added successfully": [
-                "डेटा सफलतापूर्वक जोड़ा गया"
-            ],
             "Failed to add data": [
                 "डेटा जोड़ना विफल रहा"
+            ],
+            "Checking AI store for orphaned files...": [
+                "अनाथ फ़ाइलों के लिए AI स्टोर की जाँच की जा रही है..."
+            ],
+            "Verifying": [
+                "जाँच किया जा रहा है"
+            ],
+            "items": [
+                "आइटम"
+            ],
+            "Verification complete:": [
+                "जाँच पूरी:"
+            ],
+            "marked outdated": [
+                "पुराने के रूप में चिह्नित"
+            ],
+            "Run sync to re-upload outdated items.": [
+                "पुराने आइटमों को पुनः अपलोड करने के लिए सिंक चलाएं."
             ],
             "Choose an Action": [
                 "क्रिया चुनें"
             ],
-            "Cannot change actions while sync is in progress": [
-                "सिंक प्रगति के दौरान क्रियाओं को बदला नहीं जा सकता"
+            "Dismiss": [
+                "खारिज करें"
             ],
-            "Add Training Data": [
-                "प्रशिक्षण डेटा जोड़ें"
+            "Choose content types (KB Articles, Posts, Pages) to load into the table. This does not send anything to AI yet.": [
+                "टेबल में लोड करने के लिए सामग्री प्रकार चुनें (KB लेख, पोस्ट, पेज)। यह अभी AI को कुछ भी नहीं भेजता।."
             ],
-            "Cannot navigate while sync is in progress": [
-                "सिंक प्रगति के दौरान नेविगेशन नहीं किया जा सकता"
+            "To exclude specific items, search for them in the table, select them, then use Other Actions > Delete Selected.": [
+                "विशिष्ट आइटमों को बाहर करने के लिए, तालिका में उनके लिए खोज करें, उन्हें चुनें, फिर Other Actions > Delete Selected का उपयोग करें।."
             ],
-            "Adding data to:": [
-                "डेटा जोड़ना:"
+            "Select items from the table and send them to train the AI. Use the status tabs to filter, then select all and send.": [
+                "टेबल से आइटम चुनें और उन्हें AI को प्रशिक्षित करने के लिए भेज दें। स्थिति टैब का उपयोग करके फ़िल्टर करें, फिर सभी चुनें और भेज दें।."
+            ],
+            "Keep Content in Sync": [
+                "सामग्री को सिंक्रनाइज़ रखें"
+            ],
+            "When you edit content on your site, its status changes to \"Outdated\". Filter by Outdated, select, and re-send to update the AI.": [
+                "जब आप अपनी साइट की सामग्री में संपादन करते हैं, उसकी स्थिति \"अप्रचलित\" हो जाती है। अप्रचलित के अनुसार फ़िल्टर करें, चयन करें, और AI को अपडेट करने के लिए पुनः भेजें।."
+            ],
+            "Statuses": [
+                "स्थितियाँ"
+            ],
+            "In the table but not yet sent to AI.": [
+                "टेबल में है लेकिन अभी AI को नहीं भेजा गया है।."
+            ],
+            "Sent to AI successfully.": [
+                "AI को सफलतापूर्वक भेजा गया।."
+            ],
+            "Re-sent after changes.": [
+                "परिवर्तनों के बाद पुनः भेजा गया।."
+            ],
+            "Content changed since last sync. Re-send to update.": [
+                "पिछली सिंक्रनाइज़ेशन के बाद सामग्री बदली है। अपडेट के लिए पुनः भेजें।."
+            ],
+            "Could not be synced because the content is empty or the source no longer exists.": [
+                "सिंक नहीं किया जा सका क्योंकि सामग्री खाली है या स्रोत अब मौजूद नहीं है।."
+            ],
+            "Sync failed. Re-send to retry. Check the content exists and is not empty.": [
+                "सिंक विफल रहा। पुनः प्रयास के लिए पुनः भेजें। जाँच करें कि सामग्री मौजूद है और खाली नहीं है।."
+            ],
+            "Validate & Fix Synced Items": [
+                "समन्वयित आइटमों को सत्यापित करें और ठीक करें"
             ],
             "Choose which content types you want to include in your AI training data.": [
                 "अपने AI प्रशिक्षण डेटा में आप किन कंटेंट प्रकारों को शामिल करना चाहते हैं?."
+            ],
+            "Only Published content is included. Drafts, Private, and Pending posts are not available for AI training.": [
+                "केवल प्रकाशित सामग्री शामिल है। ड्राफ्ट्स, निजी, और पेंडिंग पोस्ट AI प्रशिक्षण के लिए उपलब्ध नहीं हैं।."
             ],
             "Access Manager Notice": [
                 "एक्सेस मैनेजर सूचना"
@@ -172,26 +286,47 @@
             "Loading content types...": [
                 "सामग्री प्रकार लोड हो रहा है..."
             ],
-            "available": [
-                "उपलब्ध"
-            ],
-            "added": [
-                "जोड़ा गया"
+            "No content types available.": [
+                "कोई सामग्री प्रकार उपलब्ध नहीं है।."
             ],
             "excluded": [
                 "निकाला गया"
             ],
-            "No eligible content": [
-                "कोई योग्य सामग्री नहीं"
-            ],
-            "No published content available": [
-                "कोई प्रकाशित सामग्री उपलब्ध नहीं है"
-            ],
             "All eligible items already added to collection": [
                 "सभी योग्य आइटम पहले से संग्रह में जोड़े जा चुके हैं"
             ],
-            "No content types available.": [
-                "कोई सामग्री प्रकार उपलब्ध नहीं है।."
+            "No eligible content": [
+                "कोई योग्य सामग्री नहीं"
+            ],
+            "No articles for %s found. First create and publish articles.": [
+                "%s के लिए कोई लेख नहीं मिला। पहले लेख बनाएं और प्रकाशित करें।."
+            ],
+            "No %s found. First create and publish %s.": [
+                "%s नहीं मिला। पहले %s बनाएं और प्रकाशित करें।."
+            ],
+            "Already in Collection": [
+                "संग्रह में पहले से मौजूद"
+            ],
+            "These content types have been added": [
+                "इन सामग्री प्रकारों को जुड़े गए हैं"
+            ],
+            "Available to Add": [
+                "जोड़ने के लिए उपलब्ध"
+            ],
+            "Select items to include in training data": [
+                "प्रशिक्षण डेटा में शामिल करने के लिए आइटम चुनें"
+            ],
+            "All available content types have been added.": [
+                "सभी उपलब्ध सामग्री प्रकार जोड़े गए हैं।."
+            ],
+            "No Content Available": [
+                "कोई सामग्री उपलब्ध नहीं है"
+            ],
+            "Create and publish content first": [
+                "पहले सामग्री बनाएं और प्रकाशित करें"
+            ],
+            "Requires AI Pro": [
+                "AI प्रो की आवश्यकता है"
             ],
             "Adding Data...": [
                 "डेटा जोड़ रहा है..."
@@ -199,14 +334,23 @@
             "Add Data": [
                 "डेटा जोड़ें"
             ],
-            "Notes": [
-                "नोट्स"
-            ],
-            "Add custom notes to help train the AI with specific information, guidelines, or context that may not be in your regular content.": [
-                "एआई को विशिष्ट जानकारी, दिशानिर्देश या संदर्भ के साथ प्रशिक्षित करने में मदद करने के लिए अपने अनुसार नोट जोड़ें जो आपकी सामान्य सामग्री में न हो।."
-            ],
             "Select items from the table and choose a sync method to update your AI training data.": [
                 "टेबल से आइटम चुनें और अपने एआई मशीन लर्निंग डेटा को अपडेट करने के लिए एक सिंक विधि चुनें."
+            ],
+            "Run an extra validation pass to make sure the local database and the AI store stay in sync. If a file is missing from the AI store, it will be marked as outdated so it can be re-sent.": [
+                "यह सुनिश्चित करने के लिए एक अतिरिक्त सत्यापन पास चलाएँ कि स्थानीय डेटाबेस और AI स्टोर सिंक में रहें। यदि AI स्टोर से कोई फ़ाइल गायब है, तो उसे पुराना चिह्नित किया जाएगा ताकि उसे फिर से भेजा जा सके।."
+            ],
+            "Collection:": [
+                "संग्रह:"
+            ],
+            "synced items ready to validate": [
+                "सिंक किए गए आइटम सत्यापन के लिए तैयार हैं"
+            ],
+            "Cancel Verify": [
+                "जाँच रद्द करें"
+            ],
+            "Validation in Progress...": [
+                "सत्यापन प्रगति पर है..."
             ],
             "Manage your collection settings and data.": [
                 "अपने संग्रह की सेटिंग्स और डेटा का प्रबंधन करें।."

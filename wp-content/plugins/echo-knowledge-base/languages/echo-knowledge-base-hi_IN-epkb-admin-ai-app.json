@@ -7,11 +7,14 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Go to General Settings": [
-                "सामान्य सेटिंग्स पर जाएँ"
-            ],
             "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
                 "AI सुविधाओं के उपयोग के लिए, कृपया अपनी API कुंजी कॉन्फ़िगर करें और सामान्य सेटिंग्स में डेटा गोपनीयता समझौते को स्वीकार करें, फिर AI खोज या AI चैट सक्षम करें।."
+            ],
+            "AI Features": [
+                "एआई सुविधाएँ"
+            ],
+            "Go to General Settings": [
+                "सामान्य सेटिंग्स पर जाएँ"
             ],
             "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
                 "मशीन लर्निंग डेटा के उपयोग के लिए, कृपया उनके संबंधित टैब में से AI चैट या AI खोज को सक्षम करें।."
@@ -19,17 +22,23 @@
             "Data Collection": [
                 "डेटा संग्रह"
             ],
-            "OpenAI API Key Required": [
-                "OpenAI API कुंजी आवश्यक है"
+            "API Key Required": [
+                "API कुंजी आवश्यक"
             ],
-            "To use AI features, you need to configure your OpenAI API key.": [
-                "AI सुविधाओं के उपयोग के लिए, आपको अपनी OpenAI API कुंजी कॉन्फ़िगर करनी होगी।."
+            "To use AI features, you need to configure your API key.": [
+                "AI सुविधाओं के उपयोग के लिए आपको अपनी API कुंजी कॉन्फ़िगर करनी होगी।."
             ],
             "Configure API Key": [
                 "API कुंजी कॉन्फ़िगर करें"
             ],
             "Failed to load tab data": [
                 "टैब डेटा लोड करने में असफल"
+            ],
+            "Failed to load dashboard data. Please reload the page.": [
+                "डैशबोर्ड डेटा लोड करने में विफल रहा। कृपया पेज को फिर से लोड करें।."
+            ],
+            "Loading Dashboard...": [
+                "डैशबोर्ड लोड हो रहा है..."
             ],
             "Unknown tab": [
                 "अज्ञात टैब"

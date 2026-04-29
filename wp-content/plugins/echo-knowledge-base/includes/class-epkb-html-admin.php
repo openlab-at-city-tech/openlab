@@ -202,7 +202,8 @@ class EPKB_HTML_Admin {
 
 							<div class="epkb-admin__secondary-panel__item epkb-admin__secondary-panel__<?php echo esc_attr( $secondary['list_key'] ); ?> <?php
 							echo ( $secondary['active'] ? 'epkb-admin__secondary-panel__item--active' : '' );
-							echo esc_attr( $secondary['main_class'] ); ?>" data-target="<?php echo esc_attr( $page_view['list_key'] ) . '__' .esc_attr( $secondary['list_key'] ); ?>">     <?php
+							echo esc_attr( $secondary['main_class'] ); ?>" data-target="<?php echo esc_attr( $page_view['list_key'] ) . '__' .esc_attr( $secondary['list_key'] ); ?>"<?php
+							echo empty( $secondary['url'] ) ? '' : ' data-url="' . esc_url( $secondary['url'] ) . '"'; ?>>     <?php
 
 								// Optional icon for secondary panel item
 								if ( ! empty( $secondary['icon_class'] ) ) {        ?>
@@ -577,6 +578,7 @@ class EPKB_HTML_Admin {
 			// Shared
 			'active'                    => false,
 			'list_key'                  => '',
+			'url'                       => '',  // Optional URL - if set, clicking the tab will redirect to this URL
 
 			// Secondary Panel Item
 			'label_text'                => '',
@@ -594,6 +596,7 @@ class EPKB_HTML_Admin {
 		$default_box = array(
 			'icon_class'    => '',
 			'class'         => '',
+			'id'            => '',
 			'title'         => '',
 			'description'   => '',
 			'html'          => '',
@@ -844,7 +847,7 @@ class EPKB_HTML_Admin {
 		ob_start();	?>
 		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
 			<p><?php esc_html_e( 'Use our Frontend Editor to change KB Main Page settings.', 'echo-knowledge-base' ); ?></p>
-			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>"
+			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id'] ); ?>"
 				target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
 		</div>	<?php
 		return ob_get_clean();
@@ -864,7 +867,7 @@ class EPKB_HTML_Admin {
 		ob_start();	?>
 		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
 			<p><?php esc_html_e( 'Use our Frontend Editor to change KB Article Page settings.', 'echo-knowledge-base' ); ?></p>
-			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_article_url( $kb_config ) ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>"
+			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_article_url( $kb_config ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id'] ); ?>"
 				target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
 		</div>	<?php
 		return ob_get_clean();
@@ -890,7 +893,7 @@ class EPKB_HTML_Admin {
 		ob_start();	?>
 		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
 			<p><?php esc_html_e( 'Use our Frontend Editor to change Category Archive Page settings.', 'echo-knowledge-base' ); ?></p>
-			<a href="<?php echo esc_url( $first_kb_archive_url ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>"
+			<a href="<?php echo esc_url( $first_kb_archive_url . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id'] ); ?>"
 					 target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
 		</div>	<?php
 		return ob_get_clean();
@@ -901,8 +904,9 @@ class EPKB_HTML_Admin {
 	 * @return void
 	 */
 	public static function show_resource_links_ad() {
+		// translators: %1$s and %2$s are HTML strong tags
 		EPKB_HTML_Forms::pro_feature_ad_box( array(
-			'title'             => sprintf( esc_html__( "Get %sResource Links%s Feature", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+			'title'             => sprintf( esc_html__( "Get %1\$sResource Links%2\$s Feature", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
 			'list'              => array(
 				esc_html__( 'Add call-to-action boxes with links to the Main Page', 'echo-knowledge-base' ),
 				esc_html__( 'Customize the call-to-action appearance', 'echo-knowledge-base' ),

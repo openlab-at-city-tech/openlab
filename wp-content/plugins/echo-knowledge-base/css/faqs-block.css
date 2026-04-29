@@ -153,14 +153,11 @@ body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman
 
 /* Modules
 --------------------------------------------------------------*/
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/* Shared
+--------------------------------------------------------------*/
+/**
+ * Module Layout General Settings
+ */
 .epkb-css-working-hide-message {
   display: none;
 }
@@ -207,6 +204,14 @@ body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman
     max-width: 100% !important;
   }
 }
+#epkb-modular-main-page-container p:empty,
+.epkb-block-main-page-container p:empty {
+  display: none;
+}
+#epkb-modular-main-page-container br,
+.epkb-block-main-page-container br {
+  display: none;
+}
 #epkb-modular-main-page-container .eckb-kb-no-content,
 .epkb-block-main-page-container .eckb-kb-no-content {
   display: block !important;
@@ -217,6 +222,10 @@ body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman
   border: solid 1px #DDDDDD;
   border-radius: 10px;
   font-family: sans-serif;
+}
+#epkb-modular-main-page-container .eckb-kb-no-content br,
+.epkb-block-main-page-container .eckb-kb-no-content br {
+  display: block !important;
 }
 #epkb-modular-main-page-container .eckb-kb-no-content .eckb-kb-no-content-title,
 .epkb-block-main-page-container .eckb-kb-no-content .eckb-kb-no-content-title {
@@ -640,17 +649,13 @@ body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman
   margin-bottom: 0 !important;
 }
 
+/* Shared
+--------------------------------------------------------------*/
 /**
  * FAQs Module styles
  */
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
+/* Shared
+--------------------------------------------------------------*/
 #epkb-ml__module-faqs .epkb-faqs-article-coming-soon {
   font-size: 26px !important;
   font-family: inherit;
@@ -867,6 +872,10 @@ body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman
 }
 #epkb-ml__module-faqs #epkb-ml-faqs-drill-down-layout .epkb-faqs-title {
   font-size: 23px;
+}
+#epkb-ml__module-faqs .epkb-faqs-container .epkb-faqs__item__question:focus-visible {
+  outline: 2px solid var(--eckb-focus-color, #0073AA);
+  outline-offset: 2px;
 }
 @media only screen and (max-width: 981px) {
   #epkb-ml__module-faqs .epkb-faqs-container {

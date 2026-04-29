@@ -28,7 +28,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 			return false;
 		}
 
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$data = array(
 			'overall_score' => (int) $scores['overall'],
 			'analyzed_at' => gmdate( 'Y-m-d H:i:s' ),
@@ -49,11 +49,11 @@ class EPKB_AI_Content_Analysis_Utilities {
 	public static function get_article_scores( $article_id, $analysis=null ) {
 
 		if ( ! $analysis ) {
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$analysis = $db->get_article_analysis( $article_id );
 		}
 
-		if ( ! $analysis ) {
+		if ( ! $analysis || is_wp_error( $analysis ) ) {
 			return null;
 		}
 
@@ -79,7 +79,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 	 * @return bool Success
 	 */
 	public static function set_analysis_status( $article_id, $status ) {
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$result = $db->save_article_analysis( $article_id, array( 'status' => $status ) );
 		return ! is_wp_error( $result );
 	}
@@ -93,11 +93,11 @@ class EPKB_AI_Content_Analysis_Utilities {
 	public static function get_analysis_status( $article_id, $analysis=null ) {
 
 		if ( ! $analysis ) {
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$analysis = $db->get_article_analysis( $article_id );
 		}
 
-		return $analysis ? $analysis->status : '';
+		return $analysis && ! is_wp_error( $analysis ) ? $analysis->status : '';
 	}
 
 	/**
@@ -125,7 +125,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 			$error_message = substr( $error_message, 0, 197 ) . '...';
 		}
 
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$result = $db->save_article_analysis( $post->ID, array( 'error_message' => $error_message, 'status' => 'error' ) );
 
 		return ! is_wp_error( $result );
@@ -140,12 +140,12 @@ class EPKB_AI_Content_Analysis_Utilities {
 	public static function get_analysis_error( $article_id, $analysis=null ) {
 
 		if ( ! $analysis ) {
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$analysis = $db->get_article_analysis( $article_id );
 		}
 
 		return array(
-			'message' => $analysis && $analysis->error_message ? $analysis->error_message : '',
+			'message' => $analysis && ! is_wp_error( $analysis ) && $analysis->error_message ? $analysis->error_message : '',
 			'code' => 0 // No longer storing error codes separately
 		);
 	}
@@ -166,7 +166,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 			return false;
 		}
 
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$date_value = $date ?: gmdate( 'Y-m-d H:i:s' );
 
 		// Map action to database field
@@ -198,7 +198,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 			return false;
 		}
 
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 
 		// Map action to database field
 		$field_map = array(
@@ -223,11 +223,11 @@ class EPKB_AI_Content_Analysis_Utilities {
 	public static function get_article_dates( $article_id, $analysis=null ) {
 
 		if ( ! $analysis ) {
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$analysis = $db->get_article_analysis( $article_id );
 		}
 
-		if ( ! $analysis ) {
+		if ( ! $analysis || is_wp_error( $analysis ) ) {
 			return array(
 				'analyzed' => '',
 				'improved' => '',
@@ -263,7 +263,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 	 * @return bool Success
 	 */
 	public static function clear_all_analysis_metadata( $article_id ) {
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		return $db->delete_article_analysis( $article_id );
 	}
 
@@ -275,37 +275,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 	 */
 	public static function get_article_analysis_data( $article_id ) {
 
-		// Check if this is a demo article
-		$is_demo_article = EPKB_KB_Demo_Data::is_demo_article( $article_id );
-		if ( $is_demo_article ) {
-			$demo_tags_data = EPKB_KB_Demo_Data::get_demo_tags_usage_data();
-			return array(
-				'status' => 'analyzed',
-				'scores' => array(
-					'overall' => $demo_tags_data['score'],
-					'components' => array(
-						'tags_usage' => $demo_tags_data['score'],
-						'readability' => 0,
-						'gap_analysis' => 0
-					),
-					'importance' => 50
-				),
-				'dates' => array(
-					'analyzed' => current_time( 'mysql' ),
-					'improved' => '',
-					'ignored' => '',
-					'done' => ''
-				),
-				'error' => array( 'message' => '', 'code' => 0 ),
-				'is_analyzed' => true,
-				'is_improved' => false,
-				'is_ignored' => false,
-				'is_done' => false,
-				'is_demo' => true
-			);
-		}
-
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$analysis = $db->get_article_analysis( $article_id );
 
 		$scores = self::get_article_scores( $article_id, $analysis );
@@ -321,8 +291,7 @@ class EPKB_AI_Content_Analysis_Utilities {
 			'is_analyzed' => ! empty( $dates['analyzed'] ) && $status === 'analyzed',
 			'is_improved' => ! empty( $dates['improved'] ),
 			'is_ignored' => ! empty( $dates['ignored'] ),
-			'is_done' => ! empty( $dates['done'] ),
-			'is_demo' => false
+			'is_done' => ! empty( $dates['done'] )
 		);
 	}
 
@@ -502,36 +471,6 @@ class EPKB_AI_Content_Analysis_Utilities {
 	}
 
 	/**
-	 * Extract content from OpenAI Responses API response structure
-	 *
-	 * @param array $response OpenAI API response
-	 * @return string|WP_Error Response content text or error
-	 */
-	public static function extract_openai_response_content( $response ) {
-
-		// Validate response structure
-		if ( empty( $response['output'] ) || ! is_array( $response['output'] ) ) {
-			return new WP_Error( 'invalid_response', __( 'Invalid response from AI service', 'echo-knowledge-base' ) );
-		}
-
-		// Get the last output item
-		$last_output = end( $response['output'] );
-		if ( empty( $last_output['content'] ) || ! is_array( $last_output['content'] ) ) {
-			return new WP_Error( 'invalid_response', __( 'Invalid response content from AI service', 'echo-knowledge-base' ) );
-		}
-
-		// Get the first content item
-		$response_content = $last_output['content'][0];
-
-		// If content is an object with a 'text' property, extract it
-		if ( is_array( $response_content ) && isset( $response_content['text'] ) ) {
-			$response_content = $response_content['text'];
-		}
-
-		return trim( $response_content );
-	}
-
-	/**
 	 * Parse JSON response from AI with error handling
 	 *
 	 * @param string $json_text JSON text to parse
@@ -540,15 +479,149 @@ class EPKB_AI_Content_Analysis_Utilities {
 	 */
 	public static function parse_json_response( $json_text, $context = 'ai_analysis' ) {
 
-		// Parse JSON response
-		$parsed_response = json_decode( $json_text, true );
-		if ( json_last_error() !== JSON_ERROR_NONE ) {
-			// Log the raw response for debugging
-			EPKB_Logging::add_log( 'Failed to parse AI response', $json_text, array( 'context' => $context ) );
-			return new WP_Error( 'json_parse_error', __( 'Failed to parse AI response as JSON', 'echo-knowledge-base' ), $json_text );
+		$json_text = is_string( $json_text ) ? $json_text : strval( $json_text );
+		$fence_stripped_text = self::remove_markdown_code_fences( $json_text );
+		$json_candidates = array();
+
+		self::add_json_candidate( $json_candidates, $json_text );
+		self::add_json_candidate( $json_candidates, $fence_stripped_text );
+		// Recovery should prefer later JSON blocks because models sometimes include an example before the real payload.
+		foreach ( array_reverse( self::extract_balanced_json_structures( $json_text ) ) as $json_candidate ) {
+			self::add_json_candidate( $json_candidates, $json_candidate );
+		}
+		foreach ( array_reverse( self::extract_balanced_json_structures( $fence_stripped_text ) ) as $json_candidate ) {
+			self::add_json_candidate( $json_candidates, $json_candidate );
 		}
 
-		return $parsed_response;
+		foreach ( $json_candidates as $json_candidate ) {
+			$parsed_response = json_decode( $json_candidate, true );
+			if ( json_last_error() === JSON_ERROR_NONE ) {
+				return $parsed_response;
+			}
+		}
+
+		if ( ! empty( $json_candidates ) ) {
+			// Check if response appears to be truncated
+			$is_truncated = false;
+			$error_message = __( 'Failed to parse AI response as JSON', 'echo-knowledge-base' );
+			$text_for_detection = rtrim( $fence_stripped_text );
+
+			// Detect truncation: valid JSON should end with } or ]
+			if ( ! empty( $text_for_detection ) ) {
+				$last_char = substr( $text_for_detection, -1 );
+				// If JSON doesn't end with closing brace or bracket, it's likely truncated
+				// Also check if it looks like it was cut off mid-word or mid-string
+				if ( ! in_array( $last_char, array( '}', ']' ) ) && 
+				     ( strpos( $text_for_detection, '{' ) !== false || strpos( $text_for_detection, '[' ) !== false ) ) {
+					$is_truncated = true;
+					$error_message = __( 'AI response appears to be truncated. The response may have exceeded the maximum output length. Please try again.', 'echo-knowledge-base' );
+				}
+			}
+
+			// Log the raw response for debugging (truncate if very long to avoid log bloat)
+			$log_text = strlen( $json_text ) > 5000 ? substr( $json_text, 0, 5000 ) . '...[truncated for logging]' : $json_text;
+			EPKB_AI_Log::add_log( 'Failed to parse AI response' . ( $is_truncated ? ' (truncated)' : '' ), $log_text );
+
+			return new WP_Error( 'json_parse_error', $error_message, $json_text );
+		}
+
+		return new WP_Error( 'json_parse_error', __( 'Failed to parse AI response as JSON', 'echo-knowledge-base' ), $json_text );
+	}
+
+	/**
+	 * Add one unique JSON candidate to the parsing queue.
+	 *
+	 * @param array  $json_candidates
+	 * @param string $json_candidate
+	 */
+	private static function add_json_candidate( &$json_candidates, $json_candidate ) {
+		$json_candidate = trim( strval( $json_candidate ) );
+		if ( $json_candidate === '' || in_array( $json_candidate, $json_candidates, true ) ) {
+			return;
+		}
+
+		$json_candidates[] = $json_candidate;
+	}
+
+	/**
+	 * Extract balanced JSON objects or arrays from surrounding prose.
+	 *
+	 * @param string $text
+	 * @return array
+	 */
+	private static function extract_balanced_json_structures( $text ) {
+		$text = trim( strval( $text ) );
+		if ( $text === '' ) {
+			return array();
+		}
+
+		$json_structures = array();
+		$start_index = null;
+		$stack = array();
+		$in_string = false;
+		$is_escaped = false;
+		$text_length = strlen( $text );
+
+		for ( $index = 0; $index < $text_length; $index++ ) {
+			$char = $text[ $index ];
+
+			if ( $start_index === null ) {
+				if ( $char === '{' ) {
+					$start_index = $index;
+					$stack[] = '}';
+				} elseif ( $char === '[' ) {
+					$start_index = $index;
+					$stack[] = ']';
+				}
+				continue;
+			}
+
+			if ( $in_string ) {
+				if ( $is_escaped ) {
+					$is_escaped = false;
+					continue;
+				}
+
+				if ( $char === '\\' ) {
+					$is_escaped = true;
+					continue;
+				}
+
+				if ( $char === '"' ) {
+					$in_string = false;
+				}
+				continue;
+			}
+
+			if ( $char === '"' ) {
+				$in_string = true;
+				continue;
+			}
+
+			if ( $char === '{' ) {
+				$stack[] = '}';
+				continue;
+			}
+
+			if ( $char === '[' ) {
+				$stack[] = ']';
+				continue;
+			}
+
+			if ( empty( $stack ) || $char !== end( $stack ) ) {
+				continue;
+			}
+
+			array_pop( $stack );
+			if ( empty( $stack ) ) {
+				$json_structures[] = substr( $text, $start_index, $index - $start_index + 1 );
+				$start_index = null;
+				$in_string = false;
+				$is_escaped = false;
+			}
+		}
+
+		return $json_structures;
 	}
 
 	/**

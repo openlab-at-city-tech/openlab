@@ -13,14 +13,20 @@
             "Error": [
                 "エラー"
             ],
-            "No posts found to sync": [
-                "同期する投稿が見つかりません"
+            "No synced items found to verify": [
+                "検証する同期済みアイテムが見つかりません。"
             ],
             "Pending": [
                 "承認待ち"
             ],
             "of": [
                 "の"
+            ],
+            "Selected": [
+                "選択済み"
+            ],
+            "Processing": [
+                "処理中"
             ],
             "errors": [
                 "エラー"
@@ -31,8 +37,14 @@
             "Sync canceled": [
                 "同期がキャンセルされました"
             ],
+            "No posts found to sync": [
+                "同期する投稿が見つかりません"
+            ],
             "Failed to cancel sync": [
                 "同期のキャンセルに失敗しました"
+            ],
+            "Failed to start verification": [
+                "検証の開始に失敗しました"
             ],
             "A sync job is already running.": [
                 "同期処理が既に実行中です。."
@@ -40,20 +52,8 @@
             "Failed to start sync": [
                 "同期の開始に失敗しました"
             ],
-            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
-                "コンテンツを同期するには OpenAI API キーが必要です。一般設定で設定してください。."
-            ],
-            "Sync Method": [
-                "同期方法"
-            ],
-            "Basic Timer": [
-                "基本タイマー"
-            ],
-            "Select All Filtered Records": [
-                "絞り込み済みのすべてのレコードを選択"
-            ],
-            "Select All Records": [
-                "すべてのレコードを選択"
+            "API key is required to sync content. Please configure it in General Settings.": [
+                "コンテンツを同期するには APIキーが必要です。一般設定で設定してください。."
             ],
             "Outdated": [
                 "時代遅れ"
@@ -61,14 +61,17 @@
             "Added": [
                 "追加済み"
             ],
-            "Selected": [
-                "選択済み"
-            ],
             "Records": [
                 "レコード"
             ],
             "selected records": [
                 "選択済みのレコード"
+            ],
+            "Select All Filtered Records": [
+                "絞り込み済みのすべてのレコードを選択"
+            ],
+            "Select All Records": [
+                "すべてのレコードを選択"
             ],
             "Sync in Progress": [
                 "同期中"
@@ -82,8 +85,8 @@
             "Select at least one item to sync": [
                 "同期するには、少なくとも1つの項目を選択してください"
             ],
-            "Start Sync": [
-                "同期を開始"
+            "Send Data to AI for Training": [
+                "AIのトレーニング用データを送信"
             ],
             "Sync started successfully! ": [
                 "同期が正常に開始されました！"
@@ -93,9 +96,6 @@
             ],
             "Retrying failed posts:": [
                 "失敗した投稿を再試行中:"
-            ],
-            "Processing": [
-                "処理中"
             ],
             "posts": [
                 "投稿"
@@ -114,6 +114,27 @@
             ],
             "Sync scheduled, waiting to start...": [
                 "同期がスケジュールされています。開始を待機しています..."
+            ],
+            "Upload completed, but the number of items doesn't match:": [
+                "アップロードが完了しましたが、アイテムの数が一致しません:"
+            ],
+            "items tracked locally vs": [
+                "ローカルで追跡されているアイテム vs"
+            ],
+            "items in the AI provider.": [
+                "AI プロバイダーのアイテム。."
+            ],
+            "Checking for specific mismatches...": [
+                "特定の不一致を確認中..."
+            ],
+            "The following items were not found in the AI provider:": [
+                "以下のアイテムはAI プロバイダーで見つかりませんでした："
+            ],
+            "items in the AI provider are not tracked locally.": [
+                "AI プロバイダーのアイテムはローカルに追跡されていません。."
+            ],
+            "Verify & Fix": [
+                "検証と修正"
             ]
         }
     }

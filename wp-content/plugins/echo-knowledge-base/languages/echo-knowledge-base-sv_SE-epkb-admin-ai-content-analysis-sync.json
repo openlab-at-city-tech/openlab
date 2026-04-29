@@ -37,8 +37,8 @@
             "Content analysis completed successfully!": [
                 "Innehållsanalys genomförd framgångsrikt!"
             ],
-            "Retry limit reached while contacting OpenAI.": [
-                "Återförsöksgränsen uppnåddes vid kontakt med OpenAI."
+            "Retry limit reached while contacting AI.": [
+                "Återförsöksgränsen uppnådd vid kontakt med AI."
             ],
             "Failed to start analysis": [
                 "Misslyckades med att starta analysen"

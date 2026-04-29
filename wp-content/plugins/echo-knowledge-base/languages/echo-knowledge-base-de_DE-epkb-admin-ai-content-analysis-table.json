@@ -31,6 +31,9 @@
             "selected": [
                 "ausgewählt"
             ],
+            "Delete": [
+                "Löschen"
+            ],
             "Next": [
                 "Weiter"
             ],
@@ -45,9 +48,6 @@
             ],
             "Loading...": [
                 "Wird geladen..."
-            ],
-            "Delete": [
-                "Löschen"
             ],
             "of": [
                 "von"
@@ -79,29 +79,8 @@
             "Unknown error occurred": [
                 "Unbekannter Fehler ist aufgetreten"
             ],
-            "No articles need analysis": [
-                "Es sind keine Dokumentationsseiten zur Analyse erforderlich"
-            ],
-            "All articles have been analyzed. Great job!": [
-                "Alle Dokumentationsseiten wurden analysiert. Großartig!"
-            ],
-            "No articles need improvement": [
-                "Keine Dokumentationsseiten müssen verbessert werden"
-            ],
-            "All analyzed articles have scores above 80%. Excellent!": [
-                "Alle analysierten Dokumentationsseiten haben Werte über 80%. Ausgezeichnet!"
-            ],
-            "No recent articles": [
-                "Keine aktuellen Dokumentationsseiten"
-            ],
-            "No articles have been modified recently.": [
-                "In letzter Zeit wurden keine Dokumentationsseiten geändert."
-            ],
-            "No articles found": [
-                "Keine Dokumentationsseiten gefunden"
-            ],
-            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
-                "In dieser Wissensdatenbank sind keine Dokumentationsseiten verfügbar. Erstellen Sie einige Dokumentationsseiten, um mit der Analyse zu beginnen."
+            "All Knowledge Bases": [
+                "Alle Wissensdatenbanken"
             ],
             "To Analyze": [
                 "Analysieren"
@@ -129,6 +108,18 @@
             ],
             "No articles match your search": [
                 "Keine Dokumentationsseite entspricht Ihrer Suche"
+            ],
+            "No articles need analysis": [
+                "Es sind keine Dokumentationsseiten zur Analyse erforderlich"
+            ],
+            "No articles need improvement": [
+                "Keine Dokumentationsseiten müssen verbessert werden"
+            ],
+            "No recent articles": [
+                "Keine aktuellen Dokumentationsseiten"
+            ],
+            "No articles found": [
+                "Keine Dokumentationsseiten gefunden"
             ],
             "View detailed analysis": [
                 "Detaillierte Analyse anzeigen"

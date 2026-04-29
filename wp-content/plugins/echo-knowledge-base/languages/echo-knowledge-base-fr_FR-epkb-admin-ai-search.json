@@ -19,14 +19,23 @@
             "Cancel": [
                 "Annuler"
             ],
-            "Date:": [
-                "Date :"
+            "Save Settings": [
+                "Enregistrer les paramètres"
+            ],
+            "Delete": [
+                "Supprimer"
             ],
             "Next": [
                 "Suivant"
             ],
             "Previous": [
                 "Précédent"
+            ],
+            "Feedback": [
+                "Commentaires"
+            ],
+            "Reset": [
+                "Réinitialiser"
             ],
             "Saving...": [
                 "Sauvegarde en cours..."
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "Colonne du milieu"
             ],
-            "Feedback": [
-                "Commentaires"
-            ],
             "AI Assistant": [
                 "Assistant IA"
-            ],
-            "Save Settings": [
-                "Enregistrer les paramètres"
-            ],
-            "Delete": [
-                "Supprimer"
             ],
             "Delete Selected": [
                 "Supprimer la sélection"
             ],
             "of": [
                 "de"
-            ],
-            "Reset": [
-                "Réinitialiser"
             ],
             "Refreshing...": [
                 "Actualisation..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "Recherche de résultats supplémentaires sur le serveur..."
             ],
-            "User:": [
-                "Utilisateur:"
-            ],
-            "Status:": [
-                "État:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "Êtes-vous sûr de vouloir réinitialiser les instructions par défaut ?"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "Réinitialiser par défaut"
             ],
+            "Training data issues detected": [
+                "Problèmes de données d'apprentissage détectés"
+            ],
             "Failed to save settings": [
                 "Échec de l'enregistrement des paramètres"
             ],
             "Go to Settings": [
                 "Aller dans les Paramètres"
+            ],
+            "Deleting search...": [
+                "Suppression de la recherche..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "Êtes-vous sûr de vouloir supprimer les recherches sélectionnées ?"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "Sélectionnez une recherche pour afficher les détails"
             ],
-            "Search Information": [
-                "Informations sur la recherche"
-            ],
-            "Query:": [
-                "Requête :"
-            ],
-            "Results Count:": [
-                "Nombre de résultats :"
-            ],
             "Contact Request": [
                 "Demande de contact"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "Ajouter une section"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "Êtes-vous sûr de vouloir réinitialiser l'invite par défaut ?"
+            ],
+            "Reset Prompt": [
+                "Réinitialiser l'invite"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "Êtes-vous sûr de vouloir réinitialiser l'invite par défaut ? Votre invite personnalisée sera perdue."
+            ],
+            "Select Section:": [
+                "Sélectionnez la section :"
+            ],
+            "Prompt:": [
+                "Invite :"
+            ],
+            "Using custom prompt": [
+                "Utilisation de l'invite personnalisée"
+            ],
+            "Using default prompt": [
+                "Utilisation de l'invite par défaut"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "IA Recherche a besoin d'une collection de données d'apprentissage valide. Résolvez les problèmes ci-dessous dans les données d'apprentissage ou dans la Configuration KB."
             ],
             "Failed to load search history": [
                 "Échec du chargement de l'historique des recherches"

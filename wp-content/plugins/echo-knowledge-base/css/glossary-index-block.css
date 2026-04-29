@@ -1,0 +1,95 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__empty {
+  text-align: center;
+  padding: 20px;
+  color: #666666;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 16px 0;
+  margin: 0 0 8px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__nav-item--active:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__nav-item--inactive {
+  cursor: default;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__section {
+  display: flex;
+  align-items: flex-start;
+  padding: 24px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__section-letter {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1;
+  padding: 0 16px 0 0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__section-content {
+  flex: 1;
+  min-width: 0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__terms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+  margin: 0;
+  padding: 0;
+}
+@media only screen and (max-width: 700px) {
+  .eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__terms {
+    grid-template-columns: 1fr;
+  }
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__term {
+  padding: 8px 0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__term-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__term-definition {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555555;
+  margin: 0;
+  padding: 0;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__back-to-top {
+  display: inline-block;
+  margin: 12px 0 0 0;
+  font-size: 13px;
+  color: #888888;
+  text-decoration: none;
+}
+.eckb-kb-block-glossary-index .epkb-glossary-index .epkb-glossary-index__back-to-top:hover {
+  color: #333333;
+}

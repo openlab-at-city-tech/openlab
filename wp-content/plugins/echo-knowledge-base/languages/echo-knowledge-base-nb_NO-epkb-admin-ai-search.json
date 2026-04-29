@@ -19,14 +19,23 @@
             "Cancel": [
                 "Avbryt"
             ],
-            "Date:": [
-                "Dato:"
+            "Save Settings": [
+                "Lagre innstillinger"
+            ],
+            "Delete": [
+                "Slett"
             ],
             "Next": [
                 "Neste"
             ],
             "Previous": [
                 "Forrige"
+            ],
+            "Feedback": [
+                "Tilbakemelding"
+            ],
+            "Reset": [
+                "Tilbakestill"
             ],
             "Saving...": [
                 "Lagrer..."
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "Midtkolonne"
             ],
-            "Feedback": [
-                "Tilbakemelding"
-            ],
             "AI Assistant": [
                 "AI-assistent"
-            ],
-            "Save Settings": [
-                "Lagre innstillinger"
-            ],
-            "Delete": [
-                "Slett"
             ],
             "Delete Selected": [
                 "Slett valgte"
             ],
             "of": [
                 "av"
-            ],
-            "Reset": [
-                "Tilbakestill"
             ],
             "Refreshing...": [
                 "Oppdaterer..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "Søker på serveren etter flere resultater..."
             ],
-            "User:": [
-                "Bruker:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "Er du sikker på at du vil tilbakestille til standardinstruksjoner?"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "Tilbakestill til standard"
             ],
+            "Training data issues detected": [
+                "Oppdagede problemer med treningsdata"
+            ],
             "Failed to save settings": [
                 "Kunne ikke lagre innstillinger"
             ],
             "Go to Settings": [
                 "Gå til Innstillinger"
+            ],
+            "Deleting search...": [
+                "Søket slettes..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "Er du sikker på at du vil slette de valgte søkene?"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "Velg et søk for å vise detaljer"
             ],
-            "Search Information": [
-                "Søkeinformasjon"
-            ],
-            "Query:": [
-                "Forespørsel:"
-            ],
-            "Results Count:": [
-                "Antall resultater:"
-            ],
             "Contact Request": [
                 "Kontaktforespørsel"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "Legg til seksjon"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "Er du sikker på at du vil tilbakestille til standardprompten?"
+            ],
+            "Reset Prompt": [
+                "Tilbakestill prompten"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "Er du sikker på at du vil tilbakestille til standardprompten? Ditt tilpassede prompt vil gå tapt."
+            ],
+            "Select Section:": [
+                "Velg seksjon:"
+            ],
+            "Prompt:": [
+                "Prompt:"
+            ],
+            "Using custom prompt": [
+                "Bruker egendefinert prompt"
+            ],
+            "Using default prompt": [
+                "Bruker standardprompt"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "AI Søk trenger en gyldig maskinlæringsdatasamling. Løs problemene nedenfor i maskinlæringsdatasamlingen eller KB-konfigurasjon."
             ],
             "Failed to load search history": [
                 "Kunne ikke laste søkehistorikken"

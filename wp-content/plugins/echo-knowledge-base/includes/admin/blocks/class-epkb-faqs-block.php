@@ -242,6 +242,15 @@ final class EPKB_FAQs_Block extends EPKB_Abstract_Block {
 							'custom_css_class' => EPKB_Blocks_Settings::get_custom_css_class_setting(),
 						)
 					),
+
+					// GROUP: Help + Setup Wizard
+					'help-resources' => array(
+						'title' => esc_html__( 'Help + Setup Wizard', 'echo-knowledge-base' ),
+						'fields' => array(
+							'help_resources_link' => EPKB_Blocks_Settings::get_help_resources_link(),
+							'setup_wizard_link' => EPKB_Blocks_Settings::get_setup_wizard_link(),
+						)
+					),
 				),
 			),
 

@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  *  Outputs the Search module for Modular Main Page.
@@ -13,13 +13,16 @@ class EPKB_ML_Search {
 
 	function __construct( $kb_config, $is_kb_block = false ) {
 		$this->kb_config = $kb_config;
-		$this->setting_prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) || $is_kb_block ? '' : 'article_';
+		$this->setting_prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) || $is_kb_block || EPKB_Utilities::use_main_page_search_settings_on_article_page( $kb_config ) ? '' : 'article_';
 		$this->is_kb_block = $is_kb_block;
 
 		// Mark that search box is rendered for AI search results dialog output
-		if ( EPKB_AI_Utilities::is_ai_search_advanced_enabled() ) {
+		if ( EPKB_AI_Utilities::is_ai_search_smart_enabled() ) {
 			EPKB_AI_Search_Results_Display::mark_search_box_rendered();
 		}
+
+		// Enqueue AI search scripts if enabled
+		EPKB_AI_Utilities::enqueue_ai_search_scripts();
 	}
 
 	/**
@@ -27,11 +30,15 @@ class EPKB_ML_Search {
 	 */
 	public function display_classic_search_layout() {	?>
 
-		<!-- Classic Search Layout -->
-		<div id="epkb-ml-search-classic-layout">    <?php
-			$this->display_search_title();
-			$collection_id_attr = ' data-collection-id="' . $this->kb_config['kb_ai_collection_id'] . '"';  ?>
-			<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" onsubmit="return false;"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?><?php echo EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? ' data-ai-search-results="1"' : ''; ?><?php echo $collection_id_attr; ?>>
+			<!-- Classic Search Layout -->
+			<div id="epkb-ml-search-classic-layout">    <?php
+				$this->display_search_title();
+				$collection_attrs = '';
+				if ( ! empty( $this->kb_config['kb_ai_collection_id'] ) ) {
+					$collection_attrs = ' data-collection-id="' . esc_attr( $this->kb_config['kb_ai_collection_id'] ) . '"';
+					$collection_attrs .= ' data-collection-token="' . esc_attr( EPKB_AI_Security::create_collection_access_token( $this->kb_config['kb_ai_collection_id'], $this->kb_config['id'] ) ) . '"';
+				} ?>
+				<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" onsubmit="return false;"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?><?php echo EPKB_AI_Utilities::is_ai_search_smart_enabled() ? ' data-ai-search-results="1"' : ''; ?><?php echo $collection_attrs; ?>>
 				<input type="hidden" id="epkb_kb_id" value="<?php echo esc_attr( $this->kb_config['id'] ); ?>" >
 
 				<!-- Search Input Box -->
@@ -55,11 +62,15 @@ class EPKB_ML_Search {
 	 */
 	public function display_modern_search_layout() {	?>
 
-		<!-- Modern Search Layout -->
-		<div id="epkb-ml-search-modern-layout">    <?php
-			$this->display_search_title();
-			$collection_id_attr = ' data-collection-id="' . $this->kb_config['kb_ai_collection_id'] . '"';  ?>
-			<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" onsubmit="return false;"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?><?php echo EPKB_AI_Utilities::is_ai_search_advanced_enabled() ? ' data-ai-search-results="1"' : ''; ?><?php echo $collection_id_attr; ?>>
+			<!-- Modern Search Layout -->
+			<div id="epkb-ml-search-modern-layout">    <?php
+				$this->display_search_title();
+				$collection_attrs = '';
+				if ( ! empty( $this->kb_config['kb_ai_collection_id'] ) ) {
+					$collection_attrs = ' data-collection-id="' . esc_attr( $this->kb_config['kb_ai_collection_id'] ) . '"';
+					$collection_attrs .= ' data-collection-token="' . esc_attr( EPKB_AI_Security::create_collection_access_token( $this->kb_config['kb_ai_collection_id'], $this->kb_config['id'] ) ) . '"';
+				} ?>
+				<form id="epkb-ml-search-form" class="epkb-ml-search-input-height--<?php echo esc_attr( $this->kb_config['search_box_input_height'] ); ?>" method="get" onsubmit="return false;"<?php echo $this->is_kb_block ? ' ' . 'data-kb-block-post-id="' . (int)get_the_ID() . '"' : ''; ?><?php echo EPKB_AI_Utilities::is_ai_search_smart_enabled() ? ' data-ai-search-results="1"' : ''; ?><?php echo $collection_attrs; ?>>
 				<input type="hidden" id="epkb_kb_id" value="<?php echo esc_attr( $this->kb_config['id'] ); ?>" >
 
 				<!-- Search Input Box -->
@@ -114,7 +125,7 @@ class EPKB_ML_Search {
 		if ( $is_article ) {
 
 			// still check prefix because Sidebar layout uses Main Page search for Article Page
-			$prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) ? '' : 'article_';
+			$prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) || EPKB_Utilities::use_main_page_search_settings_on_article_page( $kb_config )  ? '' : 'article_';
 
 			$output .= '
 				#eckb-article-header #epkb-ml__module-search {
@@ -155,7 +166,7 @@ class EPKB_ML_Search {
 
 		} else if ( is_archive() ) {
 
-			$prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) ? '' : 'article_';
+			$prefix = EPKB_Core_Utilities::is_main_page_search( $kb_config ) || EPKB_Utilities::use_main_page_search_settings_on_article_page( $kb_config ) ? '' : 'article_';
 
 			$output .= '
 				#eckb-archive-page-container #eckb-archive-header #epkb-ml__module-search {

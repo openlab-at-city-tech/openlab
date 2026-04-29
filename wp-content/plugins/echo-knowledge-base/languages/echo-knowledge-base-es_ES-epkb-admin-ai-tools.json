@@ -7,29 +7,29 @@
                 "lang": "es_ES",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "AI Search": [
-                "IA Búsqueda"
-            ],
             "All": [
                 "Todo"
             ],
             "Disabled": [
                 "Desactivado"
             ],
+            "Debug Mode": [
+                "Modo de depuración"
+            ],
+            "API Key": [
+                "Clave API"
+            ],
             "AI Chat": [
                 "IA Chat"
             ],
-            "OpenAI API Key": [
-                "Clave API de OpenAI"
+            "AI Search": [
+                "IA Búsqueda"
             ],
             "Debug mode updated successfully": [
                 "Modo de depuración actualizado con éxito"
             ],
             "Refresh": [
                 "Actualizar"
-            ],
-            "Status:": [
-                "Estado:"
             ],
             "Warnings": [
                 "Advertencias"
@@ -70,9 +70,6 @@
             "Error clearing AI logs": [
                 "Error al borrar los registros de IA"
             ],
-            "Debug Mode": [
-                "Modo de depuración"
-            ],
             "Enable Debug Mode": [
                 "Activar modo de depuración"
             ],
@@ -105,6 +102,9 @@
             ],
             "Total Records:": [
                 "Total de registros:"
+            ],
+            "Status:": [
+                "Estado:"
             ],
             "Added:": [
                 "Añadido:"

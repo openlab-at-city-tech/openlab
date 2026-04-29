@@ -7,14 +7,23 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Demo Article": [
-                "डेमो लेख"
-            ],
             "Categories": [
                 "श्रेणियाँ"
             ],
+            "OFF": [
+                "ऑफ"
+            ],
+            "Use code:": [
+                "कोड का उपयोग करें:"
+            ],
+            "Copy": [
+                "कॉपी"
+            ],
             "Article Content": [
                 "डॉक्यूमेंटेशन पेज सामग्री"
+            ],
+            "Copied!": [
+                "कॉपी कर लिया गया!"
             ],
             "Analyzing...": [
                 "विश्लेषण हो रहा है..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "सामग्री की कमी का विश्लेषण"
             ],
+            "Identifies unanswered user questions": [
+                "अनुत्तरित उपयोगकर्ता प्रश्नों की पहचान करता है"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "गुम या अधूरे विषयों का पता लगाता है"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "सुधार के लिए व्यावहारिक सुझाव देता है"
+            ],
             "AI-Powered Tag Suggestions": [
                 "एआई-समर्थित टैग सुझाव"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "गैप विश्लेषण केवल AI सुविधाओं के एड-ऑन के साथ उपलब्ध है."
             ],
             "Readability": [
                 "पठनीयता"
             ],
-            "Tag added successfully": [
-                "टैग सफलतापूर्वक जोड़ा गया।"
-            ],
-            "Tag removed successfully": [
-                "टैग सफलतापूर्वक हटाया गया।"
-            ],
             "Tag updated successfully": [
                 "टैग सफलतापूर्वक अपडेट किया गया।"
+            ],
+            "Get AI Features PRO": [
+                "AI फीचर्स PRO प्राप्त करें"
             ],
             "Add New Tag": [
                 "नया टैग जोड़ें"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "टैग"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "लेख देखें"
             ],
+            "Saving tags...": [
+                "टैग सहेजे जा रहे हैं..."
+            ],
             "Failed to save tag changes": [
                 "टैग परिवर्तन सहेजने में विफल"
-            ],
-            "Failed to add tag": [
-                "टैग जोड़ने में विफल"
-            ],
-            "Failed to remove tag": [
-                "टैग हटाने में विफल"
-            ],
-            "Failed to remove tags": [
-                "टैग हटाने में विफल"
             ],
             "Failed to update tag": [
                 "टैग अपडेट करने में विफल"
             ],
             "Not Analyzed": [
                 "विश्लेषण नहीं किया गया"
-            ],
-            "Demo Analysis Data": [
-                "डेमो विश्लेषण डेटा"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "यह डेमो लेख है जिसमें प्रदर्शन के लिए नमूना एनालिटिक्स डेटा है। वास्तविक कंटेंट एनालिसिस परिणाम देखने के लिए अपने स्वयं के लेख बनाएं।."
             ],
             "Loading analysis details...": [
                 "विश्लेषण विवरण लोड हो रहा है..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "सामग्री के अंतर विश्लेषण के दौरान एक त्रुटि हुई।."
             ],
-            "Learn More About AI Features": [
-                "AI सुविधाओं के बारे में अधिक जानें"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "AI आपके लेखों में गायब जानकारी और अनुत्तरित प्रश्न पहचान लेता है। जानें किन विषयों को और अधिक कवरेज की आवश्यकता है।."
             ],
             "Analyzing article for content gaps...": [
                 "डॉक्यूमेंटेशन पेज के लिए सामग्री के अंतर का विश्लेषण किया जा रहा है..."

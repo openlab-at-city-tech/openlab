@@ -1,0 +1,96 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "hi_IN",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "अधिक जानकारी"
+            ],
+            "Cancel": [
+                "रद्द करें"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
+            "Saving...": [
+                "सहेजा जा रहा है..."
+            ],
+            "Note deleted successfully": [
+                "नोट सफलतापूर्वक हटाई गई।"
+            ],
+            "Additional Notes": [
+                "अतिरिक्त नोट्स"
+            ],
+            "Add additional support and miscellaneous information not found in articles, posts, and pages that AI should also know about.": [
+                "अतिरिक्त सहायता जोड़ें और लेखों, पोस्टों और पन्नों में नहीं मिल पाने वाली ऐसी विविध जानकारी जिन्हें AI को भी जानना चाहिए."
+            ],
+            "Examples: business hours, contact information, company policies, product details, or any other information you want the AI to reference.": [
+                "उदाहरण: कार्य समय, संपर्क जानकारी, कंपनी की नीतियाँ, उत्पाद विवरण, या कोई भी अन्य जानकारी जिसे आप AI को संदर्भित करना चाहते हैं."
+            ],
+            "Got it": [
+                "समझ गया"
+            ],
+            "Failed to load note content": [
+                "नोट सामग्री लोड करने में विफल रहा"
+            ],
+            "Please enter both title and content for the note": [
+                "कृपया नोट के लिए शीर्षक और सामग्री दोनों दर्ज करें"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "नोट हटाने में असमर्थ। कृपया पृष्ठ को फिर से लोड करें और फिर से प्रयास करें।."
+            ],
+            "Delete Note": [
+                "नोट हटाएं"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "क्या आप सच में इस नोट को हटाना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती।."
+            ],
+            "Failed to delete note": [
+                "नोट हटाने में विफल रहा"
+            ],
+            "Edit Note": [
+                "नोट संपादित करें"
+            ],
+            "Add Note": [
+                "नोट जोड़ें"
+            ],
+            "View and manage notes and PDFs (opens in new tab)": [
+                "नोट्स और PDFs देखें और प्रबंधित करें (नया टैब खुलता है)"
+            ],
+            "Manage Notes and PDFs": [
+                "नोट्स और PDFs प्रबंधित करें"
+            ],
+            "Loading note content...": [
+                "नोट की सामग्री लोड हो रही है..."
+            ],
+            "Note Title": [
+                "नोट का शीर्षक"
+            ],
+            "Enter note title...": [
+                "नोट शीर्षक दर्ज करें..."
+            ],
+            "Note Content": [
+                "नोट की सामग्री"
+            ],
+            "Enter note content...": [
+                "नोट सामग्री दर्ज करें..."
+            ],
+            "Deleting...": [
+                "हटाया जा रहा है..."
+            ],
+            "Save Note": [
+                "नोट सहेजें"
+            ],
+            "Add Notes and PDFs": [
+                "नोट्स और PDFs जोड़ें"
+            ],
+            "added": [
+                "जोड़ा गया"
+            ]
+        }
+    }
+}

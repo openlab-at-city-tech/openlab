@@ -1,0 +1,96 @@
+{
+    "domain": "echo-knowledge-base",
+    "locale_data": {
+        "echo-knowledge-base": {
+            "": {
+                "domain": "echo-knowledge-base",
+                "lang": "it_IT",
+                "plural-forms": "nplurals=2; plural=(n != 1);"
+            },
+            "Learn More": [
+                "Scopri di più"
+            ],
+            "Cancel": [
+                "Annulla"
+            ],
+            "Delete": [
+                "Elimina"
+            ],
+            "Saving...": [
+                "Salvataggio..."
+            ],
+            "Note deleted successfully": [
+                "Nota eliminata con successo"
+            ],
+            "Additional Notes": [
+                "Note aggiuntive"
+            ],
+            "Add additional support and miscellaneous information not found in articles, posts, and pages that AI should also know about.": [
+                "Aggiungi supporto aggiuntivo e informazioni varie non presenti in articoli, post e pagine che IA dovrebbe conoscere."
+            ],
+            "Examples: business hours, contact information, company policies, product details, or any other information you want the AI to reference.": [
+                "Esempi: orari di lavoro, informazioni di contatto, politiche aziendali, dettagli sui prodotti o qualsiasi altra informazione a cui l'IA dovrebbe fare riferimento."
+            ],
+            "Got it": [
+                "Capito"
+            ],
+            "Failed to load note content": [
+                "Errore nel caricamento del contenuto della nota"
+            ],
+            "Please enter both title and content for the note": [
+                "Inserisci sia il titolo che il contenuto della nota"
+            ],
+            "Unable to delete note. Please refresh the page and try again.": [
+                "Impossibile eliminare la nota. Aggiorna la pagina e riprova."
+            ],
+            "Delete Note": [
+                "Elimina nota"
+            ],
+            "Are you sure you want to delete this note? This action cannot be undone.": [
+                "Sei sicuro di voler eliminare questa nota? Questa azione non può essere annullata."
+            ],
+            "Failed to delete note": [
+                "Errore nell'eliminazione della nota"
+            ],
+            "Edit Note": [
+                "Modifica nota"
+            ],
+            "Add Note": [
+                "Aggiungi nota"
+            ],
+            "View and manage notes and PDFs (opens in new tab)": [
+                "Visualizza e gestisci note e PDF (si apre in una nuova scheda)"
+            ],
+            "Manage Notes and PDFs": [
+                "Gestisci Note e PDF"
+            ],
+            "Loading note content...": [
+                "Caricamento contenuto della nota..."
+            ],
+            "Note Title": [
+                "Titolo della nota"
+            ],
+            "Enter note title...": [
+                "Inserisci il titolo della nota..."
+            ],
+            "Note Content": [
+                "Contenuto della nota"
+            ],
+            "Enter note content...": [
+                "Inserisci il contenuto della nota..."
+            ],
+            "Deleting...": [
+                "Eliminazione in corso..."
+            ],
+            "Save Note": [
+                "Salva nota"
+            ],
+            "Add Notes and PDFs": [
+                "Aggiungi Note e PDF"
+            ],
+            "added": [
+                "aggiunto"
+            ]
+        }
+    }
+}

@@ -252,8 +252,7 @@ class EPKB_FAQs_Page {
 				<div class="epkb-admin-info-box__header__title"><?php esc_html_e( 'Manage Your Questions', 'echo-knowledge-base' ); ?></div>
 			</div>
 			<div class="epkb-admin-info-box__body">
-				<p><?php esc_html_e( 'Create your own questions and answers, and organize them into one or more FAQ groups. ' .
-						'Each FAQ group will have its own heading if multiple groups exist. Deleting a question will remove it from all groups.', 'echo-knowledge-base' ); ?></p>
+				<p><?php esc_html_e( 'Create your own questions and answers, and organize them into one or more FAQ groups. Each FAQ group will have its own heading if multiple groups exist. Deleting a question will remove it from all groups.', 'echo-knowledge-base' ); ?></p>
 			</div>
 		</div>
 
@@ -451,8 +450,7 @@ class EPKB_FAQs_Page {
 				<div class="epkb-admin-info-box__header__title"><?php esc_html_e( 'FAQ Groups', 'echo-knowledge-base' ); ?></div>
 			</div>
 			<div class="epkb-admin-info-box__body">
-				<p><?php esc_html_e( 'You can create FAQ groups and add individual FAQs to each group. ' .
-						'These groups can be displayed on different pages or within the same FAQ shortcode or block.', 'echo-knowledge-base' ); ?></p>
+				<p><?php esc_html_e( 'You can create FAQ groups and add individual FAQs to each group. These groups can be displayed on different pages or within the same FAQ shortcode or block.', 'echo-knowledge-base' ); ?></p>
 			</div>
 		</div>
 
@@ -803,7 +801,7 @@ class EPKB_FAQs_Page {
 
 								// We don't have a specific KB config here, so we'll use defaults for now.
 								// In a real scenario, these values should be fetched based on the context (e.g., shortcode attributes)
-								$current_config_values = EPKB_KB_Config_Specs::get_default_kb_config( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+								$current_config_values = EPKB_KB_Config_Specs::get_default_kb_config();
 
 								// Settings list in the order matching the screenshot
 								$settings_to_render = [
@@ -839,7 +837,7 @@ class EPKB_FAQs_Page {
 										'specs'             => $setting_name,
 										'name'              => $setting_name,
 										'id'                => $setting_name,
-										'label'             => $field_spec['label'] ?? '',
+										'label'             => EPKB_KB_Config_Specs::get_field_label( $setting_name ) ?? '',
 										'value'             => $current_value,
 										'options'           => $field_spec['options'] ?? [],
 										'default'           => $field_spec['default'] ?? '',
@@ -856,8 +854,8 @@ class EPKB_FAQs_Page {
 												<span class="epkb__option-tooltip__button epkbfa epkbfa-info-circle"></span>
 												<div class="epkb__option-tooltip__contents" style="display: none;">
 													<div class="epkb__option-tooltip__body">'.
-													// Need a way to get the description/link dynamically if possible
-													sprintf( esc_html__( 'To change FAQ Title %sclick here%s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' ).
+													/* translators: %1$s: opening link tag, %2$s: closing link tag */
+													sprintf( esc_html__( 'To change FAQ Title %1$sclick here%2$s', 'echo-knowledge-base' ), '<a href="#" class="epkb-admin__form-tab-content-desc__link">', '</a>' ).
 													'</div>
 												</div>
 											</div>';
@@ -965,7 +963,7 @@ class EPKB_FAQs_Page {
 					</label>
 				</div>
 				<div class="epkb-all-groups-count">					<?php
-					echo $groups_count . ' ' . esc_html__( 'selected', 'echo-knowledge-base' ); ?>
+					echo esc_html( $groups_count ) . ' ' . esc_html__( 'selected', 'echo-knowledge-base' ); ?>
 				</div>
 			</div>
 			

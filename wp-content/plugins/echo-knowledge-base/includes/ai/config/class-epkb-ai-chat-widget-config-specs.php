@@ -52,7 +52,27 @@ class EPKB_AI_Chat_Widget_Config_Specs extends EPKB_AI_Config_Base {
 				'type'        => EPKB_Input_Filter::COLOR_HEX,
 				'default'     => '#0073aa'
 			),
-			
+			'send_button_background_color' => array(
+				'name'        => 'send_button_background_color',
+				'type'        => EPKB_Input_Filter::COLOR_HEX,
+				'default'     => '#0066cc'
+			),
+			'new_button_background_color' => array(
+				'name'        => 'new_button_background_color',
+				'type'        => EPKB_Input_Filter::COLOR_HEX,
+				'default'     => '#3B88C3'
+			),
+			'user_message_background_color' => array(
+				'name'        => 'user_message_background_color',
+				'type'        => EPKB_Input_Filter::COLOR_HEX,
+				'default'     => '#E8F4FF'
+			),
+			'ai_message_background_color' => array(
+				'name'        => 'ai_message_background_color',
+				'type'        => EPKB_Input_Filter::COLOR_HEX,
+				'default'     => '#F3F4F6'
+			),
+
 			// Text customization
 			'widget_header_title' => array(
 				'name'        => 'widget_header_title',
@@ -148,7 +168,7 @@ class EPKB_AI_Chat_Widget_Config_Specs extends EPKB_AI_Config_Base {
 	 */
 	public static function get_all_widget_configs() {
 
-		$ai_config = EPKB_AI_Config_Specs::get_config();
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
 		$widget_list = is_array( $ai_config['ai_chat_widgets'] ) ? $ai_config['ai_chat_widgets'] : array( self::DEFAULT_WIDGET_ID );
 		if ( ! in_array( self::DEFAULT_WIDGET_ID, $widget_list ) ) {
 			array_unshift( $widget_list, self::DEFAULT_WIDGET_ID );
@@ -269,11 +289,11 @@ class EPKB_AI_Chat_Widget_Config_Specs extends EPKB_AI_Config_Base {
 		}
 
 		// Remove from widget list
-		$ai_config = EPKB_AI_Config_Specs::get_config();
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
 		$widget_list = is_array( $ai_config['ai_chat_widgets'] ) ? $ai_config['ai_chat_widgets'] : array();
 		$widget_list = array_diff( $widget_list, array( $widget_id ) );
 		sort( $widget_list );
-		EPKB_AI_Config_Specs::update_config_value( 'ai_chat_widgets', $widget_list );
+		EPKB_AI_Config_Specs::update_ai_config_value( 'ai_chat_widgets', $widget_list );
 
 		// Clear cache
 		wp_cache_delete( $option_name, 'options' );
@@ -291,14 +311,14 @@ class EPKB_AI_Chat_Widget_Config_Specs extends EPKB_AI_Config_Base {
 		$widget_id = absint( $widget_id );
 		
 		// Get current widget list
-		$ai_config = EPKB_AI_Config_Specs::get_config();
+		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
 		$widget_list = is_array( $ai_config['ai_chat_widgets'] ) ? $ai_config['ai_chat_widgets'] : array();
 		
 		// Add widget ID if not already in list
 		if ( ! in_array( $widget_id, $widget_list ) ) {
 			$widget_list[] = $widget_id;
 			sort( $widget_list );
-			EPKB_AI_Config_Specs::update_config_value( 'ai_chat_widgets', $widget_list );
+			EPKB_AI_Config_Specs::update_ai_config_value( 'ai_chat_widgets', $widget_list );
 		}
 	}
 }

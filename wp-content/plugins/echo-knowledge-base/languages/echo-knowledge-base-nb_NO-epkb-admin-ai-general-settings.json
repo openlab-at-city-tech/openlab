@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "Innstillinger lagret"
             ],
-            "Saving...": [
-                "Lagrer..."
+            "Close": [
+                "Lukk"
+            ],
+            "Cancel": [
+                "Avbryt"
             ],
             "Save Settings": [
                 "Lagre innstillinger"
+            ],
+            "Saving...": [
+                "Lagrer..."
             ],
             "Failed to save settings": [
                 "Kunne ikke lagre innstillinger"
@@ -30,6 +36,27 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "Mislyktes i å sende test-e-post. Vennligst sjekk tilkoblingen."
+            ],
+            "Change AI Provider?": [
+                "Endre AI-leverandør?"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "Endring av AI-leverandør vil påvirke innstillingene for AI-søk og AI-chat:"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "Treningsdatasamlinger er leverandørspesifikke og overføres ikke mellom leverandører."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "Du må opprette og trene nye samlinger for den nye leverandøren."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "AI Søk og AI chat vil bare vise samlinger for den valgte leverandøren."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "Dine eksisterende samlinger vil bli bevart og tilgjengelige hvis du bytter tilbake."
+            ],
+            "Change Provider": [
+                "Endre leverandør"
             ]
         }
     }

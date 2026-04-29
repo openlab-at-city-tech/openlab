@@ -7,8 +7,8 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?": [
-                "जब ${ builderName } सक्रिय है, तब ज्ञान-आधार संपादक अक्षम रहता है। क्या आप इसके बजाय ज्ञान-आधार सेटिंग्स पर जाना चाहेंगे?"
+            "The Knowledge Base Editor is disabled while the %s is active. Do you want to go to the Knowledge Base settings instead?": [
+                "जब %s सक्रिय होता है, तब ज्ञान-आधार संपादक अक्षम रहता है। क्या आप इसके बजाय ज्ञान-आधार सेटिंग्स पर जाना चाहेंगे?"
             ]
         }
     }

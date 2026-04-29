@@ -13,14 +13,44 @@
             "Cancel": [
                 "Avbryt"
             ],
+            "Next": [
+                "Neste"
+            ],
+            "AI Features": [
+                "AI-funksjoner"
+            ],
+            "OFF": [
+                "AV"
+            ],
+            "Use code:": [
+                "Bruk kode:"
+            ],
+            "Copy": [
+                "Kopier"
+            ],
+            "Documentation": [
+                "Dokumentasjon"
+            ],
+            "Copied!": [
+                "Kopiert!"
+            ],
+            "Got it!": [
+                "Forstått!"
+            ],
+            "Show Me": [
+                "Vis meg"
+            ],
             "Loading...": [
                 "Laster..."
             ],
-            "General Settings": [
-                "Generelle innstillinger"
+            "Go to General Settings": [
+                "Gå til Generelle innstillinger"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Økten din har utløpt. Oppdater siden."
+            "Go to Settings": [
+                "Gå til Innstillinger"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Økten din har utløpt. Oppdater siden for å logge inn igjen."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "For mange forespørsler. Vennligst vent et øyeblikk og prøv igjen."
@@ -37,8 +67,8 @@
             "Confirm": [
                 "Bekreft"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "For å bruke AI-funksjoner, vennligst konfigurer API-nøkkelen din og godta personvernavtalen i"
+            "Setup Steps": [
+                "Oppsettstrinn"
             ],
             "Session Expired": [
                 "Økten utløpt"
@@ -48,21 +78,6 @@
             ],
             "No results found": [
                 "Ingen resultater funnet"
-            ],
-            "Tutorial": [
-                "Veiledning"
-            ],
-            "Learn how to use this feature": [
-                "Lær hvordan du bruker denne funksjonen"
-            ],
-            "Tutorial Screenshot": [
-                "Veiledningsskjermbilde"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Dette er en veiledning som forklarer hvordan du bruker denne funksjonen."
-            ],
-            "Close Tutorial": [
-                "Lukk veiledningen"
             ]
         }
     }

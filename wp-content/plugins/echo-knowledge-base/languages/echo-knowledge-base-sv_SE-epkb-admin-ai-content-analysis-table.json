@@ -31,6 +31,9 @@
             "selected": [
                 "Vald"
             ],
+            "Delete": [
+                "Ta bort"
+            ],
             "Next": [
                 "Nästa"
             ],
@@ -45,9 +48,6 @@
             ],
             "Loading...": [
                 "Laddar in …"
-            ],
-            "Delete": [
-                "Ta bort"
             ],
             "of": [
                 "av"
@@ -79,29 +79,8 @@
             "Unknown error occurred": [
                 "Ett okänt fel uppstod"
             ],
-            "No articles need analysis": [
-                "Inga dokumentationssidor behöver analyseras"
-            ],
-            "All articles have been analyzed. Great job!": [
-                "Alla dokumentationssidor har analyserats. Bra jobbat!"
-            ],
-            "No articles need improvement": [
-                "Inga dokumentationssidor behöver förbättras"
-            ],
-            "All analyzed articles have scores above 80%. Excellent!": [
-                "Alla analyserade dokumentationssidor har över 80%. Utmärkt!"
-            ],
-            "No recent articles": [
-                "Inga nya dokumentationssidor"
-            ],
-            "No articles have been modified recently.": [
-                "Inga dokumentationssidor har ändrats nyligen."
-            ],
-            "No articles found": [
-                "Inga dokumentationssidor hittades"
-            ],
-            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
-                "Inga dokumentationssidor finns i denna kunskapsbas. Skapa några dokumentationssidor för att börja analysera."
+            "All Knowledge Bases": [
+                "Alla kunskapsbaser"
             ],
             "To Analyze": [
                 "Analysera"
@@ -129,6 +108,18 @@
             ],
             "No articles match your search": [
                 "Inga artiklar matchar din sökning"
+            ],
+            "No articles need analysis": [
+                "Inga dokumentationssidor behöver analyseras"
+            ],
+            "No articles need improvement": [
+                "Inga dokumentationssidor behöver förbättras"
+            ],
+            "No recent articles": [
+                "Inga nya dokumentationssidor"
+            ],
+            "No articles found": [
+                "Inga dokumentationssidor hittades"
             ],
             "View detailed analysis": [
                 "Visa detaljerad analys"

@@ -31,6 +31,9 @@
             "selected": [
                 "valgt"
             ],
+            "Delete": [
+                "Slet"
+            ],
             "Next": [
                 "Næste"
             ],
@@ -45,9 +48,6 @@
             ],
             "Loading...": [
                 "Indlæser..."
-            ],
-            "Delete": [
-                "Slet"
             ],
             "of": [
                 "af"
@@ -79,29 +79,8 @@
             "Unknown error occurred": [
                 "Der opstod en ukendt fejl"
             ],
-            "No articles need analysis": [
-                "Ingen artikler behøver analyse"
-            ],
-            "All articles have been analyzed. Great job!": [
-                "Alle artikler er blevet analyseret. Godt arbejde!"
-            ],
-            "No articles need improvement": [
-                "Ingen artikler behøver forbedring"
-            ],
-            "All analyzed articles have scores above 80%. Excellent!": [
-                "Alle analyserede artikler har en score over 80%. Fremragende!"
-            ],
-            "No recent articles": [
-                "Ingen nylige artikler"
-            ],
-            "No articles have been modified recently.": [
-                "Ingen artikler er blevet ændret for nylig."
-            ],
-            "No articles found": [
-                "Ingen artikler fundet"
-            ],
-            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
-                "Der er ingen artikler tilgængelige i denne Vidensbase. Opret nogle artikler for at begynde analysen."
+            "All Knowledge Bases": [
+                "Alle vidensbaser"
             ],
             "To Analyze": [
                 "Til analyse"
@@ -129,6 +108,18 @@
             ],
             "No articles match your search": [
                 "Ingen artikler matcher din søgning"
+            ],
+            "No articles need analysis": [
+                "Ingen artikler behøver analyse"
+            ],
+            "No articles need improvement": [
+                "Ingen artikler behøver forbedring"
+            ],
+            "No recent articles": [
+                "Ingen nylige artikler"
+            ],
+            "No articles found": [
+                "Ingen artikler fundet"
             ],
             "View detailed analysis": [
                 "Se detaljeret analyse"

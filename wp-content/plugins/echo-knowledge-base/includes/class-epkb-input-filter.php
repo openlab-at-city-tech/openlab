@@ -32,6 +32,7 @@ class EPKB_Input_Filter {
 	const ENUMERATION = 'enumeration';  // use when input has to be from a list of values
 	const INTERNAL_ARRAY = 'internal_array';              // array of stored values
 	const WP_EDITOR = 'wp_editor';          // WP TinyMCE editor or text that contains HTML elements
+	const AI_PROMPT = 'ai_prompt';          // AI prompt text - preserves whitespace formatting (newlines, tabs)
 	const URL = 'url';      // slug or url
 	const TYPOGRAPHY = 'typography';      // slug or url
 
@@ -98,6 +99,10 @@ class EPKB_Input_Filter {
 					$input_value = wp_kses( $input_value, EPKB_Utilities::get_extended_html_tags() );
 					break;
 
+				case self::AI_PROMPT:
+					$input_value = wp_strip_all_tags( $input_value );
+					break;
+
 				case self::TRUE_FALSE:
 					// done in filter below
 					break;
@@ -122,13 +127,14 @@ class EPKB_Input_Filter {
 			$result = $this->filter_input_field( $input_value, $field_spec );
 			if ( is_wp_error( $result ) ) {
 
-				EPKB_Logging::add_log( 'Please change the value of ' . $field_spec['label'] . ' field. Current value: "' . $input_value . '" - ' . $result->get_error_message() . ', code: ' . $result->get_error_message(), $result );
+				$field_label = EPKB_KB_Config_Specs::get_field_label( $key );
+				EPKB_Logging::add_log( 'Please change the value of ' . $field_label . ' field. Current value: "' . $input_value . '" - ' . $result->get_error_message() . ', code: ' . $result->get_error_message(), $result );
 
 				// log error only if a) NOT internal fields and more than 1 error encountered OR b) debug on
 				if ( ( empty( $field_spec['internal'] ) && count( $errors ) > 0 ) || ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ||
 					! in_array( $field_spec['type'], array( self::CHECKBOX, self::SELECTION, self::CHECKBOXES_MULTI_SELECT, self::CHECKBOXES_MULTI_SELECT_NOT, self::TRUE_FALSE, self::ENUMERATION ) ) ) {
 
-					$lang = '<strong style="color:#d5ff8b">' . esc_html( $field_spec['label'] ) . '</strong>';
+					$lang = '<strong style="color:#d5ff8b">' . esc_html( $field_label ) . '</strong>';
 					/* translators: %s: value entered by user. */
 					$errors[] = '<div style="padding: 20px 0 20px 0;">'. sprintf( esc_html__( 'Please change value of the %s field.', 'echo-knowledge-base' ), $lang ) . ' ' . $result->get_error_message() . '</div>';
 
@@ -201,6 +207,9 @@ class EPKB_Input_Filter {
 
 			case self::WP_EDITOR:
 				return $this->filter_wp_editor( $value, $field_spec );
+
+			case self::AI_PROMPT:
+				return $this->filter_ai_prompt( $value, $field_spec );
 
 			default:
 				return new WP_Error( 'eckb-invalid-input-type', esc_html__( 'Error Occurred', 'echo-knowledge-base' ) . ' - ' . $field_spec['type'] );
@@ -296,6 +305,7 @@ class EPKB_Input_Filter {
 			return $value;
 		}
 
+		// translators: %s is the invalid value
 		return new WP_Error('filter_checkbox_invalid', sprintf( esc_html__( 'The value "%s" is not valid', 'echo-knowledge-base' ), $value ) );
 	}
 
@@ -464,6 +474,37 @@ class EPKB_Input_Filter {
 	}
 
 	/**
+	 * Sanitize and validate AI prompt text. Preserves whitespace formatting (newlines, tabs).
+	 *
+	 * @param $text
+	 * @param $field_spec
+	 *
+	 * @return string|WP_Error returns sanitized and validated text
+	 */
+	private function filter_ai_prompt( $text, $field_spec ) {
+
+		if ( is_array( $text ) ) {
+			$text = '';
+		}
+
+		if ( mb_strlen( $text, 'UTF-8' ) > $field_spec['max'] ) {
+			$nof_chars_to_remove = mb_strlen( $text, 'UTF-8' ) - $field_spec['max'];
+			/* translators: %d: number of characters to remove by user when entering too long string. */
+			$msg = sprintf( _n( 'The value is too long. Remove %s character.', 'The value is too long. Remove %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
+			return new WP_Error( 'filter_text_big', $msg );
+		}
+
+		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( mb_strlen( $text, 'UTF-8' ) > 0 && mb_strlen( $text, 'UTF-8' ) < $field_spec['min'] ) ) {
+			$nof_chars_to_remove = $field_spec['min'] - mb_strlen( $text, 'UTF-8' );
+			/* translators: %d: number of characters to add by user when entering too short string. */
+			$msg = sprintf( _n( 'The value is too short. Add at least %s character.', 'The value is too short. Add at least %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
+			return new WP_Error( 'filter_text_small', $msg );
+		}
+
+		return $text;
+	}
+
+	/**
 	 * Typography field. Allow only needed array keys
 	 *
 	 * @param $value
@@ -591,6 +632,8 @@ class EPKB_Input_Filter {
 
 			if ( $spec['type'] == self::WP_EDITOR ) {
 				$name_values += array( $key => wp_kses( $input_value, EPKB_Utilities::get_extended_html_tags() ) );
+			} elseif ( $spec['type'] == self::AI_PROMPT ) {
+				$name_values += array( $key => wp_strip_all_tags( $input_value ) );
 			} elseif ( $spec['type'] == self::TYPOGRAPHY ) {
 				$name_values += array( $key => self::sanitize_typography( $input_value ) );
 			} elseif ( ( $spec['type'] == self::TEXT ) && ! ( empty( $spec['allowed_tags'] ) ) ) {

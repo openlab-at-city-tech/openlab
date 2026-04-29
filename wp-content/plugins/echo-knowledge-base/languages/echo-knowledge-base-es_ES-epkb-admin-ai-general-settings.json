@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "Ajustes guardados correctamente"
             ],
-            "Saving...": [
-                "Guardando..."
+            "Close": [
+                "Cerrar"
+            ],
+            "Cancel": [
+                "Cancelar"
             ],
             "Save Settings": [
                 "Guardar ajustes"
+            ],
+            "Saving...": [
+                "Guardando..."
             ],
             "Failed to save settings": [
                 "Error al guardar la configuración"
@@ -30,6 +36,33 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "No se pudo enviar el correo de prueba. Por favor, comprueba tu conexión."
+            ],
+            "Change AI Provider?": [
+                "Cambiar de proveedor de IA?"
+            ],
+            "Before you switch:": [
+                "Antes de cambiar:"
+            ],
+            "Read the Switching AI Providers guide →": [
+                "Lee la guía para cambiar de proveedor de IA →"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "Cambiar de proveedores de IA afectará la configuración de IA Búsqueda y IA Chat:"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "Las colecciones de Datos de entrenamiento son específicas del proveedor y no se transfieren entre proveedores."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "Deberás crear y entrenar nuevas colecciones para el nuevo proveedor."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "IA Búsqueda y IA Chat solo mostrarán colecciones para el proveedor seleccionado."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "Tus colecciones existentes se conservarán y estarán disponibles si vuelves al proveedor anterior."
+            ],
+            "Change Provider": [
+                "Cambiar proveedor"
             ]
         }
     }

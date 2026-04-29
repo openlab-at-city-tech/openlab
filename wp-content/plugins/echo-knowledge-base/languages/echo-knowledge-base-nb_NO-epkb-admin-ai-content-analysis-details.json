@@ -7,14 +7,23 @@
                 "lang": "nb_NO",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Demo Article": [
-                "Eksempelartikkel"
-            ],
             "Categories": [
                 "Kategorier"
             ],
+            "OFF": [
+                "AV"
+            ],
+            "Use code:": [
+                "Bruk kode:"
+            ],
+            "Copy": [
+                "Kopier"
+            ],
             "Article Content": [
                 "Artikkelinnhold"
+            ],
+            "Copied!": [
+                "Kopiert!"
             ],
             "Analyzing...": [
                 "Analyserer..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "Innholdsgap-analyse"
             ],
+            "Identifies unanswered user questions": [
+                "Identifiserer ubesvarte brukerspørsmål"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "Oppdager manglende eller underutviklede emner"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "Gir konkrete anbefalinger for forbedring"
+            ],
             "AI-Powered Tag Suggestions": [
                 "AI-drevne tagforslag"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "Gapanalyse er kun tilgjengelig med AI-funksjoner-tillegget."
             ],
             "Readability": [
                 "Lesbarhet"
             ],
-            "Tag added successfully": [
-                "Tagg lagt til"
-            ],
-            "Tag removed successfully": [
-                "Tagg fjernet"
-            ],
             "Tag updated successfully": [
                 "Tagg oppdatert"
+            ],
+            "Get AI Features PRO": [
+                "Få AI-funksjoner PRO"
             ],
             "Add New Tag": [
                 "Legg til nytt stikkord"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "Stikkord"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "Vis artikkel"
             ],
+            "Saving tags...": [
+                "Lagrer tagger..."
+            ],
             "Failed to save tag changes": [
                 "Kunnte ikke lagre tag-endringer"
-            ],
-            "Failed to add tag": [
-                "Mislyktes i å legge til tag"
-            ],
-            "Failed to remove tag": [
-                "Kunne ikke fjerne tag"
-            ],
-            "Failed to remove tags": [
-                "Kunne ikke fjerne tagger"
             ],
             "Failed to update tag": [
                 "Kunne ikke oppdatere tag"
             ],
             "Not Analyzed": [
                 "Ikke analysert"
-            ],
-            "Demo Analysis Data": [
-                "Demoanalyse-data"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "Dette er en demoartikkel med eksempeldata for innholdsanalyse for demonstrasjonsformål. Opprett dine egne artikler for å se ekte innholdsanalyse-resultater."
             ],
             "Loading analysis details...": [
                 "Laster inn analyseopplysninger..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "En feil oppstod under innholdsgapanalysen."
             ],
-            "Learn More About AI Features": [
-                "Lær mer om AI-funksjoner"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "AI identifiserer manglende informasjon og ubesvarte spørsmål i artiklene dine. Finn ut hvilke emner som trenger mer dekning."
             ],
             "Analyzing article for content gaps...": [
                 "Analyserer artikkelen for innholdsgap..."

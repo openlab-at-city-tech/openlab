@@ -52,8 +52,6 @@ class EPKB_Block_Utilities {
 			return false;
 		}
 
-		// Perform the computation to determine if the post has KB blocks
-		//$has_layout_blocks = self::parse_block_attributes_from_post( $found_post, '-layout' ) !== false;
 		return self::content_has_kb_block( $current_main_page->post_content );
 	}
 
@@ -79,13 +77,36 @@ class EPKB_Block_Utilities {
 	public static function get_kb_block_layout( $post, $default_layout = false ) {
 		$blocks = self::parse_blocks( $post );
 		if ( is_array( $blocks ) && count( $blocks ) ) {
-			foreach ( $blocks as $block ) {
-				if ( isset( $block['blockName'] ) && strpos( $block['blockName'], '-layout' ) !== false ) {
-					return ucfirst( str_replace( '-layout', '', preg_replace( '/echo-knowledge-base\//', '', $block['blockName'] ) ) );
-				}
+			$layout = self::find_layout_block_recursive( $blocks );
+			if ( $layout !== false ) {
+				return $layout;
 			}
 		}
 		return $default_layout;
+	}
+
+	/**
+	 * Recursively search for a KB layout block and return the layout name
+	 * @param array $blocks - Array of parsed blocks
+	 * @return string|false - Layout name or false if not found
+	 */
+	private static function find_layout_block_recursive( $blocks ) {
+		foreach ( $blocks as $block ) {
+			if ( isset( $block['blockName'] ) && strpos( $block['blockName'], 'echo-knowledge-base/' ) !== false && strpos( $block['blockName'], '-layout' ) !== false ) {
+				// Extract layout name from block name (e.g., 'echo-knowledge-base/classic-layout' -> 'Classic')
+				$block_slug = str_replace( array( 'echo-knowledge-base/', '-layout' ), '', $block['blockName'] );
+				// Convert to layout name format: 'drill-down' -> 'Drill-Down', 'classic' -> 'Classic'
+				return implode( '-', array_map( 'ucfirst', explode( '-', $block_slug ) ) );
+			}
+			// Search in inner blocks
+			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$result = self::find_layout_block_recursive( $block['innerBlocks'] );
+				if ( $result !== false ) {
+					return $result;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -103,40 +124,6 @@ class EPKB_Block_Utilities {
 		$blocks = self::parse_blocks( $post );
 		if ( is_array( $blocks ) && count( $blocks ) ) {
 			return self::parse_block_attributes_recursive( $blocks, $block_name );
-		}
-
-		return false;
-	}
-
-	/**
-	 * Return attributes of the first found layout block in the given post or false
-	 * @param $post
-	 * @return array|false
-	 */
-	public static function parse_first_layout_block_attributes_from_post( $post ) {
-
-		if ( empty( $post ) ) {
-			return false;
-		}
-
-		$quoted_layout_block_names = array(
-			preg_quote( EPKB_Basic_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Tabs_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Categories_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Classic_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Drill_Down_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Grid_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Sidebar_Layout_Block::EPKB_BLOCK_NAME, '/' ),
-			preg_quote( EPKB_Advanced_Search_Block::EPKB_BLOCK_NAME, '/' ),
-		);
-
-		if ( ! preg_match( '/wp:echo-knowledge-base\/(' . implode( '|', $quoted_layout_block_names ) . ')/i', $post->post_content, $matches ) ) {
-			return false;
-		}
-
-		$blocks = self::parse_blocks( $post );
-		if ( is_array( $blocks ) && count( $blocks ) ) {
-			return self::parse_block_attributes_recursive( $blocks, $matches[1] );
 		}
 
 		return false;
@@ -379,5 +366,132 @@ class EPKB_Block_Utilities {
 	 */
 	public static function current_theme_has_block_support() {
 		return use_block_editor_for_post_type( 'page' );
+	}
+
+	/**
+	 * Update KB blocks on a page when layout or style changes via the Setup Wizard.
+	 * @param int $page_id - The page ID containing KB blocks
+	 * @param array $new_config - The new KB configuration after wizard changes
+	 * @param string|null $new_layout - The new layout name (if layout changed)
+	 * @param array $orig_config - The original KB configuration before changes
+	 * @return bool|WP_Error - true on success, WP_Error on failure
+	 */
+	public static function update_kb_blocks_on_page( $page_id, $new_config, $new_layout = null, $orig_config = array() ) {
+
+		$post = get_post( $page_id );
+		if ( empty( $post ) || empty( $post->post_content ) ) {
+			return new WP_Error( 'empty_post', 'Post not found or empty content' );
+		}
+
+		// Check if page has KB blocks
+		if ( ! self::content_has_kb_block( $post->post_content ) ) {
+			return new WP_Error( 'no_kb_blocks', 'Page does not contain KB blocks' );
+		}
+
+		$kb_id = $new_config['id'];
+		$blocks = self::parse_blocks( $post );
+		if ( empty( $blocks ) ) {
+			return new WP_Error( 'parse_failed', 'Failed to parse blocks' );
+		}
+
+		// Determine old and new layout
+		$old_layout = ! empty( $orig_config['kb_main_page_layout'] ) ? $orig_config['kb_main_page_layout'] : $new_config['kb_main_page_layout'];
+		$target_layout = ! empty( $new_layout ) ? $new_layout : $new_config['kb_main_page_layout'];
+
+		// Get block class for the new layout to retrieve default attributes
+		$layout_block_class = self::get_block_class_by_module_name( 'categories_articles', $target_layout );
+		if ( empty( $layout_block_class ) ) {
+			return new WP_Error( 'unknown_layout', 'Unknown layout: ' . $target_layout );
+		}
+
+		$default_attributes = $layout_block_class->get_block_attributes_defaults();
+		$new_block_name = EPKB_Abstract_Block::EPKB_BLOCK_NAMESPACE . '/' . $layout_block_class::EPKB_BLOCK_NAME;
+
+		// Process blocks recursively
+		$updated_blocks = self::update_blocks_recursive( $blocks, $kb_id, $new_config, $new_block_name, $default_attributes, $target_layout );
+
+		// Serialize blocks back to content
+		$new_content = '';
+		foreach ( $updated_blocks as $block ) {
+			$new_content .= serialize_block( $block );
+		}
+
+		// Update the post
+		$result = wp_update_post( array(
+			'ID' => $page_id,
+			'post_content' => $new_content,
+		), true );
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Recursively update blocks, replacing layout blocks with new layout and updating attributes.
+	 * @param array $blocks - Array of parsed blocks
+	 * @param int $kb_id - The KB ID
+	 * @param array $new_config - New KB configuration
+	 * @param string $new_block_name - The new layout block name
+	 * @param array $default_attributes - Default attributes for the new block
+	 * @param string $target_layout - The target layout name
+	 * @return array - Updated blocks
+	 */
+	private static function update_blocks_recursive( $blocks, $kb_id, $new_config, $new_block_name, $default_attributes, $target_layout ) {
+
+		$layout_block_suffixes = array( '-layout', 'basic-layout', 'tabs-layout', 'categories-layout', 'classic-layout', 'drill-down-layout', 'grid-layout', 'sidebar-layout' );
+
+		foreach ( $blocks as &$block ) {
+
+			// Check if this is a KB layout block
+			if ( ! empty( $block['blockName'] ) && strpos( $block['blockName'], EPKB_Abstract_Block::EPKB_BLOCK_NAMESPACE . '/' ) === 0 ) {
+
+				$is_layout_block = false;
+				foreach ( $layout_block_suffixes as $suffix ) {
+					if ( strpos( $block['blockName'], $suffix ) !== false ) {
+						$is_layout_block = true;
+						break;
+					}
+				}
+
+				// Update layout block
+				if ( $is_layout_block ) {
+					// Change block name to new layout
+					$block['blockName'] = $new_block_name;
+
+					// Build non-default attributes for the new block while keeping block-only settings intact
+					$block_attrs = isset( $block['attrs'] ) && is_array( $block['attrs'] ) ? $block['attrs'] : array();
+					foreach ( $default_attributes as $attr_name => $default_value ) {
+						if ( ! array_key_exists( $attr_name, $new_config ) ) {
+							continue;
+						}
+
+						// Remove attribute if it matches default value since we only want to store non-default attributes for blocks
+						if ( $new_config[ $attr_name ] == $default_value ) {
+							unset( $block_attrs[ $attr_name ] );
+							continue;
+						}
+
+						$block_attrs[ $attr_name ] = $new_config[ $attr_name ];
+					}
+
+					// Always include kb_id if different from default
+					if ( $default_attributes['kb_id'] != $kb_id ) {
+						$block_attrs['kb_id'] = $kb_id;
+					}
+
+					$block['attrs'] = $block_attrs;
+				}
+			}
+
+			// Process inner blocks recursively
+			if ( ! empty( $block['innerBlocks'] ) && is_array( $block['innerBlocks'] ) ) {
+				$block['innerBlocks'] = self::update_blocks_recursive( $block['innerBlocks'], $kb_id, $new_config, $new_block_name, $default_attributes, $target_layout );
+			}
+		}
+
+		return $blocks;
 	}
 }

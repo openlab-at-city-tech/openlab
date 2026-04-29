@@ -7,29 +7,29 @@
                 "lang": "da_DK",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "AI Search": [
-                "AI Søg"
-            ],
             "All": [
                 "Alle"
             ],
             "Disabled": [
                 "Deaktiveret"
             ],
+            "Debug Mode": [
+                "Fejlfindings-tilstand"
+            ],
+            "API Key": [
+                "API-nøgle"
+            ],
             "AI Chat": [
                 "AI chat"
             ],
-            "OpenAI API Key": [
-                "OpenAI API-nøgle"
+            "AI Search": [
+                "AI Søg"
             ],
             "Debug mode updated successfully": [
                 "Debug-tilstand opdateret med succes"
             ],
             "Refresh": [
                 "Opdater"
-            ],
-            "Status:": [
-                "Status:"
             ],
             "Warnings": [
                 "Advarsler"
@@ -70,9 +70,6 @@
             "Error clearing AI logs": [
                 "Fejl ved rydning af AI-logfiler"
             ],
-            "Debug Mode": [
-                "Fejlfindings-tilstand"
-            ],
             "Enable Debug Mode": [
                 "Aktiver fejlfindingstilstand"
             ],
@@ -105,6 +102,9 @@
             ],
             "Total Records:": [
                 "Samlede poster:"
+            ],
+            "Status:": [
+                "Status:"
             ],
             "Added:": [
                 "Tilføjet:"

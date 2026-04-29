@@ -9,6 +9,80 @@ jQuery(document).ready(function($) {
 	}
 
 	/**
+	 * Initialize top navigation buttons beside step titles for Setup Wizard only
+	 */
+	function init_top_navigation_buttons() {
+		// Only run for Setup Wizard
+		if ( $( '.epkb-wizard-container' ).length === 0 ) return;
+
+		// Find all step panels that are currently active
+		$('.epkb-wc-step-panel').each(function() {
+			const $panel = $(this);
+			const stepId = $panel.attr('id');
+			
+			// Find the corresponding button container in the footer
+			const stepNumber = stepId ? stepId.match(/step-(\d+)/)?.[1] : null;
+			if (!stepNumber) return;
+			
+			const $footerButtons = $(`.epkb-wsb-step-${stepNumber}-panel-button`);
+			if ($footerButtons.length === 0) return;
+			
+			// Find title wrapper - try multiple selectors for different steps
+			let $titleWrapper = $panel.find('.epkb-wizard-header__info-wrapper').first();
+			if ($titleWrapper.length === 0) {
+				$titleWrapper = $panel.find('.epkb-setup-wizard-features-choices-title-wrapper').first();
+			}
+			
+			if ($titleWrapper.length === 0) return;
+			
+			// Don't add if already exists
+			if ($titleWrapper.find('.epkb-wizard-top-navigation').length > 0) return;
+			
+			// Clone the footer buttons
+			const $buttonInner = $footerButtons.find('.epkb-wizard-button-container__inner').first();
+			if ($buttonInner.length === 0) return;
+			
+			// Create top navigation container
+			const $topNav = $('<div class="epkb-wizard-top-navigation"></div>');
+			
+			// Clone and add prev button if it exists
+			const $prevBtn = $buttonInner.find('.epkb-setup-wizard-button-prev').first();
+			if ($prevBtn.length > 0) {
+				const $topPrevBtn = $prevBtn.clone(false);
+				$topPrevBtn.addClass('epkb-wizard-top-nav-btn epkb-wizard-top-nav-btn--prev');
+				// Add click handler for prev button
+				$topPrevBtn.on('click', function(e) {
+					e.preventDefault();
+					$prevBtn.trigger('click');
+				});
+				$topNav.append($topPrevBtn);
+			}
+			
+			// Clone and add next button if it exists
+			const $nextBtn = $buttonInner.find('.epkb-setup-wizard-button-next, .epkb-setup-wizard-button-apply').first();
+			if ($nextBtn.length > 0) {
+				const $topNextBtn = $nextBtn.clone(false);
+				$topNextBtn.addClass('epkb-wizard-top-nav-btn epkb-wizard-top-nav-btn--next');
+				// Add click handler for next/apply button
+				$topNextBtn.on('click', function(e) {
+					e.preventDefault();
+					$nextBtn.trigger('click');
+				});
+				$topNav.append($topNextBtn);
+			}
+			
+			// Insert navigation before the title
+			$titleWrapper.prepend($topNav);
+		});
+		
+		// Hide the footer buttons
+		$('.epkb-wizard-footer').hide();
+	}
+	
+	// Initialize top navigation after page load
+	init_top_navigation_buttons();
+
+	/**
 	 * Highlight all completed steps in status bar.
 	 */
 	function wizard_status_bar_highlight_completed_steps( nextStep, current_wizard ){
@@ -53,6 +127,18 @@ jQuery(document).ready(function($) {
 		if( lastChar === stepLength ){
 			current_wizard.find( '.epkb-wizard-button-container' ).addClass( 'epkb-wizard-button-container--final-step' );
 		}
+
+		// Update top navigation buttons
+		update_top_navigation_buttons();
+	}
+
+	/**
+	 * Update top navigation buttons to match current step
+	 */
+	function update_top_navigation_buttons() {
+		// Re-initialize top navigation to match current active buttons
+		$('.epkb-wizard-top-navigation').remove();
+		init_top_navigation_buttons();
 	}
 
 	/**
@@ -283,25 +369,79 @@ jQuery(document).ready(function($) {
 	 *
 	 ********************************************************************/
 
-	/** Initial Settings */
+	// Load preview on page load and reload on radio button change
+	if ( $( '#eckb-wizard-ordering__page' ).length ) {
+		let $orderingWizard = $( '#eckb-wizard-ordering__page' );
+		let $orderingCombined = $orderingWizard.find( '.epkb-wizard-ordering-combined' );
+		let $wizardContent = $orderingWizard.find( '.epkb-wizard-content' );
 
-	/* do not change second step page on every change to the ordering
-	let wizard_ordering_preview = $( '.epkb-wizard-ordering-ordering-preview' );
-	if ( wizard_ordering_preview.length ) {
-		$( '#eckb-wizard-ordering__page' ).on( 'change', 'input', epkb_wizard_update_ordering_view );
+		// Hide all wizard content initially
+		$orderingCombined.hide();
+
+		// Add inline loader
+		let loaderHtml = '<div class="epkb-ordering-wizard-loader">' +
+			'<div class="epkb-ordering-wizard-loader__spinner"></div>' +
+			'<div class="epkb-ordering-wizard-loader__text">' + ( epkb_vars.loading_text || 'Loading...' ) + '</div>' +
+		'</div>';
+		$wizardContent.prepend( loaderHtml );
+
+		// Load preview silently (true = silent mode, no old dialog)
+		epkb_wizard_update_ordering_view_initial( function() {
+			// After AJAX completes, hide loader and show content
+			$wizardContent.find( '.epkb-ordering-wizard-loader' ).fadeOut( 200, function() {
+				$( this ).remove();
+				$orderingCombined.fadeIn( 300 );
+			});
+		});
+
+		// Reload preview when radio buttons change (not silent - show loading for user feedback)
+		$( '#eckb-wizard-ordering__page' ).on( 'change', 'input[type=radio]', function() {
+			epkb_wizard_update_ordering_view( false );
+		});
 	}
 
-	$( '.epkb-admin__secondary-panel__order-articles' ).on( 'click', function() {
-		if ( wizard_ordering_preview.hasClass( 'epkb-wizard-ordering-ordering-preview--init' ) ) {
-			return;
-		}
-		wizard_ordering_preview.addClass( 'epkb-wizard-ordering-ordering-preview--init' );
-		epkb_wizard_update_ordering_view();
-	}); */
+	// Initial load function with callback (always silent)
+	function epkb_wizard_update_ordering_view_initial( callback ) {
+		let current_wizard = $( '#eckb-wizard-ordering__page' );
 
-	$('#eckb-wizard-ordering__page #epkb-wizard-button-next').on('click', function(){
-		epkb_wizard_update_ordering_view( false );
-	});
+		let sequence_settings = {
+			categories_display_sequence : current_wizard.find( 'input[name=categories_display_sequence]:checked' ).val(),
+			articles_display_sequence : current_wizard.find( 'input[name=articles_display_sequence]:checked' ).val(),
+			show_articles_before_categories : current_wizard.find( 'input[name=show_articles_before_categories]:checked' ).val(),
+			sidebar_show_articles_before_categories : current_wizard.find( 'input[name=show_articles_before_categories]:checked' ).val(),
+		};
+
+		let postData = {
+			action: 'epkb_wizard_update_order_view',
+			_wpnonce_epkb_ajax_action: current_wizard.find( '#_wpnonce_epkb_ajax_action' ).val(),
+			sequence_settings: sequence_settings,
+			epkb_kb_id: current_wizard.find( '#epkb_wizard_kb_id' ).val()
+		};
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			data: postData,
+			url: ajaxurl
+		}).done( function( response ) {
+			if ( typeof response.html !== 'undefined' ) {
+				let preview = '';
+				if ( response.message && response.message.length ) {
+					preview += '<h1 class="eckb-wisard-ordering-title">' + response.message + '</h1>';
+				}
+				preview += response.html;
+				current_wizard.find( '.epkb-wizard-ordering-ordering-preview' ).html( preview );
+
+				let articles = sequence_settings.articles_display_sequence == 'user-sequenced';
+				let categories = sequence_settings.categories_display_sequence == 'user-sequenced';
+				epkb_enable_custom_ordering( articles, categories );
+			}
+		}).always( function() {
+			if ( typeof callback === 'function' ) {
+				callback();
+			}
+		});
+	}
 
 	function epkb_wizard_update_ordering_view( $silent = true) {
 

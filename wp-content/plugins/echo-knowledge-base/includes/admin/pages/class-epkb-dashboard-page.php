@@ -10,7 +10,8 @@ class EPKB_Dashboard_Page {
 
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_dashboard_scripts' ) );
-		add_action( 'wp_ajax_epkb_kb_vote_for_features', array( $this, 'ajax_vote_for_features' ) );
+		add_action( 'wp_ajax_epkb_enable_glossary', array( $this, 'ajax_enable_glossary' ) );
+		add_action( 'wp_ajax_epkb_enable_quizzes', array( $this, 'ajax_enable_quizzes' ) );
 	}
 
 	/**
@@ -49,7 +50,7 @@ class EPKB_Dashboard_Page {
 		// Get views this month
 		$views_this_month = 0;
 		if ( $kb_config['article_views_counter_enable'] == 'on' ) {
-			$year = date( 'Y' );
+			$year = wp_date( 'Y' );
 			$month_weeks = $this->get_month_weeks();
 			
 			$args = array(
@@ -118,15 +119,12 @@ class EPKB_Dashboard_Page {
 								<?php esc_html_e( 'Frontend Editor', 'echo-knowledge-base' ); ?>
 							</a>						<?php 
 						} else { ?>
-							<a href="<?php echo esc_url( $kb_main_page_url ) . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id']; ?>" class="epkb-btn epkb-btn-frontend-editor" target="_blank">
+							<a href="<?php echo esc_url( $kb_main_page_url . '?action=epkb_load_editor&epkb_kb_id=' . $kb_config['id'] ); ?>" class="epkb-btn epkb-btn-frontend-editor" target="_blank">
 								<?php esc_html_e( 'Frontend Editor', 'echo-knowledge-base' ); ?>
 							</a>						<?php 
-						} ?>						<?php 
-						if ( $show_setup_wizard ) { ?>
-							<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-configuration&setup-wizard-on=true' ) ); ?>" class="epkb-btn epkb-btn-setup-wizard">							<?php 
-								esc_html_e( 'Setup Wizard', 'echo-knowledge-base' ); ?>
-							</a>						<?php 
-						} ?>
+						} ?>						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-configuration&setup-wizard-on=true' ) ); ?>" class="epkb-btn epkb-btn-setup-wizard">
+							<?php esc_html_e( 'Setup Wizard', 'echo-knowledge-base' ); ?>
+						</a>
 						<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-configuration&ekb-main-page-loc=tools&ekb-secondary-page-loc=import#tools__import' ) ); ?>" class="epkb-btn epkb-btn-import-data">
 							<?php esc_html_e( 'Import Data', 'echo-knowledge-base' ); ?>
 						</a>
@@ -353,23 +351,25 @@ class EPKB_Dashboard_Page {
 									<div class="epkb-features-carousel">
 										<!-- Slide 1: AI Features -->
 										<div class="epkb-feature-slide epkb-feature-slide--active" data-slide="0">
+											<h4 class="epkb-feature-title" style="color: #7e5bef;"><?php esc_html_e( 'AI Chat and AI Search – Free Core Feature', 'echo-knowledge-base' ); ?></h4>
 											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/2025/08/AI-Pro-Features-List.jpg"
-													 alt="<?php esc_attr_e( 'AI Features', 'echo-knowledge-base' ); ?>"
+												<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/AI-Pro-Features-List.jpg' ); ?>"
+													 alt="<?php esc_attr_e( 'AI Chat and AI Search', 'echo-knowledge-base' ); ?>"
 													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/2025/08/AI-Pro-Features-List.jpg">
+													 data-zoom-src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/AI-Pro-Features-List.jpg' ); ?>">
 												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
 											</div>
-											<p class="epkb-feature-description"><?php esc_html_e( 'AI Chat with instant answers, Smart Search with AI-generated responses, and Advanced Training on posts, pages & custom content', 'echo-knowledge-base' ); ?></p>
+											<p class="epkb-feature-description"><?php esc_html_e( 'Free AI Chat with instant answers and Smart Search with AI-generated responses. Includes training on KB articles.', 'echo-knowledge-base' ); ?> <em class="epkb-feature-pro-note"><?php esc_html_e( 'Pro: Train on posts, pages & custom content.', 'echo-knowledge-base' ); ?></em></p>
 										</div>
 
 										<!-- Slide 2: Unlimited Knowledge Bases -->
 										<div class="epkb-feature-slide" data-slide="1">
+											<h4 class="epkb-feature-title"><?php esc_html_e( 'Unlimited Knowledge Bases Add-on', 'echo-knowledge-base' ); ?></h4>
 											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-MKB-1.jpg"
-													 alt="<?php esc_attr_e( 'Unlimited Knowledge Bases', 'echo-knowledge-base' ); ?>"
+												<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-MKB-1.jpg' ); ?>"
+													 alt="<?php esc_attr_e( 'Unlimited Knowledge Bases Add-on', 'echo-knowledge-base' ); ?>"
 													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-MKB-1.jpg">
+													 data-zoom-src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-MKB-1.jpg' ); ?>">
 												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
 											</div>
 											<p class="epkb-feature-description"><?php esc_html_e( 'Create multiple fully independent knowledge bases to organize content for different needs with unlimited Knowledge Bases, divided by department or audience', 'echo-knowledge-base' ); ?></p>
@@ -377,11 +377,12 @@ class EPKB_Dashboard_Page {
 
 										<!-- Slide 3: Advanced Search -->
 										<div class="epkb-feature-slide" data-slide="2">
+											<h4 class="epkb-feature-title"><?php esc_html_e( 'Advanced Search Add-on', 'echo-knowledge-base' ); ?></h4>
 											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-ASEA-1.jpg"
-													 alt="<?php esc_attr_e( 'Advanced Search', 'echo-knowledge-base' ); ?>"
+												<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-ASEA-1.jpg' ); ?>"
+													 alt="<?php esc_attr_e( 'Advanced Search Add-on', 'echo-knowledge-base' ); ?>"
 													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-ASEA-1.jpg">
+													 data-zoom-src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-ASEA-1.jpg' ); ?>">
 												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
 											</div>
 											<p class="epkb-feature-description"><?php esc_html_e( 'Enhance user search experience with search analytics, background images, color gradients, search filters and advanced search results page', 'echo-knowledge-base' ); ?></p>
@@ -389,11 +390,12 @@ class EPKB_Dashboard_Page {
 
 										<!-- Slide 4: Elegant Layouts -->
 										<div class="epkb-feature-slide" data-slide="3">
+											<h4 class="epkb-feature-title"><?php esc_html_e( 'Elegant Layouts Add-on', 'echo-knowledge-base' ); ?></h4>
 											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-ELAY-1.1.jpg"
-													 alt="<?php esc_attr_e( 'Elegant Layouts', 'echo-knowledge-base' ); ?>"
+												<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-ELAY-1.1.jpg' ); ?>"
+													 alt="<?php esc_attr_e( 'Elegant Layouts Add-on', 'echo-knowledge-base' ); ?>"
 													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-ELAY-1.1.jpg">
+													 data-zoom-src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-ELAY-1.1.jpg' ); ?>">
 												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
 											</div>
 											<p class="epkb-feature-description"><?php esc_html_e( 'Use Grid Layout or Sidebar Layout for KB Main page or combine Basic, Tabs, Grid and Sidebar layouts in many cool ways', 'echo-knowledge-base' ); ?></p>
@@ -401,38 +403,30 @@ class EPKB_Dashboard_Page {
 
 										<!-- Slide 5: Access Manager -->
 										<div class="epkb-feature-slide" data-slide="4">
+											<h4 class="epkb-feature-title"><?php esc_html_e( 'Access Manager Add-on', 'echo-knowledge-base' ); ?></h4>
 											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-AMGR-1.jpg"
-													 alt="<?php esc_attr_e( 'Access Manager', 'echo-knowledge-base' ); ?>"
+												<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-AMGR-1.jpg' ); ?>"
+													 alt="<?php esc_attr_e( 'Access Manager Add-on', 'echo-knowledge-base' ); ?>"
 													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-AMGR-1.jpg">
+													 data-zoom-src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/featured-image-AMGR-1.jpg' ); ?>">
 												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
 											</div>
 											<p class="epkb-feature-description"><?php esc_html_e( 'Restrict your Articles to certain Groups using KB Categories and assign users to specific KB Roles within Groups to protect your content', 'echo-knowledge-base' ); ?></p>
 										</div>
 
 										<!-- Slide 6: Import Export -->
-										<div class="epkb-feature-slide" data-slide="5">
+										<div class="epkb-feature-slide" data-slide="5"
+											 data-cta-url="https://www.echoknowledgebase.com/wordpress-plugin/kb-import-export/"
+											 data-cta-text="<?php echo esc_attr__( 'Get Articles Import and Export', 'echo-knowledge-base' ); ?>">
+											<h4 class="epkb-feature-title"><?php esc_html_e( 'Articles CVS/XML Import and EXPORT Add-on', 'echo-knowledge-base' ); ?></h4>
 											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/edd/2022/01/KB-Import-Export-Banner-v2.jpg"
-													 alt="<?php esc_attr_e( 'Migrate, Copy, Import and Export', 'echo-knowledge-base' ); ?>"
+												<img src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/KB-Import-Export-Banner-v2.jpg' ); ?>"
+													 alt="<?php esc_attr_e( 'Articles CVS/XML Import and EXPORT Add-on', 'echo-knowledge-base' ); ?>"
 													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/edd/2022/01/KB-Import-Export-Banner-v2.jpg">
+													 data-zoom-src="<?php echo esc_url( Echo_Knowledge_Base::$plugin_url . 'img/dashboard/KB-Import-Export-Banner-v2.jpg' ); ?>">
 												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
 											</div>
 											<p class="epkb-feature-description"><?php esc_html_e( 'Powerful import and export plugin to migrate, create and copy articles and images from your Knowledge Base', 'echo-knowledge-base' ); ?></p>
-										</div>
-
-										<!-- Slide 7: AI Advanced Search -->
-										<div class="epkb-feature-slide" data-slide="6">
-											<div class="epkb-feature-image-container">
-												<img src="https://www.echoknowledgebase.com/wp-content/uploads/2025/10/Feature-Advanced-Search-Results.png"
-													 alt="<?php esc_attr_e( 'AI Advanced Search', 'echo-knowledge-base' ); ?>"
-													 class="epkb-feature-image epkb-zoomable-image"
-													 data-zoom-src="https://www.echoknowledgebase.com/wp-content/uploads/2025/10/Feature-Advanced-Search-Results.png">
-												<span class="epkb-zoom-icon"><i class="epkbfa epkbfa-search-plus"></i></span>
-											</div>
-											<p class="epkb-feature-description"><?php esc_html_e( 'Display comprehensive AI search results in an organized, multi-section layout that can be embedded anywhere via shortcode', 'echo-knowledge-base' ); ?></p>
 										</div>
 									</div>
 
@@ -447,7 +441,6 @@ class EPKB_Dashboard_Page {
 										<span class="epkb-carousel-dot" data-slide="3"></span>
 										<span class="epkb-carousel-dot" data-slide="4"></span>
 										<span class="epkb-carousel-dot" data-slide="5"></span>
-										<span class="epkb-carousel-dot" data-slide="6"></span>
 										<button class="epkb-carousel-btn epkb-carousel-btn--next" aria-label="<?php esc_attr_e( 'Next', 'echo-knowledge-base' ); ?>">
 											<i class="epkbfa epkbfa-chevron-right"></i>
 										</button>
@@ -455,10 +448,21 @@ class EPKB_Dashboard_Page {
 								</div>
 								
 							<div class="epkb-features-cta">
-								<a href="https://www.echoknowledgebase.com/bundle-pricing/" target="_blank" class="epkb-btn epkb-btn-features-primary">
+								<a href="https://www.echoknowledgebase.com/bundle-pricing/" target="_blank" class="epkb-btn epkb-btn-features-primary"
+								   data-default-url="https://www.echoknowledgebase.com/bundle-pricing/"
+								   data-default-text="<?php echo esc_attr__( 'Upgrade to PRO', 'echo-knowledge-base' ); ?>">
 									<i class="epkbfa epkbfa-trophy"></i>
-									<?php esc_html_e( 'Upgrade to PRO', 'echo-knowledge-base' ); ?>
-								</a>
+									<span class="epkb-features-cta-label"><?php esc_html_e( 'Upgrade to PRO', 'echo-knowledge-base' ); ?></span>
+								</a>								<?php
+								// Show Free Pro offer for new users only during first two weeks of December
+								$is_new_user = $kb_config['first_plugin_version'] === Echo_Knowledge_Base::$version;
+								$is_december_promo = (int) gmdate( 'n' ) === 12 && (int) gmdate( 'j' ) <= 14;
+								if ( $is_new_user && $is_december_promo ) { ?>
+									<a href="https://www.echoknowledgebase.com/pre-sale-question/" target="_blank" class="epkb-btn epkb-btn-free-pro">
+										<i class="epkbfa epkbfa-gift"></i>
+										<?php esc_html_e( 'Get Free Pro - Ask Us How!', 'echo-knowledge-base' ); ?>
+									</a>								<?php 
+								} ?>
 							</div>
 							</div>
 						</article>
@@ -511,15 +515,26 @@ class EPKB_Dashboard_Page {
 					<article class="epkb-card epkb-card--chatbot">
 						<div class="epkb-chatbot-content">
 							<div class="epkb-chatbot-text">
-								<div class="epkb-chatbot-heading">
-									<h2><?php esc_html_e( 'Echo Knowledge Base', 'echo-knowledge-base' ); ?> <span class="epkb-magic-icon"><i class="epkbfa epkbfa-magic"></i></span> <span class="epkb-ai-addon-text" style="white-space:nowrap;"><?php esc_html_e( 'New Chat AI', 'echo-knowledge-base' ); ?></span></h2>
+								<div class="epkb-chatbot-heading">		<?php
+									if ( EPKB_AI_Utilities::is_ai_configured() ) { ?>
+									<h2><span class="epkb-magic-icon"><i class="epkbfa epkbfa-magic"></i></span> <span class="epkb-ai-addon-text" style="white-space:nowrap;"><?php esc_html_e( 'FREE AI Chat & Search', 'echo-knowledge-base' ); ?></span></h2>		<?php
+									} else { ?>
+									<h2><span class="epkb-magic-icon"><i class="epkbfa epkbfa-magic"></i></span> <span class="epkb-ai-addon-text" style="white-space:nowrap;"><?php esc_html_e( 'AI Features (Optional)', 'echo-knowledge-base' ); ?></span></h2>		<?php
+									} ?>
 								</div>
-								<div class="epkb-chatbot-description">
-									<p><?php esc_html_e( 'Transform your knowledge base with AI-powered chat that instantly answers visitor questions. Our intelligent chatbot learns from your documentation to provide accurate, context-aware responses 24/7. Reduce support tickets, improve user satisfaction, and let AI handle repetitive queries while your team focuses on complex issues.', 'echo-knowledge-base' ); ?></p>
+								<div class="epkb-chatbot-description">	<?php
+									if ( EPKB_AI_Utilities::is_ai_configured() ) { ?>
+									<p><?php esc_html_e( 'Transform your knowledge base with AI-powered chat and search. Our intelligent chatbot answers visitor questions timely, while AI Search delivers highly relevant results by understanding user intent. Reduce support tickets, improve user satisfaction, and let AI handle queries while your team focuses on complex issues.', 'echo-knowledge-base' ); ?></p>		<?php
+									} else { ?>
+									<p><?php esc_html_e( 'This Knowledge Base AI is not enabled. AI features are optional and turned off by default. AI will only work after you manually enable it and add your own API key.', 'echo-knowledge-base' ); ?></p>		<?php
+									} ?>
 								</div>
-								<div class="epkb-chatbot-button">
+								<div class="epkb-chatbot-buttons">
 									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-ai-features&active_tab=chat' ) ); ?>" class="epkb-btn epkb-btn-primary-outline">
-										<?php esc_html_e( 'Get AI Chatbot', 'echo-knowledge-base' ); ?>
+										<?php esc_html_e( 'Get FREE AI Chat', 'echo-knowledge-base' ); ?>
+									</a>
+									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-ai-features&active_tab=ai-search' ) ); ?>" class="epkb-btn epkb-btn-primary-outline epkb-btn-ai-search">
+										<?php esc_html_e( 'Get FREE AI Search', 'echo-knowledge-base' ); ?>
 									</a>
 								</div>
 							</div>
@@ -575,6 +590,61 @@ class EPKB_Dashboard_Page {
 					</aside>
 					*/ ?>
 
+					<?php
+					$shared_kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+					$quizzes_demo_url = EPKB_Quizzes_Utilities::get_demo_quiz_url();
+
+					if ( $shared_kb_config['glossary_enable'] !== 'on' ) {
+						$this->display_feature_promo_card( array(
+							'feature_key'  => 'glossary',
+							'feature_name' => esc_html__( 'Glossary', 'echo-knowledge-base' ),
+							'icon_class'   => 'epkbfa epkbfa-book',
+							'title'        => esc_html__( 'Glossary Feature', 'echo-knowledge-base' ),
+							'features'     => array(
+								esc_html__( 'Define terms with rich descriptions', 'echo-knowledge-base' ),
+								esc_html__( 'Auto-highlight terms in articles with tooltips', 'echo-knowledge-base' ),
+								esc_html__( 'Generate terms with AI', 'echo-knowledge-base' ),
+								esc_html__( 'Glossary Index shortcode and block', 'echo-knowledge-base' ),
+							),
+							'button_label' => esc_html__( 'Enable Glossary', 'echo-knowledge-base' ),
+							'dialog_title' => esc_html__( 'Glossary Enabled', 'echo-knowledge-base' ),
+							'dialog_message' => esc_html__( 'You can find Glossary in the new admin menu on the left after the next page load, or use the button below to open it now.', 'echo-knowledge-base' ),
+							'dialog_open_label' => esc_html__( 'Open Glossary', 'echo-knowledge-base' ),
+							'dialog_cancel_label' => esc_html__( 'Stay on Dashboard', 'echo-knowledge-base' ),
+							'dialog_open_url' => admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-glossary#glossary-terms' ),
+						) );
+					}
+
+					if ( $shared_kb_config['quizzes_enable'] !== 'on' ) {
+						$this->display_feature_promo_card( array(
+							'feature_key'  => 'quizzes',
+							'feature_name' => esc_html__( 'Quizzes', 'echo-knowledge-base' ),
+							'icon_class'   => 'epkbfa epkbfa-check-square-o',
+							'title'        => esc_html__( 'Quizzes Feature', 'echo-knowledge-base' ),
+							'features'     => array(
+								esc_html__( 'Create quizzes linked to KB articles', 'echo-knowledge-base' ),
+								esc_html__( 'Add custom questions, answers, and explanations', 'echo-knowledge-base' ),
+								esc_html__( 'Generate quiz drafts with AI when available', 'echo-knowledge-base' ),
+								esc_html__( 'Show published quizzes below article content', 'echo-knowledge-base' ),
+							),
+							'button_label' => esc_html__( 'Enable Quizzes', 'echo-knowledge-base' ),
+							'dialog_title' => esc_html__( 'Quizzes Enabled', 'echo-knowledge-base' ),
+							'dialog_message' => esc_html__( 'You can find Quizzes in the new admin menu on the left after the next page load, or use the button below to open it now.', 'echo-knowledge-base' ),
+							'dialog_open_label' => esc_html__( 'Open Quizzes', 'echo-knowledge-base' ),
+							'dialog_cancel_label' => esc_html__( 'Stay on Dashboard', 'echo-knowledge-base' ),
+							'dialog_open_url' => admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-quizzes#quizzes-editor' ),
+							'secondary_link_label' => esc_html__( 'See Demo Quiz', 'echo-knowledge-base' ),
+							'secondary_link_url' => $quizzes_demo_url,
+						) );
+					} ?>
+
+					<?php
+					$quizzes_dashboard_url          = admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-quizzes#quizzes-editor' );
+					$glossary_dashboard_url         = admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-glossary#glossary-terms' );
+					$pdf_to_articles_dashboard_url = admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-configuration#tools__convert' );
+					$ai_training_data_dashboard_url = admin_url( 'edit.php?post_type=' . $post_type . '&page=epkb-kb-ai-features&active_tab=training-data' );
+					?>
+
 					<!-- What's New -->
 					<aside class="epkb-card epkb-card--whatsnew">
 						<div class="epkb-whatsnew-header">
@@ -584,30 +654,52 @@ class EPKB_Dashboard_Page {
 							<li class="epkb-whatsnew-item epkb-whatsnew-item--new">
 								<span class="epkb-whatsnew-badge"><?php esc_html_e( 'NEW', 'echo-knowledge-base' ); ?></span>
 								<div class="epkb-whatsnew-content">
-									<span class="epkb-whatsnew-date"><?php esc_html_e( 'October 27, 2025', 'echo-knowledge-base' ); ?></span>
-									<strong><?php esc_html_e( 'AI Advanced Search', 'echo-knowledge-base' ); ?></strong>
-									<span><?php esc_html_e( 'AI-powered advanced search with intelligent answers', 'echo-knowledge-base' ); ?></span>
-									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=epkb_post_type_1&page=epkb-kb-ai-features&active_tab=search' ) ); ?>" target="_blank" class="epkb-whatsnew-link" style="color: #2271b1; text-decoration: none;"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a>
+									<span class="epkb-whatsnew-date"><?php esc_html_e( 'March 29, 2026', 'echo-knowledge-base' ); ?></span>
+									<strong><?php esc_html_e( 'Quizzes', 'echo-knowledge-base' ); ?></strong>
+									<span><?php esc_html_e( 'Create quizzes linked to KB articles and generate quiz drafts with AI when available.', 'echo-knowledge-base' ); ?></span>
+									<div class="epkb-whatsnew-links">
+										<a class="epkb-whatsnew-link" href="<?php echo esc_url( $quizzes_dashboard_url ); ?>"><?php esc_html_e( 'Open Quizzes', 'echo-knowledge-base' ); ?></a>
+										<a class="epkb-whatsnew-link" href="<?php echo esc_url( $quizzes_demo_url ); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e( 'See Demo Quiz', 'echo-knowledge-base' ); ?></a>
+									</div>
+								</div>
+							</li>
+							<li class="epkb-whatsnew-item epkb-whatsnew-item--new">
+								<span class="epkb-whatsnew-badge"><?php esc_html_e( 'PRO', 'echo-knowledge-base' ); ?></span>
+								<div class="epkb-whatsnew-content">
+									<span class="epkb-whatsnew-date"><?php esc_html_e( 'March 9, 2026', 'echo-knowledge-base' ); ?></span>
+									<strong><?php esc_html_e( 'PDF to Articles', 'echo-knowledge-base' ); ?></strong>
+									<span><?php esc_html_e( 'Upload PDF files and convert them into KB articles with AI-powered formatting.', 'echo-knowledge-base' ); ?></span>
+									<a class="epkb-whatsnew-link" href="<?php echo esc_url( $pdf_to_articles_dashboard_url ); ?>"><?php esc_html_e( 'Convert PDFs to Articles', 'echo-knowledge-base' ); ?></a>
+								</div>
+							</li>
+							<li class="epkb-whatsnew-item epkb-whatsnew-item--new">
+								<span class="epkb-whatsnew-badge"><?php esc_html_e( 'PRO', 'echo-knowledge-base' ); ?></span>
+								<div class="epkb-whatsnew-content">
+									<span class="epkb-whatsnew-date"><?php esc_html_e( 'March 9, 2026', 'echo-knowledge-base' ); ?></span>
+									<strong><?php esc_html_e( 'PDF Uploads', 'echo-knowledge-base' ); ?></strong>
+									<span><?php esc_html_e( 'Upload PDFs directly into AI Data Collections for AI Chat and Search.', 'echo-knowledge-base' ); ?></span>
+									<a class="epkb-whatsnew-link" href="<?php echo esc_url( $ai_training_data_dashboard_url ); ?>"><?php esc_html_e( 'Open AI Training Data', 'echo-knowledge-base' ); ?></a>
 								</div>
 							</li>
 							<li class="epkb-whatsnew-item epkb-whatsnew-item--new">
 								<span class="epkb-whatsnew-badge"><?php esc_html_e( 'NEW', 'echo-knowledge-base' ); ?></span>
 								<div class="epkb-whatsnew-content">
-									<span class="epkb-whatsnew-date"><?php esc_html_e( 'October 5, 2025', 'echo-knowledge-base' ); ?></span>
-									<strong><?php esc_html_e( 'AI Content Analysis Released', 'echo-knowledge-base' ); ?></strong>
-									<span><?php esc_html_e( 'Advanced AI-powered insights to improve your KB', 'echo-knowledge-base' ); ?></span>
-									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=epkb_post_type_1&page=epkb-content-analysis' ) ); ?>" target="_blank" class="epkb-whatsnew-link" style="color: #2271b1; text-decoration: none;"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a>
+									<span class="epkb-whatsnew-date"><?php esc_html_e( 'February 21, 2026', 'echo-knowledge-base' ); ?></span>
+									<strong><?php esc_html_e( 'Glossary', 'echo-knowledge-base' ); ?></strong>
+									<span><?php esc_html_e( 'Add glossary terms with definitions that are automatically highlighted in your articles with interactive tooltips.', 'echo-knowledge-base' ); ?></span>
+									<a class="epkb-whatsnew-link" href="<?php echo esc_url( $glossary_dashboard_url ); ?>"><?php esc_html_e( 'Open Glossary', 'echo-knowledge-base' ); ?></a>
 								</div>
 							</li>
 							<li class="epkb-whatsnew-item epkb-whatsnew-item--new">
-								<span class="epkb-whatsnew-badge"><?php esc_html_e( 'NEW', 'echo-knowledge-base' ); ?></span>
+								<span class="epkb-whatsnew-badge"><?php esc_html_e( 'PRO', 'echo-knowledge-base' ); ?></span>
 								<div class="epkb-whatsnew-content">
-									<span class="epkb-whatsnew-date"><?php esc_html_e( 'October 5, 2025', 'echo-knowledge-base' ); ?></span>
-									<strong><?php esc_html_e( 'Upgraded Analytics', 'echo-knowledge-base' ); ?></strong>
-									<span><?php esc_html_e( 'Enhanced analytics page with improved insights and reporting', 'echo-knowledge-base' ); ?></span>
-									<a href="<?php echo esc_url( admin_url( 'edit.php?post_type=epkb_post_type_1&page=epkb-plugin-analytics' ) ); ?>" target="_blank" class="epkb-whatsnew-link" style="color: #2271b1; text-decoration: none;"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a>
+									<span class="epkb-whatsnew-date"><?php esc_html_e( 'February 21, 2026', 'echo-knowledge-base' ); ?></span>
+									<strong><?php esc_html_e( 'PDF to Notes', 'echo-knowledge-base' ); ?></strong>
+									<span><?php esc_html_e( 'Upload PDF files and convert them into AI training notes.', 'echo-knowledge-base' ); ?></span>
+									<a class="epkb-whatsnew-link" href="<?php echo esc_url( $ai_training_data_dashboard_url ); ?>"><?php esc_html_e( 'Open AI Training Data', 'echo-knowledge-base' ); ?></a>
 								</div>
 							</li>
+
 							<?php /* Temporarily hidden - backend help chat
 							<li class="epkb-whatsnew-item">
 								<div class="epkb-whatsnew-content">
@@ -618,103 +710,6 @@ class EPKB_Dashboard_Page {
 							*/ ?>
 						</ul>
 					</aside>
-
-					<!-- Vote for Features -->
-					<aside class='epkb-card epkb-card--vote-features'>
-						<div class='epkb-vote-header'>
-							<span class='epkb-vote-icon epkbfa epkbfa-check-square-o'></span>
-							<h3><?php esc_html_e( 'Vote for Features', 'echo-knowledge-base' ); ?></h3>
-						</div>
-						<div class="epkb-vote-content">
-							<p><?php esc_html_e( 'Help us prioritize new features! Tell us what you\'d like to see next.', 'echo-knowledge-base' ); ?></p>
-							<button id="epkb-open-vote-dialog" class="epkb-btn epkb-btn-vote-open">
-								<span class="epkbfa epkbfa-bullhorn"></span>
-								<?php esc_html_e( 'Vote for Top 3 Features', 'echo-knowledge-base' ); ?>
-							</button>
-						</div>
-					</aside>
-
-					<!-- Vote Dialog (hidden by default) -->
-					<div id="epkb-vote-dialog" style="display: none;" title="<?php esc_attr_e( 'Vote for Future Features', 'echo-knowledge-base' ); ?>">
-						<form id="epkb-kb-vote-features-form" class="epkb-vote-form">
-							<p class="epkb-vote-dialog-intro"><?php esc_html_e( 'Select the features you\'d like to see implemented:', 'echo-knowledge-base' ); ?></p>
-							
-							<div class="epkb-vote-features-list">
-								<label class="epkb-vote-feature-item">
-									<input type="checkbox" name="features[]" value="pdf-manual">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'Print Articles as PDF Manual', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-								
-								<label class="epkb-vote-feature-item">
-									<input type="checkbox" name="features[]" value="pdf-to-article">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'PDF to Article Conversion', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-								
-								<label class="epkb-vote-feature-item">
-									<input type="checkbox" name="features[]" value="pdf-search">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'PDF Search', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-								
-								<label class="epkb-vote-feature-item">
-									<input type="checkbox" name="features[]" value="related-articles">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'Related Articles', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-								
-								<label class="epkb-vote-feature-item">
-									<input type="checkbox" name="features[]" value="glossary">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'Glossary', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-
-								<label class="epkb-vote-feature-item">
-									<input type="checkbox" name="features[]" value="category-icons-library">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'Category Icons Library', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-
-								<label class="epkb-vote-feature-item epkb-vote-feature-other">
-									<input type="checkbox" name="features[]" value="custom-feature">
-									<span class="epkb-vote-feature-label">
-										<span class="epkb-vote-checkbox-icon"></span>
-										<span class="epkb-vote-feature-text"><?php esc_html_e( 'Custom Feature (please specify)', 'echo-knowledge-base' ); ?></span>
-									</span>
-								</label>
-								
-								<div class="epkb-vote-other-input" style="display: none;">
-									<textarea name="other_feature_text" placeholder="<?php esc_attr_e( 'Describe the feature you would like...', 'echo-knowledge-base' ); ?>" rows="3"></textarea>
-								</div>
-							</div>
-							
-							<div class="epkb-vote-user-info">
-								<div class="epkb-vote-field">
-									<label><?php esc_html_e( 'First Name', 'echo-knowledge-base' ); ?> <span class="epkb-optional" style="font-weight: bold;"><?php esc_html_e( '(optional)', 'echo-knowledge-base' ); ?></span></label>
-									<input type="text" name="first_name" value="<?php echo esc_attr( wp_get_current_user()->first_name ?: wp_get_current_user()->display_name ); ?>">
-								</div>
-								<div class="epkb-vote-field">
-									<label><?php esc_html_e( 'Email', 'echo-knowledge-base' ); ?> <span class="epkb-optional" style="font-weight: bold;"><?php esc_html_e( '(optional)', 'echo-knowledge-base' ); ?></span></label>
-									<input type="email" name="email" value="<?php echo esc_attr( wp_get_current_user()->user_email ); ?>">
-								</div>
-							</div>
-							
-							<div class="epkb-vote-message" style="display: none;"></div>
-						</form>
-					</div>
 					
 					</div> <!-- End of Sidebar -->
 
@@ -770,6 +765,69 @@ class EPKB_Dashboard_Page {
 
 
 	/**
+	 * Display feature promotion card.
+	 *
+	 * @param array $args
+	 */
+	private function display_feature_promo_card( $args ) {
+
+		$feature_key = empty( $args['feature_key'] ) ? '' : $args['feature_key'];
+		$feature_name = empty( $args['feature_name'] ) ? '' : $args['feature_name'];
+		$icon_class = empty( $args['icon_class'] ) ? '' : $args['icon_class'];
+		$title = empty( $args['title'] ) ? '' : $args['title'];
+		$features = empty( $args['features'] ) || ! is_array( $args['features'] ) ? array() : $args['features'];
+		$button_label = empty( $args['button_label'] ) ? '' : $args['button_label'];
+		$dialog_title = empty( $args['dialog_title'] ) ? '' : $args['dialog_title'];
+		$dialog_message = empty( $args['dialog_message'] ) ? '' : $args['dialog_message'];
+		$dialog_open_label = empty( $args['dialog_open_label'] ) ? '' : $args['dialog_open_label'];
+		$dialog_cancel_label = empty( $args['dialog_cancel_label'] ) ? '' : $args['dialog_cancel_label'];
+		$dialog_open_url = empty( $args['dialog_open_url'] ) ? '' : $args['dialog_open_url'];
+		$secondary_link_label = empty( $args['secondary_link_label'] ) ? '' : $args['secondary_link_label'];
+		$secondary_link_url = empty( $args['secondary_link_url'] ) ? '' : $args['secondary_link_url'];
+
+		if ( empty( $feature_key ) || empty( $feature_name ) || empty( $title ) || empty( $button_label ) ) {
+			return;
+		} ?>
+
+		<aside id="epkb-card--feature-promo-<?php echo esc_attr( $feature_key ); ?>" class="epkb-card epkb-dashboard-feature-promo">
+			<div class="epkb-dashboard-feature-promo__header">
+				<span class="epkb-dashboard-feature-promo__icon <?php echo esc_attr( $icon_class ); ?>"></span>
+				<h3><?php echo esc_html( $title ); ?></h3>
+			</div>
+			<div class="epkb-dashboard-feature-promo__body">
+				<ul class="epkb-dashboard-feature-promo__features epkb-body__check-mark-list-container">
+					<?php foreach ( $features as $feature ) { ?>
+						<li class="epkb-check-mark-list__item">
+							<span class="epkb-check-mark-list__item__icon epkbfa epkbfa-check"></span>
+							<span class="epkb-check-mark-list__item__text"><?php echo esc_html( $feature ); ?></span>
+						</li>
+					<?php } ?>
+				</ul>
+				<button
+					class="epkb-btn epkb-dashboard-feature-promo__button epkb-btn-dashboard-feature-enable"
+					type="button"
+					data-action="<?php echo esc_attr( 'epkb_enable_' . $feature_key ); ?>"
+					data-feature-label="<?php echo esc_attr( $feature_name ); ?>"
+					data-button-label="<?php echo esc_attr( $button_label ); ?>"
+					data-loading-label="<?php echo esc_attr( sprintf( esc_html__( 'Enabling %s...', 'echo-knowledge-base' ), $feature_name ) ); ?>"
+					data-dialog-title="<?php echo esc_attr( $dialog_title ); ?>"
+					data-dialog-message="<?php echo esc_attr( $dialog_message ); ?>"
+					data-dialog-open-label="<?php echo esc_attr( $dialog_open_label ); ?>"
+					data-dialog-cancel-label="<?php echo esc_attr( $dialog_cancel_label ); ?>"
+					data-dialog-open-url="<?php echo esc_url( $dialog_open_url ); ?>"
+				><?php echo esc_html( $button_label ); ?></button>
+				<?php if ( ! empty( $secondary_link_label ) && ! empty( $secondary_link_url ) ) { ?>
+					<a href="<?php echo esc_url( $secondary_link_url ); ?>" class="epkb-btn-link epkb-dashboard-feature-promo__link" target="_blank" rel="noopener noreferrer">
+						<?php echo esc_html( $secondary_link_label ); ?>
+						<span class="epkbfa epkbfa-external-link"></span>
+					</a>
+				<?php } ?>
+				<div class="epkb-dashboard-feature-promo__message" style="display: none;"></div>
+			</div>
+		</aside> <?php
+	}
+
+	/**
 	 * Enqueue scripts for dashboard page
 	 */
 	public function enqueue_dashboard_scripts() {
@@ -781,7 +839,7 @@ class EPKB_Dashboard_Page {
 		// Ensure WordPress admin scripts are loaded
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-ui-core' );
-		wp_enqueue_script( 'jquery-ui-dialog' );
+		// jquery-ui-dialog removed - vote form is now inline
 		wp_enqueue_script( 'jquery-effects-core' );
 		wp_enqueue_script( 'jquery-effects-bounce' );
 		wp_enqueue_script( 'jquery-ui-sortable' );
@@ -841,9 +899,6 @@ class EPKB_Dashboard_Page {
 	 */
 	private function should_show_setup_wizard() {
 
-		// TEMPORARY: Always show Setup Wizard button for testing
-		return true;
-
 		// Get the installation date from KB config
 		$kb_config = epkb_get_instance()->kb_config_obj->get_current_kb_configuration();
 		$install_date = empty( $kb_config['plugin_install_date'] ) ? '' : $kb_config['plugin_install_date'];
@@ -870,8 +925,8 @@ class EPKB_Dashboard_Page {
 	 * @return array
 	 */
 	private function get_month_weeks() {
-		$current_month = date( 'n' );
-		$current_year = date( 'Y' );
+		$current_month = wp_date( 'n' );
+		$current_year = wp_date( 'Y' );
 		$weeks = array();
 
 		// Get first and last day of month
@@ -879,8 +934,8 @@ class EPKB_Dashboard_Page {
 		$last_day = mktime( 0, 0, 0, (int)$current_month + 1, 0, $current_year );
 
 		// Get week numbers
-		$first_week = date( 'W', $first_day );
-		$last_week = date( 'W', $last_day );
+		$first_week = wp_date( 'W', $first_day );
+		$last_week = wp_date( 'W', $last_day );
 
 		// Handle year transition
 		if ( $last_week < $first_week ) {
@@ -912,7 +967,8 @@ class EPKB_Dashboard_Page {
 				'title'             => esc_html__( 'AI Features', 'echo-knowledge-base' ),
 				'special_note'      => esc_html__( 'Smart AI-powered support', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2025/08/AI-Pro-Features-List.jpg',
-				'desc'              => sprintf( esc_html__( '%sAI Chat%s with instant answers, %sSmart Search%s with AI-generated responses, and %sAdvanced Training%s on posts, pages & custom content.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>', '<strong>', '</strong>' ),
+				// translators: %1$s, %2$s, %3$s, %4$s, %5$s, %6$s are HTML strong tags
+				'desc'              => sprintf( esc_html__( '%1$sAI Chat%2$s with instant answers, %3$sSmart Search%4$s with AI-generated responses, and %5$sAdvanced Training%6$s on posts, pages & custom content.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>', '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/ai-features/?utm_source=plugin&utm_medium=dashboard&utm_content=carousel&utm_campaign=ai-features',
 			),
 			array(
@@ -943,7 +999,8 @@ class EPKB_Dashboard_Page {
 				'title'             => esc_html__( 'Elegant Layouts', 'echo-knowledge-base' ),
 				'special_note'      => esc_html__( 'More ways to design your KB', 'echo-knowledge-base' ),
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/2020/07/featured-image-ELAY-1.1.jpg',
-				'desc'              => sprintf( esc_html__( 'Use %sGrid Layout%s or %sSidebar Layout%s for KB Main page or combine Basic, Tabs, Grid and Sidebar layouts in many cool ways.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>' ),
+				// translators: %1$s, %2$s, %3$s, %4$s are HTML strong tags
+				'desc'              => sprintf( esc_html__( 'Use %1$sGrid Layout%2$s or %3$sSidebar Layout%4$s for KB Main page or combine Basic, Tabs, Grid and Sidebar layouts in many cool ways.', 'echo-knowledge-base' ), '<strong>', '</strong>', '<strong>', '</strong>' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/?utm_source=plugin&utm_medium=dashboard&utm_content=carousel&utm_campaign=elegant-layouts',
 			),
 			array(
@@ -959,17 +1016,34 @@ class EPKB_Dashboard_Page {
 				'img'               => 'https://www.echoknowledgebase.com/wp-content/uploads/edd/2022/01/KB-Import-Export-Banner-v2.jpg',
 				'desc'              => esc_html__( "Powerful import and export plugin to migrate, create and copy articles and images from your Knowledge Base.", 'echo-knowledge-base' ),
 				'learn_more_url'    => 'https://www.echoknowledgebase.com/wordpress-plugin/kb-import-export/?utm_source=plugin&utm_medium=dashboard&utm_content=carousel&utm_campaign=kb-import-export',
+				'cta_text'          => esc_html__( 'Get Articles Import and Export', 'echo-knowledge-base' ),
+				'cta_url'           => 'https://www.echoknowledgebase.com/wordpress-plugin/kb-import-export/',
 			),
 		);
 		
+		$discount_coupon = EPKB_AI_PRO_Features_Tab::get_discount_coupon();
+
 		$html = '';
 		foreach ( $addons as $addon ) {
 			$addon_json = htmlspecialchars( json_encode( $addon ), ENT_QUOTES, 'UTF-8' );
 			$html .= '<div class="epkb-carousel-item" data-addon=\'' . $addon_json . '\'>';
 			$html .= '<img src="' . esc_url( $addon['img'] ) . '" alt="' . esc_attr( $addon['title'] ) . '">';
-			$html .= '<a href="https://www.echoknowledgebase.com/bundle-pricing/" target="_blank" class="epkb-btn epkb-btn-upgrade-pro">';
+
+			// Show discount coupon for AI Features carousel item
+			if ( $addon['title'] === esc_html__( 'AI Features', 'echo-knowledge-base' ) && ! empty( $discount_coupon['discount_percentage'] ) ) {
+				$html .= '<div class="epkb-ad-discount-coupon">';
+				$html .= '<span class="epkb-ad-discount-badge">' . esc_html( $discount_coupon['discount_percentage'] . '% ' . __( 'OFF', 'echo-knowledge-base' ) ) . '</span>';
+				$html .= '<span class="epkb-ad-discount-text">' . esc_html__( 'Use code:', 'echo-knowledge-base' ) . ' <code>' . esc_html( $discount_coupon['coupon_code'] ) . '</code></span>';
+				$html .= '<button type="button" class="epkb-ad-discount-copy-btn" data-code="' . esc_attr( $discount_coupon['coupon_code'] ) . '">' . esc_html__( 'Copy', 'echo-knowledge-base' ) . '</button>';
+				$html .= '</div>';
+			}
+
+			$cta_url = empty( $addon['cta_url'] ) ? 'https://www.echoknowledgebase.com/bundle-pricing/' : $addon['cta_url'];
+			$cta_text = empty( $addon['cta_text'] ) ? esc_html__( 'Upgrade to PRO', 'echo-knowledge-base' ) : $addon['cta_text'];
+
+			$html .= '<a href="' . esc_url( $cta_url ) . '" target="_blank" class="epkb-btn epkb-btn-upgrade-pro">';
 			$html .= '<span class="epkbfa epkbfa-trophy"></span>';
-			$html .= esc_html__( 'Upgrade to PRO', 'echo-knowledge-base' );
+			$html .= esc_html( $cta_text );
 			$html .= '</a>';
 			$html .= '</div>';
 		}
@@ -978,65 +1052,67 @@ class EPKB_Dashboard_Page {
 	}
 	
 	/**
-	 * AJAX handler to vote for features
+	 * AJAX handler to enable the Glossary feature
 	 */
-	public function ajax_vote_for_features() {
+	public function ajax_enable_glossary() {
 
 		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die( '_wpnonce_epkb_ajax_action' );
 
-		// Get the submitted data
-		$first_name = isset( $_POST['first_name'] ) ? sanitize_text_field( $_POST['first_name'] ) : '';
-		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : '';
-		$site_url = get_site_url(); // Always use the actual site URL
-		$features = isset( $_POST['features'] ) ? array_map( 'sanitize_text_field', $_POST['features'] ) : array();
-		$other_feature_text = isset( $_POST['other_feature_text'] ) ? sanitize_textarea_field( $_POST['other_feature_text'] ) : '';
-
-		// Validate required fields - only features are required now
-		if ( empty( $features ) ) {
-			wp_send_json_error( __( 'Please select at least one feature.', 'echo-knowledge-base' ) );
-		}
-
-		// Validate email only if provided
-		if ( ! empty( $email ) && ! is_email( $email ) ) {
-			wp_send_json_error( __( 'Please provide a valid email address.', 'echo-knowledge-base' ) );
-		}
-
-		// Build feedback message
-		$feedback_message = 'KB Dashboard - User voted for features: ' . implode( ', ', $features );
-		if ( ! empty( $other_feature_text ) && in_array( 'custom-feature', $features ) ) {
-			$feedback_message .= "\nCustom feature requested: " . $other_feature_text;
-		}
-
-		// send feedback to same endpoint as deactivation form
-		$vote_data = array(
-			'epkb_action'       => 'epkb_process_user_feedback',
-			'feedback_type'     => 'kb_feature_vote',
-			'feedback_input'    => $feedback_message,
-			'plugin_name'       => 'KB',
-			'plugin_version'    => class_exists('Echo_Knowledge_Base') ? Echo_Knowledge_Base::$version : 'N/A',
-			'first_version'     => '',
-			'wp_version'        => '',
-			'theme_info'        => '',
-			'contact_user'      => $email . ' - ' . $first_name,
-			'first_name'        => $first_name,
-			'email_subject'     => 'KB Feature Vote',
+		$this->enable_default_kb_feature(
+			'glossary_enable',
+			__( 'Failed to enable Glossary. Please try again.', 'echo-knowledge-base' ),
+			__( 'Glossary has been enabled.', 'echo-knowledge-base' )
 		);
+	}
 
-		// Call the API
-		$response = wp_remote_post(
-			esc_url_raw( add_query_arg( $vote_data, 'https://www.echoknowledgebase.com' ) ),
-			array(
-				'timeout'   => 15,
-				'body'      => $vote_data,
-				'sslverify' => false
-			)
-		);
+	/**
+	 * AJAX handler to enable the Quizzes feature.
+	 */
+	public function ajax_enable_quizzes() {
 
-		// Check if the request was successful
-		if ( is_wp_error( $response ) ) {
-			wp_send_json_error( array( 'message' => __( 'Failed to submit vote. Please try again.', 'echo-knowledge-base' ) ) );
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die( '_wpnonce_epkb_ajax_action' );
+
+		$kb_id = EPKB_KB_Config_DB::DEFAULT_KB_ID;
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
+		if ( is_wp_error( $kb_config ) ) {
+			wp_send_json_error( __( 'Failed to enable Quizzes. Please try again.', 'echo-knowledge-base' ) );
 		}
 
-		wp_send_json_success( array( 'message' => __( 'Thank you for voting! Your feedback helps us prioritize future features.', 'echo-knowledge-base' ) ) );
+		$kb_config['quizzes_enable'] = 'on';
+
+		$result = epkb_get_instance()->kb_config_obj->update_kb_configuration( $kb_id, $kb_config );
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( __( 'Failed to enable Quizzes. Please try again.', 'echo-knowledge-base' ) );
+		}
+
+		wp_send_json_success( array(
+			'message'             => __( 'Quizzes have been enabled.', 'echo-knowledge-base' ),
+			'show_interest_modal' => EPKB_Quizzes_Utilities::should_show_interest_modal(),
+		) );
+	}
+
+	/**
+	 * Enable a feature stored on the default KB configuration.
+	 *
+	 * @param string $feature_key
+	 * @param string $error_message
+	 * @param string $success_message
+	 */
+	private function enable_default_kb_feature( $feature_key, $error_message, $success_message ) {
+
+		$kb_id = EPKB_KB_Config_DB::DEFAULT_KB_ID;
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id );
+		if ( is_wp_error( $kb_config ) ) {
+			wp_send_json_error( $error_message );
+		}
+
+		$kb_config[ $feature_key ] = 'on';
+
+		$result = epkb_get_instance()->kb_config_obj->update_kb_configuration( $kb_id, $kb_config );
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $error_message );
+		}
+
+		wp_send_json_success( array( 'message' => $success_message ) );
 	}
 }

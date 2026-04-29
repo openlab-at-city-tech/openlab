@@ -7,29 +7,29 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "AI Search": [
-                "AI खोज"
-            ],
             "All": [
                 "सभी"
             ],
             "Disabled": [
                 "निष्क्रिय"
             ],
+            "Debug Mode": [
+                "डिबग मोड"
+            ],
+            "API Key": [
+                "एपीआई कुंजी"
+            ],
             "AI Chat": [
                 "एआई चैट"
             ],
-            "OpenAI API Key": [
-                "OpenAI API कुंजी"
+            "AI Search": [
+                "AI खोज"
             ],
             "Debug mode updated successfully": [
                 "डिबग मोड सफलतापूर्वक अपडेट किया गया"
             ],
             "Refresh": [
                 "ताज़ा करें"
-            ],
-            "Status:": [
-                "स्थिति:"
             ],
             "Warnings": [
                 "चेतावनाएं"
@@ -70,9 +70,6 @@
             "Error clearing AI logs": [
                 "AI लॉग साफ़ करते समय त्रुटि"
             ],
-            "Debug Mode": [
-                "डिबग मोड"
-            ],
             "Enable Debug Mode": [
                 "डिबग मोड सक्षम करें"
             ],
@@ -105,6 +102,9 @@
             ],
             "Total Records:": [
                 "कुल रिकॉर्ड:"
+            ],
+            "Status:": [
+                "स्थिति:"
             ],
             "Added:": [
                 "जोड़ा गया:"

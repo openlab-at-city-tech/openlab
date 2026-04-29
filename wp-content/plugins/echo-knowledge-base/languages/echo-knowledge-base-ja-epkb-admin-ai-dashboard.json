@@ -7,140 +7,50 @@
                 "lang": "ja",
                 "plural-forms": "nplurals=1; plural=0;"
             },
-            "Learn more": [
-                "詳しく見る"
+            "Settings": [
+                "設定"
             ],
-            "Cancel": [
-                "キャンセル"
+            "Learn More": [
+                "さらに詳しく"
             ],
-            "Vote for Top 3 Features": [
-                "トップ3機能に投票"
+            "AI Features": [
+                "AI機能"
             ],
-            "First Name": [
-                "名"
+            "See Demo Quiz": [
+                "デモクイズを見る"
             ],
-            "(optional)": [
-                "（任意）"
-            ],
-            "Email": [
-                "メール"
-            ],
-            "Failed to submit vote. Please try again.": [
-                "投票の送信に失敗しました。もう一度お試しください。."
-            ],
-            "Step 1: Configure API Key & Privacy": [
-                "ステップ1: APIキーとプライバシーを設定"
-            ],
-            "Add your OpenAI API key and accept the data privacy agreement.": [
-                "OpenAIのAPIキーを追加し、データプライバシー規約に同意します。."
-            ],
-            "Step 2: Enable AI Chat and/or AI Search": [
-                "ステップ2: AIチャットおよび/またはAI検索を有効にします。"
-            ],
-            "Enable AI Search or Chat features for your website.": [
-                "ウェブサイトでAI検索またはチャット機能を有効にします。."
-            ],
-            "Step 3: Add Training Data & Sync": [
-                "ステップ3: 機械学習データを追加して同期"
-            ],
-            "Select content and sync it to OpenAI for AI processing.": [
-                "コンテンツを選択して、AI処理のためにOpenAIに同期します。."
-            ],
-            "Go to Settings": [
-                "設定へ移動"
-            ],
-            "Completed": [
-                "完了済み"
+            "General Settings": [
+                "一般設定"
             ],
             "Warnings": [
                 "警告"
             ],
-            "Welcome to AI Features!": [
-                "AI機能へようこそ！"
+            "This Knowledge Base AI Is Not Enabled": [
+                "このナレッジベースAIは有効になっていません"
             ],
-            "Let's get you set up with AI-powered chat and search in just a few steps.": [
-                "数ステップでAI搭載のチャットと検索を設定しましょう。."
-            ],
-            "Complete Your Setup": [
-                "セットアップを完了"
-            ],
-            "Just a few more steps to enable AI features:": [
-                "AI機能を有効にするには、もう少しだけ手順が必要です："
-            ],
-            "Setup Steps": [
-                "セットアップ手順"
-            ],
-            "Configure API Key & Privacy": [
-                "APIキーとプライバシーの設定"
-            ],
-            "Add your OpenAI API key and accept the data privacy agreement": [
-                "OpenAIのAPIキーを追加し、データプライバシー協定に同意してください。"
-            ],
-            "Enable AI Chat and/or AI Search": [
-                "AIチャットおよびAI検索を有効にします"
-            ],
-            "Enable AI Search or Chat features for your website": [
-                "ウェブサイトでAI検索機能またはAIチャット機能を有効にします"
-            ],
-            "Enable AI Features": [
-                "AI機能を有効にします"
-            ],
-            "Add Training Data & Sync": [
-                "学習データを追加して同期"
-            ],
-            "Select content and sync it to OpenAI for AI processing": [
-                "AI処理のためにコンテンツを選択してOpenAIへ同期します"
-            ],
-            "Go to Training Data": [
-                "学習データへ移動"
-            ],
-            "Help us prioritize features by providing your information:": [
-                "情報を提供して、機能の優先順位を決定するのをお手伝いください："
-            ],
-            "Describe Your Feature Request": [
-                "機能リクエストの内容を説明してください"
-            ],
-            "Please describe the feature you would like to see...": [
-                "見てみたい機能を説明してください..."
-            ],
-            "Submit Vote": [
-                "投票を送信"
-            ],
-            "Please describe the feature you would like to see.": [
-                "見てみたい機能について説明してください。."
-            ],
-            "Please enter a valid email address.": [
-                "有効なメールアドレスを入力してください。."
-            ],
-            "Please select at least one feature to vote for.": [
-                "投票する機能を少なくとも1つ選択してください。."
-            ],
-            "Submitting your vote...": [
-                "投票を送信しています..."
-            ],
-            "Thank you for voting!": [
-                "投票ありがとうございます！"
-            ],
-            "An error occurred. Please try again.": [
-                "エラーが発生しました。もう一度お試しください。."
+            "AI features are optional and turned off by default. AI will only work after you manually enable it and add your own API key in ": [
+                "AI機能はオプションで、デフォルトではオフです。AIは手動で有効化し、独自のAPIキーを追加した後にのみ動作します"
             ],
             "Latest AI Updates": [
                 "最新のAIアップデート"
             ],
-            "Select the features you would like to see implemented:": [
-                "実装してほしい機能を選択してください："
+            "Learn more": [
+                "詳しく見る"
             ],
-            "Released": [
-                "公開済み"
+            "Failed to enable feature.": [
+                "機能の有効化に失敗しました。."
             ],
-            "feature selected": [
-                "機能が選択されました"
+            "FREE": [
+                "無料"
             ],
-            "features selected": [
-                "機能が選択されました"
+            "Enabling...": [
+                "有効化しています..."
             ],
-            "Note: Your feedback helps us prioritize development. Features are subject to change.": [
-                "注: フィードバックは開発の優先順位付けに役立ちます。機能は変更される場合があります。."
+            "Free Features": [
+                "無料機能"
+            ],
+            "AI Feature Plugin": [
+                "AI機能プラグイン"
             ]
         }
     }

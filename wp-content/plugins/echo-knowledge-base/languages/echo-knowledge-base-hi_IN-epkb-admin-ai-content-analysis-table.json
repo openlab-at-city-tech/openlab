@@ -31,6 +31,9 @@
             "selected": [
                 "चयनित"
             ],
+            "Delete": [
+                "हटाएं"
+            ],
             "Next": [
                 "अगला"
             ],
@@ -45,9 +48,6 @@
             ],
             "Loading...": [
                 "लोड हो रहा है..."
-            ],
-            "Delete": [
-                "हटाएं"
             ],
             "of": [
                 "में से"
@@ -79,29 +79,8 @@
             "Unknown error occurred": [
                 "अज्ञात त्रुटि उत्पन्न हुई"
             ],
-            "No articles need analysis": [
-                "विश्लेषण के लिए कोई लेख आवश्यक नहीं है"
-            ],
-            "All articles have been analyzed. Great job!": [
-                "सभी लेखों का विश्लेषण कर लिया गया। बहुत अच्छा!"
-            ],
-            "No articles need improvement": [
-                "कोई लेख सुधार की आवश्यकता नहीं है"
-            ],
-            "All analyzed articles have scores above 80%. Excellent!": [
-                "सभी विश्लेषण किए गए लेखों के स्कोर 80% से ऊपर हैं। शानदार!"
-            ],
-            "No recent articles": [
-                "हाल के लेख नहीं हैं"
-            ],
-            "No articles have been modified recently.": [
-                "हाल में कोई लेख संशोधित नहीं किया गया है।."
-            ],
-            "No articles found": [
-                "कोई लेख नहीं मिला"
-            ],
-            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
-                "इस ज्ञान-आधार में कोई लेख उपलब्ध नहीं है। विश्लेषण शुरू करने के लिए कुछ लेख बनाएं।."
+            "All Knowledge Bases": [
+                "सभी ज्ञान आधार"
             ],
             "To Analyze": [
                 "विश्लेषण करें"
@@ -129,6 +108,18 @@
             ],
             "No articles match your search": [
                 "आपकी खोज से कोई डॉक्यूमेंटेशन पेज नहीं मिला"
+            ],
+            "No articles need analysis": [
+                "विश्लेषण के लिए कोई लेख आवश्यक नहीं है"
+            ],
+            "No articles need improvement": [
+                "कोई लेख सुधार की आवश्यकता नहीं है"
+            ],
+            "No recent articles": [
+                "हाल के लेख नहीं हैं"
+            ],
+            "No articles found": [
+                "कोई लेख नहीं मिला"
             ],
             "View detailed analysis": [
                 "विस्तृत विश्लेषण देखें"

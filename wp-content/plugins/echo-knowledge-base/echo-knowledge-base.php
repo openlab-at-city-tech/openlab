@@ -3,7 +3,7 @@
  * Plugin Name: Knowledge Base for Documents and FAQs
  * Plugin URI: https://www.echoknowledgebase.com
  * Description: Create Echo Knowledge Base articles, docs and FAQs.
- * Version: 15.600.0
+ * Version: 17.111.0
  * Author: Echo Plugins
  * Author URI: https://www.echoknowledgebase.com
  * Text Domain: echo-knowledge-base
@@ -43,7 +43,7 @@ final class Echo_Knowledge_Base {
 	/* @var Echo_Knowledge_Base */
 	private static $instance;
 
-	public static $version = '15.600.0';
+	public static $version = '17.111.0';
 	public static $plugin_dir;
 	public static $plugin_url;
 	public static $plugin_file = __FILE__;
@@ -77,6 +77,7 @@ final class Echo_Knowledge_Base {
 
 		self::$instance = new Echo_Knowledge_Base();
 		self::$instance->setup_system();
+		EPKB_AI_Utilities::register_ai_pro_version_guard();
 		self::$instance->setup_plugin();
 
 		add_action( 'plugins_loaded', array( self::$instance, 'load_text_domain' ), 11 );
@@ -108,6 +109,10 @@ final class Echo_Knowledge_Base {
 		new EPKB_Articles_CPT_Setup();
 		new EPKB_Articles_Admin();
 		new EPKB_FAQs_CPT_Setup();
+		new EPKB_Quizzes_CPT_Setup();
+		new EPKB_Quizzes_Setup();
+		new EPKB_Glossary_Taxonomy_Setup();
+		new EPKB_Glossary_Frontend();
 		new EPKB_Blocks_Setup();
 
 		new EPKB_Categories_Admin();
@@ -117,6 +122,10 @@ final class Echo_Knowledge_Base {
 		$this->security_obj = new EPKB_AI_Security();
 		new EPKB_AI_REST_Search_Controller();
 		new EPKB_AI_REST_Chat_Controller();
+
+		// Setup Steps and Pointers for Help Resources page
+		new EPKB_Setup_Steps();
+		new EPKB_Setup_Pointers();
 	}
 
 	/**
@@ -167,6 +176,7 @@ final class Echo_Knowledge_Base {
 		new EPKB_AI_REST_Sync_Controller();
 		new EPKB_AI_REST_Content_Analysis_Controller();
 		new EPKB_AI_REST_Search_Results_Controller();
+		new EPKB_AI_REST_PDF_Extract_Controller();
 
 		EPKB_AI_Sync_Cron_Handler::init();
 		EPKB_AI_Search_Results_Display::init();
@@ -178,7 +188,7 @@ final class Echo_Knowledge_Base {
 	 */
 	private function handle_action_request( $action ) {
 
-		if ( $action == 'epkb_download_debug_info' ) {
+		if ( in_array( $action, array( 'epkb_download_debug_info', 'epkb_download_ai_config' ), true ) ) {
 			new EPKB_Debug_Controller();
 			return;
 		}
@@ -203,7 +213,7 @@ final class Echo_Knowledge_Base {
 		} else if ( in_array( $action, array( 'epkb_get_wizard_template', 'epkb_apply_wizard_changes', 'epkb_wizard_update_order_view', 'epkb_apply_setup_wizard_changes', 'epkb_get_wizard_preset_preview' ) ) ) {
 			new EPKB_KB_Wizard_Cntrl();
 			return;
-		} else if ( in_array( $action, array( 'epkb_wpml_enable', 'eckb_update_category_slug_parameter', 'eckb_update_tag_slug_parameter', 'epkb_preload_fonts','epkb_enable_legacy_open_ai',
+		} else if ( in_array( $action, array( 'epkb_wpml_enable', 'eckb_update_category_slug_parameter', 'eckb_update_tag_slug_parameter', 'epkb_preload_fonts',
 												'epkb_load_resource_links_icons', 'epkb_load_general_typography', 'epkb_save_access_control', 'epkb_apply_settings_changes', 'epkb_save_kb_name',
 												'epkb_save_sidebar_intro_text', 'epkb_switch_kb_template' ) ) ) {
 			new EPKB_KB_Config_Controller();
@@ -216,6 +226,12 @@ final class Echo_Knowledge_Base {
 			return;
 		} else if ( in_array( $action, array( 'epkb_save_faq', 'epkb_get_faq', 'epkb_delete_faq', 'epkb_save_faq_group', 'epkb_delete_faq_group' ) ) ) {
 			new EPKB_FAQs_Ctrl();
+			return;
+		} else if ( in_array( $action, array( 'epkb_save_quiz', 'epkb_get_quiz', 'epkb_get_quiz_by_article', 'epkb_delete_quiz', 'epkb_generate_quiz', 'epkb_submit_quiz_interest' ) ) ) {
+			new EPKB_Quizzes_Ctrl();
+			return;
+		} else if ( in_array( $action, array( 'epkb_glossary_save_term', 'epkb_glossary_delete_term', 'epkb_glossary_get_term', 'epkb_glossary_bulk_publish', 'epkb_glossary_bulk_delete' ) ) ) {
+			new EPKB_Glossary_Ctrl();
 			return;
 		} else if ( in_array( $action, array( 'epkb_faq_get_shortcode' ) ) ) {
 			new EPKB_FAQs_AJAX();
@@ -232,10 +248,10 @@ final class Echo_Knowledge_Base {
 		} else if ( $action == 'epkb_ai_toggle_debug_mode' ) {
 			new EPKB_AI_Tools_Tab();
 			return;
-		} else if ( in_array( $action, array( 'epkb_get_ai_status', 'epkb_vote_for_features' ) ) ) {
+		} else if ( in_array( $action, array( 'epkb_get_ai_status', 'epkb_vote_for_features', 'epkb_submit_empty_content_report' ) ) ) {
 			new EPKB_AI_Dashboard_Tab();
 			return;
-		} else if ( $action == 'epkb_kb_vote_for_features' ) {
+		} else if ( in_array( $action, array( 'epkb_kb_vote_for_features', 'epkb_enable_glossary', 'epkb_enable_quizzes' ) ) ) {
 			new EPKB_Dashboard_Page();
 			return;
 		} else if ( $action == 'epkb_check_training_data_sync' ) {
@@ -263,6 +279,11 @@ final class Echo_Knowledge_Base {
 			return;
 		}
 
+		if ( in_array( $action, array( 'epkb_import_pdf_article', 'epkb_ai_extract_pdf_text', 'epkb_prepare_pdf_content' ) ) ) {
+			new EPKB_PDF_Import_Ctrl();
+			return;
+		}
+
 		if ( $action == 'epkb_update_the_content_flag' ) {
 			new EPKB_Articles_Setup();
 			return;
@@ -285,6 +306,12 @@ final class Echo_Knowledge_Base {
 
 		if ( in_array( $action, array( 'eckb_apply_fe_settings', 'eckb_save_fe_settings', 'eckb_save_fe_article_settings', 'eckb_save_fe_archive_settings', 'eckb_closed_fe_editor' ) ) ) {
 			new EPKB_Frontend_Editor();
+			return;
+		}
+
+		// Elementor AJAX save - register hooks to convert text-editor widgets with KB shortcode to shortcode widgets
+		if ( $action == 'elementor_ajax' ) {
+			new EPKB_Site_Builders();
 			return;
 		}
 	}
@@ -358,12 +385,6 @@ final class Echo_Knowledge_Base {
 
 		// Initialize Analytics Page to register AJAX handlers
 		new EPKB_Analytics_Page();
-
-
-		// Load test system in development environments
-		/* if ( file_exists( self::$plugin_dir . 'tests/test-init.php' ) ) {
-			require_once self::$plugin_dir . 'tests/test-init.php';
-		} */
 	}
 
 	public function load_text_domain() {
@@ -409,4 +430,3 @@ function epkb_get_instance() {
 epkb_get_instance();
 
 endif; // end class_exists() check
-

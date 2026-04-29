@@ -7,6 +7,9 @@
  */
 class EPKB_Layout_Tabs extends EPKB_Layout {
 
+	private $article_li_spacing = '';
+	private $category_li_spacing = '';
+
 	/**
 	 * Display Categories and Articles module content for KB Main Page (without KB Search)
 	 *
@@ -66,7 +69,7 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 				$category_chunks = array_chunk( $this->category_seq_data, $max_tabs_per_row_escaped, true );
 				$ix = 0;  ?>
 
-				<ul class="epkb-nav-tabs epkb-top-categories-list epkb-nav-tabs-multirow epkb-nav-tabs-multirow--max-<?php echo $max_tabs_per_row_escaped; ?>"<?php echo $ul_style_escaped; ?> > <?php
+				<ul class="epkb-nav-tabs epkb-top-categories-list epkb-nav-tabs-multirow epkb-nav-tabs-multirow--max-<?php echo $max_tabs_per_row_escaped; ?>" role="tablist"<?php echo $ul_style_escaped; ?> > <?php
 
 					// Loop over each array of tabs
 					foreach ( $category_chunks as $category_chunk ) {
@@ -92,7 +95,7 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 							$class1_li_escaped = $this->get_css_class( $active . ', epkb_top_categories' );
 							$style2_li_escaped = $this->get_inline_style( 'color:: tab_nav_font_color' ); ?>
 
-							<li id="epkb_tab_<?php echo esc_attr( ++$ix ); ?>" tabindex="0"	<?php echo $class1_li_escaped; ?> data-cat-name="<?php echo esc_attr( $tab_cat_name ); ?>" >
+							<li id="epkb_tab_<?php echo esc_attr( ++$ix ); ?>" tabindex="0" role="tab" aria-selected="<?php echo $active ? 'true' : 'false'; ?>" <?php echo $class1_li_escaped; ?> data-cat-name="<?php echo esc_attr( $tab_cat_name ); ?>" >
 
 								<div class="epkb-category-level-1" data-kb-category-id="<?php echo esc_attr( $category_id ); ?>" <?php echo $style2_li_escaped; ?> >
 									<h2 class="epkb-cat-name"><?php echo esc_html( $category_name ); ?></h2>
@@ -122,7 +125,7 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 				$style2_escaped = $this->get_inline_style( 'background-color:: tab_nav_background_color, border-bottom-color:: tab_nav_border_color, border-bottom-style: solid, border-bottom-width: 1px' ); ?>
 
 				<section <?php echo $class1_escaped . ' ' . $style1_escaped; ?> >
-					<ul	class="epkb-nav-tabs epkb-top-categories-list" <?php echo $style2_escaped; ?> >					<?php
+					<ul	class="epkb-nav-tabs epkb-top-categories-list" role="tablist" <?php echo $style2_escaped; ?> >					<?php
 
 						$ix = 0;
 						foreach ( $this->category_seq_data as $category_id => $subcategories ) {
@@ -139,7 +142,7 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 							$class1_escaped = $this->get_css_class( $active . ', col-' . $nof_top_categories . ', epkb_top_categories');
 							$style2_escaped = $this->get_inline_style( 'color:: tab_nav_font_color' );  ?>
 
-							<li id="epkb_tab_<?php echo esc_attr( ++$ix ); ?>" tabindex="0" <?php echo $class1_escaped; ?> data-cat-name="<?php echo esc_attr( $tab_cat_name ); ?>">
+							<li id="epkb_tab_<?php echo esc_attr( ++$ix ); ?>" tabindex="0" role="tab" aria-selected="<?php echo $active ? 'true' : 'false'; ?>" <?php echo $class1_escaped; ?> data-cat-name="<?php echo esc_attr( $tab_cat_name ); ?>">
 								<div  class="epkb-category-level-1" data-kb-category-id="<?php echo esc_attr( $category_id ); ?>" <?php echo $style2_escaped; ?> >
 									<h2 class="epkb-cat-name"><?php echo esc_html( $category_name ); ?></h2>
 								</div>							<?php
@@ -200,6 +203,13 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 			$this->show_categories_missing_message();
 			return;
 		}
+
+		$category_li_spacing_val = intval( $this->kb_config['article_list_spacing'] );
+		$this->category_li_spacing = 'style="padding-bottom: ' . esc_attr( $category_li_spacing_val ) . 'px !important; padding-top: ' . esc_attr( $category_li_spacing_val ) . 'px !important;"';
+		$hover_toggle = empty( $this->kb_config['article_list_hover_toggle'] ) ? 'off' : $this->kb_config['article_list_hover_toggle'];
+		$this->article_li_spacing = $hover_toggle == 'on'
+			? ''
+			: $this->get_inline_style( 'padding-bottom:: article_list_spacing, padding-top:: article_list_spacing' );
 
 		$class0_escaped = $this->get_css_class('::section_box_shadow, epkb-top-category-box');
 		$style0_escaped = $this->get_inline_style(
@@ -450,13 +460,13 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 			/** DISPLAY SUB-SUB-CATEGORIES */
 			foreach ( $box_sub_category_list as $box_sub_category_id => $box_sub_sub_category_list ) {
 				$category_name = isset( $this->articles_seq_data[$box_sub_category_id][0] ) ?
-											$this->articles_seq_data[$box_sub_category_id][0] : _x( 'Category', 'taxonomy singular name' );
+											$this->articles_seq_data[$box_sub_category_id][0] : _x( 'Category', 'taxonomy singular name', 'echo-knowledge-base' );
 
 				$class1_escaped = $this->get_css_class( '::expand_articles_icon, epkb-category-level-2-3__cat-icon' );
 				$style1_escaped = $this->get_inline_style( 'color:: section_category_icon_color' );
 				$style2_escaped = $this->get_inline_style( 'color:: section_category_font_color' ); ?>
 
-				<li <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?>>
+				<li <?php echo $this->category_li_spacing; ?>>
 					<div class="epkb-category-level-2-3" aria-expanded="false" data-kb-category-id="<?php echo esc_attr( $box_sub_category_id ); ?>" data-kb-type="<?php echo esc_attr( $level_name . 'category' ); ?>" role="region">
 						<span <?php echo $class1_escaped . ' ' . $style1_escaped; ?> ></span>
 						<h<?php echo esc_attr( $level_num + 1 ); ?> class="epkb-category-level-2-3__cat-name" tabindex="0" <?php echo $style2_escaped; ?> ><?php echo esc_html( $category_name ); ?></h<?php echo esc_attr( $level_num + 1 ); ?>>
@@ -544,7 +554,7 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 
 				/** DISPLAY ARTICLE LINK */         ?>
 				<li class="epkb-article-level-<?php echo esc_attr( $level . ' ' . $hide_class ); ?>" data-kb-article-id="<?php echo esc_attr( $article_id ); ?>"
-				        data-kb-type="<?php echo esc_attr( $data_kb_type ); ?>" <?php echo $this->get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing' ); ?> >   <?php
+				        data-kb-type="<?php echo esc_attr( $data_kb_type ); ?>" <?php echo $this->article_li_spacing; ?> >   <?php
 								$this->single_article_link( $article_title, $article_id, EPKB_Layout::TABS_LAYOUT ); ?>
 				</li> <?php
 			}
@@ -639,19 +649,18 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 			}
 		';
 
-		if ( isset( $kb_config['section_typography'] ) ) {
-			// Headings  -----------------------------------------/
-			$output .= '
-			#epkb-content-container .epkb-category-level-2-3 {
-			    font-size: ' . ( empty( $kb_config['section_typography']['font-size'] ) ? 'inherit;' : $kb_config['section_typography']['font-size'] . 'px!important;' ) . '
+		$output .= '
+			#epkb-content-container .epkb-category-level-2-3,
+			#epkb-content-container .epkb-category-level-2-3__cat-name {
+		        font-size: ' . ( ! empty( $kb_config['article_typography']['font-size'] ) ? intval( $kb_config['article_typography']['font-size'] ) . 'px !important;' : 'inherit;' ) . '
+	            font-weight: ' . ( ! empty( $kb_config['section_typography']['font-weight'] ) ? $kb_config['section_typography']['font-weight'] : 'inherit !important' ) . ';
 			}';
 
-			// Articles  -----------------------------------------/
+		if ( isset( $kb_config['article_typography'] ) ) {
 			$output .= '
-			#epkb-content-container .epkb-category-level-2-3__cat-name, 
 			#epkb-content-container .epkb-articles-coming-soon,
 			#epkb-content-container .epkb-show-all-articles { ' .
-					EPKB_Typography::get_css_string( $kb_config['section_typography'] ) . '
+				EPKB_Typography::get_css_string( $kb_config['article_typography'] ) . '
 			}';
 		}
 
@@ -663,14 +672,81 @@ class EPKB_Layout_Tabs extends EPKB_Layout {
 			}';
 		}
 
+		// Article hover effect -----------------------------------------/
+		if ( ! empty( $kb_config['article_list_hover_toggle'] ) && $kb_config['article_list_hover_toggle'] == 'on' ) {
+			$spacing = intval( $kb_config['article_list_spacing'] );
+			$hover_bg = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_background_color'] );
+			$hover_text = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_font_color'] );
+			$output .= '
+				#epkb-content-container .epkb-mp-article {
+					padding: ' . $spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				#epkb-content-container .epkb-mp-article:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				#epkb-content-container .epkb-mp-article:hover .eckb-article-title {
+					color: ' . $hover_text . ' !important;
+				}
+				#epkb-content-container .epkb-mp-article:hover .eckb-article-title__icon {
+					color: ' . $hover_text . ' !important;
+				}';
+			$output .= '
+				#epkb-content-container .epkb-sub-category > li {
+					padding-left: ' . $spacing . 'px !important;
+					padding-right: ' . $spacing . 'px !important;
+				}
+				#epkb-content-container .epkb-sub-category li {
+					padding-bottom: 0px !important;
+				}
+				#epkb-ml-tabs-layout .epkb-tab-top-articles .epkb-list-column li {
+					padding: 0 !important;
+				}';
+		}
+
+		// Space between category sections -----------------------------------------/
+		$section_gap = isset( $kb_config['section_box_gap'] ) ? intval( $kb_config['section_box_gap'] ) : 20;
+		$output .= '
+			#epkb-content-container .epkb-ml__module-categories-articles__row {
+				gap: ' . $section_gap . 'px !important;
+				margin-bottom: ' . $section_gap . 'px !important;
+			}
+			#epkb-content-container .epkb-ml__module-categories-articles__row:last-child {
+				margin-bottom: 0 !important;
+			}
+				
+			#epkb-ml-tabs-layout #epkb-content-container .epkb-tab-top-articles {
+				margin-bottom: ' . $section_gap . 'px !important;
+		    }';
+
+
+
+		// Category box padding -----------------------------------------/
+		if ( ! empty( $kb_config['category_box_padding'] ) ) {
+			$output .= '
+				#epkb-content-container .epkb-top-category-box {
+					padding: ' . intval( $kb_config['category_box_padding'] ) . 'px !important;
+				}';
+		}
+
 		// Top Level Articles  -----------------------------------------/
+		$article_spacing = intval( $kb_config['article_list_spacing'] );
 		$output .= '
 		#epkb-ml__module-categories-articles .epkb-list-column li,
 		 .epkb-tab-top-articles li {
-	        padding-top: ' . $kb_config['article_list_spacing'] . 'px !important;
-	        padding-bottom: ' . $kb_config['article_list_spacing'] . 'px !important;
+	        padding-top: ' . $article_spacing . 'px !important;
+	        padding-bottom: ' . $article_spacing . 'px !important;
             line-height: 1 !important;
 	    }';
+
+		// Articles coming soon and show all  -----------------------------------------/
+		$output .= '
+		#epkb-content-container .epkb-articles-coming-soon,
+		#epkb-content-container .epkb-show-all-articles {
+			padding-top: ' . $article_spacing . 'px !important;
+			padding-bottom: ' . $article_spacing . 'px !important;
+		}';
 
 		return $output;
 	}

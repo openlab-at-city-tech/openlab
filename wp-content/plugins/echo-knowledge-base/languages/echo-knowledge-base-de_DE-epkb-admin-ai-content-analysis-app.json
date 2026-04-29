@@ -7,11 +7,11 @@
                 "lang": "de_DE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Loading...": [
-                "Wird geladen..."
-            ],
             "AI Features Required": [
                 "AI-Funktionen erforderlich"
+            ],
+            "Loading...": [
+                "Wird geladen..."
             ],
             "Go to AI Settings": [
                 "Gehen Sie zu KI-Einstellungen"

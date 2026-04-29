@@ -13,14 +13,44 @@
             "Cancel": [
                 "Cancelar"
             ],
+            "Next": [
+                "Siguiente"
+            ],
+            "AI Features": [
+                "Funciones de IA"
+            ],
+            "OFF": [
+                "APAGADO"
+            ],
+            "Use code:": [
+                "Usar código:"
+            ],
+            "Copy": [
+                "Copiar"
+            ],
+            "Documentation": [
+                "Documentación"
+            ],
+            "Copied!": [
+                "¡Copiado!"
+            ],
+            "Got it!": [
+                "¡Entendido!"
+            ],
+            "Show Me": [
+                "Muéstrame"
+            ],
             "Loading...": [
                 "Cargando..."
             ],
-            "General Settings": [
-                "Ajustes generales"
+            "Go to General Settings": [
+                "Ir a la Configuración General"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Tu sesión ha expirado. Por favor, actualiza la página."
+            "Go to Settings": [
+                "Ir a Ajustes"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Su sesión ha expirado. Por favor, recargue la página para volver a iniciar sesión."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "Demasiadas solicitudes. Por favor, espera un momento e inténtalo de nuevo."
@@ -37,8 +67,11 @@
             "Confirm": [
                 "Confirmar"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "Para utilizar las funciones de IA, configure su clave de API y acepte el acuerdo de privacidad de datos en"
+            "Setup Steps": [
+                "Pasos de configuración"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings.": [
+                "Para usar las funciones de IA, configura tu clave API y acepta el acuerdo de privacidad de datos en los Ajustes generales."
             ],
             "Session Expired": [
                 "Sesión expirada"
@@ -48,21 +81,6 @@
             ],
             "No results found": [
                 "No se encontraron resultados"
-            ],
-            "Tutorial": [
-                "Tutorial"
-            ],
-            "Learn how to use this feature": [
-                "Aprende a usar esta función"
-            ],
-            "Tutorial Screenshot": [
-                "Captura de pantalla del tutorial"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Este es un tutorial que explica cómo usar esta función."
-            ],
-            "Close Tutorial": [
-                "Cerrar tutorial"
             ]
         }
     }

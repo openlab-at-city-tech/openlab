@@ -7,8 +7,8 @@
                 "lang": "nb_NO",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Error": [
-                "Feil"
+            "Actions": [
+                "Handlinger"
             ],
             "Analyze Content": [
                 "Analyser innhold"
@@ -16,20 +16,20 @@
             "Improve Content": [
                 "Forbedre innhold"
             ],
+            "Done": [
+                "Ferdig"
+            ],
+            "Error": [
+                "Feil"
+            ],
             "Improve": [
                 "Forbedre"
             ],
-            "Demo Analytics": [
-                "Demoanalyse"
-            ],
-            "Actions": [
-                "Handlinger"
+            "Remove": [
+                "Fjern"
             ],
             "Analyzing": [
                 "Analyserer"
-            ],
-            "No articles found": [
-                "Ingen artikler funnet"
             ],
             "To Analyze": [
                 "Analyser"
@@ -37,14 +37,11 @@
             "To Improve": [
                 "Forbedre"
             ],
+            "No articles found": [
+                "Ingen artikler funnet"
+            ],
             "Please select exactly one article to improve": [
                 "Vennligst velg nøyaktig én dokumentasjonsside å forbedre"
-            ],
-            "Demo Data Displayed": [
-                "Demodata vist"
-            ],
-            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
-                "Dette er demodata for analyseformål. Når du oppretter nye dokumentasjonssider, kan du analysere dem for å se faktiske resultater av innholdsanalyse."
             ],
             "Select All That Need Analysis": [
                 "Velg alle som trenger analyse"
@@ -82,9 +79,6 @@
             "Score below 80%": [
                 "Poeng under 80%"
             ],
-            "Done": [
-                "Ferdig"
-            ],
             "Completed": [
                 "Fullført"
             ],
@@ -111,9 +105,6 @@
             ],
             "Ignore": [
                 "Ignorer"
-            ],
-            "Remove": [
-                "Fjern"
             ],
             "Loading articles...": [
                 "Laster artikler..."

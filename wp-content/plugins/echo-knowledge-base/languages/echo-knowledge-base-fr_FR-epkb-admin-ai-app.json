@@ -7,11 +7,14 @@
                 "lang": "fr_FR",
                 "plural-forms": "nplurals=2; plural=(n > 1);"
             },
-            "Go to General Settings": [
-                "Aller dans les Paramètres généraux"
-            ],
             "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
                 "Pour utiliser les fonctionnalités IA, veuillez configurer votre clé API et accepter l'accord de confidentialité des données dans les Paramètres généraux, puis activer IA Recherche ou IA Chat."
+            ],
+            "AI Features": [
+                "Fonctionnalités d'IA"
+            ],
+            "Go to General Settings": [
+                "Aller dans les Paramètres généraux"
             ],
             "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
                 "Pour utiliser les données d'apprentissage automatique, veuillez activer soit IA Chat ou IA Recherche dans leurs onglets respectifs."
@@ -19,17 +22,23 @@
             "Data Collection": [
                 "Collecte de données"
             ],
-            "OpenAI API Key Required": [
-                "Clé API OpenAI requise"
+            "API Key Required": [
+                "Clé API requise"
             ],
-            "To use AI features, you need to configure your OpenAI API key.": [
-                "Pour utiliser les fonctionnalités d'IA, vous devez configurer votre clé API OpenAI."
+            "To use AI features, you need to configure your API key.": [
+                "Pour utiliser les fonctionnalités IA, vous devez configurer votre clé API."
             ],
             "Configure API Key": [
                 "Configurer la clé API"
             ],
             "Failed to load tab data": [
                 "Échec du chargement des données de l'onglet"
+            ],
+            "Failed to load dashboard data. Please reload the page.": [
+                "Échec du chargement des données du tableau de bord. Veuillez recharger la page."
+            ],
+            "Loading Dashboard...": [
+                "Chargement du tableau de bord..."
             ],
             "Unknown tab": [
                 "Onglet inconnu"

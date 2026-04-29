@@ -31,6 +31,9 @@
             "selected": [
                 "選択済み"
             ],
+            "Delete": [
+                "削除"
+            ],
             "Article": [
                 "記事"
             ],
@@ -49,14 +52,32 @@
             "Error": [
                 "エラー"
             ],
+            "Choose Training Data": [
+                "機械学習データを選択"
+            ],
+            "Send Data to AI": [
+                "データをAIに送信"
+            ],
+            "Thank you! Your report has been submitted successfully.": [
+                "ありがとうございます！レポートが正常に送信されました。."
+            ],
+            "Never": [
+                "決して"
+            ],
+            "Submitting...": [
+                "送信中..."
+            ],
             "Pending": [
                 "承認待ち"
             ],
-            "Delete": [
-                "削除"
-            ],
             "of": [
                 "の"
+            ],
+            "Canceled": [
+                "キャンセル済み"
+            ],
+            "Skipped": [
+                "スキップ済み"
             ],
             "Refreshing...": [
                 "更新しています..."
@@ -91,32 +112,29 @@
             "Added": [
                 "追加済み"
             ],
+            "Added:": [
+                "追加済み:"
+            ],
+            "Manage Notes and PDFs": [
+                "ノートとPDFを管理"
+            ],
+            "Deleting...": [
+                "削除中..."
+            ],
             "Failed to load training data": [
                 "機械学習データの読み込みに失敗しました"
             ],
             "Failed to delete items": [
                 "アイテムの削除に失敗しました"
             ],
-            "Delete Items": [
-                "アイテムを削除"
-            ],
             "Syncing": [
                 "同期中"
-            ],
-            "Canceled": [
-                "キャンセル済み"
             ],
             "How to get started": [
                 "はじめ方"
             ],
-            "Choose Training Data": [
-                "機械学習データを選択"
-            ],
             "Pick the content types to include.": [
                 "含めるコンテンツタイプを選択してください。."
-            ],
-            "Send Data to AI": [
-                "データをAIに送信"
             ],
             "Select items in the table, then sync them.": [
                 "表の項目を選択してから同期します。."
@@ -157,14 +175,26 @@
             "View Error": [
                 "エラーを表示"
             ],
+            "View Info": [
+                "情報を表示"
+            ],
             "View content": [
                 "コンテンツを表示"
             ],
-            "KB Files": [
-                "KB ファイル"
+            "Failed to submit report.": [
+                "レポートの送信に失敗しました。."
             ],
-            "Never": [
-                "決して"
+            "An error occurred. Please try again.": [
+                "エラーが発生しました。もう一度お試しください。."
+            ],
+            "Submit this issue if you need help:": [
+                "サポートが必要な場合は、この問題を送信してください："
+            ],
+            "Your email (optional)": [
+                "メールアドレス（任意）"
+            ],
+            "Submit to Us": [
+                "私たちに送信"
             ],
             "Error Details": [
                 "エラー詳細"
@@ -172,26 +202,77 @@
             "Failed to load content": [
                 "コンテンツの読み込みに失敗しました"
             ],
+            "Delete Items": [
+                "アイテムを削除"
+            ],
             "Post ID:": [
                 "投稿ID:"
             ],
             "Loading content...": [
                 "コンテンツを読み込み中..."
             ],
-            "Error Processing Content": [
-                "コンテンツの処理中にエラーが発生しました"
+            "Content Processing Warning": [
+                "コンテンツ処理の警告"
             ],
-            "Original Content": [
-                "元のコンテンツ"
+            "The HTML content of this post produced empty text after processing. This usually means the post contains only non-text elements (scripts, styles, embeds, etc.). The original HTML is shown below for inspection.": [
+                "この投稿の HTML コンテンツは処理後に空のテキストを生成しました。これは通常、投稿にスクリプト、スタイル、埋め込みなどの非テキスト要素のみが含まれていることを意味します。点検のため、以下に元の HTML を表示します。."
             ],
-            "Processed Content": [
-                "処理済みコンテンツ"
+            "Original HTML Content": [
+                "元の HTML コンテンツ"
             ],
             "No content available": [
                 "利用可能なコンテンツがありません"
             ],
-            "No processed content available": [
-                "処理済みのコンテンツはありません"
+            "Error Processing Content": [
+                "コンテンツの処理中にエラーが発生しました"
+            ],
+            "Delete from Training Data": [
+                "機械学習データから削除"
+            ],
+            "File Name:": [
+                "ファイル名："
+            ],
+            "Unknown file": [
+                "不明なファイル"
+            ],
+            "Stored as:": [
+                "保存形式:"
+            ],
+            "HTML": [
+                "HTML"
+            ],
+            "PDF": [
+                "PDF"
+            ],
+            "Original PDF:": [
+                "元の PDF："
+            ],
+            "Open PDF": [
+                "PDF を開く"
+            ],
+            "If this stored URL no longer works, the original PDF is no longer available from this training data record.": [
+                "この保存済み URL が機能しなくなった場合、元の PDF はこの機械学習データのレコードからは利用できなくなります。."
+            ],
+            "No original URL is stored for this upload. Only the saved file information is available here.": [
+                "このアップロードには元のURLが保存されていません。ここでは保存されたファイル情報のみが利用可能です。."
+            ],
+            "Provider:": [
+                "提供元："
+            ],
+            "AI File ID:": [
+                "AI ファイル ID："
+            ],
+            "Last Synced:": [
+                "最終同期日時："
+            ],
+            "AI-Ready Content": [
+                "AI対応コンテンツ"
+            ],
+            "Original Content": [
+                "元のコンテンツ"
+            ],
+            "No AI-ready content available": [
+                "利用可能なAI対応コンテンツはありません"
             ]
         }
     }

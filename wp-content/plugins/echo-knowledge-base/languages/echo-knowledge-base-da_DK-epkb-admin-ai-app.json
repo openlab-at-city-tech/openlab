@@ -7,11 +7,14 @@
                 "lang": "da_DK",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Go to General Settings": [
-                "Gå til Generelle indstillinger"
-            ],
             "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
                 "For at bruge AI-funktioner, konfigurer venligst din API-nøgle og accepter data-privatlivsaftalen i Generelle indstillinger, og aktiver derefter AI Søgning eller AI chat."
+            ],
+            "AI Features": [
+                "AI-funktioner"
+            ],
+            "Go to General Settings": [
+                "Gå til Generelle indstillinger"
             ],
             "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
                 "For at bruge træningsdata, aktiver venligst enten AI chat eller AI Søgning i deres respektive faner."
@@ -19,17 +22,23 @@
             "Data Collection": [
                 "Dataindsamling"
             ],
-            "OpenAI API Key Required": [
-                "OpenAI API-nøgle påkrævet"
+            "API Key Required": [
+                "API-nøgle påkrævet"
             ],
-            "To use AI features, you need to configure your OpenAI API key.": [
-                "For at bruge AI-funktioner skal du konfigurere din OpenAI API-nøgle."
+            "To use AI features, you need to configure your API key.": [
+                "For at bruge AI-funktioner skal du konfigurere din API-nøgle."
             ],
             "Configure API Key": [
                 "Konfigurer API-nøgle"
             ],
             "Failed to load tab data": [
                 "Kunne ikke indlæse fane-data"
+            ],
+            "Failed to load dashboard data. Please reload the page.": [
+                "Kunne ikke indlæse data fra Kontrolpanelet. Genindlæs venligst siden."
+            ],
+            "Loading Dashboard...": [
+                "Indlæser Kontrolpanelet..."
             ],
             "Unknown tab": [
                 "Ukendt fane"

@@ -31,6 +31,9 @@
             "selected": [
                 "चयनित"
             ],
+            "Delete": [
+                "हटाएं"
+            ],
             "Article": [
                 "लेख"
             ],
@@ -49,14 +52,32 @@
             "Error": [
                 "त्रुटि"
             ],
+            "Choose Training Data": [
+                "Machine learning data चुनें"
+            ],
+            "Send Data to AI": [
+                "एआई में डेटा भेजें"
+            ],
+            "Thank you! Your report has been submitted successfully.": [
+                "धन्यवाद! आपकी रिपोर्ट सफलतापूर्वक जमा कर दी गई है।."
+            ],
+            "Never": [
+                "कभी नहीं"
+            ],
+            "Submitting...": [
+                "सबमिट किया जा रहा है..."
+            ],
             "Pending": [
                 "स्थगित"
             ],
-            "Delete": [
-                "हटाएं"
-            ],
             "of": [
                 "में से"
+            ],
+            "Canceled": [
+                "रद्द किया गया"
+            ],
+            "Skipped": [
+                "छोड़ दिया गया"
             ],
             "Refreshing...": [
                 "ताज़ा किया जा रहा है..."
@@ -91,32 +112,29 @@
             "Added": [
                 "जोड़ा गया"
             ],
+            "Added:": [
+                "जोड़ा गया:"
+            ],
+            "Manage Notes and PDFs": [
+                "नोट्स और PDFs प्रबंधित करें"
+            ],
+            "Deleting...": [
+                "हटाया जा रहा है..."
+            ],
             "Failed to load training data": [
                 "मशीन लर्निंग डेटा लोड करने में विफल"
             ],
             "Failed to delete items": [
                 "आइटम हटाने में विफल"
             ],
-            "Delete Items": [
-                "आइटम हटाएं"
-            ],
             "Syncing": [
                 "समन्वय हो रहा है"
-            ],
-            "Canceled": [
-                "रद्द किया गया"
             ],
             "How to get started": [
                 "शुरू कैसे करें"
             ],
-            "Choose Training Data": [
-                "Machine learning data चुनें"
-            ],
             "Pick the content types to include.": [
                 "शामिल करने के लिए सामग्री प्रकार चुनें।."
-            ],
-            "Send Data to AI": [
-                "एआई में डेटा भेजें"
             ],
             "Select items in the table, then sync them.": [
                 "तालिका में आइटम चुनें, फिर उन्हें सिंक करें."
@@ -157,14 +175,26 @@
             "View Error": [
                 "त्रुटि देखें"
             ],
+            "View Info": [
+                "जानकरी देखें"
+            ],
             "View content": [
                 "सामग्री देखें"
             ],
-            "KB Files": [
-                "KB फ़ाइलें"
+            "Failed to submit report.": [
+                "रिपोर्ट भेजने में विफल रहा।."
             ],
-            "Never": [
-                "कभी नहीं"
+            "An error occurred. Please try again.": [
+                "एक त्रुटि हुई है। कृपया पुनः प्रयास करें।."
+            ],
+            "Submit this issue if you need help:": [
+                "यदि आपको मदद चाहिए, तो यह समस्या भेज दें:"
+            ],
+            "Your email (optional)": [
+                "आपका ईमेल (वैकल्पिक)"
+            ],
+            "Submit to Us": [
+                "हमें भेजें"
             ],
             "Error Details": [
                 "त्रुटि विवरण"
@@ -172,26 +202,71 @@
             "Failed to load content": [
                 "सामग्री लोड करने में विफल रहा"
             ],
+            "Delete Items": [
+                "आइटम हटाएं"
+            ],
             "Post ID:": [
                 "पोस्ट ID:"
             ],
             "Loading content...": [
                 "सामग्री लोड हो रही है..."
             ],
-            "Error Processing Content": [
-                "सामग्री प्रसंस्करण में त्रुटि"
+            "Content Processing Warning": [
+                "सामग्री प्रसंस्करण चेतावनी"
             ],
-            "Original Content": [
-                "मूल सामग्री"
+            "The HTML content of this post produced empty text after processing. This usually means the post contains only non-text elements (scripts, styles, embeds, etc.). The original HTML is shown below for inspection.": [
+                "इस पोस्ट की HTML सामग्री प्रसंस्करण के बाद खाली पाठ उत्पन्न कर दी गई है। आम तौर पर इसका मतलब है कि पोस्ट में केवल गैर-पाठ तत्व (स्क्रिप्ट, स्टाइल, एम्बेड आदि) होते हैं। निरीक्षण के लिए मूल HTML नीचे दिखाया गया है।."
             ],
-            "Processed Content": [
-                "प्रसंस्कृत सामग्री"
+            "Original HTML Content": [
+                "मूल HTML सामग्री"
             ],
             "No content available": [
                 "कोई सामग्री उपलब्ध नहीं है"
             ],
-            "No processed content available": [
-                "कोई प्रसंस्कृत सामग्री उपलब्ध नहीं है"
+            "Error Processing Content": [
+                "सामग्री प्रसंस्करण में त्रुटि"
+            ],
+            "Delete from Training Data": [
+                "Machine learning data से हटाएं"
+            ],
+            "File Name:": [
+                "फाइल का नाम:"
+            ],
+            "Unknown file": [
+                "अज्ञात फ़ाइल"
+            ],
+            "Stored as:": [
+                "इस रूप में सहेजा गया:"
+            ],
+            "HTML": [
+                "HTML"
+            ],
+            "PDF": [
+                "PDF"
+            ],
+            "Original PDF:": [
+                "मूल PDF:"
+            ],
+            "Open PDF": [
+                "PDF खोलें"
+            ],
+            "If this stored URL no longer works, the original PDF is no longer available from this training data record.": [
+                "अगर यह संग्रहीत URL अब काम नहीं करता है, तो इस Machine learning data रिकॉर्ड से मूल PDF अब उपलब्ध नहीं है।."
+            ],
+            "No original URL is stored for this upload. Only the saved file information is available here.": [
+                "इस अपलोड के लिए कोई मूल URL सहेजा नहीं गया है। यहाँ केवल सहेजी गई फ़ाइल की जानकारी उपलब्ध है।."
+            ],
+            "Provider:": [
+                "प्रदाता:"
+            ],
+            "AI File ID:": [
+                "AI फ़ाइल ID:"
+            ],
+            "Last Synced:": [
+                "आख़िरी समन्वय:"
+            ],
+            "Original Content": [
+                "मूल सामग्री"
             ]
         }
     }

@@ -19,14 +19,23 @@
             "Cancel": [
                 "Avbryt"
             ],
-            "Date:": [
-                "Datum:"
+            "Save Settings": [
+                "Spara inställningar"
+            ],
+            "Delete": [
+                "Ta bort"
             ],
             "Next": [
                 "Nästa"
             ],
             "Previous": [
                 "Föregående"
+            ],
+            "Feedback": [
+                "Återkoppling"
+            ],
+            "Reset": [
+                "Återställ"
             ],
             "Saving...": [
                 "Sparar …"
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "Mittenkolumn"
             ],
-            "Feedback": [
-                "Återkoppling"
-            ],
             "AI Assistant": [
                 "AI-assistent"
-            ],
-            "Save Settings": [
-                "Spara inställningar"
-            ],
-            "Delete": [
-                "Ta bort"
             ],
             "Delete Selected": [
                 "Ta bort valda"
             ],
             "of": [
                 "av"
-            ],
-            "Reset": [
-                "Återställ"
             ],
             "Refreshing...": [
                 "Uppdaterar..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "Söker efter fler resultat från servern..."
             ],
-            "User:": [
-                "Användare:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "Är du säker på att du vill återställa till standardinstruktioner؟"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "Återställ till standard"
             ],
+            "Training data issues detected": [
+                "Problem med maskininlärningsdata har upptäckts"
+            ],
             "Failed to save settings": [
                 "Misslyckades med att spara inställningar"
             ],
             "Go to Settings": [
                 "Gå till Inställningar"
+            ],
+            "Deleting search...": [
+                "Raderar sökningen..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "Är du säker på att du vill radera de markerade sökningarna?"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "Välj en sökning för att visa detaljer"
             ],
-            "Search Information": [
-                "Sökinformation"
-            ],
-            "Query:": [
-                "Fråga:"
-            ],
-            "Results Count:": [
-                "Antal resultat:"
-            ],
             "Contact Request": [
                 "Kontaktförfrågan"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "Lägg till avsnitt"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "Är du säker på att återställa till standardprompten?"
+            ],
+            "Reset Prompt": [
+                "Återställ prompt"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "Är du säker på att återställa till standardprompten? Din anpassade prompt kommer att gå förlorad."
+            ],
+            "Select Section:": [
+                "Välj sektion:"
+            ],
+            "Prompt:": [
+                "Prompt:"
+            ],
+            "Using custom prompt": [
+                "Använder anpassad prompt"
+            ],
+            "Using default prompt": [
+                "Använder standardprompt"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "AI Sök behöver en giltig samling för maskininlärningsdata. Lös problemen nedan i maskininlärningsdata-samlingen eller KB-konfigurationen."
             ],
             "Failed to load search history": [
                 "Misslyckades med att ladda sökhistoriken"

@@ -2317,33 +2317,33 @@ class EPKB_Icons {
 	 * @return bool
 	 */
 	public static function is_theme_with_image_icons( $kb_config ) {
-		return ! empty( $kb_config['theme_name'] ) && in_array( $kb_config['theme_name'], array(
-				'modern',
-				'modern_tabs',
-				'image',
-				'image_tabs',
-				'office',
-				'organized',
-				'teal',
-				'sharp',
-				'office_tabs',
-				'office_categories',
-				'elegant',
-				'elegant_tabs',
-				'creative',
-				'creative_tabs',
-				'creative_categories',
-				'creative_classic',
-				'creative_drill_down',
-				'bright',
-				'formal',
-				'formal_tabs',
-				'formal_categories',
-				'standard_classic',
-				'standard_drill_down',
-				'grid_basic',
-				'grid_demo_9'
-			) );
+		if ( empty( $kb_config['theme_name'] ) ) {
+			return false;
+		}
+
+		$image_icon_themes = array(
+			'modern',
+			'image',
+			'office',
+			'organized',
+			'teal',
+			'sharp',
+			'elegant',
+			'creative',
+			'creative_classic',
+			'bright',
+			'formal',
+			'informative',
+			'simple',
+			'standard_classic',
+			'standard_drill_down',
+			'grid_basic',
+			'grid_demo_9',
+		);
+
+		$theme_name = self::resolve_theme_image_icon_name( $kb_config['theme_name'], $image_icon_themes );
+
+		return in_array( $theme_name, $image_icon_themes, true );
 	}
 
 	/**
@@ -2353,10 +2353,99 @@ class EPKB_Icons {
 	 * @return bool
 	 */
 	public static function is_theme_with_photo_icons( $theme_name ) {
+		$theme_name = self::resolve_theme_image_icon_name( $theme_name, array( 'image', 'image_tabs' ) );
+
 		return ! empty( $theme_name ) && in_array( $theme_name, array(
 				'image',
 				'image_tabs',
 			) );
+	}
+
+	/**
+	 * Resolve layout-specific preset aliases to their underlying icon theme.
+	 *
+	 * @param string $theme_name
+	 * @param array  $known_themes
+	 * @return string
+	 */
+	private static function resolve_theme_image_icon_name( $theme_name, $known_themes = array() ) {
+
+		if ( empty( $theme_name ) ) {
+			return 'default';
+		}
+
+		$theme_aliases = array(
+			'creative_drill_down' => 'creative_classic',
+		);
+
+		if ( isset( $theme_aliases[ $theme_name ] ) ) {
+			return $theme_aliases[ $theme_name ];
+		}
+
+		if ( in_array( $theme_name, $known_themes, true ) ) {
+			return $theme_name;
+		}
+
+		foreach ( array( '_tabs', '_categories', '_classic', '_drill_down', '_basic' ) as $suffix ) {
+			if ( substr( $theme_name, - strlen( $suffix ) ) !== $suffix ) {
+				continue;
+			}
+
+			$base_theme_name = substr( $theme_name, 0, - strlen( $suffix ) );
+			if ( in_array( $base_theme_name, $known_themes, true ) ) {
+				return $base_theme_name;
+			}
+		}
+
+		return $theme_name;
+	}
+
+	/**
+	 * Return default pink image icons reused by several presets.
+	 *
+	 * @return string[]
+	 */
+	private static function get_default_pink_theme_image_icons() {
+		return array(
+			'image_1' => 'img/demo-icons/icons/pink-kb-icon-laptop-100.png',
+			'image_2' => 'img/demo-icons/icons/pink-kb-icon-bar-chart-100.png',
+			'image_3' => 'img/demo-icons/icons/pink-kb-icon-notepad-100.png',
+			'image_4' => 'img/demo-icons/icons/pink-kb-icon-lightbulb-100.png',
+			'image_5' => 'img/demo-icons/icons/pink-kb-icon-briefcase-100.png',
+			'image_6' => 'img/demo-icons/icons/pink-kb-icon-handshake-100.png',
+		);
+	}
+
+	/**
+	 * Return set1 image icons in the demo category display order.
+	 *
+	 * @return string[]
+	 */
+	private static function get_basic_set1_theme_image_icons() {
+		return array(
+			'image_1' => 'img/demo-icons/set1/Sales-and-Marketing.png',
+			'image_2' => 'img/demo-icons/set1/Operations-and-Logistics.png',
+			'image_3' => 'img/demo-icons/set1/Human-Resources.png',
+			'image_4' => 'img/demo-icons/set1/Finance-and-Expenses.png',
+			'image_5' => 'img/demo-icons/set1/IT-Support.png',
+			'image_6' => 'img/demo-icons/set1/Professional-Development.png',
+		);
+	}
+
+	/**
+	 * Return set2 image icons in the demo category display order.
+	 *
+	 * @return string[]
+	 */
+	private static function get_basic_set2_theme_image_icons() {
+		return array(
+			'image_1' => 'img/demo-icons/set2/Sales-and-Marketing.png',
+			'image_2' => 'img/demo-icons/set2/Operations-and-Logistics.png',
+			'image_3' => 'img/demo-icons/set2/Human-Resources.png',
+			'image_4' => 'img/demo-icons/set2/Finance-and-Expenses.png',
+			'image_5' => 'img/demo-icons/set2/IT-Support.png',
+			'image_6' => 'img/demo-icons/set2/Professional-Development.png',
+		);
 	}
 
 	/**
@@ -2368,14 +2457,7 @@ class EPKB_Icons {
 	public static function get_theme_image_icons( $theme_name ) {
 
 		$theme_icons = array(
-			'default' => array( // used for modern, office, elegant, grid_basic, standard_classic
-				'image_1'                               => 'img/demo-icons/icons/pink-kb-icon-laptop-100.png',
-				'image_2'                               => 'img/demo-icons/icons/pink-kb-icon-bar-chart-100.png',
-				'image_3'                               => 'img/demo-icons/icons/pink-kb-icon-notepad-100.png',
-				'image_4'                               => 'img/demo-icons/icons/pink-kb-icon-lightbulb-100.png',
-				'image_5'                               => 'img/demo-icons/icons/pink-kb-icon-briefcase-100.png',
-				'image_6'                               => 'img/demo-icons/icons/pink-kb-icon-handshake-100.png',
-			),
+			'default' => self::get_default_pink_theme_image_icons(), // used for grid_basic, standard_classic
 			'organized' => array( 
 				'image_1'                               => 'img/demo-icons/icons/soft-kb-icon-budget.png',              // Finance and Expenses
 				'image_2'                               => 'img/demo-icons/icons/soft-kb-icon-task-assignment.png',     // Human Resources
@@ -2400,14 +2482,12 @@ class EPKB_Icons {
 				'image_5'                               => 'img/demo-icons/icons/soft-kb-icon-performance-metrics.png', // Professional Development
 				'image_6'                               => 'img/demo-icons/icons/soft-kb-icon-employee-onboarding.png', // Sales and Marketing
 			),
-			'standard_drill_down' => array(
-				'image_1'                               => 'img/demo-icons/icons/pink-kb-icon-laptop-100.png',
-				'image_2'                               => 'img/demo-icons/icons/pink-kb-icon-bar-chart-100.png',
-				'image_3'                               => 'img/demo-icons/icons/pink-kb-icon-notepad-100.png',
-				'image_4'                               => 'img/demo-icons/icons/pink-kb-icon-lightbulb-100.png',
-				'image_5'                               => 'img/demo-icons/icons/pink-kb-icon-briefcase-100.png',
-				'image_6'                               => 'img/demo-icons/icons/pink-kb-icon-handshake-100.png',
-			),
+			'office' => self::get_basic_set1_theme_image_icons(),
+			'modern' => self::get_basic_set1_theme_image_icons(),
+			'elegant' => self::get_basic_set1_theme_image_icons(),
+			'informative' => self::get_basic_set2_theme_image_icons(),
+			'simple' => self::get_basic_set2_theme_image_icons(),
+			'standard_drill_down' => self::get_default_pink_theme_image_icons(),
 			'image' => array(
 				'image_1'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/faqs-2-example.jpg',
 				'image_2'                               => 'https://www.echoknowledgebase.com/wp-content/uploads/2021/02/users-example.jpg',
@@ -2458,16 +2538,7 @@ class EPKB_Icons {
 			),
 		);
 
-		// made duplicates of the following:
-		$theme_icons['image_tabs'] = $theme_icons['image'];
-		$theme_icons['creative_drill_down'] = $theme_icons['creative_classic'];
-		$theme_icons['creative_tabs'] = $theme_icons['creative'];
-		$theme_icons['creative_categories'] = $theme_icons['creative'];
-		$theme_icons['formal_tabs'] = $theme_icons['formal'];
-		$theme_icons['formal_categories'] = $theme_icons['formal'];
-		$theme_icons['organized_classic'] = $theme_icons['organized'];
-		$theme_icons['organized_tabs'] = $theme_icons['organized'];
-		$theme_icons['organized_drill_down'] = $theme_icons['organized'];	
+		$theme_name = self::resolve_theme_image_icon_name( $theme_name, array_keys( $theme_icons ) );
 
 		return isset( $theme_icons[$theme_name] ) ? $theme_icons[$theme_name] : $theme_icons['default'];
 	}

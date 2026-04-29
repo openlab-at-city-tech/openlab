@@ -7,8 +7,14 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
+            "Restore": [
+                "पुनर्स्थापित करें"
+            ],
             "Settings": [
                 "सेटिंग्स"
+            ],
+            "All": [
+                "सभी"
             ],
             "Page": [
                 "पृष्ठ"
@@ -19,14 +25,38 @@
             "Cancel": [
                 "रद्द करें"
             ],
+            "Save Settings": [
+                "सेटिंग्स सहेजें"
+            ],
+            "Delete": [
+                "हटाएं"
+            ],
             "Next": [
                 "अगला"
             ],
             "Previous": [
                 "पिछला"
             ],
+            "OFF": [
+                "ऑफ"
+            ],
+            "Errors": [
+                "त्रुटियाँ"
+            ],
+            "Email": [
+                "ईमेल"
+            ],
+            "Feedback": [
+                "प्रतिक्रिया"
+            ],
+            "Reset": [
+                "रीसेट"
+            ],
             "Saving...": [
                 "सहेजा जा रहा है..."
+            ],
+            "Error": [
+                "त्रुटि"
             ],
             "Go to General Settings": [
                 "सामान्य सेटिंग्स पर जाएँ"
@@ -40,11 +70,11 @@
             "AI Assistant": [
                 "एआई सहायक"
             ],
-            "Save Settings": [
-                "सेटिंग्स सहेजें"
+            "Name": [
+                "नाम"
             ],
-            "Delete": [
-                "हटाएं"
+            "Message": [
+                "संदेश"
             ],
             "Delete Selected": [
                 "चयनित को हटाएं"
@@ -52,8 +82,38 @@
             "of": [
                 "में से"
             ],
-            "Reset": [
-                "रीसेट"
+            "Phone": [
+                "फ़ोन"
+            ],
+            "Requires AI Features PRO": [
+                "एआई फीचर्स PRO आवश्यक हैं"
+            ],
+            "with code": [
+                "कोड के साथ"
+            ],
+            "Thumbs up (%d)": [
+                "थंब्स अप (%d)"
+            ],
+            "Thumbs up": [
+                "थंब्स अप"
+            ],
+            "Thumbs down (%d)": [
+                "थंब्स डाउन (%d)"
+            ],
+            "Thumbs down": [
+                "थंब्स डाउन"
+            ],
+            "Contact an Agent clicked": [
+                "एजेंट से संपर्क किया गया"
+            ],
+            "Agent handover request submitted": [
+                "एजेंट हैंडओवर अनुरोध जमा किया गया"
+            ],
+            "Trigger": [
+                "ट्रिगर"
+            ],
+            "AI error recorded in this conversation": [
+                "इस बातचीत में AI त्रुटि दर्ज की गई"
             ],
             "Are you sure you want to delete the selected conversations?": [
                 "क्या आप चयनित वार्तालाप हटाना चाहते हैं?"
@@ -67,6 +127,36 @@
             "Conversations refreshed successfully": [
                 "वार्तालाप सफलतापूर्वक ताज़ा कर दिए गए।"
             ],
+            "Archive Conversations": [
+                "वार्तालाप संग्रहित करें"
+            ],
+            "Are you sure you want to archive the selected conversations?": [
+                "क्या आप चयनित वार्तालापों को संग्रहित करना चाहते हैं?"
+            ],
+            "Archive": [
+                "आर्काइव करें"
+            ],
+            "Archiving conversations...": [
+                "वार्तालापों को संग्रहित किए जा रहे हैं..."
+            ],
+            "Restore Conversations": [
+                "वार्तालाप पुनर्स्थापित करें"
+            ],
+            "Are you sure you want to restore the selected conversations?": [
+                "क्या आप चयनित वार्तालापों को पुनर्स्थापित करना चाहते हैं?"
+            ],
+            "Restoring conversations...": [
+                "वार्तालाप पुनर्स्थापित किए जा रहे हैं..."
+            ],
+            "Agent handover request": [
+                "एजेंट हैंडओवर अनुरोध"
+            ],
+            "Active": [
+                "क्रियाशील"
+            ],
+            "Archived": [
+                "संग्रहित"
+            ],
             "Search conversations...": [
                 "वार्तालाप खोजें..."
             ],
@@ -75,6 +165,12 @@
             ],
             "Refresh": [
                 "ताज़ा करें"
+            ],
+            "Archive Selected": [
+                "चयनित वार्तालापों को संग्रहित करें"
+            ],
+            "Restore Selected": [
+                "चयनित वार्तालापों को पुनर्स्थापित करें"
             ],
             "Loading conversations...": [
                 "संवाद लोड हो रहे हैं..."
@@ -91,8 +187,38 @@
             "Conversation": [
                 "संवाद"
             ],
+            "Message Count": [
+                "संदेश गिनती"
+            ],
+            "Agent Handover": [
+                "एजेंट हैंडओवर"
+            ],
+            "The most recent AI request failed for this conversation": [
+                "इस बातचीत के लिए सबसे हालिया AI अनुरोध विफल रहा"
+            ],
+            "An earlier AI request failed during this conversation": [
+                "इस बातचीत के दौरान एक पिछला AI अनुरोध विफल रहा"
+            ],
+            "Failed": [
+                "विफल"
+            ],
+            "Error Logged": [
+                "त्रुटि लॉग की गई"
+            ],
+            "Number of messages": [
+                "संदेशों की संख्या"
+            ],
             "Searching server for more results...": [
                 "अधिक परिणामों के लिए सर्वर खोज रहा है..."
+            ],
+            "Deleting conversation...": [
+                "संवाद हटाया जा रहा है..."
+            ],
+            "Archiving conversation...": [
+                "वार्तालाप संग्रहित किया जा रहा है..."
+            ],
+            "Restoring conversation...": [
+                "वार्तालाप पुनर्स्थापित किया जा रहा है..."
             ],
             "Conversation Details": [
                 "संवाद विवरण"
@@ -100,29 +226,17 @@
             "Select a conversation to view details": [
                 "विस्तार देखने के लिए एक संवाद चुनें"
             ],
-            "Conversation Info": [
-                "संवाद जानकारी"
-            ],
-            "User:": [
-                "उपयोगकर्ता:"
-            ],
-            "Started:": [
-                "शुरू हुआ:"
-            ],
-            "Messages:": [
-                "संदेश:"
-            ],
-            "Status:": [
-                "स्थिति:"
-            ],
-            "Rating:": [
-                "रेटिंग:"
+            "Conversation Summary": [
+                "संवाद सार"
             ],
             "Full Conversation": [
                 "पूरा संवाद"
             ],
             "No messages in this conversation.": [
                 "इस संवाद में कोई संदेश नहीं है।."
+            ],
+            "Collection": [
+                "संग्रह"
             ],
             "Are you sure you want to reset to default instructions?": [
                 "क्या आप सुनिश्चित हैं कि आप डिफ़ॉल्ट निर्देशों पर रीसेट करना चाहते हैं?"
@@ -136,6 +250,12 @@
             "Reset to Default": [
                 "डिफ़ॉल्ट पर रीसेट करें"
             ],
+            "Training data issues detected": [
+                "मशीन लर्निंग डेटा मुद्दे पाए गए"
+            ],
+            "AI Chat cannot use the selected collection until these issues are fixed in Training Data.": [
+                "AI चैट चयनित संग्रह का उपयोग नहीं कर सकता जब तक इन समस्याओं को मशीन लर्निंग डेटा में ठीक नहीं किया जाता।."
+            ],
             "Failed to load conversations": [
                 "संवाद लोड करने में असफल"
             ],
@@ -148,6 +268,18 @@
             "Failed to delete conversations": [
                 "संवाद हटाने में असफल"
             ],
+            "Conversations archived successfully": [
+                "वार्तालाप सफलतापूर्वक संग्रहित कर दिए गए"
+            ],
+            "Failed to archive conversations": [
+                "वार्तालापों को संग्रहित करने में विफल रहा"
+            ],
+            "Conversations restored successfully": [
+                "वार्तालाप सफलतापूर्वक पुनर्स्थापित कर दिए गए"
+            ],
+            "Failed to restore conversations": [
+                "वार्तालापों को पुनर्स्थापित करने में विफल रहा"
+            ],
             "AI Chat is Disabled": [
                 "AI चैट अक्षम है"
             ],
@@ -157,8 +289,8 @@
             "Go to Settings": [
                 "सेटिंग्स पर जाएँ"
             ],
-            "OpenAI API key is not configured. Please configure it in General Settings to use AI Chat features.": [
-                "OpenAI API कुंजी कॉन्फ़िगर नहीं की गई है। AI चैट सुविधाओं के उपयोग के लिए कृपया सामान्य सेटिंग्स में इसे कॉन्फ़िगर करें।."
+            "API key is not configured. Please configure it in General Settings to use AI Chat features.": [
+                "API कुंजी कॉन्फ़िगर नहीं है। कृपया AI चैट सुविधाओं के उपयोग के लिए सामान्य सेटिंग्स में अपनी API कुंजी कॉन्फ़िगर करें।."
             ],
             "Please accept the data privacy agreement in General Settings to use AI Chat features.": [
                 "AI चैट सुविधाओं के उपयोग के लिए कृपया सामान्य सेटिंग्स में डेटा गोपनीयता समझौते को स्वीकार करें।."

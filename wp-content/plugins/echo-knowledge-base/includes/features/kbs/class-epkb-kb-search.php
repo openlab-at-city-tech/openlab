@@ -143,7 +143,9 @@ class EPKB_KB_Search {
 	 */
 	public static function display_search_results_html( $search_results, $kb_config ) {
 
-		if ( EPKB_Utilities::is_article_search_synced( $kb_config ) || EPKB_Core_Utilities::is_main_page_search( $kb_config ) ) {
+		$use_main_page_search_settings = EPKB_Utilities::use_main_page_search_settings_on_article_page( $kb_config ) || EPKB_Core_Utilities::is_main_page_search( $kb_config );
+
+		if ( $use_main_page_search_settings ) {
 			$show_article_excerpt = $kb_config['search_result_mode'] == 'title_excerpt';
 		} else {
 			$show_article_excerpt = $kb_config['article_search_result_mode'] == 'title_excerpt';
@@ -151,7 +153,7 @@ class EPKB_KB_Search {
 
 		$title_style_escaped = '';
 		$icon_style_escaped  = '';
-		if ( $kb_config['search_box_results_style'] == 'on' && EPKB_Core_Utilities::is_main_page_search( $kb_config ) ) {
+		if ( $kb_config['search_box_results_style'] == 'on' && $use_main_page_search_settings ) {
 			$setting_names = EPKB_Core_Utilities::get_style_setting_name( $kb_config['kb_main_page_layout'] );
 			$title_style_escaped = EPKB_Utilities::get_inline_style( 'color:: ' . $setting_names['article_font_color'] , $kb_config );
 			$icon_style_escaped = EPKB_Utilities::get_inline_style( 'color:: ' . $setting_names['article_icon_color'] , $kb_config );
@@ -159,10 +161,11 @@ class EPKB_KB_Search {
 
 		$ai_search_enabled = EPKB_AI_Utilities::is_ai_search_simple_enabled();
 
-		// Limit results to 6 if AI is shown below results
+		// Limit results if AI is shown below results
 		$results_to_show = $search_results;
 		if ( $ai_search_enabled ) {
-			$results_to_show = array_slice( $search_results, 0, 6 );
+			$results_limit = (int) EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_results_articles_count' );
+			$results_to_show = array_slice( $search_results, 0, $results_limit );
 		}
 
 		ob_start(); ?>

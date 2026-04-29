@@ -7,11 +7,11 @@
                 "lang": "fr_FR",
                 "plural-forms": "nplurals=2; plural=(n > 1);"
             },
-            "Loading...": [
-                "Chargement..."
-            ],
             "AI Features Required": [
                 "Fonctionnalités IA requises"
+            ],
+            "Loading...": [
+                "Chargement..."
             ],
             "Go to AI Settings": [
                 "Accéder aux paramètres IA"

@@ -123,7 +123,7 @@ class EPKB_FAQs_Utilities {
 								// add article title and content to the FAQ schema	?>
 								<div class="epkb-faqs__item-container" id="epkb-faqs-article-<?php echo esc_attr( $one_faq->ID ); ?>" >
 
-									<div class="epkb-faqs__item__question" data-faq-type="<?php echo esc_attr( $is_shortcode ? 'faqs' : 'module' ); ?>">     <?php
+									<div class="epkb-faqs__item__question" data-faq-type="<?php echo esc_attr( $is_shortcode ? 'faqs' : 'module' ); ?>" tabindex="0" role="button" aria-expanded="false">     <?php
 										if ( $kb_config['faq_icon_location'] != 'no_icons' && ( $kb_config['faq_open_mode'] != 'show_all_mode' ) ) { ?>
 											<div class="epkb-faqs__item__question__icon epkb-faqs__item__question__icon-closed epkbfa <?php echo esc_attr( $closed_icon ); ?>"></div>
 											<div class="epkb-faqs__item__question__icon epkb-faqs__item__question__icon-open epkbfa <?php echo esc_attr( $open_icon ); ?>"></div>    <?php
@@ -819,8 +819,8 @@ class EPKB_FAQs_Utilities {
                                             </a>';
 									} else {
 										echo ( $is_faqs_module ?
-											esc_html__( 'Select an FAQ group in the module settings to display FAQs.', 'echo-knowledge-base' )
-											: esc_html__( 'Select an FAQ group in the block settings to display FAQs.', 'echo-knowledge-base' ) );
+											esc_html__( 'Select an FAQ group in the Frontend Editor to display FAQs.', 'echo-knowledge-base' )
+											: esc_html__( 'Select an FAQ group in the FAQs block settings to display FAQs.', 'echo-knowledge-base' ) );
 									} ?>
 								</p>
 								<p>

@@ -131,6 +131,32 @@ class EPKB_Core_Utilities {
 		return $feature_specs;
 	}
 
+	/**
+	 * Retrieve all KB specs WITH labels (for UI display)
+	 *
+	 * @param int $kb_id
+	 *
+	 * @return array|false
+	 */
+	public static function retrieve_all_kb_specs_with_labels( $kb_id ) {
+
+		$specs = self::retrieve_all_kb_specs( $kb_id );
+		if ( $specs === false ) {
+			return false;
+		}
+
+		$labels = EPKB_KB_Config_Specs::get_fields_labels();
+
+		// Merge labels into specs
+		foreach ( $specs as $key => $spec ) {
+			if ( isset( $labels[$key] ) ) {
+				$specs[$key]['label'] = $labels[$key];
+			}
+		}
+
+		return $specs;
+	}
+
 	/** Get configuration from all add-ons */
 	public static function get_add_ons_config( $kb_id, $kb_config=[] ) {
 		$add_ons_kb_config = apply_filters( 'eckb_all_editors_get_current_config', $kb_config, $kb_id );
@@ -278,6 +304,17 @@ class EPKB_Core_Utilities {
 			// $new_config = self::adjust_topography( $orig_config, $new_config );
 		}
 
+		// sync font-size number settings into typography arrays
+		if ( isset( $new_config['section_head_font_size'] ) ) {
+			$new_config['section_head_typography']['font-size'] = $new_config['section_head_font_size'];
+		}
+		if ( isset( $new_config['section_head_description_font_size'] ) ) {
+			$new_config['section_head_description_typography']['font-size'] = $new_config['section_head_description_font_size'];
+		}
+		if ( isset( $new_config['article_font_size'] ) ) {
+			$new_config['article_typography']['font-size'] = $new_config['article_font_size'];
+		}
+
 		// apply Advanced Search presets (ensure all settings of selected preset are applied, including those settings which are not listed in the Settings UI)
 		$new_config = self::advanced_search_presets( $new_config, $orig_config, 'mp' );
 		$new_config = self::advanced_search_presets( $new_config, $orig_config, 'ap' );
@@ -302,7 +339,9 @@ class EPKB_Core_Utilities {
 
 		// sync 'elay_article_icon' with 'elay_sidebar_article_icon' because for Sidebar layout we show only 'elay_sidebar_article_icon' in UI
 		if ( isset( $new_config['kb_main_page_layout'] ) && $new_config['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT ) {
-			$new_config['elay_article_icon'] = $new_config['elay_sidebar_article_icon'];
+			if ( isset( $new_config['elay_sidebar_article_icon'] ) ) {
+				$new_config['elay_article_icon'] = $new_config['elay_sidebar_article_icon'];
+			}
 		}
 
 		// Legacy: save KB ID for source of Modular Main Page FAQs Module
@@ -616,7 +655,7 @@ class EPKB_Core_Utilities {
 			return [ 'new_config' => $new_config, 'seq_meta' => [] ];
 		}
 
-		// reassign categories to articles based on the new layout
+		// applies to DEMO DATA when Tab Layout -> Any Layout and Any Layout -> Tab Layout changes
 		$seq_meta = EPKB_KB_Demo_Data::reassign_categories_to_articles_based_on_layout( $orig_config['id'], $new_config['kb_main_page_layout'] );
 
 		// FE settings are not saved in the database so we need to reassign categories to articles based on the new layout
@@ -880,8 +919,8 @@ class EPKB_Core_Utilities {
 			} else if ( $new_icon_type == 'font' ) {    // font icon
 				$user_defined = $current_icon_type == 'font' && ! in_array( $category_icons[$term_id]['name'], $all_default_icons );
 			} else {    // image icon
-				$user_defined = $current_icon_type == 'image' && strpos( $category_icons[$term_id]['image_thumbnail_url'], 'img/demo-icons' ) == false &&
-					strpos( $category_icons[$term_id]['image_thumbnail_url'], 'www.echoknowledgebase.com' ) == false;
+				$user_defined = $current_icon_type == 'image' && strpos( $category_icons[$term_id]['image_thumbnail_url'], 'img/demo-icons' ) === false &&
+					strpos( $category_icons[$term_id]['image_thumbnail_url'], 'www.echoknowledgebase.com' ) === false;
 			}
 
 			// do not change user-defined icons
@@ -928,6 +967,88 @@ class EPKB_Core_Utilities {
 		}
 
 		return $icons_updated ? $category_icons : [];
+	}
+
+	/**
+	 * Update only demo category icons based on preset theme
+	 * @param array $new_config - KB configuration with theme applied
+	 * @param string $chosen_preset - Preset name
+	 * @param bool $save_update - If true, save to DB; if false, just return the array
+	 * @return array - Updated category icons array
+	 */
+	public static function get_or_update_demo_category_icons( $new_config, $chosen_preset, $save_update = false ) {
+
+		$category_icons = EPKB_KB_Config_Category::get_category_data_option( $new_config['id'] );
+		$demo_category_names = EPKB_KB_Demo_Data::get_all_demo_category_names();
+
+		// For Tabs Layout, get child categories instead of top level (tabs)
+		$kb_categories = EPKB_Categories_DB::get_top_level_categories( $new_config['id'] );
+		if ( ! empty( $kb_categories ) && $new_config['kb_main_page_layout'] == EPKB_Layout::TABS_LAYOUT ) {
+			$kb_categories_child = [];
+			foreach ( $kb_categories as $kb_category ) {
+				$child_categories = EPKB_Categories_DB::get_child_categories( $new_config['id'], $kb_category->term_id );
+				foreach ( $child_categories as $child_category ) {
+					$kb_categories_child[] = $child_category;
+				}
+			}
+			$kb_categories = $kb_categories_child;
+		}
+
+		$new_icon_type = EPKB_Icons::is_theme_with_image_icons( $new_config ) ? 'image' : 'font';
+		$is_photo_icons = EPKB_Icons::is_theme_with_photo_icons( $chosen_preset );
+		$default_font_icons = [
+			'epkbfa-user', 'epkbfa-pencil', 'epkbfa-sitemap',
+			'epkbfa-area-chart', 'epkbfa-table', 'epkbfa-cubes'
+		];
+		$theme_image_icons = EPKB_Icons::get_theme_image_icons( $chosen_preset );
+
+		$icons_updated = false;
+		$demo_icon_index = 0;
+
+		foreach ( $kb_categories as $kb_category ) {
+			if ( empty( $kb_category->term_id ) ) {
+				continue;
+			}
+
+			// Only update demo categories
+			if ( ! in_array( $kb_category->name, $demo_category_names, true ) ) {
+				continue;
+			}
+
+			$term_id = $kb_category->term_id;
+			$icon_idx = ( $demo_icon_index++ % 6 ) + 1;
+
+			if ( $new_icon_type === 'font' ) {
+				$category_icons[$term_id] = [
+					'type' => 'font',
+					'name' => $default_font_icons[$icon_idx - 1],
+					'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
+					'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
+					'image_thumbnail_url' => '',
+					'color' => '#000000'
+				];
+			} else {
+				$icon_url = $is_photo_icons
+					? $theme_image_icons['image_' . $icon_idx]
+					: Echo_Knowledge_Base::$plugin_url . $theme_image_icons['image_' . $icon_idx];
+
+				$category_icons[$term_id] = [
+					'type' => 'image',
+					'name' => EPKB_Icons::DEFAULT_CATEGORY_ICON_NAME,
+					'image_id' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_ID,
+					'image_size' => EPKB_Icons::DEFAULT_CATEGORY_IMAGE_SIZE,
+					'image_thumbnail_url' => $icon_url,
+					'color' => '#000000'
+				];
+			}
+			$icons_updated = true;
+		}
+
+		if ( $icons_updated && $save_update ) {
+			EPKB_Utilities::save_kb_option( $new_config['id'], EPKB_Icons::CATEGORIES_ICONS, $category_icons );
+		}
+
+		return $category_icons;
 	}
 
 	private static function get_category_archive_page_design( $new_config ) {
@@ -1306,7 +1427,7 @@ class EPKB_Core_Utilities {
 	public static function is_main_page_search( $kb_config ) {
 		// $kb_config['article_search_sync_toggle'] == 'on' -> handled by copying Main Page search settings to Article Page on settings save operation
 		$is_archive_using_main_page_search = is_archive() && $kb_config['archive_search_source'] == 'main_page' && ! EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config );
-		return $kb_config['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT || EPKB_Utilities::is_kb_main_page() || EPKB_Utilities::get( 'is_kb_main_page' ) == 1 || $is_archive_using_main_page_search;
+		return EPKB_Utilities::is_kb_main_page() || EPKB_Utilities::get( 'is_kb_main_page' ) == 1 || $is_archive_using_main_page_search;
 	}
 
 	/**
@@ -1381,7 +1502,7 @@ class EPKB_Core_Utilities {
 				$active = ( $kb_config['id'] == $one_kb_id && ! isset( $_GET['archived-kbs'] ) ? 'selected' : '' );   ?>
 
 				<option data-plugin="core" value="<?php echo empty( $redirect_url ) ? esc_attr( $one_kb_id ) : 'closed'; ?>"<?php echo empty( $redirect_url ) ? '' : ' data-target="' . esc_url( $redirect_url ) . '"'; ?> <?php echo esc_attr( $active ); ?>><?php
-					esc_html_e( $kb_name ); ?>
+					echo esc_html( $kb_name ); ?>
 				</option>      <?php
 			}
 
@@ -1491,8 +1612,7 @@ class EPKB_Core_Utilities {
 		<!--googleoff: all-->   
 		<!--noindex-->         
 			<div class="epkb-css-missing-message epkb-css-working-hide-message epkb-css-alert robots-nocontent" role="alert" data-nosnippet>' .
-				esc_html__( 'The Knowledge Base files containing CSS are missing, causing page elements below to misalign. This issue may be due to a 3rd-party plugin or caching conflict. ' .
-							'Please contact us for help or ensure the KB CSS files are correctly included.', 'echo-knowledge-base' ) . ' ' .
+				esc_html__( 'The Knowledge Base files containing CSS are missing, causing page elements below to misalign. This issue may be due to a 3rd-party plugin or caching conflict. Please contact us for help or ensure the KB CSS files are correctly included.', 'echo-knowledge-base' ) . ' ' .
 					'<a href="https://www.echoknowledgebase.com/technical-support/" target="_blank">' . esc_html__( 'Our Contact Form', 'echo-knowledge-base' ) . '</a>' .
 			'</div>
 		<!--/noindex-->
@@ -1525,6 +1645,7 @@ class EPKB_Core_Utilities {
 					<li>' . esc_html__( 'Verify that this error message no longer appears.', 'echo-knowledge-base' ) . '</li>
 				</ol>
 			<p>' .
+			// translators: %s is a link to the documentation article
 			sprintf(
 				esc_html__( 'For more details with images, please visit %s.', 'echo-knowledge-base' ),
 				'<a href="' . esc_url( 'https://www.echoknowledgebase.com/documentation/network-wide-installation/' ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'this article', 'echo-knowledge-base' ) . '</a>'
@@ -1634,9 +1755,11 @@ class EPKB_Core_Utilities {
 		if ( EPKB_Layouts_Setup::is_elay_layout( $new_config['kb_main_page_layout'] ) && class_exists( 'Echo_Elegant_Layouts' ) ) {
 			$current_elay_css_file_slug = $new_config['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT ? 'mp-frontend-modular-sidebar-layout' : 'mp-frontend-modular-grid-layout';
 			/**@disregard P1009, P1014 */
+			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Dynamic CSS for frontend editor
 			$elay_link_css = '<link rel="stylesheet" id="elay-' . $current_elay_css_file_slug . '-css" href="' . Echo_Elegant_Layouts::$plugin_url . 'css/' . $current_elay_css_file_slug . $suffix . '.css?ver=' . Echo_Elegant_Layouts::$version . '" media="all">';		// TODO move to KB Utilities Constants
 			if ( is_rtl() ) {
 				/**@disregard P1009, P1014 */
+				// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet -- Dynamic CSS for frontend editor
 				$elay_link_css_rtl = '<link rel="stylesheet" id="elay-' . $current_elay_css_file_slug . '-layout-css" href="' . Echo_Elegant_Layouts::$plugin_url . 'css/' . $current_elay_css_file_slug . '-rtl' . $suffix . '.css?ver=' . Echo_Elegant_Layouts::$version . '" media="all">';		// TODO move to KB Utilities Constants
 			}
 		}
@@ -1648,8 +1771,8 @@ class EPKB_Core_Utilities {
 
 		// sync Article Search with Main Search settings - Sidebar layout does not use Article Search settings, still keep the settings synced if required
 		$temp_config = array_merge( $orig_config, $new_config );
-		if ( EPKB_Utilities::is_article_search_synced( $temp_config ) ||
-			( empty( $new_config['article_search_sync_toggle'] ) && EPKB_Utilities::is_article_search_synced( $orig_config ) ) ) {
+		if ( EPKB_Utilities::use_main_page_search_settings_on_article_page( $temp_config ) ||
+			( empty( $new_config['article_search_sync_toggle'] ) && EPKB_Utilities::use_main_page_search_settings_on_article_page( $orig_config ) ) ) {
 
 			foreach ( $orig_config as $setting_name => $orig_setting_value ) {
 

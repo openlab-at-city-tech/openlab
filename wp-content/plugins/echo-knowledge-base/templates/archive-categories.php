@@ -1,4 +1,4 @@
- <?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Template for KB Category Archive Page front-end setup for V2
  *
@@ -288,7 +288,7 @@ function generate_archive_structure_css_v2( $kb_config ) {
 	 <header class="eckb-category-archive-header">
 		 <div class="eckb-category-archive-title">
 			 <h1>
-				 <span class="eckb-category-archive-title-icon <?php esc_attr_e( $category_archive_title_icon ); ?>"></span>
+				 <span class="eckb-category-archive-title-icon <?php echo esc_attr( $category_archive_title_icon ); ?>"></span>
 				 <span class="eckb-category-archive-title-desc"><?php echo esc_html( $args['config']['template_category_archive_page_heading_description'] ); ?></span>
 				 <span class="eckb-category-archive-title-name"><?php echo esc_html( $category_title ); ?></span>
 			 </h1>
@@ -305,7 +305,7 @@ function generate_archive_structure_css_v2( $kb_config ) {
   * @param $args
   * @noinspection PhpUnused*/
 function epkb_main_content( $args ) {
-	global $epkb_password_checked;
+	global $epkb_password_checked, $wp_query;
 
 	$kb_config                   = $args['config'];
 	$kb_id                       = $kb_config['id'];
@@ -338,13 +338,14 @@ function epkb_main_content( $args ) {
 		$articles_seq_data = EPKB_WPML::apply_article_language_filter( $articles_seq_data );
 	} ?>
 
-	<main class="eckb-category-archive-main <?php esc_attr_e($preset_style); ?>">   <?php
+	<main class="eckb-category-archive-main <?php echo esc_attr( $preset_style ); ?>">   <?php
 
 		$term = get_queried_object();
-		$category_id = $term->term_id;
+		$category_id = ( $term instanceof WP_Term ) ? $term->term_id : 0;
+		$custom_query = null;
 
 		// if this is Category Archive page for Categories (not tags) then order articles by configured order
-		if ( ! empty( $term ) && get_class( $term ) == 'WP_Term' && $term->taxonomy == EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ) ) {
+		if ( ! empty( $term ) && $term instanceof WP_Term && $term->taxonomy == EPKB_KB_Handler::get_category_taxonomy_name( $kb_id ) ) {
 			$paged = get_query_var( 'paged' ) ? get_query_var( 'paged' ) : 1;
 
 			$articles_sequence = $kb_config['articles_display_sequence'];
@@ -420,12 +421,14 @@ function epkb_main_content( $args ) {
 				);
 			}
 
-			query_posts( $query_args );
+			$custom_query = new WP_Query( $query_args );
 		}
 
-		while ( have_posts() ) {
+		$query = $custom_query ?: $wp_query;
 
-			the_post();
+		while ( $query->have_posts() ) {
+
+			$query->the_post();
 
 			$post_id = get_the_ID();
 
@@ -459,7 +462,7 @@ function epkb_main_content( $args ) {
 				<div class="eckb-article-header">
 					<div class="eckb-article-title">
 						<h2><a href="<?php echo esc_url( $article_link ); ?>" <?php echo $new_tab ? 'target="_blank" rel="noopener noreferrer"' : ''; ?>><?php the_title(); ?></a></h2>
-						<span class="eckb-article-title-icon epkbfa <?php esc_attr_e( $article_title_icon ); ?>"></span>
+						<span class="eckb-article-title-icon epkbfa <?php echo esc_attr( $article_title_icon ); ?>"></span>
 					</div><?php
                     if ( $meta_date_on == 'on' || $meta_author_on == 'on' || $meta_categories_on == 'on' ) { ?>
                         <div class="eckb-article-metadata">

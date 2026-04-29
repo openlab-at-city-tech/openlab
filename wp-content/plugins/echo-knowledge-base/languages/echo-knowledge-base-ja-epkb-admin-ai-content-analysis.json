@@ -7,8 +7,8 @@
                 "lang": "ja",
                 "plural-forms": "nplurals=1; plural=0;"
             },
-            "Error": [
-                "エラー"
+            "Actions": [
+                "操作"
             ],
             "Analyze Content": [
                 "コンテンツを分析"
@@ -16,20 +16,20 @@
             "Improve Content": [
                 "コンテンツを改善"
             ],
+            "Done": [
+                "完了"
+            ],
+            "Error": [
+                "エラー"
+            ],
             "Improve": [
                 "改善"
             ],
-            "Demo Analytics": [
-                "デモ分析"
-            ],
-            "Actions": [
-                "操作"
+            "Remove": [
+                "削除"
             ],
             "Analyzing": [
                 "分析中"
-            ],
-            "No articles found": [
-                "記事が見つかりません"
             ],
             "To Analyze": [
                 "分析する"
@@ -37,14 +37,11 @@
             "To Improve": [
                 "改善する"
             ],
+            "No articles found": [
+                "記事が見つかりません"
+            ],
             "Please select exactly one article to improve": [
                 "改善するには、正確に1つの記事を選択してください。"
-            ],
-            "Demo Data Displayed": [
-                "デモデータが表示されました"
-            ],
-            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
-                "これはデモ目的の分析データです。新しい記事を作成すると、それを分析して実際のコンテンツ分析結果を確認できます。."
             ],
             "Select All That Need Analysis": [
                 "分析が必要なものをすべて選択"
@@ -82,9 +79,6 @@
             "Score below 80%": [
                 "80％未満"
             ],
-            "Done": [
-                "完了"
-            ],
             "Completed": [
                 "完了済み"
             ],
@@ -111,9 +105,6 @@
             ],
             "Ignore": [
                 "無視"
-            ],
-            "Remove": [
-                "削除"
             ],
             "Loading articles...": [
                 "記事を読み込み中..."

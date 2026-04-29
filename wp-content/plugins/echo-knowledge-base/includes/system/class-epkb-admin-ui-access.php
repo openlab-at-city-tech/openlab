@@ -27,6 +27,8 @@ class EPKB_Admin_UI_Access {
 		'admin_eckb_access_content_analysis',
 		'admin_eckb_access_addons_news_read',
 		'admin_eckb_access_faqs_write',
+		'admin_eckb_access_quizzes_write',
+		'admin_eckb_access_glossary_write',
 		'admin_eckb_access_ai_feature',
 	);
 
@@ -40,18 +42,26 @@ class EPKB_Admin_UI_Access {
 	public static function is_post_eligible_for_ai_training( $post ) {
 		
 		// Get post object if ID was passed
-		if ( is_numeric( $post ) ) {
+		$was_numeric = is_numeric( $post );
+		if ( $was_numeric ) {
 			$post = get_post( $post );
 		}
-		
+
 		// Validate post object
 		if ( ! $post || ! is_object( $post ) || empty( $post->ID ) ) {
-			return new WP_Error( 'invalid_post', __( 'Invalid post object', 'echo-knowledge-base' ) );
+			$message = $was_numeric
+				? __( 'Post not found. It may have been deleted.', 'echo-knowledge-base' )
+				: __( 'Invalid post object provided', 'echo-knowledge-base' );
+			return new WP_Error( 'invalid_post', $message );
 		}
-		
-		// Check post status
-		if ( $post->post_status !== 'publish' ) {
-			return new WP_Error( 'post_not_published', __( 'Post is not published', 'echo-knowledge-base' ) );
+
+		// Check post status - allow 'publish' for all, and 'private' for AI Notes
+		$allowed_statuses = array( 'publish' );
+		if ( $post->post_type === EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE ) {
+			$allowed_statuses[] = 'private';
+		}
+		if ( ! in_array( $post->post_status, $allowed_statuses, true ) ) {
+			return new WP_Error( 'post_not_published', sprintf( __( 'Post is not published (current status: %s)', 'echo-knowledge-base' ), $post->post_status ) );
 		}
 		
 		// Check if post is password protected
@@ -96,8 +106,8 @@ class EPKB_Admin_UI_Access {
 			return false;
 		}
 
-		// FAQs are not specific to KB so use default KB ID
-		if ( $context == 'admin_eckb_access_faqs_write' ) {
+		// FAQs, Quizzes, and Glossary are not specific to KB so use default KB ID
+		if ( in_array( $context, array( 'admin_eckb_access_faqs_write', 'admin_eckb_access_quizzes_write', 'admin_eckb_access_glossary_write' ), true ) ) {
 			$config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( EPKB_KB_Config_DB::DEFAULT_KB_ID );
 			if ( empty( $config[$context] ) ) {
 				return false;
@@ -137,8 +147,8 @@ class EPKB_Admin_UI_Access {
 		$specs = EPKB_KB_Config_Specs::get_fields_specification( EPKB_KB_Config_DB::DEFAULT_KB_ID );
 		$kb_id = $config['id'];
 
-		// FAQs are not specific to KB so use default KB ID
-		if ( isset( $contexts[0] ) && $contexts[0] == 'admin_eckb_access_faqs_write' ) {
+		// FAQs, Quizzes, and Glossary are not specific to KB so use default KB ID
+		if ( isset( $contexts[0] ) && in_array( $contexts[0], array( 'admin_eckb_access_faqs_write', 'admin_eckb_access_quizzes_write', 'admin_eckb_access_glossary_write' ), true ) ) {
 			$config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( EPKB_KB_Config_DB::DEFAULT_KB_ID );
 			$kb_id = EPKB_KB_Config_DB::DEFAULT_KB_ID;
 		}
@@ -218,7 +228,7 @@ class EPKB_Admin_UI_Access {
 	 * @param int $kb_id
 	 * @return string
 	 * @noinspection PhpUnusedParameterInspection*/
-	public static function get_contributor_capability( $kb_id=0 ) {
+	public static function get_contributor_capability( $kb_id=0 ) { // keep for AMAG
 		return self::EPKB_WP_CONTRIBUTOR_CAPABILITY;
 	}
 
@@ -228,7 +238,7 @@ class EPKB_Admin_UI_Access {
 	 * @param int $kb_id
 	 * @return string
 	 * @noinspection PhpUnusedParameterInspection*/
-	public static function get_author_capability( $kb_id=0 ) {
+	public static function get_author_capability( $kb_id=0 ) { // keep for AMAG
 		return self::EPKB_WP_AUTHOR_CAPABILITY;
 	}
 
@@ -239,7 +249,7 @@ class EPKB_Admin_UI_Access {
 	 * @return string
 	 * @noinspection PhpUnusedParameterInspection
 	 */
-	public static function get_editor_capability( $kb_id=0 ) {
+	public static function get_editor_capability( $kb_id=0 ) { // keep for AMAG
 		return self::EPKB_WP_EDITOR_CAPABILITY;
 	}
 
@@ -261,13 +271,13 @@ class EPKB_Admin_UI_Access {
 	public static function get_access_boxes( $kb_config ) {
 
 		$boxes_config = [];
-		$kb_config_specs = EPKB_KB_Config_Specs::get_fields_specification( EPKB_KB_Config_DB::DEFAULT_KB_ID );
+		$kb_config_specs_labels = EPKB_KB_Config_Specs::get_fields_labels();
 		$kb_id = $kb_config['id'];
 
 		// Box: Edit KB colors, fonts, labels and features.
 		$boxes_config[] =
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_frontend_editor_write']['label'],
+				'title' => $kb_config_specs_labels['admin_eckb_access_frontend_editor_write'],
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_frontend_editor_write',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
@@ -280,7 +290,7 @@ class EPKB_Admin_UI_Access {
 		// Box: Order Articles and Categories
 		$boxes_config[] =
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_order_articles_write']['label'],
+				'title' => $kb_config_specs_labels['admin_eckb_access_order_articles_write'],
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_order_articles_write',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
@@ -293,7 +303,7 @@ class EPKB_Admin_UI_Access {
 		// Box: KB Analytics
 		$boxes_config[] =
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_search_analytics_read']['label'],
+				'title' => $kb_config_specs_labels['admin_eckb_access_search_analytics_read'],
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_search_analytics_read',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
@@ -306,7 +316,7 @@ class EPKB_Admin_UI_Access {
 		// Box: Content Analysis
 		$boxes_config[] =
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_content_analysis']['label'],
+				'title' => $kb_config_specs_labels['admin_eckb_access_content_analysis'],
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_content_analysis',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
@@ -319,7 +329,7 @@ class EPKB_Admin_UI_Access {
 		// Box: FAQs
 		$boxes_config[] = $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ?
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_faqs_write']['label'],
+				'title' => $kb_config_specs_labels['admin_eckb_access_faqs_write'],
 				'description'   => esc_html__( 'The FAQs feature is not linked to any specific KB; instead, access to it is defined within the default KB.', 'echo-knowledge-base' ),
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_faqs_write',
@@ -330,10 +340,38 @@ class EPKB_Admin_UI_Access {
 						: self::get_admin_capability(),
 					'options'       => self::get_access_control_options( true ) ) ) ) : '';
 
+		// Box: Quizzes
+		$boxes_config[] = $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ?
+			array(
+				'title' => $kb_config_specs_labels['admin_eckb_access_quizzes_write'],
+				'description'   => esc_html__( 'The Quizzes feature is not linked to any specific KB; instead, access to it is defined within the default KB.', 'echo-knowledge-base' ),
+				'html' => self::radio_buttons_vertical_access_control( array(
+					'name'          => 'admin_eckb_access_quizzes_write',
+					'radio_class'   => 'epkb-admin__radio-button-wrap',
+					'return_html'   => true,
+					'value'         => self::is_capability_in_allowed_list( $kb_config['admin_eckb_access_quizzes_write'], $kb_id )
+						? $kb_config['admin_eckb_access_quizzes_write']
+						: self::get_admin_capability(),
+					'options'       => self::get_access_control_options( true ) ) ) ) : '';
+
+		// Box: Glossary
+		$boxes_config[] = $kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ?
+			array(
+				'title' => $kb_config_specs_labels['admin_eckb_access_glossary_write'],
+				'description'   => esc_html__( 'The Glossary feature is not linked to any specific KB; instead, access to it is defined within the default KB.', 'echo-knowledge-base' ),
+				'html' => self::radio_buttons_vertical_access_control( array(
+					'name'          => 'admin_eckb_access_glossary_write',
+					'radio_class'   => 'epkb-admin__radio-button-wrap',
+					'return_html'   => true,
+					'value'         => self::is_capability_in_allowed_list( $kb_config['admin_eckb_access_glossary_write'], $kb_id )
+						? $kb_config['admin_eckb_access_glossary_write']
+						: self::get_admin_capability(),
+					'options'       => self::get_access_control_options( true ) ) ) ) : '';
+
 		// Box: Add-ons
 		$boxes_config[] =
 			array(
-				'title' => $kb_config_specs['admin_eckb_access_addons_news_read']['label'],
+				'title' => $kb_config_specs_labels['admin_eckb_access_addons_news_read'],
 				'html' => self::radio_buttons_vertical_access_control( array(
 					'name'          => 'admin_eckb_access_addons_news_read',
 					'radio_class'   => 'epkb-admin__radio-button-wrap',
@@ -503,7 +541,7 @@ class EPKB_Admin_UI_Access {
 			$data_escaped .= 'data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '" ';
 		}
 
-		if ( ! empty($args['data']['example_image']) ) {
+		if ( ! empty( $args['data']['example_image'] ) ) {
 			$args['input_group_class'] =  $args['input_group_class'] . ' eckb-wizard-radio-btn-vertical-example ';
 		}
 
@@ -511,11 +549,11 @@ class EPKB_Admin_UI_Access {
 
 		<div class="config-input-group <?php echo esc_attr( $args['input_group_class'] ); ?>" id="<?php echo esc_attr( $id ); ?>_group">		<?php
 
-			if ( ! empty($args['data']['example_image']) ) {
+			if ( ! empty( $args['data']['example_image'] ) ) {
 				echo '<div class="eckb-wizard-radio-btn-vertical-example__icon epkbfa epkbfa-eye"></div>';
 			}
 
-			if ( ! empty($args['label']) ) {     ?>
+			if ( ! empty( $args['label'] ) ) {     ?>
 				<span class="main_label <?php echo esc_attr( $args['main_label_class'] ); ?>">
 					<?php echo esc_html( $args['label'] ); ?>
 				</span>            <?php

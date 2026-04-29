@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "Indstillinger gemt"
             ],
-            "Saving...": [
-                "Gemmer..."
+            "Close": [
+                "Luk"
+            ],
+            "Cancel": [
+                "Annuller"
             ],
             "Save Settings": [
                 "Gem indstillinger"
+            ],
+            "Saving...": [
+                "Gemmer..."
             ],
             "Failed to save settings": [
                 "Kunne ikke gemme indstillinger"
@@ -30,6 +36,27 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "Kunne ikke sende test-e-mail. Tjek din forbindelse."
+            ],
+            "Change AI Provider?": [
+                "Skift AI-udbyder?"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "Når du skifter AI-udbydere, vil det påvirke dine AI Søg og AI chat-indstillinger:"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "Maskinlæringsdata-samlinger er udbyderafhængige og overføres ikke mellem udbydere."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "Du skal oprette og træne nye samlinger til den nye udbyder."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "AI Søg og AI chat vil kun vise samlinger for den valgte udbyder."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "Dine eksisterende samlinger vil bevares og være tilgængelige, hvis du skifter tilbage."
+            ],
+            "Change Provider": [
+                "Skift udbyder"
             ]
         }
     }

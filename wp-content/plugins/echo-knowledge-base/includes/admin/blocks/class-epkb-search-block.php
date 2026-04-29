@@ -52,6 +52,14 @@ final class EPKB_Search_Block extends EPKB_Abstract_Block {
 	 */
 	protected function add_this_block_required_kb_attributes( $block_attributes ) {
 		$block_attributes['kb_main_page_layout'] = EPKB_Layout::BASIC_LAYOUT;
+
+		// Add AI collection ID from KB config for Simple Search
+		$kb_id = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int)$block_attributes['kb_id'];
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+		if ( ! empty( $kb_config['kb_ai_collection_id'] ) ) {
+			$block_attributes['kb_ai_collection_id'] = $kb_config['kb_ai_collection_id'];
+		}
+
 		return $block_attributes;
 	}
 
@@ -147,7 +155,6 @@ final class EPKB_Search_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'General', 'echo-knowledge-base' ),
 						'fields' => array(
 							'kb_id' => EPKB_Blocks_Settings::get_kb_id_setting(),
-							'kb_ai_collection_id' => EPKB_Blocks_Settings::get_kb_ai_collection_id_setting(),
 							'ml_search_layout' => array(
 								'setting_type' => 'select_buttons_string',
 							),
@@ -217,6 +224,15 @@ final class EPKB_Search_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'Advanced', 'echo-knowledge-base' ),
 						'fields' => array(
 							'custom_css_class' => EPKB_Blocks_Settings::get_custom_css_class_setting(),
+						)
+					),
+
+					// GROUP: Help + Setup Wizard
+					'help-resources' => array(
+						'title' => esc_html__( 'Help + Setup Wizard', 'echo-knowledge-base' ),
+						'fields' => array(
+							'help_resources_link' => EPKB_Blocks_Settings::get_help_resources_link(),
+							'setup_wizard_link' => EPKB_Blocks_Settings::get_setup_wizard_link(),
 						)
 					),
 				),

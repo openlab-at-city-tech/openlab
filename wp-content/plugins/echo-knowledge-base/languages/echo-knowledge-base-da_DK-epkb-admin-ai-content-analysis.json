@@ -7,8 +7,8 @@
                 "lang": "da_DK",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Error": [
-                "Fejl"
+            "Actions": [
+                "Handlinger"
             ],
             "Analyze Content": [
                 "Analyser indhold"
@@ -16,20 +16,20 @@
             "Improve Content": [
                 "Forbedr indholdet"
             ],
+            "Done": [
+                "Færdig"
+            ],
+            "Error": [
+                "Fejl"
+            ],
             "Improve": [
                 "Forbedr"
             ],
-            "Demo Analytics": [
-                "Demoanalyse"
-            ],
-            "Actions": [
-                "Handlinger"
+            "Remove": [
+                "Fjern"
             ],
             "Analyzing": [
                 "Analyserer"
-            ],
-            "No articles found": [
-                "Ingen artikler fundet"
             ],
             "To Analyze": [
                 "Til analyse"
@@ -37,14 +37,11 @@
             "To Improve": [
                 "Til forbedring"
             ],
+            "No articles found": [
+                "Ingen artikler fundet"
+            ],
             "Please select exactly one article to improve": [
                 "Vælg præcis én artikel for at forbedre"
-            ],
-            "Demo Data Displayed": [
-                "Demo-data vist"
-            ],
-            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
-                "Dette er demodata vist til demonstrationsformål. Når du opretter nye artikler, kan du analysere dem for at se de faktiske resultater af indholdsanalysen."
             ],
             "Select All That Need Analysis": [
                 "Vælg alle, der har brug for analyse"
@@ -82,9 +79,6 @@
             "Score below 80%": [
                 "Scoren under 80 %"
             ],
-            "Done": [
-                "Færdig"
-            ],
             "Completed": [
                 "Fuldført"
             ],
@@ -111,9 +105,6 @@
             ],
             "Ignore": [
                 "Ignorer"
-            ],
-            "Remove": [
-                "Fjern"
             ],
             "Loading articles...": [
                 "Indlæser artikler..."

@@ -7,29 +7,29 @@
                 "lang": "ja",
                 "plural-forms": "nplurals=1; plural=0;"
             },
-            "AI Search": [
-                "AI 検索"
-            ],
             "All": [
                 "すべて"
             ],
             "Disabled": [
                 "無効"
             ],
+            "Debug Mode": [
+                "デバッグモード"
+            ],
+            "API Key": [
+                "APIキー"
+            ],
             "AI Chat": [
                 "AI チャット"
             ],
-            "OpenAI API Key": [
-                "OpenAI API キー"
+            "AI Search": [
+                "AI 検索"
             ],
             "Debug mode updated successfully": [
                 "デバッグモードを正常に更新しました。"
             ],
             "Refresh": [
                 "更新"
-            ],
-            "Status:": [
-                "ステータス:"
             ],
             "Warnings": [
                 "警告"
@@ -70,9 +70,6 @@
             "Error clearing AI logs": [
                 "AI ログのクリア中にエラーが発生しました"
             ],
-            "Debug Mode": [
-                "デバッグモード"
-            ],
             "Enable Debug Mode": [
                 "デバッグモードを有効にする"
             ],
@@ -105,6 +102,9 @@
             ],
             "Total Records:": [
                 "総レコード数:"
+            ],
+            "Status:": [
+                "ステータス:"
             ],
             "Added:": [
                 "追加済み:"

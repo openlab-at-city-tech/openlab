@@ -56,6 +56,94 @@
 #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container .epkb-aid-section__body .epkb-aid-section__body__list-container .epkb-aid-list__item a .epkb-aid-list__item__icon {
   margin: 0 5px 0 0;
 }
+.epkb-glossary-index .epkb-glossary-index__empty {
+  text-align: center;
+  padding: 20px;
+  color: #666666;
+}
+.epkb-glossary-index .epkb-glossary-index__nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 16px 0;
+  margin: 0 0 8px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+.epkb-glossary-index .epkb-glossary-index__nav-item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  font-size: 14px;
+  font-weight: 600;
+  font-style: italic;
+  text-decoration: none;
+  border-radius: 3px;
+  transition: background-color 0.2s;
+}
+.epkb-glossary-index .epkb-glossary-index__nav-item--active:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.epkb-glossary-index .epkb-glossary-index__nav-item--inactive {
+  cursor: default;
+}
+.epkb-glossary-index .epkb-glossary-index__section {
+  display: flex;
+  align-items: flex-start;
+  padding: 24px 0;
+  border-bottom: 1px solid #E0E0E0;
+}
+.epkb-glossary-index .epkb-glossary-index__section-letter {
+  flex-shrink: 0;
+  width: 80px;
+  font-size: 48px;
+  font-weight: 300;
+  line-height: 1;
+  padding: 0 16px 0 0;
+}
+.epkb-glossary-index .epkb-glossary-index__section-content {
+  flex: 1;
+  min-width: 0;
+}
+.epkb-glossary-index .epkb-glossary-index__terms {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0 32px;
+  margin: 0;
+  padding: 0;
+}
+@media only screen and (max-width: 700px) {
+  .epkb-glossary-index .epkb-glossary-index__terms {
+    grid-template-columns: 1fr;
+  }
+}
+.epkb-glossary-index .epkb-glossary-index__term {
+  padding: 8px 0;
+}
+.epkb-glossary-index .epkb-glossary-index__term-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0 0 2px 0;
+}
+.epkb-glossary-index .epkb-glossary-index__term-definition {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #555555;
+  margin: 0;
+  padding: 0;
+}
+.epkb-glossary-index .epkb-glossary-index__back-to-top {
+  display: inline-block;
+  margin: 12px 0 0 0;
+  font-size: 13px;
+  color: #888888;
+  text-decoration: none;
+}
+.epkb-glossary-index .epkb-glossary-index__back-to-top:hover {
+  color: #333333;
+}
+
 .epkb-faqs-article-coming-soon {
   font-size: 26px !important;
   font-family: inherit;
@@ -287,6 +375,11 @@
 
 #epkb-ml-faqs-drill-down-layout .epkb-faqs-title {
   font-size: 23px;
+}
+
+.epkb-faqs-container .epkb-faqs__item__question:focus-visible {
+  outline: 2px solid var(--eckb-focus-color, #0073AA);
+  outline-offset: 2px;
 }
 
 @media only screen and (max-width: 981px) {

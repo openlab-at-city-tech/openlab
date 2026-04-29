@@ -37,8 +37,8 @@
             "Content analysis completed successfully!": [
                 "コンテンツ分析が正常に完了しました！"
             ],
-            "Retry limit reached while contacting OpenAI.": [
-                "OpenAIへの接続時にリトライ上限に達しました。."
+            "Retry limit reached while contacting AI.": [
+                "AI への接続中にリトライ上限に達しました。."
             ],
             "Failed to start analysis": [
                 "分析の開始に失敗しました"

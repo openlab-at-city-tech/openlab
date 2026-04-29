@@ -43,11 +43,109 @@ final class EPKB_Featured_Articles_Block extends EPKB_Abstract_Block {
 	}
 
 	/**
+	 * Inherit article hover colors from the first *-layout block in the post (see parse_block_attributes_from_post( $post, '-layout' )) when KB IDs match. Drill Down: hover always on; others: toggle from attrs or KB config.
+	 *
+	 * @param array $block_attributes
+	 * @return array
+	 */
+	private function inherit_layout_block_hover_for_featured_block( $block_attributes ) {
+
+		$post = EPKB_Core_Utilities::get_current_post();
+		if ( empty( $post ) ) {
+			return $block_attributes;
+		}
+
+		$layout_attrs = EPKB_Block_Utilities::parse_block_attributes_from_post( $post, '-layout' );
+		if ( $layout_attrs === false ) {
+			return $block_attributes;
+		}
+
+		$featured_kb_id = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int) $block_attributes['kb_id'];
+		$layout_kb_id = empty( $layout_attrs['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int) $layout_attrs['kb_id'];
+		if ( $featured_kb_id !== $layout_kb_id ) {
+			return $block_attributes;
+		}
+
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $layout_kb_id );
+
+		$first_layout_name = EPKB_Block_Utilities::get_kb_block_layout( $post, false );
+		$layout_is_drill_down = $first_layout_name === EPKB_Layout::DRILL_DOWN_LAYOUT;
+
+		if ( $layout_is_drill_down ) {
+			$hover_toggle = 'on';
+		} else {
+			$hover_toggle = isset( $layout_attrs['article_list_hover_toggle'] ) && $layout_attrs['article_list_hover_toggle'] !== ''
+				? $layout_attrs['article_list_hover_toggle']
+				: ( isset( $kb_config['article_list_hover_toggle'] ) ? $kb_config['article_list_hover_toggle'] : 'off' );
+		}
+
+		if ( $hover_toggle !== 'on' ) {
+			// Do not leave Featured on global KB hover when this layout has hover off (add_internal_kb_settings may have set toggle on).
+			$block_attributes['article_list_hover_toggle'] = 'off';
+			return $block_attributes;
+		}
+
+		$hover_bg = isset( $layout_attrs['article_list_hover_background_color'] ) && $layout_attrs['article_list_hover_background_color'] !== ''
+			? $layout_attrs['article_list_hover_background_color']
+			: ( isset( $kb_config['article_list_hover_background_color'] ) ? $kb_config['article_list_hover_background_color'] : '#f5f5f5' );
+
+		$hover_text = isset( $layout_attrs['article_list_hover_font_color'] ) && $layout_attrs['article_list_hover_font_color'] !== ''
+			? $layout_attrs['article_list_hover_font_color']
+			: ( isset( $kb_config['article_list_hover_font_color'] ) ? $kb_config['article_list_hover_font_color'] : '#000000' );
+
+		$block_attributes['article_list_hover_background_color'] = EPKB_Utilities::sanitize_hex_color( $hover_bg );
+		$block_attributes['article_list_hover_font_color'] = EPKB_Utilities::sanitize_hex_color( $hover_text );
+		$block_attributes['article_list_hover_toggle'] = 'on';
+
+		return $block_attributes;
+	}
+
+	/**
+	 * Apply section_box_gap from the same source as hover (first *-layout block in the post) when KB IDs match.
+	 *
+	 * @param array $block_attributes
+	 * @return array
+	 */
+	private function inherit_layout_block_section_gap_for_featured_block( $block_attributes ) {
+
+		$post = EPKB_Core_Utilities::get_current_post();
+		if ( empty( $post ) ) {
+			return $block_attributes;
+		}
+
+		$layout_attrs = EPKB_Block_Utilities::parse_block_attributes_from_post( $post, '-layout' );
+		if ( $layout_attrs === false ) {
+			return $block_attributes;
+		}
+
+		$featured_kb_id = empty( $block_attributes['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int) $block_attributes['kb_id'];
+		$layout_kb_id = empty( $layout_attrs['kb_id'] ) ? EPKB_KB_Config_DB::DEFAULT_KB_ID : (int) $layout_attrs['kb_id'];
+		if ( $featured_kb_id !== $layout_kb_id ) {
+			return $block_attributes;
+		}
+
+		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $layout_kb_id );
+
+		if ( ! array_key_exists( 'section_box_gap', $layout_attrs ) ) {
+			$section_gap = isset( $kb_config['section_box_gap'] ) ? intval( $kb_config['section_box_gap'] ) : 20;
+		} else {
+			$section_gap = intval( $layout_attrs['section_box_gap'] );
+		}
+
+		$block_attributes['section_box_gap'] = $section_gap;
+
+		return $block_attributes;
+	}
+
+	/**
 	 * Block dedicated inline styles
 	 * @param $block_attributes
 	 * @return string
 	 */
 	protected function get_this_block_inline_styles( $block_attributes ) {
+
+		$block_attributes = $this->inherit_layout_block_hover_for_featured_block( $block_attributes );
+		$block_attributes = $this->inherit_layout_block_section_gap_for_featured_block( $block_attributes );
 
 		$block_ui_specs = $this->get_block_ui_specs();
 
@@ -118,6 +216,51 @@ final class EPKB_Featured_Articles_Block extends EPKB_Abstract_Block {
 			}';
 		}
 
+		// Article hover effect -----------------------------------------/
+		$hover_toggle = empty( $block_attributes['article_list_hover_toggle'] ) ? 'off' : $block_attributes['article_list_hover_toggle'];
+		if ( $hover_toggle == 'on' ) {
+			$spacing = intval( $block_attributes['article_list_spacing'] );
+			$hover_bg = EPKB_Utilities::sanitize_hex_color( $block_attributes['article_list_hover_background_color'] );
+			$hover_text = EPKB_Utilities::sanitize_hex_color( $block_attributes['article_list_hover_font_color'] );
+			$output .= '
+				' . $block_selector . ' .epkb-ml-article-container {
+					padding: ' . $spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article-inner {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article__icon {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article__text {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-articles-list li {
+					padding-top: 0px !important;
+					padding-bottom: 0px !important;
+				}';
+		}
+
+		// Space between article sections (selector matches featured-articles-block.css .epkb-ml-article-list-container path).
+		$section_gap = isset( $block_attributes['section_box_gap'] ) ? intval( $block_attributes['section_box_gap'] ) : 20;
+		$output .= '
+			' . $block_selector . ' .epkb-ml-article-list-container .epkb-ml-articles-list__row {
+				gap: ' . $section_gap . 'px !important;
+			}';
+
+		// Section padding -----------------------------------------/
+		if ( ! empty( $block_attributes['category_box_padding'] ) ) {
+			$output .= '
+				' . $block_selector . ' .epkb-ml-article-section {
+					padding: ' . intval( $block_attributes['category_box_padding'] ) . 'px !important;
+				}';
+		}
+
 		return $output;
 	}
 
@@ -186,6 +329,15 @@ final class EPKB_Featured_Articles_Block extends EPKB_Abstract_Block {
 						'title' => esc_html__( 'Advanced', 'echo-knowledge-base' ),
 						'fields' => array(
 							'custom_css_class' => EPKB_Blocks_Settings::get_custom_css_class_setting(),
+						)
+					),
+
+					// GROUP: Help + Setup Wizard
+					'help-resources' => array(
+						'title' => esc_html__( 'Help + Setup Wizard', 'echo-knowledge-base' ),
+						'fields' => array(
+							'help_resources_link' => EPKB_Blocks_Settings::get_help_resources_link(),
+							'setup_wizard_link' => EPKB_Blocks_Settings::get_setup_wizard_link(),
 						)
 					),
 				),

@@ -13,13 +13,24 @@ class EPKB_AI_Table_Operations {
 	 * @return array
 	 */
 	public static function get_table_data( $mode = 'search', $params = array() ) {
-		
+
 		$page        = isset( $params['page'] ) ? absint( $params['page'] ) : 1;
 		$per_page    = isset( $params['per_page'] ) ? absint( $params['per_page'] ) : 20;
+		$offset      = isset( $params['offset'] ) ? absint( $params['offset'] ) : null;
 		$sort_column = isset( $params['orderby'] ) ? sanitize_key( $params['orderby'] ) : EPKB_AI_Messages_DB::PRIMARY_KEY;
 		$sort_order  = isset( $params['order'] ) && in_array( strtolower( $params['order'] ), array( 'asc', 'desc' ) ) ? strtolower( $params['order'] ) : 'desc';
 		$search      = isset( $params['s'] ) ? sanitize_text_field( $params['s'] ) : '';
-		
+
+		// Parse archived filter: 'true', 'false', or 'all'
+		$archived = false;
+		if ( isset( $params['archived'] ) ) {
+			if ( $params['archived'] === 'true' || $params['archived'] === true ) {
+				$archived = true;
+			} elseif ( $params['archived'] === 'all' ) {
+				$archived = 'all';
+			}
+		}
+
 		// Map display column names to database column names
 		$column_map = array(
 			'submit_date' => 'created',
@@ -27,27 +38,29 @@ class EPKB_AI_Table_Operations {
 			'page_name' => 'title',
 			'status' => 'meta'
 		);
-		
+
 		if ( isset( $column_map[ $sort_column ] ) ) {
 			$sort_column = $column_map[ $sort_column ];
 		}
 
 		// Build filter
-		$filter = array( 'mode' => $mode );
+		$filter = array( 'mode' => $mode, 'archived' => $archived );
 		if ( ! empty( $search ) ) {
 			$filter['search'] = $search;
 		}
 
 		// Get the conversations
 		$ai_messages_db = new EPKB_AI_Messages_DB();
-		$conversations = $ai_messages_db->get_conversations(
-			array_merge( $filter, array(
-				'orderby'    => $sort_column,
-				'order'      => strtoupper( $sort_order ),
-				'per_page'   => $per_page,
-				'page'       => $page
-			) )
-		);
+		$args = array_merge( $filter, array(
+			'orderby'    => $sort_column,
+			'order'      => strtoupper( $sort_order ),
+			'per_page'   => $per_page,
+			'page'       => $page,
+		) );
+		if ( $offset !== null ) {
+			$args['offset'] = $offset;
+		}
+		$conversations = $ai_messages_db->get_conversations( $args );
 
 		if ( is_wp_error( $conversations ) ) {
 			return $conversations;
@@ -182,6 +195,76 @@ class EPKB_AI_Table_Operations {
 	}
 
 	/**
+	 * Archive selected rows
+	 *
+	 * @param string $mode 'search' or 'chat'
+	 * @param array $row_ids
+	 * @return int|WP_Error Number of archived rows
+	 */
+	public static function archive_selected_rows( $mode, $row_ids ) {
+
+		if ( ! is_array( $row_ids ) || empty( $row_ids ) ) {
+			return new WP_Error( 'no_selection', __( 'No rows selected', 'echo-knowledge-base' ) );
+		}
+
+		// Validate all IDs
+		$valid_ids = array_filter( array_map( 'absint', $row_ids ), 'EPKB_Utilities::is_positive_int' );
+		if ( empty( $valid_ids ) ) {
+			return new WP_Error( 'invalid_ids', __( 'Invalid row IDs', 'echo-knowledge-base' ) );
+		}
+
+		$ai_messages_db = new EPKB_AI_Messages_DB();
+		$archived_count = 0;
+
+		foreach ( $valid_ids as $id ) {
+			$conversation_row = $ai_messages_db->get_by_primary_key( $id );
+			if ( $conversation_row && ( $conversation_row->mode === $mode || ( $mode === 'chat' && $conversation_row->mode === 'support' ) ) ) {
+				$result = $ai_messages_db->archive_conversation( $id );
+				if ( ! is_wp_error( $result ) && $result ) {
+					$archived_count++;
+				}
+			}
+		}
+
+		return $archived_count;
+	}
+
+	/**
+	 * Unarchive selected rows
+	 *
+	 * @param string $mode 'search' or 'chat'
+	 * @param array $row_ids
+	 * @return int|WP_Error Number of unarchived rows
+	 */
+	public static function unarchive_selected_rows( $mode, $row_ids ) {
+
+		if ( ! is_array( $row_ids ) || empty( $row_ids ) ) {
+			return new WP_Error( 'no_selection', __( 'No rows selected', 'echo-knowledge-base' ) );
+		}
+
+		// Validate all IDs
+		$valid_ids = array_filter( array_map( 'absint', $row_ids ), 'EPKB_Utilities::is_positive_int' );
+		if ( empty( $valid_ids ) ) {
+			return new WP_Error( 'invalid_ids', __( 'Invalid row IDs', 'echo-knowledge-base' ) );
+		}
+
+		$ai_messages_db = new EPKB_AI_Messages_DB();
+		$unarchived_count = 0;
+
+		foreach ( $valid_ids as $id ) {
+			$conversation_row = $ai_messages_db->get_by_primary_key( $id );
+			if ( $conversation_row && ( $conversation_row->mode === $mode || ( $mode === 'chat' && $conversation_row->mode === 'support' ) ) ) {
+				$result = $ai_messages_db->unarchive_conversation( $id );
+				if ( ! is_wp_error( $result ) && $result ) {
+					$unarchived_count++;
+				}
+			}
+		}
+
+		return $unarchived_count;
+	}
+
+	/**
 	 * Format row data for display
 	 *
 	 * @param EPKB_AI_Conversation_Model $conversation
@@ -217,6 +300,7 @@ class EPKB_AI_Table_Operations {
 		$metadata = $conversation->get_metadata();
 		$status = isset( $metadata['status'] ) ? $metadata['status'] : 'answered';
 		$rating = isset( $metadata['rating'] ) ? $metadata['rating'] : 0;
+		$archived = isset( $metadata['archived'] ) && $metadata['archived'] === true;
 
 		// Base data
 		$row_data = array(
@@ -226,7 +310,8 @@ class EPKB_AI_Table_Operations {
 			'page_name'   => $conversation->get_title(),
 			'question'    => wp_trim_words( $first_message, 20 ),
 			'status'      => $status,
-			'rating'      => $rating
+			'rating'      => $rating,
+			'archived'    => $archived
 		);
 
 		// Add mode-specific data
@@ -249,7 +334,7 @@ class EPKB_AI_Table_Operations {
 
 			// Include full metadata for future use
 			$row_data['metadata'] = $metadata;
-		} elseif ( $mode === 'search' || $mode === 'advanced_search' ) {
+		} elseif ( $mode === 'search' || $mode === 'smart_search' || $mode === 'advanced_search' ) { // TODO: remove 'advanced_search' after v16
 			// Add search-specific fields for admin display
 			$row_data['created_at'] = $created_date;
 			$row_data['time'] = $created_date;

@@ -333,6 +333,55 @@ final class EPKB_Classic_Layout_Block extends EPKB_Abstract_Block {
 				line-height: 1 !important;
 			}';
 
+		// Article hover effect -----------------------------------------/
+		$hover_toggle = empty( $block_attributes['article_list_hover_toggle'] ) ? 'off' : $block_attributes['article_list_hover_toggle'];
+		if ( $hover_toggle == 'on' ) {
+			$spacing = intval( $block_attributes['article_list_spacing'] );
+			$hover_bg = EPKB_Utilities::sanitize_hex_color( $block_attributes['article_list_hover_background_color'] );
+			$hover_text = EPKB_Utilities::sanitize_hex_color( $block_attributes['article_list_hover_font_color'] );
+			$output .= '
+				' . $block_selector . ' .epkb-ml-article-container {
+					padding: ' . $spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article__text {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article__icon {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $block_selector . ' .epkb-category-section__body li {
+					padding-bottom: 0px !important;
+				}';
+		}
+
+		// Space between category sections -----------------------------------------/
+		$section_gap = isset( $block_attributes['section_box_gap'] ) ? intval( $block_attributes['section_box_gap'] ) : 20;
+		$top_icon_row_margin_bottom = max( 60, $section_gap + 20 );
+		$output .= '
+			' . $block_selector . ' .epkb-ml__module-categories-articles__row {
+				gap: ' . $section_gap . 'px !important;
+				margin-bottom: ' . $section_gap . 'px !important;
+			}
+			' . $block_selector . ' .epkb-ml__module-categories-articles__row.epkb-icon-top-row-adj {
+				margin-bottom: ' . $top_icon_row_margin_bottom . 'px !important;
+			}
+			' . $block_selector . ' .epkb-ml__module-categories-articles__row:last-child {
+				margin-bottom: 0 !important;
+			}';
+
+		// Category box padding -----------------------------------------/
+		if ( ! empty( $block_attributes['category_box_padding'] ) ) {
+			$output .= '
+				' . $block_selector . ' .epkb-category-section {
+					padding: ' . intval( $block_attributes['category_box_padding'] ) . 'px !important;
+				}';
+		}
+
 		return $output;
 	}
 
@@ -487,6 +536,15 @@ final class EPKB_Classic_Layout_Block extends EPKB_Abstract_Block {
 							'custom_css_class' => EPKB_Blocks_Settings::get_custom_css_class_setting(),
 						)
 					),
+
+					// GROUP: Help + Setup Wizard
+					'help-resources' => array(
+						'title' => esc_html__( 'Help + Setup Wizard', 'echo-knowledge-base' ),
+						'fields' => array(
+							'help_resources_link' => EPKB_Blocks_Settings::get_help_resources_link(),
+							'setup_wizard_link' => EPKB_Blocks_Settings::get_setup_wizard_link(),
+						)
+					),
 				),
 			),
 
@@ -502,12 +560,6 @@ final class EPKB_Classic_Layout_Block extends EPKB_Abstract_Block {
 						'fields' => array(
 							'block_full_width_toggle' => EPKB_Blocks_Settings::get_block_full_width_setting(),
 							'block_max_width' => EPKB_Blocks_Settings::get_block_max_width_setting(),
-							'block_presets' => array(
-								'setting_type' => 'presets_dropdown',
-								'label' => esc_html__( 'Apply Preset', 'echo-knowledge-base' ),
-								'presets' => EPKB_Blocks_Settings::get_all_preset_settings( self::EPKB_BLOCK_NAME, EPKB_Layout::CLASSIC_LAYOUT ),
-								'default' => 'current',
-							),
 						),
 					),
 
@@ -531,6 +583,12 @@ final class EPKB_Classic_Layout_Block extends EPKB_Abstract_Block {
 							),
 							'section_border_color' => array(
 								'setting_type' => 'color',
+							),
+							'section_box_gap' => array(
+								'setting_type' => 'range',
+							),
+							'category_box_padding' => array(
+								'setting_type' => 'range',
 							)
 						),
 					),
@@ -687,6 +745,21 @@ final class EPKB_Classic_Layout_Block extends EPKB_Abstract_Block {
 							),
 							'article_list_spacing' => array(
 								'setting_type' => 'range',
+							),
+							'article_list_hover_toggle' => array(
+								'setting_type' => 'toggle',
+							),
+							'article_list_hover_background_color' => array(
+								'setting_type' => 'color',
+								'hide_on_dependencies' => array(
+									'article_list_hover_toggle' => 'off',
+								),
+							),
+							'article_list_hover_font_color' => array(
+								'setting_type' => 'color',
+								'hide_on_dependencies' => array(
+									'article_list_hover_toggle' => 'off',
+								),
 							),
 							'article_typography_controls' => array(
 								'setting_type' => 'typography_controls',

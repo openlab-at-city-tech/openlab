@@ -7,8 +7,8 @@
                 "lang": "hi_IN",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Error": [
-                "त्रुटि"
+            "Actions": [
+                "क्रियाएं"
             ],
             "Analyze Content": [
                 "सामग्री विश्लेषण करें"
@@ -16,20 +16,20 @@
             "Improve Content": [
                 "सामग्री में सुधार करें"
             ],
+            "Done": [
+                "समाप्त"
+            ],
+            "Error": [
+                "त्रुटि"
+            ],
             "Improve": [
                 "सुधारें"
             ],
-            "Demo Analytics": [
-                "डेमो उपयोग आँकड़े और रिपोर्टिंग"
-            ],
-            "Actions": [
-                "क्रियाएं"
+            "Remove": [
+                "हटाएं"
             ],
             "Analyzing": [
                 "विश्लेषण किया जा रहा है"
-            ],
-            "No articles found": [
-                "कोई लेख नहीं मिला"
             ],
             "To Analyze": [
                 "विश्लेषण करें"
@@ -37,14 +37,11 @@
             "To Improve": [
                 "सुधारें"
             ],
+            "No articles found": [
+                "कोई लेख नहीं मिला"
+            ],
             "Please select exactly one article to improve": [
                 "कृपया सुधार के लिए केवल एक डॉक्यूमेंटेशन पेज चुनें"
-            ],
-            "Demo Data Displayed": [
-                "डेमो डेटा दिखाया गया"
-            ],
-            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
-                "यह प्रदर्शन के लिए दिखाए गए डेमो विश्लेषण डेटा है। एक बार आप नई डॉक्यूमेंटेशन पेज बनाते हैं, आप उनका विश्लेषण कर सकते हैं ताकि वास्तविक सामग्री विश्लेषण परिणाम देख सकें।."
             ],
             "Select All That Need Analysis": [
                 "जिनमें विश्लेषण की जरूरत है, सभी चुनें"
@@ -82,9 +79,6 @@
             "Score below 80%": [
                 "80% से कम स्कोर"
             ],
-            "Done": [
-                "समाप्त"
-            ],
             "Completed": [
                 "पूर्ण"
             ],
@@ -111,9 +105,6 @@
             ],
             "Ignore": [
                 "अनदेखा करें"
-            ],
-            "Remove": [
-                "हटाएं"
             ],
             "Loading articles...": [
                 "लेख लोड हो रहे हैं..."

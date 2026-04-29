@@ -7,11 +7,11 @@
                 "lang": "da_DK",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Loading...": [
-                "Indlæser..."
-            ],
             "AI Features Required": [
                 "AI-funktioner krævet"
+            ],
+            "Loading...": [
+                "Indlæser..."
             ],
             "Go to AI Settings": [
                 "Gå til AI-indstillinger"

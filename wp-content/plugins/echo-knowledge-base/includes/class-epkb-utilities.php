@@ -17,10 +17,10 @@ class EPKB_Utilities {
 	 */
 	public static function get_post_status_text( $post_status ) {
 
-		$post_statuses = array( 'draft' => esc_html__( 'Draft' ), 'pending' => esc_html__( 'Pending' ),
-		                        'publish' => esc_html__( 'Published' ), 'future' => esc_html__( 'Scheduled' ),
-								'private' => esc_html__( 'Private' ),
-								'trash'   => esc_html__( 'Trash' ));
+		$post_statuses = array( 'draft' => esc_html__( 'Draft', 'echo-knowledge-base' ), 'pending' => esc_html__( 'Pending', 'echo-knowledge-base' ),
+		                        'publish' => esc_html__( 'Published', 'echo-knowledge-base' ), 'future' => esc_html__( 'Scheduled', 'echo-knowledge-base' ),
+								'private' => esc_html__( 'Private', 'echo-knowledge-base' ),
+								'trash'   => esc_html__( 'Trash', 'echo-knowledge-base' ));
 
 		if ( empty( $post_status ) || ! in_array( $post_status, array_keys( $post_statuses ) ) ) {
 			return $post_status;
@@ -281,13 +281,13 @@ class EPKB_Utilities {
 		$time = abs($time2 - $time1);
 		$time = ( $time < 1 )? 1 : $time;
 		$tokens = array (
-			31536000 => esc_html__( 'year' ),
-			2592000 => esc_html__( 'month' ),
-			604800 => esc_html__( 'week' ),
-			86400 => esc_html__( 'day' ),
-			3600 => esc_html__( 'hour' ),
-			60 => esc_html__( 'min' ),
-			1 => esc_html__( 'sec' )
+			31536000 => esc_html__( 'year', 'echo-knowledge-base' ),
+			2592000 => esc_html__( 'month', 'echo-knowledge-base' ),
+			604800 => esc_html__( 'week', 'echo-knowledge-base' ),
+			86400 => esc_html__( 'day', 'echo-knowledge-base' ),
+			3600 => esc_html__( 'hour', 'echo-knowledge-base' ),
+			60 => esc_html__( 'min', 'echo-knowledge-base' ),
+			1 => esc_html__( 'sec', 'echo-knowledge-base' )
 		);
 
 		$output = '';
@@ -646,11 +646,14 @@ class EPKB_Utilities {
 			if ( $field_type == EPKB_Input_Filter::WP_EDITOR ) {
 				$sanitized_fields[$submitted_key] = wp_kses( $submitted_value, self::get_extended_html_tags() );
 
+			} elseif ( $field_type == EPKB_Input_Filter::AI_PROMPT ) {
+				$sanitized_fields[$submitted_key] = wp_strip_all_tags( $submitted_value );
+
 			} elseif ( $field_type == EPKB_Input_Filter::TYPOGRAPHY ) {
 				$sanitized_fields[$submitted_key] = EPKB_Input_Filter::sanitize_typography( $submitted_value );
 
 			} elseif ( $field_type == EPKB_Input_Filter::TEXT && ! empty( $all_fields_specs[$submitted_key]['allowed_tags'] ) ) {
-				// text input with allowed tags 
+				// text input with allowed tags
 				$sanitized_fields[$submitted_key] = wp_kses( $submitted_value, $all_fields_specs[$submitted_key]['allowed_tags'] );
 
 			} else {
@@ -2298,11 +2301,11 @@ class EPKB_Utilities {
 
 		// Standard
 		if ( $post_type_object->name == 'post' ) {
-			return esc_html__( 'Post' );
+			return esc_html__( 'Post', 'echo-knowledge-base' );
 		}
 
 		if ( $post_type_object->name == 'page' ) {
-			return esc_html__( 'Page' );
+			return esc_html__( 'Page', 'echo-knowledge-base' );
 		}
 
 		if ( in_array( $post_type_object->name, ['ip_lesson', 'ip_quiz', 'ip_question', 'ip_course'] ) ) {
@@ -2340,15 +2343,24 @@ class EPKB_Utilities {
 		return $post_type_object->label;
 	}
 
-	public static function is_article_search_synced( $kb_config ) {
+	public static function use_main_page_search_settings_on_article_page( $kb_config ) {
 
 		if ( ! isset( $kb_config['article_search_sync_toggle'] ) ) {
+			return false;
+		}
+
+		if ( is_archive() ) {
 			return false;
 		}
 
 		// if KB Main Page uses blocks then do not sync articles
 		if ( EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $kb_config ) ) {
 			return false;
+		}
+
+		// if KB Main Page is Sidebar Layout (and not block) do not use article page search settings
+		if ( $kb_config['kb_main_page_layout'] == EPKB_Layout::SIDEBAR_LAYOUT ) {
+			return true;
 		}
 
 		// if KB Main Page uses shortcode then sync articles
@@ -2516,10 +2528,10 @@ class EPKB_Utilities {
 	public static function is_internal_url( $url ) {
 
 		// get the site's host
-		$site_host = parse_url( home_url(), PHP_URL_HOST );
+		$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
 
 		// parse the URL to get its host
-		$url_host = parse_url( $url, PHP_URL_HOST );
+		$url_host = wp_parse_url( $url, PHP_URL_HOST );
 
 		// handle relative URLs (no host) - relative URLs are considered internal
 		if ( empty( $url_host ) ) {
@@ -2535,6 +2547,6 @@ class EPKB_Utilities {
 	 * @return bool True if AI Features Pro is active
 	 */
 	public static function is_ai_features_pro_enabled() {
-		return defined( 'AI_FEATURES_PRO_PLUGIN_NAME' );
+		return defined( 'AI_FEATURES_PRO_PLUGIN_NAME' ) && ! EPKB_AI_Utilities::is_ai_pro_version_outdated();
 	}
 }

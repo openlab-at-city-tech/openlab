@@ -43,7 +43,8 @@ class EPKB_AI_Content_Analysis_Job_Manager {
 			}
 
 		} catch ( Exception $e ) {
-			$error_message = sprintf( __( 'Unexpected error in %s analysis: %s', 'echo-knowledge-base' ), $analysis_type, $e->getMessage() );
+			// translators: %1$s is the analysis type, %2$s is the error message
+			$error_message = sprintf( __( 'Unexpected error in %1$s analysis: %2$s', 'echo-knowledge-base' ), $analysis_type, $e->getMessage() );
 
 			return new WP_Error( 'unexpected_error', $error_message, array( 'error' => $error_message ) );
 		}
@@ -116,6 +117,7 @@ class EPKB_AI_Content_Analysis_Job_Manager {
 				try {
 					$gap_analysis = apply_filters( 'epkb_ai_gap_analysis_analyze', $post, [ 'force' => true ] );
 				} catch ( Exception $e ) {
+					// translators: %s is the exception error message
 					return new WP_Error( 'gap_analysis_exception', sprintf( __( 'Gap analysis exception: %s', 'echo-knowledge-base' ), $e->getMessage() ) );
 				}
 
@@ -240,6 +242,7 @@ class EPKB_AI_Content_Analysis_Job_Manager {
 		$content_processor = new EPKB_AI_Content_Processor();
 		$markdown = $content_processor->clean_content( $post->post_content, $post->ID );
 		if ( is_wp_error( $markdown ) ) {
+			// translators: %s is the error message
 			return new WP_Error( 'content_processing_failed', sprintf( __( 'Failed to process article content: %s', 'echo-knowledge-base' ), $markdown->get_error_message() ) );
 		}
 

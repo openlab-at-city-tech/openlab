@@ -99,18 +99,23 @@ class EPKB_Articles_Setup {
 
 		<div id="<?php echo esc_attr( $article_container_structure_version ); ?>" class="<?php echo esc_attr( implode( " ", $article_page_container_classes ) . ' ' . $activeWPTheme ); ?> " data-mobile_breakpoint="<?php echo esc_attr( $mobile_breakpoint ); ?>">    <?php
 
+			// WCAG Accessibility: Skip link for keyboard navigation
+			if ( ! $eckb_is_kb_main_page ) { ?>
+				<a href="#eckb-article-content" class="eckb-skip-link eckb-screen-reader-text"><?php esc_html_e( 'Skip to main content', 'echo-knowledge-base' ); ?></a>   <?php
+			}
+
 		   self::article_section( 'eckb-article-header', array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article ) ); ?>
 
 			<div id="eckb-article-body">  <?php
 
 		        self::article_section( 'eckb-article-left-sidebar', array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article ) ); ?>
 
-		        <article id="eckb-article-content" data-article-id="<?php echo esc_attr( $article->ID ); ?>" <?php echo esc_attr( $article_seq_no );
+		        <article id="eckb-article-content" tabindex="-1" data-article-id="<?php echo esc_attr( $article->ID ); ?>" <?php echo esc_attr( $article_seq_no );
 				    $search_keywords = isset( $_GET['keywords'] ) ? sanitize_text_field( urldecode( $_GET['keywords'] ) ) : '';
 				    echo $search_keywords ? 'data-search-text="' . esc_attr( $search_keywords ) . '"' : '';		?>>                        <?php
 
-					self::article_section( 'eckb-article-content-header' . $v2_suffix, array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article, 'tabindex' => 0 ) );
-					self::article_section( 'eckb-article-content-body', array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article, 'content' => $content, 'tabindex' => 0 ) );
+					self::article_section( 'eckb-article-content-header' . $v2_suffix, array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article ) );
+					self::article_section( 'eckb-article-content-body', array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article, 'content' => $content ) );
 					self::article_section( 'eckb-article-content-footer', array( 'id' => $kb_config['id'], 'config' => $kb_config, 'article' => $article ) );                        ?>
 
 		        </article><!-- /#eckb-article-content -->     <?php
@@ -125,8 +130,11 @@ class EPKB_Articles_Setup {
 
 		<style id="eckb-article-styles" type="text/css"><?php echo EPKB_Utilities::minify_css( self::$styles ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped  ?></style>   <?php
 
-		$frontend_editor = new EPKB_Frontend_Editor();
-		$frontend_editor->generate_page_content( $kb_config, 'article-page' );
+		// Only show article page frontend editor if we're actually on an article page (not main page with blocks)
+		if ( empty( $eckb_is_kb_main_page ) ) {
+			$frontend_editor = new EPKB_Frontend_Editor();
+			$frontend_editor->generate_page_content( $kb_config, 'article-page' );
+		}
 
 		$article_content = ob_get_clean();
 
@@ -228,13 +236,6 @@ class EPKB_Articles_Setup {
 		// SEARCH BOX OFF: user uses blocks on KB Main Page so user has option to disable search on Article Page
 		if ( $is_article_search_settings_off && EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $args['config'] ) ) {
 			return;
-			/* $main_page = get_post( EPKB_KB_Handler::get_first_kb_main_page_id( $args['config'] ) );
-			if ( ! empty( $main_page ) ) {
-				$kb_main_page_block_layout = EPKB_Block_Utilities::get_kb_block_layout( $main_page );
-				if ( ! empty( $kb_main_page_block_layout ) ) {
-					return;
-				}
-			} */
 		}
 
 		EPKB_KB_Search::get_search_form_output( $args['config'] );
@@ -571,7 +572,7 @@ class EPKB_Articles_Setup {
 		$format = $kb_config[$location . '_toolbar_button_format'];   ?>
 
 		<div class="eckb-<?php echo esc_attr( str_replace('_', '-', $location) ); ?>-toolbar-button-container">
-			<span class="eckb-<?php echo esc_attr( $feature ); ?>-button-container">			<?php
+			<span class="eckb-<?php echo esc_attr( $feature ); ?>-button-container" tabindex="0" role="button" aria-label="<?php echo esc_attr( $kb_config[$feature . '_button_text'] ); ?>">			<?php
 				echo $format == 'icon' || $format == 'icon_text' ? '<span class="eckb-toolbar-button-icon epkbfa ' . esc_attr( $icon ) . '"></span>' : '';
 				echo $format == 'text' || $format == 'text_icon' ? '<span class="eckb-toolbar-button-text">' . esc_html( $kb_config[$feature . '_button_text'] ) . '</span>' : '';
 			   echo $format == 'icon_text' ? '<span class="eckb-toolbar-button-text">' . esc_html( $kb_config[$feature . '_button_text'] ) . '</span>' : '';
@@ -587,8 +588,9 @@ class EPKB_Articles_Setup {
 		global $multipage;
 
 		do_action( 'eckb-article-before-content', $args );
+		$content = has_filter( 'epkb_article_content' ) ? apply_filters( 'epkb_article_content', $args['content'], $args ) : $args['content'];
 		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo $args['content'];
+		echo $content;
 		do_action( 'eckb-article-after-content', $args );
 
 		// support for paged articles (with page break)
@@ -1437,6 +1439,15 @@ class EPKB_Articles_Setup {
 				    	font-family: ' . ( ! empty( $kb_config['general_typography']['font-family'] ) ? $kb_config['general_typography']['font-family'] .'!important' : 'inherit !important' ) . ';
 				}';
 
+		// KB Container Spacing (ONLY for Current Theme Template)
+		if ( ! empty( $kb_config['templates_for_kb'] ) && $kb_config['templates_for_kb'] == 'current_theme_templates' ) {
+			$output .= '
+				#eckb-article-page-container-v2 {
+					padding-top: ' . $kb_config['template_article_padding_top'] . 'px;
+					margin-top: ' . $kb_config['template_article_margin_top'] . 'px;
+				}';
+		}
+
 		$output .= '
 			#eckb-article-page-container-v2 #eckb-article-left-sidebar {
 				padding: ' . $article_left_sidebar_padding_top . 'px ' . $article_left_sidebar_padding_right . 'px ' . $article_left_sidebar_padding_bottom . 'px ' . $article_left_sidebar_padding_left . 'px;
@@ -1634,8 +1645,8 @@ class EPKB_Articles_Setup {
 	private static function wizard_widget_demo_data( $widget_id ) {
 		if ( self::is_configuring_article() && ! is_active_sidebar( $widget_id ) ) { ?>
 			  <div class="eckb-no-widget">
-			   <?php esc_html_e( 'No widgets', 'echo-widgets' ); ?><br>
-				  <a class="eckb-redirect-link" href="<?php echo esc_url( admin_url( 'widgets.php' ) ); ?>" target="_blank"><?php esc_html_e( 'Add your widgets here', 'echo-widgets' ); ?></a>
+			   <?php esc_html_e( 'No widgets', 'echo-knowledge-base' ); ?><br>
+				  <a class="eckb-redirect-link" href="<?php echo esc_url( admin_url( 'widgets.php' ) ); ?>" target="_blank"><?php esc_html_e( 'Add your widgets here', 'echo-knowledge-base' ); ?></a>
 			  </div> <?php
 		}
 	}

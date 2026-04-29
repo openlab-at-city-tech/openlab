@@ -314,8 +314,8 @@ class EPKB_KB_Config_DB {
 	 */
 	private function save_kb_config( array $config, $kb_id ) {
 
-		if ( empty( $config ) ) {
-			return new WP_Error( 'save_kb_config', 'Configuration is empty' );
+		if ( empty( $config ) || count( $config ) < 100 ) {
+			return new WP_Error( 'save_kb_config', 'Configuration is incomplete' );
 		}
 
 		$config['id'] = $kb_id;  // ensure it is the same id

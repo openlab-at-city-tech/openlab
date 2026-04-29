@@ -51,6 +51,7 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 	 */
 	protected function add_this_block_required_kb_attributes( $block_attributes ) {
 		$block_attributes['kb_main_page_layout'] = EPKB_Layout::DRILL_DOWN_LAYOUT;
+		$block_attributes['article_list_hover_toggle'] = 'on';
 		return $block_attributes;
 	}
 
@@ -138,6 +139,7 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 				border-width:' . intval( $block_attributes['section_border_width'] ) . 'px !important;
 				border-radius:' . intval( $block_attributes['section_border_radius'] ) . 'px !important;
 				border-style: ' . $border_style_escaped. ' !important;
+				background-color: ' . EPKB_Utilities::sanitize_hex_color( $block_attributes['ml_categories_articles_category_box_bg_color'] ) . ' !important;
 			}';
 
 		$output .=
@@ -231,6 +233,44 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 		        padding-bottom: ' . intval( $block_attributes['article_list_spacing'] ) . 'px !important;
 	            line-height: 1 !important;
 			}';
+
+		// Article hover effect (always on for Drill Down block; list item hover also in layout CSS)
+		$spacing = intval( $block_attributes['article_list_spacing'] );
+		$hover_bg = EPKB_Utilities::sanitize_hex_color( $block_attributes['article_list_hover_background_color'] );
+		$hover_text = EPKB_Utilities::sanitize_hex_color( $block_attributes['article_list_hover_font_color'] );
+		$output .= '
+				' . $block_selector . ' .epkb-ml-articles-list li {
+					padding: 0 !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container {
+					padding: ' . $spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article__text {
+					color: ' . $hover_text . ' !important;
+				}
+				' . $block_selector . ' .epkb-ml-article-container:hover .epkb-article__icon {
+					color: ' . $hover_text . ' !important;
+				}';
+
+		// Space between category sections -----------------------------------------/
+		$section_gap = isset( $block_attributes['section_box_gap'] ) ? intval( $block_attributes['section_box_gap'] ) : 20;
+		$output .= '
+			' . $block_selector . ' .epkb-ml-top-categories-button-container {
+				gap: ' . $section_gap . 'px !important;
+			}';
+
+		// Category box padding -----------------------------------------/
+		if ( ! empty( $block_attributes['category_box_padding'] ) ) {
+			$output .= '
+				' . $block_selector . ' .epkb-ml-top__cat-container {
+					padding: ' . intval( $block_attributes['category_box_padding'] ) . 'px !important;
+				}';
+		}
 
 		return $output;
 	}
@@ -372,6 +412,15 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 							'custom_css_class' => EPKB_Blocks_Settings::get_custom_css_class_setting(),
 						)
 					),
+
+					// GROUP: Help + Setup Wizard
+					'help-resources' => array(
+						'title' => esc_html__( 'Help + Setup Wizard', 'echo-knowledge-base' ),
+						'fields' => array(
+							'help_resources_link' => EPKB_Blocks_Settings::get_help_resources_link(),
+							'setup_wizard_link' => EPKB_Blocks_Settings::get_setup_wizard_link(),
+						)
+					),
 				),
 			),
 
@@ -387,12 +436,6 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 						'fields' => array(
 							'block_full_width_toggle' => EPKB_Blocks_Settings::get_block_full_width_setting(),
 							'block_max_width' => EPKB_Blocks_Settings::get_block_max_width_setting(),
-							'block_presets' => array(
-								'setting_type' => 'presets_dropdown',
-								'label' => esc_html__( 'Apply Preset', 'echo-knowledge-base' ),
-								'presets' => EPKB_Blocks_Settings::get_all_preset_settings( self::EPKB_BLOCK_NAME, EPKB_Layout::DRILL_DOWN_LAYOUT ),
-								'default' => 'current',
-							),
 						),
 					),
 
@@ -408,7 +451,16 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 							),
 							'section_border_color' => array(
 								'setting_type' => 'color',
-							)
+							),
+							'ml_categories_articles_category_box_bg_color' => array(
+								'setting_type' => 'color',
+							),
+							'section_box_gap' => array(
+								'setting_type' => 'range',
+							),
+							'category_box_padding' => array(
+								'setting_type' => 'range',
+							),
 						),
 					),
 
@@ -542,6 +594,12 @@ final class EPKB_Drill_Down_Layout_Block extends EPKB_Abstract_Block {
 							),
 							'article_list_spacing' => array(
 								'setting_type' => 'range',
+							),
+							'article_list_hover_background_color' => array(
+								'setting_type' => 'color',
+							),
+							'article_list_hover_font_color' => array(
+								'setting_type' => 'color',
 							),
 							'article_typography_controls' => array(
 								'setting_type' => 'typography_controls',

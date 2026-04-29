@@ -13,14 +13,44 @@
             "Cancel": [
                 "रद्द करें"
             ],
+            "Next": [
+                "अगला"
+            ],
+            "AI Features": [
+                "एआई सुविधाएँ"
+            ],
+            "OFF": [
+                "ऑफ"
+            ],
+            "Use code:": [
+                "कोड का उपयोग करें:"
+            ],
+            "Copy": [
+                "कॉपी"
+            ],
+            "Documentation": [
+                "डॉक्यूमेंटेशन"
+            ],
+            "Copied!": [
+                "कॉपी कर लिया गया!"
+            ],
+            "Got it!": [
+                "समझ गया!"
+            ],
+            "Show Me": [
+                "मुझे दिखाएं"
+            ],
             "Loading...": [
                 "लोड हो रहा है..."
             ],
-            "General Settings": [
-                "सामान्य सेटिंग्स"
+            "Go to General Settings": [
+                "सामान्य सेटिंग्स पर जाएँ"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "आपका सत्र समाप्त हो गया है। कृपया पृष्ठ को ताज़ा करें।."
+            "Go to Settings": [
+                "सेटिंग्स पर जाएँ"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "आपका सत्र समाप्त हो गया है। कृपया फिर से लॉग इन करने के लिए पेज को रीफ्रेश करें।."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "बहुत अधिक अनुरोध हैं। कृपया एक पल प्रतीक्षा करें और फिर से प्रयास करें।."
@@ -37,8 +67,8 @@
             "Confirm": [
                 "पुष्टि करें"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "AI सुविधाओं का उपयोग करने के लिए, कृपया अपनी API कुंजी कॉन्फ़िगर करें और डेटा गोपनीयता समझौता स्वीकार करें"
+            "Setup Steps": [
+                "सेटअप चरण"
             ],
             "Session Expired": [
                 "सत्र समाप्त"
@@ -48,21 +78,6 @@
             ],
             "No results found": [
                 "कोई परिणाम नहीं मिला"
-            ],
-            "Tutorial": [
-                "ट्यूटोरियल"
-            ],
-            "Learn how to use this feature": [
-                "इस सुविधा का उपयोग कैसे करें"
-            ],
-            "Tutorial Screenshot": [
-                "ट्यूटोरियल स्क्रीनशॉट"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "यह इस सुविधा के उपयोग को समझाने वाला एक ट्यूटोरियल है।."
-            ],
-            "Close Tutorial": [
-                "ट्यूटोरियल बंद करें"
             ]
         }
     }

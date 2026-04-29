@@ -145,6 +145,9 @@ class EPKB_Analytics_Page {
 		<div class="epkb-analytics-date-range-filter">
 			<div class="epkb-analytics-date-range-filter__inner">
 				<div class="epkb-analytics-date-range-filter__quick-buttons">
+					<button type="button" class="epkb-analytics-date-range-quick-btn is-active" data-preset="all-time">
+						<?php echo esc_html__( 'All Time', 'echo-knowledge-base' ); ?>
+					</button>
 					<button type="button" class="epkb-analytics-date-range-quick-btn" data-preset="last-week">
 						<?php echo esc_html__( 'Last Week', 'echo-knowledge-base' ); ?>
 					</button>
@@ -156,14 +159,11 @@ class EPKB_Analytics_Page {
 					</button>
 				</div>
 				<select class="epkb-analytics-date-range-preset" id="epkb-analytics-date-range-preset">
-					<option value="all-time"><?php echo esc_html__( 'All Time', 'echo-knowledge-base' ); ?></option>
+					<option value="" selected disabled><?php echo esc_html__( 'Choose Range', 'echo-knowledge-base' ); ?></option>
 					<option value="today"><?php echo esc_html__( 'Today', 'echo-knowledge-base' ); ?></option>
 					<option value="yesterday"><?php echo esc_html__( 'Yesterday', 'echo-knowledge-base' ); ?></option>
 					<option value="this-week"><?php echo esc_html__( 'This Week', 'echo-knowledge-base' ); ?></option>
-					<option value="last-week"><?php echo esc_html__( 'Last Week', 'echo-knowledge-base' ); ?></option>
 					<option value="this-month"><?php echo esc_html__( 'This Month', 'echo-knowledge-base' ); ?></option>
-					<option value="last-month"><?php echo esc_html__( 'Last Month', 'echo-knowledge-base' ); ?></option>
-					<option value="last-3-months"><?php echo esc_html__( 'Last 3 Months', 'echo-knowledge-base' ); ?></option>
 					<option value="last-6-months"><?php echo esc_html__( 'Last 6 Months', 'echo-knowledge-base' ); ?></option>
 					<option value="this-year"><?php echo esc_html__( 'This Year', 'echo-knowledge-base' ); ?></option>
 					<option value="last-year"><?php echo esc_html__( 'Last Year', 'echo-knowledge-base' ); ?></option>
@@ -179,10 +179,10 @@ class EPKB_Analytics_Page {
 						<span class="screen-reader-text"><?php echo esc_html__( 'End Date', 'echo-knowledge-base' ); ?></span>
 						<input type="date" class="epkb-analytics-date-end" id="epkb-analytics-date-end" />
 					</label>
+					<button type="button" class="epkb-analytics-date-range-apply epkb-primary-btn" id="epkb-analytics-date-range-apply">
+						<?php echo esc_html__( 'Apply', 'echo-knowledge-base' ); ?>
+					</button>
 				</div>
-				<button type="button" class="epkb-analytics-date-range-apply epkb-primary-btn" id="epkb-analytics-date-range-apply">
-					<?php echo esc_html__( 'Apply', 'echo-knowledge-base' ); ?>
-				</button>
 			</div>
 		</div>
 		<?php
@@ -392,8 +392,9 @@ class EPKB_Analytics_Page {
 
 			// Sum up views for weeks in range
 			for ( $week = $week_start; $week <= $week_end; $week++ ) {
-				if ( isset( $year_meta[ $week ] ) && is_numeric( $year_meta[ $week ] ) ) {
-					$total_views += (int) $year_meta[ $week ];
+				$week_key = str_pad( $week, 2, '0', STR_PAD_LEFT );
+				if ( isset( $year_meta[ $week_key ] ) && is_numeric( $year_meta[ $week_key ] ) ) {
+					$total_views += (int) $year_meta[ $week_key ];
 				}
 			}
 		}
@@ -448,7 +449,7 @@ class EPKB_Analytics_Page {
 
 			while ( $current_week <= $end_date ) {
 				$year = (int) $current_week->format( 'Y' );
-				$week = (int) $current_week->format( 'W' );
+				$week = $current_week->format( 'W' );
 
 				$weekly_data[] = array(
 					'year'        => $year,
@@ -469,7 +470,7 @@ class EPKB_Analytics_Page {
 				$week_date = clone $now;
 				$week_date->modify( "-{$i} weeks" );
 				$year = (int) $week_date->format( 'Y' );
-				$week = (int) $week_date->format( 'W' );
+				$week = $week_date->format( 'W' );
 
 				$weekly_data[] = array(
 					'year'        => $year,
@@ -1513,6 +1514,9 @@ class EPKB_Analytics_Page {
 		// Populate Time-Based Analytics section
 		$sections['time-based-analytics']['content'] = $this->get_time_based_analytics_html( $date_range );
 
+		// Allow plugins to add/modify analytics sections
+		$sections = apply_filters( 'epkb_analytics_sections', $sections, $date_range );
+
 		return $sections;
 	}
 
@@ -1807,7 +1811,8 @@ class EPKB_Analytics_Page {
 			$this->pie_chart_data_box(
 				__( 'Low Performing Articles', 'echo-knowledge-base' ),
 				sprintf(
-					__( 'Articles performing significantly below average (Mean: %d, Std Dev: %d)', 'echo-knowledge-base' ),
+					// translators: %1$d is the mean value, %2$d is the standard deviation
+					__( 'Articles performing significantly below average (Mean: %1$d, Std Dev: %2$d)', 'echo-knowledge-base' ),
 					$outlier_data['mean'],
 					$outlier_data['std_dev']
 				),
@@ -1992,7 +1997,8 @@ class EPKB_Analytics_Page {
 					<div class="epkb-analytics-card epkb-time-chart-card">
 						<div class="epkb-analytics-card__header">
 							<h3><?php echo esc_html__( 'Views Over Time', 'echo-knowledge-base' ); ?></h3>
-							<p class="epkb-analytics-card__desc"><?php printf( esc_html__( '%s trend of article views over the last %s', 'echo-knowledge-base' ), esc_html( ucfirst( $time_period_info['trend_type'] ) ), esc_html( $time_period_info['period'] ) ); ?></p>
+							<?php // translators: %1$s is the trend type (e.g., "Weekly"), %2$s is the time period (e.g., "4 weeks") ?>
+							<p class="epkb-analytics-card__desc"><?php printf( esc_html__( '%1$s trend of article views over the last %2$s', 'echo-knowledge-base' ), esc_html( ucfirst( $time_period_info['trend_type'] ) ), esc_html( $time_period_info['period'] ) ); ?></p>
 						</div>
 						<div class="epkb-analytics-card__body">
 							<canvas id="epkb-time-chart" style="height: 300px;" data-weekly-data="<?php echo esc_attr( wp_json_encode( $weekly_data ) ); ?>"></canvas>
@@ -2024,7 +2030,8 @@ class EPKB_Analytics_Page {
 							<div class="epkb-analytics-card epkb-ratings-chart-card">
 								<div class="epkb-analytics-card__header">
 									<h3><?php echo esc_html__( 'Articles Rating Over Time', 'echo-knowledge-base' ); ?></h3>
-									<p class="epkb-analytics-card__desc"><?php printf( esc_html__( '%s trend of positive and negative feedback over the last %s', 'echo-knowledge-base' ), esc_html( ucfirst( $time_period_info['trend_type'] ) ), esc_html( $time_period_info['period'] ) ); ?></p>
+									<?php // translators: %1$s is the trend type (e.g., "Weekly"), %2$s is the time period (e.g., "4 weeks") ?>
+									<p class="epkb-analytics-card__desc"><?php printf( esc_html__( '%1$s trend of positive and negative feedback over the last %2$s', 'echo-knowledge-base' ), esc_html( ucfirst( $time_period_info['trend_type'] ) ), esc_html( $time_period_info['period'] ) ); ?></p>
 								</div>
 								<div class="epkb-analytics-card__body">
 									<canvas id="epkb-ratings-chart" style="height: 300px;" data-ratings-data="<?php echo esc_attr( wp_json_encode( $weekly_ratings_data ) ); ?>"></canvas>
@@ -2039,7 +2046,8 @@ class EPKB_Analytics_Page {
 							<div class="epkb-analytics-card epkb-searches-chart-card">
 								<div class="epkb-analytics-card__header">
 									<h3><?php echo esc_html__( 'Searches Over Time', 'echo-knowledge-base' ); ?></h3>
-									<p class="epkb-analytics-card__desc"><?php printf( esc_html__( '%s trend of searches over the last %s', 'echo-knowledge-base' ), esc_html( ucfirst( $time_period_info['trend_type'] ) ), esc_html( $time_period_info['period'] ) ); ?></p>
+									<?php // translators: %1$s is the trend type (e.g., "Weekly"), %2$s is the time period (e.g., "4 weeks") ?>
+									<p class="epkb-analytics-card__desc"><?php printf( esc_html__( '%1$s trend of searches over the last %2$s', 'echo-knowledge-base' ), esc_html( ucfirst( $time_period_info['trend_type'] ) ), esc_html( $time_period_info['period'] ) ); ?></p>
 								</div>
 								<div class="epkb-analytics-card__body">
 									<canvas id="epkb-searches-chart" style="height: 300px;" data-searches-data="<?php echo esc_attr( wp_json_encode( $weekly_searches_data ) ); ?>"></canvas>

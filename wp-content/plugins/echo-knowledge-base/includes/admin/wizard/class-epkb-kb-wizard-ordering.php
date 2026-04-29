@@ -10,7 +10,6 @@
 class EPKB_KB_Wizard_Ordering {
 
 	var $kb_config = array();
-	var $feature_specs = array();
 	var $kb_id;
 
 	function __construct() {
@@ -27,7 +26,6 @@ class EPKB_KB_Wizard_Ordering {
 
 		$this->kb_config = $kb_config;
 		$this->kb_id = $this->kb_config['id'];
-		$this->feature_specs = EPKB_KB_Config_Specs::get_fields_specification( $this->kb_config['id'] );
         $HTML = new EPKB_HTML_Forms();
 
 		ob_start();
@@ -45,24 +43,9 @@ class EPKB_KB_Wizard_Ordering {
 		<div id="eckb-wizard-ordering__page" class="eckb-wizard-ordering epkb-config-wizard-content">
 			<div class="epkb-config-wizard-inner">
 
-					<!------- Wizard Status Bar ------->
-				<div class="epkb-wizard-status-bar">
-					<ul>
-						<li id="epkb-wsb-step-1" class="epkb-wsb-step epkb-wsb-step--active"><?php esc_html_e( 'Choose Type of Order', 'echo-knowledge-base'); ?></li>
-						<li id="epkb-wsb-step-2" class="epkb-wsb-step"><?php esc_html_e( 'Order Articles and Categories', 'echo-knowledge-base'); ?></li>
-					</ul>
-				</div>
-
 				<!------- Wizard Content ---------->
 				<div class="epkb-wizard-content">
-					<?php self::show_loader_html(); ?>
-					<?php $this->page_article_category_ordering(); ?>
-					<?php $this->page_ordering(); ?>
-				</div>
-
-				<!------- Wizard Footer ---------->
-				<div class="epkb-wizard-footer">
-					<?php $this->wizard_buttons(); ?>
+					<?php $this->ordering_options_and_preview(); ?>
 				</div>
 
 				<div id='epkb-ajax-in-progress' style="display:none;">
@@ -79,39 +62,24 @@ class EPKB_KB_Wizard_Ordering {
 		return ob_get_clean();
 	}
 
-	// Wizard: Step 1 - Main Page
-	private function page_article_category_ordering() {         ?>
+	// Wizard: Combined ordering options and preview
+	private function ordering_options_and_preview() {         ?>
 
-		<div id="epkb-wsb-step-1-panel" class="epkb-wc-step-panel eckb-wizard-step-1 epkb-wc-step-panel--active">
+		<div class="epkb-wizard-ordering-combined">
 			<div class="epkb-wizard-ordering-selection-container eckb-wizard-accordion">
 				<?php $this->wizard_section( 'epkb-wizard-ordering-page-feature-selection-container', array( 'id' => $this->kb_config['id'], 'config' => $this->kb_config ) ); ?>
+				<?php $this->wizard_apply_button(); ?>
 			</div>
-		</div>	<?php
-	}
-	
-	// Wizard: Step 2 - Ordering Page
-	private function page_ordering() {         ?>
-
-		<div id="epkb-wsb-step-2-panel" class="epkb-wc-step-panel eckb-wizard-step-2">
-			<div class="epkb-wizard-ordering-ordering-preview"><?php // will be filled with ajax ?></div>
+			<div class="epkb-wizard-ordering-ordering-preview"><?php // will be filled with ajax on page load ?></div>
 		</div>	<?php
 	}
 
-	//Wizard: Previous / Next Buttons / Apply Buttons
-	public function wizard_buttons() {      ?>
+	// Wizard: Apply Button only
+	public function wizard_apply_button() {      ?>
 
-		<div class="epkb-wizard-button-container epkb-wizard-button-container--first-step">
+		<div class="epkb-wizard-button-container">
 			<div class="epkb-wizard-button-container__inner">
-				<button value="0" id="epkb-wizard-button-prev" class="epkb-wizard-button epkb-wizard-button-prev">
-					<span class="epkb-wizard-button-prev__icon epkbfa epkbfa-caret-left"></span>
-					<span class="epkb-wizard-button-prev__text"><?php esc_html_e( 'Previous', 'echo-knowledge-base' ); ?></span>
-				</button>
-				<button value="2" id="epkb-wizard-button-next" class="epkb-wizard-button epkb-wizard-button-next">
-					<span class="epkb-wizard-button-next__text"><?php esc_html_e( 'Next', 'echo-knowledge-base' ); ?></span>
-					<span class="epkb-wizard-button-next__icon epkbfa epkbfa-caret-right"></span>
-				</button>
-				<button value='apply' id='epkb-wizard-button-apply' class='epkb-wizard-button epkb-wizard-button-apply epkb-ordering-wizard-button-apply' data-wizard-type='ordering' style='display: none;'><?php esc_html_e( 'Apply', 'echo-knowledge-base' ); ?></button>
-
+				<button value='apply' id='epkb-wizard-button-apply' class='epkb-wizard-button epkb-wizard-button-apply epkb-ordering-wizard-button-apply' data-wizard-type='ordering'><?php esc_html_e( 'Apply', 'echo-knowledge-base' ); ?></button>
 				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 			</div>
 		</div>	<?php
@@ -137,37 +105,37 @@ class EPKB_KB_Wizard_Ordering {
 		$kb_config = $args['config'];
 		$feature_specs = EPKB_KB_Config_Specs::get_fields_specification( $kb_id );
 
-		self::option_group_wizard( $feature_specs, array(
-			'option-heading'    => esc_html__( 'I want organize Categories and Articles', 'echo-knowledge-base' ),
+		self::option_group_wizard( array(
 			'class'             => 'eckb-wizard-features',
 			'inputs_escaped' => array(
-				'0' => EPKB_HTML_Elements::radio_buttons_vertical( $feature_specs['categories_display_sequence'] + array(
+				'0' => EPKB_HTML_Elements::radio_buttons_horizontal( $feature_specs['categories_display_sequence'] + array(
 						'id'        => 'front-end-columns',
+						'label'     => esc_html__( 'Categories Sequence', 'echo-knowledge-base' ),
 						'value'     => $kb_config['categories_display_sequence'],
-						'input_group_class' => 'epkb-radio-vertical-group-container',
-                        'return_html' => true,
+						'input_group_class' => '',
+						'return_html' => true,
 					) ),
-				'1' => EPKB_HTML_Elements::radio_buttons_vertical( $feature_specs['articles_display_sequence'] + array(
+				'1' => EPKB_HTML_Elements::radio_buttons_horizontal( $feature_specs['articles_display_sequence'] + array(
 						'id'        => 'front-end-columns',
+						'label'     => esc_html__( 'Articles Sequence', 'echo-knowledge-base' ),
 						'value'     => $kb_config['articles_display_sequence'],
-						'input_group_class' => 'epkb-radio-vertical-group-container' . ( ($kb_config['kb_main_page_layout'] == 'Grid') ? ' epkb-grid-option-hide-show' : ''),
+						'input_group_class' => ( $kb_config['kb_main_page_layout'] == 'Grid' ) ? 'epkb-grid-option-hide-show' : '',
 						'return_html' => true,
-
 					) ),
-				'2' => EPKB_HTML_Elements::radio_buttons_vertical( $feature_specs['show_articles_before_categories'] + array(
+				'2' => EPKB_HTML_Elements::radio_buttons_horizontal( $feature_specs['show_articles_before_categories'] + array(
+						'label'     => esc_html__( 'Show Articles', 'echo-knowledge-base' ),
 						'value'     => $kb_config['show_articles_before_categories'],
-						'input_group_class' => 'epkb-radio-vertical-group-container',
+						'input_group_class' => '',
 						'return_html' => true,
-					) ),	
+					) ),
 				)));           
 	}
 
 	/**
 	 * Display configuration options
-	 * @param $feature_specs
 	 * @param array $args
 	 */
-	private static function option_group_wizard( $feature_specs, $args = array() ) {
+	private static function option_group_wizard( $args = array() ) {
 
 		$defaults = array(
 			'info' => '',
@@ -204,24 +172,7 @@ class EPKB_KB_Wizard_Ordering {
 					<span class="ep_font_icon_info option-info-icon"></span>
 				</div>            <?php
 
-			}           ?>
-
-			<div class="option-info-content hidden">
-				<h5 class="option-info-title"><?php esc_html_e( 'Help', 'echo-knowledge-base' ); ?></h5>                    <?php
-				if ( $feature_specs ) {
-					if ( is_array( $args['info']) ) {
-						foreach( $args['info'] as $item ) {
-							if ( empty($feature_specs[$item]) ) {
-								continue;
-							}
-							echo '<h6>' . esc_html( $feature_specs[$item]['label'] ) . '</h6>';
-							echo '<p>' . esc_html( $feature_specs[$item]['info'] ) . '</p>';
-						}
-					} else {
-						echo '<p>' . esc_html( $args['info'] ) . '</p>';
-					}
-				}		            ?>
-			</div>            <?php
+			}
 
 			foreach ( $args['inputs_escaped'] as $input ) {
 				//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 

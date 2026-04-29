@@ -8,93 +8,154 @@ jQuery(document).ready(function($) {
 	const $dateEnd = $('#epkb-analytics-date-end');
 	const $analyticsContainer = $('.epkb-analytics-page-container');
 
-	// Show/hide custom date range fields
+	// Track the current active preset for filtering
+	let currentActivePreset = 'all-time';
+	const $quickButtonsContainer = $('.epkb-analytics-date-range-filter__quick-buttons');
+
+	// Preset labels for dynamic buttons
+	const presetLabels = {
+		'today': 'Today',
+		'yesterday': 'Yesterday',
+		'this-week': 'This Week',
+		'this-month': 'This Month',
+		'last-6-months': 'Last 6 Months',
+		'this-year': 'This Year',
+		'last-year': 'Last Year',
+		'custom': 'Custom Range'
+	};
+
+	// Show/hide custom date range fields and apply filter for non-custom presets
 	if ( $dateRangePreset.length ) {
 		$dateRangePreset.on('change', function() {
-			if ( $(this).val() === 'custom' ) {
+			const selectedVal = $(this).val();
+			if ( selectedVal === 'custom' ) {
 				$dateRangeCustom.show();
-			} else {
+				// Clear quick button highlights and remove temp button
+				$('.epkb-analytics-date-range-quick-btn').removeClass('is-active');
+				$('.epkb-analytics-date-range-quick-btn--temp').remove();
+			} else if ( selectedVal ) {
 				$dateRangeCustom.hide();
+				currentActivePreset = selectedVal;
+				// Update quick button highlights - add temp button if needed
+				updateQuickButtonHighlight(selectedVal);
+				applyDateRangeFilter(selectedVal);
+				// Reset dropdown to "Choose Range"
+				$(this).val('');
 			}
 		});
 	}
 
-	// Quick buttons for Last Week and Last Month
-	$('.epkb-analytics-date-range-quick-btn').on('click', function() {
+	// Quick buttons click handler (delegated for dynamic buttons)
+	$quickButtonsContainer.on('click', '.epkb-analytics-date-range-quick-btn', function() {
 		const preset = $(this).data('preset');
-		$dateRangePreset.val(preset).trigger('change');
-		$dateRangeApply.trigger('click');
+		currentActivePreset = preset;
+		$dateRangeCustom.hide();
+		// Remove temp button if clicking a permanent button
+		if ( ! $(this).hasClass('epkb-analytics-date-range-quick-btn--temp') ) {
+			$('.epkb-analytics-date-range-quick-btn--temp').remove();
+		}
+		// Update quick button highlights
+		$('.epkb-analytics-date-range-quick-btn').removeClass('is-active');
+		$(this).addClass('is-active');
+		// Reset dropdown to "Choose Range"
+		$dateRangePreset.val('');
+		applyDateRangeFilter(preset);
 	});
 
-	// Apply date range filter
+	// Update quick button highlight based on selected preset
+	function updateQuickButtonHighlight(preset) {
+		// Remove any existing temp button
+		$('.epkb-analytics-date-range-quick-btn--temp').remove();
+		$('.epkb-analytics-date-range-quick-btn').removeClass('is-active');
+
+		// Check if there's a button for this preset
+		const $matchingBtn = $('.epkb-analytics-date-range-quick-btn[data-preset="' + preset + '"]');
+		if ( $matchingBtn.length ) {
+			$matchingBtn.addClass('is-active');
+		} else {
+			// Create temporary button at the front
+			const label = presetLabels[preset] || preset;
+			const $tempBtn = $('<button type="button" class="epkb-analytics-date-range-quick-btn epkb-analytics-date-range-quick-btn--temp is-active" data-preset="' + preset + '">' + label + '</button>');
+			$quickButtonsContainer.prepend($tempBtn);
+		}
+	}
+
+	// Apply date range filter (for custom range Apply button)
 	if ( $dateRangeApply.length ) {
 		$dateRangeApply.on('click', function() {
-			const preset = $dateRangePreset.val();
-			const startDate = $dateStart.val();
-			const endDate = $dateEnd.val();
-			const kbId = $analyticsContainer.data('kb-id');
+			applyDateRangeFilter('custom');
+		});
+	}
 
-			// Validate custom range
-			if ( preset === 'custom' && ( ! startDate || ! endDate ) ) {
-				alert( 'Please select both start and end dates.' );
-				return;
+	// Apply date range filter function
+	function applyDateRangeFilter(presetOverride) {
+		const preset = presetOverride || currentActivePreset || 'all-time';
+		const startDate = $dateStart.val();
+		const endDate = $dateEnd.val();
+		const kbId = $analyticsContainer.data('kb-id');
+
+		// Validate custom range
+		if ( preset === 'custom' && ( ! startDate || ! endDate ) ) {
+			alert( 'Please select both start and end dates.' );
+			return;
+		}
+
+		if ( preset === 'custom' && new Date(startDate) > new Date(endDate) ) {
+			alert( 'Start date must be before end date.' );
+			return;
+		}
+
+		// Show loading dialog
+		showLoadingDialog('Loading...');
+
+		// Make AJAX request
+		$.ajax({
+			url: window.ajaxurl || ( window.epkb_vars && window.epkb_vars.ajax_url ),
+			method: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'epkb_get_filtered_analytics',
+				kb_id: kbId,
+				preset: preset,
+				start_date: startDate,
+				end_date: endDate,
+				_wpnonce_epkb_ajax_action: window.epkb_vars && window.epkb_vars.nonce ? window.epkb_vars.nonce : ''
 			}
+		}).done(function(response) {
+			if ( response && response.success && response.data && response.data.sections ) {
+				// Update all tab panels with filtered content
+				const sections = response.data.sections;
 
-			if ( preset === 'custom' && new Date(startDate) > new Date(endDate) ) {
-				alert( 'Start date must be before end date.' );
-				return;
-			}
+				$.each(sections, function(slug, html) {
+					const $panel = $('.epkb-analytics-tab-panel[data-analytics-panel="' + slug + '"]');
+					if ( $panel.length ) {
+						$panel.find('.epkb-analytics-tab-panel__inner').html(html);
+					}
+				});
 
-			// Show loading dialog
-			showLoadingDialog('Loading...');
-
-			// Make AJAX request
-			$.ajax({
-				url: window.ajaxurl || ( window.epkb_vars && window.epkb_vars.ajax_url ),
-				method: 'POST',
-				dataType: 'json',
-				data: {
-					action: 'epkb_get_filtered_analytics',
-					kb_id: kbId,
-					preset: preset,
-					start_date: startDate,
-					end_date: endDate,
-					_wpnonce_epkb_ajax_action: window.epkb_vars && window.epkb_vars.nonce ? window.epkb_vars.nonce : ''
-				}
-			}).done(function(response) {
-				if ( response && response.success && response.data && response.data.sections ) {
-					// Update all tab panels with filtered content
-					const sections = response.data.sections;
-
-					$.each(sections, function(slug, html) {
-						const $panel = $('.epkb-analytics-tab-panel[data-analytics-panel="' + slug + '"]');
-						if ( $panel.length ) {
-							$panel.find('.epkb-analytics-tab-panel__inner').html(html);
-						}
-					});
-
-					// Re-render charts based on active tab
-					const activeTab = $('.epkb-analytics-tab-button.is-active').data('analytics-tab');
-					setTimeout(function() {
-						if ( activeTab === 'time-based-analytics' ) {
-							renderTimeBasedCharts();
-						} else if ( activeTab === 'article-views' ) {
-							renderArticleViewCharts();
-						} else if ( activeTab === 'rating' ) {
-							renderRatingCharts();
-						} else if ( activeTab === 'all-data' || activeTab === 'kb-search' || activeTab === 'search-shortcode' || activeTab === 'widgets' ) {
-							renderSearchAnalyticsCharts();
-						}
-					}, 100);
-				} else {
-					alert( 'Failed to load analytics data. Please try again.' );
-				}
-			}).fail(function() {
+				// Re-render charts based on active tab
+				const activeTab = $('.epkb-analytics-tab-button.is-active').data('analytics-tab');
+				setTimeout(function() {
+					if ( activeTab === 'ai-chat' ) {
+						renderAIChatEngagementChart();
+					} else if ( activeTab === 'time-based-analytics' ) {
+						renderTimeBasedCharts();
+					} else if ( activeTab === 'article-views' ) {
+						renderArticleViewCharts();
+					} else if ( activeTab === 'rating' ) {
+						renderRatingCharts();
+					} else if ( activeTab === 'all-data' || activeTab === 'kb-search' || activeTab === 'search-shortcode' || activeTab === 'widgets' ) {
+						renderSearchAnalyticsCharts();
+					}
+				}, 100);
+			} else {
 				alert( 'Failed to load analytics data. Please try again.' );
-			}).always(function() {
-				// Hide loading dialog
-				hideLoadingDialog();
-			});
+			}
+		}).fail(function() {
+			alert( 'Failed to load analytics data. Please try again.' );
+		}).always(function() {
+			// Hide loading dialog
+			hideLoadingDialog();
 		});
 	}
 
@@ -112,7 +173,9 @@ jQuery(document).ready(function($) {
 			$analyticsPanels.removeClass('is-active');
 			$analyticsPanels.filter(`[data-analytics-panel="${tab}"]`).addClass('is-active');
 
-			if ( tab === 'time-based-analytics' ) {
+			if ( tab === 'ai-chat' ) {
+				setTimeout(renderAIChatEngagementChart, 80);
+			} else if ( tab === 'time-based-analytics' ) {
 				setTimeout(renderTimeBasedCharts, 80);
 			} else if ( tab === 'article-views' ) {
 				setTimeout(renderArticleViewCharts, 80);
@@ -633,6 +696,269 @@ jQuery(document).ready(function($) {
 		});
 	}
 
+	/**
+	 * Render all AI Chat charts
+	 */
+	function renderAIChatEngagementChart() {
+		renderAIChatConversationsChart();
+		renderAIChatMessagesChart();
+		renderAIChatEngagementStackedChart();
+	}
+
+	/**
+	 * Render AI Chat Conversations Over Time Chart
+	 */
+	function renderAIChatConversationsChart() {
+		const $chartCanvas = $('#epkb-ai-chat-conversations-chart');
+		if ( ! $chartCanvas.length ) {
+			return;
+		}
+
+		const chartDataAttr = $chartCanvas.data('chart-data');
+		if ( ! chartDataAttr || ! Array.isArray(chartDataAttr) || chartDataAttr.length === 0 ) {
+			return;
+		}
+
+		// Destroy existing chart if it exists
+		if ( window.epkbAIChatConversationsChart && typeof window.epkbAIChatConversationsChart.destroy === 'function' ) {
+			window.epkbAIChatConversationsChart.destroy();
+		}
+
+		const labels = chartDataAttr.map(item => {
+			const date = new Date(item.date);
+			return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+		});
+		const conversationsData = chartDataAttr.map(item => item.conversations || 0);
+
+		const ctx = document.getElementById('epkb-ai-chat-conversations-chart').getContext('2d');
+
+		window.epkbAIChatConversationsChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Conversations',
+					data: conversationsData,
+					borderColor: '#2271b1',
+					backgroundColor: 'rgba(34, 113, 177, 0.1)',
+					borderWidth: 2,
+					fill: true,
+					tension: 0.3,
+					pointBackgroundColor: '#2271b1',
+					pointBorderColor: '#fff',
+					pointBorderWidth: 2,
+					pointRadius: 4,
+					pointHoverRadius: 6
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: { display: false },
+					tooltip: {
+						backgroundColor: 'rgba(0, 0, 0, 0.8)',
+						padding: 12,
+						titleColor: '#fff',
+						bodyColor: '#fff'
+					}
+				},
+				scales: {
+					x: {
+						grid: { display: false },
+						ticks: { maxRotation: 45, minRotation: 45 }
+					},
+					y: {
+						beginAtZero: true,
+						ticks: { precision: 0 },
+						grid: { color: 'rgba(0, 0, 0, 0.05)' }
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * Render AI Chat Messages Over Time Chart
+	 */
+	function renderAIChatMessagesChart() {
+		const $chartCanvas = $('#epkb-ai-chat-messages-chart');
+		if ( ! $chartCanvas.length ) {
+			return;
+		}
+
+		const chartDataAttr = $chartCanvas.data('chart-data');
+		if ( ! chartDataAttr || ! Array.isArray(chartDataAttr) || chartDataAttr.length === 0 ) {
+			return;
+		}
+
+		// Destroy existing chart if it exists
+		if ( window.epkbAIChatMessagesChart && typeof window.epkbAIChatMessagesChart.destroy === 'function' ) {
+			window.epkbAIChatMessagesChart.destroy();
+		}
+
+		const labels = chartDataAttr.map(item => {
+			const date = new Date(item.date);
+			return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+		});
+		const messagesData = chartDataAttr.map(item => item.messages || 0);
+
+		const ctx = document.getElementById('epkb-ai-chat-messages-chart').getContext('2d');
+
+		window.epkbAIChatMessagesChart = new Chart(ctx, {
+			type: 'line',
+			data: {
+				labels: labels,
+				datasets: [{
+					label: 'Messages',
+					data: messagesData,
+					borderColor: '#9b59b6',
+					backgroundColor: 'rgba(155, 89, 182, 0.1)',
+					borderWidth: 2,
+					fill: true,
+					tension: 0.3,
+					pointBackgroundColor: '#9b59b6',
+					pointBorderColor: '#fff',
+					pointBorderWidth: 2,
+					pointRadius: 4,
+					pointHoverRadius: 6
+				}]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: { display: false },
+					tooltip: {
+						backgroundColor: 'rgba(0, 0, 0, 0.8)',
+						padding: 12,
+						titleColor: '#fff',
+						bodyColor: '#fff'
+					}
+				},
+				scales: {
+					x: {
+						grid: { display: false },
+						ticks: { maxRotation: 45, minRotation: 45 }
+					},
+					y: {
+						beginAtZero: true,
+						ticks: { precision: 0 },
+						grid: { color: 'rgba(0, 0, 0, 0.05)' }
+					}
+				}
+			}
+		});
+	}
+
+	/**
+	 * Render AI Chat Engagement Stacked Chart
+	 * Shows a stacked bar chart with thumbs up, thumbs down, and handoffs over time
+	 */
+	function renderAIChatEngagementStackedChart() {
+		const $chartCanvas = $('#epkb-ai-chat-engagement-chart');
+		if ( ! $chartCanvas.length ) {
+			return;
+		}
+
+		const chartDataAttr = $chartCanvas.data('chart-data');
+		if ( ! chartDataAttr || ! Array.isArray(chartDataAttr) || chartDataAttr.length === 0 ) {
+			return;
+		}
+
+		// Destroy existing chart if it exists
+		if ( window.epkbAIChatEngagementChart && typeof window.epkbAIChatEngagementChart.destroy === 'function' ) {
+			window.epkbAIChatEngagementChart.destroy();
+		}
+
+		const labels = chartDataAttr.map(item => {
+			const date = new Date(item.date);
+			return date.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+		});
+		const thumbsUpData = chartDataAttr.map(item => item.thumbs_up || 0);
+		const thumbsDownData = chartDataAttr.map(item => item.thumbs_down || 0);
+		const handoffsData = chartDataAttr.map(item => item.handoffs || 0);
+
+		const ctx = document.getElementById('epkb-ai-chat-engagement-chart').getContext('2d');
+
+		window.epkbAIChatEngagementChart = new Chart(ctx, {
+			type: 'bar',
+			data: {
+				labels: labels,
+				datasets: [
+					{
+						label: 'Thumbs Up',
+						data: thumbsUpData,
+						backgroundColor: '#27ae60',
+						borderColor: '#1e8449',
+						borderWidth: 1,
+					},
+					{
+						label: 'Thumbs Down',
+						data: thumbsDownData,
+						backgroundColor: '#e74c3c',
+						borderColor: '#c0392b',
+						borderWidth: 1,
+					},
+					{
+						label: 'Handoffs',
+						data: handoffsData,
+						backgroundColor: '#f39c12',
+						borderColor: '#d68910',
+						borderWidth: 1,
+					}
+				]
+			},
+			options: {
+				responsive: true,
+				maintainAspectRatio: false,
+				plugins: {
+					legend: {
+						display: true,
+						position: 'top',
+						labels: {
+							usePointStyle: true,
+							padding: 15
+						}
+					},
+					tooltip: {
+						mode: 'index',
+						intersect: false,
+						backgroundColor: 'rgba(0, 0, 0, 0.8)',
+						padding: 12,
+						titleColor: '#fff',
+						bodyColor: '#fff',
+						borderColor: '#4A7BEC',
+						borderWidth: 1,
+						displayColors: true
+					}
+				},
+				scales: {
+					x: {
+						stacked: true,
+						grid: {
+							display: false
+						},
+						ticks: {
+							maxRotation: 45,
+							minRotation: 45
+						}
+					},
+					y: {
+						stacked: true,
+						beginAtZero: true,
+						ticks: {
+							precision: 0
+						},
+						grid: {
+							color: 'rgba(0, 0, 0, 0.05)'
+						}
+					}
+				}
+			}
+		});
+	}
+
 	// show/hide full Pie chart data
 	const $articleViewsToggle = $('.epkb-article-views-toggle__input');
 
@@ -744,6 +1070,9 @@ jQuery(document).ready(function($) {
 	}
 
 	// Render charts on page load if needed
+	if ( $('.epkb-analytics-tab-button[data-analytics-tab="ai-chat"]').hasClass('is-active') ) {
+		setTimeout(renderAIChatEngagementChart, 80);
+	}
 	if ( $('.epkb-analytics-tab-button[data-analytics-tab="article-views"]').hasClass('is-active') ) {
 		setTimeout(renderArticleViewCharts, 80);
 	}

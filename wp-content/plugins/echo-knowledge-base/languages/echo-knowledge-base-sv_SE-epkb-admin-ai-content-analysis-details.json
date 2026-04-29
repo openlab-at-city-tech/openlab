@@ -7,14 +7,23 @@
                 "lang": "sv_SE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Demo Article": [
-                "Demoartikel"
-            ],
             "Categories": [
                 "Kategorier"
             ],
+            "OFF": [
+                "AV"
+            ],
+            "Use code:": [
+                "Använd kod:"
+            ],
+            "Copy": [
+                "Kopiera"
+            ],
             "Article Content": [
                 "Artikelinnehåll"
+            ],
+            "Copied!": [
+                "Kopierad!"
             ],
             "Analyzing...": [
                 "Analyserar …"
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "Analys av innehållsgap"
             ],
+            "Identifies unanswered user questions": [
+                "Identifierar obesvarade användarfrågor"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "Upptäcker saknade eller underutvecklade ämnen"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "Ger handlingsbara rekommendationer för förbättringar"
+            ],
             "AI-Powered Tag Suggestions": [
                 "AI-drivna taggförslag"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "Gapanalys är endast tillgänglig med tillägget AI Features."
             ],
             "Readability": [
                 "Läsbarhet"
             ],
-            "Tag added successfully": [
-                "Etikett tillagd"
-            ],
-            "Tag removed successfully": [
-                "Etikett borttagen"
-            ],
             "Tag updated successfully": [
                 "Tagg uppdaterades framgångsrikt"
+            ],
+            "Get AI Features PRO": [
+                "Få AI-funktioner PRO"
             ],
             "Add New Tag": [
                 "Lägg till ny etikett"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "Etiketter"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "Visa artiklar"
             ],
+            "Saving tags...": [
+                "Sparar taggar..."
+            ],
             "Failed to save tag changes": [
                 "Misslyckades med att spara taggändringar"
-            ],
-            "Failed to add tag": [
-                "Misslyckades med att lägga till tagg"
-            ],
-            "Failed to remove tag": [
-                "Misslyckades med att ta bort tagg"
-            ],
-            "Failed to remove tags": [
-                "Misslyckades med att ta bort taggar"
             ],
             "Failed to update tag": [
                 "Misslyckades med att uppdatera tagg"
             ],
             "Not Analyzed": [
                 "Ej analyserad"
-            ],
-            "Demo Analysis Data": [
-                "Demonstrationsdata för analys"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "Det här är en demonstrationsartikel med provdata för analysändamål. Skapa dina egna artiklar för att se riktiga resultat av innehållsanalysen."
             ],
             "Loading analysis details...": [
                 "Laddar analysdetaljer..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "Ett fel uppstod under innehållsgap-analys."
             ],
-            "Learn More About AI Features": [
-                "Lär dig mer om AI-funktioner"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "AI identifierar saknad information och obesvarade frågor i dina artiklar. Upptäck vilka ämnen som behöver mer täckning."
             ],
             "Analyzing article for content gaps...": [
                 "Analyserar artikel för innehållsgap..."

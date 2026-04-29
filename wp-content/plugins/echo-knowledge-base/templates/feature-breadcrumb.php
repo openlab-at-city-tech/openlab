@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * The template for displaying Breadcrumb for KB Article or KB Category Archive page.
  *

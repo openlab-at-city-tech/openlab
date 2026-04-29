@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /*** GENERIC NON-KB functions  ***/
 
@@ -206,14 +206,27 @@ function epkb_add_post_state( $post_states, $post ) {
 		return $post_states;
 	}
 
-	// start with default KB
-	$kb_config = get_option( EPKB_KB_Config_DB::KB_CONFIG_PREFIX . EPKB_KB_Config_DB::DEFAULT_KB_ID );
-	if ( empty( $kb_config ) || is_wp_error( $kb_config ) || empty( $kb_config['kb_main_pages'] ) || ! is_array( $kb_config['kb_main_pages'] ) ) {
-		return $post_states;
+	static $kb_main_page_states = null;
+
+	if ( $kb_main_page_states === null ) {
+		$kb_main_page_states = array();
+
+		$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs();
+		if ( ! empty( $all_kb_configs ) && is_array( $all_kb_configs ) ) {
+			foreach ( $all_kb_configs as $kb_config ) {
+				if ( empty( $kb_config['id'] ) || empty( $kb_config['kb_main_pages'] ) || ! is_array( $kb_config['kb_main_pages'] ) ) {
+					continue;
+				}
+
+				foreach ( $kb_config['kb_main_pages'] as $kb_page_id => $title ) {
+					$kb_main_page_states[ (int) $kb_page_id ] = (int) $kb_config['id'];
+				}
+			}
+		}
 	}
 
-	if ( in_array( $post->ID, array_keys( $kb_config['kb_main_pages'] ) ) ) {
-		$post_states[] = esc_html__( 'Knowledge Base', 'echo-knowledge-base' ) . ' #1';
+	if ( isset( $kb_main_page_states[ $post->ID ] ) ) {
+		$post_states[] = esc_html__( 'Knowledge Base', 'echo-knowledge-base' ) . ' #' . $kb_main_page_states[ $post->ID ];
 	}
 
 	return $post_states;

@@ -7,11 +7,11 @@
                 "lang": "nb_NO",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Loading...": [
-                "Laster..."
-            ],
             "AI Features Required": [
                 "AI-funksjoner kreves"
+            ],
+            "Loading...": [
+                "Laster..."
             ],
             "Go to AI Settings": [
                 "Gå til AI-innstillinger"

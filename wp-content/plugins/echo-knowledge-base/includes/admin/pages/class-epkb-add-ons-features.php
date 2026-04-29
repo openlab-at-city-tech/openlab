@@ -90,8 +90,7 @@ class EPKB_Add_Ons_Features {
 		$features['2023.06.01'] = array(
 			'plugin'            => esc_html__( 'KB Core', 'echo-knowledge-base'),
 			'title'             => esc_html__( 'Article Views Counter', 'echo-knowledge-base'),
-			'description'       => '<p>' . esc_html__( 'Track the number of times articles are viewed and display a view counter on article pages and in analytics. '.
-			                                           ' Show visitors the most popular articles using widgets and shortcodes (Widgets add-on required). Analyze the least popular articles for improvement or replacement..', 'echo-knowledge-base') . '</p>',
+			'description'       => '<p>' . esc_html__( 'Track the number of times articles are viewed and display a view counter on article pages and in analytics. Show visitors the most popular articles using widgets and shortcodes (Widgets add-on required). Analyze the least popular articles for improvement or replacement.', 'echo-knowledge-base' ) . '</p>',
 			'image'             => 'https://www.echoknowledgebase.com/wp-content/uploads/2023/06/featured-screenshots-article-views.jpg',
 			'learn_more_url'    => 'https://www.echoknowledgebase.com/documentation/article-views-counter/',
 			'plugin-type'       => 'core',
@@ -146,8 +145,7 @@ class EPKB_Add_Ons_Features {
 		$features['2022.08.01'] = array(
 			'plugin'            => esc_html__( 'KB Core', 'echo-knowledge-base'),
 			'title'             => esc_html__( 'Basic Settings UI', 'echo-knowledge-base'),
-			'description'       => '<p>' .esc_html__( 'We are introducing basic settings to allow users to quickly configure a subset of KB features and colors, accessible on the left sidebar on this page. '.
-			                                          'The full Visual Editor is still available under the tab called "Full Editor."', 'echo-knowledge-base' ) . '</p>',
+			'description'       => '<p>' . esc_html__( 'We are introducing basic settings to allow users to quickly configure a subset of KB features and colors, accessible on the left sidebar on this page. The full Visual Editor is still available under the tab called "Full Editor."', 'echo-knowledge-base' ) . '</p>',
 			'image'             => 'https://www.echoknowledgebase.com/wp-content/uploads/2022/08/kb-new-settings-ui.jpg',
 			//'learn_more_url'    => 'https://wordpress.org/plugins/help-dialog/',
 			'plugin-type'       => 'core',
@@ -543,7 +541,7 @@ class EPKB_Add_Ons_Features {
 		$monthName1 = ucfirst($wp_locale->get_month_abbrev($wp_locale->get_month($month)));
 		$monthName2 = ucfirst($wp_locale->get_month_abbrev($wp_locale->get_month($month + 2)));
 
-		return $monthName1 . ' - ' . $monthName2 . ' ' . date('Y');
+		return $monthName1 . ' - ' . $monthName2 . ' ' . wp_date('Y');
 	}
 
 	/**
@@ -646,8 +644,8 @@ class EPKB_Add_Ons_Features {
 
 		$features['2020.12.15'] = array(
 			'plugin'            => esc_html__( 'Widget', 'echo-knowledge-base'),
-			'title'             => esc_html__( 'Image Guide', 'creative-addons-for-elementor'),
-			'description'       => '<p>' . esc_html__( "Add hotspots to screenshots and images, and connect each hotspot to a note.", 'creative-addons-for-elementor') . '</p>',
+			'title'             => esc_html__( 'Image Guide', 'echo-knowledge-base'),
+			'description'       => '<p>' . esc_html__( "Add hotspots to screenshots and images, and connect each hotspot to a note.", 'echo-knowledge-base') . '</p>',
 			'video'             => 'https://www.youtube.com/embed/SZEP_zxBvy4',
 			'learn_more_url'    => 'https://www.creative-addons.com/elementor-widgets/image-guide/',
 			'plugin-type'       => 'elementor',
@@ -656,8 +654,8 @@ class EPKB_Add_Ons_Features {
 
 		$features['2020.12.16'] = array(
 			'plugin'            => esc_html__( 'Widget', 'echo-knowledge-base'),
-			'title'             => esc_html__( 'Text and Image', 'creative-addons-for-elementor'),
-			'description'       => '<p>' . esc_html__( 'Easy way to add text and image combo with one widget.', 'creative-addons-for-elementor') . '</p>',
+			'title'             => esc_html__( 'Text and Image', 'echo-knowledge-base'),
+			'description'       => '<p>' . esc_html__( 'Easy way to add text and image combo with one widget.', 'echo-knowledge-base') . '</p>',
 			'video'             => 'https://www.youtube.com/embed/0Lpi-M2i32U',
 			'learn_more_url'    => 'https://www.creative-addons.com/elementor-widgets/text-image/',
 			'plugin-type'       => 'elementor',

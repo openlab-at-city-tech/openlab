@@ -7,8 +7,8 @@
                 "lang": "it_IT",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Error": [
-                "Errore"
+            "Actions": [
+                "Azioni"
             ],
             "Analyze Content": [
                 "Analizza contenuti"
@@ -16,20 +16,20 @@
             "Improve Content": [
                 "Migliora il contenuto"
             ],
+            "Done": [
+                "Fatto"
+            ],
+            "Error": [
+                "Errore"
+            ],
             "Improve": [
                 "Migliora"
             ],
-            "Demo Analytics": [
-                "Analisi demo"
-            ],
-            "Actions": [
-                "Azioni"
+            "Remove": [
+                "Rimuovi"
             ],
             "Analyzing": [
                 "Analizzando"
-            ],
-            "No articles found": [
-                "Nessun articolo trovato"
             ],
             "To Analyze": [
                 "Da analizzare"
@@ -37,14 +37,11 @@
             "To Improve": [
                 "Da migliorare"
             ],
+            "No articles found": [
+                "Nessun articolo trovato"
+            ],
             "Please select exactly one article to improve": [
                 "Seleziona esattamente un articolo da migliorare"
-            ],
-            "Demo Data Displayed": [
-                "Dati demo visualizzati"
-            ],
-            "This is demo analytics data shown for demonstration purposes. Once you create new articles, you can analyze them to see real content analysis results.": [
-                "Questi sono dati di analisi dimostrativi mostrati a scopo dimostrativo. Una volta creati nuovi articoli, potrai analizzarli per vedere i reali risultati dell'analisi del contenuto."
             ],
             "Select All That Need Analysis": [
                 "Seleziona tutto ciò che necessita di analisi"
@@ -82,9 +79,6 @@
             "Score below 80%": [
                 "Punteggio inferiore all'80%"
             ],
-            "Done": [
-                "Fatto"
-            ],
             "Completed": [
                 "Completato"
             ],
@@ -111,9 +105,6 @@
             ],
             "Ignore": [
                 "Ignora"
-            ],
-            "Remove": [
-                "Rimuovi"
             ],
             "Loading articles...": [
                 "Caricamento degli articoli..."

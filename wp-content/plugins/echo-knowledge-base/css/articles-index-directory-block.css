@@ -1,0 +1,58 @@
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__header-container .epkb-aid__header__title {
+  font-size: 35px;
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container {
+  display: flex;
+  flex-direction: column;
+  padding: 0 0 0 0;
+  margin: 0 0 10px 0;
+  width: 33%;
+}
+@media only screen and (max-width: 900px) {
+  .eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container {
+    width: 50%;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container {
+    width: 100%;
+  }
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container .epkb-aid-section__header .epkb-aid-section__header__title {
+  font-size: 28px;
+  font-weight: 500;
+  padding: 0 0 0 0;
+  margin: 0 0 15px 0;
+  line-height: 1.2;
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container .epkb-aid-section__body .epkb-aid-section__body__list-container {
+  list-style-type: none;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container .epkb-aid-section__body .epkb-aid-section__body__list-container .epkb-aid-list__item {
+  width: 100%;
+  font-size: 16px;
+  padding: 0 0 0 0;
+  margin: 0 0 0 0;
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container .epkb-aid-section__body .epkb-aid-section__body__list-container .epkb-aid-list__item a {
+  display: flex;
+}
+.eckb-kb-block-articles-index-directory #epkb-article-index-dir-container .epkb-aid__body-container .epkb-aid__section-container .epkb-aid-section__body .epkb-aid-section__body__list-container .epkb-aid-list__item a .epkb-aid-list__item__icon {
+  margin: 0 5px 0 0;
+}

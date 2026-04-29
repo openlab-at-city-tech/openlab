@@ -13,14 +13,44 @@
             "Cancel": [
                 "Annulla"
             ],
+            "Next": [
+                "Avanti"
+            ],
+            "AI Features": [
+                "Funzionalità IA"
+            ],
+            "OFF": [
+                "DISATTIVATO"
+            ],
+            "Use code:": [
+                "Usa codice:"
+            ],
+            "Copy": [
+                "Copia"
+            ],
+            "Documentation": [
+                "Documentazione"
+            ],
+            "Copied!": [
+                "Copiato!"
+            ],
+            "Got it!": [
+                "Capito!"
+            ],
+            "Show Me": [
+                "Mostra"
+            ],
             "Loading...": [
                 "Caricamento..."
             ],
-            "General Settings": [
-                "Impostazioni Generali"
+            "Go to General Settings": [
+                "Vai alle Impostazioni Generali"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "La tua sessione è scaduta. Aggiorna la pagina."
+            "Go to Settings": [
+                "Vai alle Impostazioni"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "La tua sessione è scaduta. Per favore, aggiorna la pagina per accedere nuovamente."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "Troppi tentativi. Attendere un momento e riprovare."
@@ -37,8 +67,8 @@
             "Confirm": [
                 "Conferma"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "Per utilizzare le funzionalità IA, configura la tua chiave API e accetta l'accordo sulla privacy dei dati in"
+            "Setup Steps": [
+                "Passaggi di configurazione"
             ],
             "Session Expired": [
                 "Sessione scaduta"
@@ -48,21 +78,6 @@
             ],
             "No results found": [
                 "Nessun risultato trovato"
-            ],
-            "Tutorial": [
-                "Tutorial"
-            ],
-            "Learn how to use this feature": [
-                "Scopri come utilizzare questa funzione"
-            ],
-            "Tutorial Screenshot": [
-                "Screenshot del tutorial"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Questo è un tutorial che spiega come utilizzare questa funzione."
-            ],
-            "Close Tutorial": [
-                "Chiudi il tutorial"
             ]
         }
     }

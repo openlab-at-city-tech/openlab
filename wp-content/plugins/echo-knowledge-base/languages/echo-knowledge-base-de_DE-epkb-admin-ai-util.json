@@ -13,14 +13,44 @@
             "Cancel": [
                 "Abbrechen"
             ],
+            "Next": [
+                "Weiter"
+            ],
+            "AI Features": [
+                "KI-Funktionen"
+            ],
+            "OFF": [
+                "AUS"
+            ],
+            "Use code:": [
+                "Code verwenden:"
+            ],
+            "Copy": [
+                "Kopieren"
+            ],
+            "Documentation": [
+                "Dokumentation"
+            ],
+            "Copied!": [
+                "Kopiert!"
+            ],
+            "Got it!": [
+                "Verstanden!"
+            ],
+            "Show Me": [
+                "Zeigen Sie mir"
+            ],
             "Loading...": [
                 "Wird geladen..."
             ],
-            "General Settings": [
-                "Allgemeine Einstellungen"
+            "Go to General Settings": [
+                "Gehen Sie zu den allgemeinen Einstellungen"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Ihre Sitzung ist abgelaufen. Bitte aktualisieren Sie die Seite."
+            "Go to Settings": [
+                "Zu den Einstellungen"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Ihre Sitzung ist abgelaufen. Bitte aktualisieren Sie die Seite, um sich erneut anzumelden."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "Zu viele Anfragen. Bitte warten Sie einen Moment und versuchen Sie es erneut."
@@ -37,8 +67,8 @@
             "Confirm": [
                 "Bestätigen"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "Um KI-Funktionen zu verwenden, konfigurieren Sie bitte Ihren API-Schlüssel und akzeptieren Sie die Datenschutzvereinbarung in"
+            "Setup Steps": [
+                "Einrichtungsschritte"
             ],
             "Session Expired": [
                 "Sitzung abgelaufen"
@@ -48,21 +78,6 @@
             ],
             "No results found": [
                 "Keine Ergebnisse gefunden"
-            ],
-            "Tutorial": [
-                "Tutorial"
-            ],
-            "Learn how to use this feature": [
-                "Erfahren Sie, wie Sie diese Funktion verwenden"
-            ],
-            "Tutorial Screenshot": [
-                "Tutorial-Screenshot"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "Dies ist ein Tutorial, das erklärt, wie Sie diese Funktion verwenden."
-            ],
-            "Close Tutorial": [
-                "Tutorial schließen"
             ]
         }
     }

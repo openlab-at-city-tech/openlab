@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Add-on main class.
@@ -102,6 +102,10 @@ class EPKB_Convert_Ctrl {
 		if ( empty( $from_post_type ) || ( $from_post_type != 'article' && ! post_type_exists( $from_post_type ) ) ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 343, esc_html__( 'Refresh your page', 'echo-knowledge-base' ) ), '', 343 );
 		}
+		$source_post_type = $from_post_type == 'article' ? EPKB_KB_Handler::get_post_type( $kb_id ) : $from_post_type;
+		if ( empty( $source_post_type ) || ! post_type_exists( $source_post_type ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 343, esc_html__( 'Refresh your page', 'echo-knowledge-base' ) ), '', 343 );
+		}
 
 		$step = (int)EPKB_Utilities::post( 'epkb_convert_step' );
 		if ( $step != 4 ) {
@@ -114,6 +118,7 @@ class EPKB_Convert_Ctrl {
 		if ( empty( $selected_rows ) || ! is_array( $selected_rows ) ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 344, esc_html__( 'Get Selected Rows', 'echo-knowledge-base' ), esc_html__( 'No articles were selected for import.', 'echo-knowledge-base' ) ), '', 344 );
 		}
+		$selected_term_filters = $this->get_selected_term_filters( $source_post_type );
 
 		// import options
 		$convert_terms_mode = EPKB_Utilities::get( 'convert_terms_mode' );
@@ -153,11 +158,19 @@ class EPKB_Convert_Ctrl {
 				$errors[ $post_id ] = $from_post_type == 'post' ? esc_html__( 'Post not found', 'echo-knowledge-base' ) : esc_html__( 'Article not found', 'echo-knowledge-base' );
 				continue;
 			}
+			if ( get_post_type( $post_id ) != $source_post_type ) {
+				$errors[ $post_id ] = esc_html__( 'Selected content does not match the source type.', 'echo-knowledge-base' );
+				continue;
+			}
 
 			// Get article title for errors texts
 			$post_title = get_the_title( $post_id );
 			if ( empty( $post_title ) ) {
 				$post_title = $post_id;
+			}
+			if ( ! empty( $selected_term_filters ) && ! $this->post_matches_selected_filters( $post_id, $selected_term_filters ) ) {
+				$errors[ $post_title ] = esc_html__( 'Selected content does not match the active filters.', 'echo-knowledge-base' );
+				continue;
 			}
 
 			// taxonomy_name => terms
@@ -296,5 +309,40 @@ class EPKB_Convert_Ctrl {
 		}
 
 		wp_die( wp_json_encode( array( 'success' => $output_message, 'inserted' => $processed_articles_count, 'process_errors' => $errors_text ) ) );
+	}
+
+	private function get_selected_term_filters( $source_post_type ) {
+
+		$selected_term_filters = EPKB_Utilities::post( 'selected_term_filters', '' );
+		$selected_term_filters = is_string( $selected_term_filters ) ? json_decode( stripslashes( $selected_term_filters ), true ) : $selected_term_filters;
+		if ( ! is_array( $selected_term_filters ) ) {
+			return [];
+		}
+
+		$allowed_taxonomies = get_object_taxonomies( $source_post_type );
+		$selected_term_filters = array_intersect_key( $selected_term_filters, array_flip( $allowed_taxonomies ) );
+
+		foreach ( $selected_term_filters as $taxonomy_name => $term_id ) {
+			$term_id = EPKB_Utilities::sanitize_get_id( $term_id );
+			if ( is_wp_error( $term_id ) || empty( $term_id ) ) {
+				unset( $selected_term_filters[ $taxonomy_name ] );
+				continue;
+			}
+
+			$selected_term_filters[ $taxonomy_name ] = (int) $term_id;
+		}
+
+		return $selected_term_filters;
+	}
+
+	private function post_matches_selected_filters( $post_id, $selected_term_filters ) {
+
+		foreach ( $selected_term_filters as $taxonomy_name => $term_id ) {
+			if ( ! has_term( $term_id, $taxonomy_name, $post_id ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }

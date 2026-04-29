@@ -113,8 +113,6 @@
   list-style-type: none;
   list-style-image: none;
   float: none;
-  border: 0;
-  border: none;
   text-transform: none;
   letter-spacing: 0;
   height: auto;
@@ -136,8 +134,6 @@
   list-style-type: none;
   list-style-image: none;
   float: none;
-  border: 0;
-  border: none;
   text-transform: none;
   letter-spacing: 0;
   height: auto;
@@ -159,8 +155,6 @@
   list-style-type: none;
   list-style-image: none;
   float: none;
-  border: 0;
-  border: none;
   text-transform: none;
   letter-spacing: 0;
   height: auto;
@@ -182,8 +176,6 @@
   list-style-type: none;
   list-style-image: none;
   float: none;
-  border: 0;
-  border: none;
   text-transform: none;
   letter-spacing: 0;
   height: auto;
@@ -205,8 +197,6 @@
   list-style-type: none;
   list-style-image: none;
   float: none;
-  border: 0;
-  border: none;
   text-transform: none;
   letter-spacing: 0;
   height: auto;
@@ -664,14 +654,6 @@ body.wp-theme-hueman[class*=-epkb_post_type] .main::before, body.wp-theme-hueman
   display: inline-block;
   vertical-align: middle;
   margin-left: 6px;
-}
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 }
 #eckb-article-page-container-v2 #eckb-article-body #eckb-article-content #eckb-article-content-header-v2 {
   width: 100%;

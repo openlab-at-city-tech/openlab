@@ -13,14 +13,44 @@
             "Cancel": [
                 "キャンセル"
             ],
+            "Next": [
+                "次"
+            ],
+            "AI Features": [
+                "AI機能"
+            ],
+            "OFF": [
+                "オフ"
+            ],
+            "Use code:": [
+                "コードを使用:"
+            ],
+            "Copy": [
+                "コピー"
+            ],
+            "Documentation": [
+                "ドキュメント"
+            ],
+            "Copied!": [
+                "コピーしました"
+            ],
+            "Got it!": [
+                "了解しました！"
+            ],
+            "Show Me": [
+                "表示する"
+            ],
             "Loading...": [
                 "読み込み中…"
             ],
-            "General Settings": [
-                "一般設定"
+            "Go to General Settings": [
+                "一般設定へ移動"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "セッションの有効期限が切れました。ページを更新してください。."
+            "Go to Settings": [
+                "設定へ移動"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "セッションの有効期限が切れました。再度ログインするには、ページを更新してください。."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "リクエストが多すぎます。しばらく待ってからもう一度お試しください。."
@@ -37,8 +67,11 @@
             "Confirm": [
                 "確認"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "AI機能を使用するには、APIキーを設定し、データプライバシー規約に同意してください。"
+            "Setup Steps": [
+                "セットアップ手順"
+            ],
+            "To use AI features, please configure your API key and accept the data privacy agreement in General Settings.": [
+                "AI機能を使用するには、一般設定でAPIキーを設定し、データプライバシー合意に同意してください。."
             ],
             "Session Expired": [
                 "セッションが期限切れです。"
@@ -48,21 +81,6 @@
             ],
             "No results found": [
                 "結果が見つかりませんでした。"
-            ],
-            "Tutorial": [
-                "チュートリアル"
-            ],
-            "Learn how to use this feature": [
-                "この機能の使い方を学ぶ"
-            ],
-            "Tutorial Screenshot": [
-                "チュートリアルのスクリーンショット"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "これはこの機能の使い方を説明するチュートリアルです。."
-            ],
-            "Close Tutorial": [
-                "チュートリアルを閉じる"
             ]
         }
     }

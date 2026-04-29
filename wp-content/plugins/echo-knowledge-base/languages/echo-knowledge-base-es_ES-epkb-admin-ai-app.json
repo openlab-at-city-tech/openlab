@@ -7,11 +7,14 @@
                 "lang": "es_ES",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Go to General Settings": [
-                "Ir a la Configuración General"
-            ],
             "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
                 "Para usar funciones de IA, configure su clave API y acepte el acuerdo de privacidad de datos en Configuración General, luego habilite IA Search o IA Chat."
+            ],
+            "AI Features": [
+                "Funciones de IA"
+            ],
+            "Go to General Settings": [
+                "Ir a la Configuración General"
             ],
             "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
                 "Para usar IA Chat o IA Search, habilite IA Chat o IA Search en sus pestañas respectivas."
@@ -19,17 +22,23 @@
             "Data Collection": [
                 "Recopilación de datos"
             ],
-            "OpenAI API Key Required": [
-                "Se requiere la clave API de OpenAI"
+            "API Key Required": [
+                "Clave API requerida"
             ],
-            "To use AI features, you need to configure your OpenAI API key.": [
-                "Para usar las funciones de IA, necesita configurar su clave API de OpenAI."
+            "To use AI features, you need to configure your API key.": [
+                "Para usar las funciones de IA, debe configurar su clave API."
             ],
             "Configure API Key": [
                 "Configurar clave API"
             ],
             "Failed to load tab data": [
                 "Error al cargar datos de la pestaña"
+            ],
+            "Failed to load dashboard data. Please reload the page.": [
+                "No se pudieron cargar los datos del Escritorio. Por favor, recargue la página."
+            ],
+            "Loading Dashboard...": [
+                "Cargando Escritorio..."
             ],
             "Unknown tab": [
                 "Pestaña desconocida"

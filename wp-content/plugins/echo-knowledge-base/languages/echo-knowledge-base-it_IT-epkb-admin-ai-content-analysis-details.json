@@ -7,14 +7,23 @@
                 "lang": "it_IT",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Demo Article": [
-                "Articolo di esempio"
-            ],
             "Categories": [
                 "Categorie"
             ],
+            "OFF": [
+                "DISATTIVATO"
+            ],
+            "Use code:": [
+                "Usa codice:"
+            ],
+            "Copy": [
+                "Copia"
+            ],
             "Article Content": [
                 "Contenuto dell'articolo"
+            ],
+            "Copied!": [
+                "Copiato!"
             ],
             "Analyzing...": [
                 "Analizzando..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "Analisi delle lacune dei contenuti"
             ],
+            "Identifies unanswered user questions": [
+                "Identifica le domande degli utenti senza risposta"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "Individua argomenti mancanti o poco sviluppati"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "Fornisce raccomandazioni pratiche per migliorare"
+            ],
             "AI-Powered Tag Suggestions": [
                 "Suggerimenti di tag basati su IA"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "L'analisi delle lacune è disponibile solo con l'estensione Funzionalità IA."
             ],
             "Readability": [
                 "Leggibilità"
             ],
-            "Tag added successfully": [
-                "Tag aggiunto con successo"
-            ],
-            "Tag removed successfully": [
-                "Tag rimosso con successo"
-            ],
             "Tag updated successfully": [
                 "Tag aggiornato con successo"
+            ],
+            "Get AI Features PRO": [
+                "Ottieni le funzionalità AI PRO"
             ],
             "Add New Tag": [
                 "Aggiungi nuovo tag"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "Tag"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "Visualizza articolo"
             ],
+            "Saving tags...": [
+                "Salvataggio dei tag..."
+            ],
             "Failed to save tag changes": [
                 "Impossibile salvare le modifiche ai tag"
-            ],
-            "Failed to add tag": [
-                "Impossibile aggiungere tag"
-            ],
-            "Failed to remove tag": [
-                "Impossibile rimuovere tag"
-            ],
-            "Failed to remove tags": [
-                "Impossibile rimuovere i tag"
             ],
             "Failed to update tag": [
                 "Impossibile aggiornare il tag"
             ],
             "Not Analyzed": [
                 "Non analizzato"
-            ],
-            "Demo Analysis Data": [
-                "Dati di analisi di esempio"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "Questo è un articolo di esempio con dati di analisi di esempio per scopi dimostrativi. Crea i tuoi articoli per vedere i reali risultati dell'analisi dei contenuti."
             ],
             "Loading analysis details...": [
                 "Caricamento dei dettagli dell'analisi..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "Si è verificato un errore durante l'analisi delle lacune di contenuto."
             ],
-            "Learn More About AI Features": [
-                "Scopri di più sulle funzionalità dell'IA"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "L'IA identifica informazioni mancanti e domande senza risposta nei tuoi articoli. Scopri quali argomenti necessitano di una copertura maggiore."
             ],
             "Analyzing article for content gaps...": [
                 "Analisi dell'articolo per lacune di contenuto in corso..."

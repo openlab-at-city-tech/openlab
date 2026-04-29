@@ -27,27 +27,40 @@ class EPKB_AI_Tags_Usage {
 			return new WP_Error( 'invalid_article_id', __( 'Invalid article ID provided', 'echo-knowledge-base' ) );
 		}
 
-		// Check if this is a demo article - return demo data if it is
 		$article_id = $post->ID;
-		if ( EPKB_KB_Demo_Data::is_demo_article( $article_id ) ) {
-			return EPKB_KB_Demo_Data::get_demo_tags_usage_data();
-		}
+
+		// Get article content for relevance checking
+		$content = $post->post_content . ' ' . $post->post_title;
 
 		// Check if analysis exists in database (skip if force = true)
 		if ( ! $force ) {
-			$db = new EPKB_AI_Content_Analysis_DB( false );
+			$db = new EPKB_AI_Content_Analysis_DB();
 			$existing_analysis = $db->get_article_analysis( $article_id );
 			if ( $existing_analysis && ! empty( $existing_analysis->tags_data ) ) {
 				// Return stored data
 				$stored_data = json_decode( $existing_analysis->tags_data, true );
 				if ( is_array( $stored_data ) ) {
+					if ( isset( $stored_data['tag_analysis']['ai_suggestions']['suggestions'] ) ) {
+						$filtered_suggestions = self::filter_ai_suggestions_by_relevance(
+							$stored_data['tag_analysis']['ai_suggestions']['suggestions'],
+							$content
+						);
+						$stored_data['tag_analysis']['ai_suggestions']['suggestions'] = $filtered_suggestions;
+						$stored_data['suggested_tags'] = $filtered_suggestions;
+
+						if ( isset( $stored_data['tag_count'], $stored_data['tags'], $stored_data['kb_category_count'] ) ) {
+							$stored_data['recommended_tags'] = self::generate_recommendations(
+								$stored_data['tag_count'],
+								$stored_data['tags'],
+								$stored_data['tag_analysis'],
+								$stored_data['kb_category_count']
+							);
+						}
+					}
 					return $stored_data;
 				}
 			}
 		}
-
-		// Get article content for relevance checking
-		$content = $post->post_content . ' ' . $post->post_title;
 
 		$kb_id = EPKB_KB_Handler::get_kb_id_from_post_type( $post->post_type );
 		if ( empty( $kb_id ) ) {
@@ -63,7 +76,7 @@ class EPKB_AI_Tags_Usage {
 		$tags = wp_get_post_terms( $article_id, $kb_tag_taxonomy );
 		if ( is_wp_error( $tags ) ) {
 			// Log the error but continue with empty tags
-			EPKB_Logging::add_log( 'Get post terms failed for KB tag taxonomy', $kb_tag_taxonomy, $tags );
+			EPKB_AI_Log::add_log( 'Get post terms failed for KB tag taxonomy', $kb_tag_taxonomy );
 			$tags = array();
 		}
 		$tag_names = array_map( function($tag) { return $tag->name; }, $tags );
@@ -78,12 +91,12 @@ class EPKB_AI_Tags_Usage {
 		$kb_categories = wp_get_post_terms( $article_id, $kb_category_taxonomy );
 		if ( is_wp_error( $kb_categories ) ) {
 			// Log the error but continue with empty categories
-			EPKB_Logging::add_log( 'Get post terms failed for KB category taxonomy', $kb_category_taxonomy, $kb_categories );
+			EPKB_AI_Log::add_log( 'Get post terms failed for KB category taxonomy', $kb_category_taxonomy );
 			$kb_categories = array();
 		}
 		$kb_category_count = count( $kb_categories );
 
-		$analyze_ai_result = self::analyze_ai_suggestions( $post, $tag_names );
+		$analyze_ai_result = self::analyze_ai_suggestions( $post, $tag_names, $content );
 		if ( is_wp_error( $analyze_ai_result ) ) {
 			return $analyze_ai_result;
 		}
@@ -124,7 +137,7 @@ class EPKB_AI_Tags_Usage {
 		}
 
 		// Save to database
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		$db->update_tags_usage( $article_id, $score, $results );
 
 		return $results;
@@ -138,7 +151,7 @@ class EPKB_AI_Tags_Usage {
 	 */
 	public static function clear_cache( $article_id ) {
 		// Clear from database table
-		$db = new EPKB_AI_Content_Analysis_DB( false );
+		$db = new EPKB_AI_Content_Analysis_DB();
 		return $db->delete_article_analysis( $article_id );
 	}
 
@@ -154,12 +167,12 @@ class EPKB_AI_Tags_Usage {
 
 		if ( $count < self::MIN_TAGS ) {
 			$score = max( 0, 50 - ( self::MIN_TAGS - $count ) * 15 );
-			$issues[] = sprintf( __( 'Too few tags (%d). Recommended: %d-%d tags', 'echo-knowledge-base' ), $count, self::MIN_TAGS, self::MAX_TAGS
-			);
+			// translators: %1$d is the current tag count, %2$d and %3$d are the recommended range
+			$issues[] = sprintf( __( 'Too few tags (%1$d). Recommended: %2$d-%3$d tags', 'echo-knowledge-base' ), $count, self::MIN_TAGS, self::MAX_TAGS );
 		} elseif ( $count > self::MAX_TAGS ) {
 			$score = max( 0, 100 - ( $count - self::MAX_TAGS ) * 10 );
-			$issues[] = sprintf( __( 'Too many tags (%d). Recommended: %d-%d tags', 'echo-knowledge-base' ), $count, self::MIN_TAGS, self::MAX_TAGS
-			);
+			// translators: %1$d is the current tag count, %2$d and %3$d are the recommended range
+			$issues[] = sprintf( __( 'Too many tags (%1$d). Recommended: %2$d-%3$d tags', 'echo-knowledge-base' ), $count, self::MIN_TAGS, self::MAX_TAGS );
 		}
 
 		return array(
@@ -187,28 +200,33 @@ class EPKB_AI_Tags_Usage {
 			// Check length
 			$length = strlen( $tag );
 			if ( $length < self::MIN_TAG_LENGTH ) {
-				$issues[] = sprintf( __( 'Tag too short: "%s" (%d chars)', 'echo-knowledge-base' ), $tag, $length );
+				// translators: %1$s is the tag name, %2$d is the character count
+				$issues[] = sprintf( __( 'Tag too short: "%1$s" (%2$d chars)', 'echo-knowledge-base' ), $tag, $length );
 				$deductions += 10;
 			} elseif ( $length > self::MAX_TAG_LENGTH ) {
-				$issues[] = sprintf( __( 'Tag too long: "%s" (%d chars)', 'echo-knowledge-base' ), $tag, $length );
+				// translators: %1$s is the tag name, %2$d is the character count
+				$issues[] = sprintf( __( 'Tag too long: "%1$s" (%2$d chars)', 'echo-knowledge-base' ), $tag, $length );
 				$deductions += 10;
 			}
 
 			// Check word count - tags should be concise (max 4 words)
 			$word_count = $tag === '' ? 0 : count( preg_split( '/\s+/u', trim( $tag ) ) );
 			if ( $word_count > 4 ) {
-				$issues[] = sprintf( __( 'Tag has too many words: "%s" (%d words, max 4)', 'echo-knowledge-base' ), $tag, $word_count );
+				// translators: %1$s is the tag name, %2$d is the word count
+				$issues[] = sprintf( __( 'Tag has too many words: "%1$s" (%2$d words, max 4)', 'echo-knowledge-base' ), $tag, $word_count );
 				$deductions += 15;
 			}
 
 			// Check for special characters (allow Unicode letters, numbers, spaces, hyphens)
 			if ( ! preg_match( '/^[\p{L}\p{N}\s\-]+$/u', $tag ) ) {
+				// translators: %s is the tag name
 				$issues[] = sprintf( __( 'Special characters in tag: %s', 'echo-knowledge-base' ), $tag );
 				$deductions += 15;
 			}
 
 			// Check for all caps (allow short acronyms 2-4 chars)
 			if ( preg_match( '/^\p{Lu}{5,}$/u', $tag ) ) {
+				// translators: %s is the tag name
 				$issues[] = sprintf( __( 'All caps tag: "%s"', 'echo-knowledge-base' ), $tag );
 				$deductions += 5;
 			}
@@ -269,6 +287,7 @@ class EPKB_AI_Tags_Usage {
 
 		if ( ! empty( $duplicates ) ) {
 			$score = max( 0, 100 - count( $duplicates ) * 20 );
+			// translators: %s is the list of duplicate tag names
 			$issues[] = sprintf( __( 'Similar or duplicate tags found: %s', 'echo-knowledge-base' ), implode( ', ', array_unique( $duplicates ) ) );
 		}
 
@@ -298,6 +317,7 @@ class EPKB_AI_Tags_Usage {
 			$issues[] = __( 'No KB categories assigned', 'echo-knowledge-base' );
 		} elseif ( $kb_category_count > 3 ) {
 			$score -= 20;
+			// translators: %d is the number of KB categories
 			$issues[] = sprintf( __( 'Too many KB categories (%d). Consider 1-3 categories', 'echo-knowledge-base' ), $kb_category_count );
 		}
 
@@ -328,6 +348,7 @@ class EPKB_AI_Tags_Usage {
 		$weak_matches = 0;
 		$irrelevant_tags = array();
 		$weak_tags = array();
+		$weak_tag_names = array();
 		$issues = array();
 
 		foreach ( $tags as $tag ) {
@@ -368,6 +389,7 @@ class EPKB_AI_Tags_Usage {
 			} elseif ( $occurrence_count < 2 || ! $found_as_word ) {
 				$weak_matches++;
 				$weak_tags[] = sprintf( '%s (%dx)', $tag, $occurrence_count );
+				$weak_tag_names[] = $tag;
 			} else {
 				$strong_matches++;
 			}
@@ -379,11 +401,13 @@ class EPKB_AI_Tags_Usage {
 
 		// Generate issues
 		if ( ! empty( $irrelevant_tags ) ) {
+			// translators: %s is the list of tag names
 			$issues[] = sprintf( __( 'Tags not found in content: %s', 'echo-knowledge-base' ), implode( ', ', $irrelevant_tags ) );
 		}
 
 		if ( ! empty( $weak_tags ) ) {
-			$issues[] = sprintf( __( 'Tags with weak relevance (low occurrences or partial matches): %s', 'echo-knowledge-base' ), implode( ', ', $weak_tags )	 );
+			// translators: %s is the list of tag names
+			$issues[] = sprintf( __( 'Tags with weak relevance (low occurrences or partial matches): %s', 'echo-knowledge-base' ), implode( ', ', $weak_tags ) );
 		}
 
 		return array(
@@ -391,6 +415,7 @@ class EPKB_AI_Tags_Usage {
 			'issues' => $issues,
 			'irrelevant_tags' => $irrelevant_tags,
 			'weak_tags' => $weak_tags,
+			'weak_tag_names' => $weak_tag_names,
 			'strong_matches' => $strong_matches,
 			'weak_matches' => $weak_matches
 		);
@@ -401,9 +426,10 @@ class EPKB_AI_Tags_Usage {
 	 *
 	 * @param WP_Post $post
 	 * @param array $tag_names
+	 * @param string $content
 	 * @return array
 	 */
-	private static function analyze_ai_suggestions( $post, $tag_names ) {
+	private static function analyze_ai_suggestions( $post, $tag_names, $content ) {
 		$ai_suggestions = array();
 		$ai_error = null;
 
@@ -421,6 +447,8 @@ class EPKB_AI_Tags_Usage {
 				$ai_suggestions = array();
 			}
 		}
+
+		$ai_suggestions = self::filter_ai_suggestions_by_relevance( $ai_suggestions, $content );
 
 		return array(
 			'score' => 100,  // Neutral score - doesn't affect overall score
@@ -483,6 +511,7 @@ class EPKB_AI_Tags_Usage {
 			$recommendations[] = array(
 				'priority' => 'high',
 				'type' => 'tag_count',
+				// translators: %d is the number of tags to add
 				'message' => sprintf(
 					__( 'Add %d more tags for better discoverability', 'echo-knowledge-base' ),
 					self::MIN_TAGS - $tag_count
@@ -492,6 +521,7 @@ class EPKB_AI_Tags_Usage {
 			$recommendations[] = array(
 				'priority' => 'medium',
 				'type' => 'tag_count',
+				// translators: %d is the number of tags to remove
 				'message' => sprintf(
 					__( 'Remove %d tags to focus on core topics', 'echo-knowledge-base' ),
 					$tag_count - self::MAX_TAGS
@@ -556,18 +586,148 @@ class EPKB_AI_Tags_Usage {
 				'message' => __( 'AI analysis did not generate tag suggestions for this article. This may be because the article already has well-optimized tags or the content is too short.', 'echo-knowledge-base' )
 			);
 		} elseif ( ! empty( $analysis['ai_suggestions']['ai_feature_unavailable'] ) ) {
-			// Scenario 3: PRO is NOT active - show activation message
+			// Scenario 3: PRO is NOT active - show activation message with discount
+			$discount_coupon = EPKB_AI_PRO_Features_Tab::get_discount_coupon();
+			$discount_text = '';
+			if ( ! empty( $discount_coupon['discount_percentage'] ) ) {
+				// translators: %1$s is discount percentage, %2$s is the coupon code
+				$discount_text = ' ' . sprintf( __( 'Save %1$s%% with code %2$s', 'echo-knowledge-base' ), $discount_coupon['discount_percentage'], $discount_coupon['coupon_code'] );
+			}
 			$recommendations[] = array(
 				'priority' => 'medium',
 				'type' => 'ai_feature_required',
+				// translators: %1$s and %2$s are HTML anchor tags
 				'message' => sprintf(
-					__( 'Get the %sAI Features add-on%s to unlock AI-powered tag suggestions based on your article content.', 'echo-knowledge-base' ),
+					__( 'Get the %1$sAI Features add-on%2$s to unlock AI-powered tag suggestions based on your article content.', 'echo-knowledge-base' ),
 					'<a href="https://www.echoknowledgebase.com/wordpress-plugin/ai-features/" target="_blank" rel="noopener noreferrer">',
 					'</a>'
-				)
+				) . $discount_text
 			);
 		}
 
 		return $recommendations;
+	}
+
+	/**
+	 * Filter AI tag suggestions to those that pass tag relevance checks.
+	 *
+	 * @param array $ai_suggestions
+	 * @param string $content
+	 * @return array
+	 */
+	private static function filter_ai_suggestions_by_relevance( $ai_suggestions, $content ) {
+		if ( empty( $ai_suggestions ) || empty( $content ) ) {
+			return array();
+		}
+
+		if ( ! is_array( $ai_suggestions ) ) {
+			return array();
+		}
+
+		if ( isset( $ai_suggestions['broad'] ) || isset( $ai_suggestions['specific'] ) ) {
+			$filtered = array();
+			$has_suggestions = false;
+
+			if ( isset( $ai_suggestions['broad'] ) ) {
+				$filtered['broad'] = self::filter_ai_tag_list_by_relevance( $ai_suggestions['broad'], $content );
+				$has_suggestions = $has_suggestions || ! empty( $filtered['broad'] );
+			}
+
+			if ( isset( $ai_suggestions['specific'] ) ) {
+				$filtered['specific'] = self::filter_ai_tag_list_by_relevance( $ai_suggestions['specific'], $content );
+				$has_suggestions = $has_suggestions || ! empty( $filtered['specific'] );
+			}
+
+			if ( ! $has_suggestions ) {
+				return array();
+			}
+
+			return $filtered;
+		}
+
+		return self::filter_ai_tag_list_by_relevance( $ai_suggestions, $content );
+	}
+
+	/**
+	 * Filter a list of AI tag suggestions based on relevance.
+	 *
+	 * @param array $tags
+	 * @param string $content
+	 * @return array
+	 */
+	private static function filter_ai_tag_list_by_relevance( $tags, $content ) {
+		if ( empty( $tags ) || ! is_array( $tags ) ) {
+			return array();
+		}
+
+		$tag_names = array();
+		foreach ( $tags as $tag ) {
+			$tag_name = self::get_suggested_tag_name( $tag );
+			if ( $tag_name !== '' ) {
+				$tag_names[] = $tag_name;
+			}
+		}
+
+		if ( empty( $tag_names ) ) {
+			return array();
+		}
+
+		$relevance = self::analyze_tag_relevance( $tag_names, $content );
+		$excluded = array();
+
+		if ( ! empty( $relevance['irrelevant_tags'] ) ) {
+			$excluded = array_merge( $excluded, $relevance['irrelevant_tags'] );
+		}
+
+		if ( ! empty( $relevance['weak_tag_names'] ) ) {
+			$excluded = array_merge( $excluded, $relevance['weak_tag_names'] );
+		}
+
+		if ( empty( $excluded ) ) {
+			return $tags;
+		}
+
+		$excluded_map = array();
+		foreach ( $excluded as $tag_name ) {
+			$excluded_map[ strtolower( $tag_name ) ] = true;
+		}
+
+		$filtered = array();
+		foreach ( $tags as $tag ) {
+			$tag_name = self::get_suggested_tag_name( $tag );
+			if ( $tag_name === '' ) {
+				continue;
+			}
+
+			if ( isset( $excluded_map[ strtolower( $tag_name ) ] ) ) {
+				continue;
+			}
+
+			$filtered[] = $tag;
+		}
+
+		return $filtered;
+	}
+
+	/**
+	 * Normalize AI suggestion items to tag names.
+	 *
+	 * @param mixed $tag
+	 * @return string
+	 */
+	private static function get_suggested_tag_name( $tag ) {
+		if ( is_string( $tag ) ) {
+			return trim( $tag );
+		}
+
+		if ( is_array( $tag ) && ! empty( $tag['name'] ) ) {
+			return trim( $tag['name'] );
+		}
+
+		if ( is_object( $tag ) && ! empty( $tag->name ) ) {
+			return trim( $tag->name );
+		}
+
+		return '';
 	}
 }

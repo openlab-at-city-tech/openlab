@@ -7,11 +7,14 @@
                 "lang": "nb_NO",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Go to General Settings": [
-                "Gå til Generelle innstillinger"
-            ],
             "To use AI features, please configure your API key and accept the data privacy agreement in General Settings, then enable AI Search or AI Chat.": [
                 "For å bruke AI-funksjoner, vennligst konfigurer API-nøkkelen din og aksepter datapersonvernavtalen i Generelle innstillinger, og aktiver deretter AI Søk eller AI Chatt."
+            ],
+            "AI Features": [
+                "AI-funksjoner"
+            ],
+            "Go to General Settings": [
+                "Gå til Generelle innstillinger"
             ],
             "To use Training Data, please enable either AI Chat or AI Search in their respective tabs.": [
                 "For å bruke maskinlæringsdata, vennligst aktiver enten AI Chatt eller AI Søk i sine respektive faner."
@@ -19,17 +22,23 @@
             "Data Collection": [
                 "Datainnsamling"
             ],
-            "OpenAI API Key Required": [
-                "OpenAI API-nøkkel kreves"
+            "API Key Required": [
+                "API-nøkkel påkrevd"
             ],
-            "To use AI features, you need to configure your OpenAI API key.": [
-                "For å bruke AI-funksjoner, må du konfigurere OpenAI API-nøkkelen din."
+            "To use AI features, you need to configure your API key.": [
+                "For å bruke AI-funksjoner må du konfigurere API-nøkkelen."
             ],
             "Configure API Key": [
                 "Konfigurer API-nøkkel"
             ],
             "Failed to load tab data": [
                 "Kunne ikke laste inn faneinformasjon"
+            ],
+            "Failed to load dashboard data. Please reload the page.": [
+                "Kunne ikke laste inn data fra kontrollpanelet. Last siden på nytt."
+            ],
+            "Loading Dashboard...": [
+                "Laster Kontrollpanelet..."
             ],
             "Unknown tab": [
                 "Ukjent fane"

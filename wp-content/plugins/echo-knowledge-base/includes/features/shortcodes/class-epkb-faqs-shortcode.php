@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Shortcode - Lists KB articles like FAQ block with drop-down panels.

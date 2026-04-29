@@ -31,6 +31,9 @@
             "selected": [
                 "valgt"
             ],
+            "Delete": [
+                "Slett"
+            ],
             "Article": [
                 "Artikkel"
             ],
@@ -49,14 +52,32 @@
             "Error": [
                 "Feil"
             ],
+            "Choose Training Data": [
+                "Velg maskinlæringsdata"
+            ],
+            "Send Data to AI": [
+                "Send data til KI"
+            ],
+            "Thank you! Your report has been submitted successfully.": [
+                "Takk! Rapporten har blitt sendt."
+            ],
+            "Never": [
+                "Aldri"
+            ],
+            "Submitting...": [
+                "Sender inn..."
+            ],
             "Pending": [
                 "Ventende"
             ],
-            "Delete": [
-                "Slett"
-            ],
             "of": [
                 "av"
+            ],
+            "Canceled": [
+                "Avbrutt"
+            ],
+            "Skipped": [
+                "Hoppet over"
             ],
             "Refreshing...": [
                 "Oppdaterer..."
@@ -91,32 +112,29 @@
             "Added": [
                 "Lagt til"
             ],
+            "Added:": [
+                "Lagt til:"
+            ],
+            "Manage Notes and PDFs": [
+                "Administrer notater og PDF-er"
+            ],
+            "Deleting...": [
+                "Sletter..."
+            ],
             "Failed to load training data": [
                 "Klarte ikke å laste inn maskinlæringsdata"
             ],
             "Failed to delete items": [
                 "Mislyktes i å slette elementer"
             ],
-            "Delete Items": [
-                "Slett elementer"
-            ],
             "Syncing": [
                 "Synkroniserer"
-            ],
-            "Canceled": [
-                "Avbrutt"
             ],
             "How to get started": [
                 "Slik kommer du i gang"
             ],
-            "Choose Training Data": [
-                "Velg maskinlæringsdata"
-            ],
             "Pick the content types to include.": [
                 "Velg innholdstyper som skal inkluderes."
-            ],
-            "Send Data to AI": [
-                "Send data til KI"
             ],
             "Select items in the table, then sync them.": [
                 "Velg elementer i tabellen, og synkroniser dem."
@@ -157,14 +175,26 @@
             "View Error": [
                 "Vis feil"
             ],
+            "View Info": [
+                "Vis informasjon"
+            ],
             "View content": [
                 "Vis innhold"
             ],
-            "KB Files": [
-                "KB-filer"
+            "Failed to submit report.": [
+                "Kunne ikke sende inn rapport."
             ],
-            "Never": [
-                "Aldri"
+            "An error occurred. Please try again.": [
+                "En feil oppstod. Vennligst prøv igjen."
+            ],
+            "Submit this issue if you need help:": [
+                "Send inn denne saken hvis du trenger hjelp:"
+            ],
+            "Your email (optional)": [
+                "Din e-post (valgfritt)"
+            ],
+            "Submit to Us": [
+                "Send til oss"
             ],
             "Error Details": [
                 "Feildetaljer"
@@ -172,26 +202,71 @@
             "Failed to load content": [
                 "Klarte ikke å laste inn innhold"
             ],
+            "Delete Items": [
+                "Slett elementer"
+            ],
             "Post ID:": [
                 "Innlegg-ID:"
             ],
             "Loading content...": [
                 "Laster innhold..."
             ],
-            "Error Processing Content": [
-                "Feil ved behandling av innhold"
+            "Content Processing Warning": [
+                "Advarsel om innholdsbehandling"
             ],
-            "Original Content": [
-                "Originalt innhold"
+            "The HTML content of this post produced empty text after processing. This usually means the post contains only non-text elements (scripts, styles, embeds, etc.). The original HTML is shown below for inspection.": [
+                "HTML-innholdet i dette innlegget ga tom tekst etter behandling. Dette betyr vanligvis at innlegget bare inneholder ikke-tekstlige elementer (skript, stiler, innebygg, osv.). Den opprinnelige HTML-en vises nedenfor for inspeksjon."
             ],
-            "Processed Content": [
-                "Behandlet innhold"
+            "Original HTML Content": [
+                "Opprinnelig HTML-innhold"
             ],
             "No content available": [
                 "Ingen innhold tilgjengelig"
             ],
-            "No processed content available": [
-                "Ingen behandlet innhold tilgjengelig"
+            "Error Processing Content": [
+                "Feil ved behandling av innhold"
+            ],
+            "Delete from Training Data": [
+                "Slett fra maskinlæringsdata"
+            ],
+            "File Name:": [
+                "Filnavn:"
+            ],
+            "Unknown file": [
+                "Ukjent fil"
+            ],
+            "Stored as:": [
+                "Lagret som:"
+            ],
+            "HTML": [
+                "HTML"
+            ],
+            "PDF": [
+                "PDF"
+            ],
+            "Original PDF:": [
+                "Opprinnelig PDF:"
+            ],
+            "Open PDF": [
+                "Åpne PDF"
+            ],
+            "If this stored URL no longer works, the original PDF is no longer available from this training data record.": [
+                "Hvis den lagrede URL-en ikke lenger fungerer, er den opprinnelige PDF-en ikke lenger tilgjengelig fra denne maskinlæringsdatas posten."
+            ],
+            "No original URL is stored for this upload. Only the saved file information is available here.": [
+                "Ingen original URL er lagret for denne opplastingen. Kun den lagrede filinformasjonen er tilgjengelig her."
+            ],
+            "Provider:": [
+                "Leverandør:"
+            ],
+            "AI File ID:": [
+                "AI-fil-ID:"
+            ],
+            "Last Synced:": [
+                "Sist synkronisert:"
+            ],
+            "Original Content": [
+                "Originalt innhold"
             ]
         }
     }

@@ -13,14 +13,44 @@
             "Cancel": [
                 "Anuluj"
             ],
+            "Next": [
+                "Następne"
+            ],
+            "AI Features": [
+                "Funkcje AI"
+            ],
+            "OFF": [
+                "WYŁ"
+            ],
+            "Use code:": [
+                "Użyj kodu:"
+            ],
+            "Copy": [
+                "Kopiuj"
+            ],
+            "Documentation": [
+                "Dokumentacja"
+            ],
+            "Copied!": [
+                "Skopiowano!"
+            ],
+            "Got it!": [
+                "Zrozumiałem!"
+            ],
+            "Show Me": [
+                "Pokaż mi"
+            ],
             "Loading...": [
                 "Ładowanie..."
             ],
-            "General Settings": [
-                "Ustawienia ogólne"
+            "Go to General Settings": [
+                "Przejdź do ustawień ogólnych"
             ],
-            "Your session has expired. Please refresh the page.": [
-                "Twoja sesja wygasła. Odśwież stronę."
+            "Go to Settings": [
+                "Przejdź do Ustawień"
+            ],
+            "Your session has expired. Please refresh the page to log in again.": [
+                "Twoja sesja wygasła. Proszę odświeżyć stronę, aby ponownie się zalogować."
             ],
             "Too many requests. Please wait a moment and try again.": [
                 "Zbyt wiele żądań. Proszę chwilę poczekać i spróbować ponownie."
@@ -37,8 +67,8 @@
             "Confirm": [
                 "Potwierdź"
             ],
-            "To use AI features, please configure your API key and accept the data privacy agreement in ": [
-                "Aby skorzystać z funkcji AI, skonfiguruj klucz API i zaakceptuj umowę o ochronie danych w"
+            "Setup Steps": [
+                "Kroki konfiguracji"
             ],
             "Session Expired": [
                 "Sesja wygasła"
@@ -48,21 +78,6 @@
             ],
             "No results found": [
                 "Brak wyników"
-            ],
-            "Tutorial": [
-                "Poradnik"
-            ],
-            "Learn how to use this feature": [
-                "Dowiedz się, jak korzystać z tej funkcji"
-            ],
-            "Tutorial Screenshot": [
-                "Zrzut ekranu poradnika"
-            ],
-            "This is a tutorial explaining how to use this feature.": [
-                "To poradnik wyjaśniający, jak korzystać z tej funkcji."
-            ],
-            "Close Tutorial": [
-                "Zamknij poradnik"
             ]
         }
     }

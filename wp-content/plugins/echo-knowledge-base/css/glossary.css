@@ -1,0 +1,86 @@
+/* Glossary Term Highlight - base (cursor/position); color and decoration per style from config + inline CSS */
+.epkb-glossary-term {
+  cursor: help;
+  position: relative;
+}
+.epkb-glossary-term:hover, .epkb-glossary-term:focus {
+  outline: 0;
+}
+
+/* Style 1: dotted underline (default) */
+.epkb-glossary-term--highlight-style-1 {
+  border-bottom: 2px dotted;
+}
+.epkb-glossary-term--highlight-style-1:hover, .epkb-glossary-term--highlight-style-1:focus {
+  background-color: rgba(30, 115, 190, 0.08);
+}
+
+/* Style 2: thicker solid underscore */
+.epkb-glossary-term--highlight-style-2 {
+  border-bottom: 3px solid;
+}
+.epkb-glossary-term--highlight-style-2:hover, .epkb-glossary-term--highlight-style-2:focus {
+  background-color: rgba(30, 115, 190, 0.06);
+}
+
+/* Style 3: background highlight */
+.epkb-glossary-term--highlight-style-3 {
+  border-bottom: none;
+}
+.epkb-glossary-term--highlight-style-3:hover, .epkb-glossary-term--highlight-style-3:focus {
+  opacity: 0.9;
+}
+
+/* Glossary Tooltip */
+.epkb-glossary-tooltip {
+  position: absolute;
+  z-index: 100000;
+  max-width: 320px;
+  min-width: 180px;
+  padding: 12px 16px;
+  background-color: #FFFFFF;
+  color: #000000;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+  line-height: 1.5;
+  font-size: 16px;
+  /* Arrow pointing down (tooltip above term) */
+}
+.epkb-glossary-tooltip.epkb-glossary-tooltip--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.epkb-glossary-tooltip::after {
+  content: "";
+  position: absolute;
+  left: 20px;
+  border-width: 6px;
+  border-style: solid;
+  border-color: transparent;
+}
+.epkb-glossary-tooltip.epkb-glossary-tooltip--above::after {
+  top: 100%;
+  border-top-color: #FFFFFF;
+  border-bottom-width: 0;
+}
+.epkb-glossary-tooltip.epkb-glossary-tooltip--below::after {
+  bottom: 100%;
+  border-bottom-color: #FFFFFF;
+  border-top-width: 0;
+}
+
+.epkb-glossary-tooltip__term {
+  font-weight: 600;
+  margin-bottom: 4px;
+  font-size: 17px;
+}
+
+.epkb-glossary-tooltip__definition {
+  font-weight: 400;
+  font-size: 16px;
+}

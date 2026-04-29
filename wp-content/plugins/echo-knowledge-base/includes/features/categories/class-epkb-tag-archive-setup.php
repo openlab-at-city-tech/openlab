@@ -99,6 +99,9 @@ class EPKB_Tag_Archive_Setup {
 			EPKB_Articles_Setup::search_box( $args );
 		} else {
 			// Default behavior - use main page search settings
+			// Set the global flag so ASEA knows to use main page settings
+			global $asea_use_main_page_settings;
+			$asea_use_main_page_settings = true;
 			EPKB_Modular_Main_Page::search_module( $args['config'] );
 		}
 	}

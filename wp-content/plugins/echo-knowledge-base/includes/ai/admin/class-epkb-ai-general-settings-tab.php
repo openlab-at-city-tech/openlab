@@ -13,13 +13,31 @@ class EPKB_AI_General_Settings_Tab {
 	public static function get_tab_config() {
 
 		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
+		$ai_config['ai_provider'] = EPKB_AI_Provider::normalize_provider( isset( $ai_config['ai_provider'] ) ? $ai_config['ai_provider'] : '' );
 
 		return array(
 			'tab_id' => 'general-settings',
 			'title' => __( 'General Settings', 'echo-knowledge-base' ),
 			'settings_sections' => self::get_settings_sections( $ai_config ),
-			'ai_config' => $ai_config
+			'ai_config' => $ai_config,
+			'has_kb_ai_collection' => self::any_kb_has_ai_collection(),
+			'setup_steps' => EPKB_AI_Admin_Page::get_setup_steps_for_tab( 'general-settings' )
 		);
+	}
+
+	/**
+	 * Return true if at least one KB config has kb_ai_collection_id set.
+	 *
+	 * @return bool
+	 */
+	private static function any_kb_has_ai_collection() {
+		$kb_config_obj = new EPKB_KB_Config_DB();
+		foreach ( $kb_config_obj->get_kb_configs() as $kb_config ) {
+			if ( ! empty( $kb_config['kb_ai_collection_id'] ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -29,26 +47,56 @@ class EPKB_AI_General_Settings_Tab {
 	 * @return array
 	 */
 	private static function get_settings_sections( $ai_config ) {
+		$provider = $ai_config['ai_provider'];
+		$provider_options = EPKB_AI_Provider::get_provider_options();
+
 		$sections = array(
 			'api_settings' => array(
 				'id' => 'api_settings',
 				'title' => __( 'API Configuration', 'echo-knowledge-base' ),
 				'icon' => 'epkbfa epkbfa-key',
 				'fields' => array(
-					'ai_key' => array(
+					'ai_provider' => array(
+						'type' => 'select',
+						'label' => __( 'AI Provider', 'echo-knowledge-base' ),
+						'value' => $provider,
+						'options' => $provider_options,
+						'description' => __( 'Choose which provider to use for chat, search, and training data.', 'echo-knowledge-base' )
+					),
+					'ai_gemini_key' => array(
 						'type' => 'password',
-						'label' => __( 'OpenAI API Key', 'echo-knowledge-base' ),
-						'value' => empty( $ai_config['ai_key'] ) ? '': '********',
-						'description' => sprintf( __( 'Enter your OpenAI API key. You can find it at %s', 'echo-knowledge-base' ), '<a href="https://platform.openai.com/api-keys" target="_blank">https://platform.openai.com/api-keys</a>' ),
+						'label' => __( 'Google Gemini API Key', 'echo-knowledge-base' ),
+						'value' => empty( $ai_config['ai_gemini_key'] ) ? '' : '********',
+						'description' => __( 'Enter your Google Gemini API key.', 'echo-knowledge-base' ),
+						'placeholder' => 'AIza...',
+						'required' => true,
+						'dependency' => array(
+							'field' => 'ai_provider',
+							'value' => EPKB_AI_Provider::PROVIDER_GEMINI
+						)
+					),
+					'ai_chatgpt_key' => array(
+						'type' => 'password',
+						'label' => __( 'OpenAI ChatGPT API Key', 'echo-knowledge-base' ),
+						'value' => empty( $ai_config['ai_chatgpt_key'] ) ? '' : '********',
+						'description' => __( 'Enter your OpenAI ChatGPT API key.', 'echo-knowledge-base' ),
 						'placeholder' => 'sk-...',
-						'required' => true
+						'required' => true,
+						'dependency' => array(
+							'field' => 'ai_provider',
+							'value' => EPKB_AI_Provider::PROVIDER_CHATGPT
+						)
 					),
 					'ai_organization_id' => array(
 						'type' => 'text',
-						'label' => __( 'Organization ID', 'echo-knowledge-base' ),
+						'label' => __( 'OpenAI Organization ID', 'echo-knowledge-base' ),
 						'value' => $ai_config['ai_organization_id'],
 						'description' => __( 'Optional: Enter your OpenAI Organization ID if you belong to multiple organizations', 'echo-knowledge-base' ),
-						'placeholder' => 'org-...'
+						'placeholder' => 'org-...',
+						'dependency' => array(
+							'field' => 'ai_provider',
+							'value' => EPKB_AI_Provider::PROVIDER_CHATGPT
+						)
 					)
 				)
 			),
@@ -90,6 +138,7 @@ class EPKB_AI_General_Settings_Tab {
 						'type' => 'time',
 						'label' => __( 'Send Time', 'echo-knowledge-base' ),
 						'value' => $ai_config['ai_email_notifications_send_time'],
+						// translators: %s is the site timezone string
 						'description' => sprintf( __( 'Time in site timezone (%s)', 'echo-knowledge-base' ), wp_timezone_string() ),
 						'placeholder' => '09:00'
 					),
@@ -121,11 +170,13 @@ class EPKB_AI_General_Settings_Tab {
 	 */
 	public static function are_settings_configured() {
 		$ai_config = EPKB_AI_Config_Specs::get_ai_config();
-		
-		// Check if API key is set and disclaimer accepted
-		$api_key_set = ! empty( $ai_config['ai_key'] );
+		$provider = EPKB_AI_Provider::normalize_provider( isset( $ai_config['ai_provider'] ) ? $ai_config['ai_provider'] : '' );
+
+		// Check if API key is set for the active provider and disclaimer accepted
+		$api_key_field = EPKB_AI_Provider::get_api_key_field( $provider );
+		$api_key_set = ! empty( $ai_config[$api_key_field] );
 		$disclaimer_set = ! empty( $ai_config['ai_disclaimer_accepted'] ) && $ai_config['ai_disclaimer_accepted'] === 'on';
-		
+
 		return $api_key_set && $disclaimer_set;
 	}
 
@@ -135,25 +186,20 @@ class EPKB_AI_General_Settings_Tab {
 	 * @return string
 	 */
 	private static function get_disclaimer_text() {
-			return sprintf(
-		'<div class="epkb-ai-disclaimer-text">%s</div>',
-		sprintf(
-			'<p style="margin-bottom: 15px;">%s</p>
-			<p style="margin-bottom: 20px;">
-				<a href="%s" target="_blank" style="color: #2271b1; text-decoration: underline; font-weight: bold;">
-					%s
-				</a>
-			</p>	
-			<label style="font-weight: bold; display: flex; align-items: center;">
-				<input type="checkbox" name="ai_disclaimer_accepted" value="on" %s style="margin-right: 8px;">
-				%s
-			</label>',
-			__( 'Please read our AI features privacy and security disclaimer before enabling AI features.', 'echo-knowledge-base' ),
-			'https://www.echoknowledgebase.com/privacy-security-disclaimer',
-			__( 'View Privacy & Security Disclaimer', 'echo-knowledge-base' ) . ' →',
-			checked( 'on', EPKB_AI_Config_Specs::get_ai_config_value( 'ai_disclaimer_accepted' ), false ),
-			__( 'I have read and accept the privacy & security disclaimer', 'echo-knowledge-base' )
-		)
-	);
+
+		$is_checked = checked( 'on', EPKB_AI_Config_Specs::get_ai_config_value( 'ai_disclaimer_accepted' ), false );
+
+		return "<div class='epkb-ai-disclaimer-text'>" .
+					"<p class='epkb-ai-disclaimer-text__intro'>" . esc_html__( 'Please read our AI features privacy and security disclaimer before enabling AI features.', 'echo-knowledge-base' ) . "</p>" .
+					"<p class='epkb-ai-disclaimer-text__link'>" .
+						"<a href='https://www.echoknowledgebase.com/privacy-security-disclaimer' target='_blank'>" .
+							esc_html__( 'View Privacy & Security Disclaimer', 'echo-knowledge-base' ) . " →" .
+						"</a>" .
+					"</p>" .
+					"<label class='epkb-ai-disclaimer-text__checkbox'>" .
+						"<input type='checkbox' name='ai_disclaimer_accepted' value='on' " . $is_checked . ">" .
+						esc_html__( 'I have read and accept the privacy & security disclaimer', 'echo-knowledge-base' ) .
+					"</label>" .
+				"</div>";
 	}
 }

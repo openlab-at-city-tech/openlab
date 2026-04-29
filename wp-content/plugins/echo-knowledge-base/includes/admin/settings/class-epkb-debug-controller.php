@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
  * Handle saving feature settings.
@@ -11,6 +11,7 @@ class EPKB_Debug_Controller {
 
 	public function __construct() {
 		add_action( 'admin_init', array( $this, 'download_debug_info' ) );
+		add_action( 'admin_init', array( $this, 'download_ai_config' ) );
 
 		add_action( 'wp_ajax_epkb_toggle_debug', array( $this, 'toggle_debug' ) );
 		add_action( 'wp_ajax_nopriv_epkb_toggle_debug', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
@@ -122,7 +123,77 @@ class EPKB_Debug_Controller {
 			$output = EPKB_Config_Tools_Page::display_asea_debug_data();
 		}
 
-		echo esc_html( wp_strip_all_tags( $output ) );
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_strip_all_tags removes all HTML/scripts
+		echo wp_strip_all_tags( wp_specialchars_decode( $output, ENT_QUOTES ) );
+
+		die();
+	}
+
+	/**
+	 * Generates an AI configuration export file.
+	 */
+	public function download_ai_config() {
+
+		if ( EPKB_Utilities::post( 'action' ) != 'epkb_download_ai_config' ) {
+			return;
+		}
+
+		// check wpnonce
+		$wp_nonce = EPKB_Utilities::post( '_wpnonce_epkb_ajax_action' );
+		if ( empty( $wp_nonce ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $wp_nonce ) ), '_wpnonce_epkb_ajax_action' ) ) {
+			wp_die( esc_html__( 'You do not have permission to export AI config', 'echo-knowledge-base' ) . ' (E02)' );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You do not have permission to export AI config', 'echo-knowledge-base' ) . ' (E03)' );
+		}
+
+		$ai_config = get_option( EPKB_AI_Config_Specs::OPTION_NAME, array() );
+		$training_data_config = get_option( EPKB_AI_Training_Data_Config_Specs::OPTION_NAME, array() );
+		$widget_configs = array();
+		$widget_ids = isset( $ai_config['ai_chat_widgets'] ) && is_array( $ai_config['ai_chat_widgets'] ) ? $ai_config['ai_chat_widgets'] : array( EPKB_AI_Chat_Widget_Config_Specs::DEFAULT_WIDGET_ID );
+		$widget_ids = array_unique( array_filter( array_map( 'absint', $widget_ids ) ) );
+		if ( ! in_array( EPKB_AI_Chat_Widget_Config_Specs::DEFAULT_WIDGET_ID, $widget_ids, true ) ) {
+			array_unshift( $widget_ids, EPKB_AI_Chat_Widget_Config_Specs::DEFAULT_WIDGET_ID );
+		}
+
+		foreach ( $widget_ids as $widget_id ) {
+			$widget_configs[ $widget_id ] = get_option(
+				EPKB_AI_Chat_Widget_Config_Specs::OPTION_NAME_PREFIX . $widget_id,
+				EPKB_AI_Chat_Widget_Config_Specs::get_default_config()
+			);
+		}
+
+		$kb_collection_mapping = array();
+		$all_kb_configs = epkb_get_instance()->kb_config_obj->get_kb_configs();
+		foreach ( $all_kb_configs as $kb_id => $kb_config ) {
+			$kb_collection_mapping[] = array(
+				'kb_id' => absint( $kb_id ),
+				'kb_name' => empty( $kb_config['kb_name'] ) ? 'KB ' . $kb_id : $kb_config['kb_name'],
+				'kb_ai_collection_id' => empty( $kb_config['kb_ai_collection_id'] ) ? 0 : absint( $kb_config['kb_ai_collection_id'] ),
+			);
+		}
+
+		$export_data = array(
+			'generated_at' => current_time( 'c' ),
+			'plugin_version' => Echo_Knowledge_Base::$version,
+			'option_names' => array(
+				'ai_configuration' => EPKB_AI_Config_Specs::OPTION_NAME,
+				'ai_training_data_configuration' => EPKB_AI_Training_Data_Config_Specs::OPTION_NAME,
+				'ai_widget_configuration_prefix' => EPKB_AI_Chat_Widget_Config_Specs::OPTION_NAME_PREFIX,
+			),
+			'ai_configuration' => is_array( $ai_config ) ? $ai_config : array(),
+			'ai_training_data_configuration' => is_array( $training_data_config ) ? $training_data_config : array(),
+			'ai_widget_configurations' => $widget_configs,
+			'kb_collection_mapping' => $kb_collection_mapping,
+		);
+
+		nocache_headers();
+
+		header( 'Content-Type: application/json; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="epkb-ai-config-' . gmdate( 'Y-m-d-H-i-s' ) . '.json"' );
+
+		echo wp_json_encode( $export_data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES );
 
 		die();
 	}

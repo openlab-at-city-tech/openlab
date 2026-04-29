@@ -7,11 +7,11 @@
                 "lang": "sv_SE",
                 "plural-forms": "nplurals=2; plural=(n != 1);"
             },
-            "Loading...": [
-                "Laddar in …"
-            ],
             "AI Features Required": [
                 "AI-funktioner krävs"
+            ],
+            "Loading...": [
+                "Laddar in …"
             ],
             "Go to AI Settings": [
                 "Gå till AI-inställningar"

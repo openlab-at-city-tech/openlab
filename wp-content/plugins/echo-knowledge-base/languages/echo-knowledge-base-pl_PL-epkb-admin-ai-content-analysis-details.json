@@ -7,14 +7,23 @@
                 "lang": "pl_PL",
                 "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
             },
-            "Demo Article": [
-                "Demo Dokumentacja"
-            ],
             "Categories": [
                 "Kategorie"
             ],
+            "OFF": [
+                "WYŁ"
+            ],
+            "Use code:": [
+                "Użyj kodu:"
+            ],
+            "Copy": [
+                "Kopiuj"
+            ],
             "Article Content": [
                 "Zawartość artykułu"
+            ],
+            "Copied!": [
+                "Skopiowano!"
             ],
             "Analyzing...": [
                 "Analizowanie..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "Analiza luk w treści"
             ],
+            "Identifies unanswered user questions": [
+                "Identyfikuje nieodpowiedziane pytania użytkowników"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "Wykrywa braki lub niedostatecznie rozwinięte tematy"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "Dostarcza praktyczne rekomendacje dotyczące ulepszeń"
+            ],
             "AI-Powered Tag Suggestions": [
                 "Sugestie tagów zasilane AI"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "Analiza luk dostępna jest tylko w dodatku Funkcje AI."
             ],
             "Readability": [
                 "Czytelność"
             ],
-            "Tag added successfully": [
-                "Tag dodany pomyślnie"
-            ],
-            "Tag removed successfully": [
-                "Tag usunięty pomyślnie"
-            ],
             "Tag updated successfully": [
                 "Tag zaktualizowany pomyślnie"
+            ],
+            "Get AI Features PRO": [
+                "Pobierz funkcje AI PRO"
             ],
             "Add New Tag": [
                 "Utwórz tag"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "Tagi"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "Wyświetl artykuł"
             ],
+            "Saving tags...": [
+                "Zapisywanie tagów..."
+            ],
             "Failed to save tag changes": [
                 "Nie udało się zapisać zmian w tagach"
-            ],
-            "Failed to add tag": [
-                "Nie udało się dodać tagu"
-            ],
-            "Failed to remove tag": [
-                "Nie udało się usunąć tagu"
-            ],
-            "Failed to remove tags": [
-                "Nie udało się usunąć tagów"
             ],
             "Failed to update tag": [
                 "Nie udało się zaktualizować tagu"
             ],
             "Not Analyzed": [
                 "Nieanalizowano"
-            ],
-            "Demo Analysis Data": [
-                "Dane analityczne demonstracyjne"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "To jest demonstracyjny artykuł z przykładowymi danymi analitycznymi do celów demonstracyjnych. Utwórz własne artykuły, aby zobaczyć rzeczywiste wyniki analizy treści."
             ],
             "Loading analysis details...": [
                 "Ładowanie szczegółów analizy..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "Wystąpił błąd podczas analizy luk w treści."
             ],
-            "Learn More About AI Features": [
-                "Dowiedz się więcej o funkcjach AI"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "AI identyfikuje brakujące informacje i niezadane pytania w twoich artykułach. Dowiedz się, które tematy wymagają szerszego omówienia."
             ],
             "Analyzing article for content gaps...": [
                 "Analizowanie artykułu pod kątem luk w treści..."

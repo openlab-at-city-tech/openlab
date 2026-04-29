@@ -13,14 +13,20 @@
             "Error": [
                 "त्रुटि"
             ],
-            "No posts found to sync": [
-                "सिंक के लिए पोस्ट नहीं मिली"
+            "No synced items found to verify": [
+                "सत्यापन के लिए कोई सिंक किए गए आइटम नहीं मिले।"
             ],
             "Pending": [
                 "स्थगित"
             ],
             "of": [
                 "में से"
+            ],
+            "Selected": [
+                "चयनित"
+            ],
+            "Processing": [
+                "प्रक्रासन"
             ],
             "errors": [
                 "त्रुटियाँ"
@@ -31,8 +37,14 @@
             "Sync canceled": [
                 "सिंक रद्द किया गया"
             ],
+            "No posts found to sync": [
+                "सिंक के लिए पोस्ट नहीं मिली"
+            ],
             "Failed to cancel sync": [
                 "सिंक रद्द करने में विफल"
+            ],
+            "Failed to start verification": [
+                "सत्यापन शुरू करने में विफल रहा"
             ],
             "A sync job is already running.": [
                 "एक सिंक जॉब पहले से चल रहा है।."
@@ -40,20 +52,8 @@
             "Failed to start sync": [
                 "सिंक शुरू करने में विफल रहा"
             ],
-            "OpenAI API key is required to sync content. Please configure it in General Settings.": [
-                "OpenAI API कुंजी कंटेंट सिंक करने के लिए आवश्यक है। कृपया इसे सामान्य सेटिंग्स में कॉन्फ़िगर करें।."
-            ],
-            "Sync Method": [
-                "सिंक विधि"
-            ],
-            "Basic Timer": [
-                "बेसिक टाइमर"
-            ],
-            "Select All Filtered Records": [
-                "छांटे गए सभी रिकॉर्ड चुनें"
-            ],
-            "Select All Records": [
-                "सभी रिकॉर्ड चुनें"
+            "API key is required to sync content. Please configure it in General Settings.": [
+                "सामग्री सिंक करने के लिए API कुंजी आवश्यक है. कृपया इसे सामान्य सेटिंग्स में कॉन्फ़िगर करें."
             ],
             "Outdated": [
                 "पुराना"
@@ -61,14 +61,17 @@
             "Added": [
                 "जोड़ा गया"
             ],
-            "Selected": [
-                "चयनित"
-            ],
             "Records": [
                 "रिकॉर्ड्स"
             ],
             "selected records": [
                 "चुने गए रिकॉर्ड"
+            ],
+            "Select All Filtered Records": [
+                "छांटे गए सभी रिकॉर्ड चुनें"
+            ],
+            "Select All Records": [
+                "सभी रिकॉर्ड चुनें"
             ],
             "Sync in Progress": [
                 "सिंक प्रगति पर है"
@@ -82,8 +85,8 @@
             "Select at least one item to sync": [
                 "कम से कम एक आइटम चुनें ताकि सिंक किया जा सके"
             ],
-            "Start Sync": [
-                "सिंक शुरू करें"
+            "Send Data to AI for Training": [
+                "ट्रेनिंग के लिए AI को डेटा भेजें"
             ],
             "Sync started successfully! ": [
                 "सिंक सफलतापूर्वक शुरू हुआ!"
@@ -93,9 +96,6 @@
             ],
             "Retrying failed posts:": [
                 "असफल पोस्टों को पुनः प्रयास किया जा रहा है:"
-            ],
-            "Processing": [
-                "प्रक्रासन"
             ],
             "posts": [
                 "पोस्ट"
@@ -114,6 +114,27 @@
             ],
             "Sync scheduled, waiting to start...": [
                 "सिंक निर्धारित है, शुरू होने के लिए प्रतीक्षा कर रहा है..."
+            ],
+            "Upload completed, but the number of items doesn't match:": [
+                "अपलोड पूर्ण हो गया, लेकिन आइटमों की संख्या मेल नहीं खाती:"
+            ],
+            "items tracked locally vs": [
+                "स्थानीय रूप से ट्रैक किए गए आइटम बनाम"
+            ],
+            "items in the AI provider.": [
+                "एआई प्रदाता में आइटम्स।."
+            ],
+            "Checking for specific mismatches...": [
+                "विशिष्ट असंगतियों के लिए जाँच कर रहे हैं..."
+            ],
+            "The following items were not found in the AI provider:": [
+                "एआई प्रदाता में निम्न आइटम नहीं मिले:"
+            ],
+            "items in the AI provider are not tracked locally.": [
+                "एआई प्रदाता में आइटम स्थानीय रूप से ट्रैक नहीं किए जाते।."
+            ],
+            "Verify & Fix": [
+                "जाँच करें & ठीक करें"
             ]
         }
     }

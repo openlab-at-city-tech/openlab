@@ -21,6 +21,49 @@ jQuery( document ).ready( function( $ ) {
 		}
 	}
 
+	// Clean up wpautop-injected tags (Elementor compatibility)
+	cleanupWpautopTags();
+
+	// Check for setup wizard parameter - auto-open editor and highlight template section (shortcode pages only)
+	const urlParams = new URLSearchParams( window.location.search );
+	if ( urlParams.has( 'epkb_from_setup_wizard' ) && frontendEditor.length > 0 ) {
+
+		// Open the Frontend Editor
+		open_frontend_editor( null );
+
+		// For shortcode pages, highlight the template section; for block pages, just open the FE
+		let isBlockPage = frontendEditor.find( '.epkb-fe__feature-select-button[data-feature="block-main-page-settings"]' ).length > 0;
+		if ( ! isBlockPage ) {
+			setTimeout( function() {
+
+				// Open the main page settings feature
+				frontendEditor.find( '.epkb-fe__feature-select-button[data-feature="main-page-settings"]' ).trigger( 'click' );
+
+				// Highlight the theme-compatibility-mode section
+				setTimeout( function() {
+					let $targetSection = frontendEditor.find( '.epkb-fe__settings-section--theme-compatibility-mode' );
+					if ( $targetSection.length > 0 ) {
+						$targetSection.addClass( 'epkb-highlighted_setting' );
+
+						// Add explanatory message at the top of the section body
+						let $sectionBody = $targetSection.find( '.epkb-fe__settings-section-body' );
+						if ( $sectionBody.length > 0 && ! $sectionBody.find( '.epkb-fe__highlight-message' ).length ) {
+							$sectionBody.prepend(
+								'<div class="epkb-fe__highlight-message">' +
+									'<span class="epkbfa epkbfa-lightbulb-o"></span> ' +
+									'Try both templates to see which one looks better for your website.' +
+								'</div>'
+							);
+						}
+
+						let offset = $targetSection.offset().top - frontendEditor.offset().top - 100;
+						frontendEditor.animate( { scrollTop: Math.max( 0, offset ) }, 300 );
+					}
+				}, 300 );
+			}, 500 );
+		}
+	}
+
 	// Handle FE Open Button and Admin bar FE edit link
 	$( document ).on( 'click', '.epkb-fe__toggle, #wp-admin-bar-epkb-edit-mode-button', function ( e ) {
 		
@@ -39,7 +82,7 @@ jQuery( document ).ready( function( $ ) {
 			),
 			divi       : bodyClasses.contains( 'et-fb-root-ancestor' ),
 			siteOrigin : bodyClasses.contains( 'siteorigin-panels-live-editor' ),
-			pageLayer  : bodyClasses.contains( 'pagelayer-body' ),
+			pageLayer  : bodyClasses.contains( 'pagelayer-normalize' ),
 			beaver     : bodyClasses.contains( 'fl-builder-edit' ),
 			elementor  : bodyClasses.contains( 'elementor-editor-active' ),
 			brizy      : bodyClasses.contains( 'brz' ),
@@ -70,7 +113,11 @@ jQuery( document ).ready( function( $ ) {
 
 			const builderName = builderNames[ activeKey ] || 'Page Builder';
 
-			const message = wp.i18n.__( 'The Knowledge Base Editor is disabled while the ${ builderName } is active. Do you want to go to the Knowledge Base settings instead?', 'echo-knowledge-base' );
+			const message = wp.i18n.sprintf(
+				/* translators: %s: Name of the active page builder */
+				wp.i18n.__( 'The Knowledge Base Editor is disabled while the %s is active. Do you want to go to the Knowledge Base settings instead?', 'echo-knowledge-base' ),
+				builderName
+			);
 
 			// Show confirmation dialog
 			const goToSettings = window.confirm( message );
@@ -154,16 +201,6 @@ jQuery( document ).ready( function( $ ) {
 		} );
 		
 		return false;
-	} );
-
-	// Open Help tab
-	$( document ).on( 'click', '#epkb-fe__help-tab', function() {
-
-		// Add Help class and remove Main class
-		frontendEditor.addClass( 'epkb-fe__editor--help' ).removeClass( 'epkb-fe__editor--home' );
-
-		// Show action buttons
-		$( '#epkb-fe__editor .epkb-fe__actions' ).show();
 	} );
 
 	// Show settings for a feature
@@ -308,6 +345,7 @@ jQuery( document ).ready( function( $ ) {
 
 	// Design preset may change settings which are not present in the FE UI - apply full design settings + FE UI settings until user saved settings
 	let selected_search_preset = 'current';
+	let selected_categories_preset = 'current';
 
 	// Update page with a new preview - call backend
 	function updatePreview( event, ui ) {
@@ -320,6 +358,7 @@ jQuery( document ).ready( function( $ ) {
 		const feature_name = $feature_settings_container.data( 'feature' );
 		const kb_page_type = $feature_settings_container.data( 'kb-page-type' );
 		const post_id = frontendEditor.data( 'post-id' );
+		const setting_name = $(event.target).attr('name');
 
 		// Get the actual current position from the DOM for this feature
 		const $activeRow = $('.epkb-ml__row[data-feature="' + feature_name + '"]');
@@ -333,6 +372,11 @@ jQuery( document ).ready( function( $ ) {
 		let kb_config = collectConfig();
 
 		kb_config[feature_name + '_module_position'] = actualPosition;
+		if ( feature_name === 'categories_articles' && setting_name === 'categories_articles_preset' ) {
+			selected_categories_preset = kb_config.categories_articles_preset && kb_config.categories_articles_preset !== 'current'
+				? kb_config.categories_articles_preset
+				: 'current';
+		}
 
 		// Get taxonomy and term information for archive pages
 		let taxonomy = '';
@@ -385,14 +429,15 @@ jQuery( document ).ready( function( $ ) {
 				kb_page_type: kb_page_type,
 				is_article_page: kb_page_type === 'article-page' ? 1 : 0,
 				feature_name: feature_name,
-				setting_name: $(event.target).attr('name'),
+				setting_name: setting_name,
 				prev_link_css_id: $( '[id^="epkb-mp-frontend-modular-"][id$="-layout-css"]' ).attr( 'id' ),
 				settings_row_number: actualPosition ? actualPosition : 'none',
 				taxonomy: taxonomy,
 				term_id: term_id,
 				kb_post_id: post_id,
 				layout_name: current_layout_name,
-				selected_search_preset: selected_search_preset
+				selected_search_preset: selected_search_preset,
+				selected_categories_preset: selected_categories_preset
 			},
 			success: function( response ) {
 
@@ -421,6 +466,12 @@ jQuery( document ).ready( function( $ ) {
 
 						// Update current layout value fter layout switch (is needed to properly adjust settings on server side for layout change)
 						current_layout_name = frontendEditor.find( '[name="kb_main_page_layout"]:checked' ).val();
+
+						// Update articles list container ID to match the new layout (so inline styles apply correctly)
+						let $articles_list_container = $( '.epkb-ml-article-list-container' );
+						if ( $articles_list_container.length > 0 ) {
+							$articles_list_container.attr( 'id', 'epkb-ml-article-list-' + current_layout_name.toLowerCase() + '-layout' );
+						}
 
 						// Update module settings HTML
 						let $settings_list = $( '.epkb-fe__feature-settings[data-feature="' + feature_name + '"] .epkb-fe__settings-list' );
@@ -490,6 +541,10 @@ jQuery( document ).ready( function( $ ) {
 
 					// Update Categories & Articles module settings (after applying design preset)
 					if ( response.data.categories_articles_design_settings && Object.keys(response.data.categories_articles_design_settings).length > 0 ) {
+
+						if ( kb_config.categories_articles_preset && kb_config.categories_articles_preset !== 'current' ) {
+							selected_categories_preset = kb_config.categories_articles_preset;
+						}
 
 						// Unselect preset name to prevent continuing preset applying on further settings changes
 						$feature_settings_container.find( '[name="categories_articles_preset"]' ).val( 'current' ).trigger( 'change' );
@@ -706,17 +761,25 @@ jQuery( document ).ready( function( $ ) {
 
 	function apply_preset_setting( $feature_settings_container, $target_setting_field, key, value ) {
 
+		// Fallback to the same page type container if the field is outside the current feature (e.g. theme presets updating Search)
 		if ( $target_setting_field.length === 0 ) {
-			return;
+			const kb_page_type = $feature_settings_container.data( 'kb-page-type' );
+			const $page_scope = kb_page_type ? frontendEditor.find( '.epkb-fe__feature-settings[data-kb-page-type="' + kb_page_type + '"]' ) : frontendEditor;
+			$target_setting_field = $page_scope.find( '[name="' + key + '"]' );
+			if ( $target_setting_field.length === 0 ) {
+				return;
+			}
 		}
+
+		const $target_container = $target_setting_field.closest( '.epkb-fe__feature-settings' ).length ? $target_setting_field.closest( '.epkb-fe__feature-settings' ) : $feature_settings_container;
 
 		// Radio buttons
 		if ( $target_setting_field.attr( 'type' ) === 'radio' ) {
-			$feature_settings_container.find( '[name="' + key + '"][value="' + value + '"]' ).prop( 'checked', true );
+			$target_container.find( '[name="' + key + '"][value="' + value + '"]' ).prop( 'checked', true );
 
 		// Checkbox
 		} else if ( $target_setting_field.attr( 'type' ) === 'checkbox' ) {
-			$feature_settings_container.find( '[name="' + key + '"]' ).prop( 'checked', value === 'on' );
+			$target_container.find( '[name="' + key + '"]' ).prop( 'checked', value === 'on' );
 
 		// Color-picker
 		} else if ( $target_setting_field.hasClass( 'wp-color-picker' ) ) {
@@ -772,6 +835,54 @@ jQuery( document ).ready( function( $ ) {
 		$( 'body' ).append( $preview_form );
 
 		$preview_form.trigger( 'submit' );
+	}
+
+	// Save settings and reload the page - used when switching to Current Theme Template
+	function save_settings_and_reload_page( kb_page_type ) {
+
+		let loadingContainer;
+		if ( kb_page_type === 'article-page' ) {
+			loadingContainer = $( '#eckb-article-page-container-v2' );
+		} else if ( kb_page_type === 'archive-page' ) {
+			loadingContainer = $( '#eckb-archive-page-container' );
+		} else {
+			loadingContainer = $( '#epkb-modular-main-page-container, #eckb-kb-template' );
+		}
+		epkb_loading_Dialog( 'show', '', loadingContainer );
+
+		let kb_config = collectConfig();
+		let save_action = 'eckb_save_fe_settings';
+		if ( kb_page_type === 'article-page' ) {
+			save_action = 'eckb_save_fe_article_settings';
+		} else if ( kb_page_type === 'archive-page' ) {
+			save_action = 'eckb_save_fe_archive_settings';
+		}
+
+		const feature_name = $( '#epkb-fe__editor .epkb-fe__feature-settings--active' ).attr( 'data-feature' );
+
+		$.ajax( {
+			url: epkb_vars.ajaxurl,
+			method: 'POST',
+			data: {
+				action: save_action,
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+				kb_id: frontendEditor.data( 'kbid' ),
+				new_kb_config: kb_config,
+				is_article_page: kb_page_type === 'article-page' ? 1 : 0,
+				selected_search_preset: selected_search_preset,
+				selected_categories_preset: selected_categories_preset
+			},
+			success: function( response ) {
+				// Add URL parameter to reopen the Page feature in the editor after reload
+				const reload_url = new URL( window.location.href );
+				reload_url.searchParams.set( 'epkb_fe_reopen_feature', feature_name );
+				window.location.href = reload_url.toString();
+			},
+			error: function( jqXHR, textStatus, errorThrown ) {
+				console.error( 'Frontend Editor Save Settings Error:', errorThrown );
+				epkb_loading_Dialog( 'remove', '', loadingContainer );
+			}
+		} );
 	}
 
 	function update_main_page_css( response ) {
@@ -865,7 +976,7 @@ jQuery( document ).ready( function( $ ) {
 		// some settings do not need to trigger AJAX update for preview
 		const noPreviewUpdateSettings = [ 'search_result_mode', 'search_box_results_style', 'article_search_box_results_style', 'article_search_result_mode', 'advanced_search_mp_show_top_category',
 			'advanced_search_ap_show_top_category', 'advanced_search_mp_results_list_size', 'advanced_search_ap_results_list_size', 'advanced_search_text_highlight_enabled',
-			'advanced_search_mp_results_page_size', 'advanced_search_ap_results_page_size', 'advanced_search_mp_box_results_style', 'advanced_search_ap_box_results_style', 'article_views_counter_method', 'back_navigation_mode'];
+			'advanced_search_mp_results_page_size', 'advanced_search_ap_results_page_size', 'advanced_search_mp_box_results_style', 'advanced_search_ap_box_results_style', 'article_views_counter_method', 'back_navigation_mode', 'advanced_search_faqs_toggle'];
 		if ( noPreviewUpdateSettings.includes( field_name ) ) {
 			return;
 		}
@@ -1076,44 +1187,87 @@ jQuery( document ).ready( function( $ ) {
 				}
 			} );
 
-			ignore_setting_update_flag = false;
-		}
+		ignore_setting_update_flag = false;
+	}
 
-		// Article Right Sidebar (the UI has hidden fields which need to update on visual UI change - required to have the correct values in KB config when call AJAX update)
-		if ( field_name === 'nav_sidebar_right' ) {
-
-			// When unselected, then set current sidebar navigation type to none
-			const current_value = $( this ).val();
-			if ( current_value === '0' || current_value === 0 ) {
-				$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
-				return;
+	// Article Left Sidebar Toggle - when enabled, set Categories and Articles Navigation to "All Categories and Articles"
+	if ( field_name === 'article-left-sidebar-toggle' ) {
+		const is_enabled = $field.prop( 'checked' );
+		
+		if ( is_enabled ) {
+			// Set the position to 1 if it's currently disabled (0)
+			const $nav_sidebar_left = $( '#nav_sidebar_left' );
+			if ( $nav_sidebar_left.length && $nav_sidebar_left.val() === '0' ) {
+				$nav_sidebar_left.val( '1' ).trigger( 'change' );
+				update_custom_dropdown_display( $nav_sidebar_left );
+				
+				// Trigger conditional field visibility to show dependent settings (Sidebar Navigation)
+				$nav_sidebar_left.closest( '.eckb-conditional-setting-input' ).trigger( 'click' );
 			}
-
-			// When sidebar switched by 'Categories and Articles Navigation' dropdown, then keep its type in the selected sidebar (e.g. copy navigation type value from opposite sidebar to the current sidebar)
+			
+			// Set Categories and Articles Navigation type to "All Categories and Articles"
 			const current_left_sidebar_type = $( '[name="article_nav_sidebar_type_left"]:checked' ).val();
-			if ( current_left_sidebar_type !== 'eckb-nav-sidebar-none' ) {
-				$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
-				$( '[name="article_nav_sidebar_type_right"][value="' + current_left_sidebar_type + '"]' ).parent().find( '.epkb-label' ).click();
+			if ( current_left_sidebar_type === 'eckb-nav-sidebar-none' ) {
+				$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-v1"]' ).parent().find( '.epkb-label' ).click();
 			}
 		}
+	}
 
-		// Article Left Sidebar (the UI has hidden fields which need to update on visual UI change - required to have the correct values in KB config when call AJAX update)
-		if ( field_name === 'nav_sidebar_left' ) {
-
-			// When unselected, then set current sidebar navigation type to none
-			const current_value = $( this ).val();
-			if ( current_value === '0' || current_value === 0 ) {
-				$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
-				return;
-			}
-
-			// When sidebar switched by 'Categories and Articles Navigation' dropdown, then keep its type in the selected sidebar (e.g. copy navigation type value from opposite sidebar to the current sidebar)
-			const current_right_sidebar_type = $( '[name="article_nav_sidebar_type_right"]:checked' ).val();
-			if ( current_right_sidebar_type !== 'eckb-nav-sidebar-none' ) {
-				$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
-				$( '[name="article_nav_sidebar_type_left"][value="' + current_right_sidebar_type + '"]' ).parent().find( '.epkb-label' ).click();
+	// Article Right Sidebar Toggle - when enabled, set TOC to position 1
+	if ( field_name === 'article-right-sidebar-toggle' ) {
+		const is_enabled = $field.prop( 'checked' );
+		
+		if ( is_enabled ) {
+			// Set TOC to position 1 on the right side if it's currently disabled (0)
+			const $toc_right = $( '#toc_right' );
+			if ( $toc_right.length && $toc_right.val() === '0' ) {
+				$toc_right.val( '1' ).trigger( 'change' );
+				update_custom_dropdown_display( $toc_right );
 			}
 		}
+	}
+
+	// Article Right Sidebar (the UI has hidden fields which need to update on visual UI change - required to have the correct values in KB config when call AJAX update)
+	if ( field_name === 'nav_sidebar_right' ) {
+
+		// When unselected, then set current sidebar navigation type to none
+		const current_value = $( this ).val();
+		if ( current_value === '0' || current_value === 0 ) {
+			$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			return;
+		}
+
+		// When sidebar switched by 'Categories and Articles Navigation' dropdown, then keep its type in the selected sidebar (e.g. copy navigation type value from opposite sidebar to the current sidebar)
+		const current_left_sidebar_type = $( '[name="article_nav_sidebar_type_left"]:checked' ).val();
+		if ( current_left_sidebar_type !== 'eckb-nav-sidebar-none' ) {
+			$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			$( '[name="article_nav_sidebar_type_right"][value="' + current_left_sidebar_type + '"]' ).parent().find( '.epkb-label' ).click();
+		}
+	}
+	
+	// Article Left Sidebar Position dropdown (the UI has hidden fields which need to update on visual UI change - required to have the correct values in KB config when call AJAX update)
+	if ( field_name === 'nav_sidebar_left' ) {
+
+		// When unselected, then set current sidebar navigation type to none
+		const current_value = $( this ).val();
+		if ( current_value === '0' || current_value === 0 ) {
+			$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			return;
+		}
+
+		// When position is set to 1, 2, or 3, ensure Sidebar Navigation is set to "All Categories and Articles"
+		const current_left_sidebar_type = $( '[name="article_nav_sidebar_type_left"]:checked' ).val();
+		if ( current_left_sidebar_type === 'eckb-nav-sidebar-none' ) {
+			$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-v1"]' ).parent().find( '.epkb-label' ).click();
+		}
+
+		// When sidebar switched by 'Categories and Articles Navigation' dropdown, then keep its type in the selected sidebar (e.g. copy navigation type value from opposite sidebar to the current sidebar)
+		const current_right_sidebar_type = $( '[name="article_nav_sidebar_type_right"]:checked' ).val();
+		if ( current_right_sidebar_type !== 'eckb-nav-sidebar-none' ) {
+			$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			$( '[name="article_nav_sidebar_type_left"][value="' + current_right_sidebar_type + '"]' ).parent().find( '.epkb-label' ).click();
+		}
+	}
 
 		// For radio buttons, only proceed if the changed element is the selected one.
 		if ( $field.attr( 'type' ) === 'radio' && ! $field.is( ':checked' ) ) {
@@ -1224,9 +1378,8 @@ jQuery( document ).ready( function( $ ) {
 			return;
 		}
 
-		// AI Collection ID should never trigger page reload - update via AJAX only
-		if ( field_name === 'kb_ai_collection_id' ) {
-			updatePreview( event );
+		// AI Collection ID and Glossary enable should never trigger preview update - just save the new value
+		if ( field_name === 'kb_ai_collection_id' || field_name === 'glossary_enable' ) {
 			return;
 		}
 
@@ -1235,6 +1388,12 @@ jQuery( document ).ready( function( $ ) {
 		const $feature_settings = $( event.target ).closest( '.epkb-fe__feature-settings' );
 		const kb_page_type = $feature_settings.data( 'kb-page-type' );
 		const has_page_builder = frontendEditor.data( 'has-page-builder' ) === true;
+
+		// When switching to Current Theme Template, save settings and do a full page reload
+		if ( field_name === 'templates_for_kb' && $field.val() === 'current_theme_templates' ) {
+			save_settings_and_reload_page( kb_page_type );
+			return;
+		}
 
 		if ( field_name === 'templates_for_kb' || field_name === 'template_main_page_display_title' || field_name === 'general_typography_font_family' ||
 			 ( kb_page_type === 'article-page' && has_page_builder ) ) {
@@ -1347,7 +1506,8 @@ jQuery( document ).ready( function( $ ) {
 				kb_id: frontendEditor.data( 'kbid' ),
 				new_kb_config: kb_config,
 				is_article_page: kb_page_type === 'article-page' ? 1 : 0,
-				selected_search_preset: selected_search_preset
+				selected_search_preset: selected_search_preset,
+				selected_categories_preset: selected_categories_preset
 			},
 			success: function( response ) {
 
@@ -1372,6 +1532,7 @@ jQuery( document ).ready( function( $ ) {
 
 				// Reset stored search design preset
 				selected_search_preset = 'current';
+				selected_categories_preset = 'current';
 			},
 			error: function( jqXHR, textStatus, errorThrown ) {
 				// Log error to console
@@ -2188,6 +2349,38 @@ jQuery( document ).ready( function( $ ) {
 					location.reload();
 				}
 			}
+		});
+	}
+
+	/**
+	 * Clean up HTML tags incorrectly injected by wpautop.
+	 * This is needed for compatibility with page builders like Elementor that apply wpautop-like formatting.
+	 * Add new cleanup rules here as issues are discovered.
+	 */
+	function cleanupWpautopTags() {
+
+		// Unwrap select elements that are incorrectly wrapped in <p> tags
+		document.querySelectorAll( '#epkb-fe__editor p > select' ).forEach( function( select ) {
+			let p = select.parentNode;
+			p.parentNode.insertBefore( select, p );
+			p.remove();
+		});
+
+		// Remove empty <p></p> tags
+		document.querySelectorAll( '#epkb-fe__editor p:empty' ).forEach( function( p ) {
+			p.remove();
+		});
+
+		// Fix input_container incorrectly moved inside label by wpautop (move it back outside)
+		document.querySelectorAll( '#epkb-fe__editor label > .input_container' ).forEach( function( inputContainer ) {
+			let label = inputContainer.parentNode;
+			label.parentNode.insertBefore( inputContainer, label.nextSibling );
+		});
+
+		// Fix radio-buttons-container incorrectly moved inside epkb-main_label span by wpautop (move it back outside)
+		document.querySelectorAll( '#epkb-fe__editor .epkb-main_label > .epkb-radio-buttons-container' ).forEach( function( radioContainer ) {
+			let span = radioContainer.parentNode;
+			span.parentNode.insertBefore( radioContainer, span.nextSibling );
 		});
 	}
 });

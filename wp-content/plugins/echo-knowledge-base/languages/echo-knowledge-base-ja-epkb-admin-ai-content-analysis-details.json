@@ -7,14 +7,23 @@
                 "lang": "ja",
                 "plural-forms": "nplurals=1; plural=0;"
             },
-            "Demo Article": [
-                "デモ記事"
-            ],
             "Categories": [
                 "カテゴリー"
             ],
+            "OFF": [
+                "オフ"
+            ],
+            "Use code:": [
+                "コードを使用:"
+            ],
+            "Copy": [
+                "コピー"
+            ],
             "Article Content": [
                 "記事の内容"
+            ],
+            "Copied!": [
+                "コピーしました"
             ],
             "Analyzing...": [
                 "分析中..."
@@ -22,28 +31,31 @@
             "Content Gaps Analysis": [
                 "コンテンツギャップ分析"
             ],
+            "Identifies unanswered user questions": [
+                "未回答のユーザー質問を特定します"
+            ],
+            "Detects missing or underdeveloped topics": [
+                "不足しているまたは未発展のトピックを検出します"
+            ],
+            "Provides actionable recommendations for improvement": [
+                "改善のための実践的な推奨事項を提供します"
+            ],
             "AI-Powered Tag Suggestions": [
                 "AI搭載タグ提案"
-            ],
-            "Gap analysis is only available with AI Features add-on.": [
-                "ギャップ分析は AI Features アドオンでのみ利用できます。."
             ],
             "Readability": [
                 "可読性"
             ],
-            "Tag added successfully": [
-                "タグを正常に追加しました。"
-            ],
-            "Tag removed successfully": [
-                "タグを正常に削除しました。"
-            ],
             "Tag updated successfully": [
                 "タグを正常に更新しました。"
+            ],
+            "Get AI Features PRO": [
+                "AI 機能 PRO を入手"
             ],
             "Add New Tag": [
                 "新規タグを追加"
             ],
-            "taxonomy general name\u0004Tags": [
+            "Tags": [
                 "タグ"
             ],
             "Edit Article": [
@@ -52,29 +64,17 @@
             "View Article": [
                 "記事を読む"
             ],
+            "Saving tags...": [
+                "タグを保存しています..."
+            ],
             "Failed to save tag changes": [
                 "タグ変更の保存に失敗しました"
-            ],
-            "Failed to add tag": [
-                "タグの追加に失敗しました"
-            ],
-            "Failed to remove tag": [
-                "タグの削除に失敗しました"
-            ],
-            "Failed to remove tags": [
-                "タグの削除に失敗しました"
             ],
             "Failed to update tag": [
                 "タグの更新に失敗しました"
             ],
             "Not Analyzed": [
                 "分析されていません"
-            ],
-            "Demo Analysis Data": [
-                "デモ分析データ"
-            ],
-            "This is a demo article with sample analytics data for demonstration purposes. Create your own articles to see real content analysis results.": [
-                "これは、デモ目的のサンプル分析データを含むデモ記事です。実際のコンテンツ分析結果を見るには、独自の記事を作成してください。."
             ],
             "Loading analysis details...": [
                 "分析の詳細を読み込み中..."
@@ -142,8 +142,8 @@
             "An error occurred during Content Gaps analysis.": [
                 "コンテンツギャップ分析中にエラーが発生しました。."
             ],
-            "Learn More About AI Features": [
-                "AI機能について詳しく知る"
+            "AI identifies missing information and unanswered questions in your articles. Discover what topics need more coverage.": [
+                "AI は記事の不足情報と未回答の質問を特定します。より多く取り上げるべきトピックを確認しましょう。."
             ],
             "Analyzing article for content gaps...": [
                 "記事のコンテンツギャップを分析中..."

@@ -31,6 +31,9 @@
             "selected": [
                 "sélectionné"
             ],
+            "Delete": [
+                "Supprimer"
+            ],
             "Next": [
                 "Suivant"
             ],
@@ -45,9 +48,6 @@
             ],
             "Loading...": [
                 "Chargement..."
-            ],
-            "Delete": [
-                "Supprimer"
             ],
             "of": [
                 "de"
@@ -79,29 +79,8 @@
             "Unknown error occurred": [
                 "Une erreur inconnue est survenue"
             ],
-            "No articles need analysis": [
-                "Aucun article n'a besoin d'analyse"
-            ],
-            "All articles have been analyzed. Great job!": [
-                "Tous les articles ont été analysés. Excellent travail !"
-            ],
-            "No articles need improvement": [
-                "Aucun article n'a besoin d'amélioration"
-            ],
-            "All analyzed articles have scores above 80%. Excellent!": [
-                "Tous les articles analysés ont des scores supérieurs à 80 %. Excellent !"
-            ],
-            "No recent articles": [
-                "Aucun article récent"
-            ],
-            "No articles have been modified recently.": [
-                "Aucun article n'a été modifié récemment."
-            ],
-            "No articles found": [
-                "Aucun article trouvé"
-            ],
-            "No articles are available in this knowledge base. Create some articles to start analyzing.": [
-                "Aucun article n'est disponible dans cette base de connaissances. Créez quelques articles pour commencer l'analyse."
+            "All Knowledge Bases": [
+                "Toutes les bases de connaissances"
             ],
             "To Analyze": [
                 "Analyser"
@@ -129,6 +108,18 @@
             ],
             "No articles match your search": [
                 "Aucun article ne correspond à votre recherche"
+            ],
+            "No articles need analysis": [
+                "Aucun article n'a besoin d'analyse"
+            ],
+            "No articles need improvement": [
+                "Aucun article n'a besoin d'amélioration"
+            ],
+            "No recent articles": [
+                "Aucun article récent"
+            ],
+            "No articles found": [
+                "Aucun article trouvé"
             ],
             "View detailed analysis": [
                 "Voir l’analyse détaillée"

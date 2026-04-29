@@ -225,6 +225,14 @@ class EPKB_KB_Config_Layout_Modular {
 		        'type'        => EPKB_Input_Filter::COLOR_HEX,
 		        'default'     => '#1e73be'
 	        ),
+	        'ml_categories_articles_category_box_bg_color'          => array(
+		        'label'       => esc_html__( 'Category Box Background Color', 'echo-knowledge-base' ),
+		        'name'        => 'ml_categories_articles_category_box_bg_color',
+		        'max'         => '7',
+		        'min'         => '7',
+		        'type'        => EPKB_Input_Filter::COLOR_HEX,
+		        'default'     => '#ffffff'
+	        ),
 	        'ml_categories_articles_category_title_html_tag'        => array(
 		        'label'       => esc_html__( 'Category Title HTML Tag', 'echo-knowledge-base' ),
 		        'name'        => 'ml_categories_articles_category_title_html_tag',

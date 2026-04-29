@@ -7,11 +7,11 @@
                 "lang": "pl_PL",
                 "plural-forms": "nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"
             },
-            "Loading...": [
-                "Ładowanie..."
-            ],
             "AI Features Required": [
                 "Wymagane funkcje AI"
+            ],
+            "Loading...": [
+                "Ładowanie..."
             ],
             "Go to AI Settings": [
                 "Przejdź do ustawień AI"

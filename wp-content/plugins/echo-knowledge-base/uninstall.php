@@ -53,6 +53,36 @@ class EPKB_Uninstall {
 		delete_transient( '_epkb_plugin_activated' );
 	    delete_transient( '_epkb_delete_all_kb_data' );
 
+	    // Delete AI configurations
+	    delete_option( 'epkb_ai_configuration' );
+	    delete_option( 'epkb_ai_training_data_configuration' );
+	    delete_option( 'epkb_ai_widget_configuration_1' );
+
+	    // Delete AI database table versions
+	    delete_option( 'epkb_ai_training_data_table_version' );
+	    delete_option( 'epkb_ai_content_analysis_table_version' );
+	    delete_option( 'epkb_ai_messages_table_version' );
+
+	    // Clear AI cron jobs
+	    wp_clear_scheduled_hook( 'epkb_do_sync_cron_event' );
+	    wp_clear_scheduled_hook( 'epkb_do_content_analysis_cron_event' );
+
+	    // Delete AI transients
+	    delete_transient( 'epkb_openai_rate_limit' );
+	    delete_transient( 'epkb_ai_dashboard_status' );
+	    delete_transient( 'epkb_ai_chat_security_logs' );
+	    delete_transient( 'epkb_ai_sync_lock' );
+	    delete_transient( 'epkb_ai_rate_limit_until' );
+
+	    // Delete all AI error notification count transients (they use date suffix)
+	    $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_epkb_ai_error_notification_count_%'" );
+	    $wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '_transient_timeout_epkb_ai_error_notification_count_%'" );
+
+	    // Drop AI database tables
+	    $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}epkb_ai_training_data" );
+	    $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}epkb_ai_content_analysis" );
+	    $wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}epkb_ai_messages" );
+
 	    delete_option( 'asea_version' );
 	    delete_option( 'asea_version_first' );
 	    delete_option( 'asea_error_log' );

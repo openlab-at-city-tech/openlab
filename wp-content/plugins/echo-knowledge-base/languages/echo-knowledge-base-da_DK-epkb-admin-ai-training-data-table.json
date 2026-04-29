@@ -31,6 +31,9 @@
             "selected": [
                 "valgt"
             ],
+            "Delete": [
+                "Slet"
+            ],
             "Article": [
                 "Artikel"
             ],
@@ -49,14 +52,32 @@
             "Error": [
                 "Fejl"
             ],
+            "Choose Training Data": [
+                "Vælg maskinlæringsdata"
+            ],
+            "Send Data to AI": [
+                "Send data til AI"
+            ],
+            "Thank you! Your report has been submitted successfully.": [
+                "Tak! Din rapport er blevet indsendt."
+            ],
+            "Never": [
+                "Aldrig"
+            ],
+            "Submitting...": [
+                "Indsender..."
+            ],
             "Pending": [
                 "Afventer"
             ],
-            "Delete": [
-                "Slet"
-            ],
             "of": [
                 "af"
+            ],
+            "Canceled": [
+                "Annulleret"
+            ],
+            "Skipped": [
+                "Springet over"
             ],
             "Refreshing...": [
                 "Opdaterer..."
@@ -91,32 +112,29 @@
             "Added": [
                 "Tilføjet"
             ],
+            "Added:": [
+                "Tilføjet:"
+            ],
+            "Manage Notes and PDFs": [
+                "Administrér noter og PDF'er"
+            ],
+            "Deleting...": [
+                "Sletter..."
+            ],
             "Failed to load training data": [
                 "Kunne ikke indlæse maskinlæringsdata"
             ],
             "Failed to delete items": [
                 "Kunne ikke slette elementer"
             ],
-            "Delete Items": [
-                "Slet elementer"
-            ],
             "Syncing": [
                 "Synkroniserer"
-            ],
-            "Canceled": [
-                "Annulleret"
             ],
             "How to get started": [
                 "Sådan kommer du i gang"
             ],
-            "Choose Training Data": [
-                "Vælg maskinlæringsdata"
-            ],
             "Pick the content types to include.": [
                 "Vælg de indholdstyper, der skal inkluderes."
-            ],
-            "Send Data to AI": [
-                "Send data til AI"
             ],
             "Select items in the table, then sync them.": [
                 "Vælg posterne i tabellen, og synkroniser dem."
@@ -157,14 +175,26 @@
             "View Error": [
                 "Vis fejl"
             ],
+            "View Info": [
+                "Vis oplysninger"
+            ],
             "View content": [
                 "Vis indhold"
             ],
-            "KB Files": [
-                "KB-filer"
+            "Failed to submit report.": [
+                "Det lykkedes ikke at indsende rapporten."
             ],
-            "Never": [
-                "Aldrig"
+            "An error occurred. Please try again.": [
+                "Der opstod en fejl. Prøv igen."
+            ],
+            "Submit this issue if you need help:": [
+                "Indsend dette problem, hvis du har brug for hjælp:"
+            ],
+            "Your email (optional)": [
+                "Din e-mail (valgfri)"
+            ],
+            "Submit to Us": [
+                "Indsend til os"
             ],
             "Error Details": [
                 "Fejloplysninger"
@@ -172,26 +202,71 @@
             "Failed to load content": [
                 "Kunne ikke indlæse indhold"
             ],
+            "Delete Items": [
+                "Slet elementer"
+            ],
             "Post ID:": [
                 "Indlæg-ID:"
             ],
             "Loading content...": [
                 "Indlæser indhold..."
             ],
-            "Error Processing Content": [
-                "Fejl ved behandling af indhold"
+            "Content Processing Warning": [
+                "Advarsel ved indholdsbehandling"
             ],
-            "Original Content": [
-                "Originalt indhold"
+            "The HTML content of this post produced empty text after processing. This usually means the post contains only non-text elements (scripts, styles, embeds, etc.). The original HTML is shown below for inspection.": [
+                "HTML-indholdet i dette indlæg gav tom tekst efter behandlingen. Dette betyder normalt, at indlægget kun indeholder ikke-tekstlige elementer (scripts, styles, embeds osv.). Den oprindelige HTML vises nedenfor til inspektion."
             ],
-            "Processed Content": [
-                "Behandlet indhold"
+            "Original HTML Content": [
+                "Oprindeligt HTML-indhold"
             ],
             "No content available": [
                 "Intet indhold tilgængeligt"
             ],
-            "No processed content available": [
-                "Intet behandlet indhold tilgængeligt"
+            "Error Processing Content": [
+                "Fejl ved behandling af indhold"
+            ],
+            "Delete from Training Data": [
+                "Slet fra maskinlæringsdata"
+            ],
+            "File Name:": [
+                "Filnavn:"
+            ],
+            "Unknown file": [
+                "Ukendt fil"
+            ],
+            "Stored as:": [
+                "Gemt som:"
+            ],
+            "HTML": [
+                "HTML"
+            ],
+            "PDF": [
+                "PDF"
+            ],
+            "Original PDF:": [
+                "Oprindeligt PDF:"
+            ],
+            "Open PDF": [
+                "Åbn PDF"
+            ],
+            "If this stored URL no longer works, the original PDF is no longer available from this training data record.": [
+                "Hvis denne gemte URL ikke længere fungerer, er den oprindelige PDF ikke længere tilgængelig fra denne registrering af maskinlæringsdata."
+            ],
+            "No original URL is stored for this upload. Only the saved file information is available here.": [
+                "Der er ikke gemt nogen original URL for denne upload. Kun den gemte filinformation er tilgængelig her."
+            ],
+            "Provider:": [
+                "Udbyder:"
+            ],
+            "AI File ID:": [
+                "AI-fil-ID:"
+            ],
+            "Last Synced:": [
+                "Sidst synkroniseret:"
+            ],
+            "Original Content": [
+                "Originalt indhold"
             ]
         }
     }

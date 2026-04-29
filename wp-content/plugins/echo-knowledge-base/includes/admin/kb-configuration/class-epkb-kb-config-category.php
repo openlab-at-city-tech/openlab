@@ -42,9 +42,9 @@ class EPKB_KB_Config_Category {
 		
 		<tr class="form-field epkb-term-options-wrap">
 			<th scope="row"><label><?php esc_html_e( 'Draft', 'echo-knowledge-base' ); ?></label></th>
-			<td><label><input type="checkbox" name="epkb_category_is_draft" <?php checked( $is_draft ); ?>> <span><?php echo esc_html__( 'Do not list categories on the KB Main Page or sidebars. It\'s important to note that categories ' .
-                                                                'and their articles will still be accessible through direct URLs and other means. This feature is not a security measure, but rather a convenience feature that helps to ' .
-	                                                            'prepare content for publication.', 'echo-knowledge-base' ); echo ' <strong>' . esc_html__( 'It is not intended to control access to KB content like our Access Manager plugin.', 'echo-knowledge-base' ) .
+			<td><label><input type="checkbox" name="epkb_category_is_draft" <?php checked( $is_draft ); ?>> <span><?php
+				echo esc_html__( 'Do not list categories on the KB Main Page or sidebars. It\'s important to note that categories and their articles will still be accessible through direct URLs and other means. This feature is not a security measure, but rather a convenience feature that helps to prepare content for publication.', 'echo-knowledge-base' );
+				echo ' <strong>' . esc_html__( 'It is not intended to control access to KB content like our Access Manager plugin.', 'echo-knowledge-base' ) .
                      ' <a href="https://www.echoknowledgebase.com/documentation/hiding-categories/" target="_blank">' . esc_html__( 'Learn More', 'echo-knowledge-base' ) . '</a>' .
            '</strong>'; ?></span></label></td>
 		</tr><?php
@@ -57,6 +57,7 @@ class EPKB_KB_Config_Category {
 	public function display_category_fields( $category ) {
 
 		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config( $this->kb_id );
+		$generate_icon_url = 'https://www.echoknowledgebase.com/documentation/generate-category-icons/';
 
 		$current_main_page_id = EPKB_KB_Handler::get_first_kb_main_page_id( $kb_config );
 		$current_main_page = empty( $current_main_page_id) ? '' : get_post( $current_main_page_id );
@@ -79,36 +80,7 @@ class EPKB_KB_Config_Category {
 
 		$category_level = $this->get_level( $category );
 
-		// display icon on/off information but only for layouts that can have icons turned off
-		if ( $main_page_layout == EPKB_Layout::GRID_LAYOUT ) {
-			$location = $this->get_grid_icon_location( $this->kb_id );
-		} else if ( $main_page_layout == EPKB_Layout::CATEGORIES_LAYOUT && $category_level > 1 ) {
-			$location = '';
-		} else {
-			$location = epkb_get_instance()->kb_config_obj->get_value( $this->kb_id, 'section_head_category_icon_location' );
-		}
-
 		$is_new_category = ! is_object( $category );
-
-		// if icons disabled just show turn on/off link
-		/* if ( $location == 'no_icons' ) {
-
-			$message = esc_html__( 'Category Icons are disabled', 'echo-knowledge-base' );
-
-		    if ( $is_new_category ) {
-			    self::category_icon_message( 'epkb-icons-are-disabled', $message , '',
-				                                'Turn Category Icons ON. See Categories & Articles settings.' );
-			} else {    ?>
-				<tr class="form-field epkb-term-options-wrap">
-				<th scope="row">
-					<label><?php esc_html_e( 'Category Icon', 'echo-knowledge-base' ); ?></label>
-				</th>
-				<td><?php self::category_icon_message( 'epkb-icons-are-disabled', $message , '',
-												'Turn Category Icons ON. See Categories & Articles settings.' ); ?></td>
-			    </tr><?php
-			}
-			return;
-		} */
 
 		// not all categories have icons
 		switch( $main_page_layout ) {
@@ -147,7 +119,7 @@ class EPKB_KB_Config_Category {
 			<<?php echo $is_new_category ? 'div' : 'td'; ?>>				<?php
 
 				self::category_icon_message( 'epkb-icons-are-enabled', $category_icon_message, '', '');        ?>
-                
+
 				<div class="epkb-categories-icons epkb-categories-icons--visible">
 					<div class="epkb-categories-icons__tabs-header">
 						<div class="epkb-categories-icons__button <?php echo ( $active_icon_type == 'font' ) ? 'epkb-categories-icons__button--active' : ''; ?>" id="epkb_font_icon" data-type="font">
@@ -156,6 +128,10 @@ class EPKB_KB_Config_Category {
 							<div class="epkb-categories-icons__button <?php echo ( $active_icon_type == 'image' ) ? 'epkb-categories-icons__button--active' : ''; ?>" id="epkb_image_icon"
 							    data-type="image"><?php esc_html_e( 'Image Icon', 'echo-knowledge-base' ); ?>
 							</div>
+							<a class="epkb-categories-icons__link" href="<?php echo esc_url( $generate_icon_url ); ?>" target="_blank" rel="noopener noreferrer">
+								<span><?php esc_html_e( 'Generate Icon', 'echo-knowledge-base' ); ?></span>
+								<span class="epkbfa epkbfa-external-link" aria-hidden="true"></span>
+							</a>
 					</div>
 					<div class="epkb-categories-icons__tab-body epkb-categories-icons__tab-body--font
 					  <?php echo ( $active_icon_type == 'font' ) ? 'epkb-categories-icons__tab-body--active' : ''; ?>"><?php EPKB_Icons::get_icons_pack_html( true, $active_icon_name ); ?></div>
@@ -182,7 +158,7 @@ class EPKB_KB_Config_Category {
 			<p>				<?php
 				echo esc_html( $message );
 				if ( ! empty( $url ) ) {   ?>
-					<a href="<?php echo esc_url( $url ); ?>" target="_blank"><?php esc_html_e( $urlText, 'echo-knowledge-base' ); ?></a>				<?php
+					<a href="<?php echo esc_url( $url ); ?>" target="_blank"><?php echo esc_html( $urlText ); ?></a>				<?php
 				}   ?>
 			</p>
 		</div>	<?php
@@ -228,8 +204,7 @@ class EPKB_KB_Config_Category {
 					<li><?php
 						esc_html_e( 'The size of all image icons on the front-end is controlled in the visual Editor', 'echo-knowledge-base' );					?>
 					</li>
-					<li><?php esc_html_e( 'This image should match the given setting for image icon size. If you choose a larger image, the image will be compressed to the icon size. This may cause unnecessary ' .
-					              'load time on the front-end.', 'echo-knowledge-base' ); ?></li>
+					<li><?php esc_html_e( 'This image should match the given setting for image icon size. If you choose a larger image, the image will be compressed to the icon size. This may cause unnecessary load time on the front-end.', 'echo-knowledge-base' ); ?></li>
 					<li><?php esc_html_e( 'For example, if you set the icon size to 50px, an image size of 50x50 will work the best.', 'echo-knowledge-base' ); ?></li>
 				</ul>
 			</div>

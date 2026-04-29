@@ -19,14 +19,23 @@
             "Cancel": [
                 "Anuluj"
             ],
-            "Date:": [
-                "Data:"
+            "Save Settings": [
+                "Zapisz ustawienia"
+            ],
+            "Delete": [
+                "Usuń"
             ],
             "Next": [
                 "Następne"
             ],
             "Previous": [
                 "Poprzednie"
+            ],
+            "Feedback": [
+                "Uwagi"
+            ],
+            "Reset": [
+                "Resetuj"
             ],
             "Saving...": [
                 "Zapisywanie..."
@@ -49,26 +58,14 @@
             "Middle Column": [
                 "Środkowa kolumna"
             ],
-            "Feedback": [
-                "Uwagi"
-            ],
             "AI Assistant": [
                 "Asystent AI"
-            ],
-            "Save Settings": [
-                "Zapisz ustawienia"
-            ],
-            "Delete": [
-                "Usuń"
             ],
             "Delete Selected": [
                 "Usuń wybrane"
             ],
             "of": [
                 "z"
-            ],
-            "Reset": [
-                "Resetuj"
             ],
             "Refreshing...": [
                 "Odświeżanie..."
@@ -85,12 +82,6 @@
             "Searching server for more results...": [
                 "Wyszukiwanie kolejnych wyników na serwerze..."
             ],
-            "User:": [
-                "Użytkownik:"
-            ],
-            "Status:": [
-                "Status:"
-            ],
             "Are you sure you want to reset to default instructions?": [
                 "Czy na pewno chcesz zresetować instrukcje do wartości domyślnych?"
             ],
@@ -103,11 +94,17 @@
             "Reset to Default": [
                 "Resetuj do wartości domyślnych"
             ],
+            "Training data issues detected": [
+                "Wykryto problemy z danymi uczenia maszynowego"
+            ],
             "Failed to save settings": [
                 "Nie udało się zapisać ustawień"
             ],
             "Go to Settings": [
                 "Przejdź do Ustawień"
+            ],
+            "Deleting search...": [
+                "Usuwanie wyszukiwania..."
             ],
             "Are you sure you want to delete the selected searches?": [
                 "Czy na pewno chcesz usunąć wybrane wyszukiwania?"
@@ -154,15 +151,6 @@
             "Select a search to view details": [
                 "Wybierz wyszukiwanie, aby wyświetlić szczegóły"
             ],
-            "Search Information": [
-                "Informacje o wyszukiwaniu"
-            ],
-            "Query:": [
-                "Zapytanie:"
-            ],
-            "Results Count:": [
-                "Liczba wyników:"
-            ],
             "Contact Request": [
                 "Wniosek o kontakt"
             ],
@@ -201,6 +189,30 @@
             ],
             "Add Section": [
                 "Dodaj sekcję"
+            ],
+            "Are you sure you want to reset to the default prompt?": [
+                "Czy na pewno chcesz zresetować podpowiedź do wartości domyślnej?"
+            ],
+            "Reset Prompt": [
+                "Resetuj podpowiedź"
+            ],
+            "Are you sure you want to reset to the default prompt? Your custom prompt will be lost.": [
+                "Czy na pewno chcesz zresetować do wartości domyślnej podpowiedź? Twoja niestandardowa podpowiedź zostanie utracona."
+            ],
+            "Select Section:": [
+                "Wybierz sekcję:"
+            ],
+            "Prompt:": [
+                "Podpowiedź:"
+            ],
+            "Using custom prompt": [
+                "Używana niestandardowa podpowiedź"
+            ],
+            "Using default prompt": [
+                "Używana domyślna podpowiedź"
+            ],
+            "AI Search needs a valid Training Data collection. Resolve the issues below in Training Data or KB Configuration.": [
+                "AI Wyszukiwanie potrzebuje prawidłowego zbioru danych treningowych. Rozwiąż problemy poniżej w danych treningowych lub konfiguracji KB."
             ],
             "Failed to load search history": [
                 "Nie udało się wczytać historii wyszukiwania"

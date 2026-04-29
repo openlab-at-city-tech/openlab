@@ -102,6 +102,9 @@ class EPKB_Category_Archive_Setup {
 			EPKB_KB_Search::get_search_form_output( $args['config'] );
 		} else {
 			// Default behavior - use main page search settings
+			// Set the global flag so ASEA knows to use main page settings
+			global $asea_use_main_page_settings;
+			$asea_use_main_page_settings = true;
 			EPKB_Modular_Main_Page::search_module( $args['config'] );
 		}
 	}
@@ -287,7 +290,10 @@ class EPKB_Category_Archive_Setup {
 			return;
 		}
 
-		$inline_style_escaped = EPKB_Utilities::get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing', $kb_config ); ?>
+		$hover_toggle = empty( $kb_config['article_list_hover_toggle'] ) ? 'off' : $kb_config['article_list_hover_toggle'];
+		$inline_style_escaped = $hover_toggle == 'on'
+			? ''
+			: EPKB_Utilities::get_inline_style( 'padding-bottom:: article_list_spacing,padding-top::article_list_spacing', $kb_config ); ?>
 
 		<div class="eckb-article-container<?php echo esc_attr( $article_class ); ?>" id="post-<?php echo esc_attr( $article_id ); ?>">
 
@@ -900,6 +906,39 @@ class EPKB_Category_Archive_Setup {
 		    #eckb-archive-page-container .eckb-category-archive-arrow {
 		        color: ' . $kb_config['article_icon_color'] . ';
 		    }';
+
+		// Article hover effect -----------------------------------------/
+		if ( ! empty( $kb_config['article_list_hover_toggle'] ) && $kb_config['article_list_hover_toggle'] == 'on' ) {
+			$hover_spacing = intval( $kb_config['article_list_spacing'] );
+			$hover_bg = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_background_color'] );
+			$hover_text = EPKB_Utilities::sanitize_hex_color( $kb_config['article_list_hover_font_color'] );
+			$output .= '
+				#eckb-archive-page-container .epkb-ml-article-container {
+					padding: ' . $hover_spacing . 'px !important;
+					border-radius: 6px !important;
+					transition: background-color 0.2s ease, color 0.2s ease !important;
+				}
+				#eckb-archive-page-container .epkb-ml-article-container:hover {
+					background-color: ' . $hover_bg . ' !important;
+				}
+				#eckb-archive-page-container .epkb-ml-article-container:hover .epkb-article-inner {
+					color: ' . $hover_text . ' !important;
+				}
+				#eckb-archive-page-container .epkb-ml-article-container:hover .epkb-article__icon,
+				#eckb-archive-page-container .epkb-ml-article-container:hover .eckb-article-title__icon {
+					color: ' . $hover_text . ' !important;
+				}
+				#eckb-archive-page-container .epkb-ml-article-container:hover .eckb-category-archive-arrow {
+					color: ' . $hover_text . ' !important;
+				}
+				#eckb-archive-page-container .eckb-category-archive-arrow {
+					right: ' . $hover_spacing . 'px !important;
+				}
+				#eckb-archive-page-container .eckb-article-body {
+					padding-left: ' . $hover_spacing . 'px !important;
+					padding-right: ' . $hover_spacing . 'px !important;
+				}';
+		}
 
 		$output .= self::generate_archive_structure_css( $kb_config );
 

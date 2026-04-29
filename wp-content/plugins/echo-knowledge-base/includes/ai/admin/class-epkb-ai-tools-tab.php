@@ -25,12 +25,12 @@ class EPKB_AI_Tools_Tab {
 
 		// Get debug enabled status
 		$debug_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_tools_debug_enabled', 'off' );
-		
+
 		// Check if localhost and enable by default if not set
 		if ( !self::is_localhost() && $debug_enabled === 'off' ) {
 			return [];
 		}
-		
+
 		$config = array(
 			'tab_id' => 'tools',
 			'title' => __( 'Tools', 'echo-knowledge-base' ),
@@ -40,10 +40,11 @@ class EPKB_AI_Tools_Tab {
 			'debug_enabled' => $debug_enabled,
 			'system_info' => self::get_system_info(),
 			'data_collections' => self::get_data_collections_info(),
+			'vector_store_debug' => self::get_vector_store_debug_info(),
 			'nonce' => wp_create_nonce( 'epkb_ai_tools_debug' ),
 			// Tuning sub-tab removed
 		);
-		
+
 		return $config;
 	}
 
@@ -116,7 +117,7 @@ class EPKB_AI_Tools_Tab {
 		$enabled = ( $enabled === 'on' ) ? 'on' : 'off';
 		
 		// Update the configuration
-		$result = EPKB_AI_Config_Specs::update_config_value( 'ai_tools_debug_enabled', $enabled );
+		$result = EPKB_AI_Config_Specs::update_ai_config_value( 'ai_tools_debug_enabled', $enabled );
 		if ( is_wp_error( $result ) ) {
 			wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 			return;
@@ -203,10 +204,11 @@ class EPKB_AI_Tools_Tab {
 			'class' => $exec_time_class
 		);
 
-		// OpenAI API status
-		$api_key = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_key' );
-		$info['openai_api'] = array(
-			'label' => __( 'OpenAI API Key', 'echo-knowledge-base' ),
+		// AI Provider API status
+		$provider = EPKB_AI_Provider::get_active_provider();
+		$api_key = EPKB_AI_Config_Specs::get_unmasked_api_key_for_provider( $provider );
+		$info['ai_key'] = array(
+			'label' => EPKB_AI_Provider::get_provider_label( $provider ) . ' ' . __( 'API Key', 'echo-knowledge-base' ),
 			'value' => ! empty( $api_key ) ? __( 'Configured', 'echo-knowledge-base' ) : __( 'Not Configured', 'echo-knowledge-base' ),
 			'class' => empty( $api_key ) ? 'epkb-ai-error' : 'epkb-ai-success'
 		);
@@ -351,16 +353,166 @@ class EPKB_AI_Tools_Tab {
 	 * AJAX handler to get data collections info
 	 */
 	public static function ajax_get_data_collections_info() {
-		
+
 		// Security check
 		if ( ! EPKB_Admin_UI_Access::is_user_access_to_context_allowed( 'admin_eckb_access_ai_feature' ) ) {
 			wp_send_json_error( array( 'message' => __( 'Access denied', 'echo-knowledge-base' ) ) );
 			return;
 		}
-		
+
 		$collections = self::get_data_collections_info();
-		
+
 		wp_send_json_success( array( 'collections' => $collections ) );
+	}
+
+	/**
+	 * Get vector store debug information for troubleshooting
+	 *
+	 * @return array Debug info including collections, KB mappings, and online status
+	 */
+	private static function get_vector_store_debug_info() {
+
+		// Only show if AI Chat or AI Search is enabled
+		$ai_chat_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_chat_enabled' ) === 'on';
+		$ai_search_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_enabled' ) === 'on';
+		if ( ! $ai_chat_enabled && ! $ai_search_enabled ) {
+			return array();
+		}
+
+		$debug_info = array(
+			'active_provider' => EPKB_AI_Provider::get_active_provider(),
+			'active_provider_label' => EPKB_AI_Provider::get_provider_label(),
+			'collections' => array(),
+			'kb_collection_mapping' => array(),
+		);
+
+		// Gather data from both sources - only for the active provider
+		$active_provider = EPKB_AI_Provider::get_active_provider();
+		$options_data = array(); // key: collection_id
+		$db_data = array();      // key: collection_id
+
+		// 1. Get collections from options table (active provider only)
+		$options_collections = EPKB_AI_Training_Data_Config_Specs::get_training_data_collections( false, true );
+		if ( ! is_wp_error( $options_collections ) && ! empty( $options_collections ) ) {
+			foreach ( $options_collections as $collection_id => $config ) {
+				$options_data[ $collection_id ] = array(
+					'name' => ! empty( $config['ai_training_data_store_name'] ) ? $config['ai_training_data_store_name'] : EPKB_AI_Training_Data_Config_Specs::get_default_collection_name( $collection_id ),
+					'provider' => isset( $config['ai_training_data_provider'] ) ? $config['ai_training_data_provider'] : 'unknown',
+					'vector_store_id' => isset( $config['ai_training_data_store_id'] ) ? $config['ai_training_data_store_id'] : '',
+				);
+			}
+		}
+
+		// 2. Get collections from training data DB table (active provider only)
+		$training_data_db = new EPKB_AI_Training_Data_DB( true );
+		$db_collections = $training_data_db->get_all_collection_ids_from_db();
+		if ( ! is_wp_error( $db_collections ) && ! empty( $db_collections ) ) {
+			foreach ( $db_collections as $collection_id => $provider ) {
+				if ( $provider !== $active_provider ) {
+					continue;
+				}
+				$status_stats = $training_data_db->get_status_statistics( $collection_id );
+				$db_data[ $collection_id ] = array(
+					'provider' => $provider,
+					'vector_store_id' => $training_data_db->get_store_id_by_collection( $collection_id, $provider ) ?: '',
+					'record_count' => $status_stats['total'] ?? 0,
+					'synced_count' => $status_stats['synced'] ?? 0,
+				);
+			}
+		}
+
+		// 3. Merge and compare - get all unique collection IDs
+		$all_collection_ids = array_unique( array_merge( array_keys( $options_data ), array_keys( $db_data ) ) );
+		sort( $all_collection_ids );
+
+		foreach ( $all_collection_ids as $collection_id ) {
+			$in_options = isset( $options_data[ $collection_id ] );
+			$in_db = isset( $db_data[ $collection_id ] );
+			$options_store_id = $in_options ? $options_data[ $collection_id ]['vector_store_id'] : '';
+			$db_store_id = $in_db ? $db_data[ $collection_id ]['vector_store_id'] : '';
+
+			// Determine source label and if there's a mismatch
+			if ( $in_options && $in_db && $options_store_id === $db_store_id ) {
+				$source = 'Options & DB';
+				$store_id = $options_store_id;
+				$mismatch = false;
+			} else if ( $in_options && $in_db ) {
+				$source = 'Options & DB (mismatch)';
+				$store_id = $options_store_id; // Use options as primary
+				$mismatch = true;
+			} else if ( $in_options ) {
+				$source = 'Options only';
+				$store_id = $options_store_id;
+				$mismatch = false;
+			} else {
+				$source = 'DB only';
+				$store_id = $db_store_id;
+				$mismatch = false;
+			}
+
+			$provider = $in_options ? $options_data[ $collection_id ]['provider'] : $db_data[ $collection_id ]['provider'];
+			$online_status = self::check_vector_store_online_status( $store_id, $provider );
+
+			$collection_entry = array(
+				'collection_id' => $collection_id,
+				'name' => $in_options ? $options_data[ $collection_id ]['name'] : EPKB_AI_Training_Data_Config_Specs::get_default_collection_name( $collection_id ),
+				'source' => $source,
+				'provider' => $provider,
+				'provider_label' => EPKB_AI_Provider::get_provider_label( $provider ),
+				'vector_store_id' => $store_id,
+				'online_status' => $online_status,
+				'record_count' => $in_db ? $db_data[ $collection_id ]['record_count'] : 0,
+				'synced_count' => $in_db ? $db_data[ $collection_id ]['synced_count'] : 0,
+			);
+
+			// Add mismatch details if vector store IDs differ
+			if ( $mismatch ) {
+				$collection_entry['options_store_id'] = $options_store_id;
+				$collection_entry['db_store_id'] = $db_store_id;
+				$collection_entry['db_online_status'] = self::check_vector_store_online_status( $db_store_id, $db_data[ $collection_id ]['provider'] );
+			}
+
+			$debug_info['collections'][] = $collection_entry;
+		}
+
+		// 4. Get KB to collection mapping
+		$kb_config_db = new EPKB_KB_Config_DB();
+		$all_kb_configs = $kb_config_db->get_kb_configs();
+		foreach ( $all_kb_configs as $kb_id => $kb_config ) {
+			$collection_id = isset( $kb_config['kb_ai_collection_id'] ) ? absint( $kb_config['kb_ai_collection_id'] ) : 0;
+			$kb_name = isset( $kb_config['kb_name'] ) ? $kb_config['kb_name'] : 'KB ' . $kb_id;
+
+			$debug_info['kb_collection_mapping'][] = array(
+				'kb_id' => $kb_id,
+				'kb_name' => $kb_name,
+				'collection_id' => $collection_id,
+				'collection_id_display' => $collection_id > 0 ? $collection_id : __( 'Not set', 'echo-knowledge-base' ),
+			);
+		}
+
+		return $debug_info;
+	}
+
+	/**
+	 * Check if a vector store exists online
+	 *
+	 * @param string $store_id Vector store ID
+	 * @param string $provider Provider name
+	 * @return string Status: 'online', 'offline', 'unknown', or 'no_store'
+	 */
+	private static function check_vector_store_online_status( $store_id, $provider ) {
+		if ( empty( $store_id ) ) {
+			return 'no_store';
+		}
+
+		$vector_store_handler = EPKB_AI_Provider::get_vector_store_handler( $provider );
+		$store_info = $vector_store_handler->get_vector_store_info_by_id( $store_id );
+
+		if ( is_wp_error( $store_info ) ) {
+			return 'offline';
+		}
+
+		return 'online';
 	}
 	
 	/**
@@ -386,12 +538,13 @@ class EPKB_AI_Tools_Tab {
 		nocache_headers();
 		
 		header( 'Content-Type: application/json' );
-		header( 'Content-Disposition: attachment; filename="epkb-ai-debug-' . date( 'Y-m-d' ) . '.json"' );
+		header( 'Content-Disposition: attachment; filename="epkb-ai-debug-' . gmdate( 'Y-m-d' ) . '.json"' );
 		
 		// Get all debug data
 		$system_info = self::get_system_info();
 		$data_collections = self::get_data_collections_info();
-		
+		$vector_store_debug = self::get_vector_store_debug_info();
+
 		// Get AI config
 		$ai_chat_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_chat_enabled' );
 		$ai_search_enabled = EPKB_AI_Config_Specs::get_ai_config_value( 'ai_search_enabled' );
@@ -399,17 +552,18 @@ class EPKB_AI_Tools_Tab {
 			'ai_enabled' => EPKB_AI_Utilities::is_ai_configured(),
 			'ai_chat_enabled' => $ai_chat_enabled != 'off',
 			'ai_search_enabled' => $ai_search_enabled != 'off',
-			'api_key_configured' => ! empty( EPKB_AI_Config_Specs::get_ai_config_value( 'ai_key' ) )
+			'api_key_configured' => ! empty( EPKB_AI_Config_Specs::get_unmasked_api_key_for_provider( EPKB_AI_Provider::get_active_provider() ) )
 		);
-		
+
 		// Get AI logs
 		$ai_logs = EPKB_AI_Log::get_logs_for_display();
-		
+
 		$debug_data = array(
 			'generated_at' => current_time( 'c' ),
 			'plugin_version' => Echo_Knowledge_Base::$version,
 			'ai_configuration' => $ai_config,
 			'data_collections' => $data_collections,
+			'vector_store_debug' => $vector_store_debug,
 			'system_info' => array(),
 			'recent_ai_logs' => array_slice( $ai_logs, -50 ) // Last 50 logs
 		);

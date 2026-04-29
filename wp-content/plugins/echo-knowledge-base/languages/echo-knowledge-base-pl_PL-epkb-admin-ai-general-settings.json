@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "Ustawienia zapisane pomyślnie"
             ],
-            "Saving...": [
-                "Zapisywanie..."
+            "Close": [
+                "Zamknij"
+            ],
+            "Cancel": [
+                "Anuluj"
             ],
             "Save Settings": [
                 "Zapisz ustawienia"
+            ],
+            "Saving...": [
+                "Zapisywanie..."
             ],
             "Failed to save settings": [
                 "Nie udało się zapisać ustawień"
@@ -30,6 +36,27 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "Nie udało się wysłać wiadomości testowej. Sprawdź połączenie."
+            ],
+            "Change AI Provider?": [
+                "Zmień dostawcę AI?"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "Przełączanie dostawców AI będzie miało wpływ na ustawienia AI Wyszukiwanie i AI Czat"
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "Kolekcje Danych uczenia maszynowego są specyficzne dla dostawcy i nie przenoszą się między dostawcami."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "Będziesz musiał utworzyć i wytrenować nowe kolekcje dla nowego dostawcy."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "AI Wyszukiwanie i AI Czat będą wyświetlać tylko kolekcje dla wybranego dostawcy."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "Twoje istniejące kolekcje zostaną zachowane i będą dostępne, jeśli wrócisz do poprzedniego ustawienia."
+            ],
+            "Change Provider": [
+                "Zmień dostawcę"
             ]
         }
     }

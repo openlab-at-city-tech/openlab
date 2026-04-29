@@ -7,6 +7,7 @@ jQuery(document).ready(function($) {
 		return;
 	}
 
+
 	/**
 	 * Handle Setup Wizard Apply Button
 	 */
@@ -84,6 +85,22 @@ jQuery(document).ready(function($) {
 	 */
 	wizard.find( '.epkb-setup-wizard-button-next, .epkb-setup-wizard-button-prev' ).on( 'click' , function(e){
 		e.preventDefault();
+
+		// Check if clicking Next on Layout step with PRO layout selected
+		if ( $( this ).hasClass( 'epkb-setup-wizard-button-next' ) ) {
+			let current_header = $( '.epkb-wc-step-header--active' );
+			if ( current_header.hasClass( 'epkb-wc-step-header--layout' ) ) {
+				let selected_layout = wizard.find( '.epkb-setup-wizard-layout-option--active' );
+				if ( selected_layout.hasClass( 'epkb-setup-wizard-layout-option--pro' ) ) {
+					// Show PRO layout dialog instead of proceeding
+					// Use stopPropagation to prevent document click handler from closing the dialog immediately
+					e.stopPropagation();
+					$( '#epkb-wizard-pro-layout-dialog' ).addClass( 'epkb-dialog-pro-feature-ad--active' );
+					return;
+				}
+			}
+		}
+
 		let nextStep = Number( $(this).val() );
 		setup_wizard_switch_step( nextStep );
 	} );
@@ -110,6 +127,11 @@ jQuery(document).ready(function($) {
 		next_step_header.addClass( 'epkb-wc-step-header--active' );
 
 		modular_setup_wizard_switch_step( nextStep );
+
+		// Layout step handling - load live preview
+		if ( next_step_header.hasClass( 'epkb-wc-step-header--layout' ) ) {
+			setTimeout( load_layout_preview_on_step_enter, 100 );
+		}
 
 		// Design step handling
 		if ( next_step_header.hasClass( 'epkb-wc-step-header--design' ) ) {
@@ -183,31 +205,6 @@ jQuery(document).ready(function($) {
 		// Content
 		$( '.epkb-wc-step-panel' ).removeClass( 'epkb-wc-step-panel--active' );
 		$( '.eckb-wizard-step-' + nextStep ).addClass( 'epkb-wc-step-panel--active' );
-
-		// Hide all buttons
-		$( '.epkb-wc-step-panel-button' ).removeClass( 'epkb-wc-step-panel-button--active' );
-
-		let total_steps_number = $( '.epkb-wizard-content .epkb-wc-step-panel' ).length;
-
-		// Show First Step button only for first step
-		if ( nextStep === 1 ) {
-			$( '.epkb-wsb-step-1-panel-button' ).addClass( 'epkb-wc-step-panel-button--active' );
-		}
-
-		// Show Middle Step button for all steps except of first and last steps
-		if ( nextStep !== 1 && nextStep < total_steps_number ) {
-			let middle_steps_buttons_panel = $( '.epkb-wsb-step-2-panel-button' );
-			middle_steps_buttons_panel.addClass( 'epkb-wc-step-panel-button--active' );
-
-			// Update prev/next buttons value
-			middle_steps_buttons_panel.find( '.epkb-setup-wizard-button-prev' ).val( nextStep - 1 );
-			middle_steps_buttons_panel.find( '.epkb-setup-wizard-button-next' ).val( nextStep + 1 );
-		}
-
-		// Show Last Step button only for last step
-		if ( nextStep === total_steps_number ) {
-			$( '.epkb-wsb-step-3-panel-button' ).addClass( 'epkb-wc-step-panel-button--active' );
-		}
 	}
 
 	/**
@@ -234,20 +231,21 @@ jQuery(document).ready(function($) {
 	}
 
 	/**
-	 * Highlight step tabs
+	 * Highlight step tabs and banner highlights
 	 */
 	function setup_wizard_highlight_step_tabs( nextStep ) {
 
-		// Unselect all tabs
+		// Legacy tabs (for backwards compatibility)
 		wizard.find( '.epkb-setup-wizard-step-tab' ).removeClass( 'epkb-setup-wizard-step-tab--active epkb-setup-wizard-step-tab--completed' );
-
 		let current_tab = wizard.find( '.epkb-setup-wizard-step-tab--' + nextStep );
-
-		// Highlight current tab as active
 		current_tab.addClass( 'epkb-setup-wizard-step-tab--active' );
-
-		// Highlight left tabs as completed
 		current_tab.prevAll( '.epkb-setup-wizard-step-tab' ).addClass( 'epkb-setup-wizard-step-tab--completed' );
+
+		// New banner highlights
+		wizard.find( '.epkb-setup-wizard-step-highlight' ).removeClass( 'epkb-setup-wizard-step-highlight--active epkb-setup-wizard-step-highlight--completed' );
+		let current_highlight = wizard.find( '.epkb-setup-wizard-step-highlight--' + nextStep );
+		current_highlight.addClass( 'epkb-setup-wizard-step-highlight--active' );
+		current_highlight.prevAll( '.epkb-setup-wizard-step-highlight' ).addClass( 'epkb-setup-wizard-step-highlight--completed' );
 	}
 
 	/**
@@ -457,6 +455,168 @@ jQuery(document).ready(function($) {
 	} );
 
 	/**
+	 * Layout Step - Live Preview
+	 */
+	let layoutHtmlCache = {};
+	let currentLayoutRequest = null; // Track which layout is currently being requested
+
+	function load_layout_live_preview( layout_name ) {
+		let preview_container = wizard.find( '.epkb-setup-wizard-layout-preview' );
+		let preview_content = preview_container.find( '.epkb-setup-wizard-layout-preview__content' );
+		let loading_spinner = preview_container.find( '.epkb-setup-wizard-layout-preview__loading' );
+		const preset = 'current';
+		const cache_key = preset + '::' + layout_name;
+
+		// Track this request so we can ignore stale responses
+		currentLayoutRequest = layout_name;
+
+		// Show loading spinner
+		loading_spinner.show();
+
+		// Check cache first
+		if ( layoutHtmlCache[cache_key] ) {
+			// Verify this layout is still active before applying
+			let active_layout = wizard.find( '.epkb-setup-wizard-layout-option--active' ).data( 'layout' );
+			if ( active_layout !== layout_name ) {
+				return; // User switched to different layout, ignore this
+			}
+			loading_spinner.hide();
+			preview_content.html( layoutHtmlCache[cache_key].html );
+			replaceWizardCss( layoutHtmlCache[cache_key], 'layout-' + layout_name );
+			return;
+		}
+
+		let postData = {
+			action: 'epkb_get_wizard_preset_preview',
+			_wpnonce_epkb_ajax_action: $( '#_wpnonce_epkb_ajax_action' ).val(),
+			epkb_wizard_kb_id: $( '#epkb_wizard_kb_id' ).val(),
+			layout: layout_name,
+			preset: preset,
+			preview_type: 'layout'
+		};
+
+		$.ajax({
+			type: 'POST',
+			dataType: 'json',
+			cache: false,
+			url: ajaxurl,
+			data: postData
+		}).done( function( response ) {
+			// Check if user switched to a different layout while waiting for response
+			let active_layout = wizard.find( '.epkb-setup-wizard-layout-option--active' ).data( 'layout' );
+			if ( active_layout !== layout_name ) {
+				return; // User switched to different layout, ignore this stale response
+			}
+
+			loading_spinner.hide();
+
+			if ( response.success && response.data ) {
+				layoutHtmlCache[cache_key] = {
+					html: response.data.html,
+					css_file_slug: response.data.css_file_slug,
+					css_file_url: response.data.css_file_url,
+					css_file_rtl_url: response.data.css_file_rtl_url,
+					css: response.data.css
+				};
+
+				preview_content.html( response.data.html );
+				replaceWizardCss( layoutHtmlCache[cache_key], 'layout-' + layout_name );
+			} else {
+				preview_content.html( '<div class="epkb-setup-wizard-layout-preview__error">' + ( response?.message ?? epkb_vars.unknown_error ) + '</div>' );
+			}
+		}).fail( function( response, textStatus, error ) {
+			// Check if user switched to a different layout while waiting for response
+			let active_layout = wizard.find( '.epkb-setup-wizard-layout-option--active' ).data( 'layout' );
+			if ( active_layout !== layout_name ) {
+				return; // User switched to different layout, ignore this stale response
+			}
+
+			loading_spinner.hide();
+			preview_content.html( '<div class="epkb-setup-wizard-layout-preview__error">' + ( error ?? epkb_vars.unknown_error ) + '</div>' );
+		});
+	}
+
+	// Layout option click handler
+	$( document ).on( 'click', '.epkb-setup-wizard-layout-option', function() {
+		let layout_option = $( this );
+		let preview_container = wizard.find( '.epkb-setup-wizard-layout-preview' );
+		let preview_content = preview_container.find( '.epkb-setup-wizard-layout-preview__content' );
+		let loading_spinner = preview_container.find( '.epkb-setup-wizard-layout-preview__loading' );
+		let is_pro = layout_option.hasClass( 'epkb-setup-wizard-layout-option--pro' );
+
+		// Update active state
+		wizard.find( '.epkb-setup-wizard-layout-option' ).removeClass( 'epkb-setup-wizard-layout-option--active' );
+		layout_option.addClass( 'epkb-setup-wizard-layout-option--active' );
+
+		// Check the radio button for all layouts
+		layout_option.find( 'input[name="epkb-layout"]' ).prop( 'checked', true );
+
+		// Handle pro layout - show screenshot preview (no dialog, allow Next button)
+		if ( is_pro ) {
+			let pro_screenshot_url = layout_option.data( 'pro-screenshot' );
+			if ( pro_screenshot_url ) {
+				loading_spinner.hide();
+				preview_content.html( '<img src="' + pro_screenshot_url + '" alt="Layout Preview" class="epkb-setup-wizard-layout-preview__screenshot">' );
+			}
+			preview_container.addClass( 'epkb-setup-wizard-layout-preview--pro' );
+		} else {
+			preview_container.removeClass( 'epkb-setup-wizard-layout-preview--pro' );
+
+			// Load preview for selected layout
+			let layout_name = layout_option.data( 'layout' );
+			load_layout_live_preview( layout_name );
+		}
+	});
+
+	// Later/Cancel button in PRO layout dialog - closes the dialog
+	$( document ).on( 'click', '.epkb-dialog-pro-feature-ad__cancel-btn', function(e) {
+		e.preventDefault();
+		e.stopPropagation();
+		$( this ).closest( '.epkb-dialog-pro-feature-ad, .epkb-dialog-pro-feature-ad2' ).removeClass( 'epkb-dialog-pro-feature-ad--active' );
+	});
+
+	// Prevent article link clicks in PRO layout previews (Grid/Sidebar without ELAY)
+	$( document ).on( 'click', '.epkb-setup-wizard-layout-preview--pro a', function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
+
+	// Load layout preview when entering layout step
+	function load_layout_preview_on_step_enter() {
+		let layout_step = wizard.find( '.epkb-setup-wizard-step-container--layout-preview' );
+		if ( layout_step.length === 0 || ! layout_step.closest( '.epkb-wc-step-panel' ).hasClass( 'epkb-wc-step-panel--active' ) ) {
+			return;
+		}
+
+		// Get currently active layout option (handles both regular and PRO layouts)
+		let active_option = layout_step.find( '.epkb-setup-wizard-layout-option--active' );
+		if ( active_option.length === 0 ) {
+			return;
+		}
+
+		let preview_container = wizard.find( '.epkb-setup-wizard-layout-preview' );
+		let preview_content = preview_container.find( '.epkb-setup-wizard-layout-preview__content' );
+		let loading_spinner = preview_container.find( '.epkb-setup-wizard-layout-preview__loading' );
+
+		// For PRO layouts, show screenshot
+		if ( active_option.hasClass( 'epkb-setup-wizard-layout-option--pro' ) ) {
+			let pro_screenshot_url = active_option.data( 'pro-screenshot' );
+			if ( pro_screenshot_url ) {
+				loading_spinner.hide();
+				preview_content.html( '<img src="' + pro_screenshot_url + '" alt="Layout Preview" class="epkb-setup-wizard-layout-preview__screenshot">' );
+			}
+			preview_container.addClass( 'epkb-setup-wizard-layout-preview--pro' );
+		} else {
+			// For regular layouts, load live preview
+			let selected_layout = active_option.data( 'layout' );
+			if ( selected_layout ) {
+				preview_container.removeClass( 'epkb-setup-wizard-layout-preview--pro' );
+				load_layout_live_preview( selected_layout );
+			}
+		}
+	}
+
+	/**
 	 * Switch Presets Preview when user changes Layout
 	 */
 	$( document ).on( 'change', '.epkb-setup-wizard-step-container--layout input[name="epkb-layout"]', function() {
@@ -507,14 +667,40 @@ jQuery(document).ready(function($) {
 	update_article_navigation( wizard.find( '.epkb-setup-wizard-step-container--layout input[name="epkb-layout"]:checked' ).val() );
 
 	/**
-	 * Switch Presets Preview when user changes Preset
+	 * Switch Presets Preview when user changes Preset (from regular preset buttons)
 	 */
 	$( document ).on( 'change', '.epkb-setup-wizard-module-preset-selector input', function() {
 		let preset_name = $( this ).val();
 		let presets_step = wizard.find( '.epkb-setup-wizard-step-container--presets' );
 		let active_layout = presets_step.find( '.epkb-setup-wizard-module-layout--active' );
+		let active_settings_row = presets_step.find( '.epkb-setup-wizard-module-settings-row--active' );
+
+		// Update preset cards in the preview area
 		active_layout.find( '.epkb-setup-wizard-module-preset' ).removeClass( 'epkb-setup-wizard-module-preset--active' );
 		active_layout.find( '.epkb-setup-wizard-module-preset--' + preset_name ).addClass( 'epkb-setup-wizard-module-preset--active' );
+
+		// Update the Keep Current Style button state (deselect it when other preset selected)
+		active_settings_row.find( '.epkb-setup-wizard-keep-current-button' ).removeClass( 'epkb-setup-wizard-keep-current-button--active' );
+		active_settings_row.find( '.epkb-setup-wizard-keep-current-button input[value="current"]' ).prop( 'checked', false );
+	} );
+
+	/**
+	 * Switch Presets Preview when user clicks Keep Current Style button
+	 */
+	$( document ).on( 'change', '.epkb-setup-wizard-keep-current-button input', function() {
+		let presets_step = wizard.find( '.epkb-setup-wizard-step-container--presets' );
+		let active_layout = presets_step.find( '.epkb-setup-wizard-module-layout--active' );
+		let active_settings_row = presets_step.find( '.epkb-setup-wizard-module-settings-row--active' );
+
+		// Update preset cards in the preview area (select "current", deselect others)
+		active_layout.find( '.epkb-setup-wizard-module-preset' ).removeClass( 'epkb-setup-wizard-module-preset--active' );
+		active_layout.find( '.epkb-setup-wizard-module-preset--current' ).addClass( 'epkb-setup-wizard-module-preset--active' );
+
+		// Update button state
+		active_settings_row.find( '.epkb-setup-wizard-keep-current-button' ).addClass( 'epkb-setup-wizard-keep-current-button--active' );
+
+		// Deselect other preset radio buttons
+		active_settings_row.find( '.epkb-setup-wizard-module-preset-selector input' ).prop( 'checked', false );
 	} );
 
 
@@ -582,7 +768,8 @@ jQuery(document).ready(function($) {
 			_wpnonce_epkb_ajax_action: $('#_wpnonce_epkb_ajax_action').val(),
 			epkb_wizard_kb_id: $('#epkb_wizard_kb_id').val(),
 			layout: layout,
-			preset: preset
+			preset: preset,
+			preview_type: 'preset'
 		};
 
 		$.ajax({
@@ -735,10 +922,17 @@ jQuery(document).ready(function($) {
 				return;
 			}
 
-			// Success in response - redirect to 'Need Help?' page
+			// Success in response - show success dialog
 			if ( theResponse.redirect_to_url && theResponse.redirect_to_url.length > 0 ) {
-				$('#epkb-wizard-success-message').addClass('epkb-dialog-box-form--active');
-				$('#epkb-wizard-success-message .epkb-accept-button').on('click', function () {
+				let $successDialog = $('#epkb-wizard-success-message');
+				$successDialog.addClass('epkb-dialog-box-form--active');
+
+				// Set the KB main page URL for the "Open Knowledge Base" link
+				if ( theResponse.kb_main_page_url ) {
+					$successDialog.find('.epkb-wizard-success-content__open-kb').attr('href', theResponse.kb_main_page_url);
+				}
+
+				$successDialog.find('.epkb-accept-button').on('click', function () {
 					window.location = theResponse.redirect_to_url;
 				});
 			}
@@ -749,8 +943,13 @@ jQuery(document).ready(function($) {
 			// On internal server error assume the error is outside Setup Wizard - force finish the Setup Wizard like on success
 			let current_url = window.location.href;
 			let success_url = current_url.replace( '&page=epkb-kb-configuration&setup-wizard-on', '&page=epkb-dashboard&epkb_after_kb_setup' );
-			$('#epkb-wizard-success-message').addClass('epkb-dialog-box-form--active');
-			$('#epkb-wizard-success-message .epkb-accept-button').on('click', function () {
+			let $successDialog = $('#epkb-wizard-success-message');
+			$successDialog.addClass('epkb-dialog-box-form--active');
+
+			// Hide the "Open KB" link on failure since we don't have the URL
+			$successDialog.find('.epkb-wizard-success-content__open-kb').hide();
+
+			$successDialog.find('.epkb-accept-button').on('click', function () {
 				window.location = success_url;
 			});
 		} );
@@ -878,4 +1077,219 @@ jQuery(document).ready(function($) {
 			data: postData
 		});
 	} );
+
+	/*************************************************************************************************
+	 *
+	 *          Layout Preview - Show More functionality
+	 *
+	 ***********************************************************************************************/
+
+	// Classic Layout: Show main content of Category
+	$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-articles-show-more', function() {
+		$( this ).parent().parent().toggleClass( 'epkb-category-section--active');
+		$( this ).parent().parent().find( '.epkb-category-section__body' ).slideToggle();
+		$( this ).find( '.epkb-ml-articles-show-more__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+		const isExpanded = $( this ).find( '.epkb-ml-articles-show-more__show-more__icon' ).hasClass( 'epkbfa-minus' );
+		if ( isExpanded ) {
+			$( this ).parent().find( '.epkb-ml-article-count' ).hide();
+		} else {
+			$( this ).parent().find( '.epkb-ml-article-count' ).show();
+		}
+	} );
+
+	// Classic Layout: Toggle Level 2 Category Articles and Level 3 Categories
+	$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-2-lvl-category-container', function( e ) {
+		if ( $( this ).hasClass( 'epkb-ml-2-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-2-lvl-category__show-more__icon' ) ) return;
+		$( this ).find( '.epkb-ml-2-lvl-article-list' ).slideToggle();
+		$( this ).find( '.epkb-ml-3-lvl-categories' ).slideToggle();
+		$( this ).find( '.epkb-ml-2-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+		$( this ).toggleClass( 'epkb-ml-2-lvl-category--active' );
+	} );
+
+	// Classic Layout: Toggle Level 3 Category Articles and Level 4 Categories
+	$( document ).on( 'click', '#epkb-ml-classic-layout .epkb-ml-3-lvl-category-container', function( e ) {
+		if ( $( this ).hasClass( 'epkb-ml-3-lvl-category--active' ) && ! $( e.target ).hasClass( 'epkb-ml-3-lvl-category__show-more__icon' ) ) return;
+		$( this ).find( '.epkb-ml-3-lvl-article-list' ).slideToggle();
+		$( this ).find( '.epkb-ml-4-lvl-categories' ).slideToggle();
+		$( this ).find( '.epkb-ml-3-lvl-category__show-more__icon' ).toggleClass( 'epkbfa-plus epkbfa-minus' );
+		$( this ).toggleClass( 'epkb-ml-3-lvl-category--active' );
+	} );
+
+	// Tabs Layout: Level 1 Show more if articles are assigned to top categories
+	$( document ).on( 'click', '#epkb-ml-tabs-layout .epkb-ml-articles-show-more', function( e ) {
+		e.preventDefault();
+		$( this ).hide();
+		$( this ).parent().find( '.epkb-list-column li' ).removeClass( 'epkb-ml-article-hide' );
+	});
+
+	// Tabs Layout: Tab click handler
+	$( document ).on( 'click', '#epkb-content-container .epkb-nav-tabs li', function() {
+		let tabContainerLocal = $( this ).closest( '#epkb-content-container' );
+		tabContainerLocal.find( '.epkb-nav-tabs li' ).removeClass( 'active' );
+		$( this ).addClass( 'active' );
+		tabContainerLocal.find( '.epkb-tab-panel' ).removeClass( 'active' );
+		tabContainerLocal.find( '.epkb-panel-container .' + $( this ).attr( 'id' ) ).addClass( 'active' );
+	});
+
+	// Drill Down Layout: Move content box under the category row
+	function moveCategoriesBoxUnderTopCategoryButton( $layout, currentTopCat ) {
+		const $allCatContent = $layout.find( '.epkb-ml-all-categories-content-container' );
+		const $buttonContainer = $layout.find( '.epkb-ml-top-categories-button-container' );
+		$allCatContent.hide();
+
+		let currentTopCatOffset = currentTopCat.offset().top;
+		let inserted = false;
+
+		$layout.find( '.epkb-ml-top__cat-container' ).each( function() {
+			let catOffset = $( this ).offset().top;
+			if ( catOffset - currentTopCatOffset > 0 && ! inserted ) {
+				$allCatContent.insertAfter( $( this ).prevAll( '.epkb-ml-top__cat-container' ).first() );
+				inserted = true;
+				return false;
+			}
+		} );
+
+		if ( ! inserted ) {
+			$allCatContent.insertAfter( $buttonContainer );
+		}
+	}
+
+	// Drill Down Layout: Top Category Button click
+	$( document ).on( 'click', '.epkb-ml-top__cat-container', function() {
+		const $layout = $( this ).closest( '#epkb-ml-drill-down-layout' );
+		const $catContent_ShowClass = 'epkb-ml__cat-content--show';
+		const $topCatButton_ActiveClass = 'epkb-ml-top__cat-container--active';
+		const $catButton_ActiveClass = 'epkb-ml__cat-container--active';
+		const $catButtonContainers_ActiveClass = 'epkb-ml-categories-button-container--active';
+		const $catButtonContainers_ShowClass = 'epkb-ml-categories-button-container--show';
+		const $backButton_ActiveClass = 'epkb-back-button--active';
+		const $allCatContent = $layout.find( '.epkb-ml-all-categories-content-container' );
+
+		$layout.find( '.epkb-ml-top__cat-container' ).removeClass( $topCatButton_ActiveClass );
+
+		if ( $( this ).hasClass( $topCatButton_ActiveClass ) ) {
+			$( this ).removeClass( $topCatButton_ActiveClass );
+			$allCatContent.hide();
+			return;
+		}
+
+		$allCatContent.find( '.epkb-back-button' ).removeClass( $backButton_ActiveClass );
+		$( this ).addClass( $topCatButton_ActiveClass );
+
+		$layout.find( '.epkb-ml-categories-button-container' ).removeClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
+		$layout.find( '.epkb-ml__cat-content' ).removeClass( $catContent_ShowClass );
+		$layout.find( '.epkb-ml__cat-container' ).removeClass( $catButton_ActiveClass );
+
+		moveCategoriesBoxUnderTopCategoryButton( $layout, $( this ) );
+
+		$allCatContent.show();
+
+		const catId = $( this ).data( 'cat-id' );
+		$layout.find( '.epkb-ml-1-lvl__cat-content[data-cat-id="' + catId + '"]' ).addClass( $catContent_ShowClass );
+		$layout.find( '.epkb-ml-2-lvl-categories-button-container[data-cat-level="1"][data-cat-id="' + catId + '"]' ).addClass( $catButtonContainers_ShowClass );
+	});
+
+	// Drill Down Layout: Category Button click
+	$( document ).on( 'click', '.epkb-ml__cat-container', function() {
+		const $layout = $( this ).closest( '#epkb-ml-drill-down-layout' );
+		const $catContent_ShowClass = 'epkb-ml__cat-content--show';
+		const $catButton_ActiveClass = 'epkb-ml__cat-container--active';
+		const $catButtonContainers_ActiveClass = 'epkb-ml-categories-button-container--active';
+		const $catButtonContainers_ShowClass = 'epkb-ml-categories-button-container--show';
+		const $backButton_ActiveClass = 'epkb-back-button--active';
+
+		if ( $( this ).hasClass( $catButton_ActiveClass ) ) {
+			return;
+		}
+
+		$layout.find( '.epkb-ml-all-categories-content-container .epkb-back-button' ).addClass( $backButton_ActiveClass );
+
+		const catLevel = parseInt( $( this ).data( 'cat-level' ) );
+		const catId = $( this ).data( 'cat-id' );
+		const parentCatLevel = catLevel - 1;
+		const parentCatId = $( this ).data( 'parent-cat-id' );
+		const childCatLevel = catLevel + 1;
+
+		$( this ).addClass( $catButton_ActiveClass );
+		$layout.find( '.epkb-ml-' + catLevel + '-lvl-categories-button-container[data-cat-id="' + parentCatId + '"]' ).addClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
+
+		$layout.find( '.epkb-ml-' + parentCatLevel + '-lvl-categories-button-container' ).removeClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
+		$layout.find( '.epkb-ml-' + parentCatLevel + '-lvl__cat-container' ).removeClass( $catButton_ActiveClass );
+		$layout.find( '.epkb-ml-' + parentCatLevel + '-lvl__cat-content' ).removeClass( $catContent_ShowClass );
+
+		$layout.find( '.epkb-ml-' + catLevel + '-lvl__cat-content[data-cat-id="' + catId + '"]' ).addClass( $catContent_ShowClass );
+		$layout.find( '.epkb-ml-' + childCatLevel + '-lvl-categories-button-container[data-cat-id="' + catId + '"]' ).addClass( $catButtonContainers_ShowClass );
+	});
+
+	// Drill Down Layout: Back Button click
+	$( document ).on( 'click', '.epkb-back-button', function() {
+		const $layout = $( this ).closest( '#epkb-ml-drill-down-layout' );
+		const $catContent_ShowClass = 'epkb-ml__cat-content--show';
+		const $topCatButton_ActiveClass = 'epkb-ml-top__cat-container--active';
+		const $catButton_ActiveClass = 'epkb-ml__cat-container--active';
+		const $catButtonContainers_ActiveClass = 'epkb-ml-categories-button-container--active';
+		const $catButtonContainers_ShowClass = 'epkb-ml-categories-button-container--show';
+		const $backButton_ActiveClass = 'epkb-back-button--active';
+
+		let currentCatContent = $layout.find( '.epkb-ml__cat-content.' + $catContent_ShowClass );
+		let catLevel = parseInt( currentCatContent.data( 'cat-level' ) );
+		let childCatLevel = catLevel + 1;
+
+		if ( catLevel === 1 ) {
+			$layout.find( '.epkb-ml-top__cat-container' ).removeClass( $topCatButton_ActiveClass );
+			$layout.find( '.epkb-ml-all-categories-content-container' ).hide();
+			return;
+		}
+
+		let parentCatId = currentCatContent.data( 'parent-cat-id' );
+		let parentCatLevel = catLevel - 1;
+
+		if ( parentCatLevel === 1 ) {
+			$layout.find( '.epkb-ml-all-categories-content-container .epkb-back-button' ).removeClass( $backButton_ActiveClass );
+		}
+
+		$layout.find( '.epkb-ml-' + catLevel + '-lvl-categories-button-container' ).removeClass( $catButtonContainers_ActiveClass );
+		$layout.find( '.epkb-ml-' + catLevel + '-lvl__cat-container' ).removeClass( $catButton_ActiveClass );
+		$layout.find( '.epkb-ml-' + catLevel + '-lvl__cat-content' ).removeClass( $catContent_ShowClass );
+		$layout.find( '.epkb-ml-' + childCatLevel + '-lvl-categories-button-container' ).removeClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
+
+		let parentCatButton = $layout.find( '.epkb-ml-' + parentCatLevel + '-lvl__cat-container[data-cat-id="' + parentCatId + '"]' );
+		parentCatButton.closest( '.epkb-ml-categories-button-container' ).addClass( $catButtonContainers_ActiveClass + ' ' + $catButtonContainers_ShowClass );
+		parentCatButton.addClass( $catButton_ActiveClass );
+		$layout.find( '.epkb-ml-' + parentCatLevel + '-lvl__cat-content[data-cat-id="' + parentCatId + '"]' ).addClass( $catContent_ShowClass );
+	});
+
+	// Basic Layout: Toggle sub-categories (expand/collapse articles and sub-sub-categories)
+	$( document ).on( 'click', '.epkb-section-body .epkb-category-level-2-3:not(.epkb-category-focused)', function( e ) {
+		e.preventDefault();
+		$( this ).parent().children( 'ul' ).toggleClass( 'active' );
+
+		// Toggle aria-expanded attribute
+		let ariaExpandedVal = $( this ).attr( 'aria-expanded' );
+		$( this ).attr( 'aria-expanded', ariaExpandedVal === 'true' ? 'false' : 'true' );
+
+		// Toggle expand/collapse icon
+		let $icon = $( this ).find( '.epkb-category-level-2-3__cat-icon' );
+		let iconPairs = [
+			[ 'ep_font_icon_plus', 'ep_font_icon_minus' ],
+			[ 'ep_font_icon_plus_box', 'ep_font_icon_minus_box' ],
+			[ 'ep_font_icon_right_arrow', 'ep_font_icon_down_arrow' ],
+			[ 'ep_font_icon_arrow_carrot_right', 'ep_font_icon_arrow_carrot_down' ],
+			[ 'ep_font_icon_arrow_carrot_right_circle', 'ep_font_icon_arrow_carrot_down_circle' ],
+			[ 'ep_font_icon_folder_add', 'ep_font_icon_folder_open' ]
+		];
+		iconPairs.forEach( function( pair ) {
+			if ( $icon.hasClass( pair[0] ) ) {
+				$icon.removeClass( pair[0] ).addClass( pair[1] );
+			} else if ( $icon.hasClass( pair[1] ) ) {
+				$icon.removeClass( pair[1] ).addClass( pair[0] );
+			}
+		});
+	});
+
+	// Category Focused Layout: Prevent sub-category clicks (they are links but should not navigate in preview)
+	$( document ).on( 'click', '.epkb-section-body .epkb-category-level-2-3.epkb-category-focused', function( e ) {
+		e.preventDefault();
+		e.stopPropagation();
+	});
 });

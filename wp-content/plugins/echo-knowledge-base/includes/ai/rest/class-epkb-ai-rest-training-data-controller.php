@@ -43,7 +43,7 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 				),
 				'status' => array(
 					'type' => 'string',
-					'enum' => array( '', 'pending', 'adding', 'added', 'updating', 'updated', 'outdated', 'error' )
+					'enum' => array( '', 'pending', 'adding', 'added', 'updating', 'updated', 'outdated', 'error', 'skipped' )
 				),
 				'type' => array(
 					'type' => 'string'
@@ -61,6 +61,10 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 				),
 				'search' => array(
 					'type' => 'string'
+				),
+				'reconcile' => array(
+					'type' => 'boolean',
+					'default' => false
 				)
 			)
 		) );
@@ -170,6 +174,24 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 				)
 			)
 		) );
+
+		// Get eligible individual items for a collection and post type
+		register_rest_route( $this->admin_namespace, '/training-collections/(?P<collection_id>\d+)/eligible-items', array(
+			'methods'             => WP_REST_Server::READABLE,
+			'callback'            => array( $this, 'get_collection_eligible_items' ),
+			'permission_callback' => array( $this, 'check_admin_permission' ),
+			'args'                => array(
+				'collection_id' => array(
+					'required' => true,
+					'type' => 'integer'
+				),
+				'data_type' => array(
+					'required' => true,
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_key'
+				)
+			)
+		) );
 		
 		// Add data to training data collection
 		register_rest_route( $this->admin_namespace, '/training-collections/(?P<collection_id>\d+)/add-data', array(
@@ -182,9 +204,18 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 					'type' => 'integer'
 				),
 				'data_types' => array(
-					'required' => true,
 					'type' => 'array',
-					'items' => array( 'type' => 'string' )
+					'items' => array( 'type' => 'string' ),
+					'default' => array()
+				),
+				'data_type' => array(
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_key'
+				),
+				'item_ids' => array(
+					'type' => 'array',
+					'items' => array( 'type' => 'integer' ),
+					'default' => array()
 				)
 			)
 		) );
@@ -206,6 +237,42 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		// 	)
 		// ) );
 		
+		/** PDF UPLOAD TO VECTOR STORE */
+
+		// Upload PDF directly to AI vector store
+		register_rest_route( $this->admin_namespace, '/training-data/upload-pdf', array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => array( $this, 'upload_pdf_to_vector_store' ),
+			'permission_callback' => array( $this, 'check_admin_permission' ),
+			'args'                => array(
+				'collection_id' => array(
+					'required' => true,
+					'type' => 'integer'
+				),
+				'file_name' => array(
+					'required' => true,
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_file_name'
+				),
+				'file_data' => array(
+					'required' => true,
+					'type' => 'string'
+				),
+				'attachment_url' => array(
+					'type' => 'string',
+					'sanitize_callback' => 'esc_url_raw'
+				),
+				'upload_mode' => array(
+					'type' => 'string',
+					'enum' => array( 'raw_pdf', 'extract_pdf_text' ),
+					'default' => 'raw_pdf'
+				),
+				'raw_text' => array(
+					'type' => 'string'
+				)
+			)
+		) );
+
 		/** TRAINING NOTES (AI FEATURES PRO) */
 		
 		// Create training note
@@ -224,13 +291,36 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 					'sanitize_callback' => 'sanitize_text_field'
 				),
 				'content' => array(
-					'required' => true,
 					'type' => 'string',
 					'sanitize_callback' => 'wp_kses_post'
+				),
+				'note_type' => array(
+					'type' => 'string',
+					'enum' => array( 'text', 'pdf' ),
+					'default' => 'text'
+				),
+				'original_file_name' => array(
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_file_name'
+				),
+				'conversion_time' => array(
+					'type' => 'integer'
+				),
+				'format_mode' => array(
+					'type' => 'string',
+					'enum' => array( 'none', 'basic', 'ai' ),
+					'default' => 'none'
+				),
+				'pdf_base64' => array(
+					'type' => 'string'
+				),
+				'file_name' => array(
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_file_name'
 				)
 			)
 		) );
-		
+
 		// Update training note
 		register_rest_route( $this->admin_namespace, '/training-notes', array(
 			'methods'             => WP_REST_Server::EDITABLE,
@@ -265,9 +355,29 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 				'note_id' => array(
 					'required' => true,
 					'type' => 'integer'
+				),
+				'collection_id' => array(
+					'type' => 'integer'
 				)
 			)
 		) );
+
+		// Dismiss the Validate & Fix recommendation notice
+		register_rest_route( $this->admin_namespace, '/training-data/dismiss-validate-fix-notice', array(
+			'methods'             => WP_REST_Server::CREATABLE,
+			'callback'            => array( $this, 'dismiss_validate_fix_notice' ),
+			'permission_callback' => array( $this, 'check_admin_permission' ),
+		) );
+	}
+
+	/**
+	 * Persist the user's dismissal of the Validate & Fix recommendation notice.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function dismiss_validate_fix_notice() {
+		EPKB_Core_Utilities::add_kb_flag( 'ai_validate_fix_notice_dismissed' );
+		return $this->create_rest_response( array( 'success' => true ) );
 	}
 
 	/**
@@ -337,6 +447,17 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		$page = $request->get_param( 'page' );
 		$per_page = $request->get_param( 'per_page' );
 		$search = $request->get_param( 'search' );
+		$reconcile = $request->get_param( 'reconcile' );
+
+		if ( is_string( $type ) && strpos( $type, ',' ) !== false ) {
+			$type = array_map( 'trim', explode( ',', $type ) );
+		}
+
+		if ( is_array( $type ) ) {
+			$type = array_filter( array_map( 'sanitize_key', $type ) );
+		} elseif ( ! empty( $type ) ) {
+			$type = sanitize_key( $type );
+		}
 
 		// Build query args
 		$args = array(
@@ -361,36 +482,17 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 
 		// Get training data from database
 		$training_data_db = new EPKB_AI_Training_Data_DB();
+		if ( ! empty( $reconcile ) ) {
+			EPKB_AI_Utilities::reconcile_collection_source_updates( $collection_id, $training_data_db );
+		}
 		$data = $training_data_db->get_training_data_list( $args );
 		if ( is_wp_error( $data ) ) {
 			return $this->create_rest_response( [], 500, $data );
 		}
 
-		// Add post type name to each item
+		// Add display metadata needed by the admin table.
 		foreach ( $data as &$item ) {
-			// Get the post type object to get the label
-			$post_type_obj = get_post_type_object( $item->type );
-			if ( $post_type_obj && isset( $post_type_obj->labels->name ) ) {
-
-				if ( strpos( $item->type, 'epkb_post_type' ) === 0 && isset( $post_type_obj->labels->name ) ) {
-					$type_name = $post_type_obj->labels->name;
-				} else {
-					// For standard post types, use singular_name
-					$type_name = $post_type_obj->labels->singular_name;
-				}
-			} else {
-				// Fallback to the type if post type object not found
-				$type_name = ucfirst( $item->type );
-			}
-			
-			// Limit to 20 characters with ellipsis if longer
-			if ( strlen( $type_name ) > 20 ) {
-				$item->type_name = substr( $type_name, 0, 18 ) . '..';
-			} else {
-				$item->type_name = $type_name;
-			}
-			// Keep the original type as item_type for filtering
-			$item->item_type = $item->type;
+			$item = EPKB_AI_Utilities::prepare_training_data_item_for_display( $item );
 		}
 
 		$total = $training_data_db->get_training_data_count( $args );
@@ -476,6 +578,7 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		$collection_config = array(
 			'ai_training_data_store_name' => empty( $name ) ? EPKB_AI_Training_Data_Config_Specs::get_default_collection_name( $collection_id ) : $name,
 			'ai_training_data_store_id' => '',
+			'ai_training_data_provider' => EPKB_AI_Provider::get_active_provider(),
 			'ai_training_data_store_post_types' => array() // Start empty - user will add data types later
 		);
 		
@@ -536,8 +639,8 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		// If the name changed and there's a vector store, update its name too
 		if ( $name !== null && $name !== $old_name && ! empty( $collection_config['ai_training_data_store_id'] ) ) {
 
-			$openai_handler = new EPKB_AI_OpenAI_Vector_Store();
-			$update_result = $openai_handler->update_vector_store( $collection_config['ai_training_data_store_id'], array( 'name' => $name ) );
+			$vector_store_handler = EPKB_AI_Provider::get_vector_store_handler();
+			$update_result = $vector_store_handler->update_vector_store( $collection_config['ai_training_data_store_id'], array( 'name' => $name ) );
 			if ( is_wp_error( $update_result ) ) {
 				// Log the error but don't fail the entire operation
 				EPKB_AI_Log::add_log( $update_result, array( 'collection_id' => $collection_id, 'vector_store_id' => $collection_config['ai_training_data_store_id'],
@@ -565,7 +668,8 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		// Use internal method to delete
 		$results = $this->delete_training_data_by_ids( $ids );
 
-		$message = sprintf( __( 'Deleted %d items, %d failed', 'echo-knowledge-base' ), $results['deleted'], $results['failed'] );
+		// translators: %1$d is the number of deleted items, %2$d is the number of failed items
+		$message = sprintf( __( 'Deleted %1$d items, %2$d failed', 'echo-knowledge-base' ), $results['deleted'], $results['failed'] );
 		if ( $results['vector_store_errors'] > 0 ) {
 			$message .= ' ' . __( 'vector store errors:', 'echo-knowledge-base' ) . ' ' . $results['vector_store_errors'];
 		}
@@ -599,40 +703,69 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 			return $this->create_rest_response( [], 404, new WP_Error( 'not_found', __( 'Training data not found', 'echo-knowledge-base' ), array( 'training_data_id' => $id ) ) );
 		}
 
+		if ( in_array( $training_data->type, array( 'PDF', 'HTML' ), true ) ) {
+			$original_url = ! empty( $training_data->url ) ? esc_url_raw( $training_data->url ) : '';
+
+			return $this->create_rest_response( array(
+				'success' => true,
+				'data' => array(
+					'title'        => $training_data->title,
+					'content_type' => 'uploaded_file',
+					'status'       => $training_data->status,
+					'last_synced'  => $training_data->last_synced,
+					'upload_info'  => array(
+						'file_name'        => $training_data->title,
+						'original_url'     => $original_url,
+						'has_original_url' => ! empty( $original_url ),
+						'provider'         => $training_data->provider,
+						'file_id'          => $training_data->file_id,
+						'created'          => $training_data->created,
+						'storage_type'     => $training_data->type,
+					),
+				),
+			) );
+		}
+
+		if ( ! EPKB_AI_Utilities::is_post_backed_training_data_type( $training_data->type ) ) {
+			return $this->create_rest_response( [], 400, new WP_Error( 'content_not_available', __( 'Content preview is not available for this training data source.', 'echo-knowledge-base' ), array( 'training_data_id' => $id ) ) );
+		}
+
 		// Regular post handling
 		$post_id = intval( $training_data->item_id );
 		$post = get_post( $post_id );
 		if ( ! $post ) {
-			$training_data_db->mark_as_error( $id, 404, __( 'Original post not found', 'echo-knowledge-base' ) );
-			return $this->create_rest_response( [], 404, new WP_Error( 'post_not_found', __( 'Original post not found', 'echo-knowledge-base' ), array( 'training_data_id' => $id, 'post_id' => $post_id ) ) );
+			$training_data_db->mark_as_skipped( $id, 404, 'post_not_found' );
+			return $this->create_rest_response( [], 404, new WP_Error( 'post_not_found', __( 'Original post not found. It may have been deleted.', 'echo-knowledge-base' ), array( 'training_data_id' => $id, 'post_id' => $post_id ) ) );
 		}
-		
-		// Check if this is a KB files type - content comes from filter
-		if ( $post->post_type === 'epkb_kb_files' ) {
-			// For KB files, get content from filter
-			$content = '';
-			if ( has_filter( 'epkb_process_kb_file' ) ) {
-				$content = apply_filters( 'epkb_process_kb_file', '', $post );
+
+		// Process the content for display
+		$content_processor = new EPKB_AI_Content_Processor();
+		$prepared_content = $content_processor->prepare_post( $post );
+		if ( is_wp_error( $prepared_content ) ) {
+			$error_code = $prepared_content->get_error_code();
+
+			// For empty content errors, return original HTML so admin can inspect it
+			if ( in_array( $error_code, array( 'empty_markdown', 'empty_content' ), true ) ) {
+				$training_data_db->mark_as_skipped( $id, 500, $error_code );
+				return $this->create_rest_response( array(
+					'success' => true,
+					'data' => array(
+						'title' => $post->post_title,
+						'doc_content' => $post->post_content,
+						'processed_content' => '',
+						'error_type' => $error_code,
+						'error_message' => $prepared_content->get_error_message(),
+						'url' => get_permalink( $post_id ),
+						'post_type' => $post->post_type,
+						'status' => $training_data->status,
+						'item_id' => $training_data->item_id,
+						'user_email' => wp_get_current_user()->user_email
+					)
+				) );
 			}
-			
-			$prepared_content = array(
-				'content' => $content,
-				'metadata' => array(
-					'post_id' => strval( $post->ID ),
-					'title' => $post->post_title,
-					'type' => 'epkb_kb_files',
-					'url' => get_permalink( $post->ID )
-				),
-				'size' => strlen( $content )
-			);
-		} else {
-			// Process the content for display
-			$content_processor = new EPKB_AI_Content_Processor();
-			$prepared_content = $content_processor->prepare_post( $post );
-			if ( is_wp_error( $prepared_content ) ) {
-				$training_data_db->mark_as_error( $id, $prepared_content->get_error_code() === 'post_not_published' ? 404 : 500, $prepared_content->get_error_message() );
-				return $this->create_rest_response( [], 500, $prepared_content );
-			}
+
+			$training_data_db->mark_as_error( $id, $error_code === 'post_not_published' ? 404 : 500, $prepared_content->get_error_message() );
+			return $this->create_rest_response( [], 500, $prepared_content );
 		}
 
 		return $this->create_rest_response( array(
@@ -693,8 +826,8 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		
 		// Delete the vector store if it exists
 		if ( ! empty( $vector_store_id ) ) {
-			$openai_handler = new EPKB_AI_OpenAI_Vector_Store();
-			$vector_store_delete_result = $openai_handler->delete_vector_store( $vector_store_id );
+			$vector_store_handler = EPKB_AI_Provider::get_vector_store_handler();
+			$vector_store_delete_result = $vector_store_handler->delete_vector_store( $vector_store_id );
 			if ( is_wp_error( $vector_store_delete_result ) ) {
 				// Log the error but don't fail the entire operation
 				EPKB_AI_Log::add_log( $vector_store_delete_result, array( 'collection_id' => $collection_id, 'vector_store_id' => $vector_store_id, 
@@ -727,7 +860,6 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		}
 
 		$training_data_db = new EPKB_AI_Training_Data_DB();
-		$openai_handler = new EPKB_AI_OpenAI_Vector_Store();
 		$deleted = 0;
 		$failed = 0;
 		$vector_store_errors = 0;
@@ -737,21 +869,16 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 			$record = $training_data_db->get_training_data_row_by_id( $id );
 
 			if ( $record ) {
-				// Delete from OpenAI if file ID exists
-				if ( ! empty( $record->file_id ) ) {
-					$delete_file_result = $openai_handler->delete_file_from_file_storage( $record->file_id );
-					if ( is_wp_error( $delete_file_result ) ) {
-						$vector_store_errors++;
-						EPKB_AI_Log::add_log( $delete_file_result, array( 'file_id' => $record->file_id, 'message' => 'Failed to delete file from OpenAI' ) );
-					}
+				$provider_cleanup = $this->cleanup_training_data_record_from_provider( $record, 'training_data_delete' );
+				if ( is_wp_error( $provider_cleanup ) ) {
+					$vector_store_errors++;
 				}
 
-				// Remove from vector store if file_id exists
-				if ( ! empty( $record->store_id ) && ! empty( $record->file_id ) ) {
-					$remove_result = $openai_handler->remove_file_from_vector_store( $record->store_id, $record->file_id );
-					if ( is_wp_error( $remove_result ) ) {
-						$vector_store_errors++;
-						EPKB_AI_Log::add_log( $remove_result, array( 'store_id' => $record->store_id, 'file_id' => $record->file_id, 'message' => 'Failed to remove file from vector store' ) );
+				// Delete the WordPress post for AI Notes
+				if ( $record->type === EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE && ! empty( $record->item_id ) ) {
+					$delete_callable = array( 'AIPRO_AI_Notes', 'delete_ai_note' ); /* @disregard PREFIX */
+					if ( EPKB_Utilities::is_ai_features_pro_enabled() && class_exists( 'AIPRO_AI_Notes' ) && is_callable( $delete_callable ) ) { /* @disregard PREFIX */
+						call_user_func( $delete_callable, $record->item_id, true );
 					}
 				}
 			}
@@ -776,8 +903,10 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 	 */
 	public function add_data_to_collection( $request ) {
 		
-		$collection_id = $request->get_param( 'collection_id' );
-		$data_types = $request->get_param( 'data_types' );
+		$collection_id = absint( $request->get_param( 'collection_id' ) );
+		$data_type = sanitize_key( (string) $request->get_param( 'data_type' ) );
+		$data_types = array_values( array_unique( array_filter( array_map( 'sanitize_key', (array) $request->get_param( 'data_types' ) ) ) ) );
+		$item_ids = array_values( array_unique( array_filter( array_map( 'absint', (array) $request->get_param( 'item_ids' ) ) ) ) );
 		
 		// Validate collection exists
 		$collection_config = EPKB_AI_Training_Data_Config_Specs::get_training_data_collection( $collection_id );
@@ -790,9 +919,44 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 
 		// Determine which post types are allowed (UI and API gate)
 		$available_post_types = array_keys( EPKB_AI_Utilities::get_available_post_types_for_ai() );
+
+		// Add only the user-selected individual items for a single type.
+		if ( ! empty( $item_ids ) ) {
+			if ( empty( $data_type ) ) {
+				return $this->create_rest_response( [], 400, new WP_Error( 'missing_post_type', __( 'Please select one content type before adding individual items.', 'echo-knowledge-base' ) ) );
+			}
+
+			if ( ! in_array( $data_type, $available_post_types, true ) ) {
+				return $this->create_rest_response( [], 400, new WP_Error( 'invalid_post_type', __( 'The selected content type is not available for AI training.', 'echo-knowledge-base' ) ) );
+			}
+
+			$result = $this->add_selected_posts_to_collection( $collection_id, $data_type, $item_ids );
+			if ( is_wp_error( $result ) ) {
+				return $this->create_rest_response( [], 400, $result );
+			}
+
+			$total_added = $result;
+			if ( $total_added > 0 ) {
+				return $this->create_rest_response( array(
+					'success' => true,
+					'message' => sprintf(
+						_n( 'Successfully added %d selected item to the collection', 'Successfully added %d selected items to the collection', $total_added, 'echo-knowledge-base' ),
+						$total_added
+					),
+					'items_added' => $total_added
+				) );
+			}
+
+			return $this->create_rest_response( [], 400, new WP_Error( 'no_items_added', __( 'The selected items are already in the collection or are no longer available.', 'echo-knowledge-base' ) ) );
+		}
+
+		if ( empty( $data_types ) ) {
+			return $this->create_rest_response( [], 400, new WP_Error( 'missing_post_types', __( 'Please select at least one content type to add.', 'echo-knowledge-base' ) ) );
+		}
 		
-		// Update collection configuration to include the selected post types FIRST
-		$collection_config['ai_training_data_store_post_types'] = $data_types;
+		// Update collection configuration to include the selected post types FIRST (merge with existing)
+		$existing_post_types = isset( $collection_config['ai_training_data_store_post_types'] ) ? $collection_config['ai_training_data_store_post_types'] : array();
+		$collection_config['ai_training_data_store_post_types'] = array_values( array_unique( array_merge( $existing_post_types, $data_types ) ) );
 		$update_result = EPKB_AI_Training_Data_Config_Specs::update_training_data_collection( $collection_id, $collection_config );
 		if ( is_wp_error( $update_result ) ) {
 			return $this->create_rest_response( [], 400, $update_result );
@@ -816,6 +980,7 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		
 		// Prepare response message
 		if ( $total_added > 0 ) {
+			// translators: %d is the number of items added
 			return $this->create_rest_response( array( 'success' => true, 'message' => sprintf( __( 'Successfully added %d new items to the collection', 'echo-knowledge-base' ), $total_added ), 'items_added' => $total_added ) );
 		}
 
@@ -834,28 +999,119 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 	}
 
 	/**
+	 * Get eligible individual items for one content type in a collection.
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response
+	 */
+	public function get_collection_eligible_items( $request ) {
+
+		$collection_id = absint( $request->get_param( 'collection_id' ) );
+		$data_type = sanitize_key( (string) $request->get_param( 'data_type' ) );
+
+		$collection_config = EPKB_AI_Training_Data_Config_Specs::get_training_data_collection( $collection_id );
+		if ( is_wp_error( $collection_config ) ) {
+			return $this->create_rest_response( [], 400, $collection_config );
+		}
+
+		$available_post_types = EPKB_AI_Utilities::get_available_post_types_for_ai();
+		if ( empty( $data_type ) || ! isset( $available_post_types[ $data_type ] ) ) {
+			return $this->create_rest_response( [], 400, new WP_Error( 'invalid_post_type', __( 'The selected content type is not available for AI training.', 'echo-knowledge-base' ) ) );
+		}
+
+		$posts_data = $this->get_eligible_posts_for_collection( $collection_id, $data_type );
+		if ( is_wp_error( $posts_data ) ) {
+			return $this->create_rest_response( [], 400, $posts_data );
+		}
+
+		$filter_taxonomy = $this->get_category_filter_taxonomy_for_post_type( $data_type );
+		$categories = array();
+		$items = array();
+
+			foreach ( $posts_data['eligible_posts'] as $post ) {
+				$title = EPKB_AI_Validation::validate_title( get_the_title( $post ) );
+				if ( $title === '' ) {
+					$title = __( 'Untitled', 'echo-knowledge-base' ) . ' ' . $post->ID;
+				}
+
+			$item_category_ids = array();
+			$item_category_names = array();
+
+			if ( ! empty( $filter_taxonomy ) ) {
+				$post_terms = get_the_terms( $post->ID, $filter_taxonomy->name );
+				if ( ! is_wp_error( $post_terms ) && ! empty( $post_terms ) ) {
+					foreach ( $post_terms as $term ) {
+						$item_category_ids[] = (int) $term->term_id;
+						$item_category_names[] = $term->name;
+						$categories[ $term->term_id ] = array(
+							'id' => (int) $term->term_id,
+							'name' => $term->name
+						);
+					}
+				}
+			}
+
+			sort( $item_category_ids, SORT_NUMERIC );
+			natcasesort( $item_category_names );
+
+			$items[] = array(
+				'id' => (int) $post->ID,
+				'title' => $title,
+				'category_ids' => $item_category_ids,
+				'category_names' => array_values( $item_category_names )
+			);
+		}
+
+		usort( $items, function( $left, $right ) {
+			return strcasecmp( $left['title'], $right['title'] );
+		} );
+
+		if ( ! empty( $categories ) ) {
+			uasort( $categories, function( $left, $right ) {
+				return strcasecmp( $left['name'], $right['name'] );
+			} );
+		}
+
+		return $this->create_rest_response( array(
+			'success' => true,
+			'data_type' => $data_type,
+			'data_type_label' => $available_post_types[ $data_type ],
+			'category_filter' => empty( $filter_taxonomy ) ? null : array(
+				'taxonomy' => $filter_taxonomy->name,
+				'label' => ! empty( $filter_taxonomy->labels->singular_name ) ? $filter_taxonomy->labels->singular_name : __( 'Category', 'echo-knowledge-base' )
+			),
+			'categories' => array_values( $categories ),
+			'items' => $items
+		) );
+	}
+
+	/**
 	 * Get post statistics for a collection (expensive operation, called on-demand)
 	 *
 	 * @param WP_REST_Request $request
 	 * @return WP_REST_Response
 	 */
 	public function get_collection_post_stats( $request ) {
-		
+
 		$collection_id = $request->get_param( 'collection_id' );
-		
+
 		// Validate collection exists
 		$collection_config = EPKB_AI_Training_Data_Config_Specs::get_training_data_collection( $collection_id );
 		if ( is_wp_error( $collection_config ) ) {
 			return $this->create_rest_response( [], 400, $collection_config );
 		}
-		
+
 		$training_data_db = new EPKB_AI_Training_Data_DB();
-		
+		$is_ai_pro_enabled = EPKB_Utilities::is_ai_features_pro_enabled();
+
 		// Get available post types with their content status
 		$post_types_with_status = array();
 		$available_post_types = EPKB_AI_Utilities::get_available_post_types_for_ai();
 		foreach ( $available_post_types as $post_type => $label ) {
-			
+
+			// Check if this post type requires AI Pro (all non-KB post types require AI Pro)
+			$requires_ai_pro = ! EPKB_KB_Handler::is_kb_post_type( $post_type ) && ! $is_ai_pro_enabled;
+
 			// Use common function to get eligible posts - use stats_only mode for performance
 			$posts_data = $this->get_eligible_posts_for_collection( $collection_id, $post_type, true );
 			if ( is_wp_error( $posts_data ) ) {
@@ -865,13 +1121,13 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 			// Handle the count - it could be a number or '500+'
 			$eligible_count = isset( $posts_data['count'] ) ? $posts_data['count'] : count( $posts_data['eligible_posts'] );
 			$is_approximate = isset( $posts_data['is_approximate'] ) && $posts_data['is_approximate'];
-			
+
 			// Get total count for this post type in the collection (already added)
 			$already_added_in_collection = $training_data_db->get_training_data_count( array(
 				'collection_id' => $collection_id,
 				'type' => $post_type
 			) );
-			
+
 			$post_types_with_status[$post_type] = array(
 				'label' => $label,
 				'available' => $eligible_count === '500+' || $eligible_count > 0,
@@ -881,10 +1137,11 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 				'excluded' => $posts_data['excluded_count'],
 				'already_added' => $already_added_in_collection,
 				'new_items' => $eligible_count,
-				'is_approximate' => $is_approximate
+				'is_approximate' => $is_approximate,
+				'requires_ai_pro' => $requires_ai_pro
 			);
 		}
-		
+
 		return $this->create_rest_response( array( 'success' => true, 'post_types_status' => $post_types_with_status ) );
 	}
 	
@@ -897,8 +1154,6 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 	 */
 	private function add_posts_to_collection( $collection_id, $post_type ) {
 		
-		$training_data_db = new EPKB_AI_Training_Data_DB( true );
-		
 		// Use common function to get eligible posts
 		$posts_data = $this->get_eligible_posts_for_collection( $collection_id, $post_type );
 		if ( is_wp_error( $posts_data ) ) {
@@ -906,32 +1161,76 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		}
 		
 		// Get eligible posts that are not already in the collection
-		$eligible_posts = $posts_data['eligible_posts'];
-		if ( empty( $eligible_posts ) ) {
-			// No eligible posts to add
+		return $this->insert_posts_into_collection( $collection_id, $posts_data['eligible_posts'] );
+	}
+
+	/**
+	 * Add selected posts to collection.
+	 *
+	 * @param int    $collection_id Collection ID.
+	 * @param string $post_type Post type slug.
+	 * @param array  $item_ids Selected post IDs.
+	 * @return int|WP_Error Number of posts added or WP_Error on failure.
+	 */
+	private function add_selected_posts_to_collection( $collection_id, $post_type, $item_ids ) {
+
+		$item_ids = array_values( array_unique( array_filter( array_map( 'absint', (array) $item_ids ) ) ) );
+		if ( empty( $item_ids ) ) {
 			return 0;
 		}
-		
-		// Batch insert for better performance
+
+		$posts_data = $this->get_eligible_posts_for_collection( $collection_id, $post_type );
+		if ( is_wp_error( $posts_data ) ) {
+			return $posts_data;
+		}
+
+		$eligible_posts_by_id = array();
+		foreach ( $posts_data['eligible_posts'] as $post ) {
+			$eligible_posts_by_id[ (int) $post->ID ] = $post;
+		}
+
+		$selected_posts = array();
+		foreach ( $item_ids as $item_id ) {
+			if ( isset( $eligible_posts_by_id[ $item_id ] ) ) {
+				$selected_posts[] = $eligible_posts_by_id[ $item_id ];
+			}
+		}
+
+		return $this->insert_posts_into_collection( $collection_id, $selected_posts );
+	}
+
+	/**
+	 * Insert posts into the training data collection.
+	 *
+	 * @param int   $collection_id Collection ID.
+	 * @param array $posts Posts to insert.
+	 * @return int|WP_Error Number of posts added or WP_Error on failure.
+	 */
+	private function insert_posts_into_collection( $collection_id, $posts ) {
+
+		if ( empty( $posts ) ) {
+			return 0;
+		}
+
+		$training_data_db = new EPKB_AI_Training_Data_DB( true );
 		$batch_size = 100;
-		$batches = array_chunk( $eligible_posts, $batch_size );
+		$batches = array_chunk( $posts, $batch_size );
 		$total_loaded = 0;
-		
+
 		foreach ( $batches as $batch ) {
 			foreach ( $batch as $post ) {
-				// Prepare training data record
 				$training_data = array(
 					'collection_id' => $collection_id,
+					'provider'               => EPKB_AI_Provider::get_active_provider(),
 					'item_id'                => (string) $post->ID,
 					'title'                  => EPKB_AI_Validation::validate_title( $post->post_title ),
 					'type'                   => $post->post_type,
-					'status'                 => 'pending', // Default status for new records
+					'status'                 => 'pending',
 					'url'                    => get_permalink( $post->ID ),
 					'content_hash'           => md5( $post->post_content ),
 					'user_id'                => get_current_user_id()
 				);
-				
-				// Insert the record
+
 				$result = $training_data_db->insert_training_data( $training_data );
 				if ( is_wp_error( $result ) ) {
 					return $result;
@@ -940,8 +1239,32 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 				$total_loaded++;
 			}
 		}
-		
+
 		return $total_loaded;
+	}
+
+	/**
+	 * Get the category taxonomy to use for item filtering.
+	 *
+	 * @param string $post_type Post type slug.
+	 * @return WP_Taxonomy|null
+	 */
+	private function get_category_filter_taxonomy_for_post_type( $post_type ) {
+
+		$taxonomies = get_object_taxonomies( $post_type, 'objects' );
+		if ( empty( $taxonomies ) ) {
+			return null;
+		}
+
+		foreach ( $taxonomies as $taxonomy ) {
+			if ( empty( $taxonomy->hierarchical ) || $taxonomy->name === 'post_format' ) {
+				continue;
+			}
+
+			return $taxonomy;
+		}
+
+		return null;
 	}
 
 	/**
@@ -986,10 +1309,16 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 			$check_for_more = true;
 		}
 		
-		// Get published posts with controlled limit
+		// Determine allowed statuses - AI Notes allow 'private'
+		$post_status = array( 'publish' );
+		if ( $post_type === EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE ) {
+			$post_status[] = 'private';
+		}
+
+		// Get eligible posts with controlled limit
 		$posts_query = new WP_Query( array(
 			'post_type' => $post_type,
-			'post_status' => 'publish',
+			'post_status' => $post_status,
 			'posts_per_page' => $query_limit,
 			'fields' => 'ids',
 			'no_found_rows' => ! $check_for_more, // Only get total count if checking for more
@@ -1056,6 +1385,267 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 
 	
 	/**********************************************************************
+	 * PDF Upload to Vector Store
+	 **********************************************************************/
+
+	/**
+	 * Upload a PDF file directly to AI vector store
+	 *
+	 * @param WP_REST_Request $request
+	 * @return WP_REST_Response
+	 */
+	public function upload_pdf_to_vector_store( $request ) {
+
+		EPKB_PDF_Utilities::setup_timeout_error_handling( 'rest' );
+
+		$collection_id = (int) $request->get_param( 'collection_id' );
+		$file_name = $request->get_param( 'file_name' );
+		$file_data = $request->get_param( 'file_data' );
+		$upload_mode = $request->get_param( 'upload_mode' ) === 'extract_pdf_text' ? 'extract_pdf_text' : 'raw_pdf';
+		$attachment_url = $request->get_param( 'attachment_url' );
+		$attachment_url = ! empty( $attachment_url ) ? esc_url_raw( $attachment_url ) : '';
+
+		// Validate collection exists
+		$collection_config = EPKB_AI_Training_Data_Config_Specs::get_training_data_collection( $collection_id );
+		if ( is_wp_error( $collection_config ) ) {
+			return $this->create_rest_response( [], 400, $collection_config );
+		}
+
+		$pdf_data = EPKB_PDF_Utilities::decode_base64_pdf( $file_data, $file_name );
+		if ( is_wp_error( $pdf_data ) ) {
+			return $this->create_rest_response( [], 400, $pdf_data );
+		}
+
+		// Get vector store handler
+		$vector_store_handler = EPKB_AI_Provider::get_vector_store_handler();
+
+		// Get or create vector store for this collection
+		$store_id = $vector_store_handler->get_or_create_vector_store( $collection_id );
+		if ( is_wp_error( $store_id ) ) {
+			return $this->create_rest_response( [], 500, $store_id );
+		}
+
+		// Generate a unique ID for this PDF upload
+		$pdf_id = EPKB_AI_Utilities::generate_uuid_v4();
+
+		$content_hash = $pdf_data['content_hash'];
+		$training_data_type = 'PDF';
+
+		if ( $upload_mode === 'extract_pdf_text' ) {
+			$formatted_content = EPKB_PDF_Utilities::format_text_for_display( $request->get_param( 'raw_text' ), 'basic' );
+			if ( is_wp_error( $formatted_content ) ) {
+				return $this->create_rest_response( [], 400, $formatted_content );
+			}
+
+			$formatted_content = EPKB_PDF_Utilities::sanitize_note_content( $formatted_content );
+			$plain_content = EPKB_PDF_Utilities::strip_html_for_ai( $formatted_content );
+			if ( $plain_content === '' ) {
+				return $this->create_rest_response( [], 400, new WP_Error( 'empty_content', __( 'PDF text content is empty.', 'echo-knowledge-base' ) ) );
+			}
+
+			$content_hash = md5( $plain_content );
+			$training_data_type = 'HTML';
+			$upload_result = $vector_store_handler->upload_file_to_file_storage(
+				$pdf_id,
+				$this->build_html_document_for_vector_store_upload( $pdf_data['file_name'], $formatted_content ),
+				'pdf_html',
+				$store_id,
+				'html',
+				'text/html'
+			);
+		} else {
+			// Upload PDF binary to AI file storage
+			$upload_result = $vector_store_handler->upload_pdf_to_file_storage( $pdf_id, $pdf_data['binary'], $store_id );
+		}
+
+		if ( is_wp_error( $upload_result ) ) {
+			return $this->create_rest_response( [], 500, $upload_result );
+		}
+
+		$file_id = isset( $upload_result['id'] ) ? $upload_result['id'] : '';
+		if ( empty( $file_id ) ) {
+			return $this->create_rest_response( [], 500, new WP_Error( 'upload_failed', __( 'Failed to upload PDF to AI storage.', 'echo-knowledge-base' ) ) );
+		}
+
+		// For ChatGPT, add file to vector store (Gemini does this during upload)
+		$provider = EPKB_AI_Provider::get_active_provider();
+		if ( $provider !== EPKB_AI_Provider::PROVIDER_GEMINI ) {
+			$add_result = $vector_store_handler->add_file_to_vector_store( $store_id, $file_id, true );
+			if ( is_wp_error( $add_result ) ) {
+				$this->cleanup_failed_pdf_upload( $vector_store_handler, $store_id, $file_id, $collection_id, $provider, 'add_failed' );
+				return $this->create_rest_response( [], 500, $add_result );
+			}
+
+			$processing_result = $vector_store_handler->wait_for_file_to_complete_in_vector_store( $store_id, $file_id );
+			if ( is_wp_error( $processing_result ) ) {
+				$this->cleanup_failed_pdf_upload( $vector_store_handler, $store_id, $file_id, $collection_id, $provider, 'processing_failed' );
+				return $this->create_rest_response( [], 500, $processing_result );
+			}
+		}
+
+		// Insert record in training data table
+		$training_data_db = new EPKB_AI_Training_Data_DB();
+		$training_data = array(
+			'collection_id' => $collection_id,
+			'provider'      => $provider,
+			'item_id'       => $pdf_id,
+			'store_id'      => $store_id,
+			'file_id'       => $file_id,
+			'title'         => $pdf_data['file_name'],
+			'type'          => $training_data_type,
+			'status'        => 'added',
+			'content_hash'  => $content_hash,
+			'url'           => $attachment_url ?: null,
+			'user_id'       => get_current_user_id(),
+			'last_synced'   => gmdate( 'Y-m-d H:i:s' ),
+		);
+
+		$insert_id = $training_data_db->insert_training_data( $training_data );
+		if ( is_wp_error( $insert_id ) ) {
+			$this->cleanup_failed_pdf_upload( $vector_store_handler, $store_id, $file_id, $collection_id, $provider, 'insert_failed' );
+			return $this->create_rest_response( [], 500, $insert_id );
+		}
+
+		return $this->create_rest_response( array(
+			'success' => true,
+			'message' => $upload_mode === 'extract_pdf_text'
+				? __( 'PDF text extracted and uploaded successfully.', 'echo-knowledge-base' )
+				: __( 'PDF uploaded successfully.', 'echo-knowledge-base' ),
+			'record'  => array(
+				'id'          => $insert_id,
+				'title'       => $pdf_data['file_name'],
+				'type'        => $training_data_type,
+				'status'      => 'added',
+				'file_id'     => $file_id,
+				'upload_mode' => $upload_mode,
+				'created'     => gmdate( 'Y-m-d H:i:s' ),
+			),
+		) );
+	}
+
+	/**
+	 * Wrap sanitized HTML in a complete document before uploading it to AI storage.
+	 *
+	 * @param string $file_name Original PDF file name.
+	 * @param string $content Sanitized HTML fragment.
+	 * @return string
+	 */
+	private function build_html_document_for_vector_store_upload( $file_name, $content ) {
+
+		$document_title = sanitize_text_field( wp_strip_all_tags( pathinfo( (string) $file_name, PATHINFO_FILENAME ) ) );
+		if ( $document_title === '' ) {
+			$document_title = __( 'PDF Document', 'echo-knowledge-base' );
+		}
+
+		return "<!DOCTYPE html>\n<html>\n<head>\n<meta charset=\"utf-8\">\n<title>" . esc_html( $document_title ) . "</title>\n</head>\n<body>\n" . $content . "\n</body>\n</html>";
+	}
+
+	/**
+	 * Remove a PDF file from the provider when upload processing fails before DB insert.
+	 *
+	 * @param EPKB_AI_ChatGPT_Vector_Store|EPKB_AI_Gemini_Vector_Store $vector_store_handler Vector store handler.
+	 * @param string $store_id Store ID.
+	 * @param string $file_id File ID.
+	 * @param int $collection_id Collection ID.
+	 * @param string $provider Provider slug.
+	 * @param string $reason Cleanup reason.
+	 */
+	private function cleanup_failed_pdf_upload( $vector_store_handler, $store_id, $file_id, $collection_id, $provider, $reason ) {
+
+		if ( empty( $file_id ) ) {
+			return;
+		}
+
+		if ( ! empty( $store_id ) ) {
+			$remove_result = $vector_store_handler->remove_file_from_vector_store( $store_id, $file_id );
+			if ( is_wp_error( $remove_result ) && $remove_result->get_error_code() !== 'not_found' ) {
+				EPKB_AI_Log::add_log( $remove_result, array(
+					'collection_id' => $collection_id,
+					'provider'      => $provider,
+					'store_id'      => $store_id,
+					'file_id'       => $file_id,
+					'reason'        => $reason,
+					'message'       => 'Failed to remove PDF from vector store during cleanup'
+				) );
+			}
+		}
+
+		$delete_result = $vector_store_handler->delete_file_from_file_storage( $file_id, $store_id );
+		if ( is_wp_error( $delete_result ) && $delete_result->get_error_code() !== 'not_found' ) {
+			EPKB_AI_Log::add_log( $delete_result, array(
+				'collection_id' => $collection_id,
+				'provider'      => $provider,
+				'store_id'      => $store_id,
+				'file_id'       => $file_id,
+				'reason'        => $reason,
+				'message'       => 'Failed to delete PDF from AI storage during cleanup'
+			) );
+		}
+	}
+
+	/**
+	 * Get the training data record for an AI Note, scoped to the active collection when provided.
+	 *
+	 * @param int $note_id
+	 * @param int $collection_id
+	 * @return object|WP_Error|null
+	 */
+	private function get_training_data_note_record( $note_id, $collection_id = 0 ) {
+
+		$note_id = absint( $note_id );
+		$collection_id = absint( $collection_id );
+		if ( $note_id <= 0 ) {
+			return null;
+		}
+
+		$collection_ids = array();
+		if ( $collection_id > 0 ) {
+			$collection_ids[] = $collection_id;
+		}
+
+		$post_collection_id = (int) get_post_meta( $note_id, '_epkb_collection_id', true );
+		if ( $post_collection_id > 0 && ! in_array( $post_collection_id, $collection_ids, true ) ) {
+			$collection_ids[] = $post_collection_id;
+		}
+
+		if ( empty( $collection_ids ) ) {
+			$collections = EPKB_AI_Training_Data_Config_Specs::get_training_data_collections( false, false );
+			if ( ! is_wp_error( $collections ) && ! empty( $collections ) ) {
+				foreach ( array_keys( $collections ) as $available_collection_id ) {
+					$available_collection_id = (int) $available_collection_id;
+					if ( $available_collection_id > 0 ) {
+						$collection_ids[] = $available_collection_id;
+					}
+				}
+			}
+		}
+
+		$training_data_db = new EPKB_AI_Training_Data_DB();
+		foreach ( $collection_ids as $target_collection_id ) {
+			$record = $training_data_db->get_training_data_record_by_item_id( $target_collection_id, (string) $note_id );
+			if ( is_wp_error( $record ) ) {
+				return $record;
+			}
+			if ( ! empty( $record ) ) {
+				return $record;
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * Delete provider-side file references for a training data record.
+	 *
+	 * @param object $record Training data record.
+	 * @param string $reason Cleanup reason for logs.
+	 * @return bool|WP_Error
+	 */
+	private function cleanup_training_data_record_from_provider( $record, $reason = 'training_data_delete' ) {
+		return EPKB_AI_Utilities::cleanup_training_data_record_from_provider( $record, $reason );
+	}
+
+	/**********************************************************************
 	 * Training Notes (AI Features Pro)
 	 **********************************************************************/
 	
@@ -1066,25 +1656,78 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 	 * @return WP_REST_Response
 	 */
 	public function create_training_note( $request ) {
-		
+
 		// Check if AI Features Pro is enabled
 		$create_callable = array( 'AIPRO_AI_Notes', 'create_ai_note' ); /* @disregard PREFIX */
 		if ( ! EPKB_Utilities::is_ai_features_pro_enabled() || ! class_exists( 'AIPRO_AI_Notes' ) || ! is_callable( $create_callable ) ) {  /* @disregard PREFIX */
 			return $this->create_rest_response( [], 400, new WP_Error( 'ai_pro_required', __( 'AI Features Pro is required for training notes', 'echo-knowledge-base' ) ) );
 		}
-		
+
 		$collection_id = (int) $request->get_param( 'collection_id' );
 		$title = $request->get_param( 'title' );
 		$content = $request->get_param( 'content' );
-		
+
+		// Optional PDF meta parameters
+		$note_type = $request->get_param( 'note_type' ) ?: 'text';
+		$original_file_name = $request->get_param( 'original_file_name' );
+		$conversion_time = $request->get_param( 'conversion_time' );
+		$format_mode = $request->get_param( 'format_mode' ) ?: 'none';
+
+		// Apply PDF formatting before storing note content.
+		if ( $note_type === 'pdf' ) {
+			EPKB_PDF_Utilities::setup_timeout_error_handling( 'rest' );
+
+			if ( $format_mode === 'ai' ) {
+				$pdf_data = EPKB_PDF_Utilities::decode_base64_pdf(
+					$request->get_param( 'pdf_base64' ),
+					$request->get_param( 'file_name' ) ?: ( $original_file_name ?: 'document.pdf' )
+				);
+				if ( is_wp_error( $pdf_data ) ) {
+					return $this->create_rest_response( [], 400, $pdf_data );
+				}
+
+				$content = EPKB_PDF_Utilities::format_pdf_for_display( $pdf_data['binary'], $pdf_data['file_name'], 'ai' );
+			} elseif ( $format_mode !== 'none' ) {
+				$content = EPKB_PDF_Utilities::format_text_for_display( $content, $format_mode );
+			}
+
+			if ( is_wp_error( $content ) ) {
+				return $this->create_rest_response( [], 400, $content );
+			}
+		}
+
+		$content = EPKB_PDF_Utilities::sanitize_note_content( $content );
+		$plain_content = EPKB_PDF_Utilities::strip_html_for_ai( $content );
+		if ( empty( $plain_content ) ) {
+			return $this->create_rest_response( [], 400, new WP_Error( 'empty_content', __( 'No content to save.', 'echo-knowledge-base' ) ) );
+		}
+		$content_hash = md5( $plain_content );
+
 		// Validate collection exists
 		$collection_config = EPKB_AI_Training_Data_Config_Specs::get_training_data_collection( $collection_id );
 		if ( is_wp_error( $collection_config ) ) {
 			return $this->create_rest_response( [], 400, $collection_config );
 		}
-		
+
+		// Build meta array for note creation
+		$meta = array(
+			'_epkb_collection_id' => $collection_id,
+			'_in_training_data'   => '1'
+		);
+
+		// Add PDF-specific meta if this is a PDF note
+		if ( $note_type === 'pdf' ) {
+			$meta['_note_type'] = 'pdf';
+			if ( $original_file_name ) {
+				$meta['_pdf_original_file_name'] = sanitize_file_name( $original_file_name );
+			}
+			if ( $conversion_time ) {
+				$meta['_pdf_conversion_time'] = (int) $conversion_time;
+			}
+		}
+
 		// Use AI Features Pro to create note
-		$note_id = call_user_func( $create_callable, $title, $content, array( '_epkb_collection_id' => $collection_id, '_in_training_data' => '1' ) );
+		$note_id = call_user_func( $create_callable, $title, $content, $meta );
 		if ( is_wp_error( $note_id ) ) {
 			return $this->create_rest_response( [], 500, $note_id );
 		}
@@ -1093,13 +1736,14 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		$training_data_db = new EPKB_AI_Training_Data_DB();
 		$training_data = array(
 			'collection_id' => $collection_id,
-			'item_id'                => (string) $note_id,
-			'title'                  => $title,
-			'type'                   => EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE,
-			'status'                 => 'pending',
-			'url'                    => '',
-			'content_hash'           => md5( $content ),
-			'user_id'                => get_current_user_id()
+			'provider'      => EPKB_AI_Provider::get_active_provider(),
+			'item_id'       => (string) $note_id,
+			'title'         => $title,
+			'type'          => EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE,
+			'status'        => 'pending',
+			'url'           => '',
+			'content_hash'  => $content_hash,
+			'user_id'       => get_current_user_id()
 		);
 		
 		$result = $training_data_db->insert_training_data( $training_data );
@@ -1128,17 +1772,36 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		$title = $request->get_param( 'title' );
 		$content = $request->get_param( 'content' );
 		$training_id = $request->get_param( 'training_id' );
+
+		$update_data = array();
+		if ( $title !== null ) {
+			$update_data['title'] = $title;
+		}
+		if ( $content !== null ) {
+			$update_data['content'] = EPKB_PDF_Utilities::sanitize_note_content( $content );
+		}
+		if ( empty( $update_data ) ) {
+			return $this->create_rest_response( [], 400, new WP_Error( 'no_changes', __( 'No changes provided', 'echo-knowledge-base' ) ) );
+		}
 		
 		// Use AI Features Pro to update note
-		$result = call_user_func( $update_callable, $note_id, array( 'title' => $title, 'content' => $content ) );
+		$result = call_user_func( $update_callable, $note_id, $update_data );
 		if ( is_wp_error( $result ) ) {
 			return $this->create_rest_response( [], 500, $result );
 		}
 		
 		// Update training data table entry to keep it in sync
 		if ( $training_id ) {
+			$training_update = array( 'status' => 'pending' );
+			if ( $title !== null ) {
+				$training_update['title'] = $title;
+			}
+			if ( isset( $update_data['content'] ) ) {
+				$training_update['content_hash'] = md5( EPKB_PDF_Utilities::strip_html_for_ai( $update_data['content'] ) );
+			}
+
 			$training_data_db = new EPKB_AI_Training_Data_DB();
-			$result = $training_data_db->update_training_data( $training_id, array( 'title' => $title, 'content_hash' => md5( $content ), 'status' => 'pending' ) );
+			$result = $training_data_db->update_training_data( $training_id, $training_update );
 			if ( is_wp_error( $result ) ) {
 				return $this->create_rest_response( [], 500, $result );
 			}
@@ -1161,7 +1824,12 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 			return $this->create_rest_response( [], 400, new WP_Error( 'ai_pro_required', __( 'AI Features Pro is required for training notes', 'echo-knowledge-base' ) ) );
 		}
 		
-		$note_id = $request->get_param( 'note_id' );
+		$note_id = absint( $request->get_param( 'note_id' ) );
+		$collection_id = absint( $request->get_param( 'collection_id' ) );
+		$training_record = $this->get_training_data_note_record( $note_id, $collection_id );
+		if ( is_wp_error( $training_record ) ) {
+			return $this->create_rest_response( [], 500, $training_record );
+		}
 		
 		// Use AI Features Pro to delete note
 		$result = call_user_func( $delete_callable, $note_id, true );
@@ -1171,9 +1839,17 @@ class EPKB_AI_REST_Training_Data_Controller extends EPKB_AI_REST_Base_Controller
 		
 		// Delete from training data table
 		$training_data_db = new EPKB_AI_Training_Data_DB();
-		$result = $training_data_db->delete_training_data_by_source( EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE, (string) $note_id );
+		if ( $training_record && ! empty( $training_record->id ) ) {
+			$result = $training_data_db->delete_training_data_record( (int) $training_record->id );
+		} else {
+			$result = $training_data_db->delete_training_data_by_source( EPKB_AI_Utilities::AI_PRO_NOTES_POST_TYPE, (string) $note_id );
+		}
 		if ( is_wp_error( $result ) ) {
 			return $this->create_rest_response( [], 500, $result );
+		}
+
+		if ( $training_record ) {
+			$this->cleanup_training_data_record_from_provider( $training_record, 'training_note_delete' );
 		}
 		
 		return $this->create_rest_response( array( 'success' => true, 'message' => __( 'Note deleted successfully', 'echo-knowledge-base' ) ) );

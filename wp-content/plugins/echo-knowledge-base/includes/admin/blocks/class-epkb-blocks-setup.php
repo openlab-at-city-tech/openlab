@@ -14,9 +14,6 @@ class EPKB_Blocks_Setup {
 		if ( EPKB_Utilities::is_advanced_search_enabled() ) {
 			new EPKB_Advanced_Search_Block();
 		}
-		if ( EPKB_AI_Utilities::is_ai_features_pro_enabled() ) {
-			new EPKB_AI_Advanced_Search_Block();
-		}
 		new EPKB_Search_Block();
 
 		// show pro blocks next
@@ -34,6 +31,8 @@ class EPKB_Blocks_Setup {
 		new EPKB_Drill_Down_Layout_Block();
 		new EPKB_FAQs_Block();
 		new EPKB_Featured_Articles_Block();
+		new EPKB_Articles_Index_Directory_Block();
+		new EPKB_Glossary_Index_Block();
 
 		add_action( 'init', array( $this, 'initialize' ) );
 		add_filter( 'get_block_templates', array( $this, 'reassign_kb_block_page_template_with_numerical_key' ), 1, 3 );
@@ -69,7 +68,7 @@ class EPKB_Blocks_Setup {
 		array_unshift( $block_categories,
 			array(
 				'slug' => EPKB_Abstract_Block::EPKB_BLOCK_CATEGORY,
-				'title' => esc_html__( 'Echo Knowledge Base', 'echo-knowledge-base' ),
+				'title' => __( 'Echo Knowledge Base', 'echo-knowledge-base' ),
 				'icon' => EPKB_Abstract_Block::EPKB_BLOCK_CATEGORY_ICON,
 			)
 		);
@@ -108,8 +107,8 @@ class EPKB_Blocks_Setup {
 
 		// register template
 		register_block_template( $template_name, [
-			'title' => esc_html__( 'KB Block Page Template', 'echo-knowledge-base' ),
-			'description' => esc_html__( 'The recommended template to use for creating the KB main page.', 'echo-knowledge-base' ),
+			'title' => __( 'KB Block Page Template', 'echo-knowledge-base' ),
+			'description' => __( 'The recommended template to use for creating the KB main page.', 'echo-knowledge-base' ),
 			'content' => $template_content,
 			'post_types'  => array( 'page' ),
 		] );
@@ -189,8 +188,8 @@ class EPKB_Blocks_Setup {
 
 			// insert the custom template
 			$inserted_template_id = wp_insert_post( array(
-				'post_title'   => esc_html__( 'KB Block Page Template', 'echo-knowledge-base' ),
-				'post_excerpt' => esc_html__( 'The recommended template to use for creating the KB main page.', 'echo-knowledge-base' ),
+				'post_title'   => __( 'KB Block Page Template', 'echo-knowledge-base' ),
+				'post_excerpt' => __( 'The recommended template to use for creating the KB main page.', 'echo-knowledge-base' ),
 				'post_name'    => sanitize_title( EPKB_Abstract_Block::EPKB_KB_BLOCK_PAGE_TEMPLATE ),
 				'post_content' => $template_content,
 				'post_status'  => 'publish',

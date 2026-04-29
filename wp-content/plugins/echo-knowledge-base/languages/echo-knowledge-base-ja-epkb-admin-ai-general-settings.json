@@ -10,11 +10,17 @@
             "Settings saved successfully": [
                 "設定が正常に保存されました"
             ],
-            "Saving...": [
-                "保存中..."
+            "Close": [
+                "閉じる"
+            ],
+            "Cancel": [
+                "キャンセル"
             ],
             "Save Settings": [
                 "設定を保存"
+            ],
+            "Saving...": [
+                "保存中..."
             ],
             "Failed to save settings": [
                 "設定の保存に失敗しました"
@@ -30,6 +36,33 @@
             ],
             "Failed to send test email. Please check your connection.": [
                 "テストメールの送信に失敗しました。接続を確認してください。."
+            ],
+            "Change AI Provider?": [
+                "AIプロバイダを変更しますか？"
+            ],
+            "Before you switch:": [
+                "切り替える前に:"
+            ],
+            "Read the Switching AI Providers guide →": [
+                "AIプロバイダーの切り替えガイドを読む →"
+            ],
+            "Switching AI providers will affect your AI Search and AI Chat settings:": [
+                "AIプロバイダを切り替えると、AI検索とAIチャットの設定に影響します："
+            ],
+            "Training Data Collections are provider-specific and do not transfer between providers.": [
+                "機械学習データのコレクションは提供元固有で、提供元間で転送されません。."
+            ],
+            "You will need to create and train new collections for the new provider.": [
+                "新しいプロバイダ用に新しいコレクションを作成してトレーニングする必要があります。."
+            ],
+            "AI Search and AI Chat will only show collections for the selected provider.": [
+                "AI検索とAIチャットは、選択された提供元のコレクションのみを表示します。."
+            ],
+            "Your existing collections will be preserved and available if you switch back.": [
+                "元の提供元に戻すと、既存のコレクションは保持され、利用可能になります。."
+            ],
+            "Change Provider": [
+                "プロバイダを変更"
             ]
         }
     }
