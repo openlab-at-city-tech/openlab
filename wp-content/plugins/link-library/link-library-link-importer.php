@@ -191,7 +191,6 @@ function link_library_import_links( $genoptions, &$row, &$successfulimport, &$su
 						'post_type' => 'link_library_links',
 						'post_content' => '',
 						'post_title' => $post_title,
-						'tax_input' => array( $genoptions['cattaxonomy'] => $matched_link_cats, $genoptions['tagtaxonomy'] => $matched_link_tags ),
 						'post_status' => $post_status,
 						'post_date' => $link_publication
 					);
@@ -204,6 +203,9 @@ function link_library_import_links( $genoptions, &$row, &$successfulimport, &$su
 						$new_link_ID = wp_insert_post( $new_link_data );
 						$successfulimport++;
 					}
+
+					wp_set_post_terms( $new_link_ID, $matched_link_cats, $genoptions['cattaxonomy'] );
+					wp_set_post_terms( $new_link_ID, $matched_link_tags, $genoptions['tagtaxonomy'] );
 
 					update_post_meta( $new_link_ID, 'link_url', $link_url );
 

@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.8.8
+Version: 7.9.2
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
@@ -1181,6 +1181,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 		}
 
 		function CheckReciprocalLink( $RecipCheckAddress = '', $external_link = '', $request_type = 'reciprocal' ) {
+
 			$response = wp_safe_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'timeout' => 10 ) );
 
 			if( is_wp_error( $response ) ) {

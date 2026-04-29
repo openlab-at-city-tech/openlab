@@ -1672,7 +1672,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$myFile = $upload_dir['path'] . "/LinksExport.csv";
 				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
 
-				$links_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private' ) );
+				$links_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => array( 'publish', 'pending', 'draft', 'future', 'private' ), 'suppress_filters' => true );
 
 				$links_to_export = new WP_Query( $links_query_args );
 
@@ -1787,21 +1787,21 @@ wp_editor( $post->post_content, 'content', $editor_config );
 							$datarow[] = $value;
 						}
 						fputcsv( $fh, $datarow, ',', '"' );
-					}
+					}					
+				}
 
-					fclose( $fh );
+				fclose( $fh );
 
-					if ( file_exists( $myFile ) ) {
-						header( 'Content-Description: File Transfer' );
-						header( 'Content-Type: application/octet-stream' );
-						header( 'Content-Disposition: attachment; filename=' . basename( $myFile ) );
-						header( 'Expires: 0' );
-						header( 'Cache-Control: must-revalidate' );
-						header( 'Pragma: public' );
-						header( 'Content-Length: ' . filesize( $myFile ) );
-						readfile( $myFile );
-						exit;
-					}
+				if ( file_exists( $myFile ) ) {
+					header( 'Content-Description: File Transfer' );
+					header( 'Content-Type: application/octet-stream' );
+					header( 'Content-Disposition: attachment; filename=' . basename( $myFile ) );
+					header( 'Expires: 0' );
+					header( 'Cache-Control: must-revalidate' );
+					header( 'Pragma: public' );
+					header( 'Content-Length: ' . filesize( $myFile ) );
+					readfile( $myFile );
+					exit;
 				}
 			} else {
 				$message = '3';
@@ -1813,7 +1813,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$myFile = $upload_dir['path'] . "/LinksExport.opml";
 				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
 
-				$link_categories_query_args = array( );
+				$link_categories_query_args = array( 'suppress_filters' => true );
 				$link_categories_query_args['hide_empty'] = true;
 
 				add_filter( 'get_terms', 'link_library_get_terms_filter_only_publish', 10, 3 );
@@ -1831,7 +1831,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				foreach ( (array) $link_categories as $link_category ) {
 					fwrite( $fh, "\t" . '<outline type="category" title="' . $link_category->name . '">' . "\n" );
 					
-					$link_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => 'publish' );
+					$link_query_args = array( 'post_type' => 'link_library_links', 'posts_per_page' => -1, 'post_status' => 'publish', 'suppress_filters' => true );
 					$link_query_args['orderby']['title'] = 'ASC';
 
 					$link_query_args['tax_query'][] =
@@ -1880,7 +1880,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$myFile = $upload_dir['path'] . "/CategoriesExport.csv";
 				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
 
-				$link_library_categories = get_terms( 'link_library_category', array( 'hide_empty' => false, ) );
+				$link_library_categories = get_terms( 'link_library_category', array( 'hide_empty' => false, 'suppress_filters' => true ) );
 
 				if ( !empty( $link_library_categories ) ) {
 					$headerrow = array( 'Category ID', 'Category Name', 'Parent Category Name (Empty if top-level category)' );
@@ -7860,9 +7860,9 @@ function general_custom_fields_meta_box( $data ) {
 				$uploads = wp_upload_dir();
 
 				$pathpos = strpos( $delete_link_url, $uploads['baseurl'] );
-				$filepath = $uploads['basedir'] . substr( $delete_link_url, $pathpos + strlen( $uploads['baseurl'] ) );
+				$filepath = realpath( $uploads['basedir'] . substr( $delete_link_url, $pathpos + strlen( $uploads['baseurl'] ) ) );
 
-				if ( $pathpos !== false ) {
+				if ( $pathpos !== false && strpos( $filepath, $uploads['baseurl'] ) == 0 ) {
 					global $wpdb;
 					$attachment_id = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $delete_link_url ));
 
@@ -8236,7 +8236,7 @@ function wp_dropdown_cats_multiple( $output, $r ) {
 
 function link_library_reciprocal_link_checker() {
 
-	if ( !wp_verify_nonce( '_ajax_nonce' ) || !current_user_can( 'manage_options' ) ) {
+	if ( !wp_verify_nonce( $_POST['_ajax_nonce'], 'link_library_recipbrokencheck' ) || !current_user_can( 'manage_options' ) ) {
 		die();
 	}
 
@@ -8247,6 +8247,8 @@ function link_library_reciprocal_link_checker() {
 	$recipcheckdelete403 = ( isset( $_POST['recipcheckdelete403'] ) && !empty( $_POST['recipcheckdelete403'] ) && 'true' == $_POST['recipcheckdelete403'] ? true : false );
 	$check_type = ( isset( $_POST['mode'] ) && !empty( $_POST['mode'] ) ? sanitize_text_field( $_POST['mode'] ) : 'reciprocal' );
 	$rsscheckdays = ( ( isset( $_POST['rsscheckdays'] ) && !empty( $_POST['rsscheckdays'] ) ) ? intval( $_POST['rsscheckdays'] ) : $genoptions['rsscheckdays'] );
+
+	var_dump( $check_type );
 
 	if ( ! empty( $RecipCheckAddress ) || ( empty( $RecipCheckAddress ) && ( 'reciprocal' != $check_type || 'emptycat' == $check_type ) )  ) {
 		$args = array(
