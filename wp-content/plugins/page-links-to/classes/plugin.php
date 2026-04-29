@@ -31,7 +31,9 @@ class CWS_PageLinksTo {
 	const DISMISSED_NOTICES = 'page_links_dismissed_options';
 	const MESSAGE_ID = 4;
 	const NEWSLETTER_URL = 'https://pages.convertkit.com/8eb23c1339/1ce4614706';
-	const CSS_JS_VERSION = '3.3.7';
+	const CSS_JS_VERSION = '3.4.1';
+	const ALWAYS_SUPPORTED_POST_TYPES = array( 'page' );
+	const OMITTED_POST_TYPES = array( 'wp_block', 'wp-help' );
 
 	/**
 	 * Whether to replace WP links with their specified URLs.
@@ -57,10 +59,6 @@ class CWS_PageLinksTo {
 	 * @return CWS_PageLinksTo The plugin class instance.
 	 */
 	public static function get_instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new self();
-		}
-
 		return self::$instance;
 	}
 
@@ -77,10 +75,10 @@ class CWS_PageLinksTo {
 	/**
 	 * Add a WordPress hook (action/filter).
 	 *
-	 * @param mixed $hook first parameter is the name of the hook. If second or third parameters are included, they will be used as a priority (if an integer) or as a class method callback name (if a string).
+	 * @param string $hook first parameter is the name of the hook. If second or third parameters are included, they will be used as a priority (if an integer) or as a class method callback name (if a string).
 	 * @return true Will always return true.
 	 */
-	public function hook( $hook ) {
+	public function hook( string $hook ) {
 		$args = func_get_args();
 		$priority = 10;
 		$method = self::sanitize_method( $hook );
@@ -88,12 +86,12 @@ class CWS_PageLinksTo {
 		foreach ( (array) $args as $arg ) {
 			if ( is_int( $arg ) ) {
 				$priority = $arg;
-			} else {
+			} elseif ( is_string( $arg ) ) {
 				$method = $arg;
 			}
 		}
 
-		return add_action( $hook, array( $this, $method ), $priority, 999 );
+		return add_action( $hook, array( $this, $method ), $priority, 999 ); // @phpstan-ignore argument.type
 	}
 
 	/**
@@ -110,8 +108,8 @@ class CWS_PageLinksTo {
 	 * Includes a file (relative to the plugin base path)
 	 * and optionally globalizes a named array passed in.
 	 *
-	 * @param string $file The file to include.
-	 * @param array  $data A named array of data to globalize.
+	 * @param string              $file The file to include.
+	 * @param array<string,mixed> $data A named array of data to globalize.
 	 * @return void
 	 */
 	public function include_file( $file, $data = array() ) {
@@ -205,8 +203,10 @@ class CWS_PageLinksTo {
 	 * @return boolean We return the original value of their decision.
 	 */
 	public function use_block_editor_for_post( $use_block_editor, $post ) {
-		if ( $use_block_editor && self::is_supported_post_type( get_post_type( $post ) ) ) {
-			add_post_type_support( get_post_type( $post ), 'custom-fields' );
+		$post_type = get_post_type( $post );
+
+		if ( $post_type && $use_block_editor && self::is_supported_post_type( $post_type ) ) {
+			add_post_type_support( $post_type, 'custom-fields' );
 		}
 
 		return $use_block_editor;
@@ -268,12 +268,12 @@ class CWS_PageLinksTo {
 	/**
 	 * Determines REST API authentication.
 	 *
-	 * @param bool   $allowed Whether it is allowed.
-	 * @param string $meta_key The meta key being checked.
-	 * @param int    $post_id The post ID being checked.
-	 * @param int    $user_id The user ID being checked.
-	 * @param string $cap The current capability.
-	 * @param array  $caps All capabilities.
+	 * @param bool          $allowed Whether it is allowed.
+	 * @param string        $meta_key The meta key being checked.
+	 * @param int           $post_id The post ID being checked.
+	 * @param int           $user_id The user ID being checked.
+	 * @param string        $cap The current capability.
+	 * @param array<string> $caps All capabilities.
 	 * @return bool Whether the user can do it.
 	 */
 	public function rest_auth( $allowed, $meta_key, $post_id, $user_id, $cap, $caps ) {
@@ -291,6 +291,7 @@ class CWS_PageLinksTo {
 		// In earlier versions, the meta keys were stored without a leading underscore.
 		// Since then, underscore has been codified as the standard for "something manages this" post meta.
 		if ( ! get_option( self::VERSION_KEY ) || get_option( self::VERSION_KEY ) < 3 ) {
+			/** @var \wpdb $wpdb */
 			global $wpdb;
 			$total_affected = 0;
 			foreach ( array( '', '_target', '_type' ) as $meta_key ) {
@@ -298,7 +299,7 @@ class CWS_PageLinksTo {
 				$affected = $wpdb->update( $wpdb->postmeta, array(
 					'meta_key' => '_' . $meta_key,
 				), compact( 'meta_key' ) );
-				if ( $affected ) {
+				if ( is_int( $affected ) && $affected > 0 ) {
 					$total_affected += $affected;
 				}
 			}
@@ -354,12 +355,16 @@ class CWS_PageLinksTo {
 	public function enqueue_block_editor_assets() {
 		// Gutenberg.
 		if ( self::is_block_editor() && self::is_supported_post_type() ) {
-			wp_enqueue_script( 'plt-block-editor', $this->get_url() . 'dist/block-editor.js', array( 'wp-edit-post', 'wp-element', 'wp-plugins' ), self::CSS_JS_VERSION, true );
+			/** @var array{dependencies: array<string>, version: string} $asset_file */
+			$asset_file = include $this->get_path() . 'dist/block-editor.asset.php';
+			wp_enqueue_script( 'plt-block-editor', $this->get_url() . 'dist/block-editor.js', $asset_file['dependencies'], self::CSS_JS_VERSION, true );
+			wp_set_script_translations( 'plt-block-editor', 'page-links-to', $this->get_path() . 'languages' );
 			wp_localize_script( 'plt-block-editor', 'pltOptions', [
 				'supports' => [
 					'newTab' => self::supports( 'new_tab' ),
 				],
 				'panelTitle' => self::get_panel_title(),
+				'supportedPostTypes' => (array) apply_filters( 'page-links-to-post-types', self::get_default_post_types() ),
 			]);
 			do_action( 'page_links_to_enqueue_block_editor_assets' );
 		}
@@ -385,15 +390,16 @@ class CWS_PageLinksTo {
 	/**
 	 * Filters the page row actions.
 	 *
-	 * @param array   $actions The current array of actions.
-	 * @param WP_Post $post The current post row being processed.
-	 * @return array The updated array of actions.
+	 * @param array<string,string> $actions The current array of actions.
+	 * @param WP_Post              $post The current post row being processed.
+	 * @return array<string,string> The updated array of actions.
 	 */
 	public function page_row_actions( $actions, $post ) {
 		if ( self::get_link( $post ) ) {
 			$new_actions = array();
 			$inserted = false;
-			$original_html = '<a href="' . esc_attr( $this->original_link( $post->ID ) ) . '" class="plt-copy-short-url" data-clipboard-text="' . esc_attr( $this->original_link( $post->ID ) ) . '" data-original-text="' . __( 'Copy Short URL', 'page-links-to' ) . '">' . __( 'Copy Short URL', 'page-links-to' ) . '</a>';
+			$original_url = (string) $this->original_link( $post->ID );
+			$original_html = '<a href="' . esc_attr( $original_url ) . '" class="plt-copy-short-url" data-clipboard-text="' . esc_attr( $original_url ) . '" data-original-text="' . __( 'Copy Short URL', 'page-links-to' ) . '">' . __( 'Copy Short URL', 'page-links-to' ) . '</a>';
 			$original_key = 'plt_original';
 
 			foreach ( $actions as $key => $html ) {
@@ -445,7 +451,7 @@ class CWS_PageLinksTo {
 	public static function get_post_meta( $post_id, $key ) {
 		$meta = get_post_meta( absint( $post_id ), $key, true );
 
-		if ( '' === $meta ) {
+		if ( '' === $meta || ! is_string( $meta ) ) {
 			return false;
 		}
 
@@ -456,13 +462,16 @@ class CWS_PageLinksTo {
 	 * Returns the link for the specified post.
 	 *
 	 * @param  WP_Post|int $post a post or post ID.
-	 * @return mixed either a URL or false.
+	 * @return string|false either a URL or false.
 	 */
 	public static function get_link( $post ) {
 		$post = get_post( $post );
-		$post_id = empty( $post ) ? null : $post->ID;
 
-		return self::get_post_meta( $post_id, self::LINK_META_KEY );
+		if ( ! $post ) {
+			return false;
+		}
+
+		return self::get_post_meta( $post->ID, self::LINK_META_KEY );
 	}
 
 	/**
@@ -473,9 +482,12 @@ class CWS_PageLinksTo {
 	 */
 	public static function get_target( $post ) {
 		$post = get_post( $post );
-		$post_id = empty( $post ) ? null : $post->ID;
 
-		return (bool) self::get_post_meta( $post_id, self::TARGET_META_KEY );
+		if ( ! $post ) {
+			return false;
+		}
+
+		return (bool) self::get_post_meta( $post->ID, self::TARGET_META_KEY );
 	}
 
 	/**
@@ -492,9 +504,33 @@ class CWS_PageLinksTo {
 	}
 
 	/**
+	 * Get the default post types that support custom links.
+	 *
+	 * Returns post types that have a UI, except for post types omitted manually,
+	 * plus the 'page' post type.
+	 *
+	 * @return array<string> List of post type names.
+	 */
+	public static function get_default_post_types() {
+		$post_types = array_keys( get_post_types( array(
+			'show_ui'            => true,
+		) ) );
+
+		$post_types = array_values( array_diff( $post_types, self::OMITTED_POST_TYPES ) );
+
+		foreach ( self::ALWAYS_SUPPORTED_POST_TYPES as $post_type ) {
+			if ( ! in_array( $post_type, $post_types, true ) ) {
+				$post_types[] = $post_type;
+			}
+		}
+
+		return $post_types;
+	}
+
+	/**
 	 * Determine whether a post type supports custom links.
 	 *
-	 * @param string $type The post type to check.
+	 * @param string|object|null $type The post type to check.
 	 * @return bool Whether this post type supports custom links.
 	 */
 	public static function is_supported_post_type( $type = null ) {
@@ -514,9 +550,7 @@ class CWS_PageLinksTo {
 		*/
 		$hook = 'page-links-to-post-types';
 
-		$supported_post_types = (array) apply_filters( $hook, array_keys( get_post_types( array(
-			'show_ui' => true,
-		) ) ) );
+		$supported_post_types = (array) apply_filters( $hook, self::get_default_post_types() );
 
 		return in_array( $type, $supported_post_types );
 	}
@@ -527,8 +561,12 @@ class CWS_PageLinksTo {
 	 * @return void
 	 */
 	public function meta_box() {
-		$null = null;
-		$post = get_post( $null );
+		$post = get_post();
+
+		if ( ! $post ) {
+			return;
+		}
+
 		echo '<p>';
 		wp_nonce_field( 'cws_plt_' . $post->ID, '_cws_plt_nonce', false, true );
 		echo '</p>';
@@ -565,11 +603,17 @@ class CWS_PageLinksTo {
 		return $this->save_post( $post_id );
 	}
 
+	/**
+	 * Checks whether a given feature is supported.
+	 *
+	 * @param string $feature The feature to check.
+	 * @return bool Whether the feature is supported.
+	 */
 	public static function supports( $feature = '' ) {
 		switch( $feature ) {
 			case 'new_tab':
 			default:
-				return apply_filters( 'page_links_to_supports_' . $feature, true );
+				return (bool) apply_filters( 'page_links_to_supports_' . $feature, true );
 		}
 	}
 
@@ -580,9 +624,12 @@ class CWS_PageLinksTo {
 	 * @return int the post ID that was passed in.
 	 */
 	public static function save_post( $post_id ) {
-		if ( isset( $_REQUEST['_cws_plt_nonce'] ) && wp_verify_nonce( $_REQUEST['_cws_plt_nonce'], 'cws_plt_' . $post_id ) ) {
-			if ( ( ! isset( $_POST['cws_links_to_choice'] ) || 'custom' == $_POST['cws_links_to_choice'] ) && isset( $_POST['cws_links_to'] ) && strlen( $_POST['cws_links_to'] ) > 0 && $_POST['cws_links_to'] !== 'http://' ) {
-				$url = self::clean_url( stripslashes( $_POST['cws_links_to'] ) );
+		$nonce = isset( $_REQUEST['_cws_plt_nonce'] ) && is_string( $_REQUEST['_cws_plt_nonce'] ) ? $_REQUEST['_cws_plt_nonce'] : '';
+		if ( $nonce && wp_verify_nonce( $nonce, 'cws_plt_' . $post_id ) ) {
+			$links_to = isset( $_POST['cws_links_to'] ) && is_string( $_POST['cws_links_to'] ) ? $_POST['cws_links_to'] : '';
+			$choice   = isset( $_POST['cws_links_to_choice'] ) && is_string( $_POST['cws_links_to_choice'] ) ? $_POST['cws_links_to_choice'] : '';
+			if ( ( '' === $choice || 'custom' === $choice ) && strlen( $links_to ) > 0 && $links_to !== 'http://' ) {
+				$url = self::clean_url( stripslashes( $links_to ) );
 				self::set_link( $post_id, $url );
 				if ( isset( $_POST['cws_links_to_new_tab'] ) && self::supports( 'new_tab' ) ) {
 					self::set_link_new_tab( $post_id );
@@ -682,6 +729,7 @@ class CWS_PageLinksTo {
 			$meta_link = self::get_link( $post->ID );
 
 			if ( $meta_link ) {
+				/** @var string $link */
 				$link = apply_filters( 'page_links_to_link', $meta_link, $post, $link );
 				$link = esc_url( $link );
 				if ( self::supports( 'new_tab' ) && ! is_admin() && !  (defined( 'REST_REQUEST' ) && REST_REQUEST ) && self::get_target( $post->ID ) ) {
@@ -697,11 +745,11 @@ class CWS_PageLinksTo {
 	 * Returns the original URL of the post.
 	 *
 	 * @param null|int|WP_Post $post The post to fetch.
-	 * @return string The post's original URL.
+	 * @return string|false The post's original URL, or false on failure.
 	 */
 	function original_link( $post = null ) {
 		$this->replace = false;
-		$url = get_permalink( $post );
+		$url = get_permalink( $post ?? 0 );
 		$this->replace = true;
 
 		return $url;
@@ -738,7 +786,7 @@ class CWS_PageLinksTo {
 	 * Retrieves all posts that have a specified custom URL.
 	 *
 	 * @param string $url The URL to check.
-	 * @return array Array of post objects.
+	 * @return array<int|WP_Post> Array of post objects.
 	 */
 	public static function get_custom_url_posts( $url ) {
 		$result = new WP_Query(array(
@@ -755,7 +803,7 @@ class CWS_PageLinksTo {
 	/**
 	 * Retrieves all posts that have a custom URL.
 	 *
-	 * @return array Array of post objects.
+	 * @return array<int|WP_Post> Array of post objects.
 	 */
 	public static function get_all_custom_url_posts() {
 		$result = new WP_Query(array(
@@ -771,7 +819,7 @@ class CWS_PageLinksTo {
 	/**
 	 * Gets the redirection URL.
 	 *
-	 * @return string|bool the redirection URL, or false.
+	 * @return string|false the redirection URL, or false.
 	 */
 	public static function get_redirect() {
 		if ( ! is_singular() || ! get_queried_object_id() ) {
@@ -779,11 +827,11 @@ class CWS_PageLinksTo {
 		}
 		$link = self::get_link( get_queried_object_id() );
 
-		if ( $link ) {
-			$link = self::absolute_url( $link );
+		if ( ! $link ) {
+			return false;
 		}
 
-		return $link;
+		return self::absolute_url( $link );
 	}
 
 	/**
@@ -800,7 +848,8 @@ class CWS_PageLinksTo {
 				$url = set_url_scheme( 'http:' . $url );
 			} else {
 				// Host-relative.
-				$url = set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $url );
+				$host = isset( $_SERVER['HTTP_HOST'] ) && is_string( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : '';
+				$url = set_url_scheme( 'http://' . $host . $url );
 			}
 		}
 
@@ -814,9 +863,9 @@ class CWS_PageLinksTo {
 	/**
 	 * Filters the list of pages to alter the links and targets.
 	 *
-	 * @param string $output the wp_list_pages() HTML block from WordPress.
-	 * @param array  $_args (Unused) the arguments passed to `wp_list_pages()`.
-	 * @param array  $pages Array of WP_Post objects.
+	 * @param string          $output the wp_list_pages() HTML block from WordPress.
+	 * @param array<mixed>    $_args (Unused) the arguments passed to `wp_list_pages()`.
+	 * @param array<WP_Post>  $pages Array of WP_Post objects.
 	 * @return string the modified HTML block.
 	 */
 	function wp_list_pages( $output, $_args = array(), $pages = array() ) {
@@ -825,22 +874,24 @@ class CWS_PageLinksTo {
 		}
 
 		$highlight = false;
+		$current_page_id = 0;
 
-		$this_url = esc_url_raw( set_url_scheme( 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] ) );
+		$host = isset( $_SERVER['HTTP_HOST'] ) && is_string( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : '';
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) && is_string( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : '';
+		$this_url = esc_url_raw( set_url_scheme( 'http://' . $host . $request_uri ) );
 
 		foreach ( (array) $pages as $page ) {
 			$page_url = self::get_link( $page->ID );
 
 			if ( $page_url && $this_url === $page_url ) {
 				$highlight = true;
-				$current_page = esc_url( $page_url );
 				$current_page_id = $page->ID;
 			}
 		}
 
 		if ( $highlight ) {
-			$output = preg_replace( '|<li class="([^"]+) current_page_item"|', '<li class="$1"', $output ); // Kill default highlighting.
-			$output = preg_replace( '|<li class="(page_item page-item-' . $current_page_id . ')"|', '<li class="$1 current_page_item"', $output );
+			$output = (string) preg_replace( '|<li class="([^"]+) current_page_item"|', '<li class="$1"', $output ); // Kill default highlighting.
+			$output = (string) preg_replace( '|<li class="(page_item page-item-' . $current_page_id . ')"|', '<li class="$1 current_page_item"', $output );
 		}
 
 		return $output;
@@ -849,15 +900,19 @@ class CWS_PageLinksTo {
 	/**
 	 * Filters nav menu objects and adds target=_blank to the ones that need it.
 	 *
-	 * @param  array $items nav menu items.
-	 * @return array modified nav menu items.
+	 * @param  array<\WP_Post>|mixed $items nav menu items.
+	 * @return array<\WP_Post>|mixed modified nav menu items.
 	 */
 	public static function wp_nav_menu_objects( $items ) {
+		if ( ! is_array( $items ) ) {
+			return $items;
+		}
+
 		$new_items = array();
 
 		foreach ( $items as $item ) {
-			if ( isset( $item->object_id ) && self::get_target( $item->object_id ) ) {
-				$item->target = '_blank';
+			if ( is_object( $item ) && isset( $item->object_id ) && is_numeric( $item->object_id ) && self::get_target( (int) $item->object_id ) ) {
+				$item->target = '_blank'; // @phpstan-ignore property.notFound
 			}
 
 			$new_items[] = $item;
@@ -872,7 +927,7 @@ class CWS_PageLinksTo {
 	 * @return void
 	 */
 	public function load_post() {
-		if ( isset( $_GET['post'] ) && self::get_link( (int) $_GET['post'] ) ) {
+		if ( isset( $_GET['post'] ) && is_numeric( $_GET['post'] ) && self::get_link( (int) $_GET['post'] ) ) {
 			$this->hook( 'edit_form_after_title' );
 			$this->hook( 'admin_notices', 'notify_of_external_link' );
 			$this->replace = false;
@@ -885,8 +940,8 @@ class CWS_PageLinksTo {
 	 * @return void
 	 */
 	public static function ajax_dismiss_notice() {
-		if ( isset( $_GET['plt_notice'] ) ) {
-			self::dismiss_notice( $_GET['plt_notice'] );
+		if ( isset( $_GET['plt_notice'] ) && is_numeric( $_GET['plt_notice'] ) ) {
+			self::dismiss_notice( (int) $_GET['plt_notice'] );
 		}
 	}
 
@@ -899,11 +954,10 @@ class CWS_PageLinksTo {
 		if ( current_user_can( 'edit_pages' ) ) {
 			check_ajax_referer( 'plt-quick-add', 'plt_nonce' );
 
-			$post = stripslashes_deep( $_POST );
-			$title   = $post['plt_title'];
-			$url     = $post['plt_url'];
-			$slug    = $post['plt_slug'];
-			$publish = (bool) $post['plt_publish'] && current_user_can( 'publish_pages' );
+			$title   = isset( $_POST['plt_title'] ) && is_string( $_POST['plt_title'] ) ? stripslashes( $_POST['plt_title'] ) : '';
+			$url     = isset( $_POST['plt_url'] ) && is_string( $_POST['plt_url'] ) ? stripslashes( $_POST['plt_url'] ) : '';
+			$slug    = isset( $_POST['plt_slug'] ) && is_string( $_POST['plt_slug'] ) ? stripslashes( $_POST['plt_slug'] ) : '';
+			$publish = ! empty( $_POST['plt_publish'] ) && current_user_can( 'publish_pages' );
 
 			$post_id = wp_insert_post(array(
 				'post_type' => 'page',
@@ -915,6 +969,10 @@ class CWS_PageLinksTo {
 			$this->set_link( $post_id, $url );
 
 			$post = get_post( $post_id );
+
+			if ( ! $post ) {
+				return;
+			}
 
 			$message = $publish ? __( 'New page link published!', 'page-links-to' ) : __( 'Page link draft saved!', 'page-links-to' );
 
@@ -942,10 +1000,18 @@ class CWS_PageLinksTo {
 	/**
 	 * Return the notices which have been dismissed.
 	 *
-	 * @return array The list of notice IDs that have been dismissed.
+	 * @return array<int> The list of notice IDs that have been dismissed.
 	 */
-	public function get_dismissed_notices() {
-		return get_option( self::DISMISSED_NOTICES, array() );
+	public static function get_dismissed_notices() {
+		$notices = get_option( self::DISMISSED_NOTICES, array() );
+
+		if ( ! is_array( $notices ) ) {
+			return array();
+		}
+
+		return array_map( static function ( $notice ): int {
+			return is_numeric( $notice ) ? (int) $notice : 0;
+		}, $notices );
 	}
 
 	/**
@@ -969,9 +1035,9 @@ class CWS_PageLinksTo {
 	 * @return bool Whether anyone has dismissed it.
 	 */
 	public static function has_dismissed_notice( $id ) {
-		$dismissed_notices = get_option( self::DISMISSED_NOTICES, array() );
+		$dismissed_notices = self::get_dismissed_notices();
 
-		return in_array( (int) $id, $dismissed_notices );
+		return in_array( (int) $id, $dismissed_notices, true );
 	}
 
 	/**
@@ -1017,7 +1083,7 @@ class CWS_PageLinksTo {
 	 */
 	public static function is_block_editor() {
 		$current_screen = get_current_screen();
-		return method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor();
+		return $current_screen instanceof \WP_Screen && $current_screen->is_block_editor();
 	}
 
 	/**
@@ -1051,6 +1117,7 @@ class CWS_PageLinksTo {
 	 * @return string The panel title.
 	 */
 	public static function get_panel_title() {
+		/** @var string */
 		return apply_filters( 'page_links_to_panel_title', _x( 'Page Links To', 'Meta box title', 'page-links-to' ) );
 	}
 
@@ -1062,6 +1129,7 @@ class CWS_PageLinksTo {
 	public static function notify_of_external_link() {
 		if ( self::is_block_editor() ) {
 			// Disabled, currently, because these notifications can block the title, which is annoying.
+			// @phpstan-ignore-next-line booleanAnd.leftAlwaysFalse
 			false && self::block_editor_notification( 'Note: This content is pointing to a custom URL. Use the “Page Links To” area in the sidebar to control this.', 'info' );
 		} else {
 			?>
@@ -1078,21 +1146,26 @@ class CWS_PageLinksTo {
 	public function edit_form_after_title() {
 		$this->replace = true;
 		$post = get_post();
+
+		if ( ! $post ) {
+			return;
+		}
+
 		$link = self::get_link( $post );
 
 		if ( ! $link ) {
 			return;
 		}
 
-		echo '<div class="plt-links-to"><strong>' . __( 'Links to:', 'page-links-to' ) . '</strong> <a href="' . esc_url( $link ) . '">' . esc_html( $link ) . '</a> <button type="button" class="edit-slug button button-small hide-if-no-js">Edit</button></div>';
+		echo '<div class="plt-links-to"><strong>' . __( 'Links to:', 'page-links-to' ) . '</strong> <a href="' . esc_url( $link ) . '">' . esc_html( $link ) . '</a> <button type="button" class="edit-slug button button-small hide-if-no-js">' . __( 'Edit', 'page-links-to' ) . '</button></div>';
 	}
 
 	/**
 	 * Adds a GitHub link to the plugin meta.
 	 *
-	 * @param array  $links the current array of links.
-	 * @param string $file the current plugin being processed.
-	 * @return array the modified array of links.
+	 * @param array<string> $links the current array of links.
+	 * @param string        $file the current plugin being processed.
+	 * @return array<string> the modified array of links.
 	 */
 	public function plugin_row_meta( $links, $file ) {
 		if ( $file === plugin_basename( $this->file ) ) {
@@ -1108,9 +1181,9 @@ class CWS_PageLinksTo {
 	/**
 	 * Filter the post states to indicate which ones are linked using this plugin.
 	 *
-	 * @param array   $states The existing post states.
-	 * @param WP_Post $post The current post object being displayed.
-	 * @return array The modified post states array.
+	 * @param array<string,string> $states The existing post states.
+	 * @param WP_Post              $post The current post object being displayed.
+	 * @return array<string,string> The modified post states array.
 	 */
 	public function display_post_states( $states, $post ) {
 		$link = self::get_link( $post );
@@ -1121,6 +1194,7 @@ class CWS_PageLinksTo {
 			$output_parts = array(
 				'custom' => '<a title="' . __( 'Linked URL', 'page-links-to' ) . '" href="' . esc_url( $link ) . '" class="plt-post-state-link"><span class="dashicons dashicons-admin-links"></span><span class="url"> ' . esc_url( $link ) . '</span></a>',
 			);
+			/** @var array<string,string> $output_parts */
 			$output_parts = apply_filters( 'page_links_to_post_state_parts', $output_parts, $post, $link );
 			$output .= '<span class="plt-post-info">' . implode( $output_parts ) . '</span>';
 			$states['plt'] = $output;

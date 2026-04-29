@@ -2,7 +2,7 @@
 # This file is distributed under the same license as the Page Links To package.
 msgid ""
 msgstr ""
-"Project-Id-Version: Page Links To 2.9-beta\n"
+"Project-Id-Version: Page Links To 3.3.7\n"
 "Report-Msgid-Bugs-To: http://wordpress.org/tag/page-links-to\n"
 "POT-Creation-Date: 2013-06-08 17:42:50+00:00\n"
 "MIME-Version: 1.0\n"
@@ -17,26 +17,58 @@ msgctxt "Meta box title"
 msgid "Page Links To"
 msgstr ""
 
-#: page-links-to.php:228
+#: classes/plugin.php src/block-editor.js
 msgid "Point this content to:"
 msgstr ""
 
-#: page-links-to.php:229
+#: classes/plugin.php src/block-editor.js
 msgid "Its normal WordPress URL"
 msgstr ""
 
-#: page-links-to.php:230
+#: classes/plugin.php src/block-editor.js
 msgid "A custom URL"
 msgstr ""
 
-#: page-links-to.php:233
+#: classes/plugin.php
 msgid "Open this link in a new tab"
 msgstr ""
 
-#: page-links-to.php:492
+#: src/block-editor.js
+msgid "Links to"
+msgstr ""
+
+#: src/block-editor.js
+msgid "Open in new tab"
+msgstr ""
+
+#: classes/plugin.php
+msgid "Edit"
+msgstr ""
+
+#: classes/plugin.php
+msgid "Links to:"
+msgstr ""
+
+#: templates/quick-add.php
+msgid "Add Page Link"
+msgstr ""
+
+#: classes/plugin.php
+msgid "Copied to Clipboard!"
+msgstr ""
+
+#: classes/plugin.php
+msgid "Sorry, your browser does not support copying."
+msgstr ""
+
+#: classes/plugin.php
 msgid ""
 "<strong>Note</strong>: This content is pointing to a custom URL. Use the "
 "&#8220;Page Links To&#8221; box to change this behavior."
+msgstr ""
+
+#: classes/plugin.php
+msgid "You should customize this short URL to make it shorter and more memorable!"
 msgstr ""
 
 #. Plugin Name of the plugin/theme

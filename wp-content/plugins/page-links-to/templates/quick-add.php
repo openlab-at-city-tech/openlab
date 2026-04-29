@@ -7,6 +7,7 @@ var pltVars = pltVars || {};
 pltVars['fancyUrls'] = <?php echo json_encode( (bool) get_option( 'permalink_structure' ) ); ?>;
 pltVars['copied'] = <?php echo json_encode( __( 'Copied to Clipboard!', 'page-links-to' ) ); ?>;
 pltVars['browserNoSupportCopying'] = <?php echo json_encode( __( 'Sorry, your browser does not support copying.', 'page-links-to' ) ); ?>;
+pltVars['addPageLink'] = <?php echo json_encode( __( 'Add Page Link', 'page-links-to' ) ); ?>;
 </script>
 
 <div id="plt-quick-add" class="hidden">

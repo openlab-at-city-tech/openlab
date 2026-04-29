@@ -1,0 +1,9 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 10
+	paths:
+		- page-links-to.php
+		- classes/
+		- inc/
