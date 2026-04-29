@@ -1,17 +1,17 @@
 <?php
 /*
 Plugin Name: FeedWordPress
-Plugin URI: http://feedwordpress.radgeek.com/
+Plugin URI: https://fwpplugin.com/
 Description: simple and flexible Atom/RSS syndication for WordPress
-Version: 2024.1119
+Version: 2025.1211
 Author: C. Johnson
-Author URI: https://feedwordpress.radgeek.com/contact/
+Author URI: https://fwpplugin.com/contact/
 License: GPL
 */
 
 /**
  * @package FeedWordPress
- * @version 2024.1119
+ * @version 2025.1211
  */
 
 # This plugin uses code derived from:
@@ -23,15 +23,15 @@ License: GPL
 # -	Github contributors @Flynsarmy, @BandonRandon, @david-robinson-practiceweb,
 # 	@daidais, @thegreatmichael, @stedaniels, @alexiskulash, @quassy, @zoul0813,
 # 	@timmmmyboy, @vobornik, @inanimatt, @tristanleboss, @martinburchell,
-# 	@bigalownz, @oppiansteve, and @GwynethLlewelyn
+# 	@bigalownz, @oppiansteve, @GwynethLlewelyn, and @glg222
 # according to the terms of the GNU General Public License.
 
 ####################################################################################
 ## CONSTANTS & DEFAULTS ############################################################
 ####################################################################################
 
-define ('FEEDWORDPRESS_VERSION', '2024.1119');
-define ('FEEDWORDPRESS_AUTHOR_CONTACT', 'https://feedwordpress.radgeek.com/contact' );
+define ('FEEDWORDPRESS_VERSION', '2025.1211');
+define ('FEEDWORDPRESS_AUTHOR_CONTACT', 'https://fwpplugin.com/contact' );
 
 if ( ! defined( 'FEEDWORDPRESS_BLEG' ) ) :
 	define ( 'FEEDWORDPRESS_BLEG', true );
@@ -2101,9 +2101,19 @@ class FeedWordPress {
 	} /* FeedWordPress::negative () */
 
 	static function affirmative ($f, $setting = null) {
-		$affirmo = array ('y', 'yes', 't', 'true', 1);
+		// Defining possible affirmative values
+		$affirmo = [ 'y', 'yes', 't', 'true', 1 ];
+    
+		// Get the field value (presumably from some form or other input)
 		$q = self::get_field( $f, $setting );
-		return in_array( strtolower( trim( $q ) ), $affirmo );
+    
+		// Ensure $q is treated properly even if it's null or not set
+		if ( null === $q ) {
+			return false;  // Or you can return false or other fallback as needed
+		}
+
+		// Check if the value, after trimming and converting to lowercase, is in the affirmative array
+		return in_array( strtolower( trim( $q ) ), $affirmo, true ); // The third argument `true` ensures strict type checking
 	} /* FeedWordPress::affirmative () */
 
 	/**
