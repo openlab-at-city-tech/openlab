@@ -310,7 +310,7 @@ class ExactDN extends Page_Parser {
 		// Check REST API requests to see if ExactDN should be running.
 		\add_filter( 'rest_request_before_callbacks', array( $this, 'parse_restapi_maybe' ), 10, 3 );
 
-		\add_filter( 'exactdn_srcset_multipliers', array( $this, 'add_hidpi_srcset_multipliers' ) );
+		\add_filter( 'exactdn_srcset_multipliers', array( $this, 'add_hidpi_srcset_multipliers' ), 9 );
 
 		// Overrides for admin-ajax images.
 		\add_filter( 'exactdn_admin_allow_image_downsize', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
@@ -420,6 +420,8 @@ class ExactDN extends Page_Parser {
 			$stored_local_domain = $this->upload_domain;
 		} elseif ( \str_contains( $stored_local_domain, '.' ) ) {
 			$this->set_exactdn_option( 'local_domain', \base64_encode( $stored_local_domain ) );
+		} else {
+			$stored_local_domain = \base64_decode( $stored_local_domain );
 		}
 		$this->debug_message( "saved (local) domain is $stored_local_domain" );
 
@@ -898,6 +900,7 @@ class ExactDN extends Page_Parser {
 	 */
 	public function admin_notices() {
 		if ( $this->is_as3cf_cname_active() ) {
+			$this->debug_message( 'AS3CF CNAME detected' );
 			\do_action( 'exactdn_as3cf_cname_active' );
 		}
 		$stored_local_domain = $this->get_exactdn_option( 'local_domain' );
@@ -906,6 +909,7 @@ class ExactDN extends Page_Parser {
 			$stored_local_domain !== $this->upload_domain &&
 			! $this->allow_image_domain( $stored_local_domain )
 		) {
+			$this->debug_message( 'domain mismatch detected' );
 			$this->domain_mismatch = true;
 			\do_action( 'exactdn_domain_mismatch' );
 		}
@@ -1294,7 +1298,7 @@ class ExactDN extends Page_Parser {
 						$size = \array_pop( $size );
 
 						$this->debug_message( "detected $size" );
-						if ( false === $width && false === $height && 'full' !== $size && \array_key_exists( $size, $image_sizes ) ) {
+						if ( false === $width && false === $height && ! empty( $size ) && 'full' !== $size && \array_key_exists( $size, $image_sizes ) ) {
 							$width     = (int) $image_sizes[ $size ]['width'];
 							$height    = (int) $image_sizes[ $size ]['height'];
 							$transform = $image_sizes[ $size ]['crop'] ? 'resize' : 'fit';
@@ -1371,7 +1375,7 @@ class ExactDN extends Page_Parser {
 										$height    = $src_per_wp[2];
 										$transform = 'fit';
 										$this->debug_message( "no dims, using attachment dims, w=$width and h=$height" );
-									} elseif ( isset( $size ) && \array_key_exists( $size, $image_sizes ) && isset( $image_sizes[ $size ]['crop'] ) ) {
+									} elseif ( ! empty( $size ) && \array_key_exists( $size, $image_sizes ) && isset( $image_sizes[ $size ]['crop'] ) ) {
 										$transform = (bool) $image_sizes[ $size ]['crop'] ? 'resize' : 'fit';
 										$this->debug_message( 'attachment size set to crop' );
 									}
@@ -3576,7 +3580,7 @@ class ExactDN extends Page_Parser {
 	 * @return array The modified list of multipliers.
 	 */
 	public function add_hidpi_srcset_multipliers( $multipliers ) {
-		if ( $this->get_option( 'exactdn_hidpi' ) ) {
+		if ( $this->get_option( 'exactdn_hidpi' ) && $this->is_iterable( $multipliers ) ) {
 			$this->debug_message( 'adding hidpi multipliers' );
 			$multipliers[] = 2;
 			$multipliers[] = 3;

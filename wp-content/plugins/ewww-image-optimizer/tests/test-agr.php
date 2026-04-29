@@ -62,7 +62,7 @@ class EWWWIO_AGR_Tests extends WP_UnitTestCase {
 		copy( self::$test_gif, $upload_gif );
 		$id = $this->factory->attachment->create_upload_object( $upload_gif );
 		$meta = wp_get_attachment_metadata( $id );
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$file_path = ewww_image_optimizer_attachment_path( $meta, $id );
 		$thumb_path = trailingslashit( dirname( $file_path ) ) . wp_basename( $meta['sizes']['thumbnail']['file'] );
 		$this->assertTrue( ewww_image_optimizer_is_animated( $thumb_path ) );
 
@@ -82,7 +82,7 @@ class EWWWIO_AGR_Tests extends WP_UnitTestCase {
 		update_site_option( 'ewww_image_optimizer_cloud_key', self::$api_key );
 		$id = $this->factory->attachment->create_upload_object( $upload_gif );
 		$meta = wp_get_attachment_metadata( $id );
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$file_path = ewww_image_optimizer_attachment_path( $meta, $id );
 		$thumb_path = trailingslashit( dirname( $file_path ) ) . wp_basename( $meta['sizes']['thumbnail']['file'] );
 		$this->assertTrue( ewww_image_optimizer_is_animated( $thumb_path ) );
 

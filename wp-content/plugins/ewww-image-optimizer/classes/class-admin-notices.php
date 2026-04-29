@@ -580,6 +580,9 @@ final class Admin_Notices extends Base {
 		if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
 			return;
 		}
+		if ( ! $this->get_option( 'ewww_image_optimizer_exactdn' ) ) {
+			return;
+		}
 		global $exactdn;
 		if ( ! isset( $exactdn->upload_domain ) ) {
 			return;
@@ -860,6 +863,41 @@ final class Admin_Notices extends Base {
 	}
 
 	/**
+	 * Output a more concise notice/status regarding exec() and missing tools on the settings/bulk pages.
+	 */
+	public function concise_utils_status() {
+		?>
+		<?php if ( \ewwwio()->local->should_display_exec_notice() ) : ?>
+			<?php if ( \ewwwio()->local->hosting_requires_api() ) : ?>
+					<?php $this->hosting_requires_api_notice(); ?>
+			<?php else : ?>
+			<div id='ewww-image-optimizer-warning-exec' class='notice notice-warning is-dismissible'>
+				<?php
+				\printf(
+					/* translators: %s: link to 'start your premium trial' */
+					\esc_html__( 'Your web server does not meet the requirements for free server-based compression. You may %s for 5x more compression, PNG/GIF/PDF compression, and more. Otherwise, continue with free cloud-based JPG compression.', 'ewww-image-optimizer' ),
+					"<a href='https://ewww.io/plans/'>" . \esc_html__( 'start your premium trial', 'ewww-image-optimizer' ) . '</a>'
+				);
+				\ewwwio_help_link( 'https://docs.ewww.io/article/29-what-is-exec-and-why-do-i-need-it', '592dd12d0428634b4a338c39' );
+				?>
+			</div>
+			<?php endif; ?>
+			<?php $this->display_exec_dismiss_script(); ?>
+		<?php elseif ( \ewwwio()->local->tools_missing ) : ?>
+			<?php
+			if ( ! \is_dir( \EWWW_IMAGE_OPTIMIZER_TOOL_PATH ) ) {
+				$this->tool_folder_notice();
+			} elseif ( ! is_writable( \EWWW_IMAGE_OPTIMIZER_TOOL_PATH ) || ! \is_readable( \EWWW_IMAGE_OPTIMIZER_TOOL_PATH ) ) {
+				$this->tool_folder_permissions_notice();
+			} elseif ( ! \is_executable( \EWWW_IMAGE_OPTIMIZER_TOOL_PATH ) && \PHP_OS !== 'WINNT' ) {
+				$this->tool_folder_permissions_notice();
+			}
+			?>
+		<?php endif; ?>
+		<?php
+	}
+
+	/**
 	 * Outputs the script to dismiss the 'exec' notice.
 	 */
 	public function display_exec_dismiss_script() {
@@ -924,6 +962,8 @@ final class Admin_Notices extends Base {
 			$webhost = 'Kinsta';
 		} elseif ( \defined( 'WPNET_INIT_PLUGIN_VERSION' ) ) {
 			$webhost = 'WP NET';
+		} elseif ( ! empty( $_ENV['WPAAS_V2_SITE_ID'] ) ) {
+			$webhost = 'GoDaddy Managed';
 		} else {
 			return;
 		}

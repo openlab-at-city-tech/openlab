@@ -63,13 +63,13 @@ class Async_Media_Optimize extends Async_Request {
 			$ewww_image         = new EWWW_Image( $id, 'media', $file_path );
 			$ewww_image->resize = 'full';
 
-			list( $file, $msg, $conv, $original ) = ewww_image_optimizer( $file_path, 1, false, false, true );
+			ewww_image_optimizer( $file_path, 1, false, false, true );
 		} elseif ( $file_path ) {
 			ewwwio_debug_message( "processing async optimization request for $file_path" );
 			$ewww_image         = new EWWW_Image( $id, 'media', $file_path );
 			$ewww_image->resize = ( empty( $size ) ? null : $size );
 
-			list( $file, $msg, $conv, $original ) = ewww_image_optimizer( $file_path );
+			ewww_image_optimizer( $file_path );
 		} else {
 			if ( $ewwwio_id && ! $file_path ) {
 				ewwwio_debug_message( "could not find file to process async optimization request for $ewwwio_id" );
@@ -82,7 +82,6 @@ class Async_Media_Optimize extends Async_Request {
 		ewwwio_debug_message( 'checking for: ' . $file_path . '.processing' );
 		if ( ewwwio_is_file( $file_path . '.processing' ) ) {
 			ewwwio_debug_message( 'removing ' . $file_path . '.processing' );
-			$upload_path = wp_get_upload_dir();
 			ewwwio_delete_file( $file_path . '.processing' );
 		}
 	}

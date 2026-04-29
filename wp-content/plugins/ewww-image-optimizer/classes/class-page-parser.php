@@ -299,7 +299,7 @@ class Page_Parser extends Base {
 				$file = $this->url_to_path_exists( $url );
 			}
 			if ( $file && $this->is_file( $file ) ) {
-				list( $width, $height ) = \wp_getimagesize( $file );
+				list( $width, $height ) = $this->getimagesize( $file );
 			}
 		}
 		$width  = $width && \is_numeric( $width ) ? (int) $width : false;
@@ -385,7 +385,7 @@ class Page_Parser extends Base {
 			if ( \preg_match_all( '#url\((?P<bg_url>[^)]+)\)#', $attribute, $prop_matches ) ) {
 				if ( $this->is_iterable( $prop_matches['bg_url'] ) ) {
 					foreach ( $prop_matches['bg_url'] as $url ) {
-						$urls[] = \trim( \html_entity_decode( $url, ENT_QUOTES | ENT_HTML401 ), "'\"\t\n\r " );
+						$urls[] = \trim( \html_entity_decode( $url, ENT_QUOTES | ENT_HTML5 ), "'\"\t\n\r " );
 					}
 				}
 			}

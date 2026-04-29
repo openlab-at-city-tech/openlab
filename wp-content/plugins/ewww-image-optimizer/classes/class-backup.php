@@ -444,7 +444,7 @@ class Backup extends Base {
 			}
 			$this->restore_file( $image );
 			if ( 'media' === $gallery && 'full' === $image['resize'] && ! empty( $meta['width'] ) && ! empty( $meta['height'] ) ) {
-				list( $width, $height ) = \wp_getimagesize( $image['path'] );
+				list( $width, $height ) = $this->getimagesize( $image['path'] );
 				if ( (int) $width !== (int) $meta['width'] || (int) $height !== (int) $meta['height'] ) {
 					$meta['height'] = $height;
 					$meta['width']  = $width;
@@ -484,7 +484,7 @@ class Backup extends Base {
 			empty( $_REQUEST['ewww_wpnonce'] ) ||
 			(
 				! \wp_verify_nonce( \sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-tools' ) &&
-				! \wp_verify_nonce( \sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-settings' )
+				! \wp_verify_nonce( \sanitize_key( $_REQUEST['ewww_wpnonce'] ), 'ewww-image-optimizer-bulk' )
 			)
 		) {
 			$this->ob_clean();

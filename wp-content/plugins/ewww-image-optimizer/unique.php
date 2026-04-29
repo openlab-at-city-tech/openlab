@@ -50,7 +50,7 @@ function ewww_image_optimizer_gifsicle_resize( $file, $dst_x, $dst_y, $src_x, $s
 	ewwwio_debug_message( "width: $dst_w" );
 	ewwwio_debug_message( "height: $dst_h" );
 
-	list( $orig_w, $orig_h ) = wp_getimagesize( $file );
+	list( $orig_w, $orig_h ) = ewwwio()->getimagesize( $file );
 
 	$outfile = "$file.tmp";
 	// Run gifsicle.
@@ -853,7 +853,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 					// Retrieve the data from the PNG.
 					$input = imagecreatefrompng( $file );
 					// Retrieve the dimensions of the PNG.
-					list($width, $height) = wp_getimagesize( $file );
+					list($width, $height) = ewwwio()->getimagesize( $file );
 					// Create a new image with those dimensions.
 					$output = imagecreatetruecolor( $width, $height );
 					if ( '' === $r ) {
@@ -1270,6 +1270,100 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 }
 
 /**
+ * Returns the WebP file path of the given image based on naming mode.
+ *
+ * @param string $file The full filesystem path to the source image.
+ * @return string The full filesystem path to the WebP image.
+ */
+function ewww_image_optimizer_get_webp_path( $file ) {
+	$naming_mode = ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp_naming_mode', 'append' );
+	$info        = pathinfo( $file );
+
+	if ( 'replace' === $naming_mode ) {
+		if ( empty( $info['dirname'] ) || '.' === $info['dirname'] ) {
+			$info['dirname'] = '';
+		} else {
+			$info['dirname'] = trailingslashit( $info['dirname'] );
+		}
+		$webp_path = $info['dirname'] . $info['filename'] . '.webp';
+	} else {
+		$webp_path = $file . '.webp';
+	}
+
+	return apply_filters( 'ewww_image_optimizer_webp_path', $webp_path, $file, $naming_mode );
+}
+
+/**
+ * Returns all possible WebP file paths of the given image.
+ *
+ * @param string $path The full filesystem path to the source image.
+ * @return array Returns array of both append and replace WebP naming paths.
+ */
+function ewww_image_optimizer_get_all_webp_paths( $path ) {
+	if ( empty( $path ) ) {
+		return array( '', '' );
+	}
+	$naming_mode = ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp_naming_mode', 'append' );
+	$append      = $path . '.webp';
+	$info        = pathinfo( $path );
+	if ( empty( $info['dirname'] ) || '.' === $info['dirname'] ) {
+		$info['dirname'] = '';
+	} else {
+		$info['dirname'] = trailingslashit( $info['dirname'] );
+	}
+	$replace = $info['dirname'] . $info['filename'] . '.webp';
+
+	if ( 'append' === $naming_mode ) {
+		return array( $append, $replace );
+	}
+	return array( $replace, $append );
+}
+
+/**
+ * Removes obsolete WebP files created with previous naming conventions.
+ *
+ * @param string $path The full filesystem path to the source image.
+ */
+function ewww_image_optimizer_cleanup_legacy_webp( $path ) {
+	$current  = ewww_image_optimizer_get_webp_path( $path );
+	$variants = ewww_image_optimizer_get_all_webp_paths( $path );
+
+	foreach ( $variants as $legacy ) {
+		if ( $legacy !== $current && ewwwio_is_file( $legacy ) ) {
+			ewwwio_debug_message( "removing legacy webp file: $legacy" );
+			ewwwio_delete_file( $legacy );
+		}
+	}
+}
+
+/**
+ * Returns the WebP URL of the given image.
+ *
+ * @param string $path The full filesystem path to the source image.
+ * @param string $url The full URL to the source image.
+ * @return string URL to the existing WebP image.
+ */
+function ewww_image_optimizer_get_webp_url( $path, $url ) {
+	ewwwio_debug_message( "finding .webp path for source path $path and url $url" );
+	$webp_urls = ewww_image_optimizer_get_all_webp_paths( $url );
+	if ( empty( $path ) ) {
+		ewwwio_debug_message( "no path, returning {$webp_urls[0]}" );
+		return $webp_urls[0];
+	}
+	$webp_paths = ewww_image_optimizer_get_all_webp_paths( $path );
+
+	if ( ewwwio_is_file( $webp_paths[0] ) ) {
+		ewwwio_debug_message( "{$webp_paths[0]} found, returning {$webp_urls[0]}" );
+		return $webp_urls[0];
+	} elseif ( ewwwio_is_file( $webp_paths[1] ) ) {
+		ewwwio_debug_message( "{$webp_paths[1]} found, returning {$webp_urls[1]}" );
+		return $webp_urls[1];
+	}
+	ewwwio_debug_message( "no local file found, returning {$webp_urls[0]}" );
+	return $webp_urls[0];
+}
+
+/**
  * Creates WebP images alongside JPG and PNG files.
  *
  * @param string $file The name of the JPG/PNG file.
@@ -1282,7 +1376,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $recreate = false ) {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
 	$orig_size = ewww_image_optimizer_filesize( $file );
-	$webpfile  = $file . '.webp';
+	$webpfile  = ewww_image_optimizer_get_webp_path( $file );
 	if ( apply_filters( 'ewww_image_optimizer_bypass_webp', false, $file ) ) {
 		ewwwio_debug_message( "webp generation bypassed: $file" );
 		return '';
@@ -1303,7 +1397,7 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 		ewww_image_optimizer_update_webp_results( $file, 0, 3 );
 		return ewww_image_optimizer_webp_error_message( 3 );
 	}
-	list( $width, $height ) = wp_getimagesize( $file );
+	list( $width, $height ) = ewwwio()->getimagesize( $file );
 	if ( $width > 16383 || $height > 16383 ) {
 		ewww_image_optimizer_update_webp_results( $file, 0, 4 );
 		return ewww_image_optimizer_webp_error_message( 4 );
@@ -1422,11 +1516,11 @@ function ewww_image_optimizer_get_cwebp_resize_params( $file ) {
 		ewwwio_debug_message( 'building resize params' );
 		if ( $webp_crop ) {
 			ewwwio_debug_message( 'cropping' );
-			list( $full_width, $full_height ) = wp_getimagesize( $fullsize_image );
+			list( $full_width, $full_height ) = ewwwio()->getimagesize( $fullsize_image );
 			if ( ! empty( $full_width ) && ! empty( $full_height ) ) {
 				ewwwio_debug_message( 'found full-size dims' );
 				$dims = image_resize_dimensions( $full_width, $full_height, $webp_width, $webp_height, $webp_crop );
-				if ( $dims ) {
+				if ( $dims && is_array( $dims ) ) {
 					ewwwio_debug_message( 'image_resize_dimensions() returned: ' . implode( ', ', $dims ) );
 					list( $dst_x, $dst_y, $src_x, $src_y, $dst_w, $dst_h, $src_w, $src_h ) = $dims;
 					// Build it with both crop and resize args, the crop will chop off the edges for the needed aspect ratio, then resize scales it (if needed).

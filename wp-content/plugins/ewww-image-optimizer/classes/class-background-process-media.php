@@ -122,7 +122,6 @@ class Background_Process_Media extends Background_Process {
 		session_write_close();
 		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		ewwwio()->defer = false;
-		$max_attempts   = 15;
 		$attachment_id  = $item['attachment_id'];
 		if ( empty( $item['attempts'] ) && ! empty( $item['new'] ) ) {
 			ewwwio_debug_message( 'first attempt on new upload, going to sleep for a second' );
@@ -213,7 +212,6 @@ class Background_Process_Media extends Background_Process {
 			return false;
 		}
 		$compression_level = \ewww_image_optimizer_get_level( $mime );
-		$smart_reopt       = false;
 		if ( ! empty( $item['force_smart'] ) && ! \ewww_image_optimizer_level_mismatch( $already_optimized['level'], $compression_level ) ) {
 			$item['force_smart'] = false;
 		}
@@ -333,9 +331,8 @@ class Background_Process_Media extends Background_Process {
 			return;
 		}
 
-		$gallery = 'media';
-		$size    = 'full';
-		$queued  = 0;
+		$size   = 'full';
+		$queued = 0;
 		ewwwio_debug_message( "attachment id: $id" );
 
 		session_write_close();
@@ -349,7 +346,7 @@ class Background_Process_Media extends Background_Process {
 
 		$attached_file = ! empty( $this->attachments_meta[ $id ]['_wp_attached_file'] ) ? $this->attachments_meta[ $id ]['_wp_attached_file'] : '';
 
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id, $attached_file, false );
+		$file_path = \ewww_image_optimizer_attachment_path( $meta, $id, $attached_file, false );
 
 		/**
 		 * Allow altering the metadata or performing other actions before the plugin processes an attachement.
@@ -380,6 +377,7 @@ class Background_Process_Media extends Background_Process {
 		$type            = ewww_image_optimizer_mimetype( $file_path, 'i' );
 		if ( ! in_array( $type, $supported_types, true ) ) {
 			ewwwio_debug_message( "mimetype not supported: $id" );
+			\ewww_image_optimizer_post_optimize_attachment( $id );
 			return;
 		}
 
@@ -394,7 +392,6 @@ class Background_Process_Media extends Background_Process {
 			$queued += $this->queue_single_size( $id, $size, $hidpi_path, $item );
 		}
 
-		$base_dir = trailingslashit( dirname( $file_path ) );
 		// Resized versions, so we can continue.
 		if ( isset( $meta['sizes'] ) && ewww_image_optimizer_iterable( $meta['sizes'] ) ) {
 			$disabled_sizes = ewww_image_optimizer_get_option( 'ewww_image_optimizer_disable_resizes_opt', false, true );
@@ -499,6 +496,9 @@ class Background_Process_Media extends Background_Process {
 		if ( $queued && ! ewwwio()->background_image->is_process_running() && ! \get_option( 'ewww_image_optimizer_pause_image_queue' ) ) {
 			ewwwio()->background_image->dispatch();
 		}
+		if ( empty( $queued ) ) {
+			\ewww_image_optimizer_post_optimize_attachment( $id );
+		}
 	}
 
 
@@ -518,12 +518,13 @@ class Background_Process_Media extends Background_Process {
 		$file_path = false;
 		$meta      = \wp_get_attachment_metadata( $item['attachment_id'] );
 		if ( ! empty( $meta ) ) {
-			list( $file_path, $upload_path ) = \ewww_image_optimizer_attachment_path( $meta, $item['attachment_id'] );
+			$file_path = \ewww_image_optimizer_attachment_path( $meta, $item['attachment_id'] );
 		}
 
 		if ( $file_path ) {
 			\ewww_image_optimizer_add_file_exclusion( $file_path );
 		}
+		\ewww_image_optimizer_post_optimize_attachment( $item['attachment_id'] );
 	}
 
 	/**
@@ -532,7 +533,7 @@ class Background_Process_Media extends Background_Process {
 	protected function complete() {
 		\ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		parent::complete();
-		if ( 'scanning' === \get_option( 'ewww_image_optimizer_bulk_resume' ) ) {
+		if ( 'scanning' === \get_option( 'ewww_image_optimizer_bulk_resume' ) && ! \get_option( 'ewww_image_optimizer_bulk_foreground' ) ) {
 			if ( ! \ewww_image_optimizer_get_option( 'ewww_image_optimizer_auto' ) && ! get_option( 'ewwwio_stop_scheduled_scan' ) ) {
 				\ewwwio_debug_message( 'starting async scan' );
 				\update_option( 'ewww_image_optimizer_aux_resume', 'scanning' );

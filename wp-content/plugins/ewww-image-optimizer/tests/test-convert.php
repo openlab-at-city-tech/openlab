@@ -339,7 +339,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		copy( self::$test_png, $upload_png );
 		$id = $this->factory->attachment->create_upload_object( $upload_png );
 		$meta = wp_get_attachment_metadata( $id );
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$file_path = ewww_image_optimizer_attachment_path( $meta, $id );
 		$this->assertEquals( 'image/jpeg', ewww_image_optimizer_mimetype( $file_path, 'i' ) );
 
 		$test_png = download_url( 'https://ewwwio-test.sfo2.digitaloceanspaces.com/unit-tests/books.png' );
@@ -347,7 +347,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		copy( $test_png, $upload_png );
 		$id = $this->factory->attachment->create_upload_object( $upload_png );
 		$meta = wp_get_attachment_metadata( $id );
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$file_path = ewww_image_optimizer_attachment_path( $meta, $id );
 		$this->assertEquals( 'image/png', ewww_image_optimizer_mimetype( $file_path, 'i' ) );
 
 		unlink( $test_png );
@@ -364,7 +364,7 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		copy( self::$test_png, $upload_png );
 		$id = $this->factory->attachment->create_upload_object( $upload_png );
 		$meta = wp_get_attachment_metadata( $id );
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$file_path = ewww_image_optimizer_attachment_path( $meta, $id );
 		$this->assertEquals( 'image/png', ewww_image_optimizer_mimetype( $file_path, 'i' ) );
 
 		global $ewww_new_image;
@@ -372,11 +372,11 @@ class EWWWIO_Convert_Tests extends WP_UnitTestCase {
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_png_level', 10 );
 		ewww_image_optimizer_set_option( 'ewww_image_optimizer_png_to_jpg', true );
 		$meta = ewww_image_optimizer_resize_from_meta_data( $meta, $id, false, true );
-		list( $file_path, $upload_path ) = ewww_image_optimizer_attachment_path( $meta, $id );
+		$file_path = ewww_image_optimizer_attachment_path( $meta, $id );
 		$this->assertEquals( 'image/jpeg', ewww_image_optimizer_mimetype( $file_path, 'i' ) );
 
 		$base_dir = trailingslashit( dirname( $file_path ) );
-		foreach ( $meta['sizes'] as $size => $data ) {
+		foreach ( $meta['sizes'] as $data ) {
 			$image_path = $base_dir . wp_basename( $data['file'] );
 			$this->assertEquals( 'image/jpeg', ewww_image_optimizer_mimetype( $image_path, 'i' ) );
 		}
