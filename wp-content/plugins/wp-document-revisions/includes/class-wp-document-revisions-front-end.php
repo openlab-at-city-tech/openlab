@@ -43,7 +43,7 @@ class WP_Document_Revisions_Front_End {
 	 *
 	 * @param Object $instance The WP Document Revisions instance.
 	 */
-	public function __construct( &$instance = null ) {
+	public function __construct( ?object $instance = null ) {
 
 		self::$instance = &$this;
 
@@ -51,18 +51,18 @@ class WP_Document_Revisions_Front_End {
 		if ( is_null( $instance ) ) {
 			self::$parent = new WP_Document_Revisions();
 		} else {
-			self::$parent = &$instance;
+			self::$parent = $instance;
 		}
 
-		add_shortcode( 'document_revisions', array( &$this, 'revisions_shortcode' ) );
-		add_shortcode( 'documents', array( &$this, 'documents_shortcode' ) );
-		add_filter( 'document_shortcode_atts', array( &$this, 'shortcode_atts_hyphen_filter' ) );
+		add_shortcode( 'document_revisions', array( $this, 'revisions_shortcode' ) );
+		add_shortcode( 'documents', array( $this, 'documents_shortcode' ) );
+		add_filter( 'document_shortcode_atts', array( $this, 'shortcode_atts_hyphen_filter' ) );
 
 		// Add blocks. Done after wp_loaded so that the taxonomies have been defined.
-		add_action( 'wp_loaded', array( &$this, 'documents_shortcode_blocks' ), 100 );
+		add_action( 'wp_loaded', array( $this, 'documents_shortcode_blocks' ), 100 );
 
 		// Queue up JS (low priority to be at end).
-		add_action( 'wp_enqueue_scripts', array( &$this, 'enqueue_front' ), 50 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_front' ), 50 );
 	}
 
 
@@ -70,11 +70,11 @@ class WP_Document_Revisions_Front_End {
 	 * Provides support to call functions of the parent class natively.
 	 *
 	 * @since 1.2
-	 * @param function $funct the function to call.
-	 * @param array    $args  the arguments to pass to the function.
-	 * @returns mixed the result of the function
+	 * @param string $funct the function to call.
+	 * @param array  $args  the arguments to pass to the function.
+	 * @return mixed the result of the function
 	 */
-	public function __call( $funct, $args ) {
+	public function __call( string $funct, array $args ) {
 		return call_user_func_array( array( &self::$parent, $funct ), $args );
 	}
 
@@ -84,9 +84,9 @@ class WP_Document_Revisions_Front_End {
 	 *
 	 * @since 1.2
 	 * @param string $name the property to fetch.
-	 * @returns mixed the property's value
+	 * @return mixed the property's value
 	 */
-	public function __get( $name ) {
+	public function __get( string $name ) {
 		return WP_Document_Revisions::$$name;
 	}
 
@@ -95,10 +95,15 @@ class WP_Document_Revisions_Front_End {
 	 * Callback to display revisions.
 	 *
 	 * @param array $atts attributes passed via short code.
-	 * @returns string a UL with the revisions
+	 * @return string a UL with the revisions
 	 * @since 1.2
 	 */
-	public function revisions_shortcode( $atts ) {
+	public function revisions_shortcode( $atts ): string {
+
+		// WordPress passes empty string when shortcode has no attributes.
+		if ( ! is_array( $atts ) ) {
+			$atts = array();
+		}
 
 		// change attribute number into numberposts (for backward compatibility).
 		if ( array_key_exists( 'number', $atts ) && ! array_key_exists( 'numberposts', $atts ) ) {
@@ -192,7 +197,12 @@ class WP_Document_Revisions_Front_End {
 	 * @param array $atts shortcode attributes.
 	 * @return string the shortcode output
 	 */
-	public function documents_shortcode( $atts ) {
+	public function documents_shortcode( $atts ): string {
+
+		// WordPress passes empty string when shortcode has no attributes.
+		if ( ! is_array( $atts ) ) {
+			$atts = array();
+		}
 
 		// Only need to do something if workflow_state points to post_status.
 		if ( 'workflow_state' !== self::$parent->taxonomy_key() ) {
@@ -218,7 +228,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param array $atts shortcode attributes.
 	 * @return string the shortcode output
 	 */
-	private function documents_shortcode_int( $atts ) {
+	private function documents_shortcode_int( array $atts ): string {
 
 		$defaults = array(
 			'orderby' => 'modified',
@@ -481,7 +491,7 @@ class WP_Document_Revisions_Front_End {
 	 *
 	 * @since 3.2.0
 	 */
-	public function enqueue_front() {
+	public function enqueue_front(): void {
 
 		$wpdr = self::$parent;
 
@@ -497,7 +507,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param Array $atts shortcode attributes.
 	 * @return Array modified shortcode attributes
 	 */
-	public function shortcode_atts_hyphen_filter( $atts ) {
+	public function shortcode_atts_hyphen_filter( array $atts ): array {
 
 		foreach ( (array) $atts as $k => $v ) {
 
@@ -522,10 +532,10 @@ class WP_Document_Revisions_Front_End {
 	 * Register WP Document Revisions block category.
 	 *
 	 * @since 3.3.0
-	 * @param Array                   $categories           Block categories available.
-	 * @param WP_Block_Editor_Context $block_editor_context The current block editor context.
+	 * @param Array                    $categories           Block categories available.
+	 * @param ?WP_Block_Editor_Context $block_editor_context The current block editor context.
 	 */
-	public function wpdr_block_categories( $categories, $block_editor_context ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	public function wpdr_block_categories( array $categories, ?WP_Block_Editor_Context $block_editor_context = null ): array { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 
 		return array_merge(
 			$categories,
@@ -544,7 +554,7 @@ class WP_Document_Revisions_Front_End {
 	 *
 	 * @since 3.3.0
 	 */
-	public function documents_shortcode_blocks() {
+	public function documents_shortcode_blocks(): void {
 		if ( ! function_exists( 'register_block_type' ) ) {
 			// Gutenberg is not active, e.g. Old WP version installed.
 			return;
@@ -553,205 +563,67 @@ class WP_Document_Revisions_Front_End {
 		// add the plugin category.
 		add_filter( 'block_categories_all', array( $this, 'wpdr_block_categories' ), 10, 2 );
 
-		register_block_type(
-			'wp-document-revisions/documents-shortcode',
-			array(
-				'description'     => __( 'This block provides a list of all documents meeting the selection criteria and is functionally equivalent to the [documents] shortcode.', 'wp-document-revisions' ),
-				'editor_script'   => 'wpdr-documents-shortcode-editor',
-				'render_callback' => array( $this, 'wpdr_documents_shortcode_display' ),
-				'attributes'      => array(
-					'header'          => array(
-						'type'    => 'string',
-						'default' => '',
-					),
-					'taxonomy_0'      => array(
-						'type'    => 'string',
-						'default' => '',
-					),
-					'term_0'          => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'taxonomy_1'      => array(
-						'type'    => 'string',
-						'default' => '',
-					),
-					'term_1'          => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'taxonomy_2'      => array(
-						'type'    => 'string',
-						'default' => '',
-					),
-					'term_2'          => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'numberposts'     => array(
-						'type'    => 'number',
-						'default' => 5,
-					),
-					'orderby'         => array(
-						'type' => 'string',
-					),
-					'order'           => array(
-						'type' => 'string',
-					),
-					'show_edit'       => array(
-						'type' => 'string',
-					),
-					'show_thumb'      => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'show_descr'      => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-					'show_pdf'        => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'new_tab'         => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-					'freeform'        => array(
-						'type' => 'string',
-					),
-					'align'           => array(
-						'type' => 'string',
-					),
-					'backgroundColor' => array(
-						'type' => 'string',
-					),
-					'linkColor'       => array(
-						'type' => 'string',
-					),
-					'textColor'       => array(
-						'type' => 'string',
-					),
-					'gradient'        => array(
-						'type' => 'string',
-					),
-					'fontSize'        => array(
-						'type' => 'string',
-					),
-					'style'           => array(
-						'type' => 'object',
-					),
-				),
-			)
-		);
+		$dir       = dirname( __DIR__ );
+		$build_dir = $dir . '/build/blocks/documents-shortcode';
 
-		register_block_type(
-			'wp-document-revisions/revisions-shortcode',
-			array(
-				'description'     => __( 'This block provides a list of all the revisions of a selected document and is functionally equivalent to the [documents_revisions] shortcode.', 'wp-document-revisions' ),
-				'editor_script'   => 'wpdr-revisions-shortcode-editor',
-				'render_callback' => array( $this, 'wpdr_revisions_shortcode_display' ),
-				'attributes'      => array(
-					'id'              => array(
-						'type'    => 'number',
-						'default' => 0,
-					),
-					'numberposts'     => array(
-						'type'    => 'number',
-						'default' => 5,
-					),
-					'summary'         => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'show_pdf'        => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'new_tab'         => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-					'align'           => array(
-						'type' => 'string',
-					),
-					'backgroundColor' => array(
-						'type' => 'string',
-					),
-					'linkColor'       => array(
-						'type' => 'string',
-					),
-					'textColor'       => array(
-						'type' => 'string',
-					),
-					'gradient'        => array(
-						'type' => 'string',
-					),
-					'fontSize'        => array(
-						'type' => 'string',
-					),
-					'style'           => array(
-						'type' => 'object',
-					),
-				),
-			)
-		);
+		if ( file_exists( $build_dir . '/block.json' ) ) {
+			register_block_type(
+				$build_dir,
+				array(
+					'render_callback' => array( $this, 'wpdr_documents_shortcode_display' ),
+				)
+			);
+		} else {
+			// Fallback when build directory is not available (e.g. development/CI).
+			register_block_type(
+				'wp-document-revisions/documents-shortcode',
+				array(
+					'render_callback' => array( $this, 'wpdr_documents_shortcode_display' ),
+				)
+			);
+		}
 
-		// register scripts.
-		$dir      = dirname( __DIR__ );
-		$suffix   = ( WP_DEBUG ) ? '.dev' : '';
-		$index_js = 'js/wpdr-documents-shortcode' . $suffix . '.js';
-		wp_register_script(
-			'wpdr-documents-shortcode-editor',
-			plugins_url( $index_js, __DIR__ ),
-			array(
-				'wp-blocks',
-				'wp-data',
-				'wp-element',
-				'wp-block-editor',
-				'wp-components',
-				'wp-compose',
-				'wp-server-side-render',
-				'wp-i18n',
-			),
-			filemtime( "$dir/$index_js" ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
+		$rev_build_dir = $dir . '/build/blocks/revisions-shortcode';
+
+		if ( file_exists( $rev_build_dir . '/block.json' ) ) {
+			register_block_type(
+				$rev_build_dir,
+				array(
+					'render_callback' => array( $this, 'wpdr_revisions_shortcode_display' ),
+				)
+			);
+		} else {
+			// Fallback when build directory is not available (e.g. development/CI).
+			register_block_type(
+				'wp-document-revisions/revisions-shortcode',
+				array(
+					'render_callback' => array( $this, 'wpdr_revisions_shortcode_display' ),
+				)
+			);
+		}
 
 		// Add supplementary script for additional information.
 		// document CPT has no default taxonomies, need to look up in wp_taxonomies.
 		// Ensure taxonomies are set.
 		$taxonomies = $this->get_taxonomy_details();
-		wp_add_inline_script( 'wpdr-documents-shortcode-editor', 'const wpdr_data = ' . wp_json_encode( $taxonomies ), 'before' );
 
-		$index_js = 'js/wpdr-revisions-shortcode' . $suffix . '.js';
-		wp_register_script(
-			'wpdr-revisions-shortcode-editor',
-			plugins_url( $index_js, __DIR__ ),
-			array(
-				'wp-blocks',
-				'wp-data',
-				'wp-element',
-				'wp-block-editor',
-				'wp-components',
-				'wp-compose',
-				'wp-server-side-render',
-				'wp-i18n',
-			),
-			filemtime( "$dir/$index_js" ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
+		// Get the auto-generated script handle from the registered block.
+		$registry = \WP_Block_Type_Registry::get_instance();
+		$block    = $registry->get_registered( 'wp-document-revisions/documents-shortcode' );
+		if ( $block && ! empty( $block->editor_script_handles ) ) {
+			$handle = $block->editor_script_handles[0];
+			wp_add_inline_script( $handle, 'const wpdr_data = ' . wp_json_encode( $taxonomies ), 'before' );
+		}
 
 		// set translations.
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'wpdr-documents-shortcode-editor', 'wp-document-revisions' );
-			wp_set_script_translations( 'wpdr-revisions-shortcode-editor', 'wp-document-revisions' );
+			if ( $block && ! empty( $block->editor_script_handles ) ) {
+				wp_set_script_translations( $block->editor_script_handles[0], 'wp-document-revisions' );
+			}
+			$rev_block = $registry->get_registered( 'wp-document-revisions/revisions-shortcode' );
+			if ( $rev_block && ! empty( $rev_block->editor_script_handles ) ) {
+				wp_set_script_translations( $rev_block->editor_script_handles[0], 'wp-document-revisions' );
+			}
 		}
 	}
 
@@ -771,7 +643,7 @@ class WP_Document_Revisions_Front_End {
 	 * @param int    $level    level in hierarchy.
 	 * @since 3.3.0
 	 */
-	private function get_taxonomy_hierarchy( $taxonomy, $par_term = 0, $level = 0 ) {
+	private function get_taxonomy_hierarchy( string $taxonomy, int $par_term = 0, int $level = 0 ): void {
 		// get all direct descendants of the $parent.
 		$terms = get_terms(
 			array(
@@ -797,7 +669,7 @@ class WP_Document_Revisions_Front_End {
 	 * @return Array Taxonomy names for documents
 	 * @since 3.3.0
 	 */
-	public function get_taxonomy_details() {
+	public function get_taxonomy_details(): array {
 		$taxonomy_details = wp_cache_get( 'wpdr_document_taxonomies' );
 
 		if ( false === $taxonomy_details ) {
@@ -891,10 +763,10 @@ class WP_Document_Revisions_Front_End {
 	 * Server side block to render the documents list.
 	 *
 	 * @param array $atts shortcode attributes.
-	 * @returns string a UL with the revisions
+	 * @return string a UL with the revisions
 	 * @since 3.3.0
 	 */
-	public function wpdr_documents_shortcode_display( $atts ) {
+	public function wpdr_documents_shortcode_display( array $atts ): string {
 		// get instance of global class.
 		global $wpdr;
 
@@ -970,7 +842,7 @@ class WP_Document_Revisions_Front_End {
 			null;
 		} else {
 			// get likely taxonomy.
-			$taxo = ( $atts['taxonomy_0'] === $curr_taxos[0]['query'] ? $curr_taxos[0]['slug'] : '' );
+			$taxo = ( isset( $curr_taxos[0]['query'] ) && $atts['taxonomy_0'] === $curr_taxos[0]['query'] ? $curr_taxos[0]['slug'] : '' );
 			// create atts in the appropriate form tax->query_var = term slug.
 			$term = get_term( $atts['term_0'], $taxo );
 			if ( $term instanceof WP_Term ) {
@@ -1039,10 +911,10 @@ class WP_Document_Revisions_Front_End {
 	 * Server side block to render the revisions list.
 	 *
 	 * @param array $atts shortcode attributes.
-	 * @returns string a UL with the revisions
+	 * @return string a UL with the revisions
 	 * @since 3.3.0
 	 */
-	public function wpdr_revisions_shortcode_display( $atts ) {
+	public function wpdr_revisions_shortcode_display( array $atts ): string {
 		// get instance of global class.
 		global $wpdr_fe;
 

@@ -26,7 +26,7 @@ composer install --no-dev
 
 ### ⚙️ Requirements
 
-- **WordPress:** 4.9 or higher
+- **WordPress:** 5.0 or higher
 - **PHP:** 7.4 or higher
 - **File Permissions:** WordPress must be able to write to the uploads directory
 
@@ -35,7 +35,7 @@ composer install --no-dev
 After installation, you'll find a new **Documents** menu in your WordPress admin. Start by:
 
 1. **Creating your first document** - Go to Documents > Add New
-2. **Setting up workflow states** (optional) - Go to Documents > Workflow States  
+2. **Setting up workflow states** (optional) - Go to Documents > Workflow States
 3. **Configuring permissions** - Review Settings > Document Revisions
 
 Need help? Check our [FAQ](./frequently-asked-questions.md) or [get support](./SUPPORT.md).

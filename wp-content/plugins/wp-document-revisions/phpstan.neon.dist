@@ -1,0 +1,17 @@
+parameters:
+    level: 5
+    paths:
+        - wp-document-revisions.php
+        - includes/
+    excludePaths:
+        - vendor/
+    bootstrapFiles:
+        - vendor/autoload.php
+    ignoreErrors: []
+    treatPhpDocTypesAsCertain: false
+    parallel:
+        maximumNumberOfProcesses: 4
+
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+    - phpstan-baseline.neon

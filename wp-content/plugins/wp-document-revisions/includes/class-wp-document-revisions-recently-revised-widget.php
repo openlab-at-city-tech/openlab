@@ -36,7 +36,6 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	public function __construct() {
 		// Do translation stuff in widgets_init.
 		parent::__construct( 'WP_Document_Revisions_Recently_Revised_Widget', 'Recently Revised Documents' );
-		null;
 	}
 
 
@@ -46,7 +45,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 * @param Array  $args the widget arguments.
 	 * @param Object $instance the WP Document Revisions instance.
 	 */
-	public function widget_gen( $args, $instance ) {
+	public function widget_gen( array $args, $instance ) {
 		global $wpdr;
 		if ( ! $wpdr ) {
 			$wpdr = new WP_Document_Revisions();
@@ -103,7 +102,6 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 				),
 				admin_url( 'post.php' )
 			) : $permalink;
-			$target    = ( $instance['new_tab'] ? ' target="_blank"' : '' );
 			// translators: %1$s is the time ago in words, %2$s is the author.
 			$format_string = ( $instance['show_author'] ) ? __( '%1$s ago by %2$s', 'wp-document-revisions' ) : __( '%1$s ago', 'wp-document-revisions' );
 			// do we need to highlight PDFs.
@@ -118,7 +116,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 			}
 			?>
 			<li>
-				<h<?php echo esc_attr( $h_n ); ?> class="wp-block-post-title"><a href="<?php echo esc_attr( $link ) . '"' . esc_attr( $target ) . '>' . esc_html( get_the_title( $document->ID ) ) . wp_kses_post( $pdf ); ?></a></h<?php echo esc_attr( $h_n ); ?>>
+				<h<?php echo esc_attr( $h_n ); ?> class="wp-block-post-title"><a href="<?php echo esc_url( $link ); ?>"<?php echo ( $instance['new_tab'] ? ' target="_blank"' : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static string ?>><?php echo esc_html( get_the_title( $document->ID ) ) . wp_kses_post( $pdf ); ?></a></h<?php echo esc_attr( $h_n ); ?>>
 				<?php
 				if ( (bool) $instance['show_thumb'] ) {
 					$image = '<!-- ' . __( 'No thumbnail available.', 'wp-document-revisions' ) . ' -->';
@@ -261,113 +259,39 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 *
 	 * @since 3.3.0
 	 */
-	public function documents_widget_block() {
+	public function documents_widget_block(): void {
 		if ( ! function_exists( 'register_block_type' ) ) {
 			// Gutenberg is not active, e.g. Old WP version installed.
 			return;
 		}
 
-		$dir      = dirname( __DIR__ );
-		$suffix   = ( WP_DEBUG ) ? '.dev' : '';
-		$index_js = 'js/wpdr-documents-widget' . $suffix . '.js';
-		wp_register_script(
-			'wpdr-documents-widget-editor',
-			plugins_url( $index_js, __DIR__ ),
-			array(
-				'wp-blocks',
-				'wp-element',
-				'wp-block-editor',
-				'wp-components',
-				'wp-server-side-render',
-				'wp-i18n',
-			),
-			filemtime( "$dir/$index_js" ),
-			array(
-				'in_footer' => true,
-				'strategy'  => 'defer',
-			)
-		);
+		$dir       = dirname( __DIR__ );
+		$build_dir = $dir . '/build/blocks/documents-widget';
 
-		$index_css = 'css/wpdr-widget-editor-style.css';
-		wp_register_style(
-			'wpdr-documents-widget-editor-style',
-			plugins_url( $index_css, __DIR__ ),
-			array( 'wp-edit-blocks' ),
-			filemtime( plugin_dir_path( "$dir/$index_css" ) )
-		);
-
-		register_block_type(
-			'wp-document-revisions/documents-widget',
-			array(
-				'description'     => __( 'This block provides a block of the most recently changed documentsand is functionally equivalent to the recently revised widget.', 'wp-document-revisions' ),
-				'editor_script'   => 'wpdr-documents-widget-editor',
-				'editor_style'    => 'wpdr-documents-widget-editor-style',
-				'render_callback' => array( $this, 'wpdr_documents_widget_display' ),
-				'attributes'      => array(
-					'header'            => array(
-						'type' => 'string',
-					),
-					'numberposts'       => array(
-						'type'    => 'number',
-						'default' => 5,
-					),
-					'post_stat_publish' => array(
-						'type' => 'boolean',
-					),
-					'post_stat_private' => array(
-						'type' => 'boolean',
-					),
-					'post_stat_draft'   => array(
-						'type' => 'boolean',
-					),
-					'show_thumb'        => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'show_descr'        => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-					'show_author'       => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-					'show_pdf'          => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'new_tab'           => array(
-						'type'    => 'boolean',
-						'default' => false,
-					),
-					'align'             => array(
-						'type' => 'string',
-					),
-					'backgroundColor'   => array(
-						'type' => 'string',
-					),
-					'linkColor'         => array(
-						'type' => 'string',
-					),
-					'textColor'         => array(
-						'type' => 'string',
-					),
-					'gradient'          => array(
-						'type' => 'string',
-					),
-					'fontSize'          => array(
-						'type' => 'string',
-					),
-					'style'             => array(
-						'type' => 'object',
-					),
-				),
-			)
-		);
+		if ( file_exists( $build_dir . '/block.json' ) ) {
+			register_block_type(
+				$build_dir,
+				array(
+					'render_callback' => array( $this, 'wpdr_documents_widget_display' ),
+				)
+			);
+		} else {
+			// Fallback when build directory is not available (e.g. development/CI).
+			register_block_type(
+				'wp-document-revisions/documents-widget',
+				array(
+					'render_callback' => array( $this, 'wpdr_documents_widget_display' ),
+				)
+			);
+		}
 
 		// set translations.
 		if ( function_exists( 'wp_set_script_translations' ) ) {
-			wp_set_script_translations( 'wpdr-documents-widget-editor', 'wp-document-revisions' );
+			$registry = \WP_Block_Type_Registry::get_instance();
+			$block    = $registry->get_registered( 'wp-document-revisions/documents-widget' );
+			if ( $block && ! empty( $block->editor_script_handles ) ) {
+				wp_set_script_translations( $block->editor_script_handles[0], 'wp-document-revisions' );
+			}
 		}
 
 		// Find sizes for images for PDFs. (Logic based on /wp-admin/includes/image.php).
@@ -401,7 +325,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 * @param string $content  Optional. Block content. Default empty string.
 	 * @since 3.3.0
 	 */
-	public function wpdr_documents_widget_display( $atts, $content = '' ) {
+	public function wpdr_documents_widget_display( array $atts, string $content = '' ) {
 		// Create the two parameter sets.
 		$args                    = array(
 			'before_widget' => '',
@@ -410,17 +334,17 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 			'after_widget'  => '',
 		);
 		$instance                = array();
-		$instance['title']       = ( isset( $atts['header'] ) ? $atts['header'] : '' );
-		$instance['numberposts'] = ( isset( $atts['numberposts'] ) ? (int) $atts['numberposts'] : 5 );
-		$instance['show_thumb']  = ( isset( $atts['show_thumb'] ) ? (bool) $atts['show_thumb'] : false );
-		$instance['show_descr']  = ( isset( $atts['show_descr'] ) ? (bool) $atts['show_descr'] : true );
-		$instance['show_author'] = ( isset( $atts['show_author'] ) ? (bool) $atts['show_author'] : true );
-		$instance['show_pdf']    = ( isset( $atts['show_pdf'] ) ? (bool) $atts['show_pdf'] : false );
-		$instance['new_tab']     = ( isset( $atts['new_tab'] ) ? (bool) $atts['new_tab'] : true );
+		$instance['title']       = $atts['header'] ?? '';
+		$instance['numberposts'] = (int) ( $atts['numberposts'] ?? 5 );
+		$instance['show_thumb']  = (bool) ( $atts['show_thumb'] ?? false );
+		$instance['show_descr']  = (bool) ( $atts['show_descr'] ?? true );
+		$instance['show_author'] = (bool) ( $atts['show_author'] ?? true );
+		$instance['show_pdf']    = (bool) ( $atts['show_pdf'] ?? false );
+		$instance['new_tab']     = (bool) ( $atts['new_tab'] ?? true );
 		$instance['post_status'] = array(  // temp.
-			'publish' => ( isset( $atts['post_stat_publish'] ) ? (bool) $atts['post_stat_publish'] : true ),
-			'private' => ( isset( $atts['post_stat_private'] ) ? (bool) $atts['post_stat_private'] : false ),
-			'draft'   => ( isset( $atts['post_stat_draft'] ) ? (bool) $atts['post_stat_draft'] : false ),
+			'publish' => (bool) ( $atts['post_stat_publish'] ?? true ),
+			'private' => (bool) ( $atts['post_stat_private'] ?? false ),
+			'draft'   => (bool) ( $atts['post_stat_draft'] ?? false ),
 		);
 
 		// if header is set, then title at level h2.
@@ -436,7 +360,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	/**
 	 * Callback to register the recently revised widget.
 	 */
-	public function wpdr_widgets_init() {
+	public function wpdr_widgets_init(): void {
 		$this->name = __( 'Recently Revised Documents', 'wp-document-revisions' );
 
 		// can't i18n outside of a function.
@@ -452,7 +376,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 *
 	 * Call with low priority to let taxonomies be registered.
 	 */
-	public function wpdr_widgets_block_init() {
+	public function wpdr_widgets_block_init(): void {
 		global $wpdr_widget;
 
 		$wpdr_widget->documents_widget_block();

@@ -3,11 +3,13 @@
 Plugin Name: WP Document Revisions
 Plugin URI: http://ben.balter.com/2011/08/29/wp-document-revisions-document-management-version-control-wordpress/
 Description: A document management and version control plugin for WordPress that allows teams of any size to collaboratively edit files and manage their workflow.
-Version: 3.7.2
-Requires at least: 4.9
+Version: 4.0.3
+Requires at least: 5.0
+Requires PHP: 7.4
 Author: Ben Balter
 Author URI: https://ben.balter.com
-License: GPLv2 or later
+License: GPL-3.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-3.0.html
 Text Domain: wp-document-revisions
 Domain Path: /languages
  *
@@ -36,11 +38,15 @@ Domain Path: /languages
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  *  @copyright 2011-2025
- *  @license GPL v3
- *  @version 3.7.2
+ *  @license GPL-3.0-or-later
+ *  @version 4.0.3
  *  @package WP_Document_Revisions
  *  @author Ben Balter <ben@balter.com>
  */
+require_once __DIR__ . '/includes/trait-wp-document-revisions-rewrites.php';
+require_once __DIR__ . '/includes/trait-wp-document-revisions-file-handler.php';
+require_once __DIR__ . '/includes/trait-wp-document-revisions-revisions.php';
+require_once __DIR__ . '/includes/trait-wp-document-revisions-query.php';
 require_once __DIR__ . '/includes/class-wp-document-revisions.php';
 
 // $wpdr is a global reference to the class.
@@ -48,8 +54,9 @@ global $wpdr;
 $wpdr = new WP_Document_Revisions();
 require_once __DIR__ . '/includes/template-functions.php';
 
-// Activation hooks must be relative to the main plugin file.
-register_activation_hook( __FILE__, array( &$wpdr, 'activation_hook' ) );
+// Activation and deactivation hooks must be relative to the main plugin file.
+register_activation_hook( __FILE__, array( $wpdr, 'activation_hook' ) );
+register_deactivation_hook( __FILE__, array( $wpdr, 'deactivation_hook' ) );
 
 // polyfill for str_contains.
 if ( ! function_exists( 'str_contains' ) ) {
@@ -60,9 +67,9 @@ if ( ! function_exists( 'str_contains' ) ) {
 	 *
 	 * @param string $haystack the text to be searched.
 	 * @param string $needle   the text to search.
-	 * @returns boolean.
+	 * @return bool
 	 */
-	function str_contains( string $haystack, string $needle ) {
+	function str_contains( string $haystack, string $needle ): bool {
 		return empty( $needle ) || strpos( $haystack, $needle ) !== false;
 	}
 }
