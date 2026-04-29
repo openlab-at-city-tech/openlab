@@ -380,7 +380,7 @@ class Licenser extends Abstract_Module {
 		$status                 = $this->get_license_status( true );
 		$no_activations_string  = apply_filters( $this->product->get_key() . '_lc_no_activations_string', Loader::$labels['licenser']['no_activations'] );
 		$no_valid_string        = apply_filters( $this->product->get_key() . '_lc_no_valid_string', sprintf( Loader::$labels['licenser']['inactive'], '%s', '<a href="%s" target="_blank">', '</a>', '<a href="%s">', '</a>' ) );
-		$expired_license_string = apply_filters( $this->product->get_key() . '_lc_expired_string', sprintf( Loader::$labels['licenser']['expired'], '%s', '<a href="%s" target="_blank">', '</a>' ) );
+		$expired_license_string = apply_filters( $this->product->get_key() . '_lc_expired_heading_string', Loader::$labels['licenser']['expired'] );
 		// No activations left for this license.
 		if ( 'valid' != $status && $this->check_activation() ) {
 			?>
@@ -403,12 +403,72 @@ class Licenser extends Abstract_Module {
 
 		// Invalid license key.
 		if ( 'active_expired' === $status ) {
+			// Check if the notice was dismissed.
+			$dismiss_option_key = $this->product->get_key() . '_expired_notice_dismissed';
+			if ( get_option( $dismiss_option_key, false ) ) {
+				return false;
+			}
+
+			$license_data    = get_option( $this->product->get_key() . '_license_data', '' );
+			$expiration_date = '';
+			if ( is_object( $license_data ) && isset( $license_data->expires ) ) {
+				$timestamp = strtotime( (string) $license_data->expires );
+				if ( false !== $timestamp ) {
+					$expiration_date = gmdate( 'F j, Y', $timestamp );
+				}
+			}
+
+			$discount_config = apply_filters( $this->product->get_key() . '_lc_renew_discount', false );
+
+			if ( is_array( $discount_config ) && isset( $discount_config['url'] ) && isset( $discount_config['renew_button'] ) ) {
+				$renew_url    = $discount_config['url'];
+				$renew_button = $discount_config['renew_button'];
+			} else {
+				$renew_url    = apply_filters( $this->product->get_key() . '_lc_renew_url', $this->renew_url() );
+				$renew_button = apply_filters( $this->product->get_key() . '_lc_renew_button_string', Loader::$labels['licenser']['renew_license'] );
+			}
+
+			$learn_more_url    = apply_filters( $this->product->get_key() . '_lc_learn_more_url', $this->get_api_url() );
+			$learn_more_button = apply_filters( $this->product->get_key() . '_lc_learn_more_button_string', Loader::$labels['licenser']['learn_more'] );
+			$notice_message    = apply_filters( $this->product->get_key() . '_lc_expired_notice_message', Loader::$labels['licenser']['expired_notice'] );
+
+			$expired_date_string = apply_filters( $this->product->get_key() . '_lc_expired_date_string', sprintf( Loader::$labels['licenser']['expired_date'], esc_html( $expiration_date ) ) );
+			$heading             = apply_filters( $this->product->get_key() . '_lc_expired_heading_string', sprintf( Loader::$labels['licenser']['expired'], $this->product->get_name() ) );
+			$notice_id           = $this->product->get_key() . '_expired_notice';
 			?>
-			<div class="error">
-				<p>
-					<strong><?php echo sprintf( wp_kses_data( $expired_license_string ), esc_attr( $this->product->get_name() . ' ' . $this->product->get_type() ), esc_url( $this->get_api_url() . '?license=' . $this->license_key ) ); ?> </strong>
+			<div class="notice notice-warning notice-alt is-dismissible themeisle-sdk-license-notice" id="<?php echo esc_attr( $notice_id ); ?>" data-notice-id="<?php echo esc_attr( $notice_id ); ?>" style="position: relative; border-left: 4px solid #d63638; padding: 12px; background-color: #fff;">
+				<p style="margin: 0.5em 0; font-size: 13px;">
+					<strong><?php echo wp_kses_post( $heading ); ?></strong>
+					 · <?php echo esc_html( $expired_date_string ); ?>
+				</p>
+				<p style="margin: 0.5em 0 1em 0; font-size: 13px;">
+					<?php echo esc_html( $notice_message ); ?>
+				</p>
+				<p style="margin: 0.5em 0;">
+					<a href="<?php echo esc_url( $renew_url ); ?>" class="button button-primary" target="_blank" rel="noopener noreferrer">
+						<?php echo esc_html( $renew_button ); ?>
+					</a>
+					<a href="<?php echo esc_url( $learn_more_url ); ?>" class="button" target="_blank" rel="noopener noreferrer" style="border: none; background-color: transparent;">
+						<?php echo esc_html( $learn_more_button ); ?>
+					</a>
 				</p>
 			</div>
+			<script type="text/javascript">
+				jQuery(document).ready(function($) {
+					$('#<?php echo esc_js( $notice_id ); ?>').on('click', '.notice-dismiss', function(e) {
+						const noticeId = '<?php echo esc_js( $notice_id ); ?>';
+						$.ajax({
+							url: ajaxurl,
+							type: 'POST',
+							data: {
+								action: 'themeisle_sdk_dismiss_license_notice',
+								notice_id: noticeId,
+								nonce: '<?php echo esc_js( wp_create_nonce( 'themeisle_sdk_dismiss_license_notice' ) ); ?>'
+							}
+						});
+					});
+				});
+			</script>
 			<?php
 
 			return false;
@@ -1045,6 +1105,32 @@ class Licenser extends Abstract_Module {
 		add_action( 'admin_init', array( $this, 'product_valid' ), 99999999 );
 		add_action( 'admin_notices', array( $this, 'show_notice' ) );
 		add_filter( $this->product->get_key() . '_license_status', array( $this, 'get_license_status' ) );
+		add_action( 'wp_ajax_themeisle_sdk_dismiss_license_notice', array( $this, 'dismiss_license_notice' ) );
+	}
+
+	/**
+	 * Handle AJAX request to dismiss the license notice.
+	 */
+	public function dismiss_license_notice() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'themeisle_sdk_dismiss_license_notice' ) ) {
+			wp_send_json_error( 'Invalid nonce' );
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'Insufficient permissions' );
+		}
+
+		$notice_id = isset( $_POST['notice_id'] ) ? sanitize_text_field( $_POST['notice_id'] ) : '';
+
+		if ( empty( $notice_id ) ) {
+			wp_send_json_error( 'Missing notice ID' );
+		}
+
+		// Save the dismissal option.
+		$dismiss_option_key = $notice_id . '_dismissed';
+		update_option( $dismiss_option_key, true );
+
+		wp_send_json_success();
 	}
 
 	/**

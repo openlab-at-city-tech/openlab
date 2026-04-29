@@ -41,6 +41,8 @@ $files_to_load          = [
 	$themeisle_library_path . '/src/Modules/Announcements.php',
 	$themeisle_library_path . '/src/Modules/Featured_plugins.php',
 	$themeisle_library_path . '/src/Modules/Float_widget.php',
+	$themeisle_library_path . '/src/Modules/Abstract_Migration.php',
+	$themeisle_library_path . '/src/Modules/Migrator.php',
 ];
 
 $files_to_load = array_merge( $files_to_load, apply_filters( 'themeisle_sdk_required_files', [] ) );
