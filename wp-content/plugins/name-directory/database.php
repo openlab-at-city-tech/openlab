@@ -1,4 +1,7 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /* Protection! */
 if (! function_exists('add_action'))
 {
@@ -105,7 +108,7 @@ function name_directory_db_install_demo_data()
     global $name_directory_table_directory_name;
 
     // Only insert sample data when there is no data
-    $wpdb->query(sprintf("SELECT * FROM " . $name_directory_table_directory));
+    $wpdb->query(sprintf("SELECT * FROM `%s`", $name_directory_table_directory));
     if($wpdb->num_rows === 0)
     {
         $wpdb->insert($name_directory_table_directory, array(

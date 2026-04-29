@@ -3,14 +3,13 @@
  * Plugin Name: Name Directory
  * Plugin URI: https://jeroenpeters.dev/wordpress-plugin-name-directory/
  * Description: A Name Directory, i.e. for animal names or to create a glossary. Visitors can add, search or just browse all names.
- * Version: 1.30.3
+ * Version: 1.33.1
  * Author: Jeroen Peters
  * Author URI: https://jeroenpeters.dev
  * Text Domain: name-directory
- * Domain Path: /translation
  * License: GPL2
  */
-/*  Copyright 2013-2025  Jeroen Peters (email: jeroenpeters1986@gmail.com)
+/*  Copyright 2013-2026  Jeroen Peters (email: jeroenpeters1986@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -25,6 +24,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+
+if ( ! defined( 'ABSPATH' ) ) exit;
 
 // Make sure we don't expose any info if called directly
 if (! function_exists('add_action'))

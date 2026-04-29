@@ -1,4 +1,7 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 /**
  * This file is part of the NameDirectory plugin for WordPress
  */
@@ -105,7 +108,7 @@ function name_directory_switch_name_published_status($name_id)
     global $wpdb;
     global $name_directory_table_directory_name;
 
-    $wpdb->query($wpdb->prepare("UPDATE `$name_directory_table_directory_name` SET `published`=1 XOR `published` WHERE id=%d",
+    $wpdb->query($wpdb->prepare("UPDATE `{$name_directory_table_directory_name}` SET `published`=1 XOR `published` WHERE id=%d",
         intval($name_id)));
 
     return $wpdb->get_var(sprintf("SELECT `published` FROM `%s` WHERE id=%d", $name_directory_table_directory_name, intval($name_id)));
@@ -144,7 +147,7 @@ function name_directory_name_exists_in_directory($name, $directory)
 function name_directory_make_plugin_url($index = 'name_directory_startswith', $exclude = null, $directory = null)
 {
     $url = array();
-    $parsed = parse_url($_SERVER['REQUEST_URI']);
+    $parsed = wp_parse_url($_SERVER['REQUEST_URI']);
     if(! empty($parsed['query']))
     {
         parse_str($parsed['query'], $url);
@@ -581,11 +584,55 @@ function name_directory_admin_pagination($num_of_pages, $pagenum, $total_names)
     if ( $page_links ) {
         return '<div class="tablenav">
                         <div class="tablenav-pages" style="margin: 1em 0">
-                            <span class="displaying-num">' . $total_names . ' ' . __('items') . '</span>
+                            <span class="displaying-num">' . $total_names . ' ' . __('items', 'name-directory') . '</span>
                             <span class="pagination-links">' . str_replace('page-numbers', 'page-numbers button', $page_links) . '</span>
                         </div>
                       </div>';
     }
 
     return '';
+}
+
+/**
+ * Deeply clean the submitted user input from the frontend
+ * @param $input
+ * @param null $allowed_tags
+ * @return mixed
+ */
+function name_directory_deep_sanitize_public_user_input($input, $allowed_tags = null) {
+
+    $raw = trim( wp_unslash( (string)$input ) );
+
+    $decoded = html_entity_decode( $raw, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+
+    if( ! is_array( $allowed_tags ) ) {
+        $allowed_tags = array('p' => array(), 'br' => array(), 'strong'=>array(), 'em'=>array());
+    }
+
+    return wp_kses( $decoded, $allowed_tags );
+}
+
+function name_directory_get_html_tag_options() {
+    return array(
+        'strong' => 'strong  (' . __('default option', 'name-directory') . ') (' . __('no SEO importance', 'name-directory') . ')',
+        'h2' => 'h2',
+        'h3' => 'h3',
+        'h4' => 'h4',
+        'h5' => 'h5',
+        'h6' => 'h6',
+    );
+}
+
+function name_directory_get_safe_heading_tag($settings = null) {
+    if( empty($settings) ) {
+        $settings = get_option('name_directory_general_option');
+    }
+
+    $render_tag = 'strong';
+    if(! empty($settings['html_tag_for_name_heading'])) {
+        if( array_key_exists( $settings['html_tag_for_name_heading'], name_directory_get_html_tag_options() ) ) {
+            $render_tag = $settings['html_tag_for_name_heading'];
+        }
+    }
+    return $render_tag;
 }

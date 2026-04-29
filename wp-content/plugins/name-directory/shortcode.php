@@ -1,4 +1,7 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 add_action('wp_enqueue_scripts', 'name_directory_add_frontend_assets');
 
 /**
@@ -30,15 +33,16 @@ function name_directory_add_frontend_assets()
  * Render function to display a namebox for a Name Directory
  * @param $entry
  * @param $directory
+ * @param string $tag
  */
-function name_directory_render_namebox($entry, $directory)
+function name_directory_render_namebox($entry, $directory, $tag = 'strong')
 {
     echo '<div class="name_directory_name_box">';
     echo '<a name="namedirectory_' . sanitize_html_class($entry['name']) . '"></a>';
-    echo '<strong role="term">' . html_entity_decode(stripslashes($entry['name'])) . '</strong><br>';
+    echo '<' . $tag . ' role="term">' . esc_html(stripslashes($entry['name'])) . '</' . $tag . '><br>';
     if(! empty($directory['show_description']) && ! empty($entry['description']))
     {
-        $print_description = html_entity_decode(stripslashes($entry['description']));
+        $print_description = wp_kses_post(stripslashes($entry['description']));
 
         /* This toggles the read more/less indicators, these need extra html */
         if(! empty($directory['nr_words_description']))
@@ -66,7 +70,7 @@ function name_directory_render_namebox($entry, $directory)
     }
     if(! empty($directory['show_submitter_name']) && ! empty($entry['submitted_by']))
     {
-        echo "<small>" . __('Submitted by:', 'name-directory') . " " . $entry['submitted_by'] . "</small>";
+        echo "<small>" . __('Submitted by:', 'name-directory') . " " . htmlspecialchars($entry['submitted_by']) . "</small>";
     }
     echo '</div>';
 }
@@ -100,7 +104,11 @@ function name_directory_show_submit_form($directory, $overview_url)
         $recaptcha_html = "<div class='name_directory_forminput'><br><div class='g-recaptcha' data-sitekey='" . $name_directory_settings['recaptcha_sitekey'] . "'></div></div>";
     }
 
+    /* If submissions are off, just return */
     $directory_info = name_directory_get_directory_properties($directory);
+    if( empty($directory_info['show_submit_form']) ) {
+        return '';
+    }
 
     if(empty($directory_info['name_term_singular']))
     {
@@ -159,13 +167,14 @@ function name_directory_show_submit_form($directory, $overview_url)
         }
     }
 
-    if($proceed_submission === true && ! empty($_POST['name_directory_name']))
+    if($proceed_submission === true && ! empty(name_directory_deep_sanitize_public_user_input(
+            isset($_POST['name_directory_name']) ? $_POST['name_directory_name'] : null, array())))
     {
         $wpdb->get_results(
             sprintf("SELECT `id` FROM `%s` WHERE `name` = '%s' AND `directory` = %d",
-            $name_directory_table_directory_name,
-            esc_sql($_POST['name_directory_name']),
-            esc_sql(intval($directory)))
+                esc_sql($name_directory_table_directory_name),
+                esc_sql($_POST['name_directory_name']),
+                esc_sql(intval($directory)))
         );
 
         if($wpdb->num_rows > 0)
@@ -184,14 +193,14 @@ function name_directory_show_submit_form($directory, $overview_url)
 
             $db_success = $wpdb->insert(
                 $name_directory_table_directory_name,
-                array(
+                [
                     'directory'     => intval($directory),
-                    'name'          => sanitize_text_field($_POST['name_directory_name']),
+                    'name'          => name_directory_deep_sanitize_public_user_input($_POST['name_directory_name'], array()),
                     'letter'        => name_directory_get_first_char($_POST['name_directory_name']),
-                    'description'   => wp_kses_post($_POST['name_directory_description']),
+                    'description'   => name_directory_deep_sanitize_public_user_input($_POST['name_directory_description']),
                     'published'     => $published,
-                    'submitted_by'  => sanitize_text_field($_POST['name_directory_submitter']),
-                ),
+                    'submitted_by'  => name_directory_deep_sanitize_public_user_input($_POST['name_directory_submitter'], array()),
+                ],
                 array('%d', '%s', '%s', '%s', '%d', '%s')
             );
 
@@ -223,41 +232,30 @@ function name_directory_show_submit_form($directory, $overview_url)
     if( strpos( $result_class, 'error' ) !== false ) {
         $alert_role = "role='alert'";
     }
+    $form  = '<form method="post" name="name_directory_submit">';
+    $form .= '<div class="name_directory_form_result ' . $result_class . '" ' . $alert_role . '>' . $form_result . '</div>';
+    $form .= '    <p><a href="' . $overview_url . '">' . $back_txt . '</a></p>';
+    $form .= '    <div class="name_directory_forminput">';
+    $form .= '        <label for="name_directory_name">' . $name . ' <small>' . $required . '</small></label>';
+    $form .= '        <br />';
+    $form .= '        <input id="name_directory_name" type="text" autocomplete="off" name="name_directory_name" />';
+    $form .= '    </div>';
+    $form .= '    <div class="name_directory_forminput">';
+    $form .= '        <label for="name_directory_description">' . $description . '</label><br />';
+    $form .= '        <textarea id="name_directory_description" name="name_directory_description"></textarea>';
+    $form .= '    </div>';
+    $form .= '    <div class="name_directory_forminput">';
+    $form .= '        <label for="name_directory_submitter">' . $your_name . '</label>';
+    $form .= '        <br />';
+    $form .= '        <input id="name_directory_submitter" type="text" autocomplete="name" name="name_directory_submitter" />';
+    $form .= '</div>';
+    $form.= $recaptcha_html;
+    $form .= '<div class="name_directory_forminput">';
+    $form .= '    <br />';
+    $form .= '    <button type="submit">' . $submit . '</button>';
+    $form .= '</div>';
+    $form .= '</form>';
 
-    $form = <<<HTML
-        <form method='post' name='name_directory_submit'>
-
-            <div class='name_directory_form_result {$result_class}' {$alert_role}>{$form_result}</div>
-
-            <p><a href="{$overview_url}">{$back_txt}</a></p>
-
-            <div class='name_directory_forminput'>
-                <label for='name_directory_name'>{$name} <small>{$required}</small></label>
-                <br />
-                <input id='name_directory_name' type='text' autocomplete='off' name='name_directory_name' />
-            </div>
-
-            <div class='name_directory_forminput'>
-                <label for='name_directory_description'>{$description}</label>
-                <br />
-                <textarea id='name_directory_description' name='name_directory_description'></textarea>
-            </div>
-
-            <div class='name_directory_forminput'>
-                <label for='name_directory_submitter'>{$your_name}</label>
-                <br />
-                <input id='name_directory_submitter' type='text' autocomplete='name' name='name_directory_submitter' />
-            </div>
-
-            {$recaptcha_html}
-
-            <div class='name_directory_forminput'>
-                <br />
-                <button type='submit'>{$submit}</button>
-            </div>
-
-        </form>
-HTML;
 
     return $form;
 }
@@ -278,6 +276,8 @@ function name_directory_show_directory($attributes)
         array('dir' => '1'),
         $attributes
     ));
+
+    $name_directory_settings = get_option('name_directory_general_option');
 
     $name_filter = array();
     if(! empty($_GET['name_directory_startswith']) && $_GET['name_directory_startswith'] == "latest")
@@ -300,6 +300,7 @@ function name_directory_show_directory($attributes)
 
     $letter_url = name_directory_make_plugin_url('name_directory_startswith', 'name-directory-search-value', $dir);
     $directory = name_directory_get_directory_properties($dir);
+
     if($directory === null)
     {
         echo sprintf(__('Error: Name Directory #%d does not exist (anymore). If you are the webmaster, please change the shortcode.', 'name-directory'), $dir);
@@ -319,7 +320,7 @@ function name_directory_show_directory($attributes)
     $names = name_directory_get_directory_names($directory, $name_filter);
     $num_names = count($names);
 
-    if(isset($_GET['show_submitform']))
+    if(isset($_GET['show_submitform']) && ! empty($directory['show_submit_form']))
     {
         return name_directory_show_submit_form($dir, name_directory_make_plugin_url('','show_submitform', $dir));
     }
@@ -395,7 +396,7 @@ function name_directory_show_directory($attributes)
 
     if(! empty($directory['show_search_form']))
     {
-        $parsed_url = parse_url($_SERVER['REQUEST_URI']);
+        $parsed_url = wp_parse_url($_SERVER['REQUEST_URI']);
         $search_get_url = array();
         if(! empty($parsed_url['query']))
         {
@@ -432,6 +433,7 @@ function name_directory_show_directory($attributes)
                 echo sprintf(__('There are currently %d %s in this directory', 'name-directory'), $num_names, $directory['name_term']);
             }
         }
+        echo '.';
     }
     else if(empty($name_filter['character']) && ! empty($search_value))
     {
@@ -454,6 +456,7 @@ function name_directory_show_directory($attributes)
         } else {
             echo sprintf(__('Showing %d most recent %s in this directory', 'name-directory'), $num_names, $directory['name_term']);
         }
+        echo '.';
     }
     else if($directory['show_current_num_names'])
     {
@@ -472,17 +475,28 @@ function name_directory_show_directory($attributes)
         }
     }
     echo  '</div>';
-
     echo '<div class="name_directory_names">';
-    if($num_names === 0 && empty($search_value))
+    if($num_names === 0 && empty($search_value) && $directory['show_current_num_names'] == "0")
     {
-        echo '<p class="name_directory_entry_message">' . __('There are no entries in this directory at the moment', 'name-directory') . '</p>';
+        echo '<p class="name_directory_entry_message">';
+        if(empty($directory['name_term'])) {
+            echo __('There are no entries in this directory at the moment', 'name-directory');
+        } else {
+            echo sprintf(__('There are no %s in this directory at the moment', 'name-directory'), $directory['name_term']);
+        }
+        echo '.</p>';
     }
-    else if(isset($directory['show_all_names_on_index']) && $directory['show_all_names_on_index'] != 1 && empty($name_filter))
+    else if(isset($directory['show_all_names_on_index']) && $directory['show_all_names_on_index'] == "0" && empty($name_filter))
     {
         if($directory['show_index_instructions'])
         {
-            echo '<p class="name_directory_entry_message">' . __('Please select a letter from the index (above) to see entries', 'name-directory') . '</p>';
+            echo '<p class="name_directory_entry_message">';
+            if(empty($directory['name_term'])) {
+                echo trim(__('Please select a letter from the index (above) to see entries', 'name-directory'));
+            } else {
+                echo trim(sprintf(__('Please select a letter from the index (above) to see %s', 'name-directory'), $directory['name_term']));
+            }
+            echo '.</p>';
         }
     }
     else
@@ -514,7 +528,8 @@ function name_directory_show_directory($attributes)
                 }
             }
 
-            name_directory_render_namebox($entry, $directory);
+            $heading_tag = name_directory_get_safe_heading_tag($name_directory_settings);
+            name_directory_render_namebox($entry, $directory, $heading_tag);
 
             if(! empty($directory['show_line_between_names']) && $num_names != $i)
             {
@@ -604,7 +619,8 @@ function name_directory_show_random($attributes)
     ob_start();
 
     echo '<div class="name_directory_random_name">';
-    name_directory_render_namebox($entry, $directory);
+    $heading_tag = name_directory_get_safe_heading_tag();
+    name_directory_render_namebox($entry, $directory, $heading_tag);
     echo '</div>';
 
     return ob_get_clean();
@@ -633,7 +649,8 @@ function name_directory_show_single_name($attributes)
     ob_start();
 
     echo '<div class="name_directory_random_name">';
-    name_directory_render_namebox($name_entry, $directory);
+    $heading_tag = name_directory_get_safe_heading_tag();
+    name_directory_render_namebox($name_entry, $directory, $heading_tag);
     echo '</div>';
 
     return ob_get_clean();
@@ -674,15 +691,16 @@ function name_directory_insert_sitewide_search_results($where)
         foreach($directories as $found => $dir)
         {
             /* Use a plain sql query, WP_Query unfortunately didn't work (infinite loop) */
+            $directory_id = intval($dir['directory']);
             $host_pages = $wpdb->get_results("
 			  SELECT * 
 			  FROM `{$wpdb->prefix}posts` 
 			  WHERE 
 			    `post_type` IN ('page', 'post')
 			    AND `post_status` = 'publish'
-			    AND (`post_content` LIKE '%[namedirectory dir=\"{$dir['directory']}%' 
-			      OR `post_content` LIKE '%[namedirectory dir={$dir['directory']}%'
-			      OR `post_content` LIKE '%[namedirectory dir=''{$dir['directory']}%')");
+			    AND (`post_content` LIKE '%[namedirectory dir=\"{$directory_id}%' 
+			      OR `post_content` LIKE '%[namedirectory dir={$directory_id}%'
+			      OR `post_content` LIKE '%[namedirectory dir=''{$directory_id}%')");
 
             if ($host_pages)
             {

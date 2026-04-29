@@ -1,4 +1,7 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 class NameDirectoryGeneralSettingsPage
 {
 	private $options;
@@ -11,6 +14,20 @@ class NameDirectoryGeneralSettingsPage
 		add_action('admin_menu', array($this, 'add_menu_entry'));
 		add_action('admin_init', array($this, 'name_directory_general_settings_page_init'));
 	}
+
+    /**
+     * Get the available HTML tag options from the plugin defaults, or get a safety fallback
+     */
+    private function get_htmltag_options()
+    {
+        if(function_exists('name_directory_get_html_tag_options')) {
+            return name_directory_get_html_tag_options();
+        } else {
+            return array(
+                'strong' => 'Strong', // Safety measure
+            );
+        }
+    }
 
 	/**
 	 * Add options page to the menu
@@ -63,6 +80,28 @@ class NameDirectoryGeneralSettingsPage
 	 */
 	public function name_directory_general_settings_page_init()
 	{
+        register_setting(
+            'name_directory_general_settings_frontend',
+            'name_directory_general_option',
+            array($this, 'sanitize')
+        );
+
+        add_settings_section(
+            'name_directory_frontend_html_usage',
+            __('Name Directory', 'name-directory') . ' ' . __('frontend', 'name-directory'),
+            array($this, 'print_frontend_html_info'),
+            'name-directory-general-settings'
+        );
+
+        add_settings_field(
+            'html_tag_for_name_heading',
+            __('HTML-tag preference', 'name-directory'),
+            array($this, 'html_tag_for_name_heading_callback'),
+            'name-directory-general-settings',
+            'name_directory_frontend_html_usage'
+        );
+
+
 		register_setting(
 			'name_directory_general_settings_search',
 			'name_directory_general_option',
@@ -174,18 +213,18 @@ class NameDirectoryGeneralSettingsPage
 	 */
 	public function sanitize($input)
 	{
-		$boolean_settings = array();
+		$sanitized_settings = array();
 		foreach($input as $key => $value)
         {
-            if(strpos($key, 'recaptcha_') === 0)
+            if(strpos($key, 'recaptcha_') === 0 || strpos($key, 'html_tag_') === 0)
             {
-                $boolean_settings[$key] = sanitize_text_field($value);
+                $sanitized_settings[$key] = sanitize_text_field($value);
                 continue;
             }
 
-	        $boolean_settings[$key] = absint($value);
+            $sanitized_settings[$key] = absint($value);
         }
-		return $boolean_settings;
+		return $sanitized_settings;
 	}
 
 	/**
@@ -234,7 +273,7 @@ class NameDirectoryGeneralSettingsPage
     }
     public function use_namedirectory_admin_pagination_callback()
     {
-        echo $this->radio_button_option('use_namedirectory_admin_pagination');
+        echo esc_html($this->radio_button_option('use_namedirectory_admin_pagination'));
         echo sprintf("<p><em>%s</em></p>", __('When enabled, names in the WP-admin are paged at 50 per page.', 'name-directory'));
     }
 	public function search_on_callback()
@@ -272,7 +311,16 @@ class NameDirectoryGeneralSettingsPage
         echo $this->input_field_option('recaptcha_secretkey');
         echo sprintf("<p><em>%s</em></p>", __('Google reCAPTCHA secret key', 'name-directory'));
     }
+    public function html_tag_for_name_heading_callback()
+    {
+        echo $this->select_field_option('html_tag_for_name_heading', $this->get_htmltag_options());
+        echo sprintf("<p><em>%s</em></p>", __('Choose which HTML tag should be used to render the name headings in the directory. For SEO purposes, it is recommended to use H2 or H3.', 'name-directory'));
+    }
 
+    public function print_frontend_html_info()
+    {
+        print __('These settings control how Name Directory renders names on the frontend of your website.', 'name-directory');
+    }
 	/**
 	 * Get the settings option array and print one of its values
 	 */
@@ -288,6 +336,19 @@ class NameDirectoryGeneralSettingsPage
     public function input_field_option($field)
     {
         printf('<label for"' . $field . '_input"><input type="text" id="' . $field . '_input" name="name_directory_general_option[' . $field . ']" value="%s"></label>', empty($this->options[$field]) ? '' : $this->options[$field]);
+    }
+
+    /**
+     * Get the settings option array and display it as a dropdown select
+     */
+    public function select_field_option($field, $options)
+    {
+        printf('<select id="' . $field . '_select" name="name_directory_general_option[' . $field . ']">');
+        foreach($options as $key => $value)
+        {
+            printf('<option value="%s" %s>%s</option>', $key, ( ! empty($this->options[$field]) && $this->options[$field] == $key) ? 'selected' : '', $value);
+        }
+        printf('</select>');
     }
 
 	/**

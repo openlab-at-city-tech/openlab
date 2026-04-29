@@ -6,8 +6,8 @@ Donate link: https://ko-fi.com/jeroenpeters
 Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
-Tested up to: 6.9
-Stable tag: 1.30.3
+Tested up to: 7.0
+Stable tag: 1.33.1
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -81,9 +81,6 @@ We are proud to be featured on:
 
 #### Thank you
 Thank you to the few who have donated to me already, or bought a custom version of Name Directory.
-
-Additional and a special thanks goes to [JetBrains, the creator of PhpStorm](https://www.jetbrains.com/?from=name-directory),
-for providing me with a free open-source licence to their products. This helps me maintain this plugin!
 
 
 == Installation ==
@@ -187,6 +184,7 @@ Yes, every now and then I come across an installed version of the plugin. Here i
 
 1. [Dutch Budgie website - How to name your bird](https://www.parkietenvilla.nl/namenlijst/)
 1. [Alabama Orthopaedic Society - Member list](https://aosdocs.com/find-an-orthopaedist/)
+1. [Hattem24 Begrippenlijst - Nieuws over Hattem](https://hattem24.nl/begrippenlijst/) (Dutch local newssite with a glossary)
 1. [Convertus - Paid Search Terms](https://www.convertus.com/search-glossary/)
 1. [Venlo's Waordeboek (Dutch Limburgian Dialect Dictionary)](https://veldekevenlo.nl/waordebook/)
 1. [Donegal Member Directory (multiple directories)](https://thisisdonegal.ie/members-directory/)
@@ -265,6 +263,31 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 
 == Changelog ==
+
+= 1.33.1 | April 17, 2026 =
+ * Bugfix: Don't show the Submit form if it has been disabled in the settings (thank you Jibbius)
+ * Enhancement: Revised the demo/showcase list
+ * Enhancement: Tested with new WordPress 7.0, Release Candidate 2
+
+= 1.33.0 | March 7, 2026 =
+ * Enhancement: Tested with new WordPress 7.0, beta 2
+ * Enhancement: Better use routing in admin
+ * Security: Fixed issue passed by WordFence researcher Youssef Elouaer
+
+= 1.32.1 | February 3, 2026 =
+ * Security: Fixed issue passed by WordFence researcher duy.thai (thank you WordFence team)
+ * Security: Used plugin-check to address other issues
+
+= 1.32.0 | January 25, 2026 =
+ * Feature: You can now choose which tag-type is used for the name titles (h2, h3, h4, h5, h6, strong is default)
+ * Enhancement: Fixed some grammar
+ * Enhancement: Rewrote some of the plugins PHP code
+ * Security: Used plugin-check to address other issues
+
+= 1.31.0 | January 13, 2026 =
+ * Enhancement: Tested with new WordPress 7.0a alpha
+ * Security: Fixed stored XSS attack
+ * Security: Used plugin-check to address other issues
 
 = 1.30.3 | November 22, 2025 =
  * Enhancement: Tested again with new WordPress 6.9
