@@ -1,0 +1,322 @@
+<?php
+/**
+ * Class WordPress\Plugin_Check\Checker\Checks\Abstract_File_Check
+ *
+ * @package plugin-check
+ */
+
+namespace WordPress\Plugin_Check\Checker\Checks;
+
+use Exception;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use WordPress\Plugin_Check\Checker\Check_Context;
+use WordPress\Plugin_Check\Checker\Check_Result;
+use WordPress\Plugin_Check\Checker\Static_Check;
+use WordPress\Plugin_Check\Utilities\Plugin_Request_Utility;
+
+/**
+ * Base class for a check that inspects the plugin's files and contents.
+ *
+ * @since 1.0.0
+ */
+abstract class Abstract_File_Check implements Static_Check {
+
+	/**
+	 * Internal cache for plugin-specific file lists.
+	 *
+	 * @since 1.0.0
+	 * @var array
+	 */
+	private static $file_list_cache = array();
+
+	/**
+	 * Internal cache for file contents.
+	 *
+	 * @since 1.0.0
+	 * @var array
+	 */
+	private static $file_contents_cache = array();
+
+	/**
+	 * Amends the given result by running the check on the associated plugin.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Check_Result $result The check result to amend, including the plugin context to check.
+	 *
+	 * @throws Exception Thrown when the check fails with a critical error (unrelated to any errors detected as part of
+	 *                   the check).
+	 */
+	final public function run( Check_Result $result ) {
+		$files = self::get_files( $result->plugin() );
+		$this->check_files( $result, $files );
+	}
+
+	/**
+	 * Amends the given result by running the check on the given list of files.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Check_Result $result The check result to amend, including the plugin context to check.
+	 * @param array        $files  List of absolute file paths.
+	 *
+	 * @throws Exception Thrown when the check fails with a critical error (unrelated to any errors detected as part of
+	 *                   the check).
+	 */
+	abstract protected function check_files( Check_Result $result, array $files );
+
+	/**
+	 * Filters a given list of files to only contain those with specific extension.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array  $files     List of absolute file paths.
+	 * @param string $extension File extension to match.
+	 * @return array Filtered $files list.
+	 */
+	final protected static function filter_files_by_extension( array $files, $extension ) {
+		return self::filter_files_by_extensions( $files, array( $extension ) );
+	}
+
+	/**
+	 * Filters a given list of files to only contain those with specific extensions.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $files      List of absolute file paths.
+	 * @param array $extensions List of file extensions to match.
+	 * @return array Filtered $files list.
+	 */
+	final protected static function filter_files_by_extensions( array $files, array $extensions ) {
+		// Inverse the array to speed up lookup.
+		$lookup = array_flip( $extensions );
+
+		return array_values(
+			array_filter(
+				$files,
+				static function ( $file ) use ( $lookup ) {
+					return isset( $lookup[ pathinfo( $file, PATHINFO_EXTENSION ) ] );
+				}
+			)
+		);
+	}
+
+	/**
+	 * Filters a given list of files to only contain those where the file name matches the given regular expression.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array  $files List of absolute file paths.
+	 * @param string $regex Regular expression for file paths to match.
+	 * @return array Filtered $files list.
+	 */
+	final protected static function filter_files_by_regex( array $files, $regex ) {
+		return preg_grep( $regex, $files );
+	}
+
+	/**
+	 * Performs a regular expression match on the file contents of the given list of files.
+	 *
+	 * This is a wrapper around the native `preg_match()` function that will match the first occurrence within the
+	 * list of files.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $pattern The pattern to search for.
+	 * @param array  $files   List of absolute file paths.
+	 * @param array  $matches Optional. Array to store the matches, passed by reference. Similar to `preg_match()`,
+	 *                        `$matches[0]` will contain the text that matched the full pattern, `$matches[1]` will
+	 *                        have the text that matched the first captured parenthesized subpattern, and so on.
+	 * @return string|bool File path if a match was found, false otherwise.
+	 */
+	final protected static function file_preg_match( $pattern, array $files, ?array &$matches = null ) {
+		foreach ( $files as $file ) {
+			$contents = self::file_get_contents( $file );
+			if ( preg_match( $pattern, $contents, $m ) ) {
+				$matches = $m;
+				return $file;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Returns matched files performing a regular expression match on the file contents of the given list of files.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $pattern The pattern to search for.
+	 * @param array  $files   List of absolute file paths.
+	 * @return array|bool Array of file paths and matched string/pattern if matches were found, false otherwise.
+	 */
+	final protected static function files_preg_match( $pattern, array $files ) {
+		$matched_files = array();
+
+		foreach ( $files as $file ) {
+			$matches = array();
+
+			$matched_file_name = self::file_preg_match( $pattern, array( $file ), $matches );
+
+			if ( false !== $matched_file_name ) {
+				$matched_files[] = array( $matched_file_name, $matches[0] );
+			}
+		}
+
+		return count( $matched_files ) > 0 ? $matched_files : false;
+	}
+
+	/**
+	 * Returns matched files performing a regular expression match on the file contents of the given list of files with line and column information.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @param string $pattern The pattern to search for.
+	 * @param array  $files   List of absolute file paths.
+	 * @return array|bool Array of file paths and matched string/pattern if matches were found, false otherwise.
+	 */
+	final protected static function files_preg_match_all( $pattern, array $files ) {
+		$matched_files = array();
+
+		foreach ( $files as $file ) {
+			$matches = array();
+
+			$contents = self::file_get_contents( $file );
+
+			preg_match_all( $pattern, $contents, $matches, PREG_OFFSET_CAPTURE );
+
+			if ( ! empty( $matches ) ) {
+				foreach ( $matches[0] as $match ) {
+					$line   = 0;
+					$column = 0;
+
+					if ( 0 === $match[1] ) {
+						$line   = 1;
+						$column = 1;
+					} else {
+						list( $before ) = str_split( $contents, $match[1] );
+
+						$exploded  = explode( PHP_EOL, $before );
+						$last_item = end( $exploded );
+
+						$line   = count( $exploded );
+						$column = strlen( $last_item ) + 1;
+					}
+
+					$matched_files[] = array(
+						'file'   => $file,
+						'line'   => $line,
+						'column' => $column,
+					);
+				}
+			}
+		}
+
+		return count( $matched_files ) > 0 ? $matched_files : false;
+	}
+
+	/**
+	 * Performs a check indicating if the needle is contained in the file contents of the given list of files.
+	 *
+	 * This is a wrapper around the native `str_contains()` function that will find the needle within the list of
+	 * files.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array  $files  List of absolute file paths.
+	 * @param string $needle The substring to search for.
+	 * @return string|bool File path if needle was found, false otherwise.
+	 */
+	final protected static function file_str_contains( array $files, $needle ) {
+		foreach ( $files as $file ) {
+			$contents = self::file_get_contents( $file );
+			if ( str_contains( $contents, $needle ) ) {
+				return $file;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Gets the contents of the given file.
+	 *
+	 * This is effectively a caching wrapper around the native `file_get_contents()` function.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $file The file name.
+	 * @return string The file contents.
+	 */
+	private static function file_get_contents( $file ) {
+		if ( isset( self::$file_contents_cache[ $file ] ) ) {
+			return self::$file_contents_cache[ $file ];
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		self::$file_contents_cache[ $file ] = file_get_contents( $file );
+
+		return self::$file_contents_cache[ $file ];
+	}
+
+	/**
+	 * Gets the list of all files that are part of the given plugin.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param Check_Context $plugin Context for the plugin to check.
+	 * @return array List of absolute file paths.
+	 */
+	private static function get_files( Check_Context $plugin ) {
+		$location = wp_normalize_path( $plugin->location() );
+
+		if ( isset( self::$file_list_cache[ $location ] ) ) {
+			return self::$file_list_cache[ $location ];
+		}
+
+		self::$file_list_cache[ $location ] = array();
+
+		// If the location is a plugin folder, get all its files.
+		// Otherwise, it is a single-file plugin.
+		if ( $plugin->is_single_file_plugin() ) {
+			self::$file_list_cache[ $location ][] = $location;
+		} else {
+			$iterator = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $location ) );
+
+			$directories_to_ignore = Plugin_Request_Utility::get_directories_to_ignore();
+
+			$files_to_ignore = Plugin_Request_Utility::get_files_to_ignore();
+
+			foreach ( $iterator as $file ) {
+				if ( ! $file->isFile() ) {
+					continue;
+				}
+
+				$file_path = wp_normalize_path( $file->getPathname() );
+
+				// Flag to check if the file should be included or not.
+				$include_file = true;
+
+				foreach ( $directories_to_ignore as $directory ) {
+					// Check if the current file belongs to the directory you want to ignore.
+					if ( false !== strpos( $file_path, '/' . $directory . '/' ) ) {
+						$include_file = false;
+						break; // Skip the file if it matches any ignored directory.
+					}
+				}
+
+				foreach ( $files_to_ignore as $ignore_file ) {
+					if ( str_ends_with( $file_path, "/$ignore_file" ) ) {
+						$include_file = false;
+						break;
+					}
+				}
+
+				if ( $include_file ) {
+					self::$file_list_cache[ $location ][] = $file_path;
+				}
+			}
+		}
+
+		return self::$file_list_cache[ $location ];
+	}
+}
