@@ -7,6 +7,10 @@
 
 namespace DLXPlugins\CommentEditLite\Admin\Tabs;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'No direct access.' );
+}
+
 use DLXPlugins\CommentEditLite\Functions as Functions;
 use DLXPlugins\CommentEditLite\Options as Options;
 
@@ -92,32 +96,6 @@ class Support extends Tabs {
 						<path fill="currentColor" d="M259.3 17.8L194 150.2 47.9 171.5c-26.2 3.8-36.7 36.1-17.7 54.6l105.7 103-25 145.5c-4.5 26.3 23.2 46 46.4 33.7L288 439.6l130.7 68.7c23.2 12.2 50.9-7.4 46.4-33.7l-25-145.5 105.7-103c19-18.5 8.5-50.8-17.7-54.6L382 150.2 316.7 17.8c-11.7-23.6-45.6-23.9-57.4 0z"></path>
 					</symbol>
 				</svg>
-				<div class="sce-admin-panel-area">
-					<h3 class="sce-panel-heading">
-						<a href="https://dlxplugins.com/plugins/comment-edit-pro"><img id="sce-options-logo" src="<?php echo esc_url( Functions::get_plugin_url( 'images/comment-edit-base.png' ) ); ?>" alt="Comment Edit Pro logo" /></a>
-					</h3>
-					<div class="sce-panel-row">
-						<p class="description">
-							<?php echo wp_kses_post( '<strong>Go Pro</strong> with <strong>Comment Edit Pro</strong> and its useful comment utilities.', 'simple-comment-editing' ); ?>
-						</p>
-						<ul>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-editing">Additional Comment Editing Features</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-avatars">Comment Avatars</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/gravatar-privacy-protection">Gravatar Privacy Protection</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/recaptcha-3-support">reCAPTCHA 3 Support</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/akismet-spam-protection">Akismet Spam Protection Integration</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/spam-protection/cloudflare-turnstile">Cloudflare Turnstile Support</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/comment-character-control">Comment Character Control</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/frontend-editing">Front-end Comment Editing</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/integrations/slack-integration">Slack Integration</a></li>
-							<li><a href="https://docs.dlxplugins.com/v/comment-edit-pro/features-overview/webhooks">Webhooks</a></li>
-						</ul>
-					</div>
-					<div class="sce-panel-row">
-						<a class="sce-button sce-button-info" href="https://dlxplugins.com/plugins/comment-edit-pro" target="_blank"> <?php esc_html_e( 'Find out More About Comment Edit Pro', 'simple-comment-editing' ); ?></a>
-						<a class="sce-button sce-button-info" href="https://app.instawp.io/launch?t=dlx-plugins&d=v1" target="_blank"> <?php esc_html_e( 'Launch a Free Demo', 'simple-comment-editing' ); ?></a>
-					</div>
-				</div>
 				<div class="sce-admin-panel-area">
 					<h3 class="sce-panel-heading">
 						<?php esc_html_e( 'Get Support On the WordPress Plugin Directory', 'simple-comment-editing' ); ?>

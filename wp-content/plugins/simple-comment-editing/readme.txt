@@ -1,13 +1,13 @@
 === Comment Edit Core - Simple Comment Editing ===
 Contributors: ronalfy
-Tags: comment editing, comments ,edit comments, reviews,
-Requires at least: 5.0
-Tested up to: 6.9
-Stable tag: 3.2.0
+Tags: edit comment, comments, edit comments, ajax comments, comment moderation
+Requires at least: 6.5
+Tested up to: 7.0
+Stable tag: 3.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Allow your users to edit their comments for a period of time.
+Allow your users to edit their comments for a period of time. Adjust the comment timer and save some admin headaches.
 
 == Description ==
 
@@ -19,7 +19,7 @@ Go Pro for a lot more control over the comment editing experience, including fro
 
 <a href="https://docs.dlxplugins.com/v/comment-edit-lite/">Getting Started</a> | <a href="https://github.com/sponsors/DLXPlugins">Sponsor Us</a> | <a href="https://dlxplugins.com/plugins/comment-edit-lite/">Comment Edit Core Home</a>
 
-<h2>Comment Edit Core features:</h2>
+=== Comment Edit Core features ===
 <ol>
 <li>Install the plugin. That's it. It just works.
 <li>Anonymous users can edit comments for 5 minutes.</li>
@@ -28,23 +28,23 @@ Go Pro for a lot more control over the comment editing experience, including fro
 <li>Add Mailchimp to your comment form and get email subscribers through comments.</li>
 </ol>
 
-<h2>Get more with Comment Edit Pro</h2>
+=== Get more with Comment Edit Pro ===
 
 For additional features in addition to comment editing, please check out <a href="https://dlxplugins.com/plugins/comment-edit-pro/">Comment Edit Pro</a>.
 
 Features Include:
 
-* Newsletter integration with Mailchimp or ConvertKit
+* Newsletter integration with Mailchimp, ConvertKit, Flodesk, and MailerLite
 * Community features including @ Mentions, Comment Avatars, and Comment Character Control
 * Automations with Webhooks to connect to services like Zapier and other automation tools
-* Spam/bot protection add-ons with reCAPTCHA 3 or Cloudflare Turnstile support
+* Spam/bot protection add-ons with reCAPTCHA Enterprise or Cloudflare Turnstile support
 * Comment shortcuts and front-end moderation tools
 * Set comment rules per post type
 * Set comments to expire based on activity
 * Get notified of new and edited comments with the Slack integration
 * <a href="https://dlxplugins.com/plugins/comment-edit-pro/">Find out more...</a>
 
-> <a href="https://app.instawp.io/launch?t=dlx-plugins&d=v1">Launch a Live Demo on InstaWP</a>
+> <a href="https://app.instawp.io/launch?t=comment-edit-pro&d=v2">Launch a Live Demo of Comment Edit Pro on InstaWP</a>
 
 
 == Installation ==
@@ -84,6 +84,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 5. Light button theme.
 
 == Changelog ==
+
+= 3.3.0 =
+* Released 2026-03-07
+* Reorganizing admin level settings. Ensuring plugin works with WordPress 7.0.
 
 = 3.2.0 =
 * Released 2025-11-08
@@ -526,5 +530,5 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 
 == Upgrade Notice ==
 
-= 3.2.0 =
-* Security fix: Resolving Unauthenticated Sensitive Information Exposure report from Wordfence. Removing uneeded get comment function, which could expose comment information.
+= 3.3.0 =
+Reorganizing admin level settings. Ensuring plugin works with WordPress 7.0.
