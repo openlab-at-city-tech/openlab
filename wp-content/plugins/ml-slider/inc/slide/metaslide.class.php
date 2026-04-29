@@ -798,13 +798,7 @@ class MetaSlide
     }
 
     public function get_global_settings() {
-        if (is_multisite() && $settings = get_site_option('metaslider_global_settings')) {
-            return $settings;
-        }
-
-        if ($settings = get_option('metaslider_global_settings')) {
-            return $settings;
-        }
+        return metaslider_global_settings();
     }
 
     /**

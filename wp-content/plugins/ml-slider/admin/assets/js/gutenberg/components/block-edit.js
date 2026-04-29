@@ -4,7 +4,7 @@ import MetaSliderPreview from './preview'
 import BlockStretchToolbar from './stretch-toolbar'
 import SlideshowSelector from './slideshow-selector'
 import RefreshButton from './refresh-button'
-import {BlockControls, InspectorAdvancedControls, InspectorControls} from '@wordpress/block-editor'
+import {BlockControls, InspectorAdvancedControls, InspectorControls, useBlockProps} from '@wordpress/block-editor'
 
 const wp = window.wp
 const {__} = wp.i18n
@@ -36,6 +36,7 @@ const edit = (props) => {
     let isLoading = slideshows.isLoading
     let hasSlideshows = slideshows.items.length || false
     let refreshPreview = props.attributes.refreshPreview
+    const blockProps = useBlockProps()
     /**
      * inspectorControls contains the different block controls
      * - InspectorControls: controls in the sidebar
@@ -132,6 +133,8 @@ const edit = (props) => {
             slideshowId={slideshowId}
             isSelected={isSelected}
             refresh={refreshPreview}
+            clientId={props.clientId}
+            blockProps={blockProps}
         />,
         !slideshowId && <Placeholder
             key="instructions"

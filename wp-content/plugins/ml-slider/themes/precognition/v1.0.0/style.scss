@@ -36,6 +36,10 @@
 
 	  li {
 		display: inherit !important;
+
+		a {
+			text-indent: 0 !important;
+		}
 	  }
 	}
   
@@ -145,12 +149,6 @@
 	margin-right: 10px;
 	padding: 0;
 	width: 1.5em;
-  }
-  
-  .ms-is-small.metaslider.ms-theme-precognition {
-	.flexslider ol.flex-control-nav:not(.flex-control-thumbs) li a, ul.rslides_tabs li a, div.slider-wrapper .nivo-controlNav:not(.nivo-thumbs-enabled) a, .coin-slider .cs-buttons a {
-	  text-indent: -9999px;
-	}
   }
   
   .has-carousel-mode.metaslider.ms-theme-precognition {

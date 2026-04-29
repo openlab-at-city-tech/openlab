@@ -134,6 +134,22 @@
 									&lt;/&gt;
 								</div>
 								<div
+									v-else-if="'html_overlay' === slide.meta['ml-slider_type']"
+									class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									style="background:#e44d26;border-color:#6FAF4F;"
+									:original-title="__('Layer slide', 'ml-slider')"
+									:title="__('Layer slide', 'ml-slider')">
+									LS
+								</div>
+								<div
+									v-else-if="'post_images' === slide.meta['ml-slider_type']"
+									class="border flex items-center justify-center text-lg text-white rounded-full h-full tipsy-tooltip-top"
+									style="background:#e44d26;border-color:#780000;"
+									:original-title="__('Post Images', 'ml-slider')"
+									:title="__('Post Images', 'ml-slider')">
+									PI
+								</div>
+								<div
 									v-else 
 									:style="{ 'animation-delay': [(500 * index * Math.random()) + 'ms'] }"
 									class="gradient border border-white rounded-full h-full flex justify-center items-center text-red tipsy-tooltip-top"

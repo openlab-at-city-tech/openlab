@@ -698,15 +698,80 @@ window.jQuery(function ($) {
      */
     var showHideExtraEffect = function () {
         var carouselMode = $('.ms-settings-table input[name="settings[carouselMode]"]');
-        var effect = $('.ms-settings-table select[name="settings[effect]"]');
         var extraEffect = $('.ms-settings-table select[name="settings[extra_effect]"]');
 
-        var showExtraEffect = (!carouselMode.is(':checked') && ['fade', 'zooming', 'flip'].includes(effect.val()) ) ? true : false;
+        var showExtraEffect = !carouselMode.is(':checked') ? true : false;
         extraEffect.parents('tr').toggle(showExtraEffect);
     }
     setTimeout(function () {
         showHideExtraEffect();
     }, 100);
+
+    /**
+     * Show/hide full width options
+     * 
+     * @since 3.105
+     * 
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[fullWidth]"], .ms-settings-table input[name="settings[forceFullWidth]"], .ms-settings-table input[name="settings[fullWidthTarget]"]', function () {
+        showHideFullWidthOptions();
+    });
+
+    var showHideFullWidthOptions = function () {
+        var table = $('.ms-settings-table');
+        var fullWidth = table.find('input[name="settings[fullWidth]"]');
+        var forceFullWidth = table.find('input[name="settings[forceFullWidth]"]');
+        var fullWidthTarget = table.find('input[name="settings[fullWidthTarget]"]');
+    
+        forceFullWidth.parents('tr').toggle(fullWidth.is(':checked'));
+        fullWidthTarget.parents('tr').toggle(fullWidth.is(':checked') && forceFullWidth.is(':checked'));
+    };
+    
+    showHideFullWidthOptions();
+
+    /**
+     * Show/hide image options
+     * 
+     * @since 3.107
+     * 
+     */
+    $('.metaslider').on('change', '.ms-settings-table select[name="settings[smartCrop]"], .ms-settings-table select[name="settings[smartCropSource]"]', function () {
+        showHideImageOptions();
+    });
+
+    var showHideImageOptions = function () {
+        var table = $('.ms-settings-table');
+        var smartCrop = table.find('select[name="settings[smartCrop]"]');
+        var smartCropSource = table.find('select[name="settings[smartCropSource]"]');
+        var imageWidth = table.find('input[name="settings[imageWidth]"]') || null;
+        var imageHeight = table.find('input[name="settings[imageHeight]"]') || null;
+        var cropMultiply = table.find('select[name="settings[cropMultiply]"]');
+    
+        if (smartCrop.val() == 'true') {
+            cropMultiply.parents('tr').show();
+            smartCropSource.parents('tr').show();
+            
+            if (smartCropSource.val() == 'image') {
+                imageWidth.parents('tr').show();
+                imageHeight.parents('tr').show();
+            } else {
+                imageWidth.parents('tr').hide();
+                imageHeight.parents('tr').hide();
+            }
+        } else {
+            smartCropSource.parents('tr').hide();
+            imageWidth.parents('tr').hide();
+            imageHeight.parents('tr').hide();
+
+            if (smartCrop.val() == 'false') {
+                cropMultiply.parents('tr').show();
+            } else {
+                cropMultiply.parents('tr').hide();
+            }
+        }
+    };
+    
+    showHideImageOptions();
 
     /**
      * Add all the image APIs. Add events everytime the modal is open
@@ -1421,6 +1486,7 @@ window.jQuery(function ($) {
     /**
      * Trigger slideshow save after a quickstart has been created
      *
+     * @deprecated 3.106 - We use the native import for the quickstart
      * @since 3.103 - Previously removed on 3.98
      */
     var sampleSlidesWereAdded = function () {
@@ -1430,7 +1496,6 @@ window.jQuery(function ($) {
             }, 1000);
         }
     }
-    sampleSlidesWereAdded();
 
     /* Dashboard modal */
     $(".open-modal").on("click", function () {
@@ -1468,6 +1533,84 @@ window.jQuery(function ($) {
     });
 
     /**
+     * Display cancel / create quickstart options when click on a quickstart demo option
+     * 
+     * @since 3.106
+     */
+    $('.ms-quickstart-selector a:not([target="_blank"]').on('click', function(e) {
+        e.preventDefault();
+        var el = $(this);
+
+        // Remove block class for all instances
+        $('.quickstart-confirm-wrapper').each(function() {
+            $(this).removeClass('block');
+            $(this).addClass('hidden');
+            $(this).parents('li').find('.quickstart-title-wrapper').addClass('block').removeClass('hidden');
+        });
+
+        // Show current instance
+        el.parents('li').find('.quickstart-confirm-wrapper').addClass('block').removeClass('hidden');
+        el.parents('li').find('.quickstart-title-wrapper').addClass('hidden').removeClass('block');
+    });
+
+    /**
+     * Redirect to quickstart slideshow creation when click on 'yes'
+     * 
+     * @since 3.106
+     */
+    $('.quickstart-confirm-wrapper button[data-btn-type="yes"]').on('click', function(e) {
+        e.preventDefault();
+        var el = $(this);
+        var href = el.parents('li').find('a').attr('href') || null;
+
+        if (!href) {
+            console.error('href attribute not found!');
+            return;
+        }
+
+        // Redirect to new custom theme creation
+        window.location.href = href;
+    });
+
+    /**
+     * Hide options when click on 'no' option
+     * 
+     * @since 3.106
+     */
+    $('.quickstart-confirm-wrapper button[data-btn-type="no"]').on('click', function(e) {
+        e.preventDefault();
+        var el = $(this);
+        var target = el.parents('li').find('.quickstart-confirm-wrapper') || null;
+
+        if (!target) {
+            console.error('Target not found!');
+        }
+
+        // Hide current instance
+        target.addClass('hidden').removeClass('block');
+        target.parents('li').find('.quickstart-title-wrapper').addClass('block').removeClass('hidden');
+    });
+
+    /**
+     * Open demo slideshow
+     * 
+     * @since 3.106
+     */
+    $('.quickstart-confirm-wrapper button[data-btn-type="demo"]').on('click', function(e) {
+        e.preventDefault();
+        var el = $(this);
+        var href = el.attr('data-href') || null;
+
+        if (!href) {
+            console.error('href attribute not found!');
+            return;
+        }
+
+        // Redirect to demo URL
+        window.open(href, '_blank');
+    });
+
+    /**
      * Toggle all settings boxes on load
      * 
      * @since 3.101
@@ -1485,7 +1628,7 @@ window.jQuery(function ($) {
             }
         });
         // Patch to make sure disabled attribute remains for some checkboxes
-        $('.disabled-checkbox').each(function() {
+        $('.disabled-checkbox, .disabled-text').each(function() {
             $(this).attr('disabled', true);
         });
         $('.ms-loading-settings').remove();
@@ -1515,6 +1658,132 @@ window.jQuery(function ($) {
             table.show();
             box.addClass('ms-on');
         }
+    });
+
+    /**
+     * Quickstart tabs
+     * 
+     * @since 3.106
+     */
+    $('#quickstart-screen .tabs li a').on('click', function(e) {
+        e.preventDefault();
+
+        var el = $(this);
+        var href = el.attr('href') || null;
+
+        if (!href || $('.tabs-content-wrapper > div' + href).length === 0) {
+            console.error('href attribute not found!');
+            return;
+        }
+
+        // Hide all tabs content
+        $('.tabs-content-wrapper > div').each(function() {
+            $(this).hide();
+        });
+
+        // Remove active class from all tabs
+        $('#quickstart-screen .tabs li').each(function() {
+            $(this).removeClass('selected');
+        });
+
+        // Show new active tab content
+        $('.tabs-content-wrapper > div' + href).each(function() {
+            $(this).show();
+        });
+
+        // Set new active tab
+        el.parent().addClass('selected');
+    });
+
+    /**
+     * Quickstart filters
+     * 
+     * @since 3.106
+     */
+    var quickstartFilters = function() {
+        /*var filter = $(this).val();
+        var items = $('ul.ms-quickstart-selector > li');
+        console.log(filter);*/
+        const filters = {
+            features: $('#ms-qs-slide-features').val(),
+            price: $('#ms-qs-slide-price').val(),
+            animation: $('#ms-qs-slide-animation').val(),
+            integration: $('#ms-qs-slide-integration').val(),
+            type: $('#ms-qs-slide-type').val()
+        };
+
+        $('ul.ms-quickstart-selector > li').each(function () {
+
+            const $el = $(this);
+            const no_results_box = $('#ms-quickstart-no-results');
+
+            const data = {
+                features: $el.data('features') || [],
+                price: $el.data('price'),
+                animation: $el.data('animation') || [],
+                integration: $el.data('integration') || [],
+                type: $el.data('type') || []
+            };
+
+            let visible = true;
+
+            // array filters (must include selected value)
+            if (filters.features && !data.features.includes(filters.features)) visible = false;
+            if (filters.integration && !data.integration.includes(filters.integration)) visible = false;
+            if (filters.type && !data.type.includes(filters.type)) visible = false;
+            if (filters.animation && !data.animation.includes(filters.animation)) visible = false;
+
+            // string filters (exact match)
+            if (filters.price && data.price !== filters.price) visible = false;
+
+            $el.toggle(visible);
+
+            // Show no results message?
+            if ($('ul.ms-quickstart-selector > li:visible').length > 0) {
+                no_results_box.hide();
+            } else {
+                no_results_box.show();
+            }
+        });
+    }
+    $('#ms-qs-filters select').on('change', quickstartFilters);
+
+    /**
+     * Quickstart reset filters
+     * 
+     * @since 3.106
+     */
+    $('#ms-qs-slide-reset').on('click', function () {
+        $('#ms-qs-filters select').val('').trigger('change');
+    });
+
+    /**
+     * Quickstart filter active class toggle
+     * 
+     * @since 3.106
+     */
+    $('#ms-qs-filters select').on('change', function () {
+        $(this).toggleClass('ms-qs-filter-active', !!$(this).val()?.length);
+    });
+
+    /**
+     * Switch sections to show/hide based on selected case
+     * 
+     * @since 3.106
+     * */
+    $('#ms-qs-sections > a').on('click', function(e) {
+        var section = $(this).attr('data-section');
+        if (section == 'false') {
+            return;
+        }
+
+        e.preventDefault();
+
+        // Hide all the sections
+        $('.section-content-wrapper > div').hide();
+
+        // Show the selected section
+        $('.section-content-wrapper').find('#' + section).show();
     });
 });
 

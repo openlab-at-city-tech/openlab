@@ -767,15 +767,15 @@ return $theme;
         }
 
         // We have a theme, so lets add the class to the body
-        $this->theme_id = $theme['folder'];
+        $this->theme_id = sanitize_key( $theme['folder'] );
 
         // Add the theme class name to the slideshow
         add_filter('metaslider_css_classes', array($this, 'add_theme_class'), 10, 3);
         remove_filter( 'metaslider_css_classes', array( $this, 'add_no_theme_class' ), 10, 3 );
 
         // Check our themes for a match
-        if (file_exists(METASLIDER_THEMES_PATH . $theme['folder'])) {
-            $theme_dir = METASLIDER_THEMES_PATH . $theme['folder'];
+        if (file_exists(METASLIDER_THEMES_PATH . $this->theme_id )) {
+            $theme_dir = METASLIDER_THEMES_PATH . $this->theme_id;
         }
 
         /**
@@ -790,15 +790,21 @@ return $theme;
          */
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
-            if (file_exists(trailingslashit($location) . $theme['folder'])) {
-                $theme_dir = trailingslashit($location) . $theme['folder'];
+            if (file_exists(trailingslashit($location) . $this->theme_id)) {
+                $theme_dir = trailingslashit($location) . $this->theme_id;
             }
         }
 
         // Load in the base theme class
         if (isset($theme_dir) && isset($theme['version'])) {
+            // Make sure version uses 'vx.x.x' structure
+            if ( ! preg_match( '/^v\d+\.\d+\.\d+$/', trim( $theme['version'] ) ) ) {
+                return false;
+            }
+
             require_once(METASLIDER_THEMES_PATH . 'ms-theme-base.php');
-            return include_once trailingslashit($theme_dir) . trailingslashit($theme['version']) . 'theme.php';
+            $theme_file = trailingslashit( $theme_dir ) . trailingslashit( $theme['version'] ) . 'theme.php';
+            return file_exists( $theme_file ) ? include_once $theme_file : false;
         }
         
         // This should be a custom theme (pro)

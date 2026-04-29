@@ -70,7 +70,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
      */
     public function load_wysiwyg()
     {
-        $global_settings = $this->get_global_settings();
+        $global_settings = metaslider_global_settings();
 
         if (! isset($global_settings['tinyMce']) 
             || ( isset($global_settings['tinyMce'] ) && true == $global_settings['tinyMce'])
@@ -111,7 +111,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
 
         // @TODO - Move the logic below and MetaSlider->get_breakpoints() to a single place to avoid duplication
         $default_settings   = get_site_option( 'metaslider_default_settings' );
-        $global_settings    = $this->get_global_settings();
+        $global_settings    = metaslider_global_settings();
         
         if ( $default_settings 
             && ! isset( $global_settings['mobileSettings'] ) 
@@ -163,7 +163,6 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
                 && $global_settings['newSlideOrder'] === 'first' 
                 ? esc_html( $global_settings['newSlideOrder'] ) : 'last',
             'tinymce' => array(), // Just initialize to add values later through JS files
-            'quickstart_slugs' => $this->quickstart_slugs(),
             'breakpoints' => $breakpoints,
             'tone' => esc_html__( 'Tone', 'ml-slider' ),
             'opacity' => esc_html__( 'Opacity', 'ml-slider' ),

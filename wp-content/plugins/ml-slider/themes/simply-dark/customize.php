@@ -159,8 +159,8 @@ return array(
                 'min' => -100,
                 'max' => 100,
                 'css' => array(
-                    '[ms_id] .flexslider ul.flex-direction-nav li a.flex-prev { left: [ms_value]px }',
-                    '[ms_id] .flexslider ul.flex-direction-nav li a.flex-next { right: [ms_value]px }'
+                    '[ms_id] .flexslider:not(.filmstrip) ul.flex-direction-nav li a.flex-prev { left: [ms_value]px }',
+                    '[ms_id] .flexslider:not(.filmstrip) ul.flex-direction-nav li a.flex-next { right: [ms_value]px }'
                 ),
                 'scope' => array(
                     'links' => array( 
@@ -186,8 +186,8 @@ return array(
                 ),
                 'css' => 'css_rules',
                 'css_rules' => array(
-                    'top' => '[ms_id] .flexslider .flex-direction-nav li a { bottom: unset; top: calc([ms_field_value]% + 20px); transform: translateY(-[ms_field_value]%); }', // Take [ms_field_value] from arrows_vertical_position_offset
-                    'bottom' => '[ms_id] .flexslider .flex-direction-nav li a { top: unset; bottom: [ms_field_value]%; transform: translateY([ms_field_value]%); }' // Take [ms_field_value] from arrows_vertical_position_offset
+                    'top' => '[ms_id] .flexslider:not(.filmstrip) .flex-direction-nav li a { bottom: unset; top: calc([ms_field_value]% + 20px); transform: translateY(-[ms_field_value]%); }', // Take [ms_field_value] from arrows_vertical_position_offset
+                    'bottom' => '[ms_id] .flexslider:not(.filmstrip) .flex-direction-nav li a { top: unset; bottom: [ms_field_value]%; transform: translateY([ms_field_value]%); }' // Take [ms_field_value] from arrows_vertical_position_offset
                 ),
                 'scope' => array(
                     'links' => array( 

@@ -967,10 +967,16 @@
     };
     slider.getTarget = function(dir) {
       slider.direction = dir;
+      var step = slider.vars.navStep && carousel ? slider.vars.navStep : 1;
+      var last = slider.last;
+      var current = slider.currentSlide;
+
       if (dir === "next") {
-        return (slider.currentSlide === slider.last) ? 0 : slider.currentSlide + 1;
+        var next = current + step;
+        return (next > last) ? 0 : next;
       } else {
-        return (slider.currentSlide === 0) ? slider.last : slider.currentSlide - 1;
+        var prev = current - step;
+        return (prev < 0) ? last : prev;
       }
     };
 
@@ -1314,7 +1320,8 @@
 
     // Custom MetaSlider specific
     allowResize: true,            // {NEW} Boolean: Whether or not to allow slider.resize on resize event
-    useContainerWidth: false,      // {NEW} Boolean: Force to use slider.width() in doMath
+    useContainerWidth: false,     // {NEW} Boolean: Force to use slider.width() in doMath
+    navStep: 1,                   // {NEW} Integer: Number of slides to move forward/backward (carousel mode only due move param doesn't work)
 
     // Callback API
     start: function(){},            //Callback: function(slider) - Fires when the slider loads the first slide

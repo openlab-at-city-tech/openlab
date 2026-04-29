@@ -168,8 +168,8 @@ return array(
                 'css' => 'css_rules',
                 'css_rules' => array(
                     //'default' => '',
-                    'top' => '[ms_id] .flexslider .flex-direction-nav { bottom: unset; top: 0; } [ms_id] .flexslider .flex-direction-nav a { bottom: unset; top: [ms_field_value]px; }', // Take [ms_field_value] from arrows_vertical_position_offset
-                    'bottom' => '[ms_id] .flexslider .flex-direction-nav { bottom: 0; top: unset; } [ms_id] .flexslider .flex-direction-nav a { top: unset; bottom: [ms_field_value]px; }' // Take [ms_field_value] from arrows_vertical_position_offset
+                    'top' => '[ms_id] .flexslider:not(.filmstrip) .flex-direction-nav { bottom: unset; top: 0; } [ms_id] .flexslider:not(.filmstrip) .flex-direction-nav a { bottom: unset; top: [ms_field_value]px; }', // Take [ms_field_value] from arrows_vertical_position_offset
+                    'bottom' => '[ms_id] .flexslider:not(.filmstrip) .flex-direction-nav { bottom: 0; top: unset; } [ms_id] .flexslider:not(.filmstrip) .flex-direction-nav a { top: unset; bottom: [ms_field_value]px; }' // Take [ms_field_value] from arrows_vertical_position_offset
                 ),
                 'scope' => array(
                     'links' => array( 

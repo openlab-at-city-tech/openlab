@@ -197,5 +197,13 @@ return array(
         'tags' => array('light', 'minimalist'),
         'description' => __('A minimalist theme that gets out of the way so you can showcasing your beautiful pictures. Best used with Image Slides.', 'ml-slider'),
         'images' => array('danny-howe-361436-unsplash.jpg', 'etienne-beauregard-riverin-48305-unsplash.jpg', 'luca-bravo-198062-unsplash.jpg', 'fabio-mangione-236846-unsplash.jpg', 'olav-ahrens-rotne-1087667-unsplash.jpg')
-    )
+    ),
+    'cascade' => array(
+        'folder' => 'cascade',
+        'title' => 'Cascade',
+        'type' => 'free',
+        'supports' => array( 'flex' ),
+        'tags' => array('minimalist', 'vertical'),
+        'description' => __('Cascade is a minimalist theme ideal for vertical sliding.', 'ml-slider')
+    ),
 );

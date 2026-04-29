@@ -36,7 +36,7 @@ self::$instance = new self();
      * 
      * @param array  $images   - Images to upload, if any
      * @param string $theme_id - The folder name of a theme
-     * @param array $extra          Extra data such as slug from quickstart option if available. e.g. 'withcaption' from admin.php?page=metaslider&id=<ID>&metaslider_add_sample_slides=withcaption
+     * @param array $extra          Extra data such as slug from quickstart option if available. e.g. 'withcaption'
      * 
      * @return WP_Error|array - The array of ids that were uploaded
      */
@@ -141,7 +141,7 @@ self::$instance = new self();
      * 
      * @param array|null $theme_id  The name of a theme
      * @param int $count            How many images? (4 for legacy reasons)
-     * @param array $extra          Extra data such as slug from quickstart option if available. e.g. 'withcaption' from admin.php?page=metaslider&id=<ID>&metaslider_add_sample_slides=withcaption
+     * @param array $extra          Extra data such as slug from quickstart option if available. e.g. 'withcaption'
      * 
      * @return array - a formatted image array
      */

@@ -561,8 +561,7 @@ class MetaImageSlide extends MetaSlide
             )
         );
 
-        $ms_slider = new MetaSliderPlugin();
-        $global_settings = $ms_slider->get_global_settings();
+        $global_settings = metaslider_global_settings();
         if (
             !isset($global_settings['mobileSettings']) ||
             (isset($global_settings['mobileSettings']) && true == $global_settings['mobileSettings'])
@@ -860,6 +859,7 @@ class MetaImageSlide extends MetaSlide
                 'class' => "slide-{$this->slide->ID} ms-image {$mobile_class}",
                 'aria-roledescription' => "slide",
                 'data-date' => $this->slide->post_date,
+                'data-filename' => isset($slide['thumb'] ) ? wp_basename($slide['thumb']) : "",
                 'data-slide-type' => $this->identifier
             ), $slide, $this->slider->ID);
 

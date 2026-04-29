@@ -9,4 +9,8 @@
 	&.disabled, &.disabled * {
 		@apply text-gray-light !important;
 	}
+	> a.is-pro-setting {
+		font-size: 0.8rem;
+  		line-height: 1rem;
+	}
 }

@@ -167,8 +167,8 @@ return array(
                 ),
                 'css' => 'css_rules',
                 'css_rules' => array(
-                    'top' => '[ms_id] .flexslider .flex-direction-nav li a { bottom: unset; top: calc([ms_field_value]px + 20px) }', // Take [ms_field_value] from arrows_vertical_position_offset
-                    'bottom' => '[ms_id] .flexslider .flex-direction-nav li a { top: unset; bottom: [ms_field_value]px }' // Take [ms_field_value] from arrows_vertical_position_offset
+                    'top' => '[ms_id] .flexslider:not(.filmstrip) .flex-direction-nav li a { bottom: unset; top: calc([ms_field_value]px + 20px) }', // Take [ms_field_value] from arrows_vertical_position_offset
+                    'bottom' => '[ms_id] .flexslider:not(.filmstrip) .flex-direction-nav li a { top: unset; bottom: [ms_field_value]px }' // Take [ms_field_value] from arrows_vertical_position_offset
                 ),
                 'scope' => array(
                     'links' => array( 

@@ -1,12 +1,9 @@
 <?php if (!defined('ABSPATH')) die('No direct access.'); ?>
 
 <div class="thumb-col-settings">
-	<?php // Handle captions
-	if( isset( $_GET['metaslider_add_sample_slides'] ) ){
-		$slide_caption = (esc_html( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent vitae.' ));
-	} else {
-		$slide_caption = $this->cleanup_content_kses( $this->slide->post_excerpt );
-	}
+	<?php 
+	// Handle captions
+	$slide_caption = $this->cleanup_content_kses( $this->slide->post_excerpt );
 
 	$image_caption = (wp_filter_post_kses($attachment->post_excerpt));
 	$image_description = (wp_filter_post_kses($attachment->post_content));

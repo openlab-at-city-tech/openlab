@@ -5,6 +5,10 @@ jQuery(document).ready(function($){
         }).toArray();
         var clean_slideshow_ids = [...new Set(slideshow_ids)];
     
+        var ms_clean_base_url = function(url) {
+            return url.replace(/\/[a-z]{2}(?=\/|$)/i, '');
+        }
+
         $.each(clean_slideshow_ids, function(index, item) {
             var slideshow_id = this.split('-');
             var id = slideshow_id[2];
@@ -12,7 +16,7 @@ jQuery(document).ready(function($){
                 return true;
             }
             var title = $('<div>').text($('#' + item).attr('aria-label')).html();
-            var html = '<li id="wp-admin-bar-all-slideshows-list" class="ms_admin_menu_item"><a class="ab-item" href="' +  wpData.baseUrl  + '/wp-admin/admin.php?page=metaslider&id=' + id + '" target="_blank">Edit ' + title + '</a></li>';
+            var html = '<li id="wp-admin-bar-all-slideshows-list" class="ms_admin_menu_item"><a class="ab-item" href="' +  ms_clean_base_url(wpData.baseUrl)  + '/wp-admin/admin.php?page=metaslider&id=' + id + '" target="_blank">Edit ' + title + '</a></li>';
             $('#wp-admin-bar-ms-main-menu-default').append(html);
         });
     }

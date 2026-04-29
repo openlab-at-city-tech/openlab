@@ -2,9 +2,9 @@
 Contributors: andergmartins, htmgarcia, publishpress, stevejburge, rochdesigns
 Tags: slider, video slider, image slider, carousel slider, gallery
 Requires at least: 5.0
-Stable tag: 3.103.0
+Stable tag: 3.108.0
 Requires PHP: 7.0
-Tested up to: 6.8
+Tested up to: 6.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -303,6 +303,10 @@ This variety of options is why we love WordPress and why you do too. However, gi
 
 Yes, you can build Elementor slides and Beaver Builder slideshows. You can create Visual Composer sliders and Divi slideshows. No matter what page-builder plugin you use, MetaSlider will work for you whenever you need to build slide shows.
 
+= Where do I send security reports? = 
+
+You can email security@metaslider.com. You can also submit patches via Wordfence and Patchstack. Our Wordfence code is kznqwzcbuliukyojtqqkrzpmmrwmrbry.
+
 == Screenshots ==
 
 1. Image slides with MetaSlider
@@ -319,6 +323,95 @@ Yes, you can build Elementor slides and Beaver Builder slideshows. You can creat
 
 The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+= [3.108.0] - Apr 16, 2026 =
+
+* ADDED: Responsive preview options, #1802;
+* ADDED: Maximum carousel items settings, #1980;
+* ADDED: Cascade theme, #2091;
+* ADDED: Theme to Image carousel demo, #2137;
+* FIXED: Edit frontend links in multilingual sites are broken, #1946;
+* FIXED: MetaSlider block for apiVersion 3, #2123;
+* FIXED: Sanitize theme folder correctly, #2128;
+* FIXED: Productivity guide demo tags, #2131;
+* FIXED: Preview buttons and label improvements, #2132;
+* CHANGED: Make arrows vertical for Jenga theme, #2093;
+* CHANGED: Italian, Spanish and French translation updates, #2115, #2119;
+* CHANGED: Text change for max / min slides, #2142, #2138;
+
+= [3.107.0] - Mar 23, 2026 =
+
+* ADDED: Vertical slideshow quickstart demo, #2051;
+* ADDED: Hide captions based on screen sizes controls per slideshow, #2054;
+* ADDED: Loading bar to creating slideshow screen for quick start, #2057;
+* ADDED: More labels to quick start grid, #2058;
+* ADDED: Layer slides demos to quick start, #2060;
+* ADDED: Local video with captions demo to quick start, #2061;
+* ADDED: Title on Quick Start screen, #2098;
+* ADDED: Import slideshows: support for video captions (text track), #2101;
+* FIXED: Sanitize unserialized data on legacy import, #2094;
+* FIXED: Validate images and sanitize folder data from theme's manifest on legacy import, #2088;
+* FIXED: Custom width/height should be hidden, #2072;
+* FIXED: Don't use $type var due is reserved, #2076;
+* FIXED: Preview notice when sldieshow is empty is interrupted by automatic saving process, #2090;
+* FIXED: Quickstart: move vertical to animation type dropdown, #2100;
+* CHANGED: Update HTML Purifier to 4.19, #2078;
+* CHANGED: Axios to 1.13.5, #2095;
+* CHANGED: Webpack to 5.104.1, #2095;
+* CHANGED: Progress bar location, #2056;
+* CHANGED: Move image settings under "Images Options" panel, #2000, #2007;
+* CHANGED: Italian, Spanish and French translation updates, #2074;
+
+= [3.106.0] - Mar 02, 2026 =
+
+* ADDED: Pro ad to "Add CSS" buton, #1970;
+* FIXED: Precognition theme's navigation in mobile, #1997;
+* FIXED: Disjoint theme's navigation in mobile, #1996;
+* FIXED: Preview, #1998;
+* CHANGED: New quickstart page, #1896, #1981, #1982, #1983, #1984, #1986, #1987, #1988, #1990, #1993, #1999, #2002, #2005, #2006, #2009, #2010, #2013, #2014, #2016, #2018, #2020, #2022, #2024, #2027, #2018, #2019, #2032, #2034, #2035, #2036, #2041, #2050;
+* CHANGED: Italian, Spanish and French translation updates, #1973;
+* CHANGED: Small text correction for theme recommendation, #1979;
+* CHANGED: Legacy quickstart uses the same new quickstart approach, #2043;
+
+= [3.105.0] - Jan 27, 2026 =
+
+* ADDED: Full width options, #1686;
+* ADDED: Make a new "Lightbox" panel in the right sidebar, #1938, #1959;
+* ADDED: Folder slide type landing page, #1949;
+* ADDED: Install/activate MetaSlider Ligthtbox on click, #1957;
+* ADDED: Pro labels to slide types landing pages, #1930;
+* ADDED: Color to the Upgrade menu link, #1958;
+* FIXED: Detect non valid id in slideshow edit screen, #1697;
+* FIXED: Hide "Slide Direction" when Carousel mode is enabled, #1703;
+* FIXED: Visual indicator when hidding elements for device options, #1921;
+* FIXED: "Loop Carousel Continuously" doesn't work with "Reverse", #1940;
+* FIXED: Blend Theme: Links/Buttons on Caption not entirely clickable, #1727;
+* FIXED: Hide center align when carousel mode is enabled, #1743;
+* CHANGED: Some panels start open and others don't, #1952;
+* CHANGED: Slides to Advance text, #1953;
+* CHANGED: Italian, Spanish and French translation updates, #1843;
+* CHANGED: Upgrade add-on for Theme editor vs Pro themes, #1716;
+* CHANGED: Reorder slide types and add free label, #1943;
+* CHANGED: Update tooltip text for link url, #1741;
+* CHANGED: Update legacy libraries text, #1649;
+
+= [3.104.0] - Dec 16, 2025 =
+
+* ADDED: Underline, strikethrough, removeformat and line height options to caption, #1911;
+* ADDED: Promote MetaSlider Lightbox, #1906;
+* ADDED: aria-label to Play/pause, #1915;
+* ADDED: Alphabetical as an option for "Slide Order", #1751;
+* FIXED: If container is enabled, move max-width to container div, #1914;
+* FIXED: metaslider_global_settings() is missing check for multisite, #1923;
+* FIXED: sprintf is not defined, #1919;
+* FIXED: Loop Carousel Continuously breaks preview, #1918;
+* FIXED: Responsive for multi column layout options in settings page, #1902;
+* FIXED: When user interacts (Next/Prev, focus, swipe): switch to aria-live="polite", #1916;
+* CHANGED: Italian, Spanish and French translation updates, #1905;
+* CHANGED: Description for Device settings, #1907;
+* CHANGED: New location for device options, #1616;
+* CHANGED: Use metaslider_global_settings() always, #1924;
+* REMOVED: The privacy notice, #1926;
 
 = [3.103.0] - Nov 20, 2025 =
 

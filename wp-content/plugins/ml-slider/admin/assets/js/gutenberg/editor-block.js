@@ -75,6 +75,7 @@ registerStore('metaslider', {
  *                             registered; otherwise `undefined`.
  */
 registerBlockType('metaslider/slider', {
+    apiVersion: 3,
     title: 'MetaSlider',
     description: __('Use MetaSlider to insert slideshows and sliders in your page', 'ml-slider'),
     icon: icon,

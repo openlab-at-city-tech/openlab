@@ -141,6 +141,7 @@ class MetaSlider
             'carouselMode' => false,
             'carouselMargin' => 5,
             'minItems' => 2,
+            'maxItems' => 0,
             'forceHeight' => false,
             'firstSlideFadeIn' => false,
             'easing' => 'linear',
@@ -152,6 +153,8 @@ class MetaSlider
             'thumb_min_width' => 100,
             'thumb_layout' => 'grid',
             'fullWidth' => true,
+            'forceFullWidth' => false,
+            'fullWidthTarget' => 'body',
             'noConflict' => true,
             'mobileArrows_smartphone' => false,
             'mobileArrows_tablet' => false,
@@ -161,6 +164,10 @@ class MetaSlider
             'mobileNavigation_tablet' => false,
             'mobileNavigation_laptop' => false,
             'mobileNavigation_desktop' => false,
+            'mobileCaption_smartphone' => false,
+            'mobileCaption_tablet' => false,
+            'mobileCaption_laptop' => false,
+            'mobileCaption_desktop' => false,
             'mobileSlideshow_smartphone' => false,
             'mobileSlideshow_tablet' => false,
             'mobileSlideshow_laptop' => false,
@@ -181,7 +188,8 @@ class MetaSlider
             'containerPadding_bottom' => 10,
             'containerPadding_left' => 10,
             'containerMargin_top' => 10,
-            'containerMargin_bottom' => 30
+            'containerMargin_bottom' => 30,
+            'navStep' => 1
         );
         return apply_filters('metaslider_default_parameters', $params);
     }
@@ -295,6 +303,22 @@ class MetaSlider
         
                     return ($sort_setting === 'newest') ? ($dateB - $dateA) : ($dateA - $dateB);
                 });
+            } elseif ($sort_setting === 'atoz' || $sort_setting === 'ztoa') {
+                usort($slides, function ($a, $b) use ($sort_setting) {
+                    // Extract filename from each slide
+                    preg_match('/data-filename="([^"]+)"/', $a, $matchesA);
+                    preg_match('/data-filename="([^"]+)"/', $b, $matchesB);
+
+                    $nameA = isset($matchesA[1]) ? strtolower($matchesA[1]) : '';
+                    $nameB = isset($matchesB[1]) ? strtolower($matchesB[1]) : '';
+
+                    // Compare alphabetically
+                    if ($sort_setting === 'atoz') {
+                        return strcmp($nameA, $nameB);   // A → Z
+                    } else {
+                        return strcmp($nameB, $nameA);   // Z → A
+                    }
+                });
             }
             //else - drag-and-drop (false) (default)
         }
@@ -391,7 +415,7 @@ class MetaSlider
 
         //add mobile settings class
         $devices = ['smartphone', 'tablet', 'laptop', 'desktop'];
-        $features = ['mobileSlideshow' => 'hide-slideshow', 'mobileArrows' => 'hide-arrows', 'mobileNavigation' => 'hide-navigation'];
+        $features = ['mobileSlideshow' => 'hide-slideshow', 'mobileArrows' => 'hide-arrows', 'mobileNavigation' => 'hide-navigation', 'mobileCaption' => 'hide-caption'];
         
         foreach ($features as $setting_prefix => $css_prefix) {
             foreach ($devices as $device) {
@@ -473,8 +497,14 @@ class MetaSlider
      */
     private function get_container_style()
     {
-        // default
-        $style = "max-width: {$this->get_setting( 'width' )}px;";
+        $style = "";
+        $container = metaslider_pro_is_active() && $this->get_setting( 'container' ) === 'true' 
+            ? true : false;
+
+        // @since 3.104 - Move max-width to actual container div if enabled
+        if ( ! $container ) {
+            $style = "max-width: {$this->get_setting( 'width' )}px;";
+        }
 
         // carousels are always 100% wide
         if ($this->get_setting('carouselMode') == 'true' || ( $this->get_setting('fullWidth') == 'true' ) && $this->get_setting('type') != 'coin') {
@@ -687,39 +717,16 @@ class MetaSlider
         return $wp_scripts->add_data($handle, 'data', $script);
     }
 
+    /**
+     * Get device breakpoints
+     * 
+     * @deprecated 3.104 - Use metaslider_breakpoints() instead
+     * 
+     * @return array
+     */
     public function get_breakpoints()
     {
-        $slideshow_defaults = '';
-        $smartphone = 480;
-        $tablet = 768;
-        $laptop = 1024;
-        $desktop = 1440;
-
-        if (is_multisite() && $settings = get_site_option('metaslider_default_settings')) {
-            $slideshow_defaults = $settings;
-        }
-        if ($settings = get_option('metaslider_default_settings')) {
-            $slideshow_defaults = $settings;
-        }
-
-        if (! empty( $slideshow_defaults )) {
-            if(isset($slideshow_defaults['smartphone'])) {
-                $smartphone = $slideshow_defaults['smartphone'];
-            }
-            if(isset($slideshow_defaults['tablet'])) {
-                $tablet = $slideshow_defaults['tablet'];
-            }
-            if(isset($slideshow_defaults['laptop'])) {
-                $laptop = $slideshow_defaults['laptop'];
-            }
-            if(isset($slideshow_defaults['desktop'])) {
-                $desktop = $slideshow_defaults['desktop'];
-            }
-        }
-
-        $breakpoints = array($smartphone, $tablet, $laptop, $desktop);
-
-        return $breakpoints;
+        return metaslider_breakpoints();
     }
 
     public function build_mobile_css($device)
@@ -745,6 +752,9 @@ class MetaSlider
         $class .= ' .hide-navigation-' . $device . ' .flex-control-nav,';
         $class .= ' .hide-navigation-' . $device . ' .filmstrip,';
 
+        // @since 3.107 - Hide caption
+        $class .= ' .hide-caption-' . $device . ' .caption-wrap,';
+
         //hide slideshow @since 3.97
         $class .= ' .hide-slideshow-' . $device . ',';
 
@@ -762,8 +772,7 @@ class MetaSlider
     public function get_mobile_css()
     {
         $css = '';
-        $ms_slider = new MetaSliderPlugin();
-        $global_settings = $ms_slider->get_global_settings();
+        $global_settings = metaslider_global_settings();
         if (
             !isset($global_settings['mobileSettings']) ||
             (isset($global_settings['mobileSettings']) && true == $global_settings['mobileSettings'])

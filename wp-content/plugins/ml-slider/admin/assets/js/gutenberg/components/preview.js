@@ -155,27 +155,29 @@ class MetaSliderPreview extends React.Component {
      * @return dom object
      */
     render() {
-        return <div className={this.props.className + (this.state.previewIsLoading ? '' : ' loading') + ' ms-preview'}>
-            <iframe
-                key="preview-iframe"
-                height={this.state.height}
-                srcDoc={this.state.html || ''}
-                onLoad={this.handleOnLoad}
-                ref={this.iframe}
-            />
-            <div key="trigger" className="ms-preview__trigger"></div>
-            {this.state.previewIsLoading && <Placeholder
-                key="ms-loader"
-                className="ms-loader"
-                label={[icon, ' MetaSlider']}>
-                <Spinner/> {__('Loading slideshow', 'ml-slider')}
-            </Placeholder>}
-            {(this.state.previewErrorMessage) && <Placeholder
-                key="ms-preview-empty"
-                className="ms-loader"
-                label={[icon, ' MetaSlider']}>
-                {this.state.previewErrorMessage}
-            </Placeholder>}
+        return <div {...this.props.blockProps}>
+            <div className={this.props.blockProps.className + (this.state.previewIsLoading ? '' : ' loading') + ' ms-preview'}>
+                <iframe
+                    key="preview-iframe"
+                    height={this.state.height}
+                    srcDoc={this.state.html || ''}
+                    onLoad={this.handleOnLoad}
+                    ref={this.iframe}
+                />
+                <div key="trigger" className="ms-preview__trigger"></div>
+                {this.state.previewIsLoading && <Placeholder
+                    key="ms-loader"
+                    className="ms-loader"
+                    label={[icon, ' MetaSlider']}>
+                    <Spinner/> {__('Loading slideshow', 'ml-slider')}
+                </Placeholder>}
+                {(this.state.previewErrorMessage) && <Placeholder
+                    key="ms-preview-empty"
+                    className="ms-loader"
+                    label={[icon, ' MetaSlider']}>
+                    {this.state.previewErrorMessage}
+                </Placeholder>}
+            </div>
         </div>
     } // end render()
 }

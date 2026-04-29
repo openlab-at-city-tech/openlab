@@ -125,6 +125,20 @@
 			}
 		}
 
+		&.filmstrip {
+
+			a {
+
+				&.flex-prev {
+					left: 10px;
+				}
+
+				&.flex-next {
+					right: 10px;
+				}
+			}
+		}
+
 		.flex-control-paging li a {
 			text-indent: 99999px;
 			overflow: hidden;

@@ -844,3 +844,9 @@
 		}
 	}
 }
+
+@media (max-width: 1024px) {
+	.metaslider.ms-theme-disjoint .flexslider ol.flex-control-nav:not(.flex-control-thumbs) li a {
+	  	width: 30px;
+  	}
+}

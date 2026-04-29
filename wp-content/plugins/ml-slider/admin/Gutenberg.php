@@ -15,6 +15,7 @@ class MetaSlider_Gutenberg
     public function __construct()
     {
         add_action('enqueue_block_editor_assets', array($this,'enqueue_block_scripts'));
+        add_action('enqueue_block_assets', array($this,'enqueue_block_styles'));
         if (isset($_REQUEST['override_preview_style']) && filter_var($_REQUEST['override_preview_style'], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE)) {
             add_filter('metaslider_preview_styles', array($this, 'preview_styles'));
         }
@@ -50,6 +51,16 @@ class MetaSlider_Gutenberg
             'wp.i18n.setLocaleData(' . json_encode($locale_data) . ', \'ml-slider\');',
             'before'
         );
+    }
+
+    /**
+     * Enqueues block styles for editor and preview iframe
+     * 
+     * @since 3.108 - Moved from $this->enqueue_block_scripts()
+     */
+    public function enqueue_block_styles()
+    {
+        $version = MetaSliderPlugin::get_instance()->version;
 
         // Enqueue optional editor only styles
         wp_enqueue_style(

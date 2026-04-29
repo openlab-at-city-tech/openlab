@@ -17,6 +17,8 @@
 			.flex-direction-nav li a {
 				width: 30px;
 				height: 30px;
+				transform: translateY(-50%);
+  				top: calc(50% + 20px);
 	
 				&.flex-prev {
 					right: unset;

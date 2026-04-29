@@ -24,10 +24,10 @@
  
 		// Wrap nav and arrows in a div
 		// When Dots
-		$(".metaslider.has-dots-nav.ms-theme-jenga:not(.has-carousel-mode) .flexslider:not(.filmstrip) > .flex-control-paging, .metaslider.has-dots-nav.ms-theme-jenga:not(.has-carousel-mode) .flexslider:not(.filmstrip) > .flex-direction-nav").wrapAll("<div class='slide-control'></div>");
+		$(".metaslider.has-dots-nav.ms-theme-jenga .flexslider:not(.filmstrip) > .flex-control-paging, .metaslider.has-dots-nav.ms-theme-jenga .flexslider:not(.filmstrip) > .flex-direction-nav, .metaslider.has-dots-onhover-navigation.ms-theme-jenga .flexslider:not(.filmstrip) > .flex-control-paging, .metaslider.has-dots-onhover-navigation.ms-theme-jenga .flexslider:not(.filmstrip) > .flex-direction-nav").wrapAll("<div class='slide-control'></div>");
 
-		// When Carousel
-		$(".metaslider.ms-theme-jenga.has-carousel-mode .flexslider > .flex-control-paging").wrap("<div class='slide-control'></div>");
+		// When only arrows (no dots)
+		$(".metaslider.ms-theme-jenga:not(.has-dots-nav):not(.has-filmstrip-nav) .flexslider:not(.filmstrip) > .flex-direction-nav").wrap("<div class='slide-control'></div>");
 
 		// When Filmstrip
 		$(".metaslider.ms-theme-jenga.has-filmstrip-nav .flexslider:not(.filmstrip) > .flex-direction-nav").wrap("<div class='slide-control'></div>");

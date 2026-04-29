@@ -1,0 +1,139 @@
+{
+    "0": {
+        "title": "Wildlife Photography",
+        "original_id": 1492,
+        "meta": {
+            "logtivity_last_logged": "1771935408",
+            "ml-slider_settings": "a:93:{s:5:\"title\";s:13:\"New Slideshow\";s:4:\"type\";s:4:\"flex\";s:6:\"random\";s:5:\"false\";s:8:\"cssClass\";s:0:\"\";s:8:\"printCss\";s:4:\"true\";s:7:\"printJs\";s:4:\"true\";s:5:\"width\";s:3:\"800\";s:6:\"height\";s:3:\"400\";s:3:\"spw\";i:7;s:3:\"sph\";i:5;s:5:\"delay\";s:4:\"3000\";s:6:\"sDelay\";i:30;s:7:\"opacity\";d:0.7;s:10:\"titleSpeed\";i:500;s:6:\"effect\";s:4:\"fade\";s:10:\"navigation\";s:4:\"true\";s:15:\"filmstrip_delay\";s:4:\"7000\";s:24:\"filmstrip_animationSpeed\";s:3:\"600\";s:5:\"links\";s:4:\"true\";s:10:\"hoverPause\";s:4:\"true\";s:5:\"theme\";s:0:\"\";s:9:\"direction\";s:10:\"horizontal\";s:7:\"reverse\";s:5:\"false\";s:8:\"keyboard\";s:4:\"true\";s:5:\"touch\";s:4:\"true\";s:14:\"animationSpeed\";s:3:\"600\";s:8:\"prevText\";s:8:\"Previous\";s:8:\"nextText\";s:4:\"Next\";s:6:\"slices\";i:15;s:6:\"center\";s:5:\"false\";s:9:\"smartCrop\";s:4:\"true\";s:12:\"cropMultiply\";s:1:\"2\";s:12:\"smoothHeight\";s:5:\"false\";s:12:\"carouselMode\";s:5:\"false\";s:12:\"infiniteLoop\";s:5:\"false\";s:14:\"carouselMargin\";s:1:\"5\";s:8:\"minItems\";s:1:\"1\";s:11:\"forceHeight\";s:5:\"false\";s:16:\"firstSlideFadeIn\";s:5:\"false\";s:6:\"easing\";s:6:\"linear\";s:8:\"autoPlay\";s:4:\"true\";s:4:\"loop\";s:12:\"continuously\";s:11:\"thumb_width\";s:3:\"150\";s:12:\"thumb_height\";s:3:\"100\";s:17:\"responsive_thumbs\";s:4:\"true\";s:15:\"thumb_min_width\";s:3:\"100\";s:9:\"fullWidth\";s:4:\"true\";s:10:\"noConflict\";s:4:\"true\";s:23:\"mobileArrows_smartphone\";s:4:\"true\";s:19:\"mobileArrows_tablet\";s:5:\"false\";s:19:\"mobileArrows_laptop\";s:5:\"false\";s:20:\"mobileArrows_desktop\";s:5:\"false\";s:27:\"mobileNavigation_smartphone\";s:5:\"false\";s:23:\"mobileNavigation_tablet\";s:5:\"false\";s:23:\"mobileNavigation_laptop\";s:5:\"false\";s:24:\"mobileNavigation_desktop\";s:5:\"false\";s:26:\"mobileSlideshow_smartphone\";s:5:\"false\";s:22:\"mobileSlideshow_tablet\";s:5:\"false\";s:22:\"mobileSlideshow_laptop\";s:5:\"false\";s:23:\"mobileSlideshow_desktop\";s:5:\"false\";s:8:\"ariaLive\";s:5:\"false\";s:11:\"ariaCurrent\";s:5:\"false\";s:8:\"tabIndex\";s:5:\"false\";s:9:\"pausePlay\";s:5:\"false\";s:11:\"progressBar\";s:5:\"false\";s:8:\"playText\";s:0:\"\";s:9:\"pauseText\";s:0:\"\";s:10:\"smartphone\";i:480;s:6:\"tablet\";i:768;s:6:\"laptop\";i:1024;s:7:\"desktop\";i:1440;s:13:\"layer_scaling\";s:11:\"up_and_down\";s:12:\"showPlayText\";s:5:\"false\";s:15:\"theme_customize\";a:18:{s:12:\"arrows_color\";s:15:\"rgb(212,137,49)\";s:18:\"arrows_color_hover\";s:13:\"rgb(23,77,81)\";s:11:\"arrows_icon\";s:7:\"#ffffff\";s:17:\"arrows_icon_hover\";s:7:\"#ffffff\";s:16:\"navigation_color\";s:15:\"rgb(212,137,49)\";s:22:\"navigation_color_hover\";s:13:\"rgb(23,77,81)\";s:23:\"navigation_color_active\";s:13:\"rgb(23,77,81)\";s:18:\"caption_background\";s:15:\"rgb(212,137,49)\";s:18:\"caption_text_color\";s:7:\"#ffffff\";s:19:\"caption_links_color\";s:15:\"rgb(250,244,97)\";s:18:\"image_button_color\";s:15:\"rgb(212,137,49)\";s:18:\"image_button_hover\";s:15:\"rgb(168,102,25)\";s:11:\"play_button\";s:7:\"#000000\";s:17:\"play_button_hover\";s:7:\"#000000\";s:16:\"play_button_icon\";s:7:\"#ffffff\";s:22:\"play_button_icon_hover\";s:7:\"#ffffff\";s:20:\"slideshow_background\";s:4:\"#fff\";s:28:\"slideshow_progress_bar_color\";s:4:\"#fff\";}s:12:\"thumb_layout\";s:4:\"grid\";s:15:\"fullWidthTarget\";s:4:\"body\";s:12:\"extra_effect\";s:4:\"none\";s:7:\"navStep\";s:0:\"\";s:15:\"smartCropSource\";s:9:\"slideshow\";s:10:\"imageWidth\";s:3:\"400\";s:11:\"imageHeight\";s:3:\"400\";s:20:\"container_background\";s:19:\"rgba(255,255,255,0)\";s:20:\"containerPadding_top\";s:2:\"10\";s:22:\"containerPadding_right\";s:2:\"10\";s:23:\"containerPadding_bottom\";s:2:\"10\";s:21:\"containerPadding_left\";s:2:\"10\";s:19:\"containerMargin_top\";s:2:\"10\";s:22:\"containerMargin_bottom\";s:2:\"30\";s:14:\"forceFullWidth\";s:5:\"false\";s:7:\"loading\";s:5:\"false\";s:8:\"lazyLoad\";s:5:\"false\";s:8:\"lightbox\";s:5:\"false\";s:9:\"container\";s:5:\"false\";}",
+            "metaslider_slideshow_theme": "a:6:{s:6:\"folder\";s:5:\"nexus\";s:5:\"title\";s:5:\"Nexus\";s:4:\"type\";s:4:\"free\";s:8:\"supports\";a:1:{i:0;s:4:\"flex\";}s:11:\"description\";s:164:\"Featuring a built-in button with custom link, Nexus seamlessly integrates key points and interactive elements, making your presentation both engaging and navigable.\";s:12:\"instructions\";s:90:\"To add a button to the Nexus theme, enter the URL and the button text into the \"Link\" tab.\";}"
+        },
+        "slides": [
+            {
+                "original_id": 1494,
+                "order": 0,
+                "post_excerpt": "<h3><span style=\"color: rgb(255, 255, 255); font-size: 16px;\">Owl<\/span><\/h3> <div>[metaslider_hide devices=\"smartphone\"]<span style=\"font-size: 14px;\">A quiet observer, known for sharp vision and calm precision<\/span>[\/metaslider_hide]<\/div>",
+                "image": "pexels-dsd-143941-1376986",
+                "image_alt": "pexels-dsd-143941-1376986",
+                "meta": {
+                    "logtivity_last_logged": "1772454932",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Wildlife Photography Slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Wildlife Photography Slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2025\/05\/pexels-dsd-143941-1376986-scaled.jpg"
+            },
+            {
+                "original_id": 1499,
+                "order": 1,
+                "post_excerpt": "<h3><span style=\"color: rgb(255, 255, 255); font-size: 16px;\">Monkey<\/span><\/h3> <div>[metaslider_hide devices=\"smartphone\"]<span style=\"font-size: 14px;\">Playful and curious, always exploring its surroundings.<\/span>[\/metaslider_hide]<\/div>",
+                "image": "pexels-dsd-143941-1829979",
+                "image_alt": "pexels-dsd-143941-1829979",
+                "meta": {
+                    "logtivity_last_logged": "1772454932",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Wildlife Photography Slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Wildlife Photography Slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2025\/05\/pexels-dsd-143941-1829979-scaled.jpg"
+            },
+            {
+                "original_id": 1500,
+                "order": 2,
+                "post_excerpt": "<h3><span style=\"color: rgb(255, 255, 255); font-size: 16px;\">Parrot<\/span><\/h3> <div>[metaslider_hide devices=\"smartphone\"]<span style=\"font-size: 14px;\">Vibrant and expressive, famous for color and communication.<\/span>[\/metaslider_hide]<\/div>",
+                "image": "pexels-couleur-2317904",
+                "image_alt": "pexels-couleur-2317904",
+                "meta": {
+                    "logtivity_last_logged": "1772454932",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Wildlife Photography Slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Wildlife Photography Slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2025\/05\/pexels-couleur-2317904-scaled.jpg"
+            },
+            {
+                "original_id": 1501,
+                "order": 3,
+                "post_excerpt": "<h3><span style=\"color: rgb(255, 255, 255); font-size: 16px;\">Lion<\/span><\/h3> <div>[metaslider_hide devices=\"smartphone\"]<span style=\"font-size: 14px;\">Powerful and confident, a symbol of strength and leadership.<\/span>[\/metaslider_hide]<\/div>",
+                "image": "pexels-pixabay-33045",
+                "image_alt": "pexels-pixabay-33045",
+                "meta": {
+                    "logtivity_last_logged": "1772454933",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Wildlife Photography Slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Wildlife Photography Slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2025\/05\/pexels-pixabay-33045-scaled.jpg"
+            },
+            {
+                "original_id": 1502,
+                "order": 4,
+                "post_excerpt": "<h3><span style=\"color: rgb(255, 255, 255); font-size: 16px;\">Zebra<\/span><\/h3> <div>[metaslider_hide devices=\"smartphone\"]<span style=\"font-size: 14px;\">Distinctive and social, moving together in striking patterns.<\/span>[\/metaslider_hide]<\/div>",
+                "image": "pexels-pixabay-247376",
+                "image_alt": "pexels-pixabay-247376",
+                "meta": {
+                    "logtivity_last_logged": "1772454933",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Wildlife Photography Slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Wildlife Photography Slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2025\/05\/pexels-pixabay-247376.jpg"
+            }
+        ]
+    },
+    "metadata": {
+        "version": "3.105.0",
+        "date": "2026\/03\/02",
+        "domain": "https:\/\/demo.metaslider.com",
+        "environment": "production"
+    }
+}

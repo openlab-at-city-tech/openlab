@@ -32,7 +32,7 @@
 								<button
                                     @click.prevent="preview()"
                                     id="preview-slideshow"
-                                    title="<?php esc_attr_e('Save & open the preview', 'ml-slider'); echo esc_attr(_x(' (alt + p)', 'This is a keyboard shortcut.', 'ml-slider')); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
+                                    title="<?php esc_attr_e('Save & open the preview', 'ml-slider'); echo esc_attr(_x(' (Use Alt + P keys)', 'This is a keyboard shortcut.', 'ml-slider')); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar"
                                     :disabled="locked"
                                     :class="{'disabled': locked}">
                                     <svg
@@ -83,10 +83,11 @@
 
 								<!-- Pro only add css feature -->
 								<?php ob_start(); ?>
-								<button @click.prevent="showCSSManagerNotice()" title="<?php esc_attr_e('Adding custom CSS is a MetaSlider Pro feature. Click to learn more.', 'ml-slider'); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar" :class="{'disabled':true}">
-                                <svg class="w-6 p-0.5 text-gray-dark" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                                </svg>
+								<button @click.prevent="showCSSManagerNotice()" title="<?php esc_attr_e('Adding custom CSS is a MetaSlider Pro feature. Click to learn more.', 'ml-slider'); ?>" class="ms-toolbar-button tipsy-tooltip-bottom-toolbar" :class="{'disabled':false}">
+                                    <?php 
+                                    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                                    echo metaslider_upgrade_pro_small_btn( '', false ); 
+                                    ?>
 									<span class="text-sm text-gray-darkest"><?php esc_html_e('Add CSS', 'ml-slider'); ?></span>
 								</button>
 								<?php echo apply_filters('metaslider_add_css_module', ob_get_clean()); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>

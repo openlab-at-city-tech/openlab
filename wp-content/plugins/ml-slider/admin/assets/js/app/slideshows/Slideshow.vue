@@ -74,9 +74,16 @@ export default {
 			let slideshowId = data && data.hasOwnProperty('slideshowId') ? data.slideshowId : this.current.id
 			let themeId = data && data.hasOwnProperty('themeId') ? data.themeId : this.current.theme.folder
 
-			this.save().then(() => {
+			const tableSlides = document.getElementById("metaslider-slides-list");
+			const hasSlides = tableSlides && tableSlides.querySelector("tr") !== null;
+
+			if (hasSlides) {
+				this.save().then(() => {
+					this.preview(slideshowId, themeId)
+				})
+			} else {
 				this.preview(slideshowId, themeId)
-			})
+			}
 		})
 
 		EventManager.$on(['metaslider/creating-slides', 'metaslider/updating-slide'], () => {

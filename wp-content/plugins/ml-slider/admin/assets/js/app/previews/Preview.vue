@@ -13,39 +13,63 @@
 			hide-close-button>
 			<div
 				slot="box-action"
-				class="flex w-full bg-gray-light fixed top-0 left-0 right-0 h-8 items-center justify-between">
-				<div class="flex h-full">
-                    <h2
-                        :class="{
-                            'bg-white text-black': overlayTheme !== 'dark',
-                            'bg-black text-white': overlayTheme === 'dark'
-                        }"
-                        class="font-bold flex items-center h-full m-0 pl-6 pr-8 relative overflow-hidden uppercase leading-normal">
-                        {{ __('Preview', 'ml-slider') }}
-                    </h2>
+				class="flex w-full bg-gray-light fixed top-0 left-0 right-0 h-12 items-center justify-between">
+				<div class="flex w-full justify-center items-center">
                     <button
-                        :title="__('Toggle overlay type', 'ml-slider') + ' (L)'"
-                        class="lightbulb w-10 px-2 hover:bg-black hover:text-white hover:p-px transition duration-200"
+                        :title="__('Dark / Light Mode (Use L key)', 'ml-slider') "
+                        class="lightbulb w-14 p-2 hover:bg-black hover:text-white transition duration-200"
                         :class="{
-                            'bg-black text-white p-px': overlayTheme !== 'dark',
+                            'bg-black text-white': overlayTheme !== 'dark',
                             'bg-transparent text-black': overlayTheme === 'dark'
                         }"
                         @click="toggleLights">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <svg style="width:32px;height:32px;margin: 0 auto;" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                         </svg>
                     </button>
                     <button
-                        :title="__('Toggle full width', 'ml-slider') + ' (F)'"
+                        :title="__('Toggle full width (Use F key)', 'ml-slider')"
+                        :disabled="showLaptopWidth || showTabletWidth || showSmartphoneWidth"
                         :class="{
-                            'bg-black text-white p-px': showFullwidth,
-                            'bg-transparent text-black': !showFullwidth
+                            'bg-black text-white': showFullwidth && !(showLaptopWidth || showTabletWidth || showSmartphoneWidth),
+                            'bg-transparent text-black': !showFullwidth && !(showLaptopWidth || showTabletWidth || showSmartphoneWidth),
+                            'opacity-50 cursor-not-allowed': showLaptopWidth || showTabletWidth || showSmartphoneWidth
                         }"
-                        class="w-10 px-2 hover:bg-black hover:text-white hover:p-px transition duration-200"
+                        class="w-14 p-2 hover:bg-black hover:text-white transition duration-200"
                         @click="toggleFullwidth">
-						<span v-if="showFullwidth" class="dashicons dashicons-editor-contract w-full"></span>
-						<span v-else class="dashicons dashicons-editor-expand"></span>
+						<span v-if="showFullwidth" class="dashicons dashicons-editor-contract w-full text-xl"></span>
+						<span v-else class="dashicons dashicons-editor-expand text-xl"></span>
                     </button>
+					<button v-if="mobileSettingsEnabled"
+						:title="__('Laptop preview', 'ml-slider')"
+						:class="{
+							'bg-black text-white': showLaptopWidth,
+							'bg-transparent text-black': !showLaptopWidth
+						}"
+						class="w-14 p-2 hover:bg-black hover:text-white transition duration-200"
+						@click="toggleDevice('laptop')">
+						<span class="dashicons dashicons-laptop text-xl"></span>
+					</button>
+					<button v-if="mobileSettingsEnabled"
+						:title="__('Tablet preview', 'ml-slider')"
+						:class="{
+							'bg-black text-white': showTabletWidth,
+							'bg-transparent text-black': !showTabletWidth
+						}"
+						class="w-14 p-2 hover:bg-black hover:text-white transition duration-200"
+						@click="toggleDevice('tablet')">
+						<span class="dashicons dashicons-tablet text-xl"></span>
+					</button>
+					<button v-if="mobileSettingsEnabled"
+						:title="__('Smartphone preview', 'ml-slider')"
+						:class="{
+							'bg-black text-white': showSmartphoneWidth,
+							'bg-transparent text-black': !showSmartphoneWidth
+						}"
+						class="w-14 p-2 hover:bg-black hover:text-white transition duration-200"
+						@click="toggleDevice('smartphone')">
+						<span class="dashicons dashicons-smartphone text-xl"></span>
+					</button>
 				</div>
 				<button
 					:title="__('Exit preview', 'ml-slider') + ' (ESC)'"
@@ -105,8 +129,12 @@ export default {
 			previewIframe: {},
 			overlayTheme: 'dark',
 			showFullwidth: false,
+			showLaptopWidth: false,
+			showTabletWidth: false,
+			showSmartphoneWidth: false,
 			notFullySupported: !('srcdoc' in document.createElement('iframe')),
-			resizeEvent: {}
+			resizeEvent: {},
+			mobileSettingsEnabled: typeof metaslider.mobile_settings !== 'undefined' && metaslider.mobile_settings === '1' ? true : false
 		}
 	},
 	computed: {
@@ -193,6 +221,7 @@ export default {
 		},
 		setupIframe(event) {
 			this.previewIframe = {
+				iframe: event.target,
 				window: event.target.contentWindow,
 				document: event.target.contentDocument,
 				container: event.target.contentDocument.getElementById('preview-container'),
@@ -222,6 +251,10 @@ export default {
 			this.iframeLoaded = true
 		},
 		toggleFullwidth() {
+			this.showTabletWidth = false;
+			this.showSmartphoneWidth = false;
+			this.showLaptopWidth = false;
+
 			this.showFullwidth = !this.showFullwidth
 
 			// Set the container and slideshow to full width
@@ -230,6 +263,57 @@ export default {
 
 			// trigger a resize in the iframe to let the slider recalculate itself
 			this.previewIframe.window.dispatchEvent(this.resizeEvent)
+		},
+		toggleDevice(device) {
+			this.showFullwidth = false;
+			
+			const breakpoints = typeof metaslider.breakpoints === 'object' ? metaslider.breakpoints : {
+				laptop: 1024,
+				tablet: 768,
+				smartphone: 480
+			};
+
+			// Set the container and slideshow to full width
+			switch (device) {
+				default:
+				case 'laptop':
+					this.showTabletWidth = false;
+					this.showSmartphoneWidth = false;
+					
+					this.showLaptopWidth = !this.showLaptopWidth
+
+
+					this.previewIframe.iframe.style.width = this.showLaptopWidth ? breakpoints.laptop + 'px' : '100%'
+					this.previewIframe.container.style.maxWidth = this.showLaptopWidth ? breakpoints.laptop + 'px' : this.maxWidth
+					this.previewIframe.slideshow.style.maxWidth = this.showLaptopWidth ? breakpoints.laptop + 'px' : this.maxWidth
+					break
+				case 'tablet':
+					this.showLaptopWidth = false;
+					this.showSmartphoneWidth = false;
+
+					this.showTabletWidth = !this.showTabletWidth
+
+					this.previewIframe.iframe.style.width = this.showTabletWidth ? breakpoints.tablet + 'px' : '100%'
+					this.previewIframe.container.style.maxWidth = this.showTabletWidth ? breakpoints.tablet + 'px' : this.maxWidth
+					this.previewIframe.slideshow.style.maxWidth = this.showTabletWidth ? breakpoints.tablet + 'px' : this.maxWidth
+					break
+				case 'smartphone':
+					this.showLaptopWidth = false;
+					this.showTabletWidth = false;
+
+					this.showSmartphoneWidth = !this.showSmartphoneWidth
+
+					this.previewIframe.iframe.style.width = this.showSmartphoneWidth ? breakpoints.smartphone + 'px' : '100%'
+					this.previewIframe.container.style.maxWidth = this.showSmartphoneWidth ? breakpoints.smartphone + 'px' : this.maxWidth
+					this.previewIframe.slideshow.style.maxWidth = this.showSmartphoneWidth ? breakpoints.smartphone + 'px' : this.maxWidth
+					break
+			}
+			
+			// hide content while reloading to avoid glitch
+			this.iframeLoaded = false
+			
+			// reload iframe content to ensure layout recalculates for new screen size
+			this.previewIframe.iframe.contentWindow.location.reload()
 		},
 		toggleLights() {
 			this.overlayTheme = 'dark' === this.overlayTheme ? 'light' : 'dark'
@@ -256,6 +340,12 @@ export default {
 
 <style lang="scss">
 	@import '../assets/styles/globals.scss';
+	#preview-component .dashicons,
+	#preview-component .dashicons:before {
+		font-size: 30px;
+		width: 32px;
+  		height: 32px;
+	}
 	div#preview-component {
 		float: left;
 		> .sweet-modal-overlay {

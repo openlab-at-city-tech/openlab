@@ -61,16 +61,9 @@
 					{{ __('Update license key', 'ml-slider') }}
 				</template>
 			</text-single-input>
-			<switch-single-input v-model="globalSettings.optIn" @change="saveGlobalSettings()">
-				<template slot="header">{{ __('Help Improve MetaSlider', 'ml-slider') }}</template>
-				<template slot="description">
-                    <span v-html="optInDescription"/>
-                    <small v-if="Object.prototype.hasOwnProperty.call(optinInfo, 'id')" class="italic">Activated by user id #{{ optinInfo.id }} ({{ optinInfo.email }}) on {{ new Date(optinInfo.time * 1000).toLocaleDateString() }}</small>
-                </template>
-			</switch-single-input>
 			<switch-single-input v-model="globalSettings.mobileSettings" @change="saveGlobalSettings()">
 				<template slot="header">{{ __('Enable Device Settings', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Add option to hide slides and captions per screen size.', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Add option to hide slides, captions, arrows, navigation, and the slideshow per screen size.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<template v-if="globalSettings.mobileSettings">
 				<div id="mobile-settings" class="bg-white shadow mb-4 relative px-4 py-5 md:p-6">
@@ -82,34 +75,34 @@
 							{{ __('Set breakpoints for different screen sizes', 'ml-slider') }}
 						</div>
 					</div>
-					<div class="row">
-						<div class="col">
-							<div class="mobile-icon-wrap text-gray-dark">
-								<span class="dashicons dashicons-smartphone"></span>
+					<div class="flex flex-wrap ms-settings-row">
+						<div class="flex items-center ms-settings-col">
+							<div class="mobile-icon-wrap text-gray-dark flex items-center">
+								<span class="dashicons dashicons-smartphone text-3xl"></span>
 								<span class="ms-icon-name">{{ __('Smartphone', 'ml-slider') }}</span>
 							</div>
 							<text-multiple-input v-model="slideshowDefaults.smartphone" name="default-slideshow-smartphone" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
-						<div class="col">
-							<div class="mobile-icon-wrap text-gray-dark">
-								<span class="dashicons dashicons-tablet"></span>
+						<div class="flex items-center ms-settings-col">
+							<div class="mobile-icon-wrap text-gray-dark flex items-center">
+								<span class="dashicons dashicons-tablet text-3xl"></span>
 								<span class="ms-icon-name">{{ __('Tablet', 'ml-slider') }}</span>
 							</div>
 							<text-multiple-input v-model="slideshowDefaults.tablet" name="default-slideshow-tablet" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
-						<div class="col">
-							<div class="mobile-icon-wrap text-gray-dark">
-								<span class="dashicons dashicons-laptop"></span>
+						<div class="flex items-center ms-settings-col">
+							<div class="mobile-icon-wrap text-gray-dark flex items-center">
+								<span class="dashicons dashicons-laptop text-3xl"></span>
 								<span class="ms-icon-name">{{ __('Laptop', 'ml-slider') }}</span>
 							</div>
 							<text-multiple-input v-model="slideshowDefaults.laptop" name="default-slideshow-laptop" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
-						<div class="col">
-							<div class="mobile-icon-wrap text-gray-dark">
-								<span class="dashicons dashicons-desktop"></span>
+						<div class="flex items-cente ms-settings-col">
+							<div class="mobile-icon-wrap text-gray-dark flex items-center">
+								<span class="dashicons dashicons-desktop text-3xl"></span>
 								<span class="ms-icon-name">{{ __('Desktop', 'ml-slider') }}</span>
 							</div>
 							<text-multiple-input v-model="slideshowDefaults.desktop" name="default-slideshow-desktop" @click="saveSlideshowDefaultSettings()">
@@ -123,7 +116,7 @@
 				<template slot="description">{{ __('This setting allows you to disable the legacy slideshow libraries: Nivo Slider, Coin Slider, and Responsive Slides', 'ml-slider') }}</template>
 				<template slot="legacy-notices" v-if="legacySlideshows === 0">
 					<div class="notice notice-success ml-legacy-notice">
-                    	<p>{{ __('You can safely enable this setting. None of your slideshows use the legacy libraries.', 'ml-slider') }}</p>
+                    	<p>{{ __('We recommend disabling these libraries. You can safely disable the libraries. None of your slideshows use the legacy libraries.', 'ml-slider') }}</p>
 					</div>
                 </template>
 				<template slot="legacy-notices" v-if="legacySlideshows !== 0">
@@ -178,8 +171,8 @@
 							{{ __('Set default sorting options and items per page for your Dashboard.', 'ml-slider') }}
 						</div>
 					</div>
-					<div class="row">
-						<div class="col">
+					<div class="flex flex-wrap ms-settings-row">
+						<div class="flex items-center ms-settings-col">
 							<select-field-input 
 								v-model="globalSettings.dashboardSort" 
 								:options="[
@@ -191,7 +184,7 @@
 								<template slot="header">{{ __('Sort Slideshows By', 'ml-slider') }}</template>
 							</select-field-input>
 						</div>
-						<div class="col">
+						<div class="flex items-center ms-settings-col">
 							<select-field-input 
 								v-model="globalSettings.dashboardOrder" 
 								:options="[
@@ -202,7 +195,7 @@
 								<template slot="header">{{ __('Order By', 'ml-slider') }}</template>
 							</select-field-input>
 						</div>
-						<div class="col">
+						<div class="flex items-center ms-settings-col">
 							<text-single-input 
 								v-model="globalSettings.dashboardItems" 
 								name="dashboard-items" 
@@ -223,7 +216,7 @@
 		<template slot="fields">
 			<switch-single-input-ad :value="false">
 				<template slot="header">{{ __('Flush Cache when Saving Changes', 'ml-slider') }}</template>
-				<template slot="description">{{ __('This setting allows you to automatically flush cache when saving slideshow changes. Support WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to automatically flush the cache when saving slideshow changes. Supports WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
 				<template slot="proText">{{ __('This feature is available in MetaSlider Pro', 'ml-slider') }}</template>
 			</switch-single-input-ad>
 		</template>
@@ -244,24 +237,13 @@
 					{{ __('Change the maximum custom fields for Post Feed and WooCommerce', 'ml-slider') }}
 				</template>
 			</text-single-input>
-			<text-single-input 
-				v-model="proSettings.postFeedTitleLength" 
-				name="default-slideshow-width" 
-				wrapper-class="w-24" 
-				@click="saveProSettings()">
-				<template slot="header">{{ __('Maximum Title Length in Post Feed and WooCommerce Slides', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Select the maximum title length for post titles.', 'ml-slider') }}</template>
-				<template slot="input-label">
-					{{ __('Change the maximum title length for Post Feed and WooCommerce post titles', 'ml-slider') }}
-				</template>
-			</text-single-input>
 			<switch-single-input v-model="proSettings.legacyThemeEditor" @change="saveProSettings()">
 				<template slot="header">{{ __('Enable Legacy Theme Editor', 'ml-slider') }}</template>
 				<template slot="description">{{ __('This setting allows you to enable the legacy Theme Editor.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<switch-single-input v-model="proSettings.flushCache" @change="saveProSettings()">
 				<template slot="header">{{ __('Flush Cache when Saving Changes', 'ml-slider') }}</template>
-				<template slot="description">{{ __('This setting allows you to automatically flush cache when saving slideshow changes. Support WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to automatically flush the cache when saving slideshow changes. Supports WP Rocket, WP Super Cache, W3 Total Cache, WP-Optimize and WP Fastest Cache plugins.', 'ml-slider') }}</template>
 			</switch-single-input>
 		</template>
 	</split-layout>
@@ -292,7 +274,6 @@ export default {
 	data() {
 		return {
             loading: true,
-            optinInfo: {},
 			slideshowDefaults: {
 				title: '',
 				fullWidth: false,
@@ -307,7 +288,6 @@ export default {
             },
             globalSettings: {
 				license: '',
-				optIn: false,
 				adminBar: true,
 				editLink: false,
 				legacy: true,
@@ -325,7 +305,6 @@ export default {
 			proSettings: {
 				postFeedFields: 100,
 				legacyThemeEditor: false, // false means legacy Theme editor is disabled
-				postFeedTitleLength: 100,
 				flushCache: false
 			},
 			legacySlideshows: {}
@@ -340,12 +319,6 @@ export default {
 			return this.sprintf(
                 this.__('If you are a pro member, enter your license key here to receive updates. %s', 'ml-slider'),
                 `<a target="_blank" href="${this.hoplink}">${this.__('Upgrade here', 'ml-slider')}</a>`
-            )
-		},
-		optInDescription() {
-			return this.sprintf(
-                this.__('Opt-in to let MetaSlider responsibly collect information about how you use our plugin. This is disabled by default, but may have been enabled by via a notification. %s', 'ml-slider'),
-                `<a target="_blank" href="${this.privacyLink}">${this.__('View our detailed privacy policy', 'ml-slider')}</a>`
             )
 		},
 		isDisabled() {
@@ -417,9 +390,6 @@ export default {
 		}).catch(error => {
 			this.notifyError('metaslider/settings-load-error', error.response, true)
 		})
-		Settings.get('optin_user_extras').then(({data}) => {
-			this.optinInfo = data.data
-		})
 		Slideshow.legacy().then(({data}) => {
 			this.legacySlideshows = data.data
 		})
@@ -439,10 +409,6 @@ export default {
 			})
 		},
 		async saveGlobalSettings() {
-            this.optinInfo = {}
-            if (this.globalSettings.optIn) {
-                await Settings.saveGlobalSettingsSingle('optin_via', 'manual')
-            }
 			const settings = JSON.stringify(this.globalSettings)
 			Settings.saveGlobalSettings(settings).then(({data}) => {
 				this.notifyInfo(

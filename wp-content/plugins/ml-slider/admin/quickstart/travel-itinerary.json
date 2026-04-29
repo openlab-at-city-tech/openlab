@@ -1,0 +1,139 @@
+{
+    "0": {
+        "title": "Travel Itinerary",
+        "original_id": 2412,
+        "meta": {
+            "logtivity_last_logged": "1771935188",
+            "ml-slider_settings": "a:93:{s:5:\"title\";s:13:\"New Slideshow\";s:4:\"type\";s:4:\"flex\";s:6:\"random\";s:5:\"false\";s:8:\"cssClass\";s:0:\"\";s:8:\"printCss\";s:4:\"true\";s:7:\"printJs\";s:4:\"true\";s:5:\"width\";s:4:\"1800\";s:6:\"height\";s:3:\"700\";s:3:\"spw\";i:7;s:3:\"sph\";i:5;s:5:\"delay\";s:4:\"3000\";s:6:\"sDelay\";i:30;s:7:\"opacity\";d:0.7;s:10:\"titleSpeed\";i:500;s:6:\"effect\";s:5:\"slide\";s:12:\"extra_effect\";s:4:\"none\";s:10:\"navigation\";s:4:\"true\";s:15:\"filmstrip_delay\";s:4:\"7000\";s:24:\"filmstrip_animationSpeed\";s:3:\"600\";s:5:\"links\";s:4:\"true\";s:10:\"hoverPause\";s:4:\"true\";s:5:\"theme\";s:0:\"\";s:9:\"direction\";s:10:\"horizontal\";s:7:\"reverse\";s:5:\"false\";s:8:\"keyboard\";s:4:\"true\";s:5:\"touch\";s:4:\"true\";s:14:\"animationSpeed\";s:3:\"600\";s:8:\"prevText\";s:8:\"Previous\";s:8:\"nextText\";s:4:\"Next\";s:6:\"slices\";i:15;s:6:\"center\";s:5:\"false\";s:9:\"smartCrop\";s:4:\"true\";s:15:\"smartCropSource\";s:5:\"image\";s:10:\"imageWidth\";s:4:\"1200\";s:11:\"imageHeight\";s:3:\"600\";s:12:\"cropMultiply\";s:4:\"true\";s:12:\"smoothHeight\";s:5:\"false\";s:12:\"carouselMode\";s:5:\"false\";s:12:\"infiniteLoop\";s:5:\"false\";s:14:\"carouselMargin\";s:1:\"5\";s:8:\"minItems\";s:1:\"2\";s:11:\"forceHeight\";s:5:\"false\";s:16:\"firstSlideFadeIn\";s:5:\"false\";s:6:\"easing\";s:6:\"linear\";s:8:\"autoPlay\";s:4:\"true\";s:4:\"loop\";s:12:\"continuously\";s:11:\"thumb_width\";s:3:\"150\";s:12:\"thumb_height\";s:3:\"100\";s:17:\"responsive_thumbs\";s:4:\"true\";s:15:\"thumb_min_width\";s:3:\"100\";s:12:\"thumb_layout\";s:4:\"grid\";s:9:\"fullWidth\";s:4:\"true\";s:14:\"forceFullWidth\";s:5:\"false\";s:15:\"fullWidthTarget\";s:4:\"body\";s:10:\"noConflict\";s:4:\"true\";s:23:\"mobileArrows_smartphone\";s:4:\"true\";s:19:\"mobileArrows_tablet\";s:5:\"false\";s:19:\"mobileArrows_laptop\";s:5:\"false\";s:20:\"mobileArrows_desktop\";s:5:\"false\";s:27:\"mobileNavigation_smartphone\";s:4:\"true\";s:23:\"mobileNavigation_tablet\";s:5:\"false\";s:23:\"mobileNavigation_laptop\";s:5:\"false\";s:24:\"mobileNavigation_desktop\";s:5:\"false\";s:26:\"mobileSlideshow_smartphone\";s:5:\"false\";s:22:\"mobileSlideshow_tablet\";s:5:\"false\";s:22:\"mobileSlideshow_laptop\";s:5:\"false\";s:23:\"mobileSlideshow_desktop\";s:5:\"false\";s:8:\"ariaLive\";s:4:\"true\";s:11:\"ariaCurrent\";s:4:\"true\";s:8:\"tabIndex\";s:4:\"true\";s:9:\"pausePlay\";s:5:\"false\";s:11:\"progressBar\";s:5:\"false\";s:7:\"loading\";s:5:\"false\";s:8:\"lazyLoad\";s:5:\"false\";s:8:\"playText\";s:0:\"\";s:9:\"pauseText\";s:0:\"\";s:9:\"container\";s:5:\"false\";s:20:\"container_background\";s:19:\"rgba(255,255,255,0)\";s:20:\"containerPadding_top\";s:2:\"10\";s:22:\"containerPadding_right\";s:2:\"10\";s:23:\"containerPadding_bottom\";s:2:\"10\";s:21:\"containerPadding_left\";s:2:\"10\";s:19:\"containerMargin_top\";s:2:\"10\";s:22:\"containerMargin_bottom\";s:2:\"30\";s:7:\"navStep\";s:0:\"\";s:10:\"smartphone\";i:480;s:6:\"tablet\";i:768;s:6:\"laptop\";i:1024;s:7:\"desktop\";i:1440;s:15:\"theme_customize\";a:15:{s:12:\"arrows_color\";s:22:\"rgba(255,255,255,0.75)\";s:18:\"arrows_color_hover\";s:22:\"rgba(255,255,255,0.75)\";s:17:\"arrows_text_color\";s:7:\"#000000\";s:11:\"arrows_icon\";s:7:\"#000000\";s:17:\"arrows_icon_hover\";s:7:\"#000000\";s:16:\"navigation_color\";s:7:\"#ffffff\";s:18:\"caption_background\";s:22:\"rgba(255,255,255,0.75)\";s:18:\"caption_text_color\";s:7:\"#000000\";s:19:\"caption_links_color\";s:7:\"#000000\";s:11:\"play_button\";s:7:\"#000000\";s:17:\"play_button_hover\";s:7:\"#000000\";s:16:\"play_button_icon\";s:7:\"#ffffff\";s:22:\"play_button_icon_hover\";s:7:\"#ffffff\";s:20:\"slideshow_background\";s:19:\"rgba(255,255,255,0)\";s:28:\"slideshow_progress_bar_color\";s:4:\"#fff\";}s:13:\"layer_scaling\";s:11:\"up_and_down\";s:12:\"showPlayText\";s:5:\"false\";s:8:\"lightbox\";s:5:\"false\";}",
+            "metaslider_slideshow_theme": "a:7:{s:6:\"folder\";s:5:\"radix\";s:5:\"title\";s:5:\"Radix\";s:4:\"type\";s:4:\"free\";s:8:\"supports\";a:4:{i:0;s:4:\"flex\";i:1;s:10:\"responsive\";i:2;s:4:\"nivo\";i:3;s:4:\"coin\";}s:4:\"tags\";a:3:{i:0;s:5:\"light\";i:1;s:7:\"special\";i:2;s:6:\"square\";}s:11:\"description\";s:66:\"This theme has a unique design that gives it a sophisticated look.\";s:6:\"images\";a:5:{i:0;s:35:\"margo-brodowicz-183156-unsplash.jpg\";i:1;s:29:\"manki-kim-269196-unsplash.jpg\";i:2;s:30:\"artem-bali-680991-unsplash.jpg\";i:3;s:32:\"ella-olsson-1094090-unsplash.jpg\";i:4;s:35:\"muhammad-rizki-1094746-unsplash.jpg\";}}"
+        },
+        "slides": [
+            {
+                "original_id": 2418,
+                "order": 0,
+                "post_excerpt": "<div>Explore the city&rsquo;s landmarks and culture.<\/div>",
+                "image": "wenhao-ji-iiw_sohlb_q-unsplash",
+                "image_alt": "wenhao-ji-IiW_SOhLb_Q-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772051001",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Travel Itinerary slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Travel Itinerary slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/wenhao-ji-IiW_SOhLb_Q-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 2416,
+                "order": 1,
+                "post_excerpt": "<div>Start the day with coffee and a slow morning.<\/div>",
+                "image": "mylene-larnaud-p7w1uzgqtwg-unsplash",
+                "image_alt": "mylene-larnaud-p7w1Uzgqtwg-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772051002",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Travel Itinerary slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Travel Itinerary slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/mylene-larnaud-p7w1Uzgqtwg-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 2414,
+                "order": 2,
+                "post_excerpt": "<div>Arrive, check in, and settle into the city.<\/div>",
+                "image": "cuvii-etqfg7ai1so-unsplash",
+                "image_alt": "cuvii-EtqFg7Ai1so-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772051002",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Travel Itinerary slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Travel Itinerary slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/cuvii-EtqFg7Ai1so-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 2425,
+                "order": 3,
+                "post_excerpt": "<div>Wander, shop, and discover local finds.<\/div>",
+                "image": "jezael-melgoza-to5wajdt1im-unsplash",
+                "image_alt": "jezael-melgoza-To5wAJDt1IM-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1770395927",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Travel Itinerary slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Travel Itinerary slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/jezael-melgoza-To5wAJDt1IM-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 2424,
+                "order": 4,
+                "post_excerpt": "<div>End the day with city lights and evening views.<\/div>",
+                "image": "md-samir-sayek-heogjl8lx3g-unsplash",
+                "image_alt": "md-samir-sayek-HeogJL8Lx3g-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1770395928",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Travel Itinerary slideshow",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Travel Itinerary slideshow"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/md-samir-sayek-HeogJL8Lx3g-unsplash-scaled.jpg"
+            }
+        ]
+    },
+    "metadata": {
+        "version": "3.105.0",
+        "date": "2026\/02\/26",
+        "domain": "https:\/\/demo.metaslider.com",
+        "environment": "production"
+    }
+}

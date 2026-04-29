@@ -3,6 +3,15 @@ if (!defined('ABSPATH')) {
     die('No direct access.');
 }
 
+$global_settings  = metaslider_global_settings();
+$default_settings = get_site_option( 'metaslider_default_settings' );
+$breakpoints      = array(
+    'smartphone' => isset( $default_settings['smartphone'] ) ? (int) $default_settings['smartphone'] : 320,
+    'tablet'     => isset( $default_settings['tablet'] ) ? (int) $default_settings['tablet'] : 768,
+    'laptop'     => isset( $default_settings['laptop'] ) ? (int) $default_settings['laptop'] : 1024,
+    'desktop'    => isset( $default_settings['desktop'] ) ? (int) $default_settings['desktop'] : 1440
+);
+
 // Slider libraries
 $aFields = array(
     'type' => array(
@@ -155,7 +164,7 @@ echo $this->build_settings_rows($aFields);
                     ),
                     'after' => metaslider_upgrade_pro_small_btn()
                 ),
-                'fullWidth' => array(
+                'fullWidth' => array( // Don't target 'fullWidth' to show/hide with 'dependencies' array key
                     'priority' => 70,
                     'type' => 'checkbox',
                     'label' => esc_html__("100% Width", "ml-slider"),
@@ -168,7 +177,255 @@ echo $this->build_settings_rows($aFields);
                         "ml-slider"
                     )
                 ),
+                'forceFullWidth' => array( // Don't target 'forceFullWidth' to show/hide with 'dependencies' array key
+                    'priority' => 71,
+                    'type' => 'checkbox',
+                    'label' => esc_html__("Adjust Width to Target Element", "ml-slider"),
+                    'class' => 'option flex',
+                    'checked' => $this->slider->get_setting(
+                        'forceFullWidth'
+                    ) == 'true' ? 'checked' : '',
+                    'helptext' => esc_html__(
+                        'This will force the slideshow to use the full width of the target CSS element (Beta). Result may vary from theme to theme.',
+                        "ml-slider"
+                    )
+                ),
+                'fullWidthTarget' => array( // Don't target 'fullWidthTarget' to show/hide with 'dependencies' array key
+                    'priority' => 72,
+                    'type' => 'text',
+                    'label' => esc_html__("Target Element", "ml-slider"),
+                    'class' => 'option flex',
+                    'helptext' => esc_html__(
+                        "The slideshow will use the full width of this target element (Beta). If the target element is not 'body', you may need to enable 'Center Align'.",
+                        "ml-slider"
+                    ),
+                    'value' => $this->slider->get_setting(
+                        'fullWidthTarget'
+                    ) == 'false' ? '' : $this->slider->get_setting('fullWidthTarget')
+                ),
+                'center' => array(
+                    'priority' => 74,
+                    'type' => 'checkbox',
+                    'label' => esc_html__("Center Align", "ml-slider"),
+                    'class' => 'option coin flex nivo responsive',
+                    'checked' => $this->slider->get_setting(
+                        'center'
+                    ) == 'true' ? 'checked' : '',
+                    'helptext' => esc_html__(
+                        "Center align the slideshow in the available space on your website.",
+                        "ml-slider"
+                    )
+                ),
             );
+
+            // Device options
+            if ( ! isset( $global_settings['mobileSettings'] ) 
+                || ( isset( $global_settings['mobileSettings'] ) 
+                    && true == $global_settings['mobileSettings'] 
+                )  
+            ) {
+                $aFields = array_merge( 
+                    $aFields,  
+                    array(
+                        'mobileArrows' => array(
+                            'priority' => 51,
+                            'type' => 'mobile',
+                            'label' => __("Hide Arrows On", "ml-slider"),
+                            'options' => array(
+                                'smartphone' => array(
+                                    'checked' => $this->slider->get_setting('mobileArrows_smartphone') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the arrows on screen widths less than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'] 
+                                    )
+                                ),
+                                'tablet' => array(
+                                    'checked' => $this->slider->get_setting('mobileArrows_tablet') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the arrows on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'],
+                                        $breakpoints['laptop'] - 1
+                                    )
+                                ),
+                                'laptop' => array(
+                                    'checked' => $this->slider->get_setting('mobileArrows_laptop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the arrows on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['laptop'],
+                                        $breakpoints['desktop'] - 1
+                                    )
+                                ),
+                                'desktop' => array(
+                                    'checked' => $this->slider->get_setting('mobileArrows_desktop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the arrows on screen widths equal to or greater than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['desktop'] 
+                                    )
+                                ),
+                            )
+                        ),
+                        'mobileNavigation' => array(
+                            'priority' => 61,
+                            'type' => 'mobile',
+                            'label' => __("Hide Navigation On", "ml-slider"),
+                            'options' => array(
+                                'smartphone' => array(
+                                    'checked' => $this->slider->get_setting('mobileNavigation_smartphone') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the navigation on screen widths less than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'] 
+                                    )
+                                ),
+                                'tablet' => array(
+                                    'checked' => $this->slider->get_setting('mobileNavigation_tablet') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the navigation on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'],
+                                        $breakpoints['laptop'] - 1
+                                    )
+                                ),
+                                'laptop' => array(
+                                    'checked' => $this->slider->get_setting('mobileNavigation_laptop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the navigation on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['laptop'],
+                                        $breakpoints['desktop'] - 1
+                                    )
+                                ),
+                                'desktop' => array(
+                                    'checked' => $this->slider->get_setting('mobileNavigation_desktop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the navigation on screen widths equal to or greater than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['desktop'] 
+                                    )
+                                ),
+                            )
+                        ),
+                        'mobileCaption' => array(
+                            'priority' => 64,
+                            'type' => 'mobile',
+                            'label' => __("Hide Captions On", "ml-slider"),
+                            'options' => array(
+                                'smartphone' => array(
+                                    'checked' => $this->slider->get_setting('mobileCaption_smartphone') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the captions on screen widths less than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'] 
+                                    )
+                                ),
+                                'tablet' => array(
+                                    'checked' => $this->slider->get_setting('mobileCaption_tablet') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the captions on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'],
+                                        $breakpoints['laptop'] - 1
+                                    )
+                                ),
+                                'laptop' => array(
+                                    'checked' => $this->slider->get_setting('mobileCaption_laptop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the captions on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['laptop'],
+                                        $breakpoints['desktop'] - 1
+                                    )
+                                ),
+                                'desktop' => array(
+                                    'checked' => $this->slider->get_setting('mobileCaption_desktop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the captions on screen widths equal to or greater than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['desktop'] 
+                                    )
+                                ),
+                            )
+                        ),
+                        'mobileSlideshow' => array(
+                            'priority' => 68,
+                            'type' => 'mobile',
+                            'label' => __("Hide Slideshow On", "ml-slider"),
+                            'options' => array(
+                                'smartphone' => array(
+                                    'checked' => $this->slider->get_setting('mobileSlideshow_smartphone') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the slideshow on screen widths less than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'] 
+                                    )
+                                ),
+                                'tablet' => array(
+                                    'checked' => $this->slider->get_setting('mobileSlideshow_tablet') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the slideshow on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['tablet'],
+                                        $breakpoints['laptop'] - 1
+                                    )
+                                ),
+                                'laptop' => array(
+                                    'checked' => $this->slider->get_setting('mobileSlideshow_laptop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the slideshow on screen widths of %1$spx to %2$spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['laptop'],
+                                        $breakpoints['desktop'] - 1
+                                    )
+                                ),
+                                'desktop' => array(
+                                    'checked' => $this->slider->get_setting('mobileSlideshow_desktop') == 'true' ? 'checked' : '',
+                                    'helptext' => sprintf( 
+                                        __( 
+                                            'When enabled this setting will hide the slideshow on screen widths equal to or greater than %spx.', 
+                                            'ml-slider'
+                                        ), 
+                                        $breakpoints['desktop'] 
+                                    )
+                                ),
+                            )
+                        )
+                    )
+                );
+            }
 
             $aFields = apply_filters('metaslider_basic_settings', $aFields, $this->slider);
 
@@ -195,7 +452,45 @@ echo $this->build_settings_rows($aFields);
             </tr>
         </table>
     </div>
-    <div class="ms-settings-box transitionOptions ms-on">
+    <div class="ms-settings-box lightboxOptions ms-on">
+        <div class="ms-highlight highlight">
+            <?php esc_html_e( 'Lightbox Options', 'ml-slider' ) ?>
+            <a href="#" class="ms-toggle-static">
+                <span class="dashicons"></span>
+            </a>
+        </div>
+        <table class="ms-settings-box-inner">
+            <?php
+            // Lightbox options
+            $aFields = array(
+                'lightbox' => array(
+                    'priority' => 5,
+                    'type' => 'checkbox',
+                    'label' => __('Open in lightbox?', 'ml-slider'),
+                    'after' => '',
+                    'class' => 'flex',
+                    'checked' => '',
+                    'helptext' => __("All slides will open in a lightbox, using MetaSlider Lightbox", "ml-slider"),
+                    'addon_required' => true
+                ),
+                'lightbox_ad' => array(
+                    'priority' => 10,
+                    'type' => 'html',
+                    'content' => metaslider_lightbox_ad(),
+                    'class' => 'flex',
+                    'id' => 'ms-lightbox-not-installed-notice',
+                    'visible' => true
+                ),
+            );
+
+            $aFields = apply_filters('metaslider_lightbox_settings', $aFields, $this->slider);
+            
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $this->build_settings_rows($aFields);
+            ?>
+        </table>
+    </div>
+    <div class="ms-settings-box transitionOptions ms-off">
         <div class="ms-highlight">
             <?php esc_html_e( 'Transition Options', 'ml-slider' ) ?>
             <a href="#" class="ms-toggle-static">
@@ -510,7 +805,7 @@ echo $this->build_settings_rows($aFields);
             ?>
         </table>
     </div>
-    <div class="ms-settings-box carouselOptions ms-on">
+    <div class="ms-settings-box carouselOptions ms-off">
         <div class="ms-highlight">
             <?php esc_html_e( 'Carousel Options', 'ml-slider' ) ?>
             <a href="#" class="ms-toggle-static">
@@ -546,12 +841,28 @@ echo $this->build_settings_rows($aFields);
                             'when' => true
                         ),
                         array(
-                            'show' => 'minItems', // Show Carousel items
+                            'show' => 'minItems', // Show Min Carousel items
+                            'when' => true // When carouselMode is true
+                        ),
+                        array(
+                            'show' => 'maxItems', // Show Max Carousel items
                             'when' => true // When carouselMode is true
                         ),
                         array(
                             'show' => 'forceHeight', // Show Force height
                             'when' => true // When carouselMode is true
+                        ),
+                        array(
+                            'show' => 'navStep', // Show navStep
+                            'when' => true // When carouselMode is true
+                        ),
+                        array(
+                            'show' => 'center', // Show center
+                            'when' => false // When carouselMode is false
+                        ),
+                        array(
+                            'show' => 'direction', // Show direction
+                            'when' => false // When carouselMode is false
                         )
                     )
                 ),
@@ -591,13 +902,45 @@ echo $this->build_settings_rows($aFields);
                     'max' => 99,
                     'step' => 1,
                     'value' => $this->slider->get_setting('minItems'),
-                    'label' => esc_html__("Carousel Items", "ml-slider"),
+                    'label' => esc_html__("Display Minimum", "ml-slider"),
                     'class' => 'flex',
                     'helptext' => esc_html__(
-                        "Minimum number of slides to be displayed at once in the carousel.",
+                        "Minimum number of slides to be displayed at the same time in the carousel.",
                         "ml-slider"
                     ),
-                    'after' => ''
+                    'after' => 'slides'
+                ),
+                'maxItems' => array(
+                    'priority' => 41,
+                    'type' => 'number',
+                    'size' => 3,
+                    'min' => 0,
+                    'max' => 99,
+                    'step' => 1,
+                    'value' => $this->slider->get_setting('maxItems'),
+                    'label' => esc_html__("Display Maximum", "ml-slider"),
+                    'class' => 'flex',
+                    'helptext' => esc_html__(
+                        "Maximum number of slides to be displayed at the same time in the carousel. Set to 0 to adjust automatically.",
+                        "ml-slider"
+                    ),
+                    'after' => 'slides'
+                ),
+                'navStep' => array(
+                    'priority' => 45,
+                    'type' => 'number',
+                    'size' => 3,
+                    'min' => 1,
+                    'max' => 1,
+                    'step' => 1,
+                    'value' => 1,
+                    'label' => esc_html__("Slides per Navigation Click", "ml-slider"),
+                    'class' => 'flex disabled-text',
+                    'helptext' => esc_html__(
+                        "Number of slides to move when clicking next or previous.",
+                        "ml-slider"
+                    ),
+                    'after' => metaslider_upgrade_pro_small_btn()
                 ),
                 'forceHeight' => array(
                     'priority' => 50,
@@ -625,188 +968,121 @@ echo $this->build_settings_rows($aFields);
             ?>
         </table>
     </div>
-    <?php
-    // Device options
-    if ( !isset( $global_settings['mobileSettings'] ) 
-        || ( isset( $global_settings['mobileSettings'] ) && true == $global_settings['mobileSettings'] )  
-    ) {
-        $default_settings = get_site_option( 'metaslider_default_settings' );
-        $breakpoints      = array(
-            'smartphone' => isset( $default_settings['smartphone'] ) ? (int) $default_settings['smartphone'] : 320,
-            'tablet'     => isset( $default_settings['tablet'] ) ? (int) $default_settings['tablet'] : 768,
-            'laptop'     => isset( $default_settings['laptop'] ) ? (int) $default_settings['laptop'] : 1024,
-            'desktop'    => isset( $default_settings['desktop'] ) ? (int) $default_settings['desktop'] : 1440
-        );
-        ?>
-        <div class="ms-settings-box mobileOptions ms-off">
-            <div class="ms-highlight">
-                <?php esc_html_e( 'Device Options', 'ml-slider' ) ?>
-                <a href="#" class="ms-toggle-static">
+    <div class="ms-settings-box imagesOptions ms-off">
+        <div class="ms-highlight highlight">
+            <?php esc_html_e( 'Image Options', 'ml-slider' ) ?>
+            <a href="#" class="ms-toggle-static">
                 <span class="dashicons"></span>
             </a>
-            </div>
-            <table class="ms-settings-box-inner">
-                <?php
-                $aFields = array(
-                    'mobileArrows' => array(
-                        'priority' => 1,
-                        'type' => 'mobile',
-                        'label' => __("Hide Arrows On", "ml-slider"),
-                        'options' => array(
-                            'smartphone' => array(
-                                'checked' => $this->slider->get_setting('mobileArrows_smartphone') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the arrows on screen widths less than %spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['tablet'] 
-                                )
-                            ),
-                            'tablet' => array(
-                                'checked' => $this->slider->get_setting('mobileArrows_tablet') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the arrows on screen widths of %1$spx to %2$spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['tablet'],
-                                    $breakpoints['laptop'] - 1
-                                )
-                            ),
-                            'laptop' => array(
-                                'checked' => $this->slider->get_setting('mobileArrows_laptop') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the arrows on screen widths of %1$spx to %2$spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['laptop'],
-                                    $breakpoints['desktop'] - 1
-                                )
-                            ),
-                            'desktop' => array(
-                                'checked' => $this->slider->get_setting('mobileArrows_desktop') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the arrows on screen widths equal to or greater than %spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['desktop'] 
-                                )
-                            ),
-                        )
-                    ),
-                    'mobileNavigation' => array(
-                        'priority' => 2,
-                        'type' => 'mobile',
-                        'label' => __("Hide Navigation On", "ml-slider"),
-                        'options' => array(
-                            'smartphone' => array(
-                                'checked' => $this->slider->get_setting('mobileNavigation_smartphone') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the navigation on screen widths less than %spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['tablet'] 
-                                )
-                            ),
-                            'tablet' => array(
-                                'checked' => $this->slider->get_setting('mobileNavigation_tablet') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the navigation on screen widths of %1$spx to %2$spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['tablet'],
-                                    $breakpoints['laptop'] - 1
-                                )
-                            ),
-                            'laptop' => array(
-                                'checked' => $this->slider->get_setting('mobileNavigation_laptop') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the navigation on screen widths of %1$spx to %2$spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['laptop'],
-                                    $breakpoints['desktop'] - 1
-                                )
-                            ),
-                            'desktop' => array(
-                                'checked' => $this->slider->get_setting('mobileNavigation_desktop') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the navigation on screen widths equal to or greater than %spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['desktop'] 
-                                )
-                            ),
-                        )
-                    ),
-                    'mobileSlideshow' => array(
-                        'priority' => 3,
-                        'type' => 'mobile',
-                        'label' => __("Hide Slideshow On", "ml-slider"),
-                        'options' => array(
-                            'smartphone' => array(
-                                'checked' => $this->slider->get_setting('mobileSlideshow_smartphone') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the slideshow on screen widths less than %spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['tablet'] 
-                                )
-                            ),
-                            'tablet' => array(
-                                'checked' => $this->slider->get_setting('mobileSlideshow_tablet') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the slideshow on screen widths of %1$spx to %2$spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['tablet'],
-                                    $breakpoints['laptop'] - 1
-                                )
-                            ),
-                            'laptop' => array(
-                                'checked' => $this->slider->get_setting('mobileSlideshow_laptop') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the slideshow on screen widths of %1$spx to %2$spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['laptop'],
-                                    $breakpoints['desktop'] - 1
-                                )
-                            ),
-                            'desktop' => array(
-                                'checked' => $this->slider->get_setting('mobileSlideshow_desktop') == 'true' ? 'checked' : '',
-                                'helptext' => sprintf( 
-                                    __( 
-                                        'When enabled this setting will hide the slideshow on screen widths equal to or greater than %spx.', 
-                                        'ml-slider'
-                                    ), 
-                                    $breakpoints['desktop'] 
-                                )
-                            ),
-                        )
-                    ),
-                );
-
-                $aFields = apply_filters('metaslider_mobile_settings', $aFields, $this->slider);
-                
-                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-                echo $this->build_settings_rows($aFields);
-                ?>
-            </table>
         </div>
-    <?php 
-    }
-    ?>
+        <table class="ms-settings-box-inner">
+            <?php
+            // Images options
+            $aFields = array(
+                'smartCrop' => array( // Don't target 'smartCrop' to show/hide with 'dependencies' array key
+                    'priority' => 5,
+                    'type' => 'select',
+                    'label' => esc_html__("Image Crop", "ml-slider"),
+                    'class' => 'option coin flex nivo responsive',
+                    'value' => $this->slider->get_setting('smartCrop'),
+                    'options' => array(
+                        'true' => array(
+                            'label' => esc_html__(
+                                "Smart Crop",
+                                "ml-slider"
+                            ),
+                            'class' => ''
+                        ),
+                        'false' => array(
+                            'label' => esc_html__(
+                                "Standard",
+                                "ml-slider"
+                            ),
+                            'class' => ''
+                        ),
+                        'disabled' => array(
+                            'label' => esc_html__(
+                                "Disabled",
+                                "ml-slider"
+                            ),
+                            'class' => ''
+                        ),
+                        'disabled_pad' => array(
+                            'label' => esc_html__(
+                                "Disabled (Smart Pad)",
+                                "ml-slider"
+                            ),
+                            'class' => 'option flex'
+                        ),
+                    ),
+                    'helptext' => esc_html__(
+                        "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size.",
+                        "ml-slider"
+                    )
+                ),
+                'smartCropSource' => array( // Don't target 'smartCropSource' to show/hide with 'dependencies' array key
+                    'priority' => 10,
+                    'type' => 'select',
+                    'label' => __('Image Crop Source', 'ml-slider'),
+                    'class' => 'option flex inline-block',
+                    'value' => $this->slider->get_setting( 'smartCropSource' ),
+                    'options' => array(
+                        'slideshow' => array( 
+                            'label' => __('Slideshow width/height', 'ml-slider' ) 
+                        ),
+                        'image' => array( 
+                            'label' => __('Custom width/height (Pro)', 'ml-slider' ),
+                            'addon_required' => true
+                        )
+                    ),
+                    'helptext' => __(
+                        'By default, MetaSlider will crop images using the main width and height of the slideshow. If you want smaller images, select Custom width/height and make sure the values are less than the main width and height.',
+                        'ml-slider'
+                    ),
+                    'after' => metaslider_upgrade_pro_small_btn()
+                ),
+                'cropMultiply' => array(
+                    'priority' => 15,
+                    'type' => 'select',
+                    'label' => __("Image Crop Size", "ml-slider"),
+                    'class' => 'option flex',
+                    'value' => $this->slider->get_setting('cropMultiply'),
+                    'options' => array(
+                        1 => array('label' => '1x'),
+                        2 => array('label' => '2x'),
+                        3 => array('label' => '3x'),
+                        4 => array('label' => '4x')
+                    ),
+                    'helptext' => __(
+                        "This will increase the size of the images in your slideshow. Larger images are higher quality. Smaller images load more quickly.",
+                        "ml-slider"
+                    ),
+                    'extra_attrs' => array(
+                        'data-value' => $this->slider->get_setting('cropMultiply')
+                    )
+                ),
+                'lazyLoad' => array( // Don't target 'lazyLoad' to show/hide with 'dependencies' array key
+                    'priority' => 20,
+                    'type' => 'checkbox',
+                    'label' => __("Lazy Load Images", "ml-slider"),
+                    'class' => 'option flex',
+                    'checked' => $this->slider->get_setting(
+                        'lazyLoad'
+                    ) == 'true' ? 'checked' : '',
+                    'helptext' => __(
+                        "This feature can speed up your site. MetaSlider will only load slides when they are required by your slideshow.",
+                        "ml-slider"
+                    )
+                )
+            );
+
+            $aFields = apply_filters('metaslider_image_settings', $aFields, $this->slider);
+            
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+            echo $this->build_settings_rows($aFields);
+            ?>
+        </table>
+    </div>
     <div class="ms-settings-box advancedOptions ms-off">
         <div class="ms-highlight highlight">
             <?php esc_html_e( 'Advanced Options', 'ml-slider' ) ?>
@@ -818,19 +1094,6 @@ echo $this->build_settings_rows($aFields);
             <?php
             // Advanced options
             $aFields = array(
-                'center' => array(
-                    'priority' => 10,
-                    'type' => 'checkbox',
-                    'label' => esc_html__("Center Align", "ml-slider"),
-                    'class' => 'option coin flex nivo responsive',
-                    'checked' => $this->slider->get_setting(
-                        'center'
-                    ) == 'true' ? 'checked' : '',
-                    'helptext' => esc_html__(
-                        "Center align the slideshow in the available space on your website.",
-                        "ml-slider"
-                    )
-                ),
                 'autoPlay' => array( // Don't target 'autoPlay' to show/hide with 'dependencies' array key
                     'priority' => 20,
                     'type' => 'checkbox',
@@ -896,8 +1159,21 @@ echo $this->build_settings_rows($aFields);
                         'pauseText'
                     ) == 'false' ? '' : $this->slider->get_setting('pauseText')
                 ),
-                'hoverPause' => array(
+                'progressBar' => array( // Don't target 'progressBar' to show/hide with 'dependencies' array key
                     'priority' => 25,
+                    'type' => 'checkbox',
+                    'label' => esc_html__("Progress Bar", "ml-slider"),
+                    'class' => 'option flex',
+                    'checked' => $this->slider->get_setting(
+                        'progressBar'
+                    ) == 'true' ? 'checked' : '',
+                    'helptext' => esc_html__(
+                        "Displays a visual indicator showing the time left before the next slide.",
+                        "ml-slider"
+                    )
+                ),
+                'hoverPause' => array(
+                    'priority' => 26,
                     'type' => 'checkbox',
                     'label' => esc_html__("Hover Pause", "ml-slider"),
                     'class' => 'option coin flex nivo responsive',
@@ -910,7 +1186,7 @@ echo $this->build_settings_rows($aFields);
                     )
                 ),
                 'loop' => array(
-                    'priority' => 26,
+                    'priority' => 27,
                     'type' => 'select',
                     'label' => __("Loop", "ml-slider"),
                     'class' => 'option flex nivo',
@@ -920,97 +1196,6 @@ echo $this->build_settings_rows($aFields);
                         'continuously' => array('label' => __("Loop Endlessly", "ml-slider"), 'class' => ''),
                         'stopOnLast' => array('label' => __("Stop On Last Slide", "ml-slider"), 'class' => ''),
                         'stopOnFirst' => array('label' => __("Stop On First Slide After Looping", "ml-slider"), 'class' => ''),
-                    )
-                ),
-                'smartCrop' => array(
-                    'priority' => 30,
-                    'type' => 'select',
-                    'label' => esc_html__("Image Crop", "ml-slider"),
-                    'class' => 'option coin flex nivo responsive',
-                    'value' => $this->slider->get_setting('smartCrop'),
-                    'options' => array(
-                        'true' => array(
-                            'label' => esc_html__(
-                                "Smart Crop",
-                                "ml-slider"
-                            ),
-                            'class' => ''
-                        ),
-                        'false' => array(
-                            'label' => esc_html__(
-                                "Standard",
-                                "ml-slider"
-                            ),
-                            'class' => ''
-                        ),
-                        'disabled' => array(
-                            'label' => esc_html__(
-                                "Disabled",
-                                "ml-slider"
-                            ),
-                            'class' => ''
-                        ),
-                        'disabled_pad' => array(
-                            'label' => esc_html__(
-                                "Disabled (Smart Pad)",
-                                "ml-slider"
-                            ),
-                            'class' => 'option flex'
-                        ),
-                    ),
-                    'helptext' => esc_html__(
-                        "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size.",
-                        "ml-slider"
-                    ),
-                    'dependencies' => array(
-                        array(
-                            'show' => 'cropMultiply', // Show Image double size
-                            'when' => array( // When Image crop is 'true' or 'false'
-                                'true',
-                                'false'
-                            )
-                        )
-                    )
-                ),
-                'smartCropSource' => array(
-                    'priority' => 31,
-                    'type' => 'select',
-                    'label' => __('Image Crop Source', 'ml-slider'),
-                    'class' => 'option flex inline-block',
-                    'value' => $this->slider->get_setting( 'smartCropSource' ),
-                    'options' => array(
-                        'slideshow' => array( 
-                            'label' => __('Slideshow width/height', 'ml-slider' ) 
-                        ),
-                        'image' => array( 
-                            'label' => __('Custom width/height (Pro)', 'ml-slider' ),
-                            'addon_required' => true
-                        )
-                    ),
-                    'helptext' => __(
-                        'By default, MetaSlider will crop images using the main width and height of the slideshow. If you want smaller images, select Custom width/height and make sure the values are less than the main width and height.',
-                        'ml-slider'
-                    ),
-                    'after' => metaslider_upgrade_pro_small_btn()
-                ),
-                'cropMultiply' => array(
-                    'priority' => 34,
-                    'type' => 'select',
-                    'label' => __("Image Crop Size", "ml-slider"),
-                    'class' => 'option flex',
-                    'value' => $this->slider->get_setting('cropMultiply'),
-                    'options' => array(
-                        1 => array('label' => '1x'),
-                        2 => array('label' => '2x'),
-                        3 => array('label' => '3x'),
-                        4 => array('label' => '4x')
-                    ),
-                    'helptext' => __(
-                        "This will increase the size of the images in your slideshow. Larger images are higher quality. Smaller images load more quickly.",
-                        "ml-slider"
-                    ),
-                    'extra_attrs' => array(
-                        'data-value' => $this->slider->get_setting('cropMultiply')
                     )
                 ),
                 'smoothHeight' => array(
@@ -1039,6 +1224,12 @@ echo $this->build_settings_rows($aFields);
                         'oldest' => array(
                             'label' => __("Oldest First", "ml-slider")
                         ),
+                        'atoz' => array(
+                            'label' => __("A to Z (by filename)", "ml-slider")
+                        ),
+                        'ztoa' => array(
+                            'label' => __("Z to A (by filename)", "ml-slider")
+                        ),
                         'false' => array(
                             'label' => __("Drag-and-drop", "ml-slider")
                         ),
@@ -1061,19 +1252,6 @@ echo $this->build_settings_rows($aFields);
                     ) ? 'checked' : '',
                     'helptext' => esc_html__(
                         "Allow touch swipe navigation of the slider on touch-enabled devices.",
-                        "ml-slider"
-                    )
-                ),
-                'progressBar' => array( // Don't target 'progressBar' to show/hide with 'dependencies' array key
-                    'priority' => 84,
-                    'type' => 'checkbox',
-                    'label' => esc_html__("Progress Bar", "ml-slider"),
-                    'class' => 'option flex',
-                    'checked' => $this->slider->get_setting(
-                        'progressBar'
-                    ) == 'true' ? 'checked' : '',
-                    'helptext' => esc_html__(
-                        "Displays a visual indicator showing the time left before the next slide.",
                         "ml-slider"
                     )
                 ),
@@ -1172,20 +1350,7 @@ echo $this->build_settings_rows($aFields);
                         "ml-slider"
                     ),
                     'is_legacy' => true
-                ),
-                'lazyLoad' => array( // Don't target 'lazyLoad' to show/hide with 'dependencies' array key
-                    'priority' => 91,
-                    'type' => 'checkbox',
-                    'label' => __("Lazy Load Images", "ml-slider"),
-                    'class' => 'option flex',
-                    'checked' => $this->slider->get_setting(
-                        'lazyLoad'
-                    ) == 'true' ? 'checked' : '',
-                    'helptext' => __(
-                        "This feature can speed up your site. MetaSlider will only load slides when they are required by your slideshow.",
-                        "ml-slider"
-                    )
-                ),
+                )
             );
 
             $aFields = apply_filters('metaslider_advanced_settings', $aFields, $this->slider);
@@ -1195,7 +1360,6 @@ echo $this->build_settings_rows($aFields);
             ?>
         </table>
     </div>
-
     <div class="ms-settings-box containerOptions ms-off">
         <div class="ms-highlight highlight">
             <?php esc_html_e( 'Container Options', 'ml-slider' ) ?>
@@ -1378,7 +1542,7 @@ echo $this->build_settings_rows($aFields);
             ?>
         </table>
     </div>
-    <div class="ms-settings-box shortcodeOptions ms-on">
+    <div class="ms-settings-box shortcodeOptions ms-off">
         <div class="ms-highlight">
             <?php esc_html_e( 'Shortcode', 'ml-slider' ) ?>
             <a href="#" class="ms-toggle-static">

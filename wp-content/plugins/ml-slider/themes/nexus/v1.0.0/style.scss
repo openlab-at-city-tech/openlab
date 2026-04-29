@@ -119,6 +119,17 @@
 		}
 	  }
   
+		&.filmstrip  .flex-direction-nav li {
+
+			&.flex-nav-prev {
+				left: 10px;
+			}
+	
+			&.flex-nav-next {
+				right: 10px;
+			}
+		}
+	
 	  .flex-control-nav {
 		bottom: -45px;
   

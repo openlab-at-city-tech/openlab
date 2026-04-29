@@ -21,7 +21,7 @@ class HTMLPurifier_Config
      * HTML Purifier's version
      * @type string
      */
-    public $version = '4.13.0';
+    public $version = '4.19.0';
 
     /**
      * Whether or not to automatically finalize
@@ -803,7 +803,7 @@ class HTMLPurifier_Config
         if ($index !== false) {
             $array = (isset($array[$index]) && is_array($array[$index])) ? $array[$index] : array();
         }
-        $mq = $mq_fix && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc();
+        $mq = $mq_fix && version_compare(PHP_VERSION, '7.4.0', '<') && function_exists('get_magic_quotes_gpc') && get_magic_quotes_gpc();
 
         $allowed = HTMLPurifier_Config::getAllowedDirectivesForForm($allowed, $schema);
         $ret = array();
@@ -898,7 +898,11 @@ class HTMLPurifier_Config
                 break;
             }
         }
-        trigger_error($msg . $extra, $no);
+        if ($no == E_USER_ERROR) {
+          throw new Exception($msg . $extra);
+        } else {
+          trigger_error($msg . $extra, $no);
+        }
     }
 
     /**

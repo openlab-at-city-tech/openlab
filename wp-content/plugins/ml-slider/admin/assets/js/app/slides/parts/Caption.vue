@@ -85,6 +85,7 @@ export default {
 	created() {
         this.selectedSource = this.captionSource ? this.captionSource : 'override'
         // Check if URL contains metaslider_add_sample_slides=withcaption
+        // metaslider_add_sample_slides param is deprecated since 3.106 - We use the native import for the quickstart
         const urlParams = new URLSearchParams(window.location.search);
         const sampleSlides = urlParams.get('metaslider_add_sample_slides');
 		
@@ -140,10 +141,11 @@ export default {
 							type: 'image',
 							configuration: {
 								toolbar: [
-									'undo redo bold italic forecolor fontsizeinput link unlink alignleft aligncenter alignright styles code device_options add_button'
+									'undo redo bold italic underline strikethrough removeformat forecolor fontsizeinput lineheight link unlink alignleft aligncenter alignright styles code device_options add_button'
 								],
 								menubar: false,
 								plugins: 'code link',
+								line_height_formats: '0.8 0.9 1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2 2.1 2.2 2.3 2.4 2.5 2.6 2.7 2.8 2.9 3',
 								branding: false,
 								promotion: false,
 								height: 240,

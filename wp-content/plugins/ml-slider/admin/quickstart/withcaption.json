@@ -1,0 +1,211 @@
+{
+    "0": {
+        "title": "Image Carousel with Captions",
+        "original_id": 2854,
+        "meta": {
+            "logtivity_last_logged": "1772119396",
+            "ml-slider_settings": "a:93:{s:5:\"title\";s:13:\"New Slideshow\";s:4:\"type\";s:4:\"flex\";s:6:\"random\";s:5:\"false\";s:8:\"cssClass\";s:0:\"\";s:8:\"printCss\";s:4:\"true\";s:7:\"printJs\";s:4:\"true\";s:5:\"width\";s:3:\"390\";s:6:\"height\";s:3:\"400\";s:3:\"spw\";i:7;s:3:\"sph\";i:5;s:5:\"delay\";s:4:\"3000\";s:6:\"sDelay\";i:30;s:7:\"opacity\";d:0.7;s:10:\"titleSpeed\";i:500;s:6:\"effect\";s:5:\"slide\";s:12:\"extra_effect\";s:4:\"none\";s:10:\"navigation\";s:4:\"true\";s:15:\"filmstrip_delay\";s:4:\"7000\";s:24:\"filmstrip_animationSpeed\";s:3:\"600\";s:5:\"links\";s:4:\"true\";s:10:\"hoverPause\";s:4:\"true\";s:5:\"theme\";s:0:\"\";s:9:\"direction\";s:10:\"horizontal\";s:7:\"reverse\";s:5:\"false\";s:8:\"keyboard\";s:4:\"true\";s:5:\"touch\";s:4:\"true\";s:14:\"animationSpeed\";s:3:\"600\";s:8:\"prevText\";s:8:\"Previous\";s:8:\"nextText\";s:4:\"Next\";s:6:\"slices\";i:15;s:6:\"center\";s:4:\"true\";s:9:\"smartCrop\";s:4:\"true\";s:15:\"smartCropSource\";s:9:\"slideshow\";s:10:\"imageWidth\";s:3:\"400\";s:11:\"imageHeight\";s:3:\"400\";s:12:\"cropMultiply\";s:4:\"true\";s:12:\"smoothHeight\";s:5:\"false\";s:12:\"carouselMode\";s:4:\"true\";s:12:\"infiniteLoop\";s:5:\"false\";s:14:\"carouselMargin\";s:1:\"5\";s:8:\"minItems\";s:1:\"2\";s:11:\"forceHeight\";s:5:\"false\";s:16:\"firstSlideFadeIn\";s:5:\"false\";s:6:\"easing\";s:6:\"linear\";s:8:\"autoPlay\";s:4:\"true\";s:4:\"loop\";s:12:\"continuously\";s:11:\"thumb_width\";s:3:\"150\";s:12:\"thumb_height\";s:3:\"100\";s:17:\"responsive_thumbs\";s:4:\"true\";s:15:\"thumb_min_width\";s:3:\"100\";s:12:\"thumb_layout\";s:4:\"grid\";s:9:\"fullWidth\";s:4:\"true\";s:14:\"forceFullWidth\";s:5:\"false\";s:15:\"fullWidthTarget\";s:4:\"body\";s:10:\"noConflict\";s:4:\"true\";s:23:\"mobileArrows_smartphone\";s:4:\"true\";s:19:\"mobileArrows_tablet\";s:5:\"false\";s:19:\"mobileArrows_laptop\";s:5:\"false\";s:20:\"mobileArrows_desktop\";s:5:\"false\";s:27:\"mobileNavigation_smartphone\";s:5:\"false\";s:23:\"mobileNavigation_tablet\";s:5:\"false\";s:23:\"mobileNavigation_laptop\";s:5:\"false\";s:24:\"mobileNavigation_desktop\";s:5:\"false\";s:26:\"mobileSlideshow_smartphone\";s:5:\"false\";s:22:\"mobileSlideshow_tablet\";s:5:\"false\";s:22:\"mobileSlideshow_laptop\";s:5:\"false\";s:23:\"mobileSlideshow_desktop\";s:5:\"false\";s:8:\"ariaLive\";s:4:\"true\";s:11:\"ariaCurrent\";s:4:\"true\";s:8:\"tabIndex\";s:4:\"true\";s:9:\"pausePlay\";s:5:\"false\";s:11:\"progressBar\";s:5:\"false\";s:7:\"loading\";s:5:\"false\";s:8:\"lazyLoad\";s:5:\"false\";s:8:\"playText\";s:0:\"\";s:9:\"pauseText\";s:0:\"\";s:9:\"container\";s:5:\"false\";s:20:\"container_background\";s:19:\"rgba(255,255,255,0)\";s:20:\"containerPadding_top\";s:2:\"10\";s:22:\"containerPadding_right\";s:2:\"10\";s:23:\"containerPadding_bottom\";s:2:\"10\";s:21:\"containerPadding_left\";s:2:\"10\";s:19:\"containerMargin_top\";s:2:\"10\";s:22:\"containerMargin_bottom\";s:2:\"30\";s:7:\"navStep\";s:0:\"\";s:10:\"smartphone\";i:480;s:6:\"tablet\";i:768;s:6:\"laptop\";i:1024;s:7:\"desktop\";i:1440;s:12:\"showPlayText\";s:5:\"false\";s:8:\"lightbox\";s:5:\"false\";s:15:\"theme_customize\";a:21:{s:12:\"arrows_color\";s:19:\"rgba(255,255,255,0)\";s:18:\"arrows_color_hover\";s:19:\"rgba(255,255,255,0)\";s:11:\"arrows_icon\";s:7:\"#ffffff\";s:17:\"arrows_icon_hover\";s:7:\"#ffffff\";s:13:\"arrows_border\";s:7:\"#ffffff\";s:19:\"arrows_border_hover\";s:7:\"#ffffff\";s:16:\"navigation_color\";s:21:\"rgba(255,255,255,0.8)\";s:22:\"navigation_color_hover\";s:19:\"rgba(255,255,255,0)\";s:23:\"navigation_color_active\";s:19:\"rgba(255,255,255,0)\";s:23:\"navigation_border_color\";s:21:\"rgba(255,255,255,0.8)\";s:29:\"navigation_border_color_hover\";s:21:\"rgba(255,255,255,0.8)\";s:30:\"navigation_border_color_active\";s:21:\"rgba(255,255,255,0.8)\";s:18:\"caption_background\";s:15:\"rgba(0,0,0,0.8)\";s:18:\"caption_text_color\";s:7:\"#ffffff\";s:19:\"caption_links_color\";s:7:\"#ffffff\";s:11:\"play_button\";s:7:\"#000000\";s:17:\"play_button_hover\";s:7:\"#000000\";s:16:\"play_button_icon\";s:7:\"#ffffff\";s:22:\"play_button_icon_hover\";s:7:\"#ffffff\";s:20:\"slideshow_background\";s:19:\"rgba(255,255,255,0)\";s:28:\"slideshow_progress_bar_color\";s:4:\"#fff\";}s:13:\"layer_scaling\";s:11:\"up_and_down\";}",
+            "metaslider_slideshow_theme": "a:8:{s:6:\"folder\";s:7:\"outline\";s:5:\"title\";s:7:\"Outline\";s:4:\"type\";s:4:\"free\";s:8:\"supports\";a:4:{i:0;s:4:\"flex\";i:1;s:10:\"responsive\";i:2;s:4:\"nivo\";i:3;s:4:\"coin\";}s:4:\"tags\";a:4:{i:0;s:5:\"light\";i:1;s:5:\"lines\";i:2;s:4:\"bold\";i:3;s:6:\"square\";}s:11:\"description\";s:65:\"A clean, subtle theme that features block arrows and bold design.\";s:6:\"images\";a:5:{i:0;s:30:\"wabi-jayme-578762-unsplash.jpg\";i:1;s:31:\"nick-cooper-731773-unsplash.jpg\";i:2;s:38:\"olav-ahrens-rotne-1087667-unsplash.jpg\";i:3;s:35:\"muhammad-rizki-1094746-unsplash.jpg\";i:4;s:28:\"dorigo-wu-14676-unsplash.jpg\";}s:7:\"version\";s:6:\"v1.0.0\";}"
+        },
+        "slides": [
+            {
+                "original_id": 3136,
+                "order": 0,
+                "post_excerpt": "<div style=\"text-align: center;\">Design That Inspires<\/div>",
+                "image": "pine-watt-3_xwxya43he-unsplash",
+                "image_alt": "pine-watt-3_Xwxya43hE-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772108310",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/pine-watt-3_Xwxya43hE-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 3142,
+                "order": 1,
+                "post_excerpt": "<div style=\"text-align: center;\">Let&rsquo;s Create Together<\/div>",
+                "image": "helena-lopes-pgnqt0rxwls-unsplash",
+                "image_alt": "helena-lopes-PGnqT0rXWLs-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772108311",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/helena-lopes-PGnqT0rXWLs-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 3138,
+                "order": 2,
+                "post_excerpt": "<div style=\"text-align: center;\">Built For Growth<\/div>",
+                "image": "daniel-dan-fmxvhtcrmw-unsplash",
+                "image_alt": "daniel-dan-FMxvHTCRmw-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772108311",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/daniel-dan-FMxvHTCRmw-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 3140,
+                "order": 3,
+                "post_excerpt": "<div style=\"text-align: center;\">Ideas Into Reality<\/div>",
+                "image": "kai-gradert-dtde2ztfacm-unsplash",
+                "image_alt": "kai-gradert-DtDe2ZTfAcM-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772108311",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/kai-gradert-DtDe2ZTfAcM-unsplash-scaled.jpg"
+            },
+            {
+                "original_id": 2859,
+                "order": 4,
+                "post_excerpt": "<div style=\"text-align: center;\">Design the moment. Define the future.<\/div>",
+                "image": "danny-howe-361436-unsplash-2",
+                "image_alt": "danny-howe-361436-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772108312",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/danny-howe-361436-unsplash.jpg"
+            },
+            {
+                "original_id": 2860,
+                "order": 5,
+                "post_excerpt": "<div style=\"text-align: center;\">Where ambition finds its home.<\/div>",
+                "image": "ella-olsson-1094090-unsplash-1",
+                "image_alt": "ella-olsson-1094090-unsplash-1",
+                "meta": {
+                    "logtivity_last_logged": "1772108312",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/ella-olsson-1094090-unsplash-1.jpg"
+            },
+            {
+                "original_id": 2861,
+                "order": 6,
+                "post_excerpt": "<div style=\"text-align: center;\">Simplicity meets sophistication.<\/div>",
+                "image": "muhammad-rizki-1094746-unsplash-1",
+                "image_alt": "muhammad-rizki-1094746-unsplash-1",
+                "meta": {
+                    "logtivity_last_logged": "1772108312",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/muhammad-rizki-1094746-unsplash-1.jpg"
+            },
+            {
+                "original_id": 2862,
+                "order": 7,
+                "post_excerpt": "<div style=\"text-align: center;\">Bold ideas. Brighter futures.<\/div>",
+                "image": "tim-peterson-1099515-unsplash",
+                "image_alt": "tim-peterson-1099515-unsplash",
+                "meta": {
+                    "logtivity_last_logged": "1772108313",
+                    "ml-slider_type": "image",
+                    "ml-slider_inherit_image_title": "",
+                    "ml-slider_inherit_image_alt": "",
+                    "ml-slider_crop_position": "center-center",
+                    "ml-slider_caption_source": "override",
+                    "_wp_attachment_image_alt": "Carousel with Captions",
+                    "_meta_slider_slide_is_hidden": "",
+                    "_meta_slider_slide_is_scheduled": "",
+                    "_meta_slider_slide_is_delayed": "",
+                    "_meta_slider_slide_is_repeated": "",
+                    "_meta_slider_slide_has_classes": "",
+                    "_meta_slider_slide_has_thumbnail": "",
+                    "ml-slider_title": "Carousel with Captions"
+                },
+                "image_url": "https:\/\/demo.metaslider.com\/wp-content\/uploads\/2026\/02\/tim-peterson-1099515-unsplash.jpg"
+            }
+        ]
+    },
+    "metadata": {
+        "version": "3.105.0",
+        "date": "2026\/02\/26",
+        "domain": "https:\/\/demo.metaslider.com",
+        "environment": "production"
+    }
+}
