@@ -218,11 +218,12 @@ Response Body:
                     <?php if ($license_status != 'valid') : ?>
                     <div class="trp-license-page-upsell-container__right">
                         <div class="trp-settings-container trp-license-page-upsell-container-content">
-                            <div class="trp-upgrade-notice">
-                                <?php esc_html_e( 'Get more AI words and unlock all features with TranslatePress Pro.', 'translatepress-multilingual' ); ?>
-                                <a class="trp-upgrade-notice-button" href="https://translatepress.com/pricing/?utm_source=tp-license&utm_medium=client-site&utm_campaign=license-upsell"><span><?php esc_html_e( 'Upgrade now ↗', 'translatepress-multilingual' ); /* [utm58] */ ?></span></a>
-
-                            </div>
+                            <?php if ( trp_can_show_upgrade_now_button() ) : ?>
+                                <div class="trp-upgrade-notice">
+                                    <?php esc_html_e( 'Get more AI words and unlock all features with TranslatePress Pro.', 'translatepress-multilingual' ); ?>
+                                    <a class="trp-upgrade-notice-button" href="https://translatepress.com/pricing/?utm_source=tp-license&utm_medium=client-site&utm_campaign=license-upsell"><span><?php esc_html_e( 'Upgrade now ↗', 'translatepress-multilingual' ); /* [utm58] */ ?></span></a>
+                                </div>
+                            <?php endif; ?>
                             <h3 class="trp-settings-secondary-heading">
                                 <?php esc_html_e( 'Already purchased a Premium version?', 'translatepress-multilingual' ); ?>
                             </h3>

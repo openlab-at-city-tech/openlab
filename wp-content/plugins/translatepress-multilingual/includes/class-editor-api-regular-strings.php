@@ -220,10 +220,18 @@ class TRP_Editor_Api_Regular_Strings {
 						if ( ! isset( $string->block_type ) ){
 							$string->block_type = $block_type;
 						}
+						// Use URL-safe sanitization for href translations to preserve percent-encoding
+						$translated = $string->translated;
+						if ( filter_var($translated, FILTER_VALIDATE_URL) ) {
+							$translated = esc_url_raw( $translated );
+						} else {
+							$translated = trp_sanitize_string( $translated );
+						}
+
 						array_push($update_strings[ $language ], array(
 							'id' => (int)$string->id,
 							'original' => trp_sanitize_string( $string->original, false ),
-							'translated' => trp_sanitize_string( $string->translated ),
+							'translated' => $translated,
 							'status' => (int)$string->status,
 							'block_type' => (int)$string->block_type
 						));

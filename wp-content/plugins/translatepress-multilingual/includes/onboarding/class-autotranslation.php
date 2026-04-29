@@ -62,7 +62,17 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
 
         //synchronize EDD license with MTAPI
         if(!empty($license)){
-            trp_mtapi_sync_license_call(sanitize_text_field($license));
+            $sync_response = trp_mtapi_sync_license_call(sanitize_text_field($license));
+
+            // After successful license sync, enable automatic translation by default
+            if ( isset( $data['submit'] ) && $data['submit'] === 'activate'
+                 && is_array( $sync_response ) && ! is_wp_error( $sync_response )
+                 && isset( $sync_response['response']['code'] ) && $sync_response['response']['code'] == 200
+            ) {
+                $machine_translation_settings = get_option( 'trp_machine_translation_settings', array() );
+                $machine_translation_settings['machine-translation'] = 'yes';
+                update_option( 'trp_machine_translation_settings', $machine_translation_settings );
+            }
         }
 
         // Check if continue button was pressed (hidden input is present)

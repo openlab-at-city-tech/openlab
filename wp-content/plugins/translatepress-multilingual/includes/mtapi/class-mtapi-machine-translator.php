@@ -103,19 +103,24 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
                 // Only certain errors will stop MTAPI for 5 minutes trying out for new translations from the API.
                 $exception_message = (isset($translation_response->exception[0]->message)) ? $translation_response->exception[0]->message : '';
 
+                $transient_quota = $quota;
                 if ($exception_message == 'Site not found.'
                     || $exception_message == 'Insufficient quota.'
                     || $exception_message == 'Site is not active.'
                     || $exception_message == 'Out of valid license dates.')
                 {
-                    set_transient("trp_mtapi_cached_quota", 0, 5*60);
+                    $transient_quota = 0;
                 }
                 if (isset($translation_response->quota) && is_numeric($translation_response->quota)) {
-                    set_transient("trp_mtapi_cached_quota", $translation_response->quota, 5*60);
+                    $transient_quota =  $translation_response->quota;
                     // Check if this is a free license and mark translation as permanently disabled
                     if ($translation_response->quota < 500 && $this->is_free_license()) {
                         $this->set_free_license_translation_disabled(true);
                     }
+                }
+
+                if ($transient_quota !== $quota){
+                    set_transient("trp_mtapi_cached_quota", $transient_quota, 5*60);
                 }
             }
 

@@ -96,7 +96,9 @@ class TRP_Query{
         }else {
 	        $and_block_type = " AND block_type = " . $block_type;
         }
-        $query = "SELECT original,translated, status FROM `" . sanitize_text_field( $this->get_table_name( $language_code ) ) . "` WHERE status != " . self::NOT_TRANSLATED . $and_block_type . " AND translated <>'' AND original IN ";
+
+        /* Do not add a condition for "translated <> '' because this would cause re-autotranslating. */
+        $query = "SELECT original,translated, status FROM `" . sanitize_text_field( $this->get_table_name( $language_code ) ) . "` WHERE status != " . self::NOT_TRANSLATED . $and_block_type . " AND original IN ";
 
         $placeholders = array();
         $values = array();
@@ -107,8 +109,35 @@ class TRP_Query{
 
         $query .= "( " . implode ( ", ", $placeholders ) . " )";
 	    $prepared_query = $this->db->prepare( $query, $values );
-        $dictionary = $this->db->get_results( $prepared_query, OBJECT_K  );
+        $results = $this->db->get_results( $prepared_query, OBJECT  );
 
+        if ( !empty( $results ) && is_array( $results ) ) {
+            // There are edge cases where we have 2 results for the same original:
+            // one with translated as empty string, one with non-empty translation. Keep the one with translation.
+            $dictionary = [];
+            foreach ( $results as $row ) {
+                $key = $row->original;
+
+                // If this key has never been added, simply add it
+                if ( !isset( $dictionary[ $key ] ) ) {
+                    $dictionary[ $key ] = $row;
+                    continue;
+                }
+
+                // If current stored entry has empty 'translated'
+                // and this new row has non-empty 'translated', replace it
+                if (
+                    empty( $dictionary[ $key ]->translated ) &&
+                    !empty( $row->translated )
+                ) {
+                    $dictionary[ $key ] = $row;
+                }
+
+                // Otherwise do nothing — we keep the existing "better" record
+            }
+        } else {
+            $dictionary = $results;
+        }
 
 
         if( !$this->check_invalid_text ){

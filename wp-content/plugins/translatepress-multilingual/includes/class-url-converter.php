@@ -363,11 +363,15 @@ class TRP_Url_Converter {
         }
 
         if ( $url_obj->getHost() && $abs_home_url_obj->getHost() && $url_obj->getHost() != $abs_home_url_obj->getHost() ){
-            trp_bulk_debug($debug, array('url' => $url, 'abort' => "is external url "));
+            // Allow addons (like Multiple Domains) to recognize additional domains as internal
+            $is_external = apply_filters( 'trp_is_external_link', true, $url, $this->get_abs_home() );
+            if ( $is_external ) {
+                trp_bulk_debug($debug, array('url' => $url, 'abort' => "is external url "));
 
-            wp_cache_set($cache_key . $hash, $url, 'trp');
+                wp_cache_set($cache_key . $hash, $url, 'trp');
 
-            return $url; // abort for external url's
+                return $url; // abort for external url's
+            }
         }
 
         if ( $this->get_lang_from_url_string($url) === null && $this->settings['default-language'] === $language && $this->settings['add-subdirectory-to-default-language'] !== 'yes' ){
@@ -940,7 +944,7 @@ class TRP_Url_Converter {
         }
 
         if( !empty( $wc_options ) && !empty( $wc_options[$option_index] ) )
-            return $wc_options[$option_index];
+            return trim( $wc_options[$option_index], '/' );
         elseif( empty( $wc_options[$option_index] ) ){//if it's the default from _x() it won't save in the db
             $current_slug = trp_get_transient( 'tp_'.$english_woocommerce_slug.'_'. $this->settings['default-language'] );
             if( $current_slug === false ){
@@ -963,7 +967,7 @@ class TRP_Url_Converter {
      */
     public function get_path_no_lang_slug_from_url( $url ) {
         $language      = $this->get_lang_from_url_string( $url );
-        $url_lang_slug = $this->get_url_slug( $language );
+        $url_lang_slug = $language !== null ? $this->get_url_slug( $language ) : '';
         $url_object    = trp_cache_get( 'url_obj_' . hash( 'md4', $url ), 'trp' );
 
         if ( $url_object === false ) {

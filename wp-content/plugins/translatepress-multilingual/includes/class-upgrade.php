@@ -120,6 +120,12 @@ class TRP_Upgrade {
                 $this->migrate_to_language_switcher_v2();
             }
 
+            if ( version_compare( $stored_database_version, '3.1.5', '<=' ) ) {
+                add_option( 'trp_failed_translations_cleanup_315', 'no' );
+                $trp = TRP_Translate_Press::get_trp_instance();
+                $trp->get_component( 'batch_processor' )->schedule();
+            }
+
             /**
              * Write an upgrading function above this comment to be executed only once: while updating plugin to a higher version.
              * Use example condition: version_compare( $stored_database_version, '2.9.9', '<=')
@@ -1556,48 +1562,6 @@ class TRP_Upgrade {
         if ( !defined('TRP_IN_SP_PLUGIN_VERSION' ) ) return true;
 
         return version_compare( TRP_IN_SP_PLUGIN_VERSION, self::MINIMUM_SP_VERSION, '>=' );
-    }
-
-    public function is_pro_minimum_version_met(){
-
-        if ( !class_exists( 'TRP_Handle_Included_Addons') || TRANSLATE_PRESS === 'TranslatePress - Dev' )
-            return true; // Free or development version installed
-
-        // File added when we redesigned TP Settings, this is what we look for and extra-language addon is active
-        if ( defined( 'TRP_IN_EL_PLUGIN_URL' ) && file_exists( TRP_IN_EL_PLUGIN_DIR . 'assets/js/trp-back-end-script-pro.js' )){
-            return true;
-        }
-
-        //In case extra-languages addon is not active we check with the paths hardcoded
-        $pro_version_map = [
-            'TranslatePress - Personal'  => 'translatepress-personal',
-            'TranslatePress - Business'  => 'translatepress-business',
-            'TranslatePress - Developer' => 'translatepress-developer'
-        ];
-
-        $pro_plugin_path = trailingslashit( WP_PLUGIN_DIR ) . $pro_version_map[TRANSLATE_PRESS];
-
-        if( file_exists( trailingslashit( $pro_plugin_path ) . 'add-ons-advanced/extra-languages/assets/js/trp-back-end-script-pro.js' )){
-            return true;
-        }
-
-        return false;
-    }
-
-    public function show_admin_notice_minimum_pro_version_required(){
-        //show this only on our translatepress admin pages
-        if( isset( $_GET['page'] ) && ( sanitize_text_field( $_GET['page'] ) === 'translate-press' || strpos( sanitize_text_field( $_GET['page'] ), 'trp_' ) !== false ) ){
-
-        // Legacy seo pack doesn't have the minimum version met. It is useful to keep the legacy seo pack version like this because it helps with knowing when to show Run the update
-        if ( $this->is_pro_minimum_version_met() )
-            return;
-
-        $minimum_version = TRANSLATE_PRESS === 'TranslatePress - Personal' ? self::MINIMUM_PERSONAL_VERSION : self::MINIMUM_DEVELOPER_VERSION;
-
-        echo '<div class="notice notice-error">
-                <p>' . wp_kses( sprintf( __('We’ve redesigned the <strong>%1$s</strong> settings for a better experience!<br>To ensure full compatibility with the new settings structure and avoid potential layout discrepancies, please update to version <strong>%2$s</strong> or newer.<br>Your current version of <strong>%1$s</strong> may not fully support these improvements, but the plugin will continue to function as expected.', 'translatepress-multilingual'), TRANSLATE_PRESS, $minimum_version ), [ 'strong' => [], 'br' => [] ] ) . '</p>' .
-             '</div>';
-        }
     }
 
     public function dont_update_db_if_seopack_inactive(){

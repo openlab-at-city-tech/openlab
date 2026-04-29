@@ -68,7 +68,7 @@ class TRP_Machine_Translation_Tab {
         $seo_pack_active = class_exists( 'TRP_IN_Seo_Pack');
 
         $settings = array();
-        $machine_translation_keys = array( 'machine-translation', 'translation-engine', 'google-translate-key', 'deepl-api-type', 'deepl-api-key', 'block-crawlers', 'automatically-translate-slug', 'machine_translation_limit', 'machine_translation_log', 'machine_translation_limit_enabled' );
+        $machine_translation_keys = array( 'machine-translation', 'translation-engine', 'google-translate-key', 'deepl-api-type', 'deepl-api-key', 'block-crawlers', 'automatically-translate-slug', 'machine_translation_limit', 'machine_translation_log', 'machine_translation_limit_enabled', 'ai_words_notification_enabled', 'ai_words_notification_email', 'ai_words_notification_threshold' );
         foreach( $machine_translation_keys as $key ){
             if( isset( $mt_settings[$key] ) ){
                 $settings[$key] = $mt_settings[$key];
@@ -98,6 +98,31 @@ class TRP_Machine_Translation_Tab {
             $settings['machine_translation_limit_enabled'] = sanitize_text_field( $settings['machine_translation_limit_enabled'] );
         else
             $settings['machine_translation_limit_enabled'] = 'no';
+
+        // The notification fields are disabled in HTML when engine != mtapi.
+        // Disabled fields are not submitted, so check if the threshold field was actually present in the raw input.
+        // If absent, preserve existing DB values regardless of the selected engine.
+        if( isset( $mt_settings['ai_words_notification_threshold'] ) ){
+            if( !empty( $settings['ai_words_notification_enabled'] ) )
+                $settings['ai_words_notification_enabled'] = sanitize_text_field( $settings['ai_words_notification_enabled'] );
+            else
+                $settings['ai_words_notification_enabled'] = 'no';
+
+            if( !empty( $settings['ai_words_notification_email'] ) )
+                $settings['ai_words_notification_email'] = sanitize_email( $settings['ai_words_notification_email'] );
+            else
+                $settings['ai_words_notification_email'] = '';
+
+            if( !empty( $settings['ai_words_notification_threshold'] ) )
+                $settings['ai_words_notification_threshold'] = absint( $settings['ai_words_notification_threshold'] );
+            else
+                $settings['ai_words_notification_threshold'] = TRP_AI_Words_Notification::get_default_threshold();
+        } else {
+            $mt_settings_option = get_option( 'trp_machine_translation_settings' );
+            $settings['ai_words_notification_enabled']   = isset( $mt_settings_option['ai_words_notification_enabled'] )   ? $mt_settings_option['ai_words_notification_enabled']   : 'yes';
+            $settings['ai_words_notification_email']     = isset( $mt_settings_option['ai_words_notification_email'] )     ? $mt_settings_option['ai_words_notification_email']     : '';
+            $settings['ai_words_notification_threshold'] = isset( $mt_settings_option['ai_words_notification_threshold'] ) ? $mt_settings_option['ai_words_notification_threshold'] : TRP_AI_Words_Notification::get_default_threshold();
+        }
 
         if( $free_version || !$seo_pack_active ){
             $mt_settings_option = get_option( 'trp_machine_translation_settings' );
@@ -241,6 +266,9 @@ class TRP_Machine_Translation_Tab {
 
     public function test_api_key(){
         check_ajax_referer( 'trp_test_api_nonce', 'security' );
+        if ( ! current_user_can( apply_filters( 'trp_settings_capability', 'manage_options' ) ) ) {
+            wp_die( -1, 403 );
+        }
 
         $trp                = TRP_Translate_Press::get_trp_instance();
         $machine_translator = $trp->get_component( 'machine_translator' );
@@ -248,9 +276,21 @@ class TRP_Machine_Translation_Tab {
         $response           = $machine_translator->test_request();
 
         if ( is_wp_error( $response ) ) {
+            ob_start();
+            print_r( $response );
+            $full_response = ob_get_clean();
+
             wp_send_json_error([
-                'message' => esc_html__('API key validation failed.', 'translatepress-multilingual'),
-                'error'   => $response->get_error_message()
+                'message'      => esc_html__('API key validation failed.', 'translatepress-multilingual'),
+                'referrer'     => $machine_translator->get_referer(),
+                'response'     => array(
+                    'response' => array(
+                        'code'    => 'wp_error',
+                        'message' => $response->get_error_message(),
+                    ),
+                    'body'     => $response->get_error_data(),
+                ),
+                'raw_response' => $full_response,
             ]);
         }
 
@@ -260,6 +300,7 @@ class TRP_Machine_Translation_Tab {
 
         wp_send_json_success([
             'message'      => esc_html__('API key verification was successful.', 'translatepress-multilingual'),
+            'referrer'     => $machine_translator->get_referer(),
             'response'     => $response,
             'raw_response' => $full_response
         ]);

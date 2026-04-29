@@ -46,6 +46,7 @@ nav.trp-ls-inline .trp-language-switcher-inner {
     font-size: 12px;
     text-align: center;
     padding: 0 5px;
+    opacity: 70%;
 }
 
 #trp-floater-powered-by a {
@@ -53,13 +54,13 @@ nav.trp-ls-inline .trp-language-switcher-inner {
 }
 
 .trp-switcher-position-bottom #trp-floater-powered-by {
-    border-top: 1px solid var(--text, #747474);
+    border-top: 1px solid var(--border-color, #747474);
     padding-top: 5px;
     margin-top: 5px;
 }
 
 .trp-switcher-position-top #trp-floater-powered-by {
-    border-bottom: 1px solid var(--text, #747474);
+    border-bottom: 1px solid var(--border-color, #747474);
     padding-bottom: 5px;
     margin-bottom: 5px;
 }

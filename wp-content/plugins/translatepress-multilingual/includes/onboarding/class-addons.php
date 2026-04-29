@@ -96,6 +96,12 @@ class TRP_Step_Addons implements TRP_Onboarding_Step_Interface {
                                         'description' => __( 'Configure different menu items for different languages.', 'translatepress-multilingual' ),
                                         'icon' => TRP_PLUGIN_URL . 'assets/images/navigation_based_on_lang_addon_page.png',
                                 ),
+                                array(  'slug' => 'tp-add-on-multiple-domains/tp-multiple-domains.php',
+                                        'type' => 'add-on',
+                                        'name' => __( 'Different Domain per Language', 'translatepress-multilingual' ),
+                                        'description' => __( 'Connect separate domains or subdomains to each of your translated versions. Strengthen your brand’s local identity and boost SEO performance for every language you support.', 'translatepress-multilingual' ),
+                                        'icon' => TRP_PLUGIN_URL . 'assets/images/multiple_domains_addon_page.png',
+                                ),
                         )
                 )
         );

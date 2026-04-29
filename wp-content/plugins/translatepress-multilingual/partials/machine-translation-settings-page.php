@@ -177,6 +177,83 @@
                 <div class="trp-settings-separator"></div>
 
                 <div class="trp-settings-options__wrapper">
+                    <!-- AI Words Low Notification -->
+                    <?php
+                    $is_notification_disabled = '';
+                    if ( $this->settings['trp_machine_translation_settings']['translation-engine'] !== 'mtapi' )
+                        $is_notification_disabled = 'disabled';
+
+                    $notification_email = !empty( $this->settings['trp_machine_translation_settings']['ai_words_notification_email'] )
+                        ? $this->settings['trp_machine_translation_settings']['ai_words_notification_email']
+                        : get_option( 'admin_email' );
+
+                    $notification_threshold = !empty( $this->settings['trp_machine_translation_settings']['ai_words_notification_threshold'] )
+                        ? $this->settings['trp_machine_translation_settings']['ai_words_notification_threshold']
+                        : TRP_AI_Words_Notification::get_default_threshold();
+                    ?>
+                    <div class="trp-settings-options-item trp-settings-checkbox <?php if ( $is_notification_disabled ) echo 'trp-settings-checkbox__disabled'; ?>">
+                        <input type="checkbox" id="trp-ai-words-notification-enabled"
+                               name="trp_machine_translation_settings[ai_words_notification_enabled]"
+                               value="yes"
+                            <?php isset( $this->settings['trp_machine_translation_settings']['ai_words_notification_enabled'] )
+                                ? checked( $this->settings['trp_machine_translation_settings']['ai_words_notification_enabled'], 'yes' )
+                                : checked( 'yes', 'yes' );
+                            echo esc_attr( $is_notification_disabled ); ?> />
+
+                        <label for="trp-ai-words-notification-enabled" class="trp-checkbox-label">
+                            <div class="trp-checkbox-content">
+                                <b class="trp-primary-text-bold"><?php esc_html_e( 'AI Words Low Notification', 'translatepress-multilingual' ); ?></b>
+                                <span class="trp-description-text">
+                                    <?php esc_html_e( 'Receive an email notification when your TranslatePress AI word count drops below the specified threshold.', 'translatepress-multilingual' ); ?>
+                                </span>
+
+                                <?php if ( $is_notification_disabled ) : ?>
+                                    <div class="trp-upgrade-notice-at__wrapper">
+                                        <div class="trp-upgrade-notice">
+                                            <span class="trp-upgrade-notice-text">
+                                                <?php esc_html_e( 'This feature is only available when using the TranslatePress AI translation engine.', 'translatepress-multilingual' ); ?>
+                                            </span>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="trp-settings-options-item trp-ai-words-notification-details" <?php if ( $is_notification_disabled ) echo 'style="opacity: 0.5; pointer-events: none;"'; ?>>
+                        <div style="display: flex; flex-direction: column; gap: 12px; padding-left: 30px;">
+                            <div>
+                                <label for="trp-ai-words-notification-email" class="trp-primary-text-bold" style="display: block; margin-bottom: 4px;">
+                                    <?php esc_html_e( 'Notification Email', 'translatepress-multilingual' ); ?>
+                                </label>
+                                <input type="email" id="trp-ai-words-notification-email"
+                                       name="trp_machine_translation_settings[ai_words_notification_email]"
+                                       value="<?php echo esc_attr( $notification_email ); ?>"
+                                       class="trp-text-input"
+                                       style="width: 300px;"
+                                    <?php echo esc_attr( $is_notification_disabled ); ?> />
+                                <span class="trp-description-text" style="display: block; margin-top: 4px;">
+                                    <?php esc_html_e( 'The email address where the low AI words notification will be sent.', 'translatepress-multilingual' ); ?>
+                                </span>
+                            </div>
+                            <div>
+                                <label for="trp-ai-words-notification-threshold" class="trp-primary-text-bold" style="display: block; margin-bottom: 4px;">
+                                    <?php esc_html_e( 'Word Threshold', 'translatepress-multilingual' ); ?>
+                                </label>
+                                <input type="number" id="trp-ai-words-notification-threshold"
+                                       name="trp_machine_translation_settings[ai_words_notification_threshold]"
+                                       value="<?php echo esc_attr( $notification_threshold ); ?>"
+                                       min="0"
+                                       style="width: 150px;"
+                                    <?php echo esc_attr( $is_notification_disabled ); ?> />
+                                <span class="trp-secondary-text"><?php esc_html_e( 'words', 'translatepress-multilingual' ); ?></span>
+                                <span class="trp-description-text" style="display: block; margin-top: 4px;">
+                                    <?php esc_html_e( 'You will be notified when remaining AI words drop below this number.', 'translatepress-multilingual' ); ?>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Automatically Translate Slugs -->
                     <?php
                     $is_disabled = '';

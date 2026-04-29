@@ -34,6 +34,25 @@ class BaseSwitcher {
         this.bindKeyboard();
     }
 
+    /**
+     * Returns true if the list has a non-zero transition duration (for any property).
+     * We use this to decide whether to rely on `transitionend` or fall back to sync behavior.
+     */
+    _hasAnimatedTransition() {
+        if (!this.list) return false;
+
+        const cs = getComputedStyle(this.list);
+        const durationsRaw = cs.transitionDuration || '';
+
+        if (!durationsRaw) return false;
+
+        const durations = durationsRaw
+            .split(',')
+            .map(str => parseFloat(str) || 0);
+
+        return durations.some(d => d > 0);
+    }
+
     collapse() {
         this.list.hidden = true;
         this.list.setAttribute('inert', '');
@@ -65,37 +84,52 @@ class BaseSwitcher {
         this.root.classList.toggle('is-open', !!open);
     }
 
-    setOpen(open, { source = null } = {}) {
-        if (!this.root || !this.list || open === this.isOpen) return;
+    setOpen( open, { source = null } = {} ) {
+        if ( !this.root || !this.list || open === this.isOpen ) return;
 
-        // Honor reduced motion: skip the transition entirely (still class-driven)
         const prefersReduced = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+        const hasTransition  = !prefersReduced && this._hasAnimatedTransition();
 
         this.isOpen = open;
 
-        if (open) {
-            // Prepare: must be visible for CSS transition to run
-            this.list.hidden = false;
-            this.list.removeAttribute('inert');
+        // No transitions (0s duration) OR reduced motion: do everything synchronously,
+        if ( !hasTransition ) {
+            if ( open ) {
+                this.list.hidden = false;
+                this.list.removeAttribute( 'inert' );
+                this.setExpanded( true );
 
-            if (prefersReduced) {
-                this.root.classList.remove('is-transitioning');
-                this.setExpanded(true);
+                this._pendingFocusOnOpen = ( source?.type === 'keydown' );
+                if ( this._pendingFocusOnOpen ) {
+                    this._pendingFocusOnOpen = false;
+                    const first = this.list.querySelector(
+                        '[role="option"], a, button, [tabindex]:not([tabindex="-1"])'
+                    );
+                    first?.focus?.({ preventScroll: true });
+                }
             } else {
-                this.root.classList.add('is-transitioning');
-                // Next frame so the browser registers the pre-open (max-height:0) state
-                requestAnimationFrame(() => this.setExpanded(true));
+                this.setExpanded( false );
+                this.list.hidden = true;
+                this.list.setAttribute( 'inert', '' );
+                this._pendingFocusOnOpen = false;
             }
+            return;
+        }
 
-            // keyboard open should move focus after transition completes
-            this._pendingFocusOnOpen = (source?.type === 'keydown');
+        // Animated path: rely on transitionend to remove .is-transitioning
+        if ( open ) {
+            // Must be visible for CSS transition to run
+            this.list.hidden = false;
+            this.list.removeAttribute( 'inert' );
 
+            this._pendingFocusOnOpen = ( source?.type === 'keydown' );
+
+            this.root.classList.add( 'is-transitioning' );
+            // Next frame so browser registers pre-open (max-height: 0) state
+            requestAnimationFrame( () => this.setExpanded( true ) );
         } else {
-            if (prefersReduced){
-                this.root.classList.add( 'is-transitioning' );
-            }
-
-            this.setExpanded(false);
+            this.root.classList.add( 'is-transitioning' );
+            this.setExpanded( false );
         }
     }
 

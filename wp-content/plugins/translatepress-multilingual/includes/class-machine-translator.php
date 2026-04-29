@@ -47,28 +47,31 @@ class TRP_Machine_Translator {
      * @param array $languages
      * @return bool
      */
-    public function is_available( $languages = array() ){
-        if( !empty( $this->settings['trp_machine_translation_settings']['machine-translation'] ) &&
-            $this->settings['trp_machine_translation_settings']['machine-translation'] == 'yes'
-        ) {
-            if ( empty( $languages ) ){
-                // can be used to simply know if machine translation is available
-                $is_available = true;
-            }
+    public function is_available( $languages = array() ) {
+        /**
+         * Return false in case it was directly called from parent and not from a derived class (DeepL / Google / TPAI)
+         * Calling this method on the parent class means it was called too early and machine translation is not available at this point
+         */
+        if ( get_class( $this ) === __CLASS__ )
+            return false;
 
-            // If the license is invalid and the translation engine is DeepL,return false
-            $license_status = get_option( 'trp_license_status' );
-            if ( $license_status !== 'valid' && isset( $this->settings['trp_machine_translation_settings']['translation-engine'] ) && $this->settings['trp_machine_translation_settings']['translation-engine'] === 'deepl' ) {
+        $settings = $this->settings['trp_machine_translation_settings'] ?? array();
+        $enabled  = ( $settings['machine-translation'] ?? '' ) === 'yes';
+        $is_available = false;
+
+        if ( $enabled ) {
+            $engine = $settings['translation-engine'] ?? null;
+
+            if ( $engine === 'deepl' && get_option( 'trp_license_status' ) !== 'valid' ) {
                 $is_available = false;
+            } elseif ( empty( $languages ) ) {
+                $is_available = true;
+            } else {
+                $is_available = $this->check_languages_availability( $languages );
             }
-
-            $is_available = $this->check_languages_availability($languages);
-
-        }else {
-            $is_available = false;
         }
 
-        return apply_filters('trp_machine_translator_is_available', $is_available);
+        return apply_filters( 'trp_machine_translator_is_available', $is_available, $languages, $settings );
     }
 
     public function check_languages_availability( $languages, $force_recheck = false ){
@@ -234,7 +237,7 @@ class TRP_Machine_Translator {
 			$this->referer = $this->url_converter->get_abs_home();
 		}
 
-		return $this->referer;
+		return apply_filters( 'trp_machine_translator_referer', $this->referer );
 	}
 
     /**

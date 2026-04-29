@@ -53,7 +53,6 @@ jQuery( function() {
                 return;
             }
 
-
             if ( _this.error_check( new_language ) === true ){
                 return;
             }
@@ -68,8 +67,6 @@ jQuery( function() {
 
             new_option = jQuery( new_option );
 
-            new_option.find('.trp-translation-language').on( 'change', _this.change_language );
-
             new_option.find( '.trp-hidden-default-language' ).remove();
             new_option.find( '.select2-container' ).remove();
             var select = new_option.find( 'select.trp-translation-language' );
@@ -81,9 +78,28 @@ jQuery( function() {
             select.val( new_language );
             select.select2();
 
-            var checkbox = new_option.find( 'input.trp-translation-published' );
-            checkbox.removeAttr( 'disabled' );
-            checkbox.val( new_language );
+            // Attach change event listener AFTER select2 is initialized
+            new_option.find('.trp-translation-language').on( 'change', _this.change_language );
+
+            var checkboxes = new_option.find( 'input[type="checkbox"]' );
+            checkboxes.each( function() {
+                var checkbox = jQuery( this );
+                checkbox.removeAttr( 'disabled' );
+                checkbox.val( new_language );
+
+                // Update checkbox ID and label 'for' attribute to match the new language
+                var old_checkbox_id = checkbox.attr( 'id' );
+                if ( old_checkbox_id ) {
+                    var new_checkbox_id = old_checkbox_id.replace( /[a-z]{2}_[A-Z]{2}(_formal|_informal)?/g, new_language );
+                    checkbox.attr( 'id', new_checkbox_id );
+
+                    // Update the corresponding label's 'for' attribute
+                    var label = new_option.find( 'label[for="' + old_checkbox_id + '"]' );
+                    if ( label.length > 0 ) {
+                        label.attr( 'for', new_checkbox_id );
+                    }
+                }
+            });
 
             var url_slug = new_option.find( 'input.trp-language-slug' );
             url_slug.val( _this.get_default_url_slug( new_language ) );
@@ -97,9 +113,13 @@ jQuery( function() {
             new_option = jQuery( '#trp-sortable-languages' ).append( new_option );
             new_option.find( '.trp-remove-language__container' ).last().click( _this.remove_language );
 
-            jQuery( '#trp-new-language.trp-add-new-language-row' ).remove();
+            // Check if we've reached the maximum number of languages
+            var max_secondary = trp_url_slugs_info['max_secondary_languages'] || 1;
+            var current_count = jQuery( "#trp-sortable-languages .trp-language" ).length;
+            var secondary_count = current_count - 1; // Subtract 1 for default language
 
-            if ( jQuery( "#trp-languages-table .trp-language" ).length >= 2 ){
+            if ( secondary_count >= max_secondary ){
+                jQuery( '#trp-new-language' ).hide();
                 jQuery(".trp-upgrade-notice-table__wrapper").show();
             }
         };
@@ -125,6 +145,16 @@ jQuery( function() {
                 language_to_remove.remove();
 
                 error_handler.show_hide_warning( language_to_remove_code );
+
+                // Check if we can add more languages after removal
+                var max_secondary = trp_url_slugs_info['max_secondary_languages'] || 1;
+                var current_count = jQuery( "#trp-sortable-languages .trp-language" ).length;
+                var secondary_count = current_count - 1; // Subtract 1 for default language
+
+                if ( secondary_count < max_secondary ){
+                    jQuery( '#trp-new-language' ).show();
+                    jQuery(".trp-upgrade-notice-table__wrapper").hide();
+                }
             }
 
         };
@@ -183,7 +213,9 @@ jQuery( function() {
                 return;
             }
 
-            formality_select_field.removeClass( 'trp-formality-disabled' ); // when a language is added,  the fields are cloned - which means that the select field could have the .trp-formality-disabled class even if the language supports formality
+            // Remove disabled class and enable the field by default
+            formality_select_field.removeClass( 'trp-formality-disabled' );
+            formality_select_field.prop('disabled', false);
 
             if ( stripped_formal_language && languages_that_support_formality[ stripped_formal_language ] === 'true' ){
                 select_change( formality_match );
@@ -192,6 +224,7 @@ jQuery( function() {
 
             if ( !languages_that_support_formality[new_language_code] || languages_that_support_formality[new_language_code] === 'false' ){
                 formality_select_field.addClass( 'trp-formality-disabled' );
+                formality_select_field.prop('disabled', true);
             }
 
             select_change( 'default' );
@@ -221,12 +254,14 @@ jQuery( function() {
             duplicate_url_error_message = trp_url_slugs_info['error_message_duplicate_slugs'];
             iso_codes = trp_url_slugs_info['iso_codes'];
 
-            jQuery( '#trp-sortable-languages' ).sortable({ handle: '.trp-sortable-handle' });
+            jQuery( '#trp-sortable-languages' ).sortable({
+                handle: '.trp-sortable-handle'
+            });
             jQuery( '#trp-add-language' ).click( _this.add_language );
             jQuery('.trp-remove-language__container:not(.trp-adst-remove-element)').click(_this.remove_language);
             jQuery( '#trp-default-language' ).on( 'change', _this.update_default_language );
             jQuery( "form[action='options.php']").on ( 'submit', _this.check_unique_url_slugs );
-            jQuery( '#trp-languages-table' ).on( 'change', '.trp-translation-language', _this.update_url_slug_and_status );
+            jQuery( '#trp-sortable-languages' ).on( 'change', '.trp-translation-language', _this.update_url_slug_and_status );
             jQuery('.trp-language .trp-select2').not( '#trp-default-language' ).on( 'change', _this.change_language );
             jQuery( '.trp-select2' ).on( 'select2:open', function(){
                 document.querySelector( '.select2-search__field' ).focus();
@@ -472,11 +507,12 @@ jQuery( function() {
                         security: document.querySelector('#trp_test_api_nonce_field').value
                     },
                     success: function (response) {
-                        if (response.success) {
+                        if ( response && response.data ) {
                             testPopup.style.visibility = 'visible';
+                            populatePopup( response.data );
+                        }
 
-                            populatePopup(response.data);
-                        } else {
+                        if ( response && !response.success ) {
                             console.error("Error:", response.data.message);
                         }
                     },
@@ -491,12 +527,17 @@ jQuery( function() {
         }
 
         function populatePopup( response ){
+            const popupReferrer = testPopup.querySelector('.trp-referrer-name');
             const popupResponse = testPopup.querySelector('.trp-test-api-key-response .trp-settings-container');
             const popupResponseBody = testPopup.querySelector('.trp-test-api-key-response-body .trp-settings-container');
             const popupResponseFull = testPopup.querySelector('.trp-test-api-key-response-full .trp-settings-container');
+            const responseBody = typeof response.response.body === 'string'
+                ? response.response.body
+                : JSON.stringify( response.response.body );
 
+            popupReferrer.textContent     = response.referrer || '';
             popupResponse.textContent     = JSON.stringify( response.response.response );
-            popupResponseBody.textContent = response.response.body;
+            popupResponseBody.textContent = responseBody || '';
             popupResponseFull.textContent = response.raw_response;
         }
     }

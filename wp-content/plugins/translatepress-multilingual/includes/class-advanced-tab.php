@@ -302,7 +302,6 @@ class TRP_Advanced_Tab {
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/remove-duplicates-from-db.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/do-not-translate-certain-paths.php');
         include_once (TRP_PLUGIN_DIR . 'includes/advanced-settings/opposite-flag-shortcode.php');
-        include_once (TRP_PLUGIN_DIR . 'includes/advanced-settings/regular-tab-string-translation.php');
         include_once (TRP_PLUGIN_DIR . 'includes/advanced-settings/open-language-switcher-shortcode-on-click.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/hreflang-remove-locale.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/html-lang-remove-locale.php');

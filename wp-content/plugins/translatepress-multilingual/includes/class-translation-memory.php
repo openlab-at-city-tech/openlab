@@ -61,6 +61,9 @@ class TRP_Translation_Memory {
         if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
             if (isset($_POST['action']) && $_POST['action'] === 'trp_get_similar_string_translation' && !empty($_POST['original_string']) && !empty($_POST['language']) && !empty($_POST['type']) && in_array($_POST['language'], $this->settings['translation-languages']) )
             {
+                if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+                    wp_die( -1, 403 );
+                }
                 global $TRP_LANGUAGE;
                 check_ajax_referer('getsimilarstring', 'security');
                 $string = ( isset($_POST['original_string']) ) ? $_POST['original_string'] : '';//phpcs:ignore

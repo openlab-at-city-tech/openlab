@@ -15,6 +15,9 @@ class TRP_String_Translation_Helper {
 	/** Functions used by regular, gettext and slugs from SEO Pack */
 	public function check_ajax( $type, $action ) {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+				wp_die( -1, 403 );
+			}
             $handle_suffix = ( $action !== 'delete' ) ? '_' . $type : '';
 			check_ajax_referer( 'string_translation_' . $action . '_strings' . $handle_suffix, 'security' );
 

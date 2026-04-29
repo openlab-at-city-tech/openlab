@@ -251,8 +251,11 @@ Class TRP_Plugin_Notifications {
         $count = 0;
 
         foreach( $this->notifications as $notification ) {
-            if( ! empty( $notification['count_in_menu'] ) )
+            if( ! empty( $notification['count_in_menu'] ) ) {
+                if( get_user_meta( get_current_user_id(), $notification['id'] . '_dismiss_notification', true ) )
+                    continue;
                 $count++;
+            }
         }
 
         return $count;
@@ -278,6 +281,9 @@ Class TRP_Plugin_Notifications {
                 continue;
 
             if( ! in_array( $submenu, $notification['count_in_submenu'] ) )
+                continue;
+
+            if( get_user_meta( get_current_user_id(), $notification['id'] . '_dismiss_notification', true ) )
                 continue;
 
             $count++;
@@ -506,14 +512,14 @@ class TRP_Trigger_Plugin_Notifications{
                 $notification_id = 'trp_low_quota_warning';
                 $message = '<p style="padding-right:30px;">';
                 //[utm18]
-                $message .= sprintf( 
+                $message .= sprintf(
                     __('You have less than 5,000 TranslatePress AI words remaining. To continue automatically translating your website, please %spurchase additional AI words at a discount from your account%s.', 'translatepress-multilingual'),
                     '<a href="https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=tp-ai-words-upsell" target="_blank">',
                     '</a>'
                 );
                 $message .= '<a style="text-decoration: none;z-index:100;" href="' . add_query_arg( array( 'trp_dismiss_admin_notification' => $notification_id ) ) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) . '</span></a>';
                 $message .= '</p>';
-                
+
                 $notifications->add_notification( $notification_id, $message, 'trp-notice notice notice-warning', true, array('translate-press'), true, false );
             }
         }
@@ -604,6 +610,31 @@ class TRP_Trigger_Plugin_Notifications{
 	    // $notifications->add_notification($notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'));
 
 
+        /* Different Domain per Language add-on announcement */
+        if ( in_array( $tp_product_name, array( 'TranslatePress Business', 'TranslatePress Developer' ) ) ) {
+            $notification_id = 'trp_new_addon_different_domain_per_language';
+
+            $message = '<p style="padding-right:30px;">';
+            //[utm65]
+            $message .= __( '<strong>NEW:</strong> The <strong>Different Domain per Language</strong> add-on is here! Boost your global SEO and create a local experience with country-specific domains like .de or .fr. <a href="https://translatepress.com/docs/addons/different-domain-per-language/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl" target="_blank">Learn more</a>.', 'translatepress-multilingual' );
+            $message .= '</p>';
+            $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" style="text-decoration:none" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) . '</span></a>';
+
+            $notifications->add_notification($notification_id, $message, 'trp-notice notice notice-info', true, array('translate-press'));
+
+        } elseif ( $tp_product_name === 'TranslatePress Personal' || $tp_product_name === 'TranslatePress' ) {
+            $notification_id = 'trp_new_addon_different_domain_per_language_upsell';
+
+            $message = '<p style="padding-right:30px;">';
+            //[utm66]
+            $message .= __( '<strong>NEW:</strong> The <strong>Different Domain per Language</strong> add-on is here! Boost your global SEO and create a local experience with country-specific domains like .de or .fr. Upgrade to <a href="https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl-upsell" target="_blank">TranslatePress Business or Developer</a> to access it + more premium perks!', 'translatepress-multilingual' );
+            $message .= '</p>';
+            $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" style="text-decoration:none" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) . '</span></a>';
+
+            $notifications->add_notification($notification_id, $message, 'trp-notice notice notice-info', true, array('translate-press'));
+        }
+
+
 	    /*
 		 *  Machine translation enabled and quota are met.
 		 */
@@ -631,7 +662,7 @@ class TRP_Trigger_Plugin_Notifications{
 
         /**
          * Black Friday
-         * 
+         *
          * Showing this to:
          *   free users or
          *   users that have expired or disabled licenses
@@ -667,16 +698,16 @@ class TRP_Trigger_Plugin_Notifications{
                 $notification_id = 'trp_bf_2025';
 
                 $message = '<img style="float: left; margin: 10px 8px 10px 0px; max-width: 20px;" src="' . TRP_PLUGIN_URL . 'assets/images/tp-logo-2d.png" />';
-                
+
                 if ( !$free_version && $license_status == 'expired' )
                     //[utm27]
                     $message .= '<p style="padding-right:30px;font-size: 110%;"><strong>TranslatePress Black Friday is here!</strong> Renew your <strong>PRO</strong> license with our biggest discount of the year. <a href="https://translatepress.com/account/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=bf-2025-renewal" target="_blank">Learn more</a></p>';
                 else
                     //[utm28]
                     $message .= '<p style="padding-right:30px;font-size: 110%;"><strong>TranslatePress Black Friday is here!</strong> Go <strong>PRO</strong> with our biggest discount of the year. <a href="https://translatepress.com/black-friday/?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=bf-2025" target="_blank">Learn more</a></p>';
-                
+
                 $message .= '<a href="' . add_query_arg( array( 'trp_dismiss_admin_notification' => $notification_id ) ) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__( 'Dismiss this notice.', 'translatepress-multilingual' ) . '</span></a>';
-        
+
                 $notifications->add_notification( $notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'), true );
 
             }
@@ -696,7 +727,7 @@ function trp_bf_show_promotion(){
 
     if( !empty( $license_details ) ){
         foreach( $license_details as $row ){
-            
+
             if( !empty( $row ) ){
                 foreach( $row as $details ){
 

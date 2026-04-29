@@ -124,7 +124,9 @@ class TRP_Onboarding {
 
                 <div id="trp-header-items-wrapper">
                     <a class="trp-header-link" href="<?php echo esc_url( admin_url( 'options-general.php?page=translate-press' ) ); ?>"><span class="trp-header-item-text trp-primary-text"><?php esc_html_e( 'Exit Setup', 'translatepress-multilingual' ); ?></span></a>
-                    <a id="trp-upgrade-now-button" class="trp-header-link" href="https://translatepress.com/pricing/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=header-upsell"><?php esc_html_e( 'Upgrade', 'translatepress-multilingual' ); ?></a>
+                    <?php if ( trp_can_show_upgrade_now_button() ) : ?>
+                        <a id="trp-upgrade-now-button" class="trp-header-link" href="https://translatepress.com/pricing/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=header-upsell"><?php esc_html_e( 'Upgrade', 'translatepress-multilingual' ); ?></a>
+                    <?php endif; ?>
                 </div>
             </div>
             <div class="trp-onboarding-content">

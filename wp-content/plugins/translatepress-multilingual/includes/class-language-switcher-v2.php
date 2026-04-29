@@ -58,9 +58,16 @@ class TRP_Language_Switcher_V2 {
         $this->trp      = $trp;
         $this->viewport = wp_is_mobile() ? 'mobile' : 'desktop';
 
-        $this->config = $this->language_switcher_tab->get_initial_config(); // In case it's not yet initialized, we initialize it here
+        // In case it's not yet initialized, we initialize it here
+        $this->config = $this->language_switcher_tab->get_initial_config();
 
-        $this->resolve_language_context();
+        /**
+         * Add the shortcode here instead of init, so we can run the render_shortcode function on pages excluded from translation
+         * Needed because otherwise the shortcode wouldn't be processed at all and [language-switcher] text would appear on excluded pages
+         */
+        add_shortcode( 'language-switcher', [ $this, 'render_shortcode' ] );
+
+        add_action( 'plugins_loaded', array( $this, 'resolve_language_context' ), 3 ); // Trigger on plugins loaded with higher priority for compat with Multiple Domains
     }
 
     /**
@@ -73,7 +80,6 @@ class TRP_Language_Switcher_V2 {
     public function init() {
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_assets' ] );
         add_action( 'wp_footer', [ $this, 'render_floater' ], 99 );
-        add_shortcode( 'language-switcher', [ $this, 'render_shortcode' ] );
         add_filter( 'wp_get_nav_menu_items', [ $this, 'filter_menu_items' ], 10, 3 );
 
         $this->register_ls_menu_switcher();
@@ -119,7 +125,7 @@ class TRP_Language_Switcher_V2 {
      *
      * @return void
      */
-    private function resolve_language_context(): void {
+    public function resolve_language_context(): void {
         $lang_from_url = $this->url_converter->get_lang_from_url_string(); // may be null
         $needed_lang = $this->determine_needed_language($lang_from_url, $this->trp);
 
@@ -129,7 +135,9 @@ class TRP_Language_Switcher_V2 {
         $TRP_LANGUAGE = $needed_lang;
 
         $allow = apply_filters('trp_allow_language_redirect', true, $needed_lang, $this->url_converter->cur_page_url());
-        if (!$allow) return;
+
+        if ( !$allow || trp_dntcp_is_current_url_excluded() )
+            return;
 
         $missing_in_url = ($lang_from_url === null);
 
@@ -262,6 +270,10 @@ class TRP_Language_Switcher_V2 {
      * @return string
      */
     public function render_shortcode( $atts = [] ): string {
+        $loader = $this->trp->get_component( 'loader' );
+        if ( apply_filters( 'trp_allow_tp_to_run', true, $loader ) === false )
+            return '';
+
         $atts = shortcode_atts( [
             'is_editor' => 'false',
         ], $atts, 'language-switcher' );
@@ -386,7 +398,7 @@ class TRP_Language_Switcher_V2 {
                 $real_current_indexes[] = $i;
             }
 
-            $label_html = $user_labels[ $orig ] ?? null;
+            $label_html = !empty( $user_labels[ $orig ] ) && $has_label ? $user_labels[ $orig ] : null;
             if ( $label_html === null ) {
                 $label_html = $this->build_menu_item_label_viewport(
                     $code,

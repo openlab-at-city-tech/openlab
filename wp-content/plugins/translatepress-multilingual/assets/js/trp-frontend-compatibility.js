@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
     function trpClearWooCartFragments(){
 
         // clear WooCommerce cart fragments when switching language
-        var trp_language_switcher_urls = document.querySelectorAll(".trp-language-switcher-container a:not(.trp-ls-disabled-language)");
+        var trp_language_switcher_urls = document.querySelectorAll(".trp-language-switcher-container a:not(.trp-ls-disabled-language), .trp-language-item:not(.trp-language-item__current)");
 
         for (i = 0; i < trp_language_switcher_urls.length; i++) {
             trp_language_switcher_urls[i].addEventListener("click", function(){

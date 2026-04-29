@@ -1,5 +1,5 @@
 /*!
- * vue-router v4.6.3
+ * vue-router v4.6.4
  * (c) 2025 Eduardo San Martin Morote
  * @license MIT
  */
@@ -14,19 +14,31 @@
 /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/babel/babel/blob/main/packages/babel-helpers/LICENSE */
 
 /**
-* @vue/runtime-core v3.5.24
+* @vue/compiler-core v3.5.31
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/runtime-dom v3.5.24
+* @vue/compiler-dom v3.5.31
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/
 
 /**
-* @vue/shared v3.5.24
+* @vue/runtime-core v3.5.31
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/runtime-dom v3.5.31
+* (c) 2018-present Yuxi (Evan) You and Vue contributors
+* @license MIT
+**/
+
+/**
+* @vue/shared v3.5.31
 * (c) 2018-present Yuxi (Evan) You and Vue contributors
 * @license MIT
 **/

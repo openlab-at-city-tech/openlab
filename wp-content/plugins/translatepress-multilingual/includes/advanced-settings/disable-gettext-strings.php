@@ -66,6 +66,8 @@ function display_message_for_disable_gettext_in_editor( $trp_editor_notices ) {
         // Custom dismiss link
         $html .= '<a href="#" id="trp-dismiss-gettext-notice" class="trp-button-primary">'. esc_html__('Dismiss', 'translatepress-multilingual') .'</a>';
 
+        $dismiss_nonce = wp_create_nonce( 'trp_dismiss_gettext_notice' );
+
         // Inline JS with ajax URL hardcoded
         $html .= "<script>
             document.addEventListener('DOMContentLoaded', function(){
@@ -78,7 +80,7 @@ function display_message_for_disable_gettext_in_editor( $trp_editor_notices ) {
                         var xhr = new XMLHttpRequest();
                         xhr.open('POST', '" . esc_url( $ajax_url ) . "', true);
                         xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                        xhr.send('action=trp_dismiss_gettext_notice');
+                        xhr.send('action=trp_dismiss_gettext_notice&security=" . esc_js( $dismiss_nonce ) . "');
                     });
                 }
             });
@@ -94,6 +96,7 @@ function display_message_for_disable_gettext_in_editor( $trp_editor_notices ) {
 
 // Handle AJAX dismiss
 add_action( 'wp_ajax_trp_dismiss_gettext_notice', function() {
+    check_ajax_referer( 'trp_dismiss_gettext_notice', 'security' );
     if ( current_user_can( 'edit_posts' ) ) {
         update_user_meta( get_current_user_id(), '_trp_dismissed_gettext_notice', true );
     }

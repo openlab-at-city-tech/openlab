@@ -81,7 +81,7 @@ function trp_mtapi_add_settings( $mt_settings ){
 
             <div class="trp-upsale-fill" id="<?php echo esc_html( $translatepress_version_name )  ?>" style="display: none;">
                 <span class="trp-primary-text trp-upsale-text-red">
-                   <?php esc_html_e("Get more AI Tokens and unlock all AI features with TranslatePress Pro.", "translatepress-multilingual"); ?>
+                   <?php esc_html_e("Get more AI Words and unlock all AI features with TranslatePress Pro.", "translatepress-multilingual"); ?>
                         <a href="https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettingsAT&utm_campaign=tpaifree" id="trp-upgrade-link" target="_blank">
                             <span class="trp-upsale-text-link">
                                 <span><?php esc_html_e("Upgrade now", "translatepress-multilingual"); ?></span>
@@ -182,7 +182,7 @@ function trp_mtapi_add_settings( $mt_settings ){
 
         <div class="trp-upsale-fill trp-upsale-fill-active-license" id="<?php echo esc_html( $translatepress_version_name )?>" style=" display: none " >
                 <span class="trp-primary-text trp-upsale-text-red">
-                   <?php esc_html_e("Get more AI Tokens and unlock all AI features with TranslatePress Pro.", "translatepress-multilingual"); /* [utm45] */?>
+                   <?php esc_html_e("Get more AI Words and unlock all AI features with TranslatePress Pro.", "translatepress-multilingual"); /* [utm45] */?>
                         <a href="https://translatepress.com/pricing/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=tp-ai" id="trp-upgrade-link" target="_blank">
                             <span class="trp-upsale-text-link">
                                 <span><?php esc_html_e("Upgrade now", "translatepress-multilingual"); ?></span>

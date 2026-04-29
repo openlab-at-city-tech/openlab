@@ -52,7 +52,7 @@ class TRP_Step_Finish implements TRP_Onboarding_Step_Interface {
                 <div class="trp-newsletter">
                     <input type="checkbox" class="email-subscription-checkbox" name="trp-checkbox-newsletter" id="trp-checkbox-newsletter" <?php checked($this->newsletter_checkbox, 'on'); ?> />
                     <label for="trp-checkbox-newsletter" title="<?php esc_html_e('Receive ', 'translatepress-multilingual'); ?>">
-                        <?php esc_html_e('Sign me up to the Newsletter', 'translatepress-multilingual'); ?>
+                        <?php esc_html_e('Yes, send me multilingual growth tips.', 'translatepress-multilingual'); ?>
                     </label>
                     <div class="email-subscription-wrap">
                         <?php

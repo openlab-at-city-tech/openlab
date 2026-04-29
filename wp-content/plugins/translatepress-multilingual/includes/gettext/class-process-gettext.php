@@ -40,11 +40,6 @@ class TRP_Process_Gettext {
      * @return string
      */
     public function process_gettext_strings( $translation, $text, $domain, $context = 'trp_context', $number_of_items = null, $original_plural = null ) {
-        global $trp_wpdb_prefix, $wpdb;
-        if ( $trp_wpdb_prefix != $wpdb->get_blog_prefix() ){
-            return $translation;
-        }
-
         // if we have nested gettexts strip previous ones, and consider only the outermost
         $text        = TRP_Gettext_Manager::strip_gettext_tags( $text );
         $translation = TRP_Gettext_Manager::strip_gettext_tags( $translation );
@@ -70,6 +65,15 @@ class TRP_Process_Gettext {
             // Use trp_skip_gettext_processing hook for not adding wrappings.
             $this->skip_gettext_querying = apply_filters( 'trp_skip_gettext_querying', false, $translation, $text, $domain );
         }
+
+        global $trp_wpdb_prefix, $wpdb;
+        // When gettext querying is disabled, create_gettext_translated_global() never runs,
+        // so $trp_wpdb_prefix stays unset. In that case we still need to reach the
+        // gettext wrapper path so regular string detection can skip this output.
+        if ( !$this->skip_gettext_querying && $trp_wpdb_prefix != $wpdb->get_blog_prefix() ){
+            return $translation;
+        }
+
         /* get_locale() returns WP Settings Language (WPLANG). It might not be a language in TP so it may not have a TP table. */
         $current_locale = get_locale();
         global $trp_translated_gettext_texts_language;

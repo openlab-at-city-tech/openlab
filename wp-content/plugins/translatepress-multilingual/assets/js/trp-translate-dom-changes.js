@@ -464,7 +464,15 @@ function TRP_Translator(){
         }
 
         // create an observer instance
-        observer = new MutationObserver( _this.detect_new_strings_callback );
+        if ( trp_data['showdynamiccontentbeforetranslation'] === true ){
+            observer = new MutationObserver(mutations => {
+                setTimeout(() => _this.detect_new_strings_callback(mutations), 0);
+            });
+        }
+
+        else {
+            observer = observer = new MutationObserver(_this.detect_new_strings_callback)
+        }
 
         _this.resume_observer();
 

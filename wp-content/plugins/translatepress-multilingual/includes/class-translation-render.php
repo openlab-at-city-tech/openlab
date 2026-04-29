@@ -454,14 +454,23 @@ class TRP_Translation_Render{
 			return $data;
 		}
 
+        $skip_shortcode_translation = apply_filters( 'trp_rest_api_skip_shortcode_translation', true, $data );
+
 		foreach ( $translatable_keys as $field ) {
 			// Check for direct field first
 			if ( isset( $data[$field] ) && is_string( $data[$field] ) ) {
+                // Skip shortcodes due to MT quota consumption
+				if ( $this->rest_value_has_shortcode( $data[$field] ) && $skip_shortcode_translation ) {
+					continue;
+				}
 				$data[$field] = $this->translate_page( $data[$field] );
 			}
 			// For title, content, excerpt - also check .rendered subfield
 			elseif ( in_array( $field, array( 'title', 'content', 'excerpt' ) ) ) {
 				if ( isset( $data[$field]['rendered'] ) && is_string( $data[$field]['rendered'] ) ) {
+					if ( $this->rest_value_has_shortcode( $data[ $field]['rendered'] ) && $skip_shortcode_translation ) {
+						continue;
+					}
 					$data[$field]['rendered'] = $this->translate_page( $data[$field]['rendered'] );
 				}
 			}
@@ -486,6 +495,25 @@ class TRP_Translation_Render{
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Check if a value contains shortcodes.
+	 *
+	 * @param string $value
+	 * @return bool
+	 */
+	private function rest_value_has_shortcode( $value ) {
+		if ( ! is_string( $value ) || strpos( $value, '[' ) === false ) {
+			return false;
+		}
+
+		$pattern = get_shortcode_regex();
+		if ( ! empty( $pattern ) && preg_match( '/' . $pattern . '/s', $value ) ) {
+			return true;
+		}
+
+		return preg_match( '/\\[[^\\]]+\\]/', $value ) === 1;
 	}
 
     /**
@@ -844,6 +872,10 @@ class TRP_Translation_Render{
                 $string_count = array_push( $translateable_strings, $trimmed_string );
                 array_push( $nodes, array('node' => $row, 'type' => 'block'));
 
+                if ( ! apply_filters( 'trp_allow_machine_translation_for_string', true, $trimmed_string, null, null, $row ) ){
+                    array_push( $skip_machine_translating_strings, $trimmed_string );
+                }
+
                 //add data-trp-post-id attribute if needed
                 $nodes = $this->maybe_add_post_id_in_node( $nodes, $row, $string_count );
             }
@@ -1019,7 +1051,7 @@ class TRP_Translation_Render{
             $translated_strings_manual_dictionary = $this->trp_query->get_existing_translations( array_values( $translateable_strings_manual ), $language_code );
             $translated_strings_manual = array();
             foreach ( $translateable_strings_manual as $i => $string_manual ) {
-                if ( isset( $translated_strings_manual_dictionary[ $string_manual ]->translated ) ) {
+                if ( isset( $translated_strings_manual_dictionary[ $string_manual ]->translated ) && !empty( $translated_strings_manual_dictionary[ $string_manual ]->translated )) {
                     $translated_strings_manual[$i] = $translated_strings_manual_dictionary[ $string_manual ]->translated;
                 }
             }
@@ -1376,6 +1408,61 @@ class TRP_Translation_Render{
         return $allow;
     }
 
+    /*
+     * Do not automatically translate numbers, emails and base64 images
+     *
+     * Hooked to trp_allow_machine_translation_for_string
+     */
+    public function skip_strings_that_cannot_be_auto_translated( $allow, $entity_decoded_trimmed_string, $current_node_accessor_selector, $node_accessor, $row ) {
+        if ( is_numeric( $entity_decoded_trimmed_string ) ||
+            $this->looks_like_email( $entity_decoded_trimmed_string ) ||
+            ( strncmp( $entity_decoded_trimmed_string, 'data:image/', 11 ) === 0 && strpos( $entity_decoded_trimmed_string, ';base64,', 11 ) !== false )
+        ) {
+            $allow = false;
+        }
+        return $allow;
+    }
+
+    /**
+     * Very fast is_email function. Not 100% strict, but good enough for deciding to not auto translate it
+     *
+     * @param $s
+     * @return bool
+     */
+    public function looks_like_email( $s ) {
+        $len = strlen( $s );
+
+        // Length sanity (fast integer checks)
+        if ( $len < 6 || $len > 254 ) {
+            return false;
+        }
+
+        // Single @ check (cheaper than regex)
+        if ( substr_count( $s, '@' ) !== 1 ) {
+            return false;
+        }
+
+        $at = strpos( $s, '@' );
+
+        // @ cannot be first or last
+        if ( $at === 0 || $at === $len - 1 ) {
+            return false;
+        }
+
+        // No spaces
+        if ( strpos( $s, ' ' ) !== false ) {
+            return false;
+        }
+
+        // Dot must exist after @ with at least one char in between
+        $lastDot = strrpos( $s, '.' );
+        if ( $lastDot === false || $lastDot < $at + 2 || $lastDot === $len - 1 ) {
+            return false;
+        }
+
+        // Regex only for plausible candidates
+        return preg_match( '/^[^\s@]+@[^\s@]+\.[^\s@]+$/', $s ) === 1;
+    }
 
     /**
      * function that removes any unwanted leftover <trp-gettext> tags
@@ -1511,16 +1598,16 @@ class TRP_Translation_Render{
         $link_url = parse_url( $url );
         if( empty( $home_url ) )
             $home_url = home_url();
-        $home_url = parse_url( $home_url );
+        $home_url_parsed = parse_url( $home_url );
 
         // Decide on target
-        if( !isset ($link_url['host'] ) || $link_url['host'] == $home_url['host'] ) {
+        if( !isset ($link_url['host'] ) || $link_url['host'] == $home_url_parsed['host'] ) {
             // Is an internal link
             return false;
 
         } else {
-            // Is an external link
-            return true;
+            // Allow addons (like Multiple Domains) to recognize additional domains as internal
+            return apply_filters( 'trp_is_external_link', true, $url, $home_url );
         }
     }
     /**
@@ -1685,7 +1772,14 @@ class TRP_Translation_Render{
         }
 
         foreach ( $translateable_strings as $i => $string ) {
-
+            if ( isset( $dictionary[ $string ]->translated ) && empty( $dictionary[ $string ]->translated ) ) {
+                /* If we have an empty string with a status != NOT TRANSLATED, it's possible we are dealing with
+                 * an intentional thing. After Automatic translation, a text can be translated with unallowed html
+                 * thus being stored in DB as empty string with status = MACHINE TRANSLATED. By doing continue; we avoid
+                 * re-autotranslating over and over again.
+                 */
+                continue;
+            }
             // prevent accidentally machine translated strings from db such as for src to be displayed
             $skip_string = in_array( $string, $skip_machine_translating_strings );
 
@@ -1762,7 +1856,11 @@ class TRP_Translation_Render{
         foreach( $new_strings as $i => $string ){
 
             if ( !isset($translated_strings[$i]) && isset( $machine_strings[$string] ) ) {
-                $translated_strings[$i] = $machine_strings[$string];
+                $sanitized_machine_string = trp_sanitize_string( $machine_strings[$string] );
+                if ( !empty( $sanitized_machine_string ) ){
+                    // Unallowed HTML can be turned into empty string. Show original text instead
+                    $translated_strings[$i] = $sanitized_machine_string;
+                }
             }
 
             /**
@@ -2079,20 +2177,55 @@ class TRP_Translation_Render{
      * @param $args
      * @return array
      */
-    public function wp_mail_filter( $args ){
-        if ( !is_array( $args ) ){
+    public function wp_mail_filter( $args ) {
+        if ( ! is_array( $args ) ) {
             return $args;
         }
 
-        $whitelisted_shortcodes = apply_filters( 'trp_whitelisted_shortcodes_for_wp_mail', [ 'trp_language', 'language-include', 'language-exclude' ] );
-
-        if ( array_key_exists( 'subject', $args ) ){
-            $args['subject'] = $this->translate_page( trp_do_these_shortcodes( $args['subject'], $whitelisted_shortcodes ) );
+        if ( empty( $args['to'] ) ) {
+            return $args;
         }
 
-        if ( array_key_exists( 'message', $args ) ){
-            $args['message'] = $this->translate_page( trp_do_these_shortcodes( $args['message'], $whitelisted_shortcodes ) );
+        global $TRP_LANGUAGE;
+
+        $initial_language = $TRP_LANGUAGE;
+
+        $recipient = $args['to'];
+
+        // Normalize $recipient to a single email string (first recipient only - that's the main one)
+        if ( is_array( $recipient ) ) {
+            $first = reset( $recipient );
+            $recipient = is_string( $first ) ? $first : '';
         }
+
+        $recipient = (string) $recipient;
+
+        // Keep only the first comma-separated entry if multiple are present in the string
+        $recipient = trim( strtok( $recipient, ',' ) );
+
+        if ( $recipient !== '' ) {
+            trp_switch_to_preffered_language( $recipient );
+        }
+
+        $whitelisted_shortcodes = apply_filters(
+            'trp_whitelisted_shortcodes_for_wp_mail',
+            array( 'trp_language', 'language-include', 'language-exclude' )
+        );
+
+        if ( array_key_exists( 'subject', $args ) ) {
+            $args['subject'] = $this->translate_page(
+                trp_do_these_shortcodes( $args['subject'], $whitelisted_shortcodes )
+            );
+        }
+
+        if ( array_key_exists( 'message', $args ) ) {
+            $args['message'] = $this->translate_page(
+                trp_do_these_shortcodes( $args['message'], $whitelisted_shortcodes )
+            );
+        }
+
+        // Switch back to the language used initially
+        $TRP_LANGUAGE = $initial_language;
 
         return $args;
     }

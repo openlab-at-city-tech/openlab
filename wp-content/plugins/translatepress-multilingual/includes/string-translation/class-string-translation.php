@@ -360,7 +360,7 @@ class TRP_String_Translation {
         );
 
 
-        if ( !apply_filters('trp_show_regular_strings_string_translation', false ) ){
+        if ( !apply_filters('trp_show_regular_strings_string_translation', true ) ){
             unset($string_types_config['regular']);
         }
         $seo_pack_active = class_exists( 'TRP_IN_Seo_Pack');

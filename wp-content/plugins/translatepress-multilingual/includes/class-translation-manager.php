@@ -187,7 +187,7 @@ class TRP_Translation_Manager {
                     'tooltip_text_general' => esc_html__( '%1$s% of text on this page is translated into %2$s.', 'translatepress-multilingual'),
                     'minibar_text'         => esc_html__('This page is %1$s% translated into %2$s.', 'translatepress-multilingual')
                 ),
-                'multiple_types_alert'              => esc_html__( "The slug that you are trying to edit is present in other slug types:%s%.\nEditing it will replace each occurrence, regardless of the current type.", 'translatepress-multilingual')
+                'multiple_types_alert'              => esc_html__( "The slug that you are trying to edit is present in other slug types:%s%. Editing it will replace each occurrence, regardless of the current type.", 'translatepress-multilingual')
             );
     }
 
@@ -509,6 +509,10 @@ class TRP_Translation_Manager {
             'license_notice_content'      => $this->get_license_notice_content()
         );
 
+        // Remove API keys from the array due to it being exposed in JS
+        unset( $trp_editor_data['trp_settings']['trp_machine_translation_settings']['deepl-api-key'] );
+        unset( $trp_editor_data['trp_settings']['trp_machine_translation_settings']['google-translate-key'] );
+
         return apply_filters( 'trp_editor_data', $trp_editor_data );
     }
 
@@ -554,17 +558,141 @@ class TRP_Translation_Manager {
             $url_target = '';
         }
 
+        // Check if no secondary languages are configured
+        $notif_no_language = !isset( $this->settings['translation-languages'] ) || count( $this->settings['translation-languages'] ) <= 1;
+
+        // Check if user is on the free version
+        $trp = TRP_Translate_Press::get_trp_instance();
+        $tp_product_name = reset( $trp->tp_product_name );
+        $is_free_version = ( $tp_product_name === 'TranslatePress' );
+
+        // Check license status
+        $license_status = get_option( 'trp_license_status', '' );
+
+        // Check if free user does not have a valid license
+        $notif_no_free_license = $is_free_version && $license_status !== 'valid';
+
+        // Check if paid user has expired license
+        $notif_invalid_paid_license = !$is_free_version && $license_status !== 'valid';
+
+        // Check if TranslatePress AI is configured and has low quota (less than 100 words = 500 characters)
+        $notif_low_ai_quota = false;
+        $ai_words_remaining = 0;
+        $mt_settings = isset( $this->settings['trp_machine_translation_settings'] ) ? $this->settings['trp_machine_translation_settings'] : array();
+        // Check if TranslatePress AI is the selected engine (regardless of whether auto-translate is enabled)
+        $is_ai_configured = isset( $mt_settings['translation-engine'] ) && $mt_settings['translation-engine'] === 'mtapi';
+
+        if ( $is_ai_configured ) {
+            $cached_quota = get_transient( 'trp_mtapi_cached_quota' );
+            // Quota is stored in characters, 500 characters = ~100 words
+            if ( $cached_quota !== false && is_numeric( $cached_quota ) && $cached_quota < 500 ) {
+                $notif_low_ai_quota = true;
+                $ai_words_remaining = max( 0, floor( $cached_quota / 5 ) );
+            }
+        }
+
+        // Get dismissed notifications from user meta
+        $dismissed = get_user_meta( get_current_user_id(), 'trp_dismissed_admin_bar_notifications', true );
+        if ( !is_array( $dismissed ) ) {
+            $dismissed = array();
+        }
+
+        // Reset low_ai_quota dismissal when quota is no longer low (user refilled)
+        if ( !$notif_low_ai_quota && isset( $dismissed['low_ai_quota'] ) ) {
+            unset( $dismissed['low_ai_quota'] );
+            update_user_meta( get_current_user_id(), 'trp_dismissed_admin_bar_notifications', $dismissed );
+        }
+
+        // Count only non-dismissed notifications for the badge
+        $notification_count = 0;
+        if ( $notif_no_language && empty( $dismissed['no_language'] ) )           $notification_count++;
+        if ( $notif_no_free_license && empty( $dismissed['no_free_license'] ) )   $notification_count++;
+        if ( $notif_invalid_paid_license )                                        $notification_count++;
+        if ( $notif_low_ai_quota && empty( $dismissed['low_ai_quota'] ) )         $notification_count++;
+
+        // Add notification badge if there are any notifications
+        $notification_badge = '';
+        $has_notifications = $notification_count > 0;
+        if ( $has_notifications ) {
+            $notification_badge = '<span class="trp-notification-badge">' . $notification_count . '</span>';
+        }
+
         $wp_admin_bar->add_node(
             array(
                 'id'    => 'trp_edit_translation',
-                'title' => '<span class="ab-icon"></span><span class="ab-label">' . $title . '</span>',
+                'title' => '<span class="ab-icon"></span><span class="ab-label">' . $title . $notification_badge . '</span>',
                 'href'  => $url,
                 'meta'  => array(
-                    'class'  => 'trp-edit-translation',
+                    'class'  => 'trp-edit-translation' . ( $has_notifications ? ' trp-needs-setup' : '' ),
                     'target' => $url_target
                 )
             )
         );
+
+        // Add setup item if no secondary language is configured
+        if ( $notif_no_language ) {
+            $no_language_badge = empty( $dismissed['no_language'] ) ? '<span class="trp-notification-badge">1</span>' : '';
+            $wp_admin_bar->add_node(
+                array(
+                    'id'     => 'trp_add_language',
+                    'title'  => __( 'Add a New Language', 'translatepress-multilingual' ) . $no_language_badge,
+                    'href'   => add_query_arg( 'trp-dismiss-notif', 'no_language', admin_url( 'options-general.php?page=translate-press' ) ),
+                    'parent' => 'trp_edit_translation',
+                    'meta'   => array(
+                        'class' => 'trp-add-language'
+                    )
+                )
+            );
+        }
+
+        // Add free AI license item for free users without a valid license
+        if ( $notif_no_free_license ) {
+            $no_free_license_badge = empty( $dismissed['no_free_license'] ) ? '<span class="trp-notification-badge">1</span>' : '';
+            $wp_admin_bar->add_node(
+                array(
+                    'id'     => 'trp_auto_translate_setup',
+                    'title'  => __( 'Get a Free AI License', 'translatepress-multilingual' ) . $no_free_license_badge,
+                    'href'   => add_query_arg( 'trp-dismiss-notif', 'no_free_license', admin_url( 'admin.php?page=trp_machine_translation' ) ),
+                    'parent' => 'trp_edit_translation',
+                    'meta'   => array(
+                        'class' => 'trp-auto-translate-setup'
+                    )
+                )
+            );
+        }
+
+        // Add license renewal item for paid users with expired license
+        if ( $notif_invalid_paid_license ) {
+            $wp_admin_bar->add_node(
+                array(
+                    'id'     => 'trp_renew_license',
+                    'title'  => __( 'Your License is Invalid', 'translatepress-multilingual' ) . '<span class="trp-notification-badge">1</span>',
+                    'href'   => admin_url( 'admin.php?page=trp_license_key' ),
+                    'parent' => 'trp_edit_translation',
+                    'meta'   => array(
+                        'class' => 'trp-renew-license'
+                    )
+                )
+            );
+        }
+
+        // Add low AI quota warning
+        if ( $notif_low_ai_quota ) {
+            $low_ai_quota_badge = empty( $dismissed['low_ai_quota'] ) ? '<span class="trp-notification-badge">1</span>' : '';
+            /* translators: %d is the number of AI words remaining */
+            $low_quota_text = sprintf( __( 'Get More AI Words (%d left)', 'translatepress-multilingual' ), $ai_words_remaining );
+            $wp_admin_bar->add_node(
+                array(
+                    'id'     => 'trp_low_ai_quota',
+                    'title'  => $low_quota_text . $low_ai_quota_badge,
+                    'href'   => add_query_arg( 'trp-dismiss-notif', 'low_ai_quota', admin_url( 'admin.php?page=trp_machine_translation' ) ),
+                    'parent' => 'trp_edit_translation',
+                    'meta'   => array(
+                        'class' => 'trp-low-ai-quota'
+                    )
+                )
+            );
+        }
 
         $wp_admin_bar->add_node(
             array(
@@ -578,6 +706,32 @@ class TRP_Translation_Manager {
             )
         );
 
+    }
+
+    /**
+     * Dismiss an admin bar notification when the user clicks through via trp-dismiss-notif param.
+     *
+     * Hooked to admin_init.
+     */
+    public function maybe_dismiss_admin_bar_notification() {
+        if ( !isset( $_GET['trp-dismiss-notif'] ) || !current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+            return;
+        }
+
+        $notif_key  = sanitize_text_field( $_GET['trp-dismiss-notif'] );
+        $valid_keys = array( 'no_language', 'no_free_license', 'low_ai_quota' );
+
+        if ( !in_array( $notif_key, $valid_keys, true ) ) {
+            return;
+        }
+
+        $dismissed = get_user_meta( get_current_user_id(), 'trp_dismissed_admin_bar_notifications', true );
+        if ( !is_array( $dismissed ) ) {
+            $dismissed = array();
+        }
+
+        $dismissed[ $notif_key ] = true;
+        update_user_meta( get_current_user_id(), 'trp_dismissed_admin_bar_notifications', $dismissed );
     }
 
     /**
@@ -622,17 +776,52 @@ class TRP_Translation_Manager {
     /**
      * Add the glyph icon for Translate Site button in admin bar
      *
-     * hooked to admin_head action
+     * hooked to admin_head and wp_head actions
      */
     public function add_styling_to_admin_bar_button() {
-        echo "<style type='text/css'> #wpadminbar #wp-admin-bar-trp_edit_translation .ab-icon:before {    content: '\\f326';    top: 3px;}
+        if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+            return;
+        }
+        echo "<style> 
+        #wpadminbar #wp-admin-bar-trp_edit_translation .ab-icon:before {    content: '\\f326';    top: 3px;}
 		#wpadminbar #wp-admin-bar-trp_edit_translation > .ab-item {
 			text-indent: 0;
+			display: flex;
+            justify-content: space-between;
+            align-items: center;
 		}
 
 		#wpadminbar li#wp-admin-bar-trp_edit_translation {
 			display: block;
-		}</style>";
+		}
+		
+		#wpadminbar .trp-notification-badge {
+			background: #d63638;
+			color: #fff;
+			border-radius: 50%;
+			padding: 0 6px;
+			margin: -3px 0 0 6px;
+			font-size: 11px;
+			line-height: 18px;
+			display: inline-block;
+			vertical-align: middle;
+			min-width: 18px;
+			text-align: center;
+			box-sizing: border-box;
+		}
+
+		@keyframes trp-greyscale-pulse {
+			0%, 100% { color: #fff; }
+			50% { color: #626265; }
+		}
+
+		#wpadminbar .trp-needs-setup .ab-icon:before {
+			animation: trp-greyscale-pulse 3s ease-in-out infinite;
+		}
+		#wpadminbar .trp-settings-page {
+		    /*border-top: 1px solid #4b4b4b;*/
+		}
+        </style>";
     }
 
 

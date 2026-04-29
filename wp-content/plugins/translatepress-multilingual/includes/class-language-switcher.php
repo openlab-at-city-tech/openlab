@@ -34,6 +34,7 @@ class TRP_Language_Switcher{
         global $TRP_LANGUAGE;
         $TRP_LANGUAGE = $language;
         add_filter( 'get_user_option_metaboxhidden_nav-menus', array( $this, 'cpt_always_visible_in_menus' ), 10, 3 );
+        add_shortcode( 'language-switcher', [ $this, 'language_switcher' ] );
     }
 
 	/**
@@ -128,6 +129,10 @@ class TRP_Language_Switcher{
 	 * @return string                   HTML for shortcode language switcher
 	 */
 	public function language_switcher( $atts ){
+        $loader = $this->trp->get_component( 'loader' );
+        if ( apply_filters( 'trp_allow_tp_to_run', true, $loader ) === false )
+            return '';
+
 		ob_start();
 
 		global $TRP_LANGUAGE;

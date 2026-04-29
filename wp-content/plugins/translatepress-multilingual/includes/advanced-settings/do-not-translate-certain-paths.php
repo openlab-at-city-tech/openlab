@@ -247,6 +247,11 @@ function trp_exclude_include_redirect_to_default_language(){
     if( is_admin() )
         return;
 
+    // On mapped domains, trp_dntcp_redirect_excluded_paths_on_mapped_domains() handles redirects
+    // This function's URL building logic doesn't work correctly with Multiple Domains
+    if ( function_exists( 'trp_dntcp_is_on_mapped_domain' ) && trp_dntcp_is_on_mapped_domain() )
+        return;
+
     $settings          = get_option( 'trp_settings', false );
     $advanced_settings = get_option( 'trp_advanced_settings', false );
 
@@ -488,4 +493,186 @@ function trp_dntcp_exclude_links_from_automatic_translation( $excluded, $url_ver
     }
 
     return $excluded;
+}
+
+/**
+ * Check if the current URL is excluded from translation based on the
+ * "Do not translate certain paths" / "Translate only certain paths" setting.
+ *
+ * Takes into account:
+ *  - site installed in subdirectory
+ *  - "Use a subdirectory for the default language"
+ *  - {{home}} mapping
+ *  - both "exclude" and "include" modes
+ *
+ * @return bool True if the current URL should be treated as excluded from translation.
+ */
+function trp_dntcp_is_current_url_excluded() {
+    if ( is_admin() ) {
+        return false;
+    }
+
+    $settings          = get_option( 'trp_settings', false );
+    $advanced_settings = get_option( 'trp_advanced_settings', false );
+
+    // No configuration -> nothing is excluded.
+    if ( empty( $advanced_settings )
+        || ! isset( $advanced_settings['translateable_content'] )
+        || empty( $advanced_settings['translateable_content']['paths'] )
+        || empty( $advanced_settings['translateable_content']['option'] ) ) {
+        return false;
+    }
+
+    $mode  = $advanced_settings['translateable_content']['option']; // 'exclude' or 'include'
+    $paths = trp_dntcp_get_paths();
+
+    // Build current slug in the same way as trp_exclude_include_paths_to_run_on()
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+
+    $current_lang = $url_converter->get_lang_from_url_string( $url_converter->cur_page_url() );
+    if ( empty( $current_lang ) && isset( $settings['default-language'] ) ) {
+        $current_lang = $settings['default-language'];
+    }
+
+    $site_url_components = parse_url( get_home_url() );
+    $current_slug        = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( $_SERVER['REQUEST_URI'] ) : '';
+
+    // Remove site_url path for installs in subdirectories (e.g. http://localhost/wordpress)
+    if ( isset( $site_url_components['path'] ) && $site_url_components['path'] !== '' ) {
+        $current_slug = str_replace( trim( $site_url_components['path'] ), '', $current_slug );
+    }
+
+    // Take into account subdirectory for the default language or other languages.
+    // This mirrors the logic used in trp_exclude_include_paths_to_run_on().
+    if ( isset( $settings['add-subdirectory-to-default-language'] )
+        && $settings['add-subdirectory-to-default-language'] === 'yes'
+        && ! empty( $current_lang )
+        && isset( $settings['url-slugs'][ $current_lang ] ) ) {
+
+        $replace      = '\/' . $settings['url-slugs'][ $current_lang ];
+        $current_slug = preg_replace( "/$replace/i", '', ltrim( $current_slug, '/' ), 1 );
+    }
+
+    $array_slugs = array();
+    trp_test_current_slug( $current_slug, $array_slugs );
+
+    $matched = trp_return_exclude_include_url( $paths, $current_slug, $array_slugs );
+
+    // In "exclude" mode: listed paths are excluded.
+    if ( $mode === 'exclude' )
+        return (bool) $matched;
+
+    // In "include" mode: ONLY listed paths are translatable; all others are excluded
+    if ( $mode === 'include' )
+        return !$matched;
+
+    return false;
+}
+
+/**
+ * Redirect excluded paths on mapped domains to the main domain
+ *
+ * When a path is excluded from translation, it should only be accessible on the main domain.
+ * Accessing an excluded path on a language-mapped domain (e.g., ro.example.com/excluded-page/)
+ * should redirect to the main domain (e.g., example.com/excluded-page/).
+ */
+add_action( 'template_redirect', 'trp_dntcp_redirect_excluded_paths_on_mapped_domains', 0 );
+function trp_dntcp_redirect_excluded_paths_on_mapped_domains() {
+    if ( is_admin() ) {
+        return;
+    }
+
+    // Check if current path is excluded from translation
+    if ( ! trp_dntcp_is_current_url_excluded() ) {
+        return;
+    }
+
+    // Check if we're on a mapped domain (not the main domain)
+    if ( ! trp_dntcp_is_on_mapped_domain() ) {
+        return;
+    }
+
+    // Get the URL in the default language (with original/untranslated slugs)
+    $settings = get_option( 'trp_settings', array() );
+    $default_language = isset( $settings['default-language'] ) ? $settings['default-language'] : 'en_US';
+
+    $trp = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+
+    // Get current URL and convert to default language (this reverses slug translation)
+    $current_url = $url_converter->cur_page_url();
+    $redirect_url = $url_converter->get_url_for_language( $default_language, $current_url, '' );
+
+    // Ensure the redirect URL uses the main domain
+    $main_domain = get_option( 'home' );
+    $parsed_redirect = parse_url( $redirect_url );
+    $parsed_main = parse_url( $main_domain );
+
+    if ( isset( $parsed_redirect['path'] ) ) {
+        $redirect_url = trailingslashit( $main_domain ) . ltrim( $parsed_redirect['path'], '/' );
+        if ( isset( $parsed_redirect['query'] ) ) {
+            $redirect_url .= '?' . $parsed_redirect['query'];
+        }
+    }
+
+    $status = apply_filters( 'trp_redirect_status', 301, 'redirect_excluded_path_from_mapped_domain_to_main' );
+    wp_redirect( $redirect_url, $status );
+    exit;
+}
+
+/**
+ * Check if the current request is on a language-mapped domain (not the main domain)
+ *
+ * @return bool True if on a mapped domain, false if on the main domain
+ */
+function trp_dntcp_is_on_mapped_domain() {
+    $settings = get_option( 'trp_settings', array() );
+
+    // Check if Multiple Domains mappings exist
+    if ( empty( $settings['trp-multiple-domains'] ) || ! is_array( $settings['trp-multiple-domains'] ) ) {
+        return false;
+    }
+
+    // Get current host, stripping port if present (e.g. "example.com:8080" → "example.com")
+    // so the value matches what parse_url()['host'] returns on the comparison side.
+    $current_host = '';
+    if ( ! empty( $_SERVER['HTTP_X_FORWARDED_HOST'] ) ) {
+        $current_host = sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_HOST'] ) );
+    } elseif ( ! empty( $_SERVER['HTTP_HOST'] ) ) {
+        $current_host = sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) );
+    } elseif ( isset( $_SERVER['SERVER_NAME'] ) ) {
+        $current_host = sanitize_text_field( wp_unslash( $_SERVER['SERVER_NAME'] ) );
+    }
+    $current_host = strtok( $current_host, ':' );
+
+    if ( empty( $current_host ) ) {
+        return false;
+    }
+
+    // Get main domain host
+    $main_domain = get_option( 'home' );
+    $parsed_main = parse_url( $main_domain );
+    $main_host = isset( $parsed_main['host'] ) ? $parsed_main['host'] : '';
+
+    // If we're on the main domain, return false
+    if ( strcasecmp( $current_host, $main_host ) === 0 ) {
+        return false;
+    }
+
+    // Check if current host matches any mapped domain
+    foreach ( $settings['trp-multiple-domains'] as $language_code => $mapping ) {
+        if ( empty( $mapping['enabled'] ) || empty( $mapping['domain'] ) ) {
+            continue;
+        }
+
+        $parsed_mapped = parse_url( $mapping['domain'] );
+        $mapped_host = isset( $parsed_mapped['host'] ) ? $parsed_mapped['host'] : '';
+
+        if ( strcasecmp( $current_host, $mapped_host ) === 0 ) {
+            return true; // We're on a mapped domain
+        }
+    }
+
+    return false;
 }

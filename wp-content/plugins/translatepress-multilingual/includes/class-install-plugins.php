@@ -36,6 +36,9 @@ class TRP_Install_Plugins {
     public function install_plugins_request(){
         if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
             check_ajax_referer( 'trp_install_plugins', 'security' );
+            if ( ! current_user_can( 'install_plugins' ) ) {
+                wp_die( -1, 403 );
+            }
             if ( isset( $_POST['action'] ) && $_POST['action'] === 'trp_install_plugins' && !empty( $_POST['plugin_slug'] ) ) {
                 $plugin_slug = sanitize_text_field($_POST['plugin_slug']);
                 $short_slugs = $this->get_plugin_slugs();

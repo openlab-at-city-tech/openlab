@@ -36,6 +36,11 @@ class TRP_Check_Invalid_Text{
 
                 $array1 = $trp_query->get_existing_translations( array_slice( $strings_array, 0, $half ), $language_code, $block_type );
                 $array2 = $trp_query->get_existing_translations( array_slice( $strings_array, $half ), $language_code, $block_type );
+
+                if ( $array1 === false || $array2 === false ) {
+                    return false;
+                }
+
                 return array_merge( $array1, $array2 );
             }
         }

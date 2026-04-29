@@ -63,9 +63,15 @@ function trp_full_trim( $string, $args = array()  ) {
 		$filter_string = " \t\n\r\0\x0B\xA0�.,/`~!@#\$€£%^&*():;-_=+[]{}\\|?/<>1234567890'\"";
 	}
 
-	if ( strip_tags( $string ) === '' || trim ($string, $filter_string) === '' ){
-		$string = '';
-	}
+    if ( strip_tags( $string ) === '' || trim( $string, $filter_string ) === '' ) {
+        // Needs decoding otherwise some strings with special characters won't get detected.
+        // Example in Hebrew: &#1488;&#1493;&#1499;&#1500; &#1493;&#1514;&#1512;&#1489;&#1493;&#1514;
+        // Placed inside the "if" to avoid calling html_entity_decode so often as this is a very used function
+        $decoded_string = html_entity_decode( $string );
+        if ( trim( $decoded_string, $filter_string ) === '' ) {
+            $string = '';
+        }
+    }
 	return $string;
 }
 

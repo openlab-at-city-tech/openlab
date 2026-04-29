@@ -3,9 +3,9 @@ Contributors: cozmoslabs, razvan.mo, madalin.ungureanu, sareiodata, cristophor
 Donate link: https://www.translatepress.com/
 Tags: translate, translation, multilingual, automatic translation, bilingual, front-end translation, google translate, language
 Requires at least: 3.1.0
-Tested up to: 6.8.3
+Tested up to: 6.9.4
 Requires PHP: 7.4
-Stable tag: 3.0.5
+Stable tag: 3.1.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -63,6 +63,7 @@ TranslatePress - Multilingual has a range of [premium Add-ons](https://translate
 * Full [TranslatePress AI](https://translatepress.com/ai/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) access - automatically translate your entire website without extra platforms to sign up for, API keys, and additional translation costs. Each premium version includes a set number of AI translated words you can use to instantly translate your site, saving you both time and money.
 * [Extra Languages](https://translatepress.com/docs/addons/multiple-languages/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) - allows you to add an unlimited number of translation languages, with the possibility to publish languages later after you complete the translation
 * [SEO Pack](https://translatepress.com/docs/addons/seo-pack/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) - lets you translate meta information (like page title, description, url slug, image alt tag, Twitter and Facebook Social Graph tags & more) for boosting your multilingual SEO and increase traffic. Works with all popular SEO plugins.
+* [Different Domain per Language](https://translatepress.com/docs/developers/different-domain-per-language/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) - assign a different domain to each language you add (e.g. domain.de, domain.es) and improve international SEO by creating a fully local experience for your visitors
 * [Translator Accounts](https://translatepress.com/docs/addons/translator-accounts/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) - create or allow existing users to translate the site without admin rights
 * [Browse as User Role](https://translatepress.com/docs/addons/browse-as-role/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) - view and translate content that is visible only to a particular user role
 * [Navigation Based on Language](https://translatepress.com/docs/addons/navigate-based-language/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) - configure and display different menu items for different languages
@@ -142,25 +143,10 @@ For more information please check out our [documentation](https://translatepress
 
 
 == Changelog ==
-= 3.0.5 =
-* Fixed CSS for Black Friday offer from admin notice
-
-= 3.0.4 =
-* Added 39 more languages including Irish, Maltese and Sicilian
-* Added support for Latin American Spanish automatic translation in TranslatePress AI
-* Added support for Divi search in secondary language
-* Added support for exact match search in String Translation by placing the string in quotes: "example"
-* Allow schema.org data to be translated
-* Fixed Regular String Translation search so filtered languages also match terms appearing in the middle of translated strings, not only at the start
-* Prevent automatic translation of strings that are 0 or 1 characters long or strings that are punctuation only
-* Change background hover color for transparent preset in order to improve contrast of language switcher
-* Fixed two missing spaces in floating switcher HTML markup
-* Fix PHP warning with empty domain for gettext with context
-* Fixed edge case error "call to a member function is_available() on null"
-* Moved the "Automatically Translate Slug" setting to be first in line
-* Extended the license message for item_name_mismatch to provide more context
-* Improved text information next to the default language
-
+= 3.1.8 =
+ * Fix gettext translations saved as regular default strings when "Disable translation of gettext strings" is enabled
+ * Prevent edge case fatal error from occurring in class-check-invalid-text.php
+ * Send WooCommerce emails in admin language instead of order language when there are multiple recipients
 
 = Older versions =
 [Click Here](https://translatepress.com/docs/translatepress-free-changelog/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) to view the full changelog, or you can find it in the changelog.txt file in the plugin folder.

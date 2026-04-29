@@ -567,7 +567,7 @@ class Cozmoslabs_Plugin_Optin_Metadata_Builder_TRP extends Cozmoslabs_Plugin_Opt
         // In addition to Machine Translation being enabled, for the selected translation engine, verify if a license key is set. 
         // If no license key is set, consider machine translation as disabled.
         if( !empty( $settings['trp_machine_translation_settings']['machine-translation'] ) && $settings['trp_machine_translation_settings']['machine-translation'] == 'yes' && !empty( $settings['trp_machine_translation_settings']['translation-engine'] ) ){
-            if( $settings['trp_machine_translation_settings']['translation-engine'] == 'mtapi' && empty( $trp_settings['trp_license_key'] ) ){
+            if( $settings['trp_machine_translation_settings']['translation-engine'] == 'mtapi' && empty( get_option( 'trp_license_key' ) ) ){
                 $settings['trp_machine_translation_settings']['machine-translation'] = 'no';
             } else if( $settings['trp_machine_translation_settings']['translation-engine'] == 'google_translate_v2' && empty( $trp_settings['trp_machine_translation_settings']['google-translate-key'] ) ){
                 $settings['trp_machine_translation_settings']['machine-translation'] = 'no';

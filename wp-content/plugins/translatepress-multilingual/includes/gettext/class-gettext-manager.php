@@ -487,8 +487,15 @@ class TRP_Gettext_Manager {
 	 * @return void
 	 */
 	public function add_missing_language_file_translations( $dictionary, $language ) {
+        // Ensure translation files are loaded with the correct locale
+        $locale   = determine_locale();
+        $switched = switch_to_locale( $language );
 
-		$trp_plural_forms    = $this->get_gettext_component( 'plural_forms' );
+        // This means that the language is not supported by WordPress. Either a custom language or a language that we support but WordPress does not.
+        if ( !$switched && $language !== $locale )
+            return;
+
+        $trp_plural_forms    = $this->get_gettext_component( 'plural_forms' );
 		if ( ! $this->trp_query ) {
 			$trp             = TRP_Translate_Press::get_trp_instance();
 			$this->trp_query = $trp->get_component( 'query' );
@@ -610,6 +617,9 @@ class TRP_Gettext_Manager {
 			$gettext_insert_update = $this->trp_query->get_query_component( 'gettext_insert_update' );
 			$gettext_insert_update->insert_gettext_strings($insert_gettext_strings, $language);
 			$gettext_insert_update->update_gettext_strings($update_gettext_strings, $language, array('translated', 'id', 'status'));
+
+            if ( $switched )
+                restore_previous_locale();
 		}
 	}
 }

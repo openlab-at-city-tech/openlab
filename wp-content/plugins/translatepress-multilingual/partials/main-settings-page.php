@@ -41,6 +41,7 @@
 
             </div>
 
+            <?php do_action( 'trp_extend_settings' ); ?>
 
             <div class="trp-settings-container">
                 <h3 class="trp-settings-primary-heading"><?php esc_html_e( 'Re-run Setup Wizard', 'translatepress-multilingual' ); ?></h3>
@@ -79,15 +80,22 @@
                         </label>
                     </div>
 
-                    <div class="trp-settings-checkbox trp-settings-options-item">
+                    <?php
+                    $subdirectory_checkbox_disabled = apply_filters( 'trp_subdirectory_for_default_language_disabled', false );
+                    $subdirectory_checkbox_note = apply_filters( 'trp_subdirectory_for_default_language_note', '' );
+                    ?>
+                    <div class="trp-settings-checkbox trp-settings-options-item<?php echo $subdirectory_checkbox_disabled ? ' trp-settings-checkbox__disabled' : ''; ?>">
                         <input type="checkbox" id="trp-subdirectory-for-default-language" name="trp_settings[add-subdirectory-to-default-language]"
-                               value="yes" <?php checked($this->settings['add-subdirectory-to-default-language'], 'yes'); ?> />
+                               value="yes" <?php checked($this->settings['add-subdirectory-to-default-language'], 'yes'); ?> <?php disabled( $subdirectory_checkbox_disabled ); ?> />
 
                         <label for="trp-subdirectory-for-default-language" class="trp-checkbox-label">
                             <div class="trp-checkbox-content">
                                 <span class="trp-primary-text-bold"><?php esc_html_e('Use a subdirectory for the default language', 'translatepress-multilingual'); ?></span>
                                 <span class="trp-description-text">
                                     <?php echo wp_kses( __( 'Check if you want to add the subdirectory in the URL for the default language.</br>By checking this option, the default language seen by website visitors will become the first one in the "All Languages" list.', 'translatepress-multilingual' ), array( 'br' => array() ) ); ?>
+                                    <?php if ( ! empty( $subdirectory_checkbox_note ) ) : ?>
+                                        <br/><b><?php echo esc_html( $subdirectory_checkbox_note ); ?></b>
+                                    <?php endif; ?>
                                 </span>
                             </div>
                         </label>

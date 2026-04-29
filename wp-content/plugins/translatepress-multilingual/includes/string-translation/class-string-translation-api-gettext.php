@@ -54,6 +54,9 @@ class TRP_String_Translation_API_Gettext {
 	 */
 	public function get_missing_gettext_strings() {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+				wp_die( -1, 403 );
+			}
 			check_ajax_referer( 'string_translation_get_missing_strings_gettext', 'security' );
 
 			$action = 'trp_string_translation_get_missing_gettext_strings';
@@ -94,6 +97,9 @@ class TRP_String_Translation_API_Gettext {
 	 */
 	public function get_strings_by_original_ids(){
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+				wp_die( -1, 403 );
+			}
 			check_ajax_referer( 'string_translation_get_strings_by_original_ids_gettext', 'security' );
 
 			$action = 'trp_string_translation_get_strings_by_original_ids_gettext';

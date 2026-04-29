@@ -40,19 +40,6 @@ class TRP_Languages{
      * @return mixed
      */
     public function change_locale( $locale ){
-
-        if ( $this->is_string_translation_request_for_different_language() ){
-            $trp_ajax_language = (isset($_POST['trp_ajax_language']) ) ? sanitize_text_field( $_POST['trp_ajax_language'] ) : '';
-            if ( !$this->settings ){
-                $trp = TRP_Translate_Press::get_trp_instance();
-                $trp_settings = $trp->get_component( 'settings' );
-                $this->settings = $trp_settings->get_settings();
-            }
-            if ( $trp_ajax_language && in_array( $trp_ajax_language, $this->settings['translation-languages'] ) ){
-                return $trp_ajax_language;
-            }
-        }
-
         if ( $this->is_admin_request === null ){
             $trp = TRP_Translate_Press::get_trp_instance();
             $trp_is_admin_request = $trp->get_component( 'url_converter' );
@@ -69,16 +56,6 @@ class TRP_Languages{
         }
         return $locale;
     }
-
-	public function is_string_translation_request_for_different_language(){
-		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			$action = 'trp_string_translation_get_missing_gettext_strings';
-			if ( isset( $_POST['action'] ) && $_POST['action'] === $action ) {
-				return true;
-			}
-		}
-		return false;
-	}
 
     /**
      * Returns all languages information provided by WP.

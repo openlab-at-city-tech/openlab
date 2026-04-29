@@ -20,8 +20,7 @@ $locked = method_exists( $this, 'is_legacy_enabled' ) && $this->is_legacy_enable
                     <?php
                     /* translators: Explain where to toggle legacy back on */
                     echo wp_kses_post(
-                        __( 'We’ve upgraded the switcher for richer customization and a better user experience.<br>In order to use the new configurator, turn off
-                            <strong>Load legacy language switcher</strong>.', 'translatepress-multilingual' )
+                        __( 'We’ve upgraded the switcher for richer customization and a better user experience.<br>In order to use the new configurator, turn off <strong>Load legacy language switcher</strong>.', 'translatepress-multilingual' )
                     );
                     ?>
                 </p>
