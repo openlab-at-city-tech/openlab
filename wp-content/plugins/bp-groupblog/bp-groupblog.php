@@ -6,7 +6,7 @@
  */
 
 define( 'BP_GROUPBLOG_IS_INSTALLED', 1 );
-define( 'BP_GROUPBLOG_VERSION', '1.9.3' );
+define( 'BP_GROUPBLOG_VERSION', '1.9.4' );
 
 // Define default roles.
 if ( ! defined( 'BP_GROUPBLOG_DEFAULT_ADMIN_ROLE' ) ) {
@@ -163,6 +163,34 @@ function bp_groupblog_setup_nav() {
 add_action( 'bp_setup_nav', 'bp_groupblog_setup_nav' );
 
 /**
+ * Returns the blog roles that may be assigned via group-blog settings.
+ *
+ * Plugins may use the 'bp_groupblog_allowed_roles' filter to add or remove
+ * entries, e.g. to support custom roles registered via add_role().
+ *
+ * @since 1.9.4
+ * @return string[] Allowed role slugs.
+ */
+function bp_groupblog_get_allowed_roles() {
+	$roles = array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' );
+	return apply_filters( 'bp_groupblog_allowed_roles', $roles );
+}
+
+/**
+ * Checks whether an already-sanitized role slug is in the list of allowed roles.
+ *
+ * Sanitization (sanitize_text_field / wp_unslash) is the caller's
+ * responsibility so that this function stays a pure predicate.
+ *
+ * @since 1.9.4
+ * @param string $role A sanitized role slug.
+ * @return bool True if the role is allowed, false otherwise.
+ */
+function bp_groupblog_is_role_allowed( $role ) {
+	return in_array( $role, bp_groupblog_get_allowed_roles(), true );
+}
+
+/**
  * Save the blog-settings accessible only by the group admin or mod.
  *
  * Since version 1.6, this function has been called directly by
@@ -174,6 +202,12 @@ function groupblog_edit_settings() {
 	global $bp, $groupblog_blog_id, $errors, $filtered_results;
 
 	$group_id = isset( $_POST['groupblog-group-id'] ) ? (int) $_POST['groupblog-group-id'] : bp_get_current_group_id();
+
+	// Authorization: only a group admin may change these settings.
+	if ( ! groups_is_user_admin( bp_loggedin_user_id(), $group_id ) ) {
+		bp_core_add_message( __( 'You do not have permission to manage this group blog.', 'bp-groupblog' ), 'error' );
+		return;
+	}
 
 	if ( ! bp_groupblog_blog_exists( $group_id ) ) {
 		if ( isset( $_POST['groupblog-enable-blog'] ) ) {
@@ -188,6 +222,10 @@ function groupblog_edit_settings() {
 			} elseif ( isset( $_POST['groupblog-create-new'] ) && 'no' === $_POST['groupblog-create-new'] ) {
 				// They're using an existing blog, so we try to assign that to $groupblog_blog_id.
 				$groupblog_blog_id = isset( $_POST['groupblog-blogid'] ) ? (int) $_POST['groupblog-blogid'] : 0;
+				// Validate that the current user is actually an admin of the submitted blog.
+				if ( $groupblog_blog_id && ! current_user_can_for_blog( $groupblog_blog_id, 'manage_options' ) ) {
+					$groupblog_blog_id = 0;
+				}
 				if ( ! $groupblog_blog_id ) {
 					// They forgot to choose a blog, so send them back and make them do it.
 					bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.', 'bp-groupblog' ), 'error' );
@@ -218,6 +256,13 @@ function groupblog_edit_settings() {
 	foreach ( $settings as $setting => $val ) {
 		if ( isset( $_POST[ $setting ] ) ) {
 			$settings[ $setting ] = sanitize_text_field( wp_unslash( $_POST[ $setting ] ) );
+		}
+	}
+
+	// Validate submitted role values against the whitelist for this user.
+	foreach ( array( 'default-administrator', 'default-moderator', 'default-member' ) as $role_field ) {
+		if ( ! empty( $settings[ $role_field ] ) && ! bp_groupblog_is_role_allowed( $settings[ $role_field ] ) ) {
+			$settings[ $role_field ] = '';
 		}
 	}
 
@@ -574,9 +619,13 @@ function bp_groupblog_create_screen_save() {
 	}
 
 	// Set up some default roles.
-	$groupblog_default_admin_role  = isset( $_POST['default-administrator'] ) ? sanitize_text_field( wp_unslash( $_POST['default-administrator'] ) ) : BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
-	$groupblog_default_mod_role    = isset( $_POST['default-moderator'] ) ? sanitize_text_field( wp_unslash( $_POST['default-moderator'] ) ) : BP_GROUPBLOG_DEFAULT_MOD_ROLE;
-	$groupblog_default_member_role = isset( $_POST['default-member'] ) ? sanitize_text_field( wp_unslash( $_POST['default-member'] ) ) : BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
+	$_admin_role  = sanitize_text_field( wp_unslash( $_POST['default-administrator'] ?? '' ) );
+	$_mod_role    = sanitize_text_field( wp_unslash( $_POST['default-moderator'] ?? '' ) );
+	$_member_role = sanitize_text_field( wp_unslash( $_POST['default-member'] ?? '' ) );
+
+	$groupblog_default_admin_role  = bp_groupblog_is_role_allowed( $_admin_role ) ? $_admin_role : BP_GROUPBLOG_DEFAULT_ADMIN_ROLE;
+	$groupblog_default_mod_role    = bp_groupblog_is_role_allowed( $_mod_role ) ? $_mod_role : BP_GROUPBLOG_DEFAULT_MOD_ROLE;
+	$groupblog_default_member_role = bp_groupblog_is_role_allowed( $_member_role ) ? $_member_role : BP_GROUPBLOG_DEFAULT_MEMBER_ROLE;
 
 	// Set up some other values.
 	$groupblog_group_id   = isset( $_POST['group_id'] ) ? (int) $_POST['group_id'] : bp_get_new_group_id();
@@ -595,6 +644,10 @@ function bp_groupblog_create_screen_save() {
 	} elseif ( isset( $_POST['groupblog-create-new'] ) && 'no' === $_POST['groupblog-create-new'] ) {
 		// They're using an existing blog, so we try to assign that to $groupblog_blog_id.
 		$groupblog_blog_id = isset( $_POST['groupblog-blogid'] ) ? (int) $_POST['groupblog-blogid'] : 0;
+		// Validate that the current user is actually an admin of the submitted blog.
+		if ( $groupblog_blog_id && ! current_user_can_for_blog( $groupblog_blog_id, 'manage_options' ) ) {
+			$groupblog_blog_id = 0;
+		}
 		if ( ! $groupblog_blog_id ) {
 			// They forgot to choose a blog, so send them back and make them do it.
 			bp_core_add_message( __( 'Please choose one of your blogs from the drop-down menu.', 'bp-groupblog' ), 'error' );

@@ -1,32 +1,36 @@
-# Copyright (C) 2023 Rodney Blevins, Marius Ooms, Boone Gorges
+# Copyright (C) 2026 Rodney Blevins, Marius Ooms, Boone Gorges
 # This file is distributed under the (Groupblog: GNU General Public License 2.0 (GPL) http://www.gnu.org/licenses/gpl.html).
 msgid ""
 msgstr ""
-"Project-Id-Version: BP Groupblog 1.9.3\n"
+"Project-Id-Version: BP Groupblog 1.9.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/bp-groupblog\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-07-28T12:52:09-05:00\n"
+"POT-Creation-Date: 2026-03-30T12:46:27-05:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.7.1\n"
+"X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: bp-groupblog\n"
 
 #. Plugin Name of the plugin
+#: loader.php
 msgid "BP Groupblog"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: loader.php
 msgid "https://wordpress.org/plugins/bp-groupblog/"
 msgstr ""
 
 #. Description of the plugin
+#: loader.php
 msgid "Automates and links WPMU blogs groups controlled by the group creator."
 msgstr ""
 
 #. Author of the plugin
+#: loader.php
 msgid "Rodney Blevins, Marius Ooms, Boone Gorges"
 msgstr ""
 
@@ -115,6 +119,7 @@ msgstr ""
 
 #. translators: 1: theme title, 2: theme version, 3: theme author
 #: bp-groupblog-admin.php:576
+#, php-format
 msgid "%1$s %2$s by %3$s"
 msgstr ""
 
@@ -176,22 +181,22 @@ msgid "Please select a Layout which you would like to use for your Group Blog. A
 msgstr ""
 
 #: bp-groupblog-admin.php:641
-#: bp-groupblog.php:1088
+#: bp-groupblog.php:1141
 msgid "Magazine"
 msgstr ""
 
 #: bp-groupblog-admin.php:642
-#: bp-groupblog.php:1089
+#: bp-groupblog.php:1142
 msgid "Balanced template for groups with diverse postings."
 msgstr ""
 
 #: bp-groupblog-admin.php:647
-#: bp-groupblog.php:1094
+#: bp-groupblog.php:1147
 msgid "Microblog"
 msgstr ""
 
 #: bp-groupblog-admin.php:648
-#: bp-groupblog.php:1095
+#: bp-groupblog.php:1148
 msgid "Great for simple listing of posts in a chronological order."
 msgstr ""
 
@@ -348,246 +353,258 @@ msgid "Save Changes"
 msgstr ""
 
 #: bp-groupblog-classes.php:25
-#: bp-groupblog.php:988
+#: bp-groupblog.php:1041
 msgid "Group Blog"
 msgstr ""
 
-#: bp-groupblog.php:193
-#: bp-groupblog.php:600
+#: bp-groupblog.php:208
+msgid "You do not have permission to manage this group blog."
+msgstr ""
+
+#: bp-groupblog.php:231
+#: bp-groupblog.php:653
 msgid "Please choose one of your blogs from the drop-down menu."
 msgstr ""
 
-#: bp-groupblog.php:225
-#: bp-groupblog.php:609
+#: bp-groupblog.php:270
+#: bp-groupblog.php:662
 msgid "There was an error creating your group blog, please try again."
 msgstr ""
 
-#: bp-groupblog.php:227
+#: bp-groupblog.php:272
 msgid "Group details were successfully updated."
 msgstr ""
 
-#: bp-groupblog.php:640
-#: bp-groupblog.php:709
+#: bp-groupblog.php:693
+#: bp-groupblog.php:762
 msgid "Blog Title:"
 msgstr ""
 
-#: bp-groupblog.php:650
-#: bp-groupblog.php:730
+#: bp-groupblog.php:703
+#: bp-groupblog.php:783
 msgid "Blog Address:"
 msgstr ""
 
 #. translators: 1. Site name; 2. Group name.
-#: bp-groupblog.php:661
+#: bp-groupblog.php:714
+#, php-format
 msgid "Uncouple the blog \"%1$s\" from the group \"%2$s\":"
 msgstr ""
 
 #. translators: Link to Users panel.
-#: bp-groupblog.php:664
+#: bp-groupblog.php:717
+#, php-format
 msgid "<strong>Note:</strong> Uncoupling will remove the blog from your group&#8217;s navigation and prevent future synchronization of group members and blog authors, but it will not remove change blog permissions for any current member. Visit <a href=\"%1$s\">the Users panel</a> if you&#8217;d like to remove users from the blog."
 msgstr ""
 
-#: bp-groupblog.php:666
+#: bp-groupblog.php:719
 msgid "Uncouple"
 msgstr ""
 
-#: bp-groupblog.php:680
+#: bp-groupblog.php:733
 msgid "Choose either one of your existing blogs or create a new one all together with the details displayed below."
 msgstr ""
 
-#: bp-groupblog.php:680
+#: bp-groupblog.php:733
 msgid "Take care as you can only choose once. Later you may still disable or enable the blog, but your choice is set."
 msgstr ""
 
-#: bp-groupblog.php:683
+#: bp-groupblog.php:736
 msgid "Use one of your own available blogs:"
 msgstr ""
 
-#: bp-groupblog.php:688
+#: bp-groupblog.php:741
 msgid "choose a blog"
 msgstr ""
 
-#: bp-groupblog.php:704
+#: bp-groupblog.php:757
 msgid "Or, create a new blog"
 msgstr ""
 
-#: bp-groupblog.php:833
+#: bp-groupblog.php:886
 msgid "Only lowercase letters and numbers allowed."
 msgstr ""
 
 #. translators: %d: The minimum number of characters for a blog name.
-#: bp-groupblog.php:844
+#: bp-groupblog.php:897
+#, php-format
 msgid "Blog name must be at least %d characters."
 msgstr ""
 
 #. translators: %d: The minimum number of characters for a Site name.
-#: bp-groupblog.php:861
+#: bp-groupblog.php:914
+#, php-format
 msgid "Sorry, blog names may not contain the character %s!"
 msgstr ""
 
-#: bp-groupblog.php:870
+#: bp-groupblog.php:923
 msgid "Sorry, blog names must have letters too!"
 msgstr ""
 
-#: bp-groupblog.php:929
+#: bp-groupblog.php:982
 msgid "You must be a group admin to perform this action."
 msgstr ""
 
-#: bp-groupblog.php:941
+#: bp-groupblog.php:994
 msgid "Blog uncoupled."
 msgstr ""
 
-#: bp-groupblog.php:995
+#: bp-groupblog.php:1048
 msgid "Enable group blog"
 msgstr ""
 
-#: bp-groupblog.php:1004
+#: bp-groupblog.php:1057
 msgid "Member Options"
 msgstr ""
 
-#: bp-groupblog.php:1006
+#: bp-groupblog.php:1059
 msgid "Enable blog posting to allow adding of group members to the blog with the roles set below."
 msgstr ""
 
-#: bp-groupblog.php:1006
+#: bp-groupblog.php:1059
 msgid "When disabled, all members will temporarily be set to subscribers, disabling posting."
 msgstr ""
 
-#: bp-groupblog.php:1009
+#: bp-groupblog.php:1062
 msgid "Enable member blog posting"
 msgstr ""
 
-#: bp-groupblog.php:1031
+#: bp-groupblog.php:1084
 msgid "Default Administrator Role:"
 msgstr ""
 
-#: bp-groupblog.php:1032
-#: bp-groupblog.php:1039
-#: bp-groupblog.php:1046
-#: bp-groupblog.php:1055
+#: bp-groupblog.php:1085
+#: bp-groupblog.php:1092
+#: bp-groupblog.php:1099
+#: bp-groupblog.php:1108
 msgid "Administrator"
 msgstr ""
 
-#: bp-groupblog.php:1033
-#: bp-groupblog.php:1040
-#: bp-groupblog.php:1047
-#: bp-groupblog.php:1056
+#: bp-groupblog.php:1086
+#: bp-groupblog.php:1093
+#: bp-groupblog.php:1100
+#: bp-groupblog.php:1109
 msgid "Editor"
 msgstr ""
 
-#: bp-groupblog.php:1034
-#: bp-groupblog.php:1041
-#: bp-groupblog.php:1048
-#: bp-groupblog.php:1057
+#: bp-groupblog.php:1087
+#: bp-groupblog.php:1094
+#: bp-groupblog.php:1101
+#: bp-groupblog.php:1110
 msgid "Author"
 msgstr ""
 
-#: bp-groupblog.php:1035
-#: bp-groupblog.php:1042
-#: bp-groupblog.php:1049
-#: bp-groupblog.php:1058
+#: bp-groupblog.php:1088
+#: bp-groupblog.php:1095
+#: bp-groupblog.php:1102
+#: bp-groupblog.php:1111
 msgid "Contributor"
 msgstr ""
 
-#: bp-groupblog.php:1036
-#: bp-groupblog.php:1043
-#: bp-groupblog.php:1050
-#: bp-groupblog.php:1059
+#: bp-groupblog.php:1089
+#: bp-groupblog.php:1096
+#: bp-groupblog.php:1103
+#: bp-groupblog.php:1112
 msgid "Subscriber"
 msgstr ""
 
-#: bp-groupblog.php:1038
+#: bp-groupblog.php:1091
 msgid "Default Moderator Role:"
 msgstr ""
 
-#: bp-groupblog.php:1045
+#: bp-groupblog.php:1098
 msgid "Default Member Role:"
 msgstr ""
 
-#: bp-groupblog.php:1053
+#: bp-groupblog.php:1106
 msgid "A bit about WordPress member roles:"
 msgstr ""
 
-#: bp-groupblog.php:1055
+#: bp-groupblog.php:1108
 msgid "Somebody who has access to all the administration features."
 msgstr ""
 
-#: bp-groupblog.php:1056
+#: bp-groupblog.php:1109
 msgid "Somebody who can publish posts, manage posts as well as manage other people's posts, etc."
 msgstr ""
 
-#: bp-groupblog.php:1057
+#: bp-groupblog.php:1110
 msgid "Somebody who can publish and manage their own posts."
 msgstr ""
 
-#: bp-groupblog.php:1058
+#: bp-groupblog.php:1111
 msgid "Somebody who can write and manage their posts but not publish posts."
 msgstr ""
 
-#: bp-groupblog.php:1059
+#: bp-groupblog.php:1112
 msgid "Somebody who can read comments/comment/receive news letters, etc."
 msgstr ""
 
-#: bp-groupblog.php:1078
+#: bp-groupblog.php:1131
 msgid "Select Layout"
 msgstr ""
 
-#: bp-groupblog.php:1080
+#: bp-groupblog.php:1133
 msgid "Please select a Layout which you would like to use for your Group Blog."
 msgstr ""
 
-#: bp-groupblog.php:1109
+#: bp-groupblog.php:1162
 msgid "Save Changes &raquo;"
 msgstr ""
 
-#: bp-groupblog.php:1143
+#: bp-groupblog.php:1196
 msgid " We suggest adjusting the blog address below, in accordance with the following requirements:"
 msgstr ""
 
-#: bp-groupblog.php:1145
+#: bp-groupblog.php:1198
 msgid " &raquo; Only letters and numbers allowed."
 msgstr ""
 
 #. translators: Character count.
-#: bp-groupblog.php:1148
+#: bp-groupblog.php:1201
+#, php-format
 msgid " &raquo; Must be at least %s characters."
 msgstr ""
 
-#: bp-groupblog.php:1150
+#: bp-groupblog.php:1203
 msgid " &raquo; Has to contain letters as well."
 msgstr ""
 
 #. translators: 1. User link; 2. Post link; 3. Group link.
-#: bp-groupblog.php:1337
+#: bp-groupblog.php:1390
+#, php-format
 msgid "%1$s edited the blog post %2$s in the group %3$s:"
 msgstr ""
 
 #. translators: 1. User link; 2. Post link; 3. Group link.
-#: bp-groupblog.php:1342
+#: bp-groupblog.php:1395
+#, php-format
 msgid "%1$s wrote a new blog post %2$s in the group %3$s:"
 msgstr ""
 
-#: bp-groupblog.php:1512
+#: bp-groupblog.php:1565
 msgid "New groupblog comment"
 msgstr ""
 
-#: bp-groupblog.php:1514
+#: bp-groupblog.php:1567
 msgid "Groupblog Comments"
 msgstr ""
 
-#: bp-groupblog.php:1514
+#: bp-groupblog.php:1567
 msgid "Blog Comments"
 msgstr ""
 
-#: bp-groupblog.php:1583
+#: bp-groupblog.php:1636
 msgid "Anonymous user"
 msgstr ""
 
 #. translators: 1. User link; 2. Post link; 3. Site lin.
-#: bp-groupblog.php:1588
+#: bp-groupblog.php:1641
+#, php-format
 msgid "%1$s commented on the post, %2$s, on the groupblog %3$s"
 msgstr ""
 
-#: bp-groupblog.php:1869
+#: bp-groupblog.php:1922
 msgid "Blog Posts"
 msgstr ""
 

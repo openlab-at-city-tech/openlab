@@ -3,8 +3,8 @@ Contributors: MariusOoms, reblevins, boonebgorges
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=7374704
 Tags: buddypress, groups, blogs, content
 Requires at least: 3.6
-Tested up to: 6.2
-Stable tag: 1.9.3
+Tested up to: 7.0
+Stable tag: 1.9.4
 
 BuddyPress Groupblog extends the group functionality by enabling the group to have a single blog associated with it.
 
@@ -50,6 +50,9 @@ The BuddyPress Groupblog plugin extends the group functionality by enabling each
 2. Screenshot of the group blog page.
 
 == Changelog ==
+
+= 1.9.4 =
+* Security release: Fixes a vulnerability where group-member role sync could be manipulated by a malicous user.
 
 = 1.9.3 =
 * When a user leaves the group, remove them altogether from the group blog.
