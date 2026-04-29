@@ -77,6 +77,18 @@ function openlab_get_signup_avatar_visibility_value() {
 }
 
 /**
+ * Updates a user's avatar visibility and invalidates relevant caches.
+ *
+ * @param int    $user_id    ID of the user.
+ * @param string $visibility Visibility level.
+ * @return void
+ */
+function openlab_update_user_avatar_visibility( $user_id, $visibility ) {
+	bp_update_user_meta( $user_id, 'avatar_visibility', $visibility );
+	delete_transient( 'openlab_whos_online' );
+}
+
+/**
  * AJAX callback for updating avatar privacy.
  *
  * @return void
@@ -101,7 +113,7 @@ function openlab_ajax_update_avatar_privacy() {
 		wp_send_json_error( array( 'message' => __( 'You do not have permission to do this.', 'openlab' ) ) );
 	}
 
-	bp_update_user_meta( $user_id, 'avatar_visibility', $visibility );
+	openlab_update_user_avatar_visibility( $user_id, $visibility );
 
 	wp_send_json_success();
 }
@@ -137,9 +149,8 @@ function openlab_process_avatar_visibility_at_activation( $user_id, $key, $data 
 		return;
 	}
 
-	bp_update_user_meta(
+	openlab_update_user_avatar_visibility(
 		$user_id,
-		'avatar_visibility',
 		openlab_sanitize_avatar_visibility( $data['meta']['avatar_visibility'] )
 	);
 }
