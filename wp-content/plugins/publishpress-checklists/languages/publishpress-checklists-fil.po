@@ -1,0 +1,1276 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: PublishPress Checklists\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
+"POT-Creation-Date: 2026-04-16T10:23:37+00:00\n"
+"PO-Revision-Date: 2026-01-30 15:14+0000\n"
+"Last-Translator: Riza Maulana Ardiyanto <riza@publishpress.com>\n"
+"Language-Team: Filipino <https://weblate.publishpress.com/projects/"
+"publishpress-checklists/publishpress-checklists/fil/>\n"
+"Language: fil\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1 && n != 2 && n != 3 && (n % 10 == 4 "
+"|| n % 10 == 6 || n % 10 == 9);\n"
+"X-Generator: Weblate 5.14.3\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-Flags-xgettext: --add-comments=translators:\n"
+"X-Poedit-WPHeader: publishpress-checklists.php\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: *.min.js\n"
+"X-Poedit-SearchPathExcluded-1: vendor\n"
+"X-Poedit-SearchPathExcluded-2: node_modules\n"
+
+#. Plugin Name of the plugin
+msgid "PublishPress Checklists Free"
+msgstr ""
+
+#. Plugin URI of the plugin
+#, fuzzy
+msgid "https://publishpress.com/"
+msgstr "https://publishpress.com/"
+
+#. Description of the plugin
+msgid ""
+"With PublishPress Checklists, you can choose publishing requirements for "
+"your content."
+msgstr ""
+"Sa PublishPress Checklists, maaari mong piliin ang mga kinakailangan sa pag-"
+"publish para sa iyong nilalaman."
+
+#. Author of the plugin
+msgid "PublishPress"
+msgstr "PublishPress"
+
+#. Author URI of the plugin
+msgid "https://publishpress.com"
+msgstr "https://publishpress.com"
+
+msgid "Disabled"
+msgstr "Hindi pinagana"
+
+msgid "Recommended"
+msgstr "Inirerekomenda"
+
+msgid "Required"
+msgstr "Kinakailangan"
+
+msgid "Please correct your form errors below and try again."
+msgstr ""
+"Mangyaring ituwid ang iyong mga error sa form sa ibaba at subukan muli."
+
+msgid "Cheatin&#8217; uh?"
+msgstr "Cheatin&#8217; uh?"
+
+msgid "You do not have necessary permissions to complete this action."
+msgstr "Wala kang kinakailangang permiso upang makumpleto ang aksyong ito."
+
+msgid "Post does not exist"
+msgstr "Walang umiiral na post"
+
+msgid "Checklists"
+msgstr "Mga Checklist"
+
+msgid "PublishPress Checklists"
+msgstr "PublishPress Checklists"
+
+#, php-format
+msgid "If you like %s please leave us a %s rating. Thank you!"
+msgstr "Kung gusto mo ang %s mangyaring iwanan kami ng %s rating. Salamat!"
+
+msgid "Need PublishPress Checklists Support?"
+msgstr "Kailangan ng PublishPress Checklists Support?"
+
+msgid "If you need help or have a new feature request, let us know."
+msgstr ""
+"Kung kailangan mo ng tulong o may bagong kahilingan para sa tampok, ipaalam "
+"sa amin."
+
+msgid "Request Support"
+msgstr "Humiling ng Suporta"
+
+msgid "Detailed documentation is also available on the plugin website."
+msgstr "Ang detalyadong dokumentasyon ay magagamit din sa website ng plugin."
+
+msgid "View Knowledge Base"
+msgstr "Tingnan ang Knowledge Base"
+
+msgid "Settings"
+msgstr "Mga Setting"
+
+msgid "Upgrade to Pro"
+msgstr "Mag-upgrade sa Pro"
+
+#, php-format
+msgid "Approved by %s"
+msgstr "Naaprubahan ni %s"
+
+msgid "Approved by a user in this role"
+msgstr "Naaprubahan ng isang gumagamit sa papel na ito"
+
+#. translators: 1: custom editor label, 2: selected role names.
+#. translators: 1: custom editor label, 2: compact counter requirement (min/max/exact).
+#. translators: 1: custom editor label, 2: prohibited category names.
+#. translators: 1: custom editor label, 2: prohibited tag names.
+#. translators: 1: custom editor label, 2: required category names.
+#. translators: 1: custom editor label, 2: required tag names.
+#, fuzzy, php-format
+msgid "%1$s - %2$s"
+msgstr ""
+
+msgid "Min"
+msgstr "Min"
+
+msgid "Max"
+msgstr "Sagad"
+
+#. translators: %d: exact required value.
+#, php-format
+msgid "exact %d"
+msgstr ""
+
+#. translators: %d: minimum required value.
+#, php-format
+msgid "min %d"
+msgstr ""
+
+#. translators: %d: maximum allowed value.
+#, php-format
+msgid "max %d"
+msgstr ""
+
+#. translators: 1: minimum required value, 2: maximum allowed value.
+#, php-format
+msgid "min %1$d max %2$d"
+msgstr ""
+
+msgid "Edit label"
+msgstr "I-edit ang label"
+
+msgid "Number of categories"
+msgstr "Bilang ng mga kategorya"
+
+#, php-format
+msgid "Minimum of %s category"
+msgstr "Minimum ng %s na kategorya"
+
+#, php-format
+msgid "Minimum of %s categories"
+msgstr "Minimum ng %s na mga kategorya"
+
+#, php-format
+msgid "Maximum of %s category"
+msgstr "Maximum ng %s na kategorya"
+
+#, php-format
+msgid "Maximum of %s categories"
+msgstr "Maximum ng %s na mga kategorya"
+
+#, php-format
+msgid "%s category"
+msgstr "%s kategorya"
+
+#, php-format
+msgid "%s categories"
+msgstr "%s mga kategorya"
+
+#, php-format
+msgid "Between %s and %s categories"
+msgstr "Sa pagitan ng %s at %s na mga kategorya"
+
+msgid "Custom"
+msgstr "Pasadya"
+
+msgid "Which roles can mark this task as complete?"
+msgstr "Aling mga papel ang makakapagmarka sa gawaing ito bilang kumpleto?"
+
+msgid "Enter name of custom task"
+msgstr "Ilagay ang pangalan ng pasadyang gawain"
+
+msgid "Remove"
+msgstr "Alisin"
+
+msgid "Number of external links in content"
+msgstr "Bilang ng mga panlabas na link sa nilalaman"
+
+#, php-format
+msgid "Minimum of %d external link in content"
+msgstr "Minimum ng %d na panlabas na link sa nilalaman"
+
+#, php-format
+msgid "Minimum of %d external links in content"
+msgstr "Minimum ng %d na mga panlabas na link sa nilalaman"
+
+#, php-format
+msgid "Maximum of %d external link in content"
+msgstr "Maximum ng %d na panlabas na link sa nilalaman"
+
+#, php-format
+msgid "Maximum of %d external links in content"
+msgstr "Maximum ng %d na mga panlabas na link sa nilalaman"
+
+#, php-format
+msgid "%d external link in content"
+msgstr "%d panlabas na link sa nilalaman"
+
+#, php-format
+msgid "%d external links in content"
+msgstr "%d mga panlabas na link sa nilalaman"
+
+#, php-format
+msgid "Between %d and %d external links in content"
+msgstr "Sa pagitan ng %d at %d na mga panlabas na link sa nilalaman"
+
+msgid "Featured image is added"
+msgstr "Ang itinatampok na larawan ay idinagdag"
+
+msgid "Featured image has Alt text"
+msgstr "Ang itinatampok na larawan ay may Alt text"
+
+msgid "Featured image has caption"
+msgstr "Ang itinatampok na imahe ay may caption"
+
+msgid "Number of characters in excerpt"
+msgstr ""
+
+#, php-format
+msgid "Minimum of %d character in excerpt"
+msgstr "Minimum ng %d na karakter sa excerpt"
+
+#, php-format
+msgid "Minimum of %d characters in excerpt"
+msgstr "Minimum ng %d na mga karakter sa excerpt"
+
+#, php-format
+msgid "Maximum of %d character in excerpt"
+msgstr "Maksimum ng %d na karakter sa buod"
+
+#, php-format
+msgid "Maximum of %d characters in excerpt"
+msgstr "Maximum ng %d na karakter sa excerpt"
+
+#, php-format
+msgid "%d character in excerpt"
+msgstr "%d karakter sa excerpt"
+
+#, php-format
+msgid "%d characters in excerpt"
+msgstr "%d mga karakter sa excerpt"
+
+#, php-format
+msgid "Between %d and %d characters in excerpt"
+msgstr "Sa pagitan ng %d at %d na mga karakter sa excerpt"
+
+msgid "All images have Alt text"
+msgstr "Lahat ng mga larawan ay may Alt text"
+
+msgid "Number of characters in Alt text"
+msgstr "Bilang ng mga karakter sa Alt text"
+
+#, php-format
+msgid "Minimum of %d character in Alt text"
+msgstr "Minimum na %d na karakter sa Alt text"
+
+#, php-format
+msgid "Minimum of %d characters in Alt text"
+msgstr "Minimum ng %d na mga karakter sa Alt text"
+
+#, php-format
+msgid "Maximum of %d character in Alt text"
+msgstr "Sobra ng %d karakter sa Alt text"
+
+#, php-format
+msgid "Maximum of %d characters in Alt text"
+msgstr "Sobra ng %d mga karakter sa Alt text"
+
+#, php-format
+msgid "%d character in Alt text"
+msgstr "%d karakter sa Alt text"
+
+#, php-format
+msgid "%d characters in Alt text"
+msgstr "%d mga karakter sa Alt text"
+
+#, php-format
+msgid "Between %d and %d characters in Alt text"
+msgstr "Sa pagitan ng %d at %d na karakter sa Alt text"
+
+msgid "Number of internal links in content"
+msgstr "Bilang ng mga panloob na link sa nilalaman"
+
+#, php-format
+msgid "Minimum of %d internal link in content"
+msgstr "Minimum ng %d na panloob na link sa nilalaman"
+
+#, php-format
+msgid "Minimum of %d internal links in content"
+msgstr "Minimum ng %d na mga panloob na link sa nilalaman"
+
+#, php-format
+msgid "Maximum of %d internal link in content"
+msgstr "Maximum ng %d na panloob na link sa nilalaman"
+
+#, php-format
+msgid "Maximum of %d internal links in content"
+msgstr "Maximum ng %d na mga panloob na link sa nilalaman"
+
+#, php-format
+msgid "%d internal link in content"
+msgstr "%d panloob na link sa nilalaman"
+
+#, php-format
+msgid "%d internal links in content"
+msgstr "%d mga panloob na link sa nilalaman"
+
+#, fuzzy, php-format
+msgid "Between %d and %d internal links in content"
+msgstr "Sa pagitan ng %d at %d na mga panloob na link sa nilalaman"
+
+msgid "Openai"
+msgstr "Openai"
+
+msgid "Enter OpenAI task prompt"
+msgstr "Ilagay ang OpenAI task prompt"
+
+msgid "An error occured."
+msgstr "Nagkaroon ng error."
+
+msgid "Validation error. Kindly reload this page and try again."
+msgstr ""
+"May error sa pagpapatunay. Mangyaring i-reload ang pahinang ito at subukang "
+"muli."
+
+msgid "Post content is empty."
+msgstr "Walang laman ang nilalaman ng post."
+
+msgid ""
+"OpenAI tasks require an API Key. Please add your API Key in the Settings "
+"area."
+msgstr ""
+"Ang mga gawain ng OpenAI ay nangangailangan ng API Key. Mangyaring idagdag "
+"ang iyong API Key sa lugar ng Mga Setting."
+
+#, php-format
+msgid "API Error: %1s."
+msgstr "API Error: %1$s."
+
+msgid "See the full response."
+msgstr "Tingnan ang buong tugon."
+
+msgid "Invalid response"
+msgstr "Hindi wastong tugon"
+
+#, php-format
+msgid "Prohibited categories: %s"
+msgstr "Mga Bawal na Kategorya: %s"
+
+msgid "Prohibited categories"
+msgstr "Mga Bawal na Kategorya"
+
+#, php-format
+msgid "Prohibited tags: %s"
+msgstr "Mga ipinagbabawal na tag: %s"
+
+msgid "Prohibited tags"
+msgstr "Mga ipinagbabawal na tag"
+
+#, php-format
+msgid "Required categories: %s"
+msgstr "Mga kinakailangang kategorya: %s"
+
+msgid "Required categories"
+msgstr "Mga kinakailangang kategorya"
+
+#, php-format
+msgid "Required tags: %s"
+msgstr "Mga kinakailangang tag: %s"
+
+msgid "Required tags"
+msgstr "Mga kinakailangang tag"
+
+msgid "Number of tags"
+msgstr "Bilang ng mga tag"
+
+#, php-format
+msgid "Minimum of %d tag"
+msgstr "Minimum ng %d na tag"
+
+#, php-format
+msgid "Minimum of %d tags"
+msgstr "Minimum ng %d na mga tag"
+
+#, php-format
+msgid "Maximum of %d tag"
+msgstr "Maximum ng %d na tag"
+
+#, php-format
+msgid "Maximum of %d tags"
+msgstr "Maximum ng %d na mga tag"
+
+#, fuzzy, php-format
+msgid "%d tag"
+msgstr "%d tag"
+
+#, php-format
+msgid "%d tags"
+msgstr "%d mga tag"
+
+#, php-format
+msgid "Between %d and %d tags"
+msgstr "Sa pagitan ng %d at %d na mga tag"
+
+msgid "Number of "
+msgstr "Bilang ng "
+
+#, php-format
+msgid "Minimum of %d "
+msgstr "Minimum ng %d "
+
+#, php-format
+msgid "Maximum of %d "
+msgstr "Maksimum ng %d "
+
+#, fuzzy, php-format
+msgid "%d "
+msgstr "%d "
+
+#, php-format
+msgid "Between %d and %d "
+msgstr "Sa pagitan ng %d at %d "
+
+msgid "Number of characters in title"
+msgstr "Bilang ng mga karakter sa pamagat"
+
+#, php-format
+msgid "Minimum of %d character in title"
+msgstr "Minimum ng %d na karakter sa pamagat"
+
+#, php-format
+msgid "Minimum of %d characters in title"
+msgstr "Minimum ng %d na mga karakter sa pamagat"
+
+#, php-format
+msgid "Maximum of %d character in title"
+msgstr "Maksimum ng %d na karakter sa pamagat"
+
+#, php-format
+msgid "Maximum of %d characters in title"
+msgstr "Maximum ng %d na karakter sa pamagat"
+
+#, php-format
+msgid "%d character in title"
+msgstr "%d karakter sa pamagat"
+
+#, php-format
+msgid "%d characters in title"
+msgstr "%d mga karakter sa pamagat"
+
+#, php-format
+msgid "Between %d and %d characters in title"
+msgstr "Sa pagitan ng %d at %d na mga karakter sa pamagat"
+
+msgid "All links use a valid format"
+msgstr "Lahat ng mga link ay gumagamit ng wastong format"
+
+msgid "Number of words in content"
+msgstr "Bilang ng mga salita sa nilalaman"
+
+#, php-format
+msgid "Minimum of %d word in content"
+msgstr "Minimum ng %d na salita sa nilalaman"
+
+#, php-format
+msgid "Minimum of %d words in content"
+msgstr "Minimum ng %d na mga salita sa nilalaman"
+
+#, php-format
+msgid "Maximum of %d word in content"
+msgstr "Maximum ng %d na salita sa nilalaman"
+
+#, php-format
+msgid "Maximum of %d words in content"
+msgstr "Maximum ng %d na mga salita sa nilalaman"
+
+#, php-format
+msgid "%d word in content"
+msgstr "%d salita sa nilalaman"
+
+#, php-format
+msgid "%d words in content"
+msgstr "%d mga salita sa nilalaman"
+
+#, fuzzy, php-format
+msgid "Between %d and %d words in content"
+msgstr "Sa pagitan ng %d at %d na mga salita sa nilalaman"
+
+msgid "Title"
+msgstr "Pamagat"
+
+msgid "Content"
+msgstr "Nilalaman"
+
+msgid "Publish Date / Time"
+msgstr "Petsa / Oras ng Pag-publish"
+
+msgid "Approval"
+msgstr "Pag-apruba"
+
+msgid "Images"
+msgstr "Mga Larawan"
+
+msgid "Audio / Video"
+msgstr "Audio / Video"
+
+msgid "Featured Image"
+msgstr "Itinatampok na Imahe"
+
+msgid "Links"
+msgstr "Mga Link"
+
+msgid "Permalink"
+msgstr "Permalink"
+
+msgid "Categories"
+msgstr "Mga Kategorya"
+
+msgid "Tags"
+msgstr "Mga Tag"
+
+msgid "Taxonomies"
+msgstr "Mga Taxonomies"
+
+msgid "Accessibility"
+msgstr "Accessibility"
+
+msgid "WooCommerce"
+msgstr "WooCommerce"
+
+msgid "Rank Math SEO"
+msgstr "Rank Math SEO"
+
+msgid "All in One SEO"
+msgstr "All in One SEO"
+
+msgid "Yoast SEO"
+msgstr "Yoast SEO"
+
+msgid "ACF"
+msgstr "ACF"
+
+msgid "options cannot be empty."
+msgstr "hindi maaaring walang laman ang mga opsyon."
+
+msgid "Please make sure to add a name for all the custom tasks."
+msgstr ""
+"Mangyaring siguraduhing magdagdag ng pangalan para sa lahat ng mga pasadyang "
+"gawain."
+
+msgid "Rename task label"
+msgstr ""
+
+msgid "Label for the Checklists screen"
+msgstr ""
+
+msgid "Leave empty to use the default WP Admin label"
+msgstr ""
+
+msgid "Label for the post editing screen"
+msgstr ""
+
+msgid "Leave empty to use the default editing screen label"
+msgstr ""
+
+msgid "Preview in editing screen:"
+msgstr ""
+
+msgid "Default checklist label will be used."
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "No results found"
+msgstr "Walang natagpuang resulta"
+
+msgid "Searching…"
+msgstr "Naghahanap…"
+
+msgid "Suggested Prompts"
+msgstr "Inirerekomendang Mga Prompt"
+
+msgid "What's the expected OpenAI response to mark the requirement as pass?"
+msgstr ""
+"Ano ang inaasahang tugon ng OpenAI upang markahan ang kinakailangan bilang "
+"pumasa?"
+
+msgid "Clear Content"
+msgstr "Linisin ang Nilalaman"
+
+msgid "Is this content clear and easy to read?"
+msgstr "Malinaw at madaling basahin ba ang nilalaman na ito?"
+
+msgid "Friendly Tone Content"
+msgstr "Nilalaman na may Magandang Tono"
+
+msgid "Is this content tone friendly?"
+msgstr "Palakaibigan ba ang tono ng nilalaman na ito?"
+
+msgid "Professional Tone Content"
+msgstr "Nilalaman ng Propesyonal na Tono"
+
+msgid "Is this content tone professional?"
+msgstr "Propesyonal ba ang tono ng nilalaman na ito?"
+
+msgid "Persuasive Tone Content"
+msgstr "Nilalaman ng Nakakapaniwala na Tono"
+
+msgid "Is this content tone persuasive?"
+msgstr "Nakakapukaw ba ang tono ng nilalaman na ito?"
+
+msgid "Empathetic Tone Content"
+msgstr "Nilalaman na may Empatetikong Tono"
+
+msgid "Is this content tone empathetic?"
+msgstr "Empatik ba ang tono ng nilalaman na ito?"
+
+msgid "Adventurous Tone Content"
+msgstr "Mapangahas na Nilalaman"
+
+msgid "Is this content tone adventurous?"
+msgstr "Mapang-akit ba ang tono ng nilalaman na ito?"
+
+msgid "Promotional Tone Content"
+msgstr "Nilalaman na may tono ng promosyon"
+
+msgid "Is this content tone promotional?"
+msgstr "Pampromosyong tono ba ang nilalaman na ito?"
+
+msgid "Checklist"
+msgstr "Checklist"
+
+msgid "You don't have to complete any Checklist tasks."
+msgstr "Hindi mo kailangang kumpletuhin ang anumang Checklist tasks."
+
+msgid "Are you sure you want to publish anyway?"
+msgstr "Sigurado ka bang nais mong ipublish pa rin?"
+
+msgid "Are you sure you want to update the published post anyway?"
+msgstr "Sigurado ka bang nais mong i-update ang nai-publish na post kahit na?"
+
+msgid "Please complete the following tasks before publishing:"
+msgstr "Mangyaring kumpletuhin ang mga sumusunod na gawain bago ilathala:"
+
+msgid "Please complete the following tasks before updating the published post:"
+msgstr ""
+"Mangyaring kumpletuhin ang mga sumusunod na gawain bago i-update ang "
+"nailathalang post:"
+
+msgid "Not required, but important: "
+msgstr "Hindi kinakailangan, ngunit mahalaga: "
+
+msgid "One or more items in the checklist are not completed"
+msgstr "Isang o higit pang mga item sa checklist ang hindi natapos"
+
+#, fuzzy, php-format
+msgid "You don't have to complete any %sChecklist tasks%s."
+msgstr "Hindi mo kailangang kumpletuhin ang anumang %sChecklist tasks%s."
+
+msgid "Check Now"
+msgstr "Suriin Ngayon"
+
+msgid "Ok"
+msgstr "Ayos"
+
+msgid "No"
+msgstr "Hindi"
+
+msgid "Yes"
+msgstr "Oo"
+
+msgid "Task"
+msgstr "Gawain"
+
+msgid "Disabled, Recommended or Required"
+msgstr "Hindi pinagana, InirRecommended o Kinakailangan"
+
+msgid "Options"
+msgstr "Mga Pagpipilian"
+
+msgid "Add custom task"
+msgstr "Magdagdag ng pasadyang gawain"
+
+msgid "Please complete the required(*) checklists task."
+msgstr "Mangyaring kumpletuhin ang kinakailangang(*) mga checklist na gawain."
+
+msgid "required"
+msgstr "kinakailangan"
+
+msgid "Checklists tasks are not available in Elementor editors"
+msgstr "Hindi available ang mga checklist na gawain sa Elementor editors"
+
+msgid "All in One SEO Headline Score"
+msgstr "All in One SEO Headline Score"
+
+msgid "All in One SEO Score"
+msgstr "All in One SEO Score"
+
+msgid "Featured image height"
+msgstr "Taas ng tampok na imahe"
+
+msgid "Featured image width"
+msgstr "Lapad ng tampok na imahe"
+
+msgid "H1, H2, H3 etc tags are used in logical order"
+msgstr ""
+
+msgid "Number of images in content"
+msgstr "Bilang ng mga imahe sa nilalaman"
+
+msgid "Number of characters in image captions"
+msgstr "Bilang ng mga karakter sa mga caption ng imahe"
+
+msgid "Number of audio items in content"
+msgstr ""
+
+msgid "Number of video items in content"
+msgstr ""
+
+msgid "Approved by role"
+msgstr "Naaprubahan ng role"
+
+msgid "Approved by specific user"
+msgstr ""
+
+msgid "Avoid heading tags in content"
+msgstr "Iwasan ang mga heading tag sa nilalaman"
+
+msgid "Prohibited words"
+msgstr ""
+
+msgid "Publish time should be at a specific time"
+msgstr ""
+
+msgid "Publish time should be in the future"
+msgstr "Dapat nasa hinaharap ang oras ng publikasyon"
+
+msgid "Rank Math SEO Score"
+msgstr "Rank Math SEO Score"
+
+msgid "Only one H1 tag in content"
+msgstr "Isang H1 tag lamang sa nilalaman"
+
+msgid "Tables have a header row"
+msgstr "May header row ang mga talahanayan"
+
+msgid "Check the \"Allow backorders?\" box"
+msgstr "Suriin ang kahon na \"Payagan ang backorders?\""
+
+msgid "Select some products for \"Cross-sells\""
+msgstr "Pumili ng ilang produkto para sa \"Cross-sells\""
+
+msgid "Discount for the \"Sale price\""
+msgstr "Diskwento para sa \"Sale price\""
+
+msgid "Check the \"Downloadable\" box"
+msgstr "I-check ang kahon na \"Downloadable\""
+
+msgid "Product image"
+msgstr "Larawan ng produkto"
+
+msgid "Check the \"Manage stock?\" box"
+msgstr "I-check ang kahon na \"Manage stock?\""
+
+msgid "Enter a \"Regular price\""
+msgstr "Ilagay ang \"Regular price\""
+
+msgid "Enter a \"Sale price\""
+msgstr "Ilagay ang \"Sale price\""
+
+msgid "Schedule the \"Sale price\""
+msgstr "Iskedyul ang \"Sale price\""
+
+msgid "Enter a \"SKU\""
+msgstr "Ilagay ang \"SKU\""
+
+msgid "Check the \"Sold individually\" box"
+msgstr "I-check ang kahon na \"Sold individually\""
+
+msgid "Select some products for \"Upsells\""
+msgstr "Pumili ng ilang produkto para sa \"Upsells\""
+
+msgid "Check the \"Virtual\" box"
+msgstr "I-check ang kahon na \"Virtual\""
+
+#, php-format
+msgid "Number of Characters in %s field"
+msgstr "Bilang ng mga karakter sa %s na field"
+
+#, php-format
+msgid "%s is filled"
+msgstr "%s ay puno"
+
+msgid "About PublishPress Checklists"
+msgstr "Tungkol sa PublishPress Checklists"
+
+msgid "About"
+msgstr "Tungkol"
+
+msgid "PublishPress Checklists Documentation"
+msgstr "Dokumentasyon ng PublishPress Checklists"
+
+msgid "Documentation"
+msgstr "Dokumentasyon"
+
+msgid "Contact the PublishPress team"
+msgstr "Kontakin ang pangkat ng PublishPress"
+
+msgid "Contact"
+msgstr "Makipag-ugnayan"
+
+msgid "Settings saved successfully!"
+msgstr "Matagumpay na nai-save ang mga setting!"
+
+msgid "Save Changes"
+msgstr "I-save ang Mga Pagbabago"
+
+msgid "Pro feature"
+msgstr "Pro na tampok"
+
+#, php-format
+msgid "No %s requirements for this post type."
+msgstr "Walang %s na kinakailangan para sa uri ng post na ito."
+
+msgid "New Item"
+msgstr "Bagong Item"
+
+msgid "Description"
+msgstr "Paglalarawan"
+
+msgid ""
+"Custom tasks do not complete automatically. Users must check the box to show "
+"they have completed the task."
+msgstr ""
+"Ang mga pasadyang gawain ay hindi awtomatikong natatapos. Dapat markahan ng "
+"mga gumagamit ang kahon upang ipakita na natapos na nila ang gawain."
+
+msgid "Add OpenAI Prompt task"
+msgstr "Magdagdag ng OpenAI Prompt na gawain"
+
+msgid "The prompt should be in form of a question."
+msgstr "Dapat nasa anyo ng tanong ang prompt."
+
+msgid "This feature requires an OpenAI API Key."
+msgstr "Kailangan ng feature na ito ng OpenAI API Key."
+
+msgid "Latin characters in permalink"
+msgstr "Mga Latin na karakter sa permalink"
+
+msgid "Permalinks"
+msgstr "Mga Permalink"
+
+msgid "Define tasks related to permalinks"
+msgstr "Tukuyin ang mga gawain na may kaugnayan sa mga permalink"
+
+msgid "Permissions"
+msgstr "Mga Pahintulot"
+
+msgid "Exclude User Roles"
+msgstr "I-exclude ang User Roles"
+
+msgid "Reviews"
+msgstr "Mga pagsusuri"
+
+msgid "Checklists Settings"
+msgstr "Mga Setting ng Checklist"
+
+msgid ""
+"Are you sure you want to reset all renamed checklist items to their default "
+"labels? This action cannot be undone."
+msgstr ""
+"Sigurado ka bang nais mong i-reset ang lahat ng mga na-renamed na checklist "
+"item sa kanilang default na label? Hindi maibabalik ang aksyong ito."
+
+msgid "Resetting..."
+msgstr ""
+
+msgid "Reset All Renamed Labels"
+msgstr ""
+
+msgid "Features"
+msgstr "Mga Tampok"
+
+msgid "Feel free to select only the features you need."
+msgstr "Huwag mag-atubiling pumili lamang ng mga tampok na kailangan mo."
+
+msgid "Enabled features"
+msgstr "Mga pinagana na tampok"
+
+msgid "There are no PublishPress modules registered"
+msgstr "Walang nakarehistrong mga module ng PublishPress"
+
+#, fuzzy, php-format
+msgid ""
+"Disabled because add_post_type_support('%1$s', '%2$s') is included in a "
+"loaded file."
+msgstr ""
+"Hindi pinagana dahil ang add_post_type_support('%1$s', '%2$s') ay kasama sa "
+"isang na-load na file."
+
+msgid "Enable User Roles Filter:"
+msgstr ""
+
+msgid "Show warning icon:"
+msgstr "Ipakita ang icon ng babala:"
+
+msgid "Highlight failing blocks in the editor:"
+msgstr ""
+
+msgid "Delete data on uninstall:"
+msgstr "Burahin ang data sa pag-uninstall:"
+
+msgid "Enable Status Filter:"
+msgstr "Paganahin ang Status Filter:"
+
+msgid "Enable Duplicate Checklists:"
+msgstr "Paganahin ang Duplicate Checklists:"
+
+msgid "Show Checklists column in post lists:"
+msgstr "Ipakita ang kolum ng Checklist sa mga listahan ng post:"
+
+msgid "Enable Taxonomy Filter:"
+msgstr "I-enable ang Taxonomy Filter:"
+
+msgid "Disable the \"Status\" option when using \"Quick Edit\":"
+msgstr ""
+"Huwag paganahin ang \"Status\" na opsyon kapag gumagamit ng \"Quick Edit\":"
+
+msgid "Disable \"Quick Edit\" completely:"
+msgstr "Ganap na i-disable ang \"Quick Edit\":"
+
+msgid "Disable \"Publish\" button:"
+msgstr "I-disable ang \"Publish\" na button:"
+
+msgid "Complete Icon:"
+msgstr "Kumpletong Icon:"
+
+msgid "Incomplete Icon:"
+msgstr "Hindi Kumpletong Icon:"
+
+msgid "Required Complete Color:"
+msgstr "Kinakailangang Kumpletong Kulay:"
+
+msgid "Required Incomplete Color:"
+msgstr "Kinakailangang Hindi Kumpletong Kulay:"
+
+msgid "Required Asterisk Color:"
+msgstr ""
+
+msgid "Recommended Complete Color:"
+msgstr "Inirerekomendang Kumpletong Kulay:"
+
+msgid "Recommended Incomplete Color:"
+msgstr "Inirerekomendang Hindi Kumpletong Kulay:"
+
+msgid "Enable rename label in editor panel:"
+msgstr ""
+
+msgid "Checklist item sort order:"
+msgstr ""
+
+msgid "OpenAI API Key:"
+msgstr "OpenAI API Key:"
+
+msgid "Reset Renamed Checklist:"
+msgstr "I-reset ang Pinangalanang Checklist:"
+
+msgid "Post types:"
+msgstr "Mga uri ng post:"
+
+msgid ""
+"This allows tasks to be disabled for specific statuses such as \"Draft\" or "
+"\"Published."
+msgstr ""
+"Pinapayagan nito ang mga gawain na hindi paganahin para sa mga partikular na "
+"status tulad ng \"Draft\" o \"Published."
+
+msgid "This allows users to duplicate existing checklist tasks."
+msgstr ""
+"Pinapayagan nito ang mga gumagamit na kopyahin ang mga umiiral na checklist "
+"na gawain."
+
+msgid ""
+"Add a Checklists column to the Posts screen showing how many requirements "
+"are complete."
+msgstr ""
+"Magdagdag ng Checklists na kolum sa screen ng Mga Post na nagpapakita kung "
+"gaano karaming kinakailangan ang kumpleto."
+
+msgid ""
+"This allows tasks to be disabled for posts with specific taxonomy terms. Go "
+"to the \"Post Types\" tab to choose the terms."
+msgstr ""
+"Pinapayagan nito ang mga gawain na hindi paganahin para sa mga post na may "
+"tiyak na mga termino ng taxonomy. Pumunta sa tab na \"Mga Uri ng Post\" "
+"upang pumili ng mga termino."
+
+msgid ""
+"This will display a warning icon in the \"Checklists\" box if requirements "
+"are incomplete."
+msgstr ""
+"Ipinapakita nito ang isang icon ng babala sa kahon ng \"Checklists\" kung "
+"hindi kumpleto ang mga kinakailangan."
+
+msgid ""
+"This will highlight Gutenberg blocks that fail block-specific checklist "
+"tasks."
+msgstr ""
+
+msgid ""
+"When enabled, all PublishPress Checklists data will be deleted if the plugin "
+"is uninstalled."
+msgstr ""
+"Kapag naka-enable, lahat ng data ng PublishPress Checklists ay mabubura kung "
+"ang plugin ay aalisin."
+
+msgid "This will show \"Exclude User Roles\" options."
+msgstr ""
+
+msgid ""
+"Disabling the \"Status\" option is recommended because it can be used to "
+"avoid using the Checklists requirements."
+msgstr ""
+"Inirerekomenda ang pag-disable ng \"Status\" na opsyon dahil maaari itong "
+"magamit upang maiwasan ang paggamit ng mga kinakailangan ng Checklists."
+
+msgid ""
+"This will disable \"Quick Edit\" for all users except those with the "
+"\"manage_options\" capability."
+msgstr ""
+"Hihinto nito ang \"Quick Edit\" para sa lahat ng mga gumagamit maliban sa "
+"mga may kakayahang \"manage_options\"."
+
+msgid ""
+"This will disable the \"Publish\" button when checklist requirements are not "
+"met."
+msgstr ""
+"Hihinto nito ang \"Publish\" na button kapag hindi natutugunan ang mga "
+"kinakailangan ng checklist."
+
+msgid "Enter your API Key to use OpenAI prompts in checklist tasks."
+msgstr ""
+"Ilagay ang iyong API Key upang magamit ang OpenAI prompts sa checklist tasks."
+
+msgid "Post Types"
+msgstr "Mga Uri ng Post"
+
+msgid "General"
+msgstr "Pangkalahatan"
+
+msgid "Publishing Options"
+msgstr "Mga Opsyon sa Pag-publish"
+
+msgid "Appearance"
+msgstr "Hitsura"
+
+msgid "Integration"
+msgstr "Pagsasama"
+
+msgid "Tools"
+msgstr "Mga Tool"
+
+msgid "Enter a Dashicons class name (e.g., dashicons-yes, dashicons-saved). "
+msgstr ""
+"Ipasok ang pangalan ng klase ng Dashicons (hal. dashicons-yes, dashicons-"
+"saved). "
+
+msgid "View Dashicons"
+msgstr "Tingnan ang Dashicons"
+
+msgid "Enter a Dashicons class name (e.g., dashicons-no, dashicons-dismiss). "
+msgstr ""
+"Ipasok ang pangalan ng klase ng Dashicons (hal. dashicons-no, dashicons-"
+"dismiss). "
+
+msgid "Enable custom rename labels in the checklist editor panel."
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Required on top and recommended below"
+msgstr ""
+
+msgid "Sort alphabetically"
+msgstr ""
+
+msgid ""
+"This will reset all renamed checklist labels for WP Admin and Editing screen "
+"back to their default labels."
+msgstr ""
+
+msgid "Security check failed."
+msgstr "Nabigo ang pagsusuri sa seguridad."
+
+msgid "You do not have permission to perform this action."
+msgstr "Wala kang pahintulot na isagawa ang aksyong ito."
+
+msgid "All renamed labels have been reset successfully."
+msgstr ""
+
+msgid "Number of characters in Yoast SEO focus keyword"
+msgstr "Bilang ng mga karakter sa Yoast SEO focus keyword"
+
+#, php-format
+msgid "Minimum of %d character in Yoast SEO focus keyword"
+msgstr "Minimum na %d na karakter sa Yoast SEO focus keyword"
+
+#, php-format
+msgid "Minimum of %d characters in Yoast SEO focus keyword"
+msgstr "Minimum ng %d na mga karakter sa Yoast SEO focus keyword"
+
+#, php-format
+msgid "Maximum of %d character in Yoast SEO focus keyword"
+msgstr "Sobra ng %d karakter sa pangunahing keyword ng Yoast SEO"
+
+#, php-format
+msgid "Maximum of %d characters in Yoast SEO focus keyword"
+msgstr "Maximum na %d na karakter sa Yoast SEO focus keyword"
+
+#, php-format
+msgid "%d character in Yoast SEO focus keyword"
+msgstr "%d karakter sa Yoast SEO focus keyword"
+
+#, php-format
+msgid "%d characters in Yoast SEO focus keyword"
+msgstr "%d mga karakter sa Yoast SEO focus keyword"
+
+#, php-format
+msgid "Between %d and %d characters in Yoast SEO focus keyword"
+msgstr "Sa pagitan ng %d at %d na karakter sa Yoast SEO focus keyword"
+
+msgid "Number of characters in Yoast SEO meta description"
+msgstr "Bilang ng mga karakter sa Yoast SEO meta description"
+
+#, php-format
+msgid "Minimum of %d character in Yoast SEO meta description"
+msgstr "Minimum ng %d na karakter sa Yoast SEO meta description"
+
+#, php-format
+msgid "Minimum of %d characters in Yoast SEO meta description"
+msgstr "Minimum ng %d na mga karakter sa Yoast SEO meta description"
+
+#, php-format
+msgid "Maximum of %d character in Yoast SEO meta description"
+msgstr "Sobra ng %d karakter sa meta description ng Yoast SEO"
+
+#, php-format
+msgid "Maximum of %d characters in Yoast SEO meta description"
+msgstr "Maximum na %d na karakter sa Yoast SEO meta description"
+
+#, php-format
+msgid "%d character in Yoast SEO meta description"
+msgstr "%d karakter sa Yoast SEO meta description"
+
+#, php-format
+msgid "%d characters in Yoast SEO meta description"
+msgstr "%d mga karakter sa Yoast SEO meta description"
+
+#, php-format
+msgid "Between %d and %d characters in Yoast SEO meta description"
+msgstr "Sa pagitan ng %d at %d na karakter sa Yoast SEO meta description"
+
+msgid "Minimum Yoast SEO readability score"
+msgstr "Minimum na marka ng readability ng Yoast SEO"
+
+#. translators: %s expands to the readability score
+#, fuzzy, php-format
+msgid "Yoast Readability: %s"
+msgstr "Yoast Readability: %s"
+
+msgid "OK"
+msgstr "Ayos"
+
+msgid "Good"
+msgstr "Maganda"
+
+msgid "Minimum Yoast SEO analysis score"
+msgstr "Minimum na marka ng pagsusuri ng Yoast SEO"
+
+#. translators: %s expands to the seo score
+#, fuzzy, php-format
+msgid "Yoast SEO: %s"
+msgstr "Yoast SEO: %s"
+
+msgid "Define tasks related to Yoast SEO"
+msgstr "Tukuyin ang mga gawain na may kaugnayan sa Yoast SEO"
+
+msgid "This plugin can be deleted."
+msgstr "Maaaring tanggalin ang plugin na ito."
+
+#, php-format
+msgid ""
+"You're using PublishPress Checklists Free. The Pro version has more features "
+"and support. %sUpgrade to Pro%s"
+msgstr ""
+"Gumagamit ka ng PublishPress Checklists Free. Ang bersyon ng Pro ay may "
+"higit pang mga tampok at suporta. %sMag-upgrade sa Pro%s"
+
+#~ msgid "Numbers of characters in excerpt"
+#~ msgstr "Bilang ng mga karakter sa excerpt"
+
+#~ msgid "Heading in hierarchy"
+#~ msgstr "Pamagat sa hierarchy"
+
+#~ msgid "Number of audio in content"
+#~ msgstr "Bilang ng audio sa nilalaman"
+
+#~ msgid "Number of video in content"
+#~ msgstr "Bilang ng video sa nilalaman"
+
+#~ msgid "Approved by user"
+#~ msgstr "Naaprubahan ng user"
+
+#~ msgid "Published at exact time"
+#~ msgstr "Nai-publish sa eksaktong oras"
+
+#~ msgid "Enable Who Can Ignore:"
+#~ msgstr "Paganahin kung Sino ang Maaaring I-ignore:"
+
+#~ msgid "This will show \"Who can ignore\" options."
+#~ msgstr ""
+#~ "Ipinapakita nito ang mga opsyon na \"Sino ang maaaring hindi pansinin\"."
+
+#~ msgid "Reset All Custom Labels"
+#~ msgstr "I-reset ang Lahat ng Pasadyang Label"
+
+#~ msgid ""
+#~ "This will reset all renamed checklist items back to their default labels."
+#~ msgstr ""
+#~ "Ito ay magbabalik sa lahat ng pinangalanang mga item ng checklist sa "
+#~ "kanilang mga default na label."
+
+#~ msgid "All custom labels have been reset successfully."
+#~ msgstr "Lahat ng pasadyang label ay matagumpay na na-reset."
+
+#~ msgid "Who can ignore the task?"
+#~ msgstr "Sino ang maaaring hindi pansinin ang gawain?"
+
+#~ msgid "Add to these post types:"
+#~ msgstr "Idagdag sa mga uri ng post na ito:"
+
+#~ msgid "This allows users to duplicate existing checklist task."
+#~ msgstr ""
+#~ "Pinapayagan nito ang mga gumagamit na kopyahin ang umiiral na checklist "
+#~ "na gawain."
+
+#~ msgid "Validation error. Kindly reload this page and try agai.n"
+#~ msgstr ""
+#~ "Error sa pagpapatunay. Mangyaring i-reload ang pahinang ito at subukang "
+#~ "muli."

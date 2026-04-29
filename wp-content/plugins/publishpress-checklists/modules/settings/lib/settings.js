@@ -1,4 +1,7 @@
 jQuery(document).ready(function ($) {
+  // Initialize color pickers
+  $('.pp-checklists-color-picker').wpColorPicker();
+
   // Tabs
 
   var $tabsWrapper = $('#publishpress-checklists-settings-tabs');
@@ -77,4 +80,47 @@ jQuery(document).ready(function ($) {
   function removeStorageData(storageName) {
     window.localStorage.removeItem(storageName);
   }
+
+  // Reset Custom Labels button handler
+  $('#ppch-reset-custom-labels').on('click', function (e) {
+    e.preventDefault();
+
+    if (typeof ppchToolsSettings === 'undefined') {
+      return;
+    }
+
+    if (!confirm(ppchToolsSettings.resetLabelsConfirm)) {
+      return;
+    }
+
+    var $button = $(this);
+    var loadingLabel = (typeof ppchToolsSettings !== 'undefined' && ppchToolsSettings.resetLabelsLoading)
+      ? ppchToolsSettings.resetLabelsLoading
+      : 'Resetting...';
+    var defaultLabel = (typeof ppchToolsSettings !== 'undefined' && ppchToolsSettings.resetLabelsButton)
+      ? ppchToolsSettings.resetLabelsButton
+      : 'Reset All Renamed Labels';
+
+    $button.prop('disabled', true).text(loadingLabel);
+
+    $.ajax({
+      url: ppchToolsSettings.ajaxUrl,
+      type: 'POST',
+      data: {
+        action: 'ppch_reset_custom_labels',
+        nonce: ppchToolsSettings.resetLabelsNonce
+      },
+      success: function (response) {
+        if (response.success) {
+          location.reload();
+        } else {
+          alert(response.data.message);
+          $button.prop('disabled', false).text(defaultLabel);
+        }
+      },
+      error: function () {
+        $button.prop('disabled', false).text(defaultLabel);
+      }
+    });
+  });
 });

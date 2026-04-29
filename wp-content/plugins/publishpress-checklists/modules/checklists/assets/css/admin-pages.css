@@ -122,8 +122,8 @@ textarea.pp-checklists-custom-item-title {
   transition: color 200ms ease-in-out;
 }
 
-.pressshack-admin-wrapper button:not(.notice-dismiss),
-.pressshack-admin-wrapper .button:not(.notice-dismiss) {
+.pressshack-admin-wrapper button:not(.notice-dismiss):not(.wp-color-result),
+.pressshack-admin-wrapper .button:not(.notice-dismiss):not(.wp-color-result) {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
@@ -259,69 +259,6 @@ textarea.pp-checklists-custom-item-title {
   padding-left: 3px;
 }
 
-#pp-checklists-global .checklists-save-notice {
-  margin-top: 1rem;
-}
-
-/* Top notice styling when saving */
-#pp-checklists-global .checklists-save-notice:first-child {
-  margin-top: 0;
-  margin-bottom: 1.5rem;
-  position: sticky;
-  top: 32px;
-  z-index: 100;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-/* End of Top notice styling when saving */
-
-
-#pp-checklists-global .checklists-save-notice .alert {
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid transparent;
-  border-radius: 4px;
-}
-
-#pp-checklists-global .checklists-save-notice .alert-dismissible {
-  padding-right: 35px;
-}
-
-#pp-checklists-global .checklists-save-notice .alert-dismissible .close {
-  position: relative;
-  top: -2px;
-  right: -21px;
-  color: inherit;
-}
-
-#pp-checklists-global .checklists-save-notice .alert-danger {
-  color: #a94442;
-  background-color: #f2dede;
-  border-color: #ebccd1;
-}
-
-#pp-checklists-global .checklists-save-notice .alert-success {
-  color: #3c763d;
-  background-color: #dff0d8;
-  border-color: #d6e9c6;
-}
-
-#pp-checklists-global .checklists-save-notice .close {
-  float: right;
-  font-size: 21px;
-  font-weight: 700;
-  line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
-  filter: alpha(opacity=20);
-  opacity: 0.2;
-}
-
-#pp-checklists-global .checklists-save-notice a.close {
-  text-decoration: none !important;
-  font-size: 18px !important;
-  line-height: 1.2;
-}
 
 /* Inline field validation styling */
 .field-validation-error {
@@ -400,6 +337,14 @@ textarea.pp-checklists-custom-item-title {
 }
 
 @media only screen and (max-width: 781px) {
+  .pp-checklists-content-wrapper {
+    overflow-x: visible;
+  }
+
+  .pp-checklists-requirements-settings {
+    min-width: 0;
+  }
+
   #pp-checklists-global table th {
     display: none;
   }
@@ -532,10 +477,15 @@ textarea.pp-checklists-custom-item-title {
   padding: 10px;
   margin-top: 0;
   padding-top: 0;
+  overflow-x: auto;
 }
 
 .pp-checklists-content-table .select2-container {
   width: 100% !important;
+}
+
+.pp-checklists-requirements-settings {
+  min-width: 500px;
 }
 
 @media only screen and (max-width: 1270px) {
@@ -566,6 +516,31 @@ textarea.pp-checklists-custom-item-title {
 
   .pp-checklists-tabs-wrapper {
     display: block;
+  }
+}
+
+@media only screen and (min-width: 782px) and (max-width: 1100px) {
+  .pp-checklists-content-wrapper {
+    padding-bottom: 16px;
+  }
+
+  .pp-checklists-requirements-settings th,
+  .pp-checklists-requirements-settings td {
+    white-space: normal;
+  }
+
+  .pp-checklists-requirements-settings th:first-child,
+  .pp-checklists-requirements-settings td:first-child {
+    min-width: 260px;
+  }
+
+  .pp-checklists-requirements-settings th:nth-child(2),
+  .pp-checklists-requirements-settings td:nth-child(2) {
+    min-width: 150px;
+  }
+
+  .pp-checklists-task-params {
+    min-width: 180px;
   }
 }
 
@@ -649,3 +624,146 @@ textarea.pp-checklists-custom-item-title {
 }
 
 /* End Pro Lock badge */
+
+/* Custom Label Editing */
+.pp-checklists-title-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pp-checklists-default-label,
+.pp-checklists-custom-label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp-checklists-custom-label-input {
+  flex: 1;
+  min-width: 200px;
+  max-width: 100%;
+  padding: 4px 8px;
+  border: 1px solid #8c8f94;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.pp-checklists-custom-label-input:focus {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: none;
+}
+
+.pp-checklists-edit-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: #2271b1;
+  text-decoration: none;
+  flex-shrink: 0;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 5;
+}
+
+.pp-checklists-edit-label:hover {
+  color: #135e96;
+}
+
+.pp-checklists-edit-label .dashicons {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
+}
+
+.pp-checklists-rename-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 100000;
+}
+
+.pp-checklists-rename-modal-overlay.is-open {
+  display: block;
+}
+
+.pp-checklists-rename-modal {
+  display: none;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 460px;
+  max-width: calc(100vw - 40px);
+  background: #fff;
+  border: 1px solid #dcdcde;
+  border-radius: 6px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.24);
+  padding: 20px;
+  z-index: 100001;
+}
+
+.pp-checklists-rename-modal.is-open {
+  display: block;
+}
+
+.pp-checklists-rename-modal-title {
+  margin: 0 0 14px;
+  font-size: 16px;
+}
+
+.pp-checklists-rename-modal-label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+
+.pp-checklists-rename-modal-input {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.pp-checklists-rename-modal-preview {
+  margin: 0 0 14px;
+  font-size: 12px;
+  color: #50575e;
+}
+
+.pp-checklists-rename-modal-preview strong {
+  font-weight: 600;
+}
+
+.pp-checklists-rename-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* End Custom Label Editing */
+
+/* Fix column widths to prevent overlap on smaller screens */
+.pp-checklists-requirements-settings th:first-child,
+.pp-checklists-requirements-settings td:first-child {
+  width: 300px;
+  min-width: 100px;
+  max-width: 30%;
+}
+
+.pp-checklists-requirements-settings th:nth-child(2),
+.pp-checklists-requirements-settings td:nth-child(2) {
+  width: 150px;
+  min-width: 120px;
+}
+
+@media only screen and (max-width: 900px) {
+  .pp-checklists-custom-label-input {
+    min-width: 120px;
+  }
+}

@@ -72,7 +72,7 @@ class Plugin
         load_plugin_textdomain(
             'publishpress-checklists',
             false,
-            plugin_basename(plugin_dir_path(PPCH_FILE)) . '/languages/'
+            dirname(plugin_basename(PPCH_FILE)) . '/languages/'
         );
     }
 
@@ -115,4 +115,5 @@ class Plugin
 
         return $links;
     }
+
 }

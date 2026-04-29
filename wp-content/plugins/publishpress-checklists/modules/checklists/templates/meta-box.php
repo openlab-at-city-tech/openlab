@@ -1,5 +1,10 @@
 <?php
 $show_required_legend = false;
+$show_rule_headings = !empty($context['show_rule_headings']);
+$rule_heading_shown = [
+    'block' => false,
+    'warning' => false,
+];
 use PublishPress\Checklists\Core\Utils\ElementorUtils;
 ?>
 
@@ -25,6 +30,19 @@ use PublishPress\Checklists\Core\Utils\ElementorUtils;
                     </p>
                 <?php else : ?>
                     <?php foreach ($context['requirements'] as $key => $req) : ?>
+                        <?php if ($show_rule_headings && isset($req['rule']) && isset($rule_heading_shown[$req['rule']]) && !$rule_heading_shown[$req['rule']]) : ?>
+                            <?php if ($req['rule'] === 'block') : ?>
+                                <li class="pp-checklists-group-heading">
+                                    <?php echo esc_html($context['lang']['required']); ?>
+                                </li>
+                                <?php $rule_heading_shown['block'] = true; ?>
+                            <?php elseif ($req['rule'] === 'warning') : ?>
+                                <li class="pp-checklists-group-heading">
+                                    <?php echo esc_html($context['lang']['recommended']); ?>
+                                </li>
+                                <?php $rule_heading_shown['warning'] = true; ?>
+                            <?php endif; ?>
+                        <?php endif; ?>
                         <li
                                 id="pp-checklists-req-<?php echo esc_attr($key); ?>"
                                 class="pp-checklists-req metabox-req pp-checklists-<?php echo esc_attr($req['rule']); ?> status-<?php echo $req['status'] ? 'yes' : 'no'; ?> <?php echo $req['is_custom'] ? 'pp-checklists-custom-item' : ''; ?>"
@@ -39,11 +57,16 @@ use PublishPress\Checklists\Core\Utils\ElementorUtils;
                             <?php endif; ?>
 
                             <?php
-                            if ($req['is_custom']) :
-                                $icon_class = $req['status'] ? 'dashicons-yes' : '';
-                            else:
-                                $icon_class = $req['status'] ? 'dashicons-yes' : 'dashicons-no';
-                            endif;
+                            // Get custom icon settings.
+                            $legacyPlugin = \PublishPress\Checklists\Core\Factory::getLegacyPlugin();
+                            $settings_options = isset($legacyPlugin->settings->module->options) ? $legacyPlugin->settings->module->options : null;
+
+                            // Use the same icons for both Required and Recommended, including custom items.
+                            if ($req['status']) {
+                                $icon_class = (!empty($settings_options->complete_icon) && trim($settings_options->complete_icon) !== '') ? trim($settings_options->complete_icon) : 'dashicons-yes';
+                            } else {
+                                $icon_class = (!empty($settings_options->incomplete_icon) && trim($settings_options->incomplete_icon) !== '') ? trim($settings_options->incomplete_icon) : 'dashicons-no';
+                            }
                             ?>
                             <div class="status-icon dashicons <?php echo esc_attr($icon_class); ?>"></div>
                             <div class="status-label">
@@ -72,7 +95,7 @@ use PublishPress\Checklists\Core\Utils\ElementorUtils;
             </ul>
 
             <?php if ($show_required_legend) : ?>
-                <em>(*) <?php echo esc_html($context['lang']['required']); ?></em>
+                <em>(<span class="required">*</span>) <?php echo esc_html($context['lang']['required']); ?></em>
             <?php endif; ?>
         </div>
     <?php endif; ?>

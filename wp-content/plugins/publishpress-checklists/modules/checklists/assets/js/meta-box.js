@@ -290,18 +290,23 @@
         function (event, item) {
           var $item = $(item),
             $icon = $item.children('.dashicons'),
-            checked = $icon.hasClass('dashicons-yes');
+            customIcons = ppChecklists.customIcons || {},
+            completeIcon = customIcons.complete || 'dashicons-yes',
+            incompleteIcon = customIcons.incomplete || 'dashicons-no',
+            checked = $icon.hasClass(completeIcon);
 
-          $icon.removeClass('dashicons-no');
+          $icon.removeClass(incompleteIcon);
 
           if (checked) {
-            $icon.removeClass('dashicons-yes');
+            $icon.removeClass(completeIcon);
+            $icon.addClass(incompleteIcon);
             $item.removeClass('status-yes');
             $item.addClass('status-no');
             $item.find('.ppch_item_requirement').val('no');
             wp.hooks.doAction('pp-checklists.requirements-updated', $item);
           } else {
-            $icon.addClass('dashicons-yes');
+            $icon.removeClass(incompleteIcon);
+            $icon.addClass(completeIcon);
             $item.addClass('status-yes');
             $item.removeClass('status-no');
             $item.find('.ppch_item_requirement').val('yes');
@@ -522,18 +527,24 @@
      */
     update_requirement_icon: function (is_completed, $element) {
       var $icon_element = $element.find('.dashicons');
+      
+      // Get custom icons from settings or use defaults
+      var customIcons = ppChecklists.customIcons || {};
+      var completeIcon = customIcons.complete || 'dashicons-yes';
+      var incompleteIcon = customIcons.incomplete || 'dashicons-no';
+      
       if (is_completed) {
         // Ok
-        $icon_element.removeClass('dashicons-no');
-        $icon_element.addClass('dashicons-yes');
+        $icon_element.removeClass(incompleteIcon);
+        $icon_element.addClass(completeIcon);
         $icon_element.parent().removeClass('status-no');
         $icon_element.parent().addClass('status-yes');
         $element.find('.ppch_item_requirement').val('yes');
         wp.hooks.doAction('pp-checklists.requirements-updated', $element);
       } else {
         // Not ok
-        $icon_element.removeClass('dashicons-yes');
-        $icon_element.addClass('dashicons-no');
+        $icon_element.removeClass(completeIcon);
+        $icon_element.addClass(incompleteIcon);
         $icon_element.parent().removeClass('status-yes');
         $icon_element.parent().addClass('status-no');
         $element.find('.ppch_item_requirement').val('no');
@@ -1188,6 +1199,7 @@
         if (typeof obj !== 'undefined') {
           let required_tags = config.value;
           let label = config.label;
+          let hasCustomEditorLabel = !!config.has_editor_label;
           let required_tags_reached =
             required_tags.length > 0
               ? required_tags.filter((value) => {
@@ -1198,10 +1210,14 @@
           let has_required_tags = required_tags_reached.length > 0;
 
           const labelEl = $element.find('.status-label');
-          const current_label_text = label.replace(/:.*/, '');
-          const required_tags_str = required_tags_reached.map((el) => el.split('__')[1]).join(', ');
-          const final_label_text =
-            required_tags_str.length > 0 ? `${current_label_text}: ${required_tags_str} ` : `${current_label_text} `;
+          let final_label_text = label;
+
+          if (!hasCustomEditorLabel) {
+            const current_label_text = label.replace(/:.*/, '');
+            const required_tags_str = required_tags_reached.map((el) => el.split('__')[1]).join(', ');
+            final_label_text =
+              required_tags_str.length > 0 ? `${current_label_text}: ${required_tags_str} ` : `${current_label_text} `;
+          }
 
           // Update the label in the ppChecklists object
           if (typeof ppChecklists !== 'undefined' && ppChecklists.requirements[requirementId]) {
@@ -1255,6 +1271,7 @@
         if (typeof obj !== 'undefined') {
           let prohibited_tags = config.value;
           let label = config.label;
+          let hasCustomEditorLabel = !!config.has_editor_label;
           let prohibited_tags_reached =
             prohibited_tags.length > 0
               ? prohibited_tags.filter((value) => {
@@ -1265,10 +1282,14 @@
           let has_prohibited_tags = prohibited_tags_reached.length > 0;
 
           const labelEl = $element.find('.status-label');
-          const current_label_text = label.replace(/:.*/, '');
-          const prohibited_tags_str = prohibited_tags_reached.map((el) => el.split('__')[1]).join(', ');
-          const final_label_text =
-            prohibited_tags_str.length > 0 ? `${current_label_text}: ${prohibited_tags_str} ` : `${current_label_text} `;
+          let final_label_text = label;
+
+          if (!hasCustomEditorLabel) {
+            const current_label_text = label.replace(/:.*/, '');
+            const prohibited_tags_str = prohibited_tags.map((el) => el.split('__')[1]).join(', ');
+            final_label_text =
+              prohibited_tags_str.length > 0 ? `${current_label_text}: ${prohibited_tags_str} ` : `${current_label_text} `;
+          }
 
           // Update the label in the ppChecklists object
           if (typeof ppChecklists !== 'undefined' && ppChecklists.requirements[requirementId]) {
@@ -1354,6 +1375,7 @@
         if (typeof obj !== 'undefined') {
           let required_categories = config.value;
           let label = config.label;
+          let hasCustomEditorLabel = !!config.has_editor_label;
           let required_categories_reached =
             required_categories.length > 0
               ? required_categories.filter((value) => !obj.includes(Number(value.split('__')[0])))
@@ -1361,12 +1383,16 @@
           let has_required_categories = required_categories_reached.length > 0;
 
           const labelEl = $element.find('.status-label');
-          const current_label_text = label.replace(/:.*/, '');
-          const required_categories_str = required_categories_reached.map((el) => el.split('__')[1]).join(', ');
-          const final_label_text =
-            required_categories_str.length > 0
-              ? `${current_label_text}: ${required_categories_str} `
-              : `${current_label_text} `;
+          let final_label_text = label;
+
+          if (!hasCustomEditorLabel) {
+            const current_label_text = label.replace(/:.*/, '');
+            const required_categories_str = required_categories_reached.map((el) => el.split('__')[1]).join(', ');
+            final_label_text =
+              required_categories_str.length > 0
+                ? `${current_label_text}: ${required_categories_str} `
+                : `${current_label_text} `;
+          }
 
           // Update the label in the ppChecklists object
           if (typeof ppChecklists !== 'undefined' && ppChecklists.requirements[requirementId]) {
@@ -1415,6 +1441,7 @@
         if (typeof obj !== 'undefined') {
           let prohibited_categories = config.value;
           let label = config.label;
+          let hasCustomEditorLabel = !!config.has_editor_label;
           let prohibited_categories_reached =
             prohibited_categories.length > 0
               ? prohibited_categories.filter((value) => obj.includes(Number(value.split('__')[0])))
@@ -1422,12 +1449,16 @@
           let has_prohibited_categories = prohibited_categories_reached.length > 0;
 
           const labelEl = $element.find('.status-label');
-          const current_label_text = label.replace(/:.*/, '');
-          const prohibited_categories_str = prohibited_categories_reached.map((el) => el.split('__')[1]).join(', ');
-          const final_label_text =
-            prohibited_categories_str.length > 0
-              ? `${current_label_text}: ${prohibited_categories_str} `
-              : `${current_label_text} `;
+          let final_label_text = label;
+
+          if (!hasCustomEditorLabel) {
+            const current_label_text = label.replace(/:.*/, '');
+            const prohibited_categories_str = prohibited_categories.map((el) => el.split('__')[1]).join(', ');
+            final_label_text =
+              prohibited_categories_str.length > 0
+                ? `${current_label_text}: ${prohibited_categories_str} `
+                : `${current_label_text} `;
+          }
 
           // Update the label in the ppChecklists object
           if (typeof ppChecklists !== 'undefined' && ppChecklists.requirements[requirementId]) {
@@ -2061,6 +2092,7 @@
           // Get missing alt images for this specific requirement
           var missingAltImages = PP_Checklists.missing_alt_images(content, config);
           var currentCount = missingAltImages.length;
+          var no_missing_alt = currentCount === 0;
 
           // If nothing changed for this requirement, bail early
           if (currentCount === lastMissingCounts[requirementId]) {
@@ -2068,28 +2100,6 @@
           }
 
           lastMissingCounts[requirementId] = currentCount;
-          var no_missing_alt = currentCount === 0;
-
-          // Update block warnings if we're in the block editor (only for the first element to avoid duplicates)
-          if (requirementId === 'image_alt' && wp.data.select('core/block-editor')) {
-            const blocks = wp.data.select('core/block-editor').getBlocks();
-            const imageBlocks = blocks.filter(block => block.name === 'core/image');
-
-            imageBlocks.forEach(block => {
-              // Check if this block's HTML matches any of the missing alt images
-              const hasWarning = missingAltImages.some(html =>
-                html.includes(block.attributes.id) || html.includes(block.attributes.url)
-              );
-
-              // Set warning attribute on the list view item
-              const listViewElement = document.querySelector(
-                `.block-editor-list-view-leaf[data-block="${block.clientId}"]`
-              );
-              if (listViewElement) {
-                listViewElement.setAttribute('data-warning', hasWarning);
-              }
-            });
-          }
 
           $element.trigger(PP_Checklists.EVENT_UPDATE_REQUIREMENT_STATE, no_missing_alt);
         });
@@ -2193,6 +2203,7 @@
         // Detect invalid links in post content.
         var invalidLinks = PP_Checklists.validate_links_format(content);
         var currentCount = invalidLinks.length;
+        const warningText = $validateLinksElements.first().text().trim();
 
         // If nothing changed, bail early.
         if (currentCount === lastInvalidCount) {
@@ -2209,21 +2220,6 @@
             no_invalid_link,
           );
         });
-
-        // Highlight blocks containing invalid links in the List View.
-        if (wp.data.select('core/block-editor')) {
-          const blocks = wp.data.select('core/block-editor').getBlocks();
-          blocks.forEach(block => {
-            const blockContent = block.attributes.content || '';
-            const hasWarning = invalidLinks.some(link => blockContent.includes(link));
-            const listViewElement = document.querySelector(
-              `.block-editor-list-view-leaf[data-block="${block.clientId}"]`,
-            );
-            if (listViewElement) {
-              listViewElement.setAttribute('data-warning', hasWarning);
-            }
-          });
-        }
 
         lastInvalidCount = currentCount;
       });
@@ -2308,10 +2304,7 @@
         // Obtain all image alt lengths in current content
         var altLengths = PP_Checklists.get_image_alt_lengths(content);
         var signature = altLengths.join(',');
-
-        if (signature === lastSignature) {
-          return; // No change
-        }
+        var shouldUpdateRequirement = signature !== lastSignature;
 
         // Loop over each checklist element to evaluate with its own config
         $imageAltCountElements.each(function () {
@@ -2332,31 +2325,19 @@
           var min = parseInt(config.value[0]);
           var max = parseInt(config.value[1]);
 
-          // Highlight blocks containing invalid alt lengths in List View
-          if (wp.data.select('core/block-editor')) {
-            const blocks = wp.data.select('core/block-editor').getBlocks();
-            const imageBlocks = blocks.filter(block => block.name === 'core/image');
-            imageBlocks.forEach(block => {
-              const altLength = block.attributes.alt ? block.attributes.alt.length : 0;
-              const hasWarning = !PP_Checklists.check_valid_quantity(altLength, min, max);
-              const listViewElement = document.querySelector(
-                `.block-editor-list-view-leaf[data-block="${block.clientId}"]`,
-              );
-              if (listViewElement) {
-                listViewElement.setAttribute('data-warning', hasWarning);
-              }
+          if (shouldUpdateRequirement) {
+            // Validate every image alt length against the config range
+            var isValid = altLengths.every(function (len) {
+              return PP_Checklists.check_valid_quantity(len, min, max);
             });
+
+            $element.trigger(PP_Checklists.EVENT_UPDATE_REQUIREMENT_STATE, isValid);
           }
-
-          // Validate every image alt length against the config range
-          var isValid = altLengths.every(function (len) {
-            return PP_Checklists.check_valid_quantity(len, min, max);
-          });
-
-          $element.trigger(PP_Checklists.EVENT_UPDATE_REQUIREMENT_STATE, isValid);
         });
 
-        lastSignature = signature;
+        if (shouldUpdateRequirement) {
+          lastSignature = signature;
+        }
       });
     }
   } else {

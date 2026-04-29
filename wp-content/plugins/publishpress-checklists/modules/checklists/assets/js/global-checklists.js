@@ -37,6 +37,9 @@
     // Initialize count indicators
     update_count_indicators();
     
+    // Initialize custom label editing
+    initializeCustomLabelEditing();
+    
     // Auto-hide success notice after 5 seconds
     if ($('.checklists-save-notice').length > 0) {
       setTimeout(function() {
@@ -487,7 +490,7 @@
         custom_task_error_displayed = false;
 
       //remove previous notice and inline validation errors
-      $('.checklists-save-notice').remove();
+      $('#pp-checklists-global > .notice').remove();
       $('.field-validation-error').remove();
       $('.has-validation-error').removeClass('has-validation-error');
 
@@ -508,14 +511,12 @@
           if (min_field.val().trim() === '' && max_field.val().trim() === '') {
             submit_form = false;
             var field_title = $('<strong>').text(`${row_requirement_title}`);
-            submit_error += $('<div class="checklists-save-notice"></div>')
-              .append(
-                $('<div class="alert alert-danger alert-dismissible"></div>')
-                  .append('<a href="javascript:void(0);" class="close">×</a>')
-                  .append(field_title)
-                  .append(document.createTextNode(required_rules_notice)),
-              )
-              .html();
+            submit_error += $('<div class="notice notice-error"><p></p></div>')
+              .find('p')
+              .append(field_title)
+              .append(document.createTextNode(required_rules_notice))
+              .end()
+              .prop('outerHTML');
             
             // Add inline field validation notice
             var $row = $(this);
@@ -530,14 +531,12 @@
           if (!time_field.val()) {
             submit_form = false;
             var field_title = $('<strong>').text(`${row_requirement_title}`);
-            submit_error += $('<div class="checklists-save-notice"></div>')
-              .append(
-                $('<div class="alert alert-danger alert-dismissible"></div>')
-                  .append('<a href="javascript:void(0);" class="close">×</a>')
-                  .append(field_title)
-                  .append(document.createTextNode(required_rules_notice)),
-              )
-              .html();
+            submit_error += $('<div class="notice notice-error"><p></p></div>')
+              .find('p')
+              .append(field_title)
+              .append(document.createTextNode(required_rules_notice))
+              .end()
+              .prop('outerHTML');
             
             // Add inline field validation notice
             var $row = $(this);
@@ -555,19 +554,17 @@
         // Only validate if the row is visible and not marked for removal
         if ($row.is(':visible') && !$row.hasClass('removed') && $this.val().trim() === '' && !custom_task_error_displayed) {
           submit_form = false;
-          submit_error += $('<div class="checklists-save-notice"></div>')
-            .append(
-              $('<div class="alert alert-danger alert-dismissible"></div>')
-                .append('<a href="javascript:void(0);" class="close">×</a>')
-                .append(document.createTextNode(objectL10n_checklists_global_checklist.custom_item_error)),
-            )
-            .html();
+          submit_error += $('<div class="notice notice-error"><p></p></div>')
+            .find('p')
+            .append(document.createTextNode(objectL10n_checklists_global_checklist.custom_item_error))
+            .end()
+            .prop('outerHTML');
           custom_task_error_displayed = true;
         }
       });
 
       if (!submit_form) {
-        var submit_error_el = $('<div class="checklists-save-notice"></div>').append(submit_error);
+        var submit_error_el = $('<div class="pp-checklists-validation-errors"></div>').append(submit_error);
         
         // Add notice at the top of the form for better visibility
         $('#pp-checklists-global').prepend(submit_error_el.clone());
@@ -595,17 +592,10 @@
       return submit_form;
     });
 
-    // Remove current notice on dismiss
-    $(document).on('click', '#pp-checklists-global .checklists-save-notice .close', function (event) {
-      event.preventDefault();
-      //remove all notices (both top and bottom)
-      $('#pp-checklists-global .checklists-save-notice').remove();
-    });
-
     // Remove notice on any number input changed
     $(document).on('change input paste', '.pp-checklists-number', function () {
       //remove previous notice
-      $('.checklists-save-notice').remove();
+      $('#pp-checklists-global > .notice, .pp-checklists-validation-errors').remove();
       // Remove inline validation for this row
       $(this).closest('tr').removeClass('has-validation-error').find('.field-validation-error').remove();
     });
@@ -634,7 +624,7 @@
         }
       });
       if (!hasEmptyCustomTasks) {
-        $('.checklists-save-notice').remove();
+        $('#pp-checklists-global > .notice, .pp-checklists-validation-errors').remove();
       }
     });
     
@@ -652,10 +642,351 @@
           }
         });
         if (!hasEmptyCustomTasks) {
-          $('.checklists-save-notice').remove();
+          $('#pp-checklists-global > .notice, .pp-checklists-validation-errors').remove();
         }
       }, 150); // Wait for the removal to complete
     });
+
+    /**
+     * Initialize custom label editing functionality
+     */
+    function initializeCustomLabelEditing() {
+      var modalId = 'pp-checklists-rename-modal';
+      var overlayId = 'pp-checklists-rename-overlay';
+      var $activeWrapper = null;
+      var editorPanelRenameEnabled = !!objectL10n_checklists_global_checklist.editor_panel_rename_enabled;
+
+      if ($('#' + modalId).length === 0) {
+        var modalTitle = objectL10n_checklists_global_checklist.rename_modal_title || 'Rename task labels';
+        var adminFieldLabel = objectL10n_checklists_global_checklist.rename_modal_admin_label || 'Label for WP Admin / backend';
+        var adminPlaceholder = objectL10n_checklists_global_checklist.rename_modal_admin_placeholder || '';
+        var editorFieldLabel = objectL10n_checklists_global_checklist.rename_modal_editor_label || 'Label for Editing screen / frontend';
+        var editorPlaceholder = objectL10n_checklists_global_checklist.rename_modal_editor_placeholder || '';
+        var previewLabel = objectL10n_checklists_global_checklist.rename_modal_preview_label || 'Preview in editing screen:';
+        var saveLabel = objectL10n_checklists_global_checklist.rename_modal_save || 'Save';
+        var cancelLabel = objectL10n_checklists_global_checklist.rename_modal_cancel || 'Cancel';
+
+        $('body').append(
+          '<div id="' + overlayId + '" class="pp-checklists-rename-modal-overlay"></div>' +
+          '<div id="' + modalId + '" class="pp-checklists-rename-modal" role="dialog" aria-modal="true" aria-hidden="true">' +
+            '<h3 class="pp-checklists-rename-modal-title">' + modalTitle + '</h3>' +
+            '<label class="pp-checklists-rename-modal-label" for="pp-checklists-rename-admin-input">' + adminFieldLabel + '</label>' +
+            '<input id="pp-checklists-rename-admin-input" type="text" class="pp-checklists-rename-modal-input" placeholder="' + adminPlaceholder + '" />' +
+            (editorPanelRenameEnabled
+              ? '<label class="pp-checklists-rename-modal-label" for="pp-checklists-rename-editor-input">' + editorFieldLabel + '</label>' +
+                '<input id="pp-checklists-rename-editor-input" type="text" class="pp-checklists-rename-modal-input" placeholder="' + editorPlaceholder + '" />' +
+                '<p class="pp-checklists-rename-modal-preview"><strong>' + previewLabel + '</strong> <span id="pp-checklists-rename-preview-value"></span></p>'
+              : '') +
+            '<div class="pp-checklists-rename-modal-actions">' +
+              '<button type="button" class="button button-secondary pp-checklists-rename-cancel">' + cancelLabel + '</button>' +
+              '<button type="button" class="button button-primary pp-checklists-rename-save">' + saveLabel + '</button>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function closeRenameModal() {
+        $('#' + overlayId).removeClass('is-open');
+        $('#' + modalId).removeClass('is-open').attr('aria-hidden', 'true');
+      }
+
+      function toIntOrNull(rawValue) {
+        var value = $.trim(rawValue || '');
+        if (value === '') {
+          return null;
+        }
+
+        var parsed = parseInt(value, 10);
+        if (Number.isNaN(parsed)) {
+          return null;
+        }
+
+        return parsed;
+      }
+
+      function getCounterSuffixFromRow($wrapper) {
+        var $row = $wrapper.closest('tr');
+        var $minInput = $row.find('input[name*="_min"]');
+        var $maxInput = $row.find('input[name*="_max"]');
+
+        if ($minInput.length === 0 && $maxInput.length === 0) {
+          return '';
+        }
+
+        var min = toIntOrNull($minInput.first().val());
+        var max = toIntOrNull($maxInput.first().val());
+
+        if (min === null && max === null) {
+          return '';
+        }
+
+        if (min !== null && max !== null && min === max) {
+          return 'exact ' + min;
+        }
+
+        if (min !== null && (max === null || max < min)) {
+          return 'min ' + min;
+        }
+
+        if (min === null && max !== null) {
+          return 'max ' + max;
+        }
+
+        return 'min ' + min + ' max ' + max;
+      }
+
+      function getMultipleSuffixFromRow($wrapper) {
+        var $row = $wrapper.closest('tr');
+        var $multipleSelect = $row.find('.pp-checklists-task-params select[multiple]').first();
+
+        if (!$multipleSelect.length) {
+          $multipleSelect = $row.find('select[multiple]').first();
+        }
+
+        if (!$multipleSelect.length) {
+          return '';
+        }
+
+        var selectedValues = $multipleSelect.val();
+        if (!Array.isArray(selectedValues) || selectedValues.length === 0) {
+          return '';
+        }
+
+        var selectedLabels = $multipleSelect.find('option:selected')
+          .map(function () {
+            return $.trim($(this).text());
+          })
+          .get();
+
+        if (selectedLabels.length === 0) {
+          selectedValues.forEach(function (value) {
+            if (value.indexOf('__') !== -1) {
+              selectedLabels.push($.trim(value.split('__')[1] || ''));
+            } else {
+              selectedLabels.push($.trim(value));
+            }
+          });
+        }
+
+        return selectedLabels.filter(function (label) {
+          return label !== '';
+        }).join(', ');
+      }
+
+      function formatTimeForPreview(rawTime) {
+        var value = $.trim(rawTime || '');
+        if (value === '' || value.indexOf(':') === -1) {
+          return '';
+        }
+
+        var parts = value.split(':');
+        if (parts.length < 2) {
+          return '';
+        }
+
+        var hours = parseInt(parts[0], 10);
+        var minutes = parseInt(parts[1], 10);
+        if (Number.isNaN(hours) || Number.isNaN(minutes) || hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+          return '';
+        }
+
+        var period = hours >= 12 ? 'PM' : 'AM';
+        var displayHour = hours % 12;
+        if (displayHour === 0) {
+          displayHour = 12;
+        }
+
+        var displayMinutes = minutes < 10 ? '0' + minutes : String(minutes);
+
+        return displayHour + ':' + displayMinutes + ' ' + period;
+      }
+
+      function getTimeSuffixFromRow($wrapper) {
+        var $row = $wrapper.closest('tr');
+        var $timeInput = $row.find('.pp-checklists-task-params input[type="time"]').first();
+
+        if (!$timeInput.length) {
+          $timeInput = $row.find('input[type="time"]').first();
+        }
+
+        if (!$timeInput.length) {
+          return '';
+        }
+
+        return formatTimeForPreview($timeInput.val());
+      }
+
+      function getDefaultEditorLabelFromWrapper($wrapper) {
+        if (!$wrapper || !$wrapper.length) {
+          return '';
+        }
+
+        return $.trim($wrapper.find('.pp-checklists-edit-label').attr('data-editor-default-label') || '');
+      }
+
+      function updateEditorPreview($wrapper, editorLabel) {
+        if (!editorPanelRenameEnabled) {
+          return;
+        }
+
+        var previewDefault = objectL10n_checklists_global_checklist.rename_modal_preview_default || 'Default checklist label will be used.';
+        var $previewValue = $('#pp-checklists-rename-preview-value');
+
+        if (!$previewValue.length) {
+          return;
+        }
+
+        var trimmedEditorLabel = $.trim(editorLabel || '');
+        var isUsingDefaultEditorLabel = trimmedEditorLabel === '';
+        if (trimmedEditorLabel === '') {
+          trimmedEditorLabel = getDefaultEditorLabelFromWrapper($wrapper);
+        }
+
+        if (trimmedEditorLabel === '') {
+          $previewValue.text(previewDefault);
+          return;
+        }
+
+        if (isUsingDefaultEditorLabel) {
+          var defaultMultipleValue = getMultipleSuffixFromRow($wrapper);
+          if (trimmedEditorLabel.indexOf('%s') !== -1) {
+            $previewValue.text(trimmedEditorLabel.replace(/%s/g, defaultMultipleValue));
+            return;
+          }
+
+          var defaultTimeValue = getTimeSuffixFromRow($wrapper);
+          if (trimmedEditorLabel.indexOf('%time%') !== -1) {
+            $previewValue.text(trimmedEditorLabel.replace(/%time%/g, defaultTimeValue));
+            return;
+          }
+
+          $previewValue.text(trimmedEditorLabel);
+          return;
+        }
+
+        var counterSuffix = getCounterSuffixFromRow($wrapper);
+        if (counterSuffix !== '') {
+          $previewValue.text(trimmedEditorLabel + ' - ' + counterSuffix);
+          return;
+        }
+
+        var multipleSuffix = getMultipleSuffixFromRow($wrapper);
+        if (multipleSuffix !== '') {
+          $previewValue.text(trimmedEditorLabel + ' - ' + multipleSuffix);
+          return;
+        }
+
+        var timeSuffix = getTimeSuffixFromRow($wrapper);
+        if (timeSuffix !== '') {
+          if (trimmedEditorLabel.indexOf('%time%') !== -1) {
+            $previewValue.text(trimmedEditorLabel.replace(/%time%/g, timeSuffix));
+          } else {
+            $previewValue.text(trimmedEditorLabel + ' - ' + timeSuffix);
+          }
+          return;
+        }
+
+        $previewValue.text(trimmedEditorLabel);
+      }
+
+      function updateLabelPreview($wrapper, adminLabel) {
+        var $customLabel = $wrapper.find('.pp-checklists-custom-label');
+        var $defaultLabel = $wrapper.find('.pp-checklists-default-label');
+
+        if (adminLabel !== '') {
+          $customLabel.text(adminLabel).removeClass('hidden').show();
+          $defaultLabel.addClass('hidden').hide();
+        } else {
+          $customLabel.addClass('hidden').hide();
+          $defaultLabel.removeClass('hidden').show();
+        }
+      }
+
+      function openRenameModal($wrapper) {
+        var $editButton = $wrapper.find('.pp-checklists-edit-label');
+        var defaultAdminLabel = $.trim($editButton.attr('data-default-label') || '');
+        var defaultEditorLabel = $.trim($editButton.attr('data-editor-default-label') || '');
+        var currentAdminLabel = $.trim($wrapper.find('.pp-checklists-custom-label-input').val() || $editButton.attr('data-admin-label') || '');
+        var currentEditorLabel = $.trim($wrapper.find('.pp-checklists-editor-label-input').val() || $editButton.attr('data-editor-label') || '');
+
+        $activeWrapper = $wrapper;
+        $('#pp-checklists-rename-admin-input').attr('placeholder', defaultAdminLabel);
+        $('#pp-checklists-rename-admin-input').val(currentAdminLabel);
+        if (editorPanelRenameEnabled) {
+          $('#pp-checklists-rename-editor-input').attr('placeholder', defaultEditorLabel);
+          $('#pp-checklists-rename-editor-input').val(currentEditorLabel);
+        }
+        $('#' + overlayId).addClass('is-open');
+        $('#' + modalId).addClass('is-open').attr('aria-hidden', 'false');
+        if (editorPanelRenameEnabled) {
+          updateEditorPreview($wrapper, currentEditorLabel);
+        }
+        $('#pp-checklists-rename-admin-input').focus();
+      }
+
+      function saveRenameModal() {
+        if (!$activeWrapper || $activeWrapper.length === 0) {
+          closeRenameModal();
+          return;
+        }
+
+        var adminLabel = $.trim($('#pp-checklists-rename-admin-input').val() || '');
+        var editorLabel = $.trim($('#pp-checklists-rename-editor-input').val() || '');
+        var $editButton = $activeWrapper.find('.pp-checklists-edit-label');
+
+        $activeWrapper.find('.pp-checklists-custom-label-input').val(adminLabel);
+        $editButton.attr('data-admin-label', adminLabel);
+        if (editorPanelRenameEnabled) {
+          $activeWrapper.find('.pp-checklists-editor-label-input').val(editorLabel);
+          $editButton.attr('data-editor-label', editorLabel);
+        }
+        updateLabelPreview($activeWrapper, adminLabel);
+
+        closeRenameModal();
+      }
+
+      $(document).on('click', '#' + overlayId + ', .pp-checklists-rename-cancel', function () {
+        closeRenameModal();
+      });
+
+      $(document).on('click', '.pp-checklists-rename-save', function () {
+        saveRenameModal();
+      });
+
+      $(document).on('input', '#pp-checklists-rename-editor-input', function () {
+        if (!editorPanelRenameEnabled) {
+          return;
+        }
+
+        if (!$activeWrapper || $activeWrapper.length === 0) {
+          return;
+        }
+
+        updateEditorPreview($activeWrapper, $(this).val());
+      });
+
+      $(document).on('keydown', function (e) {
+        if (!$('#' + modalId).hasClass('is-open')) {
+          return;
+        }
+
+        if (e.key === 'Escape') {
+          e.preventDefault();
+          closeRenameModal();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          saveRenameModal();
+        }
+      });
+
+      // Handle click on edit label button
+      $(document).on('click', '.pp-checklists-edit-label', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        openRenameModal($(this).closest('.pp-checklists-title-wrapper'));
+      });
+    }
 
     /**
      * Initialize tab persistence functionality
