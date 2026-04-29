@@ -602,7 +602,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			</div>
 
 			<?php if ( $_delete_group_show_site_checkbox ) : ?>
-			<div class="checkbox no-margin no-margin-bottom">
+			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="delete-group-site" id="delete-group-site" value="1" />
 					<?php printf( 'Delete the associated %s site.', openlab_get_group_type() ); ?>
@@ -610,7 +610,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			</div>
 			<?php endif; ?>
 
-			<div class="checkbox no-margin no-margin-bottom">
+			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="delete-group-understand" id="delete-group-understand" value="1" onclick="if (this.checked) {
 									document.getElementById('delete-group-button').disabled = '';
