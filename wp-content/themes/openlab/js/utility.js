@@ -1022,13 +1022,6 @@ OpenLab.utility = (function ($) {
 					actualDrawer.classList.add('is-open');
 					actualDrawer.scrollTop = 0;
 
-					// Hide page content from the accessibility tree while the drawer is open.
-					// This prevents VoiceOver "explore by touch" from reaching elements underneath.
-					const pageTable = document.querySelector('.page-table');
-					if (pageTable) {
-						pageTable.inert = true;
-					}
-
 					toggle.setAttribute('aria-expanded', 'true');
 
 					// Add is-open class to navbar toggleable parent if it exists
@@ -1078,6 +1071,14 @@ OpenLab.utility = (function ($) {
 
 							if (firstFocusable) {
 								firstFocusable.focus();
+							}
+
+							// Hide page content from the accessibility tree now that focus is
+							// secured inside the drawer. Deferring this prevents the browser
+							// from moving focus (and disrupting click dispatch) during mousedown.
+							const pageTable = document.querySelector('.page-table');
+							if (pageTable) {
+								pageTable.inert = true;
 							}
 						});
 					});
