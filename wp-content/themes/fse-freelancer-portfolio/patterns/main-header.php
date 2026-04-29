@@ -21,7 +21,7 @@
 
 <!-- wp:navigation-link {"label":"Services","type":"","url":"#","kind":"custom","isTopLevelLink":true} /-->
 
-<!-- wp:navigation-link {"label":"Portfolio","type":"","url":"#","kind":"custom","isTopLevelLink":true} /-->
+<!-- wp:navigation-link {"label":"Buy Now","type":"","url":"https://www.cretathemes.com/products/portfolio-wordpress-theme","kind":"custom","isTopLevelLink":true, "opensInNewTab":true} /-->
 
 <!-- /wp:navigation --></div>
 <!-- /wp:column -->

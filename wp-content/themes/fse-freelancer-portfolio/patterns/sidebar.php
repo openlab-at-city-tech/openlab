@@ -6,7 +6,7 @@
 ?>
 <!-- wp:group {"className":"wp-block-widget-area wp-block-sidebar"} -->
 <div class="wp-block-group wp-block-widget-area wp-block-sidebar"><!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"},"top":[],"right":[],"left":[]}},"backgroundColor":"tertiary-bg-color","layout":{"type":"constrained","contentSize":"100%"}} -->
-<div class="wp-block-group has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","left":"0px","bottom":"0px"},"padding":{"right":"0","left":"0","top":"0","bottom":"0"}}}} -->
+<div class="wp-block-group has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","left":"0px","bottom":"0px"},"padding":{"right":"0","left":"0","top":"0","bottom":"0"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" style="margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><?php esc_html_e('Search','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
@@ -14,7 +14,7 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"wp-block-widget","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"},"top":[],"right":[],"left":[]}},"backgroundColor":"tertiary-bg-color"} -->
-<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"padding":{"top":"0","bottom":"0"},"margin":{"top":"0","bottom":"0","left":"0","right":"0"}}}} -->
+<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"padding":{"top":"0","bottom":"0"},"margin":{"top":"0","bottom":"0","left":"0","right":"0"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="about" style="margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-bottom:0"><?php esc_html_e('About','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
@@ -28,7 +28,7 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"},"top":[],"right":[],"left":[]}},"backgroundColor":"tertiary-bg-color","layout":{"type":"constrained","contentSize":"100%"}} -->
-<div class="wp-block-group has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
+<div class="wp-block-group has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="about" style="margin-top:0px;margin-right:0px;margin-bottom:20px;margin-left:0px"><?php esc_html_e('Archive','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
@@ -36,7 +36,7 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"wp-block-widget","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"}}},"backgroundColor":"tertiary-bg-color"} -->
-<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
+<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="categories" style="margin-top:0px;margin-right:0px;margin-bottom:20px;margin-left:0px"><?php esc_html_e('Categories','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
@@ -44,15 +44,25 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"wp-block-widget","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"},"top":[],"right":[],"left":[]}},"backgroundColor":"tertiary-bg-color"} -->
-<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
+<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="recent-post" style="margin-top:0px;margin-right:0px;margin-bottom:20px;margin-left:0px"><?php esc_html_e('Recent Posts','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
 <!-- wp:latest-posts {"displayPostDate":true,"displayFeaturedImage":true,"featuredImageAlign":"left","featuredImageSizeWidth":75,"featuredImageSizeHeight":75,"addLinkToFeaturedImage":true} /--></div>
 <!-- /wp:group -->
 
+<!-- wp:group {"className":"wow zoomIn sidebar-box","style":{"spacing":{"padding":{"top":"20px","bottom":"20px","left":"20px","right":"20px"},"margin":{"bottom":"50px"}},"border":{"radius":[],"top":{"width":"0px","style":"none"},"bottom":{"color":"var:preset|color|primary","width":"6px"},"right":[],"left":[]}},"backgroundColor":"tertiary-bg-color","layout":{"type":"constrained"}} -->
+<div class="wp-block-group wow zoomIn sidebar-box has-tertiary-bg-color-background-color has-background" style="border-top-style:none;border-top-width:0px;border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;margin-bottom:50px;padding-top:20px;padding-right:20px;padding-bottom:20px;padding-left:20px"><!-- wp:group {"className":"sidebar-heading","style":{"spacing":{"padding":{"top":"8px","bottom":"8px","left":"8px","right":"8px"}},"border":{"width":"0px","style":"none"}},"backgroundColor":"tertiary-bg-color","layout":{"type":"constrained"}} -->
+<div class="wp-block-group sidebar-heading has-tertiary-bg-color-background-color has-background" style="border-style:none;border-width:0px;padding-top:8px;padding-right:8px;padding-bottom:8px;padding-left:8px"><!-- wp:heading {"textAlign":"center","style":{"typography":{"letterSpacing":"1px"}}} -->
+<h2 class="wp-block-heading has-text-align-center" style="letter-spacing:1px">Pages</h2>
+<!-- /wp:heading --></div>
+<!-- /wp:group -->
+
+<!-- wp:page-list /--></div>
+<!-- /wp:group -->
+
 <!-- wp:group {"className":"wp-block-widget","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"},"top":[],"right":[],"left":[]}},"backgroundColor":"tertiary-bg-color"} -->
-<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
+<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="tags" style="margin-top:0px;margin-right:0px;margin-bottom:20px;margin-left:0px"><?php esc_html_e('Tags','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
@@ -60,7 +70,7 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"wp-block-widget","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"}}},"backgroundColor":"tertiary-bg-color"} -->
-<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
+<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="tags" style="margin-top:0px;margin-right:0px;margin-bottom:20px;margin-left:0px"><?php esc_html_e('Social Icons','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
@@ -78,7 +88,7 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"className":"wp-block-widget","style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|40","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}},"border":{"bottom":{"color":"var:preset|color|primary","width":"6px"}}},"backgroundColor":"tertiary-bg-color"} -->
-<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
+<div class="wp-block-group wp-block-widget has-tertiary-bg-color-background-color has-background wow zoomIn" style="border-bottom-color:var(--wp--preset--color--primary);border-bottom-width:6px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--40);padding-left:var(--wp--preset--spacing--30)"><!-- wp:heading {"textAlign":"center","style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"20px","left":"0px"}}}} -->
 <h2 class="wp-block-heading has-text-align-center" id="tags" style="margin-top:0px;margin-right:0px;margin-bottom:20px;margin-left:0px"><?php esc_html_e('Gallery','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 

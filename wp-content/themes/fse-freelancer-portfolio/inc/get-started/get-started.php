@@ -31,6 +31,7 @@ function fse_freelancer_portfolio_test_guide() {
 				<div class="link-wrapper">
 					<h4><?php esc_html_e('Important Links', 'fse-freelancer-portfolio'); ?></h4>
 					<div class="link-buttons">
+						<a class="visit-btn" href="<?php echo esc_url( home_url() ); ?>" target="_blank"><?php esc_html_e('Visit Site', 'fse-freelancer-portfolio'); ?></a>
 						<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_THEME_DOC ); ?>" target="_blank"><?php esc_html_e('Free Setup Guide', 'fse-freelancer-portfolio'); ?></a>
 						<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_SUPPORT ); ?>" target="_blank"><?php esc_html_e('Support Forum', 'fse-freelancer-portfolio'); ?></a>
 						<a href="<?php echo esc_url( FSE_FREELANCER_PORTFOLIO_PRO_DEMO ); ?>" target="_blank"><?php esc_html_e('Live Demo', 'fse-freelancer-portfolio'); ?></a>

@@ -378,3 +378,22 @@
     background-color: #0073aa !important;   
     color: #fff !important;
 }
+/* Add css activation notice  button*/
+.dash-notice p {
+    margin-bottom: 6px !important;
+}
+.dash-notice a.button {
+    margin: 1px !important;
+    display: inline-flex;
+    align-items: center;
+}
+.dash-notice {
+    padding-bottom: 10px !important;
+}
+/* visit btn css */
+.visit-btn {
+   background: #80669D !important;
+}
+.visit-btn:hover {
+    background-color: #272C2E !important;
+}

@@ -1,7 +1,7 @@
 === FSE Freelancer Portfolio ===
 Contributors: cretathemes
 Requires at least: 5.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -239,6 +239,47 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 * Added animation on frontpage.
 * Added pro link in admin dashboard topbar.
 * Resolved get started page css error.
+
+= 3.1.1 (Released: December, 2025) =
+* Resolved minor bugs.
+
+= 3.1.2 (Released: December, 2025) =
+* Added buy now button in menus.
+* Added css on post page button.
+* Tested upto WP v6.9.
+* Updated pot file.
+* Resolved error for woocommerce pages.
+
+= 3.1.3 (Released: January, 2026) =
+* Resolved minor bugs.
+
+= 3.1.4 (Released: January, 2026) =
+* Added blog listing template.
+* Added animation on woocommerce pages.
+* Added css on shop page.
+* Remove padding in activation notice all buttons.
+* Added animation on single post.
+* Resolved plugin tgm error.
+
+= 3.1.5 (Released: February, 2026) =
+* Fixed minor bugs.
+
+= 3.1.6 (Released: February, 2026) =
+* Added blog grid layout template.
+* Buy now navigation menu open in a new tab.
+* Added hover effect on sidebar blogs.
+* Set the all inner pages in container.
+
+= 3.1.7 (Released: March, 2026) =
+* In sidebar added pages block.
+* Updated search result template.
+* Resolved blog page image issue.
+* Added visit site button in get started.
+* Updated rtl file.
+* Updated pot file.
+
+= 3.1.8 (Released: April, 2026) =
+* Resolved minor issues.
 
 == Copyright ==
 
