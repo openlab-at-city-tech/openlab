@@ -63,6 +63,13 @@ class MeowKit_WPMC_Rest {
       },
       'callback' => [ $this, 'rest_update_option' ]
     ] );
+    register_rest_route( $this->namespace, '/installed_plugins/', [
+      'methods' => 'POST',
+      'permission_callback' => function () {
+        return current_user_can( 'manage_options' );
+      },
+      'callback' => [ $this, 'rest_installed_plugins' ]
+    ] );
   }
 
   public function file_rand( $filesize ) {
@@ -106,6 +113,26 @@ class MeowKit_WPMC_Rest {
 
   public function rest_all_settings() {
     return new WP_REST_Response( [ 'success' => true, 'data' => $this->get_all_options() ], 200 );
+  }
+
+  public function rest_installed_plugins() {
+    if ( !function_exists( 'get_plugins' ) ) {
+      require_once ABSPATH . 'wp-admin/includes/plugin.php';
+    }
+    $all_plugins = get_plugins();
+    $result = [];
+    foreach ( $all_plugins as $plugin_file => $plugin_data ) {
+      // Plugin file looks like "ai-engine/ai-engine.php" — the slug is the
+      // first path segment. Some plugins live at the root (single file),
+      // those we just skip; we only care about Meow Apps directories anyway.
+      $parts = explode( '/', $plugin_file );
+      if ( count( $parts ) < 2 ) {
+        continue;
+      }
+      $slug = $parts[0];
+      $result[ $slug ] = is_plugin_active( $plugin_file ) ? 'active' : 'inactive';
+    }
+    return new WP_REST_Response( [ 'success' => true, 'data' => $result ], 200 );
   }
 
   public function rest_update_option( $request ) {

@@ -49,7 +49,6 @@ SQL;
 		if ( empty( $limit ) ) {
 			$this->core->reset_issues();
 			$this->core->reset_references();
-			$this->core->reset_cached_references();
 			$this->core->reset_progress(  );
 		}
 
@@ -103,8 +102,19 @@ SQL;
 
 		$this->core->timeout_check_start( count( $posts ) );
 
+		$is_debug = $this->core->is_debug();
+
 		foreach ( $posts as $post ) {
 			$this->core->timeout_check();
+
+			// Debug logging for timeout detection
+			if ( $is_debug ) {
+				$post_obj = get_post( $post );
+				$post_type = $post_obj ? $post_obj->post_type : 'unknown';
+				$post_title = $post_obj ? substr( $post_obj->post_title, 0, 50 ) : 'no title';
+				$start_time = microtime( true );
+				$this->core->log( "🔍 Processing post ID: $post | Type: $post_type | Title: $post_title" );
+			}
 
 			// Check content
 			if ( $check_content ) {
@@ -115,6 +125,11 @@ SQL;
 
 			// Extra scanning methods
 			// do_action( 'wpmc_scan_extra', $post );
+
+			if ( $is_debug ) {
+				$elapsed_ms = round( ( microtime( true ) - $start_time ) * 1000, 2 );
+				$this->core->log( "✓ Completed post ID: $post in {$elapsed_ms}ms" );
+			}
 
 			$this->core->timeout_check_additem();
 		}
@@ -139,6 +154,79 @@ SQL;
 			// translators: %1$d is number of posts, %2$s is time in milliseconds
 			__( "Extracted references from %1\$d posts in %2\$s.", 'media-cleaner' ), count( $posts ), $elapsed
 		);
+		return $finished;
+	}
+
+	function extractRefsFromThumbnails( $limit, $limitsize ) {
+		$medias = $this->get_media_entries( $limit, $limitsize, false );
+		require_once ABSPATH . 'wp-admin/includes/image.php';
+
+		// Get the sizes that should be marked as issues
+		$force_issue_sizes = $this->core->get_option( 'thumbnail_force_issues' );
+		if ( !is_array( $force_issue_sizes ) ) {
+			$force_issue_sizes = [];
+		}
+
+		foreach ( $medias as $media_id ) {			
+			$file = get_attached_file( $media_id );
+			$meta = wp_get_attachment_metadata( $media_id );
+
+			if ( ! is_array( $meta ) || ! isset( $meta['sizes'] ) ) {
+				$meta = array( 'sizes' => array() );
+			}
+
+			// Get the current registered image sizes
+			$needed_sizes = wp_get_registered_image_subsizes();
+			
+			foreach ( $needed_sizes as $size => $size_data ) {
+				$image_path = path_join( dirname( $file ), $meta['sizes'][ $size ]['file'] ?? '' );
+				$file_exists = isset( $meta['sizes'][ $size ] ) && file_exists( $image_path ) && filesize( $image_path ) > 0;
+				// Generate the thumbnail size.
+				$resized = null;
+				$origin = "{OG_THUMB}";
+				if( !$file_exists ) {
+					$resized = image_make_intermediate_size( $file, $size_data['width'], $size_data['height'], $size_data['crop'] ?? true );
+					$origin = "{GEN_THUMB}";
+				}
+
+				$image_path = $this->core->clean_url( $image_path );
+
+				// Check if this size should be marked as an issue instead of a reference
+				if ( in_array( $size, $force_issue_sizes ) ) {
+					// Mark as issue instead of reference
+					$this->core->add_issue( $image_path, 'FORCED_THUMBNAIL_ISSUE', $media_id );
+				} else {
+					// Add a reference for generated thumbnail
+					$this->core->add_reference_url(
+						$image_path,
+						$origin  . $size,
+						$media_id, ['force_cache' => true ]
+					);
+				}
+
+				if ( $resized ) {
+					$meta['sizes'][ $size ] = $resized;
+				}
+			}
+
+			wp_update_attachment_metadata( $media_id, $meta );
+		}
+
+		$this->core->write_references();
+		$this->core->save_progress( 'extractReferencesFromThumbnails', array(
+			'type' => 'thumbnails',
+			'limit' => $limit,
+			'limitSize' => $limitsize
+		) );
+
+		$finished = count( $medias ) < $limitsize;
+
+		if ( $finished )
+		{
+			$this->core->save_progress( 'extractReferencesFromThumbnails_finished' );
+			$this->core->log("Finished extracting refs from Thumbnails.");
+		}
+
 		return $finished;
 	}
 
@@ -231,6 +319,7 @@ SQL;
 		// Get the hashes from the referenes ( unique ones ) 
 		global $wpdb;
 		$hashes = $wpdb->get_col( "SELECT DISTINCT originType FROM {$wpdb->prefix}mclean_refs" );
+
 		return $hashes;	
 	}
 

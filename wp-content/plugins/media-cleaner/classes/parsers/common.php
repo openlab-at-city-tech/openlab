@@ -134,9 +134,9 @@ class MeowApps_WPMC_Parser_Common {
 		$posts_images_ids  = array_merge( $posts_images_ids, $shortcodes['ids'] );
 		$posts_images_urls = array_merge( $posts_images_urls, $shortcodes['urls'] );
 
-		$wpmc->add_reference_id( $posts_images_ids, "CONTENT (ID)", $id );
-		$wpmc->add_reference_url( $posts_images_urls, "CONTENT (URL)", $id );
-		$wpmc->add_reference_url( $galleries_images, "GALLERY (URL)", $id );
+		$wpmc->add_reference_id( $posts_images_ids, "Common Content", $id );
+		$wpmc->add_reference_url( $posts_images_urls, "Common Content", $id );
+		$wpmc->add_reference_url( $galleries_images, "Common Gallery", $id );
 	}
 
 	public function scan_postmeta( $id ) {
@@ -176,8 +176,8 @@ class MeowApps_WPMC_Parser_Common {
 					}
 				}
 			}
-			$wpmc->add_reference_id( $postmeta_images_ids, 'POST META (ID)', $id );
-			$wpmc->add_reference_id( $postmeta_images_urls, 'POST META (URL)', $id );
+			$wpmc->add_reference_id( $postmeta_images_ids, 'Post Meta', $id );
+			$wpmc->add_reference_url( $postmeta_images_urls, 'Post Meta', $id );
 		}
 
 
@@ -186,7 +186,7 @@ class MeowApps_WPMC_Parser_Common {
 		$thumbnail_id = get_post_thumbnail_id( $id );
 		$urls = $wpmc->get_thumbnails_urls( $thumbnail_id );
 
-		$wpmc->add_reference_url( $urls, 'FEATURED IMAGE (URL) {SAFE}', $id );
+		$wpmc->add_reference_url( $urls, 'Featured Image {SAFE}', $id );
 
 	}
 }

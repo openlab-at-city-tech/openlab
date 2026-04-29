@@ -130,6 +130,11 @@ class Meow_WPMC_Rest
 				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_retrieve_files' )
 			) );
+			register_rest_route( $this->namespace, '/save_progress', array(
+				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_save_progress' )
+			) );
 			register_rest_route( $this->namespace, '/retrieve_hash_duplicates', array(
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
@@ -171,6 +176,11 @@ class Meow_WPMC_Rest
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_clear_logs' )
+			) );
+			register_rest_route( $this->namespace, '/export', array(
+				'methods' => 'GET',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_export' )
 			) );
 		} 
 		catch (Exception $e) {
@@ -312,6 +322,8 @@ class Meow_WPMC_Rest
 			$finished = $this->engine->extractRefsFromLibrary( $limit, $limitsize, $message, $post_id );
 		}else if ( $source === 'duplicates' ) {
 			$finished = $this->engine->extractRefsFromDuplicates( $limit, $limitsize );
+		} else if( $source === 'thumbnails' ) {
+			$finished = $this->engine->extractRefsFromThumbnails( $limit, $limitsize, $message, $post_id );
 		}
 		else {
 			return new WP_REST_Response( [ 
@@ -356,6 +368,39 @@ class Meow_WPMC_Rest
 			],
 		];
 
+		$this->core->save_progress( 'retrieveDuplicates_finished', array(
+			'type' => 'duplicates',
+			'targets' => $hashes,
+		) );
+
+		return new WP_REST_Response( $response, 200 );
+	}
+
+	function rest_save_progress( $request ) {
+		$params = $request->get_json_params();
+
+		$save = isset( $params['data'] ) ? $params['data'] : null;
+		$step = isset( $params['step'] ) ? $params['step'] : null;
+
+		if( !is_array( $save ) || !$step ) {
+			return new WP_REST_Response( [ 
+				'success' => false, 
+				'message' => __( 'Invalid parameters for saving progress.', 'media-cleaner' ),
+			], 400 );
+		}
+
+		$this->core->save_progress( $step, $save );
+
+		$response = [ 
+			'success' => true, 
+			'message' => __( 'Progress saved successfully.', 'media-cleaner' ),
+		];
+
+		$new_token = $this->verify_token();
+		if( $new_token ) {
+			$response['new_token'] = $new_token;
+		}
+
 		return new WP_REST_Response( $response, 200 );
 	}
 
@@ -367,13 +412,8 @@ class Meow_WPMC_Rest
 	    // 	return new WP_REST_Response( [ 'success' => false, 'message' => 'Test Service Unavailable!' ], 503 );
 		// }
 
-
 		$params = $request->get_json_params();
 		$path = isset( $params['path'] ) ? ltrim( $params['path'], '/\\' ) : null;
-		$save = isset( $params['save'] ) ? $params['save'] : null;
-
-		$this->core->save_progress( 'retrieveFiles', array( 'targets' => $save['targets'] ?? [], 'processedDirs' => $save['processedDirs'] ?? [], 'totalDirs' => $save['totalDirs'] ?? 1, 'processedCount' => $save['processedCount'] ?? 0, 'directoriesToProcess' => $save['directoriesToProcess'] ?? [] ) );
-
 
 		$files = $this->engine->get_files( $path );
 		$files_count = count( $files );
@@ -514,6 +554,13 @@ class Meow_WPMC_Rest
 			} else if( $method == 'duplicates' ) {
 				$this->core->log( "🔎 Checking Duplicate #{$piece}..." );
 				$result = ( $this->engine->check_duplicates( $piece ) ? 1 : 0 );
+				if ( $result ) {
+					$success += $result;
+				}
+			}
+			else if ( $method == 'optimize_thumbnails' ) {
+				$this->core->log( "🔎 Checking Thumbnail File: {$piece}..." );
+				$result = ( $this->engine->check_file( $piece ) ? 1 : 0 );
 				if ( $result ) {
 					$success += $result;
 				}
@@ -677,15 +724,11 @@ class Meow_WPMC_Rest
 	
 		// Extract post IDs and media IDs/URLs
 		foreach ( $entries as $entry ) {
-			// Extract post ID from originType
-			if ( preg_match('/\[(\d+)\]/', $entry->originType, $matches) ) {
-				$post_id = intval( $matches[1] );
-				$entry->post_id = $post_id;
-				$post_ids[] = $post_id;
-			} else {
-				$entry->post_id = null;
+
+			if( $entry->origin && is_numeric( $entry->origin ) ) {
+				$post_ids[] = (int) $entry->origin;
 			}
-	
+
 			// Collect media IDs and URLs
 			if ( $entry->mediaId ) {
 				$media_ids[] = $entry->mediaId;
@@ -743,11 +786,12 @@ class Meow_WPMC_Rest
 		// Assign post titles and thumbnails to entries
 		foreach ( $entries as $entry ) {
 			// Assign post title
-			if ( isset( $entry->post_id ) && isset( $post_titles[ $entry->post_id ] ) ) {
-				$entry->post_title = $post_titles[ $entry->post_id ];
+			if ( isset( $entry->origin ) && isset( $post_titles[ $entry->origin ] ) ) {
+				$entry->post_title = $post_titles[ $entry->origin ];
 			} else {
 				$entry->post_title = '';
 			}
+		
 	
 			// Assign thumbnail
 			$entry->thumbnail = '';
@@ -1195,5 +1239,49 @@ class Meow_WPMC_Rest
 	function rest_clear_progress() {
 		$this->core->clear_step_progress();
 		return new WP_REST_Response( [ 'success' => true, 'message' => 'Progress cleared.' ], 200 );
+	}
+
+	function rest_export() {
+		global $wpdb;
+		$table_scan = $wpdb->prefix . "mclean_scan";
+		$table_ref = $wpdb->prefix . "mclean_refs";
+
+		// Issues
+		$issues = $wpdb->get_results( "SELECT * FROM $table_scan WHERE ignored = 0 AND deleted = 0" );
+		// Ignored
+		$ignored = $wpdb->get_results( "SELECT * FROM $table_scan WHERE ignored = 1" );
+		// Trash
+		$trash = $wpdb->get_results( "SELECT * FROM $table_scan WHERE deleted = 1" );
+		// References
+		$references = $wpdb->get_results( "SELECT * FROM $table_ref" );
+
+		$csv_output = "Tab,ID,Path/Url,Size,Issue/Origin,Time,PostId,MediaId\n";
+
+		foreach ($issues as $row) {
+			$path = '"' . str_replace( '"', '""', $row->path ) . '"';
+			$issue = '"' . str_replace( '"', '""', $row->issue ) . '"';
+			$csv_output .= "Issues,{$row->id},{$path},{$row->size},{$issue},{$row->time},{$row->postId},\n";
+		}
+		foreach ($ignored as $row) {
+			$path = '"' . str_replace( '"', '""', $row->path ) . '"';
+			$issue = '"' . str_replace( '"', '""', $row->issue ) . '"';
+			$csv_output .= "Ignored,{$row->id},{$path},{$row->size},{$issue},{$row->time},{$row->postId},\n";
+		}
+		foreach ($trash as $row) {
+			$path = '"' . str_replace( '"', '""', $row->path ) . '"';
+			$issue = '"' . str_replace( '"', '""', $row->issue ) . '"';
+			$csv_output .= "Trash,{$row->id},{$path},{$row->size},{$issue},{$row->time},{$row->postId},\n";
+		}
+		foreach ($references as $row) {
+			$postId = '';
+			if (preg_match('/\[(\d+)\]/', $row->originType, $matches)) {
+				$postId = $matches[1];
+			}
+			$mediaUrl = '"' . str_replace( '"', '""', $row->mediaUrl ) . '"';
+			$originType = '"' . str_replace( '"', '""', $row->originType ) . '"';
+			$csv_output .= "Found In Use Medias,{$row->id},{$mediaUrl},,{$originType},,{$postId},{$row->mediaId}\n";
+		}
+
+		return new WP_REST_Response( [ 'success' => true, 'data' => $csv_output ], 200 );
 	}
 }

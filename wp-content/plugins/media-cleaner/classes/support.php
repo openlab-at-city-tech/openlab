@@ -53,7 +53,8 @@ class Meow_WPMC_Support {
     if ( class_exists( 'FLBuilderModel' ) )
       array_push( $unsupported, 'Beaver Builder' );
 
-    if ( class_exists( 'Oxygen_VSB_Dynamic_Shortcodes' ) )
+    $breakdance_mode_oxygen = defined( 'BREAKDANCE_MODE' ) && BREAKDANCE_MODE === 'oxygen';
+    if ( class_exists( 'Oxygen_VSB_Dynamic_Shortcodes' ) || $breakdance_mode_oxygen )
       array_push( $unsupported, 'Oxygen Builder' );
 
     if ( class_exists( 'Brizy_Editor_Post' ) )
@@ -270,6 +271,16 @@ class Meow_WPMC_Support {
     // FLuent Forms
 		if ( defined( 'FLUENTFORM_VERSION' ) ) {
       array_push( $unsupported, 'Fluent Forms' );
+    }
+
+    //Toolset
+		if ( defined( 'TYPES_VERSION' ) || defined( 'WPCF_VERSION' ) ) {
+			array_push( $unsupported, 'Toolset' );
+		}
+
+    //LayerSlider
+    if ( defined( 'LS_PLUGIN_VERSION' ) ) {
+      array_push( $unsupported, 'LayerSlider' );
     }
 
     return $unsupported;

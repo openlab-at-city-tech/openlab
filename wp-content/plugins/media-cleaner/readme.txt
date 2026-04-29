@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, media, files, images, library
 Donate link: https://www.patreon.com/meowapps
 Requires at least: 6.0
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 6.9.8
+Stable tag: 7.0.8
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,71 @@ This plugin is compatible with all media types, including retina and WebP versio
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 7.0.8 (2026/04/25) =
+* Update: Renamed internal origin references for clarity.
+* Update: Path descriptions now use 'thumbnails' instead of 'files' for clarity.
+* Fix: Image URLs in the metabox are now only added when actually present.
+* Update: Improved UI/UX for better user experience. We hope you'll love it! 🥰
+
+= 7.0.7 (2026/04/15) =
+* Add: New "References Buffer" option to split and flush reference processing to reduce memory errors on large datasets.
+* Fix: Improved base64 handling to better cope with malformed edge cases and prevent related issues.
+* Add: More detailed timeout debugging for reference extraction to make diagnosing performance issues easier.
+* Fix: Removed base64 content from HTML before URL parsing to prevent regex timeouts on complex pages.
+* Update: Replaced cached references with a unique hash-based system and limited media ID lookups to multilingual URLs for faster and cleaner reference handling.
+
+= 7.0.6 (2026/03/27) =
+* Fix: Hotfix to resolve a security issue that could allow SSRF attacks through embedded iframes.
+
+= 7.0.5 (2026/03/09) =
+* Fix: Ensure plugin checks run after all required options are initialized.
+* Add: Introduce LayerSlider compatibility and update Enfold theme integration.
+* Update: Improve origin handling so the plugin can work with sources that don't use numeric IDs.
+* Add: Include more direct documentation links in error popups.
+* Add: Provide ACF-specific filters for URLs and IDs to give developers more precise control over field handling.
+
+= 7.0.4 (2026/02/25) =
+* Fix: Improve how issue names are displayed.
+* Add: Allow selecting specific thumbnail sizes (to avoid the unnecessary ones).
+* Fix: Ensure media scans always use ID-based URL references (improving compatibility with WPML).
+* Update: Improve compatibility with multisite and network site.
+* Update: Apply better default settings on fresh installs.
+* 🎵 Discuss with others about Media Cleaner on [the Discord](https://discord.gg/bHDGh38).
+* 🌴 Keep us motivated with [a little review here](https://wordpress.org/support/plugin/media-cleaner/reviews/). Thank you!
+* 🥰 If you want to help us, check our [Patreon](https://www.patreon.com/meowapps). Thank you!
+
+= 7.0.3 (2026/01/27) =
+* Add: Added full support for newer versions of the Oxygen builder.
+* Fix: Updated the Divi integration so URLs with direct UR patterns are no longer incorrectly marked as safe.
+* Update: Extended Divi 5 support by recognizing mp4 and webm keys for background videos and the new "linkUrl" key in Divi blocks.
+* Update: Improved Elementor compatibility by having the parser also check page settings for relevant data.
+* Update: Made excluded directories easier to customize by turning them into a configurable setting that developers can filter.
+
+= 7.0.2 (2026/01/05) =
+* Fix: Prevent warnings and errors caused by empty HTML output and broken shortcodes.
+* Add: Support FooGallery album shortcodes for better gallery integration.
+* Add: Display icons for reference tags including SAFE, CACHE, OG_THUMB, and GEN_THUMB.
+* Update: Improve FooGallery handling by supporting non-HTML shortcode output and flagging cached media items.
+* Update: Remove the transient cache for post types and include the post ID in reference data.
+* Fix: Correct the JetEngine parser to ensure dynamic content is detected and rendered properly.
+
+= 7.0.1 (2025/12/16) =
+* Add: Introduced scan resume support for both Thumbnails and Duplicates scans.
+* Fix: Prevented an error in the Metabox parser caused by treating text values like lists.
+* Fix: Ensured the “Repair x Entries” notice only appears while repair mode is active.
+* Add: Added a new “Optimize Thumbnails” feature.
+* Add: Added support for Toolset.
+
+= 7.0.0 (2025/12/03) =
+* Fix: Prevent the plugin from loading on pages where it is not needed.
+* Add: CSV export option for scan results to make it easier to review.
+* Add: Support for pagination in FooGalleries so all gallery items are properly scanned.
+* Add: Recursive scanning for ACF Blocks to ensure nested blocks are fully detected.
+* Add: FooGallery parser support for block shortcodes.
+* 🎵 Discuss with others about Media Cleaner on [the Discord](https://discord.gg/bHDGh38).
+* 🌴 Keep us motivated with [a little review here](https://wordpress.org/support/plugin/media-cleaner/reviews/). Thank you!
+* 🥰 If you want to help us, check our [Patreon](https://www.patreon.com/meowapps). Thank you!
 
 = 6.9.8 (2025/11/13) =
 * Update: Enhanced UI and UX.

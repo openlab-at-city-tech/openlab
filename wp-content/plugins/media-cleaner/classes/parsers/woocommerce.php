@@ -18,19 +18,19 @@ function wpmc_ensure_woocommerce_indexes() {
 	// Check and create index on termmeta for meta_key queries
 	$index_exists = $wpdb->get_var( "SHOW INDEX FROM $wpdb->termmeta WHERE Key_name = 'meta_key_value_idx'" );
 	if ( !$index_exists ) {
-		$wpdb->query( "CREATE INDEX meta_key_value_idx ON $wpdb->termmeta (meta_key, meta_value(20))" );
+		$wpdb->query( "CREATE INDEX meta_key_value_idx ON $wpdb->termmeta (meta_key(191), meta_value(20))" );
 	}
 	
 	// Check and create index on term_taxonomy for taxonomy queries
 	$taxonomy_index = $wpdb->get_var( "SHOW INDEX FROM $wpdb->term_taxonomy WHERE Key_name = 'taxonomy_desc_idx'" );
 	if ( !$taxonomy_index ) {
-		$wpdb->query( "CREATE INDEX taxonomy_desc_idx ON $wpdb->term_taxonomy (taxonomy, description(50))" );
+		$wpdb->query( "CREATE INDEX taxonomy_desc_idx ON $wpdb->term_taxonomy (taxonomy(32), description(50))" );
 	}
 	
 	// Check and create index on postmeta for meta_key queries
 	$postmeta_index = $wpdb->get_var( "SHOW INDEX FROM $wpdb->postmeta WHERE Key_name = 'post_meta_key_value_idx'" );
 	if ( !$postmeta_index ) {
-		$wpdb->query( "CREATE INDEX post_meta_key_value_idx ON $wpdb->postmeta (post_id, meta_key, meta_value(20))" );
+		$wpdb->query( "CREATE INDEX post_meta_key_value_idx ON $wpdb->postmeta (post_id, meta_key(191), meta_value(20))" );
 	}
 	
 	// Check and create index on posts for parent/type queries
@@ -119,10 +119,10 @@ function wpmc_scan_postmeta_woocommerce( $id ) {
 		foreach ( $galleries_images_wc as $thumbnail_id ) {
 			//* WooCommerce Gallery Images use srcset so the sizes URL are actually used
 			$urls = $wpmc->get_thumbnails_urls_from_srcset( $thumbnail_id );
-			$wpmc->add_reference_url( $urls, 'WOOCOMMERCE GALLERY (URL) {SAFE}', $id );
+			$wpmc->add_reference_url( $urls, 'WooCommerce Gallery {SAFE}', $id );
 		}
 
-		$wpmc->add_reference_id( $galleries_images_wc, 'WOOCOMMERCE GALLERY (ID)', $id );
+		$wpmc->add_reference_id( $galleries_images_wc, 'WooCommerce Gallery', $id );
 	}
 
 	// Product Variations - check if any exist first
@@ -152,8 +152,8 @@ function wpmc_scan_postmeta_woocommerce( $id ) {
 					if( empty( $thumbnail_id ) || !is_numeric( $thumbnail_id ) ) continue;
 
 					$urls = $wpmc->get_thumbnails_urls_from_srcset( intval( $thumbnail_id ) );
-					$wpmc->add_reference_url( $urls, 'WOOCOMMERCE VARIATIONS GALLERY (URL) {SAFE}', $id );
-					$wpmc->add_reference_id(  $thumbnail_id, 'WOOCOMMERCE VARIATIONS (ID)', $id );
+					$wpmc->add_reference_url( $urls, 'WooCommerce Variations Gallery {SAFE}', $id );
+					$wpmc->add_reference_id(  $thumbnail_id, 'WooCommerce Variations Gallery', $id );
 				}
 			}
 		}
