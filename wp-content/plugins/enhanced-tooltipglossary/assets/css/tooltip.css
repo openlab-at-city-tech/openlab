@@ -474,3 +474,211 @@ li.cmtt-has-thumbnail {
     display: block;
     max-width: 300px;
 }
+
+#tt_overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: none;
+}
+
+.tt-box-bottom {
+    bottom: 0 !important;
+    right: 0 !important;
+    left: 0 !important;
+    top: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+}
+.tt-box-bottom::before {
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 34px;
+    height: 28px;
+    background:
+            url("data:image/svg+xml;utf8,<svg width='34' height='14' viewBox='0 0 34 14' xmlns='http://www.w3.org/2000/svg'><path d='M2 2 L17 12 L32 2' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round'/></svg>")
+            no-repeat top center;
+
+    background-size: 34px 14px, cover;
+}
+.tt-box-bottom::before, .tt-box-right::before, .tt-box-left::before{
+    content: "";
+    position: absolute;
+    cursor: pointer;
+    pointer-events: auto;
+    z-index: 99999;
+}
+
+.tt-box-left::before {
+    top: 50%;
+    right: -25px;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 34px;
+    background:
+            url("data:image/svg+xml;utf8,<svg width='14' height='34' viewBox='0 0 14 34' xmlns='http://www.w3.org/2000/svg'><path d='M12 2 L2 17 L12 32' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round'/></svg>")
+            no-repeat center center;
+    background-size: 14px 34px;
+}
+
+.tt-box-right::before {
+    top: 50%;
+    left: -25px;
+    transform: translateY(-50%);
+    width: 28px;
+    height: 34px;
+    background:
+            url("data:image/svg+xml;utf8,<svg width='14' height='34' viewBox='0 0 14 34' xmlns='http://www.w3.org/2000/svg'><path d='M2 2 L12 17 L2 32' stroke='%23fff' stroke-width='4' fill='none' stroke-linecap='round'/></svg>")
+            no-repeat center center;
+    background-size: 14px 34px;
+}
+
+.tt-box-bottom #ttcont, .tt-box-right #ttcont, .tt-box-left #ttcont{
+    max-height: 100%;
+    min-height: 30%;
+    margin: 0px !important;
+    width: 100% !important;
+}
+
+#tt.tt-box-bottom{
+    flex-direction: column;
+    will-change: transform;
+    transition: transform 0.25s ease;
+    max-height: 50%;
+}
+
+#tt.tt-box-bottom.dragging {
+    transition: none !important;
+}
+
+#tt.tt-box-bottom.dragging {
+    transition: none;
+}
+
+.tt-drag-handle {
+    position: absolute;
+    cursor: grab;
+    touch-action: none;
+    background: transparent;
+    z-index: 9999999;
+}
+
+.tt-box-bottom .tt-drag-handle {
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 32px;
+    transform: translateY(-100%);
+}
+
+.tt-box-right .tt-drag-handle {
+    top: auto;
+    bottom: auto;
+    left: 0;
+    width: 32px;
+    transform: translateX(-100%);
+}
+
+.tt-box-left .tt-drag-handle {
+    top: auto;
+    bottom: auto;
+    right: 0;
+    width: 32px;
+    transform: translateX(100%);
+}
+
+.tt-box-right, .tt-box-left{
+    top: 0 !important;
+    width: 300px !important;
+    max-width: 400px;
+    min-width: 200px;
+    height: 100%;
+}
+body.admin-bar .tt-box-right,body.admin-bar .tt-box-left{
+    top: 32px  !important;
+    max-height: calc(100% - 32px) !important;
+}
+
+.tt-box-left{
+    right: auto !important;
+    left: 0 !important;
+}
+
+.tt-box-right{
+    right: 0 !important;
+    left: auto !important;
+}
+
+#tt.tt-box-right #tt-btn-close, #amp-tt.tt-box-right #tt-btn-close,
+#tt.tt-box-left #tt-btn-close, #amp-tt.tt-box-left #tt-btn-close{
+    right: 10px;
+}
+
+/* Animation */
+@keyframes slideUp {
+    from {
+        transform: translateY(60px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(60px);
+        opacity: 0;
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        transform: translate(-400px, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translate(400px, 0);
+        opacity: 0;
+    }
+    to {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+}
+
+/* Optional hide animations */
+@keyframes slideOutLeft {
+    from {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(-400px, 0);
+        opacity: 0;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translate(0, 0);
+        opacity: 1;
+    }
+    to {
+        transform: translate(400px, 0 );
+        opacity: 0;
+    }
+}

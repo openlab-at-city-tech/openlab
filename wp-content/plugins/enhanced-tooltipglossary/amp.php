@@ -300,7 +300,7 @@ class CMTT_AMP {
 			$title_styles .= 'font-size:' . \CM\CMTT_Settings::get( 'cmtt_tooltipTitleFontSize', '14' ) . 'px;';
 			$title_styles .= 'background-color:' . \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_background', 'transparent' ) . ';';
 			$title_styles .= 'padding:' . \CM\CMTT_Settings::get( 'cmtt_tooltipPaddingTitle', '0' ) . ';';
-			$title_styles .= 'color:' . \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#000000 ' ) . ';';
+			$title_styles .= 'color:' . \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#ffffff ' ) . ';';
 
 			$body_styles .= 'font-size:' . \CM\CMTT_Settings::get( 'cmtt_tooltipFontSize', '14' ) . 'px;';
 			$body_styles .= 'padding:' . \CM\CMTT_Settings::get( 'cmtt_tooltipPaddingContent', '0' ) . ';';
@@ -397,7 +397,7 @@ class CMTT_AMP {
 		$titleFontSize = \CM\CMTT_Settings::get( 'cmtt_tooltipTitleFontSize', null );
 		$titleBGColor  = \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_background', 'transparent' );
 		$titlePadding  = \CM\CMTT_Settings::get( 'cmtt_tooltipPaddingTitle', '0' );
-		$titleColor    = \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#000000 ' );
+		$titleColor    = \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#ffffff ' );
 
 		$iconSize  = \CM\CMTT_Settings::get( 'cmtt_tooltipCloseSize', 14 );
 		$iconColor = \CM\CMTT_Settings::get( 'cmtt_tooltipCloseColor', '#222' );

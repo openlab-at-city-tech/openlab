@@ -463,6 +463,18 @@
     </tr>
     <tr>
         <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
+            Alternative Tooltip Style
+            <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
+                  title="Display tooltips on the left, right, or bottom of the screen instead of showing them next to the term."></span>
+        </td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+    </tr>
+    <tr>
+        <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
             Frontend Turn Tooltip Off Button
             <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
                   title="A widget is shown on each page or post which lets the visitor toggle the tooltip display on or off."></span>
@@ -665,6 +677,30 @@
     </tr>
     <tr>
         <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
+            Gemini Integration
+            <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
+                  title="Show automatically generated definition by Gemini for each term."></span>
+        </td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+    </tr>
+    <tr>
+        <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
+            AI-powered Terms Discovery
+            <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
+                  title="Automatically find new glossary terms across your site and generate definitions using AI. Review suggestions in the dashboard or enable auto-creation to publish terms automatically."></span>
+        </td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+    </tr>
+    <tr>
+        <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
             Amazon Products Integration
             <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
                   title="Show an Amazon Banner widget inside the tooltip content. The Amazon product category can be set by the admin for each term. The widget is based on the glossary term definition."></span>
@@ -697,6 +733,18 @@
             Import / Export
             <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
                   title="Import and export of terms between the glossaries using a CSV file."></span>
+        </td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+    </tr>
+    <tr>
+        <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
+            Speed Optimization
+            <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
+                  title="Enabling this option configures several internal settings to maximize the glossary’s performance and ensure faster page load times."></span>
         </td>
         <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
         <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>

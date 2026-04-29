@@ -407,6 +407,8 @@ class CMTT_Free {
 		add_action( 'template_redirect', array( __CLASS__, 'refresh_permalinks_on_bad_404' ) );
 
 		add_filter( 'the_content', array( __CLASS__, 'outputLog' ), PHP_INT_MAX );
+
+		add_action( 'cmtt_do_activate', [__CLASS__,'checkThemesBuildersCompatibility']);
 	}
 
 	/**
@@ -1403,6 +1405,7 @@ class CMTT_Free {
 			 * loadXml needs properly formatted documents, so it's better to use loadHtml, but it needs a hack to properly handle UTF-8 encoding
 			 */
 			libxml_use_internal_errors( true );
+			$html = mb_encode_numericentity($html, [0x80, 0xffff, 0, 0xffff], 'UTF-8');
 			if ( ! $dom->loadHTML( '<?xml encoding="UTF-8">' . $html ) ) {
 				libxml_clear_errors();
 			}
@@ -1816,7 +1819,7 @@ class CMTT_Free {
 		$fontSize                   = \CM\CMTT_Settings::get( 'cmtt_tooltipFontSize', null );
 		$titleFontSize              = \CM\CMTT_Settings::get( 'cmtt_tooltipTitleFontSize', null );
 		$fontFamily                 = ( $fontName !== 'default (disables Google Fonts)' ) ? 'font-family: "' . $fontName . '", sans-serif;' : '';
-		$glossaryTermTitleColorText = str_replace( '#', '', \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#000000' ) );
+		$glossaryTermTitleColorText = str_replace( '#', '', \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#ffffff' ) );
 		$zIndex                     = \CM\CMTT_Settings::get( 'cmtt_tooltipZIndex', 1500 );
 		/* ML */
 		$glossaryTermTitleColorBackground = str_replace( '#', '', \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_background', 'transparent' ) );
@@ -1831,7 +1834,10 @@ class CMTT_Free {
 		<?php echo $fontFamily; ?>
 		z-index: <?php echo $zIndex; ?>;
 		}
-
+		#tt_overlay {
+		<?php echo $fontFamily; ?>
+		z-index: <?php echo $zIndex - 1; ?>;
+		}
 		<?php if ( ! empty( $glossaryTermTitleColorText ) ) : ?>
 			#tt #ttcont div.glossaryItemTitle {
 			color: #<?php echo $glossaryTermTitleColorText; ?> !important;
@@ -3581,7 +3587,7 @@ class CMTT_Free {
 	public static function cmtt_settings_tooltip_tab_content_after( $content ) {
 		ob_start();
 		?>
-		<div class="block onlyinpro">
+		<div class="block">
 			<h3 class="section-title">
 				<span>Tooltip - Styling</span>
 				<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
@@ -3589,6 +3595,62 @@ class CMTT_Free {
 				</svg>
 			</h3>
 			<table class="floated-form-table form-table">
+				<tr>
+                    <th scope="row">Desktop tooltip display method</th>
+                    <td>
+                        <input type="hidden" name="cmtt_tooltipDesktopDisplayMethod" value="0"/>
+                        <?php
+                        $desktop_method = \CM\CMTT_Settings::get( 'cmtt_tooltipDesktopDisplayMethod', 0 );
+                        ?>
+                        <select name="cmtt_tooltipDesktopDisplayMethod">
+                            <option value="0" <?php echo selected( '0', $desktop_method ); ?>>Default
+                            </option>
+                            <option value="1" <?php echo selected( '1', $desktop_method ); ?>>(new) Box
+                            </option>
+                        </select>
+                    </td>
+                    <td colspan="2" class="cm_field_help_container">Select the method of how tooltips should be
+                        displyed on desktop.
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Mobile tooltip display method</th>
+                    <td>
+                        <input type="hidden" name="cmtt_tooltipMobileDisplayMethod" value="0"/>
+                        <?php
+                        $mobile_method = \CM\CMTT_Settings::get( 'cmtt_tooltipMobileDisplayMethod', 0 );
+                        ?>
+                        <select name="cmtt_tooltipMobileDisplayMethod">
+                            <option value="0" <?php echo selected( '0', $mobile_method ); ?>>Default
+                            </option>
+                            <option value="1" <?php echo selected( '1', $mobile_method ); ?>>(new) Box
+                            </option>
+                        </select>
+                    </td>
+                    <td colspan="2" class="cm_field_help_container">Select the method of how tooltips should be
+                        displyed on mobile.
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Desktop tooltip-box position</th>
+                    <td>
+                        <input type="hidden" name="cmtt_tooltipDesktopDisplayBoxPosition" value="0"/>
+                        <?php
+                        $desktop_position = \CM\CMTT_Settings::get( 'cmtt_tooltipDesktopDisplayBoxPosition', 0 );
+                        ?>
+                        <select name="cmtt_tooltipDesktopDisplayBoxPosition">
+                            <option value="0" <?php echo selected( '0', $desktop_position ); ?>>Bottom
+                            </option>
+                            <option value="1" <?php echo selected( '1', $desktop_position ); ?>>Right
+                            </option>
+                            <option value="2" <?php echo selected( '2', $desktop_position ); ?>>Left
+                            </option>
+                        </select>
+                    </td>
+                    <td colspan="2" class="cm_field_help_container">Select where you would like to display
+                        tooltips on desktop. Works only for (new) Box tooltips display method.
+                    </td>
+                </tr>
 				<tr class="onlyinpro">
 					<th scope="row">Is clickable?</th>
 					<td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
@@ -3645,9 +3707,11 @@ class CMTT_Free {
 						title to the tooltip content?" is set)
 					</td>
 				</tr>
-				<tr class="onlyinpro">
+				<tr class="">
 					<th scope="row">Tooltip title's text color</th>
-					<td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
+					<td><input type="text" class="colorpicker" name="cmtt_tooltipTitleColor_text"
+					           value="<?php echo \CM\CMTT_Settings::get( 'cmtt_tooltipTitleColor_text', '#ffffff' ); ?>"/>
+					</td>
 					<td colspan="2" class="cm_field_help_container">Set color of term title in the tooltip. (Works only
 						if the option "Add term title to the tooltip content?" is set)
 					</td>
@@ -4224,6 +4288,7 @@ class CMTT_Free {
 				$wrappedContent = self::getTooltipContent( $glossary_item );
 			}
 		}
+        
 		if ( empty( $wrappedContent ) ) {
 			$wrappedContent = '<div class=glossaryItemBody>' . wp_kses_post($atts['content']) . '</div>';
 		}
@@ -4745,6 +4810,16 @@ class CMTT_Free {
 		}
 
 		return apply_filters( 'cmtt_ajax_url', $ajax_url );
+	}
+
+	public static function checkThemesBuildersCompatibility() {
+		if(class_exists( 'FLBuilder' ) ){
+            \CM\CMTT_Settings::set( 'cmtt_script_in_footer', 1 );
+        }
+		if(class_exists( 'Elementor\Plugin' ) ){
+            \CM\CMTT_Settings::set( 'cmtt_glossaryTooltipHashContent', 1 );
+        }
+		return;
 	}
 
 }

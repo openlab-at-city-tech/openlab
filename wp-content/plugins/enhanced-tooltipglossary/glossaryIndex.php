@@ -183,8 +183,11 @@ class CMTT_Glossary_Index {
 		$tooltipData['post_id']                  = $postId;
 		$tooltipData['mobile_disable_tooltips']  = \CM\CMTT_Settings::get( 'cmtt_glossaryMobileDisableTooltips', '0' );
 		$tooltipData['desktop_disable_tooltips'] = \CM\CMTT_Settings::get( 'cmtt_glossaryDesktopDisableTooltips', '0' );
-		$tooltipData['tooltip_on_click']         = \CM\CMTT_Settings::get( 'cmtt_glossaryShowTooltipOnClick', '0' );
+		$tooltipData['tooltip_display_method']   = \CM\CMTT_Settings::get( 'cmtt_tooltipDesktopDisplayMethod', '0' ) && !wp_is_mobile() || \CM\CMTT_Settings::get( 'cmtt_tooltipMobileDisplayMethod', '0' ) && wp_is_mobile();
+		$tooltipData['tooltip_box_position']     = wp_is_mobile() ? '0' : \CM\CMTT_Settings::get( 'cmtt_tooltipDesktopDisplayBoxPosition', '0' );
+		$tooltipData['tooltip_on_click']         = \CM\CMTT_Settings::get( 'cmtt_glossaryShowTooltipOnClick', '0' ) || $tooltipData['tooltip_display_method'];
 		$tooltipData['exclude_ajax']             = 'cmttst_event_save';
+        
 
 		$tooltipFrontendJsDeps = array( 'jquery', 'cm-modernizr-js' );
 		if ( \CM\CMTT_Settings::get( 'cmtt_audioPlayerEnabled', '0' ) ) {

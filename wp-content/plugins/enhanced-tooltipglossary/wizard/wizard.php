@@ -98,7 +98,7 @@ class CMTT_SetupWizard{
                         'title' => 'Load the scripts in footer?',
                         'type' => 'bool',
                         'value' => 1,
-                        'hint' => 'This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues. You can disable this option in the plugin settings if needed.'
+                        'hint' => 'This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues. You can disable this option in the plugin settings if needed. This setting can improve compatibility with page builders, such as Beaver.'
                     ],
                     2 => [
                         'name' => 'cmtt_glossaryTurnOnAmp',

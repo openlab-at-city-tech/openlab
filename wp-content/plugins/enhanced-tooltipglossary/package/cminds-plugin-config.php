@@ -6,7 +6,7 @@ ob_end_clean();
 $cminds_plugin_config = array(
 	'plugin-is-pro'                 => false,
 	'plugin-has-addons'             => true,
-	'plugin-version'                => '4.4.9',
+	'plugin-version'                => '4.5.3',
 	'plugin-addons'        => array(
 		array(
 			'title' => 'Footnotes Plugin',

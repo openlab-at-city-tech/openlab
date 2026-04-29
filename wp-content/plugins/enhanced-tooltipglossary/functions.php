@@ -522,7 +522,7 @@ if (!function_exists('cminds_cmtt_admin_tooltip_preview')) {
 		$titleFontSize = \CM\CMTT_Settings::get('cmtt_tooltipTitleFontSize', null);
 		$titleBGColor = \CM\CMTT_Settings::get('cmtt_tooltipTitleColor_background', 'transparent');
 		$titlePadding = \CM\CMTT_Settings::get('cmtt_tooltipPaddingTitle', '0');
-		$titleColor = \CM\CMTT_Settings::get('cmtt_tooltipTitleColor_text', '#000000 ');
+		$titleColor = \CM\CMTT_Settings::get('cmtt_tooltipTitleColor_text', '#ffffff ');
 
 		// Tooltip Body styling
 		$bodyPadding = \CM\CMTT_Settings::get('cmtt_tooltipPaddingContent', '0');

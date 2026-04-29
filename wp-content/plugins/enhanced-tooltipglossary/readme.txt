@@ -1,144 +1,206 @@
 === CM Tooltip Glossary  ===
-Name: CM Tooltip Glossary
+Name: CM Tooltip Glossary – Boost Your SEO and User Experience
 Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
 Tags: glossary, vocabulary, dictionary, tooltip, lexicon
 Requires at least: 5.4.0
-Tested up to: 6.8
-Stable tag: 4.4.9
+Tested up to: 6.9
+Stable tag: 4.5.3
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Create a WordPress glossary, encyclopedia, or dictionary of terms and display responsive tooltips on hover.
+Transform jargon into engaging content that boosts SEO, drives engagement, improves conversions, with automatic links and tooltips.
 
 == Description ==
 
 [Glossary Pro Plugin](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) | [Videos](https://www.youtube.com/playlist?list=PLUgPw0Lem0AFU9lqQrY0kgc6NN0Qcjf2P) | [Demo](https://www.glossaryplugin.com/demo/) | [User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg) | [AddOns](https://www.cminds.com/wordpress-plugins-library/?showfilter=No&tags=TooltipAddOn) 
 
-## CM Tooltip Glossary - The #1 WordPress Glossary Plugin 
+## Make your content clearer, more useful, and more profitable
 
-The plugin empowers you to **establish an extensive knowledge-base of terms and their definitions** on your website. 
+**Stop losing visitors to confusing jargon.** Turn every technical term into an opportunity to engage, educate, and convert your audience.
 
-Utilizing this WordPress plugin, you can easily establish an **extensive glossary featuring terms with corresponding definitions**. And we've been developing this since 2012!
+This WordPress glossary plugin automatically transforms your content into an interactive learning experience that:
+* **Boosts SEO rankings** by creating hundreds of internal links and indexed pages
+* **Increases user engagement** with instant tooltips that keep visitors on your site longer
+* **Establishes authority** in your niche through comprehensive, professional definitions
+* **Improves conversion rates** by helping users understand your products and services better
+
+**12+ years of development** means you get a battle-tested solution that works seamlessly with any WordPress site.
 
 
-### Glossary Terms Pages, Links and Index
+## How Can This Glossary Plugin Help Your Website?
+
+### Create SEO-Friendly Glossary Pages and Internal Links
 
 This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
 
 Furthermore, the plugin generates an adaptable index, cataloging all the terms scattered across your website, and granting users convenient access to their respective definitions.
 
-### Tooltips
+### Boost User Engagement with Interactive Tooltips
 
-This powerful tool also includes the tooltip plugin feature, allowing you to effortlessly **present dynamic a tooltip instantly emerges when users hover over the linked term**. 
+This powerful tool also includes the tooltip plugin feature, allowing you to effortlessly present dynamic a tooltip instantly emerges when users hover over the linked term. 
 
 This delivers a seamless and user-friendly method for users to swiftly access definitions. 
 
-### Premium Editions
+## Premium Editions – Unlock More SEO & UX Power
 
-The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) includes even more powerful features, such as: audio and video tooltips, Wikipedia support, Google Translate and Merriam-Webster integrations, ChatGPT integration, support for  abbreviations and variations, synonyms, multiple glossaries support, multiple index templates and much more.
+The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) includes even more powerful features, such as: automatic AI powered terms discovery, audio and video tooltips, Wikipedia support, Google Translate and Merriam-Webster integrations, ChatGPT integration, support for abbreviations and variations, synonyms, multiple glossaries support, multiple index templates and much more.
 
-### Plugin Introduction Video
+### Plugin Introduction Video (Pro+ Version)
 
 [youtube http://www.youtube.com/watch?v=WN3HLZ6ZuBM]
 
-==  Use-Cases ==
-(Some of these use cases might include pro plugin features)
+## What Can You Achieve with This WordPress Glossary Plugin?
 
-*  **Dictionary** - Creates a dictionary of specifically used terms on your site. Support multiple languages.
-*  **Tooltip** - Adds tooltip as an anchor to predefined terms that are contained in your site.
-* **Knowledge base** - Creates a knowledge base of useful terms and definitions which includes files and images.
-* **Synonyms** -  Keep and display synonyms of terms that you are using
-* **Lexicon** - Builds a lexicon of terms.
-* **Vocabulary** - Builds a vocabulary of custom words and expressions.
-* **Explanations**  -  Explains the meanings of words in your posts or pages.
-* **Translate**  -  Translates terms and definitions into any defined language using Google Translate.
-* **Wikipedia** - Add Wikipedia content to your site.
-* **YouTube** - Show YouTube / Vimeo videos once hovering over a term
-* **Music** - Include mp3 voice or music file for each tooltip
-* **Amazon** - Enhance your site with Tooltips including Amazon product recommendation
-* **ChatGPT** - Automatically add content for each term using ChatGPT
+Transform your website into a comprehensive knowledge hub that boosts SEO, improves user experience, and establishes your authority in your niche. This powerful WordPress glossary plugin goes far beyond simple definitions.
 
-==  Features ==
+Some features mentioned below are available in Pro, Pro+, and Ecommerce editions.
 
-*  Automatically generates a Glossary index of terms. 
-*  Ability to show the A-Z index as a list or as tiles.
-*  The index is limited by 500 terms.
-*  Each glossary term has its own unique post. 
-*  The tooltip window can optionally appear when the term is hovered over by the cursor. 
-*  Term pages can  be linked directly from posts or pages.
-*  Several filters to optimize the Tooltip window and limit the length of description displayed.
-*  Prevents the glossary from parsing text, when needed, by using a Shortcode [glossary_exclude]  text [/glossary_exclude].
-*  Forces the glossary to parse text, when needed, by using a Shortcode [cm_tooltip_parse] text [/cm_tooltip_parse].
-*  Support Excerpts (if they exist) as a hover-over text that appears in the Tooltip window.
-*  Control the location and area where the Tooltip appears (pages, posts, homepage)
-*  Control if the Tooltip should appear more than once.
-*  Supports UTF-8
+### 📚 Content Management & Knowledge Base
+* Smart Dictionary Creation - Automatically build a comprehensive dictionary of industry-specific terms that grows with your content
+* Dynamic Knowledge Base - Create rich, multimedia-enhanced definitions including files, images, and structured content
+* Intelligent Content Organization - Organize complex information into easily digestible, searchable terms
 
-== Additional Features Available With the Glossary Pro Edition Version ==
+### 🎯 User Experience & Engagement
+* Interactive Tooltips - Deliver instant definitions through elegant hover tooltips that keep users engaged
+* Smart Content Explanations - Automatically explain technical terms and jargon throughout your content
+* Enhanced Navigation - Help users find related information through intelligent cross-linking
 
-> * Includes all features of the Free Version.
-> * The index can show unlimited number of glossary terms.
-> * Optimized for fast work with large glossaries.
-> * Ability to show glossary terms in all custom post types.
-> * Allows to define how many terms to show in the Index page and where to place the pagination navigation.
-> * Support import and export of terms to and from the glossary using a CSV file format.
-> * Support import and export of settings to and from the glossary using a CSV file format.
-> * Customize tooltip style (font, size, colors).
-> * Allows to display related posts and terms.
-> * Multisite support.
-> * Supports using synonyms and variations to each term.
-> * Mobile friendly.
-> * Supports changing permalink structure for terms.
-> * Fully compatible with the WPML plugin.
-> * Allows to parse the ACF fields with of various(selectable) types.
-> * Allows to disable creation of the glossary term pages
-> * (NEW) Allows to display terms as footnotes instead of tooltips
-> * Over 130 configuration options in total!
+### 🌐 Multilingual & Integration Capabilities
+* Global Reach - Support multiple languages with built-in translation features
+* Wikipedia Integration - Enrich your content with authoritative Wikipedia information
+* External Content Embedding - Include YouTube videos, audio files, and multimedia content in tooltips
 
-== List of Pro+ Edition Features ==
+### 💰 Ecommerce & Monetization Features
+* Amazon Product Integration - Monetize your glossary with relevant product recommendations
+* WooCommerce Compatibility - Seamlessly integrate with your online store
+* ChatGPT Content Generation - Automatically create comprehensive definitions using AI
+* Automatic Terms Discovery - Using AI modules scan your site for new terms and let AI fill up the content.
 
-> * Includes all features of the Free and Pro Versions.
-> * Allows to choose one from over 18 templates for the Glossary Index page
-> * (NEW) Supports the whitelist/blacklist of terms on individual posts and or whole categories
-> * (NEW) Supports for the alternative meanings for the same term
-> * Supports adding and displaying a featured image to the terms tooltip.
-> * Supports customizing the term page template.
-> * Supports displaying "Share This" widget for sharing terms in social medias.
-> * Supports Google Translate integration.
-> * Supports creating and displaying multiple glossary categories.
-> * Shows a search box in the Glossary page.
-> * Over 10 helpful shortcodes.
-> * Supports integration with Merriam-Webster Dictionary and Thesaurus
-> * Search & Replace engine allows to parse and replace terms on the fly.
-> * Eastern languages support allows to parse terms without spaces between them.
-> * Support adding abbreviation to each term.
-> * Highlights terms in comments section.
-> * Includes a frontend turn tooltip on/off button.
-> * Over 240 configuration options in total!
+### 🔍 SEO & Search Optimization
+* Internal Linking Strategy - Create a powerful internal linking structure that search engines love
+* Content Expansion - Generate additional indexed pages for each glossary term
+* User Engagement Metrics - Increase time on page and reduce bounce rates through interactive content
 
-== List of the Ecommerce Edition Features ==
+## Free Version Features - Essential Tools for Your WordPress Glossary
 
-> * Includes all features of the Free, Pro and Pro+ Versions.
-> * (NEW) Supports ChatGPT integration
-> * Supports for defining terms in different languages
-> * Supports adding a custom link to the terms
-> * Supports embedding audio in a tooltip.
-> * Supports embedding video in a tooltip.
-> * Supports Wikipedia and Wiktionary integration.
-> * Supports creating a multilanguage glossary.
-> * Supports Amazon Products integration.
-> * Supports WooCommerce Products integration.
-> * Supports adding tags to terms.
-> * Double click support allows to show a definition from an alternative source.
-> * Allows to parse an image Alt tag to show a tooltip.
-> * Supports the order in which similar terms are parsed.
-> * Allows site visitors to embed your terms on their site using an iframe.
-> * Supports more than one definition for the same term.
-> * Over 300 configuration options in total!
+Built with WordPress developers and content creators in mind, this plugin delivers the essential functionality you need to create a professional, SEO-optimized glossary that enhances your website's value and user experience.
 
-== Addons & Extensions ==
+### 🚀 Automatic Content Generation
+* Smart Index Creation - Automatically generates a comprehensive, alphabetically organized glossary index that updates in real-time
+* Flexible Display Options - Choose between clean list format or attractive tile layout for your glossary index
+* Scalable Architecture - Perfect for growing sites with up to 500 terms in the free version
+* Individual Term Pages - Each glossary term gets its own dedicated page for maximum SEO impact
+
+### 🎨 Interactive User Experience
+* Responsive Tooltip System - Elegant tooltips appear instantly on hover, providing quick access to definitions without page navigation
+* Alternative Tooltip Positioning - Place tooltips along the left, right, or bottom edge of the screen rather than directly beside the term
+* Smart Content Linking - Automatically link glossary terms throughout your posts and pages for seamless user navigation
+* Customizable Display - Control exactly where and when tooltips appear across your entire website
+* Duplicate Prevention - Smart system prevents tooltips from appearing multiple times on the same page
+
+### ⚙️ Advanced Control & Customization
+* Content Exclusion Control - Use `[glossary_exclude]` shortcode to prevent specific content from being processed
+* Forced Parsing - Use `[cm_tooltip_parse]` shortcode to ensure specific content gets processed when needed
+* Excerpt Integration - Automatically use existing excerpts as tooltip content for consistent user experience
+* Global Settings Management - Control tooltip behavior across pages, posts, and homepage from one central location
+* UTF-8 Support - Full international character support for global websites
+* Guided Setup Wizard - User-friendly onboarding process that walks you through essential configuration steps
+
+## Pro Edition Features – Take Your Glossary to the Next Level
+
+Ready to scale your glossary to enterprise-level? The Pro version removes all limitations and adds powerful features that make managing large glossaries effortless while maintaining lightning-fast performance.
+
+### 🚀 Unlimited Scale & Performance
+* Unlimited Term Capacity - Break free from the 500-term limit and build glossaries of any size
+* Enterprise Performance - Optimized algorithms and caching systems ensure fast performance even with thousands of terms
+* Advanced Pagination - Customize how many terms display per page and control pagination placement for optimal user experience
+* Optimized for Large Glossaries - High-performance architecture ensures fast loading and smooth operation, even with thousands of glossary terms
+
+### 🔧 Advanced Content Management
+* Custom Post Type Integration - Display glossary terms across all custom post types for maximum content coverage
+* Bulk Import/Export - Import and export terms and settings using CSV format for easy migration and backup
+* Flexible Permalink Control - Customize URL structures for glossary terms to match your SEO strategy
+* ACF Field Integration - Parse and display Advanced Custom Fields content in your glossary for richer definitions
+
+### 🎨 Professional Customization
+* Complete Tooltip Styling - Customize fonts, sizes, colors, and positioning to match your brand perfectly
+* Related Content Display - Show related posts and terms to increase user engagement and internal linking
+* Alternative Display Options - Choose between tooltips and footnotes based on your content strategy
+* Mobile-First Design - Responsive design ensures perfect display across all devices
+
+### 🌐 Enterprise Features
+* Multisite Compatibility - Manage glossaries across multiple WordPress sites from a single installation
+* WPML Integration - Full compatibility with WordPress Multilingual Plugin for international websites
+* Synonyms & Variations - Support multiple terms for the same concept to improve user searchability
+* 130+ Configuration Options - Fine-tune every aspect of your glossary for perfect integration with your site
+
+## Pro+ Edition Features – Advanced SEO & Customization Tools
+
+Transform your glossary into a powerful content marketing and SEO tool with advanced features that set you apart from competitors and drive real business results.
+
+### 🎨 Premium Design & Templates
+* 18+ Professional Templates - Choose from a diverse collection of beautifully designed glossary index templates
+* Featured Image Support - Add visual appeal to tooltips with featured images that enhance user engagement
+* Custom Term Templates - Design unique layouts for individual term pages to match your brand identity
+* Social Sharing Integration - Built-in "Share This" widget encourages content sharing and increases your reach
+
+### 🔍 Advanced SEO & Search Features
+* Smart Term Control - Whitelist/blacklist specific terms on individual posts or entire categories for precise SEO control
+* Alternative Meanings - Support multiple definitions for the same term to cover different contexts and use cases
+* Advanced Search Functionality - Powerful search box helps users quickly find relevant terms
+* Eastern Language Support - Parse terms without spaces for languages like Chinese, Japanese, and Korean
+* Alphabetical Archive Widget - Add an A–Z archive widget for faster navigation and stronger internal linking
+
+### 🌐 Professional Integrations
+* Google Translate Integration - Automatically translate terms and definitions into any language for global audiences
+* Merriam-Webster Dictionary - Integrate authoritative dictionary content to enhance your glossary's credibility
+* Multiple Glossary Categories - Organize terms into logical categories for better user navigation and SEO structure
+* Abbreviation Support - Include abbreviations and acronyms to make your content more accessible
+
+### ⚡ Performance & User Experience
+* Dynamic Search & Replace - Parse and replace terms on the fly for real-time content optimization
+* Comment Integration - Highlight glossary terms in comments to extend your glossary's reach
+* Frontend Tooltip Control - Give users the power to turn tooltips on/off for personalized experience
+* 240+ Configuration Options - Unprecedented control over every aspect of your glossary's behavior and appearance
+
+## Ecommerce Edition Features – Ultimate WordPress Glossary Solution
+
+The most comprehensive glossary solution available for WordPress, combining cutting-edge AI technology with powerful ecommerce features to create an unmatched user experience that drives conversions and establishes market leadership.
+
+### 🤖 AI-Powered Content Creation
+* ChatGPT Integration - Automatically generate comprehensive, engaging definitions using the latest AI technology
+* Gemini Integration - Alternative AI engine for generating high-quality glossary content and enhancing definitions
+* Smart Content Enhancement - AI-powered suggestions for improving existing definitions and expanding your glossary
+* Automated Term Discovery - Let AI identify potential new terms to add to your glossary based on your content
+
+### 🌍 Advanced Multilingual Capabilities
+* Multi-Language Term Definitions - Define terms in multiple languages from a single interface
+* Wikipedia & Wiktionary Integration - Enrich your content with authoritative information from the world's largest knowledge bases
+* Global Content Strategy - Create truly international glossaries that serve audiences worldwide
+* Custom Language Support - Add custom links to external resources in any language
+
+### 🎬 Rich Media Integration
+* Audio Tooltip Support - Embed MP3 files and audio content directly in tooltips for enhanced user experience
+* Video Integration - Include YouTube, Vimeo, and custom video content in tooltips
+* Image Alt Tag Parsing - Automatically convert image alt text into tooltip content for better accessibility
+* Multimedia Glossary - Create engaging, interactive content that keeps users on your site longer
+
+### 💰 Ecommerce & Monetization
+* Amazon Product Integration - Monetize your glossary with relevant product recommendations and affiliate links
+* WooCommerce Compatibility - Seamlessly integrate with your online store to cross-sell products
+* Product Tagging System - Tag terms with relevant products for strategic upselling opportunities
+* Conversion Optimization - Use glossary terms to guide users toward purchasing decisions
+
+### 🔧 Advanced Technical Features
+* Double-Click Functionality - Show alternative definitions from external sources with double-click
+* Smart Term Parsing Order - Control the sequence in which similar terms are processed for optimal user experience
+* Iframe Embedding - Allow visitors to embed your glossary terms on their own websites, increasing your reach
+* Multiple Definition Support - Provide comprehensive coverage with multiple definitions for complex terms
+* 300+ Configuration Options - Ultimate control over every aspect of your glossary's functionality and appearance
+
+## Addons & Extensions – Extend Your Glossary Functionality
 
 > * [CM Tooltip Custom Taxonomies ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-custom-taxonomies-add-on-for-wordpress-by-creativeminds/)
 > * [CM Tooltip Search Console ](https://www.cminds.com/wordpress-plugins-library/tooltip-glossary-search-console-widget-add-on-for-wordpress-by-creativeminds/)
@@ -148,18 +210,18 @@ The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-
 > * [CM Tooltip Glossary Widgets](https://www.cminds.com/wordpress-plugins-library/purchase-cm-tooltip-glossary-widgets-add-wordpress/)
 
 
-== Code and Style Issues ==
+## Technical Details & Customization Options
 
 The plugin creates tooltips with JavaScript. They are based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) 
 The Tooltip can be customized and styled through the tooltip.css and tooltip.js files.
 The alphabetical index for the Glossary is based on [jQuery ListNav Plugin](http://www.ihwy.com/labs/jquery-listnav-plugin.aspx)
 
 
-== Follow Us ==
+## Stay Connected with CreativeMinds
 
 [Blog](https://www.cminds.com/category/wordpress/) | [Twitter](http://twitter.com/cmplugins) | [LinkedIn](https://www.linkedin.com/company/creativeminds) | [YouTube](https://www.youtube.com/user/cmindschannel) | [Pinterest](http://www.pinterest.com/cmplugins/) | [Facebook](https://www.facebook.com/cmplugins/)
 
-== Suggested Plugins by CreativeMinds ==
+## Other Powerful WordPress Plugins by CreativeMinds
 
 List of all [WordPress Plugins](https://www.cminds.com) by CreativeMinds
 
@@ -167,6 +229,30 @@ List of all [WordPress Plugins](https://www.cminds.com) by CreativeMinds
 * [CM Answers Plugin](https://www.answersplugin.com/) - A fully-featured WordPress Questions & Answers Plugin that allows you to build multiple discussion forum systems Just like StackOverflow, Yahoo Answers and Quora, Now with MicroPayment and Anonymous posting support!
 * [CM Restrict Content](https://restrictcontent.com/) - A full-featured, powerful membership solution and content restriction plugin for WordPress. Support access by role to content on your site.
 * [CM OnBoarding](https://onboardingplugin.com/) - Superb Guidance tool which improves the online experience and the user satisfaction.
+
+## 🏆 Why Choose CM Tooltip Glossary Over Other Solutions?
+
+### Unmatched Experience & Reliability
+* 12+ Years of Development - We've been perfecting this plugin since 2012, making it the most mature and reliable glossary solution available
+* Proven Track Record - Trusted by thousands of websites worldwide, from small blogs to enterprise-level businesses
+* Continuous Innovation - Regular updates with new features, security improvements, and performance optimizations
+
+### Superior Technical Architecture
+* WordPress Native Integration - Built specifically for WordPress with deep integration into the core system
+* Performance Optimized - Advanced caching and parsing algorithms ensure fast performance even with large glossaries
+* Mobile-First Design - Responsive tooltips and layouts that work perfectly on all devices
+* SEO-First Approach - Every feature is designed to improve your search engine rankings
+
+### Comprehensive Feature Set
+* No Feature Limitations - Unlike competitors who charge extra for basic functionality, we provide comprehensive tools in every version
+* Professional Support - Expert support team that understands both WordPress and glossary management
+* Extensive Customization - Over 300 configuration options across all editions for perfect integration
+* Future-Proof Technology - AI integration, multimedia support, and advanced ecommerce features keep you ahead of the competition
+
+### Value for Investment
+* Free Version Power - Our free version includes features that competitors charge for
+* Scalable Pricing - Choose the edition that matches your current needs, upgrade as you grow
+* ROI Focused - Every feature is designed to improve user engagement, SEO performance, and conversion rates
 
 == Installation ==
 
@@ -181,6 +267,7 @@ List of all [WordPress Plugins](https://www.cminds.com) by CreativeMinds
 
 Note: You must have a call to wp_head() in your template in order for the Tooltip js and css to work properly.  If your theme does not support them you will need to link to these files manually in your theme (not recommended).
 
+
 == Frequently Asked Questions ==
 
 > [More FAQ's](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#faq)
@@ -189,47 +276,116 @@ Note: You must have a call to wp_head() in your template in order for the Toolti
 
 > [Detailed User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg)
 
+
 = Does my main glossary page need to be titled "Glossary"? =
 
-No.  It can be called anything.  In fact you don't even need to have a main Glossary page.
+No. It can be called anything. In fact, you don't even need to have a main Glossary page. The plugin will work regardless of the page title.
 
 = Do I need to manually type in an unordered list of my glossary terms on the Glossary page? =
 
-No.  Just leave that page blank.  The plugin will create an unordered list of terms automatically.
+No. Just leave that page blank. The plugin will automatically create an organized, alphabetically sorted list of all your terms.
 
 = How do I add glossary terms? =
 
-Simply add a term under the 'Glossary' section in the admnistration interface.  Title it the glossary term you want (ex. "WordPress") and put the term's definition into the body (ex. "A neato Blogging Platform").
+Simply add a term under the 'Glossary' section in the administration interface. Title it with the glossary term you want (ex. "WordPress") and put the term's definition into the body (ex. "A powerful blogging platform for creating websites").
 
 = What if I need to add or change a glossary term? =
 
-Just add it and then change it.  The links for your glossary terms are added to your page and post content on the fly so your glossary links will always be up to date.
+Just add it or edit it. The links for your glossary terms are automatically added to your page and post content, so your glossary links will always be up to date across your entire site.
+
 
 = How do I prevent the glossary from parsing a paragraph? =
 
-Just wrap the paragraph with [glossary_exclude] paragraph text [/glossary_exclude].
+Just wrap the paragraph with the shortcode: `[glossary_exclude] paragraph text [/glossary_exclude]`. This gives you full control over which content gets processed.
 
 = How do I define the Glossary link style? =
 
-You can use glossaryLink. You can also define glossaryLinkMain if you wish to have a different style in the main glossary page
+The plugin includes a set of options to configure Glossary link style. Additionally, you can use `glossaryLink` CSS class for general styling. You can also define `glossaryLinkMain` if you wish to have a different style on the main glossary page.
+
+= Can I customize the tooltip design without coding? =
+
+Yes! The plugin includes multiple customization options in the admin panel. You can adjust colors, fonts, sizes, and positioning without touching any code. For advanced customization, you can modify the `tooltip.css` and `tooltip.js` files.
+
+= How can I customize the glossary index layout in CM Tooltip Glossary for WordPress? =
+
+In the free version of CM Tooltip Glossary, you can choose between a list layout or a tile layout for your glossary index. The Pro+ and Ecommerce editions offer even more flexibility, with 18 different layouts available to display your glossary terms in a way that best matches your website design and user experience.
+
+
+= How can this glossary improve my site's SEO? =
+
+The plugin creates internal links between your content and glossary terms, improving site structure and user engagement. Each term gets its own page, creating more indexed content. The tooltips increase time on page, and the organized index helps search engines understand your content better.
+
+= Will this plugin slow down my large site? =
+
+No. The plugin is optimized for performance with efficient parsing algorithms and caching systems. For very large glossaries (500+ terms), the Pro version includes additional performance optimizations.
+
+= Does the plugin work with all WordPress themes? =
+
+The plugin works with most properly coded WordPress themes that include `wp_head()` in their templates. For best results, we recommend using one of our tested themes: Genesis Framework, Divi, Avada, Enfold, Ultra, Elementor, Beaver Builder, Visual Composer, or Themify.
+
+
+= Can I use this with page builders like Elementor or Divi? =
+
+Yes! The plugin is fully compatible with popular page builders including Elementor, Divi, WPBakery, and Oxygen Builder.
+
+= Does it work with multilingual sites? =
+
+Absolutely! The plugin supports UTF-8 and is fully compatible with WPML and other multilingual plugins. The Pro+ and Ecommerce versions include additional multilingual features like Google Translate integration.
+
+= Can I import terms from other sources? =
+
+The free version does not include import functionality. Importing terms via CSV files or from external sources is available in the Pro version and through additional add-ons.
+
+= Can I use AI tools like ChatGPT or Gemini with CM Tooltip Glossary? =
+
+Integration with AI content tools such as ChatGPT and Gemini is available in the Ecommerce version of the plugin. The free version does not include AI integration.
+
+
+= How do I control where tooltips appear? =
+
+You can control the location and area where tooltips appear (pages, posts, homepage) through the plugin settings. You can also control if tooltips should appear more than once on the same page.
+
+= Can I add multimedia content to tooltips? =
+
+The free version of CM Tooltip Glossary does not allow embedding multimedia content in tooltips. Audio, video, images, and YouTube/Vimeo tooltips are available in the Ecommerce version for a richer user experience.
+
+= Does it support synonyms and variations? =
+
+CM Tooltip Glossary free version does not include support for synonyms or variations. These features, along with abbreviation support, are available in the Pro version and above for a richer, more comprehensive glossary.
+
+= Is there a setup wizard to help me get started with CM Tooltip Glossary for WordPress? =
+
+Yes. The free version includes a guided Setup Wizard to help you quickly configure your CM Tooltip Glossary plugin, set up tooltips, and organize your glossary terms without any coding.
 
 == Screenshots ==
 
-1. Tooltip in a Post using Skins
-2. Glossary Term Page with Related Articles
-3. Glossary Index Page
-4. Glossary Index Page - Second Template
-5. Admin's Glossary Terms
-6. Plugin's Settings
-7. Log Information
-8. Statistics of Usage
-9. Plugin's Settings Tooltip Tab
-10. Video In Transparent Tooltip
-11. Merriam-Webster Embedded Content
-12. Wikipedia Embedded Content
-13. Import / Export
+1. WordPress Glossary General Settings - Core configuration options for managing glossary functionality
+2. Glossary Index Settings - Customization panel for structuring and displaying glossary index pages
+3. WordPress Glossary Term Settings - Detailed options for defining and styling individual glossary terms
+4. Glossary Tooltip Settings - Advanced customization of tooltip appearance, behavior, and design
+5. WordPress Glossary Labels - Editable front-end labels for glossary navigation and tooltips
+6. Glossary Plugin Dashboard - Centralized admin interface for managing all glossary terms
+7. WordPress Glossary Term Editor - Backend tools for creating, editing, and updating glossary entries
+8. Glossary Index Page List Layout - Alphabetically organized glossary index in list format
+9. WordPress Glossary Tiles Layout - Alternative glossary index design with tile-based navigation
+10. Glossary Term Page - Front-end example showing glossary term page
+11. WordPress Glossary Setup Wizard - Guided configuration for quick and easy plugin setup
+12. Glossary Wizard Example - Sample step from the glossary setup process for new installations
 
 == Changelog ==
+
+= 4.5.3 =
+* Added new method of displaying tooltips
+
+= 4.5.2 = 
+* Fixed encoding issue
+
+= 4.5.1 =
+* Added option to change the tooltip title color
+
+= 4.5.0 =
+Release Date: 25 Dec 2025
+* Changed the default tooltip title color
 
 = 4.4.9 =
 Release Date: 25 Jun 2025

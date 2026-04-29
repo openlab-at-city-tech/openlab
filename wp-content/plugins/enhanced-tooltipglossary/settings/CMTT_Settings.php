@@ -14,7 +14,8 @@ class CMTT_Settings extends \CMTT\Settings {
     public static function init() {
         self::load_config();
 
-        add_action(self::abbrev('_save_options_after'), [__CLASS__, 'beforeSaveSettings'], 10, 2);
+        add_action(self::abbrev('_save_options_before'), [__CLASS__, 'beforeSaveSettings'], 10, 2);
+        add_action(self::abbrev('_save_options_after'), [__CLASS__, 'preAfterSaveSettings'], 10, 2);
         add_action(self::abbrev('_save_options_after'), [__CLASS__, 'afterSaveSettings'], 100, 2);
         add_filter(self::abbrev('_before_saving_option'), [__CLASS__, 'beforeSaveOption'], 10, 2);
         add_filter(self::abbrev('_before_sanitizing_option'), [__CLASS__, 'beforeSanitizingOption'], 10, 2);
@@ -49,12 +50,12 @@ class CMTT_Settings extends \CMTT\Settings {
 
     public static function beforeSaveOption($option_value, $option_name) {
         if ($option_name == 'cmtt_index_letters') {
-            $option_value = array_map('mb_strtolower', explode(',', sanitize_text_field($option_value)));
+            $option_value = array_map('mb_strtolower', explode(',', sanitize_text_field(str_replace(' ','',$option_value))));
         }
         return $option_value;
     }
 
-    public static function beforeSaveSettings($post, $messages) {
+    public static function preAfterSaveSettings($post, $messages) {
 
         if (isset($post['cmtt_removeAllOptions'])) {
             check_admin_referer('remove-options-items');
@@ -66,6 +67,12 @@ class CMTT_Settings extends \CMTT\Settings {
             check_admin_referer('remove-options-items');
             self::_cleanupItems();
             $messages = 'CM Tooltip Glossary data terms have been removed from the database.';
+        }
+    }
+
+    public static function beforeSaveSettings($post, $messages) {
+        if (isset($post['cmtt_glossaryRemoveTooltipsFromIndex']) && $post['cmtt_glossaryID'] > 0) {
+            update_post_meta($post['cmtt_glossaryID'],'_glossary_disable_tooltip_for_page',$post['cmtt_glossaryRemoveTooltipsFromIndex']);
         }
     }
 

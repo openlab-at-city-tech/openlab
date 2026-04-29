@@ -339,7 +339,7 @@
 							</td>
 							<td colspan="2" class="cm_field_help_container">
 								<strong>Warning: Don't change this setting unless you know what you're doing</strong><br/>
-                                This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues</td>
+                                This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues. This setting can improve compatibility with page builders, such as Beaver.</td>
 						</tr>
 						<tr valign="top">
 							<th scope="row">Only highlight on "main" WP query?</th>
@@ -640,15 +640,18 @@
 							<td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
 							<td colspan="2" class="cm_field_help_container">Select this option if you wish the glossary index page to be displayed with definition near each term.</td>
 						</tr>
-						<tr valign="top">
-							<th scope="row">Remove the tooltips on the Glossary Index Page?</th>
-							<td>&nbsp;</td>
-							<?php
-							$link = admin_url('post.php?post=' . \CM\CMTT_Settings::get('cmtt_glossaryID') . '&action=edit');
-							?>
-							<td colspan="2" class="cm_field_help_container">If you want to remove the tooltip from the Glossary Index page, you should edit the page using Wordpress's Pages menu (or clicking <a href="<?php echo $link; ?>" target="_blank">this link</a>)<br/>
-								And in the <strong>"CM Tooltip - Disables"</strong> metabox in the dropdown "Tooltips" choose "Don't show"."</td>
-						</tr>
+                        <tr>
+                            <th scope="row">Remove the tooltips on the Glossary Index Page?</th>
+                            <td>
+                                <input type="hidden" name="cmtt_glossaryRemoveTooltipsFromIndex" value="0"/>
+                                <input type="checkbox"
+                                       name="cmtt_glossaryRemoveTooltipsFromIndex" <?php checked( true, get_post_meta(\CM\CMTT_Settings::get( 'cmtt_glossaryID' ),'_glossary_disable_tooltip_for_page',true) ); ?>
+                                       value="1"/>
+                            </td>							<?php
+                            $link = admin_url( 'post.php?post=' . \CM\CMTT_Settings::get( 'cmtt_glossaryID' ) . '&action=edit' );
+                            ?>
+                            <td colspan="2" class="cm_field_help_container">Enable this option to prevent showing tooltips on the <a href="<?php echo $link; ?>" target="_blank">Glossary Index Page</a></td>
+                        </tr>
 						<tr valign="top" class="onlyinpro">
 							<th scope="row">Mark terms not older than X days as "New"</th>
 							<td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
