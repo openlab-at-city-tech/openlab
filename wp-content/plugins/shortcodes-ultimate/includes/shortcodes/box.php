@@ -86,7 +86,7 @@ function su_shortcode_box( $atts = null, $content = null ) {
 			'radius'      => '3',
 			'class'       => '',
 			'id'          => '',
-			'max_width'   => '',
+			'max_width'   => 'none',
 		),
 		$atts,
 		'box'
@@ -96,6 +96,10 @@ function su_shortcode_box( $atts = null, $content = null ) {
 		$atts['box_color'] = $atts['color'];
 	}
 
+	$atts['box_color']   = su_sanitize_css_color( $atts['box_color'] );
+	$atts['title_color'] = su_sanitize_css_color( $atts['title_color'] );
+	$atts['style']       = sanitize_key( $atts['style'] );
+
 	$atts['radius'] = is_numeric( $atts['radius'] )
 		? intval( $atts['radius'] )
 		: 0;
@@ -104,13 +108,17 @@ function su_shortcode_box( $atts = null, $content = null ) {
 		? $atts['radius'] - 2
 		: 0;
 
-	$max_width = !empty($atts['max_width']) ? 'max-width:' . (is_numeric($atts['max_width']) ? $atts['max_width'] . 'px' : $atts['max_width']) . ';' : '';
+	$atts['max_width'] = su_sanitize_css_value( $atts['max_width'] );
+
+	if ( is_numeric( $atts['max_width'] ) ) {
+		$atts['max_width'] = intval( $atts['max_width'] ) . 'px';
+	}
 
 	su_query_asset( 'css', 'su-shortcodes' );
 
 	// Return result
 	return sprintf(
-		'<div class="su-box su-box-style-%1$s%2$s" id="%10$s" style="border-color:%3$s;border-radius:%4$spx;%11$s"><div class="su-box-title" style="background-color:%5$s;color:%6$s;border-top-left-radius:%7$spx;border-top-right-radius:%7$spx">%8$s</div><div class="su-box-content su-u-clearfix su-u-trim" style="border-bottom-left-radius:%7$spx;border-bottom-right-radius:%7$spx">%9$s</div></div>',
+		'<div class="su-box su-box-style-%1$s%2$s" id="%10$s" style="border-color:%3$s;border-radius:%4$spx;max-width:%11$s"><div class="su-box-title" style="background-color:%5$s;color:%6$s;border-top-left-radius:%7$spx;border-top-right-radius:%7$spx">%8$s</div><div class="su-box-content su-u-clearfix su-u-trim" style="border-bottom-left-radius:%7$spx;border-bottom-right-radius:%7$spx">%9$s</div></div>',
 		esc_attr( $atts['style'] ),
 		su_get_css_class( $atts ),
 		esc_attr( su_adjust_brightness( $atts['box_color'], -20 ) ),
@@ -121,7 +129,7 @@ function su_shortcode_box( $atts = null, $content = null ) {
 		su_do_attribute( $atts['title'], true ),
 		su_do_nested_shortcodes( $content, 'box' ),
 		sanitize_html_class( $atts['id'] ),
-		$max_width
+		esc_attr($atts['max_width'])
 	);
 
 }

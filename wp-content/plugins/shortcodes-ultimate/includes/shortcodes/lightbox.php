@@ -66,7 +66,7 @@ function su_shortcode_lightbox($atts = null, $content = null)
 
 	$atts['src'] = su_do_attribute($atts['src'], true);
 
-	if (strpos(strtolower($atts['src']), 'javascript') !== false) {
+	if ( ! preg_match( '/^(\.|#|https?:\/\/)/', $atts['src'] ) ) {
 		return su_error_message('Lightbox', __('please specify correct source', 'shortcodes-ultimate'));
 	}
 

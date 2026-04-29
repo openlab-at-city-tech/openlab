@@ -302,6 +302,8 @@ function su_shortcode_image_carousel( $atts = null, $content = null ) {
 		$atts['class'] .= ' su-image-carousel-adaptive';
 	}
 
+	$atts['max_width'] = su_sanitize_css_value( $atts['max_width'] );
+
 	if ( is_numeric( $atts['max_width'] ) ) {
 		$atts['max_width'] = $atts['max_width'] . 'px';
 	}

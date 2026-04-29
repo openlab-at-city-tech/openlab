@@ -220,7 +220,7 @@ function su_shortcode_carousel( $atts = null, $content = null ) {
 			$return .= '<div class="su-carousel-slide">';
 			// Slide content with link
 			if ( $slide['link'] ) {
-				$return .= '<a href="' . $slide['link'] . '"' . $target . ' title="' . esc_attr( $slide['title'] ) . '"><img src="' . $image['url'] . '" alt="' . esc_attr( $slide['title'] ) . '" />' . $title . '</a>';
+				$return .= '<a href="' . esc_url( $slide['link'] ) . '"' . $target . ' title="' . esc_attr( $slide['title'] ) . '"><img src="' . $image['url'] . '" alt="' . esc_attr( $slide['title'] ) . '" />' . $title . '</a>';
 			}
 			// Slide content without link
 			else {

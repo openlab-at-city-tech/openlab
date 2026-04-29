@@ -1,0 +1,19 @@
+.su-insert-shortcode-button {
+  height: 36px;
+  min-width: 36px;
+  padding: 6px 8px !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.su-insert-shortcode-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.edit-post-header-toolbar .su-insert-shortcode-button,
+.editor-header__toolbar .su-insert-shortcode-button {
+  margin-left: 8px;
+}
+

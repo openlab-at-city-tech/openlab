@@ -55,16 +55,15 @@
 					<h2><?php esc_html_e( 'Upgrade to PRO', 'shortcodes-ultimate' ); ?></h2>
 					<div class="su-admin-about-upgrade-features-list">
 						<ul>
-							<li><?php esc_html_e( 'Parallax Section shortcode', 'shortcodes-ultimate' ); ?></li>
-							<li><?php esc_html_e( 'Custom PHP shortcodes', 'shortcodes-ultimate' ); ?></li>
-							<li><?php esc_html_e( 'Content Slider shortcode', 'shortcodes-ultimate' ); ?></li>
+							<li><?php esc_html_e( 'Elementor support', 'shortcodes-ultimate' ); ?></li>
 							<li><?php esc_html_e( 'Personal email support', 'shortcodes-ultimate' ); ?></li>
+							<li><?php esc_html_e( 'Parallax Section shortcode', 'shortcodes-ultimate' ); ?></li>
+							<li><?php esc_html_e( 'Content Slider shortcode', 'shortcodes-ultimate' ); ?></li>
 							<li><?php esc_html_e( 'Testimonail shortcode', 'shortcodes-ultimate' ); ?></li>
-							<li><?php esc_html_e( '24 styles for Heading', 'shortcodes-ultimate' ); ?></li>
 							<li><?php esc_html_e( 'Progress Bar shortcode', 'shortcodes-ultimate' ); ?></li>
-							<li><?php esc_html_e( '14 styles for Spoiler', 'shortcodes-ultimate' ); ?></li>
 							<li><?php esc_html_e( 'Exit Popup shortcode', 'shortcodes-ultimate' ); ?></li>
-							<li><?php esc_html_e( '13 styles for Tabs', 'shortcodes-ultimate' ); ?></li>
+							<li><?php esc_html_e( 'Custom HTML & PHP shortcodes', 'shortcodes-ultimate' ); ?></li>
+							<li><?php esc_html_e( 'Over 50 additional styles for selected shortcodes', 'shortcodes-ultimate' ); ?></li>
 						</ul>
 					</div>
 				</div>
@@ -72,7 +71,7 @@
 					<div class="su-admin-about-upgrade-buy-pricing">
 						<div class="su-admin-about-upgrade-buy-pricing-price">
 							<span class="su-admin-about-upgrade-buy-pricing-currency">$</span>
-							<span class="su-admin-about-upgrade-buy-pricing-value">39</span>
+							<span class="su-admin-about-upgrade-buy-pricing-value">49</span>
 						</div>
 						<div class="su-admin-about-upgrade-buy-pricing-period"><?php esc_html_e( 'per year', 'shortcodes-ultimate' ); ?></div>
 					</div>

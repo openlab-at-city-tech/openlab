@@ -380,6 +380,32 @@ function su_maybe_add_css_units( $value = '', $units = '' ) {
 
 }
 
+function su_sanitize_css_property_value( $value ) {
+	return preg_replace( '/[^a-z0-9\s\.\#\,\(\)\%\-]/i', '', $value );
+}
+
+function su_sanitize_css_value( $value, $default = 'none' ) {
+
+	$value = trim( $value );
+
+	if ( '' === $value ) {
+		return $default;
+	}
+
+	$keywords = array( 'none', 'auto', 'inherit', 'initial', 'unset', 'max-content', 'min-content', 'fit-content' );
+
+	if ( in_array( strtolower( $value ), $keywords, true ) ) {
+		return strtolower( $value );
+	}
+
+	if ( preg_match( '/^-?\d+(\.\d+)?(px|em|rem|%|vw|vh|vmin|vmax|ch|ex|cm|mm|in|pt|pc)?$/i', $value ) ) {
+		return $value;
+	}
+
+	return $default;
+
+}
+
 /**
  * Helper to get the current page URL
  * @return string Current page URL

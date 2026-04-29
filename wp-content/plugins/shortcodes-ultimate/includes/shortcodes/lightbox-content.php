@@ -138,11 +138,15 @@ function su_shortcode_lightbox_content( $atts = null, $content = null ) {
 		$atts['padding'] = "{$atts['padding']}px";
 	}
 
+	$atts['width']     = su_sanitize_css_value( $atts['width'], 'auto' );
+	$atts['min_width'] = su_sanitize_css_value( $atts['min_width'], 'none' );
+	$atts['max_width'] = su_sanitize_css_value( $atts['max_width'], '600px' );
+
 	$style = array(
 		'display:none',
-		'width:' . sanitize_text_field( $atts['width'] ),
-		'min-width:' . sanitize_text_field( $atts['min_width'] ),
-		'max-width:' . sanitize_text_field( $atts['max_width'] ),
+		'width:' . $atts['width'],
+		'min-width:' . $atts['min_width'],
+		'max-width:' . $atts['max_width'],
 		'margin-top:' . sanitize_text_field( $atts['margin'] ),
 		'margin-bottom:' . sanitize_text_field( $atts['margin'] ),
 		'padding:' . sanitize_text_field( $atts['padding'] ),

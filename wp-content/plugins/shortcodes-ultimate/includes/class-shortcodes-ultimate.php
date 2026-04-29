@@ -268,6 +268,10 @@ class Shortcodes_Ultimate {
         add_filter( 'su/data/shortcodes', array($this->admin_pro_features, 'add_generator_cta') );
     }
 
+    public function freemius_tracking_allowed() {
+        return su_fs()->is_registered() && su_fs()->is_tracking_allowed();
+    }
+
     /**
      * Register all of the hooks related to both admin area and public part of
      * the plugin.

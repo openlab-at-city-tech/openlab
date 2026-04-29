@@ -119,6 +119,9 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 		'custom_gallery'
 	);
 
+	$atts['width']  = intval( $atts['width'] );
+	$atts['height'] = intval( $atts['height'] );
+
 	$slides = su_get_slides( $atts );
 	$slides = apply_filters( 'su/shortcode/custom_gallery/slides', $slides, $atts );
 
@@ -151,7 +154,7 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 			$return .= '<div class="su-custom-gallery-slide" style="width:' . $atts['width'] . 'px;height:' . $atts['height'] . 'px">';
 			// Slide content with link
 			if ( $slide['link'] ) {
-				$return .= '<a href="' . esc_attr( $slide['link'] ) . '"' . $atts['target'] . ' title="' . esc_attr( $slide['title'] ) . '"><img src="' . $image['url'] . '" alt="' . esc_attr( $slide['title'] ) . '" width="' . $atts['width'] . '" height="' . $atts['height'] . '" />' . $title . '</a>';
+				$return .= '<a href="' . esc_url( $slide['link'] ) . '"' . $atts['target'] . ' title="' . esc_attr( $slide['title'] ) . '"><img src="' . $image['url'] . '" alt="' . esc_attr( $slide['title'] ) . '" width="' . $atts['width'] . '" height="' . $atts['height'] . '" />' . $title . '</a>';
 			}
 			// Slide content without link
 			else {

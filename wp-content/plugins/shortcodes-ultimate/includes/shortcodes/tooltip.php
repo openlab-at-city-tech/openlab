@@ -225,7 +225,7 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 		'{{BACKGROUND}}'    => esc_attr( $atts['background'] ),
 		'{{COLOR}}'         => esc_attr( $atts['color'] ),
 		'{{FONT_SIZE}}'     => esc_attr( su_maybe_add_css_units( $atts['font_size'], 'px' ) ),
-		'{{MAX_WIDTH}}'     => esc_attr( su_maybe_add_css_units( $atts['max_width'], 'px' ) ),
+		'{{MAX_WIDTH}}'     => esc_attr( su_sanitize_css_value( su_maybe_add_css_units( $atts['max_width'], 'px' ), '300px' ) ),
 		'{{ALIGN}}'         => sanitize_key( $atts['text_align'] ),
 		'{{OUTLINE}}'       => sanitize_key( $atts['outline'] ),
 		'{{REFERENCE_TAG}}' => sanitize_key( $atts['reference_tag'] ),
