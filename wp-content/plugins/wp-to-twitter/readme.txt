@@ -3,11 +3,11 @@ Contributors: joedolson
 Donate link: https://xposterpro.com
 Tags: bluesky, post, social, sharing, mastodon
 Requires at least: 6.4
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
 License: GPLv3
 Text Domain: wp-to-twitter
-Stable tag: 5.0.7
+Stable tag: 5.0.8
 
 Posts to Bluesky, Mastodon or X when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
@@ -58,6 +58,12 @@ Translating my plug-ins is always appreciated. Work on XPoster translations at <
 Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter">GitHub repository of plug-in extensions</a>.
 
 == Changelog ==
+
+= 5.0.8 =
+
+* Bug fix: Ensure `wpt_post_types` is an array before accessing.
+* Change: Adaptations to handle new admin theme in WordPress 7.0.
+* Change: Add notice about X.com removing the free tier for their API.
 
 = 5.0.7 =
 

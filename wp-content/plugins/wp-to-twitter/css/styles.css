@@ -410,7 +410,7 @@ label[for='wpt_prepend_rt'], label[for='wpt_prepend_rt2'], label[for='wpt_prepen
 .wpt-support-me p {
 	font-size: 1.6em;
 	font-weight: 600;
-	background: #007eb3;
+	background: var(--wp-admin-theme-color, #007eb3 );
 	text-shadow: 1px 1px rgb( 35, 60, 127 );
 	padding: 1em;
 	text-align: center;

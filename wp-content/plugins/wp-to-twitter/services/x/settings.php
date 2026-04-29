@@ -332,6 +332,20 @@ function wtt_connect_oauth( $auth = false ) {
 	if ( $auth ) {
 		wpt_update_authenticated_users();
 	}
+	wp_admin_notice(
+		sprintf(
+			// translators: URL for more information.
+			__(
+				'As of February 6th, 2026, <a href="%s">X.com no longer offers a free tier</a>. Add a funding mechanism to continue using X.com.',
+				'wp-to-twitter'
+			),
+			'https://xposterpro.com/connecting-xposter-and-x-com/'
+		),
+		array(
+			'type' => 'warning',
+		)
+	);
+
 	$class = ( $auth ) ? 'wpt-profile' : 'wpt-settings';
 
 	if ( ! wtt_oauth_test( $auth, 'verify' ) ) {
