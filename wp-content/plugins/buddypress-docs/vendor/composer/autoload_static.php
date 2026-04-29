@@ -7,14 +7,14 @@ namespace Composer\Autoload;
 class ComposerStaticInitb91641f67d2840457f775900ea3f4b29
 {
     public static $prefixLengthsPsr4 = array (
-        'H' => 
+        'H' =>
         array (
             'HardG\\BuddyPress120URLPolyfills\\' => 32,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'HardG\\BuddyPress120URLPolyfills\\' => 
+        'HardG\\BuddyPress120URLPolyfills\\' =>
         array (
             0 => __DIR__ . '/..' . '/hard-g/buddypress-12.0-url-polyfills/src',
         ),
