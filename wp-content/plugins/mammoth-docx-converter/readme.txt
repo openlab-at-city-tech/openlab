@@ -1,14 +1,13 @@
 === Mammoth .docx converter ===
 Contributors: michaelwilliamson
-Donate link: https://liberapay.com/mwilliamson/donate
 Tags: docx, html, word, office, paste
 Requires at least: 4.0
-Tested up to: 6.4.3
-Stable tag: 1.21.0
+Tested up to: 6.9.4
+Stable tag: 1.22.0
 License: BSD 2-clause
-License URI: http://opensource.org/licenses/BSD-2-Clause
+License URI: https://opensource.org/licenses/BSD-2-Clause
 
-Mammoth converts semantically marked up .docx documents to simple and clean HTML, allowing pasting from Word documents and Google Docs without the usual mess.
+Mammoth converts semantically marked up .docx documents to simple and clean HTML, allowing pasting from Word and Google Docs without the usual mess.
 
 == Description ==
 
@@ -40,7 +39,7 @@ By default, Mammoth maps some common .docx styles to HTML elements. For instance
 
     p[style-name='WarningHeading'] => h1.warning:fresh
 
-[An online tool](http://mike.zwobble.org/projects/mammoth/embed-style-map/) can be used to embed style maps into an existing document. Details of [how to write style maps can be found on the mammoth.js documentation](https://github.com/mwilliamson/mammoth.js#writing-style-maps).
+[An online tool](https://mike.zwobble.org/projects/mammoth/embed-style-map/) can be used to embed style maps into an existing document. Details of [how to write style maps can be found on the mammoth.js documentation](https://github.com/mwilliamson/mammoth.js#writing-style-maps).
 
 A style map to be used for all documents can be set by configuring Mammoth (see below).
 
@@ -61,6 +60,10 @@ The global `MAMMOTH_OPTIONS` will be called with `mammoth` as the first argument
 Install the plugin in the usual way, and you should be able to use the Mammoth .docx converter when adding a post. If you can't see the meta box, make sure that it's selected by taking a look at the "Screen Options" for adding a post.
 
 == Changelog ==
+
+= 1.22.0 =
+
+* Update mammoth.js to 1.12.0. This includes support for checkboxes and improved support for hyperlinks.
 
 = 1.21.0 =
 
@@ -279,9 +282,3 @@ Install the plugin in the usual way, and you should be able to use the Mammoth .
 = 0.1 =
 
 * Initial release
-
-== Donations ==
-
-If you'd like to say thanks, feel free to [make a donation through Ko-fi](https://ko-fi.com/S6S01MG20).
-
-If you use Mammoth as part of your business, please consider supporting the ongoing maintenance of Mammoth by [making a weekly donation through Liberapay](https://liberapay.com/mwilliamson/donate).
