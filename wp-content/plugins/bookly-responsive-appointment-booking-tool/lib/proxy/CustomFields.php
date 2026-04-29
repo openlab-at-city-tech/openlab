@@ -6,6 +6,7 @@ use Bookly\Lib;
 /**
  * @method static void addBooklyMenuItem() Add 'Custom Fields' to Bookly menu.
  * @method static \stdClass[] getAll( array $exclude ) Get custom fields
+ * @method static \stdClass[] getVisible( array $exclude ) Get visible custom fields
  * @method static \stdClass[] getOnly( array $types ) Get custom fields
  * @method static array filterForService( array $custom_fields, int $service_id ) Get custom fields
  * @method static \stdClass[] getTranslated( $service_id = null, $translate = true, $language_code = null ) Get translated custom fields

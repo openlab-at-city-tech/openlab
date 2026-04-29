@@ -3,11 +3,15 @@ jQuery(function($) {
 
     let $keysList = $('#bookly-keys-list'),
         $newToken = $('#bookly-js-new-key'),
+        $checkAllButton = $('#bookly-check-all'),
         btn = {
-            edit: $('<button type="button" class="btn btn-default" data-action="edit">').append($('<i class="far fa-fw fa-edit mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span>').get(0).outerHTML
+            copy_token: $('<button/>', {type: 'button',  class: 'btn btn-default', 'data-action': 'copy_token', title: BooklyL10n.copy_token }).append($('<i class="far fa-fw fa-copy mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.copy_token + '</span>').get(0).outerHTML,
+            copy_link: $('<button/>', {type: 'button',  class: 'btn btn-default mr-2 ml-2', 'data-action': 'copy_link', title: BooklyL10n.copy_link }).append($('<i class="fas fa-fw fa-link mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.copy_link + '</span>').get(0).outerHTML,
+            edit: $('<button/>', {type: 'button',  class: 'btn btn-default', 'data-action': 'edit', title: BooklyL10n.edit + '…' }).append($('<i class="far fa-fw fa-edit mr-lg-1" />'), '<span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span>').get(0).outerHTML
         },
         $revokeButton = $('#bookly-keys-list-delete-button'),
-        columns = []
+        columns = [],
+        app_auth_url = 'https://app.bookly.pro/?token='
     ;
 
     $newToken
@@ -37,7 +41,6 @@ jQuery(function($) {
                             }
                             if (row.staff_id) {
                                 return data + ' <span class="text-muted">(' + BooklyL10n.staff + ')</span>';
-
                             }
                             return data;
                         }
@@ -56,7 +59,7 @@ jQuery(function($) {
         searchable: false,
         width: 90,
         render: function (data, type, row, meta) {
-            return '<div class="d-flex flex-row-reverse">' + btn.edit + '</div>';
+            return '<div class="d-flex">' + btn.copy_token + btn.copy_link + btn.edit + '</div>';
         }
     });
     columns.push({
@@ -90,17 +93,38 @@ jQuery(function($) {
         }).on('change', function() {
             $keysList.find('tbody input:checkbox').prop('checked', this.checked);
         }).on('click', '[data-action=edit]', function() {
-                let row = booklyDataTables.getRowData(this, dt);
-                BooklyGrantAuthDialog.showDialog({
-                    id: row.id,
-                    token: row.token,
-                    staff_id: row.staff_id || null,
-                    wp_user_id: row.wp_user_id || null,
-                    name: row.full_name,
-                }, function() {
-                    dt.ajax.reload(null, false);
-                });
+            let row = booklyDataTables.getRowData(this, dt);
+            BooklyGrantAuthDialog.showDialog({
+                id: row.id,
+                token: row.token,
+                staff_id: row.staff_id || null,
+                wp_user_id: row.wp_user_id || null,
+                name: row.full_name,
+            }, function() {
+                dt.ajax.reload(null, false);
             });
+        }).on('click', '[data-action=copy_token]', function() {
+            let row = booklyDataTables.getRowData(this, dt);
+            booklyCopyTextToClipboard(row.token);
+        }).on('click', '[data-action=copy_link]', function() {;
+            let row = booklyDataTables.getRowData(this, dt);
+            booklyCopyTextToClipboard(app_auth_url + row.token);
+        }).on('change', 'tbody input:checkbox', function () {
+            $checkAllButton.prop('checked', $keysList.find('tbody input:not(:checked)').length == 0);
+        })
+
+    function booklyCopyTextToClipboard(text) {
+        let $temp = $('<input/>', {type: 'text', value: text});
+        $('body').append($temp);
+        $temp.select();
+        document.execCommand('copy');
+        $temp.remove();
+        booklyAlert({success: [BooklyL10n.copied]});
+    }
+
+    $checkAllButton.on('change', function () {
+        $keysList.find('tbody input:checkbox').prop('checked', this.checked);
+    });
 
     /**
      * Revoke keys.

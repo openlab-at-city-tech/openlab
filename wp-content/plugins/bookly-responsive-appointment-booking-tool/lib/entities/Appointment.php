@@ -36,6 +36,10 @@ class Appointment extends Lib\Base\Entity
     /** @var string */
     protected $outlook_event_series_id;
     /** @var string */
+    protected $apple_event_id;
+    /** @var string */
+    protected $apple_event_etag;
+    /** @var string */
     protected $online_meeting_provider;
     /** @var string */
     protected $online_meeting_id;
@@ -69,6 +73,8 @@ class Appointment extends Lib\Base\Entity
         'outlook_event_id' => array( 'format' => '%s' ),
         'outlook_event_change_key' => array( 'format' => '%s' ),
         'outlook_event_series_id' => array( 'format' => '%s' ),
+        'apple_event_id' => array( 'format' => '%s' ),
+        'apple_event_etag' => array( 'format' => '%s' ),
         'online_meeting_provider' => array( 'format' => '%s' ),
         'online_meeting_id' => array( 'format' => '%s' ),
         'online_meeting_data' => array( 'format' => '%s' ),
@@ -184,6 +190,14 @@ class Appointment extends Lib\Base\Entity
             $time_zone = isset( $ca_data[ $id ]['timezone'] ) ? Lib\Proxy\Pro::getTimeZoneOffset( $ca_data[ $id ]['timezone'] ) : null;
 
             $customer_appointment = new CustomerAppointment();
+            // For backend-created appointments, try to use the customer's last known locale
+            // so that notifications are sent in the customer's language, not the admin's language.
+            if ( isset( $ca_data[ $id ]['created_from'] ) && $ca_data[ $id ]['created_from'] === 'backend' ) {
+                $last_locale = Lib\Proxy\Pro::getLastCustomerLocale( $ca_data[ $id ]['id'] );
+                if ( $last_locale ) {
+                    $customer_appointment->setLocale( $last_locale );
+                }
+            }
             $customer_appointment
                 ->setSeriesId( $series_id )
                 ->setAppointmentId( $this->getId() )
@@ -228,8 +242,7 @@ class Appointment extends Lib\Base\Entity
                 ->setCustomFields( json_encode( $ca_data[ $id ]['custom_fields'] ) )
                 ->setExtras( json_encode( $ca_data[ $id ]['extras'] ) )
                 ->setTimeZone( $time_zone['time_zone'] )
-                ->setTimeZoneOffset( $time_zone['time_zone_offset'] );
-            $customer_appointment
+                ->setTimeZoneOffset( $time_zone['time_zone_offset'] )
                 ->save();
             Lib\Proxy\Files::attachCFFiles( $ca_data[ $id ]['custom_fields'], $customer_appointment );
             Lib\Proxy\Pro::createBackendPayment( $ca_data[ $id ], $customer_appointment );
@@ -692,6 +705,52 @@ class Appointment extends Lib\Base\Entity
     }
 
     /**
+     * Gets apple_event_id
+     *
+     * @return string
+     */
+    public function getAppleEventId()
+    {
+        return $this->apple_event_id;
+    }
+
+    /**
+     * Sets apple_event_id
+     *
+     * @param string $apple_event_id
+     * @return $this
+     */
+    public function setAppleEventId( $apple_event_id )
+    {
+        $this->apple_event_id = $apple_event_id;
+
+        return $this;
+    }
+
+    /**
+     * Gets apple_event_etag
+     *
+     * @return string
+     */
+    public function getAppleEventEtag()
+    {
+        return $this->apple_event_etag;
+    }
+
+    /**
+     * Sets apple_event_etag
+     *
+     * @param string $apple_event_etag
+     * @return $this
+     */
+    public function setAppleEventEtag( $apple_event_etag )
+    {
+        $this->apple_event_etag = $apple_event_etag;
+
+        return $this;
+    }
+
+    /**
      * Gets online_meeting_provider
      *
      * @return string
@@ -850,11 +909,14 @@ class Appointment extends Lib\Base\Entity
                 $this->setStaffId( $modified['staff_id'] );
                 Lib\Proxy\Pro::deleteGoogleCalendarEvent( $this );
                 Lib\Proxy\OutlookCalendar::deleteEvent( $this );
+                Lib\Proxy\AppleCalendar::deleteEvent( $this );
                 $this
                     ->setStaffId( $staff_id )
                     ->setGoogleEventId( null )
                     ->setGoogleEventETag( null )
                     ->setOutlookEventId( null )
+                    ->setAppleEventId( null )
+                    ->setAppleEventEtag( null )
                     ->setOutlookEventChangeKey( null );
             }
         }
@@ -892,6 +954,7 @@ class Appointment extends Lib\Base\Entity
             Lib\Proxy\Pro::deleteOnlineMeeting( $this );
             Lib\Proxy\Pro::deleteGoogleCalendarEvent( $this );
             Lib\Proxy\OutlookCalendar::deleteEvent( $this );
+            Lib\Proxy\AppleCalendar::deleteEvent( $this );
         }
 
         return $result;

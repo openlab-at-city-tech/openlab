@@ -545,7 +545,6 @@ class Ajax extends Lib\Base\Ajax
                     $appointment
                         ->setStaffId( $staff->getId() )
                         ->setServiceId( $service->getId() )
-                        ->setCreatedFrom( 'import' )
                         ->setStartDate( date( 'Y-m-d H:i:s', $start_date ) )
                         ->setEndDate( date( 'Y-m-d H:i:s', $start_date + $duration ) )
                         ->save();

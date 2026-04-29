@@ -7,7 +7,7 @@ class PluginsUpdater
     {
         if ( defined( 'DOING_AJAX' ) ) {
             // Update Bookly add-ons
-            add_action( 'wp_ajax_bookly_update_plugin', array( __CLASS__, 'updateAddon' ), 10, 0 );
+            current_user_can( 'update_plugins' ) && add_action( 'wp_ajax_bookly_update_plugin', array( __CLASS__, 'updateAddon' ), 10, 0 );
             // Check update add-ns
             add_action( 'wp_ajax_bookly_check_update', array( __CLASS__, 'getAddonsUpdatingData' ), 10, 0 );
             add_action( 'wp_ajax_nopriv_bookly_speed_up_update_addons', array( __CLASS__, 'speedUpUpdateAddons' ), 10, 0 );

@@ -254,6 +254,7 @@ class InfoText
                     'staff_info' => array(),
                     'staff_name' => array(),
                     'staff_photo' => array(),
+                    'total_duration' => array(),
                 );
 
                 foreach ( $userData->cart->getItems() as $cart_item ) {
@@ -278,7 +279,7 @@ class InfoText
                     $data['category_info'][] = $appointment_data['category_info'];
                     $data['category_name'][] = $appointment_data['category_name'];
                     $data['service_image'][] = $appointment_data['service_image'];
-                    $data['service_info'][] = $appointment_data['service_info'] ;
+                    $data['service_info'][] = $appointment_data['service_info'];
                     $data['service_name'][] = $appointment_data['service_name'];
                     $data['service_price'][] = $appointment_data['service_price'];
                     if ( $service ) {
@@ -414,6 +415,6 @@ class InfoText
      */
     public static function implode( $data )
     {
-        return implode( ', ', array_filter( $data, function ( $value ) { return ! is_null( $value ) && $value !== ''; } ) );
+        return implode( ', ', array_filter( $data, function( $value ) { return ! is_null( $value ) && $value !== ''; } ) );
     }
 }

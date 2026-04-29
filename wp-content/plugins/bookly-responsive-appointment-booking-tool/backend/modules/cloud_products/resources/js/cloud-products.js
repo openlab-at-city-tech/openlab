@@ -15,6 +15,8 @@ jQuery(function ($) {
         $updateRequiredButtons = $('.bookly-js-bookly-update-required'),
         $requiredBooklyPro = $('.bookly-js-required-bookly-pro'),
         $infoModal = $('#bookly-product-info-modal'),
+        $startTrialModal = $('#bookly-product-start-trial-modal'),
+        $startSubscriptionModal = $('#bookly-product-start-subscription-modal'),
         infoModal = {
             $loading: $('.bookly-js-loading', $infoModal),
             $content: $('#bookly-info-content', $infoModal),
@@ -145,7 +147,49 @@ jQuery(function ($) {
             $unsubscribeModal.data('product', product);
             $unsubscribeModal.booklyModal('show');
         } else {
-            changeProductStatus(product, status, product_price, purchase_code, $button)
+            if (!!status && BooklyL10n.products[product].has_subscription) {
+                const ladda = Ladda.create($button.get(0));
+                ladda.start();
+                $.ajax({
+                    type: 'POST',
+                    url: ajaxurl,
+                    data: {
+                        action: 'bookly_cloud_is_trial',
+                        product_price: product_price,
+                        purchase_code: purchase_code,
+                        product: product,
+                        csrf_token: BooklyL10nGlobal.csrf_token
+                    },
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.success) {
+                            ladda.stop();
+                            if (response.data.is_trial) {
+                                $startTrialModal.find('.bookly-js-product-name').text(BooklyL10n.products[product].title);
+                                $startTrialModal.booklyModal('show');
+                                $startTrialModal.find('#bookly-start-trial-button').off().on('click', function () {
+                                    $startTrialModal.booklyModal('hide');
+                                    changeProductStatus(product, status, product_price, purchase_code, $button);
+                                });
+                            } else {
+                                $startSubscriptionModal.find('.bookly-js-product-name').text(BooklyL10n.products[product].title);
+                                $startSubscriptionModal.booklyModal('show');
+                                $startSubscriptionModal.find('#bookly-start-subscription-button').off().on('click', function () {
+                                    $startSubscriptionModal.booklyModal('hide');
+                                    changeProductStatus(product, status, product_price, purchase_code, $button);
+                                });
+                            }
+                        } else {
+                            ladda.stop();
+                        }
+                    },
+                    error: function () {
+                        ladda.stop();
+                    }
+                });
+            } else {
+                changeProductStatus(product, status, product_price, purchase_code, $button);
+            }
         }
     });
 
@@ -185,6 +229,7 @@ jQuery(function ($) {
 
     function changeProductStatus(product, status, product_price, purchase_code, $button) {
         const ladda = Ladda.create($button.get(0));
+        ladda.start();
         let action;
         switch (product) {
             case 'stripe':
@@ -202,8 +247,6 @@ jQuery(function ($) {
                 action = 'bookly_cloud_change_product_status';
                 break;
         }
-
-        ladda.start();
         $.ajax({
             type: 'POST',
             url: ajaxurl,

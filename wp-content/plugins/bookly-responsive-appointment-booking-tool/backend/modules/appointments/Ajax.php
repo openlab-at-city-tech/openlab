@@ -112,9 +112,10 @@ class Ajax extends Lib\Base\Ajax
      * @param array $columns
      * @param array $order
      * @param bool $export
+     * @param string|null $display_tz
      * @return array
      */
-    public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array(), $export = false )
+    public static function getAppointmentsTableData( $filter = array(), $limits = array(), $columns = array(), $order = array(), $export = false, $display_tz = null )
     {
         $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
         $postfix_archived = sprintf( ' (%s)', __( 'Archived', 'bookly' ) );
@@ -236,8 +237,13 @@ class Ajax extends Lib\Base\Ajax
                 }
                 $column = 'ca_id';
             }
+
+            $direction = $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING;
+            if ( $column !== 'id')  {
+                $direction .= ', a.id ' . $direction;
+            }
             $query->sortBy( $column )
-                ->order( $sort_by['dir'] === 'desc' ? Lib\Query::ORDER_DESCENDING : Lib\Query::ORDER_ASCENDING );
+                ->order( $direction );
         }
 
         $custom_fields = array();
@@ -254,13 +260,18 @@ class Ajax extends Lib\Base\Ajax
 
         $locations_active = Lib\Config::locationsActive();
 
+        if ( $display_tz === null ) {
+            $convert_tz = false;
+        } else {
+            $wp_tz = Lib\Config::getWPTimeZone();
+            $convert_tz = $display_tz != $wp_tz;
+        }
+
         $data = array();
         foreach ( $query->fetchArray() as $row ) {
-            // Service duration.
             $service_duration = $export
                 ? (int) ( $row['service_duration'] / MINUTE_IN_SECONDS )
                 : Lib\Utils\DateTime::secondsToInterval( $row['service_duration'] );
-            // Payment title.
             $payment_title = '';
             $payment_raw_title = '';
             if ( $row['payment'] !== null && $row['status'] !== Lib\Entities\CustomerAppointment::STATUS_WAITLISTED ) {
@@ -285,9 +296,9 @@ class Ajax extends Lib\Base\Ajax
             }
             // Appointment status.
             $row['status'] = Lib\Entities\CustomerAppointment::statusToString( $row['status'] );
-            // Custom fields
             $customer_appointment = new Lib\Entities\CustomerAppointment();
             $customer_appointment->load( $row['ca_id'] );
+            // Custom fields
             foreach ( Lib\Proxy\CustomFields::getForCustomerAppointment( $customer_appointment ) ?: array() as $custom_field ) {
                 $custom_fields[ $custom_field['id'] ] = $custom_field['value'];
             }
@@ -312,6 +323,11 @@ class Ajax extends Lib\Base\Ajax
                 $online_meeting_start_url = $row['online_meeting_id'];
             }
 
+            if ( $convert_tz ) {
+                $row['start_date'] = $row['start_date'] ? Lib\Utils\DateTime::convertTimeZone( $row['start_date'], $wp_tz, $display_tz ) : null;
+                $row['created_date'] = Lib\Utils\DateTime::convertTimeZone( $row['created_date'], $wp_tz, $display_tz );
+            }
+
             $data[] = array(
                 'id' => $row['id'],
                 'no' => Lib\Config::groupBookingActive() && $row['ca_id'] ? $row['id'] . '-' . $row['ca_id'] : $row['ca_id'],
@@ -322,19 +338,19 @@ class Ajax extends Lib\Base\Ajax
                     'name' => $row['staff_name'] . ( $row['staff_any'] ? $postfix_any : '' ) . ( $row['staff_visibility'] == 'archive' ? $postfix_archived : '' ),
                 ),
                 'customer' => array(
-                    'full_name' => $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_full_name'],
-                    'phone' => $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_phone'],
-                    'email' => $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_email'],
-                    'birthday' => $row['customer_birthday'] ? Lib\Utils\DateTime::formatDate( $row['customer_birthday'] ) : '',
+                    'full_name' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_full_name'] ),
+                    'phone' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_phone'] ),
+                    'email' => Lib\Utils\Common::stripWpKses( $row['ca_id'] === null ? __( 'N/A', 'bookly' ) : $row['customer_email'] ),
+                    'birthday' => Lib\Utils\Common::stripWpKses( $row['customer_birthday'] ? Lib\Utils\DateTime::formatDate( $row['customer_birthday'] ) : '' ),
                     'address' => Lib\Proxy\Pro::getFullAddressByCustomerData( array(
-                        'country' => $row['customer_country'],
-                        'state' => $row['customer_state'],
-                        'postcode' => $row['customer_postcode'],
-                        'city' => $row['customer_city'],
-                        'street' => $row['customer_street'],
-                        'street_number' => $row['customer_street_number'],
-                        'additional_address' => $row['customer_additional_address'],
-                        'full_address' => $row['customer_full_address'],
+                        'country' => Lib\Utils\Common::stripWpKses( $row['customer_country'] ),
+                        'state' => Lib\Utils\Common::stripWpKses( $row['customer_state'] ),
+                        'postcode' => Lib\Utils\Common::stripWpKses( $row['customer_postcode'] ),
+                        'city' =>  Lib\Utils\Common::stripWpKses( $row['customer_city'] ),
+                        'street' => Lib\Utils\Common::stripWpKses(  $row['customer_street'] ),
+                        'street_number' =>  Lib\Utils\Common::stripWpKses( $row['customer_street_number'] ),
+                        'additional_address' =>  Lib\Utils\Common::stripWpKses( $row['customer_additional_address'] ),
+                        'full_address' =>  Lib\Utils\Common::stripWpKses( $row['customer_full_address'] ),
                     ) ),
                 ),
                 'service' => array(

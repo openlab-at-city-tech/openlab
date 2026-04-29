@@ -44,6 +44,13 @@ msgid ""
 "a scheduled cron job."
 msgstr ""
 
+#, php-format
+msgid ""
+"To ensure stable operation of the \"Time interval of payment gateway\" "
+"feature, please activate %s or follow <a href=\"%s\" target=\"_blank\">the "
+"instructions</a> about cron setup."
+msgstr ""
+
 msgid "I will pay now with Credit Card"
 msgstr ""
 
@@ -59,16 +66,30 @@ msgstr ""
 msgid "Synchronization mode"
 msgstr ""
 
+#, php-format
 msgid ""
 "With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step). With \"Two-way\" "
-"sync all bookings created in Bookly Calendar will be automatically copied to "
-"Google Calendar and vice versa. Important: your website must use HTTPS. "
-"Google Calendar API will be able to send notifications only if there is a "
-"valid SSL certificate installed on your web server."
+"to %s."
+msgstr ""
+
+#, php-format
+msgid ""
+"With \"Two-way front-end only\" sync Bookly will additionally fetch events "
+"from %s and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
+msgstr ""
+
+#, php-format
+msgid ""
+"With \"Two-way\" sync all bookings created in Bookly Calendar will be "
+"automatically copied to %s and vice versa."
+msgstr ""
+
+msgid ""
+"Important: your website must use HTTPS. Google Calendar API will be able to "
+"send notifications only if there is a valid SSL certificate installed on "
+"your web server."
 msgstr ""
 
 msgid "One-way"
@@ -108,6 +129,121 @@ msgid ""
 msgstr ""
 
 msgid "Google Calendar event"
+msgstr ""
+
+msgid "Apple Calendar"
+msgstr ""
+
+msgid "Apple Calendar integration"
+msgstr ""
+
+msgid "iCloud email"
+msgstr ""
+
+msgid "App-specific password"
+msgstr ""
+
+#, php-format
+msgid "Generate an app-specific password at %s"
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "disconnect"
+msgstr ""
+
+msgid "Synchronize staff member appointments with Apple Calendar."
+msgstr ""
+
+msgid "Calendar"
+msgstr ""
+
+msgid "-- Select calendar --"
+msgstr ""
+
+msgid "Connection failed. Please reconnect."
+msgstr ""
+
+msgid "Please fill in both fields."
+msgstr ""
+
+msgid "Connecting..."
+msgstr ""
+
+msgid "Connection error. Please try again."
+msgstr ""
+
+msgid "Synchronize with Apple Calendar"
+msgstr ""
+
+msgid "Settings saved."
+msgstr ""
+
+#, php-format
+msgid ""
+"To setup %s integration, follow the instruction in <a href=\"%s\" "
+"target=\"_blank\">our documentation</a>"
+msgstr ""
+
+msgid ""
+"With \"Two-way\" sync Bookly will additionally fetch events from Apple "
+"Calendar and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
+msgstr ""
+
+msgid ""
+"You will also be able to import events from Apple Calendar into Bookly. To "
+"do this, go to Calendar and click \"Sync now\"."
+msgstr ""
+
+msgid "Copy Apple Calendar event titles"
+msgstr ""
+
+msgid ""
+"If enabled then titles of Apple Calendar events will be copied to Bookly "
+"appointments. If disabled, a standard title \"Apple Calendar event\" will be "
+"used."
+msgstr ""
+
+msgid "Limit number of fetched events"
+msgstr ""
+
+msgid ""
+"If there are a lot of events in Apple Calendar sometimes this leads to a "
+"lack of memory in PHP when Bookly tries to fetch all events. You can limit "
+"the number of fetched events here."
+msgstr ""
+
+msgid "Template for event title"
+msgstr ""
+
+msgid ""
+"Configure what information should be placed in the title of Apple Calendar "
+"event."
+msgstr ""
+
+#, php-format
+msgid "Available codes are %s and %s."
+msgstr ""
+
+msgid "Template for event description"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Email"
+msgstr ""
+
+msgid "Phone"
+msgstr ""
+
+msgid "Apple Calendar event"
 msgstr ""
 
 msgid "API Login ID"
@@ -236,9 +372,6 @@ msgid "Make every service duration equal to the duration of the longest one."
 msgstr ""
 
 msgid "Collaborative"
-msgstr ""
-
-msgid "Settings saved."
 msgstr ""
 
 msgid "Collaborative services"
@@ -735,9 +868,6 @@ msgstr ""
 msgid "Edit Status"
 msgstr ""
 
-msgid "Name"
-msgstr ""
-
 msgid "Free/Busy"
 msgstr ""
 
@@ -795,12 +925,6 @@ msgid "Online meeting"
 msgstr ""
 
 msgid "Join online meeting"
-msgstr ""
-
-msgid "Email"
-msgstr ""
-
-msgid "Phone"
 msgstr ""
 
 msgid "Birthday"
@@ -1239,6 +1363,44 @@ msgstr ""
 msgid "New customer"
 msgstr ""
 
+msgid "copied"
+msgstr ""
+
+msgid "Copy to clipboard"
+msgstr ""
+
+msgid "Create online meetings"
+msgstr ""
+
+msgid ""
+"If this setting is enabled then online meetings will be created for new "
+"event bookings with the selected online meeting provider."
+msgstr ""
+
+#, php-format
+msgid ""
+"Make sure that the provider is configured properly in Settings > <a "
+"href=\"%s\">Online Meetings</a>"
+msgstr ""
+
+msgid ""
+"This link can be inserted into notifications with {online_meeting_start_url} "
+"code"
+msgstr ""
+
+msgid "Save event to create a meeting"
+msgstr ""
+
+msgid "Meeting host"
+msgstr ""
+
+msgid "Select the staff member who will be assigned as the meeting host"
+msgstr ""
+
+#, php-format
+msgid "Please configure Zoom <a href=\"%s\">settings</a> first"
+msgstr ""
+
 msgid "Color"
 msgstr ""
 
@@ -1288,6 +1450,15 @@ msgstr ""
 msgid "Ticket mask"
 msgstr ""
 
+msgid "Advanced"
+msgstr ""
+
+msgid "Booking product"
+msgstr ""
+
+msgid "Cart item data"
+msgstr ""
+
 msgid "Nothing selected"
 msgstr ""
 
@@ -1296,6 +1467,9 @@ msgstr ""
 
 #, php-format
 msgid "Click \"%s\" to create your first one"
+msgstr ""
+
+msgid "Reorder"
 msgstr ""
 
 msgid "Events form"
@@ -1336,6 +1510,18 @@ msgid "Image URL of event"
 msgstr ""
 
 msgid "Image of event"
+msgstr ""
+
+msgid "Online meeting join URL"
+msgstr ""
+
+msgid "Online meeting password"
+msgstr ""
+
+msgid "Online meeting start URL"
+msgstr ""
+
+msgid "Online meeting URL"
 msgstr ""
 
 msgid "Ticket code of attendee"
@@ -2094,6 +2280,9 @@ msgstr ""
 msgid "Set maximum value for Quantity field."
 msgstr ""
 
+msgid "Outlook Calendar"
+msgstr ""
+
 msgid "Can't change calendar for archived staff"
 msgstr ""
 
@@ -2104,19 +2293,7 @@ msgstr ""
 msgid "Please configure Outlook Calendar <a href=\"%s\">settings</a> first"
 msgstr ""
 
-msgid "Connected"
-msgstr ""
-
-msgid "disconnect"
-msgstr ""
-
 msgid "Synchronize staff member appointments with Outlook Calendar."
-msgstr ""
-
-msgid "Calendar"
-msgstr ""
-
-msgid "-- Select calendar --"
 msgstr ""
 
 msgid ""
@@ -2126,15 +2303,6 @@ msgid ""
 msgstr ""
 
 msgid "Synchronize with Outlook Calendar"
-msgstr ""
-
-msgid "Outlook Calendar"
-msgstr ""
-
-#, php-format
-msgid ""
-"To setup %s integration, follow the instruction in <a href=\"%s\" "
-"target=\"_blank\">our documentation</a>"
 msgstr ""
 
 msgid "Application ID"
@@ -2158,16 +2326,6 @@ msgid ""
 "Enter this URL as a Redirect URLs in the Microsoft App Registration Portal."
 msgstr ""
 
-msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Outlook Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Outlook Calendar and remove corresponding "
-"time slots before displaying the Time step of the booking form (this may "
-"lead to a delay when users click Next to get to the Time step). With \"Two-"
-"way\" sync all bookings created in Bookly Calendar will be automatically "
-"copied to Outlook Calendar and vice versa."
-msgstr ""
-
 msgid "Copy Outlook Calendar event titles"
 msgstr ""
 
@@ -2177,28 +2335,15 @@ msgid ""
 "be used."
 msgstr ""
 
-msgid "Limit number of fetched events"
-msgstr ""
-
 msgid ""
 "If there is a lot of events in Outlook Calendar sometimes this leads to a "
 "lack of memory in PHP when Bookly tries to fetch all events. You can limit "
 "the number of fetched events here."
 msgstr ""
 
-msgid "Template for event title"
-msgstr ""
-
 msgid ""
 "Configure what information should be placed in the title of Outlook Calendar "
 "event."
-msgstr ""
-
-#, php-format
-msgid "Available codes are %s and %s."
-msgstr ""
-
-msgid "Template for event description"
 msgstr ""
 
 msgid "Outlook Calendar event"
@@ -2299,12 +2444,6 @@ msgstr ""
 msgid "Restore"
 msgstr ""
 
-msgid "Select service"
-msgstr ""
-
-msgid "Please select a service"
-msgstr ""
-
 msgid ""
 "Enable this setting so that the package can be displayed and available for "
 "booking when clients have not specified a particular provider."
@@ -2323,6 +2462,12 @@ msgid "Number of days"
 msgstr ""
 
 msgid "The period in days when the customer can use a package of services."
+msgstr ""
+
+msgid "Select service"
+msgstr ""
+
+msgid "Please select a service"
 msgstr ""
 
 msgid "Packages"
@@ -2601,18 +2746,7 @@ msgstr ""
 msgid "Custom service price"
 msgstr ""
 
-msgid ""
-"This link can be inserted into notifications with {online_meeting_start_url} "
-"code"
-msgstr ""
-
 msgid "Save appointment to create a meeting"
-msgstr ""
-
-msgid "copied"
-msgstr ""
-
-msgid "Copy to clipboard"
 msgstr ""
 
 msgid "Please enter a service name"
@@ -2708,12 +2842,6 @@ msgstr ""
 msgid "Edit gift card type"
 msgstr ""
 
-msgid "Booking product"
-msgstr ""
-
-msgid "Cart item data"
-msgstr ""
-
 #, php-format
 msgid ""
 "Start typing \"{\" to see the available codes. For more information, see the "
@@ -2795,20 +2923,19 @@ msgstr ""
 msgid "Limit"
 msgstr ""
 
-msgid "Create online meetings"
-msgstr ""
-
-#, php-format
 msgid ""
 "If this setting is enabled then online meetings will be created for new "
-"appointments with the selected online meeting provider. Make sure that the "
-"provider is configured properly in Settings > <a href=\"%s\">Online "
-"Meetings</a>"
+"appointments with the selected online meeting provider."
 msgstr ""
 
 msgid ""
 "If you choose Google Meet then meetings will be created for those staff "
 "members who have Google Calendar configured."
+msgstr ""
+
+msgid ""
+"If you choose Microsoft Teams then meetings will be created for those staff "
+"members who have Outlook Calendar configured."
 msgstr ""
 
 msgid "Minimum time requirement prior to booking"
@@ -2923,14 +3050,7 @@ msgstr ""
 msgid "integration"
 msgstr ""
 
-#, php-format
-msgid "Please configure Zoom <a href=\"%s\">settings</a> first"
-msgstr ""
-
 msgid "This setting allows to set up personal Zoom account for staff member"
-msgstr ""
-
-msgid "Connect"
 msgstr ""
 
 msgid "Limit working hours per day"
@@ -3516,7 +3636,7 @@ msgstr ""
 msgid "Page URL"
 msgstr ""
 
-msgid "Enter the URL of the page where this forms shortcode is placed."
+msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr ""
 
 msgid "Add new form"
@@ -3804,15 +3924,6 @@ msgstr ""
 msgid "Staff category name of appointment"
 msgstr ""
 
-msgid "Online meeting join URL"
-msgstr ""
-
-msgid "Online meeting password"
-msgstr ""
-
-msgid "Online meeting URL"
-msgstr ""
-
 msgid "I will pay now with PayPal"
 msgstr ""
 
@@ -3941,9 +4052,6 @@ msgid ""
 msgstr ""
 
 msgid "Email logs"
-msgstr ""
-
-msgid "Online meeting start URL"
 msgstr ""
 
 msgid "Client birthday full date"
@@ -4162,6 +4270,31 @@ msgid ""
 "availability of the selected staff in a front-end calendar"
 msgstr ""
 
+msgid "Display only busy slots"
+msgstr ""
+
+msgid ""
+"If this option is enabled then the front-end calendar will only show "
+"appointments with busy status (pending or approved). Free/available slots "
+"will not be displayed."
+msgstr ""
+
+msgid "Price calculation method for combined services"
+msgstr ""
+
+msgid ""
+"This setting applies only to combined services such as collaborative or "
+"compound services. Select 'Regular price' to use a fixed price for the "
+"service. Select 'Price based on nested services' to calculate the service "
+"price as the sum of the prices of its nested services."
+msgstr ""
+
+msgid "Regular price"
+msgstr ""
+
+msgid "Price based on nested services"
+msgstr ""
+
 msgid "First value for newly created appointments via backend"
 msgstr ""
 
@@ -4327,14 +4460,6 @@ msgid "Enter this URL as a redirect URI in the Google Cloud Platform"
 msgstr ""
 
 msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step)."
-msgstr ""
-
-msgid ""
 "If there is a lot of events in Google Calendar sometimes this leads to a "
 "lack of memory in PHP when Bookly tries to fetch all events. You can limit "
 "the number of fetched events here."
@@ -4472,6 +4597,9 @@ msgstr ""
 msgid "Show past appointments"
 msgstr ""
 
+msgid "Previous"
+msgstr ""
+
 #, php-format
 msgid ""
 "Sorry, the time slot %date_time% for %service% has been already occupied."
@@ -4492,19 +4620,18 @@ msgstr ""
 msgid "Event was not found"
 msgstr ""
 
+msgid "Ticket was not found"
+msgstr ""
+
+msgctxt "on date"
+msgid "on"
+msgstr ""
+
+msgctxt "at time"
+msgid "at"
+msgstr ""
+
 msgid "Service was not found"
-msgstr ""
-
-#, php-format
-msgid ""
-"%s is used on another domain %s.<br/>In order to use the purchase code on "
-"this domain, please dissociate it in the admin panel of the other domain.<br/"
-">If you do not have access to the admin area, please contact our technical "
-"support at support@bookly.info to transfer the license manually."
-msgstr ""
-
-#, php-format
-msgid "%s is not a valid purchase code for %s."
 msgstr ""
 
 #, php-format
@@ -4986,6 +5113,7 @@ msgstr ""
 msgid "Number of days to shift appointments"
 msgstr ""
 
+msgctxt "on date"
 msgid "On"
 msgstr ""
 
@@ -5029,6 +5157,17 @@ msgstr ""
 msgid "Recurring appointments"
 msgstr ""
 
+msgid "Delete series"
+msgstr ""
+
+msgid "Cancellation reason (optional)"
+msgstr ""
+
+msgid ""
+"This will permanently delete all appointments in this series. This action "
+"cannot be undone."
+msgstr ""
+
 msgid "Delete Appointment"
 msgstr ""
 
@@ -5039,9 +5178,6 @@ msgid "Delete this and the following appointments"
 msgstr ""
 
 msgid "Delete all appointments in series"
-msgstr ""
-
-msgid "Cancellation reason (optional)"
 msgstr ""
 
 msgid "Allow this service to have recurring appointments."
@@ -5426,9 +5562,6 @@ msgid ""
 "appointment"
 msgstr ""
 
-msgid "at"
-msgstr ""
-
 msgid "New recurring booking notification"
 msgstr ""
 
@@ -5546,9 +5679,6 @@ msgstr ""
 msgid "A custom block for displaying staff details"
 msgstr ""
 
-msgid "Advanced"
-msgstr ""
-
 msgid "A custom block for displaying staff advanced settings"
 msgstr ""
 
@@ -5564,7 +5694,7 @@ msgstr ""
 msgid "A custom block for displaying staff special days"
 msgstr ""
 
-msgid "Days off"
+msgid "Days Off"
 msgstr ""
 
 msgid "A custom block for displaying staff days off"
@@ -7401,6 +7531,15 @@ msgstr ""
 msgid "Form view in case of payment has been accepted for processing"
 msgstr ""
 
+msgid "Created"
+msgstr ""
+
+msgid "Rows per page"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
 msgid "Welcome to Bookly and thank you for your choice!"
 msgstr ""
 
@@ -7444,6 +7583,12 @@ msgstr ""
 msgid "Invite"
 msgstr ""
 
+msgid "Copy token"
+msgstr ""
+
+msgid "Copy link"
+msgstr ""
+
 msgid ""
 "You are going to delete access token(s). Please note that tokens will be "
 "automatically revoked, so user(s) associated with deleted token(s) will lose "
@@ -7475,6 +7620,46 @@ msgid "Next billing date"
 msgstr ""
 
 msgid "Deactivation date"
+msgstr ""
+
+msgid "Activate Product"
+msgstr ""
+
+#, php-format
+msgid "You are about to activate %s"
+msgstr ""
+
+msgid ""
+"An amount for the selected plan will be immediately charged from your Bookly "
+"Cloud balance."
+msgstr ""
+
+msgid "Continue"
+msgstr ""
+
+msgid "Activate trial"
+msgstr ""
+
+#, php-format
+msgid "You are about to activate a 7-day Trial for %s"
+msgstr ""
+
+msgid ""
+"During the trial period, you will have full access to all features of this "
+"product - completely free of charge."
+msgstr ""
+
+msgid "No payment will be taken at this stage."
+msgstr ""
+
+msgid ""
+"After the Trial ends, the selected plan will be automatically billed from "
+"your Bookly Cloud balance."
+msgstr ""
+
+msgid ""
+"Important: If you disable the Trial before it ends, it cannot be "
+"reactivated. To continue using the product, activate the selected plan."
 msgstr ""
 
 msgid "Cancel subscription"
@@ -8049,16 +8234,6 @@ msgid ""
 "website if there is no valid SSL certificate installed on your web server."
 msgstr ""
 
-msgid "PHP Sessions"
-msgstr ""
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr ""
-
 msgid "Time settings"
 msgstr ""
 
@@ -8140,6 +8315,9 @@ msgid "Customer new username"
 msgstr ""
 
 msgid "Site address"
+msgstr ""
+
+msgid "Access token link for quick authorization in the mobile app"
 msgstr ""
 
 msgid "Order ID"
@@ -8251,7 +8429,10 @@ msgid ""
 "status</a>."
 msgstr ""
 
-msgid "ICS description for customers"
+msgid "Successful payment appointment status"
+msgstr ""
+
+msgid "Description for customer's calendar"
 msgstr ""
 
 msgid "ICS description for staff"
@@ -8304,6 +8485,14 @@ msgstr ""
 msgid ""
 "If enabled, you will see an indicator near 'Calendar' for newly created "
 "appointments"
+msgstr ""
+
+msgid "Legacy mode"
+msgstr ""
+
+msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
 msgstr ""
 
 msgid "Scrollable calendar"
@@ -8538,21 +8727,6 @@ msgid ""
 "form"
 msgstr ""
 
-msgid "Session storage mode"
-msgstr ""
-
-msgid "Select where to store session data"
-msgstr ""
-
-msgid "Prevent PHP session locking"
-msgstr ""
-
-msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
-msgstr ""
-
 msgid "Show news notifications"
 msgstr ""
 
@@ -8658,6 +8832,9 @@ msgid ""
 "appointment cannot be done (due to changed status, etc.)."
 msgstr ""
 
+msgid "Search settings..."
+msgstr ""
+
 msgid "URL Settings"
 msgstr ""
 
@@ -8679,7 +8856,20 @@ msgstr ""
 msgid "Holidays"
 msgstr ""
 
-msgid "Continue"
+msgid ""
+"Reduce no-shows, keep your staff and customers informed, and send timely "
+"reminders - use SMS Notifications. Send a free test message!"
+msgstr ""
+
+msgid ""
+"Your message has been sent successfully. You can manage your messages in the "
+"'SMS Notifications' section."
+msgstr ""
+
+msgid " Give it a try!"
+msgstr ""
+
+msgid "Send SMS"
 msgstr ""
 
 msgid "Welcome to Bookly!"
@@ -8781,6 +8971,9 @@ msgid "Greetings"
 msgstr ""
 
 msgid "Cloud"
+msgstr ""
+
+msgid "SMS"
 msgstr ""
 
 msgid ""
@@ -9125,9 +9318,17 @@ msgstr ""
 msgid "Your Bookly Staff Cabinet mobile app access token"
 msgstr ""
 
+msgid "Hello"
+msgstr ""
+
 msgid ""
-"Hello.\n"
-"Your access token for Bookly Staff Cabinet mobile app: {access_token}"
+"To log in to the Bookly Staff Cabinet mobile app, please use the following "
+"link"
+msgstr ""
+
+msgid ""
+"If the link does not work, you can manually enter this access token in the "
+"app"
 msgstr ""
 
 msgid "&lt;"
@@ -9751,9 +9952,6 @@ msgstr ""
 msgid "Appointment date"
 msgstr ""
 
-msgid "Created"
-msgstr ""
-
 msgid "Start at"
 msgstr ""
 
@@ -9767,9 +9965,6 @@ msgid "Flag"
 msgstr ""
 
 msgid "Price/Minute"
-msgstr ""
-
-msgid "Regular price"
 msgstr ""
 
 msgid "Price with custom Sender ID"

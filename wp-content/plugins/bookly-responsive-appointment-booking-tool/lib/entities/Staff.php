@@ -32,6 +32,8 @@ class Staff extends Lib\Base\Entity
     /** @var string */
     protected $outlook_data;
     /** @var string */
+    protected $apple_data;
+    /** @var string */
     protected $zoom_authentication = 'default';
     /** @var string */
     protected $zoom_oauth_token;
@@ -66,6 +68,7 @@ class Staff extends Lib\Base\Entity
         'position' => array( 'format' => '%d', 'sequent' => true ),
         'google_data' => array( 'format' => '%s' ),
         'outlook_data' => array( 'format' => '%s' ),
+        'apple_data' => array( 'format' => '%s' ),
         'time_zone' => array( 'format' => '%s' ),
         'zoom_authentication' => array( 'format' => '%s' ),
         'zoom_oauth_token' => array( 'format' => '%s' ),
@@ -608,6 +611,29 @@ class Staff extends Lib\Base\Entity
     public function setOutlookData( $outlook_data )
     {
         $this->outlook_data = $outlook_data;
+
+        return $this;
+    }
+
+    /**
+     * Gets Apple Calendar data
+     *
+     * @return string
+     */
+    public function getAppleData()
+    {
+        return $this->apple_data;
+    }
+
+    /**
+     * Sets Apple Calendar data
+     *
+     * @param string $apple_data
+     * @return $this
+     */
+    public function setAppleData( $apple_data )
+    {
+        $this->apple_data = $apple_data;
 
         return $this;
     }

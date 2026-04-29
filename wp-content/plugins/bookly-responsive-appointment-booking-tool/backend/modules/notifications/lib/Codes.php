@@ -106,6 +106,7 @@ class Codes
             ),
             'mobile_staff_cabinet' => array(
                 'access_token' => array( 'description' => __( 'Access token', 'bookly' ) ),
+                'access_token_link' => array( 'description' => __( 'Access token link for quick authorization in the mobile app', 'bookly' ) ),
             ),
             'order' => array(
                 'order_id' => array( 'description' => __( 'Order ID', 'bookly' ) ),

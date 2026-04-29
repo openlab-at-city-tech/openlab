@@ -12,11 +12,13 @@ class Page extends Lib\Base\Component
     {
         self::enqueueStyles( array(
             'alias' => array( 'bookly-backend-globals', ),
+            'backend' => array( 'tailwind/tailwind.css' ),
         ) );
 
         self::enqueueScripts( array(
             'module' => array( 'js/appointments.js' => array( 'bookly-backend-globals' ) ),
             'frontend' => array( 'js/intlTelInput.min.js' => array( 'bookly-backend-globals' ) ),
+            'backend' => array( 'js/bookly-datatables.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::APPOINTMENTS );
@@ -31,12 +33,29 @@ class Page extends Lib\Base\Component
             'loadingRecords' => __( 'Loading...', 'bookly' ),
             'edit' => __( 'Edit', 'bookly' ),
             'no_result_found' => __( 'No results found', 'bookly' ),
+            'new_appointment' => __( 'New appointment', 'bookly' ),
             'searching' => __( 'Searching', 'bookly' ),
             'attachments' => __( 'Attachments', 'bookly' ),
             'tasks' => array(
                 'enabled' => Lib\Config::tasksActive(),
                 'title' => Proxy\Tasks::getFilterText(),
             ),
+            'filters' => array(
+                'id' => __( 'ID', 'bookly' ),
+                'date' => __( 'Date', 'bookly' ),
+                'created' => __( 'Created', 'bookly' ),
+                'status' => __( 'Status', 'bookly' ),
+                'customer' => __( 'Customer', 'bookly' ),
+                'staff' => __( 'Employee', 'bookly' ),
+                'service' => __( 'Service', 'bookly' ),
+                'location' => __( 'Location', 'bookly' ),
+            ),
+            'rowsPerPage' => __( 'Rows per page', 'bookly' ),
+            'delete' => __( 'Delete', 'bookly' ),
+            'export' => __( 'Export', 'bookly' ),
+            'print' => __( 'Print', 'bookly' ),
+            'reorder' => __( 'Reorder', 'bookly' ),
+            'proEnabled' => Lib\Config::proActive(),
             'datatables' => $datatables,
         ) );
 

@@ -8,7 +8,7 @@ use Bookly\Lib;
  * @method static void   enqueueStaffProfileStyles() Enqueue styles for page Staff.
  * @method static string getAffectedAppointmentsFilter( string $filter_url, int[] $staff_ids ) Get link with filter for appointments page.
  * @method static Lib\Query prepareGetStaffQuery( Lib\Query $query ) Prepare get staff list query.
- * @method static array  renderStaffPage( array $params ) Do stuff on staff page render.
+ * @method static array  prepareCalendarErrors( array $errors, array $params ) Prepare errors for calendar page.
  * @method static array  searchStaff( array $fields, array $columns, Lib\Query $query ) Search staff, prepare query and fields.
  */
 abstract class Shared extends Lib\Base\Proxy

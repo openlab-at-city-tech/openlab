@@ -180,7 +180,10 @@ class AdvancedOptions extends Tool
         $option_value = maybe_unserialize( self::parameter( 'value' ) );
 
         update_option( $option, $option_value );
-        do_action( 'wpml_register_single_string', 'bookly', $option, $option_value );
+
+        if ( strncmp( $option, 'bookly_l10n_', 12 ) === 0 ) {
+            do_action( 'wpml_register_single_string', 'bookly', $option, $option_value );
+        }
 
         wp_send_json_success();
     }

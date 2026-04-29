@@ -3,6 +3,76 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_27_3()
+    {
+        add_option( 'bookly_bc_clmn_min_width', '120' );
+        $this->alterTables( array(
+            'bookly_form_sessions' => array(
+                'ALTER TABLE `%s` CHANGE `token` `token` VARCHAR(64) NOT NULL',
+            ),
+            'bookly_staff' => array(
+                'ALTER TABLE `%s` ADD COLUMN `apple_data` TEXT DEFAULT NULL AFTER `outlook_data`',
+            ),
+            'bookly_services' => array(
+                'ALTER TABLE `%s` CHANGE `online_meetings` `online_meetings` ENUM("off","zoom","google_meet","jitsi","bbb","teams") NOT NULL DEFAULT "off"',
+            ),
+            'bookly_appointments' => array(
+                'ALTER TABLE `%s` ADD COLUMN `apple_event_etag` VARCHAR(255) DEFAULT NULL AFTER `outlook_event_series_id`',
+                'ALTER TABLE `%s` ADD COLUMN `apple_event_id` VARCHAR(255) DEFAULT NULL AFTER `outlook_event_series_id`',
+                'ALTER TABLE `%s` CHANGE `created_from` `created_from` ENUM("bookly","google","outlook","apple") NOT NULL DEFAULT "bookly"',
+                'ALTER TABLE `%s` CHANGE `online_meeting_provider` `online_meeting_provider` ENUM("zoom","google_meet","jitsi","bbb","teams") DEFAULT NULL',
+            ),
+        ) );
+    }
+
+    function update_26_9()
+    {
+        if ( $this->existsTable( 'bookly_form_sessions' ) ) {
+            $this->alterTables( array(
+                'bookly_form_sessions' => array(
+                    'ALTER TABLE `%s` CHANGE `token` `token` VARCHAR(64) NOT NULL',
+                ),
+            ) );
+        } else {
+            $this->createTables( array(
+                'bookly_form_sessions' =>
+                    'CREATE TABLE IF NOT EXISTS `%s` (
+                    `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                    `token` VARCHAR(64) NOT NULL,
+                    `value` TEXT DEFAULT NULL,
+                    `expire` DATETIME NOT NULL,
+                    INDEX `token` (`token`),
+                    INDEX `expire` (`expire`)
+                ) ENGINE = INNODB',
+            ) );
+        }
+    }
+
+    function update_26_8()
+    {
+        $this->createTables( array(
+            'bookly_form_sessions' =>
+                'CREATE TABLE IF NOT EXISTS `%s` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(255) NOT NULL,
+                `value` TEXT DEFAULT NULL,
+                `expire` DATETIME NOT NULL,
+                INDEX `token` (`token`),
+                INDEX `expire` (`expire`)
+            ) ENGINE = INNODB',
+        ) );
+
+        add_option( 'bookly_legacy_calendar', '0' );
+
+        delete_option( 'bookly_gen_prevent_session_locking' );
+        delete_option( 'bookly_gen_session_type' );
+    }
+
+    function update_26_4()
+    {
+        add_option( 'bookly_successful_payment_appointment_status', 'disabled' );
+    }
+
     function update_26_0()
     {
         /** @global \wpdb $wpdb */
@@ -283,7 +353,7 @@ class Updater extends Base\Updater
                 'type' => 'mobile_sc_grant_access_token',
                 'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
                 'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
-                'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+                'message' => __( 'Hello', 'bookly' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
                 'to_staff' => 1,
                 'active' => 1,
                 'settings' => '[]'
@@ -292,7 +362,7 @@ class Updater extends Base\Updater
                 'gateway' => 'sms',
                 'type' => 'mobile_sc_grant_access_token',
                 'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
-                'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+                'message' => __( 'Hello', 'bookly' ) . ",\n\n" . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n" . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
                 'to_staff' => 1,
                 'active' => 1,
                 'settings' => '[]'

@@ -16,8 +16,10 @@ class Page extends Lib\Base\Ajax
      */
     public static function render()
     {
+        $calendar_version = get_option( 'bookly_legacy_calendar' ) ? 'legacy' : 'latest';
+
         self::enqueueStyles( array(
-            'module' => array( 'css/event-calendar.min.css' => array( 'bookly-backend-globals' ) ),
+            'module' => array( 'css/' . ( $calendar_version !== 'latest' ? 'event-calendar-4.min.css' : 'event-calendar.min.css' ) => array( 'bookly-backend-globals' ) ),
         ) );
 
         $id = Lib\Entities\Appointment::query()->fetchVar( 'MAX(id)' );
@@ -57,8 +59,8 @@ class Page extends Lib\Base\Ajax
             $staff_members ?
                 array(
                     'module' => array(
-                        'js/event-calendar.min.js' => array( 'bookly-backend-globals' ),
-                        'js/calendar-common.js' => array( 'bookly-event-calendar.min.js' ),
+                        'js/' . ( $calendar_version !== 'latest' ? 'event-calendar-4.min.js' : 'event-calendar.min.js' ) => array( 'bookly-backend-globals' ),
+                        'js/calendar-common.js' => array( 'bookly-' . ( $calendar_version !== 'latest' ? 'event-calendar-4.min.js' : 'event-calendar.min.js' ) ),
                         'js/calendar.js' => array( 'bookly-calendar-common.js', 'bookly-dropdown.js' ),
                     ),
                     'backend' => array(
@@ -76,6 +78,8 @@ class Page extends Lib\Base\Ajax
         wp_localize_script( 'bookly-calendar.js', 'BooklyL10n', array_merge(
             Lib\Utils\Common::getCalendarSettings(),
             array(
+                'calendar_version' => $calendar_version,
+                'clmn_min_width' => get_option( 'bookly_bc_clmn_min_width', '120' ),
                 'delete' => __( 'Delete', 'bookly' ),
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),
@@ -182,8 +186,8 @@ class Page extends Lib\Base\Ajax
     {
         $one_participant = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_one_participant' ) ) . '</div>' );
         $many_participants = Lib\Utils\Codes::tokenize( '<div>' . str_replace( "\n", '</div><div>', get_option( 'bookly_cal_many_participants' ) ) . '</div>' );
-        $tooltip = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap ml-1">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{appointment_time} - {appointment_end_time}</span>' );
-        $tooltip_all_day = Lib\Utils\Codes::tokenize( '<i class="fas fa-fw fa-circle mr-1" style="color:{appointment_color}"></i><span>{service_name}</span>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}<span class="d-block text-muted">{description}</span>' );
+        $tooltip = Lib\Utils\Codes::tokenize( '<div class="d-block text-muted mb-2">{description}</div>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap ml-1">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}' );
+        $tooltip_all_day = Lib\Utils\Codes::tokenize( '<div class="d-block text-muted mb-2">{description}</div>{#each participants as participant}<div class="d-flex"><div class="text-muted flex-fill" style="overflow-wrap: anywhere;">{participant.client_name}</div><div class="text-nowrap">{#if participant.nop > 1}<span class="badge badge-info mr-1"><i class="fas fa-fw fa-user"></i>×{participant.nop}</span>{/if}<span class="badge badge-{participant.status_color}">{participant.status}</span></div></div>{/each}' );
         $postfix_any = sprintf( ' (%s)', get_option( 'bookly_l10n_option_employee' ) );
         $coloring_mode = get_option( 'bookly_cal_coloring_mode' );
         $default_codes = array(
@@ -249,14 +253,14 @@ class Page extends Lib\Base\Ajax
                 'appointment_id' => $appointment['id'],
                 'appointment_notes' => $appointment['appointment_notes'],
                 'booking_number' => Config::groupBookingActive() ? $appointment['id'] . '-' . $appointment['ca_id'] : $appointment['ca_id'],
-                'client_birthday' => $appointment['client_birthday'],
-                'client_email' => $appointment['client_email'],
-                'client_first_name' => $appointment['client_first_name'],
-                'client_last_name' => $appointment['client_last_name'],
-                'client_name' => $appointment['client_name'],
+                'client_birthday' => Common::stripWpKses( $appointment['client_birthday'] ),
+                'client_email' => Common::stripWpKses( $appointment['client_email'] ),
+                'client_first_name' => Common::stripWpKses( $appointment['client_first_name'] ),
+                'client_last_name' => Common::stripWpKses( $appointment['client_last_name'] ),
+                'client_name' => Common::stripWpKses( $appointment['client_name'] ),
                 'client_note' => $appointment['client_note'],
-                'client_phone' => $appointment['client_phone'],
-                'number_of_persons' => $appointment['number_of_persons'],
+                'client_phone' =>  Common::stripWpKses( $appointment['client_phone'] ),
+                'number_of_persons' => Common::stripWpKses( $appointment['number_of_persons'] ),
                 'payment_status' => Lib\Entities\Payment::statusToString( $appointment['payment_status'] ),
                 'payment_type' => Lib\Entities\Payment::typeToString( $appointment['payment_gateway'] ),
                 'status' => $appointment['status'],
@@ -368,7 +372,7 @@ class Page extends Lib\Base\Ajax
             $codes = Proxy\Shared::prepareAppointmentCodesData( $codes, $appointment, $participants );
 
             switch ( $coloring_mode ) {
-                case 'status';
+                case 'status':
                     $color = isset( $colors[ $event_status ] ) ? $colors[ $event_status ] : $colors['mixed'];
                     break;
                 case 'staff':
@@ -396,6 +400,7 @@ class Page extends Lib\Base\Ajax
                     'waitlisted' => $participants === 'one' ? (int) $appointment['on_waiting_list'] : null,
                     'staff_any' => (int) $appointment['staff_any'],
                     'overall_status' => $overall_status,
+                    'participants' => $participants
                 ),
             );
             if ( $appointment['duration'] * max( 1, $appointment['units'] ) >= DAY_IN_SECONDS && $appointment['start_time_info'] ) {

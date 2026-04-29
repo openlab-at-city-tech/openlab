@@ -36,7 +36,7 @@ class Zapier extends Product
      */
     public static function checkApiKey( $api_key )
     {
-        return $api_key && ( $api_key == get_option( 'bookly_cloud_zapier_api_key' ) );
+        return $api_key && ( $api_key === get_option( 'bookly_cloud_zapier_api_key' ) );
     }
 
     /**

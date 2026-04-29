@@ -9,15 +9,18 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:30+0000\n"
-"PO-Revision-Date: 2025-10-30 02:39+0000\n"
+"PO-Revision-Date: 2026-03-30 13:17+0000\n"
 "Last-Translator: \n"
 "Language-Team: Chinese (Taiwan)\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.4.11"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
 
 #, php-format
 msgid " and %d more item"
 msgid_plural " and %d more items"
 msgstr[0] "和 %d 項目"
+
+msgid " Give it a try!"
+msgstr "來嘗試一下！"
 
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
@@ -67,27 +70,8 @@ msgid_plural "%d years"
 msgstr[0] "%d 年"
 
 #, php-format
-msgid "%s day"
-msgid_plural "%s days"
-msgstr[0] "%s天"
-
-#, php-format
 msgid "%s has reached the limit of bookings for this service"
 msgstr "%s 已達到此服務的限制數量"
-
-#, php-format
-msgid "%s is not a valid purchase code for %s."
-msgstr "%s 不是 %s 的有效購買代碼。"
-
-#, php-format
-msgid ""
-"%s is used on another domain %s.<br/>In order to use the purchase code on "
-"this domain, please dissociate it in the admin panel of the other domain."
-"<br/>If you do not have access to the admin area, please contact our "
-"technical support at support@bookly.info to transfer the license manually."
-msgstr ""
-"％s在另一個域％s上使用。<br/>要在該域上使用購買代碼，請在另一個域的管理面板中將其取消關聯。<br/>"
-"如果您無權訪問管理員區，請通過support@bookly.info與我們的技術支援聯繫，以手動轉讓許可證。"
 
 #, php-format
 msgid "%s of %s"
@@ -169,12 +153,6 @@ msgstr "第三次提醒客戶即將到來的預約（需要安裝cron）"
 
 msgid "50 - 249 employees"
 msgstr "50 - 249 名員工"
-
-#, php-format
-msgid ""
-"<a class=\"%s\" href=\"#\">Click here</a> to dissociate this purchase code "
-"from the current domain (use to move the plugin to another site)."
-msgstr "<a class=\"%s\" href=\"#\">點擊此處</a>可以將該購買代碼與當前網址解除聯繫（用於將插件移至另一個網站）。"
 
 #, php-format
 msgid ""
@@ -291,6 +269,9 @@ msgstr "訪問您的訂單已被禁用。"
 msgid "Access token"
 msgstr "訪問令牌"
 
+msgid "Access token link for quick authorization in the mobile app"
+msgstr "移動應用中的快速授權訪問令牌鏈接"
+
 msgid "Access tokens"
 msgstr "訪問令牌"
 
@@ -312,8 +293,14 @@ msgstr "行動"
 msgid "Action required"
 msgstr "待操作"
 
+msgid "Activate Product"
+msgstr "激活產品"
+
 msgid "Activate purchase code"
 msgstr "激活購買代碼"
+
+msgid "Activate trial"
+msgstr "激活試用"
 
 msgid "Active from"
 msgstr "有效於"
@@ -425,9 +412,6 @@ msgstr "添加促銷碼"
 
 msgid "Add recipients"
 msgstr "添加收件人"
-
-msgid "Add Service"
-msgstr "添加服務"
 
 msgid "Add service"
 msgstr "添加服務"
@@ -583,6 +567,11 @@ msgstr "之後"
 msgid "After Service step"
 msgstr "服務步驟後"
 
+msgid ""
+"After the Trial ends, the selected plan will be automatically billed from "
+"your Bookly Cloud balance."
+msgstr "試用結束後，所選方案將在您的Bookly雲端餘額中自動計費。"
+
 msgid "After Time step (Extras duration settings will be ignored)"
 msgstr "時間步驟後（額外的時間長度設置將被忽略）"
 
@@ -718,6 +707,11 @@ msgid "Amount to pay"
 msgstr "要付數目"
 
 msgid ""
+"An amount for the selected plan will be immediately charged from your Bookly "
+"Cloud balance."
+msgstr "所選方案的金額將在您的Bookly雲端餘額中立即扣除。"
+
+msgid ""
 "An email containing the confirmation code has been sent to your email "
 "address."
 msgstr "確認碼已發到你的電郵地址。"
@@ -779,11 +773,23 @@ msgstr "API用戶名"
 msgid "App ID"
 msgstr "應用程式號"
 
+msgid "App-specific password"
+msgstr "應用專用密碼"
+
 msgid "Appearance"
 msgstr "外觀"
 
 msgid "Appearance form name"
 msgstr "外觀表單名稱"
+
+msgid "Apple Calendar"
+msgstr "Apple Calendar"
+
+msgid "Apple Calendar event"
+msgstr "Apple Calendar事件"
+
+msgid "Apple Calendar integration"
+msgstr "Apple Calendar整合"
 
 msgid "Application ID"
 msgstr "應用程式號"
@@ -883,16 +889,6 @@ msgstr "您確認要更改該處理後標題？更改該處理後標題會導致
 msgid "Are you sure you want to disable Auto-Recharge?"
 msgstr "您確定要禁止自動充值嗎？"
 
-#, php-format
-msgid ""
-"Are you sure you want to dissociate this purchase code from %s?\n"
-"\n"
-"This will also remove the entered purchase code from this site."
-msgstr ""
-"您確定要將此購買代碼與％s解除關聯嗎？\n"
-"\n"
-"這還將刪除輸入了在這網站的購買代碼。"
-
 msgid "Are you sure?"
 msgstr "確定？"
 
@@ -920,11 +916,12 @@ msgstr "關聯付款狀態"
 msgid "Associated staff member"
 msgstr "關聯員工"
 
-msgid "at"
-msgstr "在"
-
 msgid "At the top of your screen press on App ID to copy it."
 msgstr "在熒幕頂部按App ID來複製。"
+
+msgctxt "at time"
+msgid "at"
+msgstr "在"
 
 msgid "Attach ICS file"
 msgstr "附加ICS文件"
@@ -1088,9 +1085,6 @@ msgstr "主體"
 
 msgid "Body height"
 msgstr "身高"
-
-msgid "Book More"
-msgstr "預約更多"
 
 msgid "Book more"
 msgstr "預訂更多"
@@ -1480,9 +1474,6 @@ msgstr "結算表單"
 msgid "Child care"
 msgstr "兒童保育"
 
-msgid "Child Payment"
-msgstr "子付款"
-
 msgid "Child payment"
 msgstr "子付款"
 
@@ -1728,6 +1719,11 @@ msgid "Conditions"
 msgstr "條件"
 
 msgid ""
+"Configure what information should be placed in the title of Apple Calendar "
+"event."
+msgstr "設定Apple Calendar事件標題中應該涵蓋的資訊。"
+
+msgid ""
 "Configure what information should be placed in the title of Google Calendar "
 "event."
 msgstr "設定Google Calendar事件標題中應該涵蓋的資訊。"
@@ -1752,9 +1748,6 @@ msgstr "確認密碼"
 msgid "Confirmation code"
 msgstr "確認碼"
 
-msgid "Congrats!"
-msgstr "恭喜！"
-
 msgid "Congratulations!!!"
 msgstr "恭喜！"
 
@@ -1763,6 +1756,15 @@ msgstr "連接"
 
 msgid "Connected"
 msgstr "已連接"
+
+msgid "Connecting..."
+msgstr "正在連接......"
+
+msgid "Connection error. Please try again."
+msgstr "連接錯誤。請重試。"
+
+msgid "Connection failed. Please reconnect."
+msgstr "連接失敗。請重新連接。"
 
 msgid "Consulting"
 msgstr "咨詢"
@@ -1788,6 +1790,9 @@ msgstr "複製"
 msgid "Copied to clipboard"
 msgstr "複製到剪貼板"
 
+msgid "Copy Apple Calendar event titles"
+msgstr "複製Apple Calendar事件標題"
+
 msgid "Copy checkout URL"
 msgstr "複製結算URL"
 
@@ -1796,6 +1801,9 @@ msgstr "複製Google日曆活動標題"
 
 msgid "Copy invoice to another email(s)"
 msgstr "將發票複製到其他電子郵件"
+
+msgid "Copy link"
+msgstr "複製鏈接"
 
 msgid "Copy of"
 msgstr "副本"
@@ -1812,6 +1820,9 @@ msgstr "複製短代碼"
 
 msgid "Copy to clipboard"
 msgstr "複製到剪貼板"
+
+msgid "Copy token"
+msgstr "複製令牌"
 
 msgid "Cost"
 msgstr "成本"
@@ -1910,9 +1921,6 @@ msgstr "已建立"
 msgid "Created at any time"
 msgstr "在任何時間建立"
 
-msgid "Creation Date"
-msgstr "建立日期"
-
 msgid "Creation date"
 msgstr "建立日期"
 
@@ -2002,9 +2010,6 @@ msgstr ""
 msgid "Customer cabinet (all services displayed in tabs)"
 msgstr "客戶櫃（所有服務顯示在選項卡中）"
 
-msgid "Customer Email"
-msgstr "客戶電郵"
-
 msgid "Customer email"
 msgstr "顧客電郵"
 
@@ -2026,9 +2031,6 @@ msgstr "客戶資料說明"
 msgid "Customer information field"
 msgstr "客戶信息欄"
 
-msgid "Customer Name"
-msgstr "客戶名稱"
-
 msgid "Customer name"
 msgstr "顧客名稱"
 
@@ -2043,9 +2045,6 @@ msgstr "客戶對預約的留言"
 
 msgid "Customer notes for gift card"
 msgstr "禮品卡客戶須知"
-
-msgid "Customer Phone"
-msgstr "客戶電話"
 
 msgid "Customer phone"
 msgstr "顧客電話"
@@ -2123,9 +2122,6 @@ msgid "Days from the first booking"
 msgstr "天-首次預訂"
 
 msgid "Days Off"
-msgstr "休息日"
-
-msgid "Days off"
 msgstr "休息日"
 
 msgid "Deactivate Bookly Pro"
@@ -3006,6 +3002,9 @@ msgstr "僅刪除此預約"
 msgid "Delete package appointment"
 msgstr "刪除包裹預約"
 
+msgid "Delete series"
+msgstr "刪除系列"
+
 msgid "Delete this and the following appointments"
 msgstr "刪除此預約和以下預約"
 
@@ -3042,24 +3041,14 @@ msgid ""
 "%s in <b>Events</b>."
 msgstr "根據模式（沙箱或生產），按<b>添加訂閱</b>按鈕，輸入如下URL作為事件%s並在<b>事件</b>中選擇%s。"
 
-msgid "Deposit"
-msgstr "存款"
-
-msgid "Deposit only"
-msgstr "只需按金"
-
-msgid "Deposit options"
-msgstr ""
-"按金選項\n"
-
 msgid "Deposit or full price (deposit by default)"
 msgstr "按金或全價（默認按金）"
 
-msgid "Deposit value"
-msgstr "存款金額"
-
 msgid "Description"
 msgstr "形容"
+
+msgid "Description for customer's calendar"
+msgstr "客戶日曆的描述"
 
 msgid "Design consultants"
 msgstr "設計顧問"
@@ -3155,6 +3144,9 @@ msgstr "顯示前端日曆"
 
 msgid "Display gift cards"
 msgstr "展示禮品卡"
+
+msgid "Display only busy slots"
+msgstr "僅顯示繁忙時段"
 
 msgid "Display packages"
 msgstr "展示包裹"
@@ -3265,6 +3257,15 @@ msgid ""
 "code. Once the trial ends, purchase code activation is required."
 msgstr "在試用期內，您無需輸入購買代碼即可使用附加組件。在試用期結束後，需要激活購買代碼。"
 
+#, fuzzy
+#| msgid ""
+#| "During the trial period, you will have full access to all features of "
+#| "this product  completely free of charge."
+msgid ""
+"During the trial period, you will have full access to all features of this "
+"product - completely free of charge."
+msgstr "在試用期內，您可以免費使用本產品的所有功能。"
+
 msgid "E.g"
 msgstr "如，"
 
@@ -3312,9 +3313,6 @@ msgstr "編輯禮品卡"
 
 msgid "Edit gift card type"
 msgstr "編輯禮品卡類型"
-
-msgid "Edit Group"
-msgstr "編輯組別"
 
 msgid "Edit group"
 msgstr "編輯組別"
@@ -3432,12 +3430,6 @@ msgid ""
 "Enable this option if you want to limit the possibility of booking within "
 "the service capacity to one time."
 msgstr "如果要將服務能力內的預訂次數限制為一次，請啟用此選項。"
-
-msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
-msgstr "啟用這個選項，Bookly在完成PHP會話後會自動關閉會話。這樣可以防止會話鎖定，否則可能導致其他各種進程超時或失敗"
 
 msgid ""
 "Enable this option to make slot length equal to service duration at the Time "
@@ -3584,7 +3576,9 @@ msgid ""
 "accordance with Bookly data."
 msgstr "根據Bookly資料在您的Mailchimp觀眾設定中輸入欄位的標籤。"
 
-msgid "Enter the URL of the page where this forms shortcode is placed."
+#, fuzzy
+#| msgid "Enter the URL of the page where this forms shortcode is placed."
+msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr "輸入放置此表單短代碼的頁面的URL。"
 
 msgid "Enter this URL as a redirect URI in the Google Cloud Platform"
@@ -3599,6 +3593,12 @@ msgstr "輸入來自電子郵件的驗證碼"
 
 msgid "Enter verification code from SMS"
 msgstr "輸入來自SMS的驗證碼"
+
+msgid ""
+"Enter your iCloud email and the app-specific password in Edit Staff > "
+"Advanced > Apple Calendar."
+msgstr ""
+"在 編輯員工 > 高級 > Apple Calendar 中輸入您的iCloud電郵和應用專用密碼。\n"
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "輸入您的購買代碼以獲得Bookly附加組件或捆綁件"
@@ -3626,9 +3626,6 @@ msgstr "發送電子郵件時出現錯誤。"
 
 msgid "Error sending support request."
 msgstr "發送錯誤的支援請求。"
-
-msgid "Error."
-msgstr "錯誤。"
 
 msgid "Escape rooms"
 msgstr "密室逃脫"
@@ -3708,6 +3705,9 @@ msgstr "過期"
 
 msgid "Explore Bookly products"
 msgstr "探索Bookly產品"
+
+msgid "Export"
+msgstr "導出"
 
 msgid "Export only active coupons"
 msgstr "導出有效的優惠券"
@@ -3912,9 +3912,6 @@ msgstr "空閒"
 msgid "Free/Busy"
 msgstr "空閒/忙碌"
 
-msgid "Free/busy"
-msgstr "空閒/忙碌"
-
 msgid "Frequencies"
 msgstr "頻率"
 
@@ -3950,6 +3947,13 @@ msgstr "一般設置"
 
 msgid "Generate"
 msgstr "生成"
+
+msgid "Generate a new app-specific password for Bookly."
+msgstr "為Bookly生成新的應用專用密碼。"
+
+#, php-format
+msgid "Generate an app-specific password at %s"
+msgstr "在%s生成一個應用專用密碼"
 
 msgid "Generate new API Key"
 msgstr "產生新的API密鑰"
@@ -4002,6 +4006,9 @@ msgstr "禮品卡設定"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "提供的電子郵件地址已經訂閱，謝謝！"
+
+msgid "Go to appleid.apple.com and sign in with your Apple ID."
+msgstr "前往appleid.apple.com並使用您的Apple ID登入。"
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4090,6 +4097,9 @@ msgstr "頁頭高度"
 
 msgid "Headers"
 msgstr "頁頭"
+
+msgid "Hello"
+msgstr "您好"
 
 msgid ""
 "Hello,\n"
@@ -4663,13 +4673,6 @@ msgstr ""
 
 msgid ""
 "Hello.\n"
-"Your access token for Bookly Staff Cabinet mobile app: {access_token}"
-msgstr ""
-"您好。\n"
-"您的Bookly Staff Cabinet移動應用程式訪問令牌：{access_token}"
-
-msgid ""
-"Hello.\n"
 "Your agenda for tomorrow is:\n"
 "{next_day_agenda}"
 msgstr ""
@@ -4833,8 +4836,8 @@ msgstr "ICalendar庫"
 msgid "ICalendar feed URL"
 msgstr "ICalendar庫URL"
 
-msgid "ICS description for customers"
-msgstr "客戶ICS描述"
+msgid "iCloud email"
+msgstr "iCloud電郵"
 
 msgid "ICS description for staff"
 msgstr "員工ICS描述"
@@ -4869,6 +4872,12 @@ msgid ""
 "they have been edited in Bookly Calendar"
 msgstr ""
 "如果啟用，在Bookly Calendar中進行編輯後，原本複製到Bookly的Google Calendar事件描述，將被Bookly約會資料覆蓋"
+
+msgid ""
+"If enabled then titles of Apple Calendar events will be copied to Bookly "
+"appointments. If disabled, a standard title \"Apple Calendar event\" will be "
+"used."
+msgstr "若啟用，則Apple Calendar事件標題將被複製到Bookly預約。若禁用，則使用\"Apple Calendar事件\"標準標題。"
 
 msgid ""
 "If enabled then titles of Google Calendar events will be copied to Bookly "
@@ -4960,6 +4969,11 @@ msgid ""
 msgstr "如啟用，則後端日曆將佔用熒幕的一部分並保持可滾動狀態。如禁用，則後端日曆將佔用更多空間並隨整個頁面滾動。"
 
 msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
+msgstr "若啟用，日曆將使用兼容模式，這將提高與舊瀏覽器的兼容性。"
+
+msgid ""
 "If enabled, the card will be automatically associated with the customer who "
 "purchases it via the frontend booking form"
 msgstr "如啟用，卡片將自動關聯通過前端預訂表單購買該卡的客戶"
@@ -4996,6 +5010,11 @@ msgid ""
 msgstr "若導入的文件不包含狀態值列，請選擇“自定義”並設定預約的默認狀態。"
 
 msgid ""
+"If the link does not work, you can manually enter this access token in the "
+"app"
+msgstr "若鏈接無法使用，您可以在應用中手動輸入此訪問令牌"
+
+msgid ""
 "If the prices for your services include taxes, select include taxes. If the "
 "prices for your services do not include taxes, select exclude taxes."
 msgstr "如果您的服務價格包括稅收，請選擇包括稅收。如果您的服務價格不包括稅收，請選擇不包括稅收。"
@@ -5003,6 +5022,12 @@ msgstr "如果您的服務價格包括稅收，請選擇包括稅收。如果您
 #, php-format
 msgid "If the problem persists, contact our support at %s."
 msgstr "若問題仍然存在，請通過%s聯絡我們的客服。"
+
+msgid ""
+"If there are a lot of events in Apple Calendar sometimes this leads to a "
+"lack of memory in PHP when Bookly tries to fetch all events. You can limit "
+"the number of fetched events here."
+msgstr "若Apple Calendar存在多個事件，有時會導致PHP在Bookly試圖獲取所有事件的內存不足。您可在此限制獲取事件的數量。"
 
 msgid ""
 "If there is a lot of events in Google Calendar sometimes this leads to a "
@@ -5050,18 +5075,26 @@ msgid ""
 msgstr "如果啟用此選項，客戶的電子郵件地址將作為發件人地址曏工作人員和管理員發送通知。"
 
 msgid ""
+"If this option is enabled then the front-end calendar will only show "
+"appointments with busy status (pending or approved). Free/available slots "
+"will not be displayed."
+msgstr "若啟用此選項，則前端日曆將只顯示繁忙狀態（待定或已批准）的預約。空閒/可用時段將不顯示。"
+
+msgid ""
 "If this setting is enabled then Bookly will be creating WordPress user "
 "accounts for all new customers. If the user is logged in then the new "
 "customer will be associated with the existing user account."
 msgstr "如果啟用此設定，Bookly將為所有新客戶創建WordPress賬戶。如果用戶已登錄，則新的客戶將與現有的用戶帳戶相關聯。"
 
-#, php-format
 msgid ""
 "If this setting is enabled then online meetings will be created for new "
-"appointments with the selected online meeting provider. Make sure that the "
-"provider is configured properly in Settings > <a href=\"%s\">Online "
-"Meetings</a>"
-msgstr "如果這個設置生效，建立網上會議將會交由選定的會議供應商。記得確保設置中的供應商設定正確 <a href=\"%s\">網上會議</a>"
+"appointments with the selected online meeting provider."
+msgstr "若啟用此設定，則將為與所選在線會議供應者的新預約創建在線會議。"
+
+msgid ""
+"If this setting is enabled then online meetings will be created for new "
+"event bookings with the selected online meeting provider."
+msgstr "若啟用此設定，則將為與所選在線會議供應者的新活動預訂創建在線會議。"
 
 msgid ""
 "If this setting is enabled then only business days will be visible in the "
@@ -5112,6 +5145,11 @@ msgid ""
 msgstr "如果您選擇Google Meet，則將為已配置了Google Calendar的員工創建會議。"
 
 msgid ""
+"If you choose Microsoft Teams then meetings will be created for those staff "
+"members who have Outlook Calendar configured."
+msgstr "若選擇Microsoft Teams，則將為設定了Outlook Calendar的員工創建會議。"
+
+msgid ""
 "If you do not provide a valid purchase code within {days}, access to your "
 "bookings will be disabled."
 msgstr "如果您在{days}內沒有提供有效的購買代碼，您的預訂將被停用。"
@@ -5157,7 +5195,7 @@ msgid ""
 "You can also send notifications as if all customers were added as new by "
 "selecting \"Send as for new\"."
 msgstr ""
-"如果您在此約會添加了新客戶，或更改了現有客戶的約會狀態，並且希望將相應的記錄以電子郵件或SMS發送給收件人，請在點擊發送之前選擇\"新的或狀態更改下發送\"選項。您還可以通過選擇\"以新的形式發送\"來發送通知，就好像所有客戶也是新添加客戶一樣。"
+"如果您在此約會添加了新客戶，或更改了現有客戶的約會狀態，並且希望將相應的記錄以電子郵件或SMS發送給收件人，請在點擊發送之前選擇\"如果有新狀態或狀態更改則發送\"選項。您還可以通過選擇\"按新增发送\"來發送通知，就好像所有客戶也是新添加客戶一樣。"
 
 #, php-format
 msgid ""
@@ -5251,6 +5289,17 @@ msgstr "導入成功"
 
 msgid "Important"
 msgstr "重要"
+
+msgid ""
+"Important: If you disable the Trial before it ends, it cannot be reactivated."
+" To continue using the product, activate the selected plan."
+msgstr "重要：若您在試用結束前禁用了試用，將無法重新激活。若要繼續使用該產品，請激活所選方案。"
+
+msgid ""
+"Important: your website must use HTTPS. Google Calendar API will be able to "
+"send notifications only if there is a valid SSL certificate installed on "
+"your web server."
+msgstr "重要提示：您的網站必須使用HTTPS。僅當您的網頁服務器安裝了有效的SSL證書，Google Calendar API才能夠發送通知。"
 
 msgid "Imported appointments will not be synced with external calendars."
 msgstr "導入的預約將不會與外部日曆同步。"
@@ -5631,6 +5680,9 @@ msgstr "給我們留言"
 msgid "Leave your comment"
 msgstr "留下意見"
 
+msgid "Legacy mode"
+msgstr "兼容模式"
+
 msgid "Legal services"
 msgstr "法律服務"
 
@@ -5808,6 +5860,12 @@ msgstr "使選擇所需員工為必需"
 msgid "Make selecting location required"
 msgstr "要求選擇位置"
 
+#, php-format
+msgid ""
+"Make sure that the provider is configured properly in Settings > <a "
+"href=\"%s\">Online Meetings</a>"
+msgstr "確保在設定> <a href=\"%s\">在線會議</a>中正確配置供應者"
+
 msgid "Manual"
 msgstr "手動"
 
@@ -5843,6 +5901,9 @@ msgstr "醫療"
 
 msgid "Medical Clinics & Doctors"
 msgstr "醫療診所&醫生"
+
+msgid "Meeting host"
+msgstr "會議主持"
 
 msgid "Meeting rooms"
 msgstr "會議室"
@@ -5993,6 +6054,9 @@ msgstr "員工分類名稱"
 msgid "Name of ticket type"
 msgstr "門票類型名稱"
 
+msgid "Navigate to Sign-In and Security > App-Specific Passwords."
+msgstr "前往 登入和安全 > 應用專用密碼。"
+
 #, php-format
 msgid ""
 "Navigate to the <a href=\"%s\" target=\"_blank\">API Keys section</a> of "
@@ -6052,9 +6116,6 @@ msgstr "新禮品卡"
 
 msgid "New gift card type"
 msgstr "新禮品卡類型"
-
-msgid "New Group"
-msgstr "新組別"
 
 msgid "New group"
 msgstr "新組別"
@@ -6237,6 +6298,9 @@ msgstr "尚無付款"
 msgid "No payment methods available. Please contact service provider."
 msgstr "無可用支付方式。請聯繫服務供應商。"
 
+msgid "No payment will be taken at this stage."
+msgstr "在此階段將不收取任何費用。"
+
 msgid "No payments for selected period and criteria."
 msgstr "所選期間和條件下沒有付款。"
 
@@ -6245,9 +6309,6 @@ msgstr "沒有記錄時間選擇。"
 
 msgid "No records."
 msgstr "沒有記錄。"
-
-msgid "No result found"
-msgstr "找不到結果"
 
 msgid "No results found"
 msgstr "未發現結果"
@@ -6287,9 +6348,6 @@ msgstr "沒有更新"
 
 msgid "No, update just here in services"
 msgstr "不，只更新在服務這裏"
-
-msgid "No."
-msgstr "號"
 
 msgid "Nope, maybe later"
 msgstr "不用了，或許之後再算"
@@ -6501,6 +6559,10 @@ msgstr "通知員工有關從候補名單設定預約"
 msgid "Notifications"
 msgstr "通知"
 
+msgctxt "number"
+msgid "No."
+msgstr "No."
+
 msgid "number of appointments"
 msgstr "預約數目"
 
@@ -6549,9 +6611,6 @@ msgstr "數字欄"
 msgid "OFF"
 msgstr "關閉"
 
-msgid "Off"
-msgstr "關閉"
-
 msgid "Officials"
 msgstr "辦公人員"
 
@@ -6567,7 +6626,12 @@ msgstr "好，您值得擁有"
 msgid "Old password"
 msgstr "舊密碼"
 
+msgctxt "on date"
 msgid "On"
+msgstr "于"
+
+msgctxt "on date"
+msgid "on"
 msgstr "在"
 
 msgid "On hold"
@@ -6685,6 +6749,10 @@ msgstr "訂單ID"
 msgid "order ID"
 msgstr "訂單ID"
 
+msgctxt "order of elements"
+msgid "Reorder"
+msgstr "再訂購"
+
 msgid "Organizer"
 msgstr "主辦方"
 
@@ -6784,12 +6852,6 @@ msgstr "密碼"
 
 msgid "Passwords don't match"
 msgstr "密碼不符"
-
-msgid "Passwords mismatch"
-msgstr "密碼不符"
-
-msgid "Passwords must be the same."
-msgstr "密碼必須相同。"
 
 msgid "Paused"
 msgstr "已暫停"
@@ -6951,9 +7013,6 @@ msgstr "員工照片"
 msgid "Photographers"
 msgstr "攝影師"
 
-msgid "PHP Sessions"
-msgstr "PHP會話"
-
 msgid "Physiologists"
 msgstr "生理學家"
 
@@ -7037,6 +7096,9 @@ msgstr "請輸入服務名稱"
 
 msgid "Please enter your email (optional)"
 msgstr "請輸入您的電子郵件（可選）"
+
+msgid "Please fill in both fields."
+msgstr "請填寫兩個字段。"
 
 msgid "Please note that \"I'm available on or after\" picker will be hidden"
 msgstr "請注意，“我在那天或之後有空”的選項將被隱藏"
@@ -7230,6 +7292,22 @@ msgstr "請檢查您的電子郵件以確認訂閱。謝謝！"
 msgid "Port"
 msgstr "端口"
 
+msgctxt "portion of the payment"
+msgid "Deposit"
+msgstr "定金"
+
+msgctxt "portion of the payment"
+msgid "Deposit only"
+msgstr "只收取定金"
+
+msgctxt "portion of the payment"
+msgid "Deposit options"
+msgstr "定金選項"
+
+msgctxt "portion of the payment"
+msgid "Deposit value"
+msgstr "定金數值"
+
 msgid "Postal Code"
 msgstr "郵政編碼"
 
@@ -7245,14 +7323,20 @@ msgstr "以快速且清晰的形式呈現活動和售票情況。"
 msgid "Prevent caching of pages with booking form"
 msgstr "防止緩存預約表格頁面"
 
-msgid "Prevent PHP session locking"
-msgstr "防止PHP會話鎖定"
-
 msgid "Preview"
 msgstr "預視"
 
+msgid "Previous"
+msgstr "之前"
+
 msgid "Price"
 msgstr "售價"
+
+msgid "Price based on nested services"
+msgstr "基於嵌套服務的價格"
+
+msgid "Price calculation method for combined services"
+msgstr "合併服務的價格計算方法"
 
 msgid "Price correction"
 msgstr "價格修正"
@@ -7301,9 +7385,6 @@ msgstr "使用功能要求"
 
 msgid "Processing"
 msgstr "處理中"
-
-msgid "Processing..."
-msgstr "處理..."
 
 msgid "Product not found."
 msgstr "找不到產品。"
@@ -7482,6 +7563,11 @@ msgstr "轉向連接URI"
 msgid "Redirect URL for OAuth"
 msgstr "OAuth的轉向URL"
 
+msgid ""
+"Reduce no-shows, keep your staff and customers informed, and send timely "
+"reminders - use SMS Notifications. Send a free test message!"
+msgstr "減少缺席情況，讓您的員工和客戶得到通知，發送即時提醒——使用SMS短訊通知。來發送一條免費的測試短訊吧！"
+
 msgid "Reference"
 msgstr "參考"
 
@@ -7552,7 +7638,7 @@ msgid "Renew"
 msgstr "更新"
 
 msgid "Reorder"
-msgstr "重新排序"
+msgstr "再訂購"
 
 msgid "Repeat"
 msgstr "重覆"
@@ -7635,6 +7721,9 @@ msgstr "撤銷"
 msgid "Rollback"
 msgstr "回退"
 
+msgid "Rows per page"
+msgstr "每頁行數"
+
 msgid "Run tests automatically"
 msgstr "自動運行測試"
 
@@ -7658,6 +7747,9 @@ msgstr "儲存約會以建立會議"
 
 msgid "Save cart locally"
 msgstr "本地保存購物車"
+
+msgid "Save event to create a meeting"
+msgstr "保存活動以創建會議"
 
 msgid "Save invoice settings"
 msgstr "保存發票設置"
@@ -7697,6 +7789,9 @@ msgstr "搜索表單"
 
 msgid "Search payment"
 msgstr "搜索付款"
+
+msgid "Search settings..."
+msgstr "搜索設定......"
 
 msgid "Searching"
 msgstr "搜索"
@@ -7879,6 +7974,9 @@ msgid ""
 "products."
 msgstr "從產品下拉列表中選擇第1步建立的產品。"
 
+msgid "Select the staff member who will be assigned as the meeting host"
+msgstr "選擇將被指定為會議主持的員工"
+
 msgid "Select the style for displaying appointments in Month view"
 msgstr "選擇在月視圖中顯示預約的樣式"
 
@@ -7928,9 +8026,6 @@ msgid ""
 "by SMS or email."
 msgstr "選擇何時通過SMS短訊或電子郵件向客戶發送帶驗證碼的通知。"
 
-msgid "Select where to store session data"
-msgstr "選擇存儲會話數據的位置"
-
 msgid "Select who can administrate Bookly"
 msgstr "選擇可管理Bookly的人"
 
@@ -7970,7 +8065,7 @@ msgid "Send"
 msgstr "發送"
 
 msgid "Send as for new"
-msgstr "如新發送"
+msgstr "按新增发送"
 
 msgid "Send email notification to administrators at low balance"
 msgstr "餘額過低時發電郵通知管理員"
@@ -7992,6 +8087,9 @@ msgstr "發送通知"
 
 msgid "Send recovery code"
 msgstr "發送恢復代碼"
+
+msgid "Send SMS"
+msgstr "發送SMS短訊"
 
 msgid "Send tax information"
 msgstr "發送稅務信息"
@@ -8098,9 +8196,6 @@ msgstr "服務將與工作人員相關聯，而客戶將與其預約相關聯。
 
 msgid "Session error."
 msgstr "訪問時段錯誤。"
-
-msgid "Session storage mode"
-msgstr "會話存儲模式"
 
 msgid ""
 "Set 0 to disable waiting list for this service or set the required value."
@@ -8561,6 +8656,9 @@ msgstr "時段長度作為服務持續時間"
 msgid "Slug"
 msgstr "處理後標題"
 
+msgid "SMS"
+msgstr "SMS短訊"
+
 msgid "Sms"
 msgstr "Sms"
 
@@ -8856,6 +8954,9 @@ msgstr "成功預約預定"
 msgid "Success package booking"
 msgstr "成功包裹預定"
 
+msgid "Successful payment appointment status"
+msgstr "付款預約成功狀態"
+
 msgid "Summary"
 msgstr "總結"
 
@@ -8883,11 +8984,17 @@ msgstr "同步約會的歷史（過去和將來）"
 msgid "Synchronization mode"
 msgstr "同步模式"
 
+msgid "Synchronize staff member appointments with Apple Calendar."
+msgstr "與Apple Calendar同步員工預約。"
+
 msgid "Synchronize staff member appointments with Google Calendar."
 msgstr "將員工預約與Google日曆同步。"
 
 msgid "Synchronize staff member appointments with Outlook Calendar."
 msgstr "將員工預約與Outlook日曆同步。"
+
+msgid "Synchronize with Apple Calendar"
+msgstr "與Apple Calendar同步"
 
 msgid "Synchronize with Google Calendar"
 msgstr "與Google日曆同步"
@@ -9214,13 +9321,6 @@ msgstr "這個日子沒有可供選擇的時段。"
 msgid "There are no time slots for selected date."
 msgstr "所選日期沒有可供選擇的時段。"
 
-#, php-format
-msgid ""
-"There is a small risk that some issues may appear as a result of updating "
-"the plugin. Please note that, according to %1$s Envato rules %2$s, we will "
-"be able to help you only if you have active item support period."
-msgstr "更新插件可能會導致一些問題出現。請注意，根據%1$sEnvato規則%2$s，只有在有效的項目支持時段，我們才能為您提供幫助。"
-
 msgid "There is no payment required."
 msgstr "無需付款。"
 
@@ -9354,6 +9454,14 @@ msgid ""
 msgstr "此設置允許您在通過後端創建預約的一天中設定一個定界符。"
 
 msgid ""
+"This setting applies only to combined services such as collaborative or "
+"compound services. Select 'Regular price' to use a fixed price for the "
+"service. Select 'Price based on nested services' to calculate the service "
+"price as the sum of the prices of its nested services."
+msgstr ""
+"此設定僅適用於合併服務，如協作或複合服務。選擇'正常價格'，為服務使用固定價格。選擇'基於嵌套服務的價格'計算服務價格，為其嵌套服務的價格總和。"
+
+msgid ""
 "This setting determines the time limit after which the payment made via the "
 "payment gateway is considered to be incomplete. This functionality requires "
 "a scheduled cron job."
@@ -9365,13 +9473,6 @@ msgstr "該設置指定發票的到期天數(從1到365天)"
 
 msgid "This test checks for critical errors in Bookly."
 msgstr "該測試檢查Bookly中的關鍵性誤差。"
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr "該測試檢查PHP會話是否啟用。Bookly需要PHP會話才能正常工作。有關PHP會話的更多資訊，請查看PHP官方文檔%s。"
 
 msgid ""
 "This test checks the ability to establish a connection with the Bookly Cloud "
@@ -9390,6 +9491,11 @@ msgstr "管理員可以將此文本插入到客戶的通知中。"
 #, php-format
 msgid "This text can be inserted into notifications with %s code"
 msgstr "該文本可使用%s代碼插入到通知"
+
+msgid ""
+"This will permanently delete all appointments in this series. This action "
+"cannot be undone."
+msgstr "這將永久刪除本系列中的所有預約。此操作無法撤銷。"
 
 #, php-format
 msgid "This will permanently remove the ticket %s"
@@ -9418,6 +9524,9 @@ msgstr "門票掩碼"
 
 msgid "Ticket sales end at"
 msgstr "門票銷售截止時間為"
+
+msgid "Ticket was not found"
+msgstr "門票未找到"
 
 msgid "Ticket {attendee_code} for {event_title} is deleted"
 msgstr "活動{event_title}的門票{attendee_code}已刪除"
@@ -9533,6 +9642,15 @@ msgid ""
 "valid purchase code. <a href=\"{url}\">Details</a>"
 msgstr "為了能夠訪問您的預約，請通過提供有效的購買代碼來驗證您的許可證。 <a href=\"{url}\">詳細信息</a>"
 
+#, php-format
+msgid ""
+"To ensure stable operation of the \"Time interval of payment gateway\" "
+"feature, please activate %s or follow <a href=\"%s\" target=\"_blank\">the "
+"instructions</a> about cron setup."
+msgstr ""
+"為確保\"支付方的時間間隔\"功能的穩定運行，請激活%s或按照<a href=\"%s\" target=\"_blank\">"
+"關於cron設置的說明</a>來進行操作。"
+
 msgid ""
 "To find the value, log into Mailchimp account and look at the URL in your "
 "browser. You'll see something like https://us19.admin.mailchimp.com/; the "
@@ -9586,6 +9704,11 @@ msgid ""
 msgstr "欲了解有關此功能的更多資訊，請點擊<a href=\"%s\" target=\"_blank\">此鏈接</a>。"
 
 msgid ""
+"To log in to the Bookly Staff Cabinet mobile app, please use the following "
+"link"
+msgstr "登入Bookly Staff Cabinet移動應用，請使用如下鏈接"
+
+msgid ""
 "To make service invisible to your customers set the visibility to "
 "\"Private\"."
 msgstr "為了讓客戶查詢不到服務資料，請把可見度設成\"私人\"。"
@@ -9607,6 +9730,9 @@ msgid ""
 "To save data, please set \"Don't delete\" in Bookly Settings > General > "
 "Bookly data upon deleting Bookly items"
 msgstr "如需保存數據，請在刪除Bookly項時，在Bookly Settings > 常規 > Bookly數據中設置\"不刪除\""
+
+msgid "To set up Apple Calendar integration:"
+msgstr "設定Apple Calendar整合："
 
 msgid "To set up Facebook integration, do the following:"
 msgstr "要連結Facebook，請執行以下操作："
@@ -9784,17 +9910,6 @@ msgstr "升級"
 
 msgid "Upload directory"
 msgstr "上傳目錄"
-
-msgid ""
-"Upon providing the purchase code you will have access to free updates of "
-"Bookly. Updates may contain functionality improvements and important "
-"security fixes. For more information on where to find your purchase code see "
-"this <a href=\"https://help.market.envato.com/hc/en-us/articles/202822600-"
-"Where-can-I-find-my-Purchase-Code-\" target=\"_blank\">page</a>."
-msgstr ""
-"請提供購買代碼，以獲得Bookly的免費更新服務。更新可能包括功能上的改進或者重大的安全修補。關於怎樣獲得購買代碼，請參見<a href=“https:"
-"//help.market.envato.com/hc/en-us/articles/202822600-Where-can-I-find-my-"
-"Purchase-Code-“ target=“_blank”>這裏</a>."
 
 msgid "URL for adding event to Google Calendar (to use inside <a> tag)"
 msgstr "添加事件到Google Calendar的URL（在<a>標籤內使用）"
@@ -10085,39 +10200,35 @@ msgstr "您在工作流程中的哪裡遇到此問題？"
 msgid "Width"
 msgstr "寬度"
 
+#, php-format
 msgid ""
 "With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step)."
+"to %s."
+msgstr "通過\"單向\"同步，Bookly將新預約和任何其他更改推送至%s。"
+
+#, php-format
+msgid ""
+"With \"Two-way front-end only\" sync Bookly will additionally fetch events "
+"from %s and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
 msgstr ""
-"通過\"單向\"同步，Bookly可以將新預約和任何進一步的更改推送到Google日曆。使用\"雙向（僅前端）\"同步，Bookly可將從Google日曆中獲取的事件並刪除相應的時間，然後顯示預訂表單的\"時間\"步驟（這可能會導致用戶選擇\"下一步\"進入\"時間\"步驟時出現延遲）。"
+"通過\"雙向僅前端\"同步，Bookly將在顯示預訂表格的時間步驟之前從%s獲取事件並刪除相應時段（此舉可能導致用戶單擊\"下一步\"進入時間步驟時出現延遲）。"
+
+#, php-format
+msgid ""
+"With \"Two-way\" sync all bookings created in Bookly Calendar will be "
+"automatically copied to %s and vice versa."
+msgstr "通過\"雙向\"同步，在Bookly Calendar創建的所有預訂將自動複製到%s，反之亦然。"
 
 msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step). With \"Two-way\" "
-"sync all bookings created in Bookly Calendar will be automatically copied to "
-"Google Calendar and vice versa. Important: your website must use HTTPS. "
-"Google Calendar API will be able to send notifications only if there is a "
-"valid SSL certificate installed on your web server."
+"With \"Two-way\" sync Bookly will additionally fetch events from Apple "
+"Calendar and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
 msgstr ""
-"通過\"單向\"同步，Bookly可以將新預約和任何進一步的更改推送到Google日曆。使用\"雙向（僅前端）\"同步，Bookly可將從Google日曆中獲取的事件並刪除相應的時間，然後顯示預訂表單的\"時間\"步驟（這可能會導致用戶選擇\"下一步\"進入\"時間\"步驟時出現延遲）。通過\"雙向\"同步，在Bookly日曆中創建的所有預訂將自動複製到Google日曆，反之亦然。重要提示：您的網站必須使用HTTPS。只有您的網絡服務器上安裝了有效的SSL證書時，Google"
-" Calendar API才能發送通知。"
-
-msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Outlook Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Outlook Calendar and remove corresponding "
-"time slots before displaying the Time step of the booking form (this may "
-"lead to a delay when users click Next to get to the Time step). With \"Two-"
-"way\" sync all bookings created in Bookly Calendar will be automatically "
-"copied to Outlook Calendar and vice versa."
-msgstr ""
-"通過\"單向\"同步，Bookly可以將新預約和任何進一步的更改推送到Outlook日曆。使用\"雙向（僅前端）\"同步，Bookly可將從Outlook日曆中獲取的事件並刪除相應的時間，然後顯示預訂表單的\"時間\"步驟（這可能會導致用戶選擇\"下一步\"進入\"時間\"步驟時出現延遲）。通過\"雙向\"同步，在Bookly日曆中創建的所有預訂將自動複製到Outlook日曆，反之亦然。"
+"通過\"雙向\"同步，Bookly將在顯示預訂表格的時間步驟之前從Apple "
+"Calendar獲取事件並刪除相應時段（此舉可能導致用戶單擊\"下一步\"進入時間步驟時出現延遲）。"
 
 msgid "With access to Bookly"
 msgstr "擁有Bookly訪問權限"
@@ -10142,9 +10253,6 @@ msgstr "WordPress電郵"
 
 msgid "WordPress password"
 msgstr "WordPress密碼"
-
-msgid "Wordpress password"
-msgstr "Wordpress 密碼"
 
 msgid "WordPress user"
 msgstr "WordPress用戶"
@@ -10175,6 +10283,14 @@ msgstr "昨天"
 
 msgid "Yoga classes"
 msgstr "瑜伽班"
+
+#, php-format
+msgid "You are about to activate %s"
+msgstr "您即將激活%s"
+
+#, php-format
+msgid "You are about to activate a 7-day Trial for %s"
+msgstr "您即將激活%s的7天試用"
 
 msgid ""
 "You are about to change a service setting which is also configured "
@@ -10417,6 +10533,11 @@ msgid ""
 msgstr "您選擇預訂{appointments_count}個約會，總價為{total_price}。"
 
 msgid ""
+"You will also be able to import events from Apple Calendar into Bookly. To "
+"do this, go to Calendar and click \"Sync now\"."
+msgstr "您也將能從Apple Calendar導入事件到Bookly。請前往\"日曆\"並點擊\"立即同步\"。"
+
+msgid ""
 "You will be able to use the product until the end of the already paid period."
 " If during this period you decide to keep your subscription, you will have "
 "the option to do so."
@@ -10525,6 +10646,11 @@ msgstr "您的資訊"
 
 msgid "Your license has been verified successfully."
 msgstr "您的許可證已成功驗證。"
+
+msgid ""
+"Your message has been sent successfully. You can manage your messages in the "
+"'SMS Notifications' section."
+msgstr "您的訊息已成功發送。您可以在\"SMS短訊通知\"中管理您的訊息。"
 
 msgid "Your name"
 msgstr "您的名字"

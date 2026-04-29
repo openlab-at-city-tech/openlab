@@ -12,7 +12,8 @@
                 <div class="bookly-js-verification-code-error bookly-label-error"></div>
             </div>
             <div class="bookly-modal-footer">
-                <button class="bookly-btn-submit" type="submit"><?php esc_html_e( 'Verify', 'bookly' ) ?></button>
+                <button class="bookly-btn-submit bookly-js-resend-button" type="submit" disabled><?php esc_html_e( 'Resend', 'bookly' ) ?><span class="bookly-js-resend-timer bookly-font-mono"></span></button>
+                <button class="bookly-btn-submit bookly-js-verify-button" type="submit"><?php esc_html_e( 'Verify', 'bookly' ) ?></button>
             </div>
         </div>
     </div>

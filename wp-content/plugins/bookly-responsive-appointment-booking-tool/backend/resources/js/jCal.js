@@ -216,7 +216,7 @@
 
         // draw events for this month
         if (events) {
-            drawEvents($target, fd.getMonth() + 1);
+            drawEvents($target, fd.getMonth() + 1, opt);
         }
     }
 
@@ -237,17 +237,22 @@
     };
 
     // draw the events in calendar (called for each month)
-    function drawEvents($target, month) {
+    function drawEvents($target, month, opt) {
         // remove old events
-        $('.holidayDay', $target).removeClass('holidayDay');
-        $('.repeatDay', $target).removeClass('repeatDay');
+        $('.holidayDay', $target).removeClass('holidayDay').removeClass('repeatDay').removeAttr('title');
         // and add new
         for (var i in events) {
             if (events.hasOwnProperty(i)) {
                 if (events[i].m == month) {
+                    var isRepeat = !events[i].hasOwnProperty('y');
+                    var tooltip = opt.we_are_not_working || '';
+                    if (isRepeat && opt.repeat) {
+                        tooltip += ' (' + opt.repeat + ')';
+                    }
                     $target.find(getEventSelector(events[i]))
                         .addClass('holidayDay')
-                        .addClass(events[i].hasOwnProperty('y') ? '' : 'repeatDay');
+                        .addClass(isRepeat ? 'repeatDay' : '')
+                        .attr('title', tooltip);
                 }
             }
         }
@@ -344,7 +349,7 @@
                         for (let m = range[0].getMonth(); m <= range[1].getMonth(); m++) {
                             let $target = $('[data-index=' + m + ']', $container);
                             $('.day', $target).removeClass('selectedDay');
-                            drawEvents($target, m + 1);
+                            drawEvents($target, m + 1, opt);
                         }
                     }
                 },

@@ -319,7 +319,7 @@ class Cart
                         }
 
                         if ( $appointment->getStartDate() ) {
-                            Proxy\Shared::syncOnlineMeeting( array(), $appointment, $service );
+                            Proxy\Shared::syncOnlineMeeting( array(), $appointment );
                             Common::syncWithCalendars( $appointment );
                         }
 

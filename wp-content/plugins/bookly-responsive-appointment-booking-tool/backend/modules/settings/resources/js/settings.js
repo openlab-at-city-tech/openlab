@@ -27,6 +27,11 @@ jQuery(function ($) {
         $customerAddress = $('[name="bookly_l10n_cst_address_template"]'),
         $gcDescription = $('[name="bookly_gc_event_description"]'),
         $ocDescription = $('[name="bookly_oc_event_description"]'),
+        $acSyncMode = $('#bookly_ac_sync_mode'),
+        $acLimitEvents = $('#bookly_ac_limit_events'),
+        $acFullSyncOffset = $('#bookly_ac_full_sync_offset_days_before'),
+        $acFullSyncTitles = $('#bookly_ac_full_sync_titles'),
+        $acDescription = $('[name="bookly_ac_event_description"]'),
         $colorPicker = $('.bookly-js-color-picker', container.$calendar),
         $coloringMode = $('#bookly_cal_coloring_mode', container.$calendar),
         $colorsBy = $('.bookly-js-colors-by', container.$calendar),
@@ -114,6 +119,25 @@ jQuery(function ($) {
     $('#bookly_settings_outlook_calendar button[type="reset"]').on('click', function () {
         ocDescriptionEditor.booklyAceEditor('setValue', $ocDescription.data('default'));
     });
+
+    // Apple Calendar tab.
+    if ($acSyncMode.length) {
+        $acSyncMode.on('change', function () {
+            $acLimitEvents.closest('.form-group').toggle(this.value == '1.5-way');
+            $acFullSyncOffset.closest('.form-group').toggle(this.value == '2-way');
+            $acFullSyncTitles.closest('.form-group').toggle(this.value == '2-way');
+        }).trigger('change');
+
+        $acDescription.data('default', $acDescription.val());
+        let acDescriptionEditor = $('#bookly_ac_event_description').booklyAceEditor();
+        acDescriptionEditor.booklyAceEditor('onChange', function () {
+            $acDescription.val(acDescriptionEditor.booklyAceEditor('getValue'));
+        });
+
+        $('#bookly_settings_apple_calendar button[type="reset"]').on('click', function () {
+            acDescriptionEditor.booklyAceEditor('setValue', $acDescription.data('default'));
+        });
+    }
 
     // Calendar tab.
     $participants.on('change', function () {
@@ -371,4 +395,195 @@ jQuery(function ($) {
 
     // Activate tab.
     $('a[href="#bookly_settings_' + BooklyL10n.current_tab + '"]').click();
+
+    // Settings search.
+    var $searchInput = $('#bookly-settings-search'),
+        $dropdown = $('#bookly-search-dropdown'),
+        searchIndex = [],
+        debounceTimer = null,
+        maxVisible = 10
+    ;
+
+    // Build search index from DOM.
+    $('#bookly_settings_controls .tab-pane').each(function () {
+        var $pane = $(this),
+            paneId = $pane.attr('id'),
+            $navLink = $('#bookly-sidebar a[href="#' + paneId + '"]'),
+            tabName = $navLink.length ? $navLink.text().trim() : paneId.replace('bookly_settings_', '')
+        ;
+
+        $pane.find('.form-group').each(function () {
+            var $group = $(this),
+                $label = $group.find('> label').first(),
+                $help = $group.find('> small.form-text').first(),
+                labelText = $label.length ? $label.text().trim() : '',
+                helpText = $help.length ? $help.text().trim() : ''
+            ;
+
+            if (!labelText) return;
+
+            searchIndex.push({
+                label: labelText,
+                help: helpText,
+                searchText: (labelText + ' ' + helpText).toLowerCase(),
+                tabName: tabName,
+                paneId: paneId,
+                $group: $group,
+                $navLink: $navLink
+            });
+        });
+    });
+
+    function escapeHtml(text) {
+        return $('<span>').text(text).html();
+    }
+
+    function highlightMatch(text, query) {
+        var idx = text.toLowerCase().indexOf(query.toLowerCase());
+        if (idx === -1) return escapeHtml(text);
+        return escapeHtml(text.substring(0, idx))
+            + '<mark>' + escapeHtml(text.substring(idx, idx + query.length)) + '</mark>'
+            + escapeHtml(text.substring(idx + query.length));
+    }
+
+    function helpSnippet(helpText, query, maxLen) {
+        maxLen = maxLen || 80;
+        var idx = helpText.toLowerCase().indexOf(query.toLowerCase());
+        if (idx === -1) return '';
+        var start = Math.max(0, idx - 20),
+            end = Math.min(helpText.length, idx + query.length + (maxLen - 20)),
+            snippet = helpText.substring(start, end);
+        if (start > 0) snippet = '…' + snippet;
+        if (end < helpText.length) snippet = snippet + '…';
+        return highlightMatch(snippet, query);
+    }
+
+    function doSearch(query) {
+        query = query.trim();
+        $dropdown.empty();
+
+        if (!query) {
+            $dropdown.hide();
+            return;
+        }
+
+        var q = query.toLowerCase(),
+            results = [];
+
+        for (var i = 0; i < searchIndex.length; i++) {
+            if (searchIndex[i].searchText.indexOf(q) !== -1) {
+                results.push(searchIndex[i]);
+            }
+        }
+
+        if (results.length === 0) {
+            $dropdown.html('<div class="bookly-search-no-results">' + BooklyL10n.noResultsFound + '</div>').show();
+            return;
+        }
+
+        var showCount = Math.min(results.length, maxVisible),
+            hasMore = results.length > maxVisible
+        ;
+
+        for (var j = 0; j < showCount; j++) {
+            var item = results[j];
+            var $item = $('<div class="bookly-search-item">')
+                .data('index', j)
+                .append('<span class="bookly-search-item-label bookly-search-highlight">' + highlightMatch(item.label, query) + '</span>');
+            // Show help snippet if match is in help text
+            if (item.help && item.help.toLowerCase().indexOf(q) !== -1) {
+                $item.append('<span class="bookly-search-item-help bookly-search-highlight">' + helpSnippet(item.help, query) + '</span>');
+            }
+            $item.append('<span class="bookly-search-item-tab">' + escapeHtml(item.tabName) + '</span>');
+            $dropdown.append($item);
+        }
+
+        if (hasMore) {
+            var $more = $('<div class="bookly-search-show-more">' + BooklyL10n.showMore + ' (' + (results.length - maxVisible) + ')</div>');
+            $more.on('click', function (e) {
+                e.stopPropagation();
+                $(this).remove();
+                for (var k = maxVisible; k < results.length; k++) {
+                    var mItem = results[k];
+                    var $mItem = $('<div class="bookly-search-item">')
+                        .data('index', k)
+                        .append('<span class="bookly-search-item-label bookly-search-highlight">' + highlightMatch(mItem.label, query) + '</span>');
+                    if (mItem.help && mItem.help.toLowerCase().indexOf(q) !== -1) {
+                        $mItem.append('<span class="bookly-search-item-help bookly-search-highlight">' + helpSnippet(mItem.help, query) + '</span>');
+                    }
+                    $mItem.append('<span class="bookly-search-item-tab">' + escapeHtml(mItem.tabName) + '</span>');
+                    $dropdown.append($mItem);
+                }
+                bindItemClicks(results);
+            });
+            $dropdown.append($more);
+        }
+
+        bindItemClicks(results);
+        $dropdown.show();
+    }
+
+    function bindItemClicks(results) {
+        $dropdown.find('.bookly-search-item').off('click').on('click', function () {
+            var idx = $(this).data('index'),
+                item = results[idx];
+            navigateToSetting(item);
+        });
+    }
+
+    function navigateToSetting(item) {
+        $dropdown.hide();
+        $searchInput.val('');
+
+        // Activate the tab.
+        if (item.$navLink.length) {
+            item.$navLink.click();
+        }
+
+        // Scroll and highlight after tab switch.
+        setTimeout(function () {
+            var $group = item.$group;
+
+            // Expand any parent bookly-collapse containers that hide this setting.
+            $group.parents('.bookly-collapse').each(function () {
+                var $collapseEl = $(this);
+                if (!$collapseEl.hasClass('bookly-show')) {
+                    $collapseEl.booklyCollapse('show');
+                }
+            });
+
+            $('html, body').animate({
+                scrollTop: $group.offset().top - 100
+            }, 300);
+
+            $group.removeClass('bookly-setting-highlight-fade').addClass('bookly-setting-highlight-active');
+            setTimeout(function () {
+                $group.addClass('bookly-setting-highlight-fade').removeClass('bookly-setting-highlight-active');
+            }, 1500);
+            setTimeout(function () {
+                $group.removeClass('bookly-setting-highlight-fade');
+            }, 3100);
+        }, 100);
+    }
+
+    $searchInput.on('input', function () {
+        clearTimeout(debounceTimer);
+        var val = this.value;
+        debounceTimer = setTimeout(function () {
+            doSearch(val);
+        }, 200);
+    });
+
+    $searchInput.on('keydown', function (e) {
+        if (e.key === 'Escape') {
+            $dropdown.hide();
+            $searchInput.val('');
+        }
+    });
+
+    $(document).on('click', function (e) {
+        if (!$(e.target).closest('.bookly-settings-search-wrap').length) {
+            $dropdown.hide();
+        }
+    });
 });

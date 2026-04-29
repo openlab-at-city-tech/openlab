@@ -84,6 +84,8 @@ jQuery(function ($) {
                                     return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Jitsi Meet</span>';
                                 case 'bbb':
                                     return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> BigBlueButton</span>';
+                                case 'teams':
+                                    return '<span class="badge badge-secondary"><i class="fas fa-video fa-fw"></i> Teams</span>';
                                 default:
                                     return '';
                             }

@@ -36,6 +36,17 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Check if trial available for product.
+     */
+    public static function cloudIsTrial()
+    {
+        $product = Lib\Cloud\API::getInstance()->getProduct( self::parameter( 'product' ) );
+        $is_trial = $product->isTrial( self::parameter( 'product' ) );
+
+        wp_send_json_success( array( 'is_trial' => $is_trial ) );
+    }
+
+    /**
      * Enable/disable SMS Notifications
      */
     public static function cloudSmsChangeStatus()

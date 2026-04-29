@@ -1,12 +1,17 @@
 <?php
 namespace Bookly\Frontend\Modules\MobileStaffCabinet\Api;
 
-class Response implements IResponse
+class Response
 {
     protected $http_status = 200;
     protected $data = '';
     protected $headers = array();
     protected $contentType = 'application/json';
+
+    public function __construct( $data )
+    {
+        $this->setData( $data );
+    }
 
     public function render()
     {

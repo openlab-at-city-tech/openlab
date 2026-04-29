@@ -117,6 +117,7 @@ abstract class Routines
                 ->set( 'status', Payment::STATUS_REJECTED )
                 ->whereIn( 'id', $payment_ids )
                 ->execute();
+            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Payments', null, json_encode( $payment_ids ), null, 'Handle outdated unpaid payments (set REJECTED status)' );
             CustomerAppointment::query()
                 ->update()
                 ->set( 'status', CustomerAppointment::STATUS_REJECTED )
@@ -148,9 +149,11 @@ abstract class Routines
             }
 
             /** @var Appointment $appointment */
-            foreach ( array_unique( $affected_appointments ) as $appointment_id ) {
+            $affected_appointments = array_unique( $affected_appointments );
+            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Appointments', null, json_encode( $affected_appointments ), null, 'Handle outdated unpaid payments (affected appointments)' );
+            foreach ( $affected_appointments as $appointment_id ) {
                 $appointment = Appointment::find( $appointment_id );
-                Proxy\Shared::syncOnlineMeeting( array(), $appointment, Entities\Service::find( $appointment->getServiceId() ) );
+                Proxy\Shared::syncOnlineMeeting( array(), $appointment );
                 Utils\Common::syncWithCalendars( $appointment );
             }
         }
@@ -252,8 +255,13 @@ abstract class Routines
         global $wpdb;
 
         $ca_count = get_option( 'bookly_сa_count' );
-        $log10 = (int) log10( Entities\CustomerAppointment::query()->count() );
-        $current = $log10 > 0 ? pow( 10, $log10 ) : 0;
+        $quantity = Entities\CustomerAppointment::query()->count();
+        if ( $quantity ) {
+            $log10 = (int) log10( $quantity );
+            $current = $log10 > 0 ? pow( 10, $log10 ) : 0;
+        } else {
+            $current = 0;
+        }
 
         if ( $ca_count != $current ) {
             // New goal by number of customer appointments achieved,
@@ -326,7 +334,7 @@ abstract class Routines
 
     public static function clearSessions()
     {
-        Entities\Session::query()->delete()->whereLt( 'expire', current_time( 'mysql' ) )->execute();
+        FormSession::clearExpiredSessions();
     }
 
     public static function clearLogs()

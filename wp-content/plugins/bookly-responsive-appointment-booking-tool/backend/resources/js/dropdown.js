@@ -1,27 +1,27 @@
 /**
  * jQuery booklyDropdown.
  */
-(function($) {
+(function ($) {
     let id = 0;
     let methods = {
-        init: function(options) {
+        init: function (options) {
             let opts = $.extend({}, $.fn.booklyDropdown.defaults, options);
 
-            return this.filter('ul').each(function() {
+            return this.filter('ul').each(function () {
                 if ($(this).data('booklyDropdown')) {
                     return;
                 }
                 let obj = {
                     $container: $('<div class="bookly-dropdown"/>'),
                     $button: $('<button type="button" class="btn btn-default bookly-dropdown-toggle d-flex align-items-center w-100" data-toggle="bookly-dropdown"/>'),
-                    $counter: $('<span class="flex-grow-1 text-left mr-1"/>'),
+                    $counter: $('<span class="flex-grow-1 text-left me-1"/>'),
                     $ul: $(this),
                     $selectAll: $('<input type="checkbox" class="custom-control-input"/>').attr('id', 'bookly-js-dropdown-' + (++id)),
                     $groups: $(),
                     $options: [],
                     preselected: [],  // initially selected options
-                    refresh: function() {
-                        let $selected = obj.$options.filter(function(o) { return o.is(':checked') });
+                    refresh: function () {
+                        let $selected = obj.$options.filter(function (o) { return o.is(':checked') });
                         obj.$selectAll.prop('checked', false);
                         obj.$groups.prop('checked', false);
                         if ($selected.length === 0) {
@@ -36,7 +36,7 @@
                             } else {
                                 obj.$counter.text($selected.length + '/' + obj.$options.length);
                             }
-                            obj.$groups.each(function() {
+                            obj.$groups.each(function () {
                                 let $this = $(this);
                                 $this.prop('checked', $this.data('group-checkboxes').filter(':not(:checked)').length === 0);
                             });
@@ -50,7 +50,7 @@
 
                 let $content = obj.$button;
                 if (obj.$ul.data('hide-icon') === undefined) {
-                    $content.append($('<i class="mr-1 fa-fw"/>').addClass(obj.$ul.data('icon-class') || opts.iconClass));
+                    $content.append($('<i class="me-1 fa-fw"/>').addClass(obj.$ul.data('icon-class') || opts.iconClass));
                 }
                 $content.append(obj.$counter);
 
@@ -61,7 +61,7 @@
                         obj.$ul
                             .addClass('bookly-dropdown-menu bookly-dropdown-menu-' + (obj.$ul.data('align') || opts.align))
                             // Options (checkboxes).
-                            .append($.map(opts.options, function(option) {
+                            .append($.map(opts.options, function (option) {
                                 return $('<li/>')
                                     .data({
                                         'input-name': option.inputName || opts.inputsName,
@@ -74,7 +74,7 @@
                             .find('li')
                             .addClass('bookly-dropdown-item')
                             .wrapInner('<div class="custom-control custom-checkbox ml-4"><label class="custom-control-label"></label></div>')
-                            .each(function() {
+                            .each(function () {
                                 let $li = $(this),
                                     $checkbox = $('<input type="checkbox" class="custom-control-input"/>').attr('id', 'bookly-js-dropdown-' + (++id)),
                                     $ul = $li.find('ul:first')
@@ -117,20 +117,20 @@
                             // Replace with container.
                             .replaceWith(obj.$container)
                             // Do not close on click.
-                            .on('click', function(e) {
+                            .on('click', function (e) {
                                 e.stopPropagation();
                             })
                     )
                     // Events.
-                    .on('change', 'input:checkbox', function() {
+                    .on('change', 'input:checkbox', function () {
                         let $this = $(this),
                             checked = this.checked;
                         if ($this.is(obj.$selectAll)) {
-                            obj.$options.forEach(function(o) {o.prop('checked', checked);});
-                            opts.onChange.call(obj.$ul, obj.$options.map(function(o) { return o.val(); }), checked, true);
+                            obj.$options.forEach(function (o) {o.prop('checked', checked);});
+                            opts.onChange.call(obj.$ul, obj.$options.map(function (o) { return o.val(); }), checked, true);
                         } else if ($this.is(obj.$groups)) {
                             $this.data('group-checkboxes').prop('checked', this.checked);
-                            opts.onChange.call(obj.$ul, $this.data('group-checkboxes').map(function() { return this.value; }).get(), checked, false);
+                            opts.onChange.call(obj.$ul, $this.data('group-checkboxes').map(function () { return this.value; }).get(), checked, false);
                         } else {
                             opts.onChange.call(obj.$ul, [this.value], checked, false);
                         }
@@ -139,12 +139,12 @@
                 ;
 
                 // Attach a handler to an event for the container
-                obj.$container.bind('bookly-dropdown.change', function() {
-                    opts.onChange.call(obj.$ul, obj.$options.map(function(o) { return o.val(); }), this.checked, false);
+                obj.$container.bind('bookly-dropdown.change', function () {
+                    opts.onChange.call(obj.$ul, obj.$options.map(function (o) { return o.val(); }), this.checked, false);
                 });
 
                 // Link group checkboxes with sub-items.
-                obj.$groups.each(function() {
+                obj.$groups.each(function () {
                     let $this = $(this),
                         $checkboxes = $this.closest('li').find('ul input:checkbox')
                     ;
@@ -155,16 +155,16 @@
                 obj.$ul.data('booklyDropdown', obj);
             });
         },
-        deselect: function(values) {
+        deselect: function (values) {
             if (!Array.isArray(values)) {
                 values = [values];
             }
-            return this.filter('ul').each(function() {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
                 }
-                obj.$options.forEach(function(o) {
+                obj.$options.forEach(function (o) {
                     if ($.inArray(o.val(), values) > -1) {
                         o.prop('checked', false);
                     }
@@ -172,46 +172,49 @@
                 obj.refresh();
             });
         },
-        deselectAll: function() {
-            return this.filter('ul').each(function() {
+        deselectAll: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
                 }
-                obj.$options.forEach(function(o) {o.prop('checked', false)});
+                obj.$options.forEach(function (o) {o.prop('checked', false)});
                 obj.refresh();
             });
         },
-        getSelected: function() {
+        getSelected: function () {
             var obj = this.filter('ul').data('booklyDropdown'),
                 res = []
             ;
             if (obj) {
-                obj.$options.filter(function(o) { return o.is(':checked') }).forEach(function(o) {
+                obj.$options.filter(function (o) { return o.is(':checked') }).forEach(function (o) {
                     res.push(o.val());
                 });
             }
 
             return res;
         },
-        getSelectedAllState: function() {
+        getSelectedAllState: function () {
             var obj = this.filter('ul').data('booklyDropdown');
             return obj.$selectAll.prop('checked');
         },
-        getSelectedExt: function() {
+        itemsCount: function () {
+            return this.filter('ul').data('booklyDropdown').$options.length;
+        },
+        getSelectedExt: function () {
             var obj = this.filter('ul').data('booklyDropdown'),
                 res = []
             ;
             if (obj) {
-                obj.$options.filter(function(o) { return o.is(':checked') }).forEach(function(o) {
+                obj.$options.filter(function (o) { return o.is(':checked') }).forEach(function (o) {
                     res.push({value: o.val(), name: o.next('label').text()});
                 });
             }
 
             return res;
         },
-        hide: function() {
-            return this.filter('ul').each(function() {
+        hide: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
@@ -219,8 +222,8 @@
                 obj.$container.hide();
             });
         },
-        refresh: function() {
-            return this.filter('ul').each(function() {
+        refresh: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
@@ -228,28 +231,28 @@
                 obj.refresh();
             });
         },
-        reset: function() {
-            return this.filter('ul').each(function() {
+        reset: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
                 }
-                obj.$options.forEach(function(o) {
+                obj.$options.forEach(function (o) {
                     o.prop('checked', $.inArray(o.val(), obj.preselected) > -1);
                 });
                 obj.refresh();
             });
         },
-        select: function(values) {
+        select: function (values) {
             if (!Array.isArray(values)) {
                 values = [values];
             }
-            return this.filter('ul').each(function() {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
                 }
-                obj.$options.forEach(function(o) {
+                obj.$options.forEach(function (o) {
                     if ($.inArray(o.val(), values) > -1) {
                         o.prop('checked', true);
                     }
@@ -257,33 +260,33 @@
                 obj.refresh();
             });
         },
-        selectAll: function() {
-            return this.filter('ul').each(function() {
+        selectAll: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
                 }
-                obj.$options.forEach(function(o) {o.prop('checked', true)});
+                obj.$options.forEach(function (o) {o.prop('checked', true)});
                 obj.refresh();
             });
         },
-        setSelected: function(values) {
+        setSelected: function (values) {
             if (!Array.isArray(values)) {
                 values = [values];
             }
-            return this.filter('ul').each(function() {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
                 }
-                obj.$options.forEach(function(o) {
+                obj.$options.forEach(function (o) {
                     o.prop('checked', $.inArray(o.val(), values) > -1);
                 });
                 obj.refresh();
             });
         },
-        show: function() {
-            return this.filter('ul').each(function() {
+        show: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
@@ -291,8 +294,8 @@
                 obj.$container.css('display', '');
             });
         },
-        toggle: function() {
-            return this.filter('ul').each(function() {
+        toggle: function () {
+            return this.filter('ul').each(function () {
                 var obj = $(this).data('booklyDropdown');
                 if (!obj) {
                     return;
@@ -302,7 +305,7 @@
         }
     };
 
-    $.fn.booklyDropdown = function(method) {
+    $.fn.booklyDropdown = function (method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || !method) {
@@ -321,6 +324,6 @@
         txtNothingSelected: 'Nothing selected',
         inputsName: '',
         options: [],
-        onChange: function(values, selected, all) {}
+        onChange: function (values, selected, all) {}
     };
 })(jQuery);

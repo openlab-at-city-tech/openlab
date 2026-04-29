@@ -26,6 +26,51 @@
             timeGridWeek: 'resourceTimelineWeek',
             resourceTimeGridDay: 'resourceTimelineDay'
         }
+        // Event Popover
+        let $popover = $();
+        let showPopover = 0;
+        let popoverEventEl;
+
+        function animate(fn) {
+            window.requestAnimationFrame(fn);
+        }
+
+        function popoverShow() {
+            ++showPopover;
+            $popover.css('opacity', 1);
+        }
+
+        function popoverClose() {
+            if (showPopover) {
+                --showPopover;
+                let start;
+
+                function fade(time) {
+                    if (showPopover) {
+                        return;
+                    }
+                    if (!start) {
+                        start = time;
+                        return animate(fade);
+                    }
+                    let progress = time - start;
+                    if (progress < 100) {
+                        animate(fade);
+                    } else if (progress >= 100 && progress <= 300) {
+                        $popover.css('opacity', 1 - (progress - 100) / 200);
+                        animate(fade);
+                    } else {
+                        start = null;
+                        $popover.remove();
+                        $popover.length = 0;
+                        popoverEventEl = null;
+                    }
+                }
+
+                animate(fade);
+            }
+        }
+
         // Settings for Event Calendar
         let settings = {
             view: 'timeGridWeek',
@@ -85,13 +130,29 @@
                     dayHeaderFormat: function (date) {
                         return moment(date).locale('bookly').format('dddd');
                     },
-                    pointer: true
+                    pointer: true,
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(120px, 1fr)' : undefined
                 },
                 timeGridWeek: {pointer: true},
-                resourceTimeGridDay: {pointer: true},
-                resourceTimelineDay: {pointer: true, displayEventEnd: true, slotWidth: 180},
-                resourceTimelineWeek: {pointer: true, displayEventEnd: true, slotWidth: 180},
-                resourceTimelineMonth: {pointer: true, displayEventEnd: true, slotWidth: 180}
+                resourceTimeGridDay: {
+                    pointer: true,
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(' + obj.options.l10n.clmn_min_width + 'px, 1fr)' : undefined
+                },
+                resourceTimelineDay: {
+                    pointer: true,
+                    displayEventEnd: true,
+                    slotWidth: obj.options.l10n.calendar_version === 'latest' ? 120 : 180
+                },
+                resourceTimelineWeek: {
+                    pointer: true,
+                    displayEventEnd: true,
+                    slotWidth: obj.options.l10n.calendar_version === 'latest' ? 120 : 180
+                },
+                resourceTimelineMonth: {
+                    pointer: true,
+                    displayEventEnd: true,
+                    columnWidth: obj.options.l10n.calendar_version === 'latest' ? 'minmax(120px, 1fr)' : undefined
+                }
             },
             nowIndicator: true,
             hiddenDays: obj.options.l10n.hiddenDays,
@@ -107,16 +168,8 @@
             eventDurationEditable: false,
             allDaySlot: false,
             allDayContent: obj.options.l10n.allDay,
-
             slotLabelFormat: function (date) {
                 return moment(date).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
-            },
-            eventTimeFormat: function (start, end) {
-                if (start.getTime() === end.getTime()) {
-                    return moment(start).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
-                } else {
-                    return moment(start).locale('bookly').format(obj.options.l10n.mjsTimeFormat) + ' - ' + moment(end).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
-                }
             },
             dayHeaderFormat: function (date) {
                 return moment(date).locale('bookly').format('ddd, D');
@@ -138,6 +191,7 @@
                 listWeek: obj.options.l10n.list
             },
             noEventsContent: obj.options.l10n.noEvents,
+            customScrollbars: true,
             eventSources: [{
                 url: ajaxurl,
                 method: 'POST',
@@ -162,56 +216,62 @@
                 }
                 let $event = $(arg.el);
                 if (arg.event.display === 'auto' && arg.view.type !== 'listWeek') {
-                    let $existing_popover = $event.find('.bookly-ec-popover')
-                    if (!$existing_popover.length) {
-                        let $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
+                    if (popoverEventEl !== arg.el) {
+                        $popover.remove();
+                        $popover.length = 0;
+                        popoverEventEl = arg.el;
+                        showPopover = 0;
+                    }
+                    if (!$popover.length) {
+                        $popover = $('<div class="bookly-popover bs-popover-top bookly-ec-popover">')
+                        let $calendar_container = $event.closest('.ec');
                         let $arrow = $('<div class="arrow"></div><div class="bookly-arrow-background"></div>');
                         let $body = $('<div class="popover-body">');
                         let $buttons = allowEditAppointment ? popoverButtons(arg) : '';
 
-                        $body.append(arg.event.extendedProps.tooltip).append($buttons).css({minWidth: '200px'});
+                        $body.append(arg.event.extendedProps.tooltip).append($buttons).css({minWidth: '180px'});
                         $popover.append($arrow).append($body);
-                        $event.append($popover);
-                    }
+                        $calendar_container.append($popover);
+                        $popover = $calendar_container.find('.bookly-ec-popover');
 
-                    let $popover = $event.find('.bookly-ec-popover'),
-                        $arrow = $popover.find('.arrow'),
-                        offset = $event.offset(),
-                        popover_height = $popover.outerHeight(),
-                        $calendar_container = $event.closest('.ec-body').length ? $event.closest('.ec-body') : $event.closest('.ec-all-day'),
-                        container_top = $calendar_container.offset().top,
-                        event_width = $event.outerWidth(),
-                        popover_right = offset.left > window.innerWidth / 2;
+                        let event_offset = $event.offset(),
+                            popover_height = $popover.outerHeight(),
+                            event_width = $event.outerWidth(),
+                            popover_on_right = event_offset.left > window.innerWidth / 2;
 
-                    $popover.css('min-width', (Math.min(400, event_width - 2)) + 'px');
+                        $popover.css('min-width', (Math.min(400, event_width - 2)) + 'px');
 
-                    if (container_top > offset.top - popover_height) {
-                        // Popover onside of the event
-                        $popover.css('top', (Math.max(container_top, offset.top) - $(document).scrollTop()) + 'px');
-                        if (popover_right) {
+                        let popover_top = Math.min(arg.jsEvent.y, Math.max(0, Math.min(event_offset.top - $(document).scrollTop() + $event.outerHeight() - popover_height, $(window).height() - popover_height)));
+                        let popover_left = popover_on_right ? event_offset.left - $popover.outerWidth() : Math.min(event_offset.left - 7 + event_width, $calendar_container.offset().left + $calendar_container.outerWidth() - $popover.outerWidth() - 32);
+                        //Check if the popover is over a mouse pointer
+                        if (popover_left <= arg.jsEvent.x && popover_left + $popover.outerWidth() >= arg.jsEvent.x && popover_top <= arg.jsEvent.y && popover_top + $popover.outerHeight() >= arg.jsEvent.y) {
+                            popover_top = arg.jsEvent.y - popover_height - 8;
+                        }
+                        $popover.css('top', popover_top + 'px');
+                        $popover.css('left', popover_left + 'px');
+
+                        $arrow.css('top', Math.min(popover_height - 32, Math.max(arg.jsEvent.y - popover_top - 14, 8)) + 'px');
+                        if (popover_on_right) {
                             $popover.removeClass('bs-popover-top').removeClass('bs-popover-right').addClass('bs-popover-left');
-                            $popover.css('left', (offset.left - $popover.outerWidth()) + 'px');
                             $arrow.css('right', '-8px');
                         } else {
                             $popover.removeClass('bs-popover-top').removeClass('bs-popover-left').addClass('bs-popover-right');
-                            $popover.css('left', Math.min(offset.left - 7 + event_width, $calendar_container.offset().left + $calendar_container.outerWidth() - $popover.outerWidth() - 32) + 'px');
                             $arrow.css('left', '-8px');
                         }
-                    } else {
-                        // Popover on top of the event
-                        let top = Math.max(popover_height + 40, Math.max(container_top, offset.top) - $(document).scrollTop());
 
-                        $popover.css('top', (top - popover_height - 5) + 'px')
-                        $popover.removeClass('bs-popover-left').removeClass('bs-popover-right').addClass('bs-popover-top');
-                        if (popover_right) {
-                            $popover.css('left', (offset.left + event_width - $popover.outerWidth()) + 'px');
-                            $arrow.css('right', '8px');
-                        } else {
-                            $popover.css('left', (offset.left + 2) + 'px');
-                            $arrow.css('left', '8px');
-                        }
+                        $popover.on('pointerenter', function () {
+                            popoverShow();
+                        });
+                        $popover.on('pointerleave', function () {
+                            popoverClose();
+                        });
                     }
+
+                    popoverShow();
                 }
+            },
+            eventMouseLeave: function () {
+                popoverClose();
             },
             eventContent: function (arg) {
                 if (arg.event.display === 'background') {
@@ -223,7 +283,7 @@
                 let $time = $('<div class="ec-event-time"/>');
                 let $title = $('<div class="ec-event-title"/>');
 
-                $time.append(props.header_text || arg.timeText);
+                $time.append(props.header_text || (arg.event.display !== 'pointer' ? moment(arg.event.start).locale('bookly').format(obj.options.l10n.mjsTimeFormat) + ' - ' + moment(arg.event.end).locale('bookly').format(obj.options.l10n.mjsTimeFormat) : moment(arg.event.start).locale('bookly').format(obj.options.l10n.mjsTimeFormat)));
                 nodes.push($time.get(0));
                 if (arg.view.type === 'listWeek') {
                     let dot = $('<div class="ec-event-dot"></div>').css('border-color', event.backgroundColor);
@@ -251,52 +311,7 @@
                 return {domNodes: nodes};
             },
             eventClick: function (arg) {
-                if (arg.event.display === 'background') {
-                    return;
-                }
-                arg.jsEvent.stopPropagation();
-
-                if (allowEditAppointment) {
-                    if (arg.event.extendedProps.type === 'event') {
-                        BooklyAttendeesDialog.showDialog({id: arg.event.extendedProps.id}, function () { calendar.refetchEvents(); })
-                    } else {
-                        let visible_staff_id;
-                        if (arg.view.type === 'resourceTimeGridDay') {
-                            visible_staff_id = 0;
-                        } else {
-                            visible_staff_id = obj.options.getCurrentStaffId();
-                        }
-                        BooklyAppointmentDialog.showDialog(
-                            arg.event.id,
-                            null,
-                            null,
-                            function (event) {
-                                if (event == 'refresh') {
-                                    calendar.refetchEvents();
-                                } else {
-                                    if (event.start === null) {
-                                        // Task
-                                        calendar.removeEventById(event.id);
-                                    } else {
-                                        if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
-                                            // Update event in calendar.
-                                            calendar.removeEventById(event.id);
-                                            calendar.addEvent(event);
-                                        } else {
-                                            // Switch to the event owner tab.
-                                            jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
-                                        }
-                                    }
-                                }
-
-                                if (locationChanged) {
-                                    calendar.refetchEvents();
-                                    locationChanged = false;
-                                }
-                            }
-                        );
-                    }
-                }
+                eventClick(arg)
             },
             dateClick: function (arg) {
                 let staff_id, visible_staff_id;
@@ -340,9 +355,9 @@
                     obj.options.refresh();
                 }
             },
-            viewDidMount: function (view) {
+            viewDidMount: function (info) {
                 calendar.setOption('highlightedDates', []);
-                obj.options.viewChanged(view);
+                obj.options.viewChanged(info.view);
             },
             theme: function (theme) {
                 theme.button = 'btn btn-default';
@@ -352,12 +367,63 @@
             }
         };
 
+        function eventClick(arg) {
+            if (arg.event.display === 'background') {
+                return;
+            }
+            if (arg.jsEvent) {
+                arg.jsEvent.stopPropagation();
+            }
+
+            if (allowEditAppointment) {
+                if (arg.event.extendedProps.type === 'event') {
+                    BooklyAttendeesDialog.showDialog({id: arg.event.extendedProps.id}, function () { calendar.refetchEvents(); })
+                } else {
+                    let visible_staff_id;
+                    if (arg.view.type === 'resourceTimeGridDay') {
+                        visible_staff_id = 0;
+                    } else {
+                        visible_staff_id = obj.options.getCurrentStaffId();
+                    }
+                    BooklyAppointmentDialog.showDialog(
+                        arg.event.id,
+                        null,
+                        null,
+                        function (event) {
+                            if (event == 'refresh') {
+                                calendar.refetchEvents();
+                            } else {
+                                if (event.start === null) {
+                                    // Task
+                                    calendar.removeEventById(event.id);
+                                } else {
+                                    if (visible_staff_id == event.resourceId || visible_staff_id == 0) {
+                                        // Update event in calendar.
+                                        calendar.removeEventById(event.id);
+                                        calendar.addEvent(event);
+                                    } else {
+                                        // Switch to the event owner tab.
+                                        jQuery('li > a[data-staff_id=' + event.resourceId + ']').click();
+                                    }
+                                }
+                            }
+
+                            if (locationChanged) {
+                                calendar.refetchEvents();
+                                locationChanged = false;
+                            }
+                        }
+                    );
+                }
+            }
+        }
+
         function popoverButtons(arg) {
             const $buttons = arg.view.type === 'listWeek' ? $('<div class="mt-2 d-flex"></div>') : $('<div class="mt-2 d-flex justify-content-end border-top pt-2"></div>');
             let props = arg.event.extendedProps;
             if (props.hasOwnProperty('type') && props.type === 'event') {
                 $buttons.append(
-                    $('<a class="btn btn-success btn-sm mr-1">').append('<i class="fas fa-fw fa-users">')
+                    $('<a class="btn btn-success btn-sm me-1">').append('<i class="fas fa-fw fa-users">')
                         .attr('title', obj.options.l10n.events.attendees)
                         .on('click', function (e) {
                             e.stopPropagation();
@@ -365,63 +431,68 @@
                         })
                 );
             } else {
-                $buttons.append($('<button class="btn btn-success btn-sm mr-1">').append('<i class="far fa-fw fa-edit">'));
-                if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                    $buttons.append(
-                        $('<a class="btn btn-default btn-sm mr-1">').append('<i class="fas fa-fw fa-link">')
-                            .attr('title', obj.options.l10n.recurring_appointments.title)
-                            .on('click', function (e) {
-                                e.stopPropagation();
-                                BooklySeriesDialog.showDialog({
-                                    series_id: props.series_id,
-                                    done: function () {
-                                        calendar.refetchEvents();
+                $buttons.append($('<button class="btn btn-success btn-sm me-1">').append('<i class="far fa-fw fa-edit">').on('click', function (e) {
+                    e.stopPropagation();
+                    eventClick(arg);
+                }));
+                if (props.participants == 'one') {
+                    if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                        $buttons.append(
+                            $('<a class="btn btn-default btn-sm me-1">').append('<i class="fas fa-fw fa-link">')
+                                .attr('title', obj.options.l10n.recurring_appointments.title)
+                                .on('click', function (e) {
+                                    e.stopPropagation();
+                                    BooklySeriesDialog.showDialog({
+                                        series_id: props.series_id,
+                                        done: function () {
+                                            calendar.refetchEvents();
+                                        }
+                                    });
+                                })
+                        );
+                    }
+                    if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
+                        $buttons.append(
+                            $('<a class="btn btn-default btn-sm me-1">').append('<i class="far fa-fw fa-list-alt">')
+                                .attr('title', obj.options.l10n.waiting_list.title)
+                        );
+                    }
+                    if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
+                        $buttons.append(
+                            $('<a class="btn btn-default btn-sm me-1">').append('<i class="far fa-fw fa-calendar-alt">')
+                                .attr('title', obj.options.l10n.packages.title)
+                                .on('click', function (e) {
+                                    e.stopPropagation();
+                                    if (obj.options.l10n.packages.active == '1' && props.package_id) {
+                                        $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
+                                            calendar.refetchEvents();
+                                        }]);
                                     }
-                                });
-                            })
-                    );
-                }
-                if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
+                                })
+                        );
+                    }
                     $buttons.append(
-                        $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-list-alt">')
-                            .attr('title', obj.options.l10n.waiting_list.title)
-                    );
-                }
-                if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
-                    $buttons.append(
-                        $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-calendar-alt">')
-                            .attr('title', obj.options.l10n.packages.title)
-                            .on('click', function (e) {
+                        $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
+                            .attr('title', obj.options.l10n.delete)
+                            .on('click', function(e) {
                                 e.stopPropagation();
-                                if (obj.options.l10n.packages.active == '1' && props.package_id) {
-                                    $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
-                                        calendar.refetchEvents();
-                                    }]);
+                                // Localize contains only string values
+                                if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                                    $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
+                                } else {
+                                    new BooklyConfirmDeletingAppointment({
+                                            action: 'bookly_delete_appointment',
+                                            appointment_id: arg.event.id,
+                                            csrf_token: BooklyL10nGlobal.csrf_token
+                                        },
+                                        function(response) {
+                                            calendar.removeEventById(arg.event.id);
+                                        }
+                                    );
                                 }
                             })
                     );
                 }
-                $buttons.append(
-                    $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
-                        .attr('title', obj.options.l10n.delete)
-                        .on('click', function (e) {
-                            e.stopPropagation();
-                            // Localize contains only string values
-                            if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                                $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
-                            } else {
-                                new BooklyConfirmDeletingAppointment({
-                                        action: 'bookly_delete_appointment',
-                                        appointment_id: arg.event.id,
-                                        csrf_token: BooklyL10nGlobal.csrf_token
-                                    },
-                                    function (response) {
-                                        calendar.removeEventById(arg.event.id);
-                                    }
-                                );
-                            }
-                        })
-                );
             }
 
             return $buttons;

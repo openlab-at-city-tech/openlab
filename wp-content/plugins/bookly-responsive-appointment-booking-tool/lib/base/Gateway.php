@@ -13,11 +13,11 @@ use Bookly\Lib\Utils\Codes;
 abstract class Gateway
 {
     const STATUS_PROCESSING = 'processing';
-    const STATUS_COMPLETED = 'completed';
-    const STATUS_FAILED = 'failed';
+    const STATUS_COMPLETED  = 'completed';
+    const STATUS_FAILED     = 'failed';
 
     const EVENT_RETRIEVE = 'retrieve';
-    const EVENT_CANCEL = 'cancel';
+    const EVENT_CANCEL   = 'cancel';
 
     /** @var string */
     protected $type;
@@ -203,6 +203,7 @@ abstract class Gateway
             $status = Entities\Payment::query()->where( 'id', $payment->getId() )->fetchVar( 'status' );
             if ( $status !== Entities\Payment::STATUS_COMPLETED ) {
                 if ( $payment->getType() !== Entities\Payment::TYPE_LOCAL || $payment->getTotal() == 0 ) {
+                    $payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                     if ( $payment->getParentId() ) {
                         $parent_payment = Entities\Payment::find( $payment->getParentId() );
                         $details = $parent_payment->getDetailsData();
@@ -215,7 +216,6 @@ abstract class Gateway
                         }
                         $parent_payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                     }
-                    $payment->setStatus( Entities\Payment::STATUS_COMPLETED )->save();
                 }
                 if ( $payment->getCouponId() ) {
                     Booking\Proxy\Coupons::claim( $payment->getCouponId() );
@@ -237,7 +237,8 @@ abstract class Gateway
             $order = BooklyLib\DataHolders\Booking\Order::createFromOrderId( $order_id );
 
             if ( $order ) {
-                list( $sync, $gc, $oc ) = Config::syncCalendars();
+                list( $sync, $gc, $oc, $ac ) = Config::syncCalendars();
+                $order->completePayment();
                 foreach ( $order->getItems() as $item ) {
                     if ( $item->getCA() ) {
                         $item->getCA()->setJustCreated( true );
@@ -249,6 +250,9 @@ abstract class Gateway
                                 }
                                 if ( $oc && $sub_item->getAppointment()->getOutlookEventId() !== null ) {
                                     BooklyLib\Proxy\OutlookCalendar::syncEvent( $sub_item->getAppointment() );
+                                }
+                                if ( $ac && $sub_item->getAppointment()->getAppleEventId() !== null ) {
+                                    BooklyLib\Proxy\AppleCalendar::syncEvent( $sub_item->getAppointment() );
                                 }
                             }
                         }

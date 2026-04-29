@@ -12,7 +12,7 @@ class ParameterException extends \Exception
     {
         $this->parameter = $parameter;
         $this->value = $value;
-        parent::__construct( '', $code );
+        parent::__construct( 'INVALID_PARAMETER', $code );
     }
 
     /**

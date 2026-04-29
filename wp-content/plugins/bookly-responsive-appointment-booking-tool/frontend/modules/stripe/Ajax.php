@@ -57,6 +57,11 @@ class Ajax extends Lib\Base\Ajax
         if ( $payment->loadBy( array( 'id' => $event['metadata']['payment_id'], 'type' => Lib\Entities\Payment::TYPE_CLOUD_STRIPE ) ) ) {
             if ( array_key_exists( 'payment_intent', $event ) ) {
                 $payment->setRefId( $event['payment_intent'] )->save();
+                if ( $payment->getStatus() === Lib\Entities\Payment::STATUS_REJECTED ) {
+                    // Case when rools 'Time interval of payment gateway' set payment as rejected
+                    // We set status pending without saving for running retriving process
+                    $payment->setStatus( Lib\Entities\Payment::STATUS_PENDING );
+                }
             }
             $gateway->setPayment( $payment )->retrieve();
         }

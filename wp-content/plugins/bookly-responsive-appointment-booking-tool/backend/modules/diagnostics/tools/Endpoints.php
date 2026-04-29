@@ -69,11 +69,11 @@ class Endpoints extends Tool
                 foreach ( $api->account->getEndPoints() as $product => $endpoint ) {
                     switch ( $product ) {
                         case Account::PRODUCT_STRIPE:
-                        case Account::PRODUCT_ZAPIER;
-                        case Account::PRODUCT_CRON;
+                        case Account::PRODUCT_ZAPIER:
+                        case Account::PRODUCT_CRON:
                             $expected_endpoint = $api->getProduct( $product )->getEndPoint();
                             break;
-                        case Account::PRODUCT_MOBILE_STAFF_CABINET;
+                        case Account::PRODUCT_MOBILE_STAFF_CABINET:
                             $expected_endpoint = $api->getProduct( $product )->getEndPoint();
                             $list = Lib\Entities\Staff::query( 's' )
                                 ->leftJoin( 'Auth', 'a', 'a.staff_id = s.id' )

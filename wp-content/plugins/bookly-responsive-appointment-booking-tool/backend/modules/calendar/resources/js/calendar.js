@@ -8,12 +8,13 @@ jQuery(function ($) {
         $locationsFilter = $('#bookly-js-locations-filter'),
         $gcSyncButton = $('#bookly-google-calendar-sync'),
         $ocSyncButton = $('#bookly-outlook-calendar-sync'),
+        $acSyncButton = $('#bookly-apple-calendar-sync'),
         staffMembers = [],
         staffIds = getCookie('bookly_cal_st_ids'),
         serviceIds = getCookie('bookly_cal_service_ids'),
         locationIds = getCookie('bookly_cal_location_ids'),
         tabId = getCookie('bookly_cal_tab_id'),
-        lastView = getCookie('bookly_cal_view') || 'resourceTimeGridDay',
+        lastView = !getCookie('bookly_cal_view') || getCookie('bookly_cal_view') === 'undefined' ? 'resourceTimeGridDay' : getCookie('bookly_cal_view'),
         headerToolbar = {
             start: 'prev,next today',
             center: 'title',
@@ -229,6 +230,7 @@ jQuery(function ($) {
                 },
                 resourceTimelineDay: {
                     resources: staffMembers,
+                    filterResourcesWithEvents: BooklyL10n.filterResourcesWithEvents,
                     titleFormat: {year: 'numeric', month: 'short', day: 'numeric', weekday: 'short'}
                 },
                 resourceTimelineMonth: {
@@ -294,7 +296,7 @@ jQuery(function ($) {
         if (view_type != 'dayGridMonth') {
             if (['resourceTimelineMonth', 'resourceTimelineWeek', 'resourceTimelineDay'].includes(view_type)) {
                 height = 'auto';
-            } else if ($('.ec-content', $calendar).height() > height) {
+            } else if ($('.ec', $calendar).height() > height) {
                 height = Math.max(height, 300);
             } else {
                 height = 'auto';
@@ -369,6 +371,31 @@ jQuery(function ($) {
             url: ajaxurl,
             type: 'POST',
             data: {action: 'bookly_outlook_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
+            dataType: 'json',
+            success: function (response) {
+                if (response.success) {
+                    calendar.ec.refetchEvents();
+                }
+                booklyAlert(response.data.alert);
+                ladda.stop();
+            },
+            error: function (XHR) {
+                booklyAlert({error: ['Server status: ' + XHR.status]});
+                ladda.stop();
+            }
+        });
+    });
+
+    /**
+     * Sync with Apple Calendar.
+     */
+    $acSyncButton.on('click', function () {
+        var ladda = Ladda.create(this);
+        ladda.start();
+        $.ajax({
+            url: ajaxurl,
+            type: 'POST',
+            data: {action: 'bookly_apple_calendar_sync', csrf_token: BooklyL10nGlobal.csrf_token},
             dataType: 'json',
             success: function (response) {
                 if (response.success) {

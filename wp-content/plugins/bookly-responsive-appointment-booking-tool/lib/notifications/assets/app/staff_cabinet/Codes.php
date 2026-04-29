@@ -44,6 +44,7 @@ class Codes extends Base\Codes
         // Add replace codes.
         $replace_codes += array(
             'access_token' => $this->auth->getToken(),
+            'access_token_link' => 'https://app.bookly.pro/?token=' . $this->auth->getToken(),
             'staff_email' => $this->staff->getEmail(),
             'staff_info' => $format == 'html' ? nl2br( $this->staff->getInfo() ) : $this->staff->getInfo(),
             'staff_name' => $this->staff->getFullName(),

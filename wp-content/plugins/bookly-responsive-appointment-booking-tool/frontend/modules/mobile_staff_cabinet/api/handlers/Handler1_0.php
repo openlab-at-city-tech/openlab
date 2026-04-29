@@ -1,5 +1,5 @@
 <?php
-namespace Bookly\Frontend\Modules\MobileStaffCabinet\Api\V1_0;
+namespace Bookly\Frontend\Modules\MobileStaffCabinet\Api\Handlers;
 
 use Bookly\Lib;
 use Bookly\Lib\Config;
@@ -12,36 +12,13 @@ use Bookly\Lib\Slots\DatePoint;
 use Bookly\Lib\Utils\Common;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Appointment as UtilAppointment;
-use Bookly\Frontend\Modules\MobileStaffCabinet\Api;
 use Bookly\Frontend\Modules\MobileStaffCabinet\Api\Exceptions;
 
-class Handler extends Api\ApiHandler
+class Handler1_0 extends Handler
 {
-    /**
-     * @param string $role
-     * @param Lib\Base\Request $request
-     * @param Api\IResponse $response
-     */
-    public function __construct( $role, Lib\Base\Request $request, Api\IResponse $response )
+    public static function getVersion()
     {
-        $this->role = $role;
-        $this->request = $request;
-        $this->setParams( $request->get( 'params', array() ) );
-        $this->response = $response;
-    }
-
-    public function setStaff( $staff )
-    {
-        $this->staff = $staff;
-        $this->staff && Lib\Utils\Log::setAuthor( $staff->getFullName() );
-    }
-
-    public function setWpUser( $wp_user )
-    {
-        $this->wp_user = $wp_user;
-        if ( $wp_user ) {
-            Lib\Utils\Log::setAuthor( $wp_user->display_name );
-        }
+        return '1.0';
     }
 
     protected function init()
@@ -67,21 +44,9 @@ class Handler extends Api\ApiHandler
                 break;
         }
 
-        $this->result = array(
+        return array(
             'me' => $me,
             'settings' => array(
-//                'slots' => array(
-//                    'server_side' => ! $pre_generated,
-//                    'default' => $slots,
-//                ),
-//                'date' => array(
-//                    'min' => date_create( $bounding['date_min'][0] . '-' . ( $bounding['date_min'][1] + 1 ) . '-' . $bounding['date_min'][2] )->format( 'Y-m-d' ),
-//                    'max' => date_create( $bounding['date_max'][0] . '-' . ( $bounding['date_max'][1] + 1 ) . '-' . $bounding['date_max'][2] )->format( 'Y-m-d' ),
-//                    'format' => array(
-//                        'date' => get_option( 'date_format', 'Y-m-d' ),
-//                        'time' => get_option( 'time_format', 'H:i' ),
-//                    ),
-//                ),
                 'start_of_week' => (int) get_option( 'start_of_week' ),
                 'notices' => array(
                     'date_interval_not_available' => __( 'The selected period is occupied by another appointment', 'bookly' ),
@@ -213,7 +178,7 @@ class Handler extends Api\ApiHandler
             }
         }
 
-        $this->result = $response['data'];
+        return $response['data'];
     }
 
     protected function checkAppointmentTime()
@@ -272,7 +237,7 @@ class Handler extends Api\ApiHandler
 
         $result['date_interval_not_available'] = (bool) $result['date_interval_not_available'];
 
-        $this->result = $result;
+        return $result;
     }
 
     protected function saveAppointment()
@@ -281,8 +246,8 @@ class Handler extends Api\ApiHandler
         $location_id = (int) $this->param( 'location_id', 0 );
         $service_id = (int) $this->param( 'service_id' );
         $notification = $this->param( 'notification', false );
-        $custom_service_name = trim( $this->param( 'custom_service_name', '' ) );
-        $custom_service_price = trim( $this->param( 'custom_service_price', '' ) );
+        $custom_service_name = $this->param( 'custom_service_name', '' );
+        $custom_service_price = $this->param( 'custom_service_price', '' );
         if ( $this->role === self::ROLE_SUPERVISOR ) {
             $staff_id = $this->param( 'staff_id' );
             if ( ! $staff_id ) {
@@ -358,10 +323,10 @@ class Handler extends Api\ApiHandler
         if ( $response['success'] ) {
             unset( $response['data'] );
 
-            $this->result = $response;
-        } else {
-            throw new Exceptions\ApiException( 'ERROR', 400, $response['errors'], $this->request );
+            return $response;
         }
+
+        throw new Exceptions\ApiException( 'ERROR', 400, $response['errors'], $this->request );
     }
 
     protected function deleteAppointment()
@@ -378,10 +343,10 @@ class Handler extends Api\ApiHandler
 
         $response = UtilAppointment::delete( $appointment_id, $notification, $reason );
         if ( $response['success'] ) {
-            $this->result = $response['data'];
-        } else {
-            throw new Exceptions\ApiException( 'ERROR', 400, $response['errors'], $this->request );
+            return $response['data'];
         }
+
+        throw new Exceptions\ApiException( 'ERROR', 400, $response['errors'], $this->request );
     }
 
     protected function appointments()
@@ -450,7 +415,7 @@ class Handler extends Api\ApiHandler
             );
         }
 
-        $this->result = $list ?: array();
+        return $list ?: array();
     }
 
     protected function customers()
@@ -467,7 +432,7 @@ class Handler extends Api\ApiHandler
             unset( $item['attachment_id'] );
         } );
 
-        $this->result = $list;
+        return $list;
     }
 
     protected function saveCustomer()
@@ -481,22 +446,24 @@ class Handler extends Api\ApiHandler
             $customer->setGroupId( $this->param( 'group_id' ) );
         }
         $customer
-            ->setFullName( trim( rtrim( $this->param( 'first_name' ) ) . ' ' . ltrim( $this->param( 'last_name' ) ) ) )
+            ->setFirstName( trim( $this->param( 'first_name' ) ) )
+            ->setLastName( trim( $this->param( 'last_name' ) ) )
+            ->setFullName( trim( $customer->getFirstName() . ' ' . $customer->getLastName() ) )
             ->setEmail( $this->param( 'email', '' ) )
             ->setPhone( $this->param( 'phone', '' ) )
             ->setNotes( $this->param( 'notes', '' ) )
             ->save();
 
         if ( $customer->isLoaded() ) {
-            $this->result = array(
+            return array(
                 'id' => (int) $customer->getId(),
                 'first_name' => $customer->getFirstName(),
                 'last_name' => $customer->getLastName(),
             );
-        } else {
-            global $wpdb;
-            throw new Exceptions\BooklyException( $wpdb->last_error );
         }
+
+        global $wpdb;
+        throw new Exceptions\BooklyException( $wpdb->last_error );
     }
 
     protected function slots()
@@ -524,7 +491,7 @@ class Handler extends Api\ApiHandler
             $time_end = max( ( $service->getUnitsMax() * $service->getDuration() ) + DAY_IN_SECONDS, DAY_IN_SECONDS * 2 );
         }
 
-        $this->result = array(
+        return array(
             'start' => $this->generateSlots( 0, $time_end, $ts_length, $date, true ),
             'end' => $this->generateSlots( 0, $time_end, $ts_length, $date, false ),
         );
@@ -591,7 +558,7 @@ class Handler extends Api\ApiHandler
             $result[] = $custom_slot;
         }
 
-        $this->result = $result;
+        return $result;
     }
 
     /**
@@ -599,8 +566,9 @@ class Handler extends Api\ApiHandler
      */
     protected function services()
     {
-        $this->staffList();
-        $this->result = $this->result ? $this->result[0]['services'] : array();
+        $list = $this->staffList();
+
+        return $list ? $list[0]['services'] : array();
     }
 
     protected function staffList()
@@ -691,13 +659,13 @@ class Handler extends Api\ApiHandler
             $staff_list[] = $staff_item;
         }
 
-        $this->result = $staff_list;
+        return $staff_list;
     }
 
     protected function notifications()
     {
         Lib\Notifications\Routine::sendNotificationsAssociatedWithQueue( $this->param( 'notifications', array() ), $this->param( 'type', 'all' ), $this->param( 'token' ) );
-        $this->result = array( 'success' => true );
+        return array( 'success' => true );
     }
 
     protected function settings()
@@ -760,7 +728,7 @@ class Handler extends Api\ApiHandler
             }
         }
 
-        $this->result = $result;
+        return $result;
     }
 
     protected function deleteAttachments()
@@ -773,7 +741,7 @@ class Handler extends Api\ApiHandler
             $queue->setSent( 1 )->save();
         }
 
-        $this->result = array( 'success' => true );
+        return array( 'success' => true );
     }
 
     /**
@@ -814,7 +782,7 @@ class Handler extends Api\ApiHandler
             'extras' => array(),
         );
         $ca += $default;
-        $customer_appointment = $ca['ca_id']
+        $customer_appointment = isset( $ca['ca_id'] )
             ? CustomerAppointment::find( $ca['ca_id'] )
             : array();
         if ( $customer_appointment ) {
@@ -835,37 +803,6 @@ class Handler extends Api\ApiHandler
         }
 
         return $ca;
-    }
-
-    /**
-     * @param string $key
-     * @param string $format
-     * @return string
-     * @throws Exceptions\ParameterException
-     */
-    protected function getDateFormattedParameter( $key, $format )
-    {
-        return $this->getDateTimeParameter( $key )->format( $format );
-    }
-
-    /**
-     * @param string $key
-     * @return \DateTime
-     * @throws Exceptions\ParameterException
-     */
-    protected function getDateTimeParameter( $key )
-    {
-        try {
-            if ( $this->param( $key ) ) {
-                $date_time = date_create( $this->param( $key ) );
-                if ( $date_time ) {
-                    return $date_time;
-                }
-            }
-            throw new Exceptions\ParameterException( $key, $this->param( $key ) );
-        } catch ( \Error $e ) {
-            throw new Exceptions\ParameterException( $key, $this->param( $key ) );
-        }
     }
 
     /**

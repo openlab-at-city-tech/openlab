@@ -422,24 +422,59 @@ abstract class Codes
     public static function getICSCodes( Lib\DataHolders\Booking\Item $item )
     {
         $customer = Lib\Entities\Customer::find( $item->getCA()->getCustomerId() );
-        $appointment_start_date = $item->getAppointment()->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $item->getAppointment()->getStartDate() );
-        $appointment_start_time = $item->getAppointment()->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatTime( $item->getAppointment()->getStartDate() );
+        $appointment = $item->getAppointment();
+        $service = $item->getService();
+        $staff = $item->getStaff();
+        $appointment_start_date = $appointment->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment->getStartDate() );
+        $appointment_start_time = $appointment->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatTime( $appointment->getStartDate() );
+
+        $category = $service->getCategoryId() ? Entities\Category::find( $service->getCategoryId() ) : false;
+
+        $staff_service_result = Entities\StaffService::query()
+            ->select( 'capacity_max' )
+            ->where( 'staff_id', $staff->getId() )
+            ->where( 'service_id', $service->getId() )
+            ->fetchRow();
+        $service_capacity = $staff_service_result ? $staff_service_result['capacity_max'] : 0;
+
+        // Build participants array from all customer appointments
+        $participants = array();
+        foreach ( $appointment->getCustomerAppointments( true ) as $customer_appointment ) {
+            $participants[] = self::getCustomerAppointmentCodes( $customer_appointment );
+        }
 
         $codes = array(
             'appointment_date' => $appointment_start_date,
-            'appointment_time' => $item->getService()->getDuration() > DAY_IN_SECONDS && $item->getService()->getStartTimeInfo() !== null ? $item->getService()->getStartTimeInfo() : $appointment_start_time,
-            'service_name' => $item->getService()->getTranslatedTitle(),
-            'service_price' => Lib\Utils\Price::format( $item->getServicePrice() ),
-            'staff_name' => $item->getStaff()->getTranslatedName(),
-            'client_name' => $customer->getFullName(),
+            'appointment_id' => $appointment->getId(),
+            'appointment_time' => $service->getDuration() > DAY_IN_SECONDS && $service->getStartTimeInfo() !== null ? $service->getStartTimeInfo() : $appointment_start_time,
+            'booking_number' => $appointment->getId(),
+            'category_name' => $category ? $category->getTranslatedName() : '',
             'client_email' => $customer->getEmail(),
+            'client_name' => $customer->getFullName(),
             'client_phone' => $customer->getPhone(),
+            'company_address' => get_option( 'bookly_co_address' ),
+            'company_name' => get_option( 'bookly_co_name' ),
+            'company_phone' => get_option( 'bookly_co_phone' ),
+            'company_website' => get_option( 'bookly_co_website' ),
+            'internal_note' => $appointment->getInternalNote(),
+            'online_meeting_join_url' => Lib\Proxy\Shared::buildOnlineMeetingJoinUrl( '', $appointment, $customer ),
+            'online_meeting_password' => Lib\Proxy\Shared::buildOnlineMeetingPassword( '', $appointment ),
+            'online_meeting_start_url' => Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $appointment ),
+            'online_meeting_url' => Lib\Proxy\Shared::buildOnlineMeetingUrl( '', $appointment, $customer ),
+            'participants' => $participants,
+            'service_capacity' => $service_capacity,
+            'service_duration' => Lib\Utils\DateTime::secondsToInterval( $service->getDuration() ),
+            'service_info' => $service->getTranslatedInfo(),
+            'service_name' => $service->getTranslatedTitle(),
+            'service_price' => Lib\Utils\Price::format( $item->getServicePrice() ),
+            'staff_email' => $staff->getEmail(),
+            'staff_info' => $staff->getTranslatedInfo(),
+            'staff_name' => $staff->getTranslatedName(),
+            'staff_phone' => $staff->getPhone(),
             'status' => Entities\CustomerAppointment::statusToString( $item->getCA()->getStatus() ),
-            'online_meeting_url' => Lib\Proxy\Shared::buildOnlineMeetingUrl( '', $item->getAppointment(), $customer ),
-            'online_meeting_password' => Lib\Proxy\Shared::buildOnlineMeetingPassword( '', $item->getAppointment() ),
-            'online_meeting_start_url' => Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $item->getAppointment() ),
-            'online_meeting_join_url' => Lib\Proxy\Shared::buildOnlineMeetingJoinUrl( '', $item->getAppointment(), $customer ),
         );
+
+        $codes = Lib\Proxy\Shared::prepareAppointmentCodes( $codes, $appointment );
 
         $ca = $item->getCA();
         $ca->customer = $customer;

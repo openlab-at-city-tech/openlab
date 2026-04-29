@@ -10,6 +10,7 @@ use Bookly\Lib\Utils\Price;
 
 /**
  * @method static bool advancedGoogleCalendarActive()  Check whether Advanced Google Calendar add-on is active or not.
+ * @method static bool appleCalendarActive()           Check whether Apple Calendar add-on is active or not.
  * @method static bool authorizeNetActive()            Check whether Authorize.Net add-on is active or not.
  * @method static bool cartActive()                    Check whether Cart add-on is active or not.
  * @method static bool chainAppointmentsActive()       Check whether Chain Appointment add-on is active or not.
@@ -343,7 +344,7 @@ abstract class Config
     {
         $result = array();
 
-        $min_time = Proxy\Pro::getMinimumTimePriorBooking( null );
+        $min_time = Proxy\Pro::getMinimumTimePriorBooking( 0 );
         if ( $chain !== null ) {
             foreach ( $chain->getItems() as $item ) {
                 $min_time = min( $min_time, Proxy\Pro::getMinimumTimePriorBooking( $item->getService()->getId() ) );
@@ -933,7 +934,7 @@ abstract class Config
     }
 
     /**
-     * @return array
+     * @return <bool, bool, bool, bool>
      */
     public static function syncCalendars()
     {
@@ -944,12 +945,14 @@ abstract class Config
                 0 => false, // sync
                 1 => false, // Google Calendar
                 2 => false, // Outlook Calendar
+                3 => false, // Apple Calendar
             );
 
             if ( self::proActive() ) {
                 $sync[1] = (bool) ( get_option( 'bookly_gc_client_id' ) && get_option( 'bookly_gc_client_secret' ) );
                 $sync[2] = (bool) ( self::outlookCalendarActive() && get_option( 'bookly_oc_app_id' ) && get_option( 'bookly_oc_app_secret' ) );
-                $sync[0] = max( $sync[1], $sync[2] );
+                $sync[3] = (bool) ( self::appleCalendarActive() );
+                $sync[0] = max( $sync[1], $sync[2], $sync[3] );
             }
         }
 

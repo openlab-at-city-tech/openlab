@@ -23,6 +23,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
             <?php if ( $staff_members ) : ?>
                 <div class="form-row justify-content-xl-end justify-content-center">
                     <?php Proxy\OutlookCalendar::renderSyncButton( $staff_members ) ?>
+                    <?php Proxy\AppleCalendar::renderSyncButton( $staff_members ) ?>
                     <?php Proxy\AdvancedGoogleCalendar::renderSyncButton( $staff_members ) ?>
                     <?php Proxy\Locations::renderCalendarLocationFilter() ?>
                     <div class="col-sm-auto mb-2">
@@ -77,14 +78,14 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                                 <h6 class="bookly-dropdown-header"><?php esc_html_e( 'Auto-refresh Calendar', 'bookly' ) ?></h6>
                                 <div class="bookly-dropdown-divider"></div>
                                 <?php Components\Controls\Inputs::renderRadioGroup( null, null,
-                                    array(
-                                        '60' => array( 'title' => __( 'Every 1 minute', 'bookly' ) ),
-                                        '300' => array( 'title' => __( 'Every 5 minutes', 'bookly' ) ),
-                                        '900' => array( 'title' => __( 'Every 15 minutes', 'bookly' ) ),
-                                        '0' => array( 'title' => __( 'Disable', 'bookly' ) ),
-                                    ),
-                                    $refresh_rate,
-                                    array( 'name' => 'bookly_calendar_refresh_rate', 'parent-class' => 'bookly-dropdown-item mx-3 w-100' ) ) ?>
+                                        array(
+                                                '60' => array( 'title' => __( 'Every 1 minute', 'bookly' ) ),
+                                                '300' => array( 'title' => __( 'Every 5 minutes', 'bookly' ) ),
+                                                '900' => array( 'title' => __( 'Every 15 minutes', 'bookly' ) ),
+                                                '0' => array( 'title' => __( 'Disable', 'bookly' ) ),
+                                        ),
+                                        $refresh_rate,
+                                        array( 'name' => 'bookly_calendar_refresh_rate', 'parent-class' => 'bookly-dropdown-item mx-3 w-100' ) ) ?>
                             </div>
                         </div>
                     </div>
@@ -93,9 +94,9 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                     </div>
                 </div>
                 <div class="nav-scrollable nav-scrollable-pills justify-content-center justify-content-xl-start bookly-js-staff-pills <?php if ( count( $staff_members ) == 1 ) : ?>d-none<?php endif ?>">
-                    <ul class="col-auto nav nav-pills flex-nowrap">
+                    <ul class="col-auto nav nav-pills flex-nowrap p-0">
                         <?php if ( Common::isCurrentUserSupervisor() ) : ?>
-                            <li class="nav-item mr-2">
+                            <li class="nav-item me-2">
                                 <a class="nav-link d-block text-center p-2" href="#" data-staff_id="0">
                                 <span class="d-block">
                                     <i class="fas fa-users fa-2x" style="width: 40px; height: 40px;"></i>

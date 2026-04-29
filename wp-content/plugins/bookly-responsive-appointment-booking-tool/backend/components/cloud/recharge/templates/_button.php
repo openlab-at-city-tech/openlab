@@ -21,13 +21,9 @@ $disabled = $type === Amounts::RECHARGE_TYPE_AUTO && $cloud->account->autoRechar
                 <b style="vertical-align: top;line-height: 4rem;font-size: 1.5rem"><span class="text-warning">+<?php echo esc_html( $recharge['bonus'] ) ?></span></b>
             <?php endif ?>
             <?php if ( isset( $recharge['extend_support'] ) && $recharge['extend_support'] > 0 ) : ?>
-                <div class="text-muted mx-4 mb-3" style="
-                    margin-top: -10px;
-                    background: #faf2cc;
-                    background: radial-gradient(circle, #faf2cc 0%, #fff 100%);
-                ">
+                <div class="text-muted mx-4 mb-3" style=" margin-top: -10px; background: #faf2cc; background: radial-gradient(circle, #faf2cc 0%, #fff 100%);">
                     <i class="fas fa-headset"></i>
-                    <?php printf( _n( '%d day', '%d days', $recharge['extend_support'], 'bookly' ), "<b>+{$recharge['extend_support']}</b>" ) ?>
+                    <b> + <?php printf( _n( '%d day', '%d days', $recharge['extend_support'], 'bookly' ),  $recharge['extend_support'] ) ?></b>
                 </div>
             <?php endif ?>
         </div>

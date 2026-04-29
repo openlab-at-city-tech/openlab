@@ -94,36 +94,6 @@ class ShortCode extends Lib\Base\ShortCode
         // Disable caching.
         Lib\Utils\Common::noCache();
 
-        // Generate unique form id.
-        $form_id = uniqid();
-
-        // Find bookings with any of payment statuses ( PayPal, 2Checkout, PayU Latam ).
-        $status = array( 'booking' => 'new' );
-        foreach ( Lib\Session::getAllFormsData() as $saved_form_id => $data ) {
-            if ( isset ( $data['payment'] ) ) {
-                if ( ! isset ( $data['payment']['processed'] ) ) {
-                    switch ( $data['payment']['status'] ) {
-                        case Lib\Base\Gateway::STATUS_COMPLETED:
-                        case Lib\Base\Gateway::STATUS_PROCESSING:
-                            $form_id = $saved_form_id;
-                            $status = array( 'booking' => 'finished' );
-                            break;
-                        case Lib\Base\Gateway::STATUS_FAILED:
-                            $form_id = $saved_form_id;
-                            end( $data['cart'] );
-                            $status = array( 'booking' => 'cancelled', 'cart_key' => key( $data['cart'] ) );
-                            break;
-                    }
-                    // Mark this form as processed for cases when there are more than 1 booking form on the page.
-                    $data['payment']['processed'] = true;
-                    Lib\Session::setFormVar( $saved_form_id, 'payment', $data['payment'] );
-                }
-            } elseif ( isset( $data['last_touched'] ) && $data['last_touched'] + 30 * MINUTE_IN_SECONDS < time() ) {
-                // Destroy forms older than 30 min.
-                Lib\Session::destroyFormData( $saved_form_id );
-            }
-        }
-
         // Check if predefined short code is rendering
         if ( isset( $attributes['id'] ) ) {
             $attributes = apply_filters( 'bookly_form_attributed', $attributes );
@@ -188,17 +158,6 @@ class ShortCode extends Lib\Base\ShortCode
             return esc_html( 'The preselected service for shortcode is not available anymore. Please check your shortcode settings.' );
         }
 
-        if ( $hide_service_part1 && $hide_service_part2 ) {
-            Lib\Session::setFormVar( $form_id, 'skip_service_step', true );
-        } else {
-            Lib\Session::setFormVar( $form_id, 'hide_service_part1', $hide_service_part1 );
-            Lib\Session::setFormVar( $form_id, 'hide_service_part2', $hide_service_part2 );
-        }
-
-        // Store parameters in session for later use.
-        Lib\Session::setFormVar( $form_id, 'defaults', compact( 'service_id', 'staff_id', 'location_id', 'category_id', 'units', 'date_from', 'time_from', 'time_to' ) );
-        Lib\Session::setFormVar( $form_id, 'last_touched', time() );
-
         // Errors.
         $errors = array(
             Errors::SESSION_ERROR => __( 'Session error.', 'bookly' ),
@@ -209,11 +168,19 @@ class ShortCode extends Lib\Base\ShortCode
             Errors::PAYMENT_ERROR => __( 'Error', 'bookly' ) . '.',
             Errors::INCORRECT_USERNAME_PASSWORD => __( 'Incorrect username or password.' ),
         );
-
+        $form_container_id = uniqid();
+        $form_token = isset( $_GET['bookly-form-id'] ) ? $_GET['bookly-form-id'] : null;
         // Set parameters for bookly form.
         $bookly_options = array(
-            'form_id' => $form_id,
-            'status' => $status,
+            'form_id' => $form_container_id,
+            'form_data' => array(
+                'skip_service_step' => (int) ( $hide_service_part1 && $hide_service_part2 ),
+                'hide_service_part1' => (int) $hide_service_part1,
+                'hide_service_part2' => (int) $hide_service_part2,
+                'defaults' => compact( 'service_id', 'staff_id', 'location_id', 'category_id', 'units', 'date_from', 'time_from', 'time_to' ),
+            ),
+            'status' => array( 'booking' => 'new' ),
+            'form_token' => $form_token,
             'skip_steps' => array(
                 /**
                  * [extras,time,repeat]
@@ -237,7 +204,7 @@ class ShortCode extends Lib\Base\ShortCode
 
         return self::renderTemplate(
             'short_code',
-            compact( 'form_id', 'bookly_options' ),
+            compact( 'form_token', 'form_container_id', 'bookly_options' ),
             false
         );
     }

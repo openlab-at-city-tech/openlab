@@ -144,6 +144,15 @@ class Ajax extends Lib\Base\Ajax
             Lib\Entities\Payment::statusToString( $payment->getStatus() )
         );
 
+        $success_ca_status = get_option( 'bookly_successful_payment_appointment_status' );
+        if ( Lib\Config::eventsActive() || ( $success_ca_status && $success_ca_status !== 'disabled' ) ) {
+            $order = Lib\DataHolders\Booking\Order::createFromOrderId( $payment->getOrderId() );
+            if ( $order ) {
+                $order->completePayment();
+                Lib\Notifications\Cart\Sender::send( $order );
+            }
+        }
+
         list( $sync ) = Lib\Config::syncCalendars();
         if ( $sync ) {
             $appointments = Lib\Entities\Appointment::query( 'a' )
@@ -156,12 +165,6 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        if ( Lib\Config::eventsActive() ) {
-            $order = Lib\DataHolders\Booking\Order::createFromOrderId( $payment->getOrderId() );
-            if ( $order ) {
-                Lib\Proxy\Events::sendNotifications( $order );
-            }
-        }
 
         wp_send_json_success( array( 'payment_title' => $payment_title, 'status' => $payment->getStatus() ) );
     }

@@ -64,6 +64,8 @@ $update_required_modal = false;
     <?php include '_info.php' ?>
     <?php include '_activation_modal.php' ?>
     <?php include '_unsubscribe_modal.php' ?>
+    <?php include '_start_trial_modal.php' ?>
+    <?php include '_start_subscription_modal.php' ?>
     <?php if ( $update_required_modal ) : ?>
         <?php include '_update_required.php' ?>
     <?php endif ?>

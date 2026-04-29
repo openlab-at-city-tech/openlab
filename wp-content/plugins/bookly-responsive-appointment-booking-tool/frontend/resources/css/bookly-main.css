@@ -1,5 +1,5 @@
 :root {
-    --bookly-css-version: "26.0";
+    --bookly-css-version: "27.3";
 }
 
 .bookly-list-none {
@@ -54,8 +54,12 @@
     text-decoration: none;
 }
 
-.bookly-btn[disabled] {
+.bookly-btn[disabled], .bookly-btn-submit[disabled] {
     opacity: 0.5;
+}
+
+.bookly-font-mono {
+    font-family: monospace !important;
 }
 
 /* Layout */

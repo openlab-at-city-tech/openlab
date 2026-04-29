@@ -51,6 +51,7 @@ class Codes
                 $codes = array_merge( $appointment_codes, $client_codes );
                 break;
             case 'calendar_many_participants' :
+            case 'ics_for_staff' :
                 $codes = array_merge( $appointment_codes, array(
                     'participants' => array(
                         'description' => array(
@@ -64,7 +65,6 @@ class Codes
                     ),
                 ) );
                 break;
-            case 'ics_for_staff' :
             case 'ics_for_customer' :
                 $codes = array(
                     'appointment_date' => array( 'description' => __( 'Date of appointment', 'bookly' ), 'if' => true ),

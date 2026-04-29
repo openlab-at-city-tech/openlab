@@ -102,7 +102,6 @@ abstract class Plugin
     {
         try {
             register_shutdown_function( array( __CLASS__, 'logErrors' ) );
-            Lib\Session::init( get_option( 'bookly_gen_session_type', 'php' ) );
 
             /** @var static $plugin_class */
             $plugin_class = get_called_class();
@@ -456,12 +455,12 @@ abstract class Plugin
     /**
      * Init plugin.
      */
-    protected static function init() {}
+    protected static function init() { }
 
     /**
      * Init ajax.
      */
-    protected static function registerAjax() {}
+    protected static function registerAjax() { }
 
     /**
      * Init update checker.

@@ -40,7 +40,7 @@ class Select
 
         // Insert empty value if required.
         if ( $options['use_empty'] ) {
-            $this->values[ null ] = $options['empty_value'];
+            $this->values[''] = $options['empty_value'];
         }
 
         $ts_length  = Lib\Config::getTimeSlotLength();

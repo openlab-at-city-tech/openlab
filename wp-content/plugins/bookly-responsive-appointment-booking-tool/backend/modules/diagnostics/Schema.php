@@ -118,10 +118,6 @@ class Schema
                 if ( $type === 'mediumtext' ) {
                     $type = 'text';
                 }
-                // MariaDB 11.8.3
-                if ( $type === 'tinyint(4)' ) {
-                    $type = 'tinyint';
-                }
                 break;
             case 'MySql':
             default:
@@ -150,10 +146,10 @@ class Schema
             global $wpdb;
 
             $this->server = 'MySql';
-            $version = $wpdb->get_row( 'SELECT version() AS version', ARRAY_A );
-            if ( strpos( $version['version'], 'MariaDB' ) !== false ) {
+            $version = $wpdb->get_var( 'SELECT version() AS version');
+            if ( strpos( $version, 'MariaDB' ) !== false ) {
                 $this->server = 'MariaDB';
-            } elseif ( strpos( $version['version'], 'Percona' ) !== false ) {
+            } elseif ( strpos( $version, 'Percona' ) !== false ) {
                 $this->server = 'Percona';
             }
         }

@@ -85,8 +85,7 @@
                 e.preventDefault();
                 let ladda = Ladda.create(this),
                     data = booklySerialize.form($form),
-                    $staff_phone = $('#bookly-phone', $form),
-                    phone;
+                    $staff_phone = $('#bookly-phone', $form);
                 ladda.start();
                 // for BooklyPro listener in archive.js
                 // When button disabled, listeners don't process

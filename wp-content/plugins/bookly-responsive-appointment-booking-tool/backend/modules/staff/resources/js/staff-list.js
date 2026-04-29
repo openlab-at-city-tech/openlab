@@ -30,6 +30,10 @@ jQuery(function ($) {
         }
     });
 
+    // Show Google/Outlook calendars errors
+    BooklyL10n.errors.google && booklyAlert({error: BooklyL10n.errors.google});
+    BooklyL10n.errors.outlook && booklyAlert({error: BooklyL10n.errors.outlook});
+
     /**
      * Init Columns.
      */
@@ -82,7 +86,7 @@ jQuery(function ($) {
     /**
      * Init DataTables.
      */
-    var dt = booklyDataTables.init($staffList,BooklyL10n.datatables.staff_members.settings, {
+    var dt = booklyDataTables.init($staffList, BooklyL10n.datatables.staff_members.settings, {
         ajax: {
             url: ajaxurl,
             method: 'POST',
@@ -188,7 +192,7 @@ jQuery(function ($) {
     filters.category.on('change', onChangeFilter);
 
     $('#bookly-duplicate-staff-dialog-show').on('click', function () {
-        BooklyDuplicateStaffDialog.showDialog(function(){
+        BooklyDuplicateStaffDialog.showDialog(function () {
             dt.ajax.reload();
         });
     });

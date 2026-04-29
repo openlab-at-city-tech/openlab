@@ -16,9 +16,10 @@ if ( Config::customerGroupsActive() ) {
 <form method="post" action="<?php echo esc_url( add_query_arg( 'tab', 'appointments' ) ) ?>">
     <div class="card-body">
         <?php Selects::renderSingle( 'bookly_appointment_default_status', __( 'Default appointment status', 'bookly' ), $help, $statuses ) ?>
+        <?php Selects::renderSingle( 'bookly_successful_payment_appointment_status', __( 'Successful payment appointment status', 'bookly' ), __( 'Select the status that will be automatically assigned to an appointment once its payment is successfully completed. Only appointments with the status defined in the \'Default appointment status\' setting will be affected.' ), array_merge( array( array( 'disabled', __( 'Disabled', 'bookly' ) ) ), $statuses ) ) ?>
         <?php Proxy\Pro::renderAppointmentsSettings() ?>
         <div class="form-group">
-            <label for="bookly-ics-customer-editor"><?php esc_html_e( 'ICS description for customers', 'bookly' ) ?></label>
+            <label for="bookly-ics-customer-editor"><?php esc_html_e( 'Description for customer\'s calendar', 'bookly' ) ?></label>
             <?php Ace\Editor::render( 'bookly-placeholders', 'bookly-ics-customer-editor', Codes::getJson( 'ics_for_customer' ), get_option( 'bookly_l10n_ics_customer_template', '' ), 'bookly-ace-editor-h80' ) ?>
             <input type="hidden" name="bookly_l10n_ics_customer_template" value="<?php echo esc_attr( get_option( 'bookly_l10n_ics_customer_template', '' ) ) ?>"/>
         </div>
@@ -28,8 +29,8 @@ if ( Config::customerGroupsActive() ) {
             <input type="hidden" name="bookly_ics_staff_template" value="<?php echo esc_attr( get_option( 'bookly_ics_staff_template', '' ) ) ?>"/>
         </div>
         <?php Selects::renderSingle( 'bookly_appointment_end_date_method', __( 'The value returned by {appointment_end_date} placeholder', 'bookly' ), __( 'Choose \'Accurate date\' if you want the {appointment_end_date} placeholder to return the exact end date of the appointment. Select \'+1 day\' if you prefer the placeholder to include an additional day in the end date calculation. Please note that this setting will affect only appointments with a duration longer or equal to one day.', 'bookly' ), array(
-            array( 'default', __( '+1 day', 'bookly' ) ),
-            array( 'accurate', __( 'Accurate date', 'bookly' ) ),
+                array( 'default', __( '+1 day', 'bookly' ) ),
+                array( 'accurate', __( 'Accurate date', 'bookly' ) ),
         ) ) ?>
     </div>
 

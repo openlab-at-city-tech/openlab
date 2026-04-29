@@ -92,9 +92,9 @@ class Account extends Base
      * @param string $country
      * @return array|false
      */
-    public function register( $username, $password, $password_repeat, $country )
+    public function register( $username, $password, $password_repeat, $country, $source = 'bookly' )
     {
-        $data = array( '_username' => $username, '_password' => $password, 'country' => $country );
+        $data = array( '_username' => $username, '_password' => $password, 'country' => $country, 'source' => $source );
 
         if ( $password !== $password_repeat && ! empty ( $password ) ) {
             $this->api->addError( __( 'Passwords don\'t match', 'bookly' ) );

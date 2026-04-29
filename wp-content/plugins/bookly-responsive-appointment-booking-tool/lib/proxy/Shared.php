@@ -4,10 +4,10 @@ namespace Bookly\Lib\Proxy;
 use Bookly\Lib;
 
 /**
- * @method static string buildOnlineMeetingUrl( string $default, Lib\Entities\Appointment $appointment, Lib\Entities\Customer $customer ) Build online meeting URL for given appointment.
- * @method static string buildOnlineMeetingPassword( string $default, Lib\Entities\Appointment $appointment ) Build online meeting password for given appointment.
- * @method static string buildOnlineMeetingStartUrl( string $default, Lib\Entities\Appointment $appointment ) Build online meeting host url for given appointment.
- * @method static string buildOnlineMeetingJoinUrl( string $default, Lib\Entities\Appointment $appointment, Lib\Entities\Customer $customer ) Build online meeting join url for given appointment.
+ * @method static string buildOnlineMeetingUrl( string $default, Lib\Base\Entity $entity, Lib\Entities\Customer|null $customer ) Build online meeting URL for given appointment or event.
+ * @method static string buildOnlineMeetingPassword( string $default, Lib\Base\Entity $entity ) Build online meeting password for given appointment or event.
+ * @method static string buildOnlineMeetingStartUrl( string $default, Lib\Base\Entity $entity ) Build online meeting host url for given appointment or event.
+ * @method static string buildOnlineMeetingJoinUrl( string $default, Lib\Base\Entity $entity, Lib\Entities\Customer $customer ) Build online meeting join url for given appointment.
  * @method static void   deleteCustomerAppointment( Lib\Entities\CustomerAppointment $ca ) Deleting customer appointment
  * @method static void   doDailyRoutine() Execute daily routines.
  * @method static void   doHourlyRoutine() Execute hourly routines.
@@ -31,7 +31,7 @@ use Bookly\Lib;
  * @method static string prepareStatement( string $value, string $statement, string $table ) Prepare default value for sql statement.
  * @method static void   renderAdminNotices( bool $bookly_page ) Render admin notices from add-ons.
  * @method static bool   saveUserBookingData( Lib\UserBookingData $userData ) Save UserBookingData.
- * @method static array  syncOnlineMeeting( array $errors, Lib\Entities\Appointment $appointment, Lib\Entities\Service $service ) Synchronize online meeting data with appointment.
+ * @method static array  syncOnlineMeeting( array $errors, Lib\Base\Entity $entity ) Synchronize online meeting data with appointment or event.
  * @method static mixed  prepareGlobalSetting( $obj, string $token ) Extend BooklyL10Global JavaScript object
  * @method static array  prepareL10nGlobal( array $obj ) Extend BooklyL10Global JavaScript object
  * @method static array  prepareColorsStatuses( array $statuses ) Prepare colors for statuses.

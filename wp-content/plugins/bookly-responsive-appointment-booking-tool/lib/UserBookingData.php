@@ -105,6 +105,9 @@ class UserBookingData
     /** @var string */
     private $form_id;
 
+    /** @var array */
+    private $session = array();
+
     // Frontend expect variables
     private $properties = array(
         'first_rendered_step',
@@ -141,8 +144,8 @@ class UserBookingData
         // Step payment
         'coupon_code',
         'gift_code',
-        'tips',
         'deposit_full',
+        'tips',
         // Cart item keys being edited
         'edit_cart_keys',
         'repeated',
@@ -223,11 +226,11 @@ class UserBookingData
             }
         } elseif ( get_option( 'bookly_cst_remember_in_cookie' ) ) {
             if ( isset( $_COOKIE['bookly-customer-full-name'] ) ) {
-                $this->setFullName( $_COOKIE['bookly-customer-full-name'] );
+                $this->setFullName( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-full-name'] ) );
             }
             Proxy\CustomerInformation::setFromCookies( $this );
             if ( isset( $_COOKIE['bookly-customer-birthday'] ) ) {
-                $date = explode( '-', $_COOKIE['bookly-customer-birthday'] );
+                $date = explode( '-', Utils\Common::stripWpKses( $_COOKIE['bookly-customer-birthday'] ) );
                 $birthday = array(
                     'year' => $date[0],
                     'month' => isset( $date[1] ) ? (int) $date[1] : 0,
@@ -236,37 +239,39 @@ class UserBookingData
                 $this->setBirthday( $birthday );
             }
             if ( isset( $_COOKIE['bookly-customer-email'] ) ) {
-                $this->setEmail( $_COOKIE['bookly-customer-email'] )->setEmailConfirm( $_COOKIE['bookly-customer-email'] );
+                $this
+                    ->setEmail( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-email'] ) )
+                    ->setEmailConfirm( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-email'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-phone'] ) ) {
-                $this->setPhone( $_COOKIE['bookly-customer-phone'] );
+                $this->setPhone( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-phone'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-first-name'] ) ) {
-                $this->setFirstName( $_COOKIE['bookly-customer-first-name'] );
+                $this->setFirstName( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-first-name'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-last-name'] ) ) {
-                $this->setLastName( $_COOKIE['bookly-customer-last-name'] );
+                $this->setLastName( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-last-name'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-country'] ) ) {
-                $this->setCountry( $_COOKIE['bookly-customer-country'] );
+                $this->setCountry( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-country'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-state'] ) ) {
-                $this->setState( $_COOKIE['bookly-customer-state'] );
+                $this->setState( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-state'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-postcode'] ) ) {
-                $this->setPostcode( $_COOKIE['bookly-customer-postcode'] );
+                $this->setPostcode( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-postcode'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-city'] ) ) {
-                $this->setCity( $_COOKIE['bookly-customer-city'] );
+                $this->setCity( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-city'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-street'] ) ) {
-                $this->setStreet( $_COOKIE['bookly-customer-street'] );
+                $this->setStreet( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-street'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-street-number'] ) ) {
-                $this->setStreetNumber( $_COOKIE['bookly-customer-street-number'] );
+                $this->setStreetNumber( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-street-number'] ) );
             }
             if ( isset( $_COOKIE['bookly-customer-additional-address'] ) ) {
-                $this->setAdditionalAddress( $_COOKIE['bookly-customer-additional-address'] );
+                $this->setAdditionalAddress( Utils\Common::stripWpKses( $_COOKIE['bookly-customer-additional-address'] ) );
             }
         }
     }
@@ -279,7 +284,7 @@ class UserBookingData
         // Set up default parameters.
         $this
             ->setDateFrom( Slots\DatePoint::now()
-                ->modify( Proxy\Pro::getMinimumTimePriorBooking( null ) )
+                ->modify( Proxy\Pro::getMinimumTimePriorBooking( 0 ) )
                 ->toClientTz()
                 ->format( 'Y-m-d' )
             )
@@ -292,20 +297,20 @@ class UserBookingData
     }
 
     /**
-     * Save data to session.
+     * Save data to a session.
      */
     public function sessionSave()
     {
-        Session::setFormVar( $this->form_id, 'data', $this->getData() );
-        Session::setFormVar( $this->form_id, 'cart', $this->cart->getItemsData() );
-        Session::setFormVar( $this->form_id, 'chain', $this->chain->getItemsData() );
-        Session::setFormVar( $this->form_id, 'payment_id', $this->payment_id );
-        Session::setFormVar( $this->form_id, 'payment_type', $this->payment_type );
-        Session::setFormVar( $this->form_id, 'last_touched', time() );
-        Session::setFormVar( $this->form_id, 'verification_code', $this->verification_code ?: mt_rand( 100000, 999999 ) );
-        Session::setFormVar( $this->form_id, 'verification_code_sent', $this->verification_code_sent );
-        Session::setFormVar( $this->form_id, 'order_id', $this->order_id );
-        Session::save();
+        $this->session['data'] = $this->getData();
+        $this->session['cart'] = $this->cart->getItemsData();
+        $this->session['chain'] = $this->chain->getItemsData();
+        $this->session['payment_id'] = $this->payment_id;
+        $this->session['payment_type'] = $this->payment_type;
+        $this->session['verification_code'] = $this->verification_code ?: mt_rand( 100000, 999999 );
+        $this->session['verification_code_sent'] = $this->verification_code_sent;
+        $this->session['order_id'] = $this->order_id;
+
+        FormSession::saveSession( $this->form_id, $this->session );
     }
 
     /**
@@ -328,20 +333,23 @@ class UserBookingData
      */
     public function load()
     {
-        $data = Session::getFormVar( $this->form_id, 'data' );
-        if ( $data !== null ) {
-            // Restore data.
-            $this->fillData( $data );
-            $this->chain->setItemsData( Session::getFormVar( $this->form_id, 'chain' ) );
-            $this->cart->setItemsData( Session::getFormVar( $this->form_id, 'cart' ) );
-            $this->payment_id = Session::getFormVar( $this->form_id, 'payment_id' );
-            $this->payment_type = Session::getFormVar( $this->form_id, 'payment_type' );
-            $this->verification_code = Session::getFormVar( $this->form_id, 'verification_code' );
-            $this->verification_code_sent = Session::getFormVar( $this->form_id, 'verification_code_sent' );
-            $this->order_id = Session::getFormVar( $this->form_id, 'order_id' );
-            $this->applyTimeZone();
+        $this->session = FormSession::loadSession( $this->form_id );
+        if ( $this->session ) {
+            $data = isset( $this->session['data'] ) ? $this->session['data'] : null;
+            if ( $data !== null ) {
+                // Restore data.
+                $this->fillData( $data );
+                $this->chain->setItemsData( isset( $this->session['chain'] ) ? $this->session['chain'] : null );
+                $this->cart->setItemsData( isset( $this->session['cart'] ) ? $this->session['cart'] : null );
+                $this->payment_id = isset( $this->session['payment_id'] ) ? $this->session['payment_id'] : null;
+                $this->payment_type = isset( $this->session['payment_type'] ) ? $this->session['payment_type'] : null;
+                $this->verification_code = isset( $this->session['verification_code'] ) ? $this->session['verification_code'] : null;
+                $this->verification_code_sent = isset( $this->session['verification_code_sent'] ) ? $this->session['verification_code_sent'] : null;
+                $this->order_id = isset( $this->session['order_id'] ) ? $this->session['order_id'] : null;
+                $this->applyTimeZone();
 
-            return true;
+                return true;
+            }
         }
 
         return false;
@@ -355,7 +363,9 @@ class UserBookingData
     public function fillData( array $data )
     {
         foreach ( $data as $name => $value ) {
-            if ( in_array( $name, $this->properties ) ) {
+            if ( $name === 'tips' ) {
+                $this->setTips( $value );
+            } elseif ( in_array( $name, $this->properties ) ) {
                 $this->{$name} = $value;
             } elseif ( $name == 'chain' ) {
                 $chain_items = $this->chain->getItems();
@@ -486,7 +496,7 @@ class UserBookingData
                 $slots = $cart_item->getSlots();
                 foreach ( $slots as $slot ) {
                     if ( $slot[2] < $first_visit_time ) {
-                        $first_visit_time = $slots[2];
+                        $first_visit_time = $slot[2];
                         $first_visit_repeat = $repeat_id;
                     }
                 }
@@ -888,7 +898,7 @@ class UserBookingData
                 $time_zone = $customer_data['time_zone'];
 
                 $this->setTimeZone( $time_zone );
-                
+
                 if ( preg_match( '/^UTC[+-]/', $time_zone ) ) {
                     $offset = preg_replace( '/UTC\+?/', '', $time_zone );
                     $time_zone = null;
@@ -967,7 +977,7 @@ class UserBookingData
      */
     public function setPaymentStatus( $status )
     {
-        Session::setFormVar( $this->form_id, 'payment', compact( 'status' ) );
+        $this->session['payment'] = compact( 'status' );
 
         return $this;
     }
@@ -979,10 +989,10 @@ class UserBookingData
      */
     public function extractPaymentStatus()
     {
-        $status = Session::getFormVar( $this->form_id, 'payment' );
+        $status = isset( $this->session['payment'] ) ? $this->session['payment'] : null;
 
         if ( isset( $status['status'] ) ) {
-            Session::destroyFormVar( $this->form_id, 'payment' );
+            unset( $this->session['payment'] );
 
             return $status;
         }
@@ -1825,6 +1835,17 @@ class UserBookingData
      * @param bool|string $value
      * @return $this
      */
+    public function setVerificationCode( $value )
+    {
+        $this->verification_code = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param bool|string $value
+     * @return $this
+     */
     public function setVerificationCodeSent( $value )
     {
         $this->verification_code_sent = $value;
@@ -1881,7 +1902,7 @@ class UserBookingData
      */
     public function setTips( $tips )
     {
-        $this->tips = $tips;
+        $this->tips = max( 0, (float) $tips );
 
         return $this;
     }

@@ -58,6 +58,7 @@ class Logs extends Tool
         global $wpdb;
 
         $ids = self::parameter( 'ids' ) ?: array();
+        $appointments_table_name = $wpdb->prefix . 'bookly_appointments';
 
         do {
             $changed = false;
@@ -67,16 +68,25 @@ class Logs extends Tool
                     // Try to restore record
                     try {
                         $data = json_decode( $record->getDetails(), true );
+
+                        $is_appointment_record = $record->getTarget() === $appointments_table_name;
+                        if ( $is_appointment_record ) {
+                            $data['google_event_id'] = null;
+                            $data['google_event_etag'] = null;
+                            $data['outlook_event_id'] = null;
+                            $data['outlook_event_change_key'] = null;
+                            $data['outlook_event_series_id'] = null;
+                        }
+
                         $wpdb->insert(
                             $record->getTarget(),
                             $data
                         );
                         if ( ! $wpdb->last_error ) {
-                            $appointments_db_name = 'bookly_appointments';
-                            if ( substr( $record->getTarget(), -strlen( $appointments_db_name ) ) === $appointments_db_name ) {
+                            if ( $is_appointment_record ) {
                                 $appointment = Lib\Entities\Appointment::find( $data['id'] );
                                 if ( $appointment->getStartDate() ) {
-                                    Lib\Proxy\Shared::syncOnlineMeeting( array(), $appointment, Lib\Entities\Service::find( $appointment->getServiceId() ) );
+                                    Lib\Proxy\Shared::syncOnlineMeeting( array(), $appointment );
                                     Lib\Utils\Common::syncWithCalendars( $appointment );
                                 }
                             }

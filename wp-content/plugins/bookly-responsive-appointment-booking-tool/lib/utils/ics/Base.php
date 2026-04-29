@@ -38,9 +38,16 @@ class Base
                         $path = $new_path;
                     }
                 }
-                Lib\Utils\Common::getFilesystem()->put_contents( $path, $this->data );
+                try {
+                    Lib\Utils\Common::getFilesystem()->put_contents( $path, $this->data );
 
-                return $path;
+                    return $path;
+                } catch ( \Error $e ) {
+                    Lib\Utils\Log::error( $e->getMessage(), $e->getFile(), $e->getLine() );
+                } catch ( \Exception $e ) {
+                    Lib\Utils\Log::error( $e->getMessage(), $e->getFile(), $e->getLine() );
+                }
+                Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, null, null, 'Failed to create email attachment file: ' . $new_path );
             }
         }
 

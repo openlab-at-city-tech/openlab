@@ -43,7 +43,7 @@ class Ajax extends Lib\Base\Ajax
         $result = array(
             'html' => array(
                 'general' => self::renderTemplate( 'general', compact( 'service', 'service_types', 'simple_services', 'staff_dropdown_data', 'categories_collection', 'staff_ids' ), false ),
-                'advanced' => Lib\Config::proActive() ? Proxy\Pro::getAdvancedHtml( $service ) : Advertisement::render( 'services-modal-advanced-tab', ! Lib\Config::proActive(), false ),
+                'advanced' => Lib\Config::proActive() || Lib\Config::packagesActive() ? Proxy\Pro::getAdvancedHtml( $service ) : Advertisement::render( 'services-modal-advanced-tab', ! Lib\Config::proActive(), false ),
                 'time' => self::renderTemplate( 'time', compact( 'service' ), false ),
                 'extras' => Proxy\ServiceExtras::getTabHtml( $service_id ),
                 'schedule' => Proxy\ServiceSchedule::getTabHtml( $service_id ),

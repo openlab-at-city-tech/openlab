@@ -6,12 +6,12 @@ use Bookly\Lib\Slots\DatePoint;
 
 class Scheduler
 {
-    const REPEAT_DAILY = 'daily';
-    const REPEAT_WEEKLY = 'weekly';
+    const REPEAT_DAILY    = 'daily';
+    const REPEAT_WEEKLY   = 'weekly';
     const REPEAT_BIWEEKLY = 'biweekly';
-    const REPEAT_MONTHLY = 'monthly';
-    const REPEAT_YEARLY = 'yearly';//not implemented yet
-    const REPEAT_NONE = 'none';
+    const REPEAT_MONTHLY  = 'monthly';
+    const REPEAT_YEARLY   = 'yearly';//not implemented yet
+    const REPEAT_NONE     = 'none';
 
     private $client_from;
 
@@ -103,7 +103,7 @@ class Scheduler
 
         foreach ( $exclude as $slots ) {
             $this->userData
-                ->setSlots( json_decode( $slots ) )
+                ->setSlots( json_decode( $slots, true ) )
                 ->addChainToCart()
                 ->setEditCartKeys( array() );
         }
@@ -122,7 +122,7 @@ class Scheduler
             isset( $params['show_blocked_slots'] ) && $params['show_blocked_slots']
         );
 
-        $this->finder->prepare();
+        $this->finder->prepare( isset( $params['for_backend'] ) && $params['for_backend'] ? DatePoint::fromStr( $until )->modify( '+1 week' ) : null );
 
         $this->client_from = DatePoint::fromStr( $datetime )->toClientTz();
         $this->client_until = DatePoint::fromStrInClientTz( $until );
@@ -336,7 +336,7 @@ class Scheduler
             $this->slots[] = $slot;
 
             $this->userData
-                ->setSlots( json_decode( $slot['slots'] ) )
+                ->setSlots( json_decode( $slot['slots'], true ) )
                 ->addChainToCart()
                 ->setEditCartKeys( array() );
             $this->finder->handleCartBookings();

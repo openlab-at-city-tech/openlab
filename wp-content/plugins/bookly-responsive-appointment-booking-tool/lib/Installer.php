@@ -225,7 +225,9 @@ class Installer extends Base\Installer
             'type' => Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN,
             'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
             'subject' => __( 'Your Bookly Staff Cabinet mobile app access token', 'bookly' ),
-            'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+            'message' => __( 'Hello', 'bookly' ) . ",\n\n"
+                . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n"
+                . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
             'active' => 1,
             'to_staff' => 1,
             'settings' => '[]',
@@ -234,7 +236,9 @@ class Installer extends Base\Installer
             'gateway' => 'sms',
             'type' => Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN,
             'name' => __( 'New staff member\'s Bookly Staff Cabinet mobile app access token details', 'bookly' ),
-            'message' => __( "Hello.\nYour access token for Bookly Staff Cabinet mobile app: {access_token}", 'bookly' ),
+            'message' => __( 'Hello', 'bookly' ) . ",\n\n"
+                . __( 'To log in to the Bookly Staff Cabinet mobile app, please use the following link', 'bookly' ) . ":\n{access_token_link}\n\n"
+                . __( 'If the link does not work, you can manually enter this access token in the app', 'bookly' ) . ":\n{access_token}",
             'active' => 1,
             'to_staff' => 1,
             'settings' => '[]',
@@ -344,6 +348,7 @@ class Installer extends Base\Installer
             'bookly_cal_month_view_style' => 'classic',
             'bookly_cal_show_new_appointments_badge' => '0',
             'bookly_cal_last_seen_appointment' => '0',
+            'bookly_legacy_calendar' => '0',
             // Company.
             'bookly_co_logo_attachment_id' => '',
             'bookly_co_name' => '',
@@ -382,9 +387,7 @@ class Installer extends Base\Installer
             'bookly_gen_link_assets_method' => 'enqueue',
             'bookly_gen_collect_stats' => '0',
             'bookly_gen_show_powered_by' => '0',
-            'bookly_gen_session_type' => 'php',
             'bookly_gen_prevent_caching' => '1',
-            'bookly_gen_prevent_session_locking' => '0',
             'bookly_gen_badge_consider_news' => '1',
             // URL.
             'bookly_url_approve_page_url' => home_url(),
@@ -459,6 +462,7 @@ class Installer extends Base\Installer
             'bookly_appointment_status_rejected_color' => '#dd3333',
             'bookly_appointment_status_mixed_color' => '#8224e3',
             'bookly_appointment_default_status' => Entities\CustomerAppointment::STATUS_APPROVED,
+            'bookly_successful_payment_appointment_status' => 'disabled',
             'bookly_appointment_cancel_action' => 'cancel',
             // Notices
             'bookly_show_wpml_resave_required_notice' => '0',
@@ -473,6 +477,7 @@ class Installer extends Base\Installer
             'bookly_appointment_end_date_method' => 'default',
             'bookly_advanced_time_slot_length_minutes' => '',
             'bookly_advanced_slot_date_format' => 'D, M d',
+            'bookly_bc_clmn_min_width' => '120',
             'bookly_dashboard_based_on_appointment' => 'created_at',
             'bookly_temporary_logs_mobile_staff_cabinet' => '0',
         );
@@ -561,6 +566,7 @@ class Installer extends Base\Installer
                 `position`              INT NOT NULL DEFAULT 9999,
                 `google_data`           TEXT DEFAULT NULL,
                 `outlook_data`          TEXT DEFAULT NULL,
+                `apple_data`            TEXT DEFAULT NULL,
                 `zoom_authentication`   ENUM("default", "oauth") NOT NULL DEFAULT "default",
                 `zoom_oauth_token`      TEXT DEFAULT NULL,
                 `icalendar`             TINYINT(1) NOT NULL DEFAULT 0,
@@ -620,7 +626,7 @@ class Installer extends Base\Installer
                 `recurrence_frequencies`       SET("daily","weekly","biweekly","monthly") NOT NULL DEFAULT "daily,weekly,biweekly,monthly",
                 `time_requirements`            ENUM("required","optional","off") NOT NULL DEFAULT "required",
                 `collaborative_equal_duration` TINYINT(1) NOT NULL DEFAULT 0,
-                `online_meetings`              ENUM("off","zoom","google_meet","jitsi","bbb") NOT NULL DEFAULT "off",
+                `online_meetings`              ENUM("off","zoom","google_meet","jitsi","bbb","teams") NOT NULL DEFAULT "off",
                 `final_step_url`               VARCHAR(512) NOT NULL DEFAULT "",
                 `wc_product_id`                INT UNSIGNED NOT NULL DEFAULT 0,
                 `wc_cart_info_name`            VARCHAR(255) DEFAULT NULL,
@@ -800,10 +806,12 @@ class Installer extends Base\Installer
                 `outlook_event_id`         VARCHAR(255) DEFAULT NULL,
                 `outlook_event_change_key` VARCHAR(255) DEFAULT NULL,
                 `outlook_event_series_id`  VARCHAR(255) DEFAULT NULL,
-                `online_meeting_provider`  ENUM("zoom","google_meet","jitsi","bbb") DEFAULT NULL,
+                `apple_event_id`           VARCHAR(255) DEFAULT NULL,
+                `apple_event_etag`         VARCHAR(255) DEFAULT NULL,
+                `online_meeting_provider`  ENUM("zoom","google_meet","jitsi","bbb","teams") DEFAULT NULL,
                 `online_meeting_id`        VARCHAR(255) DEFAULT NULL,
                 `online_meeting_data`      TEXT DEFAULT NULL,
-                `created_from`             ENUM("bookly","google","outlook") NOT NULL DEFAULT "bookly",
+                `created_from`             ENUM("bookly","google","outlook","apple") NOT NULL DEFAULT "bookly",
                 `created_at`               DATETIME NOT NULL,
                 `updated_at`               DATETIME NOT NULL,
             CONSTRAINT
@@ -1082,6 +1090,18 @@ class Installer extends Base\Installer
                 `sent` TINYINT(1) DEFAULT 0,
                 `campaign_id` INT NOT NULL DEFAULT 0,
                 `created_at` DATETIME NOT NULL
+            ) ENGINE = INNODB
+            ' . $charset_collate
+        );
+
+        $wpdb->query(
+            'CREATE TABLE IF NOT EXISTS `' . Entities\FormSession::getTableName() . '` (
+                `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
+                `token` VARCHAR(64) NOT NULL,
+                `value` TEXT DEFAULT NULL,
+                `expire` DATETIME NOT NULL,
+                INDEX `token` (`token`),
+                INDEX `expire` (`expire`)
             ) ENGINE = INNODB
             ' . $charset_collate
         );

@@ -307,7 +307,8 @@ class Validator
                 $recipient = $this->errors['verify'] == 'phone' ? $customer->getPhone() : $customer->getEmail();
                 $this->errors['verify_text'] = $this->errors['verify'] == 'phone' ? __( 'Enter verification code from SMS', 'bookly' ) : __( 'Enter verification code from email', 'bookly' );
                 $this->errors['incorrect_code_text'] = $this->errors['verify'] == 'phone' ? Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_phone_verification_code' ) : Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_email_verification_code' );
-                if ( $userData->getVerificationCodeSent() !== $recipient ) {
+                if ( $userData->getVerificationCodeSent() !== $recipient || isset( $data['resend_verification_code'] ) ) {
+                    $userData->setVerificationCode( mt_rand( 100000, 999999 ) );
                     Sender::send( $customer, $userData->getVerificationCode(), $this->errors['verify'] );
                     $userData->setVerificationCodeSent( $recipient );
                 }

@@ -250,6 +250,8 @@ class Notification extends Lib\Base\Entity
                 'low_balance'                                  => -1,
                 /** @see \Bookly\Backend\Modules\CloudSms\Ajax::sendTestSms */
                 'test_message'                                 => 0,
+                /** @see \Bookly\Lib\Cloud\SMS::sendWizardSms */
+                'wizard_test_message'                          => 1,
                 self::TYPE_STAFF_NEW_WP_USER                   => 4,
                 self::TYPE_CUSTOMER_NEW_WP_USER                => 5,
                 self::TYPE_NEW_BOOKING_COMBINED                => 7,

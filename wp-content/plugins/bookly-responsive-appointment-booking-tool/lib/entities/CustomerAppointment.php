@@ -139,6 +139,7 @@ class CustomerAppointment extends Lib\Base\Entity
                 Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
                 // Outlook Calendar.
                 Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+                Lib\Proxy\AppleCalendar::syncEvent( $appointment );
                 // Waiting list.
                 Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
 
@@ -232,6 +233,7 @@ class CustomerAppointment extends Lib\Base\Entity
                             Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
                             // Outlook Calendar.
                             Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+                Lib\Proxy\AppleCalendar::syncEvent( $appointment );
                             // Waiting list.
                             Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
 
@@ -287,6 +289,8 @@ class CustomerAppointment extends Lib\Base\Entity
                 return __( 'Done', 'bookly' );
             case 'mixed':
                 return __( 'Mixed', 'bookly' );
+            case null:
+                return null;
             default:
                 return Lib\Proxy\CustomStatuses::statusToString( $status );
         }

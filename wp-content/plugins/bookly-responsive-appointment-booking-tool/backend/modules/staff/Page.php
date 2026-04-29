@@ -23,7 +23,7 @@ class Page extends Lib\Base\Component
         // Allow add-ons to enqueue their assets.
         Proxy\Shared::enqueueStaffProfileStyles();
         Proxy\Shared::enqueueStaffProfileScripts();
-        Proxy\Shared::renderStaffPage( self::parameters() );
+        $errors = Proxy\Shared::prepareCalendarErrors( array(), self::parameters() );
 
         $categories = Proxy\Pro::getCategoriesList() ?: array();
         foreach ( $categories as &$category ) {
@@ -45,6 +45,7 @@ class Page extends Lib\Base\Component
             'processing' => esc_attr__( 'Processing', 'bookly' ) . '…',
             'emptyTable' => __( 'No data available in table', 'bookly' ),
             'loadingRecords' => __( 'Loading...', 'bookly' ),
+            'errors' => $errors,
             'datatables' => $datatables,
         ) );
 

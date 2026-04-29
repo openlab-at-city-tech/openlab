@@ -201,6 +201,26 @@ class Order
         return $order;
     }
 
+    public function completePayment()
+    {
+        $success_ca_status = get_option( 'bookly_successful_payment_appointment_status' );
+        $default_ca_status = Lib\Proxy\CustomerGroups::takeDefaultAppointmentStatus( Lib\Config::getDefaultAppointmentStatus(), 0 );
+
+        foreach ( $this->items as $item ) {
+            if ( $item->getCA() ) {
+                $set_success = ( $item->getCA()->getStatus() === CustomerAppointment::STATUS_REJECTED );
+                if ( $set_success || ( $success_ca_status && ( $success_ca_status !== 'disabled' ) ) ) {
+                    $items = $item->getItems() ?: array( $item );
+                    foreach ( $items as $sub_item ) {
+                        if ( ( $ca = $sub_item->getCA() ) && ( $set_success || ( $ca->getStatus() === $default_ca_status ) ) ) {
+                            $ca->setStatus( $success_ca_status )->save();
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * @param CustomerAppointment[] $ca_list
      * @return static|null
@@ -224,7 +244,7 @@ class Order
             $compounds = $collaboratives = array();
             $series = null;
             foreach ( $ca_list as $ca ) {
-                $type   = Lib\Entities\Service::TYPE_SIMPLE;
+                $type = Lib\Entities\Service::TYPE_SIMPLE;
 
                 if ( $ca->getCompoundServiceId() !== null ) {
                     $type = Lib\Entities\Service::TYPE_COMPOUND;
@@ -243,8 +263,7 @@ class Order
                 // Series.
                 if ( $ca->getSeriesId() ) {
                     if ( ( $series === null )
-                        || ( $series->getCA()->getSeriesId() != $ca->getSeriesId() ) )
-                    {
+                        || ( $series->getCA()->getSeriesId() != $ca->getSeriesId() ) ) {
                         // Unique series item key
                         $series_item_key = 'series_id_' . $ca->getSeriesId();
                         if ( $order->hasItem( $series_item_key ) ) {
@@ -268,9 +287,9 @@ class Order
 
                 if ( count( $item->getItems() ) === 1 ) {
                     if ( $series ) {
-                        $series->addItem( $item_key ++, $item );
+                        $series->addItem( $item_key++, $item );
                     } else {
-                        $order->addItem( $item_key ++, $item );
+                        $order->addItem( $item_key++, $item );
                     }
                 }
             }

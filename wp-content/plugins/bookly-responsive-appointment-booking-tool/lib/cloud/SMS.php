@@ -14,6 +14,7 @@ class SMS extends Base
     const REQUEST_SENDER_ID = '/1.0/users/%token%/sender-ids';        //POST
     const RESET_SENDER_ID = '/1.0/users/%token%/sender-ids/reset';  //GET
     const SEND_SMS = '/1.1/users/%token%/sms';               //POST
+    const SEND_WIZARD_SMS = '/1.1/users/%token%/wizard/sms';               //POST
 
     /** @var array */
     protected $sender_id;
@@ -69,6 +70,27 @@ class SMS extends Base
         }
 
         return false;
+    }
+
+    /**
+     * Send Wizard SMS.
+     *
+     * @param string $phone_number
+     */
+    public function sendWizardSms( $phone_number )
+    {
+        $text = 'Bookly test SMS';
+        if ( $this->api->getToken() ) {
+            $data = array(
+                'message' => $text,
+                'impersonal_message' => $text,
+                'phone' => self::normalizePhoneNumber( $phone_number ),
+                'type' => 1,
+            );
+            if ( $data['phone'] != '' ) {
+                $this->api->sendPostRequest( self::SEND_WIZARD_SMS, $data );
+            }
+        }
     }
 
     /**

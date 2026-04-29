@@ -50,7 +50,8 @@ class Ajax extends Lib\Base\Ajax
                 self::parameter( 'username' ),
                 self::parameter( 'password' ),
                 self::parameter( 'password_repeat' ),
-                self::parameter( 'country' )
+                self::parameter( 'country' ),
+                self::parameter( 'source' )
             );
             if ( $response ) {
                 update_option( 'bookly_cloud_token', $response['token'] );

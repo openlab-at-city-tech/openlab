@@ -17,6 +17,38 @@ class Ajax extends Lib\Base\Ajax
         return array( '_default' => 'anonymous' );
     }
 
+    public static function getFormId()
+    {
+        $status = array( 'booking' => 'new' );
+        $form_processed = false;
+        if ( self::hasParameter( 'form_id' ) ) {
+            $form_id = self::parameter( 'form_id' );
+            $data = Lib\FormSession::loadSession( $form_id );
+            if ( $data && isset( $data['payment'] ) && ! isset ( $data['payment']['processed'] ) ) {
+                switch ( $data['payment']['status'] ) {
+                    case Lib\Base\Gateway::STATUS_COMPLETED:
+                    case Lib\Base\Gateway::STATUS_PROCESSING:
+                        $status = array( 'booking' => 'finished' );
+                        break;
+                    case Lib\Base\Gateway::STATUS_FAILED:
+                        end( $data['cart'] );
+                        $status = array( 'booking' => 'cancelled', 'cart_key' => key( $data['cart'] ) );
+                        break;
+                }
+                // Mark this form as processed for cases when there are more than 1 booking form on the page.
+                $data['payment']['processed'] = true;
+                Lib\FormSession::saveSession( $form_id, $data );
+                $form_processed = true;
+            }
+        }
+        if ( ! $form_processed ) {
+            $form_id = Lib\FormSession::createSession();
+            Lib\FormSession::saveSession( $form_id, self::parameter( 'form_data' ) );
+        }
+
+        wp_send_json( array( 'success' => true, 'form_id' => $form_id, 'status' => $status ) );
+    }
+
     /**
      * 1. Step service.
      * response JSON
@@ -947,6 +979,7 @@ class Ajax extends Lib\Base\Ajax
                             Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
                             // Outlook Calendar.
                             Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+                            Lib\Proxy\AppleCalendar::syncEvent( $appointment );
                             // Waiting list.
                             Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
                         }
@@ -995,6 +1028,7 @@ class Ajax extends Lib\Base\Ajax
                         Lib\Proxy\Pro::syncGoogleCalendarEvent( $appointment );
                         // Outlook Calendar.
                         Lib\Proxy\OutlookCalendar::syncEvent( $appointment );
+                            Lib\Proxy\AppleCalendar::syncEvent( $appointment );
                         // Waiting list.
                         Lib\Proxy\WaitingList::handleParticipantsChange( false, $appointment );
                     }
@@ -1080,14 +1114,13 @@ class Ajax extends Lib\Base\Ajax
                     if ( $list[0]['type'] === 'event' ) {
                         list( $start, $end, $title, $location, $description ) = Proxy\Events::getCalendarData( $list[0] );
                     } else {
-                        $staff = Lib\Entities\Staff::find( $list[0]['item']->getAppointment()->getStaffId() );
                         $location_id = $list[0]['item']->getAppointment()->getLocationId();
                         $location = $location_id
                             ? Lib\Proxy\Locations::findById( $location_id )
                             : null;
                         $start = date_create( Lib\Utils\DateTime::convertTimeZone( $list[0]['item']->getAppointment()->getStartDate(), Lib\Config::getWPTimeZone(), 'UTC' ) );
                         $end = date_create( Lib\Utils\DateTime::convertTimeZone( $list[0]['item']->getAppointment()->getEndDate(), Lib\Config::getWPTimeZone(), 'UTC' ) );
-                        $description = urlencode( sprintf( "%s<br>%s", $list[0]['title'], $staff ? $staff->getTranslatedName() : '' ) );
+                        $description = urlencode( Lib\Utils\Codes::replace( Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_ics_customer_template' ), Lib\Utils\Codes::getAppointmentCodes( $list[0]['item']->getAppointment() ), false ) );
                         $title = urlencode( $list[0]['title'] );
                     }
                     $redirect_url = sprintf(
@@ -1222,13 +1255,14 @@ class Ajax extends Lib\Base\Ajax
                 }
             }
             $form_id = self::parameter( 'form_id' );
-            $stepper_add_step = ! Lib\Session::getFormVar( $form_id, 'skip_service_step', 0 )
-                && ( Lib\Session::getFormVar( $form_id, 'hide_service_part1', 0 ) + Lib\Session::getFormVar( $form_id, 'hide_service_part2', 0 ) ) === 0;
+            $session = Lib\FormSession::loadSession( $form_id );
+            $stepper_add_step = ( ! isset( $session['skip_service_step'] ) || ! $session['skip_service_step'] )
+                && ( $session['hide_service_part1'] + $session['hide_service_part2'] === 0 );
 
             $result = self::renderTemplate( '_progress_tracker', array(
                 'step' => $step,
                 'skip_steps' => array(
-                    'service' => Lib\Session::hasFormVar( $form_id, 'skip_service_step' ),
+                    'service' => isset( $session['skip_service_step'] ) && $session['skip_service_step'],
                     'extras' => ! ( Lib\Config::serviceExtrasActive() && get_option( 'bookly_service_extras_enabled' ) ),
                     'time' => $skip_time_step,
                     'repeat' => $skip_time_step || ! Lib\Config::recurringAppointmentsActive() || ! get_option( 'bookly_recurring_appointments_enabled' ) || Lib\Config::showSingleTimeSlot(),
@@ -1262,8 +1296,9 @@ class Ajax extends Lib\Base\Ajax
      */
     private static function _setDataForSkippedServiceStep( Lib\UserBookingData $userData )
     {
+        $session_data = Lib\FormSession::loadSession( self::parameter( 'form_id' ) );
         // Staff ids.
-        $defaults = Lib\Session::getFormVar( self::parameter( 'form_id' ), 'defaults' );
+        $defaults = $session_data['defaults'];
         if ( $defaults !== null ) {
             $service_id = $defaults['service_id'];
             $service = Lib\Entities\Service::find( $defaults['service_id'] );
@@ -1368,7 +1403,7 @@ class Ajax extends Lib\Base\Ajax
             $pay_cloud_stripe = Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE ) && get_option( 'bookly_cloud_stripe_enabled' );
             if ( $pay_cloud_stripe ) {
                 $cart_info->setGateway( Lib\Entities\Payment::TYPE_CLOUD_STRIPE );
-                $show_price = ( get_option( 'bookly_cloud_square_increase' ) != 0 || get_option( 'bookly_cloud_square_addition' ) != 0 ) ?: Lib\Payment\Proxy\Shared::showPaymentSpecificPrices( false );
+                $show_price = ( get_option( 'bookly_cloud_stripe_increase' ) != 0 || get_option( 'bookly_cloud_stripe_addition' ) != 0 ) ?: Lib\Payment\Proxy\Shared::showPaymentSpecificPrices( false );
                 $gateways[ Lib\Entities\Payment::TYPE_CLOUD_STRIPE ] = array(
                     'html' => self::renderTemplate(
                         '_cloud_stripe_option',
@@ -1404,15 +1439,6 @@ class Ajax extends Lib\Base\Ajax
      */
     protected static function csrfTokenValid( $action = null )
     {
-        $excluded_actions = array(
-            'approveAppointment',
-            'cancelAppointment',
-            'rejectAppointment',
-            'renderService',
-            'renderExtras',
-            'renderTime',
-        );
-
-        return in_array( $action, $excluded_actions ) || parent::csrfTokenValid( $action );
+        return true;
     }
 }

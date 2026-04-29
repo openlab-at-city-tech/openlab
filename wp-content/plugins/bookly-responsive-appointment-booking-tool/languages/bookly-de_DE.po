@@ -9,16 +9,19 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-08-28 14:29+0000\n"
-"PO-Revision-Date: 2025-11-04 10:37+0000\n"
-"Last-Translator: support@bookly.info\n"
+"PO-Revision-Date: 2026-04-06 16:11+0000\n"
+"Last-Translator: Birk Stern\n"
 "Language-Team: German\n"
-"X-Loco-Version: 2.8.0; wp-6.8.2; php-8.4.11"
+"X-Loco-Version: 2.8.0; wp-6.9; php-8.4.16"
 
 #, php-format
 msgid " and %d more item"
 msgid_plural " and %d more items"
 msgstr[0] " und %d weiterer Artikel"
 msgstr[1] " und %d weitere Artikel"
+
+msgid " Give it a try!"
+msgstr "Probieren Sie's aus!"
 
 #, php-format
 msgid "\"%s\" is too long (%d characters max)."
@@ -82,34 +85,8 @@ msgstr[0] "%d Jahr"
 msgstr[1] "%d Jahre"
 
 #, php-format
-msgid "%s day"
-msgid_plural "%s days"
-msgstr[0] "%s Tag"
-msgstr[1] "%s Tage"
-
-#, php-format
 msgid "%s has reached the limit of bookings for this service"
 msgstr "%s hat die Buchungsgrenze für diese Dienstleistung erreicht"
-
-# %s ist kein gültiger Kauf Code für %s.  wrong
-#, php-format
-msgid "%s is not a valid purchase code for %s."
-msgstr "%s ist kein gültiger Bestellcode für %s."
-
-# % s wird für eine andere Domain%s verwendet. <br/> Um den Kaufcode für diese Domain zu verwenden, trennen Sie ihn bitte im Admin-Panel von der anderen Domain. <br/> Wenn Sie keinen Zugriff auf den Adminbereich haben, dann kontaktieren Sie bitte unseren technischen Support unter support@bookly.info, um die Lizenz manuell zu übertragen.
-# wrong
-#, php-format
-msgid ""
-"%s is used on another domain %s.<br/>In order to use the purchase code on "
-"this domain, please dissociate it in the admin panel of the other domain."
-"<br/>If you do not have access to the admin area, please contact our "
-"technical support at support@bookly.info to transfer the license manually."
-msgstr ""
-"%s wird für eine andere Domain %s verwendet. <br/> Um den Bestellcode auf "
-"dieser Domain zu verwenden, trennen Sie ihn bitte im Adminbereich der "
-"anderen Domain. <br/> Wenn Sie keinen Zugriff auf den Admin-Bereich haben, "
-"wenden Sie sich bitte an unseren technischen Support unter support@bookly."
-"info, um die Lizenz manuell zu übertragen."
 
 #, php-format
 msgid "%s of %s"
@@ -205,15 +182,6 @@ msgstr ""
 
 msgid "50 - 249 employees"
 msgstr "50 - 249 Mitarbeiter"
-
-#, php-format
-msgid ""
-"<a class=\"%s\" href=\"#\">Click here</a> to dissociate this purchase code "
-"from the current domain (use to move the plugin to another site)."
-msgstr ""
-"<a class=\"%s\" href=\"#\">Bitte hier klicken</a> um diesen Bestellcode von "
-"der aktuellen Domain zu trennen (verwenden Sie ihn, um das Plugin auf eine "
-"andere Website zu übertragen)."
 
 #, php-format
 msgid ""
@@ -360,6 +328,9 @@ msgstr "Der Zugang zu Ihren Buchungen wurde deaktiviert."
 msgid "Access token"
 msgstr "Zugriffs-Token"
 
+msgid "Access token link for quick authorization in the mobile app"
+msgstr "Zugriffstoken-Link für schnelle Autorisierung in der mobilen App"
+
 msgid "Access tokens"
 msgstr "Zugriffs-Token"
 
@@ -383,8 +354,14 @@ msgstr "Aktion"
 msgid "Action required"
 msgstr "Handlung erforderlich"
 
+msgid "Activate Product"
+msgstr "Produkt aktivieren"
+
 msgid "Activate purchase code"
 msgstr "Kaufcode aktivieren"
+
+msgid "Activate trial"
+msgstr "Testphase aktivieren"
 
 msgid "Active from"
 msgstr "Aktiv ab"
@@ -502,10 +479,6 @@ msgstr "Aktionscode hinzufügen"
 
 msgid "Add recipients"
 msgstr "Empfänger hinzufügen"
-
-# Service hinzufügen. wrong
-msgid "Add Service"
-msgstr "Dienstleistung hinzufügen"
 
 msgid "Add service"
 msgstr "Dienstleistung hinzufügen"
@@ -676,6 +649,13 @@ msgstr "danach"
 msgid "After Service step"
 msgstr "Arbeitsschritt nach der Dienstleistung"
 
+msgid ""
+"After the Trial ends, the selected plan will be automatically billed from "
+"your Bookly Cloud balance."
+msgstr ""
+"Nach Ablauf der Testphase wird der ausgewählte Tarif automatisch von Ihrem "
+"Bookly Cloud-Guthaben abgebucht."
+
 # Nach dem Zeitschritt (Extra Dauer Einstellungen werden ignoriert) makes no sense
 msgid "After Time step (Extras duration settings will be ignored)"
 msgstr ""
@@ -842,6 +822,13 @@ msgid "Amount to pay"
 msgstr "Zu zahlender Betrag"
 
 msgid ""
+"An amount for the selected plan will be immediately charged from your Bookly "
+"Cloud balance."
+msgstr ""
+"Der Betrag für den ausgewählten Tarif wird umgehend von Ihrem Bookly Cloud-"
+"Guthaben abgebucht."
+
+msgid ""
 "An email containing the confirmation code has been sent to your email "
 "address."
 msgstr ""
@@ -906,11 +893,23 @@ msgstr "API Benutzername"
 msgid "App ID"
 msgstr "App ID"
 
+msgid "App-specific password"
+msgstr "App-spezifisches Passwort"
+
 msgid "Appearance"
 msgstr "Darstellung"
 
 msgid "Appearance form name"
 msgstr "Darstellungsformularname"
+
+msgid "Apple Calendar"
+msgstr "Apple Kalender"
+
+msgid "Apple Calendar event"
+msgstr "Apple-Kalender-Termin"
+
+msgid "Apple Calendar integration"
+msgstr "Integration mit dem Apple-Kalender"
 
 msgid "Application ID"
 msgstr "Anwendungs-ID"
@@ -1028,19 +1027,6 @@ msgid "Are you sure you want to disable Auto-Recharge?"
 msgstr ""
 "Sind Sie sicher, daß Sie das automatische Aufladen deaktivieren wollen?"
 
-# Sind Sie sicher, dass sie den Kaufcode von %s trennen wollen?
-# Das wird auch den eingegebenen Kaufcode von dieser Seite entfernen. wrong
-#, php-format
-msgid ""
-"Are you sure you want to dissociate this purchase code from %s?\n"
-"\n"
-"This will also remove the entered purchase code from this site."
-msgstr ""
-"Sind Sie sicher, dass Sie diesen Bestellcode von %s nicht verwenden möchten?"
-"\n"
-"\n"
-"Dadurch wird auch der eingegebene Bestellcode von dieser Website entfernt."
-
 msgid "Are you sure?"
 msgstr "Sind Sie sicher?"
 
@@ -1074,13 +1060,13 @@ msgstr "Zugehöriger Zahlungsstatus"
 msgid "Associated staff member"
 msgstr "Zugehöriger Mitarbeiter"
 
-# am wrong
-msgid "at"
-msgstr "unter"
-
 msgid "At the top of your screen press on App ID to copy it."
 msgstr ""
 "Klicken Sie oben auf Ihrem Bildschirm auf App ID, um diese zu kopieren."
+
+msgctxt "at time"
+msgid "at"
+msgstr "um"
 
 msgid "Attach ICS file"
 msgstr "ICS-Datei anhängen"
@@ -1260,9 +1246,6 @@ msgstr "Text"
 
 msgid "Body height"
 msgstr "Texthöhe"
-
-msgid "Book More"
-msgstr "Mehr buchen"
 
 msgid "Book more"
 msgstr "Mehr buchen"
@@ -1707,9 +1690,6 @@ msgstr "Checkout-Formular"
 msgid "Child care"
 msgstr "Kinderbetreuung"
 
-msgid "Child Payment"
-msgstr "Nachgeordnete Zahlung"
-
 msgid "Child payment"
 msgstr "Nachgeordnete Zahlung"
 
@@ -1979,6 +1959,13 @@ msgid "Conditions"
 msgstr "Bedingungen"
 
 msgid ""
+"Configure what information should be placed in the title of Apple Calendar "
+"event."
+msgstr ""
+"Legen Sie fest, welche Informationen im Titel eines Apple-Kalender-Termins "
+"angezeigt werden sollen."
+
+msgid ""
 "Configure what information should be placed in the title of Google Calendar "
 "event."
 msgstr ""
@@ -2007,9 +1994,6 @@ msgstr "Passwort bestätigen"
 msgid "Confirmation code"
 msgstr "Bestätigungscode"
 
-msgid "Congrats!"
-msgstr "Herzlichen Glückwunsch!"
-
 msgid "Congratulations!!!"
 msgstr "Herzlichen Glückwunsch!!!"
 
@@ -2018,6 +2002,15 @@ msgstr "Verbinden"
 
 msgid "Connected"
 msgstr "Verbunden"
+
+msgid "Connecting..."
+msgstr "Wird verbunden..."
+
+msgid "Connection error. Please try again."
+msgstr "Verbindungsfehler. Bitte versuchen Sie es erneut."
+
+msgid "Connection failed. Please reconnect."
+msgstr "Die Verbindung ist fehlgeschlagen. Bitte versuchen Sie es erneut."
 
 msgid "Consulting"
 msgstr "Consulting"
@@ -2047,6 +2040,9 @@ msgstr "kopiert"
 msgid "Copied to clipboard"
 msgstr "In die Zwischenablage kopiert"
 
+msgid "Copy Apple Calendar event titles"
+msgstr "Titel von Apple-Kalender-Terminen kopieren"
+
 msgid "Copy checkout URL"
 msgstr "Checkout-URL kopieren"
 
@@ -2056,6 +2052,9 @@ msgstr "Kopieren von Google-Kalender-Ereignisstiteln"
 # Kopieren Sie die Rechnung in weitere E-Mails wrong
 msgid "Copy invoice to another email(s)"
 msgstr "Kopieren der Rechnung in eine andere E-Mail(s)"
+
+msgid "Copy link"
+msgstr "Link kopieren"
 
 msgid "Copy of"
 msgstr "Kopie von"
@@ -2072,6 +2071,9 @@ msgstr "Shortcode kopieren"
 
 msgid "Copy to clipboard"
 msgstr "In die Zwischenablage kopieren"
+
+msgid "Copy token"
+msgstr "Token kopieren"
 
 msgid "Cost"
 msgstr "Kosten"
@@ -2186,9 +2188,6 @@ msgstr "Erstellt"
 msgid "Created at any time"
 msgstr "Jederzeit erstellbar"
 
-msgid "Creation Date"
-msgstr "Erstellungsdatum"
-
 # Erstelldatum wrong
 msgid "Creation date"
 msgstr "Erstellungsdatum"
@@ -2284,9 +2283,6 @@ msgid "Customer cabinet (all services displayed in tabs)"
 msgstr ""
 "Kundenbereich (alle Dienstleistungen werden in Registerkarten angezeigt)"
 
-msgid "Customer Email"
-msgstr "Kunden-E-Mail"
-
 # E-Mail des Kunden wrong
 msgid "Customer email"
 msgstr "Kunden-E-Mail"
@@ -2310,9 +2306,6 @@ msgstr "Beschreibung der Kundeninformationen"
 msgid "Customer information field"
 msgstr "Kundeninformationsfeld"
 
-msgid "Customer Name"
-msgstr "Kunden-Name"
-
 # Name des Kunden wrong
 msgid "Customer name"
 msgstr "Kunden-Name"
@@ -2328,9 +2321,6 @@ msgstr "Kundennotizen für den Termin"
 
 msgid "Customer notes for gift card"
 msgstr "Kundennotizen für Geschenkgutschein"
-
-msgid "Customer Phone"
-msgstr "Kunden-Telefon"
 
 # Telefonnummer des Kunden wrong
 msgid "Customer phone"
@@ -2417,10 +2407,6 @@ msgstr "Tage ab der ersten Buchung"
 # Urlaubstage ? Holidays ?
 msgid "Days Off"
 msgstr "Urlaubstage"
-
-# Freie Tage ? Free Days is that right
-msgid "Days off"
-msgstr "Freie Tage"
 
 msgid "Deactivate Bookly Pro"
 msgstr "Bookly Pro deaktivieren"
@@ -3353,6 +3339,9 @@ msgstr "Nur diesen Termin löschen"
 msgid "Delete package appointment"
 msgstr "Termin Paket löschen"
 
+msgid "Delete series"
+msgstr "Serie löschen"
+
 msgid "Delete this and the following appointments"
 msgstr "Diesen und zukünftige Termine löschen"
 
@@ -3394,24 +3383,14 @@ msgstr ""
 "Abonnement hinzufügen</b>, geben Sie die folgende URL als Ziel für "
 "Ereignisse %s ein und wählen Sie %s unter <b>Ereignisse</b>."
 
-msgid "Deposit"
-msgstr "Anzahlung"
-
-msgid "Deposit only"
-msgstr "Nur Anzahlung"
-
-# Ratenzahlungsoptionen wrong
-msgid "Deposit options"
-msgstr "Anzahlungsoptionen"
-
 msgid "Deposit or full price (deposit by default)"
 msgstr "Anzahlung oder voller Preis (standardmäßig Anzahlung)"
 
-msgid "Deposit value"
-msgstr "Einzahlungswert"
-
 msgid "Description"
 msgstr "Beschreibung"
+
+msgid "Description for customer's calendar"
+msgstr "Beschreibung für den Kalender des Kunden"
 
 msgid "Design consultants"
 msgstr "Designberater"
@@ -3515,6 +3494,9 @@ msgstr "Front-End-Kalender anzeigen"
 
 msgid "Display gift cards"
 msgstr "Geschenkgutscheine anzeigen"
+
+msgid "Display only busy slots"
+msgstr "Nur belegte Zeitfenster anzeigen"
 
 msgid "Display packages"
 msgstr "Pakete anzeigen"
@@ -3635,6 +3617,17 @@ msgstr ""
 "nutzen. Nach Ablauf der Testphase ist die Aktivierung mit einem Kaufcode "
 "erforderlich."
 
+#, fuzzy
+#| msgid ""
+#| "During the trial period, you will have full access to all features of "
+#| "this product  completely free of charge."
+msgid ""
+"During the trial period, you will have full access to all features of this "
+"product - completely free of charge."
+msgstr ""
+"Während der Testphase haben Sie völlig kostenlosen Zugriff auf alle "
+"Funktionen dieses Produkts."
+
 msgid "E.g"
 msgstr "z.B."
 
@@ -3683,9 +3676,6 @@ msgstr "Geschenkgutschein bearbeiten"
 
 msgid "Edit gift card type"
 msgstr "Geschenkgutscheintyp bearbeiten"
-
-msgid "Edit Group"
-msgstr "Gruppe bearbeiten"
 
 msgid "Edit group"
 msgstr "Gruppe bearbeiten"
@@ -3811,16 +3801,6 @@ msgstr ""
 "der Dienstleistungskapazität auf eine Zeit begrenzen möchten.\n"
 "\n"
 "\n"
-
-msgid ""
-"Enable this option to make Bookly close the PHP session as soon as it is "
-"done with it. This should prevent locking the session, which could cause "
-"various other processes to timeout or fail"
-msgstr ""
-"Schalten Sie diese Option ein, damit Bookly die PHP-Sitzung schließt, sobald "
-"es mit dieser fertig ist. Damit soll verhindert werden, dass die Sitzung "
-"gesperrt wird, was bei verschiedenen anderen Prozessen zu "
-"Zeitüberschreitungen oder Fehlern führen könnte"
 
 msgid ""
 "Enable this option to make slot length equal to service duration at the Time "
@@ -3971,7 +3951,7 @@ msgid ""
 msgstr ""
 "Geben Sie einen festen Rabattbetrag ein (z. B. 10 weniger). Um einen "
 "prozentualen Rabatt festzulegen (z. B. 10% Rabatt), fügen Sie einem "
-"numerischen Wert das Symbol \"%\" hinzu."
+"numerischen Wert das Symbol '%' hinzu."
 
 #, php-format
 msgid ""
@@ -4005,7 +3985,9 @@ msgstr ""
 "Geben Sie die Tags der Felder in Ihren Mailchimp-Zielgruppeneinstellungen in "
 "Übereinstimmung mit den Bookly-Daten ein."
 
-msgid "Enter the URL of the page where this forms shortcode is placed."
+#, fuzzy
+#| msgid "Enter the URL of the page where this forms shortcode is placed."
+msgid "Enter the URL of the page where this form's shortcode is placed."
 msgstr ""
 "Bitte geben Sie die URL der Seite ein, auf der sich dieser Formular-"
 "Shortcode befindet."
@@ -4024,6 +4006,13 @@ msgstr "Verifizierungscode aus der E-Mail eingeben"
 
 msgid "Enter verification code from SMS"
 msgstr "Verifizierungscode aus der SMS eingeben"
+
+msgid ""
+"Enter your iCloud email and the app-specific password in Edit Staff > "
+"Advanced > Apple Calendar."
+msgstr ""
+"Geben Sie Ihre iCloud-E-Mail-Adresse und das App-spezifische Passwort unter "
+"„Mitarbeiter bearbeiten“ > „Erweitert“ > „Apple Kalender“ ein."
 
 msgid "Enter your purchase code for a Bookly add-on or bundle"
 msgstr "Bitte geben Sie Ihren Kaufcode für ein Bookly-Addon oder -Pakete ein."
@@ -4053,9 +4042,6 @@ msgstr "Fehler beim Senden der E-Mail."
 # Error sending support request. wrong
 msgid "Error sending support request."
 msgstr "Fehler beim Senden der Kundendienstanfrage."
-
-msgid "Error."
-msgstr "Fehler."
 
 msgid "Escape rooms"
 msgstr "Escape Rooms"
@@ -4141,6 +4127,9 @@ msgstr "Läuft ab"
 
 msgid "Explore Bookly products"
 msgstr "Bookly-Produkte entdecken"
+
+msgid "Export"
+msgstr "Exportieren"
 
 msgid "Export only active coupons"
 msgstr "Nur aktive Gutscheine exportieren"
@@ -4368,9 +4357,6 @@ msgstr "Frei"
 msgid "Free/Busy"
 msgstr "Frei/Beschäftigt"
 
-msgid "Free/busy"
-msgstr "Frei/Beschäftigt"
-
 msgid "Frequencies"
 msgstr "Häufigkeiten"
 
@@ -4408,6 +4394,13 @@ msgstr "Allgemeine Einstellungen"
 # Generieren wrong
 msgid "Generate"
 msgstr "Erstellen "
+
+msgid "Generate a new app-specific password for Bookly."
+msgstr "Erstellen Sie ein neues App-spezifisches Passwort für Bookly."
+
+#, php-format
+msgid "Generate an app-specific password at %s"
+msgstr "Erstellen Sie ein neues App-spezifisches Passwort unter %s"
 
 msgid "Generate new API Key"
 msgstr "Neuen API-Key generieren"
@@ -4460,6 +4453,11 @@ msgstr "Einstellungen für Geschenkgutscheine"
 
 msgid "Given email address is already subscribed, thank you!"
 msgstr "Die angegebene E-Mail Adresse ist bereits registriert, vielen Dank!"
+
+msgid "Go to appleid.apple.com and sign in with your Apple ID."
+msgstr ""
+"Rufen Sie die Seite appleid.apple.com auf und melden Sie sich mit Ihrer "
+"Apple-ID an."
 
 msgid ""
 "Go to Posts/Pages and click on the 'Add Bookly booking form' button in the "
@@ -4557,6 +4555,9 @@ msgstr "Überschriftengröße"
 
 msgid "Headers"
 msgstr "Kopfzeilen"
+
+msgid "Hello"
+msgstr "Hallo"
 
 msgid ""
 "Hello,\n"
@@ -5148,13 +5149,6 @@ msgstr ""
 
 msgid ""
 "Hello.\n"
-"Your access token for Bookly Staff Cabinet mobile app: {access_token}"
-msgstr ""
-"Hallo. Hier ist Ihr Zugriffs-Token für die mobile App Bookly Staff Cabinet: "
-"{access_token}"
-
-msgid ""
-"Hello.\n"
 "Your agenda for tomorrow is:\n"
 "{next_day_agenda}"
 msgstr ""
@@ -5329,8 +5323,8 @@ msgstr "ICalendar-Feed"
 msgid "ICalendar feed URL"
 msgstr "ICalendar-Feed-URL"
 
-msgid "ICS description for customers"
-msgstr "ICS-Beschreibung für Kunden"
+msgid "iCloud email"
+msgstr "iCloud-E-Mail"
 
 msgid "ICS description for staff"
 msgstr "ICS-Beschreibung für Mitarbeiter"
@@ -5378,6 +5372,15 @@ msgstr ""
 "Kalenderereignisse, die ursprünglich in Bookly kopiert wurden, durch die "
 "Termindaten von Bookly überschrieben, nachdem sie in Bookly Calendar "
 "bearbeitet wurden."
+
+msgid ""
+"If enabled then titles of Apple Calendar events will be copied to Bookly "
+"appointments. If disabled, a standard title \"Apple Calendar event\" will be "
+"used."
+msgstr ""
+"Wenn diese Option aktiviert ist, werden die Titel der Apple-Kalender-Termine "
+"in die Bookly-Termine übernommen. Ist sie deaktiviert, wird der "
+"Standardtitel „Apple-Kalender-Termin“ verwendet."
 
 msgid ""
 "If enabled then titles of Google Calendar events will be copied to Bookly "
@@ -5510,6 +5513,13 @@ msgstr ""
 "nimmt er mehr Platz ein und scrollt mit der gesamten Seite."
 
 msgid ""
+"If enabled, the calendar will use Legacy mode, which improves compatibility "
+"with older browsers."
+msgstr ""
+"Wenn diese Option aktiviert ist, läuft der Kalender im Legacy-Modus, wodurch "
+"die Kompatibilität mit älteren Browsern verbessert wird."
+
+msgid ""
 "If enabled, the card will be automatically associated with the customer who "
 "purchases it via the frontend booking form"
 msgstr ""
@@ -5563,6 +5573,13 @@ msgstr ""
 "fest."
 
 msgid ""
+"If the link does not work, you can manually enter this access token in the "
+"app"
+msgstr ""
+"Sollte der Link nicht funktionieren, können Sie diesen Zugriffstoken manuell "
+"in die App eingeben."
+
+msgid ""
 "If the prices for your services include taxes, select include taxes. If the "
 "prices for your services do not include taxes, select exclude taxes."
 msgstr ""
@@ -5575,6 +5592,15 @@ msgid "If the problem persists, contact our support at %s."
 msgstr ""
 "Sollte das Problem weiterhin bestehen, wenden Sie sich bitte an unseren "
 "Support unter %s."
+
+msgid ""
+"If there are a lot of events in Apple Calendar sometimes this leads to a "
+"lack of memory in PHP when Bookly tries to fetch all events. You can limit "
+"the number of fetched events here."
+msgstr ""
+"Wenn der Apple Kalender viele Termine enthält, führt dies manchmal zu einem "
+"Speicherengpass in PHP, wenn Bookly versucht, alle Termine abzurufen. Hier "
+"können Sie die Anzahl der abgerufenen Termine begrenzen."
 
 # Wenn es in Google Kalender viele Ereignisse gibt, führt dies manchmal zu Speichermangel in PHP, wenn Bookly versucht, alle Ereignisse abzurufen. Sie können die Anzahl der abgerufenen Ereignisse hier begrenzen. wrong
 msgid ""
@@ -5647,6 +5673,15 @@ msgstr ""
 "gesendet."
 
 msgid ""
+"If this option is enabled then the front-end calendar will only show "
+"appointments with busy status (pending or approved). Free/available slots "
+"will not be displayed."
+msgstr ""
+"Wenn diese Option aktiviert ist, werden im Frontend-Kalender nur Termine mit "
+"dem Status „Beschäftigt“ (in Bearbeitung oder genehmigt) angezeigt. Freie "
+"Termine werden nicht angezeigt."
+
+msgid ""
 "If this setting is enabled then Bookly will be creating WordPress user "
 "accounts for all new customers. If the user is logged in then the new "
 "customer will be associated with the existing user account."
@@ -5655,17 +5690,20 @@ msgstr ""
 "Wordpress-Benutzerkonten erstellen. Wenn sich der Benutzer dann einloggt, "
 "wird der neue Kunde zu dem bestehenden Benutzerkonto zugeordnet."
 
-#, php-format
 msgid ""
 "If this setting is enabled then online meetings will be created for new "
-"appointments with the selected online meeting provider. Make sure that the "
-"provider is configured properly in Settings > <a href=\"%s\">Online "
-"Meetings</a>"
+"appointments with the selected online meeting provider."
 msgstr ""
-"Wenn diese Einstellung aktiviert ist, werden Online-Besprechungen für neue "
-"Termine mit dem ausgewählten Anbieter von Online-Besprechungen erstellt. "
-"Stellen Sie sicher, dass der Anbieter unter Einstellungen > <a href=\"%s\">"
-"Online-Besprechungen</a> korrekt konfiguriert ist."
+"Wenn diese Einstellung aktiviert ist, werden für neue Termine Online-"
+"Meetings mit dem ausgewählten Online-Meeting-Anbieter erstellt."
+
+msgid ""
+"If this setting is enabled then online meetings will be created for new "
+"event bookings with the selected online meeting provider."
+msgstr ""
+"Wenn diese Einstellung aktiviert ist, werden für neue "
+"Veranstaltungsbuchungen Online-Meetings mit dem ausgewählten Online-Meeting-"
+"Anbieter erstellt."
 
 msgid ""
 "If this setting is enabled then only business days will be visible in the "
@@ -5732,6 +5770,13 @@ msgid ""
 msgstr ""
 "Wenn Sie Google Meet wählen, werden Meetings für die Mitarbeiter erstellt, "
 "die Google Kalender konfiguriert haben."
+
+msgid ""
+"If you choose Microsoft Teams then meetings will be created for those staff "
+"members who have Outlook Calendar configured."
+msgstr ""
+"Wenn Sie Microsoft Teams wählen, werden Besprechungen für diejenigen "
+"Mitarbeiter erstellt, die einen Outlook-Kalender eingerichtet haben."
 
 msgid ""
 "If you do not provide a valid purchase code within {days}, access to your "
@@ -5918,6 +5963,23 @@ msgstr "Erfolgreich importiert"
 
 msgid "Important"
 msgstr "Wichtig"
+
+msgid ""
+"Important: If you disable the Trial before it ends, it cannot be reactivated."
+" To continue using the product, activate the selected plan."
+msgstr ""
+"Wichtig: Wenn Sie die Testphase vor Ablauf ihrer Gültigkeit deaktivieren, "
+"kann sie nicht erneut aktiviert werden. Um das Produkt weiterhin nutzen zu "
+"können, aktivieren Sie bitte den ausgewählten Tarif."
+
+msgid ""
+"Important: your website must use HTTPS. Google Calendar API will be able to "
+"send notifications only if there is a valid SSL certificate installed on "
+"your web server."
+msgstr ""
+"Wichtig: Ihre Website muss HTTPS verwenden. Die Google Kalender-API kann "
+"Benachrichtigungen nur dann versenden, wenn auf Ihrem Webserver ein gültiges "
+"SSL-Zertifikat installiert ist."
 
 msgid "Imported appointments will not be synced with external calendars."
 msgstr ""
@@ -6365,6 +6427,9 @@ msgstr "Hinterlassen Sie uns eine Nachricht"
 msgid "Leave your comment"
 msgstr "Hinterlassen Sie einen Kommentar "
 
+msgid "Legacy mode"
+msgstr "Legacy-Modus"
+
 msgid "Legal services"
 msgstr "Juristische Dienstleistungen"
 
@@ -6564,6 +6629,14 @@ msgstr "\"Auswahl des Mitarbeiters vornehmen\" ist eine Pflichteingabe"
 msgid "Make selecting location required"
 msgstr "\"Standort auswählen\" ist eine Pflichteingabe"
 
+#, php-format
+msgid ""
+"Make sure that the provider is configured properly in Settings > <a "
+"href=\"%s\">Online Meetings</a>"
+msgstr ""
+"Bitte stellen Sie sicher, dass der Anbieter unter „Einstellungen“ > <a "
+"href=\"%s\">Online-Meetings</a> korrekt konfiguriert ist."
+
 msgid "Manual"
 msgstr "Manuell"
 
@@ -6602,6 +6675,9 @@ msgstr "Medizinisch"
 
 msgid "Medical Clinics & Doctors"
 msgstr "Medizinische Kliniken und Ärzte"
+
+msgid "Meeting host"
+msgstr "Meeting-Leiter"
 
 msgid "Meeting rooms"
 msgstr "Tagungsräume"
@@ -6771,6 +6847,10 @@ msgstr "Name der Mitarbeiterkategorie"
 msgid "Name of ticket type"
 msgstr "Name des Ticket-Typs"
 
+msgid "Navigate to Sign-In and Security > App-Specific Passwords."
+msgstr ""
+"Navigieren Sie zu „Anmeldung und Sicherheit“ > „App-spezifische Passwörter“."
+
 #, php-format
 msgid ""
 "Navigate to the <a href=\"%s\" target=\"_blank\">API Keys section</a> of "
@@ -6833,9 +6913,6 @@ msgstr "Neuer Geschenkgutschein"
 
 msgid "New gift card type"
 msgstr "Neuer Geschenkgutscheintyp"
-
-msgid "New Group"
-msgstr "Neue Gruppe"
 
 msgid "New group"
 msgstr "Neue Gruppe"
@@ -7032,6 +7109,9 @@ msgstr "Keine Zahlung"
 msgid "No payment methods available. Please contact service provider."
 msgstr "Keine Zahlungsmethoden verfügbar. Bitte kontaktieren Sie den Anbieter."
 
+msgid "No payment will be taken at this stage."
+msgstr "Zu diesem Zeitpunkt erfolgt keine Zahlung."
+
 # Keine Zahlungen für den gewünschten Zeitraum und Bedingungen. wrong
 msgid "No payments for selected period and criteria."
 msgstr "Keine Zahlungen für ausgewählte Periode und Kriterien."
@@ -7042,9 +7122,6 @@ msgstr "Keine Einträge für den ausgewählten Zeitraum."
 
 msgid "No records."
 msgstr "Keine Einträge."
-
-msgid "No result found"
-msgstr "Kein Ergebnis gefunden"
 
 msgid "No results found"
 msgstr "Keine Ergebnisse gefunden"
@@ -7086,9 +7163,6 @@ msgstr "Keine Aktualisierungen verfügbar"
 # Nein, nur hier im Servicebereich aktualisieren wrong
 msgid "No, update just here in services"
 msgstr "Nein, aktualisieren Sie nur hier in Dienstleistungen"
-
-msgid "No."
-msgstr "Nr."
 
 msgid "Nope, maybe later"
 msgstr "Nein, vielleicht später"
@@ -7336,6 +7410,10 @@ msgstr ""
 msgid "Notifications"
 msgstr "Benachrichtigungen"
 
+msgctxt "number"
+msgid "No."
+msgstr "Nr."
+
 msgid "number of appointments"
 msgstr "Anzahl von Terminen"
 
@@ -7386,9 +7464,6 @@ msgstr "Numerisches Feld"
 msgid "OFF"
 msgstr "Aus"
 
-msgid "Off"
-msgstr "Aus"
-
 msgid "Officials"
 msgstr "Behörden"
 
@@ -7404,8 +7479,13 @@ msgstr "Ok, Sie haben es sich verdient"
 msgid "Old password"
 msgstr "Altes Passwort"
 
+msgctxt "on date"
 msgid "On"
-msgstr "An"
+msgstr "Am"
+
+msgctxt "on date"
+msgid "on"
+msgstr "am"
 
 msgid "On hold"
 msgstr "ausstehend"
@@ -7540,6 +7620,10 @@ msgstr "Bestellnummer"
 msgid "order ID"
 msgstr "Bestell-ID"
 
+msgctxt "order of elements"
+msgid "Reorder"
+msgstr "Neu ordnen"
+
 msgid "Organizer"
 msgstr "Veranstalter"
 
@@ -7649,12 +7733,6 @@ msgstr "Passwort"
 
 msgid "Passwords don't match"
 msgstr "Passwörter stimmen nicht überein"
-
-msgid "Passwords mismatch"
-msgstr "Passwörter stimmen nicht überein"
-
-msgid "Passwords must be the same."
-msgstr "Passwörter müssen gleich sein."
 
 msgid "Paused"
 msgstr "Pausiert"
@@ -7822,9 +7900,6 @@ msgstr "Foto des Mitarbeiters"
 msgid "Photographers"
 msgstr "Fotografen"
 
-msgid "PHP Sessions"
-msgstr "PHP-Sitzungen"
-
 msgid "Physiologists"
 msgstr "Physiotherapeuten"
 
@@ -7933,6 +8008,9 @@ msgstr "Bitte geben Sie einen Dienstleistungsname ein"
 
 msgid "Please enter your email (optional)"
 msgstr "Bitte geben Sie Ihre E-Mail (optional)"
+
+msgid "Please fill in both fields."
+msgstr "Bitte füllen Sie beide Felder aus."
 
 msgid "Please note that \"I'm available on or after\" picker will be hidden"
 msgstr ""
@@ -8186,6 +8264,22 @@ msgstr ""
 msgid "Port"
 msgstr "Port"
 
+msgctxt "portion of the payment"
+msgid "Deposit"
+msgstr "Anzahlung"
+
+msgctxt "portion of the payment"
+msgid "Deposit only"
+msgstr "Nur Anzahlung"
+
+msgctxt "portion of the payment"
+msgid "Deposit options"
+msgstr "Anzahlungsoptionen"
+
+msgctxt "portion of the payment"
+msgid "Deposit value"
+msgstr "Anzahlungsbetrag"
+
 msgid "Postal Code"
 msgstr "Postleitzahl"
 
@@ -8204,14 +8298,21 @@ msgstr ""
 msgid "Prevent caching of pages with booking form"
 msgstr "Caching von Seiten mit Buchungsformular verhindern"
 
-msgid "Prevent PHP session locking"
-msgstr "PHP-Sitzungssperre verhindern"
-
 msgid "Preview"
 msgstr "Vorschau"
 
+msgid "Previous"
+msgstr "Vorherige"
+
 msgid "Price"
 msgstr "Preis"
+
+msgid "Price based on nested services"
+msgstr ""
+"Preis basierend auf untergeordneten Dienstleistungen\n"
+
+msgid "Price calculation method for combined services"
+msgstr "Preiskalkulationsmethode für kombinierte Dienstleistungen"
 
 msgid "Price correction"
 msgstr "Preiskorrektur"
@@ -8263,9 +8364,6 @@ msgstr "Fahren Sie mit den Funktionsanfragen fort"
 
 msgid "Processing"
 msgstr "Wird verarbeitet"
-
-msgid "Processing..."
-msgstr "Wird verarbeitet..."
 
 msgid "Product not found."
 msgstr "Produkt nicht gefunden."
@@ -8456,6 +8554,15 @@ msgstr "Umleitungs-URI"
 msgid "Redirect URL for OAuth"
 msgstr "Umleitungs-URL für OAuth"
 
+msgid ""
+"Reduce no-shows, keep your staff and customers informed, and send timely "
+"reminders - use SMS Notifications. Send a free test message!"
+msgstr ""
+"Verringern Sie die Anzahl der versäumten Termine, halten Sie Ihre "
+"Mitarbeiter und Kunden auf dem Laufenden und versenden Sie rechtzeitig "
+"Erinnerungen – nutzen Sie SMS-Benachrichtigungen. Versenden Sie eine "
+"kostenlose Testnachricht!"
+
 msgid "Reference"
 msgstr "Referenz"
 
@@ -8533,9 +8640,8 @@ msgstr "Aktionscode entfernen"
 msgid "Renew"
 msgstr "Verlängern"
 
-# Nachbestellung wrong
 msgid "Reorder"
-msgstr "nachbestellen"
+msgstr "Neu ordnen"
 
 msgid "Repeat"
 msgstr "Wiederholen"
@@ -8621,6 +8727,9 @@ msgstr "Widerrufen"
 msgid "Rollback"
 msgstr "Rollback"
 
+msgid "Rows per page"
+msgstr "Zeilen pro Seite"
+
 msgid "Run tests automatically"
 msgstr "Tests automatisch durchführen"
 
@@ -8647,6 +8756,9 @@ msgstr "Termin sichern, um eine Besprechung zu erstellen"
 
 msgid "Save cart locally"
 msgstr "Warenkorb lokal speichern"
+
+msgid "Save event to create a meeting"
+msgstr "Veranstaltung speichern, um ein Meeting zu erstellen"
 
 msgid "Save invoice settings"
 msgstr "Rechnungseinstellungen speichern"
@@ -8688,6 +8800,9 @@ msgstr "Suchformular"
 
 msgid "Search payment"
 msgstr "Zahlung suchen"
+
+msgid "Search settings..."
+msgstr "Sucheinstellungen..."
 
 # Sucht wrong
 msgid "Searching"
@@ -8909,6 +9024,10 @@ msgstr ""
 "Wählen Sie das Produkt in der Auswahl-Liste, das Sie im ersten Schritt "
 "erstellt haben."
 
+msgid "Select the staff member who will be assigned as the meeting host"
+msgstr ""
+"Bitte wählen Sie den Mitarbeiter aus, der als Meeting-Leiter fungieren soll"
+
 msgid "Select the style for displaying appointments in Month view"
 msgstr "Wählen Sie den Stil für die Anzeige von Terminen in der Monatsansicht"
 
@@ -8979,9 +9098,6 @@ msgstr ""
 "Legen Sie fest, wann eine Benachrichtigung mit einem Verifizierungscode per "
 "SMS oder E-Mail an den Kunden gesendet werden soll."
 
-msgid "Select where to store session data"
-msgstr "Wählen Sie aus, wo die Sitzungsdaten gespeichert werden sollen"
-
 msgid "Select who can administrate Bookly"
 msgstr "Legen Sie fest, wer Bookly verwalten darf"
 
@@ -9049,6 +9165,9 @@ msgstr "Benachrichtigungen senden"
 
 msgid "Send recovery code"
 msgstr "Wiederherstellungscode senden"
+
+msgid "Send SMS"
+msgstr "SMS senden"
 
 msgid "Send tax information"
 msgstr "Steuerinformationen senden"
@@ -9158,9 +9277,6 @@ msgstr ""
 # Sitzungsfehler. wrong
 msgid "Session error."
 msgstr "Session-Fehler."
-
-msgid "Session storage mode"
-msgstr "Speichermodus für Sitzungen"
 
 msgid ""
 "Set 0 to disable waiting list for this service or set the required value."
@@ -9704,6 +9820,9 @@ msgstr "Zeitfensterlänge als Dienstleistungslaufzeit"
 msgid "Slug"
 msgstr "Slug"
 
+msgid "SMS"
+msgstr "SMS"
+
 msgid "Sms"
 msgstr "Sms"
 
@@ -10029,6 +10148,9 @@ msgstr "Terminbuchung erfolgreich"
 msgid "Success package booking"
 msgstr "Paketbuchung erfolgreich"
 
+msgid "Successful payment appointment status"
+msgstr "Terminstatus für erfolgreich abgeschlossene Zahlung"
+
 msgid "Summary"
 msgstr "Zusammenfassung"
 
@@ -10057,12 +10179,19 @@ msgid "Synchronization mode"
 msgstr ""
 "Synchronisationsmodus\n"
 
+msgid "Synchronize staff member appointments with Apple Calendar."
+msgstr ""
+"Synchronisieren Sie die Termine Ihrer Mitarbeiter mit dem Apple Kalender."
+
 msgid "Synchronize staff member appointments with Google Calendar."
 msgstr ""
 "Synchronisieren Sie die Termine der Mitarbeiter mit dem Google Kalender."
 
 msgid "Synchronize staff member appointments with Outlook Calendar."
 msgstr "Synchronisieren Sie Mitgliedertermine mit Outlook-Kalender."
+
+msgid "Synchronize with Apple Calendar"
+msgstr "Mit Apple Kalender synchronisieren"
 
 msgid "Synchronize with Google Calendar"
 msgstr "Mit Google Kalender synchronisieren"
@@ -10440,17 +10569,6 @@ msgstr "Für diesen Tag sind keine Termine verfügbar."
 msgid "There are no time slots for selected date."
 msgstr "Es gibt keine Zeitfenster mehr für das ausgewählte Datum."
 
-#, php-format
-msgid ""
-"There is a small risk that some issues may appear as a result of updating "
-"the plugin. Please note that, according to %1$s Envato rules %2$s, we will "
-"be able to help you only if you have active item support period."
-msgstr ""
-"Es besteht ein geringes Risiko, dass einige Probleme durch die "
-"Aktualisierung des Plugins auftreten können. Bitte beachten Sie, dass wir "
-"Ihnen gemäß den Envato-Regeln %1$s nur dann helfen können, wenn Sie einen "
-"aktiven Zeitraum für die Artikelunterstützung haben."
-
 msgid "There is no payment required."
 msgstr "Es ist keine Zahlung erforderlich."
 
@@ -10621,6 +10739,19 @@ msgstr ""
 "Mit dieser Einstellung können Sie für Termine, die über das Backend erstellt "
 "wurden, ein Trennzeichen für einen Tag festlegen."
 
+msgid ""
+"This setting applies only to combined services such as collaborative or "
+"compound services. Select 'Regular price' to use a fixed price for the "
+"service. Select 'Price based on nested services' to calculate the service "
+"price as the sum of the prices of its nested services."
+msgstr ""
+"Diese Einstellung gilt nur für kombinierte Dienstleistungen wie "
+"kollaborative oder zusammengesetzte Dienstleistungen. Wählen Sie „Regulärer "
+"Preis“, um einen Festpreis für die Dienstleistung zu verwenden. Wählen Sie "
+"„Preis basierend auf untergeordneten Dienstleistungen“, um den Preis der "
+"Dienstleistung als Summe der Preise der untergeordneten Dienstleistungen zu "
+"berechnen."
+
 # Diese Einstellung bestimmt das Zeitlimit, nachdem die Zahlung über das Zahlungs-Gateway als unvollständig angesehen wird. Diese Funktionalität erfordert einen geplanten Cron-Job. wrong
 msgid ""
 "This setting determines the time limit after which the payment made via the "
@@ -10639,16 +10770,6 @@ msgstr ""
 
 msgid "This test checks for critical errors in Bookly."
 msgstr "Dieser Test sucht nach kritischen Fehlern in Bookly."
-
-#, php-format
-msgid ""
-"This test checks if PHP sessions are enabled. Bookly needs PHP sessions to "
-"work correctly. For more information about PHP sessions, please check the "
-"official PHP documentation %s."
-msgstr ""
-"Dieser Test prüft, ob PHP-Sitzungen aktiviert sind. Bookly benötigt PHP-"
-"Sessions, um korrekt zu funktionieren. Für weitere Informationen über PHP-"
-"Sessions lesen Sie bitte die offizielle PHP-Dokumentation %s."
 
 msgid ""
 "This test checks the ability to establish a connection with the Bookly Cloud "
@@ -10674,6 +10795,13 @@ msgstr ""
 #, php-format
 msgid "This text can be inserted into notifications with %s code"
 msgstr "Dieser Text kann mit %s-Code in Benachrichtigungen eingefügt werden"
+
+msgid ""
+"This will permanently delete all appointments in this series. This action "
+"cannot be undone."
+msgstr ""
+"Dadurch werden alle Termine dieser Serie endgültig gelöscht. Diese Aktion "
+"kann nicht rückgängig gemacht werden."
 
 #, php-format
 msgid "This will permanently remove the ticket %s"
@@ -10705,6 +10833,9 @@ msgstr "Ticketmaske"
 
 msgid "Ticket sales end at"
 msgstr "Der Ticketverkauf endet am"
+
+msgid "Ticket was not found"
+msgstr "Das Ticket wurde nicht gefunden"
 
 msgid "Ticket {attendee_code} for {event_title} is deleted"
 msgstr "Das Ticket {attendee_code} für {event_title} wurde gelöscht"
@@ -10834,6 +10965,16 @@ msgstr ""
 "Details</a>\n"
 "\n"
 
+#, php-format
+msgid ""
+"To ensure stable operation of the \"Time interval of payment gateway\" "
+"feature, please activate %s or follow <a href=\"%s\" target=\"_blank\">the "
+"instructions</a> about cron setup."
+msgstr ""
+"Um einen stabilen Betrieb der Funktion „Zeitintervall des Zahlungs-Gateways“ "
+"zu gewährleisten, aktivieren Sie bitte %s oder befolgen Sie <a href=\"%s\" "
+"target=\"_blank\">die Anweisungen</a> zur Einrichtung von Cron."
+
 msgid ""
 "To find the value, log into Mailchimp account and look at the URL in your "
 "browser. You'll see something like https://us19.admin.mailchimp.com/; the "
@@ -10906,6 +11047,13 @@ msgstr ""
 "target=\"_blank\">diesem Link</a>."
 
 msgid ""
+"To log in to the Bookly Staff Cabinet mobile app, please use the following "
+"link"
+msgstr ""
+"Um sich bei der mobilen App Bookly Staff Cabinet anzumelden, verwenden Sie "
+"bitte den folgenden Link:"
+
+msgid ""
 "To make service invisible to your customers set the visibility to "
 "\"Private\"."
 msgstr ""
@@ -10936,6 +11084,9 @@ msgid ""
 msgstr ""
 "Um Daten zu speichern, stellen Sie bitte in Bookly-Einstellungen > Allgemein "
 "> Bookly-Daten beim Löschen von Bookly-Artikeln \"Nicht löschen\" ein."
+
+msgid "To set up Apple Calendar integration:"
+msgstr "So richten Sie die Apple-Kalender-Integration ein:"
 
 msgid "To set up Facebook integration, do the following:"
 msgstr ""
@@ -11141,20 +11292,6 @@ msgstr "Upgrade"
 
 msgid "Upload directory"
 msgstr "Verzeichnis zum Hochladen"
-
-msgid ""
-"Upon providing the purchase code you will have access to free updates of "
-"Bookly. Updates may contain functionality improvements and important "
-"security fixes. For more information on where to find your purchase code see "
-"this <a href=\"https://help.market.envato.com/hc/en-us/articles/202822600-"
-"Where-can-I-find-my-Purchase-Code-\" target=\"_blank\">page</a>."
-msgstr ""
-"Durch die Bereitstellung des Code, haben Sie kostenlosen Zugang zu Updates "
-"des Plugins. Updates können Funktionalitätsverbesserungen und wichtige "
-"Sicherheitsupdates enthalten. Weitere Informationen, wo Sie Ihren Einkaufs-"
-"Code finden: <a href=\"https://help.market.envato.com/hc/en-"
-"us/articles/202822600-Where-can-I-find-my-Purchase-Code-\" target=\"_blank\">"
-"Seite</a>"
 
 msgid "URL for adding event to Google Calendar (to use inside <a> tag)"
 msgstr ""
@@ -11476,61 +11613,46 @@ msgstr "Wo in Ihrem Arbeitsvorgang befindet sich das Problem?"
 msgid "Width"
 msgstr "Breite"
 
+#, php-format
 msgid ""
 "With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step)."
+"to %s."
 msgstr ""
-"Mit der \"Einweg\"-Synchronisation verschiebt Bookly neue Termine und alle "
-"weiteren Änderungen an den Google-Kalender. Mit der Synchronisation \"Zwei-"
-"Wege, nur Frontend\" holt Bookly zusätzlich Termine aus dem Google Kalender "
-"und entfernt die entsprechenden Zeitfenster, bevor der Zeitschritt des "
-"Buchungsformulars angezeigt wird (dies kann zu einer Verzögerung führen, "
-"wenn Nutzer auf Weiter klicken, um zum Zeitschritt zu gelangen)."
+"Bei der „Einweg“-Synchronisierung überträgt Bookly neue Termine und alle "
+"weiteren Änderungen an %s."
+
+#, php-format
+msgid ""
+"With \"Two-way front-end only\" sync Bookly will additionally fetch events "
+"from %s and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
+msgstr ""
+"Bei der Synchronisierung mit „Zwei-Wege, nur Front-End“ ruft Bookly "
+"zusätzlich Termine von %s ab und entfernt die entsprechenden Zeitfenster, "
+"bevor der Zeit-Schritt des Buchungsformulars angezeigt wird (dies kann zu "
+"einer Verzögerung führen, wenn Benutzer auf „Weiter“ klicken, um zum Zeit-"
+"Schritt zu gelangen)."
+
+#, php-format
+msgid ""
+"With \"Two-way\" sync all bookings created in Bookly Calendar will be "
+"automatically copied to %s and vice versa."
+msgstr ""
+"Bei der „Zwei-Wege“-Synchronisierung werden alle im Bookly-Kalender "
+"erstellten Buchungen automatisch in %s kopiert und umgekehrt."
 
 msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Google Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Google Calendar and remove corresponding time "
-"slots before displaying the Time step of the booking form (this may lead to "
-"a delay when users click Next to get to the Time step). With \"Two-way\" "
-"sync all bookings created in Bookly Calendar will be automatically copied to "
-"Google Calendar and vice versa. Important: your website must use HTTPS. "
-"Google Calendar API will be able to send notifications only if there is a "
-"valid SSL certificate installed on your web server."
+"With \"Two-way\" sync Bookly will additionally fetch events from Apple "
+"Calendar and remove corresponding time slots before displaying the Time step "
+"of the booking form (this may lead to a delay when users click Next to get "
+"to the Time step)."
 msgstr ""
-"Mit der \" Einweg\"-Synchronisation verschiebt Bookly neue Termine und alle "
-"weiteren Änderungen an Google Kalender. Mit der Synchronisation \" Zwei-Wege,"
-" nur Front-End\" holt Bookly zusätzlich Termine aus dem Google Kalender und "
-"entfernt entsprechende Zeitfenster, bevor der Zeitschritt des "
-"Buchungsformulars angezeigt wird (dies kann zu einer Verzögerung führen, "
-"wenn Nutzer auf Weiter klicken, um zum Zeitschritt zu gelangen). Mit der \" "
-"Zwei-Wege, nur Front-End\"-Synchronisation werden alle Buchungen, die in "
-"Bookly Calendar erstellt wurden, automatisch in den Google Kalender kopiert "
-"und umgekehrt. Wichtig: Ihre Website muss HTTPS verwenden. Die Google "
-"Kalender-API kann Benachrichtigungen nur dann senden, wenn auf Ihrem "
-"Webserver ein gültiges SSL-Zertifikat installiert ist."
-
-msgid ""
-"With \"One-way\" sync Bookly pushes new appointments and any further changes "
-"to Outlook Calendar. With \"Two-way front-end only\" sync Bookly will "
-"additionally fetch events from Outlook Calendar and remove corresponding "
-"time slots before displaying the Time step of the booking form (this may "
-"lead to a delay when users click Next to get to the Time step). With \"Two-"
-"way\" sync all bookings created in Bookly Calendar will be automatically "
-"copied to Outlook Calendar and vice versa."
-msgstr ""
-"Mit der \"Einweg\"-Synchronisation schiebt Bookly neue Termine und alle "
-"weiteren Änderungen in den Outlook-Kalender. Mit \"Zwei-Wege, nur Front-"
-"End\" holt Bookly zusätzlich Termine aus dem Outlook-Kalender und entfernt "
-"entsprechende Zeitfenster, bevor der Zeitschritt des Buchungsformulars "
-"angezeigt wird (dies kann zu einer Verzögerung führen, wenn Benutzer auf "
-"Weiter klicken, um zum Zeitschritt zu gelangen). Bei der \"Zwei-Wege\"-"
-"Synchronisation werden alle im Bookly-Kalender erstellten Buchungen "
-"automatisch in den Outlook-Kalender kopiert und umgekehrt.\n"
-"\n"
+"Bei der „Zwei-Wege“-Synchronisierung ruft Bookly zusätzlich Termine aus dem "
+"Apple-Kalender ab und entfernt die entsprechenden Zeitfenster, bevor der "
+"Zeit-Schritt des Buchungsformulars angezeigt wird (dies kann zu einer "
+"Verzögerung führen, wenn Benutzer auf „Weiter“ klicken, um zum Zeit-Schritt "
+"zu gelangen)."
 
 msgid "With access to Bookly"
 msgstr "Mit Zugang zu Bookly"
@@ -11557,9 +11679,6 @@ msgstr "WordPress-E-Mail"
 
 msgid "WordPress password"
 msgstr "WordPress-Passwort"
-
-msgid "Wordpress password"
-msgstr "Wordpress-Passwort"
 
 msgid "WordPress user"
 msgstr "WordPress-Benutzer"
@@ -11590,6 +11709,14 @@ msgstr "Gestern"
 
 msgid "Yoga classes"
 msgstr "Yoga-Kurse"
+
+#, php-format
+msgid "You are about to activate %s"
+msgstr "Sie sind dabei, %s zu aktivieren"
+
+#, php-format
+msgid "You are about to activate a 7-day Trial for %s"
+msgstr "Sie sind dabei, eine 7-tägige Testphase für %s zu aktivieren"
 
 msgid ""
 "You are about to change a service setting which is also configured "
@@ -11913,6 +12040,13 @@ msgstr ""
 "{total_price} zu buchen."
 
 msgid ""
+"You will also be able to import events from Apple Calendar into Bookly. To "
+"do this, go to Calendar and click \"Sync now\"."
+msgstr ""
+"Sie können außerdem Termine aus dem Apple-Kalender in Bookly importieren. "
+"Gehen Sie dazu zum Kalender und klicken Sie auf „Jetzt synchronisieren“."
+
+msgid ""
 "You will be able to use the product until the end of the already paid period."
 " If during this period you decide to keep your subscription, you will have "
 "the option to do so."
@@ -12056,6 +12190,13 @@ msgstr "Ihre Daten"
 
 msgid "Your license has been verified successfully."
 msgstr "Ihre Lizenz wurde erfolgreich bestätigt."
+
+msgid ""
+"Your message has been sent successfully. You can manage your messages in the "
+"'SMS Notifications' section."
+msgstr ""
+"Ihre Nachricht wurde erfolgreich gesendet. Sie können Ihre Nachrichten im "
+"Bereich „SMS-Benachrichtigungen“ verwalten."
 
 msgid "Your name"
 msgstr "Ihr Name"

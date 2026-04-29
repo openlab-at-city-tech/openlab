@@ -159,7 +159,7 @@ $service_dropdown_data = Utils\Common::getServiceDataForDropDown( 's.type <> "pa
                         </select>
                     </div>
                     <div class="align-self-center mx-2">
-                        <?php esc_html_e( 'at', 'bookly' ) ?>
+                        <?php echo esc_html_x( 'at', 'at time', 'bookly' ) ?>
                     </div>
                     <div>
                         <select class="form-control custom-select" name="notification[settings][at_hour]">
@@ -190,7 +190,7 @@ $service_dropdown_data = Utils\Common::getServiceDataForDropDown( 's.type <> "pa
                     </select>
                 </div>
                 <div class="align-self-center mx-2">
-                    <?php esc_html_e( 'at', 'bookly' ) ?>
+                    <?php echo esc_html_x( 'at', 'at time', 'bookly' ) ?>
                 </div>
                 <div>
                     <select class="form-control custom-select" name="notification[settings][before_at_hour]">

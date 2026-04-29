@@ -62,7 +62,7 @@ class Ajax extends Lib\Base\Ajax
             }
         }
 
-        Lib\Utils\Common::redirect( self::parameter( 'bookly_referer' ) );
+        Lib\Utils\Common::redirect( add_query_arg( 'bookly-form-id', self::parameter( 'bookly_fid' ), site_url( self::parameter( 'bookly_referer' ) ) ) );
     }
 
     /**

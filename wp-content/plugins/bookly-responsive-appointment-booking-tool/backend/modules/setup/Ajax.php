@@ -160,6 +160,15 @@ class Ajax extends Lib\Base\Ajax
         wp_send_json_success();
     }
 
+    public static function sendWizardSMS()
+    {
+        $cloud = Lib\Cloud\API::getInstance();
+        $sms_sender = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS );
+        $sms_sender->sendWizardSms( self::parameter( 'phone' ));
+
+        wp_send_json_success();
+    }
+
     /**
      * Finish initial setup.
      */

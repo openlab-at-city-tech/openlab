@@ -8,6 +8,7 @@ class Product extends Base
     const DEACTIVATE_NOW          = ''; //POST
     const REVERT_CANCEL           = ''; //POST
     const ENDPOINT                = ''; //POST
+    const IS_TRIAL                = '/1.0/users/%token%/products/%product_id%/is-trial'; //POST
 
     /** @var string */
     protected $product_id;
@@ -36,7 +37,29 @@ class Product extends Base
      */
     public function activate( $product_price, $purchase_code = null )
     {
-        return $this->sendPostRequest( static::ACTIVATE, $this->getActivatingData( $product_price, $purchase_code ) );
+        if ( $this->sendPostRequest( static::ACTIVATE, $this->getActivatingData( $product_price, $purchase_code ) ) ) {
+            update_option( 'bookly_cloud_account_products', $this->response['products'] );
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Check product trial status
+     *
+     * @return bool
+     */
+    public function isTrial( $product_id )
+    {
+        $this->product_id = $product_id;
+
+        if ( $this->sendPostRequest( static::IS_TRIAL ) ) {
+            return $this->response['is_trial'];
+        }
+
+        return false;
     }
 
     /**
@@ -48,7 +71,13 @@ class Product extends Base
      */
     public function deactivate( $status = 'now' )
     {
-        return $this->sendPostRequest( $status === 'now' ? static::DEACTIVATE_NOW : static::DEACTIVATE_NEXT_RENEWAL );
+        if ( $this->sendPostRequest( $status === 'now' ? static::DEACTIVATE_NOW : static::DEACTIVATE_NEXT_RENEWAL ) ) {
+            update_option( 'bookly_cloud_account_products', $this->response['products'] );
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -58,7 +87,13 @@ class Product extends Base
      */
     public function revertCancel()
     {
-        return $this->sendPostRequest( static::REVERT_CANCEL );
+        if ( $this->sendPostRequest( static::REVERT_CANCEL ) ) {
+            update_option( 'bookly_cloud_account_products', $this->response['products'] );
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -104,12 +139,7 @@ class Product extends Base
 
         $this->response = $this->api
             ->sendPostRequest( $path, $data );
-        if ( $this->response ) {
-            update_option( 'bookly_cloud_account_products', $this->response['products'] );
 
-            return true;
-        }
-
-        return false;
+        return (bool) $this->response;
     }
 }
