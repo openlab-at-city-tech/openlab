@@ -3,9 +3,9 @@
 Plugin Name: WP Reading Progress
 Plugin URI: https://github.com/joerivanveen/wp-reading-progress
 Description: Light weight customizable reading progress bar. Great UX on longreads. Includes estimated reading time (beta).
-Version: 1.6.1
+Version: 1.7.0
 Requires at least: 4.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
 Author: Joeri van Veen
 Author URI: https://wp-developer.eu
@@ -15,7 +15,7 @@ Domain Path: /languages/
 */
 defined( 'ABSPATH' ) || die();
 // This is plugin nr. 6 by Ruige hond. It identifies as: ruigehond006.
-const RUIGEHOND006_VERSION = '1.6.1';
+const RUIGEHOND006_VERSION = '1.7.0';
 // Register install hook
 register_activation_hook( __FILE__, 'ruigehond006_install' );
 // Startup the plugin
@@ -35,8 +35,6 @@ function ruigehond006_run() {
 		add_filter( 'plugin_action_links_' . plugin_basename( __FILE__ ), 'ruigehond006_settingslink' ); // settings link on plugins page
 		add_action( 'add_meta_boxes', 'ruigehond006_meta_box_add' ); // in the box the user can activate the bar for a single post
 		add_action( 'save_post', 'ruigehond006_meta_box_save' );
-	} else {
-		wp_enqueue_script( 'ruigehond006_javascript', plugin_dir_url( __FILE__ ) . 'wp-reading-progress.min.js', false, RUIGEHOND006_VERSION, true );
 	}
 }
 
@@ -62,15 +60,16 @@ function ruigehond006_start() {
 		$post_identifier = 'body';
 	}
 	if ( null !== $post_identifier ) {
+		wp_enqueue_script( 'ruigehond006_javascript', plugin_dir_url( __FILE__ ) . 'wp-reading-progress.min.js', false, RUIGEHOND006_VERSION, true );
 		wp_localize_script( 'ruigehond006_javascript', 'ruigehond006_c', array_merge(
 			$options, array(
 				'post_identifier' => $post_identifier,
 				'post_id'         => $post_id,
 			)
 		) );
-	}
-	if ( ! isset( $options['no_css'] ) ) {
-		add_action( 'wp_head', 'ruigehond006_stylesheet' );
+		if ( ! isset( $options['no_css'] ) ) {
+			add_action( 'wp_head', 'ruigehond006_stylesheet' );
+		}
 	}
 	/**
 	 * separate ert section...
@@ -195,9 +194,9 @@ function ruigehond006_settings() {
 			echo esc_html__( 'This plugin displays a reading progress bar on your selected post types.', 'wp-reading-progress' );
 			echo ' ';
 			echo esc_html__( 'When it does not find a single article, it uses the whole page to calculate reading progress.', 'wp-reading-progress' );
-			echo '<br/>';
+			echo '<br>';
 			echo esc_html__( 'For post types which are switched off in the settings, you can activate the bar per post in the post-edit screen.', 'wp-reading-progress' );
-			echo '<br/>';
+			echo '<br>';
 			echo esc_html__( 'Please use valid input or the bar might not display.', 'wp-reading-progress' );
 			echo '</p>';
 		}, //callback
@@ -210,7 +209,7 @@ function ruigehond006_settings() {
 	/* @since 1.5.4: check if the required placeholders are in the translated string */
 	/* translators: %1$s: link for top, %1$s: link for bottom */
 	$string = esc_html__( 'Use %1$s or %2$s, or any VALID selector of a fixed element where the bar can be appended to, e.g. a sticky menu.', 'wp-reading-progress' );
-	if ( false === strpos($string, '%1$s') || false === strpos($string, '%2$s') ) {
+	if ( false === strpos( $string, '%1$s' ) || false === strpos( $string, '%2$s' ) ) {
 		$string = 'Use %1$s or %2$s, or any VALID selector of a fixed element where the bar can be appended to, e.g. a sticky menu.';
 	}
 	ruigehond006_add_settings_field(
@@ -229,7 +228,7 @@ function ruigehond006_settings() {
 	);
 	ruigehond006_add_settings_field(
 		'bar_color',
-		'color',
+		'wp-color',
 		esc_html__( 'Color of the progress bar', 'wp-reading-progress' ), // title
 		$option
 	);
@@ -243,7 +242,7 @@ function ruigehond006_settings() {
 	/* @since 1.5.4: check if the required placeholders are in the translated string */
 	/* translators: %1$s: link to insert .5vh, %2$s: link to insert 6px */
 	$string = esc_html__( 'Thickness based on screen height is recommended, e.g. %1$s. But you can also use pixels, e.g. %2$s.', 'wp-reading-progress' );
-	if ( false === strpos($string, '%1$s') || false === strpos($string, '%2$s') ) {
+	if ( false === strpos( $string, '%1$s' ) || false === strpos( $string, '%2$s' ) ) {
 		$string = 'Thickness based on screen height is recommended, e.g. %s. But you can also use pixels, e.g. %s.';
 	}
 	ruigehond006_add_settings_field(
@@ -288,7 +287,7 @@ function ruigehond006_settings() {
 				if ( in_array( $post_type, $post_types ) ) {
 					echo ' checked="checked"';
 				}
-				echo '/>', esc_html( $post_type ), '</label><br/>';
+				echo '/>', esc_html( $post_type ), '</label><br>';
 			}
 			echo '<div class="ruigehond006 explanation"><em>';
 			echo esc_html__( 'For unchecked post types you can enable the reading progress bar per post on the post edit page.', 'wp-reading-progress' );
@@ -317,9 +316,9 @@ function ruigehond006_settings() {
 		function () {
 			echo '<p>';
 			echo esc_html__( 'If you want to display estimated reading time (ert) and your theme does not support it, you can activate it here.', 'wp-reading-progress' );
-			echo '<br/>';
+			echo '<br>';
 			echo esc_html__( 'When activated, you need to set some extra options. Upon deactivation, those options will be removed as well.', 'wp-reading-progress' );
-			echo '<br/>';
+			echo '<br>';
 			echo esc_html__( 'The ert (snippet) will be output in a span with css class `wp-reading-progress-ert` for you to style.', 'wp-reading-progress' );
 			echo '</p>';
 		}, //callback
@@ -390,8 +389,15 @@ function ruigehond006_add_settings_field( $name, $type, $title, $option, $explan
 					echo '</label>';
 
 					return;
+//				case 'wp-color':
+//					echo '<input type="text" class="ruigehond006_colorpicker" name="ruigehond006[';
+//					echo esc_attr( $args['name'] );
+//					echo ']" value="';
+//					echo esc_attr( $args['value'] );
+//					echo '"/>';
+//					break;
 				case 'color':
-					echo '<input type="text" class="ruigehond006_colorpicker" name="ruigehond006[';
+					echo '<input type="color" name="ruigehond006[';
 					echo esc_attr( $args['name'] );
 					echo ']" value="';
 					echo esc_attr( $args['value'] );

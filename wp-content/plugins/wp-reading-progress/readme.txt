@@ -3,9 +3,9 @@ Contributors: ruigehond
 Tags: reading, progress, progressbar, estimated reading time
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hallo@ruigehond.nl&lc=US&item_name=WP+reading+progress+plugin&no_note=0&cn=&currency_code=EUR&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted
 Requires at least: 4.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 5.6
-Stable tag: 1.6.1
+Stable tag: 1.7.0
 License: GPLv3
 
 Light weight fully customizable reading progress bar. Sticks to top, bottom or sticky menu, with fallback for small screens. Includes ert (beta).
@@ -15,23 +15,23 @@ The reading progress bar is a great user experience on longreads. Especially if 
 
 Customization:
 
-- Location top of screen, bottom of screen or below a sticky menu.
+- Location top of screen, bottom of screen or below sticky elements.
+
+- Select post types you wish the bar to appear, or individual posts.
 
 - Choose color of the reading progress bar.
 
 - Have the bar start at 0% even when part of the article is visible.
 
-- Select post types you wish the bar to appear, or individual posts.
-
 Behaviour:
 
 - The reading progress bar has smooth initializing since part of the text may already be visible, after that a lightweight update-function ensures quick response while scrolling.
 
-- The bar can attach itself to any (sticky) element that you define as an admin, when there are multiple, the first visible element will be used.
+- The bar can attach itself to multiple (sticky) elements that you define as an admin, the first visible element will be used.
 
 - When there is no (longer a) visible element to attach to, the bar displays at the top.
 
-- If there is no single article identified (by class names or id) it uses the whole page to calculate progress.
+- Use `dir=rtl` on your html tag to have the bar display correctly for right-to-left languages.
 
 Estimated reading time (beta)
 
@@ -58,6 +58,8 @@ Upon uninstall WP Reading Progress removes its own options and `post_meta` data 
 3. Activate the bar for an individual post (if that post type is not enabled)
 
 == Changelog ==
+
+1.7.0: only load scripts when the bar is actually on the page
 
 1.6.1: adhere to wordpress coding standards, fixing deprecated strip_tags notice
 
@@ -123,12 +125,6 @@ Upon uninstall WP Reading Progress removes its own options and `post_meta` data 
 
 == Upgrade Notice ==
 
-= 1.5.1 =
-
-For speed the plugin looks for elements to stick to only once per request, this should work. If not, please let me know and downgrade to 1.5.0 in the meantime.
-
 = 1.4.0 =
-
-The bar will select between multiple elements when available and pick the first one in the viewport. If you use it with a sticky element please check whether it still behaves as you expect, or stick it to a better element from now on.
 
 If you upgrade from a version before 1.3.0, you have to check the `post` post type in the WP Reading Bar settings manually to keep the same behaviour.
