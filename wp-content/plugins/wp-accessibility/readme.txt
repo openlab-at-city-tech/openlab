@@ -3,9 +3,9 @@ Contributors: joedolson
 Donate link: https://www.joedolson.com/donate/
 Tags: accessibility, wcag, a11y, section508, alt text
 Requires at least: 5.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.4
-Stable tag: 2.2.6
+Stable tag: 2.3.3
 Text Domain: wp-accessibility
 License: GPLv3
 
@@ -81,6 +81,29 @@ WP Accessibility includes a statistics collection feature to help you identify h
 = Future =
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
+
+= 2.3.3 =
+
+* Bug fix: Set a default option value for `wpa_track_stats` in option call, to fix issue caused by strict type checking.
+* Bug fix: Prevent escaped strings in search output from bypassing empty search checks. Props @stevejonesdev.
+
+= 2.3.2 =
+
+* Security: Sanitize alt & longdesc text before injecting into toggle name. Props Wordfence & @jtwings.
+* Bug fix: Apply alt text checks to all supported image types. Props @knutsp.
+* Change: Add additional invalid alt text patterns.
+
+= 2.3.1 =
+
+* Bug fix: Fixes broken longdesc scripting.
+
+= 2.3.0 =
+
+* Change: Split settings into three pages: features, admin, and remediation.
+* Change: Add settings to disable automatic labelling, viewport settings, lang attributes, and removal of title attributes.
+* Change: Remove PHP-based title attribute removals.
+* Change: Switch settings markup from lists to paragraphs.
+* Change: Add bulk disable to turn off all overlay features.
 
 = 2.2.6 =
 

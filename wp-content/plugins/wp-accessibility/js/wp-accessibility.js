@@ -51,7 +51,7 @@
 	}
 
 	const viewport = document.querySelector( 'meta[name="viewport"]' );
-	if ( viewport ) {
+	if ( viewport && wpa.viewport ) {
 		let conditionsBefore = viewport.getAttribute( 'content' );
 		let conditionsAfter  = viewport.getAttribute( 'content' );
 		if ( conditionsBefore.search(/user-scalable=no/g) ) {
@@ -701,7 +701,7 @@
 					wrapper.classList.add( 'wpa-ld' );
 					let longdesc = el.getAttribute('longdesc');
 					let alt = el.getAttribute('alt');
-					let classes = [...img.classList];
+					let classes = [...el.classList];
 					wrap(el,wrapper);
 					classes.forEach(className => {
 						wrapper.classList.add(className);
@@ -710,7 +710,11 @@
 					let newLink = document.createElement( 'a' );
 					newLink.setAttribute( 'href', longdesc );
 					newLink.classList.add( 'longdesc-link' );
-					newLink.innerHTML = 'Description<span class="screen-reader-text"> of' + alt + '</span>';
+					let span = document.createElement( 'span' );
+					span.classList.add( 'screen-reader-text' );
+					span.textContent = ' of ' + alt;
+					newLink.textContent = 'Description';
+					newLink.appendChild( span );
 					el.insertAdjacentElement( 'afterend', newLink );
 				});
 			}
@@ -726,40 +730,8 @@
 		} else {
 			// Handle longdescriptions with buttons.
 			if ( longDescImgs.length > 0 ) {
-				longDescImgs.forEach( (el) => {
-					wrap( el, wrapper );
-					let longdesc = el.getAttribute('longdesc');
-					let class_array = el.getAttribute('class').match(/\S+/g);
-					let image_id = '';
-					class_array.forEach( (clas) => {
-						if ( clas.match( /wp-image-/gi ) ) {
-							image_id = clas;
-						}
-						wrapper.classList.add( clas );
-					});
-
-					// Secondary check for image ID, if not in classes.
-					if ( '' === image_id ) {
-						let imgId = el.getAttribute( 'id' );
-						image_id = imgId.replace( 'longdesc-return-', '' );
-					}
-					el.setAttribute('class', '');
-					wrapper.insertAdjacentHTML( 'beforeend', '<button aria-expanded="false" type="button" class="wpa-toggle">' + wpa.ldText + '</button>');
-					wrapper.insertAdjacentHTML('<div class="longdesc"></div>');
-					let container = wrapper.querySelector('.longdesc');
-					container.style.display = 'none';
-
-					container.load( longdesc + ' #desc_' + image_id );
-					wrapper.querySelector('button').addEventListener( 'click', function() {
-						let visible = container.checkVisibility();
-						if ( visible ) {
-							this.setAttribute( 'aria-expanded', 'false' );
-							container.style.display = 'none';
-						} else {
-							this.setAttribute( 'aria-expanded', 'true' );
-							container.style.display = 'block';
-						}
-					});
+				longDescImgs.forEach( (img) => {
+					wpa_load_image_control( img );
 				});
 			}
 
@@ -775,11 +747,18 @@
 
 		function wpa_load_image_control( img ) {
 			let classes = img.getAttribute( 'class' );
-			if ( null === classes || '' === classes ) {
-				parent  = img.closest( '.wpa-alt' );
-				classes = parent.getAttribute( 'class' ).replace( 'wpa-alt ', '' );
+			let idAtt   = img.getAttribute( 'id' );
+			let id;
+			if ( idAtt && idAtt.includes( 'longdesc' ) ) {
+				id = idAtt.replace( 'longdesc-return-', '' );
+			} else {
+				if ( null === classes || '' === classes ) {
+					parent  = img.closest( '.wpa-alt' );
+					classes = parent.getAttribute( 'class' ).replace( 'wpa-alt ', '' );
+				}
+
+				id = classes.replace( 'wp-image-', '' );
 			}
-			let id = classes.replace( 'wp-image-', '' );
 			let api = wpa.restUrl + '/' + id;
 			fetch( api )
 				.then( response => response.json())
@@ -828,8 +807,16 @@
 
 			img.setAttribute('alt', '');
 			img.setAttribute('class', '');
+			let newLink = document.createElement( 'a' );
+			newLink.setAttribute( 'href', url );
+			newLink.classList.add( 'longdesc-link' );
+			let span = document.createElement( 'span' );
+			span.classList.add( 'screen-reader-text' );
+			span.textContent = ' of ' + alt;
+			newLink.textContent = 'Description';
+			newLink.appendChild( span );
 			if ( 'link' === wpa.ldType ) {
-				wrapper.insertAdjacentHTML( 'beforeend', '<a href="' + url + '" class="longdesc-link">Description<span class="screen-reader-text"> of ' + alt + '</span></a>');
+				wrapper.insertAdjacentElement( 'beforeend', newLink );
 			} else {
 				wrapper.insertAdjacentHTML( 'beforeend', '<button aria-expanded="false" class="wpa-toggle">' + wpa.ldText + '</button>');
 				wrapper.insertAdjacentHTML( 'beforeend', '<div class="longdesc"></div>');
