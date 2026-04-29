@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace ElementsKit_Lite;
 
 defined( 'ABSPATH' ) || exit;
@@ -12,7 +12,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 	public function get_post_list() {
 
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			return;   
+			return;
 		}
 
 		$query_args = array(
@@ -44,10 +44,10 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 		return array( 'results' => $options );
 		wp_reset_postdata();
 	}
-	
+
 	public function get_page_list() {
 		if ( ! current_user_can( 'edit_posts' ) ) {
-			return;   
+			return;
 		}
 		$query_args = array(
 			'post_type'      => 'page',
@@ -111,12 +111,54 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 		wp_reset_postdata();
 	}
 
+	public function get_taxonomy_list() {
+		$query_args = array(
+			'orderby'    => 'name',
+			'order'      => 'DESC',
+			'hide_empty' => false,
+			'number'     => 10,
+		);
+
+		// set taxonomy if provided
+		if ( isset( $this->request['taxonomy'] ) ) {
+			$query_args['taxonomy'] = $this->request['taxonomy'];
+		} else {
+			$query_args['taxonomy'] = 'category';
+		}
+
+		// filter by ids or search term
+		if ( isset( $this->request['ids'] ) ) {
+			$ids                   = explode( ',', $this->request['ids'] );
+			$query_args['include'] = $ids;
+		}
+
+		// search term
+		if ( isset( $this->request['s'] ) ) {
+			$query_args['name__like'] = $this->request['s'];
+		}
+
+		$terms = get_terms( $query_args );
+
+		$options = array();
+
+		if ( is_countable( $terms ) && count( $terms ) > 0 ) :
+			foreach ( $terms as $term ) {
+				$options[] = array(
+					'id'   => $term->term_id,
+					'text' => $term->name,
+				);
+			}
+		endif;
+
+		return array( 'results' => $options );
+	}
+
 	public function get_category() {
 
 		$taxonomy   = 'category';
 		$query_args = array(
 			'taxonomy'   => array( 'category' ), // taxonomy name
-			'orderby'    => 'name', 
+			'orderby'    => 'name',
 			'order'      => 'DESC',
 			'hide_empty' => true,
 			'number'     => 10,
@@ -142,7 +184,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 					'text' => $term->name,
 				);
 			}
-		endif;      
+		endif;
 		return array( 'results' => $options );
 	}
 
@@ -180,7 +222,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 	public function get_product_cat() {
 		$query_args = array(
 			'taxonomy'   => array( 'product_cat' ), // taxonomy name
-			'orderby'    => 'name', 
+			'orderby'    => 'name',
 			'order'      => 'DESC',
 			'hide_empty' => false,
 			'number'     => 6,
@@ -220,7 +262,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 			'post_status'    => 'publish',
 			'posts_per_page' => 15,
 		);
-	
+
 		if ( isset( $this->request['ids'] ) ) {
 			$ids                    = explode( ',', $this->request['ids'] );
 			$query_args['post__in'] = $ids;
@@ -229,7 +271,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 		if ( isset( $this->request['s'] ) ) {
 			$query_args['s'] = $this->request['s'];
 		}
-	
+
 		$query   = new \WP_Query( $query_args );
 		$options = array();
 		if ( $query->have_posts() ) :
@@ -241,7 +283,7 @@ class Controls_Ajax_Select2_Api extends Core\Handler_Api {
 				);
 			}
 		endif;
-	
+
 		return array( 'results' => $options );
 		wp_reset_postdata();
 	}

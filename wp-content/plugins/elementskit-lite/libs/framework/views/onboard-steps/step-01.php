@@ -39,6 +39,15 @@
 				),
 			)
 		);
+
+		// Hidden input to enable inline SVG by default
+		$this->utils->input(
+			array(
+				'type'        => 'hidden',
+				'name'        => 'user_data[inline_svg][is_enable]',
+				'value'       => '1',
+			)
+		);
 		?>
 </div>
 

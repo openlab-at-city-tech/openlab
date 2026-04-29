@@ -1315,33 +1315,8 @@ class ElementsKit_Widget_Heading extends Widget_Base {
         $settings = $this->get_settings_for_display();
 		extract($settings);
 
-		// Sanitize Title & Sub-Title Tags
-		$options_ekit_heading_title_tag = array_keys([
-			'h1' => 'H1',
-			'h2' => 'H2',
-			'h3' => 'H3',
-			'h4' => 'H4',
-			'h5' => 'H5',
-			'h6' => 'H6',
-			'div' => 'div',
-			'span' => 'span',
-			'p' => 'p',
-		]);
-		$title_tag = \ElementsKit_Lite\Utils::esc_options($ekit_heading_title_tag, $options_ekit_heading_title_tag, 'h2');
-
-		// Sanitize Sub Title Tag
-		$options_ekit_heading_sub_title_tag = array_keys([
-			'h1' => 'H1',
-			'h2' => 'H2',
-			'h3' => 'H3',
-			'h4' => 'H4',
-			'h5' => 'H5',
-			'h6' => 'H6',
-			'div' => 'div',
-			'span' => 'span',
-			'p' => 'p',
-		]);
-		$sub_title_tag = \ElementsKit_Lite\Utils::esc_options($ekit_heading_sub_title_tag, $options_ekit_heading_sub_title_tag, 'h3');
+		$title_tag = \Elementor\Utils::validate_html_tag($ekit_heading_title_tag);
+		$sub_title_tag = \Elementor\Utils::validate_html_tag($ekit_heading_sub_title_tag);
 
 		// Image sectionn
         $image_html = '';
@@ -1352,7 +1327,6 @@ class ElementsKit_Widget_Heading extends Widget_Base {
             $this->add_render_attribute('image', 'title', Control_Media::get_image_title($settings['ekit_heading_seperator_image']));
 
             $image_html = Group_Control_Image_Size::get_attachment_image_html($settings, 'ekit_heading_seperator_image_size', 'ekit_heading_seperator_image');
-
         }
 
 		$seperator = '';

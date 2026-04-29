@@ -5,9 +5,9 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Inline script registrar.
- * 
+ *
  * Returns all necessary inline js & css.
- * 
+ *
  * @since 1.0.0
  * @access public
  */
@@ -15,13 +15,16 @@ class Build_Inline_Scripts {
 
 	use \ElementsKit_Lite\Traits\Singleton;
 
-	function __construct() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_js' ) );
-		add_action( 'admin_print_scripts', array( $this, 'admin_js' ) );
+	public function __construct() {
+		// Frontend + Admin scripts
+		add_action( 'wp_print_scripts', array( $this, 'print_inline_script' ) );
 	}
 
-
-	// scripts for common end, admin & frontend
+	/**
+	 * Get common inline JavaScript.
+	 *
+	 * @return string
+	 */
 	public function common_js() {
 		ob_start(); ?>
 
@@ -30,24 +33,20 @@ class Build_Inline_Scripts {
 		}
 
 		<?php
-		$output = ob_get_contents();
+		$output =  ob_get_contents();
 		ob_end_clean();
 		return $output;
 	}
 
-
-
-	// scripts for frontend
-	public function frontend_js() {
-		$js = $this->common_js();
-		wp_add_inline_script( 'elementskit-framework-js-frontend', $js );
-	}
-
-
-	// scripts for admin
-	public function admin_js() {
-		echo "<script type='text/javascript'>\n";
-		echo \ElementsKit_Lite\Utils::render( $this->common_js() );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Content already escaped in common_js() method
-		echo "\n</script>";
+	/**
+	 * Print inline JavaScript.
+	 *
+	 * @return void
+	 */
+	public function print_inline_script() {
+		printf(
+			"<script type='text/javascript'>%s</script>",
+			\ElementsKit_Lite\Utils::render( $this->common_js() )
+		);
 	}
 }

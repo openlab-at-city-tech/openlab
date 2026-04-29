@@ -21,13 +21,13 @@
 	);
 	?>
 	<div class="ekit-admin-input-switch ekit-admin-card-shadow attr-card-body">
-		<input <?php echo esc_attr( $options['checked'] === true ? 'checked' : '' ); ?> 
-			type="checkbox" value="<?php echo esc_attr( $value ); ?>" 
-			class="ekit-admin-control-input" 
-			name="<?php echo esc_attr( $name ); ?>" 
+		<input <?php echo esc_attr( $options['checked'] === true ? 'checked' : '' ); ?>
+			type="checkbox" value="<?php echo esc_attr( $value ); ?>"
+			class="ekit-admin-control-input"
+			name="<?php echo esc_attr( $name ); ?>"
 			id="ekit-admin-switch__<?php echo esc_attr( self::strify( $name ) . $value ); ?>"
 
-			<?php 
+			<?php
 			if ( isset( $attr ) ) {
 				foreach ( $attr as $k => $v ) {
 					echo esc_attr($k) .'='. esc_attr($v);
@@ -41,15 +41,24 @@
 			<span class="ekit-admin-control-label-switch" data-active="ON" data-inactive="OFF"></span>
 		</label>
 
-	   
+
 	</div>
-	<?php 
+	<?php
 	$slug = 'elementskit/';
 	if ( ! in_array( $value, $no_demo ) ) :
 		if ( $value === 'parallax' ) {
 			$value = 'effects';
 		}
+
+		if ( $value === 'liquid-glass' ) {
+			$value = 'elementor-liquid-glass';
+		}
+
+		if ( $value === 'badge' ) {
+			$value = 'elementor-global-badge';
+		}
+
 		?>
-		<a target="_blank" href="https://wpmet.com/plugin/<?php echo esc_attr( $slug ) . esc_attr( $value ); ?>/" class="ekit-admin-demo-tooltip"><i class="fa fa-laptop"></i><?php esc_html_e( 'View Demo', 'elementskit-lite' ); ?></a>
+		<a target="_blank" href="https://wpmet.com/plugin/<?php echo esc_attr( $slug ) . esc_attr( $value ); ?>/" class="ekit-admin-demo-tooltip"><?php esc_html_e( 'Live Demo', 'elementskit-lite' ); ?></a>
 	<?php endif; ?>
 </div>

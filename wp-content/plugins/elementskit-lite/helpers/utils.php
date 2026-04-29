@@ -308,9 +308,8 @@ class Utils {
 		}
 	}
 
-	public static function render_elementor_content( $content_id ) {
+	public static function render_elementor_content( $content_id, $has_css = false ) {
 		$elementor_instance = \Elementor\Plugin::instance();
-		$has_css            = false;
 
 		/**
 		 * CSS Print Method Internal and Exteral option support for Header and Footer Builder.
@@ -388,22 +387,11 @@ class Utils {
 		return 'ekit-main-swiper swiper';
 	}
 
-
 	/**
 	* Get a page/post by slug (new method).
 	*
-	* 🚀 New Code (preferred):
-	* - Uses post slug instead of post title.
-	* - More reliable because titles can change or contain duplicates, while slugs are unique per post type.
-	*
-	* 🕑 Migration Plan:
-	* - Keep the old `get_page_by_title()` method for the next 5–10 releases as a fallback.
-	* - If this slug-based approach proves stable, we will fully remove the title-based method afterwards.
-	* - If slug lookups fail in some use cases, we will continue to keep the title-based code.
-	*
-	* @introduced: 2025-09-01
-	* @issue: https://tree.taiga.io/project/wpmet-elementskit/issue/219
 	* @since 3.6.1
+	*
 	* @param string $slug      Post slug.
 	* @param string $post_type Post type. Default 'page'.
 	* @return WP_Post|null     WP_Post object if found, null otherwise.
@@ -429,5 +417,36 @@ class Utils {
 
 	public static function remove_special_chars($string) {
 		return preg_replace('/[^A-Za-z0-9 ]/', '', $string);
+	}
+
+	/**
+	 * Check whether a specific plugin is active.
+	 *
+	 * Works for both single-site and multisite installations
+	 * (including network-activated plugins).
+	 *
+	 * @since 3.7.8
+	 *
+	 * @param string $plugin_file Plugin file path relative to the plugins directory.
+	 * Example: 'elementskit/elementskit.php'.
+	 *
+	 * @return bool True if the plugin is active, false otherwise.
+	 */
+	public static function ekit_is_plugin_active( string $plugin_file ): bool {
+		$active_plugins = (array) apply_filters(
+			'active_plugins',
+			get_option( 'active_plugins', [] )
+		);
+
+		// Include network-activated plugins for multisite installs.
+		if ( is_multisite() ) {
+			$network_plugins = array_keys(
+				(array) get_site_option( 'active_sitewide_plugins', [] )
+			);
+
+			$active_plugins = array_merge( $active_plugins, $network_plugins );
+		}
+
+		return in_array( $plugin_file, $active_plugins, true );
 	}
 }

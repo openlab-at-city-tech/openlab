@@ -500,19 +500,15 @@ if ( ! class_exists( '\Wpmet\Libs\Our_Plugins' ) ) :
 							box-sizing: border-box;
 				}
 				.wpmet-onboard-dashboard {
-					background-color: #F5F6F9;
+					background-color: #F0F0F1;
 					margin-left: -20px;
 					padding: 30px;
-					position: absolute;
-					top: 0;
-					left: 0;
 					z-index: 1;
 					width: calc(100% + 20px);
 					-webkit-box-sizing: border-box;
 							box-sizing: border-box;
 					min-height: calc(100vh - 32px);
 					padding-top: 30px;
-					padding-bottom: 100px;
 				}
 				.wpmet-onboard-dashboard .wpmet-pro-btn {
 					color: #3E77FC;

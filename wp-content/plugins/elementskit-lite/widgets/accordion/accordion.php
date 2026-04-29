@@ -574,9 +574,17 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
             [
                 'label' => esc_html__( 'Width', 'elementskit-lite' ),
                 'type' => Controls_Manager::SLIDER,
-                'size_units' => [ '%' ],
+                'size_units' => [ 'px', '%', 'em' ],
                 'range' => [
                     '%' => [
+                        'min' => 0,
+                        'max' => 100,
+                    ],
+                    'px' => [
+                        'min' => 0,
+                        'max' => 1200,
+                    ],
+                    'em' => [
                         'min' => 0,
                         'max' => 100,
                     ],

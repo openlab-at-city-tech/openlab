@@ -25,11 +25,20 @@ class Live_Action {
 	}
 
 	public function reset() {
+		// Capability check: Only allow users who can manage options
+		if ( ! is_user_logged_in() || ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'You are not allowed to perform this action.', 'elementskit-lite' ) );
+		}
+
+		if ( wp_verify_nonce( \Elementor\Utils::get_super_global_value( $_POST, '_nonce' ),'elementor_ajax' ) ) {
+			return;
+		}
+
 		update_post_meta( $this->id, '_wp_page_template', 'elementor_canvas' );
 
 		update_post_meta(
 			$this->id,
-			'_elementor_data', 
+			'_elementor_data',
 			'[{"id":"e3a6ad6","elType":"section","settings":[],"elements":[{"id":"77605d8","elType":"column","settings":{"_column_size":100,"_inline_size":null},"elements":[{"id":"0d8eeb3","elType":"widget","settings":{},"elements":[],"widgetType":"ekit_wb_' . $this->id . '"}],"isInner":false}],"isInner":false}]'
 		);
 	}

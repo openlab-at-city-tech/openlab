@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace ElementsKit_Lite\Core;
 
 class Handler_Api {
@@ -25,7 +25,7 @@ class Handler_Api {
 					array(
 						'methods'             => \WP_REST_Server::ALLMETHODS,
 						'callback'            => array( $this, 'callback' ),
-						'permission_callback' => '__return_true', 
+						'permission_callback' => '__return_true',
 					// all permissions are implimented inside the callback action
 					)
 				);
@@ -39,7 +39,8 @@ class Handler_Api {
 
 		if ( method_exists( $this, $action_class ) ) {
 			return $this->{$action_class}();
+		} else {
+			return new \WP_Error( 'invalid_action', esc_html__( 'Invalid action', 'elementskit-lite' ), array( 'status' => 400 ) );
 		}
 	}
-
 }

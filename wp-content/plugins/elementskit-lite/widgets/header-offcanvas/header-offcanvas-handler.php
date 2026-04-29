@@ -20,7 +20,7 @@ class ElementsKit_Widget_Header_Offcanvas_Handler extends \ElementsKit_Lite\Core
 
     static function get_categories()
     {
-        return ['elementskit_headerfooter'];
+        return ['elementskit'];
     }
 
     static function get_keywords() {

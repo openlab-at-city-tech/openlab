@@ -11,10 +11,13 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
     use \ElementsKit_Lite\Widgets\Widget_Notice;
 
     public $base;
-    
+
     public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
-		$this->add_script_depends('easypiechart');
+	}
+
+	public function get_script_depends() {
+		return ['easy-pie-chart'];
 	}
 
     public function get_name() {

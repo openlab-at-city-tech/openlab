@@ -11,10 +11,13 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
     use \ElementsKit_Lite\Widgets\Widget_Notice;
 
 	public $base;
-    
+
     public function __construct( $data = [], $args = null ) {
 		parent::__construct( $data, $args );
-		$this->add_script_depends('final-countdown');
+	}
+
+	public function get_script_depends() {
+		return ['final-countdown'];
 	}
 
     public function get_name() {
@@ -1752,7 +1755,7 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
         );
 
         $this->end_controls_section();
-        
+
         $this->insert_pro_message();
     }
 

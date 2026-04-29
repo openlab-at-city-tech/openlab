@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace ElementsKit_Lite;
 
 use ElementsKit_Lite\Libs\Framework\Attr;
@@ -43,8 +43,7 @@ class Megamenu_Api extends Core\Handler_Api {
 			return;
 		}
 
-		$elementor = \Elementor\Plugin::instance();
-		$output   = $elementor->frontend->get_builder_content_for_display($menu_item_id);
+		$output   = \ElementsKit_Lite\Utils::render_elementor_content($menu_item_id);
 
 		return $output;
 	}

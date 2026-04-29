@@ -51,7 +51,7 @@ class ElementsKit_Widget_Post_List_Handler extends \ElementsKit_Lite\Core\Handle
 	}
 
     static function get_categories() {
-        return [ 'elementskit_headerfooter' ];
+        return [ 'elementskit' ];
 	}
 
     static function get_dir() {

@@ -307,8 +307,7 @@ class ElementsKit_Menu_Walker extends \Walker_Nav_Menu {
 					$builder_post       = Utils::get_page_by_title( $builder_post_title, 'elementskit_content' );
 					$output            .= '<div class="elementskit-megamenu-panel">';
 					if ( $builder_post != null ) {
-						$elementor = \Elementor\Plugin::instance();
-						$mega_menu_output = $elementor->frontend->get_builder_content_for_display( $builder_post->ID );
+						$mega_menu_output = \ElementsKit_Lite\Utils::render_elementor_content( $builder_post->ID );
 
 						// if ajax load is enable and not elementor editor mode
 						if(!empty($item_meta['megamenu_ajax_load']) && $item_meta['megamenu_ajax_load'] == 'yes') {

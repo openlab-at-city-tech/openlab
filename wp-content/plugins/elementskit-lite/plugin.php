@@ -35,9 +35,6 @@ class Plugin {
 		// check on-boarding status
 		Libs\Framework\Classes\Onboard_Status::instance()->onboard();
 
-		// Enqueue frontend scripts.
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend' ) );
-
 		// migrate old settings db to new format.
 		new Compatibility\Data_Migration\Settings_Db();
 
@@ -62,7 +59,7 @@ class Plugin {
 		// register plugin activation actions
 		( new Core\Activation_Actions() )->init();
 
-		add_action( 'wp_head', array( $this, 'add_meta_for_search_excluded' ) );
+		add_action( 'send_headers', array( $this, 'add_meta_for_search_excluded' ) );
 
 		// Register ElementsKit supported widgets to Elementor from 3rd party plugins.
 		add_action( 'elementor/widgets/register', array( $this, 'register_widgets' ), 1050 );
@@ -76,7 +73,16 @@ class Plugin {
 		// Show forms sub menu page
 		\Wpmet\Libs\Forms::instance();
 
-		$is_pro_active = in_array( 'elementskit/elementskit.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
+		$is_pro_active = \ElementsKit_Lite\Utils::ekit_is_plugin_active( 'elementskit/elementskit.php');
+
+		// Initialize editor promotion for pro widgets
+		if( ! $is_pro_active ) {
+			add_action( 'elementor/editor/init', function() {
+				if ( class_exists( '\ElementsKit_Lite\Core\Editor_Promotion' ) ) {
+					\ElementsKit_Lite\Core\Editor_Promotion::instance()->init();
+				}
+			} );
+		}
 
 		if ( is_admin() && Libs\Framework\Classes\Utils::instance()->get_settings( 'ekit_user_consent_for_banner', 'yes' ) == 'yes' ) {
 			$filter_string = \ElementsKit_Lite::active_plugins();
@@ -369,18 +375,6 @@ class Plugin {
 	/**
 	 * Enqueue scripts
 	 *
-	 * Enqueue js and css to frontend.
-	 *
-	 * @since 1.0.0
-	 * @access public
-	 */
-	public function enqueue_frontend() {
-		wp_enqueue_script( 'elementskit-framework-js-frontend', \ElementsKit_Lite::lib_url() . 'framework/assets/js/frontend-script.js', array( 'jquery' ), \ElementsKit_Lite::version(), true );
-	}
-
-	/**
-	 * Enqueue scripts
-	 *
 	 * Enqueue js and css to admin.
 	 *
 	 * @since 1.0.0
@@ -452,12 +446,16 @@ class Plugin {
 	 * @access public
 	 */
 	public function add_meta_for_search_excluded() {
-		if ( in_array(
-			get_post_type(),
-			array( 'elementskit_widget', 'elementskit_template', 'elementskit_content' )
-		)
-			) {
-			echo '<meta name="robots" content="noindex,nofollow" />', "\n";
+		if (
+			! is_admin() &&
+			is_singular() &&
+			in_array(
+				get_post_type(),
+				array( 'elementskit_widget', 'elementskit_template', 'elementskit_content' ),
+				true
+			)
+		) {
+			header( 'X-Robots-Tag: noindex', true );
 		}
 	}
 

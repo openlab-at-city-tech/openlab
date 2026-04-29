@@ -21,7 +21,7 @@ class ElementsKit_Widget_Post_Tab_Handler extends \ElementsKit_Lite\Core\Handler
     }
 
     static function get_categories() {
-        return [ 'elementskit_headerfooter' ];
+        return [ 'elementskit' ];
     }
 
     static function get_dir() {

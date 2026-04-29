@@ -15,11 +15,23 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 	public $base;
 
 	public function get_style_depends() {
-		return [ 'odometer' ];
+		$deps = [];
+
+		if ( Plugin::$instance->editor->is_edit_mode() || Plugin::$instance->preview->is_preview_mode() ) {
+			$deps[] = 'odometer';
+		}
+
+		return $deps;
 	}
 
 	public function get_script_depends() {
-		return ['odometer'];
+		$deps = [];
+
+		if ( Plugin::$instance->editor->is_edit_mode() || Plugin::$instance->preview->is_preview_mode() ) {
+			$deps[] = 'odometer';
+		}
+
+		return $deps;
 	}
 
 	public function get_name() {
@@ -276,6 +288,36 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
                     'static'  => esc_html__( 'Static', 'elementskit-lite' ),
                     'sliding'  => esc_html__( 'Sliding', 'elementskit-lite' ),
                 ],
+				'assets' => [
+					'style' => [
+						[
+							'name' => 'odometer',
+							'conditions' => [
+								'terms' => [
+									[
+										'name' => 'ekit_funfact_style',
+										'operator' => '===',
+										'value' => 'sliding',
+									],
+								],
+							],
+						],
+					],
+					'scripts' => [
+						[
+							'name' => 'odometer',
+							'conditions' => [
+								'terms' => [
+									[
+										'name' => 'ekit_funfact_style',
+										'operator' => '===',
+										'value' => 'sliding',
+									],
+								],
+							],
+						],
+					],
+				],
             ]
         );
 
@@ -603,7 +645,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-funfact .elementskit-funfact-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementskit-funfact .funfact-icon svg'    => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementskit-funfact .funfact-icon svg'    => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -796,7 +838,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
-		
+
 		$this->add_responsive_control(
 			'ekit_funfact_text_align',
 			[
@@ -1274,18 +1316,6 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 	protected function render_raw() {
 		$settings = $this->get_settings_for_display();
 
-		$options_ekit_funfact_title_size = array_keys([
-			'h1'   => 'H1',
-			'h2'   => 'H2',
-			'h3'   => 'H3',
-			'h4'   => 'H4',
-			'h5'   => 'H5',
-			'h6'   => 'H6',
-			'div'  => 'div',
-			'span' => 'span',
-			'p'    => 'p',
-		]);
-
 		$text_align = isset($settings['ekit_funfact_text_align']) ? $settings['ekit_funfact_text_align'] : 'center';
 
 		$hover_border_bottom_direction = '';
@@ -1345,7 +1375,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 						endif; ?>
 					</div>
 				<?php endif; ?>
-				
+
 				<div class="funfact-content">
 					<div class="number-percentage-wraper">
 						<?php echo esc_html( $settings['ekit_funfact_number_prefix'] ); ?>
@@ -1361,7 +1391,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 
 					<?php
 						// Validate Title Tag
-						$title_tag = \ElementsKit_Lite\Utils::esc_options($settings['ekit_funfact_title_size'], $options_ekit_funfact_title_size, 'h3');
+						$title_tag = \Elementor\Utils::validate_html_tag($settings['ekit_funfact_title_size']);
 
 						echo '<'. esc_attr($title_tag) .' class="funfact-title">';
 						echo 	esc_html( $settings['ekit_funfact_title_text'] );

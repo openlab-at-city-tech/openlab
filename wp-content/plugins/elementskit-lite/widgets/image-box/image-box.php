@@ -1610,8 +1610,9 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
                     <div class="elementskit-box-content ekit-image-box-body-inner">
                         <?php
                         if ($settings['ekit_image_box_title_text'] != '') :
+                            $ekit_image_box_title_size_esc = \Elementor\Utils::validate_html_tag( $settings['ekit_image_box_title_size'] );
                         ?>
-                        <<?php echo in_array($settings['ekit_image_box_title_size'], $options_ekit_image_box_title_size) ? esc_attr($settings['ekit_image_box_title_size']) : 'h3'; ?> class="elementskit-info-box-title">
+                        <<?php echo esc_attr($ekit_image_box_title_size_esc); ?> class="elementskit-info-box-title">
 
                         <?php if(($settings['ekit_image_box_front_title_icons'] != '') && ($settings['ekit_image_box_front_title_icon_position'] == 'left') && ($settings['ekit_image_box_style_simple'] == 'floating-style')) : ?>
 
@@ -1653,9 +1654,8 @@ class ElementsKit_Widget_Image_Box extends Widget_Base {
 
                         <?php endif; ?>
 
-                    </<?php echo in_array($settings['ekit_image_box_title_size'], $options_ekit_image_box_title_size) ? esc_attr($settings['ekit_image_box_title_size']) : 'h3'; ?>>
+                    </<?php echo esc_attr($ekit_image_box_title_size_esc); ?>>
                     <?php
-
                         endif;
                     ?>
                     <?php if ($settings['ekit_image_box_description_text'] != '') { ?>

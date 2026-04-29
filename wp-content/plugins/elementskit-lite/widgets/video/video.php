@@ -16,7 +16,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return ['wp-mediaelement'];
+		return ['wp-mediaelement', 'magnific-popup'];
 	}
 
 	public function get_name() {
@@ -1692,7 +1692,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'size' => 44,
 				],
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close' => 'width: {{SIZE}}{{UNIT}};'
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close' => 'width: {{SIZE}}{{UNIT}};'
 				],
 			]
 		);
@@ -1719,7 +1719,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'size' => 44,
 				],
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close' => 'height: {{SIZE}}{{UNIT}};'
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close' => 'height: {{SIZE}}{{UNIT}};'
 				],
 			]
 		);
@@ -1749,7 +1749,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'size' => 10,
 				],
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close > i' => 'font-size: {{SIZE}}{{UNIT}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close > i, .mfp-iframe-holder {{WRAPPER}}.ekit-popup-close > svg' => 'font-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1772,7 +1772,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				],
 				'default'		 => 'right',
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close' => '{{VALUE}}: 0;',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close' => '{{VALUE}}: 0;',
 				],
 			]
 		);
@@ -1793,7 +1793,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors' => [
-					'.mfp-container.mfp-iframe-holder .ekit-popup-close' => 'background-color: {{VALUE}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close' => 'background-color: {{VALUE}};',
 
 				],
 			]
@@ -1806,8 +1806,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close' => 'color: {{VALUE}};',
-
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close i' => 'color: {{VALUE}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close > svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1819,8 +1819,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close' => 'border-color: {{VALUE}};',
-
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1839,7 +1838,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'unit' => '%'
 				],
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -1860,7 +1859,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#000000',
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close:hover' => 'background-color: {{VALUE}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close:hover' => 'background-color: {{VALUE}};',
 
 				],
 			]
@@ -1873,8 +1872,8 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close:hover' => 'color: {{VALUE}};',
-
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close:hover' => 'color: {{VALUE}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close:hover > svg' => 'fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1886,7 +1885,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 				'type' => Controls_Manager::COLOR,
 				'default' => '#ffffff',
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close:hover' => 'border-color: {{VALUE}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close:hover' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -1905,7 +1904,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 					'unit' => '%'
 				],
 				'selectors' => [
-					'.mfp-iframe-holder .ekit-popup-close:hover' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+					'.mfp-iframe-holder {{WRAPPER}}.ekit-popup-close:hover' =>  'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -2101,7 +2100,6 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		$video_settings['startVolume'] = (!empty($ekit_video_player_start_volume['size'])) ? $ekit_video_player_start_volume['size']: 0.8;
 		$video_settings['videoType'] = (!empty($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube')) ? 'iframe': 'inline';
 		$video_settings['videoClass'] = (!empty($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube')) ? 'mfp-fade': 'ekit_self_video_wrap_content';
-		$video_settings['popupIcon'] = (!empty($ekit_video_popup_close_icon)) ? $ekit_video_popup_close_icon : '';
 		$video_settings['videoStyle'] = (!empty($ekit_video_style)) ? $ekit_video_style : '';
 		$video_settings['videoTypeName'] = (!empty($ekit_video_popup_video_type)) ? $ekit_video_popup_video_type : '';
 		$video_settings['autoplay'] = (!empty($ekit_video_popup_auto_play) && $ekit_video_popup_auto_play === '1') ? true : false;
@@ -2158,40 +2156,40 @@ class ElementsKit_Widget_Video extends Widget_Base {
 						<source type="video/mp4" src="<?php echo esc_url($clean_url); ?>" />
 					</video>
 				</div>
-			<?php endif;?>
-		</div>
-		<?php
-		}else {
-			?>
-			<div class="ekit-video-frame" data-video-setting="<?php echo esc_attr(wp_json_encode($video_settings)); ?>">
-				<div class="ekit-inline-video-content <?php if($settings['ekit_video_inline_image_overlay_switcher'] === 'yes') : ?> ekit-video-inline-overlay-wrapper <?php endif; ?>">
-					<?php if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :
-						if(isset($settings['ekit_video_inline_image_overlay_switcher']) && $settings['ekit_video_inline_image_overlay_switcher'] === 'yes' ) {
-							include Handler::get_dir() . 'parts/video-button.php';
-						}
-					?>
-					<iframe src="<?php echo esc_url($ekit_video_popup_url); ?>" allow="autoplay" allowfullscreen></iframe>
-					<?php else :
-						if(isset($settings['ekit_video_inline_image_overlay_switcher']) && $settings['ekit_video_inline_image_overlay_switcher'] === 'yes'){
-							include Handler::get_dir() . 'parts/video-button.php';
-						}
-						if ( $ekit_video_popup_video_type === 'self' &&  isset( $settings['ekit_video_inline_video_player_control'] ) && $settings['ekit_video_inline_video_player_control'] === '1') {
-                            $hosted_params['controls'] = 'controls';
-                        }
-						?>
-						<video class="inline_video_class" src="<?php echo esc_url($clean_url); ?>" <?php Utils::print_html_attributes( $hosted_params ); ?>>
-						</video>
-					<?php endif; ?>
-
-					<?php if (!empty($settings['ekit_video_inline_overlay_image']['url']) && $settings['ekit_video_inline_image_overlay_switcher'] === 'yes') :
-						?>
-						<div class="ekit-inline-video-overlay-image">
-							<img src="<?php echo esc_url($settings['ekit_video_inline_overlay_image']['url']); ?>" alt="Overlay Image">
-						</div>
-					<?php endif; ?>
+			<?php endif; ?>
+				<div class="ekit-hidden-icons" hidden aria-hidden="true">
+					<?php Icons_Manager::render_icon( $settings['ekit_video_popup_close_icon'], [ 'class' => 'ekit-popup-close-icon' ] ); ?>
 				</div>
+		</div>
+		<?php } else { ?>
+		<div class="ekit-video-frame" data-video-setting="<?php echo esc_attr(wp_json_encode($video_settings)); ?>">
+			<div class="ekit-inline-video-content <?php if($settings['ekit_video_inline_image_overlay_switcher'] === 'yes') : ?> ekit-video-inline-overlay-wrapper <?php endif; ?>">
+				<?php if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :
+					if(isset($settings['ekit_video_inline_image_overlay_switcher']) && $settings['ekit_video_inline_image_overlay_switcher'] === 'yes' ) {
+						include Handler::get_dir() . 'parts/video-button.php';
+					}
+				?>
+				<iframe src="<?php echo esc_url($ekit_video_popup_url); ?>" allow="autoplay" allowfullscreen></iframe>
+				<?php else :
+					if(isset($settings['ekit_video_inline_image_overlay_switcher']) && $settings['ekit_video_inline_image_overlay_switcher'] === 'yes'){
+						include Handler::get_dir() . 'parts/video-button.php';
+					}
+					if ( $ekit_video_popup_video_type === 'self' &&  isset( $settings['ekit_video_inline_video_player_control'] ) && $settings['ekit_video_inline_video_player_control'] === '1') {
+						$hosted_params['controls'] = 'controls';
+					}
+					?>
+					<video class="inline_video_class" src="<?php echo esc_url($clean_url); ?>" <?php Utils::print_html_attributes( $hosted_params ); ?>>
+					</video>
+				<?php endif; ?>
+
+				<?php if (!empty($settings['ekit_video_inline_overlay_image']['url']) && $settings['ekit_video_inline_image_overlay_switcher'] === 'yes') :
+					?>
+					<div class="ekit-inline-video-overlay-image">
+						<img src="<?php echo esc_url($settings['ekit_video_inline_overlay_image']['url']); ?>" alt="Overlay Image">
+					</div>
+				<?php endif; ?>
 			</div>
-			<?php
-		}
+		</div>
+		<?php }
 	}
 }

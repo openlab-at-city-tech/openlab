@@ -11,13 +11,19 @@ class ElementsKit_Widget_Mail_Chimp_Api extends Core\Handler_Api {
     }
 
     public function get_sendmail(){
+		$return = ['success' => [], 'error' => [] ];
 
-        $return = ['success' => [], 'error' => [] ];
+		$nonce = $this->request->get_header( 'X-WP-Nonce' );
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wp_rest' ) ) {
+			$return['error'] = esc_html__( 'Security check failed. Please refresh the page and try again.', 'elementskit-lite' );
+			return $return;
+		}
+
 		$dataApi 	= ElementsKit_Widget_Mail_Chimp_Handler::get_data();
 
 		$token 		= isset($dataApi['token']) ? $dataApi['token'] : '';
 		$listed 	=  $this->request['listed'];
-		
+
 		$email  	= $this->request['email'];
 	    $firstname  = $this->request['firstname'];
 	    $lastname  	= $this->request['lastname'];
@@ -32,7 +38,7 @@ class ElementsKit_Widget_Mail_Chimp_Api extends Core\Handler_Api {
 				'PHONE' => (($phone != '') ? $phone : ''),
 			],
 		];
-		
+
 		if(!empty($this->request['double_opt_in']) && $this->request['double_opt_in'] === 'yes') {
 			$data['status'] = 'pending';
 		} else {
@@ -44,7 +50,7 @@ class ElementsKit_Widget_Mail_Chimp_Api extends Core\Handler_Api {
 			$return['error'] = esc_html__( 'Please set API Key into Dashboard User Data. ', 'elementskit-lite' );
 			return $return;
 		}
-		
+
 		$url = 'https://'.$server[1].'.api.mailchimp.com/3.0/lists/'.$listed.'/members/';
 
 		$response = wp_remote_post( $url, [
@@ -52,7 +58,7 @@ class ElementsKit_Widget_Mail_Chimp_Api extends Core\Handler_Api {
 			'data_format' => 'body',
 			'timeout' => 45,
 			'headers' => [
-							
+
 							'Authorization' => 'apikey '.$token,
 							'Content-Type' => 'application/json; charset=utf-8'
 					],

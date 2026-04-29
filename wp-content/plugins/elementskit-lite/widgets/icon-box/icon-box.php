@@ -1792,19 +1792,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
         $this->add_render_attribute( 'infobox_wrapper', 'class', $ekit_icon_box_show_image );
         $this->add_render_attribute( 'infobox_wrapper', 'class', $settings['ekit_icon_box_section_bg_hover_color_direction'] );
 
-		// Title HTML Tag
-		$options_ekit_icon_box_title_size = array_keys([
-			'h1' => 'H1',
-			'h2' => 'H2',
-			'h3' => 'H3',
-			'h4' => 'H4',
-			'h5' => 'H5',
-			'h6' => 'H6',
-			'div' => 'div',
-			'span' => 'span',
-			'p' => 'p',
-		]);
-		$ekit_icon_box_title_size_esc = \ElementsKit_Lite\Utils::esc_options( $settings['ekit_icon_box_title_size'], $options_ekit_icon_box_title_size, 'h3');
+		$ekit_icon_box_title_size_esc = \Elementor\Utils::validate_html_tag( $settings['ekit_icon_box_title_size'] );
 
         // Icon
         $image = '';

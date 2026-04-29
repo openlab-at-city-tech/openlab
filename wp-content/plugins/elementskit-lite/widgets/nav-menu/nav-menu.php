@@ -494,7 +494,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 ],
             ]
         );
-	
+
 		$this->add_group_control(
 			Group_Control_Border::get_type(),
 			[
@@ -798,7 +798,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 ],
             ]
         );
-        
+
 		$this->end_controls_section();
 
         $this->start_controls_section(
@@ -1140,7 +1140,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 ],
                 'default' => 'right',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger' => 'float: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger' => 'float: {{VALUE}}',
                 ],
             ]
         );
@@ -1160,7 +1160,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'unit' => 'px',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -1184,7 +1184,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'size' => 45,
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger' => 'width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1212,7 +1212,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'size' => 3,
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger' => 'border-radius: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger' => 'border-radius: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1231,7 +1231,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     ],
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger > .ekit-menu-icon' => 'font-size: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger > .ekit-menu-icon' => 'font-size: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
                     'elementskit_hamburger_icon[value]!'    => '',
@@ -1256,7 +1256,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_toggle_background',
                 'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic' ],
-                'selector' => '{{WRAPPER}} .elementskit-menu-hamburger',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-hamburger',
             ]
         );
 
@@ -1266,7 +1266,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_toggle_border',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
                 'separator' => 'before',
-                'selector' => '{{WRAPPER}} .elementskit-menu-hamburger',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-hamburger',
             ]
         );
 
@@ -1277,8 +1277,8 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => 'rgba(0, 0, 0, 0.5)',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger .elementskit-menu-hamburger-icon' => 'background-color: {{VALUE}}',
-                    '{{WRAPPER}} .elementskit-menu-hamburger > .ekit-menu-icon' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger .elementskit-menu-hamburger-icon' => 'background-color: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger > .ekit-menu-icon' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -1298,7 +1298,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_toggle_background_hover',
                 'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic' ],
-                'selector' => '{{WRAPPER}} .elementskit-menu-hamburger:hover',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-hamburger:hover',
             ]
         );
 
@@ -1308,7 +1308,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_toggle_border_hover',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
                 'separator' => 'before',
-                'selector' => '{{WRAPPER}} .elementskit-menu-hamburger:hover',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-hamburger:hover',
             ]
         );
 
@@ -1319,8 +1319,8 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => 'rgba(0, 0, 0, 0.5)',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-hamburger:hover .elementskit-menu-hamburger-icon' => 'background-color: {{VALUE}}',
-                    '{{WRAPPER}} .elementskit-menu-hamburger:hover > .ekit-menu-icon' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger:hover .elementskit-menu-hamburger-icon' => 'background-color: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-hamburger:hover > .ekit-menu-icon' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -1344,7 +1344,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             [
                 'name' => 'elementskit_menu_close_typography',
                 'label' => esc_html__( 'Typography', 'elementskit-lite' ),
-                'selector' => '{{WRAPPER}} .elementskit-menu-close',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-close',
             ]
         );
 
@@ -1363,7 +1363,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'unit' => 'px',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-close' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-close' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -1383,7 +1383,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'unit' => 'px',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-close' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-close' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -1407,7 +1407,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'size' => 45,
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-close' => 'width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-close' => 'width: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1435,7 +1435,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     'size' => 3,
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-close' => 'border-radius: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} button.elementskit-menu-close' => 'border-radius: {{SIZE}}{{UNIT}};',
                 ],
             ]
         );
@@ -1457,7 +1457,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_close_background',
                 'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic' ],
-                'selector' => '{{WRAPPER}} .elementskit-menu-close',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-close',
             ]
         );
 
@@ -1467,7 +1467,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_close_border',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
                 'separator' => 'before',
-                'selector' => '{{WRAPPER}} .elementskit-menu-close',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-close',
             ]
         );
 
@@ -1478,7 +1478,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => 'rgba(51, 51, 51, 1)',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-close' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-close' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -1498,7 +1498,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_close_background_hover',
                 'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic' ],
-                'selector' => '{{WRAPPER}} .elementskit-menu-close:hover',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-close:hover',
             ]
         );
 
@@ -1508,7 +1508,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'name' => 'elementskit_menu_close_border_hover',
                 'label' => esc_html__( 'Border', 'elementskit-lite' ),
                 'separator' => 'before',
-                'selector' => '{{WRAPPER}} .elementskit-menu-close:hover',
+                'selector' => '{{WRAPPER}} button.elementskit-menu-close:hover',
             ]
         );
 
@@ -1519,7 +1519,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                 'type' => Controls_Manager::COLOR,
                 'default' => 'rgba(0, 0, 0, 0.5)',
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-menu-close:hover' => 'color: {{VALUE}}',
+                    '{{WRAPPER}} button.elementskit-menu-close:hover' => 'color: {{VALUE}}',
                 ],
             ]
         );
@@ -1666,9 +1666,9 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
         }
 
 		?>
-		<nav class="ekit-wid-con <?php echo esc_attr($settings['elementskit_responsive_breakpoint']); ?>" 
-			data-hamburger-icon="<?php echo esc_attr($hamburger_icon_value); ?>" 
-			data-hamburger-icon-type="<?php echo esc_attr($hamburger_icon_type); ?>" 
+		<nav class="ekit-wid-con <?php echo esc_attr($settings['elementskit_responsive_breakpoint']); ?>"
+			data-hamburger-icon="<?php echo esc_attr($hamburger_icon_value); ?>"
+			data-hamburger-icon-type="<?php echo esc_attr($hamburger_icon_type); ?>"
 			data-responsive-breakpoint="<?php echo esc_attr($responsive_menu_breakpoint); ?>">
 			<?php $this->render_raw(); ?>
         </nav>
@@ -1693,7 +1693,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
                     <span class="elementskit-menu-hamburger-icon"></span><span class="elementskit-menu-hamburger-icon"></span><span class="elementskit-menu-hamburger-icon"></span>
                 <?php
                 endif;
-                
+
                 /**
                  * Show Icon or, SVG
                  */
@@ -1716,7 +1716,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             }
 
 			$markup = '<div class="elementskit-nav-identity-panel">';
-			
+
 			// Use an if statement to conditionally display the site logo
 			$ekit_nav_menu_logo = !empty($settings['elementskit_nav_menu_logo']) ? $settings['elementskit_nav_menu_logo'] : [];
 			if (!empty($ekit_nav_menu_logo['id']) && !empty($ekit_nav_menu_logo['url'])) :
@@ -1770,7 +1770,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
 
 			// set submenu indicator icon
 			$args['submenu_indicator_icon'] = $this->get_indicator_icon($settings);
-			
+
 			// WP 6.1 submenu issue
 			if(version_compare(get_bloginfo('version'), '6.1', '>=')){
 				unset($args['depth']);
@@ -1782,7 +1782,7 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
 			 * Mobile Menu Overlay
 			 */
 			?>
-			
+
 			<div class="elementskit-menu-overlay elementskit-menu-offcanvas-elements elementskit-menu-toggler ekit-nav-menu--overlay"></div><?php
 
 

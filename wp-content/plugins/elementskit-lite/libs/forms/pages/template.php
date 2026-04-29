@@ -393,15 +393,4 @@ $plugin = $pluginStatus->get_status( 'metform/metform.php' );
 		</section>
 	</div>
 
-	<div class="ekit-footer">
-		<p>
-			<?php echo sprintf( esc_html__('Thank you for creating with %s', 'elementskit-lite'), '<a href="https://wpmet.com/docs/category/elementskit/" target="_blank" rel="noopener noreferrer">' . esc_html__( 'ElementsKit', 'elementskit-lite' ) . '</a>' ); ?>
-		</p>
-		<p class="ekit-version">
-			<?php echo sprintf( esc_html__('Version 6.8.2', 'elementskit-lite') ); ?>
-		</p>
-	</div>
-
-
-
 </div>

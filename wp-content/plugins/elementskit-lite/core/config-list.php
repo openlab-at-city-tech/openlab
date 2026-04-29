@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace ElementsKit_Lite\Core;
 
 abstract class Config_List {
@@ -7,7 +7,7 @@ abstract class Config_List {
 
 	private $full_list   = array();
 	private $active_list = array();
-	
+
 	protected $optional_list = array();
 	protected $required_list = array();
 
@@ -25,13 +25,18 @@ abstract class Config_List {
 			return ( $this->{$data . '_list'}[ $module ] ?? false );
 		}
 
+		// Return all items including pro-disabled for promotion purposes
+		if ( $data === 'all' ) {
+			return $this->full_list;
+		}
+
 		return $this->{$data . '_list'};
 	}
 
 	public function is_active( $item ) {
 
 		$item = ( $this->active_list[ $item ] ?? array() );
-		
+
 		return empty( $item['package'] ) ? false : ( ( $item['package'] == 'free' || $item['package'] == 'pro' ) );
 	}
 
@@ -42,12 +47,12 @@ abstract class Config_List {
 
 			if ( isset( $database_list[ $key ]['status'] ) && $database_list[ $key ]['status'] == 'inactive' && ! key_exists( $key, $this->required_list ) ) {
 				continue;
-			} 
+			}
 
 			if ( isset( $item['package'] ) && $item['package'] == 'pro-disabled' ) {
 				continue;
 			}
-	
+
 			$this->active_list[ $key ] = $item;
 		}
 	}

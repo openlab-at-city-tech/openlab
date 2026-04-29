@@ -11,6 +11,16 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
 
     public $base;
 
+	public function get_script_depends() {
+		$deps = [ 'imagesloaded' ];
+
+		if ( Plugin::$instance->editor->is_edit_mode() || Plugin::$instance->preview->is_preview_mode() ) {
+			$deps[] = 'masonry';
+		}
+
+		return $deps;
+	}
+
     public function get_name() {
         return Handler::get_name();
     }
@@ -48,7 +58,6 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
 	}
 
     protected function register_controls() {
-
         // Layout
         $this->start_controls_section(
            'ekit_blog_posts_general',
@@ -56,6 +65,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                'label' => esc_html__( 'Layout', 'elementskit-lite' ),
            ]
        );
+
        $this->add_control(
            'ekit_blog_posts_layout_style',
            [
@@ -83,7 +93,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                ],
            ]
        );
-       
+
         $this->add_control(
             'ekit_blog_posts_layout_style_thumb',
             [
@@ -221,15 +231,33 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                'condition' => ['ekit_blog_posts_layout_style!' => 'elementskit-blog-block-post'],
            ]
 	   );
-	   
+
 			$this->add_control(
 				'grid_masonry',
 				[
 					'label'	=> esc_html__( 'Enable Masonry', 'elementskit-lite' ),
 					'type'	=> Controls_Manager::SWITCHER,
+					'return_value' => 'yes',
 					'condition'	=> [
 						'ekit_blog_posts_layout_style!'	=> 'elementskit-blog-block-post',
-					]
+					],
+					'assets' => [
+						'scripts' => [
+							[
+								'name' => 'masonry',
+								'conditions' => [
+									'terms' => [
+										[
+											'name' => 'grid_masonry',
+											'operator' => '===',
+											'value' => 'yes',
+										],
+									],
+								],
+							],
+						],
+
+					],
 				]
 			);
 
@@ -242,16 +270,16 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
            ]
        );
 
-       $this->add_control(
-           'ekit_blog_posts_num',
-           [
-               'label'     => esc_html__( 'Posts Count', 'elementskit-lite' ),
-               'type'      => Controls_Manager::NUMBER,
-               'min'       => 1,
-               'max'       => 100,
-               'default'   => 3,
-           ]
-       );
+        $this->add_control(
+            'ekit_blog_posts_num',
+            [
+                'label'   => esc_html__( 'Posts Count', 'elementskit-lite' ),
+                'type'    => Controls_Manager::NUMBER,
+                'min'     => 1,
+                'default' => 3,
+            ]
+        );
+
 
        $this->add_control(
         'ekit_blog_posts_is_manual_selection',
@@ -521,7 +549,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                 ],
             ]
         );
-        
+
 
 		$this->end_controls_section();
 
@@ -637,7 +665,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                'placeholder' => esc_html__( 'ID', 'elementskit-lite' ),
            ]
        );
-       
+
        $this->end_controls_section();
 
 
@@ -853,7 +881,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                 ],
             ]
         );
-        
+
         $this->add_group_control(
             Group_Control_Box_Shadow::get_type(),
             [
@@ -961,19 +989,32 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
            ]
        );
 
-       $this->add_responsive_control(
+        $this->add_responsive_control(
            'ekit_blog_posts_feature_img_size',
            [
                'label' => esc_html__( 'Image Width', 'elementskit-lite' ),
                'type' => Controls_Manager::SLIDER,
+               'size_units' => [ 'px', '%', 'em', 'rem'],
                'range' => [
-                   'px' => [
-                       'min' => 1,
-                       'max' => 500,
-                   ],
+                    'px' => [
+                        'min' => 1,
+                        'max' => 500,
+                    ],
+                    '%' => [
+                          'min' => 1,
+                          'max' => 100,
+                     ],
+                    'em' => [
+                        'min' => 1,
+                        'max' => 50,
+                    ],
+                    'rem' => [
+                        'min' => 1,
+                        'max' => 50,
+                    ],
                ],
                'selectors' => [
-                   '{{WRAPPER}} .elementskit-entry-thumb' => 'width: {{SIZE}}{{UNIT}}; min-width: {{SIZE}}{{UNIT}}',
+                   '{{WRAPPER}} .elementskit-entry-thumb img' => 'width: {{SIZE}}{{UNIT}};',
                ],
                'condition' => [
                     'ekit_blog_posts_layout_style' => 'elementskit-post-image-card',
@@ -1834,7 +1875,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
             ]
         );
 
-        
+
         $this->add_responsive_control(
             'ekit_blog_posts_floating_category_padding',
             [
@@ -1866,7 +1907,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                 ],
             ]
         );
-        
+
         $this->add_responsive_control(
             'ekit_blog_posts_floating_category_margin_right', [
                 'label'			 =>esc_html__( 'Space Between Categories', 'elementskit-lite' ),
@@ -1892,7 +1933,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
                 ],
             ]
         );
-        
+
         $this->end_controls_section();
 
        // Title Styles
@@ -2780,7 +2821,7 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
            ]
        );
 
-       
+
        $this->end_controls_section();
 
        $this->insert_pro_message();
@@ -3109,7 +3150,6 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
 
                $(function () {
                    var $postItems = $('#post-items--<?php echo esc_attr( $this->get_id() ); ?>[data-masonry-config]');
-
                    $postItems.imagesLoaded(function () {
                        $postItems.masonry();
                    });

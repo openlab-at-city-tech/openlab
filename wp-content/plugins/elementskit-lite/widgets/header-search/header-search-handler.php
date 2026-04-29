@@ -20,7 +20,7 @@ class ElementsKit_Widget_Header_Search_Handler extends \ElementsKit_Lite\Core\Ha
 
     static function get_categories()
     {
-        return ['elementskit_headerfooter'];
+        return ['elementskit'];
     }
 
     static function get_keywords() {

@@ -743,7 +743,7 @@ $pro_active = ( in_array( 'elementskit/elementskit.php', apply_filters( 'active_
 					   href="#inline_svg_data_control" aria-expanded="false"
 					   aria-controls="inline_svg_data_control">
 						<span>
-							<?php esc_html_e( 'Inline SVG (Experimental)', 'elementskit-lite' ); ?>
+							<?php esc_html_e( 'Inline SVG', 'elementskit-lite' ); ?>
 						</span>
 					</a>
 				</div>

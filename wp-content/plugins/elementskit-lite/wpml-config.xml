@@ -828,5 +828,43 @@
 				<field type="Advanced Search: Keywords Title" editor_type="LINE">ekit_adv_show_popular_keyword_title</field>
 			</fields>
 		</widget>
+		<widget name="elementskit-login-form">
+          <conditions>
+              <condition key="widgetType">elementskit-login-form</condition>
+          </conditions>
+          <fields>
+              <field type="Login Form: Username Label" editor_type="LINE">ekit_login_username_label</field>
+              <field type="Login Form: Password Label" editor_type="LINE">ekit_login_password_label</field>
+              <field type="Login Form: Lost Password Instruction" editor_type="AREA">ekit_lost_password_instruction</field>
+              <field type="Login Form: Lost Password Label" editor_type="LINE">ekit_lost_password_label</field>
+              <field type="Login Form: Username Placeholder" editor_type="LINE">ekit_login_username_placeholder</field>
+              <field type="Login Form: Password Placeholder" editor_type="LINE">ekit_login_password_placeholder</field>
+              <field type="Login Form: Lost Password Placeholder" editor_type="LINE">ekit_lost_password_placeholder</field>
+              <field type="Login Form: Remember Me Text" editor_type="LINE">ekit_login_remember_me_text</field>
+              <field type="Login Form: Button Text" editor_type="LINE">ekit_login_button_text</field>
+              <field type="Login Form: Reset Password" editor_type="LINE">ekit_login_reset_button_text</field>
+              <field type="Login Form: Back to Login" editor_type="LINE">ekit_login_back_button_text</field>
+              <field type="Login Form: Lost Password Text" editor_type="LINE">ekit_login_lost_password_text</field>
+              <field type="Login Form: Register Link Text" editor_type="LINE">ekit_login_register_text</field>
+              <field type="Login Form: Separator Text" editor_type="LINE">ekit_login_separator_text</field>
+              <field type="Login Form: Logged In Message" editor_type="AREA">ekit_login_logged_in_message</field>
+          </fields>
+      </widget>
+		 <widget name="elementskit-register-form">
+          <conditions>
+              <condition key="widgetType">elementskit-register-form</condition>
+          </conditions>
+          <fields>
+              <!-- General Fields -->
+              <field type="Register Form: Button Text" editor_type="LINE">ekit_register_button_text</field>
+              <field type="Register Form: Logged In Message" editor_type="AREA">ekit_register_logged_in_message</field>
+              <field type="Register Form: Redirect URL" key_of="ekit_register_redirect_url" editor_type="LINE">url</field>
+          </fields>
+          <fields-in-item items_of="ekit_register_form_fields">
+              <!-- Repeater Fields -->
+              <field type="Register Form: Field Label" editor_type="LINE">ekit_register_form_field_label</field>
+              <field type="Register Form: Field Placeholder" editor_type="LINE">ekit_register_form_field_placeholder</field>
+          </fields-in-item>
+      </widget>
 	</elementor-widgets>
 </wpml-config>

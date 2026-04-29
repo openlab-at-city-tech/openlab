@@ -72,39 +72,7 @@ class Init {
 
 		// Match all <i> tags with class containing "icon icon-"
 		if ($ekit_svg_icon && strpos($widget_content, 'icon icon-') !== false) {
-			$widget_content = preg_replace_callback('/<i[^>]*class="([^"]*)"[^>]*><\/i>/', function ($matches) {
-				$full_class_string = $matches[1]; // Get the entire class string
-
-				// Check if this icon has the icon icon- pattern
-				if (strpos($full_class_string, 'icon icon-') !== false) {
-					// Extract the specific icon name
-					preg_match('/icon icon-([^\s"]+)/', $full_class_string, $icon_matches);
-					$icon_name = $icon_matches[1]; // This gives us "down-arrow1"
-
-					$icon = [
-						'library' => 'ekiticons',
-						'value' => 'icon icon-' . $icon_name,
-					];
-
-					// Get the ElementsKit icon HTML
-					$get_icon = self::get_icon_html($icon);
-
-					// Now extract any additional classes
-					$extra_classes = preg_replace('/\s*icon icon-[^\s"]+\s*/', ' ', $full_class_string);
-					$extra_classes = trim($extra_classes);
-
-					// If we have extra classes, add them to the generated icon HTML
-					if (!empty($extra_classes)) {
-						// Add extra classes to the generated icon
-						$get_icon = str_replace('class="', 'class="' . $extra_classes . ' ', $get_icon);
-					}
-
-					return $get_icon;
-				}
-
-				// If no match found, return the original
-				return $matches[0];
-			}, $widget_content);
+			$widget_content = self::replace_icon_tags($widget_content);
 		}
 
 		return $widget_content;
@@ -114,6 +82,46 @@ class Init {
 		$elementskit_options = get_option( 'elementskit_options' );
 		$inline_svg = $elementskit_options['user_data']['inline_svg']['is_enable'] ?? false;
 		return apply_filters( 'elementskit_font_icon_inline_svg', $inline_svg );
+	}
+
+	public static function replace_icon_tags( string $widget_content ): string {
+		return preg_replace_callback(
+			'/<i[^>]*class="([^"]*)"[^>]*><\/i>/',
+			function ( array $matches ): string {
+				$original_tag  = $matches[0];
+				$class_string  = $matches[1];
+
+				// Bail early if this is not an ElementsKit icon tag
+				if ( strpos( $class_string, 'icon icon-' ) === false ) {
+					return $original_tag;
+				}
+
+				// Extract the icon name e.g. "icon icon-down-arrow1" → "down-arrow1"
+				preg_match( '/icon icon-([^\s"]+)/', $class_string, $icon_matches );
+				$icon_name = $icon_matches[1] ?? '';
+
+				// Generate the ElementsKit icon HTML
+				$icon_html = self::get_icon_html( [
+					'library' => 'ekiticons',
+					'value'   => 'icon icon-' . $icon_name,
+				] );
+
+				if ( empty( $icon_html ) ) {
+					return $original_tag;
+				}
+
+				// Strip the "icon icon-{name}" segment to get any remaining classes
+				$extra_classes = trim( preg_replace( '/\s*icon icon-[^\s"]+\s*/', ' ', $class_string ) );
+
+				// Prepend extra classes to the generated icon HTML if any exist
+				if ( ! empty( $extra_classes ) ) {
+					$icon_html = str_replace( 'class="', 'class="' . $extra_classes . ' ', $icon_html );
+				}
+
+				return $icon_html;
+			},
+			$widget_content
+		);
 	}
 
 	public static function get_svg_icon($icon, $attributes = []) {
@@ -127,7 +135,7 @@ class Init {
 		}
 
 		$icons = json_decode($get_file_content, true);
-		$icon_name = str_replace('icon icon-', '', strtolower($icon['value']));
+		$icon_name = str_replace('icon icon-', '', $icon['value']);
 		$svg = isset($icons[$icon_name]) ? $icons[$icon_name] : false;
 
 		if ( empty($svg['paths']) ) {
@@ -166,7 +174,6 @@ class Init {
 		}
 	}
 
-	// TODO: remove this function if not used
 	public static function icon($icon, $attributes = [], $tag = 'i') {
 		if ( empty( $icon['library'] ) ) {
 			return '';

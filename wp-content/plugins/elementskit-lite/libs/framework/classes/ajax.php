@@ -69,12 +69,6 @@ class Ajax {
 			$this->utils->save_option( 'user_data', empty( $_POST['user_data'] ) ? array() : map_deep( wp_unslash( $_POST['user_data'] ) , 'wp_filter_nohtml_kses' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It will sanitize by wp_filter_nohtml_kses function
 		}
 
-		// Enable inline SVG by default if not set
-		if ( ! isset( $_POST['user_data']['inline_svg']['is_enable'] ) ) {
-			$_POST['user_data']['inline_svg']['is_enable'] = 1;
-			$this->utils->save_option( 'user_data', empty( $_POST['user_data'] ) ? array() : map_deep( wp_unslash( $_POST['user_data'] ) , 'wp_filter_nohtml_kses' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- It will sanitize by wp_filter_nohtml_kses function
-		}
-
 		if ( isset( $_POST['settings'] ) ) {
 			$this->utils->save_settings( empty( $_POST['settings'] ) ? array() : map_deep( wp_unslash( $_POST['settings'] ) , 'sanitize_text_field' )  );
 		}

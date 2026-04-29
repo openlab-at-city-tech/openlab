@@ -441,7 +441,7 @@ if ( ! class_exists( 'Wpmet\Libs\Rating' ) ) {
 
                     });
 
-                    $('#" . esc_js( $this->text_domain ) . "_btn_deserved').click(function(){
+                    $('#" . esc_js( $this->text_domain ) . "_btn_deserved').on('click', function(){
                         $.ajax({
                             url: ajaxurl,
                             type: 'POST',
@@ -457,7 +457,7 @@ if ( ! class_exists( 'Wpmet\Libs\Rating' ) ) {
                         });
                     });
 
-                    $('#" . esc_js( $this->text_domain ) . "_btn_not_good').click(function(){
+                    $('#" . esc_js( $this->text_domain ) . "_btn_not_good').on('click', function(){
                         $.ajax({
                             url: ajaxurl,
                             type: 'POST',
@@ -473,7 +473,7 @@ if ( ! class_exists( 'Wpmet\Libs\Rating' ) ) {
                         });
                     });
                     
-                    $('#" . esc_js( $this->text_domain ) . "_btn_never_show').click(function(){
+                    $('#" . esc_js( $this->text_domain ) . "_btn_never_show').on('click', function(){
                         $.ajax({
                             url: ajaxurl,
                             type: 'POST',

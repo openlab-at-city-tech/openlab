@@ -1,4 +1,4 @@
-<?php 
+<?php
 namespace ElementsKit_Lite\Modules\Controls;
 
 defined( 'ABSPATH' ) || exit;
@@ -13,7 +13,7 @@ class Widget_Area_Utils {
 	}
 
 	public function ekit_widgetarea_content() {
-		
+
 		if ( !isset($_POST['nonce']) || !wp_verify_nonce( sanitize_key( wp_unslash( $_POST['nonce'] ) ), 'ekit_pro' ) ) {
 			wp_die();
 		}
@@ -23,19 +23,18 @@ class Widget_Area_Utils {
 		if ( 'publish' !== get_post_status( $post_id ) ) {
 			wp_die();
 		}
-		
+
 		if ( isset( $post_id ) ) {
-			$elementor = \Elementor\Plugin::instance();
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Displaying with Elementor content rendering
-			echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( $elementor->frontend->get_builder_content_for_display( $post_id ), $post_id ) );
+			echo str_replace( '#elementor', '', \ElementsKit_Lite\Utils::render_tab_content( \ElementsKit_Lite\Utils::render_elementor_content( $post_id ), $post_id ) );
 		} else {
             echo esc_html__( 'Click on the Edit Content button to edit/add the content.', 'elementskit-lite' );
 		}
-		
+
 		wp_die();
 	}
 
-	public function modal_content() { 
+	public function modal_content() {
 		ob_start(); ?>
 		<div class="widgetarea_iframe_modal">
 			<?php include 'widget-area-modal.php'; ?>
@@ -43,7 +42,7 @@ class Widget_Area_Utils {
 		<?php
 			$output = ob_get_contents();
 			ob_end_clean();
-	
+
 			echo \ElementsKit_Lite\Utils::render( $output ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped --  Already escaped inside of the buffering content
 	}
 
@@ -54,19 +53,21 @@ class Widget_Area_Utils {
 		$key         = ( $content == '' ) ? $widget_key : $content;
 		$extract_key = explode( '***', $key );
 		$extract_key = $extract_key[0];
-		ob_start(); 
+		ob_start();
 		?>
 
 		<div class="widgetarea_warper widgetarea_warper_editable" data-elementskit-widgetarea-key="<?php echo esc_attr( $extract_key ); ?>"  data-elementskit-widgetarea-index="<?php echo esc_attr( $tab_id ); ?>">
-			<div class="widgetarea_warper_edit" data-elementskit-widgetarea-key="<?php echo esc_attr( $extract_key ); ?>" data-elementskit-widgetarea-index="<?php echo esc_attr( $tab_id ); ?>">
-				<i class="eicon-edit" aria-hidden="true"></i>
-				<span><?php esc_html_e( 'Edit Content', 'elementskit-lite' ); ?></span>
-			</div>
+			
+			<?php if ( \Elementor\Plugin::$instance->editor->is_edit_mode() ) : ?>
+				<div class="widgetarea_warper_edit" data-elementskit-widgetarea-key="<?php echo esc_attr( $extract_key ); ?>" data-elementskit-widgetarea-index="<?php echo esc_attr( $tab_id ); ?>">
+					<i class="eicon-edit" aria-hidden="true"></i>
+					<span><?php esc_html_e( 'Edit Content', 'elementskit-lite' ); ?></span>
+				</div>
+			<?php endif; ?>
 
 			<?php
 				$builder_post_title = 'dynamic-content-widget-' . $extract_key . '-' . $tab_id;
 				$builder_post       = \ElementsKit_Lite\Utils::get_page_by_title( $builder_post_title, 'elementskit_content' );
-				$elementor          = \Elementor\Plugin::instance();
 
 				/**
 				 * this checking for already existing content of tab.
@@ -94,8 +95,8 @@ class Widget_Area_Utils {
 								$builder_post_id = apply_filters( 'wpml_object_id', $builder_post_id, 'elementskit_content', true, $language_details['language_code'] );
 							}
 						}
-						
-						$builder_content = $elementor->frontend->get_builder_content_for_display($builder_post_id);
+
+						$builder_content = \ElementsKit_Lite\Utils::render_elementor_content($builder_post_id);
 						$rendered_tab_content = \ElementsKit_Lite\Utils::render_tab_content($builder_content, $builder_post_id);
 						// Remove '#elementor' from the rendered content, except when it's part of 'href="#elementor"'
 						$final_content = preg_replace('/(?<!href=")#elementor/', '', $rendered_tab_content);

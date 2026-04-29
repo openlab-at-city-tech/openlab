@@ -11,6 +11,10 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 
     public $base;
 
+	public function get_script_depends() {
+		return ['ekit-info-tip'];
+	}
+
     public function get_name() {
         return Handler::get_name();
     }
@@ -1928,7 +1932,7 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 				],
 				'default' => 'solid',
 				'condition' => [
-					'list_divider' => 'yes',
+					'ekit_pricing_list_divider' => 'yes',
 				],
 				'selectors' => [
 					'{{WRAPPER}} .elementskit-single-pricing .elementskit-pricing-lists li' => 'border-top-style: {{VALUE}};',
@@ -2508,21 +2512,7 @@ class ElementsKit_Widget_Pricing extends Widget_Base {
 		$settings = $this->get_settings_for_display();
 		extract($settings);
 
-
-		$options_ekit_pricing_title_size = array_keys([
-			'h1' => 'H1',
-			'h2' => 'H2',
-			'h3' => 'H3',
-			'h4' => 'H4',
-			'h5' => 'H5',
-			'h6' => 'H6',
-			'div' => 'div',
-			'span' => 'span',
-			'p' => 'p',
-		]);
-
-		$ekit_pricing_title_size_validate = \ElementsKit_Lite\Utils::esc_options( $ekit_pricing_title_size, $options_ekit_pricing_title_size, 'h3');
-
+		$ekit_pricing_title_size_validate = \Elementor\Utils::validate_html_tag( $ekit_pricing_title_size );
         $table_title = $settings[ 'ekit_pricing_table_title' ];
         $table_subtitle = $settings[ 'ekit_pricing_table_subtitle' ];
 		$table_content = $settings[ 'ekit_pricing_table_content' ];

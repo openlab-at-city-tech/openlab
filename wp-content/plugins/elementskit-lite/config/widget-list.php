@@ -236,12 +236,6 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List
 					'package'         => 'free',
 					'widget-category' => 'general', // general
 				),
-				'caldera-forms' => array(
-					'slug'            => 'caldera-forms',
-					'title'           => 'Caldera Forms',
-					'package'         => 'free',
-					'widget-category' => 'form', // form
-				),
 				'we-forms' => array(
 					'slug'            => 'we-forms',
 					'title'           => 'weForms',
@@ -283,283 +277,351 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List
 					'title'           => 'Advanced Accordion',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'ekit ekit-accordion',
 				),
 				'advanced-tab' => array(
 					'slug'            => 'advanced-tab',
 					'title'           => 'Advanced Tab',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'ekit ekit-tab',
 				),
 				'hotspot' => array(
 					'slug'            => 'hotspot',
 					'title'           => 'Hotspot',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'eicon-image-hotspot',
 				),
 				'motion-text' => array(
 					'slug'            => 'motion-text',
 					'title'           => 'Motion Text',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'eicon-animation-text',
 				),
 				'twitter-feed' => array(
 					'slug'            => 'twitter-feed',
 					'title'           => 'Twitter Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // social media feeds
+					'icon'            => 'eicon-twitter-feed',
 				),
 				'instagram-feed'       => array(
 					'slug'            => 'instagram-feed',
 					'title'           => 'Instagram Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // social media feeds
+					'icon'            => 'ekit ekit-instagram',
 				),
 				'gallery'              => array(
 					'slug'            => 'gallery',
 					'title'           => 'Gallery',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // general
+					'icon'            => 'ekit ekit-image-gallery',
 				),
 				'chart'                => array(
 					'slug'            => 'chart',
 					'title'           => 'Chart',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // general
+					'icon'            => 'eicon-shape',
 				),
 				'woo-category-list'    => array(
 					'slug'            => 'woo-category-list',
 					'title'           => 'Woo Category List',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'woocommerce', // woocommerce
+					'icon'            => 'eicon-product-categories',
 				),
 				'woo-mini-cart'        => array(
 					'slug'            => 'woo-mini-cart',
 					'title'           => 'Woo Mini Cart',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'woocommerce', // woocommerce
+					'icon'            => 'eicon-product-add-to-cart',
 				),
 				'woo-product-carousel' => array(
 					'slug'            => 'woo-product-carousel',
 					'title'           => 'Woo Product Carousel',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'woocommerce', // woocommerce
+					'icon'            => 'eicon-carousel',
 				),
 				'woo-product-list'     => array(
 					'slug'            => 'woo-product-list',
 					'title'           => 'Woo Product List',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'woocommerce', // woocommerce
+					'icon'            => 'eicon-editor-list-ul',
 				),
 				'table'                => array(
 					'slug'            => 'table',
 					'title'           => 'Data Table',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // general
+					'icon'            => 'eicon-table',
 				),
 				'timeline'             => array(
 					'slug'            => 'timeline',
 					'title'           => 'Timeline',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'ekit ekit-horizontal-timeline',
 				),
 				'creative-button'      => array(
 					'slug'            => 'creative-button',
 					'title'           => 'Creative Button',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'eicon-button',
 				),
 				'vertical-menu'        => array(
 					'slug'            => 'vertical-menu',
 					'title'           => 'Vertical Menu',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'header-footer', // header footer
+					'icon'            => 'eicon-nav-menu',
 				),
 				'advanced-toggle'      => array(
 					'slug'            => 'advanced-toggle',
 					'title'           => 'Advanced Toggle',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'eicon-toggle',
 				),
 				'video-gallery'        => array(
 					'slug'            => 'video-gallery',
 					'title'           => 'Video Gallery',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'eicon-youtube',
 				),
 				'zoom'                 => array(
 					'slug'            => 'zoom',
 					'title'           => 'Zoom',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // general
+					'icon'            => 'eicon-button',
 				),
 				'behance-feed'         => array(
 					'slug'            => 'behance-feed',
 					'title'           => 'Behance Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // social media feeds
+					'icon'            => 'ekit ekit-behance',
 				),
 				'breadcrumb' => array(
 					'slug'            => 'breadcrumb',
 					'title'           => 'Breadcrumb',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'header-footer', // header footer
+					'icon'            => 'eicon-button',
 				),
 				'dribble-feed' => array(
 					'slug'            => 'dribble-feed',
 					'title'           => 'Dribbble Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // social media feeds
+					'icon'            => 'ekit ekit-dribbble',
 				),
 				'facebook-feed' => array(
 					'slug'            => 'facebook-feed',
 					'title'           => 'Facebook Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // social media feeds
+					'icon'            => 'eicon-fb-feed',
 				),
 				'facebook-review' => array(
 					'slug'            => 'facebook-review',
 					'title'           => 'Facebook Review',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'review-testimonials', // review testimonials
+					'icon'            => 'eicon-button'
 				),
 				'yelp' => array(
 					'slug'            => 'yelp',
 					'title'           => 'Yelp',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'review-testimonials', // review testimonials
+					'icon'            => 'eicon-favorite',
 				),
 				'pinterest-feed' => array(
 					'slug'            => 'pinterest-feed',
 					'title'           => 'Pinterest Feed',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'social-media-feeds', // social media feeds
+					'icon'            => 'ekit ekit-pinterest',
 				),
 				'popup-modal' => array(
 					'slug'            => 'popup-modal',
 					'title'           => 'Popup Modal',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'marketing', // marketing
+					'icon'            => 'eicon-button',
 				),
 				'google-map' => array(
 					'slug'            => 'google-map',
 					'title'           => 'Google Maps',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // general
+					'icon'            => 'eicon-google-maps',
 				),
 				'unfold' => array(
 					'slug'            => 'unfold',
 					'title'           => 'Unfold',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'eicon-button',
 				),
 				'image-swap' => array(
 					'slug'            => 'image-swap',
 					'title'           => 'Image Swap',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'ekit ekit-image-swap',
 				),
 				'whatsapp' => array(
 					'slug'            => 'whatsapp',
 					'title'           => 'WhatsApp',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // general
+					'icon'            => 'ekit ekit-whatsapp',
 				),
 				'advanced-slider' => array(
 					'slug'            => 'advanced-slider',
 					'title'           => 'Advanced Slider',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'ekit ekit-advanced-slider',
 				),
 				'image-hover-effect' => array(
 					'slug'            => 'image-hover-effect',
 					'title'           => 'Image Hover Effect',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'			  => 'ekit ekit-image-hover-effect',
 				),
 				'fancy-animated-text' => array(
 					'slug'            => 'fancy-animated-text',
 					'title'           => 'Fancy Animated Text',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'ekit ekit-fancy-heading',
 				),
 				'price-menu' => array(
 					'slug'            => 'price-menu',
 					'title'           => 'Price Menu',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'marketing', // marketing
+					'icon'            => 'ekit ekit-price-menu',
 				),
 				'stylish-list' => array(
 					'slug'            => 'stylish-list',
 					'title'           => 'Stylish List',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'ekit ekit-stylish-list',
 				),
 				'team-slider' => array(
 					'slug'            => 'team-slider',
 					'title'           => 'Team Slider',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'ekit ekit-team-carousel-slider',
 				),
 				'audio-player' => array(
 					'slug'            => 'audio-player',
 					'title'           => 'Audio Player',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
+					'icon'            => 'ekit ekit-audio-player',
 				),
 				'flip-box' => array(
 					'slug'    => 'flip-box',
 					'title'   => 'Flip Box',
 					'package' => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'    => 'ekit ekit-flip-box',
 				),
 				'image-morphing' => array(
 					'slug'            => 'image-morphing',
 					'title'           => 'Image Morphing',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'ekit ekit-image-morphing',
 				),
 				'content-ticker' => array(
 					'slug'            => 'content-ticker',
 					'title'           => 'Content Ticker',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'marketing', // marketing
+					'icon'            => 'ekit ekit-content-ticker',
 				),
 				'coupon-code' => array(
 					'slug'            => 'coupon-code',
 					'title'           => 'Coupon Code',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'marketing', // marketing
+					'icon'            => 'ekit ekit-coupon-code',
 				),
 				'comparison-table' => array(
 					'slug'            => 'comparison-table',
 					'title'           => 'Comparison Table',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'marketing', // marketing
+					'icon'            => 'ekit ekit-flip-box',
 				),
 				'protected-content' => array(
 					'slug'            => 'protected-content',
 					'title'           => 'Protected Content',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'advanced', // advanced
+					'icon'            => 'ekit ekit-protected-content-v3',
 				),
 				'interactive-links' => array(
 					'slug'            => 'interactive-links',
 					'title'           => 'Interactive Links',
 					'package'         => 'pro-disabled',
 					'widget-category' => 'creative', // creative
+					'icon'            => 'ekit ekit-interactive-link',
 				),
 				'circle-menu' => array(
 					'slug'            => 'circle-menu',
 					'title'           => 'Circle Menu',
 					'package'         => 'pro-disabled',
-					'widget-category' => 'general', // header footer
+					'widget-category' => 'general', // general
+					'icon'            => 'ekit ekit-coupon-code',
 				),
 				'advanced-search' => array(
 					'slug'    => 'advanced-search',
 					'title'   => 'Advanced Search',
 					'package' => 'pro-disabled',
 					'widget-category' => 'header-footer', // header footer
+					'icon'    => 'ekit ekit-search',
 				),
+				'login-form' => [
+					'slug'    => 'login-form',
+					'title'   => 'Login Form',
+					'package' => 'pro-disabled',
+					'widget-category' => 'general', // general
+					'icon'    => 'ekit ekit-login',
+				],
+				'register-form' => [
+					'slug'    => 'register-form',
+					'title'   => 'Register Form',
+					'package' => 'pro-disabled',
+					'widget-category' => 'general', // general
+					'icon'    => 'ekit ekit-register',
+				],
+				'copyright' => [
+					'slug'    => 'copyright',
+					'title'   => 'Copyright',
+					'package' => 'pro-disabled',
+					'widget-category' => 'header-footer', // header footer
+					'icon'    => 'ekit ekit-copyright',
+				],
 			)
 		);
 	}
