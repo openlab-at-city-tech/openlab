@@ -9050,6 +9050,9 @@ body .content-list {
 body .overflow-hidden {
   overflow: hidden;
 }
+body .overflow-hidden:focus-within {
+  overflow: visible;
+}
 body .timestamp {
   font-size: 12px;
   color: #666666;

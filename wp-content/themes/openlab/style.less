@@ -2068,6 +2068,10 @@ body{
     }
     .overflow-hidden{
         overflow: hidden;
+
+		&:focus-within {
+			overflow: visible;
+		}
     }
     .timestamp{
         font-size: @font-size-small;
