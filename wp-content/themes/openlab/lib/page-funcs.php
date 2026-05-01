@@ -170,10 +170,13 @@ function cuny_home_new_members() {
 function cuny_whos_online() {
 	global $wpdb, $bp;
 
-	$cached = get_transient( 'openlab_whos_online' );
-	if ( $cached ) {
-		echo $cached; // WPCS: XSS ok.
-		return;
+	// Serve a cached version to anonymous visitors.
+	if ( ! is_user_logged_in() ) {
+		$cached = get_transient( 'openlab_whos_online' );
+		if ( $cached ) {
+			echo $cached; // WPCS: XSS ok.
+			return;
+		}
 	}
 
 	$rs = wp_cache_get( 'whos_online', 'openlab' );
@@ -230,11 +233,21 @@ function cuny_whos_online() {
 		<?php
 	endif;
 
+	// Only cache the public view.
 	$html = ob_get_clean();
-
-	set_transient( 'openlab_whos_online', $html, 5 * 60 );
+	if ( ! is_user_logged_in() ) {
+		set_transient( 'openlab_whos_online', $html, 5 * 60 );
+	}
 
 	echo $html; // WPCS: XSS ok.
+}
+
+/**
+ * Invalidate the caches for Who's Online.
+ */
+function openlab_bust_whos_online_cache() {
+	delete_transient( 'openlab_whos_online' );
+	wp_cache_delete( 'whos_online', 'openlab' );
 }
 
 function openlab_stay_up_to_date() {
