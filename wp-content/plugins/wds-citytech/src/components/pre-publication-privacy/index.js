@@ -68,7 +68,7 @@ const PrePublicationPrivacy = () => {
 				className="openlab-pre-publication-privacy-panel"
 				icon={ <WarningIcon /> }
 				initialOpen
-				title={ __( 'Visibility Status Alert', 'wds-citytech' ) }
+				title={ __( 'Visibility Status Check', 'wds-citytech' ) }
 			>
 				<p><strong>Site:</strong> { getBlogPublicMessage() }</p>
 				<p><strong>Post:</strong> { getPostVisibilityMessage() }</p>
