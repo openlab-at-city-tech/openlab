@@ -7495,9 +7495,8 @@ button.oplb-bs .close {
   }
 }
 .oplb-bs a:focus {
-  outline: solid;
-  outline-offset: -2px;
-  outline-width: 2px;
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
 .oplb-bs .navbar-header header {
   margin: 0;

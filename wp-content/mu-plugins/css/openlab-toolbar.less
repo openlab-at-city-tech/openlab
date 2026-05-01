@@ -364,14 +364,11 @@ body.wp-admin #wpadminbar {
 	@import "../less/bootstrap/bootstrap.less";
 	/**import boostrap overrides**/
 	@import "../less/variables.less";
-	a {
-		&:focus {
-			outline: solid;
-			outline-offset: -2px;
-			outline-width: 2px;
-		}
-	}
 	/**sitewide header**/
+	a:focus {
+        outline: @focusOutline;
+		outline-offset: 2px;
+	}
 	.navbar-header {
 		header {
 			margin: 0;
