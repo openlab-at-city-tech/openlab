@@ -7247,6 +7247,7 @@ a:focus {
   text-decoration: none;
 }
 a:focus {
+  display: inline-block;
   outline: 2px solid #005fcc;
   outline-offset: 2px;
 }
@@ -12733,12 +12734,6 @@ body.single-help .entry-content h6 {
 .activity-list .activity-header-meta .unfav span.fa {
   color: #444;
 }
-.activity-list .activity-header-meta .fav:focus,
-.activity-list .activity-header-meta .unfav:focus,
-.activity-list .activity-header-meta .fav:active,
-.activity-list .activity-header-meta .unfav:active {
-  outline: none;
-}
 .activity-list .activity-header-meta .fav span.fa:before {
   content: "\f006";
 }
@@ -12824,12 +12819,6 @@ body.single-help .entry-content h6 {
 .group-activity-content .activity-action .fav span.fa,
 .group-activity-content .activity-action .unfav span.fa {
   color: #444;
-}
-.group-activity-content .activity-action .fav:focus,
-.group-activity-content .activity-action .unfav:focus,
-.group-activity-content .activity-action .fav:active,
-.group-activity-content .activity-action .unfav:active {
-  outline: none;
 }
 .group-activity-content .activity-action .fav span.fa:before {
   content: "\f006";

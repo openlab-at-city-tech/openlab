@@ -49,6 +49,7 @@ a {
         text-decoration: none;
     }
     &:focus{
+		display: inline-block;
         outline: @focusOutline;
 		outline-offset: 2px;
     }
@@ -6029,11 +6030,6 @@ body.single-help {
                 span.fa {
                     color: #444;
                 }
-
-                &:focus,
-                &:active {
-                    outline: none;
-                }
             }
 
             .fav {
@@ -6155,11 +6151,6 @@ body.single-help {
         .unfav {
             span.fa {
                 color: #444;
-            }
-
-            &:focus,
-            &:active {
-                outline: none;
             }
         }
 
