@@ -3,26 +3,28 @@
 import { VisuallyHidden } from '@wordpress/components';
 import { useDispatch, useSelect } from '@wordpress/data';
 
+import './style.scss';
+
 export const PostSharingChoice = ( { instanceId, value, label, info, ...props } ) => (
-	<div className="editor-post-visibility__choice">
+	<div className="components-radio-control__option">
 		<input
 			type="radio"
 			name={ `editor-post-visibility__setting-${ instanceId }` }
 			value={ value }
 			id={ `editor-post-${ value }-${ instanceId }` }
 			aria-describedby={ `editor-post-${ value }-${ instanceId }-description` }
-			className="editor-post-visibility__radio"
+			className="components-radio-control__input"
 			{ ...props }
 		/>
 		<label
 			htmlFor={ `editor-post-${ value }-${ instanceId }` }
-			className="editor-post-visibility__label"
+			className="components-radio-control__label"
 		>
 			{ label }
 		</label>
 		<p
 			id={ `editor-post-${ value }-${ instanceId }-description` }
-			className="editor-post-visibility__info"
+			className="components-radio-control__option-description"
 		>
 			{ info }
 		</p>
@@ -76,7 +78,7 @@ const PostSharingOptionsContent = ( { instanceId = 'post-sharing-options' } ) =>
 	}
 
 	return (
-		<fieldset className="editor-post-visibility__fieldset">
+		<fieldset className="components-radio-control">
 			<VisuallyHidden as="legend">Sharing</VisuallyHidden>
 
 			<p>Control who can see this post.</p>
