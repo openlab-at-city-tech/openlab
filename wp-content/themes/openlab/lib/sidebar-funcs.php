@@ -1086,8 +1086,8 @@ function openlab_get_member_nav_items() {
 			$items[] = [
 				'slug'          => 'my-invitations',
 				'text'          => 'My Invitations',
-				'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
-				'is_current'    => bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_component( 'invite-anyone' ),
+				'href'          => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invite-anyone' ] ) ),
+				'is_current'    => bp_is_current_action( 'invite-anyone' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_component( 'invite-anyone' ),
 				'class'         => ! empty( $user_unread_counts['group_invites'] ) ? 'has-unread' : '',
 				'submenu_items' => array_values( openlab_my_invitations_submenu_items() ),
 			];
