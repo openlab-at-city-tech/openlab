@@ -8005,7 +8005,6 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   align-items: center;
   display: flex;
   gap: 12px;
-  padding-left: 0;
 }
 .openlab-navbar-drawer .flyout-subnav-heading,
 .openlab-drawer-container .flyout-subnav-heading {
