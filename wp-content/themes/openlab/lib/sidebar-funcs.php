@@ -306,18 +306,7 @@ function openlab_get_group_nav_items() {
 		];
 	}
 
-	// 8. Connections (if enabled)
-	$connections_enabled = groups_get_groupmeta( $group_id, 'openlab_connections_enabled' );
-	if ( $connections_enabled ) {
-		$items[] = [
-			'text'          => __( 'Connections', 'flavor' ),
-			'href'          => $group_url . 'connections/',
-			'is_current'    => ( $current_action === 'connections' ),
-			'submenu_items' => openlab_get_group_connections_submenu_items(),
-		];
-	}
-
-	// 9. Membership (always present - includes members, invites, notifications)
+	// 8. Membership (always present - includes members, invites, notifications)
 	$membership_actions = [ 'members', 'invite-anyone', 'notifications' ];
 	$membership_vars    = [ 'manage-members', 'notifications', 'membership-requests' ];
 	$membership_current = in_array( $current_action, $membership_actions, true )
@@ -336,7 +325,7 @@ function openlab_get_group_nav_items() {
 		'count'         => $member_count,
 	];
 
-	// 10. Settings (admin only, if BP thinks user is admin)
+	// 9. Settings (admin only, if BP thinks user is admin)
 	if ( $bp->is_item_admin ) {
 		$settings_current = ( $current_action === 'admin' && ! in_array( $action_var, [ 'manage-members', 'notifications', 'membership-requests' ], true ) );
 
@@ -345,6 +334,16 @@ function openlab_get_group_nav_items() {
 			'href'          => $group_url . 'admin/edit-details/',
 			'is_current'    => $settings_current,
 			'submenu_items' => openlab_get_group_settings_submenu_items( $group ),
+		];
+	}
+
+	// 10. Connections Settings - visible only to admins.
+	if ( OpenLab\Connections\Util::user_can_initiate_group_connections() ) {
+		$items[] = [
+			'text'          => __( 'Connections Settings', 'flavor' ),
+			'href'          => $group_url . 'connections/',
+			'is_current'    => ( $current_action === 'connections' ),
+			'submenu_items' => openlab_get_group_connections_submenu_items(),
 		];
 	}
 
