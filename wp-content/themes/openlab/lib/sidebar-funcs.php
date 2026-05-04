@@ -338,7 +338,7 @@ function openlab_get_group_nav_items() {
 	}
 
 	// 10. Connections Settings - visible only to admins.
-	if ( OpenLab\Connections\Util::user_can_initiate_group_connections() ) {
+	if ( OpenLab\Connections\Util::user_can_initiate_group_connections() && ! openlab_is_portfolio() ) {
 		$items[] = [
 			'text'          => __( 'Connections Settings', 'flavor' ),
 			'href'          => $group_url . 'connections/',
