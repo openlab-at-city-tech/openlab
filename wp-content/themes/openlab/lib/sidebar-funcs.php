@@ -155,11 +155,22 @@ function openlab_render_group_mobile_drawer() {
 		if ( ! empty( $nav_item['submenu_items'] ) ) {
 			$submenu_id = 'group-mobile-' . sanitize_title( $nav_item['text'] ) . '-panel';
 
+			// Add an is_heading item for the submenu panel heading.
+			$submenu_items = [];
+			if ( ! empty( $nav_item['submenu_items'] ) ) {
+				$submenu_heading = [
+					'text'       => $nav_item['text'],
+					'is_heading' => true,
+				];
+
+				$submenu_items = array_merge( [ $submenu_heading ], $nav_item['submenu_items'] );
+			}
+
 			// Add submenu panel
 			$panels[] = [
 				'id'          => $submenu_id,
 				'heading'     => $nav_item['text'],
-				'items'       => $nav_item['submenu_items'],
+				'items'       => $submenu_items,
 				'is_root'     => false,
 				'back_target' => 'group-mobile-root-panel',
 				'back_text'   => sprintf( 'Back to %s Profile', $group_type_label ),
