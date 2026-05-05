@@ -54,7 +54,7 @@ const PrePublicationPrivacy = () => {
 			case 'group-members-only':
 				return prePubShareOnlyWithGroup;
 			case 'members-only':
-				return __( 'Only logged-in OpenLab members can see this post. This will override the Public visibility setting above. You can change the post visibility settings below.', 'wds-citytech' );
+				return __( 'Only logged-in OpenLab members can see this post. This will override the site visibility setting. You can change the post visibility settings below.', 'wds-citytech' );
 		}
 	}
 
