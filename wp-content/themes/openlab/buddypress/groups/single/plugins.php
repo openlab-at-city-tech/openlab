@@ -24,9 +24,7 @@ global $bp, $wp_query;
 
 				<?php elseif ( bp_is_current_action( 'announcements' ) ) : ?>
 
-					<ul class="nav nav-inline">
-						<li class="current-menu-item">Announcements</li>
-					</ul>
+					<div class="submenu-text pull-left bold"><h2>Announcements</h2></div>
 
 				<?php elseif ( bp_is_current_action( 'connections' ) ) : ?>
 
