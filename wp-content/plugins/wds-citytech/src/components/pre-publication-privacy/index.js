@@ -43,6 +43,10 @@ const PrePublicationPrivacy = () => {
 	};
 
 	const getPostVisibilityMessage = () => {
+		if ( blogPublicInt <= -2 ) {
+			return __( 'Everyone who can view this site can see this post.', 'wds-citytech' );
+		}
+
 		switch ( postVisibility ) {
 			case 'default':
 			default:
@@ -53,6 +57,23 @@ const PrePublicationPrivacy = () => {
 				return __( 'Only logged-in OpenLab members can see this post. This will override the Public visibility setting above. You can change the post visibility settings below.', 'wds-citytech' );
 		}
 	}
+
+	const getVisibilityOptionsPanel = () => {
+		if ( blogPublicInt >= -1 ) {
+			return (
+				<PluginPrePublishPanel
+					className="openlab-pre-publication-visibility-panel"
+					initialOpen
+					title={ __( 'More visibility options', 'wds-citytech' ) }
+					icon={ <WarningIcon /> }
+				>
+					<PostSharingOptionsContent instanceId="pre-publish-sharing-options" />
+				</PluginPrePublishPanel>
+			)
+		}
+
+		return null;
+	};
 
 	return (
 		<Fragment>
@@ -65,14 +86,7 @@ const PrePublicationPrivacy = () => {
 				<p><strong>Site:</strong> { getBlogPublicMessage() }</p>
 				<p><strong>Post:</strong> { getPostVisibilityMessage() }</p>
 			</PluginPrePublishPanel>
-			<PluginPrePublishPanel
-				className="openlab-pre-publication-visibility-panel"
-				initialOpen
-				title={ __( 'More visibility options', 'wds-citytech' ) }
-				icon={ <WarningIcon /> }
-			>
-				<PostSharingOptionsContent instanceId="pre-publish-sharing-options" />
-			</PluginPrePublishPanel>
+			{ getVisibilityOptionsPanel() }
 		</Fragment>
 	);
 };
