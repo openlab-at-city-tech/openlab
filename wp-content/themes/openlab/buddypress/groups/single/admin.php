@@ -591,13 +591,18 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			$_delete_group_site_id    = openlab_get_site_id_by_group_id( $_delete_group_current_id );
 			$_delete_group_is_portfolio = openlab_is_portfolio( $_delete_group_current_id );
 			$_delete_group_show_site_checkbox = $_delete_group_site_id && ! $_delete_group_is_portfolio;
+
+			$group_type_label = openlab_get_group_type_label( $_delete_group_current_id );
+
 			?>
 
 			<div id="message" class="bp-template-notice error margin-bottom">
-				<?php if ( $_delete_group_show_site_checkbox ) : ?>
-					<p><?php printf( 'WARNING: You are about to delete this %s profile. The associated site will not be deleted unless you check the box below. There is no way back, please be careful with this option.', openlab_get_group_type() ); ?></p>
+				<?php if ( $_delete_group_is_portfolio ) : ?>
+					<p><?php printf( 'WARNING: Deleting this %s will completele remove ALL content associated with it, including the %s profile and %s site. There is no way back, please be careful with this option.', $group_type_label, $group_type_label, $group_type_label ); ?></p>
+				<?php elseif ( $_delete_group_site_id ) : ?>
+					<p><?php printf( 'WARNING: You are about to delete this %s profile. The associated site will not be deleted unless you check the box below. There is no way back, please be careful with this option.', $group_type_label ); ?></p>
 				<?php else : ?>
-					<p><?php printf( 'WARNING: Deleting this %s will completely remove ALL content associated with it. There is no way back, please be careful with this option.', openlab_get_group_type() ); ?></p>
+					<p><?php printf( 'WARNING: Deleting this %s will completely remove ALL content associated with it. There is no way back, please be careful with this option.', $group_type_label ); ?></p>
 				<?php endif; ?>
 			</div>
 
@@ -605,7 +610,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			<div class="checkbox">
 				<label>
 					<input type="checkbox" name="delete-group-site" id="delete-group-site" value="1" />
-					<?php printf( 'Delete the associated %s site.', openlab_get_group_type() ); ?>
+					<?php printf( 'Delete the associated %s site.', $group_type_label ); ?>
 				</label>
 			</div>
 			<?php endif; ?>
@@ -617,7 +622,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 								} else {
 									document.getElementById('delete-group-button').disabled = 'disabled';
 								}" />
-			<?php printf( 'I understand the consequences of deleting this %s.', openlab_get_group_type() ); ?>
+			<?php printf( 'I understand the consequences of deleting this %s.', $group_type_label ); ?>
 				</label>
 			</div>
 
