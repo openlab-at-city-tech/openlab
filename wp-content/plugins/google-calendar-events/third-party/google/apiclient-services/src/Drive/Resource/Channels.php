@@ -29,14 +29,10 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\Channel;
 class Channels extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
     /**
-     * Stops watching resources through this channel. For more information, see
-     * [Notifications for resource
-     * changes](https://developers.google.com/workspace/drive/api/guides/push).
-     * (channels.stop)
+     * Stop watching resources through this channel (channels.stop)
      *
      * @param Channel $postBody
      * @param array $optParams Optional parameters.
-     * @throws \Google\Service\Exception
      */
     public function stop(Channel $postBody, $optParams = [])
     {

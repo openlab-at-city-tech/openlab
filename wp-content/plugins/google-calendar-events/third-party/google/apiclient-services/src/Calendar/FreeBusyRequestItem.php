@@ -20,15 +20,11 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class FreeBusyRequestItem extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * The identifier of a calendar or a group.
-     *
      * @var string
      */
     public $id;
     /**
-     * The identifier of a calendar or a group.
-     *
-     * @param string $id
+     * @param string
      */
     public function setId($id)
     {

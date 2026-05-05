@@ -11,7 +11,6 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
 
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Serializes a log message to Logstash Event Format
  *
@@ -25,19 +24,19 @@ class LogstashFormatter extends NormalizerFormatter
     /**
      * @var string the name of the system for the Logstash log message, used to fill the @source field
      */
-    protected string $systemName;
+    protected $systemName;
     /**
      * @var string an application name for the Logstash log message, used to fill the @type field
      */
-    protected string $applicationName;
+    protected $applicationName;
     /**
      * @var string the key for 'extra' fields from the Monolog record
      */
-    protected string $extraKey;
+    protected $extraKey;
     /**
      * @var string the key for 'context' fields from the Monolog record
      */
-    protected string $contextKey;
+    protected $contextKey;
     /**
      * @param string      $applicationName The application that sends the data, used as the "type" field of logstash
      * @param string|null $systemName      The system/machine name, used as the "source" field of logstash, defaults to the hostname of the machine
@@ -54,33 +53,36 @@ class LogstashFormatter extends NormalizerFormatter
         $this->contextKey = $contextKey;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function format(LogRecord $record): string
+    public function format(array $record): string
     {
-        $recordData = parent::format($record);
-        $message = ['@timestamp' => $recordData['datetime'], '@version' => 1, 'host' => $this->systemName];
-        if (isset($recordData['message'])) {
-            $message['message'] = $recordData['message'];
+        $record = parent::format($record);
+        if (empty($record['datetime'])) {
+            $record['datetime'] = gmdate('c');
         }
-        if (isset($recordData['channel'])) {
-            $message['type'] = $recordData['channel'];
-            $message['channel'] = $recordData['channel'];
+        $message = ['@timestamp' => $record['datetime'], '@version' => 1, 'host' => $this->systemName];
+        if (isset($record['message'])) {
+            $message['message'] = $record['message'];
         }
-        if (isset($recordData['level_name'])) {
-            $message['level'] = $recordData['level_name'];
+        if (isset($record['channel'])) {
+            $message['type'] = $record['channel'];
+            $message['channel'] = $record['channel'];
         }
-        if (isset($recordData['level'])) {
-            $message['monolog_level'] = $recordData['level'];
+        if (isset($record['level_name'])) {
+            $message['level'] = $record['level_name'];
         }
-        if ('' !== $this->applicationName) {
+        if (isset($record['level'])) {
+            $message['monolog_level'] = $record['level'];
+        }
+        if ($this->applicationName) {
             $message['type'] = $this->applicationName;
         }
-        if (\count($recordData['extra']) > 0) {
-            $message[$this->extraKey] = $recordData['extra'];
+        if (!empty($record['extra'])) {
+            $message[$this->extraKey] = $record['extra'];
         }
-        if (\count($recordData['context']) > 0) {
-            $message[$this->contextKey] = $recordData['context'];
+        if (!empty($record['context'])) {
+            $message[$this->contextKey] = $record['context'];
         }
         return $this->toJson($message) . "\n";
     }

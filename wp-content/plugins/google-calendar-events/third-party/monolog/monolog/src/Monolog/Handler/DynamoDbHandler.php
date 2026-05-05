@@ -16,8 +16,7 @@ use SimpleCalendar\plugin_deps\Aws\DynamoDb\DynamoDbClient;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
 use SimpleCalendar\plugin_deps\Aws\DynamoDb\Marshaler;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\ScalarFormatter;
-use SimpleCalendar\plugin_deps\Monolog\Level;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
+use SimpleCalendar\plugin_deps\Monolog\Logger;
 /**
  * Amazon DynamoDB handler (http://aws.amazon.com/dynamodb/)
  *
@@ -27,23 +26,47 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 class DynamoDbHandler extends AbstractProcessingHandler
 {
     public const DATE_FORMAT = 'Y-m-d\TH:i:s.uO';
-    protected DynamoDbClient $client;
-    protected string $table;
-    protected Marshaler $marshaler;
-    public function __construct(DynamoDbClient $client, string $table, int|string|Level $level = Level::Debug, bool $bubble = \true)
+    /**
+     * @var DynamoDbClient
+     */
+    protected $client;
+    /**
+     * @var string
+     */
+    protected $table;
+    /**
+     * @var int
+     */
+    protected $version;
+    /**
+     * @var Marshaler
+     */
+    protected $marshaler;
+    public function __construct(DynamoDbClient $client, string $table, $level = Logger::DEBUG, bool $bubble = \true)
     {
-        $this->marshaler = new Marshaler();
+        /** @phpstan-ignore-next-line */
+        if (defined('SimpleCalendar\plugin_deps\Aws\Sdk::VERSION') && version_compare(Sdk::VERSION, '3.0', '>=')) {
+            $this->version = 3;
+            $this->marshaler = new Marshaler();
+        } else {
+            $this->version = 2;
+        }
         $this->client = $client;
         $this->table = $table;
         parent::__construct($level, $bubble);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    protected function write(LogRecord $record): void
+    protected function write(array $record): void
     {
-        $filtered = $this->filterEmptyFields($record->formatted);
-        $formatted = $this->marshaler->marshalItem($filtered);
+        $filtered = $this->filterEmptyFields($record['formatted']);
+        if ($this->version === 3) {
+            $formatted = $this->marshaler->marshalItem($filtered);
+        } else {
+            /** @phpstan-ignore-next-line */
+            $formatted = $this->client->formatAttributes($filtered);
+        }
         $this->client->putItem(['TableName' => $this->table, 'Item' => $formatted]);
     }
     /**
@@ -53,11 +76,11 @@ class DynamoDbHandler extends AbstractProcessingHandler
     protected function filterEmptyFields(array $record): array
     {
         return array_filter($record, function ($value) {
-            return [] !== $value;
+            return !empty($value) || \false === $value || 0 === $value;
         });
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getDefaultFormatter(): FormatterInterface
     {

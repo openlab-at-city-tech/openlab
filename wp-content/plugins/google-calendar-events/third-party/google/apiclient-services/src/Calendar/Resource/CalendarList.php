@@ -37,7 +37,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * the calendarList.list method. If you want to access the primary calendar of
      * the currently logged in user, use the "primary" keyword.
      * @param array $optParams Optional parameters.
-     * @throws \Google\Service\Exception
      */
     public function delete($calendarId, $optParams = [])
     {
@@ -53,7 +52,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * the currently logged in user, use the "primary" keyword.
      * @param array $optParams Optional parameters.
      * @return CalendarListEntry
-     * @throws \Google\Service\Exception
      */
     public function get($calendarId, $optParams = [])
     {
@@ -73,7 +71,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * used, the index-based colorId field will be set to the best matching option
      * automatically. Optional. The default is False.
      * @return CalendarListEntry
-     * @throws \Google\Service\Exception
      */
     public function insert(CalendarListEntry $postBody, $optParams = [])
     {
@@ -111,7 +108,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * full synchronization without any syncToken. Learn more about incremental
      * synchronization. Optional. The default is to return all entries.
      * @return CalendarListModel
-     * @throws \Google\Service\Exception
      */
     public function listCalendarList($optParams = [])
     {
@@ -134,7 +130,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * used, the index-based colorId field will be set to the best matching option
      * automatically. Optional. The default is False.
      * @return CalendarListEntry
-     * @throws \Google\Service\Exception
      */
     public function patch($calendarId, CalendarListEntry $postBody, $optParams = [])
     {
@@ -157,7 +152,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * used, the index-based colorId field will be set to the best matching option
      * automatically. Optional. The default is False.
      * @return CalendarListEntry
-     * @throws \Google\Service\Exception
      */
     public function update($calendarId, CalendarListEntry $postBody, $optParams = [])
     {
@@ -195,7 +189,6 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * full synchronization without any syncToken. Learn more about incremental
      * synchronization. Optional. The default is to return all entries.
      * @return Channel
-     * @throws \Google\Service\Exception
      */
     public function watch(Channel $postBody, $optParams = [])
     {

@@ -36,7 +36,6 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @param string $setting The id of the user setting.
      * @param array $optParams Optional parameters.
      * @return Setting
-     * @throws \Google\Service\Exception
      */
     public function get($setting, $optParams = [])
     {
@@ -62,7 +61,6 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * synchronization without any syncToken. Learn more about incremental
      * synchronization. Optional. The default is to return all entries.
      * @return SettingsModel
-     * @throws \Google\Service\Exception
      */
     public function listSettings($optParams = [])
     {
@@ -89,7 +87,6 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * synchronization without any syncToken. Learn more about incremental
      * synchronization. Optional. The default is to return all entries.
      * @return Channel
-     * @throws \Google\Service\Exception
      */
     public function watch(Channel $postBody, $optParams = [])
     {

@@ -18,8 +18,14 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  */
 class IcuResFileDumper extends FileDumper
 {
+    /**
+     * {@inheritdoc}
+     */
     protected $relativePathTemplate = '%domain%/%locale%.%extension%';
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
+    /**
+     * {@inheritdoc}
+     */
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
         $data = $indexes = $resources = '';
         foreach ($messages->all($domain) as $source => $target) {
@@ -85,11 +91,14 @@ class IcuResFileDumper extends FileDumper
         $padding = \strlen($data) % 4;
         return $padding ? str_repeat("\xaa", 4 - $padding) : null;
     }
-    private function getPosition(string $data): float|int
+    private function getPosition(string $data)
     {
         return (\strlen($data) + 28) / 4;
     }
-    protected function getExtension(): string
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtension()
     {
         return 'res';
     }

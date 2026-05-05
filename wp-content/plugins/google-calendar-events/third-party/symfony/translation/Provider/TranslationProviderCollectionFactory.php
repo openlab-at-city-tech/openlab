@@ -16,8 +16,8 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\Unsupport
  */
 class TranslationProviderCollectionFactory
 {
-    private iterable $factories;
-    private array $enabledLocales;
+    private $factories;
+    private $enabledLocales;
     /**
      * @param iterable<mixed, ProviderFactoryInterface> $factories
      */

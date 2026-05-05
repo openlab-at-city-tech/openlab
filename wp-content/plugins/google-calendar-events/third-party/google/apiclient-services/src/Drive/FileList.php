@@ -23,39 +23,19 @@ class FileList extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $filesType = DriveFile::class;
     protected $filesDataType = 'array';
     /**
-     * Whether the search process was incomplete. If true, then some search
-     * results might be missing, since all documents were not searched. This can
-     * occur when searching multiple drives with the `allDrives` corpora, but all
-     * corpora couldn't be searched. When this happens, it's suggested that
-     * clients narrow their query by choosing a different corpus such as `user` or
-     * `drive`.
-     *
      * @var bool
      */
     public $incompleteSearch;
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#fileList"`.
-     *
      * @var string
      */
     public $kind;
     /**
-     * The page token for the next page of files. This will be absent if the end
-     * of the files list has been reached. If the token is rejected for any
-     * reason, it should be discarded, and pagination should be restarted from the
-     * first page of results. The page token is typically valid for several hours.
-     * However, if new items are added or removed, your expected results might
-     * differ.
-     *
      * @var string
      */
     public $nextPageToken;
     /**
-     * The list of files. If `nextPageToken` is populated, then this list may be
-     * incomplete and an additional page of results should be fetched.
-     *
-     * @param DriveFile[] $files
+     * @param DriveFile[]
      */
     public function setFiles($files)
     {
@@ -69,14 +49,7 @@ class FileList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->files;
     }
     /**
-     * Whether the search process was incomplete. If true, then some search
-     * results might be missing, since all documents were not searched. This can
-     * occur when searching multiple drives with the `allDrives` corpora, but all
-     * corpora couldn't be searched. When this happens, it's suggested that
-     * clients narrow their query by choosing a different corpus such as `user` or
-     * `drive`.
-     *
-     * @param bool $incompleteSearch
+     * @param bool
      */
     public function setIncompleteSearch($incompleteSearch)
     {
@@ -90,10 +63,7 @@ class FileList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->incompleteSearch;
     }
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#fileList"`.
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -107,14 +77,7 @@ class FileList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * The page token for the next page of files. This will be absent if the end
-     * of the files list has been reached. If the token is rejected for any
-     * reason, it should be discarded, and pagination should be restarted from the
-     * first page of results. The page token is typically valid for several hours.
-     * However, if new items are added or removed, your expected results might
-     * differ.
-     *
-     * @param string $nextPageToken
+     * @param string
      */
     public function setNextPageToken($nextPageToken)
     {

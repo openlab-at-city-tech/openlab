@@ -20,27 +20,15 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventReminder extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * The method used by this reminder. Possible values are: - "email" -
-     * Reminders are sent via email.  - "popup" - Reminders are sent via a UI
-     * popup.   Required when adding a reminder.
-     *
      * @var string
      */
     public $method;
     /**
-     * Number of minutes before the start of the event when the reminder should
-     * trigger. Valid values are between 0 and 40320 (4 weeks in minutes).
-     * Required when adding a reminder.
-     *
      * @var int
      */
     public $minutes;
     /**
-     * The method used by this reminder. Possible values are: - "email" -
-     * Reminders are sent via email.  - "popup" - Reminders are sent via a UI
-     * popup.   Required when adding a reminder.
-     *
-     * @param string $method
+     * @param string
      */
     public function setMethod($method)
     {
@@ -54,11 +42,7 @@ class EventReminder extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->method;
     }
     /**
-     * Number of minutes before the start of the event when the reminder should
-     * trigger. Valid values are between 0 and 40320 (4 weeks in minutes).
-     * Required when adding a reminder.
-     *
-     * @param int $minutes
+     * @param int
      */
     public function setMinutes($minutes)
     {

@@ -437,8 +437,27 @@ class Default_Calendar_List implements Calendar_View
 
 		if ($start->day == $end->day && $start->month == $end->month && $start->year == $end->year) {
 			// Start and end on the same day.
-			// Use the calendar's configured date format consistently.
+			// e.g. 1 February 2020
 			$large = $small = date_i18n($calendar->date_format, $st);
+			if ($date_order['d'] !== false && $date_order['m'] !== false) {
+				if ($date_order['m'] > $date_order['d']) {
+					if ($date_order['y'] !== false && $date_order['y'] > $date_order['m']) {
+						$small = date_i18n('Y, d M', $st);
+					} else {
+						$small = date_i18n('d M Y', $st);
+					}
+				} else {
+					if ($date_order['y'] !== false && $date_order['y'] > $date_order['m']) {
+						if ($date_order['d'] > $date_order['m']) {
+							$small = date_i18n('M d, Y', $st);
+						} else {
+							$small = date_i18n('d M Y', $st);
+						}
+					} else {
+						$small = date_i18n('Y, M d', $st);
+					}
+				}
+			}
 		} elseif ($start->month == $end->month && $start->year == $end->year) {
 			// Start and end days on the same month.
 			// e.g. August 2020
@@ -756,26 +775,6 @@ class Default_Calendar_List implements Calendar_View
 		if (isset($_POST['ts']) && isset($_POST['id'])) {
 			$ts = absint($_POST['ts']);
 			$id = absint($_POST['id']);
-
-			// Security check: Verify the calendar exists and user has permission to view it
-			$post = get_post($id);
-
-			// Check if post exists and is a calendar post type
-			if (!$post || $post->post_type !== 'calendar') {
-				wp_send_json_error('Calendar not found.');
-				return;
-			}
-
-			// Check if post is published (public) or user has permission to read it
-			if ($post->post_status === 'publish') {
-				// Public calendar - allow access
-			} else {
-				// Draft, pending, or other status - check if user has permission
-				if (!current_user_can('read_post', $id)) {
-					wp_send_json_error('You do not have permission to view this calendar.');
-					return;
-				}
-			}
 
 			wp_send_json_success($this->draw_list($ts, $id));
 		} else {

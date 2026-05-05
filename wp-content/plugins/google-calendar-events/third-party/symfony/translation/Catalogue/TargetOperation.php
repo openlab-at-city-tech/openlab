@@ -24,22 +24,12 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogueInt
 class TargetOperation extends AbstractOperation
 {
     /**
-     * @return void
+     * {@inheritdoc}
      */
     protected function processDomain(string $domain)
     {
         $this->messages[$domain] = ['all' => [], 'new' => [], 'obsolete' => []];
         $intlDomain = $domain . MessageCatalogueInterface::INTL_DOMAIN_SUFFIX;
-        foreach ($this->target->getCatalogueMetadata('', $domain) ?? [] as $key => $value) {
-            if (null === $this->result->getCatalogueMetadata($key, $domain)) {
-                $this->result->setCatalogueMetadata($key, $value, $domain);
-            }
-        }
-        foreach ($this->target->getCatalogueMetadata('', $intlDomain) ?? [] as $key => $value) {
-            if (null === $this->result->getCatalogueMetadata($key, $intlDomain)) {
-                $this->result->setCatalogueMetadata($key, $value, $intlDomain);
-            }
-        }
         // For 'all' messages, the code can't be simplified as ``$this->messages[$domain]['all'] = $target->all($domain);``,
         // because doing so will drop messages like {x: x ∈ source ∧ x ∉ target.all ∧ x ∈ target.fallback}
         //

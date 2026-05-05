@@ -11,29 +11,33 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler\FingersCrossed;
 
-use SimpleCalendar\plugin_deps\Monolog\Level;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
 /**
  * Error level based activation strategy.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
 class ErrorLevelActivationStrategy implements ActivationStrategyInterface
 {
-    private Level $actionLevel;
     /**
-     * @param int|string|Level $actionLevel Level or name or value
-     *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $actionLevel
+     * @var Level
      */
-    public function __construct(int|string|Level $actionLevel)
+    private $actionLevel;
+    /**
+     * @param int|string $actionLevel Level or name or value
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $actionLevel
+     */
+    public function __construct($actionLevel)
     {
         $this->actionLevel = Logger::toMonologLevel($actionLevel);
     }
-    public function isHandlerActivated(LogRecord $record): bool
+    public function isHandlerActivated(array $record): bool
     {
-        return $record->level->value >= $this->actionLevel->value;
+        return $record['level'] >= $this->actionLevel;
     }
 }

@@ -11,7 +11,6 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Adds a tags array into record
  *
@@ -20,7 +19,7 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 class TagProcessor implements ProcessorInterface
 {
     /** @var string[] */
-    private array $tags;
+    private $tags;
     /**
      * @param string[] $tags
      */
@@ -29,8 +28,7 @@ class TagProcessor implements ProcessorInterface
         $this->setTags($tags);
     }
     /**
-     * @param  string[] $tags
-     * @return $this
+     * @param string[] $tags
      */
     public function addTags(array $tags = []): self
     {
@@ -38,8 +36,7 @@ class TagProcessor implements ProcessorInterface
         return $this;
     }
     /**
-     * @param  string[] $tags
-     * @return $this
+     * @param string[] $tags
      */
     public function setTags(array $tags = []): self
     {
@@ -47,11 +44,11 @@ class TagProcessor implements ProcessorInterface
         return $this;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function __invoke(LogRecord $record): LogRecord
+    public function __invoke(array $record): array
     {
-        $record->extra['tags'] = $this->tags;
+        $record['extra']['tags'] = $this->tags;
         return $record;
     }
 }

@@ -22,11 +22,7 @@ use TypeError;
 class Service
 {
     public $batchPath;
-    /**
-     * Only used in getBatch
-     */
     public $rootUrl;
-    public $rootUrlTemplate;
     public $version;
     public $servicePath;
     public $serviceName;
@@ -62,6 +58,6 @@ class Service
      */
     public function createBatch()
     {
-        return new Batch($this->client, \false, $this->rootUrlTemplate ?? $this->rootUrl, $this->batchPath);
+        return new Batch($this->client, \false, $this->rootUrl, $this->batchPath);
     }
 }

@@ -30,17 +30,16 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\TeamDriveList;
 class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
     /**
-     * Deprecated: Use `drives.create` instead. (teamdrives.create)
+     * Deprecated use drives.create instead. (teamdrives.create)
      *
-     * @param string $requestId Required. An ID, such as a random UUID, which
-     * uniquely identifies this user's request for idempotent creation of a Team
-     * Drive. A repeated request by the same user and with the same request ID will
-     * avoid creating duplicates by attempting to create the same Team Drive. If the
-     * Team Drive already exists a 409 error will be returned.
+     * @param string $requestId An ID, such as a random UUID, which uniquely
+     * identifies this user's request for idempotent creation of a Team Drive. A
+     * repeated request by the same user and with the same request ID will avoid
+     * creating duplicates by attempting to create the same Team Drive. If the Team
+     * Drive already exists a 409 error will be returned.
      * @param TeamDrive $postBody
      * @param array $optParams Optional parameters.
      * @return TeamDrive
-     * @throws \Google\Service\Exception
      */
     public function create($requestId, TeamDrive $postBody, $optParams = [])
     {
@@ -49,11 +48,10 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('create', [$params], TeamDrive::class);
     }
     /**
-     * Deprecated: Use `drives.delete` instead. (teamdrives.delete)
+     * Deprecated use drives.delete instead. (teamdrives.delete)
      *
      * @param string $teamDriveId The ID of the Team Drive
      * @param array $optParams Optional parameters.
-     * @throws \Google\Service\Exception
      */
     public function delete($teamDriveId, $optParams = [])
     {
@@ -62,7 +60,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('delete', [$params]);
     }
     /**
-     * Deprecated: Use `drives.get` instead. (teamdrives.get)
+     * Deprecated use drives.get instead. (teamdrives.get)
      *
      * @param string $teamDriveId The ID of the Team Drive
      * @param array $optParams Optional parameters.
@@ -71,7 +69,6 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * administrator; if set to true, then the requester will be granted access if
      * they are an administrator of the domain to which the Team Drive belongs.
      * @return TeamDrive
-     * @throws \Google\Service\Exception
      */
     public function get($teamDriveId, $optParams = [])
     {
@@ -80,7 +77,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('get', [$params], TeamDrive::class);
     }
     /**
-     * Deprecated: Use `drives.list` instead. (teamdrives.listTeamdrives)
+     * Deprecated use drives.list instead. (teamdrives.listTeamdrives)
      *
      * @param array $optParams Optional parameters.
      *
@@ -91,7 +88,6 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * administrator; if set to true, then all Team Drives of the domain in which
      * the requester is an administrator are returned.
      * @return TeamDriveList
-     * @throws \Google\Service\Exception
      */
     public function listTeamdrives($optParams = [])
     {
@@ -100,7 +96,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('list', [$params], TeamDriveList::class);
     }
     /**
-     * Deprecated: Use `drives.update` instead. (teamdrives.update)
+     * Deprecated use drives.update instead (teamdrives.update)
      *
      * @param string $teamDriveId The ID of the Team Drive
      * @param TeamDrive $postBody
@@ -110,7 +106,6 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * administrator; if set to true, then the requester will be granted access if
      * they are an administrator of the domain to which the Team Drive belongs.
      * @return TeamDrive
-     * @throws \Google\Service\Exception
      */
     public function update($teamDriveId, TeamDrive $postBody, $optParams = [])
     {

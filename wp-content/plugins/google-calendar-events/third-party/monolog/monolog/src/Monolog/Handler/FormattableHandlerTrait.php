@@ -20,9 +20,12 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\LineFormatter;
  */
 trait FormattableHandlerTrait
 {
-    protected FormatterInterface|null $formatter = null;
     /**
-     * @inheritDoc
+     * @var ?FormatterInterface
+     */
+    protected $formatter;
+    /**
+     * {@inheritDoc}
      */
     public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
@@ -30,11 +33,11 @@ trait FormattableHandlerTrait
         return $this;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function getFormatter(): FormatterInterface
     {
-        if (null === $this->formatter) {
+        if (!$this->formatter) {
             $this->formatter = $this->getDefaultFormatter();
         }
         return $this->formatter;

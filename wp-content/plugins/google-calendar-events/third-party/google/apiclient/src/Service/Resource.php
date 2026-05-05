@@ -32,10 +32,8 @@ class Resource
 {
     // Valid query parameters that work, but don't appear in discovery.
     private $stackParameters = ['alt' => ['type' => 'string', 'location' => 'query'], 'fields' => ['type' => 'string', 'location' => 'query'], 'trace' => ['type' => 'string', 'location' => 'query'], 'userIp' => ['type' => 'string', 'location' => 'query'], 'quotaUser' => ['type' => 'string', 'location' => 'query'], 'data' => ['type' => 'string', 'location' => 'body'], 'mimeType' => ['type' => 'string', 'location' => 'header'], 'uploadType' => ['type' => 'string', 'location' => 'query'], 'mediaUpload' => ['type' => 'complex', 'location' => 'query'], 'prettyPrint' => ['type' => 'string', 'location' => 'query']];
-    /** @var string $rootUrlTemplate */
-    private $rootUrlTemplate;
-    /** @var string $apiVersion */
-    protected $apiVersion;
+    /** @var string $rootUrl */
+    private $rootUrl;
     /** @var \Google\Client $client */
     private $client;
     /** @var string $serviceName */
@@ -48,7 +46,7 @@ class Resource
     private $methods;
     public function __construct($service, $serviceName, $resourceName, $resource)
     {
-        $this->rootUrlTemplate = $service->rootUrlTemplate ?? $service->rootUrl;
+        $this->rootUrl = $service->rootUrl;
         $this->client = $service->getClient();
         $this->servicePath = $service->servicePath;
         $this->serviceName = $serviceName;
@@ -142,11 +140,6 @@ class Resource
         if (isset($parameters['alt']) && $parameters['alt']['value'] == 'media') {
             $expectedClass = null;
         }
-        // If the class which is extending from this one contains
-        // an Api Version, add it to the header
-        if ($this->apiVersion) {
-            $request = $request->withHeader('X-Goog-Api-Version', $this->apiVersion);
-        }
         // if the client is marked for deferring, rather than
         // execute the request, return the response
         if ($this->client->shouldDefer()) {
@@ -184,14 +177,12 @@ class Resource
         } else {
             $requestUrl = $this->servicePath . $restPath;
         }
-        if ($this->rootUrlTemplate) {
-            // code for universe domain
-            $rootUrl = str_replace('UNIVERSE_DOMAIN', $this->client->getUniverseDomain(), $this->rootUrlTemplate);
-            // code for leading slash
-            if ('/' !== substr($rootUrl, -1) && '/' !== substr($requestUrl, 0, 1)) {
+        // code for leading slash
+        if ($this->rootUrl) {
+            if ('/' !== substr($this->rootUrl, -1) && '/' !== substr($requestUrl, 0, 1)) {
                 $requestUrl = '/' . $requestUrl;
             }
-            $requestUrl = $rootUrl . $requestUrl;
+            $requestUrl = $this->rootUrl . $requestUrl;
         }
         $uriTemplateVars = [];
         $queryVars = [];

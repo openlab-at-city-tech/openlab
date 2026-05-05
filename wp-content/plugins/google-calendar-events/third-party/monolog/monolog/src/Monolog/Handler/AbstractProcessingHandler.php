@@ -11,7 +11,6 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Base Handler class providing the Handler structure, including processors and formatters
  *
@@ -19,31 +18,42 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
+ *
+ * @phpstan-import-type LevelName from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @phpstan-type FormattedRecord array{message: string, context: mixed[], level: Level, level_name: LevelName, channel: string, datetime: \DateTimeImmutable, extra: mixed[], formatted: mixed}
  */
 abstract class AbstractProcessingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
     use ProcessableHandlerTrait;
     use FormattableHandlerTrait;
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function handle(LogRecord $record): bool
+    public function handle(array $record): bool
     {
         if (!$this->isHandling($record)) {
             return \false;
         }
-        if (\count($this->processors) > 0) {
+        if ($this->processors) {
+            /** @var Record $record */
             $record = $this->processRecord($record);
         }
-        $record->formatted = $this->getFormatter()->format($record);
+        $record['formatted'] = $this->getFormatter()->format($record);
         $this->write($record);
         return \false === $this->bubble;
     }
     /**
-     * Writes the (already formatted) record down to the log of the implementing handler
+     * Writes the record down to the log of the implementing handler
+     *
+     * @phpstan-param FormattedRecord $record
      */
-    abstract protected function write(LogRecord $record): void;
-    public function reset(): void
+    abstract protected function write(array $record): void;
+    /**
+     * @return void
+     */
+    public function reset()
     {
         parent::reset();
         $this->resetProcessors();

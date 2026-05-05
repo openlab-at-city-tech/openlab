@@ -20,24 +20,15 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventExtendedProperties extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Properties that are private to the copy of the event that appears on this
-     * calendar.
-     *
      * @var string[]
      */
     public $private;
     /**
-     * Properties that are shared between copies of the event on other attendees'
-     * calendars.
-     *
      * @var string[]
      */
     public $shared;
     /**
-     * Properties that are private to the copy of the event that appears on this
-     * calendar.
-     *
-     * @param string[] $private
+     * @param string[]
      */
     public function setPrivate($private)
     {
@@ -51,10 +42,7 @@ class EventExtendedProperties extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->private;
     }
     /**
-     * Properties that are shared between copies of the event on other attendees'
-     * calendars.
-     *
-     * @param string[] $shared
+     * @param string[]
      */
     public function setShared($shared)
     {

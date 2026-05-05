@@ -21,17 +21,13 @@ class FreeBusyGroup extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'errors';
     /**
-     * List of calendars' identifiers within a group.
-     *
      * @var string[]
      */
     public $calendars;
     protected $errorsType = Error::class;
     protected $errorsDataType = 'array';
     /**
-     * List of calendars' identifiers within a group.
-     *
-     * @param string[] $calendars
+     * @param string[]
      */
     public function setCalendars($calendars)
     {
@@ -45,9 +41,7 @@ class FreeBusyGroup extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->calendars;
     }
     /**
-     * Optional error(s) (if computation for the group failed).
-     *
-     * @param Error[] $errors
+     * @param Error[]
      */
     public function setErrors($errors)
     {
