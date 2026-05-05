@@ -15,7 +15,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 			<?php if ( $bp->action_variables[0] == 'membership-requests' || $bp->action_variables[0] == 'manage-members' || $bp->action_variables[0] == 'notifications' ) : ?>
 				<?php do_action( 'bp_before_group_members_content' ); ?>
 
-				<div class="submenu-text pull-left bold"><h2>Membership<span aria-hidden="true">:</span></h2></div>
+				<div class="submenu-text pull-left bold"><h2>Membership<span aria-hidden="true">:</span></h3></div>
 
 				<ul class="nav nav-inline">
 					<?php openlab_group_membership_tabs(); ?>
@@ -23,7 +23,7 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 			<?php else : ?>
 
-				<div class="submenu-text pull-left bold"><?php echo $group_label_uc; ?> Settings:</div>
+				<div class="submenu-text pull-left bold"><h2><?php echo $group_label_uc; ?> Settings<span aria-hidden="true">:</span></h2></div>
 				<ul class="nav nav-inline">
 					<?php openlab_group_admin_tabs(); ?>
 				</ul>
