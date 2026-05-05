@@ -1,7 +1,7 @@
 <?php get_header() ?>
 
 	<div id="content">
-		<div id="openlab-main-content" class="padder">
+		<div id="openlab-main-content" class="padder" tabindex="-1">
 
 			<?php if ( !is_user_logged_in() ) : ?>
 				<h3><?php _e( 'Site Activity', 'buddypress' ) ?></h3>

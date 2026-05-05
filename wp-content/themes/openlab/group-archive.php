@@ -21,7 +21,7 @@ openlab_register_archive_mobile_drawer( $drawer_id, $drawer_title );
 <div id="content" class="hfeed row">
 	<?php openlab_bp_sidebar('groups', true); ?>
 	<div <?php post_class('col-sm-18 col-xs-24'); ?>>
-		<div id="openlab-main-content" class="content-wrapper">
+		<div id="openlab-main-content" class="content-wrapper" tabindex="-1">
 			<h1 class="entry-title"><?php echo ucfirst( $group_type ) . 's'; ?> on the OpenLab
 
 			<?php if ( $can_create ) : ?>

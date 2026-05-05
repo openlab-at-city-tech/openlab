@@ -23,7 +23,7 @@
             <?php //my-<group> pages should not be displaying this ?>
             <?php if (!strstr(get_the_title(), 'My')): ?>
                 <div <?php post_class('col-sm-18 col-xs-24'); ?>>
-                    <div id="openlab-main-content"  class="content-wrapper">
+                    <div id="openlab-main-content"  class="content-wrapper" tabindex="-1">
                         <h1 class="entry-title"><span class="profile-name"><?php the_title(); ?></span>
                             <?php if ( $is_about_page ): ?>
                                 <button id="toggle-sidebar-mobile" class="drawer-toggle mobile-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="about-mobile-drawer" data-drawer-toggle="about-mobile-drawer">

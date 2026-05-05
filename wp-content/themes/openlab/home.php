@@ -8,7 +8,7 @@
 get_header();
 ?>
 
-<div id="openlab-main-content" class="clearfix row-home-top" role="main">
+<div id="openlab-main-content" class="clearfix row-home-top" role="main" tabindex="-1">
 
 	<h1 class="site-title sr-only"><?php bloginfo( 'name' ); ?></h1>
 

@@ -1,7 +1,7 @@
 <?php do_action( 'bp_before_member_home_content' ); ?>
 
     <div class="col-sm-18 col-xs-24 members-single-home" role="main">
-        <div id="openlab-main-content" class="content-wrapper">
+        <div id="openlab-main-content" class="content-wrapper" tabindex="-1">
 
 <?php do_action( 'bp_before_member_body' );
 

@@ -20,7 +20,7 @@ global $bp;
             <span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
         </div>
 
-		<div id="openlab-main-content">
+		<div id="openlab-main-content" tabindex="-1">
 			<?php bp_get_template_part( 'groups/groups', 'loop' ); ?>
 		</div>
     </div>

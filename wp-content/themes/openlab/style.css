@@ -7267,6 +7267,11 @@ a.lighter-hover:focus {
 #openlab-main-content {
   scroll-margin-top: calc(80px + 24px);
   /* Height of navbar + some extra spacing */
+  /* Focus for main content, for visibility when using skip link */
+}
+#openlab-main-content:focus-visible {
+  outline: 2px solid #005fcc;
+  outline-offset: 2px;
 }
 /* Button elements styled like text links. */
 button.link-button {
