@@ -7264,6 +7264,10 @@ a.lighter-hover:hover,
 a.lighter-hover:focus {
   color: #49cabe;
 }
+#openlab-main-content {
+  scroll-margin-top: calc(80px + 24px);
+  /* Height of navbar + some extra spacing */
+}
 /* Button elements styled like text links. */
 button.link-button {
   background: none;
