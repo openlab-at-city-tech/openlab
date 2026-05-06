@@ -1849,10 +1849,17 @@ function openlab_render_help_mobile_drawer() {
 		if ( ! empty( $item['children'] ) ) {
 			$submenu_id = 'help-mobile-' . sanitize_title( $item['text'] ) . '-panel';
 
+			// Add an is_heading item for the submenu panel heading.
+			$submenu_heading = [
+				'text'       => $item['text'],
+				'is_heading' => true,
+			];
+			$submenu_items = array_merge( [ $submenu_heading ], $item['children'] );
+
 			$panels[] = [
 				'id'          => $submenu_id,
 				'heading'     => $item['text'],
-				'items'       => $item['children'],
+				'items'       => $submenu_items,
 				'is_root'     => false,
 				'back_target' => 'help-mobile-root-panel',
 				'back_text'   => 'Back to OpenLab Help',
