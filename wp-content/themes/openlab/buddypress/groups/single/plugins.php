@@ -11,9 +11,7 @@ global $bp, $wp_query;
             <div class="submenu">
                 <?php if ($bp->current_action == 'invite-anyone' || $bp->current_action == 'notifications') : ?>
 					<div class="submenu-text pull-left bold"><h2>Membership<span aria-hidden="true">:</span></h2></div>
-                    <ul class="nav nav-inline">
-                        <?php openlab_group_membership_tabs(); ?>
-                    </ul>
+					<?php echo openlab_group_membership_submenu(); ?>
                 <?php elseif ($bp->current_action == 'docs'): ?>
 					<?php echo openlab_submenu_markup( 'group-docs' ); ?>
                 <?php elseif ($bp->current_action == 'files'): ?>

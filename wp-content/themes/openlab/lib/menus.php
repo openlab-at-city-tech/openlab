@@ -184,6 +184,10 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             }
 
             break;
+        case 'group-membership':
+            $submenu_text = 'Membership<span aria-hidden="true">:</span>';
+            $menu = openlab_group_membership_submenu();
+            break;
         case 'group-activity':
             $submenu_text = 'Activity<span aria-hidden="true">:</span> ';
             $menu = openlab_group_activity_submenu();
@@ -498,6 +502,21 @@ function openlab_group_docs_submenu() {
     }
 
     return openlab_submenu_gen( $menu_list, false, $current_item );
+}
+
+function openlab_group_membership_submenu() {
+	$items        = openlab_get_group_membership_submenu_items();
+	$menu_list    = [];
+	$current_item = null;
+
+	foreach ( $items as $item ) {
+		$menu_list[ $item['href'] ] = $item['text'];
+		if ( $item['is_current'] ) {
+			$current_item = $item['href'];
+		}
+	}
+
+	return openlab_submenu_gen( $menu_list, false, $current_item );
 }
 
 function openlab_group_activity_submenu() {

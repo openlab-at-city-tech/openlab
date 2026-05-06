@@ -14,11 +14,9 @@ if ( bp_group_has_members( $members_args ) ) : ?>
 
 	<?php do_action( 'bp_before_group_members_content' ) ?>
     <div class="row">
-        <div class="submenu col-sm-16">
+    	<div class="submenu col-sm-16">
 		<div class="submenu-text pull-left bold"><h2>Membership<span aria-hidden="true">:</span></h2></div>
-		<ul class="nav nav-inline">
-			<?php openlab_group_membership_tabs(); ?>
-		</ul>
+		<?php echo openlab_group_membership_submenu(); ?>
 	</div><!-- .item-list-tabs -->
         <div id="member-count" class="pag-count col-sm-8 align-right">
 			<?php bp_group_member_pagination_count() ?>

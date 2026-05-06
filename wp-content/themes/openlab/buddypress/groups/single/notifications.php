@@ -10,9 +10,7 @@
 		<div class="col-md-24">
             <div class="submenu">
 				<div class="submenu-text pull-left bold"><h2>Membership<span aria-hidden="true">:</span></h2></div>
-                <ul class="nav nav-inline">
-                    <?php openlab_group_membership_tabs(); ?>
-                </ul>
+                <?php echo openlab_group_membership_submenu(); ?>
             </div>
         </div>
     </div>
