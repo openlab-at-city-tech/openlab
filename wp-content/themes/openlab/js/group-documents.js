@@ -44,6 +44,14 @@
             $('#bp-group-documents').addClass('is-edit-mode');
         });
 
+        // On page load, detect ?action=add_new_file from mobile drawer navigation
+        var urlParams = new URLSearchParams( window.location.search );
+        if ( urlParams.get( 'action' ) === 'add_new_file' ) {
+            $('.submenu-item').removeClass('current-menu-item');
+            $('.submenu-item.item-add-new-file').addClass('current-menu-item');
+            $('#bp-group-documents').addClass('is-edit-mode');
+        }
+
         // Toggle current menu item when clicking
         $(document).on( 'click', '.submenu-item.item-add-new-file a', function(e) {
             e.preventDefault();
