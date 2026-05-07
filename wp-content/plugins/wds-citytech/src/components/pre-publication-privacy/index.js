@@ -47,6 +47,10 @@ const PrePublicationPrivacy = () => {
 			return __( 'Everyone who can view this site can see this post.', 'wds-citytech' );
 		}
 
+		if ( blogPublicInt === -1 && 'members-only' === postVisibility ) {
+			return __( 'Everyone who can view this site can see this post. You can change the post visibility settings below.', 'wds-citytech' );
+		}
+
 		switch ( postVisibility ) {
 			case 'default':
 			default:
