@@ -20,7 +20,10 @@ const OpenlabPostVisibilityPlugin = () => {
 		return !! editSite;
 	}, [] );
 
-	return ! isSiteEditor && <PostSharingOptions />;
+	const { blogPublic } = openlabBlocksPostVisibility;
+	const blogPublicInt = parseInt( blogPublic );
+
+	return blogPublicInt >= -1 && ! isSiteEditor && <PostSharingOptions />;
 };
 
 const registerPostVisibility = () => {
