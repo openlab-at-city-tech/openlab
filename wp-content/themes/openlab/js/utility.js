@@ -1093,10 +1093,12 @@ OpenLab.utility = (function ($) {
 					e.preventDefault();
 					isTogglingDrawer = true;
 					openFlyout(toggle);
-					// Clear flag after the handler completes
-					setTimeout(() => {
-						isTogglingDrawer = false;
-					}, 0);
+					// isTogglingDrawer is cleared by the document click handler below.
+					// We intentionally do NOT clear it here with setTimeout(0), because
+					// when the drawer slides over the cursor on open, mouseup fires on
+					// the drawer and the browser dispatches click on document.body (the
+					// common ancestor). Keeping the flag true through that click prevents
+					// the document click handler from calling closeAllDrawers().
 				});
 
 				// Handle keyboard events for Enter/Space
@@ -1219,12 +1221,20 @@ OpenLab.utility = (function ($) {
 
 			// Close flyout menus when clicking outside.
 			document.addEventListener('click', function (e) {
+				// Capture and clear the toggling flag. If mousedown opened the drawer,
+				// the subsequent click may fire on body (when the drawer slides over
+				// the cursor, mouseup lands on the drawer making body the common
+				// ancestor). In that case we must not close the drawer.
+				const wasToggling = isTogglingDrawer;
+				isTogglingDrawer = false;
+
 				const nav = document.querySelector('.openlab-navbar');
 				const flyoutContainer = document.querySelector('.openlab-navbar-drawer, .openlab-drawer-container');
 				const isClickInsideNav = nav.contains(e.target) || flyoutContainer.contains(e.target);
 				const isClickOnDrawerToggle = e.target.closest('.drawer-toggle[data-drawer-toggle]');
 
 				if (!isClickInsideNav && !isClickOnDrawerToggle) {
+					if (wasToggling) return;
 					closeAllDrawers();
 				}
 			});
