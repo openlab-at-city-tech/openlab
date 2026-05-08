@@ -691,6 +691,8 @@ function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy =
 
 	$group_type = openlab_get_current_group_type( 'case=upper' );
 
+	$block_ai_robots = $site_id ? \CBOX\OL\Robots\is_block_ai_robots_enabled( $site_id ) : false;
+
     ?>
 
     <div class="radio group-site">
@@ -703,6 +705,10 @@ function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy =
                 <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />Ask search engines not to index this site. Your site should not show up in web search results.</label>
                 <p id="search-setting-note" class="privacy-settings-note italics note">Note: This option will NOT block access to your site. It is up to search engines to honor your request.</p>
             </div>
+
+			<div class="col-sm-23">
+				<?php CBOX\OL\Robots\ai_robots_checkbox_markup( $block_ai_robots ); ?>
+			</div>
         </div>
 
         <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
