@@ -8238,6 +8238,12 @@ input[type="submit"] {
   padding-left: 0;
   margin-bottom: 0 !important;
 }
+.block-ai-robots-wrapper {
+  padding-left: 30px;
+}
+.group-setting-note.block-ai-robots-note {
+  margin-top: 0;
+}
 .entry-content img,
 .img-responsive,
 .thumbnail > img,

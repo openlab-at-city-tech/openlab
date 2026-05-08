@@ -1164,6 +1164,11 @@ function wds_bp_group_meta_save( $group ) {
 		update_blog_option( $site_id, 'cboxol_block_ai_robots', $block_ai_robots ? 1 : 0 );
 	}
 
+	if ( isset( $_POST['block_ai_robots_group'] ) ) {
+		$block_ai_robots_group = ! empty( $_POST['block_ai_robots_group'] );
+		groups_update_groupmeta( $group->id, 'cboxol_block_ai_robots', (int) $block_ai_robots_group );
+	}
+
 	// Portfolio profile link
 	if ( ! empty( $_POST['portfolio-profile-link-nonce'] ) ) {
 		$portfolio_user_id   = openlab_get_user_id_from_portfolio_group_id( $group->id );

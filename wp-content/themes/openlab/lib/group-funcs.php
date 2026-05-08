@@ -49,6 +49,9 @@ function openlab_group_privacy_settings($group_type) {
 		$group_status = groups_get_current_group()->status;
 	}
 
+	$block_ai_robots           = \CBOX\OL\Robots\is_block_ai_robots_enabled_for_group();
+	$main_site_block_ai_robots = \CBOX\OL\Robots\is_block_ai_robots_enabled_on_root_site();
+
     ?>
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
@@ -70,6 +73,29 @@ function openlab_group_privacy_settings($group_type) {
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
                         <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
+
+					<?php
+					$block_ai_robots_wrapper_class = 'form-group block-ai-robots-wrapper';
+					if ( $main_site_block_ai_robots ) {
+						$block_ai_robots_wrapper_class .= ' block-ai-robots-wrapper-main-site-blocked';
+					}
+					?>
+
+					<div class="<?php echo esc_attr( $block_ai_robots_wrapper_class ); ?>">
+						<div class="checkbox">
+							<label>
+								<input type="hidden" name="block_ai_robots_group" value="0" />
+								<input type="checkbox" name="block_ai_robots_group" id="block-ai-robots-group" value="1" <?php checked( $block_ai_robots ); ?> <?php disabled( $main_site_block_ai_robots ); ?> />
+								Ask AI crawlers not to access this <?php echo esc_html( $group_type_name ); ?> profile.
+							</label>
+
+							<?php if ( $main_site_block_ai_robots ) : ?>
+								<p class="block-ai-robots-note group-setting-note italics note"><?php esc_html_e( 'Note: AI crawler blocking is enabled for the entire community site.', 'cbox-openlab-core' ); ?></p>
+							<?php else : ?>
+								<p class="block-ai-robots-note group-setting-note italics note">Note: This option will NOT block access to the <?php echo esc_html( $group_type_name ); ?> profile. It is up to AI crawlers to honor your request.</p>
+							<?php endif; ?>
+						</div>
+					</div>
 
                     <label><input type="radio" name="group-status" value="private" <?php checked('private', $group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
