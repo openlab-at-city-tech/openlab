@@ -1094,12 +1094,7 @@ function openlab_group_admin_tabs( $group = false ) {
 	}
 
 	// Trailing info item (not a nav tab).
-	if ( $group_type === 'portfolio' ) {
-		printf(
-			'<li class="portfolio-displayname pull-right"><span class="highlight">%s</span></li>' . "\n",
-			bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) )
-		);
-	} else {
+	if ( $group_type !== 'portfolio' ) {
 		printf(
 			'<li class="info-line pull-right"><span class="timestamp info-line-timestamp visible-lg"><span class="fa fa-undo"></span> %s</span></li>' . "\n",
 			sprintf( __( 'active %s', 'buddypress' ), bp_get_group_last_active() )
