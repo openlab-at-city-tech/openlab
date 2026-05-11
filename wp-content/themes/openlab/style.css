@@ -9955,6 +9955,13 @@ body form .checkbox-list-container {
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li.cameracurrent {
   background: #333333;
 }
+.home-page .row-home-top .slider .camera_wrap .camera_commands {
+  bottom: 8px;
+  left: 8px;
+  margin-top: 0;
+  right: auto;
+  top: auto;
+}
 .home-page .row-home-top .slider .camera_wrap .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_next {
   background: transparent;

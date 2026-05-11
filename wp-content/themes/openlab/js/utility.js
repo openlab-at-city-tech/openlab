@@ -1777,7 +1777,7 @@ OpenLab.utility = (function ($) {
 						autoAdvance: true,
 						loader: 'none',
 						fx: 'simpleFade',
-						playPause: false,
+						playPause: true,
 						height: '295px',
 						navigation: false,
 						navigationHover: false,
@@ -1816,6 +1816,22 @@ OpenLab.utility = (function ($) {
 						}
 					}
 				);
+
+				// Accessibility: patch camera.js play/pause controls for keyboard use.
+				var $wrap      = $( '.camera_wrap' );
+				var $playBtn   = $( '.camera_commands .camera_play', $wrap );
+				var $stopBtn   = $( '.camera_commands .camera_stop', $wrap );
+
+				$playBtn.attr( { tabindex: '0', role: 'button', 'aria-label': 'Play slideshow' } );
+				$stopBtn.attr( { tabindex: '0', role: 'button', 'aria-label': 'Pause slideshow' } );
+
+				$( '.camera_commands', $wrap ).on( 'keydown', '.camera_play, .camera_stop', function ( e ) {
+					if ( e.which === 13 || e.which === 32 ) {
+						e.preventDefault();
+						$( this ).trigger( 'click' );
+						$( '.camera_commands .camera_play:visible, .camera_commands .camera_stop:visible', $wrap ).focus();
+					}
+				} );
 			}
 
 			if ($( '#home-new-member-wrap' ).length) {
