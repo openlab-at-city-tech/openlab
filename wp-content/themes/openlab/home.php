@@ -18,11 +18,12 @@ get_header();
         </div>
     </div>
     <div class="fill-gutter fill-gutter-left slider">
+        <a class="sr-only sr-only-focusable skip-link" href="#after-slider">Skip slideshow</a>
         <?php echo openlab_get_home_slider(); ?>
     </div>
 
 </div>
-<div class="row row-home-bottom" role="complementary">
+<div id="after-slider" class="row row-home-bottom" role="complementary" tabindex="-1">
     <div id="home-left" class="col-sm-8">
         <?php dynamic_sidebar('cac-featured') ?>
 
