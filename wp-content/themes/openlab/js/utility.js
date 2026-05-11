@@ -1779,7 +1779,7 @@ OpenLab.utility = (function ($) {
 						fx: 'simpleFade',
 						playPause: true,
 						height: '295px',
-						navigation: false,
+						navigation: true,
 						navigationHover: false,
 						onLoaded: function () {
 
@@ -1830,6 +1830,21 @@ OpenLab.utility = (function ($) {
 						e.preventDefault();
 						$( this ).trigger( 'click' );
 						$( '.camera_commands .camera_play:visible, .camera_commands .camera_stop:visible', $wrap ).focus();
+					}
+				} );
+
+				// Accessibility: move prev/next into the pag column and patch for keyboard use.
+				var $pag      = $( '.camera_pag', $wrap );
+				var $prevBtn  = $( '.camera_prev', $wrap );
+				var $nextBtn  = $( '.camera_next', $wrap );
+
+				$prevBtn.prependTo( $pag ).attr( { tabindex: '0', role: 'button', 'aria-label': 'Previous slide' } );
+				$nextBtn.appendTo( $pag ).attr( { tabindex: '0', role: 'button', 'aria-label': 'Next slide' } );
+
+				$pag.on( 'keydown', '.camera_prev, .camera_next', function ( e ) {
+					if ( e.which === 13 || e.which === 32 ) {
+						e.preventDefault();
+						$( this ).trigger( 'click' );
 					}
 				} );
 			}

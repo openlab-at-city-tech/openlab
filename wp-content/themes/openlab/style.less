@@ -3049,8 +3049,47 @@ body form{
                     float: left;
                     height: 100%;
                     border-radius: @border-radius-right;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    justify-content: space-between;
+                    padding: 8px 0;
+                    .camera_prev,
+                    .camera_next {
+                        background: transparent;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        height: 16px;
+                        left: auto;
+                        margin: 0;
+                        position: static;
+                        right: auto;
+                        top: auto;
+                        width: 100%;
+                        span {
+                            background: none;
+                            border-left: 5px solid transparent;
+                            border-right: 5px solid transparent;
+                            display: block;
+                            height: 0;
+                            width: 0;
+                        }
+                        &:hover,
+                        &:focus {
+                            opacity: 0.6;
+                            outline: 1px dotted @80gray;
+                        }
+                    }
+                    .camera_prev span {
+                        border-bottom: 7px solid @80gray;
+                    }
+                    .camera_next span {
+                        border-top: 7px solid @80gray;
+                    }
                     .camera_pag_ul{
-                        margin-top: 14px;
+                        margin-top: 0;
                         li{
                             margin: 0 auto 4px;
                             background: transparent;
@@ -3073,29 +3112,6 @@ body form{
                     margin-top: 0;
                     right: auto;
                     top: auto;
-                }
-                .camera_prev,
-                .camera_next{
-                    background: transparent;
-                    top: 14px;
-                    margin-top: 0;
-                    height: 15px;
-                    width: 10px;
-                    span{
-                        background: url('images/camera_js_nav.png') no-repeat;
-                        height: 15px;
-                        width: 10px;
-                    }
-                }
-                .camera_next{
-                    right: 4%;
-                    span{
-                        background-position: -11px 0;
-                    }
-                }
-                .camera_prev{
-                    left: auto;
-                    right: 27%;
                 }
             }
             .camera_content{
