@@ -7425,13 +7425,11 @@ blockquote .h6 {
 }
 @media (max-width: 767px) {
   body.single-item.groups .submenu h2 > span,
-  body.bp-user .submenu h2 > span,
-  body.page .submenu h2 > span {
+  body.bp-user .submenu h2 > span {
     display: none;
   }
   body.single-item.groups .nav.nav-inline,
-  body.bp-user .nav.nav-inline,
-  body.page .nav.nav-inline {
+  body.bp-user .nav.nav-inline {
     display: none;
   }
 }
