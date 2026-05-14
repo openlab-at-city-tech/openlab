@@ -1949,4 +1949,14 @@ OpenLab.utility = (function ($) {
 		window.location = url.toString();
 	} );
 
+	// Disable the noindex checkbox when the Public radio is not selected.
+	function updateNoindexCheckbox() {
+		var disabled = ! $( '#blog-private1' ).is( ':checked' );
+		$( '#blog-noindex' ).prop( 'disabled', disabled );
+		$( 'label[for="blog-noindex"], #search-setting-note' ).toggleClass( 'blog-noindex-disabled', disabled );
+	}
+
+	$( document ).on( 'change', 'input[name="blog_public"]', updateNoindexCheckbox );
+	updateNoindexCheckbox();
+
 })( jQuery );

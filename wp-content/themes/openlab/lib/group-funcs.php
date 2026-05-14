@@ -727,21 +727,32 @@ function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy =
         <h5>Public</h5>
         <div class="row">
             <div class="col-sm-24">
-                <label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( '1', $blog_public ); ?> />Allow search engines to index this site. Your site will show up in web search results.</label>
+                <label for="blog-private1"><input id="blog-private1" type="radio" name="blog_public" value="1" <?php checked( true, in_array( (string) $blog_public, [ '0', '1' ], true ) ); ?> />I would like my site to be visible to anyone.</label>
 
-                <label for="blog-private0"><input id="blog-private0" type="radio" name="blog_public" value="0" <?php checked( '0', $blog_public ); ?> />Ask search engines not to index this site. Your site should not show up in web search results.</label>
-                <p id="search-setting-note" class="privacy-settings-note italics note">Note: This option will NOT block access to your site. It is up to search engines to honor your request.</p>
+				<div class="checkbox-with-hanging-indent group-block-robots-checkbox">
+					<input type="hidden" name="blog_noindex" value="0" />
+					<input id="blog-noindex" type="checkbox" name="blog_noindex" value="1" <?php checked( '0', (string) $blog_public ); ?> />
+					<div>
+						<label for="blog-noindex">Ask search engines not to index this site. Your site should not show up in web search results.</label>
+						<p class="italics note">Note: This option will NOT block access to your site. It is up to search engines to honor your request.</p>
+					</div>
+				</div>
             </div>
         </div>
 
         <?php if (!openlab_is_portfolio() && (!isset($_GET['type']) || 'portfolio' != $_GET['type'] )): ?>
 
+            <h5>OpenLab only</h5>
+            <div class="row">
+                <div class="col-sm-24">
+                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label>
+                </div>
+            </div>
+
             <h5>Private</h5>
             <div class="row">
                 <div class="col-sm-24">
-                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered members of City Tech OpenLab.</label>
-
-                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered members of this <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
+                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered users of this <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
                 </div>
             </div>
 

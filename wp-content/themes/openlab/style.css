@@ -8344,6 +8344,9 @@ input:disabled + label {
 .form-panel .panel-body .radio label {
   margin-bottom: 15px;
 }
+.form-panel .panel-body .radio label[for="blog-private1"] {
+  margin-bottom: 10px;
+}
 .form-panel .panel-subheading {
   font-weight: 700;
   border-bottom: 1px solid #ddd;
@@ -8597,6 +8600,7 @@ input:disabled + label {
 }
 .checkbox-with-hanging-indent label {
   padding-left: 0 !important;
+  margin-bottom: 0 !important;
 }
 .checkbox-with-hanging-indent.group-block-robots-checkbox {
   padding-left: 20px;
@@ -9650,6 +9654,9 @@ body form .checkbox-list-container {
 .privacy-settings-note {
   padding-left: 20px;
   margin-top: -15px;
+}
+.blog-noindex-disabled {
+  opacity: 0.8;
 }
 .bpges-settings-gloss {
   font-style: italic;

@@ -1149,11 +1149,16 @@ function wds_bp_group_meta_save( $group ) {
 
 	// Site privacy
 	if ( isset( $_POST['blog_public'] ) ) {
-		$blog_public = (float) $_POST['blog_public'];
-		$site_id     = openlab_get_site_id_by_group_id( $group->id );
-
-		if ( $site_id ) {
-			update_blog_option( $site_id, 'blog_public', $blog_public );
+		$blog_public = (int) $_POST['blog_public'];
+		// When the Public radio (value=1) is selected, the noindex checkbox signals blog_public=0.
+		if ( 1 === $blog_public && ! empty( $_POST['blog_noindex'] ) ) {
+			$blog_public = 0;
+		}
+		if ( in_array( $blog_public, [ 1, 0, -1, -2, -3 ], true ) ) {
+			$site_id = openlab_get_site_id_by_group_id( $group->id );
+			if ( $site_id ) {
+				update_blog_option( $site_id, 'blog_public', $blog_public );
+			}
 		}
 	}
 
@@ -1189,15 +1194,6 @@ function wds_bp_group_meta_save( $group ) {
 		}
 
 		groups_update_groupmeta( $group->id, 'member_site_roles', $role_map );
-	}
-
-	if ( isset( $_POST['blog_public'] ) ) {
-		$blog_public = (float) $_POST['blog_public'];
-		$site_id     = openlab_get_site_id_by_group_id( $group->id );
-
-		if ( $site_id ) {
-			update_blog_option( $site_id, 'blog_public', $blog_public );
-		}
 	}
 
 	// Portfolio list display
