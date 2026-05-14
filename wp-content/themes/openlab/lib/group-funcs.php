@@ -67,14 +67,14 @@ function openlab_group_privacy_settings($group_type) {
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
-                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
                         <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
                     <label><input type="radio" name="group-status" value="private" <?php checked('private', $group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
-                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
                         <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can disable membership requests in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
@@ -82,7 +82,7 @@ function openlab_group_privacy_settings($group_type) {
 
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
-                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile will NOT be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, or OpenLab home page.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile will NOT be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, or OpenLab home page.</li>
                         <li>Only OpenLab members who are invited may join this <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                     </ul>
                 </div>
@@ -710,9 +710,9 @@ function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy =
             <h5>Private</h5>
             <div class="row">
                 <div class="col-sm-24">
-                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered users of City Tech OpenLab.</label>
+                    <label for="blog-private-1"><input id="blog-private-1" type="radio" name="blog_public" value="-1" <?php checked( '-1', $blog_public ); ?>>I would like my site to be visible only to registered members of City Tech OpenLab.</label>
 
-                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered users of this <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
+                    <label for="blog-private-2"><input id="blog-private-2" type="radio" name="blog_public" value="-2" <?php checked('-2', $blog_public); ?>>I would like my site to be visible to registered members of this <?php echo esc_html( ucfirst( $group_type ) ); ?>.</label>
                 </div>
             </div>
 
