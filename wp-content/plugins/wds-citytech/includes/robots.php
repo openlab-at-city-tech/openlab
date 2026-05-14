@@ -141,8 +141,8 @@ function build_group_ai_robots_directives() {
  * @param mixed  $meta_value Meta value.
  * @return void
  */
-function maybe_invalidate_group_ai_robots_cache( $meta_id, $group_id, $meta_key, $meta_value ) {
-	unset( $meta_id, $group_id, $meta_value );
+function maybe_invalidate_group_ai_robots_cache( $group_id, $meta_key, $meta_value ) {
+	unset( $group_id, $meta_value );
 
 	if ( 'cboxol_block_ai_robots' !== $meta_key ) {
 		return;
@@ -150,8 +150,8 @@ function maybe_invalidate_group_ai_robots_cache( $meta_id, $group_id, $meta_key,
 
 	clear_group_ai_robots_directives_cache();
 }
-add_action( 'updated_group_meta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 4 );
-add_action( 'deleted_group_meta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 4 );
+add_action( 'groups_update_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 3 );
+add_action( 'groups_delete_groupmeta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_robots_cache', 10, 3 );
 
 /**
  * Clears cached group AI robots directives.
@@ -161,23 +161,7 @@ add_action( 'deleted_group_meta', __NAMESPACE__ . '\\maybe_invalidate_group_ai_r
  * @return void
  */
 function clear_group_ai_robots_directives_cache() {
-	/*
-	 * BuddyPress filters the 'query' hook to replace the meta ID column name
-	 * in group meta queries. Because the current callback is hooked during
-	 * the process of updating/deleting group meta, the filter is still in place,
-	 * which causes the `delete_site_transient()` call to fail since it relies
-	 * on a direct query to the options table.
-	 */
-	$has_bp_filter_metaid_column_name = has_filter( 'query', 'bp_filter_metaid_column_name' );
-	if ( $has_bp_filter_metaid_column_name ) {
-		remove_filter( 'query', 'bp_filter_metaid_column_name' );
-	}
-
-	$deleted = delete_site_transient( GROUP_AI_ROBOTS_CACHE_KEY );
-
-	if ( $has_bp_filter_metaid_column_name ) {
-		add_filter( 'query', 'bp_filter_metaid_column_name' );
-	}
+	delete_site_transient( GROUP_AI_ROBOTS_CACHE_KEY );
 }
 
 /**
