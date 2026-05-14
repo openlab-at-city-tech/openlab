@@ -8590,6 +8590,17 @@ input:disabled + label {
 .checkbox input[type="checkbox"] {
   margin-top: 1px;
 }
+.checkbox-with-hanging-indent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.checkbox-with-hanging-indent label {
+  padding-left: 0 !important;
+}
+.checkbox-with-hanging-indent.group-block-robots-checkbox {
+  padding-left: 20px;
+}
 /** Group Announcements **/
 .ajax-loading {
   padding-left: 40px;

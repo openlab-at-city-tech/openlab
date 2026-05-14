@@ -49,6 +49,8 @@ function openlab_group_privacy_settings($group_type) {
 		$group_status = groups_get_current_group()->status;
 	}
 
+	$group_block_robots = openlab_should_noindex_group_profile( bp_get_current_group_id() );
+
     ?>
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
@@ -70,6 +72,15 @@ function openlab_group_privacy_settings($group_type) {
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
                         <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
+
+					<div class="checkbox-with-hanging-indent group-block-robots-checkbox">
+						<input type="hidden" name="group-block-robots" value="0" />
+						<input type="checkbox" name="group-block-robots" value="1" id="group-block-robots" <?php checked( $group_block_robots ); ?> />
+						<div>
+							<label for="group-block-robots">Ask search engines not to index this <?php echo esc_html( $group_type_name_uc ); ?>. Your <?php echo esc_html( $group_type_name_uc ); ?> should not show up in web search results.</label>
+							<p class="description">Note: This option will NOT block access to your <?php echo esc_html( $group_type_name_uc ); ?>. It is up to seacrh engines to honor your request.</p>
+						</div>
+					</div>
 
                     <label><input type="radio" name="group-status" value="private" <?php checked('private', $group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
@@ -240,6 +251,24 @@ function openlab_group_privacy_membership_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_privacy_membership_save' );
+
+/**
+ * Save the block-robots setting for a group.
+ *
+ * @param BP_Groups_Group $group
+ */
+function openlab_group_block_robots_save( $group ) {
+	if ( ! isset( $_POST['group-block-robots'] ) ) {
+		return;
+	}
+
+	if ( (int) $_POST['group-block-robots'] ) {
+		groups_update_groupmeta( $group->id, 'openlab_noindex_group_profile', 1 );
+	} else {
+		groups_delete_groupmeta( $group->id, 'openlab_noindex_group_profile' );
+	}
+}
+add_action( 'groups_group_after_save', 'openlab_group_block_robots_save' );
 
 /**
  * Markup for the 'Collaboration Tools' section on group settings.
@@ -2651,7 +2680,7 @@ function openlab_add_noindex_to_group_profile() {
 	}
 
 	if ( openlab_should_noindex_group_profile( $group_id ) ) {
-		echo '<meta name="robots" content="noindex" />' . "\n";
+		echo '<meta name="robots" content="noindex,nofollow" />' . "\n";
 	}
 }
 add_action( 'wp_head', 'openlab_add_noindex_to_group_profile', 0 );
