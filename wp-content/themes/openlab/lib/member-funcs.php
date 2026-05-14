@@ -351,14 +351,30 @@ function openlab_group_status_message( $group = null ) {
 
 	$message = '';
 
+	$is_loggedin_only                    = openlab_group_is_loggedin_only( $group->id );
 	$public_group_has_disabled_joining   = openlab_public_group_has_disabled_joining( $group->id );
 	$private_group_has_disabled_requests = openlab_private_group_has_disabled_membership_requests( $group->id );
 
 	switch ( $site_status ) {
-		// Public
+		// Public site (or no site — $site_status is 0 when there is no associated site).
 		case 1:
 		case 0:
-			if ( 'public' === $group->status ) {
+			if ( 'public' === $group->status && $is_loggedin_only ) {
+				if ( ! $site_url ) {
+					// No associated site: mention profile only.
+					if ( $public_group_has_disabled_joining ) {
+						$message = 'This ' . $group_label . ' is OPEN only to logged-in OpenLab members, and membership is by invitation only.';
+					} else {
+						$message = 'This ' . $group_label . ' is OPEN only to logged-in OpenLab members.';
+					}
+				} else {
+					if ( $public_group_has_disabled_joining ) {
+						$message = 'This ' . $group_label . ' Profile is OPEN only to logged-in OpenLab members, and membership is by invitation only, but the ' . $group_label . ' Site is OPEN to all visitors.';
+					} else {
+						$message = 'This ' . $group_label . ' Profile is OPEN only to logged-in OpenLab members and the ' . $group_label . ' Site is OPEN to all visitors.';
+					}
+				}
+			} elseif ( 'public' === $group->status ) {
 				if ( $public_group_has_disabled_joining ) {
 					$message = 'This ' . $group_label . ' is OPEN but membership is by invitation.';
 				} else {
@@ -384,8 +400,16 @@ function openlab_group_status_message( $group = null ) {
 
 			break;
 
+		// OpenLab members only site.
 		case -1:
-			if ( 'public' === $group->status ) {
+			if ( 'public' === $group->status && $is_loggedin_only ) {
+				// Both profile and site are OpenLab-only — combined message.
+				if ( $public_group_has_disabled_joining ) {
+					$message = 'This ' . $group_label . ' is OPEN only to logged-in OpenLab members, and membership is by invitation only.';
+				} else {
+					$message = 'This ' . $group_label . ' is OPEN only to logged-in OpenLab members.';
+				}
+			} elseif ( 'public' === $group->status ) {
 				if ( $public_group_has_disabled_joining ) {
 					$message = 'This ' . $group_label . ' Profile is OPEN and membership is by invitation only, but only logged-in OpenLab members may view the ' . $group_label . ' Site.';
 				} else {
@@ -401,8 +425,15 @@ function openlab_group_status_message( $group = null ) {
 
 			break;
 
+		// Private (members-only) site.
 		case -2:
-			if ( 'public' === $group->status ) {
+			if ( 'public' === $group->status && $is_loggedin_only ) {
+				if ( $public_group_has_disabled_joining ) {
+					$message = 'This ' . $group_label . ' Profile is OPEN only to logged-in OpenLab members, and membership is by invitation only. The ' . $group_label . ' Site is PRIVATE.';
+				} else {
+					$message = 'This ' . $group_label . ' Profile is OPEN only to logged-in OpenLab members, but the ' . $group_label . ' Site is PRIVATE.';
+				}
+			} elseif ( 'public' === $group->status ) {
 				if ( $public_group_has_disabled_joining ) {
 					$message = 'This ' . $group_label . ' Profile is OPEN but membership is by invitation. You must be a member of the ' . $group_label . ' to view the ' . $group_label . ' Site.';
 				} else {
@@ -418,8 +449,15 @@ function openlab_group_status_message( $group = null ) {
 
 			break;
 
+		// Admins-only site.
 		case -3:
-			if ( 'public' === $group->status ) {
+			if ( 'public' === $group->status && $is_loggedin_only ) {
+				if ( $public_group_has_disabled_joining ) {
+					$message = 'This ' . $group_label . ' Profile is OPEN only to logged-in OpenLab members, and membership is by invitation only. You must be an administrator to view the ' . $group_label . ' Site.';
+				} else {
+					$message = 'This ' . $group_label . ' Profile is OPEN only to logged-in OpenLab members, but you must be an administrator to view the ' . $group_label . ' Site.';
+				}
+			} elseif ( 'public' === $group->status ) {
 				if ( $public_group_has_disabled_joining ) {
 					$message = 'This ' . $group_label . ' Profile is OPEN but membership is by invitation. You must be an administrator to view the ' . $group_label . ' Site.';
 				} else {
