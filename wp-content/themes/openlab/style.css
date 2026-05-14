@@ -8230,12 +8230,6 @@ input[type="submit"] {
 .radio-inline input[type="radio"] {
   margin-top: 2px;
 }
-.radio .block-ai-crawlers-wrapper label,
-.radio-inline .block-ai-crawlers-wrapper label {
-  font-weight: 700;
-  padding-left: 0;
-  margin-bottom: 0 !important;
-}
 .entry-content img,
 .img-responsive,
 .thumbnail > img,

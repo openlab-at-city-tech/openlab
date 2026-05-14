@@ -24,7 +24,6 @@ require 'includes/user-moderation.php';
 require 'includes/block-widgets.php';
 require 'includes/cbox-polyfills/index.php';
 require 'includes/passwords.php';
-require 'includes/robots.php';
 
 // Conditionally load Easy TOC modifications.
 add_action( 'plugins_loaded', function() {
@@ -1148,20 +1147,14 @@ function wds_bp_group_meta_save( $group ) {
 		}
 	}
 
-	$site_id = openlab_get_site_id_by_group_id( $group->id );
-
 	// Site privacy
 	if ( isset( $_POST['blog_public'] ) ) {
 		$blog_public = (float) $_POST['blog_public'];
+		$site_id     = openlab_get_site_id_by_group_id( $group->id );
 
 		if ( $site_id ) {
 			update_blog_option( $site_id, 'blog_public', $blog_public );
 		}
-	}
-
-	if ( $site_id && isset( $_POST['cboxol_block_ai_robots'] ) ) {
-		$block_ai_robots = ! empty( $_POST['cboxol_block_ai_robots'] );
-		update_blog_option( $site_id, 'cboxol_block_ai_robots', $block_ai_robots ? 1 : 0 );
 	}
 
 	// Portfolio profile link
