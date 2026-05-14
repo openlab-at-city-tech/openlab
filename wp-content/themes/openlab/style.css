@@ -8601,6 +8601,9 @@ input:disabled + label {
 .checkbox-with-hanging-indent.group-block-robots-checkbox {
   padding-left: 20px;
 }
+.checkbox-with-hanging-indent.group-block-robots-checkbox label {
+  font-weight: normal;
+}
 /** Group Announcements **/
 .ajax-loading {
   padding-left: 40px;

@@ -78,7 +78,7 @@ function openlab_group_privacy_settings($group_type) {
 						<input type="checkbox" name="group-block-robots" value="1" id="group-block-robots" <?php checked( $group_block_robots ); ?> />
 						<div>
 							<label for="group-block-robots">Ask search engines not to index this <?php echo esc_html( $group_type_name_uc ); ?>. Your <?php echo esc_html( $group_type_name_uc ); ?> should not show up in web search results.</label>
-							<p class="description">Note: This option will NOT block access to your <?php echo esc_html( $group_type_name_uc ); ?>. It is up to seacrh engines to honor your request.</p>
+							<p class="note italics">Note: This option will NOT block access to your <?php echo esc_html( $group_type_name_uc ); ?>. It is up to seacrh engines to honor your request.</p>
 						</div>
 					</div>
 
