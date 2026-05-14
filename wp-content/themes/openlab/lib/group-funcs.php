@@ -49,6 +49,12 @@ function openlab_group_privacy_settings($group_type) {
 		$group_status = groups_get_current_group()->status;
 	}
 
+	// Compute effective status for the radio buttons, accounting for the OpenLab-only meta.
+	$effective_status = $group_status;
+	if ( 'public' === $group_status && openlab_group_is_loggedin_only( bp_get_current_group_id() ) ) {
+		$effective_status = 'openlab_only';
+	}
+
 	$group_block_robots = openlab_should_noindex_group_profile( bp_get_current_group_id() );
 
     ?>
@@ -65,7 +71,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <div class="row">
                 <div class="col-sm-24">
-                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $group_status) ?> />
+                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $effective_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
@@ -82,14 +88,21 @@ function openlab_group_privacy_settings($group_type) {
 						</div>
 					</div>
 
-                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" name="group-status" value="openlab_only" <?php checked('openlab_only', $effective_status) ?> />This is an OpenLab only <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <ul>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile and related content and activity will be visible only to logged-in members of the OpenLab.</li>
+                        <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
+                        <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
+                    </ul>
+
+                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $effective_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
                         <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can disable membership requests in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $effective_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
 
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
@@ -269,6 +282,202 @@ function openlab_group_block_robots_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_block_robots_save' );
+
+/**
+ * Save the OpenLab-only setting for a group.
+ *
+ * Groups with this setting are stored as status=public in BP, but with
+ * the groupmeta 'openlab_loggedin_only' = 1 to restrict access to logged-in users.
+ *
+ * @param BP_Groups_Group $group
+ */
+function openlab_group_loggedin_only_save( $group ) {
+	if ( ! isset( $_POST['group-status'] ) ) {
+		return;
+	}
+
+	if ( 'openlab_only' === $_POST['group-status'] ) {
+		groups_update_groupmeta( $group->id, 'openlab_loggedin_only', 1 );
+	} else {
+		groups_delete_groupmeta( $group->id, 'openlab_loggedin_only' );
+	}
+
+	wp_cache_delete( 'openlab_loggedin_only_group_ids', 'openlab' );
+}
+add_action( 'groups_group_after_save', 'openlab_group_loggedin_only_save' );
+
+/**
+ * Whether a group is set to OpenLab-only (logged-in users only).
+ *
+ * These groups have BP status=public but are intended to be visible only
+ * to registered members of City Tech OpenLab.
+ *
+ * @param int $group_id ID of the group. Defaults to current group.
+ * @return bool
+ */
+function openlab_group_is_loggedin_only( $group_id = 0 ) {
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	return (bool) groups_get_groupmeta( $group_id, 'openlab_loggedin_only', true );
+}
+
+/**
+ * Restrict access to OpenLab-only group pages for non-logged-in users.
+ *
+ * Hooks into BuddyPress's group access filter so that anonymous visitors are
+ * redirected to wp-login.php (mode 2) when they try to access any interior
+ * page of an OpenLab-only group. After login they are returned to the
+ * originally requested URL.
+ *
+ * @param bool  $user_has_access Whether the current user has access.
+ * @param array $no_access_args  Arguments for bp_core_no_access(), passed by reference.
+ * @return bool
+ */
+function openlab_group_loggedin_only_access_protection( $user_has_access, &$no_access_args ) {
+	if ( ! openlab_group_is_loggedin_only( bp_get_current_group_id() ) ) {
+		return $user_has_access;
+	}
+
+	if ( is_user_logged_in() ) {
+		return $user_has_access;
+	}
+
+	// The group home (landing page) is publicly accessible, mirroring BP's
+	// own behaviour for private/hidden groups.
+	if ( bp_is_current_action( 'home' ) ) {
+		return $user_has_access;
+	}
+
+	$no_access_args = array(
+		'mode'    => 2,
+		'message' => __( 'You must log in to access this group.', 'openlab' ),
+	);
+
+	return false;
+}
+add_filter( 'bp_group_user_has_access', 'openlab_group_loggedin_only_access_protection', 10, 2 );
+
+/**
+ * Get IDs of all OpenLab-only groups.
+ *
+ * Results are cached for 5 minutes. The cache is invalidated whenever a
+ * group's openlab_loggedin_only setting is saved.
+ *
+ * @return int[]
+ */
+function openlab_get_loggedin_only_group_ids() {
+	$cache_key   = 'openlab_loggedin_only_group_ids';
+	$cache_group = 'openlab';
+
+	$cached = wp_cache_get( $cache_key, $cache_group );
+	if ( false !== $cached ) {
+		return $cached;
+	}
+
+	$group_ids = array();
+
+	if ( function_exists( 'groups_get_groups' ) ) {
+		$groups = groups_get_groups(
+			array(
+				'per_page'    => 0,
+				'page'        => 1,
+				'show_hidden' => false,
+				'status'      => 'public',
+				'fields'      => 'ids',
+				'meta_query'  => array(
+					array(
+						'key'     => 'openlab_loggedin_only',
+						'value'   => '1',
+						'compare' => '=',
+					),
+				),
+			)
+		);
+
+		if ( ! empty( $groups['groups'] ) && is_array( $groups['groups'] ) ) {
+			$group_ids = array_map( 'intval', $groups['groups'] );
+		}
+	}
+
+	wp_cache_set( $cache_key, $group_ids, $cache_group, 300 );
+
+	return $group_ids;
+}
+
+/**
+ * Exclude activity items belonging to OpenLab-only groups for non-logged-in users.
+ *
+ * Applies to both the template-tag path (bp_has_activities) and the REST API
+ * path (bp_rest_activity_get_items_query_args), which bypass each other.
+ *
+ * The exclusion is expressed as a BP_Activity_Query clause:
+ *   NOT ( component = 'groups' AND item_id IN ( $group_ids ) )
+ * which is equivalent to:
+ *   ( component != 'groups' ) OR ( item_id NOT IN ( $group_ids ) )
+ * This leaves all non-group activity untouched.
+ *
+ * @param array $args bp_has_activities() / bp_activity_get() query args.
+ * @return array
+ */
+function openlab_exclude_loggedin_only_activity_for_guests( $args ) {
+	if ( is_user_logged_in() ) {
+		return $args;
+	}
+
+	$group_ids = openlab_get_loggedin_only_group_ids();
+	if ( empty( $group_ids ) ) {
+		return $args;
+	}
+
+	/*
+	 * Bail early when the query is already scoped to a single group that is
+	 * not in our loggedin-only list. In that case the exclude clause below
+	 * could never match anything, so there's no point adding it.
+	 *
+	 * The two filter hooks this callback serves present the component/ID in
+	 * different places:
+	 *  - bp_after_has_activities_parse_args (template-tag path): top-level
+	 *    $args['object'] / $args['primary_id'] — the $r['filter'] subarray
+	 *    has not been assembled yet at this point in bp_parse_args().
+	 *  - bp_rest_activity_get_items_query_args (REST path): nested under
+	 *    $args['filter']['object'] / $args['filter']['primary_id'].
+	 */
+	$scoped_component  = $args['object'] ?? ( $args['filter']['object'] ?? '' );
+	$scoped_primary_id = (int) ( $args['primary_id'] ?? ( $args['filter']['primary_id'] ?? 0 ) );
+
+	if ( 'groups' === $scoped_component && $scoped_primary_id > 0
+		&& ! in_array( $scoped_primary_id, $group_ids, true ) ) {
+		return $args;
+	}
+
+	if ( empty( $args['filter_query'] ) || ! is_array( $args['filter_query'] ) ) {
+		$args['filter_query'] = array( 'relation' => 'AND' );
+	} elseif ( empty( $args['filter_query']['relation'] ) ) {
+		$args['filter_query']['relation'] = 'AND';
+	}
+
+	$args['filter_query'][] = array(
+		'relation' => 'OR',
+		array(
+			'column'  => 'component',
+			'value'   => 'groups',
+			'compare' => '!=',
+		),
+		array(
+			'column'  => 'item_id',
+			'value'   => $group_ids,
+			'compare' => 'NOT IN',
+		),
+	);
+
+	return $args;
+}
+// Template-tag path (bp_has_activities).
+add_filter( 'bp_after_has_activities_parse_args', 'openlab_exclude_loggedin_only_activity_for_guests', 20 );
+// REST API path (bypasses bp_has_activities entirely).
+add_filter( 'bp_rest_activity_get_items_query_args', 'openlab_exclude_loggedin_only_activity_for_guests', 20 );
 
 /**
  * Markup for the 'Collaboration Tools' section on group settings.
