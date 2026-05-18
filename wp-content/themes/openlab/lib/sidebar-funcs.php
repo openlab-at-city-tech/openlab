@@ -253,6 +253,15 @@ function openlab_get_group_nav_items() {
 		'is_current' => ( $current_action === 'home' ),
 	];
 
+	// If the user does not have access to the group, only show Profile.
+	if (
+		( 'private' === $group->status && ! groups_is_user_member( bp_loggedin_user_id(), $group_id ) && ! is_super_admin() )
+		||
+		( 'public' === $group->status && openlab_group_is_loggedin_only( $group_id ) && ! is_user_logged_in() )
+	) {
+		return $items;
+	}
+
 	// 2. Activity (always present)
 	$items[] = [
 		'text'          => __( 'Activity', 'flavor' ),
