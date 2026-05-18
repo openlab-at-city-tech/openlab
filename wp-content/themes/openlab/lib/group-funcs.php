@@ -71,7 +71,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <div class="row">
                 <div class="col-sm-24">
-                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $effective_status) ?> />
+                    <label><input type="radio" id="group-status-public" name="group-status" value="public" <?php checked('public', $effective_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
@@ -81,28 +81,28 @@ function openlab_group_privacy_settings($group_type) {
 
 					<div class="checkbox-with-hanging-indent group-block-robots-checkbox">
 						<input type="hidden" name="group-block-robots" value="0" />
-						<input type="checkbox" name="group-block-robots" value="1" id="group-block-robots" <?php checked( $group_block_robots ); ?> />
-						<div>
-							<label for="group-block-robots">Ask search engines not to index this <?php echo esc_html( $group_type_name_uc ); ?>. Your <?php echo esc_html( $group_type_name_uc ); ?> should not show up in web search results.</label>
+						<input type="checkbox" id="group-noindex" name="group-block-robots" value="1" id="group-block-robots" <?php checked( $group_block_robots ); ?> />
+						<div class="group-block-robots-gloss">
+							<label for="group-noindex">Ask search engines not to index this <?php echo esc_html( $group_type_name_uc ); ?>. Your <?php echo esc_html( $group_type_name_uc ); ?> should not show up in web search results.</label>
 							<p class="note italics">Note: This option will NOT block access to your <?php echo esc_html( $group_type_name_uc ); ?>. It is up to seacrh engines to honor your request.</p>
 						</div>
 					</div>
 
-                    <label><input type="radio" name="group-status" value="openlab_only" <?php checked('openlab_only', $effective_status) ?> />This is an OpenLab only <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" id="group-status-openlab-only" name="group-status" value="openlab_only" <?php checked('openlab_only', $effective_status) ?> />This is an OpenLab only <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile and related content and activity will be visible only to logged-in members of the OpenLab.</li>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
                         <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $effective_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" id="group-status-private" name="group-status" value="private" <?php checked('private', $effective_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, OpenLab search results, and may be displayed on the OpenLab home page.</li>
                         <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can disable membership requests in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $effective_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" id="group-status-hidden" name="group-status" value="hidden" <?php checked('hidden', $effective_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
 
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>

@@ -1959,4 +1959,14 @@ OpenLab.utility = (function ($) {
 	$( document ).on( 'change', 'input[name="blog_public"]', updateNoindexCheckbox );
 	updateNoindexCheckbox();
 
+	// Same thing but for groups.
+	function updateNoindexCheckboxGroups() {
+		var disabled = ! $( '[name="group-status"][value="public"]' ).is( ':checked' );
+		$( '#group-noindex' ).prop( 'disabled', disabled );
+		$( '.group-block-robots-gloss' ).toggleClass( 'blog-noindex-disabled', disabled );
+	}
+
+	$( document ).on( 'change', 'input[name="group-status"]', updateNoindexCheckboxGroups );
+	updateNoindexCheckboxGroups();
+
 })( jQuery );
