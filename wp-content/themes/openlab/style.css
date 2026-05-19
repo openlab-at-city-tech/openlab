@@ -9950,6 +9950,13 @@ body form .checkbox-list-container {
   justify-content: space-between;
   padding: 8px 0;
 }
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_nav_group {
+  display: flex;
+  gap: 6px;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_prev,
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_next {
   background: transparent;
@@ -9957,6 +9964,7 @@ body form .checkbox-list-container {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
   height: 16px;
   left: auto;
   margin: 0;
@@ -9988,10 +9996,15 @@ body form .checkbox-list-container {
   border-top: 7px solid #333333;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul {
-  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  gap: 4px;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li {
-  margin: 0 auto 4px;
+  margin: 0;
   background: transparent;
   border: 1px solid #333333;
   display: block;
@@ -10004,12 +10017,43 @@ body form .checkbox-list-container {
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul li.cameracurrent {
   background: #333333;
 }
-.home-page .row-home-top .slider .camera_wrap .camera_commands {
-  bottom: 8px;
-  left: 8px;
-  margin-top: 0;
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_commands {
+  background: rgba(0, 0, 0, 0.55);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  height: 26px;
+  left: auto;
+  position: static !important;
   right: auto;
   top: auto;
+  width: 26px;
+  z-index: auto;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_commands:hover,
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_commands:focus {
+  opacity: 0.7;
+  outline: 1px dotted #ffffff;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_commands > .camera_play {
+  background: none;
+  border-top: 5px solid transparent;
+  border-bottom: 5px solid transparent;
+  border-left: 9px solid #49cabe;
+  height: 0;
+  margin-left: 2px;
+  width: 0;
+}
+.home-page .row-home-top .slider .camera_wrap .camera_pag .camera_commands > .camera_stop {
+  background: none;
+  border-left: 4px solid #49cabe;
+  border-right: 4px solid #49cabe;
+  display: block;
+  height: 12px;
+  width: 10px;
 }
 .home-page .row-home-top .slider .camera_content {
   background: rgba(92, 218, 205, 0.9);

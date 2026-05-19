@@ -1837,9 +1837,16 @@ OpenLab.utility = (function ($) {
 				var $pag      = $( '.camera_pag', $wrap );
 				var $prevBtn  = $( '.camera_prev', $wrap );
 				var $nextBtn  = $( '.camera_next', $wrap );
+				var $pagUl    = $( '.camera_pag_ul', $pag );
 
-				$prevBtn.prependTo( $pag ).attr( { tabindex: '0', role: 'button', 'aria-label': 'Previous slide' } );
-				$nextBtn.appendTo( $pag ).attr( { tabindex: '0', role: 'button', 'aria-label': 'Next slide' } );
+				$prevBtn.attr( { tabindex: '0', role: 'button', 'aria-label': 'Previous slide' } );
+				$nextBtn.attr( { tabindex: '0', role: 'button', 'aria-label': 'Next slide' } );
+
+				var $navGroup = $( '<div class="camera_nav_group"></div>' );
+				$navGroup.append( $prevBtn ).append( $pagUl ).append( $nextBtn );
+				$pag.prepend( $navGroup );
+
+				$( '.camera_commands', $wrap ).appendTo( $pag );
 
 				$pag.on( 'keydown', '.camera_prev, .camera_next', function ( e ) {
 					if ( e.which === 13 || e.which === 32 ) {

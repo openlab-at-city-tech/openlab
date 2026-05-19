@@ -3066,6 +3066,13 @@ body form{
                     align-items: center;
                     justify-content: space-between;
                     padding: 8px 0;
+                    .camera_nav_group {
+                        display: flex;
+						gap: 6px;
+                        flex-direction: column;
+                        align-items: center;
+                        width: 100%;
+                    }
                     .camera_prev,
                     .camera_next {
                         background: transparent;
@@ -3073,6 +3080,7 @@ body form{
                         display: flex;
                         align-items: center;
                         justify-content: center;
+                        flex-shrink: 0;
                         height: 16px;
                         left: auto;
                         margin: 0;
@@ -3101,9 +3109,14 @@ body form{
                         border-top: 7px solid @80gray;
                     }
                     .camera_pag_ul{
-                        margin-top: 0;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        margin: 0;
+						gap: 4px;
                         li{
-                            margin: 0 auto 4px;
+                            margin: 0;
                             background: transparent;
                             border: 1px solid @80gray;
                             display: block;
@@ -3117,13 +3130,44 @@ body form{
                             }
                         }
                     }
-                }
-                .camera_commands {
-                    bottom: 8px;
-                    left: 8px;
-                    margin-top: 0;
-                    right: auto;
-                    top: auto;
+                    .camera_commands {
+                        background: rgba(0, 0, 0, 0.55);
+                        border-radius: 50%;
+                        cursor: pointer;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        flex-shrink: 0;
+                        height: 26px;
+                        left: auto;
+                        position: static !important;
+                        right: auto;
+                        top: auto;
+                        width: 26px;
+                        z-index: auto;
+                        &:hover,
+                        &:focus {
+                            opacity: 0.7;
+                            outline: 1px dotted @white;
+                        }
+                        > .camera_play {
+                            background: none;
+                            border-top: 5px solid transparent;
+                            border-bottom: 5px solid transparent;
+                            border-left: 9px solid @aqua;
+                            height: 0;
+                            margin-left: 2px;
+                            width: 0;
+                        }
+                        > .camera_stop {
+                            background: none;
+                            border-left: 4px solid @aqua;
+                            border-right: 4px solid @aqua;
+                            display: block;
+                            height: 12px;
+                            width: 10px;
+                        }
+                    }
                 }
             }
             .camera_content{
