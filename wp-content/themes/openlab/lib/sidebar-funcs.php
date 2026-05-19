@@ -254,11 +254,7 @@ function openlab_get_group_nav_items() {
 	];
 
 	// If the user does not have access to the group, only show Profile.
-	if (
-		( 'private' === $group->status && ! groups_is_user_member( bp_loggedin_user_id(), $group_id ) && ! is_super_admin() )
-		||
-		( 'public' === $group->status && openlab_group_is_loggedin_only( $group_id ) && ! is_user_logged_in() )
-	) {
+	if ( ! openlab_can_view_group_content() ) {
 		return $items;
 	}
 
