@@ -910,7 +910,7 @@ function openlab_get_group_mobile_anchor_items() {
 	}
 
 	// Portfolios link.
-	if ( openlab_portfolio_list_enabled_for_group() ) {
+	if ( openlab_portfolio_list_enabled_for_group() && openlab_can_view_group_content() ) {
 		$portfolio_data = openlab_get_group_member_portfolios( $group_id );
 		if ( ! empty( $portfolio_data ) ) {
 			$items[] = [
