@@ -1305,7 +1305,7 @@ function openlab_group_profile_activity_list() {
 
         <?php if (bp_is_group_home()) { ?>
 
-            <?php if (bp_get_group_status() == 'public' || ((bp_get_group_status() == 'hidden' || bp_get_group_status() == 'private') && (bp_is_item_admin() || bp_group_is_member()))) : ?>
+            <?php if ( openlab_can_view_group_content() ) : ?>
 				<?php if ( $recent_announcements ) : ?>
 					<div class="row group-announcements-overview">
 						<div class="col-sm-24">
