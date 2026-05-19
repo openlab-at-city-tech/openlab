@@ -106,7 +106,7 @@ if ( bp_is_group() ) {
 												<fieldset>
 													<legend>Who can view this Doc and its comments?</legend>
 													<?php if ( $group && 'public' === $group->status ) : ?>
-														<label><input type="radio" name="doc[view_setting]" value="everyone" <?php checked( openlab_get_doc_view_setting( $doc_id ), 'everyone' ) ?> /> Everyone</label><br />
+														<label><input type="radio" name="doc[view_setting]" value="everyone" <?php checked( openlab_get_doc_view_setting( $doc_id ), 'everyone' ) ?> /> Everyone (who can view this <?php echo esc_html( $group_type_label ); ?>)</label><br />
 													<?php endif; ?>
 
 													<label><input type="radio" name="doc[view_setting]" value="group-members" <?php checked( openlab_get_doc_view_setting( $doc_id ), 'group-members' ) ?> /> <?php echo esc_html( $group_type_label ); ?> members only</label><br />
