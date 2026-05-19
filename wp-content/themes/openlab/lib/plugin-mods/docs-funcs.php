@@ -129,16 +129,27 @@ add_action( 'bp_ass_send_activity_notification_for_user', 'openlab_docs_activity
 add_action( 'bp_ges_add_to_digest_queue_for_user', 'openlab_docs_activity_notification_control', 100, 4 );
 
 /**
- * Adds a Delete link to the "action links" in the doc loop.
+ * Modifies "action links" on Docs.
+ *
+ * - Adds a Delete link
+ * - Removes 'Unlink from Group'
  */
-function openlab_add_delete_to_bp_docs_doc_action_links( $links, $doc_id ) {
+function openlab_modify_doc_action_links( $links, $doc_id ) {
 	if ( current_user_can( 'bp_docs_manage', $doc_id ) && ! bp_docs_is_doc_trashed( $doc_id ) ) {
 		$links[] = '<a href="' . bp_docs_get_delete_doc_link( false ) . '" class="delete confirm">' . __( 'Delete', 'buddypress-docs' ) . '</a>';
 	}
 
+	foreach ( $links as $index => $link ) {
+		if ( str_contains( $link, 'unlink-from-group' ) ) {
+			unset( $links[ $index ] );
+		}
+	}
+
+	$links = array_values( $links );
+
 	return $links;
 }
-add_filter( 'bp_docs_doc_action_links', 'openlab_add_delete_to_bp_docs_doc_action_links', 10, 2 );
+add_filter( 'bp_docs_doc_action_links', 'openlab_modify_doc_action_links', 10, 2 );
 
 /**
  * Don't allow any of budypress-docs's native directory filters.
