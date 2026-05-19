@@ -390,7 +390,7 @@ function openlab_group_loggedin_only_access_protection( $user_has_access, &$no_a
 
 	return false;
 }
-add_filter( 'bp_group_user_has_access', 'openlab_group_loggedin_only_access_protection', 10, 2 );
+add_filter( 'bp_group_user_has_access', 'openlab_group_loggedin_only_access_protection', 20, 2 );
 
 /**
  * Get IDs of all OpenLab-only groups.
