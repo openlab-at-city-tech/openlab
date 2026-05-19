@@ -324,6 +324,39 @@ function openlab_group_is_loggedin_only( $group_id = 0 ) {
 }
 
 /**
+ * Check whether the current user has access to a group's content.
+ *
+ * This combines the standard 'public' check with the OpenLab-only setting.
+ *
+ * @param int $group_id ID of the group. Defaults to current group.
+ * @param int $user_id  ID of the user. Defaults to current user.
+ * @return bool
+ */
+function openlab_can_view_group_content( $group_id = 0 ) {
+	if ( current_user_can( 'bp_moderate' ) ) {
+		return true;
+	}
+
+	if ( ! $group_id ) {
+		$group_id = bp_get_current_group_id();
+	}
+
+	$group = groups_get_group( $group_id );
+
+	$logged_in_only = openlab_group_is_loggedin_only( $group_id );
+
+	if ( 'public' === $group->status && $logged_in_only ) {
+		return is_user_logged_in();
+	}
+
+	if ( 'public' !== $group->status ) {
+		return groups_is_user_member( bp_loggedin_user_id(), $group_id );
+	}
+
+	return true;
+}
+
+/**
  * Restrict access to OpenLab-only group pages for non-logged-in users.
  *
  * Hooks into BuddyPress's group access filter so that anonymous visitors are
