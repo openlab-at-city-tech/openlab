@@ -1029,14 +1029,20 @@ function openlab_group_profile_header() {
     global $bp;
     $group_type = groups_get_groupmeta($bp->groups->current_group->id, 'wds_group_type');
 
-	// Register the group mobile drawer.
-	openlab_register_group_mobile_drawer();
+	// Register the group mobile drawer (only when the user can view group content,
+	// since restricted users get an empty drawer and a broken toggle otherwise).
+	if ( openlab_can_view_group_content() ) {
+		openlab_register_group_mobile_drawer();
+	}
     ?>
     <h1 class="entry-title group-title clearfix"><span class="profile-name hyphenate"><?php echo bp_group_name(); ?></span>
+        <?php if ( openlab_can_view_group_content() ) : ?>
         <button class="drawer-toggle mobile-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="group-mobile-drawer" data-drawer-toggle="group-mobile-drawer">
 			<span class="toggle-icon"></span>
             <span class="sr-only">Toggle navigation</span>
-        </button></h1>
+        </button>
+        <?php endif; ?>
+        </h1>
     <?php if (bp_is_group_home() || (bp_is_group_admin_page() && !$bp->is_item_admin)): ?>
         <div class="clearfix">
             <?php if ($group_type != "portfolio") : ?>
