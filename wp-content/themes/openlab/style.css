@@ -9976,8 +9976,8 @@ body form .checkbox-list-container {
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_prev span,
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_next span {
   background: none;
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
   display: block;
   height: 0;
   width: 0;
@@ -9990,10 +9990,10 @@ body form .checkbox-list-container {
   outline: 1px dotted #333333;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_prev span {
-  border-bottom: 7px solid #333333;
+  border-bottom: 10px solid #333333;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_next span {
-  border-top: 7px solid #333333;
+  border-top: 10px solid #333333;
 }
 .home-page .row-home-top .slider .camera_wrap .camera_pag .camera_pag_ul {
   display: flex;
