@@ -893,8 +893,7 @@ function openlab_get_group_mobile_anchor_items() {
 	$group_id = bp_get_current_group_id();
 
 	// Non-public groups shouldn't show this to non-members.
-	$group = groups_get_current_group();
-	if ( 'public' !== $group->status && empty( $group->user_has_access ) ) {
+	if ( ! openlab_can_view_group_content() ) {
 		return $items;
 	}
 

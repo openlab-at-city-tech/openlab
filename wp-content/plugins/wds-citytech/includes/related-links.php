@@ -71,9 +71,8 @@ function openlab_related_links_list_group_display() {
 	}
 
 	// Non-public groups shouldn't show this to non-members.
-	$group = groups_get_current_group();
-	if ( 'public' !== $group->status && empty( $group->user_has_access ) ) {
-		return false;
+	if ( ! openlab_can_view_group_content() ) {
+		return;
 	}
 
 	$related_links = openlab_get_group_related_links( $group_id );
