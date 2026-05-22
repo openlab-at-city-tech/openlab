@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms Dropbox Add-On
 Plugin URI: https://gravityforms.com
 Description: Integrates Gravity Forms with Dropbox, enabling end users to upload files to Dropbox through Gravity Forms.
-Version: 3.3.0.1
+Version: 3.3.1
 Requires at least: 6.5
 Requires PHP: 7.4
 Author: Gravity Forms
@@ -13,7 +13,7 @@ Text Domain: gravityformsdropbox
 Domain Path: /languages
 
 ------------------------------------------------------------------------
-Copyright 2012-2025 Rocketgenius Inc.
+Copyright 2012-2026 Rocketgenius Inc.
 
 This program is free software; you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
 defined( 'ABSPATH' ) || die();
 
-define( 'GF_DROPBOX_VERSION', '3.3.0.1' );
+define( 'GF_DROPBOX_VERSION', '3.3.1' );
 
 /**
  * Path to Dropbox add-on root folder.

@@ -1,4 +1,8 @@
-### 3.3.0.1
+### 3.3.1 | 2026-02-24
+- Added the [gform_dropbox_enable_custom_app](https://docs.gravityforms.com/gform_dropbox_enable_custom_app/) filter to allow advanced users to connect with a custom app.
+- Updated `GF_Field_Dropbox::get_value_entry_detail()` for compatibility with the change to `GF_Field::get_value_entry_detail()` in Gravity Forms 2.9.29.
+- Fixed an issue where files uploaded to Dropbox are not attached when using Gravity Forms 2.9.23+ and the attachments setting is enabled on the notification.
+- Fixed an issue introduced in 3.3.0.1 where some files are not uploaded when stored outside the default form/year/month folders.
 - Fixed a TypeError console error that appears upon form submission in a page with AJAX.
 - Fixed a PHP notice that occurs if a file does not exist in the form uploads directory when processing the feed.
 

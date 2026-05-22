@@ -168,6 +168,15 @@ class GF_Dropbox extends GFFeedAddOn {
 	protected $files_to_delete = array();
 
 	/**
+	 * Contains the paths of files uploaded to Dropbox, which is used to attach them to notifications.
+	 *
+	 * @since 3.3.1
+	 *
+	 * @var array
+	 */
+	protected $attachments = array();
+
+	/**
 	 * Defines the nonce action used when processing Dropbox feeds.
 	 *
 	 * @since  1.0
@@ -812,10 +821,21 @@ class GF_Dropbox extends GFFeedAddOn {
 				);
 				$html .= '</p>';
 
+				/**
+				 * Filters whether to show the custom Dropbox app option.
+				 *
+				 * By default, this option is hidden. Returning true will display the option.
+				 *
+				 * @since 3.3.1
+				 *
+				 * @param bool $enabled Whether to show the custom Dropbox app option. Default false.
+				 */
+				if ( apply_filters( 'gform_dropbox_enable_custom_app', false ) ) {
 				$html .= sprintf(
 					'<p>%s</p>',
 					sprintf( esc_html__( '%sI want to use a custom Dropbox app.%s (Recommended for advanced users only.)', 'gravityformsdropbox' ), '<a href="#" id="gform_dropbox_enable_customApp">', '</a>' )
 				);
+			}
 
 				$html .= sprintf(
 					'<a href="%2$s" class="button primary" id="gform_dropbox_auth_button">%1$s</a>',
@@ -2137,16 +2157,15 @@ class GF_Dropbox extends GFFeedAddOn {
 
 		$this->log_debug( __METHOD__ . '(): Beginning upload of file upload field #' . $field->id . '.' );
 
-		$entry_id        = absint( rgar( $entry, 'id' ) );
-        $form_id         = absint( rgar( $form, 'id' ) );
-		$meta_key        = $this->get_existing_files_meta_key( $field );
-		$existing        = gform_get_meta( $entry_id, $meta_key );
-		$update_entry    = false;
-		$count           = 0;
-		$upload_root_url = rgar( GF_Field_FileUpload::get_upload_root_info( $form_id ), 'url' );
+		$entry_id     = absint( rgar( $entry, 'id' ) );
+		$form_id      = absint( rgar( $form, 'id' ) );
+		$meta_key     = $this->get_existing_files_meta_key( $field );
+		$existing     = gform_get_meta( $entry_id, $meta_key );
+		$update_entry = false;
+		$count        = 0;
 
 		foreach ( $urls as &$url ) {
-			if ( ! $this->should_upload_file( $url, $existing, $field, $form, $entry, $feed ) || ! str_starts_with( $url, $upload_root_url ) ) {
+			if ( ! $this->should_upload_file( $url, $existing, $field, $form, $entry, $feed ) || ! str_starts_with( $url, rgar( GF_Field_FileUpload::get_file_upload_path_info( $url, $entry_id ), 'url' ) ) ) {
 				$this->log_debug( __METHOD__ . '(): Not uploading file: ' . $url );
 				continue;
 			}
@@ -2170,6 +2189,9 @@ class GF_Dropbox extends GFFeedAddOn {
 			if ( $new_url === $url ) {
 				continue;
 			}
+
+			// Stashing the path of the local file, so it is available for use as a notification attachment.
+			$this->attachments[] = $path;
 
 			$url          = $new_url;
 			$update_entry = true;
@@ -2472,35 +2494,30 @@ class GF_Dropbox extends GFFeedAddOn {
 	 * @return array
 	 */
 	public function filter_gform_pre_send_email( $email, $message_format, $notification, $entry ) {
-
-		// If email does not have any attachments, return.
-		if ( rgempty( 'attachments', $email ) || ! is_array( $email['attachments'] ) ) {
+		if ( empty( $this->attachments ) || ! rgar( $notification, 'enableAttachments' ) ) {
 			return $email;
 		}
 
-		// Loop through attachments, set Dropbox files to local files.
-		foreach ( $email['attachments'] as $a => $attachment_path ) {
+		$attachments = rgar( $email, 'attachments', array() );
+		if ( ! is_array( $attachments ) ) {
+			$attachments = array();
+		}
 
-			// If this is not a Dropbox file, skip.
-			if ( strpos( $attachment_path, 'dropbox.com' ) === false ) {
+		foreach ( $this->attachments as $attachment ) {
+			if ( in_array( $attachment, $attachments ) ) {
 				continue;
 			}
 
-			// Get file name without the Dropbox query arguments.
-			$file_name = basename( strtok( $attachment_path, '?' ) );
-
-			// Get path to local file.
-			$local_path = GFFormsModel::get_upload_path( $entry['form_id'] ) . GFCommon::format_date( rgar( $entry, 'date_created' ), false, '/Y/m/', false ) . $file_name;
-
-			// If file exists, attach. Otherwise, remove.
-			if ( file_exists( $local_path ) ) {
-				$email['attachments'][ $a ] = $local_path;
-			} else {
-				gf_dropbox()->log_debug( __METHOD__ . '(): Removing attachment from notification as file "' . $local_path . '" does not exist.' );
-				unset( $email['attachments'][ $a ] );
+			if ( ! file_exists( $attachment ) ) {
+				GFCommon::log_debug( __METHOD__ . sprintf( '(): Not attaching file; %s does not exist.', $attachment ) );
+				continue;
 			}
 
+			GFCommon::log_debug( __METHOD__ . '(): Attaching local version of file sent to Dropbox: ' . $attachment );
+			$attachments[] = $attachment;
 		}
+
+		$email['attachments'] = $attachments;
 
 		return $email;
 
