@@ -43,24 +43,6 @@
 
 		} );
 
-		// Add Select2 to post author field.
-		$( '#postAuthor' ).select2( {
-		    allowClear:  false,
-		    placeholder: gform_advancedpostcreation_form_settings_strings.select_user,
-			ajax:        {
-				url:      ajaxurl,
-				dataType: 'json',
-				delay:    250,
-				data:     function( params ) {
-					return {
-						action: 'gform_advancedpostcreation_author_search',
-						nonce:  gform_advancedpostcreation_form_settings_strings.nonce_author,
-						query:  params.term,
-					}
-				}
-			}
-		} );
-
 	} );
 
 } )( jQuery );

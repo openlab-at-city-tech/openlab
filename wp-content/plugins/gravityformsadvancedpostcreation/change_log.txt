@@ -1,3 +1,14 @@
+### 1.6.1.1
+- Fixed an error caused by the `get_current_screen()` function returning null in certain admin contexts.
+
+### 1.6.1 | 2025-12-18
+- Fixed a bug that caused JavaScript errors when forms are embedded using non-standard methods.
+
+### 1.6.0 | 2025-12-16
+- Added the ability to edit posts created by APC.
+- Added the APC posts list block and `apc_posts_lists` shortcode action to display a list of user-created posts.
+- Added new notification events for when a post is created and updated.
+
 ### 1.5.0 | 2025-03-18
 - Added a setting to disable auto-formatting for the post content field.
 - Added support for WebP images as featured images.

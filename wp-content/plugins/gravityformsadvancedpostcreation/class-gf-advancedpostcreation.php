@@ -3,6 +3,7 @@
 defined( 'ABSPATH' ) || die();
 
 use Gravity_Forms\Gravity_Forms_APC\Post_Update_Handler;
+use Gravity_Forms\Gravity_Forms_APC\Posts_List_Handler;
 
 GFForms::include_feed_addon_framework();
 
@@ -26,6 +27,15 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	private static $_instance = null;
 
 	/**
+	 * Instance of the Post_Update_Handler class.
+	 *
+	 * @since  1.6.0
+	 * @access public
+	 * @var    \Gravity_Forms\Gravity_Forms_APC\Post_Update_Handler $post_update_handler If available, contains an instance of the Post_Update_Handler.
+	 */
+	public $post_update_handler = null;
+
+	/**
 	 * Defines the version of the Advanced Post Creation Add-On.
 	 *
 	 * @since  1.0
@@ -41,7 +51,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	 * @access protected
 	 * @var    string $_min_gravityforms_version The minimum version required.
 	 */
-	protected $_min_gravityforms_version = '2.4.5';
+	protected $_min_gravityforms_version = '2.9.20';
 
 	/**
 	 * Defines the plugin slug.
@@ -179,6 +189,15 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	private $_post_author = null;
 
 	/**
+	 * Instance of the posts list shortcode handler.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @var GF_Advanced_Post_Creation_Posts_List_Handler
+	 */
+	protected $posts_list_handler = null;
+
+	/**
 	 * Enabling background feed processing to prevent performance issues delaying form submission completion.
 	 *
 	 * @since 1.4
@@ -188,6 +207,11 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	protected $_async_feed_processing = true;
 
 	protected $_asset_min;
+
+	/**
+	 * @var \Gravity_Forms\Gravity_Forms\GF_Service_Container $container
+	 */
+	private static $container;
 
 	/**
 	 * Get instance of this class.
@@ -201,7 +225,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	public static function get_instance() {
 
 		if ( null === self::$_instance ) {
-			self::$_instance = new self;
+			self::$_instance = new self();
 		}
 
 		if ( ! isset( self::$_instance->_asset_min ) ) {
@@ -209,7 +233,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return self::$_instance;
-
 	}
 
 	/**
@@ -224,7 +247,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 		add_filter( 'gform_export_form', array( $this, 'export_feeds_with_form' ) );
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds_with_form' ) );
-
 	}
 
 	/**
@@ -240,14 +262,73 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		add_filter( 'gform_disable_post_creation', array( $this, 'disable_core_post_creation' ), 10, 3 );
 		add_filter( 'gform_entry_detail_meta_boxes', array( $this, 'register_meta_box' ), 10, 3 );
 		add_filter( 'gform_pre_replace_merge_tags', array( $this, 'filter_gform_pre_replace_merge_tags' ), 10, 7 );
+		add_filter( 'gform_parsed_forms_from_shortcode', array( $this, 'filter_gform_parsed_forms_from_shortcode' ), 10, 2 );
 
 		add_action( 'gform_user_registered', array( $this, 'action_gform_user_registered' ), 10, 3 );
 
+		// Initialize post editing functionality
+		$this->init_post_edit_handler();
+
 		$this->add_delayed_payment_support(
 			array(
-				'option_label' => esc_html__( 'Create post only when payment is received.', 'gravityformsadvancedpostcreation' )
+				'option_label' => esc_html__( 'Create post only when payment is received.', 'gravityformsadvancedpostcreation' ),
 			)
 		);
+
+		$this->register_services();
+		require_once plugin_dir_path( __FILE__ ) . '/includes/blocks/class-gf-block-apc-posts.php';
+
+		add_filter( 'gform_shortcode_apc_posts_list', array( $this->get_posts_list_handler(), 'posts_list_shortcode' ), 10, 3 );
+		add_action( 'delete_post', array( $this->get_posts_list_handler(), 'reset_deleted_posts_entry_ids_cache' ), 10, 2 );
+		add_action( 'gform_enqueue_scripts', [ $this, 'get_shared_data' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'get_shared_data' ] );
+
+		require_once plugin_dir_path( __FILE__ ) . 'includes/helpers/class-admin-notifications.php';
+		$admin_notifications = new Gravity_Forms\Gravity_Forms_APC\Helpers\Admin_Notifications();
+		add_action( 'gform_update_feed_active', array( $admin_notifications, 'turn_off_post_editing_after_status_change' ), 10, 3 );
+	}
+
+	public function init_admin() {
+		parent::init_admin();
+
+		require_once plugin_dir_path( __FILE__ ) . 'includes/helpers/class-admin-notifications.php';
+		$admin_notifications = new Gravity_Forms\Gravity_Forms_APC\Helpers\Admin_Notifications();
+		add_filter( 'gform_admin_error_messages', array( $admin_notifications, 'maybe_show_payment_addon_message' ) );
+		add_action( 'gform_post_save_feed_settings', array( $admin_notifications, 'turn_off_post_editing_after_save' ), 10, 4 );
+		add_action( 'gform_post_add_feed', array( $admin_notifications, 'turn_off_post_editing_after_add' ), 10, 4 );
+	}
+
+	/**
+	 * Register service providers for the plugin.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return void
+	 */
+	public function register_services() {
+
+		$container = self::get_service_container();
+
+		$container->add_provider( new Gravity_Forms\Gravity_Forms_APC\Blocks\GF_APC_Blocks_Service_Provider() );
+	}
+
+	/**
+	 * Get the Service Container for the plugin.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return \Gravity_Forms\Gravity_Forms\GF_Service_Container
+	 */
+	public static function get_service_container() {
+
+		require_once 'includes/blocks/class-gf-apc-blocks-service-provider.php';
+
+		if ( ! empty( self::$container ) ) {
+			return self::$container;
+		}
+		self::$container = \GFForms::get_service_container();
+
+		return self::$container;
 	}
 
 	/**
@@ -261,8 +342,8 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		parent::init_ajax();
 
 		add_action( 'wp_ajax_gform_advancedpostcreation_taxonomy_search', array( $this, 'get_taxonomy_map_search_results' ) );
-		add_action( 'wp_ajax_gform_advancedpostcreation_author_search', array( $this, 'get_post_author_search_results' ) );
-
+		add_action( 'wp_ajax_gf_apc_pagination', [ $this, 'ajax_pagination' ] );
+		add_action( 'wp_ajax_nopriv_gf_apc_pagination', [ $this, 'ajax_pagination' ] );
 	}
 
 	/**
@@ -301,14 +382,49 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					),
 				),
 			),
+			array(
+				'handle'  => 'gform_apc_theme',
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme{$this->_asset_min}.css",
+				'version' => $this->_version,
+				'enqueue' => array(
+					function () {
+						if ( ! is_admin() ) {
+							return true;
+						}
+
+						// Check if this is a frontend form with entry editing
+						if ( ! class_exists( 'GFFormDisplay' ) ) {
+							return false;
+						}
+
+						if ( rgget( 'page' ) === 'gf_new_form' ) {
+							return false;
+						}
+
+						if ( function_exists( 'get_current_screen' ) ) {
+							$screen = get_current_screen();
+							if ( $screen && $screen->is_block_editor() ) {
+								return true;
+							}
+						}
+
+						// Check for entry_id and edit nonce in URL
+						if ( ! rgget( 'entry_id' ) || ! rgget( 'apc_edit_nonce' ) ) {
+							return false;
+						}
+
+						// Verify the nonce is valid
+						return wp_verify_nonce( rgget( 'apc_edit_nonce' ), 'apc-gform_advancedpostcreation_edit_entry' );
+					},
+				),
+			),
 		);
 
 		return array_merge( parent::styles(), $styles );
-
 	}
 
 	/**
-	 * Register needed styles.
+	 * Register needed scripts.
 	 *
 	 * @since  1.0
 	 * @access public
@@ -318,6 +434,23 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	 * @return array $scripts
 	 */
 	public function scripts() {
+
+		$admin_enqueue_condition = array(
+			function () {
+				if ( ! is_admin() ) {
+					return false;
+				}
+
+				if ( function_exists( 'get_current_screen' ) ) {
+					$screen = get_current_screen();
+					if ( $screen && $screen->is_block_editor() ) {
+						return true;
+					}
+				}
+
+				return false;
+			},
+		);
 
 		$scripts = array(
 			array(
@@ -366,17 +499,79 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					'select_user'  => wp_strip_all_tags( __( 'Select a User', 'gravityformsadvancedpostcreation' ) ),
 				),
 			),
+			array(
+				'handle'  => 'gform_apc_vendor_admin',
+				'src'     => $this->get_base_url() . "/assets/js/dist/vendor-admin{$this->_asset_min}.js",
+				'version' => $this->_version,
+				'deps'    => array(
+					'wp-blocks',
+					'wp-element',
+					'wp-components',
+					'wp-i18n',
+					'gform_apc_shared',
+				),
+				'enqueue' => $admin_enqueue_condition,
+			),
+			array(
+				'handle'  => 'gform_apc_block',
+				'src'     => $this->get_base_url() . "/assets/js/dist/scripts-admin{$this->_asset_min}.js",
+				'version' => $this->_version,
+				'deps'    => array( 'gform_apc_vendor_admin', 'gform_apc_shared' ),
+				'enqueue' => $admin_enqueue_condition,
+			),
+			array(
+				'handle'  => 'gform_apc_vendor_theme',
+				'src'     => $this->get_base_url() . "/assets/js/dist/vendor-theme{$this->_asset_min}.js",
+				'version' => $this->_version,
+				'deps'    => [ 'gform_gravityforms_theme' ],
+				'enqueue' => $admin_enqueue_condition,
+			),
+			array(
+				'handle'  => 'gform_apc_theme_script',
+				'src'     => $this->get_base_url() . "/assets/js/dist/scripts-theme{$this->_asset_min}.js",
+				'version' => $this->_version,
+				'deps'    => [ 'gform_apc_vendor_theme', 'gform_apc_shared' ],
+				'enqueue' => array(
+					array(
+						function () {
+							if ( is_admin() || ! class_exists( 'GFFormDisplay' ) ) {
+								return false;
+							}
+							if ( ! rgget( 'entry_id' ) || ! rgget( 'apc_edit_nonce' ) ) {
+								return false;
+							}
+							return wp_verify_nonce( rgget( 'apc_edit_nonce' ), 'apc-gform_advancedpostcreation_edit_entry' );
+						},
+					),
+				),
+			),
 		);
 
 		return array_merge( parent::scripts(), $scripts );
-
 	}
 
-
-
-
-
 	// # FEED SETTINGS -------------------------------------------------------------------------------------------------
+
+	/*
+	 * Returns the supported notification events for this Add-On.
+	 *
+	 * @since 1.6.0
+	 *
+	 * returns array|bool Array of notification events
+	 */
+	public function supported_notification_events( $form ) {
+
+		// If this form does not have an APC feed, return false.
+		if ( ! $this->has_feed( $form['id'] ) ) {
+			return false;
+		}
+
+		// Return APC notification events.
+		return array(
+			'post_created' => esc_html__( 'Post Created', 'gravityformsadvancedpostcreation' ),
+			'post_edited'  => esc_html__( 'Post Edited', 'gravityformsadvancedpostcreation' ),
+		);
+	}
 
 	/**
 	 * Setup fields for feed settings.
@@ -440,8 +635,18 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 		$create_post_fields = $this->feed_settings_fields_create_post();
 
-		return array_merge( $base_fields, $create_post_fields, $conditional_fields );
+		$create_post_settings = array_merge( $base_fields, $create_post_fields, $conditional_fields );
 
+		return array(
+			array(
+				'title'    => esc_html__( 'Post Creation Settings', 'gravityformsadvancedpostcreation' ),
+				'sections' => $create_post_settings,
+			),
+			array(
+				'title'    => esc_html__( 'Post Editing Settings', 'gravityformsadvancedpostcreation' ),
+				'sections' => $this->feed_settings_edit_post(),
+			),
+		);
 	}
 
 	/**
@@ -568,7 +773,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 						'required'            => true,
 						'choices'             => $post_date_choices,
 						'validation_callback' => array( $this, 'validate_settings_post_date' ),
-						'tooltip'       => sprintf(
+						'tooltip'             => sprintf(
 							'<h6>%s</h6>%s',
 							esc_html__( 'Post Date', 'gravityformsadvancedpostcreation' ),
 							esc_html__( 'Define the post publish date. Custom date & time can be a specific date and time or a relative time (e.g. "today", "next week").', 'gravityformsadvancedpostcreation' )
@@ -577,16 +782,15 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					array(
 						'name'          => 'postAuthor',
 						'label'         => esc_html__( 'Author', 'gravityformsadvancedpostcreation' ),
-						'type'          => 'select',
+						'description'   => $this->maybe_post_author_warning(),
+						'type'          => $this->is_gravityforms_supported( '2.9.5' ) ? 'user_select' : 'select',
 						'required'      => false,
 						'default_value' => 'logged-in-user',
-						'choices'       => $this->get_post_authors_as_choices(),
 						'tooltip'       => sprintf(
 							'<h6>%s</h6>%s',
 							esc_html__( 'Post Author', 'gravityformsadvancedpostcreation' ),
 							esc_html__( 'Select the user to be assigned to the post.', 'gravityformsadvancedpostcreation' )
 						),
-
 					),
 					array(
 						'name'    => 'postDiscussion',
@@ -631,14 +835,14 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 						),
 					),
 					array(
-						'name'       => 'disableAutoformat',
-						'label'      => esc_html__( 'Auto-Formatting', 'gravityforms' ),
-						'type'       => 'checkbox',
-						'choices'    => array(
+						'name'    => 'disableAutoformat',
+						'label'   => esc_html__( 'Auto-Formatting', 'gravityformsadvancedpostcreation' ),
+						'type'    => 'checkbox',
+						'choices' => array(
 							array(
 								'name'    => 'disableAutoformat',
-								'label'   => esc_html__( 'Disable auto-formatting', 'gravityforms' ),
-								'tooltip'       => sprintf(
+								'label'   => esc_html__( 'Disable auto-formatting', 'gravityformsadvancedpostcreation' ),
+								'tooltip' => sprintf(
 									'<h6>%s</h6>%s',
 									esc_html__( 'Disable Auto-Formatting', 'gravityformsadvancedpostcreation' ),
 									esc_html__( 'When enabled, auto-formatting will insert paragraph breaks automatically. Disable auto-formatting when using HTML to create the post content.', 'gravityformsadvancedpostcreation' )
@@ -661,7 +865,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 							'custom_value' => true,
 							'placeholder'  => esc_html__( 'Custom Field Value', 'gravityformsadvancedpostcreation' ),
 						),
-						'tooltip'       => sprintf(
+						'tooltip'     => sprintf(
 							'<h6>%s</h6>%s',
 							esc_html__( 'Custom Fields', 'gravityformsadvancedpostcreation' ),
 							esc_html__( 'Map form values to post meta using an existing meta key or defining a new one.', 'gravityformsadvancedpostcreation' )
@@ -718,7 +922,8 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		// Add post media field.
-		if ( $post_type_obj && $upload_fields = $this->get_file_fields_as_choices() ) {
+		$upload_fields = $this->get_file_fields_as_choices();
+		if ( $post_type_obj && $upload_fields ) {
 
 			// Get single file upload field choices.
 			$single_choices = $this->get_file_fields_as_choices( true );
@@ -768,7 +973,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					'multiple'    => true,
 					'placeholder' => esc_attr__( 'Select File Upload Fields', 'gravityformsadvancedpostcreation' ),
 					'choices'     => $upload_fields,
-					'tooltip'       => sprintf(
+					'tooltip'     => sprintf(
 						'<h6>%s</h6>%s',
 						esc_html__( 'Media Library', 'gravityformsadvancedpostcreation' ),
 						esc_html__( 'Select file upload fields whose files should be uploaded to the media library and assigned to the post.', 'gravityformsadvancedpostcreation' )
@@ -788,14 +993,111 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		if ( $taxonomies ) {
 
 			$fields['taxonomies'] = array(
-				'title'      => esc_html__( 'Taxonomies', 'gravityformsadvancedpostcreation' ),
-				'fields'     => $this->get_taxonomies_as_feed_settings_fields( $post_type ),
+				'title'  => esc_html__( 'Taxonomies', 'gravityformsadvancedpostcreation' ),
+				'fields' => $this->get_taxonomies_as_feed_settings_fields( $post_type ),
 			);
 
 		}
 
 		return $fields;
+	}
 
+	/*
+	 * Setup fields for post editing feed settings.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return array Settings for post editing.
+	 */
+	public function feed_settings_edit_post() {
+		$settings = array(
+			array(
+				'title'       => esc_html__( 'Post Editing', 'gravityformsadvancedpostcreation' ),
+				'description' => wp_kses_post(
+					sprintf(
+						// Translators: 1: opening anchor tag, 2: screen reader text with external link icon and closing anchor tag.
+						__( 'Allow users to edit their posts with the same form that they used to create the post. Use the block "APC Post List" to show users a list of their posts. This option is only available if the Post Author setting is set to "Logged In User" and the form does not have any payment feeds. %1$sLearn more %2$s', 'gravityformsadvancedpostcreation' ),
+						'<a href="https://docs.gravityforms.com/editing-a-post-with-the-advanced-post-creation-add-on/" target="_blank" rel="noopener noreferrer">',
+						'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityformsadvancedpostcreation' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>'
+					)
+				),
+				'fields'      => array(
+					array(
+						'name'       => 'enable_editing',
+						'label'      => esc_html__( 'Enable Post Editing', 'gravityformsadvancedpostcreation' ),
+						'type'       => 'toggle',
+						'dependency' => array(
+							'live'   => true,
+							'fields' => array(
+								array(
+									'field'  => 'postAuthor',
+									'values' => array( 'logged-in-user' ),
+								),
+							),
+						),
+					),
+					array(
+						'name'        => 'edit_post_page',
+						'label'       => esc_html__( 'Form Page', 'gravityformsadvancedpostcreation' ),
+						'description' => esc_html__( 'Select a page where this form is embedded.  When a user edits their entry, they will be taken to this page.', 'gravityformsadvancedpostcreation' ),
+						'type'        => 'post_select',
+						'post_type'   => 'page',
+						'dependency'  => array(
+							'live'   => true,
+							'fields' => array(
+								array(
+									'field'  => 'enable_editing',
+									'values' => array( true, '1' ),
+								),
+								array(
+									'field'  => 'postAuthor',
+									'values' => array( 'logged-in-user' ),
+								),
+							),
+						),
+					),
+					array(
+						'name'                => 'editable_fields',
+						'label'               => esc_html__( 'Editable Fields', 'gravityformsadvancedpostcreation' ),
+						'description'         => esc_html__( 'Select which fields the user can edit', 'gravityformsadvancedpostcreation' ),
+						'type'                => 'editable_fields',
+						'validation_callback' => array( $this, 'validate_settings_editable_fields' ),
+						'dependency'          => array(
+							'live'   => true,
+							'fields' => array(
+								array(
+									'field'  => 'enable_editing',
+									'values' => array( true, '1' ),
+								),
+								array(
+									'field'  => 'postAuthor',
+									'values' => array( 'logged-in-user' ),
+								),
+							),
+						),
+					),
+				),
+			),
+		);
+
+		$form_id = absint( rgget( 'id' ) );
+		if ( $this->form_has_payment_feed( $form_id ) ) {
+			foreach ( $settings as &$section ) {
+				if ( rgar( $section, 'fields' ) ) {
+					foreach ( $section['fields'] as &$field ) {
+						if ( rgar( $field, 'name' ) === 'enable_editing' ) {
+							$field['onchange']    = 'this.checked = !this.checked;';
+							$field['description'] = esc_html__( 'Editing is not allowed because this form has an active payment feed.', 'gravityformsadvancedpostcreation' );
+
+							break 2;
+						}
+					}
+				}
+			}
+			unset( $section, $field );
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -814,7 +1116,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	 *
 	 * @return string The HTML for the field
 	 */
-	public function settings_post_date( $field, $echo = true ) {
+	public function settings_post_date( $field, $echo = true ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.echoFound
 
 		// Get field value.
 		$default_value = rgar( $field, 'value' ) ? rgar( $field, 'value' ) : rgar( $field, 'default_value' );
@@ -872,7 +1174,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			$this->settings_field_select( $date_field, false ),
 			$this->settings_field_select( $time_field, false )
 		);
-
 	}
 
 	/**
@@ -903,7 +1204,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			$field_value === 'custom' ? ' style="display:block;"' : '',
 			$this->settings_text( $custom_field, false )
 		);
-
 	}
 
 	/**
@@ -936,10 +1236,9 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			$this->set_field_error( $date_field, rgar( $date_field, 'error_message' ) );
 		}
 
-		if ( rgblank(  $settings[ $time_field['name'] ] ) ) {
+		if ( rgblank( $settings[ $time_field['name'] ] ) ) {
 			$this->set_field_error( $time_field, rgar( $time_field, 'error_message' ) );
 		}
-
 	}
 
 	/**
@@ -956,7 +1255,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	 *
 	 * @return string The HTML for the field
 	 */
-	public function settings_taxonomy_map( $field, $echo = true ) {
+	public function settings_taxonomy_map( $field, $echo = true ) { //phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.echoFound
 
 		// Initialize return HTML string.
 		$html = '';
@@ -967,7 +1266,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			$value_field        = clone $field;
 			$custom_value_field = clone $field;
 		} else {
-			$value_field = $key_field = $custom_value_field = $field;
+			$value_field = $key_field = $custom_value_field = $field; // phpcs:ignore Squiz.PHP.DisallowMultipleAssignments.Found
 		}
 
 		// Define custom placeholder.
@@ -977,9 +1276,9 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$taxonomy = get_taxonomy( $field['taxonomy'] );
 
 		// Define key field properties.
-		$key_field['name']    .= '_key';
-		$key_field['class']    = 'key key_{i}';
-		$key_field['choices']  = array(
+		$key_field['name']   .= '_key';
+		$key_field['class']   = 'key key_{i}';
+		$key_field['choices'] = array(
 			array(
 				'label' => esc_html__( 'Select an Option', 'gravityformsadvancedpostcreation' ),
 				'value' => '',
@@ -989,6 +1288,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				'value' => 'field',
 			),
 			array(
+				// translators: %s is the singular name of the taxonomy.
 				'label' => sprintf( esc_html__( 'Assign %s', 'gravityformsadvancedpostcreation' ), $taxonomy->labels->singular_name ),
 				'value' => 'term',
 			),
@@ -1003,16 +1303,17 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				'value' => '',
 			),
 			array(
+				// translators: %s is the singular name of the taxonomy.
 				'label' => sprintf( esc_html__( 'Add New %s', 'gravityformsadvancedpostcreation' ), $taxonomy->labels->singular_name ),
 				'value' => 'gf_custom',
 			),
 		);
 
 		// Define custom value field properties.
-		$custom_value_field['name']        .= '_custom_value_{i}';
-		$custom_value_field['class']        = 'custom_value custom_value_{i}';
-		$custom_value_field['value']        = '{custom_value}';
-		$custom_value_field['placeholder']  = rgars( $field, 'value_field/placeholder' ) ? $field['value_field']['placeholder'] : esc_html__( 'Custom Value', 'gravityforms' );
+		$custom_value_field['name']       .= '_custom_value_{i}';
+		$custom_value_field['class']       = 'custom_value custom_value_{i}';
+		$custom_value_field['value']       = '{custom_value}';
+		$custom_value_field['placeholder'] = rgars( $field, 'value_field/placeholder' ) ? $field['value_field']['placeholder'] : esc_html__( 'Custom Value', 'gravityformsadvancedpostcreation' );
 
 		// Remove unneeded field properties.
 		$unneeded_props = array( 'field_map', 'key_choices', 'value_choices', 'placeholders', 'callback', 'taxonomy' );
@@ -1038,7 +1339,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	                    <th>' . $this->settings_select( $key_field, false ) . '</th>
 	                    <th>' . $this->settings_select( $value_field, false ) . '
 		                    <div class="custom-value-container">' .
-		                    	$this->settings_text( $custom_value_field, false ) . '
+								$this->settings_text( $custom_value_field, false ) . '
 		                    </div>
 	                    </th>
 						<td>
@@ -1052,19 +1353,20 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$limit = empty( $field['limit'] ) ? 0 : $field['limit'];
 
 		// Initialize generic map via Javascript.
+		// phpcs:ignore Squiz.Strings.DoubleQuoteUsage.NotRequired
 		$html .= "
 			<script type=\"text/javascript\">
 			jQuery( document ).ready( function() {
 				var taxonomyMap" . esc_js( preg_replace( '/[^A-Za-z0-9_]/', '', $field['name'] ) ) . " = new GFTaxonomyMap({
-					'baseURL':        '". GFCommon::get_base_url() ."',
-					'taxonomy':       '". $field['taxonomy'] . "',
-					'fieldId':        '". esc_attr( $field['name'] ) ."',
-					'fieldName':      '". $field['name'] ."',
-					'keyFieldName':   '". $key_field['name'] ."',
-					'valueFieldName': '". $value_field['name'] ."',
-					'formFields':     '". $this->get_taxonomy_map_form_fields() ."',
-					'preloadedTerms': '". $this->get_taxonomy_map_preload_terms( $field ) ."',
-					'limit':          '". $limit ."'
+					'baseURL':        '" . GFCommon::get_base_url() . "',
+					'taxonomy':       '" . $field['taxonomy'] . "',
+					'fieldId':        '" . esc_attr( $field['name'] ) . "',
+					'fieldName':      '" . $field['name'] . "',
+					'keyFieldName':   '" . $key_field['name'] . "',
+					'valueFieldName': '" . $value_field['name'] . "',
+					'formFields':     '" . $this->get_taxonomy_map_form_fields() . "',
+					'preloadedTerms': '" . $this->get_taxonomy_map_preload_terms( $field ) . "',
+					'limit':          '" . $limit . "'
 				});
 			});
 			</script>";
@@ -1075,7 +1377,123 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return $html;
+	}
 
+	/**
+	 * Get the HTML for the editable fields setting.
+	 *
+	 * @since  1.6.0
+	 * @access public
+	 *
+	 * @param array $field Field array containing the configuration options of this field.
+	 * @param bool  $echo  True to echo the output to the screen, false to simply return the contents as a string.
+	 *
+	 * @return string The HTML for the field
+	 */
+	public function settings_editable_fields( $field, $echo = true ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.echoFound
+
+		$fields = $this->get_editable_fields();
+
+		$classes = 'gform-settings-editable-fields-wrapper gform-settings-input__container';
+		if ( rgar( $field, 'error' ) ) {
+			$classes .= ' gform-settings-input__container--invalid';
+		}
+
+		$html = '<div class="' . esc_attr( $classes ) . '" role="group" aria-labelledby="field-select-label" tabindex="0">
+			<p id="field-select-label">' . esc_html( $field['description'] ) .
+				'<button id="editable-fields-select-all" data-select="select" class="gform-button gform-button--size-xs gform-button--white gform-button--width-auto">
+		  		<span class="gform-button__text gform-button__text--inactive">' . esc_html__( 'Select All', 'gravityformsadvancedpostcreation' ) . '</span>
+				</button>
+			</p>';
+
+		foreach ( $fields as $editable_field ) {
+			$setting = $this->get_setting( 'editable_fields', array() );
+			if ( ! is_array( $setting ) ) {
+				$setting = array();
+			}
+			$html .= sprintf(
+				'<div class="gform-settings-choice">
+				<input type="checkbox" name="_gform_setting_editable_fields[]" id="%s" value="%s" %s>
+				<label for="%s">%s</label>
+				</div>',
+				esc_attr( $editable_field['name'] ),
+				esc_attr( $editable_field['name'] ),
+				checked( true, in_array( $editable_field['name'], $setting ), false ),
+				esc_attr( $editable_field['name'] ),
+				esc_html( $editable_field['label'] )
+			);
+		}
+
+		$html .= '</div>';
+
+		if ( rgar( $field, 'error' ) ) {
+			$html .= '<div class="gform-settings-validation__error" id="error-editableFields">' . esc_html( $field['error'] ) . '</div>';
+		}
+
+		// Add JS to handle the select all button.
+		$html .= '<script type="text/javascript">
+			jQuery(document).ready(function() {
+				const allChecked = jQuery(".gform-settings-editable-fields-wrapper input[type=checkbox]:checked").length === jQuery(".gform-settings-editable-fields-wrapper input[type=checkbox]").length;
+				if (allChecked) {
+					jQuery("#editable-fields-select-all .gform-button__text").text("' . esc_html__( 'Deselect All', 'gravityformsadvancedpostcreation' ) . '");
+					jQuery("#editable-fields-select-all").attr("data-select", "deselect");
+				}
+			});
+			jQuery(document).on("click", "#editable-fields-select-all", function(e) {
+				e.preventDefault();
+				const isDeselectAll = jQuery(this).attr("data-select") === "deselect";
+				jQuery(".gform-settings-editable-fields-wrapper input[type=checkbox]").prop("checked", !isDeselectAll);
+				jQuery(this).find(".gform-button__text").text(isDeselectAll ? "' . esc_html__( 'Select All', 'gravityformsadvancedpostcreation' ) . '" : "' . esc_html__( 'Deselect All', 'gravityformsadvancedpostcreation' ) . '");
+				jQuery(this).attr("data-select", isDeselectAll ? "select" : "deselect");
+			});
+			</script>';
+
+		return $html;
+	}
+
+	/**
+	 * Validate the editable fields setting.
+	 *
+	 * @since  1.6.0
+	 */
+	public function validate_settings_editable_fields( $field, $field_value = '' ) {
+
+		// Get settings.
+		$settings = $this->get_current_settings();
+
+		// If editing is not enabled, exit.
+		if ( empty( $settings['enable_editing'] ) ) {
+			return;
+		}
+
+		// If no editable fields were selected, set error.
+		if ( empty( $field_value ) || ! is_array( $field_value ) ) {
+			$error_message = esc_html__( 'Please select at least one editable field.', 'gravityformsadvancedpostcreation' );
+			$this->set_field_error( $field, $error_message );
+		}
+	}
+
+	/**
+	 * If post editing is enabled, display a warning on the post author field.
+	 *
+	 * @since  1.6.0
+	 * @access public
+	 *
+	 * @return string|null
+	 */
+	public function maybe_post_author_warning() {
+		$settings = $this->get_current_settings();
+		if ( ! empty( $settings['enable_editing'] ) && rgar( $settings, 'postAuthor' ) === 'logged-in-user' ) {
+			$message = '<div class="gform-alert gform-alert--notice gform-alert--theme-primary">
+							<span class="gravity-component-icon gravity-component-icon--circle-notice-fine gform-alert__icon" aria-hidden="true"></span>
+							<div class="gform-alert__message-wrap">
+								<p class="gform-text gform-text--color-port gform-typography--size-text-md gform-typography--weight-regular gform-alert__message">' .
+								esc_html__( 'Post Editing is currently enabled.  If you change the author to anything other than "Logged In User", post editing will be disabled.', 'gravityformsadvancedpostcreation' )
+								. '</p>
+							</div>
+						</div>';
+			return $message;
+		}
 	}
 
 	/**
@@ -1110,7 +1528,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return '{' . $fields[0]->label . ':' . $fields[0]->id . '}';
-
 	}
 
 	/**
@@ -1152,7 +1569,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 			// Add default post types to choices.
 			$choices[] = array(
-				'label' => esc_html__( 'WordPress Post Types', 'gravityformsadvancedpostcreation' ),
+				'label'   => esc_html__( 'WordPress Post Types', 'gravityformsadvancedpostcreation' ),
 				'choices' => $default_choices,
 			);
 
@@ -1193,14 +1610,13 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 			// Add custom post types to choices.
 			$choices[] = array(
-				'label' => esc_html__( 'Custom Post Types', 'gravityformsadvancedpostcreation' ),
+				'label'   => esc_html__( 'Custom Post Types', 'gravityformsadvancedpostcreation' ),
 				'choices' => $custom_choices,
 			);
 
 		}
 
 		return $choices;
-
 	}
 
 	/**
@@ -1224,7 +1640,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return $choices;
-
 	}
 
 	/**
@@ -1241,7 +1656,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$choices = array(
 			array(
 				'value' => 'standard',
-				'label' => esc_html( _x( 'Standard', 'Post format' ) ),
+				'label' => esc_html( _x( 'Standard', 'Post format', 'gravityformsadvancedpostcreation' ) ),
 			),
 		);
 
@@ -1273,7 +1688,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return $choices;
-
 	}
 
 	/**
@@ -1331,7 +1745,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$choices = apply_filters( 'gform_advancedpostcreation_file_fields_choices', $choices, $form, $single_file );
 
 		return $choices;
-
 	}
 
 	/**
@@ -1377,114 +1790,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		);
 
 		return $meta_fields;
-
-	}
-
-	/**
-	 * Prepare post authors for feed settings field.
-	 *
-	 * @since  1.0
-	 * @access public
-	 *
-	 * @uses GFAddOn::get_setting()
-	 *
-	 * @return array
-	 */
-	public function get_post_authors_as_choices() {
-
-		// Get current value.
-		$value = $this->get_setting( 'postAuthor' );
-
-		// Initialize choices.
-		$choices = array(
-			array(
-				'label' => esc_html__( 'Logged In User', 'gravityformsadvancedpostcreation' ),
-				'value' => 'logged-in-user',
-			),
-		);
-
-		// If current value is empty or not numeric, return choices.
-		if ( rgblank( $value ) || ! is_numeric( $value ) ) {
-			return $choices;
-		}
-
-		// Get user.
-		$user = get_user_by( 'id', $value );
-
-		// If user exists, add it as a choice.
-		if ( $user ) {
-
-			 $choices[] = array(
-				 'label' => esc_html( $user->display_name ),
-				 'value' => esc_attr( $user->ID ),
-			 );
-
-		}
-
-		return $choices;
-
-	}
-
-	/**
-	 * Get suggestions for post author field.
-	 *
-	 * @since  1.0
-	 * @access public
-	 *
-	 * @uses WP_User_Query::get_results()
-	 */
-	public function get_post_author_search_results() {
-
-		// Verify nonce.
-		if ( false === wp_verify_nonce( rgget( 'nonce' ), 'gform_advancedpostcreation_author_search' ) ) {
-			wp_send_json( array( 'message' => esc_html__( 'Access denied.', 'gravityformsadvancedpostcreation' ), 'results' => array() ) );
-		}
-
-		// If user is not authorized, exit.
-		if ( ! GFCommon::current_user_can_any( $this->_capabilities_settings_page ) ) {
-			wp_send_json( array( 'message' => esc_html__( 'Access denied.', 'gravityformsadvancedpostcreation' ), 'results' => array() ) );
-		}
-
-		// Get needed variables.
-		$query = sanitize_text_field( rgget( 'query' ) );
-
-		// Initialize results array.
-		$results = array(
-			array(
-				'id'   => 'logged-in-user',
-				'text' => esc_html__( 'Logged In User', 'gravityformsadvancedpostcreation' ),
-			),
-		);
-
-		// Create user query.
-		$users = new WP_User_Query(
-			array(
-				'search'         => $query,
-				'search_columns' => array( 'user_login', 'user_email', 'user_nicename' ),
-			)
-		);
-
-		// Get users.
-		$users = $users->get_results();
-
-		// Add matching users.
-		if ( ! empty( $users ) ) {
-
-			foreach ( $users as $user ) {
-
-				// Add field to results.
-				$results[] = array(
-					'id'   => esc_html( $user->ID ),
-					'text' => esc_html( $user->display_name ),
-				);
-
-			}
-
-		}
-
-		// Return results.
-		wp_send_json( array( 'results' => $results ) );
-
 	}
 
 	/**
@@ -1520,7 +1825,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				'type'     => 'taxonomy_map',
 				'class'    => 'medium',
 				'taxonomy' => $taxonomy->name,
-				'tooltip'       => sprintf(
+				'tooltip'  => sprintf(
 					'<h6>%s</h6>%s',
 					esc_html( $taxonomy->label ),
 					esc_html__( 'Assign terms to the post using a field value, an existing term or by adding a new term.', 'gravityformsadvancedpostcreation' )
@@ -1532,7 +1837,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 		// Return fields.
 		return $fields;
-
 	}
 
 	/**
@@ -1566,7 +1870,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return json_encode( $fields );
-
 	}
 
 	/**
@@ -1608,13 +1911,10 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				if ( $term ) {
 					$terms[ $term->slug ] = esc_html( $term->name );
 				}
-
 			}
-
 		}
 
 		return json_encode( $terms );
-
 	}
 
 	/**
@@ -1664,20 +1964,73 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					'id'   => esc_html( $term->slug ),
 					'text' => wp_strip_all_tags( $term->name ),
 				);
-
 			}
-
 		}
 
 		// Add custom option.
 		$results[] = array(
 			'id'   => 'gf_custom',
+			// translators: %s is the singular name of the taxonomy.
 			'text' => sprintf( esc_html__( 'Add New %s', 'gravityformsadvancedpostcreation' ), $taxonomy_object->labels->singular_name ),
 		);
 
 		// Return results.
 		wp_send_json( array( 'results' => $results ) );
+	}
 
+	/**
+	 * Get a list of fields for the Editable Fields setting
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return array Array of editable fields
+	 */
+	public function get_editable_fields() {
+		$form   = $this->get_current_form();
+		$fields = [];
+
+		$excluded_types = [
+			'hidden',
+			'hiddenproduct',
+			'product',
+			'quantity',
+			'option',
+			'shipping',
+			'submit',
+			'total',
+			'turnstile',
+			'username',
+			'coupon',
+		];
+
+		/*
+		 * Filter the field types that should be excluded from the editable fields list.
+		 *
+		 * @since 1.6.0
+		 *
+		 * @param array $excluded_types Array of field types to exclude from the editable fields list.
+		*/
+		$excluded_types = apply_filters( 'gform_advancedpostcreation_editable_fields_excluded_types', $excluded_types );
+
+		$form_fields = rgar( $form, 'fields' );
+		if ( empty( $form_fields ) ) {
+			return [];
+		}
+
+		foreach ( $form_fields as $field ) {
+
+			if ( $field->is_payment || $field->displayOnly || in_array( $field->type, $excluded_types ) ) {
+				continue;
+			}
+
+			$fields[] = [
+				'label' => esc_html( $field->label ),
+				'name'  => esc_attr( $field->id ),
+			];
+
+		}
+
+		return $fields;
 	}
 
 	/**
@@ -1709,7 +2062,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			'postType'   => esc_html__( 'Post Type', 'gravityformsadvancedpostcreation' ),
 			'postStatus' => esc_html__( 'Status', 'gravityformsadvancedpostcreation' ),
 		);
-
 	}
 
 	/**
@@ -1733,7 +2085,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$post_type = get_post_type_object( $feed['meta']['postType'] );
 
 		return $post_type ? esc_html( $post_type->labels->singular_name ) : esc_html__( 'Not Available', 'gravityformsadvancedpostcreation' );
-
 	}
 
 	/**
@@ -1757,7 +2108,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$post_status = get_post_status_object( $feed['meta']['postStatus'] );
 
 		return $post_status ? esc_html( $post_status->label ) : esc_html__( 'Not Available', 'gravityformsadvancedpostcreation' );
-
 	}
 
 	/**
@@ -1773,7 +2123,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	public function can_duplicate_feed( $id ) {
 
 		return true;
-
 	}
 
 
@@ -1799,7 +2148,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	public function disable_core_post_creation( $is_disabled, $form, $entry ) {
 
 		return $this->get_single_submission_feed( $entry, $form ) ? true : $is_disabled;
-
 	}
 
 	/**
@@ -1817,9 +2165,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	 * @return array|WP_Error
 	 */
 	public function process_feed( $feed, $entry, $form ) {
-
 		return $this->create_post( $feed, $entry, $form );
-
 	}
 
 
@@ -1915,6 +2261,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 			// Log that post was created.
 			$this->log_debug( __METHOD__ . '(): Post was created with an ID of ' . $post['ID'] . '.' );
+			// translators: %d is the post ID.
 			$this->add_note( rgar( $entry, 'id' ), sprintf( esc_html__( 'Post created: %d.', 'gravityformsadvancedpostcreation' ), $post['ID'] ), 'success' );
 
 			// Add entry and feed ID to post meta.
@@ -1963,8 +2310,9 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		 */
 		gf_do_action( array( 'gform_advancedpostcreation_post_after_creation', $form['id'] ), $post['ID'], $feed, $entry, $form );
 
-		return $entry;
+		GFAPI::send_notifications( $form, $entry, 'post_created' );
 
+		return $entry;
 	}
 
 	/**
@@ -2068,7 +2416,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					if ( ! $is_apc_media_tag ) {
 						$content = str_replace( $match[0], GFCommon::implode_non_blank( ', ', $media_urls ), $content );
 					}
-
 				} else {
 
 					// Get file URL.
@@ -2089,11 +2436,8 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					if ( ! $is_apc_media_tag ) {
 						$content = str_replace( $match[0], $media_url, $content );
 					}
-
 				}
-
 			}
-
 		}
 
 		// Replace remaining variables in post content.
@@ -2101,7 +2445,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$content = GFCommon::replace_variables( $content, $form, $entry, false, false, $nl2br );
 
 		return $content;
-
 	}
 
 	/**
@@ -2146,7 +2489,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			}
 
 			// Get the taxonomy.
-			$taxonomy = str_replace( 'postTaxonomy_', null, $key );
+			$taxonomy = str_replace( 'postTaxonomy_', '', $key );
 
 			// Initialize terms array.
 			$terms = array();
@@ -2164,11 +2507,9 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			if ( ! empty( $terms ) ) {
 				$taxonomies[ $taxonomy ] = $terms;
 			}
-
 		}
 
 		return $taxonomies;
-
 	}
 
 	/**
@@ -2196,7 +2537,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		switch ( $mapping['key'] ) {
 
 			case 'field':
-
 				$mapped_field  = GFAPI::get_field( $form, $mapping_value );
 				$mapping_value = $this->get_field_value( $form, $entry, $mapping_value );
 
@@ -2212,7 +2552,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				break;
 
 			case 'term':
-
 				if ( 'gf_custom' === $mapping_value ) {
 
 					$mapping_value = GFCommon::replace_variables( rgar( $mapping, 'custom_value' ), $form, $entry, false, false, false, 'text' );
@@ -2232,7 +2571,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				break;
 
 			default:
-
 				if ( 'gf_custom' === $mapping_value ) {
 					$mapping_value = GFCommon::replace_variables( rgar( $mapping, 'custom_value' ), $form, $entry, false, false, false, 'text' );
 				}
@@ -2269,7 +2607,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					}
 				}
 			}
-
 		}
 
 		return $term_ids;
@@ -2307,7 +2644,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$this->_current_media[ $file_url ] = $media_id;
 
 		return $media_id;
-
 	}
 
 	/**
@@ -2374,7 +2710,9 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 	 * @return string
 	 */
 	public function get_post_title( $feed, $entry, $form ) {
-		return GFCommon::replace_variables( $feed['meta']['postTitle'], $form, $entry, false, false, false, 'text' );
+		$generated_post_title = GFCommon::replace_variables( $feed['meta']['postTitle'], $form, $entry, false, false, false, 'text' );
+		$post_title           = empty( $generated_post_title ) ? __( 'Untitled', 'gravityformsadvancedpostcreation' ) : $generated_post_title;
+		return $post_title;
 	}
 
 	/**
@@ -2508,7 +2846,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		} else {
 			$this->log_error( __METHOD__ . "(): Due to using an unsupported file extension, unable to set image ID {$image_id} as featured image for post ID {$post_id}." );
 		}
-
 	}
 
 	/**
@@ -2557,9 +2894,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				$this->media_handle_upload( $uploaded_file, $post_id );
 
 			}
-
 		}
-
 	}
 
 	/**
@@ -2598,7 +2933,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			add_post_meta( $post_id, $meta_key, $meta_value );
 
 		}
-
 	}
 
 	/**
@@ -2630,7 +2964,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			wp_set_post_terms( $post_id, $term_ids, $taxonomy );
 
 		}
-
 	}
 
 	/**
@@ -2678,16 +3011,10 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 
 			// Log error if post could not be updated.
 			if ( is_wp_error( $updated ) ) {
-				$this->log_error( __METHOD__ . '(): Unable to update author on post #' . $created_posts[ $feed['id'] ] . '; ' . $updated->get_error_message() );
+				$this->log_error( __METHOD__ . '(): Unable to update author on post #' . $created_post['post_id'] . '; ' . $updated->get_error_message() );
 			}
-
 		}
-
 	}
-
-
-
-
 
 	// # ENTRY DETAILS -------------------------------------------------------------------------------------------------
 
@@ -2716,7 +3043,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		}
 
 		return $meta_boxes;
-
 	}
 
 	/**
@@ -2749,7 +3075,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			);
 
 		}
-
 	}
 
 
@@ -2785,7 +3110,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		$form['feeds'][ $this->get_slug() ] = $feeds;
 
 		return $form;
-
 	}
 
 	/**
@@ -2833,12 +3157,7 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			GFAPI::update_form( $form );
 
 		}
-
 	}
-
-
-
-
 
 	// # HELPER METHODS ------------------------------------------------------------------------------------------------
 
@@ -2907,14 +3226,12 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 						$post_id = $id['post_id'];
 
 					}
-
 				}
 
 				// Replace merge tag.
 				$text = str_replace( $id_match[0], $url_encode ? urlencode( $post_id ) : $post_id, $text );
 
 			}
-
 		}
 
 		// Find post ID tag matches.
@@ -2946,7 +3263,6 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 						$post_id = $id['post_id'];
 
 					}
-
 				}
 
 				// Prepare URL.
@@ -2956,11 +3272,9 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 				$text = str_replace( $url_match[0], $url_encode ? urlencode( $post_edit_url ) : $post_edit_url, $text );
 
 			}
-
 		}
 
 		return $text;
-
 	}
 
 	/**
@@ -3002,7 +3316,8 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 			$media = array();
 
 			// If field value is empty, replace merge tag with empty string.
-			if ( ! $files = rgar( $entry, $field_id ) ) {
+			$files = rgar( $entry, $field_id );
+			if ( ! $files ) {
 				$text = str_replace( $match[0], '', $text );
 				continue;
 			}
@@ -3050,13 +3365,27 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 					$text = str_replace( $match[0], $ids, $text );
 
 					break;
-
 			}
-
 		}
 
 		return $text;
+	}
 
+	/**
+	 * Gets billing portal handler instance if already initialized, otherwise, initialize it.
+	 *
+	 * @since 1.4.3
+	 *
+	 * @return Posts_List_Handler
+	 */
+	public function get_posts_list_handler() {
+
+		if ( $this->posts_list_handler instanceof Posts_List_Handler === false ) {
+			require_once plugin_dir_path( __FILE__ ) . '/includes/class-posts-list-handler.php';
+			$this->posts_list_handler = new Posts_List_Handler( $this );
+		}
+
+		return $this->posts_list_handler;
 	}
 
 
@@ -3083,4 +3412,224 @@ class GF_Advanced_Post_Creation extends GFFeedAddOn {
 		return $feed_settings_fields;
 	}
 
+	/**
+	 * Handles the AJAX request for pagination of posts in the Posts List.
+	 *
+	 * @since 1.6.0
+	 */
+	public function ajax_pagination() {
+		// Check nonce.
+		check_ajax_referer( 'gf_apc_pagination_nonce', 'gf_apc_pagination_nonce' );
+
+		$posts_per_page     = absint( rgpost( 'postsPerPage' ) );
+		$form_to_show       = absint( rgpost( 'formToShow' ) );
+		$posts_list_handler = gf_advancedpostcreation()->get_posts_list_handler();
+		$posts_from_handler = $posts_list_handler->get_user_posts( $form_to_show, $posts_per_page );
+
+		$posts_array = array();
+		foreach ( $posts_from_handler['posts'] as $post_item ) {
+			$post_id             = $post_item['id'];
+			$entry_id            = $post_item['entry_id'];
+			$post_obj            = get_post( $post_id );
+			$post_obj->post_date = date_i18n( get_option( 'date_format' ), strtotime( $post_obj->post_date ) );
+			$post_title		     = get_the_title( $post_id );
+			$view_markup         = sprintf( '<a class="gform-button gform-button--size-height-s gform-button--icon-white gform-spacing gform-spacing--top-0 gform-spacing--right-2 gform-spacing--bottom-0 gform-spacing--left-0 gform-data-grid__action" href="%s" title="%s %s"><span class="dashicons dashicons-visibility"></span></a>', esc_url( get_permalink( $post_id ) ), esc_attr__( 'View', 'gravityformsadvancedpostcreation' ), esc_attr( $post_title ) );
+			$edit_link           = \GF_Advanced_Post_Creation::get_instance()->post_update_handler->get_edit_entry_link( $entry_id );
+			if ( $edit_link ) {
+				$edit_markup = sprintf( '<a class="gform-button gform-button--size-height-s gform-button--icon-white gform-spacing gform-spacing--top-0 gform-spacing--right-2 gform-spacing--bottom-0 gform-spacing--left-0 gform-data-grid__action" href="%s" title="%s %s"><span class="dashicons dashicons-edit"></span></a>', esc_url( $edit_link ), esc_attr__( 'Edit', 'gravityformsadvancedpostcreation' ), esc_attr( $post_title ) );
+			} else {
+				$edit_markup = sprintf( '<span class="disabled-edit-link gform-button gform-button--size-height-s gform-button--icon-white gform-spacing gform-spacing--top-0 gform-spacing--right-2 gform-spacing--bottom-0 gform-spacing--left-0 gform-data-grid__action" title="%s %s"><span class="dashicons dashicons-edit" style="opacity: 0.5;"></span></span>', esc_attr__( 'Editing not available for', 'gravityformsadvancedpostcreation' ), esc_attr( $post_title ) );
+			}
+			$post_obj->actions = sprintf( '%s %s', $view_markup, $edit_markup );
+
+			array_push( $posts_array, $post_obj );
+		}
+
+		// Create the data object
+		$script_data = array(
+			'data'         => $posts_array,
+			'postsPerPage' => $posts_per_page,
+			'currentPage'  => $posts_from_handler['current_page'],
+			'formToShow'   => $form_to_show,
+			'totalPages'   => $posts_per_page ? ceil( $posts_from_handler['total_count'] / $posts_per_page ) : 1,
+			'instance'     => $posts_list_handler::$instance_count,
+			'i18n'         => array(
+				'noPosts' => __( 'No posts found.', 'gravityformsadvancedpostcreation' ),
+			),
+		);
+
+		wp_send_json_success( $script_data );
+	}
+
+	/**
+	 * Adds the shared data needed for js translations and pagination ajax.
+	 *
+	 * @since 1.6.0
+	 */
+	public function get_shared_data() {
+		wp_register_script( 'gform_apc_shared', '' );
+		wp_enqueue_script( 'gform_apc_shared' );
+
+		$localize_data = [
+			'i18n'       => [
+				'untitledPost'        => esc_html__( 'Untitled', 'gravityformsadvancedpostcreation' ),
+				'published'           => esc_html__( 'Published', 'gravityformsadvancedpostcreation' ),
+				'draft'               => esc_html__( 'Draft', 'gravityformsadvancedpostcreation' ),
+				'columnTitle'         => esc_html__( 'Title', 'gravityformsadvancedpostcreation' ),
+				'columnStatus'        => esc_html__( 'Status', 'gravityformsadvancedpostcreation' ),
+				'columnDate'          => esc_html__( 'Date', 'gravityformsadvancedpostcreation' ),
+				'columnActions'       => esc_html__( 'Actions', 'gravityformsadvancedpostcreation' ),
+				'previousPage'        => esc_html__( 'Previous Page', 'gravityformsadvancedpostcreation' ),
+				'previousLabel'       => esc_html__( 'Prev', 'gravityformsadvancedpostcreation' ),
+				'nextPage'            => esc_html__( 'Next Page', 'gravityformsadvancedpostcreation' ),
+				'nextLabel'           => esc_html__( 'Next', 'gravityformsadvancedpostcreation' ),
+				'noPostsFoundMessage' => esc_html__( 'No Editable Posts Found', 'gravityformsadvancedpostcreation' ),
+			],
+			'pagination' => [
+				'ajax_url' => admin_url( 'admin-ajax.php' ),
+				'nonce'    => wp_create_nonce( 'gf_apc_pagination_nonce' ),
+			],
+		];
+
+		wp_localize_script( 'gform_apc_shared', 'gform_apc_shared', $localize_data );
+
+		add_filter( 'script_loader_tag', array( 'GFFormDisplay', 'add_script_defer' ), 10, 2 );
+
+		$script_dependencies = [
+			'gform_json',
+			'gform_gravityforms',
+			'gform_gravityforms_utils',
+			'gform_gravityforms_theme_vendors',
+			'gform_gravityforms_theme',
+			'gform_conditional_logic',
+			'wp-a11y',
+		];
+
+		wp_register_script( 'gform_apc_vendor_theme', $this->get_base_url() . "/assets/js/dist/vendor-theme{$this->_asset_min}.js", $script_dependencies, $this->_version, true );
+		wp_register_script( 'gform_apc_theme_script', $this->get_base_url() . "/assets/js/dist/scripts-theme{$this->_asset_min}.js", [ 'gform_apc_vendor_theme', 'gform_apc_shared' ], $this->_version, true );
+
+		$style_dependencies = [
+			'gform_admin_components',
+			'gravity_forms_theme_reset',
+			'gravity_forms_theme_foundation',
+			'gravity_forms_theme_framework',
+			'gravity_forms_orbital_theme',
+		];
+
+		wp_register_style( 'gform_apc_theme', $this->get_base_url() . "/assets/css/dist/theme{$this->_asset_min}.css", $style_dependencies, $this->_version, 'all' );
+
+		$assets = $this->get_assets();
+
+		foreach ( $assets as $asset ) {
+			/**
+			 * @var GF_Asset $asset
+			 */
+			$asset->enqueue_asset();
+		}
+	}
+
+	public function get_assets() {
+		$assets   = [];
+		$assets[] = new GF_Style_Asset( 'gform_apc_theme' );
+		$assets[] = new GF_Script_Asset( 'gform_apc_vendor_theme' );
+		$assets[] = new GF_Script_Asset( 'gform_apc_theme_script' );
+
+		return $assets;
+	}
+
+	/**
+	 * Checks if the form has a payment feed.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param int $form_id The form ID.
+	 * @return bool
+	 */
+	public function form_has_payment_feed( $form_id ) {
+		$feeds = GFAPI::get_feeds( null, $form_id );
+
+		if ( empty( $feeds ) || is_wp_error( $feeds ) ) {
+			return false;
+		}
+
+		$payment_slugs = [];
+		if ( method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
+			foreach ( GFAddOn::get_registered_addons() as $class ) {
+				if ( is_string( $class ) && class_exists( $class ) && is_subclass_of( $class, 'GFPaymentAddOn' ) ) {
+					$instance = is_callable( array( $class, 'get_instance' ) ) ? $class::get_instance() : null;
+					if ( $instance && method_exists( $instance, 'get_slug' ) ) {
+						$payment_slugs[ $instance->get_slug() ] = true;
+					}
+				}
+			}
+		}
+
+		foreach ( $feeds as $feed ) {
+			if ( in_array( $feed['addon_slug'], array_keys( $payment_slugs ), true ) ) {
+				if ( rgar( $feed, 'is_active' ) ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Initialize the Post_Update_Handler class for post editing functionality
+	 *
+	 * @since 1.6.0
+	 * @access private
+	 */
+	private function init_post_edit_handler() {
+		require_once 'includes/helpers/class-form-population.php';
+		require_once 'includes/class-post-update-handler.php';
+		$this->post_update_handler = \Gravity_Forms\Gravity_Forms_APC\Post_Update_Handler::get_instance( $this );
+		$this->post_update_handler->init();
+	}
+
+	/**
+	 * Filters found forms in the gform_parsed_forms_from_shortcode hook so that
+	 * we can enqueue the necessary scripts and styles for the Posts List
+	 * shortcode if no form_id is listed.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param array $found_forms
+	 * @param string $post_content
+	 *
+	 * @return array $found_forms
+	 */
+	public function filter_gform_parsed_forms_from_shortcode( $found_forms, $post_content ) {
+		if ( preg_match_all( '/\[gravityform[s]? +.*?((action=.+?)|(id=.+?))\]/is', $post_content, $matches, PREG_SET_ORDER ) ) {
+			foreach ( $matches as $match ) {
+				$attr = shortcode_parse_atts( $match[1] );
+				if ( rgar( $attr, 'action' ) !== 'apc_posts_list' ) {
+					continue;
+				}
+
+				$form_id = rgar( $attr, 'id', 0 );
+				if ( ! $form_id ) {
+					// In order to force Gravity Forms Core to load the assets needed when using a shortcode we must have a form_id. It can be any active form so we just grab the first one.
+					$apc_first_active_form_id = GFCache::get( 'apc_first_active_form_id' );
+					if ( ! $apc_first_active_form_id ) {
+						$forms                    = GFAPI::get_forms( true, false, 'title', 'ASC' );
+						$first_active_form        = $forms ? reset( $forms ) : null;
+						$apc_first_active_form_id = (int) $first_active_form['id'];
+						GFCache::set( 'apc_first_active_form_id', $apc_first_active_form_id, true, 12 * HOUR_IN_SECONDS );
+					}
+					$form_id = $apc_first_active_form_id;
+				}
+
+				$ajax   = isset( $attr['ajax'] ) && strtolower( substr( $attr['ajax'], 0, 4 ) ) === 'true';
+				$styles = json_decode( rgar( $attr, 'styles' ), true ) ? json_decode( rgar( $attr, 'styles' ), true ) : array();
+				if ( GFFormDisplay::is_applicable_form( $form_id, $ajax, $found_forms ) ) {
+					$found_forms[ $form_id ]          = $styles;
+					$found_forms[ $form_id ]['ajax']  = $ajax;
+					$found_forms[ $form_id ]['theme'] = rgar( $attr, 'theme' );
+					continue;
+				}
+			}
+		}
+		return $found_forms;
+	}
 }
