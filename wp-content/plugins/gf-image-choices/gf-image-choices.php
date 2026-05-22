@@ -12,9 +12,9 @@ Plugin Name: Gravity Forms Image Choices
 Plugin URI: https://jetsloth.com/gravity-forms-image-choices/
 Description: Easily add images as choices for Radio Buttons or Checkboxes fields in your Gravity Forms, including Survey, Quiz, Product and Option fields that have their field type set to Radio Buttons or Checkboxes
 Author: JetSloth
-Version: 1.6.16
+Version: 1.6.17
 Requires at least: 3.5
-Tested up to: 6.8.1
+Tested up to: 6.9.4
 Author URI: https://jetsloth.com
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -25,7 +25,7 @@ Requires PHP: 7.4
 
 /*
 SPDX-License-Identifier: GPL-2.0-or-later
-Copyright (c) 2025 JetSloth
+Copyright (c) 2026 JetSloth
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -43,7 +43,7 @@ along with this program; see license.txt. If not, see https://www.gnu.org/licens
 Assets & trademarks: See readme.txt (“Assets & trademarks”) for details on non-GPL assets and trademarks.
 */
 
-define('GFIC_VERSION', '1.6.16');
+define('GFIC_VERSION', '1.6.17');
 define('GFIC_HOME', 'https://jetsloth.com');
 define('GFIC_NAME', 'Gravity Forms Image Choices');
 define('GFIC_SLUG', 'gf-image-choices');
