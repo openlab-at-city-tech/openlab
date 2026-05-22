@@ -17,6 +17,7 @@ function openlab_load_theme_fixes() {
 		case 'hamilton':
 		case 'hemingway':
 		case 'herothemetrust':
+		case 'kadence':
 		case 'koji':
 		case 'lingonberry' :
 		case 'motion':
