@@ -49,6 +49,14 @@ function openlab_render_about_mobile_drawer() {
 	$heading_url = home_url( '/about/' );
 	$menu_items  = openlab_filter_drawer_nav_items( $menu_items, $heading_url );
 
+	// Insert fa-external-link element into 'Privacy Policy'.
+	foreach ( $menu_items as &$item ) {
+		if ( 'Privacy Policy' === $item['text'] ) {
+			$item['text'] = '<i class="fa fa-external-link no-margin no-margin-left"></i>' . $item['text'];
+			$item['is_raw'] = true;
+		}
+	}
+
 	return openlab_render_drawer( [
 		'id'            => 'about-mobile-drawer',
 		'default_panel' => 'about-mobile-panel',
