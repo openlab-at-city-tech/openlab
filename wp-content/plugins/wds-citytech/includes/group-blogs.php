@@ -937,6 +937,11 @@ function wds_bp_group_meta() {
 			</div>
 		</div>
 	</div>
+
+	<?php if ( ! bp_is_group_create() ) : ?>
+		<input name="group_id" type="hidden" value="<?php echo esc_attr( bp_get_current_group_id() ); ?>" />
+	<?php endif; ?>
+
 	<?php
 
 	do_action( 'openlab_after_group_site_markup' );
