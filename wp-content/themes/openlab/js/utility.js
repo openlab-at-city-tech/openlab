@@ -873,7 +873,19 @@ OpenLab.utility = (function ($) {
 			// guard, handleFocusLeave would call closeAllDrawers() (setting drawer.inert=true)
 			// before the click event fires, preventing navigation.
 			let isMouseDownInDrawer = false;
-			drawer.addEventListener('mousedown', () => { isMouseDownInDrawer = true; });
+
+			// Tracks whether the most recent mousedown inside the drawer landed on a
+			// .flyout-subnav-heading element.  These are non-focusable label items, so
+			// clicking them moves focus to body and would otherwise cause handleFocusLeave
+			// to close the drawer.  The flag is consumed (and cleared) inside the
+			// handleFocusLeave setTimeout so it outlives the mouseup that resets
+			// isMouseDownInDrawer.
+			let mouseDownOnSubnavHeading = false;
+
+			drawer.addEventListener('mousedown', (e) => {
+				isMouseDownInDrawer = true;
+				mouseDownOnSubnavHeading = !!e.target.closest('.flyout-subnav-heading');
+			});
 			document.addEventListener('mouseup', () => { isMouseDownInDrawer = false; });
 
 			// Track which toggle opened the current flyout
@@ -1280,6 +1292,22 @@ OpenLab.utility = (function ($) {
 					// Safari doesn't focus <a> elements on click, so without this guard the
 					// focusout handler would close the drawer before the click event fires.
 					if (isMouseDownInDrawer) {
+						return;
+					}
+
+					// Don't close if the click landed on a .flyout-subnav-heading.
+					// These are non-focusable label elements, so clicking them moves focus
+					// to body, which would otherwise satisfy the "focus left the drawer"
+					// condition below.  mouseup fires before this setTimeout runs, so we
+					// can't rely on isMouseDownInDrawer; instead we use a dedicated flag.
+					// handleFocusLeave is attached to both 'focusout' and 'blur' (capture),
+					// so two setTimeout(0) callbacks are queued per click.  We must NOT
+					// clear the flag synchronously here — doing so would let the second
+					// callback see it as false and still close the drawer.  Instead, we
+					// schedule the reset in its own setTimeout(0) so it runs after all
+					// already-queued handleFocusLeave callbacks have had a chance to check it.
+					if (mouseDownOnSubnavHeading) {
+						setTimeout(() => { mouseDownOnSubnavHeading = false; }, 0);
 						return;
 					}
 
