@@ -1160,6 +1160,10 @@ function openlab_member_header() {
 	<h1 class="entry-title profile-title clearfix">
 		<span class="profile-name"><?php bp_displayed_user_fullname(); ?>&rsquo;s Profile</span>
 		<span class="profile-type pull-right hidden-xs"><?php echo esc_html( $account_type ); ?></span>
+		<button class="drawer-toggle mobile-toggle pull-right visible-xs" type="button" aria-expanded="false" aria-controls="member-mobile-drawer" data-drawer-toggle="member-mobile-drawer">
+			<span class="toggle-icon"></span>
+			<span class="sr-only">Toggle navigation</span>
+		</button>
 	</h1>
 
 	<?php /* Last activity is visible only to super admins */ ?>

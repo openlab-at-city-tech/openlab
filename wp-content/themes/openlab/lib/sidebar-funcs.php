@@ -66,6 +66,16 @@ function openlab_render_about_mobile_drawer() {
 }
 
 /**
+ * Register the Member pages mobile drawer.
+ *
+ * This registers a drawer that will be rendered in the unified drawer container
+ * for Member single pages on mobile.
+ */
+function openlab_register_member_mobile_drawer() {
+	openlab_register_drawer( 'member-mobile-drawer', 'openlab_render_member_mobile_drawer' );
+}
+
+/**
  * Register the Group pages mobile drawer.
  *
  * This registers a drawer that will be rendered in the unified drawer container
@@ -1315,6 +1325,89 @@ function openlab_render_member_desktop_nav( $show_submenus = true ) {
 	}
 
 	echo $output;
+}
+
+/**
+ * Render the Member pages mobile drawer content.
+ *
+ * Uses openlab_get_member_nav_items() as the single source of truth.
+ *
+ * @return string Drawer HTML.
+ */
+function openlab_render_member_mobile_drawer() {
+	$nav_items = openlab_get_member_nav_items();
+
+	if ( empty( $nav_items ) ) {
+		return '';
+	}
+
+	$panels = [];
+	$root_items = [];
+
+	// Process each nav item from the unified data source
+	foreach ( $nav_items as $item ) {
+		$slug = isset( $item['slug'] ) ? $item['slug'] : sanitize_title( $item['text'] );
+		$panel_id = 'member-' . $slug . '-panel';
+
+		// Build root item
+		$root_item = [
+			'text'       => $item['text'],
+			'href'       => $item['href'],
+			'is_current' => isset( $item['is_current'] ) ? $item['is_current'] : false,
+		];
+
+		// Add class if present (e.g., 'has-unread')
+		if ( ! empty( $item['class'] ) ) {
+			$root_item['class'] = $item['class'];
+		}
+
+		// If item has submenu, link to panel
+		if ( ! empty( $item['submenu_items'] ) ) {
+			$root_item['submenu'] = $panel_id;
+
+			// Build submenu panel
+			$submenu_items = [];
+			foreach ( $item['submenu_items'] as $sub ) {
+				$sub_item = [
+					'text'       => $sub['text'],
+					'href'       => $sub['href'],
+					'is_current' => isset( $sub['is_current'] ) ? $sub['is_current'] : false,
+				];
+				if ( ! empty( $sub['class'] ) ) {
+					$sub_item['class'] = $sub['class'];
+				}
+				$submenu_items[] = $sub_item;
+			}
+
+			$panels[] = [
+				'id'          => $panel_id,
+				'heading'     => $item['text'],
+				'items'       => $submenu_items,
+				'back_target' => 'member-mobile-root-panel',
+				'back_text'   => 'Back to Profile',
+			];
+		}
+
+		$root_items[] = $root_item;
+	}
+
+	// Build the root panel
+	$root_panel = [
+		'id'         => 'member-mobile-root-panel',
+		'heading'    => openlab_is_my_profile() ? 'My Profile' : bp_get_displayed_user_fullname(),
+		'items'      => $root_items,
+		'is_root'    => true,
+		'show_close' => true,
+	];
+
+	// Prepend root panel to the list
+	array_unshift( $panels, $root_panel );
+
+	return openlab_render_drawer( [
+		'id'            => 'member-mobile-drawer',
+		'default_panel' => 'member-mobile-root-panel',
+		'panels'        => $panels,
+	] );
 }
 
 function openlab_bp_sidebar($type, $mobile_dropdown = false, $extra_classes = '') {
