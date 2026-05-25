@@ -2562,6 +2562,94 @@ function openlab_add_webcal_to_allowed_protocols( $protocols ) {
 add_filter( 'kses_allowed_protocols', 'openlab_add_webcal_to_allowed_protocols' );
 
 /**
+ * Allow SVG elements inserted by the Font Awesome plugin in post content.
+ *
+ * When a non-super-admin uses the Font Awesome inline icon toolbar button
+ * (rich-text format), the plugin inserts an <svg> into the post content.
+ * WordPress's wp_kses_post() does not allow <svg> or <path> by default,
+ * so they—and any styling attributes—are stripped on save.
+ *
+ * This filter whitelists the minimum set of attributes needed for those
+ * inline SVGs to survive content sanitization.
+ *
+ * @param array  $allowed_tags Allowed HTML tags and their attributes.
+ * @param string $context      The context ('post', etc.).
+ * @return array
+ */
+function openlab_allow_font_awesome_svg_in_post( $allowed_tags, $context ) {
+	if ( 'post' !== $context ) {
+		return $allowed_tags;
+	}
+
+	$allowed_tags['svg'] = array(
+		'style'              => true,
+		'class'              => true,
+		'xmlns'              => true,
+		'viewbox'            => true, // kses lowercases attribute names.
+		'aria-hidden'        => true,
+		'aria-labelledby'    => true,
+		'focusable'          => true,
+		'role'               => true,
+		'data-prefix'        => true,
+		'data-icon'          => true,
+		'data-fa-transform'  => true,
+		'data-fa-mask'       => true,
+		'data-fa-title-id'   => true,
+		'color'              => true,
+	);
+
+	$allowed_tags['path'] = array(
+		'fill'      => true,
+		'fill-rule' => true,
+		'clip-rule' => true,
+		'd'         => true,
+		'transform' => true,
+		'class'     => true,
+		'opacity'   => true,
+	);
+
+	$allowed_tags['g'] = array(
+		'transform' => true,
+		'class'     => true,
+		'opacity'   => true,
+	);
+
+	// <defs> has no meaningful attributes but must be present for masks.
+	$allowed_tags['defs'] = array();
+
+	$allowed_tags['mask'] = array(
+		'id'     => true,
+		'x'      => true,
+		'y'      => true,
+		'width'  => true,
+		'height' => true,
+	);
+
+	$allowed_tags['rect'] = array(
+		'x'      => true,
+		'y'      => true,
+		'width'  => true,
+		'height' => true,
+		'fill'   => true,
+	);
+
+	$allowed_tags['circle'] = array(
+		'cx'   => true,
+		'cy'   => true,
+		'r'    => true,
+		'fill' => true,
+	);
+
+	// Accessibility title element inside SVG.
+	$allowed_tags['title'] = array();
+
+	$allowed_tags['span']['data-transform'] = true;
+
+	return $allowed_tags;
+}
+add_filter( 'wp_kses_allowed_html', 'openlab_allow_font_awesome_svg_in_post', 10, 2 );
+
+/**
  * Don't limit upload space on blog 1.
  */
 function openlab_allow_unlimited_space_on_blog_1( $check ) {
