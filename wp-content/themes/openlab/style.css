@@ -8063,6 +8063,10 @@ button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
   font-size: 16px;
   font-weight: normal;
 }
+.openlab-navbar-drawer #favorites-flyout .flyout-heading,
+.openlab-drawer-container #favorites-flyout .flyout-heading {
+  padding: 0 var(--flyout-h-padding);
+}
 .openlab-navbar-drawer #favorites-flyout .drawer-list li a,
 .openlab-drawer-container #favorites-flyout .drawer-list li a {
   display: block;
