@@ -943,6 +943,14 @@ OpenLab.utility = (function ($) {
 				return 'Menu';
 			};
 
+			const getToggleForFlyout = function(flyoutId) {
+				if (flyoutId) {
+					return document.querySelector(`[aria-controls="${flyoutId}"], [data-drawer-toggle="${flyoutId}"]`);
+				}
+
+				return document.querySelector('.drawer-toggle[aria-expanded="true"], .navbar-flyout-toggle[aria-expanded="true"]');
+			};
+
 			// Function to close all drawers
 			const closeAllDrawers = function(returnFocusTo = null) {
 				// Announce closure if any drawer was open
@@ -1211,20 +1219,27 @@ OpenLab.utility = (function ($) {
 			// Handling close buttons in flyouts.
 			const closeButtons = document.querySelectorAll('.flyout-close-button, .drawer-close-button');
 			closeButtons.forEach(button => {
+				button.addEventListener('keydown', function (e) {
+					if (e.key !== 'Tab' || e.shiftKey) {
+						return;
+					}
+
+					const flyoutId = this.getAttribute('data-flyout-close');
+					const toggle = getToggleForFlyout(flyoutId);
+
+					if (!toggle) {
+						return;
+					}
+
+					e.preventDefault();
+					closeAllDrawers(toggle);
+				});
+
 				button.addEventListener('click', function (e) {
 					e.preventDefault();
 
 					const flyoutId = this.getAttribute('data-flyout-close');
-
-					// Find the toggle button associated with this flyout.
-					// For drawer-close-button without a specific flyout ID, find the open toggle.
-					let toggle;
-					if (flyoutId) {
-						toggle = document.querySelector(`[aria-controls="${flyoutId}"], [data-drawer-toggle="${flyoutId}"]`);
-					} else {
-						// Find any open drawer toggle
-						toggle = document.querySelector('.drawer-toggle[aria-expanded="true"], .navbar-flyout-toggle[aria-expanded="true"]');
-					}
+					const toggle = getToggleForFlyout(flyoutId);
 
 					// Close the drawer and return focus to the toggle
 					closeAllDrawers(toggle);
