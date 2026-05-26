@@ -10787,6 +10787,17 @@ a.external-link::after {
 .sidebar .learn-more-sidebar a {
   font-weight: bold;
 }
+@media (max-width: 767px) {
+  #portfolio-sidebar-inline-widget {
+    scroll-margin-top: 36px;
+  }
+  #portfolio-sidebar-inline-widget:target::before {
+    content: "";
+    display: block;
+    height: 36px;
+    margin-top: -36px;
+  }
+}
 .sidebar .group-has-site #sidebar-menu-wrapper .profile-nav {
   border-top: 0;
   margin-top: 15px;

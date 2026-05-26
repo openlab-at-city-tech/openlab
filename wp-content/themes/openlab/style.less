@@ -3911,6 +3911,18 @@ a.external-link {
         }
     }
 }
+@media (max-width: @screen-xs-max) {
+    #portfolio-sidebar-inline-widget {
+        scroll-margin-top: 36px;
+
+        &:target::before {
+            content: "";
+            display: block;
+            height: 36px;
+            margin-top: -36px;
+        }
+    }
+}
 .sidebar .group-has-site {
 	#sidebar-menu-wrapper {
 		.profile-nav {
