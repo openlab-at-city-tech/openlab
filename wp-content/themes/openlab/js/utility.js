@@ -1284,7 +1284,7 @@ OpenLab.utility = (function ($) {
 			// This handles the case where a user tabs through all items in a flyout
 			// and the focus moves to an element outside the flyout drawer.
 			// Also handles VoiceOver navigation on iOS/macOS.
-			const handleFocusLeave = function() {
+			const handleFocusLeave = function(event) {
 				// Use setTimeout to allow the browser to update document.activeElement
 				setTimeout(() => {
 					const isDrawerOpen = document.body.classList.contains('drawer-open');
@@ -1328,7 +1328,21 @@ OpenLab.utility = (function ($) {
 
 					// Check if the new focused element is outside the drawer
 					const newFocus = document.activeElement;
+					const previousFocus = event && event.target ? event.target : null;
 					const nav = document.querySelector('.openlab-navbar');
+
+					// iOS Safari blurs <select> elements to <body> while the native picker
+					// is open. Treat that as a temporary focus handoff instead of closing
+					// the drawer.
+					const isNativeSelectPickerOpen =
+						previousFocus &&
+						previousFocus.tagName === 'SELECT' &&
+						drawer.contains(previousFocus) &&
+						(newFocus === document.body || newFocus === document.documentElement);
+
+					if (isNativeSelectPickerOpen) {
+						return;
+					}
 
 					// Don't close if focus is still in the drawer
 					if (drawer.contains(newFocus)) {
