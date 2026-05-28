@@ -43,3 +43,6 @@
 [submodule "wp-content/plugins/openlab-attributions"]
 	path = wp-content/plugins/openlab-attributions
 	url = git@github.com:openlab-at-city-tech/openlab-attributions
+[submodule "wp-content/plugins/openlab-module-builder"]
+	path = wp-content/plugins/openlab-module-builder
+	url = git@github.com:openlab-at-city-tech/openlab-module-builder
