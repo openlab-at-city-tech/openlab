@@ -65,13 +65,13 @@ function openlab_load_scripts() {
 
         // Polyfills for legacy browser support (Map, Set, Element.prototype.matches, Node.prototype.contains)
         // Required by the inert polyfill for older browsers
-        wp_register_script('polyfill-io', 'https://polyfill.io/v3/polyfill.min.js?features=Map%2CSet%2CElement.prototype.matches%2CNode.prototype.contains', array(), null, false);
-        wp_enqueue_script('polyfill-io');
+        wp_register_script( 'inert-dependencies', 'https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?version=4.8.0&features=Map%2CSet%2CElement.prototype.matches%2CNode.prototype.contains', array(), null, false );
+        wp_enqueue_script( 'inert-dependencies' );
 
         // Inert polyfill for older browsers that don't support the native inert attribute
         // See: https://github.com/WICG/inert
-        wp_register_script('wicg-inert', 'https://cdn.jsdelivr.net/npm/wicg-inert@3.1.2/dist/inert.min.js', array('polyfill-io'), '3.1.2', false);
-        wp_enqueue_script('wicg-inert');
+        wp_register_script( 'wicg-inert', $stylesheet_dir_uri . '/js/inert.min.js', array( 'inert-dependencies' ), '3.1.2', false );
+        wp_enqueue_script( 'wicg-inert' );
 
         //google fonts
         wp_register_style('google-open-sans', set_url_scheme('http://fonts.googleapis.com/css?family=Open+Sans:400,400italic,600,600italic,700,700italic'), array(), '2014', 'all');
