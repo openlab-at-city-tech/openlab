@@ -19,11 +19,7 @@ add_filter(
  */
 add_action(
 	'openlab_modules_section_complete',
-	function( $post_id, $module_id, $message_type ) {
-		if ( 'openlab_email' !== $message_type ) {
-			return;
-		}
-
+	function( $post_id, $module_id ) {
 		// Get current user info
 		$user = wp_get_current_user();
 		if ( ! $user || ! $user->exists() ) {
@@ -85,7 +81,7 @@ add_action(
 		wp_mail( $user_email, $subject, $message, $headers );
 	},
 	10,
-	3
+	2
 );
 
 add_filter(
