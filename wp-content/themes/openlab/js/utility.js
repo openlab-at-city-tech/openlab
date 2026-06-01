@@ -14,7 +14,6 @@ OpenLab.utility = (function ($) {
 		uiCheck: {},
 		selectDisplay: {},
 		fullAcademicUnitOptions: {},
-		previousTopLevelSelections: {},
 		init: function () {
 
 			OpenLab.utility.adjustLoginBox();
@@ -550,6 +549,11 @@ OpenLab.utility = (function ($) {
 			var $schoolSelect = $( '#school-select' );
 			var $officeSelect = $( '#office-select' );
 
+			// topLevelChanged is true only on user-initiated changes to a school/office selector,
+			// never on the initial page-load call (changedSelect === null). This prevents the
+			// department value pre-selected via URL params from being wiped on load.
+			var topLevelChanged = false;
+
 			if ( changedSelect ) {
 				var changedUnitType = $( changedSelect ).data( 'unittype' );
 				var changedValue = $( changedSelect ).val();
@@ -558,13 +562,16 @@ OpenLab.utility = (function ($) {
 				if ( changedUnitType === 'school' && !isNoSelection( changedValue ) ) {
 					excludeUnitType = 'office';
 					$officeSelect.val( '' ).prop( 'disabled', true );
+					topLevelChanged = true;
 				} else if ( changedUnitType === 'office' && !isNoSelection( changedValue ) ) {
 					excludeUnitType = 'school';
 					$schoolSelect.val( '' ).prop( 'disabled', true );
+					topLevelChanged = true;
 				} else if ( changedUnitType === 'school' || changedUnitType === 'office' ) {
 					// If school or office was cleared (set to empty or "all"), re-enable the other
 					$schoolSelect.prop( 'disabled', false );
 					$officeSelect.prop( 'disabled', false );
+					topLevelChanged = true;
 				}
 			} else {
 				// Initial load - determine state from current values
@@ -579,22 +586,6 @@ OpenLab.utility = (function ($) {
 					$schoolSelect.prop( 'disabled', true );
 				}
 			}
-
-			// Track current top-level selections to detect changes for Department reset
-			var currentTopLevelSelections = {
-				school: $schoolSelect.val(),
-				office: $officeSelect.val()
-			};
-
-			// Check if top-level selection has changed
-			var topLevelChanged = false;
-			if ( OpenLab.utility.previousTopLevelSelections.school !== currentTopLevelSelections.school ||
-			     OpenLab.utility.previousTopLevelSelections.office !== currentTopLevelSelections.office ) {
-				topLevelChanged = true;
-			}
-
-			// Store current selections for next comparison
-			OpenLab.utility.previousTopLevelSelections = currentTopLevelSelections;
 
 			// Build selectedSlugs from the selected units (excluding the disabled type)
 			// Note: both empty string and "all" are treated as "no selection" and don't add to filter
