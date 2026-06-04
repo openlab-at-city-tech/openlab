@@ -43,7 +43,6 @@ var GFFrontendFeeds = function( args ) {
 	self.saveToState = function() {
 		const feeds = self.options.feeds.map(({ feedId, isActivated, transactionType }) => ({ feedId, isActivated, transactionType }));
 
-		console.log( 'Saving feeds to state:', feeds );
 		gform.logger.log( 'GFFrontendFeeds: Saving feeds to state: ' + JSON.stringify( feeds ) );
 
 		gform.state.set( self.options.formId, 'feeds', self.options.feeds );
