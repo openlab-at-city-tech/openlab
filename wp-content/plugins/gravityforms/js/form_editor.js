@@ -1335,6 +1335,12 @@ function getAllFieldSettings(field) {
 		});
 	}
 
+	if ( field.type === 'post_custom_field' && field.inputType === 'fileupload' ) {
+		settingsArray = settingsArray.filter( function( setting ) {
+			return setting !== '.prepopulate_field_setting';
+		} );
+	}
+
 	/**
 	 * gform_editor_field_settings
 	 *
@@ -2754,6 +2760,11 @@ function StartChangePostCategoryType(type){
 function StartChangePostCustomFieldType( type ) {
 	if ( jQuery.inArray( type, [ 'radio', 'select', 'checkbox', 'multiselect' ] ) === -1 ) {
 		field.choices = null;
+	}
+
+	if ( type === 'fileupload' ) {
+		field.allowsPrepopulate = false;
+		field.inputName = '';
 	}
 
 	return StartChangeInputType(type, field);

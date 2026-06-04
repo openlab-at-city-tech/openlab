@@ -495,7 +495,7 @@ if ( ! class_exists( 'Gravity_Api' ) ) {
 				'timeout'   => 10,
 				'body'      => in_array( $method, array( 'GET', 'DELETE' ) ) ? null : json_encode( $body ),
 				'headers'   => array(),
-				'sslverify' => false,
+				'sslverify' => true,
 			) );
 
 			// set default header options
