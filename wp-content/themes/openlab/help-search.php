@@ -9,7 +9,10 @@ $pag_page = isset( $_GET['hs-page'] ) ? intval( $_GET['hs-page'] ) : 1;
 		<div class="col-sm-18 col-xs-24 col-help">
 			<div id="openlab-main-content" class="content-wrapper" tabindex="-1">
 
-			<h1 class="entry-title help-entry-title">Search Help</h1>
+			<h1 class="entry-title help-entry-title">
+				Search Help
+                <?php echo openlab_render_drawer_toggle( 'help-mobile-drawer', [ 'text' => 'Help Menu' ] ); ?>
+			</h1>
 
 			<div id="help-title">
 				<h2 class="page-title clearfix submenu">
