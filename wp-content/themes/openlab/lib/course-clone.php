@@ -1056,8 +1056,8 @@ class Openlab_Clone_Course_Site {
 				continue;
 			}
 
-			// All 'trash' items should be deleted.
-			if ( 'trash' === $sp->post_status ) {
+			// All 'trash' and 'revision' items should be deleted.
+			if ( 'trash' === $sp->post_status || 'revision' === $sp->post_type ) {
 				$posts_to_delete_ids[] = $sp->ID;
 				continue;
 			}
