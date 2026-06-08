@@ -1,0 +1,28 @@
+.sli-menu-pill {
+  color: #333;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 3px 5px;
+  margin-left: 3px;
+}
+
+.sli-menu-cs {
+  background: #fff;
+}
+
+.sli-menu-new {
+  background: #79DCFF;
+}
+
+#toplevel_page_spotlight-instagram ul.wp-submenu li a {
+  padding-left: 10px;
+  padding-right: 0;
+}
+
+@media only screen and (max-width: 960px) {
+  .auto-fold #adminmenu #toplevel_page_spotlight-instagram ul.wp-submenu li a {
+    padding-left: 8px;
+    padding-right: 0;
+  }
+}

@@ -1,0 +1,41 @@
+{
+    "name": "dhii/services",
+    "description": "A collection of useful DI service implementations.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dhii Team",
+            "email": "development@dhii.co"
+        }
+    ],
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "require": {
+        "php": "^7.1 | ^8.0",
+        "psr/container": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.0 | ^8.0 | ^9.0",
+        "codeclimate/php-test-reporter": "<=0.3.2",
+        "vimeo/psalm": "^4.8",
+        "slevomat/coding-standard": "^6.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Dhii\\Services\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Dhii\\Services\\Tests\\Unit\\": "tests/unit",
+            "Dhii\\Services\\Tests\\Func\\": "tests/functional",
+            "Dhii\\Services\\Tests\\Stubs\\": "tests/stubs",
+            "Dhii\\Services\\Tests\\Helpers\\": "tests/helpers"
+        }
+    },
+    "scripts": {
+        "test": "phpunit",
+        "csfix": "php-cs-fixer fix -vvv"
+    }
+}

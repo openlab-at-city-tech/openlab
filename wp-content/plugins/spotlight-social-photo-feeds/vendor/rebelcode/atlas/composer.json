@@ -1,0 +1,34 @@
+{
+  "name": "rebelcode/atlas",
+  "description": "A lightweight SQL generation library.",
+  "type": "library",
+  "license": "GPL-3.0",
+  "authors": [
+    {
+      "name": "Miguel Muscat",
+      "email": "miguel.muscat@rebelcode.com",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": "^7.1 | ^8.0"
+  },
+  "require-dev": {
+    "vimeo/psalm": "^4.0",
+    "phpunit/phpunit": "^7.0 | ^8.0 | ^9.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "RebelCode\\Atlas\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "RebelCode\\Atlas\\Test\\": "tests/"
+    }
+  },
+  "scripts": {
+    "test": "phpunit",
+    "psalm": "psalm"
+  }
+}

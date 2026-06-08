@@ -1,0 +1,1932 @@
+[
+  {
+    "sid": 276982,
+    "id": "classic",
+    "name": "Classic",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Classic.png",
+    "date": 1623156166,
+    "tier": 0,
+    "keywords": [
+      ""
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 3
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "numPosts": {
+        "desktop": 9
+      },
+      "linkBehavior": {
+        "desktop": "lightbox"
+      },
+      "feedWidth": {
+        "desktop": ""
+      },
+      "feedHeight": {
+        "desktop": ""
+      },
+      "feedPadding": {
+        "desktop": 24,
+        "tablet": 14,
+        "phone": 10
+      },
+      "imgPadding": {
+        "desktop": 10,
+        "tablet": 10,
+        "phone": 6
+      },
+      "textSize": {
+        "desktop": "",
+        "tablet": "",
+        "phone": ""
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "hoverInfo": [
+        "likes_comments",
+        "insta_link"
+      ],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.5
+      },
+      "showHeader": {
+        "desktop": true
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": 5,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "normal"
+      },
+      "headerTextSize": {
+        "desktop": ""
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+      },
+      "headerPadding": {
+        "desktop": 0,
+        "phone": 0
+      },
+      "customProfilePic": 0,
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false
+      },
+      "showComments": {
+        "desktop": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": true
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 35,
+            "g": 143,
+            "b": 181,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 41,
+          "g": 167,
+          "b": 210,
+          "a": 0.1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load More Posts",
+      "loadMoreBtnScroll": false,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": true
+      },
+      "followBtnText": "Follow on Instagram",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 41,
+          "g": 167,
+          "b": 210,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "bottom"
+      }
+    }
+  },
+  {
+    "sid": 276985,
+    "id": "tallGrid",
+    "name": "Tall Grid",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2025/02/Tall-Grid.png",
+    "date": 1738693011,
+    "tier": 0,
+    "keywords": [
+      ""
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 3
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "numPosts": {
+        "desktop": 9
+      },
+      "linkBehavior": {
+        "desktop": "lightbox"
+      },
+      "feedWidth": {
+        "desktop": ""
+      },
+      "feedHeight": {
+        "desktop": ""
+      },
+      "feedPadding": {
+        "desktop": 24,
+        "tablet": 14,
+        "phone": 10
+      },
+      "imgPadding": {
+        "desktop": 10,
+        "tablet": 10,
+        "phone": 6
+      },
+      "ratio": "tallgrid",
+      "textSize": {
+        "desktop": "",
+        "tablet": "",
+        "phone": ""
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "hoverInfo": [
+        "likes_comments",
+        "insta_link"
+      ],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.5
+      },
+      "showHeader": {
+        "desktop": true
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": 5,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "normal"
+      },
+      "headerTextSize": {
+        "desktop": ""
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+      },
+      "headerPadding": {
+        "desktop": 0,
+        "phone": 0
+      },
+      "customProfilePic": 0,
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false
+      },
+      "showComments": {
+        "desktop": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": true
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 35,
+            "g": 143,
+            "b": 181,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 41,
+          "g": 167,
+          "b": 210,
+          "a": 0.1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load More Posts",
+      "loadMoreBtnScroll": false,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": true
+      },
+      "followBtnText": "Follow on Instagram",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 41,
+          "g": 167,
+          "b": 210,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "bottom"
+      }
+    }
+  },
+  {
+    "sid": 276997,
+    "id": "gallery",
+    "name": "Gallery",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Gallery.png",
+    "date": 1623156560,
+    "tier": 0,
+    "keywords": [
+      ""
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 5,
+        "tablet": 4,
+        "phone": 3
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "numPosts": {
+        "desktop": 15,
+        "tablet": 12,
+        "phone": 9
+      },
+      "linkBehavior": {
+        "desktop": "lightbox"
+      },
+      "feedWidth": {
+        "desktop": ""
+      },
+      "feedHeight": {
+        "desktop": ""
+      },
+      "feedPadding": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "imgPadding": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "textSize": {
+        "desktop": "",
+        "tablet": "",
+        "phone": ""
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+      },
+      "hoverInfo": [
+        "likes_comments",
+        "insta_link"
+      ],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.5
+      },
+      "showHeader": {
+        "desktop": false
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": 5,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "centered"
+      },
+      "headerTextSize": {
+        "desktop": ""
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "headerPadding": {
+        "desktop": 0
+      },
+      "customProfilePic": 0,
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false
+      },
+      "showComments": {
+        "desktop": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": false
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load more",
+      "loadMoreBtnScroll": true,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": false,
+        "phone": false,
+        "tablet": false
+      },
+      "followBtnText": "Follow on Instagram",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "bottom"
+      }
+    }
+  },
+  {
+    "sid": 276998,
+    "id": "solo",
+    "name": "Solo",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Solo.png",
+    "date": 1623156588,
+    "tier": 0,
+    "keywords": [
+      ""
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 1
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "numPosts": {
+        "desktop": 1
+      },
+      "linkBehavior": {
+        "desktop": "lightbox"
+      },
+      "feedWidth": {
+        "desktop": ""
+      },
+      "feedHeight": {
+        "desktop": ""
+      },
+      "feedPadding": {
+        "desktop": 20,
+        "tablet": 14,
+        "phone": 10
+      },
+      "imgPadding": {
+        "desktop": 14,
+        "tablet": 10,
+        "phone": 6
+      },
+      "textSize": {
+        "desktop": "",
+        "tablet": "",
+        "phone": ""
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "hoverInfo": [
+        "likes_comments",
+        "insta_link"
+      ],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.5
+      },
+      "showHeader": {
+        "desktop": true
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": 5,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "normal"
+      },
+      "headerTextSize": {
+        "desktop": 16,
+        "phone": 12
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "headerPadding": {
+        "desktop": 0
+      },
+      "customProfilePic": 0,
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false
+      },
+      "showComments": {
+        "desktop": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": false
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load more",
+      "loadMoreBtnScroll": true,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": true
+      },
+      "followBtnText": "Follow Me!",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 41,
+          "g": 167,
+          "b": 210,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "header"
+      }
+    }
+  },
+  {
+    "sid": 277001,
+    "id": "row",
+    "name": "Row",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Row.png",
+    "date": 1623156962,
+    "tier": 0,
+    "keywords": [
+      ""
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 6,
+        "phone": 3,
+        "tablet": 5
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "numPosts": {
+        "desktop": 6,
+        "phone": 3,
+        "tablet": 5
+      },
+      "linkBehavior": {
+        "desktop": "lightbox"
+      },
+      "feedWidth": {
+        "desktop": 0
+      },
+      "feedHeight": {
+        "desktop": 0
+      },
+      "feedPadding": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "imgPadding": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "textSize": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "hoverInfo": [
+        "likes_comments",
+        "insta_link",
+        "date"
+      ],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0.5
+      },
+      "showHeader": {
+        "desktop": false
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": null,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "centered"
+      },
+      "headerTextSize": {
+        "desktop": 0
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "headerPadding": {
+        "desktop": 0
+      },
+      "customProfilePic": "",
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false,
+        "tablet": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false,
+        "tablet": false
+      },
+      "showComments": {
+        "desktop": false,
+        "tablet": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": false
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load more",
+      "loadMoreBtnScroll": true,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": false,
+        "phone": false
+      },
+      "followBtnText": "Follow on Instagram",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "bottom"
+      }
+    }
+  },
+  {
+    "sid": 0,
+    "id": "wave",
+    "name": "Wave",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Wave.png",
+    "tier": 0,
+    "keywords": [
+      "wave"
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 7,
+        "tablet": 5,
+        "phone": 3
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "sliderAutoScroll": false,
+      "sliderAutoInterval": 3,
+      "postOrder": "date_desc",
+      "numPosts": {
+        "desktop": 7,
+        "tablet": 5,
+        "phone": 3
+      },
+      "linkBehavior": {
+        "desktop": "nothing"
+      },
+      "feedWidth": {
+        "desktop": ""
+      },
+      "feedHeight": {
+        "desktop": ""
+      },
+      "feedPadding": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "imgPadding": {
+        "desktop": 10,
+        "tablet": 10,
+        "phone": 10
+      },
+      "textSize": {
+        "desktop": "",
+        "tablet": "",
+        "phone": ""
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+      },
+      "hoverInfo": [],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "showHeader": {
+        "desktop": false
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": 5,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "centered"
+      },
+      "headerTextSize": {
+        "desktop": ""
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "headerPadding": {
+        "desktop": 0
+      },
+      "customProfilePic": 0,
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false
+      },
+      "showComments": {
+        "desktop": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": false
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load more",
+      "loadMoreBtnScroll": true,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": false,
+        "phone": false,
+        "tablet": false
+      },
+      "followBtnText": "Follow on Instagram",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "bottom"
+      },
+      "alignFooterButtons": {
+        "desktop": false
+      },
+      "customCss": ".FeedLayout__root {\n  padding-top: 30px;\n}\n\n.FeedGridLayout__cell:nth-child(2n) {\n    transform: translateY(-24px);\n}\n\n.FeedGridLayout__cell {\n    border-radius: 16px;\n    overflow: hidden;\n    box-shadow: -4px 4px 4px 0 rgb(0 0 0 / 15%);\n}"
+    }
+  },
+  {
+    "sid": 0,
+    "id": "squircleGrid",
+    "name": "Squircle Grid",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Squircle-Grid.png",
+    "tier": 0,
+    "keywords": [
+      "wave"
+    ],
+    "design": {
+      "layout": "grid",
+      "numColumns": {
+        "desktop": 4,
+        "tablet": 3,
+        "phone": 3
+      },
+      "highlightFreq": {
+        "desktop": 7
+      },
+      "sliderNumScrollPosts": {
+        "desktop": 1
+      },
+      "sliderInfinite": true,
+      "sliderLoop": false,
+      "sliderArrowPos": {
+        "desktop": "inside"
+      },
+      "sliderArrowSize": {
+        "desktop": 20
+      },
+      "sliderArrowColor": {
+        "r": 255,
+        "b": 255,
+        "g": 255,
+        "a": 1
+      },
+      "sliderArrowBgColor": {
+        "r": 0,
+        "b": 0,
+        "g": 0,
+        "a": 0.8
+      },
+      "sliderAutoScroll": false,
+      "sliderAutoInterval": 3,
+      "postOrder": "date_desc",
+      "numPosts": {
+        "desktop": 16,
+        "tablet": 9,
+        "phone": 9
+      },
+      "linkBehavior": {
+        "desktop": "nothing"
+      },
+      "feedWidth": {
+        "desktop": ""
+      },
+      "feedHeight": {
+        "desktop": ""
+      },
+      "feedPadding": {
+        "desktop": 0,
+        "tablet": 0,
+        "phone": 0
+      },
+      "imgPadding": {
+        "desktop": 16,
+        "tablet": 12,
+        "phone": 8
+      },
+      "textSize": {
+        "desktop": "",
+        "tablet": "",
+        "phone": ""
+      },
+      "bgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 0
+      },
+      "hoverInfo": [],
+      "textColorHover": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "bgColorHover": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 0
+      },
+      "showHeader": {
+        "desktop": false
+      },
+      "headerInfo": {
+        "desktop": [
+          "profile_pic",
+          "bio"
+        ]
+      },
+      "headerAccount": 5,
+      "headerStyle": {
+        "desktop": "normal",
+        "phone": "centered"
+      },
+      "headerTextSize": {
+        "desktop": ""
+      },
+      "headerPhotoSize": {
+        "desktop": 50
+      },
+      "headerTextColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "headerBgColor": {
+        "r": 255,
+        "g": 255,
+        "b": 255,
+        "a": 1
+      },
+      "headerPadding": {
+        "desktop": 0
+      },
+      "customProfilePic": 0,
+      "customBioText": "",
+      "includeStories": false,
+      "storiesInterval": 5,
+      "showCaptions": {
+        "desktop": false
+      },
+      "captionMaxLength": {
+        "desktop": 0
+      },
+      "captionRemoveDots": false,
+      "captionSize": {
+        "desktop": 0
+      },
+      "captionColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "showLikes": {
+        "desktop": false
+      },
+      "showComments": {
+        "desktop": false
+      },
+      "lcIconSize": {
+        "desktop": 14
+      },
+      "likesIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "commentsIconColor": {
+        "r": 0,
+        "g": 0,
+        "b": 0,
+        "a": 1
+      },
+      "lightboxShowSidebar": false,
+      "lightboxCtaStyle": "link",
+      "lightboxCtaDesign": {
+        "text": {
+          "color": {
+            "r": 0,
+            "g": 0,
+            "b": 0,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "bgColor": {
+          "r": 230,
+          "g": 230,
+          "b": 230,
+          "a": 1
+        },
+        "border": {
+          "radius": 3
+        }
+      },
+      "numLightboxComments": 50,
+      "showLoadMoreBtn": {
+        "desktop": false
+      },
+      "loadMoreBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "loadMoreBtnText": "Load more",
+      "loadMoreBtnScroll": true,
+      "autoload": false,
+      "showFollowBtn": {
+        "desktop": false,
+        "phone": false,
+        "tablet": false
+      },
+      "followBtnText": "Follow on Instagram",
+      "followBtnDesign": {
+        "text": {
+          "color": {
+            "r": 255,
+            "g": 255,
+            "b": 255,
+            "a": 1
+          },
+          "align": "center"
+        },
+        "border": {
+          "radius": 3
+        },
+        "bgColor": {
+          "r": 0,
+          "g": 149,
+          "b": 246,
+          "a": 1
+        },
+        "margin": {
+          "top": 0,
+          "bottom": 0,
+          "left": 0,
+          "right": 0
+        }
+      },
+      "followBtnLocation": {
+        "desktop": "header",
+        "phone": "bottom"
+      },
+      "alignFooterButtons": {
+        "desktop": false
+      },
+      "customCss": ".FeedGridLayout__cell {\n    border-radius: 16px;\n    overflow: hidden;\n    box-shadow: -4px 4px 4px 0 rgb(0 0 0 / 15%);\n}"
+    }
+  },
+  {
+    "sid": 277009,
+    "id": "linkInBio",
+    "name": "Link in Bio",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Link-in-Bio.png",
+    "date": 1623157287,
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 277004,
+    "id": "montage",
+    "name": "Montage",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Montage.png",
+    "date": 1623157023,
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 277006,
+    "id": "carousel",
+    "name": "Carousel",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Carousel.png",
+    "date": 1623157181,
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 277007,
+    "id": "brick",
+    "name": "Brick",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Brick.png",
+    "date": 1623157216,
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 277008,
+    "id": "slideshow",
+    "name": "Slideshow",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Slideshow.png",
+    "date": 1623157243,
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 277010,
+    "id": "tile",
+    "name": "Tile",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Tile.png",
+    "date": 1623157322,
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 0,
+    "id": "portfolio",
+    "name": "Portfolio",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Portfolio.png",
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  },
+  {
+    "sid": 0,
+    "id": "zoom",
+    "name": "Zoom",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2022/11/Zoom.png",
+    "tier": 10,
+    "keywords": [
+      ""
+    ],
+    "design": {}
+  }
+]

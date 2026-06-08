@@ -1,0 +1,79 @@
+:root {
+  /* Generic colors */
+  --sli-rouge: #d82442;
+  --sli-dark: #191e23;
+  --sli-wp-blue: #007cba;
+  --sli-wp-grey: #f1f1f1;
+  --sli-wp-light-grey: #f9f9f9;
+  --sli-line-color: #d3d8dc;
+}
+
+/* FS notices */
+.fs-notice.fs-slug-spotlight-social-photo-feeds {
+  color: #000;
+}
+
+/* The plugin name underneath FS notices */
+.fs-notice.fs-slug-spotlight-social-photo-feeds .fs-plugin-title {
+  background: var(--sli-rouge);
+}
+
+/* Hide notification pills in the admin menu (they wrap into their own line) */
+#adminmenu li > a.toplevel_page_spotlight-instagram .wp-menu-name span.update-plugins {
+  display: none;
+}
+
+#wpbody #fs_connect {
+  margin: 10% auto;
+  border-radius: 6px;
+  padding-bottom: 30px;
+}
+
+#wpbody #fs_connect .fs-box-container {
+  padding-top: 30px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, .2);
+  border-radius: 7px;
+}
+
+#wpbody #fs_connect .fs-visual {
+  margin-top: 10px;
+}
+
+#wpbody #fs_connect .fs-visual,
+#wpbody #fs_connect .fs-actions {
+  background: transparent;
+}
+
+#fs_connect > .fs-header > .fs-plugin-icon {
+  top: -44px !important;
+  box-shadow: 0 2px 2px -2px rgba(0, 0, 0, .25);
+}
+
+#wpbody #fs_connect .fs-content .fs-license-key-container {
+  margin-top: 25px;
+}
+
+#wpbody #fs_connect .fs-permissions {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#wpbody #fs_connect .fs-permissions,
+#wpbody #fs_connect .fs-actions {
+  background: #fff;
+}
+
+#wpbody #fs_connect .fs-freemium-licensing {
+  color: inherit;
+  background: var(--sli-wp-grey);
+  padding: 12px 0;
+}
+
+#wpbody #fs_connect .fs-freemium-licensing a {
+  color: var(--sli-wp-blue);
+}
+
+#wpbody #fs_connect .fs-terms {
+  padding: 15px 5px;
+}

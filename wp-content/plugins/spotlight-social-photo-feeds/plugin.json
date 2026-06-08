@@ -1,0 +1,11 @@
+{
+    "name": "Spotlight - Social Media Feeds",
+    "description": "Easily embed beautiful Instagram feeds on your WordPress site.",
+    "version": "1.7.5",
+    "url": "https://spotlightwp.com",
+    "author": "RebelCode",
+    "authorUrl": "https://rebelcode.com",
+    "textDomain": "sl-insta",
+    "minWpVer": "5.7",
+    "minPhpVer": "7.1"
+}
