@@ -110,6 +110,7 @@ function openlab_get_hidden_plugins() {
 		'soliloquy-lite/soliloquy-lite.php', // #3573
 		'static-html-output-plugin/wp2static.php',
 		'stout-google-calendar/stout-google-calendar.php',
+		'syntaxhighlighter/syntaxhighlighter.php', // #3719
 		'sz-google/sz-google.php',
 		'table-of-contents-plus/toc.php',
 		'tako-movable-comments/tako.php',
