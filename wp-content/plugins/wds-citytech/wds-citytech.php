@@ -4050,3 +4050,62 @@ function openlab_blog_slug_is_valid( $blogname ) {
 
 	return ! in_array( $blogname, $blacklisted_slugs, true );
 }
+
+/**
+ * Returns a list of user agents belonging to known AI crawlers.
+ */
+function openlab_get_ai_crawler_user_agents() {
+	return [
+		0 => 'Ai2Bot-Dolma',
+		1 => 'Amazonbot',
+		2 => 'ApifyWebsiteContentCrawler',
+		3 => 'Applebot-Extended',
+		4 => 'Bytespider',
+		5 => 'CCBot',
+		6 => 'ChatGLM-Spider',
+		7 => 'ClaudeBot',
+		8 => 'CloudVertexBot',
+		9 => 'cohere-training-data-crawler',
+		10 => 'Cotoyogi',
+		11 => 'Datenbank Crawler',
+		12 => 'Diffbot',
+		13 => 'FacebookBot',
+		14 => 'FirecrawlAgent',
+		15 => 'Google-Extended',
+		16 => 'GoogleOther',
+		17 => 'GPTBot',
+		18 => 'ICC-Crawler',
+		19 => 'imageSpider',
+		20 => 'Kangaroo Bot',
+		21 => 'laion-huggingface-processor',
+		22 => 'LCC',
+		23 => 'meta-externalagent',
+		24 => 'netEstate Imprint Crawler',
+		25 => 'omgili',
+		26 => 'PanguBot',
+		27 => 'SBIntuitionsBot',
+		28 => 'Spider',
+		29 => 'Timpibot',
+		30 => 'VelenPublicWebCrawler',
+		31 => 'webzio-extended',
+	];
+}
+
+/**
+ * Adds known AI crawler user agents to the site's robots.txt output.
+ *
+ * Currently blocked on:
+ *
+ * - members directory (/members/)
+ */
+function openlab_add_ai_crawlers_to_robots_txt( $output ) {
+	$ai_crawler_user_agents = openlab_get_ai_crawler_user_agents();
+
+	foreach ( $ai_crawler_user_agents as $user_agent ) {
+		$output .= "User-agent: {$user_agent}\n";
+		$output .= "Disallow: /members/\n\n";
+	}
+
+	return $output;
+}
+add_filter( 'robots_txt', 'openlab_add_ai_crawlers_to_robots_txt' );
