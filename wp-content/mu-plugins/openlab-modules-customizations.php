@@ -20,6 +20,9 @@ add_filter(
 add_action(
 	'openlab_modules_section_complete',
 	function( $post_id, $module_id ) {
+		// Disabled in favor of native emails.
+		return;
+
 		// Get current user info
 		$user = wp_get_current_user();
 		if ( ! $user || ! $user->exists() ) {
