@@ -1829,6 +1829,7 @@ OpenLab.utility = (function ($) {
 						height: '295px',
 						navigation: true,
 						navigationHover: false,
+						mobileNavHover: false,
 						onLoaded: function () {
 
 							var cameraImages = $( '.camera_wrap .camera_target' );
