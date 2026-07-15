@@ -1117,7 +1117,7 @@ class GFDirectory {
 	 *
 	 * @return field dropdown html
 	 */
-	public static function render_search_dropdown( $label = '', $name = '', $choices ) {
+	public static function render_search_dropdown( $label, $name, $choices ) {
 
 		if ( empty( $choices ) || ! is_array( $choices ) || empty( $name ) ) {
 			return '';
@@ -1763,7 +1763,7 @@ class GFDirectory {
 		return $value;
 	}
 
-	public static function get_lead_count( $form_id, $search, $star = null, $read = null, $column, $approved = false, $leads = array(), $start_date = null, $end_date = null, $limituser = false, $search_criterias ) {
+	public static function get_lead_count( $form_id, $search, $star, $read, $column, $approved, $leads, $start_date, $end_date, $limituser, $search_criterias ) {
 		global $wpdb, $current_user;
 
 		if ( ! is_numeric( $form_id ) ) {
@@ -1856,7 +1856,7 @@ class GFDirectory {
 	public static function remove_admin_only() {
 	}
 
-	public static function remove_approved_column( $type = 'form', $fields, $approvedcolumn ) {
+	public static function remove_approved_column( $type, $fields, $approvedcolumn ) {
 
 		foreach ( $fields as $key => $column ) {
 			if ( (int) floor( $column['id'] ) === (int) floor( $approvedcolumn ) ) {
@@ -1887,7 +1887,7 @@ class GFDirectory {
 	 *
 	 * @return array
 	 */
-	public static function remove_hidden_fields( $leads, $admin_only, $approved, $is_leads, $is_single = false, $show_admin_only = false, $form ) {
+	public static function remove_hidden_fields( $leads, $admin_only, $approved, $is_leads, $is_single, $show_admin_only, $form ) {
 
 		if ( empty( $admin_only ) || ! is_array( $admin_only ) ) {
 			$admin_only = array();
@@ -1934,7 +1934,7 @@ class GFDirectory {
 	}
 
 	/** returns true if field should be hidden / returns false if not , since 3.5 */
-	public static function check_hide_field_conditions( $field_id, $admin_only, $approved, $is_single = false, $show_admin_only = false, $form ) {
+	public static function check_hide_field_conditions( $field_id, $admin_only, $approved, $is_single, $show_admin_only, $form ) {
 
 		$properties = self::get_field_properties( $form, $field_id );
 		if ( empty( $properties ) ) {
