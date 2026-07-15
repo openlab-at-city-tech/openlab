@@ -319,7 +319,7 @@ class SharDB extends wpdb {
 				if ( $server['dc'] == DATACENTER && isset($server['lhost']) ) {
 					$lserver = $server;
 					$lserver['host'] = $lserver['lhost'];
-					$server_groups[$o - 0.5][] = $lserver;
+					$server_groups[(int) ( $o - 0.5 )][] = $lserver;
 				}
 
 				$server_groups[$o][] = $server;
