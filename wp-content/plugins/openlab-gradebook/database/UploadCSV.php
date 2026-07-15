@@ -5,7 +5,7 @@ class gradebook_upload_csv_API
 
     public function __construct()
     {
-        ini_set('auto_detect_line_endings', true);
+        //ini_set('auto_detect_line_endings', true);
         add_action('wp_ajax_oplb_gradebook_upload_csv', array($this, 'upload_csv'));
         add_action('admin_init', array($this, 'download_csv'));
     }
