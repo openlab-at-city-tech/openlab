@@ -61,6 +61,33 @@ abstract class c2c_Plugin_064 {
 
 	private   $setting_index      = 0;
 
+	// The following properties are populated in the constructor, either from
+	// the `$defaults`/`$plugin_options` array (via the `foreach` loop) or
+	// explicitly. They are declared here to avoid "Creation of dynamic
+	// property" deprecation notices under PHP 8.2+.
+	public $admin_options_name;
+	public $config;
+	public $disable_contextual_help;
+	public $disable_update_check;
+	public $hook_prefix;
+	public $form_name;
+	public $menu_name;
+	public $name;
+	public $nonce_field;
+	public $settings_page;
+	public $show_admin;
+	public $textdomain;
+	public $textdomain_subdir;
+
+	public $author_prefix;
+	public $id_base;
+	public $options_page;
+	public $plugin_basename;
+	public $plugin_file;
+	public $plugin_path;
+	public $u_id_base;
+	public $version;
+
 	/**
 	 * Returns the plugin framework's version.
 	 *
