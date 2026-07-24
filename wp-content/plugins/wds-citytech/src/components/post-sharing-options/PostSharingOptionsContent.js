@@ -42,7 +42,7 @@ const PostSharingOptionsContent = ( { instanceId = 'post-sharing-options' } ) =>
 		const defaultVisibility = blogPublicInt >= 0 ? 'default' : 'members-only';
 
 		return {
-			postVisibility: postMeta.openlab_post_visibility || defaultVisibility,
+			postVisibility: postMeta?.openlab_post_visibility || defaultVisibility,
 		};
 	}, [ blogPublicInt ] );
 
