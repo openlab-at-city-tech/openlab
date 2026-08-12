@@ -184,15 +184,6 @@
 				en: duplicateMessages.handle
 			}
 		} );
-
-		// Guard against duplicate error elements caused by concurrent Parsley validation contexts
-		// each independently calling addError when multiple whenValid() calls resolve simultaneously.
-		window.Parsley.on( 'field:error', function() {
-			var $dupes = this._ui.$errorsWrapper.find( '.parsley-mailEmailDuplicateCheck' );
-			if ( $dupes.length > 1 ) {
-				$dupes.not( ':first' ).remove();
-			}
-		} );
 	} )();
 
 }( window, jQuery ) );
