@@ -1046,11 +1046,7 @@ function openlab_get_group_creators_additional_text( $group_id ) {
 function openlab_group_creator_autocomplete_cb() {
 	global $wpdb;
 
-	$term  = '';
-
-	if ( isset( $_GET['term'] ) ) {
-		$term = urldecode( $_GET['term'] );
-	}
+	$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( $_GET['term'] ) ) : '';
 
 	// Direct query for speed.
 	$bp    = buddypress();
