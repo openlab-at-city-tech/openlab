@@ -1069,8 +1069,10 @@ function openlab_group_creator_autocomplete_cb() {
 	$retval = array();
 	foreach ( (array) $found as $u ) {
 		$retval[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( $u->display_name ), esc_html( $u->user_nicename ) ),
-			'value' => esc_attr( $u->user_nicename ),
+			// Not HTML-escaped: creators.js passes these through jQuery's .text()/.val(),
+			// so they are applied literally rather than rendered as HTML by the browser.
+			'label' => sprintf( '%s (%s)', $u->display_name, $u->user_nicename ),
+			'value' => $u->user_nicename,
 			'url'   => bp_core_get_user_domain( $u->ID ),
 		);
 	}
