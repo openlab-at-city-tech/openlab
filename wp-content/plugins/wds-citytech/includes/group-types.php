@@ -460,8 +460,15 @@ function openlab_additional_faculty_autocomplete_cb() {
 	$faculty_term = openlab_get_member_type_object( 'faculty' );
 
 	// Direct query for speed.
-	$like  = $wpdb->esc_like( $term );
-	$found = $wpdb->get_results( $wpdb->prepare( "SELECT u.display_name, u.user_nicename FROM $wpdb->users u LEFT JOIN {$wpdb->term_relationships} tr ON (u.ID = tr.object_id) WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' ) AND tr.term_taxonomy_id = %d", $faculty_term->term_taxonomy_id ) );
+	$like_term = '%' . $wpdb->esc_like( $term ) . '%';
+	$found     = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT u.display_name, u.user_nicename FROM {$wpdb->users} u LEFT JOIN {$wpdb->term_relationships} tr ON (u.ID = tr.object_id) WHERE ( u.display_name LIKE %s OR u.user_nicename LIKE %s ) AND tr.term_taxonomy_id = %d",
+			$like_term,
+			$like_term,
+			$faculty_term->term_taxonomy_id
+		)
+	);
 
 	$retval = array();
 	foreach ( (array) $found as $u ) {
@@ -1049,9 +1056,15 @@ function openlab_group_creator_autocomplete_cb() {
 	$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( $_GET['term'] ) ) : '';
 
 	// Direct query for speed.
-	$bp    = buddypress();
-	$like  = $wpdb->esc_like( $term );
-	$found = $wpdb->get_results( "SELECT u.ID, u.display_name, u.user_nicename FROM $wpdb->users u WHERE ( u.display_name LIKE '%%{$like}%%' OR u.user_nicename LIKE '%%{$like}%%' )" );
+	$bp        = buddypress();
+	$like_term = '%' . $wpdb->esc_like( $term ) . '%';
+	$found     = $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT u.ID, u.display_name, u.user_nicename FROM {$wpdb->users} u WHERE ( u.display_name LIKE %s OR u.user_nicename LIKE %s )",
+			$like_term,
+			$like_term
+		)
+	);
 
 	$retval = array();
 	foreach ( (array) $found as $u ) {
