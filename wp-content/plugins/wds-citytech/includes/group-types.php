@@ -447,12 +447,7 @@ add_action( 'bp_after_group_details_admin', 'openlab_course_faculty_metabox', 5 
 function openlab_additional_faculty_autocomplete_cb() {
 	global $wpdb;
 
-	$nonce = '';
-	$term  = '';
-
-	if ( isset( $_GET['nonce'] ) ) {
-		$nonce = urldecode( $_GET['nonce'] );
-	}
+	$nonce = isset( $_GET['nonce'] ) ? sanitize_text_field( wp_unslash( $_GET['nonce'] ) ) : '';
 
 	if ( ! wp_verify_nonce( $nonce, 'openlab_faculty_autocomplete' ) ) {
 		die( json_encode( -1 ) );
@@ -460,9 +455,7 @@ function openlab_additional_faculty_autocomplete_cb() {
 
 	// @todo Permissions? Faculty only?
 
-	if ( isset( $_GET['term'] ) ) {
-		$term = urldecode( $_GET['term'] );
-	}
+	$term = isset( $_GET['term'] ) ? sanitize_text_field( wp_unslash( $_GET['term'] ) ) : '';
 
 	$faculty_term = openlab_get_member_type_object( 'faculty' );
 
