@@ -117,19 +117,14 @@ function openlab_ajax_duplicate_email_check() {
 	$email = isset( $_GET['email'] ) ? sanitize_email( wp_unslash( $_GET['email'] ) ) : '';
 
 	if ( ! is_email( $email ) ) {
-		wp_send_json( [ 'matchType' => 'none' ] );
-	}
-
-	// Exact match: email is already registered.
-	if ( get_user_by( 'email', $email ) ) {
-		wp_send_json( [ 'matchType' => 'exact' ] );
+		wp_send_json( [ 'isDuplicate' => false ] );
 	}
 
 	$handle      = substr( $email, 0, strpos( $email, '@' ) );
 	$handle_base = preg_replace( '/[0-9]+$/', '', $handle );
 
 	if ( empty( $handle_base ) ) {
-		wp_send_json( [ 'matchType' => 'none' ] );
+		wp_send_json( [ 'isDuplicate' => false ] );
 	}
 
 	global $wpdb;
@@ -144,15 +139,17 @@ function openlab_ajax_duplicate_email_check() {
 		)
 	);
 
-	$pattern = '/^' . preg_quote( $handle_base, '/' ) . '[0-9]*@mail\.citytech\.cuny\.edu$/i';
+	$is_duplicate = false;
+	$pattern      = '/^' . preg_quote( $handle_base, '/' ) . '[0-9]*@mail\.citytech\.cuny\.edu$/i';
 
 	foreach ( $candidates as $candidate ) {
 		if ( preg_match( $pattern, $candidate ) ) {
-			wp_send_json( [ 'matchType' => 'handle' ] );
+			$is_duplicate = true;
+			break;
 		}
 	}
 
-	wp_send_json( [ 'matchType' => 'none' ] );
+	wp_send_json( [ 'isDuplicate' => $is_duplicate ] );
 }
 add_action( 'wp_ajax_nopriv_openlab_duplicate_email_check', 'openlab_ajax_duplicate_email_check' );
 add_action( 'wp_ajax_openlab_duplicate_email_check', 'openlab_ajax_duplicate_email_check' );

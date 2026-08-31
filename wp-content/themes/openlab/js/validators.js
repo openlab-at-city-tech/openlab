@@ -111,27 +111,13 @@
 		var inFlightValue = null;
 		var inFlightDeferreds = [];
 
-		var duplicateMessages = {
-			exact:  'This email address is already registered. Log in with this address or choose another one.',
-			handle: 'You may already have an account on the OpenLab. Please <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">contact us</a> for assistance.'
-		};
-
-		function setDuplicateMessage( matchType ) {
-			if ( duplicateMessages[ matchType ] ) {
-				window.Parsley.addMessage( 'en', 'mailEmailDuplicateCheck', duplicateMessages[ matchType ] );
-			}
-		}
-
 		window.Parsley.addValidator( 'mailEmailDuplicateCheck', {
 			validateString: function( value ) {
 				var url = ( 'undefined' !== typeof OLReg && OLReg.ajaxurl ) ? OLReg.ajaxurl : ajaxurl;
 
 				// Cached result: return synchronously so no new deferred is created.
 				if ( cache.hasOwnProperty( value ) ) {
-					if ( cache[ value ] !== 'none' ) {
-						setDuplicateMessage( cache[ value ] );
-					}
-					return cache[ value ] === 'none';
+					return ! cache[ value ];
 				}
 
 				// Same value already in flight: queue a new deferred resolved alongside the existing request.
@@ -158,13 +144,10 @@
 				} ).done( function( response ) {
 					inFlightXhr = null;
 					inFlightValue = null;
-					var matchType = ( response && response.matchType ) ? response.matchType : 'none';
-					cache[ value ] = matchType;
-					if ( matchType !== 'none' ) {
-						setDuplicateMessage( matchType );
-					}
+					var isDuplicate = !! ( response && response.isDuplicate );
+					cache[ value ] = isDuplicate;
 					inFlightDeferreds.forEach( function( d ) {
-						matchType === 'none' ? d.resolve() : d.reject();
+						isDuplicate ? d.reject() : d.resolve();
 					} );
 					inFlightDeferreds = [];
 				} ).fail( function( xhr, status ) {
@@ -172,7 +155,7 @@
 					inFlightValue = null;
 					if ( 'abort' !== status ) {
 						// On unexpected failure, don't block the user.
-						cache[ value ] = 'none';
+						cache[ value ] = false;
 						inFlightDeferreds.forEach( function( d ) { d.resolve(); } );
 					}
 					inFlightDeferreds = [];
@@ -181,7 +164,7 @@
 				return deferred.promise();
 			},
 			messages: {
-				en: duplicateMessages.handle
+				en: 'You may already have an account on the OpenLab. Please <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">contact us</a> for assistance.'
 			}
 		} );
 	} )();
