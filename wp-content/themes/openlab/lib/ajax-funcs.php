@@ -116,6 +116,11 @@ add_action('wp_ajax_openlab_ajax_help_post_autocomplete', 'openlab_ajax_help_pos
 function openlab_ajax_duplicate_email_check() {
 	$email = isset( $_GET['email'] ) ? sanitize_email( wp_unslash( $_GET['email'] ) ) : '';
 
+	// Match the domain the address will be stored with, not the case it was typed in.
+	if ( function_exists( 'openlab_normalize_email_domain' ) ) {
+		$email = openlab_normalize_email_domain( $email );
+	}
+
 	if ( ! is_email( $email ) ) {
 		wp_send_json( [ 'matchType' => 'none' ] );
 	}

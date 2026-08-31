@@ -440,7 +440,7 @@
 				return false;
 			}
 
-			const userLastNameEmailMatch = document.getElementById( 'signup_email' ).value.match( /^[^\.@]+\.([a-zA-Z]+)[0-9]*@mail\.citytech\.cuny\.edu$/ );
+			const userLastNameEmailMatch = document.getElementById( 'signup_email' ).value.match( /^[^\.@]+\.([a-zA-Z]+)[0-9]*@mail\.citytech\.cuny\.edu$/i );
 			const userLastNameEmail = userLastNameEmailMatch ? userLastNameEmailMatch[1] : '';
 
 			const userLastNameField = document.querySelector( '.last-name-field' )?.value;
@@ -817,7 +817,7 @@
 	});
 
 	function getEnteredEmailType() {
-		var email = $('#signup_email').val();
+		var email = $('#signup_email').val().toLowerCase();
 		var emailtype;
 
 		if (0 <= email.indexOf('mail.citytech.cuny.edu') || 0 <= email.indexOf('stu-mail.citytech.cuny.edu')) {

@@ -1,5 +1,36 @@
 <?php
 	// Email validation code
+
+/**
+ * Lowercases the domain part of an email address, leaving the local part alone.
+ *
+ * Domains are case-insensitive, so normalize them to lowercase before comparing
+ * or storing.
+ */
+function openlab_normalize_email_domain( $email ) {
+	$at = strrpos( $email, '@' );
+	if ( false === $at ) {
+		return $email;
+	}
+
+	return substr( $email, 0, $at ) . '@' . strtolower( substr( $email, $at + 1 ) );
+}
+
+/**
+ * Normalizes signup email domains before BuddyPress validates or stores them.
+ *
+ * bp_signup_pre_validate fires ahead of both bp_core_validate_user_signup() and
+ * bp_core_signup_user(), so validation and storage see the same value.
+ */
+function openlab_normalize_signup_email_domains() {
+	foreach ( array( 'signup_email', 'signup_email_confirm' ) as $field ) {
+		if ( isset( $_POST[ $field ] ) && is_string( $_POST[ $field ] ) ) {
+			$_POST[ $field ] = openlab_normalize_email_domain( $_POST[ $field ] );
+		}
+	}
+}
+add_action( 'bp_signup_pre_validate', 'openlab_normalize_signup_email_domains' );
+
 function openlab_registration_avatars() {
 	global $bp, $wpdb;
 
@@ -102,7 +133,7 @@ function wds_email_validate() {
 
 	$email        = $_POST['signup_email'];
 	$email_parts  = explode( '@', $email );
-	$domain       = isset( $email_parts[1] ) ? stripslashes( $email_parts[1] ): '';
+	$domain       = isset( $email_parts[1] ) ? strtolower( stripslashes( $email_parts[1] ) ) : '';
 	$account_type = isset( $_POST['openlab-account-type'] ) ? stripslashes( $_POST['openlab-account-type'] ) : 'student';
 
 	switch ( $account_type ) {

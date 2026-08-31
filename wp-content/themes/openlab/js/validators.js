@@ -1,4 +1,19 @@
 ( function( window, $ ) {
+    /**
+     * Lowercases the domain part of an email address, leaving the local part alone.
+     *
+     * Mirrors openlab_normalize_email_domain() in PHP.
+     */
+    function normalizeEmailDomain( email ) {
+        var at = email.lastIndexOf( '@' );
+
+        if ( -1 === at ) {
+            return email;
+        }
+
+        return email.slice( 0, at ) + '@' + email.slice( at + 1 ).toLowerCase();
+    }
+
     // Parsley validation rules.
     window.Parsley.addValidator('lowercase', {
         validateString: function (value) {
@@ -29,7 +44,7 @@
 
 		window.Parsley.addValidator('studentemail', {
 			validateString: function (value) {
-				return /^([a-zA-Z\-\._]+)*[0-9]{1,4}@stu-mail\.citytech\.cuny\.edu$/.test( value );
+				return /^([a-zA-Z\-\._]+)*[0-9]{1,4}@stu-mail\.citytech\.cuny\.edu$/i.test( value );
 			},
 			messages: {
 				en: 'Please enter a valid City Tech student email address. Example: first.lastname##@stu-mail.citytech.cuny.edu'
@@ -38,7 +53,7 @@
 
 		window.Parsley.addValidator('facultystaffemail', {
 			validateString: function (value) {
-				return /^([a-zA-Z0-9\-\._]+)@citytech\.cuny\.edu$/.test( value );
+				return /^([a-zA-Z0-9\-\._]+)@citytech\.cuny\.edu$/i.test( value );
 			},
 			messages: {
 				en: 'Please enter a valid City Tech faculty/staff email address.'
@@ -49,6 +64,16 @@
     // This ensures that when email/password is updated after the confirm field,
     // the confirm field's equalto validation is re-checked.
     $( document ).ready( function() {
+        // Keeps the two fields comparable for equalto, and shows what gets stored.
+        // Bound before the handlers below so they act on the normalized value.
+        $( '#signup_email, #signup_email_confirm' ).on( 'blur', function() {
+            var normalized = normalizeEmailDomain( this.value );
+
+            if ( normalized !== this.value ) {
+                this.value = normalized;
+            }
+        } );
+
         $( '#signup_email' ).on( 'input blur', function() {
             var $confirm = $( '#signup_email_confirm' );
             if ( $confirm.val().length > 0 ) {

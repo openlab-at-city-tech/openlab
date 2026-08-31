@@ -22,7 +22,8 @@ function cac_ncs_email_domain_is_in_whitelist( $email ) {
 
 	$email = explode( '@', trim( $email ) );
 
-	if ( ! isset( $email[1] ) || ! in_array( $email[1], $domains, true ) ) {
+	// Domains are case-insensitive.
+	if ( ! isset( $email[1] ) || ! in_array( strtolower( $email[1] ), $domains, true ) ) {
 		return false;
 	}
 
