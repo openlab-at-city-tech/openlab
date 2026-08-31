@@ -145,6 +145,7 @@ $account_type_options = array_map(
 										data-parsley-type="email"
 										data-parsley-group="email"
 										data-parsley-errors-container="#signup_email_error"
+										data-parsley-mail-email-duplicate-check
 										/>
 
 									<label class="control-label" for="signup_email_confirm"><span class="label-text">Confirm Email Address</span> <span class="label-gloss">(required)</span></label>

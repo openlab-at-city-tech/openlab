@@ -87,6 +87,7 @@ function openlab_enqueue_frontend_scripts() {
 
 		wp_localize_script('openlab-registration', 'OLReg', array(
 			'post_data' => $_POST,
+			'ajaxurl'   => bp_core_ajax_url(),
 		));
     }
 
