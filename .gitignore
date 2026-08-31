@@ -2,12 +2,19 @@
 wp-content/blogs.dir
 wp-content/uploads
 wp-content/cache
+wp-content/ql-cache
+wp-content/jetpack-waf
+wp-content/fonts
 
 sql/*
 wiki/images/*
 
 # Exclude environment files
 env.php
+
+# Exclude site-specific files
+robots.txt
+security.txt
 
 # Don't include .htaccess, which causes problems with the dev site
 .htaccess
@@ -47,6 +54,8 @@ wp-content/plugins/buddypress/bp-forums/bbpress
 .svn
 wp-admin/error_log
 .fseventsd/
+cgi-bin/
+.well-known/
 
 # vim files
 *.swp
