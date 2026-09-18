@@ -24,6 +24,7 @@ require 'includes/user-moderation.php';
 require 'includes/block-widgets.php';
 require 'includes/cbox-polyfills/index.php';
 require 'includes/passwords.php';
+require 'includes/user-email-lock.php';
 
 // Conditionally load Easy TOC modifications.
 add_action( 'plugins_loaded', function() {
