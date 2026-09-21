@@ -34,7 +34,7 @@ function openlab_conditional_body_classes($classes) {
 			openlab_is_search_results_page() ||
             ( isset($post->post_name) && $post->ID == $about_page_obj->ID ) ||
             ( isset($post->post_parent) && $post->post_parent == $about_page_obj->ID ) ||
-            ( isset($post->post_parent) && $post->post_parent == $calendar_page_obj->ID ) ||
+            ( $calendar_page_obj && isset($post->post_parent) && $post->post_parent == $calendar_page_obj->ID ) ||
             ( isset($post->post_type) && $post->post_type == 'help' ) ||
             ( isset($post->post_type) && $post->post_type == 'help_glossary') ||
             (!empty($query_vars) && isset($query_vars['help_category'])) ||
