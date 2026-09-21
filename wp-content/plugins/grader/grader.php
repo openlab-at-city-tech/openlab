@@ -87,7 +87,7 @@ function grader_is_post_author()
 	global $user_ID;
 	global $post;
 
-	return 	($post->post_author == $user_ID)?TRUE:FALSE;
+	return 	($post && $post->post_author == $user_ID)?TRUE:FALSE;
 }
 
 /*********************
