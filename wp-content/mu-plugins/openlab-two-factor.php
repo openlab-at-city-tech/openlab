@@ -14,6 +14,20 @@ function openlab_two_factor_providers( $providers ) {
 }
 add_filter( 'two_factor_providers', 'openlab_two_factor_providers', 9999 );
 
+// With one provider, a "Recommended" label beside it means nothing.
+add_filter( 'two_factor_recommended_providers', '__return_empty_array' );
+
+/**
+ * Removes the per-site Settings > Two-Factor page and the provider list it saves.
+ *
+ * The provider policy is network-wide. If a site admin clears the authenticator app on that
+ * page, users with two-factor get "provider no longer exists" errors on that site.
+ */
+function openlab_two_factor_remove_site_settings() {
+	remove_action( 'init', 'two_factor_register_admin_hooks' );
+}
+add_action( 'plugins_loaded', 'openlab_two_factor_remove_site_settings' );
+
 /**
  * Hides the primary-method picker on the two-factor settings form.
  *
