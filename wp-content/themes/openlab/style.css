@@ -10724,10 +10724,8 @@ a.external-link::after {
   margin-left: 5%;
 }
 .sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks .portfolio-dashboard-link a {
-  padding: 7px 0;
-}
-.sidebar .sidebar-block ul.sidebar-sublinks.portfolio-sublinks .portfolio-dashboard-link a:last-child {
-  padding-left: 0;
+  display: inline-block;
+  padding: 0;
 }
 .sidebar .sidebar-block ul.sidebar-sublinks.group-event-activity li {
   margin-bottom: 14px;
