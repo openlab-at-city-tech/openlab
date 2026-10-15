@@ -375,7 +375,8 @@ function openlab_course_faculty_metabox() {
 		foreach ( $primary_faculty as $primary_faculty_id ) {
 			$primary_faculty_user   = new WP_User( $primary_faculty_id );
 			$primary_faculty_data[] = array(
-				'label' => sprintf( '%s (%s)', bp_core_get_user_displayname( $primary_faculty_user->ID ), $primary_faculty_user->user_nicename ),
+				// BuddyPress returns names HTML-escaped. additional-faculty.js inserts text, so decode.
+				'label' => sprintf( '%s (%s)', wp_specialchars_decode( bp_core_get_user_displayname( $primary_faculty_user->ID ), ENT_QUOTES ), $primary_faculty_user->user_nicename ),
 				'value' => $primary_faculty_user->user_nicename,
 			);
 		}
@@ -388,7 +389,7 @@ function openlab_course_faculty_metabox() {
 		foreach ( $addl_faculty as $fid ) {
 			$f                   = new WP_User( $fid );
 			$addl_faculty_data[] = array(
-				'label' => sprintf( '%s (%s)', bp_core_get_user_displayname( $fid ), $f->user_nicename ),
+				'label' => sprintf( '%s (%s)', wp_specialchars_decode( bp_core_get_user_displayname( $fid ), ENT_QUOTES ), $f->user_nicename ),
 				'value' => $f->user_nicename,
 			);
 		}
@@ -579,8 +580,8 @@ function openlab_group_contact_field() {
 	foreach ( $existing_contacts as $uid ) {
 		$u                        = new WP_User( $uid );
 		$existing_contacts_data[] = array(
-			// Not HTML-escaped: group-contact.js inserts these as text.
-			'label' => sprintf( '%s (%s)', bp_core_get_user_displayname( $uid ), $u->user_nicename ),
+			// BuddyPress returns names HTML-escaped. group-contact.js inserts text, so decode.
+			'label' => sprintf( '%s (%s)', wp_specialchars_decode( bp_core_get_user_displayname( $uid ), ENT_QUOTES ), $u->user_nicename ),
 			'value' => $u->user_nicename,
 		);
 	}
@@ -649,8 +650,8 @@ function openlab_group_contact_autocomplete_cb() {
 	$retval = array();
 	foreach ( $q->results as $u ) {
 		$retval[] = array(
-			// Not HTML-escaped: group-contact.js inserts these as text.
-			'label' => sprintf( '%s (%s)', $u->fullname, $u->user_nicename ),
+			// BuddyPress returns names HTML-escaped. group-contact.js inserts text, so decode.
+			'label' => sprintf( '%s (%s)', wp_specialchars_decode( $u->fullname, ENT_QUOTES ), $u->user_nicename ),
 			'value' => $u->user_nicename,
 		);
 	}
