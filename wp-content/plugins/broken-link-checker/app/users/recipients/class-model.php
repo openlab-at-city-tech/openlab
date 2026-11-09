@@ -90,7 +90,11 @@ class Model extends Base {
 			return false;
 		}
 
-		$key_parts = explode( '_', base64_decode( $key ) );
+		/*
+		 * Split into two parts only. A recipient key may itself contain an underscore,
+		 * and splitting on every one of them would truncate it before it is compared.
+		 */
+		$key_parts = explode( '_', base64_decode( $key ), 2 );
 
 		if ( count( $key_parts ) < 2 ) {
 			return array();
@@ -99,62 +103,62 @@ class Model extends Base {
 		$hashed_email  = $key_parts[0];
 		$recipient_key = sanitize_text_field( $key_parts[1] );
 		$schedule      = Settings::instance()->get( 'schedule' );
-		$recipient     = array();
+
+		if ( '' === $recipient_key ) {
+			return array();
+		}
 
 		// First go through unregistered recipients (that were added by email).
 		if ( ! empty( $schedule['emailrecipients'] ) ) {
 			$recipient = array_filter(
 				$schedule['emailrecipients'],
 				function ( $recipient_data ) use ( $recipient_key, $hashed_email ) {
+					if ( ! isset( $recipient_data['key'], $recipient_data['email'] ) ) {
+						return false;
+					}
 
-					return isset( $recipient_data['key'] ) &&
-					       $recipient_data['key'] === $recipient_key &&
-					       $hashed_email === md5( $recipient_data['email'] );
+					return hash_equals( (string) $recipient_data['key'], $recipient_key ) &&
+					       hash_equals( md5( $recipient_data['email'] ), $hashed_email );
 				}
 			);
+
+			if ( ! empty( $recipient ) ) {
+				return array_values( $recipient )[0];
+			}
 		}
 
-		// If token does not belong to unregistered recipient we need to check in the recipients that are actual users.
-		if ( empty( $recipient ) ) {
-			if ( ! empty( $schedule['registered_recipients_data'] ) ) {
-				foreach ( $schedule['registered_recipients_data'] as $user_id => $user_data ) {
-					$user = null;
-
-					if ( md5( $user_data['email'] ) === $hashed_email ) {
-						$user = get_user_by( 'email', sanitize_email( $user_data['email'] ) );
-					}
-
-					if ( $user instanceof \WP_User ) {
-						$recipient = array(
-							'key'     => $user_data['key'],
-							'name'    => $user->display_name,
-							'email'   => $user->user_email,
-							'user_id' => $user->ID,
-						);
-
-						break;
-					}
+		/*
+		 * Registered recipients. The token has to carry the whole stored key, which is
+		 * random and specific to the recipient. Matching on md5( email ) alone would
+		 * authenticate anyone who knows the address, and an address is not a secret.
+		 */
+		if ( ! empty( $schedule['registered_recipients_data'] ) ) {
+			foreach ( $schedule['registered_recipients_data'] as $user_data ) {
+				if ( ! isset( $user_data['key'], $user_data['email'] ) ) {
+					continue;
 				}
-			}
 
-			if ( empty( $recipient ) ) {
-				$user_key_parts = explode( '|', $recipient_key );
-				$user           = ! empty( $user_key_parts[1] ) ? get_userdata( intval( $user_key_parts[1] ) ) : null;
+				if ( ! hash_equals( (string) $user_data['key'], $recipient_key ) ) {
+					continue;
+				}
 
-				if ( $user instanceof \WP_User && md5( $user->user_email ) === $hashed_email ) {
-					$recipient = array(
-						'key'     => $recipient_key,
+				if ( ! hash_equals( md5( $user_data['email'] ), $hashed_email ) ) {
+					continue;
+				}
+
+				$user = get_user_by( 'email', sanitize_email( $user_data['email'] ) );
+
+				if ( $user instanceof \WP_User ) {
+					return array(
+						'key'     => $user_data['key'],
 						'name'    => $user->display_name,
 						'email'   => $user->user_email,
 						'user_id' => $user->ID,
 					);
 				}
 			}
-
-		} else {
-			$recipient = array_values( $recipient )[0];
 		}
 
-		return $recipient;
+		return array();
 	}
 }

@@ -144,6 +144,15 @@ class Controller extends Rest_Api {
 
 				Settings::instance()->save();
 				break;
+			case 'hc-disconnect-notice-shown' :
+				Settings::instance()->set(
+					array(
+						'show_disconnect_notice' => false,
+					)
+				);
+
+				Settings::instance()->save();
+				break;
 			case 'save-version-highlights-option' :
 				Settings::instance()->set(
 					array(
@@ -349,6 +358,15 @@ class Controller extends Rest_Api {
 			$existing_recipients = wp_list_pluck( $existing_settings['schedule']['emailrecipients'], 'email' );
 		}
 
+		/*
+		 * The recipients screen rejects duplicates, but the same address must never be stored twice even when the request
+		 * does not come from it. Filtering before the map below also keeps duplicates out of the confirmation emails.
+		 */
+		$settings['schedule']['emailRecipients'] = $this->filter_duplicate_email_recipients(
+			isset( $settings['schedule']['emailRecipients'] ) ? (array) $settings['schedule']['emailRecipients'] : array(),
+			$settings['schedule']
+		);
+
 		$settings['schedule']['emailRecipients'] = array_map(
 			function ( $recipient ) use ( $existing_recipients ) {
 				/*
@@ -356,6 +374,20 @@ class Controller extends Rest_Api {
 				Removing avatars from email recipients. We can fetch the avatars when preparing recipient data for view.
 				*/
 				unset( $recipient['avatar'] );
+
+				/*
+				The owning user id is only prepared for view, so that the recipients screen can match an invited address
+				against the users list. It must not be stored, as it also marks a registered recipient elsewhere.
+				*/
+				unset( $recipient['user_id'] );
+
+				/*
+				The name is plain text. It is sanitized here, before it is stored or used in the confirmation email,
+				as the save-time sanitization would keep markup in it.
+				*/
+				if ( isset( $recipient['name'] ) ) {
+					$recipient['name'] = sanitize_text_field( $recipient['name'] );
+				}
 
 				/*
 				 * Generate activation code and send activation links to recipients if not already.
@@ -391,6 +423,55 @@ class Controller extends Rest_Api {
 	}
 
 	/**
+	 * Removes the email recipients whose address is already covered by another recipient.
+	 *
+	 * Recipients live in two separate lists, the registered users and the addresses added by email, so the same address
+	 * can reach both. Every entry gets its own scan report email, hence only the first occurrence of an address is kept.
+	 *
+	 * @param array $email_recipients The recipients added by email.
+	 * @param array $schedule The schedule settings, holding the ids of the recipients added as registered users.
+	 *
+	 * @since 2.4.14
+	 *
+	 * @return array
+	 */
+	private function filter_duplicate_email_recipients( array $email_recipients = array(), array $schedule = array() ) {
+		$known_emails = array();
+
+		// Addresses already covered by the recipients that were added from the users list.
+		if ( ! empty( $schedule['recipients'] ) ) {
+			foreach ( $schedule['recipients'] as $recipient_user_id ) {
+				$user = get_userdata( intval( $recipient_user_id ) );
+
+				if ( $user instanceof \WP_User ) {
+					$known_emails[] = strtolower( $user->user_email );
+				}
+			}
+		}
+
+		return array_values(
+			array_filter(
+				$email_recipients,
+				function ( $recipient ) use ( &$known_emails ) {
+					if ( empty( $recipient['email'] ) ) {
+						return false;
+					}
+
+					$email = strtolower( trim( $recipient['email'] ) );
+
+					if ( in_array( $email, $known_emails, true ) ) {
+						return false;
+					}
+
+					$known_emails[] = $email;
+
+					return true;
+				}
+			)
+		);
+	}
+
+	/**
 	 * Returns recipient activation url with activation code.
 	 *
 	 * @param string $activation_code
@@ -398,10 +479,14 @@ class Controller extends Rest_Api {
 	 * @return mixed
 	 */
 	private function generate_activation_link( string $activation_code = '' ) {
+		/*
+		 * add_query_arg() does not encode values. The code is base64, and a raw "+" would be read back as a space.
+		 * sanitize_text_field() must not be applied on top, as it strips the %XX octets rawurlencode() produces.
+		 */
 		return add_query_arg(
 			array(
 				'action'          => 'activate',
-				'activation_code' => sanitize_text_field( $activation_code ),
+				'activation_code' => rawurlencode( $activation_code ),
 			),
 			Activation_Webhook::instance()->webhook_url()
 		);
@@ -411,7 +496,7 @@ class Controller extends Rest_Api {
 		return add_query_arg(
 			array(
 				'action'          => 'cancel',
-				'activation_code' => sanitize_text_field( $activation_code ),
+				'activation_code' => rawurlencode( $activation_code ),
 			),
 			Activation_Webhook::instance()->webhook_url()
 		);

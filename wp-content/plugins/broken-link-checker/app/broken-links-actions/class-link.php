@@ -22,6 +22,7 @@ use WP_User;
 use WPMUDEV_BLC\App\Options\Links_Queue\Model as Queue;
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
 use WPMUDEV_BLC\Core\Traits\Execution_Time;
+use \WPMUDEV_BLC\App\Integrations\App_Integrations;
 
 /**
  * Class Scan_Data
@@ -161,6 +162,8 @@ class Link extends Base {
 	 * @return true[]
 	 */
 	public function execute_action() {
+		App_Integrations::init();
+
 		$report = array();
 
 		if ( ! empty( $this->is_full_site() ) ) {

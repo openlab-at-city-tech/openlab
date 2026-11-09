@@ -72,7 +72,7 @@ class Controller extends Base {
 	public function get_action_links() {
 		$actions         = array();
 		$dashboard_url   = menu_page_url( 'blc_dash', false );
-		$dashboard_label = esc_html__( 'Cloud', 'broken-link-checker' );
+		$dashboard_label = esc_html__( 'Find & Fix Broken Links', 'broken-link-checker' );
 		$local_url       = menu_page_url( 'blc_local', false );
 		$local_label     = esc_html__( 'Local', 'broken-link-checker' );
 		$docs_url        = 'https://wpmudev.com/docs/wpmu-dev-plugins/broken-link-checker';
@@ -86,15 +86,8 @@ class Controller extends Base {
 				),
 				$admin_url
 			);
-			$local_url     = add_query_arg(
-				array(
-					'page' => 'blc_local',
-				),
-				$admin_url
-			);
 
 			$actions['cloud'] = "<a href=\"{$dashboard_url}\">{$dashboard_label}</a>";
-			$actions['local'] = "<a href=\"{$local_url}\">{$local_label}</a>";
 		} else {
 			$local_label = esc_html__( 'Broken Links', 'broken-link-checker' );
 			$local_url   = add_query_arg(

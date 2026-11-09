@@ -157,6 +157,7 @@ final class Loader extends Base {
 		 * Start app functions.
 		 */
 		add_action( 'init', array( $this, 'init_app' ), 9 );
+		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
 
 		/*
 		 * Setup plugin scripts
@@ -170,6 +171,23 @@ final class Loader extends Base {
 		 * @since 2.0.0
 		 */
 		do_action( 'wpmudev_blc_after_core_init' );
+	}
+
+	/**
+	 * Redirects to the BLC cloud page after plugin activation.
+	 *
+	 * @since 2.4.9
+	 * @return void
+	 */
+	public function activation_redirect() {
+		if ( get_transient( 'blc_activation_redirect' ) ) {
+			delete_transient( 'blc_activation_redirect' );
+
+			if ( ! is_multisite() && current_user_can( 'manage_options' ) ) {
+				wp_safe_redirect( admin_url( 'admin.php?page=blc_dash' ) );
+				exit;
+			}
+		}
 	}
 
 	/**
@@ -211,6 +229,7 @@ final class Loader extends Base {
 					'Hub_Endpoints',
 					'Options',
 					'Submodules',
+					'Content_Filters',
 				)
 			)
 		);
@@ -236,6 +255,7 @@ final class Loader extends Base {
 					'utm_source'   => 'blc',
 					'utm_medium'   => 'plugin',
 					'utm_campaign' => 'blc_connector_main',
+					'utm_content'  => 'hub-connector',
 				),
 			),
 		);

@@ -110,7 +110,7 @@ class blcRapidShareChecker extends blcChecker {
 
 		//Is the response valid?
 		if ( is_wp_error( $response ) ) {
-			$result['log']      .= 'Error : ' . $response->get_error_message();
+			$result['log']      .= 'Error : ' . esc_html( $response->get_error_message() );
 			$result['broken']    = true;
 			$result['http_code'] = 0;
 		} else {
@@ -187,12 +187,12 @@ class blcRapidShareChecker extends blcChecker {
 				} else {
 					$result['log'] .= sprintf(
 						__( 'RapidShare API error: %s', 'broken-link-checker' ),
-						$response['body']
+						esc_html( $response['body'] )
 					);
 				}
 			} else {
 				//Unexpected error.
-				$result['log']   .= $response['body'];
+				$result['log']   .= esc_html( $response['body'] );
 				$result['broken'] = true;
 			}
 		}

@@ -110,6 +110,19 @@ if ( ! class_exists( 'blcLinkInstance' ) ) {
 				);
 			}
 
+			// Refuse the edit unless the current user is allowed to edit the item that contains this link.
+			if ( ! $container->current_user_can_edit() ) {
+				return new WP_Error(
+					'container_edit_not_allowed',
+					sprintf(
+						// translators: %1$s: container type, %2$d: container id.
+						__( 'You are not allowed to edit the link in %1$s [%2$d].', 'broken-link-checker' ),
+						$this->container_type,
+						$this->container_id
+					)
+				);
+			}
+
 			//Get the parser.
 			$parser = $this->get_parser();
 			if ( is_null( $parser ) ) {
@@ -163,6 +176,19 @@ if ( ! class_exists( 'blcLinkInstance' ) ) {
 				return new WP_Error(
 					'container_not_found',
 					sprintf( __( 'Container %1$s[%2$d] not found', 'broken-link-checker' ), $this->container_type, $this->container_id )
+				);
+			}
+
+			// Refuse the unlink unless the current user is allowed to edit the item that contains this link.
+			if ( ! $container->current_user_can_edit() ) {
+				return new WP_Error(
+					'container_edit_not_allowed',
+					sprintf(
+						// translators: %1$s: container type, %2$d: container id.
+						__( 'You are not allowed to remove the link from %1$s [%2$d].', 'broken-link-checker' ),
+						$this->container_type,
+						$this->container_id
+					)
 				);
 			}
 
@@ -508,13 +534,15 @@ if ( ! class_exists( 'blcLinkInstance' ) ) {
 	function blc_get_instances( $link_ids, $purpose = '', $load_containers = false, $load_wrapped_objects = false, $include_invalid = false ) {
 		global $wpdb; /** @var wpdb $wpdb */
 
+		$link_ids = array_filter( wp_parse_id_list( $link_ids ) );
+
 		if ( empty( $link_ids ) ) {
 			return array();
 		}
 
-		$link_ids_in = implode( ', ', $link_ids );
+		$placeholders = implode( ', ', array_fill( 0, count( $link_ids ), '%d' ) );
 
-		$q = "SELECT * FROM {$wpdb->prefix}blc_instances WHERE link_id IN ($link_ids_in)";
+		$q = $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}blc_instances WHERE link_id IN ($placeholders)", $link_ids ); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
 		//Skip instances that reference containers or parsers that aren't currently loaded
 		if ( ! $include_invalid ) {

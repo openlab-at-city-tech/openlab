@@ -45,20 +45,20 @@ class View extends Base {
 			<p>
 				<?php
 				printf(
-				/* translators: 1: Recipient name 2: Opening link tag 3; Closing link tag */
+				/* translators: 1: Recipient name 2: Opening link tag 3: Closing link tag */
 					esc_html__(
 						'Hi %1$s. You have become a recipient of site\'s broken links reports. You can continue to site from %2$shere%3$s.',
 						'broken-link-checker'
 					),
-					$params['name'],
-					'<a href="' . site_url() . '">',
+					esc_html( $params['name'] ?? '' ),
+					'<a href="' . esc_url( site_url() ) . '">',
 					'</a>'
 				);
 				?>
 			</p>
 
 			<p>
-				<?php echo $cancelation_message; ?>
+				<?php echo wp_kses_post( $cancelation_message ); ?>
 			</p>
 		</div>
 		<?php
@@ -69,12 +69,12 @@ class View extends Base {
 
 		if ( ! empty( $cancellation_link ) ) {
 			$message = sprintf(
-			/* translators: 1: Opening link tag 2; Closing link tag */
+			/* translators: 1: Opening link tag 2: Closing link tag */
 				esc_html__(
 					'If you do not wish to receive these reports in your email, you can contact site admins or click %1$shere to cancel email reports instantly%2$s.',
 					'broken-link-checker'
 				),
-				'<a href="' . esc_html( $cancellation_link ) . '">',
+				'<a href="' . esc_url( $cancellation_link ) . '">',
 				'</a>'
 			);
 		} else {
@@ -98,13 +98,13 @@ class View extends Base {
 			<p>
 				<?php
 				printf(
-				/* translators: 1: Recipient name 2: Opening link tag 3; Closing link tag */
+				/* translators: 1: Recipient name 2: Opening link tag 3: Closing link tag */
 					esc_html__(
 						'Hi %1$s. You should stop receiving broken links reports for this site. You can visit site from %2$shere%3$s.',
 						'broken-link-checker'
 					),
-					$params['name'],
-					'<a href="' . site_url() . '">',
+					esc_html( $params['name'] ?? '' ),
+					'<a href="' . esc_url( site_url() ) . '">',
 					'</a>'
 				);
 				?>

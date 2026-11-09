@@ -110,6 +110,15 @@ class blcComment extends blcContainer {
 		return current_user_can( 'edit_post', $comment->comment_post_ID );
 	}
 
+	/**
+	 * Check if the current user can edit this comment.
+	 *
+	 * @return bool
+	 */
+	function current_user_can_edit() {
+		return current_user_can( 'edit_comment', $this->container_id );
+	}
+
 	function can_be_trashed() {
 		return defined( 'EMPTY_TRASH_DAYS' ) && EMPTY_TRASH_DAYS;
 	}
@@ -414,10 +423,17 @@ class blcCommentManager extends blcContainerManager {
 				$comment_ids[] = $container->container_id;
 			}
 
+			$comment_ids = array_filter( wp_parse_id_list( $comment_ids ) );
+
+			if ( empty( $comment_ids ) ) {
+				return $containers;
+			}
+
 			//There's no WP function for retrieving multiple comments by their IDs,
 			//so we query the DB directly.
-			$q        = "SELECT * FROM {$wpdb->comments} WHERE comment_ID IN (" . implode( ', ', $comment_ids ) . ')';
-			$comments = $wpdb->get_results( $q ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$placeholders = implode( ', ', array_fill( 0, count( $comment_ids ), '%d' ) );
+			$q            = $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID IN ($placeholders)", $comment_ids ); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$comments     = $wpdb->get_results( $q ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
 			foreach ( $comments as $comment ) {
 				//Cache the comment in the internal WP object cache

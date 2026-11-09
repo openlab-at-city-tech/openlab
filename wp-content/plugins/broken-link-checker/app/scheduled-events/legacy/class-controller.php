@@ -132,15 +132,22 @@ class Controller extends Base {
 	}
 
 	public function activate_legacy_crons() {
-		global $blc_config_manager;
+		if ( ! function_exists( 'blc_get_configuration' ) ) {
+			require_once BLC_DIRECTORY_LEGACY . '/config.php';
+		}
+
+		if ( ! blc_config_initialized() ) {
+			return;
+		}
+
+		$blc_config_manager = blc_get_configuration();
 
 		$ws_link_checker = null;
 
 		if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 			require_once BLC_DIRECTORY_LEGACY . '/core/core.php';
 		}
-
-		if ( $blc_config_manager instanceof \blcConfigurationManager ) {
+		if ( ! $blc_config_manager->is_empty() ) {
 			$ws_link_checker = new \wsBrokenLinkChecker( BLC_PLUGIN_FILE_LEGACY, $blc_config_manager );
 		}
 

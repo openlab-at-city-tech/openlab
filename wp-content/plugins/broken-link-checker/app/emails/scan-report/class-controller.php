@@ -58,6 +58,15 @@ class Controller extends Mailer {
 		$broken_links_count    = Model::get_scan_results( 'broken_links' );
 		$recipients_collection = array();
 
+		/*
+		 * The report section is driven by the rows we could actually render, not by
+		 * the count reported by the Hub. The two can disagree: the count includes
+		 * links ignored after the scan, and a stored link we cannot render at all
+		 * would otherwise leave the section holding only its heading.
+		 */
+		$broken_links_list = View::instance()->broken_links_list_markup();
+		$has_report_list   = ! empty( $broken_links_list );
+
 		$this->body_variables =
 			apply_filters(
 				'wpmudev_blc_scan_report_email_vars',
@@ -89,14 +98,14 @@ class Controller extends Mailer {
 					'{{SUMMARY_UNIQUE_URLS_LBL}}'  => esc_html__( 'Unique URLs', 'broken-link-checker' ),
 					'{{UNIQUE_URLS_COUNT}}'        => Model::get_scan_results( 'unique_urls' ),
 					// REPORT PART
-					'{{REPORT_PADDING}}'           => $broken_links_count > 0 ? '25px' : '0',
-					'{{REPORT_LIST_PADDING}}'      => $broken_links_count > 0 ? '8px' : '0',
-					'{{REPORT_BTN_PADDING}}'       => $broken_links_count > 0 ? '20px' : '0',
-					'{{REPORT_TITLE}}'             => $broken_links_count > 0 ? esc_html__( 'Broken link report', 'broken-link-checker' ) : '',
-					'{{REPORT_DESCRIPTION}}'       => $broken_links_count > 0 ? esc_html__( 'The list below shows a maximum of 20 broken links. Click the View Full Report button to see the full list.', 'broken-link-checker' ) : '',
+					'{{REPORT_PADDING}}'           => $has_report_list ? '25px' : '0',
+					'{{REPORT_LIST_PADDING}}'      => $has_report_list ? '8px' : '0',
+					'{{REPORT_BTN_PADDING}}'       => $has_report_list ? '20px' : '0',
+					'{{REPORT_TITLE}}'             => $has_report_list ? esc_html__( 'Broken link report', 'broken-link-checker' ) : '',
+					'{{REPORT_DESCRIPTION}}'       => $has_report_list ? esc_html__( 'The list below shows a maximum of 20 broken links. Click the View Full Report button to see the full list.', 'broken-link-checker' ) : '',
 					'{{REPORT_BTN_URL}}'           => esc_url( Model::get_hub_home_url() ),
 					'{{REPORT_BTN_TITLE}}'         => $broken_links_count > 0 ? esc_html__( 'View Full Report', 'broken-link-checker' ) : esc_html__( 'View Report', 'broken-link-checker' ),
-					'{{BROKEN_LINKS_LIST}}'        => $broken_links_count > 0 ? View::instance()->broken_links_list_markup() : '',
+					'{{BROKEN_LINKS_LIST}}'        => $broken_links_list,
 					// FOOTER PART
 					'{{FOOTER_TITLE}}'             => esc_html__( 'Broken Link Checker', 'broken-link-checker' ),
 					'{{FOOTER_COMPANY}}'           => 'WPMU DEV',

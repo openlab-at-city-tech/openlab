@@ -19,12 +19,21 @@ defined( 'WPINC' ) || die;
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
 
 /**
- * Class Scan_Data
+ * Class Nofollow_Link
  *
  * @package WPMUDEV_BLC\App\Broken_Links_Actions\Processors
  */
 class Nofollow_Link extends Base {
 
+	/**
+	 * Modifies the content by adding `nofollow` to the target links.
+	 * Returns the modified content string.
+	 *
+	 * @param string $content The content to process.
+	 * @param string $link The link to be modified.
+	 * @param string $new_link The new link to replace the old link with (Replace action only).
+	 * @return string The modified content with `nofollow` added to the target links.
+	 */
 	public function execute( string $content = '', string $link = '', string $new_link = '' ) {
 		if ( empty( $this->get_target_tags() ) ) {
 			return $content;

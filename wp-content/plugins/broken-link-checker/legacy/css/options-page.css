@@ -141,7 +141,6 @@ ul.ui-tabs-nav li {
 	margin: 0 0.5em 0 0;
 
 	border: 1px solid #DFDFDF;
-
 	background: none repeat scroll 0 0 #F4F4F4;
 
 	border-top-right-radius: 6px;
@@ -159,6 +158,9 @@ ul.ui-tabs-nav li {
 	max-width: 20%;
 	overflow: hidden;
 	text-align: center;
+
+	cursor: pointer;
+	user-select: none;
 }
 
 #tab-button-which {
@@ -173,20 +175,20 @@ ul.ui-tabs-nav li.ui-tabs-active
 	border-bottom-color: white;
 }
 
-ul.ui-tabs-nav li a {
+ul.ui-tabs-nav li {
 	display: inline-block;
 	height: 17px;
 	text-decoration: none;
-	color: #C1C1C1;
+	color: #555;
 	padding: 0.5em 1em 0.6em 1em;
 }
 
-ul.ui-tabs-nav li a:focus {
+ul.ui-tabs-nav li:focus {
 	outline: none;
 }
 
-ul.ui-tabs-nav li.ui-tabs-selected a,
-ul.ui-tabs-nav li.ui-tabs-active a {
+ul.ui-tabs-nav li.ui-tabs-selected,
+ul.ui-tabs-nav li.ui-tabs-active {
 	color: black;
 	outline: none;
 }
@@ -231,4 +233,108 @@ ul.ui-tabs-nav li.ui-tabs-active a {
 /* Miscellaneous */
 td:target, label:target {
 	background: #ffffaa;
+}
+
+/* Accessibility improvements for WCAG 2.2 AA compliance */
+
+/* Focus indicators with sufficient contrast */
+#blc-settings-wrap button:focus,
+#blc-settings-wrap input:focus,
+#blc-settings-wrap textarea:focus,
+#blc-settings-wrap select:focus,
+#blc-settings-wrap li[role="tab"]:focus {
+	outline: 2px solid #005fcc;
+	outline-offset: 1px;
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #005fcc;
+}
+
+/* Button-style links should look like buttons */
+.button-link {
+	background: none;
+	border: 1px solid #0073aa;
+	color: #0073aa;
+	padding: 4px 8px;
+	cursor: pointer;
+	text-decoration: none;
+	border-radius: 3px;
+	display: inline-block;
+	font-size: inherit;
+	line-height: normal;
+}
+
+.button-link:hover {
+	background: #0073aa;
+	color: #fff !important;
+}
+
+.button-link:active {
+	background: #005a87;
+	border-color: #005a87;
+}
+
+/* Screen reader only text */
+.screen-reader-text {
+	position: absolute !important;
+	clip: rect(1px, 1px, 1px, 1px);
+	padding: 0 !important;
+	border: 0 !important;
+	height: 1px !important;
+	width: 1px !important;
+	overflow: hidden;
+}
+
+/* Skip link shows on focus */
+.screen-reader-text:focus {
+	position: absolute;
+	top: 0;
+	left: 6px;
+	z-index: 999999;
+	width: auto;
+	height: auto;
+	padding: 8px 16px;
+	background: #000;
+	color: #fff;
+	text-decoration: none;
+	border-radius: 3px;
+	clip: auto !important;
+}
+
+li[role="tab"]:hover {
+	background: #e9e9e9;
+	color: #333;
+}
+
+li[role="tab"][aria-selected="true"] {
+	background: #fff;
+	color: #333;
+}
+
+/* Ensure sufficient color contrast for error states */
+.blc-debug-item-warning {
+	background-color: #fff3cd;
+	border-left: 4px solid #856404;
+}
+
+.blc-debug-item-error {
+	background-color: #f8d7da;
+	border-left: 4px solid #721c24;
+}
+
+/* Status indicators with better contrast */
+.blc-menu-bubble {
+	background: #d63638 !important;
+	color: #fff !important;
+	font-weight: bold;
+}
+
+/* Form field spacing and contrast */
+.form-table th,
+.form-table td {
+	padding: 15px 10px;
+}
+
+.description {
+	color: #646970;
+	font-size: 13px;
+	margin-top: 5px;
 }

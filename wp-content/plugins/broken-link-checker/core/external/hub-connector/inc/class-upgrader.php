@@ -10,10 +10,10 @@
 
 namespace WPMUDEV\Hub\Connector;
 
-use WP_Error;
-use Theme_Upgrader;
 use Plugin_Upgrader;
+use Theme_Upgrader;
 use WP_Ajax_Upgrader_Skin;
+use WP_Error;
 
 /**
  * Class Upgrader
@@ -57,21 +57,74 @@ class Upgrader {
 	/**
 	 * Install a new plugin or theme.
 	 *
-	 * Optionally plugin can be activated after installation.
+	 *  Optionally plugin can be activated after installation.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @param string $item    The item to install.
+	 * @param string $type    Type of the item to install.
+	 * @param array  $options Install options.
 	 *
 	 * @return bool
 	 */
 	public function install( $item, $type = 'plugin', $options = array() ) {
+		return $this->do_install( $item, $type, $options );
+	}
+
+	/**
+	 * Install a Hub-signed plugin or theme.
+	 *
+	 * @since 1.1.1
+	 *
+	 * @param string $item        Item to install.
+	 * @param string $type        Item type.
+	 * @param array  $signed_list Signed item list.
+	 * @param string $signature   List signature.
+	 * @param array  $options     Install options.
+	 *
+	 * @return bool
+	 */
+	public function install_signed( $item, $type, $signed_list, $signature, $options = array() ) {
+		$this->reset_errors();
+
+		$signed = (
+			is_array( $signed_list )
+			&& Remote::get()->verify_signed_data( $signed_list, is_string( $signature ) ? $signature : '' )
+			&& in_array( (string) $item, array_map( 'strval', $signed_list ), true )
+		);
+
+		if ( ! $signed ) {
+			$this->add_error( 'INS.13', __( 'Invalid package signature', 'wpmudev' ) );
+
+			return false;
+		}
+
+		return $this->do_install( $item, $type, $options, true );
+	}
+
+	/**
+	 * Shared installer implementation.
+	 *
+	 * @since 1.1.2
+	 *
+	 * @param string $item           Item to install.
+	 * @param string $type           Item type.
+	 * @param array  $options        Install options.
+	 * @param bool   $is_trusted_url Whether a signed package URL is allowed.
+	 *
+	 * @return bool
+	 */
+	private function do_install( $item, $type = 'plugin', $options = array(), $is_trusted_url = false ) {
 		$this->reset_errors();
 		$this->options = $options;
 
-		// Setup temp filters.
-		$this->setup_filters();
-
 		// If the string is already a URL.
 		if ( filter_var( $item, FILTER_VALIDATE_URL ) ) {
+			if ( ! $is_trusted_url ) {
+				$this->add_error( 'INS.12', __( 'Package URLs require a valid Hub signature', 'wpmudev' ) );
+
+				return false;
+			}
 			$link = esc_url_raw( $item );
 		} else {
 			// Get download link.
@@ -85,6 +138,9 @@ class Upgrader {
 			return false;
 		}
 
+		// Setup temp filters.
+		$this->setup_filters();
+
 		$skin = new WP_Ajax_Upgrader_Skin();
 
 		if ( 'plugin' === $type ) {
@@ -96,7 +152,8 @@ class Upgrader {
 					$upgrader->plugin_info(),
 					false,
 					$this->get_option( 'network_wide', is_multisite() ),
-					$this->get_option( 'silent', true )
+					// https://incsub.atlassian.net/browse/WDD-418.
+					$this->get_option( 'silent' )
 				);
 
 				// If error in activation.
@@ -241,13 +298,13 @@ class Upgrader {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $key     Option key.
-	 * @param mixed  $default Default value.
+	 * @param string $key           Option key.
+	 * @param mixed  $default_value Default value.
 	 *
 	 * @return mixed
 	 */
-	public function get_option( $key, $default = false ) {
-		return isset( $this->options[ $key ] ) ? $this->options[ $key ] : $default;
+	public function get_option( $key, $default_value = false ) {
+		return $this->options[ $key ] ?? $default_value;
 	}
 
 	/**

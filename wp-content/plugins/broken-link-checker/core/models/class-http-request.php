@@ -110,9 +110,12 @@ class Http_Request extends Base {
 			$method
 		);
 
-		// Logging request args. Only if wp debugging is active.
-		Utilities::log( "Processing request with following params : \nURL: {$url} \nArgs:" . var_export( $args, true
-			) );
+		// Logging request args. Only if wp debugging is active. Sensitive
+		// headers are masked so secrets are never written to the log.
+		Utilities::log( "Processing request with following params : \nURL: {$url} \nArgs:" . var_export(
+			self::mask_sensitive_headers( $args ),
+			true
+		) );
 
 		switch ( $method ) {
 			case 'POST' :
@@ -143,6 +146,39 @@ class Http_Request extends Base {
 			'code' => wp_remote_retrieve_response_code( $response ),
 			'body' => wp_remote_retrieve_body( $response ),
 		);
+	}
+
+	/**
+	 * Returns a copy of the request args with sensitive header values masked,
+	 * safe to be written to the debug log.
+	 *
+	 * @param array $args Request args.
+	 *
+	 * @return array
+	 */
+	public static function mask_sensitive_headers( array $args ): array {
+		if ( isset( $args['headers']['Authorization'] ) && is_string( $args['headers']['Authorization'] ) ) {
+			$args['headers']['Authorization'] = self::mask_key( $args['headers']['Authorization'] );
+		}
+
+		return $args;
+	}
+
+	/**
+	 * Masks a key, keeping only its first and last four characters.
+	 *
+	 * @param string $key The key to mask.
+	 *
+	 * @return string
+	 */
+	private static function mask_key( string $key ): string {
+		$length = strlen( $key );
+
+		if ( $length <= 8 ) {
+			return str_repeat( '*', $length );
+		}
+
+		return substr( $key, 0, 4 ) . str_repeat( '*', $length - 8 ) . substr( $key, -4 );
 	}
 
 	/**

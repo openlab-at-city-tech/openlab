@@ -115,6 +115,10 @@ class Origins_Handler extends Base {
 			return false;
 		}
 
+		if ( empty( $this->link_object ) ) {
+			return false;
+		}
+
 		$processor = new Processor( $this->link_object );
 
 		if ( empty( $post_id ) ) {

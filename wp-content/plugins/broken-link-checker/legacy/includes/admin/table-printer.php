@@ -36,8 +36,36 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 			// This is used by the bulk action form.
 			$special_args              = array( '_wpnonce', '_wp_http_referer', 'action', 'selected_links' );
 			$this->neutral_current_url = remove_query_arg( $special_args );
+
+			// Register the filter for action links in the constructor so it's applied early,
+			// allowing us to remove the default "Edit" link before it gets generated.
+			add_filter( 'blc_container_action_links', array( self::class, 'filter_action_links' ), 15, 2 );
 		}
 
+		/**
+		 * Filter action links for the container.
+		 *
+		 * @param string[] $action_links The existing action links.
+		 * @param blcLink  $link         The link object.
+		 * @return string[]              The modified action links.
+		 */
+		public static function filter_action_links( $action_links, $link ) {
+			if ( is_null( $link ) || ! $link instanceof blcLink ) {
+				return $action_links;
+			}
+
+			$instances = $link->get_instances();
+			if ( empty( $instances ) ) {
+				return $action_links;
+			}
+
+			if ( 'custom_taxonomy' === $instances[0]->container_type ) {
+				// Remove the default "Edit" link since we'll be adding a custom one in ui_get_action_links() that points to the post edit screen instead of the taxonomy edit screen.
+				unset( $action_links['edit'] );
+			}
+
+			return $action_links;
+		}
 
 		/**
 		 * Print the entire link table and associated navigation elements.
@@ -77,12 +105,13 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 			};
 			$table_classes[] = 'base-filter-' . esc_html( $current_filter['base_filter'] );
 			printf(
-				'<table class="%s" id="blc-links"><thead><tr>',
-				implode( ' ', $table_classes )
+				'<table class="%s" id="blc-links" aria-label="%s"><thead><tr>',
+				implode( ' ', $table_classes ),
+				esc_attr__( 'Broken links', 'broken-link-checker' )
 			);
 
 			// The select-all checkbox.
-			echo '<th scope="col" class="column-checkbox check-column" id="cb"><input type="checkbox" /></th>';
+			echo '<th scope="col" class="column-checkbox check-column" id="cb"><input type="checkbox" aria-label="' . esc_attr__( 'Select all links', 'broken-link-checker' ) . '" /></th>';
 
 			// Column headers.
 			foreach ( $current_layout as $column_id ) {
@@ -108,11 +137,13 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 					if ( $orderby == $current_orderby ) {
 						$column_classes[] = 'sorted';
 						$column_classes[] = $current_order;
-						$order            = ( 'asc' == $current_order ) ? 'desc' : 'asc'; //Reverse the sort direction
+						$order            = ( 'asc' == $current_order ) ? 'desc' : 'asc';
+						$aria_sort        = 'asc' === $current_order ? 'ascending' : 'descending';
 					} else {
 						$order            = 'asc';
 						$column_classes[] = 'desc';
 						$column_classes[] = 'sortable';
+						$aria_sort        = 'none';
 					}
 
 					$heading = sprintf(
@@ -127,12 +158,15 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 						),
 						$heading
 					);
+				} else {
+					$aria_sort = null;
 				}
 
 				printf(
-					'<th scope="col" class="%s"%s>%s</th>',
+					'<th scope="col" class="%s"%s%s>%s</th>',
 					implode( ' ', $column_classes ),
 					isset( $column['id'] ) ? ' id="' . $column['id'] . '"' : '',
+					$aria_sort ? ' aria-sort="' . esc_attr( $aria_sort ) . '"' : '',
 					$heading
 				);
 			}
@@ -168,7 +202,7 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 			// Display the "Bulk Actions" dropdown.
 			echo '<div class="tablenav">
 					<div class="alignleft actions">
-						<select name="action' . $suffix . '" id="blc-bulk-action' . $suffix . '">' .
+						<select name="action' . $suffix . '" id="blc-bulk-action' . $suffix . '" aria-label="' . esc_attr__( 'Bulk actions', 'broken-link-checker' ) . '">' .
 							$this->bulk_actions_html .
 						'</select>
 					<input type="submit" name="doaction' . $suffix . '" id="doaction' . $suffix . '" value="',
@@ -187,14 +221,16 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 
 			<div class="view-switch">
 				<a
-					href="<?php echo esc_url( add_query_arg( 'compact', '1', $_SERVER['REQUEST_URI'] ) ); ?>"
+					href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'compact', '1', $_SERVER['REQUEST_URI'] ), 'blc-toggle-compact' ) ); ?>"
 					class="view-list <?php echo $table_compact ? 'current' : ''; ?>"
-					title="<?php echo esc_attr( __( 'Compact View', 'broken-link-checker' ) ); ?>">
+					title="<?php echo esc_attr( __( 'Compact View', 'broken-link-checker' ) ); ?>"
+					aria-label="<?php echo esc_attr( __( 'Compact View', 'broken-link-checker' ) ); ?>">
 				</a>
 				<a
-					href="<?php echo esc_url( add_query_arg( 'compact', '0', $_SERVER['REQUEST_URI'] ) ); ?>"
+					href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'compact', '0', $_SERVER['REQUEST_URI'] ), 'blc-toggle-compact' ) ); ?>"
 					class="view-excerpt <?php echo ! $table_compact ? 'current' : ''; ?>"
-					title="<?php echo esc_attr( __( 'Detailed View', 'broken-link-checker' ) ); ?>">
+					title="<?php echo esc_attr( __( 'Detailed View', 'broken-link-checker' ) ); ?>"
+					aria-label="<?php echo esc_attr( __( 'Detailed View', 'broken-link-checker' ) ); ?>">
 				</a>
 			</div>
 
@@ -212,8 +248,10 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 		function setup_columns() {
 			$this->columns = array(
 				'status'        => array(
-					'heading' => __( 'Status', 'broken-link-checker' ),
-					'content' => array( $this, 'column_status' ),
+					'heading'  => __( 'Status', 'broken-link-checker' ),
+					'content'  => array( $this, 'column_status' ),
+					'sortable' => true,
+					'orderby'  => 'status',
 				),
 
 				'new-url'       => array(
@@ -617,7 +655,13 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 						<li><strong><?php _e( 'Log', 'broken-link-checker' ); ?>:</strong>
 					<span class='blc_log'>
 					<?php
-						print nl2br( $link->log );
+						// The log is stored as pre-escaped HTML: checkers escape untrusted data
+						// before it is appended. Sanitise rather than esc_html() here so that content
+						// escaped at write time is not double-escaped, while neutralising any unescaped
+						// payload already stored by an earlier version.
+						print nl2br(
+							wp_kses( $link->log, array( 'em' => array(), 'strong' => array() ) )
+						);
 					?>
 					</span></li>
 					</ol>
@@ -630,7 +674,7 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 
 		function column_checkbox( $link ) {
 			?>
-			<th scope="row" class="check-column"><input type="checkbox" name="selected_links[]" value="<?php echo $link->link_id; ?>" /></th>
+			<th scope="row" class="check-column"><input type="checkbox" name="selected_links[]" value="<?php echo $link->link_id; ?>" aria-label="<?php printf( esc_attr__( 'Select link %s', 'broken-link-checker' ), esc_attr( $link->url ) ); ?>" /></th>
 			<?php
 		}
 
@@ -640,7 +684,7 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 		*/
 		function column_status( $link, $instances ) {
 			printf(
-				'<table class="mini-status" title="%s">',
+				'<table class="mini-status" aria-label="%s">',
 				esc_attr( __( 'Show more info about this link', 'broken-link-checker' ) )
 			);
 
@@ -756,6 +800,8 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 				}
 			}
 
+			$actions = apply_filters( 'blc_container_action_links', $actions, $link );
+
 			// Wrap actions with <span></span> and separate them with | characters.
 			// Basically, this emulates the HTML structure that WP uses for post actions under Posts -> All Posts.
 			$spans           = array();
@@ -823,8 +869,10 @@ if ( ! class_exists( 'blcTablePrinter' ) ) {
 
 		function column_redirect_url( $link, $instances ) {
 			if ( $link->redirect_count > 0 ) {
+				// esc_attr() encodes the delimiters but permits any scheme; an href needs esc_url().
 				printf(
-					'<a href="%1$s" target="_blank" class="blc-redirect-url" title="%1$s">%2$s</a>',
+					'<a href="%1$s" target="_blank" class="blc-redirect-url" title="%2$s">%3$s</a>',
+					esc_url( $link->final_url ),
 					esc_attr( $link->final_url ),
 					esc_html( $link->final_url )
 				);

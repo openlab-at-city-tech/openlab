@@ -169,13 +169,13 @@ td.column-status {
 .color-code-link-status  .link-status-warning td.column-status .status-text,
 .color-code-link-status  .link-status-warning td.column-status .http-code
 {
-	color: #FF8C00; /*#FFA500*/
+	color: #9f5700; /*#FFA500*/
 }
 
 .color-code-link-status  .link-status-error td.column-status .status-text,
 .color-code-link-status  .link-status-error td.column-status .http-code
 {
-	color: red;
+	color: #e30000;
 }
 
 

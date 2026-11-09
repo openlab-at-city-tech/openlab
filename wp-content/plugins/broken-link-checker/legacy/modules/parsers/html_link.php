@@ -68,8 +68,8 @@ class blcHTMLLink extends blcParser {
 		$url = trim( $url );
 		//$blclog->debug(__CLASS__ .':' . __FUNCTION__ . ' Found a link, raw URL = "' . $raw_url . '"');
 
-		//Sometimes links may contain shortcodes. Execute them.
-		$url = do_shortcode( $url );
+		//Sometimes links may contain shortcodes. Execute them, but only in trusted content.
+		$url = $this->expand_url_shortcodes( $url );
 
 		//Skip empty URLs
 		if ( empty( $url ) ) {

@@ -46,14 +46,14 @@ class Data {
 	 * @return string The full URL.
 	 */
 	public function current_url() {
-		$parts = parse_url( home_url() );
+		$parts = wp_parse_url( home_url() );
 
 		// Attempt to get from parsed data.
 		if ( ! empty( $parts['scheme'] ) && ! empty( $parts['host'] ) ) {
-			return "{$parts['scheme']}://{$parts['host']}" . add_query_arg( null, null );
+			return "{$parts['scheme']}://{$parts['host']}" . add_query_arg( array() );
 		}
 
-		return add_query_arg( null, null );
+		return add_query_arg( array() );
 	}
 
 	/**
@@ -128,7 +128,16 @@ class Data {
 		}
 
 		// Make sure it's in correct structure.
-		$data = wp_parse_args( $data, array( 'membership' => '' ) );
+		$data = wp_parse_args(
+			$data,
+			array(
+				'membership'                   => '',
+				'membership_full_level'        => '',
+				'membership_projects'          => array(),
+				'membership_excluded_projects' => array(),
+				'membership_access'            => array(),
+			)
+		);
 
 		/**
 		 * Filter to modify raw membership data.
@@ -150,7 +159,7 @@ class Data {
 	public function hub_site_id() {
 		$membership = $this->membership_data();
 
-		return isset( $membership['hub_site_id'] ) ? $membership['hub_site_id'] : 0;
+		return $membership['hub_site_id'] ?? 0;
 	}
 
 	/**
@@ -188,8 +197,12 @@ class Data {
 		if ( is_string( $data['membership'] ) && in_array( $data['membership'], $types, true ) ) {
 			$type = $data['membership'];
 		} elseif (
-			is_numeric( $data['membership'] ) ||
-			( is_bool( $data['membership'] ) && isset( $data['membership_full_level'] ) && is_numeric( $data['membership_full_level'] ) )
+			is_numeric( $data['membership'] )
+			|| (
+				is_bool( $data['membership'] )
+				&& isset( $data['membership_full_level'] )
+				&& is_numeric( $data['membership_full_level'] )
+			)
 		) {
 			$type = 'single';
 		}
@@ -333,17 +346,24 @@ class Data {
 	/**
 	 * Get currently logged in member user data.
 	 *
-	 * To avoid unwanted API calls, profile data will not be available
-	 * unless we call it for the first time. Once called, it will be stored
-	 * within the plugin options and will be cleared only when member logout.
-	 *
 	 * @since 1.0.0
+	 * @since 1.0.7 Internally cached by default. Introduce optional `$force` param
+	 *
+	 * @param bool $force Force data from API.
 	 *
 	 * @return array
 	 */
-	public function profile_data() {
+	public function profile_data( bool $force = false ) {
 		// Get profile data.
-		$profile = API::get()->get_profile();
+		$profile = Options::get_transient( 'profile' );
+
+		if ( empty( $profile ) || $force ) {
+			$profile = API::get()->get_profile();
+
+			// Eagerly store to transient to avoid API abuse, even if API is error.
+			Options::set_transient( 'profile', is_array( $profile ) ? $profile : true, HOUR_IN_SECONDS );
+			$profile = Options::get_transient( 'profile' );
+		}
 
 		if ( is_wp_error( $profile ) || empty( $profile ) || ! is_array( $profile ) ) {
 			$profile = array();
@@ -369,5 +389,103 @@ class Data {
 		 * @param array $profile Profile data.
 		 */
 		return apply_filters( 'wpmudev_api_profile_data', $profile );
+	}
+
+	/**
+	 *  Returns an array of projects id available on plan / membership.
+	 *
+	 * @since 1.0.7
+	 * @return array
+	 */
+	public function membership_projects(): array {
+		$type = $this->membership_type();
+
+		if ( 'full' === $type ) {
+			return array();
+		}
+		$data = $this->membership_data();
+		// For free and unit memberships.
+		if ( in_array( $type, array( 'free', 'unit' ), true ) ) {
+			$projects = is_array( $data['membership_projects'] ) ? $data['membership_projects'] : array();
+			foreach ( $projects as $i => $p ) {
+				$projects[ $i ] = intval( $p );
+			}
+
+			return $projects;
+		}
+		if ( is_numeric( $data['membership'] ) ) {
+			return array( intval( $data['membership'] ) );
+		}
+		if ( is_bool( $data['membership'] ) && is_numeric( $data['membership_full_level'] ) ) {
+			return array( intval( $data['membership_full_level'] ) );
+		}
+
+		return array();
+	}
+
+	/**
+	 * Get projects that are strictly forbidden to be installed or updated for
+	 * current membership level.
+	 *
+	 * @since 1.0.7
+	 * @return array
+	 */
+	public function membership_excluded_projects(): array {
+		$excluded = array();
+		$data     = $this->membership_data();
+		if ( false === empty( $data['membership_excluded_projects'] ) && is_array( $data['membership_excluded_projects'] ) ) {
+			foreach ( $data['membership_excluded_projects'] as $pid ) {
+				$excluded[] = intval( $pid );
+			}
+		}
+
+		return $excluded;
+	}
+
+	/**
+	 * Checks if access is allowed for membership plan by access id string.
+	 *
+	 * @since 1.0.7
+	 *
+	 * @param string $access Access ID.
+	 *
+	 * @return bool
+	 */
+	public function membership_has_access( string $access ): bool {
+		$data     = $this->membership_data();
+		$accesses = $data['membership_access'];
+
+		// The membership_access can be boolean true for full access, or array with allowed features strings.
+		if ( true === $accesses ) {
+			return true;
+		}
+
+		if ( false === is_array( $accesses ) ) {
+			return false;
+		}
+
+		return in_array( $access, $accesses, true );
+	}
+
+	/**
+	 * Get full WPMU DEV Hosting ID.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return string
+	 */
+	public function get_full_wpmu_dev_hosting_id(): string {
+		if ( ! defined( 'WPMUDEV_HOSTING_SITE_ID' ) && ! isset( $_SERVER['WPMUDEV_HOSTED'] ) ) {
+			return '';
+		}
+
+		$server_id  = defined( 'WPMUDEV_HOSTING_SITE_ID' ) ? WPMUDEV_HOSTING_SITE_ID : gethostname();
+		$website_id = ( defined( 'WPMUDEV_HOSTING_WEBSITE_ID' ) && ! empty( WPMUDEV_HOSTING_WEBSITE_ID ) ) ? WPMUDEV_HOSTING_WEBSITE_ID : '';
+
+		if ( empty( $website_id ) ) { // non shared sub-hosting.
+			return $server_id; // return server id.
+		}
+
+		return implode( '-', array( $website_id, $server_id ) );
 	}
 }

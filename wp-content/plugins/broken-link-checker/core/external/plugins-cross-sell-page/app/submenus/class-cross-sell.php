@@ -162,8 +162,7 @@ class CrossSell {
 		}
 
 		$current_plugin_slug = $this->submenu_params['slug'];
-		$free_plugins        = $this->utilities->get_free_plugins();
-		$pro_plugins         = $this->utilities->get_pro_plugins();
+		$plugins_list 	     = $this->plugins_list();
 		$handle              = 'wpmudev_plugin_cross_sell';
 		$script_suffix       = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 		$src                 = WPMUDEV_MODULE_PLUGIN_CROSS_SELL_ASSETS_URL . '/js/crosssellpage' . $script_suffix . '.js';
@@ -178,6 +177,8 @@ class CrossSell {
 				'wp-polyfill',
 			);
 
+
+
 		$this->page_scripts[ $handle ] = array(
 			'src'       => $src,
 			'style_src' => $style_src,
@@ -191,8 +192,7 @@ class CrossSell {
 				'restEndpointGetPlugins' => 'wpmudev_pcs/v1/plugincrosssell/get_plugins', // Gets the list of plugins. The param need include the current plugin slug and type (free|pro).
 				'restEndpointInstall'    => 'wpmudev_pcs/v1/plugincrosssell/install_plugin', // The endpoint to install a plugin.
 				'restEndpointActivate'   => 'wpmudev_pcs/v1/plugincrosssell/activate_plugin', // The endpoint to activate a plugin.
-				'free_plugins'           => ! empty( $free_plugins ) ? $this->filter_plugins_list( $free_plugins ) : array(),
-				'pro_plugins'            => ! empty( $pro_plugins ) ? $this->filter_plugins_list( $pro_plugins ) : array(),
+				'plugins_list'            => ! empty( $plugins_list ) ? $plugins_list : array(),
 				'utmSource'              => $this->get_utm_source(),
 			),
 		);
@@ -263,8 +263,8 @@ class CrossSell {
 	public function register_submenu() {
 		$default_params = array(
 			'parent_slug' => '',
-			'page_title'  => __( 'More free Plugins?', 'plugin-cross-sell-textdomain' ),
-			'menu_title'  => __( 'More free Plugins?', 'plugin-cross-sell-textdomain' ),
+			'page_title'  => __( 'Get More Free Plugins', 'plugin-cross-sell-textdomain' ),
+			'menu_title'  => __( 'Get More Free Plugins', 'plugin-cross-sell-textdomain' ),
 			'capability'  => 'manage_options',
 			'menu_slug'   => 'plugins_cross_sell',
 			'position'    => 10,
@@ -272,7 +272,7 @@ class CrossSell {
 
 		$submenu_params = $this->utilities->validate_schema( $this->submenu_params, $this->get_submenu_schema() ) ? wp_parse_args( $this->submenu_params, $default_params ) : $default_params;
 
-		if ( empty( $submenu_params['parent_slug'] ) ) {
+		if ( empty( $submenu_params['parent_slug'] ) || $this->submenu_exists( $submenu_params['parent_slug'], $submenu_params['menu_slug'] ) ) {
 			return false;
 		}
 
@@ -302,9 +302,75 @@ class CrossSell {
 			);
 		}
 
+		// Add custom class to the submenu item.
+		add_action( 'admin_head', function () use ( $submenu_params ) {
+			global $submenu;
+			if ( isset( $submenu[ $submenu_params['parent_slug'] ] ) ) {
+				foreach ( $submenu[ $submenu_params['parent_slug'] ] as $index => $item ) {
+					if ( isset( $item[2] ) && $item[2] === $submenu_params['menu_slug'] ) {
+						// Add your custom class using CSS targeting.
+						echo '<style>
+							#adminmenu .wp-submenu a[href="admin.php?page=' . esc_attr( $submenu_params['menu_slug'] ) . '"] {
+								font-size: 12px;
+								line-height: 22px;
+								font-weight: 400 !important;
+								color: #fefefe !important;
+								position: relative;
+							}
+
+							#adminmenu .wp-submenu a[href="admin.php?page=' . esc_attr( $submenu_params['menu_slug'] ) . '"]:before {
+								content: "";
+								inset: 0;
+								background: linear-gradient(90deg, #1B1DAC 0%, #8D8D8D 100%);
+								position: absolute;
+								z-index: -1;
+							}
+
+							#adminmenu .wp-submenu a[href="admin.php?page=' . esc_attr( $submenu_params['menu_slug'] ) . '"]:after {
+								content: "";
+								background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTEiIHZpZXdCb3g9IjAgMCAxMSAxMSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTUuNSAwLjE4NzVMMTAuODc1IDUuNUw1LjUgMTAuODEyNUw0LjU2MjUgOS44NzVMOC4zMTI1IDYuMTg3NUwwLjE4NzUgNi4xODc1TDAuMTg3NSA0LjgxMjVMOC4zMTI1IDQuODEyNUw0LjU2MjUgMS4xMjVMNS41IDAuMTg3NVoiIGZpbGw9IiNGRUZFRkUiIGZpbGwtb3BhY2l0eT0iMC41Ii8+Cjwvc3ZnPgo=");
+								background-repeat: no-repeat;
+								width: 11px;
+								height: 11px;
+								position: absolute;
+								top: 50%;
+								right: 5px;
+								transform: translateY(-50%);
+								color: #FEFEFE80;
+							}
+						</style>';
+					}
+				}
+			}
+		});
+
 		add_action( 'load-' . $page, array( $this, 'internal_admin_actions' ) );
 
 		return $page;
+	}
+
+	/**
+	 * Check if a submenu already exists under a given top‐level menu.
+	 *
+	 * @param string $parent_slug  The plugin parent menu’s slug.
+	 * @param string $submenu_slug The submenu slug per plugin.
+	 * @return bool True if it’s already registered, false otherwise.
+	 */
+	public function submenu_exists( string $parent_slug = '', string $submenu_slug = '' ): bool {
+		global $submenu;
+
+		if ( empty( $submenu[ $parent_slug ] ) ) {
+			return false;
+		}
+
+		foreach ( $submenu[ $parent_slug ] as $item ) {
+			// $item is [ 0 => menu title, 1 => capability, 2 => slug, … ]
+			if ( isset( $item[2] ) && $item[2] === $submenu_slug ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -340,7 +406,7 @@ class CrossSell {
 		if ( empty( $utm_source ) ) {
 			// Only the Free plugins will show the cross sell page. 
 			// As we're interested in the current plugin's utm_source we'll be checking free plugins list.
-			$plugins    = $this->utilities->get_free_plugins();
+			$plugins    = $this->utilities->get_plugins_list();
 			$utm_source = $this->submenu_params['utm_source'] ?? '';
 
 			if ( empty( $utm_source ) ) {
@@ -358,6 +424,149 @@ class CrossSell {
 		}
 
 		return $utm_source;
+	}
+
+	public function plugins_list() : array {
+		$plugins_list        = $this->utilities->get_plugins_list();
+		$plugins_order       = $this->plugins_order();
+		$current_plugin_slug = $this->submenu_params['slug'];
+
+		if ( empty( $plugins_list ) ) {
+			return array();
+		}
+
+		$major_plugins = $plugins_order['major'];
+		$minor_plugins = $plugins_order['minor'];
+		$placeholder   = $plugins_order['placeholder'];
+
+		$final_list = array(
+			'major' => array(),
+			'minor' => array()
+		);
+
+		// Determine current plugin type
+		$is_major_plugin       = in_array( $current_plugin_slug, $major_plugins );
+		$is_minor_plugin       = in_array( $current_plugin_slug, $minor_plugins );
+		$is_placeholder_plugin = ( $current_plugin_slug === $placeholder );
+
+		if ( $is_major_plugin ) {
+			// Rule 5: Viewing from major plugin
+			// Major list: 3 remaining major plugins + placeholder at the end
+			foreach ( $major_plugins as $plugin_slug ) {
+				if ( $plugin_slug !== $current_plugin_slug && isset( $plugins_list[ $plugin_slug ] ) ) {
+					$final_list['major'][ $plugin_slug ] = $plugins_list[ $plugin_slug ];
+				}
+			}
+
+			// Add placeholder at the end of major list
+			if ( isset( $plugins_list[ $placeholder ] ) ) {
+				$final_list['major'][ $placeholder ] = $plugins_list[ $placeholder ];
+			}
+
+			// Minor list: all minor plugins
+			foreach ( $minor_plugins as $plugin_slug ) {
+				if ( isset( $plugins_list[ $plugin_slug ] ) ) {
+					$final_list['minor'][] = $plugins_list[ $plugin_slug ];
+				}
+			}
+
+		} elseif ( $is_minor_plugin ) {
+			// Rule 6: Viewing from minor plugin
+			// Major list: all major plugins
+			foreach ( $major_plugins as $plugin_slug ) {
+				if ( isset( $plugins_list[ $plugin_slug ] ) ) {
+					$final_list['major'][ $plugin_slug ] = $plugins_list[ $plugin_slug ];
+				}
+			}
+
+			// Minor list: placeholder first, then remaining minor plugins
+			if ( isset( $plugins_list[ $placeholder ] ) ) {
+				$final_list['minor'][ $placeholder ] = $plugins_list[ $placeholder ];
+			}
+			foreach ( $minor_plugins as $plugin_slug ) {
+				if ( $plugin_slug !== $current_plugin_slug && isset( $plugins_list[ $plugin_slug ] ) ) {
+					$final_list['minor'][ $plugin_slug ] = $plugins_list[ $plugin_slug ];
+				}
+			}
+
+		} else {
+			// Rule 7: Viewing from placeholder or any other plugin
+			// Major list: all major plugins
+			foreach ( $major_plugins as $plugin_slug ) {
+				if ( isset( $plugins_list[ $plugin_slug ] ) ) {
+					$final_list['major'][ $plugin_slug ] = $plugins_list[ $plugin_slug ];
+				}
+			}
+
+			// Minor list: all minor plugins
+			foreach ( $minor_plugins as $plugin_slug ) {
+				if ( isset( $plugins_list[ $plugin_slug ] ) ) {
+					$final_list['minor'][ $plugin_slug ] = $plugins_list[ $plugin_slug ];
+				}
+			}
+		}
+
+		$final_list['major'] = $this->filter_plugins_list( $final_list['major'] );
+		$final_list['minor'] = $this->filter_plugins_list( $final_list['minor'] );
+
+		return $final_list;
+	}
+
+	/**
+	 * Returns the structure of plugins to be used in Detailed and Concise views.
+	 *
+	 * @return array
+	 */
+	public function plugins_order() : array {
+		// List of plugins split into major (falgship) and minor ones.
+		// Major plugins are shown first in Detailed view.
+		// Minor plugins are shown second in Concise view.
+		// The placeholder is used in Detailed view to replace one of the major plugins or in Concise view to replace one of the minor plugins.
+		return array(
+			'major' => array(
+				'wp-smushit',
+				'forminator',
+				'hummingbird-performance',
+				'defender-security',
+			),
+			'minor' => array(
+				'broken-link-checker',
+				'smartcrawl-seo',
+				'branda-white-labeling',
+				'beehive-analytics',
+			),
+			'placeholder' => 'wordpress-popup'
+		);
+	}
+
+	/**
+	 * Checks if a plugin is a major one.
+	 * @param string $plugin_slug
+	 * @return bool
+	 */
+	public function is_major_plugin( string $plugin_slug = '' ): bool {
+		$plugins_order = $this->plugins_order();
+		return ! empty( $plugins_order['major'] ) && in_array( $plugin_slug, $plugins_order['major'], true );
+	}
+
+	/**
+	 * Checks if a plugin is a minor one.
+	 * @param string $plugin_slug
+	 * @return bool
+	 */
+	public function is_minor_plugin( string $plugin_slug = '' ): bool {
+		$plugins_order = $this->plugins_order();
+		return ! empty( $plugins_order['minor'] ) && in_array( $plugin_slug, $plugins_order['minor'], true );
+	}
+
+	/**
+	 * Checks if a plugin is the placeholder one.
+	 * @param string $plugin_slug
+	 * @return bool
+	 */
+	public function is_placeholder_plugin( string $plugin_slug = '' ): bool {
+		$plugins_order = $this->plugins_order();
+		return ! empty( $plugins_order['placeholder'] ) && $plugin_slug === $plugins_order['placeholder'];
 	}
 
 	/**

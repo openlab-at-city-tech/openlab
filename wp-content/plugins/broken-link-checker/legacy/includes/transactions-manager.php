@@ -1,39 +1,85 @@
-<?php
+<?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
+/**
+ * Transaction manager for batching database writes.
+ *
+ * @package broken-link-checker
+ */
 
+/**
+ * Manages nested MySQL transactions via a depth counter.
+ *
+ * A BEGIN is only issued when the depth goes from 0 → 1.
+ * A COMMIT is only issued when the depth goes from 1 → 0, so inner
+ * callers that call commit() do not flush an outer transaction prematurely.
+ */
 class TransactionManager {
 
-	private $isTransactionStarted = false; //phpcs:ignore WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase
+	/**
+	 * Current nesting depth.
+	 *
+	 * @var int
+	 */
+	private int $depth = 0;
+
+	/**
+	 * Singleton instance.
+	 *
+	 * @var TransactionManager|null
+	 */
 	private static $instance;
 
-	public function start() {
+	/**
+	 * Open a transaction (or increment the nesting depth if one is already open).
+	 *
+	 * @return void
+	 */
+	public function start(): void {
 		global $wpdb;
 
-		if ( ! $this->isTransactionStarted ) {
-			$wpdb->query( 'BEGIN' );
-			$this->isTransactionStarted = true;
+		if ( 0 === $this->depth ) {
+			$wpdb->query( 'BEGIN' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		}
+		++$this->depth;
+	}
+
+	/**
+	 * Decrement the nesting depth and commit when the outermost caller is done.
+	 *
+	 * @return void
+	 */
+	public function commit(): void {
+		global $wpdb, $blclog;
+
+		if ( $this->depth <= 0 ) {
+			return;
+		}
+
+		--$this->depth;
+
+		if ( 0 === $this->depth ) {
+			$blclog->debug( 'Committing transaction.' );
+			$wpdb->query( 'COMMIT' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 		}
 	}
 
-	public function commit() {
+	/**
+	 * Roll back the current transaction and reset the nesting depth.
+	 *
+	 * @return void
+	 */
+	public function rollback(): void {
 		global $wpdb;
-		global $blclog;
-		$blclog->debug( 'Starting DB commit.' );
 
-		$this->start();
-
-		try {
-			$wpdb->query( 'COMMIT' );
-			$blclog->debug( 'Commit executed.' );
-			$this->isTransactionStarted = false;
-		} catch ( Exception $e ) {
-			$wpdb->query( 'ROLLBACK' );
-			$blclog->debug( 'Commit failed; rollback.' );
-			$this->isTransactionStarted = false;
-		}
+		$this->depth = 0;
+		$wpdb->query( 'ROLLBACK' ); //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 	}
 
-    //phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
-	static public function getInstance() {
+	/**
+	 * Return the singleton instance.
+	 *
+	 * @return TransactionManager
+	 */
+	public static function getInstance() {
 		if ( ! self::$instance ) {
 			self::$instance = new TransactionManager();
 		}

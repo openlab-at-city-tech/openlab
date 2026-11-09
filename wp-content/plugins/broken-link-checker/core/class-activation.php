@@ -33,5 +33,6 @@ final class Activation extends Base {
 	protected function __construct() {
 		\WPMUDEV_BLC\wpmudev_blc_instance();
 		do_action( 'wpmudev_blc_plugin_activated' );
+		set_transient( 'blc_activation_redirect', true, 30 );
 	}
 }

@@ -16,6 +16,7 @@ namespace WPMUDEV_BLC\App\Admin_Pages\Local_Submenu;
 // Abort if called directly.
 defined( 'WPINC' ) || die;
 
+use blcConfigurationRegistry;
 use WPMUDEV_BLC\App\Options\Settings\Model as Settings;
 use WPMUDEV_BLC\Core\Controllers\Admin_Page;
 use WPMUDEV_BLC\Core\Traits\Escape;
@@ -72,7 +73,13 @@ class Controller extends Admin_Page {
 	 * @return void
 	 */
 	public function prepare_props() {
-		$local_settings    = json_decode( get_option( 'wsblc_options' ) );
+		if ( ! function_exists( 'blc_create_admin_configuration' ) ) {
+			require_once BLC_DIRECTORY_LEGACY . '/config.php';
+		}
+
+		$local_settings = blc_create_admin_configuration();
+		$local_settings->load_options();
+
 		$page_caps         = 'manage_options';
 		$this->parent_slug = 'blc_dash';
 		$this->is_submenu  = true;
@@ -81,21 +88,27 @@ class Controller extends Admin_Page {
 		$this->menu_slug   = 'blc_local';
 		$this->position    = 1;
 
-		if ( Settings::instance()->get( 'use_legacy_blc_version' ) && ! empty( $local_settings->dashboard_widget_capability ) ) {
-			if ( in_array(
-				$local_settings->dashboard_widget_capability,
-				array(
-					'edit_others_posts',
-					'manage_options',
-				),
-				false
-			) ) {
-				$page_caps = $local_settings->dashboard_widget_capability;
-			}
+		if ( Settings::instance()->get( 'use_legacy_blc_version' ) ) {
+			$widget_capability = $local_settings->get( 'dashboard_widget_capability' );
 
-			if ( 'do_not_allow' === $local_settings->dashboard_widget_capability ) {
-				// $page_caps = 'unfiltered_html';
-				$page_caps = 'administrator';
+			if ( ! empty( $widget_capability ) ) {
+				// If the capability is one of the capabilities that can be used for a menu page, use it.
+				if (
+					in_array(
+						$widget_capability,
+						array(
+							'edit_others_posts',
+							'manage_options',
+						),
+						true
+					)
+				) {
+					$page_caps = $widget_capability;
+				}
+
+				if ( 'do_not_allow' === $widget_capability ) {
+					$page_caps = 'administrator';
+				}
 			}
 		}
 
@@ -154,15 +167,19 @@ class Controller extends Admin_Page {
 	 */
 	public function get_local_blc() {
 		if ( ! $this->local_blc instanceof \wsBrokenLinkChecker ) {
-			global $blc_config_manager;
-
-			$ws_link_checker = null;
-
-			if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
-				require_once BLC_DIRECTORY_LEGACY . '/core/core.php';
+			if ( ! function_exists( 'blc_config_initialized' ) ) {
+				require_once BLC_DIRECTORY_LEGACY . '/config.php';
 			}
 
-			if ( $blc_config_manager instanceof \blcConfigurationManager ) {
+			if ( blc_config_initialized() ) {
+				$ws_link_checker = null;
+
+				if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
+					require_once BLC_DIRECTORY_LEGACY . '/core/core.php';
+				}
+
+				$blc_config_manager = blc_get_configuration();
+
 				$this->local_blc = new \wsBrokenLinkChecker( BLC_PLUGIN_FILE_LEGACY, $blc_config_manager );
 			}
 		}

@@ -16,6 +16,10 @@ namespace WPMUDEV_BLC\App\Broken_Links_Actions\Processors;
 // Abort if called directly.
 defined( 'WPINC' ) || die;
 
+use WPMUDEV_BLC\App\Broken_Links_Actions\Processors\Content_Processors\Abstract_Content_Processor;
+use WPMUDEV_BLC\App\Broken_Links_Actions\Processors\Content_Processors\Unlink\Unlink_Dom_Processor;
+use WPMUDEV_BLC\App\Broken_Links_Actions\Processors\Content_Processors\Unlink\Unlink_Regex_Processor;
+
 /**
  * Class Scan_Data
  *
@@ -49,36 +53,31 @@ class Unlink_Link extends Link_Processor {
 	);*/
 
 	/**
-	 * Executes the Processor's action.
+	 * Modifies the content based on the action type (Replace/Unlink) and the target tags and attributes.
 	 *
-	 * @param string $content
-	 * @param string $link
-	 * @param string $new_link
-	 * @return string
+	 * @param string $content The content to process.
+	 * @param string $link The link to be replaced/removed.
+	 * @param string $new_link The new link to replace the old link with (Replace action only).
+	 * @return array|string Array of replacements (Unlink) or modified content string (Replace).
 	 */
-	public function execute( string $content = '', string $link = '', string $new_link = '' ) {
+	protected function process_content( string $content, string $link, string $new_link ) {
 		if ( empty( $this->get_target_tags() ) || empty( str_replace( PHP_EOL, '', $content ) ) ) {
 			return $content;
 		}
 
-		$link         = untrailingslashit( trim( $link, '\'"' ) );
-		$replacements = array();
+		$link = untrailingslashit( trim( $link, '\'"' ) );
 
-		foreach ( $this->get_target_tags() as $tag_name => $tag_atts ) {
-			if ( ! empty( $tag_atts ) ) {
-				foreach ( $tag_atts as $tag_att ) {
-					// First try with `DOMDocument` by default.
-					if ( apply_filters( 'wpmudev_blc_link_action_use_dom', true, 'unlink', $link ) ) {
-						$replacements = $this->use_domdocument_processor( $content, $link, $new_link, $tag_name, $tag_att );
-					} else {
-						// Optionally in case Regex is preferred, the filter `wpmudev_blc_link_action_use_dom` can be set to return false.
-						$replacements = $this->use_regex_processor( $content, $link, $new_link, $tag_name, $tag_att );
-					}
-				}
-			}
+		$replacements = $this->extract_replacements( $content, $link, $new_link, $this->get_target_tags() );
+
+		$replacements = apply_filters( 'wpmudev_blc_unlink_replacements', $replacements, $content, $link, $new_link );
+
+		if ( empty( $replacements ) ) {
+			return $content;
 		}
 
-		return empty( $replacements ) ? $content : str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
+		$content = str_replace( '/>', '>', $content );
+
+		return str_replace( array_keys( $replacements ), array_values( $replacements ), $content );
 	}
 
 	public function get_block_att_value_replacement( string $search_term = null, string $new_term = null ) {
@@ -87,102 +86,21 @@ class Unlink_Link extends Link_Processor {
 	}
 
 	/**
-	 * Processes content using `DOMDocument`.
-	 * So far haven't found a way to utilize `WP_HTML_Tag_Processor` to unlink because the WP_HTML_Tag_Processor class does not return the element's markup, nor it's position in content, in order to replace with new markup.
+	 * Returns the primary processor for the Unlink action.
 	 *
-	 * @param string $content
-	 * @param string $link
-	 * @param string $new_link
-	 * @param string $tag_name
-	 * @param string $tag_att
-	 * @return array
+	 * @return Abstract_Content_Processor
 	 */
-	public function use_domdocument_processor( string $content = '', string $link = '', string $new_link = '', string $tag_name = '', string $tag_att = '' ) {
-		$dom          = new \DOMDocument();
-		$replacements = array();
-
-		libxml_use_internal_errors( true );
-
-		$dom->loadHTML( $content );
-
-		foreach ( $dom->getElementsByTagName( $tag_name ) as $dom_link ) {
-			$search_markup      = '';
-			$replacement_str    = '';
-			$old_link           = $dom_link->getAttribute( $tag_att );
-
-			if ( $this->links_match( $link, $old_link ) ) {	
-				$search_markup   = $dom->saveHTML( $dom_link );
-				$replacement_str = $dom_link->nodeValue;
-				
-				if ( ! empty( $replacements[ $search_markup ] ) ) {
-					continue;
-				}
-
-				$special_actions = $this->content_special_actions( $content );
-
-				if ( ! empty( $special_actions ) ) {
-					$replacement_str = $search_markup;
-
-					foreach ( $special_actions as $special_case_key => $callback ) {
-						if ( is_callable( $callback ) ) {
-							$replacement_str = call_user_func(
-								$callback,
-								$replacement_str,
-							);
-						}
-					}
-
-					$replacements[ $search_markup ] = $replacement_str;
-
-					continue;
-				}
-
-				if ( apply_filters( 'wpmudev_blc_link_action_unlink_wrap', false, $link, $new_link ) ) {
-					$replacement_el = $dom->createElement( 'span', $replacement_str );
-					$replacement_el->setAttribute( 'class', apply_filters( 'wpmudev_blc_link_action_unlink_wrap_class', 'blc_unlinked', $link, $new_link ) );
-					$replacement_el->setAttribute( 'data-blc-orig-url', $link );
-					$replacement_str = $dom->saveHTML( $replacement_el );
-				}
-
-				$replacements[ $search_markup ] = $replacement_str;
-			}
-		}
-
-		return $replacements;
+	protected function get_processor(): Abstract_Content_Processor {
+		return new Unlink_Dom_Processor( $this );
 	}
 
 	/**
-	 * Processes content using regex.
-	 * Regex is default way for wp version < 6.2, even if not preferred. 
-	 * The reason we use regex by default is because:
-	 * 1. WP_HTML_Tag_Processor isn't introduced until v 6.2.
-	 * 2. DOM will fix any invalid markup which might not be desired.
+	 * Returns the fallback processor for the Unlink action.
 	 *
-	 * @param string $content
-	 * @param string $link
-	 * @param string $new_link
-	 * @param string $tag_name
-	 * @param string $tag_att
-	 * @return string
+	 * @return Abstract_Content_Processor
 	 */
-	public function use_regex_processor( string $content = '', string $link = '', string $new_link = '', string $tag_name = '', string $tag_att = '' ) {
-		$regexp       = "<{$tag_name}\s[^>]*{$tag_att}=(\"??)([^\" >]*?)\\1[^>]*>(.*)<\/{$tag_name}>";
-		$replacements = array();
-
-		if ( preg_match_all( "/$regexp/siU", $content, $matches ) ) {
-
-			if ( ! empty( $matches[0] ) ) {
-				foreach ( $matches[0] as $key => $markup ) {
-					$old_link = untrailingslashit( trim( $matches[2][ $key ], '\'"' ) );
-
-					if ( $this->links_match( $link, $old_link ) ) {
-						$replacements[ $markup ] = $matches[3][ $key ];
-					}
-				}
-			}
-		}
-
-		return $replacements;
+	protected function get_fallback_processor(): Abstract_Content_Processor {
+		return new Unlink_Regex_Processor( $this );
 	}
 
 	/**

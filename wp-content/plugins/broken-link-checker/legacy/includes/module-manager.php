@@ -294,8 +294,8 @@ class blcModuleManager {
 		}
 
 		//Check active modules
-		if ( $use_active_cache && isset( $this->plugin_conf->options['active_modules'][ $module_id ] ) ) {
-			return $this->plugin_conf->options['active_modules'][ $module_id ];
+		if ( $use_active_cache && isset( $this->plugin_conf->options['all_modules'][ $module_id ] ) ) {
+			return $this->plugin_conf->options['all_modules'][ $module_id ];
 		}
 
 		//Otherwise, use the general module cache
@@ -321,25 +321,97 @@ class blcModuleManager {
 	 * @return array Associative array of module data indexed by module ID.
 	 */
 	function get_active_modules() {
-		if ( isset( $this->plugin_conf->options['active_modules'] ) ) {
+		if ( ! empty( $this->plugin_conf->options['all_modules'] ) ) {
+			return $this->plugin_conf->options['all_modules'];
+		}
+
+		$active             = array();
+		$modules            = $this->get_modules();
+		$active_modules_ids = $this->get_active_modules_ids();
+
+		foreach ( $active_modules_ids as $module_id ) {
+			if ( array_key_exists( $module_id, $modules ) ) {
+				$active[ $module_id ] = $modules[ $module_id ];
+			}
+		}
+
+		$this->plugin_conf->options['all_modules'] = $active;
+		$this->plugin_conf->save_options();
+
+		return $this->plugin_conf->options['all_modules'];
+	}
+
+	/**
+	 * Retrieve the IDs of all active modules.
+	 *
+	 * @return array An array of module IDs.
+	 */
+	public function get_active_modules_ids() {
+		if ( ! empty( $this->plugin_conf->options['active_modules'] ) ) {
 			return $this->plugin_conf->options['active_modules'];
 		}
 
-		$active  = array();
-		$modules = $this->get_modules();
-
-		if ( is_array( $this->default_active_modules ) ) {
-			foreach ( $this->default_active_modules as $module_id ) {
-				if ( array_key_exists( $module_id, $modules ) ) {
-					$active[ $module_id ] = $modules[ $module_id ];
-				}
-			}
-		}
+		$active = $this->get_default_active_module_ids();
 
 		$this->plugin_conf->options['active_modules'] = $active;
 		$this->plugin_conf->save_options();
 
 		return $this->plugin_conf->options['active_modules'];
+	}
+
+	/**
+	 * Build the list of module IDs that should be active on a fresh/reset site, filtered
+	 * against installed modules.
+	 *
+	 * Only 'post', 'page' and 'comment' are pre-checked among "container"-category modules
+	 * (the "Look for links in" checkboxes) — every other container (custom taxonomies, ...)
+	 * needs an explicit opt-in. 'custom_field' and 'acf_field' are the exception: they're
+	 * auto-included once something is actually configured for them to check, mirroring the
+	 * one-time exclusion that used to live in legacy/includes/activation.php. Modules marked
+	 * ModuleAlwaysActive are never excluded here regardless of category, since is_active()
+	 * (not just the checkbox UI) depends on them staying in this list.
+	 *
+	 * @return array An array of module IDs.
+	 */
+	protected function get_default_active_module_ids() {
+		if ( ! is_array( $this->default_active_modules ) ) {
+			return array();
+		}
+
+		$modules = $this->get_modules();
+
+		$default_containers = array(
+			'post',
+			'page',
+			'comment',
+			'youtube-iframe',
+			'dummy',
+		);
+		if ( ! empty( $this->plugin_conf->options['custom_fields'] ) ) {
+			$default_containers[] = 'custom_field';
+		}
+		if ( ! empty( $this->plugin_conf->options['acf_fields'] ) ) {
+			$default_containers[] = 'acf_field';
+		}
+
+		$active = array();
+		foreach ( $this->default_active_modules as $module_id ) {
+			if ( ! array_key_exists( $module_id, $modules ) ) {
+				continue;
+			}
+
+			$module_data      = $modules[ $module_id ];
+			$is_always_active = ! empty( $module_data['ModuleAlwaysActive'] );
+			$is_container     = isset( $module_data['ModuleCategory'] ) && 'container' === $module_data['ModuleCategory'];
+
+			if ( $is_container && ! $is_always_active && ! in_array( $module_id, $default_containers, true ) ) {
+				continue;
+			}
+
+			$active[] = $module_id;
+		}
+
+		return $active;
 	}
 
 	/**
@@ -349,7 +421,7 @@ class blcModuleManager {
 	 * @return bool
 	 */
 	function is_active( $module_id ) {
-		return array_key_exists( $module_id, $this->get_active_modules() );
+		return in_array( $module_id, $this->get_active_modules_ids(), true );
 	}
 
 	/**
@@ -372,8 +444,11 @@ class blcModuleManager {
 
 		//Attempt to load the module
 		if ( $this->load_module( $module_id, $module_data ) ) {
+			$active_modules = $this->plugin_conf->options['active_modules'];
 			//Okay, if it loads, we can assume it works.
-			$this->plugin_conf->options['active_modules'][ $module_id ] = $module_data;
+			$active_modules[] = $module_id;
+
+			$this->plugin_conf->options['active_modules'] = $active_modules;
 			$this->plugin_conf->save_options();
 			//Invalidate the per-category active module cache
 			$this->_category_cache_active = null;
@@ -383,6 +458,8 @@ class blcModuleManager {
 			if ( $module ) {
 				$module->activated();
 			}
+			$this->refresh_active_module_cache();
+
 			return true;
 		} else {
 			return false;
@@ -413,17 +490,24 @@ class blcModuleManager {
 			$module->deactivated();
 		}
 
-		unset( $this->plugin_conf->options['active_modules'][ $module_id ] );
+		$active_modules = $this->plugin_conf->options['active_modules'];
+		$module_idx     = array_search( $module_id, $active_modules, true );
+		unset( $active_modules[ $module_idx ] );
+		$this->plugin_conf->options['active_modules'] = $active_modules;
 
 		//Keep track of when each module was last deactivated. Used for parser resynchronization.
 		if ( isset( $this->plugin_conf->options['module_deactivated_when'] ) ) {
-			$this->plugin_conf->options['module_deactivated_when'][ $module_id ] = current_time( 'timestamp' );
+			$module_deactivated_when               = $this->plugin_conf->options['module_deactivated_when'];
+			$module_deactivated_when[ $module_id ] = current_time( 'timestamp' );
+
+			$this->plugin_conf->options['module_deactivated_when'] = $module_deactivated_when;
 		} else {
 			$this->plugin_conf->options['module_deactivated_when'] = array(
 				$module_id => current_time( 'timestamp' ),
 			);
 		}
 		$this->plugin_conf->save_options();
+		$this->refresh_active_module_cache();
 
 		$this->_category_cache_active = null; //Invalidate the by-category cache since we just changed something
 		return true;
@@ -452,7 +536,7 @@ class blcModuleManager {
 	 * @return void
 	 */
 	function set_active_modules( $ids ) {
-		$current_active = array_keys( $this->get_active_modules() );
+		$current_active = $this->get_active_modules_ids();
 
 		$activate   = array_diff( $ids, $current_active );
 		$deactivate = array_diff( $current_active, $ids );
@@ -494,8 +578,8 @@ class blcModuleManager {
 		$this->load_modules();
 		$blclog->info( sprintf( '... %d modules loaded in %.3f seconds', count( $this->loaded ), microtime( true ) - $start ) );
 
-		$active = $this->get_active_modules();
-		foreach ( $active as $module_id => $module_data ) {
+		$active = $this->get_active_modules_ids();
+		foreach ( $active as $module_id ) {
 			$blclog->log( sprintf( '... Notifying module "%s"', $module_id ) );
 			$module = $this->get_module( $module_id );
 			if ( $module ) {
@@ -512,15 +596,20 @@ class blcModuleManager {
 	 * @return array An updated list of active modules.
 	 */
 	function refresh_active_module_cache() {
-		$modules = $this->get_modules();
-		foreach ( $this->plugin_conf->options['active_modules'] as $module_id => $module_header ) {
+		$modules        = $this->get_modules();
+		$active_modules = $this->plugin_conf->options['active_modules'];
+
+		$all_modules = array();
+		foreach ( $active_modules as $module_id ) {
 			if ( array_key_exists( $module_id, $modules ) ) {
-				$this->plugin_conf->options['active_modules'][ $module_id ] = $modules[ $module_id ];
+				$all_modules[ $module_id ] = $modules[ $module_id ];
 			}
 		}
+		$this->plugin_conf->options['all_modules'] = $all_modules;
+
 		$this->plugin_conf->save_options();
 		$this->_category_cache_active = null; //Invalidate the by-category active module cache
-		return $this->plugin_conf->options['active_modules'];
+		return $this->plugin_conf->options['all_modules'];
 	}
 
 	/**

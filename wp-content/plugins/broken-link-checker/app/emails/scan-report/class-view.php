@@ -18,8 +18,9 @@ defined( 'WPINC' ) || die;
 
 use WPMUDEV_BLC\App\Emails\Scan_Report\Model;
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
-
-//use WPMUDEV_BLC\Core\Utils\Utilities;
+use WPMUDEV_BLC\Core\Utils\Utilities;
+use WP_Post;
+use WP_User;
 
 class View extends Base {
 	/**
@@ -79,7 +80,7 @@ class View extends Base {
 		$broken_links_list = Model::get_scan_results( 'broken_links_list' );
 		$markup            = '';
 
-		if ( empty( $broken_links_list ) ) {
+		if ( empty( $broken_links_list ) || ! is_array( $broken_links_list ) ) {
 			return $markup;
 		}
 
@@ -89,44 +90,27 @@ class View extends Base {
 				$broken_link = (array) $broken_link;
 			}
 
+			if ( ! is_array( $broken_link ) || empty( $broken_link['url'] ) ) {
+				Utilities::log( 'BLC_SCAN_REPORT_EMAIL - Skipped a broken link entry because it holds no url.' );
+
+				continue;
+			}
+
 			if ( ! empty( $broken_link['is_ignored'] ) ) {
 				continue;
 			}
 
-			$origin_source    = $broken_link['origins'][0] ?? false;
-			$origin_source_id = null;
-
-			if ( $origin_source ) {
-				$origin_source_id = intval( url_to_postid( $origin_source ) );
-			}
-
-			$origin_post_title    = $origin_source_id ? get_the_title( $origin_source_id ) : __( 'Unknown', 'broken-link-checker' );
-			$origin_post_edit_url = get_edit_post_link( $origin_source_id );
-
-			// If get_edit_post_link keeps returning empty.
-			if ( empty( $origin_post_edit_url ) ) {
-				$post = get_post( $origin_source_id );
-
-				if ( $post instanceof \WP_Post ) {
-					$post_type_object = get_post_type_object( $post->post_type );
-
-					if ( ! $post_type_object ) {
-						continue;
-					}
-
-					$origin_post_edit_url = admin_url( sprintf( $post_type_object->_edit_link . "&action=edit", $post->ID ) );
-				} else {
-					continue;
-				}
-			}
+			$status_code = isset( $broken_link['status_code'] ) ? trim( (string) $broken_link['status_code'] ) : '';
+			$status_ref  = isset( $broken_link['status_ref'] ) ? trim( (string) $broken_link['status_ref'] ) : '';
+			$origin_cell = $this->origin_markup( $broken_link );
 
 			ob_start();
 			?>
             <tr style="border: 1px solid #F2F2F2;">
                 <td style="font-family: Roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;
                 line-height: 14px;color: #286EFA; vertical-align:top; text-align: left;">
-                    <a href="<?php echo $broken_link['url']; ?>" style="color: #286EFA;">
-						<?php echo $broken_link['url']; ?>
+                    <a href="<?php echo esc_url( $broken_link['url'] ); ?>" style="color: #286EFA;">
+						<?php echo esc_html( $broken_link['url'] ); ?>
                     </a>
                 </td>
                 <td style="font-family: roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;
@@ -134,26 +118,32 @@ class View extends Base {
 
                     <table>
                         <tr>
-                            <td style="min-width: 50px;">
+							<?php if ( '' !== $status_code ) : ?>
+                                <td style="min-width: 50px;">
                                 <span style="padding: 4px 8px;width: 36px;height: 22px;background: #FF6D6D;border-radius: 12px;font-weight: 500;font-size: 12px;line-height: 14px;color: #FFFFFF; margin:0 4px 0 0;">
-                                    <?php echo $broken_link['status_code']; ?>
+                                    <?php echo esc_html( $status_code ); ?>
                                 </span>
-                            </td>
+                                </td>
+							<?php endif; ?>
                             <td style="min-width: 50px;">
-								<?php echo $broken_link['status_ref']; ?>
+								<?php echo esc_html( $status_ref ); ?>
                             </td>
                         </tr>
                     </table>
 
                 </td>
                 <td style="font-family: roboto, sans-serif;font-weight: 500;padding: 20px; font-size: 12px;line-height: 14px;color: #286EFA; width:33%; vertical-align:top; text-align: left;">
-                    <a href="<?php echo $origin_post_edit_url; ?>" target="_blank" style="color: #286EFA;">
-						<?php echo $origin_post_title; ?>
-                    </a>
+					<?php echo $origin_cell; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Escaped in origin_markup(). ?>
                 </td>
             </tr>
 			<?php
 			$markup .= ob_get_clean();
+		}
+
+		// The heading row below is unconditional, so returning it without any
+		// data row would render a table holding nothing but column labels.
+		if ( empty( $markup ) ) {
+			return '';
 		}
 
 		return "<div style=\"overflow-x: auto;\"><table cellpadding=\"0\" cellspacing=\"0\" width=\"100%\" border=\"0\" style=\"color:#000000;
@@ -172,6 +162,177 @@ class View extends Base {
           </tr>
         {$markup}
         </table></div>";
+	}
+
+	/**
+	 * Gives the markup of the Source URL cell of a broken link row.
+	 *
+	 * A broken link is never dropped from the report because we could not tie its
+	 * origin back to a local post. We link to the best target we can resolve and
+	 * fall back to naming the origin as plain text.
+	 *
+	 * @param array $broken_link A single broken link record of the scan results.
+	 *
+	 * @return string
+	 */
+	protected function origin_markup( array $broken_link = array() ) {
+		$origin_source = $this->first_origin( $broken_link );
+
+		if ( empty( $origin_source ) ) {
+			Utilities::log(
+				sprintf(
+					'BLC_SCAN_REPORT_EMAIL - Broken link %s holds no origin. Reporting it without a source.',
+					$broken_link['url'] ?? ''
+				)
+			);
+
+			return $this->origin_label_markup( __( 'Unknown', 'broken-link-checker' ) );
+		}
+
+		$origin_source_id = intval( url_to_postid( $origin_source ) );
+
+		if ( ! empty( $origin_source_id ) ) {
+			$edit_url = $this->post_edit_url( $origin_source_id );
+
+			if ( ! empty( $edit_url ) ) {
+				$origin_post_title = get_the_title( $origin_source_id );
+
+				if ( '' === trim( (string) $origin_post_title ) ) {
+					$origin_post_title = $origin_source;
+				}
+
+				return $this->origin_link_markup( $edit_url, $origin_post_title );
+			}
+		}
+
+		// Author archives never resolve through url_to_postid().
+		$author = Utilities::is_author_url( $origin_source );
+
+		if ( $author instanceof WP_User ) {
+			return $this->origin_link_markup( $origin_source, $author->display_name );
+		}
+
+		/*
+		 * Home page, term or date archives, and permalinks we cannot map to a post.
+		 * The origin is still worth reporting, so we point at the page itself.
+		 */
+		Utilities::log(
+			sprintf(
+				'BLC_SCAN_REPORT_EMAIL - Origin %s did not resolve to a post. Reporting it as a plain url.',
+				$origin_source
+			)
+		);
+
+		return $this->origin_link_markup( $origin_source, $origin_source );
+	}
+
+	/**
+	 * Returns the first usable origin url of a broken link.
+	 *
+	 * Origins reach us from the Hub API, so we accept a list of urls, a list of
+	 * objects or arrays holding a url, and a bare url string.
+	 *
+	 * @param array $broken_link A single broken link record of the scan results.
+	 *
+	 * @return string
+	 */
+	protected function first_origin( array $broken_link = array() ) {
+		$origins = $broken_link['origins'] ?? array();
+
+		if ( is_string( $origins ) ) {
+			$origins = array( $origins );
+		}
+
+		if ( is_object( $origins ) ) {
+			$origins = (array) $origins;
+		}
+
+		if ( ! is_array( $origins ) ) {
+			return '';
+		}
+
+		foreach ( $origins as $origin ) {
+			if ( is_object( $origin ) ) {
+				$origin = (array) $origin;
+			}
+
+			if ( is_array( $origin ) ) {
+				$origin = $origin['url'] ?? '';
+			}
+
+			if ( is_string( $origin ) && '' !== trim( $origin ) ) {
+				return trim( $origin );
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Returns the edit link of a post.
+	 *
+	 * The get_edit_post_link() function returns null whenever the current user
+	 * cannot edit the post, and a scheduled report is always sent without a user
+	 * in context. So we build the link ourselves in that case.
+	 *
+	 * @param int $post_id The post to build the edit link of.
+	 *
+	 * @return string
+	 */
+	protected function post_edit_url( int $post_id = 0 ) {
+		if ( empty( $post_id ) ) {
+			return '';
+		}
+
+		$edit_url = get_edit_post_link( $post_id );
+
+		if ( ! empty( $edit_url ) ) {
+			return $edit_url;
+		}
+
+		$post = get_post( $post_id );
+
+		if ( ! $post instanceof WP_Post ) {
+			return '';
+		}
+
+		$post_type_object = get_post_type_object( $post->post_type );
+
+		if ( ! $post_type_object || empty( $post_type_object->_edit_link ) ) {
+			return '';
+		}
+
+		return admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', $post->ID ) );
+	}
+
+	/**
+	 * Wraps an origin in a link.
+	 *
+	 * @param string $url   The link target.
+	 * @param string $label The text to show.
+	 *
+	 * @return string
+	 */
+	protected function origin_link_markup( string $url = '', string $label = '' ) {
+		return sprintf(
+			'<a href="%1$s" target="_blank" style="color: #286EFA;">%2$s</a>',
+			esc_url( $url ),
+			esc_html( $label )
+		);
+	}
+
+	/**
+	 * Wraps an origin in plain text, for when there is nothing to link to.
+	 *
+	 * @param string $label The text to show.
+	 *
+	 * @return string
+	 */
+	protected function origin_label_markup( string $label = '' ) {
+		return sprintf(
+			'<span style="color: #1A1A1A;">%s</span>',
+			esc_html( $label )
+		);
 	}
 
 	/**

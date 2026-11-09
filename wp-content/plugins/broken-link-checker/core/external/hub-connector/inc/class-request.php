@@ -133,6 +133,25 @@ class Request {
 	}
 
 	/**
+	 * Make a POST request.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $path Endpoint route.
+	 * @param bool   $auth Should attach API key?.
+	 * @param array  $data Data array.
+	 *
+	 * @return mixed|WP_Error
+	 */
+	public function delete( $path, $auth = false, $data = array() ) {
+		try {
+			return $this->request( $path, $auth, $data, 'delete' );
+		} catch ( Exception $e ) {
+			return new WP_Error( $e->getCode(), $e->getMessage() );
+		}
+	}
+
+	/**
 	 * Make a GET request.
 	 *
 	 * @since 1.0.0
@@ -168,13 +187,11 @@ class Request {
 		$site_id = Data::get()->hub_site_id();
 
 		if ( ! empty( $key ) ) {
-			if ( 'post' === $method ) {
+			if ( in_array( strtolower( $method ), array( 'post', 'delete' ), true ) ) {
 				$this->add_post_argument( 'api_key', $key );
 			} else {
 				// Set API key if not already set.
-				if ( false === strpos( $url, '/' . $key ) ) {
-					$url .= '/' . $key;
-				}
+				$this->add_header_argument( 'Authorization', 'Basic ' . $key );
 				if ( ! empty( $site_id ) ) {
 					$this->add_get_argument( 'site_id', $site_id );
 				}
@@ -208,9 +225,12 @@ class Request {
 
 		// Default request options.
 		$args = array(
+			// No 'sslverify' override here on purpose: our API is always valid HTTPS, so we keep
+			// core's default (verify on) and no longer offer a plugin level opt-out
+			// (WPMUDEV_API_SSLVERIFY, deprecated). A broken local CA bundle can still be
+			// worked around with core's own https_ssl_verify / http_request_args filters.
 			'user-agent' => 'WPMUDEV Hub Connector Client/' . \WPMUDEV_HUB_CONNECTOR_VERSION . ' (+' . network_site_url() . ')',
 			'headers'    => $this->headers,
-			'sslverify'  => defined( '\WPMUDEV_API_SSLVERIFY' ) ? \WPMUDEV_API_SSLVERIFY : false,
 			'method'     => strtoupper( $method ),
 			'timeout'    => $this->timeout,
 		);
@@ -221,9 +241,26 @@ class Request {
 					$data = array_merge( $data, $this->post_args );
 				}
 
-				$args['body'] = $data;
+				$args['body'] = wp_json_encode( $data );
+				if ( ! isset( $args['headers']['Content-Type'] ) ) {
+					$args['headers']['Content-Type'] = 'application/json';
+				}
 
 				$response = wp_remote_post( $url, $args );
+				break;
+			case 'delete':
+				$args['method'] = 'DELETE';
+
+				if ( is_array( $data ) ) {
+					$data = array_merge( $data, $this->post_args );
+				}
+
+				$args['body'] = wp_json_encode( $data );
+				if ( ! isset( $args['headers']['Content-Type'] ) ) {
+					$args['headers']['Content-Type'] = 'application/json';
+				}
+
+				$response = wp_remote_request( $url, $args );
 				break;
 			case 'get':
 				// If data is set for get request add it to URL.

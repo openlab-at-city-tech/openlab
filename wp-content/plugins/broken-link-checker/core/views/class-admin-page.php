@@ -110,7 +110,7 @@ abstract class Admin_Page extends Base implements Admin_View {
 			?>
 		</div>
 
-		<?php if ( Utilities::is_site_connected() ) : ?>
+		<?php if ( ! Utilities::is_free_member() ) : ?>
 
 			<?php if ( ! $hide_footer ) : ?>
 				<ul class="sui-footer-nav">
@@ -129,9 +129,8 @@ abstract class Admin_Page extends Base implements Admin_View {
 
 			<ul class="sui-footer-nav">
 				<li><a href="https://profiles.wordpress.org/wpmudev#content-plugins" target="_blank"><?php esc_html_e( 'Free Plugins', 'broken-link-checker' ); ?></a></li>
-				<li><a href="https://wpmudev.com/features/" target="_blank"><?php esc_html_e( 'Membership', 'broken-link-checker' ); ?></a></li>
 				<li><a href="https://wpmudev.com/roadmap/" target="_blank"><?php esc_html_e( 'Roadmap', 'broken-link-checker' ); ?></a></li>
-				<li><a href="https://wpmudev.com/hub2/support/" target="_blank"><?php esc_html_e( 'Support', 'broken-link-checker' ); ?></a></li>
+				<li><a href="https://wordpress.org/support/plugin/broken-link-checker/" target="_blank"><?php esc_html_e( 'Support', 'broken-link-checker' ); ?></a></li>
 				<li><a href="https://wpmudev.com/docs/wpmu-dev-plugins/broken-link-checker" target="_blank"><?php esc_html_e( 'Docs', 'broken-link-checker' ); ?></a></li>
 				<li><a href="https://wpmudev.com/hub-welcome/" target="_blank"><?php esc_html_e( 'The Hub', 'broken-link-checker' ); ?></a></li>
 				<li><a href="https://wpmudev.com/terms-of-service/" target="_blank"><?php esc_html_e( 'Terms of Service', 'broken-link-checker' ); ?></a></li>

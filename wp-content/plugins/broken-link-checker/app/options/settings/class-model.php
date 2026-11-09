@@ -67,14 +67,14 @@ class Model extends Option {
 			 * List of broken links. Storing to be used in Scan Report Emails. Stores limited number links configured
 			 *  in `WPMUDEV_BLC\App\Scan_Models\limit_links_number()`
 			 */
-			'broken_links_list',
-			'broken_links'   => null,
-			'succeeded_urls' => null,
-			'total_urls'     => null,
-			'unique_urls'    => null,
-			'start_time'     => null,
-			'end_time'       => null,
-			'duration'       => null,
+			'broken_links_list' => null,
+			'broken_links'      => null,
+			'succeeded_urls'    => null,
+			'total_urls'        => null,
+			'unique_urls'       => null,
+			'start_time'        => null,
+			'end_time'          => null,
+			'duration'          => null,
 		),
 	);
 	/**
@@ -97,7 +97,13 @@ class Model extends Option {
 			return array();
 		}
 
-		$email_recipients = (array) $schedule['emailrecipients'] ?? array();
+		/*
+		 * The key is only lowercase once the option has been saved, since
+		 * Option::save() puts every key through sanitize_key(). Read it defensively
+		 * so a schedule coming straight from the defaults does not warn. The cast
+		 * has to stay outside the coalesce, or it binds first and defeats it.
+		 */
+		$email_recipients = (array) ( $schedule['emailrecipients'] ?? array() );
 
 		$active_recipients = array_filter(
 			$email_recipients,

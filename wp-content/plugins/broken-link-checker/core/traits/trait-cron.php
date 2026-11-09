@@ -145,9 +145,17 @@ trait Cron {
 		 */
 		if ( ! wp_next_scheduled( $this->get_hook_name() ) ) {
 			if ( $this->is_single_event ) {
-				//if ( is_int( $timestamp ) ) {
+				/*
+				 * A missing timestamp used to be passed straight through, scheduling the
+				 * event at the Unix epoch. WP Cron then saw it as due on every request and
+				 * kept re-firing it, so bail out rather than register an event that can
+				 * never stop running.
+				 */
+				if ( ! is_int( $timestamp ) || 0 >= $timestamp ) {
+					return false;
+				}
+
 				$response = wp_schedule_single_event( $timestamp, $this->get_hook_name() );
-				//}
 			} else {
 				$timestamp = $timestamp ?? time();
 				$response  = wp_schedule_event( $timestamp, $this->get_cron_interval_title(), $this->get_hook_name() );

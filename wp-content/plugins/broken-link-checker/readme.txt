@@ -2,8 +2,8 @@
 Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images
 Requires at least: 5.2
-Tested up to: 6.9
-Stable tag: 2.4.8
+Tested up to: 7.1
+Stable tag: 2.4.15
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -207,6 +207,69 @@ We take plugin security incredibly seriously; if you have a bug or vulnerability
 6. Local Broken Link Checker engine settings
 
 == Changelog ==
+
+= 2.4.15 =
+* Fix: Fixing a broken link inside a block no longer changes other URLs in that block's settings, such as embeds and navigation links.
+* Fix: Broken link highlighting now keeps the link's other attributes intact.
+* Fix: SiteOrigin Page Builder layouts are no longer corrupted when a broken link inside them is edited or unlinked.
+* Fix: Broken links can now only be edited or removed by users who can edit the post, comment or other content containing them.
+* Fix: A message is now shown when editing or unlinking a broken link is not allowed.
+* Fix: Special characters in recipient names and links now display correctly in the activation email and on the activation and cancellation pages.
+* Fix: Special characters in post titles and source URLs now display correctly in the broken links list.
+* Fix: Special characters in the link text are now preserved when a broken link is unlinked.
+* Fix: Personalised links in the scan report emails now work for all recipients.
+* Fix: An existing .htaccess file in the log folder is no longer overwritten.
+* Improvement: The custom log file path is now validated when saved.
+* Improvement: The custom CSS entered in the settings is now validated when saved.
+* Improvement: Shortcodes in link and image URLs are now only expanded in content written by users who can edit posts.
+* Improvement: Stricter validation of the addresses the Local link checker connects to.
+* Improvement: Updated the bundled Hub Connector to the latest version.
+
+= 2.4.14.1 =
+* Fix: A server-side request vulnerability
+
+= 2.4.14 =
+* Fix: Fixed scheduled scans running more than once and duplicate scan report emails being sent when the site uses a 12-hour time format.
+* Fix: Fixed the scan report email showing an incorrect broken links count when links were ignored after the scan.
+* Fix: Fixed broken links being missing from the scan report email when their source post could not be resolved.
+* Fix: Fixed scheduled scans running at the wrong time or on the wrong day for sites with a timezone other than UTC.
+* Fix: Fixed the scan schedule allowing the same recipient to be added more than once, which resulted in duplicate scan report emails.
+
+= 2.4.13.1 =
+* Fix: Patched a cross-site scripting (XSS) issue.
+
+= 2.4.13 =
+* Fix: Fixed a fatal error that could occur when viewing broken links found in Template Parts and Templates.
+* Fix: Fixed "Look For Links In" checkboxes being unchecked by default, causing some content types to be skipped during scans.
+
+= 2.4.12 =
+* Fix: Fixed an issue with permissions allowing Editors to access Dashboard widget.
+* Fix: Patched a vulnerability issue (Credit: Jakub Herman).
+
+= 2.4.11 =
+* Fix: Fixed daily scan schedule time not being saved correctly in some cases.
+
+= 2.4.10 =
+* Fix: Fixed error ocurred during database schema upgrade.
+
+= 2.4.9 =
+* Fix: Updated links in the footer of the Cloud admin page.
+* Fix: Fixed BLC Cloud link detection in comments.
+* Fix: Resolved BLC Local database error when checking pages.
+* Fix: Fixed BLC Cloud Elementor and SiteOrigin PageBuilder support.
+* Fix: Fixed BLC Cloud recipients counter in the role filter.
+* Fix: Improved BLC Cloud keyboard navigation for the recipients search field.
+* Fix: Fixed BLC Local result status code after request redirection.
+* Fix: Improved BLC Local accessibility.
+* Fix: Optimized BLC Local database.
+* Fix: Resolved PHP compatibility warnings.
+* Fix: Fixed BLC Cloud scheduled reports timezone support.
+* Enhance: Added blc_link_status_changed filter to monitor link status changes.
+* Enhance: Redirected users to the plugin dashboard after activation.
+* Enhance: Added BLC Local support for custom taxonomies.
+* Enhance: Added ability to sort BLC Local records by status code.
+* Enhance: BLC Cloud now automatically highlights broken links on the site.
+* Fix: Miscellaneousness improvements
 
 = 2.4.8 =
 * Fix: Patched a vulnerability issue.

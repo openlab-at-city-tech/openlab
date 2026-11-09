@@ -138,6 +138,15 @@ class blcBookmark extends blcContainer {
 		return current_user_can( 'manage_links' );
 	}
 
+	/**
+	 * Check if the current user can edit this bookmark.
+	 *
+	 * @return bool
+	 */
+	function current_user_can_edit() {
+		return current_user_can( 'manage_links' );
+	}
+
 	function can_be_trashed() {
 		return false;
 	}

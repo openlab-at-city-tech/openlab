@@ -29,6 +29,18 @@ class blcParser extends blcModule {
 	var $supported_containers = array();
 
 	/**
+	 * Whether shortcodes found in link URLs may be expanded.
+	 *
+	 * Only ever true while parse_container_field() is parsing a container whose
+	 * content is written by the site's own authors. Parsing runs inside WP-Cron,
+	 * so expanding shortcodes in visitor-supplied content (e.g. comments) would
+	 * execute any registered shortcode with attacker-chosen attributes.
+	 *
+	 * @var bool
+	 */
+	protected $url_shortcodes_allowed = false;
+
+	/**
 	 * Initialize the parser. Nothing much here.
 	 *
 	 * @return void
@@ -97,6 +109,61 @@ class blcParser extends blcModule {
 	 */
 	function parse( $content, $base_url = '', $default_link_text = '' ) {
 		return array();
+	}
+
+	/**
+	 * Parse a container field for links.
+	 *
+	 * Same as parse(), except that shortcodes in link URLs are expanded only when
+	 * the container says its content is trusted.
+	 *
+	 * @param string $content The text to parse.
+	 * @param string $base_url The base URL to use for normalizing relative URLs.
+	 * @param string $default_link_text Link text to use when the link has none.
+	 * @param bool   $allow_url_shortcodes Whether the content comes from a trusted, site-authored source.
+	 * @return array An array of new blcLinkInstance objects.
+	 */
+	public function parse_container_field( $content, $base_url = '', $default_link_text = '', $allow_url_shortcodes = false ) {
+		$previous                     = $this->url_shortcodes_allowed;
+		$this->url_shortcodes_allowed = (bool) $allow_url_shortcodes;
+
+		try {
+			return $this->parse( $content, $base_url, $default_link_text );
+		} finally {
+			$this->url_shortcodes_allowed = $previous;
+		}
+	}
+
+	/**
+	 * Expand shortcodes in a link URL, if the content being parsed is trusted.
+	 *
+	 * Untrusted URLs are returned unchanged. For trusted URLs, the expanded value
+	 * is only kept if it still looks like an http(s) or relative URL, since a
+	 * shortcode can return anything, markup included.
+	 *
+	 * @param string $url The URL as found in the content.
+	 * @return string The URL to use, or an empty string if the expansion did not produce a usable URL.
+	 */
+	protected function expand_url_shortcodes( $url ) {
+		if ( ! $this->url_shortcodes_allowed || false === strpos( $url, '[' ) ) {
+			return $url;
+		}
+
+		$expanded = trim( do_shortcode( $url ) );
+		if ( $expanded === $url ) {
+			return $url;
+		}
+
+		if ( '' === $expanded || preg_match( '/[\x00-\x20<>"]/', $expanded ) ) {
+			return '';
+		}
+
+		$scheme = wp_parse_url( $expanded, PHP_URL_SCHEME );
+		if ( false === $scheme || ( null !== $scheme && ! in_array( strtolower( $scheme ), array( 'http', 'https' ), true ) ) ) {
+			return '';
+		}
+
+		return $expanded;
 	}
 
 	/**

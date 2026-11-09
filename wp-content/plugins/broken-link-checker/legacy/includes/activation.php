@@ -1,17 +1,32 @@
 <?php
+/**
+ * Plugin activation script
+ *
+ * @package Broken_Link_Checker
+ */
+
+$migrated = blc_maybe_migrate_configuration();
 
 if ( get_option( 'blc_activation_enabled' ) ) {
 	return;
 }
 
-global $blclog, $blc_config_manager, $wpdb;
+$blc_config_manager = blc_get_configuration();
+if ( ! $migrated ) {
+	// Load existing options from the database if migration did not occur.
+	$blc_config_manager->load_options();
+	// Ensure default options are saved for any managers that have not loaded options yet.
+	$blc_config_manager->save_defaults();
+}
+
+global $blclog, $wpdb;
 $queryCnt = $wpdb->num_queries;
 
 require_once BLC_DIRECTORY_LEGACY . '/includes/utility-class.php';
 
-//Completing the installation/upgrade is required for the plugin to work, so make sure
-//the script doesn't get aborted by (for example) the browser timing out.
-//set_time_limit( 300 );  //5 minutes should be plenty, anything more would probably indicate an infinite loop or a deadlock
+// Completing the installation/upgrade is required for the plugin to work, so make sure.
+// the script doesn't get aborted by (for example) the browser timing out.
+// set_time_limit( 300 );  //5 minutes should be plenty, anything more would probably indicate an infinite loop or a deadlock.
 if ( blcUtility::is_host_wp_engine() || blcUtility::is_host_flywheel() ) {
 	set_time_limit( 60 );
 } else {
@@ -34,7 +49,47 @@ $blc_config_manager->options['installation_flag_cleared_on'] = date( 'c' ) . ' (
 //Note the time of the first installation (not very accurate, but still useful)
 if ( empty( $blc_config_manager->options['first_installation_timestamp'] ) ) {
 	$blc_config_manager->options['first_installation_timestamp'] = time();
+
+	// Assume this is a new install if there's no first installation timestamp
+	// We don't need to upgrade the database in this case. Only configuration setup.
+
+	//Turn off load limiting if it's not available on this server.
+	$blclog->info( 'Updating server load limit settings...' );
+	$load = blcUtility::get_server_load();
+	if ( empty( $load ) ) {
+		// Disable load limit if we can't retrieve the current load average
+		$blc_config_manager->options['enable_load_limit'] = false;
+		$blclog->info( 'Disable load limit. Cannot retrieve current load average.' );
+	} elseif ( $blc_config_manager->options['enable_load_limit'] && ! isset( $blc_config_manager->options['server_load_limit'] ) ) {
+		$fifteen_minutes    = floatval( end( $load ) );
+		$default_load_limit = round( max( min( $fifteen_minutes * 2, $fifteen_minutes + 2 ), 4 ) );
+		// Set the server load limit to the max possible limit based on current load
+		$blc_config_manager->options['server_load_limit'] = $default_load_limit;
+
+		$blclog->info(
+			sprintf(
+				'Set server load limit to %.2f. Current load average is %.2f',
+				$default_load_limit,
+				$fifteen_minutes
+			)
+		);
+	}
+
+	$blclog->info( 'Completing installation...' );
+	$blc_config_manager->options['installation_complete']    = true;
+	$blc_config_manager->options['installation_flag_set_on'] = date( 'c' ) . ' (' . microtime( true ) . ')'; //phpcs:ignore
+	if ( $blc_config_manager->save_options() ) {
+		$blclog->info( 'Configuration saved.' );
+	} else {
+		$blclog->error( 'Error saving plugin configuration!' );
+	};
+
+	$blclog->save();
+
+	update_option( 'blc_activation_enabled', true );
+	return;
 }
+
 $blc_config_manager->save_options();
 $blclog->info( 'Installation/update begins.' );
 
