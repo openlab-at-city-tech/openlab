@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#20603d" d="M0 0h900v600H0"/>
+<path fill="#fad201" d="M0 0h900v450H0"/>
+<path fill="#00a3e0" d="M0 0h900v300H0"/>
+<g fill="#e5be01" transform="translate(738 157)">
+<g id="b">
+<path id="a" d="m4-30 21-64-14 66 37-56-30 60 50-45-45 50 61-29-56 37 66-14L30-4l67 4-67 4"/>
+<use href="#a" transform="rotate(180)"/>
+</g>
+<use href="#b" transform="rotate(90)"/>
+<circle r="28" stroke="#00a3e0" stroke-width="3.5"/>
+</g>
+</svg>

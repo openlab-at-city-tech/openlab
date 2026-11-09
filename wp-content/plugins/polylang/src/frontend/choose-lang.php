@@ -3,6 +3,8 @@
  * @package Polylang
  */
 
+use WP_Syntex\Polylang\Model\Languages;
+
 /**
  * Base class to choose the language
  *
@@ -60,13 +62,20 @@ abstract class PLL_Choose_Lang {
 	 * @return void
 	 */
 	public function init() {
-		if ( Polylang::is_ajax_on_front() || ! wp_using_themes() ) {
-			$this->set_language( empty( $_REQUEST['lang'] ) ? $this->get_preferred_language() : $this->model->get_language( sanitize_key( $_REQUEST['lang'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		add_action( 'pre_comment_on_post', array( $this, 'pre_comment_on_post' ) ); // sets the language of comment.
+		add_action( 'parse_query', array( $this, 'parse_main_query' ), 2 ); // sets the language in special cases.
+		add_action( 'wp', array( $this, 'maybe_setcookie' ), 7 );
+
+		if ( ! Polylang::is_ajax_on_front() && wp_using_themes() ) {
+			return;
 		}
 
-		add_action( 'pre_comment_on_post', array( $this, 'pre_comment_on_post' ) ); // sets the language of comment
-		add_action( 'parse_query', array( $this, 'parse_main_query' ), 2 ); // sets the language in special cases
-		add_action( 'wp', array( $this, 'maybe_setcookie' ), 7 );
+		if ( isset( $_REQUEST['lang'] ) && is_string( $_REQUEST['lang'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			// Let's accept either WordPress locales or language codes.
+			$lang = $this->model->languages->get( Languages::is_locale( $_REQUEST['lang'] ) ? $_REQUEST['lang'] : sanitize_key( $_REQUEST['lang'] ) ); // phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		}
+
+		$this->set_language( empty( $lang ) ? $this->get_preferred_language() : $lang );
 	}
 
 	/**
@@ -335,7 +344,7 @@ abstract class PLL_Choose_Lang {
 		if ( $lang = apply_filters( 'pll_set_language_from_query', false, $query ) ) {
 			$this->set_language( $lang );
 			$this->set_curlang_in_query( $query );
-		} elseif ( ( count( $query->query ) == 1 || ( is_paged() && count( $query->query ) == 2 ) ) && $lang = get_query_var( 'lang' ) ) {
+		} elseif ( ( count( (array) $query->query ) == 1 || ( is_paged() && count( (array) $query->query ) == 2 ) ) && $lang = get_query_var( 'lang' ) ) {
 			$lang = $this->model->get_language( $lang );
 			$this->set_language( $lang ); // Set the language now otherwise it will be too late to filter sticky posts!
 

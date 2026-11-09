@@ -5,7 +5,9 @@
 
 namespace WP_Syntex\Polylang\Blocks\Language_Switcher\Standard;
 
-use PLL_Switcher;
+use WP_Syntex\Polylang\Switcher\Assets;
+use WP_Syntex\Polylang\Switcher\Switcher;
+use WP_Syntex\Polylang\Switcher\Settings\Settings;
 use WP_Syntex\Polylang\Blocks\Language_Switcher\Abstract_Block;
 
 /**
@@ -16,6 +18,40 @@ use WP_Syntex\Polylang\Blocks\Language_Switcher\Abstract_Block;
  * @since 3.8 Moved to Polylang Core and renamed to Language_Switcher\Standard\Block.
  */
 class Block extends Abstract_Block {
+	/**
+	 * Adds the required hooks.
+	 *
+	 * @since 3.9
+	 *
+	 * @return self
+	 */
+	public function init() {
+		parent::init();
+
+		add_action( 'init', array( $this, 'register_styles' ) );
+		add_action( 'init', array( Assets::class, 'register_scripts' ) );
+
+		return $this;
+	}
+
+	/**
+	 * Registers the styles for the language switcher block.
+	 *
+	 * @since 3.9
+	 *
+	 * @return void
+	 */
+	public function register_styles(): void {
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+		Assets::register_styles();
+		wp_register_style(
+			'pll-language-switcher-editor', // Matches `block.json`'s `editorStyle` handle.
+			plugins_url( "/css/build/language-switcher-editor{$suffix}.css", POLYLANG_ROOT_FILE ),
+			array( ASSETS::FRONTEND_ASSET_HANDLE ),
+			POLYLANG_VERSION
+		);
+	}
 
 	/**
 	 * Returns the language switcher block name with the Polylang's namespace.
@@ -44,31 +80,26 @@ class Block extends Abstract_Block {
 		static $dropdown_id = 0;
 		++$dropdown_id;
 
-		// Sets a unique id for dropdown in PLL_Switcher::the_language().
-		$attributes['dropdown'] = empty( $attributes['dropdown'] ) ? 0 : $dropdown_id;
+		$attributes['unique_id']    = 'select' === $attributes['layout'] ? 'lang_choice_' . $dropdown_id : '';
+		$attributes['show_wrapper'] = true; // Blocks always display a wrapper. Legacy `dropdown` attributes would otherwise set it to false.
 
-		$attributes = $this->set_attributes_for_block( $attributes );
+		if ( ! empty( $attributes['style']['typography']['textAlign'] ) ) {
+			$attributes['alignment'] = $attributes['style']['typography']['textAlign'];
+		}
 
-		$attributes['raw'] = false;
-		$switcher = new PLL_Switcher();
-		$switcher_output = $switcher->the_languages( $this->links, $attributes );
+		$settings        = new Settings( $attributes );
+		$switcher_output = ( new Switcher( $settings, $this->links ) )->get();
 
 		if ( empty( $switcher_output ) ) {
 			return '';
 		}
 
-		$aria_label = __( 'Choose a language', 'polylang' );
-		if ( $attributes['dropdown'] ) {
-			$switcher_output = '<label class="screen-reader-text" for="' . esc_attr( 'lang_choice_' . $attributes['dropdown'] ) . '">' . esc_html( $aria_label ) . '</label>' . $switcher_output;
+		$switcher_output = $this->apply_flag_styles_to_markup( $switcher_output, $attributes );
 
-			$wrap_tag = '<div %1$s>%2$s</div>';
-		} else {
-			$wrap_tag = '<nav role="navigation" aria-label="' . esc_attr( $aria_label ) . '"><ul %1$s>%2$s</ul></nav>';
-		}
-
-		$wrap_attributes = get_block_wrapper_attributes();
-
-		return sprintf( $wrap_tag, $wrap_attributes, $switcher_output );
+		return $this->apply_block_wrapper_attributes(
+			$switcher_output,
+			get_block_wrapper_attributes()
+		);
 	}
 
 	/**
@@ -81,5 +112,72 @@ class Block extends Abstract_Block {
 	 */
 	protected function get_path(): string {
 		return __DIR__;
+	}
+
+	/**
+	 * Merges block wrapper attributes onto the switcher root element.
+	 *
+	 * Block supports (background, spacing, etc.) must apply to the switcher
+	 * wrapper itself — not to an extra full-width `<div>` around it.
+	 *
+	 * @since 3.9
+	 *
+	 * @param string $html                Switcher HTML.
+	 * @param string $wrapper_attributes  Attributes from `get_block_wrapper_attributes()`.
+	 * @return string
+	 */
+	private function apply_block_wrapper_attributes( string $html, string $wrapper_attributes ): string {
+		if ( '' === trim( $wrapper_attributes ) ) {
+			return $html;
+		}
+
+		$processor = new \WP_HTML_Tag_Processor( $html );
+
+		if ( ! $processor->next_tag() ) {
+			return sprintf( '<div %1$s>%2$s</div>', $wrapper_attributes, $html );
+		}
+
+		foreach ( $this->parse_html_attributes( $wrapper_attributes ) as $name => $value ) {
+			if ( 'class' === $name ) {
+				$existing = $processor->get_attribute( 'class' ) ?? '';
+				$value    = trim( $existing . ' ' . $value );
+			} elseif ( 'style' === $name ) {
+				$existing = $processor->get_attribute( 'style' ) ?? '';
+				/** @var string $existing `WP_HTML_Tag_Processor::get_attribute()` returns string|null for non-boolean attributes */
+				$value = '' === $existing ? $value : rtrim( $existing, ';' ) . ';' . $value;
+			}
+
+			$processor->set_attribute( $name, $value );
+		}
+
+		return $processor->get_updated_html();
+	}
+
+	/**
+	 * Parses an HTML attributes string.
+	 *
+	 * @since 3.9
+	 *
+	 * @param string $attributes_string HTML attributes.
+	 * @return array<string, string>
+	 */
+	private function parse_html_attributes( string $attributes_string ): array {
+		$attributes = array();
+		$processor  = new \WP_HTML_Tag_Processor( '<div ' . $attributes_string . '></div>' );
+
+		if ( ! $processor->next_tag() ) {
+			return $attributes;
+		}
+
+		foreach ( array( 'class', 'style', 'id' ) as $name ) {
+			/** @var string|null $value `WP_HTML_Tag_Processor::get_attribute()` returns string|null for non-boolean attributes */
+			$value = $processor->get_attribute( $name );
+
+			if ( null !== $value && '' !== $value ) {
+				$attributes[ $name ] = $value;
+			}
+		}
+
+		return $attributes;
 	}
 }

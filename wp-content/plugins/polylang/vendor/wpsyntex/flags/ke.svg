@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 900 600">
+<path fill="#060" d="M0 0h900v600H0"/>
+<path d="M0 0h900v420H0"/>
+<path fill="#000" d="M0 0h900v180H0"/>
+<g transform="translate(450 300)">
+<path id="a" stroke="#000" stroke-width="2" d="m-106 177 7 3L75-122c21-4 42-63 48-89-27 23-59 66-54 86z"/>
+<use href="#a" transform="scale(-1 1)"/>
+<g id="c">
+<path fill="#b00" d="m-1 0 1 180c22 0 60-60 71-90h379V-90H71c-11-30-48-90-71-90"/>
+<path fill="#000" d="M71 90C83 60 90 30 90 0s-7-60-19-90C60-60 53-30 53 0s7 60 18 90"/>
+<path id="b" d="M4 22s15 30 15 79-15 79-15 79"/>
+<use href="#b" transform="scale(1 -1)"/>
+</g>
+<use href="#c" transform="scale(-1 1)"/>
+<ellipse rx="15" ry="23"/>
+</g>
+</svg>

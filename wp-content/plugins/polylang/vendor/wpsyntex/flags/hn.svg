@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" fill="#0d3b99">
+<path d="M0 0h900v600H0"/>
+<path fill="#fff" d="M0 200h900v200H0"/>
+<g id="g">
+<path id="s" d="m263 277 20-60 20 60-51-37h63"/>
+<use href="#s" y="100"/>
+</g>
+<use href="#g" x="334"/>
+<use href="#s" x="167" y="50"/>
+</svg>

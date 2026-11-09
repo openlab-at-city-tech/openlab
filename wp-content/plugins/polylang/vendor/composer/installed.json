@@ -1,5 +1,36 @@
 {
-    "packages": [],
+    "packages": [
+        {
+            "name": "wpsyntex/flags",
+            "version": "dev-main",
+            "version_normalized": "dev-main",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/polylang/flags.git",
+                "reference": "9e78fc1a05ab354ffe50094bacdcfe4b313b0bc0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/polylang/flags/zipball/9e78fc1a05ab354ffe50094bacdcfe4b313b0bc0",
+                "reference": "9e78fc1a05ab354ffe50094bacdcfe4b313b0bc0",
+                "shasum": ""
+            },
+            "time": "2026-10-21T09:25:34+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "CC0-1.0"
+            ],
+            "description": "SVG flags for Polylang",
+            "homepage": "https://polylang.pro",
+            "support": {
+                "source": "https://github.com/polylang/flags/tree/main"
+            },
+            "install-path": "../wpsyntex/flags"
+        }
+    ],
     "dev": false,
     "dev-package-names": []
 }

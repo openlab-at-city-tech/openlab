@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#da0000" viewBox="0 0 900 600">
+<path d="M0 0h900v600H0"/>
+<path fill="#fff" d="M0 0h900v400H0"/>
+<path fill="#239f40" d="M0 0h900v200H0"/>
+<g id="b">
+<path id="a" fill="#fff8" d="M13 166h76v34H13m0 200h76v34H13"/>
+<use x="80" href="#a"/>
+<use x="160" href="#a"/>
+<use x="240" href="#a"/>
+<use x="320" href="#a"/>
+</g>
+<use x="400" href="#a"/>
+<use x="480" href="#b"/>
+<g id="c">
+<path d="M409 363a68 68 0 0 0 66-117 75 75 0 0 1-66 117"/>
+<path d="M496 350a57 57 0 0 0-14-105 75 75 0 0 1 14 105m-46 25-4-75 4-59a23 23 0 0 0 9 7v45l-3 74Zm-1-139 1 2a11 11 0 0 0 19-11 10 10 0 0 1-19 4"/>
+</g>
+<use href="#c" transform="matrix(-1 0 0 1 900 0)"/>
+</svg>

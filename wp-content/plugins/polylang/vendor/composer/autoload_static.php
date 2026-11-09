@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInited5bec60c42d525a1c1222212c9f9cff
+class ComposerStaticInitf816739fffb844552a613a956bd036a9
 {
     public static $prefixLengthsPsr4 = array (
         'W' => 
@@ -39,7 +39,6 @@ class ComposerStaticInited5bec60c42d525a1c1222212c9f9cff
         'PLL_Admin_Filters_Columns' => __DIR__ . '/../..' . '/src/admin/admin-filters-columns.php',
         'PLL_Admin_Filters_Media' => __DIR__ . '/../..' . '/src/admin/admin-filters-media.php',
         'PLL_Admin_Filters_Post' => __DIR__ . '/../..' . '/src/admin/admin-filters-post.php',
-        'PLL_Admin_Filters_Post_Base' => __DIR__ . '/../..' . '/src/admin/admin-filters-post-base.php',
         'PLL_Admin_Filters_Term' => __DIR__ . '/../..' . '/src/admin/admin-filters-term.php',
         'PLL_Admin_Filters_Widgets_Options' => __DIR__ . '/../..' . '/src/admin/admin-filters-widgets-options.php',
         'PLL_Admin_Links' => __DIR__ . '/../..' . '/src/admin/admin-links.php',
@@ -120,7 +119,6 @@ class ComposerStaticInited5bec60c42d525a1c1222212c9f9cff
         'PLL_Sitemaps' => __DIR__ . '/../..' . '/src/modules/sitemaps/sitemaps.php',
         'PLL_Sitemaps_Domain' => __DIR__ . '/../..' . '/src/modules/sitemaps/sitemaps-domain.php',
         'PLL_Static_Pages' => __DIR__ . '/../..' . '/src/static-pages.php',
-        'PLL_Switcher' => __DIR__ . '/../..' . '/src/switcher.php',
         'PLL_Sync' => __DIR__ . '/../..' . '/src/modules/sync/sync.php',
         'PLL_Sync_Metas' => __DIR__ . '/../..' . '/src/modules/sync/sync-metas.php',
         'PLL_Sync_Post_Metas' => __DIR__ . '/../..' . '/src/modules/sync/sync-post-metas.php',
@@ -140,6 +138,8 @@ class ComposerStaticInited5bec60c42d525a1c1222212c9f9cff
         'PLL_Translated_Post' => __DIR__ . '/../..' . '/src/translated-post.php',
         'PLL_Translated_Term' => __DIR__ . '/../..' . '/src/translated-term.php',
         'PLL_Twenty_Seventeen' => __DIR__ . '/../..' . '/src/integrations/twenty-seventeen/twenty-seven-teen.php',
+        'PLL_Updater_Interface' => __DIR__ . '/../..' . '/src/install/updater-interface.php',
+        'PLL_Updater_Registry' => __DIR__ . '/../..' . '/src/install/updater-registry.php',
         'PLL_Upgrade' => __DIR__ . '/../..' . '/src/install/upgrade.php',
         'PLL_Usable' => __DIR__ . '/../..' . '/src/install/usable.php',
         'PLL_WPML_API' => __DIR__ . '/../..' . '/src/modules/wpml/wpml-api.php',
@@ -151,9 +151,6 @@ class ComposerStaticInited5bec60c42d525a1c1222212c9f9cff
         'PLL_WP_Sweep' => __DIR__ . '/../..' . '/src/integrations/wp-sweep/wp-sweep.php',
         'PLL_Walker' => __DIR__ . '/../..' . '/src/walker.php',
         'PLL_Walker_Dropdown' => __DIR__ . '/../..' . '/src/walker-dropdown.php',
-        'PLL_Walker_List' => __DIR__ . '/../..' . '/src/walker-list.php',
-        'PLL_Widget_Calendar' => __DIR__ . '/../..' . '/src/widget-calendar.php',
-        'PLL_Widget_Languages' => __DIR__ . '/../..' . '/src/widget-languages.php',
         'PLL_Wizard' => __DIR__ . '/../..' . '/src/modules/wizard/wizard.php',
         'PLL_WordPress_Importer' => __DIR__ . '/../..' . '/src/integrations/wp-importer/wordpress-importer.php',
         'PLL_Yarpp' => __DIR__ . '/../..' . '/src/integrations/yarpp/yarpp.php',
@@ -205,14 +202,31 @@ class ComposerStaticInited5bec60c42d525a1c1222212c9f9cff
         'WP_Syntex\\Polylang\\REST\\Request' => __DIR__ . '/../..' . '/src/modules/REST/Request.php',
         'WP_Syntex\\Polylang\\REST\\V1\\Languages' => __DIR__ . '/../..' . '/src/modules/REST/V1/Languages.php',
         'WP_Syntex\\Polylang\\REST\\V1\\Settings' => __DIR__ . '/../..' . '/src/modules/REST/V1/Settings.php',
+        'WP_Syntex\\Polylang\\Switcher\\Assets' => __DIR__ . '/../..' . '/src/Switcher/Assets.php',
+        'WP_Syntex\\Polylang\\Switcher\\Element\\Abstract_Element' => __DIR__ . '/../..' . '/src/Switcher/Element/Abstract_Element.php',
+        'WP_Syntex\\Polylang\\Switcher\\Element\\Nav' => __DIR__ . '/../..' . '/src/Switcher/Element/Nav.php',
+        'WP_Syntex\\Polylang\\Switcher\\Element\\Select' => __DIR__ . '/../..' . '/src/Switcher/Element/Select.php',
+        'WP_Syntex\\Polylang\\Switcher\\Fields\\Abstract_Fields' => __DIR__ . '/../..' . '/src/Switcher/Fields/Abstract_Fields.php',
+        'WP_Syntex\\Polylang\\Switcher\\Fields\\Menu' => __DIR__ . '/../..' . '/src/Switcher/Fields/Menu.php',
+        'WP_Syntex\\Polylang\\Switcher\\Fields\\Widget' => __DIR__ . '/../..' . '/src/Switcher/Fields/Widget.php',
+        'WP_Syntex\\Polylang\\Switcher\\Layout\\Abstract_Layout' => __DIR__ . '/../..' . '/src/Switcher/Layout/Abstract_Layout.php',
+        'WP_Syntex\\Polylang\\Switcher\\Layout\\Dropdown' => __DIR__ . '/../..' . '/src/Switcher/Layout/Dropdown.php',
+        'WP_Syntex\\Polylang\\Switcher\\Layout\\Nav' => __DIR__ . '/../..' . '/src/Switcher/Layout/Nav.php',
+        'WP_Syntex\\Polylang\\Switcher\\Layout\\Select' => __DIR__ . '/../..' . '/src/Switcher/Layout/Select.php',
+        'WP_Syntex\\Polylang\\Switcher\\Settings\\Abstract_Settings_Legacy' => __DIR__ . '/../..' . '/src/Switcher/Settings/Abstract_Settings_Legacy.php',
+        'WP_Syntex\\Polylang\\Switcher\\Settings\\Menu' => __DIR__ . '/../..' . '/src/Switcher/Settings/Menu.php',
+        'WP_Syntex\\Polylang\\Switcher\\Settings\\Settings' => __DIR__ . '/../..' . '/src/Switcher/Settings/Settings.php',
+        'WP_Syntex\\Polylang\\Switcher\\Switcher' => __DIR__ . '/../..' . '/src/Switcher/Switcher.php',
+        'WP_Syntex\\Polylang\\Widgets\\Calendar' => __DIR__ . '/../..' . '/src/Widgets/Calendar.php',
+        'WP_Syntex\\Polylang\\Widgets\\Languages' => __DIR__ . '/../..' . '/src/Widgets/Languages.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInited5bec60c42d525a1c1222212c9f9cff::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInited5bec60c42d525a1c1222212c9f9cff::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInited5bec60c42d525a1c1222212c9f9cff::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf816739fffb844552a613a956bd036a9::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf816739fffb844552a613a956bd036a9::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf816739fffb844552a613a956bd036a9::$classMap;
 
         }, null, ClassLoader::class);
     }

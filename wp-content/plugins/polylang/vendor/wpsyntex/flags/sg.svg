@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" fill="#ed2939">
+<path fill="#fff" d="m0,0h900v600H0"/>
+<path d="m0,0h900v300H0"/>
+<circle fill="#fff" cx="190" cy="150" r="110"/>
+<circle cx="240" cy="150" r="110"/>
+<path id="s" fill="#fff" d="m233 110 17-52 17 52-44-32h52"/>
+<use href="#s" x="-60" y="43"/>
+<use href="#s" x="-38" y="113"/>
+<use href="#s" x="38" y="113"/>
+<use href="#s" x="60" y="43"/>
+</svg>

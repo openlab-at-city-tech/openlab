@@ -61,6 +61,8 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 				'update_count_callback' => '_update_generic_term_count', // Count *all* objects to correctly detect unused terms.
 			)
 		);
+
+		$this->add_sanitization_hooks( $this->tax_translations );
 	}
 
 	/**
@@ -91,7 +93,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 			return false;
 		}
 
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		$translations = $this->get_translations( $id );
 
@@ -116,7 +118,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function get_translations_from_term_id( $term_id ) {
-		$term_id = $this->sanitize_int_id( $term_id );
+		$term_id = pll_sanitize_id( $term_id );
 
 		if ( empty( $term_id ) ) {
 			return array();
@@ -129,7 +131,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 		}
 
 		// Lang slugs as array keys, translation IDs as array values.
-		$translations = maybe_unserialize( $translations_term->description );
+		$translations = pll_maybe_unserialize( $translations_term->description );
 		$translations = is_array( $translations ) ? $translations : array();
 
 		return $this->validate_translations( $translations, 0, 'display' );
@@ -147,7 +149,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function save_translations( $id, array $translations = array() ) {
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return array();
@@ -182,14 +184,14 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 		if ( empty( $term ) ) {
 			// Create a new term if necessary.
 			$group = uniqid( 'pll_' );
-			wp_insert_term( $group, $this->tax_translations, array( 'description' => maybe_serialize( $translations ) ) );
+			wp_insert_term( $group, $this->tax_translations, array( 'description' => (string) maybe_serialize( $translations ) ) );
 		} else {
 			// Take care not to overwrite extra data stored in the description field, if any.
 			$group = (int) $term->term_id;
-			$descr = maybe_unserialize( $term->description );
+			$descr = pll_maybe_unserialize( $term->description );
 			$descr = is_array( $descr ) ? array_diff_key( $descr, $old_translations ) : array(); // Remove old translations.
 			$descr = array_merge( $descr, $translations ); // Add new one.
-			wp_update_term( $group, $this->tax_translations, array( 'description' => maybe_serialize( $descr ) ) );
+			wp_update_term( $group, $this->tax_translations, array( 'description' => (string) maybe_serialize( $descr ) ) );
 		}
 
 		// Link all translations to the new term.
@@ -220,7 +222,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @return void
 	 */
 	public function delete_translation( $id ) {
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return;
@@ -232,20 +234,24 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 			return;
 		}
 
-		$descr = maybe_unserialize( $term->description );
+		$descr = pll_maybe_unserialize( $term->description );
 
 		if ( ! empty( $descr ) && is_array( $descr ) ) {
-			$slug = array_search( $id, $this->get_translations( $id ) ); // In case some plugin stores the same value with different key.
-
-			if ( false !== $slug ) {
-				unset( $descr[ $slug ] );
-			}
+			/*
+			 * Search the ID to remove only among our language keys
+			 * in case some plugin stores the same value with different key.
+			 * Remove all keys with this ID as `get_translations()` may return
+			 * temporarily 2 languages for the same ID (old and new language)
+			 * when `set_language()` is called.
+			 */
+			$slugs = array_keys( $this->get_translations( $id ), $id, true );
+			$descr = array_diff_key( $descr, array_flip( $slugs ) );
 		}
 
 		if ( empty( $descr ) || ! is_array( $descr ) ) {
 			wp_delete_term( (int) $term->term_id, $this->tax_translations );
 		} else {
-			wp_update_term( (int) $term->term_id, $this->tax_translations, array( 'description' => maybe_serialize( $descr ) ) );
+			wp_update_term( (int) $term->term_id, $this->tax_translations, array( 'description' => (string) maybe_serialize( $descr ) ) );
 		}
 	}
 
@@ -260,7 +266,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function get_translations( $id ) {
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return array();
@@ -281,7 +287,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @phpstan-return array<non-empty-string, positive-int>
 	 */
 	public function get_raw_translations( $id ) {
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return array();
@@ -326,7 +332,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @phpstan-return int<0, max>
 	 */
 	public function get( $id, $lang ) {
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return 0;
@@ -356,7 +362,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @return bool
 	 */
 	public function current_user_can_synchronize( $id ) {
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return false;
@@ -405,9 +411,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 	 * @phpstan-param array<non-empty-string, positive-int> $translations
 	 */
 	protected function should_update_translation_group( $id, $translations ) {
-		// Don't do anything if no translations have been added to the group.
-		$old_translations = $this->get_translations( $id ); // Includes at least $id itself.
-		return ! empty( array_diff_assoc( $translations, $old_translations ) );
+		return count( $translations ) > 1;
 	}
 
 	/**
@@ -452,7 +456,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 				continue;
 			}
 
-			$trans = maybe_unserialize( $terms[ $id ]->description );
+			$trans = pll_maybe_unserialize( $terms[ $id ]->description );
 			$translations[ $id ] = is_array( $trans ) ? $trans : array();
 		}
 
@@ -499,7 +503,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 
 		// Make sure values are clean before working with them.
 		/** @phpstan-var array<non-empty-string, positive-int> $translations */
-		$translations = $this->sanitize_int_ids_list( $translations );
+		$translations = pll_sanitize_ids( $translations );
 
 		if ( 'save' === $context ) {
 			/**
@@ -520,7 +524,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 			$translations = $valid_translations;
 		}
 
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return $translations;
@@ -625,7 +629,7 @@ abstract class PLL_Translated_Object extends PLL_Translatable_Object {
 		// Prepare objects relationships.
 		if ( is_array( $terms ) ) {
 			foreach ( $terms as $term ) {
-				$t = maybe_unserialize( $term->description );
+				$t = pll_maybe_unserialize( $term->description );
 				if ( is_array( $t ) && in_array( $t, $translations ) ) {
 					foreach ( $t as $object_id ) {
 						if ( ! empty( $object_id ) ) {

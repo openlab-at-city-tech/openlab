@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#fddd00" viewBox="0 0 900 600">
+<path fill="#d4001c" d="M0 0h900v600H0"/>
+<g id="c">
+<g id="b">
+<g id="a">
+<path d="m438 312-17 10-10 17c-10 71-48 118-61 133a20 20 0 1 0 4 10c19 3 62 14 88 52a20 20 0 0 0 8 38l8-20-8-48c-29-31-61-39-61-39 39-46 47-117 49-153"/>
+</g>
+<use href="#a" transform="matrix(-1 0 0 1 900 0)"/>
+</g>
+<use href="#b" transform="rotate(90 450 300)"/>
+</g>
+<use href="#c" transform="rotate(180 450 300)"/>
+</svg>

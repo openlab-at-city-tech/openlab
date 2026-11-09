@@ -10,8 +10,8 @@
  * Plugin Name:       Polylang
  * Plugin URI:        https://polylang.pro
  * Description:       Adds multilingual capability to WordPress
- * Version:           3.8.3
- * Requires at least: 6.5
+ * Version:           3.9.2
+ * Requires at least: 6.8
  * Requires PHP:      7.4
  * Author:            WP SYNTEX
  * Author URI:        https://polylang.pro
@@ -41,28 +41,41 @@ defined( 'ABSPATH' ) || exit;
 if ( defined( 'POLYLANG_VERSION' ) ) {
 	// The user is attempting to activate a second plugin instance, typically Polylang and Polylang Pro.
 	require_once ABSPATH . 'wp-admin/includes/plugin.php';
-	require_once ABSPATH . 'wp-includes/pluggable.php';
 
 	if ( is_plugin_active( plugin_basename( __FILE__ ) ) ) {
 		deactivate_plugins( plugin_basename( __FILE__ ) ); // Deactivate this plugin.
-		// WP does not allow us to send a custom meaningful message, so just tell the plugin has been deactivated.
-		wp_safe_redirect( add_query_arg( 'deactivate', 'true', remove_query_arg( 'activate' ) ) );
-		exit;
+
+		add_action(
+			'load-plugins.php',
+			static function () {
+				unset( $_GET['activate'] ); // Prevent WP to display its 'Plugin activated.' message.
+				$updated_notice_args = array(
+					'type'        => 'error',
+					'dismissible' => true,
+				);
+				wp_admin_notice( __( 'Polylang hasn\'t been activated: Polylang and Polylang Pro cannot be activated at the same time.', 'polylang' ), $updated_notice_args );
+			}
+		);
 	}
 	return;
 }
 
 // Go on loading the plugin.
-define( 'POLYLANG_VERSION', '3.8.3' );
-define( 'PLL_MIN_WP_VERSION', '6.5' );
+define( 'POLYLANG_VERSION', '3.9.2' );
+define( 'PLL_MIN_WP_VERSION', '6.8' );
 define( 'PLL_MIN_PHP_VERSION', '7.4' );
 
 define( 'POLYLANG_FILE', __FILE__ );
 define( 'POLYLANG_DIR', __DIR__ );
 
-// Whether we are using Polylang or Polylang Pro, get the filename of the plugin in use.
+// The filename of the plugin in use, whether it is Polylang or Polylang Pro.
 if ( ! defined( 'POLYLANG_ROOT_FILE' ) ) {
 	define( 'POLYLANG_ROOT_FILE', __FILE__ );
+}
+
+// The root directory of the plugin in use, whether it is Polylang or Polylang Pro.
+if ( ! defined( 'POLYLANG_ROOT_DIR' ) ) {
+	define( 'POLYLANG_ROOT_DIR', __DIR__ );
 }
 
 if ( ! defined( 'POLYLANG_BASENAME' ) ) {

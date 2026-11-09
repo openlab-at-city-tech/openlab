@@ -30,21 +30,6 @@ class PLL_Upgrade {
 	}
 
 	/**
-	 * Check if upgrade is possible otherwise die to avoid activation
-	 *
-	 * @since 1.2
-	 *
-	 * @return void
-	 */
-	public function can_activate() {
-		if ( ! $this->can_upgrade() ) {
-			ob_start();
-			$this->admin_notices(); // FIXME the error message is displayed two times
-			die( ob_get_contents() ); // phpcs:ignore WordPress.Security.EscapeOutput
-		}
-	}
-
-	/**
 	 * Upgrades if possible otherwise returns false to stop Polylang loading
 	 *
 	 * @since 1.2
@@ -77,24 +62,30 @@ class PLL_Upgrade {
 	}
 
 	/**
-	 * Displays a notice when upgrading from a too old version
+	 * Displays a notice when upgrading from a too old version.
 	 *
 	 * @since 1.0
 	 *
 	 * @return void
 	 */
 	public function admin_notices() {
-		load_plugin_textdomain( 'polylang' );
-		printf(
-			'<div class="error"><p>%s</p><p>%s</p></div>',
+		$message = sprintf(
+			'<p>%s</p><p>%s</p>',
 			esc_html__( 'Polylang has been deactivated because you upgraded from a too old version.', 'polylang' ),
 			sprintf(
 				/* translators: %1$s and %2$s are Polylang version numbers */
 				esc_html__( 'Before upgrading to %2$s, please upgrade to %1$s.', 'polylang' ),
 				'<strong>2.9</strong>',
-				POLYLANG_VERSION // phpcs:ignore WordPress.Security.EscapeOutput
+				esc_html( POLYLANG_VERSION )
 			)
 		);
+
+		$args = array(
+			'type'           => 'error',
+			'paragraph_wrap' => false,
+		);
+
+		wp_admin_notice( $message, $args );
 	}
 
 	/**
@@ -112,7 +103,7 @@ class PLL_Upgrade {
 		 */
 		delete_transient( 'pll_languages_list' );
 
-		foreach ( array( '2.0.8', '2.1', '2.7', '3.4', '3.7', '3.8' ) as $version ) {
+		foreach ( array( '2.0.8', '2.1', '2.7', '3.4', '3.7', '3.8', '3.9' ) as $version ) {
 			if ( version_compare( $this->options['version'], $version, '<' ) ) {
 				$method_to_call = array( $this, 'upgrade_' . str_replace( '.', '_', $version ) );
 				if ( is_callable( $method_to_call ) ) {
@@ -168,7 +159,7 @@ class PLL_Upgrade {
 				$meta = get_post_meta( $post->ID, '_pll_strings_translations', true );
 
 				if ( empty( $meta ) ) {
-					$strings = maybe_unserialize( $post->post_content );
+					$strings = pll_maybe_unserialize( $post->post_content );
 					if ( is_array( $strings ) ) {
 						update_post_meta( $post->ID, '_pll_strings_translations', $strings );
 					}
@@ -251,6 +242,56 @@ class PLL_Upgrade {
 	}
 
 	/**
+	 * Upgrades if the previous version is < 3.9.
+	 * Migrates flag codes in language terms.
+	 *
+	 * @since 3.9
+	 *
+	 * @return void
+	 */
+	protected function upgrade_3_9() {
+		$to_migrate = array(
+			'arab'      => 'ar.lang',
+			'basque'    => 'es-pv',
+			'catalonia' => 'es-ct',
+			'england'   => 'gb-eng',
+			'esperanto' => 'eo.lang',
+			'galicia'   => 'es-ga',
+			'kurdistan' => 'iq-kr',
+			'occitania' => 'oci.lang',
+			'quebec'    => 'ca-qc',
+			'scotland'  => 'gb-sct',
+			'tibet'     => 'bo.lang',
+			'veneto'    => 'it-34',
+			'wales'     => 'gb-wls',
+		);
+
+		$terms = get_terms(
+			array(
+				'taxonomy'   => 'language',
+				'hide_empty' => false,
+			)
+		);
+
+		if ( ! is_array( $terms ) ) {
+			return;
+		}
+
+		foreach ( $terms as $term ) {
+			$description = pll_maybe_unserialize( $term->description );
+			$description = is_array( $description ) ? $description : array();
+
+			if ( isset( $description['flag_code'] ) && is_string( $description['flag_code'] ) && isset( $to_migrate[ $description['flag_code'] ] ) ) {
+				$description['flag_code'] = $to_migrate[ $description['flag_code'] ];
+				/** @var string */
+				$description = maybe_serialize( $description );
+
+				wp_update_term( $term->term_id, 'language', array( 'description' => $description ) );
+			}
+		}
+	}
+
+	/**
 	 * Moves strings translations from post meta to term meta _pll_strings_translations.
 	 *
 	 * @since 3.4
@@ -322,7 +363,7 @@ class PLL_Upgrade {
 				continue;
 			}
 
-			$description = maybe_unserialize( $term->description );
+			$description = pll_maybe_unserialize( $term->description );
 			$description = is_array( $description ) ? $description : array();
 
 			$description['fallbacks'] = $fallbacks;

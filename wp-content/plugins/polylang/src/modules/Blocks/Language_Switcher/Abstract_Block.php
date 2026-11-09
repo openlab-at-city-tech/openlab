@@ -6,8 +6,8 @@
 namespace WP_Syntex\Polylang\Blocks\Language_Switcher;
 
 use PLL_Language;
-use PLL_Switcher;
 use WP_Block_Type_Registry;
+use WP_HTML_Tag_Processor;
 
 /**
  * Abstract class for language switcher block.
@@ -25,22 +25,6 @@ abstract class Abstract_Block {
 	 * @var \PLL_Model
 	 */
 	protected $model;
-
-	/**
-	 * Current lang to render the language switcher block in an admin context.
-	 *
-	 * @since 2.8
-	 *
-	 * @var string|null
-	 */
-	protected $admin_current_lang;
-
-	/**
-	 * Is it the edit context?
-	 *
-	 * @var bool
-	 */
-	protected $is_edit_context = false;
 
 	/**
 	 * Current language.
@@ -70,9 +54,6 @@ abstract class Abstract_Block {
 	 * @return self
 	 */
 	public function init() {
-		// Use rest_pre_dispatch_filter to get additional parameters for language switcher block.
-		add_filter( 'rest_pre_dispatch', array( $this, 'get_rest_query_params' ), 10, 3 );
-
 		// Register language switcher block.
 		add_action( 'init', array( $this, 'register' ) );
 
@@ -100,8 +81,6 @@ abstract class Abstract_Block {
 	 * @return string The HTML string output to serve.
 	 */
 	abstract public function render( $attributes, $content, $block );
-
-
 
 	/**
 	 * Returns the path to the block JSON file directory.
@@ -136,36 +115,24 @@ abstract class Abstract_Block {
 			return;
 		}
 
-		$script_handle   = 'pll_blocks';
-		$suffix          = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$script_filename = 'js/build/blocks' . $suffix . '.js';
-
-		wp_register_script(
-			$script_handle,
-			plugins_url( $script_filename, POLYLANG_ROOT_FILE ),
+		$script_handle = 'pll_blocks';
+		pll_register_script(
+			'blocks',
 			array(
 				'wp-block-editor',
 				'wp-blocks',
 				'wp-components',
 				'wp-element',
 				'wp-i18n',
-				'wp-server-side-render',
-				'lodash',
-				'wp-editor',
 			),
-			POLYLANG_VERSION,
-			true
+			array(
+				'in_footer' => true,
+			),
+			'pll_'
 		);
-
-		wp_localize_script( $script_handle, 'pll_block_editor_blocks_settings', PLL_Switcher::get_switcher_options( 'block', 'string' ) );
 
 		// Translated strings used in JS code
 		wp_set_script_translations( $script_handle, 'polylang' );
-
-		// No need to render the JS variable if Polylang Pro is installed, the editor will use `lang` REST field instead.
-		if ( class_exists( 'WP_Syntex\Polylang_Pro\REST\Translated\Post' ) ) {
-			return;
-		}
 
 		// Fallback to default language if current language is not set, usually happens in Site Editor.
 		$current_language = $this->current_language;
@@ -191,51 +158,56 @@ abstract class Abstract_Block {
 	}
 
 	/**
-	 * Returns the REST parameters for language switcher block.
-	 * Used to store the request's language and context locally.
-	 * Previously was in the `PLL_Block_Editor_Switcher_Block` class.
+	 * Applies flag block attributes to switcher markup.
 	 *
-	 * @see WP_REST_Server::dispatch()
+	 * Uses WP_HTML_Tag_Processor so the dropdown SVG toggle can stay in the markup
+	 * (WP_HTML_Processor aborts on foreign content).
 	 *
-	 * @since 2.8
+	 * @since 3.9
 	 *
-	 * @param mixed            $result  Response to replace the requested version with. Can be anything
-	 *                                  a normal endpoint can return, or null to not hijack the request.
-	 * @param \WP_REST_Server  $server  Server instance.
-	 * @param \WP_REST_Request $request Request used to generate the response.
-	 * @return mixed
-	 * @template T of \WP_REST_Request
-	 * @phpstan-param T $request
+	 * @param string $html       Switcher HTML.
+	 * @param array  $attributes Block attributes.
+	 * @return string
 	 */
-	public function get_rest_query_params( $result, $server, $request ) {
-		if ( pll_is_edit_rest_request( $request ) ) {
-			$this->is_edit_context = true;
+	protected function apply_flag_styles_to_markup( string $html, array $attributes ): string {
+		if ( empty( $attributes['show_flags'] ) ) {
+			return $html;
+		}
 
-			$lang = $request->get_param( 'lang' );
-			if ( is_string( $lang ) && ! empty( $lang ) ) {
-				$this->admin_current_lang = $lang;
+		$border_radius = max( 0, min( 100, (int) ( $attributes['flag_border_radius'] ?? 0 ) ) );
+		$flag_width    = $attributes['flag_width'] ?? '18px';
+		$flag_style    = safecss_filter_attr(
+			sprintf(
+				'--pll-flag-border-radius:%1$d;--pll-flag-width:%2$s',
+				$border_radius,
+				$flag_width
+			)
+		);
+
+		$label_style = '';
+		if ( ! empty( $attributes['show_labels'] ) ) {
+			$label_style = safecss_filter_attr(
+				sprintf(
+					'--pll-flag-label-spacing:%1$s',
+					$attributes['flag_label_spacing'] ?? '0.3em'
+				)
+			);
+		}
+
+		$processor = new WP_HTML_Tag_Processor( $html );
+
+		while ( $processor->next_tag( array( 'tag_name' => 'SPAN', 'class_name' => 'pll-switcher-flag' ) ) ) {
+			$style = $processor->get_attribute( 'style' ) ?? '';
+			/** @var string $style `WP_HTML_Tag_Processor::get_attribute()` returns string|null for non-boolean attributes. */
+			$processor->set_attribute( 'style', '' === $style ? $flag_style : rtrim( $style, ';' ) . ';' . $flag_style );
+
+			if ( '' !== $label_style && $processor->next_tag( array( 'tag_name' => 'SPAN', 'class_name' => 'pll-switcher-label' ) ) ) {
+				$style = $processor->get_attribute( 'style' ) ?? '';
+				/** @var string $style `WP_HTML_Tag_Processor::get_attribute()` returns string|null for non-boolean attributes. */
+				$processor->set_attribute( 'style', '' === $style ? $label_style : rtrim( $style, ';' ) . ';' . $label_style );
 			}
 		}
-		return $result;
-	}
 
-	/**
-	 * Adds the attributes to render the block correctly.
-	 * Also specifies not to echo the switcher in any case.
-	 *
-	 * @since 3.2
-	 *
-	 * @param array $attributes The attributes of the currently rendered block.
-	 * @return array The modified attributes.
-	 */
-	protected function set_attributes_for_block( $attributes ) {
-		$attributes['echo'] = 0;
-		if ( $this->is_edit_context ) {
-			$attributes['admin_render']           = 1;
-			$attributes['admin_current_lang']     = $this->admin_current_lang;
-			$attributes['hide_if_empty']          = 0;
-			$attributes['hide_if_no_translation'] = 0; // Force not to hide the language for the block preview even if the option is checked.
-		}
-		return $attributes;
+		return $processor->get_updated_html();
 	}
 }

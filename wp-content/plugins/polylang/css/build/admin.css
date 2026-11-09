@@ -1,3 +1,89 @@
+/*  By default Polylang dialog box use WordPress jQuery UI dialog styles.
+	However WooCommerce loads its own jQuery UI dialog styles and we need to override them by ours
+	to revert to the default WordPress ones.
+*/
+.pll-confirmation-modal.ui-widget,
+.pll-confirmation-modal.ui-widget .ui-widget,
+.pll-confirmation-modal .ui-widget {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	font-size: 13px;
+}
+.pll-confirmation-modal.ui-dialog {
+	padding: 0;
+	z-index: 100102;
+	background: #fff;
+	border: 0;
+	color: #444;
+	border-radius: 0; /* Override WooCommerce dialog styles - jQuery UI 1.11.4 - WP < 5.6 */
+}
+.ui-dialog.pll-confirmation-modal .ui-dialog-titlebar {
+	background: #fcfcfc;
+	border-radius: 0;
+	border: 0;
+	border-bottom: 1px solid #dfdfdf;
+	height: 36px;
+	font-size: 18px;
+	font-weight: 600;
+	line-height: 2;
+	padding: 0 36px 0 16px;
+	color: #444;
+	position: static;
+}
+.ui-dialog.pll-confirmation-modal .ui-dialog-title {
+	float: none;
+	width: auto;
+	margin: 0;
+}
+.pll-confirmation-modal .ui-widget-header .ui-icon {
+	background: none;
+	position: static;
+}
+.pll-confirmation-modal .ui-button.ui-dialog-titlebar-close {
+	padding: 0;
+	margin: 0;
+	top: 0;
+	right: 0;
+	width: 36px;
+	height: 36px;
+	border: 0; /* Override WooCommerce dialog styles - jQuery UI 1.11.4 - WP < 5.6 */
+	background: none; /* Override WooCommerce dialog styles - jQuery UI 1.11.4 - WP < 5.6 */
+}
+.ui-dialog.pll-confirmation-modal .ui-dialog-content {
+	border: 0;
+	padding: 16px;
+	color: #444;
+	position: static;
+	box-sizing: border-box;
+}
+.ui-dialog.pll-confirmation-modal .ui-dialog-buttonpane{
+	margin: 0;
+	padding: 16px;
+	border: 0;
+	background: #fcfcfc;
+	border-top: 1px solid #dfdfdf;
+}
+.ui-dialog.pll-confirmation-modal .ui-dialog-buttonpane .ui-button{
+	margin: 0 0 0 16px;
+	padding: 0 10px 1px;
+	background: #f7f7f7;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	position: static;
+	line-height: 2;
+	vertical-align: top;
+}
+.ui-dialog.pll-confirmation-modal .ui-button:hover,
+.ui-dialog.pll-confirmation-modal .ui-button:focus {
+	background: #fafafa;
+	border-color: #999;
+	color: #23282d;
+}
+.pll-confirmation-modal + .ui-widget-overlay {
+	background: #000;
+	opacity: 0.7;
+	z-index: 100101;
+}
+
 /* languages admin panel */
 #add-lang select {
 	width: 95%;
@@ -372,6 +458,50 @@ td.column-default_lang .icon-default-lang:before,
 	margin-right: 10px;
 }
 
+/* Widgets */
+.polylang-language-switcher-widget-content {
+	width: 100%;
+	border-collapse: collapse;
+}
+.polylang-language-switcher-widget-content h4 {
+	padding: 1em 15px .33em;
+	border-top: 1px solid #c3c4c7; /* Acts as a separator. */
+	margin: 0 -15px; /* Makes the separator full widget width. */
+}
+.polylang-language-switcher-widget-content th {
+	width: 10em;
+	padding: 0 10px 10px 0;
+	text-align: start;
+}
+body.rtl .polylang-language-switcher-widget-content th {
+	padding: 0 0 10px 10px;
+}
+.polylang-language-switcher-widget-content td {
+	padding: 0 0 10px 0;
+}
+[class*="pll-hidden-by-"] {
+	display: none;
+}
+.polylang-language-switcher-widget-content label {
+	font-weight: normal;
+}
+.polylang-language-switcher-widget-content + p {
+	padding: 1em 15px .33em;
+	border-top: 1px solid #c3c4c7; /* Acts as a separator. */
+	margin: 1em -15px; /* Makes the separator full width. */
+}
+
+/* Nav menus */
+.polylang-language-switcher-menu-content fieldset {
+	padding: 0 10px .67em;
+	border-bottom: 1px solid #c3c4c7; /* Acts as a separator. */
+	margin: 0 -10px; /* Makes the separator full width. */
+}
+.polylang-language-switcher-menu-content legend {
+	padding: .67em 10px;
+	margin: 0 -10px; /* Makes the separator full width. */
+}
+
 @media screen and ( max-width: 782px ) {
 	/* settings */
 	#wpbody-content .pll-settings .pll-configure > td {
@@ -473,3 +603,4 @@ td.column-default_lang .icon-default-lang:before,
 		line-height: 20px !important;
 	}
 }
+

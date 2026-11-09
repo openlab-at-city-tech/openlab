@@ -107,7 +107,7 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 			return false;
 		}
 
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		// Add translation group for correct WXR export.
 		$translations = $this->get_translations( $id );
@@ -155,7 +155,7 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 	public function delete_translation( $id ) {
 		global $wpdb;
 
-		$id = $this->sanitize_int_id( $id );
+		$id = pll_sanitize_id( $id );
 
 		if ( empty( $id ) ) {
 			return;
@@ -177,7 +177,7 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 		// Always keep a group for terms to allow relationships remap when importing from a WXR file.
 		$group        = uniqid( 'pll_' );
 		$translations = array( $slug => $id );
-		wp_insert_term( $group, $this->tax_translations, array( 'description' => maybe_serialize( $translations ) ) );
+		wp_insert_term( $group, $this->tax_translations, array( 'description' => (string) maybe_serialize( $translations ) ) );
 		wp_set_object_terms( $id, $group, $this->tax_translations );
 	}
 
@@ -263,7 +263,7 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 	 * @phpstan-param array<positive-int> $ids
 	 */
 	public function clean_term_cache( $ids ) {
-		clean_object_term_cache( $this->sanitize_int_ids_list( $ids ), 'term' );
+		clean_object_term_cache( pll_sanitize_ids( $ids ), 'term' );
 	}
 
 	/**
@@ -279,14 +279,12 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 	 * @phpstan-param array<non-empty-string, positive-int> $translations
 	 */
 	protected function should_update_translation_group( $id, $translations ) {
-		// Don't do anything if no translations have been added to the group.
-		$old_translations = $this->get_translations( $id );
-		if ( count( $translations ) > 1 && ! empty( array_diff_assoc( $translations, $old_translations ) ) ) {
+		if ( count( $translations ) > 1 ) {
 			return true;
 		}
 
-		// But we need a translation group for terms to allow relationships remap when importing from a WXR file
-		$term = $this->get_object_term( $id, $this->tax_translations );
+		$old_translations = $this->get_translations( $id );
+		$term             = $this->get_object_term( $id, $this->tax_translations );
 		return empty( $term ) || ! empty( array_diff_assoc( $translations, $old_translations ) );
 	}
 
@@ -363,12 +361,12 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 	 * @param array        $args {
 	 *     Optional. Array of arguments for inserting a term.
 	 *
-	 *     @type string   $alias_of     Slug of the term to make this term an alias of.
-	 *                                  Default empty string. Accepts a term slug.
-	 *     @type string   $description  The term description. Default empty string.
-	 *     @type int      $parent       The id of the parent term. Default 0.
-	 *     @type string   $slug         The term slug to use. Default empty string.
-	 *     @type string[] $translations The translation group to assign to the term with language slug as keys and `term_id` as values.
+	 *     @type string $alias_of     Slug of the term to make this term an alias of.
+	 *                                Default empty string. Accepts a term slug.
+	 *     @type string $description  The term description. Default empty string.
+	 *     @type int    $parent       The id of the parent term. Default 0.
+	 *     @type string $slug         The term slug to use. Default empty string.
+	 *     @type int[]  $translations The translation group to assign to the term with language slug as keys and `term_id` as values.
 	 * }
 	 * @return array|WP_Error {
 	 *     An array of the new term data, `WP_Error` otherwise.
@@ -412,7 +410,7 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 	 *     @type int          $parent       The id of the parent term. Default 0.
 	 *     @type string       $slug         The term slug to use. Default empty string.
 	 *     @type PLL_Language $lang         The term language object.
-	 *     @type string[]     $translations The translation group to assign to the term with language slug as keys and `term_id` as values.
+	 *     @type int[]        $translations The translation group to assign to the term with language slug as keys and `term_id` as values.
 	 * }
 	 * @return array|WP_Error An array containing the `term_id` and `term_taxonomy_id`,
 	 *                        WP_Error otherwise.
@@ -449,6 +447,41 @@ class PLL_Translated_Term extends PLL_Translated_Object implements PLL_Translata
 		}
 
 		return $term;
+	}
+
+	/**
+	 * Gets a translated term by term field
+	 *
+	 * @since 3.9
+	 *
+	 * @param string       $field    The term field. Accepted values are 'term_id', 'slug', 'name', 'term_taxonomy_id'.
+	 * @param int|string   $value    Search for this term value.
+	 * @param PLL_Language $lang     Language (object, slug, or term ID).
+	 * @param string       $taxonomy Taxonomy name. Optional if $field is 'term_id'.
+	 * @return int|string The $field of the translated term. Empty if not found.
+	 */
+	public function get_by( string $field, $value, PLL_Language $lang, string $taxonomy = '' ) {
+		if ( 'term_id' === $field ) {
+			return $this->get( (int) $value, $lang );
+		}
+
+		$empty = 'term_taxonomy_id' === $field ? 0 : '';
+
+		$terms = get_terms( array( 'taxonomy' => $taxonomy, $field => $value, 'hide_empty' => false, 'lang' => '' ) );
+
+		if ( empty( $terms ) || ! is_array( $terms ) ) {
+			return $empty;
+		}
+
+		$t = reset( $terms );
+		if ( ! $t instanceof WP_Term ) {
+			return $empty;
+		}
+
+		$tr_id   = $this->get( $t->term_id, $lang );
+		$tr_term = get_term( $tr_id );
+
+		return $tr_term instanceof WP_Term ? $tr_term->$field : $empty;
 	}
 
 	/**
