@@ -398,7 +398,7 @@ class M_NextGen_Admin extends C_Base_Module {
 	/**
 	 * Adds a common body class to all admin pages
 	 *
-	 * @param $classes
+	 * @param string $classes The admin body classes.
 	 *
 	 * @return string
 	 */
@@ -409,7 +409,7 @@ class M_NextGen_Admin extends C_Base_Module {
 	/**
 	 * Adds a common body class to all NGG post types pages
 	 *
-	 * @param $classes
+	 * @param string $classes The admin body classes.
 	 *
 	 * @return string
 	 */

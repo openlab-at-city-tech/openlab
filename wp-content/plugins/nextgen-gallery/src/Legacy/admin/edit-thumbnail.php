@@ -35,6 +35,14 @@ global $wpdb;
 
 $id = (int) $_GET['id'];
 
+// The capability and nonce above are not object-level controls: without this, any holder of
+// 'NextGEN Manage gallery' could open the thumbnail cropper - and so the stored path and pixel
+// geometry - for any image id on the site. Resolve the parent gallery's owner, as the REST
+// equivalent does. See issue #1093 (audit #7.7).
+if ( true !== \Imagely\NGG\REST\DataMappers\ImageREST::current_user_can_manage_image( $id ) ) {
+	die( esc_html__( 'Permission denied', 'nggallery' ) );
+}
+
 // let's get the image data.
 $picture = nggdb::find_image( $id );
 
@@ -104,7 +112,7 @@ if ( $thumbnail_crop_frame != null ) {
 <script type="text/javascript">
 	var status = 'edit';
 	var xT, yT, wT, hT, selectedCoords;
-	var selectedImage = "thumb<?php echo esc_js( $id ); ?>";
+	var selectedImage = "thumb<?php echo (int) $id; ?>"; // (int) cast — numeric ID appended to JS string literal, guarantees digits only.
 
 	function showPreview(coords) {
 		if (status != 'edit') {
@@ -113,12 +121,12 @@ if ( $thumbnail_crop_frame != null ) {
 			status = 'edit';
 		}
 
-		var rx = <?php echo esc_js( $WidthHtmlPrev ); ?> / coords.w;
-		var ry = <?php echo esc_js( $HeightHtmlPrev ); ?> / coords.h;
+		var rx = <?php echo (float) $WidthHtmlPrev; ?> / coords.w; // (float) cast — bare JS numeric literal; esc_js would not enforce numeric.
+		var ry = <?php echo (float) $HeightHtmlPrev; ?> / coords.h; // (float) cast — bare JS numeric literal.
 
 		jQuery('#imageToEditPreview').css({
-			width: Math.round(rx * <?php echo esc_js( $resizedPreviewInfo['newWidth'] ); ?>) + 'px',
-			height: Math.round(ry * <?php echo esc_js( $resizedPreviewInfo['newHeight'] ); ?>) + 'px',
+			width: Math.round(rx * <?php echo (float) $resizedPreviewInfo['newWidth']; ?>) + 'px', // (float) cast — bare JS numeric literal in expression.
+			height: Math.round(ry * <?php echo (float) $resizedPreviewInfo['newHeight']; ?>) + 'px', // (float) cast — bare JS numeric literal in expression.
 			marginLeft: '-' + Math.round(rx * coords.x) + 'px',
 			marginTop: '-' + Math.round(ry * coords.y) + 'px'
 		});
@@ -146,7 +154,7 @@ if ( $thumbnail_crop_frame != null ) {
 				w: wT,
 				h: hT,
 				action: 'createNewThumb',
-				id: <?php echo esc_js( $id ); ?>, rr: <?php echo esc_js( str_replace( ',', '.', $rr ) ); ?>,
+				id: <?php echo (int) $id; ?>, rr: <?php echo (float) str_replace( ',', '.', $rr ); ?>, // (int)/(float) casts — bare JS numeric literals in object; eliminates need for esc_js.
 				nonce: nonce
 			},
 			cache: false,
@@ -202,7 +210,7 @@ if ( $thumbnail_crop_frame != null ) {
 				onChange: showPreview,
 				onSelect: showPreview,
 				<?php echo $default_crop_js_parameter; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Contains safe JavaScript parameters ?>
-				aspectRatio: <?php echo esc_js( str_replace( ',', '.', round( $WidthHtmlPrev / $HeightHtmlPrev, 3 ) ) ); ?>
+				aspectRatio: <?php echo (float) str_replace( ',', '.', round( $WidthHtmlPrev / $HeightHtmlPrev, 3 ) ); ?> <?php // (float) cast — bare JS numeric literal; esc_js not appropriate for numeric context. ?>
 			});
 		});
 	})(jQuery);

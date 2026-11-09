@@ -223,15 +223,20 @@ public static function check_memory_limit() {
 	 * @return bool $result of capability check
 	 */
 public static function current_user_can( $capability ) {
+		// Map NGG caps that are referenced by code but never installed by Util\Installer::set_role_caps()
+		// to the installed parent cap. Without this mapping a passthrough current_user_can() check
+		// against an uninstalled cap returns false for every role, including admins.
+		static $ngg_cap_alias_map = [
+			'NextGEN Edit gallery options' => 'NextGEN Manage gallery',
+			'NextGEN Add new gallery'      => 'NextGEN Manage gallery',
+			'NextGEN Import image folder'  => 'NextGEN Upload images',
+			'NextGEN Add/Delete album'     => 'NextGEN Edit album',
+			'NextGEN Edit album settings'  => 'NextGEN Edit album',
+		];
 
-		global $_ngg_capabilites;
+		$effective_cap = isset( $ngg_cap_alias_map[ $capability ] ) ? $ngg_cap_alias_map[ $capability ] : $capability;
 
-		if ( is_array( $_ngg_capabilites ) ) {
-			if ( in_array( $capability, $_ngg_capabilites ) ) {
-				return current_user_can( $capability );
-			}
-		}
-
-		return true;
+		// phpcs:ignore WordPress.WP.Capabilities.Unknown -- NGG-specific custom caps registered by Util\Installer::set_role_caps().
+		return current_user_can( $effective_cap );
 	}
 }

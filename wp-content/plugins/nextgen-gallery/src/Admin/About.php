@@ -644,7 +644,12 @@ class About {
 
 		// Activate the addon.
 		if ( isset( $_POST['basename'] ) ) {
-			$activate = activate_plugin( sanitize_text_field( wp_unslash( $_POST['basename'] ) ) );
+			$basename_raw = sanitize_text_field( wp_unslash( $_POST['basename'] ) ); // Ingestion-point sanitize before any comparison/use.
+			// CSRF-bypass hardening: restrict activation to the partner plugin allowlist so a stolen nonce can't activate an unrelated installed plugin.
+			if ( ! in_array( $basename_raw, $this->get_am_plugin_basenames(), true ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Plugin is not in the allowed list.', 'nggallery' ) ] );
+			}
+			$activate = activate_plugin( $basename_raw );
 
 			if ( is_wp_error( $activate ) ) {
 				echo wp_json_encode( [ 'error' => $activate->get_error_message() ] );
@@ -654,6 +659,32 @@ class About {
 
 		echo wp_json_encode( true );
 		die;
+	}
+
+	/**
+	 * Build allowlist of partner plugin basenames advertised by the About page.
+	 *
+	 * Used to constrain activate_plugin()/deactivate_plugins() inputs so the CSRF-protected
+	 * partner actions cannot be abused to toggle arbitrary plugins installed on the site.
+	 *
+	 * @return array<int,string>
+	 */
+	private function get_am_plugin_basenames() {
+		$basenames = [];
+		foreach ( $this->get_am_plugins() as $key => $partner ) {
+			// Array key is sometimes the basename itself (legacy entries), sometimes a slug.
+			if ( is_string( $key ) && false !== strpos( $key, '.php' ) ) {
+				$basenames[] = $key;
+			}
+			if ( ! empty( $partner['basename'] ) && is_string( $partner['basename'] ) ) {
+				$basenames[] = $partner['basename'];
+			}
+			// Pro variant basename lives under `pro.plug` in get_am_plugins().
+			if ( ! empty( $partner['pro']['plug'] ) && is_string( $partner['pro']['plug'] ) ) {
+				$basenames[] = $partner['pro']['plug'];
+			}
+		}
+		return array_values( array_unique( $basenames ) );
 	}
 
 
@@ -674,7 +705,12 @@ class About {
 
 		// Deactivate the addon.
 		if ( isset( $_POST['basename'] ) ) {
-			deactivate_plugins( sanitize_text_field( wp_unslash( $_POST['basename'] ) ) );
+			$basename_raw = sanitize_text_field( wp_unslash( $_POST['basename'] ) ); // Sanitize at ingestion.
+			// CSRF-bypass hardening: same allowlist as activate_am_plugin() to prevent toggling unrelated plugins.
+			if ( ! in_array( $basename_raw, $this->get_am_plugin_basenames(), true ) ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Plugin is not in the allowed list.', 'nggallery' ) ] );
+			}
+			deactivate_plugins( $basename_raw );
 		}
 
 		echo wp_json_encode( true );
@@ -700,6 +736,35 @@ class About {
 		if ( isset( $_POST['download_url'] ) ) {
 
 			$download_url = esc_url_raw( wp_unslash( $_POST['download_url'] ) );
+
+			// Host+path allowlist: restrict installable package source to specific distribution paths so a future
+			// arbitrary file upload, open redirect, or media attachment on a broad host (wordpress.org, imagely.com)
+			// cannot be coerced into installing an attacker-controlled plugin zip via admin CSRF.
+			$parsed_dl_url = wp_parse_url( $download_url );
+			$dl_host       = isset( $parsed_dl_url['host'] ) ? strtolower( $parsed_dl_url['host'] ) : '';
+			$dl_scheme     = isset( $parsed_dl_url['scheme'] ) ? strtolower( $parsed_dl_url['scheme'] ) : '';
+			$dl_path       = isset( $parsed_dl_url['path'] ) ? $parsed_dl_url['path'] : '';
+
+			// Tuples of [host, path-prefix-regex]. Path must end in .zip after the .zip-only suffix check below.
+			$allowed_sources = [
+				[ 'downloads.wordpress.org', '#^/plugin/[A-Za-z0-9._-]+\.zip$#' ],
+				[ 'www.imagely.com', '#^/(downloads|dl)/[A-Za-z0-9._/-]+\.zip$#' ],
+				[ 'imagely.com', '#^/(downloads|dl)/[A-Za-z0-9._/-]+\.zip$#' ],
+			];
+
+			$source_ok = false;
+			if ( 'https' === $dl_scheme ) {
+				foreach ( $allowed_sources as $allowed ) {
+					if ( $dl_host === $allowed[0] && preg_match( $allowed[1], $dl_path ) ) {
+						$source_ok = true;
+						break;
+					}
+				}
+			}
+			if ( ! $source_ok ) {
+				wp_send_json_error( [ 'message' => esc_html__( 'Download URL is not from an allowed host.', 'nggallery' ) ] );
+			}
+
 			global $hook_suffix;
 
 			// Set the current screen to avoid undefined notices.
@@ -739,6 +804,16 @@ class About {
 
 			if ( $installer->plugin_info() ) {
 				$plugin_basename = $installer->plugin_info();
+
+				// Activate only basenames registered in get_am_plugins(); same gate sibling activate/deactivate use.
+				if ( ! in_array( $plugin_basename, $this->get_am_plugin_basenames(), true ) ) {
+					wp_send_json_error(
+						[
+							'message' => esc_html__( 'Installed plugin is not in the partner allowlist; activation skipped.', 'nggallery' ),
+							'plugin'  => $plugin_basename,
+						]
+					);
+				}
 
 				$active = activate_plugin( $plugin_basename, false, false, true );
 

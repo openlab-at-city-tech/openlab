@@ -67,12 +67,8 @@ abstract class C_Base_Module
 	{
 	    // Package files may not exist until releases are built; do not use require_once() here
         $path = $this->get_package_abspath();
-        ini_set('track_errors', true);
         if (@file_exists($path))
             include_once($path);
-
-        if (isset($php_errormsg) && defined('NGG_DEBUG') && constant('NGG_DEBUG'))
-            error_log($php_errormsg);
 
         $this->_register_utilities();
         $this->_register_adapters();

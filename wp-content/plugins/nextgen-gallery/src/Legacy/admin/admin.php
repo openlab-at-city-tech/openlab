@@ -121,7 +121,8 @@ class nggAdminPanel {
 		add_submenu_page( $name, __( 'Manage Tags', 'nggallery' ), __( 'Manage Tags', 'nggallery' ), 'NextGEN Manage tags', 'nggallery-tags', [ $this, 'show_menu' ] );
 
 		// Set page title for hidden pages to avoid strip_tags() deprecation warning.
-		add_action( 'admin_head', [ $this, 'set_legacy_page_titles' ] );
+		// admin_init runs before admin-header.php reads $title; admin_head is too late.
+		add_action( 'admin_init', [ $this, 'set_legacy_page_titles' ] );
 
 		// register the column fields.
 		$this->register_columns();

@@ -15,26 +15,43 @@
  *   http://www.gnu.org/licenses/gpl.html
  */
 
- /*** MODIFIED BY IMAGELY TO BE jQUERY 3.5.1 COMPATIBLE */
+/*** MODIFIED BY IMAGELY TO BE jQUERY 3.5.1 COMPATIBLE */
 
-;(function($) {
-	var tmp, loading, overlay, wrap, outer, content, close, title, nav_left, nav_right,
-
-		selectedIndex = 0, selectedOpts = {}, selectedArray = [], currentIndex = 0, currentOpts = {}, currentArray = [],
-
-		ajaxLoader = null, imgPreloader = new Image(), imgRegExp = /\.(jpg|gif|png|bmp|jpeg|webp)(.*)?$/i, swfRegExp = /[^\.]\.(swf)\s*$/i,
-
-		loadingTimer, loadingFrame = 1,
-
-		titleHeight = 0, titleStr = '', start_pos, final_pos, busy = false, fx = $.extend($('<div/>')[0], { prop: 0 }),
-
+(function ($) {
+	var tmp,
+		loading,
+		overlay,
+		wrap,
+		outer,
+		content,
+		close,
+		title,
+		nav_left,
+		nav_right,
+		selectedIndex = 0,
+		selectedOpts = {},
+		selectedArray = [],
+		currentIndex = 0,
+		currentOpts = {},
+		currentArray = [],
+		ajaxLoader = null,
+		imgPreloader = new Image(),
+		imgRegExp = /\.(jpg|gif|png|bmp|jpeg|webp)(.*)?$/i,
+		swfRegExp = /[^\.]\.(swf)\s*$/i,
+		loadingTimer,
+		loadingFrame = 1,
+		titleHeight = 0,
+		titleStr = '',
+		start_pos,
+		final_pos,
+		busy = false,
+		fx = $.extend($('<div/>')[0], {prop: 0}),
 		isIE6 = false,
-
 		/*
 		 * Private methods
 		 */
 
-		_abort = function() {
+		_abort = function () {
 			loading.hide();
 
 			imgPreloader.onerror = imgPreloader.onload = null;
@@ -45,8 +62,7 @@
 
 			tmp.empty();
 		},
-
-		_error = function() {
+		_error = function () {
 			if (false === selectedOpts.onError(selectedArray, selectedIndex, selectedOpts)) {
 				loading.hide();
 				busy = false;
@@ -58,13 +74,14 @@
 			selectedOpts.width = 'auto';
 			selectedOpts.height = 'auto';
 
-			tmp.html( '<p id="fancybox-error">The requested content cannot be loaded.<br />Please try again later.</p>' );
+			tmp.html(
+				'<p id="fancybox-error">The requested content cannot be loaded.<br />Please try again later.</p>'
+			);
 
 			_process_inline();
 		},
-
-		_start = function() {
-			var obj = selectedArray[ selectedIndex ],
+		_start = function () {
+			var obj = selectedArray[selectedIndex],
 				href,
 				type,
 				title,
@@ -74,7 +91,11 @@
 
 			_abort();
 
-			selectedOpts = $.extend({}, $.fn.fancybox.defaults, (typeof $(obj).data('fancybox') == 'undefined' ? selectedOpts : $(obj).data('fancybox')));
+			selectedOpts = $.extend(
+				{},
+				$.fn.fancybox.defaults,
+				typeof $(obj).data('fancybox') == 'undefined' ? selectedOpts : $(obj).data('fancybox')
+			);
 
 			ret = selectedOpts.onStart(selectedArray, selectedIndex, selectedOpts);
 
@@ -88,7 +109,9 @@
 			title = selectedOpts.title || (obj.nodeName ? $(obj).attr('title') : obj.title) || '';
 
 			if (obj.nodeName && !selectedOpts.orig) {
-				selectedOpts.orig = $(obj).children("img:first").length ? $(obj).children("img:first") : $(obj);
+				selectedOpts.orig = $(obj).children('img:first').length
+					? $(obj).children('img:first')
+					: $(obj);
 			}
 
 			if (title === '' && selectedOpts.orig && selectedOpts.titleFromAlt) {
@@ -97,17 +120,40 @@
 
 			// Define the allowed tags
 			const allowedTags = {
-				'A': ['href', 'class', 'title'],
-				'BR': [],
-				'EM': [],
-				'I': [],
-				'STRONG': [],
-				'B': [],
-				'U': [],
-				'P': ['class'],
-				'DIV': ['class', 'id'],
-				'SPAN': ['class', 'id']
+				A: ['href', 'class', 'title'],
+				BR: [],
+				EM: [],
+				I: [],
+				STRONG: [],
+				B: [],
+				U: [],
+				P: ['class'],
+				DIV: ['class', 'id'],
+				SPAN: ['class', 'id']
 			};
+
+			// SECURITY (#1089): a caption's own href/src must be parsed, not trusted. The
+			// allow-list above keeps <a href>, but nothing here scheme-checked it, so a
+			// caption "<a href='javascript:...'>" survived. Parse with new URL() (which
+			// normalises tab/space/case so "java\tscript:"/"JavaScript:" resolve to their
+			// real scheme) and admit only http/https or mailto. An image (sameOrigin) must
+			// also be same-origin, so it cannot trigger a per-viewer off-origin request; a
+			// link may point anywhere over http/https, as caption links always could.
+			function isSafeUrl(value, sameOrigin) {
+				try {
+					var u = new URL(value, document.baseURI);
+					var scheme = u.protocol.toLowerCase();
+					if (scheme === 'mailto:') {
+						return true;
+					}
+					if (scheme === 'http:' || scheme === 'https:') {
+						return !sameOrigin || u.origin === window.location.origin;
+					}
+					return false;
+				} catch (e) {
+					return false;
+				}
+			}
 
 			function sanitizeTitle(title) {
 				const parser = new DOMParser();
@@ -121,6 +167,11 @@
 						[...el.attributes].forEach(attr => {
 							if (!allowedTags[el.tagName].includes(attr.name)) {
 								el.removeAttribute(attr.name);
+							} else if (
+								(attr.name === 'href' || attr.name === 'src') &&
+								!isSafeUrl(attr.value, attr.name === 'src')
+							) {
+								el.removeAttribute(attr.name);
 							}
 						});
 					}
@@ -133,7 +184,7 @@
 
 			href = selectedOpts.href || (obj.nodeName ? $(obj).attr('href') : obj.href) || null;
 
-			if ((/^(?:javascript)/i).test(href) || href == '#') {
+			if (/^(?:javascript)/i.test(href) || href == '#') {
 				href = null;
 			}
 
@@ -143,23 +194,17 @@
 				if (!href) {
 					href = selectedOpts.content;
 				}
-
 			} else if (selectedOpts.content) {
 				type = 'html';
-
 			} else if (href) {
 				if (href.match(imgRegExp)) {
 					type = 'image';
-
 				} else if (href.match(swfRegExp)) {
 					type = 'swf';
-
-				} else if ($(obj).hasClass("iframe")) {
+				} else if ($(obj).hasClass('iframe')) {
 					type = 'iframe';
-
-				} else if (href.indexOf("#") === 0) {
+				} else if (href.indexOf('#') === 0) {
 					type = 'inline';
-
 				} else {
 					type = 'ajax';
 				}
@@ -171,7 +216,7 @@
 			}
 
 			if (type == 'inline') {
-				obj	= href.substr(href.indexOf("#"));
+				obj = href.substr(href.indexOf('#'));
 				type = $(obj).length > 0 ? 'inline' : 'ajax';
 			}
 
@@ -180,7 +225,11 @@
 			selectedOpts.title = title;
 
 			if (selectedOpts.autoDimensions) {
-				if (selectedOpts.type == 'html' || selectedOpts.type == 'inline' || selectedOpts.type == 'ajax') {
+				if (
+					selectedOpts.type == 'html' ||
+					selectedOpts.type == 'inline' ||
+					selectedOpts.type == 'ajax'
+				) {
 					selectedOpts.width = 'auto';
 					selectedOpts.height = 'auto';
 				} else {
@@ -199,37 +248,40 @@
 			selectedOpts.padding = parseInt(selectedOpts.padding, 10);
 			selectedOpts.margin = parseInt(selectedOpts.margin, 10);
 
-			tmp.css('padding', (selectedOpts.padding + selectedOpts.margin));
+			tmp.css('padding', selectedOpts.padding + selectedOpts.margin);
 
-			$('.fancybox-inline-tmp').off('fancybox-cancel').on('fancybox-change', function() {
-				$(this).replaceWith(content.children());
-			});
+			$('.fancybox-inline-tmp')
+				.off('fancybox-cancel')
+				.on('fancybox-change', function () {
+					$(this).replaceWith(content.children());
+				});
 
 			switch (type) {
-				case 'html' :
-					tmp.html( selectedOpts.content );
+				case 'html':
+					tmp.html(selectedOpts.content);
 					_process_inline();
-				break;
+					break;
 
-				case 'inline' :
-					if ( $(obj).parent().is('#fancybox-content') === true) {
+				case 'inline':
+					if ($(obj).parent().is('#fancybox-content') === true) {
 						busy = false;
 						return;
 					}
 
 					$('<div class="fancybox-inline-tmp" />')
 						.hide()
-						.insertBefore( $(obj) )
-						.on('fancybox-cleanup', function() {
+						.insertBefore($(obj))
+						.on('fancybox-cleanup', function () {
 							$(this).replaceWith(content.children());
-						}).on('fancybox-cancel', function() {
+						})
+						.on('fancybox-cancel', function () {
 							$(this).replaceWith(tmp.children());
 						});
 
 					$(obj).appendTo(tmp);
 
 					_process_inline();
-				break;
+					break;
 
 				case 'image':
 					busy = false;
@@ -238,11 +290,11 @@
 
 					imgPreloader = new Image();
 
-					imgPreloader.onerror = function() {
+					imgPreloader.onerror = function () {
 						_error();
 					};
 
-					imgPreloader.onload = function() {
+					imgPreloader.onload = function () {
 						busy = true;
 
 						imgPreloader.onerror = imgPreloader.onload = null;
@@ -251,25 +303,41 @@
 					};
 
 					imgPreloader.src = href;
-				break;
+					break;
 
 				case 'swf':
 					selectedOpts.scrolling = 'no';
 
-					str = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="' + selectedOpts.width + '" height="' + selectedOpts.height + '"><param name="movie" value="' + href + '"></param>';
+					str =
+						'<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" width="' +
+						selectedOpts.width +
+						'" height="' +
+						selectedOpts.height +
+						'"><param name="movie" value="' +
+						href +
+						'"></param>';
 					emb = '';
 
-					$.each(selectedOpts.swf, function(name, val) {
+					$.each(selectedOpts.swf, function (name, val) {
 						str += '<param name="' + name + '" value="' + val + '"></param>';
 						emb += ' ' + name + '="' + val + '"';
 					});
 
-					str += '<embed src="' + href + '" type="application/x-shockwave-flash" width="' + selectedOpts.width + '" height="' + selectedOpts.height + '"' + emb + '></embed></object>';
+					str +=
+						'<embed src="' +
+						href +
+						'" type="application/x-shockwave-flash" width="' +
+						selectedOpts.width +
+						'" height="' +
+						selectedOpts.height +
+						'"' +
+						emb +
+						'></embed></object>';
 
 					tmp.html(str);
 
 					_process_inline();
-				break;
+					break;
 
 				case 'ajax':
 					busy = false;
@@ -278,88 +346,105 @@
 
 					selectedOpts.ajax.win = selectedOpts.ajax.success;
 
-					ajaxLoader = $.ajax($.extend({}, selectedOpts.ajax, {
-						url	: href,
-						data : selectedOpts.ajax.data || {},
-						error : function(XMLHttpRequest, textStatus, errorThrown) {
-							if ( XMLHttpRequest.status > 0 ) {
-								_error();
-							}
-						},
-						success : function(data, textStatus, XMLHttpRequest) {
-							var o = typeof XMLHttpRequest == 'object' ? XMLHttpRequest : ajaxLoader;
-							if (o.status == 200) {
-								if ( typeof selectedOpts.ajax.win == 'function' ) {
-									ret = selectedOpts.ajax.win(href, data, textStatus, XMLHttpRequest);
-
-									if (ret === false) {
-										loading.hide();
-										return;
-									} else if (typeof ret == 'string' || typeof ret == 'object') {
-										data = ret;
-									}
+					ajaxLoader = $.ajax(
+						$.extend({}, selectedOpts.ajax, {
+							url: href,
+							data: selectedOpts.ajax.data || {},
+							error: function (XMLHttpRequest, textStatus, errorThrown) {
+								if (XMLHttpRequest.status > 0) {
+									_error();
 								}
+							},
+							success: function (data, textStatus, XMLHttpRequest) {
+								var o = typeof XMLHttpRequest == 'object' ? XMLHttpRequest : ajaxLoader;
+								if (o.status == 200) {
+									if (typeof selectedOpts.ajax.win == 'function') {
+										ret = selectedOpts.ajax.win(href, data, textStatus, XMLHttpRequest);
 
-								tmp.html( data );
-								_process_inline();
+										if (ret === false) {
+											loading.hide();
+											return;
+										} else if (typeof ret == 'string' || typeof ret == 'object') {
+											data = ret;
+										}
+									}
+
+									tmp.html(data);
+									_process_inline();
+								}
 							}
-						}
-					}));
+						})
+					);
 
-				break;
+					break;
 
 				case 'iframe':
 					_show();
-				break;
+					break;
 			}
 		},
-
-		_process_inline = function() {
-			var
-				w = selectedOpts.width,
+		_process_inline = function () {
+			var w = selectedOpts.width,
 				h = selectedOpts.height;
 
 			if (w.toString().indexOf('%') > -1) {
-				w = parseInt( ($(window).width() - (selectedOpts.margin * 2)) * parseFloat(w) / 100, 10) + 'px';
-
+				w =
+					parseInt((($(window).width() - selectedOpts.margin * 2) * parseFloat(w)) / 100, 10) +
+					'px';
 			} else {
 				w = w == 'auto' ? 'auto' : w + 'px';
 			}
 
 			if (h.toString().indexOf('%') > -1) {
-				h = parseInt( ($(window).height() - (selectedOpts.margin * 2)) * parseFloat(h) / 100, 10) + 'px';
-
+				h =
+					parseInt((($(window).height() - selectedOpts.margin * 2) * parseFloat(h)) / 100, 10) +
+					'px';
 			} else {
 				h = h == 'auto' ? 'auto' : h + 'px';
 			}
 
-			tmp.wrapInner('<div style="width:' + w + ';height:' + h + ';overflow: ' + (selectedOpts.scrolling == 'auto' ? 'auto' : (selectedOpts.scrolling == 'yes' ? 'scroll' : 'hidden')) + ';position:relative;"></div>');
+			tmp.wrapInner(
+				'<div style="width:' +
+					w +
+					';height:' +
+					h +
+					';overflow: ' +
+					(selectedOpts.scrolling == 'auto'
+						? 'auto'
+						: selectedOpts.scrolling == 'yes'
+							? 'scroll'
+							: 'hidden') +
+					';position:relative;"></div>'
+			);
 
 			selectedOpts.width = tmp.width();
 			selectedOpts.height = tmp.height();
 
 			_show();
 		},
-
-		_process_image = function() {
+		_process_image = function () {
 			selectedOpts.width = imgPreloader.width;
 			selectedOpts.height = imgPreloader.height;
 
-			$("<img />").attr({
-				'id' : 'fancybox-img',
-				'src' : imgPreloader.src,
-				'alt' : selectedOpts.title
-			}).appendTo( tmp );
+			$('<img />')
+				.attr({
+					id: 'fancybox-img',
+					src: imgPreloader.src,
+					alt: selectedOpts.title
+				})
+				.appendTo(tmp);
 
 			_show();
 		},
-
-		_show = function() {
+		_show = function () {
 			var pos, equal;
 
 			loading.hide();
 
-			if (wrap.is(":visible") && false === currentOpts.onCleanup(currentArray, currentIndex, currentOpts)) {
+			if (
+				wrap.is(':visible') &&
+				false === currentOpts.onCleanup(currentArray, currentIndex, currentOpts)
+			) {
 				$.event.trigger('fancybox-cancel');
 
 				busy = false;
@@ -368,12 +453,12 @@
 
 			busy = true;
 
-			$(content.add( overlay )).off();
+			$(content.add(overlay)).off();
 
-			$(window).off("resize.fb scroll.fb");
+			$(window).off('resize.fb scroll.fb');
 			$(document).off('keydown.fb');
 
-			if (wrap.is(":visible") && currentOpts.titlePosition !== 'outside') {
+			if (wrap.is(':visible') && currentOpts.titlePosition !== 'outside') {
 				wrap.css('height', wrap.height());
 			}
 
@@ -383,19 +468,22 @@
 
 			if (currentOpts.overlayShow) {
 				overlay.css({
-					'background-color' : currentOpts.overlayColor,
-					'opacity' : currentOpts.overlayOpacity,
-					'cursor' : currentOpts.hideOnOverlayClick ? 'pointer' : 'auto',
-					'height' : $(document).height()
+					'background-color': currentOpts.overlayColor,
+					opacity: currentOpts.overlayOpacity,
+					cursor: currentOpts.hideOnOverlayClick ? 'pointer' : 'auto',
+					height: $(document).height()
 				});
 
 				if (!overlay.is(':visible')) {
 					if (isIE6) {
-						$('select:not(#fancybox-tmp select)').filter(function() {
-							return this.style.visibility !== 'hidden';
-						}).css({'visibility' : 'hidden'}).one('fancybox-cleanup', function() {
-							this.style.visibility = 'inherit';
-						});
+						$('select:not(#fancybox-tmp select)')
+							.filter(function () {
+								return this.style.visibility !== 'hidden';
+							})
+							.css({visibility: 'hidden'})
+							.one('fancybox-cleanup', function () {
+								this.style.visibility = 'inherit';
+							});
 					}
 
 					overlay.show();
@@ -408,23 +496,22 @@
 
 			_process_title();
 
-			if (wrap.is(":visible")) {
-				$( close.add( nav_left ).add( nav_right ) ).hide();
+			if (wrap.is(':visible')) {
+				$(close.add(nav_left).add(nav_right)).hide();
 
-				pos = wrap.position(),
+				(pos = wrap.position()),
+					(start_pos = {
+						top: pos.top,
+						left: pos.left,
+						width: wrap.width(),
+						height: wrap.height()
+					});
 
-				start_pos = {
-					top	 : pos.top,
-					left : pos.left,
-					width : wrap.width(),
-					height : wrap.height()
-				};
+				equal = start_pos.width == final_pos.width && start_pos.height == final_pos.height;
 
-				equal = (start_pos.width == final_pos.width && start_pos.height == final_pos.height);
-
-				content.fadeTo(currentOpts.changeFade, 0.3, function() {
-					var finish_resizing = function() {
-						content.html( tmp.contents() ).fadeTo(currentOpts.changeFade, 1, _finish);
+				content.fadeTo(currentOpts.changeFade, 0.3, function () {
+					var finish_resizing = function () {
+						content.html(tmp.contents()).fadeTo(currentOpts.changeFade, 1, _finish);
 					};
 
 					$.event.trigger('fancybox-change');
@@ -433,37 +520,41 @@
 						.empty()
 						.removeAttr('filter')
 						.css({
-							'border-width' : currentOpts.padding,
-							'width'	: final_pos.width - currentOpts.padding * 2,
-							'height' : selectedOpts.autoDimensions ? 'auto' : final_pos.height - titleHeight - currentOpts.padding * 2
+							'border-width': currentOpts.padding,
+							width: final_pos.width - currentOpts.padding * 2,
+							height: selectedOpts.autoDimensions
+								? 'auto'
+								: final_pos.height - titleHeight - currentOpts.padding * 2
 						});
 
 					if (equal) {
 						finish_resizing();
-
 					} else {
 						fx.prop = 0;
 
-						$(fx).animate({prop: 1}, {
-							 duration : currentOpts.changeSpeed,
-							 easing : currentOpts.easingChange,
-							 step : _draw,
-							 complete : finish_resizing
-						});
+						$(fx).animate(
+							{prop: 1},
+							{
+								duration: currentOpts.changeSpeed,
+								easing: currentOpts.easingChange,
+								step: _draw,
+								complete: finish_resizing
+							}
+						);
 					}
 				});
 
 				return;
 			}
 
-			wrap.removeAttr("style");
+			wrap.removeAttr('style');
 
 			content.css('border-width', currentOpts.padding);
 
 			if (currentOpts.transitionIn == 'elastic') {
 				start_pos = _get_zoom_from();
 
-				content.html( tmp.contents() );
+				content.html(tmp.contents());
 
 				wrap.show();
 
@@ -473,12 +564,15 @@
 
 				fx.prop = 0;
 
-				$(fx).animate({prop: 1}, {
-					 duration : currentOpts.speedIn,
-					 easing : currentOpts.easingIn,
-					 step : _draw,
-					 complete : _finish
-				});
+				$(fx).animate(
+					{prop: 1},
+					{
+						duration: currentOpts.speedIn,
+						easing: currentOpts.easingIn,
+						step: _draw,
+						complete: _finish
+					}
+				);
 
 				return;
 			}
@@ -489,20 +583,25 @@
 
 			content
 				.css({
-					'width' : final_pos.width - currentOpts.padding * 2,
-					'height' : selectedOpts.autoDimensions ? 'auto' : final_pos.height - titleHeight - currentOpts.padding * 2
+					width: final_pos.width - currentOpts.padding * 2,
+					height: selectedOpts.autoDimensions
+						? 'auto'
+						: final_pos.height - titleHeight - currentOpts.padding * 2
 				})
-				.html( tmp.contents() );
+				.html(tmp.contents());
 
 			wrap
 				.css(final_pos)
-				.fadeIn( currentOpts.transitionIn == 'none' ? 0 : currentOpts.speedIn, _finish );
+				.fadeIn(currentOpts.transitionIn == 'none' ? 0 : currentOpts.speedIn, _finish);
 		},
-
-		_format_title = function(title) {
+		_format_title = function (title) {
 			if (title && title.length) {
 				if (currentOpts.titlePosition == 'float') {
-					return '<table id="fancybox-title-float-wrap" cellpadding="0" cellspacing="0"><tr><td id="fancybox-title-float-left"></td><td id="fancybox-title-float-main">' + title + '</td><td id="fancybox-title-float-right"></td></tr></table>';
+					return (
+						'<table id="fancybox-title-float-wrap" cellpadding="0" cellspacing="0"><tr><td id="fancybox-title-float-left"></td><td id="fancybox-title-float-main">' +
+						title +
+						'</td><td id="fancybox-title-float-right"></td></tr></table>'
+					);
 				}
 
 				return '<div id="fancybox-title-' + currentOpts.titlePosition + '">' + title + '</div>';
@@ -510,26 +609,24 @@
 
 			return false;
 		},
-
-		_process_title = function() {
+		_process_title = function () {
 			titleStr = currentOpts.title || '';
 			titleHeight = 0;
 
-			title
-				.empty()
-				.removeAttr('style')
-				.removeClass();
+			title.empty().removeAttr('style').removeClass();
 
 			if (currentOpts.titleShow === false) {
 				title.hide();
 				return;
 			}
 
-			var isFunction = function(param) {
-				return typeof(param) === "function"
-			}
+			var isFunction = function (param) {
+				return typeof param === 'function';
+			};
 
-			titleStr = isFunction(currentOpts.titleFormat) ? currentOpts.titleFormat(titleStr, currentArray, currentIndex, currentOpts) : _format_title(titleStr);
+			titleStr = isFunction(currentOpts.titleFormat)
+				? currentOpts.titleFormat(titleStr, currentArray, currentIndex, currentOpts)
+				: _format_title(titleStr);
 
 			if (!titleStr || titleStr === '') {
 				title.hide();
@@ -538,66 +635,69 @@
 
 			title
 				.addClass('fancybox-title-' + currentOpts.titlePosition)
-				.html( titleStr )
-				.appendTo( 'body' )
+				.html(titleStr)
+				.appendTo('body')
 				.show();
 
 			switch (currentOpts.titlePosition) {
 				case 'inside':
-					title
-						.css({
-							'width' : final_pos.width - (currentOpts.padding * 2),
-							'marginLeft' : currentOpts.padding,
-							'marginRight' : currentOpts.padding
-						});
+					title.css({
+						width: final_pos.width - currentOpts.padding * 2,
+						marginLeft: currentOpts.padding,
+						marginRight: currentOpts.padding
+					});
 
 					titleHeight = title.outerHeight(true);
 
-					title.appendTo( outer );
+					title.appendTo(outer);
 
 					final_pos.height += titleHeight;
-				break;
+					break;
 
 				case 'over':
 					title
 						.css({
-							'marginLeft' : currentOpts.padding,
-							'width'	: final_pos.width - (currentOpts.padding * 2),
-							'bottom' : currentOpts.padding
+							marginLeft: currentOpts.padding,
+							width: final_pos.width - currentOpts.padding * 2,
+							bottom: currentOpts.padding
 						})
-						.appendTo( outer );
-				break;
+						.appendTo(outer);
+					break;
 
 				case 'float':
 					title
-						.css('left', parseInt((title.width() - final_pos.width - 40)/ 2, 10) * -1)
-						.appendTo( wrap );
-				break;
+						.css('left', parseInt((title.width() - final_pos.width - 40) / 2, 10) * -1)
+						.appendTo(wrap);
+					break;
 
 				default:
 					title
 						.css({
-							'width' : final_pos.width - (currentOpts.padding * 2),
-							'paddingLeft' : currentOpts.padding,
-							'paddingRight' : currentOpts.padding
+							width: final_pos.width - currentOpts.padding * 2,
+							paddingLeft: currentOpts.padding,
+							paddingRight: currentOpts.padding
 						})
-						.appendTo( wrap );
-				break;
+						.appendTo(wrap);
+					break;
 			}
 
 			title.hide();
 		},
-
-		_set_navigation = function() {
+		_set_navigation = function () {
 			if (currentOpts.enableEscapeButton || currentOpts.enableKeyboardNav) {
-				$(document).on('keydown.fb', function(e) {
+				$(document).on('keydown.fb', function (e) {
 					if (e.keyCode == 27 && currentOpts.enableEscapeButton) {
 						e.preventDefault();
 						$.fancybox.close();
-
-					} else if ((e.keyCode == 37 || e.keyCode == 39) && currentOpts.enableKeyboardNav && e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA' && e.target.tagName !== 'SELECT') {
+					} else if (
+						(e.keyCode == 37 || e.keyCode == 39) &&
+						currentOpts.enableKeyboardNav &&
+						e.target.tagName !== 'INPUT' &&
+						e.target.tagName !== 'TEXTAREA' &&
+						e.target.tagName !== 'SELECT'
+					) {
 						e.preventDefault();
-						$.fancybox[ e.keyCode == 37 ? 'prev' : 'next']();
+						$.fancybox[e.keyCode == 37 ? 'prev' : 'next']();
 					}
 				});
 			}
@@ -612,11 +712,13 @@
 				nav_left.show();
 			}
 
-			if ((currentOpts.cyclic && currentArray.length > 1) || currentIndex != (currentArray.length -1)) {
+			if (
+				(currentOpts.cyclic && currentArray.length > 1) ||
+				currentIndex != currentArray.length - 1
+			) {
 				nav_right.show();
 			}
 		},
-
 		_finish = function () {
 			if (!$.support.opacity) {
 				content.get(0).style.removeProperty('filter');
@@ -639,22 +741,31 @@
 
 			_set_navigation();
 
-			if (currentOpts.hideOnContentClick)	{
+			if (currentOpts.hideOnContentClick) {
 				content.on('click', $.fancybox.close);
 			}
 
-			if (currentOpts.hideOnOverlayClick)	{
+			if (currentOpts.hideOnOverlayClick) {
 				overlay.on('click', $.fancybox.close);
 			}
 
-			$(window).on("resize.fb", $.fancybox.resize);
+			$(window).on('resize.fb', $.fancybox.resize);
 
 			if (currentOpts.centerOnScroll) {
-				$(window).on("scroll.fb", $.fancybox.center);
+				$(window).on('scroll.fb', $.fancybox.center);
 			}
 
 			if (currentOpts.type == 'iframe') {
-				$('<iframe id="fancybox-frame" name="fancybox-frame' + new Date().getTime() + '" frameborder="0" hspace="0" ' + ' scrolling="' + selectedOpts.scrolling + '" src="' + currentOpts.href + '"></iframe>').appendTo(content);
+				$(
+					'<iframe id="fancybox-frame" name="fancybox-frame' +
+						new Date().getTime() +
+						'" frameborder="0" hspace="0" ' +
+						' scrolling="' +
+						selectedOpts.scrolling +
+						'" src="' +
+						currentOpts.href +
+						'"></iframe>'
+				).appendTo(content);
 			}
 
 			wrap.show();
@@ -667,13 +778,11 @@
 
 			_preload_images();
 		},
+		_preload_images = function () {
+			var href, objNext;
 
-		_preload_images = function() {
-			var href,
-				objNext;
-
-			if ((currentArray.length -1) > currentIndex) {
-				href = currentArray[ currentIndex + 1 ].href;
+			if (currentArray.length - 1 > currentIndex) {
+				href = currentArray[currentIndex + 1].href;
 
 				if (typeof href !== 'undefined' && href.match(imgRegExp)) {
 					objNext = new Image();
@@ -682,7 +791,7 @@
 			}
 
 			if (currentIndex > 0) {
-				href = currentArray[ currentIndex - 1 ].href;
+				href = currentArray[currentIndex - 1].href;
 
 				if (typeof href !== 'undefined' && href.match(imgRegExp)) {
 					objNext = new Image();
@@ -690,14 +799,13 @@
 				}
 			}
 		},
-
-		_draw = function(pos) {
+		_draw = function (pos) {
 			var dim = {
-				width : parseInt(start_pos.width + (final_pos.width - start_pos.width) * pos, 10),
-				height : parseInt(start_pos.height + (final_pos.height - start_pos.height) * pos, 10),
+				width: parseInt(start_pos.width + (final_pos.width - start_pos.width) * pos, 10),
+				height: parseInt(start_pos.height + (final_pos.height - start_pos.height) * pos, 10),
 
-				top : parseInt(start_pos.top + (final_pos.top - start_pos.top) * pos, 10),
-				left : parseInt(start_pos.left + (final_pos.left - start_pos.left) * pos, 10)
+				top: parseInt(start_pos.top + (final_pos.top - start_pos.top) * pos, 10),
+				left: parseInt(start_pos.left + (final_pos.left - start_pos.left) * pos, 10)
 			};
 
 			if (typeof final_pos.opacity !== 'undefined') {
@@ -707,20 +815,18 @@
 			wrap.css(dim);
 
 			content.css({
-				'width' : dim.width - currentOpts.padding * 2,
-				'height' : dim.height - (titleHeight * pos) - currentOpts.padding * 2
+				width: dim.width - currentOpts.padding * 2,
+				height: dim.height - titleHeight * pos - currentOpts.padding * 2
 			});
 		},
-
-		_get_viewport = function() {
+		_get_viewport = function () {
 			return [
-				$(window).width() - (currentOpts.margin * 2),
-				$(window).height() - (currentOpts.margin * 2),
+				$(window).width() - currentOpts.margin * 2,
+				$(window).height() - currentOpts.margin * 2,
 				$(document).scrollLeft() + currentOpts.margin,
 				$(document).scrollTop() + currentOpts.margin
 			];
 		},
-
 		_get_zoom_to = function () {
 			var view = _get_viewport(),
 				to = {},
@@ -742,46 +848,43 @@
 
 			if (resize && (to.width > view[0] || to.height > view[1])) {
 				if (selectedOpts.type == 'image' || selectedOpts.type == 'swf') {
-					ratio = (currentOpts.width ) / (currentOpts.height );
+					ratio = currentOpts.width / currentOpts.height;
 
-					if ((to.width ) > view[0]) {
+					if (to.width > view[0]) {
 						to.width = view[0];
-						to.height = parseInt(((to.width - double_padding) / ratio) + double_padding, 10);
+						to.height = parseInt((to.width - double_padding) / ratio + double_padding, 10);
 					}
 
-					if ((to.height) > view[1]) {
+					if (to.height > view[1]) {
 						to.height = view[1];
-						to.width = parseInt(((to.height - double_padding) * ratio) + double_padding, 10);
+						to.width = parseInt((to.height - double_padding) * ratio + double_padding, 10);
 					}
-
 				} else {
 					to.width = Math.min(to.width, view[0]);
 					to.height = Math.min(to.height, view[1]);
 				}
 			}
 
-			to.top = parseInt(Math.max(view[3] - 20, view[3] + ((view[1] - to.height - 40) * 0.5)), 10);
-			to.left = parseInt(Math.max(view[2] - 20, view[2] + ((view[0] - to.width - 40) * 0.5)), 10);
+			to.top = parseInt(Math.max(view[3] - 20, view[3] + (view[1] - to.height - 40) * 0.5), 10);
+			to.left = parseInt(Math.max(view[2] - 20, view[2] + (view[0] - to.width - 40) * 0.5), 10);
 
 			return to;
 		},
-
-		_get_obj_pos = function(obj) {
+		_get_obj_pos = function (obj) {
 			var pos = obj.offset();
 
-			pos.top += parseInt( obj.css('paddingTop'), 10 ) || 0;
-			pos.left += parseInt( obj.css('paddingLeft'), 10 ) || 0;
+			pos.top += parseInt(obj.css('paddingTop'), 10) || 0;
+			pos.left += parseInt(obj.css('paddingLeft'), 10) || 0;
 
-			pos.top += parseInt( obj.css('border-top-width'), 10 ) || 0;
-			pos.left += parseInt( obj.css('border-left-width'), 10 ) || 0;
+			pos.top += parseInt(obj.css('border-top-width'), 10) || 0;
+			pos.left += parseInt(obj.css('border-left-width'), 10) || 0;
 
 			pos.width = obj.width();
 			pos.height = obj.height();
 
 			return pos;
 		},
-
-		_get_zoom_from = function() {
+		_get_zoom_from = function () {
 			var orig = selectedOpts.orig ? $(selectedOpts.orig) : false,
 				from = {},
 				pos,
@@ -791,33 +894,31 @@
 				pos = _get_obj_pos(orig);
 
 				from = {
-					width : pos.width + (currentOpts.padding * 2),
-					height : pos.height + (currentOpts.padding * 2),
-					top	: pos.top - currentOpts.padding - 20,
-					left : pos.left - currentOpts.padding - 20
+					width: pos.width + currentOpts.padding * 2,
+					height: pos.height + currentOpts.padding * 2,
+					top: pos.top - currentOpts.padding - 20,
+					left: pos.left - currentOpts.padding - 20
 				};
-
 			} else {
 				view = _get_viewport();
 
 				from = {
-					width : currentOpts.padding * 2,
-					height : currentOpts.padding * 2,
-					top	: parseInt(view[3] + view[1] * 0.5, 10),
-					left : parseInt(view[2] + view[0] * 0.5, 10)
+					width: currentOpts.padding * 2,
+					height: currentOpts.padding * 2,
+					top: parseInt(view[3] + view[1] * 0.5, 10),
+					left: parseInt(view[2] + view[0] * 0.5, 10)
 				};
 			}
 
 			return from;
 		},
-
-		_animate_loading = function() {
-			if (!loading.is(':visible')){
+		_animate_loading = function () {
+			if (!loading.is(':visible')) {
 				clearInterval(loadingTimer);
 				return;
 			}
 
-			$('div', loading).css('top', (loadingFrame * -40) + 'px');
+			$('div', loading).css('top', loadingFrame * -40 + 'px');
 
 			loadingFrame = (loadingFrame + 1) % 12;
 		};
@@ -826,15 +927,15 @@
 	 * Public methods
 	 */
 
-	$.fn.fancybox = function(options) {
+	$.fn.fancybox = function (options) {
 		if (!$(this).length) {
 			return this;
 		}
 
 		$(this)
-			.data('fancybox', $.extend({}, options, ($.metadata ? $(this).metadata() : {})))
+			.data('fancybox', $.extend({}, options, $.metadata ? $(this).metadata() : {}))
 			.off('click.fb')
-			.on('click.fb', function(e) {
+			.on('click.fb', function (e) {
 				e.preventDefault();
 
 				if (busy) {
@@ -852,10 +953,9 @@
 
 				if (!rel || rel == '' || rel === 'nofollow') {
 					selectedArray.push(this);
-
 				} else {
-					selectedArray = $("a[rel=" + rel + "], area[rel=" + rel + "]");
-					selectedIndex = selectedArray.index( this );
+					selectedArray = $('a[rel=' + rel + '], area[rel=' + rel + ']');
+					selectedIndex = selectedArray.index(this);
 				}
 
 				_start();
@@ -866,7 +966,7 @@
 		return this;
 	};
 
-	$.fancybox = function(obj) {
+	$.fancybox = function (obj) {
 		var opts;
 
 		if (busy) {
@@ -884,17 +984,16 @@
 				if (typeof obj[i] == 'object') {
 					$(obj[i]).data('fancybox', $.extend({}, opts, obj[i]));
 				} else {
-					obj[i] = $({}).data('fancybox', $.extend({content : obj[i]}, opts));
+					obj[i] = $({}).data('fancybox', $.extend({content: obj[i]}, opts));
 				}
 			}
 
 			selectedArray = jQuery.merge(selectedArray, obj);
-
 		} else {
 			if (typeof obj == 'object') {
 				$(obj).data('fancybox', $.extend({}, opts, obj));
 			} else {
-				obj = $({}).data('fancybox', $.extend({content : obj}, opts));
+				obj = $({}).data('fancybox', $.extend({content: obj}, opts));
 			}
 
 			selectedArray.push(obj);
@@ -907,26 +1006,26 @@
 		_start();
 	};
 
-	$.fancybox.showActivity = function() {
+	$.fancybox.showActivity = function () {
 		clearInterval(loadingTimer);
 
 		loading.show();
 		loadingTimer = setInterval(_animate_loading, 66);
 	};
 
-	$.fancybox.hideActivity = function() {
+	$.fancybox.hideActivity = function () {
 		loading.hide();
 	};
 
-	$.fancybox.next = function() {
-		return $.fancybox.pos( currentIndex + 1);
+	$.fancybox.next = function () {
+		return $.fancybox.pos(currentIndex + 1);
 	};
 
-	$.fancybox.prev = function() {
-		return $.fancybox.pos( currentIndex - 1);
+	$.fancybox.prev = function () {
+		return $.fancybox.pos(currentIndex - 1);
 	};
 
-	$.fancybox.pos = function(pos) {
+	$.fancybox.pos = function (pos) {
 		if (busy) {
 			return;
 		}
@@ -938,7 +1037,6 @@
 		if (pos > -1 && pos < currentArray.length) {
 			selectedIndex = pos;
 			_start();
-
 		} else if (currentOpts.cyclic && currentArray.length > 1) {
 			selectedIndex = pos >= currentArray.length ? 0 : currentArray.length - 1;
 			_start();
@@ -947,7 +1045,7 @@
 		return;
 	};
 
-	$.fancybox.cancel = function() {
+	$.fancybox.cancel = function () {
 		if (busy) {
 			return;
 		}
@@ -964,7 +1062,7 @@
 	};
 
 	// Note: within an iframe use - parent.$.fancybox.close();
-	$.fancybox.close = function() {
+	$.fancybox.close = function () {
 		if (busy || wrap.is(':hidden')) {
 			return;
 		}
@@ -978,14 +1076,21 @@
 
 		_abort();
 
-		$(close.add( nav_left ).add( nav_right )).hide();
+		$(close.add(nav_left).add(nav_right)).hide();
 
-		$(content.add( overlay )).off();
+		$(content.add(overlay)).off();
 
-		$(window).off("resize.fb scroll.fb");
+		$(window).off('resize.fb scroll.fb');
 		$(document).off('keydown.fb');
 
-		content.find('iframe').attr('src', isIE6 && /^https/i.test(window.location.href || '') ? 'javascript:void(false)' : 'about:blank');
+		content
+			.find('iframe')
+			.attr(
+				'src',
+				isIE6 && /^https/i.test(window.location.href || '')
+					? 'javascript:void(false)'
+					: 'about:blank'
+			);
 
 		if (currentOpts.titlePosition !== 'inside') {
 			title.empty();
@@ -1005,9 +1110,9 @@
 
 			currentOpts.onClosed(currentArray, currentIndex, currentOpts);
 
-			currentArray = selectedOpts	= [];
+			currentArray = selectedOpts = [];
 			currentIndex = selectedIndex = 0;
-			currentOpts = selectedOpts	= {};
+			currentOpts = selectedOpts = {};
 
 			busy = false;
 		}
@@ -1018,10 +1123,10 @@
 			var pos = wrap.position();
 
 			final_pos = {
-				top	 : pos.top ,
-				left : pos.left,
-				width :	wrap.width(),
-				height : wrap.height()
+				top: pos.top,
+				left: pos.left,
+				width: wrap.width(),
+				height: wrap.height()
 			};
 
 			if (currentOpts.opacity) {
@@ -1032,19 +1137,21 @@
 
 			fx.prop = 1;
 
-			$(fx).animate({ prop: 0 }, {
-				 duration : currentOpts.speedOut,
-				 easing : currentOpts.easingOut,
-				 step : _draw,
-				 complete : _cleanup
-			});
-
+			$(fx).animate(
+				{prop: 0},
+				{
+					duration: currentOpts.speedOut,
+					easing: currentOpts.easingOut,
+					step: _draw,
+					complete: _cleanup
+				}
+			);
 		} else {
-			wrap.fadeOut( currentOpts.transitionOut == 'none' ? 0 : currentOpts.speedOut, _cleanup);
+			wrap.fadeOut(currentOpts.transitionOut == 'none' ? 0 : currentOpts.speedOut, _cleanup);
 		}
 	};
 
-	$.fancybox.resize = function() {
+	$.fancybox.resize = function () {
 		if (overlay.is(':visible')) {
 			overlay.css('height', $(document).height());
 		}
@@ -1052,7 +1159,7 @@
 		$.fancybox.center(true);
 	};
 
-	$.fancybox.center = function() {
+	$.fancybox.center = function () {
 		var view, align;
 
 		if (busy) {
@@ -1066,60 +1173,79 @@
 			return;
 		}
 
-		wrap
-			.stop()
-			.animate({
-				'top' : parseInt(Math.max(view[3] - 20, view[3] + ((view[1] - content.height() - 40) * 0.5) - currentOpts.padding)),
-				'left' : parseInt(Math.max(view[2] - 20, view[2] + ((view[0] - content.width() - 40) * 0.5) - currentOpts.padding))
-			}, typeof arguments[0] == 'number' ? arguments[0] : 200);
+		wrap.stop().animate(
+			{
+				top: parseInt(
+					Math.max(
+						view[3] - 20,
+						view[3] + (view[1] - content.height() - 40) * 0.5 - currentOpts.padding
+					)
+				),
+				left: parseInt(
+					Math.max(
+						view[2] - 20,
+						view[2] + (view[0] - content.width() - 40) * 0.5 - currentOpts.padding
+					)
+				)
+			},
+			typeof arguments[0] == 'number' ? arguments[0] : 200
+		);
 	};
 
-	$.fancybox.init = function() {
-		if ($("#fancybox-wrap").length) {
+	$.fancybox.init = function () {
+		if ($('#fancybox-wrap').length) {
 			return;
 		}
 
 		$('body').append(
-			tmp	= $('<div id="fancybox-tmp"></div>'),
-			loading	= $('<div id="fancybox-loading"><div></div></div>'),
-			overlay	= $('<div id="fancybox-overlay"></div>'),
-			wrap = $('<div id="fancybox-wrap"></div>')
+			(tmp = $('<div id="fancybox-tmp"></div>')),
+			(loading = $('<div id="fancybox-loading"><div></div></div>')),
+			(overlay = $('<div id="fancybox-overlay"></div>')),
+			(wrap = $('<div id="fancybox-wrap"></div>'))
 		);
 
 		outer = $('<div id="fancybox-outer"></div>')
-			.append('<div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div>')
-			.appendTo( wrap );
+			.append(
+				'<div class="fancybox-bg" id="fancybox-bg-n"></div><div class="fancybox-bg" id="fancybox-bg-ne"></div><div class="fancybox-bg" id="fancybox-bg-e"></div><div class="fancybox-bg" id="fancybox-bg-se"></div><div class="fancybox-bg" id="fancybox-bg-s"></div><div class="fancybox-bg" id="fancybox-bg-sw"></div><div class="fancybox-bg" id="fancybox-bg-w"></div><div class="fancybox-bg" id="fancybox-bg-nw"></div>'
+			)
+			.appendTo(wrap);
 
 		outer.append(
-			content = $('<div id="fancybox-content"></div>'),
-			close = $('<a id="fancybox-close"></a>'),
-			title = $('<div id="fancybox-title"></div>'),
+			(content = $('<div id="fancybox-content"></div>')),
+			(close = $('<a id="fancybox-close"></a>')),
+			(title = $('<div id="fancybox-title"></div>')),
 
-			nav_left = $('<a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a>'),
-			nav_right = $('<a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a>')
+			(nav_left = $(
+				'<a href="javascript:;" id="fancybox-left"><span class="fancy-ico" id="fancybox-left-ico"></span></a>'
+			)),
+			(nav_right = $(
+				'<a href="javascript:;" id="fancybox-right"><span class="fancy-ico" id="fancybox-right-ico"></span></a>'
+			))
 		);
 
 		close.on('click', $.fancybox.close);
 		loading.on('click', $.fancybox.cancel);
 
-		nav_left.on('click', function(e) {
+		nav_left.on('click', function (e) {
 			e.preventDefault();
 			$.fancybox.prev();
 		});
 
-		nav_right.on('click', function(e) {
+		nav_right.on('click', function (e) {
 			e.preventDefault();
 			$.fancybox.next();
 		});
 
 		if ($.fn.mousewheel) {
-			wrap.on('mousewheel.fb', function(e, delta) {
+			wrap.on('mousewheel.fb', function (e, delta) {
 				if (busy) {
 					e.preventDefault();
-
-				} else if ($(e.target).get(0).clientHeight == 0 || $(e.target).get(0).scrollHeight === $(e.target).get(0).clientHeight) {
+				} else if (
+					$(e.target).get(0).clientHeight == 0 ||
+					$(e.target).get(0).scrollHeight === $(e.target).get(0).clientHeight
+				) {
 					e.preventDefault();
-					$.fancybox[ delta > 0 ? 'prev' : 'next']();
+					$.fancybox[delta > 0 ? 'prev' : 'next']();
 				}
 			});
 		}
@@ -1132,67 +1258,70 @@
 			loading.addClass('fancybox-ie6');
 			wrap.addClass('fancybox-ie6');
 
-			$('<iframe id="fancybox-hide-sel-frame" src="' + (/^https/i.test(window.location.href || '') ? 'javascript:void(false)' : 'about:blank' ) + '" scrolling="no" border="0" frameborder="0" tabindex="-1"></iframe>').prependTo(outer);
+			$(
+				'<iframe id="fancybox-hide-sel-frame" src="' +
+					(/^https/i.test(window.location.href || '') ? 'javascript:void(false)' : 'about:blank') +
+					'" scrolling="no" border="0" frameborder="0" tabindex="-1"></iframe>'
+			).prependTo(outer);
 		}
 	};
 
 	$.fn.fancybox.defaults = {
-		padding : 10,
-		margin : 40,
-		opacity : false,
-		modal : false,
-		cyclic : false,
-		scrolling : 'auto',	// 'auto', 'yes' or 'no'
+		padding: 10,
+		margin: 40,
+		opacity: false,
+		modal: false,
+		cyclic: false,
+		scrolling: 'auto', // 'auto', 'yes' or 'no'
 
-		width : 560,
-		height : 340,
+		width: 560,
+		height: 340,
 
-		autoScale : true,
-		autoDimensions : true,
-		centerOnScroll : false,
+		autoScale: true,
+		autoDimensions: true,
+		centerOnScroll: false,
 
-		ajax : {},
-		swf : { wmode: 'transparent' },
+		ajax: {},
+		swf: {wmode: 'transparent'},
 
-		hideOnOverlayClick : true,
-		hideOnContentClick : false,
+		hideOnOverlayClick: true,
+		hideOnContentClick: false,
 
-		overlayShow : true,
-		overlayOpacity : 0.7,
-		overlayColor : '#777',
+		overlayShow: true,
+		overlayOpacity: 0.7,
+		overlayColor: '#777',
 
-		titleShow : true,
-		titlePosition : 'float', // 'float', 'outside', 'inside' or 'over'
-		titleFormat : null,
-		titleFromAlt : false,
+		titleShow: true,
+		titlePosition: 'float', // 'float', 'outside', 'inside' or 'over'
+		titleFormat: null,
+		titleFromAlt: false,
 
-		transitionIn : 'fade', // 'elastic', 'fade' or 'none'
-		transitionOut : 'fade', // 'elastic', 'fade' or 'none'
+		transitionIn: 'fade', // 'elastic', 'fade' or 'none'
+		transitionOut: 'fade', // 'elastic', 'fade' or 'none'
 
-		speedIn : 300,
-		speedOut : 300,
+		speedIn: 300,
+		speedOut: 300,
 
-		changeSpeed : 300,
-		changeFade : 'fast',
+		changeSpeed: 300,
+		changeFade: 'fast',
 
-		easingIn : 'swing',
-		easingOut : 'swing',
+		easingIn: 'swing',
+		easingOut: 'swing',
 
-		showCloseButton	 : true,
-		showNavArrows : true,
-		enableEscapeButton : true,
-		enableKeyboardNav : true,
+		showCloseButton: true,
+		showNavArrows: true,
+		enableEscapeButton: true,
+		enableKeyboardNav: true,
 
-		onStart : function(){},
-		onCancel : function(){},
-		onComplete : function(){},
-		onCleanup : function(){},
-		onClosed : function(){},
-		onError : function(){}
+		onStart: function () {},
+		onCancel: function () {},
+		onComplete: function () {},
+		onCleanup: function () {},
+		onClosed: function () {},
+		onError: function () {}
 	};
 
-	jQuery(function($) {
+	jQuery(function ($) {
 		$.fancybox.init();
 	});
-
 })(jQuery);

@@ -125,7 +125,7 @@
 
 			success: function(result) {
 				if (result.result === "success") {
-					fetch('<?php print esc_js( $dismiss_url ); ?>', {
+					fetch(<?php echo wp_json_encode( esc_url_raw( $dismiss_url ) ); ?>, { // esc_url_raw — URL sanitize; wp_json_encode — JS-string context (URL, not HTML attr) with surrounding quotes.
 						method: 'post',
 						cache: 'no-cache'
 					}).then(function(result) { return result.json(); }).then(function(data) {

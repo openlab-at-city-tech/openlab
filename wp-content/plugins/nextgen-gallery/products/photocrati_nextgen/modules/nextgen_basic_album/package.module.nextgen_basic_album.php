@@ -242,8 +242,8 @@ class A_NextGen_Album_Child_Entities extends Mixin
      * Register each gallery belonging to the album that has just been rendered, so that when the MVC controller
      * system 'catches up' and runs $this->render_object() that method knows what galleries to inline as JS.
      *
-     * @param array             $galleries
-     * @param $displayed_gallery
+     * @param array                                   $galleries
+     * @param \Imagely\NGG\DataTypes\DisplayedGallery $displayed_gallery
      * @return array mixed
      */
     public function register_child_gallery($galleries, $displayed_gallery)
@@ -268,7 +268,7 @@ class A_NextGen_Album_Child_Entities extends Mixin
     /**
      * Determine if we need to append the JS to the current template. This method static for the basic album controller to access.
      *
-     * @param $display_settings
+     * @param array $display_settings
      * @return bool
      */
     public static function are_child_entities_enabled($display_settings)
@@ -316,7 +316,8 @@ class A_NextGen_Album_Child_Entities extends Mixin
             $dg = $gallery->displayed_gallery;
             $id = $dg->id();
             $retval .= 'galleries.gallery_' . $id . ' = ' . wp_json_encode($dg->get_entity()) . ';';
-            $retval .= 'galleries.gallery_' . $id . '.wordpress_page_root = "' . get_permalink() . '";';
+            $retval .= 'galleries.gallery_' . $id . '.wordpress_page_root = ' . wp_json_encode((string) get_permalink()) . ';';
+            // wp_json_encode — JS-string context; raw permalink could contain ", \ breaking literal.
         }
         $retval .= '}, false);</script>';
         return $retval;

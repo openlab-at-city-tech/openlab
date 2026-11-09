@@ -39,23 +39,9 @@ function nggallery_wpmu_setup() {
 
 		if ( isset( $_POST['gallerypath'] ) ) {
 			$new_gallerypath = trailingslashit( sanitize_text_field( wp_unslash( $_POST['gallerypath'] ) ) );
-			$fs              = \Imagely\NGG\Util\Filesystem::get_instance();
-			$root            = $fs->get_document_root( 'galleries' );
-			if ( $root[0] != DIRECTORY_SEPARATOR ) {
-				$root = DIRECTORY_SEPARATOR . $root;
-			}
-
-			$gallery_abspath = $fs->get_absolute_path( $fs->join_paths( $root, $new_gallerypath ) );
-
-			if ( $gallery_abspath[0] != DIRECTORY_SEPARATOR ) {
-				$gallery_abspath = DIRECTORY_SEPARATOR . $gallery_abspath;
-			}
-
-			if ( strpos( $gallery_abspath, $root ) === false ) {
-				/* translators: %s: root directory path */
-				$messagetext[] = sprintf( __( 'Gallery path must be located in %s.', 'nggallery' ), $root );
-			} elseif ( preg_match( '\.+[/\\]', $new_gallerypath ) ) {
-				$messagetext[] = __( 'Gallery path cannot include relative paths.', 'nggallery' );
+			$result          = \Imagely\NGG\Settings\GalleryPathValidation::validate_relative_under_galleries_root( $new_gallerypath );
+			if ( is_wp_error( $result ) ) {
+				$messagetext[] = $result->get_error_message();
 			} else {
 				$ngg_options->set( 'gallerypath', $new_gallerypath );
 				$ngg_options->save();
@@ -103,8 +89,14 @@ function nggallery_wpmu_setup() {
 				</tr>
 				<tr>
 					<th valign="top"><?php esc_html_e( 'Enable import function', 'nggallery' ); ?>:</th>
-					<td><input name="wpmuImportFolder" type="checkbox" value="1" <?php checked( '1', $ngg_options->get( 'wpmuImportFolder' ) ); ?> />
-				<?php esc_html_e( 'Allow users to import images folders from the server.', 'nggallery' ); ?>
+					<td>
+						<label>
+							<input name="wpmuImportFolder" type="checkbox" value="1" <?php checked( '1', $ngg_options->get( 'wpmuImportFolder' ) ); ?> />
+							<?php esc_html_e( 'Allow users to import images folders from the server.', 'nggallery' ); ?>
+						</label>
+						<p class="description">
+							<?php esc_html_e( 'When unchecked, subsite users cannot use Import Folder in the Imagely admin or its REST API. Save and reload the Imagely screen after changing this.', 'nggallery' ); ?>
+						</p>
 					</td>
 				</tr>
 				<tr>

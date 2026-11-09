@@ -52,7 +52,9 @@ class LicenseREST {
 
 		// Extract product level from verification
 		$product = $verification_result['level'];
-		$status  = $verification_result['status'];
+
+		// Save the key before installing, so the premium plugin finds it as soon as it loads.
+		LicenseHelper::store_license( $license_key, $verification_result );
 
 		// Check if the product is already active
 		$current_level = LicenseHelper::get_license_type();

@@ -62,7 +62,16 @@ class Block extends \WP_REST_Controller {
 			return false;
 		}
 
-		// Check if the user has the capability to edit posts.
+		// The featured-image panel this route serves is enqueued for every block-editor
+		// user (IGW\BlockManager::register_hooks()), so the floor here has to stay at
+		// "can edit posts". Requiring a NextGEN capability instead would make it
+		// administrator-only in practice: Installer::set_role_caps() grants those caps to
+		// the administrator role and to no other, which is why the equivalent tightening
+		// in 2622537d was reverted by cdac933c ("Fixed the code for featured image load").
+		//
+		// #964 is a disclosure defect, not a caller defect - the route returned the whole
+		// image row. That is closed in get_item(), which now emits only the one field the
+		// panel reads.
 		return current_user_can( 'edit_posts' );
 	}
 
@@ -84,14 +93,19 @@ class Block extends \WP_REST_Controller {
 			);
 		}
 
-		$storage              = StorageManager::get_instance();
-		$image->thumbnail_url = $storage->get_image_url( $image, 'thumb' );
-		$image->image_url     = $storage->get_image_url( $image, 'full' );
+		$storage = StorageManager::get_instance();
 
+		// Only the image URL. Returning $image serialised the entire row - alttext,
+		// description, filename, meta_data, post_id, pricelist_id and the rest - to
+		// anyone who could reach the route (#964). The sole consumer,
+		// adminApp/src/featuredImage/FeaturedImageDisplay.tsx, reads image_url and
+		// nothing else, so nothing else belongs in the response.
 		return new \WP_REST_Response(
 			[
 				'success' => true,
-				'image'   => $image,
+				'image'   => [
+					'image_url' => $storage->get_image_url( $image, 'full' ),
+				],
 			]
 		);
 	}

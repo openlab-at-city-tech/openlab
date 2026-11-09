@@ -44,8 +44,8 @@ $template_params = [
 	?>
 		<a href='<?php print esc_attr( $storage->get_image_url( $image ) ); ?>'
 			title='<?php print esc_attr( $image->description ); ?>'
-			data-src="<?php print esc_attr( $storage->get_image_url( $image ) ); ?>"
-			data-thumbnail="<?php print esc_attr( $storage->get_image_url( $image, 'thumb' ) ); ?>"
+			data-src="<?php print esc_attr( $storage->get_cache_busted_image_url( $image ) ); ?>"
+			data-thumbnail="<?php print esc_attr( $storage->get_cache_busted_image_url( $image, 'thumb' ) ); ?>"
 			data-image-id="<?php print esc_attr( $image->{$image->id_field} ); ?>"
 			data-title="<?php print esc_attr( $image->alttext ); ?>"
 			data-description="<?php print esc_attr( stripslashes( $image->description ?? '' ) ); ?>"
@@ -65,9 +65,9 @@ $template_params = [
 		<?php if ( $show_tiktok_play_button || ! empty( $image->meta_data['video_link'] ) ) { ?>
 			<span class="ngg-video-play-overlay" aria-hidden="true"></span>
 		<?php } ?>
-			<img title='<?php print esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>'
+			<img<?php echo \Imagely\NGG\Display\GalleryImage::attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes() escapes each attribute with esc_attr(). ?> title='<?php print esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>'
 				alt='<?php print esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>'
-				src='<?php print esc_attr( $storage->get_computed_image_url( $image ) ); ?>'/>
+				src='<?php print esc_attr( $storage->get_cache_busted_image_url( $image ) ); ?>'/>
 		</a>
 
 		<?php $this->include_template( 'GalleryDisplay/ImageAfter', $template_params ); ?>

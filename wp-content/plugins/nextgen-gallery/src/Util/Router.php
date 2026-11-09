@@ -124,12 +124,12 @@ class Router {
 	 */
 	public function restore_request_uri() {
 		if ( isset( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-			$request_uri                    = self::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
+			$request_uri                    = self::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 			$_SERVER['REQUEST_URI']         = $request_uri;
 			$_SERVER['HTTP_X_ORIGINAL_URL'] = $request_uri;
 			$_SERVER['UNENCODED_URL']       = $request_uri;
 			if ( isset( $_SERVER['ORIG_PATH_INFO'] ) ) {
-				$_SERVER['PATH_INFO'] = self::sanitize_request_uri_for_routing( $_SERVER['ORIG_PATH_INFO'] );
+				$_SERVER['PATH_INFO'] = self::sanitize_request_uri_for_routing( $_SERVER['ORIG_PATH_INFO'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 			}
 		} else {
 			// This is the proper behavior, but it causes problems with WPML.
@@ -321,8 +321,11 @@ class Router {
 		}
 
 		// If there's a slug, we can assume everything after is a parameter,
-		// even if it's not in our desired format.
-		$retval = preg_replace( '#' . $slug . '.*$#', '', $retval );
+		// even if it's not in our desired format. Matched as a whole path
+		// segment; without a slug there is nothing to anchor to.
+		if ( '' !== $slug ) {
+			$retval = preg_replace( '#' . $slug . '(/.*)?$#', '', $retval );
+		}
 
 		if ( ! $retval ) {
 			$retval = '/';
@@ -507,6 +510,46 @@ class Router {
 	}
 
 	/**
+	 * Determines whether the current request targets the REST API.
+	 *
+	 * Runs before WordPress defines REST_REQUEST, so the URL prefix and the
+	 * plain-permalink query var are the checks that actually fire.
+	 *
+	 * @return bool
+	 */
+	public static function is_rest_request() {
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return true;
+		}
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! empty( $_GET['rest_route'] ) ) {
+			return true;
+		}
+
+		$prefix = function_exists( 'rest_get_url_prefix' ) ? rest_get_url_prefix() : 'wp-json';
+		$prefix = is_string( $prefix ) ? trim( $prefix, '/' ) : '';
+		if ( '' === $prefix ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$uri  = isset( $_SERVER['REQUEST_URI'] ) ? self::sanitize_request_uri_for_routing( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$path = wp_parse_url( $uri, PHP_URL_PATH );
+		if ( ! is_string( $path ) || '' === $path ) {
+			return false;
+		}
+
+		// WordPress routes to REST only when the prefix is the path's first
+		// segment, so compare relative to the site root (subdirectories included).
+		$home_path = untrailingslashit( (string) wp_parse_url( home_url(), PHP_URL_PATH ) );
+		$relative  = $home_path && 0 === strpos( $path, $home_path ) ? substr( $path, strlen( $home_path ) ) : $path;
+		$relative  = '/' . ltrim( $relative, '/' );
+
+		return 0 === strpos( $relative, "/{$prefix}/" ) || $relative === "/{$prefix}";
+	}
+
+	/**
 	 * Prepares REQUEST_URI (or path) for routing. Do not use sanitize_text_field():
 	 * WordPress _sanitize_text_fields() strips percent-encoded octets (e.g. %20),
 	 * corrupting path segments (brick%20store becomes brickstore).
@@ -541,7 +584,7 @@ class Router {
 	 * @return string|null
 	 */
 	public function get_querystring() {
-		return isset( $_SERVER['QUERY_STRING'] ) ? self::sanitize_request_uri_for_routing( $_SERVER['QUERY_STRING'] ) : null;
+		return isset( $_SERVER['QUERY_STRING'] ) ? self::sanitize_request_uri_for_routing( $_SERVER['QUERY_STRING'] ) : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 	}
 
 	/**
@@ -561,11 +604,11 @@ class Router {
 	 */
 	public function get_request_uri( $with_params = true ) {
 		if ( ! empty( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-			$retval = self::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
+			$retval = self::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 		} elseif ( ! empty( $_SERVER['PATH_INFO'] ) ) {
-			$retval = self::sanitize_request_uri_for_routing( $_SERVER['PATH_INFO'] );
+			$retval = self::sanitize_request_uri_for_routing( $_SERVER['PATH_INFO'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 		} else {
-			$retval = isset( $_SERVER['REQUEST_URI'] ) ? self::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ) : '';
+			$retval = isset( $_SERVER['REQUEST_URI'] ) ? self::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 		}
 
 		// Remove the querystring.

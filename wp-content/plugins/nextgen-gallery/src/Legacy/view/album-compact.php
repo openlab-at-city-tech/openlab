@@ -35,8 +35,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					echo $gallery->displayed_gallery->effect_code;
 					?>
 						href="<?php echo esc_attr( $gallery->previewpic_fullsized_url ); ?>"
-						data-fullsize="<?php echo esc_attr( $gallery->previewpic_fullsized_url ); ?>"
-						data-src="<?php echo esc_attr( $gallery->previewpic_fullsized_url ); ?>"
+						data-fullsize="<?php echo esc_attr( $gallery->previewpic_fullsized_display_url ); ?>"
+						data-src="<?php echo esc_attr( $gallery->previewpic_fullsized_display_url ); ?>"
 						data-thumbnail="<?php echo esc_attr( $gallery->previewurl ); ?>"
 						data-title="<?php echo esc_attr( $gallery->previewpic_image->alttext ?? '' ); ?>"
 						data-description="<?php echo esc_attr( stripslashes( $gallery->previewpic_image->description ?? '' ) ); ?>"

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 /**
  * Webpack plugin to generate POT files with correct JavaScript source references
  *

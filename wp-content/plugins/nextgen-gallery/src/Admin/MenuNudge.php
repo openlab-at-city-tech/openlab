@@ -224,7 +224,7 @@ class MenuNudge {
 					top: -1 * $tooltip.innerHeight() / 2 + 'px'
 				});
 
-				public function hideTooltip() {
+				function hideTooltip() {
 					$tooltip.addClass('nggallery-admin-menu-tooltip-hide');
 					$.post(ajaxurl, {
 						action: 'ngg_hide_admin_menu_tooltip',
@@ -284,6 +284,10 @@ class MenuNudge {
 	 */
 	public function mark_admin_menu_tooltip_hidden() {
 		check_ajax_referer( 'ngg-tooltip-admin-nonce', 'nonce' );
+		// Capability gate added: nonce alone insufficient — enforce manage_options before option write.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( '', 403 );
+		}
 		update_option( 'ngg_admin_menu_tooltip', time() );
 		wp_send_json_success();
 	}

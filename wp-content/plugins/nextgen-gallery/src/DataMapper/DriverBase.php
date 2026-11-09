@@ -61,6 +61,27 @@ abstract class DriverBase {
 	public $cache = [];
 
 	/**
+	 * WP object cache group. Set in subclasses to enable cross-request caching.
+	 *
+	 * @var string
+	 */
+	protected $object_cache_group = '';
+
+	/**
+	 * Memoized cache version for this request; reset by flush_query_cache().
+	 *
+	 * @var string|null
+	 */
+	private ?string $cache_version_memo = null; // phpcs:ignore PHPCompatibility.Classes.NewTypedProperties.Found -- Plugin requires PHP 7.4 (nggallery.php header), which supports typed properties.
+
+	/**
+	 * TTL in seconds for WP object cache entries.
+	 *
+	 * @var int
+	 */
+	protected $object_cache_ttl = DAY_IN_SECONDS;
+
+	/**
 	 * Model class name.
 	 *
 	 * @var string
@@ -80,6 +101,28 @@ abstract class DriverBase {
 	abstract public function add_where_clause( $where_clauses, $join );
 	abstract public function save_entity( $entity );
 	abstract public function select( $fields = null );
+
+	/**
+	 * Appends a raw SQL fragment directly to the WHERE clause list, bypassing
+	 * _parse_where_clause(). Use for conditions the parameterized system cannot
+	 * express, such as OR predicates or IS NULL checks.
+	 *
+	 * Only supported by TableDriver. Drivers that do not use direct SQL (e.g.
+	 * WPPostDriver) will throw a BadMethodCallException at runtime.
+	 *
+	 * The caller is responsible for ensuring the SQL is safe (no user input).
+	 *
+	 * @param string $sql Raw SQL condition, e.g. 'exclude = 0 OR exclude IS NULL'.
+	 *
+	 * @phpcs:ignore Squiz.Commenting.FunctionComment.InvalidNoReturn -- This base stub always throws; @return documents the contract TableDriver implements.
+	 * @return self
+	 * @throws \BadMethodCallException When called on a driver that does not support raw SQL.
+	 */
+	public function where_raw( $sql ) {
+		throw new \BadMethodCallException(
+			static::class . ' does not support where_raw(). Use TableDriver-based mappers for raw SQL conditions.'
+		);
+	}
 
 	/**
 	 * Gets the object name.
@@ -176,22 +219,69 @@ abstract class DriverBase {
 		return $this->primary_key_column;
 	}
 
+	/**
+	 * Returns the current version token for this mapper's WP object cache group.
+	 * Creates one on first call; UUID ensures no collision with entries from prior version tokens.
+	 */
+	private function get_cache_version(): string {
+		if ( $this->cache_version_memo !== null ) {
+			return $this->cache_version_memo;
+		}
+		$ver = wp_cache_get( $this->object_cache_group . '_ver', $this->object_cache_group );
+		if ( false === $ver ) {
+			$ver = wp_generate_uuid4();
+			if ( ! wp_cache_add( $this->object_cache_group . '_ver', $ver, $this->object_cache_group, $this->object_cache_ttl ) ) {
+				// Another request won the race; use the version it stored.
+				$stored = wp_cache_get( $this->object_cache_group . '_ver', $this->object_cache_group );
+				if ( false !== $stored ) {
+					$ver = $stored;
+				}
+				// If $stored is still false (evicted immediately), keep the locally generated UUID —
+				// those entries will be orphaned until TTL but cause no data corruption.
+			}
+		}
+		$this->cache_version_memo = (string) $ver;
+		return $this->cache_version_memo;
+	}
+
 	public function cache( $key, $results ) {
 		if ( $this->use_cache ) {
 			$this->cache[ $key ] = $results;
+			if ( ! empty( $this->object_cache_group ) ) {
+				$version = $this->get_cache_version();
+				wp_cache_set( md5( $key ) . '_v' . $version, $results, $this->object_cache_group, $this->object_cache_ttl );
+			}
 		}
 	}
 
 	public function get_from_cache( $key, $default_value = null ) {
-		if ( $this->use_cache && isset( $this->cache[ $key ] ) ) {
-			return $this->cache[ $key ];
-		} else {
-			return $default_value;
+		if ( $this->use_cache ) {
+			if ( isset( $this->cache[ $key ] ) ) {
+				return $this->cache[ $key ];
+			}
+			if ( ! empty( $this->object_cache_group ) ) {
+				$version = $this->get_cache_version();
+				$cached  = wp_cache_get( md5( $key ) . '_v' . $version, $this->object_cache_group );
+				if ( false !== $cached && ( is_array( $cached ) || is_object( $cached ) ) ) {
+					$this->cache[ $key ] = $cached;
+					return $cached;
+				}
+			}
 		}
+		return $default_value;
 	}
 
 	public function flush_query_cache() {
-		$this->cache = [];
+		$this->cache              = [];
+		$this->cache_version_memo = null;
+		if ( ! empty( $this->object_cache_group ) ) {
+			wp_cache_set(
+				$this->object_cache_group . '_ver',
+				wp_generate_uuid4(),
+				$this->object_cache_group,
+				$this->object_cache_ttl
+			);
+		}
 	}
 
 	/**
@@ -201,13 +291,14 @@ abstract class DriverBase {
 	 * @return string
 	 */
 	public function _clean_column( $val ) {
-		return str_replace( [ ';', "'", '"', '`' ], [ '' ], $val );
+		// Security fix (SQLi): replace blacklist with identifier whitelist. Only allow [A-Za-z0-9_] to prevent injection into ORDER BY/column contexts.
+		return preg_replace( '/[^A-Za-z0-9_]/', '', (string) $val );
 	}
 
 	/**
 	 * Notes that a particular columns is serialized, and should be deserialized when converted to an entity
 	 *
-	 * @param $column
+	 * @param string $column
 	 */
 	public function add_serialized_column( $column ) {
 		$this->_serialized_columns[] = $column;
@@ -352,6 +443,11 @@ abstract class DriverBase {
 		global $wpdb;
 		$binds = func_get_args();
 		$binds = isset( $binds[1] ) ? $binds[1] : []; // first argument is the condition.
+
+		// Multi-value binds (the IN / BETWEEN forms) are pre-quoted below, so the un-escaping
+		// step further down must skip them.
+		$has_list_bind = false;
+
 		foreach ( $binds as &$bind ) {
 
 			// A bind could be an array, used for the 'IN' operator
@@ -362,6 +458,7 @@ abstract class DriverBase {
 			}
 
 			if ( is_array( $bind ) && ! empty( $bind ) ) {
+				$has_list_bind = true;
 				foreach ( $bind as &$val ) {
 					if ( ! is_numeric( $val ) ) {
 						$val     = '"' . addslashes( $val ) . '"';
@@ -383,26 +480,33 @@ abstract class DriverBase {
 			$condition = $wpdb->prepare( $condition, $binds );
 		}
 
-		// Parse the where clause.
+		// Parse the where clause. The column and operator are removed by offset rather than with
+		// str_replace(): the value is already interpolated into $condition by this point, so an
+		// unbounded replace also strips the column name and the operator out of the value itself.
 		if ( preg_match( '/^[^\s]+/', $condition, $match ) ) {
-			$column    = trim( array_shift( $match ) );
-			$condition = str_replace( $column, '', $condition );
+			$column    = trim( $match[0] );
+			$condition = substr( $condition, strlen( $match[0] ) );
 		}
 
-		if ( preg_match( '/(NOT )?IN|(NOT )?LIKE|(NOT )?BETWEEN|[=!<>]+/i', $condition, $match ) ) {
-			$operator  = trim( array_shift( $match ) );
-			$condition = str_replace( $operator, '', $condition );
-			$operator  = strtolower( $operator );
-			$value     = trim( $condition );
+		if ( preg_match( '/(NOT )?IN|(NOT )?LIKE|(NOT )?BETWEEN|[=!<>]+/i', $condition, $match, PREG_OFFSET_CAPTURE ) ) {
+			$matched_operator = $match[0][0];
+			$operator_offset  = $match[0][1];
+			$operator         = strtolower( trim( $matched_operator ) );
+			$condition        = substr( $condition, 0, $operator_offset )
+				. substr( $condition, $operator_offset + strlen( $matched_operator ) );
+			$value            = trim( $condition );
 		}
 
 		// Values will automatically be quoted, so remove them
 		// If the value is part of an IN clause or BETWEEN clause and
 		// has multiple values, we attempt to split the values apart into an
 		// array and iterate over them individually.
-		if ( 'in' === $operator ) {
+		// 'not in' / 'not between' must split too — otherwise the multi-value bind reaches
+		// add_where_clause() as the single string "v1,v2,v3" and gets cast to (float) v1,
+		// silently producing `col NOT IN (v1)` and losing every value past the first comma.
+		if ( 'in' === $operator || 'not in' === $operator ) {
 			$values = preg_split( "/'?\s?(,)\s?'?/i", $value );
-		} elseif ( 'between' === $operator ) {
+		} elseif ( 'between' === $operator || 'not between' === $operator ) {
 			$values = preg_split( "/'?\s?(AND)\s?'?/i", $value );
 		}
 
@@ -410,6 +514,12 @@ abstract class DriverBase {
 		if ( empty( $values ) ) {
 			$values = [ $value ];
 		}
+
+		// A single scalar bind still carries the escaping prepare() applied above. Drivers that
+		// escape again when they build SQL have to undo that first pass, so flag it for them
+		// rather than un-escaping here: drivers that hand the value to WP_Query instead need it
+		// left exactly as prepare() produced it.
+		$prepared = ! empty( $binds ) && ! $has_list_bind;
 
 		foreach ( $values as $index => $value ) {
 			$value            = preg_replace( "/^(\()?'/", '', $value );
@@ -423,10 +533,11 @@ abstract class DriverBase {
 
 		// Return the WP Query meta query parameters.
 		$retval = [
-			'column'  => $column,
-			'value'   => $value,
-			'compare' => strtoupper( $operator ),
-			'type'    => $numeric ? 'numeric' : 'string',
+			'column'   => $column,
+			'value'    => $value,
+			'compare'  => strtoupper( $operator ),
+			'type'     => $numeric ? 'numeric' : 'string',
+			'prepared' => $prepared,
 		];
 
 		return $retval;

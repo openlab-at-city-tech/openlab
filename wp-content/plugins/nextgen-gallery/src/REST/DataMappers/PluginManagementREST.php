@@ -139,6 +139,30 @@ class PluginManagementREST {
 				return new \WP_Error( 'missing_download_url', 'Download URL is required', [ 'status' => 400 ] );
 			}
 
+			// Enforce https + host allowlist so this endpoint cannot be abused to drop arbitrary ZIPs from attacker-controlled hosts.
+			$parsed_host   = wp_parse_url( $download_url, PHP_URL_HOST );
+			$parsed_scheme = wp_parse_url( $download_url, PHP_URL_SCHEME );
+			/**
+			 * Filter allowed hosts for NextGEN plugin installer.
+			 *
+			 * @param string[] $hosts Lowercase hostnames permitted as plugin ZIP sources.
+			 */
+			$allowed_hosts = apply_filters(
+				'ngg_plugin_installer_allowed_hosts',
+				[
+					'downloads.wordpress.org',
+					'wordpress.org',
+					'www.imagely.com',
+					'imagely.com',
+				]
+			);
+			// Defensive: ensure filter return is an array of strings (protects against a misbehaving filter hook).
+			$allowed_hosts = is_array( $allowed_hosts ) ? array_values( array_filter( $allowed_hosts, 'is_string' ) ) : [];
+			if ( 'https' !== strtolower( (string) $parsed_scheme ) || ! in_array( strtolower( (string) $parsed_host ), array_map( 'strtolower', $allowed_hosts ), true ) ) {
+				// Reject non-https or off-allowlist hosts; blocks remote-code-install via arbitrary URL.
+				return new \WP_Error( 'invalid_download_url', __( 'Download URL host is not permitted', 'nggallery' ), [ 'status' => 400 ] );
+			}
+
 			// Ensure required WordPress files are loaded
 			if ( ! function_exists( 'request_filesystem_credentials' ) ) {
 				require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -236,6 +260,15 @@ class PluginManagementREST {
 			return new \WP_Error( 'missing_basename', 'Plugin basename is required', [ 'status' => 400 ] );
 		}
 
+		// validate_plugin rejects "..", absolute paths, and non-existent plugins; prevents path traversal via basename.
+		if ( ! function_exists( 'validate_plugin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$valid = validate_plugin( $basename );
+		if ( is_wp_error( $valid ) ) {
+			return new \WP_Error( 'invalid_basename', $valid->get_error_message(), [ 'status' => 400 ] );
+		}
+
 		$result = activate_plugin( $basename );
 
 		if ( is_wp_error( $result ) ) {
@@ -250,6 +283,15 @@ class PluginManagementREST {
 
 		if ( ! $basename ) {
 			return new \WP_Error( 'missing_basename', 'Plugin basename is required', [ 'status' => 400 ] );
+		}
+
+		// validate_plugin rejects traversal/absolute paths before passing to deactivate_plugins.
+		if ( ! function_exists( 'validate_plugin' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+		$valid = validate_plugin( $basename );
+		if ( is_wp_error( $valid ) ) {
+			return new \WP_Error( 'invalid_basename', $valid->get_error_message(), [ 'status' => 400 ] );
 		}
 
 		deactivate_plugins( $basename );

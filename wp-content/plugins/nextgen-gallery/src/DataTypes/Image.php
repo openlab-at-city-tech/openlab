@@ -183,6 +183,12 @@ class Image extends Model {
 			$this->alttext = Sanitizer::strip_html( $this->alttext, true );
 		}
 
+		if ( isset( $this->filename ) ) {
+			// Constrain to a bare basename: an image filename must never carry a directory component
+			// or "../" traversal, so the file always resolves inside its own gallery directory.
+			$this->filename = wp_basename( wp_normalize_path( (string) $this->filename ) );
+		}
+
 		$errors = array_merge(
 			[],
 			$this->validates_presence_of( 'galleryid' ),

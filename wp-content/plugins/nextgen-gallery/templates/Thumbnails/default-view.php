@@ -43,7 +43,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 	$image_count = count( $images );
 	for ( $i = 0; $i < $image_count; $i++ ) :
 		$image                   = $images[ $i ];
-		$thumb_size              = $storage->get_image_dimensions( $image, $thumbnail_size_name );
+		$thumb_size              = $storage->get_image_dimensions_or_default( $image, $thumbnail_size_name );
 		$show_tiktok_play_button = (
 			! empty( $image->meta_data ) &&
 			is_array( $image->meta_data ) &&
@@ -51,22 +51,8 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 			! empty( $image->meta_data['imagely_tiktok_show_play_button'] )
 		);
 
-		// Ensure thumb_size has valid dimensions (prevent null array access)
-		if ( ! is_array( $thumb_size ) || ! isset( $thumb_size['width'], $thumb_size['height'] ) ) {
-			$thumb_size = array(
-				'width'  => 150, // Default thumbnail width
-				'height' => 150, // Default thumbnail height
-			);
-		}
-
-		$style        = isset( $image->style ) ? $image->style : null;
 		$column_class = 'ngg-' . $number_of_columns . '-columns';
-
-		if ( isset( $image->hidden ) && $image->hidden ) {
-			$style = 'style="display: none;"';
-		} else {
-			$style = null;
-		}
+		$style        = ( isset( $image->hidden ) && $image->hidden ) ? 'display: none;' : null;
 
 			$this->start_element( 'nextgen_gallery.image_panel', 'item', $image );
 
@@ -79,7 +65,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 			"
 			<?php
 			if ( $style ) {
-						echo esc_attr( $style );}
+						echo ' style="' . esc_attr( $style ) . '"';}
 			?>
 >
 				<?php
@@ -90,8 +76,8 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 		<div class="ngg-gallery-thumbnail">
 		<a href="<?php echo esc_attr( $storage->get_image_url( $image, 'full', true ) ); ?>"
 			title="<?php echo esc_attr( $image->description ); ?>"
-			data-src="<?php echo esc_attr( $storage->get_image_url( $image ) ); ?>"
-			data-thumbnail="<?php echo esc_attr( $storage->get_image_url( $image, 'thumb' ) ); ?>"
+			data-src="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image ) ); ?>"
+			data-thumbnail="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image, 'thumb' ) ); ?>"
 			data-image-id="<?php echo esc_attr( $image->{$image->id_field} ); ?>"
 			data-image-name="<?php echo esc_attr( $image->filename ?? '' ); ?>"
 			data-title="<?php echo esc_attr( $image->alttext ); ?>"
@@ -113,12 +99,14 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 				<?php if ( $show_tiktok_play_button || ! empty( $image->meta_data['video_link'] ) ) : ?>
 					<span class="ngg-video-play-overlay" aria-hidden="true"></span>
 				<?php endif; ?>
-				<img
+				<img<?php echo \Imagely\NGG\Display\GalleryImage::attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes() escapes each attribute with esc_attr(). ?>
 					title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 					alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
-					src="<?php echo esc_attr( $storage->get_image_url( $image, $thumbnail_size_name ) ); ?>"
+					src="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image, $thumbnail_size_name ) ); ?>"
+					<?php if ( $thumb_size ) : ?>
 					width="<?php echo esc_attr( $thumb_size['width'] ); ?>"
 					height="<?php echo esc_attr( $thumb_size['height'] ); ?>"
+					<?php endif; ?>
 					style="max-width:100%;"
 				/>
 			</a>
@@ -137,8 +125,6 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 
 	<?php endfor ?>
 
-	<br style="clear: both" />
-
 	<?php
 
 	$this->end_element();
@@ -154,8 +140,6 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 	<?php if ( $pagination ) : ?>
 	<!-- Pagination -->
 		<?php echo wp_kses_post( $pagination ); ?>
-	<?php else : ?>
-	<div class="ngg-clear"></div>
 	<?php endif ?>
 </div>
 <?php $this->end_element(); ?>

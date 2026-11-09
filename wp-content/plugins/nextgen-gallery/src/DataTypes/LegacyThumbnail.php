@@ -751,6 +751,7 @@ class LegacyThumbnail {
 	 * @param string $name
 	 */
 	public function show( $quality = 100, $name = '' ) {
+		$quality = max( -1, min( 100, (int) $quality ) );
 		switch ( $this->format ) {
 			case 'GIF':
 				if ( $name != '' ) {
@@ -848,11 +849,11 @@ class LegacyThumbnail {
 			0,
 			0,
 			0,
-			$reflectedPart,
+			(int) $reflectedPart,
 			$width,
 			$reflectionHeight,
 			$width,
-			( $height - $reflectedPart )
+			(int) ( $height - $reflectedPart )
 		);
 		$this->imageFlipVertical();
 
@@ -861,7 +862,7 @@ class LegacyThumbnail {
 		imagealphablending( $this->workingImage, true );
 
 		for ( $i = 0;$i < $reflectionHeight;$i++ ) {
-			$colorToPaint = imagecolorallocatealpha( $this->workingImage, 255, 255, 255, ( $i / $reflectionHeight * -1 + 1 ) * $white );
+			$colorToPaint = imagecolorallocatealpha( $this->workingImage, 255, 255, 255, (int) ( ( $i / $reflectionHeight * -1 + 1 ) * $white ) );
 			imagefilledrectangle( $this->workingImage, 0, $height + $i, $width, $height + $i, $colorToPaint );
 		}
 
@@ -1094,7 +1095,7 @@ class LegacyThumbnail {
 		// Put text on the image, line-by-line.
 		$y_pos = $wmSize;
 		foreach ( $lines as $line ) {
-			imagettftext( $this->workingImage, $wmSize, 0, 0, $y_pos, $TextColor, $this->correct_gd_unc_path( $wmFontPath ), $line );
+			imagettftext( $this->workingImage, $wmSize, 0, 0, (int) $y_pos, $TextColor, $this->correct_gd_unc_path( $wmFontPath ), $line );
 			$y_pos += $line_height;
 		}
 
@@ -1123,10 +1124,10 @@ class LegacyThumbnail {
 	 *
 	 * Note: ImageTTFBBox() is unreliable with large font sizes
 	 *
-	 * @param $wmSize
-	 * @param $fontAngle
-	 * @param $wmFontPath
-	 * @param $text
+	 * @param int|float $wmSize
+	 * @param int|float $fontAngle
+	 * @param string    $wmFontPath
+	 * @param string    $text
 	 * @return array
 	 */
 	public function ImageTTFBBoxDimensions( $wmSize, $fontAngle, $wmFontPath, $text ) {
@@ -1197,7 +1198,7 @@ class LegacyThumbnail {
 				$dest_y = 0 + $yPOS;
 				break;
 			case 'mid':
-				$dest_y = ( $sourcefile_height / 2 ) - ( $watermarkfile_height / 2 );
+				$dest_y = (int) ( ( $sourcefile_height - $watermarkfile_height ) / 2 ) + $yPOS;
 				break;
 			case 'bot':
 				$dest_y = $sourcefile_height - $watermarkfile_height - $yPOS;
@@ -1211,7 +1212,7 @@ class LegacyThumbnail {
 				$dest_x = 0 + $xPOS;
 				break;
 			case 'Center':
-				$dest_x = ( $sourcefile_width / 2 ) - ( $watermarkfile_width / 2 );
+				$dest_x = (int) ( ( $sourcefile_width - $watermarkfile_width ) / 2 ) + $xPOS;
 				break;
 			case 'Right':
 				$dest_x = $sourcefile_width - $watermarkfile_width - $xPOS;
@@ -1220,6 +1221,14 @@ class LegacyThumbnail {
 				$dest_x = 0;
 				break;
 		}
+
+		// Offsets nudge the watermark away from its anchor, including on the centred axes.
+		// Bound each coordinate to its own anchor range so an offset cannot push the watermark
+		// off the canvas, while a watermark larger than the canvas keeps overflowing from centre.
+		$x_edge = $sourcefile_width - $watermarkfile_width;
+		$y_edge = $sourcefile_height - $watermarkfile_height;
+		$dest_x = min( max( (int) $dest_x, min( 0, $x_edge ) ), max( 0, $x_edge ) );
+		$dest_y = min( max( (int) $dest_y, min( 0, $y_edge ) ), max( 0, $y_edge ) );
 
 		// if a gif, we have to upsample it to a truecolor image.
 		if ( $this->format == 'GIF' ) {

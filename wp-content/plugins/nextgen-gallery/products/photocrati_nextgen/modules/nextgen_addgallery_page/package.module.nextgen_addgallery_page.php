@@ -97,18 +97,9 @@ class A_Import_Media_Library_Form extends Mixin
  */
 class A_NextGen_AddGallery_Ajax extends Mixin
 {
-    public function cookie_dump_action()
-    {
-        foreach ($_COOKIE as $key => &$value) {
-            if (is_string($value)) {
-                $value = stripslashes($value);
-            }
-        }
-        return ['success' => 1, 'cookies' => $_COOKIE];
-    }
     public function create_new_gallery_action()
     {
-        $gallery_name = urldecode($this->param('gallery_name'));
+        $gallery_name = urldecode((string) $this->param('gallery_name'));
         $gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
         $retval = ['gallery_name' => esc_html($gallery_name), 'gallery_id' => null];
         if (!$this->validate_ajax_request('nextgen_upload_image', true)) {
@@ -134,13 +125,33 @@ class A_NextGen_AddGallery_Ajax extends Mixin
     {
         $created_gallery = false;
         $gallery_id = intval($this->param('gallery_id'));
-        $gallery_name = urldecode($this->param('gallery_name'));
+        $gallery_name = urldecode((string) $this->param('gallery_name'));
         $gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
         $retval = ['gallery_name' => esc_html($gallery_name)];
         if ($this->validate_ajax_request('nextgen_upload_image', true)) {
             if (!class_exists('DOMDocument')) {
                 $retval['error'] = __('Please ask your hosting provider or system administrator to enable the PHP XML module which is required for image uploads', 'nggallery');
             } else {
+                // The destination arrives from the request and nothing downstream reads its
+                // author: upload_zip() and upload_image() both take the id on trust. The only
+                // gate above is the capability to upload *somewhere*, so without this a holder of
+                // "NextGEN Upload images" alone can drop files - or a whole ZIP - into any
+                // gallery on the site, where they are served publicly.
+                //
+                // The Add Gallery screen already filters its dropdown to galleries the caller may
+                // manage (adapter.upload_images_form.php::get_galleries()), so this only refuses
+                // what the UI never offered - the restriction was simply never enforced on the
+                // handler. Same test and same predicate as import_media_library_action() below.
+                //
+                // Only for an existing gallery: $gallery_id == 0 creates one below, which takes
+                // the caller as its author, so that branch is left exactly as it was. The error is
+                // set without returning, so the handler's own error response still carries it.
+                if ($gallery_id > 0) {
+                    $destination = $gallery_mapper->find($gallery_id);
+                    if (!$destination || !\Imagely\NGG\Util\Security::can_manage_owned($destination->author)) {
+                        $retval['error'] = __('You do not have permission to add images to that gallery.', 'nggallery');
+                    }
+                }
                 // We need to create a gallery.
                 if ($gallery_id == 0) {
                     if (strlen($gallery_name) > 0) {
@@ -195,6 +206,21 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                         if ($created_gallery) {
                             $gallery_mapper->destroy($gallery_id);
                         }
+                    } catch (RuntimeException $ex) {
+                        // E_UploadException extends RuntimeException, not E_NggErrorException: its
+                        // message already names the rejected file(s), so it is shown as-is rather
+                        // than wrapped in "An unexpected error occurred". Matches
+                        // \Imagely\NGG\REST\DataMappers\ImageREST, which catches RuntimeException first.
+                        //
+                        // Routed through exception_message() because not every RuntimeException
+                        // carries a message: E_EntityNotFoundException is an empty class and
+                        // import_image_file() throws it bare. Assigning getMessage() directly left
+                        // $retval['error'] empty, which skipped the 500 header below and made a
+                        // failed upload toast as a success.
+                        $retval['error'] = \Imagely\NGG\Util\Sanitization::exception_message($ex, __('The image could not be imported.', 'nggallery'));
+                        if ($created_gallery) {
+                            $gallery_mapper->destroy($gallery_id);
+                        }
                     } catch (Exception $ex) {
                         /* translators: %s: error message */
                         $retval['error'] = sprintf(__('An unexpected error occurred: %s', 'nggallery'), $ex->getMessage());
@@ -223,17 +249,55 @@ class A_NextGen_AddGallery_Ajax extends Mixin
         $root = str_replace('/', DIRECTORY_SEPARATOR, $root);
         return untrailingslashit($root);
     }
+    /**
+     * Whether $path resolves to the import root itself or something inside it.
+     *
+     * The previous test asked only whether the resolved root appeared ANYWHERE in the resolved
+     * path, which is a substring match rather than containment: for a root of
+     * `.../site/wp-content`, the sibling `.../site/wp-content-backup` carries the root as a prefix
+     * of its own name and passed, so a caller could list and import from a backup copy of the
+     * content directory sitting beside the root. Anchoring the match at offset 0 and comparing
+     * trailing-slashed paths makes `wp-content-backup` fail while `wp-content/gallery` passes.
+     *
+     * A false from realpath() is a denial rather than a 0 == 0 match: it means the path does not
+     * exist, or a symlink in it pointed outside. Same predicate as the REST twins
+     * (\Imagely\NGG\REST\DataMappers\ImageREST::browse_folder() / import_folder()).
+     *
+     * @param string $path Candidate path, already joined onto the import root.
+     * @param string $root Import root as get_import_root_abspath() reports it.
+     * @return bool
+     */
+    private function is_within_import_root($path, $root)
+    {
+        $real_path = realpath($path);
+        $real_root = realpath($root);
+        if (false === $real_path || false === $real_root) {
+            return false;
+        }
+        return 0 === strpos(trailingslashit(wp_normalize_path($real_path)), trailingslashit(wp_normalize_path($real_root)));
+    }
     public function browse_folder_action()
     {
         $retval = [];
         $html = [];
-        if ($this->validate_ajax_request('nextgen_upload_image', true)) {
-            $dir = urldecode($this->param('dir'));
+        // check_folder_import_permission() is the gate the REST twin for this operation
+        // (imagely/v1/folders/browse) already uses: it requires 'NextGEN Manage gallery' on top of
+        // the upload capability and honours the 'wpmuImportFolder' network option. Its third leg,
+        // 'NextGEN Import image folder', adds nothing today - nggGallery::current_user_can()
+        // aliases that capability to 'NextGEN Upload images' because set_role_caps() never
+        // installs it (see issue #198), which the line above already required. Those controls
+        // used to live only in the screen
+        // renderer - M_NextGen_AddGallery_Page::_register_adapters() registers this AJAX adapter
+        // unconditionally because "AJAX operations aren't admin requests" - so this handler
+        // accepted exactly what the Add Gallery screen was configured to forbid, and the nonce it
+        // verifies is the one that screen prints into its own form. See issue #1093 (audit #7.2).
+        if ($this->validate_ajax_request('nextgen_upload_image', true) && \Imagely\NGG\REST\DataMappers\ImageREST::check_folder_import_permission()) {
+            $dir = urldecode((string) $this->param('dir'));
             if ($dir) {
                 $fs = \Imagely\NGG\Util\Filesystem::get_instance();
                 $root = $this->get_import_root_abspath();
                 $browse_path = $fs->join_paths($root, $dir);
-                if (strpos(realpath($browse_path), realpath($root)) !== false) {
+                if ($this->is_within_import_root($browse_path, $root)) {
                     // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                     if (@file_exists($browse_path)) {
                         $files = scandir($browse_path);
@@ -269,7 +333,13 @@ class A_NextGen_AddGallery_Ajax extends Mixin
     public function import_folder_action()
     {
         $retval = [];
-        if ($this->validate_ajax_request('nextgen_upload_image', true)) {
+        // Same gate as browse_folder_action() above and as the REST twin
+        // (imagely/v1/folders/import): the capability tier and the 'wpmuImportFolder' network
+        // option belong next to the nonce, not in the screen renderer.
+        // Without it, 'NextGEN Upload images' alone copied the image files of any directory under
+        // the import root into a gallery - on multisite even with the feature switched off for the
+        // whole network, which is the shipped default. See issue #1093 (audit #7.2).
+        if ($this->validate_ajax_request('nextgen_upload_image', true) && \Imagely\NGG\REST\DataMappers\ImageREST::check_folder_import_permission()) {
             $folder = $this->param('folder');
             if ($folder) {
                 $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
@@ -282,10 +352,35 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                     }
                     $root = $this->get_import_root_abspath();
                     $import_path = $fs->join_paths($root, $folder);
-                    if (strpos(realpath($import_path), realpath($root)) !== false) {
+                    if ($this->is_within_import_root($import_path, $root)) {
                         $retval = $storage->import_gallery_from_fs($import_path, false, !$keep_files, $gallery_title);
                         if (!$retval) {
                             $retval = ['error' => 'Could not import folder. No images found.'];
+                        } elseif (!empty($retval['skipped_files'])) {
+                            // A per-file failure is handled inside import_gallery_from_fs() so one
+                            // bad file no longer aborts the batch - which also means the exception
+                            // that used to land in the catch arms below never reaches them. Without
+                            // this the screen reports a plain "Successfully imported N images" for
+                            // an import that partly failed.
+                            // Escaped here, at the producer: the completion toast hands this string
+                            // to $.gritter.add({text:...}), which splices it into raw markup, so a
+                            // file name is page markup unless it is escaped first. Escaping the
+                            // list covers both the warning and the error built from it below.
+                            $retval['skipped_files'] = array_map('esc_html', $retval['skipped_files']);
+                            $skipped_label = implode(', ', $retval['skipped_files']);
+                            if (empty($retval['image_ids'])) {
+                                $retval['error'] = esc_html(sprintf(
+                                    /* translators: %s: comma-separated list of file names that could not be imported. */
+                                    __('No images were imported. These files could not be imported: %s.', 'nggallery'),
+                                    $skipped_label
+                                ));
+                            } else {
+                                $retval['warning'] = esc_html(sprintf(
+                                    /* translators: %s: comma-separated list of file names that could not be imported. */
+                                    __('These files were skipped and could not be imported: %s.', 'nggallery'),
+                                    $skipped_label
+                                ));
+                            }
                         }
                     } else {
                         $retval['error'] = __('No permissions to import folders. Try refreshing the page or ensuring that your user account has sufficient roles/privileges.', 'nggallery');
@@ -309,7 +404,7 @@ class A_NextGen_AddGallery_Ajax extends Mixin
         $retval = [];
         $created_gallery = false;
         $gallery_id = intval($this->param('gallery_id'));
-        $gallery_name = urldecode($this->param('gallery_name'));
+        $gallery_name = urldecode((string) $this->param('gallery_name'));
         $gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
         $image_mapper = \Imagely\NGG\DataMappers\Image::get_instance();
         // Get attachment_ids directly from $_REQUEST since param() doesn't handle arrays correctly
@@ -325,6 +420,28 @@ class A_NextGen_AddGallery_Ajax extends Mixin
             if (empty($attachment_ids) || !is_array($attachment_ids)) {
                 $retval['error'] = __('An unexpected error occured.', 'nggallery') . ' No attachment IDs provided.';
                 return $retval;
+            }
+            // The destination arrives from the request and its author was never read, so an
+            // existing gallery has to be authorized before anything is written into it. A gallery
+            // created below instead takes the caller as its author, so it needs no check.
+            //
+            // This handler's REST twin gets the same test from check_edit_permission(); here there
+            // is no permission callback, and validate_ajax_request() above authorizes only the
+            // capability to upload *somewhere*.
+            if (empty($retval['error']) && $gallery_id > 0) {
+                // can_manage_owned(), not ImageREST::current_user_can_manage_gallery(). The latter
+                // accepts stored ownership alone, which is the defect #1111 records for the legacy
+                // AJAX handlers and #1004 tracks across the remaining gates - adding a call site
+                // for it here would spread that rather than close it, and would disagree with the
+                // featured-image sink hardened in this same change. can_manage_owned() requires a
+                // live management capability first and only then considers ownership, so a
+                // delegated manager whose capability was revoked no longer passes for galleries
+                // they once authored.
+                $destination = \Imagely\NGG\DataMappers\Gallery::get_instance()->find($gallery_id);
+                if (!$destination || !\Imagely\NGG\Util\Security::can_manage_owned($destination->author)) {
+                    $retval['error'] = __('You do not have permission to add images to that gallery.', 'nggallery');
+                    return $retval;
+                }
             }
             if (empty($retval['error']) && $gallery_id == 0) {
                 if (strlen($gallery_name) > 0) {
@@ -342,8 +459,38 @@ class A_NextGen_AddGallery_Ajax extends Mixin
             if (empty($retval['error'])) {
                 $retval['gallery_id'] = $gallery_id;
                 $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
+                // Originals can be several times larger than the scaled derivative.
+                if (function_exists('wp_raise_memory_limit')) {
+                    wp_raise_memory_limit('image');
+                }
+                $refused = [];
                 foreach ($attachment_ids as $id) {
                     try {
+                        // Each id is an object reference from the request, so it needs an
+                        // object-level check of its own - the same one this handler's REST twin
+                        // applies. Without it the only gate is "may upload images at all", and a
+                        // delegated 'NextGEN Upload images' holder can read any file in the media
+                        // library, including attachments on other users' private and draft posts,
+                        // and have it republished at a public URL inside a gallery.
+                        //
+                        // Named by id rather than by filename, because get_attached_file()
+                        // resolves for an attachment this caller may not read.
+                        if (!\Imagely\NGG\Util\Security::can_read_attachment($id)) {
+                            // Skipped, not fatal - and emphatically not `break` with a destroy.
+                            // Gallery::destroy() defaults to $with_dependencies = false, so tearing
+                            // the gallery down here would delete only its row and strand the images
+                            // already imported in this same request: their rows keep pointing at a
+                            // gallery that no longer exists and their files stay served at public
+                            // URLs. A mixed-ownership selection in the media-library picker is an
+                            // ordinary thing to do, so that would be routine, not exceptional.
+                            //
+                            // Matches the REST twin, which collects and continues and only destroys
+                            // an empty gallery it created, after the loop.
+                            $refused[] = (int) $id;
+                            continue;
+                        }
+                        // Import the attached file (the smaller derivative for a downscaled
+                        // upload); the untouched original is promoted into the backup below.
                         $abspath = get_attached_file($id);
                         if (empty($abspath) || !file_exists($abspath)) {
                             $retval['error'] = __('Image file not found for attachment ID: ', 'nggallery') . $id;
@@ -351,7 +498,8 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                         }
                         // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                         $file_data = @file_get_contents($abspath);
-                        $file_name = \Imagely\NGG\Display\I18N::mb_basename($abspath);
+                        // Name the gallery file after the original so '-scaled' does not leak.
+                        $file_name = \Imagely\NGG\Display\I18N::mb_basename(\Imagely\NGG\Util\Filesystem::get_attachment_original_abspath($id));
                         $attachment = get_post($id);
                         if (empty($file_data)) {
                             $retval['error'] = __('Image generation failed. Could not read file: ', 'nggallery') . $abspath;
@@ -361,6 +509,7 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                         if ($image) {
                             // Potentially import metadata from WordPress.
                             $image = $image_mapper->find($image);
+                            $storage->store_attachment_original_as_backup($image, $id);
                             if (!empty($attachment->post_excerpt)) {
                                 $image->alttext = $attachment->post_excerpt;
                             }
@@ -380,12 +529,43 @@ class A_NextGen_AddGallery_Ajax extends Mixin
                             $gallery_mapper->destroy($gallery_id);
                         }
                         break;
+                    } catch (RuntimeException $ex) {
+                        // Same reason as the upload handler above: E_UploadException extends
+                        // RuntimeException, and its message already names the rejected file, so it
+                        // is shown as-is instead of behind "An unexpected error occured."
+                        // exception_message() for the same reason too - a bare
+                        // E_EntityNotFoundException would otherwise blank the error and suppress
+                        // the 500.
+                        $retval['error'] = \Imagely\NGG\Util\Sanitization::exception_message($ex, __('The image could not be imported.', 'nggallery'));
+                        if ($created_gallery) {
+                            $gallery_mapper->destroy($gallery_id);
+                        }
+                        break;
                     } catch (Exception $ex) {
                         $retval['error'] = __('An unexpected error occured.', 'nggallery') . ' ' . $ex->getMessage();
                         if ($created_gallery) {
                             $gallery_mapper->destroy($gallery_id);
                         }
                         break;
+                    }
+                }
+                // Report the refusals, and clean up only a gallery this request created that
+                // ended up with nothing in it. Mirrors the REST twin: a gallery that kept even
+                // one image must survive, because destroying it makes that image unreachable
+                // from every admin screen while its file stays served.
+                if (!empty($refused)) {
+                    $message = sprintf(
+                        /* translators: %s: comma-separated list of attachment IDs. */
+                        _n('You do not have permission to import attachment ID %s, so it was skipped.', 'You do not have permission to import these attachment IDs, so they were skipped: %s.', count($refused), 'nggallery'),
+                        implode(', ', $refused)
+                    );
+                    if (empty($retval['image_ids'])) {
+                        if ($created_gallery && !$image_mapper->find_all_for_gallery($gallery_id)) {
+                            $gallery_mapper->destroy($gallery_id);
+                        }
+                        $retval['error'] = $message;
+                    } else {
+                        $retval['warning'] = $message;
                     }
                 }
             }
@@ -504,7 +684,7 @@ class A_Upload_Images_Form extends Mixin
     }
     public function get_i18n_strings()
     {
-        return ['locale' => $this->object->get_uppy_locale(), 'no_image_uploaded' => __('No images were uploaded successfully.', 'nggallery'), 'one_image_uploaded' => __('1 image was uploaded successfully.', 'nggallery'), 'x_images_uploaded' => __('{count} images were uploaded successfully.', 'nggallery'), 'manage_gallery' => __('Manage gallery > {name}', 'nggallery'), 'image_failed' => __('Image {filename} failed to upload: {error}', 'nggallery'), 'drag_files_here' => $this->can_upload_zips() ? __('Drag image and ZIP files here or %{browse}', 'nggallery') : __('Drag image files here or %{browse}', 'nggallery')];
+        return ['locale' => $this->object->get_uppy_locale(), 'no_image_uploaded' => __('No images were uploaded successfully.', 'nggallery'), 'one_image_uploaded' => __('1 image was uploaded successfully.', 'nggallery'), 'x_images_uploaded' => __('{count} images were uploaded successfully.', 'nggallery'), 'manage_gallery' => __('Manage gallery > {name}', 'nggallery'), 'image_failed' => __('Image {filename} failed to upload: {error}', 'nggallery'), 'image_warning' => __('{filename}: {warning}', 'nggallery'), 'drag_files_here' => $this->can_upload_zips() ? __('Drag image and ZIP files here or %{browse}', 'nggallery') : __('Drag image files here or %{browse}', 'nggallery')];
     }
     public function render()
     {

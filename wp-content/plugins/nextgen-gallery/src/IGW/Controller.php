@@ -10,6 +10,7 @@ use Imagely\NGG\DataMappers\Image as ImageMapper;
 
 use Imagely\NGG\Admin\FormManager;
 use Imagely\NGG\DisplayType\ControllerFactory;
+use Imagely\NGG\Display\DisplayManager;
 use Imagely\NGG\Display\StaticAssets;
 use Imagely\NGG\Display\StaticPopeAssets;
 use Imagely\NGG\Display\View;
@@ -102,11 +103,25 @@ class Controller {
 			// Fetch the displayed gallery by shortcode.
 			$shortcode = base64_decode( isset( $_REQUEST['shortcode'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['shortcode'] ) ) : '' );
 
-			// $shortcode lacks the opening and closing brackets but still begins with 'ngg ' or 'ngg_images ' which are not parameters.
-			$params = preg_replace( '/^(ngg|ngg_images) /i', '', $shortcode, 1 );
+			// $shortcode lacks the opening and closing brackets but still begins with
+			// the shortcode name, which is not a parameter.
+			preg_match( '/^(ngg|ngg_images|imagely) /i', $shortcode, $matches );
+			$tag = isset( $matches[1] ) ? strtolower( $matches[1] ) : '';
+
+			$params = preg_replace( '/^(ngg|ngg_images|imagely) /i', '', $shortcode, 1 );
 			$params = stripslashes( $params );
 			$params = str_replace( [ '[', ']' ], [ '&#91;', '&#93;' ], $params );
 			$params = shortcode_parse_atts( $params );
+
+			// The imagely shortcode's id is a gallery, and its album is an album,
+			// where params_to_displayed_gallery() reads id as a persisted displayed
+			// gallery. Translate first or the wrong record is resolved.
+			if ( 'imagely' === $tag && is_array( $params ) ) {
+				$converted = DisplayManager::convert_imagely_params( $params );
+				if ( is_array( $converted ) ) {
+					$params = $converted;
+				}
+			}
 
 			$this->displayed_gallery = Renderer::get_instance()->params_to_displayed_gallery( $params );
 		}
@@ -120,8 +135,8 @@ class Controller {
 	/**
 	 * Gets all dependencies for a particular resource that has been registered using wp_register_style/wp_register_script
 	 *
-	 * @param $handle
-	 * @param $type
+	 * @param string $handle The registered script/style handle.
+	 * @param string $type   The global holding the registry, 'wp_scripts' or 'wp_styles'.
 	 *
 	 * @return array
 	 */
@@ -441,15 +456,17 @@ class Controller {
 					'display_type'  => 'display',
 				],
 				'i18n'                          => [
-					'sources'          => \__( 'Are you inserting a Gallery (default), an Album, or images based on Tags?', 'nggallery' ),
-					'optional'         => \__( '(optional)', 'nggallery' ),
-					'slug_tooltip'     => \__( 'Sets an SEO-friendly name to this gallery for URLs. Currently only in use by the Pro Lightbox', 'nggallery' ),
-					'slug_label'       => \__( 'Slug', 'nggallery' ),
-					'no_entities'      => \__( 'No entities to display for this source', 'nggallery' ),
-					'exclude_question' => \__( 'Exclude?', 'nggallery' ),
-					'select_gallery'   => \__( 'Select a Gallery', 'nggallery' ),
-					'galleries'        => \__( 'Select one or more galleries (click in box to see available galleries).', 'nggallery' ),
-					'albums'           => \__( 'Select one album (click in box to see available albums).', 'nggallery' ),
+					'sources'             => \__( 'Are you inserting a Gallery (default), an Album, or images based on Tags?', 'nggallery' ),
+					'optional'            => \__( '(optional)', 'nggallery' ),
+					'slug_tooltip'        => \__( 'Sets an SEO-friendly name to this gallery for URLs. Currently only in use by the Pro Lightbox', 'nggallery' ),
+					'slug_label'          => \__( 'Slug', 'nggallery' ),
+					'no_entities'         => \__( 'No entities to display for this source', 'nggallery' ),
+					'exclude_question'    => \__( 'Exclude?', 'nggallery' ),
+					'manual_order_active' => \__( 'A manual image order is saved for this placement, so it no longer follows the gallery. Images added to the gallery later will appear after the images listed here.', 'nggallery' ),
+					'use_gallery_order'   => \__( "Use the gallery's order", 'nggallery' ),
+					'select_gallery'      => \__( 'Select a Gallery', 'nggallery' ),
+					'galleries'           => \__( 'Select one or more galleries (click in box to see available galleries).', 'nggallery' ),
+					'albums'              => \__( 'Select one album (click in box to see available albums).', 'nggallery' ),
 
 				],
 			]

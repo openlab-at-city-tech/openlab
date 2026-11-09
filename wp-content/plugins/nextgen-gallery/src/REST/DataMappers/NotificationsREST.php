@@ -36,7 +36,7 @@ class NotificationsREST {
 			[
 				'methods'             => 'POST',
 				'callback'            => [ $this, 'dismiss_notification' ],
-				'permission_callback' => [ $this, 'check_permissions' ],
+				'permission_callback' => [ $this, 'check_write_permissions' ],
 				'args'                => [
 					'id' => [
 						'required'          => true,
@@ -61,6 +61,24 @@ class NotificationsREST {
 	public function check_permissions( WP_REST_Request $request ) {
 		// Use the same security pattern as other NextGen REST endpoints
 		return \Imagely\NGG\Util\Security::is_allowed( 'NextGEN Gallery overview' );
+	}
+
+	/**
+	 * Check permissions for the notification dismissal write.
+	 *
+	 * Dismissing writes the site-wide `nextgen_notifications` option for every
+	 * administrator, so it must match its AJAX twin (AMNotifications::dismiss(),
+	 * which requires `manage_options`) rather than the read-only 'NextGEN Gallery
+	 * overview' capability that gates the GET sibling. `has_access()` is a display
+	 * feature flag, not an authorization check, so it cannot gate this write.
+	 *
+	 * @since 4.5.3
+	 *
+	 * @param WP_REST_Request $request The request object.
+	 * @return bool|WP_Error
+	 */
+	public function check_write_permissions( WP_REST_Request $request ) {
+		return current_user_can( 'manage_options' );
 	}
 
 	/**

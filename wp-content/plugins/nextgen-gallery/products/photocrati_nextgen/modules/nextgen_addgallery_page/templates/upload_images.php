@@ -84,22 +84,29 @@
 			}
 
 			function update_frame_event_publisher() {
-				if (window.Frame_Event_Publisher) {
-					$.post(photocrati_ajax.url,
-						{'action': 'cookie_dump'},
-						(response) => {
-							if (typeof(response) != 'object')
-								response = JSON.parse(response);
-							const events = {};
-							for (const name in response.cookies) {
-								if (name.indexOf('X-Frame-Events') !== -1) {
-									const event_data = JSON.parse(response.cookies[name]);
-									events[name] = event_data;
-								}
-							}
-							window.Frame_Event_Publisher.broadcast(events)
-						}
+				if (!window.Frame_Event_Publisher) {
+					return;
+				}
+
+				// The frame-event cookies are set without HttpOnly, so they are readable
+				// here directly. get_events() is the canonical parser: it decodes the
+				// percent-encoded payload, keys each event by its bare id (the form
+				// delete_cookie() and the listeners expect) and expires the cookie it
+				// just consumed.
+				//
+				// Guarded because this runs inside the create-gallery promise chain, whose
+				// .catch() alerts: broadcast() reaches is_parent(), which reads
+				// window.parent.document unguarded and throws SecurityError when the parent
+				// is cross-origin or CSP-sandboxed. Failing to announce the event must not
+				// report the gallery creation that already succeeded as an error.
+				try {
+					window.Frame_Event_Publisher.broadcast(
+						window.Frame_Event_Publisher.get_events(document.cookie)
 					);
+				} catch (error) {
+					if (typeof(console) !== 'undefined') {
+						console.warn('NextGEN: could not broadcast frame events', error);
+					}
 				}
 			}
 
@@ -159,23 +166,40 @@
 						uppy.reset();
 					}, 2000);
 
-					const gallery_url = '<?php echo esc_js( admin_url( '/admin.php?page=nggallery-manage-gallery&mode=edit&gid=' ) ); ?>' + gallery_select.value;
+					// Not esc_js(): it encodes the '&' separators as '&amp;', and Toastify assigns
+					// `destination` straight to window.open() with nothing to decode them again, so
+					// the server read the query keys as 'amp;mode' and 'amp;gid'. See #1158.
+					const gallery_url = <?php echo wp_json_encode( admin_url( '/admin.php?page=nggallery-manage-gallery&mode=edit&gid=' ) ); ?> + gallery_select.value;
 					const chosen_name = String(gallery_select.selectedOptions[0].dataset.originalValue);
 
 					let upload_count = result.successful.length;
 
-					// Modify the upload count so we can determine which message base to start with
+					// Modify the upload count so we can determine which message base to start with.
+					// file.response is undefined for any file that failed before a parseable HTTP
+					// response - connection reset, proxy 502, timeout, abort. Uppy's XHRUpload
+					// transport-error path emits upload-error with no response argument, so core
+					// stores response: undefined, and getFiles() still returns those files (the
+					// error handler only logs them). Reading .body off that threw a TypeError here,
+					// which aborted the whole complete handler: no toast, and the form left with
+					// gallery_name/gallery_create still disabled.
 					uppy.getFiles().forEach((file) => {
-						if ('undefined' !== typeof file.response.body.error) {
+						const body = (file.response && file.response.body) || {};
+						if ('undefined' !== typeof body.error) {
 							upload_count--;
 						}
 					})
 
-					// Adjust the upload count for images uploaded inside a zip file
+					// Adjust the upload count for images uploaded inside a zip file.
+					// image_ids is absent when every entry in the ZIP was refused: upload_zip()
+					// throws, and the ajax adapter then returns a body carrying only `error`. Reading
+					// .length off undefined threw here, and this loop runs *before* the message loop
+					// below, so the throw took out the error text and the refused-entry warning with
+					// it - the screen showed nothing at all for a ZIP with no usable pictures.
 					result.successful.forEach(function(uploaded_file) {
 						if ('zip' === uploaded_file.extension) {
+							const zip_image_ids = uploaded_file.response.body.image_ids || [];
 							upload_count = upload_count - 1;
-							upload_count = upload_count + uploaded_file.response.body.image_ids.length;
+							upload_count = upload_count + zip_image_ids.length;
 						}
 					});
 
@@ -187,13 +211,24 @@
 						message = NggUploadImages_i18n.one_image_uploaded;
 					}
 
-					// Append warning messages for individual images
+					// Append warning messages for individual images.
+					// Same guard as the count loop above: a file that failed at the transport layer
+					// has no .response at all.
 					uppy.getFiles().forEach((file) => {
-						if ('undefined' !== typeof file.response.body.error) {
+						const body = (file.response && file.response.body) || {};
+						if ('undefined' !== typeof body.error) {
 							message = message + "<br/>" + NggUploadImages_i18n.image_failed;
 							message = message.replace('{filename}', file.name)
-											.replace('{error}', file.response.body.error);
+											.replace('{error}', body.error);
 							uppy.removeFile(file.id);
+						} else if ('undefined' !== typeof body.warning) {
+							// A ZIP that imported its accepted images and had others refused comes
+							// back with a warning, not an error - the upload succeeded, so the file
+							// is not removed and the count is not decremented, but the refused
+							// names still have to be shown or the drop is invisible.
+							message = message + "<br/>" + NggUploadImages_i18n.image_warning
+								.replace('{filename}', file.name)
+								.replace('{warning}', body.warning);
 						}
 					})
 

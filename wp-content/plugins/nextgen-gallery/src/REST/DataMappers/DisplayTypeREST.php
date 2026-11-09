@@ -116,18 +116,9 @@ class DisplayTypeREST {
 			);
 		}
 
-		// Simple validation - just ensure values are not arrays or objects
-		foreach ( $settings as $key => $value ) {
-			if ( is_array( $value ) || is_object( $value ) ) {
-				return new WP_Error(
-					'invalid_setting_value',
-					// translators: %s is the setting key.
-					sprintf( __( 'Setting "%s" cannot be an array or object', 'nggallery' ), $key ),
-					[ 'status' => 400 ]
-				);
-			}
-		}
-
+		// Non-scalar values (e.g. a legacy `_errors` array the client round-tripped from GET)
+		// are stripped by sanitize_display_type_settings(); rejecting the whole payload here
+		// permanently blocked every Layout Settings save on affected sites (#677).
 		return true;
 	}
 
@@ -157,8 +148,12 @@ class DisplayTypeREST {
 			if ( is_bool( $value ) ) {
 				$sanitized[ $key ] = (bool) $value;
 			} elseif ( is_numeric( $value ) ) {
-				// Handle both integers and floats
-				$sanitized[ $key ] = is_float( $value ) ? (float) $value : (int) $value;
+				// Keep decimals intact; only cast to int when there is no fractional part.
+				// JSON delivers numeric settings as strings, so an is_float() check would
+				// truncate values like "1.5" (aspect ratio) down to 1.
+				$sanitized[ $key ] = ( (float) $value === (float) (int) $value )
+					? (int) $value
+					: (float) $value;
 			} else {
 				// Treat as string and sanitize
 				$sanitized[ $key ] = wp_kses_post( $value );
@@ -248,12 +243,22 @@ class DisplayTypeREST {
 			);
 		}
 
-		// Merge new settings with existing settings.
-		$display_type->settings = array_merge( $display_type->settings, $new_settings );
+		// Merge new settings with existing settings, dropping stored non-scalar junk
+		// so one successful save heals the record.
+		$display_type->settings = array_merge( self::clean_settings( $display_type->settings ), $new_settings );
 
-		// Save the updated display type.
+		// Save the updated display type. save() signals failure by returning falsy rather
+		// than throwing (e.g. the record fails validation), so reporting success without
+		// checking would echo the unsaved settings back with a 200.
 		try {
-			$mapper->save( $display_type );
+			if ( ! $mapper->save( $display_type ) ) {
+				return new WP_Error(
+					'save_failed',
+					__( 'Display type settings could not be saved', 'nggallery' ),
+					[ 'status' => 500 ]
+				);
+			}
+
 			return new WP_REST_Response(
 				[
 					'display_type' => self::prepare_display_type_for_response( $display_type ),
@@ -314,9 +319,17 @@ class DisplayTypeREST {
 		// Reset settings to defaults.
 		$display_type->settings = $controller->get_default_settings();
 
-		// Save the updated display type.
+		// Save the updated display type. See the note in update_display_type() — a falsy
+		// return means nothing was written.
 		try {
-			$mapper->save( $display_type );
+			if ( ! $mapper->save( $display_type ) ) {
+				return new WP_Error(
+					'save_failed',
+					__( 'Display type settings could not be reset', 'nggallery' ),
+					[ 'status' => 500 ]
+				);
+			}
+
 			return new WP_REST_Response(
 				[
 					'display_type' => self::prepare_display_type_for_response( $display_type ),
@@ -343,8 +356,28 @@ class DisplayTypeREST {
 		return [
 			'name'         => $display_type->name,
 			'title'        => $display_type->title,
-			'settings'     => $display_type->settings,
+			'settings'     => self::clean_settings( $display_type->settings ),
 			'entity_types' => $display_type->entity_types,
 		];
+	}
+
+	/**
+	 * Strips non-scalar values from a settings array, so legacy junk (e.g. a Pope-era
+	 * `_errors` array) is never sent to or kept for clients. Mirrors what
+	 * sanitize_display_type_settings() already does to incoming payloads, so stored and
+	 * returned settings stay in agreement.
+	 *
+	 * @param mixed $settings Stored settings.
+	 * @return array
+	 */
+	private static function clean_settings( $settings ) {
+		$clean = [];
+		foreach ( (array) $settings as $key => $value ) {
+			if ( is_array( $value ) || is_object( $value ) ) {
+				continue;
+			}
+			$clean[ $key ] = $value;
+		}
+		return $clean;
 	}
 }

@@ -4,16 +4,16 @@
 }
 
 #ngg_page_content.ngg_settings_page .ngg_page_content_main table tr td {
-    padding: 20px;
-    vertical-align: middle;
-    line-height: 1.8;
-    padding: 20px 20px;
+	padding: 20px;
+	vertical-align: middle;
+	line-height: 1.8;
+	padding: 20px 20px;
 }
 
 .gallery_page_ngg_other_options #ngg_page_content .ngg_page_content_main table tr td:first-of-type,
 .gallery_page_ngg_other_options #ngg_page_content .ngg_page_content_main table tr th:first-of-type {
-    width: 325px !important;
-    max-width: 100% !important;
+	width: 325px !important;
+	max-width: 100% !important;
 }
 
 .gallery_page_ngg_other_options table.image_options {
@@ -29,7 +29,7 @@
 
 .gallery_page_ngg_other_options textarea {
 	height: 100px;
-    width: 100%;
+	width: 100%;
 }
 
 .gallery_page_ngg_other_options .image_options td {
@@ -37,16 +37,16 @@
 }
 
 .gallery_page_ngg_other_options .select2-results__option--highlighted[aria-selected] {
-    background-color: #9fbb1a;
+	background-color: #9fbb1a;
 }
 
 #image_quality,
 #image_sorting_direction {
-    width: 120px !important;
+	width: 120px !important;
 }
 
 #ngg_page_content.ngg_settings_page .ngg_page_content_main table.nextgen_settings_position {
-    display: table !important;
+	display: table !important;
 }
 
 .column_wrapper {
@@ -59,18 +59,18 @@
 }
 
 #ngg_page_content .ngg_page_content_main #image_width,
-#ngg_page_content .ngg_page_content_main #image_height{
+#ngg_page_content .ngg_page_content_main #image_height {
 	width: 53px;
 }
 
 #ngg_page_content #thumbnail_dimensions_width,
-#ngg_page_content #thumbnail_dimensions_height{
+#ngg_page_content #thumbnail_dimensions_height {
 	width: 75px;
 	vertical-align: middle;
 }
 
 .nextgen-thumb-size-custom br {
-	display:none;
+	display: none;
 }
 
 .gallery_page_ngg_other_options select.thumbnail_dimensions {
@@ -87,7 +87,7 @@
 }
 label.align-to-top,
 td.align-to-top {
-	vertical-align: top
+	vertical-align: top;
 }
 
 #lightbox_library_advanced_settings td {
@@ -109,27 +109,27 @@ td.align-to-top {
 .entity_errors ul {
 	margin-left: 30px;
 }
-.entity_errors ul li{
+.entity_errors ul li {
 	list-style-type: disc;
 }
 
 #nextgen_settings_preview_refresh {
-    display: block;
+	display: block;
 }
 
 @media (max-width: 782px) {
 	#ngg_page_content.ngg_settings_page .ngg_page_content_main table tr td {
-	    width: 100%;
+		width: 100%;
 	}
 	.gallery_page_ngg_other_options input[type="text"],
 	.gallery_page_ngg_other_options select,
 	.gallery_page_ngg_other_options .select2-container,
-	#image_quality, 
+	#image_quality,
 	#image_sorting_direction {
-    	width: 100% !important;
-	} 
+		width: 100% !important;
+	}
 	#ngg_page_content.ngg_settings_page .ngg_page_content_main table tr td {
-	    padding: 5px 20px;
+		padding: 5px 20px;
 	}
 }
 

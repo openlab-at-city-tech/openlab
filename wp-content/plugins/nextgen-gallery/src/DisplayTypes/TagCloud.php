@@ -78,7 +78,8 @@ class TagCloud extends ParentController {
 			return Renderer::get_instance()->display_images( $displayed_gallery );
 		}
 
-		$application      = $router->get_routed_app();
+		$application = $router->get_routed_app();
+		$this->cast_numeric_settings( $displayed_gallery, [ 'number' ] );
 		$display_settings = $displayed_gallery->display_settings;
 		$defaults         = [
 			'exclude'  => '',

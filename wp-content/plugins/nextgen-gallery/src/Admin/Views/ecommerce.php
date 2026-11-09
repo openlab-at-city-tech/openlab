@@ -69,7 +69,7 @@
 		<div class="responsive-menu-icon"></div>
 		<div class="ngg_page_content_menu responsive-menu">
 		<a href="javascript:void(0)" data-id="ngg-ecommerce-options" class="ngg_page_content_menu_active" style="display: flex; align-items: center; padding-right: 0px; position: relative;">
-		General Options                <i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true" style="color: #ca090f; padding-right: 4px; padding-left: 4px; font-size: 12px !important;" title="Form contains errors, please fix these errors before saving."></i></a>
+		General Options                <i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true" style="color: #ca090f; padding-right: 4px; padding-left: 4px; font-size: 12px !important;" title="Form contains errors, please fix these errors before saving."></i></a>
 		<a href="javascript:void(0)" data-id="ngg-mail">
 		E-mail             </a>
 		<a href="javascript:void(0)" data-id="ngg-payment-gateways" style="display: block; padding-right: 20px;">
@@ -201,7 +201,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_studio_name" name="ecommerce[studio_name]" class="ecommerce_studio_name" value="" style="border: 1px solid red;">
-						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio Name cannot be empty." style="display: inline;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio Name cannot be empty." style="display: inline;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_studio_street_address" class="">
@@ -211,7 +211,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_studio_street_address" name="ecommerce[studio_street_address]" class="ecommerce_studio_street_address" value="" style="border: 1px solid red;">
-						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio Street Address cannot be empty." style="display: inline;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio Street Address cannot be empty." style="display: inline;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_studio_address_line" class="">
@@ -230,7 +230,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_studio_city" name="ecommerce[studio_city]" class="ecommerce_studio_city" value="" style="border: 1px solid red;">
-						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio City cannot be empty." style="display: inline;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio City cannot be empty." style="display: inline;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_home_country" class="">
@@ -242,7 +242,7 @@
 						<select id="ecommerce_home_country" name="ecommerce[home_country]" class="ecommerce_home_country" style="width: 176px; border: 1px solid red;">
 							<option value="" selected="selected">Select Country</option>
 						</select>
-						<span class="ngg-field-error-container" title="Studio Country cannot be empty." style="display: inline;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container" title="Studio Country cannot be empty." style="display: inline;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_home_state" class="" style="display: none;">
@@ -255,7 +255,7 @@
 						<select class="ecommerce_home_state state-generated-dropdown" id="" name="" style="display: none;">
 							<option value="">Select Region</option>
 						</select>
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_home_zip" class="" style="display: none;">
@@ -265,7 +265,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_home_zip" name="ecommerce[home_zip]" class="ecommerce_home_zip" value="">
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_studio_email" class="">
@@ -275,7 +275,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_studio_email" name="ecommerce[studio_email]" class="ecommerce_studio_email" value="" readonly="" onfocus="if (this.hasAttribute('readonly')) {this.removeAttribute('readonly'); this.blur(); this.trigger('focus');}" style="border: 1px solid red;">
-						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio Email cannot be empty." style="display: inline;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" title="Studio Email cannot be empty." style="display: inline;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr>
@@ -477,7 +477,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_paypal_email" name="ecommerce[paypal_email]" class="ecommerce_paypal_email" value="">
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_paypal_username" class="hidden">
@@ -487,7 +487,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_paypal_username" name="ecommerce[paypal_username]" class="ecommerce_paypal_username" value="">
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_paypal_password" class="hidden">
@@ -497,7 +497,7 @@
 					</td>
 					<td>
 						<input type="password" id="ecommerce_paypal_password" name="ecommerce[paypal_password]" class="ecommerce_paypal_password" value="">
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_paypal_signature" class="hidden">
@@ -507,7 +507,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_paypal_signature" name="ecommerce[paypal_signature]" class="ecommerce_paypal_signature" value="">
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_paypal_std_enable" class="ngg_payment_gateway_enable_row">
@@ -543,7 +543,7 @@
 					</td>
 					<td>
 						<input type="text" id="ecommerce_paypal_std_email" name="ecommerce[paypal_std_email]" class="ecommerce_paypal_std_email" value="">
-						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fa fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
+						<span class="ngg-field-error-container ngg-field-error-container-input" style="display: none;"><i class="fas fa-exclamation-triangle ngg-error-icon" aria-hidden="true"></i></span>
 					</td>
 					</tr>
 					<tr id="tr_ecommerce_test_gateway_enable" class="ngg_payment_gateway_enable_row">

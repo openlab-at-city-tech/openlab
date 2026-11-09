@@ -48,8 +48,8 @@ class Image {
 	/**
 	 * Change image attributes
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <image_id> [--description=<description>] [--title=<title>]
 	 */
 	public function edit( $args, $assoc_args ) {

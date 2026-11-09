@@ -283,6 +283,16 @@ class ThirdPartyCompatibility {
 			return;
 		}
 
+		// The skope is the post being viewed, so this walk enqueues the galleries of
+		// the current post. A post whose password the visitor has not entered shows
+		// them a form, not its content, so its galleries must not be enqueued —
+		// that localizes the gallery's image data into a page anyone can read.
+		// \post_password_required() honours the wp-postpass cookie, so a visitor who
+		// entered the password still gets the gallery.
+		if ( \is_singular() && \post_password_required( \get_queried_object_id() ) ) {
+			return;
+		}
+
 		$global_sections = \Nimble\sek_get_skoped_seks( NIMBLE_GLOBAL_SKOPE_ID );
 		$local_sections  = \Nimble\sek_get_skoped_seks( $skope_id );
 		$raw_content     = \Nimble\sek_sniff_and_decode_richtext(

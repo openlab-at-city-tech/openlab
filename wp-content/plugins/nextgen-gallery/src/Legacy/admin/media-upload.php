@@ -58,7 +58,13 @@ function media_upload_nextgen() {
 			$html = "[singlepic id={$send_id} w={$width} h={$height} float={$image['align']}]";
 		}
 
-		media_upload_nextgen_save_image();
+		// Inserting an image into a post does not require rewriting that image's stored
+		// metadata, and this tab is reachable by every role with 'upload_files'. The writer
+		// refuses internally for a caller without the capability, so the insert still works
+		// for everyone else and the TinyMCE "Add Media" import the TODO above warns about is
+		// unaffected. It is called unconditionally because the only check_admin_referer() on
+		// this branch lives inside it. See issue #1093 (audit #7.4).
+		media_upload_nextgen_save_image( false );
 
 		// Return it to TinyMCE.
 		return media_send_to_editor( $html );
@@ -66,6 +72,8 @@ function media_upload_nextgen() {
 
 	// Save button.
 	if ( isset( $_POST['save'] ) ) {
+		// An explicit Save is denied loudly rather than silently ignored - see
+		// media_upload_nextgen_save_image().
 		media_upload_nextgen_save_image();
 	}
 
@@ -73,16 +81,98 @@ function media_upload_nextgen() {
 	die();
 }
 
-function media_upload_nextgen_save_image() {
+/**
+ * Whether the current user may rewrite the stored metadata of gallery images.
+ *
+ * The capability every other edit path for these columns requires: the REST twin gates on
+ * ImageREST::check_edit_permission(), the legacy Manage Galleries branches on
+ * nggManageGallery::can_user_manage_gallery(), and the wp_ajax_ image handlers on
+ * ngg_ajax_user_can_edit_image() - all of which start from 'NextGEN Manage gallery'.
+ *
+ * @return bool
+ */
+function media_upload_nextgen_can_save_image() {
+	return \Imagely\NGG\Util\Security::is_allowed( 'nextgen_edit_gallery' );
+}
+
+/**
+ * Whether the current user may rewrite the stored metadata of one specific image.
+ *
+ * The capability above is a tier check; this adds the containment, because the row id
+ * the writer acts on is an attacker-chosen array key. current_user_can_manage_image()
+ * answers WP_Error for an image that does not exist, hence the strict comparison.
+ *
+ * Also consulted by the form renderer: the gallery dropdown is built from find_all()
+ * with no author filter, so without this the screen would print editable alttext and
+ * description fields for images the writer then silently refuses to save.
+ *
+ * @param int $image_id NGG picture id (pid).
+ * @return bool
+ */
+function media_upload_nextgen_can_edit_image_meta( $image_id ) {
+	$image_id = (int) $image_id;
+
+	if ( $image_id <= 0 || ! media_upload_nextgen_can_save_image() ) {
+		return false;
+	}
+
+	return true === \Imagely\NGG\REST\DataMappers\ImageREST::current_user_can_manage_image( $image_id );
+}
+
+/**
+ * Rewrite the stored slug, alt text and description of the posted images.
+ *
+ * @param bool $die_when_not_permitted Whether a caller without the capability is refused with
+ *                                     a 403 (an explicit Save) or simply returns without
+ *                                     writing (inserting an image into a post).
+ * @return void
+ */
+function media_upload_nextgen_save_image( $die_when_not_permitted = true ) {
 	global $wpdb;
 
+	// Verified before anything else and on every branch. This is the ONLY nonce check in
+	// media_upload_nextgen(), so the capability test below has to live inside this function
+	// rather than around its call sites - gating the call instead left the $_POST['send']
+	// branch reachable with no referer check at all for exactly the users the capability test
+	// is aimed at.
 	check_admin_referer( 'ngg-media-form' );
+
+	// The nonce only proves the request came from the NextGEN media tab, and that tab is
+	// printed for every role holding 'upload_files' - a stock Author had no NextGEN capability
+	// checked anywhere on this path while this handler rewrote image_slug, alttext and
+	// description. See issue #1093 (audit #7.4).
+	if ( ! media_upload_nextgen_can_save_image() ) {
+		if ( $die_when_not_permitted ) {
+			wp_die(
+				esc_html__( 'You do not have permission to edit gallery images.', 'nggallery' ),
+				esc_html__( 'Permission denied', 'nggallery' ),
+				[ 'response' => 403 ]
+			);
+		}
+		return;
+	}
 
 	if ( ! empty( $_POST['image'] ) ) {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash only removes slashes, values are sanitized via map_deep on line 84
 		foreach ( wp_unslash( $_POST['image'] ) as $image_id => $image ) {
-			$image_id = sanitize_text_field( wp_unslash( $image_id ) );
-			$image    = map_deep( $image, 'sanitize_text_field' );
+			// Cast rather than sanitize_text_field(): the row id is the target of the UPDATE
+			// below, so it is an integer or it is nothing.
+			$image_id = (int) $image_id;
+
+			// The capability above is a tier check, not containment: $image_id is an
+			// attacker-chosen array key, so without this every pid on the site was writable by
+			// anyone holding the capability. Resolve the parent gallery's owner per row, as
+			// ImageREST does for the REST equivalent of this edit.
+			//
+			// A skip here is silent, which is only acceptable because the form renderer calls
+			// the same predicate and prints these fields read-only when it returns false - so a
+			// legitimate caller is never offered an edit this loop would discard, and anything
+			// still reaching it posted a pid the screen did not give them.
+			if ( ! media_upload_nextgen_can_edit_image_meta( $image_id ) ) {
+				continue;
+			}
+
+			$image = map_deep( $image, 'sanitize_text_field' );
 			// create a unique slug.
 			$image_slug = nggdb::get_unique_slug( sanitize_title( $image['alttext'] ), 'image' );
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
@@ -143,13 +233,20 @@ function media_upload_nextgen_form( $errors ) {
 
 	// Get the images.
 	if ( $galleryID != 0 ) {
+		// SQLi hardening: allowlist sort column + direction read from plugin options before interpolating into ORDER BY.
+		$allowed_sort_cols = [ 'pid', 'sortorder', 'imagedate', 'filename', 'alttext', 'galleryid' ];
+		$gal_sort          = isset( $ngg->options['galSort'] ) ? (string) $ngg->options['galSort'] : 'sortorder';
+		$gal_sort          = in_array( $gal_sort, $allowed_sort_cols, true ) ? $gal_sort : 'sortorder';
+		$gal_sort_dir      = ( isset( $ngg->options['galSortDir'] ) && 'DESC' === strtoupper( (string) $ngg->options['galSortDir'] ) ) ? 'DESC' : 'ASC';
+		$start_int         = absint( $start ); // Cast LIMIT offset to int to block injection via $start.
+
 		// Using %i in $wpdb->prepare() to signify column identifiers was only added in WP 6.2
 		//
 		// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$picarray = $wpdb->get_col(
 			$wpdb->prepare(
-				"SELECT DISTINCT `pid` FROM {$wpdb->nggpictures} WHERE `galleryid` = %d AND `exclude` != 1 ORDER BY {$ngg->options['galSort']}, `pid` {$ngg->options['galSortDir']} LIMIT {$start}, 10",
+				"SELECT DISTINCT `pid` FROM {$wpdb->nggpictures} WHERE `galleryid` = %d AND `exclude` != 1 ORDER BY `{$gal_sort}`, `pid` {$gal_sort_dir} LIMIT {$start_int}, 10",
 				[
 					$galleryID,
 				]
@@ -306,10 +403,29 @@ function media_upload_nextgen_form( $errors ) {
 		$storage    = \Imagely\NGG\DataStorage\Manager::get_instance();
 		foreach ( $picarray as $picid ) {
 			// TODO:Reduce SQL Queries.
-			$picture    = nggdb::find_image( $picid );
-			$dimensions = $storage->get_image_dimensions( $picid, 'thumb' );
-			extract( $dimensions );
+			$picture   = nggdb::find_image( $picid );
 			$thumb_url = $storage->get_image_url( $picid, 'thumb' );
+
+			// The gallery dropdown above is built from find_all() with no author filter, so
+			// this list can hold images the caller may not edit. Offering an editable field
+			// whose value media_upload_nextgen_save_image() would then skip is worse than
+			// showing it read-only: the save looks like it worked and silently did not.
+			// Alignment and size stay editable either way - they only shape the inserted
+			// markup and are never written to the row. See issue #1093 (audit #7.4).
+			$can_edit_meta = media_upload_nextgen_can_edit_image_meta( $picid );
+			$meta_readonly = $can_edit_meta ? '' : ' readonly="readonly"';
+			$meta_note     = '';
+
+			if ( ! $can_edit_meta ) {
+				// Two different reasons, and saying the wrong one is worse than saying nothing:
+				// a caller with no gallery-management capability at all would otherwise be told
+				// their OWN images belong to someone else.
+				$meta_note = '<p class="description">' . esc_html(
+					media_upload_nextgen_can_save_image()
+						? __( 'You cannot edit this image\'s metadata because it belongs to another user\'s gallery.', 'nggallery' )
+						: __( 'You do not have permission to edit gallery image metadata.', 'nggallery' )
+				) . '</p>';
+			}
 			?>
 
 			<div id='media-item-<?php echo esc_attr( $picid ); ?>' class='media-item preloaded'>
@@ -327,11 +443,13 @@ function media_upload_nextgen_form( $errors ) {
 				<tr><td>&nbsp;</td></tr>
 				<tr class="alttext">
 					<td class="label"><label for="image[<?php echo esc_attr( $picid ); ?>][alttext]"><?php esc_attr_e( 'Alt/Title text', 'nggallery' ); ?></label></td>
-					<td class="field"><input id="image[<?php echo esc_attr( $picid ); ?>][alttext]" name="image[<?php echo esc_attr( $picid ); ?>][alttext]" value="<?php echo esc_attr( stripslashes( $picture->alttext ) ); ?>" type="text"/></td>
+					<td class="field"><input id="image[<?php echo esc_attr( $picid ); ?>][alttext]" name="image[<?php echo esc_attr( $picid ); ?>][alttext]" value="<?php echo esc_attr( stripslashes( $picture->alttext ?? '' ) ); ?>" type="text"<?php echo $meta_readonly; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute built above. ?>/></td>
 				</tr>
 				<tr class="caption">
 					<td class="label"><label for="image[<?php echo esc_attr( $picid ); ?>][description]"><?php esc_attr_e( 'Description', 'nggallery' ); ?></label></td>
-						<td class="field"><textarea name="image[<?php echo esc_attr( $picid ); ?>][description]" id="image[<?php echo esc_attr( $picid ); ?>][description]"><?php echo esc_attr( stripslashes( $picture->description ) ); ?></textarea></td>
+						<td class="field"><textarea name="image[<?php echo esc_attr( $picid ); ?>][description]" id="image[<?php echo esc_attr( $picid ); ?>][description]"<?php echo $meta_readonly; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fixed literal attribute built above. ?>><?php echo esc_attr( stripslashes( $picture->description ?? '' ) ); ?></textarea>
+						<?php echo $meta_note; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escaped where built above. ?>
+						</td>
 				</tr>
 					<tr class="align">
 						<td class="label"><label for="image[<?php echo esc_attr( $picid ); ?>][align]"><?php esc_attr_e( 'Alignment', 'nggallery' ); ?></label></td>
@@ -369,8 +487,9 @@ function media_upload_nextgen_form( $errors ) {
 								$ajax_nonce = wp_create_nonce( "set_post_thumbnail-$calling_post_id" );
 							}
 								$second_nonce = wp_create_nonce( 'ngg_set_post_thumbnails' );
-								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Complex HTML structure with onclick handler for WordPress media functionality
-								echo "<a class='ngg-post-thumbnail' id='ngg-post-thumbnail-" . $picid . "' href='#' onclick='NGGSetAsThumbnail(\"$picid\", \"$ajax_nonce\", \"$second_nonce\"); return false;'>" . esc_html__( 'Use as featured image', 'nggallery' ) . '</a>';
+								$picid_int    = (int) $picid; // Cast to int — id used in HTML attr and JS args, int eliminates quote/backslash injection.
+								$onclick_args = wp_json_encode( $picid_int ) . ',' . wp_json_encode( $ajax_nonce ) . ',' . wp_json_encode( $second_nonce ); // wp_json_encode — correct JS-context escape for string/int literals, replaces raw concat.
+								echo "<a class='ngg-post-thumbnail' id='ngg-post-thumbnail-" . esc_attr( $picid_int ) . "' href='#' onclick='" . esc_attr( 'NGGSetAsThumbnail(' . $onclick_args . '); return false;' ) . "'>" . esc_html__( 'Use as featured image', 'nggallery' ) . '</a>'; // esc_attr wraps onclick value — HTML-attr context around JS payload.
 								echo "<a class='ngg-post-thumbnail-standin' href='#' style='display:none;'></a>";
 							?>
 							<button type="submit" id="ngg-mlitp-<?php echo esc_attr( $picid ); ?>" class="button ngg-mlitp" value="1" name="send[<?php echo esc_attr( $picid ); ?>]"><?php esc_html_e( 'Insert into Post', 'nggallery' ); ?></button>
@@ -384,7 +503,16 @@ function media_upload_nextgen_form( $errors ) {
 	?>
 	</div>
 	<p class="ml-submit">
+		<?php
+		// Only offered to callers the writer will accept. Printing it unconditionally meant a
+		// caller without 'NextGEN Manage gallery' got a 403 from media_upload_nextgen_save_image()
+		// rendered inside the Classic Editor's modal iframe - a hard failure on a button this
+		// screen had just offered them. "Insert into Post" above stays available to everyone,
+		// since insertion does not write. See issue #1093 (audit #7.4).
+		if ( media_upload_nextgen_can_save_image() ) :
+			?>
 		<input type="submit" class="button savebutton" name="save" value="<?php esc_attr_e( 'Save all changes', 'nggallery' ); ?>" />
+		<?php endif; ?>
 	</p>
 	<input type="hidden" name="post_id" id="post_id" value="<?php echo (int) $post_id; ?>" />
 	<input type="hidden" name="select_gal" id="select_gal" value="<?php echo (int) $galleryID; ?>" />

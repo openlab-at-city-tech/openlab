@@ -26,7 +26,7 @@ class LegacyImageCollection implements \ArrayAccess {
 	/**
 	 * Checks if an offset exists.
 	 *
-	 * @param $offset
+	 * @param mixed $offset
 	 * @return bool
 	 */
 	#[\ReturnTypeWillChange]
@@ -37,7 +37,7 @@ class LegacyImageCollection implements \ArrayAccess {
 	/**
 	 * Gets the value at an offset.
 	 *
-	 * @param $offset
+	 * @param mixed $offset
 	 * @return mixed|null
 	 */
 	#[\ReturnTypeWillChange]
@@ -48,8 +48,8 @@ class LegacyImageCollection implements \ArrayAccess {
 	/**
 	 * Sets the value at an offset.
 	 *
-	 * @param $offset
-	 * @param $value
+	 * @param mixed $offset
+	 * @param mixed $value
 	 */
 	#[\ReturnTypeWillChange]
 	public function offsetSet( $offset, $value ) {
@@ -67,7 +67,7 @@ class LegacyImageCollection implements \ArrayAccess {
 	/**
 	 * Unsets the value at an offset.
 	 *
-	 * @param $offset
+	 * @param mixed $offset
 	 * @return void
 	 */
 	#[\ReturnTypeWillChange]

@@ -47,10 +47,11 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 	}
 
 	public function initialize() {
-		$forms    = \Imagely\NGG\Admin\FormManager::get_instance();
-		$settings = \Imagely\NGG\Settings\Settings::get_instance();
+		$forms = \Imagely\NGG\Admin\FormManager::get_instance();
 		$forms->add_form( NGG_ADD_GALLERY_SLUG, 'upload_images' );
-		if ( ! is_multisite() || ( is_multisite() && $settings->get( 'wpmuImportFolder' ) ) ) {
+		$import_folder_enabled = ! is_multisite()
+			|| (bool) \Imagely\NGG\Settings\GlobalSettings::get_instance()->get( 'wpmuImportFolder', false );
+		if ( $import_folder_enabled ) {
 			$forms->add_form( NGG_ADD_GALLERY_SLUG, 'import_media_library' );
 			$forms->add_form( NGG_ADD_GALLERY_SLUG, 'import_folder' );
 		}
@@ -83,7 +84,9 @@ class M_NextGen_AddGallery_Page extends C_Base_Module {
 			$this->get_registry()->add_adapter( 'I_Page_Manager', 'A_NextGen_AddGallery_Pages' );
 			$this->get_registry()->add_adapter( 'I_NextGen_Admin_Page', 'A_NextGen_AddGallery_Controller', NGG_ADD_GALLERY_SLUG );
 			$this->get_registry()->add_adapter( 'I_Form', 'A_Upload_Images_Form', 'upload_images' );
-			if ( ! is_multisite() || ( is_multisite() && \Imagely\NGG\Settings\Settings::get_instance()->get( 'wpmuImportFolder' ) ) ) {
+			$import_folder_enabled = ! is_multisite()
+				|| (bool) \Imagely\NGG\Settings\GlobalSettings::get_instance()->get( 'wpmuImportFolder', false );
+			if ( $import_folder_enabled ) {
 				$this->get_registry()->add_adapter( 'I_Form', 'A_Import_Folder_Form', 'import_folder' );
 				$this->get_registry()->add_adapter( 'I_Form', 'A_Import_Media_Library_Form', 'import_media_library' );
 			}

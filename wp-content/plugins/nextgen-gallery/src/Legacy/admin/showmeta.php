@@ -29,6 +29,16 @@ if ( ! isset( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_uns
 global $wpdb;
 
 $id = (int) ( isset( $_GET['id'] ) ? sanitize_text_field( wp_unslash( $_GET['id'] ) ) : 0 );
+
+// A nonce minted per action and per session is not an object-level control: 'NextGEN Manage
+// gallery' plus the nonce above let any holder read the stored metadata row and the EXIF, IPTC
+// and XMP blocks - camera serial, capture time, GPS coordinates, byline, copyright, caption - for
+// any image id on the site. Resolve the parent gallery's owner, as the REST equivalent does.
+// See issue #1093 (audit #7.7).
+if ( true !== \Imagely\NGG\REST\DataMappers\ImageREST::current_user_can_manage_image( $id ) ) {
+	die( esc_html__( 'Permission denied', 'nggallery' ) );
+}
+
 // let's get the meta data'.
 
 $meta     = new nggMeta( $id );

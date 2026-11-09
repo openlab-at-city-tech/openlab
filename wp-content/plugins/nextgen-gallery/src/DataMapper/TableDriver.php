@@ -155,24 +155,41 @@ class TableDriver extends DriverBase {
 	 * Orders the results of the query
 	 * This method may be used multiple of times to order by more than column
 	 *
-	 * @param $order_by
-	 * @param $direction
+	 * @param string $order_by
+	 * @param string $direction
 	 * @return self
 	 */
 	public function order_by( $order_by, $direction = 'ASC' ) {
 		// We treat the rand() function as an exception.
 		if ( preg_match( '/rand\(\s*\)/', $order_by ) ) {
 			$order = 'rand()';
+		} elseif ( preg_match( "/^FIELD\\(\\s*[`']?([A-Za-z_][A-Za-z0-9_]*)[`']?\\s*,\\s*([0-9,\\s]*)\\)$/", (string) $order_by, $m ) ) {
+			// Security fix (SQLi): allow the legacy FIELD(<ident>, <int-list>) form used for preserving IN() result order. Both identifier and integer list are strictly validated so no user-controlled string can reach SQL here.
+			$ident = $m[1];
+			$ints  = array_filter( array_map( 'intval', preg_split( '/\s*,\s*/', trim( $m[2] ) ) ) );
+			if ( empty( $ints ) ) {
+				// No ids to order by; skip the clause to avoid an empty FIELD().
+				return $this;
+			}
+			$int_csv = implode( ',', $ints );
+			$order   = "FIELD(`{$ident}`, {$int_csv})";
 		} else {
+			// Security fix (SQLi): identifier whitelist via _clean_column leaves only [A-Za-z0-9_], safe to inline in ORDER BY without requiring has_column() (aliased SELECT columns like 'new_sortorder'/'ordered_by' are legitimate but not in _table_columns).
 			$order_by = $this->_clean_column( $order_by );
-
-			// If the order by clause is a column, then it should be backticked.
+			if ( '' === $order_by ) {
+				// Empty after sanitization — refuse to build clause to avoid SQL error and potential open-ORDER-BY.
+				return $this;
+			}
 			if ( $this->has_column( $order_by ) ) {
 				$order_by = "`{$order_by}`";
 			}
 
-			$direction = $this->_clean_column( $direction );
-			$order     = "{$order_by} {$direction}";
+			// Security fix (SQLi): strict whitelist for direction; default to ASC if not exactly ASC/DESC.
+			$direction = strtoupper( $this->_clean_column( $direction ) );
+			if ( 'ASC' !== $direction && 'DESC' !== $direction ) {
+				$direction = 'ASC';
+			}
+			$order = "{$order_by} {$direction}";
 		}
 
 		$this->order_clauses[] = $order;
@@ -234,25 +251,66 @@ class TableDriver extends DriverBase {
 	public function add_where_clause( $where_clauses, $join ) {
 		$clauses = [];
 
+		// Security fix (SQLi defense-in-depth): allowlist of comparators. Anything outside this list is
+		// coerced to '=' so caller-supplied $compare cannot inject query-shape-changing fragments.
+		$allowed_compares = [ '=', '!=', '<>', '<', '<=', '>', '>=', 'IN', 'NOT IN', 'BETWEEN', 'LIKE', 'NOT LIKE', 'IS', 'IS NOT' ];
+
 		foreach ( $where_clauses as $clause ) {
-			extract( $clause );
+			// Replaced extract() with explicit reads: extract() on a structured array is a foot-gun and would clobber locals if upstream schema gains new keys.
+			$column  = isset( $clause['column'] ) ? $clause['column'] : '';
+			$value   = isset( $clause['value'] ) ? $clause['value'] : '';
+			$compare = isset( $clause['compare'] ) ? $clause['compare'] : '=';
+			$type    = isset( $clause['type'] ) ? $clause['type'] : 'string';
+
+			// Security fix (SQLi defense-in-depth): identifier hardening for $column. Schema-defined
+			// columns are backticked as before; everything else is forced through the same identifier
+			// allowlist used by order_by() ([A-Za-z0-9_]). Empty result drops the clause rather than
+			// concatenating raw caller input into SQL.
 			if ( $this->has_column( $column ) ) {
 				$column = "`{$column}`";
+			} else {
+				$column = $this->_clean_column( (string) $column );
+				if ( '' === $column ) {
+					continue;
+				}
+				$column = "`{$column}`";
 			}
+
+			// Security fix (SQLi defense-in-depth): strict comparator allowlist (was: any string passed
+			// through). Normalize to upper-case + trim before lookup so 'in' / ' IN ' still match.
+			$compare = strtoupper( trim( (string) $compare ) );
+			if ( ! in_array( $compare, $allowed_compares, true ) ) {
+				$compare = '=';
+			}
+
 			if ( ! is_array( $value ) ) {
 				$value = [ $value ];
 			}
 
+			// A value flagged 'prepared' still carries the escaping _parse_where_clause() applied
+			// with $wpdb->prepare(). Strip that pass before esc_sql() below so the value is
+			// escaped exactly once: otherwise a term holding a quote, a backslash or an
+			// esc_like() sequence is compared against a double-escaped copy and matches nothing.
+			$prepared = ! empty( $clause['prepared'] );
+
 			foreach ( $value as $index => $v ) {
-				$v               = $clause['type'] == 'numeric' ? $v : "'{$v}'";
+				// esc_sql + single-quote wrap for string values; raw cast for numeric. Prevents SQLi when callers pass user-influenced strings.
+				if ( 'numeric' === $type ) {
+					$v = (float) $v;
+				} else {
+					$v = "'" . esc_sql( $prepared ? stripslashes( $v ) : $v ) . "'";
+				}
 				$value[ $index ] = $v;
 			}
 
-			if ( $compare == 'BETWEEN' ) {
+			if ( 'BETWEEN' === $compare ) {
 				$value = "{$value[0]} AND {$value[1]}";
 			} else {
 				$value = implode( ', ', $value );
-				if ( strpos( $compare, 'IN' ) !== false ) {
+				// Exact match on the comparator string (not substring) so values like 'INFO' / 'INSERT'
+				// never sneak through into IN-style parenthesization. After normalization above the
+				// only IN-family entries are 'IN' and 'NOT IN'.
+				if ( 'IN' === $compare || 'NOT IN' === $compare ) {
 					$value = "({$value})";
 				}
 			}
@@ -261,6 +319,14 @@ class TableDriver extends DriverBase {
 		}
 
 		$this->where_clauses[] = implode( " {$join} ", $clauses );
+	}
+
+	/**
+	 * {@inheritdoc}
+	 */
+	public function where_raw( $sql ) {
+		$this->where_clauses[] = $sql;
+		return $this;
 	}
 
 	/**
@@ -461,8 +527,44 @@ class TableDriver extends DriverBase {
 		unset( $entity->id_field );
 		$primary_key = $this->get_primary_key_column();
 		if ( isset( $entity->$primary_key ) && $entity->$primary_key > 0 ) {
-			if ( $this->_update( $entity ) ) {
-				$retval = intval( $entity->$primary_key );
+			// Not a truthiness test. _update() returns wpdb::update()'s value, which is the number
+			// of affected rows, and that is 0 whenever the row already held the submitted values.
+			// A successful no-op update was therefore reported as a failed save, and every caller
+			// that tests save() for truthiness had to compensate. Two of them did it by reading
+			// $wpdb->last_error afterwards, which is unsound: wpdb::update() has `return false`
+			// paths that run before any query is issued (a non-array $data or $where, a
+			// process_fields() charset failure), and in those cases last_error still holds
+			// whatever the previous query left - usually nothing - so a genuinely rejected write
+			// looked like a no-op and was reported to the client as success.
+			//
+			// But 0 is ambiguous, and testing only `false !==` trades that bug for its mirror:
+			// MySQL also reports 0 affected rows when the WHERE matched NOTHING, with no error
+			// set. Verified: an UPDATE with an unchanged value and an UPDATE against a deleted
+			// primary key both return 0 and both leave last_error empty. This branch is entered on
+			// `$entity->$primary_key > 0` alone and never confirms the row still exists, so
+			// treating every 0 as success reports a persisted save for a row that is gone - and
+			// the subclass hooks then act on it (DataMappers\Gallery::save_entity() re-runs
+			// wp_mkdir_p() and fires ngg_created_new_gallery for the deleted gallery). The window
+			// is real on exactly the path this change is for: Lightroom's gallery_edit loads the
+			// gallery, runs the whole per-image download/resize loop, and saves seconds later.
+			//
+			// So: false is a refused write; a positive count is a persisted change; and 0 is
+			// resolved by asking whether the row is actually there. The extra read happens only on
+			// the 0 path, so the per-save cost this change exists to avoid is not reintroduced.
+			// The cache is flushed first because this entity was very likely read into it earlier
+			// in the same request, and a stale hit would defeat the check.
+			$affected = $this->_update( $entity );
+
+			if ( false !== $affected ) {
+				if ( 0 !== (int) $affected ) {
+					$retval = intval( $entity->$primary_key );
+				} else {
+					$this->flush_query_cache();
+
+					if ( $this->find( $entity->$primary_key ) ) {
+						$retval = intval( $entity->$primary_key );
+					}
+				}
 			}
 		} else {
 			$retval = $this->_create( $entity );
@@ -478,7 +580,7 @@ class TableDriver extends DriverBase {
 
 		// Clean cache.
 		if ( $retval ) {
-			$this->cache = [];
+			$this->flush_query_cache();
 		}
 
 		return $retval;
@@ -514,6 +616,10 @@ class TableDriver extends DriverBase {
 			$retval = $this->_wpdb()->query( $sql );
 		}
 
+		if ( $retval ) {
+			$this->flush_query_cache();
+		}
+
 		return $retval;
 	}
 
@@ -539,8 +645,9 @@ class TableDriver extends DriverBase {
 		$id = $this->_wpdb()->insert( $this->get_table_name(), $table_data );
 
 		if ( $id ) {
-			$key    = $this->get_primary_key_column();
-			$retval = $entity->$key = intval( $this->_wpdb()->insert_id );
+			$key          = $this->get_primary_key_column();
+			$retval       = intval( $this->_wpdb()->insert_id );
+			$entity->$key = $retval;
 		}
 
 		// Remove the custom post if saving the normal table entry failed.

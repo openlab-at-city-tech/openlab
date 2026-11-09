@@ -76,7 +76,16 @@ class Installer {
 	 */
 	public function uninstall_display_types() {
 		$mapper = DisplayTypeMapper::get_instance();
+		// Collect names before the bulk delete so we can bust per-name cache keys afterwards.
+		// delete()->run_query() bypasses destroy(), which is the normal cache-busting path.
+		$all = $mapper->find_all();
 		$mapper->delete()->run_query();
+		wp_cache_delete( 'ngg_display_type_find_all', DisplayTypeMapper::CACHE_GROUP );
+		foreach ( $all as $display_type ) {
+			if ( isset( $display_type->name ) ) {
+				wp_cache_delete( 'ngg_display_type_by_name_' . $display_type->name, DisplayTypeMapper::CACHE_GROUP );
+			}
+		}
 	}
 
 	/**

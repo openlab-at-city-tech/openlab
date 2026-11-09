@@ -7,6 +7,14 @@ namespace Imagely\NGG\REST\Admin;
  */
 class RolesCapabilities extends \WP_REST_Controller {
 
+	/**
+	 * The standard WordPress roles this screen manages, ordered from lowest to highest.
+	 *
+	 * Capabilities are assigned by walking this order, so a role outside it has no
+	 * position to assign from.
+	 */
+	const STANDARD_ROLES = [ 'subscriber', 'contributor', 'author', 'editor', 'administrator' ];
+
 	public function __construct() {
 		$this->namespace = 'imagely/v1';
 		$this->rest_base = 'roles-capabilities';
@@ -102,11 +110,11 @@ class RolesCapabilities extends \WP_REST_Controller {
 			],
 		];
 
-		// Get available WordPress roles
-		$roles    = [];
-		$wp_roles = wp_roles()->roles;
-		foreach ( $wp_roles as $role_key => $role_data ) {
-			$roles[ $role_key ] = $role_data['name'];
+		// Get the standard roles, highest first to match the order they were offered in before.
+		$roles     = [];
+		$available = $this->ngg_get_sorted_roles();
+		foreach ( array_reverse( array_keys( $available ) ) as $role_key ) {
+			$roles[ $role_key ] = wp_roles()->roles[ $role_key ]['name'];
 		}
 
 		return new \WP_REST_Response(
@@ -141,70 +149,78 @@ class RolesCapabilities extends \WP_REST_Controller {
 			'attach_interface' => 'NextGEN Attach Interface',
 		];
 
-		$wp_roles    = wp_roles()->roles;
-		$valid_roles = array_keys( $wp_roles );
+		// Only the standard roles can be assigned, and only those that exist on this site.
+		$valid_roles = array_keys( $this->ngg_get_sorted_roles() );
+
+		$applied = 0;
+		$skipped = [];
 
 		// Update each capability
 		foreach ( $valid_capabilities as $key => $capability ) {
 			if ( isset( $params[ $key ] ) ) {
 				$role = sanitize_text_field( $params[ $key ] );
 
-				// Validate that the role exists
 				if ( in_array( $role, $valid_roles, true ) ) {
 					$this->ngg_set_capability( $role, $capability );
+					++$applied;
+				} else {
+					$skipped[] = $key;
 				}
 			}
+		}
+
+		// Reporting success for a request that changed nothing would leave the screen
+		// showing values it never stored.
+		if ( 0 === $applied && ! empty( $skipped ) ) {
+			return new \WP_Error(
+				'invalid_role',
+				__( 'Those roles cannot be assigned, so nothing was saved. Only the standard WordPress roles are supported.', 'nggallery' ),
+				[
+					'status'  => 400,
+					'skipped' => $skipped,
+				]
+			);
 		}
 
 		return new \WP_REST_Response(
 			[
 				'success' => true,
 				'message' => __( 'Roles and capabilities updated successfully', 'nggallery' ),
+				'skipped' => $skipped,
 			]
 		);
 	}
 
 	/**
 	 * Get the lowest role that has a specific capability
-	 * (Copied from roles.php)
 	 */
 	private function ngg_get_role( $capability ) {
-		$check_order = $this->ngg_get_sorted_roles();
-
-		$args = array_slice( func_get_args(), 1 );
-		$args = array_merge( [ $capability ], $args );
-
-		foreach ( $check_order as $check_role ) {
-			if ( empty( $check_role ) ) {
-				return false;
-			}
-
-			if ( call_user_func_array( [ &$check_role, 'has_cap' ], $args ) ) {
-				return $check_role->name;
+		foreach ( $this->ngg_get_sorted_roles() as $role_key => $check_role ) {
+			if ( $check_role->has_cap( $capability ) ) {
+				return $role_key;
 			}
 		}
+
 		return false;
 	}
 
 	/**
 	 * Set capability for a role and all higher roles
-	 * (Copied from roles.php)
 	 */
 	private function ngg_set_capability( $lowest_role, $capability ) {
 		$check_order = $this->ngg_get_sorted_roles();
 
+		// Without a position in the order there is nothing to assign from, and walking
+		// anyway would strip the capability from every role including administrator.
+		if ( ! isset( $check_order[ $lowest_role ] ) ) {
+			return;
+		}
+
 		$add_capability = false;
 
-		foreach ( $check_order as $the_role ) {
-			$role = $the_role->name;
-
-			if ( $lowest_role == $role ) {
+		foreach ( $check_order as $role_key => $the_role ) {
+			if ( $lowest_role === $role_key ) {
 				$add_capability = true;
-			}
-
-			// If you rename the roles, then please use a role manager plugin.
-			if ( empty( $the_role ) ) {
-				continue;
 			}
 
 			$add_capability ? $the_role->add_cap( $capability ) : $the_role->remove_cap( $capability );
@@ -212,30 +228,21 @@ class RolesCapabilities extends \WP_REST_Controller {
 	}
 
 	/**
-	 * Get sorted roles by user level
-	 * (Copied from roles.php)
+	 * Get the standard roles present on this site, ordered from lowest to highest.
 	 */
 	private function ngg_get_sorted_roles() {
-		global $wp_roles;
-		$roles  = $wp_roles->role_objects;
 		$sorted = [];
 
-		if ( class_exists( 'RoleManager' ) ) {
-			foreach ( $roles as $role_key => $role_name ) {
-				$role = get_role( $role_key );
-				if ( empty( $role ) ) {
-					continue;
-				}
-				$role_user_level            = array_reduce( array_keys( $role->capabilities ), [ 'WP_User', 'level_reduction' ], 0 );
-				$sorted[ $role_user_level ] = $role;
-			}
-			$sorted = array_values( $sorted );
-		} else {
-			$role_order = [ 'subscriber', 'contributor', 'author', 'editor', 'administrator' ];
-			foreach ( $role_order as $role_key ) {
-				$sorted[ $role_key ] = get_role( $role_key );
+		foreach ( self::STANDARD_ROLES as $role_key ) {
+			$role = get_role( $role_key );
+
+			// A site can delete a standard role. Leaving a null in place here would break
+			// every caller, so it is left out of the order entirely.
+			if ( $role instanceof \WP_Role ) {
+				$sorted[ $role_key ] = $role;
 			}
 		}
+
 		return $sorted;
 	}
 }

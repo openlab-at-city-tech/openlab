@@ -10,6 +10,7 @@ namespace Imagely\NGG\REST\DataMappers;
 use WP_REST_Request;
 use WP_REST_Response;
 use WP_Error;
+use Imagely\NGG\Settings\GalleryPathValidation;
 use Imagely\NGG\Settings\Settings;
 use Imagely\NGG\Settings\GlobalSettings;
 use Imagely\NGG\Util\Security;
@@ -54,12 +55,12 @@ class SettingsREST {
 				[
 					'methods'             => 'GET',
 					'callback'            => [ self::class, 'get_global_settings' ],
-					'permission_callback' => [ self::class, 'check_read_permission' ],
+					'permission_callback' => [ self::class, 'check_network_permission' ],
 				],
 				[
 					'methods'             => 'PUT',
 					'callback'            => [ self::class, 'update_global_settings' ],
-					'permission_callback' => [ self::class, 'check_edit_permission' ],
+					'permission_callback' => [ self::class, 'check_network_permission' ],
 				],
 			]
 		);
@@ -233,6 +234,14 @@ class SettingsREST {
 	 * @return mixed
 	 */
 	protected static function sanitize_setting( $value, $key = '' ) {
+		// The slug is interpolated into patterns and used as an explode()
+		// separator, so anything not a usable string becomes the default.
+		if ( 'router_param_slug' === $key ) {
+			$slug = is_scalar( $value ) && ! is_bool( $value ) ? (string) $value : '';
+			$slug = trim( trim( sanitize_text_field( $slug ) ), '/' );
+			return '' === $slug ? 'nggallery' : $slug;
+		}
+
 		// Handle arrays and objects recursively
 		if ( is_array( $value ) ) {
 			return array_map(
@@ -358,6 +367,22 @@ class SettingsREST {
 	}
 
 	/**
+	 * Check if user has permission to read/write network-wide global settings.
+	 *
+	 * The /settings/global route writes the single network-wide ngg_options row
+	 * (GlobalSettings::save() uses update_site_option()), so it is network-admin
+	 * territory — not the per-site 'NextGEN Change options' capability that
+	 * Installer::set_role_caps() grants to every subsite administrator. Gating
+	 * the write on anything less lets a subsite admin rewrite the shared row and
+	 * flip the flag guarding the capability-remapping route.
+	 *
+	 * @return bool
+	 */
+	public static function check_network_permission() {
+		return is_multisite() ? is_super_admin() : current_user_can( 'manage_options' );
+	}
+
+	/**
 	 * Get all settings
 	 *
 	 * @return \WP_REST_Response
@@ -368,6 +393,25 @@ class SettingsREST {
 	}
 
 	/**
+	 * Validate a gallery-path request value against the galleries root.
+	 *
+	 * @param mixed $gallerypath Raw request value.
+	 * @return true|\WP_Error
+	 */
+	protected static function validate_gallerypath_rest_value( $gallerypath ) {
+		$result = GalleryPathValidation::validate_relative_under_galleries_root( $gallerypath );
+		if ( is_wp_error( $result ) ) {
+			$data = $result->get_error_data();
+			if ( ! is_array( $data ) ) {
+				$data = [];
+			}
+			$data['status'] = 400;
+			return new WP_Error( $result->get_error_code(), $result->get_error_message(), $data );
+		}
+		return true;
+	}
+
+	/**
 	 * Update settings via REST API request.
 	 *
 	 * @param \WP_REST_Request $request The request object.
@@ -375,7 +419,19 @@ class SettingsREST {
 	 */
 	public static function update_settings( WP_REST_Request $request ) {
 		$new_settings = $request->get_json_params();
-		$settings     = Settings::get_instance();
+		if ( ! is_array( $new_settings ) ) {
+			$new_settings = [];
+		}
+		if ( is_multisite() && isset( $new_settings['gallerypath'] ) && ! is_main_site() && ! is_super_admin() ) {
+			unset( $new_settings['gallerypath'] );
+		}
+		if ( isset( $new_settings['gallerypath'] ) ) {
+			$gallerypath_validation = self::validate_gallerypath_rest_value( $new_settings['gallerypath'] );
+			if ( is_wp_error( $gallerypath_validation ) ) {
+				return $gallerypath_validation;
+			}
+		}
+		$settings = Settings::get_instance();
 
 		foreach ( $new_settings as $key => $value ) {
 			// Security sanitization with context-aware handling
@@ -385,6 +441,18 @@ class SettingsREST {
 
 		try {
 			$settings->save();
+
+			/**
+			 * Fires after settings saved via the REST API have been persisted.
+			 *
+			 * Lets addons (e.g. NextGEN Pro payment gateways) react to a settings change made through the
+			 * React admin, mirroring behavior they already trigger on the legacy admin form save.
+			 *
+			 * @param array    $new_settings The settings keys/values that were sent in this request.
+			 * @param Settings $settings     The settings instance, already saved.
+			 */
+			do_action( 'ngg_settings_updated', $new_settings, $settings );
+
 			return new WP_REST_Response( $settings->to_array(), 200 );
 		} catch ( \Exception $e ) {
 			return new WP_Error(
@@ -429,7 +497,20 @@ class SettingsREST {
 		}
 
 		$new_settings = $request->get_json_params();
-		$settings     = GlobalSettings::get_instance();
+		if ( ! is_array( $new_settings ) ) {
+			$new_settings = [];
+		}
+
+		// Run the same gallery-path validation the sibling /settings route applies,
+		// so the network-wide row cannot be written an out-of-root gallery path.
+		if ( isset( $new_settings['gallerypath'] ) ) {
+			$gallerypath_validation = self::validate_gallerypath_rest_value( $new_settings['gallerypath'] );
+			if ( is_wp_error( $gallerypath_validation ) ) {
+				return $gallerypath_validation;
+			}
+		}
+
+		$settings = GlobalSettings::get_instance();
 
 		foreach ( $new_settings as $key => $value ) {
 			// Security sanitization with context-aware handling
@@ -502,7 +583,7 @@ class SettingsREST {
 
 			// Allow either absolute URLs, absolute filesystem paths, or server-relative paths.
 			$is_url = is_string( $wm_path ) && preg_match( '/^https?:\/\//i', $wm_path );
-			$is_abs = is_string( $wm_path ) && ( 0 === strpos( $wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\/]*/', $wm_path ) );
+			$is_abs = is_string( $wm_path ) && ( 0 === strpos( $wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\\\/]*/', $wm_path ) );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf -- URL case has no file check.
 			if ( $is_url ) {
 				// URL will be downloaded later; no file_exists check here.
@@ -574,7 +655,7 @@ class SettingsREST {
 
 			if ( 'image' === ( $watermark_options['wmType'] ?? '' ) && ! empty( $final_wm_path ) ) {
 				$is_url = is_string( $final_wm_path ) && preg_match( '/^https?:\/\//i', $final_wm_path );
-				$is_abs = is_string( $final_wm_path ) && ( 0 === strpos( $final_wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\/]*/', $final_wm_path ) );
+				$is_abs = is_string( $final_wm_path ) && ( 0 === strpos( $final_wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\\\/]*/', $final_wm_path ) );
 				if ( $is_url ) {
 					// Download remote watermark image to uploads folder for preview use
 					$upload_dir  = wp_upload_dir();
@@ -583,12 +664,72 @@ class SettingsREST {
 						wp_mkdir_p( $preview_dir );
 					}
 
-					$ext      = pathinfo( wp_parse_url( $final_wm_path, PHP_URL_PATH ), PATHINFO_EXTENSION );
-					$ext      = $ext ? $ext : 'png';
-					$tmp_name = 'wm_' . uniqid( '', true ) . '.' . $ext;
-					$tmp_path = $preview_dir . $tmp_name;
+					// SSRF hardening: validate URL parts and block private/loopback/link-local hosts before fetch.
+					$parsed_url = wp_parse_url( $final_wm_path );
+					$scheme     = isset( $parsed_url['scheme'] ) ? strtolower( $parsed_url['scheme'] ) : '';
+					$host       = isset( $parsed_url['host'] ) ? strtolower( $parsed_url['host'] ) : '';
+					if ( ! in_array( $scheme, [ 'http', 'https' ], true ) || '' === $host ) {
+						return new WP_Error(
+							'invalid_watermark_image',
+							__( 'Invalid watermark image URL.', 'nggallery' ),
+							[ 'status' => 400 ]
+						);
+					}
+					// Reject hostnames/IP literals (incl. bracketed IPv6) that resolve to non-public IPs (loopback, RFC1918, link-local, unique-local, cloud metadata).
+					$host_unbracketed = preg_replace( '/^\[|\]$/', '', $host ); // Strip IPv6 brackets for filter_var validation.
+					if ( filter_var( $host_unbracketed, FILTER_VALIDATE_IP ) ) {
+						// Direct IP literal (v4 or v6) — validate public-range inline; skip DNS to avoid gethostbyname IPv4-only gap.
+						if ( ! filter_var(
+							$host_unbracketed,
+							FILTER_VALIDATE_IP,
+							FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+						) ) {
+							return new WP_Error(
+								'invalid_watermark_image',
+								__( 'Watermark URL host is not allowed.', 'nggallery' ),
+								[ 'status' => 400 ]
+							);
+						}
+					} else {
+						// Hostname — resolve A and AAAA records; reject if any resolved IP is private/reserved.
+						$resolved_a = gethostbyname( $host_unbracketed );
+						$resolved_a = ( $resolved_a !== $host_unbracketed ) ? $resolved_a : null;
 
-					$response = wp_remote_get( $final_wm_path, [ 'timeout' => 15 ] );
+						// gethostbyname() only resolves IPv4 (A records); also check IPv6 (AAAA) to prevent SSRF bypass.
+						$aaaa_records  = dns_get_record( $host_unbracketed, DNS_AAAA );
+						$resolved_aaaa = ( is_array( $aaaa_records ) && ! empty( $aaaa_records ) && isset( $aaaa_records[0]['ipv6'] ) ) ? $aaaa_records[0]['ipv6'] : null;
+
+						if ( null === $resolved_a && null === $resolved_aaaa ) {
+							return new WP_Error(
+								'invalid_watermark_image',
+								__( 'Unable to resolve watermark URL host.', 'nggallery' ),
+								[ 'status' => 400 ]
+							);
+						}
+
+						foreach ( array_filter( [ $resolved_a, $resolved_aaaa ] ) as $resolved_ip ) {
+							if ( ! filter_var(
+								$resolved_ip,
+								FILTER_VALIDATE_IP,
+								FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE
+							) ) {
+								return new WP_Error(
+									'invalid_watermark_image',
+									__( 'Watermark URL host is not allowed.', 'nggallery' ),
+									[ 'status' => 400 ]
+								);
+							}
+						}
+					}
+
+					// Force safe image extension rather than trusting attacker-controlled URL path extension (RCE hardening).
+					$url_ext      = strtolower( (string) pathinfo( wp_parse_url( $final_wm_path, PHP_URL_PATH ), PATHINFO_EXTENSION ) );
+					$allowed_exts = [ 'png', 'jpg', 'jpeg', 'gif', 'webp' ];
+					$ext          = in_array( $url_ext, $allowed_exts, true ) ? $url_ext : 'png';
+					$tmp_name     = 'wm_' . uniqid( '', true ) . '.' . $ext;
+					$tmp_path     = $preview_dir . $tmp_name;
+
+					$response = wp_safe_remote_get( $final_wm_path, [ 'timeout' => 15 ] ); // Use wp_safe_remote_get to honor HTTP request safe-host filters.
 					if ( is_wp_error( $response ) || (int) wp_remote_retrieve_response_code( $response ) !== 200 ) {
 						return new WP_Error(
 							'invalid_watermark_image',
@@ -615,34 +756,76 @@ class SettingsREST {
 						);
 					}
 
-					// Convert absolute path to path relative to ABSPATH as expected by downstream logic
-					$relative          = ltrim( str_replace( ABSPATH, '/', $tmp_path ), '/' );
-					$final_wm_path     = $relative;
+					// Verify downloaded bytes are an actual image; prevents storing PHP/HTML payload under ngg-watermark-previews/.
+					$image_info = @getimagesize( $tmp_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					if ( false === $image_info ) {
+						@unlink( $tmp_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink
+						return new WP_Error(
+							'invalid_watermark_image',
+							__( 'Downloaded file is not a valid image.', 'nggallery' ),
+							[ 'status' => 400 ]
+						);
+					}
+
+					// Use the absolute filesystem path directly — downstream ngglegacy_thumbnail checks is_file() first, so absolute paths work without conversion. str_replace(ABSPATH) breaks when uploads dir lives outside ABSPATH.
+					$final_wm_path     = $tmp_path;
 					$downloaded_tmp    = true;
 					$tmp_download_path = $tmp_path;
 				} elseif ( $is_abs ) {
-					// If absolute and under ABSPATH, convert to server-relative; otherwise copy into previews dir
-					if ( 0 === strpos( $final_wm_path, ABSPATH ) ) {
-						$final_wm_path = ltrim( str_replace( ABSPATH, '/', $final_wm_path ), '/' );
+					// Path-traversal hardening: resolve symlinks/.. segments and constrain absolute paths to ABSPATH or the uploads dir only.
+					$real_wm_path  = realpath( $final_wm_path ); // realpath normalizes ../ and resolves symlinks before allowlist check.
+					$upload_dir    = wp_upload_dir();
+					$real_abspath  = realpath( ABSPATH ); // Normalize ABSPATH too so string prefix match is apples-to-apples.
+					$real_uploads  = isset( $upload_dir['basedir'] ) ? realpath( $upload_dir['basedir'] ) : false; // Uploads dir may live outside ABSPATH on some installs.
+					$under_abspath = ( $real_wm_path && $real_abspath && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_abspath ) ) ); // trailingslashit prevents partial dir-name match (e.g. /var/www/html_secret matching /var/www/html).
+					$under_uploads = ( $real_wm_path && $real_uploads && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_uploads ) ) ); // Allow uploads dir when outside ABSPATH.
+					if ( ! $real_wm_path || ( ! $under_abspath && ! $under_uploads ) ) {
+						// Reject arbitrary filesystem reads (e.g. /etc/passwd) via watermark path — prior code copied any readable file into a public previews dir.
+						return new WP_Error(
+							'invalid_watermark_image',
+							__( 'Watermark image path is not allowed.', 'nggallery' ),
+							[ 'status' => 400 ]
+						);
+					}
+					// Extension allowlist: prevents non-image files (e.g. .php) from being referenced as watermark source.
+					$abs_ext      = strtolower( (string) pathinfo( $real_wm_path, PATHINFO_EXTENSION ) );
+					$allowed_exts = [ 'png', 'jpg', 'jpeg', 'gif', 'webp' ];
+					if ( ! in_array( $abs_ext, $allowed_exts, true ) ) {
+						return new WP_Error(
+							'invalid_watermark_image',
+							__( 'Watermark image must be png, jpg, jpeg, gif, or webp.', 'nggallery' ),
+							[ 'status' => 400 ]
+						);
+					}
+					// Verify file is a real image before downstream uses it, not just extension match.
+					if ( false === @getimagesize( $real_wm_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+						return new WP_Error(
+							'invalid_watermark_image',
+							__( 'Watermark file is not a valid image.', 'nggallery' ),
+							[ 'status' => 400 ]
+						);
+					}
+					if ( $real_abspath && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_abspath ) ) ) {
+						// Under ABSPATH: convert to web-root-relative form expected by downstream renderer.
+						$final_wm_path = ltrim( str_replace( $real_abspath, '/', $real_wm_path ), '/' );
 					} else {
-						$upload_dir  = wp_upload_dir();
+						// Under uploads (outside ABSPATH): copy into previews dir so downstream code can serve from a known location.
 						$preview_dir = trailingslashit( $upload_dir['basedir'] ) . 'ngg-watermark-previews/';
 						if ( ! is_dir( $preview_dir ) ) {
 							wp_mkdir_p( $preview_dir );
 						}
-						$ext      = pathinfo( $final_wm_path, PATHINFO_EXTENSION );
-						$ext      = $ext ? $ext : 'png';
-						$tmp_name = 'wm_' . uniqid( '', true ) . '.' . $ext;
+						$tmp_name = 'wm_' . uniqid( '', true ) . '.' . $abs_ext; // Use validated extension, not attacker-controlled.
 						$tmp_path = $preview_dir . $tmp_name;
-						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-						if ( ! @copy( $final_wm_path, $tmp_path ) ) {
+						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.copy_copy
+						if ( ! @copy( $real_wm_path, $tmp_path ) ) { // Source already constrained to uploads dir above.
 							return new WP_Error(
 								'invalid_watermark_image',
 								__( 'Failed to copy watermark image for preview.', 'nggallery' ),
 								[ 'status' => 500 ]
 							);
 						}
-						$final_wm_path     = ltrim( str_replace( ABSPATH, '/', $tmp_path ), '/' );
+						// Use absolute path directly — downstream is_file() check handles it; str_replace(ABSPATH) breaks when uploads is outside ABSPATH.
+						$final_wm_path     = $tmp_path;
 						$downloaded_tmp    = true;
 						$tmp_download_path = $tmp_path;
 					}
@@ -658,8 +841,8 @@ class SettingsREST {
 				'wmType'    => sanitize_text_field( $watermark_options['wmType'] ?? 'text' ),
 				'wmText'    => sanitize_text_field( $watermark_options['wmText'] ?? 'Preview' ),
 				'wmPos'     => sanitize_text_field( $watermark_options['wmPos'] ?? 'midCenter' ),
-				'wmXpos'    => intval( $watermark_options['wmXpos'] ?? 15 ),
-				'wmYpos'    => intval( $watermark_options['wmYpos'] ?? 5 ),
+				'wmXpos'    => intval( $watermark_options['wmXpos'] ?? 0 ),
+				'wmYpos'    => intval( $watermark_options['wmYpos'] ?? 0 ),
 				'wmPath'    => sanitize_text_field( $final_wm_path ),
 				'wmFont'    => sanitize_text_field( $watermark_options['wmFont'] ?? 'arial.ttf' ),
 				'wmSize'    => intval( $watermark_options['wmSize'] ?? 30 ),
@@ -1113,10 +1296,10 @@ class SettingsREST {
 
 		// Match any of the patterns that confirm gtag.js is actively loaded and configured.
 		$detected = (
-			false !== strpos( $body, 'googletagmanager.com/gtag/js' ) ||  // gtag.js script src
-			false !== strpos( $body, 'gtag("config"' ) ||                 // double-quote variant
-			false !== strpos( $body, "gtag('config'" ) ||                 // single-quote variant
-			false !== strpos( $body, "gtag(\"config\"" ) ||               // escaped double-quote
+			false !== strpos( $body, 'googletagmanager.com/gtag/js' ) || // gtag.js script src
+			false !== strpos( $body, 'gtag("config"' ) || // double-quote variant
+			false !== strpos( $body, "gtag('config'" ) || // single-quote variant
+			false !== strpos( $body, 'gtag("config"' ) || // escaped double-quote
 			false !== strpos( $body, 'gtag/js?id=G-' )                    // GA4 Measurement ID in src
 		);
 

@@ -63,8 +63,7 @@ DIV that shows the image as you drag it
 */
 #dragDropContent{
 
-	opacity:0.4;	/* 40 % opacity */
-	filter:alpha(opacity=40);	/* 40 % opacity */
+	opacity:0.4;	/* 40 % opacity */	/* 40 % opacity */
 
 	/* 
 	No need to change these three values 

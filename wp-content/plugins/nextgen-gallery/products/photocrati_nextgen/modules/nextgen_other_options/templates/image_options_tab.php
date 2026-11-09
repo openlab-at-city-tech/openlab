@@ -1,6 +1,6 @@
 <table class="image_options">
 	<?php
-	if ( ! is_multisite() || get_current_blog_id() == 1 ) {
+	if ( ! is_multisite() || is_main_site() || is_super_admin() ) {
 		?>
 	<tr>
 		<td class="column1">

@@ -304,16 +304,16 @@ function nggallery_admin_overview() {
 									</td>
 									<td class="ngg-features-column">
 										<?php if ( $supports[0] ) { ?>
-											<i class="fa fa-check ngg-features-full"></i>
+											<i class="fas fa-check ngg-features-full"></i>
 										<?php } else { ?>
-											<i class="fa fa-times ngg-features-none"></i>
+											<i class="fas fa-times ngg-features-none"></i>
 										<?php } ?>
 									</td>
 									<td class="ngg-features-column">
 										<?php if ( $supports[1] ) { ?>
-											<i class="fa fa-check ngg-features-full"></i>
+											<i class="fas fa-check ngg-features-full"></i>
 										<?php } else { ?>
-											<i class="fa fa-times ngg-features-none"></i>
+											<i class="fas fa-times ngg-features-none"></i>
 										<?php } ?>
 									</td>
 								</tr>

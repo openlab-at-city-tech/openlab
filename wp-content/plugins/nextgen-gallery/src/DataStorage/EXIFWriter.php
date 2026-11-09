@@ -12,6 +12,7 @@ if ( version_compare( phpversion(), '7.2.0', '>=' ) ) {
 use Imagely\NGG\Display\I18N;
 use lsolesen\pel\PelDataWindow;
 use lsolesen\pel\PelJpeg;
+use lsolesen\pel\PelJpegMarker;
 use lsolesen\pel\PelTiff;
 use lsolesen\pel\PelExif;
 use lsolesen\pel\PelIfd;
@@ -19,9 +20,7 @@ use lsolesen\pel\PelTag;
 use lsolesen\pel\PelEntryShort;
 
 use lsolesen\pel\PelInvalidArgumentException;
-use lsolesen\pel\PelIfdException;
 use lsolesen\pel\PelInvalidDataException;
-use lsolesen\pel\PelJpegInvalidMarkerException;
 
 /**
  * Handles EXIF metadata reading and writing operations for JPEG images.
@@ -30,6 +29,32 @@ use lsolesen\pel\PelJpegInvalidMarkerException;
  * from JPEG files using the PEL (PHP EXIF Library) package.
  */
 class EXIFWriter {
+
+	/**
+	 * Outcome of read_exif(): not a JPEG, so a TIFF parse is the only thing left to try.
+	 */
+	const NOT_JPEG = 'not-jpeg';
+
+	/**
+	 * Outcome of read_exif(): a JPEG whose marker chain is truncated or otherwise malformed.
+	 */
+	const MALFORMED_JPEG = 'malformed-jpeg';
+
+	/**
+	 * Outcome of read_exif(): a JPEG whose marker chain holds no parseable Exif.
+	 */
+	const NO_EXIF = 'no-exif';
+
+	/**
+	 * How many marker segments the walk will step through before giving up.
+	 *
+	 * A real JPEG header carries tens of segments, and the widest legitimate case is an ICC
+	 * profile split across the 255 APP2 chunks the format allows, so this sits well clear of
+	 * anything a camera or editor produces. The bound matters because SOI and EOI carry no
+	 * length: without it a crafted run of them advances a single byte per iteration, turning
+	 * the walk into one pass per byte of the file.
+	 */
+	const MAX_MARKERS = 1024;
 
 	/**
 	 * Reads EXIF and IPTC metadata from a JPEG file.
@@ -45,36 +70,49 @@ class EXIFWriter {
 		$retval = null;
 
 		try {
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$data = new PelDataWindow( @file_get_contents( $filename ) );
-			$exif = new PelExif();
+			$exif = self::read_exif( $filename );
 
-			if ( PelJpeg::isValid( $data ) ) {
-				$jpeg = new PelJpeg();
-				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				@$jpeg->load( $data );
-				$exif = $jpeg->getExif();
-
-				if ( null === $exif ) {
-					$exif = new PelExif();
-					$jpeg->setExif( $exif );
-
-					$tiff = new PelTiff();
-					$exif->setTiff( $tiff );
-				} else {
-					$tiff = $exif->getTiff();
-				}
-			} elseif ( PelTiff::isValid( $data ) ) {
-				$tiff = new PelTiff();
-				$tiff->load( $data );
-			} else {
+			if ( self::MALFORMED_JPEG === $exif ) {
+				// PEL abandons such a file once it has parsed the whole thing, and parsing the
+				// whole thing is the cost being avoided here, so refuse it on the same terms
+				// without reading the rest of it.
 				return null;
+			}
+
+			if ( self::NOT_JPEG === $exif ) {
+				// A TIFF's directories carry offsets into anywhere in the file, so unlike a
+				// JPEG it cannot be parsed from a bounded window and the whole file is needed.
+				// is_jpeg_file() above only admits JPEG extensions, so this branch exists to
+				// preserve the previous behaviour for a mislabelled file rather than because
+				// it is expected to be taken.
+				// PelTiff::isValid() reads only the first eight bytes, so settle the question
+				// on those. Without this a file that merely carries a JPEG extension is loaded
+				// in full and then thrown away, which is the allocation being avoided here.
+				$head = self::read_file_head( $filename, 8 );
+
+				if ( false === $head || ! PelTiff::isValid( new PelDataWindow( $head ) ) ) {
+					return null;
+				}
+
+				$exif = new PelExif();
+				$tiff = new PelTiff();
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$tiff->load( new PelDataWindow( (string) @file_get_contents( $filename ) ) );
+			} else {
+				if ( self::NO_EXIF === $exif ) {
+					$exif = new PelExif();
+				}
+
+				$tiff = $exif->getTiff();
+
+				if ( null === $tiff ) {
+					$tiff = new PelTiff();
+				}
 			}
 
 			$ifd0 = $tiff->getIfd();
 			if ( null === $ifd0 ) {
 				$ifd0 = new PelIfd( PelIfd::IFD0 );
-				$tiff->setIfd( $ifd0 );
 			}
 			$tiff->setIfd( $ifd0 );
 			$exif->setTiff( $tiff );
@@ -89,14 +127,191 @@ class EXIFWriter {
 			if ( ! empty( $iptc['APP13'] ) ) {
 				$retval['iptc'] = $iptc['APP13'];
 			}
-		} catch ( PelIfdException $exception ) {
-			return null; } catch ( PelInvalidArgumentException $exception ) {
-			return null; } catch ( PelInvalidDataException $exception ) {
-				return null; } catch ( PelJpegInvalidMarkerException $exception ) {
-				return null; } catch ( \Exception $exception ) {
-					return null; } finally {
-						return $retval;
+		} catch ( \Throwable $exception ) {
+			// Metadata is best-effort: callers resize and save images with whatever comes back,
+			// so an unreadable or malformed source must degrade to "no metadata" instead of
+			// aborting the generation. PEL raises both Exception and Error subclasses on
+			// malformed input, hence Throwable rather than a list of its exception types.
+			return null;
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Reads the leading bytes of a file, leaving the rest of it on disk.
+	 *
+	 * @param string $filename Path to the file.
+	 * @param int    $length   How many bytes to read.
+	 * @return string|false The bytes read, or false when the file could not be opened.
+	 */
+	private static function read_file_head( $filename, $length ) {
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+		$handle = @fopen( $filename, 'rb' );
+
+		if ( ! $handle ) {
+			return false;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+		$head = (string) fread( $handle, $length );
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+		fclose( $handle );
+
+		return $head;
+	}
+
+	/**
+	 * Reads a JPEG's Exif by parsing only the segment that carries it.
+	 *
+	 * Walks the marker chain and parses APP1 candidates one at a time, stepping over the
+	 * entropy coded image data rather than through it. The whole point is what never gets
+	 * read: a marker's length is a 16 bit field, so this costs at most 64KB however large the
+	 * file is, and callers hold the result live while they resize and save an image.
+	 *
+	 * Two details keep the outcome the same as parsing the entire file with PEL. A candidate
+	 * that announces itself as Exif but does not parse is skipped and the walk continues, so a
+	 * later valid APP1 is still found, mirroring PelJpeg keeping an unparseable APP1 as plain
+	 * content and letting getExif() return the first one that did parse. And a marker code
+	 * outside the range PelJpegMarker::isValid() accepts abandons the walk, because PEL
+	 * abandons the file.
+	 *
+	 * @param string $filename Path to the file.
+	 * @return PelExif|string The Exif that was found, or one of self::NOT_JPEG,
+	 *                        self::MALFORMED_JPEG and self::NO_EXIF.
+	 */
+	private static function read_exif( $filename ) {
+		// WP_Filesystem only offers whole-file reads, which is precisely the cost this method
+		// exists to avoid, so the stream functions are used directly throughout.
+		// phpcs:disable WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		$handle = @fopen( $filename, 'rb' );
+
+		if ( ! $handle ) {
+			return self::NOT_JPEG;
+		}
+
+		try {
+			$stat = fstat( $handle );
+			$size = isset( $stat['size'] ) ? (int) $stat['size'] : 0;
+
+			// A JPEG opens with SOI, which may be preceded by fill bytes. Tolerate the same
+			// number of them PEL's own validity check does, so the two agree on what is a JPEG.
+			$head  = (string) fread( $handle, 8 );
+			$start = 0;
+			while ( $start < 7 && isset( $head[ $start ] ) && "\xFF" === $head[ $start ] ) {
+				++$start;
+			}
+
+			if ( ! isset( $head[ $start ] ) || "\xD8" !== $head[ $start ] ) {
+				return self::NOT_JPEG;
+			}
+
+			if ( -1 === fseek( $handle, $start + 1 ) ) {
+				return self::MALFORMED_JPEG;
+			}
+
+			$markers = 0;
+
+			while ( true ) {
+				if ( ++$markers > self::MAX_MARKERS ) {
+					// Far past any real header, so the chain is not worth following further.
+					return self::MALFORMED_JPEG;
+				}
+
+				$offset = ftell( $handle );
+
+				if ( $offset >= $size ) {
+					// Ran out of sections without meeting Exif.
+					return self::NO_EXIF;
+				}
+
+				// PelJpeg::getJpgSectionStart() steps over at most seven fill bytes and reads
+				// the first byte that is not 0xFF as the marker, without requiring a 0xFF ahead
+				// of it. Mirroring that keeps the two agreeing on where a marker begins, and
+				// bounds the scan so a long run of fill bytes cannot become a byte at a time
+				// walk of the file.
+				$peek = (string) fread( $handle, 8 );
+				$skip = 0;
+				while ( $skip < 7 && isset( $peek[ $skip ] ) && "\xFF" === $peek[ $skip ] ) {
+					++$skip;
+				}
+
+				if ( ! isset( $peek[ $skip ] ) ) {
+					return self::MALFORMED_JPEG;
+				}
+
+				$marker = ord( $peek[ $skip ] );
+
+				if ( -1 === fseek( $handle, $offset + $skip + 1 ) ) {
+					return self::MALFORMED_JPEG;
+				}
+
+				// The range PelJpegMarker::isValid() accepts. A code outside it makes PEL give
+				// up on the file, so the chain is treated as malformed rather than walked past.
+				if ( $marker < PelJpegMarker::SOF0 || $marker > PelJpegMarker::COM ) {
+					return self::MALFORMED_JPEG;
+				}
+
+				// SOS begins the entropy coded data, and Exif never appears beyond it.
+				if ( PelJpegMarker::SOS === $marker ) {
+					return self::NO_EXIF;
+				}
+
+				// SOI and EOI are the two markers PEL reads without a length, and it walks on
+				// past both rather than stopping, so an image carrying Exif after an EOI is
+				// read the same way here.
+				if ( PelJpegMarker::SOI === $marker || PelJpegMarker::EOI === $marker ) {
+					continue;
+				}
+
+				$length_bytes = (string) fread( $handle, 2 );
+
+				if ( 2 !== strlen( $length_bytes ) ) {
+					return self::MALFORMED_JPEG;
+				}
+
+				// The length counts its own two bytes.
+				$length = unpack( 'n', $length_bytes )[1] - 2;
+
+				// A segment running past the end of the file means a truncated or malformed
+				// image, which is where parsing the whole file used to fail.
+				if ( $length < 0 || ftell( $handle ) + $length > $size ) {
+					return self::MALFORMED_JPEG;
+				}
+
+				if ( PelJpegMarker::APP1 !== $marker ) {
+					if ( $length > 0 && -1 === fseek( $handle, $length, SEEK_CUR ) ) {
+						return self::MALFORMED_JPEG;
 					}
+					continue;
+				}
+
+				$payload = $length > 0 ? (string) fread( $handle, $length ) : '';
+
+				if ( strlen( $payload ) !== $length ) {
+					return self::MALFORMED_JPEG;
+				}
+
+				// APP1 also carries XMP, and only the Exif flavour is wanted here.
+				if ( 0 !== strncmp( $payload, PelExif::EXIF_HEADER, strlen( PelExif::EXIF_HEADER ) ) ) {
+					continue;
+				}
+
+				try {
+					$exif = new PelExif();
+					$exif->load( new PelDataWindow( $payload ) );
+
+					return $exif;
+				} catch ( PelInvalidDataException $exception ) {
+					// Keep walking, since a later APP1 may still carry parseable Exif.
+					continue;
+				}
+			}
+		} finally {
+			fclose( $handle );
+		}
+		// phpcs:enable WordPress.WP.AlternativeFunctions.file_system_operations_fopen, WordPress.WP.AlternativeFunctions.file_system_operations_fread, WordPress.WP.AlternativeFunctions.file_system_operations_fclose
 	}
 
 	/**
@@ -159,6 +374,10 @@ class EXIFWriter {
 		} catch ( PelInvalidDataException $exception ) {
 			error_log( "Could not write data to {$filename}" );
 			error_log( print_r( $exception, true ) );
+			return false;
+		} catch ( \Exception $exception ) {
+			// Best-effort metadata copy must never abort generation (e.g. PEL "Offset -1" on a JPEG missing its EOI marker).
+			error_log( "Could not write metadata to {$filename}: " . $exception->getMessage() );
 			return false;
 		}
 

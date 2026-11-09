@@ -136,28 +136,279 @@ class Shortcodes {
 	 * @param string $content The content to parse for nested shortcodes.
 	 * @return string
 	 */
+	/**
+	 * Finds the closing bracket for every start-tag position in one pass over the content.
+	 *
+	 * Whether a `]` closes a shortcode depends on the quote state the scan has built up, and that
+	 * state depends on where the scan began, which is why each occurrence used to need its own
+	 * walk. But there are only three states (no value open, inside a double-quoted value, inside a
+	 * single-quoted one), and the answer for a position depends only on the answers for the next
+	 * position. So one right-to-left pass carrying three running answers resolves every start tag
+	 * at once, and it does not matter which tag a position belongs to.
+	 *
+	 * Whether a single quote is significant depends on the character before it, which is fixed by
+	 * the position rather than carried along, so it needs no extra state here. The one exception is
+	 * a start tag whose first character is a single quote: the walk has read nothing yet, so it is
+	 * inert even directly after `=`.
+	 *
+	 * Stored compactly as two parallel packed (sequential-int-keyed) lists rather than one array
+	 * keyed by content position: a position-keyed array is a PHP hash, roughly three times the
+	 * footprint of a packed list, and on content packed with start tags that reached a fatal
+	 * "memory exhausted" on a multi-megabyte post. `terminator_lookup()` reads it by binary search
+	 * on the sorted starts.
+	 *
+	 * @param string $content     The content being scanned.
+	 * @param int[]  $scan_starts Indexes of the first character after each start tag.
+	 * @return array{starts:int[],terms:array<int,int|false>} Sorted start positions and the
+	 *                                                         closing-bracket index per start
+	 *                                                         (false where there is none).
+	 */
+	private function build_terminator_index( $content, array $scan_starts ) {
+		\sort( $scan_starts, SORT_NUMERIC );
+		$count  = \count( $scan_starts );
+		$terms  = $count > 0 ? \array_fill( 0, $count, false ) : [];
+		$length = \strlen( $content );
+
+		// Walk a pointer down the sorted starts in step with the scan. Starts that sit at or past
+		// the end of the content are never reached by the index (which runs from length-1), so
+		// they keep their initial false, exactly as the old position-keyed version left them.
+		$si = $count - 1;
+		while ( $si >= 0 && $scan_starts[ $si ] > $length - 1 ) {
+			--$si;
+		}
+
+		$closed = false;
+		$double = false;
+		$single = false;
+
+		for ( $index = $length - 1; $index >= 0; $index-- ) {
+			$char           = $content[ $index ];
+			$follows_equals = $index > 0 && '=' === $content[ $index - 1 ];
+			$next_closed    = $closed;
+			$next_double    = $double;
+			$next_single    = $single;
+
+			if ( '"' === $char ) {
+				$closed = $next_double;
+				$double = $next_closed;
+				$single = $next_double;
+			} elseif ( "'" === $char ) {
+				$closed = $follows_equals ? $next_single : $next_closed;
+				$double = $follows_equals ? $next_single : $next_double;
+				$single = $next_closed;
+			} elseif ( ']' === $char ) {
+				$closed = $index;
+				$double = $next_double;
+				$single = $next_single;
+			}
+
+			while ( $si >= 0 && $scan_starts[ $si ] === $index ) {
+				// A leading single quote is inert, so the scan just steps over it.
+				$terms[ $si ] = ( "'" === $char && $follows_equals ) ? $next_closed : $closed;
+				--$si;
+			}
+		}
+
+		return [
+			'starts' => $scan_starts,
+			'terms'  => $terms,
+		];
+	}
+
+	/**
+	 * Reads one start position out of the index that build_terminator_index() returned.
+	 *
+	 * @param array{starts:int[],terms:array<int,int|false>} $index      The built index.
+	 * @param int                                            $scan_start The position to resolve.
+	 * @return int|false Closing-bracket index, or false if the start has no terminator / is absent.
+	 */
+	private function terminator_lookup( array $index, $scan_start ) {
+		$starts = $index['starts'];
+		$lo     = 0;
+		$hi     = \count( $starts ) - 1;
+
+		while ( $lo <= $hi ) {
+			$mid = ( $lo + $hi ) >> 1;
+			$at  = $starts[ $mid ];
+
+			if ( $at === $scan_start ) {
+				return $index['terms'][ $mid ];
+			}
+
+			if ( $at < $scan_start ) {
+				$lo = $mid + 1;
+			} else {
+				$hi = $mid - 1;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Collects the start-tag positions of every registered shortcode in $content.
+	 *
+	 * @param string $content The content being scanned.
+	 * @return int[] Indexes of the first character after each start tag.
+	 */
+	private function collect_scan_starts( $content ) {
+		$scan_starts = [];
+
+		foreach ( $this->_shortcodes as $tag => $tag_details ) {
+			$start_tag = "[{$tag}";
+			$length    = \strlen( $start_tag );
+			$offset    = 0;
+
+			while ( true ) {
+				$found = \strpos( $content, $start_tag, $offset );
+
+				if ( false === $found ) {
+					break;
+				}
+
+				$scan_starts[] = $found + $length;
+				$offset        = $found + $length;
+			}
+		}
+
+		return $scan_starts;
+	}
+
+	/**
+	 * Largest content this pre-parser will scan. Above it the content is returned unrewritten.
+	 *
+	 * The scan and its terminator index are linear in the content length, but the index still
+	 * holds one entry per start-tag occurrence, so content densely packed with start tags costs
+	 * memory proportional to its size: about 60MB peak at 4MB of `[ngg`, which a tighter
+	 * `memory_limit` plus WordPress's own resident memory can turn into a fatal on an anonymous
+	 * render. An Author can publish such content within the default 8MB `post_max_size`, and it
+	 * renders under less memory than it was saved under. Real post content never approaches this
+	 * cap — it is two orders of magnitude above a large gallery post — so skipping the rewrite
+	 * above it only forgoes nested-shortcode neutralisation on content that is adversarial by
+	 * construction, which is the same safe fallback an unterminated start tag already takes.
+	 * The full compaction that would remove the cap is tracked in #1173.
+	 */
+	const MAX_NESTED_SHORTCODE_SCAN_BYTES = 2097152;
+
 	public function fix_nested_shortcodes( $content ) {
+		// Content far larger than any real post is not worth the index's memory; leave it as it
+		// is rather than risk a fatal on every anonymous render of it. See the constant above.
+		if ( \strlen( $content ) > self::MAX_NESTED_SHORTCODE_SCAN_BYTES ) {
+			return $content;
+		}
+
+		// Whether a `]` closes a shortcode depends on the quote state the scan built up since its
+		// own start tag, so for a long time every occurrence needed its own walk to the end of the
+		// content, and a run of unterminated start tags cost one walk each, for each of the ~21
+		// registered tags. Capping that walk only moved the cost around: every cap tried either
+		// stopped neutralising nested shortcodes for tags it had not reached yet (silently, on
+		// content as small as 805 bytes), or left a payload shape that still burned the whole
+		// allowance, 1MB of `='` pairs taking minutes.
+		//
+		// $terminators resolves all of them in a single right-to-left pass instead, so no occurrence
+		// walks the content at all. It is built on first need rather than up front, because a scan
+		// that ends a few characters in, which is every well-formed shortcode, is cheaper than the
+		// pass would be; a 560KB prose post with one gallery never builds it.
+		$terminators = null;
+
+		// Position of the last `]` in the content, for the "nothing can terminate past here" check
+		// below. Asking `strpos` from each start tag instead walked to the first `]` once per
+		// occurrence, which is O(n) each and quadratic on content packed with start tags.
+		$last_bracket = \strrpos( $content, ']' );
+
 		// Try to find each registered shortcode in the content.
 		foreach ( $this->_shortcodes as $tag => $tag_details ) {
 
 			$shortcode_start_tag = "[{$tag}";
 			$offset              = 0;
 
+			// This tag's rewrites are accumulated here and committed to $content once, after the
+			// loop. Rewriting $content per match — whether with `str_replace` over the whole string
+			// or `substr_replace` on the span — copies the content once per shortcode, which is
+			// quadratic in how many a post holds: 256KB of `[ngg a="[N]"]` took 4.2s that way, on
+			// `develop` as much as here, and 1MB took over a minute. Deferring is safe because every
+			// rewrite is confined to the span between a start tag and its own closing bracket, and
+			// the scan only ever moves forward past that bracket, so it never reads a region this
+			// tag has already rewritten. Rewrites do have to be visible to the *next* tag, which is
+			// why the commit happens per tag rather than once at the end.
+			$rewritten   = '';
+			$copied_upto = 0;
+
 			// Find each occurrence of the shortcode.
 			$start_of_shortcode = \strpos( $content, $shortcode_start_tag, $offset );
 			// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 			while ( $start_of_shortcode !== false ) {
 
-				$index                       = $start_of_shortcode + \strlen( $shortcode_start_tag );
+				// Without a closing bracket anywhere after this point no occurrence of this tag from
+				// here on can be rewritten, so stop scanning for it instead of walking the remainder
+				// of the content once per occurrence.
+				if ( false === $last_bracket || $last_bracket < $start_of_shortcode ) {
+					break;
+				}
+
+				$scan_start                  = $start_of_shortcode + \strlen( $shortcode_start_tag );
+				$index                       = $scan_start;
 				$found_attribute_assignment  = false;
 				$current_attribute_enclosure = null;
-				$last_found_char             = '';
-				$content_length              = \strlen( $content ) - 1;
+				$content_length              = \strlen( $content );
+				$found_closing_bracket       = false;
 
-				while ( true ) {
-					// Parse out the shortcode, character-by-character.
-					$char = $content[ $index ];
-					if ( '"' === $char || "'" === $char && '=' === $last_found_char ) {
+				// A well-formed shortcode's closing bracket is a few characters away, so try a
+				// short walk before paying for the index. Anything longer is either malformed or
+				// adversarial, and those are what the index exists for. Once it has been built
+				// there is nothing to gain from walking at all, so go straight to the lookup:
+				// probing first cost 3.5s on a 1MB post holding 84,000 unterminated start tags.
+				if ( null !== $terminators ) {
+					$index                 = $this->terminator_lookup( $terminators, $scan_start );
+					$found_closing_bracket = false !== $index;
+				}
+
+				$steps_left = $found_closing_bracket || null !== $terminators ? 0 : 256;
+
+				// The bound is tested before each read: $index can already start past the end of
+				// $content when the start tag is the last thing in it, e.g. content ending in
+				// "[nggallery".
+				while ( null === $terminators && $index < $content_length ) {
+					if ( --$steps_left < 0 ) {
+						$terminators = $this->build_terminator_index(
+							$content,
+							$this->collect_scan_starts( $content )
+						);
+
+						$index                 = $this->terminator_lookup( $terminators, $scan_start );
+						$found_closing_bracket = false !== $index;
+						break;
+					}
+
+					// Skip the run of characters that cannot change what this scan is looking for in
+					// C, rather than stepping over them one PHP iteration at a time. Which characters
+					// those are depends on the state: while an attribute value is open only a quote can
+					// matter, because a `]` inside one is not a closing bracket, so a run of them is
+					// skipped whole. Leaving `]` in the set while an attribute was open made content
+					// such as one `"` followed by 256KB of `]` cost a PHP iteration per byte for each of
+					// the ~21 tags: 3.4s, against 0.01s now. The skipped characters are still charged to
+					// the budget, so the bound below is unchanged, only cheaper to reach.
+					$uninteresting = \strcspn( $content, $found_attribute_assignment ? '"\'' : '"\']', $index );
+					if ( $uninteresting > 0 ) {
+						// The probe is a budget on characters walked, not on loop iterations: one
+						// iteration can skip an arbitrarily long run here, so counting iterations let
+						// content packed with start tags walk the whole post once per tag and never
+						// build the index. 256KB of `[ngg` + `"` + filler + `]` took 11s that way.
+						$steps_left -= $uninteresting;
+						$index      += $uninteresting;
+
+						if ( $index >= $content_length ) {
+							break;
+						}
+					}
+
+					// The character before this one, which decides whether a single quote opens an
+					// attribute value. Empty at the start of the scan, matching a walk that has not
+					// read anything yet.
+					$last_found_char = $index > $scan_start ? $content[ $index - 1 ] : '';
+					$char            = $content[ $index ];
+					// A single quote opens a value only right after "=", and closes the value it opened.
+					if ( '"' === $char || ( "'" === $char && ( '=' === $last_found_char || "'" === $current_attribute_enclosure ) ) ) {
 						// Is this the closing quote for an already found attribute assignment?
 						if ( $found_attribute_assignment && $char === $current_attribute_enclosure ) {
 							$found_attribute_assignment  = false;
@@ -170,18 +421,20 @@ class Shortcodes {
 						// we've found a shortcode closing tag. But, we need to ensure
 						// that this ] isn't within the value of a shortcode attribute.
 						if ( ! $found_attribute_assignment ) {
+							$found_closing_bracket = true;
 							break; // exit loop - we've found the shortcode.
 						}
 					}
 
-					$last_found_char = $char;
-
-					// Prevent infinite loops in our while(TRUE).
-					if ( $content_length === $index ) {
-						break;
-					}
-
 					++$index;
+				}
+
+				if ( ! $found_closing_bracket ) {
+					// An unterminated start tag is not a shortcode we can rewrite. Skip past it and
+					// look for the next occurrence instead of rewriting a truncated span.
+					$offset             = $start_of_shortcode + \strlen( $shortcode_start_tag );
+					$start_of_shortcode = \strpos( $content, $shortcode_start_tag, $offset );
+					continue;
 				}
 
 				// Get the shortcode.
@@ -191,14 +444,26 @@ class Shortcodes {
 					[ '[', ']' ],
 					[ '&#91;', '&#93;' ],
 					$shortcode
-				);          // Replace the shortcode with one that doesn't have nested shortcodes.
-				$content               = \str_replace(
-					$shortcode,
-					$shortcode_replacement,
-					$content
-				);              // Calculate the offset for the next loop iteration.
-				$offset                = $index + 1 + \strlen( $shortcode_replacement ) - \strlen( $shortcode );
-				$start_of_shortcode    = \strpos( $content, $shortcode_start_tag, $offset );
+				);
+
+				// Queue this occurrence's rewrite: copy everything since the last one, then the
+				// escaped span in place of the original.
+				if ( $shortcode_replacement !== $shortcode ) {
+					$rewritten  .= \substr( $content, $copied_upto, ( $start_of_shortcode + 1 ) - $copied_upto );
+					$rewritten  .= $shortcode_replacement;
+					$copied_upto = $start_of_shortcode + 1 + \strlen( $shortcode );
+				}
+
+				// Calculate the offset for the next loop iteration. $content is untouched until the
+				// commit below, so this indexes the content as it was when this tag started.
+				$offset             = $index + 1;
+				$start_of_shortcode = \strpos( $content, $shortcode_start_tag, $offset );
+			}
+
+			if ( '' !== $rewritten ) {
+				$content      = $rewritten . \substr( $content, $copied_upto );
+				$terminators  = null;
+				$last_bracket = \strrpos( $content, ']' );
 			}
 		}
 		\reset( $this->_shortcodes );

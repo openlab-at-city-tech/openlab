@@ -17,6 +17,20 @@ class RoutingApp {
 	public static $_instances = [];
 
 	/**
+	 * Most path segments a routed gallery url can carry after the parameter slug.
+	 *
+	 * @var int
+	 */
+	const MAX_PARAMETER_SEGMENTS = 6;
+
+	/**
+	 * Segments whose following segment is user supplied text, not a slug.
+	 *
+	 * @var string[]
+	 */
+	const FREE_TEXT_SEGMENTS = [ 'search', 'tagfilter' ];
+
+	/**
 	 * Request URI.
 	 *
 	 * @var string|false
@@ -340,11 +354,49 @@ class RoutingApp {
 			}
 		}
 
+		// Rewrites are matched against a decoded URI, but the result is cached and later
+		// reassembled into links. Restore the encoding of the free-text search value so
+		// reserved characters in it do not truncate those links when the URI is parsed.
+		$request_uri = $this->encode_search_parameter_segment( $request_uri );
+
 		// Cache all known data about the application request.
 		$this->set_app_request_uri( $request_uri );
 		$this->get_router()->set_routed_app( $this );
 
 		return $redirect;
+	}
+
+	/**
+	 * Percent-encodes the reserved characters of the free-text search parameter's value
+	 *
+	 * Only characters that end a path when the URI is parsed are encoded, so running this
+	 * over an already encoded value leaves it unchanged. The parameter has to open its own
+	 * path segment to match, so a path that merely contains the key is left alone.
+	 *
+	 * @param string $request_uri
+	 * @return string
+	 */
+	public function encode_search_parameter_segment( $request_uri ) {
+		if ( ! is_string( $request_uri ) || strpos( $request_uri, 'nggsearch' ) === false ) {
+			return $request_uri;
+		}
+
+		$separator = preg_quote( $this->_settings->router_param_separator, '#' );
+
+		$encoded = preg_replace_callback(
+			"#(?<=/)(nggsearch{$separator})([^/]+)#",
+			function ( $matches ) {
+				return $matches[1] . str_replace(
+					[ '#', '?', '&', ' ' ],
+					[ '%23', '%3F', '%26', '%20' ],
+					$matches[2]
+				);
+			},
+			$request_uri
+		);
+
+		// A failed substitution returns null, which would blank the whole request URI.
+		return is_string( $encoded ) ? $encoded : $request_uri;
 	}
 
 	/**
@@ -589,7 +641,7 @@ class RoutingApp {
 
 		if ( ! $found && isset( $_SERVER['REQUEST_URI'] ) ) {
 			$params = [];
-			$parsed = wp_parse_url( Router::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ), PHP_URL_QUERY );
+			$parsed = wp_parse_url( Router::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ), PHP_URL_QUERY ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 			if ( is_string( $parsed ) ) {
 				parse_str( $parsed, $params );
 			}
@@ -623,6 +675,19 @@ class RoutingApp {
 	}
 
 	/**
+	 * Builds a regex matching the parameter slug as a whole segment of a path.
+	 *
+	 * A plain substring test also matches the slug inside a longer segment, so a
+	 * page slugged "wedding-gallery" reads as already carrying the slug "gallery".
+	 *
+	 * @param string $param_slug
+	 * @return string
+	 */
+	public function param_slug_segment_regex( $param_slug ) {
+		return '#(?:^|/)' . preg_quote( $param_slug, '#' ) . '(?=/|$)#';
+	}
+
+	/**
 	 * Adds a parameter to the application's request URI
 	 *
 	 * @param string      $key
@@ -637,7 +702,7 @@ class RoutingApp {
 
 		$uri   = $this->get_app_request_uri();
 		$parts = [ $uri ];
-		if ( $param_slug && strpos( $uri, $param_slug ) === false ) {
+		if ( $param_slug && ! preg_match( $this->param_slug_segment_regex( $param_slug ), $uri ) ) {
 			$parts[] = $param_slug;
 		}
 		$parts[] = $this->create_parameter_segment( $key, $value, $id, $use_prefix );
@@ -710,14 +775,84 @@ class RoutingApp {
 		return $retval;
 	}
 
+	/**
+	 * Determines whether what follows the parameter slug can never be gallery parameters.
+	 *
+	 * Album display types route arbitrary album, gallery and image slugs, so the
+	 * remainder is judged on what it cannot be rather than against a whitelist.
+	 *
+	 * @param string $request_uri
+	 * @return bool
+	 */
+	protected function has_unroutable_remainder( $request_uri ) {
+		$settings = $this->_settings;
+		$parts    = explode( '/' . $settings->router_param_slug . '/', $request_uri, 2 );
+
+		if ( ! isset( $parts[1] ) ) {
+			return false;
+		}
+
+		$segments = array_values( array_filter( explode( '/', $parts[1] ), 'strlen' ) );
+
+		if ( ! $segments ) {
+			return false;
+		}
+
+		// Deepest routed form is album, gallery and image plus one parameter pair.
+		if ( count( $segments ) > self::MAX_PARAMETER_SEGMENTS ) {
+			return true;
+		}
+
+		$separator = $settings->router_param_separator;
+		$previous  = '';
+
+		foreach ( $segments as $segment ) {
+			// A path back into WordPress is never an album, gallery or image.
+			if ( preg_match( '#^wp-(content|includes|admin)$#i', $segment ) ) {
+				return true;
+			}
+
+			// Search terms and tag filters are user text that legitimately carries
+			// dots, both as /search/{term} and once rewritten to nggsearch--{term}.
+			$free_text = in_array( strtolower( $previous ), self::FREE_TEXT_SEGMENTS, true )
+				|| ( $separator && strpos( $segment, $separator ) !== false );
+
+			// Relative asset urls resolved against a gallery url are what seed the
+			// crawl; no slug ends in a file extension.
+			if ( ! $free_text && preg_match( '#\\.[a-z0-9]{2,5}$#i', $segment ) ) {
+				return true;
+			}
+
+			$previous = $segment;
+		}
+
+		return false;
+	}
+
 	public function has_parameter_segments() {
 		$retval      = false;
 		$settings    = $this->_settings;
 		$request_uri = $this->get_app_request_uri();
 		$sep         = preg_quote( $settings->router_param_separator, '#' );
+		$param_regex = "(/?([^/]+{$sep})?[^/]+{$sep}[^/]+/?)";
+
+		// Without a slug, require at least one real key/value segment: allowing
+		// zero makes the pattern match every request URI.
+		if ( ! $settings->router_param_slug ) {
+			return (bool) preg_match( "#{$param_regex}{1,}$#", $request_uri );
+		}
+
+		$slug_found = strpos( $request_uri, '/' . $settings->router_param_slug . '/' ) !== false;
+
+		// The slug alone does not make the request ours. Claiming one that trails
+		// something no gallery url can contain lets passthru() drop the remainder,
+		// so WordPress resolves the base page and answers 200 instead of 404.
+		if ( $slug_found && $this->has_unroutable_remainder( $request_uri ) ) {
+			return false;
+		}
 
 		// If we detect the MVC_PARAM_SLUG, then we assume that we have parameters.
-		if ( $settings->router_param_slug && strpos( $request_uri, '/' . $settings->router_param_slug . '/' ) !== false ) {
+		if ( $slug_found ) {
 			$retval = true;
 		}
 
@@ -728,8 +863,8 @@ class RoutingApp {
 				'',
 				[
 					'#',
-					$settings->router_param_slug ? '/' . preg_quote( $settings->router_param_slug, '#' ) . '/?' : '',
-					"(/?([^/]+{$sep})?[^/]+{$sep}[^/]+/?){0,}",
+					'/' . preg_quote( $settings->router_param_slug, '#' ) . '/?',
+					"{$param_regex}{0,}",
 					'$#',
 				]
 			);
@@ -762,9 +897,16 @@ class RoutingApp {
 	}
 
 	public function passthru() {
+		// A REST route is never a gallery parameter block, and this runs before
+		// the REST server reads REQUEST_URI, so rewriting it would truncate the
+		// route.
+		if ( Router::is_rest_request() ) {
+			return;
+		}
+
 		$router = Router::get_instance();
 
-		$_SERVER['NGG_ORIG_REQUEST_URI'] = isset( $_SERVER['REQUEST_URI'] ) ? Router::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ) : '';
+		$_SERVER['NGG_ORIG_REQUEST_URI'] = isset( $_SERVER['REQUEST_URI'] ) ? Router::sanitize_request_uri_for_routing( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 		$base_parts                      = wp_parse_url( $router->get_base_url( 'root' ) );
 		$new_request_uri                 = $router->join_paths(
 			( ! empty( $base_parts['path'] ) ? $base_parts['path'] : '' ),
@@ -786,7 +928,7 @@ class RoutingApp {
 		$_SERVER['HTTP_X_ORIGINAL_URL'] = $request_uri;
 		$_SERVER['UNENCODED_URL']       = $request_uri;
 		if ( isset( $_SERVER['PATH_INFO'] ) ) {
-			$_SERVER['ORIG_PATH_INFO'] = isset( $_SERVER['PATH_INFO'] ) ? Router::sanitize_request_uri_for_routing( $_SERVER['PATH_INFO'] ) : '';
+			$_SERVER['ORIG_PATH_INFO'] = isset( $_SERVER['PATH_INFO'] ) ? Router::sanitize_request_uri_for_routing( $_SERVER['PATH_INFO'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 			unset( $_SERVER['PATH_INFO'] );
 		}
 	}
@@ -809,7 +951,7 @@ class RoutingApp {
 	 * The generated_url could look like:
 	 * http://localhost/dir/nggallery/show/slideshow
 	 *
-	 * @param $generated_url
+	 * @param string $generated_url
 	 * @return mixed
 	 */
 	public function add_post_permalink_to_url( $generated_url ) {
@@ -825,13 +967,22 @@ class RoutingApp {
 			$generated_url = $base_url;
 		}
 
-		$original_url    = $generated_url;
-		$generated_parts = explode( $settings->get( 'router_param_slug', 'nggallery' ), $generated_url );
-		$generated_url   = $generated_parts[0];
-		$ngg_parameters  = '/';
-		if ( isset( $generated_parts[1] ) ) {
-			$parts          = explode( '?', $generated_parts[1] );
-			$ngg_parameters = array_shift( $parts );
+		$original_url   = $generated_url;
+		$param_slug     = $settings->get( 'router_param_slug', 'nggallery' );
+		$param_slug     = is_scalar( $param_slug ) ? trim( (string) $param_slug, '/' ) : '';
+		$ngg_parameters = '/';
+
+		// Match the slug as a whole path segment: searching the whole url also
+		// matches an occurrence inside the host, splitting it in the wrong place.
+		$url_parts = $this->wp_parse_url( $generated_url );
+		if ( '' !== $param_slug
+			&& preg_match( $this->param_slug_segment_regex( $param_slug ), $url_parts['path'], $match, PREG_OFFSET_CAPTURE )
+		) {
+			$parameters         = substr( $url_parts['path'], $match[0][1] + strlen( $match[0][0] ) );
+			$ngg_parameters     = '' === $parameters ? '/' : $parameters;
+			$url_parts['path']  = substr( $url_parts['path'], 0, $match[0][1] );
+			$url_parts['query'] = '';
+			$generated_url      = $this->construct_url_from_parts( $url_parts );
 		}
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only request parameter for routing
 		$post_permalink = get_permalink( isset( $_REQUEST['p'] ) ? intval( sanitize_text_field( wp_unslash( $_REQUEST['p'] ) ) ) : 0 );
@@ -1032,8 +1183,11 @@ class RoutingApp {
 		}
 
 		// If there's a slug, we can assume everything after is a parameter,
-		// even if it's not in our desired format.
-		$retval = preg_replace( '#' . $slug . '.*$#', '', $retval );
+		// even if it's not in our desired format. Matched as a whole path
+		// segment; without a slug there is nothing to anchor to.
+		if ( '' !== $slug ) {
+			$retval = preg_replace( '#' . $slug . '(/.*)?$#', '', $retval );
+		}
 
 		if ( ! $retval ) {
 			$retval = '/';
@@ -1294,7 +1448,7 @@ class RoutingApp {
 			}
 			$parts['path'] = $this->join_paths(
 				$parts['path'],
-				$param_slug && strpos( $parts['path'], $param_slug ) === false ? $param_slug : '',
+				$param_slug && ! preg_match( $this->param_slug_segment_regex( $param_slug ), $parts['path'] ) ? $param_slug : '',
 				$this->create_parameter_segment( $key, $value, $id, $use_prefix )
 			);
 			$parts['path'] = str_replace( '//', '/', $parts['path'] );

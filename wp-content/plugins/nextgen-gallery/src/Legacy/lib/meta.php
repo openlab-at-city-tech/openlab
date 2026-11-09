@@ -45,7 +45,7 @@ class nggMeta {
 
 		$imagePath = \Imagely\NGG\DataStorage\Manager::get_instance()->get_image_abspath( $this->image );
 
-		if ( !file_exists( $imagePath ) ) {
+		if ( ! $imagePath || ! file_exists( $imagePath ) ) {
 			return false;
 		}
 
@@ -438,17 +438,21 @@ class nggMeta {
 
 			// --------- Some values from the XMP format--------- //
 			$xmpTags = array(
-				'xap:CreateDate'            => 'created_timestamp',
-				'xap:ModifyDate'            => 'last_modfied',
-				'xap:CreatorTool'           => 'tool',
-				'dc:format'                 => 'format',
-				'dc:title'                  => 'title',
-				'dc:creator'                => 'author',
-				'dc:subject'                => 'keywords',
-				'dc:description'            => 'caption',
-				'photoshop:AuthorsPosition' => 'position',
-				'photoshop:City'            => 'city',
-				'photoshop:Country'         => 'country',
+				'xap:CreateDate'                   => 'created_timestamp',
+				'xap:ModifyDate'                   => 'last_modfied',
+				'xap:CreatorTool'                  => 'tool',
+				'dc:format'                        => 'format',
+				'dc:title'                         => 'title',
+				// IPTC-aware tools write accessibility alt text to this XMP extension property.
+				// It is the dedicated alt-text field, so it takes priority over dc:title when
+				// populating the image alttext.
+				'Iptc4xmpExt:AltTextAccessibility' => 'title',
+				'dc:creator'                       => 'author',
+				'dc:subject'                       => 'keywords',
+				'dc:description'                   => 'caption',
+				'photoshop:AuthorsPosition'        => 'position',
+				'photoshop:City'                   => 'city',
+				'photoshop:Country'                => 'country',
 			);
 
 			foreach ($xmpTags as $key => $value) {
@@ -588,7 +592,7 @@ class nggMeta {
 		$date = $this->exif_date2ts( $this->get_META( 'created_timestamp' ) );
 		if (!$date) {
 			$image_path = \Imagely\NGG\DataStorage\Manager::get_instance()->get_backup_abspath( $this->image );
-			if (file_exists( $image_path )) {
+			if ( $image_path && file_exists( $image_path ) ) {
 				$date = filectime( $image_path );
 			}
 		}
@@ -643,8 +647,8 @@ class nggMeta {
 		}
 
 		// let's add now the size of the image
-		$meta['width']  = $this->size[0];
-		$meta['height'] = $this->size[1];
+		$meta['width']  = $this->size[0] ?? null;
+		$meta['height'] = $this->size[1] ?? null;
 
 		return $meta;
 	}
@@ -659,7 +663,7 @@ class nggMeta {
 	}
 
 	/**
-	 * Wrapper to utf8_encode() that avoids double encoding.
+	 * Converts a string to UTF-8 via mb_convert_encoding(), avoiding double encoding.
 	 *
 	 * Regex adapted from http://www.w3.org/International/questions/qa-forms-utf-8.en.php
 	 * to determine if the given string is already UTF-8. mb_detect_encoding() is not
@@ -682,8 +686,8 @@ class nggMeta {
             )*$%xs',
 			$str
 		);
-		if (!$is_utf8) {
-			utf8_encode( $str );
+		if (!$is_utf8 && function_exists('mb_convert_encoding')) {
+			$str = mb_convert_encoding( $str, 'UTF-8', 'ISO-8859-1' );
 		}
 		return $str;
 	}

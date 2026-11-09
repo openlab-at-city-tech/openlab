@@ -423,6 +423,10 @@ class WPPostDriver extends DriverBase {
 		//
         // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( "INSERT INTO {$wpdb->postmeta} (post_id, meta_key, meta_value) VALUES " . implode( ',', $sql_parts ) );
+
+		// The queries above bypass the metadata API, leaving a stale 'post_meta' cache. A later
+		// update_post_meta() would compare against it, see no change and skip the write.
+		wp_cache_delete( $post_id, 'post_meta' );
 	}
 
 	/**
@@ -509,7 +513,7 @@ class WPPostDriver extends DriverBase {
 	 * Ensure that the query args are set. We need to do this in case a third-party
 	 * plugin overrides our query.
 	 *
-	 * @param $query
+	 * @param \WP_Query $query
 	 */
 	public function set_query_args( $query ) {
 		if ( $query->get( 'datamapper' ) ) {
@@ -581,6 +585,10 @@ class WPPostDriver extends DriverBase {
 			}
 		}
 
+		if ( $retval ) {
+			$this->flush_query_cache();
+		}
+
 		return $retval;
 	}
 
@@ -599,6 +607,19 @@ class WPPostDriver extends DriverBase {
 			$post->post_mime_type = '';
 		}
 
+		// Preserve the existing author when updating an existing post. wp_insert_post() defaults an
+		// absent post_author to the current user even on an update, so every save of an entity's
+		// backing post silently rewrote its author to whoever performed the save. Album ownership is
+		// derived from exactly this field (AlbumREST::current_user_can_manage_album()), so that reset
+		// transferred album ownership on every edit and locked the original author out. Only the
+		// create path (no ID) should attribute the post to the current user. #1096.
+		if ( ! empty( $post->ID ) && empty( $post->post_author ) ) {
+			$existing_post = get_post( (int) $post->ID );
+			if ( $existing_post ) {
+				$post->post_author = $existing_post->post_author;
+			}
+		}
+
 		// TODO: unsilence this. WordPress 3.9-beta2 is generating an error that should be corrected before its final release.
 		$post_id = wp_insert_post( (array) $post );
 		if ( $post_id ) {
@@ -615,7 +636,7 @@ class WPPostDriver extends DriverBase {
 			$entity->$primary_key = $post_id;
 
 			// Clean cache.
-			$this->cache = [];
+			$this->flush_query_cache();
 		}
 		$entity->id_field = $primary_key;
 

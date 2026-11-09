@@ -248,7 +248,7 @@ class C_Mailchimp_OptIn_Notice
     /**
      * Dismisses the notice.
      *
-     * @param $code
+     * @param int $code The dismiss code.
      * @return array
      */
     public function dismiss($code)
@@ -847,7 +847,7 @@ class C_NextGen_First_Run_Notification_Wizard
      */
     public function render()
     {
-        $block = <<<EOT
+        $block = <<<'EOT'
         <style>
             div#ngg-wizard-video {
                 width: 710px;

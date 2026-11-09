@@ -2,21 +2,21 @@
     "packages": [
         {
             "name": "ezyang/htmlpurifier",
-            "version": "v4.17.0",
-            "version_normalized": "4.17.0.0",
+            "version": "v4.19.0",
+            "version_normalized": "4.19.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ezyang/htmlpurifier.git",
-                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c"
+                "reference": "b287d2a16aceffbf6e0295559b39662612b77fcf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/bbc513d79acf6691fa9cf10f192c90dd2957f18c",
-                "reference": "bbc513d79acf6691fa9cf10f192c90dd2957f18c",
+                "url": "https://api.github.com/repos/ezyang/htmlpurifier/zipball/b287d2a16aceffbf6e0295559b39662612b77fcf",
+                "reference": "b287d2a16aceffbf6e0295559b39662612b77fcf",
                 "shasum": ""
             },
             "require": {
-                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0"
+                "php": "~5.6.0 || ~7.0.0 || ~7.1.0 || ~7.2.0 || ~7.3.0 || ~7.4.0 || ~8.0.0 || ~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0"
             },
             "require-dev": {
                 "cerdic/css-tidy": "^1.7 || ^2.0",
@@ -28,7 +28,7 @@
                 "ext-iconv": "Converts text to and from non-UTF-8 encodings",
                 "ext-tidy": "Used for pretty-printing HTML"
             },
-            "time": "2023-11-17T15:01:25+00:00",
+            "time": "2025-10-17T16:34:55+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -60,48 +60,9 @@
             ],
             "support": {
                 "issues": "https://github.com/ezyang/htmlpurifier/issues",
-                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.17.0"
+                "source": "https://github.com/ezyang/htmlpurifier/tree/v4.19.0"
             },
             "install-path": "../ezyang/htmlpurifier"
-        },
-        {
-            "name": "imagely/pope-framework",
-            "version": "v0.19",
-            "version_normalized": "0.19.0.0",
-            "source": {
-                "type": "git",
-                "url": "git@github.com:awesomemotive/pope-framework.git",
-                "reference": "78e0b0c59b68c44b86e688f447a5a80e78e44b4f"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/awesomemotive/pope-framework/zipball/78e0b0c59b68c44b86e688f447a5a80e78e44b4f",
-                "reference": "78e0b0c59b68c44b86e688f447a5a80e78e44b4f",
-                "shasum": ""
-            },
-            "time": "2023-12-20T13:22:52+00:00",
-            "type": "library",
-            "installation-source": "dist",
-            "autoload": {
-                "files": [
-                    "./lib/autoload.php"
-                ]
-            },
-            "license": [
-                "GPL-2.0-only"
-            ],
-            "authors": [
-                {
-                    "name": "Imagely",
-                    "email": "support@imagely.com"
-                }
-            ],
-            "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
-            "support": {
-                "source": "https://github.com/awesomemotive/pope-framework/tree/v0.19",
-                "issues": "https://github.com/awesomemotive/pope-framework/issues"
-            },
-            "install-path": "../imagely/pope-framework"
         }
     ],
     "dev": false,

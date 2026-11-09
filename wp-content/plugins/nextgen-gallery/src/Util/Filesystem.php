@@ -343,4 +343,26 @@ class Filesystem {
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		$wpdb->query( "DELETE FROM `{$wpdb->nggpictures}` WHERE `galleryid` NOT IN (SELECT `gid` FROM `{$wpdb->nggallery}`)" );
 	}
+
+	/**
+	 * Resolves the absolute path of an attachment's largest available file.
+	 *
+	 * WordPress downscales uploads above big_image_size_threshold and makes the
+	 * derivative the attached file, keeping the untouched upload beside it. Imports
+	 * want the untouched one, so ask for that first and fall back to the attached
+	 * file: for attachments that were never scaled, for non-images, and for
+	 * originals an optimization plugin has since deleted.
+	 *
+	 * @param int $attachment_id The attachment to resolve.
+	 * @return string|false
+	 */
+	public static function get_attachment_original_abspath( $attachment_id ) {
+		$abspath = wp_get_original_image_path( $attachment_id );
+
+		if ( ! $abspath || ! file_exists( $abspath ) ) {
+			$abspath = get_attached_file( $attachment_id );
+		}
+
+		return $abspath;
+	}
 }

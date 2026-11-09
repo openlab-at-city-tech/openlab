@@ -33,6 +33,14 @@ global $wpdb;
 
 $id = (int) $_GET['id'];
 
+// The capability and nonce above are not object-level controls: without this, any holder of
+// 'NextGEN Manage gallery' could open the rotate popup - and so the full-size URL - for any image
+// id on the site, and the popup mints the 'ngg-rotate-image' nonce for it. Resolve the parent
+// gallery's owner, as the REST equivalent does. See issue #1093 (audit #7.7).
+if ( true !== \Imagely\NGG\REST\DataMappers\ImageREST::current_user_can_manage_image( $id ) ) {
+	die( esc_html__( 'Permission denied', 'nggallery' ) );
+}
+
 // let's get the image data.
 $picture = nggdb::find_image( $id );
 
@@ -44,8 +52,8 @@ $preview_image = $storage->get_image_url( $id, 'full' );
 ?>
 
 <script type='text/javascript'>
-	var selectedImage = "thumb<?php echo esc_js( $id ); ?>";
-	var rotateImageNonce = '<?php print esc_attr( wp_create_nonce( 'ngg-rotate-image' ) ); ?>';
+	var selectedImage = "thumb<?php echo (int) $id; ?>"; // (int) cast — $id appended in JS string, numeric guarantee prevents break.
+	var rotateImageNonce = <?php echo wp_json_encode( wp_create_nonce( 'ngg-rotate-image' ) ); ?>; // wp_json_encode — JS-string context; esc_attr was HTML-entity encode, wrong context.
 
 	function rotateImage() {
 
@@ -57,7 +65,7 @@ $preview_image = $storage->get_image_url( $id, 'full' );
 			data:  {
 				action: 'rotateImage',
 				nonce: rotateImageNonce,
-				id: <?php print esc_attr( $id ); ?>,
+				id: <?php echo (int) $id; ?>, // (int) cast — bare JS numeric literal; esc_attr returned HTML entities, not safe in JS context.
 				ra: rotate_angle
 			},
 			cache: false,

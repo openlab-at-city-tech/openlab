@@ -27,10 +27,10 @@ use Imagely\NGG\Display\I18N;
 				data-video-url="<?php echo esc_attr( $image->meta_data['video_link'] ); ?>"
 			<?php endif; ?>
 			<?php echo $image->get_thumbcode(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- thumbcode is safe HTML attributes from display settings ?>>
-			<img title="<?php echo esc_attr( stripslashes( I18N::translate( $image->alttext ?? '', 'pic_' . $image->pid . '_alttext' ) ) ); ?>"
+			<img<?php echo \Imagely\NGG\Display\GalleryImage::attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes() escapes each attribute with esc_attr(). ?> title="<?php echo esc_attr( stripslashes( I18N::translate( $image->alttext ?? '', 'pic_' . $image->pid . '_alttext' ) ) ); ?>"
 				alt="<?php echo esc_attr( stripslashes( I18N::translate( $image->alttext ?? '', 'pic_' . $image->pid . '_alttext' ) ) ); ?>"
 				data-image-id="<?php echo esc_attr( $image->{$image->id_field} ); ?>"
-				src="<?php echo esc_attr( $image->thumb_url ); ?>"/>
+				src="<?php echo esc_attr( $image->thumbURL ); ?>"/>
 		</a>
 	<?php } ?>
 </div>

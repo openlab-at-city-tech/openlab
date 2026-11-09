@@ -75,20 +75,50 @@ class AttachToPost extends \WP_REST_Controller {
 		$storage      = StorageManager::get_instance();
 		$image_mapper = ImageMapper::get_instance();
 
-		// Enhance each gallery with preview image URL and image count
-		foreach ( $galleries as &$gallery ) {
-			// Add image count - use ImageMapper's find_all_for_gallery method
-			$images               = $image_mapper->find_all_for_gallery( $gallery->gid, false );
-			$gallery->image_count = is_array( $images ) ? count( $images ) : 0;
+		if ( ! is_array( $galleries ) ) {
+			$galleries = [];
+		}
 
-			// Add preview image URL if preview pic exists
-			if ( $gallery->previewpic && $gallery->previewpic > 0 ) {
-				$preview_image = $image_mapper->find( $gallery->previewpic );
-				if ( $preview_image ) {
-					$gallery->previewpic_image_url = $storage->get_image_url( $preview_image, 'thumb', true );
-				}
+		$pic_table = $image_mapper->get_table_name();
+
+		// Image counts for all galleries in one query (avoids an N+1 per-gallery loop).
+		// Routed through the mapper's run_query() so it uses the same DB/cache layer.
+		$counts     = [];
+		$count_rows = $image_mapper->run_query( "SELECT galleryid, COUNT(*) AS cnt FROM `{$pic_table}` GROUP BY galleryid", false, true );
+		foreach ( (array) $count_rows as $row ) {
+			$counts[ (int) $row->galleryid ] = (int) $row->cnt;
+		}
+
+		// Preview image records for all galleries in one IN() query.
+		$preview_ids = array_unique(
+			array_filter(
+				array_map(
+					static function ( $gallery ) {
+						return (int) $gallery->previewpic;
+					},
+					$galleries
+				)
+			)
+		);
+		$preview_map = [];
+		if ( $preview_ids ) {
+			$preview_rows = $image_mapper->select()->where( [ 'pid IN %s', $preview_ids ] )->run_query( false, true );
+			foreach ( (array) $preview_rows as $preview_image ) {
+				$preview_map[ (int) $preview_image->pid ] = $preview_image;
 			}
 		}
+
+		foreach ( $galleries as &$gallery ) {
+			$gallery->image_count = $counts[ (int) $gallery->gid ] ?? 0;
+
+			if ( $gallery->previewpic && isset( $preview_map[ (int) $gallery->previewpic ] ) ) {
+				$gallery->previewpic_image_url = $storage->get_cache_busted_image_url( $preview_map[ (int) $gallery->previewpic ], 'thumb' );
+			}
+
+			// Drop the heavy serialized blob the picker never reads; keeps the payload small.
+			unset( $gallery->display_type_settings );
+		}
+		unset( $gallery );
 
 		return new \WP_REST_Response(
 			[
@@ -122,23 +152,111 @@ class AttachToPost extends \WP_REST_Controller {
 	}
 
 	public function get_images( $request ) {
-		global $wpdb;
-
 		$response = [];
 
 		$params = $request->get_param( 'displayed_gallery' );
+		if ( ! is_array( $params ) ) {
+			$params = [];
+		}
 
 		$storage      = StorageManager::get_instance();
 		$image_mapper = ImageMapper::get_instance();
 
 		$displayed_gallery = new DisplayedGallery();
 
-		foreach ( $params as $key => $value ) {
-			$key = $wpdb->_escape( $key );
-   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			if ( ! in_array( $key, [ 'container_ids', 'entity_ids', 'sortorder' ] ) ) {
-				$value = esc_sql( $value );
+		// Per-property allowlist + type cast for DisplayedGallery params arriving from the REST body.
+		// Anything outside the allowlist is silently dropped; values are cast per group rather than
+		// piped through esc_sql() (which is not a substitute for $wpdb->prepare()).
+		// sortorder belongs with the ID arrays: it is the user's drag-and-drop order, a list of pids.
+		// Classifying it as a string ran every array payload through is_scalar() and coerced it to '',
+		// wiping the custom order so the modal reopened with the default gallery sort.
+		$id_array_props = [ 'container_ids', 'entity_ids', 'excluded_container_ids', 'gallery_ids', 'image_ids', 'tag_ids', 'album_ids', 'ids', 'exclusions', 'sortorder' ];
+		$string_props   = [ 'display_type', 'order_by', 'order_direction', 'returns', 'source', 'src', 'slug', 'transient_id' ];
+		$int_props      = [ 'ID', 'id', 'maximum_entity_count', 'images_list_count' ];
+		$bool_props     = [ 'is_album_gallery', 'skip_excluding_globally_excluded_images', 'tagcloud' ];
+		$assoc_props    = [ 'display_settings' ];
+		$text_props     = [ 'effect_code', 'inner_content', 'display' ];
+
+		// Normalize keys once so the source lookup and the assignment loop key off identical values.
+		$normalized = [];
+		foreach ( $params as $raw_key => $raw_value ) {
+			if ( ! is_string( $raw_key ) ) {
+				continue;
 			}
+			$key = sanitize_key( $raw_key );
+			if ( '' === $key ) {
+				continue;
+			}
+			$normalized[ $key ] = $raw_value;
+		}
+
+		// container_ids holds numeric ids for gallery/album sources but tag names for tag sources, so its
+		// sanitization depends on the source. Resolve it up front: key order is not guaranteed.
+		$source = '';
+		foreach ( [ 'source', 'src' ] as $source_key ) {
+			if ( isset( $normalized[ $source_key ] ) && is_scalar( $normalized[ $source_key ] ) ) {
+				$source = sanitize_text_field( (string) $normalized[ $source_key ] );
+				break;
+			}
+		}
+
+		// Tag sources (and aliases) address containers by name, not id; absint() would wipe them. Tag
+		// names are escaped downstream in get_term_ids_for_tags().
+		$is_tag_source  = in_array( $source, [ 'tags', 'tag', 'image_tags', 'image_tag' ], true );
+		$tag_name_props = [ 'container_ids', 'excluded_container_ids' ];
+
+		foreach ( $normalized as $key => $raw_value ) {
+			if ( in_array( $key, $id_array_props, true ) ) {
+				if ( $is_tag_source && in_array( $key, $tag_name_props, true ) ) {
+					$raw_list = is_array( $raw_value )
+						? $raw_value
+						: ( is_string( $raw_value ) ? explode( ',', $raw_value ) : [] );
+
+					// 'strlen' drops empty strings while keeping a tag literally named '0'.
+					$value = array_values(
+						array_filter(
+							array_map(
+								'sanitize_text_field',
+								array_map( 'trim', array_map( 'strval', array_filter( $raw_list, 'is_scalar' ) ) )
+							),
+							'strlen'
+						)
+					);
+				} elseif ( is_array( $raw_value ) ) {
+					$value = array_values( array_filter( array_map( 'absint', $raw_value ) ) );
+				} elseif ( is_string( $raw_value ) ) {
+					$value = array_values(
+						array_filter(
+							array_map(
+								'absint',
+								array_map( 'trim', explode( ',', $raw_value ) )
+							)
+						)
+					);
+				} else {
+					$value = [];
+				}
+			} elseif ( in_array( $key, $string_props, true ) ) {
+				$value = is_scalar( $raw_value ) ? sanitize_text_field( (string) $raw_value ) : '';
+			} elseif ( in_array( $key, $int_props, true ) ) {
+				$value = is_scalar( $raw_value ) ? (int) $raw_value : 0;
+			} elseif ( in_array( $key, $bool_props, true ) ) {
+				$value = (bool) $raw_value;
+			} elseif ( in_array( $key, $assoc_props, true ) ) {
+				if ( is_array( $raw_value ) ) {
+					$value = $raw_value;
+				} elseif ( is_string( $raw_value ) ) {
+					$decoded = json_decode( $raw_value, true );
+					$value   = is_array( $decoded ) ? $decoded : [];
+				} else {
+					$value = [];
+				}
+			} elseif ( in_array( $key, $text_props, true ) ) {
+				$value = is_scalar( $raw_value ) ? wp_kses_post( (string) $raw_value ) : '';
+			} else {
+				continue;
+			}
+
 			$displayed_gallery->$key = $value;
 		}
 
@@ -167,9 +285,14 @@ class AttachToPost extends \WP_REST_Controller {
 				}
 			}
 
-			// Get the thumbnail
-			$entity->thumb_url  = $storage->get_image_url( $image, 'thumb', true );
-			$entity->thumb_html = $storage->get_image_html( $image, 'thumb' );
+			// Get the thumbnail. A gallery/album with no previewpic resolves to null above.
+			if ( $image ) {
+				$entity->thumb_url  = $storage->get_cache_busted_image_url( $image, 'thumb' );
+				$entity->thumb_html = $storage->get_image_html( $image, 'thumb' );
+			} else {
+				$entity->thumb_url  = '';
+				$entity->thumb_html = '';
+			}
 		}
 
 		return new \WP_REST_Response( $response );

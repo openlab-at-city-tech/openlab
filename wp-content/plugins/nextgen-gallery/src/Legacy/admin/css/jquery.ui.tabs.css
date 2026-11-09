@@ -129,7 +129,6 @@
 }
 .ui-tabs-disabled {
     opacity: .4;
-    filter: alpha(opacity=40);
 }
 .ui-tabs-panel {
     border-top: 1px solid #97a5b0 !important;

@@ -106,7 +106,7 @@ class nggManageAlbum {
 
 	public function controller() {
 
-		if ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_album' ) && isset( $_POST['update'] ) || isset( $_POST['delete'] ) || isset( $_POST['add'] ) ) {
+		if ( ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_album' ) && isset( $_POST['update'] ) ) || isset( $_POST['delete'] ) || isset( $_POST['add'] ) ) {
 			$this->processor();
 		}
 

@@ -461,6 +461,11 @@ class AMNotifications {
 		// Run a security check.
 		check_ajax_referer( 'nextgen_dismiss_notification', 'nonce' );
 
+		// Capability gate added: has_access() only checks an option filter, not user caps — require manage_options before option write.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( '', 403 );
+		}
+
 		// Check for access and required param.
 		if ( ! $this->has_access() || empty( $_POST['id'] ) ) {
 			wp_send_json_error();

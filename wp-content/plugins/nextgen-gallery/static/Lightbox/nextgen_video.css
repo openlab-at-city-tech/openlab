@@ -4,21 +4,21 @@
  */
 
 .ngg-video-container {
-    position: relative;
-    width: auto;
-    height: auto;
-    background:transparent;
-    z-index: 10001;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	position: relative;
+	width: auto;
+	height: auto;
+	background: transparent;
+	z-index: 10001;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .ngg-video-player,
 .ngg-video-container iframe {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
 }
 
 /**
@@ -27,31 +27,31 @@
 
 /* NextGEN Pro Lightbox */
 #npl_wrapper.npl-video-mode .galleria-image img {
-    display: none !important;
+	display: none !important;
 }
 
 /* SimpleLightbox */
 .sl-wrapper.sl-video-mode .ngg-video-container {
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
 }
 
 .sl-wrapper.sl-video-mode .sl-image img {
-    display: none !important;
+	display: none !important;
 }
 
 /* SimpleLightbox - Video sizing */
 .sl-wrapper.sl-video-mode .sl-image {
-		top: 0 !important;
-		left: 0 !important;
-    width: 100vw !important;
-    height: 100vh !important;
+	top: 0 !important;
+	left: 0 !important;
+	width: 100vw !important;
+	height: 100vh !important;
 }
 
 /* Fancybox */
 .ngg-video-mode#fancybox-wrap #fancybox-img {
-    display: none !important;
+	display: none !important;
 }
 
 #fancybox-wrap.ngg-video-mode {
@@ -68,7 +68,7 @@
 
 /* Shutter/Shutter Reloaded */
 #shDisplay #shWrap.ngg-video-mode #shImage {
-    display: none !important;
+	display: none !important;
 }
 
 #shDisplay .ngg-video-container {
@@ -83,10 +83,10 @@
 
 /* Thickbox */
 #TB_window.ngg-video-mode #TB_Image {
-    display: none !important;
+	display: none !important;
 }
 #TB_window.ngg-video-mode #TB_ImageOff {
-    display: none !important;
+	display: none !important;
 }
 #TB_window.ngg-video-mode {
 	margin-left: 0 !important;
@@ -97,76 +97,76 @@
 
 /* Ensure caption and navigation remain visible */
 #TB_window.ngg-video-mode #TB_caption {
-    display: block !important;
-    visibility: visible !important;
+	display: block !important;
+	visibility: visible !important;
 }
 
 #TB_window.ngg-video-mode #TB_secondLine {
-    display: block !important;
-    visibility: visible !important;
+	display: block !important;
+	visibility: visible !important;
 }
 
 #TB_window.ngg-video-mode #TB_prev,
 #TB_window.ngg-video-mode #TB_next {
-    display: inline !important;
-    visibility: visible !important;
+	display: inline !important;
+	visibility: visible !important;
 }
 
 /* Video error message */
 .ngg-video-error {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 20;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 20;
 }
 
 .ngg-video-error-content {
-    color: #fff;
-    text-align: center;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+	color: #fff;
+	text-align: center;
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
 }
 
 .ngg-video-error-icon {
-    font-size: 48px;
-    opacity: 0.7;
+	font-size: 48px;
+	opacity: 0.7;
 }
 
 .ngg-video-error-text {
-    font-size: 16px;
+	font-size: 16px;
 }
 
 /* Custom Lightbox - Generic styles for third-party lightboxes */
 .ngg-custom-lightbox-video-mode img:not(.ngg-video-processed) {
-    display: none !important;
+	display: none !important;
 }
 
 .ngg-custom-lightbox-video-mode .ngg-video-container {
-    position: relative !important;
-    width: 100% !important;
-    height: 100% !important;
-    display: flex !important;
-    align-items: center;
-    justify-content: center;
-    padding: 0 !important;
-    margin: 0 !important;
+	position: relative !important;
+	width: 100% !important;
+	height: 100% !important;
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	padding: 0 !important;
+	margin: 0 !important;
 }
 
 .ngg-custom-lightbox-video-mode .ngg-video-player,
 .ngg-custom-lightbox-video-mode .ngg-video-container iframe {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto !important;
-    height: auto !important;
-    object-fit: contain;
-    display: block;
+	max-width: 100%;
+	max-height: 100%;
+	width: auto !important;
+	height: auto !important;
+	object-fit: contain;
+	display: block;
 }

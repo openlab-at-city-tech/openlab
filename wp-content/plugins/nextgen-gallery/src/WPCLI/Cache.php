@@ -20,7 +20,11 @@ class Cache {
 	 */
 	public function flush( $args, $assoc_args ) {
 		$expired = ! empty( $assoc_args['expired'] ) ? true : false;
-		Transient::flush( $expired );
+		if ( $expired ) {
+			Transient::flush_expired();
+		} else {
+			Transient::flush();
+		}
 		\WP_CLI::success( 'Flushed caches' );
 	}
 }

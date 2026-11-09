@@ -46,8 +46,8 @@ class Gallery {
 	/**
 	 * Deletes the requested gallery
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <gallery_id> [--delete-files]
 	 */
 	public function delete( $args, $assoc_args ) {
@@ -66,8 +66,8 @@ class Gallery {
 	/**
 	 * Change gallery attributes
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <gallery_id> [--description=<description>] [--title=<title>]
 	 */
 	public function edit( $args, $assoc_args ) {
@@ -77,7 +77,7 @@ class Gallery {
 			\WP_CLI::error( "Unable to find gallery {$args[0]}" );
 		}
 
-		if ( empty( $assoc_args['description'] && empty( $assoc_args['title'] ) ) ) {
+		if ( empty( $assoc_args['description'] ) && empty( $assoc_args['title'] ) ) {
 			\WP_CLI::error( 'You must provide a new description or title' );
 		}
 
@@ -85,7 +85,7 @@ class Gallery {
 			$gallery->galdesc = $assoc_args['description'];
 		}
 		if ( ! empty( $assoc_args['title'] ) ) {
-			$gallery->name = $assoc_args['title'];
+			$gallery->title = $assoc_args['title'];
 		}
 
 		$mapper->save( $gallery );
@@ -105,7 +105,7 @@ class Gallery {
 		foreach ( $mapper->find_all() as $gallery ) {
 			$display[] = [
 				'id'          => $gallery->gid,
-				'title'       => $gallery->name,
+				'title'       => $gallery->title,
 				'path'        => $gallery->path,
 				'description' => $gallery->galdesc,
 			];
@@ -117,8 +117,8 @@ class Gallery {
 	/**
 	 * Lists all children (images) of a gallery.
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <gallery_id>
 	 */
 	public function list_children( $args, $assoc_args ) {
@@ -137,7 +137,7 @@ class Gallery {
 			$display[] = [
 				'id'          => $image->pid,
 				'title'       => $image->alttext,
-				'excluded'    => 0 === boolval( $image->exclude ) ? 'no' : 'yes',
+				'excluded'    => boolval( $image->exclude ) ? 'yes' : 'no',
 				'sort order'  => $image->sortorder,
 				'description' => $image->description,
 			];

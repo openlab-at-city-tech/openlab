@@ -28,11 +28,13 @@ function nggallery_sortorder( $galleryID = 0 ) {
 		check_admin_referer( 'ngg_updatesortorder' );
 
 		// get variable new sortorder.
+		$sortArray = [];
+
 		if ( ! empty( $_POST['sortorder'] ) ) {
 			$sortArray = explode( ',', sanitize_text_field( wp_unslash( $_POST['sortorder'] ) ) );
 		}
 
-		if ( is_array( $sortArray ) ) {
+		if ( ! empty( $sortArray ) ) {
 			$neworder = [];
 
 			foreach ( $sortArray as $pid ) {
@@ -42,18 +44,28 @@ function nggallery_sortorder( $galleryID = 0 ) {
 			$sortindex = 1;
 
 			foreach ( $neworder as $pic_id ) {
+				// Scoped to $galleryID. The ids come straight from $_POST['sortorder'], so
+				// without the galleryid predicate a sort submitted against a gallery the caller
+				// owns rewrote the sortorder of any pid on the site - the gallery the handler was
+				// handed never constrained the write. See issue #1093 (audit #7.7).
+				//
 				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$wpdb->query(
 					$wpdb->prepare(
-						"UPDATE `{$wpdb->nggpictures}` SET `sortorder` = %s WHERE `pid` = %d",
+						"UPDATE `{$wpdb->nggpictures}` SET `sortorder` = %s WHERE `pid` = %d AND `galleryid` = %d",
 						[
 							$sortindex,
 							$pic_id,
+							$galleryID,
 						]
 					)
 				);
 				++$sortindex;
 			}
+
+			// The raw $wpdb writes above skip the mapper, so its cached result set is stale;
+			// bump the version or the read below re-renders the pre-save order.
+			\Imagely\NGG\DataMappers\Image::get_instance()->flush_query_cache();
 
 			\Imagely\NGG\Util\Transient::flush( 'displayed_gallery_rendering' );
 
@@ -84,7 +96,7 @@ function nggallery_sortorder( $galleryID = 0 ) {
 
 	// In the case somebody presort, then we take this url.
 	if ( isset( $_GET['dir'] ) || isset( $_GET['presort'] ) ) {
-		$base_url = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+		$base_url = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : ''; // Fixed: sanitize_text_field preserved quotes/control chars in URL; esc_url_raw validates URL at ingestion before use in add_query_arg/output.
 	} else {
 		$base_url = $clean_url;
 	}
@@ -168,43 +180,43 @@ function nggallery_sortorder( $galleryID = 0 ) {
 
 				<ul class="subsubsub">
 					<li><?php esc_html_e( 'Presort', 'nggallery' ); ?>:</li>
-					<li><a href="<?php print esc_attr( remove_query_arg( 'presort', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( remove_query_arg( 'presort', $base_url ) ); ?>"<?php // Fixed: esc_attr wrong context for href; esc_url blocks javascript:/data: schemes in URL attribute. ?>
 											<?php
 											if ( $presort == '' ) {
 												print 'class="current"';}
 											?>
 					><?php esc_html_e( 'Unsorted', 'nggallery' ); ?></a> |</li>
-					<li><a href="<?php print esc_attr( add_query_arg( 'presort', 'pid', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( add_query_arg( 'presort', 'pid', $base_url ) ); ?>"<?php // Fixed: href context needs esc_url (scheme validation), not esc_attr. ?>
 											<?php
 											if ( $presort == 'pid' ) {
 												print 'class="current"';}
 											?>
 					><?php esc_html_e( 'Image ID', 'nggallery' ); ?></a> |</li>
-					<li><a href="<?php print esc_attr( add_query_arg( 'presort', 'filename', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( add_query_arg( 'presort', 'filename', $base_url ) ); ?>"<?php // Fixed: href context needs esc_url, not esc_attr. ?>
 											<?php
 											if ( $presort == 'filename' ) {
 												print 'class="current"';}
 											?>
 					><?php esc_html_e( 'Filename', 'nggallery' ); ?></a> |</li>
-					<li><a href="<?php print esc_attr( add_query_arg( 'presort', 'alttext', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( add_query_arg( 'presort', 'alttext', $base_url ) ); ?>"<?php // Fixed: href context needs esc_url, not esc_attr. ?>
 											<?php
 											if ( $presort == 'alttext' ) {
 												print 'class="current"';}
 											?>
 					><?php esc_html_e( 'Alt/Title text', 'nggallery' ); ?></a> |</li>
-					<li><a href="<?php print esc_attr( add_query_arg( 'presort', 'imagedate', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( add_query_arg( 'presort', 'imagedate', $base_url ) ); ?>"<?php // Fixed: href context needs esc_url, not esc_attr. ?>
 											<?php
 											if ( $presort == 'imagedate' ) {
 												print 'class="current"';}
 											?>
 					><?php esc_html_e( 'Date/Time', 'nggallery' ); ?></a> |</li>
-					<li><a href="<?php print esc_attr( add_query_arg( 'dir', 'ASC', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( add_query_arg( 'dir', 'ASC', $base_url ) ); ?>"<?php // Fixed: href context needs esc_url, not esc_attr. ?>
 											<?php
 											if ( $dir == 'ASC' ) {
 												print 'class="current"';}
 											?>
 					><?php esc_html_e( 'Ascending', 'nggallery' ); ?></a> |</li>
-					<li><a href="<?php print esc_attr( add_query_arg( 'dir', 'DESC', $base_url ) ); ?>"
+					<li><a href="<?php print esc_url( add_query_arg( 'dir', 'DESC', $base_url ) ); ?>"<?php // Fixed: href context needs esc_url, not esc_attr. ?>
 											<?php
 											if ( $dir == 'DESC' ) {
 												print 'class="current"';}
@@ -218,16 +230,22 @@ function nggallery_sortorder( $galleryID = 0 ) {
 				<?php
 				if ( $picturelist ) {
 					foreach ( $picturelist as $picture ) {
+						// Assemble the url('...') value in a PHP string so no template
+						// whitespace can land inside it; a newline there is a CSS parse
+						// error and blanks the thumbnail.
+						// Admin-only cache-buster: thumbURL is canonical now, so an edited
+						// image would keep its old pixels here without this.
+						$thumb_url = $picture->thumbURL;
+						if ( ! empty( $picture->updated_at ) ) {
+							$thumb_url = add_query_arg( 't', $picture->updated_at, $thumb_url );
+						}
+						$thumb_style = "background-image:url('" . \Imagely\NGG\Util\Router::esc_url( $thumb_url ) . "')";
 						?>
 						<div class="imageBox"
 							id="pid-<?php print esc_attr( $picture->pid ); ?>">
 							<div class="imageBox_theImage"
-								style="background-image:url('
-								<?php
-								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- \Imagely\NGG\Util\Router::esc_url() provides safe URL escaping
-								print \Imagely\NGG\Util\Router::esc_url( $picture->thumbURL );
-								?>
-								')">
+								<?php // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- esc_url() applied to the URL above ?>
+								style="<?php print $thumb_style; ?>">
 							</div>
 							<div class="imageBox_label">
 								<span><?php print esc_html( stripslashes( $picture->alttext ?? '' ) ); ?></span>

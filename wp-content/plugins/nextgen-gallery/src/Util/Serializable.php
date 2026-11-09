@@ -49,14 +49,9 @@ class Serializable {
 						throw new \Exception( \__( 'NextGEN Gallery will not unserialize data with objects', 'nggallery' ) );
 					}
 
-					// The second parameter was added by PHP 7.0.
-					if ( \version_compare( \phpversion(), '7.0', '>=' ) ) {
-						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- Required for legacy data handling
-						$retval = @\unserialize( $value, [ 'allowed_classes' => false ] );
-					} else {
-						// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- Required for legacy data handling
-						$retval = @\unserialize( $value );
-					}
+					// Always disallow class instantiation via unserialize() to block POP-gadget chains; PHP <7.0 unsupported by current WP, so no fallback needed.
+					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- Required for legacy data handling
+					$retval = @\unserialize( $value, [ 'allowed_classes' => false ] );
 				} else {
 					// We use json_decode() here because PHP's unserialize() is not Unicode safe.
 					$retval = \json_decode( \base64_decode( $retval ), true );
@@ -70,7 +65,7 @@ class Serializable {
 	/**
 	 * Determines if a string may hold a serialized PHP object
 	 *
-	 * @param $value
+	 * @param mixed $value
 	 * @return bool
 	 */
 	public static function check_for_serialized_objects( $value ) {

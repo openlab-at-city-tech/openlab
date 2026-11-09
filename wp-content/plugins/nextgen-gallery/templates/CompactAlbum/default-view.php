@@ -17,8 +17,8 @@
 			if ( $open_gallery_in_lightbox && 'gallery' === $gallery->entity_type ) {
 				$anchor = $gallery->displayed_gallery->effect_code . " href='" . \Imagely\NGG\Util\Router::esc_url( $gallery->pagelink ) . "'";
 				if ( ! isset( $gallery->no_previewpic ) ) {
-					$anchor .= "data-src='" . esc_attr( $gallery->previewpic_fullsized_url ) . "'
-                            data-fullsize='" . esc_attr( $gallery->previewpic_fullsized_url ) . "'
+					$anchor .= "data-src='" . esc_attr( $gallery->previewpic_fullsized_display_url ) . "'
+                            data-fullsize='" . esc_attr( $gallery->previewpic_fullsized_display_url ) . "'
                             data-thumbnail='" . esc_attr( $gallery->previewurl ) . "'
                             data-title='" . esc_attr( $gallery->previewpic_image->alttext ) . "'
                             data-description='" . esc_attr( stripslashes( $gallery->previewpic_image->description ?? '' ) ) . "'

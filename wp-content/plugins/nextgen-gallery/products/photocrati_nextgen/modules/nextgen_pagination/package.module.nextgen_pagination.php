@@ -30,8 +30,8 @@ class Mixin_NextGen_Basic_Pagination extends Mixin
                 }
             }
         }
-        // Early exit.
-        $return = ['prev' => '', 'next' => '', 'output' => "<div class='ngg-clear'></div>"];
+        // Early exit — empty output; templates handle their own bottom clearfix when needed.
+        $return = ['prev' => '', 'next' => '', 'output' => ''];
         if ($entities_per_page <= 0 || $number_of_entities <= 0) {
             return $return;
         }

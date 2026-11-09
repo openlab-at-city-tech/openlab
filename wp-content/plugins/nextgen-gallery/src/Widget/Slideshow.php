@@ -250,8 +250,8 @@ class Slideshow extends \WP_Widget {
 	/**
 	 * Renders the slideshow content.
 	 *
-	 * @param $args
-	 * @param $instance
+	 * @param array $args
+	 * @param array $instance
 	 * @return string
 	 */
 	public function render_slideshow( $args, $instance ) {

@@ -283,6 +283,28 @@ class Gallery extends Model {
 		// Establish some rules on where galleries can go.
 		$abspath = $storage->get_gallery_abspath( $this );
 
+		// Collapse "." / ".." segments so the location rules below cannot be evaded by a path that
+		// resolves to a forbidden directory without matching it literally (e.g. a stored path of
+		// "." resolves to the WordPress root but the raw string is not equal to it).
+		$abspath = \wp_normalize_path( (string) $abspath );
+		// wp_normalize_path() preserves a leading "//" for UNC/network-share paths; keep it so the
+		// prefix comparisons below still match the constants (which also keep their "//").
+		$is_unc      = ( 0 === strpos( $abspath, '//' ) );
+		$is_absolute = ( '' !== $abspath && '/' === $abspath[0] );
+		$normalized  = [];
+		foreach ( explode( '/', $abspath ) as $segment ) {
+			if ( '' === $segment || '.' === $segment ) {
+				continue;
+			}
+			if ( '..' === $segment ) {
+				array_pop( $normalized );
+				continue;
+			}
+			$normalized[] = $segment;
+		}
+		$prefix  = $is_unc ? '//' : ( $is_absolute ? '/' : '' );
+		$abspath = $prefix . implode( '/', $normalized );
+
 		// Galleries should at least be a sub-folder, not directly in WP_CONTENT.
 		$not_directly_in = [
 			'content'        => \wp_normalize_path( WP_CONTENT_DIR ),

@@ -15,7 +15,13 @@ window.Frame_Event_Publisher = {
     ajax_handlers_setup: false,
 
 	is_parent: function() {
-		return window.parent.document === window.document;
+		try {
+			return window.parent.document === window.document;
+		}
+		catch (ex) {
+			// Unreachable parent: act as the root and broadcast downwards.
+			return true;
+		}
 	},
 
 	is_child: function(){
@@ -71,7 +77,16 @@ window.Frame_Event_Publisher = {
         else {
             if (this.is_child()) {
                 if (arguments.length <= 1) child = window;
-                this.find_parent(child).register_child(child.Frame_Event_Publisher);
+                var parent_publisher = this.find_parent(child);
+
+                // Nothing forwardable above us: emit locally instead.
+                if (!parent_publisher || parent_publisher === this) {
+                    if (arguments.length == 0) events = this.received;
+                    this.notify_children(events);
+                    return;
+                }
+
+                parent_publisher.register_child(child.Frame_Event_Publisher);
                 this.notify_parent(events, child);
             }
             else {
@@ -148,23 +163,39 @@ window.Frame_Event_Publisher = {
 
 	/**
 	 * Parses the events found in the cookie
+	 *
+	 * The server writes each event as rawurlencode( wp_json_encode( $data ) ), so every
+	 * space inside a JSON value is stored as %20. Decoding has to happen per cookie
+	 * value, after splitting on the cookie separator: unescaping the whole header first
+	 * turned those %20s back into literal spaces, and splitting on ' ' then fragmented
+	 * the cookie, so any event carrying a multi-word value (a gallery title, a tag list)
+	 * failed to parse and was discarded.
 	 */
 	get_events: function(cookie){
 		var frame_events = {};
-		var cookies = unescape(cookie).split(' ');
+		var cookies = (cookie || '').split(/;\s*/);
 		for (var i=0; i<cookies.length; i++) {
-			var current_cookie = cookies[i];
-			var parts = current_cookie.match(/X-Frame-Events_([^=]+)=(.*)/);
-			if (parts) {
-				var event_id = parts[1];
-				var event_data = parts[2].replace(/;$/, '');
-				try {
-					frame_events[event_id] = JSON.parse(event_data);
-				}
-				catch (ex) {}
-				var cookie_name = 'X-Frame-Events_'+event_id;
-				this.delete_cookie(cookie_name);
+			var parts = cookies[i].match(/^X-Frame-Events_([^=]+)=([\s\S]*)$/);
+			if (!parts) continue;
+
+			var event_id = parts[1];
+			var event_data = null;
+
+			try {
+				event_data = JSON.parse(decodeURIComponent(parts[2]));
+				frame_events[event_id] = event_data;
 			}
+			catch (ex) {
+				// Report it rather than swallowing it. The cookie is still consumed
+				// below: the bytes would be identical next time, so retrying cannot
+				// help, and leaving it would warn on every AJAX completion until it
+				// expires three hours later.
+				if (typeof(console) != "undefined") {
+					console.warn('Frame_Event_Publisher: discarding unparsable event ' + event_id, ex);
+				}
+			}
+
+			this.delete_cookie('X-Frame-Events_' + event_id);
 		}
 		return frame_events;
 	},
