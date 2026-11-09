@@ -56,7 +56,11 @@ class TRP_Gettext_Manager {
 					$this->trp_query = $trp->get_component( 'query' );
 				}
 
-				$strings = $this->trp_query->get_all_gettext_strings( $language );
+				if ( $this->is_translation_editor_preview() || ! $this->gettext_runtime_status_migration_is_complete() ) {
+					$strings = $this->trp_query->get_all_gettext_strings( $language );
+				} else {
+					$strings = $this->trp_query->get_runtime_gettext_strings( $language );
+				}
 				if ( ! empty( $strings ) ) {
 					$trp_translated_gettext_texts = $strings;
 					$trp_strings                  = array();
@@ -70,6 +74,9 @@ class TRP_Gettext_Manager {
 						$trp_strings[ $context . '::' . $plural_form . '::' . $domain . '::' . $original ] = $value;
 					}
 					$trp_translated_gettext_texts = $trp_strings;
+				} else {
+                    // A language without saved overrides must not reuse the previous email's map.
+                    $trp_translated_gettext_texts = [];
 				}
 			}
 		}
@@ -113,6 +120,24 @@ class TRP_Gettext_Manager {
 
 	public function apply_woocommerce_gettext_filter() {
 		$this->call_gettext_filters( 'woocommerce_' );
+	}
+
+	protected function is_translation_editor_preview() {
+		return isset( $_REQUEST['trp-edit-translation'] ) && $_REQUEST['trp-edit-translation'] === 'preview';
+	}
+
+	/**
+	 * Return whether the gettext runtime status migration has completed.
+	 *
+	 * Upgraded sites temporarily fall back to loading all gettext rows until the
+	 * full gettext optimization task has finished, including runtime-status
+	 * classification.
+	 *
+	 * @return bool
+	 */
+	protected function gettext_runtime_status_migration_is_complete() {
+		return get_option( 'trp_updated_database_gettext_tables_optimization', 'yes' ) === 'yes' &&
+		       get_option( 'trp_updated_database_gettext_runtime_status_update', 'yes' ) !== 'no';
 	}
 
     public function processing_gettext_is_needed() {
@@ -163,6 +188,16 @@ class TRP_Gettext_Manager {
 		$length   = strlen( $localemo );
 
 		global $l10n;
+
+		// WP 6.5+ WP_Translations has no get_filename(); compare the controller's active locale
+		// instead, otherwise this guard silently returns true and never detects a foreign catalog.
+		if ( isset( $l10n[ $domain ] ) && $l10n[ $domain ] instanceof WP_Translations ) {
+			if ( class_exists( 'WP_Translation_Controller' ) ) {
+				return strtolower( WP_Translation_Controller::get_instance()->get_locale() ) === strtolower( $locale );
+			}
+			return true;
+		}
+
 		if ( isset( $l10n[ $domain ] ) && is_object( $l10n[ $domain ] ) && method_exists( $l10n[ $domain ], 'get_filename' ) ) {
 			$mo_filename = $l10n[ $domain ]->get_filename();
 
@@ -197,7 +232,9 @@ class TRP_Gettext_Manager {
 			}
 
 			foreach ( $reload_domains as $domain ) {
-				if ( isset( $l10n[ $domain ] ) && is_object( $l10n[ $domain ] ) ) {
+				// Skip WP_Translations (no get_filename() to rewrite); they already load in the
+				// correct locale now that determine_locale() is aligned, and this avoids a fatal.
+				if ( isset( $l10n[ $domain ] ) && is_object( $l10n[ $domain ] ) && method_exists( $l10n[ $domain ], 'get_filename' ) ) {
 					$path     = $l10n[ $domain ]->get_filename();
 					$new_path = preg_replace( '/' . $domain . '-(.*).mo$/i', $domain . '-' . $locale . '.mo', $path );
 					if ( $new_path !== $path ) {
@@ -229,14 +266,20 @@ class TRP_Gettext_Manager {
 		//check here for wp ajax or woocommerce ajax
 		if ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'WC_DOING_AJAX' ) && WC_DOING_AJAX ) ) {
 			$referer = '';
-			if (!empty( $_REQUEST['_wp_http_referer'])){
+			if (!empty( $_REQUEST['_wp_http_referer']) && is_string( $_REQUEST['_wp_http_referer'] ) ){
 				// USUALLY this one is actually REQUEST_URI from the previous page. It's set by the wp_nonce_field() and wp_referer_field()
 				// wp_get_referer() returns $_SERVER['REQUEST_URI'] from the prev page (not a full URL)
                 // HOWEVER, the _wp_http_referer can be manually set by a plugin, so it can be a FULL URL in some cases
 				$referer = wp_unslash( esc_url_raw( $_REQUEST['_wp_http_referer'] ) );
-			} elseif (!empty($_SERVER['HTTP_REFERER'])) {
+			} elseif (!empty($_SERVER['HTTP_REFERER']) && is_string( $_SERVER['HTTP_REFERER'] ) ) {
 				// this one is an actual URL that the browser sets.
 				$referer = wp_unslash( esc_url_raw( $_SERVER['HTTP_REFERER'] ) );
+			}
+
+			// No referer usually means a server-side loopback (Action Scheduler, WP_Async_Request etc.), not a visitor's page.
+			// Treat it as not front-end, unless something in the request still points to a translated language.
+			if ( $referer === '' && self::is_referer_less_request_in_default_language( $url_converter ) ) {
+				return apply_filters( 'trp_is_ajax_on_frontend_without_referer', false );
 			}
 
 			//if the request did not come from the admin set proper variables for the request (being processed in ajax they got lost) and return true
@@ -250,6 +293,25 @@ class TRP_Gettext_Manager {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Whether an ajax request without a referer has nothing that points to a translated language:
+	 * no trp-form-language field, not a WooCommerce ajax call and no language in the request URL (or domain).
+	 *
+	 * @param TRP_Url_Converter $url_converter
+	 * @return bool
+	 */
+	protected static function is_referer_less_request_in_default_language( $url_converter ) {
+		if ( ! empty( $_REQUEST['trp-form-language'] ) || ! empty( $_GET['wc-ajax'] ) || ( defined( 'WC_DOING_AJAX' ) && WC_DOING_AJAX ) ) {
+			return false;
+		}
+
+		$trp          = TRP_Translate_Press::get_trp_instance();
+		$settings     = $trp->get_component( 'settings' )->get_settings();
+		$url_language = $url_converter->get_lang_from_url_string( $url_converter->cur_page_url( false ) );
+
+		return empty( $url_language ) || $url_language === $settings['default-language'];
 	}
 
 	/**
@@ -279,10 +341,24 @@ class TRP_Gettext_Manager {
 		global $TRP_LANGUAGE;
 		$trp           = TRP_Translate_Press::get_trp_instance();
 		$url_converter = $trp->get_component( 'url_converter' );
-		$TRP_LANGUAGE  = $url_converter->get_lang_from_url_string( $referer );
-		if ( empty( $TRP_LANGUAGE ) ) {
-			$settings_obj = new TRP_Settings();
-			$settings     = $settings_obj->get_settings();
+		$settings_obj  = new TRP_Settings();
+		$settings      = $settings_obj->get_settings();
+
+		if ( isset( $_REQUEST['trp-form-language'] ) && ! empty( $_REQUEST['trp-form-language'] ) ) {
+			$form_language_slug = sanitize_text_field( wp_unslash( $_REQUEST['trp-form-language'] ) );
+			$form_language      = array_search( $form_language_slug, $settings['url-slugs'], true );
+
+			if ( ! empty( $form_language ) ) {
+				$TRP_LANGUAGE = $form_language;
+				return;
+			}
+		}
+
+		$referer_language = $url_converter->get_lang_from_url_string( $referer );
+
+		if ( ! empty( $referer_language ) ) {
+			$TRP_LANGUAGE = $referer_language;
+		} elseif ( empty( $TRP_LANGUAGE ) ) {
 			$TRP_LANGUAGE = $settings["default-language"];
 		}
 	}
@@ -292,50 +368,298 @@ class TRP_Gettext_Manager {
 	 * function that machine translates gettext strings
 	 */
 	public function machine_translate_gettext() {
+		$this->flush_deferred_gettext_storage_and_mt();
+
 		/* @todo  set the original language to detect and also decide if we automatically translate for the default language */
 		global $TRP_LANGUAGE, $trp_gettext_strings_for_machine_translation;
 		if ( ! empty( $trp_gettext_strings_for_machine_translation ) ) {
-			if ( ! $this->machine_translator ) {
-				$trp                      = TRP_Translate_Press::get_trp_instance();
-				$this->machine_translator = $trp->get_component( 'machine_translator' );
+			$this->machine_translate_gettext_queue( $trp_gettext_strings_for_machine_translation, $TRP_LANGUAGE );
+			$trp_gettext_strings_for_machine_translation = array();
+		}
+	}
+
+	/**
+	 * Resolve all gettext rows observed during the request and process deferred MT.
+	 *
+	 * Runtime misses are collected in memory and flushed in batches at shutdown
+	 * to avoid one DB query per gettext string.
+	 *
+	 * @return void
+	 */
+	protected function flush_deferred_gettext_storage_and_mt() {
+		$pending_storage       = $this->process_gettext->get_pending_gettext_storage();
+		$pending_mt_candidates = $this->process_gettext->get_pending_gettext_mt_candidates();
+
+		if ( empty( $pending_storage ) && empty( $pending_mt_candidates ) ) {
+			return;
+		}
+
+		if ( ! $this->trp_query ) {
+			$trp             = TRP_Translate_Press::get_trp_instance();
+			$this->trp_query = $trp->get_component( 'query' );
+		}
+
+		$chunk_size            = max( 1, (int) apply_filters( 'trp_gettext_pending_storage_chunk_size', 250 ) );
+		$gettext_insert_update = $this->trp_query->get_query_component( 'gettext_insert_update' );
+
+		foreach ( $pending_storage as $language => $items ) {
+			if ( empty( $items ) || ! in_array( $language, $this->settings['translation-languages'] ) ) {
+				continue;
 			}
 
-			// Gettext strings are considered by default to be in the English language
-			$source_language = apply_filters( 'trp_gettext_source_language', 'en_US', $TRP_LANGUAGE, array(), $trp_gettext_strings_for_machine_translation );
-			// machine translate new strings
-			if ( $this->machine_translator->is_available( array( $source_language, $TRP_LANGUAGE ) ) ) {
+			$resolved_rows = $this->resolve_pending_gettext_rows( $language, $items, $chunk_size );
+			$missing      = array_diff_key( $items, $resolved_rows );
 
-				/* Transform associative array into ordered numeric array. We need to keep keys numeric and ordered because $new_strings and $machine_strings depend on it.
-				 * Array was constructed as associative with db ids as keys to avoid duplication.
+			if ( ! empty( $missing ) ) {
+				foreach ( array_chunk( $missing, $chunk_size, true ) as $missing_chunk ) {
+					$gettext_insert_update->insert_gettext_strings( array_values( $missing_chunk ), $language );
+				}
+
+				$inserted_rows  = $this->resolve_pending_gettext_rows( $language, $missing, $chunk_size );
+				$resolved_rows = array_replace( $resolved_rows, $inserted_rows );
+			}
+
+			$this->update_existing_gettext_rows_from_observed_translations( $language, $items, $resolved_rows );
+			$language_mt_candidates = isset( $pending_mt_candidates[ $language ] ) ? $pending_mt_candidates[ $language ] : array();
+			$mt_queue               = $this->build_deferred_gettext_mt_queue( $language, $language_mt_candidates, $resolved_rows );
+
+			if ( ! empty( $mt_queue ) ) {
+				$this->machine_translate_gettext_queue( $mt_queue, $language );
+			}
+		}
+
+		$this->process_gettext->clear_pending_gettext_buffers();
+	}
+
+	/**
+	 * Resolve observed gettext items to existing DB rows in bounded chunks.
+	 *
+	 * @param string $language   Target language code.
+	 * @param array  $items      Observed gettext items keyed by storage key.
+	 * @param int    $chunk_size Number of items to resolve per DB query.
+	 *
+	 * @return array
 				 */
-				$trp_gettext_strings_for_machine_translation = array_values( $trp_gettext_strings_for_machine_translation );
+	protected function resolve_pending_gettext_rows( $language, $items, $chunk_size ) {
+		$resolved_rows = array();
 
+		foreach ( array_chunk( $items, $chunk_size, true ) as $items_chunk ) {
+			$rows = $this->trp_query->get_gettext_rows_by_composite_keys( $language, array_values( $items_chunk ) );
+
+			foreach ( $rows as $row ) {
+				$key = $this->get_gettext_row_storage_key( $language, $row );
+
+				if ( $key ) {
+					if ( isset( $resolved_rows[ $key ] ) && ! empty( $resolved_rows[ $key ]['translated'] ) ) {
+						continue;
+					}
+
+					$resolved_rows[ $key ] = $row;
+				}
+			}
+		}
+
+		return $resolved_rows;
+	}
+
+	/**
+	 * Build the request-local storage key for a gettext DB row.
+	 *
+	 * @param string $language Target language code.
+	 * @param array  $row      Gettext row joined with the original gettext table.
+	 *
+	 * @return string
+	 */
+	protected function get_gettext_row_storage_key( $language, $row ) {
+		$original    = ! empty( $row['original'] ) ? $row['original'] : $row['tt_original'];
+		$domain      = ! empty( $row['domain'] ) ? $row['domain'] : $row['tt_domain'];
+		$context     = ! empty( $row['context'] ) ? $row['context'] : 'trp_context';
+		$plural_form = isset( $row['plural_form'] ) ? (int) $row['plural_form'] : 0;
+
+		if ( empty( $original ) || empty( $domain ) ) {
+			return '';
+		}
+
+		return $this->process_gettext->get_gettext_storage_key( $language, $context, $plural_form, $domain, $original );
+	}
+
+	/**
+	 * Persist observed language-file translations into existing untranslated rows.
+	 *
+	 * This updates storage/status only. Language-file translations stay on the
+	 * non-runtime gettext status because they should not override themselves.
+	 *
+	 * @param string $language      Target language code.
+	 * @param array  $items         Observed gettext items keyed by storage key.
+	 * @param array  $resolved_rows Existing DB rows keyed by storage key.
+	 *
+	 * @return void
+	 */
+	protected function update_existing_gettext_rows_from_observed_translations( $language, $items, &$resolved_rows ) {
+		$updates = array();
+
+		foreach ( $items as $key => $item ) {
+			if ( empty( $resolved_rows[ $key ]['id'] ) || empty( $item['translated'] ) || ! empty( $resolved_rows[ $key ]['translated'] ) ) {
+				continue;
+			}
+
+			$updates[] = array(
+				'id'         => (int) $resolved_rows[ $key ]['id'],
+				'translated' => $item['translated'],
+				'status'     => $this->trp_query->get_constant_gettext_translated_in_language_file(),
+			);
+
+			$resolved_rows[ $key ]['translated'] = $item['translated'];
+			$resolved_rows[ $key ]['status']     = $this->trp_query->get_constant_gettext_translated_in_language_file();
+		}
+
+		if ( ! empty( $updates ) ) {
+			$gettext_insert_update = $this->trp_query->get_query_component( 'gettext_insert_update' );
+			$gettext_insert_update->update_gettext_strings( $updates, $language, array( 'id', 'translated', 'status' ) );
+		}
+	}
+
+	/**
+	 * Build an id-backed gettext machine translation queue after storage resolution.
+	 *
+	 * @param string $language      Target language code.
+	 * @param array  $mt_candidates Observed MT candidates keyed by storage key.
+	 * @param array  $resolved_rows Existing DB rows keyed by storage key.
+	 *
+	 * @return array
+	 */
+	protected function build_deferred_gettext_mt_queue( $language, $mt_candidates, $resolved_rows ) {
+		if ( empty( $mt_candidates ) ) {
+			return array();
+		}
+
+		$mt_queue = array();
+
+		foreach ( $mt_candidates as $key => $candidate ) {
+			if ( empty( $resolved_rows[ $key ]['id'] ) || ! empty( $resolved_rows[ $key ]['translated'] ) ) {
+				continue;
+			}
+
+			$db_id = (int) $resolved_rows[ $key ]['id'];
+			if ( isset( $mt_queue[ $db_id ] ) ) {
+				continue;
+			}
+
+			$mt_queue[ $db_id ] = array(
+				'id'              => $db_id,
+				'original'        => $candidate['original'],
+				'translated'      => '',
+				'domain'          => $candidate['domain'],
+				'status'          => $this->trp_query->get_constant_machine_translated(),
+				'context'         => $candidate['context'],
+				'plural_form'     => $candidate['plural_form'],
+				'original_plural' => $candidate['original_plural'],
+			);
+		}
+
+		return $mt_queue;
+	}
+
+	/**
+	 * Machine translate gettext rows and persist successful MT translations.
+	 *
+	 * @param array  $gettext_queue Queue of gettext rows keyed by DB id or numeric index.
+	 * @param string $language      Target language code.
+	 *
+	 * @return void
+	 */
+	protected function machine_translate_gettext_queue( $gettext_queue, $language ) {
+		if ( empty( $gettext_queue ) || empty( $language ) ) {
+			return;
+		}
+
+		if ( ! $this->machine_translator ) {
+			$trp                      = TRP_Translate_Press::get_trp_instance();
+			$this->machine_translator = $trp->get_component( 'machine_translator' );
+		}
+
+		// Gettext strings are considered by default to be in the English language.
+		$source_language = apply_filters( 'trp_gettext_source_language', 'en_US', $language, array(), $gettext_queue );
+		if ( ! $this->machine_translator->is_available( array( $source_language, $language ) ) ) {
+			return;
+		}
+
+		$gettext_queue = array_values( $gettext_queue );
 				$new_strings = array();
-				foreach ( $trp_gettext_strings_for_machine_translation as $trp_gettext_string_for_machine_translation ) {
-					$new_strings[] = ( $trp_gettext_string_for_machine_translation['original_plural'] && (int)$trp_gettext_string_for_machine_translation['plural_form'] > 0 ) ? $trp_gettext_string_for_machine_translation['original_plural'] : $trp_gettext_string_for_machine_translation['original'];
+		foreach ( $gettext_queue as $gettext_string ) {
+			$new_strings[] = ( $gettext_string['original_plural'] && (int)$gettext_string['plural_form'] > 0 ) ? $gettext_string['original_plural'] : $gettext_string['original'];
 				}
 
-				if ( apply_filters( 'trp_gettext_allow_machine_translation', true, $source_language, $TRP_LANGUAGE, $new_strings, $trp_gettext_strings_for_machine_translation ) ) {
-					$machine_strings = $this->machine_translator->translate( $new_strings, $TRP_LANGUAGE, $source_language );
-				} else {
-					$machine_strings = apply_filters( 'trp_gettext_machine_translate_strings', array(), $new_strings, $TRP_LANGUAGE, $trp_gettext_strings_for_machine_translation );
+				if ( ! $this->trp_query ) {
+					$trp             = TRP_Translate_Press::get_trp_instance();
+					$this->trp_query = $trp->get_component( 'query' );
 				}
 
-				if ( ! empty( $machine_strings ) ) {
-					foreach ( $new_strings as $key => $new_string ) {
-						if ( isset( $machine_strings[ $new_string ] ) ) {
-							$trp_gettext_strings_for_machine_translation[ $key ]['translated'] = $machine_strings[ $new_string ];
+		$gettext_insert_update = $this->trp_query->get_query_component( 'gettext_insert_update' );
+
+		if ( apply_filters( 'trp_gettext_allow_machine_translation', true, $source_language, $language, $new_strings, $gettext_queue ) ) {
+					global $trp_machine_translation_deadline;
+					if ( ! isset( $trp_machine_translation_deadline ) ) {
+						$trp_machine_translation_deadline = microtime( true ) + apply_filters( 'trp_machine_translation_time_budget', 10 );
+					}
+
+			$unique_strings = array_values( array_unique( $new_strings ) );
+			foreach ( array_chunk( $unique_strings, $this->machine_translator->get_chunk_size() ) as $strings_chunk ) {
+						if ( microtime( true ) > $trp_machine_translation_deadline ) {
+							break;
+						}
+
+				$machine_strings = $this->machine_translator->translate( $strings_chunk, $language, $source_language, 'gettext' );
+				if ( empty( $machine_strings ) ) {
+							continue;
+						}
+
+				// still saved, so it is never re-sent and re-billed; is_sprintf_compatible() keeps it off the page
+				if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+					foreach ( $machine_strings as $original => $machine_string ) {
+						if ( ! $this->process_gettext->is_sprintf_compatible( $machine_string, $original ) ) {
+							error_log( 'TranslatePress: the ' . $language . ' machine translation of the gettext string "' . $original . '" changed its printf placeholders, so the original is displayed instead. Edit the translation to fix it. Received: ' . substr( $machine_string, 0, 200 ) );
 						}
 					}
+				}
 
-					if ( ! $this->trp_query ) {
-						$trp             = TRP_Translate_Press::get_trp_instance();
-						$this->trp_query = $trp->get_component( 'query' );
+						$strings_to_save = array();
+				foreach ( $new_strings as $key => $new_string ) {
+					if ( isset( $machine_strings[ $new_string ] ) ) {
+						$gettext_queue[ $key ]['translated'] = $machine_strings[ $new_string ];
+						$strings_to_save[]                   = $gettext_queue[ $key ];
+							}
+						}
+
+				// keep a saved chunk's locks as recently translated markers; when the save is
+				// skipped or fails, delete them so the strings can be retried right away
+				$chunk_saved = false;
+				if ( ! empty( $strings_to_save ) ) {
+					$chunk_saved = $gettext_insert_update->update_gettext_strings( $strings_to_save, $language, array( 'id', 'original', 'translated', 'domain', 'status', 'plural_form' ) );
+				}
+				$this->machine_translator->release_locks( $chunk_saved );
 					}
-					$gettext_insert_update = $this->trp_query->get_query_component( 'gettext_insert_update' );
-					$gettext_insert_update->update_gettext_strings( $trp_gettext_strings_for_machine_translation, $TRP_LANGUAGE );
+
+			return;
+						}
+
+		$machine_strings = apply_filters( 'trp_gettext_machine_translate_strings', array(), $new_strings, $language, $gettext_queue );
+		if ( empty( $machine_strings ) ) {
+			return;
+					}
+
+		foreach ( $new_strings as $key => $new_string ) {
+			if ( isset( $machine_strings[ $new_string ] ) ) {
+				$gettext_queue[ $key ]['translated'] = $machine_strings[ $new_string ];
 				}
 			}
+
+		$gettext_queue = array_filter( $gettext_queue, function( $gettext_string ) {
+			return ! empty( $gettext_string['translated'] );
+		} );
+
+		if ( ! empty( $gettext_queue ) ) {
+			$gettext_insert_update->update_gettext_strings( $gettext_queue, $language, array( 'id', 'original', 'translated', 'domain', 'status', 'plural_form' ) );
 		}
 	}
 
@@ -461,9 +785,12 @@ class TRP_Gettext_Manager {
 	 */
 	static function strip_gettext_tags( $string ) {
 		if ( is_string( $string ) && strpos( $string, 'data-trpgettextoriginal=' ) !== false ) {
+			// \d* (not \d+) so the empty-id case (#!trpst#trp-gettext data-trpgettextoriginal=#!trpen#)
+			// emitted when $db_id is empty in process_gettext_strings is also stripped — otherwise the
+			// "data-trpgettextoriginal=" substring leaks into the cleaned output and gets persisted.
 			// final 'i' is for case insensitive. same for the 'i' in  str_ireplace
-			$string = preg_replace( '/ data-trpgettextoriginal=\d+#!trpen#/i', '', $string );
-			$string = preg_replace( '/data-trpgettextoriginal=\d+#!trpen#/i', '', $string );//sometimes it can be without space
+			$string = preg_replace( '/ data-trpgettextoriginal=\d*#!trpen#/i', '', $string );
+			$string = preg_replace( '/data-trpgettextoriginal=\d*#!trpen#/i', '', $string );//sometimes it can be without space
 			$string = str_ireplace( '#!trpst#trp-gettext', '', $string );
 			$string = str_ireplace( '#!trpst#/trp-gettext', '', $string );
 			$string = str_ireplace( '#!trpst#\/trp-gettext', '', $string );
@@ -546,10 +873,10 @@ class TRP_Gettext_Manager {
 							$translated = $trp_plural_forms->translate_plural( $current_string['original'], $current_string['original_plural'], $plural_form_i, $context, $translations );
 
 							if ( $translated && $translated != $current_string['original'] && $translated != $current_string['original_plural'] ) {
-								$status = 2;
+								$status = $this->trp_query->get_constant_gettext_translated_in_language_file();
 							}else {
 								$translated = '';
-								$status = 0;
+								$status = $this->trp_query->get_constant_not_translated();
 							}
 							if ( $plural_form_id_translation_table ) {
 								if ( $translated ) {
@@ -580,15 +907,15 @@ class TRP_Gettext_Manager {
 					}
 				} else {
 					if ( $current_string['status'] == 0 && empty( $current_string['translated'] ) ) {
-						$translated = $translations->translate( $current_string['original'] );
+							$translated = $translations->translate( $current_string['original'], $context );
 					}
 				}
 				if ( $current_string['status'] == 0 && empty( $current_string['translated'] ) ) {
 					if ( $translated && $translated != $current_string['original'] && $translated != $current_string['original_plural'] ) {
-						$status = 2;
+						$status = $this->trp_query->get_constant_gettext_translated_in_language_file();
 					} else {
 						$translated = '';
-						$status     = 0;
+						$status     = $this->trp_query->get_constant_not_translated();
 					}
 
 					if ( $current_string['id'] ) {
@@ -596,7 +923,7 @@ class TRP_Gettext_Manager {
 							$update_gettext_strings[] = array(
 								'id'         => $current_string['id'],
 								'translated' => $translated,
-								'status'     => 2
+								'status'     => $this->trp_query->get_constant_gettext_translated_in_language_file()
 							);
 						}
 					} else {

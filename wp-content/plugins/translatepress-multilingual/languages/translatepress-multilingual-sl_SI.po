@@ -1,0 +1,6082 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: sl_SI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3);\n"
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: sl_SI\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || "
+"n%100==4 ? 2 : 3);\n"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress - DEV"
+msgstr "TranslatePress - DEV"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "https://translatepress.com/"
+msgstr "https://translatepress.com/"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-cd79cda5
+msgid ""
+"Experience a better way of translating your WordPress site using a visual "
+"front-end translation editor, with full support for WooCommerce and site "
+"builders."
+msgstr ""
+"Odkrijte boljši način prevajanja vaše spletne strani WordPress z vizualnim "
+"urejevalnikom prevodov v čelni strani, ki v celoti podpira WooCommerce in "
+"graditelje strani."
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+msgstr "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "https://cozmoslabs.com/"
+msgstr "https://cozmoslabs.com/"
+
+msgid "Active"
+msgstr "Aktivno"
+
+msgid ""
+"The inactive languages will still be visible and active for the admin. For "
+"other users they won't be visible in the language switchers and won't be "
+"accessible either."
+msgstr ""
+"Neaktivni jeziki bodo še vedno vidni in aktivni za administratorja. Za "
+"druge uporabnike ne bodo vidni v izbirnikih jezikov in tudi dostopni ne "
+"bodo."
+
+msgid "unknown"
+msgstr "neznano"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Extra Languages add-on</strong> requires TranslatePress version "
+"%1$s or higher. You are currently using version %2$s. Please update "
+"TranslatePress to enable this feature."
+msgstr ""
+"<strong>Dodatek Extra Languages</strong> zahteva različico TranslatePress "
+"%1$s ali višje. Trenutno uporabljate različico %2$s. Posodobite "
+"TranslatePress, da omogočite to funkcijo."
+
+msgid "Dismiss this notice."
+msgstr "Zapri to obvestilo."
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Slug"
+msgstr "Slug objave"
+
+#, tp-ctx-742ebaa7, tp-glo-9fa92a70
+msgid "URL Slugs Translation"
+msgstr "Prevajanje URL slugov"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs"
+msgstr "Slugi"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy Slugs"
+msgstr "Slugi taksonomij"
+
+#, tp-ctx-742ebaa7
+msgid "Search Taxonomy Slugs"
+msgstr "Išči taksonomske sluge"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Taxonomy Slug"
+msgstr "Slug taksonomije"
+
+msgid "Translation"
+msgstr "Prevod"
+
+#, tp-ctx-742ebaa7
+msgid "Term Slugs"
+msgstr "Slugi pojmov"
+
+#, tp-ctx-742ebaa7
+msgid "Search Term Slugs"
+msgstr "Išči sluge pojmov"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Term Slug"
+msgstr "Slug pojma"
+
+msgid "Taxonomy"
+msgstr "Taksonomija"
+
+msgid "Filter by Taxonomy"
+msgstr "Filtriraj po taksonomiji"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Slugs"
+msgstr "Slugi objav"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Slugs"
+msgstr "Išči sluge objav"
+
+#, tp-ctx-e9944eb3
+msgid "Post ID"
+msgstr "ID objave"
+
+#, tp-ctx-e9944eb3
+msgid "Post Type"
+msgstr "Vrsta objave"
+
+#, tp-ctx-e9944eb3
+msgid "Filter by Post Type"
+msgstr "Filtriraj po vrsti objave"
+
+msgid "Published"
+msgstr "Objavljeno"
+
+#, tp-ctx-e9944eb3
+msgid "Any Post Status"
+msgstr "Kateri koli status objave"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Type Base Slugs"
+msgstr "Slugs baz vrst objav"
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Type Base Slug"
+msgstr "Slug baze vrste objave"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Type Base Slugs"
+msgstr "Iskanje slugs baz vrst objav"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce Slugs"
+msgstr "WooCommerce slugs"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-cd79cda5
+msgid "WooCommerce Slug"
+msgstr "WooCommerce slug"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "Search WooCommerce Slugs"
+msgstr "Iskanje WooCommerce slugs"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Automatic and manual slug translation changes performed when "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 was active had to be "
+"removed because of some issues with that version. All slug translations "
+"from before that version are now in use. Thank you for understanding!"
+msgstr ""
+"Samodejne in ročne spremembe prevodov slugov, opravljene, ko je bil aktiven "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4, so morale biti "
+"odstranjene zaradi nekaterih težav s to različico. Vsi prevodi slugov iz "
+"obdobja pred to različico so zdaj v uporabi. Hvala za razumevanje!"
+
+msgid ""
+"If you absolutely need them, the removed translations can be found in "
+"tables trp_slug_original_obsolete and trp_slug_translation_obsolete."
+msgstr ""
+"Če jih nujno potrebujete, so odstranjeni prevodi na voljo v tabelah "
+"trp_slug_original_obsolete in trp_slug_translation_obsolete."
+
+msgid "(inactive)"
+msgstr "(neaktiven)"
+
+#, tp-ctx-742ebaa7
+msgid "Other Slugs"
+msgstr "Drugi slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Search Other Slugs"
+msgstr "Iskanje drugih slugs"
+
+msgid "Automatic User Language Detection"
+msgstr "Samodejno zaznavanje jezika uporabnika"
+
+msgid "Invalid language code"
+msgstr "Neveljavna koda jezika"
+
+#, tp-ai
+msgid ""
+"We've detected you might be speaking a different language. Do you want to "
+"change to:"
+msgstr "Zaznali smo, da morda govorite drug jezik. Ali želite preklopiti na:"
+
+#, tp-ai
+msgid "Change Language"
+msgstr "Spremeni jezik"
+
+#, tp-ai
+msgid "Close and do not switch language"
+msgstr "Zapri in ne preklopi jezika"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "First by browser language, then IP address (recommended)"
+msgstr "Najprej po jeziku brskalnika, nato po IP naslovu (priporočeno)"
+
+msgid "First by IP address, then by browser language"
+msgstr "Najprej po IP naslovu, nato po jeziku brskalnika"
+
+msgid "Only by browser language"
+msgstr "Samo po jeziku brskalnika"
+
+msgid "Only by IP address"
+msgstr "Samo po naslovu IP"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "A popup appears asking the user if they want to be redirected"
+msgstr "Pojavi se pojavno okno, ki uporabnika vpraša, ali želi biti preusmerjen"
+
+msgid "Redirect directly (*not recommended)"
+msgstr "Neposredna preusmeritev (*ni priporočljivo)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Pop-up window over the content"
+msgstr "Pojavno okno nad vsebino"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Hello bar before the content"
+msgstr "Obvestilna vrstica pred vsebino"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Automatic User Language Detection requires a newer version of "
+"TranslatePress to use its visual settings interface. The legacy settings "
+"form will remain available until TranslatePress is updated."
+msgstr ""
+"Za uporabo vizualnega vmesnika nastavitev samodejne zaznave jezika "
+"uporabnika je potrebna novejša različica TranslatePress. Stari obrazec za "
+"nastavitve bo ostal na voljo do posodobitve TranslatePressa."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Update TranslatePress"
+msgstr "Posodobi TranslatePress"
+
+msgid ""
+"WARNING. Cannot determine your language preference based on your current "
+"IP.<br>This is most likely because the website is on a local environment."
+msgstr ""
+"OPOZORILO. Na podlagi vašega trenutnega naslova IP ni mogoče določiti vaše "
+"jezikovne preference.<br>To je najverjetneje zato, ker je spletišče v "
+"lokalnem okolju."
+
+msgid "Permission denied."
+msgstr "Dovoljenje zavrnjeno."
+
+#, tp-glo-b357fc3e
+msgid "Invalid nonce."
+msgstr "Neveljaven nonce."
+
+#, tp-ai
+msgid "Invalid settings."
+msgstr "Neveljavne nastavitve."
+
+msgid "Settings saved."
+msgstr "Nastavitve so shranjene."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Go to <a href=\"%s\" target=\"_self\">Advanced</a> tab to change this "
+"feature's settings"
+msgstr ""
+"Pojdite na zavihek <a href=\"%s\" target=\"_self\">Napredno</a>, da "
+"spremenite nastavitve te funkcije"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Website language selector"
+msgstr "Izbirnik jezika spletnega mesta"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Change language"
+msgstr "Spremeni jezik"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Available languages"
+msgstr "Razpoložljivi jeziki"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Please enter your DeepL API key."
+msgstr "Vnesite svoj DeepL API ključ."
+
+#, tp-glo-c6709f3f
+msgid "DeepL"
+msgstr "DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Bad request. There was an error accessing the DeepL API."
+msgstr "Napačna zahteva. Pri dostopu do DeepL API je prišlo do napake."
+
+#, tp-glo-91460d88
+msgid "The API key entered is invalid."
+msgstr "Vneseni API ključ je neveljaven."
+
+#, tp-glo-91460d88
+msgid "The API resource could not be found."
+msgstr "Vira API ni bilo mogoče najti."
+
+msgid "The request size is too large."
+msgstr "Velikost zahteve je prevelika."
+
+msgid "The request is too long."
+msgstr "Zahteva je predolga."
+
+msgid "Too many requests. Please try again later."
+msgstr "Preveč zahtev. Poskusite znova pozneje."
+
+msgid "Your translation quota has been reached."
+msgstr "Vaša kvota za prevode je bila dosežena."
+
+msgid "We could not process your request. Please try again later."
+msgstr "Vaše zahteve nismo mogli obdelati. Poskusite znova pozneje."
+
+#, tp-glo-c6709f3f
+msgid ""
+"There is an error on the DeepL service and your request could not be "
+"processed."
+msgstr ""
+"V storitvi DeepL je prišlo do napake in vaše zahteve ni bilo mogoče "
+"obdelati."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Type"
+msgstr "Vrsta DeepL API"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Free"
+msgstr "Brezplačno"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Select the type of DeepL API you want to use."
+msgstr "Izberite vrsto DeepL API, ki jo želite uporabljati."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Key"
+msgstr "Ključ DeepL API"
+
+#, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"%s\" target=\"_blank\">this link</a> to see how you can set "
+"up an API key and control API costs."
+msgstr ""
+"Obiščite <a href=\"%s\" target=\"_blank\">to povezavo</a>, da vidite, kako "
+"lahko nastavite API ključ in nadzorujete stroške API."
+
+msgid "No Active License Detected for this website."
+msgstr "Za to spletno mesto ni zaznane aktivne licence."
+
+msgid "Enter your license key"
+msgstr "Vnesite licenčni ključ"
+
+msgid " Or %1$spurchase one here%2$s"
+msgstr " Ali %1$skuplite ga tukaj%2$s"
+
+msgid "Different Domain per Language"
+msgstr "Različna domena za vsak jezik"
+
+msgid "View Docs"
+msgstr "Ogled dokumentacije"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Assign different domains or subdomains to each language. When visitors "
+"access these domains, TranslatePress loads the appropriate language "
+"translation directly without redirecting."
+msgstr ""
+"Dodeli različne domene ali poddomene vsakemu jeziku. Ko obiskovalci "
+"dostopijo do teh domen, TranslatePress neposredno naloži ustrezen jezikovni "
+"prevod brez preusmeritve."
+
+msgid "Example: %1$s for English, %2$s for Spanish, %3$s for French."
+msgstr "Primer: %1$s za angleščino, %2$s za španščino, %3$s za francoščino."
+
+msgid "Before enabling:"
+msgstr "Pred omogočitvijo:"
+
+#, tp-glo-1edf89cb
+msgid ""
+"Ensure your domains are registered, pointed to your server, and have SSL "
+"certificates configured."
+msgstr ""
+"Poskrbite, da so vaše domene registrirane, usmerjene na vaš strežnik in da "
+"imajo konfigurirana SSL potrdila."
+
+msgid "Domain"
+msgstr "Domena"
+
+msgid "Map this language to a different domain or sub-domain."
+msgstr "Preslikajte ta jezik na drugo domeno ali poddomeno."
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Prefill with current domain"
+msgstr "Predizpolni s trenutno domeno"
+
+#, tp-glo-e765e8ba
+msgid "Check DNS"
+msgstr "Preveri DNS"
+
+#, tp-glo-e765e8ba
+msgid "Checking DNS..."
+msgstr "Preverjanje DNS..."
+
+#, tp-glo-e765e8ba
+msgid "DNS is correctly configured!"
+msgstr "DNS je pravilno konfiguriran!"
+
+#, tp-glo-e765e8ba
+msgid "DNS check failed. Please verify your domain configuration."
+msgstr "Preverjanje DNS ni uspelo. Preverite konfiguracijo domene."
+
+msgid "This domain is already assigned to another language."
+msgstr "Ta domena je že dodeljena drugemu jeziku."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Different Domain per Language add-on</strong> requires "
+"TranslatePress version %1$s or higher. You are currently using version "
+"%2$s. Please update TranslatePress to enable this feature."
+msgstr ""
+"<strong>Razširitev za različno domeno na jezik</strong> zahteva "
+"TranslatePress različice %1$s ali višjo. Trenutno uporabljate različico "
+"%2$s. Posodobite TranslatePress, da omogočite to funkcijo."
+
+msgid ""
+"Note: This option is disabled when Different Domain for Language addon is "
+"active."
+msgstr ""
+"Opomba: Ta možnost je onemogočena, ko je aktivna razširitev za različno "
+"domeno na jezik."
+
+msgid ""
+"Different Domain per Language: Domain is required when domain mapping is "
+"enabled. The toggle has been disabled for languages with empty domains."
+msgstr ""
+"Različna domena na jezik: Domena je obvezna, ko je preslikava domen "
+"omogočena. Stikalo je bilo onemogočeno za jezike s praznimi domenami."
+
+msgid ""
+"Different Domain per Language: The same domain cannot be assigned to "
+"multiple languages. The toggle has been disabled for duplicate domains."
+msgstr ""
+"Različna domena na jezik: Ista domena ne more biti dodeljena več jezikom. "
+"Stikalo je bilo onemogočeno za podvojene domene."
+
+#, tp-glo-9fa92a70
+msgid ""
+"Different Domain per Language: A language domain cannot be the same as the "
+"main site URL. The toggle has been disabled for the matching domain."
+msgstr ""
+"Različna domena na jezik: Domena jezika ne more biti enaka glavnemu URL-ju "
+"spletišča. Stikalo je bilo onemogočeno za ujemajočo se domeno."
+
+msgid "Please enter a domain."
+msgstr "Vnesite domeno."
+
+msgid "Invalid domain format."
+msgstr "Neveljavna oblika domene."
+
+msgid "Could not reach domain: %s"
+msgstr "Domene ni bilo mogoče doseči: %s"
+
+msgid "Domain is reachable!"
+msgstr "Domena je dosegljiva!"
+
+#, tp-glo-1aabb38a
+msgid "Domain returned HTTP status %d."
+msgstr "Domena je vrnila HTTP status %d."
+
+msgid "Limit this menu item to the following languages"
+msgstr "Omeji ta element menija na naslednje jezike"
+
+msgid "All Languages"
+msgstr "Vsi jeziki"
+
+msgid "Translator"
+msgstr "Prevajalec"
+
+#, tp-glo-ee8b4f9f
+msgid " TranslatePress Settings"
+msgstr " Nastavitve TranslatePress"
+
+msgid "Allow this user to translate the website."
+msgstr "Dovoli temu uporabniku prevajanje spletnega mesta."
+
+msgid "Translate Site"
+msgstr "Prevedi spletno mesto"
+
+#, tp-ai
+msgid "Add-On"
+msgstr "Dodatek"
+
+msgid "Deactivate"
+msgstr "Deaktiviraj"
+
+msgid "Activate"
+msgstr "Aktiviraj"
+
+#, tp-ai
+msgid "Installing..."
+msgstr "Nameščanje..."
+
+#, tp-ai
+msgid ""
+"This add-on can not be activated back without a valid license. Are you sure "
+"you want to deactivate it?"
+msgstr ""
+"Tega dodatka ni mogoče ponovno aktivirati brez veljavne licence. Ali ste "
+"prepričani, da ga želite deaktivirati?"
+
+msgid "Documentation"
+msgstr "Dokumentacija"
+
+#, tp-ai
+msgid "A valid license is required to activate add-ons."
+msgstr "Za aktivacijo dodatkov je potrebna veljavna licenca."
+
+#, tp-ai
+msgid "Activate all"
+msgstr "Aktiviraj vse"
+
+#, tp-ai
+msgid ""
+"Add-ons can not be activated back without a valid license. Are you sure you "
+"want to deactivate them?"
+msgstr ""
+"Dodatkov ni mogoče ponovno aktivirati brez veljavne licence. Ali ste "
+"prepričani, da jih želite deaktivirati?"
+
+#, tp-ai
+msgid "Deactivate all"
+msgstr "Deaktiviraj vse"
+
+#, tp-ai
+msgid "%1$sAdd-ons settings saved successfully%2$s"
+msgstr "%1$sNastavitve dodatkov so bile uspešno shranjene.%2$s"
+
+msgid "Date format"
+msgstr "Format datuma"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Customize the date formatting per each translated language.<br/>Leave empty "
+"for default WP setting or see more information <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">here</a>"
+msgstr ""
+"Prilagodi oblikovanje datuma za vsak prevedeni jezik.<br/>Pustite prazno za "
+"privzeto nastavitev WP ali si oglejte več informacij <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">tukaj</a>"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"To edit an existing TranslatePress language, input the language code and "
+"fill in only the columns you want to overwrite (e.g. Language name, "
+"Flag).<br>You can also add new custom languages. They will be available "
+"under General settings, All Languages list, where the URL slug can be "
+"edited."
+msgstr ""
+"Za urejanje obstoječega jezika TranslatePress vnesite kodo jezika in "
+"izpolnite le stolpce, ki jih želite prepisati (npr. ime jezika, "
+"zastava).<br>Lahko dodate tudi nove jezike po meri. Ti bodo na voljo pod "
+"splošnimi nastavitvami, na seznamu vseh jezikov, kjer je mogoče urediti URL "
+"slug."
+
+#, tp-glo-91460d88, tp-glo-9fa92a70, tp-glo-c6709f3f
+msgid ""
+"For custom flag, first upload the image in media library then paste the "
+"URL.<br>Changing or deleting a custom language will impact translations and "
+"site URL's.<br>The Language code and the ISO Code should contain only "
+"alphabetical values, numerical values, \"-\" and \"_\".<br>The ISO Codes "
+"can be found on <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO Codes</a> and <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL Target Codes</a>."
+msgstr ""
+"Za zastavo po meri najprej naložite sliko v medijsko knjižnico, nato "
+"prilepite URL.<br>Sprememba ali brisanje jezika po meri bo vplivala na "
+"prevode in URL-je spletnega mesta.<br>Koda jezika in ISO koda morata "
+"vsebovati samo abecedne vrednosti, številčne vrednosti, \"-\" in "
+"\"_\".<br>ISO kode najdete na <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO kode</a> in <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL ciljne kode</a>."
+
+msgid "Language code"
+msgstr "Koda jezika"
+
+msgid "Language name"
+msgstr "Ime jezika"
+
+msgid "Native name"
+msgstr "Izvorno ime"
+
+msgid "ISO Code"
+msgstr "ISO koda"
+
+#, tp-glo-9fa92a70
+msgid "Flag URL"
+msgstr "URL zastave"
+
+msgid "Text RTL"
+msgstr "RTL besedilo"
+
+msgid "Custom language"
+msgstr "Jezik po meri"
+
+#, tp-ai
+msgid "Disable bundled plugin translations"
+msgstr "Onemogoči priložene prevode vtičnika"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"By default, TranslatePress ships its own translation files in "
+"<code>wp-content/plugins/translatepress/languages/</code> and forces "
+"WordPress to use them instead of the language packs installed automatically "
+"from translate.wordpress.org.<br/>Enable this option to disable that "
+"override. WordPress will then load the community language pack from "
+"<code>wp-content/languages/plugins/</code> (if present) and fall back to "
+"the bundled files only when no pack is available."
+msgstr ""
+"TranslatePress privzeto vsebuje lastne prevodne datoteke v "
+"<code>wp-content/plugins/translatepress/languages/</code> in prisili "
+"WordPress, da jih uporabi namesto jezikovnih paketov, ki so samodejno "
+"nameščeni s translate.wordpress.org.<br/>Omogočite to možnost, da "
+"onemogočite to preglasitev. WordPress bo nato naložil jezikovni paket "
+"skupnosti iz <code>wp-content/languages/plugins/</code> (če obstaja) in se "
+"vrnil na priložene datoteke le, ko paket ni na voljo."
+
+msgid "Disable dynamic translation"
+msgstr "Onemogoči dinamični prevod"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c
+msgid ""
+"It disables detection of strings displayed dynamically using JavaScript. "
+"<br/>Strings loaded via a server side AJAX call will still be translated."
+msgstr ""
+"Onemogoči zaznavanje nizov, ki so prikazani dinamično z uporabo "
+"JavaScripta. <br/>Nizi, naloženi prek strežniškega klica AJAX, bodo še "
+"vedno prevedeni."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Disable translation for gettext strings"
+msgstr "Onemogoči prevajanje nizov Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Gettext Strings are strings outputted by themes and plugins. <br> "
+"Translating these types of strings through TranslatePress can be "
+"unnecessary if they are already translated using the .po/.mo translation "
+"file system.<br>Enabling this option can improve the page load performance "
+"of your site in certain cases. The disadvantage is that you can no longer "
+"edit gettext translations using TranslatePress, nor benefit from automatic "
+"translation on these strings."
+msgstr ""
+"Gettext nizi so nizi, ki jih izpišejo teme in vtičniki. <br> Prevajanje teh "
+"vrst nizov prek TranslatePress je lahko nepotrebno, če so že prevedeni z "
+"uporabo sistema prevajalskih datotek .po/.mo.<br>Omogočitev te možnosti "
+"lahko v določenih primerih izboljša hitrost nalaganja strani vašega "
+"spletnega mesta. Slabost je, da teh prevodov gettext ni več mogoče urejati "
+"v TranslatePress, niti ni mogoče samodejno prevajati teh nizov."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings translation is disabled"
+msgstr "Prevajanje Gettext nizov je onemogočeno"
+
+msgid "To enable it go to "
+msgstr "Za omogočitev pojdite na "
+
+#, tp-ai, tp-ctx-2edc90df, tp-ctx-a6928204, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress->Advanced Settings->Debug->Disable translation for gettext "
+"strings"
+msgstr ""
+"TranslatePress->Napredne nastavitve->Razhroščevanje->Onemogoči prevajanje "
+"nizov Gettext"
+
+msgid " and uncheck the Checkbox."
+msgstr " in počistite potrditveno polje."
+
+msgid "Dismiss"
+msgstr "Opusti"
+
+#, tp-glo-8778869a
+msgid "Exclude translated links from sitemap"
+msgstr "Izključi prevedene povezave iz sitemap"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-09a90ed1, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Do not include translated links in sitemaps generated by SEO "
+"plugins.<br/>Requires <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack Add-on</a> to be installed and activated."
+msgstr ""
+"Ne vključujte prevedenih povezav v sitemaps, ki jih ustvarjajo SEO "
+"vtičniki.<br/>Zahteva nameščen in aktiviran <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"dodatek SEO Pack</a>."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post title"
+msgstr "Onemogoči oznake vsebnika za naslov prispevka"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post title in translated "
+"languages.<br/>Useful when the title of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"Onemogoči indeksiranje naslova prispevka v prevedenih "
+"jezikih.<br/>Uporabno, kadar naslov prispevka ne dovoli HTML-ja in se stran "
+"zaradi tega pokvari."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post content"
+msgstr "Onemogoči oznake vsebnika za vsebino prispevka"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post content in translated "
+"languages.<br/>Useful when the content of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"Onemogoči indeksiranje vsebine prispevka v prevedenih "
+"jezikih.<br/>Uporabno, kadar vsebina prispevka ne dovoli HTML-ja in se "
+"stran zaradi tega pokvari."
+
+msgid "Do not translate certain paths"
+msgstr "Ne prevajaj določenih poti"
+
+msgid ""
+"Choose what paths can be translated. Supports wildcard at the end of the "
+"path.<br>For example, to exclude https://example.com/some/path you can "
+"either use the rule /some/path/ or /some/*.<br>Enter each rule on it's own "
+"line. To exclude the home page use {{home}}."
+msgstr ""
+"Izberite, katere poti so lahko prevedene. Podpira nadomestni znak na koncu "
+"poti.<br>Na primer, da izključite https://example.com/some/path, lahko "
+"uporabite pravilo /some/path/ ali /some/*.<br>Vnesite vsako pravilo v svojo "
+"vrstico. Da izključite domačo stran, uporabite {home}."
+
+msgid "Exclude Paths From Translation"
+msgstr "Izključi poti iz prevoda"
+
+msgid "Translate Only Certain Paths"
+msgstr "Prevedi samo določene poti"
+
+#, tp-glo-d1526d97
+msgid "Enable the hreflang x-default tag for language:"
+msgstr "Omogoči oznako hreflang x-default za jezik:"
+
+#, tp-glo-d1526d97
+msgid ""
+"Enables the hreflang=\"x-default\" for an entire language. See "
+"documentation for more details."
+msgstr ""
+"Omogoči hreflang=\"x-default\" za celoten jezik. Za več podrobnosti si "
+"oglejte dokumentacijo."
+
+msgid "Translate numbers and numerals"
+msgstr "Prevedi številke in števnike"
+
+msgid "Enable translation of numbers ( e.g. phone numbers)"
+msgstr "Omogoči prevajanje številk ( npr. telefonske številke)"
+
+msgid "Selector"
+msgstr "Selektor"
+
+msgid "Exclude from dynamic translation"
+msgstr "Izključi iz dinamičnega prevajanja"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c, tp-glo-d311355a
+msgid ""
+"Do not dynamically translate strings that are found in html nodes matching "
+"these selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated using JavaScript.<br/>These strings will "
+"still be translated on the server side if possible."
+msgstr ""
+"Ne prevajaj dinamično nizov, ki se nahajajo v HTML vozliščih, ki ustrezajo "
+"tem selektorjem.<br>Izključuje vse podrejene elemente HTML vozlišč, ki "
+"ustrezajo tem selektorjem, iz prevajanja z uporabo JavaScripta.<br/>Ti nizi "
+"bodo še vedno prevedeni na strežniški strani, če je to mogoče."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Gettext String"
+msgstr "Gettext niz"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext Strings"
+msgstr "Izključi Gettext nize"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Exclude these strings from being translated as Gettext strings by "
+"TranslatePress. Leave the domain empty to take into account any Gettext "
+"string.<br/>Can still be translated through po/mo files."
+msgstr ""
+"Izključi te nize iz prevajanja kot Gettext nize s strani TranslatePress. "
+"Pustite domeno prazno, da se upošteva kateri koli Gettext niz.<br/>Še vedno "
+"jih je mogoče prevesti preko datotek po/mo."
+
+msgid "Exclude selectors only from automatic translation"
+msgstr "Izključi izbirnike samo iz samodejnega prevoda"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not automatically translate strings that are found in html nodes "
+"matching these selectors.<br>Excludes all the children of HTML nodes "
+"matching these selectors from being automatically translated.<br>Manual "
+"translation of these strings is still possible."
+msgstr ""
+"Ne prevajaj samodejno nizov, ki se nahajajo v HTML vozliščih, ki ustrezajo "
+"tem selektorjem.<br>Izključuje vse podrejene elemente HTML vozlišč, ki "
+"ustrezajo tem selektorjem, iz samodejnega prevajanja.<br>Ročno prevajanje "
+"teh nizov je še vedno mogoče."
+
+msgid "Exclude selectors from translation"
+msgstr "Izključi izbirnike iz prevoda"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not translate strings that are found in html nodes matching these "
+"selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated.<br>These strings cannot be translated "
+"manually nor automatically."
+msgstr ""
+"Ne prevajaj nizov, ki se nahajajo v HTML vozliščih, ki ustrezajo tem "
+"selektorjem.<br>Izključuje vse podrejene elemente HTML vozlišč, ki "
+"ustrezajo tem selektorjem, iz prevajanja.<br>Tih nizov ni mogoče prevesti "
+"ročno niti samodejno."
+
+#, tp-ctx-8a82cc9e
+msgid "String"
+msgstr "Niz"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings from automatic translation"
+msgstr "Izključi nize iz samodejnega prevajanja"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Do not automatically translate these strings (ex. names, technical "
+"words...)<br>Paragraphs containing these strings will still be translated "
+"except for the specified part."
+msgstr ""
+"Ne prevajaj samodejno teh nizov (npr. imena, tehnične "
+"besede...)<br>Odstavki, ki vsebujejo te nize, bodo še vedno prevedeni, "
+"razen določenega dela."
+
+#, tp-glo-d311355a
+msgid "Fix broken HTML"
+msgstr "Popravi pokvarjen HTML"
+
+#, tp-glo-d311355a
+msgid "General attempt to fix broken or missing HTML on translated pages.<br/>"
+msgstr ""
+"Splošen poskus popravila pokvarjenega ali manjkajočega HTML na prevedenih "
+"straneh.<br/>"
+
+#, tp-glo-9fa92a70
+msgid "Force slash at end of home url:"
+msgstr "Vsili poševnico na koncu domačega URL-ja:"
+
+msgid "Ads a slash at the end of the home_url() function"
+msgstr "Doda poševnico na konec funkcije home_url()"
+
+msgid "Show Both (recommended)"
+msgstr "Prikaži oba (priporočeno)"
+
+msgid "Remove Country Locale"
+msgstr "Odstrani državno lokalizacijo"
+
+msgid "Remove Region Independent Locale"
+msgstr "Odstrani splošno lokalizacijo"
+
+#, tp-glo-d1526d97
+msgid "Remove duplicate hreflang"
+msgstr "Odstrani podvojene hreflang"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-d1526d97
+msgid ""
+"Choose which hreflang tags will appear on your website.<br/>We recommend "
+"showing both types of hreflang tags as indicated by <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google "
+"documentation</a>.<br/>Removing Country Locale when having multiple Country "
+"Locales of the same language (ex. English UK and English US) will result in "
+"showing one hreflang tag with link to just one of the region locales for "
+"that language."
+msgstr ""
+"Izberite, katere oznake hreflang se bodo prikazovale na vašem spletnem "
+"mestu.<br/>Priporočamo prikaz obeh vrst oznak hreflang, kot to navaja <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" "
+"target=\"_blank\">dokumentacija Google</a>.<br/>Odstranitev državne "
+"lokalizacije pri več državnih lokalizacijah istega jezika (npr. angleščina "
+"VB in angleščina ZDA) bo povzročila prikaz ene oznake hreflang s povezavo "
+"do le ene od regionalnih lokalizacij za ta jezik."
+
+msgid "Default (example: en-US, fr-CA, etc.)"
+msgstr "Privzeto (primer: en-US, fr-CA, itd.)"
+
+msgid "Regional (example: en, fr, es, etc.)"
+msgstr "Regionalno (primer: en, fr, es, itd.)"
+
+#, tp-glo-d311355a
+msgid "HTML Lang Attribute Format"
+msgstr "Format atributa lang HTML"
+
+#, tp-glo-d311355a
+msgid ""
+"Change lang attribute of the html tag to a format that includes country "
+"regional or not. <br>In HTML, the lang attribute (<html lang=\"en-US\">)  "
+"should be used to  specify the language of text content so that the  "
+"browser can correctly display or process  your content (eg. for  "
+"hyphenation, styling, spell checking, etc)."
+msgstr ""
+"Spremenite atribut lang oznake HTML v obliko, ki vključuje kodo "
+"države/regije ali ne. <br>V HTML naj bi se atribut lang (<html "
+"lang=\"en-US\">)  uporabljal za  določitev jezika besedilne vsebine, tako "
+"da  lahko brskalnik pravilno prikaže ali obdela  vašo vsebino (npr. za  "
+"deljenje besed s pomišljajem, oblikovanje, preverjanje črkovanja, itd.)."
+
+msgid "Load legacy Language Switcher"
+msgstr "Naloži starejši izbirnik jezika"
+
+#, tp-glo-da70db08
+msgid ""
+"Applies to all types of language switchers (floating, shortcode, and menu). "
+"When enabled, the site will revert to using the original Language Switcher "
+"configured in the General Settings tab, replacing the new customizable "
+"version. Your existing switcher settings will remain saved, but they will "
+"be ignored while this option is active."
+msgstr ""
+"Velja za vse vrste izbirnikov jezika (plavajoči, shortcode in meni). Ko je "
+"omogočeno, se bo spletno mesto vrnilo k uporabi izvirnega izbirnika jezika, "
+"konfiguriranega na zavihku Splošne nastavitve, in nadomestilo novo "
+"prilagodljivo različico. Vaše obstoječe nastavitve izbirnika bodo ostale "
+"shranjene, vendar bodo prezrte, dokler je ta možnost aktivna."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "Load legacy SEO Pack Add-On"
+msgstr "Naloži starejši dodatek SEO Pack"
+
+#, tp-ai, tp-ctx-07893e52, tp-ctx-a6928204, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"In case the recent migration to the new slug rewrite is causing trouble, "
+"set this to Yes to use the old method <br> Please <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">open a support ticket</a> letting us know of the issues "
+"you are having."
+msgstr ""
+"V primeru, da nedavna migracija na novo prepisovanje slug povzroča težave, "
+"nastavite to na Da, da uporabite staro metodo <br> Prosimo, <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">odprite zahtevek za podporo</a> in nam sporočite težave, "
+"ki jih imate."
+
+msgid "Manual Translation Only"
+msgstr "Samo ročno prevajanje"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress pro-actively scans and saves strings in the database when "
+"users access translated pages. <br>This setting disables this functionality "
+"and only allows translation and string saving when inside the Translation "
+"Editor. <br>Also disables machine translation outside the Translation "
+"Editor, giving you better control over character spending, by translating "
+"only the pages you visit in the Translation Editor."
+msgstr ""
+"TranslatePress proaktivno pregleduje in shranjuje nize v podatkovno bazo, "
+"ko uporabniki dostopajo do prevedenih strani. <br>Ta nastavitev onemogoči "
+"to funkcionalnost in dovoli prevajanje ter shranjevanje nizov samo znotraj "
+"Urejevalnika prevodov. <br>Onemogoči tudi strojno prevajanje zunaj "
+"Urejevalnika prevodov, kar vam omogoča boljši nadzor nad porabo znakov, saj "
+"se prevajajo samo strani, ki jih obiščete v Urejevalniku prevodov."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Open language switcher only on click"
+msgstr "Odpiraj izbirnik jezika le ob kliku"
+
+#, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of "
+"hovering.<br> Close it by clicking on it, anywhere else on the screen or by "
+"pressing the escape key. This will affect only the shortcode language "
+"switcher."
+msgstr ""
+"Odpiraj izbirnik jezika shortcode s klikom nanj namesto z lebdenjem.<br> "
+"Zapri ga s klikom nanj, kamorkoli drugam na zaslonu ali s pritiskom na "
+"tipko Escape. To bo vplivalo le na izbirnik jezika shortcode."
+
+msgid "Show opposite language in the language switcher"
+msgstr "Prikaži nasprotni jezik v izbirniku jezika"
+
+#, tp-glo-da70db08
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one.<br> Only works when there are exactly two "
+"languages, the default one and a translation one.<br>This will affect the "
+"shortcode language switcher and floating language switcher as well.<br> To "
+"achieve this in menu language switcher go to Appearance->Menus->Language "
+"Switcher and select Opposite Language."
+msgstr ""
+"Pretvori izbirnik jezika v gumb, ki prikaže drugi razpoložljivi jezik, ne "
+"trenutnega.<br> Deluje le, ko sta natančno dva jezika, privzeti jezik in "
+"jezik prevoda.<br>To bo vplivalo tudi na izbirnik jezika shortcode in "
+"plavajoči izbirnik jezika.<br> Da to dosežete v izbirniku jezika v meniju, "
+"pojdite na Videz->Meni->Izbirnik jezika in izberite Nasprotni jezik."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization failed."
+msgstr "Optimizacija podatkovne baze gettext za TranslatePress ni uspela."
+
+#, tp-ai
+msgid "Retry"
+msgstr "Poskusi znova"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize its gettext database tables. Back up the "
+"database, then <a href=\"%s\">start the optimization</a>."
+msgstr ""
+"TranslatePress mora optimizirati tabele podatkovne baze gettext. Najprej "
+"ustvarite varnostno kopijo podatkovne baze, nato pa <a href=\"%s\">začnite "
+"optimizacijo</a>."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Pending gettext database optimization"
+msgstr "Optimizacija podatkovne baze gettext v teku"
+
+#, tp-glo-ee8b4f9f
+msgid "Optimize TranslatePress database tables"
+msgstr "Optimiziraj tabele podatkovne baze TranslatePress"
+
+msgid "<a href=\"%s\">Click here</a> to access the database optimization tool."
+msgstr ""
+"<a href=\"%s\">Kliknite tukaj</a> za dostop do orodja za optimizacijo "
+"podatkovne baze."
+
+msgid ""
+"It helps remove possible duplicate translations, clear unnecessary data and "
+"repair possible metadata issues."
+msgstr ""
+"Pomaga odstraniti morebitne podvojene prevode, počistiti nepotrebne podatke "
+"in popraviti morebitne težave z metapodatki."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Here</a> you can observe the last 5 SQL "
+"errors relevant to TranslatePress if they exist."
+msgstr ""
+"<a href=\"%s\" target=\"_blank\">Tukaj</a> si lahko ogledate zadnjih 5 SQL "
+"napak, povezanih s TranslatePress, če obstajajo."
+
+msgid "Troubleshooting"
+msgstr "Odpravljanje težav"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext strings"
+msgstr "Izključi Gettext nize"
+
+msgid "Debug"
+msgstr "Razhroščevanje"
+
+msgid "Custom languages"
+msgstr "Jeziki po meri"
+
+msgid "Miscellaneous options"
+msgstr "Razne možnosti"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Language Switcher"
+msgstr "Preklopnik jezika"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings & pages"
+msgstr "Izključi nize & strani"
+
+msgid "Automatic Translation Memory"
+msgstr "Samodejni pomnilnik prevodov"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Serve same translation for similar text. The strings need to have a "
+"percentage of 95% similarity.<br>Helps prevent losing existing translation "
+"when correcting typos or making minor adjustments to the original text. "
+"<br>If a translation already exists for a very similar original string, it "
+"will automatically be used for the current original string.<br>Does not "
+"work when making changes to a text that is part of a translation block "
+"unless the new text is manually merged again in a translation "
+"block.<br>Each string needs to have a minimum of 50 characters."
+msgstr ""
+"Uporabi enak prevod za podobno besedilo. Nizi morajo imeti 95 % "
+"podobnosti.<br>Pomaga preprečiti izgubo obstoječega prevoda pri "
+"popravljanju tipkarskih napak ali manjših prilagoditvah izvirnega besedila. "
+"<br>Če že obstaja prevod za zelo podoben izvirni niz, bo samodejno "
+"uporabljen za trenutni izvirni niz.<br>Ne deluje pri spreminjanju besedila, "
+"ki je del prevajalskega bloka, razen če je novo besedilo ročno združeno "
+"nazaj v prevajalski blok.<br>Vsak niz mora imeti najmanj 50 znakov."
+
+msgid ""
+"WARNING: This feature can negatively impact page loading times in secondary "
+"languages, particularly with large databases (for example websites with a "
+"lot of pages or products). If you experience slow loading times, disable "
+"this and try again."
+msgstr ""
+"OPOZORILO: Ta funkcija lahko negativno vpliva na čase nalaganja strani v "
+"sekundarnih jezikih, zlasti pri velikih bazah podatkov (na primer spletna "
+"mesta z veliko stranmi ali izdelki). Če opazite počasno nalaganje, to "
+"onemogočite in poskusite znova."
+
+msgid "Fix missing dynamic content"
+msgstr "Popravi manjkajočo dinamično vsebino"
+
+#, tp-glo-7f2a0b8c
+msgid ""
+"May help fix missing content inserted using JavaScript. <br> It shows "
+"dynamically inserted content in original language for a moment before the "
+"translation request is finished."
+msgstr ""
+"Lahko pomaga popraviti manjkajočo vsebino, vstavljeno z JavaScriptom. <br> "
+"Za trenutek prikaže dinamično vstavljeno vsebino v izvirnem jeziku, preden "
+"je zahtevek za prevod zaključen."
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post content and title"
+msgstr "Filtriraj Gettext ovoj iz vsebine in naslova prispevka"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"content and post title. Does not affect previous post content. "
+"<br/><strong>Database backup is recommended before switching on.</strong>"
+msgstr ""
+"Filtrira Gettext ovoj, kot je #!trpst#trp-gettext, iz vsebine in naslova "
+"posodobljenih prispevkov. Ne vpliva na prejšnjo vsebino prispevka. "
+"<br/><strong>Priporočamo varnostno kopijo podatkovne baze, preden to "
+"omogočite.</strong>"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post meta"
+msgstr "Filtriraj Gettext ovoj iz meta podatkov prispevka"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"meta. Does not affect previous post meta. <br/><strong>Database backup is "
+"recommended before switching on.</strong>"
+msgstr ""
+"Filtrira Gettext ovoj, kot je #!trpst#trp-gettext, iz posodobljenih meta "
+"podatkov prispevka. Ne vpliva na prejšnje meta podatke prispevka. "
+"<br/><strong>Priporočamo varnostno kopijo podatkovne baze, preden to "
+"omogočite.</strong>"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Abilities for managing TranslatePress configuration."
+msgstr "Zmožnosti upravljanja konfiguracije TranslatePress."
+
+#, tp-ai
+msgid "Add a translation language"
+msgstr "Dodaj prevodni jezik"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Adds a translation language to TranslatePress. Enforces the same "
+"per-license limit as the settings UI."
+msgstr ""
+"Doda prevodni jezik v TranslatePress. Uveljavlja enako omejitev na licenco "
+"kot uporabniški vmesnik nastavitev."
+
+#, tp-ai, tp-glo-8896ebe8
+msgid "WordPress locale code (e.g. fr_FR, de_DE)."
+msgstr "Koda locale WordPress (npr. fr_FR, de_DE)."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Optional URL slug. Defaults to the ISO language code if omitted."
+msgstr "Izbiren URL slug. Če je izpuščen, je privzeta vrednost ISO jezikovna koda."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Set TranslatePress license key"
+msgstr "Nastavi licenčni ključ TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Saves a TranslatePress license key and triggers a remote license check, "
+"mirroring the onboarding flow."
+msgstr ""
+"Shrani licenčni ključ TranslatePress ter sproži oddaljeno preverjanje "
+"licence, ki odraža postopek uvajanja."
+
+#, tp-ai
+msgid "The license key to activate."
+msgstr "Licenčni ključ za aktivacijo."
+
+msgid "Enable Automatic Translation"
+msgstr "Omogočite samodejno prevajanje"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Turns on Automatic Translation. A valid TranslatePress license is required "
+"only when the resolved engine is TranslatePress AI (mtapi); Google "
+"Translate and DeepL do not require one. If no engine is passed and none is "
+"configured, defaults to mtapi."
+msgstr ""
+"Vklaplja samodejni prevod. Veljavna licenca TranslatePress je potrebna le, "
+"če je izbrani pogon TranslatePress AI (mtapi); Google Translate in DeepL ne "
+"zahtevata licence. Če pogon ni podan in ni nastavljen, je privzeto mtapi."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-c6709f3f
+msgid ""
+"Optional translation-engine slug to select (e.g. \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). When omitted, keeps the "
+"already-configured engine, or defaults to \"mtapi\" if none is configured."
+msgstr ""
+"Izbirni slug pogona za prevajanje (npr. \"mtapi\", \"google_translate_v2\", "
+"\"deepl\"). Če je izpuščen, ohrani že nastavljeni pogon ali privzeto "
+"nastavi \"mtapi\", če ni nobenega nastavljenega."
+
+#, tp-ai
+msgid "List configured languages"
+msgstr "Seznam nastavljenih jezikov"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Returns the languages currently configured in TranslatePress, including the "
+"default language and per-language slug/publish state."
+msgstr ""
+"Vrne trenutno nastavljene jezike v TranslatePress, vključno z privzetim "
+"jezikom ter slugom in stanjem objave za posamezen jezik."
+
+#, tp-ai
+msgid "List available language codes"
+msgstr "Seznam razpoložljivih jezikovnih kod"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Returns the full catalog of language codes TranslatePress recognizes, with "
+"their English names."
+msgstr ""
+"Vrne celoten seznam jezikovnih kod, ki jih prepozna TranslatePress, z "
+"njihovimi angleškimi imeni."
+
+#, tp-ai
+msgid "Remove a translation language"
+msgstr "Odstrani jezik prevoda"
+
+#, tp-ai
+msgid ""
+"Removes a configured translation language. The default language cannot be "
+"removed without first reassigning the default."
+msgstr ""
+"Odstrani nastavljeni jezik prevoda. Privzetega jezika ni mogoče odstraniti, "
+"če najprej ne nastavite drugega privzetega jezika."
+
+#, tp-ai
+msgid "Locale code of the language to remove."
+msgstr "Locale koda jezika, ki ga želite odstraniti."
+
+#, tp-ai
+msgid "Update a translation language"
+msgstr "Posodobi jezik prevoda"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"Replaces the slug and publish status of an already-configured translation "
+"language."
+msgstr "Zamenja slug in stanje objave že nastavljenega jezika prevoda."
+
+#, tp-ai
+msgid "Locale code of the language to update."
+msgstr "Locale koda jezika, ki ga želite posodobiti."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "URL slug for this language."
+msgstr "URL slug za ta jezik."
+
+#, tp-ai
+msgid "Whether this language is published on the front end."
+msgstr "Ali je ta jezik objavljen na frontendu."
+
+#, tp-ai
+msgid "Set the default language"
+msgstr "Nastavi privzeti jezik"
+
+#, tp-ai
+msgid ""
+"Promotes an already-configured language to be the site default. The "
+"previous default remains in the translation languages list."
+msgstr ""
+"Nastavi že konfiguriran jezik kot privzeti jezik spletišča. Prejšnji "
+"privzeti jezik ostane na seznamu jezikov prevoda."
+
+#, tp-ai
+msgid ""
+"Locale code to promote to default. Must already be a configured translation "
+"language."
+msgstr ""
+"Locale koda jezika, ki ga želite nastaviti za privzetega. Jezik mora biti "
+"že nastavljen kot jezik prevoda."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "You do not have permission to manage TranslatePress settings."
+msgstr "Nimate dovoljenja za upravljanje nastavitev TranslatePress."
+
+#, tp-ai
+msgid ""
+"Invalid language code. Allowed characters: A-Z, a-z, 0-9, hyphen, "
+"underscore."
+msgstr ""
+"Neveljavna jezikovna koda. Dovoljeni znaki: A-Z, a-z, 0-9, pomišljaj, "
+"podčrtaj."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Language code \"%s\" is not recognized by TranslatePress."
+msgstr "Jezikovna koda \"%s\" ni prepoznana v TranslatePress."
+
+#, tp-ai
+msgid "Language \"%s\" is already configured."
+msgstr "Jezik \"%s\" je že nastavljen."
+
+#, tp-ai
+msgid ""
+"Your current license allows up to %d additional language(s). Upgrade or "
+"activate a Pro license to add more."
+msgstr ""
+"Vaša trenutna licenca omogoča do %d dodatnih jezikov. Nadgradite ali "
+"aktivirajte Pro licenco, da dodate več."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new language during settings sanitization."
+msgstr "TranslatePress je med čiščenjem nastavitev zavrnil nov jezik."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Enabling Automatic Translation with the TranslatePress AI engine requires "
+"an active TranslatePress license. Activate a license first with "
+"translatepress/set-license-key, or pass a different engine (e.g. "
+"\"google_translate_v2\", \"deepl\")."
+msgstr ""
+"Vklop samodejnega prevajanja s pogonom TranslatePress AI zahteva aktivno "
+"licenco TranslatePress. Najprej aktivirajte licenco z "
+"translatepress/set-license-key ali uporabite drug pogon (npr. "
+"\"google_translate_v2\", \"deepl\")."
+
+msgid "Your license key expired on %s."
+msgstr "Vaš licenčni ključ je potekel %s."
+
+#, tp-ai
+msgid "Your license key has expired."
+msgstr "Vaš licenčni ključ je potekel."
+
+msgid "Your license key has been disabled."
+msgstr "Vaš licenčni ključ je bil onemogočen."
+
+#, tp-glo-ee8b4f9f
+msgid "Your TranslatePress license key is invalid or missing."
+msgstr "Vaš licenčni ključ TranslatePress je neveljaven ali manjka."
+
+#, tp-ai, tp-glo-666af81f, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from your "
+"TranslatePress account."
+msgstr ""
+"Vaš licenčni ključ je onemogočen za ta URL. Ponovno ga omogočite v svojem "
+"TranslatePress Account."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"License key mismatch. The license you entered does not match the "
+"TranslatePress version you have installed."
+msgstr ""
+"Neujemanje licenčnega ključa. Vnesena licenca se ne ujema z nameščeno "
+"različico TranslatePress."
+
+msgid "Your license key has reached its activation limit."
+msgstr "Vaš licenčni ključ je dosegel omejitev aktivacij."
+
+#, tp-ai
+msgid "An error occurred while activating the license, please try again."
+msgstr "Med aktivacijo licence je prišlo do napake, poskusite znova."
+
+#, tp-ai
+msgid "Language \"%s\" is not currently configured."
+msgstr "Jezik \"%s\" trenutno ni nastavljen."
+
+#, tp-ai
+msgid ""
+"The default language cannot be removed. Set another language as default "
+"first."
+msgstr ""
+"Privzetega jezika ni mogoče odstraniti. Najprej nastavite drug jezik kot "
+"privzetega."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Slug is empty after sanitization. Use only URL-safe characters."
+msgstr "Slug je po čiščenju prazen. Uporabljajte samo znake, ki so varni za URL."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Language \"%s\" is not currently configured. Add it first with "
+"translatepress/add-language."
+msgstr ""
+"Jezik \"%s\" trenutno ni nastavljen. Najprej ga dodajte z "
+"translatepress/add-language."
+
+#, tp-ai
+msgid "The default language is always published and cannot be unpublished."
+msgstr "Privzeti jezik je vedno objavljen in ga ni mogoče umakniti iz objave."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug \"%1$s\" is already in use by language \"%2$s\"."
+msgstr "Slug \"%1$s\" je že v uporabi za jezik \"%2$s\"."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new settings during sanitization."
+msgstr "TranslatePress je zavrnil nove nastavitve med čiščenjem."
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced"
+msgstr "Napredno"
+
+msgid "Are you sure you want to remove this item?"
+msgstr "Ali ste prepričani, da želite odstraniti ta element?"
+
+msgid "Remove"
+msgstr "Odstrani"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Add"
+msgstr "Dodaj"
+
+msgid "Select..."
+msgstr "Izberi..."
+
+msgid "An error occurred, please try again."
+msgstr "Prišlo je do napake, poskusite znova."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Vaš licenčni ključ je onemogočen za ta URL. Znova ga omogočite na <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Upravljanje strani."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn’t "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you’ve installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Neujemanje licenčnega ključa.</strong> Vnesena licenca se ne "
+"ujema z nameščeno različico TranslatePress.</p><p>Preverite, ali ste iz "
+"svojega računa TranslatePress namestili pravilno različico za vašo "
+"licenco.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"If you have only the free plugin installed but added a paid license, please "
+"install the paid plugin from your TranslatePress account."
+msgstr ""
+"Če imate nameščen samo brezplačni vtičnik, vendar ste dodali plačano "
+"licenco, namestite plačani vtičnik iz svojega računa TranslatePress."
+
+msgid "Upgrade your plan to add more sites. %1$sUpgrade now%2$s"
+msgstr "Nadgradite načrt za dodajanje več strani. %1$sNadgradite zdaj%2$s"
+
+msgid "You have successfully activated your license"
+msgstr "Uspešno ste aktivirali svojo licenco."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "[%s] Low TranslatePress AI Words"
+msgstr "[%s] Zmanjkuje besed TranslatePress AI"
+
+msgid "upgrade your plan"
+msgstr "Nadgradite svoj paket"
+
+msgid "upgrade your plan or get extra AI Words"
+msgstr "Nadgradite svoj paket ali pridobite dodatne AI-besede"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI words are running low on your site."
+msgstr "Na vašem spletišču zmanjkuje besed TranslatePress AI."
+
+msgid "Current status: %s words remaining"
+msgstr "Trenutni status: preostalo %s besed"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Once the remaining AI words run out, automatic translation through "
+"TranslatePress AI will be paused."
+msgstr ""
+"Ko zmanjka preostalih besed TranslatePress AI, bo samodejni prevod prek "
+"TranslatePress AI začasno zaustavljen."
+
+msgid "To continue translating your content, please %1$s over at %2$s"
+msgstr "Za nadaljevanje prevajanja vsebine %1$s na %2$s"
+
+msgid "Manage Notification: %s"
+msgstr "Upravljanje obvestil: %s"
+
+msgid "Others"
+msgstr "Ostali"
+
+msgid "Restrict by Language"
+msgstr "Omeji po jeziku"
+
+msgid "Exclude from Language"
+msgstr "Izključi iz jezika"
+
+msgid "Restrict element to language"
+msgstr "Omeji element na jezik"
+
+msgid "Show this element only in one language."
+msgstr "Prikaži ta element samo v enem jeziku."
+
+msgid "Enable translation"
+msgstr "Omogoči prevajanje"
+
+msgid ""
+"Allow translation to the corresponding language only if the content is "
+"written in the default language."
+msgstr ""
+"Dovoli prevajanje v ustrezen jezik le, če je vsebina napisana v privzetem "
+"jeziku."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Select language"
+msgstr "Izberite jezik"
+
+msgid "Choose in which language to show this element."
+msgstr "Izberite jezik, v katerem naj se prikaže ta element."
+
+msgid "Exclude element from language"
+msgstr "Izključi element iz jezika"
+
+msgid "Exclude this element from specific languages."
+msgstr "Izključi ta element iz določenih jezikov."
+
+msgid "Select languages"
+msgstr "Izberite jezike"
+
+msgid "Choose from which languages to exclude this element."
+msgstr "Izberite jezike, iz katerih želite izključiti ta element."
+
+msgid ""
+"This element will still be visible when you are translating your website "
+"through the Translation Editor."
+msgstr ""
+"Ta element bo še vedno viden med prevajanjem spletnega mesta v urejevalniku "
+"prevodov."
+
+msgid "The content of this element should be written in the default language."
+msgstr "Vsebina tega elementa mora biti napisana v privzetem jeziku."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> encountered SQL errors. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Check out the errors</a>."
+msgstr ""
+"<strong>TranslatePress</strong> je naletel na napake SQL. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Preverite napake</a>."
+
+msgid "Automatic translation has been disabled."
+msgstr "Samodejno prevajanje je bilo onemogočeno."
+
+msgid "Logged errors"
+msgstr "Zabeležene napake"
+
+#, tp-glo-ee8b4f9f
+msgid "These are the most recent 5 errors logged by TranslatePress:"
+msgstr "To je zadnjih 5 napak, ki jih je zabeležil TranslatePress:"
+
+msgid "Yes"
+msgstr "Da"
+
+msgid "Why are these errors occuring"
+msgstr "Zakaj se pojavljajo te napake"
+
+#, tp-glo-c6709f3f, tp-glo-ee8b4f9f
+msgid ""
+"If TranslatePress detects something wrong when executing queries on your "
+"database, it may disable the Automatic Translation feature in order to "
+"avoid any extra charging by Google/DeepL. Automatic Translation needs to be "
+"manually turned on, after you solve the issues."
+msgstr ""
+"Če TranslatePress pri izvajanju poizvedb v vaši zbirki podatkov zazna kaj "
+"narobe, lahko onemogoči funkcijo samodejnega prevajanja, da se izogne "
+"dodatnim stroškom pri Googlu/DeepL. Samodejno prevajanje je treba ročno "
+"vklopiti, potem ko odpravite težave."
+
+msgid ""
+"The SQL errors detected can occur for various reasons including missing "
+"tables, missing permissions for the SQL user to create tables or perform "
+"other operations, problems after site migration or changes to SQL server "
+"configuration."
+msgstr ""
+"Zaznane napake SQL se lahko pojavijo iz različnih razlogov, vključno z "
+"manjkajočimi tabelami, manjkajočimi dovoljenji za uporabnika SQL za "
+"ustvarjanje tabel ali izvajanje drugih operacij, težavami po selitvi "
+"spletišča ali spremembami konfiguracije strežnika SQL."
+
+msgid "What you can do in this situation"
+msgstr "Kaj lahko storite v tej situaciji"
+
+msgid "Plan A."
+msgstr "Načrt A."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL settings. Check if no "
+"more errors occur while browsing your website in a translated language. "
+"Look at the timestamps of the errors to make sure you are not seeing the "
+"old errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Pojdite v Nastavitve -> TranslatePress -> zavihek Splošno in shranite "
+"nastavitve. S tem boste regenerirali tabele z uporabo trenutnih nastavitev "
+"SQL. Preverite, ali se pri brskanju po vašem spletišču v prevedenem jeziku "
+"ne pojavljajo več napake. Poglejte časovne žige napak, da se prepričate, da "
+"ne vidite starih napak. Prikazanih je samo najnovejših 5 napak."
+
+msgid "Plan B."
+msgstr "Načrt B."
+
+msgid "If your problem isn't solved, try the following steps:"
+msgstr "Če vaša težava ni odpravljena, poskusite naslednje korake:"
+
+msgid "Create a backup of your database"
+msgstr "Ustvarite varnostno kopijo svoje zbirke podatkov"
+
+msgid ""
+"Create a copy of each translation table where you encounter errors. You can "
+"copy the table within the same database (trp_dictionary_en_us_es_es_COPY "
+"for example) -- perform this step only if you want to keep the current "
+"translations"
+msgstr ""
+"Ustvarite kopijo vsake tabele za prevode, kjer naletite na napake. Tabelo "
+"lahko kopirate znotraj iste zbirke podatkov (npr. "
+"trp_dictionary_en_us_es_es_COPY) — ta korak izvedite samo, če želite "
+"ohraniti trenutne prevode"
+
+msgid "Remove the trouble tables by executing the DROP function on them"
+msgstr "Odstranite težavne tabele z izvedbo funkcije DROP na njih"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL server."
+msgstr ""
+"Pojdite v Nastavitve -> TranslatePress -> zavihek Splošno in shranite "
+"nastavitve. S tem boste regenerirali tabele z uporabo trenutnega strežnika "
+"SQL."
+
+msgid ""
+"Copy the relevant content from the duplicated tables "
+"(trp_dictionary_en_us_es_es_COPY for example) in the newly generated table "
+"(trp_dictionary_en_us_es_es) -- perform this step only if you want to keep "
+"the current translations"
+msgstr ""
+"Kopirajte ustrezno vsebino iz podvojenih tabel (npr. "
+"trp_dictionary_en_us_es_es_COPY) v novo generirano tabelo "
+"(trp_dictionary_en_us_es_es) — ta korak izvedite samo, če želite ohraniti "
+"trenutne prevode"
+
+msgid ""
+"Test it to see if everything is working. If something went wrong, you can "
+"restore the backup that you've made at the first step. Check if no more "
+"errors occur while browsing your website in a translated language. Look at "
+"the timestamps of the errors to make sure you are not seeing the old "
+"errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Preizkusite, če vse deluje. Če je šlo kaj narobe, lahko obnovite varnostno "
+"kopijo, ki ste jo ustvarili v prvem koraku. Preverite, ali se pri brskanju "
+"po vašem spletišču v prevedenem jeziku ne pojavljajo več napake. Poglejte "
+"časovne žige napak, da se prepričate, da ne vidite starih napak. Prikazanih "
+"je samo najnovejših 5 napak."
+
+msgid "Plan C."
+msgstr "Načrt C."
+
+msgid ""
+"If your problem still isn't solved, try asking your hosting about your "
+"errors. The most common issue is missing permissions for the SQL user, such "
+"as the Create Tables permission."
+msgstr ""
+"Če vaša težava še vedno ni odpravljena, poskusite vprašati vašega "
+"gostitelja glede napak. Najpogostejši problem so manjkajoča dovoljenja za "
+"uporabnika SQL, kot je dovoljenje za ustvarjanje tabel."
+
+msgid "Could not install. Try again from <a href=\"%s\" >Plugins Dashboard.</a>"
+msgstr ""
+"Ni bilo mogoče namestiti. Poskusite znova v <a href=\"%s\" >Nadzorna plošča "
+"vtičnikov.</a>"
+
+msgid "Settings scope unknown."
+msgstr "Neznan obseg nastavitev."
+
+msgid "Legacy disabled."
+msgstr "Zastarel način onemogočen."
+
+msgid "Change language to %s"
+msgstr "Spremeni jezik v %s"
+
+msgid "Automatic Translation"
+msgstr "Samodejno prevajanje"
+
+msgid "Unsupported languages"
+msgstr "Nepodprti jeziki"
+
+msgid ""
+"The selected automatic translation engine does not provide support for "
+"these languages.<br>You can still manually translate pages in these "
+"languages using the Translation Editor."
+msgstr ""
+"Izbrani pogon za samodejno prevajanje ne podpira teh jezikov.<br>Strani v "
+"teh jezikih lahko še vedno ročno prevajate z urejevalnikom prevodov."
+
+msgid "General"
+msgstr "Splošno"
+
+#, tp-ai
+msgid "Glossary"
+msgstr "Slovar"
+
+#, tp-glo-91460d88
+msgid "API key validation failed."
+msgstr "Preverjanje API ključa ni uspelo."
+
+#, tp-glo-91460d88
+msgid "API key verification was successful."
+msgstr "Preverjanje API ključa je bilo uspešno."
+
+#, tp-glo-d6a22d74
+msgid "Please enter your Google Translate key."
+msgstr "Vnesite svoj Google Translate ključ."
+
+#, tp-glo-ee8b4f9f
+msgid "Not TranslatePress onboarding page."
+msgstr "To ni stran za uvod v TranslatePress."
+
+msgid "Step %s does not exist"
+msgstr "Korak %s ne obstaja"
+
+msgid "Welcome"
+msgstr "Dobrodošli"
+
+msgid "Add Languages"
+msgstr "Dodaj jezike"
+
+msgid "Enable Addons"
+msgstr "Omogoči dodatke"
+
+msgid "Finalize"
+msgstr "Zaključi"
+
+msgid "Exit Setup"
+msgstr "Zapusti nastavitev"
+
+msgid "Upgrade"
+msgstr "Nadgradi"
+
+msgid "Nothing here"
+msgstr "Tukaj ni ničesar"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license is missing or invalid. "
+"<br/>Please %1$sregister your copy%2$s to enable automatic website "
+"translation via TranslatePress AI, premium addons, automatic updates and "
+"support. Need a license key? %3$sPurchase one now%4$s"
+msgstr ""
+"Vaša licenca za <strong>TranslatePress</strong> manjka ali je neveljavna. "
+"<br/>Prosimo, %1$sregistrirajte svojo kopijo%2$s, da omogočite samodejno "
+"prevajanje spletnega mesta prek TranslatePress AI, premium dodatke, "
+"samodejne posodobitve in podporo. Potrebujete licenčni ključ? %3$sKupite ga "
+"zdaj%4$s"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Vaša licenca je onemogočena za ta URL. Znova jo omogočite na <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Upravljanje spletišč."
+
+msgid ""
+"You have reached the activation limit for your <strong>%1$s</strong> "
+"license. <br/>Manage your active sites from %2$s your account %3$s."
+msgstr ""
+"Dosegli ste omejitev aktivacije za vašo licenco <strong>%1$s</strong>. "
+"<br/>Upravljajte svoja aktivna spletišča iz %2$s vašega računa %3$s."
+
+msgid ""
+"License key mismatch. The license you entered doesn’t match the "
+"<strong>%1$s</strong> version you have installed. <br/>Please check that "
+"you’ve installed the correct version for your license from your "
+"%2$sTranslatePress account%3$s."
+msgstr ""
+"Neujemanje licenčnega ključa. Vnesena licenca se ne ujema z nameščeno "
+"različico <strong>%1$s</strong>. <br/>Preverite, ali ste za vašo licenco iz "
+"vašega %2$sTranslatePress Account%3$s namestili pravilno različico."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<br/>If you have only the free plugin installed but added a paid license, "
+"please install the paid plugin from your TranslatePress account."
+msgstr ""
+"<br/>Če imate nameščen samo brezplačni vtičnik, vendar ste dodali plačano "
+"licenco, namestite plačani vtičnik iz vašega TranslatePress Account."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license has expired. <br/>Please "
+"%1$sRenew Your Licence%2$s to continue receiving access to automatic "
+"translations via TranslatePress AI, premium addons, product downloads, and "
+"automatic updates. %3$sRenew now %4$s"
+msgstr ""
+"Vaša licenca za <strong>TranslatePress</strong> je potekla. <br/>Prosimo, "
+"%1$sObnovite svojo licenco%2$s, da boste še naprej imeli dostop do "
+"samodejnih prevodov prek TranslatePress AI, premium dodatkov, prenosov "
+"izdelkov in samodejnih posodobitev. %3$sObnovi zdaj %4$s"
+
+msgid "Error: "
+msgstr "Napaka: "
+
+msgid "Something went wrong, please try again."
+msgstr "Nekaj je šlo narobe, poskusite znova."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Your <strong>TranslatePress</strong> license will expire on %1$s. Please "
+"%2$sRenew Your Licence%3$s to continue receiving access to automatic "
+"translations via TP AI, premium addons, product downloads and automatic "
+"updates. %4$sRenew Now%5$s"
+msgstr ""
+"Vaša licenca za <strong>TranslatePress</strong> bo potekla %1$s. Prosimo, "
+"%2$sObnovite svojo licenco%3$s, da boste še naprej imeli dostop do "
+"samodejnih prevodov prek TP AI, premium dodatkov, prenosov izdelkov in "
+"samodejnih posodobitev. %4$sObnovi zdaj%5$s"
+
+msgid "Please %1$senter%2$s your license key to enable %3$s automatic translation."
+msgstr ""
+"Prosimo, %1$svnesite%2$s svoj licenčni ključ, da omogočite samodejno "
+"prevajanje %3$s."
+
+msgid ""
+"%1$s automatic translation requires an active license. Please %2$srenew%3$s "
+"your license or purchase a new one %4$shere%5$s."
+msgstr ""
+"Samodejno prevajanje %1$s zahteva aktivno licenco. Prosimo, "
+"%2$sobnovite%3$s svojo licenco ali kupite novo %4$stukaj%5$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You have less than 5,000 TranslatePress AI words remaining. To continue "
+"automatically translating your website, please %spurchase additional AI "
+"words at a discount from your account%s."
+msgstr ""
+"Imate manj kot 5000 besed TranslatePress AI. Če želite še naprej samodejno "
+"prevajati svoje spletno mesto, %skupite dodatne AI besede s popustom prek "
+"svojega računa%s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You do not have a valid license for <strong>TranslatePress</strong>. "
+"%1$sGet one for free%2$s to get access to TranslatePress AI."
+msgstr ""
+"Nimate veljavne licence za <strong>TranslatePress</strong>. %1$sPridobite "
+"jo brezplačno%2$s, da pridobite dostop do TranslatePress AI."
+
+msgid " Error: "
+msgstr " Napaka: "
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Learn more</a>."
+msgstr ""
+"<strong>NOVO:</strong> Dodatek <strong>Različna domena za vsak "
+"jezik</strong> je tu! Izboljšajte svoj globalni SEO in ustvarite lokalno "
+"izkušnjo z domenami za posamezne države, kot so .de ali .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Več informacij</a>."
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. Upgrade to <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business or Developer</a> to access it + "
+"more premium perks!"
+msgstr ""
+"<strong>NOVO:</strong> Dodatek <strong>Različna domena za vsak "
+"jezik</strong> je tu! Izboljšajte svoj globalni SEO in ustvarite lokalno "
+"izkušnjo z domenami za posamezne države, kot so .de ali .fr. Nadgradite na "
+"<a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business ali Developer</a>, da dostopate "
+"do njega + več premium ugodnosti!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The daily quota for machine translation characters exceeded. Please check "
+"the <strong>TranslatePress -> <a href=\"%s\">Automatic "
+"Translation</a></strong> page for more information."
+msgstr ""
+"Dnevna kvota znakov za strojno prevajanje je presežena. Preverite stran "
+"<strong>TranslatePress -> <a href=\"%s\">Samodejno prevajanje</a></strong> "
+"za več informacij."
+
+msgid "Marketing optin"
+msgstr "Marketing prijava"
+
+msgid ""
+"Opt in to our security and feature updates notifications, and non-sensitive "
+"diagnostic tracking."
+msgstr ""
+"Strinjajte se z obveščanjem o varnostnih in funkcionalnih posodobitvah ter "
+"z nesenzitivnim diagnostičnim sledenjem."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Preferred User Language"
+msgstr "TranslatePress želeni jezik uporabnika"
+
+msgid "Preferred language to navigate the site"
+msgstr "Želeni jezik za brskanje po spletni strani"
+
+msgid ""
+"The language is automatically set based by the last visited language by the "
+"user."
+msgstr "Jezik se samodejno nastavi glede na zadnji obiskani jezik uporabnika."
+
+msgid "Always use this language"
+msgstr "Vedno uporabi ta jezik"
+
+msgid ""
+"By checking this setting the preferred language will remain the one "
+"selected above, without the possibility of being changed in the "
+"frontend.<br>This language will be used in different operations such as "
+"sending email to the user."
+msgstr ""
+"Če označite to nastavitev, bo želeni jezik ostal takšen, kot je izbran "
+"zgoraj, brez možnosti spreminjanja na sprednjem delu spletišča.<br>Ta jezik "
+"bo uporabljen pri različnih operacijah, kot je pošiljanje e-pošte "
+"uporabniku."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Hello! Seems like you've been using <strong>TranslatePress</strong> for a "
+"while now to translate your website. That's awesome! "
+msgstr ""
+"Pozdravljeni! Kaže, da že nekaj časa uporabljate "
+"<strong>TranslatePress</strong> za prevajanje svoje spletne strani. "
+"Odlično! "
+
+#, tp-glo-8896ebe8
+msgid ""
+"If you can spare a few moments to rate it on WordPress.org it would help us "
+"a lot (and boost my motivation)."
+msgstr ""
+"Če si lahko vzamete nekaj trenutkov za ocenitev na WordPress.org, nam bo to "
+"veliko v pomoč (in povečalo mojo motivacijo)."
+
+#, tp-glo-ee8b4f9f
+msgid "~ Razvan, developer of TranslatePress"
+msgstr "~ Razvan, razvijalec TranslatePress"
+
+#, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid "Rate TranslatePress on WordPress.org plugin page"
+msgstr "Ocenite TranslatePress na strani vtičnika WordPress.org"
+
+msgid "Ok, I will gladly help!"
+msgstr "V redu, z veseljem pomagam!"
+
+msgid "No, thanks."
+msgstr "Ne, hvala."
+
+msgid "Full Language Names"
+msgstr "Polna imena jezikov"
+
+msgid "Short Language Names"
+msgstr "Kratka imena jezikov"
+
+msgid "Flags with Full Language Names"
+msgstr "Zastavice s polnimi imeni jezikov"
+
+msgid "Flags with Short Language Names"
+msgstr "Zastavice s kratkimi imeni jezikov"
+
+msgid "Only Flags"
+msgstr "Samo zastavice"
+
+#, tp-glo-d311355a
+msgid "Full Language Names No HTML"
+msgstr "Polna imena jezikov brez HTML"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Right"
+msgstr "Spodaj desno"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Left"
+msgstr "Spodaj levo"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Right"
+msgstr "Zgoraj desno"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Left"
+msgstr "Zgoraj levo"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Dark"
+msgstr "Temno"
+
+msgid "Light"
+msgstr "Svetlo"
+
+msgid "Install & Activate"
+msgstr "Namesti in aktiviraj"
+
+msgid "Invalid language code. Please try again."
+msgstr "Neveljavna koda jezika. Poskusite znova."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Language codes can contain only A-Z a-z 0-9 - _ characters. Check your "
+"language codes in TranslatePress General Settings."
+msgstr ""
+"Kode jezikov lahko vsebujejo le znake A-Z a-z 0-9 - _. Preverite kode "
+"jezikov v splošnih nastavitvah TranslatePress."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Error! Duplicate URL slug values."
+msgstr "Napaka! Podvojene vrednosti URL slug-a."
+
+#, tp-glo-d1526d97
+msgid ""
+"You cannot select two languages that have the same <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso code</a> but different formalities because doing so "
+"will lead to duplicate <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang tags</a>."
+msgstr ""
+"Ne morete izbrati dveh jezikov, ki imata enako <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso kodo</a>, vendar različne formalnosti, ker bo to "
+"povzročilo podvojene <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang oznake</a>."
+
+msgid ""
+"Duplicate language detected.<br>Each language can only be added once to "
+"ensure accurate translation management.<br> Please change the duplicate "
+"language entry and try again. "
+msgstr ""
+"Zaznan podvojen jezik.<br>Vsak jezik lahko dodate samo enkrat za natančno "
+"upravljanje prevodov.<br> Spremenite podvojeni vnos jezika in poskusite "
+"znova. "
+
+msgid "Current Language"
+msgstr "Trenutni jezik"
+
+msgid "Opposite Language"
+msgstr "Nasprotni jezik"
+
+msgid "Addons"
+msgstr "Dodatki"
+
+msgid "Settings"
+msgstr "Nastavitve"
+
+msgid "Pro Features"
+msgstr "Pro funkcije"
+
+msgid "Activate License"
+msgstr "Aktiviraj licenco"
+
+msgid "Need Help?"
+msgstr "Potrebujete pomoč?"
+
+msgid "Recent community discussions"
+msgstr "Nedavne razprave v skupnosti"
+
+msgid "Loading..."
+msgstr "Nalaganje..."
+
+#, tp-ctx-7832384c
+msgid "Unable to load forum posts"
+msgstr "Ni mogoče naložiti objav foruma."
+
+msgid "Ask a Question"
+msgstr "Zastavite vprašanje"
+
+msgid "View All Topics"
+msgstr "Ogled vseh tem"
+
+msgid "by"
+msgstr "od"
+
+msgid "Have a question?"
+msgstr "Imate vprašanje?"
+
+msgid ""
+"Get help directly from the plugin developers, suggest improvements, or "
+"share your feedback!"
+msgstr ""
+"Poiščite pomoč neposredno pri razvijalcih vtičnika, predlagajte izboljšave "
+"ali delite povratne informacije!"
+
+msgid "Tip for faster help:"
+msgstr "Nasvet za hitrejšo pomoč:"
+
+msgid ""
+"Include what you tried, what you expected, and what happened. Screenshots "
+"help!"
+msgstr ""
+"Vključite, kaj ste poskusili, kaj ste pričakovali in kaj se je zgodilo. "
+"Posnetki zaslona pomagajo!"
+
+msgid "Toggle support chat"
+msgstr "Preklopi klepet za podporo"
+
+msgid "Ask the community"
+msgstr "Vprašajte skupnost"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close"
+msgstr "Zapri"
+
+msgid "Empty feed response"
+msgstr "Prazen odziv vira"
+
+msgid "Unable to parse feed"
+msgstr "Ni mogoče razčleniti vira"
+
+msgid "Just now"
+msgstr "Pravkar"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "pred %d uro"
+msgstr[1] "pred %d urama"
+msgstr[2] "pred %d urami"
+msgstr[3] "pred %d urami"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "pred %d dnem"
+msgstr[1] "pred %d dnevoma"
+msgstr[2] "pred %d dnevi"
+msgstr[3] "pred %d dnevi"
+
+msgid "Source"
+msgstr "Vir"
+
+msgid "Srcset"
+msgstr "Srcset"
+
+msgid "Alt attribute"
+msgstr "Atribut alt"
+
+msgid "Title attribute"
+msgstr "Atribut title"
+
+msgid "Anchor link"
+msgstr "Sidrna povezava"
+
+msgid "Placeholder attribute"
+msgstr "Atribut placeholder"
+
+msgid "Submit attribute"
+msgstr "Atribut submit"
+
+msgid "Text"
+msgstr "Besedilo"
+
+msgid "Video Poster"
+msgstr "Poster videa"
+
+msgid "plural form"
+msgstr "Množinska oblika"
+
+msgid "one"
+msgstr "Ena"
+
+msgid "few"
+msgstr "Nekaj"
+
+msgid "many"
+msgstr "Veliko"
+
+msgid "other"
+msgstr "Druga"
+
+msgid "Saved"
+msgstr "Shranjeno"
+
+msgid "Save"
+msgstr "Shrani"
+
+msgid "Saving translation..."
+msgstr "Shranjevanje prevoda..."
+
+msgid "You have unsaved changes!"
+msgstr "Imate neshranjene spremembe!"
+
+msgid "Discard changes"
+msgstr "Zavrzi spremembe"
+
+msgid "Discard All"
+msgstr "Zavrzi vse"
+
+#, tp-ctx-2edc90df
+msgid "Loading Strings..."
+msgstr "Nalaganje nizov..."
+
+#, tp-ctx-8a82cc9e
+msgid "Select string to translate..."
+msgstr "Izberite niz za prevajanje..."
+
+msgid "Close Editor"
+msgstr "Zapri urejevalnik"
+
+msgid "From"
+msgstr "Iz"
+
+msgid "To"
+msgstr "V"
+
+msgid "Add Media"
+msgstr "Dodaj medij"
+
+msgid "Other languages"
+msgstr "Drugi jeziki"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "View Website As"
+msgstr "Ogled spletnega mesta kot"
+
+msgid "Available in our Pro Versions"
+msgstr "Na voljo v naših Pro različicah"
+
+msgid "Select or Upload Media"
+msgstr "Izberi ali naloži medij"
+
+msgid "Use this media"
+msgstr "Uporabi ta medij"
+
+msgid "Translate"
+msgstr "Prevedi"
+
+msgid "Translate entire block element"
+msgstr "Prevedi celoten element bloka"
+
+#, tp-ctx-2edc90df
+msgid "Split block to translate strings individually"
+msgstr "Razdeli blok za prevajanje posameznih nizov"
+
+#, tp-glo-e780391b
+msgid "Save changes to translation. Shortcut: CTRL(⌘) + S"
+msgstr "Shrani spremembe prevoda. Bližnjica: CTRL(⌘) + S"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to next string in dropdown list. Shortcut: CTRL(⌘) + ALT + Right "
+"Arrow"
+msgstr ""
+"Pomaknite se na naslednji niz v spustnem seznamu. Bližnjica: CTRL(⌘) + ALT "
+"+ desna puščica"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to previous string in dropdown list. Shortcut: CTRL(⌘) + ALT + "
+"Left Arrow"
+msgstr ""
+"Pomaknite se na prejšnji niz v spustnem seznamu. Bližnjica: CTRL(⌘) + ALT + "
+"leva puščica"
+
+#, tp-glo-e780391b
+msgid "Discard all changes. Shortcut: CTRL(⌘) + ALT + Z"
+msgstr "Zavrzi vse spremembe. Bližnjica: CTRL(⌘) + ALT + Z"
+
+#, tp-glo-e780391b
+msgid ""
+"Discard changes to this text box. To discard changes to all text boxes use "
+"shortcut: CTRL(⌘) + ALT + Z"
+msgstr ""
+"Zavrzi spremembe v tem besedilnem polju. Če želiš zavreči spremembe v vseh "
+"besedilnih poljih, uporabi bližnjico: CTRL(⌘) + ALT + Z"
+
+msgid "Dismiss tooltip"
+msgstr "Skrij namig"
+
+msgid "Quick Intro"
+msgstr "Kratek uvod"
+
+msgid "Are you sure you want to split this phrase into smaller parts?"
+msgstr "Ali ste prepričani, da želite razdeliti ta izraz na manjše dele?"
+
+#, tp-ctx-8a82cc9e
+msgid "This string is not ready for translation yet. <br>Try again in a moment..."
+msgstr "Ta niz še ni pripravljen za prevod.<br>Poskusite znova čez trenutek..."
+
+msgid ""
+"For this option to work, please update the Browse as other role add-on to "
+"the latest version."
+msgstr ""
+"Da bo ta možnost delovala, posodobite razširitev Browse as other role na "
+"najnovejšo različico."
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-b7a08771
+msgid "To translate slugs, please update the SEO Pack add-on to the latest version."
+msgstr "Za prevajanje slug-ov posodobite dodatek SEO Pack na najnovejšo različico."
+
+#, tp-glo-ee8b4f9f
+msgid "You can add a new language from <a href=\"%s\">Settings->TranslatePress</a>"
+msgstr "Nov jezik lahko dodate v <a href=\"%s\">Nastavitve->TranslatePress</a>"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"However, you can still use TranslatePress to <strong style=\"background: "
+"#f5fb9d;\">modify gettext strings</strong> available in your page."
+msgstr ""
+"Vendar lahko še vedno uporabite TranslatePress za <strong "
+"style=\"background: #f5fb9d;\">spreminjanje nizov Gettext</strong>, ki so "
+"na voljo na vaši strani."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Strings that are user-created cannot be modified, only those from themes "
+"and plugins."
+msgstr ""
+"Nizi, ki jih je ustvaril uporabnik, se ne morejo spreminjati, le tisti iz "
+"tem in vtičnikov."
+
+msgid "Extra Translation Features"
+msgstr "Dodatne funkcije prevajanja"
+
+msgid "Support for 130+ Extra Languages"
+msgstr "Podpora za 130+ dodatnih jezikov"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI"
+msgstr "Dostop do TranslatePress AI"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb
+msgid "Translate SEO Title, Description, Slug"
+msgstr "Prevedi SEO naslov, opis in slug"
+
+msgid "Publish only when translation is complete"
+msgstr "Objavi šele, ko je prevod dokončan"
+
+msgid "Translate by Browsing as User Role"
+msgstr "Prevedi z brskanjem kot uporabniška vloga"
+
+msgid "Different Menu Items for each Language"
+msgstr "Različni elementi menija za vsak jezik"
+
+msgid "Upgrade to PRO"
+msgstr "Nadgradi na PRO"
+
+msgid "Upgrade to PRO with our biggest discount of the year!"
+msgstr "Nadgradi na PRO z našim največjim popustom v letu!"
+
+msgid ""
+"This Black Friday, get access to these features and more at a fraction of "
+"the costs:"
+msgstr "Ta črni petek pridobi dostop do teh funkcij in več za delček cene:"
+
+msgid "No available suggestions"
+msgstr "Ni razpoložljivih predlogov"
+
+msgid "Suggestions from translation memory"
+msgstr "Predlogi iz prevodnega pomnilnika"
+
+msgid "Click to Copy"
+msgstr "Kliknite za kopiranje"
+
+msgid "Human Translation"
+msgstr "Človeški prevod"
+
+msgid "Machine Translation"
+msgstr "Strojni prevod"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext File Translation"
+msgstr "Prevajanje datotek Gettext"
+
+msgid "Text on this page is %s% translated into all languages."
+msgstr "Besedilo na tej strani je %s % prevedeno v vse jezike."
+
+msgid "%1$s% of text on this page is translated into %2$s."
+msgstr "%1$s % besedila na tej strani je prevedeno v %2$s."
+
+msgid "This page is %1$s% translated into %2$s."
+msgstr "Ta stran je %1$s % prevedena v %2$s."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"The slug that you are trying to edit is present in other slug types:%s%. "
+"Editing it will replace each occurrence, regardless of the current type."
+msgstr ""
+"Slug, ki ga poskušate urediti, je prisoten v drugih vrstah slug-ov:%s. "
+"Urejanje bo zamenjalo vsako pojavitev, ne glede na trenutno vrsto."
+
+msgid ""
+"Hover any text on the page, click %s,<br> then modify the translation in "
+"the sidebar."
+msgstr ""
+"Premaknite kazalec nad katero koli besedilo na strani, kliknite %s,<br> "
+"nato spremenite prevod v stranski vrstici."
+
+#, tp-glo-e780391b
+msgid "Don't forget to Save Translation. Use keyboard shortcut CTRL(⌘) + S"
+msgstr "Ne pozabite shraniti prevoda. Uporabite tipkovnično bližnjico CTRL(⌘) + S"
+
+msgid "Switch language to see the translation changes directly on the page."
+msgstr "Preklopite jezik, da vidite spremembe prevoda neposredno na strani."
+
+msgid "Search for any text in this page in the dropdown."
+msgstr "Poiščite katero koli besedilo na tej strani v spustnem meniju."
+
+msgid ""
+"Your %s license has <span "
+"class=\"trp-license-status-emphasized\">expired</span>."
+msgstr ""
+"Vaša %s licenca je <span "
+"class=\"trp-license-status-emphasized\">potekla</span>."
+
+msgid ""
+"<strong>This Black Friday, renew your license at a special price</strong> "
+"to continue receiving access to product downloads, automatic updates, and "
+"support."
+msgstr ""
+"<strong>Ta črni petek obnovite licenco po posebni ceni</strong>, da še "
+"naprej prejemate dostop do prenosov izdelkov, samodejnih posodobitev in "
+"podpore."
+
+msgid "Get Deal"
+msgstr "Izkoristi ponudbo"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please renew your license to continue receiving access to TranslatePress "
+"AI, premium addons, automatic updates and support."
+msgstr ""
+"Obnovite licenco, da še naprej prejemate dostop do TranslatePress AI, "
+"premium dodatkov, samodejnih posodobitev in podpore."
+
+msgid "Renew Now"
+msgstr "Obnovi zdaj"
+
+msgid ""
+"Your %s license was <span "
+"class=\"trp-license-status-emphasized\">refunded</span>."
+msgstr ""
+"Vaša %s licenca je bila <span "
+"class=\"trp-license-status-emphasized\">povrnjena</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please purchase a new license to continue receiving access to "
+"TranslatePress AI, premium addons, automatic updates and support."
+msgstr ""
+"Kupite novo licenco, da še naprej prejemate dostop do TranslatePress AI, "
+"premium dodatkov, samodejnih posodobitev in podpore."
+
+msgid "Purchase a new license"
+msgstr "Kupite novo licenco"
+
+msgid ""
+"Your %s license is <span class=\"trp-license-status-emphasized\">missing or "
+"invalid</span>."
+msgstr ""
+"Vaša %s licenca je <span class=\"trp-license-status-emphasized\">manjkajoča "
+"ali neveljavna</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please enter a valid license to get access to TranslatePress AI, premium "
+"addons, automatic updates and support. Need a license key? %1$sPurchase one "
+"now%2$s"
+msgstr ""
+"Vnesite veljavno licenco za dostop do TranslatePress AI, premium dodatkov, "
+"samodejnih posodobitev in podpore. Potrebujete licenčni ključ? %1$sKupite "
+"ga zdaj%2$s"
+
+msgid "Enter a valid license"
+msgstr "Vnesite veljavno licenco"
+
+msgid "Meta Information"
+msgstr "Meta informacije"
+
+#, tp-ctx-8a82cc9e
+msgid "String List"
+msgstr "Seznam nizov"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings"
+msgstr "Gettext nizi"
+
+msgid "Images"
+msgstr "Slike"
+
+msgid "Videos"
+msgstr "Videoposnetki"
+
+msgid "Audios"
+msgstr "Zvočni posnetki"
+
+#, tp-ctx-2edc90df
+msgid "Dynamically Added Strings"
+msgstr "Dinamično dodani nizi"
+
+msgid "Translation Editor"
+msgstr "Urejevalnik prevodov"
+
+msgid "Edit translations by visually selecting them on each site page"
+msgstr "Urejajte prevode tako, da jih vizualno izberete na vsaki strani spletišča."
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation"
+msgstr "Prevajanje niza"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid ""
+"Edit url slug translations, plugins and theme translation (emails, forms "
+"etc.)"
+msgstr "Urejanje prevodov URL slug-a, vtičnikov in tem (e-pošta, obrazci itd.)"
+
+msgid "Current User"
+msgstr "Trenutni uporabnik"
+
+msgid "Logged Out"
+msgstr "Odjavljeni"
+
+msgid "Translate Page"
+msgstr "Prevedi stran"
+
+msgid "Add a New Language"
+msgstr "Dodaj nov jezik"
+
+msgid "Your License is Invalid"
+msgstr "Vaša licenca je neveljavna"
+
+msgid "Get More AI Words (%d left)"
+msgstr "Pridobite več AI besed (%d preostalo)"
+
+#, tp-ctx-e9944eb3
+msgid ""
+"Opens post in the translation editor. Post must be saved as draft or "
+"published beforehand."
+msgstr ""
+"Odpre objavo v urejevalniku prevodov. Objava mora biti predhodno shranjena "
+"kot osnutek ali objavljena."
+
+msgid "Security check"
+msgstr "Varnostna preveritev"
+
+#, tp-ctx-2edc90df
+msgid ""
+"<strong>Warning:</strong> Some strings have possibly incorrectly encoded "
+"characters. This may result in breaking the queries, rendering the page "
+"untranslated in live mode. Consider revising the following strings or their "
+"method of outputting."
+msgstr ""
+"<strong>Opozorilo:</strong> Nekateri nizi vsebujejo morda napačno kodirane "
+"znake. To lahko pokvari poizvedbe, zaradi česar se stran v živem načinu "
+"prikaže neprevedena. Razmislite o pregledu naslednjih nizov ali načina "
+"njihovega izpisa."
+
+#, tp-ai
+msgid "IMPORTANT: It is strongly recommended to first backup the database!"
+msgstr ""
+"POMEMBNO: Močno priporočamo, da najprej ustvarite varnostno kopijo "
+"podatkovne baze!"
+
+#, tp-ai
+msgid "Are you sure you want to continue?"
+msgstr "Ali ste prepričani, da želite nadaljevati?"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress data update"
+msgstr "Posodobitev podatkov TranslatePress"
+
+msgid "We need to update your translations database to the latest version."
+msgstr "Posodobiti moramo vašo bazo podatkov prevodov na najnovejšo različico."
+
+msgid ""
+"Updating will allow editing translations of localized text from plugins and "
+"theme. Existing translation will still work as expected."
+msgstr ""
+"Posodobitev bo omogočila urejanje prevodov lokaliziranega besedila iz "
+"vtičnikov in teme. Obstoječi prevod bo še vedno deloval kot pričakovano."
+
+msgid "Run the updater"
+msgstr "Zaženi posodobitev"
+
+#, tp-ctx-742ebaa7
+msgid ""
+"Updating will allow editing translations of slugs. Existing translation "
+"will still work as expected."
+msgstr ""
+"Posodobitev bo omogočila urejanje prevodov polžev. Obstoječi prevod bo še "
+"vedno deloval kot pričakovano."
+
+#, tp-glo-47180abf, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Please activate the SEO Addon from <br/>WordPress -> Settings -> "
+"TranslatePress -> Addons section"
+msgstr ""
+"Prosimo, aktivirajte dodatek SEO v razdelku<br/>WordPress -> Nastavitve -> "
+"TranslatePress -> Dodatki"
+
+msgid "Go to Addons"
+msgstr "Pojdi v Dodatke"
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-9fa92a70, tp-glo-b7a08771
+msgid "The SEO Pack add-on allows translation of all the URL slugs:"
+msgstr "Dodatek SEO Pack omogoča prevod vseh polžev URL:"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy slugs"
+msgstr "Polži taksonomij"
+
+#, tp-ctx-742ebaa7
+msgid "Term slugs"
+msgstr "Polži pojmov"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post slugs (this includes pages and custom post types)"
+msgstr "Polži prispevkov (to vključuje strani in prilagojene vrste vsebine)"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post type base slugs"
+msgstr "Osnovni polži vrst vsebine"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce slugs"
+msgstr "Polži WooCommerce"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "The SEO Pack add-on is available with ALL premium versions of the plugin."
+msgstr "Dodatek SEO Pack je na voljo z vsemi premium različicami vtičnika."
+
+msgid "Upgrade to Pro"
+msgstr "Nadgradi na Pro"
+
+msgid "Description"
+msgstr "Opis"
+
+msgid "Article Section"
+msgstr "Razdelek članka"
+
+msgid "Article Tag"
+msgstr "Oznaka članka"
+
+msgid "OG Title"
+msgstr "OG naslov"
+
+msgid "OG Site Name"
+msgstr "OG ime spletišča"
+
+msgid "OG Description"
+msgstr "OG opis"
+
+msgid "OG Image Alt"
+msgstr "OG alt slike"
+
+msgid "Twitter Title"
+msgstr "Twitter naslov"
+
+msgid "Twitter Description"
+msgstr "Twitter opis"
+
+msgid "Twitter Image Alt"
+msgstr "Twitter alt slike"
+
+msgid "Page Title"
+msgstr "Naslov strani"
+
+msgid "Dublin Core Title"
+msgstr "Dublin Core naslov"
+
+msgid "Dublin Core Description"
+msgstr "Dublin Core opis"
+
+msgid "OG Image"
+msgstr "OG slika"
+
+#, tp-glo-9fa92a70
+msgid "OG Image Secure URL"
+msgstr "OG varen URL slike"
+
+msgid "Twitter Image"
+msgstr "Twitter slika"
+
+#, tp-ctx-2edc90df
+msgid "Removing cdata dictionary strings for language %s..."
+msgstr "Odstranjevanje nizov slovarja cdata za jezik %s..."
+
+msgid "Removing untranslated dictionary links for language %s..."
+msgstr "Odstranjevanje neprevedenih povezav slovarja za jezik %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Removing duplicated gettext strings for language %s..."
+msgstr "Odstranjevanje podvojenih nizov Gettext za jezik %s..."
+
+#, tp-ctx-2edc90df
+msgid "Removing duplicated dictionary strings for language %s..."
+msgstr "Odstranjevanje podvojenih nizov slovarja za jezik %s..."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Removing untranslated dictionary strings where translation is available for "
+"language %s..."
+msgstr ""
+"Odstranjevanje neprevedenih nizov slovarja, za katere je na voljo prevod za "
+"jezik %s..."
+
+#, tp-ctx-2edc90df
+msgid "Inserting original strings for language %s..."
+msgstr "Vstavljanje izvornih nizov za jezik %s..."
+
+#, tp-ctx-2edc90df
+msgid "Cleaning original strings table for language %s..."
+msgstr "Čiščenje tabele izvornih nizov za jezik %s..."
+
+#, tp-ctx-8a82cc9e
+msgid "Updating original string ids for language %s..."
+msgstr "Posodabljanje ID-jev izvornih nizov za jezik %s..."
+
+msgid "Regenerating original meta table for language %s..."
+msgstr "Ponovno generiranje tabele izvirnih meta podatkov za jezik %s..."
+
+msgid "Cleaning original meta table for language %s..."
+msgstr "Čiščenje tabele izvirnih meta podatkov za jezik %s..."
+
+msgid "Replacing original id NULL with value for language %s..."
+msgstr "Zamenjava vrednosti NULL izvirnega ID-ja z vrednostjo za jezik %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Inserting gettext original strings for language %s..."
+msgstr "Vstavljanje izvornih nizov Gettext za jezik %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Cleaning gettext original strings table for language %s..."
+msgstr "Čiščenje tabele izvornih nizov Gettext za jezik %s..."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Updating gettext original string ids for language %s..."
+msgstr "Posodabljanje ID-jev izvornih nizov Gettext za jezik %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Starting gettext database optimization in the background..."
+msgstr "Zagon optimizacije podatkovne baze gettext v ozadju..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating taxonomy and post type base slugs to new table structure..."
+msgstr ""
+"Preselitev polžev taksonomij in osnovnih polžev vrst vsebine v novo "
+"strukturo tabele..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating post slugs to new table structure for language %s..."
+msgstr "Preselitev polžev prispevkov v novo strukturo tabele za jezik %s..."
+
+#, tp-ctx-742ebaa7
+msgid "Migrating term slugs to new table structure for language %s..."
+msgstr "Preseljevanje slugov izrazov v novo strukturo tabel za jezik %s..."
+
+msgid "Finishing up..."
+msgstr "Zaključevanje..."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize gettext database tables. Translations "
+"continue to work while this runs in the background."
+msgstr ""
+"TranslatePress mora optimizirati tabele podatkovne baze gettext. Prevodi še "
+"naprej delujejo, medtem ko se to izvaja v ozadju."
+
+#, tp-ai
+msgid "Before starting, we strongly recommend creating a database backup."
+msgstr ""
+"Pred začetkom močno priporočamo, da ustvarite varnostno kopijo podatkovne "
+"baze."
+
+#, tp-ai
+msgid "Start optimization"
+msgstr "Začni optimizacijo"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Could not schedule gettext database optimization."
+msgstr ""
+"Posodobitev prekinjena! Ni bilo mogoče načrtovati optimizacije podatkovne "
+"baze Gettext."
+
+msgid ""
+"Database optimization did not complete successfully. We recommend restoring "
+"the original database or <a href=\"%s\" >trying again.</a>"
+msgstr ""
+"Optimizacija podatkovne zbirke ni bila uspešno zaključena. Priporočamo "
+"obnovitev izvirne podatkovne zbirke ali <a href=\"%s\">ponovni poskus.</a>"
+
+msgid ""
+"Update aborted! Your user account doesn't have the capability to perform "
+"database updates."
+msgstr ""
+"Posodobitev prekinjena! Vaš uporabniški račun nima potrebnih pravic za "
+"izvajanje posodobitev podatkovne zbirke."
+
+#, tp-glo-b357fc3e
+msgid "Update aborted! Invalid nonce."
+msgstr "Posodobitev prekinjena! Neveljaven nonce."
+
+#, tp-glo-ee8b4f9f
+msgid "Back to TranslatePress Settings"
+msgstr "Nazaj na nastavitve TranslatePress"
+
+msgid "Successfully updated database!"
+msgstr "Zbirka podatkov je bila uspešno posodobljena!"
+
+msgid "Updating database to version %s+"
+msgstr "Posodabljanje zbirke podatkov na različico %s+"
+
+msgid "Processing table for language %s..."
+msgstr "Obdelovanje tabele za jezik %s..."
+
+msgid "Update aborted! Incorrect action."
+msgstr "Posodobitev prekinjena! Nepravilno dejanje."
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-64dbb752
+msgid ""
+"Update aborted! Start the gettext database optimization separately from the "
+"Advanced settings page."
+msgstr ""
+"Posodobitev prekinjena! Začni optimizacijo podatkovne baze Gettext ločeno "
+"na strani z naprednimi nastavitvami."
+
+msgid "Update aborted! Incorrect language code."
+msgstr "Posodobitev prekinjena! Nepravilna koda jezika."
+
+msgid " done."
+msgstr " opravljeno."
+
+#, tp-ai
+msgid "Update aborted while %1$s. SQL error: %2$s"
+msgstr "Posodobitev prekinjena med %1$s. Napaka SQL: %2$s"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "inserting original strings"
+msgstr "vstavljanje izvirnih nizov"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string insertion progress"
+msgstr "preverjanje napredka vstavljanja izvirnih nizov"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "cleaning duplicate original strings"
+msgstr "čiščenje podvojenih izvirnih nizov"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "updating original string IDs"
+msgstr "posodabljanje ID-jev izvirnih nizov"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string ID update progress"
+msgstr "preverjanje napredka posodabljanja ID-jev izvirnih nizov"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "inserting gettext original strings"
+msgstr "vstavljanje izvirnih nizov Gettext"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "checking gettext original insertion progress"
+msgstr "preverjanje napredka vstavljanja izvirnih nizov Gettext"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "cleaning duplicate gettext original strings"
+msgstr "čiščenje podvojenih izvirnih nizov Gettext"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "updating gettext original string IDs"
+msgstr "posodabljanje ID-jev izvirnih nizov Gettext"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "checking gettext original string ID update progress"
+msgstr "preverjanje napredka posodabljanja ID-jev izvirnih nizov Gettext"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"All individual TranslatePress add-on plugins <a href=\"%1$s\" "
+"target=\"_blank\">have been discontinued</a> and are now included in the "
+"premium Personal, Business and Developer versions of TranslatePress. Please "
+"log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download "
+"the new premium version and install it. Your individual addons settings "
+"will be ported over."
+msgstr ""
+"Vsi posamezni vtičniki dodatkov TranslatePress <a href=\"%1$s\" "
+"target=\"_blank\">so bili ukinjeni</a> in so zdaj vključeni v premium "
+"različice Personal, Business in Developer programa TranslatePress. "
+"Prijavite se v svojo <a href=\"%2$s\" target=\"_blank\">stran računa</a>, "
+"prenesite novo premium različico in jo namestite. Nastavitve vaših "
+"posameznih dodatkov bodo prenesene."
+
+msgid "Brand-new Language Switcher Settings are here!"
+msgstr "Nove nastavitve preklopnika jezika so tukaj!"
+
+msgid ""
+"Explore pre-made templates, switch colors, flag styles, spacing, layouts & "
+"more. Use the live preview to perfect your switcher in seconds."
+msgstr ""
+"Raziskujte predpripravljene predloge, preklapljajte barve, sloge zastavic, "
+"razmike, postavitve in še več. Z uporabo predogleda v živo v nekaj sekundah "
+"izpopolnite svoj preklopnik."
+
+msgid "Start customizing"
+msgstr "Začnite prilagajati"
+
+msgid "Read documentation"
+msgstr "Preberite dokumentacijo"
+
+#, tp-ctx-8a82cc9e, tp-glo-1aabb38a, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"library</a></strong>. Please contact your server administrator to install "
+"it on your server."
+msgstr ""
+"<strong>TranslatePress</strong> zahteva <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">knjižnico PHP Multibyte "
+"String</a></strong>. Obrnite se na skrbnika strežnika, da jo namesti na vaš "
+"strežnik."
+
+#, tp-glo-5e752340
+msgid ""
+"Detected long query limitation on WPEngine hosting. Some large pages may "
+"appear untranslated. You can remove limitation by adding the following to "
+"your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
+msgstr ""
+"Zaznana omejitev dolgih poizvedb pri gostovanju WPEngine. Nekatere velike "
+"strani se lahko prikažejo neprevedene. Omejitev lahko odstranite z "
+"dodajanjem naslednjega v datoteko wp-config.php vašega spletišča: define( "
+"'WPE_GOVERNOR', false ); "
+
+msgid "Custom Language Flag"
+msgstr "Zastava po meri"
+
+msgid "The Language code of the added custom language is invalid."
+msgstr "Koda jezika za dodani jezik po meri je neveljavna."
+
+msgid "The Language code of the added custom language cannot be empty."
+msgstr "Koda jezika za dodani jezik po meri ne more biti prazna."
+
+msgid "The Automatic Translation Code of the added custom language is invalid."
+msgstr "Koda samodejnega prevoda za dodani jezik po meri je neveljavna."
+
+#, tp-ai
+msgid "Style"
+msgstr "Slog"
+
+#, tp-ai, tp-glo-da70db08
+msgid "Use shortcode settings"
+msgstr "Uporabi nastavitve shortcode"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Custom"
+msgstr "Po meri"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language names"
+msgstr "Imena jezikov"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Full names"
+msgstr "Polna imena"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Short names"
+msgstr "Kratka imena"
+
+#, tp-ai
+msgid "Hide names"
+msgstr "Skrij imena"
+
+#, tp-ai
+msgid "Flag position"
+msgstr "Položaj zastavice"
+
+#, tp-ai
+msgid "Before text"
+msgstr "Pred besedilom"
+
+#, tp-ai
+msgid "After text"
+msgstr "Za besedilom"
+
+#, tp-ai
+msgid "Hide flags"
+msgstr "Skrij zastavice"
+
+#, tp-ai
+msgid "Open on click"
+msgstr "Odpri ob kliku"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show opposite language"
+msgstr "Prikaži drugi jezik"
+
+#, tp-ai
+msgid "Size"
+msgstr "Velikost"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Normal"
+msgstr "Normalno"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Large"
+msgstr "Veliko"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag shape"
+msgstr "Oblika zastavice"
+
+#, tp-ai
+msgid "Rectangle"
+msgstr "Pravokotnik"
+
+#, tp-ai
+msgid "Square"
+msgstr "Kvadrat"
+
+#, tp-ai
+msgid "Rounded"
+msgstr "Zaobljeno"
+
+#, tp-ai
+msgid "Transitions"
+msgstr "Prehodi"
+
+#, tp-ai
+msgid "Background"
+msgstr "Ozadje"
+
+#, tp-ai
+msgid "Hover background"
+msgstr "Ozadje ob prehodu"
+
+#, tp-ai
+msgid "Hover text"
+msgstr "Besedilo ob prehodu"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border color"
+msgstr "Barva obrobe"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border width"
+msgstr "Debelina obrobe"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border radius"
+msgstr "Polmer obrobe"
+
+#, tp-ai
+msgid "Flag radius"
+msgstr "Polmer zastavice"
+
+#, tp-ai, tp-glo-1477ca6f, tp-glo-ee8b4f9f
+msgid ""
+"Disable the legacy TranslatePress language switcher to use the customizable "
+"Elementor widget. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Open language switcher settings</a>."
+msgstr ""
+"Onemogoči starejši TranslatePress jezikovni preklopnik, da uporabiš "
+"prilagodljivi Elementor gradnik. <a href=\"%s\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">Odpri nastavitve jezikovnega preklopnika</a>."
+
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"The language switcher inherits styling options from shortcode. <a "
+"href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Open shortcode "
+"settings</a>."
+msgstr ""
+"Stikalo za jezik podeduje slogovne možnosti iz shortcode. <a href=\"%s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Odpri nastavitve "
+"shortcode</a>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI"
+msgstr "TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid."
+msgstr "Tvoj TranslatePress AI API ključ je veljaven."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is invalid."
+msgstr "Tvoj TranslatePress AI API ključ je neveljaven."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key has expired."
+msgstr "Tvoj TranslatePress AI API ključ je potekel."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Activate API Key"
+msgstr "Aktiviraj API ključ"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Deactivate API Key"
+msgstr "Deaktiviraj API ključ"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add a TranslatePress AI API Key"
+msgstr "Dodaj TranslatePress AI API ključ"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI API Key"
+msgstr "TranslatePress AI API ključ"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Manage your TranslatePress AI API Key in your %1$s."
+msgstr "Upravljaj svoj TranslatePress AI API ključ v %1$s."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI API Key?"
+msgstr "Nimaš TranslatePress AI API ključa?"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get a free TranslatePress AI API Key Today"
+msgstr "Pridobi brezplačen TranslatePress AI API ključ še danes"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add your TranslatePress AI API Key"
+msgstr "Dodaj svoj TranslatePress AI API ključ"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Add your TranslatePress AI API Key to unlock all premium features. Find the "
+"TranslatePress AI API Key in your"
+msgstr ""
+"Dodaj svoj TranslatePress AI API ključ, da odkleneš vse premium funkcije. "
+"TranslatePress AI API ključ najdeš v svojem"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid and active."
+msgstr "Tvoj TranslatePress AI API ključ je veljaven in aktiven."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Activate TranslatePress AI API Key"
+msgstr "Aktiviraj TranslatePress AI API ključ"
+
+#, tp-ai, tp-glo-91460d88
+msgid "No Active API Key Detected for this website."
+msgstr "Za to spletno mesto ni zaznanega aktivnega API ključa."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"an API key by creating a free account."
+msgstr ""
+"Za omogočitev samodejnega prevajanja z uporabo TranslatePress AI potrebuješ "
+"API ključ, ki ga pridobiš z ustvarjanjem brezplačnega računa."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Enter your API key"
+msgstr "Vnesi svoj API ključ"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your API key from"
+msgstr ""
+"Za omogočitev samodejnega prevajanja z uporabo TranslatePress AI vnesi svoj "
+"API ključ iz"
+
+#, tp-ai, tp-glo-91460d88
+msgid "API Key"
+msgstr "API ključ"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "No Active TranslatePress AI API Key Detected for this website."
+msgstr "Na tej spletni strani ni zaznan aktivni TranslatePress AI API ključ."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI API Key"
+msgstr "Pridobite svoj brezplačen TranslatePress AI API ključ"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Generate API Key"
+msgstr "Ustvari API ključ"
+
+#, tp-ai, tp-glo-91460d88
+msgid "You have a valid %s <strong>API Key</strong>."
+msgstr "Imate veljaven %s <strong>API ključ</strong>."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Manage your API Key & quota on the %s"
+msgstr "Upravljajte svoj API ključ in kvoto na %s"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Get a Free AI API Key"
+msgstr "Pridobite brezplačen AI API ključ"
+
+#, tp-ai, tp-glo-91460d88
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key."
+msgstr ""
+"Ta spletna stran je že aktivirana z brezplačnim API ključem. Vsaka spletna "
+"stran lahko uporablja samo en brezplačen API ključ."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"Ta spletna stran je že aktivirana z brezplačnim API ključem. Vsaka spletna "
+"stran lahko uporablja samo en brezplačen API ključ. Nadgradite na premium "
+"načrt za več TranslatePress AI besed v %1$s svojem računu %2$s."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Checking"
+msgstr "Podatki za odpravljanje napak pri preverjanju API ključa"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Activation"
+msgstr "Podatki za odpravljanje napak pri aktivaciji API ključa"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress finished replacing the existing translations in your "
+"dictionary."
+msgstr "TranslatePress je končal zamenjavo obstoječih prevodov v vašem slovarju."
+
+#, tp-ai
+msgid "Term (%s)"
+msgstr "Izraz (%s)"
+
+#, tp-ai
+msgid "Translations"
+msgstr "Prevodi"
+
+#, tp-ai
+msgid "Term added. Glossary terms only affect new automatic translations."
+msgstr "Izraz dodan. Slovarski izrazi vplivajo samo na nove samodejne prevode."
+
+#, tp-ai
+msgid "Term updated."
+msgstr "Izraz posodobljen."
+
+#, tp-ai
+msgid "Term deleted."
+msgstr "Izraz izbrisan."
+
+#, tp-ai
+msgid "Are you sure you want to delete this term?"
+msgstr "Ali ste prepričani, da želite izbrisati ta izraz?"
+
+#, tp-ai
+msgid "Something went wrong. Please try again."
+msgstr "Nekaj je šlo narobe. Poskusite znova."
+
+#, tp-ai
+msgid "Quick Edit"
+msgstr "Hitro urejanje"
+
+msgid "Edit"
+msgstr "Uredi"
+
+msgid "Delete"
+msgstr "Izbriši"
+
+#, tp-ai
+msgid "Update"
+msgstr "Posodobi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Cancel"
+msgstr "Prekliči"
+
+#, tp-ai
+msgid "No glossary terms match your search."
+msgstr "Noben izraz v slovarju se ne ujema z vašim iskanjem."
+
+#, tp-ai
+msgid "No glossary terms found."
+msgstr "Ni najdenih izrazov v slovarju."
+
+#, tp-ai
+msgid "Could not load glossary terms. Please reload the page."
+msgstr "Izrazov v slovarju ni bilo mogoče naložiti. Prosimo, ponovno naložite stran."
+
+msgid "items"
+msgstr "elementi"
+
+#, tp-ai
+msgid "of"
+msgstr "od"
+
+#, tp-ai
+msgid "First page"
+msgstr "Prva stran"
+
+#, tp-ai
+msgid "Previous page"
+msgstr "Prejšnja stran"
+
+#, tp-ai
+msgid "Next page"
+msgstr "Naslednja stran"
+
+#, tp-ai
+msgid "Last page"
+msgstr "Zadnja stran"
+
+#, tp-ai
+msgid ""
+"The inserted term was found in your existing translations, use the %s to "
+"make changes there."
+msgstr ""
+"Vstavljeni izraz je bil najden v vaših obstoječih prevodih, uporabite %s za "
+"spremembe tam."
+
+#, tp-ai
+msgid "search & replace tool"
+msgstr "orodje za iskanje in zamenjavo"
+
+#, tp-ai
+msgid "Please provide at least one existing translation to replace."
+msgstr "Prosimo, navedite vsaj en obstoječi prevod za zamenjavo."
+
+#, tp-ai
+msgid ""
+"You are about to bulk edit a potentially large amount of translations. This "
+"action cannot be undone. It is recommended to make a backup of the database "
+"before completing this action."
+msgstr ""
+"Pravkar boste množično uredili potencialno veliko število prevodov. Tega "
+"dejanja ni mogoče razveljaviti. Priporočamo, da pred dokončanjem tega "
+"dejanja ustvarite varnostno kopijo podatkovne baze."
+
+#, tp-ai
+msgid "Continue with replacing existing translations?"
+msgstr "Nadaljujete z zamenjavo obstoječih prevodov?"
+
+#, tp-ai
+msgid "No entries found."
+msgstr "Ni najdenih vnosov."
+
+#, tp-ai
+msgid "Original"
+msgstr "Izvirnik"
+
+#, tp-ai
+msgid "Security check failed. Please reload the page and try again."
+msgstr ""
+"Varnostno preverjanje ni uspelo. Prosimo, ponovno naložite stran in "
+"poskusite znova."
+
+#, tp-ai
+msgid "You do not have permission to do this."
+msgstr "Nimate dovoljenja za to dejanje."
+
+#, tp-ai
+msgid "Please enter the term in the default language."
+msgstr "Prosimo, vnesite izraz v privzetem jeziku."
+
+#, tp-ai
+msgid "Please provide at least one translation for the term."
+msgstr "Prosimo, navedite vsaj en prevod za izraz."
+
+#, tp-ai
+msgid "The term “%s” already exists in the glossary."
+msgstr "Izraz »%s« že obstaja v slovarju."
+
+#, tp-ai
+msgid "The term you are trying to edit no longer exists. Please reload the page."
+msgstr "Izraz, ki ga poskušaš urediti, ne obstaja več. Prosim, ponovno naloži stran."
+
+#, tp-ai
+msgid "The term you are trying to delete no longer exists. Please reload the page."
+msgstr ""
+"Izraz, ki ga poskušaš izbrisati, ne obstaja več. Prosim, ponovno naloži "
+"stran."
+
+#, tp-ai
+msgid "%1$s: %2$d entry updated"
+msgid_plural "%1$s: %2$d entries updated"
+msgstr[0] "%1$s: %2$d vnos posodobljen"
+msgstr[1] "%1$s: %2$d vnosa posodobljena"
+msgstr[2] "%1$s: %2$d vnosi posodobljeni"
+msgstr[3] "%1$s: %2$d vnosov posodobljenih"
+
+#, tp-ai
+msgid "Replacement complete."
+msgstr "Zamenjava končana."
+
+#, tp-ai, tp-glo-fd3dec87
+msgid ""
+"This is a large replacement. %d entries were updated now and the rest will "
+"finish automatically in the background over the next few minutes."
+msgstr ""
+"To je obsežna zamenjava. Pravkar je bilo posodobljenih %d vnosov, "
+"preostanek pa se bo samodejno dokončal v ozadju v naslednjih nekaj minutah."
+
+#, tp-glo-c773bca5, tp-glo-d6a22d74
+msgid "Google Translate v2"
+msgstr "Google Translate v2"
+
+#, tp-glo-91460d88, tp-glo-d6a22d74
+msgid "Google Translate API Key"
+msgstr "Google Translate API ključ"
+
+#, tp-glo-91460d88
+msgid "Add your API Key here..."
+msgstr "Tukaj dodajte svoj API ključ..."
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">this link</a> to see how you can set up an API key, "
+"<strong>control API costs</strong> and set HTTP referrer restrictions."
+msgstr ""
+"Obiščite <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">to povezavo</a>, da vidite, kako nastaviti API ključ, "
+"<strong>nadzorovati stroške API</strong> in nastaviti omejitve HTTP "
+"referrerja."
+
+#, tp-glo-1aabb38a
+msgid "Your HTTP referrer is: %s"
+msgstr "Vaš HTTP referrer je: %s"
+
+#, tp-glo-d6a22d74
+msgid "There was an error with your Google Translate key."
+msgstr "Prišlo je do napake z vašim ključem Google Translate."
+
+#, tp-glo-d6a22d74
+msgid "There was an error on the server processing your Google Translate key."
+msgstr ""
+"Prišlo je do napake na strežniku pri obdelavi vašega ključa Google "
+"Translate."
+
+#, tp-glo-ee8b4f9f
+msgid "Please check your TranslatePress license key."
+msgstr "Preverite svoj licenčni ključ TranslatePress."
+
+msgid "Create your Free Account"
+msgstr "Ustvarite brezplačni račun"
+
+msgid " or "
+msgstr " ali "
+
+msgid "Your free account includes: "
+msgstr "Vaš brezplačni račun vključuje: "
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI for instant automatic translations"
+msgstr "Dostop do TranslatePress AI za takojšnje samodejne prevode"
+
+msgid "2000 AI words to translate automatically"
+msgstr "2000 AI besed za samodejno prevajanje"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI Words and unlock all AI features with TranslatePress Pro."
+msgstr "Pridobite več AI besed in odklenite vse AI funkcije z TranslatePress Pro."
+
+msgid "Upgrade now"
+msgstr "Nadgradi zdaj"
+
+msgid "You have a valid %s <strong>license</strong>."
+msgstr "Imate veljavno %s <strong>licenco</strong>."
+
+msgid " words remaining. "
+msgstr " preostalih besed. "
+
+msgid "Recheck"
+msgstr "Ponovno preverite"
+
+msgid "Rechecking..."
+msgstr "Ponovno preverjanje..."
+
+msgid "Done."
+msgstr "Končano."
+
+msgid "Manage your license & quota on the %s"
+msgstr "Upravljajte svojo licenco in kvoto na %s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account Page"
+msgstr "Stran računa TranslatePress.com"
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced Add-ons"
+msgstr "Napredni dodatki"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Developer, Business and Personal plans."
+msgstr ""
+"Ti dodatki razširjajo vaš vtičnik za prevajanje in so na voljo v paketih "
+"Developer, Business in Personal."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack"
+msgstr "SEO Pack"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and Facebook and Twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"SEO podpora za slug strani, naslov strani, opis ter podatke družbenega "
+"grafa za Facebook in Twitter. Atribut HTML lang je pravilno nastavljen."
+
+msgid "Multiple Languages"
+msgstr "Več jezikov"
+
+msgid ""
+"Add as many languages as you need for your project to go global. Publish "
+"your language only when all your translations are done."
+msgstr ""
+"Dodajte toliko jezikov, kot jih potrebujete, da bo vaš projekt globalen. "
+"Jezik objavite šele, ko so vsi prevodi končani."
+
+msgid "Pro Add-ons"
+msgstr "Pro dodatki"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Business and Developer plans."
+msgstr ""
+"Ti dodatki razširjajo vaš vtičnik za prevajanje in so na voljo v paketih "
+"Business in Developer."
+
+#, tp-glo-c6709f3f
+msgid "DeepL Automatic Translation"
+msgstr "Samodejno prevajanje DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Automatically translate your website through the DeepL API."
+msgstr "Samodejno prevedite svoje spletno mesto prek API-ja DeepL."
+
+msgid ""
+"Prompts visitors to switch to their preferred language based on their "
+"browser settings or IP address and remembers the last visited language."
+msgstr ""
+"Obiskovalce pozove k preklopu na želeni jezik na podlagi nastavitev "
+"brskalnika ali naslova IP ter si zapomni zadnji obiskani jezik."
+
+msgid "Translator Accounts"
+msgstr "Računi prevajalcev"
+
+msgid ""
+"Create translator accounts for new users or allow existing users that are "
+"not administrators to translate your website."
+msgstr ""
+"Ustvarite račune prevajalcev za nove uporabnike ali dovolite obstoječim "
+"uporabnikom, ki niso skrbniki, da prevajajo vaše spletno mesto."
+
+msgid "Browse As User Role"
+msgstr "Brskanje kot uporabniška vloga"
+
+msgid ""
+"Navigate your website just like a particular user role would. Really useful "
+"for dynamic content or hidden content that appears for particular users."
+msgstr ""
+"Po svojem spletnem mestu brskajte tako, kot bi to počela določena "
+"uporabniška vloga. Zelo uporabno za dinamične vsebine ali skrite vsebine, "
+"ki se prikažejo določenim uporabnikom."
+
+msgid "Navigation Based on Language"
+msgstr "Navigacija na podlagi jezika"
+
+msgid "Configure different menu items for different languages."
+msgstr "Nastavite različne elemente menija za različne jezike."
+
+#, tp-glo-47180abf
+msgid ""
+"Connect separate domains or subdomains to each of your translated versions. "
+"Strengthen your brand’s local identity and boost SEO performance for every "
+"language you support."
+msgstr ""
+"Povežite ločene domene ali poddomene z vsako od svojih prevedenih različic. "
+"Utrdite lokalno identiteto svoje blagovne znamke in izboljšajte SEO "
+"učinkovitost za vsak jezik, ki ga podpirate."
+
+msgid "Enable Modules"
+msgstr "Omogočite module"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Enable Add-on modules to extend TranslatePress and enhance the "
+"functionality of your translated site."
+msgstr ""
+"Omogočite module dodatkov za razširitev TranslatePress in izboljšanje "
+"funkcionalnosti vašega prevedenega spletišča."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to unlock the Pro "
+"add-ons below."
+msgstr ""
+"TranslatePress Pro je aktiven. Aktiviraj licenčni ključ, da odkleneš "
+"dodatke Pro spodaj."
+
+#, tp-ai
+msgid "Activate license"
+msgstr "Aktiviraj licenco"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro is installed but not activated yet."
+msgstr "TranslatePress Pro je nameščen, vendar še ni aktiviran."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"Opens your Plugins page (filtered to TranslatePress) in a new tab. Activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Odpre stran Vtičniki (filtrirano za TranslatePress) v novem zavihku. Tam "
+"aktiviraj vtičnik TranslatePress Pro, nato se vrni na ta zavihek — "
+"samodejno se bo posodobil."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Activate TranslatePress Pro ↗"
+msgstr "Aktiviraj TranslatePress Pro ↗"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "More functionality with TranslatePress Pro."
+msgstr "Več funkcionalnosti z TranslatePress Pro."
+
+msgid "Upgrade now ↗"
+msgstr "Nadgradi zdaj ↗"
+
+msgid "Already a Pro User?"
+msgstr "Ste že uporabnik Pro?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Opens the WordPress “Add Plugins” page in a new tab. Upload and activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Odpre WordPress stran „Dodaj vtičnike“ v novem zavihku. Tam naloži in "
+"aktiviraj vtičnik TranslatePress Pro, nato se vrni na ta zavihek — "
+"samodejno se bo posodobil."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro"
+msgstr "Namesti TranslatePress Pro"
+
+msgid "This add-on is not available on your current plan."
+msgstr "Ta dodatek ni na voljo v vašem trenutnem paketu."
+
+msgid "Continue"
+msgstr "Nadaljuj"
+
+msgid "The link you followed has expired. Please reload the page and try again."
+msgstr ""
+"Povezava, ki ste ji sledili, je potekla. Ponovno naložite stran in "
+"poskusite znova."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Manage Sites."
+msgstr ""
+"Vaš licenčni ključ je onemogočen za ta URL. Znova ga omogočite na <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Upravljanje spletišč."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn't "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you've installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Neskladje licenčnega ključa.</strong> Vnesena licenca se ne "
+"ujema z nameščeno različico TranslatePress.</p><p>Preverite, ali ste iz "
+"svojega TranslatePress računa namestili pravilno različico za vašo "
+"licenco.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid "TranslatePress Account"
+msgstr "TranslatePress Account"
+
+msgid "« Go Back"
+msgstr "« Nazaj"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Manage Sites."
+msgstr ""
+"Vaš licenčni ključ je onemogočen za ta URL. Znova ga omogočite na <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Upravljanje mest."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Automatically translate your website using TranslatePress AI."
+msgstr "Samodejno prevedite svoje spletno mesto s TranslatePress AI."
+
+msgid "your account."
+msgstr "vašega računa."
+
+msgid "Skip and continue with manual translation »"
+msgstr "Preskoči in nadaljuj z ročnim prevajanjem »"
+
+msgid "Creating a free account includes: "
+msgstr "Ustvarjanje brezplačnega računa vključuje: "
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Are you a TranslatePress PRO user?"
+msgstr "Ali ste uporabnik TranslatePress PRO?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro."
+msgstr "Namesti TranslatePress Pro."
+
+msgid "Skip this step"
+msgstr "Preskoči ta korak"
+
+msgid "The email address you added is incorrect."
+msgstr "E-poštni naslov, ki ste ga dodali, je napačen."
+
+msgid "Setup Complete"
+msgstr "Nastavitev je zaključena"
+
+msgid "You're ready to start translating!"
+msgstr "Pripravljeni ste, da začnete prevajati!"
+
+#, tp-glo-ee8b4f9f
+msgid "You have successfully set up TranslatePress for your website."
+msgstr "Uspešno ste nastavili TranslatePress za svoje spletno mesto."
+
+msgid "Receive "
+msgstr "Prejmite "
+
+msgid "Yes, send me multilingual growth tips."
+msgstr "Da, pošiljajte mi večjezične nasvete za rast."
+
+msgid "Start translating"
+msgstr "Začnite prevajati"
+
+msgid "Sign Up and Start translating"
+msgstr "Prijavite se in začnite prevajati"
+
+msgid "You need to select a default language."
+msgstr "Izbrati morate privzeti jezik."
+
+msgid ""
+"You are trying to add an invalid default language. Please select a valid "
+"option."
+msgstr "Poskušate dodati neveljaven privzeti jezik. Izberite veljavno možnost."
+
+msgid "Please add an additional language."
+msgstr "Prosimo, dodajte dodatni jezik."
+
+msgid ""
+"You are trying to add an invalid additional language. Please select a valid "
+"option."
+msgstr "Poskušate dodati neveljaven dodatni jezik. Izberite veljavno možnost."
+
+msgid "Configure Site Languages"
+msgstr "Nastavi jezike spletišča"
+
+msgid "Select the default and additional languages for your website."
+msgstr "Izberite privzeti in dodatne jezike za svoje spletišče."
+
+msgid "You can edit your site languages at any point."
+msgstr "Jezike spletišča lahko uredite kadar koli."
+
+msgid "Default Language"
+msgstr "Privzeti jezik"
+
+msgid "Select the language your content is written in."
+msgstr "Izberite jezik, v katerem je napisana vaša vsebina."
+
+msgid "Additional Language"
+msgstr "Dodatni jezik"
+
+msgid "Choose a secondary language..."
+msgstr "Izberite drugi jezik..."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Add Language"
+msgstr "Dodaj jezik"
+
+msgid "Choose a language..."
+msgstr "Izberite jezik..."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to add more "
+"languages."
+msgstr ""
+"TranslatePress Pro je aktiven. Aktiviraj licenčni ključ, da dodaš več "
+"jezikov."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Add more than two languages with TranslatePress Pro."
+msgstr "Dodajte več kot dva jezika z TranslatePress Pro."
+
+msgid "Set up Language Switcher"
+msgstr "Nastavi preklopnik jezikov"
+
+msgid ""
+"Select the style of the language switcher. You will find more ways to "
+"display it, in plugin settings."
+msgstr ""
+"Izberite slog preklopnika jezikov. Več načinov prikaza boste našli v "
+"nastavitvah vtičnika."
+
+msgid ""
+"Displays a small language drop-down across your website, in a corner of "
+"your choosing."
+msgstr ""
+"Prikazuje majhen jezikovni spustni meni po celotnem spletišču, v kotu po "
+"vaši izbiri."
+
+msgid "Switcher Location"
+msgstr "Lokacija preklopnika"
+
+msgid "Apply a Template"
+msgstr "Uporabi predlogo"
+
+msgid "You can customize the design later"
+msgstr "Obliko lahko prilagodite pozneje"
+
+msgid "Default Template"
+msgstr "Privzeta predloga"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Default"
+msgstr "Privzeto"
+
+msgid "Dark Template"
+msgstr "Temna predloga"
+
+msgid "Border Template"
+msgstr "Predloga z obrobo"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Border"
+msgstr "Obroba"
+
+msgid "Transparent Template"
+msgstr "Prosojna predloga"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Transparent"
+msgstr "Prosojna"
+
+#, tp-glo-ee8b4f9f
+msgid "Welcome to TranslatePress"
+msgstr "Dobrodošli v TranslatePress"
+
+#, tp-glo-ee8b4f9f
+msgid "Quick guided setup to configure TranslatePress in no time!"
+msgstr "Hitra vodena nastavitev za konfiguracijo TranslatePress v trenutku!"
+
+msgid "It takes less than a minute."
+msgstr "Traja manj kot minuto."
+
+msgid "Scanning item %1$d of %2$d..."
+msgstr "Skeniranje elementa %1$d od %2$d..."
+
+msgid "Manually translated"
+msgstr "Ročno prevedeno"
+
+msgid "Automatically translated"
+msgstr "Samodejno prevedeno"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext file translation"
+msgstr "Prevod datotek Gettext"
+
+msgid "Not translated"
+msgstr "Neprevedeno"
+
+msgid "Bulk Actions"
+msgstr "Skupna dejanja"
+
+msgid "Delete entries"
+msgstr "Izbriši vnose"
+
+msgid "Filter"
+msgstr "Filtriraj"
+
+msgid "Clear filters"
+msgstr "Počisti filtre"
+
+msgid "Language"
+msgstr "Jezik"
+
+msgid "Add New"
+msgstr "Dodaj novo"
+
+#, tp-ctx-2edc90df
+msgid "Rescan plugins and theme for strings"
+msgstr "Ponovno preišči vtičnike in temo za nize"
+
+#, tp-ctx-2edc90df
+msgid "Scanning plugins and theme for strings..."
+msgstr "Preiskovanje vtičnikov in teme za nize..."
+
+msgid "Plugins and theme scan is complete"
+msgstr "Preiskovanje vtičnikov in teme je zaključeno"
+
+msgid "Plugins and theme scan did not finish due to an error"
+msgstr "Preiskovanje vtičnikov in teme se zaradi napake ni zaključilo"
+
+msgid "Import / Export"
+msgstr "Uvoz / Izvoz"
+
+msgid "See More"
+msgstr "Prikaži več"
+
+msgid "See Less"
+msgstr "Prikaži manj"
+
+msgid "Apply"
+msgstr "Uporabi"
+
+#, tp-ctx-2edc90df
+msgid "No strings match your query."
+msgstr "Noben niz ne ustreza vaši poizvedbi."
+
+#, tp-ctx-2edc90df
+msgid "Try to rescan plugins and theme for strings."
+msgstr "Poskusite ponovno preiskati vtičnike in temo za nize."
+
+msgid ""
+"An error occurred while loading results. Most likely you were logged out. "
+"Reload page?"
+msgstr ""
+"Med nalaganjem rezultatov je prišlo do napake. Najverjetneje ste bili "
+"odjavljeni. Želite ponovno naložiti stran?"
+
+msgid "found in translation"
+msgstr "najdeno v prevodu"
+
+msgid "Select All"
+msgstr "Izberi vse"
+
+msgid "Select Visible"
+msgstr "Izberi vidne"
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action on all the strings matching your "
+"filter, not just the visibly checked. To perform the action only to the "
+"visible strings click \"Select Visible\" from the table header dropdown."
+msgstr ""
+"Dejanje boste izvedli na vseh nizih, ki ustrezajo vašemu filtru, ne le na "
+"vidno označenih. Če želite izvesti dejanje samo na vidnih nizih, kliknite "
+"»Izberi vidne« v spustnem meniju glave tabele."
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action only on the visible strings. To "
+"perform the action on all the strings matching the filter click \"Select "
+"All\" from the table header dropdown."
+msgstr ""
+"Dejanje boste izvedli samo na vidnih nizih. Če želite izvesti dejanje na "
+"vseh nizih, ki ustrezajo filtru, kliknite »Izberi vse« v spustnem meniju "
+"glave tabele."
+
+msgid "To continue please type the word:"
+msgstr "Če želite nadaljevati, vnesite besedo:"
+
+msgid "The word typed was incorrect. Action was cancelled."
+msgstr "Vnesena beseda je bila napačna. Dejanje je bilo preklicano."
+
+#, tp-ctx-8a82cc9e, tp-glo-ee8b4f9f
+msgid ""
+"Warning: This action cannot be undone. Deleting a string will remove its "
+"current translation. The original string will appear again in this "
+"interface after TranslatePress detects it. This action is NOT equivalent to "
+"excluding the string from being translated again."
+msgstr ""
+"Opozorilo: Tega dejanja ni mogoče razveljaviti. Brisanje niza bo odstranilo "
+"njegov trenutni prevod. Izvirni niz se bo v tem vmesniku znova prikazal, ko "
+"ga bo TranslatePress zaznal. To dejanje NI enakovredno izključitvi niza iz "
+"ponovnega prevajanja."
+
+msgid "%d original entries and their translations were deleted."
+msgstr "%d izvirnih vnosov in njihovi prevodi so bili izbrisani."
+
+msgid "Navigate to next page"
+msgstr "Pojdi na naslednjo stran"
+
+msgid "Navigate to previous page"
+msgstr "Pojdi na prejšnjo stran"
+
+msgid "Navigate to first page"
+msgstr "Pojdi na prvo stran"
+
+msgid "Navigate to last page"
+msgstr "Pojdi na zadnjo stran"
+
+msgid "Type a page number to navigate to"
+msgstr "Vnesite številko strani, na katero se želite pomakniti"
+
+msgid ""
+"Incorrect page number. Type a page number between 1 and total number of "
+"pages"
+msgstr ""
+"Nepravilna številka strani. Vnesite številko med 1 in skupnim številom "
+"strani."
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Search original and translated strings containing typed keywords while also "
+"matching selected filters. Place string in quotes for exact match: \"string\""
+msgstr ""
+"Išči izvirne in prevedene nize, ki vsebujejo vnesene ključne besede, ter "
+"hkrati ustrezajo izbranim filtrom. Za natančno ujemanje postavite niz v "
+"narekovaje: \"niz\""
+
+#, tp-ctx-2edc90df
+msgid ""
+"Filter strings according to selected translation status, filters and "
+"keywords and selected filters"
+msgstr ""
+"Filtriraj nize glede na izbrani status prevoda, filtre in ključne besede "
+"ter izbrane filtre"
+
+msgid "Removes selected filters"
+msgstr "Odstrani izbrane filtre"
+
+#, tp-ctx-2edc90df
+msgid "See options for selecting all strings"
+msgstr "Oglejte si možnosti za izbiro vseh nizov"
+
+#, tp-ctx-2edc90df
+msgid "Click to sort strings by this column"
+msgstr "Kliknite za razvrščanje nizov po tem stolpcu"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-ctx-e9944eb3, tp-glo-8896ebe8
+msgid ""
+"The ID of the WordPress post where this string was detected. Empty if the "
+"string is not associated with a specific post."
+msgstr ""
+"ID objave WordPress, kjer je bil ta niz zaznan. Prazno, če niz ni povezan z "
+"določeno objavo."
+
+msgid ""
+"Language in which the translation status filter applies. Leave unselected "
+"for the translation status to apply to ANY language"
+msgstr ""
+"Jezik, na katerega se nanaša filter statusa prevoda. Pustite neizbrano, če "
+"naj se status prevoda nanaša na KATERIKOLI jezik."
+
+msgid "Search"
+msgstr "Išči"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs that are not found in either one of the other categories."
+msgstr "Slugi, ki jih ni v nobeni od drugih kategorij."
+
+#, tp-ctx-8a82cc9e
+msgid "Plugins and Theme String Translation"
+msgstr "Prevajanje nizov vtičnikov in teme"
+
+#, tp-glo-64dbb752
+msgid "Gettext"
+msgstr "Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Search Gettext Strings"
+msgstr "Iskanje Gettext nizov"
+
+#, tp-ctx-8a82cc9e
+msgid "Original String"
+msgstr "Izvirni niz"
+
+msgid "Filter by domain"
+msgstr "Filtriraj po domeni"
+
+msgid "Filter by type"
+msgstr "Filtriraj po vrsti"
+
+msgid "Email text"
+msgstr "Besedilo e-pošte"
+
+#, tp-ctx-8a82cc9e
+msgid "Emails String Translation"
+msgstr "Prevajanje e-poštnih nizov"
+
+msgid "Emails"
+msgstr "E-pošta"
+
+#, tp-ctx-2edc90df
+msgid "Search Email Strings"
+msgstr "Išči e-poštne nize"
+
+#, tp-ctx-8a82cc9e
+msgid "User Inputted String Translation"
+msgstr "Prevajanje nizov uporabniškega vnosa"
+
+#, tp-ctx-5211e47b
+msgid "Regular"
+msgstr "Navadni"
+
+#, tp-ctx-2edc90df, tp-ctx-5211e47b
+msgid "Search Regular Strings"
+msgstr "Išči navadne nize"
+
+msgid "Filter by Translation Block"
+msgstr "Filtriraj po bloku prevajanja"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation Editor"
+msgstr "Urejevalnik prevajanja nizov"
+
+#, tp-ai
+msgid "Every minute"
+msgstr "Vsako minuto"
+
+#, tp-ai
+msgid "Could not load the background task."
+msgstr "Opravila v ozadju ni bilo mogoče naložiti."
+
+#, tp-ai
+msgid "Waiting to start background processing..."
+msgstr "Čakanje na začetek obdelave v ozadju ..."
+
+#, tp-ai
+msgid "Background processing could not start."
+msgstr "Obdelave v ozadju ni bilo mogoče začeti."
+
+#, tp-ai
+msgid "Background processing completed."
+msgstr "Obdelava v ozadju je končana."
+
+#, tp-ai
+msgid "A previous batch item failed."
+msgstr "Predhodni element paketa je spodletel."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing did not complete successfully."
+msgstr "Obdelava v ozadju TranslatePress se ni uspešno zaključila."
+
+#, tp-ai
+msgid "Error: %s"
+msgstr "Napaka: %s"
+
+#, tp-ai
+msgid "You do not have permission to view this task status."
+msgstr "Nimate dovoljenja za ogled stanja te naloge."
+
+#, tp-ai
+msgid "Invalid batch task."
+msgstr "Neveljavna naloga paketa."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress is processing a background task."
+msgstr "TranslatePress obdeluje nalogo v ozadju."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing completed successfully."
+msgstr "Obdelava v ozadju TranslatePress je bila uspešno zaključena."
+
+#, tp-ai
+msgid "Processing %s..."
+msgstr "Obdelava %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"%s is optimizing gettext database tables in the background. Translations "
+"continue to work while this runs."
+msgstr ""
+"%s v ozadju optimizira tabele podatkovne baze Gettext. Prevodi medtem še "
+"naprej delujejo."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization completed successfully."
+msgstr ""
+"Optimizacija podatkovne baze Gettext TranslatePress je bila uspešno "
+"zaključena."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress has detected and cleaned up some failed translation entries "
+"in your database following %s. No further action is required."
+msgstr ""
+"TranslatePress je v vaši podatkovni bazi zaznal in počistil nekatere "
+"neuspele prevodne vnose po tem, ko se je zgodil %s. Nadaljnjih ukrepov ni "
+"potrebno."
+
+#, tp-ai
+msgid "an isolated incident"
+msgstr "osamljen incident"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Unknown gettext lookup hash migration phase: %s."
+msgstr ""
+"Posodobitev prekinjena! Neznana faza migracije iskalne zgoščevalne "
+"vrednosti Gettext: %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Could not find an available gettext original_id index name "
+"for table %s."
+msgstr ""
+"Posodobitev prekinjena! Ni bilo mogoče najti razpoložljivega imena indeksa "
+"original_id Gettext za tabelo %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext lookup hash migration cannot process invalid ID "
+"%1$d in table %2$s. Repair the table ID schema and retry."
+msgstr ""
+"Posodobitev prekinjena! Migracija iskalne zgoščevalne vrednosti Gettext ne "
+"more obdelati neveljavnega ID-ja %1$d v tabeli %2$s. Popravite shemo ID-jev "
+"tabele in poskusite znova."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Table %1$s still references %2$d duplicate gettext original "
+"ids."
+msgstr ""
+"Posodobitev prekinjena! Tabela %1$s še vedno sklicuje %2$d podvojene "
+"originalne ID-je Gettext."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext original meta still references %d duplicate "
+"original ids."
+msgstr ""
+"Posodobitev prekinjena! Meta podatki originala Gettext še vedno sklicujejo "
+"%d podvojene originalne ID-je."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext database optimization completed."
+msgstr "Optimizacija podatkovne baze Gettext zaključena."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deduplicating gettext translation tables..."
+msgstr "Odstranjevanje podvojenih zapisov iz prevodnih tabel Gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Migrating gettext original lookup hashes..."
+msgstr "Migracija iskalnih zgoščevalnih vrednosti originalov Gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing the gettext originals lookup index..."
+msgstr "Pripravljam indeks za iskanje izvirnih gettext besedil …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses..."
+msgstr "Posodabljam stanja gettext med izvajanjem …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finishing gettext database optimization..."
+msgstr "Zaključujem optimizacijo podatkovne baze gettext …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses for language %s..."
+msgstr "Posodabljam stanja gettext med izvajanjem za jezik %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Resolving missing gettext original ids in %s..."
+msgstr "Razrešujem manjkajoče ID-je izvirnih gettext besedil v %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing gettext table %s..."
+msgstr "Pripravljam tabelo gettext %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Removing invalid gettext rows from %s..."
+msgstr "Odstranjujem neveljavne vrstice gettext iz %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Prepared gettext original ids in %s..."
+msgstr "Pripravljeni ID-ji izvirnih gettext besedil v %s …"
+
+#, tp-ai
+msgid "Normalizing plural forms in %s..."
+msgstr "Normaliziram množinske oblike v %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Processing duplicate gettext rows in %s..."
+msgstr "Obdelujem podvojene vrstice gettext v %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Building duplicate gettext map for %s..."
+msgstr "Gradim zemljevid podvojenih gettext vrstic za %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Verifying gettext table %s..."
+msgstr "Preverjam tabelo gettext %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deleting duplicate gettext rows from %s..."
+msgstr "Brišem podvojene vrstice gettext iz %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Rechecking duplicate gettext rows in %s..."
+msgstr "Ponovno preverjam podvojene vrstice gettext v %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Adding unique gettext index for %s..."
+msgstr "Dodajam enoličen indeks gettext za %s …"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finished gettext table %s."
+msgstr "Tabela gettext %s zaključena."
+
+msgid "License"
+msgstr "Licenca"
+
+msgid "Your License Key is valid."
+msgstr "Licenčni ključ je veljaven."
+
+msgid "Your License Key is invalid."
+msgstr "Licenčni ključ je neveljaven."
+
+msgid "Your License has expired."
+msgstr "Licenca je potekla."
+
+msgid "Deactivate License"
+msgstr "Deaktiviraj licenco"
+
+msgid "Add a license key"
+msgstr "Dodaj licenčni ključ"
+
+msgid "License Key"
+msgstr "Licenčni ključ"
+
+msgid "Manage your license in your %1$s."
+msgstr "Upravljaj svojo licenco v %1$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI License Key?"
+msgstr "Nimaš licenčnega ključa za TranslatePress AI?"
+
+msgid "Get a free License Today"
+msgstr "Pridobi brezplačno licenco danes"
+
+msgid "Add your License Key"
+msgstr "Dodajte svoj licenčni ključ"
+
+msgid ""
+"Add your License Key to unlock all premium features. Find the License Key "
+"in your"
+msgstr ""
+"Dodajte svoj licenčni ključ, da odklenete vse premium funkcije. Licenčni "
+"ključ najdete v svojem"
+
+msgid "Your license is valid and active."
+msgstr "Vaša licenca je veljavna in aktivna."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress License"
+msgstr "Licenca TranslatePress"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"a license key by creating a free account."
+msgstr ""
+"Za omogočitev samodejnega prevoda z uporabo TranslatePress AI potrebujete "
+"licenčni ključ, ki ga pridobite z ustvaritvijo brezplačnega računa."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your license key from"
+msgstr ""
+"Za omogočanje samodejnega prevajanja s TranslatePress AI vnesite svoj "
+"licenčni ključ iz"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI License"
+msgstr "Pridobite brezplačno licenco TranslatePress AI"
+
+msgid "Generate License"
+msgstr "Ustvari licenco"
+
+msgid "Get a Free AI License"
+msgstr "Pridobite brezplačno AI licenco"
+
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license."
+msgstr ""
+"To spletno mesto je že aktivirano pod brezplačno licenco. Vsako spletno "
+"mesto lahko uporablja samo eno brezplačno licenco."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"To spletno mesto je že aktivirano z brezplačno licenco. Vsako spletno mesto "
+"lahko uporablja samo eno brezplačno licenco. Nadgradite na premium načrt za "
+"več besed TranslatePress AI iz %1$s vašega računa %2$s."
+
+msgid "Debug Data for License Checking"
+msgstr "Podatki za razhroščevanje pri preverjanju licence"
+
+msgid "Debug Data for License Activation"
+msgstr "Podatki za razhroščevanje pri aktivaciji licence"
+
+#, tp-glo-ee8b4f9f
+msgid "Please install and activate the TranslatePress - Multilingual plugin"
+msgstr "Namestite in aktivirajte vtičnik TranslatePress - Multilingual"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update the TranslatePress - Multilingual plugin to version %1$s or "
+"higher to ensure %2$s functions correctly."
+msgstr ""
+"Posodobite vtičnik TranslatePress - Multilingual na različico %1$s ali "
+"višjo za zagotovitev pravilnega delovanja %2$s."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update TranslatePress - Multilingual to version %2$s or newer. Your "
+"currently installed version of TranslatePress - Multilingual is no longer "
+"compatible with the current version of %1$s."
+msgstr ""
+"Posodobite TranslatePress - Multilingual na različico %2$s ali novejšo. "
+"Trenutno nameščena različica TranslatePress - Multilingual ni več "
+"združljiva s trenutno različico %1$s."
+
+#, tp-glo-ee8b4f9f
+msgid "All TranslatePress functionalities are disabled until then."
+msgstr "Vse funkcionalnosti TranslatePress so do takrat onemogočene."
+
+msgid "Update Now"
+msgstr "Posodobi zdaj"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This TranslatePress add-on has been migrated to the main plugin and is no "
+"longer used. You can delete it."
+msgstr ""
+"Ta dodatek za TranslatePress je bil prenesen v glavni vtičnik in se ne "
+"uporablja več. Lahko ga izbrišete."
+
+#, tp-glo-5e752340, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires at least PHP version 5.6.20+ to "
+"run. It is the <a href=\"%s\">minimum requirement of the latest WordPress "
+"version</a>. Please contact your server administrator to update your PHP "
+"version."
+msgstr ""
+"<strong>TranslatePress</strong> za delovanje zahteva vsaj različico PHP "
+"5.6.20+. To je <a href=\"%s\">minimalna zahteva najnovejše različice "
+"WordPressa</a>. Obrnite se na skrbnika strežnika za posodobitev različice "
+"PHP."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Add-ons"
+msgstr "Dodatki za TranslatePress"
+
+msgid ""
+"You must first purchase this version to have access to the addon "
+"%1$shere%2$s"
+msgstr ""
+"Najprej morate kupiti to različico, da boste imeli dostop do dodatka "
+"%1$stukaj%2$s"
+
+msgid ""
+"You need an active license to have access to the addon. Renew or purchase a "
+"new one %1$shere%2$s."
+msgstr ""
+"Potrebujete aktivno licenco za dostop do dodatka. Podaljšajte jo ali kupite "
+"novo %1$stukaj%2$s."
+
+msgid "Please %1$senter your license%2$s key first, to activate this addon."
+msgstr "Najprej %1$svnesite licenčni%2$s ključ, da aktivirate ta dodatek."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack (Legacy)"
+msgstr "SEO Pack (Legacy)"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and facebook and twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"Podpora SEO za slug strani, naslov strani, opis ter informacije družbenega "
+"grafa za Facebook in Twitter. Atribut lang v HTML je pravilno nastavljen."
+
+msgid "Recommended Plugins"
+msgstr "Priporočeni vtičniki"
+
+msgid "A short list of plugins you can use to extend your website."
+msgstr ""
+"Kratek seznam vtičnikov, ki jih lahko uporabite za razširitev svojega "
+"spletnega mesta."
+
+#, tp-glo-35089c1a
+msgid "Profile Builder"
+msgstr "Profile Builder"
+
+#, tp-glo-35089c1a
+msgid ""
+"Capture more user information on the registration form with the help of "
+"Profile Builder's custom user profile fields and/or add an Email "
+"Confirmation process to verify your customers accounts."
+msgstr ""
+"Zajemite več uporabniških podatkov v obrazcu za registracijo s pomočjo polj "
+"za uporabniške profile po meri v Profile Builder in/ali dodajte postopek "
+"potrditve e-pošte za preverjanje računov svojih strank."
+
+msgid "Paid Member Subscriptions"
+msgstr "Paid Member Subscriptions"
+
+msgid ""
+"Accept user payments, create subscription plans and restrict content on "
+"your membership site."
+msgstr ""
+"Sprejmite plačila uporabnikov, ustvarite naročniške načrte in omejite "
+"vsebino na svojem članskem spletnem mestu."
+
+msgid "WP Webhooks Automator"
+msgstr "WP Webhooks Automator"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Create no-code automations and workflows on your WordPress site. Easily "
+"connect your plugins, sites and apps together."
+msgstr ""
+"Ustvarite avtomatizacije in potek dela brez kode na svojem WordPress "
+"spletnem mestu. Preprosto povežite svoje vtičnike, spletna mesta in "
+"aplikacije med seboj."
+
+msgid "Save Changes"
+msgstr "Shrani spremembe"
+
+msgid "Account Page"
+msgstr "Stran računa"
+
+msgid "You can get one for %1$sfree%2$s, by creating a free account. It includes:"
+msgstr ""
+"Enega lahko pridobiš %1$sbrezplačno%2$s z ustvarjanjem brezplačnega računa. "
+"Vključuje:"
+
+msgid "Debug Information"
+msgstr "Podatki za razhroščevanje"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI words and unlock all features with TranslatePress Pro."
+msgstr "Pridobi več AI besed in odkleni vse funkcije z TranslatePress Pro."
+
+msgid "Already purchased a Premium version?"
+msgstr "Ali ste že kupili premium različico?"
+
+msgid "Go to your %1$s"
+msgstr "Pojdite na svoj %1$s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account"
+msgstr "Račun TranslatePress.com"
+
+msgid "Download & Install the Pro plugin"
+msgstr "Prenesite & namestite Pro vtičnik"
+
+msgid "Learn More"
+msgstr "Več informacij"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Errors"
+msgstr "Napake TranslatePress"
+
+msgid "There are no logged errors."
+msgstr "Ni zabeleženih napak."
+
+#, tp-glo-8896ebe8
+msgid "WordPress Translation Plugin"
+msgstr "Vtičnik za prevajanje WordPress"
+
+#, tp-ai
+msgid "Back to Glossary"
+msgstr "Nazaj na slovar"
+
+#, tp-ai
+msgid "Search Existing Translations"
+msgstr "Iskanje obstoječih prevodov"
+
+#, tp-ai
+msgid ""
+"Search the existing dictionary entries to see how a term is currently "
+"translated in each language."
+msgstr ""
+"Preišči obstoječe slovarske vnose in preveri, kako je izraz trenutno "
+"preveden v posameznem jeziku."
+
+#, tp-ai
+msgid "To fully explore all the translations, use %s."
+msgstr "Za celovito raziskovanje vseh prevodov uporabite %s."
+
+#, tp-ai
+msgid "Search existing translations"
+msgstr "Išči obstoječe prevode"
+
+#, tp-ai
+msgid "Replace Existing Translations"
+msgstr "Zamenjaj obstoječe prevode"
+
+#, tp-ai
+msgid "The requested glossary term could not be found. It may have been deleted."
+msgstr "Zahtevanega izraza iz slovarja ni bilo mogoče najti. Morda je bil izbrisan."
+
+#, tp-ai
+msgid "&laquo; Back to Glossary"
+msgstr "&laquo; Nazaj v slovar"
+
+#, tp-ai
+msgid ""
+"For each language, enter the current (existing) translation you want to "
+"find; every case-insensitive occurrence in the stored translations will be "
+"replaced with the new translation, keeping the original capitalization."
+msgstr ""
+"Za vsak jezik vnesite trenutni (obstoječi) prevod, ki ga želite najti; vsak "
+"zadetek v shranjenih prevodih bo zamenjan z novim prevodom neodvisno od "
+"velikosti črk, pri čemer bo ohranjena izvirna velikost črk."
+
+#, tp-ai
+msgid ""
+"Leaving a language field empty will skip that language entirely (no changes "
+"will be made for it). Only one existing translation per language can be "
+"entered at a time. If you have multiple translations to replace for the "
+"same language, simply run the replacement again with the next value."
+msgstr ""
+"Če pustite polje za jezik prazno, se bo ta jezik v celoti preskočil (zanj "
+"ne bo opravljenih nobenih sprememb). Naenkrat je mogoče vnesti le en "
+"obstoječi prevod na jezik. Če imate za isti jezik več prevodov za "
+"zamenjavo, preprosto zamenjavo ponovite z naslednjo vrednostjo."
+
+#, tp-ai
+msgid ""
+"The \"Existing translation\" is not the term in the default language, but "
+"rather the already existing wrong translation you want to correct."
+msgstr ""
+"\"Obstoječi prevod\" ni izraz v privzetem jeziku, temveč že obstoječi "
+"napačen prevod, ki ga želite popraviti."
+
+#, tp-ai
+msgid "Existing translation"
+msgstr "Obstoječi prevod"
+
+#, tp-ai
+msgid "New translation"
+msgstr "Nov prevod"
+
+#, tp-ai
+msgid "Replace in existing translations"
+msgstr "Zamenjaj v obstoječih prevodih"
+
+#, tp-ai, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Glossary is available only with the TranslatePress AI engine."
+msgstr "Slovar je na voljo le z motorjem TranslatePress AI."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74
+msgid ""
+"Select the %s automatic translation engine to add and manage glossary "
+"terms. For other translation engines (such as DeepL or Google Translate), "
+"glossary functions are available in the translation provider’s dashboard."
+msgstr ""
+"Izberite samodejni prevajalni motor %s za dodajanje in upravljanje izrazov "
+"v slovarju. Za druge prevajalne motorje (kot sta DeepL ali Google "
+"Translate) so funkcije slovarja na voljo na nadzorni plošči ponudnika "
+"prevajanja."
+
+#, tp-ai
+msgid "Add Glossary Term"
+msgstr "Dodaj izraz v slovar"
+
+#, tp-ai
+msgid ""
+"Define words or phrases that should not be translated automatically, and "
+"optionally provide replacements per language."
+msgstr ""
+"Določite besede ali izraze, ki se ne smejo samodejno prevajati, in po želji "
+"podajte zamenjave za posamezen jezik."
+
+#, tp-ai
+msgid "The original word or phrase in the default language."
+msgstr "Izvirna beseda ali izraz v privzetem jeziku."
+
+#, tp-ai
+msgid "Add Term"
+msgstr "Dodaj izraz"
+
+#, tp-ai
+msgid "Search glossary terms"
+msgstr "Išči izraze v slovarju"
+
+#, tp-ai
+msgid "Search terms"
+msgstr "Iskalni izrazi"
+
+#, tp-ai
+msgid "Search Glossary"
+msgstr "Išči v slovarju"
+
+#, tp-ai
+msgid "Loading…"
+msgstr "Nalaganje…"
+
+#, tp-ai
+msgid "To edit existing translations, use the %s."
+msgstr "Za urejanje obstoječih prevodov uporabite %s."
+
+msgid "Language Switcher update notice"
+msgstr "Obvestilo o posodobitvi izbirnika jezika"
+
+msgid "Legacy language switcher is currently enabled"
+msgstr "Stari izbirnik jezika je trenutno omogočen"
+
+msgid ""
+"We’ve upgraded the switcher for richer customization and a better user "
+"experience.<br>In order to use the new configurator, turn off <strong>Load "
+"legacy language switcher</strong>."
+msgstr ""
+"Nadgradili smo izbirnik za bogatejše prilagajanje in boljšo uporabniško "
+"izkušnjo.<br>Za uporabo novega konfiguratorja izklopite <strong>Naloži "
+"stari izbirnik jezika</strong>."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Note: You can switch back anytime from <strong>Advanced Settings → <a "
+"href=\"%s\">Troubleshooting</a></strong>."
+msgstr ""
+"Opomba: Kadarkoli se lahko vrnete iz <strong>Napredne nastavitve → <a "
+"href=\"%s\">Odpravljanje težav</a></strong>."
+
+msgid "Enable the new switcher"
+msgstr "Omogoči nov preklopnik"
+
+msgid "Get a translation volume estimate with a detailed breakdown per page"
+msgstr "Pridobite oceno obsega prevoda s podrobnim razčlenjevanjem po straneh"
+
+msgid "Find how many translatable words are on your website"
+msgstr "Ugotovite, koliko prevedljivih besed je na vaši spletni strani"
+
+#, tp-glo-c6709f3f
+msgid ""
+"<strong>DeepL</strong> automatic translation is available as a <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"<strong>DeepL</strong> samodejno prevajanje je na voljo kot <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"By upgrading you'll get access to all paid add-ons, premium support and "
+"help fund the future development of TranslatePress."
+msgstr ""
+"Z nadgradnjo boste pridobili dostop do vseh plačljivih dodatkov, premium "
+"podpore ter s tem pomagali financirati prihodnji razvoj TranslatePress."
+
+#, tp-glo-c6709f3f
+msgid ""
+"To use <strong>DeepL</strong> for automatic translation, activate this Pro "
+"add-on from the <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"Za uporabo <strong>DeepL</strong> za samodejno prevajanje aktivirajte ta "
+"Pro dodatek v <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f, tp-glo-d311355a
+msgid ""
+"Please note that DeepL API usage is paid separately. See <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL pricing "
+"information</a>."
+msgstr ""
+"Upoštevajte, da je uporaba DeepL API plačljiva posebej. Glejte <a "
+"href=\"https://www.deepl.com/pro.html#developer\">informacije o cenah "
+"DeepL</a>."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro Add-ons"
+msgstr "Dodatki TranslatePress Pro"
+
+#, tp-glo-91460d88
+msgid "Test API credentials"
+msgstr "Preizkusite API poverilnice"
+
+msgid "Check if the selected translation engine is configured correctly."
+msgstr "Preverite, ali je izbrani prevajalni motor pravilno konfiguriran."
+
+msgid "Alternative Engines"
+msgstr "Alternativni motorji"
+
+msgid "More info"
+msgstr "Več informacij"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Switch to TranslatePress AI"
+msgstr "Preklopite na TranslatePress AI"
+
+#, tp-glo-8896ebe8
+msgid "Integrate machine translation directly with your WordPress website."
+msgstr "Integrirajte strojno prevajanje neposredno v svojo WordPress spletno stran."
+
+msgid ""
+"Choose which engine you want to use in order to %1$s automatically "
+"translate your website."
+msgstr ""
+"Izberite motor, ki ga želite uporabljati, da bi %1$s samodejno prevajali "
+"svojo spletno stran."
+
+#, tp-ctx-742ebaa7
+msgid "Automatically Translate Slugs"
+msgstr "Samodejno prevedi slugove"
+
+#, tp-ctx-742ebaa7, tp-ctx-7832384c, tp-ctx-e9944eb3
+msgid ""
+"Generate automatic translations of slugs for posts, pages and Custom Post "
+"Types.<br/>The slugs will be automatically translated starting with the "
+"second refresh of each page."
+msgstr ""
+"Generiraj samodejne prevode slugov za prispevke, strani in prilagojene "
+"vrste prispevkov.<br/>Slugi bodo samodejno prevedeni od druge osvežitve "
+"vsake strani naprej."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This feature is only available in the paid version. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"Ta funkcija je na voljo le v plačljivi različici. Nadgradi TranslatePress "
+"in odkleni več premium funkcij."
+
+#, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Requires <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack Add-on</a> to be installed and "
+"activated."
+msgstr ""
+"Zahteva nameščen in aktiviran <a href=\"%s\" title=\"TranslatePress Add-on "
+"SEO Pack documentation\" target=\"_blank\">dodatek SEO Pack</a>."
+
+msgid "Automatic Translation Settings"
+msgstr "Nastavitve samodejnega prevajanja"
+
+msgid "AI Words Low Notification"
+msgstr "Obvestilo o nizkem številu AI besed"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Receive an email notification when your TranslatePress AI word count drops "
+"below the specified threshold."
+msgstr ""
+"Prejmite e-poštno obvestilo, ko število besed TranslatePress AI pade pod "
+"določeno mejo."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This feature is only available when using the TranslatePress AI translation "
+"engine."
+msgstr ""
+"Ta funkcija je na voljo le pri uporabi prevajalskega pogona TranslatePress "
+"AI."
+
+msgid "Notification Email"
+msgstr "E-pošta za obvestila"
+
+msgid "The email address where the low AI words notification will be sent."
+msgstr "E-poštni naslov, kamor bo poslano obvestilo o nizkem številu AI besed."
+
+msgid "Word Threshold"
+msgstr "Prag besed"
+
+msgid "words"
+msgstr "besed"
+
+msgid "You will be notified when remaining AI words drop below this number."
+msgstr "Obveščeni boste, ko bo preostalo število AI besed padlo pod to številko."
+
+msgid "Block Crawlers"
+msgstr "Blokiraj pajke"
+
+msgid ""
+"Block crawlers from triggering automatic translations on your "
+"website.<br>This will not prevent crawlers from accessing this site's pages."
+msgstr ""
+"Prepreči pajkom sprožanje samodejnih prevodov na vaši spletni strani.<br>To "
+"ne bo preprečilo pajkom dostopa do strani tega spletišča."
+
+msgid "Limit machine translation / characters per day"
+msgstr "Omejitev strojnega prevajanja / znakov na dan"
+
+msgid ""
+"Add a limit to the number of automatically translated characters so you can "
+"better budget your project."
+msgstr ""
+"Dodajte omejitev števila samodejno prevedenih znakov, da boste lažje "
+"načrtovali proračun projekta."
+
+msgid "characters per day"
+msgstr "znakov na dan"
+
+msgid "Today's Character Count: "
+msgstr "Današnje število znakov: "
+
+msgid "Log machine translation queries."
+msgstr "Beleži poizvedbe strojnega prevajanja."
+
+#, tp-glo-8896ebe8
+msgid ""
+"Only enable for testing purposes. Can impact performance.<br>All records "
+"are stored in the wp_trp_machine_translation_log database table. Use a "
+"plugin like <a href=\"https://wordpress.org/plugins/wp-data-access/\" "
+"target=\"_blank\">WP Data Access</a> to browse the logs or directly from "
+"your database manager (PHPMyAdmin, etc.)"
+msgstr ""
+"Omogočite samo za namene testiranja. Lahko vpliva na zmogljivost.<br>Vsi "
+"zapisi so shranjeni v tabeli podatkovne baze "
+"wp_trp_machine_translation_log. Uporabite vtičnik, kot je <a "
+"href=\"https://wordpress.org/plugins/wp-data-access/\" target=\"_blank\">WP "
+"Data Access</a>, za brskanje po dnevnikih ali neposredno iz vašega "
+"upravitelja podatkovnih baz (PHPMyAdmin, itd.)"
+
+#, tp-glo-91460d88
+msgid "Test API Credentials"
+msgstr "Preizkusi poverilnice API"
+
+#, tp-glo-1aabb38a
+msgid "HTTP Referrer: "
+msgstr "HTTP napotnik: "
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Use this HTTP Referrer if the API lets you restrict key usage from its "
+"Dashboard."
+msgstr ""
+"Uporabite ta HTTP napotnik, če API omogoča omejitev uporabe ključa prek "
+"svoje nadzorne plošče."
+
+#, tp-ai, tp-glo-9fa92a70
+msgid "Request URL"
+msgstr "URL zahtevka"
+
+#, tp-ai
+msgid "Request Headers"
+msgstr "Glave zahtevka"
+
+#, tp-ai
+msgid "Request Body"
+msgstr "Telo zahtevka"
+
+msgid "Response"
+msgstr "Odgovor"
+
+msgid "Response Body"
+msgstr "Telo odgovora"
+
+msgid "Entire Response From wp_remote_get():"
+msgstr "Celoten odgovor iz wp_remote_get():"
+
+msgid "Select the languages you wish to make your website available in."
+msgstr "Izberite jezike, v katerih želite, da je vaše spletišče na voljo."
+
+msgid "Formality"
+msgstr "Formalnost"
+
+msgid "Code"
+msgstr "Koda"
+
+msgid "Formal"
+msgstr "Formalno"
+
+msgid "Informal"
+msgstr "Neformalno"
+
+msgid "This language does not support formality. "
+msgstr "Ta jezik ne podpira formalnosti. "
+
+msgid "Are you sure you want to remove this language?"
+msgstr "Ali ste prepričani, da želite odstraniti ta jezik?"
+
+msgid "Custom Languages"
+msgstr "Jeziki po meri"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Adding more than two languages is a paid feature. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"Dodajanje več kot dveh jezikov je plačljiva funkcija. Nadgradite "
+"TranslatePress in odklenite več premium funkcij."
+
+msgid "Please %1$senter your license%2$s key first to add more languages."
+msgstr "Najprej %1$svnesite licenčni%2$s ključ, da boste lahko dodajali več jezikov."
+
+msgid ""
+"You need an active license to add more languages. Verify in your "
+"%1$saccount%2$s that your license is valid"
+msgstr ""
+"Za dodajanje več jezikov potrebujete aktivno licenco. Preverite v svojem "
+"%1$sračunu%2$s, ali je vaša licenca veljavna."
+
+msgid "To Add more languages activate the Multiple Languages Addon"
+msgstr "Za dodajanje več jezikov aktivirajte dodatek Multiple Languages"
+
+msgid "Website Languages"
+msgstr "Jeziki spletnega mesta"
+
+msgid ""
+"WARNING. Changing the default language will invalidate existing "
+"translations."
+msgstr "OPOZORILO. Sprememba privzetega jezika bo razveljavila obstoječe prevode."
+
+msgid ""
+"Even changing from en_US to en_GB, because they are treated as two "
+"different languages."
+msgstr ""
+"Tudi sprememba iz en_US v en_GB, saj sta obravnavana kot dva različna "
+"jezika."
+
+msgid "In most cases changing the default flag is all it is needed: "
+msgstr "V večini primerov je dovolj, da spremenite privzeto zastavico: "
+
+msgid "replace the default flag"
+msgstr "zamenjajte privzeto zastavico"
+
+msgid "Re-run Setup Wizard"
+msgstr "Znova zaženi čarovnika za nastavitev"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The Setup wizard allows you to quickly setup TranslatePress. You can "
+"initiate it at any time."
+msgstr ""
+"Čarovnik za nastavitev vam omogoča hitro nastavitev TranslatePressa. "
+"Zaženete ga lahko kadar koli."
+
+msgid "Language Settings"
+msgstr "Nastavitve jezikov"
+
+msgid "Use Native language name"
+msgstr "Uporabi izvirno ime jezika"
+
+msgid ""
+"Check if you want to display languages in their native names. Otherwise, "
+"languages will be displayed in English."
+msgstr ""
+"Označite, če želite prikazati jezike v njihovih izvirnih imenih. V "
+"nasprotnem primeru bodo jeziki prikazani v angleščini."
+
+msgid "Use a subdirectory for the default language"
+msgstr "Uporabi podmapo za privzeti jezik"
+
+#, tp-glo-9fa92a70
+msgid ""
+"Check if you want to add the subdirectory in the URL for the default "
+"language.</br>By checking this option, the default language seen by website "
+"visitors will become the first one in the \"All Languages\" list."
+msgstr ""
+"Označite, če želite dodati podmapo v URL za privzeti jezik.</br>S "
+"potrditvijo te možnosti bo privzeti jezik, ki ga vidijo obiskovalci "
+"spletnega mesta, postal prvi na seznamu \"Vsi jeziki\"."
+
+msgid "Force language in custom links"
+msgstr "Vsili jezik v povezavah po meri"
+
+msgid ""
+"Select Yes if you want to force custom links without language encoding to "
+"keep the currently selected language."
+msgstr ""
+"Izberite Da, če želite, da povezave po meri brez jezikovnega kodiranja "
+"ohranijo trenutno izbrani jezik."
+
+#, tp-glo-da70db08
+msgid "Shortcode "
+msgstr "Shortcode "
+
+#, tp-glo-da70db08
+msgid "Use shortcode on any page or widget."
+msgstr "Uporabite shortcode na kateri koli strani ali pripomočku."
+
+#, tp-glo-8339568d
+msgid ""
+"You can also add the <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">Language Switcher Block</a> in the WP Gutenberg Editor."
+msgstr ""
+"Dodate lahko tudi <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">blok za preklapljanje jezikov</a> v urejevalniku WP "
+"Gutenberg."
+
+msgid "Menu item"
+msgstr "Postavka menija"
+
+msgid ""
+"Go to  %1$s Appearance -> Menus%2$s to add languages to the Language "
+"Switcher in any menu."
+msgstr ""
+"Pojdite v  %1$s Videz -> Meniji%2$s, če želite dodati jezike v preklopnik "
+"jezikov v kateri koli meni."
+
+msgid "Learn more in our documentation."
+msgstr "Več informacij najdete v naši dokumentaciji."
+
+msgid "Floating language selection"
+msgstr "Plavajoča izbira jezika"
+
+msgid "Add a floating dropdown that follows the user on every page."
+msgstr "Dodajte plavajoč spustni seznam, ki uporabnika spremlja na vsaki strani."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-glo-ee8b4f9f
+msgid "Show \"Powered by TranslatePress\""
+msgstr "Prikaži \"Powered by TranslatePress\""
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Show the small \"Powered by TranslatePress\" label in the floater language "
+"switcher."
+msgstr ""
+"Prikažite majhen napis \"Powered by TranslatePress\" v plavajočem "
+"preklopniku jezikov."
+
+msgid "5 Days to Better Multilingual Websites"
+msgstr "5 dni do boljših večjezičnih spletnih mest"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"%sJoin our FREE & EXCLUSIVE onboarding course%s and learn how to grow your "
+"multilingual traffic, reach international markets, and save time & money "
+"while getting the most out of TranslatePress!"
+msgstr ""
+"%sPridružite se našemu BREZPLAČNEMU & EKSKLUZIVNEMU tečaju za uvajanje%s in "
+"se naučite, kako povečati svoj večjezični promet, doseči mednarodne trge "
+"ter prihraniti čas & denar, medtem ko iz TranslatePress izvlečete največ!"
+
+msgid "Invalid email address"
+msgstr "Neveljaven e-poštni naslov"
+
+msgid "Your email"
+msgstr "Vaša e-pošta"
+
+msgid "Sign me up!"
+msgstr "Prijavite me!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Sign up with your email address and receive a 5-part email guide to help "
+"you maximize the power of TranslatePress."
+msgstr ""
+"Prijavite se z e-poštnim naslovom in prejmite 5-delni e-poštni vodnik, ki "
+"vam bo pomagal izkoristiti moč TranslatePress."
+
+msgid "Dismiss email course notification"
+msgstr "Opusti obvestilo o e-poštnem tečaju"
+
+msgid ""
+"Hey %s,<br>Never miss an important update - opt in to our security and "
+"feature updates notifications, and non-sensitive diagnostic tracking."
+msgstr ""
+"Hej %s,<br>Ne zamudite pomembne posodobitve - naročite se na obvestila o "
+"varnostnih in funkcionalnih posodobitvah ter neobčutljivo diagnostično "
+"sledenje."
+
+msgid "Allow & Continue"
+msgstr "Dovoli & nadaljuj"
+
+msgid "Skip"
+msgstr "Preskoči"
+
+#, tp-glo-ee8b4f9f
+msgid "This will allow TranslatePress to:"
+msgstr "To bo TranslatePressu omogočilo:"
+
+msgid "Your profile overview"
+msgstr "Pregled vašega profila"
+
+msgid "Name and email address"
+msgstr "Ime in e-poštni naslov"
+
+msgid "Admin Notices"
+msgstr "Skrbniška obvestila"
+
+msgid "Updates, announcements, marketing, no spam"
+msgstr "Posodobitve, obvestila, trženje, brez neželene pošte"
+
+msgid "Plugin status & settings"
+msgstr "Stanje vtičnika in nastavitve"
+
+msgid "Active, Deactivated, installed version and settings"
+msgstr "Aktiven, deaktiviran, nameščena različica in nastavitve"
+
+msgid "Privacy Policy"
+msgstr "Politika zasebnosti"
+
+msgid "Terms of Service"
+msgstr "Pogoji storitve"
+
+msgid "Support"
+msgstr "Podpora"
+
+msgid "Add Extra AI Words"
+msgstr "Dodaj dodatne AI besede"
+
+msgid ""
+"<strong>IMPORTANT NOTE:</strong> Before performing this action it is "
+"strongly recommended to first backup the database."
+msgstr ""
+"<strong>POMEMBNA OPOMBA:</strong> Pred izvedbo tega dejanja je zelo "
+"priporočljivo najprej ustvariti varnostno kopijo podatkovne baze."
+
+msgid ""
+"IMPORTANT: It is strongly recommended to first backup the database!! Are "
+"you sure you want to continue?"
+msgstr ""
+"POMEMBNO: Zelo priporočljivo je najprej ustvariti varnostno kopijo "
+"podatkovne baze!! Ali ste prepričani, da želite nadaljevati?"
+
+msgid "Operations to perform"
+msgstr "Operacije za izvedbo"
+
+#, tp-ctx-2edc90df
+msgid "Remove CDATA for original and dictionary strings"
+msgstr "Odstrani CDATA za izvirne in slovarske nize"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Removes CDATA from trp_original_strings and trp_dictionary_* "
+"tables.<br>This type of content should not be detected by TranslatePress. "
+"It might have been introduced in the database in older versions of the "
+"plugin."
+msgstr ""
+"Odstrani CDATA iz tabel trp_original_strings in trp_dictionary_*.<br>Ta "
+"vrsta vsebine ne bi smela biti zaznana s strani TranslatePress. Morda je "
+"bila vnesena v podatkovno bazo v starejših različicah vtičnika."
+
+msgid "Remove untranslated links from dictionary tables"
+msgstr "Odstrani neprevedene povezave iz slovarskih tabel"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Removes untranslated links and images from all trp_dictionary_* tables. "
+"These tables contain translations for user-inputted strings such as post "
+"content, post title, menus etc."
+msgstr ""
+"Odstrani neprevedene povezave in slike iz vseh tabel trp_dictionary_*. Te "
+"tabele vsebujejo prevode za nize, ki jih je vnesel uporabnik, kot so "
+"vsebina prispevka, naslov prispevka, meniji itd."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Remove duplicate rows for gettext strings"
+msgstr "Odstrani podvojene vrstice za nize Gettext"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Cleans up all trp_gettext_* tables of duplicate rows. These tables contain "
+"translations for themes and plugin strings."
+msgstr ""
+"Odstrani podvojene vrstice iz vseh tabel trp_gettext_*. Te tabele vsebujejo "
+"prevode za nize tem in vtičnikov."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for dictionary strings"
+msgstr "Odstrani podvojene vrstice za slovarske nize"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_dictionary_* tables of duplicate rows. These tables "
+"contain translations for user-inputted strings such as post content, post "
+"title, menus etc."
+msgstr ""
+"Odstrani podvojene vrstice iz vseh tabel trp_dictionary_*. Te tabele "
+"vsebujejo prevode za nize, ki jih je vnesel uporabnik, kot so vsebina "
+"prispevka, naslov prispevka, meniji itd."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for original dictionary strings"
+msgstr "Odstrani podvojene vrstice za izvirne slovarske nize"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_original_strings table of duplicate rows. This table "
+"contains strings in the default language, without any translation.<br>The "
+"trp_original_meta table, which contains meta information that refers to the "
+"post parent’s ID, is also regenerated.<br>Such duplicates can appear in "
+"exceptional situations of unexpected behavior."
+msgstr ""
+"Odstrani podvojene vrstice iz tabele trp_original_strings. Ta tabela "
+"vsebuje nize v privzetem jeziku brez kakršnihkoli prevodov.<br>Prav tako se "
+"regenerira tabela trp_original_meta, ki vsebuje meta informacije, ki se "
+"nanašajo na ID nadrejenega prispevka.<br>Takšne podvojene vrstice se lahko "
+"pojavijo v izjemnih situacijah nepričakovanega vedenja."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid ""
+"Replace gettext strings that have original ID NULL with the correct "
+"original IDs"
+msgstr ""
+"Zamenjaj nize Gettext, ki imajo izvirni ID NULL, s pravilnimi izvirnimi "
+"ID-ji"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid ""
+"Fixes an edge case issue where some gettext strings have the original ID "
+"incorrectly set to NULL, causing problems in the Translation "
+"Editor.<br>This operation corrects the original IDs in the trp_gettext_* "
+"tables.<br>Only check this option if you encountered an issue in the "
+"Translation Editor where clicking the green pencil did not bring up the "
+"gettext string for translation in the left sidebar.<br>Otherwise, please "
+"leave this option unchecked because it's an intensive operation."
+msgstr ""
+"Odpravi težavo v robnem primeru, ko nekateri nizi Gettext imajo izvirni ID "
+"nepravilno nastavljen na NULL, kar povzroča težave v prevajalskem "
+"urejevalniku.<br>Ta operacija popravi izvirne ID-je v tabelah "
+"trp_gettext_*.<br>To možnost označite le, če ste naleteli na težavo v "
+"prevajalskem urejevalniku, kjer klik na zeleni svinčnik ni prikazal niza "
+"Gettext za prevod v levi stranski vrstici.<br>V nasprotnem primeru pustite "
+"to možnost neoznačeno, saj je to zahtevna operacija."
+
+msgid "Optimize Database"
+msgstr "Optimiziraj bazo podatkov"
+
+#, tp-glo-34f425d9, tp-glo-ee8b4f9f
+msgid "TranslatePress Database Updater"
+msgstr "TranslatePress Database Updater"
+
+#, tp-glo-ee8b4f9f
+msgid "Updating TranslatePress tables. Please leave this window open."
+msgstr "Posodabljanje tabel TranslatePress. Prosimo, pustite to okno odprto."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Open colour picker"
+msgstr "Odpri izbirnik barv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enabled"
+msgstr "Omogočeno"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Disabled"
+msgstr "Onemogočeno"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Write custom CSS here..."
+msgstr "Tukaj napišite CSS po meri..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Include"
+msgstr "Vključi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Exclude"
+msgstr "Izključi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Content Restriction Mode"
+msgstr "Način omejevanja vsebine"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "No languages selected"
+msgstr "Ni izbranih jezikov"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saving..."
+msgstr "Shranjevanje..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saved!"
+msgstr "Shranjeno!"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save changes"
+msgstr "Shrani spremembe"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert to last saved values"
+msgstr "Povrni na zadnje shranjene vrednosti"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert changes"
+msgstr "Povrni spremembe"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Restoring will revert to the last saved version and discard your current "
+"edits."
+msgstr ""
+"S povrnitvijo se bo stanje vrnilo na zadnjo shranjeno različico in zavrglo "
+"trenutne spremembe."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert"
+msgstr "Povrni"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Keep editing"
+msgstr "Nadaljuj z urejanjem"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Are you sure you want to apply the <strong>%s</strong> preset?"
+msgstr "Ali ste prepričani, da želite uporabiti prednastavitev <strong>%s</strong>?"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "It will override your current settings."
+msgstr "Prepisala bo vaše trenutne nastavitve."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply preset"
+msgstr "Uporabi prednastavitev"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply %s preset"
+msgstr "Uporabi %s prednastavitev"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save failed"
+msgstr "Shranjevanje ni uspelo"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "English"
+msgstr "Angleščina"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Spanish"
+msgstr "Španščina"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "French"
+msgstr "Francoščina"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Minimal Light"
+msgstr "Minimalno svetla"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Dark Overlay"
+msgstr "Temno prekrivanje"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Brand Blue"
+msgstr "Modra blagovne znamke"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Bordered"
+msgstr "Z obrobo"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Preview"
+msgstr "Predogled pojavnega okna"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "User Language Detection Method"
+msgstr "Način zaznavanja jezika uporabnika"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Notification Behavior"
+msgstr "Vedenje obvestil"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Content"
+msgstr "Vsebina pojavnega okna"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply a preset"
+msgstr "Uporabi prednastavitev"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Design"
+msgstr "Prilagodi oblikovanje"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language detection"
+msgstr "Zaznavanje jezika"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid ""
+"Select how the language should be detected for first time visitors.<br>The "
+"visitor's last displayed language will be remembered through cookies."
+msgstr ""
+"Izberite, kako naj se zaznava jezik za obiskovalce, ki so tu "
+"prvič.<br>Zadnji prikazani jezik obiskovalca bo zapomnjen s pomočjo "
+"piškotov."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup display"
+msgstr "Prikaz pojavnega okna"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Conditionally display popup based on language"
+msgstr "Pogojen prikaz pojavnega okna glede na jezik"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Type"
+msgstr "Vrsta pojavnega okna"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid ""
+"Visitors will be redirected directly when a different preferred language is "
+"detected."
+msgstr ""
+"Obiskovalci bodo neposredno preusmerjeni, ko bo zaznan drug prednostni "
+"jezik."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Text"
+msgstr "Besedilo pojavnega okna"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Button Text"
+msgstr "Besedilo gumba"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close Button Text"
+msgstr "Besedilo gumba za zapiranje"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background color"
+msgstr "Barva ozadja"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text color"
+msgstr "Barva besedila"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button background color"
+msgstr "Barva ozadja gumba"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button hover color"
+msgstr "Barva gumba ob prehodu miške"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button text color"
+msgstr "Barva besedila gumba"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button border radius"
+msgstr "Radij obrobe gumba"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Close icon color"
+msgstr "Barva ikone za zapiranje"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Overlay color"
+msgstr "Barva prekrivanja"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Entrance animation"
+msgstr "Animacija vstopa"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Animation"
+msgstr "Animacija"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Fade"
+msgstr "Bledenje"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from top"
+msgstr "Drsenje od zgoraj"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from right"
+msgstr "Drsenje z desne"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from bottom"
+msgstr "Drsenje od spodaj"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from left"
+msgstr "Drsenje z leve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Enable custom CSS"
+msgstr "Omogoči CSS po meri"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "No names"
+msgstr "Brez imen"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Show flags"
+msgstr "Prikaži zastave"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Rectangle (4:3)"
+msgstr "Pravokotnik (4:3)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Square (1:1)"
+msgstr "Kvadrat (1:1)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag border radius"
+msgstr "Polmer obrobe zastave"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher background"
+msgstr "Ozadje preklopnika"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover background"
+msgstr "Ozadje preklopnika ob prehodu"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher text"
+msgstr "Besedilo preklopnika"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover text"
+msgstr "Besedilo preklopnika ob prehodu"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher border"
+msgstr "Obroba preklopnika"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border width"
+msgstr "Debelina obrobe stikala"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border radius"
+msgstr "Zaobljenost obrobe stikala"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Hover over the language switcher to see it in action!"
+msgstr "Premaknite kazalec čez preklopnik jezikov, da ga vidite v delovanju!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Preview"
+msgstr "Predogled preklopnika"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enable Floating Switcher"
+msgstr "Omogoči plavajoči preklopnik"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is enabled"
+msgstr "Preklopnik je omogočen"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is disabled"
+msgstr "Preklopnik je onemogočen"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Type"
+msgstr "Vrsta preklopnika"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages as dropdown"
+msgstr "Prikaži jezike kot spustni seznam"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages side by side"
+msgstr "Prikaži jezike drug ob drugem"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background hover color"
+msgstr "Barva ozadja ob premiku miške"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text hover color"
+msgstr "Barva besedila ob premiku miške"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border color"
+msgstr "Barva obrobe stikala"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag and text size"
+msgstr "Velikost zastav in besedila"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons shape"
+msgstr "Oblika ikon zastav"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons border radius"
+msgstr "Zaobljenost obrobe ikon zastav"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Layout"
+msgstr "Prilagodi postavitev"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Show the small Powered by TranslatePress label in the language switcher."
+msgstr "Prikaži majhno oznako Powered by TranslatePress v jezikovnem stikalu."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Imate neshranjene spremembe. Vseeno zapustite?"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher animations"
+msgstr "Animacije stikala"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one. <br> Only works when there are exactly two "
+"languages, the default one and a translation one."
+msgstr ""
+"Preoblikuje izbirnik jezika v gumb, ki prikazuje drugi razpoložljivi jezik, "
+"ne trenutnega. <br> Deluje samo, ko sta natančno dva jezika: privzeti in "
+"prevodni."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "This option only works when exactly two languages are published."
+msgstr "Ta možnost deluje samo, ko sta objavljena natančno dva jezika."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copied!"
+msgstr "Kopirano!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copy"
+msgstr "Kopiraj"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-8339568d, tp-glo-da70db08
+msgid ""
+"Use shortcode on any page or widget. You can also add the Language Switcher "
+"Block in the WP Gutenberg Editor."
+msgstr ""
+"Uporabite shortcode na kateri koli strani ali pripomočku. Lahko tudi dodate "
+"blok izbirnika jezika v urejevalnik WP Gutenberg."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Additional Settings"
+msgstr "Dodatne nastavitve"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of hovering. "
+"<br> Close it by clicking on it, anywhere else on the screen or by pressing "
+"the escape key. <br> This will affect only the shortcode language switcher."
+msgstr ""
+"Odprite izbirnik jezika shortcode s klikom nanj namesto lebdenja. <br> "
+"Zaprite ga s klikom nanj, s klikom kamor koli drugje na zaslonu ali s "
+"pritiskom na tipko Escape. <br> To bo vplivalo samo na izbirnik jezika "
+"shortcode."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Menu Switcher Layout"
+msgstr "Postavitev izbirnika v meniju"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"Go to <a href=\"/wp-admin/nav-menus.php\">Appearance → Menus</a> to add "
+"languages to the Language Switcher in any menu.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Learn more in our documentation.</a>"
+msgstr ""
+"Pojdite na <a href=\"/wp-admin/nav-menus.php\">Videz → Meniji</a>, da "
+"dodate jezike v izbirnik jezika v kateri koli meni.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Več informacij najdete v naši "
+"dokumentaciji.</a>"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose in which languages to show the block."
+msgstr "Izberite, v katerih jezikih naj bo blok prikazan."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose from which languages the block is excluded."
+msgstr "Izberite, iz katerih jezikov je blok izključen."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Select language(s)"
+msgstr "Izberite jezik(e)"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress Language Restriction"
+msgstr "Omejevanje jezikov TranslatePress"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid ""
+"Language restrictions cannot be saved on a top-level Classic block. Convert "
+"it to blocks or place it inside a Group block first."
+msgstr ""
+"Jezikovnih omejitev ni mogoče shraniti na klasičnem bloku na najvišji "
+"ravni. Pretvorite ga v bloke ali ga najprej postavite znotraj skupinskega "
+"bloka."
+
+msgctxt "page 1 of 3"
+msgid "of"
+msgstr "/"
+
+msgctxt "Untranslated in this language"
+msgid "in"
+msgstr "v"
+
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "Addons tab"
+msgstr "Zavihek dodatki"
+
+#, tp-glo-77a09a79, tp-glo-b83ea26c, tp-glo-ee8b4f9f
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "TranslatePress Pro Add-on"
+msgstr "TranslatePress Pro Add-on"
+
+#, tp-ai
+msgctxt "block title"
+msgid "Language Switcher"
+msgstr "Izbirnik jezika"
+
+#, tp-ai
+msgctxt "block description"
+msgid "Displays the Language Switcher."
+msgstr "Prikaže izbirnik jezika."
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Switcher"
+msgstr "Izbirnik jezika"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Translate"
+msgstr "Prevedi"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgctxt "block keyword"
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Names"
+msgstr "Imena jezikov"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Flags"
+msgstr "Zastave"

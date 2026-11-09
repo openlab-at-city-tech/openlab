@@ -122,6 +122,7 @@ class TRP_Step_Addons implements TRP_Onboarding_Step_Interface {
     }
 
 
+
     public function render() {
         $trp = TRP_Translate_Press::get_trp_instance();
         $translatepress_product_name = reset($trp->tp_product_name);
@@ -147,14 +148,31 @@ class TRP_Step_Addons implements TRP_Onboarding_Step_Interface {
         <h1><?php esc_html_e('Enable Modules', 'translatepress-multilingual'); ?></h1>
         <h3><?php esc_html_e('Enable Add-on modules to extend TranslatePress and enhance the functionality of your translated site.', 'translatepress-multilingual'); ?></h3>
 
-        <?php if($license_status == 'invalid' || $translatepress_product_name == 'TranslatePress' ) : ?>
-        <div class="trp-extra-languages-error">
-            <div class="trp-upgrade-notice">
-                <?php esc_html_e('More functionality with TranslatePress Pro.', 'translatepress-multilingual'); ?>
-                <a href="https://translatepress.com/pricing/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=enable-addons" class="trp-upgrade-notice-button"><span><?php esc_html_e('Upgrade now ↗', 'translatepress-multilingual'); ?></span></a>
+        <?php
+        $pro_state = TRP_Onboarding::get_pro_plugin_state();
+
+        if ( $pro_state === 'active' && $license_status === 'invalid' ) : // Pro plugin active but no valid license yet ?>
+            <div class="trp-extra-languages-error">
+                <div class="trp-upgrade-notice">
+                    <?php esc_html_e('TranslatePress Pro is active. Activate your license key to unlock the Pro add-ons below.', 'translatepress-multilingual'); ?>
+                    <a href="<?php echo esc_url(add_query_arg(['step' => 'ai-api-key'])); ?>" class="trp-upgrade-notice-button"><span><?php esc_html_e('Activate license', 'translatepress-multilingual'); ?></span></a>
+                </div>
             </div>
-            <p style="padding: 0 1rem;"><?php esc_html_e('Already a Pro User?', 'translatepress-multilingual'); ?> <a href="<?php echo esc_url(add_query_arg(['step' => 'install'])); ?>"> <?php esc_html_e('Activate License Key', 'translatepress-multilingual'); ?></a></p>
-        </div>
+        <?php elseif ( $pro_state === 'inactive' ) : // Pro plugin uploaded but not activated ?>
+            <div class="trp-extra-languages-error">
+                <div class="trp-upgrade-notice">
+                    <?php esc_html_e('TranslatePress Pro is installed but not activated yet.', 'translatepress-multilingual'); ?>
+                    <a class="trp-install-pro-link trp-upgrade-notice-button" href="<?php echo esc_url(self_admin_url('plugins.php?s=TranslatePress&plugin_status=inactive')); ?>" target="_blank" rel="noopener" title="<?php echo esc_attr__('Opens your Plugins page (filtered to TranslatePress) in a new tab. Activate the TranslatePress Pro plugin there, then return to this tab — it will update automatically.', 'translatepress-multilingual'); ?>"><span><?php esc_html_e('Activate TranslatePress Pro ↗', 'translatepress-multilingual'); ?></span></a>
+                </div>
+            </div>
+        <?php elseif ( $pro_state === 'not_installed' ) : // Free version, no Pro plugin present ?>
+            <div class="trp-extra-languages-error">
+                <div class="trp-upgrade-notice">
+                    <?php esc_html_e('More functionality with TranslatePress Pro.', 'translatepress-multilingual'); ?>
+                    <a href="https://translatepress.com/pricing/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=enable-addons" class="trp-upgrade-notice-button"><span><?php esc_html_e('Upgrade now ↗', 'translatepress-multilingual'); ?></span></a>
+                </div>
+                <p style="padding: 0 1rem;"><?php esc_html_e('Already a Pro User?', 'translatepress-multilingual'); ?> <a class="trp-install-pro-link" href="<?php echo esc_url(self_admin_url('plugin-install.php?tab=upload')); ?>" target="_blank" rel="noopener" title="<?php echo esc_attr__('Opens the WordPress “Add Plugins” page in a new tab. Upload and activate the TranslatePress Pro plugin there, then return to this tab — it will update automatically.', 'translatepress-multilingual'); ?>"> <?php esc_html_e('Install TranslatePress Pro', 'translatepress-multilingual'); ?></a></p>
+            </div>
         <?php endif; ?>
 
         <form method="post">

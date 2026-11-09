@@ -42,6 +42,11 @@ namespace TranslatePress;
  * In function load(), added edge case where it considered this group of symbols <!---> as an opening comment but not a closed one.
  * Browsers seem to be forgiving about this. For more details: issue #85zrvd20k
  *
+ * $token_attr was changed from ' >' to " \t\n\r\f>" so unquoted attribute values are terminated by any ASCII whitespace
+ * (per the HTML5 / Infra spec), not just U+0020 SPACE. Without this, markup like Elementor's atomic form widget — which
+ * uses tab-indented, newline-separated unquoted attributes — gets merged into one corrupted attribute when
+ * re-serialized for secondary languages. Issue #CU-869de6159.
+ *
  */
 
 define('TRP_HDOM_TYPE_ELEMENT', 1);
@@ -68,51 +73,14 @@ defined('TRP_DEFAULT_SPAN_TEXT') || define('TRP_DEFAULT_SPAN_TEXT', ' ');
 defined('TRP_MAX_FILE_SIZE') || define('TRP_MAX_FILE_SIZE', 100000000);
 define('TRP_HDOM_SMARTY_AS_TEXT', 1);
 
-function file_get_html(
-	$url,
-	$use_include_path = false,
-	$context = null,
-	$offset = 0,
-	$maxLen = -1,
-	$lowercase = true,
-	$forceTagsClosed = true,
-	$target_charset = TRP_DEFAULT_TARGET_CHARSET,
-	$stripRN = true,
-	$defaultBRText = TRP_DEFAULT_BR_TEXT,
-	$defaultSpanText = TRP_DEFAULT_SPAN_TEXT)
-{
-	if($maxLen <= 0) { $maxLen = TRP_MAX_FILE_SIZE; }
-
-	$dom = new simple_html_dom(
-		null,
-		$lowercase,
-		$forceTagsClosed,
-		$target_charset,
-		$stripRN,
-		$defaultBRText,
-		$defaultSpanText
-	);
-
-	/**
-	 * For sourceforge users: uncomment the next line and comment the
-	 * retrieve_url_contents line 2 lines down if it is not already done.
-	 */
-	$contents = file_get_contents(
-		$url,
-		$use_include_path,
-		$context,
-		$offset,
-		$maxLen
-	);
-	// $contents = retrieve_url_contents($url);
-
-	if (empty($contents) || strlen($contents) > $maxLen) {
-		$dom->clear();
-		return false;
-	}
-
-	return $dom->load($contents, $lowercase, $stripRN);
-}
+/*
+ * TranslatePress modifications
+ *
+ * -- Removed function file_get_html -- see https://simplehtmldom.sourceforge.io/docs/1.9/api/file_get_html/
+ * It internally uses file_get_contents and got flagged during a WordPress plugin scan with: Avoiding the use of certain PHP functions on remote files.
+ *
+ * Issue CU-869dmp6aw.
+ */
 
 function str_get_html(
 	$str,
@@ -1429,10 +1397,33 @@ class simple_html_dom
 	protected $cursor;
 	protected $parent;
 	protected $noise = array();
+	/*
+	 * TranslatePress security modification (CU-869ektm82)
+	 * Per-parse random salt embedded in every noise placeholder key. The parser
+	 * temporarily swaps the contents of <script>/<style>/<code>/comments/etc. for
+	 * placeholder keys while parsing, then restores them. Historically those keys
+	 * were fully predictable ("___noise___ NNNN"), so attacker-authored text (e.g.
+	 * a forged "___noise___ NNNN" inside a comment's title attribute) could
+	 * impersonate a real placeholder and have unrelated element content restored
+	 * INTO an attribute value, breaking out of the quotes (stored XSS). Binding the
+	 * key to a secret, per-parse salt makes the placeholder unforgeable. The salt is
+	 * regenerated on every parse in prepare() and never appears in output.
+	 */
+	protected $noise_salt = '';
 	protected $token_blank = " \t\r\n";
 	protected $token_equal = ' =/>';
 	protected $token_slash = " />\r\n\t";
-	protected $token_attr = ' >';
+	/*
+	 * TranslatePress modifications
+	 * Added \t, \n, \r, \f to the unquoted-attribute-value terminator set so it
+	 * matches the HTML5 spec's "ASCII whitespace" (Infra: U+0009 TAB, U+000A LF,
+	 * U+000C FF, U+000D CR, U+0020 SPACE). Upstream value was ' >', which only
+	 * terminated unquoted values at literal space or '>'. That caused tab- or
+	 * newline-separated unquoted attributes (e.g. Elementor's atomic form
+	 * widget) to be merged into one corrupted attribute when re-serialized for
+	 * secondary languages. Issue #CU-869de6159.
+	 */
+	protected $token_attr = " \t\n\r\f>";
 
 	public $_charset = '';
 	public $_target_charset = '';
@@ -1670,6 +1661,7 @@ class simple_html_dom
 		$this->pos = 0;
 		$this->cursor = 1;
 		$this->noise = array();
+		$this->noise_salt = $this->generate_noise_salt(); // TranslatePress security modification (CU-869ektm82)
 		$this->nodes = array();
 		$this->lowercase = $lowercase;
 		$this->default_br_text = $defaultBRText;
@@ -2239,7 +2231,9 @@ class simple_html_dom
 		);
 
 		for ($i = $count - 1; $i > -1; --$i) {
-			$key = '___noise___' . sprintf('% 5d', count($this->noise) + 1000);
+			// TranslatePress security modification (CU-869ektm82): embed the secret
+			// per-parse salt so the placeholder key cannot be forged from user input.
+			$key = '___noise___' . $this->noise_salt . sprintf('% 5d', count($this->noise) + 1000);
 
 			if (is_object($debug_object)) {
 				$debug_object->debug_log(2, 'key is: ' . $key);
@@ -2258,25 +2252,62 @@ class simple_html_dom
 		}
 	}
 
+	/*
+	 * TranslatePress security modification (CU-869ektm82)
+	 * Returns the cryptographically-strong, per-parse salt woven into every noise
+	 * placeholder key. Falls back gracefully if random_bytes() is unavailable.
+	 */
+	protected function generate_noise_salt()
+	{
+		if (function_exists('random_bytes')) {
+			try {
+				return bin2hex(random_bytes(8)); // 16 hex chars
+			} catch (\Exception $e) {
+				// fall through to the fallbacks below
+			} catch (\Error $e) {
+				// fall through to the fallbacks below
+			}
+		}
+
+		if (function_exists('wp_generate_password')) {
+			$salt = preg_replace('/[^a-zA-Z0-9]/', '', wp_generate_password(24, false));
+			if (strlen($salt) >= 16) {
+				return substr($salt, 0, 16);
+			}
+		}
+
+		return substr(md5(uniqid((string) mt_rand(), true)), 0, 16);
+	}
+
 	function restore_noise($text)
 	{
 		global $debug_object;
 		if (is_object($debug_object)) { $debug_object->debug_log_entry(1); }
 
-		while (($pos = strpos($text, '___noise___')) !== false) {
-			// Sometimes there is a broken piece of markup, and we don't GET the
-			// pos+11 etc... token which indicates a problem outside of us...
+		/*
+		 * TranslatePress security modification (CU-869ektm82)
+		 * Match the FULL salted marker ("___noise___" + secret salt) instead of the
+		 * bare, guessable "___noise___" token. Because the salt is random per-parse
+		 * and never exposed, attacker-authored text cannot forge a placeholder, so
+		 * unrelated element content can no longer be restored into an attribute
+		 * value (the stored-XSS vector). A bare "___noise___" appearing in real
+		 * content is now left untouched.
+		 *
+		 * This also removes the historical infinite-loop DoS: the old "undefined
+		 * key" fallback re-emitted a "___noise___" token that strpos() found again
+		 * on the next iteration, looping forever (an unauthenticated visitor could
+		 * trigger it with a forged key). Unknown/truncated markers are now dropped
+		 * and skipped. A hard iteration cap guarantees termination regardless.
+		 */
+		$marker     = '___noise___' . $this->noise_salt;
+		$marker_len = strlen($marker);
+		$offset     = 0;
+		$guard      = 1000000; // absolute safety cap against pathological input
 
-			// todo: "___noise___1000" (or any number with four or more digits)
-			// in the DOM causes an infinite loop which could be utilized by
-			// malicious software
-			if (strlen($text) > $pos + 15) {
-				$key = '___noise___'
-				. $text[$pos + 11]
-				. $text[$pos + 12]
-				. $text[$pos + 13]
-				. $text[$pos + 14]
-				. $text[$pos + 15];
+		while ($guard-- > 0 && ($pos = strpos($text, $marker, $offset)) !== false) {
+			// The numeric part is a fixed 5-character field (see sprintf('% 5d')).
+			if (strlen($text) >= $pos + $marker_len + 5) {
+				$key = $marker . substr($text, $pos + $marker_len, 5);
 
 				if (is_object($debug_object)) {
 					$debug_object->debug_log(2, 'located key of: ' . $key);
@@ -2285,21 +2316,22 @@ class simple_html_dom
 				if (isset($this->noise[$key])) {
 					$text = substr($text, 0, $pos)
 					. $this->noise[$key]
-					. substr($text, $pos + 16);
+					. substr($text, $pos + $marker_len + 5);
 				} else {
-					// do this to prevent an infinite loop.
+					// Unknown key: drop the placeholder. Do NOT re-emit a
+					// "___noise___" token here or the scan would find it again.
 					$text = substr($text, 0, $pos)
-					. 'UNDEFINED NOISE FOR KEY: '
-					. $key
-					. substr($text, $pos + 16);
+					. substr($text, $pos + $marker_len + 5);
 				}
 			} else {
-				// There is no valid key being given back to us... We must get
-				// rid of the ___noise___ or we will have a problem.
+				// Truncated marker at the tail of the string: drop it and stop.
 				$text = substr($text, 0, $pos)
-				. 'NO NUMERIC NOISE KEY'
-				. substr($text, $pos + 11);
+				. substr($text, $pos + $marker_len);
 			}
+
+			// Continue scanning from the same position so nested placeholders in
+			// restored content are still resolved; the guard prevents any loop.
+			$offset = $pos;
 		}
 		return $text;
 	}

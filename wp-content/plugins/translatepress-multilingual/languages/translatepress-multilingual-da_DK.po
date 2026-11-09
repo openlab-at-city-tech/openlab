@@ -1,0 +1,6092 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: da_DK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: da_DK\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress - DEV"
+msgstr "TranslatePress - DEV"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "https://translatepress.com/"
+msgstr "https://translatepress.com/"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-cd79cda5
+msgid ""
+"Experience a better way of translating your WordPress site using a visual "
+"front-end translation editor, with full support for WooCommerce and site "
+"builders."
+msgstr ""
+"Oplev en bedre måde at oversætte dit WordPress-websted på ved hjælp af en "
+"visuel front-end-oversættelseseditor med fuld understøttelse af WooCommerce "
+"og site builders."
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+msgstr "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "https://cozmoslabs.com/"
+msgstr "https://cozmoslabs.com/"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid ""
+"The inactive languages will still be visible and active for the admin. For "
+"other users they won't be visible in the language switchers and won't be "
+"accessible either."
+msgstr ""
+"De inaktive sprog vil stadig være synlige og aktive for administratoren. "
+"For andre brugere vil de ikke være synlige i sprogvælgerne og vil heller "
+"ikke kunne tilgås."
+
+msgid "unknown"
+msgstr "ukendt"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Extra Languages add-on</strong> requires TranslatePress version "
+"%1$s or higher. You are currently using version %2$s. Please update "
+"TranslatePress to enable this feature."
+msgstr ""
+"<strong>Extra Languages add-on</strong> kræver TranslatePress version %1$s "
+"eller højere. Du bruger i øjeblikket version %2$s. Opdater venligst "
+"TranslatePress for at aktivere denne funktion."
+
+msgid "Dismiss this notice."
+msgstr "Afvis denne meddelelse."
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Slug"
+msgstr "Indlægsslug"
+
+#, tp-ctx-742ebaa7, tp-glo-9fa92a70
+msgid "URL Slugs Translation"
+msgstr "Oversættelse af URL-slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs"
+msgstr "Slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy Slugs"
+msgstr "Taksonomislugs"
+
+#, tp-ctx-742ebaa7
+msgid "Search Taxonomy Slugs"
+msgstr "Søg efter taksonomislugs"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Taxonomy Slug"
+msgstr "Taksonomislug"
+
+msgid "Translation"
+msgstr "Oversættelse"
+
+#, tp-ctx-742ebaa7
+msgid "Term Slugs"
+msgstr "Term-slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Search Term Slugs"
+msgstr "Søg efter term-slugs"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Term Slug"
+msgstr "Term-slug"
+
+msgid "Taxonomy"
+msgstr "Taksonomi"
+
+msgid "Filter by Taxonomy"
+msgstr "Filtrer efter taksonomi"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Slugs"
+msgstr "Indlægsslugs"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Slugs"
+msgstr "Søg efter indlægsslugs"
+
+#, tp-ctx-e9944eb3
+msgid "Post ID"
+msgstr "Indlægs-ID"
+
+#, tp-ctx-e9944eb3
+msgid "Post Type"
+msgstr "Indlægstype"
+
+#, tp-ctx-e9944eb3
+msgid "Filter by Post Type"
+msgstr "Filtrer efter indlægstype"
+
+msgid "Published"
+msgstr "Udgivet"
+
+#, tp-ctx-e9944eb3
+msgid "Any Post Status"
+msgstr "Enhver indlægsstatus"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Type Base Slugs"
+msgstr "Basis-slugs for indlægstyper"
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Type Base Slug"
+msgstr "Basis-slug for indlægstype"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Type Base Slugs"
+msgstr "Søg efter basis-slugs for indlægstyper"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce Slugs"
+msgstr "WooCommerce-slugs"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-cd79cda5
+msgid "WooCommerce Slug"
+msgstr "WooCommerce-slug"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "Search WooCommerce Slugs"
+msgstr "Søg efter WooCommerce-slugs"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Automatic and manual slug translation changes performed when "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 was active had to be "
+"removed because of some issues with that version. All slug translations "
+"from before that version are now in use. Thank you for understanding!"
+msgstr ""
+"Automatiske og manuelle ændringer af slug-oversættelser udført, mens "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 var aktiv, måtte "
+"fjernes på grund af nogle problemer med den version. Alle "
+"slug-oversættelser fra før den version er nu i brug. Tak for din forståelse!"
+
+msgid ""
+"If you absolutely need them, the removed translations can be found in "
+"tables trp_slug_original_obsolete and trp_slug_translation_obsolete."
+msgstr ""
+"Hvis du absolut har brug for dem, kan de fjernede oversættelser findes i "
+"tabellerne trp_slug_original_obsolete og trp_slug_translation_obsolete."
+
+msgid "(inactive)"
+msgstr "(inaktiv)"
+
+#, tp-ctx-742ebaa7
+msgid "Other Slugs"
+msgstr "Andre slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Search Other Slugs"
+msgstr "Søg efter andre slugs"
+
+msgid "Automatic User Language Detection"
+msgstr "Automatisk registrering af brugerens sprog"
+
+msgid "Invalid language code"
+msgstr "Ugyldig sprogkode"
+
+#, tp-ai
+msgid ""
+"We've detected you might be speaking a different language. Do you want to "
+"change to:"
+msgstr "Vi har registreret, at du måske taler et andet sprog. Vil du skifte til:"
+
+#, tp-ai
+msgid "Change Language"
+msgstr "Skift sprog"
+
+#, tp-ai
+msgid "Close and do not switch language"
+msgstr "Luk og skift ikke sprog"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "First by browser language, then IP address (recommended)"
+msgstr "Først efter browsersprog, derefter IP-adresse (anbefalet)"
+
+msgid "First by IP address, then by browser language"
+msgstr "Først efter IP-adresse, derefter browsersprog"
+
+msgid "Only by browser language"
+msgstr "Kun efter browsersprog"
+
+msgid "Only by IP address"
+msgstr "Kun efter IP-adresse"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "A popup appears asking the user if they want to be redirected"
+msgstr "En popup vises, der spørger brugeren, om de ønsker at blive omdirigeret"
+
+msgid "Redirect directly (*not recommended)"
+msgstr "Omdiriger direkte (*ikke anbefalet)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Pop-up window over the content"
+msgstr "Popup-vindue over indholdet"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Hello bar before the content"
+msgstr "Hello bar før indholdet"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Automatic User Language Detection requires a newer version of "
+"TranslatePress to use its visual settings interface. The legacy settings "
+"form will remain available until TranslatePress is updated."
+msgstr ""
+"Automatisk brugersprogsdetektering kræver en nyere version af "
+"TranslatePress for at bruge dens visuelle indstillingsgrænseflade. Den "
+"ældre indstillingsformular vil forblive tilgængelig, indtil TranslatePress "
+"opdateres."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Update TranslatePress"
+msgstr "Opdater TranslatePress"
+
+msgid ""
+"WARNING. Cannot determine your language preference based on your current "
+"IP.<br>This is most likely because the website is on a local environment."
+msgstr ""
+"ADVARSEL. Kan ikke fastslå dit sprogvalg ud fra din aktuelle IP.<br>Dette "
+"skyldes højst sandsynligt, at websitet kører i et lokalt miljø."
+
+msgid "Permission denied."
+msgstr "Tilladelse nægtet."
+
+#, tp-glo-b357fc3e
+msgid "Invalid nonce."
+msgstr "Ugyldig nonce."
+
+#, tp-ai
+msgid "Invalid settings."
+msgstr "Ugyldige indstillinger."
+
+msgid "Settings saved."
+msgstr "Indstillinger gemt."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Go to <a href=\"%s\" target=\"_self\">Advanced</a> tab to change this "
+"feature's settings"
+msgstr ""
+"Gå til fanen <a href=\"%s\" target=\"_self\">Avancerede</a> for at ændre "
+"indstillingerne for denne funktion"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Website language selector"
+msgstr "Hjemmesidens sprogvælger"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Change language"
+msgstr "Skift sprog"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Available languages"
+msgstr "Tilgængelige sprog"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Please enter your DeepL API key."
+msgstr "Indtast din DeepL API-nøgle."
+
+#, tp-glo-c6709f3f
+msgid "DeepL"
+msgstr "DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Bad request. There was an error accessing the DeepL API."
+msgstr "Ugyldig anmodning. Der opstod en fejl ved adgang til DeepL API."
+
+#, tp-glo-91460d88
+msgid "The API key entered is invalid."
+msgstr "Den indtastede API-nøgle er ugyldig."
+
+#, tp-glo-91460d88
+msgid "The API resource could not be found."
+msgstr "API-ressourcen kunne ikke findes."
+
+msgid "The request size is too large."
+msgstr "Anmodningens størrelse er for stor."
+
+msgid "The request is too long."
+msgstr "Anmodningen er for lang."
+
+msgid "Too many requests. Please try again later."
+msgstr "For mange anmodninger. Prøv igen senere."
+
+msgid "Your translation quota has been reached."
+msgstr "Din oversættelseskvote er nået."
+
+msgid "We could not process your request. Please try again later."
+msgstr "Vi kunne ikke behandle din anmodning. Prøv igen senere."
+
+#, tp-glo-c6709f3f
+msgid ""
+"There is an error on the DeepL service and your request could not be "
+"processed."
+msgstr "Der er en fejl i DeepL-tjenesten, og din anmodning kunne ikke behandles."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Type"
+msgstr "DeepL API-type"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Free"
+msgstr "Gratis"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Select the type of DeepL API you want to use."
+msgstr "Vælg den type DeepL API, du vil bruge."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Key"
+msgstr "DeepL API-nøgle"
+
+#, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"%s\" target=\"_blank\">this link</a> to see how you can set "
+"up an API key and control API costs."
+msgstr ""
+"Besøg <a href=\"%s\" target=\"_blank\">dette link</a> for at se, hvordan du "
+"opretter en API-nøgle og styrer API-omkostninger."
+
+msgid "No Active License Detected for this website."
+msgstr "Ingen aktiv licens registreret for dette websted."
+
+msgid "Enter your license key"
+msgstr "Indtast din licensnøgle"
+
+msgid " Or %1$spurchase one here%2$s"
+msgstr " Eller %1$skøb én her%2$s"
+
+msgid "Different Domain per Language"
+msgstr "Forskelligt domæne pr. sprog"
+
+msgid "View Docs"
+msgstr "Se dokumentation"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Assign different domains or subdomains to each language. When visitors "
+"access these domains, TranslatePress loads the appropriate language "
+"translation directly without redirecting."
+msgstr ""
+"Tildel forskellige domæner eller underdomæner til hvert sprog. Når "
+"besøgende tilgår disse domæner, indlæser TranslatePress den relevante "
+"sprogoversættelse direkte uden at omdirigere."
+
+msgid "Example: %1$s for English, %2$s for Spanish, %3$s for French."
+msgstr "Eksempel: %1$s for engelsk, %2$s for spansk, %3$s for fransk."
+
+msgid "Before enabling:"
+msgstr "Før aktivering:"
+
+#, tp-glo-1edf89cb
+msgid ""
+"Ensure your domains are registered, pointed to your server, and have SSL "
+"certificates configured."
+msgstr ""
+"Sørg for, at dine domæner er registreret, peger på din server, og har "
+"SSL-certifikater konfigureret."
+
+msgid "Domain"
+msgstr "Domæne"
+
+msgid "Map this language to a different domain or sub-domain."
+msgstr "Kortlæg dette sprog til et andet domæne eller underdomæne."
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Prefill with current domain"
+msgstr "Udfyld med nuværende domæne"
+
+#, tp-glo-e765e8ba
+msgid "Check DNS"
+msgstr "Tjek DNS"
+
+#, tp-glo-e765e8ba
+msgid "Checking DNS..."
+msgstr "Tjekker DNS..."
+
+#, tp-glo-e765e8ba
+msgid "DNS is correctly configured!"
+msgstr "DNS er korrekt konfigureret!"
+
+#, tp-glo-e765e8ba
+msgid "DNS check failed. Please verify your domain configuration."
+msgstr "DNS-tjek mislykkedes. Bekræft venligst din domænekonfiguration."
+
+msgid "This domain is already assigned to another language."
+msgstr "Dette domæne er allerede tildelt et andet sprog."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Different Domain per Language add-on</strong> requires "
+"TranslatePress version %1$s or higher. You are currently using version "
+"%2$s. Please update TranslatePress to enable this feature."
+msgstr ""
+"<strong>Different Domain per Language add-on</strong> kræver TranslatePress "
+"version %1$s eller højere. Du bruger i øjeblikket version %2$s. Opdater "
+"venligst TranslatePress for at aktivere denne funktion."
+
+msgid ""
+"Note: This option is disabled when Different Domain for Language addon is "
+"active."
+msgstr ""
+"Bemærk: Denne indstilling er deaktiveret, når tilføjelsen Different Domain "
+"for Language er aktiv."
+
+msgid ""
+"Different Domain per Language: Domain is required when domain mapping is "
+"enabled. The toggle has been disabled for languages with empty domains."
+msgstr ""
+"Different Domain per Language: Domæne er påkrævet, når domænekortlægning er "
+"aktiveret. Kontakten er blevet deaktiveret for sprog med tomme domæner."
+
+msgid ""
+"Different Domain per Language: The same domain cannot be assigned to "
+"multiple languages. The toggle has been disabled for duplicate domains."
+msgstr ""
+"Different Domain per Language: Det samme domæne kan ikke tildeles flere "
+"sprog. Kontakten er blevet deaktiveret for duplikerede domæner."
+
+#, tp-glo-9fa92a70
+msgid ""
+"Different Domain per Language: A language domain cannot be the same as the "
+"main site URL. The toggle has been disabled for the matching domain."
+msgstr ""
+"Different Domain per Language: Et sprogs domæne kan ikke være det samme som "
+"hovedwebstedets URL. Kontakten er blevet deaktiveret for det matchende "
+"domæne."
+
+msgid "Please enter a domain."
+msgstr "Indtast venligst et domæne."
+
+msgid "Invalid domain format."
+msgstr "Ugyldigt domæneformat."
+
+msgid "Could not reach domain: %s"
+msgstr "Kunne ikke nå domænet: %s"
+
+msgid "Domain is reachable!"
+msgstr "Domænet er tilgængeligt!"
+
+#, tp-glo-1aabb38a
+msgid "Domain returned HTTP status %d."
+msgstr "Domænet returnerede HTTP-status %d."
+
+msgid "Limit this menu item to the following languages"
+msgstr "Begræns dette menupunkt til følgende sprog"
+
+msgid "All Languages"
+msgstr "Alle sprog"
+
+msgid "Translator"
+msgstr "Oversætter"
+
+#, tp-glo-ee8b4f9f
+msgid " TranslatePress Settings"
+msgstr " TranslatePress-indstillinger"
+
+msgid "Allow this user to translate the website."
+msgstr "Tillad denne bruger at oversætte hjemmesiden."
+
+msgid "Translate Site"
+msgstr "Oversæt websted"
+
+#, tp-ai
+msgid "Add-On"
+msgstr "Tilføjelse"
+
+msgid "Deactivate"
+msgstr "Deaktiver"
+
+msgid "Activate"
+msgstr "Aktiver"
+
+#, tp-ai
+msgid "Installing..."
+msgstr "Installerer..."
+
+#, tp-ai
+msgid ""
+"This add-on can not be activated back without a valid license. Are you sure "
+"you want to deactivate it?"
+msgstr ""
+"Denne tilføjelse kan ikke genaktiveres uden en gyldig licens. Er du sikker "
+"på, at du vil deaktivere den?"
+
+msgid "Documentation"
+msgstr "Dokumentation"
+
+#, tp-ai
+msgid "A valid license is required to activate add-ons."
+msgstr "En gyldig licens er påkrævet for at aktivere tilføjelser."
+
+#, tp-ai
+msgid "Activate all"
+msgstr "Aktivér alle"
+
+#, tp-ai
+msgid ""
+"Add-ons can not be activated back without a valid license. Are you sure you "
+"want to deactivate them?"
+msgstr ""
+"Tilføjelser kan ikke genaktiveres uden en gyldig licens. Er du sikker på, "
+"at du vil deaktivere dem?"
+
+#, tp-ai
+msgid "Deactivate all"
+msgstr "Deaktivér alle"
+
+#, tp-ai
+msgid "%1$sAdd-ons settings saved successfully%2$s"
+msgstr "%1$sIndstillinger for tilføjelser blev gemt%2$s"
+
+msgid "Date format"
+msgstr "Datoformat"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Customize the date formatting per each translated language.<br/>Leave empty "
+"for default WP setting or see more information <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">here</a>"
+msgstr ""
+"Tilpas datoformateringen for hvert oversat sprog.<br/>Lad feltet stå tomt "
+"for standard WP-indstilling, eller se flere oplysninger <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">her</a>"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"To edit an existing TranslatePress language, input the language code and "
+"fill in only the columns you want to overwrite (e.g. Language name, "
+"Flag).<br>You can also add new custom languages. They will be available "
+"under General settings, All Languages list, where the URL slug can be "
+"edited."
+msgstr ""
+"For at redigere et eksisterende TranslatePress-sprog skal du indtaste "
+"sprogkoden og kun udfylde de kolonner, du vil overskrive (f.eks. sprognavn, "
+"flag).<br>Du kan også tilføje nye brugerdefinerede sprog. De vil være "
+"tilgængelige under Generelle indstillinger, listen Alle sprog, hvor "
+"URL-sluggen kan redigeres."
+
+#, tp-glo-91460d88, tp-glo-9fa92a70, tp-glo-c6709f3f
+msgid ""
+"For custom flag, first upload the image in media library then paste the "
+"URL.<br>Changing or deleting a custom language will impact translations and "
+"site URL's.<br>The Language code and the ISO Code should contain only "
+"alphabetical values, numerical values, \"-\" and \"_\".<br>The ISO Codes "
+"can be found on <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO Codes</a> and <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL Target Codes</a>."
+msgstr ""
+"For brugerdefineret flag skal du først uploade billedet i mediebiblioteket "
+"og derefter indsætte URL'en.<br>Ændring eller sletning af et "
+"brugerdefineret sprog vil påvirke oversættelser og webstedets "
+"URL'er.<br>Sprogkoden og ISO-koden må kun indeholde alfabetiske værdier, "
+"numeriske værdier, \"-\" og \"_\".<br>ISO-koderne kan findes på <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO-koder</a> og <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL-målkoder</a>."
+
+msgid "Language code"
+msgstr "Sprogkode"
+
+msgid "Language name"
+msgstr "Sprognavn"
+
+msgid "Native name"
+msgstr "Modersmålsnavn"
+
+msgid "ISO Code"
+msgstr "ISO-kode"
+
+#, tp-glo-9fa92a70
+msgid "Flag URL"
+msgstr "Flag-URL"
+
+msgid "Text RTL"
+msgstr "RTL-tekst"
+
+msgid "Custom language"
+msgstr "Brugerdefineret sprog"
+
+#, tp-ai
+msgid "Disable bundled plugin translations"
+msgstr "Deaktivér medfølgende plugin-oversættelser"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"By default, TranslatePress ships its own translation files in "
+"<code>wp-content/plugins/translatepress/languages/</code> and forces "
+"WordPress to use them instead of the language packs installed automatically "
+"from translate.wordpress.org.<br/>Enable this option to disable that "
+"override. WordPress will then load the community language pack from "
+"<code>wp-content/languages/plugins/</code> (if present) and fall back to "
+"the bundled files only when no pack is available."
+msgstr ""
+"Som standard leverer TranslatePress sine egne oversættelsesfiler i "
+"<code>wp-content/plugins/translatepress/languages/</code> og tvinger "
+"WordPress til at bruge dem i stedet for de sprogpakker, der installeres "
+"automatisk fra translate.wordpress.org.<br/>Aktivér denne indstilling for "
+"at deaktivere denne tilsidesættelse. WordPress vil derefter indlæse "
+"fællesskabets sprogpakke fra <code>wp-content/languages/plugins/</code> "
+"(hvis til stede) og kun falde tilbage til de medfølgende filer, når ingen "
+"pakke er tilgængelig."
+
+msgid "Disable dynamic translation"
+msgstr "Deaktiver dynamisk oversættelse"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c
+msgid ""
+"It disables detection of strings displayed dynamically using JavaScript. "
+"<br/>Strings loaded via a server side AJAX call will still be translated."
+msgstr ""
+"Det deaktiverer registrering af strenge, der vises dynamisk ved hjælp af "
+"JavaScript. <br/>Strenge, der indlæses via et server-side AJAX-kald, vil "
+"stadig blive oversat."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Disable translation for gettext strings"
+msgstr "Deaktiver oversættelse af gettext-strenge"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Gettext Strings are strings outputted by themes and plugins. <br> "
+"Translating these types of strings through TranslatePress can be "
+"unnecessary if they are already translated using the .po/.mo translation "
+"file system.<br>Enabling this option can improve the page load performance "
+"of your site in certain cases. The disadvantage is that you can no longer "
+"edit gettext translations using TranslatePress, nor benefit from automatic "
+"translation on these strings."
+msgstr ""
+"Gettext-strenge er strenge, der genereres af temaer og plugins. <br> "
+"Oversættelse af disse typer strenge via TranslatePress kan være unødvendig, "
+"hvis de allerede er oversat ved hjælp af "
+".po/.mo-oversættelsessystemet.<br>Aktivering af denne indstilling kan "
+"forbedre sideindlæsningshastigheden på dit websted i visse tilfælde. "
+"Ulempen er, at du ikke længere kan redigere Gettext-oversættelser ved hjælp "
+"af TranslatePress, eller drage fordel af automatisk oversættelse af disse "
+"strenge."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings translation is disabled"
+msgstr "Oversættelse af Gettext-strenge er deaktiveret"
+
+msgid "To enable it go to "
+msgstr "For at aktivere det skal du gå til "
+
+#, tp-ai, tp-ctx-2edc90df, tp-ctx-a6928204, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress->Advanced Settings->Debug->Disable translation for gettext "
+"strings"
+msgstr ""
+"TranslatePress->Avancerede indstillinger->Fejlfinding->Deaktivér "
+"oversættelse af gettext-strenge"
+
+msgid " and uncheck the Checkbox."
+msgstr " og fjern markeringen i afkrydsningsfeltet."
+
+msgid "Dismiss"
+msgstr "Afvis"
+
+#, tp-glo-8778869a
+msgid "Exclude translated links from sitemap"
+msgstr "Ekskludér oversatte links fra sitemap"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-09a90ed1, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Do not include translated links in sitemaps generated by SEO "
+"plugins.<br/>Requires <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack Add-on</a> to be installed and activated."
+msgstr ""
+"Medtag ikke oversatte links i sitemaps genereret af "
+"SEO-plugins.<br/>Kræver, at <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack-tilføjelsen</a> er installeret og aktiveret."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post title"
+msgstr "Deaktiver container-tags for indlæg for indlægstitel"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post title in translated "
+"languages.<br/>Useful when the title of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"Deaktiverer søgeindeksering af indlægstitlen på oversatte "
+"sprog.<br/>Nyttigt, når indlæggets titel ikke tillader HTML, hvilket "
+"ødelægger siden."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post content"
+msgstr "Deaktiver container-tags for indlæg for indlægsindhold"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post content in translated "
+"languages.<br/>Useful when the content of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"Deaktiverer søgeindeksering af indlægsindholdet på oversatte "
+"sprog.<br/>Nyttigt, når indlæggets indhold ikke tillader HTML, hvilket "
+"ødelægger siden."
+
+msgid "Do not translate certain paths"
+msgstr "Oversæt ikke visse stier"
+
+msgid ""
+"Choose what paths can be translated. Supports wildcard at the end of the "
+"path.<br>For example, to exclude https://example.com/some/path you can "
+"either use the rule /some/path/ or /some/*.<br>Enter each rule on it's own "
+"line. To exclude the home page use {{home}}."
+msgstr ""
+"Vælg, hvilke stier der kan oversættes. Understøtter wildcard i slutningen "
+"af stien.<br>For eksempel kan du for at ekskludere "
+"https://example.com/some/path enten bruge reglen /some/path/ eller "
+"/some/*.<br>Indtast hver regel på sin egen linje. Brug {home} for at "
+"ekskludere startsiden."
+
+msgid "Exclude Paths From Translation"
+msgstr "Ekskludér stier fra oversættelse"
+
+msgid "Translate Only Certain Paths"
+msgstr "Oversæt kun visse stier"
+
+#, tp-glo-d1526d97
+msgid "Enable the hreflang x-default tag for language:"
+msgstr "Aktivér hreflang x-default-tag for sproget:"
+
+#, tp-glo-d1526d97
+msgid ""
+"Enables the hreflang=\"x-default\" for an entire language. See "
+"documentation for more details."
+msgstr ""
+"Aktiverer hreflang=\"x-default\" for et helt sprog. Se dokumentationen for "
+"flere detaljer."
+
+msgid "Translate numbers and numerals"
+msgstr "Oversæt tal og numeraler"
+
+msgid "Enable translation of numbers ( e.g. phone numbers)"
+msgstr "Aktivér oversættelse af tal (f.eks. telefonnumre)"
+
+msgid "Selector"
+msgstr "Vælger"
+
+msgid "Exclude from dynamic translation"
+msgstr "Ekskludér fra dynamisk oversættelse"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c, tp-glo-d311355a
+msgid ""
+"Do not dynamically translate strings that are found in html nodes matching "
+"these selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated using JavaScript.<br/>These strings will "
+"still be translated on the server side if possible."
+msgstr ""
+"Oversæt ikke dynamisk strenge, der findes i HTML-noder, som matcher disse "
+"selektorer.<br>Udelukker alle underordnede elementer i HTML-noder, som "
+"matcher disse selektorer, fra at blive oversat ved hjælp af "
+"JavaScript.<br/>Disse strenge vil stadig blive oversat på serversiden, hvis "
+"det er muligt."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Gettext String"
+msgstr "Gettext-streng"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext Strings"
+msgstr "Ekskluder Gettext-strenge"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Exclude these strings from being translated as Gettext strings by "
+"TranslatePress. Leave the domain empty to take into account any Gettext "
+"string.<br/>Can still be translated through po/mo files."
+msgstr ""
+"Ekskluder disse strenge fra at blive oversat som Gettext-strenge af "
+"TranslatePress. Lad domænet være tomt for at gælde for enhver "
+"Gettext-streng.<br/>Kan stadig oversættes via po/mo-filer."
+
+msgid "Exclude selectors only from automatic translation"
+msgstr "Udelad selectors udelukkende fra automatisk oversættelse"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not automatically translate strings that are found in html nodes "
+"matching these selectors.<br>Excludes all the children of HTML nodes "
+"matching these selectors from being automatically translated.<br>Manual "
+"translation of these strings is still possible."
+msgstr ""
+"Oversæt ikke automatisk strenge, der findes i HTML-noder, som matcher disse "
+"selektorer.<br>Udelukker alle underordnede elementer i HTML-noder, som "
+"matcher disse selektorer, fra at blive automatisk oversat.<br>Manuel "
+"oversættelse af disse strenge er stadig mulig."
+
+msgid "Exclude selectors from translation"
+msgstr "Udelad selectors fra oversættelse"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not translate strings that are found in html nodes matching these "
+"selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated.<br>These strings cannot be translated "
+"manually nor automatically."
+msgstr ""
+"Oversæt ikke strenge, der findes i HTML-noder, som matcher disse "
+"selektorer.<br>Udelukker alle underordnede elementer i HTML-noder, som "
+"matcher disse selektorer, fra at blive oversat.<br>Disse strenge kan ikke "
+"oversættes manuelt eller automatisk."
+
+#, tp-ctx-8a82cc9e
+msgid "String"
+msgstr "Streng"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings from automatic translation"
+msgstr "Ekskluder strenge fra automatisk oversættelse"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Do not automatically translate these strings (ex. names, technical "
+"words...)<br>Paragraphs containing these strings will still be translated "
+"except for the specified part."
+msgstr ""
+"Oversæt ikke automatisk disse strenge (f.eks. navne, tekniske "
+"ord...)<br>Afsnit, der indeholder disse strenge, vil stadig blive oversat "
+"undtagen den angivne del."
+
+#, tp-glo-d311355a
+msgid "Fix broken HTML"
+msgstr "Ret ødelagt HTML"
+
+#, tp-glo-d311355a
+msgid "General attempt to fix broken or missing HTML on translated pages.<br/>"
+msgstr ""
+"Generelt forsøg på at rette ødelagt eller manglende HTML på oversatte "
+"sider.<br/>"
+
+#, tp-glo-9fa92a70
+msgid "Force slash at end of home url:"
+msgstr "Tving skråstreg i slutningen af home url:"
+
+msgid "Ads a slash at the end of the home_url() function"
+msgstr "Tilføjer en skråstreg i slutningen af home_url()-funktionen"
+
+msgid "Show Both (recommended)"
+msgstr "Vis begge (anbefalet)"
+
+msgid "Remove Country Locale"
+msgstr "Fjern landelokalitet"
+
+msgid "Remove Region Independent Locale"
+msgstr "Fjern regionsuafhængig lokalitet"
+
+#, tp-glo-d1526d97
+msgid "Remove duplicate hreflang"
+msgstr "Fjern duplikeret hreflang"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-d1526d97
+msgid ""
+"Choose which hreflang tags will appear on your website.<br/>We recommend "
+"showing both types of hreflang tags as indicated by <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google "
+"documentation</a>.<br/>Removing Country Locale when having multiple Country "
+"Locales of the same language (ex. English UK and English US) will result in "
+"showing one hreflang tag with link to just one of the region locales for "
+"that language."
+msgstr ""
+"Vælg, hvilke hreflang-tags der skal vises på din hjemmeside.<br/>Vi "
+"anbefaler at vise begge typer hreflang-tags som angivet i <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Googles "
+"dokumentation</a>.<br/>Fjernelse af landelokalitet, når der er flere "
+"landelokaliteter af samme sprog (f.eks. engelsk UK og engelsk US), vil "
+"resultere i visning af ét hreflang-tag med link til kun én af "
+"regionlokaliteterne for det pågældende sprog."
+
+msgid "Default (example: en-US, fr-CA, etc.)"
+msgstr "Standard (eksempel: en-US, fr-CA osv.)"
+
+msgid "Regional (example: en, fr, es, etc.)"
+msgstr "Regional (eksempel: en, fr, es osv.)"
+
+#, tp-glo-d311355a
+msgid "HTML Lang Attribute Format"
+msgstr "Format for HTML lang-attribut"
+
+#, tp-glo-d311355a
+msgid ""
+"Change lang attribute of the html tag to a format that includes country "
+"regional or not. <br>In HTML, the lang attribute (<html lang=\"en-US\">)  "
+"should be used to  specify the language of text content so that the  "
+"browser can correctly display or process  your content (eg. for  "
+"hyphenation, styling, spell checking, etc)."
+msgstr ""
+"Skift lang-attributten på HTML-tagget til et format, der inkluderer land og "
+"region eller ej. <br>I HTML bør lang-attributten (<html lang=\"en-US\">) "
+"bruges til at angive tekstindholdets sprog, så browseren kan vise eller "
+"behandle dit indhold korrekt (f.eks. til orddeling, styling, stavekontrol "
+"osv.)."
+
+msgid "Load legacy Language Switcher"
+msgstr "Indlæs ældre sprogvælger"
+
+#, tp-glo-da70db08
+msgid ""
+"Applies to all types of language switchers (floating, shortcode, and menu). "
+"When enabled, the site will revert to using the original Language Switcher "
+"configured in the General Settings tab, replacing the new customizable "
+"version. Your existing switcher settings will remain saved, but they will "
+"be ignored while this option is active."
+msgstr ""
+"Gælder for alle typer sprogvælgere (flydende, shortcode og menu). Når den "
+"er aktiveret, vil siden gå tilbage til at bruge den oprindelige "
+"sprogvælger, der er konfigureret under fanen Generelle indstillinger, og "
+"erstatter den nye tilpasselige version. Dine eksisterende "
+"sprogvælgerindstillinger forbliver gemt, men de ignoreres, mens denne "
+"indstilling er aktiv."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "Load legacy SEO Pack Add-On"
+msgstr "Indlæs ældre SEO Pack-tilføjelse"
+
+#, tp-ai, tp-ctx-07893e52, tp-ctx-a6928204, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"In case the recent migration to the new slug rewrite is causing trouble, "
+"set this to Yes to use the old method <br> Please <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">open a support ticket</a> letting us know of the issues "
+"you are having."
+msgstr ""
+"Hvis den seneste migrering til den nye slug-omskrivning forårsager "
+"problemer, skal du sætte dette til Ja for at bruge den gamle metode <br> Du "
+"bedes <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">oprette en supportsag</a> og fortælle os om de problemer, "
+"du oplever."
+
+msgid "Manual Translation Only"
+msgstr "Kun manuel oversættelse"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress pro-actively scans and saves strings in the database when "
+"users access translated pages. <br>This setting disables this functionality "
+"and only allows translation and string saving when inside the Translation "
+"Editor. <br>Also disables machine translation outside the Translation "
+"Editor, giving you better control over character spending, by translating "
+"only the pages you visit in the Translation Editor."
+msgstr ""
+"TranslatePress skanner proaktivt og gemmer strenge i databasen, når brugere "
+"tilgår oversatte sider. <br>Denne indstilling deaktiverer denne "
+"funktionalitet og tillader kun oversættelse og gemning af strenge, når du "
+"er inde i Oversættelseseditoren. <br>Deaktiverer også maskinoversættelse "
+"uden for Oversættelseseditoren, hvilket giver dig bedre kontrol over "
+"tegnforbruget, ved kun at oversætte de sider, du besøger i "
+"Oversættelseseditoren."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Open language switcher only on click"
+msgstr "Åbn sprogvælgeren kun ved klik"
+
+#, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of "
+"hovering.<br> Close it by clicking on it, anywhere else on the screen or by "
+"pressing the escape key. This will affect only the shortcode language "
+"switcher."
+msgstr ""
+"Åbn sprogvælger-shortcoden ved at klikke på den i stedet for at holde musen "
+"over den.<br>Luk den ved at klikke på den, et hvilket som helst andet sted "
+"på skærmen eller ved at trykke på escape-tasten. Dette påvirker kun "
+"shortcode-sprogvælgeren."
+
+msgid "Show opposite language in the language switcher"
+msgstr "Vis det modsatte sprog i sprogvælgeren"
+
+#, tp-glo-da70db08
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one.<br> Only works when there are exactly two "
+"languages, the default one and a translation one.<br>This will affect the "
+"shortcode language switcher and floating language switcher as well.<br> To "
+"achieve this in menu language switcher go to Appearance->Menus->Language "
+"Switcher and select Opposite Language."
+msgstr ""
+"Omdanner sprogvælgeren til en knap, der viser det andet tilgængelige sprog, "
+"ikke det aktuelle.<br>Fungerer kun, når der er præcis to sprog, "
+"standardsproget og et oversættelsessprog.<br>Dette påvirker også "
+"shortcode-sprogvælgeren og den flydende sprogvælger.<br>For at opnå dette i "
+"menu-sprogvælgeren skal du gå til Udseende->Menuer->Sprogvælger og vælge "
+"Modsat sprog."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization failed."
+msgstr "TranslatePress gettext-databaseoptimering mislykkedes."
+
+#, tp-ai
+msgid "Retry"
+msgstr "Prøv igen"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize its gettext database tables. Back up the "
+"database, then <a href=\"%s\">start the optimization</a>."
+msgstr ""
+"TranslatePress skal optimere sine gettext-databasetabeller. Tag en "
+"sikkerhedskopi af databasen, og <a href=\"%s\">start optimeringen</a>."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Pending gettext database optimization"
+msgstr "Afventer gettext-databaseoptimering"
+
+#, tp-glo-ee8b4f9f
+msgid "Optimize TranslatePress database tables"
+msgstr "Optimer TranslatePress-databasetabeller"
+
+msgid "<a href=\"%s\">Click here</a> to access the database optimization tool."
+msgstr ""
+"<a href=\"%s\">Klik her</a> for at få adgang til "
+"databaseoptimeringsværktøjet."
+
+msgid ""
+"It helps remove possible duplicate translations, clear unnecessary data and "
+"repair possible metadata issues."
+msgstr ""
+"Det hjælper med at fjerne mulige duplikerede oversættelser, rydde "
+"unødvendige data og reparere mulige metadata-problemer."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Here</a> you can observe the last 5 SQL "
+"errors relevant to TranslatePress if they exist."
+msgstr ""
+"<a href=\"%s\" target=\"_blank\">Her</a> kan du se de seneste 5 SQL-fejl "
+"relevante for TranslatePress, hvis de findes."
+
+msgid "Troubleshooting"
+msgstr "Fejlfinding"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext strings"
+msgstr "Ekskluder Gettext-strenge"
+
+msgid "Debug"
+msgstr "Fejlsøgning"
+
+msgid "Custom languages"
+msgstr "Tilpassede sprog"
+
+msgid "Miscellaneous options"
+msgstr "Diverse indstillinger"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Language Switcher"
+msgstr "Sprogvælger"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings & pages"
+msgstr "Ekskluder strenge og sider"
+
+msgid "Automatic Translation Memory"
+msgstr "Automatisk oversættelseshukommelse"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Serve same translation for similar text. The strings need to have a "
+"percentage of 95% similarity.<br>Helps prevent losing existing translation "
+"when correcting typos or making minor adjustments to the original text. "
+"<br>If a translation already exists for a very similar original string, it "
+"will automatically be used for the current original string.<br>Does not "
+"work when making changes to a text that is part of a translation block "
+"unless the new text is manually merged again in a translation "
+"block.<br>Each string needs to have a minimum of 50 characters."
+msgstr ""
+"Brug samme oversættelse for lignende tekst. Strengene skal have %s "
+"lighed.<br>Hjælper med at forhindre tab af eksisterende oversættelse ved "
+"rettelse af stavefejl eller mindre justeringer af den originale tekst. "
+"<br>Hvis der allerede findes en oversættelse for en meget lignende original "
+"streng, vil den automatisk blive anvendt for den aktuelle originale "
+"streng.<br>Fungerer ikke ved ændringer af en tekst, der er en del af en "
+"oversættelsesblok, medmindre den nye tekst manuelt flettes igen i en "
+"oversættelsesblok.<br>Hver streng skal have minimum 50 tegn."
+
+msgid ""
+"WARNING: This feature can negatively impact page loading times in secondary "
+"languages, particularly with large databases (for example websites with a "
+"lot of pages or products). If you experience slow loading times, disable "
+"this and try again."
+msgstr ""
+"ADVARSEL: Denne funktion kan påvirke sidens indlæsningstider på sekundære "
+"sprog negativt, især med store databaser (f.eks. websteder med mange sider "
+"eller produkter). Hvis du oplever langsomme indlæsningstider, skal du "
+"deaktivere denne funktion og prøve igen."
+
+msgid "Fix missing dynamic content"
+msgstr "Ret manglende dynamisk indhold"
+
+#, tp-glo-7f2a0b8c
+msgid ""
+"May help fix missing content inserted using JavaScript. <br> It shows "
+"dynamically inserted content in original language for a moment before the "
+"translation request is finished."
+msgstr ""
+"Kan hjælpe med at rette manglende indhold indsat ved hjælp af JavaScript. "
+"<br> Det viser dynamisk indsat indhold på originalsproget et øjeblik, før "
+"oversættelsesanmodningen er færdig."
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post content and title"
+msgstr "Filtrer Gettext-omslag fra indhold og titel på indlæg"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"content and post title. Does not affect previous post content. "
+"<br/><strong>Database backup is recommended before switching on.</strong>"
+msgstr ""
+"Filtrerer Gettext-omslag som f.eks. #!trpst#trp-gettext fra alt opdateret "
+"indlægsindhold og indlægstitel. Påvirker ikke tidligere indlægsindhold. "
+"<br/><strong>Databasebackup anbefales før aktivering.</strong>"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post meta"
+msgstr "Filtrer Gettext-omslag fra indlægsmetadata"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"meta. Does not affect previous post meta. <br/><strong>Database backup is "
+"recommended before switching on.</strong>"
+msgstr ""
+"Filtrerer Gettext-omslag som f.eks. #!trpst#trp-gettext fra alt opdateret "
+"indlægsmetadata. Påvirker ikke tidligere indlægsmetadata. "
+"<br/><strong>Databasebackup anbefales før aktivering.</strong>"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Abilities for managing TranslatePress configuration."
+msgstr "Muligheder for at administrere TranslatePress-konfiguration."
+
+#, tp-ai
+msgid "Add a translation language"
+msgstr "Tilføj et oversættelsessprog"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Adds a translation language to TranslatePress. Enforces the same "
+"per-license limit as the settings UI."
+msgstr ""
+"Tilføjer et oversættelsessprog til TranslatePress. Håndhæver den samme "
+"grænse pr. licens som indstillingsbrugerfladen."
+
+#, tp-ai, tp-glo-8896ebe8
+msgid "WordPress locale code (e.g. fr_FR, de_DE)."
+msgstr "WordPress-lokalitetskode (f.eks. fr_FR, de_DE)."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Optional URL slug. Defaults to the ISO language code if omitted."
+msgstr "Valgfri URL-slug. Standardværdien er ISO-sprogkoden, hvis den udelades."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Set TranslatePress license key"
+msgstr "Angiv TranslatePress-licensnøgle"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Saves a TranslatePress license key and triggers a remote license check, "
+"mirroring the onboarding flow."
+msgstr ""
+"Gemmer en TranslatePress-licensnøgle og udløser en fjernlicenskontrol "
+"svarende til onboarding-forløbet."
+
+#, tp-ai
+msgid "The license key to activate."
+msgstr "Den licensnøgle, der skal aktiveres."
+
+msgid "Enable Automatic Translation"
+msgstr "Aktivér automatisk oversættelse"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Turns on Automatic Translation. A valid TranslatePress license is required "
+"only when the resolved engine is TranslatePress AI (mtapi); Google "
+"Translate and DeepL do not require one. If no engine is passed and none is "
+"configured, defaults to mtapi."
+msgstr ""
+"Aktiverer automatisk oversættelse. En gyldig TranslatePress-licens kræves "
+"kun, når den anvendte motor er TranslatePress AI (mtapi); Google Translate "
+"og DeepL kræver ikke en licens. Hvis der ikke angives nogen motor, og ingen "
+"er konfigureret, bruges mtapi som standard."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-c6709f3f
+msgid ""
+"Optional translation-engine slug to select (e.g. \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). When omitted, keeps the "
+"already-configured engine, or defaults to \"mtapi\" if none is configured."
+msgstr ""
+"Valgfrit kortnavn for oversættelsesmotor (f.eks. \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). Hvis det udelades, beholdes den "
+"allerede konfigurerede motor, eller der bruges \"mtapi\" som standard, hvis "
+"ingen er konfigureret."
+
+#, tp-ai
+msgid "List configured languages"
+msgstr "Vis konfigurerede sprog"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Returns the languages currently configured in TranslatePress, including the "
+"default language and per-language slug/publish state."
+msgstr ""
+"Returnerer de sprog, der aktuelt er konfigureret i TranslatePress, "
+"inklusive standardsproget og hvert sprogs slug/udgivelsesstatus."
+
+#, tp-ai
+msgid "List available language codes"
+msgstr "Vis tilgængelige sprogkoder"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Returns the full catalog of language codes TranslatePress recognizes, with "
+"their English names."
+msgstr ""
+"Returnerer det fulde katalog af sprogkoder, som TranslatePress genkender, "
+"med deres engelske navne."
+
+#, tp-ai
+msgid "Remove a translation language"
+msgstr "Fjern et oversættelsessprog"
+
+#, tp-ai
+msgid ""
+"Removes a configured translation language. The default language cannot be "
+"removed without first reassigning the default."
+msgstr ""
+"Fjerner et konfigureret oversættelsessprog. Standardsproget kan ikke "
+"fjernes uden først at tildele standardstatussen til et andet sprog."
+
+#, tp-ai
+msgid "Locale code of the language to remove."
+msgstr "Lokalitetskode for det sprog, der skal fjernes."
+
+#, tp-ai
+msgid "Update a translation language"
+msgstr "Opdater et oversættelsessprog"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"Replaces the slug and publish status of an already-configured translation "
+"language."
+msgstr ""
+"Erstatter slug og udgivelsesstatus for et allerede konfigureret "
+"oversættelsessprog."
+
+#, tp-ai
+msgid "Locale code of the language to update."
+msgstr "Lokalitetskode for det sprog, der skal opdateres."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "URL slug for this language."
+msgstr "URL-slug for dette sprog."
+
+#, tp-ai
+msgid "Whether this language is published on the front end."
+msgstr "Om dette sprog er udgivet på frontend."
+
+#, tp-ai
+msgid "Set the default language"
+msgstr "Indstil standardsproget"
+
+#, tp-ai
+msgid ""
+"Promotes an already-configured language to be the site default. The "
+"previous default remains in the translation languages list."
+msgstr ""
+"Forfremmer et allerede konfigureret sprog til at være webstedets "
+"standardsprog. Det tidligere standardsprog forbliver på listen over "
+"oversættelsessprog."
+
+#, tp-ai
+msgid ""
+"Locale code to promote to default. Must already be a configured translation "
+"language."
+msgstr ""
+"Lokalitetskode, der skal forfremmes til standardsprog. Skal allerede være "
+"et konfigureret oversættelsessprog."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "You do not have permission to manage TranslatePress settings."
+msgstr "Du har ikke tilladelse til at administrere TranslatePress-indstillinger."
+
+#, tp-ai
+msgid ""
+"Invalid language code. Allowed characters: A-Z, a-z, 0-9, hyphen, "
+"underscore."
+msgstr "Ugyldig sprogkode. Tilladte tegn: A-Z, a-z, 0-9, bindestreg, understregning."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Language code \"%s\" is not recognized by TranslatePress."
+msgstr "Sprogkoden \"%s\" genkendes ikke af TranslatePress."
+
+#, tp-ai
+msgid "Language \"%s\" is already configured."
+msgstr "Sproget \"%s\" er allerede konfigureret."
+
+#, tp-ai
+msgid ""
+"Your current license allows up to %d additional language(s). Upgrade or "
+"activate a Pro license to add more."
+msgstr ""
+"Din nuværende licens tillader op til %d ekstra sprog. Opgrader eller "
+"aktiver en Pro-licens for at tilføje flere."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new language during settings sanitization."
+msgstr "TranslatePress afviste det nye sprog under sanitering af indstillinger."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Enabling Automatic Translation with the TranslatePress AI engine requires "
+"an active TranslatePress license. Activate a license first with "
+"translatepress/set-license-key, or pass a different engine (e.g. "
+"\"google_translate_v2\", \"deepl\")."
+msgstr ""
+"Aktivering af automatisk oversættelse med TranslatePress AI-motoren kræver "
+"en aktiv TranslatePress-licens. Aktivér først en licens med "
+"translatepress/set-license-key, eller angiv en anden motor (f.eks. "
+"\"google_translate_v2\", \"deepl\")."
+
+msgid "Your license key expired on %s."
+msgstr "Din licensnøgle udløb den %s."
+
+#, tp-ai
+msgid "Your license key has expired."
+msgstr "Din licensnøgle er udløbet."
+
+msgid "Your license key has been disabled."
+msgstr "Din licensnøgle er blevet deaktiveret."
+
+#, tp-glo-ee8b4f9f
+msgid "Your TranslatePress license key is invalid or missing."
+msgstr "Din TranslatePress-licensnøgle er ugyldig eller mangler."
+
+#, tp-ai, tp-glo-666af81f, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from your "
+"TranslatePress account."
+msgstr ""
+"Din licensnøgle er deaktiveret for denne URL. Genaktiver den fra din "
+"TranslatePress-konto."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"License key mismatch. The license you entered does not match the "
+"TranslatePress version you have installed."
+msgstr ""
+"Licensnøglen stemmer ikke overens. Licensen du indtastede passer ikke til "
+"den TranslatePress-version, du har installeret."
+
+msgid "Your license key has reached its activation limit."
+msgstr "Din licensnøgle har nået grænsen for aktiveringer."
+
+#, tp-ai
+msgid "An error occurred while activating the license, please try again."
+msgstr "Der opstod en fejl under aktivering af licensen. Prøv igen."
+
+#, tp-ai
+msgid "Language \"%s\" is not currently configured."
+msgstr "Sproget \"%s\" er ikke konfigureret i øjeblikket."
+
+#, tp-ai
+msgid ""
+"The default language cannot be removed. Set another language as default "
+"first."
+msgstr "Standardsproget kan ikke fjernes. Vælg et andet sprog som standard først."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Slug is empty after sanitization. Use only URL-safe characters."
+msgstr "Slug er tom efter sanitering. Brug kun URL-sikre tegn."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Language \"%s\" is not currently configured. Add it first with "
+"translatepress/add-language."
+msgstr ""
+"Sproget \"%s\" er ikke konfigureret i øjeblikket. Tilføj det først med "
+"translatepress/add-language."
+
+#, tp-ai
+msgid "The default language is always published and cannot be unpublished."
+msgstr "Standardsproget er altid udgivet og kan ikke afpubliceres."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug \"%1$s\" is already in use by language \"%2$s\"."
+msgstr "Slug \"%1$s\" er allerede i brug af sproget \"%2$s\"."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new settings during sanitization."
+msgstr "TranslatePress afviste de nye indstillinger under sanitering."
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced"
+msgstr "Avancerede"
+
+msgid "Are you sure you want to remove this item?"
+msgstr "Er du sikker på, at du vil fjerne dette element?"
+
+msgid "Remove"
+msgstr "Fjern"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Add"
+msgstr "Tilføj"
+
+msgid "Select..."
+msgstr "Vælg..."
+
+msgid "An error occurred, please try again."
+msgstr "Der opstod en fejl. Prøv igen."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Din licensnøgle er deaktiveret for denne URL. Genaktiver den fra <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Administrer sites."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn’t "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you’ve installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Licensnøglen stemmer ikke overens.</strong> Licensen, du "
+"indtastede, stemmer ikke overens med den version af TranslatePress, du har "
+"installeret.</p><p>Kontroller, at du har installeret den korrekte version "
+"til din licens fra din TranslatePress Account.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"If you have only the free plugin installed but added a paid license, please "
+"install the paid plugin from your TranslatePress account."
+msgstr ""
+"Hvis du kun har det gratis plugin installeret, men har tilføjet en betalt "
+"licens, skal du installere det betalte plugin fra din TranslatePress "
+"Account."
+
+msgid "Upgrade your plan to add more sites. %1$sUpgrade now%2$s"
+msgstr "Opgrader din plan for at tilføje flere sites. %1$sOpgrader nu%2$s"
+
+msgid "You have successfully activated your license"
+msgstr "Du har aktiveret din licens"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "[%s] Low TranslatePress AI Words"
+msgstr "[%s] Lavt antal TranslatePress AI-ord"
+
+msgid "upgrade your plan"
+msgstr "opgrader din plan"
+
+msgid "upgrade your plan or get extra AI Words"
+msgstr "opgrader din plan eller få ekstra AI-ord"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI words are running low on your site."
+msgstr "Der er ved at være sluppet op for TranslatePress AI-ord på dit site."
+
+msgid "Current status: %s words remaining"
+msgstr "Aktuel status: %s ord tilbage"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Once the remaining AI words run out, automatic translation through "
+"TranslatePress AI will be paused."
+msgstr ""
+"Når de resterende AI-ord slipper op, vil automatisk oversættelse via "
+"TranslatePress AI blive sat på pause."
+
+msgid "To continue translating your content, please %1$s over at %2$s"
+msgstr "For at fortsætte med at oversætte dit indhold, bedes du %1$s på %2$s"
+
+msgid "Manage Notification: %s"
+msgstr "Administrer notifikation: %s"
+
+msgid "Others"
+msgstr "Andre"
+
+msgid "Restrict by Language"
+msgstr "Begræns efter sprog"
+
+msgid "Exclude from Language"
+msgstr "Udeluk fra sprog"
+
+msgid "Restrict element to language"
+msgstr "Begræns element til sprog"
+
+msgid "Show this element only in one language."
+msgstr "Vis dette element kun på et sprog."
+
+msgid "Enable translation"
+msgstr "Aktivér oversættelse"
+
+msgid ""
+"Allow translation to the corresponding language only if the content is "
+"written in the default language."
+msgstr ""
+"Tillad kun oversættelse til det tilsvarende sprog, hvis indholdet er "
+"skrevet på standardsproget."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Select language"
+msgstr "Vælg et sprog"
+
+msgid "Choose in which language to show this element."
+msgstr "Vælg hvilket sprog dette element skal vises på."
+
+msgid "Exclude element from language"
+msgstr "Udeluk element fra sprog"
+
+msgid "Exclude this element from specific languages."
+msgstr "Udeluk dette element fra bestemte sprog."
+
+msgid "Select languages"
+msgstr "Vælg sprog"
+
+msgid "Choose from which languages to exclude this element."
+msgstr "Vælg hvilke sprog dette element skal udelukkes fra."
+
+msgid ""
+"This element will still be visible when you are translating your website "
+"through the Translation Editor."
+msgstr ""
+"Dette element vil stadig være synligt, når du oversætter din hjemmeside via "
+"Oversættelseseditoren."
+
+msgid "The content of this element should be written in the default language."
+msgstr "Indholdet af dette element skal være skrevet på standardsproget."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> encountered SQL errors. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Check out the errors</a>."
+msgstr ""
+"<strong>TranslatePress</strong> stødte på SQL-fejl. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Se fejlene</a>."
+
+msgid "Automatic translation has been disabled."
+msgstr "Automatisk oversættelse er blevet deaktiveret."
+
+msgid "Logged errors"
+msgstr "Logget fejl"
+
+#, tp-glo-ee8b4f9f
+msgid "These are the most recent 5 errors logged by TranslatePress:"
+msgstr "Dette er de seneste 5 fejl logget af TranslatePress:"
+
+msgid "Yes"
+msgstr "Ja"
+
+msgid "Why are these errors occuring"
+msgstr "Hvorfor opstår disse fejl"
+
+#, tp-glo-c6709f3f, tp-glo-ee8b4f9f
+msgid ""
+"If TranslatePress detects something wrong when executing queries on your "
+"database, it may disable the Automatic Translation feature in order to "
+"avoid any extra charging by Google/DeepL. Automatic Translation needs to be "
+"manually turned on, after you solve the issues."
+msgstr ""
+"Hvis TranslatePress registrerer noget galt under udførelse af forespørgsler "
+"på din database, kan den deaktivere funktionen Automatisk oversættelse for "
+"at undgå yderligere opkrævning fra Google/DeepL. Automatisk oversættelse "
+"skal aktiveres manuelt, efter du har løst problemerne."
+
+msgid ""
+"The SQL errors detected can occur for various reasons including missing "
+"tables, missing permissions for the SQL user to create tables or perform "
+"other operations, problems after site migration or changes to SQL server "
+"configuration."
+msgstr ""
+"De registrerede SQL-fejl kan opstå af forskellige årsager, herunder "
+"manglende tabeller, manglende tilladelser for SQL-brugeren til at oprette "
+"tabeller eller udføre andre handlinger, problemer efter webstedsmigrering "
+"eller ændringer af SQL-serverkonfigurationen."
+
+msgid "What you can do in this situation"
+msgstr "Hvad du kan gøre i denne situation"
+
+msgid "Plan A."
+msgstr "Plan A."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL settings. Check if no "
+"more errors occur while browsing your website in a translated language. "
+"Look at the timestamps of the errors to make sure you are not seeing the "
+"old errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Gå til Indstillinger -> TranslatePress -> fanen Generelt og gem "
+"indstillinger. Dette vil regenerere tabellerne ved hjælp af dine nuværende "
+"SQL-indstillinger. Kontroller, om der ikke opstår flere fejl, mens du "
+"gennemser dit websted på et oversat sprog. Se på tidsstemplerne for fejlene "
+"for at sikre dig, at du ikke ser de gamle fejl. Kun de 5 seneste fejl vises."
+
+msgid "Plan B."
+msgstr "Plan B."
+
+msgid "If your problem isn't solved, try the following steps:"
+msgstr "Hvis dit problem ikke er løst, prøv følgende trin:"
+
+msgid "Create a backup of your database"
+msgstr "Opret en sikkerhedskopi af din database"
+
+msgid ""
+"Create a copy of each translation table where you encounter errors. You can "
+"copy the table within the same database (trp_dictionary_en_us_es_es_COPY "
+"for example) -- perform this step only if you want to keep the current "
+"translations"
+msgstr ""
+"Opret en kopi af hver oversættelsestabel, hvor du støder på fejl. Du kan "
+"kopiere tabellen inden for den samme database (f.eks. "
+"trp_dictionary_en_us_es_es_COPY) -- udfør dette trin kun, hvis du vil "
+"beholde de nuværende oversættelser"
+
+msgid "Remove the trouble tables by executing the DROP function on them"
+msgstr "Fjern de problematiske tabeller ved at udføre DROP-funktionen på dem"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL server."
+msgstr ""
+"Gå til Indstillinger -> TranslatePress -> fanen Generelt og gem "
+"indstillinger. Dette vil regenerere tabellerne ved hjælp af din nuværende "
+"SQL-server."
+
+msgid ""
+"Copy the relevant content from the duplicated tables "
+"(trp_dictionary_en_us_es_es_COPY for example) in the newly generated table "
+"(trp_dictionary_en_us_es_es) -- perform this step only if you want to keep "
+"the current translations"
+msgstr ""
+"Kopier det relevante indhold fra de duplikerede tabeller (f.eks. "
+"trp_dictionary_en_us_es_es_COPY) til den nygenererede tabel "
+"(trp_dictionary_en_us_es_es) -- udfør dette trin kun, hvis du vil beholde "
+"de nuværende oversættelser"
+
+msgid ""
+"Test it to see if everything is working. If something went wrong, you can "
+"restore the backup that you've made at the first step. Check if no more "
+"errors occur while browsing your website in a translated language. Look at "
+"the timestamps of the errors to make sure you are not seeing the old "
+"errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Test det for at se, om alt fungerer. Hvis noget gik galt, kan du gendanne "
+"sikkerhedskopien, som du oprettede i første trin. Kontroller, om der ikke "
+"opstår flere fejl, mens du gennemser dit websted på et oversat sprog. Se på "
+"tidsstemplerne for fejlene for at sikre dig, at du ikke ser de gamle fejl. "
+"Kun de 5 seneste fejl vises."
+
+msgid "Plan C."
+msgstr "Plan C."
+
+msgid ""
+"If your problem still isn't solved, try asking your hosting about your "
+"errors. The most common issue is missing permissions for the SQL user, such "
+"as the Create Tables permission."
+msgstr ""
+"Hvis dit problem stadig ikke er løst, kan du prøve at spørge din "
+"hostingudbyder om dine fejl. Det mest almindelige problem er manglende "
+"tilladelser for SQL-brugeren, såsom tilladelsen til at oprette tabeller."
+
+msgid "Could not install. Try again from <a href=\"%s\" >Plugins Dashboard.</a>"
+msgstr ""
+"Kunne ikke installeres. Prøv igen fra <a href=\"%s\" "
+">Plugins-dashboardet.</a>"
+
+msgid "Settings scope unknown."
+msgstr "Ukendt indstillingsomfang."
+
+msgid "Legacy disabled."
+msgstr "Legacy deaktiveret."
+
+msgid "Change language to %s"
+msgstr "Skift sprog til %s"
+
+msgid "Automatic Translation"
+msgstr "Automatisk oversættelse"
+
+msgid "Unsupported languages"
+msgstr "Ikke-understøttede sprog"
+
+msgid ""
+"The selected automatic translation engine does not provide support for "
+"these languages.<br>You can still manually translate pages in these "
+"languages using the Translation Editor."
+msgstr ""
+"Den valgte motor til automatisk oversættelse understøtter ikke disse "
+"sprog.<br>Du kan stadig manuelt oversætte sider på disse sprog ved hjælp af "
+"oversættelseseditoren."
+
+msgid "General"
+msgstr "Generelt"
+
+#, tp-ai
+msgid "Glossary"
+msgstr "Ordliste"
+
+#, tp-glo-91460d88
+msgid "API key validation failed."
+msgstr "Validering af API-nøgle mislykkedes."
+
+#, tp-glo-91460d88
+msgid "API key verification was successful."
+msgstr "Verifikation af API-nøgle lykkedes."
+
+#, tp-glo-d6a22d74
+msgid "Please enter your Google Translate key."
+msgstr "Indtast din Google Translate-nøgle."
+
+#, tp-glo-ee8b4f9f
+msgid "Not TranslatePress onboarding page."
+msgstr "Ikke TranslatePress-introside."
+
+msgid "Step %s does not exist"
+msgstr "Trin %s findes ikke"
+
+msgid "Welcome"
+msgstr "Velkommen"
+
+msgid "Add Languages"
+msgstr "Tilføj sprog"
+
+msgid "Enable Addons"
+msgstr "Aktivér tilføjelser"
+
+msgid "Finalize"
+msgstr "Færdiggør"
+
+msgid "Exit Setup"
+msgstr "Afslut opsætning"
+
+msgid "Upgrade"
+msgstr "Opgrader"
+
+msgid "Nothing here"
+msgstr "Intet her"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license is missing or invalid. "
+"<br/>Please %1$sregister your copy%2$s to enable automatic website "
+"translation via TranslatePress AI, premium addons, automatic updates and "
+"support. Need a license key? %3$sPurchase one now%4$s"
+msgstr ""
+"Din <strong>TranslatePress</strong>-licens mangler eller er ugyldig. "
+"<br/>Du bedes %1$sregistrere din kopi%2$s for at aktivere automatisk "
+"oversættelse af dit websted via TranslatePress AI, premium-tilføjelser, "
+"automatiske opdateringer og support. Har du brug for en licensnøgle? "
+"%3$sKøb en nu%4$s"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Din licens er deaktiveret for denne URL. Genaktivér den fra <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Administrer websteder."
+
+msgid ""
+"You have reached the activation limit for your <strong>%1$s</strong> "
+"license. <br/>Manage your active sites from %2$s your account %3$s."
+msgstr ""
+"Du har nået aktiveringsgrænsen for din <strong>%1$s</strong>-licens. "
+"<br/>Administrer dine aktive websteder fra %2$s din konto %3$s."
+
+msgid ""
+"License key mismatch. The license you entered doesn’t match the "
+"<strong>%1$s</strong> version you have installed. <br/>Please check that "
+"you’ve installed the correct version for your license from your "
+"%2$sTranslatePress account%3$s."
+msgstr ""
+"Licensnøglen stemmer ikke overens. Den licens, du har indtastet, stemmer "
+"ikke overens med den <strong>%1$s</strong>-version, du har installeret. "
+"<br/>Du bedes kontrollere, at du har installeret den korrekte version til "
+"din licens fra din %2$sTranslatePress Account%3$s."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<br/>If you have only the free plugin installed but added a paid license, "
+"please install the paid plugin from your TranslatePress account."
+msgstr ""
+"<br/>Hvis du kun har det gratis plugin installeret, men har tilføjet en "
+"betalt licens, skal du installere det betalte plugin fra din TranslatePress "
+"Account."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license has expired. <br/>Please "
+"%1$sRenew Your Licence%2$s to continue receiving access to automatic "
+"translations via TranslatePress AI, premium addons, product downloads, and "
+"automatic updates. %3$sRenew now %4$s"
+msgstr ""
+"Din <strong>TranslatePress</strong>-licens er udløbet. <br/>Du bedes "
+"%1$sfornye din licens%2$s for fortsat at have adgang til automatiske "
+"oversættelser via TranslatePress AI, premium-tilføjelser, produktdownloads "
+"og automatiske opdateringer. %3$sForny nu %4$s"
+
+msgid "Error: "
+msgstr "Fejl: "
+
+msgid "Something went wrong, please try again."
+msgstr "Der gik noget galt. Prøv venligst igen."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Your <strong>TranslatePress</strong> license will expire on %1$s. Please "
+"%2$sRenew Your Licence%3$s to continue receiving access to automatic "
+"translations via TP AI, premium addons, product downloads and automatic "
+"updates. %4$sRenew Now%5$s"
+msgstr ""
+"Din <strong>TranslatePress</strong>-licens udløber den %1$s. Du bedes "
+"%2$sfornye din licens%3$s for fortsat at have adgang til automatiske "
+"oversættelser via TP AI, premium-tilføjelser, produktdownloads og "
+"automatiske opdateringer. %4$sForny nu%5$s"
+
+msgid "Please %1$senter%2$s your license key to enable %3$s automatic translation."
+msgstr ""
+"Du bedes %1$sindtaste%2$s din licensnøgle for at aktivere automatisk "
+"oversættelse med %3$s."
+
+msgid ""
+"%1$s automatic translation requires an active license. Please %2$srenew%3$s "
+"your license or purchase a new one %4$shere%5$s."
+msgstr ""
+"Automatisk oversættelse med %1$s kræver en aktiv licens. Du bedes "
+"%2$sfornye%3$s din licens eller købe en ny %4$sher%5$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You have less than 5,000 TranslatePress AI words remaining. To continue "
+"automatically translating your website, please %spurchase additional AI "
+"words at a discount from your account%s."
+msgstr ""
+"Du har mindre end 5.000 TranslatePress AI-ord tilbage. For at fortsætte med "
+"automatisk at oversætte dit websted, bedes du %skøbe yderligere AI-ord med "
+"rabat fra din konto%s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You do not have a valid license for <strong>TranslatePress</strong>. "
+"%1$sGet one for free%2$s to get access to TranslatePress AI."
+msgstr ""
+"Du har ikke en gyldig licens til <strong>TranslatePress</strong>. %1$sFå en "
+"gratis licens%2$s for at få adgang til TranslatePress AI."
+
+msgid " Error: "
+msgstr " Fejl: "
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Learn more</a>."
+msgstr ""
+"<strong>NYT:</strong> Tilføjelsen <strong>Different Domain per "
+"Language</strong> er her! Boost din globale SEO og skab en lokal oplevelse "
+"med landespecifikke domæner som .de eller .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Læs mere</a>."
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. Upgrade to <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business or Developer</a> to access it + "
+"more premium perks!"
+msgstr ""
+"<strong>NYT:</strong> Tilføjelsen <strong>Different Domain per "
+"Language</strong> er her! Boost din globale SEO og skab en lokal oplevelse "
+"med landespecifikke domæner som .de eller .fr. Opgrader til <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business eller Developer</a> for at få "
+"adgang til den + flere premium-fordele!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The daily quota for machine translation characters exceeded. Please check "
+"the <strong>TranslatePress -> <a href=\"%s\">Automatic "
+"Translation</a></strong> page for more information."
+msgstr ""
+"Den daglige kvote for maskinoversættelsestegn er overskredet. Du bedes "
+"kontrollere siden <strong>TranslatePress -> <a href=\"%s\">Automatisk "
+"oversættelse</a></strong> for flere oplysninger."
+
+msgid "Marketing optin"
+msgstr "Marketing-tilmelding"
+
+msgid ""
+"Opt in to our security and feature updates notifications, and non-sensitive "
+"diagnostic tracking."
+msgstr ""
+"Tilmeld dig vores notifikationer om sikkerheds- og funktionsopdateringer "
+"samt ikke-følsom diagnostisk sporing."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Preferred User Language"
+msgstr "Foretrukket brugersprog i TranslatePress"
+
+msgid "Preferred language to navigate the site"
+msgstr "Foretrukket sprog til at navigere på siden"
+
+msgid ""
+"The language is automatically set based by the last visited language by the "
+"user."
+msgstr "Sproget indstilles automatisk baseret på brugerens sidst besøgte sprog."
+
+msgid "Always use this language"
+msgstr "Brug altid dette sprog"
+
+msgid ""
+"By checking this setting the preferred language will remain the one "
+"selected above, without the possibility of being changed in the "
+"frontend.<br>This language will be used in different operations such as "
+"sending email to the user."
+msgstr ""
+"Ved at markere denne indstilling forbliver det foretrukne sprog det ovenfor "
+"valgte, uden mulighed for at blive ændret i frontend.<br>Dette sprog vil "
+"blive brugt i forskellige handlinger, såsom afsendelse af e-mail til "
+"brugeren."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Hello! Seems like you've been using <strong>TranslatePress</strong> for a "
+"while now to translate your website. That's awesome! "
+msgstr ""
+"Hej! Det ser ud til, at du har brugt <strong>TranslatePress</strong> et "
+"stykke tid nu til at oversætte din hjemmeside. Det er fantastisk! "
+
+#, tp-glo-8896ebe8
+msgid ""
+"If you can spare a few moments to rate it on WordPress.org it would help us "
+"a lot (and boost my motivation)."
+msgstr ""
+"Hvis du kan afsætte et øjeblik til at bedømme det på WordPress.org, vil det "
+"hjælpe os meget (og styrke min motivation)."
+
+#, tp-glo-ee8b4f9f
+msgid "~ Razvan, developer of TranslatePress"
+msgstr "~ Razvan, udvikler af TranslatePress"
+
+#, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid "Rate TranslatePress on WordPress.org plugin page"
+msgstr "Bedøm TranslatePress på WordPress.org-pluginsiden"
+
+msgid "Ok, I will gladly help!"
+msgstr "Ok, jeg hjælper gerne!"
+
+msgid "No, thanks."
+msgstr "Nej, tak."
+
+msgid "Full Language Names"
+msgstr "Fulde sprognavne"
+
+msgid "Short Language Names"
+msgstr "Korte sprognavne"
+
+msgid "Flags with Full Language Names"
+msgstr "Flag med fulde sprognavne"
+
+msgid "Flags with Short Language Names"
+msgstr "Flag med korte sprognavne"
+
+msgid "Only Flags"
+msgstr "Kun flag"
+
+#, tp-glo-d311355a
+msgid "Full Language Names No HTML"
+msgstr "Fulde sprognavne uden HTML"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Right"
+msgstr "Nederst til højre"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Left"
+msgstr "Nederst til venstre"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Right"
+msgstr "Øverst til højre"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Left"
+msgstr "Øverst til venstre"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Dark"
+msgstr "Mørk"
+
+msgid "Light"
+msgstr "Lys"
+
+msgid "Install & Activate"
+msgstr "Installer og aktiver"
+
+msgid "Invalid language code. Please try again."
+msgstr "Ugyldig sprogkode. Prøv igen."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Language codes can contain only A-Z a-z 0-9 - _ characters. Check your "
+"language codes in TranslatePress General Settings."
+msgstr ""
+"Sprogkoder må kun indeholde tegnene A-Z a-z 0-9 - _. Tjek dine sprogkoder "
+"under Generelle indstillinger i TranslatePress."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Error! Duplicate URL slug values."
+msgstr "Fejl! Duplikerede URL-slug-værdier."
+
+#, tp-glo-d1526d97
+msgid ""
+"You cannot select two languages that have the same <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso code</a> but different formalities because doing so "
+"will lead to duplicate <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang tags</a>."
+msgstr ""
+"Du kan ikke vælge to sprog, der har den samme <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">ISO-kode</a>, men forskellige formaliteter, da det vil "
+"føre til duplikerede <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang-tags</a>."
+
+msgid ""
+"Duplicate language detected.<br>Each language can only be added once to "
+"ensure accurate translation management.<br> Please change the duplicate "
+"language entry and try again. "
+msgstr ""
+"Duplikeret sprog registreret.<br>Hvert sprog kan kun tilføjes én gang for "
+"at sikre præcis oversættelsesstyring.<br> Ret den duplikerede "
+"sprogindtastning og prøv igen. "
+
+msgid "Current Language"
+msgstr "Aktuelt sprog"
+
+msgid "Opposite Language"
+msgstr "Modsatte sprog"
+
+msgid "Addons"
+msgstr "Tilføjelser"
+
+msgid "Settings"
+msgstr "Indstillinger"
+
+msgid "Pro Features"
+msgstr "Pro-funktioner"
+
+msgid "Activate License"
+msgstr "Aktiver licens"
+
+msgid "Need Help?"
+msgstr "Brug for hjælp?"
+
+msgid "Recent community discussions"
+msgstr "Seneste fællesskabsdiskussioner"
+
+msgid "Loading..."
+msgstr "Indlæser..."
+
+#, tp-ctx-7832384c
+msgid "Unable to load forum posts"
+msgstr "Kunne ikke indlæse forumindlæg"
+
+msgid "Ask a Question"
+msgstr "Stil et spørgsmål"
+
+msgid "View All Topics"
+msgstr "Vis alle emner"
+
+msgid "by"
+msgstr "af"
+
+msgid "Have a question?"
+msgstr "Har du et spørgsmål?"
+
+msgid ""
+"Get help directly from the plugin developers, suggest improvements, or "
+"share your feedback!"
+msgstr ""
+"Få hjælp direkte fra plugin-udviklerne, foreslå forbedringer eller del din "
+"feedback!"
+
+msgid "Tip for faster help:"
+msgstr "Tip til hurtigere hjælp:"
+
+msgid ""
+"Include what you tried, what you expected, and what happened. Screenshots "
+"help!"
+msgstr ""
+"Inkluder, hvad du prøvede, hvad du forventede, og hvad der skete. "
+"Skærmbilleder hjælper!"
+
+msgid "Toggle support chat"
+msgstr "Slå supportchat til/fra"
+
+msgid "Ask the community"
+msgstr "Spørg fællesskabet"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close"
+msgstr "Luk"
+
+msgid "Empty feed response"
+msgstr "Tomt feed-svar"
+
+msgid "Unable to parse feed"
+msgstr "Kan ikke analysere feed"
+
+msgid "Just now"
+msgstr "Lige nu"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "%d time siden"
+msgstr[1] "%d timer siden"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "%d dag siden"
+msgstr[1] "%d dage siden"
+
+msgid "Source"
+msgstr "Kilde"
+
+msgid "Srcset"
+msgstr "Srcset"
+
+msgid "Alt attribute"
+msgstr "Alt-attribut"
+
+msgid "Title attribute"
+msgstr "Titel-attribut"
+
+msgid "Anchor link"
+msgstr "Ankerlink"
+
+msgid "Placeholder attribute"
+msgstr "Pladsholder-attribut"
+
+msgid "Submit attribute"
+msgstr "Send-attribut"
+
+msgid "Text"
+msgstr "Tekst"
+
+msgid "Video Poster"
+msgstr "Video-poster"
+
+msgid "plural form"
+msgstr "flertalsform"
+
+msgid "one"
+msgstr "en"
+
+msgid "few"
+msgstr "få"
+
+msgid "many"
+msgstr "mange"
+
+msgid "other"
+msgstr "andre"
+
+msgid "Saved"
+msgstr "Gemt"
+
+msgid "Save"
+msgstr "Gem"
+
+msgid "Saving translation..."
+msgstr "Gemmer oversættelse..."
+
+msgid "You have unsaved changes!"
+msgstr "Du har ugemte ændringer!"
+
+msgid "Discard changes"
+msgstr "Kassér ændringer"
+
+msgid "Discard All"
+msgstr "Kassér alle"
+
+#, tp-ctx-2edc90df
+msgid "Loading Strings..."
+msgstr "Indlæser strenge..."
+
+#, tp-ctx-8a82cc9e
+msgid "Select string to translate..."
+msgstr "Vælg streng der skal oversættes..."
+
+msgid "Close Editor"
+msgstr "Luk editor"
+
+msgid "From"
+msgstr "Fra"
+
+msgid "To"
+msgstr "Til"
+
+msgid "Add Media"
+msgstr "Tilføj medie"
+
+msgid "Other languages"
+msgstr "Andre sprog"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "View Website As"
+msgstr "Vis website som"
+
+msgid "Available in our Pro Versions"
+msgstr "Tilgængelig i vores Pro-versioner"
+
+msgid "Select or Upload Media"
+msgstr "Vælg eller upload medie"
+
+msgid "Use this media"
+msgstr "Brug dette medie"
+
+msgid "Translate"
+msgstr "Oversæt"
+
+msgid "Translate entire block element"
+msgstr "Oversæt hele blok-elementet"
+
+#, tp-ctx-2edc90df
+msgid "Split block to translate strings individually"
+msgstr "Opdel blok for at oversætte strenge individuelt"
+
+#, tp-glo-e780391b
+msgid "Save changes to translation. Shortcut: CTRL(⌘) + S"
+msgstr "Gem ændringer i oversættelsen. Genvej: CTRL(⌘) + S"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to next string in dropdown list. Shortcut: CTRL(⌘) + ALT + Right "
+"Arrow"
+msgstr ""
+"Naviger til næste streng i dropdown-listen. Genvej: CTRL(⌘) + ALT + Højre "
+"pil"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to previous string in dropdown list. Shortcut: CTRL(⌘) + ALT + "
+"Left Arrow"
+msgstr ""
+"Naviger til forrige streng i dropdown-listen. Genvej: CTRL(⌘) + ALT + "
+"Venstre pil"
+
+#, tp-glo-e780391b
+msgid "Discard all changes. Shortcut: CTRL(⌘) + ALT + Z"
+msgstr "Kassér alle ændringer. Genvej: CTRL(⌘) + ALT + Z"
+
+#, tp-glo-e780391b
+msgid ""
+"Discard changes to this text box. To discard changes to all text boxes use "
+"shortcut: CTRL(⌘) + ALT + Z"
+msgstr ""
+"Kassér ændringer i dette tekstfelt. For at kassére alle ændringer i alle "
+"tekstfelter skal du bruge genvejen: CTRL(⌘) + ALT + Z"
+
+msgid "Dismiss tooltip"
+msgstr "Luk værktøjstip"
+
+msgid "Quick Intro"
+msgstr "Hurtig introduktion"
+
+msgid "Are you sure you want to split this phrase into smaller parts?"
+msgstr "Er du sikker på, at du vil opdele denne sætning i mindre dele?"
+
+#, tp-ctx-8a82cc9e
+msgid "This string is not ready for translation yet. <br>Try again in a moment..."
+msgstr ""
+"Denne streng er ikke klar til oversættelse endnu. <br>Prøv igen om et "
+"øjeblik..."
+
+msgid ""
+"For this option to work, please update the Browse as other role add-on to "
+"the latest version."
+msgstr ""
+"For at denne indstilling virker, skal du opdatere tilføjelsen Browse as "
+"other role til den nyeste version."
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-b7a08771
+msgid "To translate slugs, please update the SEO Pack add-on to the latest version."
+msgstr ""
+"For at oversætte slugs skal du opdatere SEO Pack-tilføjelsen til den nyeste "
+"version."
+
+#, tp-glo-ee8b4f9f
+msgid "You can add a new language from <a href=\"%s\">Settings->TranslatePress</a>"
+msgstr ""
+"Du kan tilføje et nyt sprog fra <a "
+"href=\"%s\">Indstillinger->TranslatePress</a>"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"However, you can still use TranslatePress to <strong style=\"background: "
+"#f5fb9d;\">modify gettext strings</strong> available in your page."
+msgstr ""
+"Du kan dog stadig bruge TranslatePress til at <strong style=\"background: "
+"#f5fb9d;\">redigere Gettext-strenge</strong> på din side."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Strings that are user-created cannot be modified, only those from themes "
+"and plugins."
+msgstr "Brugeroprettede strenge kan ikke redigeres, kun dem fra temaer og plugins."
+
+msgid "Extra Translation Features"
+msgstr "Ekstra oversættelsesfunktioner"
+
+msgid "Support for 130+ Extra Languages"
+msgstr "Understøttelse af 130+ ekstra sprog"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI"
+msgstr "Adgang til TranslatePress AI"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb
+msgid "Translate SEO Title, Description, Slug"
+msgstr "Oversæt SEO-titel, beskrivelse og slug"
+
+msgid "Publish only when translation is complete"
+msgstr "Udgiv kun, når oversættelsen er færdig"
+
+msgid "Translate by Browsing as User Role"
+msgstr "Oversæt ved at gennemse som brugerrolle"
+
+msgid "Different Menu Items for each Language"
+msgstr "Forskellige menupunkter for hvert sprog"
+
+msgid "Upgrade to PRO"
+msgstr "Opgrader til PRO"
+
+msgid "Upgrade to PRO with our biggest discount of the year!"
+msgstr "Opgrader til PRO med årets største rabat!"
+
+msgid ""
+"This Black Friday, get access to these features and more at a fraction of "
+"the costs:"
+msgstr ""
+"Denne Black Friday får du adgang til disse funktioner og mere til en "
+"brøkdel af prisen:"
+
+msgid "No available suggestions"
+msgstr "Ingen tilgængelige forslag"
+
+msgid "Suggestions from translation memory"
+msgstr "Forslag fra oversættelseshukommelse"
+
+msgid "Click to Copy"
+msgstr "Klik for at kopiere"
+
+msgid "Human Translation"
+msgstr "Menneskelig oversættelse"
+
+msgid "Machine Translation"
+msgstr "Maskinoversættelse"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext File Translation"
+msgstr "Gettext-filoversættelse"
+
+msgid "Text on this page is %s% translated into all languages."
+msgstr "Teksten på denne side er %s% oversat til alle sprog."
+
+msgid "%1$s% of text on this page is translated into %2$s."
+msgstr "%1$s% af teksten på denne side er oversat til %2$s."
+
+msgid "This page is %1$s% translated into %2$s."
+msgstr "Denne side er %1$s% oversat til %2$s."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"The slug that you are trying to edit is present in other slug types:%s%. "
+"Editing it will replace each occurrence, regardless of the current type."
+msgstr ""
+"Den slug, du forsøger at redigere, findes i andre slug-typer: %s%. "
+"Redigering af den vil erstatte hver forekomst, uanset den aktuelle type."
+
+msgid ""
+"Hover any text on the page, click %s,<br> then modify the translation in "
+"the sidebar."
+msgstr ""
+"Hold musen over en tekst på siden, klik på %s,<br> og rediger derefter "
+"oversættelsen i sidebjælken."
+
+#, tp-glo-e780391b
+msgid "Don't forget to Save Translation. Use keyboard shortcut CTRL(⌘) + S"
+msgstr "Glem ikke at gemme oversættelsen. Brug tastaturgenvejen CTRL(⌘) + S"
+
+msgid "Switch language to see the translation changes directly on the page."
+msgstr "Skift sprog for at se oversættelsesændringerne direkte på siden."
+
+msgid "Search for any text in this page in the dropdown."
+msgstr "Søg efter en tekst på denne side i rullemenuen."
+
+msgid ""
+"Your %s license has <span "
+"class=\"trp-license-status-emphasized\">expired</span>."
+msgstr ""
+"Din %s-licens er <span "
+"class=\"trp-license-status-emphasized\">udløbet</span>."
+
+msgid ""
+"<strong>This Black Friday, renew your license at a special price</strong> "
+"to continue receiving access to product downloads, automatic updates, and "
+"support."
+msgstr ""
+"<strong>Forny din licens til en særlig pris denne Black Friday</strong> for "
+"fortsat at have adgang til produktdownloads, automatiske opdateringer og "
+"support."
+
+msgid "Get Deal"
+msgstr "Få tilbudet"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please renew your license to continue receiving access to TranslatePress "
+"AI, premium addons, automatic updates and support."
+msgstr ""
+"Forny din licens for fortsat at have adgang til TranslatePress AI, "
+"premium-tilføjelser, automatiske opdateringer og support."
+
+msgid "Renew Now"
+msgstr "Forny nu"
+
+msgid ""
+"Your %s license was <span "
+"class=\"trp-license-status-emphasized\">refunded</span>."
+msgstr ""
+"Din %s-licens blev <span "
+"class=\"trp-license-status-emphasized\">refunderet</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please purchase a new license to continue receiving access to "
+"TranslatePress AI, premium addons, automatic updates and support."
+msgstr ""
+"Køb en ny licens for fortsat at have adgang til TranslatePress AI, "
+"premium-tilføjelser, automatiske opdateringer og support."
+
+msgid "Purchase a new license"
+msgstr "Køb en ny licens"
+
+msgid ""
+"Your %s license is <span class=\"trp-license-status-emphasized\">missing or "
+"invalid</span>."
+msgstr ""
+"Din %s-licens er <span class=\"trp-license-status-emphasized\">manglende "
+"eller ugyldig</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please enter a valid license to get access to TranslatePress AI, premium "
+"addons, automatic updates and support. Need a license key? %1$sPurchase one "
+"now%2$s"
+msgstr ""
+"Indtast en gyldig licens for at få adgang til TranslatePress AI, "
+"premium-tilføjelser, automatiske opdateringer og support. Har du brug for "
+"en licensnøgle? %1$sKøb en nu%2$s"
+
+msgid "Enter a valid license"
+msgstr "Indtast en gyldig licens"
+
+msgid "Meta Information"
+msgstr "Metadata"
+
+#, tp-ctx-8a82cc9e
+msgid "String List"
+msgstr "Strengliste"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings"
+msgstr "Gettext-strenge"
+
+msgid "Images"
+msgstr "Billeder"
+
+msgid "Videos"
+msgstr "Videoer"
+
+msgid "Audios"
+msgstr "Lydfiler"
+
+#, tp-ctx-2edc90df
+msgid "Dynamically Added Strings"
+msgstr "Dynamisk tilføjede strenge"
+
+msgid "Translation Editor"
+msgstr "Oversættelseseditor"
+
+msgid "Edit translations by visually selecting them on each site page"
+msgstr "Redigér oversættelser ved at vælge dem visuelt på hver enkelt side"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation"
+msgstr "Strengoversættelse"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid ""
+"Edit url slug translations, plugins and theme translation (emails, forms "
+"etc.)"
+msgstr ""
+"Rediger URL-slug-oversættelser, plugins og temaoversættelse (e-mails, "
+"formularer osv.)"
+
+msgid "Current User"
+msgstr "Aktuel bruger"
+
+msgid "Logged Out"
+msgstr "Logget ud"
+
+msgid "Translate Page"
+msgstr "Oversæt side"
+
+msgid "Add a New Language"
+msgstr "Tilføj et nyt sprog"
+
+msgid "Your License is Invalid"
+msgstr "Din licens er ugyldig"
+
+msgid "Get More AI Words (%d left)"
+msgstr "Få flere AI-ord (%d tilbage)"
+
+#, tp-ctx-e9944eb3
+msgid ""
+"Opens post in the translation editor. Post must be saved as draft or "
+"published beforehand."
+msgstr ""
+"Åbner indlæg i oversættelseseditoren. Indlægget skal gemmes som kladde "
+"eller publiceres på forhånd."
+
+msgid "Security check"
+msgstr "Sikkerhedstjek"
+
+#, tp-ctx-2edc90df
+msgid ""
+"<strong>Warning:</strong> Some strings have possibly incorrectly encoded "
+"characters. This may result in breaking the queries, rendering the page "
+"untranslated in live mode. Consider revising the following strings or their "
+"method of outputting."
+msgstr ""
+"<strong>Advarsel:</strong> Nogle strenge har muligvis tegn med forkert "
+"kodning. Dette kan ødelægge forespørgslerne, så siden vises uoversat i "
+"live-tilstand. Overvej at revidere følgende strenge eller deres "
+"output-metode."
+
+#, tp-ai
+msgid "IMPORTANT: It is strongly recommended to first backup the database!"
+msgstr ""
+"VIGTIGT: Det anbefales kraftigt først at tage en sikkerhedskopi af "
+"databasen!"
+
+#, tp-ai
+msgid "Are you sure you want to continue?"
+msgstr "Er du sikker på, at du vil fortsætte?"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress data update"
+msgstr "TranslatePress-dataopdatering"
+
+msgid "We need to update your translations database to the latest version."
+msgstr "Vi skal opdatere din oversættelsesdatabase til den nyeste version."
+
+msgid ""
+"Updating will allow editing translations of localized text from plugins and "
+"theme. Existing translation will still work as expected."
+msgstr ""
+"Opdatering vil tillade redigering af oversættelser af lokaliseret tekst fra "
+"plugins og tema. Eksisterende oversættelser vil stadig fungere som "
+"forventet."
+
+msgid "Run the updater"
+msgstr "Kør opdateringen"
+
+#, tp-ctx-742ebaa7
+msgid ""
+"Updating will allow editing translations of slugs. Existing translation "
+"will still work as expected."
+msgstr ""
+"Opdatering gør det muligt at redigere oversættelser af slugs. Eksisterende "
+"oversættelse vil stadig fungere som forventet."
+
+#, tp-glo-47180abf, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Please activate the SEO Addon from <br/>WordPress -> Settings -> "
+"TranslatePress -> Addons section"
+msgstr ""
+"Aktiver venligst SEO-tilføjelsen fra <br/>WordPress -> Indstillinger -> "
+"TranslatePress -> Tilføjelser-sektionen"
+
+msgid "Go to Addons"
+msgstr "Gå til Tilføjelser"
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-9fa92a70, tp-glo-b7a08771
+msgid "The SEO Pack add-on allows translation of all the URL slugs:"
+msgstr "SEO Pack-tilføjelsen tillader oversættelse af alle URL-slugs:"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy slugs"
+msgstr "Taksonomi-slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Term slugs"
+msgstr "Term-slugs"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post slugs (this includes pages and custom post types)"
+msgstr "Indlægs-slugs (dette inkluderer sider og brugerdefinerede indlægstyper)"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post type base slugs"
+msgstr "Basis-slugs for indlægstyper"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce slugs"
+msgstr "WooCommerce-slugs"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "The SEO Pack add-on is available with ALL premium versions of the plugin."
+msgstr "SEO Pack-tilføjelsen er tilgængelig med ALLE premiumversioner af pluginnet."
+
+msgid "Upgrade to Pro"
+msgstr "Opgrader til Pro"
+
+msgid "Description"
+msgstr "Beskrivelse"
+
+msgid "Article Section"
+msgstr "Artikelsektion"
+
+msgid "Article Tag"
+msgstr "Artikeltag"
+
+msgid "OG Title"
+msgstr "OG-titel"
+
+msgid "OG Site Name"
+msgstr "OG-sidenavn"
+
+msgid "OG Description"
+msgstr "OG-beskrivelse"
+
+msgid "OG Image Alt"
+msgstr "Alt-tekst til OG-billede"
+
+msgid "Twitter Title"
+msgstr "Twitter-titel"
+
+msgid "Twitter Description"
+msgstr "Twitter-beskrivelse"
+
+msgid "Twitter Image Alt"
+msgstr "Alt-tekst til Twitter-billede"
+
+msgid "Page Title"
+msgstr "Sidetitel"
+
+msgid "Dublin Core Title"
+msgstr "Dublin Core-titel"
+
+msgid "Dublin Core Description"
+msgstr "Dublin Core-beskrivelse"
+
+msgid "OG Image"
+msgstr "OG-billede"
+
+#, tp-glo-9fa92a70
+msgid "OG Image Secure URL"
+msgstr "Sikker URL til OG-billede"
+
+msgid "Twitter Image"
+msgstr "Twitter-billede"
+
+#, tp-ctx-2edc90df
+msgid "Removing cdata dictionary strings for language %s..."
+msgstr "Fjerner CDATA-ordbogsstrenge for sproget %s..."
+
+msgid "Removing untranslated dictionary links for language %s..."
+msgstr "Fjerner uoversatte ordbogslinks for sproget %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Removing duplicated gettext strings for language %s..."
+msgstr "Fjerner duplikerede Gettext-strenge for sproget %s..."
+
+#, tp-ctx-2edc90df
+msgid "Removing duplicated dictionary strings for language %s..."
+msgstr "Fjerner duplikerede ordbogsstrenge for sproget %s..."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Removing untranslated dictionary strings where translation is available for "
+"language %s..."
+msgstr ""
+"Fjerner uoversatte ordbogsstrenge, hvor oversættelse er tilgængelig for "
+"sproget %s..."
+
+#, tp-ctx-2edc90df
+msgid "Inserting original strings for language %s..."
+msgstr "Indsætter originale strenge for sproget %s..."
+
+#, tp-ctx-2edc90df
+msgid "Cleaning original strings table for language %s..."
+msgstr "Renser tabel med originale strenge for sproget %s..."
+
+#, tp-ctx-8a82cc9e
+msgid "Updating original string ids for language %s..."
+msgstr "Opdaterer ID'er for originale strenge for sproget %s..."
+
+msgid "Regenerating original meta table for language %s..."
+msgstr "Regenererer metatabel for originale strenge for sproget %s..."
+
+msgid "Cleaning original meta table for language %s..."
+msgstr "Renser metatabel for originale strenge for sproget %s..."
+
+msgid "Replacing original id NULL with value for language %s..."
+msgstr "Erstatter originalt id NULL med værdi for sproget %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Inserting gettext original strings for language %s..."
+msgstr "Indsætter originale Gettext-strenge for sproget %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Cleaning gettext original strings table for language %s..."
+msgstr "Renser tabel med originale Gettext-strenge for sproget %s..."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Updating gettext original string ids for language %s..."
+msgstr "Opdaterer ID'er for originale Gettext-strenge for sproget %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Starting gettext database optimization in the background..."
+msgstr "Starter gettext-databaseoptimering i baggrunden..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating taxonomy and post type base slugs to new table structure..."
+msgstr "Migrerer basis-slugs for taksonomier og indlægstyper til ny tabelstruktur..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating post slugs to new table structure for language %s..."
+msgstr "Migrerer indlægs-slugs til ny tabelstruktur for sproget %s..."
+
+#, tp-ctx-742ebaa7
+msgid "Migrating term slugs to new table structure for language %s..."
+msgstr "Migrerer term-slugs til ny tabelstruktur for sproget %s..."
+
+msgid "Finishing up..."
+msgstr "Færdiggør..."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize gettext database tables. Translations "
+"continue to work while this runs in the background."
+msgstr ""
+"TranslatePress skal optimere gettext-databasetabeller. Oversættelser "
+"fungerer fortsat, mens dette kører i baggrunden."
+
+#, tp-ai
+msgid "Before starting, we strongly recommend creating a database backup."
+msgstr ""
+"Før du starter, anbefaler vi kraftigt at oprette en sikkerhedskopi af "
+"databasen."
+
+#, tp-ai
+msgid "Start optimization"
+msgstr "Start optimering"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Could not schedule gettext database optimization."
+msgstr "Opdatering afbrudt! Kunne ikke planlægge Gettext-databaseoptimering."
+
+msgid ""
+"Database optimization did not complete successfully. We recommend restoring "
+"the original database or <a href=\"%s\" >trying again.</a>"
+msgstr ""
+"Databaseoptimering blev ikke gennemført korrekt. Vi anbefaler at gendanne "
+"den oprindelige database eller <a href=\"%s\" >forsøge igen.</a>"
+
+msgid ""
+"Update aborted! Your user account doesn't have the capability to perform "
+"database updates."
+msgstr ""
+"Opdatering afbrudt! Din brugerkonto har ikke rettighederne til at udføre "
+"databaseopdateringer."
+
+#, tp-glo-b357fc3e
+msgid "Update aborted! Invalid nonce."
+msgstr "Opdatering afbrudt! Ugyldig nonce."
+
+#, tp-glo-ee8b4f9f
+msgid "Back to TranslatePress Settings"
+msgstr "Tilbage til TranslatePress-indstillinger"
+
+msgid "Successfully updated database!"
+msgstr "Database opdateret!"
+
+msgid "Updating database to version %s+"
+msgstr "Opdaterer database til version %s+"
+
+msgid "Processing table for language %s..."
+msgstr "Behandler tabel for sproget %s..."
+
+msgid "Update aborted! Incorrect action."
+msgstr "Opdatering afbrudt! Forkert handling."
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-64dbb752
+msgid ""
+"Update aborted! Start the gettext database optimization separately from the "
+"Advanced settings page."
+msgstr ""
+"Opdatering afbrudt! Start Gettext-databaseoptimeringen separat fra siden "
+"Avancerede indstillinger."
+
+msgid "Update aborted! Incorrect language code."
+msgstr "Opdatering afbrudt! Forkert sprogkode."
+
+msgid " done."
+msgstr " færdig."
+
+#, tp-ai
+msgid "Update aborted while %1$s. SQL error: %2$s"
+msgstr "Opdatering afbrudt under %1$s. SQL-fejl: %2$s"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "inserting original strings"
+msgstr "indsættelse af originale strenge"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string insertion progress"
+msgstr "kontrol af fremskridt for indsættelse af originale strenge"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "cleaning duplicate original strings"
+msgstr "oprydning i duplikerede originale strenge"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "updating original string IDs"
+msgstr "opdatering af ID'er for originale strenge"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string ID update progress"
+msgstr "kontrol af fremskridt for opdatering af ID'er for originale strenge"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "inserting gettext original strings"
+msgstr "indsættelse af originale Gettext-strenge"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "checking gettext original insertion progress"
+msgstr "kontrol af fremskridt for indsættelse af originale Gettext-strenge"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "cleaning duplicate gettext original strings"
+msgstr "oprydning i duplikerede originale Gettext-strenge"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "updating gettext original string IDs"
+msgstr "opdatering af ID'er for originale Gettext-strenge"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "checking gettext original string ID update progress"
+msgstr "kontrol af fremskridt for opdatering af ID'er for originale Gettext-strenge"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"All individual TranslatePress add-on plugins <a href=\"%1$s\" "
+"target=\"_blank\">have been discontinued</a> and are now included in the "
+"premium Personal, Business and Developer versions of TranslatePress. Please "
+"log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download "
+"the new premium version and install it. Your individual addons settings "
+"will be ported over."
+msgstr ""
+"Alle individuelle TranslatePress-tilføjelsesplugins <a href=\"%1$s\" "
+"target=\"_blank\">er blevet udfaset</a> og er nu inkluderet i "
+"premium-versionerne Personal, Business og Developer af TranslatePress. Log "
+"ind på din <a href=\"%2$s\" target=\"_blank\">kontoside</a>, download den "
+"nye premium-version og installer den. Dine individuelle "
+"tilføjelsesindstillinger vil blive overført."
+
+msgid "Brand-new Language Switcher Settings are here!"
+msgstr "Helt nye indstillinger for sprogvælger er her!"
+
+msgid ""
+"Explore pre-made templates, switch colors, flag styles, spacing, layouts & "
+"more. Use the live preview to perfect your switcher in seconds."
+msgstr ""
+"Udforsk færdiglavede skabeloner, skift farver, flagstile, afstand, layout "
+"og meget mere. Brug live-forhåndsvisningen til at perfektionere din "
+"sprogvælger på sekunder."
+
+msgid "Start customizing"
+msgstr "Start tilpasning"
+
+msgid "Read documentation"
+msgstr "Læs dokumentation"
+
+#, tp-ctx-8a82cc9e, tp-glo-1aabb38a, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"library</a></strong>. Please contact your server administrator to install "
+"it on your server."
+msgstr ""
+"<strong>TranslatePress</strong> kræver <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String "
+"PHP-biblioteket</a></strong>. Kontakt venligst din serveradministrator for "
+"at få det installeret på din server."
+
+#, tp-glo-5e752340
+msgid ""
+"Detected long query limitation on WPEngine hosting. Some large pages may "
+"appear untranslated. You can remove limitation by adding the following to "
+"your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
+msgstr ""
+"Lang forespørgselsbegrænsning registreret på WPEngine-hosting. Nogle store "
+"sider vises muligvis ikke oversat. Du kan fjerne begrænsningen ved at "
+"tilføje følgende til din sides wp-config.php: define( 'WPE_GOVERNOR', false "
+"); "
+
+msgid "Custom Language Flag"
+msgstr "Brugerdefineret sprogflag"
+
+msgid "The Language code of the added custom language is invalid."
+msgstr "Sprogkoden for det tilføjede brugerdefinerede sprog er ugyldig."
+
+msgid "The Language code of the added custom language cannot be empty."
+msgstr "Sprogkoden for det tilføjede brugerdefinerede sprog må ikke være tom."
+
+msgid "The Automatic Translation Code of the added custom language is invalid."
+msgstr ""
+"Den automatiske oversættelseskode for det tilføjede brugerdefinerede sprog "
+"er ugyldig."
+
+#, tp-ai
+msgid "Style"
+msgstr "Stil"
+
+#, tp-ai, tp-glo-da70db08
+msgid "Use shortcode settings"
+msgstr "Brug shortcode-indstillinger"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Custom"
+msgstr "Brugerdefineret"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language names"
+msgstr "Sprognavne"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Full names"
+msgstr "Fulde navne"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Short names"
+msgstr "Korte navne"
+
+#, tp-ai
+msgid "Hide names"
+msgstr "Skjul navne"
+
+#, tp-ai
+msgid "Flag position"
+msgstr "Flagplacering"
+
+#, tp-ai
+msgid "Before text"
+msgstr "Før tekst"
+
+#, tp-ai
+msgid "After text"
+msgstr "Efter tekst"
+
+#, tp-ai
+msgid "Hide flags"
+msgstr "Skjul flag"
+
+#, tp-ai
+msgid "Open on click"
+msgstr "Åbn ved klik"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show opposite language"
+msgstr "Vis det modsatte sprog"
+
+#, tp-ai
+msgid "Size"
+msgstr "Størrelse"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Normal"
+msgstr "Normal"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Large"
+msgstr "Stor"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag shape"
+msgstr "Flagform"
+
+#, tp-ai
+msgid "Rectangle"
+msgstr "Rektangel"
+
+#, tp-ai
+msgid "Square"
+msgstr "Kvadrat"
+
+#, tp-ai
+msgid "Rounded"
+msgstr "Afrundet"
+
+#, tp-ai
+msgid "Transitions"
+msgstr "Overgange"
+
+#, tp-ai
+msgid "Background"
+msgstr "Baggrund"
+
+#, tp-ai
+msgid "Hover background"
+msgstr "Hover-baggrund"
+
+#, tp-ai
+msgid "Hover text"
+msgstr "Hover-tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border color"
+msgstr "Kantfarve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border width"
+msgstr "Kantbredde"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border radius"
+msgstr "Kantradius"
+
+#, tp-ai
+msgid "Flag radius"
+msgstr "Flagradius"
+
+#, tp-ai, tp-glo-1477ca6f, tp-glo-ee8b4f9f
+msgid ""
+"Disable the legacy TranslatePress language switcher to use the customizable "
+"Elementor widget. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Open language switcher settings</a>."
+msgstr ""
+"Deaktivér den ældre TranslatePress-sprogvælger for at bruge den "
+"tilpasselige Elementor-widget. <a href=\"%s\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">Åbn indstillinger for sprogvælger</a>."
+
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"The language switcher inherits styling options from shortcode. <a "
+"href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Open shortcode "
+"settings</a>."
+msgstr ""
+"Sprogvælgeren arver stylingindstillinger fra shortcode. <a href=\"%s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Åbn "
+"shortcode-indstillinger</a>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI"
+msgstr "TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid."
+msgstr "Din TranslatePress AI API Key er gyldig."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is invalid."
+msgstr "Din TranslatePress AI API Key er ugyldig."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key has expired."
+msgstr "Din TranslatePress AI API Key er udløbet."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Activate API Key"
+msgstr "Aktiver API Key"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Deactivate API Key"
+msgstr "Deaktiver API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add a TranslatePress AI API Key"
+msgstr "Tilføj en TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI API Key"
+msgstr "TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Manage your TranslatePress AI API Key in your %1$s."
+msgstr "Administrer din TranslatePress AI API Key i din %1$s."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI API Key?"
+msgstr "Har du ikke en TranslatePress AI API Key?"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get a free TranslatePress AI API Key Today"
+msgstr "Få en gratis TranslatePress AI API Key i dag"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add your TranslatePress AI API Key"
+msgstr "Tilføj din TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Add your TranslatePress AI API Key to unlock all premium features. Find the "
+"TranslatePress AI API Key in your"
+msgstr ""
+"Tilføj din TranslatePress AI API Key for at låse alle premiumfunktioner op. "
+"Find din TranslatePress AI API Key i din"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid and active."
+msgstr "Din TranslatePress AI API Key er gyldig og aktiv."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Activate TranslatePress AI API Key"
+msgstr "Aktiver TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88
+msgid "No Active API Key Detected for this website."
+msgstr "Ingen aktiv API Key registreret for dette websted."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"an API key by creating a free account."
+msgstr ""
+"For at aktivere automatisk oversættelse med TranslatePress AI skal du få en "
+"API Key ved at oprette en gratis konto."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Enter your API key"
+msgstr "Indtast din API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your API key from"
+msgstr ""
+"For at aktivere automatisk oversættelse med TranslatePress AI skal du "
+"indtaste din API Key fra"
+
+#, tp-ai, tp-glo-91460d88
+msgid "API Key"
+msgstr "API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "No Active TranslatePress AI API Key Detected for this website."
+msgstr ""
+"Der er ikke fundet nogen aktiv TranslatePress AI API-nøgle for dette "
+"websted."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI API Key"
+msgstr "Få din gratis TranslatePress AI API-nøgle"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Generate API Key"
+msgstr "Generer API-nøgle"
+
+#, tp-ai, tp-glo-91460d88
+msgid "You have a valid %s <strong>API Key</strong>."
+msgstr "Du har en gyldig %s <strong>API-nøgle</strong>."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Manage your API Key & quota on the %s"
+msgstr "Administrer din API-nøgle og kvote på %s"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Get a Free AI API Key"
+msgstr "Få en gratis AI API-nøgle"
+
+#, tp-ai, tp-glo-91460d88
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key."
+msgstr ""
+"Dette websted er allerede aktiveret med en gratis API-nøgle. Hvert websted "
+"kan kun bruge én gratis API-nøgle."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"Opgrader til en premium-plan for flere TranslatePress AI-ord på %1$s din "
+"konto %2$s."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Checking"
+msgstr "Debugdata for API-nøglekontrol"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Activation"
+msgstr "Debugdata for API-nøgleaktivering"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress finished replacing the existing translations in your "
+"dictionary."
+msgstr ""
+"TranslatePress er færdig med at erstatte de eksisterende oversættelser i "
+"din ordbog."
+
+#, tp-ai
+msgid "Term (%s)"
+msgstr "Udtryk (%s)"
+
+#, tp-ai
+msgid "Translations"
+msgstr "Oversættelser"
+
+#, tp-ai
+msgid "Term added. Glossary terms only affect new automatic translations."
+msgstr "Udtryk tilføjet. Ordlisteudtryk påvirker kun nye automatiske oversættelser."
+
+#, tp-ai
+msgid "Term updated."
+msgstr "Udtryk opdateret."
+
+#, tp-ai
+msgid "Term deleted."
+msgstr "Udtryk slettet."
+
+#, tp-ai
+msgid "Are you sure you want to delete this term?"
+msgstr "Er du sikker på, at du vil slette dette udtryk?"
+
+#, tp-ai
+msgid "Something went wrong. Please try again."
+msgstr "Noget gik galt. Prøv igen."
+
+#, tp-ai
+msgid "Quick Edit"
+msgstr "Hurtigredigering"
+
+msgid "Edit"
+msgstr "Rediger"
+
+msgid "Delete"
+msgstr "Slet"
+
+#, tp-ai
+msgid "Update"
+msgstr "Opdater"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Cancel"
+msgstr "Annuller"
+
+#, tp-ai
+msgid "No glossary terms match your search."
+msgstr "Ingen ordlistetermer matcher din søgning."
+
+#, tp-ai
+msgid "No glossary terms found."
+msgstr "Ingen ordlistetermer fundet."
+
+#, tp-ai
+msgid "Could not load glossary terms. Please reload the page."
+msgstr "Kunne ikke indlæse ordlistetermer. Genindlæs siden."
+
+msgid "items"
+msgstr "elementer"
+
+#, tp-ai
+msgid "of"
+msgstr "af"
+
+#, tp-ai
+msgid "First page"
+msgstr "Første side"
+
+#, tp-ai
+msgid "Previous page"
+msgstr "Forrige side"
+
+#, tp-ai
+msgid "Next page"
+msgstr "Næste side"
+
+#, tp-ai
+msgid "Last page"
+msgstr "Sidste side"
+
+#, tp-ai
+msgid ""
+"The inserted term was found in your existing translations, use the %s to "
+"make changes there."
+msgstr ""
+"Den indsatte term blev fundet i dine eksisterende oversættelser. Brug %s "
+"til at foretage ændringer der."
+
+#, tp-ai
+msgid "search & replace tool"
+msgstr "søg- og erstat-værktøj"
+
+#, tp-ai
+msgid "Please provide at least one existing translation to replace."
+msgstr "Angiv mindst én eksisterende oversættelse, der skal erstattes."
+
+#, tp-ai
+msgid ""
+"You are about to bulk edit a potentially large amount of translations. This "
+"action cannot be undone. It is recommended to make a backup of the database "
+"before completing this action."
+msgstr ""
+"Du er ved at masse-redigere et potentielt stort antal oversættelser. Denne "
+"handling kan ikke fortrydes. Det anbefales at tage en sikkerhedskopi af "
+"databasen, før du fuldfører denne handling."
+
+#, tp-ai
+msgid "Continue with replacing existing translations?"
+msgstr "Fortsæt med at erstatte eksisterende oversættelser?"
+
+#, tp-ai
+msgid "No entries found."
+msgstr "Ingen poster fundet."
+
+#, tp-ai
+msgid "Original"
+msgstr "Original"
+
+#, tp-ai
+msgid "Security check failed. Please reload the page and try again."
+msgstr "Sikkerhedskontrollen mislykkedes. Genindlæs siden og prøv igen."
+
+#, tp-ai
+msgid "You do not have permission to do this."
+msgstr "Du har ikke tilladelse til at gøre dette."
+
+#, tp-ai
+msgid "Please enter the term in the default language."
+msgstr "Indtast termen på standardsproget."
+
+#, tp-ai
+msgid "Please provide at least one translation for the term."
+msgstr "Angiv mindst én oversættelse af termen."
+
+#, tp-ai
+msgid "The term “%s” already exists in the glossary."
+msgstr "Termen “%s” findes allerede i ordlisten."
+
+#, tp-ai
+msgid "The term you are trying to edit no longer exists. Please reload the page."
+msgstr "Termen du prøver at redigere, findes ikke længere. Genindlæs siden."
+
+#, tp-ai
+msgid "The term you are trying to delete no longer exists. Please reload the page."
+msgstr "Termen du prøver at slette, findes ikke længere. Genindlæs siden."
+
+#, tp-ai
+msgid "%1$s: %2$d entry updated"
+msgid_plural "%1$s: %2$d entries updated"
+msgstr[0] "%1$s: %2$d post opdateret"
+msgstr[1] "%1$s: %2$d poster opdateret"
+
+#, tp-ai
+msgid "Replacement complete."
+msgstr "Erstatning fuldført."
+
+#, tp-ai, tp-glo-fd3dec87
+msgid ""
+"This is a large replacement. %d entries were updated now and the rest will "
+"finish automatically in the background over the next few minutes."
+msgstr ""
+"Dette er en stor erstatning. %d poster blev opdateret nu, og resten vil "
+"automatisk blive udført i baggrunden i løbet af de næste par minutter."
+
+#, tp-glo-c773bca5, tp-glo-d6a22d74
+msgid "Google Translate v2"
+msgstr "Google Translate v2"
+
+#, tp-glo-91460d88, tp-glo-d6a22d74
+msgid "Google Translate API Key"
+msgstr "Google Translate API-nøgle"
+
+#, tp-glo-91460d88
+msgid "Add your API Key here..."
+msgstr "Indtast din API-nøgle her..."
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">this link</a> to see how you can set up an API key, "
+"<strong>control API costs</strong> and set HTTP referrer restrictions."
+msgstr ""
+"Besøg <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">dette link</a> for at se, hvordan du opretter en "
+"API-nøgle, <strong>kontrollerer API-omkostninger</strong> og angiver "
+"HTTP-referrer-begrænsninger."
+
+#, tp-glo-1aabb38a
+msgid "Your HTTP referrer is: %s"
+msgstr "Din HTTP-referrer er: %s"
+
+#, tp-glo-d6a22d74
+msgid "There was an error with your Google Translate key."
+msgstr "Der opstod en fejl med din Google Translate-nøgle."
+
+#, tp-glo-d6a22d74
+msgid "There was an error on the server processing your Google Translate key."
+msgstr ""
+"Der opstod en fejl på serveren under behandlingen af din Google "
+"Translate-nøgle."
+
+#, tp-glo-ee8b4f9f
+msgid "Please check your TranslatePress license key."
+msgstr "Kontroller din TranslatePress-licensnøgle."
+
+msgid "Create your Free Account"
+msgstr "Opret din gratis konto"
+
+msgid " or "
+msgstr " eller "
+
+msgid "Your free account includes: "
+msgstr "Din gratis konto inkluderer: "
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI for instant automatic translations"
+msgstr "Adgang til TranslatePress AI til øjeblikkelige automatiske oversættelser"
+
+msgid "2000 AI words to translate automatically"
+msgstr "2000 AI-ord til automatisk oversættelse"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI Words and unlock all AI features with TranslatePress Pro."
+msgstr "Få flere AI-ord og lås alle AI-funktioner op med TranslatePress Pro."
+
+msgid "Upgrade now"
+msgstr "Opgrader nu"
+
+msgid "You have a valid %s <strong>license</strong>."
+msgstr "Du har en gyldig %s <strong>licens</strong>."
+
+msgid " words remaining. "
+msgstr " ord tilbage. "
+
+msgid "Recheck"
+msgstr "Tjek igen"
+
+msgid "Rechecking..."
+msgstr "Tjekker igen..."
+
+msgid "Done."
+msgstr "Færdig."
+
+msgid "Manage your license & quota on the %s"
+msgstr "Administrer din licens og kvote på %s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account Page"
+msgstr "TranslatePress.com-kontoside"
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced Add-ons"
+msgstr "Avancerede tilføjelser"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Developer, Business and Personal plans."
+msgstr ""
+"Disse tilføjelser udvider dit oversættelsesplugin og er tilgængelige i "
+"Developer-, Business- og Personal-planerne."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack"
+msgstr "SEO Pack"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and Facebook and Twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"SEO-understøttelse for side-slug, sidetitel, beskrivelse og Facebook- og "
+"Twitter-social graph-information. HTML-lang-attributten er korrekt "
+"indstillet."
+
+msgid "Multiple Languages"
+msgstr "Flere sprog"
+
+msgid ""
+"Add as many languages as you need for your project to go global. Publish "
+"your language only when all your translations are done."
+msgstr ""
+"Tilføj så mange sprog, som du har brug for, for at dit projekt kan gå "
+"globalt. Udgiv først dit sprog, når alle dine oversættelser er færdige."
+
+msgid "Pro Add-ons"
+msgstr "Pro-tilføjelser"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Business and Developer plans."
+msgstr ""
+"Disse tilføjelser udvider dit oversættelsesplugin og er tilgængelige i "
+"Business- og Developer-planerne."
+
+#, tp-glo-c6709f3f
+msgid "DeepL Automatic Translation"
+msgstr "Automatisk oversættelse med DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Automatically translate your website through the DeepL API."
+msgstr "Oversæt automatisk din hjemmeside via DeepL API."
+
+msgid ""
+"Prompts visitors to switch to their preferred language based on their "
+"browser settings or IP address and remembers the last visited language."
+msgstr ""
+"Opfordrer besøgende til at skifte til deres foretrukne sprog baseret på "
+"deres browserindstillinger eller IP-adresse og husker det senest besøgte "
+"sprog."
+
+msgid "Translator Accounts"
+msgstr "Oversætterkonti"
+
+msgid ""
+"Create translator accounts for new users or allow existing users that are "
+"not administrators to translate your website."
+msgstr ""
+"Opret oversætterkonti til nye brugere, eller tillad eksisterende brugere, "
+"der ikke er administratorer, at oversætte din hjemmeside."
+
+msgid "Browse As User Role"
+msgstr "Gennemse som brugerrolle"
+
+msgid ""
+"Navigate your website just like a particular user role would. Really useful "
+"for dynamic content or hidden content that appears for particular users."
+msgstr ""
+"Naviger på din hjemmeside, præcis som en bestemt brugerrolle ville gøre. "
+"Virkelig nyttigt til dynamisk indhold eller skjult indhold, der vises for "
+"bestemte brugere."
+
+msgid "Navigation Based on Language"
+msgstr "Navigation baseret på sprog"
+
+msgid "Configure different menu items for different languages."
+msgstr "Konfigurer forskellige menupunkter for forskellige sprog."
+
+#, tp-glo-47180abf
+msgid ""
+"Connect separate domains or subdomains to each of your translated versions. "
+"Strengthen your brand’s local identity and boost SEO performance for every "
+"language you support."
+msgstr ""
+"Tilknyt separate domæner eller underdomæner til hver af dine oversatte "
+"versioner. Styrk dit brands lokale identitet og forbedr SEO-ydelsen for "
+"hvert sprog, du understøtter."
+
+msgid "Enable Modules"
+msgstr "Aktivér moduler"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Enable Add-on modules to extend TranslatePress and enhance the "
+"functionality of your translated site."
+msgstr ""
+"Aktivér tilføjelsesmoduler for at udvide TranslatePress og forbedre "
+"funktionaliteten på dit oversatte websted."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to unlock the Pro "
+"add-ons below."
+msgstr ""
+"TranslatePress Pro er aktiv. Aktivér din licensnøgle for at låse op for "
+"Pro-tilføjelserne nedenfor."
+
+#, tp-ai
+msgid "Activate license"
+msgstr "Aktivér licens"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro is installed but not activated yet."
+msgstr "TranslatePress Pro er installeret, men ikke aktiveret endnu."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"Opens your Plugins page (filtered to TranslatePress) in a new tab. Activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Åbner din Plugins-side (filtreret til TranslatePress) i en ny fane. Aktivér "
+"pluginet TranslatePress Pro der, og vend derefter tilbage til denne fane — "
+"den opdateres automatisk."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Activate TranslatePress Pro ↗"
+msgstr "Aktivér TranslatePress Pro ↗"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "More functionality with TranslatePress Pro."
+msgstr "Mere funktionalitet med TranslatePress Pro."
+
+msgid "Upgrade now ↗"
+msgstr "Opgrader nu ↗"
+
+msgid "Already a Pro User?"
+msgstr "Er du allerede Pro-bruger?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Opens the WordPress “Add Plugins” page in a new tab. Upload and activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Åbner WordPress-siden \"Tilføj plugins\" i en ny fane. Upload og aktivér "
+"pluginet TranslatePress Pro der, og vend derefter tilbage til denne fane — "
+"den opdateres automatisk."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro"
+msgstr "Installer TranslatePress Pro"
+
+msgid "This add-on is not available on your current plan."
+msgstr "Denne tilføjelse er ikke tilgængelig på din nuværende plan."
+
+msgid "Continue"
+msgstr "Fortsæt"
+
+msgid "The link you followed has expired. Please reload the page and try again."
+msgstr "Linket, du fulgte, er udløbet. Genindlæs siden og prøv igen."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Manage Sites."
+msgstr ""
+"Din licensnøgle er deaktiveret for denne URL. Genaktiver den fra <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Administrer websteder."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn't "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you've installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Licensnøglen stemmer ikke overens.</strong> Licensen, du "
+"indtastede, passer ikke til den version af TranslatePress, du har "
+"installeret.</p><p>Tjek, at du har installeret den korrekte version til din "
+"licens fra din TranslatePress Account.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid "TranslatePress Account"
+msgstr "TranslatePress Account"
+
+msgid "« Go Back"
+msgstr "« Gå tilbage"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Manage Sites."
+msgstr ""
+"Din licensnøgle er deaktiveret for denne URL. Genaktiver den fra <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Administrer websteder."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Automatically translate your website using TranslatePress AI."
+msgstr "Oversæt automatisk dit websted ved hjælp af TranslatePress AI."
+
+msgid "your account."
+msgstr "din konto."
+
+msgid "Skip and continue with manual translation »"
+msgstr "Spring over og fortsæt med manuel oversættelse »"
+
+msgid "Creating a free account includes: "
+msgstr "Oprettelse af en gratis konto inkluderer: "
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Are you a TranslatePress PRO user?"
+msgstr "Er du TranslatePress Pro-bruger?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro."
+msgstr "Installer TranslatePress Pro."
+
+msgid "Skip this step"
+msgstr "Spring dette trin over"
+
+msgid "The email address you added is incorrect."
+msgstr "Den e-mailadresse, du tilføjede, er forkert."
+
+msgid "Setup Complete"
+msgstr "Opsætning fuldført"
+
+msgid "You're ready to start translating!"
+msgstr "Du er klar til at begynde at oversætte!"
+
+#, tp-glo-ee8b4f9f
+msgid "You have successfully set up TranslatePress for your website."
+msgstr "Du har opsat TranslatePress på dit websted."
+
+msgid "Receive "
+msgstr "Modtag "
+
+msgid "Yes, send me multilingual growth tips."
+msgstr "Ja, send mig flersprogede væksttips."
+
+msgid "Start translating"
+msgstr "Start med at oversætte"
+
+msgid "Sign Up and Start translating"
+msgstr "Tilmeld dig og start med at oversætte"
+
+msgid "You need to select a default language."
+msgstr "Du skal vælge et standardsprog."
+
+msgid ""
+"You are trying to add an invalid default language. Please select a valid "
+"option."
+msgstr ""
+"Du forsøger at tilføje et ugyldigt standardsprog. Vælg venligst en gyldig "
+"mulighed."
+
+msgid "Please add an additional language."
+msgstr "Tilføj venligst et yderligere sprog."
+
+msgid ""
+"You are trying to add an invalid additional language. Please select a valid "
+"option."
+msgstr ""
+"Du forsøger at tilføje et ugyldigt ekstra sprog. Vælg venligst en gyldig "
+"mulighed."
+
+msgid "Configure Site Languages"
+msgstr "Konfigurer webstedssprog"
+
+msgid "Select the default and additional languages for your website."
+msgstr "Vælg standard- og yderligere sprog til dit websted."
+
+msgid "You can edit your site languages at any point."
+msgstr "Du kan redigere dine webstedssprog når som helst."
+
+msgid "Default Language"
+msgstr "Standardsprog"
+
+msgid "Select the language your content is written in."
+msgstr "Vælg det sprog, dit indhold er skrevet på."
+
+msgid "Additional Language"
+msgstr "Yderligere sprog"
+
+msgid "Choose a secondary language..."
+msgstr "Vælg et sekundært sprog..."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Add Language"
+msgstr "Tilføj sprog"
+
+msgid "Choose a language..."
+msgstr "Vælg et sprog..."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to add more "
+"languages."
+msgstr ""
+"TranslatePress Pro er aktiv. Aktivér din licensnøgle for at tilføje flere "
+"sprog."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Add more than two languages with TranslatePress Pro."
+msgstr "Tilføj mere end to sprog med TranslatePress Pro."
+
+msgid "Set up Language Switcher"
+msgstr "Konfigurer sprogvælger"
+
+msgid ""
+"Select the style of the language switcher. You will find more ways to "
+"display it, in plugin settings."
+msgstr ""
+"Vælg stilen på sprogvælgeren. Du finder flere måder at vise den på i "
+"plugin-indstillingerne."
+
+msgid ""
+"Displays a small language drop-down across your website, in a corner of "
+"your choosing."
+msgstr ""
+"Viser en lille sprog-rulleliste på tværs af dit websted, i et hjørne efter "
+"dit valg."
+
+msgid "Switcher Location"
+msgstr "Placering af sprogvælger"
+
+msgid "Apply a Template"
+msgstr "Anvend en skabelon"
+
+msgid "You can customize the design later"
+msgstr "Du kan tilpasse designet senere"
+
+msgid "Default Template"
+msgstr "Standardskabelon"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Default"
+msgstr "Standard"
+
+msgid "Dark Template"
+msgstr "Mørk skabelon"
+
+msgid "Border Template"
+msgstr "Kantskabelon"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Border"
+msgstr "Kant"
+
+msgid "Transparent Template"
+msgstr "Gennemsigtig skabelon"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Transparent"
+msgstr "Gennemsigtig"
+
+#, tp-glo-ee8b4f9f
+msgid "Welcome to TranslatePress"
+msgstr "Velkommen til TranslatePress"
+
+#, tp-glo-ee8b4f9f
+msgid "Quick guided setup to configure TranslatePress in no time!"
+msgstr "Hurtig guidet opsætning til at konfigurere TranslatePress på ingen tid!"
+
+msgid "It takes less than a minute."
+msgstr "Det tager mindre end et minut."
+
+msgid "Scanning item %1$d of %2$d..."
+msgstr "Scanner element %1$d af %2$d..."
+
+msgid "Manually translated"
+msgstr "Manuelt oversat"
+
+msgid "Automatically translated"
+msgstr "Automatisk oversat"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext file translation"
+msgstr "Gettext-filoversættelse"
+
+msgid "Not translated"
+msgstr "Ikke oversat"
+
+msgid "Bulk Actions"
+msgstr "Massehandlinger"
+
+msgid "Delete entries"
+msgstr "Slet poster"
+
+msgid "Filter"
+msgstr "Filtrer"
+
+msgid "Clear filters"
+msgstr "Ryd filtre"
+
+msgid "Language"
+msgstr "Sprog"
+
+msgid "Add New"
+msgstr "Tilføj ny"
+
+#, tp-ctx-2edc90df
+msgid "Rescan plugins and theme for strings"
+msgstr "Scan plugins og tema for strenge igen"
+
+#, tp-ctx-2edc90df
+msgid "Scanning plugins and theme for strings..."
+msgstr "Scanner plugins og tema for strenge..."
+
+msgid "Plugins and theme scan is complete"
+msgstr "Scanning af plugins og tema er fuldført"
+
+msgid "Plugins and theme scan did not finish due to an error"
+msgstr "Scanning af plugins og tema blev ikke fuldført på grund af en fejl"
+
+msgid "Import / Export"
+msgstr "Import / Eksport"
+
+msgid "See More"
+msgstr "Se mere"
+
+msgid "See Less"
+msgstr "Se mindre"
+
+msgid "Apply"
+msgstr "Anvend"
+
+#, tp-ctx-2edc90df
+msgid "No strings match your query."
+msgstr "Ingen strenge matcher din søgning."
+
+#, tp-ctx-2edc90df
+msgid "Try to rescan plugins and theme for strings."
+msgstr "Prøv at scanne plugins og tema for strenge igen."
+
+msgid ""
+"An error occurred while loading results. Most likely you were logged out. "
+"Reload page?"
+msgstr ""
+"Der opstod en fejl under indlæsning af resultater. Du blev højst "
+"sandsynligt logget ud. Genindlæs siden?"
+
+msgid "found in translation"
+msgstr "fundet i oversættelse"
+
+msgid "Select All"
+msgstr "Vælg alle"
+
+msgid "Select Visible"
+msgstr "Vælg synlige"
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action on all the strings matching your "
+"filter, not just the visibly checked. To perform the action only to the "
+"visible strings click \"Select Visible\" from the table header dropdown."
+msgstr ""
+"Du er ved at udføre denne handling på alle strenge, der matcher dit filter, "
+"ikke kun de synligt markerede. For kun at udføre handlingen på de synlige "
+"strenge skal du klikke på \"Vælg synlige\" i rullemenuen i tabellens "
+"overskrift."
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action only on the visible strings. To "
+"perform the action on all the strings matching the filter click \"Select "
+"All\" from the table header dropdown."
+msgstr ""
+"Du er ved at udføre denne handling kun på de synlige strenge. For at udføre "
+"handlingen på alle strenge, der matcher filteret, skal du klikke på \"Vælg "
+"alle\" i rullemenuen i tabellens overskrift."
+
+msgid "To continue please type the word:"
+msgstr "For at fortsætte skal du skrive ordet:"
+
+msgid "The word typed was incorrect. Action was cancelled."
+msgstr "Det indtastede ord var forkert. Handlingen blev annulleret."
+
+#, tp-ctx-8a82cc9e, tp-glo-ee8b4f9f
+msgid ""
+"Warning: This action cannot be undone. Deleting a string will remove its "
+"current translation. The original string will appear again in this "
+"interface after TranslatePress detects it. This action is NOT equivalent to "
+"excluding the string from being translated again."
+msgstr ""
+"Advarsel: Denne handling kan ikke fortrydes. Sletning af en streng fjerner "
+"dens nuværende oversættelse. Den originale streng vises igen i denne "
+"grænseflade, når TranslatePress registrerer den. Denne handling er IKKE "
+"ækvivalent med at ekskludere strengen fra at blive oversat igen."
+
+msgid "%d original entries and their translations were deleted."
+msgstr "%d oprindelige poster og deres oversættelser blev slettet."
+
+msgid "Navigate to next page"
+msgstr "Gå til næste side"
+
+msgid "Navigate to previous page"
+msgstr "Gå til forrige side"
+
+msgid "Navigate to first page"
+msgstr "Gå til første side"
+
+msgid "Navigate to last page"
+msgstr "Gå til sidste side"
+
+msgid "Type a page number to navigate to"
+msgstr "Indtast et sidetal at navigere til"
+
+msgid ""
+"Incorrect page number. Type a page number between 1 and total number of "
+"pages"
+msgstr "Forkert sidetal. Indtast et sidetal mellem 1 og det samlede antal sider"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Search original and translated strings containing typed keywords while also "
+"matching selected filters. Place string in quotes for exact match: \"string\""
+msgstr ""
+"Søg i originale og oversatte strenge, der indeholder indtastede nøgleord, "
+"samtidig med at de matcher valgte filtre. Sæt streng i anførselstegn for "
+"eksakt match: \"streng\""
+
+#, tp-ctx-2edc90df
+msgid ""
+"Filter strings according to selected translation status, filters and "
+"keywords and selected filters"
+msgstr ""
+"Filtrer strenge i henhold til valgt oversættelsesstatus, filtre og nøgleord "
+"og valgte filtre"
+
+msgid "Removes selected filters"
+msgstr "Fjerner valgte filtre"
+
+#, tp-ctx-2edc90df
+msgid "See options for selecting all strings"
+msgstr "Se indstillinger for at vælge alle strenge"
+
+#, tp-ctx-2edc90df
+msgid "Click to sort strings by this column"
+msgstr "Klik for at sortere strenge efter denne kolonne"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-ctx-e9944eb3, tp-glo-8896ebe8
+msgid ""
+"The ID of the WordPress post where this string was detected. Empty if the "
+"string is not associated with a specific post."
+msgstr ""
+"ID'et på WordPress-indlægget, hvor denne streng blev fundet. Tomt, hvis "
+"strengen ikke er tilknyttet et specifikt indlæg."
+
+msgid ""
+"Language in which the translation status filter applies. Leave unselected "
+"for the translation status to apply to ANY language"
+msgstr ""
+"Sprog, som oversættelsesstatusfiltret gælder for. Lad den være uvalgt, så "
+"oversættelsesstatussen gælder for ETHVERT sprog."
+
+msgid "Search"
+msgstr "Søg"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs that are not found in either one of the other categories."
+msgstr "Slugs, der ikke findes i nogen af de andre kategorier."
+
+#, tp-ctx-8a82cc9e
+msgid "Plugins and Theme String Translation"
+msgstr "Oversættelse af strenge i plugins og tema"
+
+#, tp-glo-64dbb752
+msgid "Gettext"
+msgstr "Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Search Gettext Strings"
+msgstr "Søg i Gettext-strenge"
+
+#, tp-ctx-8a82cc9e
+msgid "Original String"
+msgstr "Original streng"
+
+msgid "Filter by domain"
+msgstr "Filtrer efter domæne"
+
+msgid "Filter by type"
+msgstr "Filtrer efter type"
+
+msgid "Email text"
+msgstr "E-mail-tekst"
+
+#, tp-ctx-8a82cc9e
+msgid "Emails String Translation"
+msgstr "Oversættelse af e-mail-strenge"
+
+msgid "Emails"
+msgstr "E-mails"
+
+#, tp-ctx-2edc90df
+msgid "Search Email Strings"
+msgstr "Søg efter e-mail-strenge"
+
+#, tp-ctx-8a82cc9e
+msgid "User Inputted String Translation"
+msgstr "Oversættelse af brugerindtastede strenge"
+
+#, tp-ctx-5211e47b
+msgid "Regular"
+msgstr "Almindelig"
+
+#, tp-ctx-2edc90df, tp-ctx-5211e47b
+msgid "Search Regular Strings"
+msgstr "Søg efter almindelige strenge"
+
+msgid "Filter by Translation Block"
+msgstr "Filtrer efter oversættelsesblok"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation Editor"
+msgstr "Editor til strengoversættelse"
+
+#, tp-ai
+msgid "Every minute"
+msgstr "Hvert minut"
+
+#, tp-ai
+msgid "Could not load the background task."
+msgstr "Baggrundsopgaven kunne ikke indlæses."
+
+#, tp-ai
+msgid "Waiting to start background processing..."
+msgstr "Venter på at starte baggrundsbehandling..."
+
+#, tp-ai
+msgid "Background processing could not start."
+msgstr "Baggrundsbehandlingen kunne ikke starte."
+
+#, tp-ai
+msgid "Background processing completed."
+msgstr "Baggrundsbehandling fuldført."
+
+#, tp-ai
+msgid "A previous batch item failed."
+msgstr "Et tidligere batch-element mislykkedes."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing did not complete successfully."
+msgstr "TranslatePress baggrundsbehandling blev ikke gennemført."
+
+#, tp-ai
+msgid "Error: %s"
+msgstr "Fejl: %s"
+
+#, tp-ai
+msgid "You do not have permission to view this task status."
+msgstr "Du har ikke tilladelse til at se denne opgaves status."
+
+#, tp-ai
+msgid "Invalid batch task."
+msgstr "Ugyldig batch-opgave."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress is processing a background task."
+msgstr "TranslatePress behandler en baggrundsopgave."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing completed successfully."
+msgstr "TranslatePress baggrundsbehandling er gennemført."
+
+#, tp-ai
+msgid "Processing %s..."
+msgstr "Behandler %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"%s is optimizing gettext database tables in the background. Translations "
+"continue to work while this runs."
+msgstr ""
+"%s optimerer gettext-databasetabeller i baggrunden. Oversættelser fungerer "
+"fortsat, mens dette kører."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization completed successfully."
+msgstr "TranslatePress gettext-databaseoptimering er gennemført."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress has detected and cleaned up some failed translation entries "
+"in your database following %s. No further action is required."
+msgstr ""
+"TranslatePress har registreret og ryddet op i nogle mislykkede "
+"oversættelsesposter i din database efter %s. Der kræves ingen yderligere "
+"handling."
+
+#, tp-ai
+msgid "an isolated incident"
+msgstr "en enkeltstående hændelse"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Unknown gettext lookup hash migration phase: %s."
+msgstr "Opdatering afbrudt! Ukendt fase i gettext-opslagshash-migrering: %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Could not find an available gettext original_id index name "
+"for table %s."
+msgstr ""
+"Opdatering afbrudt! Kunne ikke finde et tilgængeligt indeksnavn for gettext "
+"original_id til tabel %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext lookup hash migration cannot process invalid ID "
+"%1$d in table %2$s. Repair the table ID schema and retry."
+msgstr ""
+"Opdatering afbrudt! Migrering af gettext-opslagshash kan ikke behandle "
+"ugyldigt ID %1$d i tabel %2$s. Reparer tabel-ID-skemaet, og prøv igen."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Table %1$s still references %2$d duplicate gettext original "
+"ids."
+msgstr ""
+"Opdatering afbrudt! Tabel %1$s refererer stadig til %2$d duplikerede "
+"gettext-original-ID'er."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext original meta still references %d duplicate "
+"original ids."
+msgstr ""
+"Opdatering afbrudt! Gettext-original-meta refererer stadig til %d "
+"duplikerede original-ID'er."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext database optimization completed."
+msgstr "Gettext-databaseoptimering gennemført."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deduplicating gettext translation tables..."
+msgstr "Deduplikerer gettext-oversættelsestabeller..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Migrating gettext original lookup hashes..."
+msgstr "Migrerer gettext-original-opslagshashes..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing the gettext originals lookup index..."
+msgstr "Forbereder opslagsindeks for Gettext-originaler..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses..."
+msgstr "Opdaterer Gettext-runtime-statusser..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finishing gettext database optimization..."
+msgstr "Afslutter Gettext-databaseoptimering..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses for language %s..."
+msgstr "Opdaterer Gettext-runtime-statusser for sproget %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Resolving missing gettext original ids in %s..."
+msgstr "Løser manglende Gettext-original-id'er i %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing gettext table %s..."
+msgstr "Forbereder Gettext-tabel %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Removing invalid gettext rows from %s..."
+msgstr "Fjerner ugyldige Gettext-rækker fra %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Prepared gettext original ids in %s..."
+msgstr "Forberedte Gettext-original-id'er i %s..."
+
+#, tp-ai
+msgid "Normalizing plural forms in %s..."
+msgstr "Normaliserer flertalsformer i %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Processing duplicate gettext rows in %s..."
+msgstr "Behandler duplikerede Gettext-rækker i %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Building duplicate gettext map for %s..."
+msgstr "Opbygger Gettext-duplikatmap for %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Verifying gettext table %s..."
+msgstr "Kontrollerer Gettext-tabel %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deleting duplicate gettext rows from %s..."
+msgstr "Sletter duplikerede Gettext-rækker fra %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Rechecking duplicate gettext rows in %s..."
+msgstr "Genkontrollerer duplikerede Gettext-rækker i %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Adding unique gettext index for %s..."
+msgstr "Tilføjer unikt Gettext-indeks for %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finished gettext table %s."
+msgstr "Afsluttede Gettext-tabel %s."
+
+msgid "License"
+msgstr "Licens"
+
+msgid "Your License Key is valid."
+msgstr "Din licensnøgle er gyldig."
+
+msgid "Your License Key is invalid."
+msgstr "Din licensnøgle er ugyldig."
+
+msgid "Your License has expired."
+msgstr "Din licens er udløbet."
+
+msgid "Deactivate License"
+msgstr "Deaktiver licens"
+
+msgid "Add a license key"
+msgstr "Tilføj en licensnøgle"
+
+msgid "License Key"
+msgstr "Licensnøgle"
+
+msgid "Manage your license in your %1$s."
+msgstr "Administrer din licens på din %1$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI License Key?"
+msgstr "Har du ikke en licensnøgle til TranslatePress AI?"
+
+msgid "Get a free License Today"
+msgstr "Få en gratis licens i dag"
+
+msgid "Add your License Key"
+msgstr "Tilføj din licensnøgle"
+
+msgid ""
+"Add your License Key to unlock all premium features. Find the License Key "
+"in your"
+msgstr ""
+"Tilføj din licensnøgle for at låse alle premiumfunktioner op. Find "
+"licensnøglen i din"
+
+msgid "Your license is valid and active."
+msgstr "Din licens er gyldig og aktiv."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress License"
+msgstr "TranslatePress-licens"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"a license key by creating a free account."
+msgstr ""
+"For at aktivere automatisk oversættelse ved hjælp af TranslatePress AI skal "
+"du oprette en gratis konto for at få en licensnøgle."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your license key from"
+msgstr ""
+"For at aktivere automatisk oversættelse ved hjælp af TranslatePress AI skal "
+"du indtaste din licensnøgle fra"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI License"
+msgstr "Få din gratis licens til TranslatePress AI"
+
+msgid "Generate License"
+msgstr "Generer licens"
+
+msgid "Get a Free AI License"
+msgstr "Få en gratis AI-licens"
+
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license."
+msgstr ""
+"Dette websted er allerede aktiveret med en gratis licens. Hvert websted kan "
+"kun bruge én gratis licens."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"Dette websted er allerede aktiveret med en gratis licens. Hvert websted kan "
+"kun bruge én gratis licens. Du bedes opgradere til en premium-plan for "
+"flere TranslatePress AI-ord fra %1$s din konto %2$s."
+
+msgid "Debug Data for License Checking"
+msgstr "Fejlfindingsdata til licenskontrol"
+
+msgid "Debug Data for License Activation"
+msgstr "Fejlfindingsdata til licensaktivering"
+
+#, tp-glo-ee8b4f9f
+msgid "Please install and activate the TranslatePress - Multilingual plugin"
+msgstr "Installer og aktiver pluginet TranslatePress - Multilingual"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update the TranslatePress - Multilingual plugin to version %1$s or "
+"higher to ensure %2$s functions correctly."
+msgstr ""
+"Opdater pluginet TranslatePress - Multilingual til version %1$s eller "
+"højere for at sikre, at %2$s fungerer korrekt."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update TranslatePress - Multilingual to version %2$s or newer. Your "
+"currently installed version of TranslatePress - Multilingual is no longer "
+"compatible with the current version of %1$s."
+msgstr ""
+"Opdater TranslatePress - Multilingual til version %2$s eller nyere. Din "
+"aktuelt installerede version af TranslatePress - Multilingual er ikke "
+"længere kompatibel med den aktuelle version af %1$s."
+
+#, tp-glo-ee8b4f9f
+msgid "All TranslatePress functionalities are disabled until then."
+msgstr "Alle funktionaliteter i TranslatePress er deaktiveret indtil da."
+
+msgid "Update Now"
+msgstr "Opdater nu"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This TranslatePress add-on has been migrated to the main plugin and is no "
+"longer used. You can delete it."
+msgstr ""
+"Denne TranslatePress-tilføjelse er blevet overført til hovedpluginet og "
+"bruges ikke længere. Du kan slette den."
+
+#, tp-glo-5e752340, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires at least PHP version 5.6.20+ to "
+"run. It is the <a href=\"%s\">minimum requirement of the latest WordPress "
+"version</a>. Please contact your server administrator to update your PHP "
+"version."
+msgstr ""
+"<strong>TranslatePress</strong> kræver mindst PHP-version 5.6.20+ for at "
+"køre. Det er <a href=\"%s\">minimumskravet for den nyeste "
+"WordPress-version</a>. Kontakt din serveradministrator for at opdatere din "
+"PHP-version."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Add-ons"
+msgstr "TranslatePress-tilføjelser"
+
+msgid ""
+"You must first purchase this version to have access to the addon "
+"%1$shere%2$s"
+msgstr ""
+"Du skal først købe denne version for at få adgang til tilføjelsen "
+"%1$sher%2$s"
+
+msgid ""
+"You need an active license to have access to the addon. Renew or purchase a "
+"new one %1$shere%2$s."
+msgstr ""
+"Du har brug for en aktiv licens for at få adgang til tilføjelsesprogrammet. "
+"Forny eller køb en ny %1$sher%2$s."
+
+msgid "Please %1$senter your license%2$s key first, to activate this addon."
+msgstr ""
+"Indtast venligst først %1$sdin licens%2$s-nøgle for at aktivere denne "
+"tilføjelse."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack (Legacy)"
+msgstr "SEO Pack (Legacy)"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and facebook and twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"SEO-understøttelse af side-slug, sidetitel, beskrivelse samt social "
+"graph-information for Facebook og Twitter. HTML-lang-attributten er korrekt "
+"indstillet."
+
+msgid "Recommended Plugins"
+msgstr "Anbefalede plugins"
+
+msgid "A short list of plugins you can use to extend your website."
+msgstr "En kort liste over plugins, du kan bruge til at udvide din hjemmeside."
+
+#, tp-glo-35089c1a
+msgid "Profile Builder"
+msgstr "Profile Builder"
+
+#, tp-glo-35089c1a
+msgid ""
+"Capture more user information on the registration form with the help of "
+"Profile Builder's custom user profile fields and/or add an Email "
+"Confirmation process to verify your customers accounts."
+msgstr ""
+"Indfang mere brugerinformation i registreringsformularen med hjælp fra "
+"Profile Builders brugerdefinerede brugerprofilfelter og/eller tilføj en "
+"bekræftelsesproces via e-mail for at verificere dine kunders konti."
+
+msgid "Paid Member Subscriptions"
+msgstr "Paid Member Subscriptions"
+
+msgid ""
+"Accept user payments, create subscription plans and restrict content on "
+"your membership site."
+msgstr ""
+"Accepter brugerbetalinger, opret abonnementsplaner og begræns indhold på "
+"dit medlemssite."
+
+msgid "WP Webhooks Automator"
+msgstr "WP Webhooks Automator"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Create no-code automations and workflows on your WordPress site. Easily "
+"connect your plugins, sites and apps together."
+msgstr ""
+"Opret no-code-automatiseringer og arbejdsgange på din WordPress-hjemmeside. "
+"Forbind nemt dine plugins, hjemmesider og apps med hinanden."
+
+msgid "Save Changes"
+msgstr "Gem ændringer"
+
+msgid "Account Page"
+msgstr "Kontoside"
+
+msgid "You can get one for %1$sfree%2$s, by creating a free account. It includes:"
+msgstr "Du kan få en %1$sgratis%2$s ved at oprette en gratis konto. Det inkluderer:"
+
+msgid "Debug Information"
+msgstr "Fejlfindingsoplysninger"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI words and unlock all features with TranslatePress Pro."
+msgstr "Få flere AI-ord og lås alle funktioner op med TranslatePress Pro."
+
+msgid "Already purchased a Premium version?"
+msgstr "Har du allerede købt en Premium-version?"
+
+msgid "Go to your %1$s"
+msgstr "Gå til din %1$s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account"
+msgstr "TranslatePress.com-konto"
+
+msgid "Download & Install the Pro plugin"
+msgstr "Download & installer Pro-pluginet"
+
+msgid "Learn More"
+msgstr "Læs mere"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Errors"
+msgstr "TranslatePress-fejl"
+
+msgid "There are no logged errors."
+msgstr "Der er ingen logget fejl."
+
+#, tp-glo-8896ebe8
+msgid "WordPress Translation Plugin"
+msgstr "Oversættelsesplugin til WordPress"
+
+#, tp-ai
+msgid "Back to Glossary"
+msgstr "Tilbage til ordlisten"
+
+#, tp-ai
+msgid "Search Existing Translations"
+msgstr "Søg i eksisterende oversættelser"
+
+#, tp-ai
+msgid ""
+"Search the existing dictionary entries to see how a term is currently "
+"translated in each language."
+msgstr ""
+"Søg i eksisterende ordbogsindgange for at se, hvordan et udtryk aktuelt er "
+"oversat på hvert sprog."
+
+#, tp-ai
+msgid "To fully explore all the translations, use %s."
+msgstr "For at udforske alle oversættelser fuldt ud, skal du bruge %s."
+
+#, tp-ai
+msgid "Search existing translations"
+msgstr "Søg i eksisterende oversættelser"
+
+#, tp-ai
+msgid "Replace Existing Translations"
+msgstr "Erstat eksisterende oversættelser"
+
+#, tp-ai
+msgid "The requested glossary term could not be found. It may have been deleted."
+msgstr "Den anmodede ordlisteterm kunne ikke findes. Den er måske blevet slettet."
+
+#, tp-ai
+msgid "&laquo; Back to Glossary"
+msgstr "&laquo; Tilbage til ordlisten"
+
+#, tp-ai
+msgid ""
+"For each language, enter the current (existing) translation you want to "
+"find; every case-insensitive occurrence in the stored translations will be "
+"replaced with the new translation, keeping the original capitalization."
+msgstr ""
+"Indtast for hvert sprog den nuværende (eksisterende) oversættelse, du "
+"ønsker at finde; hver forekomst uden hensyn til store/små bogstaver i de "
+"gemte oversættelser vil blive erstattet med den nye oversættelse, mens den "
+"oprindelige brug af store og små bogstaver bevares."
+
+#, tp-ai
+msgid ""
+"Leaving a language field empty will skip that language entirely (no changes "
+"will be made for it). Only one existing translation per language can be "
+"entered at a time. If you have multiple translations to replace for the "
+"same language, simply run the replacement again with the next value."
+msgstr ""
+"Hvis du lader et sprogfelt stå tomt, springes det pågældende sprog helt "
+"over (der vil ikke blive foretaget ændringer for det). Der kan kun "
+"indtastes én eksisterende oversættelse ad gangen for hvert sprog. Hvis du "
+"har flere oversættelser, der skal erstattes for det samme sprog, skal du "
+"blot køre erstatningen igen med den næste værdi."
+
+#, tp-ai
+msgid ""
+"The \"Existing translation\" is not the term in the default language, but "
+"rather the already existing wrong translation you want to correct."
+msgstr ""
+"\"Eksisterende oversættelse\" er ikke termen på standardsproget, men "
+"derimod den allerede eksisterende forkerte oversættelse, du ønsker at rette."
+
+#, tp-ai
+msgid "Existing translation"
+msgstr "Eksisterende oversættelse"
+
+#, tp-ai
+msgid "New translation"
+msgstr "Ny oversættelse"
+
+#, tp-ai
+msgid "Replace in existing translations"
+msgstr "Erstat i eksisterende oversættelser"
+
+#, tp-ai, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Glossary is available only with the TranslatePress AI engine."
+msgstr "Ordliste er kun tilgængelig med TranslatePress AI-motoren."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74
+msgid ""
+"Select the %s automatic translation engine to add and manage glossary "
+"terms. For other translation engines (such as DeepL or Google Translate), "
+"glossary functions are available in the translation provider’s dashboard."
+msgstr ""
+"Vælg den automatiske oversættelsesmotor %s for at tilføje og administrere "
+"ordlistetermer. For andre oversættelsesmotorer (såsom DeepL eller Google "
+"Translate) er ordlistefunktioner tilgængelige i oversættelsesudbyderens "
+"kontrolpanel."
+
+#, tp-ai
+msgid "Add Glossary Term"
+msgstr "Tilføj ordlisteterm"
+
+#, tp-ai
+msgid ""
+"Define words or phrases that should not be translated automatically, and "
+"optionally provide replacements per language."
+msgstr ""
+"Definer ord eller sætninger, der ikke skal oversættes automatisk, og angiv "
+"eventuelt erstatninger per sprog."
+
+#, tp-ai
+msgid "The original word or phrase in the default language."
+msgstr "Det oprindelige ord eller den oprindelige sætning på standardsproget."
+
+#, tp-ai
+msgid "Add Term"
+msgstr "Tilføj term"
+
+#, tp-ai
+msgid "Search glossary terms"
+msgstr "Søg i ordlistetermer"
+
+#, tp-ai
+msgid "Search terms"
+msgstr "Søgetermer"
+
+#, tp-ai
+msgid "Search Glossary"
+msgstr "Søg i ordlisten"
+
+#, tp-ai
+msgid "Loading…"
+msgstr "Indlæser…"
+
+#, tp-ai
+msgid "To edit existing translations, use the %s."
+msgstr "Brug %s til at redigere eksisterende oversættelser."
+
+msgid "Language Switcher update notice"
+msgstr "Opdateringsmeddelelse for sprogvælger"
+
+msgid "Legacy language switcher is currently enabled"
+msgstr "Den ældre sprogvælger er aktiveret"
+
+msgid ""
+"We’ve upgraded the switcher for richer customization and a better user "
+"experience.<br>In order to use the new configurator, turn off <strong>Load "
+"legacy language switcher</strong>."
+msgstr ""
+"Vi har opgraderet sprogvælgeren for at give rigere tilpasningsmuligheder og "
+"en bedre brugeroplevelse.<br>For at bruge den nye konfigurator skal du slå "
+"<strong>Indlæs ældre sprogvælger</strong> fra."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Note: You can switch back anytime from <strong>Advanced Settings → <a "
+"href=\"%s\">Troubleshooting</a></strong>."
+msgstr ""
+"Bemærk: Du kan når som helst skifte tilbage fra <strong>Avancerede "
+"indstillinger → <a href=\"%s\">Fejlfinding</a></strong>."
+
+msgid "Enable the new switcher"
+msgstr "Aktivér den nye vælger"
+
+msgid "Get a translation volume estimate with a detailed breakdown per page"
+msgstr "Få et oversættelsesvolumen-estimat med en detaljeret opdeling pr. side"
+
+msgid "Find how many translatable words are on your website"
+msgstr "Find ud af, hvor mange oversættelige ord der er på dit websted"
+
+#, tp-glo-c6709f3f
+msgid ""
+"<strong>DeepL</strong> automatic translation is available as a <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"Automatisk oversættelse med <strong>DeepL</strong> er tilgængelig som <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"By upgrading you'll get access to all paid add-ons, premium support and "
+"help fund the future development of TranslatePress."
+msgstr ""
+"Ved at opgradere får du adgang til alle betalte tilføjelser og premium "
+"support, og du hjælper med at finansiere fremtidig udvikling af "
+"TranslatePress."
+
+#, tp-glo-c6709f3f
+msgid ""
+"To use <strong>DeepL</strong> for automatic translation, activate this Pro "
+"add-on from the <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"For at bruge <strong>DeepL</strong> til automatisk oversættelse skal du "
+"aktivere denne Pro-tilføjelse fra <a href=\"%1$s\" target=\"_self\" "
+"title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f, tp-glo-d311355a
+msgid ""
+"Please note that DeepL API usage is paid separately. See <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL pricing "
+"information</a>."
+msgstr ""
+"Bemærk, at brug af DeepL API betales separat. Se <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepLs "
+"prisoplysninger</a>."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro Add-ons"
+msgstr "TranslatePress Pro-tilføjelser"
+
+#, tp-glo-91460d88
+msgid "Test API credentials"
+msgstr "Test API-legitimationsoplysninger"
+
+msgid "Check if the selected translation engine is configured correctly."
+msgstr "Kontrollér, om den valgte oversættelsesmotor er konfigureret korrekt."
+
+msgid "Alternative Engines"
+msgstr "Alternative motorer"
+
+msgid "More info"
+msgstr "Mere info"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Switch to TranslatePress AI"
+msgstr "Skift til TranslatePress AI"
+
+#, tp-glo-8896ebe8
+msgid "Integrate machine translation directly with your WordPress website."
+msgstr "Integrér maskinoversættelse direkte med dit WordPress-websted."
+
+msgid ""
+"Choose which engine you want to use in order to %1$s automatically "
+"translate your website."
+msgstr ""
+"Vælg hvilken motor du vil bruge for at %1$s automatisk oversætte dit "
+"websted."
+
+#, tp-ctx-742ebaa7
+msgid "Automatically Translate Slugs"
+msgstr "Automatisk oversættelse af slugs"
+
+#, tp-ctx-742ebaa7, tp-ctx-7832384c, tp-ctx-e9944eb3
+msgid ""
+"Generate automatic translations of slugs for posts, pages and Custom Post "
+"Types.<br/>The slugs will be automatically translated starting with the "
+"second refresh of each page."
+msgstr ""
+"Genererer automatisk oversættelser af slugs for indlæg, sider og "
+"brugerdefinerede indholdstyper.<br/>Slugs oversættes automatisk fra og med "
+"den anden genindlæsning af hver side."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This feature is only available in the paid version. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"Denne funktion er kun tilgængelig i den betalte version. Opgrader "
+"TranslatePress, og lås flere premium-funktioner op."
+
+#, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Requires <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack Add-on</a> to be installed and "
+"activated."
+msgstr ""
+"Kræver, at <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack-tilføjelsen</a> er installeret "
+"og aktiveret."
+
+msgid "Automatic Translation Settings"
+msgstr "Indstillinger for automatisk oversættelse"
+
+msgid "AI Words Low Notification"
+msgstr "Underretning om lavt AI-ordantal"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Receive an email notification when your TranslatePress AI word count drops "
+"below the specified threshold."
+msgstr ""
+"Modtag en e-mail-underretning, når dit TranslatePress AI-ordtal falder "
+"under den angivne grænse."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This feature is only available when using the TranslatePress AI translation "
+"engine."
+msgstr ""
+"Denne funktion er kun tilgængelig, når du bruger TranslatePress "
+"AI-oversættelsesmotoren."
+
+msgid "Notification Email"
+msgstr "Underretnings-e-mail"
+
+msgid "The email address where the low AI words notification will be sent."
+msgstr "E-mailadressen, som underretningen om lavt AI-ordantal sendes til."
+
+msgid "Word Threshold"
+msgstr "Ordgrænse"
+
+msgid "words"
+msgstr "ord"
+
+msgid "You will be notified when remaining AI words drop below this number."
+msgstr "Du får besked, når de resterende AI-ord falder under dette tal."
+
+msgid "Block Crawlers"
+msgstr "Bloker crawlers"
+
+msgid ""
+"Block crawlers from triggering automatic translations on your "
+"website.<br>This will not prevent crawlers from accessing this site's pages."
+msgstr ""
+"Forhindrer crawlers i at udløse automatisk oversættelse på dit "
+"websted.<br>Dette vil ikke forhindre crawlers i at få adgang til dette "
+"websteds sider."
+
+msgid "Limit machine translation / characters per day"
+msgstr "Begræns maskinoversættelse / tegn per dag"
+
+msgid ""
+"Add a limit to the number of automatically translated characters so you can "
+"better budget your project."
+msgstr ""
+"Angiv en grænse for antallet af automatisk oversatte tegn, så du bedre kan "
+"budgettere dit projekt."
+
+msgid "characters per day"
+msgstr "tegn per dag"
+
+msgid "Today's Character Count: "
+msgstr "Dagens antal tegn: "
+
+msgid "Log machine translation queries."
+msgstr "Log maskinoversættelsesforespørgsler."
+
+#, tp-glo-8896ebe8
+msgid ""
+"Only enable for testing purposes. Can impact performance.<br>All records "
+"are stored in the wp_trp_machine_translation_log database table. Use a "
+"plugin like <a href=\"https://wordpress.org/plugins/wp-data-access/\" "
+"target=\"_blank\">WP Data Access</a> to browse the logs or directly from "
+"your database manager (PHPMyAdmin, etc.)"
+msgstr ""
+"Aktiver kun til testformål. Kan påvirke ydeevnen.<br>Alle poster gemmes i "
+"databasetabellen wp_trp_machine_translation_log. Brug et plugin som <a "
+"href=\"https://wordpress.org/plugins/wp-data-access/\" target=\"_blank\">WP "
+"Data Access</a> til at gennemse loggene, eller gør det direkte fra din "
+"databaseadministrator (PHPMyAdmin, osv.)"
+
+#, tp-glo-91460d88
+msgid "Test API Credentials"
+msgstr "Test API-legitimationsoplysninger"
+
+#, tp-glo-1aabb38a
+msgid "HTTP Referrer: "
+msgstr "HTTP Referrer: "
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Use this HTTP Referrer if the API lets you restrict key usage from its "
+"Dashboard."
+msgstr ""
+"Brug denne HTTP Referrer, hvis API'et lader dig begrænse nøglebrug fra dets "
+"kontrolpanel."
+
+#, tp-ai, tp-glo-9fa92a70
+msgid "Request URL"
+msgstr "Anmodnings-URL"
+
+#, tp-ai
+msgid "Request Headers"
+msgstr "Anmodningsheadere"
+
+#, tp-ai
+msgid "Request Body"
+msgstr "Anmodningsbody"
+
+msgid "Response"
+msgstr "Respons"
+
+msgid "Response Body"
+msgstr "Respons-body"
+
+msgid "Entire Response From wp_remote_get():"
+msgstr "Hele responsen fra wp_remote_get():"
+
+msgid "Select the languages you wish to make your website available in."
+msgstr "Vælg de sprog, du ønsker at gøre din hjemmeside tilgængelig på."
+
+msgid "Formality"
+msgstr "Formalitet"
+
+msgid "Code"
+msgstr "Kode"
+
+msgid "Formal"
+msgstr "Formel"
+
+msgid "Informal"
+msgstr "Uformel"
+
+msgid "This language does not support formality. "
+msgstr "Dette sprog understøtter ikke formalitet. "
+
+msgid "Are you sure you want to remove this language?"
+msgstr "Er du sikker på, at du vil fjerne dette sprog?"
+
+msgid "Custom Languages"
+msgstr "Brugerdefinerede sprog"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Adding more than two languages is a paid feature. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"At tilføje mere end to sprog er en betalingsfunktion. Opgrader "
+"TranslatePress, og lås op for flere premium-funktioner."
+
+msgid "Please %1$senter your license%2$s key first to add more languages."
+msgstr "Indtast venligst %1$sdin licens%2$s-nøgle først for at tilføje flere sprog."
+
+msgid ""
+"You need an active license to add more languages. Verify in your "
+"%1$saccount%2$s that your license is valid"
+msgstr ""
+"Du skal bruge en aktiv licens for at tilføje flere sprog. Bekræft i din "
+"%1$skonto%2$s, at din licens er gyldig."
+
+msgid "To Add more languages activate the Multiple Languages Addon"
+msgstr "Aktivér Multiple Languages-tilføjelsen for at tilføje flere sprog."
+
+msgid "Website Languages"
+msgstr "Websitesprog"
+
+msgid ""
+"WARNING. Changing the default language will invalidate existing "
+"translations."
+msgstr ""
+"ADVARSEL. Ændring af standardsproget vil gøre eksisterende oversættelser "
+"ugyldige."
+
+msgid ""
+"Even changing from en_US to en_GB, because they are treated as two "
+"different languages."
+msgstr ""
+"Selv ved ændring fra en_US til en_GB, fordi de behandles som to forskellige "
+"sprog."
+
+msgid "In most cases changing the default flag is all it is needed: "
+msgstr "I de fleste tilfælde er det kun nødvendigt at ændre standardflaget: "
+
+msgid "replace the default flag"
+msgstr "erstat standardflaget"
+
+msgid "Re-run Setup Wizard"
+msgstr "Kør opsætningsguiden igen"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The Setup wizard allows you to quickly setup TranslatePress. You can "
+"initiate it at any time."
+msgstr ""
+"Opsætningsguiden giver dig mulighed for hurtigt at opsætte TranslatePress. "
+"Du kan starte den når som helst."
+
+msgid "Language Settings"
+msgstr "Sprogindstillinger"
+
+msgid "Use Native language name"
+msgstr "Brug oprindeligt sprognavn"
+
+msgid ""
+"Check if you want to display languages in their native names. Otherwise, "
+"languages will be displayed in English."
+msgstr ""
+"Markér, hvis du vil vise sprog på deres oprindelige navne. Ellers vises "
+"sprog på engelsk."
+
+msgid "Use a subdirectory for the default language"
+msgstr "Brug en undermappe til standardsproget"
+
+#, tp-glo-9fa92a70
+msgid ""
+"Check if you want to add the subdirectory in the URL for the default "
+"language.</br>By checking this option, the default language seen by website "
+"visitors will become the first one in the \"All Languages\" list."
+msgstr ""
+"Markér, hvis du vil tilføje undermappen i URL'en for "
+"standardsproget.</br>Ved at markere denne indstilling bliver "
+"standardsproget, som besøgende ser på hjemmesiden, det første på listen "
+"\"Alle sprog\"."
+
+msgid "Force language in custom links"
+msgstr "Gennemtving sprog i brugerdefinerede links"
+
+msgid ""
+"Select Yes if you want to force custom links without language encoding to "
+"keep the currently selected language."
+msgstr ""
+"Vælg Ja, hvis du vil gennemtvinge, at brugerdefinerede links uden "
+"sprogkodning beholder det aktuelt valgte sprog."
+
+#, tp-glo-da70db08
+msgid "Shortcode "
+msgstr "Shortcode "
+
+#, tp-glo-da70db08
+msgid "Use shortcode on any page or widget."
+msgstr "Brug shortcode på enhver side eller widget."
+
+#, tp-glo-8339568d
+msgid ""
+"You can also add the <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">Language Switcher Block</a> in the WP Gutenberg Editor."
+msgstr ""
+"Du kan også tilføje <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">sprogvælgerblokken</a> i WP Gutenberg-editoren."
+
+msgid "Menu item"
+msgstr "Menupunkt"
+
+msgid ""
+"Go to  %1$s Appearance -> Menus%2$s to add languages to the Language "
+"Switcher in any menu."
+msgstr ""
+"Gå til  %1$s Udseende -> Menuer%2$s for at tilføje sprog til sprogvælgeren "
+"i enhver menu."
+
+msgid "Learn more in our documentation."
+msgstr "Læs mere i vores dokumentation."
+
+msgid "Floating language selection"
+msgstr "Flydende sprogvalg"
+
+msgid "Add a floating dropdown that follows the user on every page."
+msgstr "Tilføj en flydende dropdown, der følger brugeren på alle sider."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-glo-ee8b4f9f
+msgid "Show \"Powered by TranslatePress\""
+msgstr "Vis \"Powered by TranslatePress\""
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Show the small \"Powered by TranslatePress\" label in the floater language "
+"switcher."
+msgstr ""
+"Vis den lille \"Powered by TranslatePress\"-etiket i den flydende "
+"sprogvælger."
+
+msgid "5 Days to Better Multilingual Websites"
+msgstr "5 dage til bedre flersprogede hjemmesider"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"%sJoin our FREE & EXCLUSIVE onboarding course%s and learn how to grow your "
+"multilingual traffic, reach international markets, and save time & money "
+"while getting the most out of TranslatePress!"
+msgstr ""
+"%sDeltag i vores GRATIS og EKSKLUSIVE onboarding-kursus%s, og lær, hvordan "
+"du øger din flersprogede trafik, når ud til internationale markeder og "
+"sparer tid og penge, samtidig med at du får mest muligt ud af "
+"TranslatePress!"
+
+msgid "Invalid email address"
+msgstr "Ugyldig e-mailadresse"
+
+msgid "Your email"
+msgstr "Din e-mail"
+
+msgid "Sign me up!"
+msgstr "Tilmeld mig!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Sign up with your email address and receive a 5-part email guide to help "
+"you maximize the power of TranslatePress."
+msgstr ""
+"Tilmeld dig med din e-mailadresse, og modtag en e-mailguide i 5 dele, der "
+"hjælper dig med at få mest muligt ud af TranslatePress."
+
+msgid "Dismiss email course notification"
+msgstr "Afvis notifikation om e-mailkursus"
+
+msgid ""
+"Hey %s,<br>Never miss an important update - opt in to our security and "
+"feature updates notifications, and non-sensitive diagnostic tracking."
+msgstr ""
+"Hej %s,<br>Gå aldrig glip af en vigtig opdatering - tilmeld dig vores "
+"notifikationer om sikkerheds- og funktionsopdateringer samt ikke-følsom "
+"diagnostisk sporing."
+
+msgid "Allow & Continue"
+msgstr "Tillad og fortsæt"
+
+msgid "Skip"
+msgstr "Spring over"
+
+#, tp-glo-ee8b4f9f
+msgid "This will allow TranslatePress to:"
+msgstr "Dette vil give TranslatePress mulighed for at:"
+
+msgid "Your profile overview"
+msgstr "Din profiloversigt"
+
+msgid "Name and email address"
+msgstr "Navn og e-mailadresse"
+
+msgid "Admin Notices"
+msgstr "Admin-meddelelser"
+
+msgid "Updates, announcements, marketing, no spam"
+msgstr "Opdateringer, meddelelser, markedsføring, ingen spam"
+
+msgid "Plugin status & settings"
+msgstr "Plugin-status og indstillinger"
+
+msgid "Active, Deactivated, installed version and settings"
+msgstr "Aktiv, deaktiveret, installeret version og indstillinger"
+
+msgid "Privacy Policy"
+msgstr "Privatlivspolitik"
+
+msgid "Terms of Service"
+msgstr "Servicevilkår"
+
+msgid "Support"
+msgstr "Support"
+
+msgid "Add Extra AI Words"
+msgstr "Tilføj ekstra AI-ord"
+
+msgid ""
+"<strong>IMPORTANT NOTE:</strong> Before performing this action it is "
+"strongly recommended to first backup the database."
+msgstr ""
+"<strong>VIGTIG BEMÆRKNING:</strong> Før du udfører denne handling, "
+"anbefales det kraftigt først at tage en backup af databasen."
+
+msgid ""
+"IMPORTANT: It is strongly recommended to first backup the database!! Are "
+"you sure you want to continue?"
+msgstr ""
+"VIGTIGT: Det anbefales kraftigt først at tage en backup af databasen!! Er "
+"du sikker på, at du vil fortsætte?"
+
+msgid "Operations to perform"
+msgstr "Handlinger der skal udføres"
+
+#, tp-ctx-2edc90df
+msgid "Remove CDATA for original and dictionary strings"
+msgstr "Fjern CDATA for originale og ordbogsstrenge"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Removes CDATA from trp_original_strings and trp_dictionary_* "
+"tables.<br>This type of content should not be detected by TranslatePress. "
+"It might have been introduced in the database in older versions of the "
+"plugin."
+msgstr ""
+"Fjerner CDATA fra tabellerne trp_original_strings og "
+"trp_dictionary_*.<br>Denne type indhold bør ikke opdages af TranslatePress. "
+"Det kan være blevet indført i databasen i ældre versioner af pluginnet."
+
+msgid "Remove untranslated links from dictionary tables"
+msgstr "Fjern uoversatte links fra ordbogstabeller"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Removes untranslated links and images from all trp_dictionary_* tables. "
+"These tables contain translations for user-inputted strings such as post "
+"content, post title, menus etc."
+msgstr ""
+"Fjerner uoversatte links og billeder fra alle trp_dictionary_*-tabeller. "
+"Disse tabeller indeholder oversættelser af brugerindtastede strenge som "
+"f.eks. indlægsindhold, indlægstitel, menuer osv."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Remove duplicate rows for gettext strings"
+msgstr "Fjern duplikerede rækker for gettext-strenge"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Cleans up all trp_gettext_* tables of duplicate rows. These tables contain "
+"translations for themes and plugin strings."
+msgstr ""
+"Renser alle trp_gettext_*-tabeller for duplikerede rækker. Disse tabeller "
+"indeholder oversættelser af strenge fra temaer og plugins."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for dictionary strings"
+msgstr "Fjern duplikerede rækker for ordbogsstrenge"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_dictionary_* tables of duplicate rows. These tables "
+"contain translations for user-inputted strings such as post content, post "
+"title, menus etc."
+msgstr ""
+"Renser alle trp_dictionary_*-tabeller for duplikerede rækker. Disse "
+"tabeller indeholder oversættelser af brugerindtastede strenge som f.eks. "
+"indlægsindhold, indlægstitel, menuer osv."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for original dictionary strings"
+msgstr "Fjern duplikerede rækker for originale ordbogsstrenge"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_original_strings table of duplicate rows. This table "
+"contains strings in the default language, without any translation.<br>The "
+"trp_original_meta table, which contains meta information that refers to the "
+"post parent’s ID, is also regenerated.<br>Such duplicates can appear in "
+"exceptional situations of unexpected behavior."
+msgstr ""
+"Renser tabellen trp_original_strings for duplikerede rækker. Denne tabel "
+"indeholder strenge på standardsproget uden nogen oversættelse.<br>Tabellen "
+"trp_original_meta, som indeholder metadata, der henviser til det "
+"overordnede indlægs ID, regenereres også.<br>Sådanne duplikater kan opstå i "
+"undtagelsessituationer på grund af uventet adfærd."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid ""
+"Replace gettext strings that have original ID NULL with the correct "
+"original IDs"
+msgstr ""
+"Erstat gettext-strenge, der har original-ID'et NULL, med de korrekte "
+"original-ID'er"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid ""
+"Fixes an edge case issue where some gettext strings have the original ID "
+"incorrectly set to NULL, causing problems in the Translation "
+"Editor.<br>This operation corrects the original IDs in the trp_gettext_* "
+"tables.<br>Only check this option if you encountered an issue in the "
+"Translation Editor where clicking the green pencil did not bring up the "
+"gettext string for translation in the left sidebar.<br>Otherwise, please "
+"leave this option unchecked because it's an intensive operation."
+msgstr ""
+"Retter et problem i et særligt tilfælde, hvor nogle gettext-strenge har "
+"original-ID'et forkert sat til NULL, hvilket forårsager problemer i "
+"oversættelseseditoren.<br>Denne handling retter original-ID'erne i "
+"trp_gettext_*-tabellerne.<br>Markér kun denne indstilling, hvis du har "
+"oplevet et problem i oversættelseseditoren, hvor et klik på den grønne "
+"blyant ikke bragte gettext-strengen frem til oversættelse i venstre "
+"sidebjælke.<br>Lad ellers venligst denne indstilling være umarkeret, da det "
+"er en ressourcekrævende handling."
+
+msgid "Optimize Database"
+msgstr "Optimer database"
+
+#, tp-glo-34f425d9, tp-glo-ee8b4f9f
+msgid "TranslatePress Database Updater"
+msgstr "TranslatePress Database Updater"
+
+#, tp-glo-ee8b4f9f
+msgid "Updating TranslatePress tables. Please leave this window open."
+msgstr "Opdaterer TranslatePress-tabeller. Hold venligst dette vindue åbent."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Open colour picker"
+msgstr "Åbn farvevælger"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enabled"
+msgstr "Aktiveret"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Disabled"
+msgstr "Deaktiveret"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Write custom CSS here..."
+msgstr "Skriv tilpasset CSS her..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Include"
+msgstr "Inkluder"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Exclude"
+msgstr "Ekskluder"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Content Restriction Mode"
+msgstr "Indholdsbegrænsningstilstand"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "No languages selected"
+msgstr "Ingen sprog valgt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saving..."
+msgstr "Gemmer..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saved!"
+msgstr "Gemt!"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save changes"
+msgstr "Gem ændringer"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert to last saved values"
+msgstr "Gendan til senest gemte værdier"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert changes"
+msgstr "Gendan ændringer"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Restoring will revert to the last saved version and discard your current "
+"edits."
+msgstr ""
+"Gendannelse vil tilbageføre til den senest gemte version og kassere dine "
+"nuværende ændringer."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert"
+msgstr "Gendan"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Keep editing"
+msgstr "Fortsæt redigering"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Are you sure you want to apply the <strong>%s</strong> preset?"
+msgstr "Er du sikker på, at du vil anvende forudindstillingen <strong>%s</strong>?"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "It will override your current settings."
+msgstr "Det vil overskrive dine nuværende indstillinger."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply preset"
+msgstr "Anvend forudindstilling"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply %s preset"
+msgstr "Anvend %s-forudindstilling"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save failed"
+msgstr "Kunne ikke gemme"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "English"
+msgstr "Engelsk"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Spanish"
+msgstr "Spansk"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "French"
+msgstr "Fransk"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Minimal Light"
+msgstr "Minimal lys"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Dark Overlay"
+msgstr "Mørk overlejring"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Brand Blue"
+msgstr "Brandblå"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Bordered"
+msgstr "Med kant"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Preview"
+msgstr "Popup-forhåndsvisning"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "User Language Detection Method"
+msgstr "Metode til registrering af brugersprog"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Notification Behavior"
+msgstr "Meddelelsesadfærd"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Content"
+msgstr "Popup-indhold"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply a preset"
+msgstr "Anvend en forudindstilling"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Design"
+msgstr "Tilpas design"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language detection"
+msgstr "Sprogdetektion"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid ""
+"Select how the language should be detected for first time visitors.<br>The "
+"visitor's last displayed language will be remembered through cookies."
+msgstr ""
+"Vælg, hvordan sproget skal registreres for "
+"førstegangsbesøgende.<br>Besøgendes senest viste sprog vil blive husket via "
+"cookies."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup display"
+msgstr "Popup-visning"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Conditionally display popup based on language"
+msgstr "Vis popup betinget baseret på sprog"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Type"
+msgstr "Popuptype"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid ""
+"Visitors will be redirected directly when a different preferred language is "
+"detected."
+msgstr ""
+"Besøgende vil blive omdirigeret direkte, når et andet foretrukket sprog "
+"detekteres."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Text"
+msgstr "Popuptekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Button Text"
+msgstr "Knaptekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close Button Text"
+msgstr "Lukkeknaptekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background color"
+msgstr "Baggrundsfarve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text color"
+msgstr "Tekstfarve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button background color"
+msgstr "Knapbaggrundsfarve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button hover color"
+msgstr "Hoverfarve for knap"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button text color"
+msgstr "Knaptekstfarve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button border radius"
+msgstr "Afrundingsradius for knap"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Close icon color"
+msgstr "Lukikonfarve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Overlay color"
+msgstr "Overlay-farve"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Entrance animation"
+msgstr "Indgangsanimation"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Animation"
+msgstr "Animation"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Fade"
+msgstr "Fade"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from top"
+msgstr "Glid ind fra top"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from right"
+msgstr "Glid ind fra højre"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from bottom"
+msgstr "Glid ind fra bund"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from left"
+msgstr "Glid ind fra venstre"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Enable custom CSS"
+msgstr "Aktivér tilpasset CSS"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "No names"
+msgstr "Ingen navne"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Show flags"
+msgstr "Vis flag"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Rectangle (4:3)"
+msgstr "Rektangel (4:3)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Square (1:1)"
+msgstr "Kvadrat (1:1)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag border radius"
+msgstr "Rundede hjørner på flag"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher background"
+msgstr "Sprogvælgerens baggrund"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover background"
+msgstr "Sprogvælgerens hover-baggrund"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher text"
+msgstr "Sprogvælgerens tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover text"
+msgstr "Sprogvælgerens hover-tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher border"
+msgstr "Sprogvælgerens kant"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border width"
+msgstr "Switchers kantbredde"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border radius"
+msgstr "Switchers kantradius"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Hover over the language switcher to see it in action!"
+msgstr "Hold musen over sprogvælgeren for at se den i aktion!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Preview"
+msgstr "Forhåndsvisning af vælger"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enable Floating Switcher"
+msgstr "Aktivér flydende vælger"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is enabled"
+msgstr "Vælgeren er aktiveret"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is disabled"
+msgstr "Vælgeren er deaktiveret"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Type"
+msgstr "Vælgertype"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages as dropdown"
+msgstr "Vis sprog som rullemenu"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages side by side"
+msgstr "Vis sprog side om side"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background hover color"
+msgstr "Baggrundsfarve ved hover"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text hover color"
+msgstr "Tekstfarve ved hover"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border color"
+msgstr "Switchers kantfarve"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag and text size"
+msgstr "Flag- og tekststørrelse"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons shape"
+msgstr "Flagikonernes form"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons border radius"
+msgstr "Flagikonernes kantradius"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Layout"
+msgstr "Tilpas layout"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Show the small Powered by TranslatePress label in the language switcher."
+msgstr "Vis den lille etiket med Powered by TranslatePress i sprogswitchen."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Du har ugemte ændringer. Vil du forlade alligevel?"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher animations"
+msgstr "Switcher-animationer"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one. <br> Only works when there are exactly two "
+"languages, the default one and a translation one."
+msgstr ""
+"Transformerer sprogskifteren til en knap, der viser det andet tilgængelige "
+"sprog, ikke det aktuelle. <br> Virker kun, når der er præcis to sprog, "
+"standardsproget og et oversættelsessprog."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "This option only works when exactly two languages are published."
+msgstr "Denne indstilling virker kun, når præcis to sprog er publiceret."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copied!"
+msgstr "Kopieret!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copy"
+msgstr "Kopier"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-8339568d, tp-glo-da70db08
+msgid ""
+"Use shortcode on any page or widget. You can also add the Language Switcher "
+"Block in the WP Gutenberg Editor."
+msgstr ""
+"Brug shortcode på enhver side eller widget. Du kan også tilføje "
+"sprogskifterblokken i WP Gutenberg-editoren."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Additional Settings"
+msgstr "Yderligere indstillinger"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of hovering. "
+"<br> Close it by clicking on it, anywhere else on the screen or by pressing "
+"the escape key. <br> This will affect only the shortcode language switcher."
+msgstr ""
+"Åbn sprogskifter-shortcoden ved at klikke på den i stedet for at holde "
+"markøren over den. <br> Luk den ved at klikke på den, hvor som helst andet "
+"på skærmen eller ved at trykke på escape-tasten. <br> Dette påvirker kun "
+"shortcode-sprogskifteren."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Menu Switcher Layout"
+msgstr "Menuskifter-layout"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"Go to <a href=\"/wp-admin/nav-menus.php\">Appearance → Menus</a> to add "
+"languages to the Language Switcher in any menu.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Learn more in our documentation.</a>"
+msgstr ""
+"Gå til <a href=\"/wp-admin/nav-menus.php\">Udseende → Menuer</a> for at "
+"tilføje sprog til sprogskifteren i enhver menu.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Læs mere i vores dokumentation.</a>"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose in which languages to show the block."
+msgstr "Vælg, hvilke sprog blokken skal vises på."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose from which languages the block is excluded."
+msgstr "Vælg, hvilke sprog blokken er ekskluderet fra."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Select language(s)"
+msgstr "Vælg sprog"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress Language Restriction"
+msgstr "TranslatePress sprogbegænsning"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid ""
+"Language restrictions cannot be saved on a top-level Classic block. Convert "
+"it to blocks or place it inside a Group block first."
+msgstr ""
+"Sprogbegrænsninger kan ikke gemmes på en Classic-blok på øverste niveau. "
+"Konverter den til blokke, eller placer den først i en Gruppe-blok."
+
+msgctxt "page 1 of 3"
+msgid "of"
+msgstr "/"
+
+msgctxt "Untranslated in this language"
+msgid "in"
+msgstr "i"
+
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "Addons tab"
+msgstr "Tilføjelsesfane"
+
+#, tp-glo-77a09a79, tp-glo-b83ea26c, tp-glo-ee8b4f9f
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "TranslatePress Pro Add-on"
+msgstr "TranslatePress Pro Add-on"
+
+#, tp-ai
+msgctxt "block title"
+msgid "Language Switcher"
+msgstr "Sprogskifter"
+
+#, tp-ai
+msgctxt "block description"
+msgid "Displays the Language Switcher."
+msgstr "Viser sprogskifteren."
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Switcher"
+msgstr "Sprogskifter"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Translate"
+msgstr "Oversæt"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgctxt "block keyword"
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Names"
+msgstr "Sprognavne"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Flags"
+msgstr "Flag"

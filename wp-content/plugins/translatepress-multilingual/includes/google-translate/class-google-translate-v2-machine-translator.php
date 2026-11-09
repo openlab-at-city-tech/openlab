@@ -67,7 +67,7 @@ class TRP_Google_Translate_V2_Machine_Translator extends TRP_Machine_Translator 
         $translated_strings = array();
 
         /* split our strings that need translation in chunks of maximum 128 strings because Google Translate has a limit of 128 strings */
-        $new_strings_chunks = array_chunk( $new_strings, 128, true );
+        $new_strings_chunks = array_chunk( $new_strings, $this->get_chunk_size(), true );
         /* if there are more than 128 strings we make multiple requests */
         foreach( $new_strings_chunks as $new_strings_chunk ){
             $response = $this->send_request( $source_language, $target_language, $new_strings_chunk );
@@ -116,6 +116,11 @@ class TRP_Google_Translate_V2_Machine_Translator extends TRP_Machine_Translator 
 
         // will have the same indexes as $new_string or it will be an empty array if something went wrong
         return $translated_strings;
+    }
+
+    /* maximum strings per request; Google Translate caps at 128 strings */
+    public function get_chunk_size(){
+        return 128;
     }
 
     /**

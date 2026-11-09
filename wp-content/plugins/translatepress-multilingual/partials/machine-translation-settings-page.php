@@ -19,9 +19,27 @@
             $seo_pack_active = class_exists( 'TRP_IN_Seo_Pack');
         ?>
 
+        <div class="advanced_setting_tab_class">
         <div id="trp-settings__wrap">
-            <div class="trp-settings-container">
-                <h3 class="trp-settings-primary-heading"><?php esc_html_e( 'Automatic Translation', 'translatepress-multilingual' ); ?></h3>
+            <?php do_action( 'trp_before_output_machine_translation_settings_options' ); ?>
+            <input type="hidden" name="tab" id="trp_machine_translation_settings_referer">
+            <div class="trp-settings-container trp-settings-container-trp_mt_subtab_general">
+                <?php
+                $trp           = TRP_Translate_Press::get_trp_instance();
+                $url_converter = $trp->get_component( "url_converter" );
+                $abs_home = $url_converter->get_abs_home();
+                // strip http(s):// and slashes
+                $abs_home = preg_replace( '#^https?://#i', '', $abs_home );
+                $abs_home = trim( $abs_home, '/' );
+                $abs_home = rawurlencode( $abs_home );
+
+                $word_counter_link = 'https://translatepress.com/website-word-count/?site=' . $abs_home . '&utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=word-counter';
+                ?>
+                <div class="trp-settings-header-row">
+                    <h3 class="trp-settings-primary-heading"><?php esc_html_e( 'Automatic Translation', 'translatepress-multilingual' ); ?></h3>
+                    <div id="trp-next-to-header-link"><a href="<?php echo esc_url( $word_counter_link ); ?>" title="<?php esc_attr_e('Get a translation volume estimate with a detailed breakdown per page','translatepress-multilingual'); ?>" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Find how many translatable words are on your website','translatepress-multilingual');?></a></div>
+                </div>
+
                 <div class="trp-settings-separator"></div>
 
                 <div class="trp-settings-options__wrapper">
@@ -169,10 +187,79 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Automatically Translate Slugs -->
+                    <?php
+                    $is_disabled = '';
+                    if ( $free_version || !$seo_pack_active )
+                        $is_disabled = 'disabled';
+                    ?>
+                    <div class="trp-settings-options-item trp-settings-checkbox trp-to-hide <?php if ( $is_disabled ) echo 'trp-settings-checkbox__disabled'; ?>">
+                        <input type="checkbox" id="trp-auto-translate-slugs"
+                               name="trp_machine_translation_settings[automatically-translate-slug]"
+                               value="yes"
+                                <?php (isset($this->settings['trp_machine_translation_settings']['automatically-translate-slug'])
+                                        && !$free_version && $seo_pack_active)
+                                        ? checked($this->settings['trp_machine_translation_settings']['automatically-translate-slug'], 'yes')
+                                        : checked('', 'yes');
+                                echo esc_attr($is_disabled); ?> />
+
+                        <label for="trp-auto-translate-slugs" class="trp-checkbox-label">
+                            <div class="trp-checkbox-content">
+                                <b class="trp-primary-text-bold"><?php esc_html_e('Automatically Translate Slugs', 'translatepress-multilingual'); ?></b>
+                                <span class="trp-description-text">
+                                    <?php
+                                    echo wp_kses(
+                                            __('Generate automatic translations of slugs for posts, pages and Custom Post Types.<br/>The slugs will be automatically translated starting with the second refresh of each page.',
+                                                    'translatepress-multilingual'), ['br' => []]
+                                    );
+                                    ?>
+                                </span>
+                                <?php
+                                if ( $is_disabled ) {
+                                    // [utm63]
+                                    $upgrade_url = esc_url(trp_add_affiliate_id_to_link('https://translatepress.com/pricing/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=slugs-at'));
+                                    // [utm64]
+                                    $seo_pack_url = esc_url('https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=slugs-at');
+
+                                    $is_free_version = $free_version;
+                                    $message = $is_free_version
+                                            ? __('This feature is only available in the paid version. Upgrade TranslatePress and unlock more premium features.', 'translatepress-multilingual')
+                                            : sprintf(
+                                                    __('Requires <a href="%s" title="TranslatePress Add-on SEO Pack documentation" target="_blank">SEO Pack Add-on</a> to be installed and activated.', 'translatepress-multilingual'),
+                                                    $seo_pack_url
+                                            );
+                                    ?>
+
+                                    <div class="trp-upgrade-notice-at__wrapper">
+                                        <div class="trp-upgrade-notice">
+                                        <span class="trp-upgrade-notice-text">
+                                            <?php echo wp_kses(
+                                                    $message,
+                                                    ['a' => ['href' => [], 'title' => [], 'target' => []]]
+                                            ); ?>
+                                        </span>
+
+                                            <?php if ($is_free_version) : ?>
+                                                <a href="<?php echo $upgrade_url; // phpcs:ignore ?>">
+                                                <span class="trp-upgrade-notice-button">
+                                                    <span><?php esc_html_e('Upgrade now', 'translatepress-multilingual'); ?></span>
+                                                    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                        <path d="M17 7.3252L7 17.3252M17 7.3252H8M17 7.3252V16.3252" stroke="#354052" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                                    </svg>
+                                                </span>
+                                                </a>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                <?php } ?>
+                            </div>
+                        </label>
+                    </div>
                 </div>
             </div>
 
-            <div class="trp-settings-container trp-to-hide">
+            <div class="trp-settings-container trp-settings-container-trp_mt_subtab_advanced trp-to-hide">
                 <h3 class="trp-settings-primary-heading"><?php esc_html_e('Automatic Translation Settings', 'translatepress-multilingual'); ?></h3>
                 <div class="trp-settings-separator"></div>
 
@@ -252,75 +339,6 @@
                                 </span>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Automatically Translate Slugs -->
-                    <?php
-                    $is_disabled = '';
-                    if ( $free_version || !$seo_pack_active )
-                        $is_disabled = 'disabled';
-                    ?>
-                    <div class="trp-settings-options-item trp-settings-checkbox <?php if ( $is_disabled ) echo 'trp-settings-checkbox__disabled'; ?>">
-                        <input type="checkbox" id="trp-auto-translate-slugs"
-                               name="trp_machine_translation_settings[automatically-translate-slug]"
-                               value="yes"
-                                <?php (isset($this->settings['trp_machine_translation_settings']['automatically-translate-slug'])
-                                        && !$free_version && $seo_pack_active)
-                                        ? checked($this->settings['trp_machine_translation_settings']['automatically-translate-slug'], 'yes')
-                                        : checked('', 'yes');
-                                echo esc_attr($is_disabled); ?> />
-
-                        <label for="trp-auto-translate-slugs" class="trp-checkbox-label">
-                            <div class="trp-checkbox-content">
-                                <b class="trp-primary-text-bold"><?php esc_html_e('Automatically Translate Slugs', 'translatepress-multilingual'); ?></b>
-                                <span class="trp-description-text">
-                                    <?php
-                                    echo wp_kses(
-                                            __('Generate automatic translations of slugs for posts, pages and Custom Post Types.<br/>The slugs will be automatically translated starting with the second refresh of each page.',
-                                                    'translatepress-multilingual'), ['br' => []]
-                                    );
-                                    ?>
-                                </span>
-                                <?php
-                                if ( $is_disabled ) {
-                                    // [utm63]
-                                    $upgrade_url = esc_url(trp_add_affiliate_id_to_link('https://translatepress.com/pricing/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=slugs-at'));
-                                    // [utm64]
-                                    $seo_pack_url = esc_url('https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=slugs-at');
-
-                                    $is_free_version = $free_version;
-                                    $message = $is_free_version
-                                            ? __('This feature is only available in the paid version. Upgrade TranslatePress and unlock more premium features.', 'translatepress-multilingual')
-                                            : sprintf(
-                                                    __('Requires <a href="%s" title="TranslatePress Add-on SEO Pack documentation" target="_blank">SEO Pack Add-on</a> to be installed and activated.', 'translatepress-multilingual'),
-                                                    $seo_pack_url
-                                            );
-                                    ?>
-
-                                    <div class="trp-upgrade-notice-at__wrapper">
-                                        <div class="trp-upgrade-notice">
-                                        <span class="trp-upgrade-notice-text">
-                                            <?php echo wp_kses(
-                                                    $message,
-                                                    ['a' => ['href' => [], 'title' => [], 'target' => []]]
-                                            ); ?>
-                                        </span>
-
-                                            <?php if ($is_free_version) : ?>
-                                                <a href="<?php echo $upgrade_url; // phpcs:ignore ?>">
-                                                <span class="trp-upgrade-notice-button">
-                                                    <span><?php esc_html_e('Upgrade now', 'translatepress-multilingual'); ?></span>
-                                                    <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                        <path d="M17 7.3252L7 17.3252M17 7.3252H8M17 7.3252V16.3252" stroke="#354052" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                                    </svg>
-                                                </span>
-                                                </a>
-                                            <?php endif; ?>
-                                        </div>
-                                    </div>
-                                <?php } ?>
-                            </div>
-                        </label>
                     </div>
 
                     <!-- Block Crawlers -->
@@ -428,6 +446,7 @@
             <button type="submit" class="trp-submit-btn">
                 <?php esc_html_e( 'Save Changes', 'translatepress-multilingual' ); ?>
             </button>
+        </div>
         </div>
     </form>
 </div>

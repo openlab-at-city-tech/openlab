@@ -3,14 +3,14 @@
 Plugin Name: TranslatePress - Multilingual
 Plugin URI: https://translatepress.com/
 Description: Experience a better way of translating your WordPress site using a visual front-end translation editor, with full support for WooCommerce and site builders.
-Version: 3.1.8
+Version: 3.3.9
 Author: Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban
 Author URI: https://cozmoslabs.com/
 Text Domain: translatepress-multilingual
 Domain Path: /languages
 License: GPL2
 WC requires at least: 2.5.0
-WC tested up to: 10.7
+WC tested up to: 11.2.1
 
 == Copyright ==
 Copyright 2017 Cozmoslabs (www.cozmoslabs.com)
@@ -49,12 +49,8 @@ function trp_enable_translatepress(){
 
 if ( trp_enable_translatepress() ) {
 	require_once plugin_dir_path( __FILE__ ) . 'class-translate-press.php';
-
-	/** License classes includes heresettings
-	 * Since version 1.4.6
-	 * It need to be outside of a hook so it load before the classes that are in the addons, that we are trying to phase out
-	 */
-	require_once plugin_dir_path( __FILE__ ) . 'includes/class-edd-sl-plugin-updater.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-ai-api-key.php';
+	require_once plugin_dir_path( __FILE__ ) . 'includes/class-ai-api-key-check.php';
 
 	/* make sure we execute our plugin before other plugins so the changes we make apply across the board */
 	add_action( 'plugins_loaded', 'trp_run_translatepress_hooks', 1 );

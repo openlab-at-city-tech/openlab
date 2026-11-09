@@ -29,12 +29,18 @@ class TRP_Editor_Api_Regular_Strings {
 	/**
 	 * Returns translations based on original strings and ids.
 	 *
-	 * Hooked to wp_ajax_trp_get_translations_regular
-	 *       and wp_ajax_nopriv_trp_get_translations_regular.
+	 * Editor-only: this can look up dictionary rows by id and trigger machine translation, so it
+	 * requires the translating capability. Logged-out / front-end dynamic translation uses the
+	 * separate, restricted get_translations_domchanges() instead.
+	 *
+	 * Hooked to wp_ajax_trp_get_translations_regular.
 	 */
 	public function get_translations() {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
 			check_ajax_referer( 'get_translations', 'security' );
+			if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+				wp_die();
+			}
 			if ( isset( $_POST['action'] ) && $_POST['action'] === 'trp_get_translations_regular' && !empty( $_POST['language'] ) && in_array( $_POST['language'], $this->settings['translation-languages'] ) ) {
 				$originals = (empty($_POST['originals']) )? array() : json_decode(stripslashes($_POST['originals'])); /* phpcs:ignore */ /* sanitized downstream */
 				$skip_machine_translation = (empty($_POST['skip_machine_translation']) )? array() : json_decode(stripslashes($_POST['skip_machine_translation'])); /* phpcs:ignore */ /* sanitized downstream */
@@ -66,6 +72,97 @@ class TRP_Editor_Api_Regular_Strings {
 
 		wp_die();
 	}
+
+	/**
+	 * Dynamic-translation endpoint for the front-end DOM-changes script.
+	 *
+	 * Hooked to wp_ajax_trp_get_translations_domchanges
+	 *       and wp_ajax_nopriv_trp_get_translations_domchanges.
+	 *
+	 * Never looks up dictionary rows by id
+     * Also passes languageForId = null to trp_sort_dictionary_by_original(), so the response does not expose dictionary row ids.
+	 *
+	 */
+	public function get_translations_domchanges() {
+		if ( ! ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			wp_die();
+		}
+
+		check_ajax_referer( 'get_translations', 'security' );
+
+		if ( empty( $_POST['language'] ) || ! in_array( $_POST['language'], $this->settings['translation-languages'] ) ) {
+			wp_die();
+		}
+		$current_language = sanitize_text_field( $_POST['language'] );
+
+		// The default language has no dictionary of its own.
+		if ( $this->settings['default-language'] == $current_language ) {
+			echo trp_safe_json_encode( array() );//phpcs:ignore
+			wp_die();
+		}
+
+		$originals = ( empty( $_POST['originals'] ) ) ? array() : json_decode( stripslashes( $_POST['originals'] ) ); /* phpcs:ignore */ /* sanitized below */
+		if ( ! is_array( $originals ) ) {
+			wp_die();
+		}
+		$skip_machine_translation = ( empty( $_POST['skip_machine_translation'] ) ) ? array() : json_decode( stripslashes( $_POST['skip_machine_translation'] ) ); /* phpcs:ignore */
+		if ( ! is_array( $skip_machine_translation ) ) {
+			$skip_machine_translation = array();
+		}
+
+		$trp = TRP_Translate_Press::get_trp_instance();
+		if ( ! $this->trp_query ) {
+			$this->trp_query = $trp->get_component( 'query' );
+		}
+		if ( ! $this->translation_render ) {
+			$this->translation_render = $trp->get_component( 'translation_render' );
+		}
+		if ( ! $this->url_converter ) {
+			$this->url_converter = $trp->get_component( 'url_converter' );
+		}
+
+		// Same original-string sanitizing as the editor path: allow plain strings, and only
+		// external or file URLs (never internal URLs, which is how the reset link would arrive).
+		$home_url       = home_url();
+		$original_array = array();
+		foreach ( $originals as $original ) {
+			if ( ! isset( $original ) ) {
+				continue;
+			}
+			$trimmed_string = trp_full_trim( trp_sanitize_string( $original, false ) );
+			if ( filter_var( $trimmed_string, FILTER_VALIDATE_URL ) === false ) {
+				$original_array[] = $trimmed_string;
+			} elseif ( $this->translation_render->is_external_link( $trimmed_string, $home_url ) || $this->url_converter->url_is_file( $trimmed_string ) ) {
+				$original_array[] = remove_query_arg( 'trp-edit-translation', $trimmed_string );
+			}
+		}
+
+		if ( empty( $original_array ) ) {
+			echo trp_safe_json_encode( array() );//phpcs:ignore
+			wp_die();
+		}
+
+		// Look up existing translations ONLY by the supplied originals - never by id.
+		$dictionaries = array( $current_language => $this->trp_query->get_string_rows( array(), $original_array, $current_language ) );
+
+		// Do not return machine translations for href/src attributes flagged as skip.
+		if ( count( $skip_machine_translation ) > 0 ) {
+			foreach ( $dictionaries[ $current_language ] as $key => $string ) {
+				if ( $string->status == 1 && in_array( $string->original, $skip_machine_translation ) ) {
+					$dictionaries[ $current_language ][ $key ]->translated = '';
+					$dictionaries[ $current_language ][ $key ]->status     = 0;
+				}
+			}
+		}
+
+		// languageForId = null: the response is keyed by original and carries no dictionary row ids.
+		$dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'regular', 'dynamicstrings', null );
+
+		echo trp_safe_json_encode( $dictionary_by_original );//phpcs:ignore
+
+		wp_die();
+	}
+
 	/**
 	 * Return dictionary with translated strings.
 	 *
@@ -75,6 +172,10 @@ class TRP_Editor_Api_Regular_Strings {
 	 * @return array
 	 */
 	protected function get_translation_for_strings( $ids, $originals, $block_type = null, $skip_machine_translation = array() ){
+		/* Editor-only. Front-end dynamic translation goes through get_translations_domchanges() instead.*/
+		if ( ! current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+			return array();
+		}
 		$trp = TRP_Translate_Press::get_trp_instance();
 		if ( ! $this->trp_query ) {
 			$this->trp_query = $trp->get_component( 'query' );
@@ -115,7 +216,7 @@ class TRP_Editor_Api_Regular_Strings {
 
 		// necessary in order to obtain all the original strings
 		if ( $this->settings['default-language'] != $current_language ) {
-			if ( !empty ( $original_array ) && current_user_can ( apply_filters( 'trp_translating_capability', 'manage_options' ) ) ) {
+			if ( !empty ( $original_array ) ) {
 				$this->translation_render->process_strings($original_array, $current_language, $block_type, $skip_machine_translation);
 			}
 			$dictionaries[$current_language] = $this->trp_query->get_string_rows( $id_array, $original_array, $current_language );
@@ -136,9 +237,8 @@ class TRP_Editor_Api_Regular_Strings {
 				if (empty($original_strings)) {
 					$original_strings = $this->extract_original_strings($dictionaries[$current_language], $original_array, $id_array);
 				}
-				if (current_user_can(apply_filters( 'trp_translating_capability', 'manage_options' ))) {
-					$this->translation_render->process_strings($original_strings, $language, $block_type, $skip_machine_translation);
-				}
+
+				$this->translation_render->process_strings($original_strings, $language, $block_type, $skip_machine_translation);
 				$dictionaries[$language] = $this->trp_query->get_string_rows(array(), $original_strings, $language);
 			}
 		}

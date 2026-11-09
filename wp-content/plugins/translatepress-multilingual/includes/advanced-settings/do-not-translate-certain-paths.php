@@ -46,6 +46,28 @@ function trp_output_do_not_translate_certain_paths( $setting ){
     <?php
 }
 
+/**
+ * Percent-decode each segment of a path so that paths written with non-latin characters
+ * ( Arabic, Cyrillic, Greek etc. ) match the percent-encoded form that arrives in REQUEST_URI.
+ *
+ * Decoding is done per segment so an encoded slash ( %2F ) does not turn into an extra path segment.
+ *
+ * @param string $path
+ * @return string
+ */
+function trp_dntcp_decode_path( $path ) {
+    if ( !is_string( $path ) || strpos( $path, '%' ) === false )
+        return $path;
+
+    $segments = explode( '/', $path );
+
+    foreach ( $segments as $key => $segment ) {
+        $segments[ $key ] = rawurldecode( $segment );
+    }
+
+    return implode( '/', $segments );
+}
+
 function trp_test_current_slug( &$current_slug, &$array_slugs ) {
     $current_slug = trim($current_slug, "/");
 
@@ -62,6 +84,10 @@ function trp_test_current_slug( &$current_slug, &$array_slugs ) {
     } else {
         $current_slug = $current_slug[0];
     }
+
+    // Compare paths in their decoded form. The paths set in the Advanced tab are usually written with
+    // the actual non-latin characters, while REQUEST_URI contains their percent-encoded equivalent.
+    $current_slug = trp_dntcp_decode_path( $current_slug );
 
     // we need to check the default language slug as well for {{home)) if the "Use a subdirectory for the default language" is checked
     if ( isset( $settings['add-subdirectory-to-default-language'] ) && $settings['add-subdirectory-to-default-language'] == 'yes' ){
@@ -455,7 +481,12 @@ function trp_dntcp_get_paths() {
         foreach ( $home_urls as $home_url ) {
             $path = preg_replace( '/^' . $home_url . '/is', '', $path );
         }
+
+        // Decode them as well, so a path pasted in its percent-encoded form still matches the
+        // decoded current slug, regardless of the casing used for the percent-encoded characters.
+        $path = trp_dntcp_decode_path( $path );
     }
+    unset( $path );
 
     return $paths;
 }

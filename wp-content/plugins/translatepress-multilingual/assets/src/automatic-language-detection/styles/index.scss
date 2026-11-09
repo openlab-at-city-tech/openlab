@@ -1,0 +1,26 @@
+@use "../../shared/styles/settings-ui";
+
+#tp-ald-popup-configurator-root {
+  min-height: 420px;
+}
+
+#tp-ald-popup-configurator-root input,
+#tp-ald-popup-configurator-root textarea,
+#tp-ald-popup-configurator-root button {
+  margin: 0;
+}
+
+@media screen and (max-width: 960px) {
+  #tp-ald-popup-configurator-root .trp-ald-configurator__main {
+    flex-direction: column;
+  }
+
+  #tp-ald-popup-configurator-root .trp-ald-configurator__left,
+  #tp-ald-popup-configurator-root .trp-ald-configurator__right {
+    width: 100%;
+  }
+
+  #tp-ald-popup-configurator-root .trp-ald-sticky-box {
+    position: static;
+  }
+}

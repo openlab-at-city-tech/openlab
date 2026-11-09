@@ -65,6 +65,23 @@ class TRP_Upgrade {
                 }
             }
 
+            if ( get_option( 'trp_updated_database_gettext_original_lookup_hash', 'is not set' ) === 'is not set' ) {
+                $originals_table = $this->trp_query->get_table_name_for_gettext_original_strings();
+                $lookup_hash_is_ready = (
+                    ! $this->trp_query->table_exists( $originals_table ) ||
+                    (
+                        $this->trp_query->table_column_exists( $originals_table, 'lookup_hash' ) &&
+                        $this->trp_query->table_index_exists( $originals_table, 'gettext_lookup_hash_unique' )
+                    )
+                );
+
+                update_option( 'trp_updated_database_gettext_original_lookup_hash', $lookup_hash_is_ready ? 'yes' : 'no' );
+            }
+
+            if ( get_option( 'trp_updated_database_gettext_tables_optimization', 'is not set' ) === 'is not set' ) {
+                update_option( 'trp_updated_database_gettext_tables_optimization', $this->gettext_tables_optimization_is_ready() ? 'yes' : 'no' );
+            }
+
             // Updates that can be done right way. They should take very little time.
             if ( version_compare( $stored_database_version, '1.3.0', '<=' ) ) {
                 $this->trp_query->check_for_block_type_column();
@@ -126,6 +143,10 @@ class TRP_Upgrade {
                 $trp->get_component( 'batch_processor' )->schedule();
             }
 
+            if ( version_compare( $stored_database_version, '3.2.0', '<=' ) ) {
+                $this->cleanup_language_switcher_menu_item_classes();
+            }
+
             /**
              * Write an upgrading function above this comment to be executed only once: while updating plugin to a higher version.
              * Use example condition: version_compare( $stored_database_version, '2.9.9', '<=')
@@ -150,6 +171,33 @@ class TRP_Upgrade {
                 $mt_settings_option['automatically-translate-slug'] = 'yes';
             }
             update_option( 'trp_machine_translation_settings', $mt_settings_option );
+        }
+    }
+
+    private function cleanup_language_switcher_menu_item_classes() {
+        $menu_items = get_posts( array(
+            'post_type'      => 'nav_menu_item',
+            'post_status'    => 'any',
+            'posts_per_page' => -1,
+            'fields'         => 'ids',
+            'meta_key'       => '_menu_item_object',
+            'meta_value'     => 'language_switcher',
+        ) );
+
+        foreach ( $menu_items as $menu_item_id ) {
+            $classes = get_post_meta( $menu_item_id, '_menu_item_classes', true );
+
+            if ( ! is_array( $classes ) || ! in_array( 'current-language-menu-item', $classes, true ) ) {
+                continue;
+            }
+
+            update_post_meta(
+                $menu_item_id,
+                '_menu_item_classes',
+                array_values( array_filter( $classes, function( $class ) {
+                    return $class !== 'current-language-menu-item';
+                } ) )
+            );
         }
     }
 
@@ -192,6 +240,7 @@ class TRP_Upgrade {
             'gettext_original_id_insert'                    => __('Inserting gettext original strings for language %s...', 'translatepress-multilingual' ),
             'gettext_original_id_cleanup'                   => __('Cleaning gettext original strings table for language %s...', 'translatepress-multilingual' ),
             'gettext_original_id_update'                    => __('Updating gettext original string ids for language %s...', 'translatepress-multilingual' ),
+            'gettext_tables_optimization'                   => __('Starting gettext database optimization in the background...', 'translatepress-multilingual' ),
             'migrate_old_slugs_to_the_new_translate_table_structure_post_type_and_tax_284' => __( 'Migrating taxonomy and post type base slugs to new table structure...', 'translatepress-multilingual' ),
             'migrate_old_slugs_to_the_new_translate_table_structure_post_meta_284'         => __( 'Migrating post slugs to new table structure for language %s...', 'translatepress-multilingual' ),
             'migrate_old_slugs_to_the_new_translate_table_structure_term_meta_284'         => __( 'Migrating term slugs to new table structure for language %s...', 'translatepress-multilingual' ),
@@ -307,6 +356,15 @@ class TRP_Upgrade {
                     'batch_size'        => 5000,
                     'message_initial'   => '',
                 ),
+                'gettext_tables_optimization' => array(
+                    'version'           => '3.3',
+                    'option_name'       => 'trp_updated_database_gettext_tables_optimization',
+                    'callback'          => array( $this,'trp_start_gettext_tables_optimization'),
+                    'batch_size'        => 1,
+                    'message_initial'   => '',
+                    'execute_only_once' => true,
+                    'background_only'   => true,
+                ),
                 'migrate_old_slugs_to_the_new_translate_table_structure_post_type_and_tax_284' => array(
                     'version'            => '0',
                     'option_name'        => 'trp_migrate_old_slug_to_new_parent_and_translate_slug_table_post_type_and_tax_284',
@@ -356,9 +414,12 @@ class TRP_Upgrade {
             }
             $updates_needed          = $this->get_updates_details();
             $option_db_error_message = get_option( $updates_needed['show_error_db_message']['option_name'] );
-            foreach ( $updates_needed as $update ) {
+                foreach ( $updates_needed as $update_key => $update ) {
                 $option = get_option( $update['option_name'], 'is not set' );
                 if ( $option === 'no' && $option_db_error_message !== 'no' ) {
+                        if ( $update_key === 'gettext_tables_optimization' && $this->gettext_tables_optimization_batch_has_started() ) {
+                            continue;
+                        }
                     add_action( 'admin_notices', array( $this, 'admin_notice_update_database' ) );
                     break;
                 }
@@ -370,6 +431,26 @@ class TRP_Upgrade {
 	 * Print admin notice message
 	 */
 	public function admin_notice_update_database() {
+        $database_update_confirmation_message = sprintf(
+            "%s\n%s",
+            __( 'IMPORTANT: It is strongly recommended to first backup the database!', 'translatepress-multilingual' ),
+            __( 'Are you sure you want to continue?', 'translatepress-multilingual' )
+        );
+
+        if ( $this->only_gettext_tables_optimization_is_pending() ) {
+            $url = wp_nonce_url(
+                add_query_arg( array( 'trp_start_gettext_tables_optimization' => '1' ) ),
+                'trp_start_gettext_tables_optimization'
+            );
+
+            $html = '<div id="message" class="notice notice-warning">';
+            $html .= '<p><strong>' . esc_html__( 'TranslatePress data update', 'translatepress-multilingual' ) . '</strong> &#8211; ' . esc_html__( 'TranslatePress needs to optimize gettext database tables. Translations continue to work while this runs in the background.', 'translatepress-multilingual' ) . '</p>';
+            $html .= '<p>' . esc_html__( 'Before starting, we strongly recommend creating a database backup.', 'translatepress-multilingual' ) . '</p>';
+            $html .= '<p class="submit"><a href="' . esc_url( $url ) . '" onclick="return confirm( ' . esc_attr( wp_json_encode( $database_update_confirmation_message ) ) . ' );" class="button-primary">' . esc_html__( 'Start optimization', 'translatepress-multilingual' ) . '</a></p>';
+            $html .= '</div>';
+            echo $html;//phpcs:ignore
+            return;
+        }
 
 		$url = add_query_arg( array(
 			'page'                      => 'trp_update_database',
@@ -378,13 +459,128 @@ class TRP_Upgrade {
 		// maybe change notice color to blue #28B1FF
 		$html = '<div id="message" class="updated">';
 		$html .= '<p><strong>' . esc_html__( 'TranslatePress data update', 'translatepress-multilingual' ) . '</strong> &#8211; ' . esc_html__( 'We need to update your translations database to the latest version.', 'translatepress-multilingual' ) . '</p>';
-		$html .= '<p class="submit"><a href="' . esc_url( $url ) . '" onclick="return confirm( \'' . __( 'IMPORTANT: It is strongly recommended to first backup the database!\nAre you sure you want to continue?', 'translatepress-multilingual' ) . '\');" class="button-primary">' . esc_html__( 'Run the updater', 'translatepress-multilingual' ) . '</a></p>';
+        $html .= '<p class="submit"><a href="' . esc_url( $url ) . '" onclick="return confirm( ' . esc_attr( wp_json_encode( $database_update_confirmation_message ) ) . ' );" class="button-primary">' . esc_html__( 'Run the updater', 'translatepress-multilingual' ) . '</a></p>';
 		$html .= '</div>';
 		echo $html;//phpcs:ignore
 	}
 
+    /**
+     * Start gettext table optimization directly from the admin notice.
+     */
+    public function maybe_start_gettext_tables_optimization_from_notice() {
+        if ( empty( $_GET['trp_start_gettext_tables_optimization'] ) ) {
+            return;
+        }
+
+        if ( ! current_user_can( apply_filters( 'trp_update_database_capability', 'manage_options' ) ) ) {
+            return;
+        }
+
+        $nonce = isset( $_GET['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) ) : '';
+        if ( ! wp_verify_nonce( $nonce, 'trp_start_gettext_tables_optimization' ) ) {
+            return;
+        }
+
+        $this->trp_start_gettext_tables_optimization();
+
+        wp_safe_redirect( remove_query_arg( array( 'trp_start_gettext_tables_optimization', '_wpnonce' ) ) );
+        exit;
+    }
+
+    /**
+     * Return whether gettext table optimization is the only pending DB updater item.
+     *
+     * @return bool
+     */
+    protected function only_gettext_tables_optimization_is_pending() {
+        $updates_needed = $this->get_updates_details();
+        $pending_keys   = array();
+
+        foreach ( $updates_needed as $key => $update ) {
+            if ( get_option( $update['option_name'], 'is not set' ) === 'no' ) {
+                $pending_keys[] = $key;
+            }
+        }
+
+        return count( $pending_keys ) === 1 && $pending_keys[0] === 'gettext_tables_optimization';
+    }
+
+    /**
+     * Return whether the background gettext optimizer task has already started.
+     *
+     * @return bool
+     */
+    protected function gettext_tables_optimization_batch_has_started() {
+        return in_array( get_option( 'trp_gettext_tables_optimization_330', 'is not set' ), array( 'no', 'failed' ), true );
+    }
+
     public function trp_successfully_run_database_optimization($language_code= null, $inferior_size = null, $batch_size = null){
         delete_option('trp_show_error_db_message');
+
+        return true;
+    }
+
+        /**
+         * Schedule gettext database optimization in the background.
+         *
+         * @return array|bool
+         */
+    public function trp_start_gettext_tables_optimization() {
+        $trp = TRP_Translate_Press::get_trp_instance();
+        $batch_processor = $trp->get_component( 'batch_processor' );
+
+        if ( $batch_processor && $batch_processor->start_task( 'trp_gettext_tables_optimization_330', true ) ) {
+            return true;
+        }
+
+        $batch_error = get_option( 'trp_batch_error_trp_gettext_tables_optimization_330', array() );
+
+        return array(
+            'error' => ! empty( $batch_error['error'] ) ? $batch_error['error'] : __( 'Update aborted! Could not schedule gettext database optimization.', 'translatepress-multilingual' ),
+        );
+    }
+
+        /**
+         * Check if gettext tables already have the final optimized schema.
+         *
+         * @return bool
+         */
+    protected function gettext_tables_optimization_is_ready() {
+        if ( ! $this->trp_query ) {
+            $trp = TRP_Translate_Press::get_trp_instance();
+            /* @var TRP_Query */
+            $this->trp_query = $trp->get_component( 'query' );
+        }
+
+        $originals_table = $this->trp_query->get_table_name_for_gettext_original_strings();
+
+        if ( ! $this->trp_query->table_exists( $originals_table ) ) {
+            return true;
+        }
+
+        if (
+            ! $this->trp_query->table_column_exists( $originals_table, 'lookup_hash' ) ||
+            ! $this->trp_query->table_index_exists( $originals_table, 'gettext_lookup_hash_unique' ) ||
+            ! $this->trp_query->table_index_exists( $originals_table, 'gettext_lookup_original_domain_context' )
+        ) {
+            return false;
+        }
+
+        foreach ( $this->trp_query->get_all_gettext_table_names() as $table_name ) {
+            $table_name = sanitize_text_field( $table_name );
+
+            if ( ! $this->trp_query->table_exists( $table_name ) ) {
+                continue;
+            }
+
+            if ( ! $this->trp_query->table_column_exists( $table_name, 'original_id' ) || ! $this->trp_query->table_column_exists( $table_name, 'plural_form' ) ) {
+                return false;
+            }
+
+            if ( ! $this->trp_query->table_index_exists( $table_name, 'gettext_original_plural_unique' ) ) {
+                return false;
+            }
+        }
 
         return true;
     }
@@ -437,6 +633,10 @@ class TRP_Upgrade {
         }
 		if ( empty ( $_REQUEST['trp_updb_action'] ) ){
 			foreach( $updates_needed as $update_action_key => $update ) {
+				if ( ! empty( $update['background_only'] ) ) {
+					continue;
+				}
+
 				$option = get_option( $update['option_name'], 'is not set' );
 				if ( $option === 'no' ) {
 					$_REQUEST['trp_updb_action'] = $update_action_key;
@@ -473,6 +673,9 @@ class TRP_Upgrade {
 			if ( !isset( $updates_needed[ $_REQUEST['trp_updb_action'] ] ) ){
 				$this->stop_and_print_error( __('Update aborted! Incorrect action.', 'translatepress-multilingual' ) );
 			}
+			if ( ! empty( $updates_needed[ $_REQUEST['trp_updb_action'] ]['background_only'] ) ) {
+				$this->stop_and_print_error( __( 'Update aborted! Start the gettext database optimization separately from the Advanced settings page.', 'translatepress-multilingual' ) );
+			}
 			if ( !in_array( $_REQUEST['trp_updb_lang'], $this->settings['translation-languages'] ) ) {//phpcs:ignore
 				$this->stop_and_print_error( __('Update aborted! Incorrect language code.', 'translatepress-multilingual' ) );
 			}
@@ -506,6 +709,11 @@ class TRP_Upgrade {
 		while( $duration < 2 ){
 			$inferior_limit = $batch_size * $get_batch;
             $callback_return = call_user_func( $update_details['callback'], $language_code, $inferior_limit, $batch_size, $extra_params );
+
+            if ( is_array( $callback_return ) && ! empty( $callback_return['error'] ) ) {
+                $this->stop_and_print_error( esc_html( $callback_return['error'] ) );
+            }
+
 			if ( (isset($callback_return['finalize_with_language']) && $callback_return['finalize_with_language']) || ($callback_return === true)  ) {
 				break;
 			}else {
@@ -583,6 +791,28 @@ class TRP_Upgrade {
 		wp_die();
 	}
 
+    /**
+     * Build a structured legacy updater error without allowing the current
+     * action to be marked as completed.
+     *
+     * @param string $operation Description of the failed operation.
+     *
+     * @return array|false
+     */
+    protected function get_legacy_database_update_error( $operation ) {
+        if ( $this->db->last_error === '' ) {
+            return false;
+        }
+
+        return array(
+            'error' => sprintf(
+                __( 'Update aborted while %1$s. SQL error: %2$s', 'translatepress-multilingual' ),
+                $operation,
+                $this->db->last_error
+            ),
+        );
+    }
+
 	/**
 	 * Get all originals from the table, trim them and update originals back into table
 	 *
@@ -645,7 +875,7 @@ class TRP_Upgrade {
      * @param int $inferior_limit       Omit first X rows
      * @param int $batch_size           How many rows to query
      *
-     * @return bool
+     * @return array|bool
      */
     public function trp_updated_database_original_id_insert_166( $language_code, $inferior_limit, $batch_size ){
         if ( ! $this->trp_query ) {
@@ -654,13 +884,25 @@ class TRP_Upgrade {
             $this->trp_query = $trp->get_component( 'query' );
         }
 
-        $rows_inserted = $this->trp_query->original_ids_insert( $language_code, $inferior_limit, $batch_size );
-
-        if ( $rows_inserted > 0 ){
-            return false;
-        }else{
+        if ( $this->settings['default-language'] === $language_code ) {
             return true;
         }
+
+        $this->trp_query->original_ids_insert( $language_code, $inferior_limit, $batch_size );
+        $error = $this->get_legacy_database_update_error( __( 'inserting original strings', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
+
+        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_table_name( $language_code, $this->settings['default-language'] ) );
+        $error   = $this->get_legacy_database_update_error( __( 'checking original string insertion progress', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
+
+        return ( $inferior_limit + $batch_size ) >= $last_id;
     }
 
     public function trp_updated_database_original_id_cleanup_166( $language_code, $inferior_limit, $batch_size ){
@@ -671,6 +913,11 @@ class TRP_Upgrade {
         }
 
         $this->trp_query->original_ids_cleanup();
+        $error = $this->get_legacy_database_update_error( __( 'cleaning duplicate original strings', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
 
         return true;
     }
@@ -682,7 +929,7 @@ class TRP_Upgrade {
      * @param int $inferior_limit       Omit first X rows
      * @param int $batch_size           How many rows to query
      *
-     * @return bool
+     * @return array|bool
      */
     public function trp_updated_database_original_id_update_166( $language_code, $inferior_limit, $batch_size ){
         if ( ! $this->trp_query ) {
@@ -691,13 +938,25 @@ class TRP_Upgrade {
             $this->trp_query = $trp->get_component( 'query' );
         }
 
-        $rows_updated = $this->trp_query->original_ids_reindex( $language_code, $inferior_limit, $batch_size );
-
-        if ( $rows_updated > 0 ){
-            return false;
-        }else {
+        if ( $this->settings['default-language'] === $language_code ) {
             return true;
         }
+
+        $this->trp_query->original_ids_reindex( $language_code, $inferior_limit, $batch_size );
+        $error = $this->get_legacy_database_update_error( __( 'updating original string IDs', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
+
+        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_table_name( $language_code, $this->settings['default-language'] ) );
+        $error   = $this->get_legacy_database_update_error( __( 'checking original string ID update progress', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
+
+        return ( $inferior_limit + $batch_size ) >= $last_id;
     }
 
 
@@ -946,7 +1205,7 @@ class TRP_Upgrade {
      * @param int $inferior_limit       Omit first X rows
      * @param int $batch_size           How many rows to query
      *
-     * @return bool
+     * @return array|bool
      */
     public function trp_updated_database_gettext_original_id_insert( $language_code, $inferior_limit, $batch_size ){
         if ( ! $this->trp_query ) {
@@ -955,14 +1214,21 @@ class TRP_Upgrade {
             $this->trp_query = $trp->get_component( 'query' );
         }
         $gettext_normalization = $this->trp_query->get_query_component('gettext_normalization');
-        $rows_inserted = $gettext_normalization->gettext_original_ids_insert( $language_code, $inferior_limit, $batch_size );
-        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_gettext_table_name($language_code) );
+        $gettext_normalization->gettext_original_ids_insert( $language_code, $inferior_limit, $batch_size );
+        $error = $this->get_legacy_database_update_error( __( 'inserting gettext original strings', 'translatepress-multilingual' ) );
 
-        if ( $inferior_limit + $batch_size <= $last_id ){
-            return false;
-        }else{
-            return true;
+        if ( $error ) {
+            return $error;
         }
+
+        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_gettext_table_name($language_code) );
+        $error   = $this->get_legacy_database_update_error( __( 'checking gettext original insertion progress', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
+
+        return ( $inferior_limit + $batch_size ) >= $last_id;
     }
 
     /**
@@ -971,7 +1237,7 @@ class TRP_Upgrade {
      * @param $language_code
      * @param $inferior_limit
      * @param $batch_size
-     * @return bool
+     * @return array|bool
      */
     public function trp_updated_database_gettext_original_id_cleanup( $language_code, $inferior_limit, $batch_size ){
         if ( ! $this->trp_query ) {
@@ -982,6 +1248,11 @@ class TRP_Upgrade {
 
         $gettext_normalization = $this->trp_query->get_query_component('gettext_normalization');
         $gettext_normalization->gettext_original_ids_cleanup();
+        $error = $this->get_legacy_database_update_error( __( 'cleaning duplicate gettext original strings', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
 
         return true;
     }
@@ -993,7 +1264,7 @@ class TRP_Upgrade {
      * @param int $inferior_limit       Omit first X rows
      * @param int $batch_size           How many rows to query
      *
-     * @return bool
+     * @return array|bool
      */
     public function trp_updated_database_gettext_original_id_update( $language_code, $inferior_limit, $batch_size ){
         if ( ! $this->trp_query ) {
@@ -1003,13 +1274,221 @@ class TRP_Upgrade {
         }
 
         $gettext_normalization = $this->trp_query->get_query_component('gettext_normalization');
-        $rows_updated = $gettext_normalization->gettext_original_ids_reindex( $language_code, $inferior_limit, $batch_size );
+        $gettext_normalization->gettext_original_ids_reindex( $language_code, $inferior_limit, $batch_size );
+        $error = $this->get_legacy_database_update_error( __( 'updating gettext original string IDs', 'translatepress-multilingual' ) );
 
-        if ( $rows_updated > 0 ){
-            return false;
-        }else {
+        if ( $error ) {
+            return $error;
+        }
+
+        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_gettext_table_name( $language_code ) );
+        $error   = $this->get_legacy_database_update_error( __( 'checking gettext original string ID update progress', 'translatepress-multilingual' ) );
+
+        if ( $error ) {
+            return $error;
+        }
+
+        return ( $inferior_limit + $batch_size ) >= $last_id;
+    }
+
+	    /**
+	     * Run the gettext originals lookup hash migration through the dedicated migration class.
+	     *
+     * @param string $language_code Unused. Kept for updater callback signature.
+     * @param int    $inferior_limit Unused. This migration resumes by DB state.
+     * @param int    $batch_size Number of rows/groups/map entries per batch.
+     * @param array  $extra_params Migration phase state.
+     *
+     * @return array|bool
+     * @throws Exception
+     */
+    public function trp_updated_database_gettext_original_lookup_hash( $language_code, $inferior_limit, $batch_size, $extra_params = array() ) {
+        if ( ! $this->trp_query ) {
+            $trp = TRP_Translate_Press::get_trp_instance();
+            /* @var TRP_Query */
+            $this->trp_query = $trp->get_component( 'query' );
+        }
+
+        require_once TRP_PLUGIN_DIR . 'includes/upgrade/gettext-optimization/class-gettext-originals-lookup-hash-migration.php';
+
+        $migration = new TRP_Gettext_Originals_Lookup_Hash_Migration( $this->trp_query );
+
+        return $migration->run( $language_code, $inferior_limit, $batch_size, $extra_params );
+    }
+
+    /**
+     * Classify gettext rows into language-file or runtime gettext statuses.
+     *
+     * Rows imported from .po/.mo files use status 4 when their stored
+     * translation matches the active language-file translation. Rows that must
+     * override runtime gettext output use the human-reviewed status 2. Machine
+     * translated rows keep their existing status semantics.
+     *
+     * @param string $language_code
+     * @param int    $inferior_limit
+     * @param int    $batch_size
+     * @param string $table_name Optional discovered gettext table name.
+     *
+     * @return bool
+     */
+    public function trp_updated_database_gettext_runtime_status_update( $language_code, $inferior_limit, $batch_size, $table_name = '' ) {
+        if ( ! $this->trp_query ) {
+            $trp = TRP_Translate_Press::get_trp_instance();
+            /* @var TRP_Query */
+            $this->trp_query = $trp->get_component( 'query' );
+        }
+
+        $table_name      = is_string( $table_name ) && $table_name !== '' ? sanitize_text_field( $table_name ) : sanitize_text_field( $this->trp_query->get_gettext_table_name( $language_code ) );
+        $originals_table = sanitize_text_field( $this->trp_query->get_table_name_for_gettext_original_strings() );
+
+        if ( ! $this->trp_query->table_exists( $table_name ) ) {
             return true;
         }
+
+        $rows = $this->db->get_results(
+            $this->db->prepare(
+                "SELECT tt.id, tt.translated, tt.status, tt.original AS tt_original, tt.domain AS tt_domain, tt.plural_form, ot.original, ot.domain, ot.context, ot.original_plural
+                FROM `$table_name` AS tt
+                LEFT JOIN `$originals_table` AS ot ON tt.original_id = ot.id
+                ORDER BY tt.id
+                LIMIT %d, %d",
+                $inferior_limit,
+                $batch_size
+            ),
+            ARRAY_A
+        );
+
+        if ( empty( $rows ) ) {
+            return true;
+        }
+
+        $current_locale          = determine_locale();
+        $switched                = switch_to_locale( $language_code );
+        $language_file_available = $switched || $current_locale === $language_code;
+
+        $ids_to_human_reviewed_status = array();
+        $ids_to_language_file_status = array();
+
+        foreach ( $rows as $row ) {
+            $new_status = $this->get_migrated_gettext_status( $row, $language_file_available );
+
+            if ( $new_status === TRP_Query::HUMAN_REVIEWED ) {
+                $ids_to_human_reviewed_status[] = (int) $row['id'];
+            } elseif ( $new_status === TRP_Query::GETTEXT_TRANSLATED_IN_LANGUAGE_FILE ) {
+                $ids_to_language_file_status[] = (int) $row['id'];
+            }
+        }
+
+        if ( $switched ) {
+            restore_previous_locale();
+        }
+
+        $this->update_gettext_statuses( $table_name, $ids_to_human_reviewed_status, TRP_Query::HUMAN_REVIEWED );
+        $this->update_gettext_statuses( $table_name, $ids_to_language_file_status, TRP_Query::GETTEXT_TRANSLATED_IN_LANGUAGE_FILE );
+
+        $is_finished = count( $rows ) < $batch_size;
+
+        return $is_finished;
+    }
+
+    /**
+     * Decide the migrated gettext status for an existing DB row.
+     *
+     * Empty/untranslated rows and machine translated rows keep their existing
+     * status semantics. Human/file-based rows use status 4 when they match the
+     * active language-file output and status 2 when they must override it.
+     *
+     * @param array  $row                     Gettext row joined with the original gettext table.
+     * @param bool   $language_file_available Whether WordPress loaded language files for the target locale.
+     *
+     * @return int|null
+     */
+    protected function get_migrated_gettext_status( $row, $language_file_available = true ) {
+        if ( empty( $row['translated'] ) || (int) $row['status'] === TRP_Query::NOT_TRANSLATED ) {
+            return null;
+        }
+
+        if ( (int) $row['status'] === TRP_Query::MACHINE_TRANSLATED ) {
+            return TRP_Query::MACHINE_TRANSLATED;
+        }
+
+        $original        = ! empty( $row['original'] ) ? $row['original'] : $row['tt_original'];
+        $domain          = ! empty( $row['domain'] ) ? $row['domain'] : $row['tt_domain'];
+        $context         = ! empty( $row['context'] ) ? $row['context'] : 'trp_context';
+        $plural_form     = isset( $row['plural_form'] ) ? (int) $row['plural_form'] : 0;
+        $original_plural = ! empty( $row['original_plural'] ) ? $row['original_plural'] : null;
+
+        if ( empty( $original ) || empty( $domain ) ) {
+            return TRP_Query::HUMAN_REVIEWED;
+        }
+
+        if ( ! $language_file_available ) {
+            $source_translation = ( ! empty( $original_plural ) && (int) $plural_form > 0 ) ? $original_plural : $original;
+
+            return ( $row['translated'] !== $source_translation ) ? TRP_Query::HUMAN_REVIEWED : TRP_Query::GETTEXT_TRANSLATED_IN_LANGUAGE_FILE;
+        }
+
+        $mo_translation = $this->get_gettext_language_file_translation( $original, $domain, $context, $plural_form, $original_plural );
+
+        return ( $row['translated'] !== $mo_translation ) ? TRP_Query::HUMAN_REVIEWED : TRP_Query::GETTEXT_TRANSLATED_IN_LANGUAGE_FILE;
+    }
+
+    /**
+     * Return the translation WordPress would provide from loaded language files.
+     *
+     * The caller is responsible for switching to the target locale before calling
+     * this method. If no matching entry exists in the language files, WordPress
+     * returns the source string.
+     *
+     * @param string      $original        Original gettext string.
+     * @param string      $domain          Text domain.
+     * @param string      $context         Gettext context or trp_context placeholder.
+     * @param int         $plural_form     Plural form index stored by TranslatePress.
+     * @param string|null $original_plural Original plural string, when available.
+     *
+     * @return string
+     */
+    protected function get_gettext_language_file_translation( $original, $domain, $context, $plural_form, $original_plural ) {
+        $translations = get_translations_for_domain( $domain );
+        $context      = ( $context === 'trp_context' ) ? null : $context;
+
+        if ( ! empty( $original_plural ) ) {
+            $plural_forms = new TRP_Plural_Forms( $this->settings );
+
+            if ( method_exists( $translations, 'translate_entry' ) ) {
+                return $plural_forms->translate_plural( $original, $original_plural, $plural_form, $context, $translations );
+            }
+
+            return (int) $plural_form === 0 ? $original : $original_plural;
+        }
+
+        return $translations->translate( $original, $context );
+    }
+
+    /**
+     * Bulk update gettext status for a list of gettext row ids.
+     *
+     * @param string $table_name     Gettext table name.
+     * @param array  $ids            Row ids to update.
+     * @param int    $status         New gettext status value.
+     *
+     * @return void
+     */
+    protected function update_gettext_statuses( $table_name, $ids, $status ) {
+        if ( empty( $ids ) ) {
+            return;
+        }
+
+        $ids = array_map( 'intval', $ids );
+        $ids = array_filter( $ids );
+
+        if ( empty( $ids ) ) {
+            return;
+        }
+
+        $this->db->query(
+            "UPDATE `$table_name` SET status = " . (int) $status . " WHERE id IN (" . implode( ',', $ids ) . ")"
+        );
     }
 
     /**

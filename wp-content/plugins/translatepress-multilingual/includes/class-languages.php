@@ -16,6 +16,7 @@ class TRP_Languages{
 	protected $wp_languages_backup = array();
 	protected $settings;
 	protected $is_admin_request;
+	protected $editor_interface_locale;
 
     /**
      * Returns array of all possible languages.
@@ -40,20 +41,106 @@ class TRP_Languages{
      * @return mixed
      */
     public function change_locale( $locale ){
-        if ( $this->is_admin_request === null ){
-            $trp = TRP_Translate_Press::get_trp_instance();
-            $trp_is_admin_request = $trp->get_component( 'url_converter' );
-            $this->is_admin_request= $trp_is_admin_request->is_admin_request();
+        if ( $this->is_admin_request() ){
+            return $locale;
         }
 
-        if ( $this->is_admin_request ){
-            return $locale;
+        $editor_interface_locale = $this->get_translation_editor_interface_locale();
+        if ( $editor_interface_locale !== '' ) {
+            return $editor_interface_locale;
         }
 
         global $TRP_LANGUAGE;
         if( !empty($TRP_LANGUAGE) ){
             $locale = $TRP_LANGUAGE;
         }
+        return $locale;
+    }
+
+    protected function is_admin_request() {
+        if ( $this->is_admin_request === null ){
+            $trp = TRP_Translate_Press::get_trp_instance();
+            $trp_is_admin_request = $trp->get_component( 'url_converter' );
+            $this->is_admin_request = $trp_is_admin_request->is_admin_request();
+        }
+
+        return $this->is_admin_request;
+    }
+
+    /**
+     * Locale the editor UI was displayed in before a language switch (trp-editor-locale, set by editor.vue).
+     *
+     * @return string
+     */
+    protected function get_translation_editor_interface_locale() {
+        if ( $this->editor_interface_locale !== null ) {
+            return $this->editor_interface_locale;
+        }
+
+        $this->editor_interface_locale = '';
+
+        if ( isset( $_REQUEST['trp-edit-translation'] ) && $_REQUEST['trp-edit-translation'] === 'true'
+             && ! empty( $_REQUEST['trp-editor-locale'] ) ) {
+            $requested    = sanitize_text_field( wp_unslash( $_REQUEST['trp-editor-locale'] ) );
+            $trp_settings = get_option( 'trp_settings', array() );
+            $allowed      = isset( $trp_settings['translation-languages'] ) ? $trp_settings['translation-languages'] : array();
+            if ( in_array( $requested, $allowed, true ) ) {
+                $this->editor_interface_locale = $requested;
+            }
+        }
+
+        return $this->editor_interface_locale;
+    }
+
+    /**
+     * Align WordPress' determine_locale() (which .mo files load) with the TP language, so
+     * frontend AJAX/REST does not load the user's profile-locale catalog instead of the referer one.
+     *
+     * @param string $locale Locale determined by WordPress.
+     * @return string
+     */
+    public function change_determine_locale( $locale ) {
+        // Resolving the TP language below can ask for the locale again; avoid recursion.
+        static $in_progress = false;
+        if ( $in_progress ) {
+            return $locale;
+        }
+
+        // wp-login.php picks its language via wp_lang
+        if ( isset( $GLOBALS['pagenow'] ) && 'wp-login.php' === $GLOBALS['pagenow'] ) {
+            return $locale;
+        }
+
+        // Real backend requests keep the user/site locale so wp-admin stays localized.
+        if ( $this->is_admin_request() ){
+            return $locale;
+        }
+
+        // inside switch_to_locale() WP_Locale_Switcher already set the locale on this filter
+        global $wp_locale_switcher;
+        if ( $wp_locale_switcher instanceof WP_Locale_Switcher && $wp_locale_switcher->is_switched() ) {
+            return $locale;
+        }
+
+        $editor_interface_locale = $this->get_translation_editor_interface_locale();
+        if ( $editor_interface_locale !== '' ) {
+            return $editor_interface_locale;
+        }
+
+        global $TRP_LANGUAGE;
+
+        // determine_locale() runs before 'init' (load_default_textdomain), so resolve the
+        // referer language now via is_ajax_on_frontend(), which does not depend on 'init'.
+        if ( empty( $TRP_LANGUAGE ) && ( ( defined( 'DOING_AJAX' ) && DOING_AJAX ) || ( defined( 'WC_DOING_AJAX' ) && WC_DOING_AJAX ) ) ) {
+            $in_progress = true;
+            TRP_Gettext_Manager::is_ajax_on_frontend();
+            $in_progress = false;
+        }
+
+        if ( ! empty( $TRP_LANGUAGE ) ) {
+            return $TRP_LANGUAGE;
+        }
+
         return $locale;
     }
 
@@ -69,7 +156,8 @@ class TRP_Languages{
 			require_once( ABSPATH . 'wp-admin/includes/translation-install.php' );
 			$this->wp_languages = wp_get_available_translations();
 
-			if ( count( $this->wp_languages ) == 0 ) {
+			// The available_translations site transient can come back as a string (corrupted serialized value or a faulty object cache).
+			if ( ! is_array( $this->wp_languages ) || count( $this->wp_languages ) == 0 ) {
 				$this->wp_languages = $this->get_wp_languages_backup();
 			}
 		}

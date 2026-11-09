@@ -29,11 +29,11 @@ class TRP_Gutenberg_Blocks {
             TRP_Language_Switcher_V2::instance()->enqueue_assets(); // only enqueue the assets if legacy is disabled
 
         if ( $pagenow === 'widgets.php' ) {
-            $arrDeps = [ 'wp-blocks', 'wp-dom', 'wp-dom-ready', 'wp-edit-widgets', 'lodash' ];
+            $arrDeps = [ 'wp-blocks', 'wp-data', 'wp-dom', 'wp-dom-ready', 'wp-edit-widgets', 'lodash' ];
         } elseif ( $pagenow === 'customize.php' ) {
-            $arrDeps = [ 'wp-blocks', 'wp-dom', 'wp-dom-ready', 'lodash' ];
+            $arrDeps = [ 'wp-blocks', 'wp-data', 'wp-dom', 'wp-dom-ready', 'lodash' ];
         } else {
-            $arrDeps = [ 'wp-blocks', 'wp-dom', 'wp-dom-ready', 'wp-edit-post', 'lodash' ];
+            $arrDeps = [ 'wp-blocks', 'wp-data', 'wp-dom', 'wp-dom-ready', 'wp-edit-post', 'lodash' ];
         }
 
         $languagesObject = $trp->get_component( 'languages' );

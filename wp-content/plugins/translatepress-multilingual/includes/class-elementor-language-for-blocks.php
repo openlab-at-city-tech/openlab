@@ -7,6 +7,7 @@ use Elementor\Controls_Manager;
 
 class TRP_Elementor {
     private static $_instance = null;
+    private $language_switcher_widget_registered = false;
     public $locations = array(
         array(
             'element' => 'common',
@@ -52,6 +53,10 @@ class TRP_Elementor {
         // Disable Element Cache when Language Restriction rules are setup for an element
 		add_filter( 'elementor/element/is_dynamic_content', array( $this, 'are_language_restriction_rules_setup' ), 20, 3 );
 
+        add_action( 'elementor/elements/categories_registered', array( $this, 'register_widget_category' ) );
+        add_action( 'elementor/widgets/register', array( $this, 'register_language_switcher_widget' ) );
+        add_action( 'elementor/widgets/widgets_registered', array( $this, 'register_language_switcher_widget' ) );
+
 	}
 
     /**
@@ -86,6 +91,46 @@ class TRP_Elementor {
             add_action('elementor/element/'.$where['element'].'/'.$this->section_name_exclude.'/before_section_end', array( $this, 'add_controls_exclude' ), 10, 2 );
         }
 
+    }
+
+    public function register_widget_category( $elements_manager ) {
+        $elements_manager->add_category(
+            'translatepress',
+            array(
+                'title' => __( 'TranslatePress', 'translatepress-multilingual' ),
+                'icon'  => 'fa fa-plug',
+            )
+        );
+    }
+
+    public function register_language_switcher_widget( $widgets_manager = null ) {
+        if ( $this->language_switcher_widget_registered ) {
+            return;
+        }
+
+        require_once TRP_PLUGIN_DIR . 'includes/elementor/class-language-switcher-widget.php';
+
+        if ( ! class_exists( 'TRP_Elementor_Language_Switcher_Widget' ) ) {
+            return;
+        }
+
+        if ( ! $widgets_manager && class_exists( '\Elementor\Plugin' ) ) {
+            $widgets_manager = \Elementor\Plugin::instance()->widgets_manager;
+        }
+
+        if ( ! $widgets_manager ) {
+            return;
+        }
+
+        if ( method_exists( $widgets_manager, 'register' ) ) {
+            $widgets_manager->register( new TRP_Elementor_Language_Switcher_Widget() );
+        } elseif ( method_exists( $widgets_manager, 'register_widget_type' ) ) {
+            $widgets_manager->register_widget_type( new TRP_Elementor_Language_Switcher_Widget() );
+        } else {
+            return;
+        }
+
+        $this->language_switcher_widget_registered = true;
     }
 
     public function add_section_show( $element, $args ) {

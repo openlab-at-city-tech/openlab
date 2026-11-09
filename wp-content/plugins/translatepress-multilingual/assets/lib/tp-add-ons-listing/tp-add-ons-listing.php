@@ -334,59 +334,102 @@ class TRP_Addons_List_Table extends WP_List_Table {
  * process the actions for the Add-ons page
  */
 add_action( 'admin_init', 'trp_add_ons_listing_process_actions', 1 );
-function trp_add_ons_listing_process_actions(){
-    if (current_user_can( 'manage_options' ) && isset( $_REQUEST['trp_add_ons_action'] ) && isset($_REQUEST['_wpnonce']) && wp_verify_nonce( sanitize_text_field( $_REQUEST['_wpnonce'] ), 'trp_add_ons_action' ) ){
 
-        $add_ons_to_activate = !empty( $_GET['trp_add_ons'] )  ? explode('|', sanitize_text_field($_GET['trp_add_ons'])) : [];
-        $plugins_to_activate = !empty( $_GET['trp_plugins'] ) ? explode('|', sanitize_text_field($_GET['trp_plugins'])) : [];
+/**
+ * Return the plugin and add-on slugs that can be managed from the Add-ons page.
+ *
+ * @return array
+ */
+function trp_add_ons_listing_get_allowed_items() {
+    return apply_filters(
+        'trp_add_ons_listing_allowed_items',
+        array(
+            'plugins' => array(
+                'profile-builder/index.php',
+                'paid-member-subscriptions/index.php',
+                'wp-webhooks/wp-webhooks.php',
+            ),
+            'add_ons' => array(
+                'tp-add-on-seo-pack/tp-seo-pack.php',
+                'tp-add-on-extra-languages/tp-extra-languages.php',
+                'tp-add-on-deepl/index.php',
+                'tp-add-on-automatic-language-detection/tp-automatic-language-detection.php',
+                'tp-add-on-translator-accounts/index.php',
+                'tp-add-on-browse-as-other-roles/tp-browse-as-other-role.php',
+                'tp-add-on-navigation-based-on-language/tp-navigation-based-on-language.php',
+                'tp-add-on-multiple-domains/tp-multiple-domains.php',
+            ),
+        )
+    );
+}
 
-        if ( $_REQUEST['trp_add_ons_action'] === 'activate_all' ) {
-            foreach ( $plugins_to_activate as $plugin ) {
-                if ( !is_plugin_active( $plugin ) ) {
-                    activate_plugin( $plugin );
-                }
-            }
-            foreach ( $add_ons_to_activate as $add_on ) {
-                do_action( 'trp_add_ons_activate', $add_on );
-            }
-        }
-
-        elseif ( $_REQUEST['trp_add_ons_action'] === 'deactivate_all' ) {
-            foreach ( $plugins_to_activate as $plugin ) {
-                if (is_plugin_active( $plugin ) ) {
-                    deactivate_plugins( $plugin );
-                }
-            }
-            foreach ( $add_ons_to_activate as $add_on ) {
-                do_action( 'trp_add_ons_deactivate', $add_on );
-            }
-        }
-
-        elseif ( $_REQUEST['trp_add_ons_action'] === 'activate' ){
-            if( !empty( $_REQUEST['trp_plugins'] ) ){//we have a plugin
-                $plugin_slug = sanitize_text_field( $_REQUEST['trp_plugins'] );
-                if( !is_plugin_active( $plugin_slug ) ) {
-                    activate_plugin( $plugin_slug );
-                }
-            }
-            elseif( !empty( $_REQUEST['trp_add_ons'] ) ){//we have a add-on
-                do_action( 'trp_add_ons_activate', sanitize_text_field($_REQUEST['trp_add_ons']) );
-            }
-        }
-        elseif ( $_REQUEST['trp_add_ons_action'] === 'deactivate' ){
-            if( !empty( $_REQUEST['trp_plugins'] ) ){//we have a plugin
-                $plugin_slug = sanitize_text_field( $_REQUEST['trp_plugins'] );
-                if( is_plugin_active( $plugin_slug ) ) {
-                    deactivate_plugins( $plugin_slug );
-                }
-            }
-            elseif( !empty( $_REQUEST['trp_add_ons'] ) ){//we have a add-on
-                do_action( 'trp_add_ons_deactivate', sanitize_text_field($_REQUEST['trp_add_ons']) );
-            }
-        }
-
-        wp_safe_redirect( add_query_arg( 'trp_add_ons_listing_success', 'true', admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ) ) ) );//phpcs:ignore
+/**
+ * Read a pipe-delimited list from the request and discard slugs not managed by TranslatePress.
+ *
+ * @param string $request_key  Request parameter name.
+ * @param array  $allowed_items Allowed slugs.
+ * @return array
+ */
+function trp_add_ons_listing_get_requested_items( $request_key, $allowed_items ) {
+    if ( empty( $_GET[ $request_key ] ) || ! is_string( $_GET[ $request_key ] ) ) {
+        return array();
     }
+
+    $requested_items = explode( '|', sanitize_text_field( wp_unslash( $_GET[ $request_key ] ) ) );
+
+    return array_values( array_intersect( $requested_items, $allowed_items ) );
+}
+
+function trp_add_ons_listing_process_actions(){
+    if ( ! current_user_can( 'manage_options' ) || empty( $_GET['trp_add_ons_action'] ) || empty( $_GET['_wpnonce'] ) ) {
+        return;
+    }
+
+    $action = sanitize_key( wp_unslash( $_GET['trp_add_ons_action'] ) );
+    $page   = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : '';
+    $nonce  = sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ) );
+
+    if (
+        'trp_addons_page' !== $page ||
+        ! in_array( $action, array( 'activate', 'activate_all', 'deactivate', 'deactivate_all' ), true ) ||
+        ! wp_verify_nonce( $nonce, 'trp_add_ons_action' )
+    ) {
+        return;
+    }
+
+    $allowed_items = trp_add_ons_listing_get_allowed_items();
+    $plugins       = current_user_can( 'activate_plugins' ) && ! empty( $allowed_items['plugins'] )
+        ? trp_add_ons_listing_get_requested_items( 'trp_plugins', $allowed_items['plugins'] )
+        : array();
+    $add_ons       = ! empty( $allowed_items['add_ons'] )
+        ? trp_add_ons_listing_get_requested_items( 'trp_add_ons', $allowed_items['add_ons'] )
+        : array();
+
+    if ( in_array( $action, array( 'activate', 'activate_all' ), true ) ) {
+        foreach ( $plugins as $plugin ) {
+            if ( ! is_plugin_active( $plugin ) && ( ! is_multisite() || ! is_network_only_plugin( $plugin ) ) ) {
+                activate_plugin( $plugin, '', false );
+            }
+        }
+
+        foreach ( $add_ons as $add_on ) {
+            do_action( 'trp_add_ons_activate', $add_on );
+        }
+    } else {
+        foreach ( $plugins as $plugin ) {
+            if ( is_plugin_active( $plugin ) ) {
+                // Explicitly limit deactivation to the current site on multisite.
+                deactivate_plugins( $plugin, false, false );
+            }
+        }
+
+        foreach ( $add_ons as $add_on ) {
+            do_action( 'trp_add_ons_deactivate', $add_on );
+        }
+    }
+
+    wp_safe_redirect( add_query_arg( 'trp_add_ons_listing_success', 'true', admin_url( 'admin.php?page=' . $page ) ) );
+    exit;
 }
 
 /**

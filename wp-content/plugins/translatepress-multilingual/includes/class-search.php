@@ -14,6 +14,7 @@ class TRP_Search extends WP_Query{
 
     protected $settings;
     protected $db;
+    protected $trp_query;
 
 
     /**
@@ -55,6 +56,10 @@ class TRP_Search extends WP_Query{
                 //in some cases for instance some ajax searches we might need to get it from the query
                 if( empty($search_query) && !empty( $query->query['s'] ) )
                     $search_query = $query->query['s'];
+
+                // an empty search would match every translated string, so let WordPress handle it like in the default language
+                if ( '' === trim( (string) $search_query ) )
+                    return $query;
 
                 $search_result_ids = $this->get_post_ids_containing_search_term($search_query, $query);
 
@@ -105,8 +110,9 @@ class TRP_Search extends WP_Query{
         if( $search_terms_count === 1 ){
             /**
              * for one search term we can find it directly in the translated column
+             * DISTINCT returns each post id once instead of once for every matching string
              */
-            $trp_search_query = $this->db->prepare( "SELECT meta_value FROM
+            $trp_search_query = $this->db->prepare( "SELECT DISTINCT meta_value FROM
                                         $dictionary_name
                                         INNER JOIN $meta_table_name ON $dictionary_name.original_id = $meta_table_name.original_id AND $meta_table_name.meta_key = '". $this->trp_query->get_meta_key_for_post_parent_id() ."'
                                         WHERE $dictionary_name.translated LIKE %s", '%' . $search_terms[0] . '%' );

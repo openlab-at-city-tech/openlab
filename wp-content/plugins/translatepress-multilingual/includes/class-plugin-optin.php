@@ -50,7 +50,7 @@ class TRP_Plugin_Optin {
 
         $trp_settings_pages[] = 'translate-press';
         $trp_settings_pages[] = 'trp_addons_page';
-        $trp_settings_pages[] = 'trp_license_key';
+        $trp_settings_pages[] = 'trp_ai_api_key';
 
         if( !in_array( $_GET['page'], $trp_settings_pages ) )
             return;
@@ -485,6 +485,7 @@ class Cozmoslabs_Plugin_Optin_Metadata_Builder_TRP extends Cozmoslabs_Plugin_Opt
             'trp_updated_database_gettext_original_id_cleanup',
             'trp_updated_database_gettext_original_id_insert',
             'trp_updated_database_gettext_original_id_update',
+            'trp_updated_database_gettext_runtime_status_update',
             'trp_were_old_slug_tables_found',
             'trp_add_ons_settings',
         ];

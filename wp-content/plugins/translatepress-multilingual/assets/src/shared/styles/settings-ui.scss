@@ -1,0 +1,19 @@
+.trp-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.trp-field__label {
+  width: var(--trp-field-label-width, unset);
+}
+
+.trp-field--column {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.trp-field--row {
+  gap: 16px;
+}

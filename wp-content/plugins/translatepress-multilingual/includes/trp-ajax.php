@@ -10,6 +10,14 @@ class TRP_Ajax{
     protected $connection;
     protected $table_prefix;
 
+    /*
+     * Flags that make json_encode() escape <, >, &, ' and " as \uXXXX, so a stored dictionary original such
+     * as <svg onload=...> can never be parsed as live html when this standalone endpoint's response is opened
+     * as a top-level document. JSON.parse() restores the exact string, so legitimate consumers are unaffected.
+     * See CU-1amndjnkyv6.
+     */
+    const SAFE_JSON_FLAGS = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
+
     /**
      * TRP_Ajax constructor.
      *
@@ -17,13 +25,30 @@ class TRP_Ajax{
      */
     public function __construct( ){
 
-        if ( !isset( $_POST['action'] ) || $_POST['action'] !== 'trp_get_translations_regular' || empty( $_POST['originals'] ) || empty( $_POST['language'] ) || empty( $_POST['original_language'] ) ) {
+        if ( !isset( $_POST['action'] ) || $_POST['action'] !== 'trp_get_translations_domchanges' || empty( $_POST['originals'] ) || empty( $_POST['language'] ) || empty( $_POST['original_language'] ) ) {
             die();
         }
 
-        include './external-functions.php';
+        /*
+         * This file runs outside WordPress and is directly requestable, so an attacker can open its response
+         * as a top-level document. Force an inert content type ( application/json + nosniff ) before any output
+         * so the browser never sniffs/renders the json body as html, whatever the dictionary happens to contain.
+         * Combined with SAFE_JSON_FLAGS this closes the stored-XSS sink. See CU-1amndjnkyv6.
+         */
+        if ( ! headers_sent() ) {
+            header( 'Content-Type: application/json; charset=utf-8' );
+            header( 'X-Content-Type-Options: nosniff' );
+        }
+
+        // Anchor to this file's directory. A cwd-relative include fails on PHP-FPM pools
+        // where the working directory of a directly-requested script is not the script's own directory.
+        include dirname( __FILE__ ) . '/external-functions.php';
+        if ( ! function_exists( 'trp_is_valid_language_code' ) ) {
+            // Include failed: degrade to the admin-ajax fallback instead of a fatal error.
+            $this->return_error();
+        }
         if ( !trp_is_valid_language_code( $_POST['language'] ) || !trp_is_valid_language_code( $_POST['original_language'] ) ) {//phpcs:ignore
-            echo json_encode( 'TranslatePress Error: Invalid language code' );
+            echo json_encode( 'TranslatePress Error: Invalid language code', self::SAFE_JSON_FLAGS );
             exit;
         }
 
@@ -97,18 +122,35 @@ class TRP_Ajax{
         );
 
         foreach ( $credentials as $credential => $constant_name ) {
-            if ( preg_match_all( "/define\s*\(\s*['\"]" . $constant_name . "['\"]\s*,\s*['\"](.*?)['\"]\s*\)/", $content, $result ) ) {
-                $credentials[ $credential ] = $result[1][0];
+            // Capture the quote character used ($result[1]) alongside the value ($result[2]) so we can
+            // reverse PHP's string-literal escaping below. We parse wp-config.php as plain text (without
+            // loading WordPress), so the raw match still contains source-level escapes: the WP installer
+            // writes these constants single-quoted through addcslashes( $value, "\\'" ), and a
+            // hand-edited password such as "xxx\$xxx" resolves to xxx$xxx at runtime. Left uncorrected,
+            // the credentials reach mysqli_connect() corrupted. See CU-7epz71.
+            if ( preg_match( "/define\s*\(\s*['\"]" . $constant_name . "['\"]\s*,\s*(['\"])(.*?)\\1\s*\)/", $content, $result ) ) {
+                $credentials[ $credential ] = $this->unescape_wp_config_value( $result[2], $result[1] );
             } else {
                 return false;
             }
         }
 
 
-        $this->connection = mysqli_connect( $credentials['db_host'], $credentials['db_user'], $credentials['db_password'], $credentials['db_name'] );
+        // Parse DB_HOST to support host:port and UNIX socket configurations (e.g. localhost:/var/run/mysqld/mysqld.sock or :/path/to/socket).
+        $db_host_parsed = $this->parse_db_host( $credentials['db_host'] );
+        if ( false === $db_host_parsed ) {
+            return false;
+        }
+        list( $db_host, $db_port, $db_socket ) = $db_host_parsed;
+
+        // Since PHP 8.1 mysqli throws exceptions by default; silence them so a failed
+        // connection returns false and the admin-ajax fallback takes over instead of a fatal error.
+        mysqli_report( MYSQLI_REPORT_OFF );
+
+        $this->connection = @mysqli_connect( $db_host, $credentials['db_user'], $credentials['db_password'], $credentials['db_name'], $db_port, $db_socket );
 
         // Check connection
-        if ( mysqli_connect_errno() ) {
+        if ( mysqli_connect_errno() || ! $this->connection ) {
             //Failed to connect to MySQL.
             return false;
         }
@@ -123,7 +165,76 @@ class TRP_Ajax{
             }
         }
 
+        // On multisite, $table_prefix from wp-config.php is the network base prefix. Subsites (blog_id > 1)
+        // store their tables under base_prefix . blog_id . '_' (see wpdb::get_blog_prefix()). See CU-869fh67ce.
+        $blog_id = isset( $_POST['blog_id'] ) ? (int) $_POST['blog_id'] : 1;
+        if ( $blog_id > 1 ) {
+            $this->table_prefix .= $blog_id . '_';
+        }
+
         return true;
+    }
+
+    /**
+     * Reverse PHP's string-literal escaping for a value read textually from wp-config.php.
+     *
+     * connect_to_db() parses wp-config.php as plain text (without loading WordPress), so the
+     * captured value still contains source-level escape sequences. This restores the value that
+     * PHP would produce at runtime, so credentials such as a password defined as "xxx\$xxx" (which
+     * resolves to xxx$xxx) connect correctly. See CU-7epz71.
+     *
+     * @param string $value Raw value captured from between the quotes.
+     * @param string $quote The quote character used in the source ( ' or " ).
+     * @return string
+     */
+    protected function unescape_wp_config_value( $value, $quote ) {
+        if ( $quote === "'" ) {
+            // Single-quoted PHP strings only treat \' and \\ as escapes.
+            return preg_replace( '/\\\\([\\\\\'])/', '$1', $value );
+        }
+
+        // Double-quoted PHP strings interpret C-style escapes (\n, \t, \\, ...) plus \" and \$.
+        return stripcslashes( $value );
+    }
+
+    /**
+     * Parse the DB_HOST string into host, port and socket components.
+     *
+     * Mirrors the parsing logic from WordPress core wpdb so that configurations
+     * relying solely on UNIX socket connections (e.g. ":/var/run/mysqld/mysqld.sock"
+     * or "localhost:/var/run/mysqld/mysqld.sock") are connected to correctly.
+     *
+     * @param string $db_host Raw DB_HOST value from wp-config.php.
+     * @return array|false    [ host, port|null, socket|null ] or false on parse failure.
+     */
+    protected function parse_db_host( $db_host ) {
+        $host   = $db_host;
+        $port   = null;
+        $socket = null;
+
+        // First peel off the socket parameter from the right, if it exists.
+        $socket_pos = strpos( $host, ':/' );
+        if ( false !== $socket_pos ) {
+            $socket = substr( $host, $socket_pos + 1 );
+            $host   = substr( $host, 0, $socket_pos );
+        }
+
+        // IPv6 host: contains more than one colon and may be wrapped in [].
+        if ( substr_count( $host, ':' ) > 1 ) {
+            $pattern = '#^(?:\[)?(?P<host>[0-9a-fA-F:]+)(?:\]:(?P<port>[\d]+))?#';
+        } else {
+            $pattern = '#^(?P<host>[^:/]*)(?::(?P<port>[\d]+))?#';
+        }
+
+        $matches = array();
+        if ( 1 !== preg_match( $pattern, $host, $matches ) ) {
+            return false;
+        }
+
+        $host = isset( $matches['host'] ) ? $matches['host'] : '';
+        $port = ! empty( $matches['port'] ) ? (int) $matches['port'] : null;
+
+        return array( $host, $port, $socket );
     }
 
     /**
@@ -169,7 +280,7 @@ class TRP_Ajax{
             }
 
 	        $dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'regular', 'dynamicstrings', null, null );
-            echo json_encode($dictionary_by_original);
+            echo json_encode( $dictionary_by_original, self::SAFE_JSON_FLAGS );
         }
 
     }
@@ -178,7 +289,7 @@ class TRP_Ajax{
      * Return error in case of connection fail and other problems.
      */
     protected function return_error(){
-        echo json_encode( 'error' );
+        echo json_encode( 'error', self::SAFE_JSON_FLAGS );
         exit;
     }
 }

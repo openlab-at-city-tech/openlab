@@ -29,6 +29,41 @@ function trp_render_blocks( $block_content, $block ) {
 add_filter( 'render_block', 'trp_render_blocks', 10, 2 );
 
 
+function trp_get_content_restriction_attribute() {
+	return [
+		'type'       => 'object',
+		'properties' => [
+			'restriction_type'   => [
+				'type' => 'string',
+			],
+			'selected_languages' => [
+				'type' => 'array',
+			],
+			'panel_open'         => [
+				'type' => 'boolean',
+			],
+		],
+		'default'    => [
+			'restriction_type'   => 'exclude',
+			'selected_languages' => [],
+			'panel_open'         => true,
+		],
+	];
+}
+
+
+function trp_add_content_restriction_attribute_to_block_args( $args ) {
+	if ( empty( $args['attributes'] ) || ! is_array( $args['attributes'] ) ) {
+		$args['attributes'] = [];
+	}
+
+	$args['attributes']['TrpContentRestriction'] = trp_get_content_restriction_attribute();
+
+	return $args;
+}
+add_filter( 'register_block_type_args', 'trp_add_content_restriction_attribute_to_block_args' );
+
+
 /**
  * Adds the `trpContentRestriction` attribute to all blocks
  */
@@ -37,26 +72,7 @@ function trp_add_custom_attributes_to_blocks() {
 	$registered_blocks = WP_Block_Type_Registry::get_instance()->get_all_registered();
 
 	foreach( $registered_blocks as $name => $block ) {
-		$block->attributes['TrpContentRestriction'] = [
-			'type'    => 'object',
-            'properties' => [
-                'restriction_type' => [
-                    'type' => 'string',
-                ],
-                'selected_languages' => [
-                    'type' => 'array',
-                ],
-                'panel_open' => [
-                    'type' => 'boolean',
-                ],
-            ],
-			'default' => [
-                'restriction_type'   => 'exclude',
-                'selected_languages' => [],
-                'panel_open'         => true,
-            ],
-		];
+		$block->attributes['TrpContentRestriction'] = trp_get_content_restriction_attribute();
 	}
 
 }
-

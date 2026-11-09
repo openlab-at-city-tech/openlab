@@ -1,3 +1,148 @@
+= 3.3.8 =
+* Fixed unauthenticated stored XSS via #TRPLINKPROCESSED. Thanks to daroo and the Wordfence team
+* Fixed missing translations in WooCommerce emails sent from the admin, including strings added by WooCommerce extensions
+* Fixed a bug where trailing punctuation was doubled after automatic translation
+* Improved performance of database upgrade process regarding duplicate removal
+* Improvements to machine translation deadlocks caused by concurrent requests
+* Fixed html lang attribute for languages with _informal and _ao90 suffixes
+* Fixed edge case where junk database entries where added when all new strings on a page were skipped by automatic translation
+* Keep the selected language on Slider Revolution layer links
+* Make "Do not translate certain paths" work with non-latin slugs
+
+= 3.3.7 =
+* Prevent XSS from using trp-gettext markers hiding js schemes in url attributes
+* Fixed #TRPLINKPROCESSED markers caused by conflict with Hummingbird
+* Fixed Rank Math self-redirects and translated category redirects
+* Skip unnecessary automatic translation memory queries
+* Fixed edge case fatal error related to Czech malformed gettext translation pack
+* Fixed translation blocks edge case failure on malformed HTML
+* Respect custom WordPress debug log configuration
+
+= 3.3.6 =
+* Prevent XSS in translation memory suggestions
+* Keep the translation editor open when switching language
+
+= 3.3.5 =
+* Reduce Automatic Translation usage by better handling concurrent translation requests of the same page
+* Fixed stalling gettext optimization by failing it on invalid table ID schemas
+* Prevent incorrect string matching and database optimization failures when gettext tables use different character sets
+* Fixed REST redirect loop on subdirectory installs
+* Fixed bug relating to Gutenberg language restriction on classic blocks
+* Improved compatibility with Breakdance Builder
+* Fixed compatibility issue with Booking Calendar plugin’s settings
+* Fixed long AJAX checkout calls when Folders plugin is enabled
+* Stop foreign-locale gettext polluting trp_gettext_en_us
+* Do not add most query strings to hreflang tags
+* Fixed Text RTL saving against the wrong custom language
+* Improved SQL query for checking if table exists
+
+= 3.3.4 =
+* Fixed unauthenticated stored XSS via comment noise-key injection. Thanks to daroo and the Wordfence team
+* Added support for hyphenated custom language gettext tables in upgrading tasks
+* Process whitelisted email shortcodes in protected contexts
+* Added compatibility for the new Automatic User Language Detection pop-up configurator
+
+= 3.3.3 =
+* Fixed XSS vulnerability in Translation Editor with gettext markers in search query parameter. Thanks to Quentin Lamour and the Patchstack team for the report
+* Fixed Breakdance product title search indexing
+
+= 3.3.2 =
+* Fixed security issue regarding sensitive information exposure. Thanks to momopon1415 and the Wordfence team
+* Ensure Divi Builder always loads in the default language
+* Fixed infinite recursion on HTTPS REST requests with multibyte UTF-8 usernames
+
+= 3.3.1 =
+* Fixed cases of gettext database optimization failure due to index creation issues
+* Fixed cases of illegal mix of collation issues when running gettext database optimization
+
+= 3.3 =
+* Fixed XSS vulnerability with gettext markers in comments. Thanks to Pham Duc Anh and the Wordfence team for the report
+* Fixed XSS vulnerability in Translation Editor strings dropdown. Thanks to momopon1415 and the Wordfence team for the report
+* Improved page loading time by better handling gettext translations
+* Fixed WooCommerce remove from cart product title not translated
+* Fixed Elementor homepage editor hanging when default-language subdirectory is enabled
+* Fixed conflict with Mailster plugin
+* Fixed hidden API credential test fields
+* Fixed trp-ajax issues when having escaped db credentials
+* Prevent interference with robots.txt
+
+= 3.2.6 =
+* Fixed XSS security vulnerability regarding gettext wrappers. Thanks to momopon1415 and the Wordfence team for the report
+* Fixed multisite add-on action security. Thanks to Jan Thiel for the report
+* Fixed plural gettext translations skipped by sprintf-compatibility check
+* Fixed edge cases of SQL syntax error in gettext table creation
+* Keep Translation Editor interface language unchanged while switching language of the site preview
+* Fixed CSS of Add Media button from Translation Editor
+
+= 3.2.5 =
+* Added Elementor language switcher widget
+* Fixed some cases where language switcher was not showing newly added languages to logged out users
+* Fixed accidental automatic translation of relative media file names
+* Fixed trp-ajax.php failures on certain hosting environments
+* Prevent some types of urls from flooding the database
+
+= 3.2.4 =
+* New feature: Glossary for TranslatePress AI translation. Control terminology and brand translation consistently
+* Added search and replace tool for existing translations
+* Added enable automatic translation ability in WordPress Abilities API endpoint
+* Fixed https issue on translated pages for some environments
+* Fixed infinite recursion in Breakdance builder locale filter
+
+= 3.2.3 =
+* Added compatibility with Breakdance Builder regarding user profile language
+* Fixed edge case where regular strings were not editable in translation editor
+* Fixed issue where media link appeared doubled in translation editor
+* Fixed WPS Hide Login page going 404 when having subdirectory for default language
+* Removed plugin install form from onboarding
+
+= 3.2.2 =
+* Improved automatic translation handling by saving progress as it goes, so large pages keep their translation even if a page load is interrupted, and the same text is no longer sent for translation (or billed) more than once
+* Fixed issue with automatically translating gettext strings that are intentionally left the same in a plugin or theme's own translation files
+* Improved UI to clarify that TranslatePress AI is available via an API key
+* Extended the Test API Credentials popup to surface the outbound HTTP request (URL, method, headers, body) alongside the response, with pretty-printed JSON
+* Fixed ERR_TOO_MANY_REDIRECTS behind SSL-terminating reverse proxy
+* Fixed broken date format gettext output in date_i18n / wp_date
+* Fixed minor CSS issue on String translation editor when opening it in languages other than English
+* Removed pro plugin updater code
+
+= 3.2.1 =
+* Added WordPress Abilities API integration
+* Improve filtering of translatable text to avoid JS code detection
+* Preserve pubDate/lastBuildDate camelCase in translated RSS feeds
+* Fix WooCommerce emails sent in default language while Different Domain per Language is enabled
+* Fix PHP 8.2 dynamic property deprecation on TRP_Search
+
+= 3.2 =
+* Localize TranslatePress user interface in the most popular languages WordPress is being used in
+* Reduce automatic translation costs by improving the filtering of translatable text
+* Improve original string lookup performance for large translation tables
+* Added Ivory Search compatibility for secondary-language search
+* Added Bricks compatibility for language switcher
+* Support UNIX socket DB connections in trp-ajax.php
+* Preserve JSON query params in language switcher URLs
+* Fixed edge case JS error: invalid assignment to const 'i'
+* Fixed illegal string offset warning in class-reviews.php
+* Fixed PHP warning for undefined oppositeLanguage key in language switcher v2
+* Fixed an issue where the menu language switcher could incorrectly save and reuse the current-language-menu-item class for the default language, causing it to appear active alongside the actual current language
+* Fixed WPRocket Preloading that was causing preloaded pages to serve a different language
+* Fixed edge case error when gettext translation has incorrect number of placeholders
+* Fixed simple_html_dom mangling unquoted attributes followed by tab/newline
+* Fixed Translate Site button URL not adding language slug for subdirectory default language
+* Fixed undefined ID column in Gettext/Regular String Translation tables
+* Fixed Vue.js error in Regular tab strings table in some edge cases
+
+= 3.1.9 =
+* Added Woodmart Layouts compatibility for the Translation Editor
+* Added MEC compatibility for price selectors and contaminated post meta
+* Fixed bug where a second mail sent in the same request was not getting translated
+* Strip leftover trp-gettext markers when translate_page returns early on default language
+* Added link to Website Word Counter tool in Automatic Translation tab
+
+= 3.1.8 =
+ * Fix gettext translations saved as regular default strings when "Disable translation of gettext strings" is enabled
+ * Prevent edge case fatal error from occurring in class-check-invalid-text.php
+ * Send WooCommerce emails in admin language instead of order language when there are multiple recipients
+
 = 3.1.7 =
 * Fixed bug where sites with insufficient quota unnecessarily requested TP AI translations
 

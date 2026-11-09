@@ -13,7 +13,7 @@ add_action( 'trp_machine_translation_extra_settings_middle', 'trp_mtapi_add_sett
 function trp_mtapi_add_settings( $mt_settings ){
     require_once("class-mtapi-customer.php");
 
-	$license = get_option('trp_license_key');
+	$license = trim( (string) get_option('trp_license_key', '') );
 	$status = get_option('trp_license_status');
 	$details = get_option('trp_license_details');
 
@@ -37,12 +37,12 @@ function trp_mtapi_add_settings( $mt_settings ){
                 </svg>
 
                 <span id="trp-mtapi-key" class="trp-primary-text trp-settings-error-text">
-                    <?php esc_html_e('No Active License Detected for this website.', 'translatepress-multilingual'); ?>
+                    <?php echo esc_html( trp_get_tp_ai_api_key_labels( 'no_active_detected' ) ); ?>
                 </span>
             </div>
             <?php if ($translatepress_version_name == 'TranslatePress') : ?>
                 <span class="trp-secondary-text trp-get-free-license-text">
-                    <?php esc_html_e('In order to enable Automatic Translation using TranslatePress AI, you need a license key by creating a free account.', 'translatepress-multilingual'); ?>
+                    <?php echo esc_html( trp_get_tp_ai_api_key_labels( 'need_key_free_account' ) ); ?>
                 </span>
             <?php endif;?>
             <div class="trp-automatic-translation-get-license-buttons">
@@ -53,8 +53,8 @@ function trp_mtapi_add_settings( $mt_settings ){
 
                 <span class="trp-secondary-text trp-text-auto"><?php esc_html_e(' or ', 'translatepress-multilingual'); ?></span>
             <?php endif;?>
-            <a href="<?php echo esc_url( admin_url('admin.php?page=trp_license_key') ) ?>" class="trp-enter-license-link trp-get-free-license-button trp-button-secondary" id="trp-enter-license-button">
-                    <?php esc_html_e( 'Enter your license key', 'translatepress-multilingual' ); ?>
+            <a href="<?php echo esc_url( admin_url('admin.php?page=trp_ai_api_key') ) ?>" class="trp-enter-license-link trp-get-free-license-button trp-button-secondary" id="trp-enter-license-button">
+                    <?php echo esc_html( trp_get_tp_ai_api_key_labels( 'enter_key' ) ); ?>
             </a>
             <?php if ( $translatepress_version_name != 'TranslatePress' ) :  /* [utm43] */ ?>
                 <span class="trp-secondary-text trp-text-auto"><?php printf( esc_html__(' Or %1$spurchase one here%2$s', 'translatepress-multilingual'), '<a href="https://translatepress.com/pricing/?utm_source=tp-automatic-translation&utm_medium=client-site&utm_campaign=activate-license" target="_blank">', '</a>' ); ?></span>
@@ -223,7 +223,7 @@ function trp_mtapi_sync_license( $settings, $mt_settings ) {
         current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) &&
         $settings['translation-engine'] === 'mtapi' )
     {
-        $license = get_option( 'trp_license_key' );
+        $license = trim( (string) get_option( 'trp_license_key', '' ) );
         $status  = get_option( 'trp_license_status' );
 
         if ( $status === 'valid' ) {
@@ -263,7 +263,7 @@ function trp_ai_recheck_quota(){
         if ( isset( $_POST['action'] ) && $_POST['action'] === 'trp_ai_recheck_quota' ) {
             $nonce_okay = check_ajax_referer( 'trp-tpai-recheck', 'nonce' );
             if ( $nonce_okay ){
-                $license = get_option( 'trp_license_key' );
+                $license = trim( (string) get_option( 'trp_license_key', '' ) );
                 $status  = get_option( 'trp_license_status' );
 
                 if ( $status === 'valid' ) {
