@@ -32,7 +32,7 @@ if ( ! class_exists( 'Redux_Validation', false ) ) {
 		public function validate( array $plugin_options, array $options, array $sections ): array {
 			$core = $this->core();
 
-			if (null === $core) {
+			if ( null === $core ) {
 				return $plugin_options;
 			}
 
@@ -43,134 +43,199 @@ if ( ! class_exists( 'Redux_Validation', false ) ) {
 							$field['section_id'] = $k;
 						}
 
-						if ( isset( $field['type'] ) && ( 'checkbox' === $field['type'] || 'checkbox_hide_below' === $field['type'] || 'checkbox_hide_all' === $field['type'] ) ) {
-							if ( ! isset( $plugin_options[ $field['id'] ] ) ) {
-								$plugin_options[ $field['id'] ] = 0;
-							}
+						$skip_validation = false;
+						$child_data      = Redux_Core::$required_child[ $field['id'] ][0] ?? null;
+
+						if ( $child_data ) {
+							$parent_value = $plugin_options[ $child_data['parent'] ] ?? null;
+							$required_val = $child_data['checkValue'];
+
+							$skip_validation = is_array( $required_val )
+								? ! in_array( $parent_value, $required_val, false ) // False flags loose type checking.
+								: $required_val != $parent_value;
 						}
 
-						// Part of Dovy's serialize typography effort.  Preserved here in case it becomes a thing. - kp.
-						/**
-						 * If ( isset ( $field['type'] ) && $field['type'] == 'typography' ) {
-						 *      if ( ! is_array( $plugin_options[ $field['id'] ] ) && ! empty( $plugin_options[ $field['id'] ] ) ) {
-						 *          $plugin_options[ $field['id'] ] = json_decode( $plugin_options[ $field['id'] ], true );
-						 *      }
-						 * }
-						 */
-
-						if ( isset( $core->extensions[ $field['type'] ] ) && method_exists( $core->extensions[ $field['type'] ], '_validate_values' ) ) {
-							$plugin_options = $core->extensions[ $field['type'] ]->_validate_values( $plugin_options, $field, $sections );
-						}
-
-						// Make sure 'validate' field is set.
-						if ( isset( $field['validate'] ) ) {
-
-							// Can we make this an array of validations?
-							$val_arr = array();
-
-							if ( is_array( $field['validate'] ) ) {
-								$val_arr = $field['validate'];
-							} else {
-								$val_arr[] = $field['validate'];
+						if ( ! $skip_validation ) {
+							if ( isset( $field['type'] ) && ( 'checkbox' === $field['type'] || 'checkbox_hide_below' === $field['type'] || 'checkbox_hide_all' === $field['type'] ) ) {
+								if ( ! isset( $plugin_options[ $field['id'] ] ) ) {
+									$plugin_options[ $field['id'] ] = 0;
+								}
 							}
 
-							foreach ( $val_arr as $idx => $val ) {
-								// shim for old *_not_empty validations.
-								if ( 'email_not_empty' === $val || 'numeric_not_empty' === $val ) {
-									$val = 'not_empty';
+							// Part of Dovy's serialize typography effort.  Preserved here in case it becomes a thing. - kp.
+							/**
+							 * If ( isset ( $field['type'] ) && $field['type'] == 'typography' ) {
+							 *      if ( ! is_array( $plugin_options[ $field['id'] ] ) && ! empty( $plugin_options[ $field['id'] ] ) ) {
+							 *          $plugin_options[ $field['id'] ] = json_decode( $plugin_options[ $field['id'] ], true );
+							 *      }
+							 * }
+							 */
+
+							if ( isset( $core->extensions[ $field['type'] ] ) && method_exists( $core->extensions[ $field['type'] ], '_validate_values' ) ) {
+								$plugin_options = $core->extensions[ $field['type'] ]->_validate_values( $plugin_options, $field, $sections );
+							}
+
+							// Default validation applied unless the field already defines 'validate' or 'validate_callback'.
+							$default_validation_by_type = array(
+								'spinner' => 'numeric',
+								'slider'  => 'numeric',
+								'color'   => 'color',
+								'date'    => 'date',
+								'link_color'     => 'css',
+								'border'         => 'css',
+								'box_shadow'     => 'css',
+								'background'     => 'css',
+								'typography'     => 'css',
+								'image_select'   => 'css',
+								'color_gradient' => 'css',
+								'spacing'        => 'css',
+								'dimensions'     => 'css',
+							);
+
+							/**
+							 * Filter the map of field types to default validation methods.
+							 *
+							 * @param array  $default_validation_by_type Map of field types to default validation methods.
+							 * @param string $field_type                 Field type being validated.
+							 */
+
+							// phpcs:ignore WordPress.NamingConventions.ValidHookName
+							$default_validation_by_type = apply_filters( "redux/validate/{$core->args['opt_name']}/defaults_by_type", $default_validation_by_type, $field['type'] ?? '' );
+
+							if ( isset( $field['type'], $field['id'] )
+								&& ! isset( $field['validate'] )
+								&& ! isset( $field['validate_callback'] )
+								&& isset( $default_validation_by_type[ $field['type'] ] )
+							) {
+								$field['validate'] = $default_validation_by_type[ $field['type'] ];
+							}
+
+							// Make sure 'validate' field is set.
+							if ( isset( $field['validate'] ) ) {
+
+								// Can we make this an array of validations?
+								$val_arr = array();
+
+								if ( is_array( $field['validate'] ) ) {
+									$val_arr = $field['validate'];
+								} else {
+									$val_arr[] = $field['validate'];
 								}
 
-								// Make sure 'validate field' is set to 'not_empty'.
-								$is_not_empty = false;
+								foreach ( $val_arr as $idx => $val ) {
+									// shim for old *_not_empty validations.
+									if ( 'email_not_empty' === $val || 'numeric_not_empty' === $val ) {
+										$val = 'not_empty';
+									}
 
-								if ( 'not_empty' === $val ) {
-									// Set the flag.
-									$is_not_empty = true;
-								}
+									// Make sure 'validate field' is set to 'not_empty'.
+									$is_not_empty = false;
 
-								// Check for empty id value.
-								if ( ! isset( $field['id'] ) || ! isset( $plugin_options[ $field['id'] ] ) || ( '' === $plugin_options[ $field['id'] ] ) ) {
+									if ( 'not_empty' === $val ) {
+										// Set the flag.
+										$is_not_empty = true;
+									}
 
-									// If we are looking for an empty value, in the case of 'not_empty'
-									// then we need to keep processing.
-									if ( ! $is_not_empty ) {
+									// Check for empty id value.
+									if ( ! isset( $field['id'] ) || ! isset( $plugin_options[ $field['id'] ] ) || ( '' === $plugin_options[ $field['id'] ] ) ) {
 
-										// Empty id and not checking for 'not_empty'.  Bail out...
-										if ( ! isset( $field['validate_callback'] ) ) {
-											continue;
+										// If we are looking for an empty value, in the case of 'not_empty'
+										// then we need to keep processing.
+										if ( ! $is_not_empty ) {
+
+											// Empty id and not checking for 'not_empty'.  Bail out...
+											if ( ! isset( $field['validate_callback'] ) ) {
+												continue;
+											}
 										}
 									}
-								}
 
-								// Force validate of custom field types.
-								if ( isset( $field['type'] ) && ! isset( $val ) && ! isset( $field['validate_callback'] ) ) {
-									if ( 'color' === $field['type'] || 'color_gradient' === $field['type'] ) {
+									// No need.  Spectrum self validates.
+									if ( 'color_rgba' === $field['type'] ) {
+										continue;
+									}
+
+									// Shim out old color rgba validators.
+									if ( 'color_rgba' === $val || 'colorrgba' === $val ) {
 										$val = 'color';
-									} elseif ( 'date' === $field['type'] ) {
-										$val = 'date';
 									}
-								}
 
-								// No need.  Spectrum self validates.
-								if ( 'color_rgba' === $field['type'] ) {
-									continue;
-								}
+									$validate = 'Redux_Validation_' . $val;
 
-								// Shim out old color rgba validators.
-								if ( 'color_rgba' === $val || 'colorrgba' === $val ) {
-									$val = 'color';
-								}
+									if ( ! class_exists( $validate ) ) {
+										$file = str_replace( '_', '-', $val );
 
-								$validate = 'Redux_Validation_' . $val;
+										/**
+										 * Filter 'redux/validate/{opt_name}/class/{field.validate}'
+										 *
+										 * @param string $validate   validation class file path
+										 */
 
-								if ( ! class_exists( $validate ) ) {
-									$file = str_replace( '_', '-', $val );
+										// phpcs:ignore WordPress.NamingConventions.ValidHookName
+										$class_file = apply_filters( "redux/validate/{$core->args['opt_name']}/class/$val", Redux_Core::$dir . "inc/validation/$val/class-redux-validation-$file.php", $validate );
 
-									/**
-									 * Filter 'redux/validate/{opt_name}/class/{field.validate}'
-									 *
-									 * @param string $validate   validation class file path
-									 */
-
-									// phpcs:ignore WordPress.NamingConventions.ValidHookName
-									$class_file = apply_filters( "redux/validate/{$core->args['opt_name']}/class/$val", Redux_Core::$dir . "inc/validation/$val/class-redux-validation-$file.php", $validate );
-
-									if ( $class_file ) {
-										if ( file_exists( $class_file ) ) {
-											require_once $class_file;
+										if ( $class_file ) {
+											if ( file_exists( $class_file ) ) {
+												require_once $class_file;
+											}
 										}
 									}
-								}
 
-								if ( class_exists( $validate ) ) {
-									if ( empty( $options[ $field['id'] ] ) ) {
-										$options[ $field['id'] ] = '';
-									}
+									if ( class_exists( $validate ) ) {
+										if ( empty( $options[ $field['id'] ] ) ) {
+											$options[ $field['id'] ] = '';
+										}
 
-									if ( isset( $plugin_options[ $field['id'] ] ) && is_array( $plugin_options[ $field['id'] ] ) && ! empty( $plugin_options[ $field['id'] ] ) ) {
-										foreach ( $plugin_options[ $field['id'] ] as $key => $value ) {
-											$before = null;
-											$after  = null;
+										if ( isset( $plugin_options[ $field['id'] ] ) && is_array( $plugin_options[ $field['id'] ] ) && ! empty( $plugin_options[ $field['id'] ] ) ) {
+											foreach ( $plugin_options[ $field['id'] ] as $key => $value ) {
+												$before = null;
+												$after  = null;
 
-											if ( isset( $plugin_options[ $field['id'] ][ $key ] ) && ( ! empty( $plugin_options[ $field['id'] ][ $key ] ) || '0' === $plugin_options[ $field['id'] ][ $key ] ) ) {
-												if ( is_array( $plugin_options[ $field['id'] ][ $key ] ) ) {
-													$before = $plugin_options[ $field['id'] ][ $key ];
+												if ( isset( $plugin_options[ $field['id'] ][ $key ] ) && ( ! empty( $plugin_options[ $field['id'] ][ $key ] ) || '0' === $plugin_options[ $field['id'] ][ $key ] ) ) {
+													if ( is_array( $plugin_options[ $field['id'] ][ $key ] ) ) {
+														$before = $plugin_options[ $field['id'] ][ $key ];
+													} else {
+														$before = trim( $plugin_options[ $field['id'] ][ $key ] );
+													}
+												}
+
+												if ( isset( $options[ $field['id'] ][ $key ] ) && ( ! empty( $plugin_options[ $field['id'] ][ $key ] ) || '0' === $plugin_options[ $field['id'] ][ $key ] ) ) {
+													$after = $options[ $field['id'] ][ $key ];
+												}
+
+												$validation = new $validate( $core, $field, $before, $after );
+
+												if ( ! empty( $validation->value ) || '0' === $validation->value ) {
+													$plugin_options[ $field['id'] ][ $key ] = $validation->value;
 												} else {
-													$before = trim( $plugin_options[ $field['id'] ][ $key ] );
+													unset( $plugin_options[ $field['id'] ][ $key ] );
+												}
+
+												if ( ! empty( $validation->error ) ) {
+													$core->errors[] = $validation->error;
+												}
+
+												if ( ! empty( $validation->warning ) ) {
+													$core->warnings[] = $validation->warning;
+												}
+
+												if ( ! empty( $validation->sanitize ) ) {
+													$core->sanitize[] = $validation->sanitize;
 												}
 											}
-
-											if ( isset( $options[ $field['id'] ][ $key ] ) && ( ! empty( $plugin_options[ $field['id'] ][ $key ] ) || '0' === $plugin_options[ $field['id'] ][ $key ] ) ) {
-												$after = $options[ $field['id'] ][ $key ];
-											}
-
-											$validation = new $validate( $core, $field, $before, $after );
-
-											if ( ! empty( $validation->value ) || '0' === $validation->value ) {
-												$plugin_options[ $field['id'] ][ $key ] = $validation->value;
+										} else {
+											if ( isset( $plugin_options[ $field['id'] ] ) ) {
+												if ( is_array( $plugin_options[ $field['id'] ] ) ) {
+													$pofi = $plugin_options[ $field['id'] ];
+												} else {
+													$pofi = trim( $plugin_options[ $field['id'] ] );
+												}
 											} else {
-												unset( $plugin_options[ $field['id'] ][ $key ] );
+												$pofi = null;
 											}
+
+											$validation                     = new $validate( $core, $field, $pofi, $options[ $field['id'] ] );
+											$plugin_options[ $field['id'] ] = $validation->value;
 
 											if ( ! empty( $validation->error ) ) {
 												$core->errors[] = $validation->error;
@@ -184,60 +249,35 @@ if ( ! class_exists( 'Redux_Validation', false ) ) {
 												$core->sanitize[] = $validation->sanitize;
 											}
 										}
-									} else {
-										if ( isset( $plugin_options[ $field['id'] ] ) ) {
-											if ( is_array( $plugin_options[ $field['id'] ] ) ) {
-												$pofi = $plugin_options[ $field['id'] ];
-											} else {
-												$pofi = trim( $plugin_options[ $field['id'] ] );
-											}
-										} else {
-											$pofi = null;
-										}
 
-										$validation                     = new $validate( $core, $field, $pofi, $options[ $field['id'] ] );
-										$plugin_options[ $field['id'] ] = $validation->value;
-
-										if ( ! empty( $validation->error ) ) {
-											$core->errors[] = $validation->error;
-										}
-
-										if ( ! empty( $validation->warning ) ) {
-											$core->warnings[] = $validation->warning;
-										}
-
-										if ( ! empty( $validation->sanitize ) ) {
-											$core->sanitize[] = $validation->sanitize;
-										}
+										break;
 									}
-
-									break;
 								}
 							}
-						}
 
-						if ( isset( $field['validate_callback'] ) && ( is_callable( $field['validate_callback'] ) || ( is_string( $field['validate_callback'] ) && function_exists( $field['validate_callback'] ) ) ) ) {
-							$callback = $field['validate_callback'];
-							unset( $field['validate_callback'] );
+							if ( isset( $field['validate_callback'] ) && ( is_callable( $field['validate_callback'] ) || ( is_string( $field['validate_callback'] ) && function_exists( $field['validate_callback'] ) ) ) ) {
+								$callback = $field['validate_callback'];
+								unset( $field['validate_callback'] );
 
-							$plugin_option = $plugin_options[ $field['id'] ] ?? null;
-							$option        = $options[ $field['id'] ] ?? null;
+								$plugin_option = $plugin_options[ $field['id'] ] ?? null;
+								$option        = $options[ $field['id'] ] ?? null;
 
-							if ( null !== $plugin_option ) {
-								$callbackvalues = call_user_func( $callback, $field, $plugin_option, $option );
+								if ( null !== $plugin_option ) {
+									$callbackvalues = call_user_func( $callback, $field, $plugin_option, $option );
 
-								$plugin_options[ $field['id'] ] = $callbackvalues['value'];
+									$plugin_options[ $field['id'] ] = $callbackvalues['value'];
 
-								if ( isset( $callbackvalues['error'] ) ) {
-									$core->errors[] = $callbackvalues['error'];
-								}
+									if ( isset( $callbackvalues['error'] ) ) {
+										$core->errors[] = $callbackvalues['error'];
+									}
 
-								if ( isset( $callbackvalues['warning'] ) ) {
-									$core->warnings[] = $callbackvalues['warning'];
-								}
+									if ( isset( $callbackvalues['warning'] ) ) {
+										$core->warnings[] = $callbackvalues['warning'];
+									}
 
-								if ( isset( $callbackvalues['sanitize'] ) ) {
-									$core->sanitize[] = $callbackvalues['sanitize'];
+									if ( isset( $callbackvalues['sanitize'] ) ) {
+										$core->sanitize[] = $callbackvalues['sanitize'];
+									}
 								}
 							}
 						}

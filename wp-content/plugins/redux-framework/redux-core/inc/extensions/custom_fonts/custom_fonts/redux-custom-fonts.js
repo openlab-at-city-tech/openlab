@@ -49,10 +49,10 @@
 		l10n = redux_custom_fonts_l10;
 
 		if ( undefined === optName ) {
-			reduxObject = redux;
-		} else {
-			reduxObject = redux.optName;
+			$.redux.getOptName( el );
 		}
+
+		reduxObject = redux.optName;
 
 		el.find( '.checkbox' ).on(
 			'click',
@@ -249,12 +249,11 @@
 					nonce: nonce,
 					attachment_id: attachment.id,
 					title: attachment.attributes.title,
-					mime: attachment.attributes.mime,
 					filename: attachment.attributes.filename,
 					conversion: Boolean( conversion )
 				};
 
-				if ( 'application/zip ' === data.mime ) {
+				if ( 'application/zip' === attachment.attributes.mime ) {
 					status = l10n.unzip;
 				} else {
 					status = l10n.convert;

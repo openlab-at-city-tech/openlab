@@ -6,7 +6,7 @@
  * @author  Kevin Provance <kevin.provance@gmail.com>
  * @class   Redux_Extension_Color_Scheme
  *
- * @version 4.5.10
+ * @version 4.5.18
  *
  * @noinspection PhpIgnoredClassAliasDeclaration
  */
@@ -26,7 +26,7 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		 *
 		 * @var string
 		 */
-		public static $version = '4.5.10';
+		public static $version = '4.5.18';
 
 		/**
 		 * Extension friendly name.
@@ -428,7 +428,7 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		 * @return      void
 		 */
 		public function parse_ajax() {
-			if ( ! is_user_logged_in() && ! is_admin() && ! current_user_can( $this->parent->args['page_permissions'] ) ) {
+			if ( ! Redux_Helpers::current_user_can( $this->parent->args['page_permissions'] ) ) {
 				wp_die( esc_html__( 'You do not have permission to perform this action.', 'redux-framework' ) );
 			}
 
@@ -569,7 +569,7 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 			// Set header info.
 			header( 'Content-Description: File Transfer' );
 			header( 'Content-type: application/txt' );
-			header( 'Content-Disposition: attachment; filename="redux_schemes_' . $this->parent->args['opt_name'] . '_' . $this->field_id . '_' . gmdate( 'm-d-Y' ) . '.json"' );
+			header( 'Content-Disposition: attachment; filename="redux_schemes_' . $this->parent->args['opt_name'] . '_' . $this->field_id . '_' . gmdate( 'm-d-Y-H-i' ) . '.json"' );
 			header( 'Content-Transfer-Encoding: binary' );
 			header( 'Expires: 0' );
 			header( 'Cache-Control: must-revalidate' );
