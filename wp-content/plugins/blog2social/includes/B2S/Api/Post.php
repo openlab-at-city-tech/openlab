@@ -21,6 +21,14 @@ class B2S_Api_Post {
             'redirection' => '5',
             'user-agent' => $ua);
 
-        return wp_remote_retrieve_body(wp_remote_post($url . 'post.php', $args));
+        $response = wp_remote_post($url . 'post.php', $args);
+        if (is_wp_error($response)) {
+            $errorMessage = $response->get_error_message();
+            if (stripos($errorMessage, 'timed out') !== false || stripos($errorMessage, 'timeout') !== false) {
+                return json_encode(array('b2s_timeout' => true, 'b2s_timeout_value' => $timeout));
+            }
+            return false;
+        }
+        return wp_remote_retrieve_body($response);
     }
 }

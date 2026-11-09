@@ -156,4 +156,17 @@ class B2S_Ship_Navbar {
 
         return $content;
     }
+
+    public function getRefreshUrl($data) {
+        $b2sAuthUrl = $this->authUrl . '&portal_id=' . $data->networkId . '&transfer=' . (in_array($data->networkId, $this->oAuthPortal) ? 'oauth' : 'form') . '&mandant_id=' . $data->mandantId . '&version=3&affiliate_id=' . B2S_Tools::getAffiliateId();
+        $chooseData = isset($this->networkTypeData[$data->networkType]) ? $this->networkTypeData[$data->networkType] : 'profile';
+        if ($data->networkId == 6 && $data->networkType == 0) {
+            $chooseData = 'page';
+        }
+        return $b2sAuthUrl . '&choose=' . $chooseData . '&update=' . $data->networkAuthId;
+    }
+
+    public function getNetworkName($networkId) {
+        return isset($this->networkName[$networkId]) ? $this->networkName[$networkId] : '';
+    }
 }

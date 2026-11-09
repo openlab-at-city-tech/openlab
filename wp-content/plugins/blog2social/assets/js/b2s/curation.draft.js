@@ -7,8 +7,11 @@ if (typeof wp.heartbeat !== "undefined") {
     wp.heartbeat.connectNow();
 }
 jQuery(window).on("load", function () {
-    jQuery('#b2sPagination').val("1");
-    b2sSortFormSubmit();
+    var $list = jQuery('.b2s-wp-posts-list-area');
+    if ($list.length && $list.closest('.modal').length === 0) {
+        jQuery('#b2sPagination').val("1");
+        b2sSortFormSubmit();
+    }
 });
 
 function b2sSortFormSubmit() {
@@ -28,6 +31,11 @@ function b2sSortFormSubmit() {
         'action': 'b2s_sort_data',
         'b2sSortPostTitle': jQuery('#b2sSortPostTitle').val(),
         'b2sSortPostAuthor': jQuery('#b2sSortPostAuthor').val(),
+        'b2sSortPostCat': jQuery('#b2sSortPostCat').val(),
+        'b2sSortPostType': jQuery('#b2sSortPostType').val(),
+        'b2sSortPostStatus': jQuery('#b2sSortPostStatus').val(),
+        'b2sSortPostShareStatus': jQuery('#b2sSortPostShareStatus').val(),
+        'b2sSortPostSharedBy': jQuery('#b2sSortPostSharedBy').val(),
         'b2sUserAuthId': jQuery('#b2sUserAuthId').val(),
         'b2sPostBlogId': jQuery('#b2sPostBlogId').val(),
         'b2sType': jQuery('#b2sType').val(),
@@ -176,7 +184,7 @@ jQuery(document).on('click', '.b2s-pagination-btn', function () {
     return false;
 });
 
-jQuery(document).on('change', '.b2s-select', function () {
+jQuery(document).on('change', '.b2s-select, .b2s-select-filter', function () {
     jQuery('#b2sPagination').val("1");
     b2sSortFormSubmit();
     return false;

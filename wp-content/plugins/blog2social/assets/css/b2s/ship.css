@@ -92,7 +92,13 @@
     font-weight:600;
 }
 
-
+.b2s-post-tool-area-free{
+    display: inline-block;
+    transform: translateY(1.8px);
+    padding-top: 0;
+    margin-top: 0;
+    margin-left: 3px;
+}
 #b2s-wrapper.toggled #b2s-sidebar-wrapper {
     width: 300px;
 }
@@ -319,8 +325,37 @@
 
 .b2s-post-item-info-area{
     font-size: 11px !important;
+    line-height: 24px;
+    white-space: nowrap;
 }
 
+.b2s-post-item-info-area > select.b2s-post-item-details-post-format{
+    display: inline-block;
+    min-width: 92px;
+    width: auto;
+    height: 24px;
+    min-height: 24px;
+    padding: 2px 18px 2px 0;
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    box-shadow: none;
+    color: #334155;
+    font-size: 11px;
+    line-height: 18px;
+    vertical-align: middle;
+    transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.b2s-post-item-info-area > select.b2s-post-item-details-post-format:hover{
+    border: 0;
+}
+
+.b2s-post-item-info-area > select.b2s-post-item-details-post-format:focus{
+    border: 0;
+    box-shadow: none;
+    outline: none;
+}
 .b2s-post-item-details-message-result{
     margin-top:2px;
 }
@@ -387,7 +422,11 @@
     font-size: 11px !important;
 
 }
-
+.b2s-edit-template-no-cache-area {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 5px;
+}
 .b2s-edit-template-content-post-item,
 .b2s-edit-template-comment-post-item {
     appearance:button;
@@ -562,6 +601,17 @@ input[type="checkbox"], input[type="radio"] {
 }
 .b2s-post-item-loading-impulse-area{
     margin-top:5em;
+}
+.b2s-loader-impulse.b2s-post-item-loading-impulse-area{
+    animation: 1.5s ease-in-out 0s normal none infinite running sk-pulseScaleOut;
+    background-color: #79b331;
+    border: 0;
+    box-shadow: none;
+}
+@media (prefers-reduced-motion: reduce) {
+    .b2s-loader-impulse.b2s-post-item-loading-impulse-area{
+        animation: none;
+    }
 }
 .b2s-post-item-details-portal-img-area{
     margin-top:1em;
@@ -1222,13 +1272,71 @@ input[type="number"]{
     color: #3c434a !important;
 }
 
+.b2s-ai-generated-tag-btn {
+    color: #888;
+    font-weight: normal;
+    margin-right: 6px;
+}
+.b2s-ai-generated-tag-btn:hover,
+.b2s-ai-generated-video-tag-btn:hover {
+    color: #888;
+    text-decoration: underline;
+}
+.b2s-ai-generated-tag-btn-inactive,
+.b2s-ai-generated-video-tag-btn-inactive {
+    color: #888;
+}
+.ai-tag-active {
+    border: 2px solid #28a745 !important;
+    color:#28a745 !important;
+}
+.b2s-ai-generated-image-tag-btn {
+    position: absolute;
+  left: 50%;
+  top: -5px;
+  transform: translateX(-50%);
+}
+
+.b2s-post-item-video-tag-ass-row {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+/* override .center-block auto-margins so the video tag stays left, inline with the ass buttons */
+.b2s-ai-generated-video-tag-btn {
+    margin: 0 6px 0 0;
+    flex-shrink: 0;
+    display: inline-block;
+    color: #888;
+    margin-right: 5px;
+}
+
+
 .b2s-tiktok-form-container{
     display: flex;
     align-items: flex-start;
     gap: 1rem;
 }
 
+/* center the AI video tag on top of the TikTok video preview, like the image tag */
+.tiktok-video-preview-wrapper .b2s-ai-generated-video-tag-btn {
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    transform: translateX(-50%);
+    z-index: 2;
+    margin: 0;
+}
 
+/* wrapper is now the flex child instead of the video itself, so it needs the same sizing */
+.tiktok-video-preview-wrapper {
+    flex-shrink: 0;
+    width: 30%;
+}
+.tiktok-video-preview.inside-wrapper {
+    width: 100%;
+}
 .tiktok-video-preview{
     flex-shrink: 0;
     width: 30%;
@@ -1483,7 +1591,6 @@ select.error,
 }
 
 .b2s-edit-template-preview-image-image-3, .b2s-edit-template-preview-link-image-3 {
-    margin-top: 10px;
     border-top: 1px solid lightgray;
     border-bottom: 1px solid lightgray;
 }
@@ -1757,6 +1864,9 @@ select.error,
     padding: 14px 16px 16px;
     margin-bottom: 12px;
     box-shadow: 7px 8px 8px rgba(0, 0, 0, 0.08);
+}
+.b2s-edit-template-ai-heading-margin{
+    margin-bottom:0px !important;
 }
 
 .b2s-edit-template-ai-content:not(.b2s-global-ai-settings-section),
@@ -2398,4 +2508,220 @@ input:disabled + .b2s-toggle-slider {
     font-size: 11px;
     color: rgba(255,255,255,0.8);
     font-family: sans-serif;
+}
+
+.alert-custom {
+    padding: 10px!important;
+    margin-bottom: 5px!important;
+}
+
+/* LinkedIn (network 3) template preview card */
+
+.b2s-network-3-card {
+    width: 100%;
+    max-width: 355px;
+    margin: 10px auto 0;
+    background: #fff;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    overflow: hidden;
+    color: #1c1e21;
+    box-sizing: border-box;
+}
+
+.b2s-network-3-card *,
+.b2s-network-3-card *::before,
+.b2s-network-3-card *::after {
+    box-sizing: border-box;
+}
+
+.b2s-network-3-card__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 12px 12px 8px;
+}
+
+.b2s-network-3-card__profile {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+}
+
+.b2s-network-3-card__avatar {
+    width: 48px;
+    height: 48px;
+    flex: 0 0 48px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.b2s-network-3-card__author-name {
+    font-size: 15px;
+    line-height: 18px;
+    font-weight: 700;
+    margin-left: 0 !important;
+}
+
+.b2s-network-3-card__date {
+    margin-top: 1px;
+    font-size: 12px;
+    line-height: 16px;
+    color: #65676b;
+}
+
+.b2s-network-3-card__globe {
+    font-size: 7px;
+    vertical-align: middle;
+}
+
+.b2s-network-3-card__menu {
+    color: #4b4f52;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.b2s-network-3-card__content {
+    padding: 0 12px 10px;
+    margin: 0 !important;
+}
+
+.b2s-network-3-card__content p {
+    margin: 0;
+    font-size: 14px;
+    line-height: 20px;
+}
+
+.b2s-network-3-card__link-preview {
+    display: flex;
+    width: 100%;
+    border: 1px solid #dddfe2;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.b2s-network-3-card__link-preview .b2s-network-3-card__image-wrapper {
+    width: 40%;
+    height: 85px;
+    max-height: none;
+    flex: 0 0 40%;
+    border: 0;
+}
+
+.b2s-network-3-card__image-wrapper {
+    width: 100%;
+    max-height: 266px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: #181c1f;
+    border-top: 1px solid #dddfe2;
+    border-bottom: 1px solid #dddfe2;
+}
+
+.b2s-network-3-card__image {
+    display: block;
+    width: 100%;
+    max-height: 266px;
+    object-fit: contain;
+}
+
+.b2s-network-3-card__link-meta {
+    padding: 8px 12px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #dddfe2;
+    flex: 1;
+    min-width: 0;
+}
+
+.b2s-network-3-card__actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 52px;
+    padding: 0 18px;
+    border-bottom: 1px solid #e4e6e8;
+}
+
+.b2s-network-3-card__action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #45484b;
+    font-size: 19px;
+    line-height: 1;
+}
+
+.b2s-network-3-card__send {
+    font-size: 16px;
+    transform: rotate(-8deg);
+}
+
+.b2s-network-3-card__footer {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+}
+
+.b2s-network-3-card__impressions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 13px;
+    color: #45484b;
+}
+
+.b2s-network-3-card__chart {
+    display: flex;
+    align-items: flex-end;
+    width: 18px;
+    height: 18px;
+    margin-right: 2px;
+    gap: 2px;
+}
+
+.b2s-network-3-card__chart span {
+    display: block;
+    width: 4px;
+    background: #303336;
+}
+
+.b2s-network-3-card__chart span:nth-child(1) {
+    height: 7px;
+}
+
+.b2s-network-3-card__chart span:nth-child(2) {
+    height: 13px;
+}
+
+.b2s-network-3-card__chart span:nth-child(3) {
+    height: 18px;
+}
+
+.b2s-network-3-card__comment-wrapper {
+    padding: 10px 12px;
+    border-top: 1px solid #e4e6e8;
+}
+
+.b2s-network-3-card__comment {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.b2s-network-3-card__comment-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.b2s-network-3-card__comment-body {
+    flex: 1;
+    background-color: #f2f3f5;
+    border-radius: 12px;
+    padding: 6px 10px;
 }

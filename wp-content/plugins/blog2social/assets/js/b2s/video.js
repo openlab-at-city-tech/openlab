@@ -1,5 +1,13 @@
 jQuery.noConflict();
 
+function showTextError(){
+ jQuery('.b2s-compose-textarea-wrap').addClass('b2s-curation-text-error');
+}
+
+function hideTextError(){
+ jQuery('.b2s-compose-textarea-wrap').removeClass('b2s-curation-text-error');
+}
+
 jQuery(window).on("load", function () {
 
     if (typeof wp.heartbeat !== "undefined") {
@@ -18,7 +26,6 @@ jQuery(window).on("load", function () {
 
     jQuery(".b2s-progress-bar").loading();
     if (jQuery('#b2sUserCanUseVideoAddon').val() == '0' || jQuery('#b2sUserCanUseVideoAddon').val() == '') {
-        jQuery('.b2s-video-upload-file-container').css('opacity', '0.2');
         jQuery('.b2s-video-upload-file-container :input').prop('disabled', 'disabled');
         jQuery('.b2s-video-upload-file-container').find("a").attr('disabled', 'disabled');
     }
@@ -41,8 +48,24 @@ function formatAMPM(date) {
     return strTime;
 }
 
+function updateCurationShipDate() {
+    var dateVal = jQuery('#b2s-post-curation-ship-date-date').val();
+    var timeVal = jQuery('#b2s-post-curation-ship-date-time').val();
+    if (dateVal && timeVal) {
+        jQuery('#b2s-post-curation-ship-date').val(dateVal + ' ' + timeVal);
+    }
+}
+
 
 /*Video url curation*/
+jQuery(document).on('click', '#b2s-compose-settings-toggle', function () {
+    var $panel = jQuery('#b2s-compose-settings-panel');
+    var $icon = jQuery(this).find('.b2s-compose-settings-toggle-icon');
+    $panel.slideToggle(150, function () {
+        $icon.toggleClass('glyphicon-chevron-down glyphicon-chevron-up', $panel.is(':visible'));
+    });
+});
+
 jQuery(document).on('click', '.b2s-btn-curation-continue', function () {
     jQuery('#b2s-curation-input-url-help').hide();
     var re = new RegExp(/^(https?:\/\/)+[a-zA-Z0-9\wÄÖÜÑÁÉÍÓÚÂÃÀÇÊÔÕÆÈËÎÏŒÙÛŸØÅöäüñáéíóúâãàçêôõæèëîïœùûÿøåß-]+(?:\.[a-zA-Z0-9\wÄÖÜÑÁÉÍÓÚÂÃÀÇÊÔÕÆÈËÎÏŒÙÛŸØÅöäüñáéíóúâãàçêôõæèëîïœùûÿøåß-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=%.ÄÖÜÑÁÉÍÓÚÂÃÀÇÊÔÕÆÈËÎÏŒÙÛŸØÅöäüñáéíóúâãàçêôõæèëîïœùûÿøåß]+$/);
@@ -90,6 +113,8 @@ jQuery(document).on('change', '#b2s-post-curation-ship-type', function () {
     if (jQuery(this).val() == 1) {
         jQuery('.b2s-post-curation-ship-date-area').show();
         jQuery('#b2s-post-curation-ship-date').prop("disabled", false);
+        jQuery('#b2s-post-curation-ship-date-date').prop('disabled', false);
+        jQuery('#b2s-post-curation-ship-date-time').prop('disabled', false);
 
         var today = new Date();
 
@@ -103,21 +128,54 @@ jQuery(document).on('change', '#b2s-post-curation-ship-type', function () {
             today.setMinutes(30);
         }
 
-        var setTodayDate = today.getFullYear() + '-' + (padDate(today.getMonth() + 1)) + '-' + padDate(today.getDate()) + ' ' + formatAMPM(today);
-        if (jQuery('#b2s-post-curation-ship-date').attr('data-language') == 'de') {
-            setTodayDate = padDate(today.getDate()) + '.' + (padDate(today.getMonth() + 1)) + '.' + today.getFullYear() + ' ' + padDate(today.getHours()) + ':' + padDate(today.getMinutes());
-        }
+        var language = jQuery('#b2s-post-curation-ship-date').attr('data-language');
+        var dateFormat = (language == 'de') ? 'dd.mm.yyyy' : 'yyyy-mm-dd';
+        var showMeridian = (language != 'de');
         //MaxSchedDate
         var maxDate = new Date(jQuery('#b2sMaxSchedDate').val());
-        jQuery('#b2s-post-curation-ship-date').b2sdatepicker({'autoClose': true, 'toggleSelected': false, 'minutesStep': 15, 'minDate': new Date(), 'maxDate': maxDate, 'startDate': today, 'todayButton': new Date(), 'position': 'top left'});
 
-        var curationPicker = jQuery('#b2s-post-curation-ship-date').b2sdatepicker().data('b2sdatepicker');
-        curationPicker.selectDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));
-        jQuery('#b2s-post-curation-ship-date').val(setTodayDate);
+        var setDateStr = (language == 'de')
+            ? padDate(today.getDate()) + '.' + (padDate(today.getMonth() + 1)) + '.' + today.getFullYear()
+            : today.getFullYear() + '-' + (padDate(today.getMonth() + 1)) + '-' + padDate(today.getDate());
+        var setTimeStr = (language == 'de')
+            ? padDate(today.getHours()) + ':' + padDate(today.getMinutes())
+            : formatAMPM(today);
+
+        jQuery('#b2s-post-curation-ship-date-date').datepicker({
+            format: dateFormat,
+            language: language,
+            maxViewMode: 2,
+            todayHighlight: true,
+            startDate: today,
+            endDate: maxDate,
+            calendarWeeks: true,
+            autoclose: true
+        }).datepicker('update', today);
+
+        jQuery('#b2s-post-curation-ship-date-time').timepicker({
+            minuteStep: 15,
+            appendWidgetTo: 'body',
+            showSeconds: false,
+            showMeridian: showMeridian,
+            defaultTime: today,
+            snapToStep: true
+        });
+
+        jQuery('#b2s-post-curation-ship-date-date').off('changeDate.curation').on('changeDate.curation', function () {
+            updateCurationShipDate();
+        });
+        jQuery('#b2s-post-curation-ship-date-time').off('changeTime.timepicker').on('changeTime.timepicker', function () {
+            updateCurationShipDate();
+        });
+
+        jQuery('#b2s-post-curation-ship-date-date').val(setDateStr);
+        jQuery('#b2s-post-curation-ship-date').val(setDateStr + ' ' + setTimeStr);
 
     } else {
         jQuery('.b2s-post-curation-ship-date-area').hide();
         jQuery('#b2s-post-curation-ship-date').prop("disabled", true);
+        jQuery('#b2s-post-curation-ship-date-date').prop('disabled', true);
+        jQuery('#b2s-post-curation-ship-date-time').prop('disabled', true);
     }
 });
 
@@ -144,6 +202,7 @@ function scrapeDetails(url) {
             'url': url,
             'action': 'b2s_scrape_url',
             'loadSettings': loadSettings,
+            'isVideo': true,
             'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
         },
         error: function () {
@@ -166,8 +225,14 @@ function scrapeDetails(url) {
                 jQuery('.b2s-curation-settings-area').show();
                 jQuery('.b2s-curation-preview-area').html(data.preview);
                 jQuery('.b2s-curation-preview-area').show();
+                jQuery('.b2s-compose-unified-input').show();
+                jQuery('.b2s-compose-toolbar').show();
+                jQuery('#b2s-compose-settings-panel').show();
                 jQuery('#b2s-btn-curation-customize').prop("disabled", false);
                 jQuery('#b2s-btn-curation-share').prop("disabled", false);
+
+                // Sync scraped description into the visible compose textarea
+                jQuery('#b2s-compose-video-textarea').val(jQuery('#b2s-post-curation-comment').val());
 
                 //set date + select schedulding
                 if (jQuery('#b2sSelSchedDate').val() != "") {
@@ -230,6 +295,13 @@ jQuery(document).on("keyup", "#b2s-post-curation-preview-title", function () {
     }
     return false;
 });
+jQuery(document).on('keyup input', '#b2s-compose-video-textarea', function () {
+    var val = jQuery(this).val();
+    jQuery('#b2s-post-curation-comment').val(val);
+    jQuery('#b2s-compose-video-textarea').toggleClass('error', val.length === 0);
+    if (val.length > 0) { hideTextError(); }
+});
+
 jQuery(document).on("keyup", "#b2s-post-curation-comment", function () {
     jQuery(this).removeClass('error');
     if (jQuery(this).val().length === 0) {
@@ -243,14 +315,16 @@ jQuery(document).on('click', '#b2s-btn-curation-share', function () {
     jQuery('#b2s-curation-no-auth-info').hide();
     jQuery('#b2s-curation-saved-draft-info').hide();
     jQuery('.b2s-post-curation-action').val('b2s_curation_share');
+    jQuery('#b2s-post-curation-comment').val(jQuery('#b2s-compose-video-textarea').val());
     var noContent = false;
     if (jQuery('#b2s-curation-post-format').val() == '0') {
         if (jQuery('#b2s-post-curation-preview-title').val().length === 0) {
             jQuery('#b2s-post-curation-preview-title').addClass('error');
             noContent = true;
         }
-        if (jQuery('#b2s-post-curation-comment').val().length === 0) {
-            jQuery('#b2s-post-curation-comment').addClass('error');
+        if (jQuery('#b2s-compose-video-textarea').val().length === 0) {
+            jQuery('#b2s-compose-video-textarea').addClass('error');
+            showTextError();
             noContent = true;
         }
     } else if (jQuery('#b2s-curation-post-format').val() == '1') {
@@ -296,9 +370,17 @@ jQuery(document).on('click', '#b2s-btn-curation-share', function () {
                 jQuery('.b2s-loading-area').hide();
                 jQuery('.b2s-curation-post-list-area').show();
                 jQuery('.b2s-curation-post-list').html(data.content);
+                jQuery('.b2s-compose-unified-input').show();
+                jQuery('.b2s-compose-toolbar').show();
+                jQuery('#b2s-compose-settings-panel').show();
+                jQuery('.b2s-curation-settings-area').show();
+                jQuery('.b2s-curation-preview-area').show();
             } else {
                 jQuery('.b2s-loading-area').hide();
                 jQuery('.b2s-curation-post-list-area').hide();
+                jQuery('.b2s-compose-unified-input').show();
+                jQuery('.b2s-compose-toolbar').show();
+                jQuery('#b2s-compose-settings-panel').show();
                 jQuery('.b2s-curation-settings-area').show();
                 if (jQuery('#b2s-curation-post-format').val() == '0') {
                     jQuery('.b2s-curation-preview-area').show();
@@ -402,8 +484,9 @@ jQuery(document).on('click', '#b2s-btn-curation-customize', function () {
             jQuery('#b2s-post-curation-preview-title').addClass('error');
             noContent = true;
         }
-        if (jQuery('#b2s-post-curation-comment').val().length === 0) {
-            jQuery('#b2s-post-curation-comment').addClass('error');
+        if (jQuery('#b2s-compose-video-textarea').val().length === 0) {
+            jQuery('#b2s-compose-video-textarea').addClass('error');
+            showTextError();
             noContent = true;
         }
     } else if (jQuery('#b2s-curation-post-format').val() == '1') {
@@ -425,6 +508,7 @@ jQuery(document).on('click', '#b2s-btn-curation-customize', function () {
         return false;
     }
     jQuery('.b2s-post-curation-action').val('b2s_curation_customize');
+    jQuery('#b2s-post-curation-comment').val(jQuery('#b2s-compose-video-textarea').val());
     jQuery('.b2s-loading-area').show();
     jQuery('.b2s-curation-settings-area').hide();
     jQuery('.b2s-curation-preview-area').hide();
@@ -468,6 +552,10 @@ jQuery(document).on('click', '#b2s-btn-curation-customize', function () {
     return false;
 });
 
+jQuery(document).on('change', '#b2s-curation-preview-profile-select', function () {
+    jQuery('#b2s-post-curation-profile-select').val(jQuery(this).val()).trigger('change');
+});
+
 jQuery(document).on('change', '#b2s-post-curation-profile-select', function () {
     var tos = false;
     if (jQuery('#b2s-post-curation-profile-data' + jQuery(this).val()).val() == "") {
@@ -507,8 +595,9 @@ jQuery(document).on('click', '#b2s-btn-curation-draft', function () {
             jQuery('#b2s-post-curation-preview-title').addClass('error');
             noContent = true;
         }
-        if (jQuery('#b2s-post-curation-comment').val().length === 0) {
-            jQuery('#b2s-post-curation-comment').addClass('error');
+        if (jQuery('#b2s-compose-video-textarea').val().length === 0) {
+            jQuery('#b2s-compose-video-textarea').addClass('error');
+            showTextError();
             noContent = true;
         }
     } else if (jQuery('#b2s-curation-post-format').val() == '1') {
@@ -530,6 +619,7 @@ jQuery(document).on('click', '#b2s-btn-curation-draft', function () {
         return false;
     }
     jQuery('.b2s-post-curation-action').val('b2s_curation_draft');
+    jQuery('#b2s-post-curation-comment').val(jQuery('#b2s-compose-video-textarea').val());
     jQuery('.b2s-loading-area').show();
     jQuery('.b2s-curation-settings-area').hide();
     jQuery('.b2s-curation-preview-area').hide();
@@ -577,7 +667,6 @@ jQuery(document).on('click', '#b2s-btn-curation-draft', function () {
 
 function activateVideo() {
     jQuery('.b2s-curation-title').hide();
-    jQuery('#b2s-curation-title-video').show();
     jQuery('.b2s-curation-subtitle').hide();
     jQuery('#b2s-curation-subtitle-video').show();
     jQuery('#b2s-post-curation-comment').val(jQuery('#b2s-post-curation-comment-dummy').val());
@@ -722,7 +811,11 @@ function loadDraftShipData() {
         jQuery('#b2s-post-curation-ship-type').trigger('change');
         if (typeof ship_date != "undefined" && ship_date != "" && ship_date != null) {
             jQuery('#b2s-post-curation-ship-date').val(ship_date);
-            jQuery('#b2s-post-curation-ship-date').trigger('change');
+            var spaceIdx = ship_date.indexOf(' ');
+            if (spaceIdx > -1) {
+                jQuery('#b2s-post-curation-ship-date-date').datepicker('update', ship_date.substring(0, spaceIdx));
+                jQuery('#b2s-post-curation-ship-date-time').val(ship_date.substring(spaceIdx + 1));
+            }
         }
     }
     if (typeof profile_select != "undefined" && profile_select != "" && profile_select != null) {
@@ -945,7 +1038,6 @@ jQuery(document).on('click', '.b2s-show-video-uploads', function () {
     var attachment_id = jQuery(this).data('attachment-id');
     if (!jQuery(this).find('i').hasClass('isload')) {
         jQuery('.b2s-server-connection-fail').hide();
-
         jQuery.ajax({
             url: ajaxurl,
             type: "POST",

@@ -32,16 +32,13 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
             <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
             <div class="col-md-9 del-padding-left del-padding-right">
                 <!--Header|Start - Include-->
+                <?php $includeNavbar = true; ?>
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
                 <!--Header|End-->
-                <div class="clearfix"></div>
-                <!--Navbar|Start-->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
-                    </div>
-                </div>
-                <!--Navbar|End-->
+    
+                <!-- Navbar  Start-->
+                <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
+                <!-- Navbar  End-->
                 <div class="clearfix"></div>
                 <!--Content|Start-->
                 <div class="panel panel-default">
@@ -150,7 +147,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type="hidden" id="b2sInsertImageType" value="0">
 <input type="hidden" id="isOgMetaChecked" value="<?php echo (isset($metaSettings['og_active']) ? (int) $metaSettings['og_active'] : 0); ?>">
 <input type="hidden" id="isCardMetaChecked" value="<?php echo (isset($metaSettings['card_active']) ? (int) $metaSettings['card_active'] : 0); ?>">
-<input type="hidden" id="b2sRedirectUrlContentCuration" value="<?php echo esc_url(get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/admin.php?page=blog2social-curation'); ?>">
+<input type="hidden" id="b2sRedirectUrlContentCuration" value="<?php echo esc_url(admin_url('admin.php?page=blog2social-post&opencontent=1')); ?>">
 <input type="hidden" id="b2sNotAllowGif" value="<?php echo esc_attr(implode(";", json_decode(B2S_PLUGIN_NETWORK_NOT_ALLOW_GIF, true))); ?>">
 <input type="hidden" id="b2sAnimateGif" value='<?php echo esc_attr(B2S_PLUGIN_NETWORK_ANIMATE_GIF); ?>'>
 <input type="hidden" id="ogMetaNetworks" value="<?php echo esc_attr(implode(';', json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og'])); ?>">
@@ -258,7 +255,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 <b><?php esc_html_e('Define the default settings for the custom post format for all of your Facebook accounts in the Blog2Social settings.', 'blog2social'); ?></b>
                             </div>
                             <div class="b2s-post-format-settings-info" data-network-id="2" style="display:none;">
-                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your Twitter accounts in the Blog2Social settings.', 'blog2social'); ?></b>
+                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your X accounts in the Blog2Social settings.', 'blog2social'); ?></b>
                             </div>
                             <div class="b2s-post-format-settings-info" data-network-id="3" style="display:none;">
                                 <b><?php esc_html_e('Define the default settings for the custom post format for all of your LinkedIn accounts in the Blog2Social settings.', 'blog2social'); ?></b>
@@ -293,43 +290,45 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 
 <div id="b2s-show-post-type-modal" class="modal fade" role="dialog" aria-labelledby="b2s-show-post-type-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-show-post-type-modal">&times;</button>
                 <h4 class="modal-title"><?php esc_html_e('What would you like to share?', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        <div class="b2s-post-type-area text-center">
-                            <div class="image">
-                                <img class="img-width-150" src="<?php echo esc_url(plugins_url('/assets/images/b2s/blog-post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="blog post">
-                            </div>
-                            <div class="text">
-                                <?php esc_html_e("Share your WordPress posts, pages or products", "blog2social") ?>
-                            </div>
-                            <div class="action">
-                                <button class="btn btn-primary" id="b2s-btn-select-blog-post"><?php esc_html_e("select", "blog2social"); ?></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xs-12">
-                        <div class="b2s-post-type-area text-center">
-                            <div class="image">
-                                <img class="img-width-150" src="<?php echo esc_url(plugins_url('/assets/images/b2s/content-curation-icon.png', B2S_PLUGIN_FILE)); ?>" alt="content curation">
-                            </div>
-                            <div class="text">
-                                <?php esc_html_e("Create or share content from other sources", "blog2social") ?>
-                            </div>
-                            <div class="action">
-                                <button class="btn btn-primary" id="b2s-btn-select-content-curation"><?php esc_html_e("select", "blog2social"); ?></button>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="b2sSelSchedDate" value="">
-
+                <div class="action-grid">
+                    <button type="button" class="btn b2s-compose-expand-btn action-card" id="b2s-btn-select-blog-post">
+                        <span class="icon icon-green" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                stroke="currentColor" stroke-width="2"
+                                stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <path d="M14 2v6h6"/>
+                                <path d="M8 13h8"/>
+                                <path d="M8 17h8"/>
+                                <path d="M8 9h3"/>
+                            </svg>
+                        </span>
+                        <span class="content">
+                            <span class="action-title"><?php esc_html_e("Share your WordPress posts, pages or products", "blog2social"); ?></span>
+                        </span>
+                    </button>
+                    <button type="button" class="btn b2s-compose-expand-btn action-card" id="b2s-btn-select-content-curation">
+                        <span class="icon icon-blue" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="24" height="24" fill="none"
+                                stroke="currentColor" stroke-width="2.5"
+                                stroke-linecap="round">
+                                <path d="M12 5v14"/>
+                                <path d="M5 12h14"/>
+                            </svg>
+                        </span>
+                        <span class="content">
+                            <span class="action-title"><?php esc_html_e("Create or share content from other sources", "blog2social"); ?></span>
+                        </span>
+                    </button>
                 </div>
+                <input type="hidden" id="b2sSelSchedDate" value="">
             </div>
         </div>
     </div>
@@ -351,44 +350,56 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 <div class="grid-body">
                                     <div class="hidden-lg hidden-md hidden-sm filterShow"><a href="#" onclick="showFilter('show');return false;"><i class="glyphicon glyphicon-chevron-down"></i><?php esc_html_e('filter', 'blog2social') ?></a></div>
                                     <div class="hidden-lg hidden-md hidden-sm filterHide"><a href="#" onclick="showFilter('hide');return false;"><i class="glyphicon glyphicon-chevron-up"></i><?php esc_html_e('filter', 'blog2social') ?></a></div>
-                                    <form class="b2sSortForm form-inline pull-left" action="#">
-                                        <input id="b2sType" type="hidden" value="all" name="b2sType">
-                                        <input id="b2sShowByDate" type="hidden" value="" name="b2sShowByDate">
-                                        <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
-                                        <?php
-                                        $postFilter = new B2S_Post_Filter('all');
-                                        echo wp_kses($postFilter->getItemHtml(), array(
-                                                'div' => array(
-                                                'class' => array()
-                                            ),
-                                            'input' => array(
-                                                'id' => array(),
-                                                'name' => array(),
-                                                'class' => array(),
-                                                'value' => array(),
-                                                'type' => array(),
-                                                'placeholder' => array(),
-                                            ),
-                                            'a' => array(
-                                                'href' => array(),
-                                                'id' => array(),
-                                                'class' => array()
-                                            ),
-                                            'span' => array(
-                                                'class' => array()
-                                            ),
-                                            'small' => array(),
-                                            'select' => array(
-                                                'id' => array(),
-                                                'name' => array(),
-                                                'class' => array()
-                                            ),
-                                            'option' => array(
-                                                'value' => array()
-                                            )
-                                        ));
-                                        ?>
-                                    </form>
+                                    <!-- Always-visible: search + toggle button -->
+                                    <div class="b2s-wp-filter-bar">
+                                        <div class="b2s-wp-filter-bar-left">
+                                            <input type="text" class="form-control" id="b2sSortPostTitle" name="b2sSortPostTitle" placeholder="<?php esc_attr_e('Search by title...', 'blog2social'); ?>">
+                                            <button type="button" class="btn btn-default btn-sm" id="b2s-wp-filter-toggle">
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                                <span id="b2s-wp-filter-toggle-label" data-show="<?php esc_attr_e('Show filters', 'blog2social'); ?>" data-hide="<?php esc_attr_e('Hide filters', 'blog2social'); ?>"><?php esc_html_e('Show filters', 'blog2social'); ?></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="b2s-wp-filter-panel" style="display:none;">
+                                        <form class="b2sSortForm form-inline" action="#">
+                                            <input id="b2sType" type="hidden" value="all" name="b2sType">
+                                            <input id="b2sShowByDate" type="hidden" value="" name="b2sShowByDate">
+                                            <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
+                                            <?php
+                                            $postFilter = new B2S_Post_Filter('all');
+                                            echo wp_kses($postFilter->getItemHtml(), array(
+                                                    'div' => array(
+                                                    'class' => array()
+                                                ),
+                                                'input' => array(
+                                                    'id' => array(),
+                                                    'name' => array(),
+                                                    'class' => array(),
+                                                    'value' => array(),
+                                                    'type' => array(),
+                                                    'placeholder' => array(),
+                                                ),
+                                                'a' => array(
+                                                    'href' => array(),
+                                                    'id' => array(),
+                                                    'class' => array()
+                                                ),
+                                                'span' => array(
+                                                    'class' => array()
+                                                ),
+                                                'small' => array(),
+                                                'select' => array(
+                                                    'id' => array(),
+                                                    'name' => array(),
+                                                    'class' => array()
+                                                ),
+                                                'option' => array(
+                                                    'value' => array()
+                                                )
+                                            ));
+                                            ?>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
                             <div class="clearfix"></div>

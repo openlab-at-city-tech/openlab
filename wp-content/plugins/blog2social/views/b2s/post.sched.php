@@ -34,15 +34,11 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
             <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
             <div class="col-md-9 del-padding-left del-padding-right">
                 <!--Header|Start - Include-->
+                <?php $includeNavbar = true; ?>
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
                 <!--Header|End-->
-                <div class="clearfix"></div>
                 <!--Navbar|Start-->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
-                    </div>
-                </div>
+                <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
                 <!--Navbar|End-->
                 <div class="clearfix"></div>
                 <!--Content|Start-->
@@ -53,48 +49,60 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                         <div class="b2s-post">
                             <div class="grid-body">
                                 <div class="pull-right"><code id="b2s-user-time"><?php echo esc_attr(B2S_Util::getLocalDate($userTimeZoneOffset, substr(B2S_LANGUAGE, 0, 2))); ?> <?php echo ((substr(B2S_LANGUAGE, 0, 2) == 'de') ? esc_html__('Clock', 'blog2social') : '') ?></code></div>
+                                <!-- Always-visible: search + toggle button -->
+                                <div class="b2s-wp-filter-bar">
+                                    <div class="b2s-wp-filter-bar-left">
+                                        <input type="text" class="form-control" id="b2sSortPostTitle" name="b2sSortPostTitle" placeholder="<?php esc_attr_e('Search by title...', 'blog2social'); ?>">
+                                        <button type="button" class="btn btn-default btn-sm" id="b2s-wp-filter-toggle">
+                                            <i class="glyphicon glyphicon-filter"></i>
+                                            <span id="b2s-wp-filter-toggle-label" data-show="<?php esc_attr_e('Show filters', 'blog2social'); ?>" data-hide="<?php esc_attr_e('Hide filters', 'blog2social'); ?>"><?php esc_html_e('Show filters', 'blog2social'); ?></span>
+                                        </button>
+                                    </div>
+                                </div>
                                 <!-- Filter Post Start-->
-                                <form class="b2sSortForm form-inline pull-left" action="#">
-                                    <input id="b2sType" type="hidden" value="sched" name="b2sType">
-                                    <input id="b2sShowByDate" type="hidden" value="<?php echo esc_attr($b2sShowByDate); ?>" name="b2sShowByDate">
-                                    <input id="b2sUserAuthId" type="hidden" value="<?php echo esc_attr($b2sUserAuthId); ?>" name="b2sUserAuthId">
-                                    <input id="b2sPostBlogId" type="hidden" value="<?php echo esc_attr($b2sPostBlogId); ?>" name="b2sPostBlogId">
-                                    <input id="b2sShowByNetwork" type="hidden" value="<?php echo esc_attr($b2sShowByNetwork); ?>" name="b2sShowByNetwork">
-                                    <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
-                                    <?php
-                                    $postFilter = new B2S_Post_Filter('sched');
-                                    echo wp_kses($postFilter->getItemHtml('blog2social-sched'), array(
-                                        'div' => array(
-                                            'class' => array()
-                                        ),
-                                        'input' => array(
-                                            'id' => array(),
-                                            'name' => array(),
-                                            'class' => array(),
-                                            'value' => array(),
-                                            'type' => array(),
-                                            'placeholder' => array(),
-                                        ),
-                                        'a' => array(
-                                            'href' => array(),
-                                            'id' => array(),
-                                            'class' => array()
-                                        ),
-                                        'span' => array(
-                                            'class' => array()
-                                        ),
-                                        'small' => array(),
-                                        'select' => array(
-                                            'id' => array(),
-                                            'name' => array(),
-                                            'class' => array()
-                                        ),
-                                        'option' => array(
-                                            'value' => array()
-                                        )
-                                    ));
-                                    ?>
-                                </form>
+                                <div id="b2s-wp-filter-panel" style="display:none;">
+                                    <form class="b2sSortForm form-inline" action="#">
+                                        <input id="b2sType" type="hidden" value="sched" name="b2sType">
+                                        <input id="b2sShowByDate" type="hidden" value="<?php echo esc_attr($b2sShowByDate); ?>" name="b2sShowByDate">
+                                        <input id="b2sUserAuthId" type="hidden" value="<?php echo esc_attr($b2sUserAuthId); ?>" name="b2sUserAuthId">
+                                        <input id="b2sPostBlogId" type="hidden" value="<?php echo esc_attr($b2sPostBlogId); ?>" name="b2sPostBlogId">
+                                        <input id="b2sShowByNetwork" type="hidden" value="<?php echo esc_attr($b2sShowByNetwork); ?>" name="b2sShowByNetwork">
+                                        <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
+                                        <?php
+                                        $postFilter = new B2S_Post_Filter('sched');
+                                        echo wp_kses($postFilter->getItemHtml('blog2social-sched'), array(
+                                            'div' => array(
+                                                'class' => array()
+                                            ),
+                                            'input' => array(
+                                                'id' => array(),
+                                                'name' => array(),
+                                                'class' => array(),
+                                                'value' => array(),
+                                                'type' => array(),
+                                                'placeholder' => array(),
+                                            ),
+                                            'a' => array(
+                                                'href' => array(),
+                                                'id' => array(),
+                                                'class' => array()
+                                            ),
+                                            'span' => array(
+                                                'class' => array()
+                                            ),
+                                            'small' => array(),
+                                            'select' => array(
+                                                'id' => array(),
+                                                'name' => array(),
+                                                'class' => array()
+                                            ),
+                                            'option' => array(
+                                                'value' => array()
+                                            )
+                                        ));
+                                        ?>
+                                    </form>
+                                </div>
                                 <!-- Filter Post Ende-->
                                 <br/>
                             </div>       
@@ -269,7 +277,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                                 <b><?php esc_html_e('Define the default settings for the custom post format for all of your Facebook accounts in the Blog2Social settings.', 'blog2social'); ?></b>
                             </div>
                             <div class="b2s-post-format-settings-info" data-network-id="2" style="display:none;">
-                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your Twitter accounts in the Blog2Social settings.', 'blog2social'); ?></b>
+                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your X accounts in the Blog2Social settings.', 'blog2social'); ?></b>
                             </div>
                             <div class="b2s-post-format-settings-info" data-network-id="3" style="display:none;">
                                 <b><?php esc_html_e('Define the default settings for the custom post format for all of your LinkedIn accounts in the Blog2Social settings.', 'blog2social'); ?></b>

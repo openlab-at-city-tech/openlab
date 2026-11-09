@@ -42,8 +42,8 @@ class B2S_Video_Validation {
                 if (is_array($video_meta) && !empty($video_meta) && isset($video_meta['filesize']) && isset($video_meta['length']) && isset($video_meta['fileformat']) && !empty($video_meta['fileformat'])) {
                     foreach ($this->networkProperties as $key => $network) {
                         if ((int) $network->network_id == (int) $networkId && (int) $network->network_type == (int) $networkType) {
-                            if (($video_meta['filesize'] / 1024) >= $network->video_max_size) {
-                                $mfs = $network->video_max_size / 1024;
+                            if (((int) $video_meta['filesize'] / 1024) >= (int) $network->video_max_size) {
+                                $mfs = (int) $network->video_max_size / 1024;
                                 return array('result' => false, 'content' => sprintf(
                                       // translators: %s is size
                                     __('Your video is exceeding the maximum file size of %s Megabyte. Please compress your video file or select a video with a smaller file size.', 'blog2social'),sanitize_text_field($mfs)));

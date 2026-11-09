@@ -54,15 +54,18 @@ class B2S_PostBox {
                 }
             }
         }
-
         if (B2S_PLUGIN_USER_VERSION > 0) {
             if ($optionAutoPost !== false) {
                 if (!isset($optionAutoPost['active']) || (isset($optionAutoPost['active']) && (int) $optionAutoPost['active'] == 1)) {
                     $state = ($postId == 0) ? 'publish' : (($postStatus != '' && ($postStatus == 'publish')) ? 'update' : 'publish');
-                    if (is_array($optionAutoPost) && isset($optionAutoPost[$state])) {
-                        if (in_array($postType, $optionAutoPost[$state])) {
-                            $autoPostActive = true;
-                        }
+                    $stateSelection = isset($optionAutoPost[$state . '_state'])
+                        ? $optionAutoPost[$state . '_state']
+                        : (($state === 'publish') ? 'all' : 'none');
+                    $selectedPostTypes = (is_array($optionAutoPost) && isset($optionAutoPost[$state]) && is_array($optionAutoPost[$state]))
+                        ? $optionAutoPost[$state]
+                        : array();
+                    if ($stateSelection === 'all' || ($stateSelection == '0' && in_array($postType, $selectedPostTypes))) {
+                        $autoPostActive = true;
                     }
                 }
             }
@@ -155,13 +158,16 @@ class B2S_PostBox {
                     $autoPostImport = true;
                     if (isset($autoPostData['post_filter']) && (int) $autoPostData['post_filter'] == 1) {
                         if (isset($autoPostData['post_type']) && is_array($autoPostData['post_type']) && !empty($autoPostData['post_type'])) {
-                            if (isset($autoPostData['post_type_state']) && (int) $autoPostData['post_type_state'] == 0) { //include
-                                if (!in_array($postType, $autoPostData['post_type'])) {
-                                    $autoPostImport = false;
-                                }
-                            } else { //exclude
-                                if (in_array($postType, $autoPostData['post_type'])) {
-                                    $autoPostImport = false;
+
+                            if(isset($autoPostData['post_type_state']) && $autoPostData['post_type_state'] != 'all') {
+                                if (isset($autoPostData['post_type_state']) && (int) $autoPostData['post_type_state'] == 0) { //include
+                                    if (!in_array($postType, $autoPostData['post_type'])) {
+                                        $autoPostImport = false;
+                                    }
+                                } else { //exclude
+                                    if (in_array($postType, $autoPostData['post_type'])) {
+                                        $autoPostImport = false;
+                                    }
                                 }
                             }
                         }
@@ -206,7 +212,7 @@ class B2S_PostBox {
                     <h3 class="b2s-meta-box-headline">' . esc_html__('Custom Sharing & Scheduling', 'blog2social') . ' <a class="b2s-info-btn" data-modal-target="b2sInfoMetaBoxModalSched" href="#">' . esc_html__('Info', 'blog2social') . '</a></h3>
                     <a id="b2s-meta-box-btn-customize" class="b2s-btn b2s-btn-primary b2s-meta-box-customize b2s-btn-sm b2s-center-block b2s-btn-margin-bottom-15" href="#">' . esc_html__('Customize & Schedule Social Media Posts', 'blog2social') . '</a>
                     <div class="b2s-post-box-content">
-                    <h3 class="b2s-meta-box-headline">' . esc_html__('The Autoposter is', 'blog2social') . ' <span class="b2s-post-meta-box-active" style="color:green;' . ((!$autoPostActive) ? 'display:none;' : '') . '">' . esc_html__('activated', 'blog2social') . '</span><span class="b2s-post-meta-box-inactive" style="color:red;' . (($autoPostActive) ? 'display:none;' : '') . '">' . esc_html__('deactivated', 'blog2social') . '</span> <a class="b2s-info-btn" data-modal-target="b2sInfoMetaBoxModalAutoPost" href="#">' . esc_html__('Info', 'blog2social') . '</a></h3>
+                    <h3 class="b2s-meta-box-headline">' . esc_html__('The Auto Poster is', 'blog2social') . ' <span class="b2s-post-meta-box-active" style="color:green;' . ((!$autoPostActive) ? 'display:none;' : '') . '">' . esc_html__('activated', 'blog2social') . '</span><span class="b2s-post-meta-box-inactive" style="color:red;' . (($autoPostActive) ? 'display:none;' : '') . '">' . esc_html__('deactivated', 'blog2social') . '</span> <a class="b2s-info-btn" data-modal-target="b2sInfoMetaBoxModalAutoPost" href="#">' . esc_html__('Info', 'blog2social') . '</a></h3>
                     <div class="b2s-meta-box-share-info">
                     <div>' . esc_html__('Shared', 'blog2social') . ': <span class="b2s-meta-box-share-count">' . $shareCount . '</span> ' . esc_html__('times', 'blog2social') . '</div>
                     <span>' . esc_html__('Last shared', 'blog2social') . ': </span>
@@ -216,7 +222,11 @@ class B2S_PostBox {
             $content .= '<div class="b2s-options-btn-area"><span class="b2s-options-btn" href="#">' . esc_html__('Advanced settings', 'blog2social') . ' <i class="glyphicon glyphicon-chevron-down"></i></span></div>
                     <div class="b2s-options" style="display:none;">
                     <br>
-                    <input type="checkbox" class="b2s-enable-auto-post" id="b2s-enable-auto-post" name="b2s-enable-auto-post" value="1" ' . (($autoPostActive) ? 'checked' : '') . '><label for="b2s-enable-auto-post">' . esc_html__('enable Auto-Posting', 'blog2social') . '</label>
+                    <input type="checkbox" class="b2s-enable-auto-post" id="b2s-enable-auto-post" name="b2s-enable-auto-post" value="1" ' . (($autoPostActive) ? 'checked' : '') . '><label for="b2s-enable-auto-post">' . esc_html__('enable Auto Poster', 'blog2social') . '</label>
+                    <br>
+                    <input type="checkbox" id="b2s-image-is-ai-generated" name="image_is_ai_generated" value="1"><label for="b2s-image-is-ai-generated">' . esc_html__('Image is AI generated', 'blog2social') . '</label>
+                    <br>
+                    <input type="checkbox" id="b2s-text-is-ai-generated" name="text_is_ai_generated" value="1"><label for="b2s-text-is-ai-generated">' . esc_html__('Text is AI generated', 'blog2social') . '</label>
                     ' . ((isset($advancedOptions)) ? $advancedOptions : '') . '
                     <a href="#b2s-post-box-calendar-header" id="b2s-post-box-calendar-btn">' . esc_html__('show calendar', 'blog2social') . '</a>
                     <input type="hidden" name="b2s-profile-selected" value="' . ((isset($selectedProfileId)) ? esc_attr($selectedProfileId) : '-1') . '">
@@ -288,7 +298,7 @@ class B2S_PostBox {
         $content = '';
         if (!$show) {
             $content .= '<div class="panel panel-group b2s-info-assignd-by"><div class="panel-body">';
-            $content .= '<span>' . esc_html__('A WordPress admin has defined the Auto-Poster settings for you. You can deactivate these settings for your profile in the Auto-Poster settings at any time.', 'blog2social') . '</span>';
+            $content .= '<span>' . esc_html__('A WordPress admin has defined the Auto Poster settings for you. You can deactivate these settings for your profile in the Auto Poster settings at any time.', 'blog2social') . '</span>';
             $content .= '</div>';
             $content .= '</div>';
             $content .= '<div style="display:none">';
@@ -303,7 +313,7 @@ class B2S_PostBox {
                             <div class="b2s-meta-box-modal-body">
                                 <div class="b2s-network-imgs">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Facebook') . '" src="' . esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)) . '">
-                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Twitter') . '" src="' . esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)) . '">
+                                    <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('X') . '" src="' . esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('LinkedIn') . '" src="' . esc_url(plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE)) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Tumblr') . '" src="' . esc_url(plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE)) . '">
                                     <img class="pull-left hidden-xs b2s-img-network" alt="' . esc_attr('Pinterest') . '" src="' . esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)) . '">
@@ -351,7 +361,7 @@ class B2S_PostBox {
         $content .= $authContent;
 
 //TOS Twitter 032018 - none multiple Accounts - User select once
-        $content .= '<div class="b2s-meta-box-auto-post-twitter-profile"><label for="b2s-post-meta-box-profil-dropdown-twitter">' . esc_html__('Select Twitter profile:', 'blog2social') . '</label> <select class="b2s-w-100" id="b2s-post-meta-box-profil-dropdown-twitter" name="b2s-post-meta-box-profil-dropdown-twitter">';
+        $content .= '<div class="b2s-meta-box-auto-post-twitter-profile"><label for="b2s-post-meta-box-profil-dropdown-twitter">' . esc_html__('Select X profile:', 'blog2social') . '</label> <select class="b2s-w-100" id="b2s-post-meta-box-profil-dropdown-twitter" name="b2s-post-meta-box-profil-dropdown-twitter">';
         foreach ($mandant as $k => $m) {
             if ((isset($auth->{$m->id}) && isset($auth->{$m->id}[0]) && !empty($auth->{$m->id}[0]))) {
                 foreach ($auth->{$m->id} as $key => $value) {
@@ -427,10 +437,14 @@ class B2S_PostBox {
             if ($optionAutoPost !== false) {
                 if (!isset($optionAutoPost['active']) || (isset($optionAutoPost['active']) && (int) $optionAutoPost['active'] == 1)) {
                     $state = ($postStatus != false && $postStatus != '' && ($postStatus == 'publish')) ? 'update' : 'publish';
-                    if (is_array($optionAutoPost) && isset($optionAutoPost[$state])) {
-                        if ($postType != false && in_array($postType, $optionAutoPost[$state])) {
-                            $autoPostActive = true;
-                        }
+                    $stateSelection = isset($optionAutoPost[$state . '_state'])
+                        ? $optionAutoPost[$state . '_state']
+                        : (($state === 'publish') ? 'all' : 'none');
+                    $selectedPostTypes = (is_array($optionAutoPost) && isset($optionAutoPost[$state]) && is_array($optionAutoPost[$state]))
+                        ? $optionAutoPost[$state]
+                        : array();
+                    if ($postType != false && ($stateSelection === 'all' || ($stateSelection == '0' && in_array($postType, $selectedPostTypes)))) {
+                        $autoPostActive = true;
                     }
                 }
             }

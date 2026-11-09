@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('ABSPATH')) {
+    exit;
+}
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Item.php');
 
 /**
@@ -219,7 +221,7 @@ class B2S_Calendar_Filter {
         if (!is_numeric($id)) {
             return null;
         }
-
+     
         $sql = "SELECT {$wpdb->prefix}b2s_posts.sched_date, "
                 . "{$wpdb->prefix}b2s_posts.blog_user_id, "
                 . "{$wpdb->prefix}b2s_posts.id as b2s_id, "
@@ -250,15 +252,22 @@ class B2S_Calendar_Filter {
                 . "AND {$wpdb->prefix}b2s_posts.hide = 0 "
                 . "ORDER BY sched_date";
 
-        // No User input in statement
-        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-        $sql = $wpdb->prepare($sql, array($id));
+        if(empty($blogPostCheck)) {
+            // No User input in statement
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+            $sql = $wpdb->prepare($sql, array($id));
+        } else {
+            // No User input in statement
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+            $sql = $wpdb->prepare($sql, array($id, B2S_PLUGIN_BLOG_USER_ID));
+        }
 
         $rows = self::getBySql($sql)->getItems();
 
         if (count($rows) > 0) {
             return $rows[0];
         }
+
 
         return null;
     }

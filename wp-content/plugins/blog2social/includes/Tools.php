@@ -505,6 +505,9 @@ class B2S_Tools {
         if ($type == 'network_guide_link_46') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1255' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1250';
         }
+        if ($type == 'network_guide_link_47') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1287' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1279';
+        }
         if ($type == 'TOKEN') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1181' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1175';
         }
@@ -569,6 +572,9 @@ class B2S_Tools {
         if($type == "post_templates_without_highlight") {
             return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/4/150/de/wie-kann-ich-die-beitragsvorlagen-fuer-meine-social_media_posts-nutzen.html' : 'https://www.blog2social.com/en/faq/content/4/152/en/how-to-use-post-templates-for-social-media-posts.html';
         }
+        if($type== "login"){
+            return ($lang == 'de') ? 'https://service.blog2social.com/de/login' : 'https://service.blog2social.com/login';
+        }
         if ($type == "addon_apps") {
             return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network_app&token=' . B2S_PLUGIN_TOKEN;
         }
@@ -613,7 +619,29 @@ class B2S_Tools {
         if($type == "faq_ai_templates") {
             return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1276' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1282';
         }
+        if($type == "faq_connect_dev") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/2/279/de/wie-verbinde-ich-blog2social-mit-meinem-devto-profil.html' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1287';
+        }
+        if($type == "how_to_social_media_posting") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/4/131/de/social-media-postformate-_-die-unterschiede-zwischen-bild_beitraegen-und-link_beitraegen.html' : 'https://www.blog2social.com/en/faq/content/3/161/en/how-to-create-social-media-posts-and-share-link-text-image-or-video-posts.html?highlight=Create%20So';
+        }
+        if($type == "blog2social_mobile_app") {
+            return ($lang == 'de') ? 'https://de.blog2social.com/social-media-mobile-app/' : 'https://en.blog2social.com/social-media-mobile-app/';
+        }
+        if($type == "blog2social_mobile_app_share") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/14/278/de/wie-kann-ich-social-media-posts-von-meinem-smartphone-planen-und-teilen.html' : 'https://www.blog2social.com/en/faq/content/15/284/en/how-to-share-social-media-posts-from-my-mobile-phone.html';
+        }
+        if($type == "blog2social_api") {
+            return ($lang == 'de') ? 'https://de.blog2social.com/social-media-api/' : 'https://en.blog2social.com/social-media-api/';
+        }
+        if($type == "faq_social_media_all_format") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1158' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1161';
+        }
+        if($type == "ai_generation") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1289' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1289';
+        }
         return false;
+
     }
 
     public static function getAffiliateId() {
@@ -1209,8 +1237,8 @@ class B2S_Tools {
         if ($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $table)) != $table) {
             return false;
         }
-
         $row = $wpdb->get_row($wpdb->prepare(
+            //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
             "SELECT `payload` FROM `{$table}` WHERE `blog_user_id` = %d AND `network_id` = %d AND `type_id` = %d LIMIT 1",
             (int) $blogUserId,
             (int) $networkId,
@@ -1260,5 +1288,61 @@ class B2S_Tools {
 
     public static function getAiTemplateMaxPromptCharacters() {
         return 1000;
+    }
+
+    public static function moveMinusOneToFront(array $array, int $maxDepth = 10, int $depth = 0): array{
+        // Don't recurse any deeper
+        if ($depth >= $maxDepth) {
+            return $array;
+        }
+
+        foreach ($array as $key => &$value) {
+            if (is_array($value)) {
+                $value = self::moveMinusOneToFront($value, $maxDepth, $depth + 1);
+            }
+        }
+        
+        unset($value);
+
+        if (array_key_exists(-1, $array)) {
+            $minusOne = $array[-1];
+            unset($array[-1]);
+
+            $array = [-1 => $minusOne] + $array;
+        }
+
+        return $array;
+    }
+
+    public static function decodeB2sJsonPostArray($post) {
+
+        if(isset($post['b2s_json'])) {
+
+            $decoded = json_decode(
+                sanitize_text_field(wp_unslash($post['b2s_json'])),
+                true
+            );
+
+            if (json_last_error() !== JSON_ERROR_NONE || !is_array($decoded)) {
+                echo wp_json_encode(array(
+                    'result' => false,
+                    'error' => 'invalid_json'
+                ));
+                wp_die();
+            }
+
+            unset($post['b2s_json']);
+            
+            // Put b2s FIRST
+            $post = array(
+            'b2s' => wp_slash($decoded),
+            )+$post;
+
+            $post= B2S_Tools::moveMinusOneToFront($post);
+
+            return $post;
+        }
+        
+        return false;
     }
 }

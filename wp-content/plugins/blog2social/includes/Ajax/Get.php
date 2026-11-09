@@ -1,7 +1,9 @@
 <?php
+
 if (!defined('ABSPATH')) {
     exit;
 }
+
 class Ajax_Get {
 
     static private $instance = null;
@@ -21,7 +23,7 @@ class Ajax_Get {
         add_action('wp_ajax_b2s_publish_post_data', array($this, 'getPublishPostData'));
         add_action('wp_ajax_b2s_sched_post_data', array($this, 'getSchedPostData'));
         add_action('wp_ajax_b2s_approve_post_data', array($this, 'getApprovePostData'));
-        add_action('wp_ajax_b2s_ship_navbar_item', array($this, 'getNavbarItem'));
+        add_action('wp_ajax_b2s_ship_navbar_item', array($this, 'getNavbarItem')); 
         add_action('wp_ajax_b2s_scrape_url', array($this, 'scrapeUrl'));
         add_action('wp_ajax_b2s_get_settings_sched_time_default', array($this, 'getSettingsSchedTimeDefault'));
         add_action('wp_ajax_b2s_get_settings_sched_time_user', array($this, 'getUserTimeSettings'));
@@ -50,11 +52,12 @@ class Ajax_Get {
         add_action('wp_ajax_b2s_get_ass_details', array($this, 'getAssDetails'));
         add_action('wp_ajax_b2s_get_ass_settings', array($this, 'getAssSettings'));
         add_action('wp_ajax_b2s_get_dashboard_activity', array($this, 'getDashboardActivity'));
+        add_action('wp_ajax_b2s_get_curation_drafts', array($this, 'getCurationDrafts'));
     }
 
     public function getBlogPostStatus() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -65,19 +68,18 @@ class Ajax_Get {
         }
         echo json_encode($status);
         wp_die();
-      
     }
 
     public function scrapeUrl() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         if (isset($_POST['url']) && !empty($_POST['url'])) {
             $data = B2S_Util::scrapeUrl(esc_url_raw(wp_unslash($_POST['url'])));
-           
+
             $scrapeError = ($data !== false) ? false : true;
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Curation/View.php');
             $curation = new B2S_Curation_View();
@@ -102,8 +104,8 @@ class Ajax_Get {
 
 
                         /*
-                            * since V7.0 Remove Video Networks
-                            */
+                         * since V7.0 Remove Video Networks
+                         */
                         $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
                         foreach ($result->data->auth as $a => $auth) {
                             foreach ($auth as $u => $item) {
@@ -117,13 +119,13 @@ class Ajax_Get {
                                 }
                             }
                         }
-                        echo json_encode(array('result' => true, 'ogdata'=> json_encode($data),  'preview' => $preview, 'scrapeError' => $scrapeError, 'settings' => $curation->getShippingDetails($result->data->mandant, $result->data->auth)));
+                        echo json_encode(array('result' => true, 'ogdata' => json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError, 'settings' => $curation->getShippingDetails($result->data->mandant, $result->data->auth, isset($_POST['isVideo']) && filter_var(wp_unslash($_POST['isVideo']), FILTER_VALIDATE_BOOLEAN))));
                         wp_die();
                     }
-                    echo json_encode(array('result' => false, 'ogdata'=> json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError, 'error' => 'NO_AUTH'));
+                    echo json_encode(array('result' => false, 'ogdata' => json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError, 'error' => 'NO_AUTH'));
                     wp_die();
                 } else {
-                    echo json_encode(array('result' => true,  'ogdata'=> json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError));
+                    echo json_encode(array('result' => true, 'ogdata' => json_encode($data), 'preview' => $preview, 'scrapeError' => $scrapeError));
                     wp_die();
                 }
             }
@@ -131,13 +133,12 @@ class Ajax_Get {
 
         echo json_encode(array('result' => false, 'preview' => '', 'scrapeError' => false, 'error' => 'NO_PREVIEW'));
         wp_die();
-    
     }
 
     public function getSortData() {
 
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -165,10 +166,10 @@ class Ajax_Get {
         $b2sResultsPerPage = (isset($_POST['b2sPostsPerPage']) && (int) $_POST['b2sPostsPerPage'] > 0) ? (int) $_POST['b2sPostsPerPage'] : B2S_PLUGIN_POSTPERPAGE;
         $b2sSortPostSharedBy = (isset($_POST['b2sSortPostSharedBy']) && (int) $_POST['b2sSortPostSharedBy'] > 0) ? (int) $_POST['b2sSortPostSharedBy'] : 0;
         $b2sSortSharedToNetwork = (isset($_POST['b2sSortSharedToNetwork']) && (int) $_POST['b2sSortSharedToNetwork'] > 0) ? (int) $_POST['b2sSortSharedToNetwork'] : 0;
-        $b2sSortSharedAtDateStart = (isset($_POST['b2sSortSharedAtDateStart']) && (int) $_POST['b2sSortSharedAtDateStart'] > 0) ? (int) $_POST['b2sSortSharedAtDateStart'] : 0;
-        $b2sSortSharedAtDateEnd = (isset($_POST['b2sSortSharedAtDateEnd']) && (int) $_POST['b2sSortSharedAtDateEnd'] > 0) ? (int) $_POST['b2sSortSharedAtDateEnd'] : 0;
+        $b2sSortSharedAtDateStart = (isset($_POST['b2sSortSharedAtDateStart']) && !empty($_POST['b2sSortSharedAtDateStart'])) ? sanitize_text_field(wp_unslash($_POST['b2sSortSharedAtDateStart'])) : 0;
+        $b2sSortSharedAtDateEnd = (isset($_POST['b2sSortSharedAtDateEnd']) && !empty($_POST['b2sSortSharedAtDateEnd'])) ? sanitize_text_field(wp_unslash($_POST['b2sSortSharedAtDateEnd'])) : 0;
         $b2sRawResponse = (isset($_POST['b2sRawResponse']) && $_POST['b2sRawResponse'] == true ? true : false);
-
+ 
         require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
         $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
         $optionPostFilters = $options->_getOption('post_filters');
@@ -176,7 +177,7 @@ class Ajax_Get {
         if (!is_array($optionPostFilters)) {
             $optionPostFilters = array();
         }
-
+  
         $optionPostFilters['searchPostTitle'] = $b2sSortPostTitle;
         $optionPostFilters['searchAuthorId'] = $b2sSortPostAuthor;
         $optionPostFilters['searchPostStatus'] = $b2sSortPostStatus;
@@ -202,12 +203,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false, 'content' => '', 'schedDates' => 0, 'pagination' => ''));
         wp_die();
-    
     }
 
     public function getNetworkBoardAndGroup() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -222,12 +222,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false, 'content' => ''));
         wp_die();
-     
     }
 
     public function getFaqEntries() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -239,48 +238,51 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false, 'content' => ''));
         wp_die();
-     
     }
 
     public function getShipItemFullText() {
-      
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         if (isset($_POST['postId']) && (int) $_POST['postId'] > 0 && isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0) {
-            
+
             // Add authorization check for the specific post
-            if (!current_user_can('read_post',(int) $_POST['postId'])) {
+            if (!current_user_can('read_post', (int) $_POST['postId'])) {
                 echo wp_json_encode(array('result' => false, 'error' => 'permission_author'));
                 wp_die();
             }
-            
+
             $userLang = isset($_POST['userLang']) ? trim(sanitize_text_field(wp_unslash($_POST['userLang']))) : strtolower(substr(B2S_LANGUAGE, 0, 2));
-                $data = get_post((int) $_POST['postId']);
-                if (isset($data->post_content)) {
-                    $postUrl = (get_permalink($data->ID) !== false) ? get_permalink($data->ID) : $data->guid;
-                    $content = trim(B2S_Util::prepareContent($data->ID, $data->post_content, $postUrl, '', false, $userLang));
-                    $networkId = isset($_POST['networkId']) ? (int) $_POST['networkId'] : 0;
-                    echo json_encode(array('result' => true, 'text' => trim(sanitize_textarea_field($content)), 'networkAuthId' => (int) $_POST['networkAuthId'], 'networkId' => $networkId));
-                    wp_die();
-                }
+            $data = get_post((int) $_POST['postId']);
+            if (isset($data->post_content)) {
+                $postUrl = (get_permalink($data->ID) !== false) ? get_permalink($data->ID) : $data->guid;
+                $content = trim(B2S_Util::prepareContent($data->ID, $data->post_content, $postUrl, '', false, $userLang));
+                $networkId = isset($_POST['networkId']) ? (int) $_POST['networkId'] : 0;
+                echo json_encode(array('result' => true, 'text' => trim(sanitize_textarea_field($content)), 'networkAuthId' => (int) $_POST['networkAuthId'], 'networkId' => $networkId));
+                wp_die();
             }
+        }
 
         echo json_encode(array('result' => false));
         wp_die();
-     
     }
 
     public function getShipItem() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         if (isset($_POST['postId']) && (int) $_POST['postId'] > 0 && isset($_POST['networkId']) && (int) (int) $_POST['networkId'] > 0 && isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0) {
+            if (!current_user_can('read_post', (int) $_POST['postId'])) {
+                echo wp_json_encode(array('result' => false, 'error' => 'permission_author'));
+                wp_die();
+            }
+
             //TOS XING Group
             if ((int) $_POST['networkId'] == 19 && isset($_POST['networkTosGroupId']) && !empty($_POST['networkTosGroupId'])) {
                 $options = new B2S_Options(0, 'B2S_PLUGIN_TOS_XING_GROUP_CROSSPOSTING');
@@ -290,8 +292,8 @@ class Ajax_Get {
                 }
             }
 
-            $networkType = isset( $_POST['networkType'] ) ? absint(wp_unslash( $_POST['networkType'] )) : 0;
-            $networkKind = isset( $_POST['networkKind'] ) ? absint(wp_unslash( $_POST['networkKind'] )) : 0;
+            $networkType = isset($_POST['networkType']) ? absint(wp_unslash($_POST['networkType'])) : 0;
+            $networkKind = isset($_POST['networkKind']) ? absint(wp_unslash($_POST['networkKind'])) : 0;
 
             //Check IsValidVideoForNetwork
             $isVideoMode = false;
@@ -299,8 +301,6 @@ class Ajax_Get {
             if (isset($_POST['isVideo']) && (int) $_POST['isVideo'] == 1) {
                 require_once B2S_PLUGIN_DIR . 'includes/B2S/Video/Validation.php';
                 $validVideo = new B2S_Video_Validation();
-
-            
 
                 $isValid = $validVideo->isValidVideoForNetwork((int) $_POST['postId'], (int) $_POST['networkId'], $networkType);
                 if (is_array($isValid) && isset($isValid['result']) && $isValid['result'] !== false) {
@@ -330,7 +330,7 @@ class Ajax_Get {
                 'networkKind' => $networkKind,
                 'networkTosGroupId' => ((isset($_POST['networkTosGroupId']) && !empty($_POST['networkTosGroupId'])) ? trim((sanitize_text_field(wp_unslash($_POST['networkTosGroupId'])))) : ''),
                 'instantSharing' => (isset($_POST['instantSharing']) ? (int) $_POST['instantSharing'] : 0),
-                'network_display_name' => isset($_POST['networkDisplayName']) ? sanitize_text_field(wp_unslash($_POST['networkDisplayName'])): "",
+                'network_display_name' => isset($_POST['networkDisplayName']) ? sanitize_text_field(wp_unslash($_POST['networkDisplayName'])) : "",
                 'networkType' => $networkType);
             $selSchedDate = (isset($_POST['selSchedDate']) && !empty($_POST['selSchedDate'])) ? (preg_match("#^[0-9\-.\]:\s]+$#", trim(sanitize_text_field(wp_unslash($_POST['selSchedDate'])))) ? trim(sanitize_text_field(wp_unslash($_POST['selSchedDate']))) : "") : "";   //routing from calendar
             $b2sPostType = (isset($_POST['b2sPostType']) && $_POST['b2sPostType'] == 'ex') ? 'ex' : "";    //Content Curation
@@ -341,13 +341,13 @@ class Ajax_Get {
 
             if (isset($_POST['b2sIsDraft']) && (int) $_POST['b2sIsDraft'] == 1) {
 
-                if(isset($_POST['forceReloadFromTemplateChange']) && (int) $_POST['forceReloadFromTemplateChange'] == 1) {
+                if (isset($_POST['forceReloadFromTemplateChange']) && (int) $_POST['forceReloadFromTemplateChange'] == 1) {
                     $forceReloadFromTemplateChange = true;
                 }
 
                 global $wpdb;
                 if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") == $wpdb->prefix . 'b2s_posts_drafts') {
-                    
+
                     $sqlResult = $wpdb->get_row($wpdb->prepare("SELECT data FROM `{$wpdb->prefix}b2s_posts_drafts` WHERE `blog_user_id` = %d AND `post_id` = %d AND `save_origin` = %d", (int) B2S_PLUGIN_BLOG_USER_ID, (int) $_POST['postId'], 0));
                     $drafts = (isset($sqlResult->data) && !empty($sqlResult->data)) ? unserialize($sqlResult->data) : false;
                     if ($drafts !== false && isset($drafts['b2s']) && !empty($drafts['b2s']) && array_key_exists(sanitize_text_field(wp_unslash($_POST['networkAuthId'])), $drafts['b2s'])) {
@@ -369,7 +369,7 @@ class Ajax_Get {
             }
 
             $item = new B2S_Ship_Item((int) $_POST['postId'], $userLang, $selSchedDate, $b2sPostType, $relayCount, $isVideoMode, $canReel, $assConnected);
-      
+
             if (isset($_POST['ignoreTemplate'])) {
 
                 $ignoreRaw = sanitize_text_field(wp_unslash($_POST['ignoreTemplate']));
@@ -382,12 +382,11 @@ class Ajax_Get {
             echo json_encode(array('result' => false));
         }
         wp_die();
-   
     }
 
     public function getPublishPostData() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -409,12 +408,11 @@ class Ajax_Get {
 
         echo json_encode(array('result' => false));
         wp_die();
-     
     }
 
     public function getVideoUploadData() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -428,15 +426,14 @@ class Ajax_Get {
                 wp_die();
             }
         }
-        
+
         echo json_encode(array('result' => false));
         wp_die();
-     
     }
 
     public function getApprovePostData() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -454,12 +451,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-    
     }
 
     public function getSchedPostsByUserAuth() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -497,12 +493,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false, 'count' => 0));
         wp_die();
-      
     }
 
     public function getSchedPostData() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -522,12 +517,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-     
     }
 
     public function getNavbarItem() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -567,12 +561,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-
     }
 
     public function getSettingsSchedTimeDefault() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -584,13 +577,12 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-     
     }
 
     //NEW V5.1.0
     public function getUserTimeSettings() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -628,18 +620,22 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-
     }
 
     public function getShipItemReloadUrl() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         if (isset($_POST['networkId']) && (int) $_POST['networkId'] > 0 && isset($_POST['networkAuthId']) && (int) $_POST['networkAuthId'] > 0 && isset($_POST['url']) && !empty($_POST['url'])) {
             if (isset($_POST['postId']) && (int) $_POST['postId'] > 0 && isset($_POST['defaultUrl']) && esc_url_raw(wp_unslash($_POST['defaultUrl'])) == esc_url_raw(wp_unslash($_POST['url'])) && (!isset($_POST['postType']) || sanitize_text_field(wp_unslash($_POST['postType'])) != 'ex')) {
+                if (!current_user_can('read_post', (int) $_POST['postId'])) {
+                    echo wp_json_encode(array('result' => false, 'error' => 'permission_author'));
+                    wp_die();
+                }
+
                 $postData = get_post((int) $_POST['postId']);
                 if ($postData->post_status != 'publish') {
                     $postUrl = (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
@@ -655,12 +651,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-       
     }
 
     public function getCalendarEvents() {
-  
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -676,49 +671,63 @@ class Ajax_Get {
         $network_details_id = (isset($_GET['filter_network_auth']) && (int) $_GET['filter_network_auth'] >= 1) ? (int) $_GET['filter_network_auth'] : 0; // 0=all
         //Filter Status
         $status = (isset($_GET['filter_status']) && (int) $_GET['filter_status'] >= 0) ? (int) $_GET['filter_status'] : 0; // 0=all,1=publish, 2=scheduled
-    
+
         if (isset($_GET['start']) && isset($_GET['end']) && preg_match("#^[0-9\-.\]]+$#", sanitize_text_field(wp_unslash($_GET['start']))) && preg_match("#^[0-9\-.\]]+$#", sanitize_text_field(wp_unslash($_GET['end'])))) {
             $calendar = B2S_Calendar_Filter::getByTimespam(sanitize_text_field(wp_unslash($_GET['start'])) . " 00:00:00", sanitize_text_field(wp_unslash($_GET['end'])) . " 23:59:59", $network_id, $network_details_id, $status);
         } else {
             $calendar = B2S_Calendar_Filter::getAll($network_id, $network_details_id);
-           
         }
-    
+
         echo json_encode($calendar->asCalendarArray());
         wp_die();
-       
     }
 
     public function getCalendarFilterNetworkAuth() {
-        
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Filter.php');
-            $network_id = (isset($_POST['network_id']) && (int) $_POST['network_id'] >= 1) ? (int) $_POST['network_id'] : 0; // 0=all
-            if ($network_id != 0) {
-                $result = B2S_Calendar_Filter::getFilterNetworkAuthHtml($network_id);
-                if ($result !== false) {
-                    echo json_encode(array('result' => true, 'content' => $result));
-                    wp_die();
-                }
+        $network_id = (isset($_POST['network_id']) && (int) $_POST['network_id'] >= 1) ? (int) $_POST['network_id'] : 0; // 0=all
+        if ($network_id != 0) {
+            $result = B2S_Calendar_Filter::getFilterNetworkAuthHtml($network_id);
+            if ($result !== false) {
+                echo json_encode(array('result' => true, 'content' => $result));
+                wp_die();
             }
-            echo json_encode(array('result' => false));
-            wp_die();
+        }
+        echo json_encode(array('result' => false));
+        wp_die();
     }
 
     public function getPostEditModal() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
-        require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Filter.php');
         if (isset($_POST['id']) && (int) $_POST['id'] > 0) {
+
+            global $wpdb;
+            if(!current_user_can('edit_others_posts')) {
+                $row = $wpdb->get_row($wpdb->prepare(
+                    "SELECT id FROM {$wpdb->prefix}b2s_posts WHERE id = %d AND blog_user_id = %d",
+                    (int) $_POST['id'],
+                    get_current_user_id()
+                    ));
+                    
+                    if (!$row) {
+                        echo wp_json_encode(array('result' => false, 'error' => 'permission_post'));
+                        wp_die();
+                    }
+            }  
+                        
+            require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Filter.php');
             $item = B2S_Calendar_Filter::getById((int) $_POST['id']);
+            
             if ($item != null) {
                 $lock_user_id = get_option("B2S_PLUGIN_CALENDAR_BLOCKED_" . (int) $_POST['id']);
                 if (!$lock_user_id) {
@@ -740,12 +749,11 @@ class Ajax_Get {
         }
         echo "0";
         wp_die();
-
     }
 
     public function getImageModal() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -761,56 +769,54 @@ class Ajax_Get {
         }
         echo "0";
         wp_die();
-    
     }
 
     public function getMultiWidgetContent() {
 
-            if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
-                echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
-                wp_die();
-            }
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+            echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
 
-            $option = get_option("B2S_MULTI_WIDGET");
-            if ($option !== false && is_array($option) && isset($option['timestamp']) && isset($option['content']) && !empty($option['content']) && $option['timestamp'] > wp_date('Y-m-d H:i:s', strtotime("-1 hours"), new DateTimeZone(date_default_timezone_get()))) {
-                $option = $option['content'];
-            } else {
-                $content = B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getNews', 'version' => B2S_PLUGIN_VERSION, 'lang' => strtolower(substr(get_locale(), 0, 2)), 'token' => B2S_PLUGIN_TOKEN));
-                update_option("B2S_MULTI_WIDGET", array("timestamp" => wp_date("Y-m-d H:i:s", null, new DateTimeZone(date_default_timezone_get())), "content" => $content), false);
-                $option = $content;
-            }
-       
-            $outputContent = B2S_Tools::esc_html_array($option, array(
-                'div' => array(
-                    'class' => array(),
-                    'style' => array()
-                ),
-                'img' => array(
-                    'src' => array(),
-                    'alt' => array(),
-                    'style' => array()
-                ),
-                'p' => array(
-                    'style' => array()
-                ),
-                'a' => array(
-                    'href' => array(),
-                    'target' => array(),
-                    'class' => array(),
-                    'title' => array()
-                )
-            ));
+        $option = get_option("B2S_MULTI_WIDGET");
+        if ($option !== false && is_array($option) && isset($option['timestamp']) && isset($option['content']) && !empty($option['content']) && $option['timestamp'] > wp_date('Y-m-d H:i:s', strtotime("-1 hours"), new DateTimeZone(date_default_timezone_get()))) {
+            $option = $option['content'];
+        } else {
+            $content = B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getNews', 'version' => B2S_PLUGIN_VERSION, 'lang' => strtolower(substr(get_locale(), 0, 2)), 'token' => B2S_PLUGIN_TOKEN));
+            update_option("B2S_MULTI_WIDGET", array("timestamp" => wp_date("Y-m-d H:i:s", null, new DateTimeZone(date_default_timezone_get())), "content" => $content), false);
+            $option = $content;
+        }
+
+        $outputContent = B2S_Tools::esc_html_array($option, array(
+                    'div' => array(
+                        'class' => array(),
+                        'style' => array()
+                    ),
+                    'img' => array(
+                        'src' => array(),
+                        'alt' => array(),
+                        'style' => array()
+                    ),
+                    'p' => array(
+                        'style' => array()
+                    ),
+                    'a' => array(
+                        'href' => array(),
+                        'target' => array(),
+                        'class' => array(),
+                        'title' => array()
+                    )
+        ));
 
         // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $outputContent;
-      
+
         wp_die();
-      
     }
 
     public function getCalendarWidgetContent() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -833,19 +839,18 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => $highlightedDays, 'error' => ''));
         wp_die();
-     
     }
 
     public function b2sSupportSystemRequirements() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         if (!current_user_can('administrator')) {
-                echo json_encode(array('result' => false, 'error' => 'admin'));
-                wp_die();
+            echo json_encode(array('result' => false, 'error' => 'admin'));
+            wp_die();
         }
 
         require_once (B2S_PLUGIN_DIR . 'includes/B2S/Support/Check/System.php');
@@ -860,13 +865,16 @@ class Ajax_Get {
         }
         echo json_encode($result);
         wp_die();
-     
     }
 
     public function searchUser() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+        if(!current_user_can('list_users')) {
+            echo json_encode(array('result' => false, 'error' => 'permission_administrator'));
             wp_die();
         }
 
@@ -877,13 +885,17 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-    
     }
 
     public function getSelectMandantUser() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+
+        if(!current_user_can('list_users')) {
+            echo wp_json_encode(array('result' => false, 'error' => 'permission_administrator'));
             wp_die();
         }
 
@@ -910,12 +922,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-      
     }
 
     public function getEditTemplateForm() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -933,12 +944,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-
     }
 
     public function checkDraftExists() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -955,15 +965,16 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-    
     }
 
     public function getCurationShipDetails() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
+
+        $preview = null;
 
         require_once (B2S_PLUGIN_DIR . 'includes/B2S/Curation/View.php');
         $curation = new B2S_Curation_View();
@@ -984,8 +995,8 @@ class Ajax_Get {
             }
 
             /*
-                * since V7.0 Remove Video Networks
-                */
+             * since V7.0 Remove Video Networks
+             */
             $isVideoNetwork = unserialize(B2S_PLUGIN_NETWORK_SUPPORT_VIDEO);
             foreach ($result->data->auth as $a => $auth) {
                 foreach ($auth as $u => $item) {
@@ -1004,12 +1015,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false, 'preview' => $preview, 'scrapeError' => $scrapeError, 'error' => 'NO_AUTH'));
         wp_die();
-
     }
 
     public function getNetworkAuthSettings() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1048,12 +1058,11 @@ class Ajax_Get {
 
         echo json_encode(array('result' => true, 'data' => json_encode($result)));
         wp_die();
-      
     }
 
     public function updatePostBox() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1065,27 +1074,26 @@ class Ajax_Get {
             echo json_encode(array('result' => true, 'active' => $updateInfo['active'], 'lastPostDate' => $updateInfo['lastPostDate'], 'schedLimit' => $updateInfo['schedLimit'], 'shareCount' => $updateInfo['shareCount']));
             wp_die();
         }
-    
     }
 
     public function getImageCaption() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
 
         if (isset($_GET['image_id']) && (int) $_GET['image_id'] > 0) {
-                $image = get_post((int) $_GET['image_id']);
-                $caption = (($image->post_content != false && $image->post_content != '') ? $image->post_content : '');
-                echo json_encode(array('result' => true, 'caption' => $caption));
-                wp_die();
+            $image = get_post((int) $_GET['image_id']);
+            $caption = (($image->post_content != false && $image->post_content != '') ? $image->post_content : '');
+            echo json_encode(array('result' => true, 'caption' => $caption));
+            wp_die();
         }
     }
 
     public function loadInsights() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1099,12 +1107,11 @@ class Ajax_Get {
         $data = $metrics->getInsightsData($filterNetwork, $filterDates);
         echo json_encode(array('result' => true, 'data' => $data));
         wp_die();
-      
     }
 
     public function getPostsDetailData() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1124,12 +1131,11 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false));
         wp_die();
-   
     }
 
     public function getAssDetails() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1163,12 +1169,11 @@ class Ajax_Get {
 
         echo json_encode(array('result' => false));
         wp_die();
-        
     }
 
     public function getAssSettings() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1179,12 +1184,11 @@ class Ajax_Get {
 
         echo json_encode(array('result' => true, 'settings' => (isset($optionData['settings']) ? $optionData['settings'] : array())));
         wp_die();
-    
     }
 
     public function getDashboardActivity() {
 
-        if (!current_user_can('read') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
             echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
             wp_die();
         }
@@ -1226,6 +1230,81 @@ class Ajax_Get {
         }
         echo json_encode(array('result' => false, 'content' => '', 'user' => $userData));
         wp_die();
-      
+    }
+
+    public function getCurationDrafts() {
+        if (!current_user_can('edit_posts') || !check_ajax_referer('b2s_security_nonce', 'b2s_security_nonce', false)) {
+            echo wp_json_encode(array('result' => false, 'error' => 'nonce'));
+            wp_die();
+        }
+
+        global $wpdb;
+
+        if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") != $wpdb->prefix . 'b2s_posts_drafts') {
+            echo wp_json_encode(array('result' => true, 'drafts' => array()));
+            wp_die();
+        }
+
+        $rows = $wpdb->get_results($wpdb->prepare(
+                        "SELECT d.id AS draft_id, d.post_id, d.data, d.last_save_date, p.post_title, p.post_content
+             FROM {$wpdb->prefix}b2s_posts_drafts d
+             LEFT JOIN {$wpdb->posts} p ON p.ID = d.post_id
+             WHERE d.blog_user_id = %d
+               AND d.save_origin = 1
+             ORDER BY d.last_save_date DESC
+             LIMIT 30",
+                        (int) B2S_PLUGIN_BLOG_USER_ID
+        ));
+
+        $drafts = array();
+        $listHtml = '';
+        foreach ($rows as $row) {
+            $postData = ($row->data) ? @unserialize($row->data) : array(); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
+            $imageUrl = '';
+            $imageId = 0;
+            $message = isset($postData['compose_text']) ? trim($postData['compose_text']) : '';
+            $url = (isset($postData['compose_url']) && !empty(trim($postData['compose_url']))) ? trim($postData['compose_url']) : '';
+            $imageUrl = (isset($postData['compose_image_url']) && !empty($postData['compose_image_url'])) ? $postData['compose_image_url'] : '';
+            $imageId = isset($postData['compose_image_id']) ? (int) $postData['compose_image_id'] : 0;
+            $tags = array();
+
+            $draft = array(
+                'draft_id' => (int) $row->draft_id,
+                'post_id' => (int) $row->post_id,
+                'title' => isset($postData['compose_title']) && $postData['compose_title'] !== '' ? (string) $postData['compose_title'] : (string) $row->post_title,
+                'message' => $message,
+                'url' => $url,
+                'image_url' => $imageUrl,
+                'image_id' => $imageId,
+                'tags' => $tags,
+                'date' => wp_date(get_option('date_format'), strtotime($row->last_save_date)),
+                'ship_type' => isset($postData['ship_type']) ? (int) $postData['ship_type'] : 0,
+                'profile_select' => isset($postData['profile_select']) ? (int) $postData['profile_select'] : 0,
+                'ship_date' => isset($postData['ship_date']) ? (string) $postData['ship_date'] : '',
+                'twitter_select' => isset($postData['twitter_select']) ? (int) $postData['twitter_select'] : 0,
+                'apply_post_templates' => isset($postData['apply_post_templates']) ? (int) $postData['apply_post_templates'] : 0,
+                'post_format' => isset($postData['post_format']) ? (int) $postData['post_format'] : 0,
+                'image_is_ai_generated' => isset($postData['image_is_ai_generated']) ? (int) $postData['image_is_ai_generated'] : 0,
+                'text_is_ai_generated' => isset($postData['text_is_ai_generated']) ? (int) $postData['text_is_ai_generated'] : 0,
+            );
+            $drafts[] = $draft;
+
+            // Build list item HTML with proper escaping and translation.
+            $displayTitle = !empty($draft['title']) ? $draft['title'] : (!empty($draft['message']) ? wp_trim_words($draft['message'], 10, '...') : esc_html__('(no title)', 'blog2social') );
+
+            $listHtml .= '<li class="list-group-item b2s-load-draft-item" data-draft="' . esc_attr(wp_json_encode($draft)) . '">';
+            $listHtml .= '<div class="media">';
+            $listHtml .= '<img class="post-img-10 pull-left hidden-xs" src="' . esc_url(plugins_url('/assets/images/b2s/post-icon.png', B2S_PLUGIN_FILE)) . '" alt="draft">';
+            $listHtml .= '<button type="button" class="btn btn-link btn-sm pull-right b2s-delete-draft-btn" data-draft-id="' . esc_attr($draft['draft_id']) . '"><span class="glyphicon glyphicon-trash"></span></button>';
+            $listHtml .= '<div class="media-body">';
+            $listHtml .= '<strong class="b2s-load-draft-title">' . esc_html($displayTitle) . '</strong>';
+            $listHtml .= '<div class="info hidden-xs"><small class="text-muted b2s-load-draft-date">' . esc_html($draft['date']) . '</small></div>';
+            $listHtml .= '</div>';
+            $listHtml .= '</div>';
+            $listHtml .= '</li>';
+        }
+
+        echo wp_json_encode(array('result' => true, 'drafts' => $drafts, 'list_html' => $listHtml));
+        wp_die();
     }
 }

@@ -30,9 +30,6 @@ $prgUserLang = strtolower(substr(get_locale(), 0, 2));
                         <!--Filter Start-->
                         <div class="b2s-post">
                             <div class="grid-body">
-                                <div class="hidden-lg hidden-md hidden-sm filterShow"><a href="#" onclick="showFilter('show');return false;"><i class="glyphicon glyphicon-chevron-down"></i> <?php esc_html_e('filter', 'blog2social') ?></a></div>
-                                <div class="hidden-lg hidden-md hidden-sm filterHide"><a href="#" onclick="showFilter('hide');return false;"><i class="glyphicon glyphicon-chevron-up"></i> <?php esc_html_e('filter', 'blog2social') ?></a></div>
-
                                 <!-- Filter Post Start-->
                                 <form class="form-inline pull-left" action="#" method="GET">
                                     <input id="page" type="hidden" value="prg-post" name="page">

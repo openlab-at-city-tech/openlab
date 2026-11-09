@@ -170,7 +170,7 @@ class B2S_Post_Item {
 
             $postTypes = " ";
             if (!empty($this->searchPostType)) {
-                $postTypes .= $wpdb->prepare(' posts.`post_type` LIKE %s', '%' . esc_sql($wpdb->esc_like($this->searchPostType)) . '%');
+                $postTypes .= $wpdb->prepare(' posts.`post_type` LIKE %s', '%' . $wpdb->esc_like($this->searchPostType) . '%');
             } else {
                 $post_types = get_post_types(array('public' => true));
                 if (is_array($post_types) && !empty($post_types)) {
@@ -401,8 +401,7 @@ class B2S_Post_Item {
                     if ($this->searchPostType == 'b2s_ex_post') {
                         $sqlPosts .= " AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 1 ";
                     } else {
-                        $sqlPosts .= " AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 0 "
-                                . " AND $addSearchType ";
+                        $sqlPosts .= " AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 0 ";
                     }
                 }
                 $video = '';
@@ -410,9 +409,13 @@ class B2S_Post_Item {
                     $postTypes .= " AND posts.`post_mime_type` LIKE '%video%' ";
                 }
 
+                if(!empty($addSearchType)) {
+                    $addSearchType = " AND $addSearchType ";
+                }
+    
                 $sqlPosts .= " AND $postTypes $video
                 $startDate $endDate 
-                $addSearchAuthorId $addSearchPostTitle $addNotAdmin $leftJoinWhere 
+                $addSearchAuthorId $addSearchPostTitle $addSearchType $addNotAdmin $leftJoinWhere 
 		ORDER BY `last_save_date` " . $sortType . " ". $addLimit;
                 // No unprepared User Input
                 // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -425,10 +428,10 @@ class B2S_Post_Item {
                     if (!empty($this->searchPostType) && $this->searchPostType == 'b2s_ex_post') {
                         $sqlPosts .= " AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 1 ";
                     } else {
-                        $sqlPosts .= " AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 0 "
-                                . " AND $addSearchType ";
+                        $sqlPosts .= " AND {$wpdb->prefix}b2s_posts_drafts.`save_origin` = 0 ";
                     }
                 }
+
                 $sqlPosts .= " AND $postTypes $video
                 $startDate $endDate 
                 $addSearchAuthorId $addSearchPostTitle $addNotAdmin $leftJoinWhere";
@@ -556,10 +559,13 @@ class B2S_Post_Item {
             $postFormatText = esc_html__('Wordpress Content', 'blog2social');
             //Since 8.7.0 Show Post Type instead of curated
             $prefix = ' - ';    
+            $linkPostUrl= '';
+            $isExPost= false;
             if(isset($var->post_type) && strtolower($var->post_type) == 'b2s_ex_post'){
-
+               
+                $isExPost= true;
                 $postFormatText = '';
-
+              
                 if(isset($var->display_post_format) && !empty($var->display_post_format)) {
 
                     if($var->display_post_format=="text"){
@@ -567,7 +573,9 @@ class B2S_Post_Item {
                     }
                     if($var->display_post_format=="link"){
                         $postFormatText = esc_html__('Link Post', 'blog2social');
+                        $linkPostUrl = get_the_guid($var->ID);
                     }
+
                     if($var->display_post_format=="image"){
                         $postFormatText = esc_html__('Image Post', 'blog2social');
                     }
@@ -637,7 +645,7 @@ class B2S_Post_Item {
                         '<span class="pull-right b2s-publish-btn">
                                                     <a class="btn btn-default btn-sm loadDraftBtn" href="admin.php?page=blog2social-ship&postId=' . esc_attr($var->ID) . (!empty($selectSchedDate) ? '&schedDate=' . $selectSchedDate : '') . '&type=draft">' . esc_html__('load Draft', 'blog2social') . '</a>
                                                 </span>' : '')
-                        . '<div class="clearfix-all"></div><div class="info hidden-xs pull-left">#' . esc_html($var->ID) . ' | ' . '<span class="b2s-publish-count" data-post-id="' . esc_attr($var->ID) . '">' . esc_html($countPublish) . '</span> ' . $sharedText . ' | ' . __('Author', 'blog2social') . ' <a href="' . esc_url(get_author_posts_url($var->post_author)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a> | ' . esc_html($postStatus[trim(strtolower($var->post_status))] . ' ' . __('on blog', 'blog2social')) . ': ' . esc_html(B2S_Util::getCustomDateFormat($var->post_date, substr(B2S_LANGUAGE, 0, 2)) . $lastPublish) . '</div>
+                        . '<div class="clearfix-all"></div><div class="info hidden-xs">#' . esc_html($var->ID) . ' | ' . '<span class="b2s-publish-count" data-post-id="' . esc_attr($var->ID) . '">' . esc_html($countPublish) . '</span> ' . $sharedText . ' | ' . __('Author', 'blog2social') . ' <a href="' . esc_url(get_author_posts_url($var->post_author)) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a> | ' . esc_html($postStatus[trim(strtolower($var->post_status))] . ' ' . __('on blog', 'blog2social')) . ': ' . esc_html(B2S_Util::getCustomDateFormat($var->post_date, substr(B2S_LANGUAGE, 0, 2)) . $lastPublish) . '</div>
                         <div class="b2s-post-details-area" data-post-id="' . esc_attr($var->ID) . '"></div>    
                         </div>                                 
                                 </li>';
@@ -656,17 +664,17 @@ class B2S_Post_Item {
                     // translators: %s is author name, second is date
                     esc_html__('uploaded by %1$s on %2$s', 'blog2social'), get_the_author_meta('display_name', $var->post_author), B2S_Util::getCustomDateFormat($var->post_date, substr(B2S_LANGUAGE, 0, 2)));
                 $shareVideoBtn = '<button class="b2s-share-video-file btn btn-primary" disabled><i class="glyphicon glyphicon-ban-circle"></i> ' . esc_html__('Share on video networks', 'blog2social') . '</button>';
-
-                if ($videoAddonDetails !== false) {
-                    if ((int) $countPublish > 0) {
-                        $videoDetails = '<a class="b2sDetailsPublishPostTriggerLink" href="#"><span class="b2s-publish-count" data-attachment-id="' . esc_attr($var->ID) . '">' . esc_html($countPublish) . '</span> ' . esc_html__('shared video posts', 'blog2social') . '</a>,  ' . sprintf(
-                            // translators: %s is author name, second is date
-                            esc_html__('latest upload by %1$s on %2$s', 'blog2social'), '<a href="' . esc_url(get_author_posts_url($lastPublish['user'])) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>', esc_html(B2S_Util::getCustomDateFormat($lastPublish['date'], substr(B2S_LANGUAGE, 0, 2)))) . ' | ' . $videoDetails;
-                        $uploadDetails = '<button class="b2s-show-video-uploads btn btn-primary" data-file-url="' . esc_attr($videoUrl) . '" data-attachment-id="' . esc_attr($var->ID) . '"><i class="glyphicon glyphicon-chevron-down"></i> ' . esc_html__('Details', 'blog2social') . '</button>';
-                    }
-                    if (isset($videoAddonDetails['volume_open']) && ($videoAddonDetails['volume_open'] >= round($videoMeta['filesize'] / 1024))) {
-                        $shareVideoBtn = '<a class="b2s-share-video-file btn btn-primary" href="admin.php?page=blog2social-ship&isVideo=1&postId=' . esc_attr($var->ID) . '" data-file-url="' . esc_attr($var->guid) . '" data-attachment-id="' . esc_attr($var->ID) . '">' . esc_html__('Share on video networks', 'blog2social') . '</a>';
-                    } else {
+             
+                if ((int) $countPublish > 0) {
+                    $videoDetails = '<a class="b2sDetailsPublishPostTriggerLink" href="#"><span class="b2s-publish-count" data-attachment-id="' . esc_attr($var->ID) . '">' . esc_html($countPublish) . '</span> ' . esc_html__('shared video posts', 'blog2social') . '</a>,  ' . sprintf(
+                        // translators: %s is author name, second is date
+                        esc_html__('latest upload by %1$s on %2$s', 'blog2social'), '<a href="' . esc_url(get_author_posts_url($lastPublish['user'])) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>', esc_html(B2S_Util::getCustomDateFormat($lastPublish['date'], substr(B2S_LANGUAGE, 0, 2)))) . ' | ' . $videoDetails;
+                    $uploadDetails = '<button class="b2s-show-video-uploads btn btn-primary" data-file-url="' . esc_attr($videoUrl) . '" data-attachment-id="' . esc_attr($var->ID) . '"><i class="glyphicon glyphicon-chevron-down"></i> ' . esc_html__('Details', 'blog2social') . '</button>';
+                }
+                if (isset($videoAddonDetails['volume_open']) && ($videoAddonDetails['volume_open'] >= round($videoMeta['filesize'] / 1024))) {
+                    $shareVideoBtn = '<a class="b2s-share-video-file btn btn-primary" href="admin.php?page=blog2social-ship&isVideo=1&postId=' . esc_attr($var->ID) . '" data-file-url="' . esc_attr($var->guid) . '" data-attachment-id="' . esc_attr($var->ID) . '">' . esc_html__('Share on video networks', 'blog2social') . '</a>';
+                } else {
+                    if($videoAddonDetails!=false){
                         $notice = '<span class="glyphicon glyphicon-warning-sign"></span> <b>' . esc_html__('Video size exceeds your data volume to share on networks', 'blog2social') . '</b></br>';
                     }
                 }
@@ -699,6 +707,7 @@ class B2S_Post_Item {
                 $userInfoName = get_the_author_meta('display_name', $lastPublish['user']);
                 $addCurationFormat = '';
                 $isVideo = '';
+       
                 $sharedText = esc_html__('shared social media posts', 'blog2social');
                 if (strtolower($var->post_type) == 'b2s_ex_post') {
                     $guid = get_the_guid($var->ID);
@@ -709,12 +718,20 @@ class B2S_Post_Item {
                     $isVideo = '&isVideo=1';
                 }
 
+                $publishedTitleHtml = '';
+                if($isExPost && empty($linkPostUrl)){
+                    $publishedTitleHtml = '<strong>' . esc_html($postTitle) . '</strong>'. $curated;
+                }else
+                {
+                    $publishedTitleHtml= '<strong><a target="_blank" href="' . esc_url(empty($linkPostUrl) ? get_permalink($var->ID) : $linkPostUrl) . '">' . esc_html($postTitle) . '</a></strong>' . $curated;
+                }
+
                 $this->postItem .= '<li class="list-group-item">
                                         <div class="media">
                                             <img class="post-img-10 pull-left hidden-xs" src="' . esc_url(plugins_url('/assets/images/b2s/' . $postType . '-icon.png', B2S_PLUGIN_FILE)) . '" alt="posttype">
                                                 <div class="media-body">
-                                                    <div class="pull-left media-nav">
-                                                            <strong><a target="_blank" href="' . esc_url(get_permalink($var->ID)) . '">' . esc_html($postTitle) . '</a></strong>' . $curated . '
+                                                    <div class="pull-left media-nav">'.
+                                                    $publishedTitleHtml . '
                                                         <span class="pull-right">
                                                         <a class="btn btn-primary hidden-xs btn-sm' . '" href="admin.php?page=blog2social-ship&postId=' . esc_attr($var->ID) . $addCurationFormat . $isVideo . '" data-blog-post-id="' . esc_attr($var->ID) . '">' . esc_html__('Re-share this post', 'blog2social') . '</a>
                                                             <button type="button" class="btn btn-primary btn-sm b2sDetailsPublishPostBtn" data-search-date="' . esc_attr($this->searchShowByDate) . '" data-post-id="' . esc_attr($var->ID) . '"><i class="glyphicon glyphicon-chevron-down"></i> ' . esc_html__('Details', 'blog2social') . '</button>
@@ -825,7 +842,6 @@ class B2S_Post_Item {
                                          </div>
                                     </li>';
             }
-
             if ($this->type == 'draft') {
                 $browser = (get_post_meta($var->ID, "b2s_source", true) == "b2s_browser_extension") ? ' - <strong>' . esc_html__('via Browser-Extension', 'blog2social') . '</strong>' : '';
                 $userInfoName = get_the_author_meta('display_name', $var->post_author);
@@ -865,13 +881,15 @@ class B2S_Post_Item {
                         $url = get_permalink($post);
                     }
                 }
+                $draftDataArr = (!empty($var->data)) ? unserialize($var->data) : array();
+                $storedRedirectUrl = (isset($draftDataArr['redirect_url']) && !empty($draftDataArr['redirect_url'])) ? $draftDataArr['redirect_url'] : '';
                 $this->postItem .= '<li class="list-group-item b2s-draft-list-entry" data-b2s-draft-id="' . esc_attr($var->draft_id) . '">
                                 <div class="media">
                                     <img class="post-img-10 pull-left hidden-xs" src="' . esc_url(plugins_url('/assets/images/b2s/' . $postType . '-icon.png', B2S_PLUGIN_FILE)) . '" alt="posttype">
                                     <div class="media-body">
                                             <strong><a target="_blank" href="' . esc_url($url) . '">' . esc_html($postTitle) . '</a></strong>
                                         <span class="pull-right b2s-publish-btn">
-                                            <a class="btn btn-primary btn-sm publishPostBtn" href="admin.php?page=blog2social-ship' . (($postType == 'video') ? '&isVideo=1' : '') . '&postId=' . esc_attr($var->ID) . '&type=draft">' . esc_html__('Edit draft', 'blog2social') . '</a>
+                                            <a class="btn btn-primary btn-sm publishPostBtn" href="' . (!empty($storedRedirectUrl) ? esc_attr($storedRedirectUrl) : 'admin.php?page=blog2social-ship' . (($postType == 'video') ? '&isVideo=1' : '') . '&postId=' . esc_attr($var->ID) . '&type=draft') . '">' . esc_html__('Edit draft', 'blog2social') . '</a>
                                         </span>
                                         <span class="pull-right">
                                             <a class="btn btn-default btn-sm deleteDraftBtn" data-b2s-draft-id="' . esc_attr($var->draft_id) . '">' . esc_html__('Delete', 'blog2social') . '</a>
@@ -953,7 +971,6 @@ class B2S_Post_Item {
     }
 
     private function getPostCount($post_id = 0) {
-      
         if ($post_id > 0) {
             global $wpdb;
             $addNotAdmin = (B2S_PLUGIN_ADMIN == false) ? $wpdb->prepare(' AND posts.`blog_user_id` = %d', B2S_PLUGIN_BLOG_USER_ID) : '';
@@ -1158,7 +1175,7 @@ class B2S_Post_Item {
                     }
 
                     $addPostFormat = '';
-                 
+               
                     $isVideo = '';
                     if (isset($var->post_format) && $var->post_format != null && (int) $var->post_format >= 0) {
                         $addPostFormat = esc_html__('post format', 'blog2social') . ': ';
@@ -1181,7 +1198,6 @@ class B2S_Post_Item {
                         }
                         $addPostFormat .= ' | ';
                     }
-
 
                     $specialPosting = (isset($var->sched_type) && isset($specialPostingData[$var->sched_type])) ? ' - <strong>' . esc_html($specialPostingData[$var->sched_type]) . '</strong>' : '';
                     $publishLink = (!empty($var->publish_link)) ? '<a target="_blank" href="' . esc_url($var->publish_link) . '">' . esc_html__('show', 'blog2social') . '</a> | ' : '';
@@ -1264,7 +1280,7 @@ class B2S_Post_Item {
                     $content .= '</div><p class="info">' . $publishLink;
 
                     if ((int) $var->hook_action == 0) {
-                        $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                        $content .=  '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">';
                         $content .= esc_html__('Delete from reporting', 'blog2social') . '</a> ';
                     }
 
@@ -1278,7 +1294,7 @@ class B2S_Post_Item {
                                 </li>';
                 }
                 $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
-                $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-publish-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                $content .= '<a class="checkbox-post-publish-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">';
                 $content .= esc_html__('Delete from reporting', 'blog2social') . '</a></label></li>';
                 $content .= '</ul></div></div>';
                 return $content;
@@ -1346,7 +1362,7 @@ class B2S_Post_Item {
                                 </li>';
                 }
                 $content .= '<li class="list-group-item"><label class="checkbox-inline checkbox-all-label-btn"><span class="glyphicon glyphicon glyphicon-trash "></span> ';
-                $content .= B2S_PLUGIN_USER_VERSION > 0 ? '<a class="checkbox-post-approve-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_html__('You want to delete your Social Media post?', 'blog2social') . '">';
+                $content .= '<a class="checkbox-post-approve-all-btn" data-blog-post-id="' . esc_attr($post_id) . '" href="#">';
                 $content .= esc_html__('Delete', 'blog2social') . '</a></label></li>';
                 $content .= '</ul></div></div>';
                 return $content;
@@ -1658,7 +1674,7 @@ class B2S_Post_Item {
                         $content .= '</div><p class="info">' . $publishLink;
 
                         if ((int) $var->hook_action == 0) {
-                            $content .= (B2S_PLUGIN_USER_VERSION > 0) ? '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">' : '<a href="#" class="b2sPreFeatureEditAndDeleteModal" data-title="' . esc_attr__('You want to delete a publish post entry?', 'blog2social') . '">';
+                            $content .= '<a href="#" class="b2s-post-publish-area-drop-btn" data-post-id="' . esc_attr($var->id) . '">';
                             $content .= esc_html__('Delete from reporting', 'blog2social') . '</a> ';
                         }
                         if (!empty($error)) {

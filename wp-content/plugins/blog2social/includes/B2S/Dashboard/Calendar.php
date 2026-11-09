@@ -1,5 +1,7 @@
 <?php
-
+if (!defined('ABSPATH')) {
+    exit;
+}
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Calendar/Filter.php');
 
 /**

@@ -40,7 +40,7 @@ $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : fal
 
                 <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LICENSE', B2S_PLUGIN_ADMIN)) { ?> 
                     <div class="row">
-                        <div class="panel panel-default b2s-margin-right-10 b2s-margin-bottom-10 b2s-margin-top-8">
+                        <div class="panel panel-default b2s-margin-right-10 b2s-margin-bottom-10 b2s-margin-top-8 license-card">
                             <div class="panel-body b2s-padding-10">
                                 <div class="media d-flex">
                                     <div class="align-self-center">
@@ -188,7 +188,7 @@ $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : fal
                             </div>
                         </div>
 
-                        <div class="b2s-ass-sidebar-account panel panel-default b2s-margin-right-10 b2s-margin-bottom-10" style="display:none;">
+                        <div class="b2s-ass-sidebar-account panel panel-default b2s-margin-right-10 b2s-margin-bottom-10 license-card" style="display:none;">
                             <div class="panel-body b2s-padding-10">
                                 <div class="media d-flex align">
                                     <div class="align-self-center">

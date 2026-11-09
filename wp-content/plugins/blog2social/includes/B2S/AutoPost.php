@@ -19,14 +19,19 @@ class B2S_AutoPost {
     private $optionPostFormat;
     private $setPreFillTextLimit;
     private $allowHashTag;
+    private $limitHashTag =array(47=>4);
     private $userVersion;
-    private $allowHtml = array(4, 11, 14, 25);
+    private $imageAiGeneratedNetworks = array(6, 12, 45);
+    private $textIsAiGenerated = array(45);
+    private $imageIsAiGenerated = false;
+    private $textAiGeneratedChecked = false;
+    private $allowHtml = array(4, 11, 14, 25, 47);
     private $default_template;
     private $echo;
     private $delay;
     private $blogUserId;
 
-    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0, $echo = 0, $delay = 0) {       
+    function __construct($postId = 0, $blogPostData = array(), $current_user_date = '0000-00-00 00:00:00', $myTimeSettings = false, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '', $b2sPostLang = 'en', $optionPostFormat = array(), $allowHashTag = true, $userVersion = 0, $echo = 0, $delay = 0, $imageIsAiGenerated = false, $textAiGeneratedChecked = false) {       
         $this->postId = $postId;
         $this->blogPostData = $blogPostData;
         $this->current_user_date = $current_user_date;
@@ -47,6 +52,8 @@ class B2S_AutoPost {
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
         $this->echo = $echo;
         $this->delay = $delay;
+        $this->imageIsAiGenerated = (bool) $imageIsAiGenerated;
+        $this->textAiGeneratedChecked = (bool) $textAiGeneratedChecked;
     }
 
     public function prepareShareData($networkAuthId = 0, $networkId = 0, $networkType = 0, $networkKind = 0) {
@@ -263,6 +270,26 @@ class B2S_AutoPost {
                 if($networkId == 39) {
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
                 }
+
+                if ($networkId == 47) {
+                    $postData['custom_title'] = wp_strip_all_tags($this->title);
+                    $networkLimitHashTag = isset($this->limitHashTag[$networkId]) ? $this->limitHashTag[$networkId] : false;
+                    $countHashtags= 0;
+                    if ($this->allowHashTag) {
+                        if (is_array($this->keywords) && !empty($this->keywords)) {
+                            foreach ($this->keywords as $tag) {
+                                $postData['tags'][] = str_replace(" ", "", $tag->name);
+                                if($networkLimitHashTag !== false){
+                                    $countHashtags++;
+                                    if($countHashtags >= $networkLimitHashTag){
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $postData['content'] = $this->contentHtml;
+                }
             } else {
                 if ($networkId == 4) {
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
@@ -329,7 +356,7 @@ class B2S_AutoPost {
                     }
                 }
 
-                if ($networkId == 11 || $networkId == 14) {
+                if ($networkId == 11 || $networkId == 14 || $networkId == 47) {
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
                     $postData['content'] = $this->contentHtml;
                 }
@@ -368,6 +395,13 @@ class B2S_AutoPost {
                     $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
                 }
+            }
+       
+            if ($this->imageIsAiGenerated && in_array($networkId, $this->imageAiGeneratedNetworks)) {
+                $postData['image_is_ai_generated'] = 1;
+            }
+            if ($this->textAiGeneratedChecked && in_array($networkId, $this->textIsAiGenerated)) {
+                $postData['text_is_ai_generated'] = 1;
             }
 
             // Process comment from template if version, network and type are allowed and comment given

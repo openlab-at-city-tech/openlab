@@ -634,14 +634,17 @@ jQuery(document).on('click', '.b2s-warning-close', function () {
         jQuery('html, body').animate({scrollTop: 0}, 'fast');
         clearTimeout(noticeTimers[index]);
         noticeTimers[index] = setTimeout(function () {
-            jQuery(el).fadeOut();
+            jQuery(el).data('b2s-dismissing', true);
+            jQuery(el).fadeOut(function () {
+                jQuery(el).data('b2s-dismissing', false);
+            });
         }, 8000);
     }
 
     var observer = new MutationObserver(function (mutations) {
         mutations.forEach(function (mutation) {
             var el = mutation.target;
-            if (jQuery(el).is(':visible')) {
+            if (!jQuery(el).data('b2s-dismissing') && jQuery(el).is(':visible')) {
                 onNoticeVisible(el);
             }
         });
@@ -763,7 +766,9 @@ jQuery(document).on('click', '#b2s-debug-connection-btn', function () {
             if (data.result == false) {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
-                } else {
+                } else if (data.error == 'permission_administrator') {
+                    jQuery('.b2s-no-permission-administrator').show();
+                }else {
                     jQuery('.b2s-debug-connection-result-area').show();
                     jQuery('.b2s-debug-connection-result-code').hide();
                     jQuery('.b2s-debug-connection-result-code-info').hide();
@@ -778,4 +783,29 @@ jQuery(document).on('click', '#b2s-debug-connection-btn', function () {
             return true;
         }
     });
+});
+
+// New Post Filters
+jQuery(document).on('click', '#b2s-wp-filter-toggle', function () {
+    var $panel = jQuery('#b2s-wp-filter-panel');
+    var $label = jQuery('#b2s-wp-filter-toggle-label');
+    if ($panel.is(':visible')) {
+        $panel.slideUp(150);
+        $label.text($label.data('show') || 'Show filters');
+    } else {
+        $panel.slideDown(150);
+        $label.text($label.data('hide') || 'Hide filters');
+    }
+});
+
+var b2sCurationSearchTimer = null;
+jQuery(document).on('input', '#b2sSortPostTitle', function () {
+    clearTimeout(b2sCurationSearchTimer);
+    b2sCurationSearchTimer = setTimeout(function () {
+        if (typeof b2sSortFormSubmit === 'function') { b2sSortFormSubmit(); }
+    }, 500);
+});
+
+jQuery('.b2s-menu-parent--open').on('click', function () {
+    jQuery('.b2s-submenu').slideToggle(150);
 });

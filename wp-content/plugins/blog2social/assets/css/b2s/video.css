@@ -6,7 +6,6 @@ h3{
 }
 .form-inline {
     width: 100%;
-    margin-top: 20px;
 }
 .form-inline .form-group  {
     margin-left: 2px;
@@ -23,6 +22,10 @@ h3{
 
 #b2sSortPostAuthor{
     margin-bottom: 9px !important;
+}
+.b2s-panel-video{
+    margin-top: 10px;   
+    border-radius: 14px !important
 }
 
 /*Video Area*/

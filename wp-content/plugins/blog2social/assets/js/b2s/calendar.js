@@ -302,8 +302,14 @@ jQuery(document).ready(function () {
                         'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
                     },
                     success: function (data) {
+                     
                         if (data && data.result === false && data.error == 'permission_author') {
                             jQuery('.b2s-no-permission-author').show();
+                            revertFunc();
+                            return;
+                        }
+                        if (data && data.result === false && data.error == 'permission_post') {
+                            jQuery('.b2s-no-permission-post').show();
                             revertFunc();
                             return;
                         }
@@ -367,11 +373,25 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
             'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
         },
         success: function (data) {
-            if (data.error == 'nonce') {
-                jQuery('.b2s-nonce-check-fail').show();
-            } else {
-                $modal = $modal.html(data);
+
+            try{
+                if (typeof data === 'string') {
+                    data = JSON.parse(data);
+                }
+                if (data && data.result === false && data.error == 'permission_post') {
+                    jQuery('.b2s-no-permission-post').show();
+                    return false;
+                }
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                return false;
+            } catch (e) {
+
             }
+
+            $modal = $modal.html(data);
+            
         }
     });
     jQuery("body").append($modal);
@@ -604,7 +624,7 @@ jQuery(document).on('click', '.b2s-pagination-btn', function () {
     return false;
 });
 
-jQuery(document).on('change', '.b2s-select', function () {
+jQuery(document).on('change', '.b2s-select, .b2s-select-filter', function () {
     jQuery('#b2sPagination').val("1");
     b2sSortFormSubmit();
     return false;
@@ -653,21 +673,10 @@ jQuery(document).on('click', '#b2s-btn-select-blog-post', function () {
 });
 
 jQuery(document).on('click', '#b2s-btn-select-content-curation', function () {
-    window.location.href = jQuery('#b2sRedirectUrlContentCuration').val() + '&schedDate=' + jQuery('#b2sSelSchedDate').val();
+    window.location.href = jQuery('#b2sRedirectUrlContentCuration').val() + '&schedDate=' + encodeURIComponent(jQuery('#b2sSelSchedDate').val());
     return false;
 });
 
-function showFilter(typ) {
-    if (typ == 'show') {
-        jQuery('.filterShow').hide();
-        jQuery('.form-inline').show();
-        jQuery('.filterHide').show();
-    } else {
-        jQuery('.filterShow').show();
-        jQuery('.form-inline').hide();
-        jQuery('.filterHide').hide();
-    }
-}
 
 //b2sSortForm 
 function b2sSortFormSubmit() {
@@ -850,6 +859,9 @@ jQuery(document).on("click", ".b2s-edit-post-save-this", function (e) {
         success: function (data) {
             if (data.error == 'nonce') {
                 jQuery('.b2s-nonce-check-fail').show();
+            }
+            if(data.error == 'permission_post') {
+                jQuery('.b2s-no-permission-post').show();
             }
             jQuery('#b2s-edit-event-modal-' + id).modal('hide');
             refreshCalender();

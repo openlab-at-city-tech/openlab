@@ -204,7 +204,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                 <img src="<?php echo esc_url(plugins_url('/assets/images/metrics/social-symbols.png', B2S_PLUGIN_FILE)); ?>" style="width: 80px; float: right;" alt="blog2social">
                 <br>
                 <br>
-                <?php esc_html_e('You can now track the performance of your posts directly in Blog2Social, starting with Facebook and Twitter, as well as other networks to follow. And you can test it exclusively and for free!', 'blog2social') ?>
+                <?php esc_html_e('You can now track the performance of your posts directly in Blog2Social, starting with Facebook and X, as well as other networks to follow. And you can test it exclusively and for free!', 'blog2social') ?>
                 <br>
                 <?php esc_html_e("Here's how to start tracking your social media posts:", 'blog2social') ?>
                 <br>
@@ -243,14 +243,14 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                 <h4 class="modal-title"><?php esc_html_e('Social Media Metrics', 'blog2social') . ' <span class="label label-success label-sm">' . esc_html__("BETA", "blog2social") . '</span>'; ?></h4>
             </div>
             <div class="modal-body">
-                <?php esc_html_e('You can now track the performance of your posts for Facebook and Twitter directly in Blog2Social. With these Social Media Metrics, you can analyze the performance of your social media posts you shared with the Blog2Social. Use it to optimize your social media strategy to reach your audience and to get better results for your social media posts.', 'blog2social') ?>
+                <?php esc_html_e('You can now track the performance of your posts for Facebook and X directly in Blog2Social. With these Social Media Metrics, you can analyze the performance of your social media posts you shared with the Blog2Social. Use it to optimize your social media strategy to reach your audience and to get better results for your social media posts.', 'blog2social') ?>
                 <br>
                 <br>
                 <?php esc_html_e("You can track the following Social Media Metrics depending on the social networks:", 'blog2social') ?>
                 <br>
                 <ul style="list-style: disc; list-style-position: inside;">
                     <li><?php esc_html_e('Impressions: A count of how many times the post has been viewed.', 'blog2social') ?></li>
-                    <li><?php esc_html_e('Link clicks: A count of link clicks, to further content. (Available for Twitter)', 'blog2social') ?></li>
+                    <li><?php esc_html_e('Link clicks: A count of link clicks, to further content. (Available for X)', 'blog2social') ?></li>
                     <li><?php esc_html_e('Likes: A count of how many times the post has been liked.', 'blog2social') ?></li>
                     <li><?php esc_html_e('Re-Shares/ Re-Tweets: A count of how many times the post has been reshared or retweeted.', 'blog2social') ?></li>
                     <li><?php esc_html_e('Comments: A count of how many times the post has been replied to.', 'blog2social') ?></li>

@@ -13,8 +13,9 @@ class B2S_Curation_Save {
     }
 
     public function insertContent() {
+        $title= isset($this->data['title']) ? sanitize_text_field($this->data['title']) : '';
         $post = array(
-            'post_title' => sanitize_text_field($this->data['title']),
+            'post_title' => $title,
             'post_content' => $this->data['content'],
             'guid' => ((isset($this->data['url']) && !empty($this->data['url'])) ? esc_url($this->data['url']) : ''),
             'post_status' => 'private',

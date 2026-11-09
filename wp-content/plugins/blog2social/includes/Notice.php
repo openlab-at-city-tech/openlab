@@ -45,7 +45,7 @@ class B2S_Notice {
     public static function getCalEvent($lang = 'en') {
         $content = '';
         $output = '';
-        if (current_user_can('read')) {
+        if (current_user_can('edit_posts')) {
             $option = get_option('B2S_CAL_EVENT_' . strtoupper($lang));
             if ($option !== false) {
                 if (is_array($option) && isset($option['last_call_date']) && isset($option['content']) && !empty($option['content']) && $option['last_call_date'] == wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) {

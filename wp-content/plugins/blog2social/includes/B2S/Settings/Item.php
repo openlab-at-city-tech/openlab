@@ -39,6 +39,7 @@ class B2S_Settings_Item {
 
         $isCheckedAllowShortcode = (get_option('B2S_PLUGIN_USER_ALLOW_SHORTCODE_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
         $isCheckedUsePermalink = (get_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
+        $imageAiTag = $this->options->_getOption('image_ai_tag');
 
         $optionUserTimeZone = $this->options->_getOption('user_time_zone');
         $optionUserTimeFormat = $this->options->_getOption('user_time_format');
@@ -127,7 +128,11 @@ class B2S_Settings_Item {
             $content .= '<strong>' . esc_html__('This is a global system setting  for your website / blog, which can be edited by users with admin rights only.', 'blog2social') . '</strong><br>';
             $content .= '<input type="checkbox" value="' . (($isCheckedLegacyMode == 1) ? 0 : 1) . '" id="b2s-general-settings-legacy-mode" ' . (($isCheckedLegacyMode == 1) ? 'checked="checked"' : '') . ' /><label for="b2s-general-settings-legacy-mode"> ' . esc_html__('activate Legacy mode', 'blog2social') . ' <a href="#" class="b2s-info-btn del-padding-left b2sInfoLegacyModeBtn">' . esc_html__('Info', 'blog2social') . '</a></label>';
         }
+        $content .= '<br>';
+        $content .= '<br>';
+
         return $content;
+
     }
 
     public function getSocialMetaDataHtml() {
@@ -152,7 +157,7 @@ class B2S_Settings_Item {
         $content .= '<h4>' . esc_html__('Meta Tags Settings for Posts and Pages', 'blog2social') . '</h4>';
         $content .= '<input type="checkbox" value="' . esc_attr($og_isChecked) . '" name="b2s_og_active" ' . (($readonly) ? 'disabled="true"' : "") . '  id="b2s_og_active" ' . (($og_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_og_active"> ' . esc_html__('Add Open Graph meta tags to your shared posts or pages, required by Facebook and other social networks to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="og" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
         $content .= '<br>';
-        $content .= '<input type="checkbox" value="' . esc_attr($card_isChecked) . '" name="b2s_card_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_card_active" ' . (($card_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_card_active"> ' . esc_html__('Add Twitter Card meta tags to your shared posts or pages, required by Twitter to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="card" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
+        $content .= '<input type="checkbox" value="' . esc_attr($card_isChecked) . '" name="b2s_card_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_card_active" ' . (($card_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_card_active"> ' . esc_html__('Add X Card meta tags to your shared posts or pages, required by X to display your post or page image, title and description correctly.', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="card" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
         $content .= '<br>';
         $content .= '<input type="checkbox" value="' . esc_attr($oembed_isChecked) . '" name="b2s_oembed_active" ' . (($readonly) ? 'disabled="true"' : "") . ' id="b2s_oembed_active" ' . (($oembed_isChecked == 0) ? 'checked="checked"' : '') . ' /><label for="b2s_oEmbed_active"> ' . esc_html__('Add oEmbed tags', 'blog2social') . ' <a href="#" class="b2sInfoMetaTagModal b2s-info-btn del-padding-left" data-meta-type="oEmbed" data-meta-origin="settings">' . esc_html__('Info', 'blog2social') . '</a></label>';
         $content .= '</div>';
@@ -216,8 +221,8 @@ class B2S_Settings_Item {
         $content .= '</div>';
         $content .= '<div class="clearfix"></div>';
         $content .= '<br>';
-        $content .= '<div><b>Twitter Card</b></div>';
-        $content .= '<p>' . esc_html__('Add the default Twitter Card parameters for title, description and image you want Twitter to display, if you share the frontpage of your blog as link post (http://www.yourblog.com)', 'blog2social') . '</p>';
+        $content .= '<div><b>X Card</b></div>';
+        $content .= '<p>' . esc_html__('Add the default X Card parameters for title, description and image you want X to display, if you share the frontpage of your blog as link post (http://www.yourblog.com)', 'blog2social') . '</p>';
         $content .= '<br>';
         $content .= '<div class="col-md-8">';
         $content .= '<div class="form-group"><label for="b2s_card_default_card_type"><strong>' . esc_html__("The default card type to use", "blog2social") . ':</strong></label>';
@@ -232,7 +237,7 @@ class B2S_Settings_Item {
             $content .= '<button class="btn btn-link btn-xs pull-right b2s-upload-image" data-id="b2s_card_default_image">' . esc_html__("Image upload / Media Gallery", "blog2social") . '</button>';
         }
         $content .= '<input type="text" ' . (($readonly) ? "readonly" : "") . ' value="' . esc_attr((($this->generalOptions->_getOption('card_default_image') !== false && !empty($this->generalOptions->_getOption('card_default_image'))) ? $this->generalOptions->_getOption('card_default_image') : '')) . '" name="b2s_card_default_image" class="form-control" id="b2s_card_default_image">';
-        $content .= '<span>' . esc_html__('Please note: Twitter supports images with a minimum dimension of 144x144 pixels and a maximum dimension of 4096x4096 pixels and less than 5 BM. The image will be cropped to a square. Twitter supports JPG, PNG, WEBP and GIF formats.', 'blog2social') . '</span>';
+        $content .= '<span>' . esc_html__('Please note: X supports images with a minimum dimension of 144x144 pixels and a maximum dimension of 4096x4096 pixels and less than 5 BM. The image will be cropped to a square. X supports JPG, PNG, WEBP and GIF formats.', 'blog2social') . '</span>';
         $content .= '</div>';
         $content .= '</div>';
         $content .= '</div>';
