@@ -130,6 +130,100 @@ abstract class Post_Entity_Endpoint extends Endpoint implements Post_Entity_Endp
 	}
 
 	/**
+	 * Filters the parameters for the request.
+	 *
+	 * Scales the requested status back to one the current user is allowed to set, and the
+	 * requested author back to the current user, before the entity is created or updated.
+	 *
+	 * @since 6.12.4
+	 * @since 6.12.4.1 Also scales back the requested author.
+	 *
+	 * @param array  $params    The parameters to filter.
+	 * @param string $operation The operation to filter the parameters for.
+	 *
+	 * @return array The filtered parameters.
+	 */
+	protected function filter_params( array $params, string $operation ): array {
+		if ( in_array( $operation, [ 'create', 'update' ], true ) ) {
+			$params = $this->scale_back_status( $params, $operation );
+			$params = $this->scale_back_author( $params );
+		}
+
+		return parent::filter_params( $params, $operation );
+	}
+
+	/**
+	 * Falls back on a status the current user is allowed to set.
+	 *
+	 * The request body schema defaults an omitted status to `publish`, so the raw request
+	 * decides whether a status was actually sent. Users without the post type's `publish_posts`
+	 * capability get `pending` in place of `publish`, `future` or `private`, and `draft` when
+	 * they sent no status at all. On update an omitted status leaves the existing one untouched.
+	 *
+	 * @since 6.12.4
+	 *
+	 * @param array  $params    The parameters of the request.
+	 * @param string $operation Either `create` or `update`.
+	 *
+	 * @return array The parameters with the status scaled back.
+	 */
+	private function scale_back_status( array $params, string $operation ): array {
+		$request = $this->get_request();
+		// Not `get_param()`: the route args carry the schema default, so it cannot tell an omitted status from a sent one.
+		$explicit  = array_merge( $request->get_query_params(), $request->get_body_params(), $request->get_json_params() ?? [] );
+		$requested = $explicit['status'] ?? null;
+
+		if ( ! $requested && 'update' === $operation ) {
+			unset( $params['status'] );
+
+			return $params;
+		}
+
+		if ( current_user_can( $this->get_post_type_object()->cap->publish_posts ) ) {
+			return $params;
+		}
+
+		if ( ! $requested ) {
+			$params['status'] = 'draft';
+
+			return $params;
+		}
+
+		if ( in_array( $requested, [ 'publish', 'future', 'private' ], true ) ) {
+			$params['status'] = 'pending';
+		}
+
+		return $params;
+	}
+
+	/**
+	 * Falls back on an author the current user is allowed to set.
+	 *
+	 * A user without the post type's `edit_others_posts` capability may not attribute the entity
+	 * to another user, on create or update. An explicit `author` is discarded in favor of the
+	 * current user; an omitted one is left untouched, so update does not overwrite an existing one.
+	 *
+	 * @since 6.12.4.1
+	 *
+	 * @param array $params The parameters of the request.
+	 *
+	 * @return array The parameters with the author scaled back.
+	 */
+	private function scale_back_author( array $params ): array {
+		if ( ! isset( $params['author'] ) ) {
+			return $params;
+		}
+
+		if ( current_user_can( $this->get_post_type_object()->cap->edit_others_posts ) ) {
+			return $params;
+		}
+
+		$params['author'] = get_current_user_id();
+
+		return $params;
+	}
+
+	/**
 	 * Returns the arguments for the delete request.
 	 *
 	 * @since 6.9.0
@@ -188,6 +282,7 @@ abstract class Post_Entity_Endpoint extends Endpoint implements Post_Entity_Endp
 	 * Formats a post into a post entity.
 	 *
 	 * @since 6.9.0
+	 * @since 6.13.3 The edit context is only served to users who can edit the post.
 	 *
 	 * @param WP_Post $post The post to format.
 	 *
@@ -196,7 +291,18 @@ abstract class Post_Entity_Endpoint extends Endpoint implements Post_Entity_Endp
 	public function get_formatted_entity( WP_Post $post ): array {
 		$rest_controller = new WP_REST_Posts_Controller( $this->get_post_type() );
 		$request         = $this->get_request();
-		$data            = $rest_controller->prepare_item_for_response( $post, $request );
+
+		/*
+		 * Core rejects `context=edit` from anyone who cannot edit the post. Checked per post,
+		 * not per request, because linked posts (an Event's Organizers and Venues) are formatted
+		 * with the same request and editing the Event grants nothing on them.
+		 */
+		if ( 'edit' === $request['context'] && ! current_user_can( $this->get_post_type_object()->cap->edit_post, $post->ID ) ) {
+			$request = clone $request;
+			$request->set_param( 'context', 'view' );
+		}
+
+		$data = $rest_controller->prepare_item_for_response( $post, $request );
 
 		return $this->transform_entity( $this->add_properties_to_model( $rest_controller->prepare_response_for_collection( $data ), $post ) );
 	}
@@ -205,16 +311,35 @@ abstract class Post_Entity_Endpoint extends Endpoint implements Post_Entity_Endp
 	 * Adds properties to the model.
 	 *
 	 * @since 6.9.0
+	 * @since 6.13.0 Update the additional properties logic to support aliases defined by the model `get_properties_to_add`
+	 *        method.
 	 *
-	 * @param array   $formatted_post The formatted post.
-	 * @param WP_Post $original_post  The original post.
+	 * @param array<string,mixed> $formatted_post The formatted post.
+	 * @param WP_Post             $original_post  The original post.
 	 *
-	 * @return array The response with the properties added.
+	 * @return array<string,mixed> The response with the properties added.
 	 */
 	protected function add_properties_to_model( array $formatted_post, WP_Post $original_post ): array {
 		$properties_to_add = $this->get_model_class()::get_properties_to_add();
 
-		$data = array_merge( (array) $formatted_post, array_intersect_key( (array) $original_post, $properties_to_add ) );
+		$additional_properties = [];
+		foreach ( (array) $original_post as $key => $value ) {
+			if ( ! isset( $properties_to_add[ $key ] ) ) {
+				continue;
+			}
+
+			$property_value = $properties_to_add[ $key ];
+
+			if ( is_string( $property_value ) ) {
+				// Alias.
+				$additional_properties[ $property_value ] = $value;
+			} elseif ( $property_value === true ) {
+				// Add as is. Strict check to keep the previous logic.
+				$additional_properties[ $key ] = $value;
+			}
+		}
+
+		$data = array_merge( (array) $formatted_post, $additional_properties );
 
 		$data['link'] = $data['permalink'] ?? $data['link'];
 		unset(

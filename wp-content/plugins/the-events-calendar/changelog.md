@@ -1,5 +1,144 @@
 # Changelog
 
+### [6.18.3.1] 2026-11-05
+
+* Fix - Passed the input attributes a date picker is given, such as its accessible name and disabled state, through to its input field.
+* Security - Hardened how calendar views handle shortcodes. Props to Filip Kowalski for reporting.
+* Security - Hardened how HTML attributes are printed in templates. Props to Hatim Madmoune -DELTA for reporting.
+* Security - Hardened shortcode handling in post content shown by calendar views. Props to Filip Kowalski for reporting.
+* Security - Hardened the rendering of copied Events widgets. Props to Hatim Madmoune -DELTA for reporting.
+* Language - 0 new strings added, 8 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.18.3] 2026-10-29
+
+* Language - 0 new strings added, 34 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Hardened access control checks for linked Organizers, Venues, and the Ignored Events admin action. Props to fcc for reporting.
+* Security - Hardened how Event details are saved. Props to fcc for reporting.
+* Security - Hardened the calendar export and add-to-calendar links. Props to ngvuthdanh for reporting.
+* Security - Hardened the rendering of the Event timezone-change link in the classic Event editor. Props to fcc for reporting.
+
+### [6.18.2] 2026-10-15
+
+* Language - 0 new strings added, 13 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Restricted the HTML tag settings of the Elementor widgets to a fixed list of tags.
+* Tweak - Added filters: `tec_events_elementor_widget_allowed_tags`
+
+### [6.18.1] 2026-10-13
+
+* Fix - Prevented a fatal error when manually running a Scheduled Import whose child record could not be created, reporting the failure as an import error instead.
+* Fix - Resolved an issue where the List view exposed an internal pagination look-ahead value in generated navigation and canonical URLs, and capped the number of events fetched per page to prevent unbounded queries.
+* Language - 0 new strings added, 61 updated, 1 fuzzied, and 0 obsoleted.
+* Tweak - Added filters: `tec_events_views_v2_max_events_per_page`
+* Tweak - Improved specificity of error handling when syncing events with Event Aggregator.
+* Tweak - Improved the unified licensing page experience.
+
+### [6.18.0] 2026-09-30
+
+* Fix - Prevented a rejected CSV import column mapping from being saved as the default, which caused later imports to pre-select "Do Not Import" for required columns.
+* Language - 0 new strings added, 13 updated, 0 fuzzied, and 0 obsoleted.
+* Tweak - Changed views: `v2/widgets/widget-events-qr-code`
+
+### [6.17.5.1] 2026-09-24
+
+* Language - 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Hardened author assignment in the REST API.
+* Security - Hardened the rendering of the Events QR Code widget. Props to Jakub Herman for reporting.
+
+### [6.17.5] 2026-09-17
+
+* Compatibility - Registered the plugin's editor blocks with Block API version 3 so they render correctly inside the iframed block editor introduced in WordPress 6.9.
+* Fix - Prevented event pages and iCal exports from failing when event descriptions contain Single Event or Events Archive blocks.
+* Fix - Resolved an issue where hiding the subscribe links with a snippet that returns a non-array value from the `tec_views_v2_subscribe_links` filter could cause a fatal error on single event pages.
+* Fix - Resolved fatal errors that could occur when WordPress or another plugin passed unexpected data to The Events Calendar, such as while SiteGround Optimizer clears its cache.
+* Language - 0 new strings added, 59 updated, 0 fuzzied, and 0 obsoleted.
+* Security - Hardened access checks on REST API responses. Props to Kaveesha Nirmal for reporting.
+* Security - Strengthened permission checks in the REST API v1. Props to Mohammed Abd Alrahman for reporting.
+
+### [6.17.4.1] 2026-09-10
+
+* Security - Strengthened validation of copied widget instances.
+
+### [6.17.4] 2026-09-03
+
+* Fix - Resolved an issue where the Day View direct URL omitted recurring event occurrences because an earlier query on the same repository froze the custom tables date redirection.
+* Fix - Fixed a fatal error when reading an event's venues or organizers on sites running a persistent object cache, caused by a cached lazy collection losing the callback it needs to rebuild itself. Also added the `tec_events_lazy_post_collection_allowed_unserialize_callbacks` filter so third-party code can register its own rebuild callbacks.
+* Language - 0 new strings added, 100 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.17.3.1] 2026-08-26
+
+* Security - Harden capability checks on REST API archive endpoints.
+* Security - Harden validation of copied widget instance data.
+
+### [6.17.3] 2026-08-20
+
+* Security - Hardened validation of copied legacy widget instances.
+* Tweak - Switched changelog tooling from jetpack-changelogger to @stellarwp/changelogger.
+* Fix - Resolved an issue where the events archive page title showed the date range of the oldest events in the calendar rather than the events listed on the page.
+* Fix - Resolved an issue where Events archive pages could return a fatal error when the request included non-numeric or array pagination parameters.
+* Language - 0 new strings added, 99 updated, 0 fuzzied, and 5 obsoleted.
+
+### [6.17.2] 2026-08-05
+
+* Language - 5 new strings added, 95 updated, 0 fuzzied, and 0 obsoleted.
+* Tweak - Improved the unified licensing page experience.
+* Tweak - Switched changelog tooling from jetpack-changelogger to @stellarwp/changelogger.
+
+### [6.17.1] 2026-07-22
+
+* Fix - Corrected CSV imports that failed to show any records on sites with a symlinked uploads folder.
+* Fix - Resolved an issue where event times rendered in UTC on WooCommerce order pages and emails when PHP's default timezone was changed by third-party code.
+* Fix - Resolved an issue where multi-day all-day events displayed an incorrect end date when PHP's default timezone was changed by third-party code.
+* Fix - Resolved an issue where the Event Tickets registration page returned a 404 when the "Return 404 for disabled view URLs" setting was enabled.
+* Language - 0 new strings added, 3 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.17.0] 2026-07-08
+
+* Compatibility - Improved PHP compatibility for versions 7.4 and up to 8.4.
+* Language - 0 new strings added, 59 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.16.5.1] 2026-07-01
+
+* Security - Expanded validation of Event Aggregator imports for all statuses.
+* Language - 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.16.5] 2026-06-24
+
+* Feature - Added "SEO & URL Handling" settings, allowing site owners to configure out-of-range URL behavior.
+* Fix - Dated List view URLs carrying ?tribe-bar-date outside the known event range now return HTTP 404 by default, and can be configured to use a soft noindex response instead, helping prevent accumulation of low-value indexed pages in search engines.
+* Fix - Removed bottom padding from "Event Venue" block to be compatible with Wordpress 7 styles.
+* Fix - URLs specifying a disabled view slug via ?eventDisplay now return HTTP 404 instead of 200.
+* Language - 0 new strings added, 2 updated, 0 fuzzied, and 0 obsoleted.
+* Language - 13 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.16.4.1] 2026-06-19
+
+* Security - Make the iCal export feed produce deterministic output and harden calendar header values against line-break injection.
+
+### [6.16.4] 2026-06-15
+
+* Tweak - Resolve license key validation server not available message on licenses screen. [CONS-478]
+* Language - 0 new strings added, 0 updated, 0 fuzzied, and 0 obsoleted.
+
+### [6.16.3] 2026-05-28
+
+* Fix - Ensure no past Event dates are shown in the Title meta tag on Events archive and single views. [TEC-5759]
+* Fix - Resolved an issue where the category legend superpowers filter would not apply in a day with multiple events from different categories. [ECP-2016]
+* Language - 1 new strings added, 65 updated, 1 fuzzied, and 4 obsoleted.
+
+### [6.16.2] 2026-05-14
+
+* Tweak - Update Harbor to 1.2.0, removing the Liquid Web Products page when there are no premium plugins present.
+
+### [6.16.1] 2026-05-12
+
+* Tweak - Update Harbor to version 1.1.0 to remove the top level Liquid Web page added to the dashboard.
+
+### [6.16.0] 2026-05-11
+
+* Feature - Integrate with Nexcess Licensing and Portal.
+* Tweak - Added filters: `tec_events_aggregator_harbor_took_over`
+* Tweak - Updated branding references from StellarWP to Nexcess.
+
 ### [6.15.20] 2026-04-08
 
 * Fix - Make SSR respect AJAX pagination so direct page URLs no longer return 404s. [TEC-5754]

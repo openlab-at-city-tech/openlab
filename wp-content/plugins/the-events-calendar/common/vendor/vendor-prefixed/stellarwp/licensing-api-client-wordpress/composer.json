@@ -1,0 +1,25 @@
+{
+    "name": "stellarwp/licensing-api-client-wordpress",
+    "type": "library",
+    "description": "WordPress transport and factory integration for the Liquid Web Licensing API client.",
+    "license": "GPL-2.0-or-later",
+    "config": {
+        "vendor-dir": "vendor",
+        "preferred-install": "dist"
+    },
+    "require": {
+        "php": ">=7.4",
+        "stellarwp/licensing-api-client": "^2.0",
+        "nyholm/psr7": "^1.8"
+    },
+    "autoload": {
+        "psr-4": {
+            "LiquidWeb\\LicensingApiClientWordPress\\": "src/"
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.1.x-dev"
+        }
+    }
+}

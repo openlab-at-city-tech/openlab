@@ -49,6 +49,13 @@ class Provider extends Provider_Abstract
             if ($this->container->get(Logger::class)->uses_own_table()) {
                 Register::table(Task_Logs::class);
             }
+            /*
+             * During WordPress installation, database operations are deferred.
+             * Don't signal table readiness until installation is complete.
+             */
+            if (wp_installing()) {
+                return;
+            }
             /**
              * Fires an action when the Shepherd tables are registered.
              *

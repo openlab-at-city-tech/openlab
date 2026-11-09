@@ -1,0 +1,70 @@
+{
+    "name": "stellarwp/uplink",
+    "description": "A library that integrates a WordPress product with the StellarWP Licensing system.",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "StellarWP",
+            "homepage": "https://stellarwp.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": ["bin/stellar-uplink"],
+    "autoload": {
+        "psr-4": {
+            "StellarWP\\Uplink\\": "src/Uplink/",
+            "StellarWP\\Uplink\\Admin_Views\\": "src/admin-views/",
+            "StellarWP\\Uplink\\Assets_Dir\\": "src/assets/",
+            "StellarWP\\Uplink\\Views\\": "src/views/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "StellarWP\\Uplink\\Tests\\": [
+              "tests/wpunit",
+              "tests/_support/Helper/"
+            ]
+        }
+    },
+    "require": {
+        "php": ">=7.1",
+        "ext-json": "*",
+        "stellarwp/container-contract": "^1.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "codeception/module-asserts": "^1.0",
+        "codeception/module-cli": "^1.0",
+        "codeception/module-db": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-rest": "^1.0",
+        "codeception/module-webdriver": "^1.0",
+        "codeception/util-universalframework": "^1.0",
+        "lucatume/codeception-snapshot-assertions": "^0.4.0",
+        "lucatume/di52": "^3.0",
+        "lucatume/wp-browser": "^3.0.14",
+        "phpspec/prophecy": "^1.0",
+        "phpspec/prophecy-phpunit": "^1.0|^2.0",
+        "phpunit/phpunit": "^6.0|^7.0|^8.0|^9.0",
+        "symfony/event-dispatcher-contracts": "^2.5.1",
+        "symfony/string": "^5.4",
+        "szepeviktor/phpstan-wordpress": "^1.1"
+    },
+    "scripts": {
+      "test:analysis": [
+        "phpstan analyse -c phpstan.neon.dist --memory-limit=-1"
+      ]
+    },
+    "scripts-descriptions": {
+      "test:analysis": "Run static code analysis."
+    }
+}

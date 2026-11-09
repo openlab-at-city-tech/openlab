@@ -1,0 +1,62 @@
+{
+  "name": "stellarwp/schema",
+  "description": "A library for simplifying the creation and updates of custom tables within WordPress.",
+  "license": "GPL-2.0",
+  "type": "library",
+  "authors": [
+    {
+      "name": "StellarWP",
+      "email": "dev@stellarwp.com"
+    }
+  ],
+  "require": {
+    "psr/container": "^1.0",
+    "stellarwp/container-contract": "^1.0"
+  },
+  "require-dev": {
+    "brianhenryie/strauss": "^0.11.0",
+    "codeception/module-asserts": "^1.0",
+    "codeception/module-cli": "^1.0",
+    "codeception/module-db": "^1.0",
+    "codeception/module-filesystem": "^1.0",
+    "codeception/module-phpbrowser": "^1.0",
+    "codeception/module-rest": "^1.0",
+    "codeception/module-webdriver": "^1.0",
+    "codeception/util-universalframework": "^1.0",
+    "lucatume/di52": "^4.0",
+    "lucatume/wp-browser": "^3.0 < 3.5",
+    "phpunit/phpunit": "~6.0",
+    "stellarwp/db": "^1.1",
+    "symfony/event-dispatcher-contracts": "^2.5.1",
+    "symfony/string": "^5.4",
+    "szepeviktor/phpstan-wordpress": "^1.1",
+    "php-stubs/wp-cli-stubs": "^2.11",
+    "lucatume/codeception-snapshot-assertions": "^0.5.0"
+  },
+  "minimum-stability": "stable",
+  "autoload": {
+    "psr-4": {
+      "StellarWP\\Schema\\": "src/Schema/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StellarWP\\Schema\\Tests\\": [
+        "tests/_support/Helper/",
+        "tests/wpunit/"
+      ],
+      "StellarWP\\Schema\\Tests\\Traits\\": "tests/_support/Traits/"
+    }
+  },
+  "scripts": {
+    "test:analysis": [
+      "phpstan analyse -c phpstan.neon.dist --memory-limit=512M"
+    ]
+  },
+  "scripts-descriptions": {
+    "test:analysis": "Run static code analysis."
+  },
+  "platform": {
+    "php": "7.0"
+  }
+}

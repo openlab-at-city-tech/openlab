@@ -1,0 +1,49 @@
+{
+  "name": "stellarwp/arrays",
+  "description": "A library for array manipulation.",
+  "type": "library",
+  "license": "GPL-2.0",
+  "platform": {
+    "php": "7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "StellarWP\\Arrays\\": "src/Arrays/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StellarWP\\Arrays\\Tests\\": "tests/_support/Helper/"
+    }
+  },
+  "authors": [
+    {
+      "name": "StellarWP",
+      "email": "dev@stellarwp.com"
+    },
+    {
+      "name": "Matthew Batchelder",
+      "email": "matt.batchelder@stellarwp.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require-dev": {
+    "lucatume/wp-browser": "^3.5 || ^4.0",
+    "szepeviktor/phpstan-wordpress": "^1.1",
+    "symfony/event-dispatcher-contracts": "^2.5.1",
+    "symfony/string": "^5.4",
+    "saggre/phpdocumentor-markdown": "^0.1.3"
+  },
+  "scripts": {
+    "create-docs": [
+      "test -f ./bin/phpDocumentor.phar || curl -o bin/phpDocumentor.phar -L -C - https://github.com/phpDocumentor/phpDocumentor/releases/download/v3.3.1/phpDocumentor.phar",
+      "@php bin/phpDocumentor.phar --directory=src --target=docs --template='vendor/saggre/phpdocumentor-markdown/themes/markdown'"
+    ],
+    "test:analysis": [
+      "phpstan analyse -c phpstan.neon.dist --memory-limit=512M"
+    ]
+  },
+  "scripts-descriptions": {
+    "test:analysis": "Run static code analysis."
+  }
+}

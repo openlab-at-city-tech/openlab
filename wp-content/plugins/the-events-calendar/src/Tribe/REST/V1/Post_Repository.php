@@ -15,7 +15,14 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 	 */
 	protected $messages;
 
-	public function __construct( Tribe__REST__Messages_Interface $messages = null ) {
+	/**
+	 * Tribe__Events__REST__V1__Post_Repository constructor.
+	 *
+	 * @since 6.17.0 Made $messages explicitly nullable.
+	 *
+	 * @param Tribe__REST__Messages_Interface|null $messages The messages handler to use, or `null` to build a default one.
+	 */
+	public function __construct( ?Tribe__REST__Messages_Interface $messages = null ) {
 		$this->types_get_map = array(
 			Tribe__Events__Main::POSTTYPE            => array( $this, 'get_event_data' ),
 			Tribe__Events__Main::VENUE_POST_TYPE     => array( $this, 'get_venue_data' ),
@@ -58,6 +65,8 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 	 * @return array|WP_Error Either the array representation of an event or an error object.
 	 *
 	 * @since 4.6 Added $context param
+	 * @since 6.18.3 Returns the site timezone in place of a stored timezone that is not a real
+	 *            timezone identifier or UTC offset.
 	 */
 	public function get_event_data( $event_id, $context = '' ) {
 		if ( $event_id instanceof WP_Post ) {
@@ -138,7 +147,7 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 			'utc_start_date_details' => $this->get_date_details( $meta['_EventStartDateUTC'] ),
 			'utc_end_date'           => $meta['_EventEndDateUTC'],
 			'utc_end_date_details'   => $this->get_date_details( $meta['_EventEndDateUTC'] ),
-			'timezone'               => isset( $meta['_EventTimezone'] ) ? $meta['_EventTimezone'] : '',
+			'timezone'               => empty( $meta['_EventTimezone'] ) ? '' : Tribe__Events__Timezones::get_event_timezone_string( $event_id ),
 			'timezone_abbr'          => isset( $meta['_EventTimezoneAbbr'] ) ? $meta['_EventTimezoneAbbr'] : '',
 			'cost'                   => tribe_get_cost( $event_id, true ),
 			'cost_details'           => array(
@@ -344,7 +353,8 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 		 */
 		$data = apply_filters( 'tribe_rest_event_venue_data', array_filter( $data ), get_post( $event_or_venue_id ) );
 
-		$data = array_filter( $data );
+		// Filters may drop entries; reset the keys so the result still serializes as a JSON list.
+		$data = array_values( array_filter( $data ) );
 
 		return count( $data ) === 1 ? reset( $data ) : $data;
 	}
@@ -538,9 +548,10 @@ class Tribe__Events__REST__V1__Post_Repository implements Tribe__Events__REST__I
 		 */
 		$data = apply_filters( 'tribe_rest_event_organizer_data', array_filter( $data ), get_post( $event_or_organizer_id ) );
 
-		$data = array_filter( $data );
+		// Filters may drop entries; reset the keys so the result still serializes as a JSON list.
+		$data = array_values( array_filter( $data ) );
 
-		return $single ? reset( $data ) : $data;
+		return $single ? ( $data[0] ?? [] ) : $data;
 	}
 
 	/**

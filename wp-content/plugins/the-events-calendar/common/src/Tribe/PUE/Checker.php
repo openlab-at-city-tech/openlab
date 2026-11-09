@@ -438,6 +438,8 @@ if ( ! class_exists( 'Tribe__PUE__Checker' ) ) {
 			// Key validation.
 			add_action( 'tribe_settings_save_field', [ $this, 'check_for_api_key_error_on_action' ], 10, 2 );
 			add_action( 'wp_ajax_pue-validate-key_' . $this->get_slug(), [ $this, 'ajax_validate_key' ] );
+			add_action( 'update_option_' . $this->pue_install_key, [ $this, 'reset_key_status_when_key_removed' ] );
+			add_action( 'update_site_option_' . $this->pue_install_key, [ $this, 'reset_key_status_when_key_removed' ] );
 			add_filter( 'tribe-pue-install-keys', [ $this, 'return_install_key' ] );
 			add_action( 'admin_enqueue_scripts', [ $this, 'maybe_display_json_error_on_plugins_page' ], 1 );
 
@@ -1238,6 +1240,23 @@ if ( ! class_exists( 'Tribe__PUE__Checker' ) ) {
 				return [];
 			}
 
+			/**
+			 * Filter early license key validation before remote PUE checks.
+			 *
+			 * Returning a non-null array short-circuits remote validation and is used as
+			 * the AJAX/validation response. Return null to continue normal validation.
+			 *
+			 * @since 6.12.3
+			 *
+			 * @param array|null          $response Early response, or null to continue.
+			 * @param string              $key      The license key being validated.
+			 * @param Tribe__PUE__Checker $checker  The PUE checker instance.
+			 */
+			$pre_validate = apply_filters( 'tec_common_pue_pre_validate_key', null, $key, $this );
+			if ( is_array( $pre_validate ) ) {
+				return $pre_validate;
+			}
+
 			$uplink_resource = $this->get_uplink_resource( $this->get_slug() );
 
 			if ( $uplink_resource ) {
@@ -1973,6 +1992,22 @@ if ( ! class_exists( 'Tribe__PUE__Checker' ) ) {
 			$query_args['key'] = sanitize_text_field( $value );
 
 			$this->license_key_status( $query_args );
+		}
+
+		/**
+		 * Marks the license invalid once its key is removed and no other key applies.
+		 *
+		 * @since 6.13.1
+		 *
+		 * @return void
+		 * @internal
+		 */
+		public function reset_key_status_when_key_removed(): void {
+			if ( '' !== $this->get_key() ) {
+				return;
+			}
+
+			$this->set_key_status( 0 );
 		}
 
 		/**

@@ -1,0 +1,27 @@
+{
+	"name": "stellarwp/container-contract",
+	"type": "library",
+	"description": "StellarWP Container Interface",
+	"keywords": [
+		"psr-11",
+		"container",
+		"container-interop",
+		"container-interface"
+	],
+	"homepage": "https://github.com/stellarwp/container-contract",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "StellarWP",
+			"homepage": "https://stellarwp.com"
+		}
+	],
+	"require": {
+		"php": ">=7.0.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"StellarWP\\ContainerContract\\": "src/"
+		}
+	}
+}

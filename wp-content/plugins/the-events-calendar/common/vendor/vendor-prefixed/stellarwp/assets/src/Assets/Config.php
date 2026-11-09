@@ -148,6 +148,8 @@ class Config {
 	/**
 	 * Gets the root path of the project.
 	 *
+	 * @since 1.5.1
+	 *
 	 * @return string
 	 */
 	public static function get_url( $path ): string {
@@ -156,7 +158,25 @@ class Config {
 
 		if ( empty( static::$path_urls[ $key ] ) ) {
 			$bases = Utils::get_bases();
-			static::$path_urls[ $key ] = trailingslashit( str_replace( wp_list_pluck( $bases, 'base_dir' ), wp_list_pluck( $bases, 'base_url' ), $path ) );
+
+			$base_dirs = array_column( $bases, 'base_dir' );
+			$base_urls = array_column( $bases, 'base_url' );
+
+			uasort( $base_dirs, function( $a, $b ) {
+				return strlen( $b ) <=> strlen( $a );
+			} );
+
+			foreach ( $base_dirs as $dir_type => $dir_path ) {
+				if ( ! isset( $base_urls[ $dir_type ] ) ) {
+					continue;
+				}
+
+				static::$path_urls[ $key ] = str_replace( $dir_path, $base_urls[ $dir_type ], $path );
+
+				if ( static::$path_urls[ $key ] !== $path ) {
+					break;
+				}
+			}
 		}
 
 		return static::$path_urls[ $key ];

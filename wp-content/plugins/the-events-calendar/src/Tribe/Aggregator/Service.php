@@ -105,8 +105,17 @@ class Tribe__Events__Aggregator__Service {
 		 */
 		$api = (object) apply_filters( 'tribe_aggregator_api', $api );
 
+		/**
+		 * Allows plugins to hook in and determine if the consolidation took over.
+		 *
+		 * @since 6.16.0
+		 *
+		 * @param bool $harbor_took_over Whether the Harbor took over.
+		 */
+		$harbor_took_over = apply_filters( 'tec_events_aggregator_harbor_took_over', false );
+
 		// Allows Eventbrite and others to skip ea license check
-		if ( ! empty( $api->licenses ) ) {
+		if ( ! empty( $api->licenses ) && ! $harbor_took_over ) {
 			foreach ( $api->licenses as $plugin => $key ) {
 				// If empty Key was passed we skip
 				if ( empty( $key ) ) {
@@ -135,7 +144,7 @@ class Tribe__Events__Aggregator__Service {
 		$plugin_name = $aggregator->filter_pue_plugin_name( '', 'event-aggregator' );
 
 		$pue_notices = Tribe__Main::instance()->pue_notices();
-		$has_notice = $pue_notices->has_notice( $plugin_name );
+		$has_notice  = ! $harbor_took_over && $pue_notices->has_notice( $plugin_name );
 
 		// The user doesn't have a valid license key
 		if ( empty( $api->key ) || $has_notice ) {
@@ -161,8 +170,9 @@ class Tribe__Events__Aggregator__Service {
 			return $api;
 		}
 
-		// Enforce Key on the Query Data
-		$data['key'] = $api->key;
+		// Enforce Key and Domain on the Query Data.
+		$data['key']    = $api->key;
+		$data['domain'] = wp_parse_url( site_url(), PHP_URL_HOST );
 
 		/**
 		 * Allow to filter the variable used to build the URL with `add_query_arg` to insert or change
@@ -236,7 +246,7 @@ class Tribe__Events__Aggregator__Service {
 		if ( 403 === $code ) {
 			return new WP_Error(
 				'core:aggregator:request-denied',
-				esc_html__( 'Event Aggregator server has blocked your request. Please try your import again later or contact support to know why.', 'the-events-calendar' )
+				esc_html__( 'Event Aggregator server has blocked your request. Please try your import again later or contact support.', 'the-events-calendar' )
 			);
 		}
 
@@ -278,10 +288,12 @@ class Tribe__Events__Aggregator__Service {
 	/**
 	 * Performs a POST request against the Event Aggregator service
 	 *
-	 * @param string $endpoint   Endpoint for the Event Aggregator service
-	 * @param array  $data       Parameters to send to the endpoint
+	 * @since 6.18.1 Moved the transport-error check ahead of the response-code read and added distinct handling for a blocked (403) response.
 	 *
-	 * @return stdClass|WP_Error
+	 * @param string $endpoint Endpoint for the Event Aggregator service.
+	 * @param array  $data     Parameters to send to the endpoint.
+	 *
+	 * @return stdClass|WP_Error The decoded response body, or a WP_Error describing the failure.
 	 */
 	public function post( $endpoint, $data = [] ) {
 		$url = $this->build_url( $endpoint );
@@ -304,18 +316,38 @@ class Tribe__Events__Aggregator__Service {
 
 		$response = $this->requests->post( esc_url_raw( $url ), $args );
 
-		// we know it is not a 404 or 403 at this point.
+		/*
+		 * A transport-level failure (DNS, TLS, refused connection, timeout) never carries a
+		 * response code, so this has to be checked before `$code` is read: a `WP_Error` would
+		 * otherwise yield `0` and get reported as a generic server-side problem.
+		 */
+		if ( is_wp_error( $response ) ) {
+			tribe( 'logger' )->log_debug(
+				'Request failed during the creation: ' . $response->get_error_message(),
+				'EA Service'
+			);
+
+			return $response;
+		}
+
 		$code = (int) wp_remote_retrieve_response_code( $response );
+
+		if ( 403 === $code ) {
+			tribe( 'logger' )->log_debug( 'Request denied with a 403 - during the creation.', 'EA Service' );
+
+			return new WP_Error(
+				'core:aggregator:request-denied',
+				esc_html__( 'Event Aggregator server has blocked your request. Please try your import again later or contact support.', 'the-events-calendar' )
+			);
+		}
+
+		// we know it is not a 403 at this point.
 		if ( $code >= 300 || $code < 200 ) {
 			tribe( 'logger' )->log_debug( "Invalid response code: {$code} - during the creation.", 'EA Service' );
 			return new WP_Error(
 				'core:aggregator:bad-response',
 				esc_html__( 'There may be an issue with the Event Aggregator server. Please try your import again later.', 'the-events-calendar' )
 			);
-		}
-
-		if ( is_wp_error( $response ) ) {
-			return $response;
 		}
 
 		$json = json_decode( wp_remote_retrieve_body( $response ) );

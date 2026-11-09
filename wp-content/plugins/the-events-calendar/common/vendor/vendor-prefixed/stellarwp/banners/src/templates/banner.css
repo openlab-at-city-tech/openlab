@@ -1,0 +1,109 @@
+/* Printed by Banner::render() just before templates/banner.php. */
+
+.notice.nx-banner {
+	position: relative;
+	/* A size container has no width of its own, so it would collapse in a flex column such as a sidebar. */
+	align-self: stretch;
+	container-type: inline-size;
+	/* Vertical only: each admin page sets a notice's side margins. */
+	margin-top: 16px;
+	margin-bottom: 16px;
+	padding: 0;
+	border: 0;
+	box-shadow: none;
+	background: #000;
+}
+
+/* Rendered where the client called render(), not as a notice: sit flush with what is above. */
+.notice.nx-banner.inline {
+	margin-top: 0;
+}
+
+.nx-banner__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 24px 72px 24px 32px;
+}
+
+.notice.nx-banner .nx-banner__text {
+	max-width: 34em;
+	margin: 0;
+	padding: 0;
+	color: #fff;
+	font-size: clamp(16px, 2.2cqi, 26px);
+	line-height: 1.25;
+	text-wrap: balance;
+}
+
+.nx-banner__accent {
+	/* The brand blue lightened just enough for 4.5:1 on black: it can render below the 24px large-text size. */
+	color: #336fe4;
+}
+
+/* Outranks wp-admin's link colours and underline. */
+.notice.nx-banner .nx-banner__cta,
+.notice.nx-banner .nx-banner__cta:visited {
+	flex: none;
+	padding: 10px 32px;
+	border-radius: 999px;
+	background: #2b69e3;
+	color: #fff;
+	font-size: 15px;
+	text-decoration: none;
+}
+
+.notice.nx-banner .nx-banner__cta:hover,
+.notice.nx-banner .nx-banner__cta:focus {
+	background: #1d55c4;
+	color: #fff;
+}
+
+.nx-banner__dismiss {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	width: 24px;
+	height: 24px;
+}
+
+.nx-banner__dismiss::before,
+.nx-banner__dismiss::after {
+	content: "";
+	position: absolute;
+	top: 11px;
+	left: 2px;
+	width: 20px;
+	height: 1.5px;
+	background: #fff;
+	transform: rotate(45deg);
+}
+
+.nx-banner__dismiss::after {
+	transform: rotate(-45deg);
+}
+
+.nx-banner__dismiss:focus {
+	box-shadow: 0 0 0 2px #2b69e3;
+	outline: 0;
+}
+
+@container (max-width: 520px) {
+	.nx-banner__inner {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 32px;
+		padding: 40px 28px 32px;
+	}
+
+	.notice.nx-banner .nx-banner__text {
+		font-size: 26px;
+	}
+
+	.nx-banner__accent {
+		display: block;
+		margin-top: 16px;
+		font-size: 20px;
+	}
+}

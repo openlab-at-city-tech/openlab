@@ -1,6 +1,17 @@
 <?php
 
 // Functions and constants
+
+namespace {
+
+}
+namespace StellarWP\Migrations {
+    if(!function_exists('\\StellarWP\\Migrations\\migrations')){
+        function migrations(...$args) {
+            return \TEC\Common\StellarWP\Migrations\migrations(...func_get_args());
+        }
+    }
+}
 namespace StellarWP\Shepherd {
     if(!function_exists('\\StellarWP\\Shepherd\\shepherd')){
         function shepherd(...$args) {
@@ -85,14 +96,34 @@ namespace StellarWP\Uplink {
         }
     }
 }
+namespace TrustedLogin {
+    if(!function_exists('\\TrustedLogin\\function_exists')){
+        function function_exists(...$args) {
+            return \TEC\Common\TrustedLogin\function_exists(...func_get_args());
+        }
+    }
+}
 
 
 namespace TEC\Common {
 
+    use BrianHenryIE\Strauss\Types\AutoloadAliasInterface;
+
+    /**
+     * @see AutoloadAliasInterface
+     *
+     * @phpstan-type ClassAliasArray array{'type':'class',isabstract:bool,classname:string,namespace?:string,extends:string,implements:array<string>}
+     * @phpstan-type InterfaceAliasArray array{'type':'interface',interfacename:string,namespace?:string,extends:array<string>}
+     * @phpstan-type TraitAliasArray array{'type':'trait',traitname:string,namespace?:string,use:array<string>}
+     * @phpstan-type AutoloadAliasArray array<string,ClassAliasArray|InterfaceAliasArray|TraitAliasArray>
+     */
     class AliasAutoloader
     {
         private string $includeFilePath;
 
+        /**
+         * @var AutoloadAliasArray
+         */
         private array $autoloadAliases = array (
   'Firebase\\JWT\\BeforeValidException' => 
   array (
@@ -1512,6 +1543,133 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'MyCLabs\\Enum\\Enum' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Enum',
+    'isabstract' => true,
+    'namespace' => 'MyCLabs\\Enum',
+    'extends' => 'TEC\\Common\\MyCLabs\\Enum\\Enum',
+    'implements' => 
+    array (
+      0 => 'JsonSerializable',
+      1 => 'Stringable',
+    ),
+  ),
+  'MyCLabs\\Enum\\PHPUnit\\Comparator' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Comparator',
+    'isabstract' => false,
+    'namespace' => 'MyCLabs\\Enum\\PHPUnit',
+    'extends' => 'TEC\\Common\\MyCLabs\\Enum\\PHPUnit\\Comparator',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nyholm\\Psr7\\Factory\\HttplugFactory' => 
+  array (
+    'type' => 'class',
+    'classname' => 'HttplugFactory',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7\\Factory',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\Factory\\HttplugFactory',
+    'implements' => 
+    array (
+      0 => 'Http\\Message\\MessageFactory',
+      1 => 'Http\\Message\\StreamFactory',
+      2 => 'Http\\Message\\UriFactory',
+    ),
+  ),
+  'Nyholm\\Psr7\\Factory\\Psr17Factory' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Psr17Factory',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7\\Factory',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\Factory\\Psr17Factory',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\RequestFactoryInterface',
+      1 => 'Psr\\Http\\Message\\ResponseFactoryInterface',
+      2 => 'Psr\\Http\\Message\\ServerRequestFactoryInterface',
+      3 => 'Psr\\Http\\Message\\StreamFactoryInterface',
+      4 => 'Psr\\Http\\Message\\UploadedFileFactoryInterface',
+      5 => 'Psr\\Http\\Message\\UriFactoryInterface',
+    ),
+  ),
+  'Nyholm\\Psr7\\Request' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Request',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\Request',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\RequestInterface',
+    ),
+  ),
+  'Nyholm\\Psr7\\Response' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Response',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\Response',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\ResponseInterface',
+    ),
+  ),
+  'Nyholm\\Psr7\\ServerRequest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ServerRequest',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\ServerRequest',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\ServerRequestInterface',
+    ),
+  ),
+  'Nyholm\\Psr7\\Stream' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Stream',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\Stream',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\StreamInterface',
+    ),
+  ),
+  'Nyholm\\Psr7\\UploadedFile' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UploadedFile',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\UploadedFile',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\UploadedFileInterface',
+    ),
+  ),
+  'Nyholm\\Psr7\\Uri' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Uri',
+    'isabstract' => false,
+    'namespace' => 'Nyholm\\Psr7',
+    'extends' => 'TEC\\Common\\Nyholm\\Psr7\\Uri',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Message\\UriInterface',
+    ),
+  ),
   'Psr\\Log\\AbstractLogger' => 
   array (
     'type' => 'class',
@@ -1767,6 +1925,73 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'Nexcess\\Banners\\Banner' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Banner',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Banner',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\BannerFields' => 
+  array (
+    'type' => 'class',
+    'classname' => 'BannerFields',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\BannerFields',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Dismissals' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Dismissals',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Dismissals',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Package' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Package',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Package',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Nexcess\\Banners\\Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Registry',
+    'isabstract' => false,
+    'namespace' => 'Nexcess\\Banners',
+    'extends' => 'TEC\\Common\\Nexcess\\Banners\\Registry',
+    'implements' => 
+    array (
+    ),
+  ),
+  'Your\\Namespace\\Container' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Container',
+    'isabstract' => false,
+    'namespace' => 'Your\\Namespace',
+    'extends' => 'TEC\\Common\\Your\\Namespace\\Container',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\ContainerContract\\ContainerInterface',
+    ),
+  ),
   'StellarWP\\DB\\Config' => 
   array (
     'type' => 'class',
@@ -2009,6 +2234,987 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'LiquidWeb\\Harbor\\API\\Functions\\Actions\\Display_Legacy_License_Page_Notice' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Display_Legacy_License_Page_Notice',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\Functions\\Actions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Actions\\Display_Legacy_License_Page_Notice',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\Functions\\Actions\\Register_Submenu' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Register_Submenu',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\Functions\\Actions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Actions\\Register_Submenu',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\Functions\\Global_Function_Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Global_Function_Registry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\Functions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Global_Function_Registry',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\Functions\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\Functions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\Catalog_Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog_Controller',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Catalog_Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\Feature_Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature_Controller',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Feature_Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\Harbor_Hosts_Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Harbor_Hosts_Controller',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Harbor_Hosts_Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\Legacy_License_Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Legacy_License_Controller',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Legacy_License_Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\License_Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Controller',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\License_Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\License_Response' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Response',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\License_Response',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\API\\REST\\V1\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\API\\REST\\V1',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Admin\\Feature_Manager_Page' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature_Manager_Page',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Admin',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Admin\\Feature_Manager_Page',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Admin\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Admin',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Admin\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\CLI\\Commands\\Catalog' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\CLI\\Commands',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Commands\\Catalog',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\CLI\\Commands\\Feature' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\CLI\\Commands',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Commands\\Feature',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\CLI\\Commands\\License' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\CLI\\Commands',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Commands\\License',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\CLI\\Display' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Display',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\CLI',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Display',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\CLI\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\CLI',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Components\\Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Controller',
+    'isabstract' => true,
+    'namespace' => 'LiquidWeb\\Harbor\\Components',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Components\\Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Config' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Config',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Config',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Contracts\\Abstract_Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Abstract_Provider',
+    'isabstract' => true,
+    'namespace' => 'LiquidWeb\\Harbor\\Contracts',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Contracts\\Abstract_Provider',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Contracts\\Provider_Interface',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Cron\\Actions\\Handle_Unschedule_Cron_Data_Refresh' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Handle_Unschedule_Cron_Data_Refresh',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Cron\\Actions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Actions\\Handle_Unschedule_Cron_Data_Refresh',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Cron\\Jobs\\Refresh_Catalog_Job' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Refresh_Catalog_Job',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Cron\\Jobs',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Jobs\\Refresh_Catalog_Job',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Cron\\Jobs\\Refresh_License_Job' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Refresh_License_Job',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Cron\\Jobs',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Jobs\\Refresh_License_Job',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Cron\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Cron',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Cron\\ValueObjects\\CronHook' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CronHook',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Cron\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\ValueObjects\\CronHook',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Error_Code' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Error_Code',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Error_Code',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Feature_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature_Collection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Feature_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Feature_Repository' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature_Repository',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Feature_Repository',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Feature_Resource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature_Resource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Feature_Resource',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Manager' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Manager',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Manager',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Resolve_Feature_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Resolve_Feature_Collection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Resolve_Feature_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Strategy\\Abstract_Strategy' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Abstract_Strategy',
+    'isabstract' => true,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Strategy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Abstract_Strategy',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Features\\Contracts\\Strategy',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Strategy\\Installable_Strategy' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Installable_Strategy',
+    'isabstract' => true,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Strategy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Installable_Strategy',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Strategy\\Plugin_Strategy' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Plugin_Strategy',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Strategy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Plugin_Strategy',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Strategy\\Service_Strategy' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Service_Strategy',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Strategy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Service_Strategy',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Strategy\\Strategy_Factory' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Strategy_Factory',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Strategy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Strategy_Factory',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Strategy\\Theme_Strategy' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Theme_Strategy',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Strategy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Theme_Strategy',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Types\\Feature' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Feature',
+    'isabstract' => true,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Types',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Feature',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Types\\Plugin' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Plugin',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Types',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Plugin',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Features\\Contracts\\Installable',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Types\\Service' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Service',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Types',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Service',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Types\\Theme' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Theme',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Types',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Theme',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Features\\Contracts\\Installable',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Update\\Plugin_Handler' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Plugin_Handler',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Update',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Plugin_Handler',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Update\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Update',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Update\\Resolve_Update_Data' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Resolve_Update_Data',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Update',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Resolve_Update_Data',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Update\\Theme_Handler' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Theme_Handler',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Update',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Theme_Handler',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Harbor' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Harbor',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Harbor',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Http\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Http\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Legacy\\Legacy_License' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Legacy_License',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Legacy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\Legacy_License',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Legacy\\License_Repository' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Repository',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Legacy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\License_Repository',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Legacy\\Notices\\License_Notice_Handler' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Notice_Handler',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Legacy\\Notices',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\Notices\\License_Notice_Handler',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Legacy\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Legacy',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Enums\\Validation_Status' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Validation_Status',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing\\Enums',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Enums\\Validation_Status',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Error_Code' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Error_Code',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Error_Code',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\License_Manager' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Manager',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\License_Manager',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Product_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Product_Collection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Product_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Registry\\Product_Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Product_Registry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing\\Registry',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Registry\\Product_Registry',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Repositories\\License_Repository' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Repository',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing\\Repositories',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Repositories\\License_Repository',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Results\\Product_Entry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Product_Entry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing\\Results',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Results\\Product_Entry',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Licensing\\Validation_State' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Validation_State',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Licensing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Validation_State',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Notice\\Notice' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Notice',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Notice',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Notice\\Notice',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Notice\\Notice_Controller' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Notice_Controller',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Notice',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Notice\\Notice_Controller',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Catalog_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog_Collection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Catalog_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Catalog_Repository' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog_Repository',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Catalog_Repository',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Clients\\Fixture_Client' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Fixture_Client',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Clients',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Fixture_Client',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Clients\\Http_Client' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Http_Client',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Clients',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Http_Client',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Error_Code' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Error_Code',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Error_Code',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Herald_Legacy_Url_Builder' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Herald_Legacy_Url_Builder',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Legacy_Url_Builder',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Herald_Routing_Url_Builder' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Herald_Routing_Url_Builder',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Routing_Url_Builder',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Herald_Url_Builder' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Herald_Url_Builder',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Url_Builder',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Feature' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog_Feature',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Results',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Feature',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Tier' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog_Tier',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Results',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Tier',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Results\\Product_Catalog' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Product_Catalog',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Results',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Product_Catalog',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Results\\Tier_Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Tier_Collection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Results',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Tier_Collection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Premium_Plugin_Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Premium_Plugin_Registry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Premium_Plugin_Registry',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Site\\Data' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Data',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Site',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Site\\Data',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Utils\\Cast' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Cast',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Utils',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Cast',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Utils\\Checks' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Checks',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Utils',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Checks',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Utils\\Collection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Collection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Utils',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Collection',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'IteratorAggregate',
+      2 => 'Countable',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Utils\\License_Key' => 
+  array (
+    'type' => 'class',
+    'classname' => 'License_Key',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Utils',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\License_Key',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Utils\\Sanitize' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Sanitize',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Utils',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Sanitize',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Utils\\Version' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Version',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\Utils',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Version',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\View\\Exceptions\\FileNotFoundException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'FileNotFoundException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\View\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\View\\Exceptions\\FileNotFoundException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\View\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\View',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\View\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\Harbor\\View\\WordPress_View' => 
+  array (
+    'type' => 'class',
+    'classname' => 'WordPress_View',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\Harbor\\View',
+    'extends' => 'TEC\\Common\\LiquidWeb\\Harbor\\View\\WordPress_View',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\Harbor\\View\\Contracts\\View',
+    ),
+  ),
   'StellarWP\\Installer\\Assets' => 
   array (
     'type' => 'class',
@@ -2072,6 +3278,1605 @@ namespace TEC\Common {
     'isabstract' => false,
     'namespace' => 'StellarWP\\Installer\\Utils',
     'extends' => 'TEC\\Common\\StellarWP\\Installer\\Utils\\Array_Utils',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClientWordPress\\Exceptions\\WordPressHttpClientException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'WordPressHttpClientException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClientWordPress\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\Exceptions\\WordPressHttpClientException',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Client\\ClientExceptionInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClientWordPress\\Http\\WordPressHttpClient' => 
+  array (
+    'type' => 'class',
+    'classname' => 'WordPressHttpClient',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClientWordPress\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\Http\\WordPressHttpClient',
+    'implements' => 
+    array (
+      0 => 'Psr\\Http\\Client\\ClientInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClientWordPress\\WordPressApiFactory' => 
+  array (
+    'type' => 'class',
+    'classname' => 'WordPressApiFactory',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClientWordPress',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\WordPressApiFactory',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Api' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Api',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Api',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Contracts\\LicensingClientInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\ApiBuilder' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiBuilder',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\ApiBuilder',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Config' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Config',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Config',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\ApiResponseException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiResponseException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ApiResponseException',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ApiErrorExceptionInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\AuthenticationException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'AuthenticationException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\AuthenticationException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\AuthorizationException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'AuthorizationException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\AuthorizationException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\ClientErrorException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ClientErrorException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ClientErrorException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\ConflictException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ConflictException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ConflictException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\DecodingException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'DecodingException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\DecodingException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\MissingAuthenticationException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'MissingAuthenticationException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\MissingAuthenticationException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\NotFoundException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'NotFoundException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\NotFoundException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\ServerErrorException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ServerErrorException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ServerErrorException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\UnexpectedResponseException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UnexpectedResponseException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\UnexpectedResponseException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\ValidationException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ValidationException',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ValidationException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\ApiUri' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiUri',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\ApiUri',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\ApiVersion' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiVersion',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\ApiVersion',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\AuthContext' => 
+  array (
+    'type' => 'class',
+    'classname' => 'AuthContext',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\AuthContext',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\AuthState' => 
+  array (
+    'type' => 'class',
+    'classname' => 'AuthState',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\AuthState',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\Factories\\ApiUriFactory' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiUriFactory',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http\\Factories',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\Factories\\ApiUriFactory',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\Factories\\ResponseExceptionFactory' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ResponseExceptionFactory',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http\\Factories',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\Factories\\ResponseExceptionFactory',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\JsonDecoder' => 
+  array (
+    'type' => 'class',
+    'classname' => 'JsonDecoder',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\JsonDecoder',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\RequestBuilder' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RequestBuilder',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RequestBuilder',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\RequestExecutor' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RequestExecutor',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RequestExecutor',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\RequestHeaderCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RequestHeaderCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RequestHeaderCollection',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Http\\RetryPolicy' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RetryPolicy',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Http',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RetryPolicy',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\CreatePool' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CreatePool',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\CreatePool',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\DeletePool' => 
+  array (
+    'type' => 'class',
+    'classname' => 'DeletePool',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\DeletePool',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\ListLedgerEntries' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ListLedgerEntries',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\ListLedgerEntries',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\RecordUsage' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RecordUsage',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\RecordUsage',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\Refund' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Refund',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\Refund',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\SetQuota' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SetQuota',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\SetQuota',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Credit\\UpdatePool' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UpdatePool',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\UpdatePool',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\SwitchTier' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SwitchTier',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\SwitchTier',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\Upsert' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Upsert',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\Upsert',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\ValueObjects\\UpsertProduct' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UpsertProduct',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\ValueObjects\\UpsertProduct',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\Activate' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Activate',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Activate',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ImportAliases' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ImportAliases',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ImportAliases',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\RemoveAliases' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RemoveAliases',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\RemoveAliases',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ValueObjects\\ImportAlias' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ImportAlias',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ValueObjects\\ImportAlias',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\Deactivate' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Deactivate',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Deactivate',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\DeleteActivation' => 
+  array (
+    'type' => 'class',
+    'classname' => 'DeleteActivation',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\DeleteActivation',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\LicenseReference' => 
+  array (
+    'type' => 'class',
+    'classname' => 'LicenseReference',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\LicenseReference',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\Listing\\ListRequest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ListRequest',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License\\Listing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Listing\\ListRequest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\License\\RegenerateKey' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RegenerateKey',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\RegenerateKey',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Token\\Create' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Create',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Token',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Token\\Create',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Requests\\Token\\Revoke' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Revoke',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Requests\\Token',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Token\\Revoke',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsLedgerResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CreditsLedgerResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsLedgerResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsLedgerResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsPoolsResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CreditsPoolsResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsPoolsResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsPoolsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsQuotasResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CreditsQuotasResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsQuotasResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsQuotasResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CreditsResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\EntitlementsResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'EntitlementsResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\EntitlementsResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\EntitlementsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\LicensesResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'LicensesResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\LicensesResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\LicensesResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\ProductsResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ProductsResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\ProductsResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\ProductsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\TokensResource' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TokensResource',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\TokensResource',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\TokensResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\BalanceCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'BalanceCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\BalanceCollection',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\DeletePool' => 
+  array (
+    'type' => 'class',
+    'classname' => 'DeletePool',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\DeletePool',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\DeleteQuota' => 
+  array (
+    'type' => 'class',
+    'classname' => 'DeleteQuota',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\DeleteQuota',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\LedgerPage' => 
+  array (
+    'type' => 'class',
+    'classname' => 'LedgerPage',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\LedgerPage',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\PoolCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'PoolCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\PoolCollection',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\QuotaCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'QuotaCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\QuotaCollection',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\RecordUsage' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RecordUsage',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\RecordUsage',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\Refund' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Refund',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\Refund',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\BalanceEntry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'BalanceEntry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\BalanceEntry',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\CreditPool' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CreditPool',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\CreditPool',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\LedgerEntry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'LedgerEntry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\LedgerEntry',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\PoolBalance' => 
+  array (
+    'type' => 'class',
+    'classname' => 'PoolBalance',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\PoolBalance',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\SiteQuota' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SiteQuota',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\SiteQuota',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Cancel' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Cancel',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Cancel',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Delete' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Delete',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Delete',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Suspend' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Suspend',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Suspend',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\SwitchTier' => 
+  array (
+    'type' => 'class',
+    'classname' => 'SwitchTier',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\SwitchTier',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Unsuspend' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Unsuspend',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Unsuspend',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Upsert' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Upsert',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Upsert',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\ValueObjects\\UpsertProduct' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UpsertProduct',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\ValueObjects\\UpsertProduct',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\ErrorResponse' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ErrorResponse',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ErrorResponse',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Activate' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Activate',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Activate',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ImportAliases' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ImportAliases',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ImportAliases',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\RemoveAliases' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RemoveAliases',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\RemoveAliases',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ValueObjects\\ImportedAlias' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ImportedAlias',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ValueObjects\\ImportedAlias',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Deactivate' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Deactivate',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Deactivate',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\DeleteActivation' => 
+  array (
+    'type' => 'class',
+    'classname' => 'DeleteActivation',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\DeleteActivation',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\Listing' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Listing',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\Listing',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\LicenseListItem' => 
+  array (
+    'type' => 'class',
+    'classname' => 'LicenseListItem',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\LicenseListItem',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\ListedProduct' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ListedProduct',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\ListedProduct',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\ListedProductCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ListedProductCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\ListedProductCollection',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Countable',
+      2 => 'IteratorAggregate',
+      3 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\RegenerateKey' => 
+  array (
+    'type' => 'class',
+    'classname' => 'RegenerateKey',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\RegenerateKey',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\StatusChange' => 
+  array (
+    'type' => 'class',
+    'classname' => 'StatusChange',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\StatusChange',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\Validate' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Validate',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Validate',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValidatedProductCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ValidatedProductCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValidatedProductCollection',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Countable',
+      2 => 'IteratorAggregate',
+      3 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\Activation' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Activation',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\Activation',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\ActivationEntitlement' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ActivationEntitlement',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\ActivationEntitlement',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\AvailableEntitlement' => 
+  array (
+    'type' => 'class',
+    'classname' => 'AvailableEntitlement',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\AvailableEntitlement',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\Entitlement' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Entitlement',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\Entitlement',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\LicenseSummary' => 
+  array (
+    'type' => 'class',
+    'classname' => 'LicenseSummary',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\LicenseSummary',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\ProductValidation' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ProductValidation',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\ProductValidation',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Product\\Catalog' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Catalog',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Product',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\Catalog',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Product\\CatalogProductCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CatalogProductCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Product',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\CatalogProductCollection',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Countable',
+      2 => 'IteratorAggregate',
+      3 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\ActivationDomain' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ActivationDomain',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\ActivationDomain',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\Activations' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Activations',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\Activations',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\CatalogEntry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CatalogEntry',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\CatalogEntry',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Token\\Auth' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Auth',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Token',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Token\\Auth',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Token\\TokenList' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TokenList',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Token',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Token\\TokenList',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Token\\ValueObjects\\TokenItem' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TokenItem',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Token\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Token\\ValueObjects\\TokenItem',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\CapabilityCollection' => 
+  array (
+    'type' => 'class',
+    'classname' => 'CapabilityCollection',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\CapabilityCollection',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Countable',
+      2 => 'IteratorAggregate',
+      3 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\PageMeta' => 
+  array (
+    'type' => 'class',
+    'classname' => 'PageMeta',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\PageMeta',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\PaginationLinks' => 
+  array (
+    'type' => 'class',
+    'classname' => 'PaginationLinks',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\PaginationLinks',
+    'implements' => 
+    array (
+      0 => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Tracing\\TraceContext' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TraceContext',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Tracing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Tracing\\TraceContext',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Tracing\\TraceParent' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TraceParent',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Tracing',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Tracing\\TraceParent',
+    'implements' => 
+    array (
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Value\\AuthToken' => 
+  array (
+    'type' => 'class',
+    'classname' => 'AuthToken',
+    'isabstract' => false,
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Value',
+    'extends' => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Value\\AuthToken',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Abstracts\\Migration_Abstract' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_Abstract',
+    'isabstract' => true,
+    'namespace' => 'StellarWP\\Migrations\\Abstracts',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Abstracts\\Migration_Abstract',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Migrations\\Contracts\\Migration',
+    ),
+  ),
+  'StellarWP\\Migrations\\Admin\\Assets' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Assets',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Admin',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Admin\\Assets',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Admin\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Admin',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Admin\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Admin\\UI' => 
+  array (
+    'type' => 'class',
+    'classname' => 'UI',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Admin',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Admin\\UI',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\CLI\\Commands' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Commands',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\CLI',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\CLI\\Commands',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\CLI\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\CLI',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\CLI\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Config' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Config',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Config',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Enums\\Log_Type' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Log_Type',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Enums',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Enums\\Log_Type',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Enums\\Operation' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Operation',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Enums',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Enums\\Operation',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Enums\\Status' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Status',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Enums',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Enums\\Status',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Exceptions\\ApiMethodException' => 
+  array (
+    'type' => 'class',
+    'classname' => 'ApiMethodException',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Exceptions',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Exceptions\\ApiMethodException',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Models\\Execution' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Execution',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Models',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Models\\Execution',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\REST\\Endpoints' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Endpoints',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\REST',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\REST\\Endpoints',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\REST\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\REST',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\REST\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Registry' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Registry',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Registry',
+    'implements' => 
+    array (
+      0 => 'ArrayAccess',
+      1 => 'Iterator',
+      2 => 'Countable',
+    ),
+  ),
+  'StellarWP\\Migrations\\Tables\\Migration_Executions' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_Executions',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tables\\Migration_Executions',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tables\\Migration_Logs' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_Logs',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tables\\Migration_Logs',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tables\\Provider' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Provider',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tables',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tables\\Provider',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tasks\\Clear_Logs' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Clear_Logs',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tasks',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tasks\\Clear_Logs',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Tasks\\Execute' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Execute',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Tasks',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Tasks\\Execute',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Cast' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Cast',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Cast',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Default_Template_Engine' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Default_Template_Engine',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Default_Template_Engine',
+    'implements' => 
+    array (
+      0 => 'StellarWP\\Migrations\\Contracts\\Template_Engine',
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Log_Download_Handler' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Log_Download_Handler',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Log_Download_Handler',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Logger' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Logger',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Logger',
+    'implements' => 
+    array (
+    ),
+  ),
+  'StellarWP\\Migrations\\Utilities\\Migration_UI' => 
+  array (
+    'type' => 'class',
+    'classname' => 'Migration_UI',
+    'isabstract' => false,
+    'namespace' => 'StellarWP\\Migrations\\Utilities',
+    'extends' => 'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Migration_UI',
     'implements' => 
     array (
     ),
@@ -4162,6 +6967,61 @@ namespace TEC\Common {
     array (
     ),
   ),
+  'TrustedLogin\\TrustedLoginClientTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginClientTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginClientTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginEncryptionTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginEncryptionTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginEncryptionTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginLoggingTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginLoggingTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginLoggingTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginRemoteTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginRemoteTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginRemoteTest',
+    'implements' => 
+    array (
+    ),
+  ),
+  'TrustedLogin\\TrustedLoginSiteAccessTest' => 
+  array (
+    'type' => 'class',
+    'classname' => 'TrustedLoginSiteAccessTest',
+    'isabstract' => false,
+    'namespace' => 'TrustedLogin',
+    'extends' => 'TEC\\Common\\TrustedLogin\\TrustedLoginSiteAccessTest',
+    'implements' => 
+    array (
+    ),
+  ),
   'Monolog\\Handler\\FormattableHandlerTrait' => 
   array (
     'type' => 'trait',
@@ -4190,6 +7050,36 @@ namespace TEC\Common {
     'use' => 
     array (
       0 => 'TEC\\Common\\Monolog\\Handler\\WebRequestRecognizerTrait',
+    ),
+  ),
+  'Nyholm\\Psr7\\MessageTrait' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'MessageTrait',
+    'namespace' => 'Nyholm\\Psr7',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\Nyholm\\Psr7\\MessageTrait',
+    ),
+  ),
+  'Nyholm\\Psr7\\RequestTrait' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'RequestTrait',
+    'namespace' => 'Nyholm\\Psr7',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\Nyholm\\Psr7\\RequestTrait',
+    ),
+  ),
+  'Nyholm\\Psr7\\StreamTrait' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'StreamTrait',
+    'namespace' => 'Nyholm\\Psr7',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\Nyholm\\Psr7\\StreamTrait',
     ),
   ),
   'Psr\\Log\\LoggerAwareTrait' => 
@@ -4362,6 +7252,66 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\DB\\QueryBuilder\\Concerns\\WhereClause',
     ),
   ),
+  'LiquidWeb\\Harbor\\Traits\\With_Debugging' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'With_Debugging',
+    'namespace' => 'LiquidWeb\\Harbor\\Traits',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Traits\\With_Debugging',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Traits\\With_Error_Throttle' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'With_Error_Throttle',
+    'namespace' => 'LiquidWeb\\Harbor\\Traits',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Traits\\With_Error_Throttle',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Concerns\\InteractsWithDateTime' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'InteractsWithDateTime',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Concerns',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Concerns\\InteractsWithDateTime',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsAuthState' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'RebindsAuthState',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Concerns',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsAuthState',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsRequestHeaderCollection' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'RebindsRequestHeaderCollection',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Concerns',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsRequestHeaderCollection',
+    ),
+  ),
+  'StellarWP\\Migrations\\Traits\\API_Methods' => 
+  array (
+    'type' => 'trait',
+    'traitname' => 'API_Methods',
+    'namespace' => 'StellarWP\\Migrations\\Traits',
+    'use' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Migrations\\Traits\\API_Methods',
+    ),
+  ),
   'StellarWP\\Schema\\Traits\\Custom_Table_Query_Methods' => 
   array (
     'type' => 'trait',
@@ -4512,6 +7462,16 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\Monolog\\ResettableInterface',
     ),
   ),
+  'Stringable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Stringable',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__Stringable',
+    ),
+  ),
   'Psr\\Container\\ContainerExceptionInterface' => 
   array (
     'type' => 'interface',
@@ -4540,6 +7500,46 @@ namespace TEC\Common {
     'extends' => 
     array (
       0 => 'TEC\\Common\\Psr\\Container\\NotFoundExceptionInterface',
+    ),
+  ),
+  'Psr\\Http\\Client\\ClientExceptionInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ClientExceptionInterface',
+    'namespace' => 'Psr\\Http\\Client',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\Psr\\Http\\Client\\ClientExceptionInterface',
+    ),
+  ),
+  'Psr\\Http\\Client\\ClientInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ClientInterface',
+    'namespace' => 'Psr\\Http\\Client',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\Psr\\Http\\Client\\ClientInterface',
+    ),
+  ),
+  'Psr\\Http\\Client\\NetworkExceptionInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'NetworkExceptionInterface',
+    'namespace' => 'Psr\\Http\\Client',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\Psr\\Http\\Client\\NetworkExceptionInterface',
+    ),
+  ),
+  'Psr\\Http\\Client\\RequestExceptionInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'RequestExceptionInterface',
+    'namespace' => 'Psr\\Http\\Client',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\Psr\\Http\\Client\\RequestExceptionInterface',
     ),
   ),
   'Psr\\Log\\LoggerAwareInterface' => 
@@ -4582,6 +7582,66 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\ContainerContract\\ContainerInterface',
     ),
   ),
+  'LiquidWeb\\Harbor\\Contracts\\Provider_Interface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Provider_Interface',
+    'namespace' => 'LiquidWeb\\Harbor\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Contracts\\Provider_Interface',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Contracts\\Installable' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Installable',
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Contracts\\Installable',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Features\\Contracts\\Strategy' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Strategy',
+    'namespace' => 'LiquidWeb\\Harbor\\Features\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Contracts\\Strategy',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Portal_Client',
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Clients',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Download_Url_Builder',
+    'namespace' => 'LiquidWeb\\Harbor\\Portal\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder',
+    ),
+  ),
+  'LiquidWeb\\Harbor\\View\\Contracts\\View' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'View',
+    'namespace' => 'LiquidWeb\\Harbor\\View\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\Harbor\\View\\Contracts\\View',
+    ),
+  ),
   'StellarWP\\Installer\\Contracts\\Handler' => 
   array (
     'type' => 'interface',
@@ -4590,6 +7650,146 @@ namespace TEC\Common {
     'extends' => 
     array (
       0 => 'TEC\\Common\\StellarWP\\Installer\\Contracts\\Handler',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Contracts\\LicensingClientInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'LicensingClientInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Contracts\\LicensingClientInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ApiErrorExceptionInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ApiErrorExceptionInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ApiErrorExceptionInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ResponseExceptionInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ResponseExceptionInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ResponseExceptionInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsLedgerResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'CreditsLedgerResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsLedgerResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsPoolsResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'CreditsPoolsResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsPoolsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsQuotasResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'CreditsQuotasResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsQuotasResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'CreditsResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\EntitlementsResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'EntitlementsResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\EntitlementsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\LicensesResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'LicensesResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\LicensesResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\ProductsResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ProductsResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\ProductsResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\TokensResourceInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'TokensResourceInterface',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Resources\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\TokensResourceInterface',
+    ),
+  ),
+  'LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Response',
+    'namespace' => 'LiquidWeb\\LicensingApiClient\\Responses\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response',
+    ),
+  ),
+  'StellarWP\\Migrations\\Contracts\\Migration' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Migration',
+    'namespace' => 'StellarWP\\Migrations\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Migrations\\Contracts\\Migration',
+    ),
+  ),
+  'StellarWP\\Migrations\\Contracts\\Template_Engine' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'Template_Engine',
+    'namespace' => 'StellarWP\\Migrations\\Contracts',
+    'extends' => 
+    array (
+      0 => 'TEC\\Common\\StellarWP\\Migrations\\Contracts\\Template_Engine',
     ),
   ),
   'StellarWP\\Models\\Contracts\\Arrayable' => 
@@ -4952,6 +8152,36 @@ namespace TEC\Common {
       0 => 'TEC\\Common\\StellarWP\\Uplink\\View\\Contracts\\View',
     ),
   ),
+  'ActionScheduler_Exception' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ActionScheduler_Exception',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__ActionScheduler_Exception',
+    ),
+  ),
+  'ActionScheduler_Schedule' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'ActionScheduler_Schedule',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__ActionScheduler_Schedule',
+    ),
+  ),
+  'CronExpression_FieldInterface' => 
+  array (
+    'type' => 'interface',
+    'interfacename' => 'CronExpression_FieldInterface',
+    'namespace' => '\\',
+    'extends' => 
+    array (
+      0 => 'TEC__Common__CronExpression_FieldInterface',
+    ),
+  ),
 );
 
         public function __construct()
@@ -4959,7 +8189,10 @@ namespace TEC\Common {
             $this->includeFilePath = __DIR__ . '/autoload_alias.php';
         }
 
-        public function autoload($class)
+        /**
+         * @param string $class
+         */
+        public function autoload($class): void
         {
             if (!isset($this->autoloadAliases[$class])) {
                 return;
@@ -4992,13 +8225,16 @@ namespace TEC\Common {
             }
         }
 
-        private function load(string $includeFile)
+        private function load(string $includeFile): void
         {
             file_put_contents($this->includeFilePath, $includeFile);
             include $this->includeFilePath;
             file_exists($this->includeFilePath) && unlink($this->includeFilePath);
         }
 
+        /**
+         * @param ClassAliasArray $class
+         */
         private function classTemplate(array $class): string
         {
             $abstract = $class['isabstract'] ? 'abstract ' : '';
@@ -5021,6 +8257,9 @@ namespace TEC\Common {
                 EOD;
         }
 
+        /**
+         * @param InterfaceAliasArray $interface
+         */
         private function interfaceTemplate(array $interface): string
         {
             $interfacename = $interface['interfacename'];
@@ -5035,6 +8274,10 @@ namespace TEC\Common {
                 interface $interfacename extends $extends {}
                 EOD;
         }
+
+        /**
+         * @param TraitAliasArray $trait
+         */
         private function traitTemplate(array $trait): string
         {
             $traitname = $trait['traitname'];

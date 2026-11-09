@@ -298,12 +298,15 @@ class Asset {
 	/**
 	 * Constructor.
 	 *
+	 * @since 1.0.0
+	 * @since 1.5.2 Added nullable type hints for the version and root path parameters.
+	 *
 	 * @param string      $slug      The asset slug.
 	 * @param string      $file      The asset file path.
 	 * @param string|null $version   The asset version.
 	 * @param string|null $root_path The path to the root of the plugin.
 	 */
-	public function __construct( string $slug, string $file, string $version = null, string $root_path = null ) {
+	public function __construct( string $slug, string $file, ?string $version = null, ?string $root_path = null ) {
 		$this->slug      = sanitize_key( $slug );
 		$this->file      = $file;
 		$this->version   = $version ?? Config::get_version();
@@ -340,12 +343,15 @@ class Asset {
 	/**
 	 * Registers an asset.
 	 *
+	 * @since 1.0.0
+	 * @since 1.5.2 Added nullable type hints for the version and root path parameters.
+	 *
 	 * @param string      $slug      The asset slug.
 	 * @param string      $file      The asset file path.
 	 * @param string|null $version   The asset version.
 	 * @param string|null $root_path The path to the root of the plugin.
 	 */
-	public static function add( string $slug, string $file, string $version = null, $root_path = null ) {
+	public static function add( string $slug, string $file, ?string $version = null, ?string $root_path = null ) {
 		return Assets::init()->add( new self( $slug, $file, $version, $root_path ) );
 	}
 

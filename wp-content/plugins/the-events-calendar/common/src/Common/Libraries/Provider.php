@@ -48,6 +48,8 @@ class Provider extends Service_Provider {
 		Schema\Config::set_container( tribe() );
 
 		$this->container->register( Shepherd::class );
+		$this->container->register( Migrations::class );
+		$this->container->register( Harbor::class );
 	}
 
 	/**

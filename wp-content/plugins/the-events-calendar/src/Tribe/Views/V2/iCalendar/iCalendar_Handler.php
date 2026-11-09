@@ -140,13 +140,14 @@ class iCalendar_Handler extends Service_Provider {
 	 * @see   `tribe_events_views_v2_view_template_vars` filter.
 	 *
 	 * @since 5.12.0
+	 * @since 6.17.0 Made $view explicitly nullable.
 	 *
 	 * @param array<string,mixed> $template_vars The View template variables.
 	 * @param View|null           $view          The View implementation.
 	 *
 	 * @return array The filtered template variables.
 	 */
-	public function filter_template_vars( array $template_vars, View $view = null ) {
+	public function filter_template_vars( array $template_vars, ?View $view = null ) {
 		// Set up the section of the $template vars for the links.
 		$template_vars['subscribe_links'] = $this->get_subscribe_links( $view );
 
@@ -157,12 +158,14 @@ class iCalendar_Handler extends Service_Provider {
 	 * Builds the subscribe links in a separate process.
 	 *
 	 * @since 5.12.0
+	 * @since 6.17.0 Made $view explicitly nullable.
+	 * @since 6.17.5 Normalize the filtered value so a non-array return cannot reach consumers.
 	 *
 	 * @param View|null $view
 	 *
 	 * @return array
 	 */
-	public function get_subscribe_links( View $view = null ) {
+	public function get_subscribe_links( ?View $view = null ) {
 		// Set up the list of links.
 		$subscribe_links = [];
 
@@ -174,7 +177,10 @@ class iCalendar_Handler extends Service_Provider {
 		 * @param array<string|object> $subscribe_links The array of links.
 		 * @param View|null            $view            The View implementation.
 		 */
-		return apply_filters( 'tec_views_v2_subscribe_links', $subscribe_links, $view );
+		$subscribe_links = apply_filters( 'tec_views_v2_subscribe_links', $subscribe_links, $view );
+
+		// Consumers are documented an array; a snippet hiding the links can return anything.
+		return is_array( $subscribe_links ) ? $subscribe_links : [];
 	}
 
 	/**

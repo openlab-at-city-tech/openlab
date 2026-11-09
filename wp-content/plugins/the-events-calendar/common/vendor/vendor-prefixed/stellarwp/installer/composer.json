@@ -1,0 +1,70 @@
+{
+  "name": "stellarwp/installer",
+  "description": "StellarWP plugin install/activation library.",
+  "type": "library",
+  "config": {
+    "platform": {
+      "php": "7.2"
+    },
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "StellarWP\\Installer\\": "src/Installer",
+      "StellarWP\\Installer\\Admin_Views\\": "src/admin-views",
+      "StellarWP\\Installer\\Assets_JS\\": "src/assets/js"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StellarWP\\Installer\\Tests\\": "tests/_support/Helper/"
+    }
+  },
+  "minimum-stability": "stable",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "ext-json": "*",
+    "php": ">=7.2"
+  },
+  "require-dev": {
+    "automattic/vipwpcs": "^2.3",
+    "codeception/module-asserts": "^1.0",
+    "codeception/module-cli": "^1.0",
+    "codeception/module-db": "^1.0",
+    "codeception/module-filesystem": "^1.0",
+    "codeception/module-phpbrowser": "^1.0",
+    "codeception/module-webdriver": "^1.0",
+    "codeception/util-universalframework": "^1.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+    "lucatume/wp-browser": "^3.1",
+    "szepeviktor/phpstan-wordpress": "^1.1",
+    "phpcompatibility/phpcompatibility-wp": "*",
+    "the-events-calendar/coding-standards": "dev-master",
+    "wp-coding-standards/wpcs": "^2.3"
+  },
+  "scripts": {
+    "test:analysis": "phpstan analyse --memory-limit=512M",
+    "compatibility:php-7.1": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.1",
+    "compatibility:php-7.2": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.2",
+    "compatibility:php-7.3": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.3",
+    "compatibility:php-7.4": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.4",
+    "compatibility:php-8.0": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.0",
+    "compatibility:php-8.1": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.1",
+    "compatibility:php-8.2": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.2",
+    "compatibility": [
+      "@compatibility:php-7.1",
+      "@compatibility:php-7.2",
+      "@compatibility:php-7.3",
+      "@compatibility:php-7.4",
+      "@compatibility:php-8.0",
+      "@compatibility:php-8.1",
+      "@compatibility:php-8.2"
+    ]
+  },
+  "scripts-descriptions": {
+    "test:analysis": "Run static code analysis."
+  }
+}

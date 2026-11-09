@@ -1,0 +1,49 @@
+{
+    "name": "stellarwp/admin-notices",
+    "description": "A handy package for easily displaying admin notices in WordPress with simple to complex visibility conditions",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jason Adams",
+            "email": "jason.adams@stellarwp.com"
+        }
+    ],
+    "require": {
+        "psr/container": "1.1.1"
+    },
+    "require-dev": {
+        "codeception/module-asserts": "^1.0",
+        "codeception/module-cli": "^1.0",
+        "codeception/module-db": "^1.0",
+        "codeception/module-filesystem": "^1.0",
+        "codeception/module-phpbrowser": "^1.0",
+        "codeception/module-rest": "^1.0",
+        "codeception/module-webdriver": "^1.0",
+        "codeception/util-universalframework": "^1.0",
+        "lucatume/wp-browser": "^3.6.5",
+        "phpunit/phpunit": "^9.5",
+        "szepeviktor/phpstan-wordpress": "^1.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "StellarWP\\AdminNotices\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "StellarWP\\AdminNotices\\Tests\\": "tests/",
+            "StellarWP\\AdminNotices\\Tests\\Support\\": "tests/_support"
+        }
+    },
+    "scripts": {
+        "test:analysis": [
+            "phpstan analyse -c phpstan.neon.dist --memory-limit=512M"
+        ]
+    },
+    "config": {
+        "platform": {
+            "php": "7.3"
+        }
+    }
+}

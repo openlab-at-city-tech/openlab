@@ -1,0 +1,113 @@
+#!/usr/bin/env php
+<?php
+
+call_user_func( function ( $version ) use ( $argv ) {
+
+	if ( is_file( $autoload = getcwd() . '/vendor/autoload.php' ) ) {
+		require $autoload;
+	} elseif ( is_file( $autoload = getcwd() . '/../../autoload.php' ) ) {
+		require $autoload;
+	} elseif ( is_file( $autoload = __DIR__ . '/../../autoload.php' ) ) {
+		require __DIR__ . '/../../vendor/autoload.php';
+	} elseif ( is_file( $autoload = __DIR__ . '/../autoload.php' ) ) {
+		require __DIR__ . '/../vendor/autoload.php';
+	} else {
+		fwrite( STDERR,
+			'You must set up the project dependencies, run the following commands:' . PHP_EOL .
+			'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
+			'php composer.phar install' . PHP_EOL
+		);
+		exit( 1 );
+	}
+
+	if ( ! class_exists( 'ScssPhp\ScssPhp\Compiler' ) ) {
+		fwrite( STDERR,
+			'The SCSS compiler cannot be found. Make sure your composer.json file includes "scssphp/scssphp" in "require-dev" and then run the following command:' . PHP_EOL .
+			'composer update' . PHP_EOL . PHP_EOL .
+			'Learn more at https://docs.trustedlogin.com' . PHP_EOL
+		);
+		exit( 1 );
+	}
+
+	$options = [];
+
+	// Process arguments
+	foreach ( $argv as $index => $arg ) {
+		if ( $index === 0 ) {
+			continue;
+		}
+
+		list( $key, $value ) = array_pad( explode( '=', $arg ), 2, null );
+		$options[ ltrim( $key, '--' ) ] = $value;
+	}
+
+	$required_args = [
+		'namespace',
+	];
+
+	$missing_args = array_diff( $required_args, array_keys( $options ) );
+
+	if ( $missing_args ) {
+		echo 'Missing required argument(s): `--' . implode( ', --', $missing_args ) . '`' . PHP_EOL;
+		exit( 1 );
+	}
+
+	$plugin_dirname = dirname( __FILE__, 5 );
+
+	if ( file_exists(  $plugin_dirname . '/vendor-namespaced/trustedlogin/client' ) ) {
+		$namespaced_dirname = $plugin_dirname . '/vendor-namespaced/trustedlogin/client';
+	} elseif ( file_exists(  $plugin_dirname . '/vendor-prefixed/trustedlogin/client' ) ) {
+		$namespaced_dirname = $plugin_dirname . '/vendor-prefixed/trustedlogin/client';
+	} else {
+		$dirname = dirname( __FILE__, 2 );
+		$namespaced_dirname = str_replace( 'trustedlogin/client', $options['namespace'] . '/trustedlogin/client', $dirname );
+	}
+
+	$assets_dir = $options['assets_dir'] ?? $namespaced_dirname . '/src/assets/';
+
+	// Add a slash to the end of the assets directory if it doesn't exist
+	$assets_dir = substr( $assets_dir, - 1 ) === '/' ? $assets_dir : $assets_dir . '/';
+
+	if ( ! file_exists( $assets_dir ) ) {
+		echo 'Assets directory does not exist: ' . $assets_dir . PHP_EOL;
+		exit( 1 );
+	}
+
+	$export_dir = $options['export_dir'] ?? $namespaced_dirname . '/src/assets/';
+
+	// Add trailing slash if missing
+	if ( substr( $export_dir, - 1 ) !== '/' ) {
+		$export_dir .= '/';
+	}
+
+	if ( ! file_exists( $export_dir ) ) {
+		echo 'Export directory does not exist: ' . $export_dir . PHP_EOL;
+		exit( 1 );
+	}
+
+	$scss_namespace = strtolower( $options['namespace'] );
+	$scss_prefix    = '/*! TrustedLogin CSS dynamically compiled by ' . $argv[0] . '. See https://docs.trustedlogin.com  */';
+	$scss_prefix    .= '$namespace: "' . $scss_namespace . '" !default;' . PHP_EOL;
+	$inputFile  = $assets_dir . 'src/trustedlogin.scss';
+	$outputFile = $export_dir . 'trustedlogin.css';
+
+	try {
+		$scss = new ScssPhp\ScssPhp\Compiler();
+		$scss->setImportPaths( $assets_dir . 'src/' );
+		$scss->setOutputStyle( ScssPhp\ScssPhp\OutputStyle::COMPRESSED );
+		$scss->setSourceMap( ScssPhp\ScssPhp\Compiler::SOURCE_MAP_INLINE );
+		$scssContent = file_get_contents( $inputFile );
+		$cssContent  = $scss->compileString( $scss_prefix . $scssContent );
+		$bytes_saved = file_put_contents( $outputFile, $cssContent->getCss() );
+
+		if ( $bytes_saved ) {
+			echo "SCSS compiled to CSS successfully. Saved to $outputFile.\n";
+		} else {
+			echo "SCSS compiled to CSS successfully, but could not write to $outputFile.\n";
+		}
+	} catch ( ScssPhp\ScssPhp\Exception\SassException $e ) {
+		echo $e->getMessage();
+		exit( 1 );
+	}
+
+}, '0.2' );
