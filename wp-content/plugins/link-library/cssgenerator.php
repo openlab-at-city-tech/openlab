@@ -16,6 +16,7 @@ function link_library_generate_css( $my_link_library_plugin ) {
 	for ( $i = 1; $i <= $genoptions['numberstylesets']; $i++ ) {
 		$settingsid = intval( $i );
 
+		$settingsid = link_library_validate_settings_number( $settingsid );
 		$settingsname = 'LinkLibraryPP' . $settingsid;
 		$options = get_option( $settingsname );
 		$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );

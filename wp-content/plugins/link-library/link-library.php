@@ -3,7 +3,7 @@
 Plugin Name: Link Library
 Plugin URI: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.9.2
+Version: 7.10.1
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
@@ -48,6 +48,26 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 	global $my_link_library_plugin;
 	global $my_link_library_plugin_admin;
+
+	function link_library_validate_settings_number( $settings, $admin = false ) {
+		if ( is_numeric( $settings ) ) {
+			$settings = intval( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
+			$options = get_option( $settingsname );
+			if ( false === $options && !$admin ) {
+				$settings = 1;
+			}
+		} else {
+			$settings = 1;
+		}
+
+		$genoptions = get_option( 'LinkLibraryGeneral' );
+		if ( $settings > $genoptions['numberstylesets'] ) {
+			$settings = 1;
+		}
+		
+		return $settings;
+	}
 
 	function link_library_tweak_plugins_http_filter( $response, $r, $url ) {
 		if ( stristr( $url, 'api.wordpress.org/plugins/update-check/1.1' ) ) {
@@ -720,6 +740,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 			if ( isset( $attributes['settingsid']) && !empty( $attributes['settingsid'] ) ) {
 				$settings = $attributes['settingsid'];
+				$settings = link_library_validate_settings_number( $settings );
 			}
 			
 			$genoptions = get_option( 'LinkLibraryGeneral' );
@@ -745,6 +766,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 			if ( isset( $attributes['settingsid']) && !empty( $attributes['settingsid'] ) ) {
 				$settings = $attributes['settingsid'];
+				$settings = link_library_validate_settings_number( $settings );
 			}
 			
 			$genoptions = get_option( 'LinkLibraryGeneral' );
@@ -1045,6 +1067,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$processedsettings = array();
 				foreach ( $settingssetsids as $setting ) {
 					if ( !in_array( $setting, $processedsettings ) ) {
+						$setting = link_library_validate_settings_number( $setting );
 						$processedsettings[] = $setting;
 						$settingsname = 'LinkLibraryPP' . $setting;
 						$options = get_option( $settingsname );
@@ -1078,12 +1101,14 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$linkcatquery .= 'WHERE tt.taxonomy = "link_category" AND ';
 
 				if ( !empty( $categoryname ) ) {
-					$linkcatquery .= 't.slug = "' . $categoryname . '"';
-					$nicecatname = $wpdb->get_var( $linkcatquery );
-					return $title . $genoptions['pagetitleprefix'] . $nicecatname . $genoptions['pagetitlesuffix'];
+					$linkcatquery .= 't.slug = "%s"';
+					$preplinkcatquery = $wpdb->prepare( $linkcatquery, $categoryname );
+					$nicecatname = sanitize_text_field( $wpdb->get_var( $preplinkcatquery ) );
+					return $title . $genoptions['pagetitleprefix'] . esc_html( $nicecatname ) . $genoptions['pagetitlesuffix'];
 				} elseif ( !empty( $catid ) ) {
-					$linkcatquery .= 't.term_id = "' . $catid . '"';
-					$nicecatname = $wpdb->get_var( $linkcatquery );
+					$linkcatquery .= 't.term_id = "%d"';
+					$preplinkcatquery = $wpdb->prepare( $linkcatquery, $catid );
+					$nicecatname = $wpdb->get_var( $preplinkcatquery );
 					return $title . $genoptions['pagetitleprefix'] . $nicecatname . $genoptions['pagetitlesuffix'];
 				}
 			}
@@ -1185,15 +1210,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 			$response = wp_safe_remote_get( $external_link, array( 'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.0.0 Safari/537.36', 'timeout' => 10 ) );
 
 			if( is_wp_error( $response ) ) {
-				$data = file_get_contents( $external_link );
-				if ( false !== $data ) {
-					return 'exists_found';
-				} else {
-					$response_code = $response->get_error_code();
-					if ( 'http_request_failed' == $response_code ) {
-						return 'error_403';
-					}
-				}			
+				return 'error_403';
 			} elseif ( $response['response']['code'] == '200' ) {
 
 				$original_protocol = '';
@@ -1324,7 +1341,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -1457,7 +1475,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -1503,7 +1522,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -1558,7 +1578,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -1645,7 +1666,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -1742,7 +1764,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -1996,7 +2019,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$settings = 1;
 			}
 
-			$settingsname = 'LinkLibraryPP' . intval( $settings );
+			$settings = link_library_validate_settings_number( $settings );
+			$settingsname = 'LinkLibraryPP' . $settings;
 			$options = get_option( $settingsname );
 			$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
@@ -2205,6 +2229,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 				if ( $settingssetsids ) {
 					foreach ( $settingssetsids as $settingsetid ) {
+						$settingsetid = link_library_validate_settings_number( $settingsetid );
 						$settingsname = 'LinkLibraryPP' . $settingsetid;
 						$options = get_option( $settingsname );
 						$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );

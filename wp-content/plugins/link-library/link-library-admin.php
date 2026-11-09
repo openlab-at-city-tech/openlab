@@ -42,7 +42,6 @@ class link_library_plugin_admin {
 
 		add_action( 'add_meta_boxes', array( $this, 'll_make_wp_editor_movable' ), 0 );
 		add_action( 'save_post', array( $this, 'll_save_link_fields' ), 10, 2 );
-		add_action( 'before_delete_post', array( $this, 'll_delete_link_fields' ), 10 );
 		add_filter( 'manage_edit-link_library_links_columns', array( $this, 'll_add_columns' ) );
 		add_action( 'manage_link_library_links_posts_custom_column', array( $this, 'll_populate_columns' ) );
 		add_filter( 'manage_edit-link_library_links_sortable_columns', array( $this, 'll_column_sortable' ) );
@@ -887,6 +886,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			if ( isset( $_GET['settingscopy'] ) && isset( $_GET['source'] ) ) {
 				$destination = intval( $_GET['settingscopy'] );
 				$source      = intval( $_GET['source'] );
+				$source = link_library_validate_settings_number( $source );
 	
 				$sourcesettingsname = 'LinkLibraryPP' . $source;
 				$sourceoptions      = get_option( $sourcesettingsname );
@@ -897,6 +897,8 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$settings = $destination;
 			}			
 		}
+
+		$settings = link_library_validate_settings_number( $settings, true );
 
 		if ( isset( $_GET['deletesettings'] ) ) {
 			check_admin_referer( 'link-library-delete' );
@@ -2287,7 +2289,12 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$myFile = $upload_dir['path'] . "/SettingSet" . $_POST['settingsetid'] . "Export.csv";
 				$fh = fopen( $myFile, 'w' ) or die( "can't open file" );
 
-				$sourcesettingsname = 'LinkLibraryPP' . $_POST['settingsetid'];
+				if ( isset( $_POST['settingsetid'] ) && !empty( $_POST['settingsetid'] ) ) {
+					$settingsetid = link_library_validate_settings_number( $_POST['settingsetid'] );
+				} else {
+					$settingsetid = 1;
+				}
+				$sourcesettingsname = 'LinkLibraryPP' . $settingsetid;
 				$sourceoptions      = get_option( $sourcesettingsname );
 
 				$headerrow = array();
@@ -2357,8 +2364,9 @@ wp_editor( $post->post_content, 'content', $editor_config );
 				$messages[] = '8';
 			}
 		} else {
-			$settingsetid = $_POST['settingsetid'];
-			$settings     = $_POST['settingsetid'];
+			$settings = $_POST['settingsetid'];
+			$settings = link_library_validate_settings_number( $settings, true );
+			$settingsetid = $settings;
 
 			$settingsname = 'LinkLibraryPP' . $settingsetid;
 
@@ -2501,7 +2509,7 @@ wp_editor( $post->post_content, 'content', $editor_config );
 			foreach (
 				array(
 					'hide_if_empty', 'catanchor', 'showdescription', 'shownotes', 'showrating', 'showupdated', 'show_images',
-					'use_html_tags', 'show_rss', 'nofollow', 'showcolumnheaders', 'show_rss_icon', 'showcategorydescheaders',
+					'show_rss', 'nofollow', 'showcolumnheaders', 'show_rss_icon', 'showcategorydescheaders',
 					'showcategorydesclinks', 'showadmineditlinks', 'showonecatonly', 'rsspreview', 'rssfeedinline', 'rssfeedinlinecontent',
 					'pagination', 'hidecategorynames', 'showinvisible', 'showdate', 'showuserlinks', 'emailnewlink', 'usethumbshotsforimages', 'uselocalimagesoverthumbshots',
 					'addlinkreqlogin', 'showcatlinkcount', 'publishrssfeed', 'showname', 'enablerewrite', 'storelinksubmitter', 'showlinkhits', 'showcaptcha',
@@ -5829,14 +5837,6 @@ function general_custom_fields_meta_box( $data ) {
 		<table>
 			<tr>
 				<td>
-					<?php _e( 'Convert [] to &lt;&gt; in Link Description and Notes', 'link-library' ); ?>
-				</td>
-				<td style='width:75px;padding:0px 20px 0px 20px'>
-					<input type="checkbox" id="use_html_tags" name="use_html_tags" <?php checked( $options['use_html_tags'] ); ?>/>
-				</td>
-			</tr>
-			<tr>
-				<td>
 					<?php _e( 'Add nofollow tag to outgoing links', 'link-library' ); ?>
 				</td>
 				<td style='width:75px;padding:0px 20px 0px 20px'>
@@ -7577,16 +7577,16 @@ function general_custom_fields_meta_box( $data ) {
 					if ( $genoptions['customurl' . $customurlfieldnumber . 'active'] ) {
 						$valuefield = 'link_custom_url_' . $customurlfieldnumber; ?>
 				<tr>
-					<td style="width:200px"><?php echo $genoptions['customurl' . $customurlfieldnumber . 'label']; ?></td>
-					<td><input type="text" name="link_custom_url_<?php echo $customurlfieldnumber; ?>" style="width:100%" value="<?php echo $$valuefield; ?>"></td>
+					<td style="width:200px"><?php echo esc_html( $genoptions['customurl' . $customurlfieldnumber . 'label'] ); ?></td>
+					<td><input type="text" name="link_custom_url_<?php echo $customurlfieldnumber; ?>" style="width:100%" value="<?php echo esc_attr( $$valuefield ); ?>"></td>
 				</tr>
 			<?php } } ?>
 			<?php for ( $customtextfieldnumber = 1; $customtextfieldnumber < 6; $customtextfieldnumber++ ) {
 				if ( $genoptions['customtext' . $customtextfieldnumber . 'active'] ) {
 					$valuefield = 'link_custom_text_' . $customtextfieldnumber; ?>
 					<tr>
-						<td style="width:200px"><?php echo $genoptions['customtext' . $customtextfieldnumber . 'label']; ?></td>
-						<td><input type="text" name="link_custom_text_<?php echo $customtextfieldnumber; ?>" style="width:100%" value="<?php echo $$valuefield; ?>"></td>
+						<td style="width:200px"><?php echo esc_html( $genoptions['customtext' . $customtextfieldnumber . 'label'] ); ?></td>
+						<td><input type="text" name="link_custom_text_<?php echo $customtextfieldnumber; ?>" style="width:100%" value="<?php echo esc_attr( $$valuefield ); ?>"></td>
 					</tr>
 				<?php } } ?>
 			<?php for ( $customlistfieldnumber = 1; $customlistfieldnumber < 6; $customlistfieldnumber++ ) {
@@ -7595,13 +7595,13 @@ function general_custom_fields_meta_box( $data ) {
 					$list_values = explode( ',', $genoptions['customlist' . $customlistfieldnumber . 'values'] );
 					?>
 					<tr>
-						<td style="width:200px"><?php echo $genoptions['customlist' . $customlistfieldnumber . 'label']; ?></td>
+						<td style="width:200px"><?php echo esc_html( $genoptions['customlist' . $customlistfieldnumber . 'label'] ); ?></td>
 						<td>
 							<?php if ( !empty( $list_values ) ) { ?>
 								<select name="link_custom_list_<?php echo $customlistfieldnumber; ?>">
 									<option value=""><?php _e( 'Select an option', 'link-library' ); ?></option>
 								<?php foreach ( $list_values as $index => $list_value ) { ?>
-									<option <?php selected( $index, $$valuefield ); ?> value="<?php echo $index; ?>"><?php echo $list_value; ?></option>
+									<option <?php selected( $index, $$valuefield ); ?> value="<?php echo esc_attr( $index ); ?>"><?php echo esc_html( $list_value ); ?></option>
 								<?php } ?>
 								</select>
 							<?php } ?>
@@ -7812,7 +7812,7 @@ function general_custom_fields_meta_box( $data ) {
 			$array_direct_items = array( 'link_target' );
 			foreach ( $array_direct_items as $array_direct_item ) {
 				if ( isset( $_POST[$array_direct_item] ) ) {
-					update_post_meta( $link_id, $array_direct_item, $_POST[$array_direct_item] );
+					update_post_meta( $link_id, $array_direct_item, sanitize_text_field( $_POST[$array_direct_item] ) );
 				}
 			}
 
@@ -7843,35 +7843,6 @@ function general_custom_fields_meta_box( $data ) {
 				if ( isset( $_POST[$array_url_nonce] ) && !empty( $_POST[$array_url_nonce] ) ) {
 					if ( wp_verify_nonce( $_POST['link_edit_nonce'], plugin_basename( __FILE__ ) ) ) {
 						update_post_meta( $link_id, $array_url_nonce, esc_url( $_POST[$array_url_nonce] ) );
-					}
-				}
-			}
-		}
-	}
-
-	function ll_delete_link_fields( $post_id ) {
-		$genoptions = get_option( 'LinkLibraryGeneral' );
-		$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
-
-		if ( $genoptions['deletelocalfile'] ) {
-			$delete_link_url = get_post_meta( $post_id, 'link_url', true );
-
-			if ( !empty( $delete_link_url ) ) {
-				$uploads = wp_upload_dir();
-
-				$pathpos = strpos( $delete_link_url, $uploads['baseurl'] );
-				$filepath = realpath( $uploads['basedir'] . substr( $delete_link_url, $pathpos + strlen( $uploads['baseurl'] ) ) );
-
-				if ( $pathpos !== false && strpos( $filepath, $uploads['baseurl'] ) == 0 ) {
-					global $wpdb;
-					$attachment_id = $wpdb->get_col($wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE guid='%s';", $delete_link_url ));
-
-					if ( sizeof( $attachment_id ) == 1 ) {
-						if ( !empty( $attachment_id ) ) {
-							wp_delete_attachment( $attachment_id[0], true );
-						}
-					} elseif ( file_exists( $filepath ) ) {
-						$unlinkreturn = unlink( $filepath );
 					}
 				}
 			}

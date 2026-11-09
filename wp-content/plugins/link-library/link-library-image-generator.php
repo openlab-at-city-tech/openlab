@@ -4,7 +4,29 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 require_once plugin_dir_path( __FILE__ ) . 'link-library-defaults.php';
 
+function verify_file_bounds(string $userInput, string $baseFolder): bool {
+    // Get the absolute, resolved path of the base folder
+    $realBase = realpath($baseFolder);
+    
+    // Get the absolute, resolved path of the user request
+    $realUserPath = realpath($baseFolder . '/' . $userInput);
+    
+    // If realpath returns false, the file/folder does not exist
+    if ($realBase === false || $realUserPath === false) {
+        return false;
+    }
+    
+    // Ensure the user path begins exactly with the allowed base path
+    return strpos($realUserPath, $realBase) === 0;
+}
+
+
 function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $thumbnailsize, $thumbnailgenerator ) {
+
+    if ( !current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Not allowed', 'link-library' ) );
+	}
+
     $status = false;
     if ( $url != "" && $name != "" ) {
         $protocol = is_ssl() ? 'https://' : 'http://';
@@ -46,60 +68,62 @@ function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filep
 
         $img    = $uploads['basedir'] . "/" . $filepath . "/" . $linkid . '.png';
 
-        if ( $thumbnailgenerator != 'google' || $mode == 'favicon' || $mode == 'favicononly' ) {
-            $tempfile = download_url( $genthumburl );
-            if ( !is_wp_error( $tempfile ) ) {
-                copy( $tempfile, $img );
-                unlink( $tempfile );
-                $status = true;
-            }
-        } elseif ( $thumbnailgenerator == 'google' && ( $mode == 'thumb' || $mode == 'thumbonly' ) ) {
-             $screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . esc_html( $url ) );
-            $data_whole = json_decode($screenshot);
+        if ( verify_file_bounds( $img, $uploads['basedir'] ) ) {
+            if ( $thumbnailgenerator != 'google' || $mode == 'favicon' || $mode == 'favicononly' ) {
+                        $tempfile = download_url( $genthumburl );
+                        if ( !is_wp_error( $tempfile ) ) {
+                            copy( $tempfile, $img );
+                            unlink( $tempfile );
+                            $status = true;
+                        }
+            } elseif ( $thumbnailgenerator == 'google' && ( $mode == 'thumb' || $mode == 'thumbonly' ) ) {
+                $screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . esc_html( $url ) );
+                $data_whole = json_decode($screenshot);
 
-            if (isset($data_whole->error) || empty($screenshot)) {
-                if (!(substr($url, 0, 4) == 'http')) {
-                    $url2 = 'https%3A%2F%2F' . $url;
-                    $screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . $url2 );
-                    $data_whole = json_decode($screenshot);
+                if (isset($data_whole->error) || empty($screenshot)) {
+                    if (!(substr($url, 0, 4) == 'http')) {
+                        $url2 = 'https%3A%2F%2F' . $url;
+                        $screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . $url2 );
+                        $data_whole = json_decode($screenshot);
+                    }
                 }
-            }
-            if (isset($data_whole->error) || empty($screenshot)) {
-                if (!(substr($url, 0, 3) == 'www')) {
-                    $url3 = 'https%3A%2F%2F' . 'www.' . $url;
-                    $screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . $url3 );
-                    $data_whole = json_decode($screenshot);
+                if (isset($data_whole->error) || empty($screenshot)) {
+                    if (!(substr($url, 0, 3) == 'www')) {
+                        $url3 = 'https%3A%2F%2F' . 'www.' . $url;
+                        $screenshot = file_get_contents('https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=' . $url3 );
+                        $data_whole = json_decode($screenshot);
+                    }
                 }
-            }
-            if (isset($data_whole->error)) {
-                $status = false;
-            } else {
-                if (isset($data_whole->lighthouseResult->audits->{'final-screenshot'}->details->data)) {
-                    $data = $data_whole->lighthouseResult->audits->{'final-screenshot'}->details->data;
-                    $data = str_replace('data:image/jpeg;base64','',$data);
-
-                    $data = str_replace('_', '/', $data);
-                    $data = str_replace('-', '+', $data);
-                    $base64img = str_replace('data:image/jpeg;base64,', '', $data);
-
-                    $data   		  = base64_decode($data);
-                    $upload_dir       = $uploads['basedir'] . '/' . $filepath; // Set upload folder
-                    $image_data       = $data; // img data
-                    $unique_file_name = wp_unique_filename( $uploads['basedir'] . '/' . $filepath, $linkid . '.png' ); // Generate unique name
-                    $filename         = basename( $unique_file_name ); // Create image file name
-
-                    // Create the image  file on the server
-                    file_put_contents( $img, $image_data );
-
-                    $exists = file_exists($tmp);
-                    $status = true;
-                } else {
+                if (isset($data_whole->error)) {
                     $status = false;
+                } else {
+                    if (isset($data_whole->lighthouseResult->audits->{'final-screenshot'}->details->data)) {
+                        $data = $data_whole->lighthouseResult->audits->{'final-screenshot'}->details->data;
+                        $data = str_replace('data:image/jpeg;base64','',$data);
+
+                        $data = str_replace('_', '/', $data);
+                        $data = str_replace('-', '+', $data);
+                        $base64img = str_replace('data:image/jpeg;base64,', '', $data);
+
+                        $data   		  = base64_decode($data);
+                        $upload_dir       = $uploads['basedir'] . '/' . $filepath; // Set upload folder
+                        $image_data       = $data; // img data
+                        $unique_file_name = wp_unique_filename( $uploads['basedir'] . '/' . $filepath, $linkid . '.png' ); // Generate unique name
+                        $filename         = basename( $unique_file_name ); // Create image file name
+
+                        // Create the image  file on the server
+                        file_put_contents( $img, $image_data );
+
+                        $exists = file_exists($tmp);
+                        $status = true;
+                    } else {
+                        $status = false;
+                    }
+
                 }
 
             }
-
-        }
+        }        
 
         if ( $status !== false ) {
             if ( $filepathtype == 'absolute' || empty( $filepathtype ) ) {
@@ -109,7 +133,7 @@ function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filep
                 $newimagedata  = $parsedaddress['path'] . "/" . $filepath . "/" . $linkid . ".png";
             }
 
-            if ( $mode == 'thumb' || $mode == 'favicon' ) {
+            if ( ( $mode == 'thumb' || $mode == 'favicon' ) && verify_file_bounds( $newimagedata, $uploads['basedir'] ) ) {
                 update_post_meta( $linkid, 'link_image', $newimagedata );
 
                 if ( empty( $newimagedata ) ) {
@@ -169,6 +193,10 @@ function link_library_ajax_image_generator ( $my_link_library_plugin_admin ) {
 }
 
 function link_library_image_generator( $LLPluginClass, $options = array(), $autogen = false ) {
+
+    if ( !current_user_can( 'manage_options' ) ) {
+		wp_die( __( 'Not allowed', 'link-library' ) );
+	}
 
     $genoptions = get_option( 'LinkLibraryGeneral' );
 	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );

@@ -11,6 +11,8 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	load_plugin_textdomain( 'link-library', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
 
 	$settings     = ( isset( $_POST['settingsid'] ) ? $_POST['settingsid'] : 1 );
+	$settings = link_library_validate_settings_number( $settings );
+
 	$settingsname = 'LinkLibraryPP' . $settings;
 	$options      = get_option( $settingsname );
 	$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
@@ -21,6 +23,10 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	$valid   = true;
 	$requiredcheck = true;
 	$message = "";
+
+	if ( $options['addlinkreqlogin'] && !current_user_can( 'read' ) ) {
+		wp_die( 'Link submission required login but submission data indicates that the user is not logged in.' );
+	}
 
 	$captureddata                           = array();
 	if ( isset( $_POST['link_category'] ) ) {
@@ -79,12 +85,12 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 	$uploads = wp_upload_dir();
 
-	if ( isset( $_FILES['linkimage']['name'] ) ) {
+	if ( ( 'show' == $options['showaddlinkimage'] || 'required' == $options['showaddlinkimage'] ) && isset( $_FILES['linkimage']['name'] ) ) {
 		$image_file_ext = strtolower( end( explode( '.', $_FILES['linkimage']['name'] ) ) );
 		$allowed_image_extensions = array( 'jpeg', 'jpg', 'png' );
 	}
 
-	if ( isset( $_FILES['linkfile']['name'] ) ) {
+	if ( 'show' == $options['showaddlinkfile'] && isset( $_FILES['linkfile']['name'] ) ) {
 		$link_file_ext = strtolower( end( explode( '.', $_FILES['linkfile']['name'] ) ) );
 		$allowed_link_file_extensions = explode( ',', $options['linkfileallowedtypes'] );
 	}
@@ -134,7 +140,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	} else if ( isset( $_FILES['linkfile'] ) && file_exists( $_FILES['linkfile']['tmp_name'] ) && !in_array( $link_file_ext, $allowed_link_file_extensions ) ) {
 		$requiredcheck = false;
 		$message = 28;
-	} elseif ( isset( $_FILES['linkfile'] ) && file_exists( $_FILES['linkfile']['tmp_name'] ) && file_exists( $uploads['basedir'] . '/link-library-files/' . $_FILES['linkfile']['name'] ) ) {
+	} elseif ( isset( $_FILES['linkfile'] ) && file_exists( $_FILES['linkfile']['tmp_name'] ) && file_exists( $uploads['basedir'] . '/link-library-files/' . sanitize_file_name( $_FILES['linkfile']['name'] ) ) ) {
 		$requiredcheck = false;
 		$message = 29;
 	}
@@ -259,18 +265,20 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 				$existinglinkquery = "SELECT * from " . $my_link_library_plugin->db_prefix() . "posts p, " . $my_link_library_plugin->db_prefix() . "postmeta pm where p.ID = pm.post_ID and pm.meta_key = 'link_url' and ";
 				$existinglinkquery .= '( ';
 
-				$existinglinkquery .= "p.post_title = '" . $captureddata['link_name'] . "' ";
+				$existinglinkquery .= "p.post_title = '%s' ";
 
 				if ( ( $options['addlinknoaddress'] == false ) || ( $options['addlinknoaddress'] == true && $captureddata['link_url'] != "" ) ) {
-					$existinglinkquery .= " or pm.meta_value = '" . $captureddata['link_url'] . "' ";
+					$existinglinkquery .= " or pm.meta_value = '%s' ";
 				}
 
 				if ( $options['onelinkperdomain'] ) {
 					$parsed_url = parse_url( $captureddata['link_url'] );
-					$existinglinkquery .= " or pm.meta_value like '%" . $parsed_url['host'] . "%' ";
+					$existinglinkquery .= " or pm.meta_value like '%%s%' ";
 				}
 
 				$existinglinkquery .= " )";
+
+				$existinglinkquery = $wpdb->prepare( $existinglinkquery, $captureddata['link_name'],  $captureddata['link_url'], $parsed_url['host'] );
 
 				$existinglink = $wpdb->get_var( $existinglinkquery );
 			} elseif ( 'show' == $options['showaddlinkfile'] ) {
@@ -464,9 +472,9 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 										mkdir( $uploads['basedir'] . '/link-library-files' );
 									}
 
-									$target_link_file_name = $uploads['basedir'] . '/link-library-files/' . $_FILES['linkfile']['name'];
-									$target_link_file_url = $uploads['baseurl'] . '/link-library-files/' . $_FILES['linkfile']['name'];
-									move_uploaded_file( $_FILES['linkfile']['tmp_name'], $target_link_file_name );
+									$target_link_file_name = $uploads['basedir'] . '/link-library-files/' . sanitize_file_name( $_FILES['linkfile']['name'] );
+									$target_link_file_url = $uploads['baseurl'] . '/link-library-files/' . sanitize_file_name( $_FILES['linkfile']['name'] );
+									move_uploaded_file( sanitize_file_name( $_FILES['linkfile']['tmp_name'] ), $target_link_file_name );
 									update_post_meta( $new_link_ID, 'link_url', $target_link_file_url );
 								}
 							}
@@ -491,17 +499,17 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						update_post_meta( $new_link_ID, 'link_custom_url_4', esc_url( $captureddata['ll_customurl4'] ) );
 						update_post_meta( $new_link_ID, 'link_custom_url_5', esc_url( $captureddata['ll_customurl5'] ) );	
 						
-						update_post_meta( $new_link_ID, 'link_custom_text_1', sanitize_text_field( $captureddata['ll_customtext1'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_text_2', sanitize_text_field( $captureddata['ll_customtext2'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_text_3', sanitize_text_field( $captureddata['ll_customtext3'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_text_4', sanitize_text_field( $captureddata['ll_customtext4'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_text_5', sanitize_text_field( $captureddata['ll_customtext5'] ) );	
+						update_post_meta( $new_link_ID, 'link_custom_text_1', wp_kses_post( sanitize_text_field( $captureddata['ll_customtext1'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_2', wp_kses_post( sanitize_text_field( $captureddata['ll_customtext2'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_3', wp_kses_post( sanitize_text_field( $captureddata['ll_customtext3'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_4', wp_kses_post( sanitize_text_field( $captureddata['ll_customtext4'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_text_5', wp_kses_post( sanitize_text_field( $captureddata['ll_customtext5'] ) ) );	
 
-						update_post_meta( $new_link_ID, 'link_custom_list_1', sanitize_text_field( $captureddata['ll_customlist1'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_list_2', sanitize_text_field( $captureddata['ll_customlist2'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_list_3', sanitize_text_field( $captureddata['ll_customlist3'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_list_4', sanitize_text_field( $captureddata['ll_customlist4'] ) );
-						update_post_meta( $new_link_ID, 'link_custom_list_5', sanitize_text_field( $captureddata['ll_customlist5'] ) );	
+						update_post_meta( $new_link_ID, 'link_custom_list_1', wp_kses_post( sanitize_text_field( $captureddata['ll_customlist1'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_2', wp_kses_post( sanitize_text_field( $captureddata['ll_customlist2'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_3', wp_kses_post( sanitize_text_field( $captureddata['ll_customlist3'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_4', wp_kses_post( sanitize_text_field( $captureddata['ll_customlist4'] ) ) );
+						update_post_meta( $new_link_ID, 'link_custom_list_5', wp_kses_post( sanitize_text_field( $captureddata['ll_customlist5'] ) ) );	
 
 						update_post_meta( $new_link_ID, 'link_visits', 0 );
 						update_post_meta( $new_link_ID, 'link_rating', 0 );

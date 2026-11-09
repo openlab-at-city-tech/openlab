@@ -17,6 +17,7 @@ function link_library_generate_rss_feed () {
     $genoptions = get_option( 'LinkLibraryGeneral' );
 	$genoptions = wp_parse_args( $genoptions, ll_reset_gen_settings( 'return' ) );
 
+    $settingsetid = link_library_validate_settings_number( $settingsetid );
     $settingsname = 'LinkLibraryPP' . $settingsetid;
     $options = get_option( $settingsname );
 
