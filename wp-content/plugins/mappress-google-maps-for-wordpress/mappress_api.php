@@ -22,10 +22,11 @@ class Mappress_Api extends WP_REST_Controller {
 	}
 
 	public function create_map($request) {
+		ob_start();
 		$mapdata = $request->get_json_params();
 
 		if (!$mapdata)
-			return new WP_Error('create_map', 'Map save data missing');
+			return new WP_Error('create_map', 'Map save data missing', array('status' => 400));
 
 		$map = new Mappress_Map($mapdata);
 		$result = $map->save();
@@ -38,11 +39,17 @@ class Mappress_Api extends WP_REST_Controller {
 
 	public function delete_map($request) {
 		ob_start();
-		$mapid = $request->get_param('mapid');
+		$url_params = $request->get_url_params();
+		$mapid = isset($url_params['mapid']) ? $url_params['mapid'] : null;        
+		
+		if (!Mappress_Map::get($mapid))
+			return new WP_Error('delete_item', 'Map not found', array('status' => 404));
+		
 		$result = Mappress_Map::delete($mapid);
 
 		if (!$result)
-			return new WP_Error('delete_item', "Internal error when deleting map ID '$mapid'!");
+			return new WP_Error('delete_item', "Internal error when deleting map ID '$mapid'!", array('status' => 500));
+
 
 		return $this->rest_response($mapid);
 	}
@@ -76,7 +83,8 @@ class Mappress_Api extends WP_REST_Controller {
 		ob_start();
 		$result = Mappress_Map::empty_trash();
 		if (!$result)
-			return new WP_Error('empty_trash', 'Internal error when emptying trash, your data was not saved!');
+			return new WP_Error('empty_trash', 'Internal error when emptying trash, your data was not saved!', array('status' => 500));
+
 		return $this->rest_response('OK');
 	}
 	
@@ -87,16 +95,32 @@ class Mappress_Api extends WP_REST_Controller {
 		return $this->rest_response($this->counts($otype, $oid));
 	}
 
+	// Note that this is used only for internal reads in the editor
 	public function get_map($request) {
 		ob_start();
 		$mapid = $request->get_param('mapid');
 		$map = ($mapid) ? Mappress_Map::get($mapid) : null;
 
 		if (!$map)
-			return new WP_Error('get_map', 'Map not found');
+			return new WP_Error('get_map', 'Map not found', array('status' => 404));
 
 		return $this->rest_response($map);
 	}
+	
+	public function get_map_display($request) {
+		ob_start();
+		$mapid = $request->get_param('mapid');
+		$map   = ($mapid) ? Mappress_Map::get($mapid) : null;
+
+		// Must exist and not be trashed
+		if (!$map || $map->status === 'trashed')
+			return new WP_Error('get_map', 'Map not found', array('status' => 404));
+
+		// Strip edit-only data
+		$data = $map->to_json();
+		unset($data['metaKey'], $data['status']);
+		return $this->rest_response($data);        
+	}    
 
 	public function get_map_schema() {
 		$schema = array(
@@ -112,7 +136,7 @@ class Mappress_Api extends WP_REST_Controller {
 				),
 				'center' => array(
 					'description' => esc_html("Map center.  May be null for automatic center, or a string of lat,lng to force the center."),
-					'type' => 'integer',
+					'type' => 'string',
 				),
 				'mapTypeId' => array(
 					'description' => esc_html('Map type.  May be null, a default type (roadmap, satellite or hybrid) or the name of a custom style.'),
@@ -190,6 +214,9 @@ class Mappress_Api extends WP_REST_Controller {
 		foreach(array('filter', 'oid', 'otype', 'page', 'page_size', 'search_text', 'sort_by', 'sort_asc') as $arg)
 			$$arg = $request->get_param($arg);
 			
+		// An unspecified otype means "post".  The widgets editor and customizer have no post context, so don't send it
+		$otype = ($otype) ? $otype : 'post';            
+
 		$where = " WHERE 1=1 ";
 
 		if ($otype == 'post') {
@@ -200,10 +227,10 @@ class Mappress_Api extends WP_REST_Controller {
 			$where .= " AND $maps_table.otype = 'post' ";
 		} else {
 			// User maps, not currently displayed in picker
-			$fields = "SELECT $maps_table.mapid, $maps_table.otype, $maps_table.oid, $maps_table.status, $maps_table.title, $wpdb->users.nicename as otitle ";
+			$fields = "SELECT $maps_table.mapid, $maps_table.otype, $maps_table.oid, $maps_table.status, $maps_table.title, $wpdb->users.user_nicename as otitle ";            
 			$from = " FROM $maps_table ";
 			$join = " LEFT OUTER JOIN $wpdb->users ON ($wpdb->users.ID = $maps_table.oid) ";
-			$where .= " AND $maps_table.otype = 'post' ";
+			$where .= " AND $maps_table.otype = 'user' ";
 		}
   
 		$where .= ($filter == 'trashed') ? " AND $maps_table.status = 'trashed' " : " AND $maps_table.status != 'trashed' ";
@@ -212,21 +239,19 @@ class Mappress_Api extends WP_REST_Controller {
 
 		if ($search_text) {
 			// Can't use column alias in where
-			$otitle = ($otype == 'post') ? "$wpdb->posts.post_title" : "$wpdb->users.nicename";
+			$otitle = ($otype == 'post') ? "$wpdb->posts.post_title" : "$wpdb->users.user_nicename";            
 			$where .= $wpdb->prepare(" AND ($maps_table.mapid = %s OR $maps_table.title like '%%%s%%' OR $otitle like '%%%s%%') ", $search_text, $search_text, $search_text);
 		}
 
 		$orderby = '';
 
-		// Note that sort_by should be ;already sanitized by wpdb->prepare
-		if ($sort_by == 'mapid') {
-			$orderby = $wpdb->prepare(" ORDER BY %1s ", $sort_by) . ( ($sort_asc == 'true') ? "ASC" : "DESC" );
-			if ($sort_by != 'mapid')
-				$orderby .= ", mapid";
-		}
+		// Only "mapid" is supported; if more sort columns are added, whitelist them explicitly.
+		if ($sort_by == 'mapid') 
+			$orderby = " ORDER BY mapid " . (($sort_asc == 'true') ? "ASC" : "DESC");
 
-		if ($page_size > 0)
-			$limit = $wpdb->prepare(" LIMIT %d, %d", ($page-1) * $page_size, $page_size);
+		$page = max(1, (int)$page);
+		$page_size = max(1, (int)$page_size);            
+		$limit = $wpdb->prepare(" LIMIT %d, %d", ($page-1) * $page_size, $page_size);
 
 		// Run query, then check if more results exist
 		$results = $wpdb->get_results($fields . $from . $join . $where . $orderby . $limit);
@@ -252,11 +277,15 @@ class Mappress_Api extends WP_REST_Controller {
 
 	public function mutate_map($request) {
 		ob_start();
-		$mapid = $request->get_param('mapid');
-		$mapdata = $request->get_param('changes');
+		$url_params = $request->get_url_params();
+		$mapid = isset($url_params['mapid']) ? $url_params['mapid'] : null;
+		$mapdata = $request->get_param('changes');        
 
 		if (!$mapid || !$mapdata)
-			return new WP_Error('mutate_map', 'Missing parameter while mutating');
+			return new WP_Error('mutate_map', 'Missing parameter while mutating', array('status' => 400));
+
+		if (!Mappress_Map::get($mapid))
+			return new WP_Error('mutate_map', 'Map not found', array('status' => 404));
 
 		$result = Mappress_Map::mutate($mapid, $mapdata);
 		if (!$result)
@@ -266,13 +295,15 @@ class Mappress_Api extends WP_REST_Controller {
 	}
 
 	public function update_map($request) {
-		$mapid = $request->get_param('mapid');
+		ob_start();
+		$url_params = $request->get_url_params();
+		$mapid = isset($url_params['mapid']) ? $url_params['mapid'] : null;
 		$mapdata = (object) $request->get_json_params();
 
 		if (!$mapdata)
-			return new WP_Error('update_map', 'Map save data missing');
-		if (!$mapid || $mapid != $mapdata->mapid)
-			return new WP_Error('update_map', 'Map ID missing');
+			return new WP_Error('update_map', 'Map save data missing', array('status' => 400));
+		if (!$mapid || !isset($mapdata->mapid) || $mapid != $mapdata->mapid)
+			return new WP_Error('update_map', 'Map ID missing', array('status' => 400));
 
 		$map = new Mappress_Map($mapdata);
 		$result = $map->save();
@@ -281,79 +312,79 @@ class Mappress_Api extends WP_REST_Controller {
 			return new WP_Error('update_map', 'Internal error, your data has not been saved!');
 
 		return $this->rest_response($map->mapid);
-	}
-
+	}    
+	
 	public function rest_api_init() {
 		register_rest_route(
 			$this->namespace,
 			'/maps',
 			array(
-				array(
+				array(               
 					'methods' => 'GET',
 					'callback' => array($this, 'get_maps'),
-					'permission_callback' => function() {
-						return current_user_can('edit_posts');
-					},
-					'args' => array(
-						'filter' => array('sanitize_callback' => 'sanitize_title', 'default' => 'all'),
-						'oid' => array('sanitize_callback' => 'sanitize_title', 'default' => null),
-						'otype' => array('sanitize_callback' => 'sanitize_title', 'default' => 'post'),
+					'permission_callback' => function() { return current_user_can(Mappress::cap()); },                    
+					'args' => array(                    
+						'filter' => array('sanitize_callback' => 'sanitize_key', 'default' => 'all'),
+						'oid' => array('sanitize_callback' => 'absint', 'default' => null),   
+						'otype' => array('sanitize_callback' => 'sanitize_key', 'default' => 'post'),
 						'page' => array('sanitize_callback' => 'absint', 'default' => 1),
 						'page_size' => array('sanitize_callback' => 'absint', 'default' => 10),
-						'search' => array('sanitize_callback' => 'sanitize_title', 'default' => ''),
-						'sort_by' => array('sanitize_callback' => 'sanitize_title', 'default' => 'mapid'),
+						'search_text' => array('sanitize_callback' => 'sanitize_text_field', 'default' => ''),                        
+						'sort_by' => array('sanitize_callback' => 'sanitize_key', 'default' => 'mapid'),
 						'sort_asc' => array('sanitize_callback' => 'rest_sanitize_boolean', 'default' => true),
 					),
-
-				),
+				),    
 				array(
 					'methods' => 'POST',
 					'callback' => array($this, 'create_map'),
-					'permission_callback' => function() {
-						return current_user_can('edit_posts');
-					},
+					'permission_callback' => function() { return current_user_can(Mappress::cap()); },                    
 				),
 				'schema' => array($this, 'get_map_schema')
 			)
 		);
 
-		// Individual map ops - note for future bulk use  '/maps/op/(?P<mapid>\d+(,\d+)*)',
+		// Map editing
 		register_rest_route(
 			$this->namespace,
 			'/maps/(?P<mapid>\d+)',
-			array(
+			array(         
 				array(
 					'methods' => 'GET',
 					'callback' => array($this, 'get_map'),
-					'permission_callback' => '__return_true',
-				),
-
+					'permission_callback' => function() { return current_user_can(Mappress::cap()); },
+				),       
+				
 				array(
 					'methods' => 'DELETE',
 					'callback' => array($this, 'delete_map'),
-					'permission_callback' => function() {
-						return current_user_can('edit_posts');
-					},
+					'permission_callback' => function() { return current_user_can(Mappress::cap('delete_map')); },                    
 				),
 
 				array(
 					'methods' => 'POST',
 					'callback' => array($this, 'update_map'),
-					'permission_callback' => function() {
-						return current_user_can('edit_posts');
-					},
+					'permission_callback' => function() { return current_user_can(Mappress::cap()); },                    
 				),
 
 				array(
 					'methods' => 'PATCH',
 					'callback' => array($this, 'mutate_map'),
-					'permission_callback' => function() {
-						return current_user_can('edit_posts');
-					},
+					'permission_callback' => function() { return current_user_can(Mappress::cap()); },                    
 				),
 				'schema' => array($this, 'get_map_schema'),
 			)
 		);
+		
+		// Map display - for future use
+		register_rest_route(
+			$this->namespace,
+			'/maps/(?P<mapid>\d+)/display',
+			array(
+				'methods' => 'GET',
+				'callback' => array($this, 'get_map_display'),
+				'permission_callback' => '__return_true',
+			)
+		);        
 
 		// Clone 
 		register_rest_route(
@@ -362,9 +393,10 @@ class Mappress_Api extends WP_REST_Controller {
 			array (
 				'methods' => 'POST',
 				'callback' => array($this, 'duplicate_map'),
-				'permission_callback' => function() {
-					return current_user_can('edit_posts');
-				},
+				'permission_callback' => function() { return current_user_can(Mappress::cap()); },                    
+				'args' => array(
+					'oid' => array('sanitize_callback' => 'absint', 'default' => 0),
+				),                
 				'schema' => array($this, 'get_map_schema'),
 			)
 		);
@@ -376,11 +408,9 @@ class Mappress_Api extends WP_REST_Controller {
 			array(
 				'methods' => 'GET',
 				'callback' => array($this, 'get_counts'),
-				'permission_callback' => function() {
-					return current_user_can('edit_posts');
-				},
+				'permission_callback' => function() { return current_user_can(Mappress::cap()); },                    
 				'args' => array(
-					'otype' => array('sanitize_callback' => 'sanitize_title'),
+					'otype' => array('sanitize_callback' => 'sanitize_key'),
 					'oid' => array('sanitize_callback' => 'absint'),
 				)
 
@@ -394,9 +424,7 @@ class Mappress_Api extends WP_REST_Controller {
 			array(
 				'methods' => 'POST',
 				'callback' => array($this, 'empty_trash'),
-				'permission_callback' => function() {
-					return current_user_can('edit_posts');
-				}
+				'permission_callback' => function() { return current_user_can(Mappress::cap('empty_trash')); },                    
 			)
 		);
 		

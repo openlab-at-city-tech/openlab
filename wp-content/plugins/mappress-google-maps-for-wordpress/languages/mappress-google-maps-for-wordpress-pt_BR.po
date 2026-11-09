@@ -1,0 +1,593 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MapPress\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
+"Last-Translator: \n"
+"Language-Team: Portuguese (Brazil)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-05T02:59:52+00:00\n"
+"PO-Revision-Date: 2026-11-07 19:16+0000\n"
+"Language: pt_BR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: mappress-google-maps-for-wordpress\n"
+
+#. Plugin Name of the plugin
+#: mappress.php
+msgid "MapPress Google Maps and Leaflet Maps"
+msgstr "MapPress Google Maps and Leaflet Maps"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: mappress.php
+msgid "https://www.mappresspro.com"
+msgstr "https://www.mappresspro.com"
+
+#. Description of the plugin
+#: mappress.php
+msgid "MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress"
+msgstr "O MapPress facilita adicionar mapas do Google Maps e do Leaflet ao WordPress"
+
+#. Author of the plugin
+#: mappress.php
+msgid "Chris Richardson"
+msgstr "Chris Richardson"
+
+#: mappress.php:192
+msgid "Renew your license"
+msgstr "Renove sua licença"
+
+#: mappress.php:193
+msgid "Your MapPress license has expired.  %s to get the latest updates and prevent errors."
+msgstr "Sua licença do MapPress expirou.  %s para receber as atualizações mais recentes e evitar erros."
+
+#: mappress.php:233
+#: mappress.php:976
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Settings"
+msgstr "Configurações"
+
+#: mappress.php:234
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Maps"
+msgstr "Mapas"
+
+#: mappress.php:237
+#: pro/mappress_import.php:107
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Import"
+msgstr "Importar"
+
+#: mappress.php:238
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Support"
+msgstr "Suporte"
+
+#: mappress.php:241
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Upgrade"
+msgstr "Fazer upgrade"
+
+#: mappress.php:254
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "As tabelas do banco de dados do MapPress estão faltando.  Desative o plugin e ative-o novamente para corrigir isso."
+
+#: mappress.php:259
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "A Google Maps API key is required"
+msgstr "É necessária uma chave de API do Google Maps"
+
+#: mappress.php:259
+msgid "Please update your"
+msgstr "Atualize suas"
+
+#: mappress.php:259
+msgid "MapPress Settings"
+msgstr "Configurações do MapPress"
+
+#: mappress.php:264
+msgid "Upgrade Now"
+msgstr "Fazer upgrade agora"
+
+#: mappress.php:265
+msgid "Your MapPress data must be upgraded!  Please %s.</strong>"
+msgstr "Seus dados do MapPress precisam ser atualizados!  %s.</strong>"
+
+#: mappress.php:593
+msgid "MapPress requires WordPress 6.3 or later. Please update WordPress."
+msgstr "O MapPress requer o WordPress 6.3 ou posterior. Atualize o WordPress."
+
+#: mappress.php:664
+msgid "Please enter your MapPress license key to enable plugin updates"
+msgstr "Digite sua chave de licença do MapPress para ativar as atualizações do plugin"
+
+#: mappress.php:824
+msgid "Are you sure you want to delete?"
+msgstr "Tem certeza de que deseja excluir?"
+
+#: mappress.php:885
+msgid "Standard"
+msgstr "Padrão"
+
+#: mappress.php:886
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Muted"
+msgstr "Suave"
+
+#: mappress.php:887
+#: mappress.php:898
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Light"
+msgstr "Claro"
+
+#: mappress.php:888
+#: mappress.php:899
+#: mappress.php:910
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Dark"
+msgstr "Escuro"
+
+#: mappress.php:889
+#: mappress.php:900
+#: mappress.php:919
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Satellite"
+msgstr "Satélite"
+
+#: mappress.php:896
+msgid "Streets"
+msgstr "Ruas"
+
+#: mappress.php:897
+msgid "Outdoors"
+msgstr "Ao ar livre"
+
+#: mappress.php:901
+msgid "Satellite Streets"
+msgstr "Satélite com ruas"
+
+#: mappress.php:907
+msgid "Liberty"
+msgstr "Liberty"
+
+#: mappress.php:908
+msgid "Bright"
+msgstr "Bright"
+
+#: mappress.php:909
+msgid "Positron"
+msgstr "Positron"
+
+#: mappress.php:917
+msgid "Roadmap"
+msgstr "Mapa de ruas"
+
+#: mappress.php:918
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Terrain"
+msgstr "Relevo"
+
+#: mappress.php:920
+msgid "Hybrid"
+msgstr "Híbrido"
+
+#: mappress.php:977
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "What's new"
+msgstr "Novidades"
+
+#: mappress.php:1426
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Version"
+msgstr "Versão"
+
+#: mappress_api.php:73
+msgid "Copy of %s"
+msgstr "Cópia de %s"
+
+#: mappress_api.php:73
+#: mappress_map.php:155
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Untitled"
+msgstr "Sem título"
+
+#: mappress_db.php:56
+msgid "Success!  Upgrade complete."
+msgstr "Pronto!  Upgrade concluído."
+
+#: mappress_db.php:156
+#: mappress_map.php:500
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "MapPress"
+msgstr "MapPress"
+
+#: mappress_db.php:162
+msgid "Map data upgrade"
+msgstr "Atualização dos dados de mapas"
+
+#: mappress_db.php:163
+msgid "Your map data needs to be upgraded."
+msgstr "Os dados dos seus mapas precisam ser atualizados."
+
+#: mappress_db.php:164
+msgid "Please make a database backup now.  Data will be permanently modified."
+msgstr "Faça agora um backup do banco de dados.  Os dados serão alterados permanentemente."
+
+#: mappress_db.php:167
+msgid "Your map data is up to date."
+msgstr "Os dados dos seus mapas estão atualizados."
+
+#: mappress_map.php:152
+msgid "+%d more"
+msgstr "+%d mais"
+
+#: mappress_map.php:156
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Edit map"
+msgstr "Editar mapa"
+
+#: mappress_map.php:160
+msgid "Attach"
+msgstr "Anexar"
+
+#: mappress_map.php:174
+msgid "Post not found"
+msgstr "Post não encontrado"
+
+#: mappress_map.php:189
+msgid "Post not available"
+msgstr "Post não disponível"
+
+#: mappress_map.php:362
+msgid "Geocoding error: %s"
+msgstr "Erro de geocodificação: %s"
+
+#: mappress_map.php:368
+msgid "Location"
+msgstr "Local"
+
+#: mappress_poi.php:119
+msgid "Invalid lat/lng coordinate: %s,%s"
+msgstr "Coordenada lat/lng inválida: %s,%s"
+
+#: mappress_settings.php:157
+msgid "Select at least one post type"
+msgstr "Selecione pelo menos um tipo de post"
+
+#: mappress_settings.php:472
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Default"
+msgstr "Padrão"
+
+#: mappress_settings.php:502
+msgid "Address line "
+msgstr "Linha de endereço"
+
+#: mappress_settings.php:503
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Latitude"
+msgstr "Latitude"
+
+#: mappress_settings.php:503
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Longitude"
+msgstr "Longitude"
+
+#: mappress_settings.php:503
+#: mappress_template.php:41
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Title"
+msgstr "Título"
+
+#: mappress_settings.php:503
+#: mappress_template.php:38
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Body"
+msgstr "Texto"
+
+#: mappress_settings.php:503
+#: mappress_template.php:40
+#: mappress_template.php:50
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Icon"
+msgstr "Ícone"
+
+#: mappress_settings.php:503
+msgid "Zoom"
+msgstr "Zoom"
+
+#: mappress_settings.php:622
+msgid "Sure, I'll leave a review"
+msgstr "Claro, vou deixar uma avaliação"
+
+#: mappress_settings.php:623
+msgid "Nope, maybe later"
+msgstr "Não, talvez mais tarde"
+
+#: mappress_settings.php:624
+msgid "I need help using the plugin"
+msgstr "Preciso de ajuda para usar o plugin"
+
+#: mappress_settings.php:626
+msgid "A quick favor?"
+msgstr "Um pequeno favor?"
+
+#: mappress_settings.php:627
+msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
+msgstr "Olá, espero que você esteja gostando do MapPress.  Você poderia reservar um momento para escrever uma breve avaliação?  Isso significaria muito para mim!"
+
+#: mappress_template.php:37
+#: mappress_template.php:48
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Address"
+msgstr "Endereço"
+
+#: mappress_template.php:39
+msgid "Distance"
+msgstr "Distância"
+
+#: mappress_template.php:42
+msgid "URL"
+msgstr "URL"
+
+#: mappress_template.php:43
+msgid "Custom field"
+msgstr "Campo personalizado"
+
+#: mappress_template.php:44
+msgid "POI data field"
+msgstr "Campo de dados do POI"
+
+#: mappress_template.php:49
+msgid "Display Name"
+msgstr "Nome de exibição"
+
+#: mappress_template.php:51
+msgid "Custom Field"
+msgstr "Campo personalizado"
+
+#: pro/mappress_acf.php:26
+msgid "Address or lat/lng was missing in ACF field"
+msgstr "Endereço ou lat/lng ausente no campo do ACF"
+
+#: pro/mappress_filter.php:87
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Post type"
+msgstr "Tipo de post"
+
+#: pro/mappress_filter.php:91
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Role"
+msgstr "Função"
+
+#: pro/mappress_filter.php:95
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Text search"
+msgstr "Pesquisa de texto"
+
+#: pro/mappress_geocoder.php:29
+msgid "Invalid geocoder: %s"
+msgstr "Geocodificador inválido: %s"
+
+#: pro/mappress_geocoder.php:47
+msgid "API Key is missing - see MapPress Settings"
+msgstr "Chave de API ausente - veja as configurações do MapPress"
+
+#: pro/mappress_geocoder.php:65
+msgid "Invalid status: %s, %s"
+msgstr "Status inválido: %s, %s"
+
+#: pro/mappress_geocoder.php:75
+#: pro/mappress_geocoder.php:111
+#: pro/mappress_geocoder.php:155
+msgid "No results for address: %s"
+msgstr "Nenhum resultado para o endereço: %s"
+
+#: pro/mappress_geocoder.php:184
+msgid "Error: %s %s"
+msgstr "Erro: %s %s"
+
+#: pro/mappress_geocoder.php:189
+msgid "Invalid JSON from Geocoding service: %s"
+msgstr "JSON inválido do serviço de geocodificação: %s"
+
+#: pro/mappress_icons.php:153
+msgid "Files error: "
+msgstr "Erro de arquivo:"
+
+#: pro/mappress_import.php:46
+msgid "Setting \"allow_url_fopen=1\" must in your php.ini file to process remote files.  Not all hosting services allow this."
+msgstr "A configuração \"allow_url_fopen=1\" precisa estar no seu php.ini para processar arquivos remotos.  Nem todas as hospedagens permitem isso."
+
+#: pro/mappress_import.php:56
+msgid "Unable to open file"
+msgstr "Não foi possível abrir o arquivo"
+
+#: pro/mappress_import.php:60
+msgid "Unable to read file headers"
+msgstr "Não foi possível ler os cabeçalhos do arquivo"
+
+#: pro/mappress_import.php:80
+msgid "Line %d column count doesn't match headers column count"
+msgstr "O número de colunas da linha %d não corresponde ao dos cabeçalhos"
+
+#: pro/mappress_import.php:120
+msgid "Map %d updated."
+msgstr "Mapa %d atualizado."
+
+#: pro/mappress_import.php:120
+msgid "Map %d saved."
+msgstr "Mapa %d salvo."
+
+#: pro/mappress_import.php:122
+msgid "See data view for errors."
+msgstr "Veja a visualização de dados para os erros."
+
+#: pro/mappress_import.php:184
+msgid "Geocoding failed"
+msgstr "Falha na geocodificação"
+
+#: pro/mappress_import.php:186
+msgid "No address or lat/lng provided!"
+msgstr "Nenhum endereço ou lat/lng informado!"
+
+#: pro/mappress_import.php:211
+msgid "Import Maps"
+msgstr "Importar mapas"
+
+#: pro/mappress_import.php:212
+msgid "Sample file"
+msgstr "Arquivo de exemplo"
+
+#: pro/mappress_import.php:213
+msgid "Import documentation"
+msgstr "Documentação da importação"
+
+#: pro/mappress_meta.php:45
+msgid "Map already exists, skipped"
+msgstr "O mapa já existe, ignorado"
+
+#: pro/mappress_meta.php:62
+msgid "No valid address"
+msgstr "Nenhum endereço válido"
+
+#: pro/mappress_meta.php:64
+msgid "No valid address [no error details]"
+msgstr "Nenhum endereço válido [sem detalhes do erro]"
+
+#: pro/mappress_meta.php:72
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Automatic"
+msgstr "Automático"
+
+#: pro/mappress_meta.php:157
+msgid "No address or lat/lng specified"
+msgstr "Nenhum endereço ou lat/lng especificado"
+
+#: pro/mappress_updater.php:44
+msgid "Could not retrieve plugin information from mappresspro.com.  Please try again later."
+msgstr "Não foi possível obter as informações do plugin em mappresspro.com.  Tente novamente mais tarde."
+
+#: pro/mappress_updater.php:136
+msgid "Communication error, please try again later"
+msgstr "Erro de comunicação, tente novamente mais tarde"
+
+#: pro/mappress_updater.php:143
+msgid "Your server's IP has been blocked by Siteground's antibot system.  Please contact Siteground and your hosting service to resolve."
+msgstr "O IP do seu servidor foi bloqueado pelo sistema antibot da Siteground.  Entre em contato com a Siteground e com sua hospedagem para resolver."
+
+#: pro/mappress_updater.php:145
+msgid "Server error"
+msgstr "Erro do servidor"
+
+#: pro/mappress_updater.php:149
+msgid "JSON error"
+msgstr "Erro de JSON"
+
+#: pro/mappress_updater.php:176
+msgid "Error when checking license"
+msgstr "Erro ao verificar a licença"
+
+#: pro/mappress_updater.php:237
+msgid "This is the free version of MapPress and would overwrite MapPress Pro, disabling mashups, filters, icons and other Pro features. Install MapPress Pro from mappresspro.com instead. To install the free version deliberately, delete MapPress Pro first."
+msgstr "Esta é a versão gratuita do MapPress e ela substituiria o MapPress Pro, desativando mashups, filtros, ícones e outros recursos Pro. Instale o MapPress Pro a partir de mappresspro.com. Para instalar a versão gratuita de propósito, exclua primeiro o MapPress Pro."
+
+#: pro/mappress_widget.php:71
+#: pro/mappress_widget_map.php:59
+msgid "Widget title"
+msgstr "Título do widget"
+
+#: pro/mappress_widget.php:76
+#: pro/mappress_widget_map.php:69
+msgid "Map size"
+msgstr "Tamanho do mapa"
+
+#: pro/mappress_widget.php:82
+msgid "Show"
+msgstr "Mostrar"
+
+#: pro/mappress_widget.php:83
+msgid "Current posts"
+msgstr "Posts atuais"
+
+#: pro/mappress_widget.php:84
+msgid "Hide if empty"
+msgstr "Ocultar se estiver vazio"
+
+#: pro/mappress_widget.php:86
+msgid "All posts"
+msgstr "Todos os posts"
+
+#: pro/mappress_widget.php:87
+msgid "Custom query"
+msgstr "Consulta personalizada"
+
+#: pro/mappress_widget.php:90
+msgid "Learn about queries"
+msgstr "Saiba mais sobre consultas"
+
+#: pro/mappress_widget.php:96
+#: pro/mappress_widget_map.php:77
+msgid "Show POI list"
+msgstr "Mostrar lista de POIs"
+
+#: pro/mappress_widget.php:103
+#: pro/mappress_widget_map.php:84
+msgid "Other Settings"
+msgstr "Outras configurações"
+
+#: pro/mappress_widget.php:106
+#: pro/mappress_widget_map.php:87
+msgid "Example: initialopeninfo=\"true\""
+msgstr "Exemplo: initialopeninfo=\"true\""
+
+#: pro/mappress_widget_map.php:64
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Map ID"
+msgstr "ID do mapa"
+
+#: templates/mashup-modal.php:17
+msgid "Continue reading"
+msgstr "Continuar lendo"
+
+#. translators: %s: Author name.
+#: templates/mashup-modal.php:23
+msgid "By %s"
+msgstr "Por %s"
+
+#: templates/mashup-modal.php:27
+msgid "In"
+msgstr "Em"
+
+#: templates/mashup-modal.php:28
+msgid " Tagged "
+msgstr " Tags:"
