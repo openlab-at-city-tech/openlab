@@ -69,7 +69,6 @@ if (typeof wp.media !== "undefined" && wp.media) {
                     }
                 },
                 error: (collection, response, options) => {
-                    console.log('could not open url to video share page');
                 }
             });
         },

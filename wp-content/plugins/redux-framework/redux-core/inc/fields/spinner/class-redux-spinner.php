@@ -53,7 +53,7 @@ if ( ! class_exists( 'Redux_Spinner', false ) ) {
 				}
 			}
 
-			$data_string .= ' data-val=' . $this->value;
+			$data_string .= ' data-val="' . esc_attr( $this->value ) . '"';
 
 			// Don't allow input edit if there's a step.
 			$readonly = '';

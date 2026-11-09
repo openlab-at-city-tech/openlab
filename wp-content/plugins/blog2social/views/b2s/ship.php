@@ -23,9 +23,14 @@ $selProfile = isset($_GET['profile']) ? (int) $_GET['profile'] : 0;
 $selImg = (isset($_GET['img']) && !empty($_GET['img'])) ? base64_decode(sanitize_text_field(wp_unslash($_GET['img']))) : '';
 $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : false;
 $exPostFormat = (isset($_GET['postFormat']) && $_GET['postFormat'] == '1') ? 1 : ((isset($_GET['postFormat']) && $_GET['postFormat'] == '2') ? 2 : 0);
-$postUrl = (isset($_GET['b2sPostType']) && $_GET['b2sPostType'] == 'ex') ? (($exPostFormat == 0 || $exPostFormat == 1) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
+$postUrl = (isset($_GET['b2sPostType']) && $_GET['b2sPostType'] == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
 
 $ignoreTemplate = (isset($_GET['ignoreTemplate']))? (int)$_GET['ignoreTemplate'] :0;
+$imageIsAiGenerated = isset($_GET['imageIsAiGenerated']) ? (int)$_GET['imageIsAiGenerated'] : 0;
+$aiImageUrl= $selImg;
+$textIsAiGenerated = isset($_GET['textIsAiGenerated']) ? (int)$_GET['textIsAiGenerated'] : 0;
+$featuredImage = wp_get_attachment_url(get_post_thumbnail_id($postData->ID));
+
 $postStatus = array('publish' => esc_html__('published', 'blog2social'), 'pending' => esc_html__('draft', 'blog2social'), 'future' => esc_html__('scheduled', 'blog2social'));
 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
@@ -35,6 +40,7 @@ $optionUserTimeFormat = $options->_getOption('user_time_format');
 if ($optionUserTimeFormat == false) {
     $optionUserTimeFormat = (substr(B2S_LANGUAGE, 0, 2) == 'de') ? 0 : 1;
 }
+
 $isPremium = (B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__("SMART", "blog2social") . '</span>' : '';
 $videoMeta = ($isVideo) ? wp_read_video_metadata(get_attached_file($postData->ID)) : null;
 $selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? wp_date("Y-m-d", (strtotime(sanitize_text_field(wp_unslash($_GET['schedDate'])) . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600),  new DateTimeZone(date_default_timezone_get())) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? wp_date("Y-m-d H:i:s", strtotime(B2S_Util::getUTCForDate(sanitize_text_field(wp_unslash($_GET['schedDateTime'])), $userTimeZoneOffset * (-1))),  new DateTimeZone(date_default_timezone_get())) : '' );    //routing from calendar or curated content
@@ -75,7 +81,15 @@ if ($wpdb->get_var($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->pre
 
 $navbar = new B2S_Ship_Navbar();
 $mandantData = $navbar->getData();
-$maxInputVars = ini_get('max_input_vars');
+$maxInputVars = @ini_get('max_input_vars');
+
+$disconnectedNetworks = array();
+foreach ($mandantData['auth'] as $channelData) {
+    if (isset($channelData->expiredDate) && $channelData->expiredDate != '0000-00-00' && $channelData->expiredDate <= wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) {
+        $disconnectedNetworks[] = $channelData;
+    }
+}
+$hasDisconnectedNetworks = !empty($disconnectedNetworks);
 ?>
 <div class="b2s-container">
     <?php
@@ -114,6 +128,11 @@ $maxInputVars = ini_get('max_input_vars');
         <div class="col-xs-12 col-md-9 del-padding-left">
             <div class="col-xs-12 del-padding-left hidden-xs">
                 <div class="panel panel-group">
+                    
+                
+                                        
+                
+                
                     <div class="panel-body b2s-post-details" style="min-height: 260px !important;">
                         <h2>
                             <?php
@@ -137,10 +156,12 @@ $maxInputVars = ini_get('max_input_vars');
                             $length=isset($videoMeta['length']) ? $videoMeta['length'] : "";
                             ?>
                             <div class="info">
-                                <video id="b2sVideoPreview" controls height="73" poster="#" autobuffer="true" class="pull-left">
-                                    <source src="<?php echo esc_attr(wp_get_attachment_url($postData->ID)); ?>" type="<?php echo esc_attr($postData->post_mime_type); ?>">
-                                    <img src="<?php echo esc_url(plugins_url('/assets/images/video_default.png', B2S_PLUGIN_FILE)); ?>" alt="video" class="hidden-xs" height="73"/>
-                                </video> 
+                                <div class="pull-left" style="position:relative;">
+                                    <video id="b2sVideoPreview" controls height="73" poster="#" autobuffer="true">
+                                        <source src="<?php echo esc_attr(wp_get_attachment_url($postData->ID)); ?>" type="<?php echo esc_attr($postData->post_mime_type); ?>">
+                                        <img src="<?php echo esc_url(plugins_url('/assets/images/video_default.png', B2S_PLUGIN_FILE)); ?>" alt="video" class="hidden-xs" height="73"/>
+                                    </video>
+                                </div>
                                 <div class="add-padding-left pull-left">
                                     <b><?php esc_html_e('Video', 'blog2social') ?>:</b> <?php echo esc_html(B2S_Util::getTitleByLanguage($postData->post_title, $userLang)); ?><br>
                                     <b><?php esc_html_e('Type', 'blog2social') ?> :</b> <?php
@@ -173,8 +194,35 @@ $maxInputVars = ini_get('max_input_vars');
                         ?>
                     </div>
                 </div>
+                <?php if ($hasDisconnectedNetworks) {
+                foreach ($disconnectedNetworks as $disconnectedNetwork) {
+                    $b2sNetworkName = $navbar->getNetworkName($disconnectedNetwork->networkId);
+                    $b2sRefreshUrl = $navbar->getRefreshUrl($disconnectedNetwork);
+                    ?>
+                <div class="alert alert-warning alert-custom b2s-network-warning b2s-disconnected-networks-notice" data-network-auth-id="<?php echo esc_attr($disconnectedNetwork->networkAuthId); ?>" data-network-id="<?php echo esc_attr($disconnectedNetwork->networkId); ?>" data-network-type="<?php echo esc_attr($disconnectedNetwork->networkType); ?>">
+                    <button type="button" class="close b2s-disconnected-delete-btn" aria-label="Close" data-network-auth-id="<?php echo esc_attr($disconnectedNetwork->networkAuthId); ?>" data-network-id="<?php echo esc_attr($disconnectedNetwork->networkId); ?>" data-network-type="<?php echo esc_attr($disconnectedNetwork->networkType); ?>">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>
+                    <span class="pf-network-warning-text">
+                        <?php
+                        echo wp_kses(sprintf(
+                            // translators: 1: Network name, 2: Account name
+                            __('The connection to %1$s <strong>"%2$s"</strong> has expired.', 'blog2social'),
+                            esc_html($b2sNetworkName),
+                            esc_html(stripslashes($disconnectedNetwork->networkUserName))
+                        ), array('strong' => array()));
+                        ?>
+                        <a href="#" onclick="wop('<?php echo esc_js($b2sRefreshUrl); ?>', 'Blog2Social Network'); return false;" class="b2s-disconnected-refresh-btn" style="text-decoration: underline;"><?php esc_html_e('Refresh here', 'blog2social'); ?></a>
+                    </span>
+                    <div class="clearfix"></div>
+                </div> 
+            <?php
+                }
+            } ?>
             </div>
-            <div class="clearfix"></div>            
+            <div class="clearfix"></div>
+            
             <?php if (defined("B2S_PLUGIN_NOTICE_SITE_URL") && B2S_PLUGIN_NOTICE_SITE_URL != false) { ?>
                 <div class="b2s-settings-user-sched-time-area col-xs-12 del-padding-left hidden-xs">
                     <button type="button" class="btn btn-link pull-left btn-xs  scroll-to-bottom"><span class="glyphicon glyphicon-chevron-down"></span> <?php esc_html_e('scroll to bottom', 'blog2social') ?> </button>
@@ -386,7 +434,6 @@ $maxInputVars = ini_get('max_input_vars');
                                         </div>
 
                                     <?php } else { ?>
-
                                         <form id="b2sNetworkSent" method="post">
                                             <input type="hidden" id="max_input_vars" value="<?php echo esc_attr($maxInputVars); ?>">
                                             <div class="b2s-post-area col-md-9 del-padding-left">
@@ -403,6 +450,7 @@ $maxInputVars = ini_get('max_input_vars');
                                                         </div>
                                                     </div>
                                                 </div>
+
                                                 <div class="b2s-post-list"></div>
                                                 <div class="b2s-post-network-properties-error-list"></div>
 
@@ -421,6 +469,7 @@ $maxInputVars = ini_get('max_input_vars');
                                             <input type="hidden" id="is_video" name="is_video" value="<?php echo (int) esc_attr(sanitize_text_field($isVideo)); ?>">
                                             <input type="hidden" id="video_upload_url" name="video_upload_url" value="<?php echo (((int) $isVideo == 1) ? esc_html(wp_get_attachment_url($postData->ID), 'blog2social') : ''); ?>">
                                             <input type="hidden" id="video_upload_size" name="video_upload_size" value="<?php echo (($videoMeta != null && isset($videoMeta['filesize'])) ? esc_attr($videoMeta['filesize']) : 0); ?>">
+                                            <?php if ($isVideo) { ?><input type="hidden" class="b2s-ai-generated-video-tag-hidden-input" name="video_is_ai_generated" value="0" data-network-auth-id="0" data-network-count="-1"><?php } ?>
                                             <input type="hidden" id="publish_date" name="publish_date" value="">
                                             <input type="hidden" id="user_version" name="user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">
                                             <input type="hidden" id="action" name="action" value="b2s_save_ship_data">
@@ -438,6 +487,10 @@ $maxInputVars = ini_get('max_input_vars');
                                             <input type="hidden" id="b2s-ship-ass-connected" value="<?php echo esc_attr($assConnected); ?>">
                                             <input type="hidden" id="b2s-ship-ass-words-open" value="<?php echo esc_attr($assWordsOpen); ?>">
                                             <input type="hidden" id="b2s-ship-ass-words-total" value="<?php echo esc_attr($assWordsTotal); ?>">
+                                            <input type="hidden" id="b2sAiTaggedImageUrls" name="ai_tagged_image_urls" value="<?php echo !empty($aiImageUrl) ? esc_attr(json_encode($aiImageUrl)) : esc_attr(json_encode(array())); ?>">
+                                            <input type="hidden" id="b2stextIsAigeneratedDefault" name="text_is_ai_generated_default" value="<?php echo esc_attr($textIsAiGenerated); ?>">
+                                            <input type="hidden" name="b2s_post_type" value="<?php echo (isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? 'ex' : ''; ?>">
+                                            <input type="hidden" name="b2s_ex_post_format" value="<?php echo esc_attr($exPostFormat); ?>">
 
                                             <div class="b2s-reporting-btn-area col-md-9 del-padding-left" style="display: none;">
                                                 <div class="panel panel-group">
@@ -823,7 +876,7 @@ $maxInputVars = ini_get('max_input_vars');
                                                             <b><?php esc_html_e('Define the default settings for the custom post format for all of your Facebook accounts in the Blog2Social settings.', 'blog2social'); ?></b>
                                                         </div>
                                                         <div class="b2s-post-format-settings-info" data-network-id="2" style="display:none;">
-                                                            <b><?php esc_html_e('Define the default settings for the custom post format for all of your Twitter accounts in the Blog2Social settings.', 'blog2social'); ?></b>
+                                                            <b><?php esc_html_e('Define the default settings for the custom post format for all of your X accounts in the Blog2Social settings.', 'blog2social'); ?></b>
                                                         </div>
                                                         <div class="b2s-post-format-settings-info" data-network-id="3" style="display:none;">
                                                             <b><?php esc_html_e('Define the default settings for the custom post format for all of your LinkedIn accounts in the Blog2Social settings.', 'blog2social'); ?></b>
@@ -1051,7 +1104,7 @@ $maxInputVars = ini_get('max_input_vars');
                             <input type="hidden" id="selSchedDate" value="<?php echo esc_attr($selSchedDate); ?>">
                             <input type="hidden" id="selProfile" value="<?php echo esc_attr($selProfile); ?>">   
                             <input type="hidden" id="b2sPostType" value="<?php echo (isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? 'ex' : ''; ?>">
-                            <input type="hidden" id="b2sDefault_url" name="default_url" value="<?php echo esc_attr((isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? (($exPostFormat == 0 || $exPostFormat == 1) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid)); ?>">
+                            <input type="hidden" id="b2sDefault_url" name="default_url" value="<?php echo esc_attr((isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid)); ?>">
                             <input type="hidden" id="b2sPortalImagePath" value="<?php echo esc_url(plugins_url('/assets/images/portale/', B2S_PLUGIN_FILE)); ?>">
                             <input type="hidden" id="b2sTosXingGroupCrosspostingLimit" value="<?php echo esc_attr($tosCrossPosting[19][2]); ?>">
                             <input type="hidden" id="b2sServerUrl" value="<?php echo esc_url(B2S_PLUGIN_SERVER_URL); ?>">
@@ -1189,6 +1242,7 @@ $maxInputVars = ini_get('max_input_vars');
                                 </div>
                             </div>
 
+                           
                             <div class="modal fade" id="b2s-edit-template" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-template" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content custom-edit-template-modal-width">
@@ -1223,6 +1277,7 @@ $maxInputVars = ini_get('max_input_vars');
                                             <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-44" alt="Threads" src="<?php echo esc_url(plugins_url('/assets/images/portale/44_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                                             <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-45" alt="X" src="<?php echo esc_url(plugins_url('/assets/images/portale/45_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                                             <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-46" alt="Band" src="<?php echo esc_url(plugins_url('/assets/images/portale/46_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                                            <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-47" alt="Dev" src="<?php echo esc_url(plugins_url('/assets/images/portale/47_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                                             <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4>
                                         </div>
                                         <div class="row b2s-loading-area width-100">
@@ -1236,13 +1291,14 @@ $maxInputVars = ini_get('max_input_vars');
 
                                         </div>
                                         <div class="modal-footer b2s-edit-template-footer">
+                                            <button type="button" class="btn btn-primary btn-sm b2s-edit-template-save-ai-btn" style="display: none;"><?php esc_html_e('save', 'blog2social'); ?></button>
                                             <button class="btn btn-primary btn-sm b2s-edit-template-save-btn"><?php esc_html_e('save', 'blog2social'); ?></button>
                                             <input type="hidden" value="" id="b2s-edit-template-network-id">
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
+                    
                             <div class="modal fade" id="b2sInfoNetwork18" tabindex="-1" role="dialog"  aria-labelledby="b2sInfoNetwork18" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog" role="document">
                                     <div class="modal-content">
@@ -1329,6 +1385,7 @@ $maxInputVars = ini_get('max_input_vars');
                                                     <span class="b2s-bold">{CONTENT}</span> - <?php esc_html_e('The content of your post', 'blog2social') ?> <br>
                                                     <span class="b2s-bold">{KEYWORDS}</span> - <?php esc_html_e('The tags you have set in your post.', 'blog2social') ?> <br>
                                                     <span class="b2s-bold">{AUTHOR}</span> - <?php esc_html_e('The name of the post author.', 'blog2social') ?> <br>
+                                                    <span class="b2s-bold">{CAPTION}</span> - <?php esc_html_e('The caption of your video.', 'blog2social') ?> <br>
                                                     <?php
                                                     if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
                                                         ?>
@@ -1372,6 +1429,24 @@ $maxInputVars = ini_get('max_input_vars');
                                         <div class="modal-body">
                                             <div><?php esc_html_e('The number of form fields in this request exceeds your current server limit (max_input_vars =', 'blog2social') ?> <span class="b2s-max-input-vars-value"></span><?php esc_html_e(')', 'blog2social') ?></div>
                                             <div><?php esc_html_e('Please increase this value in your PHP configuration or reduce the number of selected networks for shipping.', 'blog2social') ?></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" id="b2sAiTextTagAllModal" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="false" style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAiTextTagAllModal">&times;</button>
+                                            <h4 class="modal-title"><?php esc_html_e('Mark all as AI generated text', 'blog2social') ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><?php esc_html_e('Do you also want to mark the text as AI generated on all other visible networks?', 'blog2social') ?></p>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-primary" id="b2s-ai-text-tag-all-yes"><?php esc_html_e('Yes, mark all', 'blog2social') ?></button>
+                                            <button type="button" class="btn btn-default" id="b2s-ai-text-tag-all-no"><?php esc_html_e('No, only this one', 'blog2social') ?></button>
                                         </div>
                                     </div>
                                 </div>

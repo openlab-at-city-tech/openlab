@@ -4,7 +4,7 @@
  *
  * Used in free plugins to get a glimpse of other plugins offered by WPMU DEV.
  *
- * @since   1.0.0
+ * @version 1.1.0
  * @author  Panos Lyrakis
  * @link    https://wpmudev.com
  * @package WPMUDEV\Plugin_Cross_Sell
@@ -24,7 +24,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 
 // Sub-module version.
 if ( ! defined( 'WPMUDEV_MODULE_PLUGIN_CROSS_SELL_VERSION' ) ) {
-	define( 'WPMUDEV_MODULE_PLUGIN_CROSS_SELL_VERSION', '1.0.0' );
+	define( 'WPMUDEV_MODULE_PLUGIN_CROSS_SELL_VERSION', '1.1.0' );
 }
 
 // Sub-module directory.

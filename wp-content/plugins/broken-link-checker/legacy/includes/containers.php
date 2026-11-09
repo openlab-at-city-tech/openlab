@@ -180,6 +180,24 @@ class blcContainer {
 	}
 
 	/**
+	 * Whether the given post type is one of the Site Editor's block-theme
+	 * post types (Templates, Template Parts).
+	 *
+	 * Core's _edit_link format for these types takes two %s placeholders
+	 * (post type + slug) instead of the usual one, and core's
+	 * get_delete_post_link() has no special-case handling for them at all.
+	 * Container UI code must not build edit/trash/delete links for these
+	 * post types the "normal" way - see get_edit_post_link() in
+	 * wp-includes/link-template.php for the core logic this mirrors.
+	 *
+	 * @param string $post_type
+	 * @return bool
+	 */
+	protected function is_site_editor_post_type( $post_type ) {
+		return in_array( $post_type, array( 'wp_template', 'wp_template_part' ), true );
+	}
+
+	/**
 	 * Get the value of the specified field of the object wrapped by this container.
 	 *
 	 * @access protected
@@ -251,6 +269,8 @@ class blcContainer {
 		//Load the wrapped object, if not done already
 		$this->get_wrapped_object();
 
+		$allow_url_shortcodes = $this->allows_url_shortcodes();
+
 		//FB::log($this->fields, "Parseable fields :");
 
 		//Iterate over all parse-able fields
@@ -277,7 +297,7 @@ class blcContainer {
 			//Parse the field with each parser
 			foreach ( $parsers as $parser ) {
 				//FB::log("Parsing $name with '{$parser->parser_type}' parser");
-				$found_instances = $parser->parse( $value, $base_url, $default_link_text );
+				$found_instances = $parser->parse_container_field( $value, $base_url, $default_link_text, $allow_url_shortcodes );
 				//FB::log($found_instances, "Found instances");
 
 				$transactionManager = TransactionManager::getInstance();
@@ -371,6 +391,21 @@ class blcContainer {
 		return '';
 	}
 
+	/**
+	 * Whether shortcodes in link URLs found in this container may be expanded.
+	 *
+	 * Parsing runs inside WP-Cron, so this must stay false for any container
+	 * whose content can be supplied by site visitors (comments) or by code
+	 * outside the site's control (post meta, which front-end forms and other
+	 * plugins write to). Only content written by the site's own authors should
+	 * return true.
+	 *
+	 * @return bool
+	 */
+	public function allows_url_shortcodes() {
+		return false;
+	}
+
 
 
 	/**
@@ -462,6 +497,25 @@ class blcContainer {
 	 * @return bool
 	 */
 	function current_user_can_delete() {
+		return false;
+	}
+
+	/**
+	 * Check if the current user can edit the item wrapped by this container.
+	 *
+	 * A link record is global - one link_id stands for every place its URL
+	 * appears - and editing or removing the link rewrites all of those places.
+	 * Handlers that act on a user's behalf must therefore confirm editing rights
+	 * for every affected container before writing anything.
+	 *
+	 * current_user_can_delete() is the equivalent guard for the bulk delete action.
+	 *
+	 * Should be over-ridden in a subclass. Denying by default means a new
+	 * container type stays protected until it explicitly opts in.
+	 *
+	 * @return bool
+	 */
+	function current_user_can_edit() {
 		return false;
 	}
 
@@ -797,9 +851,12 @@ class blcContainerHelper {
 	static function get_unsynched_containers( $max_results = 0 ) {
 		global $wpdb; /* @var wpdb $wpdb */
 
+		// A loose comparison does not constrain this to an integer on its own.
+		$max_results = absint( $max_results );
+
 		$q = "SELECT * FROM {$wpdb->prefix}blc_synch WHERE synched = 0";
 		if ( $max_results > 0 ) {
-			$q .= " LIMIT $max_results";
+			$q .= $wpdb->prepare( ' LIMIT %d', $max_results );
 		}
 
 		$container_data = $wpdb->get_results( $q, ARRAY_A ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

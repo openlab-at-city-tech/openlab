@@ -50,6 +50,10 @@ export default function Dropdown( props ) {
 				itemTag = 'button';
 				props.onClick = callback;
 				break;
+			case 'divider':
+				itemTag = 'hr';
+				content = null;
+				break;
 			default:
 				// eslint-disable-next-line no-unused-vars
 				itemTag = 'span';

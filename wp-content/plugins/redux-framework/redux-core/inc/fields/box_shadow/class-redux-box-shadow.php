@@ -211,7 +211,7 @@ if ( ! class_exists( 'Redux_Box_Shadow', false ) ) {
 			$css .= 'background:' . esc_html( $this->field['preview-color'] );
 
 			echo '</div>';
-			echo '<div class="" id="shadow-result" style="' . $css . '"></div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+			echo '<div class="" id="shadow-result" style="' . esc_attr( $css ) . '"></div>';
 			echo '</div>';
 		}
 

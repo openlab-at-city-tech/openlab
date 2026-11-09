@@ -25,29 +25,57 @@ class B2S_Changelog {
                     $content .= '<div class="b2s-changelog-body">';
                     if (isset($changelogContent['version_info']) && !empty($changelogContent['version_info'])) {
                         $content .= '<p class="b2s-font-bold">' . $changelogContent['version_info'] . '</p>';
-                        $content .= '<br>';
                     }
                     foreach (unserialize(B2S_PLUGIN_CHANGELOG_CONTENT) as $key => $value) {
-                        if (!in_array($key, array('new', 'improvements', 'fixed', 'upcoming')) || !is_array($value) || empty($value)) {
+                        if (!in_array($key, array('new', 'improvements', 'fixed', 'upcoming','fixes & tweaks')) || !is_array($value) || empty($value)) {
                             continue;
                         }
+                       
                         if ($key == 'new') {
-                            $content .= '<p class="label label-success b2s-font-size-12">' . esc_html__('New', 'blog2social') . '</p>';
+                            $content .= '<h3 class="news-modal-heading">' . esc_html__('New', 'blog2social') . '</h3>';
                         } else if ($key == 'improvements') {
-                            $content .= '<p class="label label-info b2s-font-size-12">' . esc_html__('Improvements', 'blog2social') . '</p>';
+                            $content .= '<h3 class="news-modal-heading">' . esc_html__('Improvements', 'blog2social') . '</h3>';
                         } else if ($key == 'fixed') {
-                            $content .= '<p class="label label-warning b2s-font-size-12">' . esc_html__('Fixed', 'blog2social') . '</p>';
+                            $content .= '<h3 class="news-modal-heading">' . esc_html__('Fixed', 'blog2social') . '</h3>';
                         } else if ($key == 'upcoming') {
-                            $content .= '<p class="label label-danger b2s-font-size-12">' . esc_html__('Upcoming Integrations', 'blog2social') . '</p>';
+                            $content .= '<h3 class="news-modal-heading">' . esc_html__('Upcoming Integrations', 'blog2social') . '</h3>';
+                        } else if ($key == 'fixes & tweaks') {
+                            $content .= '<h3 class="news-modal-heading">' . esc_html__('Fixes & Tweaks', 'blog2social') . '</h3>';
                         }
-                        $content .= '<ul class="b2s-changelog-list">';
-                        foreach ($value as $entry) {
-                            $content .= '<li>' . wp_kses($entry, array(
-                                'a' => array(
-                                    'href' => array(),
-                                    'target' => array()
-                                )
-                            )) . '</li>';
+                        $content .= '<ul class="">';
+
+                        // New structure: single array with 'headings' and 'texts' keys
+                        if (isset($value['texts']) && is_array($value['texts'])) {
+                            $texts = $value['texts'];
+                            $headings = isset($value['headings']) && is_array($value['headings']) ? $value['headings'] : array();
+                            $headingbadges = isset($value['headingbadges']) && is_array($value['headingbadges']) ? $value['headingbadges'] : array();
+                            $i = 0;
+                            foreach ($texts as $text) {
+                                $content .= "<div class='b2s-changelog-item'>"; 
+                                $heading = isset($headings[$i]) ? $headings[$i] : '';
+                                $headingbadge = isset($headingbadges[$i]) ? $headingbadges[$i] : '';
+                               
+                                if (!empty($headingbadge)) {
+                                    $content .= '<span class="label label-warning b2s-font-size-12">' . $headingbadge . "".'</span>';
+                                }
+                                if (!empty($heading)) {
+                                    $content .= '<strong>'.'  ' . $heading . '</strong><br>';
+                                }
+                                if (!empty($text)) {
+                                    $content .= '<p>' . $text . '</p>';
+                                }
+                                $content .= '</div><hr class="news-modal-hr">';
+                          
+                                $i++;
+                            }
+                            
+                        } else {
+                            // Old structure: flat list of string entries
+                            foreach ($value as $entry) {
+                                if (is_string($entry)) {
+                                    $content .= '<li>' . $entry . '</li>';
+                                }
+                            }
                         }
                         $content .= '</ul>';
                     }

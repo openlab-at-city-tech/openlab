@@ -249,8 +249,7 @@ abstract class PLL_Admin_Base extends PLL_Base {
 		 * 3 => true if loaded in footer
 		 */
 		$scripts = array(
-			'user'    => array( array( 'profile', 'user-edit' ), array( 'jquery' ), false, false ),
-			'widgets' => array( array( 'widgets' ), array( 'jquery' ), false, false ),
+			'widgets' => array( array( 'widgets' ), array(), false, true ),
 		);
 
 		$block_screens = array( 'widgets', 'site-editor' );
@@ -288,8 +287,7 @@ abstract class PLL_Admin_Base extends PLL_Base {
 			}
 		}
 
-		wp_register_style( 'polylang_admin', plugins_url( "/css/build/admin{$suffix}.css", POLYLANG_ROOT_FILE ), array( 'wp-jquery-ui-dialog' ), POLYLANG_VERSION );
-		wp_enqueue_style( 'polylang_dialog', plugins_url( "/css/build/dialog{$suffix}.css", POLYLANG_ROOT_FILE ), array( 'polylang_admin' ), POLYLANG_VERSION );
+		pll_enqueue_style( 'admin', array( 'wp-jquery-ui-dialog' ) );
 
 		$this->add_inline_scripts();
 	}
@@ -332,7 +330,7 @@ abstract class PLL_Admin_Base extends PLL_Base {
 	 */
 	private function add_inline_scripts() {
 		if ( wp_script_is( 'pll_block-editor', 'enqueued' ) ) {
-			$default_lang_script = 'const pllDefaultLanguage = "' . $this->options['default_lang'] . '";';
+			$default_lang_script = sprintf( 'const pllDefaultLanguage = %s;', wp_json_encode( $this->options['default_lang'] ) );
 			wp_add_inline_script(
 				'pll_block-editor',
 				$default_lang_script,
@@ -552,7 +550,7 @@ abstract class PLL_Admin_Base extends PLL_Base {
 			array(
 				'id'    => 'languages',
 				'title' => $selected->flag . $title,
-				'href'  => esc_url( add_query_arg( 'lang', $selected->slug, remove_query_arg( 'paged' ) ) ),
+				'href'  => esc_url( $this->get_admin_bar_menu_url( $selected ) ),
 				'meta'  => array(
 					'title' => __( 'Filters content by language', 'polylang' ),
 					'class' => 'all' === $selected->slug ? '' : 'pll-filtered-languages',
@@ -569,12 +567,62 @@ abstract class PLL_Admin_Base extends PLL_Base {
 				array(
 					'parent' => 'languages',
 					'id'     => $lang->slug,
-					'title'  => $lang->flag . esc_html( $lang->name ),
-					'href'   => esc_url( add_query_arg( 'lang', $lang->slug, remove_query_arg( 'paged' ) ) ),
+					'title'  => sprintf( '%s %s', 'all' === $lang->slug ? $lang->flag : $lang->get_admin_flag( 'aria-hidden' ), esc_html( $lang->name ) ),
+					'href'   => esc_url( $this->get_admin_bar_menu_url( $lang ) ),
 					'meta'   => 'all' === $lang->slug ? array() : array( 'lang' => esc_attr( $lang->get_locale( 'display' ) ) ),
 				)
 			);
 		}
+	}
+
+	/**
+	 * Returns the admin language filter url for a given language.
+	 *
+	 * @since 3.9
+	 *
+	 * @param object $language The language or an object for all languages.
+	 * @return string
+	 *
+	 * @phpstan-param object{'slug': string} $language
+	 */
+	protected function get_admin_bar_menu_url( $language ): string {
+		global $pagenow, $post_type;
+
+		$url = add_query_arg( 'lang', $language->slug, remove_query_arg( 'paged' ) );
+
+		if ( 'edit.php' !== $pagenow || ! $language instanceof PLL_Language ) {
+			return $url;
+		}
+
+		// Attempt to translate the category (taxonomy) filter if present.
+		if ( ! $post_type ) {
+			return $url;
+		}
+
+		foreach ( get_object_taxonomies( $post_type, 'objects' ) as $tax ) {
+			if ( ! $this->model->is_translated_taxonomy( $tax->name ) ) {
+				continue;
+			}
+
+			$query_var = (string) $tax->query_var;
+			$qv        = get_query_var( $query_var );
+			if ( empty( $qv ) || ! is_string( $qv ) ) {
+				continue;
+			}
+
+			$qv = $this->model->term->get_by( 'slug', $qv, $language, $tax->name );
+
+			if ( ! empty( $qv ) ) {
+				$url = add_query_arg( $query_var, $qv, remove_query_arg( $query_var, $url ) );
+			}
+
+			// For categories, we translated 'category_name'. We must remove 'cat' to avoid conflicts.
+			if ( 'category' === $tax->name ) {
+				$url = remove_query_arg( 'cat', $url );
+			}
+		}
+
+		return $url;
 	}
 
 	/**
@@ -606,24 +654,16 @@ abstract class PLL_Admin_Base extends PLL_Base {
 
 	/**
 	 * Tells if the Polylang's admin bar menu should be hidden for the current page.
-	 * Conventionally, it should be hidden on edition pages.
+	 * Conventionally, it should be hidden on edition pages, term edit pages and Site Editor pages.
 	 *
 	 * @since 3.8
 	 *
 	 * @return bool
 	 */
 	public function should_hide_admin_bar_menu(): bool {
-		global $pagenow, $typenow, $taxnow;
+		global $pagenow;
 
-		if ( in_array( $pagenow, array( 'post.php', 'post-new.php' ), true ) ) {
-			return ! empty( $typenow );
-		}
-
-		if ( 'term.php' === $pagenow ) {
-			return ! empty( $taxnow );
-		}
-
-		return false;
+		return in_array( $pagenow, array( 'post.php', 'post-new.php', 'site-editor.php', 'term.php' ), true );
 	}
 
 	/**

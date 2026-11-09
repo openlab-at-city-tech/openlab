@@ -172,21 +172,27 @@ class TRP_Advanced_Tab {
                             }
 						}
 
-						 /* If the setting is a type "checkbox" we remove one empty value from the sub-array if it comes after a 'yes' value
-		                    In this case we properly save an empty value for an unchecked checkbox
-		                    and also control the display checked/unchecked on the frontend
+						 /* Every row of a "checkbox" column submits a hidden empty value followed by the
+						    checkbox value itself, but only when it is actually checked. Collapse each of
+						    those pairs back into a single value so the column keeps one entry per row,
+						    aligned with the other columns, and stores '' for an unchecked checkbox.
 						 */
 	                    foreach ( $registered_setting['columns'] as $column => $column_name ) {
 	                        if (is_array($column_name) && $column_name ['type'] === 'checkbox'){
-			                    foreach ($settings[ $registered_setting['name'] ] [$column] as $submitted_key => $submitted_value) {
-					                    if ( $submitted_value === 'yes' ) {
-						                    unset ( $settings[ $registered_setting['name'] ] [ $column ] [ $submitted_key + 1 ] );
+			                    $checkbox_values = array();
+			                    foreach ($settings[ $registered_setting['name'] ] [$column] as $submitted_value) {
+				                    if ( $submitted_value === 'yes' ) {
+					                    // replace the placeholder that the hidden input added for this row
+					                    if ( ! empty( $checkbox_values ) && end( $checkbox_values ) === '' ) {
+						                    array_pop( $checkbox_values );
 					                    }
-				                    // Check for illegal values at checkbox side
-				                    if ( !$submitted_value === 'yes' || !$submitted_value === '' ) {
-					                    $settings[ $registered_setting['name'] ] [ $column ] [$submitted_key] = '';
+					                    $checkbox_values[] = 'yes';
+				                    } else {
+					                    // any other value is an unchecked checkbox
+					                    $checkbox_values[] = '';
 				                    }
 			                    }
+			                    $settings[ $registered_setting['name'] ] [ $column ] = $checkbox_values;
 	                        }
 	                    }
 
@@ -281,6 +287,7 @@ class TRP_Advanced_Tab {
 	 */
 
 	public function include_custom_codes(){
+        include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/disable-bundled-translations.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/disable-dynamic-translation.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/force-slash-at-end-of-links.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/enable-numerals-translation.php');
@@ -840,10 +847,16 @@ class TRP_Advanced_Tab {
 
                         case 'checkbox':
                             $checked = ($option_value === 'yes') ? "checked='checked'" : '';
+                            /* An unchecked checkbox is not submitted at all, which would shift the whole
+                               column and apply the value to the wrong row. The hidden input right before it
+                               makes sure every row always sends one value for this column. */
                             $html .= "<td>
                                     <div class='trp-settings-checkbox trp-settings-options-item'>
-                                        <input type='checkbox' id='" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "_$index' 
-                                               name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]' 
+                                        <input type='hidden'
+                                               name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]'
+                                               value='' />
+                                        <input type='checkbox' id='" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "_$index'
+                                               name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]'
                                                value='yes' $checked />
                                     </div>
                                   </td>";
@@ -884,6 +897,7 @@ class TRP_Advanced_Tab {
                 case 'checkbox':
                     $html .= "<td>
                             <div class='trp-settings-checkbox trp-settings-options-item'>
+                                <input type='hidden' value='' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'>
                                 <input type='checkbox' id='new_entry_" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "' value='yes'  data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'>
                             </div>
                           </td>";

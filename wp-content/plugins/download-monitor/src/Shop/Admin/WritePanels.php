@@ -13,6 +13,7 @@ class WritePanels {
 	 */
 	public function setup() {
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		add_filter( 'default_hidden_meta_boxes', array( $this, 'default_hidden_meta_boxes' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'save_post' ), 1, 2 );
 		add_action( 'dlm_product_save', array( $this, 'save_meta_boxes' ), 1, 2 );
 	}
@@ -61,6 +62,22 @@ class WritePanels {
 			// Priority is left out as we prioritise based on our sorting function
 			add_meta_box( $metabox['id'], $metabox['title'], $metabox['callback'], $metabox['screen'], $metabox['context'], 'high' );
 		}
+	}
+
+	/**
+	 * Hide the Custom Fields metabox by default. Users can enable it from Screen Options.
+	 *
+	 * @param array      $hidden
+	 * @param \WP_Screen $screen
+	 *
+	 * @return array
+	 */
+	public function default_hidden_meta_boxes( $hidden, $screen ) {
+		if ( PostType::KEY === $screen->id && ! in_array( 'postcustom', $hidden, true ) ) {
+			$hidden[] = 'postcustom';
+		}
+
+		return $hidden;
 	}
 
 	/**

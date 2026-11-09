@@ -31,11 +31,12 @@ function TRP_Translator(){
             type: 'post',
             dataType: 'json',
             data: {
-                action                   : 'trp_get_translations_regular',
+                action                   : ( _this.is_editor ) ? 'trp_get_translations_regular' : 'trp_get_translations_domchanges',
                 all_languages            : 'false',
                 security                 : trp_data['gettranslationsnonceregular'],
                 language                 : language_to_query,
                 original_language        : original_language, // used for trp custom ajax
+                blog_id                  : trp_data.trp_blog_id, // used for trp custom ajax on multisite
                 originals                : JSON.stringify( string_originals ),
                 skip_machine_translation : JSON.stringify( skip_machine_translation ),
                 dynamic_strings          : 'true',

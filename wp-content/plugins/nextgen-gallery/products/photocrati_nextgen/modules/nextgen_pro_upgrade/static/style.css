@@ -1,17 +1,17 @@
 #ngg_upgrade_to_pro_page_wrapper {
-    display: flex;
-    flex-wrap: wrap;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #ngg_upgrade_to_pro_page_wrapper .wp-block-columns {
-    width: 100%;
+	width: 100%;
 }
 
 #ngg_upgrade_to_pro_page_wrapper .wp-block-column.ngg-block-card {
-    display: flex;
-    flex-direction: column;
+	display: flex;
+	flex-direction: column;
 }
 
 #ngg_upgrade_to_pro_page_wrapper .wp-block-column.ngg-block-card p {
-    flex-grow: 1;
+	flex-grow: 1;
 }

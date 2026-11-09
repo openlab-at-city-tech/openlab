@@ -71,21 +71,21 @@ class PLL_Model {
 	/**
 	 * Model for the languages.
 	 *
-	 * @var Model\Languages
+	 * @var \WP_Syntex\Polylang\Model\Languages
 	 */
 	public $languages;
 
 	/**
 	 * Model for taxonomies translated by Polylang.
 	 *
-	 * @var Model\Post_Types
+	 * @var \WP_Syntex\Polylang\Model\Post_Types
 	 */
 	public $post_types;
 
 	/**
 	 * Model for taxonomies filtered/translated by Polylang.
 	 *
-	 * @var Model\Taxonomies
+	 * @var \WP_Syntex\Polylang\Model\Taxonomies
 	 */
 	public $taxonomies;
 
@@ -321,7 +321,7 @@ class PLL_Model {
 	 * @param array        $q    {
 	 *   WP_Query arguments:
 	 *
-	 *   @type string|string[] $post_type   Post type or array of post types.
+	 *   @type string|string[] $post_type   Post type or array of post types, defaults to 'post'.
 	 *   @type int             $m           Combination YearMonth. Accepts any four-digit year and month.
 	 *   @type int             $year        Four-digit year.
 	 *   @type int             $monthnum    Two-digit month.
@@ -329,7 +329,7 @@ class PLL_Model {
 	 *   @type int             $author      Author id.
 	 *   @type string          $author_name User 'user_nicename'.
 	 *   @type string          $post_format Post format.
-	 *   @type string          $post_status Post status.
+	 *   @type string          $post_status Post status, defaults to 'publish'.
 	 * }
 	 * @return int
 	 *
@@ -344,7 +344,6 @@ class PLL_Model {
 	 *     author_name?: non-falsy-string,
 	 *     post_format?: non-falsy-string
 	 * } $q
-	 * @phpstan-return int<0, max>
 	 */
 	public function count_posts( $lang, $q = array() ): int {
 		global $wpdb;
@@ -366,16 +365,16 @@ class PLL_Model {
 		}
 
 		$cache_key = $this->cache->get_unique_key( 'pll_count_posts_', $q );
-		$counts    = wp_cache_get( $cache_key, 'counts' );
+		$counts    = $this->get_counts_cache( $cache_key );
 
 		if ( ! is_array( $counts ) ) {
 			$counts  = array();
-			$select  = "SELECT pll_tr.term_taxonomy_id, COUNT( * ) AS num_posts FROM {$wpdb->posts}";
+			$select  = "SELECT pll_tr.term_taxonomy_id, post_status, COUNT( * ) AS num_posts FROM {$wpdb->posts}";
 			$join    = $this->post->join_clause();
-			$where   = sprintf( " WHERE post_status = '%s'", esc_sql( $q['post_status'] ) );
-			$where  .= sprintf( " AND {$wpdb->posts}.post_type IN ( '%s' )", implode( "', '", esc_sql( $q['post_type'] ) ) );
+			$where   = sprintf( " WHERE {$wpdb->posts}.post_type IN ( '%s' )", implode( "', '", esc_sql( $q['post_type'] ) ) );
 			$where  .= $this->post->where_clause( $this->languages->get_list() );
-			$groupby = ' GROUP BY pll_tr.term_taxonomy_id';
+			$where  .= " AND post_status != 'auto-draft'";
+			$groupby = ' GROUP BY pll_tr.term_taxonomy_id, post_status';
 
 			if ( ! empty( $q['m'] ) ) {
 				$q['m'] = '' . preg_replace( '|[^0-9]|', '', $q['m'] );
@@ -424,15 +423,21 @@ class PLL_Model {
 
 			// PHPCS:ignore WordPress.DB.PreparedSQL.NotPrepared
 			$res = $wpdb->get_results( $select . $join . $where . $groupby, ARRAY_A );
+
 			foreach ( (array) $res as $row ) {
-				$counts[ $row['term_taxonomy_id'] ] = $row['num_posts'];
+				$counts[ $row['term_taxonomy_id'] ][ $row['post_status'] ] = $row['num_posts'];
 			}
 
-			wp_cache_set( $cache_key, $counts, 'counts' );
+			$this->set_counts_cache( $cache_key, $counts );
 		}
 
 		$term_taxonomy_id = $lang->get_tax_prop( 'language', 'term_taxonomy_id' );
-		return empty( $counts[ $term_taxonomy_id ] ) ? 0 : $counts[ $term_taxonomy_id ];
+
+		if ( 'any' === $q['post_status'] ) {
+			return isset( $counts[ $term_taxonomy_id ] ) ? (int) array_sum( $counts[ $term_taxonomy_id ] ) : 0;
+		}
+
+		return $counts[ $term_taxonomy_id ][ $q['post_status'] ] ?? 0;
 	}
 
 	/**
@@ -612,5 +617,48 @@ class PLL_Model {
 		}
 
 		$this->set_language_in_mass( $lang, $types_with_objects );
+	}
+
+	/**
+	 * Returns the number of posts grouped per language from the cache.
+	 *
+	 * @since 3.9
+	 *
+	 * @param string $cache_key The cache key.
+	 * @return array|false The counts grouped per language, false if the cache is empty.
+	 */
+	private function get_counts_cache( string $cache_key ) {
+		$last_changed = wp_cache_get_last_changed( 'posts' );
+
+		if ( ! function_exists( 'wp_cache_get_salted' ) ) {
+			// Backward compatibility with WordPress < 6.9.
+			$cache_key = "{$cache_key}:{$last_changed}";
+			$counts    = wp_cache_get( $cache_key, 'posts' );
+		} else {
+			$counts = wp_cache_get_salted( $cache_key, 'posts', $last_changed );
+		}
+
+		return is_array( $counts ) ? $counts : false;
+	}
+
+	/**
+	 * Stores the number of posts grouped per language in the cache.
+	 *
+	 * @since 3.9
+	 *
+	 * @param string  $cache_key The cache key.
+	 * @param int[][] $counts    The number of posts grouped per language and post status.
+	 * @return bool True if the value has been stored, false otherwise.
+	 */
+	private function set_counts_cache( $cache_key, array $counts ): bool {
+		$last_changed = wp_cache_get_last_changed( 'posts' );
+
+		if ( ! function_exists( 'wp_cache_set_salted' ) ) {
+			// Backward compatibility with WordPress < 6.9.
+			$cache_key = "{$cache_key}:{$last_changed}";
+			return wp_cache_set( $cache_key, $counts, 'posts' );
+		}
+
+		return wp_cache_set_salted( $cache_key, $counts, 'posts', $last_changed );
 	}
 }

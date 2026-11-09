@@ -280,10 +280,15 @@ abstract class Tribe__Process__Queue extends Tribe__Process__Handler {
 	 * Deletes a queue batch(es) and meta information.
 	 *
 	 * @since 4.7.18
+	 * @since 6.13.3 Does nothing when the key is empty, instead of deleting every option.
 	 *
 	 * @param string $key
 	 */
 	public static function delete_queue( $key ) {
+		if ( ! $key ) {
+			return;
+		}
+
 		global $wpdb;
 
 		$meta_key = $key . '_meta';
@@ -433,7 +438,7 @@ abstract class Tribe__Process__Queue extends Tribe__Process__Handler {
 
 		$max_frag_size = $this->get_max_frag_size();
 		// we add a 15% to the size to take the serialization and query overhead into account when fragmenting
-		$serialized_size = strlen( utf8_decode( maybe_serialize( $data ) ) ) * 1.15;
+		$serialized_size = strlen( mb_convert_encoding( maybe_serialize( $data ), 'ISO-8859-1', 'UTF-8' ) ) * 1.15;
 		$frags_count     = (int) ceil( $serialized_size / $max_frag_size );
 		$per_frag        = max( (int) floor( count( $data ) / $frags_count ), 1 );
 
@@ -630,6 +635,7 @@ abstract class Tribe__Process__Queue extends Tribe__Process__Handler {
 	 *
 	 * @since 4.7.12
 	 * @since 4.9.5 Pulled method code from the `WP_Background_Process` class.
+	 * @since 6.13.3 Returns an empty batch, with an empty key and no data, when no batch row is left.
 	 *
 	 * @return stdClass The first batch of items from the queue.
 	 */
@@ -647,8 +653,8 @@ abstract class Tribe__Process__Queue extends Tribe__Process__Handler {
 		", $key ) );
 
 		$batch       = new stdClass();
-		$batch->key  = $query->option_name;
-		$batch->data = maybe_unserialize( $query->option_value );
+		$batch->key  = $query ? $query->option_name : '';
+		$batch->data = $query ? maybe_unserialize( $query->option_value ) : [];
 
 		$this->original_batch_count = ! empty( $batch->data ) ? count( $batch->data ) : 0;
 
@@ -834,15 +840,22 @@ abstract class Tribe__Process__Queue extends Tribe__Process__Handler {
 	 * within server memory and time limit constraints.
 	 *
 	 * @since 4.9.5 Pulled from the `WP_Background_Process` class.
+	 * @since 6.12.0 Made $data_source explicitly nullable.
+	 * @since 6.13.3 Stops processing when the batch was removed by another runner before it could be read.
 	 *
 	 * @param array|null $data_source Unused and kept for compatibility with parent; the queue
 	 *                                data is stored and read from the database.
 	 */
-	protected function handle( array $data_source = null ) {
+	protected function handle( ?array $data_source = null ) {
 		$this->lock_process();
 
 		do {
 			$batch = $this->get_batch();
+
+			if ( ! $batch->key ) {
+				// Another runner removed the batch after `is_queue_empty()` saw it.
+				break;
+			}
 
 			foreach ( $batch->data as $key => $value ) {
 				$task = $this->task( $value );
@@ -1116,13 +1129,14 @@ abstract class Tribe__Process__Queue extends Tribe__Process__Handler {
 	 * Just a proxy to the `sync_process` method.
 	 *
 	 * @since 4.9.5
+	 * @since 6.12.0 Made $data_source explicitly nullable.
 	 *
 	 * @param array|null $data_source If not provided the method will read the handler data from the
 	 *                                request array.
 	 *
 	 * @return array|mixed|null The synchronous process result.
 	 */
-	public function sync_handle( array $data_source = null ) {
+	public function sync_handle( ?array $data_source = null ) {
 		// In the base implementation the data source is unused and read from the database.
 		return $this->sync_process();
 	}

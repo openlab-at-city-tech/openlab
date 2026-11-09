@@ -1,0 +1,6051 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress - DEV"
+msgstr "TranslatePress - DEV"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "https://translatepress.com/"
+msgstr "https://translatepress.com/"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-cd79cda5
+msgid ""
+"Experience a better way of translating your WordPress site using a visual "
+"front-end translation editor, with full support for WooCommerce and site "
+"builders."
+msgstr ""
+"Trải nghiệm cách tốt hơn để dịch trang WordPress của bạn bằng trình chỉnh "
+"sửa bản dịch trực quan trên giao diện người dùng, với hỗ trợ đầy đủ cho "
+"WooCommerce và các công cụ xây dựng trang."
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+msgstr "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "https://cozmoslabs.com/"
+msgstr "https://cozmoslabs.com/"
+
+msgid "Active"
+msgstr "Đang hoạt động"
+
+msgid ""
+"The inactive languages will still be visible and active for the admin. For "
+"other users they won't be visible in the language switchers and won't be "
+"accessible either."
+msgstr ""
+"Các ngôn ngữ không hoạt động vẫn sẽ hiển thị và hoạt động đối với quản trị "
+"viên. Đối với người dùng khác, chúng sẽ không hiển thị trong bộ chuyển đổi "
+"ngôn ngữ và cũng không thể truy cập được."
+
+msgid "unknown"
+msgstr "không xác định"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Extra Languages add-on</strong> requires TranslatePress version "
+"%1$s or higher. You are currently using version %2$s. Please update "
+"TranslatePress to enable this feature."
+msgstr ""
+"<strong>Tiện ích bổ sung Extra Languages</strong> yêu cầu TranslatePress "
+"phiên bản %1$s trở lên. Bạn hiện đang sử dụng phiên bản %2$s. Vui lòng cập "
+"nhật TranslatePress để kích hoạt tính năng này."
+
+msgid "Dismiss this notice."
+msgstr "Ẩn thông báo này."
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Slug"
+msgstr "Slug bài viết"
+
+#, tp-ctx-742ebaa7, tp-glo-9fa92a70
+msgid "URL Slugs Translation"
+msgstr "Dịch slug URL"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs"
+msgstr "Slug"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy Slugs"
+msgstr "Slug phân loại"
+
+#, tp-ctx-742ebaa7
+msgid "Search Taxonomy Slugs"
+msgstr "Tìm kiếm slug phân loại"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Taxonomy Slug"
+msgstr "Slug phân loại"
+
+msgid "Translation"
+msgstr "Bản dịch"
+
+#, tp-ctx-742ebaa7
+msgid "Term Slugs"
+msgstr "Slug thuật ngữ"
+
+#, tp-ctx-742ebaa7
+msgid "Search Term Slugs"
+msgstr "Tìm kiếm slug thuật ngữ"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Term Slug"
+msgstr "Slug thuật ngữ"
+
+msgid "Taxonomy"
+msgstr "Phân loại"
+
+msgid "Filter by Taxonomy"
+msgstr "Lọc theo phân loại"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Slugs"
+msgstr "Slug bài viết"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Slugs"
+msgstr "Tìm kiếm slug bài viết"
+
+#, tp-ctx-e9944eb3
+msgid "Post ID"
+msgstr "ID bài viết"
+
+#, tp-ctx-e9944eb3
+msgid "Post Type"
+msgstr "Kiểu bài viết"
+
+#, tp-ctx-e9944eb3
+msgid "Filter by Post Type"
+msgstr "Lọc theo kiểu bài viết"
+
+msgid "Published"
+msgstr "Đã xuất bản"
+
+#, tp-ctx-e9944eb3
+msgid "Any Post Status"
+msgstr "Bất kỳ trạng thái bài viết"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Type Base Slugs"
+msgstr "Slug cơ sở kiểu bài viết"
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Type Base Slug"
+msgstr "Slug cơ sở kiểu bài viết"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Type Base Slugs"
+msgstr "Tìm kiếm slug cơ sở kiểu bài viết"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce Slugs"
+msgstr "Slug WooCommerce"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-cd79cda5
+msgid "WooCommerce Slug"
+msgstr "Slug WooCommerce"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "Search WooCommerce Slugs"
+msgstr "Tìm kiếm slug WooCommerce"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Automatic and manual slug translation changes performed when "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 was active had to be "
+"removed because of some issues with that version. All slug translations "
+"from before that version are now in use. Thank you for understanding!"
+msgstr ""
+"Các thay đổi dịch slug tự động và thủ công được thực hiện khi "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 đang hoạt động đã phải "
+"được xóa bỏ do một số sự cố với phiên bản đó. Tất cả các bản dịch slug từ "
+"trước phiên bản đó hiện đang được sử dụng. Cảm ơn bạn đã thông cảm!"
+
+msgid ""
+"If you absolutely need them, the removed translations can be found in "
+"tables trp_slug_original_obsolete and trp_slug_translation_obsolete."
+msgstr ""
+"Nếu bạn thực sự cần chúng, các bản dịch đã xóa có thể được tìm thấy trong "
+"các bảng trp_slug_original_obsolete và trp_slug_translation_obsolete."
+
+msgid "(inactive)"
+msgstr "(không hoạt động)"
+
+#, tp-ctx-742ebaa7
+msgid "Other Slugs"
+msgstr "Slug khác"
+
+#, tp-ctx-742ebaa7
+msgid "Search Other Slugs"
+msgstr "Tìm kiếm slug khác"
+
+msgid "Automatic User Language Detection"
+msgstr "Tự động phát hiện ngôn ngữ người dùng"
+
+msgid "Invalid language code"
+msgstr "Mã ngôn ngữ không hợp lệ"
+
+#, tp-ai
+msgid ""
+"We've detected you might be speaking a different language. Do you want to "
+"change to:"
+msgstr ""
+"Chúng tôi phát hiện bạn có thể đang sử dụng ngôn ngữ khác. Bạn có muốn "
+"chuyển sang:"
+
+#, tp-ai
+msgid "Change Language"
+msgstr "Thay đổi ngôn ngữ"
+
+#, tp-ai
+msgid "Close and do not switch language"
+msgstr "Đóng và không chuyển ngôn ngữ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "First by browser language, then IP address (recommended)"
+msgstr "Ưu tiên theo ngôn ngữ trình duyệt, sau đó đến địa chỉ IP (khuyến nghị)"
+
+msgid "First by IP address, then by browser language"
+msgstr "Ưu tiên theo địa chỉ IP, sau đó đến ngôn ngữ trình duyệt"
+
+msgid "Only by browser language"
+msgstr "Chỉ theo ngôn ngữ trình duyệt"
+
+msgid "Only by IP address"
+msgstr "Chỉ theo địa chỉ IP"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "A popup appears asking the user if they want to be redirected"
+msgstr "Hiển thị cửa sổ bật lên hỏi người dùng có muốn được chuyển hướng không"
+
+msgid "Redirect directly (*not recommended)"
+msgstr "Chuyển hướng trực tiếp (*không khuyến nghị)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Pop-up window over the content"
+msgstr "Cửa sổ bật lên phía trên nội dung"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Hello bar before the content"
+msgstr "Thanh thông báo trước nội dung"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Automatic User Language Detection requires a newer version of "
+"TranslatePress to use its visual settings interface. The legacy settings "
+"form will remain available until TranslatePress is updated."
+msgstr ""
+"Tính năng tự động phát hiện ngôn ngữ người dùng yêu cầu phiên bản "
+"TranslatePress mới hơn để sử dụng giao diện cài đặt trực quan. Biểu mẫu cài "
+"đặt kế thừa sẽ vẫn khả dụng cho đến khi TranslatePress được cập nhật."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Update TranslatePress"
+msgstr "Cập nhật TranslatePress"
+
+msgid ""
+"WARNING. Cannot determine your language preference based on your current "
+"IP.<br>This is most likely because the website is on a local environment."
+msgstr ""
+"CẢNH BÁO. Không thể xác định tùy chọn ngôn ngữ của bạn dựa trên IP hiện "
+"tại.<br>Rất có thể là do trang web đang ở môi trường cục bộ."
+
+msgid "Permission denied."
+msgstr "Quyền truy cập bị từ chối."
+
+#, tp-glo-b357fc3e
+msgid "Invalid nonce."
+msgstr "Nonce không hợp lệ."
+
+#, tp-ai
+msgid "Invalid settings."
+msgstr "Cài đặt không hợp lệ."
+
+msgid "Settings saved."
+msgstr "Đã lưu cài đặt."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Go to <a href=\"%s\" target=\"_self\">Advanced</a> tab to change this "
+"feature's settings"
+msgstr ""
+"Đi đến tab <a href=\"%s\" target=\"_self\">Nâng cao</a> để thay đổi cài đặt "
+"của tính năng này"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Website language selector"
+msgstr "Bộ chọn ngôn ngữ trang web"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Change language"
+msgstr "Thay đổi ngôn ngữ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Available languages"
+msgstr "Ngôn ngữ có sẵn"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Please enter your DeepL API key."
+msgstr "Vui lòng nhập khóa API DeepL của bạn."
+
+#, tp-glo-c6709f3f
+msgid "DeepL"
+msgstr "DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Bad request. There was an error accessing the DeepL API."
+msgstr "Yêu cầu không hợp lệ. Đã xảy ra lỗi khi truy cập DeepL API."
+
+#, tp-glo-91460d88
+msgid "The API key entered is invalid."
+msgstr "Khóa API đã nhập không hợp lệ."
+
+#, tp-glo-91460d88
+msgid "The API resource could not be found."
+msgstr "Không tìm thấy tài nguyên API."
+
+msgid "The request size is too large."
+msgstr "Kích thước yêu cầu quá lớn."
+
+msgid "The request is too long."
+msgstr "Yêu cầu quá dài."
+
+msgid "Too many requests. Please try again later."
+msgstr "Quá nhiều yêu cầu. Vui lòng thử lại sau."
+
+msgid "Your translation quota has been reached."
+msgstr "Bạn đã đạt đến hạn mức dịch."
+
+msgid "We could not process your request. Please try again later."
+msgstr "Chúng tôi không thể xử lý yêu cầu của bạn. Vui lòng thử lại sau."
+
+#, tp-glo-c6709f3f
+msgid ""
+"There is an error on the DeepL service and your request could not be "
+"processed."
+msgstr "Đã xảy ra lỗi trên dịch vụ DeepL và yêu cầu của bạn không thể được xử lý."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Type"
+msgstr "Loại API DeepL"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Free"
+msgstr "Miễn phí"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Select the type of DeepL API you want to use."
+msgstr "Chọn loại API DeepL bạn muốn sử dụng."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Key"
+msgstr "Khóa API DeepL"
+
+#, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"%s\" target=\"_blank\">this link</a> to see how you can set "
+"up an API key and control API costs."
+msgstr ""
+"Truy cập <a href=\"%s\" target=\"_blank\">liên kết này</a> để xem cách "
+"thiết lập khóa API và kiểm soát chi phí API."
+
+msgid "No Active License Detected for this website."
+msgstr "Không phát hiện khóa cấp phép đang hoạt động cho trang web này."
+
+msgid "Enter your license key"
+msgstr "Nhập khóa bản quyền của bạn"
+
+msgid " Or %1$spurchase one here%2$s"
+msgstr " Hoặc %1$smua tại đây%2$s"
+
+msgid "Different Domain per Language"
+msgstr "Tên miền khác nhau cho mỗi ngôn ngữ"
+
+msgid "View Docs"
+msgstr "Xem tài liệu"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Assign different domains or subdomains to each language. When visitors "
+"access these domains, TranslatePress loads the appropriate language "
+"translation directly without redirecting."
+msgstr ""
+"Gán các tên miền hoặc tên miền phụ khác nhau cho mỗi ngôn ngữ. Khi khách "
+"truy cập các tên miền này, TranslatePress tải trực tiếp bản dịch ngôn ngữ "
+"phù hợp mà không chuyển hướng."
+
+msgid "Example: %1$s for English, %2$s for Spanish, %3$s for French."
+msgstr "Ví dụ: %1$s cho tiếng Anh, %2$s cho tiếng Tây Ban Nha, %3$s cho tiếng Pháp."
+
+msgid "Before enabling:"
+msgstr "Trước khi bật:"
+
+#, tp-glo-1edf89cb
+msgid ""
+"Ensure your domains are registered, pointed to your server, and have SSL "
+"certificates configured."
+msgstr ""
+"Đảm bảo các tên miền của bạn đã được đăng ký, trỏ đến máy chủ của bạn và đã "
+"cấu hình chứng chỉ SSL."
+
+msgid "Domain"
+msgstr "Tên miền"
+
+msgid "Map this language to a different domain or sub-domain."
+msgstr "Ánh xạ ngôn ngữ này sang một tên miền hoặc tên miền phụ khác."
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Prefill with current domain"
+msgstr "Điền sẵn tên miền hiện tại"
+
+#, tp-glo-e765e8ba
+msgid "Check DNS"
+msgstr "Kiểm tra DNS"
+
+#, tp-glo-e765e8ba
+msgid "Checking DNS..."
+msgstr "Đang kiểm tra DNS..."
+
+#, tp-glo-e765e8ba
+msgid "DNS is correctly configured!"
+msgstr "DNS đã được cấu hình chính xác!"
+
+#, tp-glo-e765e8ba
+msgid "DNS check failed. Please verify your domain configuration."
+msgstr "Kiểm tra DNS thất bại. Vui lòng xác minh cấu hình tên miền của bạn."
+
+msgid "This domain is already assigned to another language."
+msgstr "Tên miền này đã được gán cho một ngôn ngữ khác."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Different Domain per Language add-on</strong> requires "
+"TranslatePress version %1$s or higher. You are currently using version "
+"%2$s. Please update TranslatePress to enable this feature."
+msgstr ""
+"<strong>Tiện ích bổ sung Different Domain per Language</strong> yêu cầu "
+"TranslatePress phiên bản %1$s trở lên. Bạn hiện đang sử dụng phiên bản "
+"%2$s. Vui lòng cập nhật TranslatePress để kích hoạt tính năng này."
+
+msgid ""
+"Note: This option is disabled when Different Domain for Language addon is "
+"active."
+msgstr ""
+"Lưu ý: Tùy chọn này bị vô hiệu hóa khi tiện ích bổ sung Different Domain "
+"for Language đang hoạt động."
+
+msgid ""
+"Different Domain per Language: Domain is required when domain mapping is "
+"enabled. The toggle has been disabled for languages with empty domains."
+msgstr ""
+"Different Domain per Language: Tên miền là bắt buộc khi ánh xạ tên miền "
+"được bật. Nút chuyển đã bị vô hiệu hóa đối với các ngôn ngữ có tên miền "
+"trống."
+
+msgid ""
+"Different Domain per Language: The same domain cannot be assigned to "
+"multiple languages. The toggle has been disabled for duplicate domains."
+msgstr ""
+"Different Domain per Language: Không thể gán cùng một tên miền cho nhiều "
+"ngôn ngữ. Nút chuyển đã bị vô hiệu hóa đối với các tên miền trùng lặp."
+
+#, tp-glo-9fa92a70
+msgid ""
+"Different Domain per Language: A language domain cannot be the same as the "
+"main site URL. The toggle has been disabled for the matching domain."
+msgstr ""
+"Different Domain per Language: Tên miền ngôn ngữ không thể giống với URL "
+"trang web chính. Nút chuyển đã bị vô hiệu hóa đối với tên miền trùng khớp."
+
+msgid "Please enter a domain."
+msgstr "Vui lòng nhập một tên miền."
+
+msgid "Invalid domain format."
+msgstr "Định dạng tên miền không hợp lệ."
+
+msgid "Could not reach domain: %s"
+msgstr "Không thể truy cập tên miền: %s"
+
+msgid "Domain is reachable!"
+msgstr "Tên miền có thể truy cập được!"
+
+#, tp-glo-1aabb38a
+msgid "Domain returned HTTP status %d."
+msgstr "Tên miền trả về mã trạng thái HTTP %d."
+
+msgid "Limit this menu item to the following languages"
+msgstr "Giới hạn mục menu này cho các ngôn ngữ sau"
+
+msgid "All Languages"
+msgstr "Tất cả ngôn ngữ"
+
+msgid "Translator"
+msgstr "Người dịch"
+
+#, tp-glo-ee8b4f9f
+msgid " TranslatePress Settings"
+msgstr " Cài đặt TranslatePress"
+
+msgid "Allow this user to translate the website."
+msgstr "Cho phép người dùng này dịch trang web."
+
+msgid "Translate Site"
+msgstr "Dịch trang web"
+
+#, tp-ai
+msgid "Add-On"
+msgstr "Tiện ích bổ sung"
+
+msgid "Deactivate"
+msgstr "Hủy kích hoạt"
+
+msgid "Activate"
+msgstr "Kích hoạt"
+
+#, tp-ai
+msgid "Installing..."
+msgstr "Đang cài đặt..."
+
+#, tp-ai
+msgid ""
+"This add-on can not be activated back without a valid license. Are you sure "
+"you want to deactivate it?"
+msgstr ""
+"Tiện ích bổ sung này không thể kích hoạt lại nếu không có giấy phép hợp lệ. "
+"Bạn có chắc chắn muốn hủy kích hoạt nó không?"
+
+msgid "Documentation"
+msgstr "Tài liệu"
+
+#, tp-ai
+msgid "A valid license is required to activate add-ons."
+msgstr "Cần có giấy phép hợp lệ để kích hoạt các tiện ích bổ sung."
+
+#, tp-ai
+msgid "Activate all"
+msgstr "Kích hoạt tất cả"
+
+#, tp-ai
+msgid ""
+"Add-ons can not be activated back without a valid license. Are you sure you "
+"want to deactivate them?"
+msgstr ""
+"Các tiện ích bổ sung không thể kích hoạt lại nếu không có giấy phép hợp lệ. "
+"Bạn có chắc chắn muốn hủy kích hoạt chúng không?"
+
+#, tp-ai
+msgid "Deactivate all"
+msgstr "Hủy kích hoạt tất cả"
+
+#, tp-ai
+msgid "%1$sAdd-ons settings saved successfully%2$s"
+msgstr "%1$sCài đặt tiện ích bổ sung đã được lưu thành công%2$s"
+
+msgid "Date format"
+msgstr "Định dạng ngày tháng"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Customize the date formatting per each translated language.<br/>Leave empty "
+"for default WP setting or see more information <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">here</a>"
+msgstr ""
+"Tùy chỉnh định dạng ngày tháng cho từng ngôn ngữ đã dịch.<br/>Để trống để "
+"dùng thiết lập mặc định của WP hoặc xem thêm thông tin <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">tại đây</a>"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"To edit an existing TranslatePress language, input the language code and "
+"fill in only the columns you want to overwrite (e.g. Language name, "
+"Flag).<br>You can also add new custom languages. They will be available "
+"under General settings, All Languages list, where the URL slug can be "
+"edited."
+msgstr ""
+"Để chỉnh sửa một ngôn ngữ TranslatePress hiện có, hãy nhập mã ngôn ngữ và "
+"điền vào chỉ các cột bạn muốn ghi đè (ví dụ: Tên ngôn ngữ, Cờ).<br>Bạn cũng "
+"có thể thêm các ngôn ngữ tùy chỉnh mới. Chúng sẽ có sẵn trong phần Cài đặt "
+"chung, danh sách Tất cả ngôn ngữ, nơi slug URL có thể được chỉnh sửa."
+
+#, tp-glo-91460d88, tp-glo-9fa92a70, tp-glo-c6709f3f
+msgid ""
+"For custom flag, first upload the image in media library then paste the "
+"URL.<br>Changing or deleting a custom language will impact translations and "
+"site URL's.<br>The Language code and the ISO Code should contain only "
+"alphabetical values, numerical values, \"-\" and \"_\".<br>The ISO Codes "
+"can be found on <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO Codes</a> and <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL Target Codes</a>."
+msgstr ""
+"Đối với cờ tùy chỉnh, trước tiên hãy tải hình ảnh lên thư viện media sau đó "
+"dán URL.<br>Việc thay đổi hoặc xóa một ngôn ngữ tùy chỉnh sẽ ảnh hưởng đến "
+"các bản dịch và URL của trang web.<br>Mã ngôn ngữ và Mã ISO chỉ được chứa "
+"các ký tự chữ cái, ký tự số, \"-\" và \"_\".<br>Các Mã ISO có thể tìm thấy "
+"tại <a href = \"https://cloud.google.com/translate/docs/languages\" target "
+"= \"_blank\">Google ISO Codes</a> và <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL Target Codes</a>."
+
+msgid "Language code"
+msgstr "Mã ngôn ngữ"
+
+msgid "Language name"
+msgstr "Tên ngôn ngữ"
+
+msgid "Native name"
+msgstr "Tên bản địa"
+
+msgid "ISO Code"
+msgstr "Mã ISO"
+
+#, tp-glo-9fa92a70
+msgid "Flag URL"
+msgstr "URL cờ"
+
+msgid "Text RTL"
+msgstr "Văn bản RTL"
+
+msgid "Custom language"
+msgstr "Ngôn ngữ tùy chỉnh"
+
+#, tp-ai
+msgid "Disable bundled plugin translations"
+msgstr "Tắt bản dịch plugin đi kèm"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"By default, TranslatePress ships its own translation files in "
+"<code>wp-content/plugins/translatepress/languages/</code> and forces "
+"WordPress to use them instead of the language packs installed automatically "
+"from translate.wordpress.org.<br/>Enable this option to disable that "
+"override. WordPress will then load the community language pack from "
+"<code>wp-content/languages/plugins/</code> (if present) and fall back to "
+"the bundled files only when no pack is available."
+msgstr ""
+"Mặc định, TranslatePress cung cấp sẵn các tệp bản dịch riêng trong "
+"<code>wp-content/plugins/translatepress/languages/</code> và buộc WordPress "
+"sử dụng chúng thay vì các gói ngôn ngữ được cài đặt tự động từ "
+"translate.wordpress.org.<br/>Bật tùy chọn này để tắt việc ghi đè đó. "
+"WordPress sau đó sẽ tải gói ngôn ngữ cộng đồng từ "
+"<code>wp-content/languages/plugins/</code> (nếu có) và chỉ sử dụng các tệp "
+"đi kèm khi không có gói nào khả dụng."
+
+msgid "Disable dynamic translation"
+msgstr "Tắt dịch động"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c
+msgid ""
+"It disables detection of strings displayed dynamically using JavaScript. "
+"<br/>Strings loaded via a server side AJAX call will still be translated."
+msgstr ""
+"Nó vô hiệu hóa việc phát hiện các chuỗi được hiển thị động bằng JavaScript. "
+"<br/>Các chuỗi được tải qua lệnh gọi AJAX phía máy chủ vẫn sẽ được dịch."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Disable translation for gettext strings"
+msgstr "Vô hiệu hóa dịch cho các chuỗi gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Gettext Strings are strings outputted by themes and plugins. <br> "
+"Translating these types of strings through TranslatePress can be "
+"unnecessary if they are already translated using the .po/.mo translation "
+"file system.<br>Enabling this option can improve the page load performance "
+"of your site in certain cases. The disadvantage is that you can no longer "
+"edit gettext translations using TranslatePress, nor benefit from automatic "
+"translation on these strings."
+msgstr ""
+"Chuỗi Gettext là các chuỗi được xuất ra bởi theme và plugin. <br> Việc dịch "
+"các loại chuỗi này qua TranslatePress có thể không cần thiết nếu chúng đã "
+"được dịch bằng hệ thống tệp dịch .po/.mo.<br>Bật tùy chọn này có thể cải "
+"thiện hiệu suất tải trang của trang web bạn trong một số trường hợp. Nhược "
+"điểm là bạn không thể chỉnh sửa bản dịch gettext bằng TranslatePress nữa, "
+"cũng như không được hưởng lợi từ dịch tự động đối với các chuỗi này."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings translation is disabled"
+msgstr "Bản dịch chuỗi Gettext đã bị tắt"
+
+msgid "To enable it go to "
+msgstr "Để bật, hãy đi đến "
+
+#, tp-ai, tp-ctx-2edc90df, tp-ctx-a6928204, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress->Advanced Settings->Debug->Disable translation for gettext "
+"strings"
+msgstr "TranslatePress->Cài đặt nâng cao->Gỡ lỗi->Tắt dịch cho các chuỗi gettext"
+
+msgid " and uncheck the Checkbox."
+msgstr " và bỏ chọn hộp kiểm."
+
+msgid "Dismiss"
+msgstr "Bỏ qua"
+
+#, tp-glo-8778869a
+msgid "Exclude translated links from sitemap"
+msgstr "Loại trừ các liên kết đã dịch khỏi sitemap"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-09a90ed1, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Do not include translated links in sitemaps generated by SEO "
+"plugins.<br/>Requires <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack Add-on</a> to be installed and activated."
+msgstr ""
+"Không đưa các liên kết đã dịch vào sitemaps được tạo bởi các plugin "
+"SEO.<br/>Yêu cầu <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack Add-on</a> được cài đặt và kích hoạt."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post title"
+msgstr "Tắt thẻ container bài viết cho tiêu đề bài viết"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post title in translated "
+"languages.<br/>Useful when the title of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"Tùy chọn này tắt việc lập chỉ mục tìm kiếm tiêu đề bài viết trong các ngôn "
+"ngữ đã dịch.<br/>Hữu ích khi tiêu đề bài viết không cho phép HTML, làm hỏng "
+"trang."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post content"
+msgstr "Tắt thẻ container bài viết cho nội dung bài viết"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post content in translated "
+"languages.<br/>Useful when the content of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"Tùy chọn này tắt việc lập chỉ mục tìm kiếm nội dung bài viết trong các ngôn "
+"ngữ đã dịch.<br/>Hữu ích khi nội dung bài viết không cho phép HTML, làm "
+"hỏng trang."
+
+msgid "Do not translate certain paths"
+msgstr "Không dịch một số đường dẫn nhất định"
+
+msgid ""
+"Choose what paths can be translated. Supports wildcard at the end of the "
+"path.<br>For example, to exclude https://example.com/some/path you can "
+"either use the rule /some/path/ or /some/*.<br>Enter each rule on it's own "
+"line. To exclude the home page use {{home}}."
+msgstr ""
+"Chọn đường dẫn nào có thể được dịch. Hỗ trợ ký tự đại diện ở cuối đường "
+"dẫn.<br>Ví dụ, để loại trừ https://example.com/some/path, bạn có thể sử "
+"dụng quy tắc /some/path/ hoặc /some/*.<br>Nhập mỗi quy tắc trên một dòng "
+"riêng. Để loại trừ trang chủ, hãy sử dụng {home}."
+
+msgid "Exclude Paths From Translation"
+msgstr "Loại trừ đường dẫn khỏi bản dịch"
+
+msgid "Translate Only Certain Paths"
+msgstr "Chỉ dịch một số đường dẫn nhất định"
+
+#, tp-glo-d1526d97
+msgid "Enable the hreflang x-default tag for language:"
+msgstr "Bật thẻ hreflang x-default cho ngôn ngữ:"
+
+#, tp-glo-d1526d97
+msgid ""
+"Enables the hreflang=\"x-default\" for an entire language. See "
+"documentation for more details."
+msgstr ""
+"Bật hreflang=\"x-default\" cho toàn bộ một ngôn ngữ. Xem tài liệu để biết "
+"thêm chi tiết."
+
+msgid "Translate numbers and numerals"
+msgstr "Dịch số và chữ số"
+
+msgid "Enable translation of numbers ( e.g. phone numbers)"
+msgstr "Bật dịch số (ví dụ: số điện thoại)"
+
+msgid "Selector"
+msgstr "Bộ chọn"
+
+msgid "Exclude from dynamic translation"
+msgstr "Loại trừ khỏi dịch động"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c, tp-glo-d311355a
+msgid ""
+"Do not dynamically translate strings that are found in html nodes matching "
+"these selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated using JavaScript.<br/>These strings will "
+"still be translated on the server side if possible."
+msgstr ""
+"Không dịch động các chuỗi nằm trong các nút HTML khớp với các bộ chọn "
+"này.<br>Loại trừ tất cả phần tử con của các nút HTML khớp với các bộ chọn "
+"này khỏi việc dịch bằng JavaScript.<br/>Các chuỗi này vẫn sẽ được dịch ở "
+"phía máy chủ nếu có thể."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Gettext String"
+msgstr "Chuỗi Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext Strings"
+msgstr "Loại trừ chuỗi Gettext"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Exclude these strings from being translated as Gettext strings by "
+"TranslatePress. Leave the domain empty to take into account any Gettext "
+"string.<br/>Can still be translated through po/mo files."
+msgstr ""
+"Loại trừ các chuỗi này khỏi việc được dịch dưới dạng chuỗi Gettext bởi "
+"TranslatePress. Để trống domain để áp dụng cho bất kỳ chuỗi Gettext "
+"nào.<br/>Vẫn có thể được dịch qua các tệp po/mo."
+
+msgid "Exclude selectors only from automatic translation"
+msgstr "Chỉ loại trừ bộ chọn khỏi dịch tự động"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not automatically translate strings that are found in html nodes "
+"matching these selectors.<br>Excludes all the children of HTML nodes "
+"matching these selectors from being automatically translated.<br>Manual "
+"translation of these strings is still possible."
+msgstr ""
+"Không tự động dịch các chuỗi nằm trong các nút HTML khớp với các bộ chọn "
+"này.<br>Loại trừ tất cả phần tử con của các nút HTML khớp với các bộ chọn "
+"này khỏi việc được dịch tự động.<br>Việc dịch thủ công các chuỗi này vẫn có "
+"thể thực hiện được."
+
+msgid "Exclude selectors from translation"
+msgstr "Loại trừ bộ chọn khỏi dịch"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not translate strings that are found in html nodes matching these "
+"selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated.<br>These strings cannot be translated "
+"manually nor automatically."
+msgstr ""
+"Không dịch các chuỗi nằm trong các nút HTML khớp với các bộ chọn "
+"này.<br>Loại trừ tất cả phần tử con của các nút HTML khớp với các bộ chọn "
+"này khỏi việc được dịch.<br>Các chuỗi này không thể được dịch thủ công hay "
+"tự động."
+
+#, tp-ctx-8a82cc9e
+msgid "String"
+msgstr "Chuỗi"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings from automatic translation"
+msgstr "Loại trừ chuỗi khỏi dịch tự động"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Do not automatically translate these strings (ex. names, technical "
+"words...)<br>Paragraphs containing these strings will still be translated "
+"except for the specified part."
+msgstr ""
+"Không tự động dịch các chuỗi này (ví dụ: tên, thuật ngữ kỹ thuật...)<br>Các "
+"đoạn văn chứa các chuỗi này vẫn sẽ được dịch ngoại trừ phần được chỉ định."
+
+#, tp-glo-d311355a
+msgid "Fix broken HTML"
+msgstr "Sửa HTML bị hỏng"
+
+#, tp-glo-d311355a
+msgid "General attempt to fix broken or missing HTML on translated pages.<br/>"
+msgstr "Nỗ lực chung để sửa HTML bị hỏng hoặc thiếu trên các trang đã dịch.<br/>"
+
+#, tp-glo-9fa92a70
+msgid "Force slash at end of home url:"
+msgstr "Buộc thêm dấu gạch chéo ở cuối URL trang chủ:"
+
+msgid "Ads a slash at the end of the home_url() function"
+msgstr "Thêm dấu gạch chéo vào cuối hàm home_url()"
+
+msgid "Show Both (recommended)"
+msgstr "Hiển thị cả hai (khuyến nghị)"
+
+msgid "Remove Country Locale"
+msgstr "Xóa locale quốc gia"
+
+msgid "Remove Region Independent Locale"
+msgstr "Xóa locale độc lập khu vực"
+
+#, tp-glo-d1526d97
+msgid "Remove duplicate hreflang"
+msgstr "Xóa hreflang trùng lặp"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-d1526d97
+msgid ""
+"Choose which hreflang tags will appear on your website.<br/>We recommend "
+"showing both types of hreflang tags as indicated by <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google "
+"documentation</a>.<br/>Removing Country Locale when having multiple Country "
+"Locales of the same language (ex. English UK and English US) will result in "
+"showing one hreflang tag with link to just one of the region locales for "
+"that language."
+msgstr ""
+"Chọn thẻ hreflang nào sẽ xuất hiện trên trang web của bạn.<br/>Chúng tôi "
+"khuyến nghị hiển thị cả hai loại thẻ hreflang như được chỉ dẫn trong <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">tài liệu "
+"của Google</a>.<br/>Việc loại bỏ Địa phương quốc gia khi có nhiều Địa "
+"phương quốc gia của cùng một ngôn ngữ (ví dụ: English UK và English US) sẽ "
+"dẫn đến việc chỉ hiển thị một thẻ hreflang với liên kết đến chỉ một trong "
+"các địa phương khu vực của ngôn ngữ đó."
+
+msgid "Default (example: en-US, fr-CA, etc.)"
+msgstr "Mặc định (ví dụ: en-US, fr-CA, v.v.)"
+
+msgid "Regional (example: en, fr, es, etc.)"
+msgstr "Khu vực (ví dụ: en, fr, es, v.v.)"
+
+#, tp-glo-d311355a
+msgid "HTML Lang Attribute Format"
+msgstr "Định dạng thuộc tính lang HTML"
+
+#, tp-glo-d311355a
+msgid ""
+"Change lang attribute of the html tag to a format that includes country "
+"regional or not. <br>In HTML, the lang attribute (<html lang=\"en-US\">)  "
+"should be used to  specify the language of text content so that the  "
+"browser can correctly display or process  your content (eg. for  "
+"hyphenation, styling, spell checking, etc)."
+msgstr ""
+"Thay đổi thuộc tính lang của thẻ html sang định dạng có bao gồm quốc "
+"gia/khu vực hoặc không. <br>Trong HTML, thuộc tính lang (<html "
+"lang=\"en-US\">) nên được sử dụng để xác định ngôn ngữ của nội dung văn bản "
+"để trình duyệt có thể hiển thị hoặc xử lý nội dung của bạn một cách chính "
+"xác (ví dụ: để ngắt từ, định dạng, kiểm tra chính tả, v.v.)."
+
+msgid "Load legacy Language Switcher"
+msgstr "Tải bộ chuyển đổi ngôn ngữ cũ"
+
+#, tp-glo-da70db08
+msgid ""
+"Applies to all types of language switchers (floating, shortcode, and menu). "
+"When enabled, the site will revert to using the original Language Switcher "
+"configured in the General Settings tab, replacing the new customizable "
+"version. Your existing switcher settings will remain saved, but they will "
+"be ignored while this option is active."
+msgstr ""
+"Áp dụng cho tất cả các loại bộ chuyển đổi ngôn ngữ (nổi, shortcode và "
+"menu). Khi bật, trang web sẽ quay lại sử dụng Bộ chuyển đổi ngôn ngữ gốc "
+"được cấu hình trong tab Cài đặt chung, thay thế phiên bản tùy chỉnh mới. "
+"Các cài đặt bộ chuyển đổi hiện có của bạn sẽ vẫn được lưu, nhưng sẽ bị bỏ "
+"qua khi tùy chọn này đang hoạt động."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "Load legacy SEO Pack Add-On"
+msgstr "Tải tiện ích bổ sung SEO Pack cũ"
+
+#, tp-ai, tp-ctx-07893e52, tp-ctx-a6928204, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"In case the recent migration to the new slug rewrite is causing trouble, "
+"set this to Yes to use the old method <br> Please <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">open a support ticket</a> letting us know of the issues "
+"you are having."
+msgstr ""
+"Trong trường hợp việc chuyển sang cơ chế viết lại slug mới gần đây gây ra "
+"sự cố, hãy đặt tùy chọn này thành Có để sử dụng phương pháp cũ <br> Vui "
+"lòng <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">mở một phiếu hỗ trợ</a> để cho chúng tôi biết về các vấn "
+"đề bạn đang gặp phải."
+
+msgid "Manual Translation Only"
+msgstr "Chỉ dịch thủ công"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress pro-actively scans and saves strings in the database when "
+"users access translated pages. <br>This setting disables this functionality "
+"and only allows translation and string saving when inside the Translation "
+"Editor. <br>Also disables machine translation outside the Translation "
+"Editor, giving you better control over character spending, by translating "
+"only the pages you visit in the Translation Editor."
+msgstr ""
+"TranslatePress chủ động quét và lưu các chuỗi vào cơ sở dữ liệu khi người "
+"dùng truy cập các trang đã dịch. <br>Tùy chọn này tắt chức năng này và chỉ "
+"cho phép dịch và lưu chuỗi khi ở trong Trình chỉnh sửa bản dịch. <br>Ngoài "
+"ra còn tắt dịch máy bên ngoài Trình chỉnh sửa bản dịch, giúp bạn kiểm soát "
+"tốt hơn việc tiêu tốn ký tự, bằng cách chỉ dịch các trang bạn truy cập "
+"trong Trình chỉnh sửa bản dịch."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Open language switcher only on click"
+msgstr "Chỉ mở bộ chuyển đổi ngôn ngữ khi nhấp chuột"
+
+#, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of "
+"hovering.<br> Close it by clicking on it, anywhere else on the screen or by "
+"pressing the escape key. This will affect only the shortcode language "
+"switcher."
+msgstr ""
+"Mở bộ chuyển đổi ngôn ngữ shortcode bằng cách nhấp vào thay vì di chuột "
+"qua.<br> Đóng nó bằng cách nhấp vào nó, nhấp vào bất kỳ đâu khác trên màn "
+"hình hoặc nhấn phím escape. Điều này chỉ ảnh hưởng đến bộ chuyển đổi ngôn "
+"ngữ shortcode."
+
+msgid "Show opposite language in the language switcher"
+msgstr "Hiển thị ngôn ngữ đối lập trong bộ chuyển đổi ngôn ngữ"
+
+#, tp-glo-da70db08
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one.<br> Only works when there are exactly two "
+"languages, the default one and a translation one.<br>This will affect the "
+"shortcode language switcher and floating language switcher as well.<br> To "
+"achieve this in menu language switcher go to Appearance->Menus->Language "
+"Switcher and select Opposite Language."
+msgstr ""
+"Biến bộ chuyển đổi ngôn ngữ thành một nút hiển thị ngôn ngữ khác có sẵn, "
+"không phải ngôn ngữ hiện tại.<br> Chỉ hoạt động khi có đúng hai ngôn ngữ, "
+"ngôn ngữ mặc định và ngôn ngữ dịch.<br>Điều này sẽ ảnh hưởng đến bộ chuyển "
+"đổi ngôn ngữ shortcode và bộ chuyển đổi ngôn ngữ nổi.<br> Để thực hiện điều "
+"này trong bộ chuyển đổi ngôn ngữ menu, hãy vào Giao diện->Menu->Bộ chuyển "
+"đổi ngôn ngữ và chọn Ngôn ngữ đối lập."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization failed."
+msgstr "Tối ưu hóa cơ sở dữ liệu gettext của TranslatePress không thành công."
+
+#, tp-ai
+msgid "Retry"
+msgstr "Thử lại"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize its gettext database tables. Back up the "
+"database, then <a href=\"%s\">start the optimization</a>."
+msgstr ""
+"TranslatePress cần tối ưu hóa các bảng cơ sở dữ liệu gettext. Sao lưu cơ sở "
+"dữ liệu, sau đó <a href=\"%s\">bắt đầu tối ưu hóa</a>."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Pending gettext database optimization"
+msgstr "Đang chờ tối ưu hóa cơ sở dữ liệu gettext"
+
+#, tp-glo-ee8b4f9f
+msgid "Optimize TranslatePress database tables"
+msgstr "Tối ưu hóa các bảng cơ sở dữ liệu TranslatePress"
+
+msgid "<a href=\"%s\">Click here</a> to access the database optimization tool."
+msgstr ""
+"<a href=\"%s\">Nhấp vào đây</a> để truy cập công cụ tối ưu hóa cơ sở dữ "
+"liệu."
+
+msgid ""
+"It helps remove possible duplicate translations, clear unnecessary data and "
+"repair possible metadata issues."
+msgstr ""
+"Nó giúp loại bỏ các bản dịch trùng lặp có thể có, xóa dữ liệu không cần "
+"thiết và sửa chữa các sự cố metadata có thể xảy ra."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Here</a> you can observe the last 5 SQL "
+"errors relevant to TranslatePress if they exist."
+msgstr ""
+"<a href=\"%s\" target=\"_blank\">Tại đây</a> bạn có thể xem 5 lỗi SQL cuối "
+"cùng liên quan đến TranslatePress nếu có."
+
+msgid "Troubleshooting"
+msgstr "Khắc phục sự cố"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext strings"
+msgstr "Loại trừ chuỗi Gettext"
+
+msgid "Debug"
+msgstr "Gỡ lỗi"
+
+msgid "Custom languages"
+msgstr "Ngôn ngữ tùy chỉnh"
+
+msgid "Miscellaneous options"
+msgstr "Tùy chọn khác"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Language Switcher"
+msgstr "Bộ chuyển đổi ngôn ngữ"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings & pages"
+msgstr "Loại trừ chuỗi và trang"
+
+msgid "Automatic Translation Memory"
+msgstr "Bộ nhớ dịch tự động"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Serve same translation for similar text. The strings need to have a "
+"percentage of 95% similarity.<br>Helps prevent losing existing translation "
+"when correcting typos or making minor adjustments to the original text. "
+"<br>If a translation already exists for a very similar original string, it "
+"will automatically be used for the current original string.<br>Does not "
+"work when making changes to a text that is part of a translation block "
+"unless the new text is manually merged again in a translation "
+"block.<br>Each string needs to have a minimum of 50 characters."
+msgstr ""
+"Sử dụng chung bản dịch cho văn bản tương tự. Các chuỗi cần có độ tương đồng "
+"95%.<br>Giúp ngăn mất bản dịch hiện có khi sửa lỗi chính tả hoặc điều chỉnh "
+"nhỏ văn bản gốc. <br>Nếu đã có bản dịch cho một chuỗi gốc rất tương tự, nó "
+"sẽ tự động được sử dụng cho chuỗi gốc hiện tại.<br>Không hoạt động khi thay "
+"đổi văn bản thuộc một khối dịch trừ khi văn bản mới được hợp nhất thủ công "
+"lại trong khối dịch.<br>Mỗi chuỗi cần có tối thiểu 50 ký tự."
+
+msgid ""
+"WARNING: This feature can negatively impact page loading times in secondary "
+"languages, particularly with large databases (for example websites with a "
+"lot of pages or products). If you experience slow loading times, disable "
+"this and try again."
+msgstr ""
+"CẢNH BÁO: Tính năng này có thể ảnh hưởng tiêu cực đến thời gian tải trang ở "
+"ngôn ngữ phụ, đặc biệt với cơ sở dữ liệu lớn (ví dụ các trang web có nhiều "
+"trang hoặc sản phẩm). Nếu bạn gặp tình trạng tải chậm, hãy tắt tính năng "
+"này và thử lại."
+
+msgid "Fix missing dynamic content"
+msgstr "Sửa nội dung động bị thiếu"
+
+#, tp-glo-7f2a0b8c
+msgid ""
+"May help fix missing content inserted using JavaScript. <br> It shows "
+"dynamically inserted content in original language for a moment before the "
+"translation request is finished."
+msgstr ""
+"Có thể giúp sửa nội dung bị thiếu được chèn bằng JavaScript. <br> Nó hiển "
+"thị nội dung được chèn động bằng ngôn ngữ gốc trong giây lát trước khi yêu "
+"cầu dịch hoàn tất."
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post content and title"
+msgstr "Lọc bọc Gettext khỏi nội dung và tiêu đề bài viết"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"content and post title. Does not affect previous post content. "
+"<br/><strong>Database backup is recommended before switching on.</strong>"
+msgstr ""
+"Lọc bọc Gettext như #!trpst#trp-gettext khỏi toàn bộ nội dung và tiêu đề "
+"bài viết đã cập nhật. Không ảnh hưởng đến nội dung bài viết trước đó. "
+"<br/><strong>Nên sao lưu cơ sở dữ liệu trước khi bật.</strong>"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post meta"
+msgstr "Lọc bọc Gettext khỏi meta bài viết"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"meta. Does not affect previous post meta. <br/><strong>Database backup is "
+"recommended before switching on.</strong>"
+msgstr ""
+"Lọc bọc Gettext như #!trpst#trp-gettext khỏi toàn bộ meta bài viết đã cập "
+"nhật. Không ảnh hưởng đến meta bài viết trước đó. <br/><strong>Nên sao lưu "
+"cơ sở dữ liệu trước khi bật.</strong>"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Abilities for managing TranslatePress configuration."
+msgstr "Khả năng quản lý cấu hình TranslatePress."
+
+#, tp-ai
+msgid "Add a translation language"
+msgstr "Thêm ngôn ngữ dịch"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Adds a translation language to TranslatePress. Enforces the same "
+"per-license limit as the settings UI."
+msgstr ""
+"Thêm ngôn ngữ dịch vào TranslatePress. Áp dụng cùng giới hạn theo giấy phép "
+"như giao diện cài đặt."
+
+#, tp-ai, tp-glo-8896ebe8
+msgid "WordPress locale code (e.g. fr_FR, de_DE)."
+msgstr "Mã địa phương WordPress (ví dụ: fr_FR, de_DE)."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Optional URL slug. Defaults to the ISO language code if omitted."
+msgstr "Slug URL tùy chọn. Mặc định là mã ngôn ngữ ISO nếu không nhập."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Set TranslatePress license key"
+msgstr "Thiết lập khóa bản quyền TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Saves a TranslatePress license key and triggers a remote license check, "
+"mirroring the onboarding flow."
+msgstr ""
+"Lưu khóa bản quyền TranslatePress và kích hoạt kiểm tra bản quyền từ xa, "
+"tương tự như quy trình thiết lập ban đầu."
+
+#, tp-ai
+msgid "The license key to activate."
+msgstr "Khóa bản quyền cần kích hoạt."
+
+msgid "Enable Automatic Translation"
+msgstr "Kích hoạt dịch tự động"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Turns on Automatic Translation. A valid TranslatePress license is required "
+"only when the resolved engine is TranslatePress AI (mtapi); Google "
+"Translate and DeepL do not require one. If no engine is passed and none is "
+"configured, defaults to mtapi."
+msgstr ""
+"Bật Dịch Tự động. Giấy phép TranslatePress hợp lệ chỉ bắt buộc khi công cụ "
+"dịch được sử dụng là TranslatePress AI (mtapi); Google Translate và DeepL "
+"không cần giấy phép. Nếu không truyền công cụ nào và cũng chưa được cấu "
+"hình, mặc định sẽ là mtapi."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-c6709f3f
+msgid ""
+"Optional translation-engine slug to select (e.g. \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). When omitted, keeps the "
+"already-configured engine, or defaults to \"mtapi\" if none is configured."
+msgstr ""
+"slug công cụ dịch tùy chọn để chọn (ví dụ: \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). Khi bỏ qua, giữ nguyên công cụ đã cấu "
+"hình, hoặc mặc định là \"mtapi\" nếu chưa có công cụ nào được cấu hình."
+
+#, tp-ai
+msgid "List configured languages"
+msgstr "Liệt kê các ngôn ngữ đã cấu hình"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Returns the languages currently configured in TranslatePress, including the "
+"default language and per-language slug/publish state."
+msgstr ""
+"Trả về các ngôn ngữ hiện đang được cấu hình trong TranslatePress, bao gồm "
+"ngôn ngữ mặc định và slug/trạng thái xuất bản của từng ngôn ngữ."
+
+#, tp-ai
+msgid "List available language codes"
+msgstr "Liệt kê các mã ngôn ngữ khả dụng"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Returns the full catalog of language codes TranslatePress recognizes, with "
+"their English names."
+msgstr ""
+"Trả về danh mục đầy đủ các mã ngôn ngữ mà TranslatePress nhận diện, kèm "
+"theo tên tiếng Anh của chúng."
+
+#, tp-ai
+msgid "Remove a translation language"
+msgstr "Xóa một ngôn ngữ dịch"
+
+#, tp-ai
+msgid ""
+"Removes a configured translation language. The default language cannot be "
+"removed without first reassigning the default."
+msgstr ""
+"Xóa một ngôn ngữ dịch đã được cấu hình. Không thể xóa ngôn ngữ mặc định nếu "
+"chưa chỉ định lại ngôn ngữ mặc định trước."
+
+#, tp-ai
+msgid "Locale code of the language to remove."
+msgstr "Mã locale của ngôn ngữ cần xóa."
+
+#, tp-ai
+msgid "Update a translation language"
+msgstr "Cập nhật một ngôn ngữ dịch"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"Replaces the slug and publish status of an already-configured translation "
+"language."
+msgstr "Thay thế slug và trạng thái xuất bản của một ngôn ngữ dịch đã được cấu hình."
+
+#, tp-ai
+msgid "Locale code of the language to update."
+msgstr "Mã locale của ngôn ngữ cần cập nhật."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "URL slug for this language."
+msgstr "Slug URL cho ngôn ngữ này."
+
+#, tp-ai
+msgid "Whether this language is published on the front end."
+msgstr "Ngôn ngữ này có được xuất bản trên giao diện người dùng hay không."
+
+#, tp-ai
+msgid "Set the default language"
+msgstr "Thiết lập ngôn ngữ mặc định"
+
+#, tp-ai
+msgid ""
+"Promotes an already-configured language to be the site default. The "
+"previous default remains in the translation languages list."
+msgstr ""
+"Thiết lập một ngôn ngữ đã được cấu hình thành ngôn ngữ mặc định của trang "
+"web. Ngôn ngữ mặc định trước đó vẫn được giữ lại trong danh sách ngôn ngữ "
+"dịch."
+
+#, tp-ai
+msgid ""
+"Locale code to promote to default. Must already be a configured translation "
+"language."
+msgstr ""
+"Mã locale cần thiết lập thành mặc định. Phải là một ngôn ngữ dịch đã được "
+"cấu hình từ trước."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "You do not have permission to manage TranslatePress settings."
+msgstr "Bạn không có quyền quản lý cài đặt TranslatePress."
+
+#, tp-ai
+msgid ""
+"Invalid language code. Allowed characters: A-Z, a-z, 0-9, hyphen, "
+"underscore."
+msgstr ""
+"Mã ngôn ngữ không hợp lệ. Các ký tự cho phép: A-Z, a-z, 0-9, dấu gạch nối, "
+"dấu gạch dưới."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Language code \"%s\" is not recognized by TranslatePress."
+msgstr "Mã ngôn ngữ \"%s\" không được TranslatePress nhận diện."
+
+#, tp-ai
+msgid "Language \"%s\" is already configured."
+msgstr "Ngôn ngữ \"%s\" đã được cấu hình."
+
+#, tp-ai
+msgid ""
+"Your current license allows up to %d additional language(s). Upgrade or "
+"activate a Pro license to add more."
+msgstr ""
+"Giấy phép hiện tại của bạn cho phép tối đa %d ngôn ngữ bổ sung. Nâng cấp "
+"hoặc kích hoạt giấy phép Pro để thêm nữa."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new language during settings sanitization."
+msgstr "TranslatePress đã từ chối ngôn ngữ mới trong quá trình làm sạch cài đặt."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Enabling Automatic Translation with the TranslatePress AI engine requires "
+"an active TranslatePress license. Activate a license first with "
+"translatepress/set-license-key, or pass a different engine (e.g. "
+"\"google_translate_v2\", \"deepl\")."
+msgstr ""
+"Bật Dịch Tự động bằng công cụ TranslatePress AI yêu cầu giấy phép "
+"TranslatePress còn hiệu lực. Hãy kích hoạt giấy phép trước bằng "
+"translatepress/set-license-key, hoặc truyền một công cụ khác (ví dụ: "
+"\"google_translate_v2\", \"deepl\")."
+
+msgid "Your license key expired on %s."
+msgstr "Khóa giấy phép của bạn đã hết hạn vào %s."
+
+#, tp-ai
+msgid "Your license key has expired."
+msgstr "Khóa giấy phép của bạn đã hết hạn."
+
+msgid "Your license key has been disabled."
+msgstr "Khóa giấy phép của bạn đã bị vô hiệu hóa."
+
+#, tp-glo-ee8b4f9f
+msgid "Your TranslatePress license key is invalid or missing."
+msgstr "Khóa giấy phép TranslatePress của bạn không hợp lệ hoặc bị thiếu."
+
+#, tp-ai, tp-glo-666af81f, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from your "
+"TranslatePress account."
+msgstr ""
+"Khóa giấy phép của bạn đã bị vô hiệu hóa cho URL này. Hãy kích hoạt lại từ "
+"tài khoản TranslatePress của bạn."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"License key mismatch. The license you entered does not match the "
+"TranslatePress version you have installed."
+msgstr ""
+"Khóa giấy phép không khớp. Giấy phép bạn đã nhập không khớp với phiên bản "
+"TranslatePress bạn đã cài đặt."
+
+msgid "Your license key has reached its activation limit."
+msgstr "Khóa giấy phép của bạn đã đạt đến giới hạn kích hoạt."
+
+#, tp-ai
+msgid "An error occurred while activating the license, please try again."
+msgstr "Đã xảy ra lỗi khi kích hoạt giấy phép, vui lòng thử lại."
+
+#, tp-ai
+msgid "Language \"%s\" is not currently configured."
+msgstr "Ngôn ngữ \"%s\" hiện chưa được cấu hình."
+
+#, tp-ai
+msgid ""
+"The default language cannot be removed. Set another language as default "
+"first."
+msgstr "Không thể xóa ngôn ngữ mặc định. Hãy đặt ngôn ngữ khác làm mặc định trước."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Slug is empty after sanitization. Use only URL-safe characters."
+msgstr "Slug trống sau khi làm sạch. Chỉ sử dụng các ký tự an toàn cho URL."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Language \"%s\" is not currently configured. Add it first with "
+"translatepress/add-language."
+msgstr ""
+"Ngôn ngữ \"%s\" hiện chưa được cấu hình. Hãy thêm trước bằng "
+"translatepress/add-language."
+
+#, tp-ai
+msgid "The default language is always published and cannot be unpublished."
+msgstr "Ngôn ngữ mặc định luôn được xuất bản và không thể hủy xuất bản."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug \"%1$s\" is already in use by language \"%2$s\"."
+msgstr "Slug \"%1$s\" đã được ngôn ngữ \"%2$s\" sử dụng."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new settings during sanitization."
+msgstr "TranslatePress đã từ chối cài đặt mới trong quá trình làm sạch."
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced"
+msgstr "Nâng cao"
+
+msgid "Are you sure you want to remove this item?"
+msgstr "Bạn có chắc chắn muốn xóa mục này không?"
+
+msgid "Remove"
+msgstr "Xóa"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Add"
+msgstr "Thêm"
+
+msgid "Select..."
+msgstr "Chọn..."
+
+msgid "An error occurred, please try again."
+msgstr "Đã xảy ra lỗi, vui lòng thử lại."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Khóa giấy phép của bạn đã bị vô hiệu hóa cho URL này. Kích hoạt lại từ <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Quản lý các trang."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn’t "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you’ve installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Khóa giấy phép không khớp.</strong> Giấy phép bạn đã nhập không "
+"khớp với phiên bản TranslatePress bạn đã cài đặt.</p><p>Vui lòng kiểm tra "
+"rằng bạn đã cài đặt đúng phiên bản cho giấy phép của mình từ tài khoản "
+"TranslatePress của bạn.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"If you have only the free plugin installed but added a paid license, please "
+"install the paid plugin from your TranslatePress account."
+msgstr ""
+"Nếu bạn chỉ cài đặt plugin miễn phí nhưng đã thêm giấy phép trả phí, vui "
+"lòng cài đặt plugin trả phí từ tài khoản TranslatePress của bạn."
+
+msgid "Upgrade your plan to add more sites. %1$sUpgrade now%2$s"
+msgstr "Nâng cấp gói của bạn để thêm nhiều trang web hơn. %1$sNâng cấp ngay%2$s"
+
+msgid "You have successfully activated your license"
+msgstr "Bạn đã kích hoạt giấy phép thành công"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "[%s] Low TranslatePress AI Words"
+msgstr "[%s] Số từ TranslatePress AI còn ít"
+
+msgid "upgrade your plan"
+msgstr "nâng cấp gói của bạn"
+
+msgid "upgrade your plan or get extra AI Words"
+msgstr "nâng cấp gói của bạn hoặc mua thêm từ AI"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI words are running low on your site."
+msgstr "Số từ TranslatePress AI trên trang web của bạn sắp hết."
+
+msgid "Current status: %s words remaining"
+msgstr "Trạng thái hiện tại: %s từ còn lại"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Once the remaining AI words run out, automatic translation through "
+"TranslatePress AI will be paused."
+msgstr ""
+"Khi số từ AI còn lại hết, tính năng dịch tự động qua TranslatePress AI sẽ "
+"bị tạm dừng."
+
+msgid "To continue translating your content, please %1$s over at %2$s"
+msgstr "Để tiếp tục dịch nội dung của bạn, vui lòng %1$s tại %2$s"
+
+msgid "Manage Notification: %s"
+msgstr "Quản lý thông báo: %s"
+
+msgid "Others"
+msgstr "Khác"
+
+msgid "Restrict by Language"
+msgstr "Hạn chế theo ngôn ngữ"
+
+msgid "Exclude from Language"
+msgstr "Loại trừ khỏi ngôn ngữ"
+
+msgid "Restrict element to language"
+msgstr "Hạn chế phần tử theo ngôn ngữ"
+
+msgid "Show this element only in one language."
+msgstr "Chỉ hiển thị phần tử này trong một ngôn ngữ."
+
+msgid "Enable translation"
+msgstr "Bật dịch thuật"
+
+msgid ""
+"Allow translation to the corresponding language only if the content is "
+"written in the default language."
+msgstr ""
+"Chỉ cho phép dịch sang ngôn ngữ tương ứng nếu nội dung được viết bằng ngôn "
+"ngữ mặc định."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Select language"
+msgstr "Chọn ngôn ngữ"
+
+msgid "Choose in which language to show this element."
+msgstr "Chọn ngôn ngữ để hiển thị phần tử này."
+
+msgid "Exclude element from language"
+msgstr "Loại trừ phần tử khỏi ngôn ngữ"
+
+msgid "Exclude this element from specific languages."
+msgstr "Loại trừ phần tử này khỏi các ngôn ngữ cụ thể."
+
+msgid "Select languages"
+msgstr "Chọn các ngôn ngữ"
+
+msgid "Choose from which languages to exclude this element."
+msgstr "Chọn các ngôn ngữ để loại trừ phần tử này."
+
+msgid ""
+"This element will still be visible when you are translating your website "
+"through the Translation Editor."
+msgstr ""
+"Phần tử này vẫn sẽ hiển thị khi bạn đang dịch trang web thông qua Trình "
+"chỉnh sửa bản dịch."
+
+msgid "The content of this element should be written in the default language."
+msgstr "Nội dung của phần tử này nên được viết bằng ngôn ngữ mặc định."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> encountered SQL errors. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Check out the errors</a>."
+msgstr ""
+"<strong>TranslatePress</strong> đã gặp lỗi SQL. <a href=\"%s\" title=\"Xem "
+"lỗi SQL của TranslatePress\">Xem các lỗi</a>."
+
+msgid "Automatic translation has been disabled."
+msgstr "Dịch tự động đã bị tắt."
+
+msgid "Logged errors"
+msgstr "Lỗi đã ghi nhận"
+
+#, tp-glo-ee8b4f9f
+msgid "These are the most recent 5 errors logged by TranslatePress:"
+msgstr "Đây là 5 lỗi gần nhất được TranslatePress ghi nhận:"
+
+msgid "Yes"
+msgstr "Có"
+
+msgid "Why are these errors occuring"
+msgstr "Tại sao các lỗi này xảy ra"
+
+#, tp-glo-c6709f3f, tp-glo-ee8b4f9f
+msgid ""
+"If TranslatePress detects something wrong when executing queries on your "
+"database, it may disable the Automatic Translation feature in order to "
+"avoid any extra charging by Google/DeepL. Automatic Translation needs to be "
+"manually turned on, after you solve the issues."
+msgstr ""
+"Nếu TranslatePress phát hiện có lỗi khi thực thi truy vấn trên cơ sở dữ "
+"liệu của bạn, tính năng Dịch Tự động có thể bị vô hiệu hóa để tránh phát "
+"sinh thêm chi phí từ Google/DeepL. Bạn cần bật lại Dịch Tự động thủ công "
+"sau khi đã khắc phục các vấn đề."
+
+msgid ""
+"The SQL errors detected can occur for various reasons including missing "
+"tables, missing permissions for the SQL user to create tables or perform "
+"other operations, problems after site migration or changes to SQL server "
+"configuration."
+msgstr ""
+"Các lỗi SQL được phát hiện có thể xảy ra do nhiều nguyên nhân, bao gồm "
+"thiếu bảng, thiếu quyền của người dùng SQL để tạo bảng hoặc thực hiện các "
+"thao tác khác, sự cố sau khi di chuyển trang web hoặc thay đổi cấu hình máy "
+"chủ SQL."
+
+msgid "What you can do in this situation"
+msgstr "Bạn có thể làm gì trong tình huống này"
+
+msgid "Plan A."
+msgstr "Phương án A."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL settings. Check if no "
+"more errors occur while browsing your website in a translated language. "
+"Look at the timestamps of the errors to make sure you are not seeing the "
+"old errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Vào Cài đặt -> TranslatePress -> thẻ Chung và Lưu cài đặt. Thao tác này sẽ "
+"tái tạo các bảng bằng cấu hình SQL hiện tại của bạn. Kiểm tra xem còn lỗi "
+"xảy ra khi duyệt trang web bằng ngôn ngữ đã dịch hay không. Xem mốc thời "
+"gian của các lỗi để đảm bảo bạn không nhìn thấy các lỗi cũ. Chỉ hiển thị 5 "
+"lỗi gần nhất."
+
+msgid "Plan B."
+msgstr "Phương án B."
+
+msgid "If your problem isn't solved, try the following steps:"
+msgstr "Nếu vấn đề của bạn chưa được giải quyết, hãy thử các bước sau:"
+
+msgid "Create a backup of your database"
+msgstr "Tạo bản sao lưu cơ sở dữ liệu của bạn"
+
+msgid ""
+"Create a copy of each translation table where you encounter errors. You can "
+"copy the table within the same database (trp_dictionary_en_us_es_es_COPY "
+"for example) -- perform this step only if you want to keep the current "
+"translations"
+msgstr ""
+"Tạo bản sao của mỗi bảng dịch gặp lỗi. Bạn có thể sao chép bảng trong cùng "
+"cơ sở dữ liệu (ví dụ: trp_dictionary_en_us_es_es_COPY) -- chỉ thực hiện "
+"bước này nếu bạn muốn giữ các bản dịch hiện tại."
+
+msgid "Remove the trouble tables by executing the DROP function on them"
+msgstr "Xóa các bảng gặp sự cố bằng cách thực thi hàm DROP trên chúng"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL server."
+msgstr ""
+"Vào Cài đặt -> TranslatePress -> thẻ Chung và Lưu cài đặt. Thao tác này sẽ "
+"tái tạo các bảng bằng máy chủ SQL hiện tại của bạn."
+
+msgid ""
+"Copy the relevant content from the duplicated tables "
+"(trp_dictionary_en_us_es_es_COPY for example) in the newly generated table "
+"(trp_dictionary_en_us_es_es) -- perform this step only if you want to keep "
+"the current translations"
+msgstr ""
+"Sao chép nội dung liên quan từ các bảng đã sao chép (ví dụ: "
+"trp_dictionary_en_us_es_es_COPY) vào bảng mới được tạo "
+"(trp_dictionary_en_us_es_es) -- chỉ thực hiện bước này nếu bạn muốn giữ các "
+"bản dịch hiện tại."
+
+msgid ""
+"Test it to see if everything is working. If something went wrong, you can "
+"restore the backup that you've made at the first step. Check if no more "
+"errors occur while browsing your website in a translated language. Look at "
+"the timestamps of the errors to make sure you are not seeing the old "
+"errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Kiểm tra để xem mọi thứ có hoạt động không. Nếu có sự cố, bạn có thể khôi "
+"phục bản sao lưu đã tạo ở bước đầu tiên. Kiểm tra xem còn lỗi xảy ra khi "
+"duyệt trang web bằng ngôn ngữ đã dịch hay không. Xem mốc thời gian của các "
+"lỗi để đảm bảo bạn không nhìn thấy các lỗi cũ. Chỉ hiển thị 5 lỗi gần nhất."
+
+msgid "Plan C."
+msgstr "Phương án C."
+
+msgid ""
+"If your problem still isn't solved, try asking your hosting about your "
+"errors. The most common issue is missing permissions for the SQL user, such "
+"as the Create Tables permission."
+msgstr ""
+"Nếu vấn đề của bạn vẫn chưa được giải quyết, hãy thử liên hệ với nhà cung "
+"cấp hosting về các lỗi này. Vấn đề phổ biến nhất là thiếu quyền cho người "
+"dùng SQL, chẳng hạn như quyền Tạo bảng (Create Tables)."
+
+msgid "Could not install. Try again from <a href=\"%s\" >Plugins Dashboard.</a>"
+msgstr "Không thể cài đặt. Thử lại từ <a href=\"%s\" >Bảng điều khiển Plugin.</a>"
+
+msgid "Settings scope unknown."
+msgstr "Phạm vi cài đặt không xác định."
+
+msgid "Legacy disabled."
+msgstr "Chế độ cũ đã bị tắt."
+
+msgid "Change language to %s"
+msgstr "Chuyển sang ngôn ngữ %s"
+
+msgid "Automatic Translation"
+msgstr "Dịch tự động"
+
+msgid "Unsupported languages"
+msgstr "Ngôn ngữ không được hỗ trợ"
+
+msgid ""
+"The selected automatic translation engine does not provide support for "
+"these languages.<br>You can still manually translate pages in these "
+"languages using the Translation Editor."
+msgstr ""
+"Công cụ dịch tự động đã chọn không hỗ trợ các ngôn ngữ này.<br>Bạn vẫn có "
+"thể dịch thủ công các trang sang các ngôn ngữ này bằng Trình chỉnh sửa bản "
+"dịch."
+
+msgid "General"
+msgstr "Chung"
+
+#, tp-ai
+msgid "Glossary"
+msgstr "Bảng thuật ngữ"
+
+#, tp-glo-91460d88
+msgid "API key validation failed."
+msgstr "Xác thực khóa API thất bại."
+
+#, tp-glo-91460d88
+msgid "API key verification was successful."
+msgstr "Xác thực khóa API thành công."
+
+#, tp-glo-d6a22d74
+msgid "Please enter your Google Translate key."
+msgstr "Vui lòng nhập khóa Google Translate của bạn."
+
+#, tp-glo-ee8b4f9f
+msgid "Not TranslatePress onboarding page."
+msgstr "Không phải trang hướng dẫn TranslatePress."
+
+msgid "Step %s does not exist"
+msgstr "Bước %s không tồn tại"
+
+msgid "Welcome"
+msgstr "Chào mừng"
+
+msgid "Add Languages"
+msgstr "Thêm ngôn ngữ"
+
+msgid "Enable Addons"
+msgstr "Bật tiện ích bổ sung"
+
+msgid "Finalize"
+msgstr "Hoàn tất"
+
+msgid "Exit Setup"
+msgstr "Thoát thiết lập"
+
+msgid "Upgrade"
+msgstr "Nâng cấp"
+
+msgid "Nothing here"
+msgstr "Không có gì ở đây"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license is missing or invalid. "
+"<br/>Please %1$sregister your copy%2$s to enable automatic website "
+"translation via TranslatePress AI, premium addons, automatic updates and "
+"support. Need a license key? %3$sPurchase one now%4$s"
+msgstr ""
+"Giấy phép <strong>TranslatePress</strong> của bạn bị thiếu hoặc không hợp "
+"lệ. <br/>Vui lòng %1$sđăng ký bản sao của bạn%2$s để kích hoạt tính năng "
+"dịch tự động website qua TranslatePress AI, các tiện ích bổ sung cao cấp, "
+"cập nhật tự động và hỗ trợ. Cần khóa giấy phép? %3$sMua ngay%4$s"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Giấy phép của bạn đã bị vô hiệu hóa cho URL này. Kích hoạt lại từ <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Quản lý các trang web."
+
+msgid ""
+"You have reached the activation limit for your <strong>%1$s</strong> "
+"license. <br/>Manage your active sites from %2$s your account %3$s."
+msgstr ""
+"Bạn đã đạt đến giới hạn kích hoạt cho giấy phép <strong>%1$s</strong> của "
+"bạn. <br/>Quản lý các trang web đang hoạt động của bạn từ %2$s tài khoản "
+"của bạn %3$s."
+
+msgid ""
+"License key mismatch. The license you entered doesn’t match the "
+"<strong>%1$s</strong> version you have installed. <br/>Please check that "
+"you’ve installed the correct version for your license from your "
+"%2$sTranslatePress account%3$s."
+msgstr ""
+"Khóa giấy phép không khớp. Giấy phép bạn nhập không khớp với phiên bản "
+"<strong>%1$s</strong> bạn đã cài đặt. <br/>Vui lòng kiểm tra rằng bạn đã "
+"cài đặt đúng phiên bản cho giấy phép của mình từ %2$sTranslatePress "
+"Account%3$s của bạn."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<br/>If you have only the free plugin installed but added a paid license, "
+"please install the paid plugin from your TranslatePress account."
+msgstr ""
+"<br/>Nếu bạn chỉ cài đặt plugin miễn phí nhưng đã thêm giấy phép trả phí, "
+"vui lòng cài đặt plugin trả phí từ TranslatePress Account của bạn."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license has expired. <br/>Please "
+"%1$sRenew Your Licence%2$s to continue receiving access to automatic "
+"translations via TranslatePress AI, premium addons, product downloads, and "
+"automatic updates. %3$sRenew now %4$s"
+msgstr ""
+"Giấy phép <strong>TranslatePress</strong> của bạn đã hết hạn. <br/>Vui lòng "
+"%1$sGia hạn Giấy phép%2$s để tiếp tục nhận quyền truy cập dịch tự động qua "
+"TranslatePress AI, các tiện ích bổ sung cao cấp, tải xuống sản phẩm và cập "
+"nhật tự động. %3$sGia hạn ngay %4$s"
+
+msgid "Error: "
+msgstr "Lỗi: "
+
+msgid "Something went wrong, please try again."
+msgstr "Đã xảy ra lỗi, vui lòng thử lại."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Your <strong>TranslatePress</strong> license will expire on %1$s. Please "
+"%2$sRenew Your Licence%3$s to continue receiving access to automatic "
+"translations via TP AI, premium addons, product downloads and automatic "
+"updates. %4$sRenew Now%5$s"
+msgstr ""
+"Giấy phép <strong>TranslatePress</strong> của bạn sẽ hết hạn vào %1$s. Vui "
+"lòng %2$sGia hạn Giấy phép%3$s để tiếp tục nhận quyền truy cập dịch tự động "
+"qua TP AI, các tiện ích bổ sung cao cấp, tải xuống sản phẩm và cập nhật tự "
+"động. %4$sGia hạn ngay%5$s"
+
+msgid "Please %1$senter%2$s your license key to enable %3$s automatic translation."
+msgstr "Vui lòng %1$snhập%2$s khóa giấy phép của bạn để kích hoạt dịch tự động %3$s."
+
+msgid ""
+"%1$s automatic translation requires an active license. Please %2$srenew%3$s "
+"your license or purchase a new one %4$shere%5$s."
+msgstr ""
+"Dịch tự động %1$s yêu cầu giấy phép đang hoạt động. Vui lòng %2$sgia "
+"hạn%3$s giấy phép của bạn hoặc mua giấy phép mới %4$stại đây%5$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You have less than 5,000 TranslatePress AI words remaining. To continue "
+"automatically translating your website, please %spurchase additional AI "
+"words at a discount from your account%s."
+msgstr ""
+"Bạn còn lại ít hơn 5.000 từ TranslatePress AI. Để tiếp tục dịch tự động "
+"website của bạn, vui lòng %smua thêm từ AI được giảm giá từ tài khoản của "
+"bạn%s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You do not have a valid license for <strong>TranslatePress</strong>. "
+"%1$sGet one for free%2$s to get access to TranslatePress AI."
+msgstr ""
+"Bạn không có giấy phép hợp lệ cho <strong>TranslatePress</strong>. %1$sNhận "
+"miễn phí%2$s để truy cập TranslatePress AI."
+
+msgid " Error: "
+msgstr " Lỗi: "
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Learn more</a>."
+msgstr ""
+"<strong>MỚI:</strong> Tiện ích bổ sung <strong>Different Domain per "
+"Language</strong> đã có mặt! Tăng cường SEO toàn cầu và tạo trải nghiệm địa "
+"phương với các tên miền theo quốc gia như .de hay .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Tìm hiểu thêm</a>."
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. Upgrade to <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business or Developer</a> to access it + "
+"more premium perks!"
+msgstr ""
+"<strong>MỚI:</strong> Tiện ích bổ sung <strong>Different Domain per "
+"Language</strong> đã có mặt! Tăng cường SEO toàn cầu và tạo trải nghiệm địa "
+"phương với các tên miền theo quốc gia như .de hay .fr. Nâng cấp lên <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business hoặc Developer</a> để truy cập "
+"tiện ích này cùng nhiều đặc quyền cao cấp khác!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The daily quota for machine translation characters exceeded. Please check "
+"the <strong>TranslatePress -> <a href=\"%s\">Automatic "
+"Translation</a></strong> page for more information."
+msgstr ""
+"Đã vượt quá hạn ngạch ký tự dịch máy hàng ngày. Vui lòng kiểm tra trang "
+"<strong>TranslatePress -> <a href=\"%s\">Dịch Tự Động</a></strong> để biết "
+"thêm thông tin."
+
+msgid "Marketing optin"
+msgstr "Đăng ký tiếp thị"
+
+msgid ""
+"Opt in to our security and feature updates notifications, and non-sensitive "
+"diagnostic tracking."
+msgstr ""
+"Chọn tham gia nhận thông báo cập nhật bảo mật và tính năng của chúng tôi, "
+"cùng với việc theo dõi chẩn đoán không nhạy cảm."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Preferred User Language"
+msgstr "Ngôn ngữ ưu tiên của người dùng TranslatePress"
+
+msgid "Preferred language to navigate the site"
+msgstr "Ngôn ngữ ưu tiên để duyệt trang web"
+
+msgid ""
+"The language is automatically set based by the last visited language by the "
+"user."
+msgstr ""
+"Ngôn ngữ được tự động thiết lập dựa trên ngôn ngữ cuối cùng mà người dùng "
+"đã truy cập."
+
+msgid "Always use this language"
+msgstr "Luôn sử dụng ngôn ngữ này"
+
+msgid ""
+"By checking this setting the preferred language will remain the one "
+"selected above, without the possibility of being changed in the "
+"frontend.<br>This language will be used in different operations such as "
+"sending email to the user."
+msgstr ""
+"Khi bật cài đặt này, ngôn ngữ ưu tiên sẽ luôn là ngôn ngữ đã chọn ở trên, "
+"không thể thay đổi ở giao diện người dùng.<br>Ngôn ngữ này sẽ được sử dụng "
+"trong các thao tác khác nhau như gửi email cho người dùng."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Hello! Seems like you've been using <strong>TranslatePress</strong> for a "
+"while now to translate your website. That's awesome! "
+msgstr ""
+"Xin chào! Có vẻ như bạn đã sử dụng <strong>TranslatePress</strong> được một "
+"thời gian để dịch trang web của mình. Thật tuyệt! "
+
+#, tp-glo-8896ebe8
+msgid ""
+"If you can spare a few moments to rate it on WordPress.org it would help us "
+"a lot (and boost my motivation)."
+msgstr ""
+"Nếu bạn có thể dành vài phút để đánh giá trên WordPress.org, điều đó sẽ "
+"giúp ích cho chúng tôi rất nhiều (và tiếp thêm động lực cho tôi)."
+
+#, tp-glo-ee8b4f9f
+msgid "~ Razvan, developer of TranslatePress"
+msgstr "~ Razvan, nhà phát triển của TranslatePress"
+
+#, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid "Rate TranslatePress on WordPress.org plugin page"
+msgstr "Đánh giá TranslatePress trên trang plugin WordPress.org"
+
+msgid "Ok, I will gladly help!"
+msgstr "Ok, tôi rất sẵn lòng giúp đỡ!"
+
+msgid "No, thanks."
+msgstr "Không, cảm ơn."
+
+msgid "Full Language Names"
+msgstr "Tên ngôn ngữ đầy đủ"
+
+msgid "Short Language Names"
+msgstr "Tên ngôn ngữ ngắn"
+
+msgid "Flags with Full Language Names"
+msgstr "Cờ kèm tên ngôn ngữ đầy đủ"
+
+msgid "Flags with Short Language Names"
+msgstr "Cờ kèm tên ngôn ngữ ngắn"
+
+msgid "Only Flags"
+msgstr "Chỉ cờ"
+
+#, tp-glo-d311355a
+msgid "Full Language Names No HTML"
+msgstr "Tên ngôn ngữ đầy đủ không HTML"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Right"
+msgstr "Góc dưới bên phải"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Left"
+msgstr "Góc dưới bên trái"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Right"
+msgstr "Góc trên bên phải"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Left"
+msgstr "Góc trên bên trái"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Dark"
+msgstr "Tối"
+
+msgid "Light"
+msgstr "Sáng"
+
+msgid "Install & Activate"
+msgstr "Cài đặt & Kích hoạt"
+
+msgid "Invalid language code. Please try again."
+msgstr "Mã ngôn ngữ không hợp lệ. Vui lòng thử lại."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Language codes can contain only A-Z a-z 0-9 - _ characters. Check your "
+"language codes in TranslatePress General Settings."
+msgstr ""
+"Mã ngôn ngữ chỉ có thể chứa các ký tự A-Z a-z 0-9 - _. Kiểm tra mã ngôn ngữ "
+"của bạn trong mục Cài đặt chung của TranslatePress."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Error! Duplicate URL slug values."
+msgstr "Lỗi! Các giá trị slug URL bị trùng lặp."
+
+#, tp-glo-d1526d97
+msgid ""
+"You cannot select two languages that have the same <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso code</a> but different formalities because doing so "
+"will lead to duplicate <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang tags</a>."
+msgstr ""
+"Bạn không thể chọn hai ngôn ngữ có cùng <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">mã ISO</a> nhưng khác mức độ trang trọng vì làm như vậy "
+"sẽ dẫn đến <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">thẻ hreflang</a> trùng lặp."
+
+msgid ""
+"Duplicate language detected.<br>Each language can only be added once to "
+"ensure accurate translation management.<br> Please change the duplicate "
+"language entry and try again. "
+msgstr ""
+"Đã phát hiện ngôn ngữ trùng lặp.<br>Mỗi ngôn ngữ chỉ có thể được thêm một "
+"lần để đảm bảo quản lý bản dịch chính xác.<br> Vui lòng thay đổi mục ngôn "
+"ngữ trùng lặp và thử lại. "
+
+msgid "Current Language"
+msgstr "Ngôn ngữ hiện tại"
+
+msgid "Opposite Language"
+msgstr "Ngôn ngữ ngược lại"
+
+msgid "Addons"
+msgstr "Tiện ích mở rộng"
+
+msgid "Settings"
+msgstr "Cài đặt"
+
+msgid "Pro Features"
+msgstr "Tính năng Pro"
+
+msgid "Activate License"
+msgstr "Kích hoạt giấy phép"
+
+msgid "Need Help?"
+msgstr "Cần trợ giúp?"
+
+msgid "Recent community discussions"
+msgstr "Thảo luận cộng đồng gần đây"
+
+msgid "Loading..."
+msgstr "Đang tải..."
+
+#, tp-ctx-7832384c
+msgid "Unable to load forum posts"
+msgstr "Không thể tải các bài viết diễn đàn"
+
+msgid "Ask a Question"
+msgstr "Đặt câu hỏi"
+
+msgid "View All Topics"
+msgstr "Xem tất cả chủ đề"
+
+msgid "by"
+msgstr "bởi"
+
+msgid "Have a question?"
+msgstr "Bạn có câu hỏi?"
+
+msgid ""
+"Get help directly from the plugin developers, suggest improvements, or "
+"share your feedback!"
+msgstr ""
+"Nhận trợ giúp trực tiếp từ nhà phát triển plugin, đề xuất cải tiến hoặc "
+"chia sẻ phản hồi của bạn!"
+
+msgid "Tip for faster help:"
+msgstr "Mẹo để được trợ giúp nhanh hơn:"
+
+msgid ""
+"Include what you tried, what you expected, and what happened. Screenshots "
+"help!"
+msgstr ""
+"Nêu rõ những gì bạn đã thử, mong đợi và đã xảy ra. Ảnh chụp màn hình sẽ "
+"giúp ích!"
+
+msgid "Toggle support chat"
+msgstr "Bật/tắt hỗ trợ trò chuyện"
+
+msgid "Ask the community"
+msgstr "Hỏi cộng đồng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close"
+msgstr "Đóng"
+
+msgid "Empty feed response"
+msgstr "Phản hồi nguồn cấp trống"
+
+msgid "Unable to parse feed"
+msgstr "Không thể phân tích nguồn cấp"
+
+msgid "Just now"
+msgstr "Vừa xong"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "%d giờ trước"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "%d ngày trước"
+
+msgid "Source"
+msgstr "Nguồn"
+
+msgid "Srcset"
+msgstr "Srcset"
+
+msgid "Alt attribute"
+msgstr "Thuộc tính alt"
+
+msgid "Title attribute"
+msgstr "Thuộc tính title"
+
+msgid "Anchor link"
+msgstr "Liên kết neo"
+
+msgid "Placeholder attribute"
+msgstr "Thuộc tính placeholder"
+
+msgid "Submit attribute"
+msgstr "Thuộc tính submit"
+
+msgid "Text"
+msgstr "Văn bản"
+
+msgid "Video Poster"
+msgstr "Poster video"
+
+msgid "plural form"
+msgstr "Dạng số nhiều"
+
+msgid "one"
+msgstr "một"
+
+msgid "few"
+msgstr "một vài"
+
+msgid "many"
+msgstr "nhiều"
+
+msgid "other"
+msgstr "khác"
+
+msgid "Saved"
+msgstr "Đã lưu"
+
+msgid "Save"
+msgstr "Lưu"
+
+msgid "Saving translation..."
+msgstr "Đang lưu bản dịch..."
+
+msgid "You have unsaved changes!"
+msgstr "Bạn có thay đổi chưa lưu!"
+
+msgid "Discard changes"
+msgstr "Bỏ thay đổi"
+
+msgid "Discard All"
+msgstr "Bỏ tất cả"
+
+#, tp-ctx-2edc90df
+msgid "Loading Strings..."
+msgstr "Đang tải chuỗi..."
+
+#, tp-ctx-8a82cc9e
+msgid "Select string to translate..."
+msgstr "Chọn chuỗi để dịch..."
+
+msgid "Close Editor"
+msgstr "Đóng trình chỉnh sửa"
+
+msgid "From"
+msgstr "Từ"
+
+msgid "To"
+msgstr "Sang"
+
+msgid "Add Media"
+msgstr "Thêm tập tin"
+
+msgid "Other languages"
+msgstr "Ngôn ngữ khác"
+
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+msgid "View Website As"
+msgstr "Xem trang web dưới dạng"
+
+msgid "Available in our Pro Versions"
+msgstr "Có sẵn trong các phiên bản Pro của chúng tôi"
+
+msgid "Select or Upload Media"
+msgstr "Chọn hoặc tải lên tập tin"
+
+msgid "Use this media"
+msgstr "Sử dụng tập tin này"
+
+msgid "Translate"
+msgstr "Dịch"
+
+msgid "Translate entire block element"
+msgstr "Dịch toàn bộ phần tử khối"
+
+#, tp-ctx-2edc90df
+msgid "Split block to translate strings individually"
+msgstr "Tách khối để dịch từng chuỗi riêng lẻ"
+
+#, tp-glo-e780391b
+msgid "Save changes to translation. Shortcut: CTRL(⌘) + S"
+msgstr "Lưu các thay đổi vào bản dịch. Phím tắt: CTRL(⌘) + S"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to next string in dropdown list. Shortcut: CTRL(⌘) + ALT + Right "
+"Arrow"
+msgstr ""
+"Chuyển đến chuỗi tiếp theo trong danh sách thả xuống. Phím tắt: CTRL(⌘) + "
+"ALT + Mũi tên phải"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to previous string in dropdown list. Shortcut: CTRL(⌘) + ALT + "
+"Left Arrow"
+msgstr ""
+"Chuyển đến chuỗi trước đó trong danh sách thả xuống. Phím tắt: CTRL(⌘) + "
+"ALT + Mũi tên trái"
+
+#, tp-glo-e780391b
+msgid "Discard all changes. Shortcut: CTRL(⌘) + ALT + Z"
+msgstr "Hủy bỏ tất cả các thay đổi. Phím tắt: CTRL(⌘) + ALT + Z"
+
+#, tp-glo-e780391b
+msgid ""
+"Discard changes to this text box. To discard changes to all text boxes use "
+"shortcut: CTRL(⌘) + ALT + Z"
+msgstr ""
+"Hủy bỏ các thay đổi đối với hộp văn bản này. Để hủy bỏ các thay đổi đối với "
+"tất cả các hộp văn bản, hãy dùng phím tắt: CTRL(⌘) + ALT + Z"
+
+msgid "Dismiss tooltip"
+msgstr "Bỏ qua chú thích"
+
+msgid "Quick Intro"
+msgstr "Giới thiệu nhanh"
+
+msgid "Are you sure you want to split this phrase into smaller parts?"
+msgstr "Bạn có chắc chắn muốn chia cụm từ này thành các phần nhỏ hơn không?"
+
+#, tp-ctx-8a82cc9e
+msgid "This string is not ready for translation yet. <br>Try again in a moment..."
+msgstr "Chuỗi này chưa sẵn sàng để dịch. <br>Hãy thử lại sau một lát..."
+
+msgid ""
+"For this option to work, please update the Browse as other role add-on to "
+"the latest version."
+msgstr ""
+"Để tùy chọn này hoạt động, vui lòng cập nhật tiện ích bổ sung Duyệt với vai "
+"trò khác lên phiên bản mới nhất."
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-b7a08771
+msgid "To translate slugs, please update the SEO Pack add-on to the latest version."
+msgstr ""
+"Để dịch các slug, vui lòng cập nhật tiện ích bổ sung SEO Pack lên phiên bản "
+"mới nhất."
+
+#, tp-glo-ee8b4f9f
+msgid "You can add a new language from <a href=\"%s\">Settings->TranslatePress</a>"
+msgstr "Bạn có thể thêm ngôn ngữ mới từ <a href=\"%s\">Cài đặt->TranslatePress</a>"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"However, you can still use TranslatePress to <strong style=\"background: "
+"#f5fb9d;\">modify gettext strings</strong> available in your page."
+msgstr ""
+"Tuy nhiên, bạn vẫn có thể sử dụng TranslatePress để <strong "
+"style=\"background: #f5fb9d;\">sửa đổi các chuỗi gettext</strong> có trên "
+"trang của bạn."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Strings that are user-created cannot be modified, only those from themes "
+"and plugins."
+msgstr ""
+"Các chuỗi do người dùng tạo không thể sửa đổi, chỉ những chuỗi từ giao diện "
+"và plugin."
+
+msgid "Extra Translation Features"
+msgstr "Tính năng dịch thuật bổ sung"
+
+msgid "Support for 130+ Extra Languages"
+msgstr "Hỗ trợ hơn 130 ngôn ngữ bổ sung"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI"
+msgstr "Truy cập TranslatePress AI"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb
+msgid "Translate SEO Title, Description, Slug"
+msgstr "Dịch Tiêu đề SEO, Mô tả, Slug"
+
+msgid "Publish only when translation is complete"
+msgstr "Chỉ xuất bản khi bản dịch đã hoàn tất"
+
+msgid "Translate by Browsing as User Role"
+msgstr "Dịch bằng cách duyệt với vai trò người dùng"
+
+msgid "Different Menu Items for each Language"
+msgstr "Các mục menu khác nhau cho mỗi ngôn ngữ"
+
+msgid "Upgrade to PRO"
+msgstr "Nâng cấp lên PRO"
+
+msgid "Upgrade to PRO with our biggest discount of the year!"
+msgstr "Nâng cấp lên PRO với mức giảm giá lớn nhất trong năm!"
+
+msgid ""
+"This Black Friday, get access to these features and more at a fraction of "
+"the costs:"
+msgstr ""
+"Trong dịp Black Friday này, hãy truy cập các tính năng này và hơn thế nữa "
+"với chi phí chỉ bằng một phần nhỏ:"
+
+msgid "No available suggestions"
+msgstr "Không có gợi ý khả dụng"
+
+msgid "Suggestions from translation memory"
+msgstr "Gợi ý từ bộ nhớ dịch"
+
+msgid "Click to Copy"
+msgstr "Nhấp để sao chép"
+
+msgid "Human Translation"
+msgstr "Bản dịch của con người"
+
+msgid "Machine Translation"
+msgstr "Bản dịch máy"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext File Translation"
+msgstr "Dịch Tệp Gettext"
+
+msgid "Text on this page is %s% translated into all languages."
+msgstr "Văn bản trên trang này được dịch %s% sang tất cả các ngôn ngữ."
+
+msgid "%1$s% of text on this page is translated into %2$s."
+msgstr "%1$s% văn bản trên trang này được dịch sang %2$s."
+
+msgid "This page is %1$s% translated into %2$s."
+msgstr "Trang này được dịch %1$s% sang %2$s."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"The slug that you are trying to edit is present in other slug types:%s%. "
+"Editing it will replace each occurrence, regardless of the current type."
+msgstr ""
+"Slug mà bạn đang cố gắng chỉnh sửa hiện có trong các loại slug khác:%s%. "
+"Việc chỉnh sửa sẽ thay thế mỗi lần xuất hiện, bất kể loại hiện tại."
+
+msgid ""
+"Hover any text on the page, click %s,<br> then modify the translation in "
+"the sidebar."
+msgstr ""
+"Di chuột qua bất kỳ văn bản nào trên trang, nhấp %s,<br> sau đó sửa đổi bản "
+"dịch trong thanh bên."
+
+#, tp-glo-e780391b
+msgid "Don't forget to Save Translation. Use keyboard shortcut CTRL(⌘) + S"
+msgstr "Đừng quên lưu bản dịch. Sử dụng phím tắt CTRL(⌘) + S"
+
+msgid "Switch language to see the translation changes directly on the page."
+msgstr "Chuyển đổi ngôn ngữ để xem các thay đổi bản dịch trực tiếp trên trang."
+
+msgid "Search for any text in this page in the dropdown."
+msgstr "Tìm kiếm bất kỳ văn bản nào trên trang này trong menu thả xuống."
+
+msgid ""
+"Your %s license has <span "
+"class=\"trp-license-status-emphasized\">expired</span>."
+msgstr ""
+"Giấy phép %s của bạn đã <span class=\"trp-license-status-emphasized\">hết "
+"hạn</span>."
+
+msgid ""
+"<strong>This Black Friday, renew your license at a special price</strong> "
+"to continue receiving access to product downloads, automatic updates, and "
+"support."
+msgstr ""
+"<strong>Trong dịp Black Friday này, gia hạn giấy phép của bạn với giá đặc "
+"biệt</strong> để tiếp tục nhận quyền truy cập tải xuống sản phẩm, cập nhật "
+"tự động và hỗ trợ."
+
+msgid "Get Deal"
+msgstr "Nhận ưu đãi"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please renew your license to continue receiving access to TranslatePress "
+"AI, premium addons, automatic updates and support."
+msgstr ""
+"Vui lòng gia hạn giấy phép của bạn để tiếp tục nhận quyền truy cập vào "
+"TranslatePress AI, tiện ích bổ sung cao cấp, cập nhật tự động và hỗ trợ."
+
+msgid "Renew Now"
+msgstr "Gia hạn ngay"
+
+msgid ""
+"Your %s license was <span "
+"class=\"trp-license-status-emphasized\">refunded</span>."
+msgstr ""
+"Giấy phép %s của bạn đã được <span "
+"class=\"trp-license-status-emphasized\">hoàn tiền</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please purchase a new license to continue receiving access to "
+"TranslatePress AI, premium addons, automatic updates and support."
+msgstr ""
+"Vui lòng mua giấy phép mới để tiếp tục nhận quyền truy cập vào "
+"TranslatePress AI, tiện ích bổ sung cao cấp, cập nhật tự động và hỗ trợ."
+
+msgid "Purchase a new license"
+msgstr "Mua giấy phép mới"
+
+msgid ""
+"Your %s license is <span class=\"trp-license-status-emphasized\">missing or "
+"invalid</span>."
+msgstr ""
+"Giấy phép %s của bạn <span class=\"trp-license-status-emphasized\">thiếu "
+"hoặc không hợp lệ</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please enter a valid license to get access to TranslatePress AI, premium "
+"addons, automatic updates and support. Need a license key? %1$sPurchase one "
+"now%2$s"
+msgstr ""
+"Vui lòng nhập giấy phép hợp lệ để truy cập TranslatePress AI, tiện ích bổ "
+"sung cao cấp, cập nhật tự động và hỗ trợ. Cần khóa giấy phép? %1$sMua "
+"ngay%2$s"
+
+msgid "Enter a valid license"
+msgstr "Nhập giấy phép hợp lệ"
+
+msgid "Meta Information"
+msgstr "Thông tin Meta"
+
+#, tp-ctx-8a82cc9e
+msgid "String List"
+msgstr "Danh sách chuỗi"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings"
+msgstr "Chuỗi Gettext"
+
+msgid "Images"
+msgstr "Hình ảnh"
+
+msgid "Videos"
+msgstr "Video"
+
+msgid "Audios"
+msgstr "Âm thanh"
+
+#, tp-ctx-2edc90df
+msgid "Dynamically Added Strings"
+msgstr "Chuỗi được thêm động"
+
+msgid "Translation Editor"
+msgstr "Trình chỉnh sửa bản dịch"
+
+msgid "Edit translations by visually selecting them on each site page"
+msgstr "Chỉnh sửa bản dịch bằng cách chọn trực quan trên từng trang của website"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation"
+msgstr "Dịch chuỗi"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid ""
+"Edit url slug translations, plugins and theme translation (emails, forms "
+"etc.)"
+msgstr "Chỉnh sửa bản dịch slug URL, plugin và giao diện (email, form v.v.)"
+
+msgid "Current User"
+msgstr "Người dùng hiện tại"
+
+msgid "Logged Out"
+msgstr "Đã đăng xuất"
+
+msgid "Translate Page"
+msgstr "Dịch trang"
+
+msgid "Add a New Language"
+msgstr "Thêm ngôn ngữ mới"
+
+msgid "Your License is Invalid"
+msgstr "Giấy phép của bạn không hợp lệ"
+
+msgid "Get More AI Words (%d left)"
+msgstr "Nhận thêm từ AI (%d còn lại)"
+
+#, tp-ctx-e9944eb3
+msgid ""
+"Opens post in the translation editor. Post must be saved as draft or "
+"published beforehand."
+msgstr ""
+"Mở bài viết trong trình chỉnh sửa bản dịch. Bài viết phải được lưu dưới "
+"dạng bản nháp hoặc đã xuất bản trước đó."
+
+msgid "Security check"
+msgstr "Kiểm tra bảo mật"
+
+#, tp-ctx-2edc90df
+msgid ""
+"<strong>Warning:</strong> Some strings have possibly incorrectly encoded "
+"characters. This may result in breaking the queries, rendering the page "
+"untranslated in live mode. Consider revising the following strings or their "
+"method of outputting."
+msgstr ""
+"<strong>Cảnh báo:</strong> Một số chuỗi có thể chứa các ký tự được mã hóa "
+"không chính xác. Điều này có thể làm hỏng các truy vấn, khiến trang không "
+"được dịch ở chế độ trực tiếp. Hãy cân nhắc xem xét lại các chuỗi sau hoặc "
+"phương thức xuất của chúng."
+
+#, tp-ai
+msgid "IMPORTANT: It is strongly recommended to first backup the database!"
+msgstr "QUAN TRỌNG: Rất khuyến nghị bạn sao lưu cơ sở dữ liệu trước!"
+
+#, tp-ai
+msgid "Are you sure you want to continue?"
+msgstr "Bạn có chắc chắn muốn tiếp tục?"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress data update"
+msgstr "Cập nhật dữ liệu TranslatePress"
+
+msgid "We need to update your translations database to the latest version."
+msgstr ""
+"Chúng tôi cần cập nhật cơ sở dữ liệu bản dịch của bạn lên phiên bản mới "
+"nhất."
+
+msgid ""
+"Updating will allow editing translations of localized text from plugins and "
+"theme. Existing translation will still work as expected."
+msgstr ""
+"Việc cập nhật sẽ cho phép chỉnh sửa bản dịch của văn bản đã bản địa hóa từ "
+"plugin và theme. Bản dịch hiện có vẫn sẽ hoạt động như mong đợi."
+
+msgid "Run the updater"
+msgstr "Chạy trình cập nhật"
+
+#, tp-ctx-742ebaa7
+msgid ""
+"Updating will allow editing translations of slugs. Existing translation "
+"will still work as expected."
+msgstr ""
+"Việc cập nhật sẽ cho phép chỉnh sửa bản dịch của các đường dẫn tĩnh. Bản "
+"dịch hiện có vẫn sẽ hoạt động như mong đợi."
+
+#, tp-glo-47180abf, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Please activate the SEO Addon from <br/>WordPress -> Settings -> "
+"TranslatePress -> Addons section"
+msgstr ""
+"Vui lòng kích hoạt SEO Addon từ <br/>WordPress -> Cài đặt -> TranslatePress "
+"-> mục Addons"
+
+msgid "Go to Addons"
+msgstr "Đến mục Addons"
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-9fa92a70, tp-glo-b7a08771
+msgid "The SEO Pack add-on allows translation of all the URL slugs:"
+msgstr "Tiện ích bổ sung SEO Pack cho phép dịch tất cả các đường dẫn tĩnh URL:"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy slugs"
+msgstr "Đường dẫn tĩnh phân loại"
+
+#, tp-ctx-742ebaa7
+msgid "Term slugs"
+msgstr "Đường dẫn tĩnh thuật ngữ"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post slugs (this includes pages and custom post types)"
+msgstr "Đường dẫn tĩnh bài viết (bao gồm cả trang và loại bài viết tùy chỉnh)"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post type base slugs"
+msgstr "Đường dẫn tĩnh cơ sở loại bài viết"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce slugs"
+msgstr "Đường dẫn tĩnh WooCommerce"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "The SEO Pack add-on is available with ALL premium versions of the plugin."
+msgstr ""
+"Tiện ích mở rộng SEO Pack có sẵn trong TẤT CẢ các phiên bản trả phí của "
+"plugin."
+
+msgid "Upgrade to Pro"
+msgstr "Nâng cấp lên Pro"
+
+msgid "Description"
+msgstr "Mô tả"
+
+msgid "Article Section"
+msgstr "Phần bài viết"
+
+msgid "Article Tag"
+msgstr "Thẻ bài viết"
+
+msgid "OG Title"
+msgstr "Tiêu đề OG"
+
+msgid "OG Site Name"
+msgstr "Tên trang OG"
+
+msgid "OG Description"
+msgstr "Mô tả OG"
+
+msgid "OG Image Alt"
+msgstr "Văn bản thay thế ảnh OG"
+
+msgid "Twitter Title"
+msgstr "Tiêu đề Twitter"
+
+msgid "Twitter Description"
+msgstr "Mô tả Twitter"
+
+msgid "Twitter Image Alt"
+msgstr "Văn bản thay thế ảnh Twitter"
+
+msgid "Page Title"
+msgstr "Tiêu đề trang"
+
+msgid "Dublin Core Title"
+msgstr "Tiêu đề Dublin Core"
+
+msgid "Dublin Core Description"
+msgstr "Mô tả Dublin Core"
+
+msgid "OG Image"
+msgstr "Ảnh OG"
+
+#, tp-glo-9fa92a70
+msgid "OG Image Secure URL"
+msgstr "URL bảo mật ảnh OG"
+
+msgid "Twitter Image"
+msgstr "Ảnh Twitter"
+
+#, tp-ctx-2edc90df
+msgid "Removing cdata dictionary strings for language %s..."
+msgstr "Đang xóa các chuỗi từ điển CDATA cho ngôn ngữ %s..."
+
+msgid "Removing untranslated dictionary links for language %s..."
+msgstr "Đang xóa liên kết từ điển chưa dịch cho ngôn ngữ %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Removing duplicated gettext strings for language %s..."
+msgstr "Đang xóa các chuỗi gettext trùng lặp cho ngôn ngữ %s..."
+
+#, tp-ctx-2edc90df
+msgid "Removing duplicated dictionary strings for language %s..."
+msgstr "Đang xóa các chuỗi từ điển trùng lặp cho ngôn ngữ %s..."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Removing untranslated dictionary strings where translation is available for "
+"language %s..."
+msgstr ""
+"Đang xóa các chuỗi từ điển chưa được dịch khi bản dịch đã có sẵn cho ngôn "
+"ngữ %s..."
+
+#, tp-ctx-2edc90df
+msgid "Inserting original strings for language %s..."
+msgstr "Đang chèn các chuỗi gốc cho ngôn ngữ %s..."
+
+#, tp-ctx-2edc90df
+msgid "Cleaning original strings table for language %s..."
+msgstr "Đang dọn dẹp bảng chuỗi gốc cho ngôn ngữ %s..."
+
+#, tp-ctx-8a82cc9e
+msgid "Updating original string ids for language %s..."
+msgstr "Đang cập nhật ID chuỗi gốc cho ngôn ngữ %s..."
+
+msgid "Regenerating original meta table for language %s..."
+msgstr "Đang tạo lại bảng meta gốc cho ngôn ngữ %s..."
+
+msgid "Cleaning original meta table for language %s..."
+msgstr "Đang dọn dẹp bảng meta gốc cho ngôn ngữ %s..."
+
+msgid "Replacing original id NULL with value for language %s..."
+msgstr "Đang thay thế ID gốc NULL bằng giá trị cho ngôn ngữ %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Inserting gettext original strings for language %s..."
+msgstr "Đang chèn các chuỗi gốc gettext cho ngôn ngữ %s..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Cleaning gettext original strings table for language %s..."
+msgstr "Đang dọn dẹp bảng chuỗi gốc gettext cho ngôn ngữ %s..."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Updating gettext original string ids for language %s..."
+msgstr "Đang cập nhật ID chuỗi gốc gettext cho ngôn ngữ %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Starting gettext database optimization in the background..."
+msgstr "Đang bắt đầu tối ưu hóa cơ sở dữ liệu gettext trong nền..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating taxonomy and post type base slugs to new table structure..."
+msgstr ""
+"Đang di chuyển các đường dẫn tĩnh phân loại và đường dẫn tĩnh cơ sở loại "
+"bài viết sang cấu trúc bảng mới..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating post slugs to new table structure for language %s..."
+msgstr ""
+"Đang di chuyển các đường dẫn tĩnh bài viết sang cấu trúc bảng mới cho ngôn "
+"ngữ %s..."
+
+#, tp-ctx-742ebaa7
+msgid "Migrating term slugs to new table structure for language %s..."
+msgstr "Đang di chuyển slug thuật ngữ sang cấu trúc bảng mới cho ngôn ngữ %s..."
+
+msgid "Finishing up..."
+msgstr "Đang hoàn tất..."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize gettext database tables. Translations "
+"continue to work while this runs in the background."
+msgstr ""
+"TranslatePress cần tối ưu hóa các bảng cơ sở dữ liệu gettext. Các bản dịch "
+"vẫn tiếp tục hoạt động trong khi quá trình này chạy trong nền."
+
+#, tp-ai
+msgid "Before starting, we strongly recommend creating a database backup."
+msgstr ""
+"Trước khi bắt đầu, chúng tôi rất khuyến nghị bạn tạo bản sao lưu cơ sở dữ "
+"liệu."
+
+#, tp-ai
+msgid "Start optimization"
+msgstr "Bắt đầu tối ưu hóa"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Could not schedule gettext database optimization."
+msgstr "Cập nhật đã bị hủy! Không thể lên lịch tối ưu hóa cơ sở dữ liệu gettext."
+
+msgid ""
+"Database optimization did not complete successfully. We recommend restoring "
+"the original database or <a href=\"%s\" >trying again.</a>"
+msgstr ""
+"Tối ưu hóa cơ sở dữ liệu không thành công. Chúng tôi khuyên bạn nên khôi "
+"phục cơ sở dữ liệu gốc hoặc <a href=\"%s\">thử lại.</a>"
+
+msgid ""
+"Update aborted! Your user account doesn't have the capability to perform "
+"database updates."
+msgstr ""
+"Cập nhật bị hủy! Tài khoản của bạn không có quyền thực hiện cập nhật cơ sở "
+"dữ liệu."
+
+#, tp-glo-b357fc3e
+msgid "Update aborted! Invalid nonce."
+msgstr "Cập nhật bị hủy! Nonce không hợp lệ."
+
+#, tp-glo-ee8b4f9f
+msgid "Back to TranslatePress Settings"
+msgstr "Quay lại Cài đặt TranslatePress"
+
+msgid "Successfully updated database!"
+msgstr "Đã cập nhật cơ sở dữ liệu thành công!"
+
+msgid "Updating database to version %s+"
+msgstr "Đang cập nhật cơ sở dữ liệu lên phiên bản %s+"
+
+msgid "Processing table for language %s..."
+msgstr "Đang xử lý bảng cho ngôn ngữ %s..."
+
+msgid "Update aborted! Incorrect action."
+msgstr "Cập nhật bị hủy! Hành động không chính xác."
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-64dbb752
+msgid ""
+"Update aborted! Start the gettext database optimization separately from the "
+"Advanced settings page."
+msgstr ""
+"Cập nhật đã bị hủy! Hãy bắt đầu tối ưu hóa cơ sở dữ liệu gettext riêng biệt "
+"từ trang cài đặt nâng cao."
+
+msgid "Update aborted! Incorrect language code."
+msgstr "Cập nhật bị hủy! Mã ngôn ngữ không chính xác."
+
+msgid " done."
+msgstr " xong."
+
+#, tp-ai
+msgid "Update aborted while %1$s. SQL error: %2$s"
+msgstr "Cập nhật bị hủy trong khi %1$s. Lỗi SQL: %2$s"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "inserting original strings"
+msgstr "chèn các chuỗi gốc"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string insertion progress"
+msgstr "kiểm tra tiến độ chèn chuỗi gốc"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "cleaning duplicate original strings"
+msgstr "dọn dẹp các chuỗi gốc trùng lặp"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "updating original string IDs"
+msgstr "cập nhật ID chuỗi gốc"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string ID update progress"
+msgstr "kiểm tra tiến độ cập nhật ID chuỗi gốc"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "inserting gettext original strings"
+msgstr "chèn các chuỗi gốc gettext"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "checking gettext original insertion progress"
+msgstr "kiểm tra tiến độ chèn chuỗi gốc gettext"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "cleaning duplicate gettext original strings"
+msgstr "dọn dẹp các chuỗi gốc gettext trùng lặp"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "updating gettext original string IDs"
+msgstr "cập nhật ID chuỗi gốc gettext"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "checking gettext original string ID update progress"
+msgstr "kiểm tra tiến độ cập nhật ID chuỗi gốc gettext"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"All individual TranslatePress add-on plugins <a href=\"%1$s\" "
+"target=\"_blank\">have been discontinued</a> and are now included in the "
+"premium Personal, Business and Developer versions of TranslatePress. Please "
+"log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download "
+"the new premium version and install it. Your individual addons settings "
+"will be ported over."
+msgstr ""
+"Tất cả các plugin tiện ích bổ sung TranslatePress riêng lẻ <a href=\"%1$s\" "
+"target=\"_blank\">đã ngừng cung cấp</a> và hiện được bao gồm trong các "
+"phiên bản trả phí Personal, Business và Developer của TranslatePress. Vui "
+"lòng đăng nhập vào <a href=\"%2$s\" target=\"_blank\">trang tài khoản</a> "
+"của bạn, tải xuống phiên bản trả phí mới và cài đặt. Các cài đặt tiện ích "
+"bổ sung riêng lẻ của bạn sẽ được chuyển sang."
+
+msgid "Brand-new Language Switcher Settings are here!"
+msgstr "Cài đặt Bộ chuyển đổi ngôn ngữ hoàn toàn mới đã ra mắt!"
+
+msgid ""
+"Explore pre-made templates, switch colors, flag styles, spacing, layouts & "
+"more. Use the live preview to perfect your switcher in seconds."
+msgstr ""
+"Khám phá các mẫu có sẵn, thay đổi màu sắc, kiểu cờ, khoảng cách, bố cục và "
+"hơn thế nữa. Sử dụng bản xem trước trực tiếp để hoàn thiện bộ chuyển đổi "
+"của bạn trong vài giây."
+
+msgid "Start customizing"
+msgstr "Bắt đầu tùy chỉnh"
+
+msgid "Read documentation"
+msgstr "Đọc tài liệu"
+
+#, tp-ctx-8a82cc9e, tp-glo-1aabb38a, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"library</a></strong>. Please contact your server administrator to install "
+"it on your server."
+msgstr ""
+"<strong>TranslatePress</strong> yêu cầu <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">thư viện PHP xử lý "
+"chuỗi đa byte</a></strong>. Vui lòng liên hệ với quản trị viên máy chủ của "
+"bạn để cài đặt nó trên máy chủ."
+
+#, tp-glo-5e752340
+msgid ""
+"Detected long query limitation on WPEngine hosting. Some large pages may "
+"appear untranslated. You can remove limitation by adding the following to "
+"your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
+msgstr ""
+"Đã phát hiện hạn chế truy vấn dài trên hosting WPEngine. Một số trang lớn "
+"có thể hiển thị chưa được dịch. Bạn có thể loại bỏ hạn chế bằng cách thêm "
+"dòng sau vào tệp wp-config.php của trang web: define( 'WPE_GOVERNOR', false "
+"); "
+
+msgid "Custom Language Flag"
+msgstr "Cờ ngôn ngữ tùy chỉnh"
+
+msgid "The Language code of the added custom language is invalid."
+msgstr "Mã ngôn ngữ của ngôn ngữ tùy chỉnh đã thêm không hợp lệ."
+
+msgid "The Language code of the added custom language cannot be empty."
+msgstr "Mã ngôn ngữ của ngôn ngữ tùy chỉnh đã thêm không được để trống."
+
+msgid "The Automatic Translation Code of the added custom language is invalid."
+msgstr "Mã dịch tự động của ngôn ngữ tùy chỉnh đã thêm không hợp lệ."
+
+#, tp-ai
+msgid "Style"
+msgstr "Kiểu"
+
+#, tp-ai, tp-glo-da70db08
+msgid "Use shortcode settings"
+msgstr "Sử dụng cài đặt shortcode"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Custom"
+msgstr "Tùy chỉnh"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language names"
+msgstr "Tên ngôn ngữ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Full names"
+msgstr "Tên đầy đủ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Short names"
+msgstr "Tên ngắn"
+
+#, tp-ai
+msgid "Hide names"
+msgstr "Ẩn tên"
+
+#, tp-ai
+msgid "Flag position"
+msgstr "Vị trí cờ"
+
+#, tp-ai
+msgid "Before text"
+msgstr "Trước văn bản"
+
+#, tp-ai
+msgid "After text"
+msgstr "Sau văn bản"
+
+#, tp-ai
+msgid "Hide flags"
+msgstr "Ẩn cờ"
+
+#, tp-ai
+msgid "Open on click"
+msgstr "Nhấp để mở"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show opposite language"
+msgstr "Hiển thị ngôn ngữ còn lại"
+
+#, tp-ai
+msgid "Size"
+msgstr "Kích thước"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Normal"
+msgstr "Bình thường"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Large"
+msgstr "Lớn"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag shape"
+msgstr "Hình dạng cờ"
+
+#, tp-ai
+msgid "Rectangle"
+msgstr "Hình chữ nhật"
+
+#, tp-ai
+msgid "Square"
+msgstr "Hình vuông"
+
+#, tp-ai
+msgid "Rounded"
+msgstr "Bo tròn"
+
+#, tp-ai
+msgid "Transitions"
+msgstr "Hiệu ứng chuyển đổi"
+
+#, tp-ai
+msgid "Background"
+msgstr "Nền"
+
+#, tp-ai
+msgid "Hover background"
+msgstr "Nền khi di chuột"
+
+#, tp-ai
+msgid "Hover text"
+msgstr "Văn bản khi di chuột"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border color"
+msgstr "Màu viền"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border width"
+msgstr "Độ rộng viền"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border radius"
+msgstr "Bán kính viền"
+
+#, tp-ai
+msgid "Flag radius"
+msgstr "Bán kính cờ"
+
+#, tp-ai, tp-glo-1477ca6f, tp-glo-ee8b4f9f
+msgid ""
+"Disable the legacy TranslatePress language switcher to use the customizable "
+"Elementor widget. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Open language switcher settings</a>."
+msgstr ""
+"Tắt bộ chuyển đổi ngôn ngữ TranslatePress cũ để sử dụng widget Elementor có "
+"thể tùy chỉnh. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Mở cài đặt bộ chuyển đổi ngôn ngữ</a>."
+
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"The language switcher inherits styling options from shortcode. <a "
+"href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Open shortcode "
+"settings</a>."
+msgstr ""
+"Bộ chuyển đổi ngôn ngữ kế thừa các tùy chọn kiểu dáng từ shortcode. <a "
+"href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Mở cài đặt "
+"shortcode</a>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI"
+msgstr "TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid."
+msgstr "Khóa API TranslatePress AI của bạn hợp lệ."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is invalid."
+msgstr "Khóa API TranslatePress AI của bạn không hợp lệ."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key has expired."
+msgstr "Khóa API TranslatePress AI của bạn đã hết hạn."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Activate API Key"
+msgstr "Kích hoạt khóa API"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Deactivate API Key"
+msgstr "Hủy kích hoạt khóa API"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add a TranslatePress AI API Key"
+msgstr "Thêm khóa API TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI API Key"
+msgstr "Khóa API TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Manage your TranslatePress AI API Key in your %1$s."
+msgstr "Quản lý khóa API TranslatePress AI của bạn trong %1$s."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI API Key?"
+msgstr "Chưa có khóa API TranslatePress AI?"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get a free TranslatePress AI API Key Today"
+msgstr "Nhận khóa API TranslatePress AI miễn phí ngay hôm nay"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add your TranslatePress AI API Key"
+msgstr "Thêm khóa API TranslatePress AI của bạn"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Add your TranslatePress AI API Key to unlock all premium features. Find the "
+"TranslatePress AI API Key in your"
+msgstr ""
+"Thêm khóa API TranslatePress AI của bạn để mở khóa tất cả các tính năng cao "
+"cấp. Tìm khóa API TranslatePress AI trong"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid and active."
+msgstr "Khóa API TranslatePress AI của bạn hợp lệ và đang hoạt động."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Activate TranslatePress AI API Key"
+msgstr "Kích hoạt khóa API TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88
+msgid "No Active API Key Detected for this website."
+msgstr "Không phát hiện khóa API đang hoạt động cho trang web này."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"an API key by creating a free account."
+msgstr ""
+"Để bật Dịch tự động bằng TranslatePress AI, bạn cần một khóa API bằng cách "
+"tạo tài khoản miễn phí."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Enter your API key"
+msgstr "Nhập khóa API của bạn"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your API key from"
+msgstr ""
+"Để bật Dịch tự động bằng TranslatePress AI, vui lòng nhập khóa API của bạn "
+"từ"
+
+#, tp-ai, tp-glo-91460d88
+msgid "API Key"
+msgstr "Khóa API"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "No Active TranslatePress AI API Key Detected for this website."
+msgstr ""
+"Không phát hiện thấy khóa API TranslatePress AI nào đang hoạt động cho "
+"trang web này."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI API Key"
+msgstr "Nhận khóa API TranslatePress AI miễn phí của bạn"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Generate API Key"
+msgstr "Tạo khóa API"
+
+#, tp-ai, tp-glo-91460d88
+msgid "You have a valid %s <strong>API Key</strong>."
+msgstr "Bạn có một <strong>Khóa API</strong> %s hợp lệ."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Manage your API Key & quota on the %s"
+msgstr "Quản lý khóa API và hạn mức của bạn trên %s"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Get a Free AI API Key"
+msgstr "Nhận khóa API AI miễn phí"
+
+#, tp-ai, tp-glo-91460d88
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key."
+msgstr ""
+"Trang web này đã được kích hoạt bằng một khóa API miễn phí. Mỗi trang web "
+"chỉ có thể sử dụng một khóa API miễn phí."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"Trang web này đã được kích hoạt bằng một khóa API miễn phí. Mỗi trang web "
+"chỉ có thể sử dụng một khóa API miễn phí. Vui lòng nâng cấp lên gói trả phí "
+"để có thêm từ TranslatePress AI từ %1$stài khoản của bạn%2$s."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Checking"
+msgstr "Dữ liệu gỡ lỗi cho việc kiểm tra khóa API"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Activation"
+msgstr "Dữ liệu gỡ lỗi cho việc kích hoạt khóa API"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress finished replacing the existing translations in your "
+"dictionary."
+msgstr ""
+"TranslatePress đã hoàn tất việc thay thế các bản dịch hiện có trong từ điển "
+"của bạn."
+
+#, tp-ai
+msgid "Term (%s)"
+msgstr "Thuật ngữ (%s)"
+
+#, tp-ai
+msgid "Translations"
+msgstr "Bản dịch"
+
+#, tp-ai
+msgid "Term added. Glossary terms only affect new automatic translations."
+msgstr ""
+"Đã thêm thuật ngữ. Thuật ngữ bảng thuật ngữ chỉ ảnh hưởng đến các bản dịch "
+"tự động mới."
+
+#, tp-ai
+msgid "Term updated."
+msgstr "Đã cập nhật thuật ngữ."
+
+#, tp-ai
+msgid "Term deleted."
+msgstr "Đã xóa thuật ngữ."
+
+#, tp-ai
+msgid "Are you sure you want to delete this term?"
+msgstr "Bạn có chắc chắn muốn xóa thuật ngữ này không?"
+
+#, tp-ai
+msgid "Something went wrong. Please try again."
+msgstr "Đã xảy ra lỗi. Vui lòng thử lại."
+
+#, tp-ai
+msgid "Quick Edit"
+msgstr "Sửa nhanh"
+
+msgid "Edit"
+msgstr "Sửa"
+
+msgid "Delete"
+msgstr "Xóa"
+
+#, tp-ai
+msgid "Update"
+msgstr "Cập nhật"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Cancel"
+msgstr "Hủy"
+
+#, tp-ai
+msgid "No glossary terms match your search."
+msgstr "Không có thuật ngữ bảng chú giải nào khớp với tìm kiếm của bạn."
+
+#, tp-ai
+msgid "No glossary terms found."
+msgstr "Không tìm thấy thuật ngữ bảng chú giải nào."
+
+#, tp-ai
+msgid "Could not load glossary terms. Please reload the page."
+msgstr "Không thể tải thuật ngữ bảng chú giải. Vui lòng tải lại trang."
+
+msgid "items"
+msgstr "mục"
+
+#, tp-ai
+msgid "of"
+msgstr "trên"
+
+#, tp-ai
+msgid "First page"
+msgstr "Trang đầu"
+
+#, tp-ai
+msgid "Previous page"
+msgstr "Trang trước"
+
+#, tp-ai
+msgid "Next page"
+msgstr "Trang sau"
+
+#, tp-ai
+msgid "Last page"
+msgstr "Trang cuối"
+
+#, tp-ai
+msgid ""
+"The inserted term was found in your existing translations, use the %s to "
+"make changes there."
+msgstr ""
+"Thuật ngữ đã chèn được tìm thấy trong các bản dịch hiện có của bạn, hãy sử "
+"dụng %s để thay đổi ở đó."
+
+#, tp-ai
+msgid "search & replace tool"
+msgstr "công cụ tìm kiếm và thay thế"
+
+#, tp-ai
+msgid "Please provide at least one existing translation to replace."
+msgstr "Vui lòng cung cấp ít nhất một bản dịch hiện có để thay thế."
+
+#, tp-ai
+msgid ""
+"You are about to bulk edit a potentially large amount of translations. This "
+"action cannot be undone. It is recommended to make a backup of the database "
+"before completing this action."
+msgstr ""
+"Bạn sắp chỉnh sửa hàng loạt một lượng lớn bản dịch. Thao tác này không thể "
+"hoàn tác. Bạn nên sao lưu cơ sở dữ liệu trước khi hoàn thành thao tác này."
+
+#, tp-ai
+msgid "Continue with replacing existing translations?"
+msgstr "Tiếp tục thay thế các bản dịch hiện có?"
+
+#, tp-ai
+msgid "No entries found."
+msgstr "Không tìm thấy mục nào."
+
+#, tp-ai
+msgid "Original"
+msgstr "Bản gốc"
+
+#, tp-ai
+msgid "Security check failed. Please reload the page and try again."
+msgstr "Kiểm tra bảo mật thất bại. Vui lòng tải lại trang và thử lại."
+
+#, tp-ai
+msgid "You do not have permission to do this."
+msgstr "Bạn không có quyền thực hiện việc này."
+
+#, tp-ai
+msgid "Please enter the term in the default language."
+msgstr "Vui lòng nhập thuật ngữ bằng ngôn ngữ mặc định."
+
+#, tp-ai
+msgid "Please provide at least one translation for the term."
+msgstr "Vui lòng cung cấp ít nhất một bản dịch cho thuật ngữ."
+
+#, tp-ai
+msgid "The term “%s” already exists in the glossary."
+msgstr "Thuật ngữ “%s” đã tồn tại trong bảng chú giải."
+
+#, tp-ai
+msgid "The term you are trying to edit no longer exists. Please reload the page."
+msgstr "Thuật ngữ bạn đang cố chỉnh sửa không còn tồn tại. Vui lòng tải lại trang."
+
+#, tp-ai
+msgid "The term you are trying to delete no longer exists. Please reload the page."
+msgstr "Thuật ngữ bạn đang cố xóa không còn tồn tại. Vui lòng tải lại trang."
+
+#, tp-ai
+msgid "%1$s: %2$d entry updated"
+msgid_plural "%1$s: %2$d entries updated"
+msgstr[0] "%1$s: Đã cập nhật %2$d mục"
+
+#, tp-ai
+msgid "Replacement complete."
+msgstr "Thay thế hoàn tất."
+
+#, tp-ai, tp-glo-fd3dec87
+msgid ""
+"This is a large replacement. %d entries were updated now and the rest will "
+"finish automatically in the background over the next few minutes."
+msgstr ""
+"Đây là một thay thế lớn. %d mục đã được cập nhật ngay bây giờ và phần còn "
+"lại sẽ tự động hoàn tất trong nền trong vài phút tới."
+
+#, tp-glo-c773bca5, tp-glo-d6a22d74
+msgid "Google Translate v2"
+msgstr "Google Translate v2"
+
+#, tp-glo-91460d88, tp-glo-d6a22d74
+msgid "Google Translate API Key"
+msgstr "Khóa API Google Translate"
+
+#, tp-glo-91460d88
+msgid "Add your API Key here..."
+msgstr "Thêm khóa API của bạn vào đây..."
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">this link</a> to see how you can set up an API key, "
+"<strong>control API costs</strong> and set HTTP referrer restrictions."
+msgstr ""
+"Truy cập <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">liên kết này</a> để xem cách thiết lập khóa API, "
+"<strong>kiểm soát chi phí API</strong> và đặt các hạn chế về HTTP referrer."
+
+#, tp-glo-1aabb38a
+msgid "Your HTTP referrer is: %s"
+msgstr "HTTP referrer của bạn là: %s"
+
+#, tp-glo-d6a22d74
+msgid "There was an error with your Google Translate key."
+msgstr "Đã xảy ra lỗi với khóa Google Translate của bạn."
+
+#, tp-glo-d6a22d74
+msgid "There was an error on the server processing your Google Translate key."
+msgstr "Đã xảy ra lỗi trên máy chủ khi xử lý khóa Google Translate của bạn."
+
+#, tp-glo-ee8b4f9f
+msgid "Please check your TranslatePress license key."
+msgstr "Vui lòng kiểm tra khóa cấp phép TranslatePress của bạn."
+
+msgid "Create your Free Account"
+msgstr "Tạo tài khoản miễn phí"
+
+msgid " or "
+msgstr " hoặc "
+
+msgid "Your free account includes: "
+msgstr "Tài khoản miễn phí của bạn bao gồm: "
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI for instant automatic translations"
+msgstr "Quyền truy cập TranslatePress AI để dịch tự động ngay lập tức"
+
+msgid "2000 AI words to translate automatically"
+msgstr "2000 từ AI để dịch tự động"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI Words and unlock all AI features with TranslatePress Pro."
+msgstr "Nhận thêm từ AI và mở khóa tất cả tính năng AI với TranslatePress Pro."
+
+msgid "Upgrade now"
+msgstr "Nâng cấp ngay"
+
+msgid "You have a valid %s <strong>license</strong>."
+msgstr "Bạn có <strong>bản quyền</strong> %s hợp lệ."
+
+msgid " words remaining. "
+msgstr " từ còn lại. "
+
+msgid "Recheck"
+msgstr "Kiểm tra lại"
+
+msgid "Rechecking..."
+msgstr "Đang kiểm tra lại..."
+
+msgid "Done."
+msgstr "Xong."
+
+msgid "Manage your license & quota on the %s"
+msgstr "Quản lý bản quyền & hạn mức của bạn trên %s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account Page"
+msgstr "Trang Tài khoản TranslatePress.com"
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced Add-ons"
+msgstr "Tiện ích mở rộng nâng cao"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Developer, Business and Personal plans."
+msgstr ""
+"Các tiện ích bổ sung này mở rộng plugin dịch của bạn và có sẵn trong các "
+"gói Developer, Business và Personal."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack"
+msgstr "SEO Pack"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and Facebook and Twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"Hỗ trợ SEO cho slug trang, tiêu đề trang, mô tả và thông tin đồ thị mạng xã "
+"hội Facebook và Twitter. Thuộc tính lang HTML được thiết lập đúng cách."
+
+msgid "Multiple Languages"
+msgstr "Nhiều ngôn ngữ"
+
+msgid ""
+"Add as many languages as you need for your project to go global. Publish "
+"your language only when all your translations are done."
+msgstr ""
+"Thêm bao nhiêu ngôn ngữ tùy ý cho dự án của bạn để vươn ra toàn cầu. Chỉ "
+"xuất bản ngôn ngữ khi mọi bản dịch đã hoàn tất."
+
+msgid "Pro Add-ons"
+msgstr "Tiện ích bổ sung Pro"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Business and Developer plans."
+msgstr ""
+"Các tiện ích bổ sung này mở rộng plugin dịch của bạn và có sẵn trong các "
+"gói Business và Developer."
+
+#, tp-glo-c6709f3f
+msgid "DeepL Automatic Translation"
+msgstr "Dịch tự động DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Automatically translate your website through the DeepL API."
+msgstr "Tự động dịch trang web của bạn thông qua API DeepL."
+
+msgid ""
+"Prompts visitors to switch to their preferred language based on their "
+"browser settings or IP address and remembers the last visited language."
+msgstr ""
+"Gợi ý khách truy cập chuyển sang ngôn ngữ ưu tiên dựa trên cài đặt trình "
+"duyệt hoặc địa chỉ IP và ghi nhớ ngôn ngữ đã truy cập lần cuối."
+
+msgid "Translator Accounts"
+msgstr "Tài khoản dịch giả"
+
+msgid ""
+"Create translator accounts for new users or allow existing users that are "
+"not administrators to translate your website."
+msgstr ""
+"Tạo tài khoản dịch giả cho người dùng mới hoặc cho phép người dùng hiện tại "
+"không phải quản trị viên dịch trang web của bạn."
+
+msgid "Browse As User Role"
+msgstr "Duyệt với tư cách vai trò người dùng"
+
+msgid ""
+"Navigate your website just like a particular user role would. Really useful "
+"for dynamic content or hidden content that appears for particular users."
+msgstr ""
+"Điều hướng trang web của bạn như thể một vai trò người dùng cụ thể. Rất hữu "
+"ích cho nội dung động hoặc nội dung ẩn chỉ hiển thị với người dùng nhất "
+"định."
+
+msgid "Navigation Based on Language"
+msgstr "Điều hướng dựa trên ngôn ngữ"
+
+msgid "Configure different menu items for different languages."
+msgstr "Cấu hình các mục menu khác nhau cho từng ngôn ngữ."
+
+#, tp-glo-47180abf
+msgid ""
+"Connect separate domains or subdomains to each of your translated versions. "
+"Strengthen your brand’s local identity and boost SEO performance for every "
+"language you support."
+msgstr ""
+"Kết nối các tên miền hoặc tên miền phụ riêng biệt với từng phiên bản đã "
+"dịch của bạn. Tăng cường bản sắc thương hiệu địa phương và cải thiện hiệu "
+"suất SEO cho mỗi ngôn ngữ bạn hỗ trợ."
+
+msgid "Enable Modules"
+msgstr "Bật mô-đun"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Enable Add-on modules to extend TranslatePress and enhance the "
+"functionality of your translated site."
+msgstr ""
+"Bật các mô-đun bổ sung để mở rộng TranslatePress và nâng cao chức năng cho "
+"trang web đã dịch của bạn."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to unlock the Pro "
+"add-ons below."
+msgstr ""
+"TranslatePress Pro đang hoạt động. Kích hoạt khóa giấy phép của bạn để mở "
+"khóa các tiện ích bổ sung Pro bên dưới."
+
+#, tp-ai
+msgid "Activate license"
+msgstr "Kích hoạt giấy phép"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro is installed but not activated yet."
+msgstr "TranslatePress Pro đã được cài đặt nhưng chưa được kích hoạt."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"Opens your Plugins page (filtered to TranslatePress) in a new tab. Activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Mở trang Plugin của bạn (đã lọc theo TranslatePress) trong tab mới. Kích "
+"hoạt plugin TranslatePress Pro ở đó, sau đó quay lại tab này — nó sẽ tự "
+"động cập nhật."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Activate TranslatePress Pro ↗"
+msgstr "Kích hoạt TranslatePress Pro ↗"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "More functionality with TranslatePress Pro."
+msgstr "Nhiều chức năng hơn với TranslatePress Pro."
+
+msgid "Upgrade now ↗"
+msgstr "Nâng cấp ngay ↗"
+
+msgid "Already a Pro User?"
+msgstr "Đã là người dùng Pro?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Opens the WordPress “Add Plugins” page in a new tab. Upload and activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Mở trang “Thêm Plugin” của WordPress trong tab mới. Tải lên và kích hoạt "
+"plugin TranslatePress Pro ở đó, sau đó quay lại tab này — nó sẽ tự động cập "
+"nhật."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro"
+msgstr "Cài đặt TranslatePress Pro"
+
+msgid "This add-on is not available on your current plan."
+msgstr "Tiện ích bổ sung này không khả dụng trong gói hiện tại của bạn."
+
+msgid "Continue"
+msgstr "Tiếp tục"
+
+msgid "The link you followed has expired. Please reload the page and try again."
+msgstr "Liên kết bạn đã theo dõi đã hết hạn. Vui lòng tải lại trang và thử lại."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Manage Sites."
+msgstr ""
+"Khóa giấy phép của bạn đã bị vô hiệu hóa cho URL này. Hãy kích hoạt lại từ "
+"<a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Quản lý các site."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn't "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you've installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Khóa giấy phép không khớp.</strong> Giấy phép bạn đã nhập không "
+"khớp với phiên bản TranslatePress đã cài đặt.</p><p>Vui lòng kiểm tra rằng "
+"bạn đã cài đặt đúng phiên bản cho giấy phép của mình từ tài khoản "
+"TranslatePress của bạn.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid "TranslatePress Account"
+msgstr "TranslatePress Account"
+
+msgid "« Go Back"
+msgstr "« Quay lại"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Manage Sites."
+msgstr ""
+"Khóa giấy phép của bạn đã bị vô hiệu hóa cho URL này. Hãy kích hoạt lại từ "
+"<a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Quản lý trang web."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Automatically translate your website using TranslatePress AI."
+msgstr "Tự động dịch trang web của bạn bằng TranslatePress AI."
+
+msgid "your account."
+msgstr "tài khoản của bạn."
+
+msgid "Skip and continue with manual translation »"
+msgstr "Bỏ qua và tiếp tục với bản dịch thủ công »"
+
+msgid "Creating a free account includes: "
+msgstr "Việc tạo tài khoản miễn phí bao gồm: "
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Are you a TranslatePress PRO user?"
+msgstr "Bạn có phải là người dùng TranslatePress PRO không?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro."
+msgstr "Cài đặt TranslatePress Pro."
+
+msgid "Skip this step"
+msgstr "Bỏ qua bước này"
+
+msgid "The email address you added is incorrect."
+msgstr "Địa chỉ email bạn đã thêm không chính xác."
+
+msgid "Setup Complete"
+msgstr "Thiết lập hoàn tất"
+
+msgid "You're ready to start translating!"
+msgstr "Bạn đã sẵn sàng bắt đầu dịch!"
+
+#, tp-glo-ee8b4f9f
+msgid "You have successfully set up TranslatePress for your website."
+msgstr "Bạn đã thiết lập thành công TranslatePress cho trang web của mình."
+
+msgid "Receive "
+msgstr "Nhận "
+
+msgid "Yes, send me multilingual growth tips."
+msgstr "Có, hãy gửi cho tôi các mẹo phát triển đa ngôn ngữ."
+
+msgid "Start translating"
+msgstr "Bắt đầu dịch"
+
+msgid "Sign Up and Start translating"
+msgstr "Đăng ký và bắt đầu dịch"
+
+msgid "You need to select a default language."
+msgstr "Bạn cần chọn ngôn ngữ mặc định."
+
+msgid ""
+"You are trying to add an invalid default language. Please select a valid "
+"option."
+msgstr ""
+"Bạn đang thử thêm ngôn ngữ mặc định không hợp lệ. Vui lòng chọn tùy chọn "
+"hợp lệ."
+
+msgid "Please add an additional language."
+msgstr "Vui lòng thêm ngôn ngữ bổ sung."
+
+msgid ""
+"You are trying to add an invalid additional language. Please select a valid "
+"option."
+msgstr ""
+"Bạn đang cố thêm một ngôn ngữ bổ sung không hợp lệ. Vui lòng chọn một tùy "
+"chọn hợp lệ."
+
+msgid "Configure Site Languages"
+msgstr "Cấu hình ngôn ngữ trang web"
+
+msgid "Select the default and additional languages for your website."
+msgstr "Chọn ngôn ngữ mặc định và ngôn ngữ bổ sung cho trang web của bạn."
+
+msgid "You can edit your site languages at any point."
+msgstr "Bạn có thể chỉnh sửa ngôn ngữ trang web bất cứ lúc nào."
+
+msgid "Default Language"
+msgstr "Ngôn ngữ mặc định"
+
+msgid "Select the language your content is written in."
+msgstr "Chọn ngôn ngữ mà nội dung của bạn được viết bằng."
+
+msgid "Additional Language"
+msgstr "Ngôn ngữ bổ sung"
+
+msgid "Choose a secondary language..."
+msgstr "Chọn ngôn ngữ phụ..."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Add Language"
+msgstr "Thêm ngôn ngữ"
+
+msgid "Choose a language..."
+msgstr "Chọn ngôn ngữ..."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to add more "
+"languages."
+msgstr ""
+"TranslatePress Pro đang hoạt động. Kích hoạt khóa giấy phép của bạn để thêm "
+"nhiều ngôn ngữ hơn."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Add more than two languages with TranslatePress Pro."
+msgstr "Thêm hơn hai ngôn ngữ với TranslatePress Pro."
+
+msgid "Set up Language Switcher"
+msgstr "Thiết lập bộ chuyển đổi ngôn ngữ"
+
+msgid ""
+"Select the style of the language switcher. You will find more ways to "
+"display it, in plugin settings."
+msgstr ""
+"Chọn kiểu của bộ chuyển đổi ngôn ngữ. Bạn sẽ tìm thấy thêm nhiều cách hiển "
+"thị trong cài đặt plugin."
+
+msgid ""
+"Displays a small language drop-down across your website, in a corner of "
+"your choosing."
+msgstr ""
+"Hiển thị menu thả xuống ngôn ngữ nhỏ trên khắp trang web của bạn, tại góc "
+"mà bạn chọn."
+
+msgid "Switcher Location"
+msgstr "Vị trí bộ chuyển đổi ngôn ngữ"
+
+msgid "Apply a Template"
+msgstr "Áp dụng mẫu"
+
+msgid "You can customize the design later"
+msgstr "Bạn có thể tùy chỉnh thiết kế sau"
+
+msgid "Default Template"
+msgstr "Mẫu mặc định"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Default"
+msgstr "Mặc định"
+
+msgid "Dark Template"
+msgstr "Mẫu tối"
+
+msgid "Border Template"
+msgstr "Mẫu viền"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Border"
+msgstr "Viền"
+
+msgid "Transparent Template"
+msgstr "Mẫu trong suốt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Transparent"
+msgstr "Trong suốt"
+
+#, tp-glo-ee8b4f9f
+msgid "Welcome to TranslatePress"
+msgstr "Chào mừng bạn đến với TranslatePress"
+
+#, tp-glo-ee8b4f9f
+msgid "Quick guided setup to configure TranslatePress in no time!"
+msgstr "Hướng dẫn thiết lập nhanh để cấu hình TranslatePress chỉ trong giây lát!"
+
+msgid "It takes less than a minute."
+msgstr "Chỉ mất chưa đầy một phút."
+
+msgid "Scanning item %1$d of %2$d..."
+msgstr "Đang quét mục %1$d trên %2$d..."
+
+msgid "Manually translated"
+msgstr "Đã dịch thủ công"
+
+msgid "Automatically translated"
+msgstr "Đã dịch tự động"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext file translation"
+msgstr "Dịch tệp Gettext"
+
+msgid "Not translated"
+msgstr "Chưa dịch"
+
+msgid "Bulk Actions"
+msgstr "Thao tác hàng loạt"
+
+msgid "Delete entries"
+msgstr "Xóa các mục"
+
+msgid "Filter"
+msgstr "Lọc"
+
+msgid "Clear filters"
+msgstr "Xóa bộ lọc"
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "Add New"
+msgstr "Thêm mới"
+
+#, tp-ctx-2edc90df
+msgid "Rescan plugins and theme for strings"
+msgstr "Quét lại plugin và giao diện để tìm chuỗi"
+
+#, tp-ctx-2edc90df
+msgid "Scanning plugins and theme for strings..."
+msgstr "Đang quét plugin và giao diện để tìm chuỗi..."
+
+msgid "Plugins and theme scan is complete"
+msgstr "Đã quét xong plugin và giao diện"
+
+msgid "Plugins and theme scan did not finish due to an error"
+msgstr "Quét plugin và giao diện không hoàn tất do lỗi"
+
+msgid "Import / Export"
+msgstr "Nhập / Xuất"
+
+msgid "See More"
+msgstr "Xem thêm"
+
+msgid "See Less"
+msgstr "Xem ít hơn"
+
+msgid "Apply"
+msgstr "Áp dụng"
+
+#, tp-ctx-2edc90df
+msgid "No strings match your query."
+msgstr "Không có chuỗi nào khớp với truy vấn của bạn."
+
+#, tp-ctx-2edc90df
+msgid "Try to rescan plugins and theme for strings."
+msgstr "Thử quét lại plugin và giao diện để tìm chuỗi."
+
+msgid ""
+"An error occurred while loading results. Most likely you were logged out. "
+"Reload page?"
+msgstr "Đã xảy ra lỗi khi tải kết quả. Có thể bạn đã bị đăng xuất. Tải lại trang?"
+
+msgid "found in translation"
+msgstr "tìm thấy trong bản dịch"
+
+msgid "Select All"
+msgstr "Chọn tất cả"
+
+msgid "Select Visible"
+msgstr "Chọn các mục hiển thị"
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action on all the strings matching your "
+"filter, not just the visibly checked. To perform the action only to the "
+"visible strings click \"Select Visible\" from the table header dropdown."
+msgstr ""
+"Bạn sắp thực hiện thao tác này trên tất cả các chuỗi khớp với bộ lọc, không "
+"chỉ những chuỗi hiển thị đã được chọn. Để chỉ thực hiện thao tác trên các "
+"chuỗi hiển thị, hãy nhấp vào \"Chọn hiển thị\" từ menu thả xuống đầu bảng."
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action only on the visible strings. To "
+"perform the action on all the strings matching the filter click \"Select "
+"All\" from the table header dropdown."
+msgstr ""
+"Bạn sắp thực hiện thao tác này chỉ trên các chuỗi hiển thị. Để thực hiện "
+"thao tác trên tất cả các chuỗi khớp với bộ lọc, hãy nhấp vào \"Chọn tất "
+"cả\" từ menu thả xuống đầu bảng."
+
+msgid "To continue please type the word:"
+msgstr "Để tiếp tục, vui lòng nhập từ:"
+
+msgid "The word typed was incorrect. Action was cancelled."
+msgstr "Từ đã nhập không chính xác. Hành động đã bị hủy."
+
+#, tp-ctx-8a82cc9e, tp-glo-ee8b4f9f
+msgid ""
+"Warning: This action cannot be undone. Deleting a string will remove its "
+"current translation. The original string will appear again in this "
+"interface after TranslatePress detects it. This action is NOT equivalent to "
+"excluding the string from being translated again."
+msgstr ""
+"Cảnh báo: Thao tác này không thể hoàn tác. Xóa một chuỗi sẽ xóa bản dịch "
+"hiện tại của nó. Chuỗi gốc sẽ xuất hiện lại trong giao diện này sau khi "
+"TranslatePress phát hiện. Thao tác này KHÔNG tương đương với việc loại trừ "
+"chuỗi khỏi việc được dịch lại."
+
+msgid "%d original entries and their translations were deleted."
+msgstr "%d mục gốc và bản dịch của chúng đã bị xóa."
+
+msgid "Navigate to next page"
+msgstr "Đi đến trang tiếp theo"
+
+msgid "Navigate to previous page"
+msgstr "Đi đến trang trước"
+
+msgid "Navigate to first page"
+msgstr "Đi đến trang đầu tiên"
+
+msgid "Navigate to last page"
+msgstr "Đi đến trang cuối cùng"
+
+msgid "Type a page number to navigate to"
+msgstr "Nhập số trang để đi đến"
+
+msgid ""
+"Incorrect page number. Type a page number between 1 and total number of "
+"pages"
+msgstr "Số trang không chính xác. Nhập số trang từ 1 đến tổng số trang"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Search original and translated strings containing typed keywords while also "
+"matching selected filters. Place string in quotes for exact match: \"string\""
+msgstr ""
+"Tìm kiếm các chuỗi gốc và đã dịch chứa từ khóa đã nhập đồng thời khớp với "
+"các bộ lọc đã chọn. Đặt chuỗi trong dấu ngoặc kép để khớp chính xác: "
+"\"chuỗi\""
+
+#, tp-ctx-2edc90df
+msgid ""
+"Filter strings according to selected translation status, filters and "
+"keywords and selected filters"
+msgstr ""
+"Lọc chuỗi theo trạng thái dịch đã chọn, bộ lọc, từ khóa và các bộ lọc đã "
+"chọn"
+
+msgid "Removes selected filters"
+msgstr "Xóa các bộ lọc đã chọn"
+
+#, tp-ctx-2edc90df
+msgid "See options for selecting all strings"
+msgstr "Xem các tùy chọn để chọn tất cả chuỗi"
+
+#, tp-ctx-2edc90df
+msgid "Click to sort strings by this column"
+msgstr "Nhấp để sắp xếp chuỗi theo cột này"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-ctx-e9944eb3, tp-glo-8896ebe8
+msgid ""
+"The ID of the WordPress post where this string was detected. Empty if the "
+"string is not associated with a specific post."
+msgstr ""
+"ID của bài viết WordPress nơi chuỗi này được phát hiện. Trống nếu chuỗi "
+"không liên kết với một bài viết cụ thể."
+
+msgid ""
+"Language in which the translation status filter applies. Leave unselected "
+"for the translation status to apply to ANY language"
+msgstr ""
+"Ngôn ngữ mà bộ lọc trạng thái dịch áp dụng. Để trống nếu muốn trạng thái "
+"dịch áp dụng cho BẤT KỲ ngôn ngữ nào"
+
+msgid "Search"
+msgstr "Tìm kiếm"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs that are not found in either one of the other categories."
+msgstr "Các slug không có trong bất kỳ danh mục nào khác."
+
+#, tp-ctx-8a82cc9e
+msgid "Plugins and Theme String Translation"
+msgstr "Dịch chuỗi Plugin và Giao diện"
+
+#, tp-glo-64dbb752
+msgid "Gettext"
+msgstr "Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Search Gettext Strings"
+msgstr "Tìm kiếm chuỗi Gettext"
+
+#, tp-ctx-8a82cc9e
+msgid "Original String"
+msgstr "Chuỗi gốc"
+
+msgid "Filter by domain"
+msgstr "Lọc theo domain"
+
+msgid "Filter by type"
+msgstr "Lọc theo loại"
+
+msgid "Email text"
+msgstr "Văn bản email"
+
+#, tp-ctx-8a82cc9e
+msgid "Emails String Translation"
+msgstr "Dịch chuỗi email"
+
+msgid "Emails"
+msgstr "Email"
+
+#, tp-ctx-2edc90df
+msgid "Search Email Strings"
+msgstr "Tìm kiếm chuỗi email"
+
+#, tp-ctx-8a82cc9e
+msgid "User Inputted String Translation"
+msgstr "Dịch chuỗi do người dùng nhập"
+
+#, tp-ctx-5211e47b
+msgid "Regular"
+msgstr "Thông thường"
+
+#, tp-ctx-2edc90df, tp-ctx-5211e47b
+msgid "Search Regular Strings"
+msgstr "Tìm kiếm chuỗi thông thường"
+
+msgid "Filter by Translation Block"
+msgstr "Lọc theo khối dịch"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation Editor"
+msgstr "Trình chỉnh sửa dịch chuỗi"
+
+#, tp-ai
+msgid "Every minute"
+msgstr "Mỗi phút"
+
+#, tp-ai
+msgid "Could not load the background task."
+msgstr "Không thể tải tác vụ nền."
+
+#, tp-ai
+msgid "Waiting to start background processing..."
+msgstr "Đang chờ để bắt đầu xử lý nền..."
+
+#, tp-ai
+msgid "Background processing could not start."
+msgstr "Không thể bắt đầu xử lý nền."
+
+#, tp-ai
+msgid "Background processing completed."
+msgstr "Xử lý nền đã hoàn tất."
+
+#, tp-ai
+msgid "A previous batch item failed."
+msgstr "Một mục trong đợt xử lý trước đã thất bại."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing did not complete successfully."
+msgstr "Xử lý nền TranslatePress không hoàn tất thành công."
+
+#, tp-ai
+msgid "Error: %s"
+msgstr "Lỗi: %s"
+
+#, tp-ai
+msgid "You do not have permission to view this task status."
+msgstr "Bạn không có quyền xem trạng thái tác vụ này."
+
+#, tp-ai
+msgid "Invalid batch task."
+msgstr "Tác vụ hàng loạt không hợp lệ."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress is processing a background task."
+msgstr "TranslatePress đang xử lý một tác vụ nền."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing completed successfully."
+msgstr "Xử lý nền TranslatePress đã hoàn tất thành công."
+
+#, tp-ai
+msgid "Processing %s..."
+msgstr "Đang xử lý %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"%s is optimizing gettext database tables in the background. Translations "
+"continue to work while this runs."
+msgstr ""
+"%s đang tối ưu hóa các bảng cơ sở dữ liệu gettext trong nền. Các bản dịch "
+"vẫn hoạt động trong khi quá trình này chạy."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization completed successfully."
+msgstr "Tối ưu hóa cơ sở dữ liệu gettext của TranslatePress đã hoàn tất thành công."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress has detected and cleaned up some failed translation entries "
+"in your database following %s. No further action is required."
+msgstr ""
+"TranslatePress đã phát hiện và dọn dẹp một số mục bản dịch bị lỗi trong cơ "
+"sở dữ liệu của bạn sau %s. Không cần thực hiện thêm hành động nào."
+
+#, tp-ai
+msgid "an isolated incident"
+msgstr "một sự cố đơn lẻ"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Unknown gettext lookup hash migration phase: %s."
+msgstr "Cập nhật bị hủy! Giai đoạn di chuyển băm tra cứu gettext không xác định: %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Could not find an available gettext original_id index name "
+"for table %s."
+msgstr ""
+"Cập nhật bị hủy! Không tìm thấy tên chỉ mục original_id gettext khả dụng "
+"cho bảng %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext lookup hash migration cannot process invalid ID "
+"%1$d in table %2$s. Repair the table ID schema and retry."
+msgstr ""
+"Cập nhật bị hủy! Di chuyển băm tra cứu gettext không thể xử lý ID không hợp "
+"lệ %1$d trong bảng %2$s. Sửa chữa lược đồ ID bảng và thử lại."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Table %1$s still references %2$d duplicate gettext original "
+"ids."
+msgstr ""
+"Cập nhật bị hủy! Bảng %1$s vẫn còn tham chiếu %2$d ID original gettext "
+"trùng lặp."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext original meta still references %d duplicate "
+"original ids."
+msgstr ""
+"Cập nhật bị hủy! Meta original gettext vẫn còn tham chiếu %d ID original "
+"trùng lặp."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext database optimization completed."
+msgstr "Tối ưu hóa cơ sở dữ liệu gettext đã hoàn tất."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deduplicating gettext translation tables..."
+msgstr "Đang loại bỏ trùng lặp các bảng bản dịch gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Migrating gettext original lookup hashes..."
+msgstr "Đang di chuyển các băm tra cứu original gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing the gettext originals lookup index..."
+msgstr "Đang chuẩn bị chỉ mục tra cứu bản gốc gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses..."
+msgstr "Đang cập nhật trạng thái thời gian chạy của gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finishing gettext database optimization..."
+msgstr "Đang hoàn tất tối ưu hóa cơ sở dữ liệu gettext..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses for language %s..."
+msgstr "Đang cập nhật trạng thái thời gian chạy của gettext cho ngôn ngữ %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Resolving missing gettext original ids in %s..."
+msgstr "Đang xử lý các ID bản gốc gettext bị thiếu trong %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing gettext table %s..."
+msgstr "Đang chuẩn bị bảng gettext %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Removing invalid gettext rows from %s..."
+msgstr "Đang xóa các hàng gettext không hợp lệ từ %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Prepared gettext original ids in %s..."
+msgstr "Đã chuẩn bị ID bản gốc gettext trong %s..."
+
+#, tp-ai
+msgid "Normalizing plural forms in %s..."
+msgstr "Đang chuẩn hóa dạng số nhiều trong %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Processing duplicate gettext rows in %s..."
+msgstr "Đang xử lý các hàng gettext trùng lặp trong %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Building duplicate gettext map for %s..."
+msgstr "Đang xây dựng bản đồ trùng lặp gettext cho %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Verifying gettext table %s..."
+msgstr "Đang xác minh bảng gettext %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deleting duplicate gettext rows from %s..."
+msgstr "Đang xóa các hàng gettext trùng lặp khỏi %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Rechecking duplicate gettext rows in %s..."
+msgstr "Đang kiểm tra lại các hàng gettext trùng lặp trong %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Adding unique gettext index for %s..."
+msgstr "Đang thêm chỉ mục duy nhất gettext cho %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finished gettext table %s."
+msgstr "Đã hoàn tất bảng gettext %s."
+
+msgid "License"
+msgstr "Giấy phép"
+
+msgid "Your License Key is valid."
+msgstr "Khóa giấy phép của bạn hợp lệ."
+
+msgid "Your License Key is invalid."
+msgstr "Khóa giấy phép của bạn không hợp lệ."
+
+msgid "Your License has expired."
+msgstr "Giấy phép của bạn đã hết hạn."
+
+msgid "Deactivate License"
+msgstr "Hủy kích hoạt giấy phép"
+
+msgid "Add a license key"
+msgstr "Thêm khóa giấy phép"
+
+msgid "License Key"
+msgstr "Khóa giấy phép"
+
+msgid "Manage your license in your %1$s."
+msgstr "Quản lý giấy phép của bạn trong %1$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI License Key?"
+msgstr "Bạn chưa có khóa giấy phép TranslatePress AI?"
+
+msgid "Get a free License Today"
+msgstr "Nhận giấy phép miễn phí ngay hôm nay"
+
+msgid "Add your License Key"
+msgstr "Thêm khóa giấy phép của bạn"
+
+msgid ""
+"Add your License Key to unlock all premium features. Find the License Key "
+"in your"
+msgstr ""
+"Thêm khóa giấy phép của bạn để mở khóa tất cả các tính năng cao cấp. Tìm "
+"khóa giấy phép trong"
+
+msgid "Your license is valid and active."
+msgstr "Giấy phép của bạn hợp lệ và đang hoạt động."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress License"
+msgstr "Giấy phép TranslatePress"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"a license key by creating a free account."
+msgstr ""
+"Để kích hoạt Dịch tự động bằng TranslatePress AI, bạn cần có khóa cấp phép "
+"bằng cách tạo một tài khoản miễn phí."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your license key from"
+msgstr ""
+"Để kích hoạt Dịch Tự động bằng TranslatePress AI, vui lòng nhập khóa giấy "
+"phép của bạn từ"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI License"
+msgstr "Nhận giấy phép TranslatePress AI miễn phí của bạn"
+
+msgid "Generate License"
+msgstr "Tạo giấy phép"
+
+msgid "Get a Free AI License"
+msgstr "Nhận giấy phép AI miễn phí"
+
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license."
+msgstr ""
+"Trang web này đã được kích hoạt bằng giấy phép miễn phí. Mỗi trang web chỉ "
+"có thể sử dụng một giấy phép miễn phí."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"Website này đã được kích hoạt bằng giấy phép miễn phí. Mỗi website chỉ có "
+"thể sử dụng một giấy phép miễn phí. Vui lòng nâng cấp lên gói trả phí để có "
+"thêm từ TranslatePress AI từ %1$s tài khoản của bạn %2$s."
+
+msgid "Debug Data for License Checking"
+msgstr "Dữ liệu gỡ lỗi cho việc kiểm tra giấy phép"
+
+msgid "Debug Data for License Activation"
+msgstr "Dữ liệu gỡ lỗi cho việc kích hoạt giấy phép"
+
+#, tp-glo-ee8b4f9f
+msgid "Please install and activate the TranslatePress - Multilingual plugin"
+msgstr "Vui lòng cài đặt và kích hoạt plugin TranslatePress - Multilingual"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update the TranslatePress - Multilingual plugin to version %1$s or "
+"higher to ensure %2$s functions correctly."
+msgstr ""
+"Vui lòng cập nhật plugin TranslatePress - Multilingual lên phiên bản %1$s "
+"trở lên để đảm bảo %2$s hoạt động chính xác."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update TranslatePress - Multilingual to version %2$s or newer. Your "
+"currently installed version of TranslatePress - Multilingual is no longer "
+"compatible with the current version of %1$s."
+msgstr ""
+"Vui lòng cập nhật TranslatePress - Multilingual lên phiên bản %2$s trở lên. "
+"Phiên bản TranslatePress - Multilingual hiện đã cài đặt của bạn không còn "
+"tương thích với phiên bản hiện tại của %1$s."
+
+#, tp-glo-ee8b4f9f
+msgid "All TranslatePress functionalities are disabled until then."
+msgstr "Tất cả các chức năng của TranslatePress sẽ bị vô hiệu hóa cho đến khi đó."
+
+msgid "Update Now"
+msgstr "Cập nhật ngay"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This TranslatePress add-on has been migrated to the main plugin and is no "
+"longer used. You can delete it."
+msgstr ""
+"Tiện ích mở rộng TranslatePress này đã được chuyển sang plugin chính và "
+"không còn được sử dụng nữa. Bạn có thể xóa nó."
+
+#, tp-glo-5e752340, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires at least PHP version 5.6.20+ to "
+"run. It is the <a href=\"%s\">minimum requirement of the latest WordPress "
+"version</a>. Please contact your server administrator to update your PHP "
+"version."
+msgstr ""
+"<strong>TranslatePress</strong> yêu cầu ít nhất phiên bản PHP 5.6.20+ để "
+"chạy. Đây là <a href=\"%s\">yêu cầu tối thiểu của phiên bản WordPress mới "
+"nhất</a>. Vui lòng liên hệ với quản trị viên máy chủ của bạn để cập nhật "
+"phiên bản PHP."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Add-ons"
+msgstr "Tiện ích bổ sung TranslatePress"
+
+msgid ""
+"You must first purchase this version to have access to the addon "
+"%1$shere%2$s"
+msgstr ""
+"Bạn phải mua phiên bản này trước để có quyền truy cập vào tiện ích bổ sung "
+"%1$stại đây%2$s"
+
+msgid ""
+"You need an active license to have access to the addon. Renew or purchase a "
+"new one %1$shere%2$s."
+msgstr ""
+"Bạn cần bản quyền đang hoạt động để truy cập tiện ích bổ sung. Gia hạn hoặc "
+"mua mới %1$stại đây%2$s."
+
+msgid "Please %1$senter your license%2$s key first, to activate this addon."
+msgstr ""
+"Vui lòng %1$snhập khóa bản quyền%2$s của bạn trước để kích hoạt tiện ích bổ "
+"sung này."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack (Legacy)"
+msgstr "SEO Pack (Kế thừa)"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and facebook and twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"Hỗ trợ SEO cho slug trang, tiêu đề trang, mô tả và thông tin đồ thị xã hội "
+"Facebook và Twitter. Thuộc tính lang HTML được thiết lập đúng cách."
+
+msgid "Recommended Plugins"
+msgstr "Plugin đề xuất"
+
+msgid "A short list of plugins you can use to extend your website."
+msgstr "Danh sách ngắn các plugin bạn có thể dùng để mở rộng trang web."
+
+#, tp-glo-35089c1a
+msgid "Profile Builder"
+msgstr "Profile Builder"
+
+#, tp-glo-35089c1a
+msgid ""
+"Capture more user information on the registration form with the help of "
+"Profile Builder's custom user profile fields and/or add an Email "
+"Confirmation process to verify your customers accounts."
+msgstr ""
+"Thu thập thêm thông tin người dùng trên biểu mẫu đăng ký với các trường hồ "
+"sơ người dùng tùy chỉnh của Profile Builder và/hoặc thêm quy trình Xác nhận "
+"Email để xác minh tài khoản khách hàng của bạn."
+
+msgid "Paid Member Subscriptions"
+msgstr "Paid Member Subscriptions"
+
+msgid ""
+"Accept user payments, create subscription plans and restrict content on "
+"your membership site."
+msgstr ""
+"Chấp nhận thanh toán của người dùng, tạo các gói đăng ký và hạn chế nội "
+"dung trên trang web thành viên của bạn."
+
+msgid "WP Webhooks Automator"
+msgstr "WP Webhooks Automator"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Create no-code automations and workflows on your WordPress site. Easily "
+"connect your plugins, sites and apps together."
+msgstr ""
+"Tạo tự động hóa và quy trình làm việc không cần mã trên trang web WordPress "
+"của bạn. Dễ dàng kết nối các plugin, trang web và ứng dụng lại với nhau."
+
+msgid "Save Changes"
+msgstr "Lưu thay đổi"
+
+msgid "Account Page"
+msgstr "Trang tài khoản"
+
+msgid "You can get one for %1$sfree%2$s, by creating a free account. It includes:"
+msgstr ""
+"Bạn có thể nhận một khóa %1$smiễn phí%2$s, bằng cách tạo một tài khoản miễn "
+"phí. Nó bao gồm:"
+
+msgid "Debug Information"
+msgstr "Thông tin gỡ lỗi"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI words and unlock all features with TranslatePress Pro."
+msgstr "Nhận thêm từ AI và mở khóa mọi tính năng với TranslatePress Pro."
+
+msgid "Already purchased a Premium version?"
+msgstr "Đã mua phiên bản Premium chưa?"
+
+msgid "Go to your %1$s"
+msgstr "Truy cập %1$s của bạn"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account"
+msgstr "Tài khoản TranslatePress.com"
+
+msgid "Download & Install the Pro plugin"
+msgstr "Tải xuống và cài đặt plugin Pro"
+
+msgid "Learn More"
+msgstr "Tìm hiểu thêm"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Errors"
+msgstr "Lỗi TranslatePress"
+
+msgid "There are no logged errors."
+msgstr "Không có lỗi nào được ghi lại."
+
+#, tp-glo-8896ebe8
+msgid "WordPress Translation Plugin"
+msgstr "Plugin dịch WordPress"
+
+#, tp-ai
+msgid "Back to Glossary"
+msgstr "Quay lại Bảng thuật ngữ"
+
+#, tp-ai
+msgid "Search Existing Translations"
+msgstr "Tìm kiếm bản dịch hiện có"
+
+#, tp-ai
+msgid ""
+"Search the existing dictionary entries to see how a term is currently "
+"translated in each language."
+msgstr ""
+"Tìm kiếm các mục từ điển hiện có để xem thuật ngữ hiện đang được dịch như "
+"thế nào trong từng ngôn ngữ."
+
+#, tp-ai
+msgid "To fully explore all the translations, use %s."
+msgstr "Để khám phá toàn bộ các bản dịch, hãy sử dụng %s."
+
+#, tp-ai
+msgid "Search existing translations"
+msgstr "Tìm kiếm bản dịch hiện có"
+
+#, tp-ai
+msgid "Replace Existing Translations"
+msgstr "Thay thế bản dịch hiện có"
+
+#, tp-ai
+msgid "The requested glossary term could not be found. It may have been deleted."
+msgstr ""
+"Không tìm thấy thuật ngữ bảng thuật ngữ được yêu cầu. Có thể thuật ngữ đó "
+"đã bị xóa."
+
+#, tp-ai
+msgid "&laquo; Back to Glossary"
+msgstr "&laquo; Quay lại Bảng thuật ngữ"
+
+#, tp-ai
+msgid ""
+"For each language, enter the current (existing) translation you want to "
+"find; every case-insensitive occurrence in the stored translations will be "
+"replaced with the new translation, keeping the original capitalization."
+msgstr ""
+"Với mỗi ngôn ngữ, hãy nhập bản dịch hiện tại (đã tồn tại) mà bạn muốn tìm; "
+"mọi lần xuất hiện không phân biệt chữ hoa/chữ thường trong các bản dịch đã "
+"lưu trữ sẽ được thay thế bằng bản dịch mới, đồng thời giữ nguyên cách viết "
+"hoa ban đầu."
+
+#, tp-ai
+msgid ""
+"Leaving a language field empty will skip that language entirely (no changes "
+"will be made for it). Only one existing translation per language can be "
+"entered at a time. If you have multiple translations to replace for the "
+"same language, simply run the replacement again with the next value."
+msgstr ""
+"Nếu để trống trường ngôn ngữ, ngôn ngữ đó sẽ được bỏ qua hoàn toàn (không "
+"có thay đổi nào được thực hiện). Mỗi lần chỉ có thể nhập một bản dịch hiện "
+"có cho mỗi ngôn ngữ. Nếu bạn có nhiều bản dịch cần thay thế cho cùng một "
+"ngôn ngữ, chỉ cần chạy lại thao tác thay thế với giá trị tiếp theo."
+
+#, tp-ai
+msgid ""
+"The \"Existing translation\" is not the term in the default language, but "
+"rather the already existing wrong translation you want to correct."
+msgstr ""
+"\"Bản dịch hiện có\" không phải là thuật ngữ trong ngôn ngữ mặc định, mà là "
+"bản dịch sai đã tồn tại mà bạn muốn sửa."
+
+#, tp-ai
+msgid "Existing translation"
+msgstr "Bản dịch hiện có"
+
+#, tp-ai
+msgid "New translation"
+msgstr "Bản dịch mới"
+
+#, tp-ai
+msgid "Replace in existing translations"
+msgstr "Thay thế trong các bản dịch hiện có"
+
+#, tp-ai, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Glossary is available only with the TranslatePress AI engine."
+msgstr "Bảng thuật ngữ chỉ khả dụng với công cụ TranslatePress AI."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74
+msgid ""
+"Select the %s automatic translation engine to add and manage glossary "
+"terms. For other translation engines (such as DeepL or Google Translate), "
+"glossary functions are available in the translation provider’s dashboard."
+msgstr ""
+"Chọn công cụ dịch tự động %s để thêm và quản lý thuật ngữ bảng thuật ngữ. "
+"Đối với các công cụ dịch khác (như DeepL hoặc Google Translate), chức năng "
+"bảng thuật ngữ có sẵn trong bảng điều khiển của nhà cung cấp dịch vụ dịch "
+"thuật."
+
+#, tp-ai
+msgid "Add Glossary Term"
+msgstr "Thêm thuật ngữ bảng thuật ngữ"
+
+#, tp-ai
+msgid ""
+"Define words or phrases that should not be translated automatically, and "
+"optionally provide replacements per language."
+msgstr ""
+"Xác định các từ hoặc cụm từ không nên được dịch tự động, và có thể tùy chọn "
+"cung cấp bản thay thế cho từng ngôn ngữ."
+
+#, tp-ai
+msgid "The original word or phrase in the default language."
+msgstr "Từ hoặc cụm từ gốc trong ngôn ngữ mặc định."
+
+#, tp-ai
+msgid "Add Term"
+msgstr "Thêm thuật ngữ"
+
+#, tp-ai
+msgid "Search glossary terms"
+msgstr "Tìm kiếm thuật ngữ bảng thuật ngữ"
+
+#, tp-ai
+msgid "Search terms"
+msgstr "Tìm kiếm thuật ngữ"
+
+#, tp-ai
+msgid "Search Glossary"
+msgstr "Tìm kiếm bảng thuật ngữ"
+
+#, tp-ai
+msgid "Loading…"
+msgstr "Đang tải…"
+
+#, tp-ai
+msgid "To edit existing translations, use the %s."
+msgstr "Để chỉnh sửa các bản dịch hiện có, hãy sử dụng %s."
+
+msgid "Language Switcher update notice"
+msgstr "Thông báo cập nhật Bộ chuyển đổi ngôn ngữ"
+
+msgid "Legacy language switcher is currently enabled"
+msgstr "Bộ chuyển đổi ngôn ngữ cũ hiện đang được bật"
+
+msgid ""
+"We’ve upgraded the switcher for richer customization and a better user "
+"experience.<br>In order to use the new configurator, turn off <strong>Load "
+"legacy language switcher</strong>."
+msgstr ""
+"Chúng tôi đã nâng cấp bộ chuyển đổi để có nhiều tùy chỉnh hơn và trải "
+"nghiệm người dùng tốt hơn.<br>Để sử dụng công cụ cấu hình mới, hãy tắt "
+"<strong>Tải bộ chuyển đổi ngôn ngữ cũ</strong>."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Note: You can switch back anytime from <strong>Advanced Settings → <a "
+"href=\"%s\">Troubleshooting</a></strong>."
+msgstr ""
+"Lưu ý: Bạn có thể chuyển lại bất cứ lúc nào từ <strong>Cài đặt nâng cao → "
+"<a href=\"%s\">Khắc phục sự cố</a></strong>."
+
+msgid "Enable the new switcher"
+msgstr "Bật bộ chuyển đổi mới"
+
+msgid "Get a translation volume estimate with a detailed breakdown per page"
+msgstr "Nhận ước tính khối lượng dịch với bảng phân tích chi tiết theo từng trang"
+
+msgid "Find how many translatable words are on your website"
+msgstr "Tìm số từ có thể dịch trên trang web của bạn"
+
+#, tp-glo-c6709f3f
+msgid ""
+"<strong>DeepL</strong> automatic translation is available as a <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"Dịch tự động <strong>DeepL</strong> có sẵn dưới dạng <a href=\"%1$s\" "
+"target=\"_blank\" title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"By upgrading you'll get access to all paid add-ons, premium support and "
+"help fund the future development of TranslatePress."
+msgstr ""
+"Bằng cách nâng cấp, bạn sẽ có quyền truy cập vào tất cả tiện ích bổ sung "
+"trả phí, hỗ trợ cao cấp và góp phần tài trợ cho sự phát triển trong tương "
+"lai của TranslatePress."
+
+#, tp-glo-c6709f3f
+msgid ""
+"To use <strong>DeepL</strong> for automatic translation, activate this Pro "
+"add-on from the <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"Để sử dụng <strong>DeepL</strong> cho dịch tự động, hãy kích hoạt tiện ích "
+"bổ sung Pro này từ <a href=\"%1$s\" target=\"_self\" "
+"title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f, tp-glo-d311355a
+msgid ""
+"Please note that DeepL API usage is paid separately. See <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL pricing "
+"information</a>."
+msgstr ""
+"Vui lòng lưu ý rằng việc sử dụng API DeepL được tính phí riêng. Xem <a "
+"href=\"https://www.deepl.com/pro.html#developer\">thông tin giá của "
+"DeepL</a>."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro Add-ons"
+msgstr "Tiện ích bổ sung TranslatePress Pro"
+
+#, tp-glo-91460d88
+msgid "Test API credentials"
+msgstr "Kiểm tra thông tin xác thực API"
+
+msgid "Check if the selected translation engine is configured correctly."
+msgstr "Kiểm tra xem công cụ dịch đã chọn đã được cấu hình đúng chưa."
+
+msgid "Alternative Engines"
+msgstr "Công cụ thay thế"
+
+msgid "More info"
+msgstr "Thêm thông tin"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Switch to TranslatePress AI"
+msgstr "Chuyển sang TranslatePress AI"
+
+#, tp-glo-8896ebe8
+msgid "Integrate machine translation directly with your WordPress website."
+msgstr "Tích hợp dịch máy trực tiếp với trang web WordPress của bạn."
+
+msgid ""
+"Choose which engine you want to use in order to %1$s automatically "
+"translate your website."
+msgstr "Chọn công cụ bạn muốn sử dụng để %1$s tự động dịch trang web của bạn."
+
+#, tp-ctx-742ebaa7
+msgid "Automatically Translate Slugs"
+msgstr "Tự động dịch các slug"
+
+#, tp-ctx-742ebaa7, tp-ctx-7832384c, tp-ctx-e9944eb3
+msgid ""
+"Generate automatic translations of slugs for posts, pages and Custom Post "
+"Types.<br/>The slugs will be automatically translated starting with the "
+"second refresh of each page."
+msgstr ""
+"Tạo bản dịch tự động cho slug của bài viết, trang và Custom Post "
+"Types.<br/>Các slug sẽ được dịch tự động bắt đầu từ lần làm mới thứ hai của "
+"mỗi trang."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This feature is only available in the paid version. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"Tính năng này chỉ khả dụng trong phiên bản trả phí. Nâng cấp TranslatePress "
+"và mở khóa thêm nhiều tính năng cao cấp."
+
+#, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Requires <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack Add-on</a> to be installed and "
+"activated."
+msgstr ""
+"Yêu cầu cài đặt và kích hoạt <a href=\"%s\" title=\"TranslatePress Add-on "
+"SEO Pack documentation\" target=\"_blank\">tiện ích bổ sung SEO Pack</a>."
+
+msgid "Automatic Translation Settings"
+msgstr "Cài đặt Dịch tự động"
+
+msgid "AI Words Low Notification"
+msgstr "Thông báo Số từ AI Thấp"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Receive an email notification when your TranslatePress AI word count drops "
+"below the specified threshold."
+msgstr ""
+"Nhận thông báo qua email khi số từ AI TranslatePress của bạn giảm xuống "
+"dưới ngưỡng đã chỉ định."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This feature is only available when using the TranslatePress AI translation "
+"engine."
+msgstr "Tính năng này chỉ khả dụng khi sử dụng công cụ dịch TranslatePress AI."
+
+msgid "Notification Email"
+msgstr "Email thông báo"
+
+msgid "The email address where the low AI words notification will be sent."
+msgstr "Địa chỉ email để gửi thông báo khi số từ AI thấp."
+
+msgid "Word Threshold"
+msgstr "Ngưỡng Số từ"
+
+msgid "words"
+msgstr "từ"
+
+msgid "You will be notified when remaining AI words drop below this number."
+msgstr "Bạn sẽ nhận được thông báo khi số từ AI còn lại giảm xuống dưới con số này."
+
+msgid "Block Crawlers"
+msgstr "Chặn Trình thu thập Dữ liệu"
+
+msgid ""
+"Block crawlers from triggering automatic translations on your "
+"website.<br>This will not prevent crawlers from accessing this site's pages."
+msgstr ""
+"Chặn trình thu thập dữ liệu kích hoạt bản dịch tự động trên trang web của "
+"bạn.<br>Điều này sẽ không ngăn trình thu thập dữ liệu truy cập các trang "
+"của trang web này."
+
+msgid "Limit machine translation / characters per day"
+msgstr "Giới hạn dịch máy / ký tự mỗi ngày"
+
+msgid ""
+"Add a limit to the number of automatically translated characters so you can "
+"better budget your project."
+msgstr ""
+"Thêm giới hạn cho số lượng ký tự được dịch tự động để bạn có thể quản lý "
+"ngân sách dự án tốt hơn."
+
+msgid "characters per day"
+msgstr "ký tự mỗi ngày"
+
+msgid "Today's Character Count: "
+msgstr "Số ký tự hôm nay: "
+
+msgid "Log machine translation queries."
+msgstr "Ghi log các truy vấn dịch máy."
+
+#, tp-glo-8896ebe8
+msgid ""
+"Only enable for testing purposes. Can impact performance.<br>All records "
+"are stored in the wp_trp_machine_translation_log database table. Use a "
+"plugin like <a href=\"https://wordpress.org/plugins/wp-data-access/\" "
+"target=\"_blank\">WP Data Access</a> to browse the logs or directly from "
+"your database manager (PHPMyAdmin, etc.)"
+msgstr ""
+"Chỉ bật cho mục đích thử nghiệm. Có thể ảnh hưởng đến hiệu suất.<br>Tất cả "
+"bản ghi được lưu trong bảng cơ sở dữ liệu wp_trp_machine_translation_log. "
+"Sử dụng plugin như <a "
+"href=\"https://wordpress.org/plugins/wp-data-access/\" target=\"_blank\">WP "
+"Data Access</a> để duyệt log hoặc trực tiếp từ trình quản lý cơ sở dữ liệu "
+"của bạn (PHPMyAdmin, v.v.)"
+
+#, tp-glo-91460d88
+msgid "Test API Credentials"
+msgstr "Kiểm tra thông tin xác thực API"
+
+#, tp-glo-1aabb38a
+msgid "HTTP Referrer: "
+msgstr "HTTP Referrer: "
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Use this HTTP Referrer if the API lets you restrict key usage from its "
+"Dashboard."
+msgstr ""
+"Sử dụng HTTP Referrer này nếu API cho phép bạn hạn chế việc sử dụng khóa từ "
+"Bảng điều khiển của nó."
+
+#, tp-ai, tp-glo-9fa92a70
+msgid "Request URL"
+msgstr "URL yêu cầu"
+
+#, tp-ai
+msgid "Request Headers"
+msgstr "Tiêu đề yêu cầu"
+
+#, tp-ai
+msgid "Request Body"
+msgstr "Nội dung yêu cầu"
+
+msgid "Response"
+msgstr "Phản hồi"
+
+msgid "Response Body"
+msgstr "Nội dung phản hồi"
+
+msgid "Entire Response From wp_remote_get():"
+msgstr "Toàn bộ phản hồi từ wp_remote_get():"
+
+msgid "Select the languages you wish to make your website available in."
+msgstr "Chọn các ngôn ngữ bạn muốn trang web của mình hỗ trợ."
+
+msgid "Formality"
+msgstr "Mức độ trang trọng"
+
+msgid "Code"
+msgstr "Mã"
+
+msgid "Formal"
+msgstr "Trang trọng"
+
+msgid "Informal"
+msgstr "Thân mật"
+
+msgid "This language does not support formality. "
+msgstr "Ngôn ngữ này không hỗ trợ mức độ trang trọng. "
+
+msgid "Are you sure you want to remove this language?"
+msgstr "Bạn có chắc chắn muốn xóa ngôn ngữ này không?"
+
+msgid "Custom Languages"
+msgstr "Ngôn ngữ tùy chỉnh"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Adding more than two languages is a paid feature. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"Thêm nhiều hơn hai ngôn ngữ là tính năng trả phí. Hãy nâng cấp "
+"TranslatePress và mở khóa thêm các tính năng cao cấp."
+
+msgid "Please %1$senter your license%2$s key first to add more languages."
+msgstr "Vui lòng %1$snhập mã giấy phép%2$s của bạn trước để thêm nhiều ngôn ngữ hơn."
+
+msgid ""
+"You need an active license to add more languages. Verify in your "
+"%1$saccount%2$s that your license is valid"
+msgstr ""
+"Bạn cần có giấy phép hoạt động để thêm nhiều ngôn ngữ hơn. Hãy xác minh "
+"trong %1$stài khoản%2$s của bạn rằng giấy phép vẫn còn hiệu lực."
+
+msgid "To Add more languages activate the Multiple Languages Addon"
+msgstr ""
+"Để thêm nhiều ngôn ngữ hơn, hãy kích hoạt tiện ích bổ sung Multiple "
+"Languages"
+
+msgid "Website Languages"
+msgstr "Ngôn ngữ trang web"
+
+msgid ""
+"WARNING. Changing the default language will invalidate existing "
+"translations."
+msgstr "CẢNH BÁO. Thay đổi ngôn ngữ mặc định sẽ vô hiệu hóa các bản dịch hiện có."
+
+msgid ""
+"Even changing from en_US to en_GB, because they are treated as two "
+"different languages."
+msgstr ""
+"Ngay cả khi thay đổi từ en_US sang en_GB, vì chúng được coi là hai ngôn ngữ "
+"khác nhau."
+
+msgid "In most cases changing the default flag is all it is needed: "
+msgstr "Trong hầu hết các trường hợp, chỉ cần thay đổi cờ mặc định là đủ: "
+
+msgid "replace the default flag"
+msgstr "thay thế cờ mặc định"
+
+msgid "Re-run Setup Wizard"
+msgstr "Chạy lại Trình hướng dẫn Thiết lập"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The Setup wizard allows you to quickly setup TranslatePress. You can "
+"initiate it at any time."
+msgstr ""
+"Trình hướng dẫn Thiết lập cho phép bạn thiết lập TranslatePress nhanh "
+"chóng. Bạn có thể khởi chạy nó bất cứ lúc nào."
+
+msgid "Language Settings"
+msgstr "Cài đặt Ngôn ngữ"
+
+msgid "Use Native language name"
+msgstr "Sử dụng tên ngôn ngữ bản địa"
+
+msgid ""
+"Check if you want to display languages in their native names. Otherwise, "
+"languages will be displayed in English."
+msgstr ""
+"Chọn nếu bạn muốn hiển thị ngôn ngữ bằng tên bản địa của chúng. Nếu không, "
+"ngôn ngữ sẽ được hiển thị bằng tiếng Anh."
+
+msgid "Use a subdirectory for the default language"
+msgstr "Sử dụng thư mục con cho ngôn ngữ mặc định"
+
+#, tp-glo-9fa92a70
+msgid ""
+"Check if you want to add the subdirectory in the URL for the default "
+"language.</br>By checking this option, the default language seen by website "
+"visitors will become the first one in the \"All Languages\" list."
+msgstr ""
+"Chọn nếu bạn muốn thêm thư mục con vào URL cho ngôn ngữ mặc định.</br>Khi "
+"chọn tùy chọn này, ngôn ngữ mặc định mà khách truy cập trang web thấy sẽ "
+"trở thành ngôn ngữ đầu tiên trong danh sách \"Tất cả ngôn ngữ\"."
+
+msgid "Force language in custom links"
+msgstr "Buộc ngôn ngữ trong liên kết tùy chỉnh"
+
+msgid ""
+"Select Yes if you want to force custom links without language encoding to "
+"keep the currently selected language."
+msgstr ""
+"Chọn Có nếu bạn muốn buộc các liên kết tùy chỉnh không có mã hóa ngôn ngữ "
+"vẫn giữ ngôn ngữ hiện đang được chọn."
+
+#, tp-glo-da70db08
+msgid "Shortcode "
+msgstr "Shortcode "
+
+#, tp-glo-da70db08
+msgid "Use shortcode on any page or widget."
+msgstr "Sử dụng shortcode trên bất kỳ trang hoặc tiện ích nào."
+
+#, tp-glo-8339568d
+msgid ""
+"You can also add the <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">Language Switcher Block</a> in the WP Gutenberg Editor."
+msgstr ""
+"Bạn cũng có thể thêm <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">khối chuyển đổi ngôn ngữ</a> trong trình soạn thảo "
+"Gutenberg WP."
+
+msgid "Menu item"
+msgstr "Mục menu"
+
+msgid ""
+"Go to  %1$s Appearance -> Menus%2$s to add languages to the Language "
+"Switcher in any menu."
+msgstr ""
+"Vào  %1$sGiao diện -> Menu%2$s để thêm ngôn ngữ vào trình chuyển đổi ngôn "
+"ngữ trong bất kỳ menu nào."
+
+msgid "Learn more in our documentation."
+msgstr "Tìm hiểu thêm trong tài liệu của chúng tôi."
+
+msgid "Floating language selection"
+msgstr "Lựa chọn ngôn ngữ nổi"
+
+msgid "Add a floating dropdown that follows the user on every page."
+msgstr "Thêm một danh sách thả xuống nổi theo người dùng trên mọi trang."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-glo-ee8b4f9f
+msgid "Show \"Powered by TranslatePress\""
+msgstr "Hiển thị \"Powered by TranslatePress\""
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Show the small \"Powered by TranslatePress\" label in the floater language "
+"switcher."
+msgstr ""
+"Hiển thị nhãn nhỏ \"Powered by TranslatePress\" trong trình chuyển đổi ngôn "
+"ngữ nổi."
+
+msgid "5 Days to Better Multilingual Websites"
+msgstr "5 ngày để cải thiện trang web đa ngôn ngữ"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"%sJoin our FREE & EXCLUSIVE onboarding course%s and learn how to grow your "
+"multilingual traffic, reach international markets, and save time & money "
+"while getting the most out of TranslatePress!"
+msgstr ""
+"%sTham gia khóa học nhập môn MIỄN PHÍ & ĐỘC QUYỀN%s và tìm hiểu cách phát "
+"triển lưu lượng truy cập đa ngôn ngữ, tiếp cận thị trường quốc tế, đồng "
+"thời tiết kiệm thời gian & tiền bạc để tận dụng tối đa TranslatePress!"
+
+msgid "Invalid email address"
+msgstr "Địa chỉ email không hợp lệ"
+
+msgid "Your email"
+msgstr "Email của bạn"
+
+msgid "Sign me up!"
+msgstr "Đăng ký ngay!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Sign up with your email address and receive a 5-part email guide to help "
+"you maximize the power of TranslatePress."
+msgstr ""
+"Đăng ký bằng địa chỉ email của bạn và nhận hướng dẫn qua email gồm 5 phần "
+"để giúp bạn tận dụng tối đa sức mạnh của TranslatePress."
+
+msgid "Dismiss email course notification"
+msgstr "Bỏ qua thông báo khóa học email"
+
+msgid ""
+"Hey %s,<br>Never miss an important update - opt in to our security and "
+"feature updates notifications, and non-sensitive diagnostic tracking."
+msgstr ""
+"Chào %s,<br>Đừng bao giờ bỏ lỡ cập nhật quan trọng - hãy đăng ký nhận thông "
+"báo cập nhật bảo mật và tính năng, cùng với việc theo dõi chẩn đoán không "
+"nhạy cảm."
+
+msgid "Allow & Continue"
+msgstr "Cho phép & Tiếp tục"
+
+msgid "Skip"
+msgstr "Bỏ qua"
+
+#, tp-glo-ee8b4f9f
+msgid "This will allow TranslatePress to:"
+msgstr "Điều này sẽ cho phép TranslatePress:"
+
+msgid "Your profile overview"
+msgstr "Tổng quan hồ sơ của bạn"
+
+msgid "Name and email address"
+msgstr "Tên và địa chỉ email"
+
+msgid "Admin Notices"
+msgstr "Thông báo quản trị"
+
+msgid "Updates, announcements, marketing, no spam"
+msgstr "Cập nhật, thông báo, tiếp thị, không spam"
+
+msgid "Plugin status & settings"
+msgstr "Trạng thái & cài đặt plugin"
+
+msgid "Active, Deactivated, installed version and settings"
+msgstr "Đang hoạt động, Đã vô hiệu hóa, phiên bản đã cài đặt và các thiết lập"
+
+msgid "Privacy Policy"
+msgstr "Chính sách bảo mật"
+
+msgid "Terms of Service"
+msgstr "Điều khoản dịch vụ"
+
+msgid "Support"
+msgstr "Hỗ trợ"
+
+msgid "Add Extra AI Words"
+msgstr "Thêm từ AI bổ sung"
+
+msgid ""
+"<strong>IMPORTANT NOTE:</strong> Before performing this action it is "
+"strongly recommended to first backup the database."
+msgstr ""
+"<strong>LƯU Ý QUAN TRỌNG:</strong> Trước khi thực hiện thao tác này, rất "
+"khuyến nghị bạn sao lưu cơ sở dữ liệu trước."
+
+msgid ""
+"IMPORTANT: It is strongly recommended to first backup the database!! Are "
+"you sure you want to continue?"
+msgstr ""
+"QUAN TRỌNG: Rất khuyến nghị bạn sao lưu cơ sở dữ liệu trước!! Bạn có chắc "
+"chắn muốn tiếp tục?"
+
+msgid "Operations to perform"
+msgstr "Các thao tác cần thực hiện"
+
+#, tp-ctx-2edc90df
+msgid "Remove CDATA for original and dictionary strings"
+msgstr "Xóa CDATA cho các chuỗi gốc và chuỗi từ điển"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Removes CDATA from trp_original_strings and trp_dictionary_* "
+"tables.<br>This type of content should not be detected by TranslatePress. "
+"It might have been introduced in the database in older versions of the "
+"plugin."
+msgstr ""
+"Xóa CDATA khỏi các bảng trp_original_strings và trp_dictionary_*.<br>Loại "
+"nội dung này không nên được phát hiện bởi TranslatePress. Nó có thể đã được "
+"thêm vào cơ sở dữ liệu trong các phiên bản cũ của plugin."
+
+msgid "Remove untranslated links from dictionary tables"
+msgstr "Xóa liên kết chưa dịch khỏi các bảng từ điển"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Removes untranslated links and images from all trp_dictionary_* tables. "
+"These tables contain translations for user-inputted strings such as post "
+"content, post title, menus etc."
+msgstr ""
+"Xóa các liên kết và hình ảnh chưa được dịch khỏi tất cả các bảng "
+"trp_dictionary_*. Các bảng này chứa bản dịch cho các chuỗi do người dùng "
+"nhập như nội dung bài viết, tiêu đề bài viết, menu, v.v."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Remove duplicate rows for gettext strings"
+msgstr "Xóa các hàng trùng lặp cho các chuỗi gettext"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Cleans up all trp_gettext_* tables of duplicate rows. These tables contain "
+"translations for themes and plugin strings."
+msgstr ""
+"Dọn dẹp tất cả các bảng trp_gettext_* khỏi các hàng trùng lặp. Các bảng này "
+"chứa bản dịch cho các chuỗi của theme và plugin."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for dictionary strings"
+msgstr "Xóa các hàng trùng lặp cho các chuỗi từ điển"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_dictionary_* tables of duplicate rows. These tables "
+"contain translations for user-inputted strings such as post content, post "
+"title, menus etc."
+msgstr ""
+"Dọn dẹp tất cả các bảng trp_dictionary_* khỏi các hàng trùng lặp. Các bảng "
+"này chứa bản dịch cho các chuỗi do người dùng nhập như nội dung bài viết, "
+"tiêu đề bài viết, menu, v.v."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for original dictionary strings"
+msgstr "Xóa các hàng trùng lặp cho các chuỗi từ điển gốc"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_original_strings table of duplicate rows. This table "
+"contains strings in the default language, without any translation.<br>The "
+"trp_original_meta table, which contains meta information that refers to the "
+"post parent’s ID, is also regenerated.<br>Such duplicates can appear in "
+"exceptional situations of unexpected behavior."
+msgstr ""
+"Dọn dẹp bảng trp_original_strings khỏi các hàng trùng lặp. Bảng này chứa "
+"các chuỗi bằng ngôn ngữ mặc định, không có bản dịch nào.<br>Bảng "
+"trp_original_meta, chứa thông tin meta tham chiếu đến ID của bài viết cha, "
+"cũng được tái tạo.<br>Các bản trùng lặp như vậy có thể xuất hiện trong các "
+"tình huống ngoại lệ do hành vi không mong muốn."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid ""
+"Replace gettext strings that have original ID NULL with the correct "
+"original IDs"
+msgstr "Thay thế các chuỗi gettext có ID gốc NULL bằng các ID gốc chính xác"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid ""
+"Fixes an edge case issue where some gettext strings have the original ID "
+"incorrectly set to NULL, causing problems in the Translation "
+"Editor.<br>This operation corrects the original IDs in the trp_gettext_* "
+"tables.<br>Only check this option if you encountered an issue in the "
+"Translation Editor where clicking the green pencil did not bring up the "
+"gettext string for translation in the left sidebar.<br>Otherwise, please "
+"leave this option unchecked because it's an intensive operation."
+msgstr ""
+"Sửa lỗi trường hợp hiếm gặp khi một số chuỗi gettext có ID gốc được đặt "
+"không chính xác thành NULL, gây ra sự cố trong Trình chỉnh sửa bản "
+"dịch.<br>Thao tác này sửa các ID gốc trong các bảng trp_gettext_*.<br>Chỉ "
+"chọn tùy chọn này nếu bạn gặp phải sự cố trong Trình chỉnh sửa bản dịch khi "
+"nhấp vào bút chì màu xanh lá không hiển thị chuỗi gettext để dịch trong "
+"thanh bên trái.<br>Nếu không, vui lòng để tùy chọn này không được chọn vì "
+"đây là thao tác nặng."
+
+msgid "Optimize Database"
+msgstr "Tối ưu hóa cơ sở dữ liệu"
+
+#, tp-glo-34f425d9, tp-glo-ee8b4f9f
+msgid "TranslatePress Database Updater"
+msgstr "TranslatePress Database Updater"
+
+#, tp-glo-ee8b4f9f
+msgid "Updating TranslatePress tables. Please leave this window open."
+msgstr "Đang cập nhật các bảng TranslatePress. Vui lòng để cửa sổ này mở."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Open colour picker"
+msgstr "Mở bộ chọn màu"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enabled"
+msgstr "Đã bật"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Disabled"
+msgstr "Đã tắt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Write custom CSS here..."
+msgstr "Viết CSS tùy chỉnh tại đây..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Include"
+msgstr "Bao gồm"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Exclude"
+msgstr "Loại trừ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Content Restriction Mode"
+msgstr "Chế độ Hạn chế Nội dung"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "No languages selected"
+msgstr "Chưa chọn ngôn ngữ nào"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saving..."
+msgstr "Đang lưu..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saved!"
+msgstr "Đã lưu!"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save changes"
+msgstr "Lưu thay đổi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert to last saved values"
+msgstr "Khôi phục về giá trị đã lưu cuối cùng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert changes"
+msgstr "Khôi phục thay đổi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Restoring will revert to the last saved version and discard your current "
+"edits."
+msgstr ""
+"Khôi phục sẽ quay về phiên bản đã lưu cuối cùng và hủy bỏ các chỉnh sửa "
+"hiện tại của bạn."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert"
+msgstr "Khôi phục"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Keep editing"
+msgstr "Tiếp tục chỉnh sửa"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Are you sure you want to apply the <strong>%s</strong> preset?"
+msgstr "Bạn có chắc chắn muốn áp dụng cấu hình trước <strong>%s</strong> không?"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "It will override your current settings."
+msgstr "Việc này sẽ ghi đè lên cài đặt hiện tại của bạn."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply preset"
+msgstr "Áp dụng cấu hình trước"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply %s preset"
+msgstr "Áp dụng cài đặt trước %s"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save failed"
+msgstr "Lưu thất bại"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "English"
+msgstr "Tiếng Anh"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Spanish"
+msgstr "Tiếng Tây Ban Nha"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "French"
+msgstr "Tiếng Pháp"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Minimal Light"
+msgstr "Tối giản sáng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Dark Overlay"
+msgstr "Lớp phủ tối"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Brand Blue"
+msgstr "Xanh thương hiệu"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Bordered"
+msgstr "Có viền"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Preview"
+msgstr "Xem trước popup"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "User Language Detection Method"
+msgstr "Phương thức phát hiện ngôn ngữ người dùng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Notification Behavior"
+msgstr "Hành vi thông báo"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Content"
+msgstr "Nội dung popup"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply a preset"
+msgstr "Áp dụng cài đặt trước"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Design"
+msgstr "Tùy chỉnh thiết kế"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language detection"
+msgstr "Phát hiện ngôn ngữ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid ""
+"Select how the language should be detected for first time visitors.<br>The "
+"visitor's last displayed language will be remembered through cookies."
+msgstr ""
+"Chọn cách ngôn ngữ sẽ được phát hiện cho khách truy cập lần đầu.<br>Ngôn "
+"ngữ hiển thị lần cuối của khách truy cập sẽ được ghi nhớ thông qua cookie."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup display"
+msgstr "Hiển thị popup"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Conditionally display popup based on language"
+msgstr "Hiển thị popup có điều kiện dựa trên ngôn ngữ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Type"
+msgstr "Loại cửa sổ bật lên"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid ""
+"Visitors will be redirected directly when a different preferred language is "
+"detected."
+msgstr ""
+"Khách truy cập sẽ được chuyển hướng trực tiếp khi phát hiện ngôn ngữ ưu "
+"tiên khác."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Text"
+msgstr "Văn bản cửa sổ bật lên"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Button Text"
+msgstr "Văn bản nút"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close Button Text"
+msgstr "Văn bản nút đóng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background color"
+msgstr "Màu nền"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text color"
+msgstr "Màu chữ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button background color"
+msgstr "Màu nền nút"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button hover color"
+msgstr "Màu khi di chuột qua nút"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button text color"
+msgstr "Màu chữ nút"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button border radius"
+msgstr "Độ bo góc nút"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Close icon color"
+msgstr "Màu biểu tượng đóng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Overlay color"
+msgstr "Màu lớp phủ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Entrance animation"
+msgstr "Hiệu ứng xuất hiện"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Animation"
+msgstr "Hiệu ứng"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Fade"
+msgstr "Mờ dần"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from top"
+msgstr "Trượt từ trên xuống"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from right"
+msgstr "Trượt từ phải sang"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from bottom"
+msgstr "Trượt từ dưới lên"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from left"
+msgstr "Trượt từ trái sang"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Enable custom CSS"
+msgstr "Bật CSS tùy chỉnh"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "No names"
+msgstr "Không hiển thị tên"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Show flags"
+msgstr "Hiển thị cờ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Rectangle (4:3)"
+msgstr "Hình chữ nhật (4:3)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Square (1:1)"
+msgstr "Hình vuông (1:1)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag border radius"
+msgstr "Bán kính viền cờ"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher background"
+msgstr "Nền bộ chuyển đổi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover background"
+msgstr "Nền bộ chuyển đổi khi di chuột"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher text"
+msgstr "Chữ bộ chuyển đổi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover text"
+msgstr "Chữ bộ chuyển đổi khi di chuột"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher border"
+msgstr "Viền bộ chuyển đổi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border width"
+msgstr "Độ rộng viền bộ chuyển đổi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border radius"
+msgstr "Bán kính viền bộ chuyển đổi"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Hover over the language switcher to see it in action!"
+msgstr "Di chuột qua bộ chuyển đổi ngôn ngữ để xem nó hoạt động!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Preview"
+msgstr "Xem trước bộ chuyển đổi"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enable Floating Switcher"
+msgstr "Bật bộ chuyển đổi nổi"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is enabled"
+msgstr "Bộ chuyển đổi đã được bật"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is disabled"
+msgstr "Bộ chuyển đổi đã bị tắt"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Type"
+msgstr "Kiểu bộ chuyển đổi"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages as dropdown"
+msgstr "Hiển thị ngôn ngữ dưới dạng thả xuống"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages side by side"
+msgstr "Hiển thị ngôn ngữ cạnh nhau"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background hover color"
+msgstr "Màu nền khi di chuột"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text hover color"
+msgstr "Màu chữ khi di chuột"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border color"
+msgstr "Màu viền bộ chuyển đổi"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag and text size"
+msgstr "Kích thước cờ và chữ"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons shape"
+msgstr "Hình dạng biểu tượng cờ"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons border radius"
+msgstr "Bán kính viền biểu tượng cờ"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Layout"
+msgstr "Tùy chỉnh bố cục"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Show the small Powered by TranslatePress label in the language switcher."
+msgstr "Hiển thị nhãn nhỏ Cung cấp bởi TranslatePress trong bộ chuyển đổi ngôn ngữ."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Bạn có thay đổi chưa lưu. Vẫn rời khỏi?"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher animations"
+msgstr "Hiệu ứng động bộ chuyển đổi"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one. <br> Only works when there are exactly two "
+"languages, the default one and a translation one."
+msgstr ""
+"Biến bộ chuyển đổi ngôn ngữ thành một nút hiển thị ngôn ngữ khác có sẵn, "
+"không phải ngôn ngữ hiện tại. <br> Chỉ hoạt động khi có đúng hai ngôn ngữ: "
+"ngôn ngữ mặc định và ngôn ngữ dịch."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "This option only works when exactly two languages are published."
+msgstr "Tùy chọn này chỉ hoạt động khi có đúng hai ngôn ngữ được xuất bản."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copied!"
+msgstr "Đã sao chép!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copy"
+msgstr "Sao chép"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-8339568d, tp-glo-da70db08
+msgid ""
+"Use shortcode on any page or widget. You can also add the Language Switcher "
+"Block in the WP Gutenberg Editor."
+msgstr ""
+"Sử dụng shortcode trên bất kỳ trang hoặc tiện ích nào. Bạn cũng có thể thêm "
+"Khối Bộ Chuyển Đổi Ngôn Ngữ trong trình chỉnh sửa Gutenberg của WP."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Additional Settings"
+msgstr "Cài đặt bổ sung"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of hovering. "
+"<br> Close it by clicking on it, anywhere else on the screen or by pressing "
+"the escape key. <br> This will affect only the shortcode language switcher."
+msgstr ""
+"Mở shortcode bộ chuyển đổi ngôn ngữ bằng cách nhấp vào thay vì di chuột "
+"qua. <br> Đóng nó bằng cách nhấp vào nó, nhấp vào bất kỳ nơi nào khác trên "
+"màn hình hoặc nhấn phím Escape. <br> Điều này chỉ ảnh hưởng đến shortcode "
+"bộ chuyển đổi ngôn ngữ."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Menu Switcher Layout"
+msgstr "Bố cục Bộ Chuyển Đổi Menu"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"Go to <a href=\"/wp-admin/nav-menus.php\">Appearance → Menus</a> to add "
+"languages to the Language Switcher in any menu.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Learn more in our documentation.</a>"
+msgstr ""
+"Đi tới <a href=\"/wp-admin/nav-menus.php\">Giao diện → Menu</a> để thêm "
+"ngôn ngữ vào Bộ Chuyển Đổi Ngôn Ngữ trong bất kỳ menu nào.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Tìm hiểu thêm trong tài liệu của "
+"chúng tôi.</a>"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose in which languages to show the block."
+msgstr "Chọn ngôn ngữ để hiển thị khối."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose from which languages the block is excluded."
+msgstr "Chọn ngôn ngữ mà khối bị loại trừ."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Select language(s)"
+msgstr "Chọn ngôn ngữ"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress Language Restriction"
+msgstr "Hạn chế Ngôn ngữ TranslatePress"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid ""
+"Language restrictions cannot be saved on a top-level Classic block. Convert "
+"it to blocks or place it inside a Group block first."
+msgstr ""
+"Hạn chế ngôn ngữ không thể lưu trên khối Cổ điển cấp cao nhất. Hãy chuyển "
+"nó thành các khối hoặc đặt nó vào trong khối Nhóm trước."
+
+msgctxt "page 1 of 3"
+msgid "of"
+msgstr "/"
+
+msgctxt "Untranslated in this language"
+msgid "in"
+msgstr "trong"
+
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "Addons tab"
+msgstr "Tab tiện ích mở rộng"
+
+#, tp-glo-77a09a79, tp-glo-b83ea26c, tp-glo-ee8b4f9f
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "TranslatePress Pro Add-on"
+msgstr "TranslatePress Pro Add-on"
+
+#, tp-ai
+msgctxt "block title"
+msgid "Language Switcher"
+msgstr "Bộ Chuyển Đổi Ngôn Ngữ"
+
+#, tp-ai
+msgctxt "block description"
+msgid "Displays the Language Switcher."
+msgstr "Hiển thị Bộ Chuyển Đổi Ngôn Ngữ."
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Switcher"
+msgstr "Bộ Chuyển Đổi Ngôn Ngữ"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Translate"
+msgstr "Dịch"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgctxt "block keyword"
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Names"
+msgstr "Tên ngôn ngữ"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Flags"
+msgstr "Cờ"

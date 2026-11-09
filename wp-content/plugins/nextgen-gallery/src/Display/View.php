@@ -80,7 +80,17 @@ class View {
 
 		foreach ( $this->params as $key => $value ) {
 			if ( strpos( $key, '_template' ) === 0 ) {
-				$value = $this->get_template_abspath( $value );
+				try {
+					$value = $this->get_template_abspath( $value );
+				} catch ( \RuntimeException $e ) {
+					// A caller-controlled parameter (e.g. a shortcode attribute) can share the
+					// '_template' prefix without being a real template path. Such a value must not
+					// fatal the render; nor should the raw, unvalidated value be kept, since a
+					// '_template'-keyed variable is expected to be an already-resolved path and a
+					// preserved attacker string could be mistaken for one downstream. Drop the key.
+					unset( $e );
+					continue;
+				}
 			}
 			$retval[ $key ] = $value;
 		}
@@ -138,7 +148,13 @@ class View {
 		}
 
 		// Filename must end with ".php".
-		if ( substr_compare( $filename, '.php', -3 ) === 0 ) {
+		//
+		// This gate was inert in both directions. The offset was -3, so it compared the last three
+		// characters ("php") against the four-character needle ".php" and could never return 0 -
+		// substr_compare( 'a.php', '.php', -3 ) is 66, not 0. And the sense was inverted against
+		// the comment: it returned false when the name *did* end in ".php", so correcting only the
+		// offset would have rejected every legitimate template instead. Both are fixed together.
+		if ( substr_compare( $filename, '.php', -4 ) !== 0 ) {
 			return false;
 		}
 
@@ -156,6 +172,19 @@ class View {
 	public function get_template_abspath( ?string $template = null ): string {
 		if ( ! $template ) {
 			$template = $this->template;
+		}
+
+		// SECURITY: refuse stream-wrapper syntax ("://") on every branch, before any
+		// filesystem call. is_valid_template_filename() already makes this refusal, but
+		// it only runs on the absolute-path branch below; the relative branch reaches
+		// find_template_abspath()'s file_exists() with the raw value intact. A value such
+		// as "phar:///path/to/image.png/x.php" makes PHP open the named Phar archive. On
+		// PHP <= 7.4 that unserialises the archive's metadata object (object injection);
+		// PHP 8.0 defers metadata unserialization to an explicit getMetadata() call, so
+		// the file op itself is inert there, but a wrapper is still never a valid
+		// template and must not reach the filesystem regardless.
+		if ( false !== strpos( str_replace( '\\', '/', (string) $template ), '://' ) ) {
+			throw new \RuntimeException( esc_html( (string) $template ) . ' is not a valid MVC template' );
 		}
 
 		$legacy_template_path = ! empty( $this->legacy_template ) ? $this->legacy_template : '';
@@ -290,7 +319,10 @@ class View {
 				$this->end_element();
 			}
 
-			extract( $__params );
+			// EXTR_SKIP keeps the already-resolved $__target (and the other local
+			// render state) from being overwritten by a caller-supplied key of the
+			// same name, so the path validated above is the path that is included.
+			extract( $__params, EXTR_SKIP );
 
 			include $__target;
 
@@ -441,10 +473,11 @@ class View {
 		// Use underscores to prefix local variables to avoid conflicts with template vars.
 		$__element = $this->start_element( $this->template, 'template' );
 
-		$template_vars = $this->get_template_vars();
-		extract( $template_vars );
-
-		include $this->get_template_abspath();
+		// Template variables are a caller-controlled bag (shortcode attributes flow into it), so
+		// they must never be extracted into this method's own scope - a parameter named like a
+		// local (e.g. __element) would otherwise overwrite the ViewElement this method returns and
+		// fatal in rasterize_object(). Give them their own isolated scope instead.
+		$this->include_isolated( $this->get_template_abspath(), $this->get_template_vars() );
 
 		$this->end_element();
 
@@ -458,6 +491,22 @@ class View {
 		}
 
 		return $__element;
+	}
+
+	/**
+	 * Includes a template with the given variables in scope and nothing else.
+	 *
+	 * Deliberately holds no local that a template variable could collide with (both locals are
+	 * obscurely underscore-prefixed and skipped by EXTR_SKIP), and stays a method on the view so
+	 * templates keep access to $this->start_element() / $this->include_template().
+	 *
+	 * @param string $__ngg_target The absolute path of the template to include.
+	 * @param array  $__ngg_vars   The template variables to expose in the template's scope.
+	 * @return void
+	 */
+	private function include_isolated( $__ngg_target, array $__ngg_vars ) {
+		extract( $__ngg_vars, EXTR_SKIP );
+		include $__ngg_target;
 	}
 
 	/**

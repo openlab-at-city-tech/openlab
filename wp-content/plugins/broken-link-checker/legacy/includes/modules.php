@@ -28,6 +28,7 @@ $blc_module_manager = blcModuleManager::getInstance(
 		'youtube-checker',  //Video checker using the YouTube API
 		'youtube-iframe',   //Embedded YouTube video container
 		'dummy',            //Dummy container used as a fallback
+		'custom_taxonomy',    //Custom taxonomy container
 	)
 );
 

@@ -138,24 +138,28 @@ class Scan_Data extends Base {
 
 		$links_limit = apply_filters( 'wpmudev_blc_settings_links_limit', 20, $links_list, $this );
 
-		// Make sure we don't store ignored ones.
-		// We only store the broken links to be sent to be sent from the
-		if ( count( $links_list ) > $links_limit ) {
-			$new_links_list = array();
+		/*
+		 * Make sure we don't store ignored ones, whatever the length of the list.
+		 * Filtering only the lists longer than the limit used to let ignored links
+		 * reach the report email, which counts them and then leaves them out of
+		 * the table it lists.
+		 */
+		$new_links_list = array();
 
-			foreach( $links_list as $key => $broken_link ) {
-				if ( property_exists( $broken_link, 'is_ignored' ) && ! empty( $broken_link->is_ignored ) ) {
-					continue;
-				}
-
-				$new_links_list[] = $broken_link;
+		foreach ( $links_list as $broken_link ) {
+			if ( is_object( $broken_link ) && ! empty( $broken_link->is_ignored ) ) {
+				continue;
 			}
 
-			$links_list = $new_links_list;
+			if ( is_array( $broken_link ) && ! empty( $broken_link['is_ignored'] ) ) {
+				continue;
+			}
+
+			$new_links_list[] = $broken_link;
 		}
 
 		return array_slice(
-			$links_list,
+			$new_links_list,
 			0,
 			$links_limit
 		);

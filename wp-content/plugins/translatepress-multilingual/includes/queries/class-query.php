@@ -20,8 +20,11 @@ class TRP_Query{
     protected $error_manager;
     protected $check_invalid_text;
     protected $tables_exist = array();
+    protected $machine_translation_lock_table_checked = null;
     protected $db_sql_version = null;
     protected $gettext_normalized = null;
+    protected $gettext_original_lookup_hash_available = null;
+    protected $database_column_character_sets = array();
 
     /* gettext query components */
     protected $gettext_table_creation;
@@ -31,6 +34,7 @@ class TRP_Query{
     const NOT_TRANSLATED = 0;
     const MACHINE_TRANSLATED = 1;
     const HUMAN_REVIEWED = 2;
+    const GETTEXT_TRANSLATED_IN_LANGUAGE_FILE = 4;
     const SIMILAR_TRANSLATED = 3;
     const BLOCK_TYPE_REGULAR_STRING = 0;
     const BLOCK_TYPE_ACTIVE = 1;
@@ -188,6 +192,15 @@ class TRP_Query{
     }
 
     /**
+     * Return constant used for gettext rows that mirror language-file translations.
+     *
+     * @return int
+     */
+    public function get_constant_gettext_translated_in_language_file(){
+        return self::GETTEXT_TRANSLATED_IN_LANGUAGE_FILE;
+    }
+
+    /**
      * Return constant used for entries automatically filled by the original being a string similar to another string that has a translation.
      *
      * @return int
@@ -232,7 +245,7 @@ class TRP_Query{
      */
     public function check_table( $default_language, $language_code ){
         $table_name = sanitize_text_field( $this->get_table_name( $language_code, $default_language ) );
-        if ( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
+        if ( ! $this->trp_table_exists_exact( $table_name ) ) {
             // table not in database. Create new table
             $charset_collate = $this->db->get_charset_collate();
 
@@ -258,7 +271,7 @@ class TRP_Query{
 
             $this->maybe_record_automatic_translation_error(array( 'details' => 'Error creating regular tables' ) );
 
-            if ( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
+            if ( ! $this->trp_table_exists_exact( $table_name ) ) {
                 // table still doesn't exist after creation
                 $this->maybe_record_automatic_translation_error(array( 'details' => 'Error creating regular strings tables' ), true );
             }else {
@@ -284,7 +297,7 @@ class TRP_Query{
      */
     public function check_machine_translation_log_table(){
         $table_name = $this->db->prefix . 'trp_machine_translation_log';
-        if ( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name )
+        if ( ! $this->trp_table_exists_exact( $table_name ) )
         {
             // table not in database. Create new table
             $charset_collate = $this->db->get_charset_collate();
@@ -305,7 +318,7 @@ class TRP_Query{
 
             $this->maybe_record_automatic_translation_error(array( 'details' => 'Error creating machine translation log tables' ) );
 
-            if ( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name )
+            if ( ! $this->trp_table_exists_exact( $table_name ) )
             {
                 $this->maybe_record_automatic_translation_error(array( 'details' => 'Error creating machine translation log tables' ), true );
                 // something failed. Table still doesn't exist.
@@ -316,6 +329,218 @@ class TRP_Query{
         }
         //table exists
         return true;
+    }
+
+    /**
+     * Return table name for the machine translation locks table
+     *
+     * @return string                       Table name.
+     */
+    public function get_table_name_for_machine_translation_locks(){
+        return apply_filters( 'trp_table_name_machine_translation_locks', sanitize_text_field( $this->db->prefix . 'trp_machine_translation_locks' ), $this->db->prefix );
+    }
+
+    /**
+     * Create the machine translation locks table if it doesn't exist.
+     *
+     * @return bool     Whether the table is available.
+     */
+    public function check_machine_translation_lock_table(){
+        if ( $this->machine_translation_lock_table_checked !== null ){
+            return $this->machine_translation_lock_table_checked;
+        }
+
+        $table_name = $this->get_table_name_for_machine_translation_locks();
+
+        if ( $this->table_exists( $table_name ) ){
+            $owner_column = $this->db->get_results( "SHOW COLUMNS FROM `" . $table_name . "` LIKE 'owner'" );
+            if ( ! empty( $owner_column ) ){
+                $this->machine_translation_lock_table_checked = true;
+                return true;
+            }
+
+            // pre-release version of this table, without the owner column. It only holds short lived locks, safe to recreate
+            $this->db->query( "DROP TABLE IF EXISTS `" . $table_name . "`" );
+        }
+
+        // IF NOT EXISTS instead of dbDelta() so concurrent requests don't log "table already exists" errors
+        $charset_collate = $this->db->get_charset_collate();
+
+        $this->db->query( "CREATE TABLE IF NOT EXISTS `" . $table_name . "`(
+                                string_hash char(40) NOT NULL PRIMARY KEY,
+                                owner varchar(64) NOT NULL,
+                                updated_at datetime NOT NULL,
+                                KEY owner (owner),
+                                KEY updated_at (updated_at)
+                             ) $charset_collate" );
+
+        $this->machine_translation_lock_table_checked = $this->table_exists( $table_name, true );
+        if ( ! $this->machine_translation_lock_table_checked ){
+            $this->maybe_record_automatic_translation_error( array( 'details' => 'Error creating machine translation locks table' ) );
+        }
+
+        return $this->machine_translation_lock_table_checked;
+    }
+
+    /**
+     * Try to claim a lock for each of the provided string hashes on behalf of the provided owner.
+     *
+     * Each statement is atomic on its own, so out of any number of concurrent requests every hash is
+     * handed to exactly one owner, without transactions.
+     *
+     * @param array $string_hashes      Array of sha1 string hashes ( see TRP_Machine_Translator ).
+     * @param string $lock_owner        UUIDv4 token ( wp_generate_uuid4() ) identifying the claiming request. Used to release.
+     * @param int $lock_timeout         Seconds after which a lock is considered abandoned.
+     * @return array|false|null         The hashes that were claimed. False if lock contention persists.
+     *                                  Null if locking is unavailable or the claims couldn't be read back.
+     */
+    public function claim_machine_translation_locks( $string_hashes, $lock_owner, $lock_timeout = 50 ){
+        $string_hashes = array_values( array_unique( array_filter( (array) $string_hashes ) ) );
+        if ( empty( $string_hashes ) || ! is_string( $lock_owner ) || $lock_owner === '' ){
+            return array();
+        }
+
+        // Acquire overlapping hashes in the same order across concurrent requests.
+        sort( $string_hashes, SORT_STRING );
+
+        $table_name     = $this->get_table_name_for_machine_translation_locks();
+        $now            = gmdate( 'Y-m-d H:i:s' );
+        $expired_before = gmdate( 'Y-m-d H:i:s', time() - (int) $lock_timeout );
+
+        // grab the hashes nobody holds
+        $insert_placeholders = implode( ', ', array_fill( 0, count( $string_hashes ), '( %s, %s, %s )' ) );
+        $insert_values       = array();
+        foreach( $string_hashes as $string_hash ){
+            array_push( $insert_values, $string_hash, $lock_owner, $now );
+        }
+        $insert_query = $this->db->prepare(
+            "INSERT IGNORE INTO `" . $table_name . "` ( string_hash, owner, updated_at ) VALUES " . $insert_placeholders,
+            $insert_values
+        );
+        $insert_result = $this->query_machine_translation_locks_with_retry( $insert_query );
+        if ( $insert_result !== true ){
+            return $insert_result;
+        }
+        $rows_claimed_by_insert = (int) $this->db->rows_affected;
+
+        // take over expired locks
+        $in_placeholders = implode( ', ', array_fill( 0, count( $string_hashes ), '%s' ) );
+        $update_query = $this->db->prepare(
+            "UPDATE `" . $table_name . "` SET owner = %s, updated_at = %s WHERE updated_at < %s AND string_hash IN ( " . $in_placeholders . " ) ORDER BY string_hash",
+            array_merge( array( $lock_owner, $now, $expired_before ), $string_hashes )
+        );
+        $update_result = $this->query_machine_translation_locks_with_retry( $update_query );
+        if ( $update_result !== true ){
+            return $update_result;
+        }
+        $rows_claimed_by_update = (int) $this->db->rows_affected;
+
+        $claimed = $this->db->get_col( $this->db->prepare( "SELECT string_hash FROM `" . $table_name . "` WHERE owner = %s AND string_hash IN ( " . $in_placeholders . " )", array_merge( array( $lock_owner ), $string_hashes ) ) );
+        if ( $this->db->last_error !== '' ){
+            return null;
+        }
+
+        // rows were claimed under this owner but the read-back can't see them: the token was mangled
+        // on write (e.g. truncated by the column) or the SELECT hit a lagging replica. Locking is
+        // broken, not contended, so report it as unavailable instead of "everything is locked by others"
+        if ( empty( $claimed ) && ( $rows_claimed_by_insert > 0 || $rows_claimed_by_update > 0 ) ){
+            return null;
+        }
+
+        return $claimed;
+    }
+
+    /**
+     * Retry a lock claim statement after a deadlock, without logging recovered errors.
+     *
+     * Claims use autocommit, so a deadlock rolls back only the statement being retried.
+     *
+     * @param string $query Prepared INSERT or UPDATE query.
+     * @return bool|null True on success, false on contention, null on another database error.
+     */
+    protected function query_machine_translation_locks_with_retry( $query ){
+        $suppress_errors = $this->db->suppress_errors( true );
+        $is_contention   = false;
+
+        try {
+            for ( $attempt = 0; $attempt < 3; $attempt++ ) {
+                $this->db->query( $query );
+                if ( $this->db->last_error === '' ) {
+                    return true;
+                }
+
+                // Use wpdb's public error text, including with database drop-ins.
+                $is_deadlock   = stripos( $this->db->last_error, 'Deadlock found when trying to get lock' ) !== false;
+                $is_contention = $is_deadlock || stripos( $this->db->last_error, 'Lock wait timeout exceeded' ) !== false;
+                if ( ! $is_deadlock || $attempt === 2 ) {
+                    break;
+                }
+
+                usleep( wp_rand( 10000, 30000 ) * ( $attempt + 1 ) );
+            }
+        } finally {
+            $this->db->suppress_errors( $suppress_errors );
+        }
+
+        // Preserve normal error reporting when retries fail or the error isn't retryable.
+        $this->db->print_error( $this->db->last_error );
+        return $is_contention ? false : null;
+    }
+
+    /**
+     * Delete every lock held by the provided owners.
+     *
+     * Deleting by owner leaves alone the locks that were taken over after this request exceeded the lock timeout.
+     *
+     * @param array $lock_owners        Array of UUIDv4 owner tokens used when claiming.
+     */
+    public function delete_machine_translation_locks( $lock_owners ){
+        $lock_owners = array_values( array_unique( array_filter( (array) $lock_owners ) ) );
+        if ( empty( $lock_owners ) ){
+            return;
+        }
+
+        $table_name   = $this->get_table_name_for_machine_translation_locks();
+        $placeholders = implode( ', ', array_fill( 0, count( $lock_owners ), '%s' ) );
+
+        $this->db->query( $this->db->prepare( "DELETE FROM `" . $table_name . "` WHERE owner IN ( " . $placeholders . " )", $lock_owners ) );
+    }
+
+    /**
+     * Refresh the timestamp on every lock held by the provided owners.
+     *
+     * Used instead of releasing after the translations were saved: the locks stay in place until the lock
+     * timeout as "recently translated" markers, blocking concurrent requests whose dictionary read predates
+     * the save from re-translating the same strings.
+     *
+     * @param array $lock_owners        Array of UUIDv4 owner tokens used when claiming.
+     */
+    public function refresh_machine_translation_locks( $lock_owners ){
+        $lock_owners = array_values( array_unique( array_filter( (array) $lock_owners ) ) );
+        if ( empty( $lock_owners ) ){
+            return;
+        }
+
+        $table_name   = $this->get_table_name_for_machine_translation_locks();
+        $placeholders = implode( ', ', array_fill( 0, count( $lock_owners ), '%s' ) );
+
+        $this->db->query( $this->db->prepare( "UPDATE `" . $table_name . "` SET updated_at = %s WHERE owner IN ( " . $placeholders . " )", array_merge( array( gmdate( 'Y-m-d H:i:s' ) ), $lock_owners ) ) );
+    }
+
+    /**
+     * Delete expired locks left behind by requests that died before releasing them. Cron safety net.
+     *
+     * @param int $lock_timeout         Seconds after which a lock is considered abandoned.
+     */
+    public function cleanup_machine_translation_locks( $lock_timeout = 50 ){
+        $table_name = $this->get_table_name_for_machine_translation_locks();
+        if ( ! $this->table_exists( $table_name ) ){
+            return;
+        }
+
+        $expired_before = gmdate( 'Y-m-d H:i:s', time() - (int) $lock_timeout );
+
+        $this->db->query( $this->db->prepare( "DELETE FROM `" . $table_name . "` WHERE updated_at < %s", $expired_before ) );
     }
 
     public function copy_all_translation_blocks_into_table( $default_language, $language_code ){
@@ -347,7 +572,7 @@ class TRP_Query{
     public function check_original_table(){
 
         $table_name = $this->get_table_name_for_original_strings();
-        if ( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
+        if ( ! $this->trp_table_exists_exact( $table_name ) ) {
             // table not in database. Create new table
             $charset_collate = $this->db->get_charset_collate();
 
@@ -383,11 +608,9 @@ class TRP_Query{
         /*
         *  select all string that are in the dictionary table and are not in the original tables and insert them in the original
         */
-        $insert_records = $this->db->query( $this->db->prepare( "INSERT INTO `$originals_table` (original) SELECT DISTINCT ( BINARY t1.original ) FROM `$table_name` t1 LEFT JOIN `$originals_table` t2 ON ( t2.original = t1.original AND t2.original = BINARY t1.original ) WHERE t2.original IS NULL AND t1.id > %d AND t1.id <= %d AND LENGTH(t1.original) < 20000", $inferior_limit, ($inferior_limit + $batch_size) ) );
+        $insert_records = $this->db->query( $this->db->prepare( "INSERT INTO `$originals_table` (original) SELECT DISTINCT ( BINARY t1.original ) FROM `$table_name` t1 LEFT JOIN `$originals_table` t2 ON ( t2.original = BINARY t1.original ) WHERE t2.id IS NULL AND t1.id > %d AND t1.id <= %d AND LENGTH(t1.original) < 20000", $inferior_limit, ($inferior_limit + $batch_size) ) );
 
-        if (!empty($this->db->last_error)) {
-            $this->error_manager->record_error(array('last_error_insert_original_strings' => $this->db->last_error));
-        }
+        $this->record_error_preserving_last_error( 'last_error_insert_original_strings' );
 
         return $insert_records;
 
@@ -396,6 +619,8 @@ class TRP_Query{
     /**
      * Function that makes sure we don't have duplicates in original_strings table when updating to version 1.6.6
      * It is executed after we inserted all the strings
+     *
+     * @return int|false Number of deleted rows, or false on error.
      */
     public function original_ids_cleanup(){
         if( !$this->error_manager ){
@@ -404,17 +629,11 @@ class TRP_Query{
         }
 
         $originals_table = $this->get_table_name_for_original_strings();
-        $charset_collate = $this->db->get_charset_collate();
-        $charset = "utf8mb4";
-        if( strpos( 'latin1', $charset_collate ) === 0 )
-            $charset = "latin1";
+        $result = $this->db->query( "DELETE t1 FROM `$originals_table` t1 INNER JOIN `$originals_table` t2 WHERE t1.id > t2.id AND t1.original = BINARY t2.original" );
 
-        $this->db->query( "DELETE t1 FROM `$originals_table` t1 INNER JOIN `$originals_table` t2 WHERE t1.id > t2.id AND t1.original COLLATE ".$charset."_bin = t2.original" );
+        $this->record_error_preserving_last_error( 'last_error_cleaning_original_strings' );
 
-        if (!empty($this->db->last_error)) {
-            $this->error_manager->record_error(array('last_error_cleaning_original_strings' => $this->db->last_error));
-        }
-
+        return $result;
     }
 
     /**
@@ -433,18 +652,51 @@ class TRP_Query{
 
         $originals_table = $this->get_table_name_for_original_strings();
         $table_name = sanitize_text_field( $this->get_table_name( $language_code, $this->settings['default-language'] ) );
-        $charset_collate = $this->db->get_charset_collate();
-        $charset = "utf8mb4";
-        if( strpos( 'latin1', $charset_collate ) === 0 )
-            $charset = "latin1";
-
         /*
         *  perform a UPDATE JOIN with the original table https://www.mysqltutorial.org/mysql-update-join/
         */
-        $update_records = $this->db->query( $this->db->prepare( "UPDATE $table_name, $originals_table SET $table_name.original_id = $originals_table.id WHERE $table_name.original COLLATE ". $charset ."_bin = $originals_table.original AND $table_name.id > %d AND $table_name.id <= %d", $inferior_limit, ($inferior_limit + $batch_size) ) );
+        $source_charset = $this->get_database_column_character_set( $table_name, 'original' );
 
-        if (!empty($this->db->last_error)) {
-            $this->error_manager->record_error(array('last_error_reindex_original_ids' => $this->db->last_error));
+        if ( $this->db->last_error !== '' ) {
+            $this->record_error_preserving_last_error( 'last_error_reindex_original_ids' );
+            return false;
+        }
+
+        $target_charset = $this->get_database_column_character_set( $originals_table, 'original' );
+
+        if ( $this->db->last_error !== '' ) {
+            $this->record_error_preserving_last_error( 'last_error_reindex_original_ids' );
+            return false;
+        }
+
+        $character_sets_differ =
+            $source_charset !== '' &&
+            $target_charset !== '' &&
+            strcasecmp( $source_charset, $target_charset ) !== 0;
+
+        if ( $character_sets_differ ) {
+            // Convert only the dictionary value so the originals index remains usable.
+            // BINARY keeps identity exact; the round trip rejects utf8mb4 "€" -> latin1 "?".
+            $identity_condition = "originals.original = BINARY CONVERT(dictionary.original USING $target_charset)
+                AND BINARY dictionary.original = BINARY CONVERT(CONVERT(dictionary.original USING $target_charset) USING $source_charset)";
+            // Compare an existing reference with the same target-charset representation.
+            $current_original_condition = "current_original.original != BINARY CONVERT(dictionary.original USING $target_charset)";
+        } else {
+            $identity_condition         = 'originals.original = BINARY dictionary.original';
+            $current_original_condition = 'current_original.original != BINARY dictionary.original';
+        }
+
+        $update_records = $this->db->query(
+            $this->db->prepare(
+                "UPDATE `$table_name` AS dictionary INNER JOIN `$originals_table` AS originals ON $identity_condition LEFT JOIN `$originals_table` AS current_original ON current_original.id = dictionary.original_id SET dictionary.original_id = originals.id WHERE ( dictionary.original_id IS NULL OR dictionary.original_id = 0 OR current_original.id IS NULL OR $current_original_condition ) AND dictionary.id > %d AND dictionary.id <= %d",
+                $inferior_limit,
+                ( $inferior_limit + $batch_size )
+            )
+        );
+
+        if ( $this->db->last_error !== '' ) {
+            $this->record_error_preserving_last_error( 'last_error_reindex_original_ids' );
+            return false;
         }
 
         return $update_records;
@@ -466,10 +718,10 @@ class TRP_Query{
 
             $possible_new_strings = array();
             foreach ( $new_strings as $string ) {
-                $possible_new_strings[] = $this->db->prepare( "%s",  $string );
+                $possible_new_strings[] = 'CAST(' . $this->db->prepare( "%s",  $string ) . ' AS BINARY)';
             }
 
-            $existing_strings = $this->db->get_results( "SELECT original FROM `$originals_table` WHERE BINARY $originals_table.original IN (".implode( ',', $possible_new_strings ).")", OBJECT_K );
+            $existing_strings = $this->db->get_results( "SELECT original FROM `$originals_table` WHERE $originals_table.original IN (".implode( ',', $possible_new_strings ).")", OBJECT_K );
 
             if( !empty( $existing_strings ) ){
                 $existing_strings = array_keys($existing_strings);
@@ -489,7 +741,7 @@ class TRP_Query{
             }
 
             //get the ids for all the new strings (new in dictionary)
-            $new_strings_in_dictionary_with_original_id = $this->db->get_results( "SELECT original,id FROM `$originals_table` WHERE BINARY $originals_table.original IN (".implode( ',', $possible_new_strings ).")", OBJECT_K );
+            $new_strings_in_dictionary_with_original_id = $this->db->get_results( "SELECT original,id FROM `$originals_table` WHERE $originals_table.original IN (".implode( ',', $possible_new_strings ).")", OBJECT_K );
 
             if( count( $new_strings_in_dictionary_with_original_id ) === count( $new_strings ) ){
                 return $new_strings_in_dictionary_with_original_id;
@@ -563,7 +815,7 @@ class TRP_Query{
     public function check_original_meta_table(){
 
         $table_name = $this->get_table_name_for_original_meta();
-        if ( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
+        if ( ! $this->trp_table_exists_exact( $table_name ) ) {
             // table not in database. Create new table
             $charset_collate = $this->db->get_charset_collate();
 
@@ -666,16 +918,43 @@ class TRP_Query{
 	}
 
 	/**
+	 * Returns true if a database table index exists.
+	 *
+	 * @param string $table_name Database table name.
+	 * @param string $index_name Index name.
+	 *
+	 * @return bool
+	 */
+	public function table_index_exists( $table_name, $index_name ) {
+		$table_name = sanitize_text_field( $table_name );
+		$index_name = sanitize_text_field( $index_name );
+
+		if ( empty( $table_name ) || empty( $index_name ) ) {
+			return false;
+		}
+
+		$index = $this->db->get_results(
+			$this->db->prepare(
+				"SHOW INDEX FROM `" . $table_name . "` WHERE Key_name = %s",
+				$index_name
+			)
+		);
+
+		return ! empty( $index );
+	}
+
+	/**
 	 * Update regular (non-gettext) strings in DB
 	 *
 	 * @param array $update_strings                 Array of strings to update
 	 * @param string $language_code                 Language code
 	 * @param array $columns_to_update              Array with the name of columns to update id, original, translated, status, block_type, original_id
+	 * @return bool                                 Whether the strings were written to the DB ( false when nothing was saved or the query failed )
      */
 
 	public function update_strings( $update_strings, $language_code, $columns_to_update = array('id','original', 'translated', 'status', 'block_type', 'original_id') ) {
 		if ( count( $update_strings ) == 0 ) {
-			return;
+			return false;
 		}
 
 		$placeholder_array_mapping = array( 'id'=>'%d', 'original'=>'%s', 'translated' => '%s', 'status' => '%d', 'block_type'=>'%d', 'original_id'=>'%d' );
@@ -722,13 +1001,15 @@ class TRP_Query{
 		// but by using prepare you cannot insert NULL values.
 
 		$prepared_query = $this->db->prepare($query . ' ', $values);
-		$this->db->query( $prepared_query );
+		$result = $this->db->query( $prepared_query );
         if( !$this->check_invalid_text ){
             $trp = TRP_Translate_Press::get_trp_instance();
             $this->check_invalid_text = $trp->get_component( 'check_invalid_text' );
         }
         $this->check_invalid_text->update_translations_without_invalid_text( $update_strings, $language_code, $columns_to_update );
         $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running update_strings()' ) );
+
+        return false !== $result;
 	}
 
 	/**
@@ -809,12 +1090,12 @@ class TRP_Query{
         if ( !is_array( $original_strings ) || count ( $original_strings ) == 0 ){
             return array();
         }
-        $query = "SELECT original,id FROM `" . $this->get_table_name_for_original_strings() . "` WHERE BINARY original IN ";
+        $query = "SELECT original,id FROM `" . $this->get_table_name_for_original_strings() . "` WHERE original IN ";
 
         $placeholders = array();
         $values = array();
         foreach( $original_strings as $string ){
-            $placeholders[] = '%s';
+            $placeholders[] = 'BINARY %s';
             $values[] = $string;
         }
 
@@ -898,6 +1179,112 @@ class TRP_Query{
     }
 
     /**
+     * Return a safe prefix length for the gettext originals composite lookup index.
+     *
+     * MyISAM limits indexes to 1000 bytes. Three 100-character utf8mb4 prefixes
+     * can require 1200 bytes, while three 83-character prefixes require at most
+     * 996 bytes. InnoDB can keep the more selective 100-character prefixes.
+     *
+     * @param string $table_name Gettext originals table name.
+     *
+     * @return int
+     */
+    public function get_gettext_original_lookup_index_prefix_length( $table_name ) {
+        $table_name = sanitize_text_field( $table_name );
+        $engine     = $this->db->get_var(
+            $this->db->prepare(
+                'SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = %s',
+                $table_name
+            )
+        );
+
+        return strtoupper( (string) $engine ) === 'MYISAM' ? 83 : 100;
+    }
+
+    /**
+     * Return table name for temporary gettext originals deduplication map.
+     *
+     * @return string
+     */
+    public function get_table_name_for_gettext_originals_dedup_map() {
+        return sanitize_text_field( $this->db->prefix . 'trp_gettext_originals_dedup_map' );
+    }
+
+    /**
+     * Return the gettext originals lookup-hash column name.
+     *
+     * @return string
+     */
+    public function get_gettext_original_lookup_hash_column_name() {
+        return 'lookup_hash';
+    }
+
+    /**
+     * Normalize gettext context before hashing or exact matching.
+     *
+     * @param string|null $context Context value from runtime or DB.
+     *
+     * @return string
+     */
+    public function normalize_gettext_original_context( $context ) {
+        return ( $context === null || $context === '' ) ? 'trp_context' : $context;
+    }
+
+    /**
+     * Build the canonical lookup hash for a gettext original identity.
+     *
+     * @param string      $original Source original.
+     * @param string      $domain   Gettext domain.
+     * @param string|null $context  Optional gettext context.
+     *
+     * @return string
+     */
+    public function get_gettext_original_lookup_hash( $original, $domain, $context = null ) {
+        return md5( $original . "\x1F" . $domain . "\x1F" . $this->normalize_gettext_original_context( $context ) );
+    }
+
+    /**
+     * Return whether the gettext originals hash migration is complete and usable.
+     *
+     * Runtime code must not reference lookup_hash until this is true, otherwise
+     * existing sites without the column can hit SQL errors before migration.
+     *
+     * @return bool
+     */
+    public function gettext_original_lookup_hash_is_available() {
+        if ( $this->gettext_original_lookup_hash_available !== null ) {
+            return $this->gettext_original_lookup_hash_available;
+        }
+
+        $option_value = get_option( 'trp_updated_database_gettext_original_lookup_hash', 'is not set' );
+        $table_name   = $this->get_table_name_for_gettext_original_strings();
+
+        $this->gettext_original_lookup_hash_available = (
+            $this->table_column_exists( $table_name, $this->get_gettext_original_lookup_hash_column_name() ) &&
+            (
+                $option_value === 'yes' ||
+                ( $option_value === 'is not set' && $this->table_index_exists( $table_name, 'gettext_lookup_hash_unique' ) )
+            )
+        );
+
+        return $this->gettext_original_lookup_hash_available;
+    }
+
+    /**
+     * Build a request-local identity key for exact gettext row matching.
+     *
+     * @param string      $original    Source original.
+     * @param string      $domain      Gettext domain.
+     * @param string|null $context     Optional gettext context.
+     * @param int         $plural_form Plural form.
+     *
+     * @return string
+     */
+    public function get_gettext_original_identity_key( $original, $domain, $context, $plural_form ) {
+        return $original . "\x1F" . $domain . "\x1F" . $this->normalize_gettext_original_context( $context ) . "\x1F" . (int) $plural_form;
+    }
+
+    /**
      * Return table name for gettext original meta table
      *
      * @return string                       Table name.
@@ -929,9 +1316,149 @@ class TRP_Query{
         return $dictionary;
     }
 
+    /**
+     * Return gettext rows that are eligible to override gettext output at runtime.
+     *
+     * Runtime overrides are represented by human-reviewed gettext status 2.
+     * Machine translated rows continue to load by status 1. Language-file
+     * matches use status 4 and are intentionally left to WordPress gettext.
+     *
+     * @param string $language_code Target language code.
+     *
+     * @return array|null
+     */
+    public function get_runtime_gettext_strings( $language_code ) {
+        $gettext_table_name = sanitize_text_field($this->get_gettext_table_name($language_code));
+
+        $dictionary = $this->db->get_results(
+            "SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.original, ot.domain, ot.context FROM `" . $gettext_table_name . "` AS tt LEFT JOIN `" . sanitize_text_field($this->get_table_name_for_gettext_original_strings()) . "` AS ot ON tt.original_id = ot.id WHERE tt.translated <> '' AND tt.status != " . self::NOT_TRANSLATED . " AND ( tt.status = " . self::HUMAN_REVIEWED . " OR tt.status = " . self::MACHINE_TRANSLATED . " )",
+            ARRAY_A
+        );
+        $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running get_runtime_gettext_strings()' ) );
+        if ( is_array( $dictionary ) && count( $dictionary ) === 0 && !$this->table_exists($this->get_gettext_table_name( $language_code )) ){
+            $this->maybe_record_automatic_translation_error(array( 'details' => 'Missing table ' . $this->get_gettext_table_name( $language_code ). ' . To regenerate tables, try going to Settings->TranslatePress->General tab and Save Settings.'), true );
+        }
+        return $dictionary;
+    }
+
     public function get_all_gettext_translated_strings(  $language_code ){
         $dictionary = $this->db->get_results("SELECT id, original, translated, domain FROM `" . sanitize_text_field( $this->get_gettext_table_name( $language_code ) ) . "` WHERE translated <>'' AND status != " . self::NOT_TRANSLATED, ARRAY_A );
         $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running get_all_gettext_translated_strings()' ) );
+        return $dictionary;
+    }
+
+    /**
+     * Return gettext DB rows matching exact observed gettext storage keys.
+     *
+     * This is used at shutdown to resolve all observed runtime misses in batches,
+     * so existing DB ids can be reused without inserting duplicate rows.
+     *
+     * @param string $language_code Target language code.
+     * @param array  $items         Observed gettext items with original, domain, context and plural_form.
+     *
+     * @return array|null
+     */
+    public function get_gettext_rows_by_composite_keys( $language_code, $items ) {
+        if ( !is_array( $items ) || count( $items ) === 0 ) {
+            return array();
+        }
+
+        $normalized_hashes        = array();
+        $normalized_plural_forms  = array();
+        $normalized_identity_keys = array();
+        $legacy_where_clauses     = array();
+        $legacy_values            = array();
+
+        foreach ( $items as $item ) {
+            if ( empty( $item['original'] ) || !isset( $item['domain'], $item['context'], $item['plural_form'] ) ) {
+                continue;
+            }
+
+            $context = $this->normalize_gettext_original_context( $item['context'] );
+            $normalized_hashes[ $this->get_gettext_original_lookup_hash( $item['original'], $item['domain'], $context ) ] = true;
+            $normalized_plural_forms[ (int) $item['plural_form'] ] = true;
+            $normalized_identity_keys[ $this->get_gettext_original_identity_key( $item['original'], $item['domain'], $context, $item['plural_form'] ) ] = true;
+
+            if ( $context === 'trp_context' ) {
+                $legacy_where_clauses[] = "( ( tt.original_id IS NULL OR tt.original_id = 0 ) AND tt.original = BINARY %s AND tt.domain = %s AND COALESCE( tt.plural_form, 0 ) = %d )";
+                array_push(
+                    $legacy_values,
+                    $item['original'],
+                    $item['domain'],
+                    (int) $item['plural_form']
+                );
+            }
+        }
+
+        if ( empty( $normalized_hashes ) && empty( $legacy_where_clauses ) ) {
+            return array();
+        }
+
+        $gettext_table   = sanitize_text_field( $this->get_gettext_table_name( $language_code ) );
+        $originals_table = sanitize_text_field( $this->get_table_name_for_gettext_original_strings() );
+        $dictionary      = array();
+
+        if ( ! empty( $normalized_hashes ) && $this->gettext_original_lookup_hash_is_available() ) {
+            $hash_placeholders   = implode( ', ', array_fill( 0, count( $normalized_hashes ), '%s' ) );
+            $plural_placeholders = implode( ', ', array_fill( 0, count( $normalized_plural_forms ), '%d' ) );
+            $normalized_values   = array_merge( array_keys( $normalized_hashes ), array_map( 'intval', array_keys( $normalized_plural_forms ) ) );
+
+            $normalized_query = "SELECT tt.id, tt.translated, tt.status, tt.original AS tt_original, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.id AS ot_id, ot.original, ot.domain, ot.context, ot.original_plural, ot.lookup_hash FROM `$originals_table` AS ot INNER JOIN `$gettext_table` AS tt ON tt.original_id = ot.id WHERE ot.lookup_hash IN ( $hash_placeholders ) AND COALESCE( tt.plural_form, 0 ) IN ( $plural_placeholders )";
+            $normalized_rows  = $this->db->get_results( $this->db->prepare( $normalized_query, $normalized_values ), ARRAY_A );
+        } elseif ( ! empty( $normalized_identity_keys ) ) {
+            $legacy_normalized_clauses = array();
+            $legacy_normalized_values  = array();
+
+            foreach ( $items as $item ) {
+                if ( empty( $item['original'] ) || !isset( $item['domain'], $item['context'], $item['plural_form'] ) ) {
+                    continue;
+                }
+
+                $legacy_normalized_clauses[] = "( ot.original = BINARY %s AND ot.domain = %s AND COALESCE( NULLIF( ot.context, '' ), 'trp_context' ) = %s AND COALESCE( tt.plural_form, 0 ) = %d )";
+                array_push(
+                    $legacy_normalized_values,
+                    $item['original'],
+                    $item['domain'],
+                    $this->normalize_gettext_original_context( $item['context'] ),
+                    (int) $item['plural_form']
+                );
+            }
+
+            if ( ! empty( $legacy_normalized_clauses ) ) {
+                $normalized_query = "SELECT tt.id, tt.translated, tt.status, tt.original AS tt_original, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.id AS ot_id, ot.original, ot.domain, ot.context, ot.original_plural FROM `$originals_table` AS ot INNER JOIN `$gettext_table` AS tt ON tt.original_id = ot.id WHERE " . implode( ' OR ', $legacy_normalized_clauses );
+                $normalized_rows  = $this->db->get_results( $this->db->prepare( $normalized_query, $legacy_normalized_values ), ARRAY_A );
+            } else {
+                $normalized_rows = array();
+            }
+        } else {
+            $normalized_rows = array();
+        }
+
+        if ( ! empty( $normalized_rows ) ) {
+            foreach ( $normalized_rows as $row ) {
+                $identity_key = $this->get_gettext_original_identity_key(
+                    $row['original'],
+                    $row['domain'],
+                    $row['context'],
+                    isset( $row['plural_form'] ) ? (int) $row['plural_form'] : 0
+                );
+
+                if ( isset( $normalized_identity_keys[ $identity_key ] ) ) {
+                    $dictionary[] = $row;
+                }
+            }
+        }
+
+        if ( ! empty( $legacy_where_clauses ) ) {
+            $legacy_query = "SELECT tt.id, tt.translated, tt.status, tt.original AS tt_original, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, NULL AS ot_id, NULL AS original, NULL AS domain, NULL AS context, NULL AS original_plural FROM `$gettext_table` AS tt WHERE " . implode( ' OR ', $legacy_where_clauses );
+            $legacy_rows  = $this->db->get_results( $this->db->prepare( $legacy_query, $legacy_values ), ARRAY_A );
+
+            if ( ! empty( $legacy_rows ) ) {
+                $dictionary = array_merge( $dictionary, $legacy_rows );
+            }
+        }
+
+        $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running get_gettext_rows_by_composite_keys()' ) );
         return $dictionary;
     }
 
@@ -1105,7 +1632,9 @@ class TRP_Query{
         foreach ( $table_names as $table_name ){
             if ( isset( $table_name[0]) &&
                 strpos($table_name[0], 'trp_gettext_original_meta') === false &&
-                strpos($table_name[0], 'trp_gettext_original_strings') === false ) {
+                strpos($table_name[0], 'trp_gettext_original_strings') === false &&
+                strpos($table_name[0], 'trp_gettext_locale_dedup_map') === false &&
+                strpos($table_name[0], 'trp_gettext_originals_dedup_map') === false ) {
                 $return_tables[] = $table_name[0];
             }
         }
@@ -1245,7 +1774,7 @@ class TRP_Query{
 
         if ($this->table_exists($table_name)) {
             $query = $this->db->prepare(
-                "SELECT id, original, translated, plural_form domain FROM $table_name 
+                "SELECT id, original, translated, plural_form, domain FROM $table_name 
                         WHERE (original > %s OR (original = %s AND id > %d)) 
                         ORDER BY original, id 
                         LIMIT %d",
@@ -1484,11 +2013,27 @@ class TRP_Query{
         }
 
 	    $table_name = sanitize_text_field($table_name);
-        $table_found = strtolower( $this->db->get_var( "SHOW TABLES LIKE '$table_name'" ) ) == strtolower( $table_name );
+        $table_found = strtolower( (string) $this->db->get_var( $this->db->prepare( 'SHOW TABLES LIKE %s', $this->db->esc_like( $table_name ) ) ) ) == strtolower( $table_name );
         if ( $table_found ) {
             $this->tables_exist[] = $table_name;
         }
         return $table_found;
+    }
+
+    /**
+     * Whether a database table exists, matching the name exactly.
+     *
+     * SHOW TABLES LIKE treats '_' and '%' as wildcards, so an unescaped table name
+     * such as wp_trp_dictionary_en_gb_nl_nl can wrongly match a sibling table like
+     * wp_trp_dictionary_en_gb_nl-nl. Escaping the name with esc_like() guarantees an
+     * exact match. Unlike table_exists(), this performs no caching, so it is safe to
+     * use right after creating a table to verify it now exists.
+     *
+     * @param string $table_name
+     * @return bool
+     */
+    protected function trp_table_exists_exact( $table_name ){
+        return (string) $this->db->get_var( $this->db->prepare( 'SHOW TABLES LIKE %s', $this->db->esc_like( $table_name ) ) ) === $table_name;
     }
 
     /**
@@ -1506,10 +2051,21 @@ class TRP_Query{
             return;
         }
 
-        $charset_collate = $this->db->get_charset_collate();
-        $charset = (strpos( 'latin1', $charset_collate ) === 0 ) ? "latin1" : "utf8mb4";
-
         $table_name = ( $string_type === 'gettext' ) ? $this->get_gettext_table_name( $language ) : $this->get_table_name( $language );
+        $original_charset = $this->get_database_column_character_set( $table_name, 'original' );
+
+        if ( $this->db->last_error !== '' || ! preg_match( '/^[a-zA-Z0-9_]+$/', $original_charset ) ) {
+            return false;
+        }
+
+        $domain_charset = '';
+        if ( $string_type === 'gettext' ) {
+            $domain_charset = $this->get_database_column_character_set( $table_name, 'domain' );
+
+            if ( $this->db->last_error !== '' || ! preg_match( '/^[a-zA-Z0-9_]+$/', $domain_charset ) ) {
+                return false;
+            }
+        }
 
         $values = array();
         $place_holders = array();
@@ -1519,13 +2075,63 @@ class TRP_Query{
             }else{
                 array_push( $values, $string['original'], $string['id'] );
             }
-            $domain = ( $string_type === 'gettext') ? "AND domain COLLATE " . $charset . "_bin = '%s' AND plural_form = '%d' " : "";
-            $place_holders[] = "(original COLLATE " . $charset . "_bin = '%s' " . $domain . "AND id != '%d'  )";
+            $domain = ( $string_type === 'gettext') ? "AND domain = BINARY CONVERT('%s' USING $domain_charset) AND plural_form = '%d' " : "";
+            $place_holders[] = "(original = BINARY CONVERT('%s' USING $original_charset) " . $domain . "AND id != '%d'  )";
         }
 
         $sql = "DELETE FROM `" . sanitize_text_field( $table_name ). "` WHERE " . implode( " OR ", $place_holders );
         $query = $this->db->prepare( $sql, $values );
         return $this->db->query( $query );
+    }
+
+    /**
+     * Record the current SQL error without allowing the logging query to erase it.
+     *
+     * @param string $error_key Error-manager detail key.
+     */
+    protected function record_error_preserving_last_error( $error_key ) {
+        $last_error = $this->db->last_error;
+
+        if ( $last_error === '' ) {
+            return;
+        }
+
+        $this->error_manager->record_error( array( $error_key => $last_error ) );
+        $this->db->last_error = $last_error;
+    }
+
+    /**
+     * Return the declared character set for a text column.
+     *
+     * @param string $table_name Database table name.
+     * @param string $column_name Database column name.
+     *
+     * @return string
+     */
+    protected function get_database_column_character_set( $table_name, $column_name ) {
+        $cache_key = $table_name . '.' . $column_name;
+
+        if ( isset( $this->database_column_character_sets[ $cache_key ] ) ) {
+            return $this->database_column_character_sets[ $cache_key ];
+        }
+
+        $character_set = $this->db->get_var(
+            $this->db->prepare(
+                "SELECT CHARACTER_SET_NAME
+                FROM information_schema.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = %s
+                    AND COLUMN_NAME = %s",
+                $table_name,
+                $column_name
+            )
+        );
+
+        if ( $this->db->last_error === '' ) {
+            $this->database_column_character_sets[ $cache_key ] = is_string( $character_set ) ? $character_set : '';
+        }
+
+        return is_string( $character_set ) ? $character_set : '';
     }
 
     public function rename_originals_table(){

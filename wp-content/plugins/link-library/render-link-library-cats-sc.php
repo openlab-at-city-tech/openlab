@@ -402,7 +402,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 									$cattext .= $settings;
 								}
 
-								$cattext .= "('" . $catname->term_id. "', '";
+								$cattext .= "('" . esc_js( $catname->term_id ) . "', '";
 
 								if ( !empty( $targetlibrary ) ) {
 									$cattext .= $targetlibrary;
@@ -421,10 +421,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
 			                $cattargetaddress = add_query_arg( 'cat_id', $catname->term_id, '');
 			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
-				                $cattargetaddress = add_query_arg( 'searchll', sanitize_text_field( $_GET['searchll'] ), $cattargetaddress );
+				                $cattargetaddress = add_query_arg( 'searchll', rawurlencode( sanitize_text_field( wp_unslash( $_GET['searchll'] ) ) ), $cattargetaddress );
 			                }
 
-			                $cattext .= $cattargetaddress;
+			                $cattext .= esc_url( $cattargetaddress );
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
@@ -436,10 +436,10 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 
 			                $cattargetaddress = add_query_arg( 'catslug', $catname->slug, '');
 			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
-				                $cattargetaddress = add_query_arg( 'searchll', sanitize_text_field( $_GET['searchll'] ), $cattargetaddress );
+				                $cattargetaddress = add_query_arg( 'searchll', rawurlencode( sanitize_text_field( wp_unslash( $_GET['searchll'] ) ) ), $cattargetaddress );
 			                }
 
-			                $cattext .= $cattargetaddress;
+			                $cattext .= esc_url( $cattargetaddress );
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
@@ -458,7 +458,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 			                $get_array['catname'] = urlencode( $catname->name );
 			                $get_query = add_query_arg( $get_array, $cattargetaddress );
 
-			                $cattext .= $get_query;
+			                $cattext .= esc_url( $get_query );
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
@@ -468,12 +468,12 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 				                $cattext = "<a href='";
 			                }
 
-			                $cattargetaddress = esc_url( site_url() . '/' . $rewritepage . '/' . $catname->slug . '/' );
+			                $cattargetaddress = site_url() . '/' . $rewritepage . '/' . $catname->slug . '/';
 			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
-				                $cattargetaddress = add_query_arg( 'searchll', sanitize_text_field( $_GET['searchll'] ), $cattargetaddress );
+				                $cattargetaddress = add_query_arg( 'searchll', rawurlencode( sanitize_text_field( wp_unslash( $_GET['searchll'] ) ) ), $cattargetaddress );
 			                }
 
-			                $cattext .= $cattargetaddress;
+			                $cattext .= esc_url( $cattargetaddress );
 
 			                if ( 'dropdown' != $flatlist && 'dropdowndirect' != $flatlist ) {
 				                $cattext .= "'>";
@@ -486,7 +486,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 			                }
 
 			                if ( $searchfiltercats && isset( $_GET['searchll'] ) && !empty( $_GET['searchll'] ) ) {
-				                $cattext .= '?searchll=' . sanitize_text_field( $_GET['searchll'] ) . '&cat_id=' . $catname->term_id;
+				                $cattext .= '?searchll=' . rawurlencode( sanitize_text_field( wp_unslash( $_GET['searchll'] ) ) ) . '&cat_id=' . $catname->term_id;
 			                } elseif ( 'toggles' != $flatlist && 'togglesshowhideall' != $flatlist ) {
 				                $cattext .= '#' . $catname->slug;
 			                }
@@ -683,7 +683,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 						$output .= $settings;
 					}
 					
-					$output .= "(catidvar, linklistID, 1, '" . $searchstring  . "');return false; }";
+					$output .= "(catidvar, linklistID, 1, '" . esc_js( $searchstring )  . "');return false; }";
                 } else {
                     $output .= "\t\tlocation=\n";
                     $output .= "document.catselect.catdropdown" . $settings . ".options[document.catselect.catdropdown" . $settings . ".selectedIndex].value }\n";

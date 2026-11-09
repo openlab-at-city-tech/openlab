@@ -41,36 +41,15 @@ class Utilities {
 	}
 
 	/**
-	 * Returns the list of free plugins.
-	 *
-	 * @return array
-	 */
-	public function get_free_plugins(): array {
-		$plugins = $this->get_plugins_list();
-		return is_array( $plugins ) && ! empty( $plugins['free-plugins'] ) ? $plugins['free-plugins'] : array();
-	}
-
-	/**
-	 * Returns the list of pro plugins.
-	 *
-	 * @return array
-	 */
-	public function get_pro_plugins(): array {
-		$plugins = $this->get_plugins_list();
-		return is_array( $plugins ) && ! empty( $plugins['pro-plugins'] ) ? $plugins['pro-plugins'] : array();
-	}
-
-	/**
 	 * Retrieves the path of a plugin by its slug.
 	 *
 	 * @param string $plugin_slug The plugin slug.
 	 * @return string
 	 */
 	public function get_plugin_path_by_slug( string $plugin_slug = '' ): string {
-		$free_plugins = $this->get_free_plugins();
-		$free_plugins = is_array( $free_plugins ) && ! empty( $free_plugins['free-plugins'] ) ? $free_plugins['free-plugins'] : $free_plugins;
+		$plugins_list = $this->get_plugins_list();
 
-		return $this->get_value_from_associative_array( 'path', $free_plugins, array( 'slug' => $plugin_slug ) );
+		return $this->get_value_from_associative_array( 'path', $plugins_list, array( 'slug' => $plugin_slug ) );
 	}
 
 	/**

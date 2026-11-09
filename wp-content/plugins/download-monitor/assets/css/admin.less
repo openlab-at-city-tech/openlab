@@ -18,39 +18,6 @@
 
 .post-type-dlm_download {
 
-  .dlm-extension-filtering a {
-	cursor: pointer;
-	padding-bottom: 9px;
-	margin-bottom: -2px;
-	font-weight: 600;
-	border-bottom: 4px solid transparent;
-  }
-
-  .dlm-page-header {
-	border-bottom: 1px solid #ccc;
-	padding: 15px 20px;
-	display: flex;
-	justify-content: space-between;
-	background: #fff;
-	width: calc(100% + 20px);
-	box-sizing: border-box;
-	margin-left: -20px;
-
-	.dlm-header-logo{
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 20px;
-		 .dlm-header-logo-text {
-			margin: 0;
-			font-size: 18px;
-		}
-		img {
-			max-height: 35px;
-		}
-	}
-  }
-
   td.column-shortcode {
 	.hidden {
 	  display: none;
@@ -146,258 +113,6 @@
 		  width: 200px;
 		}
 	  }
-	}
-  }
-}
-
-/** Settings */
-.dlm-settings-sub-nav {
-  margin: 0 0 10px 0;
-  width: 100%;
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, .04);
-  list-style: none;
-  padding: 0;
-  font-size: 13px;
-  float: left;
-  color: #646970;
-  li {
-	display: inline-block;
-	margin-right: 10px;
-	margin-bottom: -2px;
-	display: inline-block;
-    margin: 0;
-    padding: 0;
-    white-space: nowrap;
-  }
-
-  a {
-	padding: 13px;
-	display: block;
-	outline: none;
-	box-shadow: none;
-	line-height: 2;
-    text-decoration: none;
-
-  }
-
-  .active-section {
-	margin-bottom: -2px;
-
-	a {
-	  border-bottom: 4px solid #000;
-	  padding-bottom: 9px;
-	  margin-bottom: -2px;
-	  font-weight: 600;
-	}
-  }
-}
-
-
-.dlm-admin-settings {
-
-  #setting-dlm_decimal_separator,
-  #setting-dlm_thousand_separator {
-	width: 50px;
-  }
-
-  table {
-	&.api_keys {
-	  td {
-		padding:15px 10px;
-	  }
-	}
-	td {
-	  padding: 15px 0;
-	}
-  }
-
-  h3 {
-	margin: 2em 0 0;
-  }
-
-  .form-table {
-
-	label.dlm-radio-label {
-	  display: block;
-	  margin-bottom: 5px;
-	}
-
-	label.dlm-enhanced-radio-label {
-	  position: relative;
-	  padding: 10px 15px;
-	  display: inline-block;
-	  margin-bottom: 15px;
-	  -webkit-user-select: none; /* Safari */
-	  -moz-user-select: none; /* Firefox */
-	  -ms-user-select: none; /* IE10+/Edge */
-	  user-select: none; /* Standard */
-
-	  span {
-		z-index: 3;
-		position: relative;
-	  }
-
-	  input[type="radio"] {
-		position: relative;
-		z-index: 2;
-
-		& + div.dlm-radio__selectable-area {
-		  position: absolute;
-		  width: 100%;
-		  height: 100%;
-		  border-radius: 20px;
-		  display: block;
-		  top: 0;
-		  left: 0;
-		  opacity: 1;
-		  border: 1px solid grey;
-		}
-
-		&:checked + div.dlm-radio__selectable-area {
-		  border-color: green;
-		  background-color: rgba(0, 128, 0, 0.6);
-
-		  & + span {
-			color: #fff;
-		  }
-		}
-	  }
-	}
-  }
-
-  .dlm_settings {
-	padding: 5px 0;
-
-	& > th {
-	  padding: 15px 5px;
-	}
-
-	& > td {
-	  padding: 15px 5px 15px 0;
-	}
-  }
-
-  .dlm_install_plugin_setting {
-	background: #fff;
-	padding: 0 15px;
-	border-bottom: 1px solid #ccc;
-	border-top: 1px solid #ccc;
-  }
-
-  .dlm_group_setting {
-	td,
-	.dlm-accordeon-group {
-	  margin: 0 auto;
-	  padding: 0 !important;
-
-	  .dlm-groupped-settings__box {
-		margin: 5px 0 5px 0;
-
-		.postbox {
-		  padding: 0;
-		  margin: 0 auto;
-
-		  .hndle {
-			margin: 0;
-			padding: 8px;
-			font-weight: lighter;
-		  }
-		}
-	  }
-	}
-
-	.handle-actions {
-	  button {
-		box-shadow: none;
-	  }
-	}
-
-	h2.hndle {
-	  cursor: pointer;
-	}
-
-	.dlm-accordeon-group__content {
-	  padding: 15px;
-
-	  .dlm-accordeon-group__setting {
-		padding: 35px 0;
-		display: flex;
-		flex-wrap: wrap;
-		flex-direction: row;
-		justify-content: space-between;
-
-		.dlm-accordeon-group__setting-title {
-		  font-size: 16px;
-		  margin-bottom: 15px;
-		  font-weight: bold;
-		  width: 20%;
-		}
-
-		.dlm-accordeon-group__setting-content {
-		  width: 80%;
-		}
-
-		.description {
-		  font-style: italic;
-		}
-	  }
-	}
-  }
-
-  .dlm-template-override {
-	width: 100%;
-	max-width: 1200px;
-	border-collapse: collapse;
-
-	thead {
-	  tr {
-		font-weight: bold;
-		border-bottom: 1px solid #ccc;
-	  }
-	}
-
-	tbody {
-	  tr {
-		&:nth-child(even) {
-		  background: #f9f9f9;
-		}
-	  }
-	}
-
-	.wpchill-tooltip {
-	  float: none;
-	}
-  }
-
-  .dlm-content-tab {
-	width: 65%;
-	float: left;
-  }
-
-  .wpchill-upsells-wrapper.wpchill-right-upsells {
-	width: 30%;
-	float: right;
-  }
-
-  .dlm-content-tab-full {
-	width: 100%;
-
-	.wp-list-table {
-	  &.approveddownloadpath {
-		.dlm-path-enabled {
-		  color:green;
-		  padding: 8px 10px;
-		}
-		.dlm-path-disabled {
-		  color: red;
-		  padding: 8px 10px;
-		}
-	  }
-	}
-
-	#dlm_downloads_path {
-	  min-width: 400px;
 	}
   }
 }
@@ -1208,7 +923,7 @@ table.wp-list-table {
 	}
   }
 
-  p {
+   .form-field {
 	margin: 0 !important;
 	border-top: 1px solid white;
 	border-bottom: 1px solid #DFDFDF;
@@ -1325,7 +1040,13 @@ table.wp-list-table {
   #drag-drop-area {
 	margin: 1em 0;
   }
-
+	.dlm-media-insert-button{
+		background: #2271b1;
+		border-color: #2271b1;
+		color: #fff;
+		text-decoration: none;
+		text-shadow: none;
+	}
   .updated,
   .error {
 	margin-left: 0;
@@ -1340,6 +1061,11 @@ table.wp-list-table {
 	margin: 0 0 .25em 0;
 	display: block;
 	font-size: 1.1em;
+
+  input[type="radio"]:checked::before {
+	background: #2271b1 !important;
+	border-color: #2271b1 !important;
+  }
   }
 
   span.description {
@@ -2845,37 +2571,6 @@ table.wp-list-table {
   }
 }
 
-.wrap.dlm-admin-settings {
-  .form-table {
-	.dlm_htaccess_notice {
-	  margin-bottom: 5px;
-	}
-  }
-
-  .dlm-upsell-badge {
-	font-size: 10px;
-	background: #f4daa4;
-	padding: 2px 5px;
-	display: inline-block;
-	margin-left: 10px;
-	border-radius: 10px;
-  }
-
-  #setting-dlm_downloads_path {
-	& + p {
-	  strong {
-		color: red;
-	  }
-	}
-
-	.dlm-install-plugin-actions {
-	  display: inline-block;
-	  vertical-align: middle;
-	  margin: 5px auto;
-	  margin-left: 15px;
-	}
-  }
-}
 
 #installed-extensions {
   .dlm_extensions {
@@ -4010,14 +3705,16 @@ div#dlm-export-settings-upsell {
   }
 }
 .post-type-dlm_download {
-	.wpchill-tooltip-button.copy-dlm-shortcode {
+	.wpchill-tooltip-button.wpchill-tooltip-button.copy-dlm-shortcode {
 	line-height: 13px;
+	color: #fff;
 
 	.dashicons {
 		font-size: 17px;
 		width: 17px;
 		height: 17px;
 		line-height: 20px;
+		color: #fff;
 		}
 	}
 }

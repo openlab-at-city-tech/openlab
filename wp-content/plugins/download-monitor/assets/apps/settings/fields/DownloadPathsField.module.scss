@@ -1,0 +1,17 @@
+.header {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 12px;
+}
+
+.modalActions {
+	display: flex;
+	justify-content: flex-end;
+	gap: 8px;
+	margin-top: 20px;
+}
+
+.wrapper table td,
+.wrapper table th {
+	vertical-align: middle;
+}

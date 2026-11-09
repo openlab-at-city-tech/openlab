@@ -26,10 +26,12 @@ class AddonsREST {
 	 * @var array
 	 */
 	public static $valid_addons = [
+		'dropbox',
 		'dribbble',
 		'tiktok',
 		'google_analytics',
 		'instagram',
+		'google_photos',
 	];
 
 	/**
@@ -199,11 +201,13 @@ class AddonsREST {
 		$feature_display_names = [
 			'dribbble'         => 'Dribbble',
 			'tiktok'           => 'TikTok',
+			'dropbox'          => 'Dropbox',
 			'google_analytics' => 'Google Analytics',
 			'instagram'        => 'Instagram',
+			'google_photos'    => 'Google Photos',
 		];
-		$display_name = isset( $feature_display_names[ $addon_id ] ) ? $feature_display_names[ $addon_id ] : $addon_id;
-		$noun         = __( 'Feature', 'nggallery' );
+		$display_name          = isset( $feature_display_names[ $addon_id ] ) ? $feature_display_names[ $addon_id ] : $addon_id;
+		$noun                  = __( 'Feature', 'nggallery' );
 		if ( $enabled ) {
 			return sprintf(
 				/* translators: 1: Feature, 2: display name (e.g. Dribbble, TikTok) */

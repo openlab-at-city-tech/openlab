@@ -110,7 +110,9 @@ class SinglePicture extends ParentController {
 
 		$size = $dynthumbs->get_size_name( $params );
 
-		$thumbnail_url = $storage->get_image_url( $image, $size );
+		// The visible <img src> for both the modern and legacy singlepic templates, so it
+		// carries the cache-buster; the anchor href above stays canonical.
+		$thumbnail_url = $storage->get_cache_busted_image_url( $image, $size );
 
 		if ( ! empty( $display_settings['template'] ) && $display_settings['template'] != 'default' ) {
 			$params = $this->prepare_legacy_parameters( [ $image ], $displayed_gallery, [ 'single_image' => true ] );

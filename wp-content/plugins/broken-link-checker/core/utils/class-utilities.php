@@ -1264,4 +1264,32 @@ final class Utilities {
 	public static function process_extensive( $param = null ) {
 		return apply_filters( 'wpmudev_blc_process_extensive', false, $param );
 	}
+
+	/**
+	 * Converts a time string to a timestamp.
+	 *
+	 * @param string      $time_string The time string to convert.
+	 * @param string|null $time_zone   Optional. The time zone to use. Defaults to the WordPress timezone.
+	 *
+	 * @return int The timestamp.
+	 */
+	public static function str_to_time( $time_string, $time_zone = null ) {
+		if ( empty( $time_string ) ) {
+			return 0;
+		}
+
+		if ( is_null( $time_zone ) ) {
+			$time_zone = wp_timezone_string();
+		}
+
+		try {
+			$timezone = new \DateTimeZone( $time_zone );
+		} catch ( \Exception $e ) {
+			$timezone = new \DateTimeZone( 'UTC' );
+		}
+
+		$date_time = new \DateTimeImmutable( $time_string, $timezone );
+
+		return $date_time->getTimestamp();
+	}
 }

@@ -261,4 +261,13 @@ trait Dashboard_API {
 
 		return apply_filters( 'wpmudev_blc_dashboard_api_key', $api_key );
 	}
+
+	/**
+	 * Disconnect from Hub Connector
+	 *
+	 * @return bool|WP_Error
+	 */
+	public static function hub_connector_disconnect() {
+		return \WPMUDEV\Hub\Connector\API::get()->logout();
+	}
 }

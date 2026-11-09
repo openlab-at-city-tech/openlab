@@ -26,9 +26,9 @@
 
             // get data
             var featured = ('1' === $( '.column-featured', $post_row ).text() );
-            var members_only = ('1' === $( '.column-locked_download span', $post_row ).data('members_only') );
+            var members_only = (1 === $( '.column-locked_download span', $post_row ).data('members_only') );
             var redirect_only = ('1' === $( '.column-redirect_only', $post_row ).text() );
-            var terms_conditions = ('1' === $( '.column-locked_download span', $post_row ).data('_dlm_tc_locked') );
+            var terms_conditions = (1 === $( '.column-locked_download span', $post_row ).data('_dlm_tc_locked') );
 
             // populate data
             $( ':input[name="_featured"]', $edit_row ).prop( 'checked', featured );

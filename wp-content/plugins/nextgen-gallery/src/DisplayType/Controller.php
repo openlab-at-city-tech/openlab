@@ -62,7 +62,7 @@ class Controller {
 				$pro_active = constant( $pro_active );
 			}
 			if ( ! is_admin() && ( empty( $pro_active ) || version_compare( $pro_active, '1.0.11' ) >= 0 ) ) {
-				\wp_enqueue_style( 'fontawesome' );
+				\wp_enqueue_style( 'nextgen_gallery_icons' );
 				$retval         = true;
 				$this->run_once = true;
 			}
@@ -105,14 +105,32 @@ class Controller {
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
 		\wp_enqueue_script( 'ngg_common' );
 
-		\wp_enqueue_style( 'ngg_video_play_overlay' );
-		\wp_enqueue_script( 'ngg_tiktok_video' );
+		// Resolve gallery once for video/TikTok gating — avoids duplicate DB lookups.
+		$gallery_mapper  = \Imagely\NGG\DataMappers\Gallery::get_instance();
+		$container_ids   = $displayed_gallery->container_ids;
+		$gallery         = null;
+		$external_source = null;
 
-		// Video: helper script for multi-platform video support.
-		\wp_enqueue_script( 'ngg_video_helper' );
+		if ( ! empty( $container_ids ) && is_array( $container_ids ) ) {
+			$gallery = $gallery_mapper->find( intval( $container_ids[0] ), true );
+			if ( $gallery && isset( $gallery->external_source ) && is_array( $gallery->external_source ) ) {
+				$external_source = $gallery->external_source;
+			}
+		}
 
-		// Video: lightbox styles for multi-platform video support.
-		\wp_enqueue_style( 'ngg_video_lightbox' );
+		// Unified external-source truth: [] (regular gallery) and null (unset) both mean no source.
+		$has_external = is_array( $external_source ) && ! empty( $external_source );
+
+		// Gate video assets: only load when gallery has non-empty external media source (or gallery is undetermined).
+		if ( null === $gallery || $has_external ) {
+			\wp_enqueue_style( 'ngg_video_play_overlay' );
+
+			// Video: helper script for multi-platform video support.
+			\wp_enqueue_script( 'ngg_video_helper' );
+
+			// Video: lightbox styles for multi-platform video support.
+			\wp_enqueue_style( 'ngg_video_lightbox' );
+		}
 
 		\wp_add_inline_script(
 			'ngg_common',
@@ -173,29 +191,26 @@ class Controller {
 			$tiktok_settings['global']['link_target'] = isset( $tiktok_defaults['tiktok_link_target'] ) ? (string) $tiktok_defaults['tiktok_link_target'] : '0';
 		}
 
-		$gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
-		$container_ids  = $displayed_gallery->container_ids;
+		if ( $has_external ) {
+			if ( isset( $external_source['type'] ) && 'tiktok' === $external_source['type'] ) {
+				\wp_enqueue_script( 'ngg_tiktok_video' );
+				// Flag TikTok gallery so the lightbox enqueue loop includes TikTok-specific assets.
+				LightboxManager::flag_tiktok_gallery();
+			}
 
-		if ( ! empty( $container_ids ) && is_array( $container_ids ) ) {
-			$first_gallery_id = intval( $container_ids[0] );
-			$gallery          = $gallery_mapper->find( $first_gallery_id, true );
+			$settings_mode = isset( $external_source['settings_mode'] ) ? $external_source['settings_mode'] : 'default';
 
-			if ( $gallery && isset( $gallery->external_source ) && is_array( $gallery->external_source ) ) {
-				$external_source = $gallery->external_source;
-				$settings_mode   = isset( $external_source['settings_mode'] ) ? $external_source['settings_mode'] : 'default';
+			if ( 'custom' === $settings_mode && null !== $gallery ) {
+				$gallery_id = (string) $gallery->gid;
 
-				if ( 'custom' === $settings_mode ) {
-					$gallery_id = (string) $gallery->gid;
+				$gallery_link = isset( $external_source['tiktok_link'] ) ? (string) $external_source['tiktok_link'] : $tiktok_settings['global']['link'];
 
-					$gallery_link = isset( $external_source['tiktok_link'] ) ? (string) $external_source['tiktok_link'] : $tiktok_settings['global']['link'];
+				$gallery_link_target = isset( $external_source['tiktok_link_target'] ) ? (string) $external_source['tiktok_link_target'] : $tiktok_settings['global']['link_target'];
 
-					$gallery_link_target = isset( $external_source['tiktok_link_target'] ) ? (string) $external_source['tiktok_link_target'] : $tiktok_settings['global']['link_target'];
-
-					$tiktok_settings[ 'gallery_' . $gallery_id ] = [
-						'link'        => $gallery_link,
-						'link_target' => $gallery_link_target,
-					];
-				}
+				$tiktok_settings[ 'gallery_' . $gallery_id ] = [
+					'link'        => $gallery_link,
+					'link_target' => $gallery_link_target,
+				];
 			}
 		}
 
@@ -224,27 +239,18 @@ class Controller {
 				'autoplay_videos'          => false,
 			],
 		];
-		// Get gallery-specific video settings if available
-		if ( ! empty( $container_ids ) && is_array( $container_ids ) ) {
-			$first_gallery_id = intval( $container_ids[0] );
-			$gallery          = $gallery_mapper->find( $first_gallery_id, true );
+		// Get gallery-specific video settings if available (uses already-resolved $external_source).
+		if ( $has_external && null !== $gallery && isset( $external_source['type'] ) && 'video' === $external_source['type'] ) {
+			$gallery_id                       = (string) $gallery->gid;
+			$gallery_show_video_controls      = isset( $external_source['show_video_controls'] ) ? (bool) $external_source['show_video_controls'] : $video_settings['default']['show_video_controls'];
+			$gallery_show_play_pause_controls = isset( $external_source['show_play_pause_controls'] ) ? (bool) $external_source['show_play_pause_controls'] : $video_settings['default']['show_play_pause_controls'];
+			$gallery_autoplay_videos          = isset( $external_source['autoplay_videos'] ) ? (bool) $external_source['autoplay_videos'] : $video_settings['default']['autoplay_videos'];
 
-			if ( $gallery && isset( $gallery->external_source ) && is_array( $gallery->external_source ) ) {
-				$external_source = $gallery->external_source;
-
-				if ( isset( $external_source['type'] ) && 'video' === $external_source['type'] ) {
-					$gallery_id                       = (string) $gallery->gid;
-					$gallery_show_video_controls      = isset( $external_source['show_video_controls'] ) ? (bool) $external_source['show_video_controls'] : $video_settings['default']['show_video_controls'];
-					$gallery_show_play_pause_controls = isset( $external_source['show_play_pause_controls'] ) ? (bool) $external_source['show_play_pause_controls'] : $video_settings['default']['show_play_pause_controls'];
-					$gallery_autoplay_videos          = isset( $external_source['autoplay_videos'] ) ? (bool) $external_source['autoplay_videos'] : $video_settings['default']['autoplay_videos'];
-
-					$video_settings[ 'gallery_' . $gallery_id ] = [
-						'show_video_controls'      => $gallery_show_video_controls,
-						'show_play_pause_controls' => $gallery_show_play_pause_controls,
-						'autoplay_videos'          => $gallery_autoplay_videos,
-					];
-				}
-			}
+			$video_settings[ 'gallery_' . $gallery_id ] = [
+				'show_video_controls'      => $gallery_show_video_controls,
+				'show_play_pause_controls' => $gallery_show_play_pause_controls,
+				'autoplay_videos'          => $gallery_autoplay_videos,
+			];
 		}
 
 		// Output video settings to JavaScript
@@ -410,11 +416,13 @@ class Controller {
 			// Once we have the image, get its dimensions.
 			if ( $image ) {
 				$dimensions = $storage->get_image_dimensions( $image, $named_size );
-				if ( $dimensions['width'] > $widest ) {
-					$widest = $dimensions['width'];
-				}
-				if ( $dimensions['height'] > $longest ) {
-					$longest = $dimensions['height'];
+				if ( $dimensions ) {
+					if ( $dimensions['width'] > $widest ) {
+						$widest = $dimensions['width'];
+					}
+					if ( $dimensions['height'] > $longest ) {
+						$longest = $dimensions['height'];
+					}
 				}
 			}
 		}
@@ -468,11 +476,32 @@ class Controller {
 				$display_type_view = join( DIRECTORY_SEPARATOR, [ 'default', $display_type_view ] );
 			}
 
+			$storage = StorageManager::get_instance();
+
 			foreach ( $dirs as $category => $dir ) {
 				$category = preg_quote( $category . DIRECTORY_SEPARATOR, '#' );
 				if ( preg_match( "#^{$category}(.*)$#", $display_type_view, $match ) ) {
 					$display_type_view = $match[1];
 					$template_abspath  = $fs->join_paths( $dir, $display_type_view );
+
+					// join_paths() preserves "..", and this value comes from the gallery's stored
+					// display_type_settings, which remote-editing endpoints can write. Without a
+					// containment check, "default/../../../../uploads/2026/01/x.jpg" resolves here
+					// and View::render() include()s whatever it points at. The refused case falls
+					// through to the built-in template rather than failing the render.
+					if ( ! $storage->is_path_contained( $dir, $template_abspath ) ) {
+						$storage->log_path_refusal(
+							sprintf(
+								'NextGEN Gallery: refused display template "%s" for display type "%s" - resolves outside the template directory (%s)',
+								$template_abspath,
+								$display_type_name,
+								$dir
+							),
+							StorageManager::REFUSAL_TEMPLATE_PATH
+						);
+						continue;
+					}
+
 					// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 					if ( @file_exists( $template_abspath ) ) {
 						$template = $template_abspath;
@@ -549,13 +578,24 @@ class Controller {
 		}
 
 		if ( $template_abspath ) {
-			// render the template.
-			extract( $vars );
+			// Include the template from an isolated scope so a caller-supplied variable
+			// bag cannot overwrite the path find() just validated, the buffering flag,
+			// or the string this method returns. Before this isolation a shortcode
+			// attribute literally named "template_abspath" (copied verbatim into the
+			// display-settings bag) replaced the resolved path through extract()'s
+			// default EXTR_OVERWRITE, turning the renderer into an arbitrary-file
+			// include. EXTR_SKIP protects the closure's own two parameters, so a
+			// "__ngg_target"/"__ngg_vars" attribute cannot reintroduce the overwrite.
+			$render = static function ( $__ngg_target, array $__ngg_vars ) {
+				extract( $__ngg_vars, EXTR_SKIP );
+				include $__ngg_target;
+			};
+
 			if ( $return_output ) {
 				ob_start();
 			}
 
-			include $template_abspath;
+			$render( $template_abspath, (array) $vars );
 
 			if ( $return_output ) {
 				$retval = ob_get_contents();
@@ -623,7 +663,7 @@ class Controller {
 
 		foreach ( $picture_list as &$image ) {
 			if ( isset( $image->hidden ) && $image->hidden ) {
-				$tmp          = $displayed_gallery->display_settings['number_of_columns'];
+				$tmp          = (int) $displayed_gallery->display_settings['number_of_columns'];
 				$image->style = ( $tmp > 0 ) ? 'style="width:' . floor( 100 / $tmp ) . '%;display: none;"' : 'style="display: none;"';
 			}
 		}
@@ -702,7 +742,7 @@ class Controller {
 		if ( ! $origin_url
 		&& ! empty( $displayed_gallery->display_settings['original_display_type'] )
 		&& ! empty( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-			$origin_url = Router::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
+			$origin_url = Router::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 		}
 
 		$url = $origin_url ? $origin_url : $app->get_app_url( false, true );
@@ -746,11 +786,11 @@ class Controller {
 			}
 		}
 
-		// Early exit.
+		// Early exit — empty output; templates handle their own bottom clearfix when needed.
 		$return = [
 			'prev'   => '',
 			'next'   => '',
-			'output' => "<div class='ngg-clear'></div>",
+			'output' => '',
 		];
 
 		if ( $entities_per_page <= 0 || $number_of_entities <= 0 ) {
@@ -875,7 +915,7 @@ class Controller {
 	/**
 	 * Deletes duplicate display types.
 	 *
-	 * @param $name
+	 * @param string $name Display type name.
 	 */
 	public function delete_duplicates( $name ) {
 		$mapper  = DisplayTypeMapper::get_instance();
@@ -954,5 +994,30 @@ class Controller {
 
 	public function get_default_settings() {
 		return [];
+	}
+
+	/**
+	 * Casts settings used in arithmetic to non-negative ints. Shortcode attributes and cleared
+	 * admin fields arrive as strings; a leading number is kept, anything else uses the default.
+	 *
+	 * @param DisplayedGallery $displayed_gallery Displayed gallery.
+	 * @param string[]         $keys              Setting keys to cast.
+	 */
+	public function cast_numeric_settings( $displayed_gallery, array $keys ) {
+		$defaults = $this->get_default_settings();
+		$settings = (array) $displayed_gallery->display_settings;
+
+		foreach ( $keys as $key ) {
+			$fallback = $defaults[ $key ] ?? 0;
+			$value    = isset( $settings[ $key ] ) && is_scalar( $settings[ $key ] ) ? $settings[ $key ] : $fallback;
+
+			if ( is_string( $value ) && ! is_numeric( $value ) ) {
+				$value = preg_match( '/\A\s*[+-]?\d+/', $value, $matches ) ? $matches[0] : $fallback;
+			}
+
+			$settings[ $key ] = max( 0, (int) $value );
+		}
+
+		$displayed_gallery->display_settings = $settings;
 	}
 }

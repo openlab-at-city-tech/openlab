@@ -111,24 +111,6 @@ class DLM_Downloads_Path_Helper {
 	}
 
 	/**
-	 * Retrieves the base admin URL for the download settings.
-	 *
-	 * @return string Base admin URL.
-	 * @since 5.0.0
-	 */
-	public static function get_base_url() {
-		return add_query_arg(
-			array(
-				'post_type' => 'dlm_download',
-				'page'      => 'download-monitor-settings',
-				'tab'       => 'advanced',
-				'section'   => 'download_path',
-			),
-			admin_url( 'edit.php' )
-		);
-	}
-
-	/**
 	 * Enables a download path.
 	 *
 	 * @param  string $path  The path string.
@@ -140,24 +122,6 @@ class DLM_Downloads_Path_Helper {
 		foreach ( $paths as $key => $a_path ) {
 			if ( rtrim( str_replace( DIRECTORY_SEPARATOR, '/', $a_path['path_val'] ), "/\\" ) === rtrim( str_replace( DIRECTORY_SEPARATOR, '/', $path ), "/\\" ) ) {
 				$paths[ $key ]['enabled'] = true;
-				self::save_paths( $paths );
-				break;
-			}
-		}
-	}
-
-	/**
-	 * Disables a download path.
-	 *
-	 * @param  string $path  The path string.
-	 *
-	 * @since 5.0.0
-	 */
-	public static function disable_download_path( $path ) {
-		$paths = self::get_all_paths();
-		foreach ( $paths as $key => $a_path ) {
-			if ( str_replace( DIRECTORY_SEPARATOR, '/', $a_path['path_val'] ) === str_replace( DIRECTORY_SEPARATOR, '/', $path ) ) {
-				$paths[ $key ]['enabled'] = false;
 				self::save_paths( $paths );
 				break;
 			}

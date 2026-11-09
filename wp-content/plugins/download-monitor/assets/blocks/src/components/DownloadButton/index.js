@@ -36,15 +36,16 @@ const DownloadButton = ( {
 	const updateHeight = ( target ) => {
 		const cacheKey = encodeURI( getIframeUrl() );
 
-		//check if we need to reset height to new URL
-		if ( calculatedHeight.chacheKey !== cacheKey ) {
-			setCalculatedHeight( {
-				cacheKey,
-				height: target.contentDocument.getElementById(
-					'dlmPreviewContainer'
-				).scrollHeight,
-			} );
+		if ( calculatedHeight.chacheKey === cacheKey ) {
+			return;
 		}
+
+		const container = target.contentDocument?.getElementById( 'dlmPreviewContainer' );
+		if ( ! container ) {
+			return;
+		}
+
+		setCalculatedHeight( { cacheKey, height: container.scrollHeight } );
 	};
 
 	const iframeURL = getIframeUrl();

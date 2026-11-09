@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" fill="#07038D">
+<path fill="#046A38" d="m0,0h900v600H0"/>
+<path fill="#fff" d="m0,0h900v400H0"/>
+<path fill="#FF6820" d="m0,0h900v200H0"/>
+<g transform="translate(450,300)">
+<circle r="92"/>
+<circle fill="#fff" r="80"/>
+<circle r="16"/>
+<g id="c">
+<g id="b">
+<path id="a" d="m0-80 3 48L0-8-3-32M21-77 11-30 2-8 5-32M40-69 19-26 4-7 13-29"/>
+<use href="#a" transform="scale(-1)"/>
+</g>
+<use href="#b" transform="rotate(45)"/>
+</g>
+<use href="#c" transform="rotate(90)"/>
+</g>
+</svg>

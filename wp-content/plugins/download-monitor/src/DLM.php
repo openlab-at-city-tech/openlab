@@ -102,9 +102,6 @@ class WP_DLM {
 			// Admin Write Panels
 			new DLM_Admin_Writepanels();
 
-			// Admin Media Browser
-			new DLM_Admin_Media_Browser();
-
 			// Admin Media Insert
 			new DLM_Admin_Media_Insert();
 
@@ -139,17 +136,11 @@ class WP_DLM {
 
 			new DLM_Review();
 
-			// Load the templates action class
-			$plugin_status = DLM_Plugin_Status::get_instance();
-
 			global $pagenow;
 			// Single Download edit screen debugger.
 			if ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) {
 				$debugger = DLM_Debug::get_instance();
 			}
-
-			// Load the API Key Generation class
-			$key_generation = DLM_Key_Generation::get_instance();
 
 			if ( ( defined( 'MULTISITE' ) && MULTISITE ) ) {
 				$multisite = DLM_Network_Settings::get_instance();
@@ -164,6 +155,9 @@ class WP_DLM {
 
 		// Load the Approved Download Path option table
 		DLM_Downloads_Path::get_instance();
+
+		DLM_Plugin_Status::get_instance();
+		DLM_Key_Generation::get_instance();
 
 		// Set the DB Upgrader class to see if we need to upgrade the table or not.
 		// This is mainly to move to version 4.6.x from 4.5.x and below.
@@ -182,6 +176,18 @@ class WP_DLM {
 
 		// Initialize the reports rest api.
 		new DLM_Reports_Rest_Api();
+
+		// Extensions React page — menu/assets/REST must be registered even
+		// outside is_admin() (REST requests never satisfy is_admin()).
+		new DLM_Extensions_Page();
+		new DLM_Extensions_Assets();
+		DLM_Extensions_Rest::get_instance();
+		DLM_Extensions_Base::get_instance();
+
+		// React Settings page - same reasoning as Extensions above.
+		new DLM_Settings_React_Page();
+		new DLM_Settings_React_Assets();
+		DLM_Settings_Rest::get_instance();
 
 		// Setup Modal
 		if ( '1' === get_option( 'dlm_no_access_modal', 0 ) ) {
@@ -317,8 +323,6 @@ class WP_DLM {
 		add_filter( 'post_type_link',
 			array( $this, 'archive_filter_download_link' ), 20, 2 );
 
-		// setup product manager
-		DLM_Product_Manager::get()->setup();
 		// Set the no access session
 		add_action( 'wp', array( $this, 'set_no_access_session' ) );
 	}
@@ -394,7 +398,7 @@ class WP_DLM {
 	public function frontend_scripts() {
 
 		if ( apply_filters( 'dlm_frontend_scripts', true ) ) {
-			wp_register_style( 'dlm-frontend', $this->get_plugin_url()
+			wp_enqueue_style( 'dlm-frontend', $this->get_plugin_url()
 			                                   . '/assets/css/frontend-tailwind.min.css',
 				array(), DLM_VERSION );
 		}
@@ -412,7 +416,8 @@ class WP_DLM {
 		}
 
 		// Leave this filter here in case XHR is problematic and needs to be disabled.
-		if ( self::do_xhr() ) {
+		$is_divi_fb = isset( $_GET['et_fb'] ) || ( function_exists( 'et_fb_is_builder_used_on_current_request' ) && et_fb_is_builder_used_on_current_request() );
+		if ( self::do_xhr() && ! $is_divi_fb ) {
 			wp_register_script(
 				'dlm-xhr',
 				plugins_url( '/assets/js/dlm-xhr' . ( ( ! SCRIPT_DEBUG )
@@ -427,7 +432,6 @@ class WP_DLM {
 			// Add dashicons on the front if popup modal for no access is used.
 			if ( '1' === get_option( 'dlm_no_access_modal', 0 ) ) {
 				wp_enqueue_style( 'dashicons' );
-				wp_enqueue_style( 'dlm-frontend' );
 			}
 			// @todo: delete the xhr_links attribute in the future as it will not be needed. It's only here for backwards
 			// compatibility as extensions might using it. Used prior to 4.7.72.
@@ -445,7 +449,8 @@ class WP_DLM {
 			);
 
 			$dlm_xhr_security_data = array(
-				'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+				'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+				'countExcluded' => DLM_Logging::ignore_admin_log(),
 			);
 
 			$xhr_data = array_merge( $dlm_xhr_data, $dlm_xhr_security_data );
@@ -509,13 +514,16 @@ class WP_DLM {
 			$nonXHRGlobalLinks = array_map( 'sanitize_text_field',
 				$nonXHRGlobalLinks );
 			// The dlmXHRprogress is used to display the progress bar on the front end.
-			$dlmXHRprogress = apply_filters(
+			$default_spinner = DLM_URL . 'assets/images/dlm-spinner.svg';
+			$dlmXHRprogress  = apply_filters(
 				'dlm_xhr_progress',
 				array(
 					'display'   => true,
-					'animation' => includes_url( '/images/spinner.gif' ),
+					'animation' => $default_spinner,
 				)
 			);
+			// Only use the inline currentColor spinner when nobody swapped it out via the filter above.
+			$dlmXHRInlineSpinner = ( $dlmXHRprogress['animation'] === $default_spinner );
 
 			// Add the global variables for the XHR script.
 			wp_add_inline_script( 'dlm-xhr',
@@ -526,7 +534,7 @@ class WP_DLM {
 				. json_encode( $nonXHRGlobalLinks ) . '; dlmXHRgif = "'
 				. esc_url( $dlmXHRprogress['animation'] )
 				. '"; const dlmXHRProgress = "' . $dlmXHRprogress['display']
-				. '"', 'before' );
+				. '"; const dlmXHRInlineSpinner = ' . ( $dlmXHRInlineSpinner ? 'true' : 'false' ), 'before' );
 			// Add translations for the error messages.
 			wp_localize_script( 'dlm-xhr', 'dlmXHRtranslations',
 				apply_filters( 'dlm_xhr_error_translations', array(

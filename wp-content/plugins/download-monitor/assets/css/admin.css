@@ -1,33 +1,3 @@
-.post-type-dlm_download .dlm-extension-filtering a {
-  cursor: pointer;
-  padding-bottom: 9px;
-  margin-bottom: -2px;
-  font-weight: 600;
-  border-bottom: 4px solid transparent;
-}
-.post-type-dlm_download .dlm-page-header {
-  border-bottom: 1px solid #ccc;
-  padding: 15px 20px;
-  display: flex;
-  justify-content: space-between;
-  background: #fff;
-  width: calc(100% + 20px);
-  box-sizing: border-box;
-  margin-left: -20px;
-}
-.post-type-dlm_download .dlm-page-header .dlm-header-logo {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-}
-.post-type-dlm_download .dlm-page-header .dlm-header-logo .dlm-header-logo-text {
-  margin: 0;
-  font-size: 18px;
-}
-.post-type-dlm_download .dlm-page-header .dlm-header-logo img {
-  max-height: 35px;
-}
 .post-type-dlm_download td.column-shortcode .hidden {
   display: none;
 }
@@ -107,200 +77,6 @@
 }
 .post-type-dlm_download .wp-list-table.otherdownloadspath th #title {
   width: 200px;
-}
-/** Settings */
-.dlm-settings-sub-nav {
-  margin: 0 0 10px 0;
-  width: 100%;
-  border-bottom: 1px solid #ccc;
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
-  list-style: none;
-  padding: 0;
-  font-size: 13px;
-  float: left;
-  color: #646970;
-}
-.dlm-settings-sub-nav li {
-  margin-right: 10px;
-  margin-bottom: -2px;
-  display: inline-block;
-  margin: 0;
-  padding: 0;
-  white-space: nowrap;
-}
-.dlm-settings-sub-nav a {
-  padding: 13px;
-  display: block;
-  outline: none;
-  box-shadow: none;
-  line-height: 2;
-  text-decoration: none;
-}
-.dlm-settings-sub-nav .active-section {
-  margin-bottom: -2px;
-}
-.dlm-settings-sub-nav .active-section a {
-  border-bottom: 4px solid #000;
-  padding-bottom: 9px;
-  margin-bottom: -2px;
-  font-weight: 600;
-}
-.dlm-admin-settings #setting-dlm_decimal_separator,
-.dlm-admin-settings #setting-dlm_thousand_separator {
-  width: 50px;
-}
-.dlm-admin-settings table.api_keys td {
-  padding: 15px 10px;
-}
-.dlm-admin-settings table td {
-  padding: 15px 0;
-}
-.dlm-admin-settings h3 {
-  margin: 2em 0 0;
-}
-.dlm-admin-settings .form-table label.dlm-radio-label {
-  display: block;
-  margin-bottom: 5px;
-}
-.dlm-admin-settings .form-table label.dlm-enhanced-radio-label {
-  position: relative;
-  padding: 10px 15px;
-  display: inline-block;
-  margin-bottom: 15px;
-  -webkit-user-select: none;
-  /* Safari */
-  -moz-user-select: none;
-  /* Firefox */
-  -ms-user-select: none;
-  /* IE10+/Edge */
-  user-select: none;
-  /* Standard */
-}
-.dlm-admin-settings .form-table label.dlm-enhanced-radio-label span {
-  z-index: 3;
-  position: relative;
-}
-.dlm-admin-settings .form-table label.dlm-enhanced-radio-label input[type="radio"] {
-  position: relative;
-  z-index: 2;
-}
-.dlm-admin-settings .form-table label.dlm-enhanced-radio-label input[type="radio"] + div.dlm-radio__selectable-area {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  border-radius: 20px;
-  display: block;
-  top: 0;
-  left: 0;
-  opacity: 1;
-  border: 1px solid grey;
-}
-.dlm-admin-settings .form-table label.dlm-enhanced-radio-label input[type="radio"]:checked + div.dlm-radio__selectable-area {
-  border-color: green;
-  background-color: rgba(0, 128, 0, 0.6);
-}
-.dlm-admin-settings .form-table label.dlm-enhanced-radio-label input[type="radio"]:checked + div.dlm-radio__selectable-area + span {
-  color: #fff;
-}
-.dlm-admin-settings .dlm_settings {
-  padding: 5px 0;
-}
-.dlm-admin-settings .dlm_settings > th {
-  padding: 15px 5px;
-}
-.dlm-admin-settings .dlm_settings > td {
-  padding: 15px 5px 15px 0;
-}
-.dlm-admin-settings .dlm_install_plugin_setting {
-  background: #fff;
-  padding: 0 15px;
-  border-bottom: 1px solid #ccc;
-  border-top: 1px solid #ccc;
-}
-.dlm-admin-settings .dlm_group_setting td,
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group {
-  margin: 0 auto;
-  padding: 0 !important;
-}
-.dlm-admin-settings .dlm_group_setting td .dlm-groupped-settings__box,
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group .dlm-groupped-settings__box {
-  margin: 5px 0 5px 0;
-}
-.dlm-admin-settings .dlm_group_setting td .dlm-groupped-settings__box .postbox,
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group .dlm-groupped-settings__box .postbox {
-  padding: 0;
-  margin: 0 auto;
-}
-.dlm-admin-settings .dlm_group_setting td .dlm-groupped-settings__box .postbox .hndle,
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group .dlm-groupped-settings__box .postbox .hndle {
-  margin: 0;
-  padding: 8px;
-  font-weight: lighter;
-}
-.dlm-admin-settings .dlm_group_setting .handle-actions button {
-  box-shadow: none;
-}
-.dlm-admin-settings .dlm_group_setting h2.hndle {
-  cursor: pointer;
-}
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group__content {
-  padding: 15px;
-}
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group__content .dlm-accordeon-group__setting {
-  padding: 35px 0;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  justify-content: space-between;
-}
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group__content .dlm-accordeon-group__setting .dlm-accordeon-group__setting-title {
-  font-size: 16px;
-  margin-bottom: 15px;
-  font-weight: bold;
-  width: 20%;
-}
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group__content .dlm-accordeon-group__setting .dlm-accordeon-group__setting-content {
-  width: 80%;
-}
-.dlm-admin-settings .dlm_group_setting .dlm-accordeon-group__content .dlm-accordeon-group__setting .description {
-  font-style: italic;
-}
-.dlm-admin-settings .dlm-template-override {
-  width: 100%;
-  max-width: 1200px;
-  border-collapse: collapse;
-}
-.dlm-admin-settings .dlm-template-override thead tr {
-  font-weight: bold;
-  border-bottom: 1px solid #ccc;
-}
-.dlm-admin-settings .dlm-template-override tbody tr:nth-child(even) {
-  background: #f9f9f9;
-}
-.dlm-admin-settings .dlm-template-override .wpchill-tooltip {
-  float: none;
-}
-.dlm-admin-settings .dlm-content-tab {
-  width: 65%;
-  float: left;
-}
-.dlm-admin-settings .wpchill-upsells-wrapper.wpchill-right-upsells {
-  width: 30%;
-  float: right;
-}
-.dlm-admin-settings .dlm-content-tab-full {
-  width: 100%;
-}
-.dlm-admin-settings .dlm-content-tab-full .wp-list-table.approveddownloadpath .dlm-path-enabled {
-  color: green;
-  padding: 8px 10px;
-}
-.dlm-admin-settings .dlm-content-tab-full .wp-list-table.approveddownloadpath .dlm-path-disabled {
-  color: red;
-  padding: 8px 10px;
-}
-.dlm-admin-settings .dlm-content-tab-full #dlm_downloads_path {
-  min-width: 400px;
 }
 /* File lists */
 ul.download_monitor_file_browser {
@@ -1232,7 +1008,7 @@ table.wp-list-table .column-thumb img {
   padding: 0.5em 0.9em;
   margin: 0;
 }
-#download-monitor-options p {
+#download-monitor-options .form-field {
   margin: 0 !important;
   border-top: 1px solid white;
   border-bottom: 1px solid #DFDFDF;
@@ -1240,7 +1016,7 @@ table.wp-list-table .column-thumb img {
   overflow: hidden;
   zoom: 1;
 }
-#download-monitor-options p.not-active {
+#download-monitor-options .form-field.not-active {
   opacity: 0.7;
 }
 #download-monitor-options .dlm_product_locked_downloads {
@@ -1326,6 +1102,13 @@ table.wp-list-table .column-thumb img {
 #insert-download #drag-drop-area {
   margin: 1em 0;
 }
+#insert-download .dlm-media-insert-button {
+  background: #2271b1;
+  border-color: #2271b1;
+  color: #fff;
+  text-decoration: none;
+  text-shadow: none;
+}
 #insert-download .updated,
 #insert-download .error {
   margin-left: 0;
@@ -1338,6 +1121,10 @@ table.wp-list-table .column-thumb img {
   margin: 0 0 0.25em 0;
   display: block;
   font-size: 1.1em;
+}
+#insert-download label input[type="radio"]:checked::before {
+  background: #2271b1 !important;
+  border-color: #2271b1 !important;
 }
 #insert-download span.description {
   display: block;
@@ -2507,26 +2294,6 @@ table.wp-list-table .column-thumb img {
   height: auto;
   width: auto;
 }
-.wrap.dlm-admin-settings .form-table .dlm_htaccess_notice {
-  margin-bottom: 5px;
-}
-.wrap.dlm-admin-settings .dlm-upsell-badge {
-  font-size: 10px;
-  background: #f4daa4;
-  padding: 2px 5px;
-  display: inline-block;
-  margin-left: 10px;
-  border-radius: 10px;
-}
-.wrap.dlm-admin-settings #setting-dlm_downloads_path + p strong {
-  color: red;
-}
-.wrap.dlm-admin-settings #setting-dlm_downloads_path .dlm-install-plugin-actions {
-  display: inline-block;
-  vertical-align: middle;
-  margin: 5px auto;
-  margin-left: 15px;
-}
 #installed-extensions .dlm_extensions {
   width: 100%;
 }
@@ -3441,14 +3208,16 @@ div#dlm-export-settings-upsell span {
 .xmas-upsell-columns .wpchill-xmas-upsell * {
   z-index: 2;
 }
-.post-type-dlm_download .wpchill-tooltip-button.copy-dlm-shortcode {
+.post-type-dlm_download .wpchill-tooltip-button.wpchill-tooltip-button.copy-dlm-shortcode {
   line-height: 13px;
+  color: #fff;
 }
-.post-type-dlm_download .wpchill-tooltip-button.copy-dlm-shortcode .dashicons {
+.post-type-dlm_download .wpchill-tooltip-button.wpchill-tooltip-button.copy-dlm-shortcode .dashicons {
   font-size: 17px;
   width: 17px;
   height: 17px;
   line-height: 20px;
+  color: #fff;
 }
 .file {
   background-repeat: no-repeat;

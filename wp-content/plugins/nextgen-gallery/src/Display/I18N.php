@@ -420,35 +420,44 @@ class I18N {
 		$content = stripslashes( $content );
 		$content = str_replace( '`', '', $content );
 
-		// Step 2: Remove specific dangerous patterns using regex.
-		// Remove <script> tags and anything inside them.
+		// Step 2: Remove dangerous patterns. Each must match real HTML/JS constructs only,
+		// never plain words containing them as a substring (e.g. "description", "medieval").
+		// Remove <script> tags (paired) and any stray/unclosed <script> opener.
 		$content = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $content );
+		$content = preg_replace( '/<\/?script\b[^>]*>?/i', '', $content );
 
 		// Remove inline event handlers like onclick, onload, etc.
 		$content = preg_replace( '/\bon\w+\s*=\s*["\'].*?["\']/i', '', $content );
 
-		// Remove dangerous JavaScript function calls (alert, prompt, confirm, etc.).
-		$content = preg_replace( '/\b(alert|prompt|confirm)\s*\(\s*["\']?.*?["\']?\s*\)/i', '', $content ); // standard function calls.
+		// Remove "javascript:"/"vbscript:" URL protocols (scheme + colon).
+		$content = preg_replace( '/\b(?:javascript|vbscript)\s*:/i', '', $content );
 
-		// Remove variations of alert(), prompt(), confirm(), including backticks and HTML entities.
-		$content = preg_replace( '/\b(alert|prompt|confirm)\s*\(\s*`?[^`]*`?\s*\)/i', '', $content ); // with backticks.
-
-		// Remove encoded JavaScript entities like &lt;script&gt;alert&lt;/script&gt; and others.
-		$content = preg_replace( '/(&#?x?([0-9a-f]+);?|&(?:[a-z0-9]+|#x?[0-9a-f]+);?)*alert/i', '', $content ); // HTML-encoded alert and script.
-		$content = preg_replace( '/(&#?x?([0-9a-f]+);?|&(?:[a-z0-9]+|#x?[0-9a-f]+);?)*script/i', '', $content ); // HTML-encoded script.
-
-		// Remove JavaScript URL protocols like "javascript:", "vbscript:", etc.
-		$content = preg_replace( '/(javascript|vbscript|data|file):/i', '', $content );
-
-		// Remove dangerous JavaScript functions (eval, window.location, document.cookie, etc.).
-		$content = preg_replace( '/(eval|window\.location|document\.cookie|document\.write)/i', '', $content );
-
-		// Remove HTML entities.
-		$content = preg_replace( '/\&[^;]*;/', '', $content );
+		// Remove eval() calls and window.location / document.cookie / document.write access.
+		$content = preg_replace( '/\b(?:eval\s*\(|window\.location|document\.cookie|document\.write)/i', '', $content );
 
 		// Strip remaining unwanted HTML tags and attributes (you can customize this further).
 		$allowed_tags = self::get_kses_allowed_html();
-		$content      = wp_kses( $content, $allowed_tags );
+		$content      = wp_kses( $content, $allowed_tags, array( 'http', 'https', 'mailto' ) );
+
+		// wp_kses() normalizes a bare "&" to "&amp;" and a stray ">" to "&gt;", which the encode below
+		// would encode a second time, so "A & B" was stored as "A &amp;amp; B" (#1180). Undo that in
+		// text only; tags keep kses's form, which is the valid HTML their attributes need. The encode
+		// below must keep double-encoding: an entity rebuilt after the decode above (the backtick
+		// strip turns "&l`t;" into "&lt;") would otherwise come back as a live "<" when rendered.
+		$parts = preg_split( '/(<[^>]*>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+		foreach ( $parts as $index => $part ) {
+			// Odd indexes hold the captured tags.
+			if ( 0 === $index % 2 ) {
+				$parts[ $index ] = strtr(
+					$part,
+					[
+						'&amp;' => '&',
+						'&gt;'  => '>',
+					]
+				);
+			}
+		}
+		$content = implode( '', $parts );
 
 		// Clean up the content by re-encoding HTML entities, this ensures that no malicious code is stored in db.
 		$content = htmlspecialchars( $content, ENT_QUOTES, 'UTF-8' );
@@ -475,7 +484,7 @@ class I18N {
 	 * @return string The plain text.
 	 */
 	public static function ngg_plain_text_alt_title_attributes( $text ) {
-		$text = esc_attr( strip_tags( html_entity_decode( $text, ENT_QUOTES, 'UTF-8' ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
+		$text = esc_attr( strip_tags( html_entity_decode( (string) $text, ENT_QUOTES, 'UTF-8' ) ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags
 		return $text;
 	}
 
@@ -491,7 +500,7 @@ class I18N {
 		// Keep decoding until no changes occur (i.e., fully decoded).
 		do {
 			$previous_content = $content;
-			$content          = html_entity_decode( $content, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+			$content          = html_entity_decode( (string) $content, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 			// phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
 		} while ( $previous_content !== $content );
 

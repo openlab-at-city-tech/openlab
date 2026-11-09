@@ -1,0 +1,60 @@
+.form {
+	position: relative;
+}
+
+.fieldWrapper {
+	position: relative;
+	margin-bottom: var(--theme-content-spacing);
+}
+
+.narrowField :global(.components-base-control__field) {
+	max-width: 40%;
+
+	@media (max-width: 1024px) {
+		max-width: 100%;
+	}
+}
+
+.halfField :global(.components-base-control__field) {
+	max-width: 50%;
+
+	@media (max-width: 1024px) {
+		max-width: 100%;
+	}
+}
+
+.fieldRow {
+	display: flex;
+	gap: 16px;
+	align-items: flex-start;
+
+	> * {
+		flex: 1 1 0;
+		max-width: 50%;
+	}
+
+	@media (max-width: 1024px) {
+		flex-direction: column;
+
+		> * {
+			max-width: 100%;
+		}
+	}
+}
+
+.lockedGroup {
+	position: relative;
+}
+
+.disabledClass {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.group {
+	margin-bottom: var(--theme-content-spacing);
+
+	h4 {
+		font-size: 17px;
+	}
+}

@@ -50,7 +50,7 @@ final class Auth_Url_Cache_Decorator implements Contracts\Auth_Url {
 	 */
 	public function get( string $slug ): string {
 		if ( ! $slug ) {
-			throw new InvalidArgumentException( __( 'The Product Slug cannot be empty', '%TEXTDOMAIN%' ) );
+			throw new InvalidArgumentException( __( 'The Product Slug cannot be empty', 'tribe-common' ) );
 		}
 
 		$transient = $this->build_transient( $slug );

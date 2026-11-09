@@ -24,6 +24,7 @@ use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
 use WPMUDEV_BLC\Core\Traits\Execution_Time;
 use WPMUDEV_BLC\App\Broken_Links_Actions\Link;
 use WPMUDEV_BLC\App\Broken_Links_Actions\Processors\Main as Processor;
+use WPMUDEV_BLC\App\Broken_Links_Actions\Processors\Main;
 
 /**
  * Class Full_Site_Handler
@@ -365,7 +366,15 @@ class Full_Site_Handler extends Base {
 			return false;
 		}
 
+		if ( empty( $this->link_object ) ) {
+			return false;
+		}
+
 		$processor = new Processor( $this->link_object );
+
+		if ( $processor instanceof Main ) {
+			$processor->init_processor( $instance->id );
+		}
 
 		switch ( $this->current_table ) {
 			case 'posts' :

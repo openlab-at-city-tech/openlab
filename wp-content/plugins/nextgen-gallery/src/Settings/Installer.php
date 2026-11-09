@@ -2,6 +2,8 @@
 
 namespace Imagely\NGG\Settings;
 
+use Imagely\NGG\Migrations\ResetIgnoredWatermarkOffsets;
+
 /**
  * Installer for NextGEN Gallery settings.
  */
@@ -110,8 +112,8 @@ class Installer {
 				// Watermark settings.
 				'watermark_automatically_at_upload' => 0,
 				'wmPos'                             => 'midCenter',             // Position.
-				'wmXpos'                            => 15,                      // X Pos.
-				'wmYpos'                            => 5,                       // Y Pos.
+				'wmXpos'                            => 0,                       // X offset from the position anchor.
+				'wmYpos'                            => 0,                       // Y offset from the position anchor.
 				'wmType'                            => 'text',                  // Type : 'image' / 'text'.
 				'wmPath'                            => '',                      // Path to image.
 				'wmFont'                            => 'arial.ttf',             // Font type.
@@ -168,12 +170,12 @@ class Installer {
 			// Admin table pagination.
 				'admin_table_per_page'              => 20, // Default number of items per page in admin tables (albums, galleries, tags, orders, etc.).
 			// Item details pagination.
-			'item_details_per_page'              => 50, // Default number of items per page in items details of gallery and album.
+				'item_details_per_page'             => 50, // Default number of items per page in items details of gallery and album.
 
 			// Admin table column visibility (Manage Albums / Manage Galleries). Empty = use frontend defaults.
-			'admin_albums_visible_columns'       => [],
-			'admin_galleries_visible_columns'    => [],
-		]
+				'admin_albums_visible_columns'      => [],
+				'admin_galleries_visible_columns'   => [],
+			]
 		);
 
 		if ( \is_multisite() ) {
@@ -244,6 +246,15 @@ class Installer {
 	public function install( $reset = false ) {
 		$this->install_global_settings( $reset );
 		$this->install_local_settings( $reset );
+
+		// Here rather than on a bootstrap hook: Util\Installer::update() reaches this only when the
+		// stored version differs, and only while holding the atomic upgrade lock, so the scan runs
+		// once per upgrade instead of on every admin request.
+		\Imagely\NGG\Migrations\NeutralizeStoredExecutableFilenames::migrate();
+
+		// Runs only on a version change, under the upgrade lock, and is persisted by the
+		// save Util\Installer::update() already performs once every handler has run.
+		ResetIgnoredWatermarkOffsets::apply( $this->blog_settings );
 	}
 
 	/**

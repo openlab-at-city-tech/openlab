@@ -1,0 +1,29 @@
+#dlm-settings-app {
+	#wpcontent {
+		padding-left: 0;
+	}
+
+	.components-button:focus:not(:disabled) {
+		box-shadow: none;
+		outline: none;
+	}
+
+	.components-toggle-group-control:focus-within {
+		outline: none;
+		box-shadow: none;
+	}
+
+	.components-toggle-group-control::before {
+		background: var(--wp-admin-theme-color, #3858e9);
+	}
+
+	.components-toggle-group-control-option-base[aria-checked="true"] {
+		background: var(--wp-admin-theme-color, #3858e9);
+		color: #fff;
+		border-radius: 2px;
+	}
+
+	.wp-switch-editor.wp-switch-editor {
+		box-sizing: content-box;
+	}
+}

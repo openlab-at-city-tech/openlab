@@ -7,7 +7,6 @@
 }
 .form-inline {
     width: 100%;
-    margin-bottom: 20px;
 }
 .form-inline .form-group {
     margin-left: 2px;
@@ -24,19 +23,6 @@
         margin-bottom: 10px;
     }
 }
-@media(max-width: 767px) {
-    .form-inline {
-        display: none;
-    }
-    .filterHide {
-        display: none;
-    }
-    .form-inline button ,.form-inline a { 
-        width: 49%;
-        margin-bottom: 10px;
-    }
-}
-
 .checkbox-item{
     margin: 25px 5px 0 !important;
 }
@@ -244,6 +230,22 @@ textarea.form-control {
     font-size: 11px !important;
 }
 
+.b2s-ai-generated-image-tag-btn-inactive {
+    color: #888;
+}
+
+.ai-tag-active {
+    border: 2px solid #28a745 !important;
+    color: #28a745 !important;
+}
+
+.b2s-ai-generated-image-tag-btn {
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    transform: translateX(-50%);
+}
+
 .b2s-post-ship-item-full-text, .b2s-post-ship-item-message-delete, .b2s-post-ship-item-network-settings, .b2s-post-ship-item-post-format{
     line-height: 1.5 !important;
     padding: 0 1px 3px !important;
@@ -274,7 +276,6 @@ textarea.form-control {
 
 .form-inline {
     width: 100%;
-    margin-bottom: 20px;
 }
 .form-inline .form-group  {
     margin-left: 2px;
@@ -289,18 +290,7 @@ textarea.form-control {
         margin-bottom: 10px;
     }
 }
-@media(max-width: 767px) {
-    .form-inline {
-        display: none;
-    }
-    .filterHide {
-        display: none;
-    }
-    .form-inline button ,.form-inline a { 
-        width: 49%;
-        margin-bottom: 10px;
-    }
-}
+
 
 .img-thumbnail{
     display: block !important;
@@ -655,3 +645,6 @@ input:disabled + .b2s-toggle-slider {
     font-size: 13px;
 }
 
+.b2s-post-filter-sched-legend{
+    margin-top: 15px;
+}

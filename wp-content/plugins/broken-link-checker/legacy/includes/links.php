@@ -19,8 +19,9 @@ if ( ! class_exists( 'blcLink' ) ) {
 		var $is_new = false;
 
 		//DB fields
-		var $link_id = 0;
-		var $url     = '';
+		var $link_id  = 0;
+		var $url      = '';
+		var $url_hash = '';
 
 		var $being_checked      = false;
 		var $last_check         = 0;
@@ -112,6 +113,7 @@ if ( ! class_exists( 'blcLink' ) ) {
 
 			$this->field_format = array(
 				'url'                => '%s',
+				'url_hash'           => '%s',
 				'first_failure'      => 'datetime',
 				'last_check'         => 'datetime',
 				'last_success'       => 'datetime',
@@ -157,8 +159,9 @@ if ( ! class_exists( 'blcLink' ) ) {
 					$this->set_values( $arr );
 				} else { //Link not found, treat as new
 					//              $blclog->debug(__CLASS__ .':' . __FUNCTION__ . ' Link not found.');
-					$this->url    = $arg;
-					$this->is_new = true;
+					$this->url      = $arg;
+					$this->url_hash = md5( $arg );
+					$this->is_new   = true;
 				}
 			} elseif ( is_array( $arg ) ) {
 				$this->set_values( $arg );
@@ -239,11 +242,14 @@ if ( ! class_exists( 'blcLink' ) ) {
 
 			if ( $save_results ) {
 
-				//Update the DB record before actually performing the check.
-				//Useful if something goes terribly wrong while checking this particular URL
-				//(e.g. the server might kill the script for running over the exec. time limit).
-				//Note : might be unnecessary.
-				$this->save();
+				// Update the DB record before actually performing the check.
+				// Useful if something goes terribly wrong while checking this particular URL
+				// (e.g. the server might kill the script for running over the exec. time limit).
+				if ( ! $this->is_new && $this->link_id ) {
+					$this->update_checked();
+				} else {
+					$this->save();
+				}
 			}
 
 			$defaults = array(
@@ -307,6 +313,28 @@ if ( ! class_exists( 'blcLink' ) ) {
 			}
 
 			return $this->broken;
+		}
+
+		/**
+		 * A helper method used to update the link's DB record when the link is being checked.
+		 *
+		 * @access private
+		 * @return void
+		 */
+		private function update_checked() {
+			global $wpdb;
+			$wpdb->query( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+				$wpdb->prepare(
+					"UPDATE {$wpdb->prefix}blc_links
+					SET being_checked = 1,
+						last_check_attempt = %s,
+						check_count = %d
+					WHERE link_id = %d",
+					date( 'Y-m-d H:i:s', $this->last_check_attempt ), //phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
+					$this->check_count,
+					$this->link_id
+				)
+			);
 		}
 
 		/**
@@ -456,8 +484,8 @@ if ( ! class_exists( 'blcLink' ) ) {
 				if ( $this->dismissed ) {
 					$this->log .= sprintf(
 						"Restoring a dismissed link. \nOld status: \n%s\nNew status: \n%s\n",
-						$this->result_hash,
-						$new_result_hash
+						esc_html( $this->result_hash ),
+						esc_html( $new_result_hash )
 					);
 				}
 				$this->dismissed = false;
@@ -481,6 +509,27 @@ if ( ! class_exists( 'blcLink' ) ) {
 					//so it's no longer a false positive.
 					$this->false_positive = false;
 				}
+			}
+
+			if ( $new_result_hash !== $this->result_hash ) {
+
+				$instances = $this->get_instances();
+				$posts     = array_map(
+					function ( $instance ) {
+						return $instance->container_id;
+					},
+					$instances
+				);
+				/**
+				 * Fires when the status of a link changes as a result of a check.
+				 * The hook is fired only when the new status is different from the old one.
+				 *
+				 * @param array  $posts   The IDs of the posts containing the link.
+				 * @param string $url     The URL of the link.
+				 * @param bool   $broken  The new "broken" status of the link (true if the link is now marked as broken, false otherwise).
+				 * @param int    $link_id The link's database ID.
+				 */
+				do_action( 'blc_link_status_changed', $posts, $this->url, $broken, $this->link_id );
 			}
 
 			$this->broken      = $broken;
@@ -533,33 +582,18 @@ if ( ! class_exists( 'blcLink' ) ) {
 
 			if ( $this->is_new ) {
 
-				//BUG: Technically, there should be a 'LOCK TABLES wp_blc_links WRITE' here. In fact,
-				//the plugin should probably lock all involved tables whenever it parses something, lest
-				//the user (ot another plugin) modify the thing being parsed while we're working.
-				//The problem with table locking, though, is that parsing takes a long time and having
-				//all of WP freeze while the plugin is working would be a Bad Thing. Food for thought.
+				// Always use the current URL's hash so the UNIQUE KEY de-duplicates correctly.
+				$values['url_hash'] = sprintf( "'%s'", md5( $this->url ) );
 
-				//Check if there's already a link with this URL present
-				$q           = $wpdb->prepare(
-					"SELECT link_id FROM {$wpdb->prefix}blc_links WHERE url = %s",
-					$this->url
-				);
-				$existing_id = $wpdb->get_var( $q ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-				if ( ! empty( $existing_id ) ) {
-					//Dammit.
-					$this->link_id = $existing_id;
-					$this->is_new  = false;
-					return true;
-				}
-
-				//Insert a new row
+				// Single INSERT … ON DUPLICATE KEY UPDATE replaces the old SELECT + INSERT pair.
+				// If a row with the same url_hash already exists, LAST_INSERT_ID() returns its
+				// existing link_id so $wpdb->insert_id is populated correctly.
 				$q = sprintf(
-					"INSERT INTO {$wpdb->prefix}blc_links( %s ) VALUES( %s )",
+					"INSERT INTO {$wpdb->prefix}blc_links( %s ) VALUES( %s )\n"
+					. 'ON DUPLICATE KEY UPDATE link_id = LAST_INSERT_ID(link_id)',
 					implode( ', ', array_keys( $values ) ),
 					implode( ', ', array_values( $values ) )
 				);
-				//FB::log($q, 'Link add query');
 				$blclog->debug( __CLASS__ . ':' . __FUNCTION__ . ' Adding a new link. SQL query:' . "\n", $q );
 
 				$rez = false !== $wpdb->query( $q ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -567,12 +601,9 @@ if ( ! class_exists( 'blcLink' ) ) {
 				if ( $rez ) {
 					$this->link_id = $wpdb->insert_id;
 					$blclog->debug( __CLASS__ . ':' . __FUNCTION__ . ' Database record created. ID = ' . $this->link_id );
-					//FB::info($this->link_id, "Link added");
-					//If the link was successfully saved then it's no longer "new"
 					$this->is_new = false;
 				} else {
 					$blclog->error( __CLASS__ . ':' . __FUNCTION__ . ' Error adding link', $this->url );
-					//FB::error($wpdb->last_error, "Error adding link {$this->url}");
 				}
 
 				TransactionManager::getInstance()->commit();
@@ -1130,10 +1161,19 @@ function blc_cleanup_links( $link_id = null ) {
 				{$wpdb->prefix}blc_instances.link_id IS NULL";
 
 	if ( null !== $link_id ) {
-		if ( ! is_array( $link_id ) ) {
-			$link_id = array( intval( $link_id ) );
+		$link_ids = array_filter( wp_parse_id_list( $link_id ) );
+
+		/*
+		 * An empty list means "none of these links", not "every orphan". Falling through
+		 * would widen the DELETE to the whole table.
+		 */
+		if ( empty( $link_ids ) ) {
+			return true;
 		}
-		$q .= " AND {$wpdb->prefix}blc_links.link_id IN (" . implode( ', ', $link_id ) . ')';
+
+		$placeholders = implode( ', ', array_fill( 0, count( $link_ids ), '%d' ) );
+
+		$q .= $wpdb->prepare( " AND {$wpdb->prefix}blc_links.link_id IN ($placeholders)", $link_ids ); //phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
 
 	$rez     = $wpdb->query( $q ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

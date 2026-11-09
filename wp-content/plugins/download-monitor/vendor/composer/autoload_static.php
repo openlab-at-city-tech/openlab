@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
+class ComposerStaticInit021bdd81433c1899ad93618be10a5e1e
 {
     public static $prefixLengthsPsr4 = array (
         'W' =>
@@ -23,30 +23,13 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'DLM_API_Key' => __DIR__ . '/../..' . '/src/KeyGeneration/class-dlm-api-key.php',
-        'DLM_API_Keys_Table' => __DIR__ . '/../..' . '/src/KeyGeneration/admin/class-dlm-api-keys-table.php',
         'DLM_Admin' => __DIR__ . '/../..' . '/src/Admin/Admin.php',
-        'DLM_Admin_Extensions' => __DIR__ . '/../..' . '/src/Admin/Extensions.php',
+        'DLM_Admin_Extensions' => __DIR__ . '/../..' . '/includes/backwards-compatibility/class-dlm-admin-extensions-compat.php',
         'DLM_Admin_Fields_Field' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Field.php',
-        'DLM_Admin_Fields_Field_Accordion' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Accordion.php',
-        'DLM_Admin_Fields_Field_ActionButton' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/ActionButton.php',
-        'DLM_Admin_Fields_Field_Callback' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Callback.php',
         'DLM_Admin_Fields_Field_Checkbox' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Checkbox.php',
-        'DLM_Admin_Fields_Field_Desc' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Desc.php',
-        'DLM_Admin_Fields_Field_Editor' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Editor.php',
-        'DLM_Admin_Fields_Field_EnhancedRadio' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/EnghancedRadio.php',
-        'DLM_Admin_Fields_Field_Factory' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/FieldFactory.php',
-        'DLM_Admin_Fields_Field_HtaccessStatus' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/HtaccessStatus.php',
-        'DLM_Admin_Fields_Field_InstallPlugin' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/InstallPlugin.php',
-        'DLM_Admin_Fields_Field_Lazy_Select' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/LazySelect.php',
-        'DLM_Admin_Fields_Field_Password' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Password.php',
-        'DLM_Admin_Fields_Field_Radio' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Radio.php',
-        'DLM_Admin_Fields_Field_Select' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Select.php',
         'DLM_Admin_Fields_Field_Text' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Text.php',
-        'DLM_Admin_Fields_Field_Textarea' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Textarea.php',
-        'DLM_Admin_Fields_Field_Title' => __DIR__ . '/../..' . '/src/Admin/Settings/Fields/Title.php',
         'DLM_Admin_Helper' => __DIR__ . '/../..' . '/src/Admin/class-dlm-admin-helper.php',
         'DLM_Admin_List_Table' => __DIR__ . '/../..' . '/src/Admin/class-dlm-admin-list-table.php',
-        'DLM_Admin_Media_Browser' => __DIR__ . '/../..' . '/src/Admin/MediaBrowser.php',
         'DLM_Admin_Media_Insert' => __DIR__ . '/../..' . '/src/Admin/MediaInsert.php',
         'DLM_Admin_OptionsUpsells' => __DIR__ . '/../..' . '/src/Admin/OptionsUpsells.php',
         'DLM_Admin_Scripts' => __DIR__ . '/../..' . '/src/Admin/AdminScripts.php',
@@ -82,8 +65,11 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'DLM_Download_Version' => __DIR__ . '/../..' . '/src/Version/Version.php',
         'DLM_Downloads_Path' => __DIR__ . '/../..' . '/src/Admin/DownloadPaths/class-dlm-downloads-path.php',
         'DLM_Downloads_Path_Helper' => __DIR__ . '/../..' . '/src/Admin/DownloadPaths/class-dlm-downloads-path-helper.php',
-        'DLM_Downloads_Path_Table' => __DIR__ . '/../..' . '/src/Admin/DownloadPaths/class-dlm-downloads-path-table.php',
         'DLM_Empty_Table' => __DIR__ . '/../..' . '/src/Admin/class-dlm-empty-table.php',
+        'DLM_Extensions_Assets' => __DIR__ . '/../..' . '/src/Admin/class-dlm-extensions-assets.php',
+        'DLM_Extensions_Base' => __DIR__ . '/../..' . '/src/RestAPI/class-dlm-extensions-base.php',
+        'DLM_Extensions_Page' => __DIR__ . '/../..' . '/src/Admin/class-dlm-extensions-page.php',
+        'DLM_Extensions_Rest' => __DIR__ . '/../..' . '/src/RestAPI/class-dlm-extensions-rest.php',
         'DLM_File_Manager' => __DIR__ . '/../..' . '/src/FileManager.php',
         'DLM_Frontend_Templates' => __DIR__ . '/../..' . '/src/class-dlm-frontend-templates.php',
         'DLM_Gutenberg' => __DIR__ . '/../..' . '/src/Gutenberg.php',
@@ -114,10 +100,11 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'DLM_Network_Settings' => __DIR__ . '/../..' . '/src/Admin/class-dlm-network-settings.php',
         'DLM_Plugin_Status' => __DIR__ . '/../..' . '/src/Admin/class-dlm-plugin-status.php',
         'DLM_Post_Type_Manager' => __DIR__ . '/../..' . '/src/PostTypeManager.php',
-        'DLM_Product' => __DIR__ . '/../..' . '/src/Product/Product.php',
-        'DLM_Product_Error_Handler' => __DIR__ . '/../..' . '/src/Product/ProductErrorHandler.php',
-        'DLM_Product_License' => __DIR__ . '/../..' . '/src/Product/ProductLicense.php',
-        'DLM_Product_Manager' => __DIR__ . '/../..' . '/src/Product/ProductManager.php',
+        'DLM_Pro_Compat' => __DIR__ . '/../..' . '/includes/class-dlm-pro-compat.php',
+        'DLM_Product' => __DIR__ . '/../..' . '/includes/backwards-compatibility/class-dlm-legacy-extensions-bridge.php',
+        'DLM_Product_Error_Handler' => __DIR__ . '/../..' . '/includes/backwards-compatibility/class-dlm-legacy-extensions-bridge.php',
+        'DLM_Product_License' => __DIR__ . '/../..' . '/includes/backwards-compatibility/class-dlm-legacy-extensions-bridge.php',
+        'DLM_Product_Manager' => __DIR__ . '/../..' . '/includes/backwards-compatibility/class-dlm-legacy-extensions-bridge.php',
         'DLM_Reports' => __DIR__ . '/../..' . '/src/Admin/Reports/class-dlm-reports.php',
         'DLM_Reports_Rest_Api' => __DIR__ . '/../..' . '/src/Admin/Reports/class-dlm-reports-rest-api.php',
         'DLM_Rest_API' => __DIR__ . '/../..' . '/src/RestAPI/class-dlm-rest-api.php',
@@ -125,7 +112,9 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'DLM_Search' => __DIR__ . '/../..' . '/src/Search.php',
         'DLM_Services' => __DIR__ . '/../..' . '/src/Services.php',
         'DLM_Settings_Helper' => __DIR__ . '/../..' . '/src/Admin/Settings/SettingsHelper.php',
-        'DLM_Settings_Page' => __DIR__ . '/../..' . '/src/Admin/Settings/Page.php',
+        'DLM_Settings_React_Assets' => __DIR__ . '/../..' . '/src/Admin/class-dlm-settings-react-assets.php',
+        'DLM_Settings_React_Page' => __DIR__ . '/../..' . '/src/Admin/class-dlm-settings-react-page.php',
+        'DLM_Settings_Rest' => __DIR__ . '/../..' . '/src/RestAPI/class-dlm-settings-rest.php',
         'DLM_Shortcodes' => __DIR__ . '/../..' . '/src/Shortcodes.php',
         'DLM_TC_Access_Manager' => __DIR__ . '/../..' . '/src/TermsAndConditions/classes/class-dlm-tc-access-manager.php',
         'DLM_TC_Assets' => __DIR__ . '/../..' . '/src/TermsAndConditions/classes/class-dlm-tc-assets.php',
@@ -193,7 +182,6 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'WPChill\\DownloadMonitor\\Dependencies\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/../..' . '/src/Dependencies/Psr/Container/NotFoundExceptionInterface.php',
         'WPChill\\DownloadMonitor\\Shop\\Access\\Manager' => __DIR__ . '/../..' . '/src/Shop/Access/Manager.php',
         'WPChill\\DownloadMonitor\\Shop\\Admin\\DownloadOption' => __DIR__ . '/../..' . '/src/Shop/Admin/DownloadOption.php',
-        'WPChill\\DownloadMonitor\\Shop\\Admin\\Fields\\GatewayOverview' => __DIR__ . '/../..' . '/src/Shop/Admin/Fields/GatewayOverview.php',
         'WPChill\\DownloadMonitor\\Shop\\Admin\\OrderTable' => __DIR__ . '/../..' . '/src/Shop/Admin/OrderTable.php',
         'WPChill\\DownloadMonitor\\Shop\\Admin\\Pages\\Orders' => __DIR__ . '/../..' . '/src/Shop/Admin/Pages/Orders.php',
         'WPChill\\DownloadMonitor\\Shop\\Admin\\ProductTableColumns' => __DIR__ . '/../..' . '/src/Shop/Admin/ProductTableColumns.php',
@@ -301,7 +289,6 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'WPChill\\DownloadMonitor\\Shop\\Util\\PostType' => __DIR__ . '/../..' . '/src/Shop/Util/PostType.php',
         'WPChill\\DownloadMonitor\\Shop\\Util\\Redirect' => __DIR__ . '/../..' . '/src/Shop/Util/Redirect.php',
         'WPChill\\DownloadMonitor\\Shop\\Util\\TemplateInjector' => __DIR__ . '/../..' . '/src/Shop/Util/TemplateInjector.php',
-        'WPChill\\DownloadMonitor\\Util\\ExtensionLoader' => __DIR__ . '/../..' . '/src/Util/ExtensionLoader.php',
         'WPChill\\DownloadMonitor\\Util\\PageCreator' => __DIR__ . '/../..' . '/src/Util/PageCreator.php',
         'WPChill_About_Us' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-about-us.php',
         'WPChill_Notifications' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-notifications.php',
@@ -314,9 +301,9 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8333af2c3447f1bf579f784754a6299d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8333af2c3447f1bf579f784754a6299d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8333af2c3447f1bf579f784754a6299d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit021bdd81433c1899ad93618be10a5e1e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit021bdd81433c1899ad93618be10a5e1e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit021bdd81433c1899ad93618be10a5e1e::$classMap;
 
         }, null, ClassLoader::class);
     }

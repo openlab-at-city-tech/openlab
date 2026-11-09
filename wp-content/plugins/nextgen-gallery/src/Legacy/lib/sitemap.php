@@ -76,7 +76,17 @@ class nggSitemaps {
 		if ($id) {
 			$gallery_storage = \Imagely\NGG\DataStorage\Manager::get_instance();
 			$image_mapper    = \Imagely\NGG\DataMappers\Image::get_instance();
-			foreach ($image_mapper->find_all_for_gallery( $id ) as $image) {
+			// SECURITY (#1091): filter on `exclude`, exactly as every display type does.
+			// find_all_for_gallery() applies no exclude predicate, so the sitemap was
+			// publishing the live file URLs of images the operator marked hidden from
+			// display — defeating the exclusion control for proofing / pre-release /
+			// paid-download galleries. The sitemap must publish only what the gallery
+			// renders, so collect the same visible rows the display path collects.
+			$images = $image_mapper->select()
+				->where( array( 'galleryid = %s', $id ) )
+				->where( array( 'exclude != %d', 1 ) )
+				->run_query();
+			foreach ($images as $image) {
 				$this->images[] = array(
 					'src'   =>  $gallery_storage->get_image_url( $image ),
 					'title' =>  $image->title,

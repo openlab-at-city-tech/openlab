@@ -51,9 +51,6 @@ class DLM_Key_Generation {
 	private function load_admin_hooks() {
 		// Add the API keys section to the settings page.
 		add_filter( 'dlm_settings', array( $this, 'add_api_section' ) );
-		// Add AJAX action to generate API key.
-		add_action( 'wp_ajax_dlm_action_api_key', array( $this, 'ajax_handle_api_key_actions' ) );
-		add_action( 'wp_ajax_dlm_keygen_search_users', array( $this, 'ajax_search_users' ) );
 	}
 
 	/**
@@ -62,44 +59,6 @@ class DLM_Key_Generation {
 	 * @since 5.0.0
 	 */
 	private function load_frontend_hooks() {
-	}
-
-	/**
-	 * Render API Keys page.
-	 *
-	 * @since 5.0.0
-	 */
-	public function render_api_keys_page() {
-		$current_user = wp_get_current_user();
-		?>
-		<div class='dlm-api-keys'>
-			<div class="dlm-api-keys-generator">
-				<br>
-				<select name="dlm-keygen-user-select" class="dlm-keygen-user-select">
-					<option selected="selected" value="
-					<?php
-					echo esc_attr( $current_user->data->ID );
-					?>
-					"> 
-					<?php
-						echo esc_html( $current_user->data->display_name . '(' . $current_user->data->user_email . ')' );
-					?>
-					</option>
-				</select>
-				<button class="dlm-keygen-generate button button-secondary">
-				<?php
-					echo esc_html__( 'Generate API Key', 'download-monitor' );
-				?>
-				</button>
-			</div>
-			<?php
-			// Add your code here.
-			$api_keys_table = new DLM_API_Keys_Table();
-			$api_keys_table->prepare_items();
-			$api_keys_table->display();
-			?>
-		</div>
-		<?php
 	}
 
 	/**
@@ -266,78 +225,6 @@ class DLM_Key_Generation {
 	}
 
 	/**
-	 * Get users for keygen select
-	 *
-	 * @since 5.0.0
-	 */
-	public function ajax_search_users() {
-		$term = isset( $_GET['q'] ) ? trim( wp_unslash( $_GET['q'] ) ) : '';
-
-		check_ajax_referer( 'dlm_ajax_nonce', '_ajax_nonce' );
-		$this->check_permission();
-		$args = array(
-			'search'         => '*' . esc_attr( $term ) . '*',
-			'search_columns' => array( 'user_login', 'user_nicename', 'user_email', 'display_name' ),
-			'number'         => 10, // Limit the number of results
-		);
-
-		$user_query = new WP_User_Query( $args );
-		$users      = $user_query->get_results();
-
-		$results = array();
-
-		if ( ! empty( $users ) ) {
-			foreach ( $users as $user ) {
-				$results[] = array(
-					'id'   => $user->ID,
-					'text' => $user->display_name . '(' . $user->user_email . ')',
-				);
-			}
-		}
-
-		wp_send_json( $results );
-	}
-
-	/**
-	 * Ajax handler to generate/regenerate/revoke API keys
-	 *
-	 * @since 5.0.0
-	 */
-	public function ajax_handle_api_key_actions() {
-		if ( ! isset( $_POST['dlm_action'] ) || '' == $_POST['dlm_action'] ) {
-			wp_send_json_error( 'No action given.' );
-		}
-
-		$user_id = isset( $_POST['user_id'] ) ? absint( $_POST['user_id'] ) : 0;
-
-		if ( 0 === $user_id ) {
-			wp_send_json_error( 'User id not set.' );
-		}
-		// Check nonce.
-		check_ajax_referer( 'dlm_ajax_nonce', '_ajax_nonce' );
-		// Check if the user has permission to perform this action.
-		$this->check_permission();
-
-		switch ( $_POST['dlm_action'] ) {
-			case 'generate':
-			case 'regenerate':
-				$results = $this->generate_api_key( $user_id, true );
-
-				if ( $results ) {
-					wp_send_json_success( $results );
-				}
-				wp_send_json_error( 'API key generation failed.' );
-				break;
-			case 'revoke':
-				if ( $this->revoke_api_key( $user_id ) ) {
-					wp_send_json_success( 'API key revoked successfully' );
-				}
-				wp_send_json_error( 'API key revocation failed.' );
-				break;
-		}
-	}
-
-	/**
 	 * Add setting field.
 	 *
 	 * @param  array  $settings  Array of settings.
@@ -350,12 +237,8 @@ class DLM_Key_Generation {
 			'title'         => __( 'REST API', 'download-monitor' ),
 			'fields'        => array(
 				array(
-					'name'     => 'dlm_api_keys_section',
-					'label'    => '',
-					'desc'     => '',
-					'link'     => admin_url( 'edit.php?post_type=dlm_download&page=download-monitor-settings' ) . '&tab=advanced&section=rest',
-					'type'     => 'callback',
-					'callback' => array( $this, 'render_api_keys_page' ),
+					'name'     => '',
+					'type'     => 'api_keys_table',
 					'priority' => 90,
 				),
 			),
@@ -364,16 +247,5 @@ class DLM_Key_Generation {
 		);
 
 		return $settings;
-	}
-
-	/**
-	 * Check if the user has permission to perform this action.
-	 *
-	 * @since 5.0.14
-	 */
-	public function check_permission() {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'You do not have permission to perform this action.', 'download-monitor' ) );
-		}
 	}
 }

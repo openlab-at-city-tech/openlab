@@ -1,0 +1,28 @@
+.bulkActionsBar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: var(--theme-content-spacing);
+	background: var(--theme-palette-color-7);
+	border: 1px solid var(--theme-border-color);
+	border-bottom: 1px solid var(--theme-border-color);
+	border-radius: 10px 10px 0 0;
+}
+
+.bulkActionsSelect {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+
+	> div > div {
+		margin-bottom: 0 !important;
+	}
+}
+
+.bulkSelect {
+	min-width: 150px;
+}
+
+.applyButton {
+	margin: 0;
+}

@@ -48,6 +48,16 @@ class View implements View_Interface {
 	use Json_Ld_Data;
 
 	/**
+	 * The maximum number of events a View will fetch per page.
+	 *
+	 * The `posts_per_page` request variable can drive the number of events per page through the Context,
+	 * so the value is capped to keep unauthenticated requests from forcing unbounded queries.
+	 *
+	 * @since 6.18.1
+	 */
+	const MAX_EVENTS_PER_PAGE = 200;
+
+	/**
 	 * An instance of the DI container.
 	 *
 	 * @var Container
@@ -267,10 +277,11 @@ class View implements View_Interface {
 	 * View constructor.
 	 *
 	 * @since 4.9.11
+	 * @since 6.17.0 Made $messages explicitly nullable.
 	 *
 	 * @param Messages|null $messages An instance of the messages collection.
 	 */
-	public function __construct( Messages $messages = null ) {
+	public function __construct( ?Messages $messages = null ) {
 		$this->messages = $messages ?: new Messages();
 		$this->rewrite  = TEC_Rewrite::instance();
 		$this->slug     = static::$view_slug; // @todo Kept for back-compat, remove when we finally remove the non-static prop.
@@ -428,6 +439,7 @@ class View implements View_Interface {
 	 * Builds and returns an instance of a View by slug or class.
 	 *
 	 * @since  4.9.2
+	 * @since 6.17.0 Made $context explicitly nullable.
 	 *
 	 * @param string       $view       The view slug, as registered in the `tribe_events_views` filter, or class.
 	 * @param Context|null $context    The context this view should render from; if not set then the global
@@ -435,7 +447,7 @@ class View implements View_Interface {
 	 *
 	 * @return View_Interface An instance of the built view.
 	 */
-	public static function make( $view = null, Context $context = null ) {
+	public static function make( $view = null, ?Context $context = null ) {
 		$manager = tribe( Manager::class );
 
 		$default_view = $manager->get_default_view();
@@ -817,9 +829,11 @@ class View implements View_Interface {
 	}
 
 	/**
+	 * @since 6.17.0 Made $context explicitly nullable.
+	 *
 	 * {@inheritDoc}
 	 */
-	public function set_context( Context $context = null ) {
+	public function set_context( ?Context $context = null ) {
 		$this->context = $context;
 	}
 
@@ -1159,9 +1173,11 @@ class View implements View_Interface {
 	}
 
 	/**
+	 * @since 6.17.0 Made $repository explicitly nullable.
+	 *
 	 * {@inheritDoc}
 	 */
-	public function set_repository( Repository $repository = null ) {
+	public function set_repository( ?Repository $repository = null ) {
 		$this->repository = $repository;
 	}
 
@@ -1223,12 +1239,13 @@ class View implements View_Interface {
 	 * Sets a View URL object either from some arguments or from the current URL.
 	 *
 	 * @since 4.9.3
+	 * @since 6.17.0 Made $args explicitly nullable.
 	 *
 	 * @param array|null $args   An associative array of arguments that will be mapped to the corresponding query
 	 *                           arguments by the View, or `null` to use the current URL.
 	 * @param bool       $merge  Whether to merge the arguments or override them.
 	 */
-	public function set_url( array $args = null, $merge = false ) {
+	public function set_url( ?array $args = null, $merge = false ) {
 		if ( ! isset( $this->url ) ) {
 			$this->url = new Url();
 		}
@@ -1254,18 +1271,25 @@ class View implements View_Interface {
 	 * Maps a set of arguments to query arguments, ready to be appended to a URL.
 	 *
 	 * @since 4.9.3
+	 * @since 6.17.0 Made $args explicitly nullable.
 	 *
 	 * @param array $args An associative array of arguments to map (translate) to query arguments.
 	 *
 	 * @return array An associative array of query arguments mapped from the input ones.
 	 */
-	protected function map_args_to_query_args( array $args = null ) {
+	protected function map_args_to_query_args( ?array $args = null ) {
 		if ( empty( $args ) ) {
 			return [];
 		}
 
 		// By default let's use the locations set in the Context to map the arguments to query args.
 		$query_args = tribe_context()->map_to_read( $args, Context::REQUEST_VAR );
+
+		/*
+		 * `posts_per_page` is an internal repository argument carrying the pagination look-ahead value; it must
+		 * never be reflected into a generated View URL or an unbounded, self-generating crawl space results.
+		 */
+		unset( $query_args['posts_per_page'] );
 
 		global $wp;
 
@@ -1326,17 +1350,48 @@ class View implements View_Interface {
 	}
 
 	/**
+	 * Returns the number of events a View should show per page, bounded to a safe maximum.
+	 *
+	 * The value can be driven by the `posts_per_page` request variable through the Context, so it is
+	 * capped here to keep unauthenticated requests from forcing unbounded repository queries. It is
+	 * also kept at one or more: with zero, the look-ahead event would be the only one fetched, and the
+	 * View would render empty pages that never advance.
+	 *
+	 * @since 6.18.1
+	 *
+	 * @param Context|null $context The context to read the value from, or `null` to use the View Context.
+	 *
+	 * @return int The bounded number of events per page, at least one.
+	 */
+	public function get_events_per_page( ?Context $context = null ): int {
+		$context ??= $this->get_context();
+		$per_page = max( 1, absint( $context->get( 'events_per_page', 12 ) ) );
+
+		/**
+		 * Filters the maximum number of events a View will fetch per page.
+		 *
+		 * @since 6.18.1
+		 *
+		 * @param int $max_events_per_page The maximum number of events per page.
+		 */
+		$max = (int) apply_filters( 'tec_events_views_v2_max_events_per_page', static::MAX_EVENTS_PER_PAGE );
+
+		return min( $per_page, max( 1, $max ) );
+	}
+
+	/**
 	 * Sets up the View repository arguments from the View context or a provided Context object.
 	 *
 	 * @since 4.9.3
 	 * @since 6.0.5 Now will merge a "global" repository arg filter, which will be applied elsewhere as well as this
 	 *                primary repository query.
+	 * @since 6.17.0 Made $context explicity nullable.
 	 *
 	 * @param Context|null $context A context to use to setup the args, or `null` to use the View Context.
 	 *
 	 * @return array The arguments, ready to be set on the View repository instance.
 	 */
-	protected function setup_repository_args( Context $context = null ) {
+	protected function setup_repository_args( ?Context $context = null ) {
 		$context = null !== $context ? $context : $this->context;
 
 		$context_arr = $context->to_array();
@@ -1349,7 +1404,7 @@ class View implements View_Interface {
 		 * @since 5.0.0
 		*/
 		$args = [
-			'posts_per_page'       => (int) $context_arr['events_per_page'] + 1,
+			'posts_per_page'       => $this->get_events_per_page( $context ) + 1,
 			'paged'                => max( Arr::get_first_set( array_filter( $context_arr ), [
 				'paged',
 				'page',
@@ -1418,7 +1473,7 @@ class View implements View_Interface {
 			1
 		);
 
-		return ( $current_page - 1 ) * (int) $context->get( 'events_per_page' );
+		return ( $current_page - 1 ) * $this->get_events_per_page();
 	}
 
 	/**
@@ -1583,7 +1638,7 @@ class View implements View_Interface {
 	 * @return mixed                   Weather the array of events has a next page.
 	 */
 	public function has_next_event( array $events, $overwrite_flag = true ) {
-		$has_next_events = count( $events ) > (int) $this->get_context()->get( 'events_per_page', 12 );
+		$has_next_events = count( $events ) > $this->get_events_per_page();
 		if ( (bool) $overwrite_flag ) {
 			$this->set_has_next_event( $has_next_events );
 		}
@@ -1600,6 +1655,42 @@ class View implements View_Interface {
 	 */
 	public function get_has_next_event() {
 		return (boolean) $this->has_next_event;
+	}
+
+	/**
+	 * Applies the View repository arguments and returns the events the View would display, without
+	 * rendering it.
+	 *
+	 * Callers that need the events before the View runs cannot use `get_html()` for it: rendering
+	 * also fires the HTML cache and SEO hooks, and out of order those produce the wrong directives.
+	 *
+	 * @since 6.17.3
+	 *
+	 * @return array<int, WP_Post> The events the View would display for its current context and page.
+	 */
+	public function fetch_events(): array {
+		if ( empty( $this->repository_args ) ) {
+			$this->repository_args = $this->get_repository_args();
+			$this->repository->by_args( $this->repository_args );
+		}
+
+		$events = array_filter(
+			$this->repository->all(),
+			static function ( $event ) {
+				return $event instanceof WP_Post;
+			}
+		);
+
+		remove_filter( 'tribe_repository_query_arg_offset_override', [ $this, 'filter_repository_query_arg_offset_override' ], 10 );
+
+		$is_paginated = isset( $this->repository_args['posts_per_page'] ) && - 1 !== $this->repository_args['posts_per_page'];
+
+		/* The repository asks for one event more than the page holds; see setup_repository_args(). */
+		if ( $is_paginated && $this->has_next_event( $events ) ) {
+			array_pop( $events );
+		}
+
+		return $events;
 	}
 
 	/**
@@ -1851,13 +1942,14 @@ class View implements View_Interface {
 	 * Filters the repository arguments that will be used to set up the View repository instance.
 	 *
 	 * @since 4.9.5
+	 * @since 6.17.0 Made $context explicitly nullable.
 	 *
 	 * @param array        $repository_args The repository arguments that will be used to set up the View repository instance.
 	 * @param Context|null $context         Either a specific Context or `null` to use the View current Context.
 	 *
 	 * @return array The filtered repository arguments.
 	 */
-	protected function filter_repository_args( array $repository_args, Context $context = null ) {
+	protected function filter_repository_args( array $repository_args, ?Context $context = null ) {
 		$context = null !== $context ? $context : $this->context;
 
 		/**

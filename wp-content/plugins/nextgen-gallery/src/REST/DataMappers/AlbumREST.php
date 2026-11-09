@@ -63,7 +63,7 @@ class AlbumREST {
 				'callback'            => [ self::class, 'get_albums' ],
 				'permission_callback' => [ self::class, 'check_read_permission' ],
 				'args'                => [
-					'orderby'  => [
+					'orderby'          => [
 						'type'              => 'string',
 						'enum'              => [
 							'id',
@@ -76,26 +76,57 @@ class AlbumREST {
 						'default'           => 'id',
 						'sanitize_callback' => 'sanitize_text_field',
 					],
-					'order'    => [
+					'order'            => [
 						'type'              => 'string',
 						'enum'              => [ 'ASC', 'DESC' ],
 						'default'           => 'ASC',
 						'sanitize_callback' => 'sanitize_text_field',
 					],
-					'per_page' => [
+					'per_page'         => [
 						'type'              => 'integer',
 						'default'           => 25,
 						'sanitize_callback' => [ self::class, 'sanitize_per_page' ],
 					],
-					'page'     => [
+					'page'             => [
 						'type'              => 'integer',
 						'default'           => 1,
 						'sanitize_callback' => 'absint',
 					],
-					'search'   => [
+					'search'           => [
 						'type'              => 'string',
 						'description'       => 'Search albums by name',
 						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'exclude_ids'      => [
+						'type'              => 'array',
+						'description'       => 'Album IDs to exclude from results (e.g. the album currently being edited or albums already added).',
+						'items'             => [
+							'type' => 'integer',
+						],
+						'sanitize_callback' => function ( $value ) {
+							if ( ! is_array( $value ) ) {
+								return [];
+							}
+							return array_values( array_unique( array_filter( array_map( 'absint', $value ) ) ) );
+						},
+					],
+					'include_ids'      => [
+						'type'              => 'array',
+						'description'       => 'Restrict results to these album IDs. Lets callers fetch a known, bounded set (e.g. the albums nested in the album being edited) in one request instead of loading every album with per_page=-1.',
+						'items'             => [
+							'type' => 'integer',
+						],
+						'sanitize_callback' => function ( $value ) {
+							if ( ! is_array( $value ) ) {
+								return [];
+							}
+							return array_values( array_unique( array_filter( array_map( 'absint', $value ) ) ) );
+						},
+					],
+					'exclude_album_id' => [
+						'type'              => 'integer',
+						'description'       => 'Exclude this album and the albums nested inside it. Bounded alternative to exclude_ids for albums with many members (the server derives the IDs from the album\'s sortorder).',
+						'sanitize_callback' => 'absint',
 					],
 				],
 			]
@@ -202,8 +233,15 @@ class AlbumREST {
 					'preview_image_id'      => [
 						'required'          => false,
 						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
-						'validate_callback' => [ self::class, 'validate_preview_image_id' ],
+						// Cast keeping the sign (not absint) so a negative ID stays negative and hits the
+						// fallback in update_album() instead of flipping to a real image (-42 -> 42). Wrapped
+						// in a closure because WP passes ($value, $request, $param) to sanitize_callback and
+						// the built-in intval() rejects the extra args (ArgumentCountError -> HTTP 500).
+						'sanitize_callback' => static function ( $value ) {
+							return (int) $value;
+						},
+						// Existence checked in update_album() instead of here, so a stale unchanged
+						// previewpic can't block an edit (#875).
 					],
 					'pageid'                => [
 						'required'          => false,
@@ -339,23 +377,7 @@ class AlbumREST {
 			);
 		}
 
-		// Check cache first.
-		$cache_key = 'ngg_image_exists_' . $value;
-		$exists    = wp_cache_get( $cache_key );
-
-		if ( false === $exists ) {
-			global $wpdb;
-			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$exists = $wpdb->get_var(
-				$wpdb->prepare(
-					"SELECT COUNT(*) FROM {$wpdb->nggpictures} WHERE pid = %d",
-					$value
-				)
-			);
-			wp_cache_set( $cache_key, $exists, '', 3600 ); // Cache for 1 hour.
-		}
-
-		if ( ! $exists ) {
+		if ( ! self::image_exists( $value ) ) {
 			return new WP_Error(
 				'invalid_preview_image_id',
 				// translators: %d is the image ID.
@@ -368,6 +390,23 @@ class AlbumREST {
 	}
 
 	/**
+	 * Whether an image with the given pid exists.
+	 *
+	 * @param int $pid The image ID to check.
+	 * @return bool
+	 */
+	public static function image_exists( $pid ) {
+		$pid = (int) $pid;
+		if ( $pid <= 0 ) {
+			return false;
+		}
+
+		// Via the mapper (not a standalone COUNT + cache key) so image deletion invalidates the result
+		// and a preview set to a just-deleted image self-heals instead of hitting a stale positive.
+		return (bool) ImageMapper::get_instance()->find( $pid );
+	}
+
+	/**
 	 * Check if user has permission to read albums
 	 *
 	 * @return bool
@@ -377,12 +416,72 @@ class AlbumREST {
 	}
 
 	/**
-	 * Check if user has permission to edit albums
+	 * Check if user has permission to edit albums.
 	 *
+	 * Per-album ownership gate: holders of 'NextGEN Edit album' may create albums, but PUT/DELETE
+	 * on `/albums/{id}` additionally require the user to own the album or hold the cross-author cap.
+	 * Mirrors the ownership pattern PR #805 applied on `ImageREST` so authors cannot mutate albums
+	 * belonging to other authors (IDOR).
+	 *
+	 * @param \WP_REST_Request|null $request The REST request (passed by WP for permission_callback).
 	 * @return bool
 	 */
-	public static function check_edit_permission() {
-		return Security::is_allowed( 'NextGEN Edit album' );
+	public static function check_edit_permission( $request = null ) {
+		if ( ! Security::is_allowed( 'NextGEN Edit album' ) ) {
+			return false;
+		}
+
+		if ( ! $request instanceof WP_REST_Request ) {
+			return true;
+		}
+
+		$url_params = $request->get_url_params();
+		$album_id   = isset( $url_params['id'] ) ? (int) $url_params['id'] : 0;
+		if ( $album_id <= 0 ) {
+			// POST /albums (create) — no per-album id, base cap is sufficient.
+			return true;
+		}
+
+		return self::current_user_can_manage_album( $album_id );
+	}
+
+	/**
+	 * Determine whether the current user may manage a specific album.
+	 *
+	 * Shared object-level ownership gate for every entry point that accepts an album id from a
+	 * request. The REST routes here, the XML-RPC album methods (`XMLRPC\Controller::get_album()`,
+	 * reached by `ngg.editAlbum` / `ngg.deleteAlbum`) and the Lightroom album tasks all call it so
+	 * authors cannot mutate or delete albums belonging to other authors (IDOR). See #1096.
+	 *
+	 * Holders of the cross-author `nextgen_edit_gallery_unowned` capability may manage any album.
+	 * Otherwise ownership is derived from the album's linked `extras_post_id` row in `wp_posts`
+	 * (post_author), because the `ngg_album` table has no `author` column. When no extras post
+	 * exists yet (orphan), only cross-author-cap holders may manage it.
+	 *
+	 * Callers must still enforce the base `nextgen_edit_album` capability themselves; this predicate
+	 * only narrows that capability to the albums the caller owns.
+	 *
+	 * @param int $album_id Album primary key.
+	 * @return bool
+	 */
+	public static function current_user_can_manage_album( $album_id ) {
+		// Cross-author cap holders may manage any album.
+		if ( Security::is_allowed( 'nextgen_edit_gallery_unowned' ) ) {
+			return true;
+		}
+
+		$mapper = AlbumMapper::get_instance();
+		$album  = $mapper->find( $album_id );
+		if ( ! $album ) {
+			// Unknown id — let downstream return 404 via validate_id. Don't grant access here.
+			return false;
+		}
+
+		$extras_post_id = isset( $album->extras_post_id ) ? (int) $album->extras_post_id : 0;
+		$post           = $extras_post_id > 0 ? get_post( $extras_post_id ) : null;
+
+		// An orphan album has no author, so an id of 0 leaves the gate on the cross-author cap.
+		return Security::can_manage_owned( $post ? $post->post_author : 0, 'NextGEN Edit album' );
 	}
 
 	/**
@@ -395,9 +494,24 @@ class AlbumREST {
 		global $wpdb;
 		$mapper = AlbumMapper::get_instance();
 
+		// When exclude_album_id is supplied, exclude that album itself plus the albums nested inside it,
+		// derived server-side. This keeps the request URL bounded for albums with many members (one
+		// integer instead of one exclude_ids[] entry per nested album).
+		$exclude_album_id = (int) $request->get_param( 'exclude_album_id' );
+		if ( $exclude_album_id > 0 ) {
+			$existing_excludes = (array) $request->get_param( 'exclude_ids' );
+			$request->set_param(
+				'exclude_ids',
+				array_values( array_unique( array_merge( $existing_excludes, self::get_album_child_album_ids( $exclude_album_id ) ) ) )
+			);
+		}
+
 		// Get and validate order parameters.
-		$orderby = $request->get_param( 'orderby' ) ?? 'id';
-		$order   = strtoupper( $request->get_param( 'order' ) ?? 'ASC' );
+		// Security fix (SQLi): normalize orderby input via sanitize_key before mapping so only safe identifier chars are considered.
+		$orderby = sanitize_key( (string) ( $request->get_param( 'orderby' ) ?? 'id' ) );
+		// Security fix (SQLi): restrict order direction to ASC/DESC; anything else defaults to ASC.
+		$order = strtoupper( (string) ( $request->get_param( 'order' ) ?? 'ASC' ) );
+		$order = in_array( $order, [ 'ASC', 'DESC' ], true ) ? $order : 'ASC';
 
 		// Map frontend column names to database column names
 		$column_mapping = [
@@ -409,9 +523,11 @@ class AlbumREST {
 			'previewpic' => 'previewpic',
 		];
 
-		// Map the orderby parameter to the actual database column
+		// Security fix (SQLi): require orderby to be a known mapping key; unmapped values fall back to 'id' instead of passing through raw (previously missing else allowed ORDER BY injection).
 		if ( isset( $column_mapping[ $orderby ] ) ) {
 			$orderby = $column_mapping[ $orderby ];
+		} else {
+			$orderby = 'id';
 		}
 
 		// Get pagination parameters.
@@ -425,12 +541,21 @@ class AlbumREST {
 		$page     = $request->get_param( 'page' );
 		$offset   = ( $page - 1 ) * $per_page;
 
+		// Restrict to an explicit ID set when include_ids is supplied. Present-but-empty means the caller
+		// wants a known set that happens to be empty (e.g. an album with no nested albums), so it must
+		// resolve to zero rows rather than falling through to "all albums".
+		$has_include_ids = $request->has_param( 'include_ids' );
+		$include_ids     = $request->get_param( 'include_ids' );
+		$include_ids     = is_array( $include_ids ) ? array_values( array_unique( array_filter( array_map( 'absint', $include_ids ) ) ) ) : [];
+
 		$cache_params  = [
 			$orderby,
 			$order,
 			$per_page_param,
 			$page,
 			$request->get_param( 'search' ),
+			$request->get_param( 'exclude_ids' ),
+			$has_include_ids ? $include_ids : 'none',
 		];
 		$cache_key     = Transient::create_key( 'rest_albums', $cache_params );
 		$cached_result = Transient::fetch( $cache_key, false );
@@ -443,22 +568,82 @@ class AlbumREST {
 			$result->header( 'X-WP-TotalPages', $cached_result['total_pages'] ?? 0 );
 			return $result;
 		}
+
+		// include_ids was supplied but resolved to nothing: the caller asked for a specific, empty set,
+		// so return no albums instead of every album.
+		if ( $has_include_ids && empty( $include_ids ) ) {
+			$result = new WP_REST_Response( [], 200 );
+			$result->header( 'X-WP-Total', 0 );
+			$result->header( 'X-WP-TotalPages', 0 );
+			return $result;
+		}
+
 		// Build the base query and apply filters.
 		$query = $mapper->select();
 
-		if ( $request->has_param( 'search' ) ) {
-			$search_term = $request->get_param( 'search' );
-			$query->where( [ 'name LIKE %s', '%' . $search_term . '%' ] );
+		// Skipped when empty: "name LIKE '%%'" would drop every row with a NULL name. esc_like()
+		// keeps a typed % or _ literal. The COUNT query below must build the same predicate.
+		$search_term = trim( (string) $request->get_param( 'search' ) );
+		if ( '' !== $search_term ) {
+			$search_wildcard = '%' . $wpdb->esc_like( $search_term ) . '%';
+			if ( ctype_digit( $search_term ) ) {
+				// A digit-only term matches the ID as well as the name, so albums saved without a
+				// name (listed by their ID in the picker) stay reachable. The driver parenthesises
+				// each where_clauses entry before AND-joining, so precedence is preserved.
+				$query->add_where_clause(
+					[
+						$query->_parse_where_clause( 'name LIKE %s', [ $search_wildcard ] ),
+						$query->_parse_where_clause( 'id = %d', [ (int) $search_term ] ),
+					],
+					'OR'
+				);
+			} else {
+				$query->where( [ 'name LIKE %s', $search_wildcard ] );
+			}
+		}
+
+		// Restrict to an explicit set of album IDs when requested (bounded fetch, avoids per_page=-1).
+		if ( ! empty( $include_ids ) ) {
+			$query->where( [ 'id IN %s', $include_ids ] );
+		}
+
+		// Exclude specific album IDs (e.g. the album being edited) server-side so pagination
+		// and the per_page budget are only consumed by genuinely available albums.
+		$exclude_ids = $request->get_param( 'exclude_ids' );
+		$exclude_ids = is_array( $exclude_ids ) ? array_values( array_unique( array_filter( array_map( 'absint', $exclude_ids ) ) ) ) : [];
+		if ( ! empty( $exclude_ids ) ) {
+			$query->where( [ 'id NOT IN %s', $exclude_ids ] );
 		}
 
 		// Calculate total items for pagination using the same filters.
 		$where_clauses = [];
 		$params        = [];
 
-		if ( $request->has_param( 'search' ) ) {
-			$search_term     = '%' . $request->get_param( 'search' ) . '%';
-			$where_clauses[] = 'name LIKE %s';
-			$params[]        = $search_term;
+		if ( '' !== $search_term ) {
+			if ( ctype_digit( $search_term ) ) {
+				$where_clauses[] = '( name LIKE %s OR id = %d )';
+				$params[]        = '%' . $wpdb->esc_like( $search_term ) . '%';
+				$params[]        = (int) $search_term;
+			} else {
+				$where_clauses[] = 'name LIKE %s';
+				$params[]        = '%' . $wpdb->esc_like( $search_term ) . '%';
+			}
+		}
+
+		if ( ! empty( $include_ids ) ) {
+			$placeholders    = implode( ',', array_fill( 0, count( $include_ids ), '%d' ) );
+			$where_clauses[] = "id IN ( {$placeholders} )";
+			foreach ( $include_ids as $include_id ) {
+				$params[] = $include_id;
+			}
+		}
+
+		if ( ! empty( $exclude_ids ) ) {
+			$placeholders    = implode( ',', array_fill( 0, count( $exclude_ids ), '%d' ) );
+			$where_clauses[] = "id NOT IN ( {$placeholders} )";
+			foreach ( $exclude_ids as $exclude_id ) {
+				$params[] = $exclude_id;
+			}
 		}
 
 		$table_name = $wpdb->nggalbum;
@@ -475,6 +660,10 @@ class AlbumREST {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		$total_items = (int) $wpdb->get_var( $sql );
+		// A failed COUNT casts to 0, which is indistinguishable from an empty library and would
+		// otherwise be cached as the real total. The page rows come from a separate query, so the
+		// response is still served; it just must not persist a total nobody can trust.
+		$count_failed = '' !== (string) $wpdb->last_error;
 
 		// Fetch current page of items.
 		$query->order_by( $orderby, $order )
@@ -493,7 +682,9 @@ class AlbumREST {
 			'total_items' => $total_items,
 			'total_pages' => $total_pages,
 		];
-		Transient::update( $cache_key, $cache_data );
+		if ( ! $count_failed ) {
+			Transient::update( $cache_key, $cache_data );
+		}
 		$result = new WP_REST_Response( $response, 200 );
 
 		// Add pagination headers.
@@ -501,6 +692,39 @@ class AlbumREST {
 		$result->header( 'X-WP-TotalPages', $total_pages );
 
 		return $result;
+	}
+
+	/**
+	 * Get the album IDs to exclude for a given album: the album itself plus any albums nested in it.
+	 *
+	 * Album sortorder stores nested albums as strings like "a12" and galleries as plain integers,
+	 * so only the "a"-prefixed entries are sub-albums.
+	 *
+	 * @param int $album_id The album ID.
+	 * @return int[] Album IDs (self + nested albums).
+	 */
+	private static function get_album_child_album_ids( $album_id ) {
+		$album_id = (int) $album_id;
+		if ( $album_id <= 0 ) {
+			return [];
+		}
+
+		// Always exclude the album itself (an album cannot be added to itself).
+		$album_ids = [ $album_id ];
+
+		$album = AlbumMapper::get_instance()->find( $album_id );
+		if ( $album && ! empty( $album->sortorder ) ) {
+			$sortorder = is_array( $album->sortorder ) ? $album->sortorder : json_decode( $album->sortorder, true );
+			if ( is_array( $sortorder ) ) {
+				foreach ( $sortorder as $entry ) {
+					if ( is_string( $entry ) && isset( $entry[0] ) && 'a' === $entry[0] && ctype_digit( substr( $entry, 1 ) ) ) {
+						$album_ids[] = (int) substr( $entry, 1 );
+					}
+				}
+			}
+		}
+
+		return array_values( array_unique( array_filter( $album_ids ) ) );
 	}
 
 	/**
@@ -605,9 +829,6 @@ class AlbumREST {
 		if ( $request->has_param( 'description' ) ) {
 			$album->albumdesc = $request->get_param( 'description' );
 		}
-		if ( $request->has_param( 'preview_image_id' ) ) {
-			$album->previewpic = $request->get_param( 'preview_image_id' );
-		}
 		if ( $request->has_param( 'pageid' ) ) {
 			$album->pageid = $request->get_param( 'pageid' );
 		}
@@ -617,12 +838,39 @@ class AlbumREST {
 			$album->sortorder = $request->get_param( 'sortorder' );
 		}
 
+		// Preview image: only touch it when the caller actually picked a different image. Re-sending the
+		// stored previewpic unchanged (the admin app round-trips the whole album on save) must never fail,
+		// even if that image was later deleted. When a genuinely new value doesn't resolve, self-heal to a
+		// valid first-gallery thumbnail instead of rejecting the whole update. See GH issue #875.
+		// Placed after sortorder so the fallback uses the incoming galleries, not the stale ones.
+		if ( $request->has_param( 'preview_image_id' ) ) {
+			$new_pid = (int) $request->get_param( 'preview_image_id' );
+			if ( $new_pid !== (int) $album->previewpic ) {
+				$album->previewpic = self::image_exists( $new_pid )
+					? $new_pid
+					: self::get_first_gallery_thumbnail( $album->sortorder );
+			}
+		}
+
 		// Handle display type fields
 		if ( $request->has_param( 'display_type' ) ) {
 			$album->display_type = $request->get_param( 'display_type' );
 		}
 		if ( $request->has_param( 'display_type_settings' ) ) {
-			$album->display_type_settings = $request->get_param( 'display_type_settings' );
+			$incoming = (array) $request->get_param( 'display_type_settings' );
+			$edited   = $request->has_param( 'display_type' )
+				? $request->get_param( 'display_type' )
+				: $album->display_type;
+			$stored   = is_array( $album->display_type_settings ) ? $album->display_type_settings : [];
+
+			// Persist only the display type the user edited; the payload may carry every type, so key
+			// off display_type. The fallback merges onto stored settings so other customized types survive.
+			if ( '' !== (string) $edited && array_key_exists( $edited, $incoming ) ) {
+				$stored[ $edited ]            = $incoming[ $edited ];
+				$album->display_type_settings = $stored;
+			} else {
+				$album->display_type_settings = array_merge( $stored, $incoming );
+			}
 		}
 
 		try {
@@ -731,7 +979,7 @@ class AlbumREST {
 			'thumbnail'   => $thumbnail,
 			'created'     => $album->date_created,
 			'modified'    => $album->date_modified,
-			'displayType' => $album->display_type ?? 'photocrati-nextgen_basic_thumbnails',
+			'displayType' => $album->display_type ? $album->display_type : 'photocrati-nextgen_basic_compact_album',
 		];
 	}
 
@@ -774,8 +1022,9 @@ class AlbumREST {
 			'counter'               => $gallery_count,
 			'sortorder'             => $album->sortorder,
 			'extras_post_id'        => $album->extras_post_id,
-			'display_type'          => $album->display_type ?? 'photocrati-nextgen_basic_thumbnails',
-			'display_type_settings' => $album->display_type_settings ?? [],
+			'display_type'          => $album->display_type ? $album->display_type : 'photocrati-nextgen_basic_compact_album',
+			// Fill uncustomized display types with current global values for the admin UI (not persisted).
+			'display_type_settings' => AlbumMapper::get_instance()->with_display_type_defaults( $album->display_type_settings ?? [] ),
 		];
 	}
 

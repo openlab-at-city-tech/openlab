@@ -10,6 +10,7 @@
 namespace TEC\Events\SEO\Headers;
 
 use TEC\Common\Contracts\Provider\Controller as Controller_Contract;
+use TEC\Events\SEO\Settings;
 use Tribe__Events__Main as TEC;
 
 /**
@@ -54,13 +55,14 @@ class Controller extends Controller_Contract {
 	 * before that logic runs and lets TEC render the view with its own repository.
 	 *
 	 * @since 6.15.20
+	 * @since 6.17.5 Made the short-circuit value non-strict; it is handed back untouched.
 	 *
 	 * @param bool      $preempt  Whether to short-circuit handle_404().
 	 * @param \WP_Query $wp_query The main query object.
 	 *
 	 * @return bool True to prevent the 404, otherwise the original value.
 	 */
-	public function prevent_list_view_paged_404( bool $preempt, \WP_Query $wp_query ): bool {
+	public function prevent_list_view_paged_404( $preempt, \WP_Query $wp_query ) {
 		if ( $preempt ) {
 			return $preempt;
 		}
@@ -97,19 +99,82 @@ class Controller extends Controller_Contract {
 			! isset( $wp_query->query['post_type'] )
 			|| $wp_query->query['post_type'] !== TEC::POSTTYPE
 			|| ! isset( $wp_query->query['eventDisplay'] )
-			|| ! isset( $wp_query->query['eventDate'] )
 		) {
 			return;
 		}
 
-		$enabled_views = tribe_get_option( 'tribeEnableViews' );
+		$enabled_views = tribe_get_option( 'tribeEnableViews', [] );
 		$event_display = $wp_query->query['eventDisplay'];
 
-		if ( 'day' === $event_display ) {
-			$this->check_day_view( $wp_query, $enabled_views );
-		} elseif ( 'month' === $event_display ) {
-			$this->check_month_view( $wp_query, $enabled_views );
+		// 'past' is a List view display-mode modifier, not a view slug — normalize it so
+		// the enabled-view guard and per-view dispatch both treat it as 'list'.
+		$effective_display = 'past' === $event_display ? 'list' : $event_display;
+
+		// disabled-view guard — otherwise the main events page receives a false 404.
+		if ( 'default' === $effective_display ) {
+			return;
 		}
+
+		if ( $this->is_single_event_request( $wp_query ) ) {
+			return;
+		}
+
+		// 404 for any view that is currently disabled, regardless of how the URL was built.
+		// Site owners can disable this guard via Settings > Display > SEO & URL Handling.
+		if ( ! in_array( $effective_display, $enabled_views, true ) ) {
+			if ( tribe_get_option( Settings::OPT_DISABLED_VIEW_404, true ) ) {
+				$this->set_404( $wp_query );
+			}
+			// Either way, skip per-view date checks for a disabled view.
+			return;
+		}
+
+		// Day/Month views carry the date as a WP query var (set by URL rewrite rules).
+		// List view keeps the date as a raw GET parameter (?tribe-bar-date) instead.
+		$has_pretty_date = isset( $wp_query->query['eventDate'] );
+		$has_list_date   = 'list' === $effective_display && ! empty( tribe_get_request_var( 'tribe-bar-date' ) );
+
+		if ( ! $has_pretty_date && ! $has_list_date ) {
+			return;
+		}
+
+		if ( 'day' === $effective_display ) {
+			$this->check_day_view( $wp_query, $enabled_views );
+		} elseif ( 'month' === $effective_display ) {
+			$this->check_month_view( $wp_query, $enabled_views );
+		} elseif ( 'list' === $effective_display ) {
+			$this->check_list_view( $wp_query, $enabled_views );
+		}
+	}
+
+	/**
+	 * Whether the current request targets a single event rather than an event archive.
+	 *
+	 * The disabled-view 404 guard is only meaningful for the calendar *archive* views
+	 * (list, month, day, photo, …). Single-event endpoints reuse the `eventDisplay`
+	 * query var for non-archive purposes — the Event Tickets registration page
+	 * (eventDisplay=tickets), the recurring-series `all` view and the single-event
+	 * `ical` feed — and must never be treated as a disabled archive view.
+	 *
+	 * A single event is always addressed by its slug (`name` / `tribe_events`) or its
+	 * ID (`p`) in the parsed query, which archive requests never carry. The WP
+	 * conditionals are checked first for real requests, with the raw query vars as a
+	 * fallback for early hooks or direct calls where the conditionals are not yet set.
+	 *
+	 * @since 6.17.1
+	 *
+	 * @param \WP_Query $wp_query The global WP_Query object.
+	 *
+	 * @return bool True when the request is for a single event.
+	 */
+	private function is_single_event_request( \WP_Query $wp_query ): bool {
+		if ( $wp_query->is_single || $wp_query->is_singular ) {
+			return true;
+		}
+
+		return ! empty( $wp_query->query['name'] )
+			|| ! empty( $wp_query->query['tribe_events'] )
+			|| ! empty( $wp_query->query['p'] );
 	}
 
 	/**
@@ -167,7 +232,7 @@ class Controller extends Controller_Contract {
 	 */
 	private function check_day_view( object $wp_query, array $enabled_views ) {
 		if ( ! in_array( 'day', $enabled_views, true ) ) {
-			$wp_query->set_404();
+			$this->set_404( $wp_query );
 
 			return;
 		}
@@ -180,13 +245,13 @@ class Controller extends Controller_Contract {
 		}
 
 		if ( strtotime( $data['earliest_date_str'] ) > $data['event_timestamp'] ) {
-			$wp_query->set_404();
+			$this->set_404( $wp_query );
 
 			return;
 		}
 
 		if ( strtotime( $data['latest_date_str'] ) < $data['event_timestamp'] ) {
-			$wp_query->set_404();
+			$this->set_404( $wp_query );
 
 			return;
 		}
@@ -203,7 +268,7 @@ class Controller extends Controller_Contract {
 	 */
 	private function check_month_view( object $wp_query, array $enabled_views ) {
 		if ( ! in_array( 'month', $enabled_views, true ) ) {
-			$wp_query->set_404();
+			$this->set_404( $wp_query );
 
 			return;
 		}
@@ -217,16 +282,120 @@ class Controller extends Controller_Contract {
 		}
 
 		if ( $data['earliest_date_str'] > $data['event_date_str'] ) {
-			$wp_query->set_404();
+			$this->set_404( $wp_query );
 
 			return;
 		}
 
 		if ( $data['latest_date_str'] < $data['event_date_str'] ) {
-			$wp_query->set_404();
+			$this->set_404( $wp_query );
 
 			return;
 		}
+	}
+
+	/**
+	 * Check the conditions for the list view.
+	 *
+	 * Returns a 404 (or noindex, depending on the tec_seo_out_of_range_behavior setting) when:
+	 * - List view is disabled in TEC settings.
+	 * - The ?tribe-bar-date parameter refers to a date before the earliest event on record.
+	 * - The ?tribe-bar-date parameter refers to a date after the latest event on record.
+	 *
+	 * Mirrors the grace logic used in check_day_view(): if the site has no events yet and
+	 * the requested date is in the current month, validation is skipped so the live list
+	 * view is not erroneously suppressed.
+	 *
+	 * @since 6.16.5
+	 *
+	 * @param object $wp_query      The global WP_Query object.
+	 * @param array  $enabled_views An array of the enabled view slugs.
+	 */
+	private function check_list_view( object $wp_query, array $enabled_views ): void {
+		if ( ! in_array( 'list', $enabled_views, true ) ) {
+			$this->set_404( $wp_query );
+			return;
+		}
+
+		// List view stores the date in ?tribe-bar-date (a raw GET param, not a WP query var).
+		$tribe_bar_date = tribe_get_request_var( 'tribe-bar-date', '' );
+
+		if ( empty( $tribe_bar_date ) ) {
+			return;
+		}
+
+		$event_timestamp = strtotime( $tribe_bar_date );
+
+		// Bail on malformed date strings.
+		if ( false === $event_timestamp ) {
+			return;
+		}
+
+		$event_month   = gmdate( 'Y-m', $event_timestamp );
+		$current_month = static::get_current_month();
+
+		$earliest_date_str = tribe_events_earliest_date( 'Y-m-d' );
+		$latest_date_str   = tribe_events_latest_date( 'Y-m-d' );
+
+		// No events exist yet: allow only the current month (grace), 404 everything else.
+		if ( ! $earliest_date_str || ! $latest_date_str ) {
+			if ( $event_month !== $current_month ) {
+				$this->handle_out_of_range( $wp_query );
+			}
+			return;
+		}
+
+		if ( strtotime( $earliest_date_str ) > $event_timestamp ) {
+			$this->handle_out_of_range( $wp_query );
+			return;
+		}
+
+		if ( strtotime( $latest_date_str ) < $event_timestamp ) {
+			$this->handle_out_of_range( $wp_query );
+		}
+	}
+
+	/**
+	 * Respond to an out-of-range date request.
+	 *
+	 * By default (setting: 'hard_404'), the WP_Query is set to a 404 so WordPress
+	 * returns an HTTP 404 Not Found response — the strongest SEO signal.
+	 *
+	 * When the site owner has chosen 'soft_noindex' in Settings > Display >
+	 * SEO & URL Handling, the page is still served (HTTP 200) but a noindex
+	 * robots directive is injected via the wp_robots filter, so search engines
+	 * will not index the URL without surfacing a 404 error page to visitors.
+	 *
+	 * @since 6.16.5
+	 *
+	 * @param object $wp_query The global WP_Query object.
+	 */
+	private function handle_out_of_range( object $wp_query ): void {
+		$behavior = tribe_get_option( Settings::OPT_OUT_OF_RANGE_BEHAVIOR, 'hard_404' );
+
+		if ( 'soft_noindex' === $behavior ) {
+			// Add noindex at the wp_robots filter stage instead of returning a 404.
+			add_filter(
+				'wp_robots',
+				static function ( array $robots ): array {
+					$robots['noindex'] = true;
+					return $robots;
+				}
+			);
+			return;
+		}
+
+		$this->set_404( $wp_query );
+	}
+
+	/**
+	 * Set the query to 404 and send the HTTP 404 status header.
+	 *
+	 * @param \WP_Query $wp_query The query to mark as 404.
+	 */
+	private function set_404( \WP_Query $wp_query ): void {
+		$wp_query->set_404();
+		status_header( 404 );
 	}
 
 	/**

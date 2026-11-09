@@ -61,6 +61,7 @@ class Slideshow extends ParentController {
 
 		// We now hide option for triggers on this display type. This ensures they do not show based on past settings.
 		$displayed_gallery->display_settings['ngg_triggers_display'] = 'never';
+		$this->cast_numeric_settings( $displayed_gallery, [ 'gallery_height' ] );
 
 		// Get the images to be displayed.
 		$current_page = (int) $router->get_parameter( 'nggpage', 1 );

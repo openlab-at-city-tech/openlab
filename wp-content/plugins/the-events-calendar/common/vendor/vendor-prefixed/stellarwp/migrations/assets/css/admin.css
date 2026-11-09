@@ -1,0 +1,936 @@
+/**
+ * Migrations Admin Styles
+ *
+ * @package StellarWP\Migrations
+ */
+
+.stellarwp-migrations-filters {
+	margin-bottom: 20px;
+	max-width: 1200px;
+}
+
+.stellarwp-migrations-filters__row {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.stellarwp-migrations-filters__field {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.stellarwp-migrations-filters__actions {
+	display: flex;
+	gap: 8px;
+}
+
+.stellarwp-migrations-filters__checkboxes {
+	align-items: center;
+	display: flex;
+	gap: 16px;
+	margin-left: auto;
+}
+
+.stellarwp-migrations-filters__checkboxes label {
+	align-items: center;
+	color: #1d2327;
+	cursor: pointer;
+	display: flex;
+	font-size: 13px;
+	gap: 6px;
+	white-space: nowrap;
+}
+
+.stellarwp-migrations-filters__checkboxes input[type="checkbox"] {
+	margin: 0;
+}
+
+.stellarwp-migrations-filters__checkboxes input[type="checkbox"]:focus {
+	box-shadow: 0 0 0 2px #2271b1;
+	outline: none;
+}
+
+.stellarwp-migrations-filters__field--tags {
+	flex: 1;
+	max-width: 400px;
+	min-width: 250px;
+}
+
+.stellarwp-migrations-filters__field--tags .select2-container {
+	/* Make sure the select2 container takes up the full width of the parent */
+	width: 100% !important;
+}
+
+/* Make Select2 compact to match button height */
+.stellarwp-migrations-filters__field--tags .select2-container--default .select2-selection--multiple {
+	border-color: #8c8f94;
+	border-radius: 3px;
+	max-height: 30px;
+	min-height: 0;
+	overflow-y: auto;
+	padding: 2px 4px;
+}
+
+.stellarwp-migrations-filters__field--tags .select2-container--default .select2-selection--multiple .select2-selection__rendered {
+	line-height: 1;
+	padding: 0;
+}
+
+.stellarwp-migrations-filters__field--tags .select2-container--default .select2-selection--multiple .select2-selection__choice {
+	background-color: #f0f0f1;
+	border-color: #c3c4c7;
+	font-size: 12px;
+	line-height: 1.3;
+	margin: 1px 2px 1px 0;
+	padding: 2px 4px 2px 6px;
+}
+
+.stellarwp-migrations-filters__field--tags .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+	margin-right: 3px;
+}
+
+.stellarwp-migrations-filters__field--tags .select2-container--default .select2-search--inline .select2-search__field {
+	font-size: 13px;
+	height: 22px;
+	line-height: 22px;
+	margin: 0;
+	min-height: unset;
+	padding: 0 0 0 4px;
+}
+
+/* List Container */
+.stellarwp-migrations-list {
+	max-width: 1200px;
+}
+
+.stellarwp-migrations-empty {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	color: #646970;
+	padding: 20px;
+	text-align: center;
+}
+
+/* Migration Card */
+.stellarwp-migration-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	margin-bottom: 16px;
+	padding: 20px;
+}
+
+.stellarwp-migration-card:last-child {
+	margin-bottom: 0;
+}
+
+.stellarwp-migration-card__header {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+	margin-bottom: 8px;
+}
+
+.stellarwp-migration-card__label {
+	color: #1d2327;
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0;
+}
+
+.stellarwp-migration-card__label a {
+	color: #2271b1;
+	text-decoration: none;
+}
+
+.stellarwp-migration-card__label a:hover,
+.stellarwp-migration-card__label a:focus {
+	color: #135e96;
+	text-decoration: underline;
+}
+
+.stellarwp-migration-card__label a:focus {
+	box-shadow: 0 0 0 2px #2271b1;
+	outline: none;
+}
+
+.stellarwp-migration-card__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.stellarwp-migration-card__tag {
+	background: #f0f0f1;
+	border-radius: 3px;
+	color: #50575e;
+	font-size: 12px;
+	font-style: normal;
+	font-weight: 400;
+	padding: 2px 8px;
+	text-transform: lowercase;
+}
+
+.stellarwp-migration-card__description {
+	color: #50575e;
+	font-size: 12px;
+	line-height: 1.5;
+	margin: 0 0 4px;
+}
+
+.stellarwp-migration-card__details-link {
+	color: #2271b1;
+	display: inline-block;
+	font-size: 12px;
+	margin: 0 0 16px;
+	text-decoration: none;
+}
+
+.stellarwp-migration-card__details-link:hover {
+	color: #135e96;
+	text-decoration: underline;
+}
+
+.stellarwp-migration-card__separator {
+	border: none;
+	border-top: 1px solid #f0f0f1;
+	margin: 0 0 16px;
+}
+
+.stellarwp-migration-card__footer {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.stellarwp-migration-card__status {
+	align-items: center;
+	display: flex;
+	gap: 8px;
+	min-width: 120px;
+}
+
+.stellarwp-migration-card__status-label {
+	border-radius: 3px;
+	display: inline-block;
+	font-size: 12px;
+	font-weight: 500;
+	padding: 4px 10px;
+	text-transform: capitalize;
+}
+
+/* Status Colors */
+.stellarwp-migration-card__status-label--pending {
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.stellarwp-migration-card__status-label--scheduled {
+	background: #e7f5fe;
+	color: #0a4b78;
+}
+
+.stellarwp-migration-card__status-label--running {
+	background: #fef8e7;
+	color: #8b6914;
+}
+
+.stellarwp-migration-card__status-label--completed {
+	background: #edfaef;
+	color: #1e7e34;
+}
+
+.stellarwp-migration-card__status-label--failed {
+	background: #fcf0f1;
+	color: #8b1a1a;
+}
+
+.stellarwp-migration-card__status-label--paused {
+	background: #fef8e7;
+	color: #8b6914;
+}
+
+.stellarwp-migration-card__status-label--canceled {
+	background: #f0f0f1;
+	color: #50575e;
+}
+
+.stellarwp-migration-card__status-label--not-applicable {
+	background: #f0f0f1;
+	color: #8c8f94;
+}
+
+.stellarwp-migration-card__status-label--reverted {
+	background: #f0f0f1;
+	color: #53476b;
+}
+
+.stellarwp-migration-card__progress-text {
+	color: #646970;
+	font-size: 13px;
+	font-variant-numeric: tabular-nums;
+}
+
+.stellarwp-migration-card__dot-separator {
+	color: #8c8f94;
+	font-size: 14px;
+	line-height: 1;
+}
+
+.stellarwp-migration-card__total-items {
+	color: #646970;
+	font-size: 13px;
+	font-variant-numeric: tabular-nums;
+}
+
+/* Progress Bar */
+.stellarwp-migration-progress {
+	flex: 1;
+	max-width: 300px;
+	min-width: 150px;
+}
+
+.stellarwp-migration-progress__bar {
+	background: #f0f0f1;
+	border-radius: 10px;
+	height: 10px;
+	overflow: hidden;
+}
+
+.stellarwp-migration-progress__fill {
+	border-radius: 10px;
+	height: 100%;
+	transition: width 0.3s ease;
+}
+
+/* Progress Fill Colors by Status */
+.stellarwp-migration-progress__fill--pending {
+	background: #c3c4c7;
+}
+
+.stellarwp-migration-progress__fill--scheduled {
+	background: #72aee6;
+}
+
+.stellarwp-migration-progress__fill--running {
+	animation: stellarwp-migrations-progress-stripe 1s linear infinite;
+	background: #f0b849;
+	background-image: linear-gradient(
+		-45deg,
+		rgba(255, 255, 255, 0.2) 25%,
+		transparent 25%,
+		transparent 50%,
+		rgba(255, 255, 255, 0.2) 50%,
+		rgba(255, 255, 255, 0.2) 75%,
+		transparent 75%,
+		transparent
+	);
+	background-size: 20px 20px;
+}
+
+.stellarwp-migration-progress__fill--completed {
+	background: #00a32a;
+}
+
+.stellarwp-migration-progress__fill--failed {
+	background: #d63638;
+}
+
+.stellarwp-migration-progress__fill--paused {
+	background: #f0b849;
+}
+
+.stellarwp-migration-progress__fill--canceled {
+	background: #c3c4c7;
+}
+
+.stellarwp-migration-progress__fill--reverted {
+	background: #826eb4;
+}
+
+@keyframes stellarwp-migrations-progress-stripe {
+	0% {
+		background-position: 0 0;
+	}
+	100% {
+		background-position: 20px 0;
+	}
+}
+
+/* Actions */
+.stellarwp-migration-card__actions {
+	align-items: center;
+	display: flex;
+	gap: 8px;
+	margin-left: auto;
+}
+
+.stellarwp-migration-btn {
+	align-items: center;
+	border: 1px solid transparent;
+	border-radius: 3px;
+	cursor: pointer;
+	display: inline-flex;
+	font-size: 13px;
+	font-weight: 500;
+	gap: 2px;
+	justify-content: center;
+	line-height: 1.4;
+	padding: 6px 12px;
+	text-decoration: none;
+	transition: all 0.1s ease;
+}
+
+.stellarwp-migration-btn:disabled,
+.stellarwp-migration-btn--loading {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.stellarwp-migration-btn--loading {
+	position: relative;
+}
+
+.stellarwp-migration-btn--loading::after {
+	animation: stellarwp-migrations-spin 0.6s linear infinite;
+	border: 2px solid transparent;
+	border-radius: 50%;
+	border-top-color: currentColor;
+	content: "";
+	height: 12px;
+	margin-left: 8px;
+	position: absolute;
+	width: 12px;
+}
+
+@keyframes stellarwp-migrations-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+.stellarwp-migration-btn--primary {
+	background: #2271b1;
+	border-color: #2271b1;
+	color: #fff;
+}
+
+.stellarwp-migration-btn--primary:hover:not(:disabled) {
+	background: #135e96;
+	border-color: #135e96;
+}
+
+.stellarwp-migration-btn--primary:focus {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1;
+	outline: none;
+}
+
+.stellarwp-migration-btn--secondary {
+	background: #f6f7f7;
+	border-color: #c3c4c7;
+	color: #2271b1;
+}
+
+.stellarwp-migration-btn--secondary:hover:not(:disabled) {
+	background: #f0f0f1;
+	border-color: #8c8f94;
+	color: #135e96;
+}
+
+.stellarwp-migration-btn--secondary:focus {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1;
+	outline: none;
+}
+
+.stellarwp-migration-btn--danger {
+	background: #d63638;
+	border-color: #d63638;
+	color: #fff;
+}
+
+.stellarwp-migration-btn--danger:hover:not(:disabled) {
+	background: #b32d2e;
+	border-color: #b32d2e;
+}
+
+.stellarwp-migration-btn--danger:focus {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #d63638;
+	outline: none;
+}
+
+/* Message Area */
+.stellarwp-migration-card__message {
+	border-radius: 4px;
+	font-size: 13px;
+	line-height: 1.5;
+	margin-top: 16px;
+	padding: 12px 16px;
+}
+
+.stellarwp-migration-card__message--success {
+	background: #edfaef;
+	border: 1px solid #c3e6cb;
+	color: #1e7e34;
+}
+
+.stellarwp-migration-card__message--error {
+	background: #fcf0f1;
+	border: 1px solid #f5c6cb;
+	color: #8b1a1a;
+}
+
+/* Responsive */
+@media screen and (max-width: 782px) {
+	/* Filters - smaller buttons */
+	.stellarwp-migrations-filters__actions .button {
+		font-size: 12px;
+		line-height: 1.5;
+		min-height: 0;
+		padding: 4px 10px;
+	}
+
+	/* Filters - left-align checkboxes */
+	.stellarwp-migrations-filters__checkboxes {
+		margin-left: 0;
+		width: 100%;
+	}
+
+	.stellarwp-migration-card__footer {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.stellarwp-migration-card__status {
+		justify-content: space-between;
+	}
+
+	.stellarwp-migration-progress {
+		max-width: none;
+	}
+
+	.stellarwp-migration-card__actions {
+		justify-content: flex-start;
+		margin-left: 0;
+	}
+}
+
+/* ==========================================================================
+   Single Migration View
+   ========================================================================== */
+
+.stellarwp-migration-single {
+	max-width: 1200px;
+}
+
+/* Back Link */
+.stellarwp-migration-single__back {
+	margin-bottom: 16px;
+}
+
+.stellarwp-migration-single__back-link {
+	align-items: center;
+	color: #50575e;
+	display: inline-flex;
+	font-size: 13px;
+	gap: 2px;
+	text-decoration: none;
+}
+
+.stellarwp-migration-single__back-link:hover,
+.stellarwp-migration-single__back-link:focus {
+	color: #2271b1;
+}
+
+.stellarwp-migration-single__back-link .dashicons {
+	font-size: 16px;
+	height: 16px;
+	width: 16px;
+}
+
+.stellarwp-migrations-back-link-divider {
+	border: none;
+	border-top: 1px solid #c3c4c7;
+	margin: 12px 0 0;
+}
+
+/* Header */
+.stellarwp-migration-single__header {
+	margin-bottom: 24px;
+}
+
+.stellarwp-migration-single__label {
+	color: #1d2327;
+	font-size: 24px;
+	font-weight: 600;
+	margin: 0 0 8px;
+}
+
+.stellarwp-migration-single__description {
+	color: #50575e;
+	font-size: 14px;
+	line-height: 1.6;
+	margin: 0;
+}
+
+.stellarwp-migration-single__section-title {
+	border-bottom: 1px solid #c3c4c7;
+	color: #1d2327;
+	font-size: 16px;
+	font-weight: 600;
+	margin: 32px 0 16px;
+	padding-bottom: 8px;
+}
+
+/* Not Found */
+.stellarwp-migration-not-found {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-left-color: #d63638;
+	border-left-width: 4px;
+	border-radius: 4px;
+	padding: 20px;
+}
+
+.stellarwp-migration-not-found h1 {
+	color: #1d2327;
+	font-size: 18px;
+	margin: 0 0 8px;
+}
+
+.stellarwp-migration-not-found p {
+	color: #50575e;
+	margin: 0;
+}
+
+/* Status Card */
+.stellarwp-migration-status-card {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	padding: 20px;
+}
+
+.stellarwp-migration-status-card__content {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+.stellarwp-migration-status-card__status {
+	align-items: center;
+	display: flex;
+	gap: 12px;
+	min-width: 150px;
+}
+
+.stellarwp-migration-status-card__progress {
+	flex: 1;
+	max-width: 400px;
+	min-width: 200px;
+}
+
+.stellarwp-migration-status-card__timing {
+	color: #646970;
+	font-size: 13px;
+}
+
+.stellarwp-migration-status-card__started {
+	color: #646970;
+}
+
+.stellarwp-migration-status-card__not-started {
+	color: #8c8f94;
+	font-style: italic;
+}
+
+/* Configuration Box */
+.stellarwp-migration-config-box {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	padding: 20px;
+}
+
+.stellarwp-migration-config-box__grid {
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+}
+
+.stellarwp-migration-config-box__item {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.stellarwp-migration-config-box__item--full {
+	grid-column: 1 / -1;
+}
+
+.stellarwp-migration-config-box__label {
+	color: #646970;
+	font-size: 12px;
+	font-weight: 500;
+	text-transform: uppercase;
+}
+
+.stellarwp-migration-config-box__value {
+	color: #1d2327;
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.stellarwp-migration-config-box__value--yes {
+	color: #00a32a;
+}
+
+.stellarwp-migration-config-box__value--no {
+	color: #d63638;
+}
+
+/* Execution Logs */
+.stellarwp-migration-logs {
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+	padding: 20px;
+}
+
+.stellarwp-migration-logs__empty {
+	color: #646970;
+	text-align: center;
+}
+
+.stellarwp-migration-logs__empty p {
+	margin: 0;
+}
+
+.stellarwp-migration-logs__row {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+	justify-content: space-between;
+	margin-bottom: 16px;
+}
+
+.stellarwp-migration-logs__selector {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.stellarwp-migration-logs__selector:only-child {
+	margin-bottom: 0;
+}
+
+.stellarwp-migration-logs__actions {
+	flex: 0 0 auto;
+}
+
+.stellarwp-migration-logs__download-btn {
+	align-items: baseline;
+	/* Override the inline display from WordPress core styles. */
+	display: flex !important;
+	gap: 8px;
+	justify-content: center;
+}
+
+.stellarwp-migration-logs__select {
+	max-width: 400px;
+	width: 100%;
+}
+
+.stellarwp-migration-logs__select:focus {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+	outline: none;
+}
+
+.stellarwp-migration-logs__execution-info {
+	color: #646970;
+	display: flex;
+	font-size: 12px;
+	gap: 20px;
+	margin-bottom: 16px;
+}
+
+.stellarwp-migration-logs__execution-start::before,
+.stellarwp-migration-logs__execution-end::before {
+	margin-right: 4px;
+}
+
+.stellarwp-migration-logs__execution-start::before {
+	content: "Started:";
+	font-weight: 500;
+}
+
+.stellarwp-migration-logs__execution-end::before {
+	content: "Ended:";
+	font-weight: 500;
+}
+
+.stellarwp-migration-logs__container {
+	border: 1px solid #e2e4e7;
+	border-radius: 4px;
+	max-height: 500px;
+	overflow-y: auto;
+}
+
+.stellarwp-migration-logs__container--has-more {
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+
+.stellarwp-migration-logs__list {
+	font-family: monospace;
+	font-size: 12px;
+	line-height: 1.6;
+}
+
+.stellarwp-migration-logs__loading {
+	align-items: center;
+	display: flex;
+	gap: 8px;
+	justify-content: center;
+	padding: 20px;
+}
+
+.stellarwp-migration-logs__loading .spinner {
+	float: none;
+	margin: 0;
+}
+
+.stellarwp-migration-logs__no-logs {
+	color: #646970;
+	padding: 20px;
+	text-align: center;
+}
+
+.stellarwp-migration-logs__no-logs p {
+	margin: 0;
+}
+
+.stellarwp-migration-logs__load-more {
+	background: #f6f7f7;
+	border: 1px solid #e2e4e7;
+	border-radius: 0 0 4px 4px;
+	border-top: none;
+	margin-top: -4px;
+	padding: 12px;
+	text-align: center;
+}
+
+.stellarwp-migration-logs__load-more-btn:focus {
+	box-shadow: 0 0 0 1px #fff, 0 0 0 3px #2271b1;
+	outline: none;
+}
+
+/* Log Entry */
+.stellarwp-migration-log {
+	border-bottom: 1px solid #f0f0f1;
+	display: flex;
+	gap: 8px;
+	padding: 8px 12px;
+}
+
+.stellarwp-migration-log:last-child {
+	border-bottom: none;
+}
+
+.stellarwp-migration-log__icon {
+	flex-shrink: 0;
+	font-size: 14px;
+	width: 16px;
+}
+
+.stellarwp-migration-log__content {
+	flex: 1;
+	min-width: 0;
+}
+
+.stellarwp-migration-log__message {
+	word-break: break-word;
+}
+
+.stellarwp-migration-log__time {
+	color: #8c8f94;
+	flex-shrink: 0;
+	font-size: 11px;
+}
+
+/* Log Types */
+.stellarwp-migration-log--info {
+	background: #fff;
+	color: #1d2327;
+}
+
+.stellarwp-migration-log--debug {
+	background: #f6f7f7;
+	color: #646970;
+}
+
+.stellarwp-migration-log--debug .stellarwp-migration-log__icon {
+	color: #646970;
+}
+
+.stellarwp-migration-log--warning {
+	background: #fef8e7;
+	color: #8b6914;
+}
+
+.stellarwp-migration-log--warning .stellarwp-migration-log__icon {
+	color: #dba617;
+}
+
+.stellarwp-migration-log--error {
+	background: #fcf0f1;
+	color: #8b1a1a;
+}
+
+.stellarwp-migration-log--error .stellarwp-migration-log__icon {
+	color: #d63638;
+}
+
+/* Execution Boundary Markers */
+.stellarwp-migration-log--boundary {
+	background: #f0f6fc;
+	border-left: 3px solid #72aee6;
+	color: #2271b1;
+	font-weight: 500;
+}
+
+/* Responsive Single View */
+@media screen and (max-width: 782px) {
+	.stellarwp-migration-status-card__content {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.stellarwp-migration-status-card__status {
+		justify-content: space-between;
+	}
+
+	.stellarwp-migration-status-card__progress {
+		max-width: none;
+	}
+
+	.stellarwp-migration-config-box__grid {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.stellarwp-migration-logs__execution-info {
+		flex-direction: column;
+		gap: 4px;
+	}
+}

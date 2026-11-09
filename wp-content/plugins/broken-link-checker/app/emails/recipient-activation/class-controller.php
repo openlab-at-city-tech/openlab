@@ -67,8 +67,12 @@ class Controller extends Mailer {
 		$cancellation_link = $email_args['cancellation_link'] ?? '';
 		$name              = $email_args['name'] ?? '';
 		$email              = $email_args['email'] ?? '';
-		$site_name         = get_bloginfo( 'name' );
+		$site_name         = esc_html( get_bloginfo( 'name' ) );
 
+		/*
+		 * The body is HTML, so every value is escaped here, at the point of output. The name and address may come
+		 * straight from the request that added the recipient, before any save-time sanitization has run.
+		 */
 		$this->body_variables =
 			apply_filters(
 				'wpmudev_blc_scan_report_email_vars',
@@ -79,11 +83,11 @@ class Controller extends Mailer {
 					'{{SITENAME}}'                 => $site_name,
 					//BODY
 					'{{GREETING}}'                 => esc_html__( 'Hi {{USERNAME}}', 'broken-link-checker' ),
-					'{{USERNAME}}'                 => $name,
-					'{{EMAIL_ADDRESS}}'            => $email,
-					'{{SITE_URL}}'                  => site_url(),
+					'{{USERNAME}}'                 => esc_html( $name ),
+					'{{EMAIL_ADDRESS}}'            => esc_html( $email ),
+					'{{SITE_URL}}'                  => esc_url( site_url() ),
 					'{{CONFIRM_BTN_LABEL}}'        => esc_html__( 'Confirm Subscription', 'broken-link-checker' ),
-					'{{ACTIVATION_LINK}}'          => $activation_link,
+					'{{ACTIVATION_LINK}}'          => esc_url( $activation_link ),
 					// FOOTER PART
 					'{{FOOTER_TITLE}}'             => esc_html__( 'Broken Link Checker', 'broken-link-checker' ),
 					'{{FOOTER_COMPANY}}'           => 'WPMU DEV', //$site_name,
@@ -94,7 +98,7 @@ class Controller extends Mailer {
 					'{{COMPANY_ADDRESS}}'          => esc_html__( 'INCSUB PO BOX 163, ALBERT PARK, VICTORIA.3206 AUSTRALIA', 'broken-link-checker' ),
 					'{{COMPANY_TITLE}}'            => $site_name,
 					'{{UNSUBSCRIBE}}'              => esc_html__( 'Unsubscribe', 'broken-link-checker' ),
-					'{{UNSUBSCRIBE_LINK}}'         => $cancellation_link,
+					'{{UNSUBSCRIBE_LINK}}'         => esc_url( $cancellation_link ),
 					'{{SOCIAL_LINKS}}'             => Model::get_social_links(),
 				),
 				$this

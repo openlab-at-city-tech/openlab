@@ -221,7 +221,7 @@ class blcPostMeta extends blcContainer {
 			if ( $post ) {
 				$post_html .= sprintf(
 					'<span class="row-title">%s</span><br>',
-					get_the_title( $post )
+					esc_html( get_the_title( $post ) )
 				);
 			}
 			$post_html .= sprintf(
@@ -236,7 +236,7 @@ class blcPostMeta extends blcContainer {
 			'<a class="row-title" href="%s" title="%s">%s</a>',
 			esc_url( $this->get_edit_url() ),
 			esc_attr( __( 'Edit this post' ) ),
-			get_the_title( $this->container_id )
+			esc_html( get_the_title( $this->container_id ) )
 		);
 
 		return $post_html;
@@ -251,7 +251,13 @@ class blcPostMeta extends blcContainer {
 		if ( current_user_can( 'edit_post', $this->container_id ) ) {
 			$actions['edit'] = '<span class="edit"><a href="' . $this->get_edit_url() . '" title="' . esc_attr( __( 'Edit this item' ) ) . '">' . __( 'Edit' ) . '</a>';
 
-			if ( $this->current_user_can_delete() ) {
+			//Note: core's get_delete_post_link() has no special-case handling for
+			//Site Editor post types (unlike get_edit_post_link()), so calling it for
+			//them throws an ArgumentCountError. They're deleted via the Site Editor,
+			//not this legacy link, so we simply omit the action for them.
+			if ( $this->current_user_can_delete()
+				&& ! $this->is_site_editor_post_type( get_post_type( $this->container_id ) )
+			) {
 				if ( $this->can_be_trashed() ) {
 					$actions['trash'] = sprintf(
 						"<span><a class='submitdelete' title='%s' href='%s'>%s</a>",
@@ -309,7 +315,19 @@ class blcPostMeta extends blcContainer {
 			return '';
 		}
 
-		return apply_filters( 'get_edit_post_link', admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) ), $post->ID, $context );
+		$link = '';
+		if ( $post_type_object->_edit_link ) {
+			if ( 'wp_template' === $post->post_type || 'wp_template_part' === $post->post_type ) {
+				$slug = urlencode( get_stylesheet() . '//' . $post->post_name );
+				$link = admin_url( sprintf( $post_type_object->_edit_link, $post->post_type, $slug ) );
+			} elseif ( 'wp_navigation' === $post->post_type ) {
+				$link = admin_url( sprintf( $post_type_object->_edit_link, (string) $post->ID ) );
+			} else {
+				$link = admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) );
+			}
+		}
+
+		return apply_filters( 'get_edit_post_link', $link, $post->ID, $context );
 	}
 
 	/**
@@ -339,7 +357,7 @@ class blcPostMeta extends blcContainer {
 					'delete_failed',
 					sprintf(
 						__( 'Failed to delete post "%1$s" (%2$d)', 'broken-link-checker' ),
-						get_the_title( $this->container_id ),
+						esc_html( get_the_title( $this->container_id ) ),
 						$this->container_id
 					)
 				);
@@ -358,7 +376,7 @@ class blcPostMeta extends blcContainer {
 				'trash_disabled',
 				sprintf(
 					__( 'Can\'t move post "%1$s" (%2$d) to the trash because the trash feature is disabled', 'broken-link-checker' ),
-					get_the_title( $this->container_id ),
+					esc_html( get_the_title( $this->container_id ) ),
 					$this->container_id
 				)
 			);
@@ -377,7 +395,7 @@ class blcPostMeta extends blcContainer {
 				'trash_failed',
 				sprintf(
 					__( 'Failed to move post "%1$s" (%2$d) to the trash', 'broken-link-checker' ),
-					get_the_title( $this->container_id ),
+					esc_html( get_the_title( $this->container_id ) ),
 					$this->container_id
 				)
 			);
@@ -388,6 +406,15 @@ class blcPostMeta extends blcContainer {
 		$post             = get_post( $this->container_id );
 		$post_type_object = get_post_type_object( $post->post_type );
 		return current_user_can( $post_type_object->cap->delete_post, $this->container_id );
+	}
+
+	/**
+	 * Check if the current user can edit the post this custom field belongs to.
+	 *
+	 * @return bool
+	 */
+	function current_user_can_edit() {
+		return current_user_can( 'edit_post', $this->container_id );
 	}
 
 	function can_be_trashed() {

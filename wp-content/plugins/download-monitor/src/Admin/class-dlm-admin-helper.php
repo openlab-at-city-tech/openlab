@@ -180,29 +180,6 @@ class DLM_Admin_Helper {
 	}
 
 	/**
-	 * Check whether the license is valid or not.
-	 *
-	 * @param  string  $functionality  The functionality.
-	 *
-	 * @return bool
-	 *
-	 * @since 3.8.2
-	 */
-	public function check_license_validity( $functionality ) {
-		// Check if license is valid.
-		if ( ! class_exists( 'DLM_Product_License' ) ) {
-			return false;
-		}
-		$license = new DLM_Product_License( $functionality );
-
-		if ( ! $license || ! $license->is_active() ) {
-			return false;
-		}
-
-		return true;
-	}
-
-	/**
 	 * Get the week start day.
 	 *
 	 * @return string

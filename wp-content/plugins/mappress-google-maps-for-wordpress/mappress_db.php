@@ -11,12 +11,14 @@ class Mappress_Db {
 		global $wpdb;
 		$maps_table = $wpdb->prefix . 'mapp_maps';
 
-		$exists = $wpdb->get_var("show tables like '$maps_table'");
+		$exists = $wpdb->get_var($wpdb->prepare("SHOW TABLES LIKE %s", $maps_table));        
 		if ($exists)
 			return;
 
 		$wpdb->show_errors(true);
-		$result = $wpdb->query("CREATE TABLE IF NOT EXISTS $maps_table (
+		
+		$result = $wpdb->query($wpdb->prepare(        
+			"CREATE TABLE IF NOT EXISTS %i (
 			mapid INT NOT NULL AUTO_INCREMENT,
 			otype VARCHAR(32),
 			oid INT,
@@ -26,8 +28,9 @@ class Mappress_Db {
 			INDEX title_idx (title(191)),
 			PRIMARY KEY  (mapid),
 			UNIQUE KEY object_idx (otype, oid, mapid)
-			) CHARACTER SET utf8;"
-		);
+			) CHARACTER SET utf8;",
+			$maps_table 
+		));
 		$wpdb->show_errors(false);
 		return $result;
 	}
@@ -87,20 +90,25 @@ class Mappress_Db {
 		$posts_table = $wpdb->prefix . 'mappress_posts';
 
 		// Create new maps table
-		$wpdb->query("DROP TABLE IF EXISTS $new_maps");
+		$wpdb->query($wpdb->prepare("DROP TABLE IF EXISTS %i", $new_maps));
 		$result = self::create_db();
 		if ($result === false)
 			return $wpdb->last_error();
 
 		// Populate
-		$sql = "SELECT $posts_table.mapid, $posts_table.postid, $old_maps.obj "
-		. " FROM $old_maps "
-		. " INNER JOIN $posts_table ON ($posts_table.mapid = $old_maps.mapid)";
-		$rows = $wpdb->get_results($sql);
-
+		$sql = $wpdb->prepare(
+			"SELECT %i.mapid, %i.postid, %i.obj
+			   FROM %i
+			   INNER JOIN %i ON (%i.mapid = %i.mapid)",
+			$posts_table, $posts_table, $old_maps,
+			$old_maps,
+			$posts_table, $posts_table, $old_maps
+		);
+		$rows = $wpdb->get_results($sql);        
+		
 		// Modify rows, can be rerun because most data is read from legacy posts table
 		foreach($rows as $row) {
-			$mapdata = unserialize($row->obj);
+			$mapdata = unserialize($row->obj, array('allowed_classes' => array('Mappress_Map', 'Mappress_Poi')));   // Note only these classes expected
 			$mapdata->mapid = $row->mapid;
 			$mapdata->oid = $row->postid;
 			$mapdata->otype = 'post';

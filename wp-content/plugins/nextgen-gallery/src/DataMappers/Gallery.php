@@ -48,6 +48,11 @@ class Gallery extends TableDriver {
 	public $custom_post_name = 'mixin_nextgen_table_extras';
 
 	/**
+	 * @var string
+	 */
+	protected $object_cache_group = 'ngg_galleries';
+
+	/**
 	 * Constructor.
 	 *
 	 * Defines the database table structure and initializes the mapper.
@@ -100,27 +105,6 @@ class Gallery extends TableDriver {
 			self::$instance = new $class();
 		}
 		return self::$instance;
-	}
-
-	/**
-	 * Finds a gallery by ID or entity.
-	 *
-	 * @param int|GalleryType $entity The gallery ID or gallery entity to find.
-	 * @return GalleryType|null The gallery entity or null if not found.
-	 */
-	public function find( $entity ) {
-		/**
-		 * Gallery result.
-		 *
-		 * @var GalleryType $result
-		 */
-		$result = parent::find( $entity );
-
-		if ( $result ) {
-			$this->initialize_display_type_settings( $result );
-		}
-
-		return $result;
 	}
 
 	/**
@@ -209,36 +193,35 @@ class Gallery extends TableDriver {
 	}
 
 	/**
-	 * Ensures display type settings are properly initialized with defaults, this will also guaratee that new fields are not added to the display type settings.
+	 * Fills missing display types in the given per-gallery settings with the current global defaults.
+	 * Presentation-only (admin UI); never persisted onto the gallery.
 	 *
-	 * @param object $entity The gallery entity
-	 * @return void
+	 * @param array $settings Stored per-gallery display type settings keyed by display type name.
+	 * @return array Settings with missing display types and untouched keys filled from current global.
 	 */
-	private function initialize_display_type_settings( $entity ) {
-		// Initialize display type settings if not set
-		if ( ! is_array( $entity->display_type_settings ) ) {
-			$entity->display_type_settings = [];
+	public function with_display_type_defaults( $settings ) {
+		$settings = is_array( $settings ) ? $settings : [];
+
+		foreach ( $this->get_all_display_type_defaults() as $type_name => $defaults ) {
+			$sanitized_defaults = array_map(
+				static function ( $value ) {
+					return is_bool( $value ) ? (int) $value : $value;
+				},
+				$defaults
+			);
+
+			// is_ecommerce_enabled is a gallery-level column, not a per-display-type setting.
+			unset( $sanitized_defaults['is_ecommerce_enabled'] );
+
+			// Fill at the key level: a partially-customized type keeps its stored values but has its
+			// untouched keys filled from the current global, so the admin UI shows live global values
+			// (not stale client-side defaults) for keys the migration stripped as default-equal.
+			$settings[ $type_name ] = isset( $settings[ $type_name ] ) && is_array( $settings[ $type_name ] )
+				? array_merge( $sanitized_defaults, $settings[ $type_name ] )
+				: $sanitized_defaults;
 		}
 
-		// Get defaults for all display types
-		$all_defaults = $this->get_all_display_type_defaults();
-
-		// Ensure all display types have settings
-		foreach ( $all_defaults as $type_name => $defaults ) {
-			if ( ! isset( $entity->display_type_settings[ $type_name ] ) ) {
-				$sanitized_defaults = array_map(
-					function ( $value ) {
-						return is_bool( $value ) ? (int) $value : $value;
-					},
-					$defaults
-				);
-
-				// Not removed from actual display type settings, because of old admin UI.
-				unset( $sanitized_defaults['is_ecommerce_enabled'] );
-
-				$entity->display_type_settings[ $type_name ] = $sanitized_defaults;
-			}
-		}
+		return $settings;
 	}
 
 	public function save_entity( $entity ) {
@@ -255,8 +238,7 @@ class Gallery extends TableDriver {
 		// Always update modified date.
 		$entity->date_modified = $current_time;
 
-		// Initialize display type settings before saving.
-		$this->initialize_display_type_settings( $entity );
+		// Defaults are not baked into per-gallery settings here; absent types inherit global at render.
 
 		// A bug in NGG 2.1.24 allowed galleries to be created with spaces in the directory name, unreplaced by dashes
 		// This causes a few problems everywhere, so we here allow users a way to fix those galleries by just re-saving.

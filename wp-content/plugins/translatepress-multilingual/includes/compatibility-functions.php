@@ -42,6 +42,73 @@ function trp_missing_mbstrings_library( $allow_to_run ){
 add_filter( 'trp_allow_tp_to_run', 'trp_missing_mbstrings_library' );
 
 /**
+ * robots.txt should never be handled by TranslatePress.
+ *
+ * Without this, the robots.txt file is processed by TranslatePress on secondary
+ * languages: it becomes accessible (and translated) on language URLs such as
+ * /es/robots.txt, and when "Use subdirectory for default language" is enabled the
+ * default robots.txt gets redirected to the language slug URL. Since the resulting
+ * file no longer matches the canonical one, this causes indexing issues.
+ *
+ * The check is based on the request URI (instead of is_robots()) because these
+ * filters run on 'plugins_loaded', before the query is parsed and conditional tags
+ * are available.
+ *
+ * @see https://app.clickup.com/t/qtc0c2
+ *
+ * @param string $url Optional URL to check. Defaults to the current request URI.
+ * @return bool        Whether the current request targets a robots.txt file.
+ */
+function trp_is_robots_txt_request( $url = '' ){
+    if ( empty( $url ) ) {
+        $url = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore
+    }
+    if ( empty( $url ) || ! is_string( $url ) ) {
+        return false;
+    }
+    // Only look at the path, ignoring any query string or fragment.
+    $path = wp_parse_url( $url, PHP_URL_PATH );
+    if ( empty( $path ) ) {
+        return false;
+    }
+    return (bool) preg_match( '#(^|/)robots\.txt$#i', $path );
+}
+
+// Don't run TranslatePress (no translation, no output buffering) on robots.txt requests.
+function trp_stop_running_on_robots_txt( $allow_to_run ){
+    if ( trp_is_robots_txt_request() ) {
+        return false;
+    }
+    return $allow_to_run;
+}
+add_filter( 'trp_allow_tp_to_run', 'trp_stop_running_on_robots_txt' );
+
+// Don't redirect robots.txt to a language URL (e.g. /robots.txt -> /en/robots.txt).
+function trp_stop_redirect_on_robots_txt( $allow_redirect, $needed_language, $current_page_url ){
+    if ( trp_is_robots_txt_request( $current_page_url ) || trp_is_robots_txt_request() ) {
+        return false;
+    }
+    return $allow_redirect;
+}
+add_filter( 'trp_allow_language_redirect', 'trp_stop_redirect_on_robots_txt', 10, 3 );
+
+/**
+ * Keep the canonical, unprefixed WordPress REST URL accessible when the default
+ * language uses a subdirectory. REST requests must not redirect to themselves.
+ */
+function trp_stop_redirect_on_unprefixed_rest_request( $allow_redirect, $needed_language, $current_page_url ) {
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+
+    if ( $url_converter->is_unprefixed_rest_request_on_subdirectory_install() ) {
+        return false;
+    }
+
+    return $allow_redirect;
+}
+add_filter( 'trp_allow_language_redirect', 'trp_stop_redirect_on_unprefixed_rest_request', 10, 3 );
+
+/**
  * Don't have html inside menu title tags. Some themes just put in the title the content of the link without striping HTML
  */
 add_filter( 'nav_menu_link_attributes', 'trp_remove_html_from_menu_title', 10, 3);
@@ -219,8 +286,17 @@ function trp_do_not_translate_dk_pdf($translate, $output){
 
 add_filter( 'trp_skip_gettext_processing', 'trp_invoices_for_woocommerce_strip_gettext_from_pdf', 10, 4 );
 function trp_invoices_for_woocommerce_strip_gettext_from_pdf( $bool, $translation, $text, $domain ){
+    if ( !isset( $_GET['wc-ajax'] ) || $_GET['wc-ajax'] != 'checkout' ) {
+        return $bool;
+    }
 
-    if ( isset( $_GET['wc-ajax'] ) && $_GET['wc-ajax'] == "checkout" && class_exists( '\BEWPI_Invoice' ) && ((trim( $domain ) === 'woocommerce-pdf-invoice') || ( $text == 'Cash on delivery' && trim($domain) == 'woocommerce') ) ) {
+    $domain = trim( $domain );
+    $is_invoice_string = (
+        $domain === 'woocommerce-pdf-invoice' ||
+        ( $text == 'Cash on delivery' && $domain == 'woocommerce' )
+    );
+
+    if ( $is_invoice_string && class_exists( '\BEWPI_Invoice' ) ) {
         return true;
     }
     return $bool;
@@ -305,7 +381,17 @@ function trp_woocommerce_pdf_catalog_compatibility_dont_translate_pdf( $bool, $o
 
 add_filter( 'trp_skip_gettext_processing', 'trp_woo_strip_gettext_from_yith_pdf', 10, 4 );
 function trp_woo_strip_gettext_from_yith_pdf( $bool, $translation, $text, $domain ){
-    if ( isset( $_GET['wc-ajax'] ) && $_GET['wc-ajax'] == 'checkout' && class_exists( 'YITH_Checkout_Addon' ) && ((trim( $domain ) === 'yith-woocommerce-pdf-invoice') || ( $text == 'N/A' && trim($domain) == 'woocommerce') ) ){
+    if ( !isset( $_GET['wc-ajax'] ) || $_GET['wc-ajax'] != 'checkout' ) {
+        return $bool;
+    }
+
+    $domain = trim( $domain );
+    $is_invoice_string = (
+        $domain === 'yith-woocommerce-pdf-invoice' ||
+        ( $text == 'N/A' && $domain == 'woocommerce' )
+    );
+
+    if ( $is_invoice_string && class_exists( 'YITH_Checkout_Addon' ) ) {
         return true;
     }
     return $bool;
@@ -504,6 +590,53 @@ function trp_option_pre_save_strip_trpst( $value, $option, $old_value ) {
 }
 
 /**
+ * Compatibility with Modern Events Calendar (MEC).
+ *
+ * MEC reads price/total values out of DOM nodes and posts them back via AJAX,
+ * which causes TRP gettext markers wrapping the rendered labels to end up in
+ * post meta (e.g. mec_total_price = "85.00 #!trpst#trp-gettext...#!trpen#").
+ * That breaks external integrations expecting numeric values.
+ *
+ * Exclude the MEC price/total selectors from frontend translation so the
+ * markers don't reach AJAX submissions, and strip any markers that still slip
+ * through into the affected post meta keys.
+ */
+add_filter( 'trp_no_translate_selectors', 'trp_mec_no_translate_selectors' );
+function trp_mec_no_translate_selectors( $skip_selectors ) {
+    $skip_selectors[] = '.mec-total-cost';
+    $skip_selectors[] = '.mec-book-price-total';
+    $skip_selectors[] = '#mec_total_price';
+    return $skip_selectors;
+}
+
+add_action( 'added_post_meta', 'trp_mec_post_meta_strip_trpst', 10, 4 );
+add_action( 'updated_postmeta', 'trp_mec_post_meta_strip_trpst', 10, 4 );
+function trp_mec_post_meta_strip_trpst( $meta_id, $object_id, $meta_key, $meta_value ) {
+    $mec_meta_keys = array( 'mec_total_price', 'mec_paid_amount', 'mec_gateway_label' );
+
+    if ( ! in_array( $meta_key, $mec_meta_keys, true ) ) {
+        return;
+    }
+
+    if ( ! is_string( $meta_value ) || strpos( $meta_value, 'data-trpgettextoriginal=' ) === false ) {
+        return;
+    }
+
+    if ( ! class_exists( 'TRP_Translation_Manager' ) ) {
+        return;
+    }
+
+    $clean_value = TRP_Translation_Manager::strip_gettext_tags( $meta_value );
+
+    // Remove our own hooks to prevent recursion, then re-add
+    remove_action( 'added_post_meta', 'trp_mec_post_meta_strip_trpst', 10 );
+    remove_action( 'updated_postmeta', 'trp_mec_post_meta_strip_trpst', 10 );
+    update_metadata_by_mid( 'post', $meta_id, $clean_value );
+    add_action( 'added_post_meta', 'trp_mec_post_meta_strip_trpst', 10, 4 );
+    add_action( 'updated_postmeta', 'trp_mec_post_meta_strip_trpst', 10, 4 );
+}
+
+/**
  * Compatibility with WooCommerce country list on checkout.
  *
  * Skip detection by translate-dom-changes of the list of countries
@@ -690,6 +823,22 @@ function trp_strip_request_metadata_keys( $metadata ){
 }
 
 /**
+ * Let Hummingbird start its page-cache buffer before TranslatePress.
+ *
+ * Both normally start at init priority 0, but TranslatePress registers first.
+ * Buffers are processed in reverse order, so Hummingbird would cache the page
+ * before it is translated and before #TRPLINKPROCESSED markers are removed.
+ */
+add_filter( 'trp_start_output_buffer_priority', 'trp_hummingbird_compatibility' );
+function trp_hummingbird_compatibility( $priority ){
+    if ( defined( 'WPHB_VERSION' ) && (int) $priority === 0 ) {
+        return 1;
+    }
+
+    return $priority;
+}
+
+/**
  * Compatibility with NextGEN Gallery
  *
  * They start an output buffer at init -1 (before ours at init 0). They print footer scripts after we run translate_page,
@@ -782,7 +931,10 @@ if( class_exists( 'WooCommerce' ) ) {
 	function trp_woo_fix_product_remove_from_cart_notice($message, $cart_item){
 		$product = wc_get_product( $cart_item['product_id'] );
 		if ($product){
-			$message =  sprintf( _x( '&ldquo; %s &rdquo;', 'Item name in quotes', 'woocommerce' ), $product->get_name() ); //phpcs:ignore
+			$trp                = TRP_Translate_Press::get_trp_instance();
+			$translation_render = $trp->get_component( 'translation_render' );
+			$product_name       = $translation_render->translate_page( $product->get_name() );
+			$message            = sprintf( _x( '&ldquo; %s &rdquo;', 'Item name in quotes', 'woocommerce' ), $product_name ); //phpcs:ignore
 		}
 		return $message;
 	}
@@ -1293,6 +1445,20 @@ if( defined( 'BRIZY_PRO_VERSION' ) || defined( 'BRIZY_VERSION' ) ){
 
 
 /**
+ * Compatibility with Bricks Builder
+ * Hide Floating Language Switcher (both v1 and v2) inside the Bricks builder editor.
+ */
+function trp_bricks_suppress_floater_in_builder( $html ) {
+    if ( function_exists( 'bricks_is_builder_main' ) && bricks_is_builder_main() ) {
+        return '';
+    }
+    return $html;
+}
+add_filter( 'trp_floater_ls_html_v2', 'trp_bricks_suppress_floater_in_builder' );
+add_filter( 'trp_floating_ls_html',   'trp_bricks_suppress_floater_in_builder' );
+
+
+/**
  * Compatibility with woocommerce-pdf-vouchers plugin, removed language from download link of the vouchers
  */
 if( defined( 'WOO_VOU_PLUGIN_VERSION' ) ){
@@ -1326,6 +1492,10 @@ if( defined( 'WOO_VOU_PLUGIN_VERSION' ) ){
 
 add_filter( 'aws_search_results_products_ids', 'trp_aws_search_results_products_ids', 10, 2 );
 function trp_aws_search_results_products_ids(  $posts_ids, $s ){
+    // an empty search would match every translated string, so keep the Advanced Woo Search results like in the default language
+    if ( '' === trim( (string) $s ) ){
+        return $posts_ids;
+    }
     global $TRP_LANGUAGE;
     $trp = TRP_Translate_Press::get_trp_instance();
     $trp_settings = $trp->get_component( 'settings' );
@@ -1355,6 +1525,99 @@ function trp_aws_current_language( $lang ) {
     }
     return $lang;
 }
+/**
+ * Compatibility with Ivory Search plugin.
+ *
+ * Ivory Search registers pre_get_posts at priority 9999999 to inject `_is_includes`
+ * (title/content/excerpt/custom_field/SKU/etc.) and a posts_search/posts_join pair
+ * that builds the WHERE/JOIN clauses for those fields. TranslatePress's own
+ * trp_search_filter runs at priority 99999999 and overwrites `post__in` with
+ * translated content matches, which excludes everything Ivory's SQL would have
+ * matched (e.g. SKU matches in WooCommerce).
+ *
+ * To keep both sets of matches, after TP has finished we run a sub WP_Query with
+ * Ivory's `_is_includes` config plus `_is_settings[search_engine] = index`. The
+ * 'index' flag lets Ivory's posts_search/posts_join filters process a non-main
+ * query (see IS_Public::posts_search line check on $is_index_search). The IDs
+ * returned by that sub-query are merged into the current `post__in`.
+ */
+add_action( 'pre_get_posts', 'trp_ivory_search_merge_results', 99999999 + 1 );
+function trp_ivory_search_merge_results( $query ) {
+    if ( ! class_exists( 'IS_Public' ) ) {
+        return;
+    }
+    if ( ! empty( $GLOBALS['trp_ivory_compat_running'] ) ) {
+        return;
+    }
+    if ( is_admin() || ! $query->is_main_query() || ! $query->is_search() ) {
+        return;
+    }
+    if ( empty( $query->query_vars['_is_includes'] ) ) {
+        return;
+    }
+
+    global $TRP_LANGUAGE;
+    $trp          = TRP_Translate_Press::get_trp_instance();
+    $trp_settings = $trp->get_component( 'settings' );
+    $settings     = $trp_settings->get_settings();
+    if ( $TRP_LANGUAGE === $settings['default-language'] ) {
+        return;
+    }
+
+    $search_term = $query->get( 's' );
+    if ( $search_term === '' && ! empty( $_GET['s'] ) ) {
+        $search_term = sanitize_text_field( wp_unslash( $_GET['s'] ) );
+    }
+    if ( $search_term === '' ) {
+        return;
+    }
+
+    $is_settings = (array) $query->get( '_is_settings' );
+    $is_settings['search_engine'] = 'index';
+
+    $sub_args = array(
+        's'              => $search_term,
+        'fields'         => 'ids',
+        'posts_per_page' => 200,
+        'no_found_rows'  => true,
+        '_is_includes'   => $query->get( '_is_includes' ),
+        '_is_settings'   => $is_settings,
+    );
+    $is_excludes = $query->get( '_is_excludes' );
+    if ( ! empty( $is_excludes ) ) {
+        $sub_args['_is_excludes'] = $is_excludes;
+    }
+    $post_type = $query->get( 'post_type' );
+    if ( ! empty( $post_type ) ) {
+        $sub_args['post_type'] = $post_type;
+    }
+    $post_status = $query->get( 'post_status' );
+    if ( ! empty( $post_status ) ) {
+        $sub_args['post_status'] = $post_status;
+    }
+
+    $GLOBALS['trp_ivory_compat_running'] = true;
+    $sub_query = new WP_Query( $sub_args );
+    $ivory_ids = $sub_query->posts;
+    unset( $GLOBALS['trp_ivory_compat_running'] );
+
+    if ( empty( $ivory_ids ) ) {
+        return;
+    }
+
+    $current_post_in = (array) $query->get( 'post__in' );
+    $current_post_in = array_filter( $current_post_in, 'is_numeric' );
+
+    $merged = array_values( array_unique( array_merge(
+        array_map( 'absint', $current_post_in ),
+        array_map( 'absint', $ivory_ids )
+    ) ) );
+
+    if ( ! empty( $merged ) ) {
+        $query->set( 'post__in', $merged );
+    }
+}
+
 /**
  * Compatibility with thrive Arhitect plugin which does a "nice" little trick with remove_all_filters( 'template_include' ); so we need to stop that or else it will not load our translation editor
  */
@@ -1810,6 +2073,10 @@ if( class_exists('WooCommerce_Product_Search_Service') ) {
 
     function trp_woocommerce_product_search_compatibility($search_query)
     {
+        // an empty search would match every translated string, so let WooCommerce Product Search handle it like in the default language
+        if ( '' === trim( (string) $search_query ) ) {
+            return $search_query;
+        }
         global $TRP_LANGUAGE;
         $trp = TRP_Translate_Press::get_trp_instance();
         $trp_settings = $trp->get_component('settings');
@@ -2039,12 +2306,144 @@ function trp_AIOSEO_remove_gettext_hooks($trp_loader){
  */
 add_filter( 'trp_needed_language', 'trp_page_builders_compatibility_with_subdirectory_for_default_language', 10, 4 );
 function trp_page_builders_compatibility_with_subdirectory_for_default_language( $needed_language, $lang_from_url, $settings, $trp) {
-    if ( ( ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) || isset( $_GET['elementor-preview'] ) ) //Elementor
-        || ( ( isset( $_GET['et_fb'] ) && $_GET['et_fb'] === '1' ) && ( isset( $_GET['PageSpeed'] ) && $_GET['PageSpeed'] === "off" ) ) //Divi
-        || ( ( isset( $_GET['vc_action'] ) && $_GET['vc_action'] === 'vc_inline' ) || ( isset( $_GET['vc_editable'] ) && $_GET['vc_editable'] === 'true' ) ) ) { //WPBakery
+    if ( trp_is_page_builder_editor_request() ) {
         $needed_language = $settings['default-language'];
     }
     return $needed_language;
+}
+
+/**
+ * Whether the current request is a page builder editor session (the builder shell or its preview iframe).
+ *
+ * The preview iframe of a page builder is a regular front-end request, so front-end output such as the
+ * Automatic User Language Detection popup would otherwise show up on top of the editing canvas.
+ *
+ * @return bool
+ */
+function trp_is_page_builder_editor_request() {
+    $is_builder_request = ( ( isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) || isset( $_GET['elementor-preview'] ) ) //Elementor
+        || trp_divi_is_builder_request() //Divi 4 & 5. Divi 4 appended PageSpeed=off to the builder URL, Divi 5 no longer does, so don't rely on it
+        || trp_is_breakdance_builder_request() //Breakdance builder shell (?breakdance=builder) and canvas iframe (breakdance_iframe=true)
+        || ( ( isset( $_GET['vc_action'] ) && $_GET['vc_action'] === 'vc_inline' ) || ( isset( $_GET['vc_editable'] ) && $_GET['vc_editable'] === 'true' ) ); //WPBakery
+
+    return apply_filters( 'trp_is_page_builder_editor_request', $is_builder_request );
+}
+
+/**
+ * Whether the current request is a Divi Builder session.
+ * et_fb=1  - Visual Builder (front-end)
+ * et_bfb=1 - Backend Builder iframe
+ */
+function trp_divi_is_builder_request() {
+    return ( isset( $_GET['et_fb'] ) && $_GET['et_fb'] === '1' ) || ( isset( $_GET['et_bfb'] ) && $_GET['et_bfb'] === '1' ); /* phpcs:ignore */
+}
+
+/**
+ * Redirect Divi Builder sessions opened on a secondary language URL to the default language.
+ *
+ * The Divi 5 Visual Builder loads its content over the REST API. On a secondary language URL
+ * the REST root advertised to the builder is language-prefixed and TranslatePress processes
+ * the page and the REST responses, so the builder fails to load the post content.
+ *
+ * Hooked before TRP_Language_Switcher::redirect_to_correct_language() so we don't redirect twice.
+ * The default language with "Use subdirectory for default language" enabled is left as is;
+ * trp_needed_language resolves it, and on the default language TranslatePress leaves both the
+ * page and the REST responses untouched.
+ */
+add_action( 'template_redirect', 'trp_divi_builder_redirect_to_default_language', 10 );
+function trp_divi_builder_redirect_to_default_language() {
+    if ( is_admin() || ! trp_divi_is_builder_request() || ! defined( 'ET_BUILDER_VERSION' ) ) {
+        return;
+    }
+
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+    $settings      = ( new TRP_Settings() )->get_settings();
+
+    if ( ! $url_converter || empty( $settings['default-language'] ) ) {
+        return;
+    }
+
+    $current_url  = $url_converter->cur_page_url();
+    $current_lang = $url_converter->get_lang_from_url_string( $current_url );
+
+    if ( $current_lang != null && $current_lang != $settings['default-language'] ) {
+        $link_to_redirect = $url_converter->get_url_for_language( $settings['default-language'], null, '' );
+
+        if ( $link_to_redirect != $current_url ) {
+            wp_redirect( $link_to_redirect, 301 );
+            exit;
+        }
+    }
+}
+
+/**
+ * Disable the automatic language detection redirect script inside the Divi Builder.
+ * Otherwise it would redirect the builder page back to the visitor's preferred language,
+ * bouncing against the redirect to the default language above.
+ */
+add_filter( 'trp_ald_enqueue_redirecting_script', 'trp_divi_builder_disable_ald_redirect' );
+function trp_divi_builder_disable_ald_redirect( $enqueue_redirecting_script ) {
+    if ( trp_divi_is_builder_request() ) {
+        return false;
+    }
+    return $enqueue_redirecting_script;
+}
+
+/**
+ * Hide the floating language switcher inside the Divi Builder.
+ */
+add_filter( 'trp_floating_ls_html', 'trp_divi_builder_disable_language_switcher' );
+add_filter( 'trp_floater_ls_html_v2', 'trp_divi_builder_disable_language_switcher' );
+function trp_divi_builder_disable_language_switcher( $html ) {
+    if ( trp_divi_is_builder_request() ) {
+        return '';
+    }
+    return $html;
+}
+
+
+/**
+ * Compatibility with Elementor when editing the static front page while "Use a subdirectory for the
+ * default language" is enabled.
+ *
+ * Elementor builds the preview URL from get_permalink(). For the static front page that permalink is
+ * the bare home URL (no ?page_id=), and TP does not add the language subdirectory on admin requests,
+ * so the preview URL ends up as e.g. https://example.com/?elementor-preview=ID . On the front end that
+ * bare-home request no longer resolves to the front page (it now lives under /<default-language>/), so
+ * it returns a 404 and the Elementor editor hangs on the loading screen.
+ *
+ * Regular pages are not affected because their preview URL carries ?page_id=ID, which resolves fine.
+ *
+ * We fix it at the source by adding the default-language subdirectory to the front-page preview URL
+ * (e.g. https://example.com/<default-language>/?elementor-preview=ID), which resolves correctly (200)
+ * and lets the editor finish loading.
+ */
+add_filter( 'elementor/document/urls/preview', 'trp_elementor_front_page_preview_url_subdirectory', 10, 2 );
+function trp_elementor_front_page_preview_url_subdirectory( $url, $document ) {
+
+    $trp      = TRP_Translate_Press::get_trp_instance();
+    $settings = $trp->get_component( 'settings' )->get_settings();
+
+    // Only when the default language uses a subdirectory.
+    if ( ( isset( $settings['add-subdirectory-to-default-language'] ) ? $settings['add-subdirectory-to-default-language'] : 'no' ) !== 'yes' ) {
+        return $url;
+    }
+
+    // Only for the configured static front page.
+    if ( get_option( 'show_on_front' ) !== 'page' ) {
+        return $url;
+    }
+
+    $front_page_id = (int) get_option( 'page_on_front' );
+    if ( $front_page_id === 0 || ! is_object( $document ) || (int) $document->get_main_id() !== $front_page_id ) {
+        return $url;
+    }
+
+    $url_converter = $trp->get_component( 'url_converter' );
+
+    // Pass an empty processed marker so the URL is not suffixed with #TRPLINKPROCESSED.
+    return $url_converter->get_url_for_language( $settings['default-language'], $url, '' );
 }
 
 
@@ -2941,6 +3340,318 @@ function trp_breakdance_compat__remove_filter() {
 }
 add_action( 'plugins_loaded', 'trp_breakdance_compat__remove_filter', 20 );
 
+/**
+ * Prepare translated search indexing for Breakdance product title elements.
+ *
+ * Breakdance renders its Product Title and dynamic Post Title elements outside the
+ * WordPress main loop. TranslatePress normally avoids adding post container tags in
+ * that context because title filters can also run in SEO plugins and other places
+ * where HTML is not accepted. Without the container, however, the translated title
+ * is not associated with the product ID and cannot be found by translated search.
+ *
+ * Arm an override only for the title filter triggered immediately by the relevant
+ * Breakdance element. The override is removed at the end of that same filter call.
+ *
+ * @param object|string $element The Breakdance element being rendered.
+ *
+ * @return void
+ */
+function trp_breakdance_prepare_product_title_search_indexing( $element ) {
+    if ( is_object( $element ) ) {
+        $element_name = get_class( $element );
+    } elseif ( is_string( $element ) ) {
+        $element_name = $element;
+    } else {
+        return;
+    }
+
+    /**
+     * Filter the Breakdance elements that render the current product title.
+     *
+     * @param string[] $product_title_elements Breakdance element class names.
+     */
+    $product_title_elements = (array) apply_filters( 'trp_breakdance_product_title_elements', array(
+        'EssentialElements\\PostTitle',
+        'EssentialElements\\WooProductTitle',
+    ) );
+
+    if ( ! in_array( $element_name, $product_title_elements, true ) || ! function_exists( 'is_product' ) || ! is_product() ) {
+        return;
+    }
+
+    add_filter( 'trp_wrap_with_post_id_overrule', 'trp_breakdance_allow_current_product_title_wrapper', PHP_INT_MAX, 3 );
+    add_filter( 'the_title', 'trp_breakdance_remove_product_title_wrapper_override', PHP_INT_MAX, 2 );
+}
+add_action( 'breakdance_render_element_template', 'trp_breakdance_prepare_product_title_search_indexing', 10, 1 );
+
+/**
+ * Allow the current product title to receive TranslatePress post context.
+ *
+ * @param bool     $overrule Whether post container tags should be skipped.
+ * @param string   $content  The title being filtered.
+ * @param int|null $post_id  The post ID supplied by the_title.
+ *
+ * @return bool
+ */
+function trp_breakdance_allow_current_product_title_wrapper( $overrule, $content, $post_id ) {
+    if ( ! empty( $post_id ) && (int) $post_id === (int) get_queried_object_id() ) {
+        return false;
+    }
+
+    return $overrule;
+}
+
+/**
+ * Remove the one-use Breakdance product title indexing override.
+ *
+ * @param string   $title   The filtered title.
+ * @param int|null $post_id The post ID supplied by the_title.
+ *
+ * @return string
+ */
+function trp_breakdance_remove_product_title_wrapper_override( $title, $post_id ) {
+    remove_filter( 'trp_wrap_with_post_id_overrule', 'trp_breakdance_allow_current_product_title_wrapper', PHP_INT_MAX );
+    remove_filter( 'the_title', 'trp_breakdance_remove_product_title_wrapper_override', PHP_INT_MAX );
+
+    return $title;
+}
+
+/**
+ * Detect whether the current request is loading the Breakdance Builder interface.
+ */
+function trp_is_breakdance_builder_request() {
+    $template = isset( $_GET['breakdance'] ) ? sanitize_text_field( wp_unslash( $_GET['breakdance'] ) ) : '';
+
+    $builder_templates = array( 'builder', 'templates', 'design_library', 'regenerate-cache', 'onboarding-app' );
+
+    if ( in_array( $template, $builder_templates, true ) ) {
+        return true;
+    }
+
+    if ( ! empty( $_GET['breakdance_iframe'] ) ) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Make the Breakdance Builder follow the user profile language instead of the
+ * site default that change_locale() forces on frontend requests.
+ */
+function trp_breakdance_builder_respect_user_locale( $locale ) {
+    // Guard against infinite recursion: both is_user_logged_in() (via
+    // wp_get_current_user() -> get_user_by() -> sanitize_user() ->
+    // remove_accents() on multibyte usernames) and get_user_locale() (falls
+    // back to get_locale() when the user has no profile language) re-fire
+    // this very 'locale' filter. Without this guard that recurses until PHP
+    // exhausts memory / segfaults.
+    static $in_progress = false;
+    if ( $in_progress ) {
+        return $locale;
+    }
+
+    // Cheapest check first: on non-Breakdance-builder requests bail before
+    // touching any user functions that could re-enter this filter.
+    if ( ! trp_is_breakdance_builder_request() ) {
+        return $locale;
+    }
+
+    $in_progress = true;
+
+    // is_user_logged_in() is not yet available on the early load_default_textdomain() locale call.
+    if ( ! function_exists( 'is_user_logged_in' ) || ! is_user_logged_in() ) {
+        $in_progress = false;
+        return $locale;
+    }
+
+    $user_locale = get_user_locale();
+    $in_progress = false;
+
+    return $user_locale;
+}
+// Priority 100000 so this runs after TRP_Languages::change_locale() (99999).
+add_filter( 'locale', 'trp_breakdance_builder_respect_user_locale', 100000 );
+add_filter( 'plugin_locale', 'trp_breakdance_builder_respect_user_locale', 100000 );
+
+/**
+ * Convert a URL of this site to its default-language version, collapsing repeated language slugs.
+ *
+ * Breakdance builds the "Edit Global Styles" (browse mode) admin bar link with
+ * home_url( $_SERVER['REQUEST_URI'] ). On a secondary-language page the request URI already carries
+ * the language slug and TRP_Url_Converter::add_language_to_home_url() prepends it once more, so the
+ * browseModeOpenUrl and returnUrl parameters end up as https://example.com/en/en/page/ .
+ * TRP_Url_Converter::get_url_for_language() replaces a single language slug, so drop the duplicated
+ * leading slugs first and let it handle the remaining one (including translated slugs from SEO Pack).
+ *
+ * @param string $url Absolute URL of this site.
+ *
+ * @return string The URL in the default language.
+ */
+function trp_breakdance_url_to_default_language( $url ) {
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+    $settings      = $trp->get_component( 'settings' )->get_settings();
+
+    if ( empty( $url ) || ! $url_converter || empty( $settings['default-language'] ) ) {
+        return $url;
+    }
+
+    $language_slugs = array();
+    foreach ( (array) $settings['translation-languages'] as $language_code ) {
+        $language_slugs[] = $url_converter->get_url_slug( $language_code, false );
+    }
+
+    $url_obj  = new \TranslatePress\Uri( $url );
+    $abs_home = wp_parse_url( $url_converter->get_abs_home() );
+
+    // Only URLs of this site carry TranslatePress language slugs.
+    if ( $url_obj->getHost() && ! empty( $abs_home['host'] ) && strcasecmp( strval( $url_obj->getHost() ), $abs_home['host'] ) !== 0 ) {
+        return $url;
+    }
+
+    $original_path = strval( $url_obj->getPath() );
+    $home_path     = isset( $abs_home['path'] ) ? trim( strval( $abs_home['path'] ), '/' ) : '';
+    $path          = trim( $original_path, '/' );
+
+    if ( $home_path !== '' && strpos( $path, $home_path ) === 0 ) {
+        $path = trim( substr( $path, strlen( $home_path ) ), '/' );
+    }
+
+    $segments = ( $path === '' ) ? array() : explode( '/', $path );
+
+    // A URL never legitimately starts with two language slugs. Keep the last one so
+    // get_url_for_language() still knows which language the rest of the path is in.
+    while ( count( $segments ) >= 2 && in_array( $segments[0], $language_slugs, true ) && in_array( $segments[1], $language_slugs, true ) ) {
+        array_shift( $segments );
+    }
+
+    $new_path = '/' . ltrim( $home_path . '/' . implode( '/', $segments ), '/' );
+    if ( $new_path !== '/' && substr( $original_path, -1 ) === '/' ) {
+        $new_path .= '/';
+    }
+    $url_obj->setPath( $new_path );
+
+    return $url_converter->get_url_for_language( $settings['default-language'], $url_obj->getUri(), '' );
+}
+
+/**
+ * Redirect Breakdance Builder requests opened on a secondary language URL to the default language.
+ *
+ * Admin Bar → Breakdance → "Edit Global Styles" on a secondary-language page links to the builder on
+ * that language ( https://example.com/en/?breakdance=builder&mode=browse&browseModeOpenUrl=... ), so the
+ * builder canvas renders the translated page and edits made there are saved into the original
+ * content, mixing languages. The browseModeOpenUrl and returnUrl parameters also carry a doubled
+ * language slug ( /en/en/page/ ), which resolves to a 404 in the canvas and when leaving the builder.
+ *
+ * Applies to the builder shell (?breakdance=builder) and the canvas iframe (breakdance_iframe=true).
+ * Hooked before TRP_Language_Switcher::redirect_to_correct_language() so we don't redirect twice.
+ */
+add_action( 'template_redirect', 'trp_breakdance_builder_redirect_to_default_language', 10 );
+function trp_breakdance_builder_redirect_to_default_language() {
+    if ( is_admin() || ! defined( '__BREAKDANCE_VERSION' ) || ! trp_is_breakdance_builder_request() ) {
+        return;
+    }
+
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+    if ( ! $url_converter ) {
+        return;
+    }
+
+    $current_url  = $url_converter->cur_page_url();
+    $redirect_url = trp_breakdance_url_to_default_language( $current_url );
+    $redirect     = ( $redirect_url !== $current_url );
+
+    // Browse mode: the page opened in the canvas and the page returned to when closing the builder.
+    foreach ( array( 'browseModeOpenUrl', 'returnUrl' ) as $param ) {
+        if ( empty( $_GET[ $param ] ) ) {
+            continue;
+        }
+        $original_value  = esc_url_raw( wp_unslash( $_GET[ $param ] ) ); /* phpcs:ignore WordPress.Security.NonceVerification.Recommended */
+        $converted_value = trp_breakdance_url_to_default_language( $original_value );
+        if ( $converted_value !== $original_value ) {
+            $redirect_url = add_query_arg( $param, rawurlencode( $converted_value ), $redirect_url );
+            $redirect     = true;
+        }
+    }
+
+    if ( $redirect ) {
+        $status = apply_filters( 'trp_redirect_status', 302, 'breakdance_builder_redirect_to_default_language' );
+        wp_safe_redirect( $redirect_url, $status );
+        exit;
+    }
+}
+
+/**
+ * Disable the automatic language detection redirect script inside the Breakdance canvas.
+ * Otherwise it would send the canvas back to the visitor's preferred language,
+ * bouncing against the redirect to the default language above.
+ */
+add_filter( 'trp_ald_enqueue_redirecting_script', 'trp_breakdance_builder_disable_ald_redirect' );
+function trp_breakdance_builder_disable_ald_redirect( $enqueue_redirecting_script ) {
+    if ( trp_is_breakdance_builder_request() ) {
+        return false;
+    }
+    return $enqueue_redirecting_script;
+}
+
+/**
+ * Hide the floating language switcher inside the Breakdance canvas, so the canvas can't be switched
+ * to a secondary language while editing.
+ */
+add_filter( 'trp_floating_ls_html', 'trp_breakdance_builder_disable_language_switcher' );
+add_filter( 'trp_floater_ls_html_v2', 'trp_breakdance_builder_disable_language_switcher' );
+function trp_breakdance_builder_disable_language_switcher( $html ) {
+    if ( trp_is_breakdance_builder_request() ) {
+        return '';
+    }
+    return $html;
+}
+
+/**
+ * Remove Woodmart Layouts' template overrides when TranslatePress editors are active.
+ *
+ * Woodmart's Layouts module (woodmart_layout CPT) hooks `template_include` at
+ * priority 20 via subclasses of XTS\Modules\Layouts\Layout_Type. Their override
+ * echoes the entire page output and returns false from the filter. When TP's
+ * own `template_include` filter (priority 99999) then returns the editor
+ * partial, WordPress includes that partial too — producing two complete HTML
+ * documents in the response and breaking the Translation Editor on any page
+ * type with an assigned Woodmart Layout (single product, shop archive, etc.).
+ *
+ * Hooked on `init` priority 999, after Woodmart's `include_files` (priority 10)
+ * has loaded the layout classes and registered their filters.
+ *
+ * @return void
+ */
+function trp_woodmart_compat__remove_layout_filters() {
+    $is_editor  = isset( $_GET['trp-edit-translation'] ) && 'true' === sanitize_text_field( wp_unslash( $_GET['trp-edit-translation'] ) );
+    $is_strings = isset( $_GET['trp-string-translation'] ) && 'true' === sanitize_text_field( wp_unslash( $_GET['trp-string-translation'] ) );
+
+    if ( ! ( $is_editor || $is_strings ) )
+        return;
+
+    $layout_classes = array(
+        'XTS\\Modules\\Layouts\\Single_Product',
+        'XTS\\Modules\\Layouts\\Shop_Archive',
+        'XTS\\Modules\\Layouts\\Single_Post',
+        'XTS\\Modules\\Layouts\\Posts_Archive',
+        'XTS\\Modules\\Layouts\\Checkout',
+        'XTS\\Modules\\Layouts\\Cart',
+        'XTS\\Modules\\Layouts\\My_Account',
+        'XTS\\Modules\\Layouts\\Thank_You_Page',
+    );
+
+    foreach ( $layout_classes as $class ) {
+        if ( class_exists( $class ) ) {
+            $instance = $class::get_instance();
+            remove_filter( 'template_include', array( $instance, 'override_template' ), 20 );
+        }
+    }
+}
+add_action( 'init', 'trp_woodmart_compat__remove_layout_filters', 999 );
+
 /*
  * Add support for Simple Download Manager on certain hosts (not replicated locally)
  * Having TP installed will brake archives, an extra line gets added to the archive processing due to output buffer.
@@ -3023,7 +3734,17 @@ function trp_divi_wrap_module_with_post_id($output, $render_slug, $module) {
 /**
  * Compatibility with redirect plugins when SEO Pack rewrites REQUEST_URI for translated slugs.
  */
-add_filter( 'rank_math/redirection/pre_search', 'trp_rank_math_use_original_request_uri_for_redirections', 9, 3 );
+add_action( 'plugins_loaded', 'trp_register_rank_math_seo_pack_compatibility', 20 );
+function trp_register_rank_math_seo_pack_compatibility() {
+    if ( ! defined( 'TRP_IN_SP_PLUGIN_VERSION' ) || ! class_exists( 'RankMath', false ) ) {
+        return;
+    }
+
+    add_filter( 'rank_math/redirection/pre_search', 'trp_rank_math_use_original_request_uri_for_redirections', 9, 3 );
+    add_filter( 'rank_math/redirection/add_redirect_header', 'trp_guard_rank_math_redirect', PHP_INT_MAX );
+    add_filter( 'request', 'trp_rank_math_category_redirect_language', 9 );
+}
+
 function trp_rank_math_use_original_request_uri_for_redirections( $check, $uri, $full_uri ) {
     if ( ! is_null( $check ) ) {
         return $check;
@@ -3058,6 +3779,84 @@ function trp_rank_math_use_original_request_uri_for_redirections( $check, $uri, 
 }
 
 /**
+ * Rank Math calls this filter immediately before wp_redirect(), after resolving its target.
+ * Leave its header preference unchanged; only guard this redirect attempt.
+ */
+function trp_guard_rank_math_redirect( $add_header ) {
+    if ( ! empty( trp_get_original_request_uri() ) ) {
+        add_filter( 'wp_redirect', 'trp_prevent_rank_math_self_redirect', PHP_INT_MAX );
+    }
+
+    return $add_header;
+}
+
+/**
+ * Cancel a Rank Math self-redirect using the visitor URL preserved before URI rewriting.
+ */
+function trp_prevent_rank_math_self_redirect( $location ) {
+    remove_filter( 'wp_redirect', 'trp_prevent_rank_math_self_redirect', PHP_INT_MAX );
+
+    if ( ! is_string( $location ) || $location === '' ) {
+        return $location;
+    }
+
+    // A form submission can legitimately redirect to the same URL for a new GET request.
+    if ( isset( $_SERVER['REQUEST_METHOD'] ) && ! in_array( $_SERVER['REQUEST_METHOD'], array( 'GET', 'HEAD' ), true ) ) {
+        return $location;
+    }
+
+    // The translated-slug cache preserves the visitor URL before SEO Pack rewrites REQUEST_URI.
+    $trp = TRP_Translate_Press::get_trp_instance();
+    $current_url = $trp->get_component( 'url_converter' )->cur_page_url();
+    $target = wp_parse_url( WP_Http::make_absolute_url( $location, $current_url ) );
+    $current = wp_parse_url( $current_url );
+
+    if ( ! is_array( $target ) || ! is_array( $current ) ) {
+        return $location;
+    }
+
+    $normalize_url = static function ( $url ) {
+        $url['scheme'] = strtolower( isset( $url['scheme'] ) ? $url['scheme'] : '' );
+        $url['host'] = strtolower( isset( $url['host'] ) ? $url['host'] : '' );
+        $url['port'] = isset( $url['port'] ) ? $url['port'] : ( $url['scheme'] === 'https' ? 443 : 80 );
+        $url['path'] = isset( $url['path'] ) && $url['path'] !== '' ? $url['path'] : '/';
+        ksort( $url );
+        return $url;
+    };
+
+    return $normalize_url( $target ) === $normalize_url( $current ) ? false : $location;
+}
+
+/**
+ * Rank Math strips the category base during request parsing, before its redirect module.
+ */
+function trp_rank_math_category_redirect_language( $query_vars ) {
+    global $TRP_LANGUAGE;
+
+    if ( ! isset( $query_vars['rank_math_category_redirect'] ) || ! is_string( $query_vars['rank_math_category_redirect'] ) || empty( $TRP_LANGUAGE ) ) {
+        return $query_vars;
+    }
+
+    $trp = TRP_Translate_Press::get_trp_instance();
+    $settings = $trp->get_component( 'settings' )->get_settings();
+    if ( $TRP_LANGUAGE === $settings['default-language'] ) {
+        return $query_vars;
+    }
+
+    $category_url = trailingslashit( get_option( 'home' ) ) . user_trailingslashit( $query_vars['rank_math_category_redirect'], 'category' );
+    add_filter( 'wp_redirect', function ( $location ) use ( $category_url, $TRP_LANGUAGE ) {
+        if ( $location !== $category_url ) {
+            return $location;
+        }
+
+        $trp = TRP_Translate_Press::get_trp_instance();
+        return $trp->get_component( 'url_converter' )->get_url_for_language( $TRP_LANGUAGE, $location, '' );
+    } );
+
+    return $query_vars;
+}
+
+/**
  * Register request URL filters for the Redirection plugin only when it is active.
  *
  * TP rewrites REQUEST_URI for translated slugs, while Redirection matches against request URL.
@@ -3074,3 +3873,399 @@ function trp_register_redirection_original_request_uri_filters() {
     add_filter( 'redirection_url_source', 'trp_get_original_request_uri', 1 );
 }
 add_action( 'plugins_loaded', 'trp_register_redirection_original_request_uri_filters', 20 );
+
+/**
+ * Exclude TranslatePress secondary-language URLs from WP Rocket's Preload Links feature.
+ *
+ * WP Rocket's `<link rel="prefetch">` on hover otherwise warms the browser cache with the
+ * alternate-language version of the page being hovered, and a single accidental click can
+ * leave the visitor stuck on that other language (every internal link on that page is in
+ * the new language too).
+ *
+ * Languages served from a separate domain (Multiple Domains add-on) are already skipped
+ * by WP Rocket's same-origin check, so they're not included in the patterns.
+ *
+ * Pattern shape `/<slug>(?:/|$)` matches `/he`, `/he/`, `/he/anything` but not `/help` or
+ * other slugs that share a prefix. Patterns are joined with `|` and used as a JS RegExp
+ * (case-insensitive) inside preload-links.js.
+ */
+add_filter( 'rocket_preload_links_exclusions', 'trp_exclude_language_slugs_from_wp_rocket_preload_links' );
+function trp_exclude_language_slugs_from_wp_rocket_preload_links( $excluded ) {
+    if ( ! is_array( $excluded ) ) {
+        $excluded = (array) $excluded;
+    }
+
+    if ( ! class_exists( 'TRP_Translate_Press' ) ) {
+        return $excluded;
+    }
+
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $settings_comp = $trp->get_component( 'settings' );
+    if ( ! $settings_comp ) {
+        return $excluded;
+    }
+
+    $settings = $settings_comp->get_settings();
+    if ( empty( $settings['publish-languages'] ) || empty( $settings['url-slugs'] ) ) {
+        return $excluded;
+    }
+
+    $default_language          = isset( $settings['default-language'] ) ? $settings['default-language'] : '';
+    $default_uses_subdirectory = isset( $settings['add-subdirectory-to-default-language'] ) && $settings['add-subdirectory-to-default-language'] === 'yes';
+    $multiple_domains          = isset( $settings['trp-multiple-domains'] ) && is_array( $settings['trp-multiple-domains'] ) ? $settings['trp-multiple-domains'] : array();
+
+    foreach ( $settings['publish-languages'] as $language_code ) {
+        if ( $language_code === $default_language && ! $default_uses_subdirectory ) {
+            continue;
+        }
+
+        if ( ! empty( $multiple_domains[ $language_code ]['enabled'] ) ) {
+            continue;
+        }
+
+        if ( empty( $settings['url-slugs'][ $language_code ] ) ) {
+            continue;
+        }
+
+        $slug = trim( $settings['url-slugs'][ $language_code ], '/' );
+        if ( $slug === '' ) {
+            continue;
+        }
+
+        $excluded[] = '/' . preg_quote( $slug, '/' ) . '(?:/|$)';
+    }
+
+    return $excluded;
+}
+
+/**
+ * Skip TranslatePress language prefixing on home_url() / get_permalink() while a
+ * WP Rocket preload job is executing.
+ *
+ * WP Rocket's preload runs via Action Scheduler. When LoadInitialSitemap and
+ * CrawlHomepage seed their URL list from home_url(), $TRP_LANGUAGE may still be
+ * set to a secondary language (left over from an earlier render sharing the
+ * runner process, or set by a referer-driven mutation in the AJAX/init path).
+ * Without this skip the preload bot warms the wrong-language URLs.
+ *
+ * The receiving side of each preload fetch is intentionally not handled here —
+ * resolve_language_context() picks the correct language from the URL itself, so
+ * secondary-language pages preload with their proper `/<slug>/...` internal links.
+ *
+ * @param bool   $skip Whether to skip prefixing already requested by another filter.
+ * @param string $url  Original URL passed to the home_url filter.
+ * @param string $path Path component passed to the home_url filter.
+ * @return bool
+ */
+add_filter( 'trp_skip_add_language_to_home_url', 'trp_skip_language_during_wp_rocket_preload', 10, 3 );
+function trp_skip_language_during_wp_rocket_preload( $skip, $url, $path ) {
+    if ( $skip ) {
+        return $skip;
+    }
+
+    if ( ! defined( 'WP_ROCKET_VERSION' ) ) {
+        return $skip;
+    }
+
+    if ( ! function_exists( 'doing_action' ) ) {
+        return $skip;
+    }
+
+    $preload_hooks = array(
+        'rocket_preload_job_load_initial_sitemap',
+        'rocket_preload_job_parse_sitemap',
+        'rocket_preload_job_preload_url',
+        'rocket_preload_job_check_finished',
+    );
+
+    foreach ( $preload_hooks as $hook ) {
+        if ( doing_action( $hook ) ) {
+            return true;
+        }
+    }
+
+    return $skip;
+}
+
+/**
+ * Compatibility with plugins that serve a local Google Analytics file (e.g. CAOS / Host Analytics Locally).
+ *
+ * Those requests use the 'local_ga_js' GET parameter to output the analytics JS file. We must not run
+ * TranslatePress translation on these responses, so stop translating the page when the parameter is present.
+ * Particularly important because automatic translation got triggered.
+ */
+add_filter( 'trp_stop_translating_page', 'trp_local_ga_js_stop_translating_page' );
+function trp_local_ga_js_stop_translating_page( $stop ){
+    if ( isset( $_REQUEST['local_ga_js'] ) ){
+        return true;
+    }
+    return $stop;
+}
+
+/**
+ * Compatibility with WPS Hide Login.
+ *
+ * When "Use subdirectory for default language" is enabled, TranslatePress adds the language
+ * subdirectory (e.g. /en/) to every home_url() call. WPS Hide Login builds its custom login URL
+ * from home_url('/') and matches incoming requests against home_url( $login_slug, 'relative' ),
+ * so the prefixed URL (e.g. /en/login) no longer matches the real login slug (/login) and the
+ * login page returns a 404, locking users out. The login page is not a translatable frontend page
+ * (it is the equivalent of wp-login.php), so it must always be reachable without a language prefix.
+ *
+ * This keeps the login URL unprefixed in both directions:
+ *  - link generation: via the dedicated 'wps_hide_login_home_url' filter exposed by the plugin;
+ *  - request matching/redirect: by skipping the language subdirectory for the login slug path.
+ */
+function trp_wps_hide_login_get_slug() {
+    if ( ! defined( 'WPS_HIDE_LOGIN_VERSION' ) && ! class_exists( 'WPS\WPS_Hide_Login\Plugin' ) ) {
+        return '';
+    }
+    $slug = get_option( 'whl_page' );
+    if ( empty( $slug ) ) {
+        $slug = 'login';
+    }
+    return $slug;
+}
+
+/**
+ * Strip the TranslatePress language subdirectory from the home URL used to build the login URL.
+ * Hooked to WPS Hide Login's own filter, which receives the (possibly prefixed) home_url('/').
+ */
+add_filter( 'wps_hide_login_home_url', 'trp_wps_hide_login_unprefixed_home_url' );
+function trp_wps_hide_login_unprefixed_home_url( $url ) {
+    $trp           = TRP_Translate_Press::get_trp_instance();
+    $url_converter = $trp->get_component( 'url_converter' );
+    if ( ! $url_converter ) {
+        return $url;
+    }
+
+    $home = trailingslashit( $url_converter->get_abs_home() );
+
+    // Preserve the scheme of the URL the plugin computed (e.g. https when forcing SSL on login).
+    $scheme = wp_parse_url( $url, PHP_URL_SCHEME );
+    if ( ! empty( $scheme ) ) {
+        $home = set_url_scheme( $home, $scheme );
+    }
+
+    return $home;
+}
+
+/**
+ * Do not add the language subdirectory to home_url() calls that point to the WPS Hide Login slug.
+ * This keeps home_url( $login_slug, 'relative' ) === /login so the plugin still matches the request
+ * and serves the login page instead of letting it fall through to a 404 / language redirect.
+ */
+add_filter( 'trp_skip_add_language_to_home_url', 'trp_wps_hide_login_skip_language_for_slug', 10, 3 );
+function trp_wps_hide_login_skip_language_for_slug( $skip, $url, $path ) {
+    if ( $skip ) {
+        return $skip;
+    }
+
+    $slug = trp_wps_hide_login_get_slug();
+    if ( $slug !== '' && trim( (string) $path, '/' ) === $slug ) {
+        return true;
+    }
+
+    return $skip;
+}
+
+/**
+ * Compatibility with Slider Revolution.
+ *
+ * Slider Revolution prints the data of a module as a JSON blob inside a <script> tag
+ * ( SR7.JSON['...'] = {...} ) and builds part of the module from it on the client side.
+ * The URL of a layer link action lives in that JSON whenever the layer is not rendered
+ * as a plain <a href> in the markup: the jQuery link type ( which the editor forces on
+ * row, column and group layers ), the slide link and every layer that the module only
+ * renders on the client. TranslatePress rewrites URLs found in the HTML markup, not
+ * inside scripts, so those links keep pointing to the default language and clicking
+ * them sends the visitor back to the default language version of the page.
+ *
+ * Convert the internal URLs stored in the slider JSON to the current language.
+ *
+ * @since 3.3.5
+ *
+ * @param array $data Slider data that Slider Revolution is about to json_encode.
+ * @return array
+ */
+add_filter( 'sr_load_slider_json', 'trp_slider_revolution_add_language_to_json_links' );
+function trp_slider_revolution_add_language_to_json_links( $data ) {
+    if ( ! is_array( $data ) || empty( $data['slides'] ) || ! is_array( $data['slides'] ) ) {
+        return $data;
+    }
+
+    foreach ( $data['slides'] as $slide_key => $slide ) {
+
+        // The whole slide can be a link ( Slide Options -> Link & SEO ).
+        if ( ! empty( $slide['params']['seo']['link'] ) ) {
+            $data['slides'][ $slide_key ]['params']['seo']['link'] = trp_slider_revolution_get_link_for_current_language( $slide['params']['seo']['link'] );
+        }
+
+        if ( empty( $slide['layers'] ) || ! is_array( $slide['layers'] ) ) {
+            continue;
+        }
+
+        foreach ( $slide['layers'] as $layer_key => $layer ) {
+            if ( ! is_array( $layer ) ) {
+                continue;
+            }
+
+            // Version 7 layers keep the link of an <a> layer directly on the layer.
+            if ( ! empty( $layer['href'] ) ) {
+                $data['slides'][ $slide_key ]['layers'][ $layer_key ]['href'] = trp_slider_revolution_get_link_for_current_language( $layer['href'] );
+            }
+
+            if ( empty( $layer['actions']['action'] ) || ! is_array( $layer['actions']['action'] ) ) {
+                continue;
+            }
+
+            foreach ( $layer['actions']['action'] as $action_key => $action ) {
+                if ( ! is_array( $action ) || empty( $action['action'] ) ) {
+                    continue;
+                }
+
+                if ( $action['action'] === 'link' ) {
+                    $link_key = 'image_link';
+                } elseif ( $action['action'] === 'menu' ) {
+                    $link_key = 'menu_link';
+                } else {
+                    continue;
+                }
+
+                if ( empty( $action[ $link_key ] ) ) {
+                    continue;
+                }
+
+                $data['slides'][ $slide_key ]['layers'][ $layer_key ]['actions']['action'][ $action_key ][ $link_key ] =
+                    trp_slider_revolution_get_link_for_current_language( $action[ $link_key ] );
+            }
+        }
+    }
+
+    return $data;
+}
+
+/**
+ * Compatibility with Slider Revolution.
+ *
+ * The legacy version 6 front-end does not use the JSON blob for the layer actions, it writes
+ * them in a data-actions attribute instead. TranslatePress does not rewrite URLs found in
+ * custom attributes, so the links of jQuery type layer actions need the same treatment there.
+ *
+ * @since 3.3.5
+ *
+ * @param array $events Actions that Slider Revolution is about to write in data-actions.
+ * @return array
+ */
+add_filter( 'rs_action_output_layer_action', 'trp_slider_revolution_add_language_to_layer_actions' );
+function trp_slider_revolution_add_language_to_layer_actions( $events ) {
+    if ( ! is_array( $events ) ) {
+        return $events;
+    }
+
+    foreach ( $events as $key => $event ) {
+        if ( ! is_array( $event ) || empty( $event['url'] ) || empty( $event['a'] ) ) {
+            continue;
+        }
+
+        if ( ! in_array( $event['a'], array( 'simplelink', 'menulink' ), true ) ) {
+            continue;
+        }
+
+        $events[ $key ]['url'] = trp_slider_revolution_get_link_for_current_language( $event['url'] );
+    }
+
+    return $events;
+}
+
+/**
+ * Compatibility with Slider Revolution.
+ *
+ * Add the current language to an internal URL stored by Slider Revolution, following the same
+ * rules TranslatePress applies to the href of an <a> tag found in the markup of the page.
+ *
+ * @since 3.3.5
+ *
+ * @param string $url URL as stored by Slider Revolution.
+ * @return string
+ */
+function trp_slider_revolution_get_link_for_current_language( $url ) {
+    if ( ! is_string( $url ) ) {
+        return $url;
+    }
+
+    $trimmed_url = trim( $url );
+
+    // Skip empty values, anchors and non http(s) schemes such as mailto:, tel: or javascript:.
+    if ( $trimmed_url === '' || strpos( $trimmed_url, '#' ) === 0 ) {
+        return $url;
+    }
+    if ( preg_match( '/^[a-z][a-z0-9+.-]*:/i', $trimmed_url ) && stripos( $trimmed_url, 'http' ) !== 0 ) {
+        return $url;
+    }
+
+    // Slider Revolution stores protocol relative URLs ( //example.com/page ) when the Protocol
+    // option of the action is left on auto. Resolve them so that the host can be compared, then
+    // put the URL back in the form it was stored in.
+    $is_protocol_relative = ( strpos( $trimmed_url, '//' ) === 0 );
+    if ( $is_protocol_relative ) {
+        $trimmed_url = ( is_ssl() ? 'https:' : 'http:' ) . $trimmed_url;
+    }
+
+    // Anything that is neither absolute nor starting at the root of the site is relative to the
+    // current path ( or a host name typed without a protocol ). Adding a language would break it.
+    if ( ! preg_match( '#^https?://#i', $trimmed_url ) && strpos( $trimmed_url, '/' ) !== 0 ) {
+        return $url;
+    }
+
+    global $TRP_LANGUAGE;
+
+    $trp                 = TRP_Translate_Press::get_trp_instance();
+    $settings            = $trp->get_component( 'settings' )->get_settings();
+    $url_converter       = $trp->get_component( 'url_converter' );
+    $translation_render  = $trp->get_component( 'translation_render' );
+
+    if ( ! is_object( $url_converter ) || ! is_object( $translation_render ) ) {
+        return $url;
+    }
+
+    $default_language        = $settings['default-language'];
+    $subdirectory_on_default = ( isset( $settings['add-subdirectory-to-default-language'] ) && $settings['add-subdirectory-to-default-language'] === 'yes' );
+
+    if ( $settings['force-language-to-custom-links'] !== 'yes' ) {
+        return $url;
+    }
+    if ( $TRP_LANGUAGE === $default_language && ! $subdirectory_on_default ) {
+        return $url;
+    }
+
+    $local_url         = $translation_render->maybe_is_local_url( $trimmed_url, home_url() );
+    $language_from_url = $url_converter->get_lang_from_url_string( $local_url );
+
+    if ( $translation_render->is_external_link( $local_url, home_url() ) ||
+         $translation_render->is_admin_link( $local_url ) ||
+         $url_converter->url_is_file( $local_url ) ||
+         ( $language_from_url !== null && ! ( $subdirectory_on_default && $language_from_url === $default_language ) ) ) {
+        return $url;
+    }
+
+    /**
+     * Run the URL through the same filter that TRP_Translation_Render::handle_custom_links_and_forms()
+     * applies to the href of an <a> tag, so that Slider Revolution links obey the "Do not translate
+     * certain paths" setting and any other filter hooked to it.
+     *
+     * The fourth argument is the <a> node that the URL was found on. There is no such node here,
+     * the URL comes from the slider data, so null is passed instead.
+     */
+    $new_url = apply_filters( 'trp_force_custom_links', $url_converter->get_url_for_language( $TRP_LANGUAGE, $local_url, '' ), $local_url, $TRP_LANGUAGE, null );
+
+    if ( ! is_string( $new_url ) || $new_url === '' ) {
+        return $url;
+    }
+
+    if ( $is_protocol_relative ) {
+        $new_url = preg_replace( '#^https?://#i', '//', $new_url );
+    }
+
+    return $new_url;
+}

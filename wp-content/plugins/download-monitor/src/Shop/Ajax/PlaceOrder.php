@@ -160,7 +160,7 @@ class PlaceOrder extends Ajax {
 
 		// exit if gateway was not successful
 		if ( ! $gateway_result->is_success() ) {
-			$this->response( false, '', sprintf( __( 'Payment gateway error: %s', 'download-monitor' ), $gateway_result->get_error_message() ) );
+			$this->response( false, '', $gateway_result->get_error_message() );
 		}
 
 		// order is in DB, gateway did what it had to do -> clear the cart

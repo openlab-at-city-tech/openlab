@@ -1,11 +1,11 @@
 ﻿=== Nested Pages ===
-Contributors: kylephillips
-Donate link: https://github.com/sponsors/kylephillips/
-Tags: pages, admin, nested, tree view, page tree, sort, quick edit, structure
+Contributors: kylephillips, hookandfilter
+Donate link: https://hookandfilter.com/
+Tags: pages, admin, nested, tree view, page tree, sort
 Requires at least: 3.8
-Tested up to: 6.7
-Requires PHP: 5.4
-Stable tag: 3.2.12
+Tested up to: 7.1
+Requires PHP: 8.0
+Stable tag: 3.3.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,9 +23,7 @@ Nested Pages provides a drag and drop interface for managing pages & posts in th
 * Works with any post type
 * Works on touch-enabled devices
 
-For more information visit [nestedpages.com](http://nestedpages.com).
-
-For development inquiries or to submit security notices, please visit the [Github repository](https://github.com/kylephillips/wp-nested-pages).
+For more information visit [hookandfilter.com](https://hookandfilter.com/plugins/nested-pages/).
 
 **Important: Nested Pages requires WordPress version 3.8 or higher, and PHP version 5.4 or higher.**
 
@@ -106,6 +104,26 @@ No. The menu synchronization currently only works within the pages post type.
 9. The Nested Pages interface can be enabled on a per-post-type basis, with customizable options for each type.
 
 == Changelog ==
+
+= 3.3.3 =
+* Security Update. Thanks to Ananda Dhakal for the responsible disclosure.
+
+= 3.3.2 =
+* Fixes issue where post type settings were not saving correctly
+* Updates minimum PHP version to 8.0
+
+= 3.3.1 =
+* Additional style updates
+
+= 3.3.0 =
+* Updates styles to better match WordPress 7+
+
+= 3.2.15 =
+* Security update - Thanks to Meher Sudhakar Abbireddi for reporting
+
+= 3.2.14 =
+* Tested with WordPress 7
+* Security update - Thanks to Meher Sudhakar Abbireddi for reporting
 
 = 3.2.13 =
 * Security update addressing XSS code vulnerability

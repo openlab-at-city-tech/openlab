@@ -11,18 +11,7 @@
         margin-bottom: 10px;
     }
 }
-@media(max-width: 767px) {
-    .form-inline {
-        display: none;
-    }
-    .filterHide {
-        display: none;
-    }
-    .form-inline button ,.form-inline a { 
-        width: 49%;
-        margin-bottom: 10px;
-    }
-}
+
 
 #prgLogoutBtn{
     margin-top: 5px;

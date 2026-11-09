@@ -32,17 +32,27 @@ class Controller {
 		// gallery customization for style.
 		//
         // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		$data = isset( $_REQUEST['data'] ) ? Sanitization::recursive_stripslashes( wp_unslash( $_REQUEST['data'] ) ) : null;
-		$name = isset( $_REQUEST['name'] ) ? Sanitization::recursive_stripslashes( wp_unslash( $_REQUEST['name'] ) ) : null;
+		// Force scalar + unslash + strip; reject arrays/objects to prevent type-juggling into template lookup/decode.
+		$raw_data = isset( $_REQUEST['data'] ) && is_scalar( $_REQUEST['data'] ) ? (string) wp_unslash( $_REQUEST['data'] ) : null;
+		$raw_name = isset( $_REQUEST['name'] ) && is_scalar( $_REQUEST['name'] ) ? (string) wp_unslash( $_REQUEST['name'] ) : null;
+		$data     = null !== $raw_data ? Sanitization::recursive_stripslashes( $raw_data ) : null;
+		// sanitize_key restricts template name to [a-z0-9_-], blocks path traversal / unexpected chars in array key lookup.
+		$name = null !== $raw_name ? sanitize_key( Sanitization::recursive_stripslashes( $raw_name ) ) : null;
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-		if ( isset( $data ) && isset( $name ) ) {
+		if ( isset( $data ) && isset( $name ) && '' !== $name ) {
 			$manager = Manager::get_instance( 'all' );
 
+			// Whitelist: only render if name maps to a registered template; prevents undefined-offset + arbitrary template key lookup.
+			$template = $manager->get_css_template( $name );
+			if ( false === $template || null === $template ) {
+				return;
+			}
+
 			if ( \C_NextGEN_Bootstrap::get_pro_api_version() < 4.0 ) {
-				$view = new \C_MVC_View( $manager->get_css_template( $name ), $manager->decode( $data ) );
+				$view = new \C_MVC_View( $template, $manager->decode( $data ) );
 			} else {
-				$view = new View( $manager->get_css_template( $name ), $manager->decode( $data ) );
+				$view = new View( $template, $manager->decode( $data ) );
 			}
 
 			return $view->render( $return_output );

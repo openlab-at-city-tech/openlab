@@ -4,9 +4,9 @@ jQuery(function ($) {
 		$('.tc_accepted').change(function () {
 			var btn = $(this).closest('form').find('.dlm-tc-submit');
 			if (this.checked) {
-				btn.removeAttr('disabled');
+				btn.removeAttr('disabled').removeAttr('aria-disabled').removeClass('disabled');
 			} else {
-				btn.attr('disabled', 'disabled');
+				btn.attr('disabled', 'disabled').attr('aria-disabled', 'true').addClass('disabled');
 			}
 		});
 
@@ -76,11 +76,11 @@ jQuery(function ($) {
 					newHref = href + '?tc_accepted=1';
 				}
 				btn.attr('href', newHref);
-				btn.removeAttr('disabled');
+				btn.removeAttr('disabled').removeAttr('aria-disabled').removeClass('disabled');
 				btn.css('pointer-events', 'all');
 			} else {
 				btn.attr('href', href);
-				btn.attr('disabled', 'disabled');
+				btn.attr('disabled', 'disabled').attr('aria-disabled', 'true').addClass('disabled');
 				btn.css('pointer-events', 'none');
 			}
 
@@ -101,11 +101,11 @@ jQuery(function ($) {
 	
 				if (this.checked) {
 					btn.attr('href', newHref);
-					btn.removeAttr('disabled');
+					btn.removeAttr('disabled').removeAttr('aria-disabled').removeClass('disabled');
 					btn.css('pointer-events', 'all');
 				} else {
 					btn.attr('href', href);
-					btn.attr('disabled', 'disabled');
+					btn.attr('disabled', 'disabled').attr('aria-disabled', 'true').addClass('disabled');
 					btn.css('pointer-events', 'none');
 				}
 			});

@@ -25,6 +25,14 @@ class LightboxManager {
 	private $has_registered_default_lightboxes = false;
 
 	/**
+	 * Whether the current page has at least one TikTok gallery.
+	 * Set via flag_tiktok_gallery() when a gallery with external_source type=tiktok is detected.
+	 *
+	 * @var bool
+	 */
+	private static $has_tiktok_gallery = false;
+
+	/**
 	 * LightboxManager instance.
 	 *
 	 * @var LightboxManager
@@ -295,15 +303,30 @@ class LightboxManager {
 	}
 
 	/**
+	 * Flag that the current page has a TikTok gallery.
+	 * Called by the display type controller when a gallery with external_source type=tiktok is detected.
+	 * Allows the lightbox enqueue loop to conditionally include TikTok-specific assets.
+	 *
+	 * @return void
+	 */
+	public static function flag_tiktok_gallery() {
+		self::$has_tiktok_gallery = true;
+	}
+
+	/**
 	 * Maybe enqueue lightbox resources based on context.
 	 */
 	public function maybe_enqueue() {
 		$settings             = Settings::get_instance();
 		$thumb_effect_context = $settings->get( 'thumbEffectContext', '' );
 
-		if ( 'nextgen_images' !== $thumb_effect_context ) {
-			$this->enqueue();
+		// The default context only covers NextGEN images, which the gallery render path
+		// already handles; the other contexts must load the stack on every page.
+		if ( 'nextgen_images' === $thumb_effect_context ) {
+			return;
 		}
+
+		$this->enqueue();
 	}
 
 	/**
@@ -373,6 +396,10 @@ class LightboxManager {
 					$legacy_src = $src;
 					$src        = '';
 				}
+				// TikTok lightbox styles are only needed when a TikTok gallery is on the page.
+				if ( false !== strpos( $src . $legacy_src, 'nextgen_tiktok' ) && ! self::$has_tiktok_gallery ) {
+					continue;
+				}
 				if ( 0 === strpos( $src, 'wordpress#' ) ) {
 					$parts = explode( 'wordpress#', $src );
 					wp_enqueue_style( array_pop( $parts ) );
@@ -396,6 +423,10 @@ class LightboxManager {
 				if ( empty( $legacy_src ) ) {
 					$legacy_src = $src;
 					$src        = '';
+				}
+				// TikTok lightbox scripts are only needed when a TikTok gallery is on the page.
+				if ( false !== strpos( $src . $legacy_src, 'nextgen_tiktok' ) && ! self::$has_tiktok_gallery ) {
+					continue;
 				}
 				if ( 0 === strpos( $src, 'wordpress#' ) ) {
 					$parts = explode( 'wordpress#', $src );

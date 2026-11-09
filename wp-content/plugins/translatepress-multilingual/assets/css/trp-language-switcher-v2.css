@@ -71,6 +71,18 @@ nav.trp-ls-inline .trp-language-switcher-inner {
     border: none;
 }
 
+.elementor-widget-trp_language_switcher {
+    width: fit-content;
+    max-width: 100%;
+}
+
+.elementor-widget-trp_language_switcher .elementor-widget-container,
+.trp-elementor-language-switcher,
+.trp-elementor-language-switcher .trp-shortcode-switcher__wrapper {
+    width: fit-content;
+    max-width: 100%;
+}
+
 .trp-shortcode-switcher {
     position: static;
     display: inline-block;
@@ -252,7 +264,7 @@ nav.trp-ls-inline .trp-language-switcher-inner {
     padding-top: 0 !important;
 }
 
-.trp_ald_ls_container .trp-language-switcher{
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector){
     position: relative;
     display: inline-block;
     padding: 0;
@@ -262,7 +274,7 @@ nav.trp-ls-inline .trp-language-switcher-inner {
 }
 
 
-.trp_ald_ls_container .trp-language-switcher > div {
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) > div {
     box-sizing: border-box;
 
     padding-right: 20px;
@@ -275,24 +287,24 @@ nav.trp-ls-inline .trp-language-switcher-inner {
     background-color: #fff;
 }
 
-.trp_ald_ls_container .trp-language-switcher > div > a {
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) > div > a {
     display: block;
     padding: 2px;
     border-radius: 3px;
     color: rgb(7, 105, 173);
 }
 
-.trp_ald_ls_container .trp-language-switcher > div > a:hover {
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) > div > a:hover {
     background: #f1f1f1;
 }
-.trp_ald_ls_container .trp-language-switcher > div > a.trp-ls-shortcode-disabled-language {
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) > div > a.trp-ls-shortcode-disabled-language {
     cursor: default;
 }
-.trp_ald_ls_container .trp-language-switcher > div > a.trp-ls-shortcode-disabled-language:hover {
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) > div > a.trp-ls-shortcode-disabled-language:hover {
     background: none;
 }
 
-.trp_ald_ls_container .trp-language-switcher > div > a > img{
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) > div > a > img{
     display: inline;
     margin: 0 3px;
     width: 18px;
@@ -300,15 +312,15 @@ nav.trp-ls-inline .trp-language-switcher-inner {
     border-radius: 0;
 }
 
-.trp_ald_ls_container .trp-language-switcher .trp-ls-shortcode-current-language{
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) .trp-ls-shortcode-current-language{
     display: inline-block;
 }
-.trp_ald_ls_container .trp-language-switcher:focus .trp-ls-shortcode-current-language,
-.trp_ald_ls_container .trp-language-switcher:hover .trp-ls-shortcode-current-language{
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector):focus .trp-ls-shortcode-current-language,
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector):hover .trp-ls-shortcode-current-language{
     visibility: hidden;
 }
 
-.trp_ald_ls_container .trp-language-switcher .trp-ls-shortcode-language{
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector) .trp-ls-shortcode-language{
     display: inline-block;
     height: 1px;
     overflow: hidden;
@@ -322,8 +334,8 @@ nav.trp-ls-inline .trp-language-switcher-inner {
     min-height: auto;
 }
 
-.trp_ald_ls_container .trp-language-switcher:focus .trp-ls-shortcode-language,
-.trp_ald_ls_container .trp-language-switcher:hover .trp-ls-shortcode-language{
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector):focus .trp-ls-shortcode-language,
+.trp_ald_ls_container .trp-language-switcher:not(.trp-ald-language-selector):hover .trp-ls-shortcode-language{
     visibility: visible;
     max-height: 250px;
     height: auto;

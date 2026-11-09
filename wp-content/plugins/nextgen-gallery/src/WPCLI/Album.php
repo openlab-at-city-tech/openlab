@@ -46,8 +46,8 @@ class Album {
 	/**
 	 * Deletes the requested album
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <album_id>
 	 */
 	public function delete( $args, $assoc_args ) {
@@ -64,8 +64,8 @@ class Album {
 	/**
 	 * Change album attributes
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <album_id> [--description=<description>] [--name=<name>]
 	 */
 	public function edit( $args, $assoc_args ) {
@@ -115,8 +115,8 @@ class Album {
 	/**
 	 * Adds child galleries or albums to an album
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <album_id> [--galleries=<galleries>] [--albums=<albums>]
 	 */
 	public function add_children( $args, $assoc_args ) {
@@ -171,8 +171,8 @@ class Album {
 	/**
 	 * Removes child galleries or albums attached to an album
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <album_id> [--galleries=<galleries>] [--albums=<albums>]
 	 */
 	public function delete_children( $args, $assoc_args ) {
@@ -216,8 +216,8 @@ class Album {
 	/**
 	 * Lists all child galleries and albums belonging to an album
 	 *
-	 * @param $args
-	 * @param $assoc_args
+	 * @param array $args
+	 * @param array $assoc_args
 	 * @synopsis <album_id>
 	 */
 	public function list_children( $args, $assoc_args ) {

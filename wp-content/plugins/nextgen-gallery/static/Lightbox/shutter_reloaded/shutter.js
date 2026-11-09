@@ -21,262 +21,467 @@
  */
 
 shutterReloaded = {
+	// ***************************************************************************
 
-// ***************************************************************************
+	//    edit below to change the text buttons/titles for the menu (use html entities for non-ascii characters)
+	L10n: ['Previous', 'Next', 'Close', 'Full Size', 'Fit to Screen', 'Image', 'of', 'Loading...'],
 
-//    edit below to change the text buttons/titles for the menu (use html entities for non-ascii characters)
-    L10n : ['Previous','Next','Close','Full Size','Fit to Screen','Image','of','Loading...'],
+	//    change to "true/false" to enable/disable showing the number of images in a set.
+	imageCount: true,
 
-//    change to "true/false" to enable/disable showing the number of images in a set.
-    imageCount : true,
+	//    change to true/false to enable/disable text buttons instead of images
+	textBtns: false,
 
-//    change to true/false to enable/disable text buttons instead of images
-    textBtns : false,
+	//    change the path to Shutter's image buttons directory if needed
+	shImgDir:
+		nextgen_lightbox_settings.static_path.replace('/{placeholder}', '') +
+		'/shutter_reloaded/images/',
 
-//    change the path to Shutter's image buttons directory if needed
-    shImgDir : nextgen_lightbox_settings.static_path.replace('/{placeholder}', '') + '/shutter_reloaded/images/',
+	// ***************************************************************************
 
-// ***************************************************************************
+	I: function (a) {
+		return document.getElementById(a);
+	},
 
-    I : function (a) {
-        return document.getElementById(a);
-    },
+	// SECURITY (#1089): the caption title is concatenated straight into
+	// D.innerHTML below, so an attacker-stored caption would execute as HTML.
+	// safe() filters it; esc() is its fallback when DOMParser is unavailable.
+	esc: function (s) {
+		return String(s == null ? '' : s)
+			.replace(/&/g, '&amp;')
+			.replace(/</g, '&lt;')
+			.replace(/>/g, '&gt;')
+			.replace(/"/g, '&quot;')
+			.replace(/'/g, '&#39;');
+	},
 
-    Init : function (a) {
-        var L, T, ext, i, setid, inset, shfile, shMenuPre, k, img;
-        shutterLinks = {};
-        shutterSets = {};
-        for ( i = 0; i < document.links.length; i++ ) {
-            L = document.links[i];
-            ext = ( L.href.indexOf('?') == -1 ) ? L.href.slice(-4).toLowerCase() : L.href.substring( 0, L.href.indexOf('?') ).slice(-4).toLowerCase();
-            if ( ext != '.jpg' && ext != '.png' && ext != '.gif' && ext != 'jpeg' && ext != 'webp' ) continue;
-            if ( a == 'sh' && L.className.toLowerCase().indexOf('shutter') == -1 ) continue;
-            if ( a == 'lb' && L.rel.toLowerCase().indexOf('lightbox') == -1 ) continue;
+	// Captions are stored as markup (bold, links) and arrive entity-decoded in the
+	// anchor title. Parse inertly (a DOMParser document runs no scripts or event
+	// handlers and loads no images) and keep only the formatting tags the Fancybox
+	// sanitizer allows, plus same-origin images as in Simplelightbox and Thickbox;
+	// href/src must pass isSafeUrl(). Without DOMParser, fall back to escaped plain
+	// text.
+	allowedTags: {
+		A: ['href', 'class', 'title'],
+		BR: [],
+		EM: [],
+		I: [],
+		STRONG: [],
+		B: [],
+		U: [],
+		P: ['class'],
+		DIV: ['class'],
+		SPAN: ['class'],
+		IMG: ['src', 'alt', 'title']
+	},
 
-            if ( L.className.toLowerCase().indexOf('shutterset') != -1 )
-                setid = ( L.className.indexOf(' ') != -1 ) ? L.className.slice(0,L.className.indexOf(' ')) : L.className;
-            else if ( L.rel.toLowerCase().indexOf('lightbox[') != -1 )
-                setid = L.rel;
-            else setid = 0, inset = -1;
+	isSafeUrl: function (value, sameOrigin) {
+		try {
+			var u = new URL(value, document.baseURI);
+			var scheme = u.protocol.toLowerCase();
+			if (scheme === 'mailto:') {
+				return true;
+			}
+			if (scheme === 'http:' || scheme === 'https:') {
+				return !sameOrigin || u.origin === window.location.origin;
+			}
+			return false;
+		} catch (e) {
+			return false;
+		}
+	},
 
-            if( setid ) {
-                if ( ! shutterSets[setid] ) shutterSets[setid] = [];
-                inset = shutterSets[setid].push(i);
-            }
+	safe: function (s) {
+		var t = shutterReloaded,
+			doc,
+			els,
+			i,
+			j,
+			el,
+			allowed,
+			name;
+		if (s == null || s === '') {
+			return '';
+		}
+		if (typeof DOMParser === 'undefined') {
+			return t.esc(s);
+		}
+		doc = new DOMParser().parseFromString(String(s), 'text/html');
+		els = doc.body.querySelectorAll('*');
+		for (i = 0; i < els.length; i++) {
+			el = els[i];
+			allowed = t.allowedTags[el.tagName];
+			if (!allowed) {
+				el.parentNode && el.parentNode.removeChild(el);
+				continue;
+			}
+			for (j = el.attributes.length - 1; j >= 0; j--) {
+				name = el.attributes[j].name;
+				if (
+					allowed.indexOf(name) === -1 ||
+					((name === 'href' || name === 'src') &&
+						!t.isSafeUrl(el.attributes[j].value, name === 'src'))
+				) {
+					el.removeAttribute(name);
+				}
+			}
+		}
+		return doc.body.innerHTML;
+	},
 
-            shfile = L.href.slice(L.href.lastIndexOf('/')+1);
-            T = ( L.title && L.title != shfile ) ? L.title : '';
+	Init: function (a) {
+		var L, T, ext, i, setid, inset, shfile, shMenuPre, k, img;
+		shutterLinks = {};
+		shutterSets = {};
+		for (i = 0; i < document.links.length; i++) {
+			L = document.links[i];
+			ext =
+				L.href.indexOf('?') == -1
+					? L.href.slice(-4).toLowerCase()
+					: L.href.substring(0, L.href.indexOf('?')).slice(-4).toLowerCase();
+			if (ext != '.jpg' && ext != '.png' && ext != '.gif' && ext != 'jpeg' && ext != 'webp')
+				continue;
+			if (a == 'sh' && L.className.toLowerCase().indexOf('shutter') == -1) continue;
+			if (a == 'lb' && L.rel.toLowerCase().indexOf('lightbox') == -1) continue;
 
-            shutterLinks[i] = {link:L.href,num:inset,set:setid,title:T};
-            L.onclick = new Function('shutterReloaded.Make("'+i+'");return false;');
-        }
+			if (L.className.toLowerCase().indexOf('shutterset') != -1)
+				setid =
+					L.className.indexOf(' ') != -1
+						? L.className.slice(0, L.className.indexOf(' '))
+						: L.className;
+			else if (L.rel.toLowerCase().indexOf('lightbox[') != -1) setid = L.rel;
+			else (setid = 0), (inset = -1);
 
-        if ( ! this.textBtns ) {
-            shMenuPre = ['close.gif','prev.gif','next.gif','resize1.gif','resize2.gif','loading.gif'];
-            for ( k = 0; k < shMenuPre.length; k++ ) {
-                img = new Image();
-                img.src = this.shImgDir+shMenuPre[k];
-            }
-        }
-    },
+			if (setid) {
+				if (!shutterSets[setid]) shutterSets[setid] = [];
+				inset = shutterSets[setid].push(i);
+			}
 
-    Make : function(ln,fs) {
-        var prev, next, prevlink = '', nextlink = '', previmg, nextimg, prevbtn, nextbtn, D, S, W, NB, fsarg = '', imgNum, closebtn, fsbtn, fsLink;
+			shfile = L.href.slice(L.href.lastIndexOf('/') + 1);
+			T = L.title && L.title != shfile ? L.title : '';
 
-        if ( ! this.Top ) {
-            if ( typeof window.pageYOffset != 'undefined' ) this.Top = window.pageYOffset;
-            else this.Top = (document.documentElement.scrollTop > 0) ? document.documentElement.scrollTop : document.body.scrollTop;
-        }
+			shutterLinks[i] = {link: L.href, num: inset, set: setid, title: T};
+			L.onclick = new Function('shutterReloaded.Make("' + i + '");return false;');
+		}
 
-        if ( typeof this.pgHeight == 'undefined' )
-            this.pgHeight = Math.max(document.documentElement.scrollHeight,document.body.scrollHeight);
+		if (!this.textBtns) {
+			shMenuPre = [
+				'close.gif',
+				'prev.gif',
+				'next.gif',
+				'resize1.gif',
+				'resize2.gif',
+				'loading.gif'
+			];
+			for (k = 0; k < shMenuPre.length; k++) {
+				img = new Image();
+				img.src = this.shImgDir + shMenuPre[k];
+			}
+		}
+	},
 
-        if ( fs ) this.FS = true;
-        else this.FS = null;
+	Make: function (ln, fs) {
+		var prev,
+			next,
+			prevlink = '',
+			nextlink = '',
+			previmg,
+			nextimg,
+			prevbtn,
+			nextbtn,
+			D,
+			S,
+			W,
+			NB,
+			fsarg = '',
+			imgNum,
+			closebtn,
+			fsbtn,
+			fsLink;
 
-        if ( this.resizing ) this.resizing = null;
-        window.onresize = new Function('shutterReloaded.Resize("'+ln+'");');
+		if (!this.Top) {
+			if (typeof window.pageYOffset != 'undefined') this.Top = window.pageYOffset;
+			else
+				this.Top =
+					document.documentElement.scrollTop > 0
+						? document.documentElement.scrollTop
+						: document.body.scrollTop;
+		}
 
-        document.documentElement.style.overflowX = 'hidden';
-        if ( ! this.VP ) {
-            this._viewPort();
-            this.VP = true;
-        }
+		if (typeof this.pgHeight == 'undefined')
+			this.pgHeight = Math.max(document.documentElement.scrollHeight, document.body.scrollHeight);
 
-        if ( ! (S = this.I('shShutter')) ) {
-            S = document.createElement('div');
-            S.setAttribute('id','shShutter');
-            document.getElementsByTagName('body')[0].appendChild(S);
-            this.fixTags();
-        }
+		if (fs) this.FS = true;
+		else this.FS = null;
 
-        if ( ! (D = this.I('shDisplay')) ) {
-            D = document.createElement('div');
-            D.setAttribute('id','shDisplay');
-            D.style.top = this.Top + 'px';
-            document.getElementsByTagName('body')[0].appendChild(D);
-        }
+		if (this.resizing) this.resizing = null;
+		window.onresize = new Function('shutterReloaded.Resize("' + ln + '");');
 
-        S.style.height = this.pgHeight + 'px';
+		document.documentElement.style.overflowX = 'hidden';
+		if (!this.VP) {
+			this._viewPort();
+			this.VP = true;
+		}
 
-        var dv = this.textBtns ? ' | ' : '';
-        if ( shutterLinks[ln].num > 1 ) {
-            prev = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num - 2];
-            prevbtn = this.textBtns ? this.L10n[0] : '<img src="'+this.shImgDir+'prev.gif" title="'+this.L10n[0]+'" />';
-            prevlink = '<a href="#" onclick="shutterReloaded.Make('+prev+');return false">'+prevbtn+'</a>'+dv;
-            previmg = new Image();
-            previmg.src = shutterLinks[prev].link;
-        }
+		if (!(S = this.I('shShutter'))) {
+			S = document.createElement('div');
+			S.setAttribute('id', 'shShutter');
+			document.getElementsByTagName('body')[0].appendChild(S);
+			this.fixTags();
+		}
 
-        if ( shutterLinks[ln].num != -1 && shutterLinks[ln].num < (shutterSets[shutterLinks[ln].set].length) ) {
-            next = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num];
-            nextbtn = this.textBtns ? this.L10n[1] : '<img src="'+this.shImgDir+'next.gif" title="'+this.L10n[1]+'" />';
-            nextlink = '<a href="#" onclick="shutterReloaded.Make('+next+');return false">'+nextbtn+'</a>'+dv;
-            nextimg = new Image();
-            nextimg.src = shutterLinks[next].link;
-        }
+		if (!(D = this.I('shDisplay'))) {
+			D = document.createElement('div');
+			D.setAttribute('id', 'shDisplay');
+			D.style.top = this.Top + 'px';
+			document.getElementsByTagName('body')[0].appendChild(D);
+		}
 
-        closebtn = this.textBtns ? this.L10n[2] : '<img src="'+this.shImgDir+'close.gif" title="'+this.L10n[2]+'" />';
+		S.style.height = this.pgHeight + 'px';
 
-        imgNum = ( (shutterLinks[ln].num > 0) && this.imageCount ) ? ' '+this.L10n[5]+'&nbsp;'+shutterLinks[ln].num+'&nbsp;'+this.L10n[6]+'&nbsp;'+shutterSets[shutterLinks[ln].set].length : '';
-        if ( imgNum && this.textBtns ) imgNum += ' |';
+		var dv = this.textBtns ? ' | ' : '';
+		if (shutterLinks[ln].num > 1) {
+			prev = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num - 2];
+			prevbtn = this.textBtns
+				? this.L10n[0]
+				: '<img src="' + this.shImgDir + 'prev.gif" title="' + this.L10n[0] + '" />';
+			prevlink =
+				'<a href="#" onclick="shutterReloaded.Make(' +
+				prev +
+				');return false">' +
+				prevbtn +
+				'</a>' +
+				dv;
+			previmg = new Image();
+			previmg.src = shutterLinks[prev].link;
+		}
 
-        if ( this.FS ) {
-            fsbtn = this.textBtns ? this.L10n[4] : '<img src="'+this.shImgDir+'resize2.gif" title="'+this.L10n[4]+'" />';
-        } else {
-            fsbtn = this.textBtns ? this.L10n[3] : '<img src="'+this.shImgDir+'resize1.gif" title="'+this.L10n[3]+'" />';
-            fsarg = ',1';
-        }
+		if (
+			shutterLinks[ln].num != -1 &&
+			shutterLinks[ln].num < shutterSets[shutterLinks[ln].set].length
+		) {
+			next = shutterSets[shutterLinks[ln].set][shutterLinks[ln].num];
+			nextbtn = this.textBtns
+				? this.L10n[1]
+				: '<img src="' + this.shImgDir + 'next.gif" title="' + this.L10n[1] + '" />';
+			nextlink =
+				'<a href="#" onclick="shutterReloaded.Make(' +
+				next +
+				');return false">' +
+				nextbtn +
+				'</a>' +
+				dv;
+			nextimg = new Image();
+			nextimg.src = shutterLinks[next].link;
+		}
 
-        fsLink = '<span id="fullSize"><a href="#" onclick="shutterReloaded.Make('+ln+fsarg+');return false">'+fsbtn+'</a>'+dv+'</span>';
+		closebtn = this.textBtns
+			? this.L10n[2]
+			: '<img src="' + this.shImgDir + 'close.gif" title="' + this.L10n[2] + '" />';
 
-        if ( ! (NB = this.I('shNavBar')) ) {
-            NB = document.createElement('div');
-            NB.setAttribute('id','shNavBar');
-            document.getElementsByTagName('body')[0].appendChild(NB);
-        }
+		imgNum =
+			shutterLinks[ln].num > 0 && this.imageCount
+				? ' ' +
+					this.L10n[5] +
+					'&nbsp;' +
+					shutterLinks[ln].num +
+					'&nbsp;' +
+					this.L10n[6] +
+					'&nbsp;' +
+					shutterSets[shutterLinks[ln].set].length
+				: '';
+		if (imgNum && this.textBtns) imgNum += ' |';
 
-        NB.innerHTML = dv+prevlink+'<a href="#" onclick="shutterReloaded.hideShutter();return false">'+closebtn+'</a>'+dv+fsLink+nextlink+imgNum;
+		if (this.FS) {
+			fsbtn = this.textBtns
+				? this.L10n[4]
+				: '<img src="' + this.shImgDir + 'resize2.gif" title="' + this.L10n[4] + '" />';
+		} else {
+			fsbtn = this.textBtns
+				? this.L10n[3]
+				: '<img src="' + this.shImgDir + 'resize1.gif" title="' + this.L10n[3] + '" />';
+			fsarg = ',1';
+		}
 
-        D.innerHTML = '<div id="shWrap"><img src="'+shutterLinks[ln].link+'" id="shTopImg" onload="shutterReloaded.ShowImg();" onclick="shutterReloaded.hideShutter();" /><div id="shTitle">'+shutterLinks[ln].title+'</div></div>';
+		fsLink =
+			'<span id="fullSize"><a href="#" onclick="shutterReloaded.Make(' +
+			ln +
+			fsarg +
+			');return false">' +
+			fsbtn +
+			'</a>' +
+			dv +
+			'</span>';
 
-        window.setTimeout(function(){shutterReloaded.loading();},2000);
-    },
+		if (!(NB = this.I('shNavBar'))) {
+			NB = document.createElement('div');
+			NB.setAttribute('id', 'shNavBar');
+			document.getElementsByTagName('body')[0].appendChild(NB);
+		}
 
-    loading : function() {
-        var S, WB, W;
-        if ( (W = this.I('shWrap')) && W.style.visibility == 'visible' ) return;
-        if ( ! (S = this.I('shShutter')) ) return;
-        if ( this.I('shWaitBar') ) return;
-        WB = document.createElement('div');
-        WB.setAttribute('id','shWaitBar');
-        WB.style.top = this.Top + 'px';
-        WB.innerHTML = '<img src="'+this.shImgDir+'loading.gif" title="'+this.L10n[7]+'" />';
-        S.appendChild(WB);
-    },
+		NB.innerHTML =
+			dv +
+			prevlink +
+			'<a href="#" onclick="shutterReloaded.hideShutter();return false">' +
+			closebtn +
+			'</a>' +
+			dv +
+			fsLink +
+			nextlink +
+			imgNum;
 
-    hideShutter : function() {
-        var D, S, NB;
-        if ( D = this.I('shDisplay') ) D.parentNode.removeChild(D);
-        if ( S = this.I('shShutter') ) S.parentNode.removeChild(S);
-        if ( NB = this.I('shNavBar') ) NB.parentNode.removeChild(NB);
-        this.fixTags(true);
-        window.scrollTo(0,this.Top);
-        window.onresize = this.FS = this.Top = this.VP = null;
-        document.documentElement.style.overflowX = '';
-    },
+		D.innerHTML =
+			'<div id="shWrap"><img src="' +
+			shutterLinks[ln].link +
+			'" id="shTopImg" onload="shutterReloaded.ShowImg();" onclick="shutterReloaded.hideShutter();" /><div id="shTitle">' +
+			shutterReloaded.safe(shutterLinks[ln].title) +
+			'</div></div>';
 
-    Resize : function(ln) {
-        if ( this.resizing ) return;
-        if ( ! this.I('shShutter') ) return;
-        var W = this.I('shWrap');
-        if ( W ) W.style.visibility = 'hidden';
+		window.setTimeout(function () {
+			shutterReloaded.loading();
+		}, 2000);
+	},
 
-        window.setTimeout(function(){shutterReloaded.resizing = null},500);
-        window.setTimeout(new Function('shutterReloaded.VP = null;shutterReloaded.Make("'+ln+'");'),100);
-        this.resizing = true;
-    },
+	loading: function () {
+		var S, WB, W;
+		if ((W = this.I('shWrap')) && W.style.visibility == 'visible') return;
+		if (!(S = this.I('shShutter'))) return;
+		if (this.I('shWaitBar')) return;
+		WB = document.createElement('div');
+		WB.setAttribute('id', 'shWaitBar');
+		WB.style.top = this.Top + 'px';
+		WB.innerHTML = '<img src="' + this.shImgDir + 'loading.gif" title="' + this.L10n[7] + '" />';
+		S.appendChild(WB);
+	},
 
-    _viewPort : function() {
-        var wiH = window.innerHeight ? window.innerHeight : 0;
-        var dbH = document.body.clientHeight ? document.body.clientHeight : 0;
-        var deH = document.documentElement ? document.documentElement.clientHeight : 0;
+	hideShutter: function () {
+		var D, S, NB;
+		if ((D = this.I('shDisplay'))) D.parentNode.removeChild(D);
+		if ((S = this.I('shShutter'))) S.parentNode.removeChild(S);
+		if ((NB = this.I('shNavBar'))) NB.parentNode.removeChild(NB);
+		this.fixTags(true);
+		window.scrollTo(0, this.Top);
+		window.onresize = this.FS = this.Top = this.VP = null;
+		document.documentElement.style.overflowX = '';
+	},
 
-        if( wiH > 0 ) {
-            this.wHeight = ( (wiH - dbH) > 1 && (wiH - dbH) < 30 ) ? dbH : wiH;
-            this.wHeight = ( (this.wHeight - deH) > 1 && (this.wHeight - deH) < 30 ) ? deH : this.wHeight;
-        } else this.wHeight = ( deH > 0 ) ? deH : dbH;
+	Resize: function (ln) {
+		if (this.resizing) return;
+		if (!this.I('shShutter')) return;
+		var W = this.I('shWrap');
+		if (W) W.style.visibility = 'hidden';
 
-        var deW = document.documentElement ? document.documentElement.clientWidth : 0;
-        var dbW = window.innerWidth ? window.innerWidth : document.body.clientWidth;
-        this.wWidth = ( deW > 1 ) ? deW : dbW;
-    },
+		window.setTimeout(function () {
+			shutterReloaded.resizing = null;
+		}, 500);
+		window.setTimeout(
+			new Function('shutterReloaded.VP = null;shutterReloaded.Make("' + ln + '");'),
+			100
+		);
+		this.resizing = true;
+	},
 
-    ShowImg : function() {
-        var S, W, WB, D, T, TI, NB, wHeight, wWidth, capH, shHeight, maxHeight, itop, mtop, resized = 0;
-        if ( ! (S = this.I('shShutter')) ) return;
-        if ( (W = this.I('shWrap')) && W.style.visibility == 'visible' ) return;
-        if ( WB = this.I('shWaitBar') ) WB.parentNode.removeChild(WB);
+	_viewPort: function () {
+		var wiH = window.innerHeight ? window.innerHeight : 0;
+		var dbH = document.body.clientHeight ? document.body.clientHeight : 0;
+		var deH = document.documentElement ? document.documentElement.clientHeight : 0;
 
-        D = this.I('shDisplay');
-        TI = this.I('shTopImg');
-        T = this.I('shTitle');
-        NB = this.I('shNavBar');
-        S.style.width = D.style.width = '';
-        T.style.width = (TI.width - 4) + 'px';
+		if (wiH > 0) {
+			this.wHeight = wiH - dbH > 1 && wiH - dbH < 30 ? dbH : wiH;
+			this.wHeight = this.wHeight - deH > 1 && this.wHeight - deH < 30 ? deH : this.wHeight;
+		} else this.wHeight = deH > 0 ? deH : dbH;
 
-        capH = NB.offsetHeight ? T.offsetHeight + NB.offsetHeight : 30;
-        shHeight = this.wHeight - 7 - capH;
+		var deW = document.documentElement ? document.documentElement.clientWidth : 0;
+		var dbW = window.innerWidth ? window.innerWidth : document.body.clientWidth;
+		this.wWidth = deW > 1 ? deW : dbW;
+	},
 
-        if ( this.FS ) {
-            if ( TI.width > (this.wWidth - 10) )
-                S.style.width = D.style.width = TI.width + 10 + 'px';
-            document.documentElement.style.overflowX = '';
-        } else {
-            window.scrollTo(0,this.Top);
-            if ( TI.height > shHeight ) {
-                TI.width = TI.width * (shHeight / TI.height);
-                TI.height = shHeight;
-                resized = 1;
-            }
-            if ( TI.width > (this.wWidth - 16) ) {
-                TI.height = TI.height * ((this.wWidth - 16) / TI.width);
-                TI.width = this.wWidth - 16;
-                resized = 1;
-            }
-            T.style.width = (TI.width - 4) + 'px';
-            NB.style.bottom = '0px';
-        }
+	ShowImg: function () {
+		var S,
+			W,
+			WB,
+			D,
+			T,
+			TI,
+			NB,
+			wHeight,
+			wWidth,
+			capH,
+			shHeight,
+			maxHeight,
+			itop,
+			mtop,
+			resized = 0;
+		if (!(S = this.I('shShutter'))) return;
+		if ((W = this.I('shWrap')) && W.style.visibility == 'visible') return;
+		if ((WB = this.I('shWaitBar'))) WB.parentNode.removeChild(WB);
 
-        maxHeight = this.Top + TI.height + capH + 10;
-        if ( maxHeight > this.pgHeight ) S.style.height = maxHeight + 'px';
-        window.scrollTo(0,this.Top);
-        if ( (this.FS && (TI.height > shHeight || TI.width > this.wWidth)) || resized ) this.I('fullSize').style.display = 'inline';
+		D = this.I('shDisplay');
+		TI = this.I('shTopImg');
+		T = this.I('shTitle');
+		NB = this.I('shNavBar');
+		S.style.width = D.style.width = '';
+		T.style.width = TI.width - 4 + 'px';
 
-        itop = (shHeight - TI.height) * 0.45;
-        mtop = (itop > 3) ? Math.floor(itop) : 3;
-        D.style.top = this.Top + mtop + 'px';
-        NB.style.bottom = '0';
-        W.style.visibility = 'visible';
-    },
+		capH = NB.offsetHeight ? T.offsetHeight + NB.offsetHeight : 30;
+		shHeight = this.wHeight - 7 - capH;
 
-    fixTags : function(arg) {
-        var sel = document.getElementsByTagName('select');
-        var obj = document.getElementsByTagName('object');
-        var emb = document.getElementsByTagName('embed');
+		if (this.FS) {
+			if (TI.width > this.wWidth - 10) S.style.width = D.style.width = TI.width + 10 + 'px';
+			document.documentElement.style.overflowX = '';
+		} else {
+			window.scrollTo(0, this.Top);
+			if (TI.height > shHeight) {
+				TI.width = TI.width * (shHeight / TI.height);
+				TI.height = shHeight;
+				resized = 1;
+			}
+			if (TI.width > this.wWidth - 16) {
+				TI.height = TI.height * ((this.wWidth - 16) / TI.width);
+				TI.width = this.wWidth - 16;
+				resized = 1;
+			}
+			T.style.width = TI.width - 4 + 'px';
+			NB.style.bottom = '0px';
+		}
 
-        if ( arg ) var vis = 'visible';
-        else var vis = 'hidden';
+		maxHeight = this.Top + TI.height + capH + 10;
+		if (maxHeight > this.pgHeight) S.style.height = maxHeight + 'px';
+		window.scrollTo(0, this.Top);
+		if ((this.FS && (TI.height > shHeight || TI.width > this.wWidth)) || resized)
+			this.I('fullSize').style.display = 'inline';
 
-        for (i = 0; i < sel.length; i++) sel[i].style.visibility = vis;
-        for (i = 0; i < obj.length; i++) obj[i].style.visibility = vis;
-        for (i = 0; i < emb.length; i++) emb[i].style.visibility = vis;
-    }
+		itop = (shHeight - TI.height) * 0.45;
+		mtop = itop > 3 ? Math.floor(itop) : 3;
+		D.style.top = this.Top + mtop + 'px';
+		NB.style.bottom = '0';
+		W.style.visibility = 'visible';
+	},
+
+	fixTags: function (arg) {
+		var sel = document.getElementsByTagName('select');
+		var obj = document.getElementsByTagName('object');
+		var emb = document.getElementsByTagName('embed');
+
+		if (arg) var vis = 'visible';
+		else var vis = 'hidden';
+
+		for (i = 0; i < sel.length; i++) sel[i].style.visibility = vis;
+		for (i = 0; i < obj.length; i++) obj[i].style.visibility = vis;
+		for (i = 0; i < emb.length; i++) emb[i].style.visibility = vis;
+	}
 };
 
-var shutterLinks = {}, shutterSets = {};
+var shutterLinks = {},
+	shutterSets = {};
 if (typeof shutterOnload == 'function') {
-    oldonload = window.onload;
-    if( typeof window.onload != 'function' ) window.onload = shutterOnload;
-    else window.onload = function(){shutterOnload();if(oldonload){oldonload();}};
+	oldonload = window.onload;
+	if (typeof window.onload != 'function') window.onload = shutterOnload;
+	else
+		window.onload = function () {
+			shutterOnload();
+			if (oldonload) {
+				oldonload();
+			}
+		};
 }

@@ -471,6 +471,15 @@ div.trp-switch .trp-switch-input {
     margin-right: 4px;
 }
 
+.trp-settings-header-row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    column-gap: 24px;
+    row-gap: 4px;
+}
+
 #trp-upgrade-now-button{
     color: var(--trp-settings-upgrade-text-color);
     background-color: var(--trp-settings-upgrade-bg-color);
@@ -977,11 +986,13 @@ input.trp-language-slug{
 .trp-alternative-engines-select__wrapper summary{
     cursor: pointer;
     list-style: none;
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 6px;
     position: relative;
-    width: 82px;
+    /* Grow with the label so wider translations (e.g. Romanian "Mai multe
+       informații") stay on a single row instead of wrapping. */
+    width: fit-content;
 }
 
 .trp-alternative-engines-select__wrapper summary::before {
@@ -991,6 +1002,7 @@ input.trp-language-slug{
     background-repeat: no-repeat;
     width: 16px;
     height: 16px;
+    flex: 0 0 16px;
 }
 
 details[open] summary::before {
@@ -1136,8 +1148,22 @@ details .trp-description-text{
     z-index: 101;
 }
 
+.trp-test-api-key-popup-body{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    padding-right: 4px;
+}
+
 .trp-test-api-key-popup .trp-settings-container{
     padding: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 .trp-test-api-key__header{
@@ -1146,12 +1172,24 @@ details .trp-description-text{
     justify-content: space-between;
 }
 
+.trp-test-api-key-request-url .trp-settings-container{
+    min-height: 40px;
+}
+
+.trp-test-api-key-request-headers .trp-settings-container,
+.trp-test-api-key-request-body .trp-settings-container{
+    max-height: 160px;
+    overflow-y: auto;
+}
+
 .trp-test-api-key-response .trp-settings-container{
     min-height: 115px;
 }
 
 .trp-test-api-key-response-body .trp-settings-container{
     min-height: 100px;
+    max-height: 240px;
+    overflow-y: auto;
 }
 
 .trp-test-api-key-response-full .trp-settings-container{
@@ -1466,7 +1504,7 @@ td.trp-add-list-entry-input-col, .trp-list-entry td{
     margin-left: 32px;
 }
 
-#trp_advanced_tab_content_table .trp_advanced_tab_content_table_item a, .trp-submenu-item{
+#trp_advanced_tab_content_table a, .trp-submenu-item{
     text-decoration: none;
     color: var(--trp-settings-primary-color);
     font-size: var(--trp-settings-primary-font-size);
@@ -1477,7 +1515,9 @@ td.trp-add-list-entry-input-col, .trp-list-entry td{
     cursor: pointer;
 }
 
-#trp_advanced_tab_content_table .trp_advanced_tab_content_table_item:hover a, .trp-submenu-item:hover {
+#trp_advanced_tab_content_table .trp_advanced_tab_content_table_item:hover a,
+#trp_advanced_tab_content_table > a:hover,
+.trp-submenu-item:hover {
     color: var(--trp-settings-accent-color);
 }
 
@@ -1485,12 +1525,21 @@ td.trp-add-list-entry-input-col, .trp-list-entry td{
     border-bottom: 2px solid var(--trp-settings-accent-color);
 }
 
-#trp_advanced_tab_content_table .trp_advanced_tab_content_table_item.trp-nav-active a, .trp-submenu-item.trp-nav-active {
+#trp_advanced_tab_content_table .trp_advanced_tab_content_table_item.trp-nav-active a,
+#trp_advanced_tab_content_table > a:has(.trp_advanced_tab_content_table_item.trp-nav-active),
+.trp-submenu-item.trp-nav-active {
    color: var(--trp-settings-accent-color);
 }
 
-#trp_advanced_tab_content_table .trp_advanced_tab_content_table_item a:focus{
+#trp_advanced_tab_content_table a:focus{
     box-shadow: none;
+}
+
+/* Real-URL subtab layout: anchor wraps the item span. Strip the anchor's own padding so
+ * the span's padding remains the only spacing source, matching the hash-anchor layout. */
+#trp_advanced_tab_content_table > a {
+    display: inline-flex;
+    padding: 0;
 }
 
 /* Optin Page */
@@ -1869,5 +1918,298 @@ td.trp-add-list-entry-input-col, .trp-list-entry td{
     .trp-license-field-col #trp_license_key{
         width: unset;
     }
+}
+
+/* Glossary two-column layout (mirrors the WP edit-tags.php / category screen).
+   Widths match the Language Switcher floater configurator (40% / 60%, gap 16px,
+   capped at 1280px). */
+.trp-glossary-columns{
+    max-width: 1280px;
+}
+
+.trp-glossary-columns #col-left,
+.trp-glossary-columns #col-right{
+    box-sizing: border-box;
+}
+
+/* Override the core #col-left/#col-right .col-wrap 6px gutters (which win on
+   ID specificity) so the white boxes sit flush with the content edges — and
+   line up with the full-width "Term added" notice above them. */
+.trp-glossary-columns #col-left .col-wrap,
+.trp-glossary-columns #col-right .col-wrap{
+    padding: 0;
+}
+
+/* Reset the shared container max-width so each box fills its own column */
+.trp-glossary-columns .trp-settings-container{
+    max-width: none;
+    margin-bottom: 0;
+}
+
+/* The new white container on the right reuses .trp-settings-container styling */
+.trp-glossary-table-container .trp-glossary-table{
+    margin-top: 0;
+}
+
+/* #col-container also carries WP's .wp-clearfix, whose ::after pseudo becomes a
+   trailing zero-width flex item once the container is display:flex. Combined with
+   `gap`, it pushes the right column ~24px inside the container edge (so it no
+   longer lines up with the full-width notice above). The columns are never
+   floated here, so the clearfix is unnecessary — drop the pseudo. */
+.trp-glossary-columns.wp-clearfix::after{
+    display: none;
+}
+
+/* Stack the columns on smaller screens, side-by-side on wide screens */
+@media only screen and (min-width: 1200px){
+    .trp-glossary-columns{
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+    }
+
+    .trp-glossary-columns #col-left{
+        float: none;
+        width: 40%;
+    }
+
+    .trp-glossary-columns #col-right{
+        float: none;
+        width: 60%;
+    }
+}
+
+@media only screen and (max-width: 1199px){
+    .trp-glossary-columns #col-left,
+    .trp-glossary-columns #col-right{
+        float: none;
+        width: 100%;
+    }
+
+    .trp-glossary-columns #col-left{
+        margin-bottom: 24px;
+    }
+}
+
+/* WP core hides `.form-wrap > p` at <=782px, which swallows our action buttons
+   (Add Term / Replace / Cancel) sitting in `<p class="submit">`. Force them back. */
+@media only screen and (max-width: 782px){
+    .trp-glossary-columns .form-wrap > p.submit,
+    #trp-glossary-replace-form.form-wrap > p.submit{
+        display: block;
+    }
+}
+
+/* Glossary locked state: when the active engine isn't TranslatePress AI, grey out
+   the add-term form and terms table and show an explanatory pop-up over them. The
+   subtabs and the "search & replace tool" link outside #col-container stay usable. */
+.trp-glossary-columns.trp-glossary-locked{
+    position: relative;
+}
+
+.trp-glossary-locked #col-left,
+.trp-glossary-locked #col-right{
+    opacity: 0.45;
+    pointer-events: none;
+    user-select: none;
+}
+
+.trp-glossary-lock-overlay{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    box-sizing: border-box;
+    z-index: 10;
+}
+
+.trp-glossary-lock-message{
+    background: #fff;
+    border: 1px solid var(--trp-settings-medium-gray-border-color);
+    border-radius: var(--trp-settings-radius-medium);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    padding: 24px 28px;
+    max-width: 480px;
+    text-align: left;
+}
+
+.trp-glossary-lock-title{
+    text-align: center;
+}
+
+.trp-glossary-lock-message p{
+    margin: 0 0 8px;
+}
+
+.trp-glossary-lock-message p:last-child{
+    margin-bottom: 0;
+}
+
+/* Row action links (Edit | Delete), styled as WP list-table row actions */
+.trp-glossary-table .row-actions .button-link{
+    padding: 0;
+    color: #2271b1;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.trp-glossary-table .row-actions .button-link:hover{
+    color: #135e96;
+    text-decoration: underline;
+}
+
+.trp-glossary-table .row-actions .delete .button-link{
+    color: #b32d2e;
+}
+
+.trp-glossary-table .row-actions .delete .button-link:hover{
+    color: #b32d2e;
+}
+
+/* Reveal row actions on row hover / focus, like the category screen */
+.trp-glossary-table tbody tr:not(.trp-glossary-quick-edit) .row-actions{
+    visibility: hidden;
+}
+
+.trp-glossary-table tbody tr:hover .row-actions,
+.trp-glossary-table tbody tr:focus-within .row-actions{
+    visibility: visible;
+}
+
+/* Inline quick-edit form row */
+.trp-glossary-quick-edit-wrap{
+    padding: 8px 4px;
+}
+
+.trp-glossary-quick-edit-wrap h4{
+    margin: 0 0 10px;
+}
+
+.trp-glossary-quick-edit-field{
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.trp-glossary-quick-edit-field label{
+    flex: 0 0 160px;
+    font-weight: 600;
+    padding-right: 12px;
+}
+
+.trp-glossary-quick-edit-field input[type="text"]{
+    flex: 1 1 auto;
+    /* Without min-width:0 a flex item won't shrink below its content, so the
+       input overflows the container on narrow viewports. */
+    min-width: 0;
+    max-width: 320px;
+    box-sizing: border-box;
+}
+
+/* On very small screens stack the label above a full-width input so the
+   fixed-width label can't push the field past the settings container. */
+@media only screen and (max-width: 600px){
+    .trp-glossary-quick-edit-field{
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .trp-glossary-quick-edit-field label{
+        flex: 0 0 auto;
+        padding-right: 0;
+        margin-bottom: 4px;
+    }
+
+    .trp-glossary-quick-edit-field input[type="text"]{
+        max-width: none;
+    }
+}
+
+.trp-glossary-quick-edit-actions{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.trp-glossary-quick-edit-actions .spinner{
+    float: none;
+    margin: 0;
+}
+
+.trp-glossary-quick-edit-error{
+    color: #b32d2e;
+}
+
+/* Keep the add-term spinner inline with its button */
+.trp-glossary-spinner{
+    float: none;
+    margin: 0 0 0 4px;
+    vertical-align: middle;
+}
+
+/* The glossary "Term added" notice sits above the columns; cancel the default
+   #trp-settings-page .notice horizontal margin so it lines up with the white
+   container below (#col-container) instead of being indented. */
+#trp-settings-page #trp-glossary-ajax-response .notice,
+#trp-settings-page #trp-glossary-replace-response .notice{
+    margin-left: 0;
+    margin-right: 0;
+}
+
+/* Keep the glossary notice aligned with the (1280px-capped) columns below it. */
+#trp-settings-page #trp-glossary-ajax-response .notice{
+    max-width: 1280px;
+    box-sizing: border-box;
+}
+
+/* Give the "use the search & replace tool" line some breathing room above it. */
+.trp-glossary-replace-tool-link{
+    margin-top: 24px;
+}
+
+/* "Back to Glossary" link under the subtabs on the search & replace page. */
+.trp-glossary-back-link{
+    margin: 0 0 16px;
+}
+
+/* A little more breathing room between the prev/next buttons and the
+   "1 of N" paging text in the glossary table pagination. */
+.trp-glossary-tablenav .tablenav-pages .paging-input{
+    margin: 0 8px;
+}
+
+/* Small gap between First page ↔ Previous, and between Next ↔ Last page.
+   Targeted by position so it applies whether the ends are links or disabled spans. */
+.trp-glossary-tablenav .pagination-links > :nth-child(1){
+    margin-right: 4px;
+}
+
+.trp-glossary-tablenav .pagination-links > :nth-child(5){
+    margin-left: 4px;
+}
+
+/* The dictionary search tool stacks vertically (description, search bar, results),
+   so keep its search bar in normal flow. WP's `p.search-box { float: right }`
+   (element+class) out-specifies a single class, so scope this to beat it —
+   otherwise the floated bar overshoots the container when there are no results. */
+.trp-settings-container p.trp-glossary-search-dictionary-box{
+    float: none;
+    margin-bottom: 12px;
+}
+
+/* The Existing/New translation inputs are regular-text (fixed ~25em); inside a
+   fixed-layout table they overflow their column at intermediate widths. Let them
+   shrink to fit the cell instead. */
+#trp-glossary-replace-form input.trp-glossary-replace-existing,
+#trp-glossary-replace-form input.trp-glossary-replace-new{
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 

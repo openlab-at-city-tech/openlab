@@ -1,3 +1,7 @@
+<?php if (!defined('ABSPATH')) {
+    exit;
+}
+?>
 <div id="b2s-edit-event-modal-<?php echo esc_attr($item->getB2SId()); ?>" class="modal fade" role="dialog" aria-labelledby="b2s-edit-event-modal-<?php echo esc_attr($item->getB2SId()); ?>" aria-hidden="true" data-backdrop="false">
     <div class="modal-dialog">
         <div class="modal-content">

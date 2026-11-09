@@ -1,0 +1,10 @@
+parameters:
+    level: 5
+    paths:
+        - bin/
+        - src/
+        - client.php
+    bootstrapFiles:
+        - bin/phpstan-bootstrap.php
+    dynamicConstantNames:
+    treatPhpDocTypesAsCertain: false

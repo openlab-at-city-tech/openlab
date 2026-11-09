@@ -99,7 +99,7 @@ class MetaData {
 		$this->file_path = Manager::get_instance()->get_image_abspath( $this->image );
 
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		if ( ! @file_exists( $this->file_path ) ) {
+		if ( ! $this->file_path || ! @file_exists( $this->file_path ) ) {
 			return;
 		}
 
@@ -483,17 +483,21 @@ class MetaData {
 
 			// --------- Some values from the XMP format--------- //
 			$xmp_tags = [
-				'xap:CreateDate'            => 'created_timestamp',
-				'xap:ModifyDate'            => 'last_modfied',
-				'xap:CreatorTool'           => 'tool',
-				'dc:format'                 => 'format',
-				'dc:title'                  => 'title',
-				'dc:creator'                => 'author',
-				'dc:subject'                => 'keywords',
-				'dc:description'            => 'caption',
-				'photoshop:AuthorsPosition' => 'position',
-				'photoshop:City'            => 'city',
-				'photoshop:Country'         => 'country',
+				'xap:CreateDate'                   => 'created_timestamp',
+				'xap:ModifyDate'                   => 'last_modfied',
+				'xap:CreatorTool'                  => 'tool',
+				'dc:format'                        => 'format',
+				'dc:title'                         => 'title',
+				// IPTC-aware tools write accessibility alt text to this XMP extension property.
+				// It is the dedicated alt-text field, so it takes priority over dc:title when
+				// populating the image alttext.
+				'Iptc4xmpExt:AltTextAccessibility' => 'title',
+				'dc:creator'                       => 'author',
+				'dc:subject'                       => 'keywords',
+				'dc:description'                   => 'caption',
+				'photoshop:AuthorsPosition'        => 'position',
+				'photoshop:City'                   => 'city',
+				'photoshop:Country'                => 'country',
 			];
 
 			foreach ( $xmp_tags as $xmp_tag => $xmp_field ) {
@@ -691,8 +695,8 @@ class MetaData {
 		}
 
 		// let's add now the size of the image.
-		$meta['width']  = $this->size[0];
-		$meta['height'] = $this->size[1];
+		$meta['width']  = $this->size[0] ?? null;
+		$meta['height'] = $this->size[1] ?? null;
 
 		return $meta;
 	}

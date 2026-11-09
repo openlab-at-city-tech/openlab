@@ -18,7 +18,7 @@ if ( ! defined( '\WPMUDEV_HUB_CONNECTOR_FILE' ) ) {
 
 // Module version.
 if ( ! defined( '\WPMUDEV_HUB_CONNECTOR_VERSION' ) ) {
-	define( 'WPMUDEV_HUB_CONNECTOR_VERSION', '1.0.0' );
+	define( 'WPMUDEV_HUB_CONNECTOR_VERSION', '1.1.1' );
 }
 
 // SUI version.
@@ -71,6 +71,13 @@ if ( ! class_exists( '\WPMUDEV\Hub\Connector' ) ) {
 				return;
 			}
 
+			// WPMU DEV Hosting should use WPMU DEV Dashboard, bail.
+			if ( ! empty( Connector\Data::get()->get_full_wpmu_dev_hosting_id() ) ) {
+				return;
+			}
+
+			require_once __DIR__ . '/lib/vendor/autoload.php';
+
 			// Init classes.
 			Connector\Rest::get();
 			Connector\Admin::get();
@@ -97,9 +104,9 @@ if ( ! class_exists( '\WPMUDEV\Hub\Connector' ) ) {
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param string $class Class name to autoload.
+		 * @param string $class_name Class name to autoload.
 		 */
-		public function autoload( string $class ) {
+		public function autoload( string $class_name ) {
 			// Project-specific namespace prefix.
 			$prefix = 'WPMUDEV\\Hub\\Connector\\';
 
@@ -107,7 +114,7 @@ if ( ! class_exists( '\WPMUDEV\Hub\Connector' ) ) {
 			$len = strlen( $prefix );
 
 			// Get the relative class name.
-			$relative_class = substr( $class, $len );
+			$relative_class = substr( $class_name, $len );
 
 			if ( ! empty( $relative_class ) ) {
 				$path = explode( '\\', strtolower( str_replace( '_', '-', $relative_class ) ) );

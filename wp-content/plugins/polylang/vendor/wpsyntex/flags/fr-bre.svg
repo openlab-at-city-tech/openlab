@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#fff" d="M0 0h900v600H0"/>
+<path d="M400 0h500v67H400zm0 133h500v67H400zM0 267h900v66H0zm0 133h900v67H0zm0 133h900v67H0"/>
+<g id="c">
+<g id="b">
+<path id="a" d="m50 30 27 66-21-9-6 12-6-12-21 9 27-66 9-6 15 6-15 6-9-6-9 6-15-6 15-6 9 6-6-9 6-15 6 15"/>
+<use x="100" href="#a"/>
+<use x="200" href="#a"/>
+</g>
+<use x="300" href="#a"/>
+</g>
+<use x="50" y="82" href="#b"/>
+<use y="163" href="#c"/>
+</svg>

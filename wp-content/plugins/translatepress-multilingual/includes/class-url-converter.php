@@ -13,6 +13,7 @@ class TRP_Url_Converter {
     protected $absolute_home;
     protected $settings;
     protected $admin_url;
+    protected $blog_id;
 
     /**
      * TRP_Url_Converter constructor.
@@ -21,6 +22,7 @@ class TRP_Url_Converter {
      */
     public function __construct( $settings ){
         $this->settings = $settings;
+        $this->blog_id = get_current_blog_id();
         //$admin_url is declared here because it was causing a conflict with Ultimate Dashboard since there was an action hooked on site_url
         $this->admin_url = strtolower( admin_url() );
     }
@@ -39,8 +41,24 @@ class TRP_Url_Converter {
     public function add_language_to_home_url( $url, $path, $orig_scheme, $blog_id ){
         global $TRP_LANGUAGE;
 
+        /*
+         * The converter and its settings belong to the site on which TranslatePress
+         * was initialized. Do not apply that state to another site requested through
+         * get_home_url( $blog_id ) or while switch_to_blog() is active.
+         */
+        $target_blog_id = empty( $blog_id ) ? get_current_blog_id() : (int) $blog_id;
+        if ( is_multisite() && $target_blog_id !== $this->blog_id ) {
+            return $url;
+        }
+
         //if this is not set then don't do anything as this is an exception/error and $TRP_LANGUAGE should always be set
         if( empty( $TRP_LANGUAGE ) )
+            return $url;
+
+        // Keep the canonical WordPress REST URL unprefixed. On subdirectory installs,
+        // adding the default language here prevents WP::parse_request() from removing
+        // the real home path and the REST rewrite rules no longer match.
+        if ( $this->is_unprefixed_rest_request_on_subdirectory_install() )
             return $url;
 
         if ( isset( $this->settings['add-subdirectory-to-default-language'] ) && $this->settings['add-subdirectory-to-default-language'] == 'no' && $TRP_LANGUAGE == $this->settings['default-language'] ) {
@@ -48,7 +66,7 @@ class TRP_Url_Converter {
         }
 
         if( apply_filters( 'trp_add_language_to_home_url_check_for_admin', true, $url, $path ) &&
-            ( is_customize_preview() || $this->is_admin_request()  || $this->is_sitemap_path( $path ) || $this->url_is_file( $path ) ) )
+            ( is_customize_preview() || $this->is_admin_request()  || $this->is_sitemap_path( $path ) || $this->url_is_file( $path ) || apply_filters( 'trp_skip_add_language_to_home_url', false, $url, $path ) ) )
             return $url;
 
         $url_slug = $this->get_url_slug( $TRP_LANGUAGE );
@@ -74,6 +92,25 @@ class TRP_Url_Converter {
     }
 
     /**
+     * Check if an unprefixed REST request is affected by a subdirectory install.
+     *
+     * @return bool
+     */
+    public function is_unprefixed_rest_request_on_subdirectory_install() {
+        if ( ( $this->settings['add-subdirectory-to-default-language'] ?? 'no' ) !== 'yes' ) {
+            return false;
+        }
+
+        $home_path = wp_parse_url( $this->get_abs_home(), PHP_URL_PATH );
+        if ( ! is_string( $home_path ) || trim( $home_path, '/' ) === '' ) {
+            return false;
+        }
+
+        return TRP_Translation_Manager::is_rest_api_request()
+            && $this->get_lang_from_url_string( $this->cur_page_url( false ) ) === null;
+    }
+
+    /**
      * Check if this is a request at the backend.
      *
      * @return bool true if is admin request, otherwise false.
@@ -86,9 +123,9 @@ class TRP_Url_Converter {
         //because this function is hooked to 'locale' and reaches at a certain point a function hooked to 'kses_allowed_protocols'
         //Scriptless Social Sharing had a function hooked to the same filter and it created an infinit loop
         $referrer = '';
-        if ( ! empty( $_REQUEST['_wp_http_referer'] ) ) {
+        if ( ! empty( $_REQUEST['_wp_http_referer'] ) && is_string( $_REQUEST['_wp_http_referer'] ) ) {
             $referrer = wp_unslash( esc_url_raw( $_REQUEST['_wp_http_referer'], array( 'http', 'https' ) ) );
-        } else if ( ! empty( $_SERVER['HTTP_REFERER'] ) ) {
+        } else if ( ! empty( $_SERVER['HTTP_REFERER'] ) && is_string( $_SERVER['HTTP_REFERER'] ) ) {
             $referrer = wp_unslash( esc_url_raw( $_SERVER['HTTP_REFERER'], array( 'http', 'https' ) ) );
         }
 
@@ -169,8 +206,15 @@ class TRP_Url_Converter {
             return;
         }
 
+        $is_editor_preview = ( isset( $_GET['trp-edit-translation'] ) && $_GET['trp-edit-translation'] == 'preview' );
+
+        // The Translation Editor switches languages by following these hreflang URLs, so inside the
+        // editor preview the current URL is used as it is. Stripping query arguments here would drop
+        // trp-edit-translation=preview and send the editor to the plain frontend page, closing it.
+        $hreflang_source_url = $is_editor_preview ? $this->cur_page_url( false ) : $this->get_hreflang_source_url( $this->cur_page_url( false ) );
+
         $languages = $this->settings['publish-languages'];
-        if ( isset( $_GET['trp-edit-translation'] ) && $_GET['trp-edit-translation'] == 'preview' ) {
+        if ( $is_editor_preview ) {
             $languages = $this->settings['translation-languages'];
         }
 
@@ -184,7 +228,7 @@ class TRP_Url_Converter {
                 $hreflang              = str_replace( '_', '-', $hreflang );
                 $hreflang              = apply_filters( 'trp_hreflang', $hreflang, $language );
                 $hreflang_duplicates[] = $hreflang;
-                echo '<link rel="alternate" hreflang="' . esc_attr( $hreflang ) . '" href="' . esc_url( $this->get_url_for_language( $language ) ) . '"/>' . "\n";
+                echo '<link rel="alternate" hreflang="' . esc_attr( $hreflang ) . '" href="' . esc_url( $this->get_url_for_language( $language, $hreflang_source_url ) ) . '"/>' . "\n";
             }
 
             if ( apply_filters( 'trp_add_region_independent_hreflang_tags', true ) ) {
@@ -192,7 +236,7 @@ class TRP_Url_Converter {
                 $language_independent_hreflang = apply_filters( 'trp_hreflang', $language_independent_hreflang, $language );
                 if ( !empty( $language_independent_hreflang ) && !in_array( $language_independent_hreflang, $region_independent_languages ) ) {
                     $region_independent_languages[]                      = $language_independent_hreflang;
-                    $hreflang_duplicates_region_independent[ $language ] = '<link rel="alternate" hreflang="' . esc_attr( $language_independent_hreflang ) . '" href="' . esc_url( $this->get_url_for_language( $language ) ) . '"/>' . "\n";
+                    $hreflang_duplicates_region_independent[ $language ] = '<link rel="alternate" hreflang="' . esc_attr( $language_independent_hreflang ) . '" href="' . esc_url( $this->get_url_for_language( $language, $hreflang_source_url ) ) . '"/>' . "\n";
 
                 }
             }
@@ -210,8 +254,68 @@ class TRP_Url_Converter {
 
         if ( !empty( $this->settings['trp_advanced_settings']['enable_hreflang_xdefault'] ) && $this->settings['trp_advanced_settings']['enable_hreflang_xdefault'] != 'disabled' && in_array( $this->settings['trp_advanced_settings']['enable_hreflang_xdefault'], $this->settings['translation-languages'] ) ) {
             $default_lang = $this->settings['trp_advanced_settings']['enable_hreflang_xdefault'];
-            echo '<link rel="alternate" hreflang="x-default" href="' . esc_url( $this->get_url_for_language( $default_lang ) ) . '"/>' . "\n";
+            echo '<link rel="alternate" hreflang="x-default" href="' . esc_url( $this->get_url_for_language( $default_lang, $hreflang_source_url ) ) . '"/>' . "\n";
         }
+    }
+
+    /**
+     * Return the current URL without query parameters that should not be present in hreflang tags.
+     *
+     * Pagination parameters are preserved because paginated URLs identify different content. Query
+     * parameters are left unchanged on sites using plain permalinks because they identify the requested
+     * resource in that permalink structure.
+     *
+     * @param string $url Current page URL.
+     * @return string
+     */
+    public function get_hreflang_source_url( $url ) {
+        $url_obj = new \TranslatePress\Uri( $url );
+        $query   = $url_obj->getQuery();
+
+        if ( empty( $query ) ) {
+            return $url;
+        }
+
+        if ( empty( get_option( 'permalink_structure' ) ) ) {
+            return $url;
+        }
+
+        $query_args = array();
+        wp_parse_str( $query, $query_args );
+
+        $pagination_query_args = array( 'page', 'paged', 'cpage' );
+        $preserved_query_args  = $pagination_query_args;
+
+        /**
+         * Filter the query parameters preserved in hreflang URLs.
+         *
+         * @param string[] $preserved_query_args Query parameter names to preserve.
+         * @param string   $url                  Current page URL.
+         */
+        $preserved_query_args = apply_filters( 'trp_hreflang_preserved_query_args', $preserved_query_args, $url );
+        $preserved_query_args = is_array( $preserved_query_args ) ? array_filter( $preserved_query_args, 'is_string' ) : array();
+        $preserved_query_args = array_unique( $preserved_query_args );
+
+        $query_args = array_intersect_key( $query_args, array_flip( $preserved_query_args ) );
+
+        // Only page numbers greater than one identify a separate paginated resource.
+        foreach ( $pagination_query_args as $pagination_query_arg ) {
+            if (
+                isset( $query_args[ $pagination_query_arg ] ) &&
+                ( !is_scalar( $query_args[ $pagination_query_arg ] ) || !ctype_digit( strval( $query_args[ $pagination_query_arg ] ) ) || intval( $query_args[ $pagination_query_arg ] ) < 2 )
+            ) {
+                unset( $query_args[ $pagination_query_arg ] );
+            }
+        }
+
+        $url_obj->setQuery( '' );
+        $url = $url_obj->getUri();
+
+        if ( !empty( $query_args ) ) {
+            $url = add_query_arg( $query_args, $url );
+        }
+
+        return $url;
     }
 
     /**
@@ -252,7 +356,7 @@ class TRP_Url_Converter {
      */
     public function change_lang_attr_in_html_tag( $output ){
         global $TRP_LANGUAGE;
-        $tp_lang = str_replace('_formal', '', $TRP_LANGUAGE); // de-de-formal is not a valid lang attribute.
+        $tp_lang = str_replace( array( '_formal', '_informal', '_ao90' ), '', $TRP_LANGUAGE ); // de-DE-formal, de-CH-informal and pt-PT-ao90 are not valid lang attributes.
         $lang = get_bloginfo('language');
         if ( $lang && !empty($tp_lang) ) {
             if ( apply_filters( 'trp_add_default_lang_tags', true ) ) {
@@ -635,7 +739,7 @@ class TRP_Url_Converter {
 
         if ( apply_filters('trp_adjust_absolute_home_https_based_on_server_variable', true) ) {
             // always return absolute_home based on the http or https version of the current page request. This means no more redirects.
-            if ( !empty( $_SERVER['HTTPS'] ) && strtolower( sanitize_text_field( $_SERVER['HTTPS'] ) ) != 'off' ) {
+            if ( $this->is_https_request() ) {
                 $this->absolute_home = str_replace( 'http://', 'https://', $this->absolute_home );
             } else {
                 $this->absolute_home = str_replace( 'https://', 'http://', $this->absolute_home );
@@ -647,6 +751,49 @@ class TRP_Url_Converter {
         wp_cache_set( 'get_abs_home', $this->absolute_home, 'trp' );
 
         return $this->absolute_home;
+    }
+
+    /**
+     * Determine whether the current request is served over HTTPS.
+     *
+     * Besides the usual $_SERVER['HTTPS'] check, this also honors the scheme
+     * forwarded by an SSL-terminating reverse proxy / load balancer (a common
+     * managed-hosting setup, e.g. SpinWP). On those setups $_SERVER['HTTPS'] is
+     * empty on the PHP backend even though the visitor is on https, and the real
+     * scheme is passed through the HTTP_X_FORWARDED_PROTO / HTTP_X_FORWARDED_SSL
+     * headers. Relying only on $_SERVER['HTTPS'] there made get_abs_home() force
+     * the home url to http:// while WordPress home/siteurl were https://, which
+     * resulted in an ERR_TOO_MANY_REDIRECTS loop.
+     *
+     * Detection is additive toward https and never downgrades a genuine HTTPS
+     * request: a real $_SERVER['HTTPS'] is authoritative, so a stray or
+     * misconfigured forwarded header (e.g. an inner proxy that sets
+     * X-Forwarded-Proto from the backend connection scheme) can no longer force
+     * the home url back to http:// on an https page. Only when no signal reports
+     * https do we treat the request as http.
+     *
+     * @return bool
+     */
+    private function is_https_request() {
+        // A genuine HTTPS connection is authoritative and must never be downgraded by a stray/misconfigured forwarded header.
+        if ( ! empty( $_SERVER['HTTPS'] ) && strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTPS'] ) ) ) !== 'off' ) {
+            return true;
+        }
+
+        // SSL-terminating reverse proxy / load balancer reports the visitor-facing scheme here.
+        if ( ! empty( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) {
+            // Can be a comma-separated list with multiple proxies; the first value is the client-facing one.
+            $forwarded_proto = explode( ',', sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_PROTO'] ) ) );
+            if ( strtolower( trim( $forwarded_proto[0] ) ) === 'https' ) {
+                return true;
+            }
+        }
+
+        if ( ! empty( $_SERVER['HTTP_X_FORWARDED_SSL'] ) ) {
+            return strtolower( sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_FORWARDED_SSL'] ) ) ) === 'on';
+        }
+
+        return false;
     }
 
     /**
@@ -742,7 +889,19 @@ class TRP_Url_Converter {
             return $req_uri;
         }
 
-        $req_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( $_SERVER['REQUEST_URI'] ) : '';
+        // Pre-encode characters that esc_url_raw() would strip (e.g., when the request URI
+        // contains literal { } " < > from JSON-encoded query parameters such as
+        // ?jet_ajax_search_settings={"search_source":"product"}). Already percent-encoded
+        // sequences (%7B, %7D, %22, ...) are unaffected, so this is a no-op for correctly
+        // encoded URLs. The result is then sanitized by esc_url_raw().
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- sanitized via esc_url_raw() on the same statement, after pre-encoding.
+        $req_uri = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( strtr( wp_unslash( $_SERVER['REQUEST_URI'] ), array(
+            '{' => '%7B',
+            '}' => '%7D',
+            '"' => '%22',
+            '<' => '%3C',
+            '>' => '%3E',
+        ) ) ) : '';
 
         // strval converts null to empty string. $this->get_abs_home() can be null and this causes a PHP 8 notice.
         $abs_home = strval( $this->get_abs_home() );
@@ -979,7 +1138,8 @@ class TRP_Url_Converter {
         if ( empty( $url_lang_slug ) ) {
             $path_no_lang_slug = $url_object->getPath();
         } else {
-            $path_no_lang_slug = preg_replace( '/\/' . preg_quote( $url_lang_slug, '/' ) . '\/?/', '/', $url_object->getPath(), 1 );
+            // Remove the language slug only when it is a complete path segment.
+            $path_no_lang_slug = preg_replace( '/\/' . preg_quote( $url_lang_slug, '/' ) . '(?:\/|$)/', '/', $url_object->getPath(), 1 );
         }
 
         // Returning the path using strval() to avoid an empty check.
@@ -987,4 +1147,3 @@ class TRP_Url_Converter {
     }
 
 }
-

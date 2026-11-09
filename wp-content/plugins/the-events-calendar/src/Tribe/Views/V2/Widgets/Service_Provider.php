@@ -12,6 +12,7 @@ namespace Tribe\Events\Views\V2\Widgets;
 use Tribe\Events\Views\V2\Views\Widgets\Widget_List_View;
 use Tribe\Events\Views\V2\Views\Widgets\Widget_QR_Code_View;
 use TEC\Common\Contracts\Service_Provider as Provider_Contract;
+use WP_Widget;
 
 
 /**
@@ -75,7 +76,6 @@ class Service_Provider extends Provider_Contract {
 
 		add_filter( 'rest_pre_dispatch', [ $this, 'enable_widget_copy_paste' ], 10, 3 );
 		add_filter( 'rest_dispatch_request', [ $this, 'enable_saving_widget_copied' ], 10, 3 );
-		add_filter( 'render_block_data', [ $this, 'enable_rendering_widget_copied' ] );
 	}
 
 	/**
@@ -106,13 +106,15 @@ class Service_Provider extends Provider_Contract {
 
 	/**
 	 * Enable widget copy paste for the Legacy Widgets that we are registering.
-	 * 
+	 *
 	 * @since 6.11.1
-	 * 
+	 * @since 6.17.4.1 Sign and store the sanitized instance instead of the submitted bytes.
+	 * @since 6.18.3.1 Leave correctly signed instances alone and re-sign only the widget's own sanitized settings.
+	 *
 	 * @param mixed           $result  The result of the rest request.
 	 * @param WP_REST_Server  $server  The REST server.
 	 * @param WP_REST_Request $request The REST request.
-	 * 
+	 *
 	 * @return mixed The result of the rest request.
 	 */
 	public function enable_widget_copy_paste( $result, $server, $request ) {
@@ -120,10 +122,10 @@ class Service_Provider extends Provider_Contract {
 		if ( null !== $result ) {
 			return $result;
 		}
-	
+
 		// Get the route being requested.
 		$route = $request->get_route();
-		
+
 		// Check if this matches our target endpoint.
 		if ( ! preg_match( '#^/wp/v2/widget-types/([a-zA-Z0-9_-]+)/(?:encode|render)$#', $route, $matches ) ) {
 			return $result;
@@ -133,10 +135,10 @@ class Service_Provider extends Provider_Contract {
 		if ( ! isset( $matches[1] ) ) {
 			return $result;
 		}
-	
+
 		// Get the widget type ID from the route.
 		$widget_type_id = $matches[1];
-	
+
 		// Bail if the widget is not a tribe widget.
 		if ( ! str_starts_with( $widget_type_id, 'tribe-widget-' ) ) {
 			return $result;
@@ -156,12 +158,11 @@ class Service_Provider extends Provider_Contract {
 			return $result;
 		}
 
-		// Set the new instance.
-		$new_instance         = $request['instance'];
-		$serialized_instance  = base64_decode( $request['instance']['encoded'] );
-		$new_instance['hash'] = wp_hash( $serialized_instance );
+		$new_instance = $this->get_signed_widget_instance( $widget_object, $request['instance'] );
+		if ( null === $new_instance ) {
+			return $result;
+		}
 
-		// Override the instance.
 		$request->set_param( 'instance', $new_instance );
 
 		return $result;
@@ -169,13 +170,15 @@ class Service_Provider extends Provider_Contract {
 
 	/**
 	 * Enable widget copy paste for the Legacy Widgets that we are registering.
-	 * 
+	 *
 	 * @since 6.11.2
-	 * 
+	 * @since 6.17.4.1 Sign and store the sanitized instance instead of the submitted bytes.
+	 * @since 6.18.3.1 Leave correctly signed instances alone and re-sign only the widget's own sanitized settings.
+	 *
 	 * @param mixed           $result  The result of the rest request.
 	 * @param WP_REST_Request $request The REST request.
 	 * @param string          $route   The route of the request.
-	 * 
+	 *
 	 * @return mixed The result of the rest request.
 	 */
 	public function enable_saving_widget_copied( $result, $request, $route ) {
@@ -188,19 +191,19 @@ class Service_Provider extends Provider_Contract {
 		if ( ! is_string( $route ) ) {
 			return $result;
 		}
-		
+
 		// Check if this matches our target endpoint.
 		if ( ! str_starts_with( $route, '/wp/v2/widgets' ) ) {
 			return $result;
 		}
-		
+
 		$widget_type_id = $request->get_param( 'id_base' );
 
 		// Bail if the widget type ID is not a string.
 		if ( ! is_string( $widget_type_id ) ) {
 			return $result;
 		}
-	
+
 		// Bail if the widget is not a tribe widget.
 		if ( ! str_starts_with( $widget_type_id, 'tribe-widget-' ) ) {
 			return $result;
@@ -220,12 +223,11 @@ class Service_Provider extends Provider_Contract {
 			return $result;
 		}
 
-		// Set the new instance.
-		$new_instance         = $request['instance'];
-		$serialized_instance  = base64_decode( $request['instance']['encoded'] );
-		$new_instance['hash'] = wp_hash( $serialized_instance );
+		$new_instance = $this->get_signed_widget_instance( $widget_object, $request['instance'] );
+		if ( null === $new_instance ) {
+			return $result;
+		}
 
-		// Override the instance.
 		$request->set_param( 'instance', $new_instance );
 
 		return $result;
@@ -233,36 +235,71 @@ class Service_Provider extends Provider_Contract {
 
 	/**
 	 * Enable widget copy paste for the Legacy Widgets that we are registering.
-	 * 
+	 *
 	 * @since 6.11.2
-	 * 
+	 * @since 6.17.4.1 Sign and store the sanitized instance instead of the submitted bytes.
+	 * @deprecated 6.18.3.1 Block data is no longer re-signed on render; only instances the site signed are rendered.
+	 *
 	 * @param array $parsed_block The parsed block.
-	 * 
-	 * @return array The parsed block.
+	 *
+	 * @return array The parsed block, unchanged.
 	 */
 	public function enable_rendering_widget_copied( $parsed_block ) {
-		if ( ! isset( $parsed_block['attrs']['idBase'] ) ) {
-			return $parsed_block;
-		}
+		_deprecated_function( __METHOD__, '6.18.3.1' );
 
-		$widget_id = $parsed_block['attrs']['idBase'];
-
-		if ( ! str_starts_with( $widget_id, 'tribe-widget-' ) ) {
-			return $parsed_block;
-		}
-
-		$instance = $parsed_block['attrs']['instance'] ?? [];
-		
-		if ( ! isset( $instance['encoded'], $instance['hash'] ) ) {
-			return $parsed_block;
-		}
-
-		$serialized_instance = base64_decode( $instance['encoded'] );
-		$instance['hash']    = wp_hash( $serialized_instance );
-		
-		$parsed_block['attrs']['instance'] = $instance;
-		
 		return $parsed_block;
+	}
+
+	/**
+	 * Returns a sanitized copy of a copied widget instance, or null when it cannot be trusted.
+	 *
+	 * The instance is rebuilt from a strict decode and re-serialized, so only plain,
+	 * expected data is ever stored and signed.
+	 *
+	 * @since 6.17.3
+	 * @since 6.17.3.1 Only accept instances that unserialize to a plain array.
+	 * @since 6.17.4.1 Return the sanitized instance instead of a boolean.
+	 *
+	 * @param string $serialized The decoded widget instance.
+	 *
+	 * @return string|null The sanitized serialized instance, or null when not safe.
+	 */
+	protected function get_safe_widget_instance( $serialized ) {
+		$data = $this->get_safe_widget_data( $serialized );
+
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		return null === $data ? null : serialize( $data );
+	}
+
+	/**
+	 * Recursively determine whether a value holds any object.
+	 *
+	 * @since 6.17.3
+	 * @since 6.17.4.1 Bail out on overly nested input.
+	 *
+	 * @param mixed $data  The value to inspect.
+	 * @param int   $depth Current recursion depth.
+	 *
+	 * @return bool Whether an object was found, or the input is too deeply nested.
+	 */
+	protected function contains_object( $data, $depth = 0 ) {
+		if ( $depth > 20 ) {
+			return true;
+		}
+
+		if ( is_object( $data ) ) {
+			return true;
+		}
+
+		if ( is_array( $data ) ) {
+			foreach ( $data as $value ) {
+				if ( $this->contains_object( $value, $depth + 1 ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -279,5 +316,73 @@ class Service_Provider extends Provider_Contract {
 		$views[ Widget_QR_Code_View::get_view_slug() ] = Widget_QR_Code_View::class;
 
 		return $views;
+	}
+
+	/**
+	 * Returns a copied widget instance signed for this site, or null to leave it as submitted.
+	 *
+	 * An instance the site already signed is left alone. Any other instance is rebuilt through
+	 * the widget's own `update()`, so only its settings, sanitized as on a normal save, are signed.
+	 *
+	 * @since 6.18.3.1
+	 *
+	 * @param WP_Widget                            $widget_object The widget the instance belongs to.
+	 * @param array{encoded: string, hash: string} $instance      The submitted instance; values are checked to be strings.
+	 *
+	 * @return array{encoded: string, hash: string}|null The instance to use, or null to leave the request unchanged.
+	 */
+	private function get_signed_widget_instance( WP_Widget $widget_object, array $instance ): ?array {
+		if ( ! is_string( $instance['encoded'] ) || ! is_string( $instance['hash'] ) ) {
+			return null;
+		}
+
+		$serialized = base64_decode( $instance['encoded'] );
+
+		if ( hash_equals( wp_hash( $serialized ), $instance['hash'] ) ) {
+			return null;
+		}
+
+		if ( ! $widget_object instanceof Widget_Abstract ) {
+			return null;
+		}
+
+		$data = $this->get_safe_widget_data( $serialized );
+		if ( null === $data ) {
+			return null;
+		}
+
+		$settings = $widget_object->update( array_merge( $widget_object->get_default_arguments(), $data ), [] );
+
+		// phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_serialize
+		$signed = serialize( $settings );
+
+		$instance['encoded'] = base64_encode( $signed );
+		$instance['hash']    = wp_hash( $signed );
+
+		return $instance;
+	}
+
+	/**
+	 * Decodes a copied widget instance into plain data, or null when it cannot be trusted.
+	 *
+	 * @since 6.18.3.1
+	 *
+	 * @param mixed $serialized The decoded widget instance; anything but a string is rejected.
+	 *
+	 * @return array<string,mixed>|null The instance settings, free of objects, or null when not safe.
+	 */
+	private function get_safe_widget_data( $serialized ): ?array {
+		if ( ! is_string( $serialized ) ) {
+			return null;
+		}
+
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize
+		$data = @unserialize( $serialized, [ 'allowed_classes' => false ] );
+
+		if ( ! is_array( $data ) || $this->contains_object( $data ) ) {
+			return null;
+		}
+
+		return $data;
 	}
 }

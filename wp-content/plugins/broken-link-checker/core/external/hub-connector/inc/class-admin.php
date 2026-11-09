@@ -36,7 +36,7 @@ class Admin {
 	 *
 	 * @var array Arguments.
 	 */
-	protected array $extra_args = array();
+	protected $extra_args = array();
 
 	/**
 	 * Initialize admin class.
@@ -193,6 +193,10 @@ class Admin {
 	 * @param string $plugin Plugin identifier.
 	 */
 	public function render( $plugin = 'default' ) {
+		// only render on appropriate capability.
+		if ( ! ( is_multisite() ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' ) ) ) {
+			return;
+		}
 		if ( ! empty( $plugin ) ) {
 			$this->plugin = $plugin;
 		}
@@ -286,7 +290,9 @@ class Admin {
 		// Prepare redirect URL.
 		$redirect_url = add_query_arg( array( 'hub_connector_callback' => 1 ), $current_url );
 
-		$auth_nonce = wp_create_nonce( 'auth_nonce' );
+		// fool-proof, in normal condition this enqueue_assets method won't be called without access.
+		$has_access = is_multisite() ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' );
+		$auth_nonce = $has_access ? wp_create_nonce( 'auth_nonce' ) : '';
 
 		// Extra arguments.
 		$extra_args = $this->get_plugin_extra_args_from_screen();
@@ -294,7 +300,7 @@ class Admin {
 		// URL arguments for registration URL.
 		$register_args = array(
 			'signup'           => 'site-connect',
-			'site_connect_url' => urlencode( add_query_arg( 'auth_nonce', $auth_nonce, $redirect_url ) ),
+			'site_connect_url' => rawurlencode( add_query_arg( 'auth_nonce', $auth_nonce, $redirect_url ) ),
 		);
 		// Include extra args.
 		if ( ! empty( $extra_args['register'] ) ) {
@@ -307,9 +313,12 @@ class Admin {
 			'nonce'             => wp_create_nonce( 'wp_rest' ),
 			'is_syncing'        => false,
 			'is_team_selection' => false,
-			'has_access'        => current_user_can( 'manage_options' ),
+			'has_access'        => $has_access,
 			'is_logged_in'      => API::get()->is_logged_in(),
+			// Not being used for literal output / DB insert.
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
 			'current_tab'       => isset( $_GET['hub_connector_callback'] ) ? 'login' : 'register',
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 			'login'             => array(
 				'hub_auth_url'    => add_query_arg(
 					$extra_args['auth'] ?? array(),
@@ -364,39 +373,53 @@ class Admin {
 	 * @return bool
 	 */
 	public function process_auth_callback() {
+		// we do verify nonce, but we do have more sanity checks to be done first.
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 		// Only for Hub connector callback.
 		if ( ! isset( $_REQUEST['hub_connector_callback'] ) ) {
 			return false;
 		}
 
 		// Should be capable to perform the actions.
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! ( is_multisite() ? current_user_can( 'manage_network_options' ) : current_user_can( 'manage_options' ) ) ) {
 			return $this->update_vars( array( 'has_access' => false ) );
 		}
 
 		// If not logged in.
 		if ( ! API::get()->is_logged_in() ) {
-			$error = $this->get_auth_error();
-			if ( ! empty( $error ) ) {
-				// Set auth errors.
-				return $this->update_vars( array( 'auth_error' => $error ) );
-			}
-
 			// Auth nonce verification.
 			if ( ! $this->verify_nonce() ) {
 				// Failed. So no access.
 				return $this->update_vars( array( 'has_access' => false ) );
 			}
 
+			$error = $this->get_auth_error();
+			if ( ! empty( $error ) ) {
+				// Set auth errors.
+				return $this->update_vars( array( 'auth_error' => $error ) );
+			}
+
+			$incoming_api_key = trim( sanitize_key( wp_unslash( $_REQUEST['set_apikey'] ?? $_REQUEST['user_apikey'] ?? '' ) ) );
+			$current_api_key  = API::get()->get_api_key();
+			if ( '' !== $current_api_key && '' !== $incoming_api_key && ! hash_equals( $current_api_key, $incoming_api_key ) ) {
+				return $this->update_vars(
+					array(
+						'auth_error' => __( 'This site is already connected to a different WPMU DEV account. Log out before connecting another account.', 'wpmudev' ),
+					)
+				);
+			}
+
 			// Is team selection callback.
 			if ( $this->is_team_selection() ) {
+				$user_api_key = trim( sanitize_key( wp_unslash( $_REQUEST['user_apikey'] ?? '' ) ) );
 				// Get the teams for API key.
-				$teams = API::get()->get_hub_teams( trim( $_REQUEST['user_apikey'] ) );
+				$teams = API::get()->get_hub_teams( $user_api_key );
 
 				// Set team selection page vars.
 				return $this->update_vars(
 					array(
-						'api_key'           => trim( $_REQUEST['user_apikey'] ),
+						'api_key'           => $user_api_key,
 						'hub_teams'         => $teams,
 						'is_team_selection' => true,
 					)
@@ -405,8 +428,9 @@ class Admin {
 
 			// Is the set API key page.
 			if ( ! empty( $_REQUEST['set_apikey'] ) ) {
+				$set_api_key = trim( sanitize_key( wp_unslash( $_REQUEST['set_apikey'] ) ) );
 				// Set API key.
-				API::get()->set_api_key( trim( $_REQUEST['set_apikey'] ) );
+				API::get()->set_api_key( $set_api_key );
 
 				// Make sure to start syncing.
 				return $this->update_vars(
@@ -417,6 +441,8 @@ class Admin {
 				);
 			}
 		}
+
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		return false;
 	}
@@ -431,6 +457,13 @@ class Admin {
 	 * @return string
 	 */
 	private function get_auth_error() {
+		/**
+		 * Nonce is verified in `process_auth_callback` before this method called.
+		 *
+		 * @see self::process_auth_callback()
+		 */
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+
 		$error               = '';
 		$reset_url           = Data::get()->server_url( 'wp-login.php?action=lostpassword' );
 		$skip_trial_url      = Data::get()->server_url( 'hub/account/?skip_trial' );
@@ -442,29 +475,38 @@ class Admin {
 
 		if ( isset( $_GET['api_error'] ) ) {
 			// Get errors.
-			$api_error  = esc_html( $_GET['api_error'] );
-			$auth_error = isset( $_GET['auth_error'] ) ? esc_html( $_GET['auth_error'] ) : '';
+			$api_error  = sanitize_key( wp_unslash( $_GET['api_error'] ) );
+			$auth_error = sanitize_key( wp_unslash( $_GET['auth_error'] ?? '' ) );
 
 			if ( 1 === (int) $api_error || 'auth' === $api_error ) {
 				switch ( $auth_error ) {
 					case 'google_linked':
 						$error = sprintf(
 						// translators: %s Account detail URL.
-							__( 'You are currently using your Google account as your preferred login method. If you wish to login with your WPMU DEV email & password instead, please change the <strong>Login Method</strong> in <a href="%s" target="_blank">your WPMU DEV account</a>.', 'wpmudev' ),
+							__(
+								'You are currently using your Google account as your preferred login method. If you wish to login with your WPMU DEV email & password instead, please change the <strong>Login Method</strong> in <a href="%s" target="_blank">your WPMU DEV account</a>.',
+								'wpmudev'
+							),
 							$account_details_url
 						);
 						break;
 					case 'google_unlinked':
 						$error = sprintf(
 						// translators: %s Account detail URL.
-							__( 'You are currently using your WPMU DEV email & password as your preferred login method. If you wish to login with your Google account instead, please change the <strong>Login Method</strong> in <a href="%s" target="_blank">your WPMU DEV account</a>.', 'wpmudev' ),
+							__(
+								'You are currently using your WPMU DEV email & password as your preferred login method. If you wish to login with your Google account instead, please change the <strong>Login Method</strong> in <a href="%s" target="_blank">your WPMU DEV account</a>.',
+								'wpmudev'
+							),
 							$account_details_url
 						);
 						break;
 					case 'reauth_google':
 						$error = sprintf(
 						// translators: %1$s Account detail URL, %2$s Reset URL.
-							__( 'Due to security improvements, you will need to re-link your Google account in the Hub. Please log in with your WPMU DEV email & password for now, then set up your preferred <strong>Login Method</strong> in <a href="%1$s" target="_blank">your WPMU DEV account</a>. Forgot your password? You can <a href="%2$s" target="_blank">reset it here</a>.', 'wpmudev' ),
+							__(
+								'Due to security improvements, you will need to re-link your Google account in the Hub. Please log in with your WPMU DEV email & password for now, then set up your preferred <strong>Login Method</strong> in <a href="%1$s" target="_blank">your WPMU DEV account</a>. Forgot your password? You can <a href="%2$s" target="_blank">reset it here</a>.',
+								'wpmudev'
+							),
 							$account_details_url,
 							$reset_url
 						);
@@ -486,7 +528,10 @@ class Admin {
 							'%s<br><a href="%s" target="_blank">%s</a>',
 							sprintf(
 							// translators: %1$s Rest URL, %2$s Upgrade URL, %3$s Trial URL.
-								__( 'This domain has previously been registered with us by the user %1$s. To use WPMU DEV on this domain, you can either log in with the original account (you can <a target="_blank" href="%2$s">reset your password</a>) or <a target="_blank" href="%3$s">upgrade your trial</a> to a full membership. Trial accounts can\'t use previously registered domains - <a target="_blank" href="%4$s">here\'s why</a>.', 'wpmudev' ),
+								__(
+									'This domain has previously been registered with us by the user %1$s. To use WPMU DEV on this domain, you can either log in with the original account (you can <a target="_blank" href="%2$s">reset your password</a>) or <a target="_blank" href="%3$s">upgrade your trial</a> to a full membership. Trial accounts can\'t use previously registered domains - <a target="_blank" href="%4$s">here\'s why</a>.',
+									'wpmudev'
+								),
 								'<strong style="word-break: break-all;">' . esc_html( $_GET['display_name'] ) . '</strong>', // phpcs:ignore
 								$reset_url,
 								$skip_trial_url,
@@ -499,7 +544,10 @@ class Admin {
 					case 'already_registered':
 						$error = sprintf(
 						// translators: %1$d Account name, %2$s Security info, %3$s Hub URL, %4$s Support URL.
-							__( 'This site is currently registered to %1$s. For <a target="_blank" href="%2$s">security reasons</a> they will need to go to the <a target="_blank" href="%3$s">WPMU DEV Hub</a> and remove this domain before you can log in. If you do not have access to that account, and have no way of contacting that user, please <a target="_blank" href="%4$s">contact support for assistance</a>.', 'wpmudev' ),
+							__(
+								'This site is currently registered to %1$s. For <a target="_blank" href="%2$s">security reasons</a> they will need to go to the <a target="_blank" href="%3$s">WPMU DEV Hub</a> and remove this domain before you can log in. If you do not have access to that account, and have no way of contacting that user, please <a target="_blank" href="%4$s">contact support for assistance</a>.',
+								'wpmudev'
+							),
 							'<strong style="word-break: break-all;">' . esc_html( $_GET['display_name'] ) . '</strong>', // phpcs:ignore.
 							$security_info_url,
 							$websites_url,
@@ -511,6 +559,17 @@ class Admin {
 						// translators: %s Support URL.
 							__( 'This domain cannot be registered to your WPMU DEV account.<br><a href="%s">Contact Accounts & Billing if you need further assistance »</a>', 'wpmudev' ),
 							Data::get()->server_url( 'hub2/#ask-question' )
+						);
+						break;
+					case 'expired_membership':
+						$error = sprintf(
+						// translators: %1$s Hub Account URL, %2$s: Switch to Free URL.
+							__(
+								'Login failed — your WPMU DEV membership has expired. Renew now to regain full access, or switch to our free plan to continue managing all your site in the Hub.<br/><br/><a class="sui-button sui-button-blue" href="%1$s" target="_blank">Renew Membership</a>&nbsp;<a class="sui-button sui-button-ghost" href="%2$s" target="_blank">Switch to Free</a>',
+								'wpmudev'
+							),
+							Data::get()->server_url( 'hub2/account/ ' ),
+							Data::get()->server_url( 'hub2/?switch-free=1 ' )
 						);
 						break;
 					case 'invalid_nonce':
@@ -551,6 +610,7 @@ class Admin {
 		 * @param string $plugin Plugin identifier.
 		 */
 		return apply_filters( 'wpmudev_hub_connector_get_auth_error', $error, $this->get_plugin_id() );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -561,6 +621,12 @@ class Admin {
 	 * @return bool
 	 */
 	private function is_team_selection() {
+		/**
+		 * Nonce is verified in `process_auth_callback` before this method called.
+		 *
+		 * @see self::process_auth_callback()
+		 */
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		return (
 			// Should have multi auth param.
 			isset( $_REQUEST['is_multi_auth'] )
@@ -568,6 +634,8 @@ class Admin {
 			// Should have an API key.
 			&& ! empty( $_REQUEST['user_apikey'] )
 		);
+
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -581,7 +649,7 @@ class Admin {
 	 * @return bool
 	 */
 	private function verify_nonce() {
-		return wp_verify_nonce( ( isset( $_REQUEST['auth_nonce'] ) ? $_REQUEST['auth_nonce'] : '' ), 'auth_nonce' );
+		return wp_verify_nonce( ( sanitize_text_field( wp_unslash( $_REQUEST['auth_nonce'] ?? '' ) ) ), 'auth_nonce' );
 	}
 
 	/**
@@ -614,15 +682,25 @@ class Admin {
 	 */
 	private function text_vars() {
 		$strings = array(
-			'login_title'  => __( 'Let’s connect your site', 'wpmudev' ),
-			'login_desc'   => __( 'To manage your site from The Hub, log in with your WPMU DEV account email and password.', 'wpmudev' ),
-			'sync_error'   => __( 'Could not sync with Hub. Please try again.', 'wpmudev' ),
-			'sync_desc1'   => __( 'The Hub connects WPMU DEV to your website and unlocks all the power of our all-in-one platform services.', 'wpmudev' ),
-			'sync_desc2'   => __( 'Once your website is connected to the Hub, you will be able to perform updates, managing services - all from one place.', 'wpmudev' ),
-			'sync_loading' => __( 'Please wait a few moments while we connect your website.', 'wpmudev' ),
-			'team_title'   => __( 'Choose The Hub Team', 'wpmudev' ),
-			'team_desc'    => __( 'We\'ve noticed that you are a member of multiple teams in The Hub. Which team would you like to connect to this site?', 'wpmudev' ),
-			'team_error'   => __( 'Unknown API error occurred. Please try again.', 'wpmudev' ),
+			'login_title'         => __( 'Let’s connect your site', 'wpmudev' ),
+			'login_desc'          => __( 'To manage your site from The Hub, log in with your WPMU DEV account email and password.', 'wpmudev' ),
+			'sync_error'          => __( 'Could not sync with The Hub. Please try again.', 'wpmudev' ),
+			'sync_desc1'          => __( 'The Hub connects WPMU DEV to your website and unlocks all the power of our all-in-one platform services.', 'wpmudev' ),
+			'sync_desc2'          => __( 'Once your website is connected to The Hub, you will be able to perform updates, manage services - all from one place.', 'wpmudev' ),
+			'sync_loading'        => __( 'Please wait a few moments while we connect your website.', 'wpmudev' ),
+			'team_title'          => __( 'Choose The Hub Team', 'wpmudev' ),
+			'team_desc'           => __( 'We\'ve noticed that you are a member of multiple teams in The Hub. Which team would you like to connect to this site?', 'wpmudev' ),
+			'team_error'          => __( 'Unknown API error occurred. Please try again.', 'wpmudev' ),
+			'create_account_desc' => __( "Create a free account to connect your site to WPMU DEV and activate cloud-based link checker. <i>It's fast, seamless, and free.</i>", 'wpmudev' ),
+			'no_access_desc'      => __( 'You do not have the permission to view this page.', 'wpmudev' ),
+			'signin_with_google'  => __( 'Sign in with Google', 'wpmudev' ),
+			'forgot_password'     => __( 'Forgot password?', 'wpmudev' ),
+			'keep_me_logged_in'   => __( 'Keep me logged in', 'wpmudev' ),
+			'login'               => __( 'Login', 'wpmudev' ),
+			'new_user'            => __( 'I am a new user', 'wpmudev' ),
+			'existing_user'       => __( 'I am an existing user', 'wpmudev' ),
+			'continue_with_email' => __( 'OR continue with email', 'wpmudev' ),
+			'create_free_account' => __( 'Create a free account', 'wpmudev' ),
 		);
 
 		/**
@@ -656,6 +734,7 @@ class Admin {
 
 		// Get plugin ID.
 		$plugin_id = $screens[ $screen->id ];
+
 		// Get plugin's extra args.
 		return $this->get_plugin_extra_args( $plugin_id );
 	}

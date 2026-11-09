@@ -91,6 +91,41 @@ class LicenseHelper {
 	}
 
 	/**
+	 * Store a verified license key where the premium plugins read it.
+	 *
+	 * Writes the key, status and level options NextGEN Pro, Plus and Starter write when a key is
+	 * activated on their own License tab (LicenseActions::register_site_endpoint_call() in
+	 * nextgen-gallery-pro), so a key entered in the free plugin's "Activate License & Install"
+	 * form or the onboarding wizard is not lost once the premium plugin takes over. The License
+	 * tab needs all three to show the license as active. Expiration, brand and the last-check
+	 * time are left to the premium plugin's own license check.
+	 *
+	 * Only an active key is stored, as Pro does: verify_license_with_server() also accepts
+	 * inactive and disabled keys, and saving one of those would replace a working key and
+	 * lock features that check the license status.
+	 *
+	 * @param string $license_key  The verified license key.
+	 * @param array  $verification The result of verify_license_with_server().
+	 * @return bool False when nothing was stored: the key is not active, or the level is not a known premium product.
+	 */
+	public static function store_license( $license_key, $verification ) {
+		$level = $verification['level'] ?? '';
+
+		if ( 'active' !== ( $verification['status'] ?? '' ) || ! in_array( $level, [ 'pro', 'plus', 'starter' ], true ) ) {
+			return false;
+		}
+
+		// Read by Imagely\NGGPro\License\Manager::get_license().
+		update_option( 'photocrati_license_default', $license_key, false );
+		update_option( 'photocrati_license_product_photocrati-nextgen-' . $level, $license_key, false );
+
+		update_option( 'ngg_license_status_' . $level, 'active' );
+		update_option( 'ngg_license_level_' . $level, $level );
+
+		return true;
+	}
+
+	/**
 	 * Get download URL for the Pro plugin
 	 *
 	 * @param string $license_key The license key.

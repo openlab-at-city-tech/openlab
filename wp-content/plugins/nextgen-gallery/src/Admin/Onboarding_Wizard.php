@@ -515,7 +515,7 @@ class Onboarding_Wizard {
 
 			$updated = update_option( 'ngg_onboarding_data', $onboarding_data );
 
-			wp_send_json_success( 'Addons saved successfully' );
+			wp_send_json_success( 'Features saved successfully' );
 			wp_die();
 		}
 
@@ -557,12 +557,18 @@ class Onboarding_Wizard {
 			// Sanitize data, plugins is a string delimited by comma.
 
 			$plugins = explode( ',', sanitize_text_field( wp_unslash( $_POST['plugins'] ) ) );
+			// Allowlist: only slugs returned by get_recommended_plugins() may be installed via this endpoint; prevents arbitrary wp.org plugin install from attacker-supplied slug.
+			$allowed_slugs = array_keys( $this->get_recommended_plugins() );
 			// Install the plugins.
 			foreach ( $plugins as $plugin ) {
+				$plugin = sanitize_key( $plugin ); // Enforce slug charset (a-z0-9_-) so crafted values cannot break out of the downloads.wordpress.org URL path.
+				if ( ! in_array( $plugin, $allowed_slugs, true ) ) {
+					continue; // Reject any slug not in the recommended allowlist.
+				}
 				if ( '' !== $this->is_recommended_plugin_installed( $plugin ) ) {
 					continue; // Skip the plugin if it is already installed.
 				}
-				// Generate the plugin URL by slug.
+				// Generate the plugin URL by slug (slug now validated against allowlist above).
 				$url = 'https://downloads.wordpress.org/plugin/' . $plugin . '.zip';
 				$this->install_helper( $url );
 
@@ -605,6 +611,12 @@ class Onboarding_Wizard {
 	 * Uses shared LicenseHelper utility for license verification and installation.
 	 */
 	public function ngg_plugin_verify_license_key() {
+		// Capability guard: handler installs/activates plugins and writes license options; restrict to site admins, matching sibling onboarding handlers (save_onboarding_data, install_recommended_plugins).
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'You do not have permission to verify license keys' );
+			wp_die();
+		}
+
 		if (
 			! isset( $_POST['nextgen-gallery-license-key'], $_POST['nonce'] )
 			|| ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['nonce'] ) ), 'nextgen-galleryOnboardingCheck' )
@@ -629,6 +641,9 @@ class Onboarding_Wizard {
 		}
 
 		$product = $verification_result['level'];
+
+		// Save the key before installing, so the premium plugin finds it as soon as it loads.
+		\Imagely\NGG\Util\LicenseHelper::store_license( $license_key, $verification_result );
 
 		// Check if the product is already active
 		$current_level = \Imagely\NGG\Util\LicenseHelper::get_license_type();

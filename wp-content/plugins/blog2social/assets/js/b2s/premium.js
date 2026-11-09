@@ -64,6 +64,9 @@ jQuery('.chosen-search input').on('keyup', function () {
                                 jQuery('#b2s-license-user').val(jQuery("#b2s-license-user-select option:first").val());
                             }
                         }
+                        if (data.error == 'permission_administrator') {
+                            jQuery('.b2s-no-permission-administrator').show();
+                        }
                     }
                 }
             });

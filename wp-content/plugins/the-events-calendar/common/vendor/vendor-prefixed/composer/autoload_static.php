@@ -4,10 +4,10 @@
 
 namespace TEC\Common\Composer\Autoload;
 
-class ComposerStaticInit385a5b2051d091def148e6db756ece7b
+class ComposerStaticInitaea9ea0e62da148cd6e410e57bea6b8e
 {
     public static $prefixLengthsPsr4 = array (
-        'T' => 
+        'T' =>
         array (
             'TEC\\Common\\lucatume\\DI52\\' => 25,
             'TEC\\Common\\TrustedLogin\\' => 24,
@@ -22,6 +22,7 @@ class ComposerStaticInit385a5b2051d091def148e6db756ece7b
             'TEC\\Common\\StellarWP\\Schema\\' => 28,
             'TEC\\Common\\StellarWP\\SchemaModels\\' => 34,
             'TEC\\Common\\StellarWP\\Models\\' => 28,
+            'TEC\\Common\\StellarWP\\Migrations\\' => 32,
             'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' => 41,
             'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' => 43,
             'TEC\\Common\\StellarWP\\Installer\\' => 31,
@@ -31,117 +32,194 @@ class ComposerStaticInit385a5b2051d091def148e6db756ece7b
             'TEC\\Common\\StellarWP\\Arrays\\' => 28,
             'TEC\\Common\\StellarWP\\AdminNotices\\' => 34,
             'TEC\\Common\\Psr\\Log\\' => 19,
+            'TEC\\Common\\Psr\\Http\\Client\\' => 27,
             'TEC\\Common\\Psr\\Container\\' => 25,
+            'TEC\\Common\\Nyholm\\Psr7\\' => 23,
+            'TEC\\Common\\Nexcess\\Banners\\' => 27,
+            'TEC\\Common\\MyCLabs\\Enum\\' => 24,
             'TEC\\Common\\Monolog\\' => 19,
+            'TEC\\Common\\LiquidWeb\\LicensingApiClient\\' => 40,
+            'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\' => 49,
+            'TEC\\Common\\LiquidWeb\\Harbor\\Views\\' => 34,
+            'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dir\\' => 38,
+            'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' => 42,
+            'TEC\\Common\\LiquidWeb\\Harbor\\' => 28,
             'TEC\\Common\\Firebase\\JWT\\' => 24,
+        ),
+        'P' =>
+        array (
+            'Psr\\Http\\Message\\' => 17,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'TEC\\Common\\lucatume\\DI52\\' => 
+        'TEC\\Common\\lucatume\\DI52\\' =>
         array (
             0 => __DIR__ . '/..' . '/lucatume/di52/src',
         ),
-        'TEC\\Common\\TrustedLogin\\' => 
+        'TEC\\Common\\TrustedLogin\\' =>
         array (
             0 => __DIR__ . '/..' . '/trustedlogin/client/src',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\Views\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\Views\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/views',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\Assets_Dir\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/assets',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\Admin_Views\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/admin-views',
         ),
-        'TEC\\Common\\StellarWP\\Uplink\\' => 
+        'TEC\\Common\\StellarWP\\Uplink\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/uplink/src/Uplink',
         ),
-        'TEC\\Common\\StellarWP\\Telemetry\\Views_Dir\\' => 
+        'TEC\\Common\\StellarWP\\Telemetry\\Views_Dir\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/views',
         ),
-        'TEC\\Common\\StellarWP\\Telemetry\\Assets_Dir\\' => 
+        'TEC\\Common\\StellarWP\\Telemetry\\Assets_Dir\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/resources',
         ),
-        'TEC\\Common\\StellarWP\\Telemetry\\' => 
+        'TEC\\Common\\StellarWP\\Telemetry\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/Telemetry',
         ),
-        'TEC\\Common\\StellarWP\\Shepherd\\' => 
+        'TEC\\Common\\StellarWP\\Shepherd\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/shepherd/src',
         ),
-        'TEC\\Common\\StellarWP\\Schema\\' => 
+        'TEC\\Common\\StellarWP\\Schema\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/schema/src/Schema',
         ),
-        'TEC\\Common\\StellarWP\\SchemaModels\\' => 
+        'TEC\\Common\\StellarWP\\SchemaModels\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/schema-models/src',
         ),
-        'TEC\\Common\\StellarWP\\Models\\' => 
+        'TEC\\Common\\StellarWP\\Models\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/models/src/Models',
         ),
-        'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' => 
+        'TEC\\Common\\StellarWP\\Migrations\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/migrations/src',
+        ),
+        'TEC\\Common\\StellarWP\\Installer\\Assets_JS\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/installer/src/assets/js',
         ),
-        'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' => 
+        'TEC\\Common\\StellarWP\\Installer\\Admin_Views\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/installer/src/admin-views',
         ),
-        'TEC\\Common\\StellarWP\\Installer\\' => 
+        'TEC\\Common\\StellarWP\\Installer\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/installer/src/Installer',
         ),
-        'TEC\\Common\\StellarWP\\DB\\' => 
+        'TEC\\Common\\StellarWP\\DB\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/db/src/DB',
         ),
-        'TEC\\Common\\StellarWP\\ContainerContract\\' => 
+        'TEC\\Common\\StellarWP\\ContainerContract\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/container-contract/src',
         ),
-        'TEC\\Common\\StellarWP\\Assets\\' => 
+        'TEC\\Common\\StellarWP\\Assets\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/assets/src/Assets',
         ),
-        'TEC\\Common\\StellarWP\\Arrays\\' => 
+        'TEC\\Common\\StellarWP\\Arrays\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/arrays/src/Arrays',
         ),
-        'TEC\\Common\\StellarWP\\AdminNotices\\' => 
+        'TEC\\Common\\StellarWP\\AdminNotices\\' =>
         array (
             0 => __DIR__ . '/..' . '/stellarwp/admin-notices/src',
         ),
-        'TEC\\Common\\Psr\\Log\\' => 
+        'TEC\\Common\\Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
         ),
-        'TEC\\Common\\Psr\\Container\\' => 
+        'TEC\\Common\\Psr\\Http\\Client\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-client/src',
+        ),
+        'TEC\\Common\\Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'TEC\\Common\\Monolog\\' => 
+        'TEC\\Common\\Nyholm\\Psr7\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/nyholm/psr7/src',
+        ),
+        'TEC\\Common\\Nexcess\\Banners\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/banners/src',
+        ),
+        'TEC\\Common\\MyCLabs\\Enum\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/myclabs/php-enum/src',
+        ),
+        'TEC\\Common\\Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'TEC\\Common\\Firebase\\JWT\\' => 
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src',
+        ),
+        'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/licensing-api-client-wordpress/src',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\Views\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/src/views',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dir\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/build',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\Build_Dev_Dir\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/build-dev',
+        ),
+        'TEC\\Common\\LiquidWeb\\Harbor\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor',
+        ),
+        'TEC\\Common\\Firebase\\JWT\\' =>
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+        'Psr\\Http\\Message\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/psr/http-factory/src',
+            1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
     );
 
     public static $classMap = array (
         'TEC\\Common\\Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Psr\\Http\\Message\\MessageInterface' => __DIR__ . '/..' . '/psr/http-message/src/MessageInterface.php',
+        'Psr\\Http\\Message\\RequestFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/RequestFactoryInterface.php',
+        'Psr\\Http\\Message\\RequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/RequestInterface.php',
+        'Psr\\Http\\Message\\ResponseFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/ResponseFactoryInterface.php',
+        'Psr\\Http\\Message\\ResponseInterface' => __DIR__ . '/..' . '/psr/http-message/src/ResponseInterface.php',
+        'Psr\\Http\\Message\\ServerRequestFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/ServerRequestFactoryInterface.php',
+        'Psr\\Http\\Message\\ServerRequestInterface' => __DIR__ . '/..' . '/psr/http-message/src/ServerRequestInterface.php',
+        'Psr\\Http\\Message\\StreamFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/StreamFactoryInterface.php',
+        'Psr\\Http\\Message\\StreamInterface' => __DIR__ . '/..' . '/psr/http-message/src/StreamInterface.php',
+        'Psr\\Http\\Message\\UploadedFileFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/UploadedFileFactoryInterface.php',
+        'Psr\\Http\\Message\\UploadedFileInterface' => __DIR__ . '/..' . '/psr/http-message/src/UploadedFileInterface.php',
+        'Psr\\Http\\Message\\UriFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/UriFactoryInterface.php',
+        'Psr\\Http\\Message\\UriInterface' => __DIR__ . '/..' . '/psr/http-message/src/UriInterface.php',
+        'Stringable' => __DIR__ . '/..' . '/myclabs/php-enum/stubs/Stringable.php',
         'TEC\\Common\\Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
         'TEC\\Common\\Firebase\\JWT\\CachedKeySet' => __DIR__ . '/..' . '/firebase/php-jwt/src/CachedKeySet.php',
         'TEC\\Common\\Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
@@ -149,6 +227,229 @@ class ComposerStaticInit385a5b2051d091def148e6db756ece7b
         'TEC\\Common\\Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
         'TEC\\Common\\Firebase\\JWT\\Key' => __DIR__ . '/..' . '/firebase/php-jwt/src/Key.php',
         'TEC\\Common\\Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Actions\\Display_Legacy_License_Page_Notice' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/Functions/Actions/Display_Legacy_License_Page_Notice.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Actions\\Register_Submenu' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/Functions/Actions/Register_Submenu.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Global_Function_Registry' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/Functions/Global_Function_Registry.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\Functions\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/Functions/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Catalog_Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/Catalog_Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Feature_Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/Feature_Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Harbor_Hosts_Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/Harbor_Hosts_Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Legacy_License_Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/Legacy_License_Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\License_Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/License_Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\License_Response' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/License_Response.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\API\\REST\\V1\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/API/REST/V1/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Admin\\Feature_Manager_Page' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Admin/Feature_Manager_Page.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Admin\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Admin/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Commands\\Catalog' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/CLI/Commands/Catalog.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Commands\\Feature' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/CLI/Commands/Feature.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Commands\\License' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/CLI/Commands/License.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Display' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/CLI/Display.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\CLI\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/CLI/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Components\\Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Components/Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Config' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Config.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Contracts\\Abstract_Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Contracts/Abstract_Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Contracts\\Provider_Interface' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Contracts/Provider_Interface.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Actions\\Handle_Unschedule_Cron_Data_Refresh' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Cron/Actions/Handle_Unschedule_Cron_Data_Refresh.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Jobs\\Refresh_Catalog_Job' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Cron/Jobs/Refresh_Catalog_Job.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Jobs\\Refresh_License_Job' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Cron/Jobs/Refresh_License_Job.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Cron/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Cron\\ValueObjects\\CronHook' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Cron/ValueObjects/CronHook.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Contracts\\Installable' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Contracts/Installable.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Contracts\\Strategy' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Contracts/Strategy.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Error_Code' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Error_Code.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Feature_Collection' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Feature_Collection.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Feature_Repository' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Feature_Repository.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Feature_Resource' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Feature_Resource.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Manager' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Manager.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Resolve_Feature_Collection' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Resolve_Feature_Collection.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Abstract_Strategy' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Strategy/Abstract_Strategy.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Installable_Strategy' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Strategy/Installable_Strategy.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Plugin_Strategy' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Strategy/Plugin_Strategy.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Service_Strategy' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Strategy/Service_Strategy.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Strategy_Factory' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Strategy/Strategy_Factory.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Strategy\\Theme_Strategy' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Strategy/Theme_Strategy.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Feature' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Types/Feature.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Plugin' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Types/Plugin.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Service' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Types/Service.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Types\\Theme' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Types/Theme.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Plugin_Handler' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Update/Plugin_Handler.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Update/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Resolve_Update_Data' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Update/Resolve_Update_Data.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Features\\Update\\Theme_Handler' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Features/Update/Theme_Handler.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Harbor' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Harbor.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Http\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Http/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\Legacy_License' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Legacy/Legacy_License.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\License_Repository' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Legacy/License_Repository.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\Notices\\License_Notice_Handler' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Legacy/Notices/License_Notice_Handler.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Legacy\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Legacy/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Enums\\Validation_Status' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Enums/Validation_Status.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Error_Code' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Error_Code.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\License_Manager' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/License_Manager.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Product_Collection' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Product_Collection.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Registry\\Product_Registry' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Registry/Product_Registry.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Repositories\\License_Repository' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Repositories/License_Repository.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Results\\Product_Entry' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Results/Product_Entry.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Licensing\\Validation_State' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Licensing/Validation_State.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Notice\\Notice' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Notice/Notice.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Notice\\Notice_Controller' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Notice/Notice_Controller.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Catalog_Collection' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Catalog_Collection.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Catalog_Repository' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Catalog_Repository.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Fixture_Client' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Clients/Fixture_Client.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Http_Client' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Clients/Http_Client.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Clients\\Portal_Client' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Clients/Portal_Client.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Contracts\\Download_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Contracts/Download_Url_Builder.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Error_Code' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Error_Code.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Legacy_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Herald_Legacy_Url_Builder.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Routing_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Herald_Routing_Url_Builder.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Herald_Url_Builder' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Herald_Url_Builder.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Feature' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Results/Catalog_Feature.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Catalog_Tier' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Results/Catalog_Tier.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Product_Catalog' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Results/Product_Catalog.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Portal\\Results\\Tier_Collection' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Portal/Results/Tier_Collection.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Premium_Plugin_Registry' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Premium_Plugin_Registry.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Site\\Data' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Site/Data.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Traits\\With_Debugging' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Traits/With_Debugging.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Traits\\With_Error_Throttle' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Traits/With_Error_Throttle.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Cast' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Utils/Cast.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Checks' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Utils/Checks.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Collection' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Utils/Collection.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\License_Key' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Utils/License_Key.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Sanitize' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Utils/Sanitize.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\Utils\\Version' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/Utils/Version.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\View\\Contracts\\View' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/View/Contracts/View.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\View\\Exceptions\\FileNotFoundException' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/View/Exceptions/FileNotFoundException.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\View\\Provider' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/View/Provider.php',
+        'TEC\\Common\\LiquidWeb\\Harbor\\View\\WordPress_View' => __DIR__ . '/..' . '/stellarwp/harbor/src/Harbor/View/WordPress_View.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\Exceptions\\WordPressHttpClientException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client-wordpress/src/Exceptions/WordPressHttpClientException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\Http\\WordPressHttpClient' => __DIR__ . '/..' . '/stellarwp/licensing-api-client-wordpress/src/Http/WordPressHttpClient.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClientWordPress\\WordPressApiFactory' => __DIR__ . '/..' . '/stellarwp/licensing-api-client-wordpress/src/WordPressApiFactory.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Api' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Api.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\ApiBuilder' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/ApiBuilder.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Concerns\\InteractsWithDateTime' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Concerns/InteractsWithDateTime.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Config' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Config.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Contracts\\LicensingClientInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Contracts/LicensingClientInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ApiResponseException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/ApiResponseException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\AuthenticationException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/AuthenticationException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\AuthorizationException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/AuthorizationException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ClientErrorException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/ClientErrorException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ConflictException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/ConflictException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ApiErrorExceptionInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/Contracts/ApiErrorExceptionInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\Contracts\\ResponseExceptionInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/Contracts/ResponseExceptionInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\DecodingException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/DecodingException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\MissingAuthenticationException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/MissingAuthenticationException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\NotFoundException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/NotFoundException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ServerErrorException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/ServerErrorException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\UnexpectedResponseException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/UnexpectedResponseException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Exceptions\\ValidationException' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Exceptions/ValidationException.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\ApiUri' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/ApiUri.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\ApiVersion' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/ApiVersion.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\AuthContext' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/AuthContext.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\AuthState' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/AuthState.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\Factories\\ApiUriFactory' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/Factories/ApiUriFactory.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\Factories\\ResponseExceptionFactory' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/Factories/ResponseExceptionFactory.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\JsonDecoder' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/JsonDecoder.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RequestBuilder' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/RequestBuilder.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RequestExecutor' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/RequestExecutor.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RequestHeaderCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/RequestHeaderCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Http\\RetryPolicy' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Http/RetryPolicy.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\CreatePool' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/CreatePool.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\DeletePool' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/DeletePool.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\ListLedgerEntries' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/ListLedgerEntries.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\RecordUsage' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/RecordUsage.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\Refund' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/Refund.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\SetQuota' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/SetQuota.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Credit\\UpdatePool' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Credit/UpdatePool.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\SwitchTier' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Entitlement/SwitchTier.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\Upsert' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Entitlement/Upsert.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Entitlement\\ValueObjects\\UpsertProduct' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Entitlement/ValueObjects/UpsertProduct.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Activate' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/Activate.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ImportAliases' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/Alias/ImportAliases.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\RemoveAliases' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/Alias/RemoveAliases.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Alias\\ValueObjects\\ImportAlias' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/Alias/ValueObjects/ImportAlias.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Deactivate' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/Deactivate.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\DeleteActivation' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/DeleteActivation.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\LicenseReference' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/LicenseReference.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\Listing\\ListRequest' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/Listing/ListRequest.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\License\\RegenerateKey' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/License/RegenerateKey.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Token\\Create' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Token/Create.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Requests\\Token\\Revoke' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Requests/Token/Revoke.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsAuthState' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Concerns/RebindsAuthState.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Concerns\\RebindsRequestHeaderCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Concerns/RebindsRequestHeaderCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsLedgerResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/CreditsLedgerResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsPoolsResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/CreditsPoolsResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsQuotasResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/CreditsQuotasResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\CreditsResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/CreditsResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\EntitlementsResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/EntitlementsResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\LicensesResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/LicensesResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\ProductsResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/ProductsResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Contracts\\TokensResourceInterface' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Contracts/TokensResourceInterface.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsLedgerResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Credit/CreditsLedgerResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsPoolsResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Credit/CreditsPoolsResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsQuotasResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Credit/CreditsQuotasResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\Credit\\CreditsResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/Credit/CreditsResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\EntitlementsResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/EntitlementsResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\LicensesResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/LicensesResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\ProductsResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/ProductsResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Resources\\TokensResource' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Resources/TokensResource.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Contracts\\Response' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Contracts/Response.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\BalanceCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/BalanceCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\DeletePool' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/DeletePool.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\DeleteQuota' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/DeleteQuota.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\LedgerPage' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/LedgerPage.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\PoolCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/PoolCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\QuotaCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/QuotaCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\RecordUsage' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/RecordUsage.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\Refund' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/Refund.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\BalanceEntry' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/ValueObjects/BalanceEntry.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\CreditPool' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/ValueObjects/CreditPool.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\LedgerEntry' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/ValueObjects/LedgerEntry.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\PoolBalance' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/ValueObjects/PoolBalance.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Credit\\ValueObjects\\SiteQuota' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Credit/ValueObjects/SiteQuota.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Cancel' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/Cancel.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Delete' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/Delete.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Suspend' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/Suspend.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\SwitchTier' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/SwitchTier.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Unsuspend' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/Unsuspend.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\Upsert' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/Upsert.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Entitlement\\ValueObjects\\UpsertProduct' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Entitlement/ValueObjects/UpsertProduct.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ErrorResponse' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/ErrorResponse.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Activate' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Activate.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ImportAliases' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Alias/ImportAliases.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\RemoveAliases' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Alias/RemoveAliases.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Alias\\ValueObjects\\ImportedAlias' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Alias/ValueObjects/ImportedAlias.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Deactivate' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Deactivate.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\DeleteActivation' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/DeleteActivation.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\Listing' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Listing/Listing.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\LicenseListItem' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Listing/ValueObjects/LicenseListItem.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\ListedProduct' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Listing/ValueObjects/ListedProduct.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Listing\\ValueObjects\\ListedProductCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Listing/ValueObjects/ListedProductCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\RegenerateKey' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/RegenerateKey.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\StatusChange' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/StatusChange.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\Validate' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/Validate.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValidatedProductCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValidatedProductCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\Activation' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValueObjects/Activation.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\ActivationEntitlement' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValueObjects/ActivationEntitlement.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\AvailableEntitlement' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValueObjects/AvailableEntitlement.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\Entitlement' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValueObjects/Entitlement.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\LicenseSummary' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValueObjects/LicenseSummary.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\License\\ValueObjects\\ProductValidation' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/License/ValueObjects/ProductValidation.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\Catalog' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Product/Catalog.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\CatalogProductCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Product/CatalogProductCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\ActivationDomain' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Product/ValueObjects/ActivationDomain.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\Activations' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Product/ValueObjects/Activations.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Product\\ValueObjects\\CatalogEntry' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Product/ValueObjects/CatalogEntry.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Token\\Auth' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Token/Auth.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Token\\TokenList' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Token/TokenList.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\Token\\ValueObjects\\TokenItem' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/Token/ValueObjects/TokenItem.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\CapabilityCollection' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/ValueObjects/CapabilityCollection.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\PageMeta' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/ValueObjects/PageMeta.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Responses\\ValueObjects\\PaginationLinks' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Responses/ValueObjects/PaginationLinks.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Tracing\\TraceContext' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Tracing/TraceContext.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Tracing\\TraceParent' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Tracing/TraceParent.php',
+        'TEC\\Common\\LiquidWeb\\LicensingApiClient\\Value\\AuthToken' => __DIR__ . '/..' . '/stellarwp/licensing-api-client/src/Value/AuthToken.php',
         'TEC\\Common\\Monolog\\Attribute\\AsMonologProcessor' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Attribute/AsMonologProcessor.php',
         'TEC\\Common\\Monolog\\DateTimeImmutable' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/DateTimeImmutable.php',
         'TEC\\Common\\Monolog\\ErrorHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/ErrorHandler.php',
@@ -264,9 +565,31 @@ class ComposerStaticInit385a5b2051d091def148e6db756ece7b
         'TEC\\Common\\Monolog\\SignalHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/SignalHandler.php',
         'TEC\\Common\\Monolog\\Test\\TestCase' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Test/TestCase.php',
         'TEC\\Common\\Monolog\\Utils' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Utils.php',
+        'TEC\\Common\\MyCLabs\\Enum\\Enum' => __DIR__ . '/..' . '/myclabs/php-enum/src/Enum.php',
+        'TEC\\Common\\MyCLabs\\Enum\\PHPUnit\\Comparator' => __DIR__ . '/..' . '/myclabs/php-enum/src/PHPUnit/Comparator.php',
+        'TEC\\Common\\Nexcess\\Banners\\Banner' => __DIR__ . '/..' . '/stellarwp/banners/src/Banner.php',
+        'TEC\\Common\\Nexcess\\Banners\\BannerFields' => __DIR__ . '/..' . '/stellarwp/banners/src/BannerFields.php',
+        'TEC\\Common\\Nexcess\\Banners\\Dismissals' => __DIR__ . '/..' . '/stellarwp/banners/src/Dismissals.php',
+        'TEC\\Common\\Nexcess\\Banners\\Package' => __DIR__ . '/..' . '/stellarwp/banners/src/Package.php',
+        'TEC\\Common\\Nexcess\\Banners\\Registry' => __DIR__ . '/..' . '/stellarwp/banners/src/Registry.php',
+        'TEC\\Common\\Nyholm\\Psr7\\Factory\\HttplugFactory' => __DIR__ . '/..' . '/nyholm/psr7/src/Factory/HttplugFactory.php',
+        'TEC\\Common\\Nyholm\\Psr7\\Factory\\Psr17Factory' => __DIR__ . '/..' . '/nyholm/psr7/src/Factory/Psr17Factory.php',
+        'TEC\\Common\\Nyholm\\Psr7\\MessageTrait' => __DIR__ . '/..' . '/nyholm/psr7/src/MessageTrait.php',
+        'TEC\\Common\\Nyholm\\Psr7\\Request' => __DIR__ . '/..' . '/nyholm/psr7/src/Request.php',
+        'TEC\\Common\\Nyholm\\Psr7\\RequestTrait' => __DIR__ . '/..' . '/nyholm/psr7/src/RequestTrait.php',
+        'TEC\\Common\\Nyholm\\Psr7\\Response' => __DIR__ . '/..' . '/nyholm/psr7/src/Response.php',
+        'TEC\\Common\\Nyholm\\Psr7\\ServerRequest' => __DIR__ . '/..' . '/nyholm/psr7/src/ServerRequest.php',
+        'TEC\\Common\\Nyholm\\Psr7\\Stream' => __DIR__ . '/..' . '/nyholm/psr7/src/Stream.php',
+        'TEC\\Common\\Nyholm\\Psr7\\StreamTrait' => __DIR__ . '/..' . '/nyholm/psr7/src/StreamTrait.php',
+        'TEC\\Common\\Nyholm\\Psr7\\UploadedFile' => __DIR__ . '/..' . '/nyholm/psr7/src/UploadedFile.php',
+        'TEC\\Common\\Nyholm\\Psr7\\Uri' => __DIR__ . '/..' . '/nyholm/psr7/src/Uri.php',
         'TEC\\Common\\Psr\\Container\\ContainerExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerExceptionInterface.php',
         'TEC\\Common\\Psr\\Container\\ContainerInterface' => __DIR__ . '/..' . '/psr/container/src/ContainerInterface.php',
         'TEC\\Common\\Psr\\Container\\NotFoundExceptionInterface' => __DIR__ . '/..' . '/psr/container/src/NotFoundExceptionInterface.php',
+        'TEC\\Common\\Psr\\Http\\Client\\ClientExceptionInterface' => __DIR__ . '/..' . '/psr/http-client/src/ClientExceptionInterface.php',
+        'TEC\\Common\\Psr\\Http\\Client\\ClientInterface' => __DIR__ . '/..' . '/psr/http-client/src/ClientInterface.php',
+        'TEC\\Common\\Psr\\Http\\Client\\NetworkExceptionInterface' => __DIR__ . '/..' . '/psr/http-client/src/NetworkExceptionInterface.php',
+        'TEC\\Common\\Psr\\Http\\Client\\RequestExceptionInterface' => __DIR__ . '/..' . '/psr/http-client/src/RequestExceptionInterface.php',
         'TEC\\Common\\Psr\\Log\\AbstractLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/AbstractLogger.php',
         'TEC\\Common\\Psr\\Log\\InvalidArgumentException' => __DIR__ . '/..' . '/psr/log/Psr/Log/InvalidArgumentException.php',
         'TEC\\Common\\Psr\\Log\\LogLevel' => __DIR__ . '/..' . '/psr/log/Psr/Log/LogLevel.php',
@@ -340,6 +663,35 @@ class ComposerStaticInit385a5b2051d091def148e6db756ece7b
         'TEC\\Common\\StellarWP\\Installer\\Handler\\Plugin' => __DIR__ . '/..' . '/stellarwp/installer/src/Installer/Handler/Plugin.php',
         'TEC\\Common\\StellarWP\\Installer\\Installer' => __DIR__ . '/..' . '/stellarwp/installer/src/Installer/Installer.php',
         'TEC\\Common\\StellarWP\\Installer\\Utils\\Array_Utils' => __DIR__ . '/..' . '/stellarwp/installer/src/Installer/Utils/Array_Utils.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Abstracts\\Migration_Abstract' => __DIR__ . '/..' . '/stellarwp/migrations/src/Abstracts/Migration_Abstract.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Admin\\Assets' => __DIR__ . '/..' . '/stellarwp/migrations/src/Admin/Assets.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Admin\\Provider' => __DIR__ . '/..' . '/stellarwp/migrations/src/Admin/Provider.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Admin\\UI' => __DIR__ . '/..' . '/stellarwp/migrations/src/Admin/UI.php',
+        'TEC\\Common\\StellarWP\\Migrations\\CLI\\Commands' => __DIR__ . '/..' . '/stellarwp/migrations/src/CLI/Commands.php',
+        'TEC\\Common\\StellarWP\\Migrations\\CLI\\Provider' => __DIR__ . '/..' . '/stellarwp/migrations/src/CLI/Provider.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Config' => __DIR__ . '/..' . '/stellarwp/migrations/src/Config.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Contracts\\Migration' => __DIR__ . '/..' . '/stellarwp/migrations/src/Contracts/Migration.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Contracts\\Template_Engine' => __DIR__ . '/..' . '/stellarwp/migrations/src/Contracts/Template_Engine.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Enums\\Log_Type' => __DIR__ . '/..' . '/stellarwp/migrations/src/Enums/Log_Type.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Enums\\Operation' => __DIR__ . '/..' . '/stellarwp/migrations/src/Enums/Operation.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Enums\\Status' => __DIR__ . '/..' . '/stellarwp/migrations/src/Enums/Status.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Exceptions\\ApiMethodException' => __DIR__ . '/..' . '/stellarwp/migrations/src/Exceptions/ApiMethodException.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Models\\Execution' => __DIR__ . '/..' . '/stellarwp/migrations/src/Models/Execution.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Provider' => __DIR__ . '/..' . '/stellarwp/migrations/src/Provider.php',
+        'TEC\\Common\\StellarWP\\Migrations\\REST\\Endpoints' => __DIR__ . '/..' . '/stellarwp/migrations/src/REST/Endpoints.php',
+        'TEC\\Common\\StellarWP\\Migrations\\REST\\Provider' => __DIR__ . '/..' . '/stellarwp/migrations/src/REST/Provider.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Registry' => __DIR__ . '/..' . '/stellarwp/migrations/src/Registry.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Tables\\Migration_Executions' => __DIR__ . '/..' . '/stellarwp/migrations/src/Tables/Migration_Executions.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Tables\\Migration_Logs' => __DIR__ . '/..' . '/stellarwp/migrations/src/Tables/Migration_Logs.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Tables\\Provider' => __DIR__ . '/..' . '/stellarwp/migrations/src/Tables/Provider.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Tasks\\Clear_Logs' => __DIR__ . '/..' . '/stellarwp/migrations/src/Tasks/Clear_Logs.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Tasks\\Execute' => __DIR__ . '/..' . '/stellarwp/migrations/src/Tasks/Execute.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Traits\\API_Methods' => __DIR__ . '/..' . '/stellarwp/migrations/src/Traits/API_Methods.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Cast' => __DIR__ . '/..' . '/stellarwp/migrations/src/Utilities/Cast.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Default_Template_Engine' => __DIR__ . '/..' . '/stellarwp/migrations/src/Utilities/Default_Template_Engine.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Log_Download_Handler' => __DIR__ . '/..' . '/stellarwp/migrations/src/Utilities/Log_Download_Handler.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Logger' => __DIR__ . '/..' . '/stellarwp/migrations/src/Utilities/Logger.php',
+        'TEC\\Common\\StellarWP\\Migrations\\Utilities\\Migration_UI' => __DIR__ . '/..' . '/stellarwp/migrations/src/Utilities/Migration_UI.php',
         'TEC\\Common\\StellarWP\\Models\\Config' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Config.php',
         'TEC\\Common\\StellarWP\\Models\\Contracts\\Arrayable' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/Arrayable.php',
         'TEC\\Common\\StellarWP\\Models\\Contracts\\Model' => __DIR__ . '/..' . '/stellarwp/models/src/Models/Contracts/Model.php',
@@ -584,9 +936,9 @@ class ComposerStaticInit385a5b2051d091def148e6db756ece7b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit385a5b2051d091def148e6db756ece7b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit385a5b2051d091def148e6db756ece7b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit385a5b2051d091def148e6db756ece7b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitaea9ea0e62da148cd6e410e57bea6b8e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitaea9ea0e62da148cd6e410e57bea6b8e::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitaea9ea0e62da148cd6e410e57bea6b8e::$classMap;
 
         }, null, ClassLoader::class);
     }

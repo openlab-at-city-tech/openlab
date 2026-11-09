@@ -16,6 +16,7 @@ use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\DisplayType as DisplayTypeMapper;
 
 use Imagely\NGG\DataTypes\Gallery;
+use Imagely\NGG\Util\MassAssignment;
 use Imagely\NGG\Util\Security;
 use Imagely\NGG\Util\Transient;
 
@@ -92,6 +93,24 @@ class GalleryREST {
 						'description'       => 'Search galleries by title',
 						'sanitize_callback' => 'sanitize_text_field',
 					],
+					'exclude_ids'       => [
+						'type'              => 'array',
+						'description'       => 'Gallery IDs to exclude from results (e.g. galleries already in an album).',
+						'items'             => [
+							'type' => 'integer',
+						],
+						'sanitize_callback' => function ( $value ) {
+							if ( ! is_array( $value ) ) {
+								return [];
+							}
+							return array_values( array_unique( array_filter( array_map( 'absint', $value ) ) ) );
+						},
+					],
+					'exclude_album_id'  => [
+						'type'              => 'integer',
+						'description'       => 'Exclude the galleries already contained in this album. Bounded alternative to exclude_ids for large albums (the server derives the IDs from the album\'s sortorder).',
+						'sanitize_callback' => 'absint',
+					],
 				],
 			]
 		);
@@ -158,10 +177,6 @@ class GalleryREST {
 						'type'              => 'string',
 						'sanitize_callback' => 'wp_kses_post', // TODO get correct sanitize callback.
 					],
-					'path'    => [
-						'type'              => 'string',
-						'sanitize_callback' => 'sanitize_text_field',
-					],
 				],
 			]
 		);
@@ -188,14 +203,6 @@ class GalleryREST {
 						'type'              => 'string',
 						'sanitize_callback' => 'sanitize_text_field',
 					],
-					'path'                  => [
-						'type'              => 'string',
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'author'                => [
-						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
-					],
 					'previewpic'            => [
 						'type'              => 'integer',
 						'sanitize_callback' => 'absint',
@@ -207,14 +214,6 @@ class GalleryREST {
 					'galdesc'               => [
 						'type'              => 'string',
 						'sanitize_callback' => 'wp_kses_post',
-					],
-					'slug'                  => [
-						'type'              => 'string',
-						'sanitize_callback' => 'sanitize_title',
-					],
-					'extras_post_id'        => [
-						'type'              => 'integer',
-						'sanitize_callback' => 'absint',
 					],
 					'parent_id'             => [
 						'type'              => 'integer',
@@ -319,9 +318,7 @@ class GalleryREST {
 		if ( $request && $request->get_param( 'id' ) ) {
 			$gallery = GalleryMapper::get_instance()->find( $request->get_param( 'id' ) );
 			if ( $gallery ) {
-				if ( get_current_user_id() !== $gallery->author && ! Security::is_allowed( 'NextGEN Manage others gallery' ) ) {
-					return false;
-				}
+				return Security::can_manage_owned( $gallery->author, 'nextgen_edit_gallery' );
 			}
 		}
 
@@ -349,9 +346,26 @@ class GalleryREST {
 		global $wpdb;
 		$mapper = GalleryMapper::get_instance();
 
+		// When exclude_album_id is supplied, derive the galleries already in that album server-side and
+		// fold them into exclude_ids. This keeps the request URL bounded for large albums (one integer
+		// instead of one exclude_ids[] entry per gallery, which can overflow web-server request-line limits).
+		$exclude_album_id = (int) $request->get_param( 'exclude_album_id' );
+		if ( $exclude_album_id > 0 ) {
+			$existing_excludes = (array) $request->get_param( 'exclude_ids' );
+			$request->set_param(
+				'exclude_ids',
+				array_values( array_unique( array_merge( $existing_excludes, self::get_album_gallery_ids( $exclude_album_id ) ) ) )
+			);
+		}
+
 		// Get and validate order parameters.
-		$orderby = $request->get_param( 'orderby' ) ?? 'gid';
-		$order   = strtoupper( $request->get_param( 'order' ) ?? 'ASC' );
+		// Security fix (SQLi): whitelist orderby against the same enum declared in register_rest_route() args for this endpoint; unknown input falls back to 'gid' to block ORDER BY injection even if the REST enum check is bypassed.
+		$allowed_orderby   = [ 'gid', 'title', 'author', 'is_ecommerce_enabled', 'is_private', 'date_created', 'date_modified' ];
+		$requested_orderby = sanitize_key( (string) ( $request->get_param( 'orderby' ) ?? 'gid' ) );
+		$orderby           = in_array( $requested_orderby, $allowed_orderby, true ) ? $requested_orderby : 'gid';
+		// Security fix (SQLi): restrict order direction to ASC/DESC; anything else defaults to ASC.
+		$order = strtoupper( (string) ( $request->get_param( 'order' ) ?? 'ASC' ) );
+		$order = in_array( $order, [ 'ASC', 'DESC' ], true ) ? $order : 'ASC';
 
 		// Get pagination parameters.
 		$per_page_param = (int) $request->get_param( 'per_page' );
@@ -367,8 +381,18 @@ class GalleryREST {
 		// Build filter conditions from request.
 		$filters = self::build_filter_conditions( $request );
 
+		// Author scope: callers without 'nextgen_edit_gallery_unowned' see only their own galleries (matches get_gallery / get_galleries_batch).
+		$current_user_id   = get_current_user_id();
+		$author_scope_user = Security::is_allowed( 'nextgen_edit_gallery_unowned' ) ? 0 : (int) $current_user_id;
+		if ( $author_scope_user > 0 ) {
+			$filters['conditions'][]    = [ 'author = %d', $author_scope_user ];
+			$filters['where_clauses'][] = 'author = %d';
+			$filters['params'][]        = $author_scope_user;
+		}
+
 		$cache_params  = [
-			get_current_user_id(),
+			$current_user_id,
+			$author_scope_user, // Distinct cache slot per scope to avoid leaking unowned-cap responses to non-cap callers.
 			$orderby,
 			$order,
 			$per_page_param,
@@ -376,6 +400,7 @@ class GalleryREST {
 			$request->get_param( 'ecommerce_filter' ),
 			$request->get_param( 'is_private_filter' ),
 			$request->get_param( 'search' ),
+			$request->get_param( 'exclude_ids' ),
 		];
 		$cache_key     = Transient::create_key( 'rest_galleries', $cache_params );
 		$cached_result = Transient::fetch( $cache_key, false );
@@ -394,6 +419,17 @@ class GalleryREST {
 			$query->where( $condition );
 		}
 
+		// OR group (match the search term against the title or the ID). The driver parenthesises
+		// each where_clauses entry before AND-joining them, so precedence is preserved.
+		if ( ! empty( $filters['or_conditions'] ) ) {
+			$or_clauses = [];
+			foreach ( $filters['or_conditions'] as $or_condition ) {
+				$clause       = array_shift( $or_condition );
+				$or_clauses[] = $query->_parse_where_clause( $clause, $or_condition );
+			}
+			$query->add_where_clause( $or_clauses, 'OR' );
+		}
+
 		// Calculate total items for pagination using the same filters.
 		$table_name = $wpdb->nggallery;
 		$sql        = "SELECT COUNT(*) FROM {$table_name}";
@@ -409,6 +445,10 @@ class GalleryREST {
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
 		$total_items = (int) $wpdb->get_var( $sql );
+		// A failed COUNT casts to 0, which is indistinguishable from an empty library and would
+		// otherwise be cached as the real total. The page rows come from a separate query, so the
+		// response is still served; it just must not persist a total nobody can trust.
+		$count_failed = '' !== (string) $wpdb->last_error;
 
 		// Fetch current page of items.
 		$query->order_by( $orderby, $order )
@@ -416,9 +456,19 @@ class GalleryREST {
 
 		$galleries = $query->run_query();
 
+		// Batch the per-gallery image counts into a single grouped query to avoid an N+1
+		// (previously one COUNT(*) per gallery inside prepare_gallery_list_item_for_response — the
+		// hot spot behind the large-install timeouts in #726 / #792).
+		$page_gallery_ids = [];
+		foreach ( $galleries as $gallery ) {
+			$page_gallery_ids[] = (int) $gallery->{$gallery->id_field};
+		}
+		$image_counts = self::get_image_counts_for_galleries( $page_gallery_ids );
+
 		$response = [];
 		foreach ( $galleries as $gallery ) {
-			$response[] = self::prepare_gallery_list_item_for_response( $gallery );
+			$gallery_id = (int) $gallery->{$gallery->id_field};
+			$response[] = self::prepare_gallery_list_item_for_response( $gallery, $image_counts[ $gallery_id ] ?? 0 );
 		}
 
 		$total_pages = ceil( $total_items / $per_page );
@@ -427,7 +477,9 @@ class GalleryREST {
 			'total_items' => $total_items,
 			'total_pages' => $total_pages,
 		];
-		Transient::update( $cache_key, $cache_data );
+		if ( ! $count_failed ) {
+			Transient::update( $cache_key, $cache_data );
+		}
 		$result = new WP_REST_Response( $response, 200 );
 
 		// Add pagination headers.
@@ -454,7 +506,10 @@ class GalleryREST {
 	 * }
 	 */
 	private static function build_filter_conditions( WP_REST_Request $request ) {
+		global $wpdb;
+
 		$conditions    = [];
+		$or_conditions = [];
 		$where_clauses = [];
 		$params        = [];
 
@@ -475,20 +530,123 @@ class GalleryREST {
 			$params[]        = $is_private;
 		}
 
-		if ( $request->has_param( 'search' ) ) {
-			$search_term          = $request->get_param( 'search' );
-			$search_term_wildcard = '%' . $search_term . '%';
+		// Skipped when empty: "title LIKE '%%'" would drop every row with a NULL title. esc_like()
+		// keeps a typed % or _ literal.
+		$search_term = trim( (string) $request->get_param( 'search' ) );
+		if ( '' !== $search_term ) {
+			$search_term_wildcard = '%' . $wpdb->esc_like( $search_term ) . '%';
 
-			$conditions[]    = [ 'title LIKE %s', $search_term_wildcard ];
-			$where_clauses[] = 'title LIKE %s';
-			$params[]        = $search_term_wildcard;
+			if ( ctype_digit( $search_term ) ) {
+				// A digit-only term matches the ID as well as the title. Galleries saved without
+				// a title are listed by their ID, so a title match alone can never reach them.
+				$or_conditions[] = [ 'title LIKE %s', $search_term_wildcard ];
+				$or_conditions[] = [ 'gid = %d', (int) $search_term ];
+
+				$where_clauses[] = '( title LIKE %s OR gid = %d )';
+				$params[]        = $search_term_wildcard;
+				$params[]        = (int) $search_term;
+			} else {
+				$conditions[]    = [ 'title LIKE %s', $search_term_wildcard ];
+				$where_clauses[] = 'title LIKE %s';
+				$params[]        = $search_term_wildcard;
+			}
+		}
+
+		// Exclude specific gallery IDs (e.g. galleries already in an album) server-side so
+		// pagination and the per_page budget are only consumed by genuinely available galleries.
+		$exclude_ids = $request->get_param( 'exclude_ids' );
+		if ( is_array( $exclude_ids ) ) {
+			$exclude_ids = array_values( array_unique( array_filter( array_map( 'absint', $exclude_ids ) ) ) );
+			if ( ! empty( $exclude_ids ) ) {
+				$placeholders = implode( ',', array_fill( 0, count( $exclude_ids ), '%d' ) );
+
+				// Query builder understands the "NOT IN %s" array-bind form.
+				$conditions[] = [ 'gid NOT IN %s', $exclude_ids ];
+				// COUNT query uses individual %d placeholders bound to the same IDs.
+				$where_clauses[] = "gid NOT IN ( {$placeholders} )";
+				foreach ( $exclude_ids as $exclude_id ) {
+					$params[] = $exclude_id;
+				}
+			}
 		}
 
 		return [
 			'conditions'    => $conditions,
+			'or_conditions' => $or_conditions,
 			'where_clauses' => $where_clauses,
 			'params'        => $params,
 		];
+	}
+
+	/**
+	 * Get the gallery IDs contained in an album's sortorder.
+	 *
+	 * Album sortorder mixes gallery IDs (integers) and nested-album references (strings like "a12");
+	 * only the integer entries are galleries.
+	 *
+	 * @param int $album_id The album ID.
+	 * @return int[] Gallery IDs contained in the album.
+	 */
+	private static function get_album_gallery_ids( $album_id ) {
+		$album_id = (int) $album_id;
+		if ( $album_id <= 0 ) {
+			return [];
+		}
+
+		$album = \Imagely\NGG\DataMappers\Album::get_instance()->find( $album_id );
+		if ( ! $album || empty( $album->sortorder ) ) {
+			return [];
+		}
+
+		$sortorder = is_array( $album->sortorder ) ? $album->sortorder : json_decode( $album->sortorder, true );
+		if ( ! is_array( $sortorder ) ) {
+			return [];
+		}
+
+		$gallery_ids = [];
+		foreach ( $sortorder as $entry ) {
+			// Integer entries are galleries; string entries like "a12" are nested albums, skip those.
+			if ( is_int( $entry ) || ( is_string( $entry ) && ctype_digit( $entry ) ) ) {
+				$gallery_ids[] = (int) $entry;
+			}
+		}
+
+		return array_values( array_unique( array_filter( $gallery_ids ) ) );
+	}
+
+	/**
+	 * Get image counts for multiple galleries in a single grouped query.
+	 *
+	 * Shared by the list (get_galleries) and batch (get_galleries_batch) endpoints so neither runs a
+	 * per-gallery COUNT(*) (the N+1 behind the large-install timeouts in #726 / #792).
+	 *
+	 * @param int[] $gallery_ids Gallery IDs.
+	 * @return array<int,int> Map of gallery ID => image count. Galleries with no images are absent
+	 *                        from the map (callers should default to 0).
+	 */
+	private static function get_image_counts_for_galleries( array $gallery_ids ) {
+		global $wpdb;
+
+		$counts        = [];
+		$sanitized_ids = array_values( array_unique( array_filter( array_map( 'absint', $gallery_ids ) ) ) );
+		if ( empty( $sanitized_ids ) ) {
+			return $counts;
+		}
+
+		$placeholders = implode( ',', array_fill( 0, count( $sanitized_ids ), '%d' ) );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQL.NotPrepared
+		$count_rows = $wpdb->get_results(
+			$wpdb->prepare(
+				// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- {$placeholders} is a list of %d built from count( $sanitized_ids ), and $sanitized_ids is passed to prepare().
+				"SELECT galleryid, COUNT(*) AS total FROM {$wpdb->nggpictures} WHERE galleryid IN ( {$placeholders} ) GROUP BY galleryid",
+				$sanitized_ids
+			)
+		);
+		foreach ( (array) $count_rows as $count_row ) {
+			$counts[ (int) $count_row->galleryid ] = (int) $count_row->total;
+		}
+
+		return $counts;
 	}
 
 	/**
@@ -511,12 +669,10 @@ class GalleryREST {
 			);
 		}
 
-		// Check if user can view this gallery.
-		// Users can only view galleries they own unless they have "nextgen_edit_gallery_unowned" capability.
-		$current_user_id = get_current_user_id();
-		$can_manage      = ( (int) $current_user_id === (int) $gallery->author ) || Security::is_allowed( 'nextgen_edit_gallery_unowned' );
-
-		if ( ! $can_manage ) {
+		// Read surface, so the required capability is the overview one the route already gates on.
+		// That leaves this gate's effective rule unchanged; requiring the edit capability here
+		// would stop an overview-only role from reading its own galleries.
+		if ( ! Security::can_manage_owned( $gallery->author, 'NextGEN Gallery overview' ) ) {
 			return new WP_Error(
 				'gallery_forbidden',
 				__( 'Sorry, you do not have permission to view this gallery', 'nggallery' ),
@@ -553,9 +709,12 @@ class GalleryREST {
 			);
 		}
 
-		$mapper          = GalleryMapper::get_instance();
-		$current_user_id = get_current_user_id();
-		$can_edit_all    = Security::is_allowed( 'nextgen_edit_gallery_unowned' );
+		$mapper = GalleryMapper::get_instance();
+
+		// Batch the per-gallery image counts into a single grouped query. Previously each gallery
+		// triggered its own COUNT(*) in prepare_gallery_for_response — an N+1 that made albums with
+		// 50+ galleries fire 50+ COUNT queries on every editor load.
+		$counts = self::get_image_counts_for_galleries( $ids );
 
 		$galleries = [];
 		foreach ( $ids as $id ) {
@@ -566,18 +725,103 @@ class GalleryREST {
 				continue;
 			}
 
-			// Check permissions for each gallery
-			$can_manage = ( (int) $current_user_id === (int) $gallery->author ) || $can_edit_all;
-
-			if ( ! $can_manage ) {
+			// Same read gate as get_gallery(), so its effective rule is likewise unchanged. The
+			// capability lookups read the already-loaded WP_User, so there is no per-row query
+			// to hoist out of the loop.
+			if ( ! Security::can_manage_owned( $gallery->author, 'NextGEN Gallery overview' ) ) {
 				// Skip galleries user doesn't have permission to view
 				continue;
 			}
 
-			$galleries[] = self::prepare_gallery_for_response( $gallery );
+			$gallery_id  = (int) $gallery->{$gallery->id_field};
+			$galleries[] = self::prepare_gallery_for_response( $gallery, $counts[ $gallery_id ] ?? 0 );
 		}
 
 		return new WP_REST_Response( $galleries, 200 );
+	}
+
+	/**
+	 * Collected on purpose so MassAssignment refuses them rather than this endpoint ignoring
+	 * them silently.
+	 *
+	 * @var string[]
+	 */
+	const NEVER_EDITABLE_PROPERTIES = [
+		'path',
+		'author',
+		'slug',
+		'extras_post_id',
+	];
+
+	/**
+	 * Properties create_gallery() accepts.
+	 *
+	 * @var string[]
+	 */
+	const CREATE_PROPERTIES = [
+		'title',
+		'galdesc',
+	];
+
+	/**
+	 * Properties update_gallery() accepts. `display_type_settings` needs the merge below rather
+	 * than a straight assignment, and `parent_id` is not a gallery column.
+	 *
+	 * @var string[]
+	 */
+	const UPDATE_PROPERTIES = [
+		'name',
+		'title',
+		'galdesc',
+		'previewpic',
+		'pageid',
+		'is_private',
+		'display_type',
+		'external_source',
+		'is_ecommerce_enabled',
+		'pricelist_id',
+	];
+
+	/**
+	 * Collects the gallery properties the request supplied. Read by name, not from the route
+	 * schema: an unregistered parameter is still readable from the body.
+	 *
+	 * @param WP_REST_Request $request  The REST request object.
+	 * @param string[]        $accepted Property names this endpoint accepts.
+	 * @return array
+	 */
+	private static function collect_request_properties( WP_REST_Request $request, array $accepted ) {
+		$properties = [];
+
+		foreach ( array_merge( $accepted, self::NEVER_EDITABLE_PROPERTIES ) as $key ) {
+			if ( $request->has_param( $key ) ) {
+				$properties[ $key ] = $request->get_param( $key );
+			}
+		}
+
+		return $properties;
+	}
+
+	/**
+	 * Refuses the request and names the properties. Nothing is saved, so the caller is not told
+	 * an edit succeeded that never stored the value.
+	 *
+	 * @param array $refused Refused property keys.
+	 * @return WP_Error
+	 */
+	private static function refused_property_error( array $refused ) {
+		return new WP_Error(
+			'rest_gallery_property_not_editable',
+			sprintf(
+				// translators: %s is a comma-separated list of property names.
+				__( 'These gallery properties may not be set through this endpoint and nothing was saved: %s', 'nggallery' ),
+				MassAssignment::describe_refused( $refused )
+			),
+			[
+				'status'  => 403,
+				'refused' => $refused,
+			]
+		);
 	}
 
 	/**
@@ -590,11 +834,23 @@ class GalleryREST {
 		$mapper  = GalleryMapper::get_instance();
 		$gallery = new Gallery();
 
-		$gallery->name    = sanitize_title( $request->get_param( 'title' ) );
-		$gallery->title   = $request->get_param( 'title' );
-		$gallery->path    = $request->get_param( 'path' );
-		$gallery->author  = get_current_user_id();
-		$gallery->galdesc = $request->get_param( 'galdesc' );
+		$assignable = MassAssignment::filter(
+			self::collect_request_properties( $request, self::CREATE_PROPERTIES ),
+			'gallery',
+			$refused
+		);
+
+		if ( $refused ) {
+			return self::refused_property_error( $refused );
+		}
+
+		foreach ( $assignable as $key => $value ) {
+			$gallery->$key = $value;
+		}
+
+		// Server-derived, never taken from the request. The mapper builds the folder from these.
+		$gallery->name   = sanitize_title( $request->get_param( 'title' ) );
+		$gallery->author = get_current_user_id();
 
 		try {
 			$mapper->save( $gallery );
@@ -632,60 +888,49 @@ class GalleryREST {
 			);
 		}
 
-		if ( $request->has_param( 'name' ) ) {
-			$gallery->name = sanitize_title( $request->get_param( 'name' ) );
+		$assignable = MassAssignment::filter(
+			self::collect_request_properties( $request, self::UPDATE_PROPERTIES ),
+			'gallery',
+			$refused
+		);
+
+		if ( $refused ) {
+			return self::refused_property_error( $refused );
 		}
-		if ( $request->has_param( 'title' ) ) {
-			$gallery->title = $request->get_param( 'title' );
+
+		if ( isset( $assignable['name'] ) ) {
+			$assignable['name'] = sanitize_title( $assignable['name'] );
 		}
-		if ( $request->has_param( 'path' ) ) {
-			$gallery->path = $request->get_param( 'path' );
+
+		foreach ( $assignable as $key => $value ) {
+			$gallery->$key = $value;
 		}
-		if ( $request->has_param( 'author' ) ) {
-			$gallery->author = $request->get_param( 'author' );
-		}
-		if ( $request->has_param( 'previewpic' ) ) {
-			$gallery->previewpic = $request->get_param( 'previewpic' );
-		}
-		if ( $request->has_param( 'pageid' ) ) {
-			$gallery->pageid = $request->get_param( 'pageid' );
-		}
-		if ( $request->has_param( 'galdesc' ) ) {
-			$gallery->galdesc = $request->get_param( 'galdesc' );
-		}
-		if ( $request->has_param( 'slug' ) ) {
-			$gallery->slug = $request->get_param( 'slug' );
-		}
-		if ( $request->has_param( 'extras_post_id' ) ) {
-			$gallery->extras_post_id = $request->get_param( 'extras_post_id' );
-		}
+
 		if ( $request->has_param( 'parent_id' ) ) {
 			$gallery->parent_id = $request->get_param( 'parent_id' );
 		}
-		if ( $request->has_param( 'pricelist_id' ) ) {
-			$gallery->pricelist_id = $request->get_param( 'pricelist_id' );
-
+		if ( isset( $assignable['pricelist_id'] ) ) {
 			// Also update the WordPress post meta for ecommerce requirements check
 			if ( $gallery->extras_post_id ) {
-				update_post_meta( $gallery->extras_post_id, 'pricelist_id', $request->get_param( 'pricelist_id' ) );
+				update_post_meta( $gallery->extras_post_id, 'pricelist_id', $assignable['pricelist_id'] );
 			}
 		}
-		if ( $request->has_param( 'display_type' ) ) {
-			$gallery->display_type = $request->get_param( 'display_type' );
-		}
 		if ( $request->has_param( 'display_type_settings' ) ) {
-			$gallery->display_type_settings = $request->get_param( 'display_type_settings' );
-		}
-		if ( $request->has_param( 'external_source' ) ) {
-			$gallery->external_source = $request->get_param( 'external_source' );
-		}
-		if ( $request->has_param( 'is_private' ) ) {
-			$gallery->is_private = (bool) $request->get_param( 'is_private' );
-		}
-		if ( $request->has_param( 'is_ecommerce_enabled' ) ) {
-			$gallery->is_ecommerce_enabled = $request->get_param( 'is_ecommerce_enabled' );
-		}
+			$incoming = (array) $request->get_param( 'display_type_settings' );
+			$edited   = $request->has_param( 'display_type' )
+				? $request->get_param( 'display_type' )
+				: $gallery->display_type;
+			$stored   = is_array( $gallery->display_type_settings ) ? $gallery->display_type_settings : [];
 
+			// Persist only the display type the user edited; the payload may carry every type, so key
+			// off display_type. The fallback merges onto stored settings so other customized types survive.
+			if ( '' !== (string) $edited && array_key_exists( $edited, $incoming ) ) {
+				$stored[ $edited ]              = $incoming[ $edited ];
+				$gallery->display_type_settings = $stored;
+			} else {
+				$gallery->display_type_settings = array_merge( $stored, $incoming );
+			}
+		}
 		try {
 			$mapper->save( $gallery );
 			Transient::flush( 'rest_galleries' );
@@ -844,6 +1089,21 @@ class GalleryREST {
 				continue;
 			}
 
+			// Re-check existence right before insert: the $old_images_list snapshot above can be
+			// stale by the time this loop runs (e.g. a concurrent scan request importing the same
+			// file), so array_diff() alone isn't a reliable guard against duplicate imports.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$already_imported = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT `pid` FROM {$wpdb->nggpictures} WHERE `galleryid` = %d AND `filename` = %s LIMIT 1",
+					$id,
+					$filename
+				)
+			);
+			if ( $already_imported ) {
+				continue;
+			}
+
 			try {
 				// Create a new image entity.
 				$image             = new \Imagely\NGG\DataTypes\Image();
@@ -944,26 +1204,32 @@ class GalleryREST {
 	 *     @type string $displayType         Gallery display type.
 	 * }
 	 */
-	private static function prepare_gallery_list_item_for_response( $gallery ) {
+	private static function prepare_gallery_list_item_for_response( $gallery, $precomputed_count = null ) {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$gallery->counter = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->nggpictures} WHERE galleryid = %d",
-				$gallery->{$gallery->id_field}
-			)
-		);
+		if ( null !== $precomputed_count ) {
+			// Caller supplied the image count (get_galleries batches the counts into a single grouped
+			// query to avoid an N+1 of COUNT(*) queries). Cast to string to match the wpdb::get_var()
+			// path below and the frontend `count: string` contract.
+			$gallery->counter = (string) (int) $precomputed_count;
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$gallery->counter = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->nggpictures} WHERE galleryid = %d",
+					$gallery->{$gallery->id_field}
+				)
+			);
+		}
 
 		if ( $gallery->previewpic ) {
 			$storage   = \Imagely\NGG\DataStorage\Manager::get_instance();
 			$thumbnail = $storage->get_image_url( $gallery->previewpic, 'thumb' );
 		}
 
-		// Check if current user can manage this gallery
-		// User can manage if they own it OR have "NextGEN Manage others gallery" capability
-		$current_user_id = get_current_user_id();
-		$can_manage      = ( (int) $current_user_id === (int) $gallery->author ) || Security::is_allowed( 'nextgen_edit_gallery_unowned' );
+		// Mirrors check_edit_permission() so the flag cannot promise the adminApp an edit the
+		// write routes will refuse once the owner's gallery-management capability is revoked.
+		$can_manage = Security::can_manage_owned( $gallery->author, 'nextgen_edit_gallery' );
 
 		return [
 			'id'           => $gallery->gid,
@@ -987,7 +1253,7 @@ class GalleryREST {
 	 * @param Gallery $gallery The gallery object.
 	 * @return array
 	 */
-	private static function prepare_gallery_for_response( $gallery ) {
+	private static function prepare_gallery_for_response( $gallery, $precomputed_count = null ) {
 		global $wpdb;
 
 		if ( $gallery->previewpic ) {
@@ -995,13 +1261,20 @@ class GalleryREST {
 			$thumbnail = $storage->get_image_url( $gallery->previewpic, 'thumb' );
 		}
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-		$gallery->counter = $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(*) FROM {$wpdb->nggpictures} WHERE galleryid = %d",
-				$gallery->{$gallery->id_field}
-			)
-		);
+		if ( null !== $precomputed_count ) {
+			// Caller supplied the image count (e.g. get_galleries_batch batches the counts into a
+			// single grouped query to avoid an N+1 of COUNT(*) queries when an album loads many galleries).
+			// Cast to string to match the wpdb::get_var() path below and the frontend `counter: string` contract.
+			$gallery->counter = (string) (int) $precomputed_count;
+		} else {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$gallery->counter = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT COUNT(*) FROM {$wpdb->nggpictures} WHERE galleryid = %d",
+					$gallery->{$gallery->id_field}
+				)
+			);
+		}
 
 		return [
 			'gid'                   => $gallery->gid,
@@ -1019,7 +1292,8 @@ class GalleryREST {
 			'counter'               => $gallery->counter ?? 0,
 			'previewpic_url'        => $thumbnail ?? '',
 			'display_type'          => $gallery->display_type ?? 'photocrati-nextgen_basic_thumbnails',
-			'display_type_settings' => $gallery->display_type_settings ?? [],
+			// Fill uncustomized display types with current global values for the admin UI (not persisted).
+			'display_type_settings' => GalleryMapper::get_instance()->with_display_type_defaults( $gallery->display_type_settings ?? [] ),
 			'external_source'       => $gallery->external_source ?? [],
 			'is_private'            => (bool) ( $gallery->is_private ?? false ),
 			'is_ecommerce_enabled'  => $gallery->is_ecommerce_enabled ?? false,
@@ -1088,28 +1362,71 @@ class GalleryREST {
 			return [];
 		}
 
-		$sanitized = [];
-		foreach ( $settings as $key => $value ) {
-			$key = sanitize_text_field( $key );
+		$allowed_types         = [ 'video', 'tiktok', 'instagram', 'dribbble', 'youtube', 'google_photos', 'dropbox' ];
+		$allowed_settings_mode = [ 'default', 'custom', 'global' ];
 
-			switch ( gettype( $value ) ) {
-				case 'boolean':
+		// Flat keys (cast rule).
+		$schema = [
+			'type'                     => 'string',
+			'settings_mode'            => 'string',
+			'show_video_controls'      => 'bool',
+			'show_play_pause_controls' => 'bool',
+			'autoplay_videos'          => 'bool',
+			'google_photos_account'    => 'int',
+		];
+
+		// Per-integration prefixed keys — one rule per field, applied to each
+		// allowed addon prefix (tiktok/instagram/dribbble).
+		$per_type_fields = [
+			'_account'          => 'string',
+			'_number'           => 'int',
+			'_link'             => 'int',
+			'_link_target'      => 'int_bool',
+			'_image_size'       => 'string',
+			'_caption'          => 'int_bool',
+			'_caption_length'   => 'int',
+			'_cache'            => 'int_bool',
+			'_show_play_button' => 'int_bool',
+		];
+		foreach ( [ 'tiktok', 'instagram', 'dribbble' ] as $prefix ) {
+			foreach ( $per_type_fields as $suffix => $cast ) {
+				$schema[ $prefix . $suffix ] = $cast;
+			}
+		}
+
+		$filtered  = array_intersect_key( $settings, $schema );
+		$sanitized = [];
+
+		foreach ( $schema as $key => $cast ) {
+			if ( ! array_key_exists( $key, $filtered ) ) {
+				continue;
+			}
+			$value = $filtered[ $key ];
+
+			switch ( $cast ) {
+				case 'bool':
 					$sanitized[ $key ] = (bool) $value;
 					break;
-				case 'integer':
+				case 'int':
 					$sanitized[ $key ] = (int) $value;
 					break;
-				case 'double':
-					$sanitized[ $key ] = (float) $value;
+				case 'int_bool':
+					$sanitized[ $key ] = ( (int) $value ) ? 1 : 0;
+					break;
+				case 'url':
+					$sanitized[ $key ] = esc_url_raw( (string) $value );
 					break;
 				case 'string':
-					$sanitized[ $key ] = wp_kses_post( $value );
-					break;
-				case 'array':
-					$sanitized[ $key ] = array_map( 'sanitize_text_field', $value );
-					break;
 				default:
-					$sanitized[ $key ] = null;
+					$clean = sanitize_text_field( (string) $value );
+					if ( 'type' === $key && '' !== $clean && ! in_array( $clean, $allowed_types, true ) ) {
+						break;
+					}
+					if ( 'settings_mode' === $key && ! in_array( $clean, $allowed_settings_mode, true ) ) {
+						break;
+					}
+					$sanitized[ $key ] = $clean;
+					break;
 			}
 		}
 

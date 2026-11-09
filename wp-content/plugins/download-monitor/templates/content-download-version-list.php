@@ -30,7 +30,7 @@ if ( ! empty( $dlm_attributes['className'] ) ) {
 }
 
 if ( $versions ) : ?>
-	<ul class="download-versions<?php
+	<ul class="download-versions wp-block-list<?php
 	echo ( ! empty( $dlm_attributes['className'] ) ) ? ' ' . esc_attr( $dlm_attributes['className'] ) : ''; ?>">
 		<?php
 		/** @var DLM_Download_Version $version */

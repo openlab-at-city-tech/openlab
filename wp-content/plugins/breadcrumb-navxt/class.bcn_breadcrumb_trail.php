@@ -254,8 +254,12 @@ class bcn_breadcrumb_trail
 	protected function determine_taxonomy()
 	{
 		global $wp;
+		$bk_req = '';
 		//Backup the server request variable
-		$bk_req = $_SERVER['REQUEST_URI'];
+		if(isset($_SERVER['REQUEST_URI']))
+		{
+			$bk_req = $_SERVER['REQUEST_URI'];
+		}
 		//Now set the request URL to the referrer URL
 		//Could just chain the [1] selection, but that's not PHP5.3 compatible
 		$url_split = explode(home_url(), esc_url(wp_get_referer()));
@@ -1269,6 +1273,12 @@ class bcn_breadcrumb_trail
 			}
 			else if($breadcrumb instanceof bcn_breadcrumb)
 			{
+				$assembled_breadcrumb = $breadcrumb->assemble($linked, $position, ($key === 0));
+				//If the assembled breadcrumb is empty, go to the next breadcrumb
+				if($assembled_breadcrumb === '')
+				{
+					continue;
+				}
 				$types = $breadcrumb->get_types();
 				array_walk($types, 'sanitize_html_class');
 				$attrib_array = array('class' => $types);
@@ -1284,7 +1294,7 @@ class bcn_breadcrumb_trail
 				$attribs = apply_filters_deprecated('bcn_display_attributes', array($attribs, $breadcrumb->get_types(), $breadcrumb->get_id()), '7.5.1', 'bcn_display_attribute_array');
 				$separator = apply_filters('bcn_display_separator', $separator, $position, $last_position, $depth);
 				//Assemble the breadcrumb
-				$trail_str_escaped .= sprintf($template, $breadcrumb->assemble($linked, $position, ($key === 0)), wp_kses($separator, apply_filters('bcn_allowed_html', wp_kses_allowed_html('post'))), $attribs);
+				$trail_str_escaped .= sprintf($template, $assembled_breadcrumb, wp_kses($separator, apply_filters('bcn_allowed_html', wp_kses_allowed_html('post'))), $attribs);
 			}
 			if($reverse)
 			{

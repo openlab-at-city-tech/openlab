@@ -3,8 +3,8 @@ Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library
 Requires at least: 4.4
-Tested up to: 6.9
-Stable tag: 7.9.2
+Tested up to: 7.1.4
+Stable tag: 7.10.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,31 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.10.1 =
+* Fixed potential security issues
+
+= 7.10.0 =
+* Fixed potential security issues
+* Fixed library switching and copying mechanism
+
+= 7.9.8 =
+* Fixed potential security issues
+
+= 7.9.7 =
+* Fixed potential security issues
+
+= 7.9.6 =
+* Fixed potential security issues reported by Karthik Ramakrishnan, Daria Golikova, Osman Hussein and Charles Vosburgh
+
+= 7.9.5 =
+* Fixed potential security issues
+
+= 7.9.4 =
+* Fixed potential security issue
+
+= 7.9.3 =
+* Fixed potential security issue
 
 = 7.9.2 =
 * Fix for links importer, both scheduled and manual

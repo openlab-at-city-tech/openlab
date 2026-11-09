@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** @var \WPChill\DownloadMonitor\Shop\Product\Product $product */
 /** @var string $atc_url */
 ?>
-<a class="aligncenter download-button" href="<?php
+<a class="aligncenter dlm-download-button" href="<?php
 echo esc_url( $atc_url ); ?>" rel="nofollow">
 	<?php
 	printf( esc_html__( 'Purchase &ldquo;%s&rdquo;', 'download-monitor' ), esc_html( $product->get_title() ) ); ?>

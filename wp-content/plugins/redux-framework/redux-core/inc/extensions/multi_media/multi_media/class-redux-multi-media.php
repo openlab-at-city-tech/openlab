@@ -107,9 +107,9 @@ if ( ! class_exists( 'Redux_Multi_Media' ) ) {
 					// hidden ID input.
 					$id_input = '<input
                                     type="hidden"
-                                    value="' . $url . '"
+                                    value="' . esc_attr( $url ) . '"
                                     name="' . esc_attr( $this->field['name'] . $this->field['name_suffix'] ) . '[' . intval( $id ) . ']"
-                                    id="filelist-' . $id . '"
+                                    id="filelist-' . esc_attr( $id ) . '"
                                     class="" />';
 
 					// Check for a valid image extension.
@@ -143,8 +143,8 @@ if ( ! class_exists( 'Redux_Multi_Media' ) ) {
 						// Add file to array.
 						$html  = '<li>';
 						$html .= esc_html__( 'File: ', 'redux-framework' );
-						$html .= '<strong>' . $title . '</strong>&nbsp;&nbsp;&nbsp;';
-						$html .= '(<a href="' . $url . '" target="_blank" rel="external">' . esc_html__( 'Download', 'redux-framework' ) . '</a> / <a href="#" class="redux_remove_file_button">' . __( 'Remove', 'redux-framework' ) . '</a>)';
+						$html .= '<strong>' . esc_html( $title ) . '</strong>&nbsp;&nbsp;&nbsp;';
+						$html .= '(<a href="' . esc_url( $url ) . '" target="_blank" rel="external">' . esc_html__( 'Download', 'redux-framework' ) . '</a> / <a href="#" class="redux_remove_file_button">' . __( 'Remove', 'redux-framework' ) . '</a>)';
 						$html .= $id_input;
 						$html .= '</li>';
 

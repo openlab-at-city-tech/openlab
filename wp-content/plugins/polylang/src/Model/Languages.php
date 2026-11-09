@@ -5,12 +5,12 @@
 
 namespace WP_Syntex\Polylang\Model;
 
+use WP_Term;
+use WP_Error;
 use PLL_Cache;
 use PLL_Language;
 use PLL_Language_Factory;
 use PLL_Translatable_Objects;
-use WP_Error;
-use WP_Term;
 use WP_Syntex\Polylang\Options\Options;
 
 defined( 'ABSPATH' ) || exit;
@@ -35,35 +35,37 @@ class Languages {
 	 *
 	 * @var Options
 	 */
-	private $options;
+	private Options $options;
 
 	/**
 	 * Translatable objects registry.
 	 *
 	 * @var PLL_Translatable_Objects
 	 */
-	private $translatable_objects;
+	private PLL_Translatable_Objects $translatable_objects;
 
 	/**
 	 * Internal non persistent cache object.
 	 *
-	 * @var PLL_Cache<mixed>
+	 * @var PLL_Cache
+	 *
+	 * @phpstan-var PLL_Cache<mixed>
 	 */
-	private $cache;
+	private PLL_Cache $cache;
 
 	/**
 	 * Flag set to true during the language objects creation.
 	 *
 	 * @var bool
 	 */
-	private $is_creating_list = false;
+	private bool $is_creating_list = false;
 
 	/**
 	 * Tells if {@see WP_Syntex\Polylang\Model\Languages::get_list()} can be used.
 	 *
 	 * @var bool
 	 */
-	private $languages_ready = false;
+	private bool $languages_ready = false;
 
 	/**
 	 * List of automatic language proxies.
@@ -72,7 +74,7 @@ class Languages {
 	 *
 	 * @phpstan-var array<non-falsy-string, Languages_Proxy_Interface>
 	 */
-	private $automatic_proxies = array();
+	private array $automatic_proxies = array();
 
 	/**
 	 * List of language proxies.
@@ -81,7 +83,7 @@ class Languages {
 	 *
 	 * @phpstan-var array<non-falsy-string, Languages_Proxy_Interface>
 	 */
-	private $proxies = array();
+	private array $proxies = array();
 
 	/**
 	 * Constructor.
@@ -111,9 +113,9 @@ class Languages {
 	 *                     `term_id` and `term_taxonomy_id` can be fetched for any language taxonomy.
 	 *                     /!\ For the `term_taxonomy_id`, prefix the ID by `tt:` (ex: `"tt:{$tt_id}"`),
 	 *                     this is to prevent confusion between `term_id` and `term_taxonomy_id`.
-	 * @return PLL_Language|false Language object, false if no language found.
+	 * @return \PLL_Language|false Language object, false if no language found.
 	 *
-	 * @phpstan-param PLL_Language|WP_Term|int|string $value
+	 * @phpstan-param \PLL_Language|\WP_Term|int|string $value
 	 */
 	public function get( $value ) {
 		if ( $value instanceof PLL_Language ) {
@@ -141,7 +143,7 @@ class Languages {
 			$this->cache->set( 'language:' . $lang->w3c, $lang );
 		}
 
-		/** @var PLL_Language|false */
+		/** @var \PLL_Language|false */
 		return $this->cache->get( 'language:' . $value );
 	}
 
@@ -166,7 +168,7 @@ class Languages {
 	 *   @type string $flag_code      Optional. Country code, {@see src/settings/flags.php}. Will be converted to flag.
 	 *   @type bool   $no_default_cat Optional. If set, no default category will be created for this language. Default is false.
 	 * }
-	 * @return PLL_Language|WP_Error The object language on success, a `WP_Error` otherwise.
+	 * @return \PLL_Language|\WP_Error The object language on success, a `WP_Error` otherwise.
 	 *
 	 * @phpstan-param array{
 	 *     name?: string,
@@ -297,7 +299,7 @@ class Languages {
 	 *   @type string $flag       Optional, country code, {@see src/settings/flags.php}.
 	 *   @type string $flag_code  Optional. Country code, {@see src/settings/flags.php}. Will be converted to flag.
 	 * }
-	 * @return PLL_Language|WP_Error The updated object language on success, a `WP_Error` otherwise.
+	 * @return \PLL_Language|\WP_Error The updated object language on success, a `WP_Error` otherwise.
 	 *
 	 * @phpstan-param array{
 	 *     lang_id: int|numeric-string,
@@ -453,7 +455,7 @@ class Languages {
 		 *   @type string $no_default_cat Optional, if set, no default category has been created for this language.
 		 *   @type string $flag           Optional, country code, @see src/settings/flags.php.
 		 * }
-		 * @param PLL_Language $lang Previous value of the language being edited.
+		 * @param \PLL_Language $lang Previous value of the language being edited.
 		 */
 		do_action( 'pll_update_language', $args, $lang );
 
@@ -661,7 +663,7 @@ class Languages {
 			 * @since 3.4 Deprecated. If you used this hook to filter URLs, you may hook `'site_url'` instead.
 			 * @deprecated
 			 *
-			 * @param PLL_Language[] $languages The list of language objects.
+			 * @param \PLL_Language[] $languages The list of language objects.
 			 */
 			$languages = apply_filters_deprecated( 'pll_after_languages_cache', array( $languages ), '3.4' );
 
@@ -720,7 +722,7 @@ class Languages {
 	 * @since 3.4
 	 * @since 3.7 Moved from `PLL_Model::get_default_language()` to `WP_Syntex\Polylang\Model\Languages::get_default()`.
 	 *
-	 * @return PLL_Language|false Default language object, `false` if no language found.
+	 * @return \PLL_Language|false Default language object, `false` if no language found.
 	 */
 	public function get_default() {
 		if ( ! empty( $this->options['default_lang'] ) ) {
@@ -880,8 +882,8 @@ class Languages {
 	 *
 	 * @since 3.8
 	 *
-	 * @param PLL_Language[] $languages The list of language objects.
-	 * @param array          $args {
+	 * @param \PLL_Language[] $languages The list of language objects.
+	 * @param array           $args {
 	 *   @type string $fields Optional. Returns only that field if set; {@see PLL_Language} for a list of fields.
 	 * }
 	 * @return array List of `PLL_Language` objects or `PLL_Language` object properties.
@@ -929,6 +931,18 @@ class Languages {
 	}
 
 	/**
+	 * Checks if a given value matches the locale format.
+	 *
+	 * @since 3.8.5
+	 *
+	 * @param string $value The value to check.
+	 * @return bool
+	 */
+	public static function is_locale( $value ): bool {
+		return is_string( $value ) && (bool) preg_match( '#' . self::LOCALE_PATTERN . '#', $value );
+	}
+
+	/**
 	 * Builds the language metas into an array and serializes it, to be stored in the term description.
 	 *
 	 * @since 3.4
@@ -964,7 +978,7 @@ class Languages {
 			$language_term = get_term( (int) $args['lang_id'] );
 
 			if ( $language_term instanceof WP_Term ) {
-				$old_data = maybe_unserialize( $language_term->description );
+				$old_data = pll_maybe_unserialize( $language_term->description );
 			}
 		}
 
@@ -1011,7 +1025,7 @@ class Languages {
 		// Don't allow to overwrite `$locale`, `$rtl`, and `$flag_code`.
 		$new_data = array_merge( $old_data, $add_data, $new_data );
 
-		/** @var non-empty-string $serialized maybe_serialize() cannot return anything else than a string when fed by an array. */
+		/** @phpstan-var non-empty-string $serialized maybe_serialize() cannot return anything else than a string when fed by an array. */
 		$serialized = maybe_serialize( $new_data );
 		return $serialized;
 	}
@@ -1037,7 +1051,7 @@ class Languages {
 		$errors = new WP_Error();
 
 		// Validate locale with the same pattern as WP 4.3. See #28303.
-		if ( empty( $args['locale'] ) || ! preg_match( '#' . self::LOCALE_PATTERN . '#', $args['locale'], $matches ) ) {
+		if ( empty( $args['locale'] ) || ! self::is_locale( $args['locale'] ) ) {
 			$errors->add( 'pll_invalid_locale', __( 'Enter a valid WordPress locale', 'polylang' ) );
 		}
 
@@ -1060,7 +1074,7 @@ class Languages {
 		}
 
 		// Validate flag.
-		if ( ! empty( $args['flag'] ) && ! is_readable( POLYLANG_DIR . '/flags/' . $args['flag'] . '.png' ) ) {
+		if ( ! empty( $args['flag'] ) && ! is_readable( POLYLANG_ROOT_DIR . '/vendor/wpsyntex/flags/' . $args['flag'] . '.svg' ) ) {
 			$flag = PLL_Language::get_flag_information( $args['flag'] );
 
 			if ( ! empty( $flag['url'] ) ) {
@@ -1105,7 +1119,7 @@ class Languages {
 		if ( is_array( $terms ) ) {
 			foreach ( $terms as $term ) {
 				$term_ids[ $term->taxonomy ][] = $term->term_id;
-				$tr = maybe_unserialize( $term->description );
+				$tr = pll_maybe_unserialize( $term->description );
 				$tr = is_array( $tr ) ? $tr : array();
 
 				/**
@@ -1122,7 +1136,7 @@ class Languages {
 				 * }
 				 * @param string           $old_slug The old language slug.
 				 * @param string           $new_slug The new language slug.
-				 * @param WP_Term          $term     The term containing the post or term translation group.
+				 * @param \WP_Term         $term     The term containing the post or term translation group.
 				 */
 				$tr = apply_filters( 'update_translation_group', $tr, $old_slug, $new_slug, $term );
 
@@ -1288,9 +1302,9 @@ class Languages {
 	 * @since 3.4
 	 * @since 3.7 Moved from `PLL_Model::get_languages_from_taxonomies()` to `WP_Syntex\Polylang\Model\Languages::get_from_taxonomies()`.
 	 *
-	 * @return PLL_Language[] An array of `PLL_Language` objects, array keys are the type.
+	 * @return \PLL_Language[] An array of `PLL_Language` objects, array keys are the type.
 	 *
-	 * @phpstan-return list<PLL_Language>
+	 * @phpstan-return list<\PLL_Language>
 	 */
 	protected function get_from_taxonomies(): array {
 		$terms_by_slug = array();
@@ -1302,11 +1316,11 @@ class Languages {
 		}
 
 		/**
-		 * @var (
+		 * @phpstan-var (
 		 *     array{
 		 *         string: array{
-		 *             language: WP_Term,
-		 *         }&array<non-empty-string, WP_Term>
+		 *             language: \WP_Term,
+		 *         }&array<non-empty-string, \WP_Term>
 		 *     }
 		 * ) $terms_by_slug
 		 */
@@ -1325,14 +1339,14 @@ class Languages {
 		 * @since 3.4 Deprecated.
 		 * @deprecated
 		 *
-		 * @param PLL_Language[]       $languages The list of language objects.
-		 * @param Language $model     `Language` object.
+		 * @param \PLL_Language[] $languages The list of language objects.
+		 * @param \Languages      $model     `Languages` object.
 		 */
 		$languages = apply_filters_deprecated( 'pll_languages_list', array( $languages, $this ), '3.4', 'pll_additional_language_data' );
 
 		if ( ! $this->are_ready() ) {
 			// Do not cache an incomplete list.
-			/** @var list<PLL_Language> $languages */
+			/** @phpstan-var list<\PLL_Language> $languages */
 			return $languages;
 		}
 
@@ -1351,7 +1365,7 @@ class Languages {
 
 		set_transient( self::TRANSIENT_NAME, $languages_data );
 
-		/** @var list<PLL_Language> $languages */
+		/** @phpstan-var list<\PLL_Language> $languages */
 		return $languages;
 	}
 
@@ -1363,7 +1377,7 @@ class Languages {
 	 * @since 3.2.3
 	 * @since 3.7 Moved from `PLL_Model::get_language_terms()` to `WP_Syntex\Polylang\Model\Languages::get_terms()`.
 	 *
-	 * @return WP_Term[]
+	 * @return \WP_Term[]
 	 */
 	protected function get_terms(): array {
 		$terms = get_terms(

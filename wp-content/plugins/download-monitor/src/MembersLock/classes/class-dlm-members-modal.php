@@ -255,8 +255,16 @@ class DLM_Members_Modal {
 	public function login_user() {
 		// Check nonce.
 		check_ajax_referer( 'dlm-ajax-nonce', 'security' );
-		$user_name             = sanitize_text_field( $_POST['user_name'] );
-		$user_pass             = sanitize_text_field( $_POST['user_pass'] );
+
+		$ip         = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+		$rate_key   = 'dlm_login_attempts_' . md5( $ip );
+		$attempts   = (int) get_transient( $rate_key );
+		if ( $attempts >= 5 ) {
+			wp_send_json_error( __( 'Too many login attempts. Please try again later.', 'download-monitor' ) );
+		}
+
+		$user_name             = sanitize_text_field( isset( $_POST['user_name'] ) ? $_POST['user_name'] : '' );
+		$user_pass             = isset( $_POST['user_pass'] ) ? wp_unslash( $_POST['user_pass'] ) : '';
 		$info                  = array();
 		$info['user_login']    = $user_name;
 		$info['user_password'] = $user_pass;
@@ -272,9 +280,10 @@ class DLM_Members_Modal {
 			} catch ( Exception $e ) {
 			}
 		}
-		// Check if user managed to log in
+		// Check if user managed to log in — return generic error to prevent username enumeration.
 		if ( is_wp_error( $user_sigon ) ) {
-			wp_send_json_error( $user_sigon->get_error_message() );
+			set_transient( $rate_key, $attempts + 1, 5 * MINUTE_IN_SECONDS );
+			wp_send_json_error( __( 'Invalid username or password.', 'download-monitor' ) );
 		}
 		// Found Download? Set download link
 		if ( $download ) {

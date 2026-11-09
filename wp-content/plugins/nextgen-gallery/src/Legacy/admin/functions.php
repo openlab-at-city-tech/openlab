@@ -31,7 +31,8 @@ class nggAdmin {
 				if ( isset( $info['extension'] ) ) {
 					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					if ( in_array( strtolower( $info['extension'] ), $ext ) ) {
-						if ( ! seems_utf8( $file ) ) {
+						// phpcs:ignore WordPress.WP.DeprecatedFunctions.seems_utf8Found -- Fallback for WP < 6.9, where wp_is_valid_utf8() does not exist.
+						if ( ! ( function_exists( 'wp_is_valid_utf8' ) ? wp_is_valid_utf8( $file ) : seems_utf8( $file ) ) ) {
 							$file = mb_convert_encoding( $file, 'UTF-8', 'ISO-8859-1' );
 						}
 
@@ -50,11 +51,14 @@ class nggAdmin {
 	 * Creates or recreates a thumbnail
 	 *
 	 * @class nggAdmin
-	 * @param object|int $image Contain all information about the image or the id
+	 * @param object|int   $image Contain all information about the image or the id
+	 * @param integer      $width optional, falls back to the saved thumbnail width
+	 * @param integer      $height optional, falls back to the saved thumbnail height
+	 * @param boolean|null $crop optional, falls back to the saved fixed-dimension setting
 	 * @return string result code
 	 * @since v1.0.0
 	 */
-	public static function create_thumbnail( $image ) {
+	public static function create_thumbnail( $image, $width = 0, $height = 0, $crop = null ) {
 
 		if ( is_object( $image ) ) {
 			if ( isset( $image->id ) ) {
@@ -70,6 +74,19 @@ class nggAdmin {
 			'watermark'  => false,
 			'reflection' => false,
 		];
+
+		// One-off dimensions travel as params, so a caller never has to write them to
+		// the site-wide options to get a single thumbnail at a different size.
+		if ( $width > 0 ) {
+			$params['width'] = (int) $width;
+		}
+		if ( $height > 0 ) {
+			$params['height'] = (int) $height;
+		}
+		if ( null !== $crop ) {
+			$params['crop'] = (bool) $crop;
+		}
+
 		$result = $storage->generate_thumbnail( $image, $params );
 
 		if ( ! $result ) {
@@ -374,6 +391,16 @@ class nggAdmin {
 				// get the caption / description field.
 				$description = empty( $meta['caption'] ) ? $image->description : $meta['caption'];
 
+				// SECURITY (#1110): IPTC title/caption are attacker-controllable file
+				// metadata and were written to nggpictures.alttext/description with a raw
+				// prepared UPDATE below, bypassing the sanitisation every other write path
+				// applies. The stored value later reaches a JS innerHTML sink in the
+				// Shutter lightbox and executes for any visitor. Run both through the same
+				// I18N sanitiser the normal admin save path (update_pictures()) uses, so an
+				// imported value is neutralised identically to a hand-edited one.
+				$alttext     = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $alttext );
+				$description = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $description );
+
 				// get the file date/time from exif.
 				$timestamp = $meta['timestamp'];
 
@@ -545,6 +572,22 @@ class nggAdmin {
 			if ( ! @getimagesize( $gallerypath . '/' . $picture ) ) {
 				unset( $new_images[ $key ] );
 				@unlink( $gallerypath . '/' . $picture ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
+				continue;
+			}
+
+			// Re-check existence right before insert: $old_imageslist above can be stale by the
+			// time this loop runs (e.g. a concurrent scan request importing the same file), so
+			// array_diff() alone isn't a reliable guard against duplicate imports.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$already_imported = $wpdb->get_var(
+				$wpdb->prepare(
+					"SELECT `pid` FROM {$wpdb->nggpictures} WHERE `galleryid` = %d AND `filename` = %s LIMIT 1",
+					$gallery_id,
+					$picture
+				)
+			);
+			if ( $already_imported ) {
+				unset( $new_images[ $key ] );
 			}
 		}
 
@@ -576,20 +619,7 @@ class nggAdmin {
 	 * @return bool $result
 	 */
 	public static function can_manage_this_gallery( $check_ID ) {
-
-		global $user_ID, $wp_roles;
-
-		// phpcs:ignore WordPress.WP.Capabilities.Unknown
-		if ( ! current_user_can( 'NextGEN Manage others gallery' ) ) {
-			// get the current user ID.
-			wp_get_current_user();
-
-			if ( $user_ID != $check_ID ) {
-				return false;
-			}
-		}
-
-		return true;
+		return \Imagely\NGG\Util\Security::can_manage_owned( $check_ID, 'nextgen_edit_gallery' );
 	}
 
 	/**
@@ -607,14 +637,29 @@ class nggAdmin {
 			return '';
 		}
 
-		$js_array = implode( '","', $image_array );
+		// Built with wp_json_encode() rather than implode( '","', ... ) inside a quoted string
+		// literal. esc_js() runs _wp_specialchars( $text, ENT_COMPAT ), which entity-encodes the
+		// double quotes used as the separator: the ids 9601,9602 became the string
+		// 9601&quot;,&quot;9602, so `new Array( "..." )` produced a ONE element array whose single
+		// entry was that whole mangled string. The client then posted it as an id, the server
+		// absint()-ed it back to 9601, and every dialog-driven bulk operation processed only the
+		// first selected image while the progress bar reported completion over maxStep = 1.
+		// That is the still-open half of issue #925 (the other half - sanitize_text_field()
+		// collapsing the posted doaction[] array to '' - is fixed in manage.php).
+		//
+		// The ids are integers here, but the JSON is hex-escaped anyway so no value can close the
+		// <script> element or break out of the literal.
+		$js_array = wp_json_encode(
+			array_values( array_map( 'strval', $image_array ) ),
+			JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT
+		);
 
 		// send out some JavaScript, which initate the ajax operation.
 		ob_start();
 		?>
 		<script type="text/javascript">
 
-			Images = new Array("<?php echo esc_js( $js_array ); ?>");
+			Images = <?php echo $js_array; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_json_encode with JSON_HEX_* produces a self-contained, script-safe JS array literal; esc_js() would corrupt it. ?>;
 
 			nggAjaxOptions = {
 				operation: "<?php echo esc_js( $operation ); ?>",

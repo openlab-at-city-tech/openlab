@@ -83,6 +83,10 @@ class Thumbnails extends ParentController {
 		}
 		$display_settings['number_of_columns'] = $number_of_columns;
 
+		// LegacyImage and prepare_legacy_parameters() read the shared settings, not this copy.
+		$displayed_gallery->display_settings['images_per_page']   = $images_per_page;
+		$displayed_gallery->display_settings['number_of_columns'] = $number_of_columns;
+
 		if ( ! $display_settings['disable_pagination'] ) {
 			$current_page = (int) $router->get_parameter( 'nggpage', $gallery_id, 1 );
 		} else {
@@ -173,7 +177,7 @@ class Thumbnails extends ParentController {
 			if ( $display_settings['use_imagebrowser_effect'] ) {
 				if ( ! empty( $displayed_gallery->display_settings['original_display_type'] )
 				&& ! empty( $_SERVER['NGG_ORIG_REQUEST_URI'] ) ) {
-					$origin_url = Router::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] );
+					$origin_url = Router::sanitize_request_uri_for_routing( $_SERVER['NGG_ORIG_REQUEST_URI'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash -- sanitize_request_uri_for_routing() unslashes and sanitizes; sanitize_text_field() would strip percent-encoded octets and break routing.
 				}
 
 				$app = $router->get_routed_app();

@@ -1,3 +1,4 @@
+import { useEffect, useState } from '@wordpress/element';
 import useStateContext from './context/useStateContext';
 import DateRangeSelect from './components/DateRangeSelect';
 import TabNavigation from './components/TabNavigation';
@@ -8,17 +9,18 @@ import styles from './ReportsWrapper.module.scss';
 
 export default function ReportsWrapper() {
 	const { state, dispatch } = useStateContext();
+	const [ mountedTabs, setMountedTabs ] = useState( () => new Set( [ state.activeTab ] ) );
 
-	const renderTabContent = () => {
-		switch (state.activeTab) {
-			case 'overview':
-				return (<OverviewTab />);
-			case 'detailed':
-				return (<DetailedTab />);
-			default:
-				return applyFilters(`dlm.reports.tab.${state.activeTab}.body`, '', { dispatch, state });
-		}
-	};
+	useEffect( () => {
+		setMountedTabs( ( prev ) => {
+			if ( prev.has( state.activeTab ) ) {
+				return prev;
+			}
+			return new Set( prev ).add( state.activeTab );
+		} );
+	}, [ state.activeTab ] );
+
+	const isKnownTab = 'overview' === state.activeTab || 'detailed' === state.activeTab;
 
 	return (
 		<div className={styles.dlmReportsWrapper} >
@@ -31,7 +33,17 @@ export default function ReportsWrapper() {
 				{applyFilters('dlm.reports.after.rangeSelect', '', { dispatch, state })}
 			</div>
 			<div className={styles.dlmReportsBody}>
-				{renderTabContent()}
+				{ mountedTabs.has( 'overview' ) && (
+					<div style={ { display: 'overview' === state.activeTab ? undefined : 'none' } }>
+						<OverviewTab />
+					</div>
+				) }
+				{ mountedTabs.has( 'detailed' ) && (
+					<div style={ { display: 'detailed' === state.activeTab ? undefined : 'none' } }>
+						<DetailedTab />
+					</div>
+				) }
+				{ ! isKnownTab && applyFilters( `dlm.reports.tab.${ state.activeTab }.body`, '', { dispatch, state } ) }
 				{applyFilters('dlm.reports.after.tab.content', '', { dispatch, state })}
 			</div>
 		</div>

@@ -17,6 +17,13 @@ if ( defined( 'ABSPATH' ) && defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	delete_option( 'blc_activation_enabled' );
 	delete_option( 'blc_installation_log' );
 
+	// Remove migrated flag.
+	delete_option( 'blc_configuration_migrated' );
+	delete_option( 'wsblc_admin_options' );
+	delete_option( 'wsblc_frontend_options' );
+	delete_option( 'wsblc_general_options' );
+	delete_option( 'wsblc_modules_options' );
+
 	// Remove the database tables.
 	$mywpdb = $GLOBALS['wpdb'];
 	if ( isset( $mywpdb ) ) {

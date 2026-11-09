@@ -24,8 +24,8 @@ $displayName = stripslashes(get_user_by('id', B2S_PLUGIN_BLOG_USER_ID)->display_
 $displayName = ((empty($displayName) || $displayName == false) ? __("Unknown username", "blog2social") : $displayName);
 $networkItem = new B2S_Network_Item();
 $networkData = $networkItem->getData();
-?>
 
+?>
 <div class="b2s-container">
     <?php
     if ($onboarding == 1 && B2S_PLUGIN_USER_VERSION == 0) {
@@ -404,6 +404,7 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
+
 <div class="modal fade" id="b2s-edit-template" tabindex="-1" role="dialog" aria-labelledby="b2s-edit-template" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog" role="document">
         <div class="modal-content custom-edit-template-modal-width">
@@ -438,6 +439,7 @@ $networkData = $networkItem->getData();
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-44" alt="Threads" src="<?php echo esc_url(plugins_url('/assets/images/portale/44_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-45" alt="X" src="<?php echo esc_url(plugins_url('/assets/images/portale/45_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                 <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-46" alt="Band" src="<?php echo esc_url(plugins_url('/assets/images/portale/46_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
+                <img class="pull-left hidden-xs b2s-img-network b2s-edit-template-network-img" id="b2s-edit-template-network-img-47" alt="Dev" src="<?php echo esc_url(plugins_url('/assets/images/portale/47_flat.png', B2S_PLUGIN_FILE)); ?>" style="display: none;">
                 <h4 class="modal-title b2s-edit-template-title"><?php esc_html_e('Edit Post Template', 'blog2social') ?></h4>
             </div>
             <div class="row b2s-loading-area width-100">
@@ -451,12 +453,14 @@ $networkData = $networkItem->getData();
 
             </div>
             <div class="modal-footer b2s-edit-template-footer">
+                <button type="button" class="btn btn-primary btn-sm b2s-edit-template-save-ai-btn" style="display: none;"><?php esc_html_e('save', 'blog2social'); ?></button>
                 <button class="btn btn-primary btn-sm b2s-edit-template-save-btn"><?php esc_html_e('save', 'blog2social'); ?></button>
                 <input type="hidden" value="" id="b2s-edit-template-network-id">
             </div>
         </div>
     </div>
 </div>
+
 
 <div class="modal fade" id="b2sInfoNoCache" tabindex="-1" role="dialog" aria-labelledby="b2sInfoNoCache" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
@@ -524,6 +528,7 @@ $networkData = $networkItem->getData();
                         <span class="b2s-bold">{CONTENT}</span> - <?php esc_html_e('The content of your post', 'blog2social') ?> <br>
                         <span class="b2s-bold">{KEYWORDS}</span> - <?php esc_html_e('The tags you have set in your post.', 'blog2social') ?> <br>
                         <span class="b2s-bold">{AUTHOR}</span> - <?php esc_html_e('The name of the post author.', 'blog2social') ?> <br>
+                        <span class="b2s-bold">{CAPTION}</span> - <?php esc_html_e('The caption of your video.', 'blog2social') ?> <br>
                         <?php    
                         if (class_exists('WooCommerce') && function_exists('wc_get_product')) {
                          ?>

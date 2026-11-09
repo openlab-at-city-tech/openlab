@@ -1,55 +1,83 @@
 <?php
 
-class B2S_Util {
+class B2S_Util
+{
 
-    public static function urlsafe_base64_encode($data) {
-//return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
+    public static function urlsafe_base64_encode($data)
+    {
+        //return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
         return base64_encode($data);
     }
 
-    public static function urlsafe_base64_decode($data) {
-//return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 3 - ( 3 + strlen($data)) % 4));
+    public static function urlsafe_base64_decode($data)
+    {
+        //return base64_decode(strtr($data, '-_', '+/') . str_repeat('=', 3 - ( 3 + strlen($data)) % 4));
         return base64_decode($data);
     }
 
-    public static function getUTCForDate($date, $userTimezone) {
+    public static function getUTCForDate($date, $userTimezone)
+    {
+        $userTimezone = self::normalizeTimezoneOffset($userTimezone);
         $utcTime = strtotime($date) + ($userTimezone * 3600);
         return wp_date('Y-m-d H:i:s', $utcTime, new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function getLocalDate($userTimezone, $lang = 'en') {
+    public static function getLocalDate($userTimezone, $lang = 'en')
+    {
+        $userTimezone = self::normalizeTimezoneOffset($userTimezone);
         $ident = ($lang == 'de') ? 'd.m.Y H:i' : 'Y/m/d g:i a';
         $localTime = strtotime(gmdate('Y-m-d H:i:s')) + ($userTimezone * 3600);
         return wp_date($ident, $localTime, new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function getbyIdentLocalDate($userTimezone, $ident = "Y-m-d H:i:s") {
+    public static function getbyIdentLocalDate($userTimezone, $ident = "Y-m-d H:i:s")
+    {
+        $userTimezone = self::normalizeTimezoneOffset($userTimezone);
         $localTime = strtotime(gmdate('Y-m-d H:i:s')) + ($userTimezone * 3600);
         return wp_date($ident, $localTime, new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function getCustomLocaleDateTime($userTimezone, $ident = "Y-m-d H:i:s") {
+    public static function getCustomLocaleDateTime($userTimezone, $ident = "Y-m-d H:i:s")
+    {
+        $userTimezone = self::normalizeTimezoneOffset($userTimezone);
         $localTime = strtotime(gmdate('Y-m-d H:i:s')) + ($userTimezone * 3600);
         return wp_date($ident, $localTime, new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function getVersion($version = 000) {
+    private static function normalizeTimezoneOffset($userTimezone)
+    {
+        if (!is_numeric($userTimezone)) {
+            return 0.0;
+        }
+        $timezoneOffset = (float) $userTimezone;
+        if (!is_finite($timezoneOffset)) {
+            return 0.0;
+        }
+        return $timezoneOffset;
+    }
+
+    public static function getVersion($version = 000)
+    {
         return substr(chunk_split($version, 1, '.'), 0, -1);
     }
 
-    public static function convertKbToGb($kbytes) {
+    public static function convertKbToGb($kbytes)
+    {
         return $fileSize = round($kbytes / 1024 / 1024, 3) . 'GB';
     }
 
-    public static function convertKbToGbOneDecimal($kbytes) {
+    public static function convertKbToGbOneDecimal($kbytes)
+    {
         return $fileSize = round($kbytes / 1024 / 1024, 1) . 'GB';
     }
 
-    public static function convertKbToMb($kbytes) {
+    public static function convertKbToMb($kbytes)
+    {
         return $fileSize = round($kbytes / 1024, 0) . 'MB';
     }
 
-    public static function getRemainingVideoVolume($kbytes) {
+    public static function getRemainingVideoVolume($kbytes)
+    {
         if (self::convertKbToGbOneDecimal($kbytes) > 1) {
             return self::convertKbToGbOneDecimal($kbytes);
         } else {
@@ -57,7 +85,8 @@ class B2S_Util {
         }
     }
 
-    public static function getUsedPercentOfXy($open, $total) {
+    public static function getUsedPercentOfXy($open, $total)
+    {
         if ((int) $total > 0 && (int) $open > 0) {
             $usedOf = (100 - ((100 / $total) * $open));
             return round($usedOf, 2);
@@ -66,7 +95,8 @@ class B2S_Util {
         }
     }
 
-    public static function getRandomColor() {
+    public static function getRandomColor()
+    {
         $letters = '0123456789ABCDEF';
         $color = '#';
         for ($i = 0; $i < 6; $i++) {
@@ -75,7 +105,8 @@ class B2S_Util {
         return $color;
     }
 
-    public static function returnInByts($val = "") {
+    public static function returnInByts($val = "")
+    {
         if (!empty($val)) {
             $last = strtolower(mb_substr(trim($val), -1));
             switch ($last) {
@@ -95,7 +126,8 @@ class B2S_Util {
         return $val;
     }
 
-    public static function getCustomDateFormat($dateTime = '0000-00-00 00:00:00', $lang = 'en', $time = true) {
+    public static function getCustomDateFormat($dateTime = '0000-00-00 00:00:00', $lang = 'en', $time = true)
+    {
         $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
         $optionUserTimeFormat = $options->_getOption('user_time_format');
         if ($optionUserTimeFormat == false) {
@@ -110,7 +142,8 @@ class B2S_Util {
         }
     }
 
-    public static function getTrialRemainingDays($trialEndDate = '', $timeZone = 'Europe/Berlin') {
+    public static function getTrialRemainingDays($trialEndDate = '', $timeZone = 'Europe/Berlin')
+    {
         if (!empty($trialEndDate)) {
             $trailDateUtc = new DateTime($trialEndDate);
             $timeZone = empty($timeZone) ? 'Europe/Berlin' : $timeZone;
@@ -126,7 +159,8 @@ class B2S_Util {
         return false;
     }
 
-    public static function scrapeUrl($url = '') {
+    public static function scrapeUrl($url = '')
+    {
         if (!empty($url)) {
             $param = array();
             libxml_use_internal_errors(true); // Yeah if you are so worried about using @ with warnings
@@ -146,7 +180,7 @@ class B2S_Util {
             }
             $html = self::b2sFileGetContents($url, true);
             if (!empty($html) && $html !== false) {
-//Search rist Parameter
+                //Search rist Parameter
                 $data = self::b2sGetAllTags($html, 'all', false);
                 if (is_array($data) && !empty($data)) {
                     return $data;
@@ -156,24 +190,25 @@ class B2S_Util {
         }
     }
 
-    public static function getMetaTags($postId = 0, $postUrl = '', $network = 1) {
+    public static function getMetaTags($postId = 0, $postUrl = '', $network = 1)
+    {
         $type = ($network == 2 || $network == 45) ? 'twitter' : 'og';
         $search = ($network == 2 || $network == 45) ? 'name' : 'property';
-//GETSTOREEDDATA
+        //GETSTOREEDDATA
         if ((int) $postId != 0) {
             $metaData = get_option('B2S_PLUGIN_POST_META_TAGES_' . strtoupper($type) . '_' . $postId);
             if ($metaData !== false && is_array($metaData)) {
                 return $metaData;
             }
         }
-//GETDATA
+        //GETDATA
         $getTags = array('title', 'description', 'image', 'image_alt_text');
         $param = array();
         libxml_use_internal_errors(true); // Yeah if you are so worried about using @ with warnings
         $postUrl = $postUrl . ((wp_parse_url($postUrl, PHP_URL_QUERY) ? '&' : '?') . 'no_cache=1');  //nocache
         $html = self::b2sFileGetContents($postUrl);
         if (!empty($html) && $html !== false) {
-//Search rist OG Parameter
+            //Search rist OG Parameter
             $temp = self::b2sGetAllTags($html, $type, false, $search);
             foreach ($getTags as $k => $v) {
                 if (isset($temp[$v]) && !empty($temp[$v])) {
@@ -195,7 +230,7 @@ class B2S_Util {
                     }
                 }
             }
-//STOREDATA
+            //STOREDATA
             if ((int) $postId != 0) {
                 update_option('B2S_PLUGIN_POST_META_TAGES_' . strtoupper($type) . '_' . $postId, $param);
             }
@@ -204,20 +239,22 @@ class B2S_Util {
         return false;
     }
 
-    private static function b2sFileGetContents($url, $extern = false) {
+    private static function b2sFileGetContents($url, $extern = false)
+    {
 
         $wpVersion = get_bloginfo('version');
         $pluginVersion = $version = implode('.', str_split((string) B2S_PLUGIN_VERSION));
         $ua = sprintf(
-                'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
-                $wpVersion,
-                $pluginVersion
+            'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
+            $wpVersion,
+            $pluginVersion
         );
 
         $args = array(
             'timeout' => 15,
             'redirection' => '5',
-            'user-agent' => $ua);
+            'user-agent' => $ua
+        );
 
         $response = wp_safe_remote_get($url, $args);
         if (!is_wp_error($response)) {
@@ -231,19 +268,22 @@ class B2S_Util {
         return false;
     }
 
-    private static function b2sGetMetaDescription($html) {
+    private static function b2sGetMetaDescription($html)
+    {
         //$res = get_meta_tags($url);
         //return (isset($res['description']) ? self::cleanContent(strip_shortcodes($res['description'])) : '');
         $res = preg_match('#<meta +name *=[\"\']?description[\"\']?[^>]*content=[\"\']?(.*?)[\"\']? */?>#i', $html, $matches);
         return (isset($matches[1]) && !empty($matches[1])) ? trim(preg_replace('/\s+/', ' ', $matches[1])) : '';
     }
 
-    private static function b2sGetMetaTitle($html) {
+    private static function b2sGetMetaTitle($html)
+    {
         $res = preg_match("/<title>(.*)<\/title>/siU", $html, $matches);
         return (isset($matches[1]) && !empty($matches[1])) ? trim(preg_replace('/\s+/', ' ', $matches[1])) : '';
     }
 
-    private static function b2sGetAllTags($html, $type = 'og', $ignoreEncoding = false, $search = 'property') {
+    private static function b2sGetAllTags($html, $type = 'og', $ignoreEncoding = false, $search = 'property')
+    {
         $list = array();
         $doc = new DOMDocument();
         if (function_exists('mb_convert_encoding') && !$ignoreEncoding) {
@@ -323,7 +363,8 @@ class B2S_Util {
         return $list;
     }
 
-    public static function getImagesByPostId($postId = 0, $forceFeaturedImage = true, $postContent = '', $postUrl = '', $network = false, $postLang = 'en') {
+    public static function getImagesByPostId($postId = 0, $forceFeaturedImage = true, $postContent = '', $postUrl = '', $network = false, $postLang = 'en')
+    {
 
         $matches = array();
         $homeUrl = get_site_url();
@@ -333,8 +374,8 @@ class B2S_Util {
         $image_alt = get_post_meta($attachment_id, '_wp_attachment_image_alt', true);
         if ($forceFeaturedImage && $featuredImage != false && !empty($featuredImage)) {
             $ext = pathinfo(
-                    wp_parse_url($featuredImage, PHP_URL_PATH),
-                    PATHINFO_EXTENSION
+                wp_parse_url($featuredImage, PHP_URL_PATH),
+                PATHINFO_EXTENSION
             );
             if (!in_array($ext, array('jpg', 'png', 'webp', 'gif'))) {
                 return array(0 => array(0 => $featuredImage, 1 => esc_attr($image_alt)));
@@ -351,17 +392,17 @@ class B2S_Util {
                 if ($imgUrl == false) {
                     continue;
                 }
-//AllowedExtensions?
+                //AllowedExtensions?
                 if (!$network && !in_array(substr($imgUrl, strrpos($imgUrl, '.')), array('.jpg', '.png', '.webp', '.gif'))) {
                     continue;
                 }
-//isRelativ?
+                //isRelativ?
                 if (!preg_match('/((http|https):\/\/|(www.))/', $imgUrl)) {
-//StartWith //
+                    //StartWith //
                     if ((substr($imgUrl, 0, 2) == '//')) {
                         $imgUrl = (($scheme != NULL) ? $scheme : 'http') . ':' . $imgUrl;
                     } else {
-//StartWith /
+                        //StartWith /
                         $imgUrl = (substr($imgUrl, 0, 1) != '/') ? '/' . $imgUrl : $imgUrl;
                         $imgUrl = str_replace('//', '/', $imgUrl);
                         $imgUrl = $homeUrl . $imgUrl;
@@ -380,7 +421,8 @@ class B2S_Util {
         return $rtrnArray;
     }
 
-    public static function clean_html($text = '', $tags = array('style', 'script', 'noscript')) {
+    public static function clean_html($text = '', $tags = array('style', 'script', 'noscript'))
+    {
         if (!empty($text)) {
             if (!empty($tags)) {
                 if (is_array($tags)) {
@@ -395,14 +437,16 @@ class B2S_Util {
         return $text;
     }
 
-    public static function convertLiElements($postContent) {
+    public static function convertLiElements($postContent)
+    {
         $postContent = preg_replace("/<([\s]*?)\/([\s]*?)li([\s]*?)>*?([^\n]?)*?<([\s]*?)li/", "</li>\n<li", $postContent);
         $postContent = preg_replace("/<([\s]*?)li*?([\s]*?)>/", "- ", $postContent);
         $postContent = preg_replace("/<([\s]*?)\/([\s]*?)li([\s]*?)>/", "", $postContent);
         return $postContent;
     }
 
-    public static function prepareContent($postId = 0, $postContent = '', $postUrl = '', $allowHtml = '<p><h1><h2><br><i><b><a><img>', $allowEmoji = true, $postLang = 'en') {
+    public static function prepareContent($postId = 0, $postContent = '', $postUrl = '', $allowHtml = '<p><h1><h2><br><i><b><a><img>', $allowEmoji = true, $postLang = 'en')
+    {
 
         $homeUrl = get_site_url();
         $scheme = wp_parse_url($homeUrl, PHP_URL_SCHEME);
@@ -451,14 +495,15 @@ class B2S_Util {
 
             return $tempContent;
         }
-        
+
         //Convert HTML Linebreaks, if still there
         $prepareContent = preg_replace('/<\s*\/?\s*br\s*\/?\s*>/', "\n", $prepareContent);
 
         return preg_replace('/(?:[ \t]*(?:\n|\r\n?)){3,}/', "\n\n", trim(wp_strip_all_tags($prepareContent)));
     }
 
-    public static function createTagArrayFromString($tagString = "") {
+    public static function createTagArrayFromString($tagString = "")
+    {
 
         $allowedTags = array();
         if (!empty($tagString)) {
@@ -506,7 +551,8 @@ class B2S_Util {
         return $allowedTags;
     }
 
-    public static function cleanHtmlAttr($postContent) {
+    public static function cleanHtmlAttr($postContent)
+    {
         $postContent = preg_replace('/(<[^>]+) style=[\"\'].*?[\"\']/i', '$1', $postContent);
         $postContent = preg_replace('/(<[^>]+) class=[\"\'].*?[\"\']/i', '$1', $postContent);
         $postContent = preg_replace('/(<[^>]+) height=[\"\'].*?[\"\']/i', '$1', $postContent);
@@ -514,7 +560,8 @@ class B2S_Util {
         return preg_replace('/(<[^>]+) id=[\"\'].*?[\"\']/i', '$1', $postContent);
     }
 
-    public static function b2sValidateUrl($url) {
+    public static function b2sValidateUrl($url)
+    {
 
         $url = esc_url_raw(trim($url));
         if (empty($url)) {
@@ -533,20 +580,22 @@ class B2S_Util {
         return $url;
     }
 
-    public static function cleanContent($postContent) {
+    public static function cleanContent($postContent)
+    {
         return preg_replace('/\[.*?(?=\])\]/s', '', $postContent);
     }
 
-    public static function getFullContent($postId = 0, $postContent = '', $postUrl = '', $postLang = 'en') {
+    public static function getFullContent($postId = 0, $postContent = '', $postUrl = '', $postLang = 'en')
+    {
 
         $postLang = ($postLang === false) ? 'en' : trim(strtolower($postLang));
-//isset settings allow shortcode
+        //isset settings allow shortcode
         if (get_option('B2S_PLUGIN_USER_ALLOW_SHORTCODE_' . get_current_user_id()) !== false) {
 
-//check is shortcode in content
+            //check is shortcode in content
             if (preg_match('/\[(.*?)\]/s', $postContent)) {
 
-//check has crawled content from frontend
+                //check has crawled content from frontend
                 $dbContent = get_option('B2S_PLUGIN_POST_CONTENT_' . $postId);
                 if ($dbContent !== false) {
                     return $dbContent;
@@ -558,15 +607,15 @@ class B2S_Util {
                         return $postContent;
                     }
 
-//crawl content from frontend
+                    //crawl content from frontend
                     $postUrl = add_query_arg(array('b2s_get_full_content' => 1, 'no_cache' => 1, 'lang' => $postLang), $postUrl);
                     $wpVersion = get_bloginfo('version');
                     $pluginVersion = implode('.', str_split((string) B2S_PLUGIN_VERSION));
 
                     $ua = sprintf(
-                            'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
-                            $wpVersion,
-                            $pluginVersion
+                        'Blog2SocialBot/1.0 (WP/%s; Plugin/%s; +https://en.blog2social.com/bot-info; bot@blog2social.com)',
+                        $wpVersion,
+                        $pluginVersion
                     );
 
                     $args = array(
@@ -578,7 +627,7 @@ class B2S_Util {
                     $wpB2sGetFullContent = wp_safe_remote_get($postUrl, $args); //slot 11 seconds       
 
                     if (is_array($wpB2sGetFullContent) && !is_wp_error($wpB2sGetFullContent)) {
-//get crwaled content from db - hide cache by get_options
+                        //get crwaled content from db - hide cache by get_options
                         global $wpdb;
                         $dbContent = $wpdb->get_var($wpdb->prepare("SELECT option_value FROM " . $wpdb->options . " WHERE option_name =%s ", 'B2S_PLUGIN_POST_CONTENT_' . $postId));
                         if ($dbContent !== NULL) {
@@ -592,7 +641,8 @@ class B2S_Util {
     }
 
     //BlueSky cuts urls after 16 chars into the path
-    public static function getNetwork43UrlLength($url = "") {
+    public static function getNetwork43UrlLength($url = "")
+    {
         if (!empty($url)) {
             $hostlength = 0;
             $pathlength = 0;
@@ -615,8 +665,9 @@ class B2S_Util {
         return 0;
     }
 
-//Emoji by Schedule + AllowNoNetwork
-    public static function remove4byte($content) {
+    //Emoji by Schedule + AllowNoNetwork
+    public static function remove4byte($content)
+    {
         if (function_exists('iconv')) {
             $content = iconv("utf-8", "utf-8//ignore", $content);
         }
@@ -628,7 +679,8 @@ class B2S_Util {
     )%xs', '', $content));
     }
 
-    public static function cleanShortCodeByCaption($postContent) {
+    public static function cleanShortCodeByCaption($postContent)
+    {
         preg_match_all('#\s*\[caption[^]]*\].*?\[/caption\]\s*#is', $postContent, $matches);
         if (isset($matches[0]) && !empty($matches[0]) && is_array($matches[0])) {
             $temp = '';
@@ -645,7 +697,8 @@ class B2S_Util {
         return $postContent;
     }
 
-    public static function getRandomTime($start, $ende) {
+    public static function getRandomTime($start, $ende)
+    {
         $startparts = explode(':', $start);
         $startH = $startparts[0];
         $startMin = strlen($startparts[1]) == 1 ? '0' . $startparts[1] : $startparts[1];
@@ -667,13 +720,15 @@ class B2S_Util {
         return $hour . ':' . $minuteRound;
     }
 
-    public static function getTimeByLang($time, $lang = 'de') {
+    public static function getTimeByLang($time, $lang = 'de')
+    {
         $time = substr('0' . $time, -2);
         $slug = ($lang == 'en') ? 'h:i a' : 'H:i';
         return wp_date($slug, strtotime(wp_date('Y-m-d ' . $time . ':00:00', null, new DateTimeZone(date_default_timezone_get()))), new DateTimeZone(date_default_timezone_get()));
     }
 
-    public static function getExcerpt($text, $count = 400, $max = false, $add = false, $customStops = array()) {
+    public static function getExcerpt($text, $count = 400, $max = false, $add = false, $customStops = array())
+    {
 
         //Bug: Converting json + PHP Extension
         if (function_exists('mb_strlen') && function_exists('mb_substr') && function_exists('mb_stripos') && function_exists('mb_strripos')) {
@@ -707,12 +762,12 @@ class B2S_Util {
                 }
             }
             $tmpText = implode(array_slice($parts, 0, $last_taken));
-      
+
             //Old case: first whole set in $text is greater than $count, do cut off by word -until V7.5.5
             if (empty($tmpText)) {
 
                 $stops = !empty($customStops) && is_array($customStops) ? $customStops : array('.', '?', '!', '#', '(');
-         
+
                 $min = $count;
                 $cleanTruncateWord = true;
                 $max = ($max !== false) ? ($max - $min) : ($min - 1);
@@ -762,26 +817,27 @@ class B2S_Util {
         return trim($text);
     }
 
-//Plugin qTranslate [:en]Content[:de]Text[:]
-    public static function getTitleByLanguage($title, $postLang = 'en') {
+    //Plugin qTranslate [:en]Content[:de]Text[:]
+    public static function getTitleByLanguage($title, $postLang = 'en')
+    {
         $postLang = ($postLang === false) ? 'en' : trim(strtolower($postLang));
         $regex = "#(<!--:[a-z]{2}-->|<!--:-->|\[:[a-z]{2}\]|\[:\]|\{:[a-z]{2}\}|\{:\})#ism";
         $blocks = preg_split($regex, $title, -1, PREG_SPLIT_NO_EMPTY | PREG_SPLIT_DELIM_CAPTURE);
-        if (count($blocks) <= 1) {//no language is encoded in the $text, the most frequent case
+        if (count($blocks) <= 1) { //no language is encoded in the $text, the most frequent case
             return wp_strip_all_tags($title);
         }
         $result = array();
         $current_lang = false;
         foreach ($blocks as $block) {
-// detect c-tags
+            // detect c-tags
             if (preg_match("#^<!--:([a-z]{2})-->$#ism", $block, $matches)) {
                 $current_lang = $matches[1];
                 continue;
-// detect b-tags
+                // detect b-tags
             } elseif (preg_match("#^\[:([a-z]{2})\]$#ism", $block, $matches)) {
                 $current_lang = $matches[1];
                 continue;
-// detect s-tags @since 3.3.6 swirly bracket encoding added
+                // detect s-tags @since 3.3.6 swirly bracket encoding added
             } elseif (preg_match("#^\{:([a-z]{2})\}$#ism", $block, $matches)) {
                 $current_lang = $matches[1];
                 continue;
@@ -793,7 +849,7 @@ class B2S_Util {
                     $current_lang = false;
                     break;
                 default:
-// correctly categorize text block
+                    // correctly categorize text block
                     if ($current_lang) {
                         if (!isset($result[$current_lang])) {
                             $result[$current_lang] = '';
@@ -820,7 +876,8 @@ class B2S_Util {
         return wp_strip_all_tags($result[$postLang]);
     }
 
-    public static function createTimezoneList($selected = '', $region = 2047) { //DateTimeZone::ALL == 2047  >=PHP 5.5.3 constant not set
+    public static function createTimezoneList($selected = '', $region = 2047)
+    { //DateTimeZone::ALL == 2047  >=PHP 5.5.3 constant not set
         $timezones = timezone_identifiers_list($region);
         if (!$timezones) {
             return false;
@@ -838,7 +895,8 @@ class B2S_Util {
         return $optionHtmlList;
     }
 
-    public static function humanReadableOffset($floatnbr = 0) {
+    public static function humanReadableOffset($floatnbr = 0)
+    {
         $result = '';
         $floatnbr = number_format($floatnbr, 2, '.', ' ');
         $sign = '';
@@ -880,7 +938,8 @@ class B2S_Util {
         return $first . ':' . $second;
     }
 
-    public static function getOffsetToUtcByTimeZone($userTimeZone = '', $firstDateTime = 'now') {
+    public static function getOffsetToUtcByTimeZone($userTimeZone = '', $firstDateTime = 'now')
+    {
 
         if (empty($userTimeZone)) {
             $userTimeZone = date_default_timezone_get();
@@ -893,7 +952,8 @@ class B2S_Util {
         return (float) $offset / 3600;
     }
 
-    public static function addUrlParameter($url = '', $parameter = array()) {
+    public static function addUrlParameter($url = '', $parameter = array())
+    {
         $add = '&';
         if (!wp_parse_url($url, PHP_URL_QUERY)) {
             $add = '?';

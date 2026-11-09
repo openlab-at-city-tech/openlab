@@ -94,6 +94,13 @@ class Controller extends Rest_Api {
 		} else {
 			$avatar                  = get_avatar_url( $email, array( 'size' => 24 ) );
 			$response_data['avatar'] = $avatar;
+
+			/*
+			 * The email address may belong to a registered user. The id lets the caller detect a recipient that has
+			 * already been added through the users list, without exposing any user email address.
+			 */
+			$user                     = get_user_by( 'email', $email );
+			$response_data['user_id'] = $user instanceof \WP_User ? $user->ID : 0;
 		}
 
 		$response = $this->prepare_item_for_response( $response_data, $request );
@@ -151,6 +158,11 @@ class Controller extends Rest_Api {
 			'confirmed' => array(
 				'description' => esc_html__( 'Auto-confirmed when email belongs to user.', 'broken-link-checker' ),
 				'type'        => 'boolean',
+			),
+
+			'user_id' => array(
+				'description' => esc_html__( 'Id of the registered user owning the email address. 0 when the email address does not belong to a user.', 'broken-link-checker' ),
+				'type'        => 'integer',
 			),
 
 			'message' => array(

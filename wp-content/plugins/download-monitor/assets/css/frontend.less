@@ -1,4 +1,4 @@
-.download-box {
+.dlm-download-box {
   width: 250px;
   border: 1px solid #ccc;
   -moz-border-radius: 4px;
@@ -30,11 +30,11 @@
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
   }
 
-  .download-box-content {
+  .dlm-download-box-content {
     padding: 0 1em 1em;
   }
 
-  .download-count {
+  .dlm-download-count {
     -moz-border-radius: 1em;
     -webkit-border-radius: 1em;
     border-radius: 1em;
@@ -57,109 +57,82 @@
   }
 }
 
-.download-button {
-  text-align: center;
-  text-decoration: none !important;
-  padding: 0.75em 1em;
-  color: #fff;
-  display: block;
-  font-size: 1.2em;
-  line-height: 1.5em;
-  background-color: #0099cc;
-  background-image: -webkit-linear-gradient(#009fd4, #0099cc, #0086b2);
-  background-image: -moz-linear-gradient(#009fd4, #0099cc, #0086b2);
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  border: 1px solid #0086b2;
-  cursor: pointer;
+:where(.dlm-downloads) li {
+  margin-top: 0.5em;
+}
 
-  &:hover {
-    color: #fff;
-    background-color: #0099cc;
-    background-image: -webkit-linear-gradient(#0099cc, #0086b2);
-    background-image: -moz-linear-gradient(#0099cc, #0086b2);
-  }
+.dlm-download-default {
+  display: inline-block;
+}
 
-  &:visited {
-    color: #fff;
-    text-decoration: none;
-  }
+.dlm-download-button {
+  display: inline-flex;
+  flex-direction: column;
 
-
-  small {
+  .dlm-button-meta {
     font-size: 0.8em;
     opacity: 0.8;
-    display: block;
   }
 }
 
-.filetype-icon {
-  padding-left: 19px;
-  background-repeat: no-repeat;
-  background-position: left;
-  background-image: url(../images/filetypes/document.png);
-}
 
-.filetype-pdf {
+.dlm-filetype-pdf {
   background-image: url(../images/filetypes/document-pdf.png);
 }
 
-.filetype-m4r, .filetype-au, .filetype-snd, .filetype-mid, .filetype-midi, .filetype-kar, .filetype-mpga, .filetype-mp2, .filetype-mp3, .filetype-aif, .filetype-aiff, .filetype-aifc, .filetype-m3u, .filetype-ram, .filetype-rm, .filetype-rpm, .filetype-ra, .filetype-wav, .filetype-wave {
+.dlm-filetype-m4r, .dlm-filetype-au, .dlm-filetype-snd, .dlm-filetype-mid, .dlm-filetype-midi, .dlm-filetype-kar, .dlm-filetype-mpga, .dlm-filetype-mp2, .dlm-filetype-mp3, .dlm-filetype-aif, .dlm-filetype-aiff, .dlm-filetype-aifc, .dlm-filetype-m3u, .dlm-filetype-ram, .dlm-filetype-rm, .dlm-filetype-rpm, .dlm-filetype-ra, .dlm-filetype-wav, .dlm-filetype-wave {
   background-image: url(../images/filetypes/document-music.png);
 }
 
-.filetype-mpeg, .filetype-mpg, .filetype-mpe, .filetype-qt, .filetype-mov, .filetype-mxu, .filetype-avi, .filetype-movie, .filetype-mp4, .filetype-divx, .filetype-wmv {
+.dlm-filetype-mpeg, .dlm-filetype-mpg, .dlm-filetype-mpe, .dlm-filetype-qt, .dlm-filetype-mov, .dlm-filetype-mxu, .dlm-filetype-avi, .dlm-filetype-movie, .dlm-filetype-mp4, .dlm-filetype-divx, .dlm-filetype-wmv {
   background-image: url(../images/filetypes/document-film.png);
 }
 
-.filetype-zip, .filetype-gz, .filetype-rar, .filetype-sit, .filetype-tar, .filetype-7z {
+.dlm-filetype-zip, .dlm-filetype-gz, .dlm-filetype-rar, .dlm-filetype-sit, .dlm-filetype-tar, .dlm-filetype-7z {
   background-image: url(../images/filetypes/document-zipper.png);
 }
 
-.filetype-xls, .filetype-tsv, .filetype-csv, .filetype-xlsx {
+.dlm-filetype-xls, .dlm-filetype-tsv, .dlm-filetype-csv, .dlm-filetype-xlsx {
   background-image: url(../images/filetypes/document-excel.png);
 }
 
-.filetype-doc, .filetype-docx {
+.dlm-filetype-doc, .dlm-filetype-docx {
   background-image: url(../images/filetypes/document-word-text.png);
 }
 
-.filetype-ai {
+.dlm-filetype-ai {
   background-image: url(../images/filetypes/document-illustrator.png);
 }
 
-.filetype-swf {
+.dlm-filetype-swf {
   background-image: url(../images/filetypes/document-flash-movie.png);
 }
 
-.filetype-eps, .filetype-ps, .filetype-bmp, .filetype-gif, .filetype-ief, .filetype-jpeg, .filetype-jpg, .filetype-jpe, .filetype-png, .filetype-tiff, .filetype-tif, .filetype-djv, .filetype-wbmp, .filetype-ras, .filetype-pnm, .filetype-pbm, .filetype-pgm, .filetype-ppm, .filetype-rgb, .filetype-xbm, .filetype-xpm, .filetype-xwd {
+.dlm-filetype-eps, .dlm-filetype-ps, .dlm-filetype-bmp, .dlm-filetype-gif, .dlm-filetype-ief, .dlm-filetype-jpeg, .dlm-filetype-jpg, .dlm-filetype-jpe, .dlm-filetype-png, .dlm-filetype-tiff, .dlm-filetype-tif, .dlm-filetype-djv, .dlm-filetype-wbmp, .dlm-filetype-ras, .dlm-filetype-pnm, .dlm-filetype-pbm, .dlm-filetype-pgm, .dlm-filetype-ppm, .dlm-filetype-rgb, .dlm-filetype-xbm, .dlm-filetype-xpm, .dlm-filetype-xwd {
   background-image: url(../images/filetypes/document-image.png);
 }
 
-.filetype-psd {
+.dlm-filetype-psd {
   background-image: url(../images/filetypes/document-photoshop.png);
 }
 
-.filetype-ppt, .filetype-pptx {
+.dlm-filetype-ppt, .dlm-filetype-pptx {
   background-image: url(../images/filetypes/document-powerpoint.png);
 }
 
-.filetype-js, .filetype-css, .filetype-as, .filetype-htm, .filetype-htaccess, .filetype-sql, .filetype-html, .filetype-php, .filetype-xml, .filetype-xsl {
+.dlm-filetype-js, .dlm-filetype-css, .dlm-filetype-as, .dlm-filetype-htm, .dlm-filetype-htaccess, .dlm-filetype-sql, .dlm-filetype-html, .dlm-filetype-php, .dlm-filetype-xml, .dlm-filetype-xsl {
   background-image: url(../images/filetypes/document-code.png);
 }
 
-.filetype-rtx, .filetype-rtf {
+.dlm-filetype-rtx, .dlm-filetype-rtf {
   background-image: url(../images/filetypes/document-text-image.png);
 }
 
-.filetype-txt {
+.dlm-filetype-txt {
   background-image: url(../images/filetypes/document-text.png);
 }
 
-nav.download-monitor-pagination, #content nav.download-monitor-pagination {
+nav.dlm-download-monitor-pagination, #content nav.dlm-download-monitor-pagination {
   text-align: center;
   ul {
     display: inline-block;
@@ -244,7 +217,7 @@ data.dlm-hidden-info {
 
       &.box {
         width: 100%;
-        span.download-done {
+        span.dlm-download-done {
           &::after {
             content: '✓'
           }
@@ -277,26 +250,11 @@ data.dlm-hidden-info {
   } 
 }
 /* Comment below lines for the new XHR loader so that we know where to rever*/
-html body a.download-button{
+html body a.dlm-download-button{
   position: relative;
   
   &.dlm-download-started {
     text-decoration: none;
-  }
-
-  &.dlm-download-complete {
-    &::after {
-      content: '✓';
-      width:20px;
-      right:-30px;
-      position: absolute;
-      height: 100%;
-      z-index:3;
-      background:transparent;
-      color:green;
-      bottom:0;
-      left:auto;
-    }
   }
 
   &::before {
@@ -313,63 +271,55 @@ html body a.download-button{
     border-radius:5px;
   }
 
-  &.download-Infinity {
+  &.dlm-download-Infinity {
     &::before {
       animation: infinite-loading 1s infinite linear;
     }
   }
 
-  &.download-10:before {
+  &.dlm-download-10:before {
     width: 10%;
   }
 
-  &.download-20:before {
+  &.dlm-download-20:before {
     width: 20%;
   }
 
-  &.download-30:before {
+  &.dlm-download-30:before {
     width: 30%;
   }
 
-  &.download-40:before {
+  &.dlm-download-40:before {
     width: 40%;
   }
 
-  &.download-50:before {
+  &.dlm-download-50:before {
     width: 50%;
   }
 
-  &.download-60:before {
+  &.dlm-download-60:before {
     width: 60%;
   }
 
-  &.download-70:before {
+  &.dlm-download-70:before {
     width: 70%;
   }
 
-  &.download-80:before {
+  &.dlm-download-80:before {
     width: 80%;
   }
 
-  &.download-90:before {
+  &.dlm-download-90:before {
     width: 90%;
   }
 
-  &.download-100:before {
+  &.dlm-download-100:before {
     width:100%;
   }
 }
 
-a.download-button {
-  
-  &.dlm-download-complete {
-    &::after {
-    height:auto;
-    top:50%;
-    transform: translateY(-50%);
-    }
-  }
-  
+a.dlm-download-button {
+
   &::before {
     z-index: 0;
   }
@@ -380,44 +330,11 @@ a.download-button {
   }
 }
 
-html body .download-link {
+html body .dlm-download-link {
   position: relative;
-
-  &::before, &::after {
-    content: '';
-    position: absolute;
-    right: -40px;
-    border-radius: 5px;
-    display: block;
-    opacity:0;
-    z-index:-1;
-  }
 
   &.dlm-download-started {
     text-decoration: none;
-
-    &::before, &::after {
-      opacity:1;
-      z-index:99;
-    }
-  }
-
-  &.dlm-download-complete {
-    &::after {
-      content: '✓';
-      opacity:1;
-      z-index:99;
-      background:transparent;
-      animation:none;
-      transform: translateY(-50%);
-      top:calc( 50% - 5px );
-      line-height: initial;
-    }
-
-    &::before {
-     opacity:0;
-      z-index:-1;
-    }
   }
 }
 @keyframes lds-ellipsis1 {
@@ -441,11 +358,42 @@ html body .download-link {
   color:red;
 }
 
+@keyframes dlm-xhr-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes dlm-spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+.dlm-download-started .dlm-original-content {
+  display: none;
+}
+
+.dlm-original-content,
+.dlm-xhr-loading-gif {
+  animation: dlm-xhr-fade-in 0.25s ease;
+}
+
+.dlm-xhr-loading-gif {
+  width: 22px;
+  height: 22px;
+  align-self: center;
+  margin: 5px 4px 5px 0;
+  vertical-align: middle;
+}
+
+.dlm-xhr-spinner .dlm-spinner-arc {
+  transform-origin: 22px 22px;
+  animation: dlm-spinner-rotate 0.9s linear infinite;
+}
+
 .dlm-xhr-progress {
   min-width:75px;
   width:auto;
   display:inline-block;
   position:relative;
+  vertical-align: middle;
 }
 
 .dlm-no-access-modal-window {

@@ -14,6 +14,20 @@ use Imagely\NGG\DisplayType\ControllerFactory;
 class DisplayType extends WPPostDriver {
 
 	/**
+	 * Object cache group for display type lookups.
+	 *
+	 * @var string
+	 */
+	const CACHE_GROUP = 'ngg_display_types';
+
+	/**
+	 * Short TTL for not-found / empty-result entries — avoids freezing transient misses for 24 h.
+	 *
+	 * @var int
+	 */
+	const NEGATIVE_CACHE_TTL = 300;
+
+	/**
 	 * Singleton instance of the DisplayType mapper.
 	 *
 	 * @var DisplayType|\Imagely\NGGPro\DataMappers\DisplayType|null
@@ -26,6 +40,13 @@ class DisplayType extends WPPostDriver {
 	 * @var string
 	 */
 	public $model_class = 'Imagely\NGG\DataTypes\DisplayType';
+
+	/**
+	 * WP object cache group.
+	 *
+	 * @var string
+	 */
+	protected $object_cache_group = 'ngg_display_types';
 
 	/**
 	 * Constructor.
@@ -68,14 +89,28 @@ class DisplayType extends WPPostDriver {
 	 * @return null|\Imagely\NGG\DataTypes\DisplayType The display type entity or null if not found.
 	 */
 	public function find_by_name( $name ) {
+		$cache_key = 'ngg_display_type_by_name_' . $name;
+		$cached    = wp_cache_get( $cache_key, self::CACHE_GROUP );
+		if ( false !== $cached ) {
+			return '' !== $cached ? $cached : null;
+		}
+
 		$retval = null;
 		$this->select();
 		$this->where( [ 'name = %s', $name ] );
+		$this->limit( 1 ); // name is unique; prevents posts_per_page=-1 default on cache miss.
 
 		$results = $this->run_query();
 
 		if ( ! $results ) {
-			foreach ( $this->find_all() as $entity ) {
+			// Cache find_all() result to avoid N unbounded queries per request when aliases trigger this fallback.
+			$all = wp_cache_get( 'ngg_display_type_find_all', self::CACHE_GROUP );
+			if ( false === $all ) {
+				$all     = $this->find_all();
+				$all_ttl = ! empty( $all ) ? DAY_IN_SECONDS : self::NEGATIVE_CACHE_TTL;
+				wp_cache_set( 'ngg_display_type_find_all', $all, self::CACHE_GROUP, $all_ttl );
+			}
+			foreach ( $all as $entity ) {
 				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( $entity->name == $name || ( isset( $entity->aliases ) && is_array( $entity->aliases ) && in_array( $name, $entity->aliases ) ) ) {
 					$retval = $entity;
@@ -86,6 +121,69 @@ class DisplayType extends WPPostDriver {
 			$retval = $results[0];
 		}
 
+		// Store '' as sentinel for null: wp_cache_get returns false for a miss, but null is a valid "not found"
+		// result. Using '' as the stored value lets us distinguish a cache hit (not found) from a cache miss.
+		// Use a short TTL for not-found entries — a transient miss (e.g. lookup before Pro registers its
+		// display types) must not be frozen as authoritative for 24 h.
+		$ttl = null !== $retval ? DAY_IN_SECONDS : self::NEGATIVE_CACHE_TTL;
+		wp_cache_set( $cache_key, null !== $retval ? $retval : '', self::CACHE_GROUP, $ttl );
+
+		return $retval;
+	}
+
+	/**
+	 * Saves a display type entity and busts the object cache.
+	 *
+	 * @param \Imagely\NGG\DataTypes\DisplayType $entity The display type entity to save.
+	 * @return bool|int
+	 */
+	public function save( $entity ) {
+		$new_name = $entity->name ?? null;
+		$old_name = null;
+
+		// Bust the old-name cache entry when the display type is being renamed.
+		$pkey      = $this->get_primary_key_column();
+		$entity_id = isset( $entity->$pkey ) ? intval( $entity->$pkey ) : 0;
+		if ( $entity_id ) {
+			$existing = $this->find( $entity_id );
+			$old_name = $existing->name ?? null;
+		}
+
+		$retval = parent::save( $entity );
+		if ( $retval ) {
+			if ( $new_name ) {
+				wp_cache_delete( 'ngg_display_type_by_name_' . $new_name, self::CACHE_GROUP );
+			}
+			if ( $old_name && $old_name !== $new_name ) {
+				wp_cache_delete( 'ngg_display_type_by_name_' . $old_name, self::CACHE_GROUP );
+			}
+			wp_cache_delete( 'ngg_display_type_find_all', self::CACHE_GROUP );
+		}
+		return $retval;
+	}
+
+	/**
+	 * Destroys a display type entity and busts the object cache.
+	 *
+	 * @param \Imagely\NGG\DataTypes\DisplayType|int $entity The entity or its ID.
+	 * @param bool                                   $skip_trash Whether to skip the trash.
+	 * @return bool
+	 */
+	public function destroy( $entity, $skip_trash = true ) {
+		$name = null;
+		if ( is_object( $entity ) && isset( $entity->name ) ) {
+			$name = $entity->name;
+		} elseif ( is_numeric( $entity ) ) {
+			$existing = $this->find( (int) $entity );
+			$name     = $existing->name ?? null;
+		}
+		$retval = parent::destroy( $entity, $skip_trash );
+		if ( $retval ) {
+			if ( $name ) {
+				wp_cache_delete( 'ngg_display_type_by_name_' . $name, self::CACHE_GROUP );
+			}
+			wp_cache_delete( 'ngg_display_type_find_all', self::CACHE_GROUP );
+		}
 		return $retval;
 	}
 
@@ -98,8 +196,15 @@ class DisplayType extends WPPostDriver {
 	public function find_by_entity_type( $entity_type ) {
 		$find_entity_types = is_array( $entity_type ) ? $entity_type : [ $entity_type ];
 
+		$all = wp_cache_get( 'ngg_display_type_find_all', self::CACHE_GROUP );
+		if ( false === $all ) {
+			$all     = $this->find_all();
+			$all_ttl = ! empty( $all ) ? DAY_IN_SECONDS : self::NEGATIVE_CACHE_TTL;
+			wp_cache_set( 'ngg_display_type_find_all', $all, self::CACHE_GROUP, $all_ttl );
+		}
+
 		$retval = null;
-		foreach ( $this->find_all() as $display_type ) {
+		foreach ( $all as $display_type ) {
 			foreach ( $find_entity_types as $entity_type ) {
 				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				if ( isset( $display_type->entity_types ) && in_array( $entity_type, $display_type->entity_types ) ) {

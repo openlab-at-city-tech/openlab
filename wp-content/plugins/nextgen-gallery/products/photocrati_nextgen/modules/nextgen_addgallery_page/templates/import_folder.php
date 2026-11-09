@@ -71,16 +71,26 @@
 				}
 				else {
 					<?php
-					$url     = admin_url() . 'admin.php?page=nggallery-manage-gallery&mode=edit&gid={gid}';
-					$message = sprintf(
-						/* translators: %s: URL to manage the gallery */
-						__( 'Done! Successfully imported {count} images. <a href="%s" target="_blank">Manage gallery</a>', 'nggallery' ),
-						esc_url( $url )
-					);
+					$manage_url_base = esc_js( admin_url( 'admin.php?page=nggallery-manage-gallery&mode=edit&gid=' ) );
+					// translators: {count} is replaced by JS with the number of imported images, {manage_url} is replaced with the gallery edit URL.
+					$message = __( 'Done! Successfully imported {count} images. <a href="{manage_url}" target="_blank">Manage gallery</a>', 'nggallery' );
+					// translators: {warning} is replaced by JS with the list of files that could not be imported.
+					$warning_message = __( 'Some files were skipped: {warning}', 'nggallery' );
 					?>
+					var manage_url_base = '<?php echo $manage_url_base; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Already escaped with esc_js() when assigned above. ?>';
 					var message = '<?php echo wp_kses_post( $message ); ?>';
 					message = message.replace('{count}', response.image_ids.length);
-					message = message.replace('{gid}', response.gallery_id);
+					message = message.replace('{manage_url}', manage_url_base + response.gallery_id);
+
+					// A folder where some files imported and others failed comes back with a
+					// warning rather than an error - the import partly succeeded, so the count
+					// still stands, but the dropped names have to be shown or the drop is
+					// invisible. Mirrors the ZIP endpoint's reader in upload_images.php.
+					if (typeof(response.warning) == 'string') {
+						var warning_message = '<?php echo wp_kses_post( $warning_message ); ?>';
+						message = message + "<br/>" + warning_message.replace('{warning}', response.warning);
+					}
+
 					progress_bar.close(100);
 					$.gritter.add({
 						title: '<?php esc_html_e( 'Upload complete', 'nggallery' ); ?>',

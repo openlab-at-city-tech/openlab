@@ -1,0 +1,461 @@
+# This file is distributed under the same license as the package.
+msgid ""
+msgstr ""
+"Project-Id-Version: TrustedLogin Client 1.6.2\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/trustedlogin-client\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-01-26T17:36:25+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.9.0\n"
+"X-Domain: trustedlogin\n"
+
+#. Plugin Name of the plugin
+msgid "TrustedLogin Client Test"
+msgstr ""
+
+#: src/Admin.php:123
+#: src/Admin.php:163
+#: src/Form.php:230
+msgid "Revoke Access"
+msgstr ""
+
+#: src/Admin.php:168
+msgid "You are logged in as a support user. Click to permanently revoke access."
+msgstr ""
+
+#: src/Admin.php:195
+msgid "Grant Support Access"
+msgstr ""
+
+#: src/Ajax.php:92
+msgid "Verification issue: Request could not be verified. Please reload the page."
+msgstr ""
+
+#: src/Ajax.php:99
+msgid "You do not have the ability to create users."
+msgstr ""
+
+#: src/Client.php:321
+#: src/Client.php:451
+msgid "TrustedLogin requires a secure connection using HTTPS."
+msgstr ""
+
+#: src/Client.php:574
+msgid "The support user was not deleted."
+msgstr ""
+
+#: src/Encryption.php:302
+msgid "Encryption key could not be fetched, Vendor site returned 404."
+msgstr ""
+
+#. translators: %s is the ID of the user who created the support session. The user can't be found; only the User ID is known.
+#: src/Form.php:217
+msgid "Unknown (User #%d)"
+msgstr ""
+
+#. translators: %s is the display name of the user who granted access
+#: src/Form.php:232
+msgid "Created %s ago by %s"
+msgstr ""
+
+#: src/Form.php:258
+#: src/Form.php:1067
+msgid "Secured by TrustedLogin"
+msgstr ""
+
+#: src/Form.php:344
+msgid "Terms of Service"
+msgstr ""
+
+#: src/Form.php:360
+msgid "By granting access, you agree to the {{tos_link}}."
+msgstr ""
+
+#. translators: %s is the reference ID
+#: src/Form.php:401
+msgid "Reference #%s"
+msgstr ""
+
+#. translators: %1$s is replaced with the name of the software developer (e.g. "Acme Widgets"). %2$s is the amount of time remaining for access ("1 week")
+#: src/Form.php:417
+msgid "%1$s has site access that expires in %2$s."
+msgstr ""
+
+#. translators: %1$s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:425
+msgid "%1$s would like support access to this site."
+msgstr ""
+
+#. translators: %1$s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:428
+msgid "Grant %1$s access to this site."
+msgstr ""
+
+#: src/Form.php:500
+msgid "Include a message for support?"
+msgstr ""
+
+#: src/Form.php:513
+msgid "Please describe the issue you are having."
+msgstr ""
+
+#. translators: %s is replaced with the of time that the login will be active for (e.g. "1 week")
+#: src/Form.php:537
+msgid "Access this site for %s."
+msgstr ""
+
+#. translators: %s is replaced by the amount of time that the login will be active for (e.g. "1 week")
+#: src/Form.php:540
+msgid "Access auto-expires in %s. You may revoke access at any time."
+msgstr ""
+
+#. translators: %s is replaced with the name of the role (e.g. "Administrator")
+#: src/Form.php:547
+msgid "Create a user with a role based on %s."
+msgstr ""
+
+#: src/Form.php:550
+msgid "View modified role capabilities"
+msgstr ""
+
+#. translators: %s is replaced with the name of the role (e.g. "Administrator")
+#: src/Form.php:556
+msgid "Create a user with a role of %s."
+msgstr ""
+
+#. translators: [link] and [/link] are replaced with a link to the Site Health page. Do not translate.
+#: src/Form.php:584
+msgid "Include the [link]Site Health[/link] troubleshooting report"
+msgstr ""
+
+#: src/Form.php:607
+msgid "Additional capabilities:"
+msgstr ""
+
+#: src/Form.php:608
+msgid "Removed capabilities:"
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:678
+msgid "%s support may not be able to access this site."
+msgstr ""
+
+#: src/Form.php:679
+msgid "This website is running in a local development environment. To provide support, we must be able to access your site using a publicly-accessible URL."
+msgstr ""
+
+#: src/Form.php:681
+msgid "Learn more."
+msgstr ""
+
+#: src/Form.php:731
+msgid "Learn about TrustedLogin"
+msgstr ""
+
+#: src/Form.php:787
+msgid "TrustedLogin Status"
+msgstr ""
+
+#: src/Form.php:787
+msgid "Offline"
+msgstr ""
+
+#: src/Form.php:787
+msgid "Online"
+msgstr ""
+
+#: src/Form.php:788
+msgid "API Key"
+msgstr ""
+
+#: src/Form.php:789
+msgid "License Key"
+msgstr ""
+
+#: src/Form.php:790
+msgid "Log URL"
+msgstr ""
+
+#: src/Form.php:790
+msgid "Download the log"
+msgstr ""
+
+#: src/Form.php:791
+msgid "Log Level"
+msgstr ""
+
+#: src/Form.php:791
+msgid "(Default)"
+msgstr ""
+
+#: src/Form.php:792
+msgid "Webhook URL"
+msgstr ""
+
+#: src/Form.php:793
+msgid "Vendor Public Key"
+msgstr ""
+
+#: src/Form.php:793
+msgid "Verify key"
+msgstr ""
+
+#: src/Form.php:811
+msgid "Debugging Info"
+msgstr ""
+
+#: src/Form.php:813
+msgid "TrustedLogin Config"
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:1006
+msgid "Grant %s Access"
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:1008
+msgid "Extend %s Access"
+msgstr ""
+
+#: src/Form.php:1121
+msgid "Could not create TrustedLogin access."
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:1130
+msgid "The user details could not be sent to %1$s automatically."
+msgstr ""
+
+#. translators: %1$s is the vendor support url and %2$s is the vendor title
+#: src/Form.php:1135
+msgid "Please <a href=\"%1$s\" target=\"_blank\">click here</a> to go to the %2$s support site"
+msgstr ""
+
+#: src/Form.php:1143
+msgid "Confirm"
+msgstr ""
+
+#: src/Form.php:1144
+msgid "Ok"
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1146
+msgid "Go to %1$s support site"
+msgstr ""
+
+#: src/Form.php:1147
+msgid "Close"
+msgstr ""
+
+#: src/Form.php:1148
+msgid "Cancel"
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1150
+msgid "Revoke %1$s support access"
+msgstr ""
+
+#: src/Form.php:1151
+#: src/Form.php:1328
+msgid "Copy"
+msgstr ""
+
+#: src/Form.php:1152
+msgid "Copied!"
+msgstr ""
+
+#: src/Form.php:1155
+msgid "(This link opens in a new window.)"
+msgstr ""
+
+#: src/Form.php:1156
+msgid "The access key has been copied to your clipboard."
+msgstr ""
+
+#: src/Form.php:1160
+msgid "Support access granted"
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1163
+msgid "A temporary support user has been created, and sent to %1$s support."
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1169
+msgid "Generating & encrypting secure support access for %1$s"
+msgstr ""
+
+#. translators: %1$s is the vendor title and %2$s is the human-readable expiration time (for example, "1 week")
+#: src/Form.php:1173
+msgid "Extending support access for %1$s by %2$s"
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1177
+msgid "Sending encrypted access to %1$s."
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1181
+msgid "Error syncing support user to %1$s"
+msgstr ""
+
+#: src/Form.php:1192
+msgid "Action Cancelled"
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1195
+msgid "A support account for %1$s was not created."
+msgstr ""
+
+#: src/Form.php:1200
+msgid "Support Access Was Not Granted"
+msgstr ""
+
+#: src/Form.php:1201
+msgid "There was an error granting access: "
+msgstr ""
+
+#: src/Form.php:1204
+msgid "Your authorized session has expired. Please refresh the page."
+msgstr ""
+
+#: src/Form.php:1207
+msgid "TrustedLogin Key Created"
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1210
+msgid "Share this TrustedLogin Key with %1$s to give them secure access:"
+msgstr ""
+
+#: src/Form.php:1216
+msgid "The TrustedLogin vendor could not be found."
+msgstr ""
+
+#. translators: %1$s is the vendor title
+#: src/Form.php:1222
+msgid "%1$s Support user already exists"
+msgstr ""
+
+#. translators: %1$s is the vendor title, %2$s is the URL to the users list page
+#: src/Form.php:1228
+msgid "A support user for %1$s already exists. You may revoke this support access from your <a href=\"%2$s\" target=\"_blank\">Users list</a>."
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:1270
+msgid "No %s users exist."
+msgstr ""
+
+#: src/Form.php:1296
+msgid "Error"
+msgstr ""
+
+#: src/Form.php:1300
+msgid "There was an error returning the access key."
+msgstr ""
+
+#: src/Form.php:1322
+msgid "Site access key:"
+msgstr ""
+
+#: src/Form.php:1324
+msgid "Access Key"
+msgstr ""
+
+#: src/Form.php:1332
+msgid "Copy the access key to your clipboard"
+msgstr ""
+
+#: src/Form.php:1335
+msgid "The access key is not a password; only %1$s will be able to access your site using this code. You may share this access key on support forums."
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/Form.php:1368
+msgid "%s access revoked."
+msgstr ""
+
+#: src/Form.php:1371
+msgid "You may safely close this window."
+msgstr ""
+
+#: src/Remote.php:245
+msgid "Unable to verify Pause Mode."
+msgstr ""
+
+#: src/Remote.php:248
+msgid "Authentication failed."
+msgstr ""
+
+#: src/Remote.php:251
+msgid "TrustedLogin account issue."
+msgstr ""
+
+#: src/Remote.php:254
+msgid "Invalid tokens."
+msgstr ""
+
+#: src/Remote.php:258
+msgid "The TrustedLogin vendor was not found."
+msgstr ""
+
+#: src/Remote.php:268
+msgid "The TrustedLogin site is not currently online."
+msgstr ""
+
+#: src/Remote.php:274
+msgid "The TrustedLogin site is not currently available."
+msgstr ""
+
+#: src/Remote.php:278
+#: src/Remote.php:321
+msgid "Invalid response."
+msgstr ""
+
+#: src/Remote.php:315
+msgid "The response was invalid."
+msgstr ""
+
+#. translators: %s is the name of the missing data from the server
+#: src/Remote.php:340
+msgid "Invalid response. Missing key: %s"
+msgstr ""
+
+#: src/SecurityChecks.php:86
+msgid "TrustedLogin temporarily disabled."
+msgstr ""
+
+#. translators: %s is the error message
+#: src/SecurityChecks.php:115
+msgid "There was an issue verifying the user identifier with TrustedLogin, aborting login. (%s)"
+msgstr ""
+
+#: src/SiteAccess.php:58
+msgid "Unexpected action value"
+msgstr ""
+
+#: src/SiteAccess.php:89
+msgid "Could not sync to TrustedLogin server"
+msgstr ""
+
+#. translators: %s is replaced with the name of the software developer (e.g. "Acme Widgets")
+#: src/SupportRole.php:242
+#: src/SupportUser.php:238
+msgid "%s Support"
+msgstr ""
+
+#: src/SupportUser.php:201
+msgid "User not created; User with that email already exists"
+msgstr ""

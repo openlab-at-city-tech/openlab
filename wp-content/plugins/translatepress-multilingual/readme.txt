@@ -1,19 +1,19 @@
-﻿=== Translate Multilingual sites - TranslatePress ===
+﻿=== TranslatePress - Translate Multilingual sites with AI Translation ===
 Contributors: cozmoslabs, razvan.mo, madalin.ungureanu, sareiodata, cristophor
 Donate link: https://www.translatepress.com/
-Tags: translate, translation, multilingual, automatic translation, bilingual, front-end translation, google translate, language
+Tags: translate, translation, multilingual, automatic translation, ai translation, front-end translation, google translate, language
 Requires at least: 3.1.0
-Tested up to: 6.9.4
+Tested up to: 7.1.4
 Requires PHP: 7.4
-Stable tag: 3.1.8
+Stable tag: 3.3.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Translate your entire site directly from the front-end and go multilingual. Full support for WooCommerce, page builders + Google Translate integration
+Translate your site visually, directly from the front-end. Go multilingual in minutes using automatic AI translation. Works with any theme or plugin.
 
 == Description ==
 
-**Experience a better way to translate your WordPress site and go multilingual, directly from the front-end using a visual translation interface.**
+**Experience a better way to translate your WordPress site and go multilingual, directly from the front-end using a visual translation interface. The built-in AI translation lets you translate automatically, then refine anything visually.**
 
 TranslatePress is a [WordPress translation plugin](https://translatepress.com/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) that anyone can use.
 
@@ -28,7 +28,9 @@ https://www.youtube.com/watch?v=EMBdXuyrZUA
 * Translate all your website content directly from the front-end, in a friendly user interface (translations are displayed in real-time).
 * Fully compatible with all themes and plugins
 * Live preview of your translated pages, as you edit them.
-* Automatic translation support through [TranslatePress AI Free](https://translatepress.com/ai-free/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree), with a 2.000 AI words limit.
+* Automatic AI translation support through [TranslatePress AI Free](https://translatepress.com/ai-free/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree), with a 2,000 AI words limit. Use our free [Website Word Count](https://translatepress.com/website-word-count/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) to find how many words your website contains. 
+* Translation Glossary for TranslatePress AI that allows you to set preferred translations for brand names, product terms and industry jargon, so they're translated consistently every time and in every language.
+* Search & Replace functionality that lets you find and bulk edit a word or phrase across all your existing translations at once.
 * Integrates with Google Translate, allowing you to set up unlimited automatic translations using your own Google API key.
 * Fully customizable language switcher that you can display as a menu item, a floating dropdown, or place anywhere else using the Language Switcher block, or the **[language-switcher]** shortcode.
 * [Image translation](https://translatepress.com/docs/image-translation/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) support, for [translating images, sliders and other media](https://translatepress.com/translate-images-in-wordpress/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree).
@@ -93,6 +95,25 @@ TranslatePress - Multilingual has a range of [premium Add-ons](https://translate
 
 You can test out TranslatePress - Multilingual plugin by [visiting our demo site](https://demo.translatepress.com/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree)
 
+== External Services ==
+
+This plugin connects to the TranslatePress AI translation service to perform automatic translations. Data sent includes page text, license key, site URL, and language settings. This may be triggered by front-end page visits, not just admin actions.
+If you opt in, the plugin sends limited diagnostic and configuration data to Cozmoslabs.com to help improve the  product.
+
+Terms & Conditions: https://translatepress.com/terms-conditions/
+Privacy Policy: https://translatepress.com/privacy-policy/
+
+If you choose to use Google Translate or DeepL as your translation engine and provide your own API key, content from your site will be sent to those services for translation. This may also be triggered by front-end page visits.
+
+Google Translate Terms of Service: https://cloud.google.com/terms/
+Google Privacy Policy: https://policies.google.com/privacy
+
+DeepL Terms of Service: https://www.deepl.com/en/pro-license
+DeepL Privacy Policy: https://www.deepl.com/en/privacy
+
+The plugin requests translation files of other plugins hosted on WordPress.org.
+Select2: [https://github.com/select2/select2](https://github.com/select2/select2)
+
 == Installation ==
 
 1. Upload the translatepress folder to the '/wp-content/plugins/' directory
@@ -116,7 +137,11 @@ TranslatePress is easier to use and more intuitive altogether. No more switching
 
 = How do I start to translate my WordPress site? =
 
-After installing the plugin, select your secondary language and click "Translate Site" to start translating your entire site exactly as it looks in the front-end.
+After installing the plugin, select your secondary language and click "Translate Site" to start translating your entire site exactly as it looks in the front-end. To speed things up, use TranslatePress AI for automatic AI translation.
+
+= How does AI translation using TranslatePress AI work? 
+
+[TranslatePress AI](https://translatepress.com/ai/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) combines the best LLMs (like Gemini and GPT) and Neural Machine Translation (NMT) engines (like DeepL and Google Translate) into one integrated solution, to automatically translate your website. The system intelligently selects the most suitable engine for any given language pair and context, to ensure maximum accuracy. 
 
 = Will it slow down my website? =
 
@@ -130,6 +155,9 @@ Yes, TranslatePress works out of the box with WooCommerce. You can use to build 
 
 For more information please check out our [documentation](https://translatepress.com/docs/translatepress/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree).
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the TranslatePress plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/55520b61-434d-4271-801d-b55f75b5cbe1). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 == Screenshots ==
 1. TranslatePress front-end visual translation editor in action
@@ -143,10 +171,16 @@ For more information please check out our [documentation](https://translatepress
 
 
 == Changelog ==
-= 3.1.8 =
- * Fix gettext translations saved as regular default strings when "Disable translation of gettext strings" is enabled
- * Prevent edge case fatal error from occurring in class-check-invalid-text.php
- * Send WooCommerce emails in admin language instead of order language when there are multiple recipients
+= 3.3.9 =
+* Improved translation quality on texts with placeholders and glossary terms
+* Fixed XSS by serving trp-ajax.php responses as inert JSON
+* Fixed stored XSS via PCRE backtrack bypass of URL-scheme neutralizer
+* Fixed gettext insert query fails on MySQL8 when having duplicate originals in the same batch
+* Small performance improvement on referer-less AJAX loopbacks
+* Fixed Chinese and other languages getting an ASCII punctuation after a native mark in new automatic translations
+* Fixed trp-ajax dynamic translation on multisites by querying the correct subsite tables
+* Fixed String Translation search with straight apostrophes
+* Fixed CSS issue with checkboxes in String Translation
 
 = Older versions =
 [Click Here](https://translatepress.com/docs/translatepress-free-changelog/?utm_source=wp.org&utm_medium=tp-description-page&utm_campaign=TPFree) to view the full changelog, or you can find it in the changelog.txt file in the plugin folder.

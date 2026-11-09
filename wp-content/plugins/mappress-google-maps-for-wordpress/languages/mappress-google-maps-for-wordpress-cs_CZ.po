@@ -1,0 +1,593 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MapPress\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
+"Last-Translator: \n"
+"Language-Team: Czech\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-05T02:59:52+00:00\n"
+"PO-Revision-Date: 2026-11-07 19:16+0000\n"
+"Language: cs_CZ\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+"X-Domain: mappress-google-maps-for-wordpress\n"
+
+#. Plugin Name of the plugin
+#: mappress.php
+msgid "MapPress Google Maps and Leaflet Maps"
+msgstr "MapPress Google Maps and Leaflet Maps"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+#: mappress.php
+msgid "https://www.mappresspro.com"
+msgstr "https://www.mappresspro.com"
+
+#. Description of the plugin
+#: mappress.php
+msgid "MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress"
+msgstr "MapPress usnadňuje přidávání map Google Maps a Leaflet do WordPressu"
+
+#. Author of the plugin
+#: mappress.php
+msgid "Chris Richardson"
+msgstr "Chris Richardson"
+
+#: mappress.php:192
+msgid "Renew your license"
+msgstr "Obnovte licenci"
+
+#: mappress.php:193
+msgid "Your MapPress license has expired.  %s to get the latest updates and prevent errors."
+msgstr "Vaše licence MapPress vypršela.  %s, abyste dostávali nejnovější aktualizace a předešli chybám."
+
+#: mappress.php:233
+#: mappress.php:976
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Settings"
+msgstr "Nastavení"
+
+#: mappress.php:234
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Maps"
+msgstr "Mapy"
+
+#: mappress.php:237
+#: pro/mappress_import.php:107
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Import"
+msgstr "Import"
+
+#: mappress.php:238
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Support"
+msgstr "Podpora"
+
+#: mappress.php:241
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Upgrade"
+msgstr "Upgrade"
+
+#: mappress.php:254
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Chybí databázové tabulky MapPress.  Deaktivujte plugin a znovu jej aktivujte, aby se to opravilo."
+
+#: mappress.php:259
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "A Google Maps API key is required"
+msgstr "Je vyžadován API klíč Google Maps"
+
+#: mappress.php:259
+msgid "Please update your"
+msgstr "Aktualizujte prosím své"
+
+#: mappress.php:259
+msgid "MapPress Settings"
+msgstr "Nastavení MapPress"
+
+#: mappress.php:264
+msgid "Upgrade Now"
+msgstr "Upgradovat nyní"
+
+#: mappress.php:265
+msgid "Your MapPress data must be upgraded!  Please %s.</strong>"
+msgstr "Vaše data MapPress je nutné aktualizovat!  Prosím %s.</strong>"
+
+#: mappress.php:593
+msgid "MapPress requires WordPress 6.3 or later. Please update WordPress."
+msgstr "MapPress vyžaduje WordPress 6.3 nebo novější. Aktualizujte prosím WordPress."
+
+#: mappress.php:664
+msgid "Please enter your MapPress license key to enable plugin updates"
+msgstr "Zadejte licenční klíč MapPress pro povolení aktualizací pluginu"
+
+#: mappress.php:824
+msgid "Are you sure you want to delete?"
+msgstr "Opravdu chcete smazat?"
+
+#: mappress.php:885
+msgid "Standard"
+msgstr "Standardní"
+
+#: mappress.php:886
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Muted"
+msgstr "Tlumená"
+
+#: mappress.php:887
+#: mappress.php:898
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Light"
+msgstr "Světlá"
+
+#: mappress.php:888
+#: mappress.php:899
+#: mappress.php:910
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Dark"
+msgstr "Tmavá"
+
+#: mappress.php:889
+#: mappress.php:900
+#: mappress.php:919
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Satellite"
+msgstr "Satelit"
+
+#: mappress.php:896
+msgid "Streets"
+msgstr "Ulice"
+
+#: mappress.php:897
+msgid "Outdoors"
+msgstr "Turistická"
+
+#: mappress.php:901
+msgid "Satellite Streets"
+msgstr "Satelit s ulicemi"
+
+#: mappress.php:907
+msgid "Liberty"
+msgstr "Liberty"
+
+#: mappress.php:908
+msgid "Bright"
+msgstr "Bright"
+
+#: mappress.php:909
+msgid "Positron"
+msgstr "Positron"
+
+#: mappress.php:917
+msgid "Roadmap"
+msgstr "Silniční mapa"
+
+#: mappress.php:918
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Terrain"
+msgstr "Terén"
+
+#: mappress.php:920
+msgid "Hybrid"
+msgstr "Hybridní"
+
+#: mappress.php:977
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "What's new"
+msgstr "Novinky"
+
+#: mappress.php:1426
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Version"
+msgstr "Verze"
+
+#: mappress_api.php:73
+msgid "Copy of %s"
+msgstr "Kopie %s"
+
+#: mappress_api.php:73
+#: mappress_map.php:155
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Untitled"
+msgstr "Bez názvu"
+
+#: mappress_db.php:56
+msgid "Success!  Upgrade complete."
+msgstr "Hotovo!  Upgrade dokončen."
+
+#: mappress_db.php:156
+#: mappress_map.php:500
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "MapPress"
+msgstr "MapPress"
+
+#: mappress_db.php:162
+msgid "Map data upgrade"
+msgstr "Upgrade dat map"
+
+#: mappress_db.php:163
+msgid "Your map data needs to be upgraded."
+msgstr "Data vašich map je nutné aktualizovat."
+
+#: mappress_db.php:164
+msgid "Please make a database backup now.  Data will be permanently modified."
+msgstr "Nyní si prosím zálohujte databázi.  Data budou trvale změněna."
+
+#: mappress_db.php:167
+msgid "Your map data is up to date."
+msgstr "Data vašich map jsou aktuální."
+
+#: mappress_map.php:152
+msgid "+%d more"
+msgstr "+%d dalších"
+
+#: mappress_map.php:156
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Edit map"
+msgstr "Upravit mapu"
+
+#: mappress_map.php:160
+msgid "Attach"
+msgstr "Připojit"
+
+#: mappress_map.php:174
+msgid "Post not found"
+msgstr "Příspěvek nenalezen"
+
+#: mappress_map.php:189
+msgid "Post not available"
+msgstr "Příspěvek není k dispozici"
+
+#: mappress_map.php:362
+msgid "Geocoding error: %s"
+msgstr "Chyba geokódování: %s"
+
+#: mappress_map.php:368
+msgid "Location"
+msgstr "Místo"
+
+#: mappress_poi.php:119
+msgid "Invalid lat/lng coordinate: %s,%s"
+msgstr "Neplatná souřadnice lat/lng: %s,%s"
+
+#: mappress_settings.php:157
+msgid "Select at least one post type"
+msgstr "Vyberte alespoň jeden typ obsahu"
+
+#: mappress_settings.php:472
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Default"
+msgstr "Výchozí"
+
+#: mappress_settings.php:502
+msgid "Address line "
+msgstr "Řádek adresy"
+
+#: mappress_settings.php:503
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Latitude"
+msgstr "Zeměpisná šířka"
+
+#: mappress_settings.php:503
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Longitude"
+msgstr "Zeměpisná délka"
+
+#: mappress_settings.php:503
+#: mappress_template.php:41
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Title"
+msgstr "Název"
+
+#: mappress_settings.php:503
+#: mappress_template.php:38
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Body"
+msgstr "Text"
+
+#: mappress_settings.php:503
+#: mappress_template.php:40
+#: mappress_template.php:50
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Icon"
+msgstr "Ikona"
+
+#: mappress_settings.php:503
+msgid "Zoom"
+msgstr "Přiblížení"
+
+#: mappress_settings.php:622
+msgid "Sure, I'll leave a review"
+msgstr "Jistě, napíšu hodnocení"
+
+#: mappress_settings.php:623
+msgid "Nope, maybe later"
+msgstr "Ne, možná později"
+
+#: mappress_settings.php:624
+msgid "I need help using the plugin"
+msgstr "Potřebuji pomoc s pluginem"
+
+#: mappress_settings.php:626
+msgid "A quick favor?"
+msgstr "Malá prosba?"
+
+#: mappress_settings.php:627
+msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
+msgstr "Dobrý den, doufám, že jste s MapPress spokojeni.  Mohli byste si na chvíli najít čas a napsat krátké hodnocení?  Moc by to pro mě znamenalo!"
+
+#: mappress_template.php:37
+#: mappress_template.php:48
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Address"
+msgstr "Adresa"
+
+#: mappress_template.php:39
+msgid "Distance"
+msgstr "Vzdálenost"
+
+#: mappress_template.php:42
+msgid "URL"
+msgstr "URL"
+
+#: mappress_template.php:43
+msgid "Custom field"
+msgstr "Vlastní pole"
+
+#: mappress_template.php:44
+msgid "POI data field"
+msgstr "Datové pole POI"
+
+#: mappress_template.php:49
+msgid "Display Name"
+msgstr "Zobrazované jméno"
+
+#: mappress_template.php:51
+msgid "Custom Field"
+msgstr "Vlastní pole"
+
+#: pro/mappress_acf.php:26
+msgid "Address or lat/lng was missing in ACF field"
+msgstr "V poli ACF chyběla adresa nebo lat/lng"
+
+#: pro/mappress_filter.php:87
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Post type"
+msgstr "Typ obsahu"
+
+#: pro/mappress_filter.php:91
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Role"
+msgstr "Role"
+
+#: pro/mappress_filter.php:95
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Text search"
+msgstr "Textové vyhledávání"
+
+#: pro/mappress_geocoder.php:29
+msgid "Invalid geocoder: %s"
+msgstr "Neplatný geokodér: %s"
+
+#: pro/mappress_geocoder.php:47
+msgid "API Key is missing - see MapPress Settings"
+msgstr "Chybí API klíč – viz nastavení MapPress"
+
+#: pro/mappress_geocoder.php:65
+msgid "Invalid status: %s, %s"
+msgstr "Neplatný stav: %s, %s"
+
+#: pro/mappress_geocoder.php:75
+#: pro/mappress_geocoder.php:111
+#: pro/mappress_geocoder.php:155
+msgid "No results for address: %s"
+msgstr "Žádné výsledky pro adresu: %s"
+
+#: pro/mappress_geocoder.php:184
+msgid "Error: %s %s"
+msgstr "Chyba: %s %s"
+
+#: pro/mappress_geocoder.php:189
+msgid "Invalid JSON from Geocoding service: %s"
+msgstr "Neplatný JSON ze služby geokódování: %s"
+
+#: pro/mappress_icons.php:153
+msgid "Files error: "
+msgstr "Chyba souboru:"
+
+#: pro/mappress_import.php:46
+msgid "Setting \"allow_url_fopen=1\" must in your php.ini file to process remote files.  Not all hosting services allow this."
+msgstr "Pro zpracování vzdálených souborů musí být v php.ini nastaveno \"allow_url_fopen=1\".  Ne všechny hostingy to umožňují."
+
+#: pro/mappress_import.php:56
+msgid "Unable to open file"
+msgstr "Soubor nelze otevřít"
+
+#: pro/mappress_import.php:60
+msgid "Unable to read file headers"
+msgstr "Nelze načíst záhlaví souboru"
+
+#: pro/mappress_import.php:80
+msgid "Line %d column count doesn't match headers column count"
+msgstr "Počet sloupců na řádku %d neodpovídá počtu sloupců záhlaví"
+
+#: pro/mappress_import.php:120
+msgid "Map %d updated."
+msgstr "Mapa %d aktualizována."
+
+#: pro/mappress_import.php:120
+msgid "Map %d saved."
+msgstr "Mapa %d uložena."
+
+#: pro/mappress_import.php:122
+msgid "See data view for errors."
+msgstr "Chyby najdete v zobrazení dat."
+
+#: pro/mappress_import.php:184
+msgid "Geocoding failed"
+msgstr "Geokódování selhalo"
+
+#: pro/mappress_import.php:186
+msgid "No address or lat/lng provided!"
+msgstr "Nebyla zadána adresa ani lat/lng!"
+
+#: pro/mappress_import.php:211
+msgid "Import Maps"
+msgstr "Importovat mapy"
+
+#: pro/mappress_import.php:212
+msgid "Sample file"
+msgstr "Ukázkový soubor"
+
+#: pro/mappress_import.php:213
+msgid "Import documentation"
+msgstr "Dokumentace importu"
+
+#: pro/mappress_meta.php:45
+msgid "Map already exists, skipped"
+msgstr "Mapa již existuje, přeskočeno"
+
+#: pro/mappress_meta.php:62
+msgid "No valid address"
+msgstr "Žádná platná adresa"
+
+#: pro/mappress_meta.php:64
+msgid "No valid address [no error details]"
+msgstr "Žádná platná adresa [bez podrobností o chybě]"
+
+#: pro/mappress_meta.php:72
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Automatic"
+msgstr "Automaticky"
+
+#: pro/mappress_meta.php:157
+msgid "No address or lat/lng specified"
+msgstr "Nebyla zadána adresa ani lat/lng"
+
+#: pro/mappress_updater.php:44
+msgid "Could not retrieve plugin information from mappresspro.com.  Please try again later."
+msgstr "Nepodařilo se načíst informace o pluginu z mappresspro.com.  Zkuste to prosím později."
+
+#: pro/mappress_updater.php:136
+msgid "Communication error, please try again later"
+msgstr "Chyba komunikace, zkuste to prosím později"
+
+#: pro/mappress_updater.php:143
+msgid "Your server's IP has been blocked by Siteground's antibot system.  Please contact Siteground and your hosting service to resolve."
+msgstr "IP adresa vašeho serveru byla zablokována antibotovým systémem Siteground.  Kontaktujte prosím Siteground a svůj hosting."
+
+#: pro/mappress_updater.php:145
+msgid "Server error"
+msgstr "Chyba serveru"
+
+#: pro/mappress_updater.php:149
+msgid "JSON error"
+msgstr "Chyba JSON"
+
+#: pro/mappress_updater.php:176
+msgid "Error when checking license"
+msgstr "Chyba při ověřování licence"
+
+#: pro/mappress_updater.php:237
+msgid "This is the free version of MapPress and would overwrite MapPress Pro, disabling mashups, filters, icons and other Pro features. Install MapPress Pro from mappresspro.com instead. To install the free version deliberately, delete MapPress Pro first."
+msgstr "Toto je bezplatná verze MapPress, která by přepsala MapPress Pro a vypnula mashupy, filtry, ikony a další funkce Pro. Nainstalujte místo toho MapPress Pro z mappresspro.com. Pokud chcete bezplatnou verzi nainstalovat záměrně, nejprve smažte MapPress Pro."
+
+#: pro/mappress_widget.php:71
+#: pro/mappress_widget_map.php:59
+msgid "Widget title"
+msgstr "Název widgetu"
+
+#: pro/mappress_widget.php:76
+#: pro/mappress_widget_map.php:69
+msgid "Map size"
+msgstr "Velikost mapy"
+
+#: pro/mappress_widget.php:82
+msgid "Show"
+msgstr "Zobrazit"
+
+#: pro/mappress_widget.php:83
+msgid "Current posts"
+msgstr "Aktuální příspěvky"
+
+#: pro/mappress_widget.php:84
+msgid "Hide if empty"
+msgstr "Skrýt, pokud je prázdné"
+
+#: pro/mappress_widget.php:86
+msgid "All posts"
+msgstr "Všechny příspěvky"
+
+#: pro/mappress_widget.php:87
+msgid "Custom query"
+msgstr "Vlastní dotaz"
+
+#: pro/mappress_widget.php:90
+msgid "Learn about queries"
+msgstr "Více o dotazech"
+
+#: pro/mappress_widget.php:96
+#: pro/mappress_widget_map.php:77
+msgid "Show POI list"
+msgstr "Zobrazit seznam POI"
+
+#: pro/mappress_widget.php:103
+#: pro/mappress_widget_map.php:84
+msgid "Other Settings"
+msgstr "Další nastavení"
+
+#: pro/mappress_widget.php:106
+#: pro/mappress_widget_map.php:87
+msgid "Example: initialopeninfo=\"true\""
+msgstr "Příklad: initialopeninfo=\"true\""
+
+#: pro/mappress_widget_map.php:64
+#: build/index_mappress.js
+#: build/index_mappress_admin.js
+msgid "Map ID"
+msgstr "ID mapy"
+
+#: templates/mashup-modal.php:17
+msgid "Continue reading"
+msgstr "Pokračovat ve čtení"
+
+#. translators: %s: Author name.
+#: templates/mashup-modal.php:23
+msgid "By %s"
+msgstr "Autor: %s"
+
+#: templates/mashup-modal.php:27
+msgid "In"
+msgstr "V"
+
+#: templates/mashup-modal.php:28
+msgid " Tagged "
+msgstr " Štítky:"

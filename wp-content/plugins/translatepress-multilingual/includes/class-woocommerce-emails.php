@@ -6,6 +6,17 @@ if ( !defined('ABSPATH' ) )
 
 class TRP_Woocommerce_Emails{
 
+    private static $email_contexts = [];
+    private static $sending_order_email = false;
+    private static $email_global_names = [
+        'TRP_LANGUAGE',
+        'TRP_LANGUAGE_COPY',
+        'TRP_LANGUAGE_ORIGINAL',
+        'trp_translated_gettext_texts',
+        'trp_translated_gettext_texts_language',
+        'trp_wpdb_prefix',
+    ];
+
     public function __construct(){}
 
     public function initialize_hooks(){
@@ -48,6 +59,7 @@ class TRP_Woocommerce_Emails{
             // Hijack execution to translate emails in user language accordingly
             add_filter( 'woocommerce_allow_switching_email_locale', array( $this, 'trp_woo_setup_locale' ), 10, 2 );
             add_filter( 'woocommerce_allow_restoring_email_locale', array( $this, 'trp_woo_restore_locale' ), 10, 2 );
+            add_filter( 'woocommerce_mail_callback', [ $this, 'wrap_mail_callback' ], 99999, 2 );
         }
     }
 
@@ -223,9 +235,31 @@ class TRP_Woocommerce_Emails{
         if ( empty( $language ) )
             $language = $TRP_LANGUAGE;
 
-        trp_switch_language( $language );
-
-        add_filter( 'trp_allow_gettext_write', '__return_true' );
+        // Save the request state so the previous language and gettext overrides can be restored.
+        $context = [
+            'email'   => $wc_email,
+            'globals' => [],
+            'filters' => [],
+        ];
+        foreach ( self::$email_global_names as $name ) {
+            if ( array_key_exists( $name, $GLOBALS ) ) {
+                $context['globals'][ $name ] = $GLOBALS[ $name ];
+            }
+        }
+        $email_filters = [
+            [ 'trp_before_translate_content', 'trp_reset_language', 99999999 ],
+            [ 'plugin_locale', 'trp_get_locale', 99999999 ],
+            [ 'trp_allow_gettext_write', '__return_true', 10 ],
+            [ 'trp_processing_gettext_is_needed', '__return_true', 10 ],
+        ];
+        foreach ( $email_filters as $filter ) {
+            if ( has_filter( $filter[0], $filter[1] ) === false ) {
+                $context['filters'][] = $filter;
+            }
+        }
+        self::$email_contexts[] = $context;
+        $index = count( self::$email_contexts ) - 1;
+        self::$email_contexts[ $index ]['switched_locale'] = trp_switch_language( $language );
 
         $this->reload_woocommerce_textdomain();
 
@@ -356,50 +390,93 @@ class TRP_Woocommerce_Emails{
      * @return false
      */
     public function trp_woo_restore_locale( $bool, $wc_email ) {
+        $context = end( self::$email_contexts );
+        if ( ! $context || $context['email'] !== $wc_email ) {
+            return $bool;
+        }
+        array_pop( self::$email_contexts );
 
-        trp_restore_language();
+        foreach ( $context['filters'] as $filter ) {
+            remove_filter( $filter[0], $filter[1], $filter[2] );
+        }
+        foreach ( self::$email_global_names as $name ) {
+            if ( array_key_exists( $name, $context['globals'] ) ) {
+                $GLOBALS[ $name ] = $context['globals'][ $name ];
+            } else {
+                unset( $GLOBALS[ $name ] );
+            }
+        }
+        if ( ! empty( $context['switched_locale'] ) ) {
+            restore_previous_locale();
+        }
         $this->reload_woocommerce_textdomain();
 
         return false;
 
     }
 
-    /**
-     * Ensure TranslatePress gettext is active for the current email language.
-     *
-     * WooCommerce's emails are not always triggered in a normal frontend request.
-     * They can be sent asynchronously (e.g. admin changing an order status, a
-     * payment processor callback marking the order as paid, or cron/CLI jobs).
-     *
-     * In those cases, TranslatePress’s gettext global ($trp_translated_gettext_texts)
-     * and filters are never initialized in time because the email is rendered much
-     * later in the request lifecycle.
-     *
-     * To guarantee that TP’s database-backed translations are available for
-     * the strings in WooCommerce emails, we:
-     *   - check if at least one of TP’s WooCommerce gettext filters is already attached,
-     *   - if not, force creation of the gettext global and force-attach the filters.
-     *
-     * This way, even when emails are sent outside a normal page render, the
-     * gettext translations stored in TranslatePress are applied correctly.
-     */
+    /** Whether WooCommerce is currently building a localized email. */
+    public static function is_translating_email() {
+        return ! empty( self::$email_contexts );
+    }
+
+    /** Order emails can safely pass their gettext markers to the regular translator. */
+    public static function is_order_email() {
+        $context = end( self::$email_contexts );
+        return $context && is_a( $context['email']->object, 'WC_Order' );
+    }
+
+    public static function is_sending_order_email() {
+        return self::$sending_order_email;
+    }
+
+    /** Limit the admin wp_mail exception to the actual order-email delivery callback. */
+    public function wrap_mail_callback( $callback, $wc_email ) {
+        $context = end( self::$email_contexts );
+        if ( ! $context || $context['email'] !== $wc_email || ! self::is_order_email() ) {
+            return $callback;
+        }
+
+        return function ( ...$args ) use ( $callback ) {
+            $previous = self::$sending_order_email;
+            self::$sending_order_email = true;
+            try {
+                return call_user_func_array( $callback, $args );
+            } finally {
+                self::$sending_order_email = $previous;
+            }
+        };
+    }
+
+    /** Load the selected email language and include gettext from email extensions. */
     private function bootstrap_trp_gettext_for_emails() {
         $trp             = TRP_Translate_Press::get_trp_instance();
         $gettext_manager = $trp->get_component( 'gettext_manager' );
         $pg              = $gettext_manager->get_gettext_component( 'process_gettext' );
-
-        // If at least one core handler is already attached, return
-        if ( has_filter( 'gettext', [ $pg, 'woocommerce_process_gettext_strings_no_context' ] ) )
-            return;
 
         if ( !$trp->get_component( 'machine_translator') || get_class( $trp->get_component( 'machine_translator' ) ) === TRP_Machine_Translator::class )
             $trp->init_machine_translation(); // Machine translator should be initialized by the get_trp_instance() call. In the case of cron jobs, it is not - so we initialize it here manually.
 
         // Bypass processing_gettext_is_needed usual checks. Otherwise, the below method calls wouldn't go through
         add_filter( 'trp_processing_gettext_is_needed', '__return_true' );
+        add_filter( 'trp_allow_gettext_write', '__return_true' );
 
+        // An existing hook does not mean its dictionary belongs to this email language.
         $gettext_manager->create_gettext_translated_global();
-        $gettext_manager->call_gettext_filters( 'woocommerce_' );
+        $gettext_handlers = [
+            'gettext' => [ 'process_gettext_strings_no_context', 3 ],
+            'gettext_with_context' => [ 'process_gettext_strings_with_context', 4 ],
+            'ngettext' => [ 'process_ngettext_strings', 5 ],
+            'ngettext_with_context' => [ 'process_ngettext_strings_with_context', 6 ],
+        ];
+        foreach ( $gettext_handlers as $hook => $handler ) {
+            $callback = [ $pg, $handler[0] ];
+            if ( has_filter( $hook, $callback ) === false ) {
+                add_filter( $hook, $callback, 100, $handler[1] );
+                $index = count( self::$email_contexts ) - 1;
+                self::$email_contexts[ $index ]['filters'][] = [ $hook, $callback, 100 ];
+            }
+        }
     }
 
     function reload_woocommerce_textdomain() {

@@ -94,7 +94,7 @@ class Controller extends Webhook {
 				if ( $this->set_recipient_status( $this->activated_recipient ) ) {
 					$this->activated_recipient['cancellation_link'] = add_query_arg( array(
 						'action'          => 'cancel',
-						'activation_code' => esc_html( $activation_key ),
+						'activation_code' => rawurlencode( $activation_key ),
 					), $this->webhook_url() );
 				}
 				break;

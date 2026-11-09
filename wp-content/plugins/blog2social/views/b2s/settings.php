@@ -45,7 +45,7 @@ if ($optionUserTimeFormat == false) {
                                     <a href="#b2s-general" class="b2s-general" data-toggle="tab"><?php esc_html_e('General', 'blog2social') ?></a>
                                 </li>
                                 <li>
-                                    <a href="admin.php?page=blog2social-autopost" class="b2s-auto-post"><?php esc_html_e('Auto-Post', 'blog2social') ?></a>
+                                    <a href="admin.php?page=blog2social-autopost" class="b2s-auto-post"><?php esc_html_e('Auto Posting', 'blog2social') ?></a>
                                 </li>
                                 <li>
                                     <a href="#b2s-social-meta-data" class="b2s-social-meta-data" data-toggle="tab"><?php esc_html_e('Social Meta Data', 'blog2social') ?></a>

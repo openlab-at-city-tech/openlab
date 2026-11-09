@@ -216,7 +216,7 @@ if ( $show_upgrade_notice ) :
             <?php
             $license_status = get_option( 'trp_license_status' );
             if( empty($license_status) ){
-                printf( esc_html__('Please %1$senter your license%2$s key first to add more languages.', 'translatepress-multilingual'), '<a href="' . esc_url( admin_url('admin.php?page=trp_license_key') ) . '">', '</a>');
+                printf( esc_html__('Please %1$senter your license%2$s key first to add more languages.', 'translatepress-multilingual'), '<a href="' . esc_url( admin_url('admin.php?page=trp_ai_api_key') ) . '">', '</a>');
             }
             elseif( $license_status !== 'valid' ){
                 // [utm66]

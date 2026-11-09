@@ -27,89 +27,125 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                 <!--Header|Start - Include-->
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
                 <!--Header|End-->
+                <h1 class="b2s-page-title"><?php esc_html_e('Share a new video post', 'blog2social'); ?></h1>
+                <p class="b2s-page-subtitle b2s-color-grey"><?php esc_html_e('Share video links directly to your social media networks', 'blog2social'); ?></p>
                 <h1 id="b2s-curation-title-video" class="b2s-curation-title" style="display: none;"><?php esc_html_e('Share New Video Post', 'blog2social'); ?></h1>
-                <p id="b2s-curation-subtitle-video" class="b2s-bold b2s-color-grey b2s-curation-subtitle" style="display: none;"><?php esc_html_e('Add a video link, upload a video or select a video from your media library to share it on your social media accounts.', 'blog2social'); ?></p>
-                <br>
-                <!--Navbar|Start-->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/post.navbar.php'); ?>
-                    </div>
-                </div>
+                <!--Navbar|Start, since new navbar the navbar is skipped for video-->  
                 <input type="hidden" id="b2s-curation-post-format" value="0">
                 <!--Navbar|End-->
                 <div class="clearfix"></div>
-                <!--Content|Start-->
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h3><?php esc_html_e("Insert a video link to share on social media, e.g. from Youtube or Vimeo.", 'blog2social') ?> <span class="label label-success"><?php esc_html_e("FREE", "blog2social"); ?></span></h3>
-                        <div class="clearfix"></div>
-                        <div id="b2s-curation-no-review-info" class="alert alert-danger">
-                            <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No link preview available. Please check your link.', 'blog2social'); ?>
-                        </div>
-                        <div id="b2s-curation-no-auth-info" class="alert alert-danger">
-                            <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No connected networks. Please make sure to connect at least one social media account.', 'blog2social'); ?>
-                        </div>
-                        <div id="b2s-curation-no-data-info" class="alert alert-danger">
-                            <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Invalid data. Please check your data.', 'blog2social'); ?>
-                        </div>
-                        <div id="b2s-curation-saved-draft-info" class="alert alert-success">
-                            <span class="glyphicon glyphicon-success glyphicon-ok"></span> <?php esc_html_e('Saved as draft.', 'blog2social'); ?>
-                        </div>
-                        <div class="b2s-curation-area">
-                            <form id="b2s-curation-post-form" method="post">
-                                <div class="b2s-loading-area" style="display:none">
-                                    <br>
-                                    <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
-                                    <div class="clearfix"></div>
-                                    <div class="text-center b2s-loader-text"><?php esc_html_e("Load data...", "blog2social"); ?></div>
-                                </div>
-                                <div class="b2s-curation-link-area">
-                                    <div class="b2s-curation-input-area">
-                                        <div class="col-md-12">
-                                            <div class="row form-group">
-                                                <small id="b2s-curation-input-url-help" class="form-text text-muted b2s-color-text-red"><?php esc_html_e("Please enter a valid link", "blog2social") ?></small>
-                                                <input type="email" class="form-control" id="b2s-curation-input-url" value="" placeholder="<?php esc_html_e("Enter link", "blog2social"); ?>">
-                                                <div class="clearfix"></div>
-                                                <div class="b2s-curation-input-area-btn">
-                                                    <button class="btn btn-primary b2s-btn-curation-continue"><?php esc_html_e("continue", "blog2social"); ?></button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="b2s-curation-result-area">
-                                        <div class="col-md-12">
-                                            <input type="hidden" id="b2s_user_timezone" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset) ?>">
-                                            <div class="b2s-curation-preview-area"></div>
-                                            <div class="clearfix"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="b2s-curation-settings-area"></div>
-                                <input type="hidden" id="b2s-draft-id" value="" name="b2s-draft-id">
-                                <textarea id="b2s-post-curation-comment-dummy" style="display:none;"></textarea>
-                            </form>
-                            <div class="row b2s-curation-post-list-area">
-                                <div class="b2s-curation-post-list"></div>
-                                <div class="col-md-12">
-                                    <div class="pull-right">
-                                        <button class="btn btn-primary b2s-re-share-btn"><?php esc_html_e('Re-share this post', 'blog2social') ?></button>
-                                        <a class="btn btn-primary" href="admin.php?page=blog2social-curation"><?php esc_html_e('Create a new post', 'blog2social') ?></a>
-                                    </div>
-                                </div>
-                            </div>
-                            <input type="hidden" id="b2sSelSchedDate" value="">
-                            <input type="hidden" id="b2sServerUrl" value="<?php echo esc_attr(B2S_PLUGIN_SERVER_URL); ?>">
-                            <input type="hidden" id="b2sJsTextPublish" value="<?php esc_html_e('published', 'blog2social') ?>">
-                            <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
-                            <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
-                            <input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(wp_date('Y-m-d', strtotime("+ 3 years"),  new DateTimeZone(date_default_timezone_get()))); ?>">
+                <!--Compose Area|Start-->
+                <div class="b2s-compose-outer">
+                    <div class="b2s-compose-col-main">
+                        <div class="panel panel-default b2s-compose-panel">
+                            <div class="panel-body">
 
+                                <!-- Alert messages (JS-controlled) -->
+                                <div id="b2s-curation-no-review-info" class="alert alert-danger" style="display:none;">
+                                    <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No link preview available. Please check your link.', 'blog2social'); ?>
+                                </div>
+                                <div id="b2s-curation-no-auth-info" class="alert alert-danger" style="display:none;">
+                                    <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No connected networks. Please make sure to connect at least one social media account.', 'blog2social'); ?>
+                                </div>
+                                <div id="b2s-curation-no-data-info" class="alert alert-danger" style="display:none;">
+                                    <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Invalid data. Please check your data.', 'blog2social'); ?>
+                                </div>
+                                <div id="b2s-curation-saved-draft-info" class="alert alert-success" style="display:none;">
+                                    <span class="glyphicon glyphicon-success glyphicon-ok"></span> <?php esc_html_e('Saved as draft.', 'blog2social'); ?>
+                                </div>
+
+                                <!-- Compose header row: avatar + label -->
+                                <div class="b2s-compose-header">
+                                    <div class="b2s-compose-header-left">
+                                        <img class="b2s-compose-avatar img-circle" src="<?php echo esc_url(plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE)); ?>" alt="Blog2Social">
+                                        <span class="b2s-compose-header-label"><?php esc_html_e('Enter a video link to share on your social media networks', 'blog2social'); ?></span>
+                                    </div>
+                                </div>
+
+                                <form id="b2s-curation-post-form" method="post">
+
+                                    <!-- Loading spinner -->
+                                    <div class="b2s-loading-area" style="display:none;">
+                                        <br>
+                                        <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
+                                        <div class="clearfix"></div>
+                                        <div class="text-center b2s-loader-text"><?php esc_html_e("Load data...", "blog2social"); ?></div>
+                                    </div>
+
+                                    <!-- Video link input area -->
+                                    <div class="b2s-curation-link-area">
+                                        <div class="b2s-curation-input-area">
+                                            <small id="b2s-curation-input-url-help" class="form-text b2s-color-text-red"><?php esc_html_e("Please enter a valid link", "blog2social"); ?></small>
+                                            <input type="text" class="form-control" id="b2s-curation-input-url" value="" placeholder="<?php esc_attr_e("Enter video link", "blog2social"); ?>">
+                                            <button class="btn btn-primary b2s-btn-curation-continue" type="button"><?php esc_html_e("continue", "blog2social"); ?></button>
+                                        </div>
+                                        <div class="b2s-curation-result-area">
+                                            <input type="hidden" name="b2s_user_timezone" value="<?php echo esc_attr($userTimeZoneOffset); ?>">
+                                            <div class="b2s-curation-preview-area"></div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Compose textarea for video post text (used by video.js as #b2s-post-curation-comment) -->
+                                    <div class="b2s-compose-unified-input" style="display:none;">
+                                        <div class="b2s-compose-textarea-wrap">
+                                            <textarea
+                                                id="b2s-compose-video-textarea"
+                                                class="form-control b2s-compose-main-textarea b2s-post-item-details-item-message-input"
+                                                placeholder="<?php esc_attr_e('Write your video post text...', 'blog2social'); ?>"
+                                                rows="2"
+                                            ></textarea>
+                                            <button type="button" class="b2s-compose-emoji-inline-btn b2s-post-item-details-item-message-emoji-btn" title="<?php esc_attr_e('Emoji', 'blog2social'); ?>">
+                                                <img src="<?php echo esc_url(plugins_url('/assets/images/b2s-emoji.png', B2S_PLUGIN_FILE)); ?>" width="16" height="16" alt="Emoji">
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div id="b2s-error-text-empty" class="b2s-compose-error-msg" style="display:none;">
+                                        <span class="glyphicon glyphicon-exclamation-sign"></span> <?php esc_html_e('Please enter a message.', 'blog2social'); ?>
+                                    </div>
+                                    <div class="b2s-compose-toolbar" style="display:none;">
+                                        <button type="button" id="b2s-compose-settings-toggle" class="btn btn-default btn-sm b2s-compose-toolbar-btn b2s-compose-settings-toggle-btn">
+                                            <i class="glyphicon glyphicon-cog"></i>
+                                            <span id="b2s-compose-settings-toggle-label"><?php esc_html_e('Time and format settings', 'blog2social'); ?></span>
+                                            <i class="glyphicon glyphicon-chevron-down b2s-compose-settings-toggle-icon"></i>
+                                        </button>
+                                        <div class="b2s-compose-toolbar-spacer"></div>
+                                        <button type="button" id="b2s-btn-curation-customize" class="btn btn-default btn-sm b2s-compose-toolbar-btn b2s-btn-curation-customize" disabled="disabled"><?php esc_html_e('Customize', 'blog2social'); ?></button>
+                                        <button type="button" id="b2s-btn-curation-share" class="btn btn-success btn-sm b2s-compose-toolbar-btn b2s-btn-curation-share" disabled="disabled"><?php esc_html_e('Share', 'blog2social'); ?></button>
+                                    </div>
+
+                                    <!-- Settings panel (starts expanded, Bootstrap-collapsible via cog button) -->
+                                    <div id="b2s-compose-settings-panel" style="display:none;">
+                                        <div class="b2s-compose-send-options">
+                                            <div class="b2s-curation-settings-area" style="display:none;"></div>
+                                        </div>
+                                    </div>
+
+                                    <input type="hidden" id="b2s-draft-id" value="" name="b2s-draft-id">
+                                    <textarea id="b2s-post-curation-comment-dummy" style="display:none;"></textarea>
+
+                                </form>
+
+                                <!-- Re-share area (JS-controlled) -->
+                                <div class="row b2s-curation-post-list-area">
+                                    <div class="b2s-curation-post-list"></div>
+                                </div>
+
+                            </div>
                         </div>
                     </div>
                 </div>
+                <!--Compose Area|End-->
 
-                <div class="panel panel-default">
+                <!-- Hidden inputs for JS -->
+                <input type="hidden" id="b2sSelSchedDate" value="">
+                <input type="hidden" id="b2sServerUrl" value="<?php echo esc_attr(B2S_PLUGIN_SERVER_URL); ?>">
+                <input type="hidden" id="b2sJsTextPublish" value="<?php esc_attr_e('published', 'blog2social'); ?>">
+                <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
+                <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
+                <input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(wp_date('Y-m-d', strtotime("+ 3 years"), new DateTimeZone(date_default_timezone_get()))); ?>">
+                <input type="hidden" id="b2s_user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">
+
+                <div class="panel panel-default b2s-panel-video">
                     <div class="panel-body">
                         <div class="clearfix"></div>
                         <div class="b2s-video-upload-drag-drop" >
@@ -175,7 +211,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                         <span class="b2s-text-bold"><?php esc_html_e("What's included in the video-post trial?", "blog2social"); ?></span>
                                         <ul class="list-group">
                                             <li class="list-group-item b2s-video-premium-benefits">
-                                                - <?php esc_html_e("Publish and share your video files on: YouTube, TikTok, Vimeo, Instagram, Pinterest, Facebook, and Twitter", "blog2social"); ?>
+                                                - <?php esc_html_e("Publish and share your video files on: YouTube, TikTok, Vimeo, Instagram, Pinterest, Facebook, and X", "blog2social"); ?>
                                             </li>
                                             <li class="list-group-item b2s-video-premium-benefits">
                                                 - <?php esc_html_e("Upload 1 video of up to 250 MB per day", "blog2social"); ?>
@@ -242,43 +278,57 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                                 <div class="clearfix"></div>
                                 <br>
                                 <div class="b2s-video-upload-list">
-                                    <form class="b2sSortForm form-inline pull-left" action="#">
-                                        <input id="b2sType" type="hidden" value="video" name="b2sType">
-                                        <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
-                                        <?php
-                                        $postFilter = new B2S_Post_Filter('video');
-                                        echo wp_kses($postFilter->getItemHtml(), array(
-                                            'div' => array(
-                                                'class' => array()
-                                            ),
-                                            'input' => array(
-                                                'id' => array(),
-                                                'name' => array(),
-                                                'class' => array(),
-                                                'value' => array(),
-                                                'type' => array(),
-                                                'placeholder' => array(),
-                                            ),
-                                            'a' => array(
-                                                'href' => array(),
-                                                'id' => array(),
-                                                'class' => array()
-                                            ),
-                                            'span' => array(
-                                                'class' => array()
-                                            ),
-                                            'small' => array(),
-                                            'select' => array(
-                                                'id' => array(),
-                                                'name' => array(),
-                                                'class' => array()
-                                            ),
-                                            'option' => array(
-                                                'value' => array()
-                                            )
-                                        ));
-                                        ?>
-                                    </form>
+                        
+                                    <!-- Always-visible: search + toggle button -->
+                                    <div class="b2s-wp-filter-bar">
+                                        <div class="b2s-wp-filter-bar-left">
+                                            <input type="text" class="form-control" id="b2sSortPostTitle" name="b2sSortPostTitle" placeholder="<?php esc_attr_e('Search by title...', 'blog2social'); ?>">
+                                            <button type="button" class="btn btn-default btn-sm" id="b2s-wp-filter-toggle">
+                                                <i class="glyphicon glyphicon-filter"></i>
+                                                <span id="b2s-wp-filter-toggle-label" data-show="<?php esc_attr_e('Show filters', 'blog2social'); ?>" data-hide="<?php esc_attr_e('Hide filters', 'blog2social'); ?>"><?php esc_html_e('Show filters', 'blog2social'); ?></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- Filter Post Start-->
+                                    <div id="b2s-wp-filter-panel" style="display:none;">
+                                        <form class="b2sSortForm form-inline" action="#">
+                                            <input id="b2sType" type="hidden" value="video" name="b2sType">
+                                            <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
+                                            <?php
+                                            $postFilter = new B2S_Post_Filter('video');
+                                            echo wp_kses($postFilter->getItemHtml(), array(
+                                                'div' => array(
+                                                    'class' => array()
+                                                ),
+                                                'input' => array(
+                                                    'id' => array(),
+                                                    'name' => array(),
+                                                    'class' => array(),
+                                                    'value' => array(),
+                                                    'type' => array(),
+                                                    'placeholder' => array(),
+                                                ),
+                                                'a' => array(
+                                                    'href' => array(),
+                                                    'id' => array(),
+                                                    'class' => array()
+                                                ),
+                                                'span' => array(
+                                                    'class' => array()
+                                                ),
+                                                'small' => array(),
+                                                'select' => array(
+                                                    'id' => array(),
+                                                    'name' => array(),
+                                                    'class' => array()
+                                                ),
+                                                'option' => array(
+                                                    'value' => array()
+                                                )
+                                            ));
+                                            ?>
+                                        </form>
+                                    </div>
                                     <div class="clearfix"></div>
                                     <div class="b2s-sort-area">
                                         <div class="b2s-loading-area" style="display:none">

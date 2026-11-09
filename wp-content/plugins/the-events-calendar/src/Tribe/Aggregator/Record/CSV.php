@@ -191,13 +191,16 @@ class Tribe__Events__Aggregator__Record__CSV extends Tribe__Events__Aggregator__
 		}
 
 		$content_type = $this->get_csv_content_type();
-		update_option( 'tribe_events_import_column_mapping_' . $content_type, $data['column_map'] );
+		$option_key   = 'tribe_events_import_column_mapping_' . $content_type;
 
 		try {
 			$importer = $this->get_importer();
-		} catch ( RuntimeException $e ) {
+		} catch ( InvalidArgumentException $e ) {
 			return tribe_error( 'core:aggregator:missing-csv-file' );
 		}
+
+		// Validate against this submission's map directly; don't persist it until validation passes.
+		$importer->set_map( $data['column_map'] );
 
 		if ( ! empty( $data['category'] ) ) {
 			$importer = $this->maybe_set_default_category( $importer );
@@ -228,7 +231,7 @@ class Tribe__Events__Aggregator__Record__CSV extends Tribe__Events__Aggregator__
 			);
 		}
 
-		update_option( 'tribe_events_import_column_mapping_' . $content_type, $data['column_map'] );
+		update_option( $option_key, $data['column_map'] );
 
 		return $importer;
 	}
@@ -310,6 +313,7 @@ class Tribe__Events__Aggregator__Record__CSV extends Tribe__Events__Aggregator__
 	 *
 	 * @since 4.6.15
 	 * @since 6.15.17.1 Strengthen file type and location checks during aggregator imports.
+	 * @since 6.17.1 Resolve symlinks before validating the path so imports work on symlinked uploads directories.
 	 *
 	 * @return bool|false|string Either the absolute path to the CSV file or `false` on failure.
 	 */
@@ -321,6 +325,9 @@ class Tribe__Events__Aggregator__Record__CSV extends Tribe__Events__Aggregator__
 		}
 
 		if ( $file_path ) {
+			// Resolve symlinks (e.g. a symlinked uploads directory) so the path can be compared against the uploads base below.
+			$file_path = realpath( $file_path ) ?: $file_path;
+
 			// Only allow CSV files — reject any other extension to prevent file disclosure.
 			$filetype = wp_check_filetype( $file_path );
 			if ( empty( $filetype['ext'] ) || 'csv' !== strtolower( $filetype['ext'] ) ) {

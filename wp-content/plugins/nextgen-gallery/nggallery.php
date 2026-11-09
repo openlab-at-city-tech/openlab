@@ -2,14 +2,14 @@
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 4.2.0
+ * Version: 4.5.5
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=pluginuri
  * Author URI: https://www.imagely.com/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=authoruri
  * License: GPLv3
  * Text Domain: nggallery
  * Domain Path: /static/I18N/
- * Requires PHP: 7.0
+ * Requires PHP: 7.4
  *
  * @package Nextgen Gallery
  */
@@ -27,6 +27,7 @@ use Imagely\NGG\Admin\Shortcode_Preview;
 use Imagely\NGG\Admin\Onboarding_Wizard;
 use Imagely\NGG\Admin\App;
 use Imagely\NGG\Migrations\AddGalleryDates;
+use Imagely\NGG\Migrations\NormalizeDisplayTypeSettings;
 
 /**
  * Clean Exit Exception for graceful shutdown.
@@ -242,6 +243,14 @@ class C_NextGEN_Bootstrap {
 		// Allow Composer dependencies to be found and loaded.
 		require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 
+		// Declare the POPE classes. Vendored in-tree rather than pulled from Composer; see
+		// src/Legacy/Pope/VENDORED.md. Loaded here, at the same point Composer's `files`
+		// autoload used to load it, because declaring these classes on every request is
+		// load-bearing for third-party integrations (and for get_declared_classes() checks
+		// in src/Util/ThirdPartyCompatibility.php). Bootstrapping the component registry is
+		// a separate, lazy step; see self::load_pope().
+		require_once __DIR__ . DIRECTORY_SEPARATOR . 'src/Legacy/Pope/lib/autoload.php';
+
 		// If another plugin or theme with the POPE library (such as the legacy Photocrati theme) is active during.
 		// the NextGEN activation process, it may produce warnings that can stop this plugin from activating.
 		if ( ! $this->is_activating() && ! $this->is_topscorer_request() ) {
@@ -265,6 +274,10 @@ class C_NextGEN_Bootstrap {
 				( new MenuNudge() )->hooks();
 				( new Ecommerce_Preview() )->hooks();
 				AddGalleryDates::migrate( false );
+				// Deferred to admin_init: the normalization needs every display-type controller
+				// registered (Pro registers its own on ngg_initialized, which fires below), so it
+				// cannot run inline here or it would skip all Pro display types.
+				add_action( 'admin_init', [ NormalizeDisplayTypeSettings::class, 'migrate' ] );
 			}
 			// TODO maybe move back to only admin after all is done.
 			( new App() )->hooks();
@@ -344,6 +357,15 @@ class C_NextGEN_Bootstrap {
 		}
 
 		$relative_class = substr( $class_name, $len );
+
+		// Only a name shaped like a PHP class may be mapped onto a path. The mapping below is a
+		// plain str_replace onto src/, so a caller passing a crafted string to class_exists() -
+		// e.g. a class name read from a database column - could otherwise walk out of src/ with
+		// "..\" segments and require() an uploaded file. Rejected here rather than at each
+		// caller, so the guard cannot be forgotten at a new one.
+		if ( ! preg_match( '/^[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*(\\\\[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*)*$/', $relative_class ) ) {
+			return;
+		}
 
 		$file = $base_dir . str_replace( '\\', DIRECTORY_SEPARATOR, $relative_class ) . '.php';
 
@@ -702,13 +724,29 @@ class C_NextGEN_Bootstrap {
 	/**
 	 * Loads the POPE framework (Plugin Object Polymorphic Extensibility).
 	 *
+	 * Declared static so it can be called as \C_NextGEN_Bootstrap::load_pope() from
+	 * namespaced code that needs to guarantee Pope is available before firing actions
+	 * that third-party plugins may handle with legacy Pope classes (e.g. ShortPixel's
+	 * use of C_Gallery_Storage via the ngg_added_new_image hook).
+	 *
 	 * @param bool $force Force loading even if conditions don't require it.
 	 */
-	public function load_pope( $force = false ) {
-		// We allow POPE to load if the requested URL/POST includes photocrati_ajax as it is still used by a few NextGEN
-		// modules for XHR such as uploading images.
+	public static function load_pope( $force = false ) {
+		// Never load twice.
+		if ( self::$pope_loaded ) {
+			return;
+		}
+
+		// Skip loading on non-admin, non-AJAX REST requests unless a known third-party
+		// image-optimisation plugin is active (those plugins hook into ngg_added_new_image
+		// and require legacy Pope classes) or loading is explicitly forced.
 		//
-		// Third-party image optimization plugins that require legacy C_Gallery_Storage class access:
+		// NOTE: This check is evaluated at plugin-load time (constructor) when sibling plugins
+		// may not yet be included, so the constant checks can be unreliable at that point.
+		// The explicit load_pope(true) call before do_action('ngg_added_new_image') in
+		// DataStorage\Manager is the reliable safety net for REST upload requests.
+		//
+		// Third-party image optimization plugins that require legacy C_Gallery_Storage access:
 		// - EWWW Image Optimizer: uses I_Gallery_Storage interface
 		// - WP Smush: uses I_Gallery_Storage interface
 		// - Imagify: adds their own mixin to C_Gallery_Storage
@@ -723,8 +761,7 @@ class C_NextGEN_Bootstrap {
 			&& ! defined( 'EWWW_IMAGE_OPTIMIZER_VERSION' ) // EWWW uses I_Gallery_Storage.
 			&& ! defined( 'WP_SMUSH_VERSION' ) // WP_SMUSH_VERSION uses I_Gallery_Storage.
 			&& ! defined( 'IMAGIFY_VERSION' ) // Imagify adds their own mixin to C_Gallery_Storage.
-			&& ! defined( 'SHORTPIXEL_IMAGE_OPTIMISER_VERSION' ) // ShortPixel uses C_Gallery_Storage.
-			|| self::$pope_loaded ) {
+			&& ! defined( 'SHORTPIXEL_IMAGE_OPTIMISER_VERSION' ) ) { // ShortPixel uses C_Gallery_Storage.
 			return;
 		}
 
@@ -943,18 +980,61 @@ class C_NextGEN_Bootstrap {
 			'get_nextgen_api_token',
 		];
 
-		// Nonce verification is not necessary here: authentication is handled by the Lightroom\Controller class.
+		// Nonce verification is not possible here: the Lightroom client never requests or
+		// sends one. Each action authenticates itself in Lightroom\Controller, and this
+		// routing layer adds a cheap precondition in front of it: a request carrying no
+		// credential field at all is answered here and never reaches the controller.
+		//
+		// This is a PRESENCE test, not an authorization gate - "tok=x" satisfies it - so
+		// #1029's second hardening note (gate the four actions at the routing layer *instead
+		// of* relying on the controller) is NOT delivered by it. The controller remains the
+		// authority on whether a credential is valid.
+		//
+		// '' !== rather than empty() so a password or token of "0" is not refused here.
 		//
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-		if ( ! empty( $_REQUEST['photocrati_ajax'] )
-		&& ! empty( $_REQUEST['action'] )
-		&& '1' === (string) ( wp_unslash( $_REQUEST['photocrati_ajax'] ) )
-		&& in_array( $_REQUEST['action'], $lightroom_actions, true ) ) {
+		$lightroom_is_action = ! empty( $_REQUEST['photocrati_ajax'] )
+			&& ! empty( $_REQUEST['action'] )
+			&& '1' === (string) ( wp_unslash( $_REQUEST['photocrati_ajax'] ) )
+			&& in_array( $_REQUEST['action'], $lightroom_actions, true );
+
+		$lightroom_has_credential = ( isset( $_REQUEST['tok'] ) && '' !== $_REQUEST['tok'] )
+			|| ( isset( $_REQUEST['job_post_back'] ) && '' !== $_REQUEST['job_post_back'] )
+			|| ( isset( $_REQUEST['q'] ) && '' !== $_REQUEST['q'] && isset( $_REQUEST['z'] ) && '' !== $_REQUEST['z'] );
+
+		if ( $lightroom_is_action && $lightroom_has_credential ) {
 			add_action(
 				'init',
 				function () {
 					$this->register_taxonomy();
 					( new \Imagely\NGG\Lightroom\Controller() )->run();
+				},
+				0
+			);
+		} elseif ( $lightroom_is_action ) {
+			// Answered in the controller's own envelope. Letting the request fall through to
+			// the front controller returned a bare { "error": "..." } with no error.code, which
+			// is the only field the desktop client reads - so a mistyped password became an
+			// unintelligible failure instead of "Authentication Failed."
+			add_action(
+				'init',
+				function () {
+					$this->register_taxonomy();
+
+					wp_send_json(
+						[
+							'result' => 'error',
+							'error'  => [
+								// The literal, not API::ERR_NOT_AUTHENTICATED: the autoloader maps
+								// Lightroom\Controller to Controller.php, and Lightroom\API lives in
+								// that same file under a name it cannot resolve - referencing the
+								// constant here fatals. The constants' numeric values are fixed by
+								// contract (see the note on the API class), so 1002 is stable.
+								'code'    => 1002,
+								'message' => __( 'Authentication Failed.', 'nggallery' ),
+							],
+						]
+					);
 				},
 				0
 			);
@@ -1007,19 +1087,25 @@ class C_NextGEN_Bootstrap {
 	/**
 	 * Registers the NextGEN taxonomy.
 	 *
+	 * Terms attach to NextGEN picture IDs, not posts, so ngg_tag has no object type.
+	 *
+	 * Keep update_count_callback: without it WordPress counts ngg_tag as a post taxonomy and
+	 * writes count = 0, and Legacy\admin\manage.php deletes ngg_tag terms with count <= 0.
+	 *
 	 * @return void
 	 */
 	public function register_taxonomy() {
 		// Register the NextGEN taxonomy.
 		$args = [
-			'label'    => __( 'Picture tag', 'nggallery' ),
-			'template' => __( 'Picture tag: %2$l.', 'nggallery' ),
-			'helps'    => __( 'Separate picture tags with commas.', 'nggallery' ),
-			'sort'     => true,
-			'args'     => [ 'orderby' => 'term_order' ],
+			'label'                 => __( 'Picture tag', 'nggallery' ),
+			'template'              => __( 'Picture tag: %2$l.', 'nggallery' ),
+			'helps'                 => __( 'Separate picture tags with commas.', 'nggallery' ),
+			'sort'                  => true,
+			'args'                  => [ 'orderby' => 'term_order' ],
+			'update_count_callback' => '_update_generic_term_count',
 		];
 
-		register_taxonomy( 'ngg_tag', 'nggallery', $args );
+		register_taxonomy( 'ngg_tag', [], $args );
 	}
 
 	/**
@@ -1221,7 +1307,7 @@ class C_NextGEN_Bootstrap {
 		define( 'NGG_PRODUCT_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PLUGIN_DIR, '/\\' ), 'products' ] ) );
 		define( 'NGG_MODULE_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PRODUCT_DIR, '/\\' ), 'photocrati_nextgen', 'modules' ] ) );
 		define( 'NGG_PLUGIN_STARTED_AT', microtime() );
-		define( 'NGG_PLUGIN_VERSION', '4.2.0' );
+		define( 'NGG_PLUGIN_VERSION', '4.5.5' );
 
 		$random_version = function_exists( 'wp_rand' ) ? wp_rand( 0, mt_getrandmax() ) : mt_rand( 0, mt_getrandmax() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand
 		define( 'NGG_SCRIPT_VERSION', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? (string) $random_version : NGG_PLUGIN_VERSION );

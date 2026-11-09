@@ -138,6 +138,10 @@ class DisplayedGallery extends Model {
 	 */
 	public $is_album_gallery;
 
+	// Sources allowed to override the global maximum_entity_count; shared by the constructor and
+	// get_maximum_entity_count() so the two stay in sync.
+	const MAX_COUNT_SOURCES = [ 'tag', 'tags', 'image_tag', 'image_tags', 'random_images', 'recent_images', 'random', 'recent' ];
+
 	/**
 	 * Maximum entity count.
 	 *
@@ -250,8 +254,7 @@ class DisplayedGallery extends Model {
 
 		// Only some sources should have their own maximum_entity_count.
 		if ( ! empty( $this->display_settings['maximum_entity_count'] )
-		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-		&& in_array( $this->source, [ 'tag', 'tags', 'random_images', 'recent_images', 'random', 'recent' ] ) ) {
+		&& in_array( $this->source, self::MAX_COUNT_SOURCES, true ) ) {
 			$this->maximum_entity_count = $this->display_settings['maximum_entity_count'];
 		}
 
@@ -267,41 +270,31 @@ class DisplayedGallery extends Model {
 	/**
 	 * Merges display type settings with per-gallery display settings.
 	 *
-	 * Uses the display type (global) settings as the base. Per-gallery values are applied only when
-	 * they represent an explicit user override (i.e., differ from the controller's original default).
-	 * This prevents stale defaults baked into galleries at creation time from overriding subsequent
-	 * changes to the global display type settings (e.g., "Maximum image width" for Masonry).
-	 *
-	 * Note: A limitation is that if a user explicitly sets a per-gallery value to match the
-	 * controller default (e.g., 240) and the admin later changes the global to 300, the gallery
-	 * will render with 300 since there is no way to distinguish "explicit default" from "stale copy."
+	 * Layered lowest-to-highest: controller defaults, then the stored global settings, then the
+	 * per-gallery overrides. Controller defaults form the base so keys added in newer versions are
+	 * always present even when the stored DisplayType row predates them (avoids undefined-index reads
+	 * in display types). The stored global sits on top of the defaults, and per-gallery values win
+	 * last — a gallery only stores settings it explicitly customized, so a present value is always a
+	 * deliberate choice and overrides the global even when it equals the default. Uncustomized display
+	 * types are absent from the overrides and therefore inherit the current global settings.
 	 *
 	 * @param \Imagely\NGG\DataTypes\DisplayType $display_type The display type entity.
 	 * @return array The merged display settings.
 	 */
 	private function merge_display_settings( $display_type ) {
-		$base      = (array) $display_type->settings;
 		$overrides = is_array( $this->display_settings ) ? $this->display_settings : [];
 
-		// Get the controller's original defaults to detect explicit overrides.
 		$defaults = [];
 		if ( ControllerFactory::has_controller( $display_type->name ) ) {
 			$controller = ControllerFactory::get_controller( $display_type->name );
 			if ( method_exists( $controller, 'get_default_settings' ) ) {
-				$defaults = $controller->get_default_settings();
+				$defaults = (array) $controller->get_default_settings();
 			}
 		}
 
-		foreach ( $overrides as $key => $value ) {
-			// Only apply per-gallery value if it represents an explicit override
-			// (differs from the original default). Values matching the default were likely
-			// copied at gallery creation and should not override global display type changes.
-			if ( ! array_key_exists( $key, $defaults ) || (string) $defaults[ $key ] !== (string) $value ) {
-				$base[ $key ] = $value;
-			}
-		}
+		$base = array_merge( $defaults, (array) $display_type->settings );
 
-		return $base;
+		return array_merge( $base, $overrides );
 	}
 
 	public function get_mapper() {
@@ -387,17 +380,26 @@ class DisplayedGallery extends Model {
 		// and excluded entity ids, and mark specifically which entities are excluded.
 		if ( $returns == 'both' ) {
 			// We need to add two dynamic columns, one called "sortorder" and the other called "exclude".
-			$if_true      = 1;
-			$if_false     = 0;
-			$excluded_set = $this->entity_ids;
+			$entity_ids_provided = ! empty( $this->entity_ids );
 
-			if ( ! $excluded_set ) {
+			if ( $entity_ids_provided ) {
+				$if_true      = 1;
+				$if_false     = 0;
+				$excluded_set = $this->entity_ids;
+			} else {
 				$if_true      = 0;
 				$if_false     = 1;
 				$excluded_set = $this->exclusions;
 			}
 
-			$sortorder_set = $this->sortorder ? $this->sortorder : $excluded_set;
+			// Only an explicit entity_ids list represents an ordered "include these in this order" payload
+			// and is valid as an implicit sortorder. exclusions is a "hide these" list; using it as sortorder
+			// produces non-zero FIND_IN_SET values only for excluded images while everything else lands at 0,
+			// so the reversed-direction ORDER BY below pushes excluded images to the top of the result
+			// (visible in the legacy block's "Sort or Exclude Images" tab after reopening the modal).
+			$sortorder_set = $this->sortorder
+				? $this->sortorder
+				: ( $entity_ids_provided ? $this->entity_ids : null );
 
 			// Add sortorder column.
 			if ( $sortorder_set ) {
@@ -559,8 +561,9 @@ class DisplayedGallery extends Model {
 					$image_ids = [];
 
 					if ( $total <= $limit ) {
+						$total_int = (int) $total; // SQLi hardening: cast COUNT() result to int before LIMIT interpolation.
 						// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-						$image_ids = $wpdb->get_col( "SELECT `pictures`.`pid` FROM {$wpdb->nggpictures} `pictures` {$old_where_sql} LIMIT {$total}" );
+						$image_ids = $wpdb->get_col( "SELECT `pictures`.`pid` FROM {$wpdb->nggpictures} `pictures` {$old_where_sql} LIMIT {$total_int}" );
 					} else {
 						// Start retrieving random ID from the DB and hope they exist; continue looping until our count is full.
 						$segments        = ceil( $limit / 4 );
@@ -585,13 +588,20 @@ class DisplayedGallery extends Model {
 					self::$_random_image_ids_cache[ $id ] = $image_ids;
 				}
 
-				$image_ids = implode( ',', $image_ids );
-
-				// Replace the existing WHERE clause with one where aready retrieved "random" PID are included.
-				$mapper->where_clauses = [ " {$noExtras} `{$image_key}` IN ({$image_ids}) {$noExtras}" ];
+				// SQLi hardening: force every PID to int before IN() interpolation — prepare() cannot parameterize a comma-joined list.
+				$int_ids = array_filter( array_map( 'intval', (array) $image_ids ) );
+				if ( empty( $int_ids ) ) {
+					// Guard against invalid SQL from an empty IN() list.
+					$mapper->where_clauses = [ ' 1=0' ];
+				} else {
+					$image_ids = implode( ',', $int_ids );
+					// Replace the existing WHERE clause with one where aready retrieved "random" PID are included.
+					$mapper->where_clauses = [ " {$noExtras} `{$image_key}` IN ({$image_ids}) {$noExtras}" ];
+				}
 			} else {
+				$limit_int = (int) $limit; // SQLi hardening: cast LIMIT to int; callers may pass shortcode/REST maximum_entity_count.
 				// Replace the existing WHERE clause with one that selects from a sub-query that is randomly ordered.
-				$sub_where             = "SELECT `{$image_key}` FROM `{$table_name}` i {$old_where_sql} ORDER BY RAND() LIMIT {$limit}";
+				$sub_where             = "SELECT `{$image_key}` FROM `{$table_name}` i {$old_where_sql} ORDER BY RAND() LIMIT {$limit_int}";
 				$mapper->where_clauses = [ " {$noExtras} `{$image_key}` IN (SELECT `{$image_key}` FROM ({$sub_where}) o) {$noExtras}" ];
 			}
 		}
@@ -599,6 +609,25 @@ class DisplayedGallery extends Model {
 		// Apply a sorting order.
 		if ( $sort_by ) {
 			$mapper->order_by( $sort_by, $sort_direction );
+
+			// Every image missing from an explicit id list gets FIND_IN_SET 0, so the
+			// whole tail shares one sort value. Order that tail by the gallery's own
+			// arrangement instead of leaving it to the pid tiebreaker alone. The
+			// column is numbered per gallery, so this only holds for a single one:
+			// across several it would interleave them instead of appending.
+			if ( 'new_sortorder' === $sort_by
+				&& 'tags' !== $source_obj->name
+				&& 1 === count( (array) $this->container_ids ) ) {
+				$mapper->order_by( 'sortorder', 'ASC' );
+			}
+
+			// Append a deterministic pid tiebreaker so tied sort values cannot be
+			// partitioned differently across LIMIT/OFFSET page queries. Without it,
+			// rows sharing a sort value (e.g. appended images all at sortorder 0) can
+			// repeat on one page and be absent from every page.
+			if ( 'pid' !== $sort_by ) {
+				$mapper->order_by( 'pid', 'ASC' );
+			}
 		}
 
 		// Apply a limit.
@@ -636,7 +665,8 @@ class DisplayedGallery extends Model {
 	 */
 	public function _query_random_ids_for_cache( $limit = 10, $where_sql = '' ) {
 		global $wpdb;
-		$mod = wp_rand( 3, 9 );
+		$mod       = wp_rand( 3, 9 );
+		$limit_int = (int) $limit; // SQLi hardening: cast LIMIT to int — callers may pass derived user input.
 
 		if ( empty( $where_sql ) ) {
 			$where_sql = 'WHERE 1=1';
@@ -651,7 +681,7 @@ class DisplayedGallery extends Model {
                     JOIN (SELECT CEIL(MAX(`pid`) * RAND()) AS `pid` FROM {$wpdb->nggpictures}) AS `x` ON `pictures`.`pid` >= `x`.`pid`
                     {$where_sql}
                     AND `pictures`.`pid` MOD {$mod} = 0
-                    LIMIT {$limit}"
+                    LIMIT {$limit_int}"
 		);
 		// phpcs:enable WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 	}
@@ -693,15 +723,24 @@ class DisplayedGallery extends Model {
 			$container_ids = $this->container_ids;
 			if ( $container_ids ) {
 				if ( $container_ids !== [ '0' ] && $container_ids !== [ '' ] ) {
-					$container_ids = array_map( 'intval', $container_ids );
-					$album_mapper->where( [ "{$album_key} IN %s", $container_ids ] );
+					// Keep only positive ids; an unresolved slug intval()s to 0 and negatives are dropped too, and
+					// skip the query when nothing is left, avoiding an empty IN()/FIELD().
+					$container_ids = array_filter(
+						array_map( 'intval', $container_ids ),
+						static function ( $id ) {
+							return $id > 0;
+						}
+					);
+					if ( $container_ids ) {
+						$album_mapper->where( [ "{$album_key} IN %s", $container_ids ] );
 
-					// This order_by is necessary for albums to be ordered correctly given the WHERE .. IN() above.
-					$order_string = implode( ',', $container_ids );
-					$album_mapper->order_by( "FIELD('id', {$order_string})" );
+						// This order_by is necessary for albums to be ordered correctly given the WHERE .. IN() above.
+						$order_string = implode( ',', $container_ids );
+						$album_mapper->order_by( "FIELD('id', {$order_string})" );
 
-					foreach ( $album_mapper->run_query() as $album ) {
-						$entity_ids = array_merge( $entity_ids, (array) $album->sortorder );
+						foreach ( $album_mapper->run_query() as $album ) {
+							$entity_ids = array_merge( $entity_ids, (array) $album->sortorder );
+						}
 					}
 				} elseif ( $container_ids === [ '0' ] || $container_ids === [ '' ] ) {
 					foreach ( $gallery_mapper->select( $gallery_key )->run_query() as $gallery ) {
@@ -891,17 +930,19 @@ class DisplayedGallery extends Model {
 	}
 
 	/**
-	 * Honor the gallery 'maximum_entity_count' setting ONLY when dealing with random & recent galleries. All others
-	 * will always obey the *global* 'maximum_entity_count' setting.
+	 * Honor a per-gallery 'maximum_entity_count' only for the sources in self::MAX_COUNT_SOURCES
+	 * (tag/tags, random, recent). Every other source obeys the global setting.
 	 */
 	public function get_maximum_entity_count() {
 		$max = intval( Settings::get_instance()->get( 'maximum_entity_count', 500 ) );
 
-		$sources    = SourceManager::get_instance();
-		$source_obj = $this->get_source();
-  // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-		if ( in_array( $source_obj, [ $sources->get( 'random' ), $sources->get( 'random_images' ), $sources->get( 'recent' ), $sources->get( 'recent_images' ) ] ) ) {
-			$max = intval( $this->maximum_entity_count );
+		if ( in_array( $this->source, self::MAX_COUNT_SOURCES, true ) ) {
+			// Ignore a non-numeric, zero, or negative per-gallery value and use the global cap instead,
+			// so an invalid per-gallery value cannot resolve to 0 and drop the query LIMIT.
+			$per_gallery = intval( $this->maximum_entity_count );
+			if ( $per_gallery >= 1 ) {
+				$max = $per_gallery;
+			}
 		}
 
 		return $max;
@@ -1093,7 +1134,7 @@ class DisplayedGallery extends Model {
 	/**
 	 * Ensures the 'id' attribute is copied to 'ID' as both are used frequently
 	 *
-	 * @param $value
+	 * @param null|int|string $value Optional value to set as the ID.
 	 * @return mixed
 	 */
 	public function id( $value = null ) {

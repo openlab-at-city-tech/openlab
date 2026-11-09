@@ -3,7 +3,7 @@
 namespace TEC\Common\StellarWP\Arrays;
 
 use ArrayAccess;
-use Illuminate\Support\Enumerable;
+use Closure;
 use InvalidArgumentException;
 
 /**
@@ -31,8 +31,10 @@ class Arr {
 	 * @return array
 	 */
 	public static function add( $array, $key, $value ) {
+		$key = explode( '.', $key );
+		$key = static::wrap( $key );
 		if ( is_null( static::get( $array, $key ) ) ) {
-			static::set( $array, $key, $value );
+			$array = static::set( $array, $key, $value );
 		}
 
 		return $array;
@@ -208,7 +210,7 @@ class Arr {
 		$results = [];
 
 		foreach ( $array as $key => $value ) {
-			if ( is_array( $value ) && ! empty( $value ) ) {
+			if ( is_array( $value ) ) {
 				$results = array_merge( $results, static::dot( $value, $prepend . $key . '.' ) );
 			} else {
 				$results[ $prepend . $key ] = $value;
@@ -290,9 +292,10 @@ class Arr {
 	 * @return array
 	 */
 	public static function except( $array, $keys ) {
-		static::forget( $array, $keys );
+		$new_array = $array;
+		static::forget( $new_array, $keys );
 
-		return $array;
+		return $new_array;
 	}
 
 
@@ -305,19 +308,7 @@ class Arr {
 	 * @return bool
 	 */
 	public static function exists( $array, $key ) {
-		if ( $array instanceof Enumerable ) {
-			return $array->has( $key );
-		}
-
-		if ( $array instanceof ArrayAccess ) {
-			return $array->offsetExists( $key );
-		}
-
-		if ( is_float( $key ) ) {
-			$key = (string) $key;
-		}
-
-		return array_key_exists( $key, $array );
+		return static::has( $array, $key );
 	}
 
 	/**
@@ -354,10 +345,10 @@ class Arr {
 	 *
 	 * @return mixed
 	 */
-	public static function first( $array, callable $callback = null, $default = null ) {
+	public static function first( $array, ?callable $callback = null, $default = null ) {
 		if ( is_null( $callback ) ) {
 			if ( empty( $array ) ) {
-				return value( $default );
+				return self::value( $default );
 			}
 
 			foreach ( $array as $item ) {
@@ -371,7 +362,7 @@ class Arr {
 			}
 		}
 
-		return value( $default );
+		return self::value( $default );
 	}
 
 	/**
@@ -390,16 +381,30 @@ class Arr {
 	public static function flatten( $array, int $depth = PHP_INT_MAX ): array {
 		$result = [];
 
-		foreach ( $array as $item ) {
+		if ( $depth < 1 ) {
+			return $array;
+		}
+
+		foreach ( $array as $key => $item ) {
 			if ( ! is_array( $item ) ) {
-				$result[] = $item;
+				// Preserve string keys, use numeric keys for numeric
+				if ( is_string( $key ) ) {
+					$result[ $key ] = $item;
+				} else {
+					$result[] = $item;
+				}
 			} else {
 				$values = $depth === 1
 					? array_values( $item )
 					: static::flatten( $item, $depth - 1 );
 
-				foreach ( $values as $value ) {
-					$result[] = $value;
+				foreach ( $values as $value_key => $value ) {
+					// Preserve string keys from nested arrays
+					if ( is_string( $value_key ) ) {
+						$result[ $value_key ] = $value;
+					} else {
+						$result[] = $value;
+					}
 				}
 			}
 		}
@@ -416,38 +421,29 @@ class Arr {
 	 * @return void
 	 */
 	public static function forget( &$array, $keys ) {
-		$original = &$array;
-
-		$keys = static::wrap( $keys );
-
-		if ( count( $keys ) === 0 ) {
-			return;
-		}
+		$keys = (array) $keys;
 
 		foreach ( $keys as $key ) {
-			// if the exact key exists in the top-level, remove it
-			if ( static::exists( $array, $key ) ) {
-				unset( $array[ $key ] );
+			// Convert dot notation to array segments
+			$parts = explode( '.', $key );
 
+			if ( count( $parts ) === 1 ) {
+				unset( $array[ $key ] );
 				continue;
 			}
 
-			$parts = explode( '.', $key );
+			// For nested keys, traverse the array
+			$current = &$array;
+			$lastKey = array_pop( $parts );
 
-			// clean up before each pass
-			$array = &$original;
-
-			while ( count( $parts ) > 1 ) {
-				$part = array_shift( $parts );
-
-				if ( isset( $array[ $part ] ) && static::accessible( $array[ $part ] ) ) {
-					$array = &$array[ $part ];
-				} else {
+			foreach ( $parts as $part ) {
+				if ( ! isset( $current[ $part ] ) || ! is_array( $current[ $part ] ) ) {
 					continue 2;
 				}
+				$current = &$current[ $part ];
 			}
 
-			unset( $array[ array_shift( $parts ) ] );
+			unset( $current[ $lastKey ] );
 		}
 	}
 
@@ -457,23 +453,26 @@ class Arr {
 	 * Example: get( $a, [ 0, 1, 2 ] ) returns the value of $a[0][1][2] or the default.
 	 *
 	 * @param array|object|mixed    $variable Array or object to search within.
-	 * @param array|string|int|null $indexes  Specify each nested index in order.
-	 *                                        Example: array( 'lvl1', 'lvl2' );
+	 * @param array|string|int|null $indexes  Specify each nested index in order. Can also be in dot notation.
+	 *                                        Example: array( 'lvl1', 'lvl2' ) or 'lvl1.lvl2'.
 	 * @param mixed                 $default  Default value if the search finds nothing.
 	 *
 	 * @return mixed The value of the specified index or the default if not found.
+	 * @throws \InvalidArgumentException If the provided variable is not an array and does not implement ArrayAccess.
 	 */
 	public static function get( $variable, $indexes, $default = null ) {
-		if ( is_object( $variable ) ) {
-			$variable = static::wrap( $variable );
-		}
-
 		if ( ! static::accessible( $variable ) ) {
-			return $default;
+			throw new \InvalidArgumentException( 'The provided variable is not an array and does not implement ArrayAccess.' );
 		}
 
 		if ( is_null( $indexes ) ) {
 			return $variable;
+		}
+
+		if ( is_string( $indexes ) && isset( $variable[ $indexes ] ) ) {
+			return $variable[ $indexes ];
+		} elseif ( is_string( $indexes ) ) {
+			$indexes = explode( '.', $indexes );
 		}
 
 		$indexes = static::wrap( $indexes );
@@ -549,19 +548,38 @@ class Arr {
 	 * @return bool
 	 */
 	public static function has( $array, $indexes ) {
-		if ( is_null( $indexes ) ) {
+		if ( ! is_array( $array ) ) {
 			return false;
 		}
 
-		$indexes = static::wrap( $indexes );
-
-		foreach ( $indexes as $index ) {
-			if ( ! static::exists( $array, $index ) ) {
-				return false;
-			}
+		if ( isset( $array[ $indexes ] ) ) {
+			return true;
 		}
 
-		return true;
+		if ( is_string( $indexes ) && isset( $array[ $indexes ] ) ) {
+			return true;
+		}
+
+		if ( is_string( $indexes ) ) {
+			$indexes = explode( '.', $indexes );
+		}
+
+		// Start with the root array
+		$current = &$array;
+
+		// Get all segments except the last one
+		$segments  = array_slice( $indexes, 0, -1 );
+		$final_key = end( $indexes );
+
+		// Iterate through every key, setting the pointer one level deeper each time.
+		foreach ( $segments as $segment ) {
+			if ( ! isset( $current[ $segment ] ) || ! is_array( $current[ $segment ] ) ) {
+				return false;
+			}
+			$current = &$current[ $segment ];
+		}
+
+		return isset( $current[ $final_key ] );
 	}
 
 	/**
@@ -689,9 +707,9 @@ class Arr {
 	 *
 	 * @return mixed
 	 */
-	public static function last( $array, callable $callback = null, $default = null ) {
+	public static function last( $array, ?callable $callback = null, $default = null ) {
 		if ( is_null( $callback ) ) {
-			return empty( $array ) ? value( $default ) : end( $array );
+			return empty( $array ) ? self::value( $default ) : end( $array );
 		}
 
 		return static::first( array_reverse( $array, true ), $callback, $default );
@@ -722,7 +740,7 @@ class Arr {
 		}
 
 		if ( ! is_array( $value ) ) {
-			$value = preg_split( '/\\s*' . preg_quote( $sep ) . '\\s*/', $value );
+			$value = preg_split( '/\\s*' . preg_quote( $sep, '/' ) . '\\s*/', $value );
 		}
 
 		$filtered = [];
@@ -790,14 +808,16 @@ class Arr {
 	 *
 	 * @return array
 	 */
-	function merge_recursive( array &$array1, array &$array2 ): array {
+	public static function merge_recursive( array &$array1, array &$array2 ): array {
 		$merged = $array1;
 
 		foreach ( $array2 as $key => &$value ) {
-			if ( is_array( $value ) && isset( $merged [ $key ] ) && is_array( $merged [ $key ] ) ) {
-				$merged [ $key ] = static::merge_recursive( $merged [ $key ], $value );
+			if ( is_array( $value ) && isset( $merged[ $key ] ) && is_array( $merged[ $key ] ) ) {
+				$merged[ $key ] = static::merge_recursive( $merged[ $key ], $value );
+			} else if ( is_int( $key ) ) {
+				$merged[] = $value;
 			} else {
-				$merged [ $key ] = $value;
+				$merged[ $key ] = $value;
 			}
 		}
 
@@ -991,17 +1011,19 @@ class Arr {
 	 * @return bool The sorting result.
 	 */
 	public static function recursive_ksort( array &$array ): bool {
+		// First recursively sort all sub-arrays
 		foreach ( $array as &$value ) {
 			if ( is_array( $value ) ) {
 				static::recursive_ksort( $value );
 			}
 		}
 
-		return ksort( $array );
+		// Then sort the current array, ensuring numeric keys are sorted numerically
+		return ksort( $array, SORT_NATURAL );
 	}
 
 	/**
-	 * Recursively remove associative, non numeric, keys from an array.
+	 * Recursively remove numeric keys from an array.
 	 *
 	 * @since 1.0.0
 	 *
@@ -1050,37 +1072,39 @@ class Arr {
 	 * @return array Full array with the key set to the specified value.
 	 */
 	public static function set( $array, $key, $value ): array {
+		// Convert input to array if not already
+		if ( ! is_array( $array ) ) {
+			$array = [];
+		}
+
+		// If key is a string with dots, convert to array
+		if ( is_string( $key ) ) {
+			$key = explode( '.', $key );
+		}
+
 		// Convert strings and such to array.
 		$key = static::wrap( $key );
 
-		// Setup a pointer that we can point to the key specified.
-		$key_pointer = &$array;
+		// Start with the root array
+		$current = &$array;
 
-		// Iterate through every key, setting the pointer one level deeper each time.
-		foreach ( $key as $i ) {
+		// Get all segments except the last one
+		$segments  = array_slice( $key, 0, -1 );
+		$final_key = end( $key );
 
-			// Ensure current array depth can have children set.
-			if ( ! is_array( $key_pointer ) ) {
-				// $key_pointer is set but is not an array. Converting it to an array
-				// would likely lead to unexpected problems for whatever first set it.
-				$error = sprintf(
-					'Attempted to set $array[%1$s] but %2$s is already set and is not an array.',
-					implode( '][', $key ),
-					$i
-				);
-
-				_doing_it_wrong( __FUNCTION__, esc_html( $error ), '4.3' );
-				break;
-			} elseif ( ! isset( $key_pointer[ $i ] ) ) {
-				$key_pointer[ $i ] = [];
+		// Traverse through each key segment
+		foreach ( $segments as $segment ) {
+			// If the current segment is a Closure or not an array, convert it to an array
+			if ( ! isset( $current[ $segment ] ) || ! is_array( $current[ $segment ] ) ) {
+				$current[ $segment ] = [];
 			}
 
-			// Dive one level deeper into the nested array.
-			$key_pointer = &$key_pointer[ $i ];
+			// Move pointer to next level
+			$current = &$current[ $segment ];
 		}
 
-		// Set the value for the specified key
-		$key_pointer = $value;
+		// Set the final value
+		$current[ $final_key ] = $value;
 
 		return $array;
 	}
@@ -1153,7 +1177,7 @@ class Arr {
 	 */
 	public static function sort_by_priority( $array ): array {
 		if ( ! is_array( $array ) ) {
-			return $array;
+			throw new \InvalidArgumentException( 'Input must be an array' );
 		}
 
 		if ( static::is_assoc( $array ) ) {
@@ -1176,7 +1200,7 @@ class Arr {
 	 *
 	 * @return int
 	 */
-	protected static function sort_by_priority_comparison( $a, $b ): int {
+	public static function sort_by_priority_comparison( $a, $b ): int {
 		if ( is_array( $a ) ) {
 			$a_priority = $a['priority'];
 		} else {
@@ -1249,7 +1273,7 @@ class Arr {
 	 * @return array<string,mixed> The input array with each numeric key stringified.
 	 */
 	public static function stringify_keys( array $input, $prefix = null ): array {
-		$prefix  = null === $prefix ? uniqid( 'sk_', true ) : $prefix;
+		$prefix  = null === $prefix ? uniqid( 'sk_' ) : $prefix;
 		$visitor = static function( $key, $value ) use ( $prefix ) {
 			$string_key = is_numeric( $key ) ? $prefix . $key : $key;
 
@@ -1273,6 +1297,10 @@ class Arr {
 	public static function strpos( string $haystack, $needles, int $offset = 0 ) {
 		$needles = static::wrap( $needles );
 
+		$needles = array_filter( $needles, static function( $needle ) {
+			return is_string( $needle ) && $needle !== '';
+		} );
+
 		foreach ( $needles as $i ) {
 			$search = strpos( $haystack, $i, $offset );
 
@@ -1295,8 +1323,12 @@ class Arr {
 	 * @return string The list separated by the specified separator or the original list if the list is empty.
 	 */
 	public static function to_list( $list, string $sep = ',' ): string {
+		if ( $list === null ) {
+			return '';
+		}
+
 		if ( empty( $list ) ) {
-			return $list;
+			return is_array( $list ) ? '' : $list;
 		}
 
 		if ( is_array( $list ) ) {
@@ -1317,7 +1349,7 @@ class Arr {
 		$results = [];
 
 		foreach ( $array as $key => $value ) {
-			static::set( $results, $key, $value );
+			$results = static::set( $results, explode( '.', $key ), $value );
 		}
 
 		return $results;
@@ -1385,5 +1417,60 @@ class Arr {
 		}
 
 		return is_array( $value ) ? $value : [ $value ];
+	}
+
+	/**
+	 * Recursively computes the intersection of arrays using keys for comparison.
+	 *
+	 * @param mixed[] $array     The array with master keys to check.
+	 * @param mixed[] ...$arrays Additional arrays to compare keys against.
+	 *
+	 * @return mixed[] An associative array containing all the entries of $array
+	 *                 whose keys exist in every provided array, recursively.
+	 */
+	public static function intersect_key_recursive( array $array, array ...$arrays ): array {
+		$array = array_intersect_key( $array, ...$arrays );
+
+		foreach ( $array as $key => $value ) {
+			if ( ! is_array( $value ) ) {
+				continue;
+			}
+
+			$arrays_to_intersect = [];
+			foreach ( $arrays as $intersect_array ) {
+				if ( ! isset( $intersect_array[ $key ] ) ) {
+					unset( $array[ $key ] );
+					continue 2;
+				}
+
+				if ( ! is_array( $intersect_array[ $key ] ) ) {
+					continue;
+				}
+
+				$arrays_to_intersect[] = $intersect_array[ $key ];
+			}
+
+			if ( empty( $arrays_to_intersect ) ) {
+				continue;
+			}
+
+			$array[ $key ] = static::intersect_key_recursive( $value, ...$arrays_to_intersect );
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Return the default value of the given value.
+	 *
+	 * @template TValue
+	 * @template TArgs
+	 *
+	 * @param  TValue|\Closure(TArgs): TValue  $value
+	 * @param  TArgs  ...$args
+	 * @return TValue
+	 */
+	private static function value( $value, ...$args ) {
+		return $value instanceof Closure ? $value( ...$args ) : $value;
 	}
 }

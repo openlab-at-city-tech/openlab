@@ -83,7 +83,7 @@ class LegacyImage {
 	public function __construct( $image, $displayed_gallery = null, $legacy = false ) {
 		// for clarity.
 		if ( $displayed_gallery && isset( $displayed_gallery->display_settings['number_of_columns'] ) ) {
-			$columns = $displayed_gallery->display_settings['number_of_columns'];
+			$columns = (int) $displayed_gallery->display_settings['number_of_columns'];
 		} else {
 			$columns = 0;
 		}
@@ -208,7 +208,7 @@ class LegacyImage {
 			case 'imageHTML':
 				$tmp                       = '<a href="' . $this->__get( 'imageURL' ) . '" title="'
 					. esc_attr( $this->__get( 'description' ) )
-					. '" ' . $this->get_thumbcode( $this->__get( 'name' ) ) . '><img alt="' . esc_attr( $this->__get( 'alttext' ) ) . '" src="' . $this->__get( 'imageURL' ) . '"/></a>';
+					. '" ' . $this->get_thumbcode( $this->__get( 'name' ) ) . '><img' . \Imagely\NGG\Display\GalleryImage::attributes() . ' alt="' . esc_attr( $this->__get( 'alttext' ) ) . '" src="' . $this->__get( 'imageURL' ) . '"/></a>';
 				$this->_cache['href']      = $tmp;
 				$this->_cache['imageHTML'] = $tmp;
 				return $this->_cache['imageHTML'];
@@ -308,7 +308,7 @@ class LegacyImage {
 			case 'thumbHTML':
 				$tmp                       = '<a href="' . $this->__get( 'imageURL' ) . '" title="'
 					. htmlspecialchars( stripslashes( $this->__get( 'description' ) ) )
-					. '" ' . $this->get_thumbcode( $this->__get( 'name' ) ) . '><img alt="' . $this->__get( 'alttext' )
+					. '" ' . $this->get_thumbcode( $this->__get( 'name' ) ) . '><img' . \Imagely\NGG\Display\GalleryImage::attributes() . ' alt="' . $this->__get( 'alttext' )
 					. '" src="' . $this->thumbURL . '"/></a>';
 				$this->_cache['href']      = $tmp;
 				$this->_cache['thumbHTML'] = $tmp;

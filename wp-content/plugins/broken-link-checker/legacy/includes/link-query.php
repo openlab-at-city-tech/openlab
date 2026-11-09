@@ -466,6 +466,7 @@ class blcLinkQuery {
 				'url'          => 'links.url',
 				'link_text'    => 'instances.link_text',
 				'redirect_url' => 'links.final_url',
+				'status'       => 'links.http_code',
 			);
 			$column          = $params['orderby'];
 
@@ -722,23 +723,6 @@ class blcLinkQuery {
 		echo implode( ' |</li>', $items );
 
 		echo '</ul>';
-	}
-
-	/**
-	 * Print the appropriate heading for the given filter.
-	 *
-	 * @param array $current_filter
-	 * @return void
-	 */
-	function print_filter_heading( $current_filter ) {
-		echo '<h2>';
-		//Output a header matching the current filter
-		if ( $current_filter['count'] > 0 ) {
-			echo $current_filter['heading'] . " (<span class='current-link-count'>{$current_filter['count']}</span>)";
-		} else {
-			echo $current_filter['heading_zero'] . "<span class='current-link-count'></span>";
-		}
-		echo '</h2>';
 	}
 
 	/**

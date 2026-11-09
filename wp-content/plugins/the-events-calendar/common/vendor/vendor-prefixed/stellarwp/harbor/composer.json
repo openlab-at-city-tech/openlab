@@ -1,0 +1,113 @@
+{
+    "name": "stellarwp/harbor",
+    "description": "A library that integrates a WordPress product with the Liquid Web licensing system.",
+    "type": "library",
+    "license": "GPL-2.0-or-later",
+    "authors": [
+        {
+            "name": "Liquid Web",
+            "homepage": "https://liquidweb.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "bin": ["bin/stellar-harbor"],
+    "autoload": {
+        "psr-4": {
+            "LiquidWeb\\Harbor\\": "src/Harbor/",
+            "LiquidWeb\\Harbor\\Views\\": "src/views/",
+            "LiquidWeb\\Harbor\\Build_Dir\\": "build/",
+            "LiquidWeb\\Harbor\\Build_Dev_Dir\\": "build-dev/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "LiquidWeb\\Harbor\\Tests\\": [
+              "tests/wpunit",
+              "tests/_support/Helper/"
+            ]
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "ext-json": "*",
+        "nyholm/psr7": "^1.0",
+        "psr/http-client": "^1.0",
+        "psr/http-factory": "^1.0",
+        "psr/http-message": "^1.1",
+        "stellarwp/container-contract": "^1.0",
+        "stellarwp/licensing-api-client-wordpress": "^2.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "dealerdirect/phpcodesniffer-composer-installer": true
+        }
+    },
+    "require-dev": {
+        "dealerdirect/phpcodesniffer-composer-installer": "^1",
+        "dpanta94/phpstan-containers": "^0",
+        "exussum12/coverage-checker": "^1.1",
+        "lucatume/codeception-snapshot-assertions": "*",
+        "lucatume/di52": "^3",
+        "lucatume/wp-browser": "*",
+        "php-stubs/wp-cli-stubs": "^2",
+        "phpcompatibility/phpcompatibility-wp": "^2",
+        "phpspec/prophecy": "*",
+        "phpspec/prophecy-phpunit": "*",
+        "phpstan/phpstan": "^2",
+        "phpunit/phpunit": "*",
+        "stellarwp/coding-standards": "^2",
+        "szepeviktor/phpstan-wordpress": ">=1.0",
+        "wp-cli/wp-cli": "^2"
+    },
+    "scripts": {
+      "test:analysis": [
+        "phpstan analyse -c phpstan.neon.dist --memory-limit=-1"
+      ],
+      "test:analysis:baseline": [
+        "phpstan analyse -c phpstan.neon.dist --memory-limit=-1 --generate-baseline"
+      ],
+      "compatibility:php-7.4": "phpcs --standard=phpcs-php-compatibility.xml --runtime-set testVersion 7.4",
+      "compatibility:php-8.0": "phpcs --standard=phpcs-php-compatibility.xml --runtime-set testVersion 8.0",
+      "compatibility:php-8.1": "phpcs --standard=phpcs-php-compatibility.xml --runtime-set testVersion 8.1",
+      "compatibility:php-8.2": "phpcs --standard=phpcs-php-compatibility.xml --runtime-set testVersion 8.2",
+      "compatibility:php-8.3": "phpcs --standard=phpcs-php-compatibility.xml --runtime-set testVersion 8.3",
+      "compatibility:php-8.4": "phpcs --standard=phpcs-php-compatibility.xml --runtime-set testVersion 8.4",
+      "compatibility": [
+        "@compatibility:php-7.4",
+        "@compatibility:php-8.0",
+        "@compatibility:php-8.1",
+        "@compatibility:php-8.2",
+        "@compatibility:php-8.3",
+        "@compatibility:php-8.4"
+      ],
+      "phpcs": "phpcs -s",
+      "phpcs:fix": "phpcbf",
+      "phpcs:ci": "dev_scripts/partial-phpcs.sh",
+      "release:prep": "dev_scripts/release-prep.sh",
+      "release:set-version": "dev_scripts/set-numeric-version.sh",
+      "release:update-consumers": [
+        "Composer\\Config::disableProcessTimeout",
+        "dev_scripts/update-consumers.sh"
+      ]
+    },
+    "scripts-descriptions": {
+      "test:analysis": "Run static code analysis.",
+      "test:analysis:baseline": "Generate a baseline for static code analysis.",
+      "phpcs": "Run PHP Code Sniffer to check coding standards.",
+      "phpcs:fix": "Auto-fix PHP Code Sniffer issues.",
+      "phpcs:ci": "Run partial phpcs check on changed lines only.",
+      "compatibility:php-7.4": "Run PHPCompatibilityWP for PHP 7.4.",
+      "compatibility:php-8.0": "Run PHPCompatibilityWP for PHP 8.0.",
+      "compatibility:php-8.1": "Run PHPCompatibilityWP for PHP 8.1.",
+      "compatibility:php-8.2": "Run PHPCompatibilityWP for PHP 8.2.",
+      "compatibility:php-8.3": "Run PHPCompatibilityWP for PHP 8.3.",
+      "compatibility:php-8.4": "Run PHPCompatibilityWP for PHP 8.4.",
+      "compatibility": "Run PHPCompatibilityWP for all supported PHP versions.",
+      "release:prep": "Prepare a release: set version, replace TBD tags, and write changelog. Usage: composer release:prep -- <version> [date]",
+      "release:set-version": "Replace TBD tags and update Harbor::VERSION. Usage: composer release:set-version -- <version>",
+      "release:update-consumers": "Open PRs bumping Harbor in consumer plugins. Usage: composer release:update-consumers -- [version] [-y] [--dry-run] [owner/repo ...]"
+    }
+}

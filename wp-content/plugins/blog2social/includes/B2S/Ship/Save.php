@@ -312,7 +312,36 @@ class B2S_Ship_Save {
         $postData = $this->postData['post'];
         $this->postData['post'] = serialize($this->postData['post']);
 
-        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $this->postData, 90));
+        $iniMaxExec = ini_get('max_execution_time');
+
+        if ($iniMaxExec === false || $iniMaxExec === '') {
+            $maxExecutionTime = 90; // Default to 90 seconds if the value is not set or cannot be retrieved
+        } else {
+            $maxExecutionTime = (int) $iniMaxExec;
+        }
+        
+        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $this->postData, $maxExecutionTime));
+
+        //Version >8.9.2 - timeout handling
+        if (isset($result->b2s_timeout) && $result->b2s_timeout === true) {
+            $timeoutSeconds = isset($result->b2s_timeout_value) ? (int) $result->b2s_timeout_value : 0;
+            $timeoutHtml = '<br><div class="alert alert-warning"><i class="glyphicon glyphicon-time"></i> <b>' .
+                sprintf(
+                    // translators: %d is the timeout value in seconds
+                    esc_html__('The time to process this request exceeds your max execution time of %d seconds. The post result can not be confirmed, so your posts will not have a link attached to them. To avoid this problem in the future, we recommend to increase your max_execution_time or to schedule your posts.', 'blog2social'),
+                    $timeoutSeconds
+                ) .
+                '</b></div>';
+            foreach ($postData as $k => $v) {
+                if (!$quickShare) {
+                    $content[] = array('networkAuthId' => $v['network_auth_id'], 'html' => $timeoutHtml);
+                } else {
+                    $content[] = array('networkAuthId' => $v['network_auth_id'], 'networkDisplayName' => $v['network_display_name'], 'networkId' => $v['network_id'], 'networkType' => $v['network_type'], 'html' => $timeoutHtml);
+                }
+            }
+            return $content;
+        }
+
         $errorText = unserialize(B2S_PLUGIN_NETWORK_ERROR);
         $insertInsights = true;
         $requestSuccess = false;
@@ -468,7 +497,7 @@ class B2S_Ship_Save {
         return $printSchedDate;
     }
 
-    public function saveSchedDetails($data, $schedData, $relayData = array()) {
+    public function saveSchedDetails($data, $schedData, $relayData = array(), $quickShare = false, $b2sExPostFormat = "") {
 
         global $wpdb;
 
@@ -542,6 +571,40 @@ class B2S_Ship_Save {
                         $data['multi_images'] = json_encode($multi_images);
                     }
 
+                    //Multi Image AI Tags
+                    $multi_image_ai_tags = array();
+                    if (isset($schedData['multi_image_ai_tag_1'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_1'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_2'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_2'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_3'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_3'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_4'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_4'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_5'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_5'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_6'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_6'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_7'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_7'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_8'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_8'][$key]);
+                    }
+                    if (isset($schedData['multi_image_ai_tag_9'][$key])) {
+                        array_push($multi_image_ai_tags, (int) $schedData['multi_image_ai_tag_9'][$key]);
+                    }
+                    if (!empty($multi_image_ai_tags)) {
+                        $serializeData['multi_image_ai_tags'] = json_encode($multi_image_ai_tags);
+                        $data['multi_image_ai_tags'] = json_encode($multi_image_ai_tags);
+                    }
+
                     //content
                     if (isset($schedData['sched_content'][$key]) && !empty($schedData['sched_content'][$key])) {
                         $serializeData['content'] = $schedData['sched_content'][$key];
@@ -569,6 +632,26 @@ class B2S_Ship_Save {
                         } 
                     }else if(isset($data['share_as_story'])){//Update Edit Post
                         $serializeData['share_as_story'] = $data['share_as_story'];
+                    }
+
+                    if(isset($serializeData['text_is_ai_generated'])){
+                        unset($serializeData['text_is_ai_generated']);
+                    }
+
+                    if(isset($schedData['text_is_ai_generated'][$key])){
+                        $serializeData['text_is_ai_generated'] = (int)$schedData['text_is_ai_generated'][$key] === 1 ? 1 : 0;
+                    }else if(isset($data['text_is_ai_generated'])){//Update Edit Post
+                        $serializeData['text_is_ai_generated'] = $data['text_is_ai_generated'];
+                    }
+
+                    if(isset($serializeData['image_is_ai_generated'])){
+                        unset($serializeData['image_is_ai_generated']);
+                    }
+
+                    if(isset($schedData['image_is_ai_generated'][$key])){
+                        $serializeData['image_is_ai_generated'] = (int)$schedData['image_is_ai_generated'][$key] === 1 ? 1 : 0;
+                    }else if(isset($data['image_is_ai_generated'])){//Update Edit Post
+                        $serializeData['image_is_ai_generated'] = $data['image_is_ai_generated'];
                     }
 
                     //Update - calendar edit function
@@ -690,8 +773,9 @@ class B2S_Ship_Save {
                     'hook_action' => (($shareApprove == 0) ? 5 : 0),
                     'post_format' => (($data['post_format'] !== '') ? (((int) $data['post_format'] > 0) ? (int) $data['post_format'] : 0) : null)
                         ), array("id" => $data['b2s_id']), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d'));
+                      
             } else {
-                $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
+                $schedInsertData = array(
                     'post_id' => $data['post_id'],
                     'blog_user_id' => $data['blog_user_id'],
                     'user_timezone' => $schedData['user_timezone'],
@@ -704,8 +788,15 @@ class B2S_Ship_Save {
                     'post_for_relay' => ((!empty($relayData) && is_array($relayData)) ? 1 : 0),
                     'post_for_approve' => $shareApprove,
                     'hook_action' => (($shareApprove == 0) ? 1 : 0),
-                    'post_format' => (($data['post_format'] !== '') ? (((int) $data['post_format'] > 0) ? 1 : 0) : null)
-                        ), array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d', '%d'));
+                    'post_format' => (($data['post_format'] !== '') ? (((int) $data['post_format'] > 0) ? 1 : 0) : null),
+                );
+              
+                $schedInsertFormats = array('%d', '%d', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d', '%d', '%d');
+                if ($quickShare) {
+                    $schedInsertData['display_post_format'] = $b2sExPostFormat;
+                    $schedInsertFormats[] = '%s';
+                }
+                $wpdb->insert($wpdb->prefix . 'b2s_posts', $schedInsertData, $schedInsertFormats);
 
                 //since V4.8.0 relay posts
                 if (!empty($relayData) && is_array($relayData)) {

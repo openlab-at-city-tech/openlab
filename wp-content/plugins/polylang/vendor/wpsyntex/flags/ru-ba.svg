@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#007000" d="m0,0h900v600H0"/>
+<path fill="#fff" d="m0,0h900v400H0"/>
+<path fill="#0070ff" d="m0,0h900v200H0"/>
+<g transform="translate(450 300)" stroke="gold">
+<circle r="75" fill="none" stroke-width="10"/>
+<circle r="16" fill="gold"/>
+<path stroke-width="4" d="M0 0v50"/>
+<g id="c">
+<g id="b">
+<g id="a">
+<path stroke-width="4" d="M0 0h-50"/>
+<circle cx="-50" r="10" fill="gold"/>
+</g>
+<use href="#a" transform="rotate(30)"/>
+</g>
+<use href="#b" transform="rotate(60)"/>
+</g>
+<use href="#c" transform="rotate(90)"/>
+</g>
+</svg>

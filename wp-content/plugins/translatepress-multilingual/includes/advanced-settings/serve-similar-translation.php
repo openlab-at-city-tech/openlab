@@ -55,6 +55,16 @@ function trp_serve_similar_translations ( $dictionary, $prepared_query, $strings
         $minimal_percent_of_compatibility = apply_filters('trp_minimal_percent_of_compatibility_for_strings_to_be_similar', 0.95);
 
         foreach ( $strings_array as $string ) {
+            // Check eligibility before the expensive full-text lookup.
+            if ( strlen( $string ) < $minimal_characters_per_strings_considered_for_similarity ) {
+                continue;
+            }
+
+            // Similar URLs can point to different destinations. Only reuse exact URL translations.
+            if ( filter_var( trim( $string ), FILTER_VALIDATE_URL ) !== false ) {
+                continue;
+            }
+
             //we try to get the translated strings from the dictionary
             if ( !isset( $dictionary[ $string ] ) ) {
                 $result = false;
@@ -69,7 +79,7 @@ function trp_serve_similar_translations ( $dictionary, $prepared_query, $strings
                     // after this, we check the minimal length of the two strings and use the function 'trp_dice_match' to determine the percentage of similarity
                     // if the percentage is higher or equal to the chosen value, the similar string gets all the arguments from the string in DB including the translation
                     $original = reset( $result )->original;
-                    if ( strlen( $string ) >= $minimal_characters_per_strings_considered_for_similarity && strlen( $original ) >= $minimal_characters_per_strings_considered_for_similarity && trp_dice_match( $string, $original ) >= $minimal_percent_of_compatibility) {
+                    if ( strlen( $original ) >= $minimal_characters_per_strings_considered_for_similarity && trp_dice_match( $string, $original ) >= $minimal_percent_of_compatibility) {
                         $dictionary[ $string ] = reset( $result );
                     }
 

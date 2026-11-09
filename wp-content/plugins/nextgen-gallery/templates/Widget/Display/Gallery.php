@@ -29,9 +29,9 @@ echo wp_kses_post( $settings['widget_setting_before_widget'] )
 				data-video-url="<?php echo esc_attr( $image->meta_data['video_link'] ); ?>"
 			<?php endif; ?>
 			<?php echo $effect_code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- effect_code is safe HTML attributes from display settings ?>
-			><img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+			><img<?php echo \Imagely\NGG\Display\GalleryImage::attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes() escapes each attribute with esc_attr(). ?> title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 				alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
-				src="<?php echo esc_attr( $storage->get_image_url( $image, $settings['image_type'], true ) ); ?>"
+				src="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image, $settings['image_type'] ) ); ?>"
 				width="<?php echo esc_attr( $settings['image_width'] ); ?>"
 				height="<?php echo esc_attr( $settings['image_height'] ); ?>"
 			/></a>

@@ -112,10 +112,17 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * @since 6.17.5 Return the value untouched when an earlier callback replaced it with a non-array.
 	 */
 	public function filter_tec_views_v2_subscribe_links( $subscribe_links ) {
 		// Bail early if we're not supposed to show this link.
 		if ( ! $this->is_visible() ) {
+			return $subscribe_links;
+		}
+
+		// An earlier filter may have replaced the list with a non-array; don't append to it.
+		if ( ! is_array( $subscribe_links ) ) {
 			return $subscribe_links;
 		}
 
@@ -197,9 +204,11 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 	}
 
 	/**
+	 * @since 6.17.0 Made $view explicitly nullable.
+	 *
 	 * {@inheritDoc}
 	 */
-	public function get_label( View $view = null ): string {
+	public function get_label( ?View $view = null ): string {
 		return $this->filter_get_label( $this->label(), $view );
 	}
 
@@ -216,13 +225,14 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 	 * Filters the label for the link.
 	 *
 	 * @since 6.8.2.1
+	 * @since 6.17.0 Made $view explicitly nullable.
 	 *
 	 * @param string    $value The label to filter.
 	 * @param View|null $view  The current View object.
 	 *
 	 * @return string
 	 */
-	protected function filter_get_label( string $value, View $view = null ): string {
+	protected function filter_get_label( string $value, ?View $view = null ): string {
 		$slug = self::get_slug();
 
 		/**
@@ -240,9 +250,11 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 	}
 
 	/**
+	 * @since 6.17.0 Made $view explicitly nullable.
+	 *
 	 * {@inheritDoc}
 	 */
-	public function get_single_label( View $view = null ): string {
+	public function get_single_label( ?View $view = null ): string {
 		return $this->filter_get_single_label( $this->single_label(), $view );
 	}
 
@@ -259,13 +271,14 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 	 * Filters the single label for the link.
 	 *
 	 * @since 6.8.2.1
+	 * @since 6.17.0 Made $view explicitly nullable.
 	 *
 	 * @param string    $value The label to filter.
 	 * @param View|null $view  The current View object.
 	 *
 	 * @return string
 	 */
-	protected function filter_get_single_label( string $value, View $view = null ): string {
+	protected function filter_get_single_label( string $value, ?View $view = null ): string {
 		$slug = self::get_slug();
 
 		/**
@@ -301,9 +314,11 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 	}
 
 	/**
+	 * @since 6.17.0 Made $view explicitly nullable.
+	 *
 	 * {@inheritDoc}
 	 */
-	public function get_uri( View $view = null ) {
+	public function get_uri( ?View $view = null ) {
 		// If we're on a Single Event view, let's bypass the canonical function call and logic.
 		if ( is_single() ) {
 			$feed_url = null === $view ? tribe_get_single_ical_link() : $view->get_context()->get( 'single_ical_link', false );
@@ -351,11 +366,13 @@ abstract class Link_Abstract implements Link_Interface, JsonSerializable {
 	 * in WordPress, so it will work out of the box on any website, even if
 	 * the settings are changed or break.
 	 *
+	 * @since 6.17.0 Made $view explicitly nullable.
+	 *
 	 * @param View $view The View we're being called from.
 	 *
 	 * @return string The iCal Feed URI.
 	 */
-	protected function get_canonical_ics_feed_url( View $view = null ) {
+	protected function get_canonical_ics_feed_url( ?View $view = null ) {
 		if ( null === $view ) {
 			return '';
 		}

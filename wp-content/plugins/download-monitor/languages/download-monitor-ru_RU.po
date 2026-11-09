@@ -3149,10 +3149,10 @@ msgstr ""
 #: templates/content-download.php:16
 msgid "1 download"
 msgid_plural "%d downloads"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "%d Загрузка"
+msgstr[1] "%d Загрузки"
+msgstr[2] "%d Загрузок"
+msgstr[3] "%d Загрузок"
 
 #: templates/content-download-box.php:27
 #: templates/content-download-filename.php:14
@@ -3168,10 +3168,10 @@ msgstr ""
 #: templates/content-download-version-list.php:24
 msgid "Downloaded 1 time"
 msgid_plural "Downloaded %d times"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
-msgstr[3] ""
+msgstr[0] "Загружено %d раз"
+msgstr[1] "Загружено %d раза"
+msgstr[2] "Загружено %d раз"
+msgstr[3] "Загружено %d раз"
 
 #: templates/content-download-no-version.php:12
 msgid "Please set a version in your WordPress admin"

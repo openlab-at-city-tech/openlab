@@ -23,36 +23,20 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
             update_option('trp_license_key', $license);
 
             $trp = TRP_Translate_Press::get_trp_instance();
-            $trp->get_component('plugin_updater')->force_check_license('true');
+            $trp->get_component('plugin_updater')->force_check_tp_api_key('true');
 
             // Check license validation results
             $this->check_license_validation_results();
         }
 
-        // Handle automatic translation setting
-        $machine_translation_enabled = isset($data['trp_machine_translation']) && $data['trp_machine_translation'] === 'yes';
+        // Determine whether we have a valid TranslatePress AI license after the check above.
+        $license_status   = get_option('trp_license_status');
+        $license_details  = get_option('trp_license_details');
+        $license_is_valid = ($license_status === 'valid' && isset($license_details['valid'][0]));
 
-        // Get current machine translation settings
+        // Automatic Translation is enabled by default whenever the license is valid.
         $machine_translation_settings = get_option('trp_machine_translation_settings', array());
-
-        if ($machine_translation_enabled) {
-            // Check if license is valid before enabling automatic translation
-            $license_status = get_option('trp_license_status');
-            $license_details = get_option('trp_license_details');
-
-            // Validate that we have a valid license for automatic translation
-            if ($license_status !== 'valid' || !isset($license_details['valid'][0])) {
-                $this->errors->add('license_required', __('A valid license is required to enable Automatic Translation.', 'translatepress-multilingual'));
-            } else {
-                // Save automatic translation setting as enabled
-                $machine_translation_settings['machine-translation'] = 'yes';
-            }
-        } else {
-            // Save automatic translation setting as disabled
-            $machine_translation_settings['machine-translation'] = 'no';
-        }
-
-        // Update the settings regardless of enabled/disabled state
+        $machine_translation_settings['machine-translation'] = $license_is_valid ? 'yes' : 'no';
         update_option('trp_machine_translation_settings', $machine_translation_settings);
 
         // Handle errors - don't redirect if there are errors, render() will display them
@@ -62,17 +46,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
 
         //synchronize EDD license with MTAPI
         if(!empty($license)){
-            $sync_response = trp_mtapi_sync_license_call(sanitize_text_field($license));
-
-            // After successful license sync, enable automatic translation by default
-            if ( isset( $data['submit'] ) && $data['submit'] === 'activate'
-                 && is_array( $sync_response ) && ! is_wp_error( $sync_response )
-                 && isset( $sync_response['response']['code'] ) && $sync_response['response']['code'] == 200
-            ) {
-                $machine_translation_settings = get_option( 'trp_machine_translation_settings', array() );
-                $machine_translation_settings['machine-translation'] = 'yes';
-                update_option( 'trp_machine_translation_settings', $machine_translation_settings );
-            }
+            trp_mtapi_sync_license_call(sanitize_text_field($license));
         }
 
         // Check if continue button was pressed (hidden input is present)
@@ -118,7 +92,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                     $this->errors->add('no_activations_left', __('Your license key has reached its activation limit.', 'translatepress-multilingual'));
                     break;
                 case 'website_already_on_free_license':
-                    $this->errors->add('website_already_on_free_license', __('This website is already activated under a free license. Each website can only use one free license.', 'translatepress-multilingual'));
+                    $this->errors->add('website_already_on_free_license', trp_get_tp_ai_api_key_labels( 'already_on_free' ));
                     break;
                 default:
                     $this->errors->add('license_error', __('An error occurred, please try again.', 'translatepress-multilingual'));
@@ -158,25 +132,16 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
 
             if ($status === false) : ?>
 
-                <div class="trp-settings-options-item trp-settings-switch__wrapper">
-                    <div class="trp-switch ">
-                        <input type="checkbox" id="trp-machine-translation-enabled" class="trp-switch-input"
-                               name="trp_machine_translation" value="yes" disabled >
-                        <label for="trp-machine-translation-enabled" class="trp-switch-label"></label>
-                    </div>
-                    <label for="trp-machine-translation-enabled"><?php esc_html_e('Enable Automatic Translation', 'translatepress-multilingual');?></label>
-                </div>
-
                 <div class="trp-onboarding-license">
                     <h4>
                         <img src="<?php echo esc_url(TRP_PLUGIN_URL . 'assets/images/'); ?>ai-icon.svg" width="24" height="24" align="top"/>TranslatePress AI<?php //this is not localized by choice ?>
                     </h4>
-                    <p><?php esc_html_e('In order to enable Automatic Translation using TranslatePress AI, please enter your license key from', 'translatepress-multilingual');?> <a href="https://translatepress.com/account/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=tp-ai" target="_blank"><?php esc_html_e('your account.', 'translatepress-multilingual');?></a></p>
+                    <p><?php echo esc_html( trp_get_tp_ai_api_key_labels( 'enter_key_from' ) );?> <a href="https://translatepress.com/account/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=tp-ai" target="_blank"><?php esc_html_e('your account.', 'translatepress-multilingual');?></a></p>
                     <div>
-                        <label for="license-field">License Key</label>
+                        <label for="license-field"><?php echo esc_html( trp_get_tp_ai_api_key_labels( 'ai_field_label' ) ); ?></label>
                         <div class="license-field-wrap">
                             <input id="license-field" type="password" name="trp_license" value="<?php echo esc_attr(get_option('trp_license_key', '')); ?>" required />
-                            <button class="trp-button-secondary" type="submit" name="submit" value="activate"><?php esc_html_e('Activate License', 'translatepress-multilingual');?></button>
+                            <button class="trp-button-secondary" type="submit" name="submit" value="activate"><?php echo esc_html( trp_get_tp_ai_api_key_labels( 'ai_activate_button' ) );?></button>
                         </div>
                     </div>
                     <?php
@@ -188,7 +153,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                     } else {
                         ?>
                         <div id="trp-mtapi-key" class="ob-notice ob-notice-error">
-                            <?php esc_html_e('No Active License Detected for this website.', 'translatepress-multilingual'); ?>
+                            <?php echo esc_html( trp_get_tp_ai_api_key_labels( 'no_active_detected_ai' ) ); ?>
                         </div>
                         <?php
                     }
@@ -207,11 +172,11 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                 <div class="trp-ob-wrap trp-ob-gold-bg">
                     <div class="trp-ob-generate-license">
                         <div class="trp-ob-generate-license-header">
-                            <h3><?php esc_html_e("Get Your Free TranslatePress AI License", 'translatepress-multilingual'); ?></h3>
+                            <h3><?php echo esc_html( trp_get_tp_ai_api_key_labels( 'get_free_ai_heading' ) ); ?></h3>
                         </div>
                         <div class="trp-ob-generate-license-button">
                             <a href="<?php echo esc_url('https://translatepress.com/ai-free/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=tp-ai-free') ?>" target="_blank">
-                                <?php esc_html_e('Generate License', 'translatepress-multilingual'); ?>
+                                <?php echo esc_html( trp_get_tp_ai_api_key_labels( 'generate_button' ) ); ?>
                             </a>
                         </div>
                     </div>
@@ -228,7 +193,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                         </span>
                 </div>
                 <div class="trp-ob-wrap trp-ob-grey-bg trp-primary-text trp-ob-center">
-                    <?php esc_html_e('Are you a TranslatePress PRO user?', 'translatepress-multilingual'); ?> <a href="<?php echo esc_url(add_query_arg(['step' => 'install'])); ?>"><?php esc_html_e('Install & Activate your pro plugin.', 'translatepress-multilingual'); ?></a>
+                    <?php esc_html_e('Are you a TranslatePress PRO user?', 'translatepress-multilingual'); ?> <a class="trp-install-pro-link" href="<?php echo esc_url(self_admin_url('plugin-install.php?tab=upload')); ?>" target="_blank" rel="noopener" title="<?php echo esc_attr__('Opens the WordPress “Add Plugins” page in a new tab. Upload and activate the TranslatePress Pro plugin there, then return to this tab — it will update automatically.', 'translatepress-multilingual'); ?>"><?php esc_html_e('Install TranslatePress Pro.', 'translatepress-multilingual'); ?></a>
                 </div>
 
                 <div class="trp-ob-wrap trp-primary-text trp-ob-center">
@@ -267,21 +232,6 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                 $usage_percentage = ($total_quota > 0) ? ($quota / $total_quota) * 100 : 0;
                 ?>
 
-                <?php
-                // Check current automatic translation setting
-                $machine_translation_settings = get_option('trp_machine_translation_settings', array());
-                $is_machine_translation_enabled = isset($machine_translation_settings['machine-translation']) && $machine_translation_settings['machine-translation'] === 'yes';
-                ?>
-                
-                <div class="trp-settings-options-item trp-settings-switch__wrapper">
-                    <div class="trp-switch ">
-                        <input type="checkbox" id="trp-machine-translation-enabled" class="trp-switch-input"
-                               name="trp_machine_translation" value="yes" <?php checked($is_machine_translation_enabled, true); ?>>
-                        <label for="trp-machine-translation-enabled" class="trp-switch-label"></label>
-                    </div>
-                    <label for="trp-machine-translation-enabled">Enable Automatic Translation</label>
-                </div>
-
                 <div class="trp-engine trp-automatic-translation-engine__container" id="mtapi">
                     <span class="trp-primary-text-bold">
                         <img src="<?php echo esc_url(TRP_PLUGIN_URL . 'assets/images/'); ?>ai-icon.svg" width="24" height="24"/>
@@ -296,7 +246,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                         </svg>
 
                         <span id="trp-mtapi-key" class="trp-primary-text"><?php
-                            printf(wp_kses(__('You have a valid %s <strong>license</strong>.', 'translatepress-multilingual'), array('strong' => array())),
+                            printf(wp_kses( trp_get_tp_ai_api_key_labels( 'valid_product' ), array('strong' => array())),
                                 wp_kses($product_name, array('strong' => array()))
                             ); ?>
                         </span>
@@ -313,7 +263,7 @@ class TRP_Step_AutoTranslation implements TRP_Onboarding_Step_Interface {
                     <span class="trp-secondary-text">
                         <?php
                         printf(
-                            esc_html__('Manage your license & quota on the %s', 'translatepress-multilingual'),
+                            esc_html( trp_get_tp_ai_api_key_labels( 'manage_quota' ) ),
                             '<a href="' . esc_url('https://translatepress.com/account/?utm_source=tp-onboarding&utm_medium=client-site&utm_campaign=tp-ai') . '" target="_blank" class="trp-settings-link"> ' . esc_html__('TranslatePress.com Account Page', 'translatepress-multilingual') . '</a>'
                         );
                         ?>

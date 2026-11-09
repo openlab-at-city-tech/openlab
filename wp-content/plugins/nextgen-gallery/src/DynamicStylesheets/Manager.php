@@ -55,7 +55,8 @@ class Manager {
 	 * @return string|false The template path or false if not found.
 	 */
 	public function get_css_template( $name ) {
-		return $this->templates[ $name ];
+		// isset guard prevents PHP warning + undefined-index leak on unregistered names; returns false so callers can reject.
+		return isset( $this->templates[ $name ] ) ? $this->templates[ $name ] : false;
 	}
 
 	/**

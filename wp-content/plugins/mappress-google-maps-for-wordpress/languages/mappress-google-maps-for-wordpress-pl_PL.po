@@ -1,0 +1,339 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MapPress Maps for WordPress 2.84.11\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
+"Last-Translator: admin\n"
+"Language-Team: Polski\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-11-02T20:13:57+00:00\n"
+"PO-Revision-Date: 2022-11-08 11:58+0000\n"
+"Language: pl-PL\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10 >= 2 && n%10<=4 &&(n%100<10||n%100 >= 20)? 1 : 2);\n"
+"X-Loco-Version: 2.6.3; wp-6.1\n"
+
+#. Plugin Name of the plugin
+msgid "MapPress Maps for WordPress"
+msgstr "Mapy MapPress dla WordPress"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.mappresspro.com"
+msgstr "https://www.mappresspro.com"
+
+#. Description of the plugin
+msgid "MapPress makes it easy to add Google and Leaflet Maps to WordPress"
+msgstr "MapPress czyni dodawanie map Google i Leaflet do WordPress łatwym"
+
+#. Author of the plugin
+msgid "Chris Richardson"
+msgstr "Chris Richardson"
+
+#: mappress.php:187
+#: mappress.php:744
+msgid "Settings"
+msgstr "Ustawienia"
+
+#: mappress.php:188
+#: build/index_mappress_admin.js:1
+msgid "Maps"
+msgstr "Mapy"
+
+#: mappress.php:190
+#: build/index_mappress_admin.js:1
+msgid "Import"
+msgstr "Importuj"
+
+#: mappress.php:191
+#: build/index_mappress.js:1
+#: build/index_mappress_admin.js:1
+msgid "Support"
+msgstr "Wsparcie"
+
+#: mappress.php:192
+#: build/index_mappress_admin.js:1
+msgid "Upgrade"
+msgstr "Ulepsz"
+
+#: mappress.php:205
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "Brakuje tabel bazy dany MapPress. Dezaktywuj wtyczkę i aktywuj ją ponownie aby to naprawić."
+
+#: mappress.php:210
+msgid "A Google Maps API key is required"
+msgstr "Wymagany klucz API map Google"
+
+#: mappress.php:210
+msgid "Please update your"
+msgstr "Proszę zaktualizować"
+
+#: mappress.php:210
+msgid "MapPress Settings"
+msgstr "Ustawienia MapPress"
+
+#: mappress.php:215
+msgid "Upgrade Now"
+msgstr "Ulepsz teraz"
+
+#: mappress.php:216
+msgid "Your MapPress data must be upgraded!  Please %s.</strong>"
+msgstr "Twoje dane MapPress muszą być zaktualizowane! Proszę %s. </strong>"
+
+#: mappress.php:521
+msgid "Renew your license"
+msgstr "Odnów swoją licencję"
+
+#: mappress.php:523
+msgid "Your MapPress license has expired.  %s to get the latest updates and prevent errors."
+msgstr "Twoja licencja MapPress wygasła. %s aby otrzymywać najnowsze aktualizacje i zapobiegać błędom."
+
+#: mappress.php:532
+msgid "Please enter your MapPress license key to enable plugin updates"
+msgstr "Proszę wprowadzić klucz licencyjny MapPress aby włączyć aktualizacje wtyczki"
+
+#: mappress.php:535
+msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
+msgstr "Bloki edytora Gutenberg dla MapPress wymagają WordPress 5.3 lub najnowszej wtyczki Gutenberg. Proszę zaktualizować aby używać edytora blokowego."
+
+#: mappress.php:538
+msgid "MapPress has many new features!  %s."
+msgstr "MapPress ma wiele nowych funkcji! %s."
+
+#: mappress.php:538
+#: mappress.php:541
+#: mappress.php:547
+#: mappress.php:583
+#: build/index_mappress_admin.js:1
+msgid "Learn more"
+msgstr "Dowiedz się więcej"
+
+#: mappress.php:541
+#: mappress.php:583
+msgid "MapPress templates have changed!  Please update custom templates to the new format. %s."
+msgstr "Szablony MapPress uległy zmianie! Proszę zaktualizować własne szablony do nowego formatu. %s."
+
+#: mappress.php:547
+msgid "MapPress templates and filters have changed.  Please update custom templates and filters. %s."
+msgstr "Szablony i filtry MapPress zostały zmienione. Proszę zaktualizować własne szablony i filtry. %s."
+
+#: mappress.php:655
+msgid "Are you sure you want to delete?"
+msgstr "Czy na pewno chcesz usunąć?"
+
+#: mappress.php:687
+#: mappress.php:696
+msgid "Streets"
+msgstr "Ulice"
+
+#: mappress.php:688
+msgid "Outdoors"
+msgstr "Outdoor"
+
+#: mappress.php:689
+msgid "Light"
+msgstr "Jasny"
+
+#: mappress.php:690
+msgid "Dark"
+msgstr "Ciemny"
+
+#: mappress.php:691
+#: mappress.php:704
+msgid "Satellite"
+msgstr "Satelita"
+
+#: mappress.php:692
+msgid "Satellite Streets"
+msgstr "Ulice satelitarne"
+
+#: mappress.php:702
+msgid "Roadmap"
+msgstr "Mapa drogowa"
+
+#: mappress.php:703
+msgid "Terrain"
+msgstr "Teren"
+
+#: mappress.php:705
+msgid "Hybrid"
+msgstr "Hybryda"
+
+#: mappress.php:745
+#: mappress_settings.php:536
+#: mappress_settings.php:567
+#: build/index_mappress_admin.js:1
+msgid "What's new"
+msgstr "Co nowego"
+
+#: mappress.php:1148
+msgid "Version"
+msgstr "Wersja"
+
+#: mappress_api.php:67
+msgid "Copy of %s"
+msgstr "Kopia %s"
+
+#: mappress_api.php:67
+#: build/index_mappress_admin.js:1
+msgid "Untitled"
+msgstr "Bez tytułu"
+
+#: mappress_db.php:53
+msgid "Success!  Upgrade complete."
+msgstr "Sukces! Aktualizacja zakończona."
+
+#: mappress_db.php:148
+#: mappress_map.php:370
+#: mappress_settings.php:531
+#: mappress_settings.php:562
+#: build/index_mappress_admin.js:1
+msgid "MapPress"
+msgstr "MapPress"
+
+#: mappress_db.php:154
+msgid "Map data upgrade"
+msgstr "Aktualizacja danych mapy"
+
+#: mappress_db.php:155
+msgid "Your map data needs to be upgraded."
+msgstr "Twoja mapa wymaga uaktualnienia."
+
+#: mappress_db.php:156
+msgid "Please make a database backup now.  Data will be permanently modified."
+msgstr "Proszę wykonać kopię zapasową bazy danych w tej chwili. Dane mogą zostać trwale zmodyfikowane."
+
+#: mappress_db.php:159
+msgid "Your map data is up to date."
+msgstr "Twoja mapa jest aktualna."
+
+#: mappress_map.php:90
+msgid "Post not found"
+msgstr "Wpis nie odnaleziony"
+
+#: mappress_map.php:283
+msgid "Geocoding error: %s"
+msgstr "Błąd geokodowania: %s"
+
+#: mappress_map.php:289
+msgid "Location"
+msgstr "Lokacja"
+
+#: mappress_poi.php:56
+msgid "Invalid lat/lng coordinate: %s,%s"
+msgstr "Nieprawidłowe koordynaty szer/dług geogr.: %s,%s"
+
+#: mappress_settings.php:324
+#: build/index_mappress_admin.js:1
+msgid "Default"
+msgstr "Domyślne"
+
+#: mappress_settings.php:394
+msgid "Address line "
+msgstr "Linia adresu"
+
+#: mappress_settings.php:395
+msgid "Latitude"
+msgstr "Szerokość geograficzna"
+
+#: mappress_settings.php:395
+msgid "Longitude"
+msgstr "Długość geograficzna"
+
+#: mappress_settings.php:395
+#: mappress_template.php:40
+#: build/index_mappress_admin.js:1
+msgid "Title"
+msgstr "Tytuł"
+
+#: mappress_settings.php:395
+#: mappress_template.php:38
+msgid "Body"
+msgstr "Treść"
+
+#: mappress_settings.php:395
+#: mappress_template.php:39
+#: mappress_template.php:49
+#: build/index_mappress_admin.js:1
+msgid "Icon"
+msgstr "Ikona"
+
+#: mappress_settings.php:395
+msgid "Zoom"
+msgstr "Powiekszenie"
+
+#: mappress_settings.php:504
+msgid "OK, you deserve it!"
+msgstr "Jasne, zasługujesz na to!"
+
+#: mappress_settings.php:505
+msgid "Nope, maybe later"
+msgstr "Nie, może później"
+
+#: mappress_settings.php:506
+msgid "I need help using the plugin"
+msgstr "Potrzebuję pomocy w używaniu wtyczki"
+
+#: mappress_settings.php:508
+msgid "Help Spread the Word"
+msgstr "Pomóż szerzyć wieści"
+
+#: mappress_settings.php:509
+msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
+msgstr "Cześć, mam nadzieję, że podoba Ci się MapPress. Czy chciałbyś poświęcić chwilę na napisanie krótkiej recenzji? Wiele by to dla mnie znaczyło!"
+
+#: mappress_settings.php:535
+#: mappress_settings.php:566
+msgid "Get help"
+msgstr "Uzyskaj pomoc"
+
+#: mappress_settings.php:538
+#: mappress_settings.php:569
+#: build/index_mappress_admin.js:1
+msgid "Your account"
+msgstr "Twoje konto"
+
+#: mappress_settings.php:540
+#: mappress_settings.php:571
+msgid "Upgrade to MapPress Pro"
+msgstr "Ulepsz do MapPress Pro"
+
+#: mappress_template.php:37
+#: mappress_template.php:46
+msgid "Address"
+msgstr "Adres"
+
+#: mappress_template.php:41
+msgid "URL"
+msgstr "URL"
+
+#: mappress_template.php:42
+#: mappress_template.php:50
+msgid "Custom Field"
+msgstr "Własne pole"
+
+#: mappress_template.php:47
+msgid "Email"
+msgstr "Email"
+
+#: mappress_template.php:48
+msgid "Display Name"
+msgstr "Nazwa wyświetlana"
+
+#: templates/mashup-modal.php:17
+msgid "Continue reading"
+msgstr "Czytaj dalej"
+
+#. translators: %s: Author name.
+#: templates/mashup-modal.php:23
+msgid "By %s"
+msgstr "Przez %s"
+
+#: templates/mashup-modal.php:27
+msgid "In"
+msgstr "W"
+
+#: templates/mashup-modal.php:28
+msgid " Tagged "
+msgstr "Otagowano"

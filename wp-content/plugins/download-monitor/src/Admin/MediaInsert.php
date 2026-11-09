@@ -181,7 +181,7 @@ class DLM_Admin_Media_Insert {
                 <legend><?php echo esc_html__( 'Search download', 'download-monitor' ); ?>:</legend>
                 <label>
                     <input type="text" name="dlm_search" value='<?php echo esc_html( str_replace( "'", "", stripslashes( ( $search_query ) ) ) ); ?>'/>
-                    <input type="submit" name="dlm_search_submit" value="Search" class="button button-primary" />
+                    <input type="submit" name="dlm_search_submit" value="Search" class="button button-primary dlm-media-insert-button" />
                 </label>
             </fieldset>
 
@@ -228,7 +228,7 @@ class DLM_Admin_Media_Insert {
 			</p>
 
 			<p>
-				<input type="button" class="button insert_download button-primary button-large" value="<?php echo esc_html__( 'Insert Shortcode', 'download-monitor' ); ?>"/>
+				<input type="button" class="button insert_download button-primary button-large dlm-media-insert-button" value="<?php echo esc_html__( 'Insert Shortcode', 'download-monitor' ); ?>"/>
 			</p>
 
 		</form>
@@ -271,7 +271,8 @@ class DLM_Admin_Media_Insert {
 
 				<p>
 					<?php wp_nonce_field( 'quick-add', 'quick-add-nonce' ) ?>
-					<input type="submit" class="button button-primary button-large" value="<?php echo esc_attr__( 'Save Download', 'download-monitor' ); ?>"/>
+					<input type="submit" id="dlm-quick-add-save" class="button button-primary button-large dlm-media-insert-button" value="<?php echo esc_attr__( 'Save Download', 'download-monitor' ); ?>"/>
+					<img src="<?php echo esc_url( includes_url( '/images/spinner.gif' ) ); ?>" id="dlm-quick-add-spinner" style="display:none;width:20px;height:20px;vertical-align:middle;margin-left:6px;" />
 				</p>
 			</div>
 
@@ -301,8 +302,6 @@ class DLM_Admin_Media_Insert {
 
 				jQuery( 'body' ).on( 'click', '.insert_download', function () {
 
-					var win = window.dialogArguments || opener || parent || top;
-
 					var download_id = jQuery( 'input[name="download_id"]:checked' ).val();
 					var template = '';
 					var tempSelect = jQuery('#template_name').val();
@@ -319,7 +318,9 @@ class DLM_Admin_Media_Insert {
 
 					shortcode = shortcode + ']';
 
-					win.send_to_editor( shortcode );
+					if ( window.parent && window.parent !== window ) {
+						window.parent.postMessage( { type: 'dlm_insert_download_shortcode', shortcode: shortcode }, window.location.origin );
+					}
 
 					return false;
 				} );
@@ -328,6 +329,11 @@ class DLM_Admin_Media_Insert {
 					jQuery( '#plupload-upload-ui' ).slideUp();
 					jQuery( '#quick-add-details' ).slideDown();
 					return false;
+				} );
+
+				jQuery( '#quick-add' ).on( 'submit', function () {
+					jQuery( '#dlm-quick-add-save' ).prop( 'disabled', true );
+					jQuery( '#dlm-quick-add-spinner' ).show();
 				} );
 
 				<?php

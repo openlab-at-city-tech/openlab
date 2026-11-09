@@ -22,13 +22,6 @@ class Transient {
 	private static $_instance = null;
 
 	/**
-	 * Tracker array.
-	 *
-	 * @var array
-	 */
-	protected $_tracker;
-
-	/**
 	 * Gets the singleton instance.
 	 *
 	 * @return Transient
@@ -41,48 +34,7 @@ class Transient {
 	}
 
 	public function __construct() {
-		global $_wp_using_ext_object_cache;
-
 		$this->_groups = get_option( 'ngg_transient_groups', [ '__counter' => 1 ] );
-		if ( $_wp_using_ext_object_cache ) {
-			$this->_tracker = get_option( 'photocrati_cache_tracker', [] );
-		}
-
-		register_shutdown_function( [ $this, '_update_tracker' ] );
-	}
-
-	public function delete_tracked( $group = null ) {
-		global $_wp_using_ext_object_cache;
-
-		if ( $_wp_using_ext_object_cache ) {
-			if ( $group ) {
-				if ( is_array( $this->_tracker ) && isset( $this->_tracker[ $this->get_group_id( $group ) ] ) ) {
-					foreach ( $this->_tracker[ $this->get_group_id( $group ) ] as $key ) {
-						delete_transient( $this->get_group_id( $group ) . '__' . $key );
-					}
-
-					unset( $this->_tracker[ $this->get_group_id( $group ) ] );
-				}
-			} else {
-				foreach ( $this->_groups as $group => $data ) {
-					$this->delete_tracked( $group );
-				}
-			}
-		}
-	}
-
-	/**
-	 * Despite the underscore prefix this cannot be marked protected: it is used by register_shutdown_function()
-	 */
-	public function _update_tracker() {
-		global $_wp_using_ext_object_cache;
-
-		if ( $_wp_using_ext_object_cache ) {
-			$current_value = get_option( 'photocrati_cache_tracker', [] );
-			if ( $current_value !== $this->_tracker ) {
-				update_option( 'photocrati_cache_tracker', $this->_tracker, 'no' );
-			}
-		}
 	}
 
 	public function add_group( $group_or_groups ) {
@@ -93,6 +45,12 @@ class Transient {
 		// If the 'ngg_transient_groups' option is set and is not an array, this could cause fatal error.
 		if ( ! is_array( $this->_groups ) ) {
 			$this->_groups = [];
+		}
+
+		// Ensure the counter exists; the stored option may have been reset or cleared
+		// (e.g. after manually deleting transients) without the default counter key.
+		if ( ! isset( $this->_groups['__counter'] ) ) {
+			$this->_groups['__counter'] = 1;
 		}
 
 		foreach ( $groups as $group ) {
@@ -127,10 +85,73 @@ class Transient {
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$param = @wp_json_encode( $param );
 			}
-			$params = implode( '', $params );
+			unset( $param );
+
+			// Length-prefix each element before joining so two different parameter sets cannot
+			// serialise to the same string: a plain implode( '' ) made ['ab','c'] and ['a','bc']
+			// indistinguishable, letting unrelated galleries share one cache slot.
+			$params = implode(
+				'',
+				array_map(
+					static function ( $param ) {
+						return strlen( (string) $param ) . ':' . $param;
+					},
+					$params
+				)
+			);
 		}
 
-		return $this->get_group_id( $group ) . '__' . str_replace( '-', '_', crc32( $params ) );
+		global $_wp_using_ext_object_cache;
+
+		$group_id = $this->get_group_id( $group );
+
+		// Derive the key from a cryptographic digest, not crc32(). CRC-32 is a linear
+		// error-detecting code over GF(2), not a hash: for any target key, four chosen suffix
+		// bytes can be solved for directly, so a Contributor could craft a gallery whose key
+		// collides with any other gallery's and poison the shared, visitor-facing render cache.
+		// sha1() truncated to 32 hex characters keeps keys short while making collisions infeasible.
+		$digest = substr( sha1( (string) $params ), 0, 32 );
+
+		// Object-cache sites can't be invalidated via clear()'s wp_options DELETE, so embed a
+		// per-group version in the key; bumping it (see clear()) orphans all prior keys.
+		if ( $_wp_using_ext_object_cache ) {
+			return $group_id . '_v' . $this->get_group_version( $group_id ) . '__' . $digest;
+		}
+
+		return $group_id . '__' . $digest;
+	}
+
+	/**
+	 * Current invalidation version for a group (object-cache sites only). Defaults to 1 when the
+	 * counter has not been stored yet or was evicted.
+	 *
+	 * @param int $group_id Numeric group id from get_group_id().
+	 * @return int
+	 */
+	private function get_group_version( $group_id ) {
+		$version = wp_cache_get( 'ngg_cache_ver_' . $group_id, 'ngg' );
+
+		return ( false !== $version ) ? (int) $version : 1;
+	}
+
+	/**
+	 * Bumps a group's invalidation version, orphaning every key built against the previous one.
+	 * Both branches are atomic: wp_cache_add() only seeds the counter when it is absent (cold
+	 * start, jumping to v2 so implicit-v1 keys are invalidated), and wp_cache_incr() is atomic.
+	 * This avoids the lost-update race a check-then-set (get + set) would have under concurrent
+	 * flushes, where a stale process could clobber a newer version back to the seed value.
+	 *
+	 * @param int $group_id Numeric group id from get_group_id().
+	 * @return void
+	 */
+	private function bump_group_version( $group_id ) {
+		$cache_key = 'ngg_cache_ver_' . $group_id;
+
+		// wp_cache_add() fails when the counter already exists, in which case another request has
+		// seeded it and we increment instead.
+		if ( ! wp_cache_add( $cache_key, 2, 'ngg' ) ) {
+			wp_cache_incr( $cache_key, 1, 'ngg' );
+		}
 	}
 
 	public function get( $key, $default_value = null, $lookup = null ) {
@@ -153,23 +174,6 @@ class Transient {
 		return $retval;
 	}
 
-	protected function _track_key( $key ) {
-		global $_wp_using_ext_object_cache;
-
-		if ( $_wp_using_ext_object_cache ) {
-			$parts = explode( '__', $key );
-			$group = $parts[0];
-			$id    = $parts[1];
-			if ( ! isset( $this->_tracker[ $group ] ) ) {
-				$this->_tracker[ $group ] = [];
-			}
-			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			if ( ! in_array( $id, $this->_tracker[ $group ] ) ) {
-				$this->_tracker[ $group ][] = $id;
-			}
-		}
-	}
-
 	public function set( $key, $value, $ttl = 0 ) {
 		$retval  = false;
 		$enabled = true;
@@ -184,9 +188,6 @@ class Transient {
 
 		if ( $enabled ) {
 			$retval = set_transient( $key, wp_json_encode( $value ), $ttl );
-			if ( $retval ) {
-				$this->_track_key( $key );
-			}
 		}
 
 		return $retval;
@@ -204,6 +205,25 @@ class Transient {
 	 */
 	public function clear( $group = null, $expired = false ) {
 		if ( $group === '__counter' ) {
+			return;
+		}
+
+		// No (or empty) group means "every known group"; clear each individually.
+		if ( ! is_string( $group ) || empty( $group ) ) {
+			foreach ( $this->_groups as $name => $params ) {
+				$this->clear( $name, $expired );
+			}
+			return;
+		}
+
+		global $_wp_using_ext_object_cache;
+
+		// Object-cache sites: transients aren't in wp_options, so bump the group version instead
+		// of the SQL DELETE below. flush_expired() is skipped — the backend evicts on its own TTL.
+		if ( $_wp_using_ext_object_cache ) {
+			if ( ! $expired ) {
+				$this->bump_group_version( $this->get_group_id( $group ) );
+			}
 			return;
 		}
 
@@ -260,14 +280,6 @@ class Transient {
 				//
 				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 				$wpdb->query( $wpdb->prepare( $sql, $params ) );
-			}
-
-			if ( $expired ) {
-				$this->delete_tracked( $group );
-			}
-		} else {
-			foreach ( $this->_groups as $name => $params ) {
-				$this->clear( $name, $expired );
 			}
 		}
 	}

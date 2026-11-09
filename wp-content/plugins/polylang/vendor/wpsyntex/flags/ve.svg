@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 900 600">
+<path fill="#cf142b" d="M0 0h900v600H0"/>
+<path fill="#00247d" d="M0 0h900v400H0"/>
+<path fill="#fc0" d="M0 0h900v200H0"/>
+<path id="a" d="m266 376 17-46 13 47-39-30 50 2Zm25-58 35-36-7 49-23-43 44 21Zm68-24-10-48 37 33-50-5 43-25m28 22 7-48 23 43-44-22 49-8"/>
+<use href="#a" transform="matrix(-1 0 0 1 900 0)"/>
+</svg>

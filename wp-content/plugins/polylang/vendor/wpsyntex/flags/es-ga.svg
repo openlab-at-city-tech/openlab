@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#fff" d="M0 0h900v600H0"/>
+<path fill="#09c" d="M900 513 129 0H0v85l774 515h126"/>
+<path fill="#005bbf" d="M539 242v135c-1 24-20 85-89 85s-88-61-89-86V242"/>
+<g id="b">
+<path id="a" fill="#ccc" d="M405 276h-12v-12h-12v12h-12v12h12v12h12v-12h12"/>
+<use y="53" href="#a"/>
+<use y="106" href="#a"/>
+<use x="63" y="-15" href="#a"/>
+<circle cx="450" cy="313" r="20" fill="#ccc"/>
+<path fill="#c8b100" d="M451 447h-35v-2c27-6 27-45 25-52-9-8 0-17 0-17v-4c-29-6-26-37-26-37h36zm0-215h-73v-17l-23-43c-4-9 2-33 31-33 1-17 62-25 62-21v-13h-10v-4h10v-7h3"/>
+<path fill="#c6363c" d="M362 161q6 24 18 43c3-3 5-3 2-16 5 12 8 11 14 13q-4-27-17-52c-9 2-18 6-17 12m76-26c-22 0-39 2-41 12q4 28 19 53 11-4 9-25c2 21 8 26 18 23"/>
+<circle cx="379" cy="223" r="6" fill="#c6363c"/>
+<circle cx="450" cy="220" r="6" fill="#c6363c"/>
+<circle cx="450" cy="122" r="9" fill="#0c4076"/>
+<circle cx="415" cy="220" r="6" fill="#078930"/>
+</g>
+<use href="#b" transform="matrix(-1 0 0 1 900 0)"/>
+</svg>

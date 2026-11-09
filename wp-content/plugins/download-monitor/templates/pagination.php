@@ -15,7 +15,7 @@ if ( $pages <= 1 ) {
 	return;
 }
 ?>
-<nav class="download-monitor-pagination">
+<nav class="dlm-download-monitor-pagination">
 	<?php
 	echo wp_kses_post( paginate_links(
 		apply_filters(

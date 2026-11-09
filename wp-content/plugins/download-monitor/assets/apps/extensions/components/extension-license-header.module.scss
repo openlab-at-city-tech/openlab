@@ -1,0 +1,134 @@
+.licenseHeader {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.licenseContent {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.licenseActive,
+.licenseInactive {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+	flex: 1;
+	min-width: 0;
+
+	.licenseTextWrapper {
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+		flex: 1;
+		min-width: 0;
+	}
+
+	.greeting {
+		margin: 0;
+		font-size: 13px;
+		line-height: 1.5;
+		color: var(--theme-text-color);
+	}
+
+	.activationInfo {
+		font-size: 12px;
+		line-height: 1.5;
+		color: var(--theme-text-color);
+		opacity: 0.65;
+		margin: 0;
+	}
+}
+
+.toggleButton {
+	font-size: 13px;
+	padding: 0;
+	height: auto;
+	line-height: 1.5;
+	white-space: nowrap;
+	flex-shrink: 0;
+	text-decoration: none;
+	color: var(--theme-link-initial-color);
+
+	&:hover {
+		text-decoration: underline;
+		color: var(--theme-link-hover-color);
+	}
+
+	&:focus {
+		box-shadow: none;
+		outline: 1px solid transparent;
+		outline-offset: 2px;
+	}
+}
+
+.licenseKeySection {
+	margin-top: 8px;
+	padding-top: var(--theme-content-spacing);
+	border-top: 1px solid var(--theme-border-color);
+}
+
+.inputGroup {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	flex-wrap: wrap;
+}
+
+.inputWrapper {
+	flex: 1;
+	min-width: 300px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.licenseInput {
+	width: 100%;
+	padding: 6px 10px;
+	font-size: 13px;
+	line-height: 1.5;
+	color: var(--theme-text-color);
+	background-color: #fff;
+	border: 1px solid var(--theme-border-color);
+	border-radius: 2px;
+
+	&:focus {
+		border-color: var(--theme-link-initial-color);
+		outline: 2px solid transparent;
+	}
+
+	&:disabled {
+		cursor: not-allowed;
+		opacity: 0.6;
+	}
+
+	&.error {
+		border-color: #d63638;
+		background-color: #fcf0f1;
+	}
+}
+
+.errorMessage {
+	font-size: 12px;
+	line-height: 1.5;
+	color: #d63638;
+	margin: 0;
+	padding: 0;
+}
+
+.buttonGroup {
+	display: flex;
+	gap: 8px;
+}
+
+.actionButton {
+	height: 30px;
+	font-size: 13px;
+	padding: 0 12px;
+	white-space: nowrap;
+}

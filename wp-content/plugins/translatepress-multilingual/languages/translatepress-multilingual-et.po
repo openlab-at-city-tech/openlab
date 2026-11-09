@@ -1,0 +1,6022 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: et\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress - DEV"
+msgstr "TranslatePress - DEV"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "https://translatepress.com/"
+msgstr "https://translatepress.com/"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-cd79cda5
+msgid ""
+"Experience a better way of translating your WordPress site using a visual "
+"front-end translation editor, with full support for WooCommerce and site "
+"builders."
+msgstr ""
+"Avasta parem viis oma WordPressi saidi tõlkimiseks visuaalse kasutajapoolse "
+"tõlkimisredaktori abil, mis toetab täielikult WooCommerce'i ja lehekülje "
+"koostajaid."
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+msgstr "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "https://cozmoslabs.com/"
+msgstr "https://cozmoslabs.com/"
+
+msgid "Active"
+msgstr "Aktiivne"
+
+msgid ""
+"The inactive languages will still be visible and active for the admin. For "
+"other users they won't be visible in the language switchers and won't be "
+"accessible either."
+msgstr ""
+"Passiivsed keeled on administraatorile endiselt nähtavad ja aktiivsed. "
+"Teistele kasutajatele ei ole need keelelülitites nähtavad ega kättesaadavad."
+
+msgid "unknown"
+msgstr "tundmatu"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Extra Languages add-on</strong> requires TranslatePress version "
+"%1$s or higher. You are currently using version %2$s. Please update "
+"TranslatePress to enable this feature."
+msgstr ""
+"<strong>Extra Languages add-on</strong> nõuab TranslatePressi versiooni "
+"%1$s või uuemat. Kasutad praegu versiooni %2$s. Palun uuenda TranslatePress "
+"selle funktsiooni lubamiseks."
+
+msgid "Dismiss this notice."
+msgstr "Peida see teade."
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Slug"
+msgstr "Postituse slug"
+
+#, tp-ctx-742ebaa7, tp-glo-9fa92a70
+msgid "URL Slugs Translation"
+msgstr "URL-slugide tõlked"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs"
+msgstr "Slugid"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy Slugs"
+msgstr "Taksonoomia slugid"
+
+#, tp-ctx-742ebaa7
+msgid "Search Taxonomy Slugs"
+msgstr "Otsi taksonoomia slugisid"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Taxonomy Slug"
+msgstr "Taksonoomia slug"
+
+msgid "Translation"
+msgstr "Tõlge"
+
+#, tp-ctx-742ebaa7
+msgid "Term Slugs"
+msgstr "Terminite slugid"
+
+#, tp-ctx-742ebaa7
+msgid "Search Term Slugs"
+msgstr "Otsi terminite slugisid"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Term Slug"
+msgstr "Termini slug"
+
+msgid "Taxonomy"
+msgstr "Taksonoomia"
+
+msgid "Filter by Taxonomy"
+msgstr "Filtreeri taksonoomia järgi"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Slugs"
+msgstr "Postituste slugid"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Slugs"
+msgstr "Otsi postituste slugisid"
+
+#, tp-ctx-e9944eb3
+msgid "Post ID"
+msgstr "Postituse ID"
+
+#, tp-ctx-e9944eb3
+msgid "Post Type"
+msgstr "Postituse tüüp"
+
+#, tp-ctx-e9944eb3
+msgid "Filter by Post Type"
+msgstr "Filtreeri postituse tüübi järgi"
+
+msgid "Published"
+msgstr "Avaldatud"
+
+#, tp-ctx-e9944eb3
+msgid "Any Post Status"
+msgstr "Mistahes postituse olek"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Type Base Slugs"
+msgstr "Postituse tüübi baas-slugid"
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Type Base Slug"
+msgstr "Postituse tüübi baas-slug"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Type Base Slugs"
+msgstr "Otsi postituse tüübi baas-slugisid"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce Slugs"
+msgstr "WooCommerce slugid"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-cd79cda5
+msgid "WooCommerce Slug"
+msgstr "WooCommerce slug"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "Search WooCommerce Slugs"
+msgstr "Otsi WooCommerce slugisid"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Automatic and manual slug translation changes performed when "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 was active had to be "
+"removed because of some issues with that version. All slug translations "
+"from before that version are now in use. Thank you for understanding!"
+msgstr ""
+"Automaatilised ja käsitsi tehtud slugi tõlkemuudatused, mis tehti "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 aktiivsena, tuli "
+"eemaldada mõningate selle versiooni probleemide tõttu. Kõik slugi tõlked "
+"enne seda versiooni on nüüd kasutusel. Täname mõistmise eest!"
+
+msgid ""
+"If you absolutely need them, the removed translations can be found in "
+"tables trp_slug_original_obsolete and trp_slug_translation_obsolete."
+msgstr ""
+"Kui sa neid absoluutselt vajad, leiad eemaldatud tõlked tabelitest "
+"trp_slug_original_obsolete ja trp_slug_translation_obsolete."
+
+msgid "(inactive)"
+msgstr "(mitteaktiivne)"
+
+#, tp-ctx-742ebaa7
+msgid "Other Slugs"
+msgstr "Muud slugid"
+
+#, tp-ctx-742ebaa7
+msgid "Search Other Slugs"
+msgstr "Otsi muid slugisid"
+
+msgid "Automatic User Language Detection"
+msgstr "Automaatne kasutaja keele tuvastamine"
+
+msgid "Invalid language code"
+msgstr "Vigane keelekood"
+
+#, tp-ai
+msgid ""
+"We've detected you might be speaking a different language. Do you want to "
+"change to:"
+msgstr "Tuvastasime, et võid rääkida teises keeles. Kas soovid muuta keeleks:"
+
+#, tp-ai
+msgid "Change Language"
+msgstr "Vaheta keel"
+
+#, tp-ai
+msgid "Close and do not switch language"
+msgstr "Sulge ja ära vaheta keelt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "First by browser language, then IP address (recommended)"
+msgstr "Kõigepealt brauseri keele järgi, seejärel IP-aadressi järgi (soovitatav)"
+
+msgid "First by IP address, then by browser language"
+msgstr "Kõigepealt IP-aadressi järgi, seejärel brauseri keele järgi"
+
+msgid "Only by browser language"
+msgstr "Ainult brauseri keele järgi"
+
+msgid "Only by IP address"
+msgstr "Ainult IP-aadressi järgi"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "A popup appears asking the user if they want to be redirected"
+msgstr "Ilmub hüpikaken, milles küsitakse kasutajalt, kas ta soovib ümbersuunamist"
+
+msgid "Redirect directly (*not recommended)"
+msgstr "Otse ümbersuunamine (*ei soovitata)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Pop-up window over the content"
+msgstr "Hüpikaken sisu kohal"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Hello bar before the content"
+msgstr "Tervitusriba enne sisu"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Automatic User Language Detection requires a newer version of "
+"TranslatePress to use its visual settings interface. The legacy settings "
+"form will remain available until TranslatePress is updated."
+msgstr ""
+"Automaatne kasutaja keele tuvastamine nõuab uuemat versiooni tootest "
+"TranslatePress, et kasutada selle visuaalset seadistuste liidest. Vananenud "
+"seadistusvorm jääb saadavaks, kuni TranslatePress värskendatakse."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Update TranslatePress"
+msgstr "Värskenda TranslatePress"
+
+msgid ""
+"WARNING. Cannot determine your language preference based on your current "
+"IP.<br>This is most likely because the website is on a local environment."
+msgstr ""
+"HOIATUS. Teie keele-eelistust ei saa määrata teie praeguse IP-aadressi "
+"põhjal.<br>Tõenäoliselt on see seetõttu, et veebisait asub kohalikus "
+"keskkonnas."
+
+msgid "Permission denied."
+msgstr "Õigused puuduvad."
+
+#, tp-glo-b357fc3e
+msgid "Invalid nonce."
+msgstr "Vigane nonce."
+
+#, tp-ai
+msgid "Invalid settings."
+msgstr "Vigased seadistused."
+
+msgid "Settings saved."
+msgstr "Seaded on salvestatud."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Go to <a href=\"%s\" target=\"_self\">Advanced</a> tab to change this "
+"feature's settings"
+msgstr ""
+"Mine vahekaardile <a href=\"%s\" target=\"_self\">Täpsemad</a>, et muuta "
+"selle funktsiooni seadeid."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Website language selector"
+msgstr "Veebisaidi keelevalija"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Change language"
+msgstr "Muuda keelt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Available languages"
+msgstr "Saadaolevad keeled"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Please enter your DeepL API key."
+msgstr "Sisesta oma DeepL API võti."
+
+#, tp-glo-c6709f3f
+msgid "DeepL"
+msgstr "DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Bad request. There was an error accessing the DeepL API."
+msgstr "Vigane päring. DeepL API-le juurdepääsemisel ilmnes viga."
+
+#, tp-glo-91460d88
+msgid "The API key entered is invalid."
+msgstr "Sisestatud API võti on kehtetu."
+
+#, tp-glo-91460d88
+msgid "The API resource could not be found."
+msgstr "API ressurssi ei leitud."
+
+msgid "The request size is too large."
+msgstr "Päringu suurus on liiga suur."
+
+msgid "The request is too long."
+msgstr "Päring on liiga pikk."
+
+msgid "Too many requests. Please try again later."
+msgstr "Liiga palju päringuid. Palun proovige hiljem uuesti."
+
+msgid "Your translation quota has been reached."
+msgstr "Teie tõlkekvoot on täitunud."
+
+msgid "We could not process your request. Please try again later."
+msgstr "Teie päringut ei õnnestunud töödelda. Palun proovige hiljem uuesti."
+
+#, tp-glo-c6709f3f
+msgid ""
+"There is an error on the DeepL service and your request could not be "
+"processed."
+msgstr "DeepL teenuses on viga ja teie päringut ei õnnestunud töödelda."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Type"
+msgstr "DeepL API tüüp"
+
+msgid "Pro"
+msgstr "Pro"
+
+msgid "Free"
+msgstr "Tasuta"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Select the type of DeepL API you want to use."
+msgstr "Valige DeepL API tüüp, mida soovite kasutada."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Key"
+msgstr "DeepL API võti"
+
+#, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"%s\" target=\"_blank\">this link</a> to see how you can set "
+"up an API key and control API costs."
+msgstr ""
+"Külastage <a href=\"%s\" target=\"_blank\">seda linki</a>, et näha, kuidas "
+"seadistada API võtit ja kontrollida API kulusid."
+
+msgid "No Active License Detected for this website."
+msgstr "Selle veebisaidi jaoks ei tuvastatud aktiivset litsentsi."
+
+msgid "Enter your license key"
+msgstr "Sisesta oma litsentsivõti"
+
+msgid " Or %1$spurchase one here%2$s"
+msgstr " Või %1$sosta siit%2$s"
+
+msgid "Different Domain per Language"
+msgstr "Erinev domeen keele kohta"
+
+msgid "View Docs"
+msgstr "Vaata dokumentatsiooni"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Assign different domains or subdomains to each language. When visitors "
+"access these domains, TranslatePress loads the appropriate language "
+"translation directly without redirecting."
+msgstr ""
+"Määra iga keele jaoks erinevad domeenid või alamdomeenid. Kui külastajad "
+"pääsevad nendele domeenidele ligi, laadib TranslatePress otse vastava keele "
+"tõlke ilma ümbersuunamiseta."
+
+msgid "Example: %1$s for English, %2$s for Spanish, %3$s for French."
+msgstr ""
+"Näide: %1$s inglise keele jaoks, %2$s hispaania keele jaoks, %3$s prantsuse "
+"keele jaoks."
+
+msgid "Before enabling:"
+msgstr "Enne lubamist:"
+
+#, tp-glo-1edf89cb
+msgid ""
+"Ensure your domains are registered, pointed to your server, and have SSL "
+"certificates configured."
+msgstr ""
+"Veendu, et domeenid on registreeritud, suunatud serverisse ning "
+"SSL-sertifikaadid on seadistatud."
+
+msgid "Domain"
+msgstr "Domeen"
+
+msgid "Map this language to a different domain or sub-domain."
+msgstr "Seosta see keel teise domeeni või alamdomeeniga."
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Prefill with current domain"
+msgstr "Täida praeguse domeeniga"
+
+#, tp-glo-e765e8ba
+msgid "Check DNS"
+msgstr "Kontrolli DNS-i"
+
+#, tp-glo-e765e8ba
+msgid "Checking DNS..."
+msgstr "DNS-i kontrollimine..."
+
+#, tp-glo-e765e8ba
+msgid "DNS is correctly configured!"
+msgstr "DNS on õigesti seadistatud!"
+
+#, tp-glo-e765e8ba
+msgid "DNS check failed. Please verify your domain configuration."
+msgstr "DNS-i kontroll nurjus. Palun kontrolli domeeni seadistust."
+
+msgid "This domain is already assigned to another language."
+msgstr "See domeen on juba määratud teisele keelele."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Different Domain per Language add-on</strong> requires "
+"TranslatePress version %1$s or higher. You are currently using version "
+"%2$s. Please update TranslatePress to enable this feature."
+msgstr ""
+"<strong>Iga keele jaoks eri domeen</strong> lisamoodul nõuab "
+"TranslatePressi versiooni %1$s või uuemat. Praegu on kasutusel versioon "
+"%2$s. Palun uuenda TranslatePressi, et see funktsioon lubada."
+
+msgid ""
+"Note: This option is disabled when Different Domain for Language addon is "
+"active."
+msgstr ""
+"Märkus: see valik on keelatud, kui lisamoodul Iga keele jaoks eri domeen on "
+"aktiivne."
+
+msgid ""
+"Different Domain per Language: Domain is required when domain mapping is "
+"enabled. The toggle has been disabled for languages with empty domains."
+msgstr ""
+"Iga keele jaoks eri domeen: domeen on kohustuslik, kui domeenide seostamine "
+"on lubatud. Keelte puhul, mille domeen on tühi, on lüliti keelatud."
+
+msgid ""
+"Different Domain per Language: The same domain cannot be assigned to "
+"multiple languages. The toggle has been disabled for duplicate domains."
+msgstr ""
+"Iga keele jaoks eri domeen: sama domeeni ei saa määrata mitmele keelele. "
+"Korduvate domeenide puhul on lüliti keelatud."
+
+#, tp-glo-9fa92a70
+msgid ""
+"Different Domain per Language: A language domain cannot be the same as the "
+"main site URL. The toggle has been disabled for the matching domain."
+msgstr ""
+"Iga keele jaoks eri domeen: keele domeen ei saa olla sama mis peamise saidi "
+"URL. Vastava domeeni puhul on lüliti keelatud."
+
+msgid "Please enter a domain."
+msgstr "Palun sisesta domeen."
+
+msgid "Invalid domain format."
+msgstr "Vigane domeenivorming."
+
+msgid "Could not reach domain: %s"
+msgstr "Domeen pole kättesaadav: %s"
+
+msgid "Domain is reachable!"
+msgstr "Domeen on kättesaadav!"
+
+#, tp-glo-1aabb38a
+msgid "Domain returned HTTP status %d."
+msgstr "Domeen tagastas HTTP staatuse %d."
+
+msgid "Limit this menu item to the following languages"
+msgstr "Piira seda menüüelementi järgmistele keeltele"
+
+msgid "All Languages"
+msgstr "Kõik keeled"
+
+msgid "Translator"
+msgstr "Tõlkija"
+
+#, tp-glo-ee8b4f9f
+msgid " TranslatePress Settings"
+msgstr " TranslatePress seaded"
+
+msgid "Allow this user to translate the website."
+msgstr "Lubage sellel kasutajal veebisaiti tõlkida."
+
+msgid "Translate Site"
+msgstr "Tõlgi saiti"
+
+#, tp-ai
+msgid "Add-On"
+msgstr "Lisamoodul"
+
+msgid "Deactivate"
+msgstr "Deaktiveeri"
+
+msgid "Activate"
+msgstr "Aktiveeri"
+
+#, tp-ai
+msgid "Installing..."
+msgstr "Paigaldamine..."
+
+#, tp-ai
+msgid ""
+"This add-on can not be activated back without a valid license. Are you sure "
+"you want to deactivate it?"
+msgstr ""
+"Seda lisamoodulit ei saa kehtiva litsentsita uuesti aktiveerida. Kas oled "
+"kindel, et soovid selle desaktiveerida?"
+
+msgid "Documentation"
+msgstr "Dokumentatsioon"
+
+#, tp-ai
+msgid "A valid license is required to activate add-ons."
+msgstr "Lisamoodulite aktiveerimiseks on vaja kehtivat litsentsi."
+
+#, tp-ai
+msgid "Activate all"
+msgstr "Aktiveeri kõik"
+
+#, tp-ai
+msgid ""
+"Add-ons can not be activated back without a valid license. Are you sure you "
+"want to deactivate them?"
+msgstr ""
+"Lisamooduleid ei saa kehtiva litsentsita uuesti aktiveerida. Kas oled "
+"kindel, et soovid need desaktiveerida?"
+
+#, tp-ai
+msgid "Deactivate all"
+msgstr "Desaktiveeri kõik"
+
+#, tp-ai
+msgid "%1$sAdd-ons settings saved successfully%2$s"
+msgstr "%1$sLisamoodulite seaded salvestati edukalt%2$s"
+
+msgid "Date format"
+msgstr "Kuupäeva vorming"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Customize the date formatting per each translated language.<br/>Leave empty "
+"for default WP setting or see more information <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">here</a>"
+msgstr ""
+"Kohanda kuupäeva vormingut iga tõlgitud keele jaoks.<br/>Jäta tühjaks "
+"WordPressi vaike-seadistuse jaoks või vaata lisateavet <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">siit</a>"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"To edit an existing TranslatePress language, input the language code and "
+"fill in only the columns you want to overwrite (e.g. Language name, "
+"Flag).<br>You can also add new custom languages. They will be available "
+"under General settings, All Languages list, where the URL slug can be "
+"edited."
+msgstr ""
+"Olemasoleva TranslatePress keele muutmiseks sisesta keelekood ja täida "
+"ainult need veerud, mida soovid üle kirjutada (nt keele nimi, "
+"lipp).<br>Saad lisada ka uusi kohandatud keeli. Need on saadaval üldiste "
+"seadete all, kõikide keelte loendis, kus saab URL slugi muuta."
+
+#, tp-glo-91460d88, tp-glo-9fa92a70, tp-glo-c6709f3f
+msgid ""
+"For custom flag, first upload the image in media library then paste the "
+"URL.<br>Changing or deleting a custom language will impact translations and "
+"site URL's.<br>The Language code and the ISO Code should contain only "
+"alphabetical values, numerical values, \"-\" and \"_\".<br>The ISO Codes "
+"can be found on <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO Codes</a> and <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL Target Codes</a>."
+msgstr ""
+"Kohandatud lipu jaoks laadi pilt esmalt meediaraamatukokka ja kleebi "
+"seejärel URL.<br>Kohandatud keele muutmine või kustutamine mõjutab tõlkeid "
+"ja saidi URL-e.<br>Keelekood ja ISO-kood peaksid sisaldama ainult tähti, "
+"numbreid, \"-\" ja \"_\".<br>ISO koode leiad lehtedelt <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google'i ISO-koodid</a> ja <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL-i sihtkoodid</a>."
+
+msgid "Language code"
+msgstr "Keelekood"
+
+msgid "Language name"
+msgstr "Keele nimi"
+
+msgid "Native name"
+msgstr "Põlisnimi"
+
+msgid "ISO Code"
+msgstr "ISO-kood"
+
+#, tp-glo-9fa92a70
+msgid "Flag URL"
+msgstr "Lipu URL"
+
+msgid "Text RTL"
+msgstr "Tekst RTL"
+
+msgid "Custom language"
+msgstr "Kohandatud keel"
+
+#, tp-ai
+msgid "Disable bundled plugin translations"
+msgstr "Keela kaasasolevad pistikprogrammi tõlked"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"By default, TranslatePress ships its own translation files in "
+"<code>wp-content/plugins/translatepress/languages/</code> and forces "
+"WordPress to use them instead of the language packs installed automatically "
+"from translate.wordpress.org.<br/>Enable this option to disable that "
+"override. WordPress will then load the community language pack from "
+"<code>wp-content/languages/plugins/</code> (if present) and fall back to "
+"the bundled files only when no pack is available."
+msgstr ""
+"Vaikimisi tarnib TranslatePress kaasa oma tõlkefailid asukohas "
+"<code>wp-content/plugins/translatepress/languages/</code> ja sunbib "
+"WordPressi kasutama neid automaatselt translate.wordpress.org-st "
+"paigaldatud keelepakettide asemel.<br/>Luba see valik, et keelata see "
+"ülekirjutus. Seejärel laadib WordPress sisse kogukonna keelepaketi "
+"asukohast <code>wp-content/languages/plugins/</code> (kui see on olemas) ja "
+"kasutab kaasasolevaid faile ainult juhul, kui keelepakett pole saadaval."
+
+msgid "Disable dynamic translation"
+msgstr "Keela dünaamiline tõlkimine"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c
+msgid ""
+"It disables detection of strings displayed dynamically using JavaScript. "
+"<br/>Strings loaded via a server side AJAX call will still be translated."
+msgstr ""
+"Keelab JavaScripti abil dünaamiliselt kuvatavate stringide tuvastamise. "
+"<br/>Serveripoolse AJAX päringuga laaditud stringid tõlgitakse endiselt."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Disable translation for gettext strings"
+msgstr "Keela gettext stringide tõlkimine"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Gettext Strings are strings outputted by themes and plugins. <br> "
+"Translating these types of strings through TranslatePress can be "
+"unnecessary if they are already translated using the .po/.mo translation "
+"file system.<br>Enabling this option can improve the page load performance "
+"of your site in certain cases. The disadvantage is that you can no longer "
+"edit gettext translations using TranslatePress, nor benefit from automatic "
+"translation on these strings."
+msgstr ""
+"Gettext-sõned on sõned, mida teemad ja pluginad väljastavad. <br> Nende "
+"sõnetüüpide tõlkimine TranslatePressi kaudu võib olla tarbetu, kui need on "
+"juba tõlgitud .po/.mo tõlkimisfailide süsteemi abil.<br>Selle valiku "
+"lubamine võib teatud juhtudel parandada saidi lehe laadimise jõudlust. "
+"Puuduseks on see, et te ei saa enam gettext tõlkeid TranslatePressis muuta "
+"ega kasutada nende sõnede automaatset tõlkimist."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings translation is disabled"
+msgstr "Gettext-sõnede tõlkimine on keelatud"
+
+msgid "To enable it go to "
+msgstr "Selle lubamiseks mine "
+
+#, tp-ai, tp-ctx-2edc90df, tp-ctx-a6928204, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress->Advanced Settings->Debug->Disable translation for gettext "
+"strings"
+msgstr "TranslatePress->Täpsemad seaded->Silumine->Keela gettext stringide tõlkimine"
+
+msgid " and uncheck the Checkbox."
+msgstr " ja tühista märkeruut."
+
+msgid "Dismiss"
+msgstr "Peida"
+
+#, tp-glo-8778869a
+msgid "Exclude translated links from sitemap"
+msgstr "Välista tõlgitud lingid sitemapist"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-09a90ed1, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Do not include translated links in sitemaps generated by SEO "
+"plugins.<br/>Requires <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack Add-on</a> to be installed and activated."
+msgstr ""
+"Ära lisa tõlgitud linke SEO pluginate genereeritud "
+"sitemaps'idesse.<br/>Nõuab <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack lisa</a> paigaldamist ja aktiveerimist."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post title"
+msgstr "Keela postituse pealkirja konteinerimärgendid"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post title in translated "
+"languages.<br/>Useful when the title of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"See keelab postituse pealkirja indekseerimise tõlgitud "
+"keeltes.<br/>Kasulik, kui postituse pealkiri ei toeta HTML-i, mis rikuks "
+"lehe ära."
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post content"
+msgstr "Keela postituse sisu konteinerimärgendid"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post content in translated "
+"languages.<br/>Useful when the content of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr ""
+"See keelab postituse sisu indekseerimise tõlgitud keeltes.<br/>Kasulik, kui "
+"postituse sisu ei toeta HTML-i, mis rikuks lehe ära."
+
+msgid "Do not translate certain paths"
+msgstr "Ära tõlgi teatud teid"
+
+msgid ""
+"Choose what paths can be translated. Supports wildcard at the end of the "
+"path.<br>For example, to exclude https://example.com/some/path you can "
+"either use the rule /some/path/ or /some/*.<br>Enter each rule on it's own "
+"line. To exclude the home page use {{home}}."
+msgstr ""
+"Vali, millised teed on tõlgitavad. Toetab tee lõpus metamärki.<br>Näiteks "
+"aadressi https://example.com/some/path välistamiseks võid kasutada kas "
+"reeglit /some/path/ või /some/*.<br>Sisesta iga reegel eraldi reale. "
+"Avalehe välistamiseks kasuta {home}."
+
+msgid "Exclude Paths From Translation"
+msgstr "Välista teed tõlkimisest"
+
+msgid "Translate Only Certain Paths"
+msgstr "Tõlgi ainult teatud teed"
+
+#, tp-glo-d1526d97
+msgid "Enable the hreflang x-default tag for language:"
+msgstr "Luba keele jaoks hreflang x-default märgend:"
+
+#, tp-glo-d1526d97
+msgid ""
+"Enables the hreflang=\"x-default\" for an entire language. See "
+"documentation for more details."
+msgstr ""
+"Lubab hreflang x-default märgendi kogu keele jaoks. Lisateabe saamiseks "
+"vaata dokumentatsiooni."
+
+msgid "Translate numbers and numerals"
+msgstr "Tõlgi numbrid ja numeraalid"
+
+msgid "Enable translation of numbers ( e.g. phone numbers)"
+msgstr "Luba numbrite tõlkimine (nt telefoninumbrid)"
+
+msgid "Selector"
+msgstr "Selektor"
+
+msgid "Exclude from dynamic translation"
+msgstr "Välista dünaamilisest tõlkimisest"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c, tp-glo-d311355a
+msgid ""
+"Do not dynamically translate strings that are found in html nodes matching "
+"these selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated using JavaScript.<br/>These strings will "
+"still be translated on the server side if possible."
+msgstr ""
+"Ära tõlgi dünaamiliselt sõnesid, mis leiduvad HTML-sõlmedes, mis vastavad "
+"neile selektoritele.<br>Välistab kõik nende selektoritele vastavate "
+"HTML-sõlmede alamsõlmed JavaScripti abil tõlkimisest.<br/>Neid sõnesid "
+"tõlgitakse endiselt serveripoolel, kui võimalik."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Gettext String"
+msgstr "Gettext-sõne"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext Strings"
+msgstr "Välista Gettext-sõned"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Exclude these strings from being translated as Gettext strings by "
+"TranslatePress. Leave the domain empty to take into account any Gettext "
+"string.<br/>Can still be translated through po/mo files."
+msgstr ""
+"Välista need sõned TranslatePressi poolt Gettext-sõnedena tõlkimisest. Jäta "
+"domeen tühjaks, et hõlmata kõiki Gettext-sõnesid.<br/>Neid saab endiselt "
+"tõlkida po/mo-failide kaudu."
+
+msgid "Exclude selectors only from automatic translation"
+msgstr "Jäta selektorid automaattõlkest välja"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not automatically translate strings that are found in html nodes "
+"matching these selectors.<br>Excludes all the children of HTML nodes "
+"matching these selectors from being automatically translated.<br>Manual "
+"translation of these strings is still possible."
+msgstr ""
+"Ära tõlgi automaatselt sõnesid, mis leiduvad HTML-sõlmedes, mis vastavad "
+"neile selektoritele.<br>Välistab kõik nende selektoritele vastavate "
+"HTML-sõlmede alamsõlmed automaatsest tõlkimisest.<br>Neid sõnesid on "
+"endiselt võimalik käsitsi tõlkida."
+
+msgid "Exclude selectors from translation"
+msgstr "Jäta selektorid tõlkimisest välja"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not translate strings that are found in html nodes matching these "
+"selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated.<br>These strings cannot be translated "
+"manually nor automatically."
+msgstr ""
+"Ära tõlgi sõnesid, mis leiduvad HTML-sõlmedes, mis vastavad neile "
+"selektoritele.<br>Välistab kõik nende selektoritele vastavate HTML-sõlmede "
+"alamsõlmed tõlkimisest.<br>Neid sõnesid ei saa tõlkida käsitsi ega "
+"automaatselt."
+
+#, tp-ctx-8a82cc9e
+msgid "String"
+msgstr "Sõne"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings from automatic translation"
+msgstr "Välista sõned automaatsest tõlkimisest"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Do not automatically translate these strings (ex. names, technical "
+"words...)<br>Paragraphs containing these strings will still be translated "
+"except for the specified part."
+msgstr ""
+"Ära tõlgi automaatselt neid sõnesid (nt nimed, tehnilised "
+"terminid...)<br>Lõigud, mis sisaldavad neid sõnesid, tõlgitakse endiselt, "
+"välja arvatud määratud osa."
+
+#, tp-glo-d311355a
+msgid "Fix broken HTML"
+msgstr "Paranda vigane HTML"
+
+#, tp-glo-d311355a
+msgid "General attempt to fix broken or missing HTML on translated pages.<br/>"
+msgstr "Üldine katse parandada tõlgitud lehtedel vigane või puuduv HTML.<br/>"
+
+#, tp-glo-9fa92a70
+msgid "Force slash at end of home url:"
+msgstr "Sunnitud kaldkriips home URL-i lõpus:"
+
+msgid "Ads a slash at the end of the home_url() function"
+msgstr "Lisab kaldkriipsu funktsiooni home_url() lõppu"
+
+msgid "Show Both (recommended)"
+msgstr "Näita mõlemat (soovitatav)"
+
+msgid "Remove Country Locale"
+msgstr "Eemalda riigi lokaat"
+
+msgid "Remove Region Independent Locale"
+msgstr "Eemalda piirkonnast sõltumatu lokaat"
+
+#, tp-glo-d1526d97
+msgid "Remove duplicate hreflang"
+msgstr "Eemalda duplikaat-hreflang"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-d1526d97
+msgid ""
+"Choose which hreflang tags will appear on your website.<br/>We recommend "
+"showing both types of hreflang tags as indicated by <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google "
+"documentation</a>.<br/>Removing Country Locale when having multiple Country "
+"Locales of the same language (ex. English UK and English US) will result in "
+"showing one hreflang tag with link to just one of the region locales for "
+"that language."
+msgstr ""
+"Vali, millised hreflang märgendid kuvatakse sinu veebisaidil.<br/>Soovitame "
+"kuvada mõlemat tüüpi hreflang märgendeid, nagu on näidatud <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google'i "
+"dokumentatsioonis</a>.<br/>Kui sama keele jaoks on mitu riigilokaati (nt "
+"inglise UK ja inglise US), siis riigilokaadi eemaldamine toob kaasa ühe "
+"hreflang märgendi kuvamise, mis viitab vaid ühele selle keele "
+"piirkondlikule lokaadile."
+
+msgid "Default (example: en-US, fr-CA, etc.)"
+msgstr "Vaikimisi (näide: en-US, fr-CA, jne)"
+
+msgid "Regional (example: en, fr, es, etc.)"
+msgstr "Piirkondlik (näide: en, fr, es, jne)"
+
+#, tp-glo-d311355a
+msgid "HTML Lang Attribute Format"
+msgstr "HTML lang-atribuudi vorming"
+
+#, tp-glo-d311355a
+msgid ""
+"Change lang attribute of the html tag to a format that includes country "
+"regional or not. <br>In HTML, the lang attribute (<html lang=\"en-US\">)  "
+"should be used to  specify the language of text content so that the  "
+"browser can correctly display or process  your content (eg. for  "
+"hyphenation, styling, spell checking, etc)."
+msgstr ""
+"Muuda HTML-märgendi lang-atribuuti vormingusse, mis sisaldab riiki/regiooni "
+"või mitte. <br>HTML-is tuleks lang-atribuuti (<html lang=\"en-US\">) "
+"kasutada tekstisisu keele määramiseks, et brauser saaks sinu sisu õigesti "
+"kuvada või töödelda (nt poolituse, kujunduse, õigekirjakontrolli jne jaoks)."
+
+msgid "Load legacy Language Switcher"
+msgstr "Laadi vananenud keelelüliti"
+
+#, tp-glo-da70db08
+msgid ""
+"Applies to all types of language switchers (floating, shortcode, and menu). "
+"When enabled, the site will revert to using the original Language Switcher "
+"configured in the General Settings tab, replacing the new customizable "
+"version. Your existing switcher settings will remain saved, but they will "
+"be ignored while this option is active."
+msgstr ""
+"Kehtib kõigile keelelüliti tüüpidele (hõljuv, shortcode ja menüü). Kui see "
+"on lubatud, naaseb sait algse keelelüliti kasutamise juurde, mis on "
+"seadistatud Üldseadete vahekaardil, asendades sellega uue kohandatava "
+"versiooni. Olemasolevad keelelüliti seaded jäävad salvestatuks, kuid neid "
+"eiratakse, kui see valik on aktiivne."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "Load legacy SEO Pack Add-On"
+msgstr "Laadi vananenud SEO Packi lisa"
+
+#, tp-ai, tp-ctx-07893e52, tp-ctx-a6928204, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"In case the recent migration to the new slug rewrite is causing trouble, "
+"set this to Yes to use the old method <br> Please <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">open a support ticket</a> letting us know of the issues "
+"you are having."
+msgstr ""
+"Kui hiljutine üleminek uuele slug ümberkirjutamisele tekitab probleeme, "
+"määra see väärtuseks Jah, et kasutada vana meetodit. <br> Palun <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">ava tugipilet</a>, teavitades meid tekkivatest "
+"probleemidest."
+
+msgid "Manual Translation Only"
+msgstr "Ainult käsitsi tõlkimine"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress pro-actively scans and saves strings in the database when "
+"users access translated pages. <br>This setting disables this functionality "
+"and only allows translation and string saving when inside the Translation "
+"Editor. <br>Also disables machine translation outside the Translation "
+"Editor, giving you better control over character spending, by translating "
+"only the pages you visit in the Translation Editor."
+msgstr ""
+"TranslatePress skaneerib ja salvestab sõnesid proaktiivselt andmebaasi, kui "
+"kasutajad pääsevad tõlgitud lehtedele ligi. <br>See seade keelab selle "
+"funktsionaalsuse ja lubab tõlkimise ning sõnede salvestamise ainult "
+"Tõlkeredaktori sees. <br>Keelab samuti masintõlkimise Tõlkeredaktori "
+"väliselt, andes teile parema kontrolli tähemärkide kulutamise üle, tõlkides "
+"ainult neid lehti, mida külastate Tõlkeredaktoris."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Open language switcher only on click"
+msgstr "Ava keelelüliti ainult klõpsates"
+
+#, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of "
+"hovering.<br> Close it by clicking on it, anywhere else on the screen or by "
+"pressing the escape key. This will affect only the shortcode language "
+"switcher."
+msgstr ""
+"Ava keelelüliti shortcode sellele klõpsates, mitte hiirega peale "
+"minnes.<br> Sulge see, klõpsates sellele, mujale ekraanil või vajutades "
+"Escape klahvi. See mõjutab ainult shortcode keelelülitit."
+
+msgid "Show opposite language in the language switcher"
+msgstr "Näita keelelülitis teist keelt"
+
+#, tp-glo-da70db08
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one.<br> Only works when there are exactly two "
+"languages, the default one and a translation one.<br>This will affect the "
+"shortcode language switcher and floating language switcher as well.<br> To "
+"achieve this in menu language switcher go to Appearance->Menus->Language "
+"Switcher and select Opposite Language."
+msgstr ""
+"Muudab keelelüliti nupuks, mis näitab teist saadaolevat keelt, mitte "
+"praegust.<br> Töötab ainult siis, kui on täpselt kaks keelt: vaikekeel ja "
+"tõlkekeel.<br>See mõjutab ka shortcode keelelülitit ja hõljuvat "
+"keelelülitit.<br> Menüü keelelüliti jaoks mine Välimus->Menüüd->Keelelüliti "
+"ja vali Teine keel."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization failed."
+msgstr "TranslatePress gettext andmebaasi optimeerimine ebaõnnestus."
+
+#, tp-ai
+msgid "Retry"
+msgstr "Proovi uuesti"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize its gettext database tables. Back up the "
+"database, then <a href=\"%s\">start the optimization</a>."
+msgstr ""
+"TranslatePress vajab gettext andmebaasi tabelite optimeerimist. Tee "
+"andmebaasi varukoopia, seejärel <a href=\"%s\">alusta optimeerimist</a>."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Pending gettext database optimization"
+msgstr "Ootel gettext andmebaasi optimeerimine"
+
+#, tp-glo-ee8b4f9f
+msgid "Optimize TranslatePress database tables"
+msgstr "Optimeeri TranslatePressi andmebaasi tabelid"
+
+msgid "<a href=\"%s\">Click here</a> to access the database optimization tool."
+msgstr ""
+"<a href=\"%s\">Klõpsa siin</a>, et pääseda ligi andmebaasi "
+"optimeerimistööriistale."
+
+msgid ""
+"It helps remove possible duplicate translations, clear unnecessary data and "
+"repair possible metadata issues."
+msgstr ""
+"See aitab eemaldada võimalikud korduvad tõlked, kustutada ebavajalikud "
+"andmed ja parandada võimalikud metaandmete probleemid."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Here</a> you can observe the last 5 SQL "
+"errors relevant to TranslatePress if they exist."
+msgstr ""
+"<a href=\"%s\" target=\"_blank\">Siin</a> saad vaadata 5 viimast "
+"TranslatePressiga seotud SQL viga, kui neid on."
+
+msgid "Troubleshooting"
+msgstr "Tõrkeotsing"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext strings"
+msgstr "Välista Gettext-sõned"
+
+msgid "Debug"
+msgstr "Silumine"
+
+msgid "Custom languages"
+msgstr "Kohandatud keeled"
+
+msgid "Miscellaneous options"
+msgstr "Mitmesugused valikud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Language Switcher"
+msgstr "Keelevahetaja"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings & pages"
+msgstr "Välista sõned ja lehed"
+
+msgid "Automatic Translation Memory"
+msgstr "Automaatne tõlkemälu"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Serve same translation for similar text. The strings need to have a "
+"percentage of 95% similarity.<br>Helps prevent losing existing translation "
+"when correcting typos or making minor adjustments to the original text. "
+"<br>If a translation already exists for a very similar original string, it "
+"will automatically be used for the current original string.<br>Does not "
+"work when making changes to a text that is part of a translation block "
+"unless the new text is manually merged again in a translation "
+"block.<br>Each string needs to have a minimum of 50 characters."
+msgstr ""
+"Kasuta sarnase teksti jaoks sama tõlget. Sõned peavad olema 95% ulatuses "
+"sarnased.<br>Aitab vältida olemasoleva tõlke kaotamist, kui parandatakse "
+"trükivigu või tehakse originaaltekstis väiksemaid muudatusi. <br>Kui väga "
+"sarnase originaalsõne jaoks on juba tõlge olemas, kasutatakse seda "
+"automaatselt ka praeguse originaalsõne jaoks.<br>Ei tööta, kui muudetakse "
+"teksti, mis on osa tõlkeplokist, välja arvatud juhul, kui uus tekst "
+"ühendatakse käsitsi uuesti tõlkeplokiga.<br>Iga sõne peab olema vähemalt 50 "
+"tähemärki pikk."
+
+msgid ""
+"WARNING: This feature can negatively impact page loading times in secondary "
+"languages, particularly with large databases (for example websites with a "
+"lot of pages or products). If you experience slow loading times, disable "
+"this and try again."
+msgstr ""
+"HOIATUS: See funktsioon võib halvendada lehe laadimisaegu teistes keeltes, "
+"eriti suurte andmebaaside puhul (näiteks veebisaitidel, kus on palju lehti "
+"või tooteid). Kui ilmneb aeglane laadimine, keelake see funktsioon ja "
+"proovige uuesti."
+
+msgid "Fix missing dynamic content"
+msgstr "Paranda puuduv dünaamiline sisu"
+
+#, tp-glo-7f2a0b8c
+msgid ""
+"May help fix missing content inserted using JavaScript. <br> It shows "
+"dynamically inserted content in original language for a moment before the "
+"translation request is finished."
+msgstr ""
+"Võib aidata parandada JavaScriptiga lisatud puuduvat sisu. <br> See kuvab "
+"dünaamiliselt lisatud sisu originaalkeeles hetkeks enne tõlketaotluse "
+"lõpetamist."
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post content and title"
+msgstr "Filtreeri Gettext märgendus postituse sisust ja pealkirjast"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"content and post title. Does not affect previous post content. "
+"<br/><strong>Database backup is recommended before switching on.</strong>"
+msgstr ""
+"Filtreerib Gettext märgenduse, näiteks #!trpst#trp-gettext, kõigist "
+"uuendatud postituste sisust ja pealkirjadest. Ei mõjuta varasemat "
+"postituste sisu.<br/><strong>Enne sisse lülitamist soovitatakse teha "
+"andmebaasi varukoopia.</strong>"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post meta"
+msgstr "Filtreeri Gettext märgendus postituse metaandmetest"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"meta. Does not affect previous post meta. <br/><strong>Database backup is "
+"recommended before switching on.</strong>"
+msgstr ""
+"Filtreerib Gettext märgenduse, näiteks #!trpst#trp-gettext, kõigist "
+"uuendatud postituste metaandmetest. Ei mõjuta varasemaid postituste "
+"metaandmeid.<br/><strong>Enne sisse lülitamist soovitatakse teha andmebaasi "
+"varukoopia.</strong>"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Abilities for managing TranslatePress configuration."
+msgstr "Võimalused TranslatePressi seadistuse haldamiseks."
+
+#, tp-ai
+msgid "Add a translation language"
+msgstr "Lisa tõlkekeel"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Adds a translation language to TranslatePress. Enforces the same "
+"per-license limit as the settings UI."
+msgstr ""
+"Lisab TranslatePressisse tõlkekeele. Rakendab sama litsentsipiirangut kui "
+"seadistuste kasutajaliides."
+
+#, tp-ai, tp-glo-8896ebe8
+msgid "WordPress locale code (e.g. fr_FR, de_DE)."
+msgstr "WordPressi lokaadi kood (nt fr_FR, de_DE)."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Optional URL slug. Defaults to the ISO language code if omitted."
+msgstr "Valikuline URL slug. Vaikimisi kasutatakse ISO keelekoodi, kui see on puudu."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Set TranslatePress license key"
+msgstr "Määra TranslatePressi litsentsivõti"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Saves a TranslatePress license key and triggers a remote license check, "
+"mirroring the onboarding flow."
+msgstr ""
+"Salvestab TranslatePressi litsentsivõtme ja käivitab "
+"kaug-litsentsikontrolli, jäljendades kasutuselevõtu protsessi."
+
+#, tp-ai
+msgid "The license key to activate."
+msgstr "Aktiveeritav litsentsivõti."
+
+msgid "Enable Automatic Translation"
+msgstr "Luba automaatne tõlkimine"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Turns on Automatic Translation. A valid TranslatePress license is required "
+"only when the resolved engine is TranslatePress AI (mtapi); Google "
+"Translate and DeepL do not require one. If no engine is passed and none is "
+"configured, defaults to mtapi."
+msgstr ""
+"Lülitab sisse automaatse tõlke. Kehtiv TranslatePress litsents on nõutav "
+"ainult siis, kui kasutatav mootor on TranslatePress AI (mtapi); Google "
+"Translate ja DeepL seda ei nõua. Kui mootorit ei edastata ja ühtegi pole "
+"seadistatud, on vaikimisi väärtus mtapi."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-c6709f3f
+msgid ""
+"Optional translation-engine slug to select (e.g. \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). When omitted, keeps the "
+"already-configured engine, or defaults to \"mtapi\" if none is configured."
+msgstr ""
+"Valikuline tõlkemootori slug valimiseks (nt \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). Kui see jäetakse ära, säilitatakse "
+"juba seadistatud mootor või kasutatakse vaikimisi väärtust \"mtapi\", kui "
+"ühtegi pole seadistatud."
+
+#, tp-ai
+msgid "List configured languages"
+msgstr "Loenda seadistatud keeled"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Returns the languages currently configured in TranslatePress, including the "
+"default language and per-language slug/publish state."
+msgstr ""
+"Tagastab TranslatePressis hetkel seadistatud keeled, sealhulgas vaikekeele "
+"ning iga keele slug ja avaldamise oleku."
+
+#, tp-ai
+msgid "List available language codes"
+msgstr "Loenda saadaolevad keelekoodid"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Returns the full catalog of language codes TranslatePress recognizes, with "
+"their English names."
+msgstr ""
+"Tagastab täieliku kataloogi TranslatePressi tuntud keelekoodidest nende "
+"inglisekeelsete nimedega."
+
+#, tp-ai
+msgid "Remove a translation language"
+msgstr "Eemalda tõlkekeel"
+
+#, tp-ai
+msgid ""
+"Removes a configured translation language. The default language cannot be "
+"removed without first reassigning the default."
+msgstr ""
+"Eemaldab seadistatud tõlkekeele. Vaikekeelt ei saa eemaldada ilma "
+"kõigepealt uut vaikekeelt määramata."
+
+#, tp-ai
+msgid "Locale code of the language to remove."
+msgstr "Eemaldatava keele lokaadi kood."
+
+#, tp-ai
+msgid "Update a translation language"
+msgstr "Uuenda tõlkekeelt"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"Replaces the slug and publish status of an already-configured translation "
+"language."
+msgstr "Asendab juba seadistatud tõlkekeele slug ja avaldamise oleku."
+
+#, tp-ai
+msgid "Locale code of the language to update."
+msgstr "Uuendatava keele lokaadi kood."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "URL slug for this language."
+msgstr "Selle keele URL slug."
+
+#, tp-ai
+msgid "Whether this language is published on the front end."
+msgstr "Kas see keel on avaldatud esiküljel."
+
+#, tp-ai
+msgid "Set the default language"
+msgstr "Määra vaikekeel"
+
+#, tp-ai
+msgid ""
+"Promotes an already-configured language to be the site default. The "
+"previous default remains in the translation languages list."
+msgstr ""
+"Tõstab juba seadistatud keele saidi vaikekeeleks. Eelmine vaikekeel säilib "
+"tõlkekeelte nimekirjas."
+
+#, tp-ai
+msgid ""
+"Locale code to promote to default. Must already be a configured translation "
+"language."
+msgstr ""
+"Vaikekeeleks tõstetava keele lokaadi kood. Peab olema juba seadistatud "
+"tõlkekeel."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "You do not have permission to manage TranslatePress settings."
+msgstr "Teil puudub õigus hallata TranslatePressi seadistusi."
+
+#, tp-ai
+msgid ""
+"Invalid language code. Allowed characters: A-Z, a-z, 0-9, hyphen, "
+"underscore."
+msgstr "Vigane keelekood. Lubatud märgid: A-Z, a-z, 0-9, sidekriips, alakriips."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Language code \"%s\" is not recognized by TranslatePress."
+msgstr "TranslatePress ei tunne keelekoodi \"%s\" ära."
+
+#, tp-ai
+msgid "Language \"%s\" is already configured."
+msgstr "Keel \"%s\" on juba seadistatud."
+
+#, tp-ai
+msgid ""
+"Your current license allows up to %d additional language(s). Upgrade or "
+"activate a Pro license to add more."
+msgstr ""
+"Teie praegune litsents võimaldab kuni %d täiendavat keelt. Täiendage või "
+"aktiveerige Pro-litsents, et lisada rohkem."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new language during settings sanitization."
+msgstr "TranslatePress lükkas uue keele seadistuste puhastamise käigus tagasi."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Enabling Automatic Translation with the TranslatePress AI engine requires "
+"an active TranslatePress license. Activate a license first with "
+"translatepress/set-license-key, or pass a different engine (e.g. "
+"\"google_translate_v2\", \"deepl\")."
+msgstr ""
+"Automaatse tõlke lubamine mootoriga TranslatePress AI nõuab aktiivset "
+"TranslatePress litsentsi. Aktiveeri kõigepealt litsents käsuga "
+"translatepress/set-license-key või edasta teine mootor (nt "
+"\"google_translate_v2\", \"deepl\")."
+
+msgid "Your license key expired on %s."
+msgstr "Sinu litsentsivõti aegus %s."
+
+#, tp-ai
+msgid "Your license key has expired."
+msgstr "Teie litsentsivõti on aegunud."
+
+msgid "Your license key has been disabled."
+msgstr "Sinu litsentsivõti on keelatud."
+
+#, tp-glo-ee8b4f9f
+msgid "Your TranslatePress license key is invalid or missing."
+msgstr "Sinu TranslatePress litsentsivõti on kehtetu või puudub."
+
+#, tp-ai, tp-glo-666af81f, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from your "
+"TranslatePress account."
+msgstr ""
+"Teie litsentsivõti on selle URL-i jaoks keelatud. Lubage see uuesti oma "
+"TranslatePressi kontolt."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"License key mismatch. The license you entered does not match the "
+"TranslatePress version you have installed."
+msgstr ""
+"Litsentsivõtme mittevastavus. Sisestatud litsents ei vasta installitud "
+"TranslatePressi versioonile."
+
+msgid "Your license key has reached its activation limit."
+msgstr "Sinu litsentsivõti on jõudnud aktiveerimise limiidini."
+
+#, tp-ai
+msgid "An error occurred while activating the license, please try again."
+msgstr "Litsentsi aktiveerimisel ilmnes viga, proovige uuesti."
+
+#, tp-ai
+msgid "Language \"%s\" is not currently configured."
+msgstr "Keel \"%s\" pole hetkel seadistatud."
+
+#, tp-ai
+msgid ""
+"The default language cannot be removed. Set another language as default "
+"first."
+msgstr ""
+"Vaikimisi keelt ei saa eemaldada. Määrake kõigepealt mõni muu keel "
+"vaikimisi keeleks."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Slug is empty after sanitization. Use only URL-safe characters."
+msgstr "Slug on puhastamise järel tühi. Kasutage ainult URL-i jaoks sobivaid märke."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Language \"%s\" is not currently configured. Add it first with "
+"translatepress/add-language."
+msgstr ""
+"Keel \"%s\" pole hetkel seadistatud. Lisage see kõigepealt käsuga "
+"translatepress/add-language."
+
+#, tp-ai
+msgid "The default language is always published and cannot be unpublished."
+msgstr "Vaikimisi keel on alati avaldatud ja seda ei saa avaldamata muuta."
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug \"%1$s\" is already in use by language \"%2$s\"."
+msgstr "Slug \"%1$s\" on juba kasutusel keele \"%2$s\" jaoks."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new settings during sanitization."
+msgstr "TranslatePress lükkas uued seadistused puhastamise käigus tagasi."
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced"
+msgstr "Täpsemad"
+
+msgid "Are you sure you want to remove this item?"
+msgstr "Kas olete kindel, et soovite selle üksuse eemaldada?"
+
+msgid "Remove"
+msgstr "Eemalda"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Add"
+msgstr "Lisa"
+
+msgid "Select..."
+msgstr "Vali..."
+
+msgid "An error occurred, please try again."
+msgstr "Tekkis viga, palun proovi uuesti."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Sinu litsentsivõti on selle URL-i jaoks keelatud. Taasaktiveeri see lehelt "
+"<a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Halda saite."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn’t "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you’ve installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Litsentsivõtme vastuolu.</strong> Sisestatud litsents ei ühti "
+"sinu paigaldatud TranslatePress versiooniga.</p><p>Palun kontrolli, et oled "
+"oma TranslatePress kontolt paigaldanud õige versiooni oma litsentsi "
+"jaoks.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"If you have only the free plugin installed but added a paid license, please "
+"install the paid plugin from your TranslatePress account."
+msgstr ""
+"Kui sul on paigaldatud ainult tasuta pistikprogramm, kuid oled lisanud "
+"tasulise litsentsi, palun paigalda tasuline pistikprogramm oma "
+"TranslatePress kontolt."
+
+msgid "Upgrade your plan to add more sites. %1$sUpgrade now%2$s"
+msgstr "Täienda oma paketti rohkemate saitide lisamiseks. %1$sTäienda nüüd%2$s"
+
+msgid "You have successfully activated your license"
+msgstr "Oled oma litsentsi edukalt aktiveerinud."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "[%s] Low TranslatePress AI Words"
+msgstr "[%s] TranslatePress AI sõnad on lõppemas"
+
+msgid "upgrade your plan"
+msgstr "uuendage oma paketti"
+
+msgid "upgrade your plan or get extra AI Words"
+msgstr "uuendage oma paketti või hankige täiendavaid AI sõnu"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI words are running low on your site."
+msgstr "Teie saidil hakkavad TranslatePress AI sõnad otsa saama."
+
+msgid "Current status: %s words remaining"
+msgstr "Praegune seis: %s sõna jäänud"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Once the remaining AI words run out, automatic translation through "
+"TranslatePress AI will be paused."
+msgstr ""
+"Kui järelejäänud AI sõnad otsa saavad, peatatakse automaatne tõlkimine "
+"TranslatePress AI kaudu."
+
+msgid "To continue translating your content, please %1$s over at %2$s"
+msgstr "Sisu tõlkimise jätkamiseks palun %1$s saidil %2$s"
+
+msgid "Manage Notification: %s"
+msgstr "Halda teavitust: %s"
+
+msgid "Others"
+msgstr "Muud"
+
+msgid "Restrict by Language"
+msgstr "Piira keele järgi"
+
+msgid "Exclude from Language"
+msgstr "Välista keelest"
+
+msgid "Restrict element to language"
+msgstr "Piira element keelele"
+
+msgid "Show this element only in one language."
+msgstr "Näita seda elementi ainult ühes keeles."
+
+msgid "Enable translation"
+msgstr "Luba tõlkimine"
+
+msgid ""
+"Allow translation to the corresponding language only if the content is "
+"written in the default language."
+msgstr ""
+"Lubab tõlkida vastavasse keelde ainult siis, kui sisu on kirjutatud "
+"vaikimisi keeles."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Select language"
+msgstr "Vali keel"
+
+msgid "Choose in which language to show this element."
+msgstr "Vali, millises keeles seda elementi näidata."
+
+msgid "Exclude element from language"
+msgstr "Välista element keelest"
+
+msgid "Exclude this element from specific languages."
+msgstr "Välista see element kindlatest keeltest."
+
+msgid "Select languages"
+msgstr "Vali keeled"
+
+msgid "Choose from which languages to exclude this element."
+msgstr "Vali, millistest keeltest see element välistada."
+
+msgid ""
+"This element will still be visible when you are translating your website "
+"through the Translation Editor."
+msgstr ""
+"See element on nähtav ka siis, kui tõlkid oma veebisaiti tõlkimisredaktori "
+"kaudu."
+
+msgid "The content of this element should be written in the default language."
+msgstr "Selle elemendi sisu peaks olema kirjutatud vaikimisi keeles."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> encountered SQL errors. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Check out the errors</a>."
+msgstr ""
+"<strong>TranslatePress</strong>is ilmnes SQL-vigu. <a href=\"%s\" "
+"title=\"Vaata TranslatePressi SQL-vigu\">Vaata vigu</a>."
+
+msgid "Automatic translation has been disabled."
+msgstr "Automaatne tõlkimine on keelatud."
+
+msgid "Logged errors"
+msgstr "Logitud vead"
+
+#, tp-glo-ee8b4f9f
+msgid "These are the most recent 5 errors logged by TranslatePress:"
+msgstr "Need on TranslatePressi viimased 5 logitud viga."
+
+msgid "Yes"
+msgstr "Jah"
+
+msgid "Why are these errors occuring"
+msgstr "Miks need vead tekivad"
+
+#, tp-glo-c6709f3f, tp-glo-ee8b4f9f
+msgid ""
+"If TranslatePress detects something wrong when executing queries on your "
+"database, it may disable the Automatic Translation feature in order to "
+"avoid any extra charging by Google/DeepL. Automatic Translation needs to be "
+"manually turned on, after you solve the issues."
+msgstr ""
+"Kui TranslatePress tuvastab andmebaasipäringute täitmisel midagi valesti, "
+"võib ta keelata automaatse tõlkimise funktsiooni, et vältida "
+"Google'i/DeepL-i lisatasusid. Automaatne tõlkimine tuleb pärast probleemide "
+"lahendamist käsitsi uuesti sisse lülitada."
+
+msgid ""
+"The SQL errors detected can occur for various reasons including missing "
+"tables, missing permissions for the SQL user to create tables or perform "
+"other operations, problems after site migration or changes to SQL server "
+"configuration."
+msgstr ""
+"Tuvastatud SQL-vead võivad tekkida mitmel põhjusel, sealhulgas puuduvad "
+"tabelid, puuduvad õigused SQL-kasutajal tabelite loomiseks või muude "
+"toimingute tegemiseks, probleemid pärast saidi migreerimist või SQL-serveri "
+"konfiguratsiooni muudatused."
+
+msgid "What you can do in this situation"
+msgstr "Mida saate selles olukorras teha"
+
+msgid "Plan A."
+msgstr "Plaan A."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL settings. Check if no "
+"more errors occur while browsing your website in a translated language. "
+"Look at the timestamps of the errors to make sure you are not seeing the "
+"old errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Minge jaotisse Sätted -> TranslatePress -> Üldine vahekaart ja salvestage "
+"sätted. See genereerib tabelid uuesti teie praeguste SQL-sätete abil. "
+"Kontrollige, kas tõlgitud keeles saidil sirvimisel enam vigu ei teki. "
+"Vaadake vigade ajatempleid, et veenduda, et te ei näe vanu vigu. Kuvatakse "
+"ainult viis viimast viga."
+
+msgid "Plan B."
+msgstr "Plaan B."
+
+msgid "If your problem isn't solved, try the following steps:"
+msgstr "Kui teie probleem ei ole lahendatud, proovige järgmisi samme:"
+
+msgid "Create a backup of your database"
+msgstr "Looge oma andmebaasist varukoopia"
+
+msgid ""
+"Create a copy of each translation table where you encounter errors. You can "
+"copy the table within the same database (trp_dictionary_en_us_es_es_COPY "
+"for example) -- perform this step only if you want to keep the current "
+"translations"
+msgstr ""
+"Looge igast tõlketabelist, kus teil vead tekivad, koopia. Saate tabeli "
+"kopeerida samasse andmebaasi (nt trp_dictionary_en_us_es_es_COPY) -- tehke "
+"see samm ainult siis, kui soovite praegused tõlked säilitada"
+
+msgid "Remove the trouble tables by executing the DROP function on them"
+msgstr "Kustutage probleemsed tabelid DROP-käsu abil"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL server."
+msgstr ""
+"Minge jaotisse Sätted -> TranslatePress -> Üldine vahekaart ja salvestage "
+"sätted. See genereerib tabelid uuesti teie praeguse SQL-serveri abil."
+
+msgid ""
+"Copy the relevant content from the duplicated tables "
+"(trp_dictionary_en_us_es_es_COPY for example) in the newly generated table "
+"(trp_dictionary_en_us_es_es) -- perform this step only if you want to keep "
+"the current translations"
+msgstr ""
+"Kopeerige asjakohane sisu kopeeritud tabelitest (nt "
+"trp_dictionary_en_us_es_es_COPY) äsja loodud tabelisse "
+"(trp_dictionary_en_us_es_es) -- tehke see samm ainult siis, kui soovite "
+"praegused tõlked säilitada"
+
+msgid ""
+"Test it to see if everything is working. If something went wrong, you can "
+"restore the backup that you've made at the first step. Check if no more "
+"errors occur while browsing your website in a translated language. Look at "
+"the timestamps of the errors to make sure you are not seeing the old "
+"errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"Testige, et näha, kas kõik toimib. Kui midagi läks valesti, saate taastada "
+"esimeses etapis tehtud varukoopia. Kontrollige, kas tõlgitud keeles saidil "
+"sirvimisel enam vigu ei teki. Vaadake vigade ajatempleid, et veenduda, et "
+"te ei näe vanu vigu. Kuvatakse ainult viis viimast viga."
+
+msgid "Plan C."
+msgstr "Plaan C."
+
+msgid ""
+"If your problem still isn't solved, try asking your hosting about your "
+"errors. The most common issue is missing permissions for the SQL user, such "
+"as the Create Tables permission."
+msgstr ""
+"Kui teie probleem ei ole endiselt lahendatud, proovige küsida oma "
+"veebimajutajalt nende vigade kohta. Kõige levinum probleem on "
+"SQL-kasutajalt puuduvad õigused, näiteks tabelite loomise õigus."
+
+msgid "Could not install. Try again from <a href=\"%s\" >Plugins Dashboard.</a>"
+msgstr ""
+"Ei õnnestunud installida. Proovige uuesti <a href=\"%s\" >pluginate "
+"lehel.</a>"
+
+msgid "Settings scope unknown."
+msgstr "Sätete ulatus on teadmata."
+
+msgid "Legacy disabled."
+msgstr "Pärand on keelatud."
+
+msgid "Change language to %s"
+msgstr "Muuda keel: %s"
+
+msgid "Automatic Translation"
+msgstr "Automaatne tõlge"
+
+msgid "Unsupported languages"
+msgstr "Toetamata keeled"
+
+msgid ""
+"The selected automatic translation engine does not provide support for "
+"these languages.<br>You can still manually translate pages in these "
+"languages using the Translation Editor."
+msgstr ""
+"Valitud automaattõlkemootor ei toeta neid keeli.<br/>Saad siiski neis "
+"keeltes lehti käsitsi tõlkida tõlkeredaktori abil."
+
+msgid "General"
+msgstr "Üldine"
+
+#, tp-ai
+msgid "Glossary"
+msgstr "Sõnastik"
+
+#, tp-glo-91460d88
+msgid "API key validation failed."
+msgstr "API võtme valideerimine nurjus."
+
+#, tp-glo-91460d88
+msgid "API key verification was successful."
+msgstr "API võtme kinnitamine õnnestus."
+
+#, tp-glo-d6a22d74
+msgid "Please enter your Google Translate key."
+msgstr "Sisesta oma Google Translate võti."
+
+#, tp-glo-ee8b4f9f
+msgid "Not TranslatePress onboarding page."
+msgstr "See pole TranslatePressi tutvustusleht."
+
+msgid "Step %s does not exist"
+msgstr "Samm %s ei eksisteeri."
+
+msgid "Welcome"
+msgstr "Tere tulemast"
+
+msgid "Add Languages"
+msgstr "Lisa keeled"
+
+msgid "Enable Addons"
+msgstr "Luba lisad"
+
+msgid "Finalize"
+msgstr "Lõpeta"
+
+msgid "Exit Setup"
+msgstr "Välju seadistamisest"
+
+msgid "Upgrade"
+msgstr "Täienda"
+
+msgid "Nothing here"
+msgstr "Siin pole midagi"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license is missing or invalid. "
+"<br/>Please %1$sregister your copy%2$s to enable automatic website "
+"translation via TranslatePress AI, premium addons, automatic updates and "
+"support. Need a license key? %3$sPurchase one now%4$s"
+msgstr ""
+"Sinu <strong>TranslatePress</strong> litsents puudub või on kehtetu. "
+"<br/>Palun %1$sregistreeri oma koopia%2$s, et võimaldada automaatset "
+"veebisaidi tõlkimist TranslatePress AI abil, premium-lisamooduleid, "
+"automaatseid uuendusi ja tuge. Vajad litsentsivõtit? %3$sOsta see kohe%4$s"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"Sinu litsents on selle URL jaoks keelatud. Luba see uuesti saidil <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Halda saite."
+
+msgid ""
+"You have reached the activation limit for your <strong>%1$s</strong> "
+"license. <br/>Manage your active sites from %2$s your account %3$s."
+msgstr ""
+"Oled jõudnud oma <strong>%1$s</strong> litsentsi aktiveerimise limiidini. "
+"<br/>Halda oma aktiivseid saite %2$s oma konto %3$s kaudu."
+
+msgid ""
+"License key mismatch. The license you entered doesn’t match the "
+"<strong>%1$s</strong> version you have installed. <br/>Please check that "
+"you’ve installed the correct version for your license from your "
+"%2$sTranslatePress account%3$s."
+msgstr ""
+"Litsentsivõti ei sobi. Sisestatud litsents ei vasta installitud "
+"<strong>%1$s</strong> versioonile. <br/>Palun kontrolli oma "
+"%2$sTranslatePress Account%3$s kaudu, kas oled installinud oma litsentsi "
+"jaoks õige versiooni."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<br/>If you have only the free plugin installed but added a paid license, "
+"please install the paid plugin from your TranslatePress account."
+msgstr ""
+"<br/>Kui oled installinud ainult tasuta plugina, kuid lisanud makstud "
+"litsentsi, palun installi makstud plugin oma TranslatePress Account kaudu."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license has expired. <br/>Please "
+"%1$sRenew Your Licence%2$s to continue receiving access to automatic "
+"translations via TranslatePress AI, premium addons, product downloads, and "
+"automatic updates. %3$sRenew now %4$s"
+msgstr ""
+"Sinu <strong>TranslatePress</strong> litsents on aegunud. <br/>Palun "
+"%1$suuenda oma litsents%2$s, et jätkata juurdepääsu automaatsetele "
+"tõlgetele TranslatePress AI abil, premium-lisamoodulitele, toote "
+"allalaadimistele ja automaatsetele uuendustele. %3$sUuenda kohe %4$s"
+
+msgid "Error: "
+msgstr "Viga: "
+
+msgid "Something went wrong, please try again."
+msgstr "Midagi läks valesti, palun proovi uuesti."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Your <strong>TranslatePress</strong> license will expire on %1$s. Please "
+"%2$sRenew Your Licence%3$s to continue receiving access to automatic "
+"translations via TP AI, premium addons, product downloads and automatic "
+"updates. %4$sRenew Now%5$s"
+msgstr ""
+"Sinu <strong>TranslatePress</strong> litsents aegub %1$s. Palun %2$suuenda "
+"oma litsents%3$s, et jätkata juurdepääsu automaatsetele tõlgetele TP AI "
+"abil, premium-lisamoodulitele, toote allalaadimistele ja automaatsetele "
+"uuendustele. %4$sUuenda kohe%5$s"
+
+msgid "Please %1$senter%2$s your license key to enable %3$s automatic translation."
+msgstr ""
+"Palun %1$ssisesta%2$s oma litsentsivõti, et võimaldada %3$s automaatset "
+"tõlkimist."
+
+msgid ""
+"%1$s automatic translation requires an active license. Please %2$srenew%3$s "
+"your license or purchase a new one %4$shere%5$s."
+msgstr ""
+"%1$s automaatne tõlkimine nõuab aktiivset litsentsi. Palun %2$suuenda%3$s "
+"oma litsents või osta uus %4$ssiit%5$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You have less than 5,000 TranslatePress AI words remaining. To continue "
+"automatically translating your website, please %spurchase additional AI "
+"words at a discount from your account%s."
+msgstr ""
+"Sul on jäänud vähem kui 5000 TranslatePress AI sõna. Veebisaidi automaatse "
+"tõlkimise jätkamiseks palun %sosta täiendavaid AI sõnu soodushinnaga oma "
+"kontolt%s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You do not have a valid license for <strong>TranslatePress</strong>. "
+"%1$sGet one for free%2$s to get access to TranslatePress AI."
+msgstr ""
+"Sul pole kehtivat <strong>TranslatePress</strong> litsentsi. %1$sHangi see "
+"tasuta%2$s TranslatePress AI kasutamiseks."
+
+msgid " Error: "
+msgstr " Viga: "
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Learn more</a>."
+msgstr ""
+"<strong>UUS:</strong> <strong>Different Domain per Language</strong> "
+"lisamoodul on saadaval! Tõsta oma globaalset SEO ja loo kohalik kogemus "
+"riigispetsiifiliste domeenidega nagu .de või .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Loe lähemalt</a>."
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. Upgrade to <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business or Developer</a> to access it + "
+"more premium perks!"
+msgstr ""
+"<strong>UUS:</strong> <strong>Different Domain per Language</strong> "
+"lisamoodul on saadaval! Tõsta oma globaalset SEO ja loo kohalik kogemus "
+"riigispetsiifiliste domeenidega nagu .de või .fr. Täienda <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business või Developer</a> versioonile, et "
+"saada juurdepääs sellele ja teistele premium-eelistele!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The daily quota for machine translation characters exceeded. Please check "
+"the <strong>TranslatePress -> <a href=\"%s\">Automatic "
+"Translation</a></strong> page for more information."
+msgstr ""
+"Päevane masintõlke tähemärkide kvoot on ületatud. Palun vaata lisateavet "
+"lehel <strong>TranslatePress -> <a href=\"%s\">Automaatne "
+"tõlkimine</a></strong>."
+
+msgid "Marketing optin"
+msgstr "Turundusnõusolek"
+
+msgid ""
+"Opt in to our security and feature updates notifications, and non-sensitive "
+"diagnostic tracking."
+msgstr ""
+"Nõustu meie turbe- ja funktsiooniuuenduste teadete ning mittetundlike "
+"diagnostiliste jälgimisandmetega."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Preferred User Language"
+msgstr "TranslatePressi eelistatud kasutajakeel"
+
+msgid "Preferred language to navigate the site"
+msgstr "Eelistatud keel saidil navigeerimiseks"
+
+msgid ""
+"The language is automatically set based by the last visited language by the "
+"user."
+msgstr "Keel määratakse automaatselt kasutaja viimati külastatud keele põhjal."
+
+msgid "Always use this language"
+msgstr "Kasuta alati seda keelt"
+
+msgid ""
+"By checking this setting the preferred language will remain the one "
+"selected above, without the possibility of being changed in the "
+"frontend.<br>This language will be used in different operations such as "
+"sending email to the user."
+msgstr ""
+"Selle seade märkimisel jääb eelistatud keeleks ülal valitud keel, ilma et "
+"seda saaks avalikus vaates muuta.<br>Seda keelt kasutatakse erinevates "
+"toimingutes, näiteks kasutajale e-kirja saatmisel."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Hello! Seems like you've been using <strong>TranslatePress</strong> for a "
+"while now to translate your website. That's awesome! "
+msgstr ""
+"Tere! Paistab, et <strong>TranslatePress</strong> on teie veebisaidi "
+"tõlkimiseks juba mõnda aega kasutuses olnud. See on suurepärane! "
+
+#, tp-glo-8896ebe8
+msgid ""
+"If you can spare a few moments to rate it on WordPress.org it would help us "
+"a lot (and boost my motivation)."
+msgstr ""
+"Kui leiate mõne hetke, et seda WordPress.org-is hinnata, aitaksite meid "
+"palju (ja tõstaksite mu motivatsiooni)."
+
+#, tp-glo-ee8b4f9f
+msgid "~ Razvan, developer of TranslatePress"
+msgstr "~ Razvan, TranslatePress arendaja"
+
+#, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid "Rate TranslatePress on WordPress.org plugin page"
+msgstr "Hinda TranslatePress WordPress.org pistikprogrammi lehel"
+
+msgid "Ok, I will gladly help!"
+msgstr "Jah, aitan hea meelega!"
+
+msgid "No, thanks."
+msgstr "Ei, aitäh."
+
+msgid "Full Language Names"
+msgstr "Täielikud keelenimed"
+
+msgid "Short Language Names"
+msgstr "Lühikesed keelenimed"
+
+msgid "Flags with Full Language Names"
+msgstr "Lipud täielike keelenimedega"
+
+msgid "Flags with Short Language Names"
+msgstr "Lipud lühikeste keelenimedega"
+
+msgid "Only Flags"
+msgstr "Ainult lipud"
+
+#, tp-glo-d311355a
+msgid "Full Language Names No HTML"
+msgstr "Täielikud keelenimed ilma HTML-ta"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Right"
+msgstr "All paremal"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Left"
+msgstr "All vasakul"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Right"
+msgstr "Üleval paremal"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Left"
+msgstr "Üleval vasakul"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Dark"
+msgstr "Tume"
+
+msgid "Light"
+msgstr "Hele"
+
+msgid "Install & Activate"
+msgstr "Paigalda ja aktiveeri"
+
+msgid "Invalid language code. Please try again."
+msgstr "Kehtetu keelekood. Palun proovi uuesti."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Language codes can contain only A-Z a-z 0-9 - _ characters. Check your "
+"language codes in TranslatePress General Settings."
+msgstr ""
+"Keelekoodid võivad sisaldada ainult A-Z a-z 0-9 - _ märke. Kontrolli oma "
+"keelekoode TranslatePressi üldseadetes."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Error! Duplicate URL slug values."
+msgstr "Viga! URL slug duplikaatväärtused."
+
+#, tp-glo-d1526d97
+msgid ""
+"You cannot select two languages that have the same <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso code</a> but different formalities because doing so "
+"will lead to duplicate <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang tags</a>."
+msgstr ""
+"Sa ei saa valida kahte keelt, millel on sama <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">ISO kood</a>, kuid erinev vormilisus, kuna see tekitab "
+"dubleeritud <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang märgendid</a>."
+
+msgid ""
+"Duplicate language detected.<br>Each language can only be added once to "
+"ensure accurate translation management.<br> Please change the duplicate "
+"language entry and try again. "
+msgstr ""
+"Tuvastati korduv keel.<br>Iga keelt saab lisada ainult üks kord, et tagada "
+"täpne tõlkehaldus.<br>Palun muuda korduv keelekirje ja proovi uuesti. "
+
+msgid "Current Language"
+msgstr "Praegune keel"
+
+msgid "Opposite Language"
+msgstr "Vastupidine keel"
+
+msgid "Addons"
+msgstr "Lisad"
+
+msgid "Settings"
+msgstr "Seaded"
+
+msgid "Pro Features"
+msgstr "Pro funktsioonid"
+
+msgid "Activate License"
+msgstr "Aktiveeri litsents"
+
+msgid "Need Help?"
+msgstr "Vajad abi?"
+
+msgid "Recent community discussions"
+msgstr "Hiljutised kogukonna arutelud"
+
+msgid "Loading..."
+msgstr "Laadimine..."
+
+#, tp-ctx-7832384c
+msgid "Unable to load forum posts"
+msgstr "Foorumi postitusi ei õnnestunud laadida."
+
+msgid "Ask a Question"
+msgstr "Esita küsimus"
+
+msgid "View All Topics"
+msgstr "Vaata kõiki teemasid"
+
+msgid "by"
+msgstr "postitas"
+
+msgid "Have a question?"
+msgstr "Kas sul on küsimus?"
+
+msgid ""
+"Get help directly from the plugin developers, suggest improvements, or "
+"share your feedback!"
+msgstr ""
+"Saa abi otse pistikprogrammi arendajatelt, soovita täiustusi või jaga "
+"tagasisidet!"
+
+msgid "Tip for faster help:"
+msgstr "Nipp kiirema abi saamiseks:"
+
+msgid ""
+"Include what you tried, what you expected, and what happened. Screenshots "
+"help!"
+msgstr "Kirjelda, mida proovisid, mida ootasid ja mis juhtus. Ekraanipildid aitavad!"
+
+msgid "Toggle support chat"
+msgstr "Lülita tugivestlus sisse/välja"
+
+msgid "Ask the community"
+msgstr "Küsi kogukonnalt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close"
+msgstr "Sulge"
+
+msgid "Empty feed response"
+msgstr "Tühi voo vastus"
+
+msgid "Unable to parse feed"
+msgstr "Voo töötlemine ebaõnnestus"
+
+msgid "Just now"
+msgstr "Just nüüd"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "%d tund tagasi"
+msgstr[1] "%d tundi tagasi"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "%d päev tagasi"
+msgstr[1] "%d päeva tagasi"
+
+msgid "Source"
+msgstr "Allikas"
+
+msgid "Srcset"
+msgstr "Srcset"
+
+msgid "Alt attribute"
+msgstr "Alt atribuut"
+
+msgid "Title attribute"
+msgstr "Pealkirja atribuut"
+
+msgid "Anchor link"
+msgstr "Ankru link"
+
+msgid "Placeholder attribute"
+msgstr "Kohahoidja atribuut"
+
+msgid "Submit attribute"
+msgstr "Saatmise atribuut"
+
+msgid "Text"
+msgstr "Tekst"
+
+msgid "Video Poster"
+msgstr "Video pisipilt"
+
+msgid "plural form"
+msgstr "mitmuse vorm"
+
+msgid "one"
+msgstr "üks"
+
+msgid "few"
+msgstr "mõned"
+
+msgid "many"
+msgstr "paljud"
+
+msgid "other"
+msgstr "muu"
+
+msgid "Saved"
+msgstr "Salvestatud"
+
+msgid "Save"
+msgstr "Salvesta"
+
+msgid "Saving translation..."
+msgstr "Tõlget salvestatakse..."
+
+msgid "You have unsaved changes!"
+msgstr "Sul on salvestamata muudatusi!"
+
+msgid "Discard changes"
+msgstr "Loobu muudatustest"
+
+msgid "Discard All"
+msgstr "Loobu kõigist"
+
+#, tp-ctx-2edc90df
+msgid "Loading Strings..."
+msgstr "Sõnede laadimine..."
+
+#, tp-ctx-8a82cc9e
+msgid "Select string to translate..."
+msgstr "Vali sõne tõlkimiseks..."
+
+msgid "Close Editor"
+msgstr "Sulge redaktor"
+
+msgid "From"
+msgstr "Alates"
+
+msgid "To"
+msgstr "Kuni"
+
+msgid "Add Media"
+msgstr "Lisa meedium"
+
+msgid "Other languages"
+msgstr "Teised keeled"
+
+msgid "Context"
+msgstr "Kontekst"
+
+msgid "View Website As"
+msgstr "Vaata veebisaiti kui"
+
+msgid "Available in our Pro Versions"
+msgstr "Saadaval meie Pro versioonides"
+
+msgid "Select or Upload Media"
+msgstr "Vali või laadi üles meedium"
+
+msgid "Use this media"
+msgstr "Kasuta seda meediumi"
+
+msgid "Translate"
+msgstr "Tõlgi"
+
+msgid "Translate entire block element"
+msgstr "Tõlgi kogu plokkelement"
+
+#, tp-ctx-2edc90df
+msgid "Split block to translate strings individually"
+msgstr "Tükelda plokk sõnede eraldi tõlkimiseks"
+
+#, tp-glo-e780391b
+msgid "Save changes to translation. Shortcut: CTRL(⌘) + S"
+msgstr "Salvesta tõlkemuudatused. Kiirklahv: CTRL(⌘) + S"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to next string in dropdown list. Shortcut: CTRL(⌘) + ALT + Right "
+"Arrow"
+msgstr ""
+"Liigu järgmise sõne juurde ripploendis. Otsetee: CTRL(⌘) + ALT + parem "
+"nooleklahv"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to previous string in dropdown list. Shortcut: CTRL(⌘) + ALT + "
+"Left Arrow"
+msgstr ""
+"Liigu eelmise sõne juurde ripploendis. Otsetee: CTRL(⌘) + ALT + vasak "
+"nooleklahv"
+
+#, tp-glo-e780391b
+msgid "Discard all changes. Shortcut: CTRL(⌘) + ALT + Z"
+msgstr "Hülga kõik muudatused. Kiirklahv: CTRL(⌘) + ALT + Z"
+
+#, tp-glo-e780391b
+msgid ""
+"Discard changes to this text box. To discard changes to all text boxes use "
+"shortcut: CTRL(⌘) + ALT + Z"
+msgstr ""
+"Hülga selle tekstikasti muudatused. Kõigi tekstikastide muudatuste "
+"hülgamiseks kasuta kiirklahvi: CTRL(⌘) + ALT + Z"
+
+msgid "Dismiss tooltip"
+msgstr "Sulge vihje"
+
+msgid "Quick Intro"
+msgstr "Kiire tutvustus"
+
+msgid "Are you sure you want to split this phrase into smaller parts?"
+msgstr "Kas olete kindel, et soovite selle fraasi väiksemateks osadeks jagada?"
+
+#, tp-ctx-8a82cc9e
+msgid "This string is not ready for translation yet. <br>Try again in a moment..."
+msgstr "See sõne ei ole veel tõlkimiseks valmis. <br>Proovi hetke pärast uuesti..."
+
+msgid ""
+"For this option to work, please update the Browse as other role add-on to "
+"the latest version."
+msgstr ""
+"Selle valiku toimimiseks värskendage lisamoodul Browse as other role "
+"uusimale versioonile."
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-b7a08771
+msgid "To translate slugs, please update the SEO Pack add-on to the latest version."
+msgstr "Slugide tõlkimiseks palun uuenda SEO Pack lisamoodul viimasele versioonile."
+
+#, tp-glo-ee8b4f9f
+msgid "You can add a new language from <a href=\"%s\">Settings->TranslatePress</a>"
+msgstr "Uue keele saate lisada menüüst <a href=\"%s\">Seaded->TranslatePress</a>"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"However, you can still use TranslatePress to <strong style=\"background: "
+"#f5fb9d;\">modify gettext strings</strong> available in your page."
+msgstr ""
+"Siiski saad kasutada TranslatePressi, et <strong style=\"background: "
+"#f5fb9d;\">muuta gettext sõnesid</strong>, mis on oma lehel saadaval."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Strings that are user-created cannot be modified, only those from themes "
+"and plugins."
+msgstr ""
+"Kasutaja loodud sõnesid ei saa muuta, ainult need, mis pärinevad teemadest "
+"ja pluginatest."
+
+msgid "Extra Translation Features"
+msgstr "Täiendavad tõlkefunktsioonid"
+
+msgid "Support for 130+ Extra Languages"
+msgstr "Tugi 130+ täiendavale keelele"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI"
+msgstr "Juurdepääs TranslatePress AI-le"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb
+msgid "Translate SEO Title, Description, Slug"
+msgstr "Tõlgi SEO pealkiri, kirjeldus ja slug"
+
+msgid "Publish only when translation is complete"
+msgstr "Avalda ainult siis, kui tõlge on valmis"
+
+msgid "Translate by Browsing as User Role"
+msgstr "Tõlkimine teise rollina sirvides"
+
+msgid "Different Menu Items for each Language"
+msgstr "Erinevad menüüelemendid iga keele jaoks"
+
+msgid "Upgrade to PRO"
+msgstr "Uuenda PRO-ks"
+
+msgid "Upgrade to PRO with our biggest discount of the year!"
+msgstr "Uuenda PRO-ks meie aasta suurima allahindlusega!"
+
+msgid ""
+"This Black Friday, get access to these features and more at a fraction of "
+"the costs:"
+msgstr ""
+"Sellel Black Friday'l saa juurdepääs neile funktsioonidele ja paljule muule "
+"murdosa hinnaga:"
+
+msgid "No available suggestions"
+msgstr "Soovitusi pole saadaval"
+
+msgid "Suggestions from translation memory"
+msgstr "Soovitused tõlkemälust"
+
+msgid "Click to Copy"
+msgstr "Klõpsa kopeerimiseks"
+
+msgid "Human Translation"
+msgstr "Inimtõlge"
+
+msgid "Machine Translation"
+msgstr "Masintõlge"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext File Translation"
+msgstr "Gettext-failide tõlkimine"
+
+msgid "Text on this page is %s% translated into all languages."
+msgstr "Selle lehe tekst on %s% tõlgitud kõigisse keeltesse."
+
+msgid "%1$s% of text on this page is translated into %2$s."
+msgstr "%1$s% selle lehe tekstist on tõlgitud keelde %2$s."
+
+msgid "This page is %1$s% translated into %2$s."
+msgstr "See leht on %1$s% tõlgitud keelde %2$s."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"The slug that you are trying to edit is present in other slug types:%s%. "
+"Editing it will replace each occurrence, regardless of the current type."
+msgstr ""
+"Slug, mida üritad muuta, esineb ka teistes slug tüüpides: %s. Selle "
+"muutmisel asendatakse iga esinemine, olenemata praegusest tüübist."
+
+msgid ""
+"Hover any text on the page, click %s,<br> then modify the translation in "
+"the sidebar."
+msgstr ""
+"Liigu hiirega suvalise teksti kohale lehel, klõpsa %s,<br> seejärel muuda "
+"tõlget külgribal."
+
+#, tp-glo-e780391b
+msgid "Don't forget to Save Translation. Use keyboard shortcut CTRL(⌘) + S"
+msgstr "Ära unusta tõlget salvestada. Kasuta klaviatuuri otseteed CTRL(⌘) + S"
+
+msgid "Switch language to see the translation changes directly on the page."
+msgstr "Vaheta keelt, et näha tõlkemuudatusi otse lehel."
+
+msgid "Search for any text in this page in the dropdown."
+msgstr "Otsi suvalist teksti sellel lehel rippmenüüst."
+
+msgid ""
+"Your %s license has <span "
+"class=\"trp-license-status-emphasized\">expired</span>."
+msgstr ""
+"Sinu %s litsents on <span "
+"class=\"trp-license-status-emphasized\">aegunud</span>."
+
+msgid ""
+"<strong>This Black Friday, renew your license at a special price</strong> "
+"to continue receiving access to product downloads, automatic updates, and "
+"support."
+msgstr ""
+"<strong>Sellel mustal reedel uuenda oma litsents erihinnaga</strong>, et "
+"jätkata juurdepääsu saamist toodete allalaadimistele, automaatsetele "
+"uuendustele ja toele."
+
+msgid "Get Deal"
+msgstr "Saa pakkumine"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please renew your license to continue receiving access to TranslatePress "
+"AI, premium addons, automatic updates and support."
+msgstr ""
+"Palun uuenda oma litsents, et jätkata juurdepääsu saamist TranslatePress "
+"AI-le, premium-lisadele, automaatsetele uuendustele ja toele."
+
+msgid "Renew Now"
+msgstr "Uuenda nüüd"
+
+msgid ""
+"Your %s license was <span "
+"class=\"trp-license-status-emphasized\">refunded</span>."
+msgstr ""
+"Sinu %s litsents <span "
+"class=\"trp-license-status-emphasized\">tagastati</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please purchase a new license to continue receiving access to "
+"TranslatePress AI, premium addons, automatic updates and support."
+msgstr ""
+"Palun osta uus litsents, et jätkata juurdepääsu saamist TranslatePress "
+"AI-le, premium-lisadele, automaatsetele uuendustele ja toele."
+
+msgid "Purchase a new license"
+msgstr "Osta uus litsents"
+
+msgid ""
+"Your %s license is <span class=\"trp-license-status-emphasized\">missing or "
+"invalid</span>."
+msgstr ""
+"Sinu %s litsents on <span class=\"trp-license-status-emphasized\">puuduv "
+"või kehtetu</span>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please enter a valid license to get access to TranslatePress AI, premium "
+"addons, automatic updates and support. Need a license key? %1$sPurchase one "
+"now%2$s"
+msgstr ""
+"Sisesta kehtiv litsents, et saada juurdepääs TranslatePress AI-le, premium "
+"lisadele, automaatsetele uuendustele ja tugile. Vajad litsentsivõtit? "
+"%1$sOsta kohe%2$s"
+
+msgid "Enter a valid license"
+msgstr "Sisesta kehtiv litsents"
+
+msgid "Meta Information"
+msgstr "Metaandmed"
+
+#, tp-ctx-8a82cc9e
+msgid "String List"
+msgstr "Sõnede loend"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings"
+msgstr "Gettext sõned"
+
+msgid "Images"
+msgstr "Pildid"
+
+msgid "Videos"
+msgstr "Videod"
+
+msgid "Audios"
+msgstr "Audiod"
+
+#, tp-ctx-2edc90df
+msgid "Dynamically Added Strings"
+msgstr "Dünaamiliselt lisatud sõned"
+
+msgid "Translation Editor"
+msgstr "Tõlkimisredaktor"
+
+msgid "Edit translations by visually selecting them on each site page"
+msgstr "Muuda tõlkeid, valides need visuaalselt igal saidi leheküljel"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation"
+msgstr "Sõne tõlkimine"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid ""
+"Edit url slug translations, plugins and theme translation (emails, forms "
+"etc.)"
+msgstr "Muuda URL slug tõlkeid, pluginate ja teema tõlkeid (e-kirjad, vormid jne.)"
+
+msgid "Current User"
+msgstr "Praegune kasutaja"
+
+msgid "Logged Out"
+msgstr "Väljalogitud"
+
+msgid "Translate Page"
+msgstr "Tõlgi leht"
+
+msgid "Add a New Language"
+msgstr "Lisa uus keel"
+
+msgid "Your License is Invalid"
+msgstr "Teie litsents on kehtetu"
+
+msgid "Get More AI Words (%d left)"
+msgstr "Hangi rohkem AI-sõnu (%d jäänud)"
+
+#, tp-ctx-e9944eb3
+msgid ""
+"Opens post in the translation editor. Post must be saved as draft or "
+"published beforehand."
+msgstr ""
+"Avab postituse tõlkeredaktoris. Postitus peab olema eelnevalt salvestatud "
+"mustandina või avaldatuna."
+
+msgid "Security check"
+msgstr "Turvakontroll"
+
+#, tp-ctx-2edc90df
+msgid ""
+"<strong>Warning:</strong> Some strings have possibly incorrectly encoded "
+"characters. This may result in breaking the queries, rendering the page "
+"untranslated in live mode. Consider revising the following strings or their "
+"method of outputting."
+msgstr ""
+"<strong>Hoiatus:</strong> Mõned stringid võivad sisaldada vigaselt "
+"kodeeritud märke. See võib rikkuda päringuid, mille tõttu jääb leht "
+"reaalajas tõlkimata. Kaaluge järgmiste stringide või nende väljastamise "
+"viisi ülevaatamist."
+
+#, tp-ai
+msgid "IMPORTANT: It is strongly recommended to first backup the database!"
+msgstr "TÄHTIS: on tungivalt soovitatav kõigepealt teha andmebaasi varukoopia!"
+
+#, tp-ai
+msgid "Are you sure you want to continue?"
+msgstr "Kas oled kindel, et soovid jätkata?"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress data update"
+msgstr "TranslatePressi andmete värskendamine"
+
+msgid "We need to update your translations database to the latest version."
+msgstr "Peame teie tõlkide andmebaasi uusimale versioonile värskendama."
+
+msgid ""
+"Updating will allow editing translations of localized text from plugins and "
+"theme. Existing translation will still work as expected."
+msgstr ""
+"Värskendamine võimaldab redigeerida pistikprogrammide ja teema "
+"lokaliseeritud tekstide tõlkeid. Olemasolev tõlge töötab endiselt "
+"ootuspäraselt."
+
+msgid "Run the updater"
+msgstr "Käivita värskendaja"
+
+#, tp-ctx-742ebaa7
+msgid ""
+"Updating will allow editing translations of slugs. Existing translation "
+"will still work as expected."
+msgstr ""
+"Uuendamine võimaldab slugide tõlkeid muuta. Olemasolev tõlge töötab "
+"endiselt ootuspäraselt."
+
+#, tp-glo-47180abf, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Please activate the SEO Addon from <br/>WordPress -> Settings -> "
+"TranslatePress -> Addons section"
+msgstr ""
+"Palun aktiveerige SEO-lisa jaotisest<br/>WordPress -> Seaded -> "
+"TranslatePress -> Lisad"
+
+msgid "Go to Addons"
+msgstr "Mine lisadesse"
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-9fa92a70, tp-glo-b7a08771
+msgid "The SEO Pack add-on allows translation of all the URL slugs:"
+msgstr "SEO Packi lisamoodul võimaldab kõigi URL-slugide tõlkimist:"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy slugs"
+msgstr "Taksonoomia slugid"
+
+#, tp-ctx-742ebaa7
+msgid "Term slugs"
+msgstr "Terminite slugid"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post slugs (this includes pages and custom post types)"
+msgstr "Postituste slugid (selle hulka kuuluvad lehed ja kohandatud postitüübid)"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post type base slugs"
+msgstr "Postitüüpide baasslugid"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce slugs"
+msgstr "WooCommerce'i slugid"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "The SEO Pack add-on is available with ALL premium versions of the plugin."
+msgstr "SEO Pack lisamoodul on saadaval KÕIGIS plugina tasulistes versioonides."
+
+msgid "Upgrade to Pro"
+msgstr "Uuenda Pro-ks"
+
+msgid "Description"
+msgstr "Kirjeldus"
+
+msgid "Article Section"
+msgstr "Artikli sektsioon"
+
+msgid "Article Tag"
+msgstr "Artikli silt"
+
+msgid "OG Title"
+msgstr "OG pealkiri"
+
+msgid "OG Site Name"
+msgstr "OG saidi nimi"
+
+msgid "OG Description"
+msgstr "OG kirjeldus"
+
+msgid "OG Image Alt"
+msgstr "OG pildi alt-tekst"
+
+msgid "Twitter Title"
+msgstr "Twitteri pealkiri"
+
+msgid "Twitter Description"
+msgstr "Twitteri kirjeldus"
+
+msgid "Twitter Image Alt"
+msgstr "Twitteri pildi alt-tekst"
+
+msgid "Page Title"
+msgstr "Lehe pealkiri"
+
+msgid "Dublin Core Title"
+msgstr "Dublin Core pealkiri"
+
+msgid "Dublin Core Description"
+msgstr "Dublin Core kirjeldus"
+
+msgid "OG Image"
+msgstr "OG pilt"
+
+#, tp-glo-9fa92a70
+msgid "OG Image Secure URL"
+msgstr "OG pildi turvaline URL"
+
+msgid "Twitter Image"
+msgstr "Twitteri pilt"
+
+#, tp-ctx-2edc90df
+msgid "Removing cdata dictionary strings for language %s..."
+msgstr "Eemaldatakse CDATA sõnastiku stringe keele %s jaoks..."
+
+msgid "Removing untranslated dictionary links for language %s..."
+msgstr "Eemaldatakse tõlkimata sõnastiku lingid keele %s jaoks..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Removing duplicated gettext strings for language %s..."
+msgstr "Eemaldatakse korduvaid gettext-stringe keele %s jaoks..."
+
+#, tp-ctx-2edc90df
+msgid "Removing duplicated dictionary strings for language %s..."
+msgstr "Eemaldatakse korduvaid sõnastiku stringe keele %s jaoks..."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Removing untranslated dictionary strings where translation is available for "
+"language %s..."
+msgstr ""
+"Eemaldatakse tõlkimata sõnastiku stringe, mille tõlge on saadaval, keele %s "
+"jaoks..."
+
+#, tp-ctx-2edc90df
+msgid "Inserting original strings for language %s..."
+msgstr "Sisestatakse algupäraseid stringe keele %s jaoks..."
+
+#, tp-ctx-2edc90df
+msgid "Cleaning original strings table for language %s..."
+msgstr "Puhastatakse algupäraste stringide tabelit keele %s jaoks..."
+
+#, tp-ctx-8a82cc9e
+msgid "Updating original string ids for language %s..."
+msgstr "Uuendatakse algupäraste stringide ID-sid keele %s jaoks..."
+
+msgid "Regenerating original meta table for language %s..."
+msgstr "Originaalmeta tabeli taasloomine keele %s jaoks..."
+
+msgid "Cleaning original meta table for language %s..."
+msgstr "Originaalmeta tabeli puhastamine keele %s jaoks..."
+
+msgid "Replacing original id NULL with value for language %s..."
+msgstr "Originaal-ID NULL-i asendamine väärtusega keele %s jaoks..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Inserting gettext original strings for language %s..."
+msgstr "Sisestatakse gettexti algupäraseid stringe keele %s jaoks..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Cleaning gettext original strings table for language %s..."
+msgstr "Puhastatakse gettexti algupäraste stringide tabelit keele %s jaoks..."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Updating gettext original string ids for language %s..."
+msgstr "Uuendatakse gettexti algupäraste stringide ID-sid keele %s jaoks..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Starting gettext database optimization in the background..."
+msgstr "Gettext andmebaasi optimeerimine käivitatakse taustal..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating taxonomy and post type base slugs to new table structure..."
+msgstr ""
+"Migreeritakse taksonoomia ja postitüüpide baasslugisid uude "
+"tabelistruktuuri..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating post slugs to new table structure for language %s..."
+msgstr "Migreeritakse postituste slugisid uude tabelistruktuuri keele %s jaoks..."
+
+#, tp-ctx-742ebaa7
+msgid "Migrating term slugs to new table structure for language %s..."
+msgstr "Terminite slugide migreerimine uude tabeli struktuuri keele %s jaoks..."
+
+msgid "Finishing up..."
+msgstr "Lõpetamine..."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize gettext database tables. Translations "
+"continue to work while this runs in the background."
+msgstr ""
+"TranslatePress vajab gettext andmebaasi tabelite optimeerimist. Tõlked "
+"töötavad edasi sel ajal, kui see töötab taustal."
+
+#, tp-ai
+msgid "Before starting, we strongly recommend creating a database backup."
+msgstr "Enne alustamist soovitame tungivalt luua andmebaasi varukoopia."
+
+#, tp-ai
+msgid "Start optimization"
+msgstr "Alusta optimeerimist"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Could not schedule gettext database optimization."
+msgstr ""
+"Uuendus katkestatud! Gettexti andmebaasi optimeerimise ajastamine "
+"ebaõnnestus."
+
+msgid ""
+"Database optimization did not complete successfully. We recommend restoring "
+"the original database or <a href=\"%s\" >trying again.</a>"
+msgstr ""
+"Andmebaasi optimeerimine ei lõppenud edukalt. Soovitame algse andmebaasi "
+"taastamist või <a href=\"%s\" >uuesti proovimist.</a>"
+
+msgid ""
+"Update aborted! Your user account doesn't have the capability to perform "
+"database updates."
+msgstr ""
+"Uuendamine katkestatud! Teie kasutajakontol puudub õigus andmebaasi "
+"uuendusi teha."
+
+#, tp-glo-b357fc3e
+msgid "Update aborted! Invalid nonce."
+msgstr "Uuendamine katkestatud! Kehtetu nonce."
+
+#, tp-glo-ee8b4f9f
+msgid "Back to TranslatePress Settings"
+msgstr "Tagasi TranslatePressi seadete juurde"
+
+msgid "Successfully updated database!"
+msgstr "Andmebaas edukalt uuendatud!"
+
+msgid "Updating database to version %s+"
+msgstr "Andmebaasi uuendamine versioonile %s+"
+
+msgid "Processing table for language %s..."
+msgstr "Tabeli töötlemine keele %s jaoks..."
+
+msgid "Update aborted! Incorrect action."
+msgstr "Uuendamine katkestatud! Vale toiming."
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-64dbb752
+msgid ""
+"Update aborted! Start the gettext database optimization separately from the "
+"Advanced settings page."
+msgstr ""
+"Uuendus katkestatud! Käivita gettexti andmebaasi optimeerimine eraldi "
+"täpsemate seadete lehelt."
+
+msgid "Update aborted! Incorrect language code."
+msgstr "Uuendamine katkestatud! Vigane keelekood."
+
+msgid " done."
+msgstr " tehtud."
+
+#, tp-ai
+msgid "Update aborted while %1$s. SQL error: %2$s"
+msgstr "Uuendus katkestati: %1$s. SQL viga: %2$s"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "inserting original strings"
+msgstr "originaalstringide sisestamine"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string insertion progress"
+msgstr "originaalstringide sisestamise edenemise kontrollimine"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "cleaning duplicate original strings"
+msgstr "korduvate originaalstringide puhastamine"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "updating original string IDs"
+msgstr "originaalstringide ID-de uuendamine"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string ID update progress"
+msgstr "originaalstringide ID-de uuendamise edenemise kontrollimine"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "inserting gettext original strings"
+msgstr "gettexti originaalstringide sisestamine"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "checking gettext original insertion progress"
+msgstr "gettexti originaalstringide sisestamise edenemise kontrollimine"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "cleaning duplicate gettext original strings"
+msgstr "korduvate gettexti originaalstringide puhastamine"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "updating gettext original string IDs"
+msgstr "gettexti originaalstringide ID-de uuendamine"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "checking gettext original string ID update progress"
+msgstr "gettexti originaalstringide ID-de uuendamise edenemise kontrollimine"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"All individual TranslatePress add-on plugins <a href=\"%1$s\" "
+"target=\"_blank\">have been discontinued</a> and are now included in the "
+"premium Personal, Business and Developer versions of TranslatePress. Please "
+"log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download "
+"the new premium version and install it. Your individual addons settings "
+"will be ported over."
+msgstr ""
+"Kõik eraldiseisvad TranslatePressi lisamoodulid <a href=\"%1$s\" "
+"target=\"_blank\">on lõpetatud</a> ja on nüüd kaasatud TranslatePressi "
+"tasulistesse Personal, Business ja Developer versioonidesse. Palun logi "
+"sisse oma <a href=\"%2$s\" target=\"_blank\">konto lehele</a>, laadi alla "
+"uus tasuline versioon ja installi see. Sinu eraldiseisvate lisamoodulite "
+"seaded kantakse üle."
+
+msgid "Brand-new Language Switcher Settings are here!"
+msgstr "Täiesti uued keelelüliti seaded on saadaval!"
+
+msgid ""
+"Explore pre-made templates, switch colors, flag styles, spacing, layouts & "
+"more. Use the live preview to perfect your switcher in seconds."
+msgstr ""
+"Uuri valmismalle, muuda värve, lipu stiile, vahesid, paigutusi ja muud. "
+"Kasuta reaalajas eelvaadet, et täiusta oma lüliti sekunditega."
+
+msgid "Start customizing"
+msgstr "Alusta kohandamist"
+
+msgid "Read documentation"
+msgstr "Loe dokumentatsiooni"
+
+#, tp-ctx-8a82cc9e, tp-glo-1aabb38a, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"library</a></strong>. Please contact your server administrator to install "
+"it on your server."
+msgstr ""
+"<strong>TranslatePress</strong> nõuab <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"teeki</a></strong>. Palun võtke ühendust oma serveri administraatoriga, et "
+"see teie serverisse installida."
+
+#, tp-glo-5e752340
+msgid ""
+"Detected long query limitation on WPEngine hosting. Some large pages may "
+"appear untranslated. You can remove limitation by adding the following to "
+"your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
+msgstr ""
+"Tuvastati pika päringu piirang WPEngine hostimisel. Mõned suured lehed "
+"võivad olla tõlkimata. Piirangu saab eemaldada, lisades järgmise oma saidi "
+"wp-config.php faili: define( 'WPE_GOVERNOR', false ); "
+
+msgid "Custom Language Flag"
+msgstr "Kohandatud keelelipp"
+
+msgid "The Language code of the added custom language is invalid."
+msgstr "Lisatud kohandatud keele keelekood on vigane."
+
+msgid "The Language code of the added custom language cannot be empty."
+msgstr "Lisatud kohandatud keele keelekood ei saa olla tühi."
+
+msgid "The Automatic Translation Code of the added custom language is invalid."
+msgstr "Lisatud kohandatud keele automaattõlke kood on vigane."
+
+#, tp-ai
+msgid "Style"
+msgstr "Stiil"
+
+#, tp-ai, tp-glo-da70db08
+msgid "Use shortcode settings"
+msgstr "Kasuta shortcode seadeid"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Custom"
+msgstr "Kohandatud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language names"
+msgstr "Keelenimed"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Full names"
+msgstr "Täisnimed"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Short names"
+msgstr "Lühinimed"
+
+#, tp-ai
+msgid "Hide names"
+msgstr "Peida nimed"
+
+#, tp-ai
+msgid "Flag position"
+msgstr "Lipu asukoht"
+
+#, tp-ai
+msgid "Before text"
+msgstr "Enne teksti"
+
+#, tp-ai
+msgid "After text"
+msgstr "Pärast teksti"
+
+#, tp-ai
+msgid "Hide flags"
+msgstr "Peida lipud"
+
+#, tp-ai
+msgid "Open on click"
+msgstr "Ava klõpsates"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show opposite language"
+msgstr "Näita vastaskeelt"
+
+#, tp-ai
+msgid "Size"
+msgstr "Suurus"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Normal"
+msgstr "Tavaline"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Large"
+msgstr "Suur"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag shape"
+msgstr "Lipu kuju"
+
+#, tp-ai
+msgid "Rectangle"
+msgstr "Ristkülik"
+
+#, tp-ai
+msgid "Square"
+msgstr "Ruut"
+
+#, tp-ai
+msgid "Rounded"
+msgstr "Ümardatud"
+
+#, tp-ai
+msgid "Transitions"
+msgstr "Üleminekud"
+
+#, tp-ai
+msgid "Background"
+msgstr "Taust"
+
+#, tp-ai
+msgid "Hover background"
+msgstr "Hover-taust"
+
+#, tp-ai
+msgid "Hover text"
+msgstr "Hover-tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border color"
+msgstr "Piirjoone värv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border width"
+msgstr "Piirjoone laius"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border radius"
+msgstr "Piirjoone raadius"
+
+#, tp-ai
+msgid "Flag radius"
+msgstr "Lipu raadius"
+
+#, tp-ai, tp-glo-1477ca6f, tp-glo-ee8b4f9f
+msgid ""
+"Disable the legacy TranslatePress language switcher to use the customizable "
+"Elementor widget. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Open language switcher settings</a>."
+msgstr ""
+"Keela vananenud TranslatePressi keelelüliti, et kasutada kohandatavat "
+"Elementori vidinat. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Ava keelelüliti seaded</a>."
+
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"The language switcher inherits styling options from shortcode. <a "
+"href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Open shortcode "
+"settings</a>."
+msgstr ""
+"Keelevahetaja pärib shortcode stiilivalikud. <a href=\"%s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">Ava shortcode seaded</a>."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI"
+msgstr "TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid."
+msgstr "Sinu TranslatePress AI API võti on kehtiv."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is invalid."
+msgstr "Sinu TranslatePress AI API võti on kehtetu."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key has expired."
+msgstr "Sinu TranslatePress AI API võti on aegunud."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Activate API Key"
+msgstr "Aktiveeri API võti"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Deactivate API Key"
+msgstr "Deaktiveeri API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add a TranslatePress AI API Key"
+msgstr "Lisa TranslatePress AI API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI API Key"
+msgstr "TranslatePress AI API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Manage your TranslatePress AI API Key in your %1$s."
+msgstr "Halda oma TranslatePress AI API võtit oma %1$s."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI API Key?"
+msgstr "Kas sul pole TranslatePress AI API võtit?"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get a free TranslatePress AI API Key Today"
+msgstr "Hangi täna tasuta TranslatePress AI API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add your TranslatePress AI API Key"
+msgstr "Lisa oma TranslatePress AI API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Add your TranslatePress AI API Key to unlock all premium features. Find the "
+"TranslatePress AI API Key in your"
+msgstr ""
+"Lisa oma TranslatePress AI API võti kõigi premium-funktsioonide avamiseks. "
+"Leia TranslatePress AI API võti oma"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid and active."
+msgstr "Sinu TranslatePress AI API võti on kehtiv ja aktiivne."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Activate TranslatePress AI API Key"
+msgstr "Aktiveeri TranslatePress AI API võti"
+
+#, tp-ai, tp-glo-91460d88
+msgid "No Active API Key Detected for this website."
+msgstr "Selle veebisaidi jaoks ei tuvastatud aktiivset API võtit."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"an API key by creating a free account."
+msgstr ""
+"Automatiseeritud tõlke lubamiseks TranslatePress AI abil pead looma tasuta "
+"konto, et saada API võti."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Enter your API key"
+msgstr "Sisesta oma API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your API key from"
+msgstr ""
+"Automatiseeritud tõlke lubamiseks TranslatePress AI abil sisesta oma API "
+"võti"
+
+#, tp-ai, tp-glo-91460d88
+msgid "API Key"
+msgstr "API võti"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "No Active TranslatePress AI API Key Detected for this website."
+msgstr "Sellel veebisaidil ei tuvastatud aktiivset TranslatePress AI API võtit."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI API Key"
+msgstr "Hangi tasuta TranslatePress AI API võti"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Generate API Key"
+msgstr "Loo API võti"
+
+#, tp-ai, tp-glo-91460d88
+msgid "You have a valid %s <strong>API Key</strong>."
+msgstr "Teil on kehtiv %s <strong>API võti</strong>."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Manage your API Key & quota on the %s"
+msgstr "Halda oma API võtit ja kvooti saidil %s"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Get a Free AI API Key"
+msgstr "Hangi tasuta AI API võti"
+
+#, tp-ai, tp-glo-91460d88
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key."
+msgstr ""
+"See veebisait on juba tasuta API võtme alusel aktiveeritud. Iga veebisait "
+"saab kasutada ainult ühte tasuta API võtit."
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"See veebisait on juba tasuta API võtme alusel aktiveeritud. Iga veebisait "
+"saab kasutada ainult ühte tasuta API võtit. Rohkemate TranslatePress AI "
+"sõnade saamiseks uuenda tasulisele plaanile %1$soma kontolt%2$s."
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Checking"
+msgstr "Silumisandmed API võtme kontrollimiseks"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Activation"
+msgstr "Silumisandmed API võtme aktiveerimiseks"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress finished replacing the existing translations in your "
+"dictionary."
+msgstr "TranslatePress lõpetas olemasolevate tõlgete asendamise teie sõnastikus."
+
+#, tp-ai
+msgid "Term (%s)"
+msgstr "Termin (%s)"
+
+#, tp-ai
+msgid "Translations"
+msgstr "Tõlked"
+
+#, tp-ai
+msgid "Term added. Glossary terms only affect new automatic translations."
+msgstr "Termin lisatud. Sõnastiku terminid mõjutavad ainult uusi automaattõlkeid."
+
+#, tp-ai
+msgid "Term updated."
+msgstr "Termin uuendatud."
+
+#, tp-ai
+msgid "Term deleted."
+msgstr "Termin kustutatud."
+
+#, tp-ai
+msgid "Are you sure you want to delete this term?"
+msgstr "Kas olete kindel, et soovite selle termini kustutada?"
+
+#, tp-ai
+msgid "Something went wrong. Please try again."
+msgstr "Midagi läks valesti. Palun proovige uuesti."
+
+#, tp-ai
+msgid "Quick Edit"
+msgstr "Kiirredigeerimine"
+
+msgid "Edit"
+msgstr "Muuda"
+
+msgid "Delete"
+msgstr "Kustuta"
+
+#, tp-ai
+msgid "Update"
+msgstr "Uuenda"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Cancel"
+msgstr "Tühista"
+
+#, tp-ai
+msgid "No glossary terms match your search."
+msgstr "Teie otsingule ei vasta ükski sõnastiku termin."
+
+#, tp-ai
+msgid "No glossary terms found."
+msgstr "Sõnastiku termineid ei leitud."
+
+#, tp-ai
+msgid "Could not load glossary terms. Please reload the page."
+msgstr "Sõnastiku termineid ei saanud laadida. Palun laadige leht uuesti."
+
+msgid "items"
+msgstr "üksust"
+
+#, tp-ai
+msgid "of"
+msgstr "/"
+
+#, tp-ai
+msgid "First page"
+msgstr "Esimene lehekülg"
+
+#, tp-ai
+msgid "Previous page"
+msgstr "Eelmine lehekülg"
+
+#, tp-ai
+msgid "Next page"
+msgstr "Järgmine lehekülg"
+
+#, tp-ai
+msgid "Last page"
+msgstr "Viimane lehekülg"
+
+#, tp-ai
+msgid ""
+"The inserted term was found in your existing translations, use the %s to "
+"make changes there."
+msgstr ""
+"Sisestatud termin leiti teie olemasolevatest tõlgetest, kasutage muudatuste "
+"tegemiseks %s."
+
+#, tp-ai
+msgid "search & replace tool"
+msgstr "otsi ja asenda tööriist"
+
+#, tp-ai
+msgid "Please provide at least one existing translation to replace."
+msgstr "Palun sisestage vähemalt üks olemasolev tõlge, mida asendada."
+
+#, tp-ai
+msgid ""
+"You are about to bulk edit a potentially large amount of translations. This "
+"action cannot be undone. It is recommended to make a backup of the database "
+"before completing this action."
+msgstr ""
+"Olete hakkamas muutma potentsiaalselt suurt hulka tõlkeid. Seda toimingut "
+"ei saa tagasi võtta. Soovitatakse enne selle toimingu lõpetamist teha "
+"andmebaasist varukoopia."
+
+#, tp-ai
+msgid "Continue with replacing existing translations?"
+msgstr "Kas jätkata olemasolevate tõlgete asendamist?"
+
+#, tp-ai
+msgid "No entries found."
+msgstr "Kirjeid ei leitud."
+
+#, tp-ai
+msgid "Original"
+msgstr "Algne"
+
+#, tp-ai
+msgid "Security check failed. Please reload the page and try again."
+msgstr "Turvakontroll ebaõnnestus. Palun laadige leht uuesti ja proovige uuesti."
+
+#, tp-ai
+msgid "You do not have permission to do this."
+msgstr "Teil puudub selle tegemiseks luba."
+
+#, tp-ai
+msgid "Please enter the term in the default language."
+msgstr "Palun sisestage termin vaikimisi keeles."
+
+#, tp-ai
+msgid "Please provide at least one translation for the term."
+msgstr "Palun sisestage terminile vähemalt üks tõlge."
+
+#, tp-ai
+msgid "The term “%s” already exists in the glossary."
+msgstr "Termin “%s” on juba sõnastikus olemas."
+
+#, tp-ai
+msgid "The term you are trying to edit no longer exists. Please reload the page."
+msgstr "Termin, mida proovid muuta, ei ole enam olemas. Palun laadi leht uuesti."
+
+#, tp-ai
+msgid "The term you are trying to delete no longer exists. Please reload the page."
+msgstr "Termin, mida proovid kustutada, ei ole enam olemas. Palun laadi leht uuesti."
+
+#, tp-ai
+msgid "%1$s: %2$d entry updated"
+msgid_plural "%1$s: %2$d entries updated"
+msgstr[0] "%1$s: %2$d kirje uuendatud"
+msgstr[1] "%1$s: %2$d kirjet uuendatud"
+
+#, tp-ai
+msgid "Replacement complete."
+msgstr "Asendamine lõpetatud."
+
+#, tp-ai, tp-glo-fd3dec87
+msgid ""
+"This is a large replacement. %d entries were updated now and the rest will "
+"finish automatically in the background over the next few minutes."
+msgstr ""
+"See on suur asendamine. %d kirjet uuendati nüüd ning ülejäänud uuendatakse "
+"automaatselt taustal järgmise paari minuti jooksul."
+
+#, tp-glo-c773bca5, tp-glo-d6a22d74
+msgid "Google Translate v2"
+msgstr "Google Translate v2"
+
+#, tp-glo-91460d88, tp-glo-d6a22d74
+msgid "Google Translate API Key"
+msgstr "Google Translate API võti"
+
+#, tp-glo-91460d88
+msgid "Add your API Key here..."
+msgstr "Lisa oma API võti siia..."
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">this link</a> to see how you can set up an API key, "
+"<strong>control API costs</strong> and set HTTP referrer restrictions."
+msgstr ""
+"Külastage <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">seda linki</a>, et näha, kuidas seadistada API võtit, "
+"<strong>kontrollida API kulusid</strong> ja määrata HTTP viitaja piiranguid."
+
+#, tp-glo-1aabb38a
+msgid "Your HTTP referrer is: %s"
+msgstr "Sinu HTTP viitaja on: %s"
+
+#, tp-glo-d6a22d74
+msgid "There was an error with your Google Translate key."
+msgstr "Sinu Google Translate võtmega ilmnes viga."
+
+#, tp-glo-d6a22d74
+msgid "There was an error on the server processing your Google Translate key."
+msgstr "Serveril ilmnes viga sinu Google Translate võtme töötlemisel."
+
+#, tp-glo-ee8b4f9f
+msgid "Please check your TranslatePress license key."
+msgstr "Palun kontrolli oma TranslatePress litsentsivõtit."
+
+msgid "Create your Free Account"
+msgstr "Loo oma tasuta konto"
+
+msgid " or "
+msgstr " või "
+
+msgid "Your free account includes: "
+msgstr "Sinu tasuta konto sisaldab: "
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI for instant automatic translations"
+msgstr "Juurdepääs TranslatePress AI-le koheste automaatsete tõlkide jaoks."
+
+msgid "2000 AI words to translate automatically"
+msgstr "2000 AI-sõna automaatseks tõlkimiseks."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI Words and unlock all AI features with TranslatePress Pro."
+msgstr "Hanki rohkem AI-sõnu ja ava kõik AI-funktsioonid TranslatePress Pro-ga."
+
+msgid "Upgrade now"
+msgstr "Uuenda nüüd"
+
+msgid "You have a valid %s <strong>license</strong>."
+msgstr "Sul on kehtiv %s <strong>litsents</strong>."
+
+msgid " words remaining. "
+msgstr " sõna jäänud. "
+
+msgid "Recheck"
+msgstr "Kontrolli uuesti"
+
+msgid "Rechecking..."
+msgstr "Kontrollin uuesti..."
+
+msgid "Done."
+msgstr "Valmis."
+
+msgid "Manage your license & quota on the %s"
+msgstr "Halda oma litsentsi ja kvooti lehel %s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account Page"
+msgstr "TranslatePress.com-i konto leht"
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced Add-ons"
+msgstr "Täpsemad lisad"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Developer, Business and Personal plans."
+msgstr ""
+"Need lisad laiendavad sinu tõlkepluginat ja on saadaval Developer, Business "
+"ja Personal plaanides."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack"
+msgstr "SEO Pack"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and Facebook and Twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"SEO tugi lehe slugi, pealkirja, kirjelduse ning Facebooki ja Twitteri "
+"sotsiaalse graafi info jaoks. HTML lang atribuut on õigesti määratud."
+
+msgid "Multiple Languages"
+msgstr "Mitmed keeled"
+
+msgid ""
+"Add as many languages as you need for your project to go global. Publish "
+"your language only when all your translations are done."
+msgstr ""
+"Lisa oma projekti jaoks nii palju keeli, kui vajad, et see globaalseks "
+"muuta. Avalda keel alles siis, kui kõik tõlked on valmis."
+
+msgid "Pro Add-ons"
+msgstr "Pro lisad"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Business and Developer plans."
+msgstr ""
+"Need lisad laiendavad sinu tõlkepluginat ja on saadaval Business ja "
+"Developer plaanides."
+
+#, tp-glo-c6709f3f
+msgid "DeepL Automatic Translation"
+msgstr "DeepL automaatne tõlkimine"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Automatically translate your website through the DeepL API."
+msgstr "Tõlgi oma veebisait automaatselt DeepL API kaudu."
+
+msgid ""
+"Prompts visitors to switch to their preferred language based on their "
+"browser settings or IP address and remembers the last visited language."
+msgstr ""
+"Soovitab külastajatel lülituda oma eelistatud keelele brauseri seadete või "
+"IP-aadressi alusel ning jätab meelde viimati külastatud keele."
+
+msgid "Translator Accounts"
+msgstr "Tõlkijate kontod"
+
+msgid ""
+"Create translator accounts for new users or allow existing users that are "
+"not administrators to translate your website."
+msgstr ""
+"Loo tõlkijate kontod uutele kasutajatele või luba olemasolevatel "
+"kasutajatel, kes pole administraatorid, oma veebisaiti tõlkida."
+
+msgid "Browse As User Role"
+msgstr "Sirvi kasutajarollina"
+
+msgid ""
+"Navigate your website just like a particular user role would. Really useful "
+"for dynamic content or hidden content that appears for particular users."
+msgstr ""
+"Navigeeri oma veebisaidil nagu seda teeks kindel kasutajaroll. Väga kasulik "
+"dünaamilise või peidetud sisu jaoks, mis kuvatakse kindlatele kasutajatele."
+
+msgid "Navigation Based on Language"
+msgstr "Keelepõhine navigeerimine"
+
+msgid "Configure different menu items for different languages."
+msgstr "Seadista erinevate keelte jaoks erinevad menüüelemendid."
+
+#, tp-glo-47180abf
+msgid ""
+"Connect separate domains or subdomains to each of your translated versions. "
+"Strengthen your brand’s local identity and boost SEO performance for every "
+"language you support."
+msgstr ""
+"Ühenda eraldi domeenid või alamdomeenid iga oma tõlgitud versiooniga. "
+"Tugevenda oma kaubamärgi kohalikku identiteeti ja tõsta SEO tulemuslikkust "
+"iga keele jaoks, mida toetad."
+
+msgid "Enable Modules"
+msgstr "Luba moodulid"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Enable Add-on modules to extend TranslatePress and enhance the "
+"functionality of your translated site."
+msgstr ""
+"Luba lisamoodulid TranslatePress-i laiendamiseks ja oma tõlgitud saidi "
+"funktsionaalsuse täiendamiseks."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to unlock the Pro "
+"add-ons below."
+msgstr ""
+"TranslatePress Pro on aktiivne. Aktiveeri oma litsentsivõti, et avada "
+"allpool olevad Pro lisad."
+
+#, tp-ai
+msgid "Activate license"
+msgstr "Aktiveeri litsents"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro is installed but not activated yet."
+msgstr "TranslatePress Pro on paigaldatud, kuid pole veel aktiveeritud."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"Opens your Plugins page (filtered to TranslatePress) in a new tab. Activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Avab pistikprogrammide lehe (filtreeritud TranslatePressi järgi) uuel "
+"kaardil. Aktiveeri seal TranslatePress Pro pistikprogramm, seejärel naase "
+"sellele kaardile — see uuendab automaatselt."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Activate TranslatePress Pro ↗"
+msgstr "Aktiveeri TranslatePress Pro ↗"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "More functionality with TranslatePress Pro."
+msgstr "Rohkem funktsionaalsust TranslatePress Pro-ga."
+
+msgid "Upgrade now ↗"
+msgstr "Uuenda nüüd ↗"
+
+msgid "Already a Pro User?"
+msgstr "Kas oled juba Pro kasutaja?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Opens the WordPress “Add Plugins” page in a new tab. Upload and activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"Avab WordPressi „Lisa pistikprogramme“ lehe uuel kaardil. Laadi seal üles "
+"ja aktiveeri TranslatePress Pro pistikprogramm, seejärel naase sellele "
+"kaardile — see uuendab automaatselt."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro"
+msgstr "Paigalda TranslatePress Pro"
+
+msgid "This add-on is not available on your current plan."
+msgstr "See lisamoodul pole sinu praegusel plaanis saadaval."
+
+msgid "Continue"
+msgstr "Jätka"
+
+msgid "The link you followed has expired. Please reload the page and try again."
+msgstr ""
+"Link, millele klõpsasid, on aegunud. Palun laadi leht uuesti ja proovi "
+"uuesti."
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Manage Sites."
+msgstr ""
+"Teie litsentsivõti on selle URL-i jaoks keelatud. Taasaktiveerige see lehel "
+"<a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Saitide haldamine."
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn't "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you've installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>Litsentsivõti ei ühti.</strong> Sisestatud litsents ei ühti "
+"installitud TranslatePressi versiooniga.</p><p>Palun kontrolli, et oled "
+"installinud oma litsentsile vastava versiooni oma TranslatePressi "
+"kontolt.</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid "TranslatePress Account"
+msgstr "TranslatePress Account"
+
+msgid "« Go Back"
+msgstr "« Mine tagasi"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Manage Sites."
+msgstr ""
+"Sinu litsentsivõti on selle URL-i jaoks keelatud. Luba see uuesti saidilt "
+"<a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Halda saite."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Automatically translate your website using TranslatePress AI."
+msgstr "Tõlgi oma veebisait automaatselt TranslatePress AI abil."
+
+msgid "your account."
+msgstr "oma kontolt."
+
+msgid "Skip and continue with manual translation »"
+msgstr "Jäta vahele ja jätka käsitsi tõlkimisega »"
+
+msgid "Creating a free account includes: "
+msgstr "Tasuta konto loomine sisaldab: "
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Are you a TranslatePress PRO user?"
+msgstr "Kas oled TranslatePress PRO kasutaja?"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro."
+msgstr "Paigalda TranslatePress Pro."
+
+msgid "Skip this step"
+msgstr "Jäta see samm vahele"
+
+msgid "The email address you added is incorrect."
+msgstr "Sisestatud e-posti aadress on vale."
+
+msgid "Setup Complete"
+msgstr "Seadistamine lõpetatud"
+
+msgid "You're ready to start translating!"
+msgstr "Oled valmis tõlkimisega alustama!"
+
+#, tp-glo-ee8b4f9f
+msgid "You have successfully set up TranslatePress for your website."
+msgstr "Oled edukalt seadistanud TranslatePressi oma veebisaidi jaoks."
+
+msgid "Receive "
+msgstr "Saada "
+
+msgid "Yes, send me multilingual growth tips."
+msgstr "Jah, saatke mulle mitmekeelse kasvu näpunäiteid."
+
+msgid "Start translating"
+msgstr "Alusta tõlkimist"
+
+msgid "Sign Up and Start translating"
+msgstr "Registreeru ja alusta tõlkimist"
+
+msgid "You need to select a default language."
+msgstr "Peate valima vaikekeele."
+
+msgid ""
+"You are trying to add an invalid default language. Please select a valid "
+"option."
+msgstr "Te üritate lisada kehtetut vaikekeelt. Palun valige kehtiv valik."
+
+msgid "Please add an additional language."
+msgstr "Palun lisage täiendav keel."
+
+msgid ""
+"You are trying to add an invalid additional language. Please select a valid "
+"option."
+msgstr "Üritate lisada sobimatut lisakeelt. Palun valige kehtiv valik."
+
+msgid "Configure Site Languages"
+msgstr "Seadista saidi keeled"
+
+msgid "Select the default and additional languages for your website."
+msgstr "Valige oma veebisaidi vaike- ja täiendavad keeled."
+
+msgid "You can edit your site languages at any point."
+msgstr "Saate oma saidi keeli igal ajal muuta."
+
+msgid "Default Language"
+msgstr "Vaikekeel"
+
+msgid "Select the language your content is written in."
+msgstr "Valige keel, milles teie sisu on kirjutatud."
+
+msgid "Additional Language"
+msgstr "Täiendav keel"
+
+msgid "Choose a secondary language..."
+msgstr "Valige teine keel..."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Add Language"
+msgstr "Lisa keel"
+
+msgid "Choose a language..."
+msgstr "Valige keel..."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to add more "
+"languages."
+msgstr ""
+"TranslatePress Pro on aktiivne. Aktiveeri oma litsentsivõti, et lisada "
+"rohkem keeli."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Add more than two languages with TranslatePress Pro."
+msgstr "Lisage TranslatePress Pro-ga rohkem kui kaks keelt."
+
+msgid "Set up Language Switcher"
+msgstr "Seadista keelelüliti"
+
+msgid ""
+"Select the style of the language switcher. You will find more ways to "
+"display it, in plugin settings."
+msgstr ""
+"Valige keelelüliti stiil. Pistikprogrammi seadistustest leiate rohkem "
+"võimalusi selle kuvamiseks."
+
+msgid ""
+"Displays a small language drop-down across your website, in a corner of "
+"your choosing."
+msgstr "Kuvab väikese keeleripmenüü kogu veebisaidil teie valitud nurgas."
+
+msgid "Switcher Location"
+msgstr "Lüliti asukoht"
+
+msgid "Apply a Template"
+msgstr "Rakenda malli"
+
+msgid "You can customize the design later"
+msgstr "Saate kujundust hiljem kohandada."
+
+msgid "Default Template"
+msgstr "Vaikimisi mall"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Default"
+msgstr "Vaikimisi"
+
+msgid "Dark Template"
+msgstr "Tume mall"
+
+msgid "Border Template"
+msgstr "Äärega mall"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Border"
+msgstr "Ääris"
+
+msgid "Transparent Template"
+msgstr "Läbipaistev mall"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Transparent"
+msgstr "Läbipaistev"
+
+#, tp-glo-ee8b4f9f
+msgid "Welcome to TranslatePress"
+msgstr "Tere tulemast TranslatePressi"
+
+#, tp-glo-ee8b4f9f
+msgid "Quick guided setup to configure TranslatePress in no time!"
+msgstr "Kiire juhendatud seadistus, et seadistada TranslatePress hetkega!"
+
+msgid "It takes less than a minute."
+msgstr "See võtab aega alla minuti."
+
+msgid "Scanning item %1$d of %2$d..."
+msgstr "Skaneeritakse üksust %1$d / %2$d..."
+
+msgid "Manually translated"
+msgstr "Käsitsi tõlgitud"
+
+msgid "Automatically translated"
+msgstr "Automaatselt tõlgitud"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext file translation"
+msgstr "Gettext-faili tõlge"
+
+msgid "Not translated"
+msgstr "Tõlkimata"
+
+msgid "Bulk Actions"
+msgstr "Hulgitoimingud"
+
+msgid "Delete entries"
+msgstr "Kustuta kirjed"
+
+msgid "Filter"
+msgstr "Filtreeri"
+
+msgid "Clear filters"
+msgstr "Tühjenda filtrid"
+
+msgid "Language"
+msgstr "Keel"
+
+msgid "Add New"
+msgstr "Lisa uus"
+
+#, tp-ctx-2edc90df
+msgid "Rescan plugins and theme for strings"
+msgstr "Skanni uuesti pluginate ja teema sõnesid"
+
+#, tp-ctx-2edc90df
+msgid "Scanning plugins and theme for strings..."
+msgstr "Pluginate ja teema sõnede skannimine..."
+
+msgid "Plugins and theme scan is complete"
+msgstr "Pluginate ja teema skannimine on lõpetatud"
+
+msgid "Plugins and theme scan did not finish due to an error"
+msgstr "Pluginate ja teema skannimine jäi vea tõttu pooleli"
+
+msgid "Import / Export"
+msgstr "Import / Eksport"
+
+msgid "See More"
+msgstr "Näita rohkem"
+
+msgid "See Less"
+msgstr "Näita vähem"
+
+msgid "Apply"
+msgstr "Rakenda"
+
+#, tp-ctx-2edc90df
+msgid "No strings match your query."
+msgstr "Otsingule ei vasta ükski sõne."
+
+#, tp-ctx-2edc90df
+msgid "Try to rescan plugins and theme for strings."
+msgstr "Proovi uuesti skannida pluginate ja teema sõnesid."
+
+msgid ""
+"An error occurred while loading results. Most likely you were logged out. "
+"Reload page?"
+msgstr ""
+"Tulemuste laadimisel tekkis viga. Tõenäoliselt logiti teid välja. Laadida "
+"leht uuesti?"
+
+msgid "found in translation"
+msgstr "tõlkes leitud"
+
+msgid "Select All"
+msgstr "Vali kõik"
+
+msgid "Select Visible"
+msgstr "Vali nähtavad"
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action on all the strings matching your "
+"filter, not just the visibly checked. To perform the action only to the "
+"visible strings click \"Select Visible\" from the table header dropdown."
+msgstr ""
+"Oled teostamas seda toimingut kõigi filtrile vastavate sõnedega, mitte "
+"ainult nähtavalt märgitudatega. Selle toimingu teostamiseks ainult "
+"nähtavate sõnedega klõpsa tabeli päise rippmenüüst valikut \"Vali "
+"nähtavad\"."
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action only on the visible strings. To "
+"perform the action on all the strings matching the filter click \"Select "
+"All\" from the table header dropdown."
+msgstr ""
+"Oled teostamas seda toimingut ainult nähtavate sõnedega. Selle toimingu "
+"teostamiseks kõigi filtrile vastavate sõnedega klõpsa tabeli päise "
+"rippmenüüst valikut \"Vali kõik\"."
+
+msgid "To continue please type the word:"
+msgstr "Jätkamiseks sisesta sõna:"
+
+msgid "The word typed was incorrect. Action was cancelled."
+msgstr "Sisestatud sõna oli vale. Toiming tühistati."
+
+#, tp-ctx-8a82cc9e, tp-glo-ee8b4f9f
+msgid ""
+"Warning: This action cannot be undone. Deleting a string will remove its "
+"current translation. The original string will appear again in this "
+"interface after TranslatePress detects it. This action is NOT equivalent to "
+"excluding the string from being translated again."
+msgstr ""
+"Hoiatus: Seda toimingut ei saa tagasi võtta. Sõne kustutamine eemaldab "
+"selle praeguse tõlke. Originaalsõne ilmub selles liideses uuesti nähtavale "
+"pärast seda, kui TranslatePress tuvastab selle. See toiming EI OLE "
+"samaväärne sellega, kui sõne edaspidi tõlkimisest välja jätta."
+
+msgid "%d original entries and their translations were deleted."
+msgstr "%d algset kirjet ja nende tõlked kustutati."
+
+msgid "Navigate to next page"
+msgstr "Liigu järgmisele lehele"
+
+msgid "Navigate to previous page"
+msgstr "Liigu eelmisele lehele"
+
+msgid "Navigate to first page"
+msgstr "Liigu esimesele lehele"
+
+msgid "Navigate to last page"
+msgstr "Liigu viimasele lehele"
+
+msgid "Type a page number to navigate to"
+msgstr "Sisesta leheküljenumber, millele liikuda"
+
+msgid ""
+"Incorrect page number. Type a page number between 1 and total number of "
+"pages"
+msgstr ""
+"Vale leheküljenumber. Sisesta leheküljenumber 1 ja lehekülgede koguarvu "
+"vahel."
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Search original and translated strings containing typed keywords while also "
+"matching selected filters. Place string in quotes for exact match: \"string\""
+msgstr ""
+"Otsi originaal- ja tõlgitud sõnesid, mis sisaldavad sisestatud märksõnu ja "
+"vastavad samal ajal valitud filtritele. Täpse vaste jaoks pane sõne "
+"jutumärkidesse: \"sõne\""
+
+#, tp-ctx-2edc90df
+msgid ""
+"Filter strings according to selected translation status, filters and "
+"keywords and selected filters"
+msgstr ""
+"Filtreeri sõnesid vastavalt valitud tõlkeolekule, filtritele ja "
+"märksõnadele ning valitud filtritele"
+
+msgid "Removes selected filters"
+msgstr "Eemaldab valitud filtrid"
+
+#, tp-ctx-2edc90df
+msgid "See options for selecting all strings"
+msgstr "Vaata valikuid kõigi sõnede valimiseks"
+
+#, tp-ctx-2edc90df
+msgid "Click to sort strings by this column"
+msgstr "Klõpsa sõnede sorteerimiseks selle veeru järgi"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-ctx-e9944eb3, tp-glo-8896ebe8
+msgid ""
+"The ID of the WordPress post where this string was detected. Empty if the "
+"string is not associated with a specific post."
+msgstr ""
+"WordPressi postituse ID, kus see string tuvastati. Tühi, kui string pole "
+"seotud konkreetse postitusega."
+
+msgid ""
+"Language in which the translation status filter applies. Leave unselected "
+"for the translation status to apply to ANY language"
+msgstr ""
+"Keel, millele tõlkeoleku filter rakendub. Jäta valimata, et tõlkeoleku "
+"filter rakenduks mistahes keelele."
+
+msgid "Search"
+msgstr "Otsi"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs that are not found in either one of the other categories."
+msgstr "Slugid, mida ei leitud üheski teises kategoorias."
+
+#, tp-ctx-8a82cc9e
+msgid "Plugins and Theme String Translation"
+msgstr "Pluginate ja teema sõnetõlked"
+
+#, tp-glo-64dbb752
+msgid "Gettext"
+msgstr "Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Search Gettext Strings"
+msgstr "Otsi Gettext sõnesid"
+
+#, tp-ctx-8a82cc9e
+msgid "Original String"
+msgstr "Algne sõne"
+
+msgid "Filter by domain"
+msgstr "Filtreeri domeeni järgi"
+
+msgid "Filter by type"
+msgstr "Filtreeri tüübi järgi"
+
+msgid "Email text"
+msgstr "E-kirja tekst"
+
+#, tp-ctx-8a82cc9e
+msgid "Emails String Translation"
+msgstr "E-posti sõnetõlked"
+
+msgid "Emails"
+msgstr "E-kirjad"
+
+#, tp-ctx-2edc90df
+msgid "Search Email Strings"
+msgstr "Otsi e-posti sõnesid"
+
+#, tp-ctx-8a82cc9e
+msgid "User Inputted String Translation"
+msgstr "Kasutaja sisestatud sõnetõlked"
+
+#, tp-ctx-5211e47b
+msgid "Regular"
+msgstr "Tavaline"
+
+#, tp-ctx-2edc90df, tp-ctx-5211e47b
+msgid "Search Regular Strings"
+msgstr "Otsi tavalisi sõnesid"
+
+msgid "Filter by Translation Block"
+msgstr "Filtreeri tõlkeploki järgi"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation Editor"
+msgstr "Sõnetõlkimise redaktor"
+
+#, tp-ai
+msgid "Every minute"
+msgstr "Iga minut"
+
+#, tp-ai
+msgid "Could not load the background task."
+msgstr "Taustülesannet ei saanud laadida."
+
+#, tp-ai
+msgid "Waiting to start background processing..."
+msgstr "Ootab tausttöötluse käivitamist..."
+
+#, tp-ai
+msgid "Background processing could not start."
+msgstr "Tausttöötlust ei saanud käivitada."
+
+#, tp-ai
+msgid "Background processing completed."
+msgstr "Tausttöötlus lõpetatud."
+
+#, tp-ai
+msgid "A previous batch item failed."
+msgstr "Eelmine partiiüksus ebaõnnestus."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing did not complete successfully."
+msgstr "TranslatePressi taustatöötlust ei lõpetatud edukalt."
+
+#, tp-ai
+msgid "Error: %s"
+msgstr "Viga: %s"
+
+#, tp-ai
+msgid "You do not have permission to view this task status."
+msgstr "Teil pole luba seda ülesande olekut vaadata."
+
+#, tp-ai
+msgid "Invalid batch task."
+msgstr "Kehtetu partiiülesanne."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress is processing a background task."
+msgstr "TranslatePress töötleb taustaülesannet."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing completed successfully."
+msgstr "TranslatePressi taustatöötlus lõpetati edukalt."
+
+#, tp-ai
+msgid "Processing %s..."
+msgstr "Töötlen %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"%s is optimizing gettext database tables in the background. Translations "
+"continue to work while this runs."
+msgstr ""
+"%s optimeerib taustal Gettexti andmebaasitabeleid. Tõlked töötavad selle "
+"ajal edasi."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization completed successfully."
+msgstr "TranslatePressi Gettexti andmebaasi optimeerimine lõpetati edukalt."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress has detected and cleaned up some failed translation entries "
+"in your database following %s. No further action is required."
+msgstr ""
+"TranslatePress tuvastas ja puhastas teie andmebaasist mõned ebaõnnestunud "
+"tõlkekanded pärast %s. Edasist tegevust pole vaja."
+
+#, tp-ai
+msgid "an isolated incident"
+msgstr "üksikjuhtum"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Unknown gettext lookup hash migration phase: %s."
+msgstr "Uuendamine katkestati! Tundmatu Gettexti otsinguräsi migreerimise faas: %s."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Could not find an available gettext original_id index name "
+"for table %s."
+msgstr ""
+"Uuendamine katkestati! Tabeli %s jaoks ei leitud saadaolevat Gettexti "
+"original_id indeksi nime."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext lookup hash migration cannot process invalid ID "
+"%1$d in table %2$s. Repair the table ID schema and retry."
+msgstr ""
+"Uuendamine katkestati! Gettexti otsinguräsi migreerimine ei suuda töödelda "
+"vigast ID-d %1$d tabelis %2$s. Parandage tabeli ID skeem ja proovige uuesti."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Table %1$s still references %2$d duplicate gettext original "
+"ids."
+msgstr ""
+"Uuendamine katkestati! Tabel %1$s sisaldab endiselt %2$d duplikaatset "
+"Gettexti original_id väärtust."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext original meta still references %d duplicate "
+"original ids."
+msgstr ""
+"Uuendamine katkestati! Gettexti original meta sisaldab endiselt %d "
+"duplikaatset original_id väärtust."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext database optimization completed."
+msgstr "Gettexti andmebaasi optimeerimine lõpetati."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deduplicating gettext translation tables..."
+msgstr "Gettexti tõlketabelite duplikaatide eemaldamine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Migrating gettext original lookup hashes..."
+msgstr "Gettexti originaalide otsinguräside migreerimine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing the gettext originals lookup index..."
+msgstr "Gettext originaalide otsingu indeksi ettevalmistamine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses..."
+msgstr "Gettext käivitusaegsete olekute uuendamine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finishing gettext database optimization..."
+msgstr "Gettext andmebaasi optimeerimise lõpetamine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses for language %s..."
+msgstr "Gettext käivitusaegsete olekute uuendamine keele %s jaoks..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Resolving missing gettext original ids in %s..."
+msgstr "Puuduvate gettext originaal-ID-de lahendamine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing gettext table %s..."
+msgstr "Gettext tabeli %s ettevalmistamine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Removing invalid gettext rows from %s..."
+msgstr "Vigaste gettext ridade eemaldamine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Prepared gettext original ids in %s..."
+msgstr "Gettext originaal-ID-d on ette valmistatud: %s..."
+
+#, tp-ai
+msgid "Normalizing plural forms in %s..."
+msgstr "Mitmuse vormide normaliseerimine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Processing duplicate gettext rows in %s..."
+msgstr "Duplikaat-gettext ridade töötlemine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Building duplicate gettext map for %s..."
+msgstr "Duplikaat-gettext kaardi loomine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Verifying gettext table %s..."
+msgstr "Gettext tabeli %s kontrollimine..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deleting duplicate gettext rows from %s..."
+msgstr "Duplikaat-gettext ridade kustutamine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Rechecking duplicate gettext rows in %s..."
+msgstr "Duplikaat-gettext ridade uuesti kontrollimine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Adding unique gettext index for %s..."
+msgstr "Unikaalse gettext indeksi lisamine: %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finished gettext table %s."
+msgstr "Gettext tabel %s on lõpetatud."
+
+msgid "License"
+msgstr "Litsents"
+
+msgid "Your License Key is valid."
+msgstr "Teie litsentsivõti on kehtiv."
+
+msgid "Your License Key is invalid."
+msgstr "Teie litsentsivõti on kehtetu."
+
+msgid "Your License has expired."
+msgstr "Teie litsents on aegunud."
+
+msgid "Deactivate License"
+msgstr "Deaktiveeri litsents"
+
+msgid "Add a license key"
+msgstr "Lisa litsentsivõti"
+
+msgid "License Key"
+msgstr "Litsentsivõti"
+
+msgid "Manage your license in your %1$s."
+msgstr "Halda oma litsentsi oma lehel %1$s."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI License Key?"
+msgstr "Kas teil pole TranslatePress AI litsentsivõtit?"
+
+msgid "Get a free License Today"
+msgstr "Hankige täna tasuta litsents."
+
+msgid "Add your License Key"
+msgstr "Lisage oma litsentsivõti"
+
+msgid ""
+"Add your License Key to unlock all premium features. Find the License Key "
+"in your"
+msgstr ""
+"Lisage oma litsentsivõti, et avada kõik tasulised funktsioonid. Leidke "
+"litsentsivõti oma"
+
+msgid "Your license is valid and active."
+msgstr "Teie litsents on kehtiv ja aktiivne."
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress License"
+msgstr "TranslatePressi litsents"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"a license key by creating a free account."
+msgstr ""
+"TranslatePress AI automaatse tõlke lubamiseks pead looma tasuta konto, et "
+"saada litsentsivõti."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your license key from"
+msgstr "Automaattõlke lubamiseks TranslatePress AI abil sisesta oma litsentsivõti"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI License"
+msgstr "Hangi tasuta TranslatePress AI litsents"
+
+msgid "Generate License"
+msgstr "Loo litsents"
+
+msgid "Get a Free AI License"
+msgstr "Hangi tasuta AI-litsents"
+
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license."
+msgstr ""
+"See veebisait on juba aktiveeritud tasuta litsentsi alusel. Iga veebisait "
+"saab kasutada ainult ühte tasuta litsentsi."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"See veebisait on juba aktiveeritud tasuta litsentsi alusel. Iga veebisait "
+"saab kasutada ainult ühte tasuta litsentsi. Palun täienda premium-plaanile, "
+"et saada rohkem TranslatePress AI sõnu %1$s oma konto %2$s kaudu."
+
+msgid "Debug Data for License Checking"
+msgstr "Silumisandmed litsentsi kontrollimiseks."
+
+msgid "Debug Data for License Activation"
+msgstr "Silumisandmed litsentsi aktiveerimiseks."
+
+#, tp-glo-ee8b4f9f
+msgid "Please install and activate the TranslatePress - Multilingual plugin"
+msgstr "Palun paigaldage ja aktiveerige pistikprogramm TranslatePress - Multilingual"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update the TranslatePress - Multilingual plugin to version %1$s or "
+"higher to ensure %2$s functions correctly."
+msgstr ""
+"Palun värskendage pistikprogramm TranslatePress - Multilingual versioonile "
+"%1$s või kõrgemale, et %2$s töötaks õigesti."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update TranslatePress - Multilingual to version %2$s or newer. Your "
+"currently installed version of TranslatePress - Multilingual is no longer "
+"compatible with the current version of %1$s."
+msgstr ""
+"Palun värskendage TranslatePress - Multilingual versioonile %2$s või "
+"uuemale. Teie praegu paigaldatud TranslatePress - Multilingual versioon ei "
+"ühildu enam %1$s praeguse versiooniga."
+
+#, tp-glo-ee8b4f9f
+msgid "All TranslatePress functionalities are disabled until then."
+msgstr "Kõik TranslatePress funktsioonid on seni keelatud."
+
+msgid "Update Now"
+msgstr "Uuenda kohe"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This TranslatePress add-on has been migrated to the main plugin and is no "
+"longer used. You can delete it."
+msgstr ""
+"See TranslatePress lisa on üle viidud põhipistikprogrammi ja seda enam ei "
+"kasutata. Saate selle kustutada."
+
+#, tp-glo-5e752340, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires at least PHP version 5.6.20+ to "
+"run. It is the <a href=\"%s\">minimum requirement of the latest WordPress "
+"version</a>. Please contact your server administrator to update your PHP "
+"version."
+msgstr ""
+"<strong>TranslatePress</strong> nõuab töötamiseks vähemalt PHP versiooni "
+"5.6.20+. See on <a href=\"%s\">viimase WordPressi versiooni "
+"miinimumnõue</a>. Palun võtke ühendust oma serveri administraatoriga, et "
+"uuendada oma PHP versiooni."
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Add-ons"
+msgstr "TranslatePressi lisamoodulid"
+
+msgid ""
+"You must first purchase this version to have access to the addon "
+"%1$shere%2$s"
+msgstr ""
+"Sa pead kõigepealt ostma selle versiooni, et saada juurdepääs lisamoodulile "
+"%1$ssiit%2$s."
+
+msgid ""
+"You need an active license to have access to the addon. Renew or purchase a "
+"new one %1$shere%2$s."
+msgstr ""
+"Selle lisa kasutamiseks on vaja aktiivset litsentsi. Uuenda või osta uus "
+"%1$ssiit%2$s."
+
+msgid "Please %1$senter your license%2$s key first, to activate this addon."
+msgstr ""
+"Palun %1$ssisesta oma litsentsi%2$s võti kõigepealt, et see lisa "
+"aktiveerida."
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack (Legacy)"
+msgstr "SEO Pack (Legacy)"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and facebook and twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr ""
+"SEO tugi lehe slugi, lehe pealkirja, kirjelduse ning Facebooki ja Twitteri "
+"sotsiaalse graafiku info jaoks. HTML lang atribuut on korrektselt määratud."
+
+msgid "Recommended Plugins"
+msgstr "Soovitatud pluginad"
+
+msgid "A short list of plugins you can use to extend your website."
+msgstr "Lühike nimekiri pluginatest, millega saad oma veebisaiti laiendada."
+
+#, tp-glo-35089c1a
+msgid "Profile Builder"
+msgstr "Profile Builder"
+
+#, tp-glo-35089c1a
+msgid ""
+"Capture more user information on the registration form with the help of "
+"Profile Builder's custom user profile fields and/or add an Email "
+"Confirmation process to verify your customers accounts."
+msgstr ""
+"Kogu registreerimisvormil rohkem kasutajateavet Profile Builderi kohandatud "
+"kasutajaprofiili väljade abil ja/või lisa e-posti kinnitamise protsess oma "
+"klientide kontode kinnitamiseks."
+
+msgid "Paid Member Subscriptions"
+msgstr "Paid Member Subscriptions"
+
+msgid ""
+"Accept user payments, create subscription plans and restrict content on "
+"your membership site."
+msgstr ""
+"Võta vastu kasutajate makseid, loo tellimusplaane ja piira sisu oma "
+"liikmelisusveebisaidil."
+
+msgid "WP Webhooks Automator"
+msgstr "WP Webhooks Automator"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Create no-code automations and workflows on your WordPress site. Easily "
+"connect your plugins, sites and apps together."
+msgstr ""
+"Loo koodivabu automatiseerimisi ja töövooge oma WordPressi saidil. Ühenda "
+"hõlpsalt oma pluginad, saidid ja rakendused omavahel."
+
+msgid "Save Changes"
+msgstr "Salvesta muudatused"
+
+msgid "Account Page"
+msgstr "Kontoleht"
+
+msgid "You can get one for %1$sfree%2$s, by creating a free account. It includes:"
+msgstr "Saate selle hankida %1$stasuta%2$s, luues tasuta konto. Sellega kaasneb:"
+
+msgid "Debug Information"
+msgstr "Silumisteave"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI words and unlock all features with TranslatePress Pro."
+msgstr "Hankige rohkem AI-sõnu ja avage kõik funktsioonid TranslatePress Pro-ga."
+
+msgid "Already purchased a Premium version?"
+msgstr "Oled juba Premium versiooni ostnud?"
+
+msgid "Go to your %1$s"
+msgstr "Mine oma %1$s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account"
+msgstr "TranslatePress.com konto"
+
+msgid "Download & Install the Pro plugin"
+msgstr "Laadi alla ja installi Pro plugin"
+
+msgid "Learn More"
+msgstr "Loe lähemalt"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Errors"
+msgstr "TranslatePressi vead"
+
+msgid "There are no logged errors."
+msgstr "Logitud vigu ei ole."
+
+#, tp-glo-8896ebe8
+msgid "WordPress Translation Plugin"
+msgstr "WordPressi tõlkeplugin"
+
+#, tp-ai
+msgid "Back to Glossary"
+msgstr "Tagasi sõnastikku"
+
+#, tp-ai
+msgid "Search Existing Translations"
+msgstr "Olemasolevate tõlgete otsing"
+
+#, tp-ai
+msgid ""
+"Search the existing dictionary entries to see how a term is currently "
+"translated in each language."
+msgstr ""
+"Otsi olemasolevaid sõnastikukirjeid, et näha, kuidas mõistet praegu igas "
+"keeles tõlgitakse."
+
+#, tp-ai
+msgid "To fully explore all the translations, use %s."
+msgstr "Kõigi tõlgete vaatamiseks kasutage %s."
+
+#, tp-ai
+msgid "Search existing translations"
+msgstr "Otsi olemasolevaid tõlkeid"
+
+#, tp-ai
+msgid "Replace Existing Translations"
+msgstr "Asenda olemasolevad tõlked"
+
+#, tp-ai
+msgid "The requested glossary term could not be found. It may have been deleted."
+msgstr "Nõutud sõnastiku terminit ei leitud. See võib olla kustutatud."
+
+#, tp-ai
+msgid "&laquo; Back to Glossary"
+msgstr "&laquo; Tagasi sõnastikku"
+
+#, tp-ai
+msgid ""
+"For each language, enter the current (existing) translation you want to "
+"find; every case-insensitive occurrence in the stored translations will be "
+"replaced with the new translation, keeping the original capitalization."
+msgstr ""
+"Iga keele jaoks sisestage praegune (olemasolev) tõlge, mida soovite leida; "
+"iga tõstutundetu esinemine salvestatud tõlgetes asendatakse uue tõlkega, "
+"säilitades esialgse suurtähtede kasutuse."
+
+#, tp-ai
+msgid ""
+"Leaving a language field empty will skip that language entirely (no changes "
+"will be made for it). Only one existing translation per language can be "
+"entered at a time. If you have multiple translations to replace for the "
+"same language, simply run the replacement again with the next value."
+msgstr ""
+"Kui jätta keeleväli tühjaks, jäetakse see keel täielikult vahele (selle "
+"jaoks muudatusi ei tehta). Korraga saab sisestada ainult ühe olemasoleva "
+"tõlke keele kohta. Kui sama keele jaoks on vaja asendada mitut tõlget, "
+"käivitage asendamine lihtsalt uuesti järgmise väärtusega."
+
+#, tp-ai
+msgid ""
+"The \"Existing translation\" is not the term in the default language, but "
+"rather the already existing wrong translation you want to correct."
+msgstr ""
+"\"Olemasolev tõlge\" ei ole vaikimisi keele termin, vaid juba olemasolev "
+"vale tõlge, mida soovite parandada."
+
+#, tp-ai
+msgid "Existing translation"
+msgstr "Olemasolev tõlge"
+
+#, tp-ai
+msgid "New translation"
+msgstr "Uus tõlge"
+
+#, tp-ai
+msgid "Replace in existing translations"
+msgstr "Asenda olemasolevates tõlgetes"
+
+#, tp-ai, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Glossary is available only with the TranslatePress AI engine."
+msgstr "Sõnastik on saadaval ainult TranslatePress AI mootoriga."
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74
+msgid ""
+"Select the %s automatic translation engine to add and manage glossary "
+"terms. For other translation engines (such as DeepL or Google Translate), "
+"glossary functions are available in the translation provider’s dashboard."
+msgstr ""
+"Valige %s automaattõlke mootor sõnastiku terminite lisamiseks ja "
+"haldamiseks. Muude tõlkemootorite (nagu DeepL või Google Translate) puhul "
+"on sõnastiku funktsioonid saadaval tõlketeenuse pakkuja juhtpaneelis."
+
+#, tp-ai
+msgid "Add Glossary Term"
+msgstr "Lisa sõnastiku termin"
+
+#, tp-ai
+msgid ""
+"Define words or phrases that should not be translated automatically, and "
+"optionally provide replacements per language."
+msgstr ""
+"Määrake sõnad või väljendid, mida ei tohiks automaatselt tõlkida, ja "
+"vajadusel andke asendused iga keele kohta."
+
+#, tp-ai
+msgid "The original word or phrase in the default language."
+msgstr "Algne sõna või väljend vaikimisi keeles."
+
+#, tp-ai
+msgid "Add Term"
+msgstr "Lisa termin"
+
+#, tp-ai
+msgid "Search glossary terms"
+msgstr "Otsi sõnastiku termineid"
+
+#, tp-ai
+msgid "Search terms"
+msgstr "Otsi termineid"
+
+#, tp-ai
+msgid "Search Glossary"
+msgstr "Otsi sõnastikust"
+
+#, tp-ai
+msgid "Loading…"
+msgstr "Laadimine…"
+
+#, tp-ai
+msgid "To edit existing translations, use the %s."
+msgstr "Olemasolevate tõlgete muutmiseks kasuta %s."
+
+msgid "Language Switcher update notice"
+msgstr "Keelelüliti uuendamise teade"
+
+msgid "Legacy language switcher is currently enabled"
+msgstr "Pärandkeelelüliti on praegu lubatud"
+
+msgid ""
+"We’ve upgraded the switcher for richer customization and a better user "
+"experience.<br>In order to use the new configurator, turn off <strong>Load "
+"legacy language switcher</strong>."
+msgstr ""
+"Uuendasime lülitit rikkalikuma kohandamise ja parema kasutajakogemuse "
+"jaoks.<br>Uue konfiguraatori kasutamiseks lülita välja <strong>Laadi "
+"pärandkeelelüliti</strong>."
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Note: You can switch back anytime from <strong>Advanced Settings → <a "
+"href=\"%s\">Troubleshooting</a></strong>."
+msgstr ""
+"Märkus: saate igal ajal lülituda tagasi jaotises <strong>Täpsemad seaded → "
+"<a href=\"%s\">Tõrkeotsing</a></strong>."
+
+msgid "Enable the new switcher"
+msgstr "Luba uus vahetaja"
+
+msgid "Get a translation volume estimate with a detailed breakdown per page"
+msgstr "Hangi tõlkemahu hinnang koos detailse leheküljepõhise jaotusega"
+
+msgid "Find how many translatable words are on your website"
+msgstr "Leia, kui palju tõlkimiseks sobivaid sõnu on sinu veebisaidil"
+
+#, tp-glo-c6709f3f
+msgid ""
+"<strong>DeepL</strong> automatic translation is available as a <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"<strong>DeepL</strong>-i automaatne tõlkimine on saadaval kui <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"By upgrading you'll get access to all paid add-ons, premium support and "
+"help fund the future development of TranslatePress."
+msgstr ""
+"Uuendades saad ligipääsu kõigile tasulistele lisamoodulitele, premium-toele "
+"ning aitad kaasa TranslatePress-i tulevase arenduse rahastamisele."
+
+#, tp-glo-c6709f3f
+msgid ""
+"To use <strong>DeepL</strong> for automatic translation, activate this Pro "
+"add-on from the <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"Kasutamaks <strong>DeepL</strong>-i automaatset tõlkimist, aktiveeri see "
+"Pro lisamoodul: <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+
+#, tp-glo-91460d88, tp-glo-c6709f3f, tp-glo-d311355a
+msgid ""
+"Please note that DeepL API usage is paid separately. See <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL pricing "
+"information</a>."
+msgstr ""
+"Pane tähele, et DeepL API kasutamine on eraldi tasuline. Vaata <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL-i hinnateavet</a>."
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro Add-ons"
+msgstr "TranslatePress Pro lisamoodulid"
+
+#, tp-glo-91460d88
+msgid "Test API credentials"
+msgstr "Testi API tunnuseid"
+
+msgid "Check if the selected translation engine is configured correctly."
+msgstr "Kontrolli, kas valitud tõlkemootor on õigesti seadistatud."
+
+msgid "Alternative Engines"
+msgstr "Alternatiivsed mootorid"
+
+msgid "More info"
+msgstr "Lisateave"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Switch to TranslatePress AI"
+msgstr "Lülitu üle TranslatePress AI-le"
+
+#, tp-glo-8896ebe8
+msgid "Integrate machine translation directly with your WordPress website."
+msgstr "Integreeri masintõlge otse oma WordPressi veebisaidiga."
+
+msgid ""
+"Choose which engine you want to use in order to %1$s automatically "
+"translate your website."
+msgstr ""
+"Vali, millist mootorit soovid kasutada selleks, et %1$s automaatselt oma "
+"veebisaiti tõlkida."
+
+#, tp-ctx-742ebaa7
+msgid "Automatically Translate Slugs"
+msgstr "Tõlgi slugid automaatselt"
+
+#, tp-ctx-742ebaa7, tp-ctx-7832384c, tp-ctx-e9944eb3
+msgid ""
+"Generate automatic translations of slugs for posts, pages and Custom Post "
+"Types.<br/>The slugs will be automatically translated starting with the "
+"second refresh of each page."
+msgstr ""
+"Genereeritakse automaatsed slugide tõlked postituste, lehtede ja kohandatud "
+"postitüüpide jaoks.<br/>Slugid tõlgitakse automaatselt alates iga lehe "
+"teisest värskendusest."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This feature is only available in the paid version. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"See funktsioon on saadaval ainult tasulises versioonis. Uuenda "
+"TranslatePress ja ava rohkem premium-funktsioone."
+
+#, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Requires <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack Add-on</a> to be installed and "
+"activated."
+msgstr ""
+"Nõuab <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack documentation\" "
+"target=\"_blank\">SEO Pack lisamooduli</a> installimist ja aktiveerimist."
+
+msgid "Automatic Translation Settings"
+msgstr "Automaattõlke seaded"
+
+msgid "AI Words Low Notification"
+msgstr "Madala AI-sõnade arvu teavitus"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Receive an email notification when your TranslatePress AI word count drops "
+"below the specified threshold."
+msgstr ""
+"Saate e-posti teavituse, kui TranslatePress AI sõnade arv langeb alla "
+"määratud lävendi."
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This feature is only available when using the TranslatePress AI translation "
+"engine."
+msgstr ""
+"See funktsioon on saadaval ainult TranslatePress AI tõlkemootori "
+"kasutamisel."
+
+msgid "Notification Email"
+msgstr "Teavituse e-posti aadress"
+
+msgid "The email address where the low AI words notification will be sent."
+msgstr "E-posti aadress, kuhu saadetakse teavitus madala AI-sõnade arvu kohta."
+
+msgid "Word Threshold"
+msgstr "Sõnade lävend"
+
+msgid "words"
+msgstr "sõna"
+
+msgid "You will be notified when remaining AI words drop below this number."
+msgstr "Saate teavituse, kui järelejäänud AI-sõnade arv langeb alla selle arvu."
+
+msgid "Block Crawlers"
+msgstr "Blokeeri robotid"
+
+msgid ""
+"Block crawlers from triggering automatic translations on your "
+"website.<br>This will not prevent crawlers from accessing this site's pages."
+msgstr ""
+"Takistab roboteid automaatsete tõlgete käivitamast teie veebisaidil.<br>See "
+"ei takista roboteid selle saidi lehekülgedele pääsemast."
+
+msgid "Limit machine translation / characters per day"
+msgstr "Masintõlke piirang / märki päevas"
+
+msgid ""
+"Add a limit to the number of automatically translated characters so you can "
+"better budget your project."
+msgstr ""
+"Lisage automaatselt tõlgitud märkide arvule piirang, et saaksite oma "
+"projekti paremini planeerida."
+
+msgid "characters per day"
+msgstr "märki päevas"
+
+msgid "Today's Character Count: "
+msgstr "Tänane märkide arv: "
+
+msgid "Log machine translation queries."
+msgstr "Logi masintõlke päringud."
+
+#, tp-glo-8896ebe8
+msgid ""
+"Only enable for testing purposes. Can impact performance.<br>All records "
+"are stored in the wp_trp_machine_translation_log database table. Use a "
+"plugin like <a href=\"https://wordpress.org/plugins/wp-data-access/\" "
+"target=\"_blank\">WP Data Access</a> to browse the logs or directly from "
+"your database manager (PHPMyAdmin, etc.)"
+msgstr ""
+"Luba ainult testimise eesmärgil. Võib mõjutada jõudlust.<br>Kõik kirjed "
+"salvestatakse andmebaasi tabelisse wp_trp_machine_translation_log. Logide "
+"sirvimiseks kasuta pistikprogrammi nagu <a "
+"href=\"https://wordpress.org/plugins/wp-data-access/\" target=\"_blank\">WP "
+"Data Access</a> või vaata neid otse oma andmebaasi haldurist (PHPMyAdmin "
+"jne)."
+
+#, tp-glo-91460d88
+msgid "Test API Credentials"
+msgstr "Testi API volitusi"
+
+#, tp-glo-1aabb38a
+msgid "HTTP Referrer: "
+msgstr "HTTP viitaja: "
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Use this HTTP Referrer if the API lets you restrict key usage from its "
+"Dashboard."
+msgstr ""
+"Kasuta seda HTTP viitajat, kui API võimaldab oma armatuurlaualt võtme "
+"kasutamist piirata."
+
+#, tp-ai, tp-glo-9fa92a70
+msgid "Request URL"
+msgstr "Päringu URL"
+
+#, tp-ai
+msgid "Request Headers"
+msgstr "Päringu päised"
+
+#, tp-ai
+msgid "Request Body"
+msgstr "Päringu keha"
+
+msgid "Response"
+msgstr "Vastus"
+
+msgid "Response Body"
+msgstr "Vastuse keha"
+
+msgid "Entire Response From wp_remote_get():"
+msgstr "Kogu vastus funktsioonist wp_remote_get():"
+
+msgid "Select the languages you wish to make your website available in."
+msgstr "Vali keeled, milles soovid oma veebisaidi kättesaadavaks teha."
+
+msgid "Formality"
+msgstr "Ametlikkus"
+
+msgid "Code"
+msgstr "Kood"
+
+msgid "Formal"
+msgstr "Ametlik"
+
+msgid "Informal"
+msgstr "Mitteametlik"
+
+msgid "This language does not support formality. "
+msgstr "See keel ei toeta ametlikkust. "
+
+msgid "Are you sure you want to remove this language?"
+msgstr "Kas oled kindel, et soovid selle keele eemaldada?"
+
+msgid "Custom Languages"
+msgstr "Kohandatud keeled"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Adding more than two languages is a paid feature. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr ""
+"Rohkem kui kahe keele lisamine on tasuline funktsioon. Täiendage "
+"TranslatePressi ja avage rohkem tasulisi funktsioone."
+
+msgid "Please %1$senter your license%2$s key first to add more languages."
+msgstr ""
+"Palun %1$ssisestage oma litsents%2$s võti kõigepealt, et lisada rohkem "
+"keeli."
+
+msgid ""
+"You need an active license to add more languages. Verify in your "
+"%1$saccount%2$s that your license is valid"
+msgstr ""
+"Rohkemate keelte lisamiseks on vajalik aktiivne litsents. Kontrollige oma "
+"%1$skontos%2$s, et teie litsents kehtib."
+
+msgid "To Add more languages activate the Multiple Languages Addon"
+msgstr "Rohkemate keelte lisamiseks aktiveerige mitme keele lisa"
+
+msgid "Website Languages"
+msgstr "Veebisaidi keeled"
+
+msgid ""
+"WARNING. Changing the default language will invalidate existing "
+"translations."
+msgstr "HOIATUS. Vaikekeele muutmine muudab olemasolevad tõlked kehtetuks."
+
+msgid ""
+"Even changing from en_US to en_GB, because they are treated as two "
+"different languages."
+msgstr ""
+"Isegi en_US-st en_GB-ks muutmine, kuna neid käsitletakse kahe erineva "
+"keelena."
+
+msgid "In most cases changing the default flag is all it is needed: "
+msgstr "Enamikel juhtudel piisab vaike lipu muutmisest: "
+
+msgid "replace the default flag"
+msgstr "asendage vaike lipp"
+
+msgid "Re-run Setup Wizard"
+msgstr "Käivitage häälestusviisard uuesti"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The Setup wizard allows you to quickly setup TranslatePress. You can "
+"initiate it at any time."
+msgstr ""
+"Häälestusviisard võimaldab teil kiiresti TranslatePressi seadistada. Saate "
+"selle igal ajal käivitada."
+
+msgid "Language Settings"
+msgstr "Keele seaded"
+
+msgid "Use Native language name"
+msgstr "Kasutage emakeelset nime"
+
+msgid ""
+"Check if you want to display languages in their native names. Otherwise, "
+"languages will be displayed in English."
+msgstr ""
+"Märkige, kui soovite keeli kuvada nende emakeelsete nimedega. Vastasel "
+"juhul kuvatakse keeled inglise keeles."
+
+msgid "Use a subdirectory for the default language"
+msgstr "Kasutage vaikekeele jaoks alamkataloogi"
+
+#, tp-glo-9fa92a70
+msgid ""
+"Check if you want to add the subdirectory in the URL for the default "
+"language.</br>By checking this option, the default language seen by website "
+"visitors will become the first one in the \"All Languages\" list."
+msgstr ""
+"Märkige, kui soovite vaikekeele jaoks lisada URL-i alamkataloogi.</br>Selle "
+"valiku märkimisel muutub veebisaidi külastajatele nähtav vaikekeel loendis "
+"\"Kõik keeled\" esimeseks keeleks."
+
+msgid "Force language in custom links"
+msgstr "Sundke keel kohandatud linkides"
+
+msgid ""
+"Select Yes if you want to force custom links without language encoding to "
+"keep the currently selected language."
+msgstr ""
+"Valige Jah, kui soovite, et kohandatud lingid ilma keelekoodita säilitaksid "
+"praegu valitud keele."
+
+#, tp-glo-da70db08
+msgid "Shortcode "
+msgstr "Shortcode "
+
+#, tp-glo-da70db08
+msgid "Use shortcode on any page or widget."
+msgstr "Kasuta shortcode'i mis tahes lehel või vidinas."
+
+#, tp-glo-8339568d
+msgid ""
+"You can also add the <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">Language Switcher Block</a> in the WP Gutenberg Editor."
+msgstr ""
+"Saad lisada ka <a href=\"%s\" title=\"Keelevahetaja ploki "
+"dokumentatsioon\">Keelevahetaja ploki</a> WP Gutenberg toimetisse."
+
+msgid "Menu item"
+msgstr "Menüü üksus"
+
+msgid ""
+"Go to  %1$s Appearance -> Menus%2$s to add languages to the Language "
+"Switcher in any menu."
+msgstr ""
+"Mine %1$sVälimus -> Menüüd%2$s, et lisada keeli Keelevahetajasse mis tahes "
+"menüüs."
+
+msgid "Learn more in our documentation."
+msgstr "Tutvu lähemalt meie dokumentatsiooniga."
+
+msgid "Floating language selection"
+msgstr "Ujuv keelevalik"
+
+msgid "Add a floating dropdown that follows the user on every page."
+msgstr "Lisa ujuv rippmenüü, mis liigub kasutajaga kaasa igal lehel."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-glo-ee8b4f9f
+msgid "Show \"Powered by TranslatePress\""
+msgstr "Näita \"Powered by TranslatePress\""
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Show the small \"Powered by TranslatePress\" label in the floater language "
+"switcher."
+msgstr "Näita väikest \"Powered by TranslatePress\" silti ujuvas keelevahetajas."
+
+msgid "5 Days to Better Multilingual Websites"
+msgstr "5 päeva paremate mitmekeelsete veebisaitideni"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"%sJoin our FREE & EXCLUSIVE onboarding course%s and learn how to grow your "
+"multilingual traffic, reach international markets, and save time & money "
+"while getting the most out of TranslatePress!"
+msgstr ""
+"%sLiitu meie TASUTA ja EKSKLUSIIVSE sisseelamiskursusega%s ja õpi, kuidas "
+"kasvatada oma mitmekeelset liiklust, jõuda rahvusvahelistele turgudele ning "
+"säästa aega ja raha, saades TranslatePressist parimat kasu!"
+
+msgid "Invalid email address"
+msgstr "Vigane e-posti aadress"
+
+msgid "Your email"
+msgstr "Sinu e-post"
+
+msgid "Sign me up!"
+msgstr "Registreeri mind!"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Sign up with your email address and receive a 5-part email guide to help "
+"you maximize the power of TranslatePress."
+msgstr ""
+"Registreeru oma e-posti aadressiga ja saa 5-osaline e-posti juhend, mis "
+"aitab sul TranslatePressi võimalusi maksimaalselt ära kasutada."
+
+msgid "Dismiss email course notification"
+msgstr "Peida e-posti kursuse teavitus"
+
+msgid ""
+"Hey %s,<br>Never miss an important update - opt in to our security and "
+"feature updates notifications, and non-sensitive diagnostic tracking."
+msgstr ""
+"Tere, %s,<br>Ära jää olulistest uuendustest ilma – luba meie turbe- ja "
+"funktsiooniuuenduste teavitused ning mittetundlik diagnostiline jälgimine."
+
+msgid "Allow & Continue"
+msgstr "Luba ja jätka"
+
+msgid "Skip"
+msgstr "Jäta vahele"
+
+#, tp-glo-ee8b4f9f
+msgid "This will allow TranslatePress to:"
+msgstr "See võimaldab TranslatePressil:"
+
+msgid "Your profile overview"
+msgstr "Teie profiili ülevaade"
+
+msgid "Name and email address"
+msgstr "Nimi ja e-posti aadress"
+
+msgid "Admin Notices"
+msgstr "Admini teated"
+
+msgid "Updates, announcements, marketing, no spam"
+msgstr "Uuendused, teated, turundus, rämpsposti pole"
+
+msgid "Plugin status & settings"
+msgstr "Plugina olek ja seaded"
+
+msgid "Active, Deactivated, installed version and settings"
+msgstr "Aktiivne, deaktiveeritud, paigaldatud versioon ja seaded"
+
+msgid "Privacy Policy"
+msgstr "Privaatsuspoliitika"
+
+msgid "Terms of Service"
+msgstr "Kasutustingimused"
+
+msgid "Support"
+msgstr "Tugi"
+
+msgid "Add Extra AI Words"
+msgstr "Lisa täiendavaid AI-sõnu"
+
+msgid ""
+"<strong>IMPORTANT NOTE:</strong> Before performing this action it is "
+"strongly recommended to first backup the database."
+msgstr ""
+"<strong>OLULINE MÄRKUS:</strong> Enne selle toimingu teostamist on "
+"tungivalt soovitatav kõigepealt varundada andmebaas."
+
+msgid ""
+"IMPORTANT: It is strongly recommended to first backup the database!! Are "
+"you sure you want to continue?"
+msgstr ""
+"OLULINE: On tungivalt soovitatav kõigepealt varundada andmebaas!! Kas olete "
+"kindel, et soovite jätkata?"
+
+msgid "Operations to perform"
+msgstr "Teostatavad toimingud"
+
+#, tp-ctx-2edc90df
+msgid "Remove CDATA for original and dictionary strings"
+msgstr "Eemalda CDATA originaal- ja sõnastiku stringidelt"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Removes CDATA from trp_original_strings and trp_dictionary_* "
+"tables.<br>This type of content should not be detected by TranslatePress. "
+"It might have been introduced in the database in older versions of the "
+"plugin."
+msgstr ""
+"Eemaldab CDATA tabelitest trp_original_strings ja trp_dictionary_*.<br>Seda "
+"tüüpi sisu ei peaks TranslatePress tuvastama.<br>See võis olla andmebaasi "
+"lisatud plugina vanemates versioonides."
+
+msgid "Remove untranslated links from dictionary tables"
+msgstr "Eemalda tõlkimata lingid sõnastiku tabelitest"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Removes untranslated links and images from all trp_dictionary_* tables. "
+"These tables contain translations for user-inputted strings such as post "
+"content, post title, menus etc."
+msgstr ""
+"Eemaldab tõlkimata lingid ja pildid kõigist trp_dictionary_* tabelitest. "
+"Need tabelid sisaldavad kasutaja sisestatud stringide tõlkeid, nagu "
+"postituse sisu, postituse pealkiri, menüüd jne."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Remove duplicate rows for gettext strings"
+msgstr "Eemalda duplikaatreaad gettext stringidest"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Cleans up all trp_gettext_* tables of duplicate rows. These tables contain "
+"translations for themes and plugin strings."
+msgstr ""
+"Puhastab kõik trp_gettext_* tabelid duplikaatreadest. Need tabelid "
+"sisaldavad teemade ja pluginate stringide tõlkeid."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for dictionary strings"
+msgstr "Eemalda duplikaatreaad sõnastiku stringidest"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_dictionary_* tables of duplicate rows. These tables "
+"contain translations for user-inputted strings such as post content, post "
+"title, menus etc."
+msgstr ""
+"Puhastab kõik trp_dictionary_* tabelid duplikaatreadest. Need tabelid "
+"sisaldavad kasutaja sisestatud stringide tõlkeid, nagu postituse sisu, "
+"postituse pealkiri, menüüd jne."
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for original dictionary strings"
+msgstr "Eemalda duplikaatreaad originaalsetelt sõnastiku stringidelt"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_original_strings table of duplicate rows. This table "
+"contains strings in the default language, without any translation.<br>The "
+"trp_original_meta table, which contains meta information that refers to the "
+"post parent’s ID, is also regenerated.<br>Such duplicates can appear in "
+"exceptional situations of unexpected behavior."
+msgstr ""
+"Puhastab trp_original_strings tabeli duplikaatreadest. See tabel sisaldab "
+"vaikimisi keele stringe ilma tõlketa.<br>trp_original_meta tabel, mis "
+"sisaldab metaandmeid, mis viitavad postituse vanema ID-le, taastatakse "
+"samuti.<br>Sellised duplikaadid võivad ilmneda erandlike ootamatu käitumise "
+"olukordade korral."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid ""
+"Replace gettext strings that have original ID NULL with the correct "
+"original IDs"
+msgstr ""
+"Asenda gettext stringid, mille originaal-ID on NULL, õigete "
+"originaal-ID-dega"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid ""
+"Fixes an edge case issue where some gettext strings have the original ID "
+"incorrectly set to NULL, causing problems in the Translation "
+"Editor.<br>This operation corrects the original IDs in the trp_gettext_* "
+"tables.<br>Only check this option if you encountered an issue in the "
+"Translation Editor where clicking the green pencil did not bring up the "
+"gettext string for translation in the left sidebar.<br>Otherwise, please "
+"leave this option unchecked because it's an intensive operation."
+msgstr ""
+"Parandab äärjuhtumi, kus mõnel gettext stringil on originaal-ID ekslikult "
+"NULL-iks seatud, mis tekitab probleeme tõlkeredaktoris.<br>See toiming "
+"parandab originaal-ID-sid trp_gettext_* tabelites.<br>Märgi see valik "
+"ainult siis, kui ilmnes tõlkeredaktoris probleem, kus rohelise pliiatsi "
+"klõpsamine ei toonud gettext stringi tõlkimiseks vasakule "
+"külgribale.<br>Vastasel juhul jäta see valik märkimata, sest see on "
+"ressursimahukas toiming."
+
+msgid "Optimize Database"
+msgstr "Optimeeri andmebaasi"
+
+#, tp-glo-34f425d9, tp-glo-ee8b4f9f
+msgid "TranslatePress Database Updater"
+msgstr "TranslatePress Database Updater"
+
+#, tp-glo-ee8b4f9f
+msgid "Updating TranslatePress tables. Please leave this window open."
+msgstr "TranslatePress tabelite uuendamine. Palun jäta see aken avatuks."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Open colour picker"
+msgstr "Ava värvivalija"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enabled"
+msgstr "Lubatud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Disabled"
+msgstr "Keelatud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Write custom CSS here..."
+msgstr "Kirjuta siia kohandatud CSS..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Include"
+msgstr "Kaasa"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Exclude"
+msgstr "Välja"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Content Restriction Mode"
+msgstr "Sisu piiramise režiim"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "No languages selected"
+msgstr "Keeli pole valitud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saving..."
+msgstr "Salvestamine..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saved!"
+msgstr "Salvestatud!"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save changes"
+msgstr "Salvesta muudatused"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert to last saved values"
+msgstr "Taasta viimati salvestatud väärtused"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert changes"
+msgstr "Tühista muudatused"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Restoring will revert to the last saved version and discard your current "
+"edits."
+msgstr ""
+"Taastamine naaseb viimati salvestatud versiooni juurde ja tühistab "
+"praegused muudatused."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert"
+msgstr "Taasta"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Keep editing"
+msgstr "Jätka muutmist"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Are you sure you want to apply the <strong>%s</strong> preset?"
+msgstr "Kas olete kindel, et soovite rakendada eelseadet <strong>%s</strong>?"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "It will override your current settings."
+msgstr "See asendab teie praegused seadistused."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply preset"
+msgstr "Rakenda eelseade"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply %s preset"
+msgstr "Rakenda eelseade %s"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save failed"
+msgstr "Salvestamine ebaõnnestus"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "English"
+msgstr "Inglise"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Spanish"
+msgstr "Hispaania"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "French"
+msgstr "Prantsuse"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Minimal Light"
+msgstr "Minimalistlik hele"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Dark Overlay"
+msgstr "Tume ülekate"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Brand Blue"
+msgstr "Brändi sinine"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Bordered"
+msgstr "Ääristatud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Preview"
+msgstr "Hüpikakna eelvaade"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "User Language Detection Method"
+msgstr "Kasutaja keele tuvastamise meetod"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Notification Behavior"
+msgstr "Teavituse käitumine"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Content"
+msgstr "Hüpikakna sisu"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply a preset"
+msgstr "Rakenda eelseade"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Design"
+msgstr "Kohanda kujundust"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language detection"
+msgstr "Keele tuvastamine"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid ""
+"Select how the language should be detected for first time visitors.<br>The "
+"visitor's last displayed language will be remembered through cookies."
+msgstr ""
+"Vali, kuidas keelt tuvastatakse esmakordsete külastajate "
+"puhul.<br>Külastaja viimati kuvatud keel jäetakse meelde küpsiste abil."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup display"
+msgstr "Hüpikakna kuvamine"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Conditionally display popup based on language"
+msgstr "Kuva hüpikaken tingimuslikult keele alusel"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Type"
+msgstr "Hüpikakna tüüp"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid ""
+"Visitors will be redirected directly when a different preferred language is "
+"detected."
+msgstr "Kui tuvastatakse erinev eelistatud keel, suunatakse külastajad otse ümber."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Text"
+msgstr "Hüpikakna tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Button Text"
+msgstr "Nupu tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close Button Text"
+msgstr "Sulgemisnupu tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background color"
+msgstr "Taustavärv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text color"
+msgstr "Teksti värv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button background color"
+msgstr "Nupu taustavärv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button hover color"
+msgstr "Nupu hover-värv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button text color"
+msgstr "Nupu tekstivärv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button border radius"
+msgstr "Nupu ääre raadius"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Close icon color"
+msgstr "Sulgemisikooni värv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Overlay color"
+msgstr "Ülekattekihi värv"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Entrance animation"
+msgstr "Sisenemisanimatsioon"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Animation"
+msgstr "Animatsioon"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Fade"
+msgstr "Hajumine"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from top"
+msgstr "Libisemine ülevalt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from right"
+msgstr "Libisemine paremalt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from bottom"
+msgstr "Libisemine alt"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from left"
+msgstr "Libisemine vasakult"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Enable custom CSS"
+msgstr "Luba kohandatud CSS"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "No names"
+msgstr "Nimedeta"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Show flags"
+msgstr "Kuva lipud"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Rectangle (4:3)"
+msgstr "Ristkülik (4:3)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Square (1:1)"
+msgstr "Ruut (1:1)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag border radius"
+msgstr "Lipu ääre raadius"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher background"
+msgstr "Vahetaja taust"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover background"
+msgstr "Vahetaja taust (hover)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher text"
+msgstr "Vahetaja tekst"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover text"
+msgstr "Vahetaja tekst (hover)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher border"
+msgstr "Vahetaja ääris"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border width"
+msgstr "Vahetaja äärise laius"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border radius"
+msgstr "Vahetaja äärise raadius"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Hover over the language switcher to see it in action!"
+msgstr "Liigu hiirega keelelüliti kohale, et näha seda tegevuses!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Preview"
+msgstr "Lüliti eelvaade"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enable Floating Switcher"
+msgstr "Luba ujuv lüliti"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is enabled"
+msgstr "Lüliti on lubatud"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is disabled"
+msgstr "Lüliti on keelatud"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Type"
+msgstr "Lüliti tüüp"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages as dropdown"
+msgstr "Näita keeli rippmenüüna"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages side by side"
+msgstr "Näita keeli kõrvuti"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background hover color"
+msgstr "Tausta hover-värv"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text hover color"
+msgstr "Teksti hover-värv"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border color"
+msgstr "Vahetaja äärise värv"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag and text size"
+msgstr "Lipu ja teksti suurus"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons shape"
+msgstr "Lipu ikoonide kuju"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons border radius"
+msgstr "Lipu ikoonide äärise raadius"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Layout"
+msgstr "Kohanda paigutust"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Show the small Powered by TranslatePress label in the language switcher."
+msgstr "Näita keelevahetajas väikest Powered by TranslatePress silti"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "Sul on salvestamata muudatusi. Lahkuda ikkagi?"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher animations"
+msgstr "Vahetaja animatsioonid"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one. <br> Only works when there are exactly two "
+"languages, the default one and a translation one."
+msgstr ""
+"Muudab keelelüliti nupuks, mis kuvab teise saadaoleva keele, mitte "
+"praeguse. <br> Töötab ainult juhul, kui on täpselt kaks keelt – vaikekeel "
+"ja tõlkekeel."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "This option only works when exactly two languages are published."
+msgstr "See valik töötab ainult siis, kui on avaldatud täpselt kaks keelt."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copied!"
+msgstr "Kopeeritud!"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copy"
+msgstr "Kopeeri"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-8339568d, tp-glo-da70db08
+msgid ""
+"Use shortcode on any page or widget. You can also add the Language Switcher "
+"Block in the WP Gutenberg Editor."
+msgstr ""
+"Kasuta shortcode'i mis tahes lehel või vidinas. WP Gutenberg redaktoris "
+"saad lisada ka keelelüliti ploki."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Additional Settings"
+msgstr "Täiendavad seaded"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of hovering. "
+"<br> Close it by clicking on it, anywhere else on the screen or by pressing "
+"the escape key. <br> This will affect only the shortcode language switcher."
+msgstr ""
+"Ava keelelüliti shortcode klõpsates sellel, mitte hõljutades. <br> Sulge "
+"see klõpsates sellel, mis tahes muus kohas ekraanil või vajutades "
+"paoklahvi. <br> See mõjutab ainult shortcode keelelüliti."
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Menu Switcher Layout"
+msgstr "Menüü keelelüliti paigutus"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"Go to <a href=\"/wp-admin/nav-menus.php\">Appearance → Menus</a> to add "
+"languages to the Language Switcher in any menu.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Learn more in our documentation.</a>"
+msgstr ""
+"Ava <a href=\"/wp-admin/nav-menus.php\">Välimus → Menüüd</a>, et lisada "
+"keeli menüü keelelülitisse mis tahes menüüs.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Loe lähemalt meie "
+"dokumentatsioonist.</a>"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose in which languages to show the block."
+msgstr "Vali, millistes keeltes plokk kuvada."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose from which languages the block is excluded."
+msgstr "Vali, millistest keeltest plokk on välja jäetud."
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Select language(s)"
+msgstr "Vali keel(ed)"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress Language Restriction"
+msgstr "TranslatePress keelepiirang"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid ""
+"Language restrictions cannot be saved on a top-level Classic block. Convert "
+"it to blocks or place it inside a Group block first."
+msgstr ""
+"Keelepiiranguid ei saa salvestada tipptaseme klassikalises plokis. Teisenda "
+"see plokkideks või aseta see kõigepealt Grupi ploki sisse."
+
+msgctxt "page 1 of 3"
+msgid "of"
+msgstr "/"
+
+msgctxt "Untranslated in this language"
+msgid "in"
+msgstr "keeles"
+
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "Addons tab"
+msgstr "Lisade vahekaart"
+
+#, tp-glo-77a09a79, tp-glo-b83ea26c, tp-glo-ee8b4f9f
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "TranslatePress Pro Add-on"
+msgstr "TranslatePress Pro Add-on"
+
+#, tp-ai
+msgctxt "block title"
+msgid "Language Switcher"
+msgstr "Keelelüliti"
+
+#, tp-ai
+msgctxt "block description"
+msgid "Displays the Language Switcher."
+msgstr "Kuvab keelelüliti."
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Switcher"
+msgstr "Keelelüliti"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Translate"
+msgstr "Tõlgi"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgctxt "block keyword"
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Names"
+msgstr "Keelte nimed"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Flags"
+msgstr "Lipud"

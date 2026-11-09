@@ -258,6 +258,13 @@ class Model {
 			function ( $recipient ) {
 				$recipient['avatar'] = get_avatar_url( $recipient['email'], array( 'size' => 30 ) );
 
+				/*
+				 * An email recipient can be the owner of a registered user account. The id is only prepared for view so
+				 * that the schedule screen can tell that recipient apart from the same person added as a user.
+				 */
+				$user                 = get_user_by( 'email', $recipient['email'] );
+				$recipient['user_id'] = $user instanceof \WP_User ? $user->ID : 0;
+
 				return $recipient;
 			},
 			$email_recipients

@@ -295,10 +295,10 @@ class PLL_Wizard {
 	 * @return void
 	 */
 	public function enqueue_scripts() {
-		wp_enqueue_style( 'polylang_admin', plugins_url( '/css/build/admin' . $this->get_suffix() . '.css', POLYLANG_ROOT_FILE ), array(), POLYLANG_VERSION );
-		wp_enqueue_style( 'pll-wizard', plugins_url( '/css/build/wizard' . $this->get_suffix() . '.css', POLYLANG_ROOT_FILE ), array( 'dashicons', 'install', 'common', 'forms' ), POLYLANG_VERSION );
+		pll_enqueue_style( 'admin' );
+		pll_enqueue_style( 'wizard', array( 'dashicons', 'install', 'common', 'forms' ) );
 
-		$this->styles = array( 'polylang_admin', 'pll-wizard' );
+		$this->styles = array( 'pll-admin', 'pll-wizard' );
 	}
 
 	/**
@@ -482,7 +482,8 @@ class PLL_Wizard {
 		// To be really loaded the script needs to be passed to the `$steps['languages']['scripts']` array below with the same handle than in `wp_enqueue_script()`.
 		wp_enqueue_script( 'pll_settings', plugins_url( '/js/build/settings' . $this->get_suffix() . '.js', POLYLANG_ROOT_FILE ), array( 'jquery', 'jquery-ui-selectmenu' ), POLYLANG_VERSION, true );
 		wp_localize_script( 'pll_settings', 'pll_settings', array( 'dismiss_notice' => esc_html__( 'Dismiss this notice.', 'polylang' ) ) );
-		wp_register_script( 'pll-wizard-languages', plugins_url( '/js/build/languages-step' . $this->get_suffix() . '.js', POLYLANG_ROOT_FILE ), array( 'jquery', 'jquery-ui-dialog' ), POLYLANG_VERSION, true );
+
+		pll_enqueue_script( 'wizard-languages', array( 'jquery', 'jquery-ui-dialog' ), array( 'in_footer' => true ) );
 		wp_localize_script(
 			'pll-wizard-languages',
 			'pll_wizard_params',
@@ -504,7 +505,7 @@ class PLL_Wizard {
 				'i18n_remove_language_icon'   => esc_html__( 'Remove this language', 'polylang' ),
 			)
 		);
-		wp_enqueue_script( 'pll-wizard-languages' );
+
 		wp_enqueue_style( 'pll-wizard-selectmenu', plugins_url( '/css/build/selectmenu' . $this->get_suffix() . '.css', POLYLANG_ROOT_FILE ), array( 'dashicons', 'install', 'common', 'wp-jquery-ui-dialog' ), POLYLANG_VERSION );
 		$steps['languages'] = array(
 			'name'    => esc_html__( 'Languages', 'polylang' ),
@@ -757,19 +758,24 @@ class PLL_Wizard {
 	 * @return void
 	 */
 	public function display_step_home_page() {
-		$model   = $this->model;
-		$languages = $model->languages->get_list();
+		$model        = $this->model;
+		$languages    = $model->languages->get_list();
 		$home_page_id = get_option( 'page_on_front' );
 		$home_page_id = is_numeric( $home_page_id ) ? (int) $home_page_id : 0;
 		$translations = $model->post->get_translations( $home_page_id );
-		$home_page = $home_page_id > 0 ? get_post( $home_page_id ) : null;
-		$home_page_language = $model->post->get_language( $home_page_id );
-		$untranslated_languages = array();
+		$home_page    = $home_page_id > 0 ? get_post( $home_page_id ) : null;
 
 		if ( empty( $home_page ) ) {
 			return;
 		}
 
+		$home_page_language = $model->post->get_language( $home_page_id );
+
+		if ( empty( $home_page_language ) ) {
+			return;
+		}
+
+		$untranslated_languages = array();
 		foreach ( $languages as $language ) {
 			if ( ! $model->post->get( $home_page_id, $language ) ) {
 				$untranslated_languages[] = $language;

@@ -147,7 +147,46 @@ class Model extends Base {
 	 * Returns array recipients email address and names.
 	 */
 	public static function get_recipients() {
-		return array_merge( self::get_registered_user_recipients(), self::get_email_recipients() );
+		return self::unique_recipients(
+			array_merge( self::get_registered_user_recipients(), self::get_email_recipients() )
+		);
+	}
+
+	/**
+	 * Drops the recipients sharing an email address with a preceding one, so that each address is reported to once.
+	 *
+	 * The recipients screen and the settings endpoint both reject duplicates, but the same address can already be stored
+	 * in both recipient lists on sites that were saved before that.
+	 *
+	 * @param array $recipients The recipients, registered users first as those also carry the review link.
+	 *
+	 * @since 2.4.14
+	 *
+	 * @return array
+	 */
+	private static function unique_recipients( array $recipients = array() ) {
+		$sent_to = array();
+
+		return array_values(
+			array_filter(
+				$recipients,
+				function ( $recipient ) use ( &$sent_to ) {
+					if ( empty( $recipient['email'] ) ) {
+						return false;
+					}
+
+					$email = strtolower( trim( $recipient['email'] ) );
+
+					if ( in_array( $email, $sent_to, true ) ) {
+						return false;
+					}
+
+					$sent_to[] = $email;
+
+					return true;
+				}
+			)
+		);
 	}
 
 	public static function get_registered_user_recipients() {

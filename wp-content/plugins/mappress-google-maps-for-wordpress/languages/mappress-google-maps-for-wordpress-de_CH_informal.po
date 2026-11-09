@@ -1,0 +1,1620 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: MapPress Maps for WordPress 2.84.17\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
+"Last-Translator: \n"
+"Language-Team: Deutsch (Schweiz, Du)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2022-11-24T21:44:43+00:00\n"
+"PO-Revision-Date: 2023-01-30 15:01+0000\n"
+"Language: de-CH-informal\n"
+"X-Generator: Loco https://localise.biz/\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.6.3; wp-6.1.1\n"
+
+msgid " Tagged "
+msgstr " Markiert"
+
+msgid "%d maps for this post"
+msgstr "%d Karten für diesen Beitrag"
+
+msgid "%d of %d"
+msgstr "%d von %d"
+
+msgid "%d Result"
+msgstr "%d Ergebnis"
+
+msgid "%d Results"
+msgstr "%d Ergebnisse"
+
+msgid "(credit card required)"
+msgstr "(Kreditkarte erforderlich)"
+
+msgid "(optional - credit card required)"
+msgstr "(optional - Kreditkarte erforderlich)"
+
+msgid "A $200 monthly usage credit means it's free for most sites"
+msgstr "Ein monatliches Nutzungsguthaben von 200 US-Dollar bedeutet, dass es für die meisten Websites kostenlos ist"
+
+msgid "A generous monthly usage credit means it's free for most sites."
+msgstr "Ein großzügiges monatliches Nutzungsguthaben bedeutet, dass es für die meisten Websites kostenlos ist."
+
+msgid "A Google Maps API key is required"
+msgstr "Ein Google Maps-API-Schlüssel ist erforderlich"
+
+msgid "A theme or plugin has loaded Google Maps twice"
+msgstr "Ein Theme oder Plugin hat Google Maps zweimal geladen"
+
+msgid "A theme or plugin is preventing Google Maps from loading."
+msgstr "Ein Design oder Plugin verhindert das Laden von Google Maps."
+
+msgid "A theme or plugin is preventing the Leaflet library from loading."
+msgstr "Ein Design oder Plugin verhindert das Laden der Leaflet-Bibliothek."
+
+msgid "A theme or plugin is preventing the underscore.js library from loading."
+msgstr "Ein Design oder Plugin verhindert das Laden der underscore.js-Bibliothek."
+
+msgid "ACF map field to include on MapPress mashups"
+msgstr "ACF-Kartenfeld, das in MapPress-Mashups aufgenommen werden soll"
+
+msgid "Active"
+msgstr "Aktiv"
+
+msgid "Add"
+msgstr "Hinzufügen"
+
+msgid "Add custom field"
+msgstr "Benutzerdefiniertes Feld hinzufügen"
+
+msgid "Add Media"
+msgstr "Medien hinzufügen"
+
+msgid "Add New"
+msgstr "Neue hinzufügen"
+
+msgid "Add style"
+msgstr "Stil hinzufügen"
+
+msgid "Add to map"
+msgstr "Zur Karte hinzufügen"
+
+msgid "Address"
+msgstr "Die Anschrift"
+
+msgid "Address line "
+msgstr "Adresszeile"
+
+msgid "Advanced Custom Fields"
+msgstr "Erweiterte benutzerdefinierte Felder"
+
+msgid "All"
+msgstr "Alle"
+
+msgid "All posts"
+msgstr "Alle Artikel"
+
+msgid "Animate icon"
+msgstr "Symbol animieren"
+
+msgid "API Key is missing - see MapPress Settings"
+msgstr "API-Schlüssel fehlt - siehe MapPress-Einstellungen"
+
+msgid "API key required"
+msgstr "API-Schlüssel erforderlich"
+
+msgid "Are you sure you want to delete?"
+msgstr "Sind Sie sicher, dass Sie löschen möchten?"
+
+msgid "Arrow"
+msgstr "Pfeil"
+
+msgid "Attach map to post"
+msgstr "Karte an Beitrag anhängen"
+
+msgid "Attach to post"
+msgstr "An den Beitrag anhängen"
+
+msgid "Attached to post"
+msgstr "Beitrag angehängt"
+
+msgid "Author"
+msgstr "Autor"
+
+msgid "Auto"
+msgstr "Auto"
+
+msgid "Automatic"
+msgstr "Automatisch"
+
+msgid "Automatic display"
+msgstr "Automatische Anzeige"
+
+msgid "Automatic icons"
+msgstr "Automatische Symbole"
+
+msgid "Basic Settings"
+msgstr "Grundeinstellungen"
+
+msgid "Be sure to set \"Show in REST API\" for custom taxonomies"
+msgstr "Stellen Sie sicher, dass Sie für benutzerdefinierte Taxonomien „In REST-API anzeigen“ festlegen"
+
+msgid "Below map"
+msgstr "Unten Karte"
+
+msgid "Beta versions"
+msgstr "Beta-Versionen"
+
+msgid "Bicycling"
+msgstr "Radfahren"
+
+msgid "Body"
+msgstr "Körper"
+
+msgid "Bottom of post"
+msgstr "Unten im Beitrag"
+
+msgid "Bounding box"
+msgstr "Begrenzungsrahmen"
+
+msgid "Build amazing maps with the easiest and most powerful mapping plugin available"
+msgstr "Erstellen Sie fantastische Karten mit dem einfachsten und leistungsstärksten Mapping-Plugin, das es gibt"
+
+#. translators: %s: Author name.
+msgid "By %s"
+msgstr "Von %s"
+
+msgid "Cancel"
+msgstr "Absagen"
+
+msgid "Center"
+msgstr "Center"
+
+msgid "Center map"
+msgstr "Karte zentrieren"
+
+msgid "Center on user location when map is displayed"
+msgstr "Zentrieren Sie den Standort des Benutzers, wenn die Karte angezeigt wird"
+
+msgid "Center/Zoom"
+msgstr "Zentrieren/Zoomen"
+
+msgid "Check for a plugin or theme conflict:"
+msgstr "Suchen Sie nach einem Plugin- oder Theme-Konflikt:"
+
+msgid "Check now"
+msgstr "Jetzt prüfen"
+
+msgid "Checkboxes"
+msgstr "Kontrollkästchen"
+
+#. Author of the plugin
+msgid "Chris Richardson"
+msgstr "Chris Richardson"
+
+msgid "Circle"
+msgstr "Kreis"
+
+msgid "Clustering"
+msgstr "Clustering"
+
+msgid "Color"
+msgstr "Farbe"
+
+msgid "Communication error, please try again later"
+msgstr "Kommunikationsfehler, bitte versuchen Sie es später erneut"
+
+msgid "Compatibility"
+msgstr "Kompatibilität"
+
+msgid "Compatibility mode"
+msgstr "Kompatibilitätsmodus"
+
+msgid "Complianz is active.  No setup is necessary in Complianz."
+msgstr "Compliance ist aktiv. In Complianz ist keine Einrichtung erforderlich."
+
+msgid "Connect POIs with lines"
+msgstr "Verbinden Sie POIs mit Linien"
+
+msgid "Contact"
+msgstr "Kontakt"
+
+msgid "Contact me"
+msgstr "Kontaktiere mich"
+
+msgid "contact me"
+msgstr "kontaktiere mich"
+
+msgid "Continue reading"
+msgstr "Weiterlesen"
+
+msgid "Copy"
+msgstr "Kopieren"
+
+msgid "Copy maps when overwriting a translation"
+msgstr "Karten kopieren, wenn eine Übersetzung überschrieben wird"
+
+msgid "Copy of %s"
+msgstr "Kopie von %s"
+
+msgid "Copy shortcode"
+msgstr "Shortcode kopieren"
+
+msgid "Copy the URL and paste it here"
+msgstr "Kopieren Sie die URL und fügen Sie sie hier ein"
+
+msgid "Country code for searches"
+msgstr "Ländercode für Suchen"
+
+msgid "Coverage"
+msgstr "Abdeckung"
+
+msgid "Create new icon"
+msgstr "Neues Symbol erstellen"
+
+msgid "Creating your first map"
+msgstr "Erstellen Sie Ihre erste Karte"
+
+msgid "Credit card required"
+msgstr "Kreditkarte erforderlich"
+
+msgid "Current post"
+msgstr "Aktueller Beitrag"
+
+msgid "Current posts"
+msgstr "Aktuelle Beiträge"
+
+msgid "Custom"
+msgstr "Benutzerdefiniert"
+
+msgid "Custom color"
+msgstr "Freiwählbare Farbe"
+
+msgid "Custom Field"
+msgstr "Benutzerdefinierte Feld"
+
+msgid "Custom fields"
+msgstr "Benutzerdefinierte Felder"
+
+msgid "Custom icons"
+msgstr "Benutzerdefinierte Symbole"
+
+msgid "Custom query"
+msgstr "Benutzerdefinierte Abfrage"
+
+msgid "Custom styles"
+msgstr "Benutzerdefinierte Stile"
+
+msgid "Custom templates"
+msgstr "Benutzerdefinierte Vorlagen"
+
+msgid "Dark"
+msgstr "Dunkel"
+
+msgid "Deactivate"
+msgstr "Deaktivieren"
+
+msgid "Deactivate ALL other plugins"
+msgstr "Deaktivieren Sie ALLE anderen Plugins"
+
+msgid "Default"
+msgstr "Standard"
+
+msgid "Default icon"
+msgstr "Standardsymbol"
+
+msgid "Default style"
+msgstr "Standardstil"
+
+msgid "Delete"
+msgstr "Löschen"
+
+msgid "Delete Permanently"
+msgstr "Dauerhaft löschen"
+
+msgid "Detach"
+msgstr "Ablösen"
+
+msgid "Detailed plugin documentation:"
+msgstr "Ausführliche Plugin-Dokumentation:"
+
+msgid "Did you know?"
+msgstr "Hast Du gewusst?"
+
+msgid "Directions"
+msgstr "Richtungen"
+
+msgid "Directions link"
+msgstr "Anfahrtslink"
+
+msgid "Directions server"
+msgstr "Wegbeschreibungsserver"
+
+msgid "Disable clustering at zoom"
+msgstr "Clustering bei Zoom deaktivieren"
+
+msgid "Disable footer scripts if maps are output using AJAX"
+msgstr "Deaktivieren Sie Fußzeilenskripte, wenn Karten mit AJAX ausgegeben werden"
+
+msgid "Display"
+msgstr "Anzeige"
+
+msgid "Display Name"
+msgstr "Anzeigename"
+
+msgid "Documentation"
+msgstr "Dokumentation"
+
+msgid "Done"
+msgstr "Getan"
+
+msgid "Download"
+msgstr "Herunterladen"
+
+msgid "Download style"
+msgstr "Stil herunterladen"
+
+msgid "Edit"
+msgstr "Bearbeiten"
+
+msgid "Edit list"
+msgstr "Liste bearbeiten"
+
+msgid "Edit map"
+msgstr "Karte bearbeiten"
+
+msgid "Edit post"
+msgstr "Beitrag bearbeiten"
+
+msgid "Editor"
+msgstr "Editor"
+
+msgid "Email"
+msgstr "Email"
+
+msgid "Empty map, skipping"
+msgstr "Leere Karte, überspringen"
+
+msgid "Enable iframe compatibility mode"
+msgstr "Iframe-Kompatibilitätsmodus aktivieren"
+
+msgid "Enable map zoom with mouse scroll wheel"
+msgstr "Aktivieren Sie den Kartenzoom mit dem Scrollrad der Maus"
+
+msgid "Enable marker clustering"
+msgstr "Marker-Clustering aktivieren"
+
+msgid "Enable search"
+msgstr "Suche aktivieren"
+
+msgid "Enable search for mashups"
+msgstr "Suche nach Mashups aktivieren"
+
+msgid "Enable updates for beta versions"
+msgstr "Aktivieren Sie Updates für Betaversionen"
+
+msgid "Enjoy the plugin!  Replay this guide any time from the MapPress support menu."
+msgstr "Viel Spaß mit dem Plugin! Spielen Sie diese Anleitung jederzeit über das MapPress-Supportmenü ab."
+
+msgid "Enter an address, place, KML file URL, or lat,lng"
+msgstr "Geben Sie eine Adresse, einen Ort, eine KML-Datei-URL oder lat,lng ein"
+
+msgid "Enter API key to use Google geocoder"
+msgstr "Geben Sie den API-Schlüssel ein, um den Google Geocoder zu verwenden"
+
+msgid "Enter API key to use Google maps"
+msgstr "Geben Sie den API-Schlüssel ein, um Google Maps zu verwenden"
+
+msgid "Enter license to enable automatic updates"
+msgstr "Geben Sie die Lizenz ein, um automatische Updates zu aktivieren"
+
+msgid "Enter style from Mapbox Studio"
+msgstr "Geben Sie den Stil aus Mapbox Studio ein"
+
+msgid "Enter style name"
+msgstr "Stilnamen eingeben"
+
+msgid "Enter token to use Mapbox"
+msgstr "Geben Sie das Token ein, um Mapbox zu verwenden"
+
+msgid "Enter your access token here"
+msgstr "Geben Sie hier Ihr Zugriffstoken ein"
+
+msgid "Enter your API key here"
+msgstr "Geben Sie hier Ihren API-Schlüssel ein"
+
+msgid "Error during update!  Please contact support."
+msgstr "Fehler beim Update! Bitte wenden Sie sich an den Support."
+
+msgid "Error reading KML file."
+msgstr "Fehler beim Lesen der KML-Datei."
+
+msgid "Error when checking license"
+msgstr "Fehler beim Überprüfen der Lizenz"
+
+msgid "Error: %s %s"
+msgstr "Fehler: %s %s"
+
+msgid "Example: initialopeninfo=\"true\""
+msgstr "Beispiel: initialopeninfo=\"true\""
+
+msgid "Excel: File -> Save As -> 'CSV' or 'CSV UTF-8' (for special characters)'"
+msgstr "Excel: Datei -> Speichern unter -> 'CSV' oder 'CSV UTF-8' (für Sonderzeichen)'"
+
+msgid "Excellent functionality"
+msgstr "Hervorragende Funktionalität"
+
+msgid "Exclude term slugs"
+msgstr "Begriffs-Slugs ausschließen"
+
+msgid "Feedback"
+msgstr "Feedback"
+
+msgid "Field name"
+msgstr "Feldname"
+
+msgid "File"
+msgstr "Datei"
+
+msgid "File -> Share -> Publish to web"
+msgstr "Datei -> Freigeben -> Im Web veröffentlichen"
+
+msgid "File must be in CSV format:"
+msgstr "Datei muss im CSV-Format vorliegen:"
+
+msgid "Files error: "
+msgstr "Dateifehler:"
+
+msgid "Fill"
+msgstr "Füllen"
+
+msgid "Filter"
+msgstr "Filter"
+
+msgid "Filter button label"
+msgstr "Beschriftung der Filterschaltfläche"
+
+msgid "Filter type"
+msgstr "Filter Typ"
+
+msgid "Filters"
+msgstr "Filter"
+
+msgid "Filters position"
+msgstr "Position filtern"
+
+msgid "Font"
+msgstr "Schriftart"
+
+msgid "Font size"
+msgstr "Schriftgröße"
+
+msgid "For bulk geocoding (>100 items) online geocoding services are faster and less expensive."
+msgstr "Für die Massengeokodierung (>100 Artikel) sind Online-Geokodierungsdienste schneller und kostengünstiger."
+
+msgid "For more info:"
+msgstr "Für mehr Information:"
+
+msgid "For searches, use the Search Radius setting instead."
+msgstr "Verwenden Sie für Suchen stattdessen die Einstellung Suchradius."
+
+msgid "Format"
+msgstr "Format"
+
+msgid "Frontend Forms"
+msgstr "Frontend-Formulare"
+
+msgid "GDPR Compliance"
+msgstr "DSGVO-Konformität"
+
+msgid "Generate Maps from Custom Fields"
+msgstr "Generieren Sie Karten aus benutzerdefinierten Feldern"
+
+msgid "Geocode posts"
+msgstr "Posts geokodieren"
+
+msgid "Geocoder"
+msgstr "Geocoder"
+
+msgid "Geocoding"
+msgstr "Geokodierung"
+
+msgid "Geocoding error: %s"
+msgstr "Geocodierungsfehler: %s"
+
+msgid "Geocoding errors"
+msgstr "Geocodierungsfehler"
+
+msgid "Geocoding failed"
+msgstr "Geocodierung fehlgeschlagen"
+
+msgid "Geodesic (curved) lines"
+msgstr "Geodätische (gekrümmte) Linien"
+
+msgid "Geolocate"
+msgstr "Geolokalisieren"
+
+msgid "Get an Access Token"
+msgstr "Holen Sie sich ein Zugriffstoken"
+
+msgid "Get an API Key"
+msgstr "Holen Sie sich einen API-Schlüssel"
+
+msgid "Get Directions"
+msgstr "Anweisungen bekommen"
+
+msgid "Get help"
+msgstr "Hilfe bekommen"
+
+msgid "Get license"
+msgstr "Lizenz erhalten"
+
+msgid "Get Mapbox Access Token"
+msgstr "Holen Sie sich das Mapbox-Zugriffstoken"
+
+msgid "Good functionality"
+msgstr "Gute Funktionalität"
+
+msgid "Google and MapBox require a credit card, but include so much free usage that 99% of sites are never billed."
+msgstr "Google und MapBox erfordern eine Kreditkarte, beinhalten aber so viel kostenlose Nutzung, dass 99 % der Websites nie in Rechnung gestellt werden."
+
+msgid "Google API Key"
+msgstr "Google-API-Schlüssel"
+
+msgid "Google API key"
+msgstr "Google-API-Schlüssel"
+
+msgid "Google Maps API key required"
+msgstr "Google Maps-API-Schlüssel erforderlich"
+
+msgid "Google Maps API loaded multiple times"
+msgstr "Google Maps API mehrfach geladen"
+
+msgid "Google Maps API not loaded"
+msgstr "Google Maps-API nicht geladen"
+
+msgid "Google requires an API key to use Google Maps."
+msgstr "Google benötigt einen API-Schlüssel, um Google Maps verwenden zu können."
+
+msgid "Google Server API key"
+msgstr "Google Server-API-Schlüssel"
+
+msgid "Google Sheets"
+msgstr "Google Tabellen"
+
+msgid "Google sheets must be shared before importing:"
+msgstr "Google-Tabellen müssen vor dem Import freigegeben werden:"
+
+msgid "Google sheets: File -> Download -> Comma Separated Values (.csv)"
+msgstr "Google Sheets: Datei -> Download -> Kommagetrennte Werte (.csv)"
+
+msgid "Happy Mapping"
+msgstr "Fröhliches Mapping"
+
+msgid "Height"
+msgstr "Höhe"
+
+msgid "Help"
+msgstr "Hilfe"
+
+msgid "Help Spread the Word"
+msgstr "Helfen Sie mit, das Wort zu verbreiten"
+
+msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
+msgstr "Hallo, ich hoffe, Ihnen gefällt MapPress. Würden Sie sich einen Moment Zeit nehmen, um eine kurze Bewertung zu schreiben? Es würde mir viel bedeuten!"
+
+msgid "Hide if empty"
+msgstr "Ausblenden, wenn leer"
+
+msgid "Highlight selected POI"
+msgstr "Markieren Sie den ausgewählten POI"
+
+msgid "Hover"
+msgstr "Schweben"
+
+msgid "HTML"
+msgstr "HTML"
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://www.mappresspro.com"
+msgstr "https://www.mappresspro.com"
+
+msgid "Hybrid"
+msgstr "Hybrid"
+
+msgid "I don't want to get an API key"
+msgstr "Ich möchte keinen API-Schlüssel erhalten"
+
+msgid "I don't want to say"
+msgstr "Ich will nicht sagen"
+
+msgid "I need help using the plugin"
+msgstr "Ich brauche Hilfe bei der Verwendung des Plugins"
+
+msgid "Icon"
+msgstr "Symbol"
+
+msgid "Icon directory"
+msgstr "Icon-Verzeichnis"
+
+msgid "Icon size"
+msgstr "Symbolgröße"
+
+msgid "Icons"
+msgstr "Symbole"
+
+msgid "If the maps are working, reactivate one by one to find the conflict."
+msgstr "Wenn die Karten funktionieren, reaktivieren Sie eine nach der anderen, um den Konflikt zu finden."
+
+msgid "Images"
+msgstr "Bilder"
+
+msgid "Import"
+msgstr "Importieren"
+
+msgid "Import documentation"
+msgstr "Dokumentation importieren"
+
+msgid "Import Maps"
+msgstr "Karten importieren"
+
+msgid "In"
+msgstr "In"
+
+msgid "Include children"
+msgstr "Kinder einbeziehen"
+
+msgid "Include KML POIs in mashups"
+msgstr "KML-POIs in Mashups einbeziehen"
+
+msgid "Include term slugs"
+msgstr "Term-Slugs einbeziehen"
+
+msgid "Initial open"
+msgstr "Anfänglich offen"
+
+msgid "Initial zoom"
+msgstr "Anfänglicher Zoom"
+
+msgid "Inline"
+msgstr "In der Reihe"
+
+msgid "Input"
+msgstr "Eingang"
+
+msgid "Insert a map"
+msgstr "Karte einfügen"
+
+msgid "Insert a mashup"
+msgstr "Fügen Sie ein Mashup ein"
+
+msgid "Insert into post"
+msgstr "In Beitrag einfügen"
+
+msgid "Invalid geocoder: %s"
+msgstr "Ungültiger Geocoder: %s"
+
+msgid "Invalid JSON"
+msgstr "Ungültiger JSON-Code"
+
+msgid "Invalid JSON from Geocoding service: %s"
+msgstr "Ungültiges JSON vom Geocodierungsdienst: %s"
+
+msgid "Invalid lat/lng coordinate: %s,%s"
+msgstr "Ungültige Lat/Lng-Koordinate: %s,%s"
+
+msgid "Invalid status: %s, %s Address: %s"
+msgstr "Ungültiger Status: %s, %s Adresse: %s"
+
+msgid "JSON"
+msgstr "JSON"
+
+msgid "JSON error"
+msgstr "JSON-Fehler"
+
+msgid "Just insert a MapPress Map block to get started."
+msgstr "Fügen Sie einfach einen MapPress-Kartenblock ein, um loszulegen."
+
+msgid "Key"
+msgstr "Taste"
+
+msgid "KML"
+msgstr "KML"
+
+msgid "KMLs"
+msgstr "KMLs"
+
+msgid "Label"
+msgstr "Etikett"
+
+msgid "Language"
+msgstr "Sprache"
+
+msgid "Language for searches and Google map controls"
+msgstr "Sprache für Suchen und Google Map-Steuerelemente"
+
+msgid "Latitude"
+msgstr "Breite"
+
+msgid "Leaflet doesn't require a key."
+msgstr "Prospekt benötigt keinen Schlüssel."
+
+msgid "Leaflet is free and requires no API key.  Google requires an API key and has usage limits."
+msgstr "Leaflet ist kostenlos und erfordert keinen API-Schlüssel. Google erfordert einen API-Schlüssel und hat Nutzungsbeschränkungen."
+
+msgid "Leaflet library not loaded"
+msgstr "Prospektbibliothek nicht geladen"
+
+msgid "Learn about queries"
+msgstr "Erfahren Sie mehr über Abfragen"
+
+msgid "Learn more"
+msgstr "Mehr erfahren"
+
+msgid "Left"
+msgstr "Links"
+
+msgid "Left of map"
+msgstr "Links von der Karte"
+
+msgid "License"
+msgstr "Lizenz"
+
+msgid "License is invalid or expired"
+msgstr "Die Lizenz ist ungültig oder abgelaufen"
+
+msgid "Light"
+msgstr "Hell"
+
+msgid "Line"
+msgstr "Linie"
+
+msgid "Line %d column count doesn't match headers column count"
+msgstr "Die Spaltenanzahl von Zeile %d stimmt nicht mit der Spaltenanzahl der Überschriften überein"
+
+msgid "List"
+msgstr "Liste"
+
+msgid "Localization"
+msgstr "Lokalisierung"
+
+msgid "Location"
+msgstr "Ort"
+
+msgid "Longitude"
+msgstr "Längengrad"
+
+msgid "Lots of free usage"
+msgstr "Viele kostenlose Nutzung"
+
+msgid "Map"
+msgstr "Karte"
+
+msgid "Map %d attached to post"
+msgstr "Karte %d an Beitrag angehängt"
+
+msgid "Map %d copied"
+msgstr "Karte %d kopiert"
+
+msgid "Map %d could not be found.  Please select a different map."
+msgstr "Karte %d konnte nicht gefunden werden. Bitte wählen Sie eine andere Karte aus."
+
+msgid "Map %d deleted"
+msgstr "Karte %d gelöscht"
+
+msgid "Map %d moved to trash"
+msgstr "Karte %d in den Papierkorb verschoben"
+
+msgid "Map %d restored"
+msgstr "Karte %d wiederhergestellt"
+
+msgid "Map %d saved"
+msgstr "Karte %d gespeichert"
+
+msgid "Map alignment"
+msgstr "Kartenausrichtung"
+
+msgid "Map already exists, skipped"
+msgstr "Karte existiert bereits, übersprungen"
+
+msgid "Map data upgrade"
+msgstr "Kartendaten-Upgrade"
+
+msgid "Map Error"
+msgstr "Kartenfehler"
+
+msgid "Map error: please see the developer console (F12 in most browsers) for details."
+msgstr "Zuordnungsfehler: Details finden Sie in der Entwicklerkonsole (F12 in den meisten Browsern)."
+
+msgid "Map field"
+msgstr "Kartenfeld"
+
+msgid "Map ID"
+msgstr "Karten-ID"
+
+msgid "Map ID (Down)"
+msgstr "Karten-ID (unten)"
+
+msgid "Map ID (Up)"
+msgstr "Karten-ID (nach oben)"
+
+msgid "Map ID, post title, or map title..."
+msgstr "Karten-ID, Beitragstitel oder Kartentitel..."
+
+msgid "Map Library"
+msgstr "Kartenbibliothek"
+
+msgid "Map list item"
+msgstr "Kartenlistenelement"
+
+msgid "Map popup"
+msgstr "Karten-Popup"
+
+msgid "Map Settings"
+msgstr "Karteneinstellungen"
+
+msgid "Map settings"
+msgstr "Karteneinstellungen"
+
+msgid "Map size"
+msgstr "Kartengröße"
+
+msgid "Map sizes"
+msgstr "Kartengrößen"
+
+msgid "Mapbox access token"
+msgstr "Mapbox-Zugriffstoken"
+
+msgid "Mapbox makes Leaflet better, with great-looking map tiles, styled maps, and a powerful geocoder."
+msgstr "Mapbox verbessert Leaflet mit großartig aussehenden Kartenkacheln, gestalteten Karten und einem leistungsstarken Geocoder."
+
+msgid "Mapbox makes Leaflet maps look great and provides an excellent geocoder."
+msgstr "Mapbox lässt Leaflet-Karten großartig aussehen und bietet einen hervorragenden Geocoder."
+
+msgid "MapBox Share URL"
+msgstr "MapBox-Freigabe-URL"
+
+msgid "Mapping API"
+msgstr "Mapping-API"
+
+msgid "MapPress"
+msgstr "MapPress"
+
+msgid "MapPress also supports the \"classic\" editor.  Just click the MapPress button to open the map library."
+msgstr "MapPress unterstützt auch den \"klassischen\" Editor. Klicken Sie einfach auf die MapPress-Schaltfläche, um die Kartenbibliothek zu öffnen."
+
+msgid "MapPress database tables are missing.  Please deactivate the plugin and activate it again to fix this."
+msgstr "MapPress-Datenbanktabellen fehlen. Bitte deaktivieren Sie das Plugin und aktivieren Sie es erneut, um dies zu beheben."
+
+msgid "MapPress FAQ"
+msgstr "MapPress-FAQ"
+
+#. Plugin Name of the plugin
+msgid "MapPress Google Maps and Leaflet Maps"
+msgstr "MapPress Google Maps und Leaflet Maps"
+
+msgid "MapPress Gutenberg blocks require WordPress 5.3 or the latest Gutenberg Plugin. Please update if using the block editor."
+msgstr "MapPress Gutenberg-Blöcke erfordern WordPress 5.3 oder das neueste Gutenberg-Plugin. Bitte aktualisieren Sie, wenn Sie den Blockeditor verwenden."
+
+msgid "MapPress has many new features!  %s."
+msgstr "MapPress hat viele neue Funktionen! %s."
+
+msgid "MapPress is compatible with the free %s plugin for GDPR compliance with Google Maps."
+msgstr "MapPress ist mit dem kostenlosen %s-Plug-in für die DSGVO-Konformität mit Google Maps kompatibel."
+
+msgid "MapPress license key"
+msgstr "MapPress-Lizenzschlüssel"
+
+#. Description of the plugin
+msgid "MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress"
+msgstr "MapPress macht es einfach, Google Maps und Leaflet Maps zu WordPress hinzuzufügen"
+
+msgid "MapPress Map"
+msgstr "MapPress-Karte"
+
+msgid "MapPress Mashup"
+msgstr "MapPress-Mashup"
+
+msgid "MapPress provides custom block types for the Gutenberg editor."
+msgstr "MapPress bietet benutzerdefinierte Blocktypen für den Gutenberg-Editor."
+
+msgid "MapPress Settings"
+msgstr "MapPress-Einstellungen"
+
+msgid "MapPress Support"
+msgstr "MapPress-Unterstützung"
+
+msgid "MapPress supports both Leaflet and Google mapping APIs."
+msgstr "MapPress unterstützt sowohl Leaflet- als auch Google-Mapping-APIs."
+
+msgid "MapPress templates and filters have changed.  Please update custom templates and filters. %s."
+msgstr "MapPress-Vorlagen und -Filter haben sich geändert. Bitte aktualisieren Sie benutzerdefinierte Vorlagen und Filter. %s."
+
+msgid "MapPress templates have changed!  Please update custom templates to the new format. %s."
+msgstr "MapPress-Vorlagen haben sich geändert! Bitte aktualisieren Sie benutzerdefinierte Vorlagen auf das neue Format. %s."
+
+msgid "Maps"
+msgstr "Karten"
+
+msgid "Maps for WordPress"
+msgstr "Karten für WordPress"
+
+msgid "Maps in the Block Editor"
+msgstr "Karten im Blockeditor"
+
+msgid "Maps in the Classic Editor"
+msgstr "Karten im klassischen Editor"
+
+msgid "Marker click"
+msgstr "Markierungsklick"
+
+msgid "Mashup filters"
+msgstr "Mashup-Filter"
+
+msgid "Mashup list item"
+msgstr "Mashup-Listenelement"
+
+msgid "Mashup popup"
+msgstr "Mashup-Popup"
+
+msgid "Mashups"
+msgstr "Mashups"
+
+msgid "Max zoom"
+msgstr "Maximaler Zoom"
+
+msgid "Mini width"
+msgstr "Minibreite"
+
+msgid "Minimum search radius (km)"
+msgstr "Mindestsuchradius (km)"
+
+msgid "Miscellaneous"
+msgstr "Sonstig"
+
+msgid "Missing feature"
+msgstr "Fehlende Funktion"
+
+msgid "My location"
+msgstr "Mein Standort"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Need some help?"
+msgstr "Hilfe benötigen?"
+
+msgid "New"
+msgstr "Neu"
+
+msgid "New filter"
+msgstr "Neuer Filter"
+
+msgid "New icon"
+msgstr "Neues Symbol"
+
+msgid "New style"
+msgstr "Neuer Stil"
+
+msgid "No address or lat/lng provided!"
+msgstr "Keine Adresse oder Lat/Lng angegeben!"
+
+msgid "No API key"
+msgstr "Kein API-Schlüssel"
+
+msgid "No credit card"
+msgstr "Keine Kreditkarte"
+
+msgid "No errors"
+msgstr "Keine Fehler"
+
+msgid "No icon selected"
+msgstr "Kein Symbol ausgewählt"
+
+msgid "No maps attached to post"
+msgstr "Dem Beitrag sind keine Karten beigefügt"
+
+msgid "No maps found"
+msgstr "Keine Karten gefunden"
+
+msgid "No posts found"
+msgstr "Keine Einträge gefunden"
+
+msgid "No results"
+msgstr "Keine Ergebnisse"
+
+msgid "No results for address: %s"
+msgstr "Keine Ergebnisse für Adresse: %s"
+
+msgid "No valid address"
+msgstr "Keine gültige Adresse"
+
+msgid "Nominatim is free but inaccurate.  Consider using Mapbox or Google instead."
+msgstr "Nominatim ist kostenlos, aber ungenau. Erwägen Sie stattdessen die Verwendung von Mapbox oder Google."
+
+msgid "None"
+msgstr "Keiner"
+
+msgid "Nope, maybe later"
+msgstr "Nein, vielleicht später"
+
+msgid "Off"
+msgstr "aus"
+
+msgid "OK, you deserve it!"
+msgstr "Okay, du hast es verdient!"
+
+msgid "On"
+msgstr "Auf"
+
+msgid "Only available for sites using https"
+msgstr "Nur für Websites verfügbar, die https verwenden"
+
+msgid "Opacity"
+msgstr "Opazität"
+
+msgid "Open arrow"
+msgstr "Pfeil öffnen"
+
+msgid "Open first POI"
+msgstr "Öffnen Sie den ersten POI"
+
+msgid "Open first POI when a map is displayed"
+msgstr "Öffnen Sie den ersten POI, wenn eine Karte angezeigt wird"
+
+msgid "Open list when map is displayed"
+msgstr "Liste öffnen, wenn Karte angezeigt wird"
+
+msgid "Open map library"
+msgstr "Kartenbibliothek öffnen"
+
+msgid "Open POIs on hover"
+msgstr "POIs beim Hover öffnen"
+
+msgid "Open popup"
+msgstr "Popup öffnen"
+
+msgid "Open post"
+msgstr "Beitrag öffnen"
+
+msgid "Open Setup Wizard"
+msgstr "Öffnen Sie den Einrichtungsassistenten"
+
+msgid "or"
+msgstr "oder"
+
+msgid "Order by"
+msgstr "Sortieren nach"
+
+msgid "Other"
+msgstr "Andere"
+
+msgid "Other Settings"
+msgstr "Andere Einstellungen"
+
+msgid "Outdoors"
+msgstr "Draußen"
+
+msgid "Output scripts in footer"
+msgstr "Skripte in Fußzeile ausgeben"
+
+msgid "Overwrite"
+msgstr "Überschreiben"
+
+msgid "Overwrite maps on publish/save"
+msgstr "Karten beim Veröffentlichen/Speichern überschreiben"
+
+msgid "Paging"
+msgstr "Paging"
+
+msgid "Permanently delete this map?"
+msgstr "Diese Karte endgültig löschen?"
+
+msgid "Please Choose a Mapping API"
+msgstr "Bitte wählen Sie eine Zuordnungs-API aus"
+
+msgid "Please enter a field name"
+msgstr "Bitte geben Sie einen Feldnamen ein"
+
+msgid "Please enter a Mapbox access token in the MapPress settings screen to use styled maps."
+msgstr "Bitte geben Sie einen Mapbox-Zugriffstoken in den MapPress-Einstellungsbildschirm ein, um gestaltete Karten zu verwenden."
+
+msgid "Please enter your MapPress license key to enable plugin updates"
+msgstr "Bitte geben Sie Ihren MapPress-Lizenzschlüssel ein, um Plugin-Updates zu aktivieren"
+
+msgid "Please explain..."
+msgstr "Bitte erkläre..."
+
+msgid "Please make a database backup now.  Data will be permanently modified."
+msgstr "Bitte erstellen Sie jetzt eine Datenbanksicherung. Die Daten werden dauerhaft geändert."
+
+msgid "Please provide some feedback:"
+msgstr "Bitte geben Sie Feedback:"
+
+msgid "Please select the post content to insert the map into."
+msgstr "Bitte wählen Sie den Beitragsinhalt aus, in den die Karte eingefügt werden soll."
+
+msgid "Please update your"
+msgstr "Bitte aktualisieren Sie Ihre"
+
+msgid "POI images"
+msgstr "POI-Bilder"
+
+msgid "POI List"
+msgstr "POI-Liste"
+
+msgid "POI list"
+msgstr "POI-Liste"
+
+msgid "POI lists"
+msgstr "POI-Listen"
+
+msgid "POI title + body"
+msgstr "POI-Titel + Körper"
+
+msgid "POIs"
+msgstr "Sonderziele"
+
+msgid "POIs per page"
+msgstr "POIs pro Seite"
+
+msgid "Popup content"
+msgstr "Popup-Inhalt"
+
+msgid "Popup thumbnail size"
+msgstr "Größe der Popup-Miniaturansicht"
+
+msgid "Popups"
+msgstr "Popups"
+
+msgid "Position"
+msgstr "Position"
+
+msgid "Post custom field"
+msgstr "Posten Sie ein benutzerdefiniertes Feld"
+
+msgid "Post featured image"
+msgstr "Beitragsbild posten"
+
+msgid "Post IDs"
+msgstr "Post-IDs"
+
+msgid "Post IDs separated by commas"
+msgstr "Beitrags-IDs durch Kommas getrennt"
+
+msgid "Post in modal"
+msgstr "Modal posten"
+
+msgid "Post in new tab"
+msgstr "In neuem Tab posten"
+
+msgid "Post not found"
+msgstr "Beitrag nicht gefunden"
+
+msgid "Post title + excerpt"
+msgstr "Beitragstitel + Auszug"
+
+msgid "Post type"
+msgstr "Post-Typ"
+
+msgid "Post types"
+msgstr "Beitragstypen"
+
+msgid "Posts"
+msgstr "Beiträge"
+
+msgid "Prevents conflicts with other plugins, but maps may load slower."
+msgstr "Verhindert Konflikte mit anderen Plugins, aber Karten werden möglicherweise langsamer geladen."
+
+msgid "px, %, vh"
+msgstr "px, %, vh"
+
+msgid "px, %, vw"
+msgstr "px, %, vw"
+
+msgid "Query"
+msgstr "Anfrage"
+
+msgid "Query JSON"
+msgstr "JSON abfragen"
+
+msgid "Radio buttons"
+msgstr "Radio Knöpfe"
+
+msgid "Refresh map"
+msgstr "Karte aktualisieren"
+
+msgid "Renew your license"
+msgstr "Erneuern Sie Ihre Lizenz"
+
+msgid "Replace the default \"roadmap\" or \"streets\" style"
+msgstr "Ersetzen Sie den Standardstil „Straßenkarte“ oder „Straßen“."
+
+msgid "Required because %s is active"
+msgstr "Erforderlich, da %s aktiv ist"
+
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+msgid "Reset Defaults"
+msgstr "Standardeinstellungen zurückzusetzen"
+
+msgid "Reset template to default"
+msgstr "Vorlage auf Standard zurücksetzen"
+
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+msgid "Restrict searches to a bounding box (optional)"
+msgstr "Suche auf einen Begrenzungsrahmen beschränken (optional)"
+
+msgid "Result"
+msgstr "Ergebnis"
+
+msgid "Results"
+msgstr "Ergebnisse"
+
+msgid "Right"
+msgstr "Rechts"
+
+msgid "Roadmap"
+msgstr "Fahrplan"
+
+msgid "Role"
+msgstr "Rolle"
+
+msgid "Sample file"
+msgstr "Beispieldatei"
+
+msgid "Sample Map"
+msgstr "Beispielkarte"
+
+msgid "Satellite"
+msgstr "Satellit"
+
+msgid "Satellite Streets"
+msgstr "Satellitenstraßen"
+
+msgid "Save"
+msgstr "Speichern"
+
+msgid "Save changes?"
+msgstr "Änderungen speichern?"
+
+msgid "Scale"
+msgstr "Skala"
+
+msgid "Scripts"
+msgstr "Skripte"
+
+msgid "Scroll wheel zoom"
+msgstr "Scrollrad-Zoom"
+
+msgid "Search"
+msgstr "Suche"
+
+msgid "Search box"
+msgstr "Suchbox"
+
+msgid "Search box placeholder"
+msgstr "Platzhalter für das Suchfeld"
+
+msgid "Search country"
+msgstr "Land suchen"
+
+msgid "Search radius"
+msgstr "Suchradius"
+
+msgid "Select"
+msgstr "Wählen"
+
+msgid "Select 'Entire Document' and 'Comma-Separated Values (.csv)"
+msgstr "Wählen Sie „Gesamtes Dokument“ und „Komma-getrennte Werte (.csv)“"
+
+msgid "Select a color"
+msgstr "Wählen Sie eine Farbe aus"
+
+msgid "Select a style"
+msgstr "Wählen Sie einen Stil aus"
+
+msgid "Select file"
+msgstr "Datei aussuchen"
+
+msgid "Select icon"
+msgstr "Symbol auswählen"
+
+msgid "Select icons to delete"
+msgstr "Wählen Sie die zu löschenden Symbole aus"
+
+msgid "Server API key for geocoding.  Only required if client key is restricted by referrer."
+msgstr "Server-API-Schlüssel für die Geocodierung. Nur erforderlich, wenn der Clientschlüssel durch den Referrer eingeschränkt ist."
+
+msgid "Set"
+msgstr "Satz"
+
+msgid "Setting \"allow_url_fopen=1\" must in your php.ini file to process remote files.  Not all hosting services allow this."
+msgstr "Die Einstellung \"allow_url_fopen=1\" muss in Ihrer php.ini-Datei gesetzt werden, um entfernte Dateien zu verarbeiten. Nicht alle Hosting-Dienste erlauben dies."
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Shape"
+msgstr "Gestalten"
+
+msgid "Shortcode copied"
+msgstr "Shortcode kopiert"
+
+msgid "Show"
+msgstr "Zeigen"
+
+msgid "Show a list of POIs with each map"
+msgstr "Zeigen Sie eine Liste mit POIs mit jeder Karte an"
+
+msgid "Show cluster bounds on hover"
+msgstr "Clustergrenzen beim Hover anzeigen"
+
+msgid "Show in list"
+msgstr "In Liste anzeigen"
+
+msgid "Show in popup"
+msgstr "Im Popup anzeigen"
+
+msgid "Show map"
+msgstr "Karte anzeigen"
+
+msgid "Show POI list"
+msgstr "POI-Liste anzeigen"
+
+msgid "Show user location as a blue circle on the map"
+msgstr "Benutzerstandort als blauen Kreis auf der Karte anzeigen"
+
+msgid "Sign up with Mapbox"
+msgstr "Melden Sie sich bei Mapbox an"
+
+msgid "Size"
+msgstr "Größe"
+
+msgid "Slug"
+msgstr "Schnecke"
+
+msgid "Sorry to see you go!  Need help?"
+msgstr "Es tut mir leid dich gehen zu sehen! Brauchen Sie Hilfe?"
+
+msgid "Sort"
+msgstr "Sortieren"
+
+msgid "Sort POI list by title"
+msgstr "POI-Liste nach Titel sortieren"
+
+msgid "Source"
+msgstr "Quelle"
+
+msgid "Spiderfy"
+msgstr "Spiderfy"
+
+msgid "Standard icons"
+msgstr "Standardsymbole"
+
+msgid "Standard styles"
+msgstr "Standardstile"
+
+msgid "Streets"
+msgstr "Straßen"
+
+msgid "Stroke"
+msgstr "Schlaganfall"
+
+msgid "Style"
+msgstr "Stil"
+
+msgid "Style already exists, overwrite?"
+msgstr "Stil existiert bereits, überschreiben?"
+
+msgid "Style name"
+msgstr "Stilname"
+
+msgid "Styled Maps"
+msgstr "Gestaltete Karten"
+
+msgid "Success!  Database updated."
+msgstr "Erfolg! Datenbank aktualisiert."
+
+msgid "Success!  Upgrade complete."
+msgstr "Erfolg! Upgrade abgeschlossen."
+
+msgid "Support"
+msgstr "Die Unterstützung"
+
+msgid "Support forum"
+msgstr "Hilfeforum"
+
+msgid "Switch to a standard WordPress theme"
+msgstr "Wechseln Sie zu einem Standard-WordPress-Theme"
+
+msgid "Templates"
+msgstr "Vorlagen"
+
+msgid "Terrain"
+msgstr "Terrain"
+
+msgid "Text search"
+msgstr "Textsuche"
+
+msgid "The field \"%s\" has already been added"
+msgstr "Das Feld \"%s\" wurde bereits hinzugefügt"
+
+msgid "The map didn't display"
+msgstr "Die Karte wurde nicht angezeigt"
+
+msgid "The Map Library provides an easy way to see and edit all of your maps.  The library can be opened in the post editor or from the MapPress menu."
+msgstr "Die Kartenbibliothek bietet eine einfache Möglichkeit, alle Ihre Karten anzuzeigen und zu bearbeiten. Die Bibliothek kann im Post-Editor oder über das MapPress-Menü geöffnet werden."
+
+msgid "This may be a CORS error.  See the MapPress FAQ for help."
+msgstr "Dies kann ein CORS-Fehler sein. Hilfe finden Sie in den häufig gestellten Fragen zu MapPress."
+
+msgid "Thumbnails"
+msgstr "Miniaturansichten"
+
+msgid "Title"
+msgstr "Titel"
+
+msgid "To generate MapPress maps from ACF fields, leave this blank and use the Geocoding section"
+msgstr "Um MapPress-Karten aus ACF-Feldern zu generieren, lassen Sie dieses Feld leer und verwenden Sie den Abschnitt Geokodierung"
+
+msgid "Too hard to use"
+msgstr "Zu schwer zu bedienen"
+
+msgid "Top"
+msgstr "oben"
+
+msgid "Top of post"
+msgstr "Anfang des Beitrags"
+
+msgid "Traffic"
+msgstr "Verkehr"
+
+msgid "Transit"
+msgstr "Transit"
+
+msgid "Trash"
+msgstr "Müll"
+
+msgid "Travel line options"
+msgstr "Reiselinienoptionen"
+
+msgid "Travel lines"
+msgstr "Reiselinien"
+
+msgid "Troubleshooting"
+msgstr "Fehlerbehebung"
+
+msgid "Unable to get your location"
+msgstr "Ihr Standort kann nicht abgerufen werden"
+
+msgid "Unable to open file"
+msgstr "Datei kann nicht geöffnet werden"
+
+msgid "Unable to read file headers"
+msgstr "Dateiheader können nicht gelesen werden"
+
+msgid "Unable to save map!"
+msgstr "Karte kann nicht gespeichert werden!"
+
+msgid "Unattached"
+msgstr "Ungebunden"
+
+msgid "Underscore library not loaded"
+msgstr "Unterstrichbibliothek nicht geladen"
+
+msgid "Unlimited free usage"
+msgstr "Unbegrenzte kostenlose Nutzung"
+
+msgid "Untitled"
+msgstr "Ohne Titel"
+
+msgid "Update"
+msgstr "Aktualisieren"
+
+msgid "Upgrade"
+msgstr "Aktualisierung"
+
+msgid "Upgrade Now"
+msgstr "Jetzt upgraden"
+
+msgid "Upgrade to MapPress Pro"
+msgstr "Aktualisieren Sie auf MapPress Pro"
+
+msgid "Upload icons"
+msgstr "Symbole hochladen"
+
+msgid "URL"
+msgstr "URL"
+
+msgid "Use default icon"
+msgstr "Standardsymbol verwenden"
+
+msgid "Use map IDs from file"
+msgstr "Karten-IDs aus Datei verwenden"
+
+msgid "Use the map library to create a new map or insert an existing map."
+msgstr "Verwenden Sie die Kartenbibliothek, um eine neue Karte zu erstellen oder eine vorhandene Karte einzufügen."
+
+msgid "Used for geolocation and centering maps with a single POI"
+msgstr "Wird für die Geolokalisierung und Zentrierung von Karten mit einem einzigen POI verwendet"
+
+msgid "User custom field"
+msgstr "Benutzerdefiniertes Benutzerfeld"
+
+msgid "User list item"
+msgstr "Element der Benutzerliste"
+
+msgid "User location"
+msgstr "Standort des Benutzers"
+
+msgid "User popup"
+msgstr "Benutzer-Popup"
+
+msgid "Users"
+msgstr "Benutzer"
+
+msgid "Value (a or a,b,c...)"
+msgstr "Wert (a oder a,b,c...)"
+
+msgid "Version"
+msgstr "Ausführung"
+
+msgid "Video"
+msgstr "Video"
+
+msgid "Video URL"
+msgstr "Video-URL"
+
+msgid "Viewport automatic"
+msgstr "Ansichtsfenster automatisch"
+
+msgid "Viewport set"
+msgstr "Ansichtsfenster eingestellt"
+
+msgid "Visual"
+msgstr "Visuell"
+
+msgid "WARNING: this will overwrite any existing maps with the same IDs"
+msgstr "WARNUNG: Dadurch werden alle vorhandenen Karten mit denselben IDs überschrieben"
+
+msgid "Welcome to MapPress!"
+msgstr "Willkommen bei MapPress!"
+
+msgid "What's new"
+msgstr "Was gibt's Neues"
+
+msgid "Widget title"
+msgstr "Widget-Titel"
+
+msgid "Width"
+msgstr "Breite"
+
+msgid "Width (px) to use map/list toggle buttons"
+msgstr "Breite (Pixel) zur Verwendung von Karten-/Listen-Umschaltflächen"
+
+msgid "Your account"
+msgstr "Ihr Konto"
+
+msgid "Your Location"
+msgstr "Ihr Standort"
+
+msgid "Your map data is up to date."
+msgstr "Ihre Kartendaten sind aktuell."
+
+msgid "Your map data needs to be upgraded."
+msgstr "Ihre Kartendaten müssen aktualisiert werden."
+
+msgid "Your MapPress data must be upgraded!  Please %s.</strong>"
+msgstr "Ihre MapPress-Daten müssen aktualisiert werden! Bitte %s.</strong>"
+
+msgid "Your MapPress license has expired.  %s to get the latest updates and prevent errors."
+msgstr "Ihre MapPress-Lizenz ist abgelaufen. %s, um die neuesten Updates zu erhalten und Fehler zu vermeiden."
+
+msgid "Zoom"
+msgstr "Zoomen"

@@ -18,7 +18,6 @@ defined( 'WPINC' ) || die;
 
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
 use WPMUDEV_BLC\Core\Utils\Utilities;
-use WPMUDEV_BLC\Core\Traits\Sanitize;
 
 /**
  * Class Mailer
@@ -26,13 +25,6 @@ use WPMUDEV_BLC\Core\Traits\Sanitize;
  * @package WPMUDEV_BLC\Core\Controllers
  */
 abstract class Webhook extends Base {
-	/**
-	 * Use Sanitize Trait.
-	 *
-	 * @since 2.0.0
-	 */
-	use Sanitize;
-
 	/**
 	 * The webhook title.
 	 *
@@ -145,10 +137,6 @@ abstract class Webhook extends Base {
 	 * @return void
 	 */
 	public function parse_request( $wp ) {
-
-		if ( Utilities::plain_permalinks_mode() ) {
-			$wp->query_vars = wp_parse_args( $this->sanitize_array( $_GET ), $wp->query_vars );
-		}
 
 		if ( array_key_exists( $this->webhook_tag, $wp->query_vars ) ) {
 			$this->webhook_action( $wp );

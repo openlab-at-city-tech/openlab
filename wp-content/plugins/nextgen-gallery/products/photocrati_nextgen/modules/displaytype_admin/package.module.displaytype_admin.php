@@ -531,7 +531,7 @@ class A_NextGen_Basic_Template_Form extends Mixin
     /**
      * Renders 'template' settings field
      *
-     * @param $display_type
+     * @param \Imagely\NGG\DataTypes\DisplayType $display_type
      * @return mixed
      */
     public function _render_nextgen_basic_templates_template_field($display_type)

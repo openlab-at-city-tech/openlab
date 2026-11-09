@@ -63,7 +63,8 @@ class Ecommerce_Preview {
 		);
 
 		// Set page title for hidden pages to avoid strip_tags() deprecation warning.
-		add_action( 'admin_head', [ $this, 'set_page_title' ] );
+		// admin_init runs before admin-header.php reads $title; admin_head is too late.
+		add_action( 'admin_init', [ $this, 'set_page_title' ] );
 	}
 
 	/**

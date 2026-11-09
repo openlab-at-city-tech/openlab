@@ -1,0 +1,29 @@
+.pageHeader {
+	display: flex;
+	justify-content: center;
+	background: #fff;
+	border-top: 1px solid var(--theme-border-color);
+	border-bottom: 1px solid var(--theme-border-color);
+	padding: var(--theme-content-spacing) 0;
+	margin: 0;
+    width: calc(100% + 20px);
+    margin-left: -20px;
+	box-sizing: border-box;
+}
+
+.logoContainer {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+}
+
+.logo {
+	height: 32px;
+	width: 32px;
+}
+
+.logoText {
+	font-size: 20px;
+	font-weight: 600;
+	color: var(--theme-text-color);
+}

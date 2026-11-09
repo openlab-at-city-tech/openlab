@@ -120,7 +120,7 @@ class TRP_Support_Chat {
         // Check for TranslatePress pages
         $trp_pages = array(
             'settings_page_translate-press',
-            'admin_page_trp_license_key',
+            'admin_page_trp_ai_api_key',
             'admin_page_trp_addons_page',
             'admin_page_trp_advanced_page',
             'admin_page_trp_machine_translation',

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#ffcd00" viewBox="0 0 900 600">
+<path fill="#002f6c" d="M0 600V0h900"/>
+<path fill="#009a44" d="M900 0v600H0"/>
+<path stroke="#fff" stroke-width="200" d="M0 600 900 0"/>
+<path stroke="#c8102e" stroke-width="150" d="M0 600 900 0"/>
+<path id="a" d="m196 105 34-29-8 44 44-8-29 34 42 16-42 16 29 34-44-8 8 44-34-29-16 42-16-42"/>
+<use href="#a" transform="rotate(180 180 163)"/>
+<circle cx="180" cy="163" r="55" stroke="#002f6c" stroke-width="10"/>
+</svg>

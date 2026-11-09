@@ -10,27 +10,44 @@
             </div>
         </div>
 
-        <div class="trp-test-api-key-referrer__wrapper">
-            <div class="trp-test-api-key-referrer">
-                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'HTTP Referrer: ', 'translatepress-multilingual' ); ?></span>
-                <span class="trp-settings-secondary-heading trp-referrer-name"></span>
+        <div class="trp-test-api-key-popup-body">
+            <div class="trp-test-api-key-referrer__wrapper">
+                <div class="trp-test-api-key-referrer">
+                    <span class="trp-settings-secondary-heading"><?php esc_html_e( 'HTTP Referrer: ', 'translatepress-multilingual' ); ?></span>
+                    <span class="trp-settings-secondary-heading trp-referrer-name"></span>
+                </div>
+                <span class="trp-primary-text"><?php esc_html_e( 'Use this HTTP Referrer if the API lets you restrict key usage from its Dashboard.', 'translatepress-multilingual' );?></span>
             </div>
-            <span class="trp-primary-text"><?php esc_html_e( 'Use this HTTP Referrer if the API lets you restrict key usage from its Dashboard.', 'translatepress-multilingual' );?></span>
-        </div>
 
-        <div class="trp-test-api-key-response trp-test-api-key-response__wrapper">
-            <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Response', 'translatepress-multilingual' );?></span>
-            <div class="trp-settings-container"></div>
-        </div>
+            <div class="trp-test-api-key-request-url trp-test-api-key-response__wrapper">
+                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Request URL', 'translatepress-multilingual' );?></span>
+                <div class="trp-settings-container"></div>
+            </div>
 
-        <div class="trp-test-api-key-response-body trp-test-api-key-response__wrapper">
-            <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Response Body', 'translatepress-multilingual' );?></span>
-            <div class="trp-settings-container"></div>
-        </div>
+            <div class="trp-test-api-key-request-headers trp-test-api-key-response__wrapper">
+                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Request Headers', 'translatepress-multilingual' );?></span>
+                <div class="trp-settings-container"></div>
+            </div>
 
-        <div class="trp-test-api-key-response-full trp-test-api-key-response__wrapper">
-            <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Entire Response From wp_remote_get():', 'translatepress-multilingual' );?></span>
-            <div class="trp-settings-container"></div>
+            <div class="trp-test-api-key-request-body trp-test-api-key-response__wrapper">
+                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Request Body', 'translatepress-multilingual' );?></span>
+                <div class="trp-settings-container"></div>
+            </div>
+
+            <div class="trp-test-api-key-response trp-test-api-key-response__wrapper">
+                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Response', 'translatepress-multilingual' );?></span>
+                <div class="trp-settings-container"></div>
+            </div>
+
+            <div class="trp-test-api-key-response-body trp-test-api-key-response__wrapper">
+                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Response Body', 'translatepress-multilingual' );?></span>
+                <div class="trp-settings-container"></div>
+            </div>
+
+            <div class="trp-test-api-key-response-full trp-test-api-key-response__wrapper">
+                <span class="trp-settings-secondary-heading"><?php esc_html_e( 'Entire Response From wp_remote_get():', 'translatepress-multilingual' );?></span>
+                <div class="trp-settings-container"></div>
+            </div>
         </div>
 
     </div>

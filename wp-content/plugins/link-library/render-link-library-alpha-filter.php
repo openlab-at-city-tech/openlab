@@ -33,11 +33,11 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 	$linkcatquery .= 'WHERE tt.taxonomy = "' . $generaloptions['cattaxonomy'] . '"';
 
 	if ( !empty( $categorylist_cpt ) ) {
-		$linkcatquery .= ' AND t.term_id in ( ' . $categorylist_cpt . ' )';
+		$linkcatquery .= ' AND t.term_id in ( %s )';
 	}
 
 	if ( !empty( $excludecategorylist_cpt ) ) {
-		$linkcatquery .= ' AND t.term_id not in ( ' . $excludecategorylist_cpt . ' )';
+		$linkcatquery .= ' AND t.term_id not in ( %s )';
 	}
 
 	if ( $hide_if_empty ) {
@@ -46,7 +46,9 @@ function RenderLinkLibraryAlphaFilter( $LLPluginClass, $generaloptions, $library
 
 	$linkcatquery .= ' ORDER by catletter ASC';
 
-	$catletters = $wpdb->get_col( $linkcatquery );
+	$preparedlinkcatquery = $wpdb->prepare( $linkcatquery, $categorylist_cpt, $excludecategorylist_cpt );
+
+	$catletters = $wpdb->get_col( $preparedlinkcatquery );
 
 	$output = '<div class="catalphafilter">';
 

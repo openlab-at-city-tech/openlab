@@ -2,6 +2,8 @@
 
 namespace Imagely\NGG\DisplayedGallery;
 
+use Imagely\NGG\DataStorage\Manager as StorageManager;
+
 // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
 /**
  * The Trigger Manager displays "trigger buttons" for a displayed gallery.
@@ -222,6 +224,81 @@ class TriggerManager {
 		return $this->position_of( $name );
 	}
 
+	/**
+	 * Whether a class name may be instantiated as a trigger handler.
+	 *
+	 * Accepted: the default handler, a subclass of it, or a class registered in code through
+	 * register_display_type_handler(). A handler that is neither can be allowed explicitly through
+	 * the `ngg_allowed_trigger_handlers` filter - that is a code-side decision, which a stored
+	 * column value is not.
+	 *
+	 * @param string $klass Class name.
+	 * @return bool
+	 */
+	protected function is_trigger_handler_class( $klass ) {
+		if ( ! is_string( $klass ) || '' === $klass ) {
+			return false;
+		}
+
+		// Shape-checked before anything that can autoload. class_exists() and is_subclass_of()
+		// both run the autoloader, and NGG's autoloader maps the class name onto a path under
+		// src/ - so calling either on the raw stored value would let "Imagely\NGG\..\..\uploads\x"
+		// require() an uploaded file before this method ever returned false. A value that is not
+		// shaped like a PHP class name never reaches those calls.
+		if ( ! preg_match( '/^\\\\?[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*(\\\\[A-Za-z_\x80-\xff][A-Za-z0-9_\x80-\xff]*)*$/', $klass ) ) {
+			return false;
+		}
+
+		// Compared on a normalized form: PHP class names are case-insensitive and a leading "\\" is
+		// optional, so a registered handler written as "\\Foo\\Bar" must still match a stored
+		// "Foo\\Bar" - refusing that would drop a legitimate third-party handler.
+		$normalized = self::normalize_class_name( $klass );
+		$default    = $this->_default_display_type_handler;
+
+		if ( $default && $normalized === self::normalize_class_name( $default ) ) {
+			return true;
+		}
+
+		// Registered handlers are trusted: they were declared in code, not read from a column.
+		foreach ( (array) $this->_display_type_handlers as $registered ) {
+			if ( $normalized === self::normalize_class_name( $registered ) ) {
+				return true;
+			}
+		}
+
+		/**
+		 * Filters the extra classes that may be instantiated as a trigger handler.
+		 *
+		 * @param string[] $handlers Fully-qualified class names.
+		 */
+		$allowed = (array) apply_filters( 'ngg_allowed_trigger_handlers', [] );
+
+		foreach ( $allowed as $allowed_class ) {
+			if ( $normalized === self::normalize_class_name( $allowed_class ) ) {
+				return true;
+			}
+		}
+
+		// Last: a subclass of the default handler. This is the only branch that has to load the
+		// class, so it runs after every name-only comparison has failed, and only for a value
+		// already shaped like a class name.
+		if ( $default && is_subclass_of( $klass, ltrim( (string) $default, '\\' ) ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * A class name in the form used for comparison: no leading separator, lowercased.
+	 *
+	 * @param mixed $klass Class name.
+	 * @return string
+	 */
+	protected static function normalize_class_name( $klass ) {
+		return is_string( $klass ) ? strtolower( ltrim( $klass, '\\' ) ) : '';
+	}
+
 	public function get_handler_for_displayed_gallery( $displayed_gallery ) {
 		// Find the trigger handler for the current display type.
 
@@ -237,11 +314,35 @@ class TriggerManager {
 			}
 		}
 
+		// Validated here, not at the sinks: display_settings['trigger_handler'] originates in the
+		// gallery's stored display_type_settings and is therefore writable through the editing
+		// endpoints, while both consumers reach code with it on an unauthenticated front-end
+		// render - render() with `new $klass()`, enqueue_resources() with method_exists() and
+		// call_user_func(). Gating the getter means a third consumer cannot be added without it.
+		if ( $klass && ! $this->is_trigger_handler_class( $klass ) ) {
+			// Logged, not silently swapped: this substitution makes a gallery's trigger buttons
+			// (lightbox, add-to-cart, proofing) render from the default handler instead of the
+			// configured one, or not render at all when there is no default - a front-end change
+			// with no admin signal, so support needs a line to search for.
+			StorageManager::get_instance()->log_path_refusal(
+				sprintf(
+					'NextGEN Gallery: refused trigger handler "%s" for display type "%s" - not the default handler, a subclass of it, or a handler registered in code; using the default instead',
+					is_string( $klass ) ? $klass : gettype( $klass ),
+					isset( $displayed_gallery->display_type ) ? $displayed_gallery->display_type : '?'
+				),
+				StorageManager::REFUSAL_TRIGGER_HANDLER
+			);
+
+			$klass = $this->_default_display_type_handler;
+		}
+
 		return $klass;
 	}
 
 	public function render( $view, $displayed_gallery ) {
+		// Already validated by get_handler_for_displayed_gallery().
 		$klass = $this->get_handler_for_displayed_gallery( $displayed_gallery );
+
 		if ( $klass ) {
 			$handler                    = new $klass();
 			$handler->view              = $view;
@@ -296,10 +397,30 @@ class TriggerManager {
 		return $retval;
 	}
 
+	/**
+	 * Runs each registered trigger's is_renderable() for its enqueue side effect,
+	 * so trigger assets survive a rendering-cache hit that skips the render pass.
+	 *
+	 * @param object $displayed_gallery The displayed gallery.
+	 * @return void
+	 */
+	public function enqueue_trigger_assets( $displayed_gallery ) {
+		foreach ( $this->_trigger_order as $name ) {
+			if ( ! isset( $this->_triggers[ $name ] ) ) {
+				continue;
+			}
+
+			$klass = $this->_triggers[ $name ];
+			if ( method_exists( $klass, 'is_renderable' ) ) {
+				call_user_func( [ $klass, 'is_renderable' ], $name, $displayed_gallery );
+			}
+		}
+	}
+
 	public function enqueue_resources( $displayed_gallery ) {
 		$handler = $this->get_handler_for_displayed_gallery( $displayed_gallery );
 		if ( $handler ) {
-			wp_enqueue_style( 'fontawesome' );
+			wp_enqueue_style( 'nextgen_gallery_icons' );
 			wp_enqueue_style( 'ngg_trigger_buttons' );
 
 			if ( method_exists( $handler, 'enqueue_resources' ) ) {

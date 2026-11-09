@@ -144,6 +144,31 @@ abstract class DLM_Utils {
 	}
 
 	/**
+	 * Percent-encode characters that are not allowed in an http(s) URL (spaces, unicode etc.),
+	 * leaving already encoded sequences, the host and non-http(s) paths untouched.
+	 *
+	 * @param  string  $url
+	 *
+	 * @return string
+	 * @since 5.3.3
+	 */
+	public static function encode_url( $url ) {
+		if ( ! is_string( $url ) || ! preg_match( '#^(https?://[^/?\#]*)(.*)$#is', trim( $url ), $parts ) ) {
+			return $url;
+		}
+
+		$rest = preg_replace_callback(
+			'/[^A-Za-z0-9\-._~!$&\'()*+,;=:@\/?#\[\]%]+|%(?![0-9A-Fa-f]{2})/',
+			function ( $matches ) {
+				return rawurlencode( $matches[0] );
+			},
+			$parts[2]
+		);
+
+		return $parts[1] . $rest;
+	}
+
+	/**
 	 * Retrieves the longes common substring from a list of strings
 	 *
 	 * @param  array  $file_paths

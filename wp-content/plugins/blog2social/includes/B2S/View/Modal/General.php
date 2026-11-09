@@ -184,7 +184,7 @@ class B2S_View_Modal_General {
             "b2sPreFeatureEditAndDeleteModal" => array(
                 0 => array(
                     "title" => esc_html__('Post Management', 'blog2social'),
-                    "subline" => esc_html__('Would you like to delete a published post or edit a scheduled one?', 'blog2social'),
+                    "subline" => esc_html__('Would you like to edit a scheduled post?', 'blog2social'),
                     "bottomText" => esc_html__('Unfortunately, this isn’t possible in the Free version – but with SMART, PRO, or BUSINESS you have full control over your content:', 'blog2social'),
                     "backgroundImage" => '/assets/images/advertising-modal/bg-delete-post.png',
                     "textColor" => 'b2s-color-dark-grey',
@@ -196,7 +196,7 @@ class B2S_View_Modal_General {
                     "listitems" => array(
                         esc_html__('Keep an overview of your posts and schedules in the calendar', 'blog2social'),
                         esc_html__('Automatically post and schedule your content', 'blog2social'),
-                        esc_html__('Flexibly delete, reschedule, or repost your content', 'blog2social'),
+                        esc_html__('Flexibly reschedule or repost your content', 'blog2social'),
                     ),
                 )
             ),

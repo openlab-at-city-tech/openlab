@@ -87,11 +87,11 @@
 <!-- only show the limit field when 'all images' is selected -->
 <script type="text/javascript">
 	(function($) {
-		$('#<?php echo esc_attr( $self->get_field_id( 'galleryid' ) ); ?>').on('change', function() {
+		$(<?php echo wp_json_encode( '#' . $self->get_field_id( 'galleryid' ) ); ?>).on('change', function() { // wp_json_encode — selector is JS string, not HTML attr; esc_attr produced HTML entities not decoded by JS.
 			if ($(this).val() == 0) {
-				$('#<?php echo esc_attr( $self->get_field_id( 'limit' ) ); ?>_container').show();
+				$(<?php echo wp_json_encode( '#' . $self->get_field_id( 'limit' ) . '_container' ); ?>).show(); // wp_json_encode — JS-string context for jQuery selector.
 			} else {
-				$('#<?php echo esc_attr( $self->get_field_id( 'limit' ) ); ?>_container').hide();
+				$(<?php echo wp_json_encode( '#' . $self->get_field_id( 'limit' ) . '_container' ); ?>).hide(); // wp_json_encode — JS-string context for jQuery selector.
 			}
 		});
 	})(jQuery);

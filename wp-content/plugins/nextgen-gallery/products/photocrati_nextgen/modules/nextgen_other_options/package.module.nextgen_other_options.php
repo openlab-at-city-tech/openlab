@@ -21,7 +21,7 @@ class A_Custom_Lightbox_Form extends Mixin
     /**
      * Renders the lightbox library code field.
      *
-     * @param $lightbox
+     * @param \Imagely\NGG\DataTypes\Lightbox $lightbox
      * @return mixed
      */
     public function _render_lightbox_library_code_field($lightbox)
@@ -31,7 +31,7 @@ class A_Custom_Lightbox_Form extends Mixin
     /**
      * Renders the lightbox library styles field.
      *
-     * @param $lightbox
+     * @param \Imagely\NGG\DataTypes\Lightbox $lightbox
      * @return mixed
      */
     public function _render_lightbox_library_styles_field($lightbox)
@@ -41,7 +41,7 @@ class A_Custom_Lightbox_Form extends Mixin
     /**
      * Renders the lightbox library scripts field.
      *
-     * @param $lightbox
+     * @param \Imagely\NGG\DataTypes\Lightbox $lightbox
      * @return mixed
      */
     public function _render_lightbox_library_scripts_field($lightbox)
@@ -160,20 +160,16 @@ class A_Image_Options_Form extends Mixin
         $save = true;
         if ($image_options) {
             // Update the gallery path. Moves all images to the new location.
-            if (isset($image_options['gallerypath']) && (!is_multisite() || get_current_blog_id() == 1)) {
-                $fs = \Imagely\NGG\Util\Filesystem::get_instance();
-                $root = $fs->get_document_root('galleries');
-                $image_options['gallerypath'] = $fs->add_trailing_slash($image_options['gallerypath']);
-                $gallery_abspath = $fs->get_absolute_path($fs->join_paths($root, $image_options['gallerypath']));
-                if ($gallery_abspath[0] != DIRECTORY_SEPARATOR) {
-                    $gallery_abspath = DIRECTORY_SEPARATOR . $gallery_abspath;
-                }
-                if (strpos($gallery_abspath, $root) === false) {
-                    /* translators: %s: root directory path */
-                    $this->object->get_model()->add_error(sprintf(__('Gallery path must be located in %s', 'nggallery'), $root), 'gallerypath');
+            if (isset($image_options['gallerypath']) && (!is_multisite() || is_main_site() || is_super_admin())) {
+                $validation = \Imagely\NGG\Settings\GalleryPathValidation::validate_relative_under_galleries_root($image_options['gallerypath']);
+                if (is_wp_error($validation)) {
+                    $this->object->get_model()->add_error($validation->get_error_message(), 'gallerypath');
                     $storage = \Imagely\NGG\DataStorage\Manager::get_instance();
                     $image_options['gallerypath'] = trailingslashit($storage->get_upload_relpath());
                     unset($storage);
+                } else {
+                    $fs = \Imagely\NGG\Util\Filesystem::get_instance();
+                    $image_options['gallerypath'] = $fs->add_trailing_slash(trim($image_options['gallerypath']));
                 }
             } elseif (isset($image_options['gallerypath'])) {
                 unset($image_options['gallerypath']);

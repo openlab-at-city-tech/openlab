@@ -190,13 +190,7 @@ class PLL_Admin_Classic_Editor {
 
 		Capabilities::get_user()->can_translate_or_die( $lang );
 
-		$post_type_object = get_post_type_object( $post->post_type );
-
-		if ( empty( $post_type_object ) ) {
-			wp_die( esc_html( "{$post->post_type} is not a valid post type." ) );
-		}
-
-		if ( ! current_user_can( $post_type_object->cap->edit_post, $post->ID ) ) {
+		if ( ! current_user_can( 'edit_post', $post->ID ) ) {
 			wp_die( 'You are not allowed to edit this post.' );
 		}
 
@@ -271,7 +265,7 @@ class PLL_Admin_Classic_Editor {
 		}
 
 		// Flag
-		$x->Add( array( 'what' => 'flag', 'data' => empty( $lang->flag ) ? esc_html( $lang->slug ) : $lang->flag ) );
+		$x->Add( array( 'what' => 'flag', 'data' => $lang->get_admin_flag( 'aria-hidden' ) ) );
 
 		// Sample permalink
 		$x->Add( array( 'what' => 'permalink', 'data' => get_sample_permalink_html( $post->ID ) ) );
@@ -333,7 +327,7 @@ class PLL_Admin_Classic_Editor {
 			}
 		}
 
-		wp_die( wp_json_encode( $return ) );
+		wp_die( wp_json_encode( $return ) ?: '[]' );
 	}
 
 	/**

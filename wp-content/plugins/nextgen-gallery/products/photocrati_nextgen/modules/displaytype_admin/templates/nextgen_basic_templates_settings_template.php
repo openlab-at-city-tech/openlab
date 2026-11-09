@@ -5,7 +5,7 @@
 				title="<?php echo esc_attr( $template_text ); ?>">
 			<?php echo esc_html( $template_label ); ?>
 			<div class="deprecated">
-				<i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+				<i class="fas fa-exclamation-circle" aria-hidden="true"></i>
 				<strong>Deprecated:</strong> For more information, please see our <a target='_blank' href='https://www.imagely.com/docs/legacy-templates-deprecation'>documentation</a>
 			</div>
 		</label>

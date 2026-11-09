@@ -122,7 +122,7 @@ class blcACFParser extends blcParser {
 
 		$field_html = sprintf(
 			'<code>%s</code>',
-			$instance->container_field
+			esc_html( $instance->container_field )
 		);
 
 		if ( 'email' !== $context ) {

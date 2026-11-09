@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#ff0" viewBox="0 0 900 600">
+<path fill="red" d="M0 0h900v600H0"/>
+<g transform="translate(450 300)">
+<g id="c">
+<g id="b">
+<path id="a" d="m29-182-18 63c-1 10 13 12 15 3m31-59-27 60c-3 9 11 13 14 4m40-53-37 55c-4 8 9 15 14 6m48-46-45 48c-6 8 6 17 12 9M0-184l-7 65c0 9 14 9 14 0z"/>
+<use href="#a" transform="rotate(45)"/>
+</g>
+<use href="#b" transform="rotate(90)"/>
+</g>
+<use href="#c" transform="scale(-1)"/>
+<circle r="111"/>
+<circle r="98" fill="red"/>
+<circle r="85"/>
+<path id="d" fill="none" stroke="red" stroke-width="8" d="M-76-47C-26-24 19 10 43 76M-68-59C12-26 41 17 62 63M-57-68C18-45 50-2 75 46M-42-79Q47-50 85 23"/>
+<use href="#d" transform="scale(-1 1)"/>
+</g>
+</svg>

@@ -10,10 +10,10 @@ if (!defined('ABSPATH')) {
  * Author: Blog2Social, miaadenion
  * Text Domain: blog2social
  * Domain Path: /languages
- * Version: 8.9.0
+ * Version: 9.1.7
  * Requires at least: 6.2
  * Requires PHP: 7.4
- * Tested up to: 6.9
+ * Tested up to: 7.1
  * Author URI: https://www.blog2social.com
  * License: GPLv3
  */
@@ -22,7 +22,7 @@ if (!defined('ABSPATH')) {
  * @phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
  */
 
-define('B2S_PLUGIN_VERSION', '890');
+define('B2S_PLUGIN_VERSION', '917');
 define('B2S_PLUGIN_LANGUAGE', serialize(array('de_DE', 'en_US')));
 define('B2S_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('B2S_PLUGIN_URL', plugin_dir_url(__FILE__));

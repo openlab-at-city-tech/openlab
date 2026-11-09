@@ -109,6 +109,25 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 			if ( is_admin() || ! empty( $GLOBALS['wp']->query_vars['rest_route'] ) ) {
 				return;
 			}
+
+			// When WPML is active, resolve the translated endpoint for the current language so
+			// query var lookups below match the rewrite endpoint that was actually registered.
+			if ( function_exists( 'icl_get_languages' ) && has_filter( 'wpml_translate_single_string' ) ) {
+				$current_lang = apply_filters( 'wpml_current_language', null );
+				if ( $current_lang ) {
+					$translated_endpoint = apply_filters(
+						'wpml_translate_single_string',
+						$this->endpoint,
+						'admin_texts_dlm_download_endpoint',
+						'dlm_download_endpoint',
+						$current_lang
+					);
+					if ( ! empty( $translated_endpoint ) ) {
+						$this->endpoint = $translated_endpoint;
+					}
+				}
+			}
+
 			// check HTTP method.
 			$request_method = ( ! empty( $_SERVER['REQUEST_METHOD'] )
 				? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) )
@@ -160,6 +179,9 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 				);
 				exit;
 			}
+
+			// Lets an extension resolve $wp->query_vars[$this->endpoint] / $wp->request itself (e.g. from a custom URL) before the check below runs.
+			do_action( 'dlm_download_handler_before_resolve', $wp, $this->endpoint );
 
 			// check if need to handle an actual download.
 			if ( ! empty( $wp->query_vars[ $this->endpoint ] )
@@ -433,7 +455,27 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 
 			$is_redirect = $download->is_redirect_only() || apply_filters( 'dlm_do_not_force', false, $download, $version );
 
+			if ( ! $remote_file && ! $is_redirect && ! file_exists( $file_path ) ) {
+				if ( $this->check_for_xhr() ) {
+					header( 'X-DLM-Error: file_not_found' );
+					$this->set_no_access_modal( __( 'File not found.', 'download-monitor' ), $download, 'file_not_found' );
+					exit;
+				}
+
+				wp_die(
+					esc_html__( 'File not found.', 'download-monitor' )
+						. ' <a href="' . esc_url( home_url() ) . '">'
+						. esc_html__( 'Go to homepage &rarr;', 'download-monitor' )
+						. '</a>',
+					esc_html__( 'Download Error', 'download-monitor' ),
+					array( 'response' => 404 )
+				);
+			}
+
 			$file_path = apply_filters( 'dlm_file_path', $file_path, $remote_file, $download );
+			if ( $remote_file ) {
+				$file_path = DLM_Utils::encode_url( $file_path );
+			}
 			// Not a redirect, so we need to check the file type.
 			if ( ! $is_redirect ) {
 				// Defined restricted file types.
@@ -472,6 +514,10 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 				);
 				session_set_cookie_params( apply_filters( 'dlm_set_session_params', $params ) );
 				session_start();
+				if ( PHP_SESSION_ACTIVE !== session_status() ) {
+					session_save_path( sys_get_temp_dir() );
+					session_start();
+				}
 			}
 
 			// Check Access.
@@ -549,6 +595,10 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 			// Get the referrer.
 			$referrer       = ( isset( $_SERVER['HTTP_REFERER'] ) ) ? esc_url_raw( $_SERVER['HTTP_REFERER'] ) : '';
 			$cookie_manager = DLM_Cookie_Manager::get_instance();
+
+			if ( $this->check_for_xhr() ) {
+				header( 'X-DLM-Log-Token: ' . $this->dlm_logging->generate_xhr_log_token( $download->get_id(), $version->get_id() ) );
+			}
 			// check if user downloaded this version in the past minute. This checks if the cookie exists and if it's
 			// value is the same as the download id.
 			if ( false === $cookie_manager->check_cookie_meta( 'wp_dlm_downloading', $download->get_id() ) ) {
@@ -772,30 +822,25 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 				list( $range )             = explode( ',', $range, 2 );
 				list( $range, $range_end ) = explode( '-', $range );
 				$range                     = intval( $range );
-				$range_end_modified        = false;
 
-				if ( ! $range_end || $range_end > $version->get_filesize() ) {
-					$range_end          = $version->get_filesize() - 1;
-					$range_end_modified = true;
+				if ( '' === trim( (string) $range_end ) || intval( $range_end ) >= $version->get_filesize() ) {
+					$range_end = $version->get_filesize() - 1;
 				} else {
 					$range_end = intval( $range_end );
 				}
 
-				if ( $range_end_modified ) {
-					$new_length = ( $range_end - $range ) + 1;
-				} else {
-					$new_length = $range_end - $range;
-				}
+				$new_length = ( $range_end - $range ) + 1;
 
 				header( $_SERVER['SERVER_PROTOCOL'] . ' 206 Partial Content' );
 				header( "Content-Length: $new_length" );
 				header( "Content-Range: bytes {$range}-{$range_end}/{$version->get_filesize()}" );
 			} else {
-				$range = false;
+				$range      = false;
+				$new_length = false;
 			}
 
 			// Adding contents to an object will trigger error on big files.
-			if ( ! $this->readfile_chunked( $file_path, false, $range ) ) {
+			if ( ! $this->readfile_chunked( $file_path, false, $range, $new_length ) ) {
 				if ( $remote_file ) {
 					// Redirect - we can't track if this completes or not.
 					if ( $this->check_for_xhr() ) {
@@ -919,14 +964,14 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 			$headers = array();
 			// We use this method to encode the filename so that file names with characters like
 			// chinese or persian can be named correctly after the download in Safari.
-			$file_name = rawurlencode( sanitize_file_name( $file_name ) );
+			$file_name_safe = str_replace( '"', '', sanitize_text_field( $file_name ) );
+			$file_name      = rawurlencode( $file_name_safe );
 			if ( $this->check_for_xhr() ) {
-				$headers['Content-Disposition']
-											= "attachment; filename=\"{$file_name}\";";
+				$headers['Content-Disposition'] = "attachment; filename=\"{$file_name}\";";
 				$headers['X-DLM-File-Name']     = "{$file_name}";
 			} else {
-				$headers['Content-Disposition']
-					= "attachment; filename*=UTF-8''{$file_name};";
+				// Include filename= fallback for Safari which doesn't support filename*=UTF-8'' without it.
+				$headers['Content-Disposition'] = "attachment; filename=\"{$file_name_safe}\"; filename*=UTF-8''{$file_name}";
 			}
 
 			$headers['X-Robots-Tag']              = 'noindex, nofollow';
@@ -1025,13 +1070,15 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 		 * @param  string   $file
 		 * @param  boolean  $retbytes  return bytes of file
 		 * @param  boolean  $range     if  HTTP RANGE to seek
+		 * @param  boolean  $length    max bytes to output, false for whole file
 		 *
 		 * @return   mixed
 		 */
 		public function readfile_chunked(
 			$file,
 			$retbytes = true,
-			$range = false
+			$range = false,
+			$length = false
 		) {
 			$chunksize = 1 * ( 1024 * 1024 );
 			$buffer    = '';
@@ -1046,8 +1093,16 @@ if ( ! class_exists( 'DLM_Download_Handler' ) ) {
 				fseek( $handle, $range );
 			}
 
-			while ( ! feof( $handle ) ) {
-				$buffer = fread( $handle, $chunksize );
+			while ( ! feof( $handle ) && ( false === $length || $length > 0 ) ) {
+				$buffer = fread( $handle, false === $length ? $chunksize : min( $chunksize, $length ) );
+
+				if ( false === $buffer ) {
+					break;
+				}
+
+				if ( false !== $length ) {
+					$length -= strlen( $buffer );
+				}
 				// phpcs:ignore
 				echo $buffer;
 

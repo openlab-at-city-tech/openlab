@@ -83,15 +83,50 @@ class App {
 			],
 		];
 
-		// Only add eCommerce menu item if Pro level is installed
-		$pro_type = $this->get_pro_type_installed();
-		if ( 'pro' === $pro_type ) {
-			$sub_menus[] = [
-				'name'       => __( 'eCommerce', 'nggallery' ),
-				'capability' => 'NextGEN Change options',
-				'menu_slug'  => "$menu-ecommerce",
-			];
-		}
+		/*
+		 * eCommerce menu: Pro opens the full hub; Lite opens a static Pro-upsell page (the
+		 * React app renders the right one).
+		 *
+		 * manage_options for both tiers, because the hub's own REST routes require it:
+		 * "NextGEN Change options" is delegable to any role from the Roles screen below, so it
+		 * cannot govern the payment ledger, its customer PII, or the order hashes the
+		 * unauthenticated digital-download route takes as proof of purchase
+		 * (nextgen-gallery-pro#815). A menu at the delegable capability over routes needing
+		 * manage_options would 403 on every request.
+		 *
+		 * The settings route is deliberately NOT part of that: SettingsREST still resolves both
+		 * callbacks to "NextGEN Change options" and returns Settings::to_array() whole, because
+		 * the Settings screen below is registered at that capability and serves a delegated role
+		 * for every non-commerce option. What it no longer returns to such a caller is the
+		 * gateway credentials, both licence-key spellings and the print-lab billing customer:
+		 * nextgen-gallery-pro#838 redacts them on rest_request_after_callbacks and refuses a
+		 * write carrying one on rest_pre_dispatch, for /imagely/v1/settings and /settings/global.
+		 *
+		 * Those two routes only. Still open, and none of it administrator-only:
+		 * - The classic eCommerce form mass-assigns every posted ecommerce[*] key at the
+		 *   delegable capability, so that screen can still CHANGE the credentials
+		 *   (nextgen-gallery-pro#816). Reading them back from it is closed by #838.
+		 * - get_license_data() below checks no capability, and get_imagely_app_data() is
+		 *   localized by TWO callers: this file's hub pages, and IGW\BlockManager, whose
+		 *   register_blocks() puts it on the block editor script that core enqueues for any
+		 *   edit_posts user. So a Contributor reads the key from post-new.php, and the fix has
+		 *   to land in get_license_data() itself - gating this file would leave that route
+		 *   open (#1161).
+		 * - Free's Other Options forms save the posted array whole into the same row, so that
+		 *   screen can still write any key, gateway credentials included (#1174).
+		 * - Pro prints the licence key into the Other Options markup at the same delegable
+		 *   capability, a separate route from #1161 (nextgen-gallery-pro#867).
+		 * - The gate ships in Pro, so without Pro the stored values are readable again (#1163).
+		 *
+		 * This is also where both halves sat before faa02189 moved the whole menu off
+		 * manage_options; the gallery, album, tag and style delegations that commit introduced
+		 * are deliberate and stay as they are.
+		 */
+		$sub_menus[] = [
+			'name'       => __( 'eCommerce', 'nggallery' ),
+			'capability' => 'manage_options',
+			'menu_slug'  => "$menu-ecommerce",
+		];
 
 		$sub_menus[] = [
 			'name'       => __( 'Settings', 'nggallery' ),
@@ -110,14 +145,28 @@ class App {
 		];
 
 		foreach ( $sub_menus as $sub_menu ) {
+			$callback              = ( "$menu-addons" === $sub_menu['menu_slug'] )
+				? [ $this, 'render_addons_page' ]
+				: [ $this, 'render_settings_page' ];
 			$this->hook_suffixes[] = add_submenu_page(
 				$menu,
 				$sub_menu['name'],
 				$sub_menu['name'],
 				$sub_menu['capability'],
 				$sub_menu['menu_slug'],
-				[ $this, 'render_settings_page' ]
+				$callback
 			);
+		}
+
+		// Single "Integrations" menu item → direct link to Settings > Integrations tab.
+		global $submenu;
+		if ( isset( $submenu['imagely'] ) && current_user_can( 'NextGEN Change options' ) ) { // phpcs:ignore WordPress.WP.Capabilities.Unknown
+			$submenu['imagely'][] = [
+				__( 'Integrations', 'nggallery' ),
+				'NextGEN Change options',
+				admin_url( 'admin.php?page=imagely-settings&tab=integrations' ),
+				__( 'Integrations', 'nggallery' ),
+			];
 		}
 
 		// Hide the "Edit Gallery" menu item from the sidebar (but keep it registered)
@@ -208,6 +257,13 @@ class App {
 		wp_deregister_style( 'forms-css' );
 	}
 
+	/**
+	 * Render the Addons page (same app container as other Imagely pages).
+	 */
+	public function render_addons_page() {
+		$this->render_settings_page();
+	}
+
 	public function render_settings_page() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only GET parameter for display mode
 		$embed     = isset( $_GET['embed'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['embed'] ) );
@@ -242,25 +298,34 @@ HTML;
 	 */
 	public static function get_imagely_app_data() {
 		$data = [
-			'nonce'                    => wp_create_nonce( 'imagely-admin' ),
-			'nonce_preview'            => wp_create_nonce( 'ngg_preview_shortcode' ),
-			'restURL'                  => esc_url_raw( rest_url() ),
-			'assetsURL'                => plugins_url( 'assets', NGG_PLUGIN_FILE ),
-			'home_url'                 => esc_url_raw( get_home_url() ),
-			'adminUrl'                 => esc_url_raw( admin_url() ),
-			'pluginPath'               => NGG_PLUGIN_DIR,
-			'plugin_url'               => esc_url_raw( trailingslashit( plugins_url( '', NGG_PLUGIN_FILE ) ) ),
-			'debug'                    => self::is_debug(),
-			'version'                  => class_exists( '\Imagely\NGGPro\Bootloader' ) && ! empty( \Imagely\NGGPro\Bootloader::$plugin_version )
+			'nonce'                     => wp_create_nonce( 'imagely-admin' ),
+			'nonce_preview'             => wp_create_nonce( 'ngg_preview_shortcode' ),
+			'restURL'                   => esc_url_raw( rest_url() ),
+			'assetsURL'                 => plugins_url( 'assets', NGG_PLUGIN_FILE ),
+			'home_url'                  => esc_url_raw( get_home_url() ),
+			'adminUrl'                  => esc_url_raw( admin_url() ),
+			'pluginPath'                => NGG_PLUGIN_DIR,
+			'plugin_url'                => esc_url_raw( trailingslashit( plugins_url( '', NGG_PLUGIN_FILE ) ) ),
+			'debug'                     => self::is_debug(),
+			'version'                   => class_exists( '\Imagely\NGGPro\Bootloader' ) && ! empty( \Imagely\NGGPro\Bootloader::$plugin_version )
 				? \Imagely\NGGPro\Bootloader::$plugin_version
 				: ( defined( 'NGG_PLUGIN_VERSION' ) ? NGG_PLUGIN_VERSION : '' ),
-			'utmVersion'               => self::get_utm_version(),
-			'proTypeInstalled'         => self::get_pro_type_installed(),
-			'licenseData'              => self::get_license_data(),
-			'enviraCdnConfig'          => self::get_cdn_config(),
-			'canAccessRolesSettings'   => self::can_access_roles_settings(),
-			'canAccessLicenseSettings' => self::can_access_license_settings(),
-			'legacyTemplates'          => self::get_legacy_templates(),
+			'utmVersion'                => self::get_utm_version(),
+			'proTypeInstalled'          => self::get_pro_type_installed(),
+			'licenseData'               => self::get_license_data(),
+			'enviraCdnConfig'           => self::get_cdn_config(),
+			'canAccessRolesSettings'    => self::can_access_roles_settings(),
+			'canAccessLicenseSettings'  => self::can_access_license_settings(),
+			// Integers survive wp_localize_script better than booleans. canEditGalleryPath is authoritative in JS.
+			'is_multisite'              => is_multisite() ? 1 : 0,
+			'is_main_site'              => ( ! is_multisite() || is_main_site() ) ? 1 : 0,
+			'is_super_admin'            => is_super_admin() ? 1 : 0,
+			'canEditGalleryPath'        => ( ! is_multisite() || is_main_site() || is_super_admin() ) ? 1 : 0,
+			'canImportFolderFromServer' => (
+				! is_multisite()
+				|| (bool) \Imagely\NGG\Settings\GlobalSettings::get_instance()->get( 'wpmuImportFolder', false )
+			) ? 1 : 0,
+			'legacyTemplates'           => self::get_legacy_templates(),
 		];
 
 		return apply_filters( 'ngg_imagely_app_data', $data );
@@ -323,6 +388,7 @@ HTML;
 			'is_valid'     => false,
 			'expiration'   => null,
 			'expires_soon' => false,
+			'brand'        => 'imagely',
 		];
 
 		// Only get license data if we're not on the free version
@@ -338,7 +404,12 @@ HTML;
 			$license_key     = $licensing->get_license( $current_product );
 
 			if ( ! empty( $license_key ) ) {
-				$license_data['license_key'] = $license_key;
+				// This data is printed on the block editor and on hub pages a delegated role can
+				// open, so only a user who may manage the license gets the full key. Newer Pro
+				// masks it as well; this also covers an older Pro running with this version.
+				$license_data['license_key'] = self::can_access_license_settings()
+					? $license_key
+					: self::mask_license_key( $license_key );
 
 				// Get plugin level
 				$license_data['plugin_level'] = $pro_type;
@@ -354,6 +425,12 @@ HTML;
 				$level = get_option( 'ngg_license_level_' . $pro_type, '' );
 				if ( ! empty( $level ) ) {
 					$license_data['level'] = $level;
+				}
+
+				// Get storefront brand (defaults to imagely; only photocrati-store licenses differ).
+				$brand = get_option( 'ngg_license_brand_' . $pro_type, '' );
+				if ( ! empty( $brand ) ) {
+					$license_data['brand'] = $brand;
 				}
 
 				// Get last check time
@@ -380,6 +457,22 @@ HTML;
 	}
 
 	/**
+	 * Mask a license key down to its last four characters.
+	 *
+	 * The app only checks that a key is present and displays its last four characters, so both
+	 * still work. Masking an already masked key returns it unchanged.
+	 *
+	 * @param string $license_key License key.
+	 * @return string
+	 */
+	public static function mask_license_key( $license_key ) {
+		$license_key = (string) $license_key;
+		$shown       = strlen( $license_key ) > 4 ? substr( $license_key, -4 ) : '';
+
+		return str_repeat( '*', strlen( $license_key ) - strlen( $shown ) ) . $shown;
+	}
+
+	/**
 	 * Get system information for the admin app.
 	 *
 	 * @return array System information array
@@ -396,6 +489,9 @@ HTML;
 
 		// Get upload directory info
 		$upload_dir = wp_upload_dir();
+
+		// Reported as-is ("rows:<n>") when set; see the note on the field below.
+		$guard_deferred = (string) get_option( 'ngg_pictures_guard_deferred', '' );
 
 		$system_info = [
 			// Existing fields
@@ -457,6 +553,16 @@ HTML;
 			'timezone'                 => wp_timezone_string(),
 			'locale'                   => get_locale(),
 			'permalink_structure'      => get_option( 'permalink_structure', 'Default' ),
+
+			// Database schema state. The duplicate-image guard is deliberately not migrated onto
+			// existing pictures tables (#941), so on those sites it is simply absent -- and the
+			// only other record of that is the weekly check-in, which UsageTracking::hooks()
+			// skips unless the onboarding wizard ran and the licence is lite. Old installs are
+			// exactly the affected population and exactly the one that cannot report, so the
+			// deferral is surfaced here too, where a site owner or support can read it.
+			'pictures_guard_deferred'  => '' !== $guard_deferred ? $guard_deferred : 'No',
+			'schema_error_recorded'    => '' !== (string) get_option( 'ngg_schema_error', '' ) ? 'Yes' : 'No',
+			'upgrade_error_recorded'   => '' !== (string) get_option( 'ngg_upgrade_error', '' ) ? 'Yes' : 'No',
 
 			// NextGen Legacy Settings
 			'show_legacy_admin_pages'  => $settings->get( 'ngg_show_old_settings', false ) ? 'Yes' : 'No',

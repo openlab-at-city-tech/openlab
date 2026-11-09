@@ -113,24 +113,15 @@ class CreateOrder
 		$request->headers["prefer"] = "return=representation";
 		$request->body = $this->buildRequestBody();
 
-		try {
+		$response = $this->client->execute($request);
 
-			$response = $this->client->execute($request);
-
-			$this->setId( $response->result->id );
-			$this->setStatus( $response->result->status );
-			$links = array();
-			foreach ($response->result->links as $link) {
-				$links[ $link->rel ] = $link->href;
-			}
-			$this->setLinks( $links );
-
-		} catch ( PayPalHttp\HttpException $ex ) {
-
-			// echo $ex->statusCode;
-			// print_r($ex->getMessage());
-
+		$this->setId( $response->result->id );
+		$this->setStatus( $response->result->status );
+		$links = array();
+		foreach ($response->result->links as $link) {
+			$links[ $link->rel ] = $link->href;
 		}
+		$this->setLinks( $links );
 
 		return $response;
 	}

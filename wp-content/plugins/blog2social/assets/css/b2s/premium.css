@@ -21,6 +21,20 @@ body .thumbnail{
     padding-top: 2px !important;
 }
 
+input[type="text"].b2s-key-area-input {
+    height: 30px !important;
+    min-height: 30px !important;
+    padding-top: 3px !important;
+    padding-bottom: 3px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    border-radius: 3px !important;
+}
+
+.b2s-key-area .input-group-btn {
+    padding-left: 5px;
+}
+
 #b2s_license_user_select_chosen {
     width: 100% !important;
 }
@@ -63,6 +77,7 @@ body .thumbnail{
     border-color:#79b331 !important;
     color: #79b331 !important;
     background-color:white !important;
+    font-size: 11px !important;
     
 }
 

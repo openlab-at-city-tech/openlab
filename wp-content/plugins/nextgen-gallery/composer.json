@@ -5,15 +5,8 @@
 	"homepage": "https://www.imagely.com/",
 	"license": "GPLv2",
 	"type": "wordpress-plugin",
-	"repositories": [
-		{
-			"type": "vcs",
-			"url": "git@github.com:awesomemotive/pope-framework.git"
-		}
-	],
 	"require": {
-		"imagely/pope-framework": "v0.19",
-		"ezyang/htmlpurifier": "4.17.0"
+		"ezyang/htmlpurifier": "4.19.0"
 	},
 	"require-dev": {
 		"nikic/php-parser": "4.18.0",

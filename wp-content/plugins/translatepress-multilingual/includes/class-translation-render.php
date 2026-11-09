@@ -61,13 +61,19 @@ class TRP_Translation_Render{
     }
 
     /**
-     * Function to hide php errors and notice and instead log them in debug.log so we don't store the notice strings inside the db if WP_DEBUG is on
+     * Hide PHP errors and notices so they are not stored as translation strings when WP_DEBUG is on.
+     *
+     * Preserve an error log path already configured by WordPress or PHP.
      */
     public function trp_debug_mode_off(){
         if ( WP_DEBUG ) {
-            ini_set('display_errors', 0);
-            ini_set('log_errors', 1);
-            ini_set('error_log', WP_CONTENT_DIR . '/debug.log');
+            ini_set( 'display_errors', 0 );
+            ini_set( 'log_errors', 1 );
+
+            $error_log = ini_get( 'error_log' );
+            if ( $error_log === false || $error_log === '' ) {
+                ini_set( 'error_log', WP_CONTENT_DIR . '/debug.log' );
+            }
         }
     }
 
@@ -284,8 +290,33 @@ class TRP_Translation_Render{
 	 * @return string
 	 */
     public function trim_translation_block( $string ){
-	    return preg_replace('/\s+/', ' ',   html_entity_decode( htmlspecialchars_decode( wp_strip_all_tags(trp_full_trim( $string )), ENT_QUOTES ) ) ) ;
+	    return preg_replace('/\s+/', ' ',   html_entity_decode( htmlspecialchars_decode( $this->strip_all_tags_tolerantly(trp_full_trim( $string )), ENT_QUOTES ) ) ) ;
     }
+
+	/**
+	 * wp_strip_all_tags() replacement that survives malformed markup.
+	 *
+	 * strip_tags() discards everything that follows an unterminated tag, so a single customer typo
+	 * such as </span< in an Elementor widget emptied the rest of the page for trim_translation_block(),
+	 * and every translation block below that typo stopped being recognized and split back into
+	 * individual strings on each page load.
+	 *
+	 * Matches wp_strip_all_tags() on well-formed markup: script and style contents are dropped,
+	 * comments are dropped, everything else between < and > is removed.
+	 *
+	 * @param string $string
+	 *
+	 * @return string
+	 */
+	public function strip_all_tags_tolerantly( $string ){
+		$stripped = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $string );
+		$stripped = preg_replace( '/<!--.*?-->/s', '', $stripped );
+		// quote-aware so that a > inside an attribute value does not end the tag early
+		$stripped = preg_replace( '/<[^>"\']*(?:(?:"[^"]*"|\'[^\']*\')[^>"\']*)*>/', '', $stripped );
+
+		// any of the above returns null if the string defeats the backtrack limit
+		return ( $stripped === null ) ? wp_strip_all_tags( $string ) : trim( $stripped );
+	}
 
     /**
      * Recursive function that checks if a DOM node contains certain tags or not
@@ -535,8 +566,7 @@ class TRP_Translation_Render{
     	global $trp_editor_notices;
 
         /* replace our special tags so we have valid html */
-        $output = str_ireplace('#!trpst#', '<', $output);
-        $output = str_ireplace('#!trpen#', '>', $output);
+        $output = $this->replace_gettext_markers_with_html_tags( $output );
 
         $output = apply_filters('trp_before_translate_content', $output);
 
@@ -592,6 +622,11 @@ class TRP_Translation_Render{
         if ($language_code === false) {
             /* add back the excluded tags like script and style to the html */
             $output = $this->add_excluded_tags_after_translation( $output, $output_with_excluded_tags_removed['excluded_tags'] );
+            /* strip leftover trp-gettext markers. Direct callers (wp_mail_filter, oembed,
+               REST) hit this path when $TRP_LANGUAGE is the default language; the regular
+               frontend output buffer handles default-language stripping via
+               render_default_language() instead. */
+            $output = $this->remove_trp_html_tags( $output );
             return $output;
         }
         if ( $language_code == $this->settings['default-language'] ){
@@ -747,7 +782,8 @@ class TRP_Translation_Render{
         ksort($trp_rows);
         foreach( $trp_rows as $level ){
             foreach( $level as $row ){
-                $original_gettext_translation_id = $row->getAttribute('data-trpgettextoriginal');
+                /* never write this value back out unvalidated, see sanitize_gettext_original_id() */
+                $original_gettext_translation_id = $this->sanitize_gettext_original_id( $row->getAttribute('data-trpgettextoriginal') );
                 /* Parent node has no other children and no other innertext besides the current node */
                 if( count( $row->parent()->children ) == 1 && $row->parent()->innertext == $row->outertext ){
                     $row->outertext = $row->innertext();
@@ -756,7 +792,8 @@ class TRP_Translation_Render{
                     // we are in the editor
                     if (isset($_REQUEST['trp-edit-translation']) && $_REQUEST['trp-edit-translation'] == 'preview') {
                         //move up the data-trpgettextoriginal attribute
-                        $row->parent()->setAttribute('data-trpgettextoriginal', $original_gettext_translation_id);
+                        /* esc_attr because simple_html_dom::makeup() writes the stored value verbatim */
+                        $row->parent()->setAttribute('data-trpgettextoriginal', esc_attr( $original_gettext_translation_id ));
                     }
                 }
                 else{
@@ -767,7 +804,7 @@ class TRP_Translation_Render{
                     /* Changes made to outertext take place only after saving the html object to a string */
                     $row->outertext = '<trp-wrap class="trp-wrap" data-no-translation';
                     if (isset($_REQUEST['trp-edit-translation']) && $_REQUEST['trp-edit-translation'] == 'preview') {
-                        $row->outertext .= ' data-trpgettextoriginal="'. $original_gettext_translation_id .'"';
+                        $row->outertext .= ' data-trpgettextoriginal="'. esc_attr( $original_gettext_translation_id ) .'"';
                     }
                     $row->outertext .= '>'.$row->innertext().'</trp-wrap>';
                 }
@@ -793,6 +830,12 @@ class TRP_Translation_Render{
                             $nfv_row->outertext = $nfv_row->innertext();
 	                        $saved_node_from_value = $node_from_value->save();
 
+	                        // unwrapping the marker ( and decoding the value ) must not expose a script scheme that
+	                        // wp_kses never saw, e.g. href="&lt;trp-gettext /?&gt;javascript:..." [CU-869f8bpxr]
+	                        if ( $this->is_url_attribute( $attr_name ) && $this->has_unsafe_url_scheme( $saved_node_from_value ) ) {
+		                        $saved_node_from_value = '';
+	                        }
+
 	                        // attributes of these tags are not handled well by the parser so don't escape them [see iss6264]
 	                        if ( $row->tag != 'script' && $row->tag != 'style' ){
 		                        $saved_node_from_value = esc_attr($saved_node_from_value);
@@ -802,8 +845,10 @@ class TRP_Translation_Render{
                             $row->setAttribute($no_translate_attribute . '-' . $attr_name, '');
                             // we are in the editor
                             if (isset($_REQUEST['trp-edit-translation']) && $_REQUEST['trp-edit-translation'] == 'preview') {
-                                $original_gettext_translation_id = $nfv_row->getAttribute('data-trpgettextoriginal');
-                                $row->setAttribute('data-trpgettextoriginal-' . $attr_name, $original_gettext_translation_id);
+                                /* this node was rebuilt from a host attribute value that can carry reflected
+                                   user input, so the id is untrusted here. See sanitize_gettext_original_id() */
+                                $original_gettext_translation_id = $this->sanitize_gettext_original_id( $nfv_row->getAttribute('data-trpgettextoriginal') );
+                                $row->setAttribute('data-trpgettextoriginal-' . $attr_name, esc_attr( $original_gettext_translation_id ));
                             }
 
                         }
@@ -954,6 +999,22 @@ class TRP_Translation_Render{
 	    $home_url = home_url();
 
 	    $node_accessors = $this->get_node_accessors();
+
+	    /*
+	     * Node types that carry a media URL (image/video/audio) rather than translatable text.
+	     * These are diverted to the manual path below so that, outside preview mode, they are
+	     * looked up but never inserted into the database on the front-end. This prevents DB bloat
+	     * from dynamic/responsive media URLs. We key on the node type instead of the accessor
+	     * because media URLs arrive through several accessors ('src', 'srcset', 'poster', and
+	     * 'content' for og:image/twitter:image meta tags registered by the SEO Pack add-on) while
+	     * the 'content' accessor is also shared with translatable text meta tags (meta_desc).
+	     */
+	    $media_url_node_types = apply_filters( 'trp_media_url_node_types', array(
+		    'image_src', 'picture_image_src', 'picture_source_srcset',
+		    'video_src', 'video_poster', 'video_source_src',
+		    'audio_src', 'audio_source_src', 'meta_desc_img',
+	    ) );
+
 	    foreach( $node_accessors as $node_accessor_key => $node_accessor ){
 	    	if ( isset( $node_accessor['selector'] ) ){
 			    foreach ( $html->find( $node_accessor['selector'] ) as $k => $row ){
@@ -975,8 +1036,11 @@ class TRP_Translation_Render{
                         $trimmed_string = '';
                     }
 
-                    // outside preview mode we build the $translateable_strings_manual array for src
-                    if ( $current_node_accessor_selector === 'src' && !$preview_mode && $trimmed_string != ''){
+                    // outside preview mode we build the $translateable_strings_manual array for media URLs
+                    // (image/video/audio src, srcset, poster and og:image/twitter:image meta tags).
+                    // Keyed on node type rather than accessor since media URLs arrive via 'src', 'srcset',
+                    // 'poster' and 'content', while 'content' is also used by translatable text meta tags.
+                    if ( in_array( $node_accessor_key, $media_url_node_types, true ) && !$preview_mode && $trimmed_string != ''){
                         $translateable_strings_manual[] = html_entity_decode( $trimmed_string );
                         $nodes_manual[] = array('node' => $row, 'type' => $node_accessor_key);
                         // reset the string so it's excluded from $translateable_strings (no longer inserted in the database in front-end)
@@ -1068,7 +1132,7 @@ class TRP_Translation_Render{
                     do_action( 'trp_set_translation_for_attribute', $node_manual['node'], $accessor, $translated_strings_manual[$i] );
                 }else{
                     $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->$accessor );
-                    $nodes[$i]['node']->$accessor = str_replace( $translateable_string_manual, trp_sanitize_string($translated_strings_manual[$i]), $node_manual['node']->$accessor );
+                    $node_manual['node']->$accessor = str_replace( $translateable_string_manual, trp_sanitize_string($translated_strings_manual[$i]), $node_manual['node']->$accessor );
                 }
             }
             do_action('trp_translateable_information_manual', $translateable_information_manual, $translated_strings_manual, $language_code);
@@ -1211,6 +1275,32 @@ class TRP_Translation_Render{
 	    return apply_filters( 'trp_translated_html', $final_html, $TRP_LANGUAGE, $language_code, $preview_mode );
     }
 
+    /**
+     * Restore camelCase XML element names in syndication feeds.
+     *
+     * The HTML DOM parser used by translate_page() lowercases tag names. RSS 2.0
+     * defines <pubDate> and <lastBuildDate> in camelCase, so the lowercased output
+     * is not valid per the syndication spec and is rejected by some readers.
+     */
+    public function restore_feed_camelcase_tags( $final_html, $TRP_LANGUAGE = null, $language_code = null, $preview_mode = false ) {
+        if ( ! is_feed() || ! is_string( $final_html ) ) {
+            return $final_html;
+        }
+
+        $camelcase_tags = apply_filters( 'trp_feed_camelcase_tags', array( 'pubDate', 'lastBuildDate' ) );
+
+        foreach ( $camelcase_tags as $tag ) {
+            $lowercase = strtolower( $tag );
+            $final_html = str_replace(
+                array( '<' . $lowercase . '>', '</' . $lowercase . '>' ),
+                array( '<' . $tag . '>',       '</' . $tag . '>' ),
+                $final_html
+            );
+        }
+
+        return $final_html;
+    }
+
 
     public function handle_custom_links_and_forms( $html ){
         global $TRP_LANGUAGE;
@@ -1262,7 +1352,7 @@ class TRP_Translation_Render{
                 $a_href->setAttribute( 'data-trp-unpreviewable', 'trp-unpreviewable' );
             }
 
-            $a_href->href = str_replace('#TRPLINKPROCESSED', '', $a_href->href);
+            $a_href->href = $this->strip_link_processed_marker( $a_href->href );
         }
 
         // pass the current language in forms where the action does not contain the language
@@ -1294,7 +1384,7 @@ class TRP_Translation_Render{
                 }
 
                 // this should happen regardless of whether we made changes above
-                $row->action = str_replace( '#TRPLINKPROCESSED', '', esc_url( $row->action ) );
+                $row->action = $this->strip_link_processed_marker( esc_url( $row->action ) );
             }
         }
 
@@ -1303,11 +1393,34 @@ class TRP_Translation_Render{
                 if ( isset( $link->rel ) && ( $link->rel == 'next' || $link->rel == 'prev' ) )
                     $link->href = $this->url_converter->get_url_for_language( $TRP_LANGUAGE, $link->href );
 
-                $link->href = str_replace('#TRPLINKPROCESSED', '', $link->href);
+                $link->href = $this->strip_link_processed_marker( $link->href );
             }
         }
 
         return $html;
+    }
+
+    /**
+     * Remove the internal #TRPLINKPROCESSED marker from a url attribute value and re-validate the result.
+     *
+     * The marker is normally a trailing fragment TRP appends to links it has already processed, but it can
+     * also arrive embedded in attacker-controlled input ( e.g. a stored comment anchor href ) where it SPLITS
+     * an otherwise-blocked scheme: "java#TRPLINKPROCESSEDscript:alert(1)" passes wp_kses / has_unsafe_url_scheme()
+     * while split, then collapses to a live "javascript:alert(1)" once the marker is removed. We only neutralize
+     * in that case ( stripping the marker turned a safe value into an unsafe one ) so that url schemes the site
+     * itself placed, including a plain "javascript:void(0)", are left exactly as before. [CU-869ffp71k]
+     *
+     * @param string $value url attribute value that may still contain #TRPLINKPROCESSED
+     * @return string the marker-free value, or '' when stripping the marker exposed an unsafe scheme
+     */
+    private function strip_link_processed_marker( $value ){
+        $stripped = str_replace( '#TRPLINKPROCESSED', '', $value );
+        if ( $stripped !== $value
+            && $this->has_unsafe_url_scheme( $stripped )
+            && ! $this->has_unsafe_url_scheme( $value ) ) {
+            return '';
+        }
+        return $stripped;
     }
 
     public function is_first_language_not_default_language(){
@@ -1465,29 +1578,247 @@ class TRP_Translation_Render{
     }
 
     /**
+     * Turn our internal gettext markers back into real html tags.
+     *
+     * Gettext strings are wrapped in #!trpst#trp-gettext ...#!trpen# instead of < and > so that the
+     * wrapper survives the escaping functions themes and plugins apply to translated strings
+     * ( esc_html, esc_attr, sanitize_text_field, ... ). Since the markers contain no html special
+     * characters they also survive the escaping applied to *user input*, so replacing them
+     * unconditionally allowed anyone to smuggle < and > into an already escaped page through a
+     * query parameter ( e.g. ?s=#!trpst#img src=x onerror=alert(1)#!trpen# ) and inject html.
+     *
+     * That's why we only convert marker pairs that form one of the wrappers we generate ourselves in
+     * TRP_Process_Gettext::process_gettext_strings(). Everything else stays harmless literal text.
+     *
+     * Both wrapper forms come out as "< + what was between the markers + >", so one pattern with one
+     * capture group handles both and the buffer is only scanned once. Every quantifier is bounded on
+     * purpose: an unbounded one here is reachable from ?s= and a PCRE failure would return null and
+     * blank the whole page.
+     *
+     * Opening wrapper: #!trpst#trp-gettext data-trpgettextoriginal=123#!trpen#
+     *   - the id is missing when the original was not in the database ( see strip_gettext_tags() ),
+     *     hence \d{0,20} and not \d{1,20}
+     *   - the separating space can be replaced by a literal backslash-u0020 escape by third party
+     *     code ( see the WooTour compatibility ), so accept that form too
+     * Closing wrapper: #!trpst#/trp-gettext#!trpen#
+     *   - the slash arrives backslash escaped when the string went through json encoding; keep the
+     *     escaping in the output so the json stays valid. remove_trp_html_tags() cleans up leftovers.
+     *
+     * @param string $string
+     * @return string
+     */
+    public function replace_gettext_markers_with_html_tags( $string ){
+        /* stripos and the 'i' modifier because the markers can be uppercased by code that normalizes
+           the html it outputs. str_ireplace was used here before for the same reason. */
+        if ( !is_string( $string ) || stripos( $string, '#!trpst#' ) === false ){
+            return $string;
+        }
+
+        $replaced = preg_replace(
+            '/#!trpst#(trp-gettext(?:(?:\s|\\\\{1,2}u0020){1,40}data-trpgettextoriginal=\d{0,20})?|\\\\{0,4}\/trp-gettext)#!trpen#/i',
+            '<$1>',
+            $string
+        );
+
+        /* preg_replace returns null when PCRE gives up ( backtrack or jit stack limit ). Never let that
+           through: translate_page() would bail on the non-string and serve an empty document. Leaving
+           the markers unconverted is the safe outcome, they render as inert text. */
+        return is_string( $replaced ) ? $replaced : $string;
+    }
+
+    /**
      * function that removes any unwanted leftover <trp-gettext> tags
+     *
+     * Security ( CU-869eddnvm ): the opening-tag removals below used an unbounded inner match ( .*? ) that
+     * could bridge across html attribute/tag delimiters. TP emits these wrappers as real tags, but the same
+     * marker can also appear ENCODED ( percent-encoded, or html-entity escaped: %23%21trpst%23trp-gettext,
+     * &lt;trp-gettext ) inside an attribute value that survived wp_kses, because the marker text contains no
+     * html-special characters. A .*? there let a start marker inside one attribute ( href ) reach an end
+     * marker inside another ( title ) and collapse everything between them, splicing the two attributes into
+     * e.g. href="javascript:..." from an otherwise kses-clean, unauthenticated comment ( stored XSS ).
+     *
+     * The real-tag form ( <trp-gettext ...> ) is never attacker-reachable: wp_kses strips a literal <trp-*>
+     * tag from user input, so it stays permissive ( bounded only by the real angle brackets ). Only the
+     * encoded/entity form is attacker-reachable, so there the captured span excludes the raw attribute
+     * delimiters "'<> and can no longer leave a single attribute value / text node. Legitimately escaped
+     * wrappers carry &quot;/&#039; rather than raw quotes, so they are still removed.
+     *
+     * Security ( CU-869f8bpxr ): a marker can also sit entirely inside ONE url attribute value and act as an
+     * obfuscation prefix: href="&lt;trp-gettext /?&gt;javascript:alert(1)". wp_kses_bad_protocol() skips
+     * any value with "/?" before the first colon ( it looks like a relative url ), so it is stored verbatim
+     * and is inert, but removing the marker leaves a live href="javascript:...". Constraining the marker shape
+     * is not enough ( the attribute gettext path in translate_page() also html-decodes the value ), so url
+     * attribute values that carry a marker are re-checked for a script scheme after the markers are removed.
+     *
      * @param $string
      * @return string|string[]|null
      */
     function remove_trp_html_tags( $string ){
-        $string = preg_replace( '/(<|&lt;)trp-gettext (.*?)(>|&gt;)/i', '', $string );
+        if ( stripos( $string, 'trp-' ) !== false ) {
+            $string = $this->neutralize_marker_hidden_url_schemes( $string );
+        }
+
+        return $this->strip_trp_markers( $string );
+    }
+
+    /**
+     * Empty url attribute values ( href, src, action... ) that only get a script scheme once the trp markers
+     * inside them are removed. Values with no marker are left alone; wp_kses already had its say on them.
+     *
+     * @param string $string
+     * @return string
+     */
+    private function neutralize_marker_hidden_url_schemes( $string ){
+        $url_attributes = array_map( function( $attr ){ return preg_quote( $attr, '/' ); }, $this->get_url_attributes() );
+
+        // Capture the value with a possessive, delimiter-bounded class instead of a lazy .*? ( CU-1amndjnkyuu ).
+        // A url attribute value never legitimately contains a raw < or > ( they would close the tag ) nor an
+        // unescaped copy of its own quote, so the value is matched with [^"<>] / [^'<>] and *+ ( possessive, no
+        // backtracking ). The old lazy .*?\2 could be forced to span ~1MB across many comments by a stray
+        // opening quote whose closing quote sat far away; that defeated pcre.backtrack_limit, preg_replace_callback
+        // returned null, the function failed open and strip_trp_markers() then collapsed a smuggled
+        // java<marker>script: value into a live javascript: url. Bounding on < > keeps every candidate inside a
+        // single tag ( at most one comment ), so the match stays linear and the backtrack limit is never reached.
+        // A branch reset group ( ?| ) keeps $matches[2]/$matches[3] = opening-delimiter/value for both quote types,
+        // and the quote can be json-escaped ( href=\"...\" ) when the html is inside a json response.
+        $pattern = '/(?<=[\s"\'\/])((?:' . implode( '|', $url_attributes ) . ')\s*=\s*)(?|(\\\\{0,2}")([^"<>]*+)"|(\\\\{0,2}\')([^\'<>]*+)\')/is';
+
+        $result = preg_replace_callback( $pattern, function( $matches ){
+            if ( stripos( $matches[3], 'trp-' ) === false || !$this->has_unsafe_url_scheme( $this->strip_trp_markers( $matches[3] ) ) ) {
+                return $matches[0];
+            }
+            return $matches[1] . $matches[2] . $matches[2];
+        }, $string );
+
+        // preg failure ( e.g. backtrack limit ) - keep the original string rather than blanking the page. The
+        // bounded pattern above makes this unreachable for the comment-smuggling vector, so it stays a last resort.
+        return ( $result === null ) ? $string : $result;
+    }
+
+    /**
+     * @param string $attr_name
+     * @return bool
+     */
+    private function is_url_attribute( $attr_name ){
+        return in_array( strtolower( $attr_name ), $this->get_url_attributes(), true );
+    }
+
+    /**
+     * Attributes a browser resolves as a url ( same list wp_kses runs wp_kses_bad_protocol() on ).
+     *
+     * @return array
+     */
+    private function get_url_attributes(){
+        if ( function_exists( 'wp_kses_uri_attributes' ) ) {
+            return wp_kses_uri_attributes();
+        }
+        return array( 'action', 'archive', 'background', 'cite', 'classid', 'codebase', 'data', 'formaction', 'href', 'icon', 'longdesc', 'manifest', 'poster', 'profile', 'src', 'usemap', 'xmlns' );
+    }
+
+    /**
+     * Whether a url attribute value would be run by the browser under a scheme that is not in
+     * wp_allowed_protocols() ( javascript:, data:, vbscript: ... ).
+     *
+     * Deliberately stricter than the browser: entities are decoded repeatedly ( a value can be decoded more
+     * than once on its way out ), numeric references are also decoded without their ";", and every
+     * whitespace / control character and backslash is dropped before the scheme is read.
+     *
+     * @param string $value
+     * @return bool
+     */
+    private function has_unsafe_url_scheme( $value ){
+        $decoded = (string) $value;
+        for ( $i = 0; $i < 5; $i++ ) {
+            $previous = $decoded;
+            $decoded  = html_entity_decode( $decoded, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+            $decoded  = preg_replace_callback( '/&#(x[0-9a-f]++|[0-9]++);?/i', function( $matches ){
+                return html_entity_decode( '&#' . $matches[1] . ';', ENT_QUOTES | ENT_HTML5, 'UTF-8' );
+            }, $decoded );
+            if ( $decoded === $previous ) {
+                break;
+            }
+        }
+        $decoded = preg_replace( '/[\x00-\x20\x7f\\\\]+/', '', $decoded );
+
+        if ( !preg_match( '/^([a-z][a-z0-9+.\-]*):/i', $decoded, $matches ) ) {
+            return false;
+        }
+
+        return !in_array( strtolower( $matches[1] ), wp_allowed_protocols(), true );
+    }
+
+    /**
+     * Remove every trp-gettext / trp-wrap / trp-post-container marker ( real, entity and percent-encoded forms ).
+     *
+     * @param string $string
+     * @return string|string[]|null
+     */
+    private function strip_trp_markers( $string ){
+        // trp-gettext opening tag: the real form ( <...> ) and the entity form ( &lt;...&gt; ) both carry an
+        // unquoted attribute ( data-trpgettextoriginal=123 ), so a single delimiter-constrained match is safe.
+        $string = preg_replace( '/(<|&lt;)trp-gettext ([^"\'<>]*?)(>|&gt;)/i', '', $string );
         $string = preg_replace( '/(<|&lt;)(\\\\)*\/trp-gettext(>|&gt;)/i', '', $string );
 
         // In case we have a gettext string which was run through rawurlencode(). See more details on iss6563
-        $string = preg_replace( '/%23%21trpst%23trp-gettext(.*?)%23%21trpen%23/i', '', $string );
+        $string = preg_replace( '/%23%21trpst%23trp-gettext([^"\'<>]*?)%23%21trpen%23/i', '', $string );
         $string = preg_replace( '/%23%21trpst%23%2Ftrp-gettext%23%21trpen%23/i', '', $string );
         $string = preg_replace( '/%23%21trpst%23%5C%2Ftrp-gettext%23%21trpen%23/i', '', $string );
 
         if (!isset($_REQUEST['trp-edit-translation']) || $_REQUEST['trp-edit-translation'] != 'preview') {
-            $string = preg_replace('/(<|&lt;)trp-wrap (.*?)(>|&gt;)/i', '', $string);
+            // Real trp-wrap tag carries a double-quoted attribute ( class="trp-wrap" ), so the real form stays
+            // permissive; only the attacker-reachable entity form is delimiter-constrained.
+            $string = preg_replace('/<trp-wrap [^<>]*?>/i', '', $string);
+            $string = preg_replace('/&lt;trp-wrap ([^"\'<>]*?)&gt;/i', '', $string);
             $string = preg_replace('/(<|&lt;)(\\\\)*\/trp-wrap(>|&gt;)/i', '', $string);
         }
 
         //remove post containers before outputting
-        $string = preg_replace( '/(<|&lt;)trp-post-container (.*?)(>|&gt;)/i', '', $string );
+        // Real trp-post-container carries a single-quoted attribute ( data-trp-post-id='123' ), so the real
+        // form stays permissive; only the attacker-reachable entity form is delimiter-constrained.
+        $string = preg_replace( '/<trp-post-container [^<>]*?>/i', '', $string );
+        $string = preg_replace( '/&lt;trp-post-container ([^"\'<>]*?)&gt;/i', '', $string );
         $string = preg_replace( '/(<|&lt;)(\\\\)*\/trp-post-container(>|&gt;)/i', '', $string );
 
         return $string;
+    }
+
+    /**
+     * Validate a data-trpgettextoriginal value before it is written back into the page.
+     *
+     * The value is always a row id from wp_trp_gettext_original_strings that TP itself placed in the
+     * wrapper ( see TRP_Process_Gettext::process_gettext_strings() ), and it is legitimately empty when
+     * the original was not in the database yet ( see strip_gettext_tags() ). Anything else means the
+     * wrapper did not come from us.
+     *
+     * Security ( follow-up to the CVE-2026-17505 marker hardening ): the wrapper IS
+     * attacker reachable, just not through the #!trpst# markers that replace_gettext_markers_with_html_tags()
+     * now constrains to data-trpgettextoriginal=\d{0,20}. A literal
+     *
+     *     <trp-gettext data-trpgettextoriginal='x"><img src=x onerror=alert(1)>'>X</trp-gettext>
+     *
+     * in reflected input ( ?s= ) is escaped to entities by WordPress and lands inside a host attribute
+     * ( title=, content=, value= ), and the trp_attr_rows loop in translate_page() deliberately
+     * html_entity_decodes that attribute and re-parses it, resurrecting the tag as a real node. The id was
+     * then written straight back out with setAttribute() / string concatenation. Neither escapes:
+     * simple_html_dom::makeup() concatenates the stored value between quotes verbatim, so a double quote
+     * in the id closed the attribute and injected live markup. Unauthenticated, because every preview
+     * branch only tests $_REQUEST['trp-edit-translation'] with no capability check.
+     *
+     * Constraining the value to digits removes the breakout at the source; callers additionally esc_attr()
+     * on output so the sink stays safe even if this ever loosens.
+     *
+     * @param mixed $id Raw attribute value as returned by simple_html_dom's getAttribute().
+     * @return string Digits-only id, or an empty string when the value is not a usable id.
+     */
+    protected function sanitize_gettext_original_id( $id ){
+        /* getAttribute() returns true for a valueless attribute and null/false for a removed one */
+        if ( ! is_string( $id ) ){
+            return '';
+        }
+
+        $id = trim( $id );
+
+        return ( $id !== '' && ctype_digit( $id ) ) ? $id : '';
     }
 
     /**
@@ -1823,10 +2154,66 @@ class TRP_Translation_Render{
         $update_strings                                                       = array();
         $unique_original_strings_with_machine_translations                    = array();
 
-        // machine translate new strings
+        // machine translate new strings in chunks, saving each chunk to the dictionary right away.
+        // Saving per-chunk (instead of once at the end) means an aborted or overlapping page load
+        // never re-sends, and re-bills, a chunk that was already translated and saved.
+        $machine_strings = false;
         if ( $machine_translation_available ) {
-            $machine_strings                                                      = $this->machine_translator->translate( $machine_translatable_strings, $language_code, $this->settings['default-language'] );
-            $unique_original_strings_with_machine_translations                    = array_keys( $machine_strings );
+            $machine_strings = array();
+
+            // Request-wide time budget: once we pass the deadline we stop sending chunks and let the
+            // page finish loading; the remaining strings are translated on future page loads. The
+            // deadline is kept in a global so it is shared across the whole request - regular/DOM
+            // strings (translated while the page renders) use up the budget before gettext strings
+            // (translated on shutdown), so regular strings are prioritised.
+            global $trp_machine_translation_deadline;
+            if ( ! isset( $trp_machine_translation_deadline ) ) {
+                $trp_machine_translation_deadline = microtime( true ) + apply_filters( 'trp_machine_translation_time_budget', 10 );
+            }
+
+            // Deduplicate before chunking so a string repeated across the page (e.g. "Read more") is
+            // sent to the engine, and billed, only once. Downstream lookups are all keyed by the
+            // original string, so the single translation is applied to every occurrence.
+            $strings_to_machine_translate = array_unique( $machine_translatable_strings );
+
+            foreach ( array_chunk( $strings_to_machine_translate, $this->machine_translator->get_chunk_size(), true ) as $strings_chunk ) {
+                if ( microtime( true ) > $trp_machine_translation_deadline ) {
+                    break;
+                }
+
+                $chunk_machine_strings = $this->machine_translator->translate( $strings_chunk, $language_code, $this->settings['default-language'] );
+                if ( empty( $chunk_machine_strings ) ) {
+                    continue;
+                }
+                $machine_strings += $chunk_machine_strings;
+
+                // save this chunk to the dictionary before requesting the next one
+                $chunk_originals        = array_keys( $chunk_machine_strings );
+                $chunk_original_inserts = $this->trp_query->original_strings_sync( $language_code, $chunk_originals );
+                $chunk_untranslated     = $this->trp_query->get_untranslated_strings( $chunk_originals, $language_code );
+                $chunk_update_strings   = array();
+                foreach ( $chunk_machine_strings as $original => $translated ) {
+                    if ( ! isset( $chunk_original_inserts[ $original ] ) ) {
+                        continue;
+                    }
+                    $id = ( isset( $chunk_untranslated[ $original ] ) ) ? $chunk_untranslated[ $original ]->id : NULL;
+                    $chunk_update_strings[] = array(
+                        'id'          => $id,
+                        'original_id' => $chunk_original_inserts[ $original ]->id,
+                        'original'    => trp_sanitize_string( $original, false ),
+                        'translated'  => trp_sanitize_string( $translated ),
+                        'status'      => $this->trp_query->get_constant_machine_translated() );
+                }
+                // keep a saved chunk's locks as recently translated markers; when the save is
+                // skipped or fails, delete them so the strings can be retried right away
+                $chunk_saved = false;
+                if ( ! empty( $chunk_update_strings ) && apply_filters( 'trp_allow_string_saving', true, array(), $chunk_update_strings ) ) {
+                    $chunk_saved = $this->trp_query->update_strings( $chunk_update_strings, $language_code, array( 'id', 'original', 'translated', 'status', 'original_id' ) );
+                }
+                $this->machine_translator->release_locks( $chunk_saved );
+            }
+
+            $unique_original_strings_with_machine_translations = array_keys( $machine_strings );
         }
 
         /**
@@ -1837,20 +2224,13 @@ class TRP_Translation_Render{
 
         $original_inserts = $this->trp_query->original_strings_sync( $language_code, $originals_to_be_synced );
 
-        if ( $machine_translation_available ) {
-            // insert unique machine translations into db. Only for strings newly discovered
-            foreach ( $unique_original_strings_with_machine_translations as $string ) {
-                $id = ( isset( $untranslated_list[ $string ] ) ) ? $untranslated_list[ $string ]->id : NULL;
-                array_push( $update_strings, array(
-                    'id'          => $id,
-                    'original_id' => $original_inserts[ $string ]->id,
-                    'original'    => trp_sanitize_string( $string, false ),
-                    'translated'  => trp_sanitize_string( $machine_strings[ $string ] ),
-                    'status'      => $this->trp_query->get_constant_machine_translated() ) );
-            }
-        }else{
-            $machine_strings = false;
-        }
+        /* Machine-translated rows were saved per-chunk in the loop above, so they are intentionally
+         * not added to $update_strings here. $update_strings below carries only the "similar strings"
+         * rows. $machine_strings is still used further down to populate $translated_strings for
+         * rendering this request. */
+
+        // strings another request is translating right now must not be inserted as untranslated below: the lock holder inserts them when it saves
+        $lock_skipped_strings = $this->machine_translator ? $this->machine_translator->get_lock_skipped_strings() : array();
 
         // update existing strings without translation if we have one now. also, do not insert duplicates for existing untranslated strings in db
         foreach( $new_strings as $i => $string ){
@@ -1888,7 +2268,7 @@ class TRP_Translation_Render{
 
             }
 
-            if ( isset( $untranslated_list[ $string ] ) || isset( $machine_strings[ $string ] ) ) {
+            if ( isset( $untranslated_list[ $string ] ) || isset( $machine_strings[ $string ] ) || isset( $lock_skipped_strings[ $string ] ) ) {
                 unset( $new_strings[ $i ] );
             }
         }
@@ -2086,6 +2466,7 @@ class TRP_Translation_Render{
             'trp_wp_ajax_url'                                      => apply_filters( 'trp_wp_ajax_url', admin_url( 'admin-ajax.php' ) ),
             'trp_language_to_query'                                => $language_to_query,
             'trp_original_language'                                => $this->settings['default-language'],
+            'trp_blog_id'                                          => get_current_blog_id(), // used by trp-ajax.php to query the subsite's tables on multisite
             'trp_current_language'                                 => $TRP_LANGUAGE,
             'trp_skip_selectors'                                   => apply_filters( 'trp_skip_selectors_from_dynamic_translation', array( '[data-no-translation]', '[data-no-dynamic-translation]', '[data-trp-translate-id-innertext]', 'script', 'style', 'head', 'trp-span', 'translate-press' ), $TRP_LANGUAGE, $this->settings ), // data-trp-translate-id-innertext refers to translation block and it shouldn't be detected
             'trp_base_selectors'                                   => $this->get_base_attribute_selectors(),
@@ -2186,6 +2567,26 @@ class TRP_Translation_Render{
             return $args;
         }
 
+        /* Skip full email translation in request contexts where TranslatePress does not wrap
+           gettext strings (wp-login.php, wp-admin, xmlrpc, TP editor requests). There the
+           email body carries no trp-gettext markers, so translate_page() would treat every
+           line - including security URLs like the password-reset link - as a regular
+           dynamic string and persist it to the dictionary, from where it can be disclosed.
+           Whitelisted conditional shortcodes must still be evaluated because WooCommerce
+           does not process them before wp_mail. See CU-869ehfvac and CU-869ekd2dw. */
+        global $pagenow;
+        if ( ! $this->url_converter ) {
+            $trp                 = TRP_Translate_Press::get_trp_instance();
+            $this->url_converter = $trp->get_component( 'url_converter' );
+        }
+        $is_order_email = TRP_Woocommerce_Emails::is_sending_order_email();
+        $skip_email_translation = ! $is_order_email && (
+            $pagenow === 'wp-login.php'
+            || $pagenow === 'xmlrpc.php'
+            || ( is_admin() && ! TRP_Gettext_Manager::is_ajax_on_frontend() )
+            || $this->url_converter->is_admin_request()
+        );
+
         global $TRP_LANGUAGE;
 
         $initial_language = $TRP_LANGUAGE;
@@ -2203,8 +2604,11 @@ class TRP_Translation_Render{
         // Keep only the first comma-separated entry if multiple are present in the string
         $recipient = trim( strtok( $recipient, ',' ) );
 
-        if ( $recipient !== '' ) {
-            trp_switch_to_preffered_language( $recipient );
+        $did_switch_language = false;
+
+        // TranslatePress already selected the order email language in trp_woo_setup_locale().
+        if ( ! $is_order_email && $recipient !== '' ) {
+            $did_switch_language = trp_switch_to_preffered_language( $recipient );
         }
 
         $whitelisted_shortcodes = apply_filters(
@@ -2213,19 +2617,27 @@ class TRP_Translation_Render{
         );
 
         if ( array_key_exists( 'subject', $args ) ) {
-            $args['subject'] = $this->translate_page(
-                trp_do_these_shortcodes( $args['subject'], $whitelisted_shortcodes )
-            );
+            $args['subject'] = trp_do_these_shortcodes( $args['subject'], $whitelisted_shortcodes );
+
+            if ( ! $skip_email_translation ) {
+                $args['subject'] = $this->translate_page( $args['subject'] );
+            }
         }
 
         if ( array_key_exists( 'message', $args ) ) {
-            $args['message'] = $this->translate_page(
-                trp_do_these_shortcodes( $args['message'], $whitelisted_shortcodes )
-            );
+            $args['message'] = trp_do_these_shortcodes( $args['message'], $whitelisted_shortcodes );
+
+            if ( ! $skip_email_translation ) {
+                $args['message'] = $this->translate_page( $args['message'] );
+            }
         }
 
-        // Switch back to the language used initially
-        $TRP_LANGUAGE = $initial_language;
+        if ( $did_switch_language ) {
+            trp_restore_language();
+        } else {
+            // No preferred-language switch happened, so restore only the request language.
+            $TRP_LANGUAGE = $initial_language;
+        }
 
         return $args;
     }
@@ -2260,7 +2672,8 @@ class TRP_Translation_Render{
                 $this->url_converter = $trp->get_component('url_converter');
             }
 
-            $location = $this->url_converter->get_url_for_language( $form_language, $location );
+            // Redirects do not pass through the HTML renderer that removes link markers.
+            $location = $this->url_converter->get_url_for_language( $form_language, $location, '' );
         }
         return $location;
     }
@@ -2399,7 +2812,7 @@ class TRP_Translation_Render{
             return $content;
 
         //we try to wrap only the actual content of the post and not when the filters are executed in SEO plugins for example
-        if( ( !$wp_query->in_the_loop || !is_main_query() ) && apply_filters('trp_wrap_with_post_id_overrule', true ) )
+        if( ( !$wp_query->in_the_loop || !is_main_query() ) && apply_filters( 'trp_wrap_with_post_id_overrule', true, $content, $id ) )
             return $content;
 
         //for the_tile filter we have an $id and we can compare it with the post we are on ..to avoid wrapping titles in menus for example

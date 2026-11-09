@@ -292,12 +292,9 @@ if ( ! class_exists( 'Redux_Slider', false ) ) {
 			}
 
 			// Set default values(s).
-			if ( true === $two_handles ) {
+			if ( $two_handles ) {
 				$val_one = $this->value[0];
 				$val_two = $this->value[1];
-
-				$html  = 'data-default-one=' . $val_one . ' ';
-				$html .= 'data-default-two=' . $val_two . ' ';
 
 				$name_one = $field_name . '[1]';
 				$name_two = $field_name . '[2]';
@@ -307,8 +304,6 @@ if ( ! class_exists( 'Redux_Slider', false ) ) {
 			} else {
 				$val_one = $this->value;
 				$val_two = '';
-
-				$html = 'data-default-one=' . $val_one;
 
 				$name_one = $field_name;
 				$name_two = '';
@@ -375,7 +370,9 @@ if ( ! class_exists( 'Redux_Slider', false ) ) {
 	                data-rtl="' . esc_attr( is_rtl() ) . '"
 	                data-forced="' . esc_attr( $this->field['forced'] ) . '"
 	                data-float-mark="' . esc_attr( $this->field['float_mark'] ) . '"
-	                data-resolution="' . esc_attr( $this->field['resolution'] ) . '" ' . esc_html( $html ) . '></div>';
+	                data-resolution="' . esc_attr( $this->field['resolution'] ) . '"
+					data-default-one="' . esc_attr( $val_one ) . '"
+					' . ($two_handles ? 'data-default-two="' . esc_attr( $val_two ) . '"' : '') . '></div>';
 
 			// Double slider output.
 			if ( true === $two_handles ) {

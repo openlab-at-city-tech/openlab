@@ -1,29 +1,29 @@
 #ngg-importML-selected-image-import.hidden {
-    display: none;
+	display: none;
 }
 
 #ngg-importML-select-opener.hidden {
-    display: none;
+	display: none;
 }
 
 #ngg-importML-gallery-selection {
-    display: inline-block;
+	display: inline-block;
 }
 
 #ngg-importML-selected-image-import {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 #ngg-importML-select-opener {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 #ngg-importML-gallery-name {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 #ngg-importML-gallery-select {
-    vertical-align: middle;
+	vertical-align: middle;
 }
 
 .ngg_settings_page .jqueryFileTree LI.directory {
@@ -31,5 +31,5 @@
 }
 
 .ngg_settings_page .jqueryFileTree LI.expanded {
-    background-size: 21px;
+	background-size: 21px;
 }

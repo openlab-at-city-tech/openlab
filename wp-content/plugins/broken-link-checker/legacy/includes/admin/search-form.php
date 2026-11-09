@@ -8,7 +8,7 @@
 			//save the search query as a custom filter.
 	if ( 'search' == $filter_id ) {
 		?>
-	<form name="save-search-query" id="custom-filter-form" action="<?php echo admin_url( 'admin.php?page=blc_local' ); ?>" method="post" class="blc-inline-form">
+	<form name="save-search-query" id="custom-filter-form" action="<?php echo esc_url( admin_url( 'admin.php?page=blc_local' ) ); ?>" method="post" class="blc-inline-form">
 		<?php wp_nonce_field( 'create-custom-filter' ); ?>
 		<input type="hidden" name="name" id="blc-custom-filter-name" value="" />
 		<input type="hidden" name="params" id="blc-custom-filter-params" value="<?php echo http_build_query( $search_params, '', '&' ); ?>" />
@@ -19,9 +19,9 @@
 	} elseif ( ! empty( $current_filter['custom'] ) ) {
 		//If we're displaying a custom filter give an option to delete it.
 		?>
-	<form name="save-search-query" id="custom-filter-form" action="<?php echo admin_url( 'admin.php?page=blc_local' ); ?>" method="post" class="blc-inline-form">
+	<form name="save-search-query" id="custom-filter-form" action="<?php echo esc_url( admin_url( 'admin.php?page=blc_local' ) ); ?>" method="post" class="blc-inline-form">
 		<?php wp_nonce_field( 'delete-custom-filter' ); ?>
-		<input type="hidden" name="filter_id" id="blc-custom-filter-id" value="<?php echo $filter_id; ?>" />
+		<input type="hidden" name="filter_id" id="blc-custom-filter-id" value="<?php echo esc_attr( $filter_id ); ?>" />
 		<input type="hidden" name="action" value="delete-custom-filter" />
 		<input type="submit" value="<?php esc_attr_e( 'Delete This Filter', 'broken-link-checker' ); ?>" id="blc-delete-filter" class="button" />
 	</form>
@@ -34,7 +34,7 @@
 
 <!-- The search dialog -->
 <div id='search-links-dialog' title='Search'>
-<form class="search-form" action="<?php echo admin_url( 'admin.php?page=blc_local' ); ?>" method="get">
+<form class="search-form" action="<?php echo esc_url( admin_url( 'admin.php?page=blc_local' ) ); ?>" method="get">
 	<input type="hidden" name="page" value="blc_local" />
 	<input type="hidden" name="filter_id" value="search" />
 	<fieldset>

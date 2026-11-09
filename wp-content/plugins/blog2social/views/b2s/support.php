@@ -209,12 +209,12 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
                                             <div class="clearfix"></div>
                                             <br>
                                             <div>
-                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)); ?>" alt="Twitter">  <span class="b2s-text-bold"><?php esc_html_e("Twitter Card Validator", "blog2social") ?>
-                                                    | <a class="btn-link" href="<?php echo esc_url(B2S_Tools::getSupportLink("twitter_cards")); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust Twitter Card tags.", "blog2social"); ?></a>
+                                                <img class="b2s-feature-img-with-24" src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)); ?>" alt="X">  <span class="b2s-text-bold"><?php esc_html_e("X Card Validator", "blog2social") ?>
+                                                    | <a class="btn-link" href="<?php echo esc_url(B2S_Tools::getSupportLink("twitter_cards")); ?>" target="_blank"><?php esc_html_e("Learn how to edit and adjust X Card tags.", "blog2social"); ?></a>
                                                 </span>
                                             </div>
                                             <div class="b2s-padding-top-8">
-                                                <button class="btn btn-primary btn-sm b2s-btn-sharing-debugger" data-network-id="2" b2s-url-query="https://cards-dev.twitter.com/validator?url="><?php esc_html_e("Validate directly on Twitter", "blog2social") ?></button>
+                                                <button class="btn btn-primary btn-sm b2s-btn-sharing-debugger" data-network-id="2" b2s-url-query="https://cards-dev.twitter.com/validator?url="><?php esc_html_e("Validate directly on X", "blog2social") ?></button>
                                             </div>
                                         </div>
                                     </div>

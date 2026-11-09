@@ -7,6 +7,7 @@ export function SearchDropdown( props ) {
     const [textareaValue, setTextareaValue] = useState( '' );
     const [dropdownMarkup, setDropdownMarkup] = useState( '' );
     const [selectedItemIdx, setSelectedItemIdx] = useState( -1 );
+    const [showDefaultMessage, setShowDefaultMessage] = useState( true );
     const [reset, setReset] = useState( false );
 
     let searchResultsItems = [];
@@ -14,17 +15,22 @@ export function SearchDropdown( props ) {
         searchResultsItems = props.searchResults;
     }
 
+    let minLength = 3;
+    if ( props.minLength ) {
+        minLength = props.minLength;
+    }
+
     /**
      * Sets the dropdown content when there's a change on any of props.searchResults, props.showDefaultMessage, props.showNoResultsMessage
      */
     useEffect(() => {
-        if ( ! props.showDefaultMessage && ! props.showNoResultsMessage ) {
+        if ( ! showDefaultMessage && ! props.showNoResultsMessage ) {
             setDropdownMarkup( printItems( selectedItemIdx ) );
         } else {
             setDropdownMarkup( dropdownContent() );
         }
 
-    }, [props.searchResults, props.showDefaultMessage, props.showNoResultsMessage], reset);
+    }, [props.searchResults, showDefaultMessage, props.showNoResultsMessage], reset);
 
     /**
      * Initially sets the dropdown content to the default message.
@@ -128,6 +134,7 @@ export function SearchDropdown( props ) {
             el.preventDefault();
             clearDropdown();
             setSearchResultsFieldStatus( 'closed' );
+
             const textarea = el.currentTarget.querySelector( 'textarea' );
             if ( textarea ) {
                 textarea.blur();
@@ -176,14 +183,18 @@ export function SearchDropdown( props ) {
     }
 
     const clearDropdown = () => {
+        // Close dropdown
         setSearchResultsFieldStatus( 'closed' );
+        // Clear textarea value
         setTextareaValue( '' );
+        // Clear selection
         setSelectedItemIdx( -1 );
-        //props.searchResults = [];
+        // Reset dropdown content to default message
         setDropdownMarkup( '');
-        //props.showDefaultMessage = true;
-        //props.showNoResultsMessage = false;
         setDropdownMarkup( getDefaultMessage() );
+        // Show default message
+        setShowDefaultMessage( true );
+
         setReset( true );
     }
 
@@ -203,15 +214,31 @@ export function SearchDropdown( props ) {
                             key={`${props.id}-${listItem.key}`}
                             id={`${props.id}-option-${index}`}
                             className={`select2-results__option select2-results__option--selectable${selectedItem === index ? ' select2-results__option--selected' : ''}`}
-                            onClick={() => {
-                                listItem.onClick();
+                            onClick={(e) => {
+                                if ( typeof props.onSelect === 'function' ) {
+                                    props.onSelect( index );
+                                }
+
+                                if ( props.onItemClick && typeof props.onItemClick === 'function' ) {
+                                    props.onItemClick( e );
+                                }
+
                                 clearDropdown();
                             } }
                             onKeyDown={(e) => {
-                                if ( e.key === 'Enter' || e.key === ' ' ) {
+                                // Handle Enter key to select item
+                                if ( e.key === 'Enter' ) {
                                     e.preventDefault();
-                                    listItem.onClick();
+
+                                    if ( typeof props.onSelect === 'function' ) {
+                                        props.onSelect( index );
+                                    }
+
                                     clearDropdown();
+                                }
+
+                                if ( props.onKeyDown && typeof props.onKeyDown === 'function' ) {
+                                    props.onKeyDown( e );
                                 }
                             }}
                             role="option"
@@ -222,6 +249,18 @@ export function SearchDropdown( props ) {
                     )
                 )
             )
+        }
+    }
+
+    const handleTextFieldChange = ( e ) => {    
+        if ( e.currentTarget.value.length < minLength ) {
+            setShowDefaultMessage( true );
+        } else {
+            setShowDefaultMessage( false );
+        }
+
+        if ( props.onChange && typeof props.onChange === 'function' ) {
+            props.onChange( e );
         }
     }
 
@@ -238,7 +277,7 @@ export function SearchDropdown( props ) {
     }
 
     const dropdownContent = () => {
-        if ( props.showDefaultMessage && props.defaultMessage ) {
+        if ( showDefaultMessage && props.defaultMessage ) {
             return getDefaultMessage();
         } else if ( props.showNoResultsMessage && props.noResultsMessage ) {
             return getNoResultsMessage();
@@ -251,7 +290,7 @@ export function SearchDropdown( props ) {
         searchStatus = __('Loading results', 'broken-link-checker');
     } else if (props.showNoResultsMessage && props.noResultsMessage){
         searchStatus = props.noResultsMessage;
-    } else if (props.showDefaultMessage && props.defaultMessage) {
+    } else if (showDefaultMessage && props.defaultMessage) {
         searchStatus = props.defaultMessage;
     } else {
         searchStatus = `${searchResultsItems.length} ${searchResultsItems.length === 1 ? 'result' : 'results'} available`;
@@ -319,7 +358,7 @@ export function SearchDropdown( props ) {
                                     placeholder={props.placeholder}
                                     onKeyDown={props.onKeyDown}
                                     onClick={props.onClick}
-                                    onChange={props.onChange}
+                                    onChange={(e) => handleTextFieldChange(e)}
                                     onFocus={(e)=>handleTextareaFocus(e)}
                                     value={textareaValue}
                                 >
@@ -332,6 +371,7 @@ export function SearchDropdown( props ) {
 
             <div
                 id={`sui-select-dropdown-wrap-${props.id}`}
+                tabIndex="0"
                 onClick={(e)=>{ handleResultsContainerClick(e) }}
             >
             <span
@@ -348,7 +388,7 @@ export function SearchDropdown( props ) {
                             className="sui-screen-reader-text">
                             {searchStatus}
                             </span>
-                        {( props.showDefaultMessage || props.showNoResultsMessage ) ? (
+                        {( showDefaultMessage || props.showNoResultsMessage ) ? (
                             <div className="select2-results__options" style={{display: 'flex'}}>
                             {dropdownMarkup}
                             </div>

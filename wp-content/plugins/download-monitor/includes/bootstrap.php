@@ -36,6 +36,9 @@ require_once dirname( DLM_PLUGIN_FILE ) . '/includes/admin/wpchill/class-wpchill
 // load the wpchill upsells system.
 require_once dirname( DLM_PLUGIN_FILE ) . '/includes/admin/wpchill/class-wpchill-upsells.php';
 
+// load the legacy extensions bridge (keeps old bundled extensions' update-checkers working).
+require_once dirname( DLM_PLUGIN_FILE ) . '/includes/backwards-compatibility/class-dlm-legacy-extensions-bridge.php';
+
 // include installer functions.
 require_once 'installer-functions.php';
 

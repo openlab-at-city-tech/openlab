@@ -10,7 +10,12 @@ use WP_Syntex\Polylang\Capabilities\Capabilities;
  *
  * @since 1.2
  */
-class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
+class PLL_Admin_Filters_Post {
+	/**
+	 * @var PLL_Model
+	 */
+	public $model;
+
 	/**
 	 * Current language (used to filter the content).
 	 *
@@ -26,7 +31,7 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 	 * @param object $polylang The Polylang object.
 	 */
 	public function __construct( &$polylang ) {
-		parent::__construct( $polylang );
+		$this->model   = &$polylang->model;
 		$this->curlang = &$polylang->curlang;
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
@@ -41,6 +46,14 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 
 		// Sets the language in Tiny MCE
 		add_filter( 'tiny_mce_before_init', array( $this, 'tiny_mce_before_init' ) );
+
+		// Filter untranslated items in the posts list table.
+		add_action( 'restrict_manage_posts', array( $this, 'untranslated_dropdown' ) );
+
+		// Languages views in post list tables.
+		foreach ( $this->model->get_translated_post_types() as $post_type ) {
+			add_filter( "views_edit-{$post_type}", array( $this, 'add_per_language_edit_views' ) );
+		}
 	}
 
 	/**
@@ -90,10 +103,19 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 		}
 
 		// Hierarchical post types
-		if ( 'edit' == $screen->base && is_post_type_hierarchical( $screen->post_type ) ) {
-			$pages = get_pages( array( 'sort_column' => 'menu_order, post_title' ) ); // Same arguments as the parent pages dropdown to avoid an extra query.
+		if ( 'edit' == $screen->base && is_post_type_hierarchical( $screen->post_type ) && post_type_supports( $screen->post_type, 'page-attributes' ) ) {
+			$pages = get_pages(
+				array(
+					'sort_column' => 'menu_order, post_title',
+					'post_type'   => $screen->post_type,
+				)
+			); // Same arguments as the parent pages dropdown to avoid an extra query.
 
-			update_post_caches( $pages, $screen->post_type, true, false );
+			if ( ! is_array( $pages ) ) {
+				return;
+			}
+
+			update_object_term_cache( wp_list_pluck( $pages, 'ID' ), $screen->post_type );
 
 			$page_languages = array();
 
@@ -169,7 +191,7 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 			return;
 		}
 
-		$this->save_translations( $post_id, array_map( 'absint', $_POST['post_tr_lang'] ) );
+		$this->model->post->save_translations( $post_id, array_map( 'absint', $_POST['post_tr_lang'] ) );
 	}
 
 	/**
@@ -257,5 +279,92 @@ class PLL_Admin_Filters_Post extends PLL_Admin_Filters_Post_Base {
 			$mce_init['directionality'] = $this->curlang->is_rtl ? 'rtl' : 'ltr';
 		}
 		return $mce_init;
+	}
+
+	/**
+	 * Displays a dropdown for filtering unstranslated items in the posts list table.
+	 *
+	 * @since 3.9
+	 *
+	 * @param string $post_type The post type.
+	 * @return void
+	 */
+	public function untranslated_dropdown( $post_type ) {
+		if ( ! $this->model->is_translated_post_type( $post_type ) ) {
+			return;
+		}
+
+		$languages = $this->model->get_languages_list();
+
+		foreach ( $languages as $k => $language ) {
+			$languages[ $k ] = $language->to_std_class(); // Important not to modify the language name everywhere.
+			/* translators: %s is a native language name */
+			$languages[ $k ]->name = sprintf( __( 'Untranslated in %s', 'polylang' ), $language->name );
+		}
+
+		$dropdown = new PLL_Walker_Dropdown();
+
+		$dropdown_html = $dropdown->walk(
+			array_merge(
+				array( (object) array( 'slug' => 0, 'name' => __( 'All translation statuses', 'polylang' ) ) ),
+				$languages
+			),
+			-1,
+			array(
+				'id'       => 'pll_untranslated_in',
+				'name'     => 'untranslated_in',
+				'class'    => 'postform',
+				'selected' => isset( $_GET['untranslated_in'] ) ? sanitize_key( $_GET['untranslated_in'] ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			)
+		);
+
+		printf(
+			'<label class="screen-reader-text" for="pll_untranslated_in">%s</label>',
+			esc_html__( 'Filter untranslated items', 'polylang' )
+		);
+
+		echo $dropdown_html; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	/**
+	 * Add languages filter views to the list of views available for the post list table.
+	 *
+	 * @since 3.9
+	 *
+	 * @param string[] $views Array of available list table views.
+	 * @return string[]
+	 */
+	public function add_per_language_edit_views( $views ) {
+		global $typenow;
+
+		if ( empty( $typenow ) ) {
+			return $views;
+		}
+
+		$q = array(
+			'post_type'   => $typenow,
+			'post_status' => 'any',
+		);
+
+		foreach ( $this->model->languages->get_list() as $language ) {
+			$views[ $language->slug ] = sprintf(
+				'<a href="%s" %s>%s <span class="count">(%s)</span></a>',
+				esc_url( add_query_arg( 'lang', $language->slug, remove_query_arg( 'paged' ) ) ),
+				! empty( $this->curlang ) && $this->curlang->slug === $language->slug ? 'class="current" aria-current="page"' : '',
+				esc_html( $language->name ),
+				number_format_i18n( (int) $this->model->count_posts( $language, $q ) )
+			);
+		}
+
+		if ( isset( $views['all'] ) ) { // In case a filter removes this key.
+			$replacement = 'lang=all&';
+
+			if ( ! str_contains( $views['all'], 'all_posts=1' ) ) {
+				$replacement .= 'all_posts=1&';
+			}
+			$views['all'] = str_replace( 'edit.php?', 'edit.php?' . $replacement, $views['all'] );
+		}
+
+		return $views;
 	}
 }

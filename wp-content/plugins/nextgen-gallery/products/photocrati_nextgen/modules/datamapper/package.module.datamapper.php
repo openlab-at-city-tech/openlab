@@ -212,7 +212,7 @@ class C_DataMapper_Driver_Base extends C_Component
     /**
      * Notes that a particular columns is serialized, and should be unserialized when converted to an entity
      *
-     * @param $column
+     * @param string $column
      */
     public function add_serialized_column($column)
     {
@@ -805,8 +805,8 @@ class C_CustomTable_DataMapper_Driver extends C_DataMapper_Driver_Base
      * Orders the results of the query
      * This method may be used multiple of times to order by more than column
      *
-     * @param $order_by
-     * @param $direction
+     * @param string $order_by
+     * @param string $direction
      * @return object
      */
     public function order_by($order_by, $direction = 'ASC')
@@ -1150,7 +1150,8 @@ class C_CustomTable_DataMapper_Driver_Mixin extends Mixin
         $id = $this->object->_wpdb()->insert($this->object->get_table_name(), $this->object->_convert_to_table_data($entity));
         if ($id) {
             $key = $this->object->get_primary_key_column();
-            $retval = $entity->{$key} = intval($this->object->_wpdb()->insert_id);
+            $retval = intval($this->object->_wpdb()->insert_id);
+            $entity->{$key} = $retval;
         }
         return $retval;
     }
@@ -1685,7 +1686,7 @@ class C_CustomPost_DataMapper_Driver extends C_DataMapper_Driver_Base
      * Ensure that the query args are set. We need to do this in case a third-party
      * plugin overrides our query
      *
-     * @param $query
+     * @param \WP_Query $query
      */
     public function set_query_args($query)
     {
@@ -1997,7 +1998,8 @@ class C_DataMapper_Model extends C_Component
      */
     public function &__set($property, $value)
     {
-        $retval = $this->_stdObject->{$property} = $value;
+        $this->_stdObject->{$property} = $value;
+        $retval = $value;
         return $retval;
     }
     public function __isset($property_name)

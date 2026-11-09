@@ -78,9 +78,9 @@ if (! function_exists ( 'thumbs_rating_getlink' )) :
 
 		$link_button = '<span class="likebtn-wrapper lb-loaded lb-style-white lb-popup-position-top lb-popup-style-light lb-unlike-not-allowed">';
 		$link_button .= '<span class="likebtn-button lb-like thumbs-rating-up">';
-		$link_button .= '<span onclick="thumbs_rating_vote(this, ' . $post_ID . ', 1, \'' . $likelabel . '\');" class="lb-a">';
+		$link_button .= '<span onclick="thumbs_rating_vote(this, ' . $post_ID . ', 1, \'' . esc_js( $likelabel ) . '\');" class="lb-a">';
 		$link_button .= '<span class="likebtn-icon lb-like-icon">&nbsp;</span>';
-		$link_button .= '<span class="likebtn-label lb-like-label">' . $likelabel . '</span>';
+		$link_button .= '<span class="likebtn-label lb-like-label">' . esc_html( $likelabel ) . '</span>';
 		$link_button .= '</span>';
 		$link_button .= '<span class="lb-count" data-count="'. $thumbs_rating_up_count . '" style="display: inline-block;">'. $thumbs_rating_up_count . '</span>';
 		$link_button .= '</span>';
@@ -126,7 +126,7 @@ if (! function_exists ( 'thumbs_rating_add_vote_callback' )) :
 		$post_ID = intval ( $_POST ['postid'] );
 		$type_of_vote = intval ( $_POST ['type'] );
 		$selection = '';
-		$likelabel = $_POST['likelabel'];
+		$likelabel = isset( $_POST['likelabel'] ) ? sanitize_text_field( wp_unslash( $_POST['likelabel'] ) ) : '';
 
 		if ( isset( $_POST['selection'] ) ) {
 			$selection = intval ( $_POST ['selection'] );

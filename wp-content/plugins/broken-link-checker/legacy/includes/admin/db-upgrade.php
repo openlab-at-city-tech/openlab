@@ -8,41 +8,62 @@ class blcDatabaseUpgrader {
 	 * @return bool
 	 */
 	public static function upgrade_database() {
-		global $blclog;
+		global $blclog, $wpdb; /** @var wpdb $wpdb */
 
-		$conf    = blc_get_configuration();
-		$current = $conf->options['current_db_version'];
-
-		if ( ( 0 != $current ) && ( $current < 4 ) ) {
-			//The 4th DB version makes a lot of backwards-incompatible changes to the main
-			//BLC tables, so instead of upgrading we just throw them away and recreate.
-			if ( ! blcDatabaseUpgrader::drop_tables() ) {
-				return false;
-			};
-			$current = 0;
-		}
-
-		//Create/update the plugin's tables
-		if ( ! blcDatabaseUpgrader::make_schema_current() ) {
+		// Serialize concurrent upgrade attempts. GET_LOCK() is atomic (no PHP-level
+		// check-then-act race like an option flag would have) and is automatically
+		// released by MySQL when the connection closes, even if this request dies
+		// mid-upgrade - so it can't get stuck "locked" forever. A non-blocking
+		// (0 second) attempt means a request that loses the race just skips the
+		// upgrade instead of queuing behind it.
+		$lock_name = $wpdb->prefix . 'blc_db_upgrade';
+		if ( 1 !== (int) $wpdb->get_var( $wpdb->prepare( 'SELECT GET_LOCK(%s, 0)', $lock_name ) ) ) {
 			return false;
 		}
 
-		if ( 0 != $current ) {
+		try {
+			$conf    = blc_get_configuration();
+			$current = $conf->options['current_db_version'];
 
-			if ( $current < 5 ) {
-				blcDatabaseUpgrader::upgrade_095();
+			if ( ( 0 != $current ) && ( $current < 4 ) ) {
+				//The 4th DB version makes a lot of backwards-incompatible changes to the main
+				//BLC tables, so instead of upgrading we just throw them away and recreate.
+				if ( ! blcDatabaseUpgrader::drop_tables() ) {
+					return false;
+				};
+				$current = 0;
 			}
 
-			if ( $current == 16 ) {
-				blcDatabaseUpgrader::upgrade_3_2_3();
+			//Create/update the plugin's tables
+			if ( ! blcDatabaseUpgrader::make_schema_current() ) {
+				return false;
 			}
+
+			// Backfill url_hash and add its UNIQUE KEY (see the note in db-schema.php
+			// for why this isn't part of the declarative schema). Runs unconditionally,
+			// not just when $current < 18, so fresh installs (current == 0) get the
+			// constraint too, not just upgrades.
+			blcDatabaseUpgrader::upgrade_url_hash();
+
+			if ( 0 != $current ) {
+
+				if ( $current < 5 ) {
+					blcDatabaseUpgrader::upgrade_095();
+				}
+
+				if ( $current == 16 ) {
+					blcDatabaseUpgrader::upgrade_3_2_3();
+				}
+			}
+
+			$conf->options['current_db_version'] = BLC_DATABASE_VERSION;
+			$conf->save_options();
+			$blclog->info( 'Database successfully upgraded.' );
+
+			return true;
+		} finally {
+			$wpdb->query( $wpdb->prepare( 'SELECT RELEASE_LOCK(%s)', $lock_name ) );
 		}
-
-		$conf->options['current_db_version'] = BLC_DATABASE_VERSION;
-		$conf->save_options();
-		$blclog->info( 'Database successfully upgraded.' );
-
-		return true;
 	}
 
 	/**
@@ -110,6 +131,46 @@ class blcDatabaseUpgrader {
 		$blclog->info( 'Done.' );
 
 		return true;
+	}
+
+	/**
+	 * Back-fill the url_hash column added in DB version 17/18, then add its UNIQUE KEY.
+	 *
+	 * The column itself is created by make_schema_current() (it's part of the
+	 * declarative schema), but the UNIQUE KEY deliberately isn't - adding both in
+	 * the same pass fails with a duplicate-key error on any site that already has
+	 * more than one link, because every existing row starts out sharing the same
+	 * default '' value before it's backfilled. So this runs the backfill first,
+	 * then adds the constraint explicitly.
+	 *
+	 * Safe to call on every upgrade attempt: the backfill only touches rows still
+	 * missing a hash, and the ALTER is skipped once the key already exists.
+	 *
+	 * @return void
+	 */
+	static function upgrade_url_hash() {
+		global $wpdb, $blclog;
+
+		$wpdb->query( //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			"UPDATE {$wpdb->prefix}blc_links SET url_hash = MD5(url) WHERE url_hash = ''"
+		);
+
+		$existing_key = $wpdb->get_results( //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			"SHOW INDEX FROM {$wpdb->prefix}blc_links WHERE Key_name = 'url_hash'"
+		);
+
+		if ( ! empty( $existing_key ) ) {
+			return;
+		}
+
+		$added = $wpdb->query( "ALTER TABLE {$wpdb->prefix}blc_links ADD UNIQUE KEY `url_hash` (`url_hash`)" ); //phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+
+		if ( false === $added ) {
+			// Most likely cause: genuine duplicate URLs already in the table (distinct
+			// from the guaranteed-duplicate-'' case backfilled above). Don't let that
+			// block the rest of the upgrade from completing - log it and move on.
+			$blclog->error( "Could not add the url_hash UNIQUE KEY on {$wpdb->prefix}blc_links: " . $wpdb->last_error );
+		}
 	}
 
 	static function upgrade_095( $trigger_errors = false ) {
@@ -283,7 +344,7 @@ class blcTableDelta {
 
 							// Is actual field definition different from that in the query?
 							$different =
-								( $tablefield->Type != $definition['data_type'] ) ||
+								( blcTableDelta::normalize_data_type( $tablefield->Type ) !== blcTableDelta::normalize_data_type( $definition['data_type'] ) ) ||
 								( $definition['collation'] && ( $tablefield->Collation != $definition['collation'] ) ) ||
 								( $definition['null_allowed'] && ( 'NO' == $tablefield->Null ) ) ||
 								( $tablefield->Default !== $definition['default'] );
@@ -594,6 +655,27 @@ class blcTableDelta {
 		}
 
 		return compact( 'data_type', 'null_allowed', 'auto_increment', 'default', 'charset', 'collation', 'column_definition' );
+	}
+
+	/**
+	 * Normalize a column data type for comparison purposes.
+	 *
+	 * MySQL 8.0.17+ and newer MariaDB versions deprecate the display width
+	 * attribute of integer types and may report it inconsistently (e.g. "int
+	 * unsigned" instead of "int(10) unsigned") regardless of how the column
+	 * was originally created. Comparing the raw strings then never matches,
+	 * so the same (no-op) "ALTER TABLE ... MODIFY COLUMN" keeps getting
+	 * regenerated and re-executed on every request. Stripping the display
+	 * width before comparing avoids that false positive.
+	 *
+	 * @param string $data_type
+	 * @return string
+	 */
+	static function normalize_data_type( $data_type ) {
+		$data_type     = strtolower( trim( $data_type ) );
+		$integer_types = array( 'tinyint', 'smallint', 'mediumint', 'int', 'integer', 'bigint' );
+
+		return preg_replace( '@^(' . implode( '|', $integer_types ) . ')\(\d+\)@', '$1', $data_type );
 	}
 
 	/**

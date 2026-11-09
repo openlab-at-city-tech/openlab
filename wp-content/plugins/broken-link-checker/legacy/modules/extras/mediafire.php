@@ -67,10 +67,10 @@ class blcMediaFireChecker extends blcChecker {
 
 			//An unexpected error.
 			$result['broken'] = true;
-			$result['log']   .= 'Error : ' . $rez->get_error_message();
+			$result['log']   .= 'Error : ' . esc_html( $rez->get_error_message() );
 			$data = $rez->get_error_data();
 			if ( $data ) {
-				$result['log'] .= "\n\nError data : " . print_r( $data, true );
+				$result['log'] .= "\n\nError data : " . esc_html( print_r( $data, true ) );
 			}
 		} else {
 
@@ -90,7 +90,7 @@ class blcMediaFireChecker extends blcChecker {
 					$result['broken']    = false;
 					$result['http_code'] = 200;
 					$result['log']      .= 'File OK';
-					$result['log']      .= "\nFull URL: " . $rez['headers']['location'];
+					$result['log']      .= "\nFull URL: " . esc_html( $rez['headers']['location'] );
 
 				} elseif ( strpos( $rez['headers']['location'], 'errno=320' ) !== false ) {
 					$result['status_code'] = BLC_LINK_STATUS_ERROR;
@@ -115,11 +115,11 @@ class blcMediaFireChecker extends blcChecker {
 					$result['status_text'] = __( 'Unknown Error', 'broken-link-checker' );
 					$result['log']        .= "Unknown error.\n\n";
 					foreach ( $rez['headers'] as $name => $value ) {
-						$result['log'] .= sprintf( "%s: %s\n", $name, $value );
+						$result['log'] .= sprintf( "%s: %s\n", esc_html( $name ), esc_html( $value ) );
 					}
 				}
 			} else {
-				$result['log'] .= "Unknown error.\n\n" . implode( "\n", $rez['headers'] );
+				$result['log'] .= "Unknown error.\n\n" . esc_html( implode( "\n", $rez['headers'] ) );
 			}
 		}
 

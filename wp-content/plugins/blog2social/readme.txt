@@ -4,9 +4,9 @@ Requires PHP: 5.5.3
 Tags: social media automation, auto post, cross-posting, auto repost, social media scheduler, social media plugin
 Donate link: https://paypal.me/adenion
 Requires at least: 6.2
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 8.9.0
+Stable tag: 9.1.7
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,7 +20,7 @@ Blog2Social automatically creates social media posts for your content and shares
 
 _Compatible with WooCommerce, Gutenberg Editor, Hummingbird, Bitly, Rebrand.ly, Sniply, WP Automatic Plugin, Page Builder & RSS Importer._
 
-**#New: AI Post Templates, Extended Comment Feature & Improved Preview**
+**#New: AI Tags, Assistini Content Creation & Improved Sharing**
 
 * AI Post Templates: Define individual prompts per network (e.g. Facebook, X, Instagram) and customize tone and writing style for AI-generated content
 * Extended Comment Feature: "First" Comment now available for Flickr, Reddit, VKontakte, YouTube, Vimeo, Mastodon, Discord, Threads, and Band
@@ -157,6 +157,36 @@ No. Default WordPress plugin permissions (755) are sufficient.
 
 
 == Changelog ==
+= 9.1.7 =
+Usability Optimization
+= 9.1.6 =
+Usability Optimization
+= 9.1.5 =
+Additional Security Update & Plugin Activation Optimization
+= 9.1.4 =
+Bugfix: Calendar new Post
+= 9.1.3 =
+Usability Optimization
+= 9.1.2 =
+Usability Optimization
+= 9.1.1 =
+Additional Security Update
+= 9.1.0 =
+AI Tags, Assistini Content Creation & Improved Sharing
+= 9.0.3 =
+WordPress 7.1 Compatibility
+= 9.0.2 =
+Usability Optimization
+= 9.0.1 =
+Bugfix: Datepicker (German), Usability Optimization
+= 9.0.0 =
+Improved Share Posts View and Resharer, Network Dev Integration
+= 8.9.3 =
+Additional Security Update
+= 8.9.2 =
+Usability Optimization
+= 8.9.1 =
+Additional Security Update
 = 8.9.0 =
 AI Post Templates, Extended Comment Feature & Improved Preview
 = 8.8.5 =
@@ -231,58 +261,38 @@ Usability Optimization
 Usability Optimization
 = 8.0.0 =
 Integration AI Text Assistent Assistini
-= 7.5.4 =
-Usability Optimization
-= 7.5.3 =
-Usability Optimization
-= 7.5.2 =
-Usability Optimization
-= 7.5.1 =
-Usability Optimization
-= 7.5.0 =
-Bluesky and HumHub Integration, Facebook Group changes to instant sharing
-= 7.4.2 =
-Usability Optimization
-= 7.4.1 =
-Usability Optimization
-= 7.4.0 =
-Usability Optimization
-= 7.3.5 =
-Usability Optimization, Pinterest Title, AI Social Media Post Generator, Today's Content Calendar Tips
-= 7.3.4 =
-Bugfix: Video Posting Status
-= 7.3.3 =
-Bugfix: Post-Preview-Editor
-= 7.3.2 =
-Instagram Stories, LinkedIn Video Upload for profiles
-= 7.3.1 =
-Usability Optimization
-= 7.3.0 =
-Usability Optimization
-= 7.2.3 =
-Usability Optimization
-= 7.2.2 =
-Optimize Auto-Poster
-= 7.2.1 =
-Additional Security Update
-= 7.2.0 =
-Twitter Own App Integration
-= 7.1.3 =
-Usability Optimization
-= 7.1.2 =
-Bugfix: Video-Upload
-= 7.1.1 =
-Bugfix: LinkedIn Profile
-= 7.1.0 =
-Video Scheduling & Mastodon,Discord Integration 
-= 7.0.2 = 
-Bugfix: Pinterest Autorisation
-= 7.0.1 = 
-Bugfix: Autoposting
-= 7.0.0 = 
-Publish and share videos
 
 == Upgrade Notice ==
+= 9.1.7 =
+Usability Optimization
+= 9.1.6 =
+Usability Optimization
+= 9.1.5 =
+Additional Security Update & Plugin Activation Optimization
+= 9.1.4 =
+Bugfix: Calendar new Post
+= 9.1.3 =
+Usability Optimization
+= 9.1.2 =
+Usability Optimization
+= 9.1.1 =
+Additional Security Update
+= 9.1.0 =
+AI Tags, Assistini Content Creation & Improved Sharing
+= 9.0.3 =
+WordPress 7.1 Compatibility
+= 9.0.2 =
+Usability Optimization
+= 9.0.1 =
+Bugfix: Datepicker (German), Usability Optimization
+= 9.0.0 =
+Improved Share Posts View and Resharer, Network Dev Integration
+= 8.9.3 =
+Additional Security Update
+= 8.9.2 =
+Usability Optimization
+= 8.9.1 =
+Additional Security Update
 = 8.9.0 =
 AI Post Templates, Extended Comment Feature & Improved Preview
 = 8.8.5 =
@@ -359,53 +369,3 @@ Usability Optimization
 Usability Optimization
 = 8.0.0 =
 Integration AI Text Assistent Assistini
-= 7.5.4 =
-Usability Optimization
-= 7.5.3 =
-Usability Optimization
-= 7.5.2 =
-Usability Optimization
-= 7.5.1 =
-Usability Optimization
-= 7.5.0 =
-Bluesky and HumHub Integration, Facebook Group changes to instant sharing
-= 7.4.2 =
-Usability Optimization
-= 7.4.1 =
-Usability Optimization
-= 7.4.0 =
-Usability Optimization
-= 7.3.5 =
-Usability Optimization, Pinterest Title, AI Social Media Post Generator, Today's Content Calendar Tips
-= 7.3.4 =
-Bugfix: Video Posting Status
-= 7.3.3 =
-Bugfix: Post-Preview-Editor
-= 7.3.2 =
-Instagram Stories, LinkedIn Video Upload for profiles
-= 7.3.1 =
-Usability Optimization
-= 7.3.0 =
-Usability Optimization
-= 7.2.3 =
-Usability Optimization
-= 7.2.2 =
-Optimize Auto-Poster
-= 7.2.1 =
-Additional Security Update
-= 7.2.0 =
-Twitter Own App Integration
-= 7.1.3 =
-Usability Optimization
-= 7.1.2 =
-Bugfix: Video-Upload
-= 7.1.1 =
-Bugfix: LinkedIn Profile
-= 7.1.0 =
-Video Scheduling & Mastodon,Discord Integration 
-= 7.0.2 = 
-Bugfix: Pinterest Autorisation
-= 7.0.1 = 
-Bugfix: Autoposting
-= 7.0.0 = 
-Publish and share videos

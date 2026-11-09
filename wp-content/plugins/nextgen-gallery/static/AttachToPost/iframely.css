@@ -1,9 +1,10 @@
 /* keep the ATP background white */
 html#iframely {
-    background: white !important;
+	background: white !important;
 }
 
-#iframely, #iframely body {
+#iframely,
+#iframely body {
 	background: white !important;
 	padding: 0px;
 	width: 100%;
@@ -11,9 +12,7 @@ html#iframely {
 }
 
 #iframely {
-    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: alpha(opacity=0);
-	opacity: 0.0;
+	opacity: 0;
 	background-position: center center;
 	background-repeat: no-repeat;
 	position: absolute;
@@ -26,76 +25,75 @@ html#iframely {
 }
 
 #iframely #ngg_page_content.ngg_settings_page {
-    background: #fff;
+	background: #fff;
 }
 
 #iframely h2,
 #iframely #icon-nextgen-gallery {
-    display: none;
+	display: none;
 }
 
 #iframely #wpwrap {
-    background-color: #fcfcfc;
+	background-color: #fcfcfc;
 }
 
 #iframely #ngg_page_content {
-    margin: 0;
-    width: 100%;
+	margin: 0;
+	width: 100%;
 }
 
-#iframely #ngg_page_content, 
-#iframely #ngg_page_content .ngg_manage_galleries table th, 
+#iframely #ngg_page_content,
+#iframely #ngg_page_content .ngg_manage_galleries table th,
 #iframely #ngg_page_content .ngg_manage_galleries table td {
-    font-size: 13px !important;
+	font-size: 13px !important;
 }
 
-#iframely .ngg-admin .notice, 
-#iframely .ngg-admin div.error, 
+#iframely .ngg-admin .notice,
+#iframely .ngg-admin div.error,
 #iframely .ngg-admin div.updated {
-    display: none;
+	display: none;
 }
 
 #iframely #ngg_page_content .ngg_page_content_header {
-    margin: 25px 0 -30px;
-    padding-left: 30px;
+	margin: 25px 0 -30px;
+	padding-left: 30px;
 }
 
 #iframely #ngg_page_content .ngg_page_content_header img,
 #iframely #ngg_page_content .ngg_page_content_header p {
-    display: none;
+	display: none;
 }
 
 #iframely #ngg_page_content .ngg_page_content_menu {
-    background: transparent;
-    border: none;
-    padding: 10px 20px 10px 23px;
-    float: none;
-    height: 25px;
-    margin-top: 16px;
-    width: auto;
+	background: transparent;
+	border: none;
+	padding: 10px 20px 10px 23px;
+	float: none;
+	height: 25px;
+	margin-top: 16px;
+	width: auto;
 }
 
 #iframely #ngg_page_content .ngg_page_content_menu a {
-    border: none;
-    color: black;
-    display: inline;
-    font-size: 14px;
-    font-weight: 300;
-    text-decoration: none;
-    line-height: 25px;
-    padding: 6px;
-    font-size: 12px;
-    margin-right: 10px;
+	border: none;
+	color: black;
+	display: inline;
+	font-size: 14px;
+	font-weight: 300;
+	text-decoration: none;
+	line-height: 25px;
+	padding: 6px;
+	font-size: 12px;
+	margin-right: 10px;
 }
 
 #iframely #ngg_page_content .ngg_page_content_menu a:active {
-    background: transparent;
+	background: transparent;
 }
 
 #iframely #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active {
-    font-weight: 500;
-    border-bottom: 3px solid #9ebc1b;
-
+	font-weight: 500;
+	border-bottom: 3px solid #9ebc1b;
 }
 
 #iframely #ngg_page_content .ngg_page_content_menu a:before {
@@ -104,106 +102,105 @@ html#iframely {
 
 #displayed_tab #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active:after,
 #displayed_tab #ngg_page_content .ngg_page_content_menu a:active:after {
-    display: none !important;
+	display: none !important;
 }
 
 #iframely #ngg_page_content .ngg_page_content_main {
-    padding: 30px;
-    width: 100%;
-    box-shadow: none;
+	padding: 30px;
+	width: 100%;
+	box-shadow: none;
 }
 
 #iframely #ngg_page_content .ngg_page_content_main h3 {
-    display: none;
+	display: none;
 }
 
 #iframely #ngg_page_content .ngg_manage_tags .ngg_page_content_main h3,
 #iframely #ngg_page_content .ngg_manage_images .ngg_page_content_main h3,
 #iframely #ngg_page_content .ngg_manage_albums .ngg_page_content_main h3 {
-    display: block;
+	display: block;
 }
 
 #iframely #ngg_page_content button:active,
 #iframely #ngg_page_content .button-primary:active,
 #iframely #ngg_page_content .button-secondary:active {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 #iframely #bulkaction {
-    width: 140px !important;
+	width: 140px !important;
 }
 
 #iframely .tablenav.top .displaying-num {
-    display: none;
+	display: none;
 }
 
 #iframely .ngg_manage_galleries table #id {
-    min-width: 40px;
+	min-width: 40px;
 }
 
 #iframely .ngg_manage_galleries table #author {
-    min-width: 85px;
+	min-width: 85px;
 }
 
 #iframely .ngg_manage_galleries table #page_id {
-    min-width: 65px;
+	min-width: 65px;
 }
 #iframely .gallery_page_nggallery-manage-gallery .ui-dialog {
-    height: auto !important;
-    min-height: auto;
+	height: auto !important;
+	min-height: auto;
 }
 
 /* Media Queries */
 
-
 @media (max-width: 1140px) {
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content button,
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
-        width: 130px !important;
-    }
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content button,
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
+		width: 130px !important;
+	}
 }
 
 @media (max-width: 940px) {
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content button,
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
-        width: 201px !important;
-    }
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content button,
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
+		width: 201px !important;
+	}
 }
 
 @media (max-width: 800px) {
-    #iframely .ngg-admin #wpbody {
-        padding: 0;
-    } 
-    #iframely #ngg_page_content .ngg_page_content_menu {
-        padding: 5px 0 0;
-        background: transparent;
-        border: none;
-    }
-    #iframely #ngg_page_content .ngg_page_content_menu a {
-        display: block;
-        width: 100%;
-        float: left;
-        padding: 0;
-        text-align: center;
-        box-sizing: border-box;
-    }
-    #iframely #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active, 
-    #iframely #ngg_page_content .ngg_page_content_menu a:active {
-        background: transparent;
-    }
-    #iframely #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active:after {
-        display:none;
-    }
-    #iframely #ngg_page_content .ngg_page_content_menu a:last-of-type {
-        padding-bottom: 5px;
-    }
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content button,
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
-    #iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
-        width: 100% !important;
-        margin: 4px 0;
-        display: block;
-    }
+	#iframely .ngg-admin #wpbody {
+		padding: 0;
+	}
+	#iframely #ngg_page_content .ngg_page_content_menu {
+		padding: 5px 0 0;
+		background: transparent;
+		border: none;
+	}
+	#iframely #ngg_page_content .ngg_page_content_menu a {
+		display: block;
+		width: 100%;
+		float: left;
+		padding: 0;
+		text-align: center;
+		box-sizing: border-box;
+	}
+	#iframely #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active,
+	#iframely #ngg_page_content .ngg_page_content_menu a:active {
+		background: transparent;
+	}
+	#iframely #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active:after {
+		display: none;
+	}
+	#iframely #ngg_page_content .ngg_page_content_menu a:last-of-type {
+		padding-bottom: 5px;
+	}
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content button,
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content .button-primary,
+	#iframely .gallery_page_ngg_addgallery #ngg_page_content .button-secondary {
+		width: 100% !important;
+		margin: 4px 0;
+		display: block;
+	}
 }

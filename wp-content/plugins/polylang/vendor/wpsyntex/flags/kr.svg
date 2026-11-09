@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#fff" d="M0 0h900v600H0"/>
+<g transform="matrix(6.25 0 0 6.25 450 300)">
+<path stroke="#000" stroke-width="4" d="m-35-37-13 20m5 3 13-20m5 3-13 20m63 42 6-9m1-2 6-9m5 3-6 9m-1 2-6 9m5 3 6-9m1-2 6-9m-96 0 13 20m5-3-6-9m-1-2-6-9m5-3 13 20m63-42-6-9m-1-2-6-9m5-3 13 20m5-3-6-9m-1-2-6-9"/>
+<circle r="24" fill="#cd2e3a"/>
+<path fill="#0047a0" d="M0 0a12 12 0 1 1 20 13 24 24 0 1 1-40-26A12 12 0 1 0 0 0"/>
+</g>
+</svg>

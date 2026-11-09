@@ -355,7 +355,7 @@ class Renderer {
   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( is_array( $displayed_gallery->container_ids ) && in_array( 'All', $displayed_gallery->container_ids ) ) {
 			$lookup = false;
-		} elseif ( $displayed_gallery->source == 'albums' && ( $app->get_parameter( 'gallery' ) ) || $app->get_parameter( 'album' ) ) {
+		} elseif ( ( $displayed_gallery->source == 'albums' && ( $app->get_parameter( 'gallery' ) ) ) || $app->get_parameter( 'album' ) ) {
 			$lookup = false;
   // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		} elseif ( in_array( $displayed_gallery->source, [ 'random', 'random_images' ] ) ) {
@@ -377,6 +377,12 @@ class Renderer {
 		&& ! in_array( $displayed_gallery->id(), DisplayManager::$enqueued_displayed_gallery_ids ) ) {
 			DisplayManager::$enqueued_displayed_gallery_ids[] = $displayed_gallery->id();
 			$controller->enqueue_frontend_resources( $displayed_gallery );
+		}
+
+		// Enqueue trigger assets outside the dedup block so they survive a cache hit.
+		if ( ( ! defined( 'NGG_SKIP_LOAD_SCRIPTS' ) || ! NGG_SKIP_LOAD_SCRIPTS )
+		&& ! $this->is_rest_request() ) {
+			TriggerManager::get_instance()->enqueue_trigger_assets( $displayed_gallery );
 		}
 
 		// Try cache lookup, if we're to do so.
@@ -469,7 +475,6 @@ class Renderer {
 		if ( self::$has_done_app_rewrite ) {
 			return;
 		}
-		self::$has_done_app_rewrite = true;
 
 		$do_rewrites = false;
 		$app         = null;
@@ -543,5 +548,28 @@ class Renderer {
 		if ( $do_rewrites && $app ) {
 			$app->do_rewrites();
 		}
+
+		// Rewrites run once per request, but only an album has any. Marking them done
+		// for whichever gallery rendered first meant an album placed after another
+		// display (a Pro search form, a thumbnail gallery) never had its URLs
+		// rewritten, so each album link appended its slugs to the current URL again.
+		if ( $do_rewrites || self::is_album_display( $displayed_gallery ) ) {
+			self::$has_done_app_rewrite = true;
+		}
+	}
+
+	/**
+	 * Whether a displayed gallery is an album, or a gallery opened from one.
+	 *
+	 * Covers the Pro album types too, whose rewrites run on the ngg_do_app_rewrites action.
+	 *
+	 * @param DisplayedGallery $displayed_gallery The displayed gallery.
+	 * @return bool
+	 */
+	protected static function is_album_display( $displayed_gallery ) {
+		$original_display_type = isset( $displayed_gallery->display_settings['original_display_type'] ) ? $displayed_gallery->display_settings['original_display_type'] : '';
+
+		return false !== strpos( (string) $displayed_gallery->display_type, '_album' )
+			|| false !== strpos( (string) $original_display_type, '_album' );
 	}
 }

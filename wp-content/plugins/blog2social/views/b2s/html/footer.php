@@ -46,7 +46,7 @@ if (!defined('ABSPATH')) {
                 <div class="modal-body">        
                     <div class="row">
                         <div class="col-md-12">
-                            <b><?php esc_html_e('Define your preferred post format for sharing your social media content on Twitter, LinkedIn, or Facebook.', 'blog2social') ?></b>
+                            <b><?php esc_html_e('Define your preferred post format for sharing your social media content on X, LinkedIn, or Facebook.', 'blog2social') ?></b>
                             <div class="clearfix"></div>
                             <div class="col-md-6">
                                 <br>
@@ -122,10 +122,10 @@ if (!defined('ABSPATH')) {
                     <h4 class="modal-title"><?php esc_html_e('Why Retweets?', 'blog2social') ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php esc_html_e('Retweets are the recommended way to reshare the same Tweets across Twitter accounts in accordance with Twitter new rules. You can now schedule multiple Retweets for an original Tweet that you are planning right from your WordPress.', 'blog2social') ?>
+                    <?php esc_html_e('Retweets are the recommended way to reshare the same Tweets across X accounts in accordance with X new rules. You can now schedule multiple Retweets for an original Tweet that you are planning right from your WordPress.', 'blog2social') ?>
                     <br>
                     <br>
-                    <?php esc_html_e('If Retweets are enabled, every Original-Tweet you schedule in this step will be retweeted by the selected Twitter accounts. If, for example, 3 Original-Tweets are scheduled, every single Tweet will trigger a Retweet for the selected Twitter accounts.', 'blog2social') ?>
+                    <?php esc_html_e('If Retweets are enabled, every Original-Tweet you schedule in this step will be retweeted by the selected X accounts. If, for example, 3 Original-Tweets are scheduled, every single Tweet will trigger a Retweet for the selected X accounts.', 'blog2social') ?>
                     <br>
                     <br>
                     <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
@@ -167,10 +167,10 @@ if (!defined('ABSPATH')) {
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoContentTwitterModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php esc_html_e('Define Twitter post content', 'blog2social') ?></h4>
+                    <h4 class="modal-title"><?php esc_html_e('Define X post content', 'blog2social') ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php esc_html_e('Select the content that will be automatically pre-filled in your Twitter posts. If you have ticked the box "include WordPress tags as hashtags in my post", hashtags are automatically added in the drop-down menu.', 'blog2social') ?>
+                    <?php esc_html_e('Select the content that will be automatically pre-filled in your X posts. If you have ticked the box "include WordPress tags as hashtags in my post", hashtags are automatically added in the drop-down menu.', 'blog2social') ?>
                     <br>
                 </div>
             </div>
@@ -298,14 +298,14 @@ if (!defined('ABSPATH')) {
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoAssignAutoPost" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"><?php esc_html_e('Transfer Auto-Poster settings to other users (Business):', 'blog2social') ?></h4>
+                    <h4 class="modal-title"><?php esc_html_e('Transfer Auto Poster settings to other users (Business):', 'blog2social') ?></h4>
                 </div>
                 <div class="modal-body">
-                    <?php esc_html_e('With Blog2Social you can transfer the Auto-Poster settings as a WordPress-administrator to other users if they have activated the same Blog2Social-Business license. This way, you can also assign social media accounts to other users, so they can auto-post without setting up these connections in each user account. Within these settings, you can also decide whether newly published or updated content from other users should be automatically shared. Users with an assigned Auto-Poster setting and an assigned social-media-network group will then share content automatically how you selected the content to be shared automatically.', 'blog2social') ?>
+                    <?php esc_html_e('With Blog2Social you can transfer the Auto Poster settings as a WordPress-administrator to other users if they have activated the same Blog2Social-Business license. This way, you can also assign social media accounts to other users, so they can auto-post without setting up these connections in each user account. Within these settings, you can also decide whether newly published or updated content from other users should be automatically shared. Users with an assigned Auto Poster setting and an assigned social-media-network group will then share content automatically how you selected the content to be shared automatically.', 'blog2social') ?>
                     <br>
                     <?php echo wp_kses(sprintf(
                         // translators: %s is a link
-                        __('You will get more information on how to assign the Auto-Poster settings in the <a target="_blank" href="%s">Auto-Poster guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_post_assign'))),
+                        __('You will get more information on how to assign the Auto Poster settings in the <a target="_blank" href="%s">Auto Poster guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_post_assign'))),
                         array(
                             'a' => array(
                                 'href' => array(),
@@ -394,7 +394,7 @@ if (!defined('ABSPATH')) {
                 <?php esc_html_e('Use X threads to share messages that deserve more than just 280 characters! Your copy will be shared in multiple connected tweets, each one with 280 characters, appearing underneath each other - like a thread.', 'blog2social') ?>
                 <br>
                 <br>
-                <?php esc_html_e('Tip: To define threaded posts as the default setting for your tweets, activate this function in your post templates for Twitter.', 'blog2social') ?>
+                <?php esc_html_e('Tip: To define threaded posts as the default setting for your tweets, activate this function in your post templates for X.', 'blog2social') ?>
                 <br>
             </div>
         </div>
@@ -427,7 +427,7 @@ if (!defined('ABSPATH')) {
                 <div class="isCardMetaChecked meta-text"  style="display:none;">
                     <?php echo wp_kses(
                         // translators: %s is a link
-                        sprintf(__('Your changes will have no effect on your social media posts on Twitter, if you have manually unchecked the Meta Tag options for Twitter in your Blog2Social <a target="_blank" href="%s">settings</a>', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        sprintf(__('Your changes will have no effect on your social media posts on X, if you have manually unchecked the Meta Tag options for X in your Blog2Social <a target="_blank" href="%s">settings</a>', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
                         array('a' => 
                             array('target' => array(), 
                             'href' => array())
@@ -461,10 +461,20 @@ if (!defined('ABSPATH')) {
                             'class' => array()
                         ),
                         'br'=> array(),
+                        'strong' => array(),
                         'ul' => array(
                             'class' => array()
                         ),
                         'li' => array(
+                            'class' => array()
+                        ),
+                        'span' => array(
+                            'class' => array()
+                        ),
+                        'h3' => array(
+                            'class' => array()
+                        ),
+                        'hr' => array(
                             'class' => array()
                         )
                     )

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#f8e92e" viewBox="0 0 900 600">
+<path fill="#d82126" d="M0 0h900v600H0"/>
+<path id="a" d="M450 236 405 0h90zm41 97L0 0h135zm-41-33L0 240v120zm0 65-45 235h90zm41-98L0 600h135"/>
+<use href="#a" transform="matrix(-1 0 0 1 900 0)"/>
+<circle cx="450" cy="300" r="107" fill="#d82126"/>
+<circle cx="450" cy="300" r="86"/>
+</svg>

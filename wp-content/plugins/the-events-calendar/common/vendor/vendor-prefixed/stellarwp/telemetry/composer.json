@@ -1,0 +1,73 @@
+{
+  "name": "stellarwp/telemetry",
+  "description": "Telemetry library for StellarWP plugins.",
+  "type": "library",
+  "config": {
+    "sort-packages": true,
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "StellarWP\\Telemetry\\": "src/Telemetry",
+      "StellarWP\\Telemetry\\Views_Dir\\": "src/views",
+      "StellarWP\\Telemetry\\Assets_Dir\\": "src/resources"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StellarWP\\Telemetry\\Tests\\": "tests/",
+      "StellarWP\\Telemetry\\Tests\\Support\\": "tests/_support/"
+    }
+  },
+  "minimum-stability": "stable",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "ext-json": "*",
+    "php": ">=7.1",
+    "stellarwp/container-contract": "^1.0"
+  },
+  "require-dev": {
+    "automattic/vipwpcs": "^3.0.0",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+    "lucatume/di52": "3.0.0",
+    "lucatume/wp-browser": "^3.2.3",
+    "phpcompatibility/phpcompatibility-wp": "*",
+    "phpunit/php-code-coverage": "^9.2",
+    "szepeviktor/phpstan-wordpress": "^1.1",
+    "the-events-calendar/coding-standards": "dev-master",
+    "wp-coding-standards/wpcs": "^3.0.0"
+  },
+  "repositories": [
+    {
+      "name": "the-events-calendar/coding-standards",
+      "type": "github",
+      "url": "https://github.com/the-events-calendar/coding-standards"
+    }
+  ],
+  "scripts": {
+    "test:analysis": "phpstan analyse --memory-limit=512M",
+    "compatibility:php-7.1": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.1",
+    "compatibility:php-7.2": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.2",
+    "compatibility:php-7.3": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.3",
+    "compatibility:php-7.4": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.4",
+    "compatibility:php-8.0": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.0",
+    "compatibility:php-8.1": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.1",
+    "compatibility:php-8.2": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.2",
+    "compatibility:php-8.3": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.3",
+    "compatibility": [
+      "@compatibility:php-7.1",
+      "@compatibility:php-7.2",
+      "@compatibility:php-7.3",
+      "@compatibility:php-7.4",
+      "@compatibility:php-8.0",
+      "@compatibility:php-8.1",
+      "@compatibility:php-8.2",
+      "@compatibility:php-8.3"
+    ]
+  },
+  "scripts-descriptions": {
+    "test:analysis": "Run static code analysis."
+  }
+}

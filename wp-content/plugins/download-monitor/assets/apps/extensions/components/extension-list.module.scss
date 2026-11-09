@@ -1,0 +1,10 @@
+.extensionWrapper {
+	max-width: var(--theme-normal-container-max-width);
+	margin: 0 auto;
+	margin-top: calc(var(--theme-content-spacing) * 2);
+
+	@media (max-width: 768px) {
+		max-width: var(--theme-narrow-container-max-width);
+		padding: 0 16px;
+	}
+}

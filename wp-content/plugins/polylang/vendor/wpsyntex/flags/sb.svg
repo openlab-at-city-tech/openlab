@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#0051ba" d="M0 600V0h900"/>
+<path fill="#215b33" d="M900 0v600H0"/>
+<path stroke="#fcd116" stroke-width="54" d="M0 600 900 0"/>
+<g id="b">
+<path id="a" fill="#fff" d="M37 121 72 12l35 109-92-67h114"/>
+<use y="202" href="#a"/>
+</g>
+<use x="238" href="#b"/>
+<use x="119" y="101" href="#a"/>
+</svg>

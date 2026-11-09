@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="#fff" viewBox="0 0 900 600">
+<path fill="#308738" d="M0 0h900v600H0"/>
+<path fill="#ee162e" d="M0 0h900v408H0"/>
+<path fill="#3081f7" d="M0 0h900v192H0"/>
+<path d="M0 204h900v192H0"/>
+<circle cx="144" cy="96" r="72"/>
+<circle cx="168" cy="96" r="72" fill="#3081f7"/>
+<g id="b">
+<path id="a" d="m294 166 8-27 9 27-22-17h27"/>
+<use x="58" href="#a"/>
+<use x="116" href="#a"/>
+</g>
+<use y="-58" href="#b"/>
+<use y="-116" href="#b"/>
+<use x="-116" href="#b"/>
+<use x="-58" y="-58" href="#b"/>
+</svg>

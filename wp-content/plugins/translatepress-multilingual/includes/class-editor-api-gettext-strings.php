@@ -89,12 +89,15 @@ class TRP_Editor_Api_Gettext_Strings {
 						$update_strings[ $language ] = array();
 						foreach( $language_strings as $string ) {
 							if ( isset( $string->id ) && is_numeric( $string->id ) ) {
+								$translated = trp_sanitize_string( $string->translated );
+								$status     = ! empty( $translated ) ? TRP_Query::HUMAN_REVIEWED : TRP_Query::NOT_TRANSLATED;
+
 								array_push($update_strings[ $language ], array(
 									'id' => (int)$string->id,
                                     'original' => trp_sanitize_string( $string->original, false ),
-									'translated' => trp_sanitize_string( $string->translated ),
+									'translated' => $translated,
 									'domain' => sanitize_text_field( $string->domain ),
-									'status' => (int)$string->status,
+									'status' => $status,
 									'plural_form' => (int)$string->plural_form,
 									'context' => $string->context
 								));

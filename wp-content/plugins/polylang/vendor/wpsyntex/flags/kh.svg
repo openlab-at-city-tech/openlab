@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+<path fill="#032ea1" d="M0 0h900v600H0"/>
+<path fill="#e00025" d="M0 150h900v300H0"/>
+<path id="a" fill="#fff" d="M455 424H255v-36h21v-25h16v-17h13v-45h-5v-22h15v-23h6l-1-6h3l-1-5h3l-1-5h3l-1-5h5v-7l8-9 8 9v7h5v5h3l-1 5h3l-1 5h3l-1 6h6v23h45v-23h15l-1-12h4l-1-11h4l-1-11h4l-1-11h4l-1-11h3v-11h4v-7l8-11"/>
+<use href="#a" transform="matrix(-1 0 0 1 900 0)"/>
+</svg>

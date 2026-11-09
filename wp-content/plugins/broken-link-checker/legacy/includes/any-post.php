@@ -212,18 +212,24 @@ class blcPostTypeOverlord {
 	/**
 	 * Create or update synchronization records for all posts.
 	 *
-	 * @param string $container_type
-	 * @param bool $forced If true, assume that all synch. records are gone and will need to be recreated from scratch.
+	 * @param string $container_type Optional. If specified, only resynch records for posts of this type.
+	 *                               Otherwise, resynch records for all post types.
+	 * @param bool   $forced If true, assume that all synch. records are gone and will need to be recreated from scratch.
 	 * @return void
 	 */
-	function resynch( $container_type = '', $forced = false ) {
-		global $wpdb; /** @var wpdb $wpdb */
+	public function resynch( $container_type = '', $forced = false ) {
+		/**
+		 * Database manager.
+		 *
+		 * @var wpdb $wpdb
+		 */
+		global $wpdb;
 		global $blclog;
 
-		//Resynch is expensive in terms of DB performance. Thus we only do it once, processing
-		//all post types in one go and ignoring any further resynch requests during this pageload.
-		//BUG: This might be a problem if there ever is an actual need to run resynch twice or
-		//more per pageload.
+		// Resynch is expensive in terms of DB performance. Thus we only do it once, processing
+		// all post types in one go and ignoring any further resynch requests during this pageload.
+		// BUG: This might be a problem if there ever is an actual need to run resynch twice or
+		// more per pageload.
 		if ( $this->resynch_already_done ) {
 			$blclog->log( sprintf( '...... Skipping "%s" resyncyh since all post types were already synched.', $container_type ) );
 			return;
@@ -234,119 +240,177 @@ class blcPostTypeOverlord {
 			return;
 		}
 
-		$escaped_post_types    = array_map( 'esc_sql', $this->enabled_post_types );
-		$escaped_post_statuses = array_map( 'esc_sql', $this->enabled_post_statuses );
-
 		if ( $forced ) {
-			//Create new synchronization records for all posts.
-			$blclog->log( '...... Creating synch records for these post types: ' . implode( ', ', $escaped_post_types ) . ' that have one of these statuses: ' . implode( ', ', $escaped_post_statuses ) );
+			$blclog->log( '...... Creating synch records for these post types: ' . implode( ', ', $this->enabled_post_types ) . ' that have one of these statuses: ' . implode( ', ', $this->enabled_post_statuses ) );
 			$start = microtime( true );
-			$q     = "INSERT INTO {$wpdb->prefix}blc_synch(container_id, container_type, synched)
-				  SELECT posts.id, posts.post_type, 0
-				  FROM {$wpdb->posts} AS posts
-				  WHERE
-				  	posts.post_status IN (%s)
-	 				AND posts.post_type IN (%s)";
-			$q     = sprintf(
-				$q,
-				"'" . implode( "', '", $escaped_post_statuses ) . "'",
-				"'" . implode( "', '", $escaped_post_types ) . "'"
-			);
-			$wpdb->query( $q );
-			$blclog->log( sprintf( '...... %d rows inserted in %.3f seconds', $wpdb->rows_affected, microtime( true ) - $start ) );
+
+			// Create new synchronization records for all posts.
+			$rows_inserted = $this->create_all_synch_records();
+
+			$blclog->log( sprintf( '...... %d rows inserted in %.3f seconds', $rows_inserted, microtime( true ) - $start ) );
 		} else {
-			//Delete synch records corresponding to posts that no longer exist.
-			//Also delete posts that don't have enabled post status
 			$blclog->log( '...... Deleting synch records for removed posts & post with invalid status' );
-			$start            = microtime( true );
-			$all_posts_id     = get_posts(
-				array(
-					'posts_per_page' => -1,
-					'fields'         => 'ids',
-					'post_type'      => $this->enabled_post_types,
-					'post_status'    => $this->enabled_post_statuses,
-				)
-			);
+			$start = microtime( true );
 
-			$q = "DELETE synch.* FROM {$wpdb->prefix}blc_synch AS synch WHERE synch.container_id NOT IN (%s)";
+			// Delete synch records corresponding to posts that no longer exist.
+			// Also delete posts that don't have enabled post status.
+			$rows_removed = $this->cleanup_synch_records();
+			$blclog->debug( $wpdb->last_query );
 
-			$q     = sprintf(
-				$q,
-				"'" . implode( "', '", $all_posts_id ) . "'"
-			);
-
-			$wpdb->query( $q );
 			$elapsed = microtime( true ) - $start;
-			$blclog->debug( $q );
-			$blclog->log( sprintf( '...... %d rows deleted in %.3f seconds', $wpdb->rows_affected, $elapsed ) );
+			$blclog->log( sprintf( '...... %d rows deleted in %.3f seconds', $rows_removed, $elapsed ) );
 
-			// //Delete records where the post status is not one of the enabled statuses.
-			// $blclog->log( '...... Deleting synch records for posts that have a disallowed status' );
-			// $start = microtime( true );
-			// $all_posts_status     = get_posts(
-			// 	array(
-			// 		'posts_per_page' => -1,
-			// 		'fields'         => 'ids',
-			// 		'post_type'      => $this->enabled_post_types,
-			// 		'post_status'    => $this->enabled_post_statuses,
-			// 	)
-			// );
-
-			// $q     = "DELETE synch.*
-			// 	  FROM
-			// 		 {$wpdb->prefix}blc_synch AS synch
-			// 	  WHERE
-			// 		 posts.post_status NOT IN (%s)";
-			// $q     = sprintf(
-			// 	$q,
-			// 	"'" . implode( "', '", $escaped_post_statuses ) . "'",
-			// 	"'" . implode( "', '", wp_list_pluck( $all_posts, 'post_status' ) ) . "'",
-			// );
-			// $wpdb->query( $q );
-			// $elapsed = microtime( true ) - $start;
-			// $blclog->debug( $q );
-			// $blclog->log( sprintf( '...... %d rows deleted in %.3f seconds', $wpdb->rows_affected, $elapsed ) );
-
-			//Remove the 'synched' flag from all posts that have been updated
-			//since the last time they were parsed/synchronized.
 			$blclog->log( '...... Marking changed posts as unsynched' );
 			$start = microtime( true );
-			$q     = "UPDATE
-					{$wpdb->prefix}blc_synch AS synch
-					JOIN {$wpdb->posts} AS posts ON (synch.container_id = posts.ID and synch.container_type=posts.post_type)
-				  SET
-					synched = 0
-				  WHERE
-					synch.last_synch < posts.post_modified";
-			$wpdb->query( $q );
-			$elapsed = microtime( true ) - $start;
-			$blclog->debug( $q );
-			$blclog->log( sprintf( '...... %d rows updated in %.3f seconds', $wpdb->rows_affected, $elapsed ) );
 
-			//Create synch. records for posts that don't have them.
+			// Remove the 'synched' flag from all posts that have been updated
+			// since the last time they were parsed/synchronized.
+			$rows_updated = $this->mark_unsynched();
+
+			$elapsed = microtime( true ) - $start;
+			$blclog->debug( $wpdb->last_query );
+			$blclog->log( sprintf( '...... %d rows updated in %.3f seconds', $rows_updated, $elapsed ) );
+
 			$blclog->log( '...... Creating synch records for new posts' );
 			$start = microtime( true );
-			$q     = "INSERT INTO {$wpdb->prefix}blc_synch(container_id, container_type, synched)
-				  SELECT posts.id, posts.post_type, 0
-				  FROM
-				    {$wpdb->posts} AS posts LEFT JOIN {$wpdb->prefix}blc_synch AS synch
-					ON (synch.container_id = posts.ID and synch.container_type=posts.post_type)
-				  WHERE
-				  	posts.post_status IN (%s)
-	 				AND posts.post_type IN (%s)
-					AND synch.container_id IS NULL";
-			$q     = sprintf(
-				$q,
-				"'" . implode( "', '", $escaped_post_statuses ) . "'",
-				"'" . implode( "', '", $escaped_post_types ) . "'"
-			);
-			$wpdb->query( $q );
+
+			// Create synch. records for posts that don't have them.
+			$records_created = $this->create_new_synch_records();
+
 			$elapsed = microtime( true ) - $start;
-			$blclog->debug( $q );
-			$blclog->log( sprintf( '...... %d rows inserted in %.3f seconds', $wpdb->rows_affected, $elapsed ) );
+			$blclog->debug( $wpdb->last_query );
+			$blclog->log( sprintf( '...... %d rows inserted in %.3f seconds', $records_created, $elapsed ) );
 		}
 
 		$this->resynch_already_done = true;
+	}
+
+	/**
+	 * Insert synchronization records for all posts with an enabled type and status.
+	 * Used during a forced full resynch.
+	 *
+	 * @return int Number of rows affected.
+	 */
+	public function create_all_synch_records() {
+		global $wpdb;
+
+		$status_placeholders = implode( ', ', array_fill( 0, count( $this->enabled_post_statuses ), '%s' ) );
+		$type_placeholders   = implode( ', ', array_fill( 0, count( $this->enabled_post_types ), '%s' ) );
+
+		$q = $wpdb->prepare(
+			"INSERT INTO {$wpdb->prefix}blc_synch(container_id, container_type, synched)
+			  SELECT posts.id, posts.post_type, 0
+			  FROM {$wpdb->posts} AS posts
+			  WHERE posts.post_status IN ({$status_placeholders})
+			    AND posts.post_type   IN ({$type_placeholders})",
+			array_merge(
+				$this->enabled_post_statuses,
+				$this->enabled_post_types
+			)
+		);
+
+		$wpdb->query( $q );
+
+		return $wpdb->rows_affected;
+	}
+
+	/**
+	 * Insert synchronization records for posts that do not yet have one.
+	 * Used during an incremental resynch.
+	 *
+	 * @return int Number of rows affected.
+	 */
+	public function create_new_synch_records() {
+		global $wpdb;
+
+		$status_placeholders = implode( ', ', array_fill( 0, count( $this->enabled_post_statuses ), '%s' ) );
+		$type_placeholders   = implode( ', ', array_fill( 0, count( $this->enabled_post_types ), '%s' ) );
+
+		$q = $wpdb->prepare(
+			"INSERT INTO {$wpdb->prefix}blc_synch(container_id, container_type, synched)
+			  SELECT posts.id, posts.post_type, 0
+			  FROM {$wpdb->posts} AS posts
+			    LEFT JOIN {$wpdb->prefix}blc_synch AS synch
+			           ON synch.container_id   = posts.ID
+			          AND synch.container_type = posts.post_type
+			  WHERE posts.post_status IN ({$status_placeholders})
+			    AND posts.post_type   IN ({$type_placeholders})
+			    AND synch.container_id IS NULL",
+			array_merge(
+				$this->enabled_post_statuses,
+				$this->enabled_post_types
+			)
+		);
+
+		$wpdb->query( $q );
+
+		return $wpdb->rows_affected;
+	}
+
+	/**
+	 * Delete synchronization records for posts that no longer exist or don't have enabled post status.
+	 *
+	 * @return int Number of rows affected.
+	 */
+	public function cleanup_synch_records() {
+		/**
+		 * Note: The query below is a bit complex, but it's optimized for performance. It deletes all synch. records that don't have
+		 * a corresponding post with an enabled post type and status in one go, using a single query.
+		 *
+		 * @var wpdb $wpdb
+		 */
+		global $wpdb;
+		global $blclog;
+
+		if ( empty( $this->enabled_post_types ) ) {
+			return 0;
+		}
+
+		$type_placeholders   = implode( ', ', array_fill( 0, count( $this->enabled_post_types ), '%s' ) );
+		$status_placeholders = implode( ', ', array_fill( 0, count( $this->enabled_post_statuses ), '%s' ) );
+
+		// Post types appear twice (post_type column and container_type column), so merge accordingly.
+		$q = $wpdb->prepare(
+			"DELETE synch.*
+			      FROM {$wpdb->prefix}blc_synch AS synch
+			      LEFT JOIN {$wpdb->posts} AS posts
+			             ON posts.ID          = synch.container_id
+			            AND posts.post_type   IN ({$type_placeholders})
+			            AND posts.post_status IN ({$status_placeholders})
+			      WHERE posts.ID IS NULL
+			        AND synch.container_type IN ({$type_placeholders})",
+			array_merge(
+				$this->enabled_post_types,
+				$this->enabled_post_statuses,
+				$this->enabled_post_types
+			)
+		);
+
+		$wpdb->query( $q );
+
+		return $wpdb->rows_affected;
+	}
+
+	/**
+	 * Mark posts that have been modified since the last synch. as unsynched.
+	 *
+	 * @return int Number of posts marked as unsynched.
+	 */
+	public function mark_unsynched() {
+		/**
+		 * Note: The query below is a bit complex, but it's optimized for performance. It marks all posts that have been modified since
+		 * the last synch. as unsynched in one go, using a single query.
+		 */
+		global $wpdb;
+		$q = "UPDATE
+				{$wpdb->prefix}blc_synch AS synch
+				JOIN {$wpdb->posts} AS posts ON (synch.container_id = posts.ID and synch.container_type=posts.post_type)
+					SET synched = 0
+				WHERE
+					synch.last_synch < posts.post_modified";
+		$wpdb->query( $q );
+
+		return $wpdb->rows_affected;
 	}
 
 	/**
@@ -447,7 +511,7 @@ class blcPostTypeOverlord {
 	 * @return void
 	 */
 	function hook_wp_head() {
-		echo '<style>',$this->plugin_conf->options['broken_link_css'],'</style>';
+		echo '<style>', blc_sanitize_custom_css( $this->plugin_conf->options['broken_link_css'] ), '</style>';
 	}
 }
 
@@ -466,6 +530,24 @@ class blcAnyPostContainer extends blcContainer {
 	var $default_field = 'post_content';
 
 	public $updating_urls = null;
+
+	/**
+	 * Only trust posts whose author can write posts, and so could use shortcodes
+	 * in them anyway.
+	 *
+	 * Post type alone is not enough: forum topics and replies, and posts made by
+	 * front-end submission forms, can be written by subscribers or visitors.
+	 *
+	 * @return bool
+	 */
+	public function allows_url_shortcodes() {
+		$post = $this->get_wrapped_object();
+		if ( ! $post || empty( $post->post_author ) ) {
+			return false;
+		}
+
+		return user_can( (int) $post->post_author, 'edit_posts' );
+	}
 
 	/**
 	 * Get action links for this post.
@@ -498,7 +580,13 @@ class blcAnyPostContainer extends blcContainer {
 			);
 
 			//Trash/Delete link
-			if ( current_user_can( $post_type_object->cap->delete_post, $this->container_id ) ) {
+			//Note: core's get_delete_post_link() has no special-case handling for
+			//Site Editor post types (unlike get_edit_post_link()), so calling it for
+			//them throws an ArgumentCountError. They're deleted via the Site Editor,
+			//not this legacy link, so we simply omit the action for them.
+			if ( current_user_can( $post_type_object->cap->delete_post, $this->container_id )
+				&& ! $this->is_site_editor_post_type( $post->post_type )
+			) {
 				if ( $this->can_be_trashed() ) {
 					$actions['trash'] = sprintf(
 						"<span class='trash'><a class='submitdelete' title='%s' href='%s'>%s</a>",
@@ -518,6 +606,7 @@ class blcAnyPostContainer extends blcContainer {
 		}
 
 		//View/Preview link
+		// Not escaped here: both uses below pass it through esc_attr().
 		$title = get_the_title( $this->container_id );
 		if ( in_array( $post->post_status, array( 'pending', 'draft' ) ) ) {
 			if ( current_user_can( $post_type_object->cap->edit_post, $this->container_id ) ) {
@@ -552,16 +641,16 @@ class blcAnyPostContainer extends blcContainer {
 		if ( 'email' === $context ) {
 			$source = sprintf(
 				$source,
-				get_the_permalink( $this->container_id ),
+				esc_url( get_the_permalink( $this->container_id ) ),
 				esc_attr( __( 'View this item' ) ),
-				get_the_title( $this->container_id )
+				esc_html( get_the_title( $this->container_id ) )
 			);
 		} else {
 			$source = sprintf(
 				$source,
-				$this->get_edit_url(),
+				esc_url( $this->get_edit_url() ),
 				esc_attr( __( 'Edit this item' ) ),
-				get_the_title( $this->container_id )
+				esc_html( get_the_title( $this->container_id ) )
 			);
 		}
 
@@ -596,16 +685,20 @@ class blcAnyPostContainer extends blcContainer {
 			return '';
 		}
 
-		if ( 'wp_template' === $post->post_type || 'wp_template_part' === $post->post_type ) {
-			$slug = urlencode( get_stylesheet() . '//' . $post->post_name );
-			$link = admin_url( sprintf( $post_type_object->_edit_link, $post->post_type, $slug ) );
-		} elseif ( 'wp_navigation' === $post->post_type ) {
-			$link = admin_url( sprintf( $post_type_object->_edit_link, (string) $post->ID ) );
-		} elseif ( $post_type_object->_edit_link ) {
-			$link = admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) );
-		}
+		if ( empty( $post_type_object->_edit_link ) ) {
+			$link = admin_url( 'post.php?post=' . $post->ID . $action ); // Fallback to default edit link.
+		} else {
+			if ( 'wp_template' === $post->post_type || 'wp_template_part' === $post->post_type ) {
+				$slug = urlencode( get_stylesheet() . '//' . $post->post_name );
+				$link = admin_url( sprintf( $post_type_object->_edit_link, $post->post_type, $slug ) );
+			} elseif ( 'wp_navigation' === $post->post_type ) {
+				$link = admin_url( sprintf( $post_type_object->_edit_link, (string) $post->ID ) );
+			} elseif ( $post_type_object->_edit_link ) {
+				$link = admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) );
+			}
 
-		$post_type_object->_edit_link = str_replace( 'postType=%s&', '', $post_type_object->_edit_link );
+			$post_type_object->_edit_link = str_replace( 'postType=%s&', '', $post_type_object->_edit_link );
+		}
 
 		return apply_filters( 'get_edit_post_link', $link, $post->ID, $context );
 	}
@@ -747,7 +840,7 @@ class blcAnyPostContainer extends blcContainer {
 					'delete_failed',
 					sprintf(
 						__( 'Failed to delete post "%1$s" (%2$d)', 'broken-link-checker' ),
-						get_the_title( $this->container_id ),
+						esc_html( get_the_title( $this->container_id ) ),
 						$this->container_id
 					)
 				);
@@ -766,7 +859,7 @@ class blcAnyPostContainer extends blcContainer {
 				'trash_disabled',
 				sprintf(
 					__( 'Can\'t move post "%1$s" (%2$d) to the trash because the trash feature is disabled', 'broken-link-checker' ),
-					get_the_title( $this->container_id ),
+					esc_html( get_the_title( $this->container_id ) ),
 					$this->container_id
 				)
 			);
@@ -786,7 +879,7 @@ class blcAnyPostContainer extends blcContainer {
 				'trash_failed',
 				sprintf(
 					__( 'Failed to move post "%1$s" (%2$d) to the trash', 'broken-link-checker' ),
-					get_the_title( $this->container_id ),
+					esc_html( get_the_title( $this->container_id ) ),
 					$this->container_id
 				)
 			);
@@ -802,6 +895,29 @@ class blcAnyPostContainer extends blcContainer {
 		$post             = $this->get_wrapped_object();
 		$post_type_object = get_post_type_object( $post->post_type );
 		return current_user_can( $post_type_object->cap->delete_post, $this->container_id );
+	}
+
+	/**
+	 * Check if the current user can edit this post.
+	 *
+	 * Uses the post type's mapped meta capability, so custom post types with
+	 * their own capabilities (and the Site Editor's wp_template / wp_template_part
+	 * types, whose edit caps map to edit_theme_options) are enforced correctly.
+	 *
+	 * @return bool
+	 */
+	function current_user_can_edit() {
+		$post = $this->get_wrapped_object();
+		if ( ! $post ) {
+			return false;
+		}
+
+		$post_type_object = get_post_type_object( $post->post_type );
+		if ( ! $post_type_object ) {
+			return false;
+		}
+
+		return current_user_can( $post_type_object->cap->edit_post, $this->container_id );
 	}
 
 	function can_be_trashed() {
@@ -889,17 +1005,8 @@ class blcAnyPostContainerManager extends blcContainerManager {
 			return blcAnyPostContainerManager::ui_bulk_trash_message( $n );
 		} else {
 			$post_type_object = get_post_type_object( $this->container_type );
-			$type_name        = '';
 
-			if ( $this->container_type == 'post' || is_null( $post_type_object ) ) {
-				$delete_msg = _n( '%d post deleted.', '%d posts deleted.', $n, 'broken-link-checker' );
-			} elseif ( $this->container_type == 'page' ) {
-				$delete_msg = _n( '%d page deleted.', '%d pages deleted.', $n, 'broken-link-checker' );
-			} else {
-				$delete_msg = _n( '%1$d "%2$s" deleted.', '%1$d "%2$s" deleted.', $n, 'broken-link-checker' );
-				$type_name  = ( $n == 1 ? $post_type_object->labels->singular_name : $post_type_object->labels->name );
-			}
-			return sprintf( $delete_msg, $n, $type_name );
+			return self::build_delete_action_message( $n, $this->container_type, $post_type_object );
 		}
 	}
 
@@ -912,16 +1019,57 @@ class blcAnyPostContainerManager extends blcContainerManager {
 	 */
 	function ui_bulk_trash_message( $n ) {
 		$post_type_object = get_post_type_object( $this->container_type );
-		$type_name        = '';
 
-		if ( $this->container_type == 'post' || is_null( $post_type_object ) ) {
-			$delete_msg = _n( '%d post moved to the Trash.', '%d posts moved to the Trash.', $n, 'broken-link-checker' );
-		} elseif ( $this->container_type == 'page' ) {
-			$delete_msg = _n( '%d page moved to the Trash.', '%d pages moved to the Trash.', $n, 'broken-link-checker' );
+		return self::build_trash_action_message( $n, $this->container_type, $post_type_object );
+	}
+
+	/**
+	 * Get the message to display after $n posts have been deleted.
+	 *
+	 * @param int               $n Number of deleted posts.
+	 * @param string            $container_type The post type of the deleted posts.
+	 * @param WP_Post_Type|null $post_type_object The post type object of the deleted posts, or null if it couldn't be retrieved.
+	 * @return string A delete confirmation message, e.g. "5 posts were moved deleted"
+	 */
+	public static function build_delete_action_message( $n, $container_type, $post_type_object ) {
+		$type_name = '';
+
+		if ( 'post' === $container_type || null === $post_type_object ) {
+			// translators: %d is the number of deleted posts.
+			$msg = _n( '%d post deleted.', '%d posts deleted.', $n, 'broken-link-checker' );
+		} elseif ( 'page' === $container_type ) {
+			// translators: %d is the number of deleted pages.
+			$msg = _n( '%d page deleted.', '%d pages deleted.', $n, 'broken-link-checker' );
 		} else {
-			$delete_msg = _n( '%1$d "%2$s" moved to the Trash.', '%1$d "%2$s" moved to the Trash.', $n, 'broken-link-checker' );
-			$type_name  = ( $n == 1 ? $post_type_object->labels->singular_name : $post_type_object->labels->name );
+			// translators: %1$d is the number of deleted items, %2$s is the item type.
+			$msg       = _n( '%1$d "%2$s" deleted.', '%1$d "%2$s" deleted.', $n, 'broken-link-checker' );
+			$type_name = ( 1 === (int) $n ? $post_type_object->labels->singular_name : $post_type_object->labels->name );
 		}
-		return sprintf( $delete_msg, $n, $type_name );
+
+		return sprintf( $msg, $n, $type_name );
+	}
+
+	/**
+	 * Get the message to display after $n posts have been moved to the Trash.
+	 *
+	 * @param int               $n Number of trashed posts.
+	 * @param string            $container_type The post type of the trashed posts.
+	 * @param WP_Post_Type|null $post_type_object The post type object of the trashed posts, or null if it couldn't be retrieved.
+	 * @return string A confirmation message, e.g. "5 posts were moved to trash"
+	 */
+	public static function build_trash_action_message( $n, $container_type, $post_type_object ) {
+		if ( 'post' === $container_type || null === $post_type_object ) {
+			// translators: %d is the number of posts moved to the Trash.
+			$msg = _n( '%d post moved to the Trash.', '%d posts moved to the Trash.', $n, 'broken-link-checker' );
+		} elseif ( 'page' === $container_type ) {
+			// translators: %d is the number of pages moved to the Trash.
+			$msg = _n( '%d page moved to the Trash.', '%d pages moved to the Trash.', $n, 'broken-link-checker' );
+		} else {
+			// translators: %1$d is the number of trashed items, %2$s is the item type.
+			$msg       = _n( '%1$d "%2$s" moved to the Trash.', '%1$d "%2$s" moved to the Trash.', $n, 'broken-link-checker' );
+			$type_name = ( 1 === (int) $n ? $post_type_object->labels->singular_name : $post_type_object->labels->name );
+		}
+
+		return sprintf( $msg, $n, $type_name );
 	}
 }

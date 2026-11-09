@@ -1,0 +1,14 @@
+.status {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+
+.ok {
+	color: #46b450;
+}
+
+.error {
+	color: #dc3232;
+}

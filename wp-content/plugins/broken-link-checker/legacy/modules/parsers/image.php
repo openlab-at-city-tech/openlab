@@ -62,8 +62,11 @@ class blcHTMLImage extends blcParser {
 				$url = trim( $url );
 				$blclog->info( 'Trimmed image URL: "' . $url . '"' );
 
-				//Allow shortcodes in image URLs.
-				$url = do_shortcode( $url );
+				//Allow shortcodes in image URLs, but only in trusted content.
+				$url = $this->expand_url_shortcodes( $url );
+				if ( '' === $url ) {
+					continue;
+				}
 
 				//Attempt to parse the URL
 				$parts = @parse_url( $url );

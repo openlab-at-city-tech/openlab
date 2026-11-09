@@ -1,3 +1,337 @@
+/* ============================================================
+   Re-Post NEW Design  (b2s-rp-new-*)
+   ============================================================ */
+
+/* Cards */
+.b2s-rp-new-card {
+    border-radius: 8px;
+    border-color: #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,.06);
+    margin-bottom: 16px;
+}
+.b2s-rp-new-card .panel-heading.b2s-rp-new-card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #f1f5f9;
+    border-radius: 8px 8px 0 0;
+    padding: 14px 16px 10px;
+}
+.b2s-rp-new-card .panel-body {
+    padding: 16px;
+}
+
+/* Card title row */
+.b2s-rp-new-card-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2px;
+}
+.b2s-rp-new-card-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.b2s-rp-new-heading {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+    line-height: 1.4;
+    color: #1e293b;
+}
+.b2s-rp-new-card-desc {
+    color: #64748b;
+    font-size: 12px;
+    margin: 4px 0 0 0;
+}
+
+/* Icons */
+.b2s-rp-new-icon-primary {
+    color: #0073aa;
+    font-size: 17px !important;
+    line-height: 1;
+    vertical-align: middle;
+}
+.b2s-rp-new-icon-muted {
+    color: #94a3b8;
+    font-size: 15px !important;
+    line-height: 1;
+    vertical-align: middle;
+}
+
+/* Active filter badge */
+.b2s-rp-new-filter-badge {
+    background-color: #e2e8f0;
+    color: #475569;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* Collapsible trigger */
+.b2s-rp-new-collapse-trigger,.b2s-rp-new-collapse-trigger-import  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 8px 12px;
+    background-color: #f8fafc;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    text-decoration: none !important;
+    margin-top: 8px;
+    transition: background-color .15s;
+}
+.b2s-rp-new-collapse-trigger:hover,
+.b2s-rp-new-collapse-trigger:focus,
+.b2s-rp-new-collapse-trigger-import:hover,
+.b2s-rp-new-collapse-trigger-import:focus {
+    background-color: #f1f5f9;
+    color: #374151;
+    text-decoration: none;
+}
+.b2s-rp-new-chevron {
+    font-size: 10px;
+    transition: transform .2s;
+}
+.b2s-rp-new-collapse-trigger[aria-expanded="true"] .b2s-rp-new-chevron,
+.b2s-rp-new-collapse-trigger-import[aria-expanded="true"] .b2s-rp-new-chevron {
+    transform: rotate(180deg);
+}
+
+/* Filter list */
+.b2s-rp-new-filter-list {
+    padding-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.b2s-rp-new-filter-rows-wrap {
+    display: contents;
+}
+.b2s-rp-new-filter-rows-wrap.b2s-info-display-none {
+    display: none;
+}
+
+.b2s-rp-new-filter-row-head {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.b2s-rp-new-filter-label {
+  flex: 0 0 280px; /* fixed label column */
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.b2s-rp-new-filter-state-select {
+  flex: 1;
+  max-width: none !important;
+}
+
+
+.b2s-rp-new-filter-state-select {
+    flex: 1;
+    height: 30px !important;
+    padding: 2px 8px !important;
+    font-size: 13px !important;
+}
+.b2s-rp-new-filter-input {
+    margin-top: 8px;
+}
+.b2s-rp-new-small-label {
+    font-size: 11px;
+    color: #64748b;
+    margin-bottom: 3px;
+    display: block;
+}
+
+/* Additional options section */
+.b2s-rp-new-extras {
+    border-top: 1px solid #e2e8f0;
+    margin-top: 12px;
+    padding-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Toggle row */
+.b2s-rp-new-toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 10px;
+    border-radius: 6px;
+    background-color: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+.b2s-rp-new-toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.b2s-rp-new-label-normal {
+    font-weight: normal;
+    margin-bottom: 0;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+/* Toggle switch */
+.b2s-rp-new-switch {
+    position: relative;
+    display: inline-block;
+    width: 38px;
+    height: 22px;
+    margin-bottom: 0;
+    flex-shrink: 0;
+}
+.b2s-rp-new-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.b2s-rp-new-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #cbd5e1;
+    border-radius: 22px;
+    transition: .2s;
+}
+.b2s-rp-new-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 3px;
+    bottom: 3px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: .2s;
+}
+.b2s-rp-new-switch input:checked + .b2s-rp-new-slider {
+    background-color: #0073aa;
+}
+.b2s-rp-new-switch input:checked + .b2s-rp-new-slider:before {
+    transform: translateX(16px);
+}
+
+/* Inline row (Every X days at TIME) */
+.b2s-rp-new-inline-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 13px;
+    margin-bottom: 8px;
+}
+.b2s-rp-new-inline-number {
+    width: 56px !important;
+    height: 28px !important;
+    padding: 2px 4px !important;
+    display: inline-block !important;
+    text-align: center;
+}
+.b2s-rp-new-time-input {
+    width: 88px !important;
+    height: 28px !important;
+    display: inline-block !important;
+}
+.b2s-rp-new-select-sm {
+    height: 28px !important;
+    padding: 2px 6px !important;
+    font-size: 13px !important;
+    display: inline-block !important;
+    width: auto !important;
+}
+.b2s-rp-new-muted {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* Weekday toggle buttons */
+.b2s-rp-new-weekday-row {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+.b2s-rp-new-weekday-btn {
+    width: 34px;
+    height: 28px;
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    background-color: #f1f5f9;
+    color: #64748b;
+    cursor: pointer;
+    transition: background-color .15s, color .15s;
+    padding: 0;
+    line-height: 1;
+}
+.b2s-rp-new-weekday-btn.b2s-rp-new-weekday-on {
+    background-color: #0073aa;
+    color: #fff;
+    border-color: #0073aa;
+}
+.b2s-rp-new-weekday-hidden {
+    display: none !important;
+}
+
+/* Schedule option boxes */
+.b2s-rp-new-sched-option {
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    transition: border-color .15s, background-color .15s;
+}
+.b2s-rp-new-sched-option:hover {
+    border-color: #94a3b8;
+}
+.b2s-rp-new-sched-active {
+    border-color: #0073aa;
+    background-color: #f0f9ff;
+}
+.b2s-rp-new-sched-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.b2s-rp-new-sched-label {
+    font-weight: 600;
+    margin-bottom: 0;
+    font-size: 13px;
+    cursor: pointer;
+}
+.b2s-rp-new-sched-body {
+    margin-top: 10px;
+}
+
+/* Best times row */
+.b2s-rp-new-best-times {
+    margin-top: 4px;
+}
+
+/* Submit button */
+.b2s-rp-new-submit-btn {
+    height: 40px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+/* ============================================================
+   End Re-Post NEW Design
+   ============================================================ */
+
 .chosen-container {
     width: 100% !important;
     margin-top: 2px;
@@ -205,6 +539,7 @@
 
 .chosen-container-multi .chosen-choices li.search-field input[type="text"] {
     margin: -1px 0px !important;
+    min-height: 30px !important;
 }
 
 .chosen-container-multi .chosen-choices {
@@ -245,18 +580,7 @@
         margin-bottom: 10px;
     }
 }
-@media(max-width: 767px) {
-    .form-inline {
-        display: none;
-    }
-    .filterHide {
-        display: none;
-    }
-    .form-inline button ,.form-inline a { 
-        width: 49%;
-        margin-bottom: 10px;
-    }
-}
+
 
 .datepicker table tr td.event {
     background-color: #ffdb99;
@@ -490,18 +814,7 @@ textarea.form-control {
         margin-bottom: 10px;
     }
 }
-@media(max-width: 767px) {
-    .form-inline {
-        display: none;
-    }
-    .filterHide {
-        display: none;
-    }
-    .form-inline button ,.form-inline a { 
-        width: 49%;
-        margin-bottom: 10px;
-    }
-}
+
 
 .img-thumbnail{
     display: block !important;
@@ -725,3 +1038,87 @@ input[type="radio"] {
     border: 2px solid #79B331 !important
 }
 
+#b2s-network-group-wrap,#b2s-network-group-wrap-twitter{
+    display: flex;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.b2s-curation-network-select-glyphicon{
+    position: absolute!important;
+    top: 31%!important;
+    left: 10px!important;
+}
+#b2s-re-post-profil-dropdown
+ {
+    height: 28px !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    box-shadow: none !important;
+    color: #475569;
+    padding: 5px 12px;
+    background: #f8fafc;
+    transition: background .15s, border-color .15s, color .15s;
+    min-height: 12px !important;
+    line-height: normal;
+    padding-left: 30px !important;
+    padding-right: 23px;
+    min-width: 100%;
+}
+
+.select-chevron{
+    right: 10px;
+    position: absolute !important;
+    top: 35% !important;
+    pointer-events: none;
+}
+
+.select-chevron {
+    font-size: 10px;
+    transition: transform 0.01s;
+}
+
+#b2s-network-group-wrap.is-open .select-chevron {
+    transform: rotate(180deg);
+}
+#b2s-network-group-wrap-twitter.is-open .select-chevron {
+    transform: rotate(180deg);
+}
+
+#b2s-re-post-profil-dropdown-twitter{
+     height: 28px !important;
+    font-size: 12px !important;
+    font-weight: 500;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 20px !important;
+    box-shadow: none !important;
+    color: #475569;
+    padding: 5px 12px;
+    background: #f8fafc;
+    transition: background .15s, border-color .15s, color .15s;
+    min-height: 12px !important;
+    line-height: normal;
+    padding-left: 30px !important;
+    padding-right: 23px;
+    min-width: 100%;
+}
+.b2s-img-network-x-icon{
+    position: absolute !important;
+    top: 24% !important;
+    left: 9px !important;
+    width:16px;
+    height:16px;
+}
+.b2s-preview-network-info-link {
+    margin-left: 5px;
+    margin-top: 7px;
+}
+.b2s-curation-network-select-wrap{
+    position: relative;
+    width: 100%;
+}
+.b2s-network-details-container-list{
+    display: flex;
+}

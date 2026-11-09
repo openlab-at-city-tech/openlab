@@ -92,9 +92,13 @@ class ATPManager {
 	 * Renders the underscore template used by TinyMCE for IGW placeholders
 	 */
 	public function print_tinymce_placeholder_template() {
+		// Only render on post/page/site-editor screens, not on every admin page. See #801.
+		if ( ! $this->is_new_or_edit_post_screen() ) {
+			return;
+		}
 		$view     = new View( 'AttachToPost/tinymce_placeholder', [], 'photocrati-attach_to_post#tinymce_placeholder' );
 		$template = $view->find_template_abspath( 'AttachToPost/tinymce_placeholder', 'photocrati-attach_to_post#tinymce_placeholder' );
-		readfile( $template ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_readfile
+		require $template;
 	}
 
 	/**
@@ -113,8 +117,8 @@ class ATPManager {
 	/**
 	 * Removes IGW preview/placeholder images from Yoast's sitemap
 	 *
-	 * @param $images
-	 * @param $post_id
+	 * @param array $images
+	 * @param int   $post_id
 	 * @return array
 	 */
 	public function remove_preview_images_from_yoast_sitemap( $images, $post_id ) {
@@ -338,16 +342,22 @@ class ATPManager {
 				'photocrati_ajax',
 				'ngg_tinymce_plugin',
 				[
-					'url'   => add_query_arg(
+					'url'      => add_query_arg(
 						'ver',
 						NGG_SCRIPT_VERSION,
 						StaticAssets::get_url( 'AttachToPost/ngg_attach_to_post_tinymce_plugin.js', 'photocrati-attach_to_post#ngg_attach_to_post_tinymce_plugin.js' )
 					),
-					'i18n'  => [
+					'i18n'     => [
 						'button_label' => \__( 'Add NextGEN Gallery', 'nggallery' ),
+						'unverified'   => \__( 'The gallery picker sent a response that could not be verified, so nothing was inserted. Reload the editor and try again, or insert the gallery with a shortcode.', 'nggallery' ),
+						'unexpected'   => \__( 'The gallery picker returned an unexpected result, so nothing was inserted. Select the gallery again, or insert it with a shortcode.', 'nggallery' ),
+						'no_target'    => \__( 'There is no editor to insert the gallery into, so nothing was inserted.', 'nggallery' ),
 					],
-					'name'  => $this->attach_to_post_tinymce_plugin,
-					'nonce' => \wp_create_nonce( 'ngg_attach_to_post_iframe' ),
+					'name'     => $this->attach_to_post_tinymce_plugin,
+					'nonce'    => \wp_create_nonce( 'ngg_attach_to_post_iframe' ),
+					// The message bridge pins the picker's origin to this URL.
+					'igw_url'  => \admin_url( '/?' . NGG_ATTACH_TO_POST_SLUG . '=1' ),
+					'atp_slug' => NGG_ATTACH_TO_POST_SLUG,
 				]
 			);
 		}
@@ -393,7 +403,7 @@ class ATPManager {
 	/**
 	 * Adds the Attach To Post TinyMCE i18n strings
 	 *
-	 * @param $mce_translation
+	 * @param array $mce_translation
 	 * @return mixed
 	 */
 	public function add_attach_to_post_tinymce_i18n( $mce_translation ) {

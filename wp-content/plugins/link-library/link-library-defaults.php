@@ -80,7 +80,6 @@ function ll_reset_options( $settings = 1, $layout = 'list', $setoptions = 'retur
 	$options['showrating']                    = false;
 	$options['showupdated']                   = false;
 	$options['show_images']                   = false;
-	$options['use_html_tags']                 = false;
 	$options['show_rss']                      = false;
 	$options['nofollow']                      = false;
 	$options['catlistwrappers']               = 1;

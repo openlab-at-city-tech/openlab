@@ -1,0 +1,87 @@
+{
+  "name": "stellarwp/shepherd",
+  "description": "A library for offloading tasks to background processes.",
+  "type": "library",
+  "license": "GPL-2.0-or-later",
+  "config": {
+    "platform": {
+      "php": "7.4"
+    },
+    "allow-plugins": {
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
+  },
+  "autoload": {
+    "psr-4": {
+      "StellarWP\\Shepherd\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StellarWP\\Shepherd\\Tests\\": "tests/_support/Helper/"
+    }
+  },
+  "authors": [
+    {
+      "name": "StellarWP",
+      "email": "dev@stellarwp.com"
+    },
+    {
+      "name": "Dimitrios Pantazis",
+      "email": "dimi@stellarwp.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.4",
+    "stellarwp/db": "^1.1",
+    "stellarwp/schema": "^3.2",
+    "woocommerce/action-scheduler": "3.9.3",
+    "psr/log": "^1.1"
+  },
+  "require-dev": {
+    "stellarwp/coding-standards": "^2.1",
+    "codeception/module-asserts": "^1.3",
+    "codeception/module-cli": "^1.1",
+    "codeception/module-db": "^1.2",
+    "codeception/module-filesystem": "^1.0",
+    "codeception/module-phpbrowser": "^1.0",
+    "codeception/module-rest": "^2.0",
+    "codeception/module-webdriver": "^1.4",
+    "codeception/util-universalframework": "^1.0",
+    "lucatume/wp-browser": "^3.5.7",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "szepeviktor/phpstan-wordpress": "^2.0",
+    "lucatume/di52": "^4.0",
+    "slope-it/clock-mock": "^0.4.0",
+    "lucatume/codeception-snapshot-assertions": "^0.4.0"
+  },
+  "scripts": {
+    "test:analysis": [
+      "phpstan analyse -c phpstan.neon.dist --memory-limit=512M"
+    ],
+    "compatibility:php-7.4": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 7.4",
+    "compatibility:php-8.0": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.0",
+    "compatibility:php-8.1": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.1",
+    "compatibility:php-8.2": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.2",
+    "compatibility:php-8.3": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.3",
+    "compatibility:php-8.4": "phpcs ./src -s --standard=PHPCompatibilityWP --runtime-set testVersion 8.4",
+    "compatibility": [
+      "@compatibility:php-7.4",
+      "@compatibility:php-8.0",
+      "@compatibility:php-8.1",
+      "@compatibility:php-8.2",
+      "@compatibility:php-8.3",
+      "@compatibility:php-8.4"
+    ]
+  },
+  "scripts-descriptions": {
+    "test:analysis": "Run static code analysis.",
+    "compatibility:php-7.4": "Run PHPCompatibilityWP compatibility checks for PHP 7.4.",
+    "compatibility:php-8.0": "Run PHPCompatibilityWP compatibility checks for PHP 8.0.",
+    "compatibility:php-8.1": "Run PHPCompatibilityWP compatibility checks for PHP 8.1.",
+    "compatibility:php-8.2": "Run PHPCompatibilityWP compatibility checks for PHP 8.2.",
+    "compatibility:php-8.3": "Run PHPCompatibilityWP compatibility checks for PHP 8.3.",
+    "compatibility:php-8.4": "Run PHPCompatibilityWP compatibility checks for PHP 8.4."
+  }
+}

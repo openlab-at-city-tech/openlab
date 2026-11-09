@@ -64,13 +64,8 @@ jQuery(
 											$.each(
 												terms,
 												function ( i ) {
-													// Backward compatibility with WordPress < 6.7.
-													// Support both old (WP < 6.7) and new (WP >= 6.7) ID formats.
-													// Old format: category-123 (WordPress < 6.7).
-													// New format: in-category-123-1 (WordPress >= 6.7).
 													const termId = pll_term_languages[ lg ][ tax ][ i ];
-													const selector = `#${tax}-${termId}, [id^="in-${tax}-${termId}-"]`;
-													$( selector ).toggle( lang === lg );
+													$( `[id^="in-${tax}-${termId}-"]` ).toggle( lang === lg );
 												}
 											);
 										}
@@ -156,7 +151,7 @@ jQuery(
 											// data is built with a call to WP_Posts_List_Table::single_row method
 											// which uses internally other WordPress methods which escape correctly values.
 											// For Polylang language columns the HTML code is correctly escaped in PLL_Admin_Filters_Columns::post_column method.
-											$( "#post-" + this.supplemental.post_id ).replaceWith( this.data ); // phpcs:ignore WordPressVIPMinimum.JS.HTMLExecutingFunctions.replaceWith
+											$( "#post-" + this.supplemental.post_id ).replaceWith( this.data );
 										}
 									}
 								);

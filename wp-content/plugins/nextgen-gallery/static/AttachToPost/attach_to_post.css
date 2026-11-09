@@ -20,29 +20,29 @@
  */
 
 @font-face {
-    font-family: 'Lato';
-    src: url('../../products/photocrati_nextgen/modules/nextgen_admin/static/Lato-Regular.ttf') format('truetype')
+	font-family: "Lato";
+	src: url("../../products/photocrati_nextgen/modules/nextgen_admin/static/Lato-Regular.ttf")
+		format("truetype");
 }
 
 /* 1. Overall IGW Window */
 
-html, body {
-    width: 100% !important;
-    height: 100% !important;
-    padding: 0 !important;
-    margin: 0 !important;
-    max-width: 100% !important;
-    font-size: 13px;
-    overflow: hidden;
+html,
+body {
+	width: 100% !important;
+	height: 100% !important;
+	padding: 0 !important;
+	margin: 0 !important;
+	max-width: 100% !important;
+	font-size: 13px;
+	overflow: hidden;
 }
 
 body {
 	position: absolute;
 	visibility: hidden;
-	-ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
-	filter: alpha(opacity=0);
-	opacity: 0.0;
-    height: 100%;
+	opacity: 0;
+	height: 100%;
 }
 
 .entity_errors {
@@ -52,7 +52,7 @@ body {
 .entity_errors ul {
 	margin-left: 30px;
 }
-.entity_errors ul li{
+.entity_errors ul li {
 	list-style-type: disc;
 }
 
@@ -64,10 +64,10 @@ body {
 	border: 0;
 	background: none;
 	height: 100%;
-    overflow: hidden;
-    padding: 0;
-    position: relative;
-    visibility: visible;
+	overflow: hidden;
+	padding: 0;
+	position: relative;
+	visibility: visible;
 }
 
 #attach_to_post_tabs.ui-tabs-hide {
@@ -79,19 +79,19 @@ body {
 
 #attach_to_post_tabs h3 {
 	text-transform: uppercase;
-    color: black;
-    margin-top: 0;
-    letter-spacing: 2px;
-    font-size: 18px;
-    font-weight: 900;
+	color: black;
+	margin-top: 0;
+	letter-spacing: 2px;
+	font-size: 18px;
+	font-weight: 900;
 }
 
 h3#choose_display {
-    margin-bottom: 24px;
+	margin-bottom: 24px;
 }
 
 #attach_to_post_tabs .main_menu_tab {
-    padding: 0;
+	padding: 0;
 	position: absolute;
 	left: 220px;
 	right: 0;
@@ -101,7 +101,7 @@ h3#choose_display {
 
 #attach_to_post_tabs.ngg_atp_ios_detected {
 	overflow-y: scroll;
-    -webkit-overflow-scrolling: touch;
+	-webkit-overflow-scrolling: touch;
 }
 
 #attach_to_post_tabs .ui-widget-header {
@@ -120,13 +120,12 @@ iframe {
 }
 
 .chrome_70_hack_frames {
-    z-index: 100000000 !important;
+	z-index: 100000000 !important;
 }
 
 .chrome_70_hack_noframes {
-    z-index: 0 !important;
+	z-index: 0 !important;
 }
-
 
 .clear {
 	clear: both;
@@ -146,12 +145,12 @@ table {
 }
 
 .select2-results {
-	font-family: 'segoe ui', Arial, sans-serif;
+	font-family: "segoe ui", Arial, sans-serif;
 	font-size: 13px;
 }
 
 .select2-container a {
-    color: #444 !important;
+	color: #444 !important;
 }
 
 /* thanks to nextgen_admin_page.css */
@@ -164,34 +163,34 @@ table {
 
 #attach_to_post_tabs .ui-tabs-icon {
 	box-sizing: border-box;
-    color: #fff;
-    font-family: "Lato", sans-serif;
-    float: none;
-    font-size: 20px;
-    font-weight: bold;
-    height: 100%;
-    letter-spacing: 1px;
-    line-height: 60px;
-    margin-bottom: 0;
-    position: fixed;
-    text-transform: uppercase;
-    width: 220px;
-    padding: 0;
+	color: #fff;
+	font-family: "Lato", sans-serif;
+	float: none;
+	font-size: 20px;
+	font-weight: bold;
+	height: 100%;
+	letter-spacing: 1px;
+	line-height: 60px;
+	margin-bottom: 0;
+	position: fixed;
+	text-transform: uppercase;
+	width: 220px;
+	padding: 0;
 }
 
 #attach_to_post_tabs img.attach_to_post_logo {
-    height: 80px;
-    padding: 50px 0 30px;
-    float: right;
-    margin-right: 26px;
+	height: 80px;
+	padding: 50px 0 30px;
+	float: right;
+	margin-right: 26px;
 }
 
 #attach_to_post_tabs .ui-tabs-nav {
-    border: none;
-    background: transparent;
-    padding: 0;
-    margin-top: 110px;
-    list-style: none;
+	border: none;
+	background: transparent;
+	padding: 0;
+	margin-top: 110px;
+	list-style: none;
 }
 
 #attach_to_post_tabs .ui-tabs-nav li {
@@ -202,36 +201,36 @@ table {
 	margin: 0;
 	width: 100%;
 	border-radius: 0;
-    box-sizing: border-box;
-    padding: 24px 30px 24px 20px;
+	box-sizing: border-box;
+	padding: 24px 30px 24px 20px;
 }
 
-#attach_to_post_tabs .ui-tabs-nav li.ui-state-focus, 
-#attach_to_post_tabs .ui-tabs-nav li.ui-state-active, 
-#attach_to_post_tabs .ui-tabs-nav li:focus, 
+#attach_to_post_tabs .ui-tabs-nav li.ui-state-focus,
+#attach_to_post_tabs .ui-tabs-nav li.ui-state-active,
+#attach_to_post_tabs .ui-tabs-nav li:focus,
 #attach_to_post_tabs .ui-tabs-nav li.active {
-    outline: none;
+	outline: none;
 }
 
 #attach_to_post_tabs .ui-tabs-nav li a {
-    display: list-item;
-    color: #555;
-    float: right;
-    font-size: 13px;
-    font-weight: 400;
-    font-family: "Lato", sans-serif;
-    letter-spacing: 1.5px;
-    line-height: 1;  
-    text-transform: uppercase;
-    padding: 0 !important;  
+	display: list-item;
+	color: #555;
+	float: right;
+	font-size: 13px;
+	font-weight: 400;
+	font-family: "Lato", sans-serif;
+	letter-spacing: 1.5px;
+	line-height: 1;
+	text-transform: uppercase;
+	padding: 0 !important;
 }
 
 #attach_to_post_tabs .ui-tabs-nav li.ui-tabs-active {
 	border-left: 6px solid #9dbd1b;
 }
 
-#attach_to_post_tabs .ui-tabs-nav li.ui-tabs-active a, 
-#attach_to_post_tabs .ui-tabs-nav li.ui-state-disabled a, 
+#attach_to_post_tabs .ui-tabs-nav li.ui-tabs-active a,
+#attach_to_post_tabs .ui-tabs-nav li.ui-state-disabled a,
 #attach_to_post_tabs .ui-tabs-nav li.ui-tabs-loading a {
 	cursor: pointer;
 }
@@ -249,8 +248,8 @@ table {
 }
 
 #displayed_tab #ngg_page_content {
-    margin: 0;
-    width: 100%;
+	margin: 0;
+	width: 100%;
 }
 
 #displayed_tab #attach_to_post_tabs .ngg_page_content_header {
@@ -258,29 +257,29 @@ table {
 }
 
 #displayed_tab #ngg_page_content .ngg_page_content_menu {
-    background: transparent;
-    border: none;
-    padding: 0 20px 10px 27px;
-    float: none;
-    height: 25px;
-    margin-top: 0;
-    width: auto;
-    position: relative;
-    top: 100px;
+	background: transparent;
+	border: none;
+	padding: 0 20px 10px 27px;
+	float: none;
+	height: 25px;
+	margin-top: 0;
+	width: auto;
+	position: relative;
+	top: 100px;
 }
 
 #displayed_tab #ngg_page_content .ngg_page_content_menu a,
 #displayed_tab #ngg_page_content .ngg_page_content_menu a:active {
-    border: none;
-    color: black;
-    display: inline;
-    font-weight: 300;
-    text-decoration: none;
-    line-height: 25px;
-    padding: 4px;
-    font-size: 12px;
-    background: transparent;
-    margin-right: 10px;
+	border: none;
+	color: black;
+	display: inline;
+	font-weight: 300;
+	text-decoration: none;
+	line-height: 25px;
+	padding: 4px;
+	font-size: 12px;
+	background: transparent;
+	margin-right: 10px;
 }
 
 #displayed_tab #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active {
@@ -290,7 +289,7 @@ table {
 }
 
 #displayed_tab #ngg_page_content .ngg_page_content_menu a:active:after {
-	display:none;
+	display: none;
 }
 
 #displayed_tab #ngg_page_content .ngg_page_content_menu a:before {
@@ -298,9 +297,9 @@ table {
 }
 
 #displayed_tab #ngg_page_content .ngg_page_content_main {
-    padding: 20px 30px 30px;
-    width: 100%;
-    box-shadow: none;
+	padding: 20px 30px 30px;
+	width: 100%;
+	box-shadow: none;
 }
 
 #displayed_tab #ngg_page_content.ngg_settings_page {
@@ -308,14 +307,14 @@ table {
 }
 
 #displayed_tab .ngg_igw_promo {
-    display: block !important;
-    padding: 15px 7px;
-    color: #666;
+	display: block !important;
+	padding: 15px 7px;
+	color: #666;
 	font-family: "Lato", sans-serif;
 	font-size: 10pt;
-    letter-spacing: .5px;
-    box-sizing: border-box;
-    height: 172px;
+	letter-spacing: 0.5px;
+	box-sizing: border-box;
+	height: 172px;
 }
 
 #displayed_tab .ngg_igw_promo p {
@@ -323,77 +322,76 @@ table {
 }
 
 #displayed_tab .ngg_igw_promo p:nth-of-type(1) {
-    margin-top: 10px;
+	margin-top: 10px;
 }
 
 #displayed_tab .ngg_igw_promo p:nth-of-type(2) {
-    margin: 20px 0;
+	margin: 20px 0;
 }
 
 #displayed_tab .ngg_igw_promo a {
-    text-decoration: none;
-    font-weight: 600;
-    background: #9ebc1b;
-    color: white;
-    padding: 10px 16px;
-    font-size: 11px;
-    text-transform: uppercase;
+	text-decoration: none;
+	font-weight: 600;
+	background: #9ebc1b;
+	color: white;
+	padding: 10px 16px;
+	font-size: 11px;
+	text-transform: uppercase;
 }
 
 #displayed_tab .ngg_igw_coupon {
-    font-size: 12px;
-    margin-top: 10px;
+	font-size: 12px;
+	margin-top: 10px;
 }
-
 
 #attach_to_post_tabs #displayed_tab #ngg_page_content .ngg_page_content_main > div.ngg_igw_video {
 	display: block !important;
-    position: absolute;
-    left: 280px;
-    top: 71px;
+	position: absolute;
+	left: 280px;
+	top: 71px;
 }
 
-#displayed_tab .ngg_igw_video_open {	
+#displayed_tab .ngg_igw_video_open {
 	background: black;
-    cursor: pointer;
-    margin: 0;
-    font-weight: 400;
-    height: 28px !important;
-    line-height: 28px !important;
-    font-size: 10px;
+	cursor: pointer;
+	margin: 0;
+	font-weight: 400;
+	height: 28px !important;
+	line-height: 28px !important;
+	font-size: 10px;
 }
 
 #displayed_tab .ngg_igw_video_inner {
 	display: none;
-	box-shadow: 0 0 10px 5px rgba(0,0,0,.2);
+	box-shadow: 0 0 10px 5px rgba(0, 0, 0, 0.2);
 	background: #fff;
 }
 
 #displayed_tab .ngg_igw_video_close {
-    width: 100%;
-    height: 50px;
-    display: block;
-    text-align: center;
-    line-height: 50px;
-    font-size: 13px;
-    font-weight: 600;
-    cursor: pointer;
-    font-family: "Lato", sans-serif;
-    background: black;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
+	width: 100%;
+	height: 50px;
+	display: block;
+	text-align: center;
+	line-height: 50px;
+	font-size: 13px;
+	font-weight: 600;
+	cursor: pointer;
+	font-family: "Lato", sans-serif;
+	background: black;
+	color: #fff;
+	text-transform: uppercase;
+	letter-spacing: 1.5px;
 }
 
 #displayed_tab .ngg_igw_video iframe {
-    width: 630px;
-    height: 350px !important;
-    min-height: auto;
-    margin-bottom: -3px;
+	width: 630px;
+	height: 350px !important;
+	min-height: auto;
+	margin-bottom: -3px;
 }
 
-#choose_display_content, 
-#display_settings_tab_content, 
+#choose_display_content,
+#display_settings_tab_content,
 #preview_tab_content {
 	margin-top: 80px;
 }
@@ -405,7 +403,7 @@ table {
 }
 
 #displayed_tab #display_tip {
-	color: rgba(42,52,61,.6);
+	color: rgba(42, 52, 61, 0.6);
 	display: block;
 	font-size: 14px;
 	width: 960px;
@@ -414,7 +412,7 @@ table {
 }
 
 #displayed_tab #slug_configuration {
-    display: none;
+	display: none;
 }
 
 #displayed_tab #source_configuration td,
@@ -425,8 +423,8 @@ table {
 }
 
 #displayed_tab #source_configuration label {
-    color: #777 !important;
-    font-size: 13px !important;
+	color: #777 !important;
+	font-size: 13px !important;
 }
 
 #attach_to_post_tabs #displayed_tab #ngg_page_content #source_configuration tr td:first-of-type {
@@ -440,22 +438,22 @@ table {
 	line-height: 20px;
 }
 
-#displayed_tab #ngg_page_content .ngg_page_content_main .select2-selection--multiple, 
+#displayed_tab #ngg_page_content .ngg_page_content_main .select2-selection--multiple,
 #displayed_tab #ngg_page_content .ngg_page_content_main .select2-selection--single {
-    height: auto;
-    line-height: 21px;
+	height: auto;
+	line-height: 21px;
 }
 
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
-    background-color: #9fbb1a;
+	background-color: #9fbb1a;
 }
 
 #displayed_tab #slug_configuration #slug_label {
-    width: 52px;
+	width: 52px;
 }
 
-#displayed_tab #slug_configuration #slug_column input[type=text] {
-    width: 498px;
+#displayed_tab #slug_configuration #slug_column input[type="text"] {
+	width: 498px;
 }
 
 #displayed_tab #display_type_selector {
@@ -464,11 +462,11 @@ table {
 
 #displayed_tab .display_type_preview {
 	float: left;
-    margin: 0 5px 5px 0;
-    border: 1px solid #ddd;
-    background: #fff;
-    width: 145px;
-    height: 170px;
+	margin: 0 5px 5px 0;
+	border: 1px solid #ddd;
+	background: #fff;
+	width: 145px;
+	height: 170px;
 }
 
 #displayed_tab .display_type_preview .image_container {
@@ -478,14 +476,14 @@ table {
 	font-size: 12px;
 	font-weight: 500;
 	padding: 8px;
-    box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 #displayed_tab .display_type_preview .image_container img {
 	margin-top: 10px;
 	margin-bottom: 10px;
-    box-sizing: border-box;
-    max-width: 100px;
+	box-sizing: border-box;
+	max-width: 100px;
 }
 
 #displayed_tab .display_type_preview .image_container p {
@@ -493,7 +491,7 @@ table {
 }
 
 .display_type_preview label > div {
-    font-size: 12px;
+	font-size: 12px;
 }
 
 #displayed_tab .select2-chosen {
@@ -502,10 +500,10 @@ table {
 
 #ngg_page_content #save_displayed_gallery.button {
 	font-weight: 700;
-    height: 50px!important;
-    line-height: 50px!important;
-    padding: 0 30px!important;
-    font-size: 13px;
+	height: 50px !important;
+	line-height: 50px !important;
+	padding: 0 30px !important;
+	font-size: 13px;
 }
 
 #save_displayed_gallery:disabled {
@@ -515,43 +513,43 @@ table {
 /* 3b. Display Tab: "Customize Display Settings" Subtab */
 
 #display_settings_tab #display_settings_form table tr td:first-child {
-    vertical-align: top;
-    text-align: right;
-    padding-right: 7px;
-    width: 180px;
+	vertical-align: top;
+	text-align: right;
+	padding-right: 7px;
+	width: 180px;
 }
 
 #display_settings_tab #display_settings_form table td {
-    text-align: left;
+	text-align: left;
 }
 
 #display_settings_tab #display_settings_form table textarea {
-    height: 60px;
+	height: 60px;
 }
 
 #display_settings_tab #display_settings_form textarea,
-#display_settings_tab #display_settings_form input[type=text],
-#display_settings_tab #display_settings_form input[type=number],
+#display_settings_tab #display_settings_form input[type="text"],
+#display_settings_tab #display_settings_form input[type="number"],
 #display_settings_tab #display_settings_form select {
-    width: 157px;
+	width: 157px;
 }
 
 #display_settings_tab #display_settings_form .ngg_slideshow_gallery_width,
 #display_settings_tab #display_settings_form .ngg_slideshow_gallery_height,
 #display_settings_tab #display_settings_form .ngg_thumbnail_dimension_width,
 #display_settings_tab #display_settings_form .ngg_thumbnail_dimension_height {
-    width: 65px !important;
+	width: 65px !important;
 }
 
 #display_settings_tab #display_settings_form .nextgen_settings_colorpicker {
-    width: 85px !important;
-    text-align: center;
+	width: 85px !important;
+	text-align: center;
 }
 
 /* 3c. Display Tab: "Sort & Exclude Images" (ie, Preview) Subtab */
 
 h3#preview_tab {
-    margin-bottom: 0;
+	margin-bottom: 0;
 }
 
 #preview_tab_content {
@@ -559,14 +557,14 @@ h3#preview_tab {
 }
 
 #preview_tab_content a {
-    text-decoration: none;
-    font-weight: 300;
+	text-decoration: none;
+	font-weight: 300;
 }
 
 #preview_tab_content .previewed_entity {
 	width: 100%;
-	border-bottom: solid 1px #E0E0D6;
-	background-color: #FAFAF0;
+	border-bottom: solid 1px #e0e0d6;
+	background-color: #fafaf0;
 }
 
 #preview_tab_content .previewed_entity .container {
@@ -574,14 +572,14 @@ h3#preview_tab {
 }
 
 #preview_tab_content .previewed_entity.header {
-	background-color: #F0F0E6;
+	background-color: #f0f0e6;
 	padding-bottom: 5px;
 	padding-top: 5px;
 }
 
 #preview_tab_content .header label {
 	font-size: 12px;
-	color: rgb(100,150,100);
+	color: rgb(100, 150, 100);
 	font-weight: 600;
 }
 
@@ -607,7 +605,7 @@ h3#preview_tab {
 	background-color: white;
 	width: 100px;
 	padding: 10px 10px 30px 10px;
-    margin: 0 5px 5px 0;
+	margin: 0 5px 5px 0;
 	border: solid 1px #eee;
 	display: block;
 	vertical-align: middle;
@@ -628,7 +626,7 @@ h3#preview_tab {
 	border: 0;
 }
 
-#preview_tab_content #entity_list  li{
+#preview_tab_content #entity_list li {
 	float: left;
 }
 
@@ -682,6 +680,12 @@ h3#preview_tab {
 	font-weight: bold;
 }
 
+#preview_tab_content .header_row.ngg_manual_order_notice {
+	padding: 6px 8px;
+	border-left: 4px solid #d63638;
+	background: #fcf0f1;
+}
+
 #preview_tab_content #entity_list li.clear {
 	float: none;
 	clear: both;
@@ -700,14 +704,14 @@ h3#preview_tab {
 
 @media (max-width: 1120px) {
 	#displayed_tab .ngg_igw_promo {
-	    position: static;
-	    width: 602px;
-	    height: 125px;
-	    max-width: 100%;
-	    margin-bottom: 10px;
+		position: static;
+		width: 602px;
+		height: 125px;
+		max-width: 100%;
+		margin-bottom: 10px;
 	}
 	#displayed_tab .ngg_igw_coupon {
-	    margin-top: 10px;
+		margin-top: 10px;
 	}
 	#attach_to_post_tabs #displayed_tab #ngg_page_content .ngg_page_content_main > div.ngg_igw_video,
 	#displayed_tab .ngg_igw_video_inner {
@@ -717,28 +721,28 @@ h3#preview_tab {
 
 @media (max-width: 800px) {
 	#attach_to_post_tabs .ui-tabs-icon {
-	    width: 100%;
-	    position: static;
-	    border-right: none;
-	    border-bottom: 3px solid #9fbb1a;
-	    text-align: center;
+		width: 100%;
+		position: static;
+		border-right: none;
+		border-bottom: 3px solid #9fbb1a;
+		text-align: center;
 		/* Also update #attach_to_post_tabs .main_menu_tab's top position when changing height */
 		/*height: 280px;*/
 		height: 150px;
 		padding: 20px;
 	}
 	#attach_to_post_tabs img.attach_to_post_logo {
-    	display: none;
+		display: none;
 	}
 
 	#attach_to_post_tabs .ui-tabs-nav {
-	    margin-top: 0;
+		margin-top: 0;
 	}
 	#attach_to_post_tabs .ui-tabs-nav li {
-	    padding: 5px;
-	    list-style: none !important;
-	    border-bottom: none;
-    	border-top: none !important;
+		padding: 5px;
+		list-style: none !important;
+		border-bottom: none;
+		border-top: none !important;
 	}
 	#attach_to_post_tabs .ui-tabs-nav li.ui-tabs-active {
 		background: transparent;
@@ -747,19 +751,19 @@ h3#preview_tab {
 		display: none;
 	}
 	#attach_to_post_tabs .ui-tabs-nav li a {
-	    float: none;
-	    padding: 0 !important;
-	    font-weight: normal;
+		float: none;
+		padding: 0 !important;
+		font-weight: normal;
 	}
 	#attach_to_post_tabs .ui-tabs-nav li a.active_tab {
 		color: #9ebc1b;
 	}
 	#attach_to_post_tabs .ui-tabs-nav li a.active_tab::before {
-		display:none;
+		display: none;
 	}
 	#attach_to_post_tabs .main_menu_tab {
-	    margin-left: 0;
-	    min-height: auto;
+		margin-left: 0;
+		min-height: auto;
 		position: absolute;
 		top: 150px;
 		right: 0;
@@ -770,48 +774,57 @@ h3#preview_tab {
 	#displayed_tab #ngg_page_content .ngg_page_content_menu {
 		padding: 5px 0 0;
 		background: none;
-    	border: none;
+		border: none;
 	}
 	#displayed_tab #ngg_page_content .ngg_page_content_menu a {
-	    display: block;
-	    width: 100%;
-	    float: left;
-	    padding: 0;
-    	text-align: center;
-    	box-sizing: border-box;
+		display: block;
+		width: 100%;
+		float: left;
+		padding: 0;
+		text-align: center;
+		box-sizing: border-box;
 	}
-	#displayed_tab #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active, 
+	#displayed_tab #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active,
 	#displayed_tab #ngg_page_content .ngg_page_content_menu a:active {
 		background: transparent;
 	}
 	#displayed_tab #ngg_page_content .ngg_page_content_menu .ngg_page_content_menu_active:after {
-		display:none;
+		display: none;
 	}
 	#displayed_tab #ngg_page_content .ngg_page_content_menu a:last-of-type {
-	    padding-bottom: 5px;
+		padding-bottom: 5px;
 	}
 	#displayed_tab #source_configuration tr,
 	#displayed_tab #slug_configuration tr {
 		margin-bottom: 24px;
 	}
 	#ngg_page_content #save_displayed_gallery.button {
-	    position: static;
-	    margin-left: 0;
-	    padding: 0;
+		position: static;
+		margin-left: 0;
+		padding: 0;
 	}
 }
 
 @media (max-width: 781px) {
-    #attach_to_post_tabs.ngg_atp_ios_detected .ui-tabs-nav li:nth-of-type(1)::after {
-        display:none;
-    }
-	#attach_to_post_tabs #displayed_tab #ngg_page_content .ngg_page_content_main table tr td {
-	    width: 100% !important;
+	#attach_to_post_tabs.ngg_atp_ios_detected .ui-tabs-nav li:nth-of-type(1)::after {
+		display: none;
 	}
-	#attach_to_post_tabs #displayed_tab #ngg_page_content .ngg_page_content_main #source_configuration {
+	#attach_to_post_tabs #displayed_tab #ngg_page_content .ngg_page_content_main table tr td {
+		width: 100% !important;
+	}
+	#attach_to_post_tabs
+		#displayed_tab
+		#ngg_page_content
+		.ngg_page_content_main
+		#source_configuration {
 		display: table !important;
 	}
-	#attach_to_post_tabs #displayed_tab #ngg_page_content .ngg_page_content_main #source_configuration tbody {
+	#attach_to_post_tabs
+		#displayed_tab
+		#ngg_page_content
+		.ngg_page_content_main
+		#source_configuration
+		tbody {
 		display: table-row-group !important;
 	}
 	#displayed_tab #ngg_page_content .responsive-menu-icon {
@@ -820,13 +833,13 @@ h3#preview_tab {
 }
 
 .ngg-marketing-popup {
-	font-family: "Lato", sans-serif;	
+	font-family: "Lato", sans-serif;
 }
 
 @media (max-width: 400px) {
 	#displayed_tab .display_type_preview {
-    	float: none;
-    	margin: 20px auto;
-    	width: 170px;
-    }
+		float: none;
+		margin: 20px auto;
+		width: 170px;
+	}
 }

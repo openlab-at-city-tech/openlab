@@ -350,6 +350,23 @@ class DLM_Media_Library {
 	 * @return void
 	 * @since 4.7.2
 	 */
+	/**
+	 * Get the attachment's real file URL, bypassing `generate_attachment_url()`
+	 * (which, while the file is still marked protected, returns the Download
+	 * link instead of the physical file URL stored in `_files`).
+	 *
+	 * @param  int  $attachment_id
+	 *
+	 * @return string
+	 */
+	private function get_raw_attachment_url( $attachment_id ) {
+		remove_filter( 'wp_get_attachment_url', array( download_monitor(), 'generate_attachment_url' ), 15 );
+		$url = wp_get_attachment_url( $attachment_id );
+		add_filter( 'wp_get_attachment_url', array( download_monitor(), 'generate_attachment_url' ), 15, 2 );
+
+		return $url;
+	}
+
 	public function protect_file() {
 		// Check if nonce is transmitted.
 		if ( ! isset( $_POST['_ajax_nonce'] ) ) {
@@ -362,11 +379,14 @@ class DLM_Media_Library {
 		// Check if nonce is correct.
 		check_ajax_referer( 'dlm_protect_file', '_ajax_nonce' );
 		// Get the data so we can create the download.
-		$file = $_POST;
+		$file          = $_POST;
+		$attachment_id = absint( $file['attachment_id'] );
+		$old_url       = $this->get_raw_attachment_url( $attachment_id );
 		// Move the file.
-		download_monitor()->service( 'file_manager' )->move_file_to_dlm_uploads( $file['attachment_id'] );
-		// Create the download or update existing one.
-		$current_url = $this->create_download( $file );
+		download_monitor()->service( 'file_manager' )->move_file_to_dlm_uploads( $attachment_id );
+		$new_url = $this->get_raw_attachment_url( $attachment_id );
+		$updated_version_ids = download_monitor()->service( 'file_manager' )->sync_version_urls( $old_url, $new_url );
+		$current_url = $this->create_download( $file, $new_url, $updated_version_ids );
 		// Send the response.
 		$data = array(
 			'url'  => $current_url,
@@ -392,25 +412,15 @@ class DLM_Media_Library {
 		// Check if nonce is correct
 		check_ajax_referer( 'dlm_protect_file', '_ajax_nonce' );
 		// Get the data so we can create the download
-		$file = $_POST;
-		// For the moment we don't know the version id or if it exists
-		$version_id = false;
-		// Now make the move to Download Monitor's protected folder dlm_uploads
-		download_monitor()->service( 'file_manager' )->move_file_back( $file['attachment_id'] );
-		// Get the currently protected download so that we can update its files
-		$known_download = get_post_meta( $file['attachment_id'], 'dlm_download', true );
-		if ( ! empty( $known_download ) ) {
-			$version_id = json_decode( $known_download, true )['version_id'];
-		}
+		$file          = $_POST;
+		$attachment_id = absint( $file['attachment_id'] );
+		$old_url       = $this->get_raw_attachment_url( $attachment_id );
+		// Now make the move out of Download Monitor's protected folder dlm_uploads
+		download_monitor()->service( 'file_manager' )->move_file_back( $attachment_id );
 		// Delete set metas when the file was protected.
-		delete_post_meta( $file['attachment_id'], 'dlm_protected_file' );
-		// Get current URL so we can update the Version files.
-		$current_url = wp_get_attachment_url( $file['attachment_id'] );
-
-		if ( $version_id ) {
-			// Update the Version meta.
-			update_post_meta( $version_id, '_files', download_monitor()->service( 'file_manager' )->json_encode_files( $current_url ) );
-		}
+		delete_post_meta( $attachment_id, 'dlm_protected_file' );
+		$current_url = wp_get_attachment_url( $attachment_id );
+		download_monitor()->service( 'file_manager' )->sync_version_urls( $old_url, $current_url );
 
 		// Send the response
 		$data = array(
@@ -422,21 +432,27 @@ class DLM_Media_Library {
 	}
 
 	/**
-	 * Create new Download and its version
+	 * Create new Download and its version, unless the file is already used by
+	 * an existing Version (linked via `dlm_download` meta or not) — in that
+	 * case, reuse it instead of creating a duplicate Download.
 	 *
-	 * @param $file
+	 * @param  array  $file
+	 * @param  string|null  $file_url  Current URL of the attachment, if already known.
+	 * @param  int[]  $already_updated_version_ids  Version IDs already synced to $file_url by sync_version_urls().
 	 *
-	 * @return string URL of the new Download
+	 * @return string URL of the (new or existing) Download
 	 * @since 4.7.2
 	 */
-	public function create_download( $file ) {
+	public function create_download( $file, $file_url = null, $already_updated_version_ids = array() ) {
 
-		// Get new URL
-		$file_url = wp_get_attachment_url( $file['attachment_id'] );
-		// Check if the file has been previously protected
-		$known_download = get_post_meta( $file['attachment_id'], 'dlm_download', true );
-		// If not, protect and add the corresponding meta, Download & Version
-		if ( empty( $known_download ) ) {
+		if ( null === $file_url ) {
+			$file_url = wp_get_attachment_url( $file['attachment_id'] );
+		}
+
+		if ( ! empty( $already_updated_version_ids ) ) {
+			$version_id  = reset( $already_updated_version_ids );
+			$download_id = wp_get_post_parent_id( $version_id );
+		} else {
 			$title          = get_the_title( $file['attachment_id'] );
 			$download_title = ! empty( $title ) ? $title : DLM_Utils::basename( $file['file'] );
 			// Create the Download object.
@@ -462,18 +478,16 @@ class DLM_Media_Library {
 			$version_id = wp_insert_post( $version );
 			// Update the Version meta.
 			update_post_meta( $version_id, '_files', download_monitor()->service( 'file_manager' )->json_encode_files( $file_url ) );
-			// Set a meta option to know what Download is using this file and what Version.
-			$attachment_meta = json_encode(
-				array(
-					'download_id' => $download_id,
-					'version_id'  => $version_id,
-				)
-			);
-			update_post_meta( $file['attachment_id'], 'dlm_download', $attachment_meta );
-		} else { // Use the current Download and Version
-			$download_id = json_decode( $known_download, true )['download_id'];
-			$version_id  = json_decode( $known_download, true )['version_id'];
 		}
+
+		// Set a meta option to know what Download is using this file and what Version.
+		$attachment_meta = json_encode(
+			array(
+				'download_id' => $download_id,
+				'version_id'  => $version_id,
+			)
+		);
+		update_post_meta( $file['attachment_id'], 'dlm_download', $attachment_meta );
 
 		// Update the Version meta.
 		update_post_meta( $version_id, '_files', download_monitor()->service( 'file_manager' )->json_encode_files( $file_url ) );
@@ -657,10 +671,12 @@ class DLM_Media_Library {
 					'user_id'       => get_current_user_id(),
 					'title'         => get_the_title( $post_id ),
 				);
+				$old_url = $this->get_raw_attachment_url( $post_id );
 				// Move the file.
 				download_monitor()->service( 'file_manager' )->move_file_to_dlm_uploads( $file['attachment_id'] );
-				// Create the Download.
-				$this->create_download( $file );
+				$new_url = $this->get_raw_attachment_url( $post_id );
+				$updated_version_ids = download_monitor()->service( 'file_manager' )->sync_version_urls( $old_url, $new_url );
+				$this->create_download( $file, $new_url, $updated_version_ids );
 			}
 		}
 		// Redirect to the media library when finished.

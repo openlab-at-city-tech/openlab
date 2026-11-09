@@ -222,7 +222,7 @@ class TRP_Language_Switcher_V2 {
             ? 'top'
             : 'bottom' );
 
-        $is_opposite = (bool) $config['oppositeLanguage'];
+        $is_opposite = (bool) ( $config['oppositeLanguage'] ?? false ) && $this->has_exactly_two_published_languages();
 
         $list = $this->get_language_items( $name_type, $is_opposite );
 
@@ -281,11 +281,34 @@ class TRP_Language_Switcher_V2 {
         /** @var bool $is_editor is Gutenberg editor the place of render */
         $is_editor = filter_var( $atts['is_editor'], FILTER_VALIDATE_BOOLEAN );
 
+        return $this->render_inline_switcher( [], $is_editor );
+    }
+
+    /**
+     * Render an inline language switcher using the V2 shortcode renderer and optional config overrides.
+     *
+     * Used by integrations that need per-instance controls while keeping the same markup, styling
+     * variables, URL generation and front-end behavior as the V2 shortcode switcher.
+     *
+     * @param array  $config_overrides Shortcode-scope config overrides.
+     * @param bool   $is_editor        Whether links should be inert for an editor preview.
+     * @param string $context          Rendering context used for integration-specific filters.
+     * @param string|null $viewport    Optional viewport override. Accepts desktop|mobile.
+     * @return string
+     */
+    public function render_inline_switcher( array $config_overrides = [], bool $is_editor = false, string $context = 'shortcode', ?string $viewport = null ): string {
+        $loader = $this->trp->get_component( 'loader' );
+        if ( apply_filters( 'trp_allow_tp_to_run', true, $loader ) === false )
+            return '';
+
         $config = ( isset( $this->config['shortcode'] ) && is_array( $this->config['shortcode'] ) )
             ? $this->config['shortcode']
             : [];
 
-        $viewport = $this->viewport;
+        if ( ! empty( $config_overrides ) )
+            $config = $this->merge_config_overrides( $config, $config_overrides );
+
+        $viewport = in_array( $viewport, [ 'desktop', 'mobile' ], true ) ? $viewport : $this->viewport;
         $layout   = $config['layoutCustomizer'][ $viewport ]
             ?? ( $config['layoutCustomizer']['desktop'] ?? [] );
 
@@ -293,9 +316,9 @@ class TRP_Language_Switcher_V2 {
         $flag_position = $layout['flagIconPosition'] ?? 'before';
         $flag_shape    = $config['flagShape']        ?? 'rect';
         $open_on_click = ! empty( $config['clickLanguage'] );
-        $flag_ratio    = ( $flag_shape === 'square' ) ? 'square' : 'rect';
+        $flag_shape    = in_array( $flag_shape, [ 'rect', 'square', 'rounded' ], true ) ? $flag_shape : 'rect';
 
-        $is_opposite = (bool) $config['oppositeLanguage'];
+        $is_opposite = (bool) ( $config['oppositeLanguage'] ?? false ) && $this->has_exactly_two_published_languages();
 
         $list = $this->get_language_items( $name_type, $is_opposite );
 
@@ -309,7 +332,7 @@ class TRP_Language_Switcher_V2 {
 
             $code         = $item['code'];
             $item['url']  = $this->url_converter->get_url_for_language( $code, $url );
-            $item['flag'] = $this->get_flag_html( $code, $flag_ratio, $item_has_label );
+            $item['flag'] = $this->get_flag_html( $code, $flag_shape, $item_has_label );
             $item['name'] = isset( $item['name'] ) && is_string( $item['name'] ) ? $item['name'] : '';
         }
         unset( $item );
@@ -325,12 +348,28 @@ class TRP_Language_Switcher_V2 {
 
         $html = apply_filters( 'trp_shortcode_ls_html_v2', $html, $list, $config, $layout );
 
+        if ( $context !== 'shortcode' ) {
+            $html = apply_filters( 'trp_' . sanitize_key( $context ) . '_ls_html_v2', $html, $list, $config, $layout );
+        }
+
         if ( ! empty( $config['enableCustomCss'] ) && ! empty( $config['customCss'] ) && is_string( $config['customCss'] ) ) {
             $css  = str_ireplace( '</style', '', $config['customCss'] );
             $html .= '<style id="trp-language-switcher-shortcode-custom-css">' . $css . '</style>';
         }
 
         return $html;
+    }
+
+    private function merge_config_overrides( array $config, array $overrides ): array {
+        foreach ( $overrides as $key => $value ) {
+            if ( is_array( $value ) && isset( $config[ $key ] ) && is_array( $config[ $key ] ) ) {
+                $config[ $key ] = $this->merge_config_overrides( $config[ $key ], $value );
+            } else {
+                $config[ $key ] = $value;
+            }
+        }
+
+        return $config;
     }
 
 
@@ -343,7 +382,7 @@ class TRP_Language_Switcher_V2 {
      * @return array
      */
     public function filter_menu_items( array $items, $menu, $args ): array {
-        if ( empty( $this->config['menu'] ) || !is_array( $this->config['menu'] ) ) {
+        if ( empty( $this->config['menu'] ) || !is_array( $this->config['menu'] ) || is_admin() ) {
             return $items;
         }
 
@@ -549,6 +588,14 @@ class TRP_Language_Switcher_V2 {
             }
         }
         return $this->current_lang;
+    }
+
+    private function has_exactly_two_published_languages(): bool {
+        $published_languages = isset( $this->settings['publish-languages'] ) && is_array( $this->settings['publish-languages'] )
+            ? array_values( array_filter( $this->settings['publish-languages'] ) )
+            : [];
+
+        return count( $published_languages ) === 2;
     }
 
     /**

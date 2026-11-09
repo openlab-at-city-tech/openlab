@@ -249,33 +249,15 @@ a.trp-submit-btn{
 #trp-add-language:focus{
     box-shadow: none;
     outline: none;
-    color: var(--trp-settings-accent-color);
     border-color: var(--trp-settings-accent-color);
     border-radius: var(--trp-settings-radius-medium);
 }
 
-/* Install and Activate */
-.trp-onboarding-install{
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1rem;
-    background: var(--trp-settings-bg-light);
-    padding: 2.5rem;
-    margin-top: 1rem;
-    border-radius: 3px;
-}
-
-.trp-onboarding-install input[type="file"],
-.trp-onboarding-install button{
-    flex-shrink: 0;
-}
-
-#trp-settings-page .trp-onboarding-content .trp-onboarding-install .trp-submit-btn{
-    padding-left: 12px;
-    padding-right: 12px;
-    min-width: auto;
+/* Keep the hover text readable even while the button is focused (e.g. right after the click that
+   shows the "go Pro" notice): without this, the focus color above would beat the hover color and
+   render blue text on the blue hover background. */
+#trp-add-language:focus:hover{
+    color: #fff;
 }
 
 .trp-ob-center{
@@ -298,30 +280,6 @@ a.trp-submit-btn{
 .trp-ob-center a:hover,
 .trp-ob-skip a:hover{
     text-decoration: underline;
-}
-
-.trp-plugins{
-    background: var(--trp-settings-bg-light);
-    border-radius: 3px;
-    overflow: hidden;
-}
-
-.trp-plugins form{
-    display: flex;
-    align-items: center;
-}
-
-.trp-plugins li{
-    padding: 0 2.5rem;
-    margin: 0;
-}
-
-.trp-plugins li:hover{
-    background: var(--trp-settings-disabled-color);
-}
-
-.trp-plugins form label{
-    flex-grow: 2;
 }
 
 /* Activate License */
@@ -777,6 +735,22 @@ a.trp-submit-btn{
     white-space: nowrap;
 }
 
+/*
+ * Keep the step dots centered on the page. In the row layout the logo (left) and the items wrapper
+ * (right) have different widths, which would push the centered nav off-centre; giving both side
+ * columns equal width makes the nav land on the header's true center. Row layout only (>= 481px) —
+ * below that the header stacks into a centered column.
+ */
+@media (min-width: 481px) {
+    #trp-settings-header .trp-settings-logo,
+    #trp-settings-header #trp-header-items-wrapper {
+        flex: 1 1 0;
+    }
+    #trp-settings-header #trp-header-items-wrapper {
+        justify-content: flex-end;
+    }
+}
+
 /* Mobile Devices - Enhanced (320px to 480px) */
 @media (max-width: 480px) {
     #trp-settings-header {
@@ -843,15 +817,10 @@ a.trp-submit-btn{
         padding: 12px 20px !important;
     }
 
-    .trp-onboarding-install,
     .trp-onboarding-license,
     .trp-ob-wrap {
         padding: 1.5rem;
         margin-bottom: 1rem;
-    }
-
-    .trp-plugins li {
-        padding: 0 1.5rem;
     }
 
     .license-field-wrap,
@@ -940,13 +909,6 @@ a.trp-submit-btn{
         align-self: flex-end;
         margin-bottom: 0.5rem;
     }
-
-    .trp-onboarding-install {
-        display: block;
-    }
-    .trp-onboarding-install input[type=file]{
-        margin-bottom: 1rem;
-    }
 }
 
 /* Small Tablets (481px to 768px) */
@@ -983,7 +945,6 @@ a.trp-submit-btn{
         min-width: 70% !important;
     }
 
-    .trp-onboarding-install,
     .trp-onboarding-license,
     .trp-ob-wrap {
         padding: 2rem;
@@ -1099,7 +1060,6 @@ a.trp-submit-btn{
         display: none;
     }
 
-    .trp-onboarding-install,
     .trp-onboarding-license {
         background: #fff !important;
         border: 1px solid #ccc !important;

@@ -108,7 +108,7 @@ class DLM_Widget_Downloads extends WP_Widget {
 				echo wp_kses_post( $before_title ) . wp_kses_post( $title ) . wp_kses_post( $after_title );
 			}
 
-			echo wp_kses_post( apply_filters( 'dlm_widget_downloads_list_start', '<ul class="dlm-downloads">' ) );
+			echo wp_kses_post( apply_filters( 'dlm_widget_downloads_list_start', '<ul class="dlm-downloads wp-block-list">' ) );
 
 			// Template handler
 			$template_handler = new DLM_Template_Handler();

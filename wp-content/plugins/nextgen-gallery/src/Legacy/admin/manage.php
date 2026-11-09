@@ -60,6 +60,14 @@ class nggManageGallery {
 	 */
 	public $search_result = false;
 
+	/**
+	 * Gallery ID => author ID, memoized for the search-results branch of
+	 * image_belongs_to_gallery(). Per-request only.
+	 *
+	 * @var array
+	 */
+	private $gallery_author_cache = [];
+
 	// initiate the manage page.
 	public function __construct() {
 
@@ -112,6 +120,19 @@ class nggManageGallery {
 
 		switch ( $this->mode ) {
 			case 'sort':
+				// nggallery_sortorder() verifies the 'ngg_updatesortorder' nonce but never
+				// resolved the owner of the gallery it was handed, so the sort screen - and its
+				// write - was reachable for any gallery id by any holder of
+				// 'NextGEN Manage gallery'. Gated only when there is gallery context, matching
+				// post_processor_images(): with no gid there is no author, so
+				// can_user_manage_gallery() would answer on the cross-author capability alone
+				// and deny every owner-only caller. Nothing is left reachable by that, because
+				// nggallery_sortorder() returns on gid 0 before its own check_admin_referer()
+				// and before the UPDATE. See issue #1093 (audit #7.7).
+				if ( (int) $this->gid && ! $this->can_user_manage_gallery() ) {
+					nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+					break;
+				}
 				include_once __DIR__ . '/manage-sort.php';
 				nggallery_sortorder( $this->gid );
 				break;
@@ -137,6 +158,13 @@ class nggManageGallery {
 
 			// TODO:Remove also Tag reference.
 			check_admin_referer( 'ngg_delpicture' );
+
+			// Verify the image belongs to the gallery named in the request.
+			if ( ! $this->image_belongs_to_gallery( $this->pid ) ) {
+				nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+				return;
+			}
+
 			$image = $nggdb->find_image( $this->pid );
 			if ( $image ) {
 				do_action( 'ngg_delete_picture', $this->pid, $image );
@@ -160,6 +188,12 @@ class nggManageGallery {
 		if ( $this->mode == 'recoverpic' ) {
 
 			check_admin_referer( 'ngg_recoverpicture' );
+
+			// Verify the image belongs to the gallery named in the request.
+			if ( ! $this->image_belongs_to_gallery( $this->pid ) ) {
+				nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+				return;
+			}
 
 			// bring back the old image.
 			nggAdmin::recover_image( $this->pid );
@@ -263,8 +297,8 @@ class nggManageGallery {
 		$caption       = \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $caption );
 		$caption       = esc_attr( $caption );
 		$date          = mysql2date( get_option( 'date_format' ), $picture->imagedate );
-		$width         = $picture->meta_data['width'];
-		$height        = $picture->meta_data['height'];
+		$width         = $picture->meta_data['width'] ?? null;
+		$height        = $picture->meta_data['height'] ?? null;
 		$pixels        = "{$width} x {$height} pixels";
 		$excluded      = checked( $picture->exclude, 1, false );
 		$exclude_label = __( 'Exclude ?', 'nggallery' );
@@ -590,7 +624,7 @@ class nggManageGallery {
 
 	public function render_gallery_author_field( $gallery ) {
 		$user   = get_userdata( $gallery->author );
-		$author = isset( $user->display_name ) ? $user->display_name : $user->user_nicename;
+		$author = isset( $user->display_name ) ? $user->display_name : ( $user->user_nicename ?? null );
 		include 'templates/manage_gallery/gallery_author_field.php';
 	}
 
@@ -649,6 +683,13 @@ class nggManageGallery {
 							$id = sanitize_text_field( wp_unslash( $id ) );
 
 							$gallery = $mapper->find( $id );
+							if ( ! $gallery ) {
+								continue;
+							}
+							// Per-row ownership: can_manage_this_gallery() requires the gallery-management capability, then accepts the gallery author or a holder of 'NextGEN Manage others gallery'.
+							if ( ! nggAdmin::can_manage_this_gallery( $gallery->author ) ) {
+								continue;
+							}
 							if ( $gallery->path == '../' || false !== strpos( $gallery->path, '/../' ) ) {
 								/* translators: %s: gallery ID */
 								nggGallery::show_message( sprintf( __( 'One or more "../" in Gallery paths could be unsafe and NextGen Gallery will not delete gallery %s automatically', 'nggallery' ), $gallery->{$gallery->id_field} ) );
@@ -690,11 +731,25 @@ class nggManageGallery {
 
 		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_ResizeImages'] ) ) {
 
-			// save the new values for the next operation.
-			$ngg->options['imgWidth']  = isset( $_POST['imgWidth'] ) ? (int) $_POST['imgWidth'] : 0;
-			$ngg->options['imgHeight'] = isset( $_POST['imgHeight'] ) ? (int) $_POST['imgHeight'] : 0;
-			// What is in the case the user has no if cap 'NextGEN Change options' ? Check feedback.
-			update_option( 'ngg_options', $ngg->options );
+			// Writing site-wide image dimensions requires the options capability (issue #966).
+			// Only the write is gated: the resize itself is authorized on NextGEN Manage
+			// gallery in ngg_ajax_operation() and re-reads the saved dimensions, so denying
+			// the write must not deny the operation to a delegated gallery manager.
+			if ( ! Security::is_allowed( 'NextGEN Change options' ) ) {
+				nggGallery::show_error(
+					sprintf(
+						/* translators: 1: image width in pixels, 2: image height in pixels. */
+						__( 'Sorry, you have no access here. Changing the site-wide image dimensions needs the "NextGEN Change options" capability, so the images will be resized at the saved dimensions instead (%1$d x %2$d).', 'nggallery' ),
+						(int) $ngg->options['imgWidth'],
+						(int) $ngg->options['imgHeight']
+					)
+				);
+			} else {
+				// save the new values for the next operation.
+				$ngg->options['imgWidth']  = isset( $_POST['imgWidth'] ) ? (int) $_POST['imgWidth'] : 0;
+				$ngg->options['imgHeight'] = isset( $_POST['imgHeight'] ) ? (int) $_POST['imgHeight'] : 0;
+				update_option( 'ngg_options', $ngg->options );
+			}
 
 			$gallery_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 			// A prefix 'gallery_' will first fetch all ids from the selected galleries.
@@ -703,17 +758,28 @@ class nggManageGallery {
 
 		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_NewThumbnail'] ) ) {
 
-			// save the new values for the next operation.
-			$settings = Settings::get_instance();
-			$settings->set( 'thumbwidth', isset( $_POST['thumbwidth'] ) ? (int) $_POST['thumbwidth'] : 0 );
-			$settings->set( 'thumbheight', isset( $_POST['thumbheight'] ) ? (int) $_POST['thumbheight'] : 0 );
-			$settings->set( 'thumbfix', isset( $_POST['thumbfix'] ) );
-			$settings->save();
-			ngg_refreshSavedSettings();
+			// Writing site-wide thumbnail dimensions requires the options capability (issue #966).
+			// Only the write is gated - see the note on TB_ResizeImages above.
+			if ( ! Security::is_allowed( 'NextGEN Change options' ) ) {
+				nggGallery::show_error(
+					sprintf(
+						/* translators: 1: thumbnail width in pixels, 2: thumbnail height in pixels. */
+						__( 'Sorry, you have no access here. Changing the site-wide thumbnail dimensions needs the "NextGEN Change options" capability, so the thumbnails will be created at the saved dimensions instead (%1$d x %2$d).', 'nggallery' ),
+						(int) Settings::get_instance()->get( 'thumbwidth' ),
+						(int) Settings::get_instance()->get( 'thumbheight' )
+					)
+				);
+			} else {
+				// save the new values for the next operation.
+				$settings = Settings::get_instance();
+				$settings->set( 'thumbwidth', isset( $_POST['thumbwidth'] ) ? (int) $_POST['thumbwidth'] : 0 );
+				$settings->set( 'thumbheight', isset( $_POST['thumbheight'] ) ? (int) $_POST['thumbheight'] : 0 );
+				$settings->set( 'thumbfix', isset( $_POST['thumbfix'] ) );
+				$settings->save();
+				ngg_refreshSavedSettings();
+			}
 
-			// What is in the case the user has no if cap 'NextGEN Change options' ? Check feedback.
 			$gallery_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
-
 			// A prefix 'gallery_' will first fetch all ids from the selected galleries.
 			nggAdmin::do_ajax_operation( 'gallery_create_thumbnail', $gallery_ids, __( 'Create new thumbnails', 'nggallery' ) );
 		}
@@ -724,90 +790,273 @@ class nggManageGallery {
 
 		check_admin_referer( 'ngg_updategallery' );
 
-		// bulk update in a single gallery.
-		if ( isset( $_POST['bulkaction'] ) && isset( $_POST['doaction'] ) ) {
+		// Every branch in this dispatcher mutates a specific gallery or its images.
+		// Gate on gallery ownership up-front so a nonce obtained from one gallery
+		// cannot be replayed against another user's gallery (see issue #963).
+		//
+		// Only when there is gallery context: $this->gid is 0 on the image-search screen,
+		// whose form (manage-images.php:151) posts no gid, so with $this->gallery null
+		// can_user_manage_gallery() answers on the cross-author capability alone and denies
+		// every owner-only caller. Gating unconditionally here would
+		// reinstate the guard f2cd6c9e removed to fix #816/#821 and make the gid == 0 branch
+		// in update_pictures() unreachable. Search-results mode is covered by that branch's
+		// capability gate plus its per-image ownership checks.
+		if ( (int) $this->gid && ! $this->can_user_manage_gallery() ) {
+			nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+			return;
+		}
+
+		// bulk update in a single gallery. The action select and the row checkboxes live in the
+		// main form, so require the Apply button that confirms them rather than any submit.
+		if ( isset( $_POST['showThickbox'] ) && isset( $_POST['bulkaction'] ) && isset( $_POST['doaction'] ) ) {
 
 			check_admin_referer( 'ngg_updategallery' );
+
+			// The checkbox form posts doaction[] as an array of image ids. sanitize_text_field()
+			// returns '' for any array (formatting.php:5633), so passing it through that made
+			// do_ajax_operation() bail on its ! is_array() guard and every branch below except
+			// delete_images silently did nothing - issue #925, and the reason the scoping below
+			// never reached them. The ids are absint-ed here instead, which is stricter.
+			//
+			// Normalise before scoping, and scope unconditionally: gating the scoping call on
+			// is_array() left a bypass, because a forged request can post doaction=<victim pid>
+			// as a scalar. is_array() was then false, scope_images_to_gallery() never ran, and
+			// the (array) cast still handed the unscoped id to every branch below - the very
+			// thing issue #965 is about.
+			$requested_ids = isset( $_POST['doaction'] )
+				? array_values( array_unique( array_filter( array_map( 'absint', (array) wp_unslash( $_POST['doaction'] ) ) ) ) )
+				: [];
+
+			// Scope image IDs to the current gallery so IDs from other galleries
+			// cannot be acted upon via a forged request (issue #965).
+			$doaction_ids = array_values( $this->scope_images_to_gallery( $requested_ids ) );
+
+			// Keep $_POST in sync for anything downstream that still reads it.
+			$_POST['doaction'] = $doaction_ids;
+
+			// Report the pruned IDs. Every other guard in this handler surfaces its refusal;
+			// without this the five direct-op branches below hand an empty (or shortened) list
+			// to do_ajax_operation(), which returns '' for an empty array (functions.php:622) -
+			// no progress bar, no message, nothing. That silent-no-op-after-an-authorization-
+			// filter shape is exactly what issues #816 and #821 were reported as.
+			// delete_images reports its own shortfall against the selected count, and no_action
+			// changes nothing, so neither needs this notice.
+			$bulkaction       = is_scalar( $_POST['bulkaction'] ) ? sanitize_key( wp_unslash( $_POST['bulkaction'] ) ) : '';
+			$doaction_skipped = count( $requested_ids ) - count( $doaction_ids );
+
+			if ( $doaction_skipped > 0 && ! in_array( $bulkaction, [ 'delete_images', 'no_action' ], true ) ) {
+				nggGallery::show_error(
+					sprintf(
+						/* translators: %s: number of images that were skipped. */
+						_n(
+							'%s selected image does not belong to this gallery and was skipped.',
+							'%s selected images do not belong to this gallery and were skipped.',
+							$doaction_skipped,
+							'nggallery'
+						),
+						number_format_i18n( $doaction_skipped )
+					)
+				);
+			}
 
 			switch ( $_POST['bulkaction'] ) {
 				case 'no_action':
 					break;
 				case 'rotate_cw':
-					nggAdmin::do_ajax_operation( 'rotate_cw', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Rotate images', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'rotate_cw', $doaction_ids, __( 'Rotate images', 'nggallery' ) );
 					break;
 				case 'rotate_ccw':
-					nggAdmin::do_ajax_operation( 'rotate_ccw', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Rotate images', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'rotate_ccw', $doaction_ids, __( 'Rotate images', 'nggallery' ) );
 					break;
 				case 'recover_images':
-					nggAdmin::do_ajax_operation( 'recover_image', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Recover from backup', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'recover_image', $doaction_ids, __( 'Recover from backup', 'nggallery' ) );
 					break;
 				case 'set_watermark':
-					nggAdmin::do_ajax_operation( 'set_watermark', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Set watermark', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'set_watermark', $doaction_ids, __( 'Set watermark', 'nggallery' ) );
 					break;
 				case 'strip_orientation_tag':
-					nggAdmin::do_ajax_operation( 'strip_orientation_tag', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Remove EXIF Orientation', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'strip_orientation_tag', $doaction_ids, __( 'Remove EXIF Orientation', 'nggallery' ) );
 					break;
 				case 'delete_images':
-					if ( is_array( $_POST['doaction'] ) ) {
-						// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash only removes slashes, values are sanitized on line 709
-						foreach ( wp_unslash( $_POST['doaction'] ) as $imageID ) {
-							$imageID = sanitize_text_field( wp_unslash( $imageID ) );
-							$image   = $nggdb->find_image( $imageID );
+					// Gated on the normalised list rather than on is_array( $_POST['doaction'] ),
+					// so this branch no longer behaves differently depending on the raw request
+					// shape (a scalar doaction used to skip it entirely).
+					if ( [] !== $requested_ids ) {
+						// Counted rather than tracked in a single $delete_pic flag: that flag held
+						// only the last destroy() result, so a partial failure still reported
+						// success, and with the gallery scoping above the list can now be empty,
+						// leaving it read while never assigned.
+						//
+						// $requested is what the user selected. Counting attempts only over the
+						// post-scoping survivors made the denominator meaningless: selecting five
+						// images where three belonged to another gallery reported "2 pictures
+						// deleted successfully." and no error at all, so a destructive bulk action
+						// silently did less than it was asked to.
+						$requested = count( $requested_ids );
+						$deleted   = 0;
+						$attempts  = 0;
+
+						foreach ( $doaction_ids as $imageID ) {
+							$image = $nggdb->find_image( $imageID );
 							if ( $image ) {
+								++$attempts;
 								do_action( 'ngg_delete_picture', $image->pid, $image );
 								if ( $ngg->options['deleteImg'] ) {
 									$storage = StorageManager::get_instance();
 									$storage->delete_image( $image->pid );
 								}
-								$delete_pic = ImageMapper::get_instance()->destroy( $image->pid );
+
+								$mapper = ImageMapper::get_instance();
+								$mapper->destroy( $image->pid );
+
+								// Success is "the row is gone", not destroy()'s return value.
+								// StorageManager::delete_image() already calls destroy() itself,
+								// and the ngg_delete_picture listeners may too, so by the time the
+								// call above runs the DELETE often affects 0 rows and returns a
+								// falsy value for an image that was in fact deleted. Trusting that
+								// return reported a failure for every successful deletion.
+								$mapper->flush_query_cache();
+								if ( ! $mapper->find( $image->pid ) ) {
+									++$deleted;
+								}
 							}
 						}
-						if ( $delete_pic ) {
-							nggGallery::show_message( __( 'Pictures deleted successfully ', 'nggallery' ) );
+
+						if ( $deleted > 0 ) {
+							nggGallery::show_message(
+								sprintf(
+									/* translators: %s: number of pictures deleted. */
+									_n( '%s picture deleted successfully.', '%s pictures deleted successfully.', $deleted, 'nggallery' ),
+									number_format_i18n( $deleted )
+								)
+							);
+						}
+
+						// Measured against $requested, so IDs dropped by the gallery scoping and
+						// IDs whose row no longer resolves are both reported instead of vanishing.
+						if ( $deleted < $requested ) {
+							nggGallery::show_error(
+								sprintf(
+									/* translators: 1: number of pictures that could not be deleted, 2: number selected. */
+									__( 'Could not delete %1$s of the %2$s selected picture(s).', 'nggallery' ),
+									number_format_i18n( $requested - $deleted ),
+									number_format_i18n( $requested )
+								)
+							);
+						}
+
+						if ( 0 === $attempts ) {
+							nggGallery::show_error( __( 'No pictures from this gallery were selected, so nothing was deleted.', 'nggallery' ) );
 						}
 					}
 					break;
 				case 'import_meta':
-					nggAdmin::do_ajax_operation( 'import_metadata', isset( $_POST['doaction'] ) ? sanitize_text_field( wp_unslash( $_POST['doaction'] ) ) : '', __( 'Import metadata', 'nggallery' ) );
+					nggAdmin::do_ajax_operation( 'import_metadata', $doaction_ids, __( 'Import metadata', 'nggallery' ) );
 					break;
 			}
 		}
 
-		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_ResizeImages'] ) ) {
+		// Scope TB_imagelist to the current gallery for all TB_* branches (issue #965).
+		$tb_pic_ids    = [];
+		$tb_has_images = false;
 
-			// save the new values for the next operation.
-			$ngg->options['imgWidth']  = isset( $_POST['imgWidth'] ) ? (int) $_POST['imgWidth'] : 0;
-			$ngg->options['imgHeight'] = isset( $_POST['imgHeight'] ) ? (int) $_POST['imgHeight'] : 0;
+		if ( isset( $_POST['TB_imagelist'] ) && isset( $_POST['TB_bulkaction'] ) ) {
+			$tb_pic_ids = array_values(
+				$this->scope_images_to_gallery(
+					array_filter( array_map( 'absint', explode( ',', sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) ) ) )
+				)
+			);
 
-			update_option( 'ngg_options', $ngg->options );
+			$_POST['TB_imagelist'] = implode( ',', $tb_pic_ids );
+			$tb_has_images         = ! empty( $tb_pic_ids );
 
+			// An empty result has to stop the TB_* branches below rather than fall through.
+			// explode( ',', '' ) returns array( '' ), which is not empty, so do_ajax_operation()
+			// would run for image 0 and wp_set_object_terms( '', ... ) would create the tags and
+			// attach them to object 0 - and then the screen would report success. The branches
+			// below consume $tb_pic_ids (already absint-ed) rather than re-exploding, for the
+			// same reason.
+			if ( ! $tb_has_images ) {
+				nggGallery::show_error( __( 'None of the selected images belong to this gallery, so no changes were made.', 'nggallery' ) );
+			}
+		}
+
+		if ( $tb_has_images && isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_ResizeImages'] ) ) {
+
+			// Writing site-wide image dimensions requires the options capability,
+			// not just the gallery-management capability (issue #966).
+			if ( ! Security::is_allowed( 'NextGEN Change options' ) ) {
+				nggGallery::show_error(
+					sprintf(
+						/* translators: 1: image width in pixels, 2: image height in pixels. */
+						__( 'Sorry, you have no access here. Changing the site-wide image dimensions needs the "NextGEN Change options" capability, so the images will be resized at the saved dimensions instead (%1$d x %2$d).', 'nggallery' ),
+						(int) $ngg->options['imgWidth'],
+						(int) $ngg->options['imgHeight']
+					)
+				);
+			} else {
+				// save the new values for the next operation.
+				$ngg->options['imgWidth']  = isset( $_POST['imgWidth'] ) ? (int) $_POST['imgWidth'] : 0;
+				$ngg->options['imgHeight'] = isset( $_POST['imgHeight'] ) ? (int) $_POST['imgHeight'] : 0;
+
+				update_option( 'ngg_options', $ngg->options );
+			}
+
+			// Only the write above is gated: ngg_ajax_operation() authorizes the resize on
+			// NextGEN Manage gallery and re-reads the saved dimensions, so a delegated gallery
+			// manager keeps bulk resize with the existing settings.
 			$pic_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 			nggAdmin::do_ajax_operation( 'resize_image', $pic_ids, __( 'Resize images', 'nggallery' ) );
 		}
 
-		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_NewThumbnail'] ) ) {
+		if ( $tb_has_images && isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_NewThumbnail'] ) ) {
 
-			// save the new values for the next operation.
-			$settings = Settings::get_instance();
-			$settings->set( 'thumbwidth', isset( $_POST['thumbwidth'] ) ? (int) $_POST['thumbwidth'] : 0 );
-			$settings->set( 'thumbheight', isset( $_POST['thumbheight'] ) ? (int) $_POST['thumbheight'] : 0 );
-			$settings->set( 'thumbfix', isset( $_POST['thumbfix'] ) );
-			$settings->save();
-			ngg_refreshSavedSettings();
+			// Writing site-wide thumbnail dimensions requires the options capability,
+			// not just the gallery-management capability (issue #966).
+			if ( ! Security::is_allowed( 'NextGEN Change options' ) ) {
+				nggGallery::show_error(
+					sprintf(
+						/* translators: 1: thumbnail width in pixels, 2: thumbnail height in pixels. */
+						__( 'Sorry, you have no access here. Changing the site-wide thumbnail dimensions needs the "NextGEN Change options" capability, so the thumbnails will be created at the saved dimensions instead (%1$d x %2$d).', 'nggallery' ),
+						(int) Settings::get_instance()->get( 'thumbwidth' ),
+						(int) Settings::get_instance()->get( 'thumbheight' )
+					)
+				);
+			} else {
+				// save the new values for the next operation.
+				$settings = Settings::get_instance();
+				$settings->set( 'thumbwidth', isset( $_POST['thumbwidth'] ) ? (int) $_POST['thumbwidth'] : 0 );
+				$settings->set( 'thumbheight', isset( $_POST['thumbheight'] ) ? (int) $_POST['thumbheight'] : 0 );
+				$settings->set( 'thumbfix', isset( $_POST['thumbfix'] ) );
+				$settings->save();
+				ngg_refreshSavedSettings();
+			}
 
+			// Only the write above is gated - see the note on TB_ResizeImages.
 			$pic_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
 			nggAdmin::do_ajax_operation( 'create_thumbnail', $pic_ids, __( 'Create new thumbnails', 'nggallery' ) );
 		}
 
-		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_SelectGallery'] ) ) {
+		if ( $tb_has_images && isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_SelectGallery'] ) ) {
 
-			$pic_ids  = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
+			$pic_ids  = $tb_pic_ids;
 			$dest_gid = isset( $_POST['dest_gid'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['dest_gid'] ) ) : 0;
 
 			switch ( isset( $_POST['TB_bulkaction'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_bulkaction'] ) ) : '' ) {
 				case 'copy_to':
 					$destination = GalleryMapper::get_instance()->find( $dest_gid );
-					$new_ids     = StorageManager::get_instance()->copy_images( $pic_ids, $dest_gid );
+
+					// $dest_gid comes from $_POST and is only cast to an int; copy_images() and
+					// move_images() never consult the destination gallery's author. Without this
+					// the source list is scoped but the target is not, so images could be placed
+					// into someone else's gallery. The null check also stops the
+					// $destination->title dereference below from warning on an unknown dest_gid.
+					if ( ! $destination || ! nggAdmin::can_manage_this_gallery( $destination->author ) ) {
+						nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+						break;
+					}
+
+					$new_ids = StorageManager::get_instance()->copy_images( $pic_ids, $dest_gid );
 
 					if ( ! empty( $new_ids ) ) {
 						$admin_url = admin_url();
@@ -826,7 +1075,15 @@ class nggManageGallery {
 					break;
 				case 'move_to':
 					$destination = GalleryMapper::get_instance()->find( $dest_gid );
-					$new_ids     = StorageManager::get_instance()->move_images( $pic_ids, $dest_gid );
+
+					// Same as copy_to above - and move_images() deletes the sources after
+					// copying, so an unauthorized destination also destroys the originals.
+					if ( ! $destination || ! nggAdmin::can_manage_this_gallery( $destination->author ) ) {
+						nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+						break;
+					}
+
+					$new_ids = StorageManager::get_instance()->move_images( $pic_ids, $dest_gid );
 
 					if ( ! empty( $new_ids ) ) {
 						$admin_url = admin_url();
@@ -845,11 +1102,11 @@ class nggManageGallery {
 			}
 		}
 
-		if ( isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_EditTags'] ) ) {
+		if ( $tb_has_images && isset( $_POST['TB_bulkaction'] ) && isset( $_POST['TB_EditTags'] ) ) {
 			// do tags update.
 
 			// get the images list.
-			$pic_ids = explode( ',', isset( $_POST['TB_imagelist'] ) ? sanitize_text_field( wp_unslash( $_POST['TB_imagelist'] ) ) : '' );
+			$pic_ids = $tb_pic_ids;
 			$taglist = explode( ',', isset( $_POST['taglist'] ) ? sanitize_text_field( wp_unslash( $_POST['taglist'] ) ) : '' );
 			$taglist = array_map( 'trim', $taglist );
 
@@ -891,7 +1148,31 @@ class nggManageGallery {
 			// Update pictures.
 			$success = false;
 
+			// nggGallery::current_user_can( 'NextGEN Edit gallery options' ) aliases to the global
+			// 'NextGEN Manage gallery' cap (lib/core.php:230) - it carries no gallery context, and
+			// $this->gallery is loaded from (int) $_GET['gid'] with no author test. So a user with
+			// 'NextGEN Manage gallery' but not 'NextGEN Manage others gallery' - the exact role
+			// split can_manage_this_gallery() exists to enforce, and the threat model this change
+			// is written against - could POST updatepictures with ?gid=<victim gallery> and rewrite
+			// another author's title, galdesc, storage path, pageid and pricelist_id. That is
+			// WPScan report #963. The sibling gallery-row writers in this same method (scanfolder,
+			// addnewpage) and update_pictures() all gate on can_user_manage_gallery() already;
+			// this was the one that did not.
+			//
+			// It also closes a hole in the previewpic containment check below: that check is
+			// guarded by `$value &&`, so previewpic=0 skipped image_belongs_to_gallery() entirely
+			// and still cleared the preview thumbnail on an unowned gallery.
+			$can_edit_gallery_fields = false;
+
 			if ( nggGallery::current_user_can( 'NextGEN Edit gallery options' ) && ! isset( $_GET['s'] ) ) {
+				$can_edit_gallery_fields = $this->can_user_manage_gallery();
+
+				if ( ! $can_edit_gallery_fields ) {
+					nggGallery::show_error( __( 'Sorry, you have no access here.', 'nggallery' ) );
+				}
+			}
+
+			if ( $can_edit_gallery_fields ) {
 				$tags   = [ '<a>', '<abbr>', '<acronym>', '<address>', '<b>', '<base>', '<basefont>', '<big>', '<blockquote>', '<br>', '<br/>', '<caption>', '<center>', '<cite>', '<code>', '<col>', '<colgroup>', '<dd>', '<del>', '<dfn>', '<dir>', '<div>', '<dl>', '<dt>', '<em>', '<fieldset>', '<font>', '<h1>', '<h2>', '<h3>', '<h4>', '<h5>', '<h6>', '<hr>', '<i>', '<img>', '<ins>', '<label>', '<legend>', '<li>', '<menu>', '<noframes>', '<noscript>', '<ol>', '<optgroup>', '<option>', '<p>', '<pre>', '<q>', '<s>', '<samp>', '<select>', '<small>', '<span>', '<strike>', '<strong>', '<sub>', '<sup>', '<table>', '<tbody>', '<td>', '<tfoot>', '<th>', '<thead>', '<tr>', '<tt>', '<u>', '<ul>' ];
 				$fields = [ 'title', 'galdesc' ];
 
@@ -912,20 +1193,54 @@ class nggManageGallery {
 				}
 
 				if ( $this->gallery ) {
-					$excludes = [ '_wpnonce', '_wp_http_referer', 'nggpage' ];
-					foreach ( $_POST as $key => $value ) {
-						// Yet another IIS hack: gallery paths can be mangled into \\wp-content\\blah\\ which causes
-						// later errors when validating the gallery path: just automatically replace \\ with / here.
-						if ( $key === 'path' ) {
-							$value = str_replace( '\\\\', '/', $value );
+					// Allowlist matches the editable inputs in templates/manage_gallery/gallery_*_field.php.
+					// Iterating $_POST blindly would let columns like author/gid/extras_post_id/slug be set.
+					$editable_gallery_fields = [ 'title', 'galdesc', 'previewpic', 'path', 'pageid', 'pricelist_id' ];
+
+					foreach ( $editable_gallery_fields as $field ) {
+						if ( ! isset( $_POST[ $field ] ) ) {
+							continue;
 						}
 
-						if ( ! in_array( $key, $excludes, true ) ) {
-							$this->gallery->$key = $value;
+						if ( $field === 'path' ) {
+							// IIS hack: gallery paths can be mangled into \\wp-content\\blah\\ which causes later errors when validating the gallery path.
+							$value = str_replace( '\\\\', '/', sanitize_text_field( wp_unslash( $_POST[ $field ] ) ) );
+						} elseif ( $field === 'previewpic' || $field === 'pageid' || $field === 'pricelist_id' ) {
+							$value = (int) wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cast to int.
+
+							// The preview <select> is built only from this gallery's images
+							// (render_gallery_preview_image_field()), so containment lived in the
+							// template and not in the save path: a forged post could point the
+							// public preview thumbnail at an image from another gallery. An
+							// unresolvable id also blocks every later album save - see issue #875.
+							//
+							// The rejection is reported rather than dropped with a bare continue.
+							// Every other guard added here surfaces a message; a silent continue
+							// left the old previewpic in place, saved the remaining fields, and
+							// still printed "Updated successfully" below - so an admin whose chosen
+							// thumbnail no longer resolves (deleted image, image moved to another
+							// gallery) got a success message and a frontend that kept showing the
+							// previous thumbnail, with nothing to explain why. That is the reported
+							// symptom of #816 and #821, and #875's stale-preview-ID state.
+							if ( $field === 'previewpic' && $value && ! $this->image_belongs_to_gallery( $value ) ) {
+								nggGallery::show_error( __( 'The selected preview image does not belong to this gallery and was not saved.', 'nggallery' ) );
+								continue;
+							}
+						} else {
+							// title/galdesc are pre-sanitized higher in this branch (sanitize_text_field + strip_tags allowlist) and written back into $_POST; read that processed value.
+							$value = wp_unslash( $_POST[ $field ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Only title/galdesc reach here, already sanitized and written back into $_POST above.
 						}
+
+						$this->gallery->$field = $value;
 					}
 
 					$mapper->save( $this->gallery );
+
+					// Mirror the REST save so the ecommerce requirement check (which reads this post meta) sees it.
+					// Only when the gallery is valid, so an invalid save does not mark the requirement complete.
+					if ( isset( $_POST['pricelist_id'] ) && ! empty( $this->gallery->extras_post_id ) && $this->gallery->is_valid() ) {
+						update_post_meta( $this->gallery->extras_post_id, 'pricelist_id', (int) wp_unslash( $_POST['pricelist_id'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cast to int.
+					}
 
 					if ( ! $this->gallery->is_valid() ) {
 						foreach ( $this->gallery->validation() as $property => $errors ) {
@@ -951,6 +1266,11 @@ class nggManageGallery {
 		// Rescan folder.
 		if ( isset( $_POST['scanfolder'] ) ) {
 
+			// Outer nonce + page-level cap is not enough; folder import targets a specific gallery row.
+			if ( ! $this->can_user_manage_gallery() ) {
+				return;
+			}
+
 			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 			$gallerypath = $wpdb->get_var(
 				$wpdb->prepare(
@@ -967,8 +1287,17 @@ class nggManageGallery {
 		// Add a new page.
 		if ( isset( $_POST['addnewpage'] ) ) {
 
-			$parent_id     = isset( $_POST['parent_id'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['parent_id'] ) ) ) : '';
-			$gallery_title = isset( $_POST['title'] ) ? esc_attr( sanitize_text_field( wp_unslash( $_POST['title'] ) ) ) : '';
+			// Branch mutates a specific gallery and publishes a page — gate on gallery ownership and on publish_pages
+			// because wp_insert_post() does not enforce capabilities when called directly.
+			if ( ! $this->can_user_manage_gallery() ) {
+				return;
+			}
+			if ( ! current_user_can( 'publish_pages' ) ) {
+				return;
+			}
+
+			$parent_id     = isset( $_POST['parent_id'] ) ? (int) wp_unslash( $_POST['parent_id'] ) : 0; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Cast to int.
+			$gallery_title = isset( $_POST['title'] ) ? sanitize_text_field( wp_unslash( $_POST['title'] ) ) : '';
 			$mapper        = GalleryMapper::get_instance();
 			$gallery       = $mapper->find( $this->gid );
 			$gallery_name  = $gallery->name;
@@ -995,22 +1324,97 @@ class nggManageGallery {
 		}
 	}
 
-	public function can_user_manage_gallery() {
-		$retval = false;
-
-		if ( $this->gallery && wp_get_current_user()->ID == $this->gallery->author ) {
-			$retval = true;
-		} elseif ( Security::is_allowed( 'nextgen_edit_gallery_unowned' ) ) {
-			$retval = true;
+	/**
+	 * Verify that the given image belongs to the gallery currently being managed.
+	 *
+	 * Prevents cross-gallery operations where an attacker passes image IDs from
+	 * another gallery in the request body while addressing their own gallery.
+	 *
+	 * In search-results mode there is no gallery context ($this->gid is falsy), so the image
+	 * is authorized against its own gallery instead - the same split update_pictures() makes.
+	 *
+	 * @param int $image_id Image ID to check.
+	 * @return bool True if the current user may operate on this image.
+	 */
+	public function image_belongs_to_gallery( $image_id ) {
+		$image = ImageMapper::get_instance()->find( (int) $image_id );
+		if ( ! $image ) {
+			return false;
 		}
 
-		return $retval;
+		if ( ! $this->gid ) {
+			// The image-search form (manage-images.php:151) posts no gid, so denying every ID
+			// here silently emptied doaction[]/TB_imagelist on that screen - the #816/#821
+			// regression class. Authorize per image against its own gallery instead.
+			if ( ! Security::is_allowed( 'nextgen_edit_gallery' ) ) {
+				return false;
+			}
+
+			$image_gallery_id = (int) $image->galleryid;
+			// Memoized because a search can return images from many galleries and
+			// scope_images_to_gallery() calls this once per ID. Bounded by the number of
+			// distinct galleries named in the request, and discarded with the request.
+			if ( ! array_key_exists( $image_gallery_id, $this->gallery_author_cache ) ) {
+				$image_gallery = GalleryMapper::get_instance()->find( $image_gallery_id );
+
+				$this->gallery_author_cache[ $image_gallery_id ] = $image_gallery ? $image_gallery->author : null;
+			}
+
+			$author = $this->gallery_author_cache[ $image_gallery_id ];
+
+			return null !== $author && nggAdmin::can_manage_this_gallery( $author );
+		}
+
+		// The galleryid comparison below only proves both sides agree, and both sides are
+		// requester-supplied: $this->gid is (int) $_GET['gid']. Without an ownership check
+		// first, mode=delpic&gid=<victim gallery>&pid=<victim image> satisfies the guard.
+		// See issue #965.
+		if ( ! $this->can_user_manage_gallery() ) {
+			return false;
+		}
+
+		return (int) $image->galleryid === (int) $this->gid;
+	}
+
+	/**
+	 * Filter an array of image IDs to only those belonging to the current gallery.
+	 *
+	 * @param array $image_ids Array of image IDs.
+	 * @return array Filtered array of IDs belonging to $this->gid.
+	 */
+	public function scope_images_to_gallery( $image_ids ) {
+		if ( ! is_array( $image_ids ) ) {
+			$image_ids = array_filter( array_map( 'absint', explode( ',', (string) $image_ids ) ) );
+		}
+		return array_filter(
+			$image_ids,
+			function ( $id ) {
+				return $this->image_belongs_to_gallery( $id );
+			}
+		);
+	}
+
+	public function can_user_manage_gallery() {
+		// No gallery in context means no author, so an id of 0 leaves the gate on the
+		// cross-author cap - as before, now with the base capability required alongside it.
+		return Security::can_manage_owned( $this->gallery ? $this->gallery->author : 0, 'nextgen_edit_gallery' );
 	}
 
 	public function update_pictures() {
 		$updated = 0;
 
-		if ( ! $this->can_user_manage_gallery() ) {
+		// $this->gid is set from (int) $_GET['gid'] in the constructor and is the authoritative
+		// gallery ID. It is 0 (falsy) in search-results mode where no single gallery is selected.
+		$current_gallery_id = (int) $this->gid;
+
+		if ( $current_gallery_id ) {
+			// Normal gallery-edit mode: verify the current user can manage this specific gallery.
+			if ( ! $this->can_user_manage_gallery() ) {
+				return $updated;
+			}
+		} elseif ( ! Security::is_allowed( 'nextgen_edit_gallery' ) ) {
+			// Search-results mode (no gallery context): require at least basic gallery-management
+			// capability as a first gate. Per-image ownership is enforced inside the loop below.
 			return $updated;
 		}
 
@@ -1020,6 +1424,11 @@ class nggManageGallery {
 			&& wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'ngg_updategallery' ) ) {
 			$image_mapper = ImageMapper::get_instance();
 
+			// Memoize gallery lookups for the search-results branch: a search can return images from many
+			// distinct galleries, and GalleryMapper::find() hits the DB on every call. Cache by galleryid
+			// so each gallery is loaded at most once per request.
+			$gallery_cache = [];
+
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- wp_unslash only removes slashes, values are sanitized on line 976 and later
 			foreach ( wp_unslash( $_POST['images'] ) as $pid => $data ) {
 				$pid = sanitize_text_field( wp_unslash( $pid ) );
@@ -1028,6 +1437,26 @@ class nggManageGallery {
 				}
 				$image = $image_mapper->find( $pid );
 				if ( $image ) {
+					if ( $current_gallery_id ) {
+						// Normal gallery-edit mode: cross-gallery IDOR guard.
+						// can_user_manage_gallery() verifies ownership of $this->gallery, but without
+						// this check a user managing gallery A could craft images[<pid>][...] entries
+						// that rewrite fields on images belonging to gallery B.
+						if ( (int) $image->galleryid !== $current_gallery_id ) {
+							continue;
+						}
+					} else {
+						// Search-results mode: no single gallery context — verify per-image that the
+						// current user can manage the gallery this image belongs to.
+						$image_gallery_id = (int) $image->galleryid;
+						if ( ! array_key_exists( $image_gallery_id, $gallery_cache ) ) {
+							$gallery_cache[ $image_gallery_id ] = GalleryMapper::get_instance()->find( $image_gallery_id );
+						}
+						$image_gallery = $gallery_cache[ $image_gallery_id ];
+						if ( ! $image_gallery || ! nggAdmin::can_manage_this_gallery( $image_gallery->author ) ) {
+							continue;
+						}
+					}
 					// Strip slashes from title/description/alttext fields.
 					if ( isset( $data['description'] ) ) {
 						$data['description'] = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $data['description'] );
@@ -1044,9 +1473,16 @@ class nggManageGallery {
 						$data['image_slug'] = null; // will cause a new slug to be generated.
 					}
 
-					// Update all fields.
-					foreach ( $data as $key => $value ) {
-						$image->$key = $value;
+					// image_slug is included because the alttext-change branch above sets it to null to trigger regeneration.
+					// pricelist_id is the per-image Pricelist select Pro injects into the Ecommerce column.
+					// Iterating $data blindly would allow columns like galleryid/meta_data/post_id/extras_post_id/imagedate to be overwritten via crafted images[<pid>][...] POST.
+					$editable_image_fields = [ 'alttext', 'description', 'title', 'exclude', 'tags', 'image_slug', 'pricelist_id' ];
+
+					foreach ( $editable_image_fields as $field ) {
+						if ( array_key_exists( $field, $data ) ) {
+							// pricelist_id: 0 = inherit gallery, -1 = none, >0 = a pricelist. Cast with (int), not absint, so -1 survives.
+							$image->$field = ( 'pricelist_id' === $field ) ? (int) $data[ $field ] : $data[ $field ];
+						}
 					}
 					if ( $image_mapper->save( $image ) ) {
 						++$updated;

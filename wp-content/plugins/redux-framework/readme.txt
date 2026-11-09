@@ -1,10 +1,10 @@
 === Redux Framework ===
 Contributors: kprovance, dovyp, redux
 Tags: admin, options, theme options, plugin options, options framework
-Requires at least: 5.0
+Requires at least: 5.3
 Requires PHP: 7.4
-Tested up to: 7.0
-Stable tag: 4.5.11
+Tested up to: 7.1
+Stable tag: 4.5.18
 License: GPL-3.0+
 License URI: http://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -121,6 +121,48 @@ NOTE: Redux is not intended to be used on its own. It requires a config file pro
 2. Activate the plugin through the 'Plugins' menu in WordPress.
 
 == Changelog ==
+
+= 4.5.18 =
+* Fixed: Authenticated (Subscriber+) stored XSS via the 'color' field validation warning.
+* Modified: Export and download filenames now include the hour and minute.
+* Release date: November 09, 2026
+
+= 4.5.17 =
+* Fixed: Authenticated (Custom+) stored XSS via CSS-emitting User-profile fields.
+* Fixed: Authenticated (Subscriber+) stored XSS via the 'multi_media' field array key.
+* Fixed: Missing authorization to authenticated (Subscriber+) allowing sensitive information disclosure via edit-tags.php, term.php, post-new.php, post.php inline redux_<opt_name> JavaScript.
+* Fixed: Authenticated (Subscriber+) stored XSS via a color scheme name.
+* Fixed: Missing authorization to authenticated (Subscriber+) allowing sensitive information disclosure via the download_options AJAX action.
+* Modified: The `custom_fonts` field type is now only supported in the main options panel.
+* Modified: Customizer sections are now only visible to users with `page_permissions`.
+* Deprecated: `Redux_Metaboxes::filter_metaboxes()` no longer performs any action.
+* Deprecated: `Redux_Helpers::localize()`.
+* Deprecated: `Redux_Extension_Taxonomy::get_values`.
+* Deprecated: `Redux_Extension_Users::get_values()`.
+* Release date: October 27, 2026
+
+= 4.5.16 =
+* Fixed: Authenticated (Subscriber+) stored XSS via the 'multi_media' field and client-supplied checkuser_id.
+* Fixed: Missing authorization to authenticated (Subscriber+) allowing sensitive information disclosure via /wp-admin/profile.php inline redux_<opt_name> JavaScript.
+* Fixed: Metabox fields registered via the 'redux/metaboxes/{opt_name}/boxes' filter failing to save.
+* Release date: October 12, 2026
+
+= 4.5.15 =
+* Fixed: Authenticated (Custom+) stored XSS via the 'user-mediaurl' media field.
+* Fixed: Missing authorization to authenticated (Subscriber+) allowing arbitrary attachment deletion via the 'attachment_id' parameter.
+* Release date: September 21, 2026
+
+= 4.5.14 =
+* Fixed: XSS vulnerabilities caused by lack of output escaping and validation.
+* Fixed: Position of save spinner
+* Fixed: #4108 - Fields hidden by `required` no longer validate.
+* Release date: September 09, 2026
+
+= 4.5.13 =
+* Fix: Reported privilege escalation vulnerability in `users` extension. Thanks, Jakub Herman.
+* Updated: "Modern" added to theme colors for WP 7.0.
+* Updated: Improved RTL.CSS. Thanks, @Mr-Alidoosti.
+* Release date: June 22, 2026
 
 = 4.5.11 =
 * Updated: Adjust to WordPress 7.0 Interface changes.

@@ -77,7 +77,7 @@ class PLL_Frontend_Auto_Translate {
 		global $wpdb;
 		$qv = &$query->query_vars;
 
-		if ( $query->is_main_query() || isset( $qv['lang'] ) || ( ! empty( $qv['post_type'] ) && ! $this->model->is_translated_post_type( $qv['post_type'] ) ) ) {
+		if ( $query->is_main_query() || isset( $qv['lang'] ) || empty( $this->curlang ) || ( ! empty( $qv['post_type'] ) && ! $this->model->is_translated_post_type( $qv['post_type'] ) ) ) {
 			return;
 		}
 
@@ -98,7 +98,8 @@ class PLL_Frontend_Auto_Translate {
 		$arr = array();
 		if ( ! empty( $qv['category_name'] ) ) {
 			foreach ( explode( ',', $qv['category_name'] ) as $slug ) {
-				$arr[] = $this->get_translated_term_by( 'slug', $slug, 'category' );
+				$translated = $this->model->term->get_by( 'slug', $slug, $this->curlang, 'category' );
+				$arr[]      = $translated ?: $slug;
 			}
 
 			$qv['category_name'] = implode( ',', $arr );
@@ -131,7 +132,8 @@ class PLL_Frontend_Auto_Translate {
 			$arr = array();
 			if ( ! empty( $qv[ $key ] ) ) {
 				foreach ( $qv[ $key ] as $slug ) {
-					$arr[] = $this->get_translated_term_by( 'slug', $slug, 'post_tag' );
+					$translated = $this->model->term->get_by( 'slug', $slug, $this->curlang, 'post_tag' );
+					$arr[]      = $translated ?: $slug;
 				}
 
 				$qv[ $key ] = $arr;
@@ -254,6 +256,10 @@ class PLL_Frontend_Auto_Translate {
 	 * @return array Translated tax queries.
 	 */
 	protected function translate_tax_query_recursive( $tax_queries ) {
+		if ( empty( $this->curlang ) ) {
+			return $tax_queries;
+		}
+
 		foreach ( $tax_queries as $key => $q ) {
 			if ( ! is_array( $q ) ) {
 				continue;
@@ -262,8 +268,9 @@ class PLL_Frontend_Auto_Translate {
 			if ( isset( $q['taxonomy'], $q['terms'] ) && $this->model->is_translated_taxonomy( $q['taxonomy'] ) ) {
 				$arr = array();
 				$field = isset( $q['field'] ) && in_array( $q['field'], array( 'slug', 'name' ) ) ? $q['field'] : 'term_id';
-				foreach ( (array) $q['terms'] as $t ) {
-					$arr[] = $this->get_translated_term_by( $field, $t, $q['taxonomy'] );
+				foreach ( (array) $q['terms'] as $term ) {
+					$translated = $this->model->term->get_by( $field, $term, $this->curlang, $q['taxonomy'] );
+					$arr[]      = $translated ?: $term;
 				}
 
 				$tax_queries[ $key ]['terms'] = $arr;
@@ -274,39 +281,6 @@ class PLL_Frontend_Auto_Translate {
 		}
 
 		return $tax_queries;
-	}
-
-	/**
-	 * Translates a term given one field.
-	 *
-	 * @since 2.3.3
-	 *
-	 * @param string     $field    Either 'slug', 'name', 'term_id', or 'term_taxonomy_id'
-	 * @param string|int $term     Search for this term value
-	 * @param string     $taxonomy Taxonomy name.
-	 * @return string|int Translated term slug, name, term_id or term_taxonomy_id
-	 */
-	protected function get_translated_term_by( $field, $term, $taxonomy ) {
-		if ( 'term_id' === $field ) {
-			if ( $tr_id = $this->get_term( $term ) ) {
-				return $tr_id;
-			}
-		} else {
-			$terms = get_terms( array( 'taxonomy' => $taxonomy, $field => $term, 'lang' => '' ) );
-
-			if ( ! empty( $terms ) && is_array( $terms ) ) {
-				$t = reset( $terms );
-				if ( ! $t instanceof WP_Term ) {
-					return $term;
-				}
-				$tr_id = $this->get_term( $t->term_id );
-
-				if ( ! is_wp_error( $tr = get_term( $tr_id, $taxonomy ) ) ) {
-					return $tr->$field;
-				}
-			}
-		}
-		return $term;
 	}
 
 	/**
@@ -329,12 +303,15 @@ class PLL_Frontend_Auto_Translate {
 			$slugs = explode( $sep, $query_var );
 		}
 
-		foreach ( $slugs as &$slug ) {
-			if ( ! is_string( $slug ) ) {
-				// We got an unexpected query var, let return it unchanged.
-				return $query_var;
+		if ( ! empty( $this->curlang ) ) {
+			foreach ( $slugs as $key => $slug ) {
+				if ( ! is_string( $slug ) ) {
+					// We got an unexpected query var, let return it unchanged.
+					return $query_var;
+				}
+				$translated     = $this->model->term->get_by( 'slug', $slug, $this->curlang, $taxonomy );
+				$slugs[ $key ] = $translated ?: $slug;
 			}
-			$slug = $this->get_translated_term_by( 'slug', $slug, $taxonomy );
 		}
 
 		if ( ! empty( $sep ) ) {

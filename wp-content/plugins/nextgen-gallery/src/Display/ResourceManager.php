@@ -175,7 +175,7 @@ class ResourceManager {
         // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotValidated, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
 		// Do not apply to NextGEN's admin page.
-		if ( is_admin() && isset( $_REQUEST['page'] ) && ! preg_match( '#^(ngg|nextgen)#', wp_unslash( $_REQUEST['page'] ) ) ) {
+		if ( is_admin() && isset( $_REQUEST['page'] ) && ! preg_match( '#^(ngg|nextgen)#', sanitize_text_field( wp_unslash( $_REQUEST['page'] ) ) ) ) {
 			$retval = false;
 		}
 

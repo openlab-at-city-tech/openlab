@@ -61,7 +61,7 @@ class B2S_QuickPost {
                 $postData['content'] = $postData['content']. "\n\n" . $this->optionalLink;
             }
            
-            if ($networkId == 7 || $networkId == 9 || ($networkId == 8 && $networkType != 0) | ($networkId == 19 && $networkType != 0) || $networkId == 39 || $networkId == 36) {
+            if ($networkId == 7 || $networkId == 9 || ($networkId == 8 && $networkType != 0) | ($networkId == 19 && $networkType != 0) || $networkId == 39 || $networkId == 36 || $networkId == 47) {
                 $postData['custom_title'] = $this->title;
             }
             if ($networkId == 15) {

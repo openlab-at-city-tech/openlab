@@ -18,6 +18,7 @@ use Imagely\NGG\Util\Router;
 use Imagely\NGG\DataMappers\Gallery as GalleryMapper;
 use Imagely\NGG\DataMappers\Album as AlbumMapper;
 use Imagely\NGG\REST\DataMappers\AddonsREST;
+use Imagely\NGG\Display\GalleryDetector;
 
 /**
  * Display Manager class for NextGEN Gallery
@@ -32,6 +33,28 @@ class DisplayManager {
 	 * @var array
 	 */
 	public static $enqueued_displayed_gallery_ids = [];
+
+	/**
+	 * The post whose content is currently being scanned for galleries.
+	 *
+	 * Set only while enqueue_frontend_resources() walks the queried posts. Anything
+	 * downstream that needs to know which post a gallery came from has to read it
+	 * from here: the loop covers every post in the query while $GLOBALS['post']
+	 * stays on the first one, so get_the_ID() names an unrelated post on any
+	 * listing page.
+	 *
+	 * @var int
+	 */
+	private static $current_content_post_id = 0;
+
+	/**
+	 * The post whose content is currently being scanned for galleries.
+	 *
+	 * @return int Post ID, or 0 outside the content scan.
+	 */
+	public static function get_current_content_post_id() {
+		return self::$current_content_post_id;
+	}
 
 	/**
 	 * Registers hooks for display manager
@@ -54,6 +77,7 @@ class DisplayManager {
 		add_action( 'wp_print_styles', [ $self, 'fix_nextgen_custom_css_order' ], PHP_INT_MAX - 1 );
 
 		add_action( 'wp_enqueue_scripts', [ $self, 'enqueue_frontend_resources' ] );
+		add_action( 'wp_enqueue_scripts', [ $self, 'maybe_enqueue_base_assets' ], 9 );
 		add_action( 'wp_enqueue_scripts', [ $self, 'maybe_enqueue_ga4_tracking' ], 20 );
 	}
 
@@ -75,13 +99,81 @@ class DisplayManager {
 			return;
 		}
 
-		$posts = $wp_query->posts;
+		$posts          = $wp_query->posts;
+		$shortcode_tags = array_keys( Shortcodes::get_instance()->get_shortcodes() );
+
 		foreach ( $posts as $post ) {
 			if ( empty( $post->post_content ) ) {
 				continue;
 			}
 
-			self::enqueue_frontend_resources_for_content( $post->post_content );
+			// A password-protected post shows its visitor a form, not its content, so
+			// its galleries must not be rendered — and their image data localized —
+			// into a listing page every visitor can read. post_password_required()
+			// honours the wp-postpass cookie, so a visitor who entered the password
+			// still gets the gallery.
+			if ( post_password_required( $post ) ) {
+				continue;
+			}
+
+			// Skip expensive regex + DataMapper processing when no registered NGG shortcode is present.
+			$has_shortcode = false;
+			foreach ( $shortcode_tags as $tag ) {
+				if ( false !== strpos( $post->post_content, '[' . $tag ) ) {
+					$has_shortcode = true;
+					break;
+				}
+			}
+			if ( ! $has_shortcode ) {
+				continue;
+			}
+
+			// Name the post being scanned for anything downstream that needs to know
+			// which post a gallery belongs to; see get_current_content_post_id().
+			self::$current_content_post_id = (int) $post->ID;
+
+			try {
+				self::enqueue_frontend_resources_for_content( $post->post_content );
+			} finally {
+				self::$current_content_post_id = 0;
+			}
+		}
+	}
+
+	/**
+	 * Forces NextGEN's base frontend scripts to load when the documented
+	 * `nextgen_load_assets_on_page` filter explicitly opts the current page in.
+	 *
+	 * Pages that actually render an NGG gallery already enqueue ngg_common /
+	 * photocrati_ajax through the shortcode-scan / render path in
+	 * enqueue_frontend_resources(). This hook covers the case that path cannot see:
+	 * assets deliberately forced on a page NextGEN does not render itself (the escape
+	 * hatch a site uses when a third party renders the gallery, or when it simply needs
+	 * NextGEN's frontend JS present).
+	 *
+	 * Gating on the explicit filter rather than GalleryDetector::has_gallery() keeps the
+	 * base handles off detector false positives (a stray shortcode-like string, a
+	 * page-builder postmeta match, a widget in an unrelated sidebar) that never render a
+	 * gallery, while still making nextgen_load_assets_on_page a reliable
+	 * "load NextGEN assets here" switch.
+	 *
+	 * @return void
+	 */
+	public function maybe_enqueue_base_assets() {
+		if ( ( defined( 'NGG_SKIP_LOAD_SCRIPTS' ) && NGG_SKIP_LOAD_SCRIPTS ) || $this->is_rest_request() ) {
+			return;
+		}
+
+		// The false default means this is true only when a callback has explicitly
+		// hooked the filter to force asset loading on the current page.
+		if ( ! apply_filters( 'nextgen_load_assets_on_page', false ) ) {
+			return;
+		}
+
+		foreach ( [ 'photocrati_ajax', 'ngg_common' ] as $handle ) {
+			if ( wp_script_is( $handle, 'registered' ) && ! wp_script_is( $handle, 'enqueued' ) ) {
+				wp_enqueue_script( $handle );
+			}
 		}
 	}
 
@@ -113,7 +205,7 @@ class DisplayManager {
 
 			// Special handling for the imagely shortcode
 			if ( 'imagely' === $this_shortcode_name ) {
-				$params = self::convert_imagely_params_for_enqueuing( $params );
+				$params = self::convert_imagely_params( $params );
 				if ( ! $params ) {
 					continue; // Skip if gallery not found or no ID provided
 				}
@@ -156,12 +248,16 @@ class DisplayManager {
 	}
 
 	/**
-	 * Converts imagely shortcode parameters to standard NGG parameters for resource enqueuing
+	 * Converts imagely shortcode parameters to standard NGG display parameters.
+	 *
+	 * The imagely shortcode addresses a gallery or album directly, where NGG's own
+	 * parameters describe a displayed gallery, so anything resolving an imagely
+	 * shortcode has to translate first.
 	 *
 	 * @param array $params The imagely shortcode parameters
 	 * @return array|false The converted parameters or false if gallery/album not found
 	 */
-	private static function convert_imagely_params_for_enqueuing( $params ) {
+	public static function convert_imagely_params( $params ) {
 		// Check if this is a gallery or album shortcode
 		$gallery_id = isset( $params['id'] ) ? intval( $params['id'] ) : 0;
 		$album_id   = isset( $params['album'] ) ? intval( $params['album'] ) : 0;
@@ -195,10 +291,13 @@ class DisplayManager {
 				}
 			}
 
-			// Ensure ecommerce is enabled when set on the gallery record
-			if ( ! empty( $gallery->is_ecommerce_enabled ) ) {
-				$display_params['is_ecommerce_enabled'] = 1;
-			}
+			// The gallery column is authoritative for a gallery addressed by its ID. eCommerce is a
+			// gallery-level column in the new admin - the display type's "Customize" tab has no
+			// eCommerce control - so write both directions. Without the explicit 0 a display type
+			// whose defaults turn eCommerce on (Pro Tile ships 'is_ecommerce_enabled' => '1') wins
+			// the merge in DisplayedGallery::merge_display_settings() and keeps the cart on a
+			// gallery whose own toggle is off (#858).
+			$display_params['is_ecommerce_enabled'] = empty( $gallery->is_ecommerce_enabled ) ? 0 : 1;
 
 			// Set the gallery source
 			$display_params['source']        = 'galleries';
@@ -322,7 +421,8 @@ class DisplayManager {
 	}
 
 	/**
-	 * Enqueues FontAwesome library
+	 * Enqueues FontAwesome subset CSS (43 icons used by NGG; ~84% smaller than all.min.css).
+	 * JS approach removed — no FA JS API used. Webfonts served from plugin static dir.
 	 *
 	 * @return void
 	 */
@@ -337,59 +437,22 @@ class DisplayManager {
 			return;
 		}
 
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-		wp_register_script(
-			'fontawesome_v4_shim',
-			StaticAssets::get_url( 'FontAwesome/js/v4-shims.min.js' ),
-			[],
-			'5.3.1'
-		);
-		if ( ! wp_script_is( 'fontawesome', 'registered' ) ) {
-			add_filter(
-				'script_loader_tag',
-				[ '\Imagely\NGG\Display\DisplayManager', 'fix_fontawesome_script_tag' ],
-				10,
-				2
-			);
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NotInFooter
-			wp_enqueue_script(
-				'fontawesome',
-				StaticAssets::get_url( 'FontAwesome/js/all.min.js' ),
-				[ 'fontawesome_v4_shim' ],
-				'5.3.1'
-			);
-		}
-
-		if ( ! wp_style_is( 'fontawesome', 'registered' ) ) {
+		if ( ! wp_style_is( 'nextgen_gallery_icons', 'registered' ) ) {
 			wp_enqueue_style(
-				'fontawesome_v4_shim_style',
-				StaticAssets::get_url( 'FontAwesome/css/v4-shims.min.css' ),
+				'nextgen_gallery_icons',
+				StaticAssets::get_url( 'FontAwesome/css/ngg-icons.min.css' ),
 				[],
 				NGG_SCRIPT_VERSION
 			);
+			// Lightbox-scoped copy under a unique family name so the Pro lightbox
+			// toolbar icons are immune to any third-party Font Awesome on the page.
 			wp_enqueue_style(
-				'fontawesome',
-				StaticAssets::get_url( 'FontAwesome/css/all.min.css' ),
-				[],
+				'nextgen_gallery_icons_scope',
+				StaticAssets::get_url( 'FontAwesome/css/ngg-icons-scope.css' ),
+				[ 'nextgen_gallery_icons' ],
 				NGG_SCRIPT_VERSION
 			);
-		}       wp_enqueue_script( 'fontawesome_v4_shim' );
-		wp_enqueue_script( 'fontawesome' );
-	}
-
-	/**
-	 * WP doesn't allow an easy way to set the defer, crossorign, or integrity attributes on our <script>
-	 *
-	 * @param string $tag The script tag HTML.
-	 * @param string $handle The script handle.
-	 * @return string Modified script tag.
-	 */
-	public static function fix_fontawesome_script_tag( $tag, $handle ) {
-		if ( 'fontawesome' !== $handle ) {
-			return $tag;
 		}
-
-		return str_replace( ' src', ' defer crossorigin="anonymous" data-auto-replace-svg="false" data-keep-original-source="false" data-search-pseudo-elements src', $tag );
 	}
 
 	/**
@@ -682,10 +745,16 @@ class DisplayManager {
 			return;
 		}
 
-		$settings         = Settings::get_instance();
-		$measurement_id   = $settings->get( 'ga4_measurement_id', '' );
-		$measurement_id   = is_string( $measurement_id ) ? trim( $measurement_id ) : '';
+		$settings       = Settings::get_instance();
+		$measurement_id = $settings->get( 'ga4_measurement_id', '' );
+		$measurement_id = is_string( $measurement_id ) ? trim( $measurement_id ) : '';
 		if ( empty( $measurement_id ) ) {
+			return;
+		}
+
+		// Gate to gallery pages; Pro Commerce hooks this filter to also include ecommerce pages
+		// (purchase event fires on the Thanks page which has no gallery shortcode).
+		if ( ! GalleryDetector::has_gallery() && ! apply_filters( 'nextgen_ga4_load_on_page', false ) ) {
 			return;
 		}
 
@@ -716,8 +785,83 @@ class DisplayManager {
 	 * @return string
 	 */
 	public function display_images( $params, $inner_content = null ) {
+		$params   = self::apply_album_descriptions_setting( $params );
 		$renderer = Renderer::get_instance();
 		return $renderer->display_images( $params, $inner_content );
+	}
+
+	/**
+	 * Applies an album's saved descriptions setting to a legacy shortcode that did not set one.
+	 *
+	 * The legacy shortcode takes its display settings from its own attributes and otherwise falls
+	 * back to the display type's global row, so an album's own toggle never reached the renderer.
+	 * Only the descriptions setting is layered here, and only underneath the shortcode attributes,
+	 * so an explicit attribute stays authoritative.
+	 *
+	 * @param array $params Shortcode parameters.
+	 * @return array
+	 */
+	private static function apply_album_descriptions_setting( $params ) {
+		if ( ! is_array( $params ) || isset( $params['enable_descriptions'] ) ) {
+			return $params;
+		}
+
+		$source = $params['src'] ?? ( $params['source'] ?? '' );
+
+		if ( ! in_array( $source, [ 'albums', 'album' ], true ) && empty( $params['albums'] ) && empty( $params['album_ids'] ) ) {
+			return $params;
+		}
+
+		// Key order mirrors the precedence in Renderer::params_to_displayed_gallery(), where 'albums'
+		// is folded into 'album_ids' and 'ids' overwrites the container ids resolved from either.
+		$ids = null;
+		foreach ( [ 'ids', 'albums', 'album_ids', 'container_ids' ] as $key ) {
+			if ( ! empty( $params[ $key ] ) ) {
+				$ids = $params[ $key ];
+				break;
+			}
+		}
+
+		if ( null === $ids ) {
+			return $params;
+		}
+
+		$ids = is_array( $ids ) ? $ids : preg_split( '/,|\|/', (string) $ids );
+		$ids = array_values( array_filter( array_map( 'trim', array_map( 'strval', $ids ) ), 'strlen' ) );
+
+		// A multi-album shortcode has no single entity whose setting should win.
+		if ( count( $ids ) !== 1 ) {
+			return $params;
+		}
+
+		$album = AlbumMapper::get_instance()->find( (int) $ids[0] );
+
+		if ( ! $album || empty( $album->display_type_settings ) || ! is_array( $album->display_type_settings ) ) {
+			return $params;
+		}
+
+		$display_type = $params['display_type'] ?? ( $params['display'] ?? '' );
+
+		if ( empty( $display_type ) ) {
+			$display_type = $album->display_type ?? '';
+		}
+
+		// Shortcodes use aliases, while stored settings are keyed by the canonical display type name.
+		if ( ControllerFactory::has_controller( $display_type ) ) {
+			$display_type = ControllerFactory::get_display_type_id( $display_type );
+		}
+
+		if ( empty( $display_type ) || empty( $album->display_type_settings[ $display_type ] ) ) {
+			return $params;
+		}
+
+		$stored = $album->display_type_settings[ $display_type ];
+
+		if ( is_array( $stored ) && array_key_exists( 'enable_descriptions', $stored ) ) {
+			$params['enable_descriptions'] = $stored['enable_descriptions'];
+		}
+
+		return $params;
 	}
 
 	/**
@@ -861,10 +1005,9 @@ class DisplayManager {
 			}
 		}
 
-		// Ensure ecommerce is enabled when set on the gallery record
-		if ( ! empty( $gallery->is_ecommerce_enabled ) ) {
-			$display_params['is_ecommerce_enabled'] = 1;
-		}
+		// The gallery column is authoritative for a gallery addressed by its ID - see the identical
+		// write in convert_imagely_params() for why the 0 has to be explicit (#858).
+		$display_params['is_ecommerce_enabled'] = empty( $gallery->is_ecommerce_enabled ) ? 0 : 1;
 
 		// Set the gallery source
 		$display_params['source']        = 'galleries';

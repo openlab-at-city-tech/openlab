@@ -116,10 +116,10 @@ class MediaRSS extends \WP_Widget {
 	/**
 	 * Gets the Media RSS link HTML.
 	 *
-	 * @param $mrss_url
-	 * @param bool     $show_icon
-	 * @param string   $title
-	 * @param string   $text
+	 * @param string $mrss_url
+	 * @param bool   $show_icon
+	 * @param string $title
+	 * @param string $text
 	 * @return string
 	 */
 	public function get_mrss_link( $mrss_url, $show_icon = true, $title = '', $text = '' ) {

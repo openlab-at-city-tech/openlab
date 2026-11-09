@@ -154,6 +154,13 @@ function nggallery_picturelist( $controller ) {
 				<?php wp_nonce_field( 'ngg_updategallery' ); ?>
 				<input type="hidden" name="nggpage" value="manage-images"/>
 
+				<?php // Enter in a text field activates the form's first submit button, so keep the primary save action first. ?>
+				<input type="submit"
+						name="updatepictures"
+						value="<?php esc_attr_e( 'Save Changes', 'nggallery' ); ?>"
+						hidden
+						style="display: none;"/>
+
 				<!-- form#updategallery continues below end of if statement -->
 
 				<!-- div.ngg_page_content_main continues below end of if statement -->
@@ -177,6 +184,13 @@ function nggallery_picturelist( $controller ) {
 
 						<?php wp_nonce_field( 'ngg_updategallery' ); ?>
 						<input type="hidden" name="nggpage" value="manage-images"/>
+
+						<?php // Enter in a text field activates the form's first submit button, so keep the primary save action first. ?>
+						<input type="submit"
+								name="updatepictures"
+								value="<?php esc_attr_e( 'Save Changes', 'nggallery' ); ?>"
+								hidden
+								style="display: none;"/>
 
 						<?php if ( nggGallery::current_user_can( 'NextGEN Edit gallery options' ) ) : ?>
 
@@ -205,7 +219,8 @@ function nggallery_picturelist( $controller ) {
 												<input type="submit"
 														class="button-primary"
 														name="scanfolder"
-														value="<?php esc_attr_e( 'Scan Folder for new images', 'nggallery' ); ?>"/>
+														value="<?php esc_attr_e( 'Scan Folder for new images', 'nggallery' ); ?>"
+														onclick="var b=this;setTimeout(function(){b.disabled=true;b.value='<?php echo esc_js( __( 'Scanning...', 'nggallery' ) ); ?>';},0);"/>
 											<?php } ?>
 											<input type="submit"
 													class="button-primary action ngg_save_gallery_changes"
@@ -334,8 +349,8 @@ function nggallery_picturelist( $controller ) {
 										}
 
 										++$counter;
-										$picture->imageURL  = $storage->get_image_url( $picture );
-										$picture->thumbURL  = $storage->get_image_url( $picture, 'thumb' );
+										$picture->imageURL  = $storage->get_cache_busted_image_url( $picture );
+										$picture->thumbURL  = $storage->get_cache_busted_image_url( $picture, 'thumb' );
 										$picture->imagePath = $storage->get_image_abspath( $picture );
 										$picture->thumbPath = $storage->get_image_abspath( $picture, 'thumb' );
 										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- apply_filters() returns safe HTML for image row
@@ -465,6 +480,14 @@ function nggallery_picturelist( $controller ) {
 						<strong><?php esc_html_e( 'Resize Images to', 'nggallery' ); ?>:</strong>
 					</td>
 					<td>
+						<?php
+						// The dimensions are site-wide settings, so editing them needs the options
+						// capability (issue #966). The resize itself only needs gallery management,
+						// so the fields become read-only rather than the action disappearing - the
+						// server refuses the write in post_processor_images() either way, and this
+						// stops a delegated manager typing values that are then ignored.
+						if ( \Imagely\NGG\Util\Security::is_allowed( 'NextGEN Change options' ) ) :
+							?>
 						<input type="text"
 								size="5"
 								name="imgWidth"
@@ -476,6 +499,11 @@ function nggallery_picturelist( $controller ) {
 								value="<?php echo esc_attr( $settings->get( 'imgHeight' ) ); ?>"/>
 						<br/>
 						<small><?php esc_html_e( 'Width x height (in pixel). NextGEN Gallery will keep ratio size', 'nggallery' ); ?></small>
+						<?php else : ?>
+						<strong><?php echo esc_html( $settings->get( 'imgWidth' ) . ' x ' . $settings->get( 'imgHeight' ) ); ?></strong>
+						<br/>
+						<small><?php esc_html_e( 'Images will be resized to the saved dimensions. Changing them needs the "NextGEN Change options" capability, so these fields are read-only for your role.', 'nggallery' ); ?></small>
+						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
@@ -509,7 +537,18 @@ function nggallery_picturelist( $controller ) {
 						<?php esc_html_e( 'Width x height (in pixel)', 'nggallery' ); ?>
 					</th>
 					<td>
-						<?php include __DIR__ . '/thumbnails-template.php'; ?>
+						<?php
+						// See the note on the resize dialog above - same capability, same reason.
+						if ( \Imagely\NGG\Util\Security::is_allowed( 'NextGEN Change options' ) ) {
+							include __DIR__ . '/thumbnails-template.php';
+						} else {
+							?>
+						<strong><?php echo esc_html( $settings->get( 'thumbwidth' ) . ' x ' . $settings->get( 'thumbheight' ) ); ?></strong>
+						<br/>
+						<small><?php esc_html_e( 'Thumbnails will be created at the saved dimensions. Changing them needs the "NextGEN Change options" capability, so these fields are read-only for your role.', 'nggallery' ); ?></small>
+							<?php
+						}
+						?>
 					</td>
 				</tr>
 				<tr valign="top">
@@ -517,12 +556,18 @@ function nggallery_picturelist( $controller ) {
 						<?php esc_html_e( 'Set fix dimension', 'nggallery' ); ?>
 					</th>
 					<td>
+						<?php if ( \Imagely\NGG\Util\Security::is_allowed( 'NextGEN Change options' ) ) : ?>
 						<input type="checkbox"
 								name="thumbfix"
 								value="1"
 								<?php checked( '1', $settings->get( 'thumbfix' ) ); ?>/>
 						<br/>
 						<small><?php esc_html_e( 'Ignore the aspect ratio, no portrait thumbnails', 'nggallery' ); ?></small>
+						<?php else : ?>
+						<strong><?php echo $settings->get( 'thumbfix' ) ? esc_html__( 'On', 'nggallery' ) : esc_html__( 'Off', 'nggallery' ); ?></strong>
+						<br/>
+						<small><?php esc_html_e( 'Read-only for your role - changing it needs the "NextGEN Change options" capability.', 'nggallery' ); ?></small>
+						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
@@ -885,11 +930,8 @@ class _NGG_Images_List_Table extends WP_List_Table {
 }
 
 function wpmu_enable_function( $value ) {
-	if ( is_multisite() ) {
-		$ngg_options = get_site_option( 'ngg_options' );
-		return $ngg_options[ $value ];
+	if ( ! is_multisite() ) {
+		return true;
 	}
-
-	// if this is not WPMU, enable it !
-	return true;
+	return (bool) \Imagely\NGG\Settings\GlobalSettings::get_instance()->get( $value, false );
 }

@@ -1,0 +1,48 @@
+.nav {
+	background-color: #fff;
+	border-bottom: 1px solid var(--theme-border-color);
+	display: flex;
+	justify-content: center;
+	gap: var(--theme-content-spacing);
+	overflow-x: auto;
+
+	@media (max-width: 1024px) {
+		justify-content: flex-start;
+	}
+}
+
+.navButton {
+	padding: 11px 3px;
+	font-size: 16px;
+	line-height: 16px;
+	box-sizing: content-box;
+	font-weight: 400;
+	color: var(--theme-text-color);
+	box-shadow: none;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+.navButtonActive {
+	font-weight: 500;
+	border-bottom: 4px solid var(--wp-admin-theme-color);
+}
+
+.navSkeletonBar {
+	height: 20px;
+	margin: 22px 3px;
+	border-radius: 3px;
+	background: linear-gradient(90deg, #e8e8e8 25%, #f2f2f2 50%, #e8e8e8 75%);
+	background-size: 200% 100%;
+	animation: dlm-nav-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes dlm-nav-skeleton-pulse {
+	0% {
+		background-position: 200% 0;
+	}
+
+	100% {
+		background-position: -200% 0;
+	}
+}

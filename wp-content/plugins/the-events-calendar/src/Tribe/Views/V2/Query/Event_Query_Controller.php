@@ -8,6 +8,7 @@
 
 namespace Tribe\Events\Views\V2\Query;
 
+use Tribe\Events\Views\V2\View;
 use Tribe__Events__Main as TEC;
 
 /**
@@ -43,6 +44,7 @@ class Event_Query_Controller {
 	 * are all supported by the Event_Query_Controller.
 	 *
 	 * @since 4.9.2
+	 * @since 6.17.0 Made $query explicitly nullable.
 	 *
 	 * @param \WP_Query|null $query The query object currently being filtered, if any.
 	 *
@@ -51,7 +53,7 @@ class Event_Query_Controller {
 	 *
 	 * @return array|null A populated list of posts, or the original value if the filtering should not apply.
 	 */
-	public function inject_posts( $posts = null, \WP_Query $query = null ) {
+	public function inject_posts( $posts = null, ?\WP_Query $query = null ) {
 		if ( ! $query instanceof \WP_Query ) {
 			return $posts;
 		}
@@ -143,6 +145,16 @@ class Event_Query_Controller {
 				 */
 				$per_page = max( 1, (int) tribe_get_option( 'posts_per_page', tribe_get_option( 'postsPerPage', get_option( 'posts_per_page', 12 ) ) ) );
 			}
+
+			/**
+			 * Filters the maximum number of events a View will fetch per page.
+			 *
+			 * @since 6.18.1
+			 *
+			 * @param int $max_events_per_page The maximum number of events per page.
+			 */
+			$max      = (int) apply_filters( 'tec_events_views_v2_max_events_per_page', View::MAX_EVENTS_PER_PAGE );
+			$per_page = min( $per_page, max( 1, $max ) );
 
 			if ( 'past' === $display ) {
 				$orm_args = [

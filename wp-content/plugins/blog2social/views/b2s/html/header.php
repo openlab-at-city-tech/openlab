@@ -118,6 +118,12 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo esc_html_e('To execute this function, you need administrator permissions. Please contact your administrator for access.', 'blog2social'); ?>
     </div>
 </div>
+<div class="panel panel-group b2s-header-notice b2s-left-border-danger b2s-no-permission b2s-no-permission-post" style="display:none;">
+    <div class="panel-body">
+        <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo esc_html_e('You must be an admin to move or edit posts owned by someone else.', 'blog2social'); ?>
+    </div>
+</div>
 
 <!--Info Mail Update -->
 <div class="panel panel-group b2s-header-notice b2s-network-auth-info b2s-left-border-success b2s-mail-update-success" style="display:none;">
@@ -131,7 +137,7 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 <div class="panel panel-group b2s-header-notice b2s-auto-posting" style="display: <?php echo esc_attr($autoPostLimit); ?>;">
     <div class="panel-body">
         <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Autoposter limit has been reached', 'blog2social') ?> <br> <?php esc_html_e('Your daily limit for posting automatically has been reached.', 'blog2social'); ?>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Auto Poster limit has been reached', 'blog2social') ?> <br> <?php esc_html_e('Your daily limit for posting automatically has been reached.', 'blog2social'); ?>
     </div>
 </div>
 
@@ -148,6 +154,7 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The page and post meta data could not be removed.', 'blog2social'); ?>
     </div>
 </div>
+
 
 <div class="panel panel-group b2s-header-notice b2s-meta-tags-yoast b2s-meta-tags-success" style="display:<?php echo esc_attr($showYoast); ?>;">
     <div class="panel-body">
@@ -180,7 +187,7 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 <div class="panel panel-group b2s-header-notice b2s-meta-tags-webdados b2s-meta-tags-danger" style="display:<?php echo esc_attr($showWebdaos); ?>;">
     <div class="panel-body">
         <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Blog2Social has detected another plugin that is setting Social Meta tags for your blog posts. To ensure that your Social Meta tags are set correctly for your social media posts shared with Blog2Social, please deactivate the Facebook Open Graph and Twitter Card Tags settings in your other plugins.', 'blog2social'); ?>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Blog2Social has detected another plugin that is setting Social Meta tags for your blog posts. To ensure that your Social Meta tags are set correctly for your social media posts shared with Blog2Social, please deactivate the Facebook Open Graph and X Card Tags settings in your other plugins.', 'blog2social'); ?>
     </div>
 </div>
 
@@ -320,7 +327,7 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         <button class="close b2s-warning-close"><span aria-hidden="true">&times;</span></button>
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo wp_kses(sprintf(
                // translators: %s is a link
-            __('To connect more Twitter apps with your Twitter accounts, please upgrade your current Blog2Social license or get a Twitter app add-on to your current license <a href="%s">Login with your Blog2Social account and continue to booking.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('addon_apps'))),
+            __('To connect more X apps with your X accounts, please upgrade your current Blog2Social license or get a X app add-on to your current license <a href="%s">Login with your Blog2Social account and continue to booking.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('addon_apps'))),
             array('a' => array(
                 'href' => array(),
                 'target' => '_blank')
@@ -517,7 +524,7 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
 
 <?php
 if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], unserialize(B2S_PLUGIN_REMOVE_PAGE_TITLE))) {
-    ?> <h1>
+    ?> <h1 <?php if(isset($includeNavbar) && $includeNavbar) { ?>class="pull-left"<?php } ?>>
         <?php
         if ((isset($getPages[$_GET['page']]) && !empty($getPages[$_GET['page']]))) {
             echo wp_kses($getPages[sanitize_text_field(wp_unslash($_GET['page']))], array('span' => array('class' => array()), 'a' => array('href' => array(), 'target' => array(), 'class' => array()), 'button' => array('class' => array())));

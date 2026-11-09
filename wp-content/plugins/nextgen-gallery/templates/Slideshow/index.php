@@ -16,8 +16,8 @@
  * @var string $placeholder
  * @var string $thumbnail_link
  * @var string $thumbnail_link_text
- */ ?>
-<?php
+ */
+
 $_slide_gallery_id = null;
 if ( isset( $displayed_gallery->container_ids ) && ! empty( $displayed_gallery->container_ids ) ) {
 	$_slide_gallery_id = reset( $displayed_gallery->container_ids );
@@ -33,7 +33,8 @@ if ( isset( $gallery ) && ! empty( $gallery->title ) ) {
 		$_slide_gallery_name = $_slide_ngg_gallery->title;
 	}
 }
-$this->start_element( 'nextgen_gallery.gallery_container', 'container', $displayed_gallery ); ?>
+$this->start_element( 'nextgen_gallery.gallery_container', 'container', $displayed_gallery );
+?>
 
 <div class="ngg-galleryoverview ngg-slideshow"
 	id="<?php echo esc_attr( $anchor ); ?>"
@@ -43,8 +44,8 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 	data-gallery-name="<?php echo esc_attr( $_slide_gallery_name ); ?>"
 	<?php endif; ?>
 	style="max-width: <?php echo esc_attr( $gallery_width ); ?>px;
-			max-height: <?php echo esc_attr( $gallery_height ); ?>px;
-			display: none;">
+			min-height: <?php echo esc_attr( $gallery_height ); ?>px;
+			visibility: hidden;">
 
 	<?php
 	$image_count = count( $images );
@@ -68,8 +69,8 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 
 		<a href="<?php echo esc_attr( $storage->get_image_url( $image ) ); ?>"
 			title="<?php echo esc_attr( $image->description ); ?>"
-			data-src="<?php echo esc_attr( $storage->get_image_url( $image ) ); ?>"
-			data-thumbnail="<?php echo esc_attr( $storage->get_image_url( $image, 'thumb' ) ); ?>"
+			data-src="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image ) ); ?>"
+			data-thumbnail="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image, 'thumb' ) ); ?>"
 			data-image-id="<?php echo esc_attr( $image->{$image->id_field} ); ?>"
 			data-image-name="<?php echo esc_attr( $image->filename ?? '' ); ?>"
 			data-title="<?php echo esc_attr( $image->alttext ); ?>"
@@ -91,10 +92,11 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 				<span class="ngg-video-play-overlay" aria-hidden="true"></span>
 			<?php endif; ?>
 
-			<img data-image-id='<?php echo esc_attr( $image->pid ); ?>'
+			<img<?php echo \Imagely\NGG\Display\GalleryImage::attributes(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- attributes() escapes each attribute with esc_attr(). ?> data-image-id='<?php echo esc_attr( $image->pid ); ?>'
 				title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->description ) ); ?>"
 				alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
-				src="<?php echo esc_attr( $storage->get_computed_image_url( $image, 'full' ) ); ?>"
+				src="<?php echo esc_attr( $storage->get_cache_busted_image_url( $image, 'full' ) ); ?>"
+				height="<?php echo esc_attr( (string) ( $gallery_height - 20 ) ); ?>"
 				style="max-height: <?php echo esc_attr( $gallery_height - 20 ); ?>px;"/>
 		</a>
 

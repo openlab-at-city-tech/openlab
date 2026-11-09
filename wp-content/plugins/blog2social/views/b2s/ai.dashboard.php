@@ -39,7 +39,7 @@ if ($wpdb->get_var($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->pre
                                 </div>
                                 <h1><?php esc_html_e('Welcome to the Blog2Social AI Assistant', 'blog2social'); ?></h1>
                                 <p class="b2s-ai-hero-desc">
-                                    <?php esc_html_e('Discover how Assistini AI takes your social media posts to the next level. Creative ideas, optimized texts, better performance - for Instagram, Twitter, Facebook and LinkedIn.', 'blog2social'); ?>
+                                    <?php esc_html_e('Discover how Assistini AI takes your social media posts to the next level. Creative ideas, optimized texts, better performance - for Instagram, X, Facebook and LinkedIn.', 'blog2social'); ?>
                                 </p>
                                 <div class="b2s-ai-connect-row">
                                     <?php

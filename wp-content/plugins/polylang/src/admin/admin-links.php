@@ -198,7 +198,7 @@ class PLL_Admin_Links extends PLL_Links {
 	 */
 	private function get_edit_item_link_html( string $url, PLL_Language $language, int $item_id, string $item_name, string $mode ): string {
 		if ( 'list_current' === $mode ) {
-			$flag  = $this->get_flag_html( $language );
+			$flag  = $language->get_admin_flag( 'aria-hidden' );
 			$class = 'pll_column_flag';
 		} else {
 			$flag  = '';
@@ -337,18 +337,6 @@ class PLL_Admin_Links extends PLL_Links {
 	}
 
 	/**
-	 * Returns the language flag or the language slug if there is no flag.
-	 *
-	 * @since 3.8
-	 *
-	 * @param PLL_Language $language PLL_Language object.
-	 * @return string
-	 */
-	public function get_flag_html( PLL_Language $language ): string {
-		return $language->flag ?: sprintf( '<abbr>%s</abbr>', esc_html( $language->slug ) );
-	}
-
-	/**
 	 * Returns some data (`from_post` and `new_lang`) from the current request.
 	 *
 	 * @since 3.7
@@ -374,9 +362,9 @@ class PLL_Admin_Links extends PLL_Links {
 			return array();
 		}
 
-		// Capability check already done in post-new.php.
 		check_admin_referer( 'new-post-translation' );
-		return $this->get_objects_from_new_post_translation_request( (int) $_GET['from_post'], sanitize_key( $_GET['new_lang'] ) );
+
+		return $this->get_objects_from_new_post_translation_request( (int) $_GET['from_post'], sanitize_key( $_GET['new_lang'] ), sanitize_key( $GLOBALS['post_type'] ) );
 	}
 
 	/**
@@ -401,7 +389,8 @@ class PLL_Admin_Links extends PLL_Links {
 		}
 
 		check_admin_referer( 'translate_media' );
-		return $this->get_objects_from_new_post_translation_request( (int) $_GET['from_media'], sanitize_key( $_GET['new_lang'] ) );
+
+		return $this->get_objects_from_new_post_translation_request( (int) $_GET['from_media'], sanitize_key( $_GET['new_lang'] ), 'attachment' );
 	}
 
 	/**
@@ -409,8 +398,9 @@ class PLL_Admin_Links extends PLL_Links {
 	 *
 	 * @since 3.7
 	 *
-	 * @param int    $post_id   The original Post ID provided.
-	 * @param string $lang_slug The new translation language provided
+	 * @param int    $post_id            The original Post ID provided.
+	 * @param string $lang_slug          The new translation language provided.
+	 * @param string $expected_post_type Expected post type of the source post.
 	 * @return array {
 	 *     @type WP_Post      $from_post The source post.
 	 *     @type PLL_Language $new_lang  The target language.
@@ -418,15 +408,27 @@ class PLL_Admin_Links extends PLL_Links {
 	 *
 	 * @phpstan-return array{}|array{from_post: WP_Post, new_lang: PLL_Language}|never
 	 */
-	private function get_objects_from_new_post_translation_request( int $post_id, string $lang_slug ): array {
+	private function get_objects_from_new_post_translation_request( int $post_id, string $lang_slug, string $expected_post_type ): array {
 		if ( $post_id <= 0 || empty( $lang_slug ) ) {
 			return array();
 		}
 
-		$post = get_post( $post_id );
 		$lang = $this->model->get_language( $lang_slug );
+		if ( ! $lang || ! $this->user->can_translate( $lang ) ) {
+			return array();
+		}
 
-		if ( empty( $post ) || empty( $lang ) ) {
+		$post = get_post( $post_id );
+
+		if ( empty( $post ) ) {
+			return array();
+		}
+
+		if ( ! $this->user->has_cap( 'read_post', $post->ID ) ) {
+			return array();
+		}
+
+		if ( $expected_post_type !== $post->post_type ) {
 			return array();
 		}
 

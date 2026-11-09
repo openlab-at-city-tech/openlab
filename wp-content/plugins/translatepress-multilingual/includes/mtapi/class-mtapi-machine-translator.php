@@ -25,7 +25,7 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
 	public function send_request( $source_language, $language_code, $strings_array, $formality = "default" ){
 		/* build our translation request */
         $translation_request = [];
-		$translation_request['key'] = get_option('trp_license_key', '');
+		$translation_request['key'] = trim( (string) get_option('trp_license_key', '') );
 		$translation_request['url'] = trailingslashit( $this->get_referer() );
 		$translation_request['source'] = $source_language;
 		$translation_request['target'] = $language_code;
@@ -80,11 +80,8 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
 
 		$translated_strings = array();
 
-        /* apply filter to allow modification of chunk size, default is 50 */
-        $chunk_size = apply_filters( 'trp_mtapi_chunk_size', 50 );
-
-        /* split our strings that need translation in chunks of maximum $chunk_size strings due to limit of TranslatePress AI*/
-        $new_strings_chunks = array_chunk( $new_strings, $chunk_size, true );
+        /* split our strings that need translation in chunks of maximum get_chunk_size() strings due to limit of TranslatePress AI*/
+        $new_strings_chunks = array_chunk( $new_strings, $this->get_chunk_size(), true );
 
         foreach( $new_strings_chunks as $new_strings_chunk ){
             // exist early if quota for this website is = 0 character
@@ -171,6 +168,11 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
 		return $translated_strings;
 	}
 
+	/* maximum strings per request; filterable, default 50 due to the TranslatePress AI limit */
+	public function get_chunk_size(){
+		return apply_filters( 'trp_mtapi_chunk_size', 50 );
+	}
+
 	/**
 	 * Send a test request to verify if the functionality is working
 	 */
@@ -182,8 +184,9 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
 
 	public function get_api_key(){
         if ( $this->license_key === null ){
-            $this->license_key = get_option( 'trp_license_key' );
-            $this->license_key = ( empty( $this->license_key ) ) ? false : $this->license_key;
+            $stored = get_option( 'trp_license_key' );
+            $stored = is_string( $stored ) ? trim( $stored ) : '';
+            $this->license_key = ( $stored === '' ) ? false : $stored;
         }
         return $this->license_key;
 

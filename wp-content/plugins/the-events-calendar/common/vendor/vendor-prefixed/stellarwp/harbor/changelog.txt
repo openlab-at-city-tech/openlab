@@ -1,0 +1,54 @@
+### [1.6.2] 2026-10-05
+
+* Fix - Stop filling the debug log when a host plugin checks a feature while no premium plugin is active, and log a feature that is not in the catalog once per request instead of on every check.
+* Fix - Stop reporting a "called incorrectly" notice when a host plugin boots Harbor after wp_loaded, such as during plugin activation.
+
+### [1.6.1] 2026-09-23
+
+* Fix - Include the catalog changelog in the plugin and theme update data so the WordPress "View details" modal shows a Changelog tab instead of only the description.
+
+### [1.6.0] 2026-07-27
+
+* Tweak - Added an Activate control beside the Unactivated badge in the product header, with a tier picker when a license covers multiple unactivated tiers.
+* Tweak - Split the Feature Manager product list into Installed Features and Available Features sections.
+
+### [1.5.0] 2026-06-25
+
+* Tweak - Update the unified license key input UI to mask its value when in locked state.
+* Feature - Added const LW_HARBOR_DISABLE_DEBUG_LOG to disable harbor specific logs
+* Fix - Fixed license activation being blocked for ~60s after submitting an invalid key. The validate-and-store throttle is now per-license-key with a separate rolling-window rate limit for abuse protection, so a valid key submitted right after an invalid one no longer replays the previous error.
+* Fix - Fixed license validation using the wrong domain on staging/preview sites. Site\Data::get_domain() now derives the host from home_url() instead of reading the siteurl option directly, so host-environment plugins that rewrite the site address (e.g. Hostinger's preview-domain mu-plugin) are honored and the domain Harbor validates against matches the one used during activation. WP-CLI and cron are unaffected, as home_url() returns the canonical domain when no web request is present.
+* Fix - Corrected support and documentation links in the Error Modal
+
+### [1.4.0] 2026-05-21
+
+* Fix - Type-hint in WP Core's callback was too strict and could cause fatal.
+* Feature - Added the `lw_harbor_refresh_catalog()` global function to force a synchronous re-fetch of the product catalog from the Commerce Portal API.
+
+### [1.3.0] 2026-05-19
+
+* Feature - Registered Legacy Licenses can now be utilized for updates if `use_for_updates` is `true`.
+* Tweak - The Software License Manager page now shows a splash screen until a Unified License Key is entered.
+
+### [1.2.0] 2026-05-13
+
+* Feature - The features page no longer shows unless a Premium Addon has been registered.
+* Tweak - Added the `lw_harbor/loaded` action to indicate when Harbor is loaded.
+* Tweak - Added the `lw_harbor/premium_plugin_exists` filter to declare whether a premium plugin exists on a site.
+* Tweak - Removed opt-in as it will not be necessary now that external communications are gated behind a Premium Addon enabling Harbor.
+* Tweak - The `lw-harbor/hide_menu_item` now also applies to the submenu item created by `lw_harbor_register_submenu()`.
+
+### [1.1.0] 2026-05-12
+
+* Feature - External connections are now gated behind a per-site opt-in flow.
+* Fix - Moved the Licensing Page to a submenu item under Settings.
+* Tweak - Added the `lw-harbor/hide_menu_item` to hide the Licensing Page submenu item while leaving the submenu page registered.
+
+### [1.0.1] 2026-04-29
+
+* Feature - Show Harbor version on admin page footer.
+* Fix - Upgrade buttons now route existing subscribers to the portal's change-plan flow for the target tier instead of the catalog `purchase_url`, which was adding a duplicate plan to the basket. Unlicensed visitors still see the `purchase_url` for a fresh purchase.
+
+### [1.0.0] 2026-04-28
+
+* Feature - Initial version.

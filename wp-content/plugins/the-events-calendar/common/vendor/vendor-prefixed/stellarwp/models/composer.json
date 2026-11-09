@@ -1,0 +1,52 @@
+{
+  "name": "stellarwp/models",
+  "description": "A library for a simple model structure.",
+  "keywords": ["stellarwp"],
+  "type": "library",
+  "homepage": "https://github.com/stellarwp/models",
+  "license": "GPL-3.0-or-later",
+  "authors": [
+    {
+      "name": "StellarWP",
+      "homepage": "https://github.com/stellarwp"
+    }
+  ],
+  "config": {
+    "preferred-install": "dist",
+    "platform": {
+      "php": "7.4"
+    },
+    "allow-plugins": {
+      "kylekatarnls/update-helper": true
+    }
+  },
+  "require": {
+    "stellarwp/db": "^1.0.3"
+  },
+  "require-dev": {
+    "codeception/module-asserts": "^1.0",
+    "codeception/module-cli": "^1.0",
+    "codeception/module-db": "^1.0",
+    "codeception/module-filesystem": "^1.0",
+    "codeception/module-phpbrowser": "^1.0",
+    "codeception/module-rest": "^1.0",
+    "codeception/module-webdriver": "^1.0",
+    "codeception/util-universalframework": "^1.0",
+    "lucatume/wp-browser": "^3.0.14",
+    "phpunit/phpunit": "~6.0",
+    "phpstan/phpstan": "^2.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "StellarWP\\Models\\": "src/Models/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "StellarWP\\Models\\Tests\\": "tests/_support/Helper/"
+    }
+  },
+  "scripts": {
+    "phpstan": "phpstan analyze --memory-limit=512M"
+  }
+}

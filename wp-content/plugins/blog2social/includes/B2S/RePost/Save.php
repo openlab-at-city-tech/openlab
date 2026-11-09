@@ -32,8 +32,13 @@ class B2S_RePost_Save {
     private $allowHtml;
     private $default_template;
     private $setPreFillTextLimit;
+    private $limitHashTag =array(47=>4);
+    private $imageAiGeneratedNetworks;
+    private $textIsAiGenerated = array(45);
+    private $imageIsAiGenerated = false;
+    private $textAiGeneratedChecked = false;
 
-    function __construct($blogUserId = 0, $b2sUserLang = 'en', $userTimezone = 0, $optionPostFormat = array(), $allowHashTag = true, $bestTimes = array(), $userVersion = 0) {
+    function __construct($blogUserId = 0, $b2sUserLang = 'en', $userTimezone = 0, $optionPostFormat = array(), $allowHashTag = true, $bestTimes = array(), $userVersion = 0, $imageIsAiGenerated = false, $textAiGeneratedChecked = false) {
         $this->userVersion = defined("B2S_PLUGIN_USER_VERSION") ? B2S_PLUGIN_USER_VERSION : (int) $userVersion;
         $this->blogUserId = $blogUserId;
         $this->userTimezone = $userTimezone;
@@ -44,11 +49,14 @@ class B2S_RePost_Save {
         $this->setPreFillText = array(0 => array(8 => 239, 10 => 442, 16 => 250, 17 => 442, 18 => 800, 20 => 300, 21 => 65000, 36 => 200, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(8 => 1200, 10 => 442, 17 => 442, 19 => 5000, 42 => 1000), 2 => array(8 => 239, 10 => 442, 17 => 442, 19 => 239));
         $this->setPreFillTextLimit = array(0 => array(8 => 400, 10 => 500, 18 => 1000, 20 => 400, 16 => false, 21 => 65535, 36 => 400, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(8 => 1200, 10 => 500, 19 => 60000, 42 => 1000), 2 => array(8 => 400, 10 => 500, 19 => 9000));
         $this->notAllowNetwork = array(4, 11, 14, 16);
-        $this->allowHtml = array(4, 11, 14);
+        $this->allowHtml = array(4, 11, 14, 47);
         $this->allowNetworkOnlyImage = array(6, 7, 12, 20, 21, 36);
+        $this->imageAiGeneratedNetworks = array(1, 6, 12, 45);
         $this->tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
         $this->linkNoCache = B2S_Tools::getNoCacheData(B2S_PLUGIN_BLOG_USER_ID);
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
+        $this->imageIsAiGenerated = (bool) $imageIsAiGenerated;
+        $this->textAiGeneratedChecked = (bool) $textAiGeneratedChecked;
     }
 
     public function setPostData($postId = 0, $title = '', $content = '', $excerpt = '', $url = '', $imageUrl = '', $keywords = '') {
@@ -108,7 +116,7 @@ class B2S_RePost_Save {
                         $schedData = array_merge($schedData, $defaultPostData);
                     }
                     if ( defined('B2S_PLUGIN_ALLOW_ADD_LINK') && in_array($value->networkId, unserialize(B2S_PLUGIN_ALLOW_ADD_LINK)) && isset($this->optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $this->optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
-                        if (($value->networkId == 12) || (isset($this->optionPostFormat[$value->networkId][$value->networkType]['format']) && (int) $this->optionPostFormat[$value->networkId][$value->networkType]['format'] == 1)) {
+                        if (($value->networkId == 12 || $value->networkId == 6) || (isset($this->optionPostFormat[$value->networkId][$value->networkType]['format']) && (int) $this->optionPostFormat[$value->networkId][$value->networkType]['format'] == 1)) {
                             $schedData['url'] = '';
                         }
                     }
@@ -334,6 +342,26 @@ class B2S_RePost_Save {
                     }
                     $postData['content'] = B2S_Util::getExcerpt($postData['content'], 0, $limit);
                 }
+
+                if ($networkId == 47) {
+                    $postData['custom_title'] = wp_strip_all_tags($this->title);
+                    $networkLimitHashTag = isset($this->limitHashTag[$networkId]) ? $this->limitHashTag[$networkId] : false;
+                    $countHashtags= 0;
+                    if ($this->allowHashTag) {
+                        if (is_array($this->keywords) && !empty($this->keywords)) {
+                            foreach ($this->keywords as $tag) {
+                                $postData['tags'][] = str_replace(" ", "", $tag->name);
+                                if($networkLimitHashTag !== false){
+                                    $countHashtags++;
+                                    if($countHashtags >= $networkLimitHashTag){
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    $postData['content'] = $this->contentHtml;
+                }
             } else {
                 if ($networkId == 4) {
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
@@ -401,7 +429,7 @@ class B2S_RePost_Save {
                     }
                 }
 
-                if ($networkId == 11 || $networkId == 14) {
+                if ($networkId == 11 || $networkId == 14 || $networkId == 47) {
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
                     $postData['content'] = $this->contentHtml;
                 }
@@ -440,6 +468,13 @@ class B2S_RePost_Save {
                     $postData['content'] = (isset($this->setPreFillText[$networkType][$networkId])) ? B2S_Util::getExcerpt($this->content, (int) $this->setPreFillText[$networkType][$networkId], (isset($this->setPreFillTextLimit[$networkType][$networkId]) ? (int) $this->setPreFillTextLimit[$networkType][$networkId] : false)) : $this->content;
                     $postData['custom_title'] = wp_strip_all_tags($this->title);
                 }
+            }
+
+            if ($this->imageIsAiGenerated && in_array($networkId, $this->imageAiGeneratedNetworks)) {
+                $postData['image_is_ai_generated'] = 1;
+            }
+            if ($this->textAiGeneratedChecked && in_array($networkId, $this->textIsAiGenerated)) {
+                $postData['text_is_ai_generated'] = 1;
             }
 
             // Process comment from template if it exists for all networks

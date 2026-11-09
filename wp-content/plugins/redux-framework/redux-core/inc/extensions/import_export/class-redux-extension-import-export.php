@@ -3,7 +3,7 @@
  * Redux Import/Export Extension Class
  *
  * @class   Redux_Extension_Import_Export
- * @version 4.5.10
+ * @version 4.5.18
  * @package Redux Framework
  *
  * @noinspection PhpIgnoredClassAliasDeclaration
@@ -26,7 +26,7 @@ if ( ! class_exists( 'Redux_Extension_Import_Export', false ) ) {
 		 *
 		 * @var string
 		 */
-		public static $version = '4.5.10';
+		public static $version = '4.5.18';
 
 		/**
 		 * Is field bit.
@@ -100,7 +100,7 @@ if ( ! class_exists( 'Redux_Extension_Import_Export', false ) ) {
 		 * Import download options.
 		 */
 		public function download_options() {
-			if ( ! is_user_logged_in() && ! is_admin() && ! current_user_can( $this->parent->args['page_permissions'] ) ) {
+			if ( ! Redux_Helpers::current_user_can( $this->parent->args['page_permissions'] ) ) {
 				wp_die( esc_html__( 'You do not have permission to export options.', 'redux-framework' ) );
 			}
 
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Redux_Extension_Import_Export', false ) ) {
 			if ( isset( $_GET['action'] ) && 'redux_download_options-' . $this->parent->args['opt_name'] === $_GET['action'] ) { // phpcs:ignore WordPress.Security.NonceVerification
 				header( 'Content-Description: File Transfer' );
 				header( 'Content-type: application/txt' );
-				header( 'Content-Disposition: attachment; filename="redux_options_"' . $this->parent->args['opt_name'] . '_backup_' . gmdate( 'm-d-Y' ) . '.json' );
+				header( 'Content-Disposition: attachment; filename="redux_options_' . $this->parent->args['opt_name'] . '_backup_' . gmdate( 'm-d-Y-H-i' ) . '.json"' );
 				header( 'Content-Transfer-Encoding: binary' );
 				header( 'Expires: 0' );
 				header( 'Cache-Control: must-revalidate' );

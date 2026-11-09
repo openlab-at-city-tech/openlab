@@ -55,8 +55,13 @@ class Actions {
 		// Do hub sync when a plugin/theme is changed.
 		add_action( 'activated_plugin', array( $this, 'set_shutdown_sync' ) );
 		add_action( 'deactivated_plugin', array( $this, 'set_shutdown_sync' ) );
-		add_action( 'deleted_plugin', array( $this, 'set_shutdown_sync' ) );
-		add_action( 'deleted_theme', array( $this, 'set_shutdown_sync' ) );
+
+		// deletion: note that this is **before** files actually getting deleted
+		// it should be okay though, we just setting up in-memory flag for shutdown
+		// worst case scenario: if files turns out failed to be deleted, and plugins files still exists the sync on shutdown in theory would still be skipped due to identical state/data.
+		add_action( 'delete_plugin', array( $this, 'set_shutdown_sync' ) );
+		add_action( 'delete_theme', array( $this, 'set_shutdown_sync' ) );
+
 		add_action( 'upgrader_process_complete', array( $this, 'set_shutdown_sync' ) );
 
 		// Perform shut down actions.
@@ -72,6 +77,9 @@ class Actions {
 	 * @since 1.0.0
 	 */
 	public function set_shutdown_sync() {
+		// pre-load class to be in memory stack.
+		// it should have _almost_ no cost.
+		new Request();
 		$this->sync_hub = true;
 	}
 

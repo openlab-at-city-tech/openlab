@@ -1,0 +1,17 @@
+site_name: TrustedLogin Client Docs
+repo_url: https://github.com/trustedlogin/trustedlogin-client/
+
+theme:
+  name: readthedocs
+  highlightjs: true
+  hljs_languages:
+    - php
+    - js
+  include_homepage_in_sidebar: false
+use_directory_urls: true
+extra_css:
+  - css/custom.css
+markdown_extensions:
+  - toc:
+      permalink: "#"
+      separator: "_"

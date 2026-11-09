@@ -66,11 +66,6 @@
 .mapp-classic {
 	display: inline-block;
 }
-
-.mapp-classic button.mapp-classic-button {
-	display: flex;
-	align-items: center;
-}
 						 
 /*
 	-----------------------------------------------------------------------------------

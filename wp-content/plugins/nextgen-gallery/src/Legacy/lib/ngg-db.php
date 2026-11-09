@@ -128,6 +128,9 @@ public static function get_ids_from_gallery( $id, $order_by = 'sortorder', $orde
 		// Say no to any other value
 		$order_dir = ( $order_dir == 'DESC' ) ? 'DESC' : 'ASC';
 		$order_by  = ( empty( $order_by ) ) ? 'sortorder' : $order_by;
+		// SQLi hardening: allowlist nggpictures column names for ORDER BY before SQL interpolation.
+		$allowed_cols = [ 'pid', 'sortorder', 'imagedate', 'filename', 'alttext', 'galleryid', 'image_slug', 'description', 'exclude' ];
+		$order_by     = in_array( $order_by, $allowed_cols, true ) ? $order_by : 'sortorder';
 
 		// Query database
 		if ( is_numeric( $id ) ) {
@@ -473,6 +476,9 @@ public static function find_last_images( $page = 0, $limit = 30, $exclude = true
 		// Say no to any other value
 		$order_dir = ( $order_dir == 'DESC' ) ? 'DESC' : 'ASC';
 		$order_by  = ( empty( $order_by ) ) ? 'galleryid' : $order_by;
+		// SQLi hardening: allowlist nggpictures column names for ORDER BY before SQL interpolation.
+		$allowed_cols = [ 'pid', 'sortorder', 'imagedate', 'filename', 'alttext', 'galleryid', 'image_slug', 'description', 'exclude' ];
+		$order_by     = in_array( $order_by, $allowed_cols, true ) ? $order_by : 'galleryid';
 
 		$sql = $wpdb->prepare(
 			"SELECT t.*, tt.*   

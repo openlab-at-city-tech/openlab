@@ -443,8 +443,15 @@ class DLM_Download {
 		}
 
 		if ( get_option( 'permalink_structure' ) ) {
-			// Fix for translation plugins that modify the home_url
-			$link = $this->maybe_add_language_prefix( get_home_url( null, '', $scheme ) );
+			$home_url = get_home_url( null, '', $scheme );
+
+			// Fix for Polylang - includes language prefix and any subdirectory (e.g. site.com/en/subdir/)
+			if ( function_exists( 'pll_home_url' ) ) {
+				$home_url = pll_home_url();
+			}
+
+			// Fix for WPML and other translation plugins in admin
+			$link = $this->maybe_add_language_prefix( $home_url );
 
 			$parsed_url = wp_parse_url( $link );
 			if ( ! empty( $parsed_url['query'] ) ) {
@@ -453,7 +460,14 @@ class DLM_Download {
 				$link = untrailingslashit( $link ) . '/' . $endpoint . '/' . $value . '/';
 			}
 		} else {
-			$link = add_query_arg( $endpoint, $value, home_url( '', $scheme ) );
+			$home_url = home_url( '', $scheme );
+
+			// Fix for Polylang - includes language prefix and any subdirectory (e.g. site.com/en/subdir/)
+			if ( function_exists( 'pll_home_url' ) ) {
+				$home_url = pll_home_url();
+			}
+
+			$link = add_query_arg( $endpoint, $value, $home_url );
 		}
 
 		// Add the timestamp to the Download's link to prevent unwanted behaviour with caching plugins/hosts.

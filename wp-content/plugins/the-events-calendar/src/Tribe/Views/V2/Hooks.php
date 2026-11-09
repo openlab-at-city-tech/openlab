@@ -23,6 +23,7 @@ use Tribe\Events\Views\V2\Repository\Event_Period;
 use Tribe\Events\Views\V2\Template\Featured_Title;
 use Tribe\Events\Views\V2\Template\Title;
 use Tribe\Events\Views\V2\Utils\View as View_Utils;
+use Tribe\Events\Views\V2\View;
 use Tribe__Context as Context;
 use Tribe__Customizer__Section as Customizer_Section;
 use Tribe__Events__Main as TEC;
@@ -223,7 +224,11 @@ class Hooks extends Service_Provider {
 		}
 
 		// Trim to what is shown (we add one sometimes for pagination links).
-		$cnt = $view->get_context()->get( 'events_per_page' );
+		if ( $view instanceof View && method_exists( $view, 'get_events_per_page' ) ) {
+			$cnt = $view->get_events_per_page();
+		} else {
+			$cnt = $view->get_context()->get( 'events_per_page' );
+		}
 		if ( $cnt ) {
 			$events = array_slice( $events, 0, (int) $cnt );
 		}
@@ -412,13 +417,14 @@ class Hooks extends Service_Provider {
 	 * inject posts in it, if needed.
 	 *
 	 * @since 4.9.2
+	 * @since 6.17.0 Made $query explicitly nullable.
 	 *
 	 * @param  null|array  $posts The posts to filter, a `null` value by default or an array if set by other methods.
 	 * @param  \WP_Query|null  $query The query object to (maybe) control and whose posts will be populated.
 	 *
 	 * @return array An array of injected posts, or the original array of posts if no post injection is required.
 	 */
-	public function filter_posts_pre_query( $posts = null, \WP_Query $query = null ) {
+	public function filter_posts_pre_query( $posts = null, ?\WP_Query $query = null ) {
 		if ( is_admin() ) {
 			return $posts;
 		}
@@ -470,6 +476,15 @@ class Hooks extends Service_Provider {
 		}
 		$per_page = (int) tribe_get_option( 'posts_per_page', tribe_get_option( 'postsPerPage', get_option( 'posts_per_page', 12 ) ) );
 		if ( $per_page > 0 ) {
+			/**
+			 * Filters the maximum number of events a View will fetch per page.
+			 *
+			 * @since 6.18.1
+			 *
+			 * @param int $max_events_per_page The maximum number of events per page.
+			 */
+			$max      = (int) apply_filters( 'tec_events_views_v2_max_events_per_page', View::MAX_EVENTS_PER_PAGE );
+			$per_page = min( $per_page, max( 1, $max ) );
 			$query->set( 'posts_per_page', $per_page );
 		}
 	}
@@ -481,12 +496,15 @@ class Hooks extends Service_Provider {
 	 * a copy of the original `Tribe__Events__Main::eventQueryVars` one.
 	 *
 	 * @since 4.9.2
+	 * @since 6.17.5 Made the parameter non-strict.
 	 *
 	 * @param  array  $query_vars  The list of publicly available query variables.
 	 *
 	 * @return array The filtered list of publicly available query variables.
 	 */
-	public function filter_query_vars( array $query_vars = [] ) {
+	public function filter_query_vars( $query_vars = [] ) {
+		$query_vars = (array) $query_vars;
+
 		$query_vars[] = 'eventDisplay';
 		$query_vars[] = 'eventDate';
 		$query_vars[] = 'eventSequence';

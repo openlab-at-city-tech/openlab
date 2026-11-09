@@ -1,0 +1,5537 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"Project-Id-Version: TranslatePress Multilingual\n"
+"Language: zh_TW\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: TranslatePress build (community + OpenRouter), 2026-10-13\n"
+"Last-Translator: WordPress.org community contributors + TranslatePress AI\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress - DEV"
+msgstr "TranslatePress - DEV"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "https://translatepress.com/"
+msgstr "https://translatepress.com/"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-cd79cda5
+msgid ""
+"Experience a better way of translating your WordPress site using a visual "
+"front-end translation editor, with full support for WooCommerce and site "
+"builders."
+msgstr "使用視覺化前端翻譯編輯器翻譯你的 WordPress 網站，完整支援 WooCommerce 與網站建置工具，體驗更好的翻譯方式。"
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+msgstr "Cozmoslabs, Razvan Mocanu, Madalin Ungureanu, Cristophor Hurduban"
+
+#, tp-ai, tp-glo-f0b4b440
+msgid "https://cozmoslabs.com/"
+msgstr "https://cozmoslabs.com/"
+
+msgid "Active"
+msgstr "已啟用"
+
+msgid ""
+"The inactive languages will still be visible and active for the admin. For "
+"other users they won't be visible in the language switchers and won't be "
+"accessible either."
+msgstr "非啟用中的語言對管理員仍然可見且作用中。對其他使用者而言，這些語言不會顯示在語言切換器中，也無法存取。"
+
+msgid "unknown"
+msgstr "未知"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Extra Languages add-on</strong> requires TranslatePress version "
+"%1$s or higher. You are currently using version %2$s. Please update "
+"TranslatePress to enable this feature."
+msgstr ""
+"<strong>Extra Languages 附加元件</strong>需要 TranslatePress 版本 %1$s "
+"或更高版本。你目前使用的版本為 %2$s。請更新 TranslatePress 以啟用此功能。"
+
+msgid "Dismiss this notice."
+msgstr "忽略此通知。"
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Slug"
+msgstr "文章 slug"
+
+#, tp-ctx-742ebaa7, tp-glo-9fa92a70
+msgid "URL Slugs Translation"
+msgstr "URL slug 翻譯"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs"
+msgstr "Slugs"
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy Slugs"
+msgstr "分類法 slug"
+
+#, tp-ctx-742ebaa7
+msgid "Search Taxonomy Slugs"
+msgstr "搜尋分類法 slug"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Taxonomy Slug"
+msgstr "分類法 slug"
+
+msgid "Translation"
+msgstr "翻譯"
+
+#, tp-ctx-742ebaa7
+msgid "Term Slugs"
+msgstr "詞彙 slug"
+
+#, tp-ctx-742ebaa7
+msgid "Search Term Slugs"
+msgstr "搜尋詞彙 slug"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Term Slug"
+msgstr "詞彙 slug"
+
+msgid "Taxonomy"
+msgstr "分類法"
+
+msgid "Filter by Taxonomy"
+msgstr "按分類法篩選"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Slugs"
+msgstr "文章 slug"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Slugs"
+msgstr "搜尋文章 slug"
+
+#, tp-ctx-e9944eb3
+msgid "Post ID"
+msgstr "文章 ID"
+
+#, tp-ctx-e9944eb3
+msgid "Post Type"
+msgstr "文章類型"
+
+#, tp-ctx-e9944eb3
+msgid "Filter by Post Type"
+msgstr "依文章類型篩選"
+
+msgid "Published"
+msgstr "已發佈"
+
+#, tp-ctx-e9944eb3
+msgid "Any Post Status"
+msgstr "任何文章狀態"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post Type Base Slugs"
+msgstr "文章類型基底 slug"
+
+#, tp-ctx-07893e52, tp-ctx-e9944eb3, tp-glo-67834fcb
+msgid "Post Type Base Slug"
+msgstr "文章類型基底 slug"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Search Post Type Base Slugs"
+msgstr "搜尋文章類型基底 slug"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce Slugs"
+msgstr "WooCommerce slug"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-cd79cda5
+msgid "WooCommerce Slug"
+msgstr "WooCommerce slug"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "Search WooCommerce Slugs"
+msgstr "搜尋 WooCommerce slug"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Automatic and manual slug translation changes performed when "
+"<strong>TranslatePress - Multilingual</strong> 2.8.4 was active had to be "
+"removed because of some issues with that version. All slug translations "
+"from before that version are now in use. Thank you for understanding!"
+msgstr ""
+"由於 <strong>TranslatePress - Multilingual</strong> 2.8.4 "
+"版本存在某些問題，必須移除在該版本運作期間執行的自動和手動 slug 翻譯變更。該版本之前的所有 slug 翻譯現已恢復使用。感謝您的諒解！"
+
+msgid ""
+"If you absolutely need them, the removed translations can be found in "
+"tables trp_slug_original_obsolete and trp_slug_translation_obsolete."
+msgstr ""
+"如果你確實需要這些翻譯，可以在 trp_slug_original_obsolete 和 trp_slug_translation_obsolete "
+"資料表中找到。"
+
+msgid "(inactive)"
+msgstr "（未啟用）"
+
+#, tp-ctx-742ebaa7
+msgid "Other Slugs"
+msgstr "其他 slug"
+
+#, tp-ctx-742ebaa7
+msgid "Search Other Slugs"
+msgstr "搜尋其他 slug"
+
+msgid "Automatic User Language Detection"
+msgstr "自動偵測使用者語言"
+
+msgid "Invalid language code"
+msgstr "無效的語言代碼"
+
+#, tp-ai
+msgid ""
+"We've detected you might be speaking a different language. Do you want to "
+"change to:"
+msgstr "我們偵測到您可能使用不同的語言。是否要變更為："
+
+#, tp-ai
+msgid "Change Language"
+msgstr "變更語言"
+
+#, tp-ai
+msgid "Close and do not switch language"
+msgstr "關閉，不要切換語言"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "First by browser language, then IP address (recommended)"
+msgstr "先依瀏覽器語言，再依 IP 位址（建議）"
+
+msgid "First by IP address, then by browser language"
+msgstr "先依 IP 位址，再依瀏覽器語言"
+
+msgid "Only by browser language"
+msgstr "僅依瀏覽器語言"
+
+msgid "Only by IP address"
+msgstr "僅依 IP 位址"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "A popup appears asking the user if they want to be redirected"
+msgstr "顯示彈出視窗詢問使用者是否想要重新導向"
+
+msgid "Redirect directly (*not recommended)"
+msgstr "直接重新導向（*不建議）"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Pop-up window over the content"
+msgstr "覆蓋內容的彈出視窗"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Hello bar before the content"
+msgstr "內容前的通知列"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Automatic User Language Detection requires a newer version of "
+"TranslatePress to use its visual settings interface. The legacy settings "
+"form will remain available until TranslatePress is updated."
+msgstr ""
+"「自動使用者語言偵測」需要使用較新版本的 TranslatePress 才能使用其視覺化設定介面。在 TranslatePress "
+"更新之前，舊版設定表單將繼續可用。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Update TranslatePress"
+msgstr "更新 TranslatePress"
+
+msgid ""
+"WARNING. Cannot determine your language preference based on your current "
+"IP.<br>This is most likely because the website is on a local environment."
+msgstr "警告：無法根據您目前的 IP 判定語言偏好。<br>這很可能是因為網站處於本機環境。"
+
+msgid "Permission denied."
+msgstr "沒有權限。"
+
+#, tp-glo-b357fc3e
+msgid "Invalid nonce."
+msgstr "無效的 nonce。"
+
+#, tp-ai
+msgid "Invalid settings."
+msgstr "設定無效。"
+
+msgid "Settings saved."
+msgstr "設定已儲存。"
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Go to <a href=\"%s\" target=\"_self\">Advanced</a> tab to change this "
+"feature's settings"
+msgstr "前往<a href=\"%s\" target=\"_self\">進階</a>分頁以變更此功能的設定"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Website language selector"
+msgstr "網站語言選擇器"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Change language"
+msgstr "變更語言"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Available languages"
+msgstr "可用語言"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Please enter your DeepL API key."
+msgstr "請輸入您的 DeepL API 金鑰。"
+
+#, tp-glo-c6709f3f
+msgid "DeepL"
+msgstr "DeepL"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Bad request. There was an error accessing the DeepL API."
+msgstr "錯誤的要求。存取 DeepL API 時發生錯誤。"
+
+#, tp-glo-91460d88
+msgid "The API key entered is invalid."
+msgstr "輸入的 API 金鑰無效。"
+
+#, tp-glo-91460d88
+msgid "The API resource could not be found."
+msgstr "找不到 API 資源。"
+
+msgid "The request size is too large."
+msgstr "要求大小過大。"
+
+msgid "The request is too long."
+msgstr "要求太長。"
+
+msgid "Too many requests. Please try again later."
+msgstr "要求過多。請稍後再試。"
+
+msgid "Your translation quota has been reached."
+msgstr "您的翻譯配額已達上限。"
+
+msgid "We could not process your request. Please try again later."
+msgstr "我們無法處理您的要求。請稍後再試。"
+
+#, tp-glo-c6709f3f
+msgid ""
+"There is an error on the DeepL service and your request could not be "
+"processed."
+msgstr "DeepL 服務發生錯誤，無法處理您的要求。"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Type"
+msgstr "DeepL API 類型"
+
+msgid "Pro"
+msgstr "專業版"
+
+msgid "Free"
+msgstr "免費"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Select the type of DeepL API you want to use."
+msgstr "選取您要使用的 DeepL API 類型。"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "DeepL API Key"
+msgstr "DeepL API 金鑰"
+
+#, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"%s\" target=\"_blank\">this link</a> to see how you can set "
+"up an API key and control API costs."
+msgstr "請前往<a href=\"%s\" target=\"_blank\">此連結</a>查看如何設定 API 金鑰並控管 API 費用。"
+
+msgid "No Active License Detected for this website."
+msgstr "未偵測到適用於此網站的有效授權。"
+
+msgid "Enter your license key"
+msgstr "輸入你的授權金鑰"
+
+msgid " Or %1$spurchase one here%2$s"
+msgstr " 或%1$s在此購買%2$s"
+
+msgid "Different Domain per Language"
+msgstr "每種語言使用不同網域"
+
+msgid "View Docs"
+msgstr "查看文件"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Assign different domains or subdomains to each language. When visitors "
+"access these domains, TranslatePress loads the appropriate language "
+"translation directly without redirecting."
+msgstr "為每種語言指派不同的網域或子網域。當訪客存取這些網域時，TranslatePress 會直接載入對應的語言翻譯，無需重新導向。"
+
+msgid "Example: %1$s for English, %2$s for Spanish, %3$s for French."
+msgstr "範例：英文使用 %1$s、西班牙文使用 %2$s、法文使用 %3$s。"
+
+msgid "Before enabling:"
+msgstr "啟用前："
+
+#, tp-glo-1edf89cb
+msgid ""
+"Ensure your domains are registered, pointed to your server, and have SSL "
+"certificates configured."
+msgstr "請確保你的網域已註冊、指向你的伺服器，並已設定 SSL 憑證。"
+
+msgid "Domain"
+msgstr "網域"
+
+msgid "Map this language to a different domain or sub-domain."
+msgstr "將此語言對應至不同的網域或子網域。"
+
+msgid "https://example.com"
+msgstr "https://example.com"
+
+msgid "Prefill with current domain"
+msgstr "以目前網域預填"
+
+#, tp-glo-e765e8ba
+msgid "Check DNS"
+msgstr "檢查 DNS"
+
+#, tp-glo-e765e8ba
+msgid "Checking DNS..."
+msgstr "正在檢查 DNS…"
+
+#, tp-glo-e765e8ba
+msgid "DNS is correctly configured!"
+msgstr "DNS 設定正確！"
+
+#, tp-glo-e765e8ba
+msgid "DNS check failed. Please verify your domain configuration."
+msgstr "DNS 檢查失敗。請確認你的網域設定。"
+
+msgid "This domain is already assigned to another language."
+msgstr "此網域已指派給其他語言。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>Different Domain per Language add-on</strong> requires "
+"TranslatePress version %1$s or higher. You are currently using version "
+"%2$s. Please update TranslatePress to enable this feature."
+msgstr ""
+"<strong>Different Domain per Language 附加元件</strong>需要 TranslatePress 版本 "
+"%1$s 或更高版本。你目前使用的版本為 %2$s。請更新 TranslatePress 以啟用此功能。"
+
+msgid ""
+"Note: This option is disabled when Different Domain for Language addon is "
+"active."
+msgstr "注意：當 Different Domain for Language 附加元件啟用時，此選項會停用。"
+
+msgid ""
+"Different Domain per Language: Domain is required when domain mapping is "
+"enabled. The toggle has been disabled for languages with empty domains."
+msgstr "Different Domain per Language：啟用網域對應時必須提供網域。已停用網域為空之語言的切換開關。"
+
+msgid ""
+"Different Domain per Language: The same domain cannot be assigned to "
+"multiple languages. The toggle has been disabled for duplicate domains."
+msgstr "Different Domain per Language：同一個網域無法指派給多個語言。已停用重複網域的切換開關。"
+
+#, tp-glo-9fa92a70
+msgid ""
+"Different Domain per Language: A language domain cannot be the same as the "
+"main site URL. The toggle has been disabled for the matching domain."
+msgstr "Different Domain per Language：語言網域不能與主要網站 URL 相同。已停用相符網域的切換開關。"
+
+msgid "Please enter a domain."
+msgstr "請輸入網域。"
+
+msgid "Invalid domain format."
+msgstr "網域格式無效。"
+
+msgid "Could not reach domain: %s"
+msgstr "無法連線至網域：%s"
+
+msgid "Domain is reachable!"
+msgstr "網域可以連線！"
+
+#, tp-glo-1aabb38a
+msgid "Domain returned HTTP status %d."
+msgstr "網域傳回 HTTP 狀態碼 %d。"
+
+msgid "Limit this menu item to the following languages"
+msgstr "將此選單項目限制為以下語言"
+
+msgid "All Languages"
+msgstr "所有語言"
+
+msgid "Translator"
+msgstr "譯者"
+
+#, tp-glo-ee8b4f9f
+msgid " TranslatePress Settings"
+msgstr " TranslatePress 設定"
+
+msgid "Allow this user to translate the website."
+msgstr "允許這位使用者翻譯網站。"
+
+msgid "Translate Site"
+msgstr "翻譯網站"
+
+#, tp-ai
+msgid "Add-On"
+msgstr "附加元件"
+
+msgid "Deactivate"
+msgstr "停用"
+
+msgid "Activate"
+msgstr "啟用"
+
+#, tp-ai
+msgid "Installing..."
+msgstr "安裝中…"
+
+#, tp-ai
+msgid ""
+"This add-on can not be activated back without a valid license. Are you sure "
+"you want to deactivate it?"
+msgstr "沒有有效授權就無法重新啟用這個附加元件。你確定要停用嗎？"
+
+msgid "Documentation"
+msgstr "說明文件"
+
+#, tp-ai
+msgid "A valid license is required to activate add-ons."
+msgstr "啟用附加元件需要有效授權。"
+
+#, tp-ai
+msgid "Activate all"
+msgstr "全部啟用"
+
+#, tp-ai
+msgid ""
+"Add-ons can not be activated back without a valid license. Are you sure you "
+"want to deactivate them?"
+msgstr "沒有有效授權就無法重新啟用附加元件。你確定要將它們停用嗎？"
+
+#, tp-ai
+msgid "Deactivate all"
+msgstr "全部停用"
+
+#, tp-ai
+msgid "%1$sAdd-ons settings saved successfully%2$s"
+msgstr "%1$s附加元件設定已成功儲存%2$s"
+
+msgid "Date format"
+msgstr "日期格式"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Customize the date formatting per each translated language.<br/>Leave empty "
+"for default WP setting or see more information <a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">here</a>"
+msgstr ""
+"為每個翻譯語言自訂日期格式。<br/>留空以使用預設 WP 設定，或<a "
+"href=\"https://wordpress.org/support/article/formatting-date-and-time/\" "
+"title=\"Formatting Date and Time\" target=\"_blank\">在此處</a>查看更多資訊。"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"To edit an existing TranslatePress language, input the language code and "
+"fill in only the columns you want to overwrite (e.g. Language name, "
+"Flag).<br>You can also add new custom languages. They will be available "
+"under General settings, All Languages list, where the URL slug can be "
+"edited."
+msgstr ""
+"若要編輯現有的 TranslatePress "
+"語言，請輸入語言代碼，並僅填寫您想要覆寫的欄位（例如語言名稱、旗標）。<br>您也可以新增自訂語言。這些語言將會顯示在「一般設定」的「所有語言」清單中，"
+"您可以在該處編輯 URL slug。"
+
+#, tp-glo-91460d88, tp-glo-9fa92a70, tp-glo-c6709f3f
+msgid ""
+"For custom flag, first upload the image in media library then paste the "
+"URL.<br>Changing or deleting a custom language will impact translations and "
+"site URL's.<br>The Language code and the ISO Code should contain only "
+"alphabetical values, numerical values, \"-\" and \"_\".<br>The ISO Codes "
+"can be found on <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO Codes</a> and <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL Target Codes</a>."
+msgstr ""
+"若要使用自訂旗標，請先將圖片上傳至媒體庫，然後貼上 URL。<br>變更或刪除自訂語言將會影響翻譯和網站 URL。<br>語言代碼和 ISO "
+"代碼只能包含字母、數字、「-」和「_」。<br>ISO 代碼可於 <a href = "
+"\"https://cloud.google.com/translate/docs/languages\" target = "
+"\"_blank\">Google ISO 代碼</a> 和 <a href = "
+"\"https://www.deepl.com/docs-api/translating-text/\" target = "
+"\"_blank\">DeepL 目標代碼</a> 查詢。"
+
+msgid "Language code"
+msgstr "語言代碼"
+
+msgid "Language name"
+msgstr "語言名稱"
+
+msgid "Native name"
+msgstr "原生名稱"
+
+msgid "ISO Code"
+msgstr "ISO 代碼"
+
+#, tp-glo-9fa92a70
+msgid "Flag URL"
+msgstr "旗標 URL"
+
+msgid "Text RTL"
+msgstr "RTL 文字"
+
+msgid "Custom language"
+msgstr "自訂語言"
+
+#, tp-ai
+msgid "Disable bundled plugin translations"
+msgstr "停用隨附的外掛翻譯"
+
+#, tp-ai, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"By default, TranslatePress ships its own translation files in "
+"<code>wp-content/plugins/translatepress/languages/</code> and forces "
+"WordPress to use them instead of the language packs installed automatically "
+"from translate.wordpress.org.<br/>Enable this option to disable that "
+"override. WordPress will then load the community language pack from "
+"<code>wp-content/languages/plugins/</code> (if present) and fall back to "
+"the bundled files only when no pack is available."
+msgstr ""
+"預設情況下，TranslatePress 會將自己的翻譯檔案放在 "
+"<code>wp-content/plugins/translatepress/languages/</code>，並強制 WordPress "
+"使用這些檔案，而非自動從 translate.wordpress.org 安裝的語言套件。<br/>啟用此選項可停用該覆寫行為。WordPress "
+"將會改為從 <code>wp-content/languages/plugins/</code> "
+"載入社群語言套件（若存在的話），並且只在沒有可用套件時才會回退到隨附的檔案。"
+
+msgid "Disable dynamic translation"
+msgstr "停用動態翻譯"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c
+msgid ""
+"It disables detection of strings displayed dynamically using JavaScript. "
+"<br/>Strings loaded via a server side AJAX call will still be translated."
+msgstr "停用偵測使用 JavaScript 動態顯示的字串。 <br/>透過伺服器端 AJAX 呼叫載入的字串仍會被翻譯。"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Disable translation for gettext strings"
+msgstr "停用 gettext 字串的翻譯"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Gettext Strings are strings outputted by themes and plugins. <br> "
+"Translating these types of strings through TranslatePress can be "
+"unnecessary if they are already translated using the .po/.mo translation "
+"file system.<br>Enabling this option can improve the page load performance "
+"of your site in certain cases. The disadvantage is that you can no longer "
+"edit gettext translations using TranslatePress, nor benefit from automatic "
+"translation on these strings."
+msgstr ""
+"Gettext 字串是由佈景主題和外掛輸出的字串。<br> 如果這類字串已經使用 .po/.mo 翻譯檔案系統完成翻譯，透過 "
+"TranslatePress 再次翻譯可能是不必要的。<br>啟用此選項在某些情況下可改善網站的頁面載入效能。缺點是您將無法再使用 "
+"TranslatePress 編輯 gettext 翻譯，這些字串也無法使用自動翻譯。"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings translation is disabled"
+msgstr "Gettext 字串翻譯已停用"
+
+msgid "To enable it go to "
+msgstr "若要啟用，請前往 "
+
+#, tp-ai, tp-ctx-2edc90df, tp-ctx-a6928204, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress->Advanced Settings->Debug->Disable translation for gettext "
+"strings"
+msgstr "TranslatePress->進階設定->偵錯->停用 Gettext 字串翻譯"
+
+msgid " and uncheck the Checkbox."
+msgstr " 並取消勾選核取方塊。"
+
+msgid "Dismiss"
+msgstr "關閉"
+
+#, tp-glo-8778869a
+msgid "Exclude translated links from sitemap"
+msgstr "從 sitemap 排除翻譯連結"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-09a90ed1, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Do not include translated links in sitemaps generated by SEO "
+"plugins.<br/>Requires <a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack Add-on</a> to be installed and activated."
+msgstr ""
+"請勿將翻譯後的連結包含在 SEO 外掛產生的 sitemaps 中。<br/>需要安裝並啟用<a "
+"href=\"https://translatepress.com/docs/addons/seo-pack/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=miscellaneous\" "
+"title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> "
+"SEO Pack 附加元件</a>。"
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post title"
+msgstr "停用文章標題的容器標籤"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post title in translated "
+"languages.<br/>Useful when the title of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr "這會停用翻譯語言中文章標題的搜尋索引。<br/>當文章標題不允許 HTML 因而導致頁面損壞時，此功能非常實用。"
+
+#, tp-ctx-e9944eb3
+msgid "Disable post container tags for post content"
+msgstr "停用文章內容的容器標籤"
+
+#, tp-ctx-e9944eb3, tp-glo-d311355a
+msgid ""
+"It disables search indexing the post content in translated "
+"languages.<br/>Useful when the content of the post doesn't allow HTML thus "
+"breaking the page."
+msgstr "這會停用翻譯語言中文章內容的搜尋索引。<br/>當文章內容不允許 HTML 因而導致頁面損壞時，此功能非常實用。"
+
+msgid "Do not translate certain paths"
+msgstr "不翻譯特定路徑"
+
+msgid ""
+"Choose what paths can be translated. Supports wildcard at the end of the "
+"path.<br>For example, to exclude https://example.com/some/path you can "
+"either use the rule /some/path/ or /some/*.<br>Enter each rule on it's own "
+"line. To exclude the home page use {{home}}."
+msgstr ""
+"選擇哪些路徑可以翻譯。支援在路徑結尾使用萬用字元。<br>例如，要排除 https://example.com/some/path，你可以使用規則 "
+"/some/path/ 或 /some/*。<br>每條規則請輸入於獨立一行。若要排除首頁，請使用 {home}。"
+
+msgid "Exclude Paths From Translation"
+msgstr "從翻譯排除路徑"
+
+msgid "Translate Only Certain Paths"
+msgstr "只翻譯特定路徑"
+
+#, tp-glo-d1526d97
+msgid "Enable the hreflang x-default tag for language:"
+msgstr "啟用語言的 hreflang x-default 標籤："
+
+#, tp-glo-d1526d97
+msgid ""
+"Enables the hreflang=\"x-default\" for an entire language. See "
+"documentation for more details."
+msgstr "為整個語言啟用 hreflang=\"x-default\"。詳情請參閱說明文件。"
+
+msgid "Translate numbers and numerals"
+msgstr "翻譯數字與數值"
+
+msgid "Enable translation of numbers ( e.g. phone numbers)"
+msgstr "啟用數字翻譯（例如電話號碼）"
+
+msgid "Selector"
+msgstr "選取器"
+
+msgid "Exclude from dynamic translation"
+msgstr "從動態翻譯排除"
+
+#, tp-ctx-2edc90df, tp-glo-7f2a0b8c, tp-glo-d311355a
+msgid ""
+"Do not dynamically translate strings that are found in html nodes matching "
+"these selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated using JavaScript.<br/>These strings will "
+"still be translated on the server side if possible."
+msgstr ""
+"不要動態翻譯在符合這些選取器的 HTML 節點中找到的字串。<br>排除符合這些選取器之 HTML 節點的所有子節點，使其不會透過 "
+"JavaScript 進行翻譯。<br/>如果可行，這些字串仍會在伺服器端進行翻譯。"
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Gettext String"
+msgstr "Gettext 字串"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext Strings"
+msgstr "排除 Gettext 字串"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"Exclude these strings from being translated as Gettext strings by "
+"TranslatePress. Leave the domain empty to take into account any Gettext "
+"string.<br/>Can still be translated through po/mo files."
+msgstr ""
+"將這些字串排除在 TranslatePress 的 Gettext 字串翻譯之外。將網域留白以納入任何 Gettext 字串。<br/>仍可透過 "
+"po/mo 檔案進行翻譯。"
+
+msgid "Exclude selectors only from automatic translation"
+msgstr "僅將選擇器排除於自動翻譯之外"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not automatically translate strings that are found in html nodes "
+"matching these selectors.<br>Excludes all the children of HTML nodes "
+"matching these selectors from being automatically translated.<br>Manual "
+"translation of these strings is still possible."
+msgstr ""
+"不要自動翻譯在符合這些選取器的 HTML 節點中找到的字串。<br>排除符合這些選取器之 HTML "
+"節點的所有子節點，使其不會自動翻譯。<br>這些字串仍可以手動翻譯。"
+
+msgid "Exclude selectors from translation"
+msgstr "將選擇器排除於翻譯之外"
+
+#, tp-ctx-2edc90df, tp-glo-d311355a
+msgid ""
+"Do not translate strings that are found in html nodes matching these "
+"selectors.<br>Excludes all the children of HTML nodes matching these "
+"selectors from being translated.<br>These strings cannot be translated "
+"manually nor automatically."
+msgstr ""
+"不要翻譯在符合這些選取器的 HTML 節點中找到的字串。<br>排除符合這些選取器之 HTML "
+"節點的所有子節點，使其不被翻譯。<br>這些字串無法手動或自動翻譯。"
+
+#, tp-ctx-8a82cc9e
+msgid "String"
+msgstr "字串"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings from automatic translation"
+msgstr "將字串排除在自動翻譯之外"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Do not automatically translate these strings (ex. names, technical "
+"words...)<br>Paragraphs containing these strings will still be translated "
+"except for the specified part."
+msgstr "不要自動翻譯這些字串（例如名稱、技術詞彙……）。<br>包含這些字串的段落仍會翻譯，但指定的部分除外。"
+
+#, tp-glo-d311355a
+msgid "Fix broken HTML"
+msgstr "修復損壞的 HTML"
+
+#, tp-glo-d311355a
+msgid "General attempt to fix broken or missing HTML on translated pages.<br/>"
+msgstr "一般嘗試修復翻譯頁面上損壞或遺漏的 HTML。<br/>"
+
+#, tp-glo-9fa92a70
+msgid "Force slash at end of home url:"
+msgstr "強制在首頁 URL 結尾加上斜線："
+
+msgid "Ads a slash at the end of the home_url() function"
+msgstr "在 home_url() 函式結尾加上斜線"
+
+msgid "Show Both (recommended)"
+msgstr "兩者都顯示（建議）"
+
+msgid "Remove Country Locale"
+msgstr "移除國家/地區語系"
+
+msgid "Remove Region Independent Locale"
+msgstr "移除區域獨立語系"
+
+#, tp-glo-d1526d97
+msgid "Remove duplicate hreflang"
+msgstr "移除重複的 hreflang"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-d1526d97
+msgid ""
+"Choose which hreflang tags will appear on your website.<br/>We recommend "
+"showing both types of hreflang tags as indicated by <a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google "
+"documentation</a>.<br/>Removing Country Locale when having multiple Country "
+"Locales of the same language (ex. English UK and English US) will result in "
+"showing one hreflang tag with link to just one of the region locales for "
+"that language."
+msgstr ""
+"選擇哪些 hreflang 標籤會顯示在您的網站上。<br/>我們建議顯示這兩種 hreflang 標籤，如<a "
+"href=\"https://developers.google.com/search/docs/advanced/crawling/"
+"localized-versions\" title=\"Google Crawling\" target=\"_blank\">Google "
+"說明文件</a>所述。<br/>當同一語言有多個國家/地區語系（例如：英文（英國）與英文（美國））時，移除國家/地區語系將導致只顯示一個 "
+"hreflang 標籤，且連結僅指向該語言的其中一個地區語系。"
+
+msgid "Default (example: en-US, fr-CA, etc.)"
+msgstr "預設（例如：en-US、fr-CA 等）"
+
+msgid "Regional (example: en, fr, es, etc.)"
+msgstr "區域（例如：en、fr、es 等）"
+
+#, tp-glo-d311355a
+msgid "HTML Lang Attribute Format"
+msgstr "HTML Lang 屬性格式"
+
+#, tp-glo-d311355a
+msgid ""
+"Change lang attribute of the html tag to a format that includes country "
+"regional or not. <br>In HTML, the lang attribute (<html lang=\"en-US\">)  "
+"should be used to  specify the language of text content so that the  "
+"browser can correctly display or process  your content (eg. for  "
+"hyphenation, styling, spell checking, etc)."
+msgstr ""
+"將 html 標籤的 lang 屬性變更為包含或不包含國家/地區的格式。<br>在 HTML 中，lang 屬性（<html "
+"lang=\"en-US\">）應用於指定文字內容的語言，以便瀏覽器能正確顯示或處理您的內容（例如斷字、樣式設定、拼字檢查等）。"
+
+msgid "Load legacy Language Switcher"
+msgstr "載入舊版語言切換器"
+
+#, tp-glo-da70db08
+msgid ""
+"Applies to all types of language switchers (floating, shortcode, and menu). "
+"When enabled, the site will revert to using the original Language Switcher "
+"configured in the General Settings tab, replacing the new customizable "
+"version. Your existing switcher settings will remain saved, but they will "
+"be ignored while this option is active."
+msgstr ""
+"適用於所有類型的語言切換器（浮動、shortcode "
+"和選單）。啟用後，網站將恢復使用「一般設定」分頁中設定的原始語言切換器，取代新的可自訂版本。您現有的切換器設定將繼續儲存，但在此選項啟用期間會被忽略。"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "Load legacy SEO Pack Add-On"
+msgstr "載入舊版 SEO Pack 附加元件"
+
+#, tp-ai, tp-ctx-07893e52, tp-ctx-a6928204, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"In case the recent migration to the new slug rewrite is causing trouble, "
+"set this to Yes to use the old method <br> Please <a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">open a support ticket</a> letting us know of the issues "
+"you are having."
+msgstr ""
+"如果最近移轉至新的 slug 重寫規則造成問題，請將此選項設為「是」以使用舊方法 <br> 請<a "
+"href=\"https://translatepress.com/support/open-ticket/?utm_source=tp-"
+"advanced&utm_medium=client-site&utm_campaign=troubleshooting\" "
+"target=\"_blank\">開啟支援票證</a>，讓我們知道您遇到的問題。"
+
+msgid "Manual Translation Only"
+msgstr "僅手動翻譯"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress pro-actively scans and saves strings in the database when "
+"users access translated pages. <br>This setting disables this functionality "
+"and only allows translation and string saving when inside the Translation "
+"Editor. <br>Also disables machine translation outside the Translation "
+"Editor, giving you better control over character spending, by translating "
+"only the pages you visit in the Translation Editor."
+msgstr ""
+"TranslatePress "
+"會在使用者存取翻譯頁面時，主動掃描並將字串儲存至資料庫。<br>此設定會停用這項功能，僅允許在翻譯編輯器內進行翻譯和儲存字串。<br>同時也會停用翻譯編"
+"輯器外部的機器翻譯，只翻譯您在翻譯編輯器中瀏覽的頁面，讓您更能控制字元用量。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Open language switcher only on click"
+msgstr "僅在點擊時開啟語言切換器"
+
+#, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of "
+"hovering.<br> Close it by clicking on it, anywhere else on the screen or by "
+"pressing the escape key. This will affect only the shortcode language "
+"switcher."
+msgstr ""
+"透過點擊而非懸停來開啟語言切換器 shortcode。<br> 點擊該元素、畫面其他位置，或按下 Esc 鍵即可關閉。這只會影響 shortcode "
+"語言切換器。"
+
+msgid "Show opposite language in the language switcher"
+msgstr "在語言切換器中顯示另一種語言"
+
+#, tp-glo-da70db08
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one.<br> Only works when there are exactly two "
+"languages, the default one and a translation one.<br>This will affect the "
+"shortcode language switcher and floating language switcher as well.<br> To "
+"achieve this in menu language switcher go to Appearance->Menus->Language "
+"Switcher and select Opposite Language."
+msgstr ""
+"將語言切換器變更為顯示另一個可用語言（而非目前語言）的按鈕。<br> 僅在恰好有兩種語言（預設語言和翻譯語言）時有效。<br>這也會影響 "
+"shortcode 語言切換器和浮動語言切換器。<br> 若要在選單語言切換器中達成此效果，請前往「外觀->選單->語言切換器」並選取「另一種語言」。"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization failed."
+msgstr "TranslatePress Gettext 資料庫最佳化失敗。"
+
+#, tp-ai
+msgid "Retry"
+msgstr "重試"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize its gettext database tables. Back up the "
+"database, then <a href=\"%s\">start the optimization</a>."
+msgstr "TranslatePress 需要最佳化其 Gettext 資料庫資料表。請先備份資料庫，然後<a href=\"%s\">開始最佳化</a>。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Pending gettext database optimization"
+msgstr "Gettext 資料庫最佳化待處理"
+
+#, tp-glo-ee8b4f9f
+msgid "Optimize TranslatePress database tables"
+msgstr "最佳化 TranslatePress 資料庫資料表"
+
+msgid "<a href=\"%s\">Click here</a> to access the database optimization tool."
+msgstr "<a href=\"%s\">點擊這裡</a>以存取資料庫最佳化工具。"
+
+msgid ""
+"It helps remove possible duplicate translations, clear unnecessary data and "
+"repair possible metadata issues."
+msgstr "可協助移除可能的重複翻譯、清除不必要的資料，並修復可能的中繼資料問題。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<a href=\"%s\" target=\"_blank\">Here</a> you can observe the last 5 SQL "
+"errors relevant to TranslatePress if they exist."
+msgstr ""
+"<a href=\"%s\" target=\"_blank\">這裡</a>可以查看與 TranslatePress 相關的最後 5 筆 SQL "
+"錯誤（如果存在的話）。"
+
+msgid "Troubleshooting"
+msgstr "疑難排解"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Exclude Gettext strings"
+msgstr "排除 Gettext 字串"
+
+msgid "Debug"
+msgstr "偵錯"
+
+msgid "Custom languages"
+msgstr "自訂語言"
+
+msgid "Miscellaneous options"
+msgstr "其他選項"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Language Switcher"
+msgstr "語言切換器"
+
+#, tp-ctx-2edc90df
+msgid "Exclude strings & pages"
+msgstr "排除字串與頁面"
+
+msgid "Automatic Translation Memory"
+msgstr "自動翻譯記憶體"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Serve same translation for similar text. The strings need to have a "
+"percentage of 95% similarity.<br>Helps prevent losing existing translation "
+"when correcting typos or making minor adjustments to the original text. "
+"<br>If a translation already exists for a very similar original string, it "
+"will automatically be used for the current original string.<br>Does not "
+"work when making changes to a text that is part of a translation block "
+"unless the new text is manually merged again in a translation "
+"block.<br>Each string needs to have a minimum of 50 characters."
+msgstr ""
+"為相似文字提供相同翻譯。字串必須達到 95% 的相似度。<br>有助於在修正錯字或對原始文字進行微調時，避免遺失現有翻譯。 "
+"<br>若已有與目前原始字串非常相似的字串翻譯，將自動套用到目前的原始字串。<br>當修改屬於翻譯區塊一部分的文字時，此功能不會生效，除非新文字再次手動"
+"合併到翻譯區塊中。<br>每個字串必須至少包含 50 個字元。"
+
+msgid ""
+"WARNING: This feature can negatively impact page loading times in secondary "
+"languages, particularly with large databases (for example websites with a "
+"lot of pages or products). If you experience slow loading times, disable "
+"this and try again."
+msgstr ""
+"警告：此功能可能會對次要語言的頁面載入時間造成負面影響，特別是在資料庫龐大的情況下（例如擁有大量頁面或商品的網站）。如果您遇到載入速度變慢的情況，請停用"
+"此功能後再試一次。"
+
+msgid "Fix missing dynamic content"
+msgstr "修正遺失的動態內容"
+
+#, tp-glo-7f2a0b8c
+msgid ""
+"May help fix missing content inserted using JavaScript. <br> It shows "
+"dynamically inserted content in original language for a moment before the "
+"translation request is finished."
+msgstr "可能有助於修正使用 JavaScript 插入的遺失內容。<br> 在翻譯請求完成前，會短暫顯示以原始語言動態插入的內容。"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post content and title"
+msgstr "過濾文章內容與標題中的 Gettext 包裝標記"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"content and post title. Does not affect previous post content. "
+"<br/><strong>Database backup is recommended before switching on.</strong>"
+msgstr ""
+"過濾所有已更新文章內容及標題中的 Gettext 包裝標記（例如 #!trpst#trp-gettext）。不會影響先前的文章內容。 "
+"<br/><strong>建議在開啟前先備份資料庫。</strong>"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid "Filter Gettext wrapping from post meta"
+msgstr "過濾文章中繼資料中的 Gettext 包裝標記"
+
+#, tp-ctx-e9944eb3, tp-glo-64dbb752
+msgid ""
+"Filters gettext wrapping such as #!trpst#trp-gettext from all updated post "
+"meta. Does not affect previous post meta. <br/><strong>Database backup is "
+"recommended before switching on.</strong>"
+msgstr ""
+"過濾所有已更新文章中繼資料中的 Gettext 包裝標記（例如 #!trpst#trp-gettext）。不會影響先前的文章中繼資料。 "
+"<br/><strong>建議在開啟前先備份資料庫。</strong>"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Abilities for managing TranslatePress configuration."
+msgstr "管理 TranslatePress 設定的權限"
+
+#, tp-ai
+msgid "Add a translation language"
+msgstr "新增翻譯語言"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Adds a translation language to TranslatePress. Enforces the same "
+"per-license limit as the settings UI."
+msgstr "為 TranslatePress 新增翻譯語言。強制執行與設定介面相同的每份授權限制。"
+
+#, tp-ai, tp-glo-8896ebe8
+msgid "WordPress locale code (e.g. fr_FR, de_DE)."
+msgstr "WordPress 語系代碼（例如 fr_FR、de_DE）。"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Optional URL slug. Defaults to the ISO language code if omitted."
+msgstr "選填的 URL slug。若省略，預設為 ISO 語言代碼。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Set TranslatePress license key"
+msgstr "設定 TranslatePress 授權金鑰"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Saves a TranslatePress license key and triggers a remote license check, "
+"mirroring the onboarding flow."
+msgstr "儲存 TranslatePress 授權金鑰並觸發遠端授權檢查，與新手引導流程一致。"
+
+#, tp-ai
+msgid "The license key to activate."
+msgstr "要啟用的授權金鑰。"
+
+msgid "Enable Automatic Translation"
+msgstr "啟用自動翻譯"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Turns on Automatic Translation. A valid TranslatePress license is required "
+"only when the resolved engine is TranslatePress AI (mtapi); Google "
+"Translate and DeepL do not require one. If no engine is passed and none is "
+"configured, defaults to mtapi."
+msgstr ""
+"開啟自動翻譯。只有當實際使用的引擎為 TranslatePress AI (mtapi) 時，才需要有效的 TranslatePress "
+"授權；Google Translate 和 DeepL 則不需要。如果未傳入引擎且未設定任何引擎，則預設為 mtapi。"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-c6709f3f
+msgid ""
+"Optional translation-engine slug to select (e.g. \"mtapi\", "
+"\"google_translate_v2\", \"deepl\"). When omitted, keeps the "
+"already-configured engine, or defaults to \"mtapi\" if none is configured."
+msgstr ""
+"可選用的翻譯引擎 slug（例如 "
+"\"mtapi\"、\"google_translate_v2\"、\"deepl\"）。若省略，則保留已設定的引擎；若未設定任何引擎，則預設為 "
+"\"mtapi\"。"
+
+#, tp-ai
+msgid "List configured languages"
+msgstr "列出已設定的語言"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-ee8b4f9f
+msgid ""
+"Returns the languages currently configured in TranslatePress, including the "
+"default language and per-language slug/publish state."
+msgstr "傳回目前設定在 TranslatePress 中的語言，包含預設語言以及各語言的 slug/發布狀態。"
+
+#, tp-ai
+msgid "List available language codes"
+msgstr "列出可用的語言代碼"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Returns the full catalog of language codes TranslatePress recognizes, with "
+"their English names."
+msgstr "傳回 TranslatePress 可識別的完整語言代碼目錄，及其英文名稱。"
+
+#, tp-ai
+msgid "Remove a translation language"
+msgstr "移除翻譯語言"
+
+#, tp-ai
+msgid ""
+"Removes a configured translation language. The default language cannot be "
+"removed without first reassigning the default."
+msgstr "移除已設定的翻譯語言。預設語言必須先重新指派後才能移除。"
+
+#, tp-ai
+msgid "Locale code of the language to remove."
+msgstr "要移除的語言的地區代碼。"
+
+#, tp-ai
+msgid "Update a translation language"
+msgstr "更新翻譯語言"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"Replaces the slug and publish status of an already-configured translation "
+"language."
+msgstr "取代已設定之翻譯語言的 slug 和發布狀態。"
+
+#, tp-ai
+msgid "Locale code of the language to update."
+msgstr "要更新的語言的地區代碼。"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "URL slug for this language."
+msgstr "此語言的 URL slug。"
+
+#, tp-ai
+msgid "Whether this language is published on the front end."
+msgstr "此語言是否在前端發布。"
+
+#, tp-ai
+msgid "Set the default language"
+msgstr "設定預設語言"
+
+#, tp-ai
+msgid ""
+"Promotes an already-configured language to be the site default. The "
+"previous default remains in the translation languages list."
+msgstr "將已設定的語言提升為網站預設語言。先前的預設語言會保留在翻譯語言清單中。"
+
+#, tp-ai
+msgid ""
+"Locale code to promote to default. Must already be a configured translation "
+"language."
+msgstr "要提升為預設語言的地區代碼。必須已是設定的翻譯語言。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "You do not have permission to manage TranslatePress settings."
+msgstr "你沒有管理 TranslatePress 設定的權限。"
+
+#, tp-ai
+msgid ""
+"Invalid language code. Allowed characters: A-Z, a-z, 0-9, hyphen, "
+"underscore."
+msgstr "語言代碼無效。允許的字元：A-Z、a-z、0-9、連字號、底線。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Language code \"%s\" is not recognized by TranslatePress."
+msgstr "TranslatePress 無法識別語言代碼「%s」。"
+
+#, tp-ai
+msgid "Language \"%s\" is already configured."
+msgstr "語言「%s」已設定完成。"
+
+#, tp-ai
+msgid ""
+"Your current license allows up to %d additional language(s). Upgrade or "
+"activate a Pro license to add more."
+msgstr "您目前的授權最多允許 %d 個額外語言。升級或啟用 Pro 授權以新增更多語言。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new language during settings sanitization."
+msgstr "TranslatePress 在設定清理過程中拒絕了這個新語言。"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Enabling Automatic Translation with the TranslatePress AI engine requires "
+"an active TranslatePress license. Activate a license first with "
+"translatepress/set-license-key, or pass a different engine (e.g. "
+"\"google_translate_v2\", \"deepl\")."
+msgstr ""
+"使用 TranslatePress AI 引擎開啟自動翻譯需要有效的 TranslatePress 授權。請先使用 "
+"translatepress/set-license-key 啟用授權，或傳入其他引擎（例如 "
+"\"google_translate_v2\"、\"deepl\"）。"
+
+msgid "Your license key expired on %s."
+msgstr "您的授權金鑰已於 %s 過期。"
+
+#, tp-ai
+msgid "Your license key has expired."
+msgstr "您的授權金鑰已過期。"
+
+msgid "Your license key has been disabled."
+msgstr "您的授權金鑰已被停用。"
+
+#, tp-glo-ee8b4f9f
+msgid "Your TranslatePress license key is invalid or missing."
+msgstr "您的 TranslatePress 授權金鑰無效或遺失。"
+
+#, tp-ai, tp-glo-666af81f, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from your "
+"TranslatePress account."
+msgstr "您的授權金鑰已在此 URL 停用。請從您的 TranslatePress 帳戶重新啟用。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"License key mismatch. The license you entered does not match the "
+"TranslatePress version you have installed."
+msgstr "授權金鑰不符。您輸入的授權與已安裝的 TranslatePress 版本不相符。"
+
+msgid "Your license key has reached its activation limit."
+msgstr "您的授權金鑰已達啟用上限。"
+
+#, tp-ai
+msgid "An error occurred while activating the license, please try again."
+msgstr "啟用授權時發生錯誤，請再試一次。"
+
+#, tp-ai
+msgid "Language \"%s\" is not currently configured."
+msgstr "語言「%s」目前尚未設定。"
+
+#, tp-ai
+msgid ""
+"The default language cannot be removed. Set another language as default "
+"first."
+msgstr "無法移除預設語言。請先將其他語言設為預設。"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Slug is empty after sanitization. Use only URL-safe characters."
+msgstr "slug 在清理後為空白。請只使用安全的 URL 字元。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"Language \"%s\" is not currently configured. Add it first with "
+"translatepress/add-language."
+msgstr "語言「%s」目前尚未設定。請先使用 translatepress/add-language 新增。"
+
+#, tp-ai
+msgid "The default language is always published and cannot be unpublished."
+msgstr "預設語言一律會發布，且無法取消發布。"
+
+#, tp-ai, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug \"%1$s\" is already in use by language \"%2$s\"."
+msgstr "slug「%1$s」已被語言「%2$s」使用。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress rejected the new settings during sanitization."
+msgstr "TranslatePress 在清理過程中拒絕了新設定。"
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced"
+msgstr "進階"
+
+msgid "Are you sure you want to remove this item?"
+msgstr "確定要移除此項目嗎？"
+
+msgid "Remove"
+msgstr "移除"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Add"
+msgstr "新增"
+
+msgid "Select..."
+msgstr "選取..."
+
+msgid "An error occurred, please try again."
+msgstr "發生錯誤，請再試一次。"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"您的授權金鑰已在此 URL 停用。請從 <a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> 管理網站重新啟用。"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn’t "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you’ve installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>授權金鑰不符。</strong>您輸入的授權與已安裝的 TranslatePress 版本不符。</p><p>請確認您已從 "
+"TranslatePress 帳號安裝與授權相符的正確版本。</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"If you have only the free plugin installed but added a paid license, please "
+"install the paid plugin from your TranslatePress account."
+msgstr "如果您只安裝了免費外掛，但已新增付費授權，請從您的 TranslatePress 帳號安裝付費外掛。"
+
+msgid "Upgrade your plan to add more sites. %1$sUpgrade now%2$s"
+msgstr "升級您的方案以新增更多網站。%1$s立即升級%2$s"
+
+msgid "You have successfully activated your license"
+msgstr "您已成功啟用授權。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "[%s] Low TranslatePress AI Words"
+msgstr "[%s] TranslatePress AI 字數不足"
+
+msgid "upgrade your plan"
+msgstr "升級您的方案"
+
+msgid "upgrade your plan or get extra AI Words"
+msgstr "升級您的方案或取得額外 AI 字數"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI words are running low on your site."
+msgstr "您網站上的 TranslatePress AI 字數即將用完。"
+
+msgid "Current status: %s words remaining"
+msgstr "目前狀態：剩餘 %s 字"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Once the remaining AI words run out, automatic translation through "
+"TranslatePress AI will be paused."
+msgstr "一旦剩餘 AI 字數用完，透過 TranslatePress AI 進行的自動翻譯將會暫停。"
+
+msgid "To continue translating your content, please %1$s over at %2$s"
+msgstr "若要繼續翻譯您的內容，請前往 %2$s %1$s"
+
+msgid "Manage Notification: %s"
+msgstr "管理通知：%s"
+
+msgid "Others"
+msgstr "其他"
+
+msgid "Restrict by Language"
+msgstr "依語言限制"
+
+msgid "Exclude from Language"
+msgstr "從語言排除"
+
+msgid "Restrict element to language"
+msgstr "限制元素顯示語言"
+
+msgid "Show this element only in one language."
+msgstr "僅在單一語言中顯示此元素。"
+
+msgid "Enable translation"
+msgstr "啟用翻譯"
+
+msgid ""
+"Allow translation to the corresponding language only if the content is "
+"written in the default language."
+msgstr "僅當內容以預設語言撰寫時，才允許翻譯為對應語言。"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Select language"
+msgstr "選取語言"
+
+msgid "Choose in which language to show this element."
+msgstr "選擇要以哪種語言顯示此元素。"
+
+msgid "Exclude element from language"
+msgstr "從語言排除元素"
+
+msgid "Exclude this element from specific languages."
+msgstr "從特定語言排除此元素。"
+
+msgid "Select languages"
+msgstr "選取語言"
+
+msgid "Choose from which languages to exclude this element."
+msgstr "選擇要從哪些語言排除此元素。"
+
+msgid ""
+"This element will still be visible when you are translating your website "
+"through the Translation Editor."
+msgstr "透過翻譯編輯器翻譯網站時，此元素仍會顯示。"
+
+msgid "The content of this element should be written in the default language."
+msgstr "此元素的內容應以預設語言撰寫。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> encountered SQL errors. <a href=\"%s\" "
+"title=\"View TranslatePress SQL Errors\">Check out the errors</a>."
+msgstr ""
+"<strong>TranslatePress</strong> 遇到 SQL 錯誤。<a href=\"%s\" title=\"View "
+"TranslatePress SQL Errors\">查看錯誤</a>。"
+
+msgid "Automatic translation has been disabled."
+msgstr "自動翻譯已停用。"
+
+msgid "Logged errors"
+msgstr "已記錄的錯誤"
+
+#, tp-glo-ee8b4f9f
+msgid "These are the most recent 5 errors logged by TranslatePress:"
+msgstr "以下是 TranslatePress 記錄的最新的 5 個錯誤："
+
+msgid "Yes"
+msgstr "是"
+
+msgid "Why are these errors occuring"
+msgstr "為什麼會發生這些錯誤"
+
+#, tp-glo-c6709f3f, tp-glo-ee8b4f9f
+msgid ""
+"If TranslatePress detects something wrong when executing queries on your "
+"database, it may disable the Automatic Translation feature in order to "
+"avoid any extra charging by Google/DeepL. Automatic Translation needs to be "
+"manually turned on, after you solve the issues."
+msgstr ""
+"如果 TranslatePress 在執行資料庫查詢時偵測到異常，可能會停用自動翻譯功能，以避免 Google/DeepL "
+"額外收費。解決問題後，需要手動重新開啟自動翻譯。"
+
+msgid ""
+"The SQL errors detected can occur for various reasons including missing "
+"tables, missing permissions for the SQL user to create tables or perform "
+"other operations, problems after site migration or changes to SQL server "
+"configuration."
+msgstr ""
+"偵測到的 SQL 錯誤可能由多種原因造成，包括缺少資料表、SQL 使用者缺少建立資料表或執行其他操作的權限、網站遷移後的問題，或是 SQL "
+"伺服器設定變更。"
+
+msgid "What you can do in this situation"
+msgstr "您可以在此情況下怎麼做"
+
+msgid "Plan A."
+msgstr "方案 A."
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL settings. Check if no "
+"more errors occur while browsing your website in a translated language. "
+"Look at the timestamps of the errors to make sure you are not seeing the "
+"old errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"前往「設定」->「TranslatePress」->「一般」分頁，然後儲存設定。這會使用您目前的 SQL "
+"設定重新產生資料表。請以翻譯語言瀏覽網站，確認是否不再發生錯誤。請查看錯誤時間戳記，以確保您看到的不是舊錯誤。只會顯示最近 5 筆錯誤。"
+
+msgid "Plan B."
+msgstr "方案 B."
+
+msgid "If your problem isn't solved, try the following steps:"
+msgstr "如果問題尚未解決，請嘗試以下步驟："
+
+msgid "Create a backup of your database"
+msgstr "建立資料庫備份"
+
+msgid ""
+"Create a copy of each translation table where you encounter errors. You can "
+"copy the table within the same database (trp_dictionary_en_us_es_es_COPY "
+"for example) -- perform this step only if you want to keep the current "
+"translations"
+msgstr ""
+"為每個發生錯誤的翻譯資料表建立副本。您可以在同一個資料庫內複製資料表（例如 "
+"trp_dictionary_en_us_es_es_COPY）——只有當您想保留目前翻譯時，才執行此步驟。"
+
+msgid "Remove the trouble tables by executing the DROP function on them"
+msgstr "執行 DROP 函式來移除有問題的資料表"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Go to Settings -> TranslatePress -> General tab and Save Settings. This "
+"will regenerate the tables using your current SQL server."
+msgstr "前往「設定」->「TranslatePress」->「一般」分頁，然後儲存設定。這會使用您目前的 SQL 伺服器重新產生資料表。"
+
+msgid ""
+"Copy the relevant content from the duplicated tables "
+"(trp_dictionary_en_us_es_es_COPY for example) in the newly generated table "
+"(trp_dictionary_en_us_es_es) -- perform this step only if you want to keep "
+"the current translations"
+msgstr ""
+"將複製資料表中的相關內容（例如 "
+"trp_dictionary_en_us_es_es_COPY）複製到新產生的資料表（trp_dictionary_en_us_es_"
+"es）中——只有當您想保留目前翻譯時，才執行此步驟。"
+
+msgid ""
+"Test it to see if everything is working. If something went wrong, you can "
+"restore the backup that you've made at the first step. Check if no more "
+"errors occur while browsing your website in a translated language. Look at "
+"the timestamps of the errors to make sure you are not seeing the old "
+"errors. Only the most recent 5 errors are displayed."
+msgstr ""
+"進行測試以確認一切正常。如果發生問題，您可以還原第一步建立的備份。請以翻譯語言瀏覽網站，確認是否不再發生錯誤。請查看錯誤時間戳記，以確保您看到的不是舊錯"
+"誤。只會顯示最近 5 筆錯誤。"
+
+msgid "Plan C."
+msgstr "方案 C."
+
+msgid ""
+"If your problem still isn't solved, try asking your hosting about your "
+"errors. The most common issue is missing permissions for the SQL user, such "
+"as the Create Tables permission."
+msgstr "如果問題仍未解決，請嘗試向您的主機商詢問這些錯誤。最常見的問題是 SQL 使用者缺少權限，例如建立資料表的權限。"
+
+msgid "Could not install. Try again from <a href=\"%s\" >Plugins Dashboard.</a>"
+msgstr "無法安裝。請從<a href=\"%s\" >外掛程式頁面</a>再試一次。"
+
+msgid "Settings scope unknown."
+msgstr "設定範圍未知。"
+
+msgid "Legacy disabled."
+msgstr "舊版功能已停用。"
+
+msgid "Change language to %s"
+msgstr "將語言變更為 %s"
+
+msgid "Automatic Translation"
+msgstr "自動翻譯"
+
+msgid "Unsupported languages"
+msgstr "不支援的語言"
+
+msgid ""
+"The selected automatic translation engine does not provide support for "
+"these languages.<br>You can still manually translate pages in these "
+"languages using the Translation Editor."
+msgstr "選取的自動翻譯引擎不支援這些語言。<br>您仍可使用翻譯編輯器手動翻譯這些語言的頁面。"
+
+msgid "General"
+msgstr "一般"
+
+#, tp-ai
+msgid "Glossary"
+msgstr "詞彙表"
+
+#, tp-glo-91460d88
+msgid "API key validation failed."
+msgstr "API 金鑰驗證失敗。"
+
+#, tp-glo-91460d88
+msgid "API key verification was successful."
+msgstr "API 金鑰驗證成功。"
+
+#, tp-glo-d6a22d74
+msgid "Please enter your Google Translate key."
+msgstr "請輸入您的 Google Translate 金鑰。"
+
+#, tp-glo-ee8b4f9f
+msgid "Not TranslatePress onboarding page."
+msgstr "非 TranslatePress 設定引導頁面。"
+
+msgid "Step %s does not exist"
+msgstr "步驟 %s 不存在"
+
+msgid "Welcome"
+msgstr "歡迎"
+
+msgid "Add Languages"
+msgstr "新增語言"
+
+msgid "Enable Addons"
+msgstr "啟用附加元件"
+
+msgid "Finalize"
+msgstr "完成"
+
+msgid "Exit Setup"
+msgstr "退出設定"
+
+msgid "Upgrade"
+msgstr "升級"
+
+msgid "Nothing here"
+msgstr "尚無內容"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license is missing or invalid. "
+"<br/>Please %1$sregister your copy%2$s to enable automatic website "
+"translation via TranslatePress AI, premium addons, automatic updates and "
+"support. Need a license key? %3$sPurchase one now%4$s"
+msgstr ""
+"您的 <strong>TranslatePress</strong> 授權遺失或無效。<br/>請 %1$s註冊您的副本%2$s，以啟用透過 "
+"TranslatePress AI 提供的自動網站翻譯、進階附加元件、自動更新及支援服務。需要授權金鑰嗎？%3$s立即購買%4$s"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> Manage Sites."
+msgstr ""
+"您的授權已在此 URL 停用。請前往 <a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=license-deactivated\">https://"
+"translatepress.com/account</a> -> 管理網站 重新啟用。"
+
+msgid ""
+"You have reached the activation limit for your <strong>%1$s</strong> "
+"license. <br/>Manage your active sites from %2$s your account %3$s."
+msgstr "您的 <strong>%1$s</strong> 授權已達啟用數量上限。<br/>從 %2$s 您的帳號 %3$s 管理已啟用的網站。"
+
+msgid ""
+"License key mismatch. The license you entered doesn’t match the "
+"<strong>%1$s</strong> version you have installed. <br/>Please check that "
+"you’ve installed the correct version for your license from your "
+"%2$sTranslatePress account%3$s."
+msgstr ""
+"授權金鑰不符。您輸入的授權與您已安裝的 <strong>%1$s</strong> 版本不相符。<br/>請在您的 "
+"%2$sTranslatePress Account%3$s 中確認您已安裝與授權相符的正確版本。"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<br/>If you have only the free plugin installed but added a paid license, "
+"please install the paid plugin from your TranslatePress account."
+msgstr "<br/>如果您只安裝了免費版外掛，但新增了付費授權，請從您的 TranslatePress Account 安裝付費版外掛。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Your <strong>TranslatePress</strong> license has expired. <br/>Please "
+"%1$sRenew Your Licence%2$s to continue receiving access to automatic "
+"translations via TranslatePress AI, premium addons, product downloads, and "
+"automatic updates. %3$sRenew now %4$s"
+msgstr ""
+"您的 <strong>TranslatePress</strong> 授權已到期。<br/>請 %1$s續約您的授權%2$s，以繼續使用透過 "
+"TranslatePress AI 提供的自動翻譯、進階附加元件、產品下載及自動更新服務。%3$s立即續約 %4$s"
+
+msgid "Error: "
+msgstr "錯誤： "
+
+msgid "Something went wrong, please try again."
+msgstr "發生錯誤，請再試一次。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Your <strong>TranslatePress</strong> license will expire on %1$s. Please "
+"%2$sRenew Your Licence%3$s to continue receiving access to automatic "
+"translations via TP AI, premium addons, product downloads and automatic "
+"updates. %4$sRenew Now%5$s"
+msgstr ""
+"您的 <strong>TranslatePress</strong> 授權將於 %1$s 到期。請 %2$s續約您的授權%3$s，以繼續使用透過 TP "
+"AI 提供的自動翻譯、進階附加元件、產品下載及自動更新服務。%4$s立即續約%5$s"
+
+msgid "Please %1$senter%2$s your license key to enable %3$s automatic translation."
+msgstr "請 %1$s輸入%2$s 您的授權金鑰，以啟用 %3$s 自動翻譯。"
+
+msgid ""
+"%1$s automatic translation requires an active license. Please %2$srenew%3$s "
+"your license or purchase a new one %4$shere%5$s."
+msgstr "%1$s 自動翻譯需要有效的授權。請 %2$s續約%3$s 您的授權，或 %4$s在此處%5$s 購買新的授權。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You have less than 5,000 TranslatePress AI words remaining. To continue "
+"automatically translating your website, please %spurchase additional AI "
+"words at a discount from your account%s."
+msgstr "您的 TranslatePress AI 剩餘字數已不足 5,000。若要繼續自動翻譯您的網站，請 %s從您的帳號以折扣價購買額外的 AI 字數%s。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"You do not have a valid license for <strong>TranslatePress</strong>. "
+"%1$sGet one for free%2$s to get access to TranslatePress AI."
+msgstr ""
+"您沒有有效的 <strong>TranslatePress</strong> 授權。%1$s免費取得%2$s，以使用 TranslatePress "
+"AI。"
+
+msgid " Error: "
+msgstr " 錯誤： "
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. <a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">Learn more</a>."
+msgstr ""
+"<strong>新功能：</strong><strong>Different Domain per Language</strong> "
+"附加元件已推出！提升您的全球 SEO，並使用 .de 或 .fr 等國家專屬域名打造在地化體驗。<a "
+"href=\"https://translatepress.com/docs/addons/different-domain-per-language/"
+"?utm_source=wp-dashboard&utm_medium=client-site&utm_campaign=new-addon-ddpl\""
+" target=\"_blank\">了解更多</a>。"
+
+#, tp-glo-47180abf, tp-glo-ee8b4f9f
+msgid ""
+"<strong>NEW:</strong> The <strong>Different Domain per Language</strong> "
+"add-on is here! Boost your global SEO and create a local experience with "
+"country-specific domains like .de or .fr. Upgrade to <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business or Developer</a> to access it + "
+"more premium perks!"
+msgstr ""
+"<strong>新功能：</strong><strong>Different Domain per Language</strong> "
+"附加元件已推出！提升您的全球 SEO，並使用 .de 或 .fr 等國家專屬域名打造在地化體驗。升級至 <a "
+"href=\"https://translatepress.com/pricing/?utm_source=wp-dashboard&utm_"
+"medium=client-site&utm_campaign=new-addon-ddpl-upsell\" "
+"target=\"_blank\">TranslatePress Business 或 Developer</a> 即可使用，並享有更多進階權益！"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The daily quota for machine translation characters exceeded. Please check "
+"the <strong>TranslatePress -> <a href=\"%s\">Automatic "
+"Translation</a></strong> page for more information."
+msgstr ""
+"機器翻譯字元的每日配額已超過。請查看 <strong>TranslatePress -> <a "
+"href=\"%s\">自動翻譯</a></strong> 頁面以取得更多資訊。"
+
+msgid "Marketing optin"
+msgstr "行銷選擇加入"
+
+msgid ""
+"Opt in to our security and feature updates notifications, and non-sensitive "
+"diagnostic tracking."
+msgstr "選擇加入我們的安全與功能更新通知，以及非敏感性的診斷追蹤。"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Preferred User Language"
+msgstr "TranslatePress 使用者偏好語言"
+
+msgid "Preferred language to navigate the site"
+msgstr "用於瀏覽網站的偏好語言"
+
+msgid ""
+"The language is automatically set based by the last visited language by the "
+"user."
+msgstr "語言會根據使用者上次造訪的語言自動設定。"
+
+msgid "Always use this language"
+msgstr "一律使用此語言"
+
+msgid ""
+"By checking this setting the preferred language will remain the one "
+"selected above, without the possibility of being changed in the "
+"frontend.<br>This language will be used in different operations such as "
+"sending email to the user."
+msgstr "勾選此設定後，偏好語言將維持為上方選擇的語言，無法在前台變更。<br>此語言將用於不同操作，例如向使用者發送電子郵件。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Hello! Seems like you've been using <strong>TranslatePress</strong> for a "
+"while now to translate your website. That's awesome! "
+msgstr "你好！看來你已經使用 <strong>TranslatePress</strong> 翻譯網站一段時間了。太棒了！ "
+
+#, tp-glo-8896ebe8
+msgid ""
+"If you can spare a few moments to rate it on WordPress.org it would help us "
+"a lot (and boost my motivation)."
+msgstr "如果你能花幾分鐘在 WordPress.org 上評分，對我們會是很大的幫助（也能激勵我）。"
+
+#, tp-glo-ee8b4f9f
+msgid "~ Razvan, developer of TranslatePress"
+msgstr "~ Razvan，TranslatePress 開發者"
+
+#, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid "Rate TranslatePress on WordPress.org plugin page"
+msgstr "在 WordPress.org 外掛頁面為 TranslatePress 評分"
+
+msgid "Ok, I will gladly help!"
+msgstr "好的，我很樂意幫忙！"
+
+msgid "No, thanks."
+msgstr "不用了，謝謝。"
+
+msgid "Full Language Names"
+msgstr "完整語言名稱"
+
+msgid "Short Language Names"
+msgstr "簡短語言名稱"
+
+msgid "Flags with Full Language Names"
+msgstr "旗幟與完整語言名稱"
+
+msgid "Flags with Short Language Names"
+msgstr "旗幟與簡短語言名稱"
+
+msgid "Only Flags"
+msgstr "僅旗幟"
+
+#, tp-glo-d311355a
+msgid "Full Language Names No HTML"
+msgstr "完整語言名稱（無 HTML）"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Right"
+msgstr "右下角"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Bottom Left"
+msgstr "左下角"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Right"
+msgstr "右上角"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Top Left"
+msgstr "左上角"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Dark"
+msgstr "深色"
+
+msgid "Light"
+msgstr "淺色"
+
+msgid "Install & Activate"
+msgstr "安裝並啟用"
+
+msgid "Invalid language code. Please try again."
+msgstr "語言代碼無效。請再試一次。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Language codes can contain only A-Z a-z 0-9 - _ characters. Check your "
+"language codes in TranslatePress General Settings."
+msgstr "語言代碼只能包含 A-Z a-z 0-9 - _ 字元。請在 TranslatePress 一般設定中檢查你的語言代碼。"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid "Error! Duplicate URL slug values."
+msgstr "錯誤！重複的 URL slug 值。"
+
+#, tp-glo-d1526d97
+msgid ""
+"You cannot select two languages that have the same <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso code</a> but different formalities because doing so "
+"will lead to duplicate <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang tags</a>."
+msgstr ""
+"你無法選擇兩個具有相同 <a "
+"href=\"https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes\" "
+"target=\"_blank\">iso 代碼</a> 但不同正式程度的語言，因為這樣會導致重複的 <a "
+"href=\"https://developers.google.com/search/docs/specialty/international/"
+"localized-versions\" target=\"_blank\">hreflang 標籤</a>。"
+
+msgid ""
+"Duplicate language detected.<br>Each language can only be added once to "
+"ensure accurate translation management.<br> Please change the duplicate "
+"language entry and try again. "
+msgstr "偵測到重複的語言。<br>每種語言只能新增一次，以確保翻譯管理準確無誤。<br> 請變更重複的語言項目，然後再試一次。 "
+
+msgid "Current Language"
+msgstr "目前語言"
+
+msgid "Opposite Language"
+msgstr "對應語言"
+
+msgid "Addons"
+msgstr "附加元件"
+
+msgid "Settings"
+msgstr "設定"
+
+msgid "Pro Features"
+msgstr "專業功能"
+
+msgid "Activate License"
+msgstr "啟用授權"
+
+msgid "Need Help?"
+msgstr "需要協助嗎？"
+
+msgid "Recent community discussions"
+msgstr "最近的社群討論"
+
+msgid "Loading..."
+msgstr "載入中..."
+
+#, tp-ctx-7832384c
+msgid "Unable to load forum posts"
+msgstr "無法載入論壇文章"
+
+msgid "Ask a Question"
+msgstr "提出問題"
+
+msgid "View All Topics"
+msgstr "查看所有主題"
+
+msgid "by"
+msgstr "由"
+
+msgid "Have a question?"
+msgstr "有問題嗎？"
+
+msgid ""
+"Get help directly from the plugin developers, suggest improvements, or "
+"share your feedback!"
+msgstr "直接向外掛開發者尋求協助、提出改進建議，或分享你的意見回饋！"
+
+msgid "Tip for faster help:"
+msgstr "更快獲得協助的訣竅："
+
+msgid ""
+"Include what you tried, what you expected, and what happened. Screenshots "
+"help!"
+msgstr "請包含您嘗試過的方法、預期的結果，以及實際發生的情況。截圖很有幫助！"
+
+msgid "Toggle support chat"
+msgstr "切換支援對話"
+
+msgid "Ask the community"
+msgstr "向社群發問"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close"
+msgstr "關閉"
+
+msgid "Empty feed response"
+msgstr "Feed 回應為空"
+
+msgid "Unable to parse feed"
+msgstr "無法解析 Feed"
+
+msgid "Just now"
+msgstr "剛剛"
+
+msgid "%d hour ago"
+msgid_plural "%d hours ago"
+msgstr[0] "%d 小時前"
+
+msgid "%d day ago"
+msgid_plural "%d days ago"
+msgstr[0] "%d 天前"
+
+msgid "Source"
+msgstr "來源"
+
+msgid "Srcset"
+msgstr "Srcset"
+
+msgid "Alt attribute"
+msgstr "替代文字屬性"
+
+msgid "Title attribute"
+msgstr "標題屬性"
+
+msgid "Anchor link"
+msgstr "錨點連結"
+
+msgid "Placeholder attribute"
+msgstr "預留位置屬性"
+
+msgid "Submit attribute"
+msgstr "提交屬性"
+
+msgid "Text"
+msgstr "文字"
+
+msgid "Video Poster"
+msgstr "影片海報"
+
+msgid "plural form"
+msgstr "複數形式"
+
+msgid "one"
+msgstr "單數"
+
+msgid "few"
+msgstr "少數"
+
+msgid "many"
+msgstr "多數"
+
+msgid "other"
+msgstr "其他"
+
+msgid "Saved"
+msgstr "已儲存"
+
+msgid "Save"
+msgstr "儲存"
+
+msgid "Saving translation..."
+msgstr "儲存翻譯中……"
+
+msgid "You have unsaved changes!"
+msgstr "你有未儲存的變更！"
+
+msgid "Discard changes"
+msgstr "捨棄變更"
+
+msgid "Discard All"
+msgstr "全部捨棄"
+
+#, tp-ctx-2edc90df
+msgid "Loading Strings..."
+msgstr "正在載入字串..."
+
+#, tp-ctx-8a82cc9e
+msgid "Select string to translate..."
+msgstr "選取要翻譯的字串..."
+
+msgid "Close Editor"
+msgstr "關閉編輯器"
+
+msgid "From"
+msgstr "來源"
+
+msgid "To"
+msgstr "目標"
+
+msgid "Add Media"
+msgstr "新增媒體"
+
+msgid "Other languages"
+msgstr "其他語言"
+
+msgid "Context"
+msgstr "語境"
+
+msgid "View Website As"
+msgstr "檢視網站為"
+
+msgid "Available in our Pro Versions"
+msgstr "我們的專業版提供此功能"
+
+msgid "Select or Upload Media"
+msgstr "選取或上傳媒體"
+
+msgid "Use this media"
+msgstr "使用此媒體"
+
+msgid "Translate"
+msgstr "翻譯"
+
+msgid "Translate entire block element"
+msgstr "翻譯整個區塊元素"
+
+#, tp-ctx-2edc90df
+msgid "Split block to translate strings individually"
+msgstr "分割區塊以單獨翻譯字串"
+
+#, tp-glo-e780391b
+msgid "Save changes to translation. Shortcut: CTRL(⌘) + S"
+msgstr "儲存翻譯變更。快速鍵：CTRL(⌘) + S"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to next string in dropdown list. Shortcut: CTRL(⌘) + ALT + Right "
+"Arrow"
+msgstr "導覽至下拉清單中的下一個字串。快速鍵：CTRL(⌘) + ALT + 向右鍵"
+
+#, tp-ctx-8a82cc9e, tp-glo-e780391b
+msgid ""
+"Navigate to previous string in dropdown list. Shortcut: CTRL(⌘) + ALT + "
+"Left Arrow"
+msgstr "導覽至下拉清單中的上一個字串。快速鍵：CTRL(⌘) + ALT + 向左鍵"
+
+#, tp-glo-e780391b
+msgid "Discard all changes. Shortcut: CTRL(⌘) + ALT + Z"
+msgstr "捨棄所有變更。快速鍵：CTRL(⌘) + ALT + Z"
+
+#, tp-glo-e780391b
+msgid ""
+"Discard changes to this text box. To discard changes to all text boxes use "
+"shortcut: CTRL(⌘) + ALT + Z"
+msgstr "捨棄此文字方塊的變更。若要捨棄所有文字方塊的變更，請使用快速鍵：CTRL(⌘) + ALT + Z"
+
+msgid "Dismiss tooltip"
+msgstr "關閉工具提示"
+
+msgid "Quick Intro"
+msgstr "快速介紹"
+
+msgid "Are you sure you want to split this phrase into smaller parts?"
+msgstr "確定要將這個片語拆分成較小的部分嗎？"
+
+#, tp-ctx-8a82cc9e
+msgid "This string is not ready for translation yet. <br>Try again in a moment..."
+msgstr "這個字串尚未準備好進行翻譯。<br>請稍後再試..."
+
+msgid ""
+"For this option to work, please update the Browse as other role add-on to "
+"the latest version."
+msgstr "若要使用此選項，請將 Browse as other role 附加元件更新至最新版本。"
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-b7a08771
+msgid "To translate slugs, please update the SEO Pack add-on to the latest version."
+msgstr "若要翻譯 slug，請將 SEO Pack 附加元件更新至最新版本。"
+
+#, tp-glo-ee8b4f9f
+msgid "You can add a new language from <a href=\"%s\">Settings->TranslatePress</a>"
+msgstr "您可以從<a href=\"%s\">設定->TranslatePress</a>新增語言。"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"However, you can still use TranslatePress to <strong style=\"background: "
+"#f5fb9d;\">modify gettext strings</strong> available in your page."
+msgstr ""
+"不過，你仍然可以使用 TranslatePress 來<strong style=\"background: #f5fb9d;\">修改頁面中可用的 "
+"Gettext 字串</strong>。"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Strings that are user-created cannot be modified, only those from themes "
+"and plugins."
+msgstr "使用者建立的字串無法修改，只有佈景主題和外掛程式中的字串才能修改。"
+
+msgid "Extra Translation Features"
+msgstr "額外翻譯功能"
+
+msgid "Support for 130+ Extra Languages"
+msgstr "支援 130 多種額外語言"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI"
+msgstr "可使用 TranslatePress AI"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb
+msgid "Translate SEO Title, Description, Slug"
+msgstr "翻譯 SEO 標題、描述、Slug"
+
+msgid "Publish only when translation is complete"
+msgstr "翻譯完成後才發布"
+
+msgid "Translate by Browsing as User Role"
+msgstr "以使用者角色瀏覽並翻譯"
+
+msgid "Different Menu Items for each Language"
+msgstr "每種語言使用不同的選單項目"
+
+msgid "Upgrade to PRO"
+msgstr "升級至 PRO"
+
+msgid "Upgrade to PRO with our biggest discount of the year!"
+msgstr "以本年度最優惠的折扣升級至 PRO！"
+
+msgid ""
+"This Black Friday, get access to these features and more at a fraction of "
+"the costs:"
+msgstr "這個黑色星期五，以超值價格取得這些及更多功能："
+
+msgid "No available suggestions"
+msgstr "沒有可用的建議"
+
+msgid "Suggestions from translation memory"
+msgstr "來自翻譯記憶庫的建議"
+
+msgid "Click to Copy"
+msgstr "點擊複製"
+
+msgid "Human Translation"
+msgstr "人工翻譯"
+
+msgid "Machine Translation"
+msgstr "機器翻譯"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext File Translation"
+msgstr "Gettext 檔案翻譯"
+
+msgid "Text on this page is %s% translated into all languages."
+msgstr "此頁面的文字已有 %s% 翻譯為所有語言。"
+
+msgid "%1$s% of text on this page is translated into %2$s."
+msgstr "此頁面有 %1$s% 的文字已翻譯為 %2$s。"
+
+msgid "This page is %1$s% translated into %2$s."
+msgstr "此頁面已有 %1$s% 翻譯為 %2$s。"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid ""
+"The slug that you are trying to edit is present in other slug types:%s%. "
+"Editing it will replace each occurrence, regardless of the current type."
+msgstr "你正在嘗試編輯的 slug 也存在於其他 slug 類型：%s。無論目前類型為何，編輯後將取代每一個出現的位置。"
+
+msgid ""
+"Hover any text on the page, click %s,<br> then modify the translation in "
+"the sidebar."
+msgstr "將滑鼠游標懸停在頁面上的任何文字，點擊 %s，<br>然後在側邊欄中修改翻譯。"
+
+#, tp-glo-e780391b
+msgid "Don't forget to Save Translation. Use keyboard shortcut CTRL(⌘) + S"
+msgstr "別忘了儲存翻譯。使用鍵盤快捷鍵 CTRL(⌘) + S"
+
+msgid "Switch language to see the translation changes directly on the page."
+msgstr "切換語言即可直接在頁面上查看翻譯變更。"
+
+msgid "Search for any text in this page in the dropdown."
+msgstr "在下拉選單中搜尋此頁面的任何文字。"
+
+msgid ""
+"Your %s license has <span "
+"class=\"trp-license-status-emphasized\">expired</span>."
+msgstr "您的 %s 授權已<span class=\"trp-license-status-emphasized\">過期</span>。"
+
+msgid ""
+"<strong>This Black Friday, renew your license at a special price</strong> "
+"to continue receiving access to product downloads, automatic updates, and "
+"support."
+msgstr "<strong>本週黑色星期五，以特惠價格續約您的授權</strong>，以繼續取得產品下載、自動更新及支援的存取權限。"
+
+msgid "Get Deal"
+msgstr "取得優惠"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please renew your license to continue receiving access to TranslatePress "
+"AI, premium addons, automatic updates and support."
+msgstr "請續約您的授權，以繼續取得 TranslatePress AI、進階附加元件、自動更新及支援的存取權限。"
+
+msgid "Renew Now"
+msgstr "立即續約"
+
+msgid ""
+"Your %s license was <span "
+"class=\"trp-license-status-emphasized\">refunded</span>."
+msgstr "您的 %s 授權已<span class=\"trp-license-status-emphasized\">退款</span>。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please purchase a new license to continue receiving access to "
+"TranslatePress AI, premium addons, automatic updates and support."
+msgstr "請購買新授權，以繼續取得 TranslatePress AI、進階附加元件、自動更新及支援的存取權限。"
+
+msgid "Purchase a new license"
+msgstr "購買新授權"
+
+msgid ""
+"Your %s license is <span class=\"trp-license-status-emphasized\">missing or "
+"invalid</span>."
+msgstr "您的 %s 授權<span class=\"trp-license-status-emphasized\">遺失或無效</span>。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Please enter a valid license to get access to TranslatePress AI, premium "
+"addons, automatic updates and support. Need a license key? %1$sPurchase one "
+"now%2$s"
+msgstr "請輸入有效的授權以使用 TranslatePress AI、進階附加元件、自動更新及支援。需要授權金鑰嗎？%1$s立即購買%2$s"
+
+msgid "Enter a valid license"
+msgstr "輸入有效授權"
+
+msgid "Meta Information"
+msgstr "中繼資訊"
+
+#, tp-ctx-8a82cc9e
+msgid "String List"
+msgstr "字串清單"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Gettext Strings"
+msgstr "Gettext 字串"
+
+msgid "Images"
+msgstr "圖片"
+
+msgid "Videos"
+msgstr "影片"
+
+msgid "Audios"
+msgstr "音訊"
+
+#, tp-ctx-2edc90df
+msgid "Dynamically Added Strings"
+msgstr "動態新增的字串"
+
+msgid "Translation Editor"
+msgstr "翻譯編輯器"
+
+msgid "Edit translations by visually selecting them on each site page"
+msgstr "在每個網站頁面上以視覺化選取方式編輯翻譯"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation"
+msgstr "字串翻譯"
+
+#, tp-ctx-07893e52, tp-glo-67834fcb, tp-glo-9fa92a70
+msgid ""
+"Edit url slug translations, plugins and theme translation (emails, forms "
+"etc.)"
+msgstr "編輯 URL slug 翻譯、外掛程式及佈景主題翻譯（電子郵件、表單等）"
+
+msgid "Current User"
+msgstr "目前使用者"
+
+msgid "Logged Out"
+msgstr "已登出"
+
+msgid "Translate Page"
+msgstr "翻譯頁面"
+
+msgid "Add a New Language"
+msgstr "新增語言"
+
+msgid "Your License is Invalid"
+msgstr "您的授權無效"
+
+msgid "Get More AI Words (%d left)"
+msgstr "取得更多 AI 字數（剩餘 %d）"
+
+#, tp-ctx-e9944eb3
+msgid ""
+"Opens post in the translation editor. Post must be saved as draft or "
+"published beforehand."
+msgstr "在翻譯編輯器中開啟文章。文章必須事先儲存為草稿或發佈。"
+
+msgid "Security check"
+msgstr "安全性檢查"
+
+#, tp-ctx-2edc90df
+msgid ""
+"<strong>Warning:</strong> Some strings have possibly incorrectly encoded "
+"characters. This may result in breaking the queries, rendering the page "
+"untranslated in live mode. Consider revising the following strings or their "
+"method of outputting."
+msgstr ""
+"<strong>警告：</strong> "
+"部分字串可能包含編碼不正確的字元。這可能導致查詢錯誤，使頁面在正式環境中無法顯示翻譯。請考慮修改以下字串或其輸出方式。"
+
+#, tp-ai
+msgid "IMPORTANT: It is strongly recommended to first backup the database!"
+msgstr "重要：強烈建議先備份資料庫！"
+
+#, tp-ai
+msgid "Are you sure you want to continue?"
+msgstr "確定要繼續嗎？"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress data update"
+msgstr "TranslatePress 資料更新"
+
+msgid "We need to update your translations database to the latest version."
+msgstr "我們需要將您的翻譯資料庫更新至最新版本。"
+
+msgid ""
+"Updating will allow editing translations of localized text from plugins and "
+"theme. Existing translation will still work as expected."
+msgstr "更新後即可編輯外掛和佈景主題本地化文字的翻譯。現有翻譯仍會正常運作。"
+
+msgid "Run the updater"
+msgstr "執行更新程式"
+
+#, tp-ctx-742ebaa7
+msgid ""
+"Updating will allow editing translations of slugs. Existing translation "
+"will still work as expected."
+msgstr "更新後將可編輯代稱的翻譯。現有的翻譯仍會正常運作。"
+
+#, tp-glo-47180abf, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Please activate the SEO Addon from <br/>WordPress -> Settings -> "
+"TranslatePress -> Addons section"
+msgstr "請從 <br/>WordPress -> 設定 -> TranslatePress -> 附加元件區段啟用 SEO 附加元件。"
+
+msgid "Go to Addons"
+msgstr "前往附加元件"
+
+#, tp-ctx-742ebaa7, tp-glo-47180abf, tp-glo-9fa92a70, tp-glo-b7a08771
+msgid "The SEO Pack add-on allows translation of all the URL slugs:"
+msgstr "SEO Pack 附加元件可讓您翻譯所有 URL 代稱："
+
+#, tp-ctx-742ebaa7
+msgid "Taxonomy slugs"
+msgstr "分類法代稱"
+
+#, tp-ctx-742ebaa7
+msgid "Term slugs"
+msgstr "詞彙代稱"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post slugs (this includes pages and custom post types)"
+msgstr "文章代稱（包含頁面和自訂文章類型）"
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Post type base slugs"
+msgstr "文章類型基底代稱"
+
+#, tp-ctx-742ebaa7, tp-glo-cd79cda5
+msgid "WooCommerce slugs"
+msgstr "WooCommerce 代稱"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "The SEO Pack add-on is available with ALL premium versions of the plugin."
+msgstr "SEO Pack 附加元件適用於此外掛程式的所有進階版本。"
+
+msgid "Upgrade to Pro"
+msgstr "升級至專業版"
+
+msgid "Description"
+msgstr "描述"
+
+msgid "Article Section"
+msgstr "文章區段"
+
+msgid "Article Tag"
+msgstr "文章標籤"
+
+msgid "OG Title"
+msgstr "OG 標題"
+
+msgid "OG Site Name"
+msgstr "OG 網站名稱"
+
+msgid "OG Description"
+msgstr "OG 描述"
+
+msgid "OG Image Alt"
+msgstr "OG 圖片替代文字"
+
+msgid "Twitter Title"
+msgstr "Twitter 標題"
+
+msgid "Twitter Description"
+msgstr "Twitter 描述"
+
+msgid "Twitter Image Alt"
+msgstr "Twitter 圖片替代文字"
+
+msgid "Page Title"
+msgstr "頁面標題"
+
+msgid "Dublin Core Title"
+msgstr "Dublin Core 標題"
+
+msgid "Dublin Core Description"
+msgstr "Dublin Core 描述"
+
+msgid "OG Image"
+msgstr "OG 圖片"
+
+#, tp-glo-9fa92a70
+msgid "OG Image Secure URL"
+msgstr "OG 圖片安全 URL"
+
+msgid "Twitter Image"
+msgstr "Twitter 圖片"
+
+#, tp-ctx-2edc90df
+msgid "Removing cdata dictionary strings for language %s..."
+msgstr "正在移除語言 %s 的 CDATA 字典字串..."
+
+msgid "Removing untranslated dictionary links for language %s..."
+msgstr "正在移除語言 %s 的未翻譯字典連結..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Removing duplicated gettext strings for language %s..."
+msgstr "正在移除語言 %s 的重複 Gettext 字串..."
+
+#, tp-ctx-2edc90df
+msgid "Removing duplicated dictionary strings for language %s..."
+msgstr "正在移除語言 %s 的重複字典字串..."
+
+#, tp-ctx-2edc90df
+msgid ""
+"Removing untranslated dictionary strings where translation is available for "
+"language %s..."
+msgstr "正在移除語言 %s 中已有可用翻譯的未翻譯字典字串..."
+
+#, tp-ctx-2edc90df
+msgid "Inserting original strings for language %s..."
+msgstr "正在為語言 %s 插入原始字串..."
+
+#, tp-ctx-2edc90df
+msgid "Cleaning original strings table for language %s..."
+msgstr "正在清理語言 %s 的原始字串資料表..."
+
+#, tp-ctx-8a82cc9e
+msgid "Updating original string ids for language %s..."
+msgstr "正在更新語言 %s 的原始字串 ID..."
+
+msgid "Regenerating original meta table for language %s..."
+msgstr "正在重新產生語言 %s 的原始 meta 資料表..."
+
+msgid "Cleaning original meta table for language %s..."
+msgstr "正在清理語言 %s 的原始 meta 資料表..."
+
+msgid "Replacing original id NULL with value for language %s..."
+msgstr "正在將語言 %s 的原始 ID NULL 取代為值..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Inserting gettext original strings for language %s..."
+msgstr "正在為語言 %s 插入 Gettext 原始字串..."
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Cleaning gettext original strings table for language %s..."
+msgstr "正在清理語言 %s 的 Gettext 原始字串資料表..."
+
+#, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "Updating gettext original string ids for language %s..."
+msgstr "正在更新語言 %s 的 Gettext 原始字串 ID..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Starting gettext database optimization in the background..."
+msgstr "正在背景開始 Gettext 資料庫最佳化..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating taxonomy and post type base slugs to new table structure..."
+msgstr "正在將分類法與文章類型基底代稱遷移至新的資料表結構..."
+
+#, tp-ctx-742ebaa7, tp-ctx-e9944eb3
+msgid "Migrating post slugs to new table structure for language %s..."
+msgstr "正在將語言 %s 的文章代稱遷移至新的資料表結構..."
+
+#, tp-ctx-742ebaa7
+msgid "Migrating term slugs to new table structure for language %s..."
+msgstr "正在將詞彙 slug 遷移至新資料表結構，語言為 %s..."
+
+msgid "Finishing up..."
+msgstr "正在完成..."
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress needs to optimize gettext database tables. Translations "
+"continue to work while this runs in the background."
+msgstr "TranslatePress 需要最佳化 Gettext 資料庫資料表。在背景執行期間，翻譯功能仍可繼續運作。"
+
+#, tp-ai
+msgid "Before starting, we strongly recommend creating a database backup."
+msgstr "開始之前，我們強烈建議先建立資料庫備份。"
+
+#, tp-ai
+msgid "Start optimization"
+msgstr "開始最佳化"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Could not schedule gettext database optimization."
+msgstr "更新已中止！無法排程 Gettext 資料庫最佳化。"
+
+msgid ""
+"Database optimization did not complete successfully. We recommend restoring "
+"the original database or <a href=\"%s\" >trying again.</a>"
+msgstr "資料庫最佳化未能成功完成。建議還原原始資料庫，或<a href=\"%s\" >再試一次。</a>"
+
+msgid ""
+"Update aborted! Your user account doesn't have the capability to perform "
+"database updates."
+msgstr "更新已中止！您的使用者帳號沒有執行資料庫更新的權限。"
+
+#, tp-glo-b357fc3e
+msgid "Update aborted! Invalid nonce."
+msgstr "更新已中止！nonce 無效。"
+
+#, tp-glo-ee8b4f9f
+msgid "Back to TranslatePress Settings"
+msgstr "返回 TranslatePress 設定"
+
+msgid "Successfully updated database!"
+msgstr "資料庫更新成功！"
+
+msgid "Updating database to version %s+"
+msgstr "正在更新資料庫至版本 %s+"
+
+msgid "Processing table for language %s..."
+msgstr "正在處理語言 %s 的資料表..."
+
+msgid "Update aborted! Incorrect action."
+msgstr "更新已中止！動作不正確。"
+
+#, tp-ai, tp-ctx-a6928204, tp-glo-64dbb752
+msgid ""
+"Update aborted! Start the gettext database optimization separately from the "
+"Advanced settings page."
+msgstr "更新已中止！請從進階設定頁面分別開始 Gettext 資料庫最佳化。"
+
+msgid "Update aborted! Incorrect language code."
+msgstr "更新已中止！語言代碼不正確。"
+
+msgid " done."
+msgstr " 完成。"
+
+#, tp-ai
+msgid "Update aborted while %1$s. SQL error: %2$s"
+msgstr "在%1$s時更新已中止。SQL 錯誤：%2$s"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "inserting original strings"
+msgstr "插入原始字串"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string insertion progress"
+msgstr "檢查原始字串插入進度"
+
+#, tp-ai, tp-ctx-2edc90df
+msgid "cleaning duplicate original strings"
+msgstr "清理重複的原始字串"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "updating original string IDs"
+msgstr "更新原始字串 ID"
+
+#, tp-ai, tp-ctx-8a82cc9e
+msgid "checking original string ID update progress"
+msgstr "檢查原始字串 ID 更新進度"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "inserting gettext original strings"
+msgstr "插入 Gettext 原始字串"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "checking gettext original insertion progress"
+msgstr "檢查 Gettext 原始字串插入進度"
+
+#, tp-ai, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "cleaning duplicate gettext original strings"
+msgstr "清理重複的 Gettext 原始字串"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "updating gettext original string IDs"
+msgstr "更新 Gettext 原始字串 ID"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid "checking gettext original string ID update progress"
+msgstr "檢查 Gettext 原始字串 ID 更新進度"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"All individual TranslatePress add-on plugins <a href=\"%1$s\" "
+"target=\"_blank\">have been discontinued</a> and are now included in the "
+"premium Personal, Business and Developer versions of TranslatePress. Please "
+"log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download "
+"the new premium version and install it. Your individual addons settings "
+"will be ported over."
+msgstr ""
+"所有獨立的 TranslatePress 附加元件外掛程式<a href=\"%1$s\" "
+"target=\"_blank\">已停止維護</a>，現已納入 TranslatePress 進階版個人版、商業版及開發者版本中。請登入您的<a "
+"href=\"%2$s\" target=\"_blank\">帳號頁面</a>，下載新的進階版本並安裝。您個別附加元件的設定將會被移轉過來。"
+
+msgid "Brand-new Language Switcher Settings are here!"
+msgstr "全新的語言切換器設定登場！"
+
+msgid ""
+"Explore pre-made templates, switch colors, flag styles, spacing, layouts & "
+"more. Use the live preview to perfect your switcher in seconds."
+msgstr "探索預製範本、切換顏色、旗幟樣式、間距、版面配置及更多功能。使用即時預覽功能，在幾秒內將您的切換器調整至完美。"
+
+msgid "Start customizing"
+msgstr "開始自訂"
+
+msgid "Read documentation"
+msgstr "閱讀說明文件"
+
+#, tp-ctx-8a82cc9e, tp-glo-1aabb38a, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"library</a></strong>. Please contact your server administrator to install "
+"it on your server."
+msgstr ""
+"<strong>TranslatePress</strong> 需要 <strong><a "
+"href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP "
+"函式庫</a></strong>。請聯絡您的伺服器管理員在伺服器上安裝此函式庫。"
+
+#, tp-glo-5e752340
+msgid ""
+"Detected long query limitation on WPEngine hosting. Some large pages may "
+"appear untranslated. You can remove limitation by adding the following to "
+"your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
+msgstr ""
+"偵測到 WPEngine 主機上的長查詢限制。部分大型頁面可能會顯示為未翻譯。您可以透過在網站的 wp-config.php "
+"中加入以下內容來移除限制：define( 'WPE_GOVERNOR', false ); "
+
+msgid "Custom Language Flag"
+msgstr "自訂語言旗幟"
+
+msgid "The Language code of the added custom language is invalid."
+msgstr "新增的自訂語言之語言代碼無效。"
+
+msgid "The Language code of the added custom language cannot be empty."
+msgstr "新增的自訂語言之語言代碼不能為空白。"
+
+msgid "The Automatic Translation Code of the added custom language is invalid."
+msgstr "新增的自訂語言之自動翻譯代碼無效。"
+
+#, tp-ai
+msgid "Style"
+msgstr "樣式"
+
+#, tp-ai, tp-glo-da70db08
+msgid "Use shortcode settings"
+msgstr "使用 shortcode 設定"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Custom"
+msgstr "自訂"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language names"
+msgstr "語言名稱"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Full names"
+msgstr "完整名稱"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Short names"
+msgstr "簡稱"
+
+#, tp-ai
+msgid "Hide names"
+msgstr "隱藏名稱"
+
+#, tp-ai
+msgid "Flag position"
+msgstr "旗幟位置"
+
+#, tp-ai
+msgid "Before text"
+msgstr "文字之前"
+
+#, tp-ai
+msgid "After text"
+msgstr "文字之後"
+
+#, tp-ai
+msgid "Hide flags"
+msgstr "隱藏旗幟"
+
+#, tp-ai
+msgid "Open on click"
+msgstr "點擊時開啟"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show opposite language"
+msgstr "顯示對應語言"
+
+#, tp-ai
+msgid "Size"
+msgstr "大小"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Normal"
+msgstr "一般"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Large"
+msgstr "大"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag shape"
+msgstr "旗幟形狀"
+
+#, tp-ai
+msgid "Rectangle"
+msgstr "矩形"
+
+#, tp-ai
+msgid "Square"
+msgstr "正方形"
+
+#, tp-ai
+msgid "Rounded"
+msgstr "圓角"
+
+#, tp-ai
+msgid "Transitions"
+msgstr "轉場效果"
+
+#, tp-ai
+msgid "Background"
+msgstr "背景"
+
+#, tp-ai
+msgid "Hover background"
+msgstr "懸停背景"
+
+#, tp-ai
+msgid "Hover text"
+msgstr "懸停文字"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border color"
+msgstr "邊框顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border width"
+msgstr "邊框寬度"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Border radius"
+msgstr "邊框圓角"
+
+#, tp-ai
+msgid "Flag radius"
+msgstr "旗幟圓角"
+
+#, tp-ai, tp-glo-1477ca6f, tp-glo-ee8b4f9f
+msgid ""
+"Disable the legacy TranslatePress language switcher to use the customizable "
+"Elementor widget. <a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">Open language switcher settings</a>."
+msgstr ""
+"停用舊版 TranslatePress 語言切換器，以使用可自訂的 Elementor 小工具。<a href=\"%s\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">開啟語言切換器設定</a>。"
+
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"The language switcher inherits styling options from shortcode. <a "
+"href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Open shortcode "
+"settings</a>."
+msgstr ""
+"語言切換器會繼承 shortcode 的樣式選項。<a href=\"%s\" target=\"_blank\" rel=\"noopener "
+"noreferrer\">開啟 shortcode 設定</a>。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI"
+msgstr "TranslatePress AI"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid."
+msgstr "您的 TranslatePress AI API Key 有效。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is invalid."
+msgstr "您的 TranslatePress AI API Key 無效。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key has expired."
+msgstr "您的 TranslatePress AI API Key 已過期。"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Activate API Key"
+msgstr "啟用 API Key"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Deactivate API Key"
+msgstr "停用 API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add a TranslatePress AI API Key"
+msgstr "新增 TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "TranslatePress AI API Key"
+msgstr "TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Manage your TranslatePress AI API Key in your %1$s."
+msgstr "在您的 %1$s 中管理您的 TranslatePress AI API Key。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI API Key?"
+msgstr "沒有 TranslatePress AI API Key？"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get a free TranslatePress AI API Key Today"
+msgstr "立即取得免費的 TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Add your TranslatePress AI API Key"
+msgstr "新增您的 TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Add your TranslatePress AI API Key to unlock all premium features. Find the "
+"TranslatePress AI API Key in your"
+msgstr "新增您的 TranslatePress AI API Key 以解鎖所有進階功能。在您的"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Your TranslatePress AI API Key is valid and active."
+msgstr "您的 TranslatePress AI API Key 有效且已啟用。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Activate TranslatePress AI API Key"
+msgstr "啟用 TranslatePress AI API Key"
+
+#, tp-ai, tp-glo-91460d88
+msgid "No Active API Key Detected for this website."
+msgstr "此網站未偵測到已啟用的 API Key。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"an API key by creating a free account."
+msgstr "若要使用 TranslatePress AI 啟用自動翻譯，您需要建立免費帳戶以取得 API Key。"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Enter your API key"
+msgstr "輸入您的 API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your API key from"
+msgstr "若要使用 TranslatePress AI 啟用自動翻譯，請輸入您的 API Key，來自"
+
+#, tp-ai, tp-glo-91460d88
+msgid "API Key"
+msgstr "API Key"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "No Active TranslatePress AI API Key Detected for this website."
+msgstr "未偵測到此網站的有效 TranslatePress AI API 金鑰。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI API Key"
+msgstr "取得您的免費 TranslatePress AI API 金鑰"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Generate API Key"
+msgstr "產生 API 金鑰"
+
+#, tp-ai, tp-glo-91460d88
+msgid "You have a valid %s <strong>API Key</strong>."
+msgstr "您擁有一個有效的 %s <strong>API 金鑰</strong>。"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Manage your API Key & quota on the %s"
+msgstr "在 %s 管理您的 API 金鑰與配額"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Get a Free AI API Key"
+msgstr "取得免費 AI API 金鑰"
+
+#, tp-ai, tp-glo-91460d88
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key."
+msgstr "此網站已使用免費 API 金鑰啟用。每個網站只能使用一個免費 API 金鑰。"
+
+#, tp-ai, tp-glo-91460d88, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free API key. Each website can "
+"only use one free API key. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"此網站已使用免費 API 金鑰啟用。每個網站只能使用一個免費 API 金鑰。請升級至進階方案，以從 %1$s 您的帳號 %2$s 取得更多 "
+"TranslatePress AI 字數。"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Checking"
+msgstr "API 金鑰檢查的除錯資料"
+
+#, tp-ai, tp-glo-91460d88
+msgid "Debug Data for API Key Activation"
+msgstr "API 金鑰啟用的除錯資料"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress finished replacing the existing translations in your "
+"dictionary."
+msgstr "TranslatePress 已完成取代字典中的現有翻譯。"
+
+#, tp-ai
+msgid "Term (%s)"
+msgstr "詞彙 (%s)"
+
+#, tp-ai
+msgid "Translations"
+msgstr "翻譯"
+
+#, tp-ai
+msgid "Term added. Glossary terms only affect new automatic translations."
+msgstr "已新增詞彙。詞彙表中的詞彙只會影響新的自動翻譯。"
+
+#, tp-ai
+msgid "Term updated."
+msgstr "已更新詞彙。"
+
+#, tp-ai
+msgid "Term deleted."
+msgstr "已刪除詞彙。"
+
+#, tp-ai
+msgid "Are you sure you want to delete this term?"
+msgstr "確定要刪除此詞彙嗎？"
+
+#, tp-ai
+msgid "Something went wrong. Please try again."
+msgstr "發生錯誤。請再試一次。"
+
+#, tp-ai
+msgid "Quick Edit"
+msgstr "快速編輯"
+
+msgid "Edit"
+msgstr "編輯"
+
+msgid "Delete"
+msgstr "刪除"
+
+#, tp-ai
+msgid "Update"
+msgstr "更新"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Cancel"
+msgstr "取消"
+
+#, tp-ai
+msgid "No glossary terms match your search."
+msgstr "沒有詞彙表項目符合您的搜尋。"
+
+#, tp-ai
+msgid "No glossary terms found."
+msgstr "找不到詞彙表項目。"
+
+#, tp-ai
+msgid "Could not load glossary terms. Please reload the page."
+msgstr "無法載入詞彙表項目。請重新載入頁面。"
+
+msgid "items"
+msgstr "項目"
+
+#, tp-ai
+msgid "of"
+msgstr "／"
+
+#, tp-ai
+msgid "First page"
+msgstr "第一頁"
+
+#, tp-ai
+msgid "Previous page"
+msgstr "上一頁"
+
+#, tp-ai
+msgid "Next page"
+msgstr "下一頁"
+
+#, tp-ai
+msgid "Last page"
+msgstr "最後一頁"
+
+#, tp-ai
+msgid ""
+"The inserted term was found in your existing translations, use the %s to "
+"make changes there."
+msgstr "插入的字詞已在您的現有翻譯中找到，請使用 %s 在該處進行修改。"
+
+#, tp-ai
+msgid "search & replace tool"
+msgstr "搜尋與取代工具"
+
+#, tp-ai
+msgid "Please provide at least one existing translation to replace."
+msgstr "請提供至少一個要取代的現有翻譯。"
+
+#, tp-ai
+msgid ""
+"You are about to bulk edit a potentially large amount of translations. This "
+"action cannot be undone. It is recommended to make a backup of the database "
+"before completing this action."
+msgstr "您即將大量編輯可能數量龐大的翻譯。此動作無法復原。建議在完成此動作前先備份資料庫。"
+
+#, tp-ai
+msgid "Continue with replacing existing translations?"
+msgstr "繼續取代現有翻譯？"
+
+#, tp-ai
+msgid "No entries found."
+msgstr "找不到任何項目。"
+
+#, tp-ai
+msgid "Original"
+msgstr "原文"
+
+#, tp-ai
+msgid "Security check failed. Please reload the page and try again."
+msgstr "安全性檢查失敗。請重新載入頁面後再試一次。"
+
+#, tp-ai
+msgid "You do not have permission to do this."
+msgstr "您沒有權限執行此操作。"
+
+#, tp-ai
+msgid "Please enter the term in the default language."
+msgstr "請以預設語言輸入詞彙。"
+
+#, tp-ai
+msgid "Please provide at least one translation for the term."
+msgstr "請為該詞彙提供至少一個翻譯。"
+
+#, tp-ai
+msgid "The term “%s” already exists in the glossary."
+msgstr "詞彙「%s」已存在於詞彙表中。"
+
+#, tp-ai
+msgid "The term you are trying to edit no longer exists. Please reload the page."
+msgstr "你嘗試編輯的字詞已不存在。請重新載入頁面。"
+
+#, tp-ai
+msgid "The term you are trying to delete no longer exists. Please reload the page."
+msgstr "你嘗試刪除的字詞已不存在。請重新載入頁面。"
+
+#, tp-ai
+msgid "%1$s: %2$d entry updated"
+msgid_plural "%1$s: %2$d entries updated"
+msgstr[0] "%1$s：已更新 %2$d 個項目。"
+
+#, tp-ai
+msgid "Replacement complete."
+msgstr "取代完成。"
+
+#, tp-ai, tp-glo-fd3dec87
+msgid ""
+"This is a large replacement. %d entries were updated now and the rest will "
+"finish automatically in the background over the next few minutes."
+msgstr "這是大規模取代。目前已更新 %d 個項目，其餘項目將於接下來幾分鐘內在背景自動完成。"
+
+#, tp-glo-c773bca5, tp-glo-d6a22d74
+msgid "Google Translate v2"
+msgstr "Google Translate v2"
+
+#, tp-glo-91460d88, tp-glo-d6a22d74
+msgid "Google Translate API Key"
+msgstr "Google Translate API 金鑰"
+
+#, tp-glo-91460d88
+msgid "Add your API Key here..."
+msgstr "在此輸入您的 API 金鑰..."
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Visit <a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">this link</a> to see how you can set up an API key, "
+"<strong>control API costs</strong> and set HTTP referrer restrictions."
+msgstr ""
+"造訪<a href=\"https://cloud.google.com/docs/authentication/api-keys\" "
+"target=\"_blank\">此連結</a>以了解如何設定 API 金鑰、<strong>控管 API 費用</strong>以及設定 HTTP "
+"參照網址限制。"
+
+#, tp-glo-1aabb38a
+msgid "Your HTTP referrer is: %s"
+msgstr "您的 HTTP 參照網址為：%s"
+
+#, tp-glo-d6a22d74
+msgid "There was an error with your Google Translate key."
+msgstr "您的 Google Translate 金鑰發生錯誤。"
+
+#, tp-glo-d6a22d74
+msgid "There was an error on the server processing your Google Translate key."
+msgstr "伺服器處理您的 Google Translate 金鑰時發生錯誤。"
+
+#, tp-glo-ee8b4f9f
+msgid "Please check your TranslatePress license key."
+msgstr "請檢查您的 TranslatePress 授權金鑰。"
+
+msgid "Create your Free Account"
+msgstr "建立免費帳號"
+
+msgid " or "
+msgstr " 或 "
+
+msgid "Your free account includes: "
+msgstr "免費帳號包含： "
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Access to TranslatePress AI for instant automatic translations"
+msgstr "使用 TranslatePress AI 進行即時自動翻譯"
+
+msgid "2000 AI words to translate automatically"
+msgstr "2000 個可自動翻譯的 AI 字數"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI Words and unlock all AI features with TranslatePress Pro."
+msgstr "取得更多 AI 字數，並使用 TranslatePress Pro 解鎖所有 AI 功能。"
+
+msgid "Upgrade now"
+msgstr "立即升級"
+
+msgid "You have a valid %s <strong>license</strong>."
+msgstr "你擁有有效的 %s <strong>授權</strong>。"
+
+msgid " words remaining. "
+msgstr " 個字剩餘。 "
+
+msgid "Recheck"
+msgstr "重新檢查"
+
+msgid "Rechecking..."
+msgstr "正在重新檢查..."
+
+msgid "Done."
+msgstr "完成。"
+
+msgid "Manage your license & quota on the %s"
+msgstr "在 %s 管理你的授權和配額"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account Page"
+msgstr "TranslatePress.com 帳號頁面"
+
+#, tp-ai, tp-ctx-a6928204
+msgid "Advanced Add-ons"
+msgstr "進階附加元件"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Developer, Business and Personal plans."
+msgstr "這些附加元件可擴充您的翻譯外掛，適用於開發者、商業及個人方案。"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack"
+msgstr "SEO Pack"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and Facebook and Twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr "支援頁面 slug、頁面標題、描述，以及 Facebook 與 Twitter 社交圖譜資訊的 SEO。HTML lang 屬性已正確設定。"
+
+msgid "Multiple Languages"
+msgstr "多種語言"
+
+msgid ""
+"Add as many languages as you need for your project to go global. Publish "
+"your language only when all your translations are done."
+msgstr "為專案走向全球新增所需數量的語言。請在所有翻譯完成後，再發佈您的語言。"
+
+msgid "Pro Add-ons"
+msgstr "專業附加元件"
+
+msgid ""
+"These addons extend your translation plugin and are available in the "
+"Business and Developer plans."
+msgstr "這些附加元件可擴充您的翻譯外掛，適用於商業及開發者方案。"
+
+#, tp-glo-c6709f3f
+msgid "DeepL Automatic Translation"
+msgstr "DeepL 自動翻譯"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f
+msgid "Automatically translate your website through the DeepL API."
+msgstr "透過 DeepL API 自動翻譯您的網站。"
+
+msgid ""
+"Prompts visitors to switch to their preferred language based on their "
+"browser settings or IP address and remembers the last visited language."
+msgstr "根據訪客的瀏覽器設定或 IP 位址，提示訪客切換至其偏好語言，並記住上次造訪的語言。"
+
+msgid "Translator Accounts"
+msgstr "譯者帳號"
+
+msgid ""
+"Create translator accounts for new users or allow existing users that are "
+"not administrators to translate your website."
+msgstr "為新使用者建立譯者帳號，或允許現有的非管理員使用者翻譯您的網站。"
+
+msgid "Browse As User Role"
+msgstr "以使用者角色瀏覽"
+
+msgid ""
+"Navigate your website just like a particular user role would. Really useful "
+"for dynamic content or hidden content that appears for particular users."
+msgstr "如同特定使用者角色般瀏覽您的網站。對於動態內容或僅向特定使用者顯示的隱藏內容非常實用。"
+
+msgid "Navigation Based on Language"
+msgstr "依語言的導覽"
+
+msgid "Configure different menu items for different languages."
+msgstr "為不同語言設定不同的選單項目。"
+
+#, tp-glo-47180abf
+msgid ""
+"Connect separate domains or subdomains to each of your translated versions. "
+"Strengthen your brand’s local identity and boost SEO performance for every "
+"language you support."
+msgstr "為每個翻譯版本連接獨立的網域或子網域。強化品牌的在地識別度，並提升每種支援語言的 SEO 成效。"
+
+msgid "Enable Modules"
+msgstr "啟用模組"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Enable Add-on modules to extend TranslatePress and enhance the "
+"functionality of your translated site."
+msgstr "啟用附加模組來擴充 TranslatePress，並提升翻譯網站的功能。"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to unlock the Pro "
+"add-ons below."
+msgstr "TranslatePress Pro 已啟用。請啟用授權金鑰以解鎖下方的 Pro 附加元件。"
+
+#, tp-ai
+msgid "Activate license"
+msgstr "啟用授權"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro is installed but not activated yet."
+msgstr "TranslatePress Pro 已安裝但尚未啟用。"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"Opens your Plugins page (filtered to TranslatePress) in a new tab. Activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr ""
+"在新分頁中開啟你的外掛頁面（已篩選至 TranslatePress）。請在該處啟用 TranslatePress Pro "
+"外掛，然後返回此分頁——它將自動更新。"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Activate TranslatePress Pro ↗"
+msgstr "啟用 TranslatePress Pro ↗"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "More functionality with TranslatePress Pro."
+msgstr "使用 TranslatePress Pro 獲得更多功能。"
+
+msgid "Upgrade now ↗"
+msgstr "立即升級 ↗"
+
+msgid "Already a Pro User?"
+msgstr "已經是 Pro 使用者了嗎？"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"Opens the WordPress “Add Plugins” page in a new tab. Upload and activate "
+"the TranslatePress Pro plugin there, then return to this tab — it will "
+"update automatically."
+msgstr "在新分頁中開啟 WordPress「安裝外掛」頁面。請在該處上傳並啟用 TranslatePress Pro 外掛，然後返回此分頁——它將自動更新。"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro"
+msgstr "安裝 TranslatePress Pro"
+
+msgid "This add-on is not available on your current plan."
+msgstr "此附加模組在你目前的方案中無法使用。"
+
+msgid "Continue"
+msgstr "繼續"
+
+msgid "The link you followed has expired. Please reload the page and try again."
+msgstr "你點擊的連結已過期。請重新載入頁面後再試一次。"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> Manage Sites."
+msgstr ""
+"您的授權金鑰已針對此 URL 停用。請從 <a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=activate-license\">https://translatepress."
+"com/account</a> -> 管理網站 重新啟用。"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid ""
+"<p><strong>License key mismatch.</strong> The license you entered doesn't "
+"match the TranslatePress version you have installed.</p><p>Please check "
+"that you've installed the correct version for your license from your "
+"TranslatePress account.</p>"
+msgstr ""
+"<p><strong>授權金鑰不相符。</strong>你輸入的授權金鑰與已安裝的 TranslatePress 版本不符。</p><p>請確認你已從 "
+"TranslatePress 帳號安裝與授權相符的正確版本。</p>"
+
+#, tp-glo-666af81f, tp-glo-ee8b4f9f
+msgid "TranslatePress Account"
+msgstr "TranslatePress Account"
+
+msgid "« Go Back"
+msgstr "« 返回"
+
+#, tp-glo-9fa92a70, tp-glo-ee8b4f9f
+msgid ""
+"Your license key is disabled for this URL. Re-enable it from <a "
+"target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> Manage Sites."
+msgstr ""
+"你的授權金鑰已在此 URL 停用。請前往 <a target=\"_blank\" "
+"href=\"https://translatepress.com/account/?utm_source=tp-onboarding&utm_"
+"medium=client-site&utm_campaign=tp-ai\">https://translatepress.com/account</"
+"a> -> 管理網站重新啟用。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Automatically translate your website using TranslatePress AI."
+msgstr "使用 TranslatePress AI 自動翻譯你的網站。"
+
+msgid "your account."
+msgstr "你的帳號。"
+
+msgid "Skip and continue with manual translation »"
+msgstr "跳過並繼續使用手動翻譯 »"
+
+msgid "Creating a free account includes: "
+msgstr "建立免費帳號包含： "
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Are you a TranslatePress PRO user?"
+msgstr "你是 TranslatePress Pro 使用者嗎？"
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Install TranslatePress Pro."
+msgstr "安裝 TranslatePress Pro。"
+
+msgid "Skip this step"
+msgstr "跳過此步驟"
+
+msgid "The email address you added is incorrect."
+msgstr "你輸入的電子郵件地址不正確。"
+
+msgid "Setup Complete"
+msgstr "設定完成"
+
+msgid "You're ready to start translating!"
+msgstr "你已準備好開始翻譯！"
+
+#, tp-glo-ee8b4f9f
+msgid "You have successfully set up TranslatePress for your website."
+msgstr "你已成功地為你的網站設定好 TranslatePress。"
+
+msgid "Receive "
+msgstr "接收 "
+
+msgid "Yes, send me multilingual growth tips."
+msgstr "是，請傳送多語言成長技巧給我。"
+
+msgid "Start translating"
+msgstr "開始翻譯"
+
+msgid "Sign Up and Start translating"
+msgstr "註冊並開始翻譯"
+
+msgid "You need to select a default language."
+msgstr "您需要選取預設語言。"
+
+msgid ""
+"You are trying to add an invalid default language. Please select a valid "
+"option."
+msgstr "您嘗試新增的預設語言無效。請選擇有效的選項。"
+
+msgid "Please add an additional language."
+msgstr "請新增其他語言。"
+
+msgid ""
+"You are trying to add an invalid additional language. Please select a valid "
+"option."
+msgstr "你正在嘗試新增無效的額外語言。請選取有效的選項。"
+
+msgid "Configure Site Languages"
+msgstr "設定網站語言"
+
+msgid "Select the default and additional languages for your website."
+msgstr "為您的網站選擇預設語言和其他語言。"
+
+msgid "You can edit your site languages at any point."
+msgstr "您可以隨時編輯網站語言。"
+
+msgid "Default Language"
+msgstr "預設語言"
+
+msgid "Select the language your content is written in."
+msgstr "選取您內容所使用的語言。"
+
+msgid "Additional Language"
+msgstr "其他語言"
+
+msgid "Choose a secondary language..."
+msgstr "選擇次要語言..."
+
+#, tp-ctx-07893e52, tp-glo-67834fcb
+msgid "Slug"
+msgstr "Slug"
+
+msgid "Add Language"
+msgstr "新增語言"
+
+msgid "Choose a language..."
+msgstr "選擇語言..."
+
+#, tp-ai, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress Pro is active. Activate your license key to add more "
+"languages."
+msgstr "TranslatePress Pro 已啟用。請啟用授權金鑰以新增更多語言。"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Add more than two languages with TranslatePress Pro."
+msgstr "使用 TranslatePress Pro 新增超過兩種語言。"
+
+msgid "Set up Language Switcher"
+msgstr "設定語言切換器"
+
+msgid ""
+"Select the style of the language switcher. You will find more ways to "
+"display it, in plugin settings."
+msgstr "選擇語言切換器的樣式。您可以在外掛設定中找到更多顯示方式。"
+
+msgid ""
+"Displays a small language drop-down across your website, in a corner of "
+"your choosing."
+msgstr "在整個網站顯示一個小型語言下拉選單，並置於您選擇的角落。"
+
+msgid "Switcher Location"
+msgstr "切換器位置"
+
+msgid "Apply a Template"
+msgstr "套用範本"
+
+msgid "You can customize the design later"
+msgstr "稍後可以自訂設計"
+
+msgid "Default Template"
+msgstr "預設範本"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Default"
+msgstr "預設"
+
+msgid "Dark Template"
+msgstr "深色範本"
+
+msgid "Border Template"
+msgstr "邊框範本"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Border"
+msgstr "邊框"
+
+msgid "Transparent Template"
+msgstr "透明範本"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+msgid "Transparent"
+msgstr "透明"
+
+#, tp-glo-ee8b4f9f
+msgid "Welcome to TranslatePress"
+msgstr "歡迎使用 TranslatePress"
+
+#, tp-glo-ee8b4f9f
+msgid "Quick guided setup to configure TranslatePress in no time!"
+msgstr "快速引導設定，立即完成 TranslatePress 設定！"
+
+msgid "It takes less than a minute."
+msgstr "只需不到一分鐘。"
+
+msgid "Scanning item %1$d of %2$d..."
+msgstr "正在掃描第 %1$d 項，共 %2$d 項..."
+
+msgid "Manually translated"
+msgstr "手動翻譯"
+
+msgid "Automatically translated"
+msgstr "自動翻譯"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext file translation"
+msgstr "Gettext 檔案翻譯"
+
+msgid "Not translated"
+msgstr "未翻譯"
+
+msgid "Bulk Actions"
+msgstr "批次操作"
+
+msgid "Delete entries"
+msgstr "刪除項目"
+
+msgid "Filter"
+msgstr "篩選"
+
+msgid "Clear filters"
+msgstr "清除篩選條件"
+
+msgid "Language"
+msgstr "語言"
+
+msgid "Add New"
+msgstr "新增"
+
+#, tp-ctx-2edc90df
+msgid "Rescan plugins and theme for strings"
+msgstr "重新掃描外掛與佈景主題中的字串"
+
+#, tp-ctx-2edc90df
+msgid "Scanning plugins and theme for strings..."
+msgstr "正在掃描外掛與佈景主題中的字串..."
+
+msgid "Plugins and theme scan is complete"
+msgstr "外掛和佈景主題掃描已完成"
+
+msgid "Plugins and theme scan did not finish due to an error"
+msgstr "外掛和佈景主題掃描因錯誤而未能完成"
+
+msgid "Import / Export"
+msgstr "匯入 / 匯出"
+
+msgid "See More"
+msgstr "查看更多"
+
+msgid "See Less"
+msgstr "查看較少"
+
+msgid "Apply"
+msgstr "套用"
+
+#, tp-ctx-2edc90df
+msgid "No strings match your query."
+msgstr "沒有符合查詢條件的字串。"
+
+#, tp-ctx-2edc90df
+msgid "Try to rescan plugins and theme for strings."
+msgstr "請嘗試重新掃描外掛與佈景主題中的字串。"
+
+msgid ""
+"An error occurred while loading results. Most likely you were logged out. "
+"Reload page?"
+msgstr "載入結果時發生錯誤。你很可能已經登出。要重新載入頁面嗎？"
+
+msgid "found in translation"
+msgstr "在翻譯中找到"
+
+msgid "Select All"
+msgstr "全選"
+
+msgid "Select Visible"
+msgstr "選取可見項目"
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action on all the strings matching your "
+"filter, not just the visibly checked. To perform the action only to the "
+"visible strings click \"Select Visible\" from the table header dropdown."
+msgstr "您即將對所有符合篩選條件的字串執行此動作，而不僅是畫面上已勾選的字串。若只要對可見字串執行動作，請點擊表格標題下拉選單中的「選取可見項目」。"
+
+#, tp-ctx-2edc90df
+msgid ""
+"You are about to perform this action only on the visible strings. To "
+"perform the action on all the strings matching the filter click \"Select "
+"All\" from the table header dropdown."
+msgstr "您即將只對可見字串執行此動作。若要對所有符合篩選條件的字串執行動作，請點擊表格標題下拉選單中的「全部選取」。"
+
+msgid "To continue please type the word:"
+msgstr "若要繼續，請輸入以下字詞："
+
+msgid "The word typed was incorrect. Action was cancelled."
+msgstr "輸入的字詞不正確。操作已取消。"
+
+#, tp-ctx-8a82cc9e, tp-glo-ee8b4f9f
+msgid ""
+"Warning: This action cannot be undone. Deleting a string will remove its "
+"current translation. The original string will appear again in this "
+"interface after TranslatePress detects it. This action is NOT equivalent to "
+"excluding the string from being translated again."
+msgstr ""
+"警告：此動作無法復原。刪除字串將會移除其目前的翻譯。原始字串將在 TranslatePress "
+"偵測到後再次出現於此介面中。此動作不等同於排除該字串，使其不再被翻譯。"
+
+msgid "%d original entries and their translations were deleted."
+msgstr "已刪除 %d 個原始項目及其翻譯。"
+
+msgid "Navigate to next page"
+msgstr "前往下一頁"
+
+msgid "Navigate to previous page"
+msgstr "前往上一頁"
+
+msgid "Navigate to first page"
+msgstr "前往第一頁"
+
+msgid "Navigate to last page"
+msgstr "前往最後一頁"
+
+msgid "Type a page number to navigate to"
+msgstr "輸入要前往的頁碼"
+
+msgid ""
+"Incorrect page number. Type a page number between 1 and total number of "
+"pages"
+msgstr "頁碼不正確。請輸入介於 1 與總頁數之間的頁碼"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e
+msgid ""
+"Search original and translated strings containing typed keywords while also "
+"matching selected filters. Place string in quotes for exact match: \"string\""
+msgstr "搜尋包含輸入關鍵字的原始字串與翻譯字串，並同時符合所選的篩選條件。若要完全相符，請將字串加上引號：\"字串\""
+
+#, tp-ctx-2edc90df
+msgid ""
+"Filter strings according to selected translation status, filters and "
+"keywords and selected filters"
+msgstr "根據所選的翻譯狀態、篩選條件、關鍵字以及所選篩選條件來篩選字串"
+
+msgid "Removes selected filters"
+msgstr "移除所選的篩選條件"
+
+#, tp-ctx-2edc90df
+msgid "See options for selecting all strings"
+msgstr "查看選取所有字串的選項"
+
+#, tp-ctx-2edc90df
+msgid "Click to sort strings by this column"
+msgstr "點擊以依此欄位排序字串"
+
+#, tp-ai, tp-ctx-8a82cc9e, tp-ctx-e9944eb3, tp-glo-8896ebe8
+msgid ""
+"The ID of the WordPress post where this string was detected. Empty if the "
+"string is not associated with a specific post."
+msgstr "偵測到這段字串的 WordPress 文章 ID。如果字串未與特定文章相關聯，則為空。"
+
+msgid ""
+"Language in which the translation status filter applies. Leave unselected "
+"for the translation status to apply to ANY language"
+msgstr "翻譯狀態篩選條件套用的語言。若不選取，則翻譯狀態會套用至任何語言。"
+
+msgid "Search"
+msgstr "搜尋"
+
+#, tp-ctx-742ebaa7
+msgid "Slugs that are not found in either one of the other categories."
+msgstr "未在其他任何類別中找到的 slug。"
+
+#, tp-ctx-8a82cc9e
+msgid "Plugins and Theme String Translation"
+msgstr "外掛與佈景主題字串翻譯"
+
+#, tp-glo-64dbb752
+msgid "Gettext"
+msgstr "Gettext"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Search Gettext Strings"
+msgstr "搜尋 Gettext 字串"
+
+#, tp-ctx-8a82cc9e
+msgid "Original String"
+msgstr "原始字串"
+
+msgid "Filter by domain"
+msgstr "依網域篩選"
+
+msgid "Filter by type"
+msgstr "依類型篩選"
+
+msgid "Email text"
+msgstr "電子郵件文字"
+
+#, tp-ctx-8a82cc9e
+msgid "Emails String Translation"
+msgstr "電子郵件字串翻譯"
+
+msgid "Emails"
+msgstr "電子郵件"
+
+#, tp-ctx-2edc90df
+msgid "Search Email Strings"
+msgstr "搜尋電子郵件字串"
+
+#, tp-ctx-8a82cc9e
+msgid "User Inputted String Translation"
+msgstr "使用者輸入字串翻譯"
+
+#, tp-ctx-5211e47b
+msgid "Regular"
+msgstr "一般"
+
+#, tp-ctx-2edc90df, tp-ctx-5211e47b
+msgid "Search Regular Strings"
+msgstr "搜尋一般字串"
+
+msgid "Filter by Translation Block"
+msgstr "依翻譯區塊篩選"
+
+#, tp-ctx-8a82cc9e
+msgid "String Translation Editor"
+msgstr "字串翻譯編輯器"
+
+#, tp-ai
+msgid "Every minute"
+msgstr "每分鐘"
+
+#, tp-ai
+msgid "Could not load the background task."
+msgstr "無法載入背景工作。"
+
+#, tp-ai
+msgid "Waiting to start background processing..."
+msgstr "等待開始背景處理……"
+
+#, tp-ai
+msgid "Background processing could not start."
+msgstr "背景處理無法開始。"
+
+#, tp-ai
+msgid "Background processing completed."
+msgstr "背景處理完成。"
+
+#, tp-ai
+msgid "A previous batch item failed."
+msgstr "先前的批次項目失敗。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing did not complete successfully."
+msgstr "TranslatePress 背景處理未成功完成。"
+
+#, tp-ai
+msgid "Error: %s"
+msgstr "錯誤：%s"
+
+#, tp-ai
+msgid "You do not have permission to view this task status."
+msgstr "你沒有權限檢視此任務狀態。"
+
+#, tp-ai
+msgid "Invalid batch task."
+msgstr "無效的批次任務。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress is processing a background task."
+msgstr "TranslatePress 正在處理背景任務。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress background processing completed successfully."
+msgstr "TranslatePress 背景處理已成功完成。"
+
+#, tp-ai
+msgid "Processing %s..."
+msgstr "正在處理 %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"%s is optimizing gettext database tables in the background. Translations "
+"continue to work while this runs."
+msgstr "%s 正在背景中最佳化 gettext 資料庫資料表。在此程序執行期間，翻譯功能會持續運作。"
+
+#, tp-ai, tp-glo-64dbb752, tp-glo-ee8b4f9f
+msgid "TranslatePress gettext database optimization completed successfully."
+msgstr "TranslatePress gettext 資料庫最佳化已成功完成。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid ""
+"TranslatePress has detected and cleaned up some failed translation entries "
+"in your database following %s. No further action is required."
+msgstr "TranslatePress 在 %s 後偵測到並清理了資料庫中一些失敗的翻譯項目。無需採取進一步動作。"
+
+#, tp-ai
+msgid "an isolated incident"
+msgstr "單一事件"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Update aborted! Unknown gettext lookup hash migration phase: %s."
+msgstr "更新已中止！未知的 gettext 查詢雜湊遷移階段：%s。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Could not find an available gettext original_id index name "
+"for table %s."
+msgstr "更新已中止！無法找到資料表 %s 可用的 gettext original_id 索引名稱。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext lookup hash migration cannot process invalid ID "
+"%1$d in table %2$s. Repair the table ID schema and retry."
+msgstr "更新已中止！Gettext 查詢雜湊遷移無法處理資料表 %2$s 中的無效 ID %1$d。請修復資料表 ID 結構後重試。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Table %1$s still references %2$d duplicate gettext original "
+"ids."
+msgstr "更新已中止！資料表 %1$s 仍參照了 %2$d 個重複的 gettext 原始 ID。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid ""
+"Update aborted! Gettext original meta still references %d duplicate "
+"original ids."
+msgstr "更新已中止！Gettext 原始中繼資料仍參照了 %d 個重複的原始 ID。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Gettext database optimization completed."
+msgstr "Gettext 資料庫最佳化已完成。"
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deduplicating gettext translation tables..."
+msgstr "正在刪除 gettext 翻譯資料表中的重複項目..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Migrating gettext original lookup hashes..."
+msgstr "正在遷移 gettext 原始查詢雜湊..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing the gettext originals lookup index..."
+msgstr "正在準備 Gettext 原始字串查詢索引..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses..."
+msgstr "正在更新 Gettext 執行時狀態..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finishing gettext database optimization..."
+msgstr "正在完成 Gettext 資料庫最佳化..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Updating gettext runtime statuses for language %s..."
+msgstr "正在更新語言 %s 的 Gettext 執行時狀態..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Resolving missing gettext original ids in %s..."
+msgstr "正在解析 %s 中缺少的 Gettext 原始字串 ID..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Preparing gettext table %s..."
+msgstr "正在準備 Gettext 資料表 %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Removing invalid gettext rows from %s..."
+msgstr "正在從 %s 移除無效的 Gettext 資料列..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Prepared gettext original ids in %s..."
+msgstr "已準備 %s 中的 Gettext 原始字串 ID..."
+
+#, tp-ai
+msgid "Normalizing plural forms in %s..."
+msgstr "正在將 %s 中的複數形式標準化..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Processing duplicate gettext rows in %s..."
+msgstr "正在處理 %s 中的重複 Gettext 資料列..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Building duplicate gettext map for %s..."
+msgstr "正在為 %s 建立重複 Gettext 資料列對應表..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Verifying gettext table %s..."
+msgstr "正在驗證 Gettext 資料表 %s..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Deleting duplicate gettext rows from %s..."
+msgstr "正在從 %s 刪除重複 Gettext 資料列..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Rechecking duplicate gettext rows in %s..."
+msgstr "正在重新檢查 %s 中的重複 Gettext 資料列..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Adding unique gettext index for %s..."
+msgstr "正在為 %s 新增唯一的 Gettext 索引..."
+
+#, tp-ai, tp-glo-64dbb752
+msgid "Finished gettext table %s."
+msgstr "已完成 Gettext 資料表 %s。"
+
+msgid "License"
+msgstr "授權"
+
+msgid "Your License Key is valid."
+msgstr "您的授權金鑰有效。"
+
+msgid "Your License Key is invalid."
+msgstr "您的授權金鑰無效。"
+
+msgid "Your License has expired."
+msgstr "您的授權已過期。"
+
+msgid "Deactivate License"
+msgstr "停用授權"
+
+msgid "Add a license key"
+msgstr "新增授權金鑰"
+
+msgid "License Key"
+msgstr "授權金鑰"
+
+msgid "Manage your license in your %1$s."
+msgstr "在您的%1$s中管理您的授權。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Don’t have a TranslatePress AI License Key?"
+msgstr "沒有 TranslatePress AI 授權金鑰？"
+
+msgid "Get a free License Today"
+msgstr "立即取得免費授權"
+
+msgid "Add your License Key"
+msgstr "新增您的授權金鑰"
+
+msgid ""
+"Add your License Key to unlock all premium features. Find the License Key "
+"in your"
+msgstr "新增您的授權金鑰以解鎖所有進階功能。請在您的"
+
+msgid "Your license is valid and active."
+msgstr "您的授權有效且已啟用。"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress License"
+msgstr "TranslatePress 授權"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, you need "
+"a license key by creating a free account."
+msgstr "若要使用 TranslatePress AI 啟用自動翻譯，您需要建立免費帳戶以取得授權金鑰。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"In order to enable Automatic Translation using TranslatePress AI, please "
+"enter your license key from"
+msgstr "如要使用 TranslatePress AI 啟用自動翻譯，請輸入你的授權金鑰，來自"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Get Your Free TranslatePress AI License"
+msgstr "取得你的免費 TranslatePress AI 授權"
+
+msgid "Generate License"
+msgstr "產生授權"
+
+msgid "Get a Free AI License"
+msgstr "取得免費 AI 授權"
+
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license."
+msgstr "此網站已在免費授權下啟用。每個網站只能使用一個免費授權。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This website is already activated under a free license. Each website can "
+"only use one free license. Please upgrade to a premium plan for more "
+"TranslatePress AI words from %1$s your account %2$s."
+msgstr ""
+"此網站已在免費授權下啟用。每個網站只能使用一個免費授權。請從 %1$s 您的帳號 %2$s 升級至進階方案，以取得更多 TranslatePress "
+"AI 字數。"
+
+msgid "Debug Data for License Checking"
+msgstr "授權檢查的偵錯資料"
+
+msgid "Debug Data for License Activation"
+msgstr "授權啟用的偵錯資料"
+
+#, tp-glo-ee8b4f9f
+msgid "Please install and activate the TranslatePress - Multilingual plugin"
+msgstr "請安裝並啟用 TranslatePress - Multilingual 外掛"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update the TranslatePress - Multilingual plugin to version %1$s or "
+"higher to ensure %2$s functions correctly."
+msgstr "請將 TranslatePress - Multilingual 外掛更新至版本 %1$s 或更高版本，以確保 %2$s 正常運作。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Please update TranslatePress - Multilingual to version %2$s or newer. Your "
+"currently installed version of TranslatePress - Multilingual is no longer "
+"compatible with the current version of %1$s."
+msgstr ""
+"請將 TranslatePress - Multilingual 更新至版本 %2$s 或更新版本。您目前安裝的 TranslatePress - "
+"Multilingual 版本與目前 %1$s 版本不再相容。"
+
+#, tp-glo-ee8b4f9f
+msgid "All TranslatePress functionalities are disabled until then."
+msgstr "在此之前，所有 TranslatePress 功能都將停用。"
+
+msgid "Update Now"
+msgstr "立即更新"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This TranslatePress add-on has been migrated to the main plugin and is no "
+"longer used. You can delete it."
+msgstr "此 TranslatePress 附加元件已移轉至主要外掛，不再使用。您可以將其刪除。"
+
+#, tp-glo-5e752340, tp-glo-8896ebe8, tp-glo-ee8b4f9f
+msgid ""
+"<strong>TranslatePress</strong> requires at least PHP version 5.6.20+ to "
+"run. It is the <a href=\"%s\">minimum requirement of the latest WordPress "
+"version</a>. Please contact your server administrator to update your PHP "
+"version."
+msgstr ""
+"<strong>TranslatePress</strong> 至少需要 PHP 5.6.20+ 版本才能執行。這是<a href=\"%s\">最新 "
+"WordPress 版本的最低需求</a>。請聯絡您的伺服器管理員更新 PHP 版本。"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Add-ons"
+msgstr "TranslatePress 附加元件"
+
+msgid ""
+"You must first purchase this version to have access to the addon "
+"%1$shere%2$s"
+msgstr "您必須先購買此版本才能存取附加元件 %1$s此處%2$s"
+
+msgid ""
+"You need an active license to have access to the addon. Renew or purchase a "
+"new one %1$shere%2$s."
+msgstr "您需要有效的授權才能存取此附加元件。請%1$s在此處%2$s續約或購買新授權。"
+
+msgid "Please %1$senter your license%2$s key first, to activate this addon."
+msgstr "請先%1$s輸入授權%2$s金鑰，以啟用此附加元件。"
+
+#, tp-glo-47180abf, tp-glo-b7a08771
+msgid "SEO Pack (Legacy)"
+msgstr "SEO Pack (舊版)"
+
+#, tp-ctx-07893e52, tp-glo-47180abf, tp-glo-67834fcb, tp-glo-d311355a
+msgid ""
+"SEO support for page slug, page title, description and facebook and twitter "
+"social graph information. The HTML lang attribute is properly set."
+msgstr "提供頁面 slug、頁面標題、描述以及 Facebook 和 Twitter 社交圖譜資訊的 SEO 支援。HTML lang 屬性已正確設定。"
+
+msgid "Recommended Plugins"
+msgstr "推薦外掛"
+
+msgid "A short list of plugins you can use to extend your website."
+msgstr "簡短列出可用於擴充網站的外掛。"
+
+#, tp-glo-35089c1a
+msgid "Profile Builder"
+msgstr "Profile Builder"
+
+#, tp-glo-35089c1a
+msgid ""
+"Capture more user information on the registration form with the help of "
+"Profile Builder's custom user profile fields and/or add an Email "
+"Confirmation process to verify your customers accounts."
+msgstr "透過 Profile Builder 的自訂使用者資料欄位，在註冊表單中收集更多使用者資訊，以及/或新增電子郵件確認流程來驗證客戶的帳號。"
+
+msgid "Paid Member Subscriptions"
+msgstr "Paid Member Subscriptions"
+
+msgid ""
+"Accept user payments, create subscription plans and restrict content on "
+"your membership site."
+msgstr "接受使用者付款、建立訂閱方案，並在會員網站上限制內容存取。"
+
+msgid "WP Webhooks Automator"
+msgstr "WP Webhooks Automator"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Create no-code automations and workflows on your WordPress site. Easily "
+"connect your plugins, sites and apps together."
+msgstr "在 WordPress 網站上建立無程式碼自動化流程與工作流程。輕鬆串連你的外掛、網站與應用程式。"
+
+msgid "Save Changes"
+msgstr "儲存變更"
+
+msgid "Account Page"
+msgstr "帳號頁面"
+
+msgid "You can get one for %1$sfree%2$s, by creating a free account. It includes:"
+msgstr "只要建立免費帳號，即可%1$s免費%2$s取得一組。內容包括："
+
+msgid "Debug Information"
+msgstr "偵錯資訊"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "Get more AI words and unlock all features with TranslatePress Pro."
+msgstr "取得更多 AI 字數，並使用 TranslatePress Pro 解鎖所有功能。"
+
+msgid "Already purchased a Premium version?"
+msgstr "已購買進階版本了嗎？"
+
+msgid "Go to your %1$s"
+msgstr "前往您的 %1$s"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress.com Account"
+msgstr "TranslatePress.com 帳號"
+
+msgid "Download & Install the Pro plugin"
+msgstr "下載並安裝 Pro 外掛程式"
+
+msgid "Learn More"
+msgstr "了解更多"
+
+#, tp-glo-ee8b4f9f
+msgid "TranslatePress Errors"
+msgstr "TranslatePress 錯誤"
+
+msgid "There are no logged errors."
+msgstr "目前沒有記錄的錯誤。"
+
+#, tp-glo-8896ebe8
+msgid "WordPress Translation Plugin"
+msgstr "WordPress 翻譯外掛"
+
+#, tp-ai
+msgid "Back to Glossary"
+msgstr "返回詞彙表"
+
+#, tp-ai
+msgid "Search Existing Translations"
+msgstr "搜尋現有翻譯"
+
+#, tp-ai
+msgid ""
+"Search the existing dictionary entries to see how a term is currently "
+"translated in each language."
+msgstr "搜尋現有的字典項目，查看詞彙目前在各語言中的翻譯。"
+
+#, tp-ai
+msgid "To fully explore all the translations, use %s."
+msgstr "若要完整瀏覽所有翻譯，請使用%s。"
+
+#, tp-ai
+msgid "Search existing translations"
+msgstr "搜尋現有翻譯"
+
+#, tp-ai
+msgid "Replace Existing Translations"
+msgstr "取代現有翻譯"
+
+#, tp-ai
+msgid "The requested glossary term could not be found. It may have been deleted."
+msgstr "找不到要求的詞彙表詞條。該詞條可能已被刪除。"
+
+#, tp-ai
+msgid "&laquo; Back to Glossary"
+msgstr "&laquo; 返回詞彙表"
+
+#, tp-ai
+msgid ""
+"For each language, enter the current (existing) translation you want to "
+"find; every case-insensitive occurrence in the stored translations will be "
+"replaced with the new translation, keeping the original capitalization."
+msgstr "請為每種語言輸入您要尋找的目前（現有）翻譯；儲存翻譯中每個不區分大小寫的出現位置都會被取代為新翻譯，並保留原始的大小寫格式。"
+
+#, tp-ai
+msgid ""
+"Leaving a language field empty will skip that language entirely (no changes "
+"will be made for it). Only one existing translation per language can be "
+"entered at a time. If you have multiple translations to replace for the "
+"same language, simply run the replacement again with the next value."
+msgstr ""
+"將語言欄位留空會完全跳過該語言（不會進行任何變更）。每次每種語言只能輸入一個現有翻譯。如果您有同一語言的多個翻譯要取代，只需使用下一個值再次執行取代作業"
+"。"
+
+#, tp-ai
+msgid ""
+"The \"Existing translation\" is not the term in the default language, but "
+"rather the already existing wrong translation you want to correct."
+msgstr "「現有翻譯」並非預設語言中的詞彙，而是您想要修正的現有錯誤翻譯。"
+
+#, tp-ai
+msgid "Existing translation"
+msgstr "現有翻譯"
+
+#, tp-ai
+msgid "New translation"
+msgstr "新翻譯"
+
+#, tp-ai
+msgid "Replace in existing translations"
+msgstr "在現有翻譯中取代"
+
+#, tp-ai, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Glossary is available only with the TranslatePress AI engine."
+msgstr "詞彙表功能僅適用於 TranslatePress AI 翻譯引擎。"
+
+#, tp-ai, tp-glo-c6709f3f, tp-glo-d6a22d74
+msgid ""
+"Select the %s automatic translation engine to add and manage glossary "
+"terms. For other translation engines (such as DeepL or Google Translate), "
+"glossary functions are available in the translation provider’s dashboard."
+msgstr ""
+"選擇 %s 自動翻譯引擎以新增及管理詞彙表詞條。對於其他翻譯引擎（例如 DeepL 或 Google "
+"Translate），詞彙表功能可在翻譯提供者的控制面板中使用。"
+
+#, tp-ai
+msgid "Add Glossary Term"
+msgstr "新增詞彙表詞條"
+
+#, tp-ai
+msgid ""
+"Define words or phrases that should not be translated automatically, and "
+"optionally provide replacements per language."
+msgstr "定義不應自動翻譯的字詞或詞組，並可選擇為每種語言提供取代內容。"
+
+#, tp-ai
+msgid "The original word or phrase in the default language."
+msgstr "預設語言中的原始字詞或詞組。"
+
+#, tp-ai
+msgid "Add Term"
+msgstr "新增詞條"
+
+#, tp-ai
+msgid "Search glossary terms"
+msgstr "搜尋詞彙表詞條"
+
+#, tp-ai
+msgid "Search terms"
+msgstr "搜尋詞條"
+
+#, tp-ai
+msgid "Search Glossary"
+msgstr "搜尋詞彙表"
+
+#, tp-ai
+msgid "Loading…"
+msgstr "載入中…"
+
+#, tp-ai
+msgid "To edit existing translations, use the %s."
+msgstr "如要編輯現有翻譯，請使用%s。"
+
+msgid "Language Switcher update notice"
+msgstr "語言切換器更新通知"
+
+msgid "Legacy language switcher is currently enabled"
+msgstr "目前已啟用舊版語言切換器"
+
+msgid ""
+"We’ve upgraded the switcher for richer customization and a better user "
+"experience.<br>In order to use the new configurator, turn off <strong>Load "
+"legacy language switcher</strong>."
+msgstr "我們已升級切換器，提供更豐富的自訂選項和更好的使用者體驗。<br>如要使用新的設定工具，請關閉<strong>載入舊版語言切換器</strong>。"
+
+#, tp-ai, tp-ctx-a6928204
+msgid ""
+"Note: You can switch back anytime from <strong>Advanced Settings → <a "
+"href=\"%s\">Troubleshooting</a></strong>."
+msgstr "注意：您可以隨時從<strong>進階設定 → <a href=\"%s\">疑難排解</a></strong>切換回去。"
+
+msgid "Enable the new switcher"
+msgstr "啟用新切換器"
+
+msgid "Get a translation volume estimate with a detailed breakdown per page"
+msgstr "取得翻譯量預估，並提供每頁的詳細分項資料"
+
+msgid "Find how many translatable words are on your website"
+msgstr "查看您的網站上有多少可翻譯的字數"
+
+#, tp-glo-c6709f3f
+msgid ""
+"<strong>DeepL</strong> automatic translation is available as a <a "
+"href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"<strong>DeepL</strong> 自動翻譯以 <a href=\"%1$s\" target=\"_blank\" "
+"title=\"%2$s\">%2$s</a> 的形式提供。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"By upgrading you'll get access to all paid add-ons, premium support and "
+"help fund the future development of TranslatePress."
+msgstr "升級後即可使用所有付費附加元件、獲得進階支援，並協助 TranslatePress 的未來開發。"
+
+#, tp-glo-c6709f3f
+msgid ""
+"To use <strong>DeepL</strong> for automatic translation, activate this Pro "
+"add-on from the <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>."
+msgstr ""
+"若要使用 <strong>DeepL</strong> 進行自動翻譯，請從 <a href=\"%1$s\" target=\"_self\" "
+"title=\"%2$s\">%2$s</a> 啟用此 Pro 附加元件。"
+
+#, tp-glo-91460d88, tp-glo-c6709f3f, tp-glo-d311355a
+msgid ""
+"Please note that DeepL API usage is paid separately. See <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL pricing "
+"information</a>."
+msgstr ""
+"請注意，DeepL API 的使用需另外付費。請參閱 <a "
+"href=\"https://www.deepl.com/pro.html#developer\">DeepL 定價資訊</a>。"
+
+#, tp-glo-77a09a79, tp-glo-ee8b4f9f
+msgid "TranslatePress Pro Add-ons"
+msgstr "TranslatePress Pro 附加元件"
+
+#, tp-glo-91460d88
+msgid "Test API credentials"
+msgstr "測試 API 憑證"
+
+msgid "Check if the selected translation engine is configured correctly."
+msgstr "檢查所選的翻譯引擎是否設定正確。"
+
+msgid "Alternative Engines"
+msgstr "替代引擎"
+
+msgid "More info"
+msgstr "更多資訊"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid "Switch to TranslatePress AI"
+msgstr "切換至 TranslatePress AI"
+
+#, tp-glo-8896ebe8
+msgid "Integrate machine translation directly with your WordPress website."
+msgstr "直接將機器翻譯整合至您的 WordPress 網站。"
+
+msgid ""
+"Choose which engine you want to use in order to %1$s automatically "
+"translate your website."
+msgstr "選擇您要使用的引擎，以便%1$s自動翻譯您的網站。"
+
+#, tp-ctx-742ebaa7
+msgid "Automatically Translate Slugs"
+msgstr "自動翻譯 Slug"
+
+#, tp-ctx-742ebaa7, tp-ctx-7832384c, tp-ctx-e9944eb3
+msgid ""
+"Generate automatic translations of slugs for posts, pages and Custom Post "
+"Types.<br/>The slugs will be automatically translated starting with the "
+"second refresh of each page."
+msgstr "為文章、頁面和自訂文章類型自動產生 slug 翻譯。<br/>從每個頁面的第二次重新整理開始，slug 將會自動翻譯。"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"This feature is only available in the paid version. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr "此功能僅於付費版本提供。升級 TranslatePress 以解鎖更多進階功能。"
+
+#, tp-glo-47180abf, tp-glo-b7a08771, tp-glo-ee8b4f9f
+msgid ""
+"Requires <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack Add-on</a> to be installed and "
+"activated."
+msgstr ""
+"需要安裝並啟用 <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack "
+"documentation\" target=\"_blank\">SEO Pack 附加元件</a>。"
+
+msgid "Automatic Translation Settings"
+msgstr "自動翻譯設定"
+
+msgid "AI Words Low Notification"
+msgstr "AI 字數不足通知"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"Receive an email notification when your TranslatePress AI word count drops "
+"below the specified threshold."
+msgstr "當您的 TranslatePress AI 字數低於指定門檻時，接收電子郵件通知。"
+
+#, tp-glo-ee8b4f9f, tp-glo-f7c8926f
+msgid ""
+"This feature is only available when using the TranslatePress AI translation "
+"engine."
+msgstr "此功能僅在使用 TranslatePress AI 翻譯引擎時可用。"
+
+msgid "Notification Email"
+msgstr "通知電子郵件"
+
+msgid "The email address where the low AI words notification will be sent."
+msgstr "接收 AI 字數不足通知的電子郵件地址。"
+
+msgid "Word Threshold"
+msgstr "字數門檻"
+
+msgid "words"
+msgstr "字"
+
+msgid "You will be notified when remaining AI words drop below this number."
+msgstr "當剩餘 AI 字數低於此數字時，您將收到通知。"
+
+msgid "Block Crawlers"
+msgstr "封鎖爬蟲"
+
+msgid ""
+"Block crawlers from triggering automatic translations on your "
+"website.<br>This will not prevent crawlers from accessing this site's pages."
+msgstr "防止爬蟲在您的網站上觸發自動翻譯。<br>這不會阻止爬蟲存取此網站的頁面。"
+
+msgid "Limit machine translation / characters per day"
+msgstr "限制機器翻譯 / 每日字元數"
+
+msgid ""
+"Add a limit to the number of automatically translated characters so you can "
+"better budget your project."
+msgstr "為自動翻譯的字元數設定上限，以便更好地規劃專案預算。"
+
+msgid "characters per day"
+msgstr "每日字元數"
+
+msgid "Today's Character Count: "
+msgstr "今日字元數： "
+
+msgid "Log machine translation queries."
+msgstr "記錄機器翻譯查詢。"
+
+#, tp-glo-8896ebe8
+msgid ""
+"Only enable for testing purposes. Can impact performance.<br>All records "
+"are stored in the wp_trp_machine_translation_log database table. Use a "
+"plugin like <a href=\"https://wordpress.org/plugins/wp-data-access/\" "
+"target=\"_blank\">WP Data Access</a> to browse the logs or directly from "
+"your database manager (PHPMyAdmin, etc.)"
+msgstr ""
+"僅供測試用途時啟用。可能會影響效能。<br>所有記錄都儲存在 wp_trp_machine_translation_log 資料庫資料表中。請使用如 "
+"<a href=\"https://wordpress.org/plugins/wp-data-access/\" "
+"target=\"_blank\">WP Data Access</a> 之類的外掛來瀏覽記錄，或直接透過您的資料庫管理工具 (PHPMyAdmin "
+"等) 查看。"
+
+#, tp-glo-91460d88
+msgid "Test API Credentials"
+msgstr "測試 API 憑證"
+
+#, tp-glo-1aabb38a
+msgid "HTTP Referrer: "
+msgstr "HTTP Referrer: "
+
+#, tp-glo-1aabb38a, tp-glo-91460d88
+msgid ""
+"Use this HTTP Referrer if the API lets you restrict key usage from its "
+"Dashboard."
+msgstr "如果 API 可讓您從其控制台限制金鑰的使用範圍，請使用這個 HTTP Referrer。"
+
+#, tp-ai, tp-glo-9fa92a70
+msgid "Request URL"
+msgstr "要求 URL"
+
+#, tp-ai
+msgid "Request Headers"
+msgstr "要求標頭"
+
+#, tp-ai
+msgid "Request Body"
+msgstr "要求主體"
+
+msgid "Response"
+msgstr "回應"
+
+msgid "Response Body"
+msgstr "回應主體"
+
+msgid "Entire Response From wp_remote_get():"
+msgstr "wp_remote_get() 的完整回應："
+
+msgid "Select the languages you wish to make your website available in."
+msgstr "選取您希望網站支援的語言。"
+
+msgid "Formality"
+msgstr "正式程度"
+
+msgid "Code"
+msgstr "代碼"
+
+msgid "Formal"
+msgstr "正式"
+
+msgid "Informal"
+msgstr "非正式"
+
+msgid "This language does not support formality. "
+msgstr "這個語言不支援正式程度。 "
+
+msgid "Are you sure you want to remove this language?"
+msgstr "您確定要移除此語言嗎？"
+
+msgid "Custom Languages"
+msgstr "自訂語言"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Adding more than two languages is a paid feature. Upgrade TranslatePress "
+"and unlock more premium features."
+msgstr "新增超過兩種語言是付費功能。升級 TranslatePress 以解鎖更多進階功能。"
+
+msgid "Please %1$senter your license%2$s key first to add more languages."
+msgstr "請先%1$s輸入您的授權%2$s金鑰，才能新增更多語言。"
+
+msgid ""
+"You need an active license to add more languages. Verify in your "
+"%1$saccount%2$s that your license is valid"
+msgstr "您需要有效的授權才能新增更多語言。請在您的%1$s帳號%2$s中確認授權是否有效。"
+
+msgid "To Add more languages activate the Multiple Languages Addon"
+msgstr "若要新增更多語言，請啟用 Multiple Languages Addon。"
+
+msgid "Website Languages"
+msgstr "網站語言"
+
+msgid ""
+"WARNING. Changing the default language will invalidate existing "
+"translations."
+msgstr "警告：變更預設語言將會使現有翻譯失效。"
+
+msgid ""
+"Even changing from en_US to en_GB, because they are treated as two "
+"different languages."
+msgstr "即使是從 en_US 變更為 en_GB 也一樣，因為它們會被視為兩種不同的語言。"
+
+msgid "In most cases changing the default flag is all it is needed: "
+msgstr "在大多數情況下，變更預設旗幟就是所需的一切： "
+
+msgid "replace the default flag"
+msgstr "取代預設旗幟"
+
+msgid "Re-run Setup Wizard"
+msgstr "重新執行設定精靈"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"The Setup wizard allows you to quickly setup TranslatePress. You can "
+"initiate it at any time."
+msgstr "設定精靈可讓您快速設定 TranslatePress。您可以隨時啟動它。"
+
+msgid "Language Settings"
+msgstr "語言設定"
+
+msgid "Use Native language name"
+msgstr "使用語言原生名稱"
+
+msgid ""
+"Check if you want to display languages in their native names. Otherwise, "
+"languages will be displayed in English."
+msgstr "如果您希望以各語言的母語名稱顯示，請勾選此項目。否則，語言將以英文顯示。"
+
+msgid "Use a subdirectory for the default language"
+msgstr "為預設語言使用子目錄"
+
+#, tp-glo-9fa92a70
+msgid ""
+"Check if you want to add the subdirectory in the URL for the default "
+"language.</br>By checking this option, the default language seen by website "
+"visitors will become the first one in the \"All Languages\" list."
+msgstr "如果您想要為預設語言在網址中加入子目錄，請勾選此項目。</br>勾選此選項後，網站訪客看到的預設語言將會變成「所有語言」清單中的第一個語言。"
+
+msgid "Force language in custom links"
+msgstr "在自訂連結中強制使用語言"
+
+msgid ""
+"Select Yes if you want to force custom links without language encoding to "
+"keep the currently selected language."
+msgstr "如果您希望強制沒有語言編碼的自訂連結保留目前選取的語言，請選取「是」。"
+
+#, tp-glo-da70db08
+msgid "Shortcode "
+msgstr "shortcode "
+
+#, tp-glo-da70db08
+msgid "Use shortcode on any page or widget."
+msgstr "在任何頁面或小工具使用 shortcode。"
+
+#, tp-glo-8339568d
+msgid ""
+"You can also add the <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">Language Switcher Block</a> in the WP Gutenberg Editor."
+msgstr ""
+"你也可以在 WP Gutenberg 編輯器中加入 <a href=\"%s\" title=\"Language Switcher Block "
+"Documentation\">語言切換區塊</a>。"
+
+msgid "Menu item"
+msgstr "選單項目"
+
+msgid ""
+"Go to  %1$s Appearance -> Menus%2$s to add languages to the Language "
+"Switcher in any menu."
+msgstr "前往  %1$s 外觀 -> 選單%2$s，將語言加入任何選單的語言切換器。"
+
+msgid "Learn more in our documentation."
+msgstr "在我們的文件中了解更多。"
+
+msgid "Floating language selection"
+msgstr "浮動語言選擇"
+
+msgid "Add a floating dropdown that follows the user on every page."
+msgstr "新增一個浮動下拉選單，跟隨使用者瀏覽每個頁面。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-glo-ee8b4f9f
+msgid "Show \"Powered by TranslatePress\""
+msgstr "顯示「Powered by TranslatePress」"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Show the small \"Powered by TranslatePress\" label in the floater language "
+"switcher."
+msgstr "在浮動語言切換器中顯示「Powered by TranslatePress」小標籤。"
+
+msgid "5 Days to Better Multilingual Websites"
+msgstr "5 天打造更優質的多語言網站"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"%sJoin our FREE & EXCLUSIVE onboarding course%s and learn how to grow your "
+"multilingual traffic, reach international markets, and save time & money "
+"while getting the most out of TranslatePress!"
+msgstr "%s加入我們免費且專屬的入門課程%s，學習如何提升多語言流量、觸及國際市場，並在充分運用 TranslatePress 的同時節省時間與金錢！"
+
+msgid "Invalid email address"
+msgstr "電子郵件地址無效"
+
+msgid "Your email"
+msgstr "你的電子郵件"
+
+msgid "Sign me up!"
+msgstr "我要訂閱！"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Sign up with your email address and receive a 5-part email guide to help "
+"you maximize the power of TranslatePress."
+msgstr "使用你的電子郵件地址訂閱，即可收到 5 部分的電子郵件指南，協助你充分發揮 TranslatePress 的功能。"
+
+msgid "Dismiss email course notification"
+msgstr "關閉電子郵件課程通知"
+
+msgid ""
+"Hey %s,<br>Never miss an important update - opt in to our security and "
+"feature updates notifications, and non-sensitive diagnostic tracking."
+msgstr "嘿，%s，<br>別錯過任何重要更新——請選擇接收我們的安全性與功能更新通知，以及非敏感的診斷追蹤。"
+
+msgid "Allow & Continue"
+msgstr "允許並繼續"
+
+msgid "Skip"
+msgstr "略過"
+
+#, tp-glo-ee8b4f9f
+msgid "This will allow TranslatePress to:"
+msgstr "這將允許 TranslatePress："
+
+msgid "Your profile overview"
+msgstr "你的個人資料概覽"
+
+msgid "Name and email address"
+msgstr "名稱與電子郵件地址"
+
+msgid "Admin Notices"
+msgstr "管理員通知"
+
+msgid "Updates, announcements, marketing, no spam"
+msgstr "更新、公告、行銷，無垃圾郵件"
+
+msgid "Plugin status & settings"
+msgstr "外掛狀態與設定"
+
+msgid "Active, Deactivated, installed version and settings"
+msgstr "啟用、停用、已安裝版本與設定"
+
+msgid "Privacy Policy"
+msgstr "隱私權政策"
+
+msgid "Terms of Service"
+msgstr "服務條款"
+
+msgid "Support"
+msgstr "支援"
+
+msgid "Add Extra AI Words"
+msgstr "新增額外 AI 字數"
+
+msgid ""
+"<strong>IMPORTANT NOTE:</strong> Before performing this action it is "
+"strongly recommended to first backup the database."
+msgstr "<strong>重要注意事項：</strong>執行此操作前，強烈建議先備份資料庫。"
+
+msgid ""
+"IMPORTANT: It is strongly recommended to first backup the database!! Are "
+"you sure you want to continue?"
+msgstr "重要：強烈建議先備份資料庫！！確定要繼續嗎？"
+
+msgid "Operations to perform"
+msgstr "要執行的操作"
+
+#, tp-ctx-2edc90df
+msgid "Remove CDATA for original and dictionary strings"
+msgstr "移除原始字串和字典字串的 CDATA"
+
+#, tp-glo-ee8b4f9f
+msgid ""
+"Removes CDATA from trp_original_strings and trp_dictionary_* "
+"tables.<br>This type of content should not be detected by TranslatePress. "
+"It might have been introduced in the database in older versions of the "
+"plugin."
+msgstr ""
+"從 trp_original_strings 與 trp_dictionary_* 資料表中移除 CDATA。<br>這類內容不應被 "
+"TranslatePress 偵測到。它可能是由舊版外掛引入資料庫的。"
+
+msgid "Remove untranslated links from dictionary tables"
+msgstr "從字典資料表中移除未翻譯的連結"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Removes untranslated links and images from all trp_dictionary_* tables. "
+"These tables contain translations for user-inputted strings such as post "
+"content, post title, menus etc."
+msgstr "從所有 trp_dictionary_* 資料表中移除未翻譯的連結和圖片。這些資料表包含使用者輸入字串的翻譯，例如文章內容、文章標題、選單等。"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid "Remove duplicate rows for gettext strings"
+msgstr "移除 gettext 字串的重複資料列"
+
+#, tp-ctx-2edc90df
+msgid ""
+"Cleans up all trp_gettext_* tables of duplicate rows. These tables contain "
+"translations for themes and plugin strings."
+msgstr "清除所有 trp_gettext_* 資料表中的重複資料列。這些資料表包含佈景主題和外掛字串的翻譯。"
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for dictionary strings"
+msgstr "移除字典字串的重複資料列"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_dictionary_* tables of duplicate rows. These tables "
+"contain translations for user-inputted strings such as post content, post "
+"title, menus etc."
+msgstr "清除所有 trp_dictionary_* 資料表中的重複資料列。這些資料表包含使用者輸入字串的翻譯，例如文章內容、文章標題、選單等。"
+
+#, tp-ctx-2edc90df
+msgid "Remove duplicate rows for original dictionary strings"
+msgstr "移除原始字典字串的重複資料列"
+
+#, tp-ctx-2edc90df, tp-ctx-e9944eb3
+msgid ""
+"Cleans up all trp_original_strings table of duplicate rows. This table "
+"contains strings in the default language, without any translation.<br>The "
+"trp_original_meta table, which contains meta information that refers to the "
+"post parent’s ID, is also regenerated.<br>Such duplicates can appear in "
+"exceptional situations of unexpected behavior."
+msgstr ""
+"清除 trp_original_strings "
+"資料表中的所有重複資料列。此資料表包含預設語言的字串，不含任何翻譯。<br>trp_original_meta 資料表（包含參照上層文章 ID "
+"的中繼資料）也會重新產生。<br>這類重複資料可能在發生未預期的異常行為時出現。"
+
+#, tp-ctx-2edc90df, tp-glo-64dbb752
+msgid ""
+"Replace gettext strings that have original ID NULL with the correct "
+"original IDs"
+msgstr "將原始 ID 為 NULL 的 gettext 字串替換為正確的原始 ID"
+
+#, tp-ctx-2edc90df, tp-ctx-8a82cc9e, tp-glo-64dbb752
+msgid ""
+"Fixes an edge case issue where some gettext strings have the original ID "
+"incorrectly set to NULL, causing problems in the Translation "
+"Editor.<br>This operation corrects the original IDs in the trp_gettext_* "
+"tables.<br>Only check this option if you encountered an issue in the "
+"Translation Editor where clicking the green pencil did not bring up the "
+"gettext string for translation in the left sidebar.<br>Otherwise, please "
+"leave this option unchecked because it's an intensive operation."
+msgstr ""
+"修正某些 gettext 字串的原始 ID 被錯誤設為 NULL 的邊緣案例問題，此問題會造成翻譯編輯器出現問題。<br>此操作會修正 "
+"trp_gettext_* 資料表中的原始 ID。<br>只有當您在翻譯編輯器中遇到點擊綠色鉛筆後，左側邊欄未顯示該 gettext "
+"字串供翻譯的問題時，才勾選此選項。<br>否則，請勿勾選此選項，因為這是一項耗費資源的作業。"
+
+msgid "Optimize Database"
+msgstr "最佳化資料庫"
+
+#, tp-glo-34f425d9, tp-glo-ee8b4f9f
+msgid "TranslatePress Database Updater"
+msgstr "TranslatePress Database Updater"
+
+#, tp-glo-ee8b4f9f
+msgid "Updating TranslatePress tables. Please leave this window open."
+msgstr "正在更新 TranslatePress 資料表。請保持此視窗開啟。"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Open colour picker"
+msgstr "開啟色彩選擇器"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enabled"
+msgstr "已啟用"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Disabled"
+msgstr "已停用"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Write custom CSS here..."
+msgstr "在此撰寫自訂 CSS..."
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Include"
+msgstr "包含"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Exclude"
+msgstr "排除"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Content Restriction Mode"
+msgstr "內容限制模式"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "No languages selected"
+msgstr "未選取語言"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saving..."
+msgstr "儲存中…"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Saved!"
+msgstr "已儲存！"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save changes"
+msgstr "儲存變更"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert to last saved values"
+msgstr "還原為上次儲存的值"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert changes"
+msgstr "還原變更"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Restoring will revert to the last saved version and discard your current "
+"edits."
+msgstr "還原將會回復至上次儲存的版本，並捨棄您目前的編輯內容。"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Revert"
+msgstr "還原"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Keep editing"
+msgstr "繼續編輯"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Are you sure you want to apply the <strong>%s</strong> preset?"
+msgstr "確定要套用 <strong>%s</strong> 預設組合嗎？"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "It will override your current settings."
+msgstr "這會覆寫您目前的設定。"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply preset"
+msgstr "套用預設組合"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply %s preset"
+msgstr "套用 %s 預設"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Save failed"
+msgstr "儲存失敗"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "English"
+msgstr "英文"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Spanish"
+msgstr "西班牙文"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "French"
+msgstr "法文"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Minimal Light"
+msgstr "極簡淺色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Dark Overlay"
+msgstr "深色覆蓋"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Brand Blue"
+msgstr "品牌藍"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Bordered"
+msgstr "邊框"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Preview"
+msgstr "彈出視窗預覽"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "User Language Detection Method"
+msgstr "使用者語言偵測方式"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Notification Behavior"
+msgstr "通知行為"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup Content"
+msgstr "彈出視窗內容"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Apply a preset"
+msgstr "套用預設"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Design"
+msgstr "自訂設計"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Language detection"
+msgstr "語言偵測"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid ""
+"Select how the language should be detected for first time visitors.<br>The "
+"visitor's last displayed language will be remembered through cookies."
+msgstr "選擇首次訪客的語言偵測方式。<br>訪客最後顯示的語言將透過 Cookie 記住。"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Popup display"
+msgstr "彈出視窗顯示"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Conditionally display popup based on language"
+msgstr "根據語言條件顯示彈出視窗"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Type"
+msgstr "彈出視窗類型"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid ""
+"Visitors will be redirected directly when a different preferred language is "
+"detected."
+msgstr "當偵測到不同的偏好語言時，訪客將會被直接重新導向。"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Popup Text"
+msgstr "彈出視窗文字"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Button Text"
+msgstr "按鈕文字"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+msgid "Close Button Text"
+msgstr "關閉按鈕文字"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background color"
+msgstr "背景顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text color"
+msgstr "文字顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button background color"
+msgstr "按鈕背景顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button hover color"
+msgstr "按鈕懸停顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button text color"
+msgstr "按鈕文字顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Button border radius"
+msgstr "按鈕邊框圓角"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Close icon color"
+msgstr "關閉圖示顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Overlay color"
+msgstr "遮罩顏色"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Entrance animation"
+msgstr "進場動畫"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Animation"
+msgstr "動畫"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Fade"
+msgstr "淡入"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from top"
+msgstr "從頂部滑入"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from right"
+msgstr "從右側滑入"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from bottom"
+msgstr "從底部滑入"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Slide from left"
+msgstr "從左側滑入"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5ab49663
+msgid "Enable custom CSS"
+msgstr "啟用自訂 CSS"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "No names"
+msgstr "無名稱"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Show flags"
+msgstr "顯示國旗"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Rectangle (4:3)"
+msgstr "矩形 (4:3)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Square (1:1)"
+msgstr "正方形 (1:1)"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Flag border radius"
+msgstr "國旗圓角"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher background"
+msgstr "切換器背景"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover background"
+msgstr "切換器懸停背景"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher text"
+msgstr "切換器文字"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher hover text"
+msgstr "切換器懸停文字"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#, tp-ai
+msgid "Switcher border"
+msgstr "切換器邊框"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border width"
+msgstr "切換器邊框寬度"
+
+#: assets/js/trp-ald-popup-configurator.js:2
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border radius"
+msgstr "切換器邊框圓角"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Hover over the language switcher to see it in action!"
+msgstr "將游標移至語言切換器上方，即可查看實際效果！"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Preview"
+msgstr "切換器預覽"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Enable Floating Switcher"
+msgstr "啟用浮動切換器"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is enabled"
+msgstr "切換器已啟用"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher is disabled"
+msgstr "切換器已停用"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher Type"
+msgstr "切換器類型"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages as dropdown"
+msgstr "以下拉選單顯示語言"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Show languages side by side"
+msgstr "並排顯示語言"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Background hover color"
+msgstr "背景懸停顏色"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Text hover color"
+msgstr "文字懸停顏色"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher border color"
+msgstr "切換器邊框顏色"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag and text size"
+msgstr "旗幟與文字大小"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons shape"
+msgstr "旗幟圖示形狀"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Flag icons border radius"
+msgstr "旗幟圖示邊框圓角"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Customize Layout"
+msgstr "自訂版面配置"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "Show the small Powered by TranslatePress label in the language switcher."
+msgstr "在語言切換器中顯示小型的 Powered by TranslatePress 標籤。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "You have unsaved changes. Leave anyway?"
+msgstr "您有未儲存的變更。確定要離開嗎？"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Switcher animations"
+msgstr "切換器動畫"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid ""
+"Transforms the language switcher into a button showing the other available "
+"language, not the current one. <br> Only works when there are exactly two "
+"languages, the default one and a translation one."
+msgstr "將語言切換器轉換為顯示其他可用語言（而非目前語言）的按鈕。<br>僅在恰好有兩種語言時有效：預設語言和翻譯語言。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "This option only works when exactly two languages are published."
+msgstr "此選項僅在恰好發布兩種語言時有效。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copied!"
+msgstr "已複製！"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Copy"
+msgstr "複製"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-8339568d, tp-glo-da70db08
+msgid ""
+"Use shortcode on any page or widget. You can also add the Language Switcher "
+"Block in the WP Gutenberg Editor."
+msgstr "在任何頁面或小工具中使用 shortcode。您也可以在 WP Gutenberg 編輯器中加入語言切換器區塊。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Additional Settings"
+msgstr "其他設定"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-da70db08
+msgid ""
+"Open the language switcher shortcode by clicking on it instead of hovering. "
+"<br> Close it by clicking on it, anywhere else on the screen or by pressing "
+"the escape key. <br> This will affect only the shortcode language switcher."
+msgstr ""
+"透過點擊而非懸停來開啟語言切換器 shortcode。<br>透過點擊語言切換器、畫面其他位置或按下 Esc 鍵來關閉。<br>這只會影響 "
+"shortcode 語言切換器。"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai
+msgid "Menu Switcher Layout"
+msgstr "選單切換器版面配置"
+
+#: assets/js/trp-lang-switcher-configurator.js:2
+#, tp-ai, tp-glo-5e752340, tp-glo-ee8b4f9f
+msgid ""
+"Go to <a href=\"/wp-admin/nav-menus.php\">Appearance → Menus</a> to add "
+"languages to the Language Switcher in any menu.<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">Learn more in our documentation.</a>"
+msgstr ""
+"前往<a href=\"/wp-admin/nav-menus.php\">外觀 → 選單</a>，將語言加入任何選單中的語言切換器。<br> <a "
+"href=\"https://translatepress.com/docs/settings/language-switcher/?utm_"
+"source=tp-language-switcher&utm_medium=client-site&utm_campaign=ls-menu-"
+"item#menu-switcher\" target=\"_blank\">在我們的文件中深入瞭解。</a>"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose in which languages to show the block."
+msgstr "選擇要在哪些語言中顯示此區塊。"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Choose from which languages the block is excluded."
+msgstr "選擇要從哪些語言中排除此區塊。"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid "Select language(s)"
+msgstr "選擇語言"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai, tp-glo-ee8b4f9f
+msgid "TranslatePress Language Restriction"
+msgstr "TranslatePress 語言限制"
+
+#: includes/gutenberg-blocks/block-language-restriction/build/index.js:1
+#, tp-ai
+msgid ""
+"Language restrictions cannot be saved on a top-level Classic block. Convert "
+"it to blocks or place it inside a Group block first."
+msgstr "語言限制無法儲存在頂層傳統區塊上。請先將其轉換為區塊，或將其放入群組區塊中。"
+
+msgctxt "page 1 of 3"
+msgid "of"
+msgstr "/"
+
+msgctxt "Untranslated in this language"
+msgid "in"
+msgstr "在"
+
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "Addons tab"
+msgstr "附加元件分頁"
+
+#, tp-glo-77a09a79, tp-glo-b83ea26c, tp-glo-ee8b4f9f
+msgctxt "Verbiage for the DeepL Pro Add-on"
+msgid "TranslatePress Pro Add-on"
+msgstr "TranslatePress Pro Add-on"
+
+#, tp-ai
+msgctxt "block title"
+msgid "Language Switcher"
+msgstr "語言切換器"
+
+#, tp-ai
+msgctxt "block description"
+msgid "Displays the Language Switcher."
+msgstr "顯示語言切換器。"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Switcher"
+msgstr "語言切換器"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Translate"
+msgstr "翻譯"
+
+#, tp-ai, tp-glo-ee8b4f9f
+msgctxt "block keyword"
+msgid "TranslatePress"
+msgstr "TranslatePress"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Language Names"
+msgstr "語言名稱"
+
+#, tp-ai
+msgctxt "block keyword"
+msgid "Flags"
+msgstr "旗幟"

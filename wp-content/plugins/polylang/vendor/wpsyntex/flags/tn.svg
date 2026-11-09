@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600" fill="#e70013">
+<path d="M0 0h900v600H0"/>
+<g transform="translate(450 300)">
+<circle r="150" fill="#fff"/>
+<circle r="112"/>
+<circle cx="30" r="90" fill="#fff"/>
+<path d="M85 40-37 0 85-40 9 64V-64"/>
+</g>
+</svg>

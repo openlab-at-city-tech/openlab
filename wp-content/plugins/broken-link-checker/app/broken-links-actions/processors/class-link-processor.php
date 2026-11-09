@@ -17,6 +17,7 @@ namespace WPMUDEV_BLC\App\Broken_Links_Actions\Processors;
 defined( 'WPINC' ) || die;
 
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
+use WPMUDEV_BLC\App\Broken_Links_Actions\Processors\Content_Processors\Abstract_Content_Processor;
 
 /**
  * Class Scan_Data
@@ -88,6 +89,7 @@ abstract class Link_Processor extends Base {
 		$this->is_recurring_block = false;
 		$this->current_block_name = null;
 		$this->is_nav             = false;
+		$this->post_id            = null;
 	}
 
 	public function parse_block( array $block = array(), string $link = null, string $new_link = null ) {
@@ -127,13 +129,46 @@ abstract class Link_Processor extends Base {
 	public function parse_block_atts( array $block_atts = array(), string $link = null, string $new_link = null ) {
 		if ( ! empty( $block_atts ) ) {
 			foreach ( $block_atts as $key => $value ) {
-				if ( filter_var( $value, FILTER_VALIDATE_URL ) ) {
-					$block_atts[ $key ] = $this->get_block_att_value_replacement( $value, $new_link );
+				/*
+				 * Only rewrite a setting that both looks like a URL and actually holds the broken
+				 * link being actioned. Without the link comparison every URL-like block setting
+				 * (embedded video, navigation link, etc.) would be replaced or emptied too,
+				 * silently breaking unrelated content.
+				 */
+				if (
+					! is_string( $value ) ||
+					! filter_var( $value, FILTER_VALIDATE_URL ) ||
+					! $this->block_att_holds_link( $value, $link )
+				) {
+					continue;
 				}
+
+				$block_atts[ $key ] = $this->get_block_att_value_replacement( $value, $new_link );
 			}
 		}
 
 		return $block_atts;
+	}
+
+	/**
+	 * Checks whether a URL-like block attribute value holds the broken link being actioned.
+	 *
+	 * The comparison mirrors the one used for links found in the visible content: surrounding
+	 * quotes and a trailing slash are ignored, and URLs are normalised through `links_match()`.
+	 *
+	 * @param string      $att_value The URL-like block attribute value.
+	 * @param string|null $link      The link being replaced/unlinked.
+	 * @return bool
+	 */
+	public function block_att_holds_link( string $att_value = '', ?string $link = null ) : bool {
+		if ( empty( $att_value ) || empty( $link ) ) {
+			return false;
+		}
+
+		return $this->links_match(
+			untrailingslashit( trim( $link, '\'"' ) ),
+			untrailingslashit( trim( $att_value, '\'"' ) )
+		);
 	}
 
 	/**
@@ -291,7 +326,102 @@ abstract class Link_Processor extends Base {
 
 	abstract protected function set_special_rules();
 
-	abstract public function execute( string $content = '', string $link = '', string $new_link = '' );
+	/**
+	 * Executes the Processor's action.
+	 *
+	 * @param string $content The content to process.
+	 * @param string $link The link to be replaced/removed.
+	 * @param string $new_link The new link to replace the old link with (Replace action only).
+	 * @return string The processed content.
+	 */
+	public function execute( string $content = '', string $link = '', string $new_link = '' ) {
+		$content = $this->process_content( $content, $link, $new_link );
+
+		return apply_filters(
+			'wpmudev_blc_link_processor_content',
+			$content,
+			$link,
+			$new_link,
+			$this->get_target_tags(),
+			$this
+		);
+	}
+
+	/**
+	 * Modifies the content based on the action type (Replace/Unlink) and the target tags and attributes.
+	 *
+	 * @param string $content The content to process.
+	 * @param string $link The link to be replaced/removed.
+	 * @param string $new_link The new link to replace the old link with (Replace action only).
+	 * @return array|string Array of replacements (Unlink) or modified content string (Replace).
+	 */
+	abstract protected function process_content( string $content, string $link, string $new_link );
 
 	abstract public function get_block_att_value_replacement( string $search_term = null, string $new_term = null );
+
+	/**
+	 * Returns the primary processor for this action.
+	 *
+	 * @return Abstract_Content_Processor
+	 */
+	abstract protected function get_processor(): Abstract_Content_Processor;
+
+	/**
+	 * Returns the fallback processor for this action.
+	 *
+	 * @return Abstract_Content_Processor
+	 */
+	abstract protected function get_fallback_processor(): Abstract_Content_Processor;
+
+	/**
+	 * Delegates content processing to the appropriate processor strategy.
+	 * Uses the primary processor by default, but routes through the fallback processor when
+	 * SiteOrigin Page Builder, Divi, or Elementor is active, as those builders
+	 * may store content in formats that the primary processor does not handle reliably.
+	 *
+	 * @param string $content Source content to process.
+	 * @param string $link The link to be replaced/removed.
+	 * @param string $new_link The new link to replace the old link with (Replace action only).
+	 * @param array  $tags An array of target tags and attributes to process.
+	 * @return array|string Array of replacements (Unlink) or modified content string (Replace).
+	 */
+	protected function extract_replacements( $content, $link, $new_link, array $tags ) {
+		if ( $this->is_pagebuilder_active() ) {
+			$new_content = $this->get_fallback_processor()->process( $content, $link, $new_link, $tags );
+		} else {
+			$new_content = $this->get_processor()->process( $content, $link, $new_link, $tags );
+
+			if ( $new_content === $content ) {
+				// If the primary processor returns unchanged result, we should try the fallback processor before giving up.
+				$new_content = $this->get_fallback_processor()->process( $content, $link, $new_link, $tags );
+			}
+		}
+
+		return $new_content;
+	}
+
+	/**
+	 * Checks whether a known page builder plugin (SiteOrigin Page Builder, Divi, or Elementor)
+	 * is currently active.
+	 *
+	 * @return bool
+	 */
+	protected function is_pagebuilder_active() {
+		// SiteOrigin Page Builder.
+		if ( defined( 'SITEORIGIN_PANELS_VERSION' ) ) {
+			return true;
+		}
+
+		// Divi (plugin or theme).
+		if ( defined( 'ET_BUILDER_PLUGIN_ACTIVE' ) || function_exists( 'et_setup_theme' ) ) {
+			return true;
+		}
+
+		// Elementor.
+		if ( defined( 'ELEMENTOR_VERSION' ) ) {
+			return true;
+		}
+
+		return apply_filters( 'wpmudev_blc_is_pagebuilder_active', false );
+	}
 }

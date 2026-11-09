@@ -29,6 +29,38 @@ function nextgen_load_admin_partial( $template ) {
 }
 
 /**
+ * Build a human-readable, uppercased list of the image formats accepted for upload
+ * on the current server.
+ *
+ * The list is derived from the same source used for validation
+ * (NGG_DEFAULT_ALLOWED_FILE_TYPES via the ngg_allowed_file_types filter), so WebP is
+ * only included when the server can actually process it (GD compiled with WebP support).
+ *
+ * @since 4.2.4
+ *
+ * @return string Comma-separated uppercase format list, e.g. "JPEG, JPG, PNG, GIF, WEBP".
+ */
+function ngg_get_allowed_formats_label() {
+	$extensions = apply_filters( 'ngg_allowed_file_types', NGG_DEFAULT_ALLOWED_FILE_TYPES );
+
+	// The ngg_allowed_file_types filter normally returns an array, but guard against
+	// a raw comma-separated string in case the filter is short-circuited elsewhere.
+	if ( ! is_array( $extensions ) ) {
+		$extensions = explode( ',', (string) $extensions );
+	}
+
+	// Drop the internal "_backup" pseudo-extension and any empty entries.
+	$extensions = array_filter(
+		array_map( 'trim', $extensions ),
+		function ( $ext ) {
+			return '' !== $ext && '_backup' !== $ext;
+		}
+	);
+
+	return strtoupper( implode( ', ', $extensions ) );
+}
+
+/**
  * Helper method to check if starter, plus or pro is active.
  *
  * @since 3.5.0

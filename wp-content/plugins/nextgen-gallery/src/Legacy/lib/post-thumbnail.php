@@ -156,23 +156,31 @@ class nggPostThumbnail {
 			die( '-1' );
 		}
 
-		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( $_REQUEST['nonce'], 'ngg_set_post_thumbnails' ) ) {
+		// Sanitize + unslash nonce prior to verification per WP standards (defense-in-depth).
+		if ( ! isset( $_REQUEST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'ngg_set_post_thumbnails' ) ) {
 			die( '-1' );
 		}
 
 		// get the post id as global variable, otherwise the ajax_nonce failed later
-		$post_ID = intval( $_REQUEST['post_id'] );
+		// wp_unslash added before intval() per WP input handling standards (strip magic-quote slashes before cast).
+		$post_ID = isset( $_REQUEST['post_id'] ) ? intval( wp_unslash( $_REQUEST['post_id'] ) ) : 0;
 
 		if ( ! current_user_can( 'edit_post', $post_ID ) ) {
 			die( '-1' );
 		}
 
-		$thumbnail_id = intval( $_REQUEST['thumbnail_id'] );
+		// wp_unslash added before intval() per WP input handling standards (strip magic-quote slashes before cast).
+		$thumbnail_id = isset( $_REQUEST['thumbnail_id'] ) ? intval( wp_unslash( $_REQUEST['thumbnail_id'] ) ) : 0;
 
 		// delete the image
 		if ( $thumbnail_id == '-1' ) {
 			delete_post_meta( $post_ID, '_thumbnail_id' );
 			die( '1' );
+		}
+
+		// Scope NGG image selection: edit_post alone lets an author attach arbitrary NGG images (incl. private/admin-only galleries) as featured image. Require the NGG Attach Interface cap so only users granted gallery-attach rights may pick NGG images. Removal branch above is not gated since it only clears post meta on a post the user already owns.
+		if ( ! \Imagely\NGG\Util\Security::is_allowed( 'NextGEN Attach Interface' ) ) {
+			die( '-1' );
 		}
 
 		$attachment_id = StorageManager::get_instance()->set_post_thumbnail( $post_ID, $thumbnail_id, TRUE );
@@ -217,7 +225,8 @@ class nggPostThumbnail {
 				$img_src = trailingslashit( home_url() ) . 'index.php?callback=image&amp;pid=' . $image->pid . '&amp;width=' . $width . '&amp;height=' . $height . '&amp;mode=crop';
 			}
 
-			$thumbnail_html = '<img width="266" src="' . $img_src . '" alt="' . $image->alttext . '" title="' . $image->alttext . '" />';
+			// Escape URL + attribute data from DB to prevent stored XSS via image alttext in admin featured-image meta box.
+			$thumbnail_html = '<img width="266" src="' . esc_url( $img_src ) . '" alt="' . esc_attr( $image->alttext ) . '" title="' . esc_attr( $image->alttext ) . '" />';
 
 			if ( !empty( $thumbnail_html ) ) {
 				$ajax_nonce = wp_create_nonce( "set_post_thumbnail-$post_ID" );

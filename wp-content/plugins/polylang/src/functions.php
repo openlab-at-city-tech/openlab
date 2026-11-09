@@ -1,30 +1,10 @@
 <?php
 /**
  * @package Polylang
- */
-
-/**
- * Define wordpress.com VIP equivalent of uncached functions
+ *
  * WordPress backward compatibility functions
- * and miscellaneous utility functions
+ * and miscellaneous utility functions.
  */
-
-if ( ! function_exists( 'wpcom_vip_get_page_by_path' ) ) {
-	/**
-	 * Retrieves a page given its path.
-	 *
-	 * @since 2.8.3
-	 *
-	 * @param string       $page_path Page path.
-	 * @param string       $output    Optional. The required return type. One of OBJECT, ARRAY_A, or ARRAY_N, which correspond to
-	 *                                a WP_Post object, an associative array, or a numeric array, respectively. Default OBJECT.
-	 * @param string|array $post_type Optional. Post type or array of post types. Default 'page'.
-	 * @return WP_Post|array|null WP_Post (or array) on success, or null on failure.
-	 */
-	function wpcom_vip_get_page_by_path( $page_path, $output = OBJECT, $post_type = 'page' ) {
-		return get_page_by_path( $page_path, $output, $post_type ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.get_page_by_path_get_page_by_path
-	}
-}
 
 /**
  * Determines whether we should load the cache compatibility
@@ -46,7 +26,7 @@ function pll_is_cache_active() {
 }
 
 /**
- * Get the the current requested url
+ * Get the current requested url.
  *
  * @since 2.6
  *
@@ -151,7 +131,7 @@ function pll_add_notice( WP_Error $error ) {
 			)
 		);
 
-		add_settings_error( 'polylang', $error_code, $message, $type );
+		add_settings_error( 'polylang', (string) $error_code, $message, $type );
 	}
 }
 
@@ -171,4 +151,158 @@ function pll_is_edit_rest_request( WP_REST_Request $request ): bool {
 	}
 
 	return 'GET' === $request->get_method() && 'edit' === $request->get_param( 'context' );
+}
+
+/**
+ * Sanitizes an ID as positive integer.
+ * Kind of similar to `absint()`, but rejects negative integers instead of making them positive.
+ *
+ * @since 3.9
+ *
+ * @param mixed $id A supposedly numeric ID.
+ * @return int A positive integer. `0` for non numeric values and negative integers.
+ *
+ * @phpstan-return int<0, max>
+ */
+function pll_sanitize_id( $id ): int {
+	return is_numeric( $id ) && $id >= 1 ? abs( (int) $id ) : 0;
+}
+
+/**
+ * Sanitizes an array of IDs as positive integers.
+ * `0` values are removed.
+ *
+ * @since 3.9
+ *
+ * @param mixed $ids A supposedly array of numeric IDs.
+ * @return int[]
+ *
+ * @phpstan-return array<positive-int>
+ */
+function pll_sanitize_ids( $ids ): array {
+	if ( empty( $ids ) || ! is_array( $ids ) ) {
+		return array();
+	}
+
+	return array_filter( array_map( 'pll_sanitize_id', $ids ) );
+}
+
+/**
+ * Unserializes data only if it was serialized.
+ *
+ * Like `maybe_unserialize()` but passes options to `unserialize()`, including
+ * `allowed_classes` to mitigate PHP object injection.
+ *
+ * @since 3.8.11
+ *
+ * @param mixed $data    Data that might be unserialized.
+ * @param array $options {
+ *     Options for @see unserialize(). Default `array( 'allowed_classes' => false )`.
+ *
+ *     @type bool|class-string[] $allowed_classes Whether to allow PHP objects. Default false.
+ * }
+ * @return mixed Unserialized data, or the original value if not serialized.
+ */
+function pll_maybe_unserialize( $data, array $options = array( 'allowed_classes' => false ) ) {
+	if ( ! is_string( $data ) || ! is_serialized( $data ) ) {
+		return $data;
+	}
+
+	return unserialize( trim( $data ), $options ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize, PHPCompatibility.FunctionUse.NewFunctionParameters.unserialize_optionsFound
+}
+
+/**
+ * Enqueues a JS script.
+ *
+ * @since 3.9
+ *
+ * @param string   $name         The filename of the script (without the extension).
+ * @param string[] $dependencies Optional. An array of registered script handles this script depends on.
+ * @param array    $args     {
+ *     Optional. An array of additional script loading strategies. Default empty array.
+ *
+ *     @type string    $strategy      Optional. If provided, may be either 'defer' or 'async'.
+ *     @type bool      $in_footer     Optional. Whether to print the script in the footer. Default 'false'.
+ *     @type string    $fetchpriority Optional. The fetch priority for the script. Default 'auto'.
+ * }
+ * @param string   $prefix       Optional. Prefix to use for the script handle. Default 'pll-'.
+ * @return void
+ *
+ * @phpstan-param non-empty-string $name
+ */
+function pll_enqueue_script( string $name, array $dependencies = array(), array $args = array(), string $prefix = 'pll-' ): void {
+	pll_register_script( $name, $dependencies, $args );
+	wp_scripts()->enqueue( $prefix . $name );
+}
+
+/**
+ * Registers a JS script.
+ *
+ * @since 3.9
+ *
+ * @param string   $name         The filename of the script (without the extension).
+ * @param string[] $dependencies Optional. An array of registered script handles this script depends on.
+ * @param array    $args     {
+ *     Optional. An array of additional script loading strategies. Default empty array.
+ *
+ *     @type string    $strategy      Optional. If provided, may be either 'defer' or 'async'.
+ *     @type bool      $in_footer     Optional. Whether to print the script in the footer. Default 'false'.
+ *     @type string    $fetchpriority Optional. The fetch priority for the script. Default 'auto'.
+ * }
+ * @param string   $prefix       Optional. Prefix to use for the script handle. Default 'pll-'.
+ * @return void
+ *
+ * @phpstan-param non-empty-string $name
+ */
+function pll_register_script( string $name, array $dependencies = array(), array $args = array(), string $prefix = 'pll-' ): void {
+	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$src    = plugins_url( "/js/build/{$name}{$suffix}.js", POLYLANG_ROOT_FILE );
+
+	if ( '' === $src ) {
+		return;
+	}
+
+	$version = WP_DEBUG ? time() : POLYLANG_VERSION;
+	wp_register_script( $prefix . $name, $src, array_filter( $dependencies ), (string) $version, $args );
+}
+
+/**
+ * Enqueues a CSS stylesheet.
+ *
+ * @since 3.9
+ *
+ * @param string   $name         The filename of the stylesheet (without the extension).
+ * @param string[] $dependencies Optional. An array of registered stylesheet handles this stylesheet depends on.
+ * @param string   $prefix       Optional. Prefix to use for the stylesheet handle. Default 'pll-'.
+ * @return void
+ *
+ * @phpstan-param non-empty-string $name
+ */
+function pll_enqueue_style( string $name, array $dependencies = array(), string $prefix = 'pll-' ): void {
+	pll_register_style( $name, $dependencies );
+	wp_styles()->enqueue( $prefix . $name );
+}
+
+/**
+ * Registers a CSS stylesheet.
+ *
+ * @since 3.9
+ *
+ * @param string   $name         The filename of the stylesheet (without the extension).
+ * @param string[] $dependencies Optional. An array of registered stylesheet handles this stylesheet depends on.
+ * @param string   $prefix       Optional. Prefix to use for the stylesheet handle. Default 'pll-'.
+ * @return void
+ *
+ * @phpstan-param non-empty-string $name
+ */
+function pll_register_style( string $name, array $dependencies = array(), string $prefix = 'pll-' ): void {
+	$suffix  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$src     = plugins_url( "/css/build/{$name}{$suffix}.css", POLYLANG_ROOT_FILE );
+
+	if ( '' === $src ) {
+		return;
+	}
+
+	$version = WP_DEBUG ? time() : POLYLANG_VERSION;
+	wp_register_style( $prefix . $name, $src, $dependencies, (string) $version );
 }

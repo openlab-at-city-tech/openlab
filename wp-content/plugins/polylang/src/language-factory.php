@@ -92,23 +92,16 @@ class PLL_Language_Factory {
 			);
 		}
 
-		// The description fields can contain any property.
-		$description = maybe_unserialize( $terms['language']->description );
+		$description = pll_maybe_unserialize( $terms['language']->description );
+		$description = is_array( $description ) ? $description : array();
 
-		if ( is_array( $description ) ) {
-			$description = array_intersect_key(
-				$description,
-				array( 'locale' => null, 'rtl' => null, 'flag_code' => null, 'active' => null, 'fallbacks' => null )
-			);
+		// `locale` and `flag_code` are used before `sanitize_data()`, so check their types in case of a corrupted description.
+		$data['locale']    = is_string( $description['locale'] ?? null ) ? $description['locale'] : '';
+		$data['flag_code'] = is_string( $description['flag_code'] ?? null ) ? $description['flag_code'] : '';
 
-			foreach ( $description as $prop => $value ) {
-				if ( 'rtl' === $prop ) {
-					$data['is_rtl'] = $value;
-				} else {
-					$data[ $prop ] = $value;
-				}
-			}
-		}
+		$data['is_rtl']    = $description['rtl'] ?? 0;
+		$data['active']    = $description['active'] ?? true;
+		$data['fallbacks'] = $description['fallbacks'] ?? array();
 
 		if ( ! empty( $data['locale'] ) ) {
 			if ( isset( $languages[ $data['locale'] ]['w3c'] ) ) {
@@ -169,6 +162,11 @@ class PLL_Language_Factory {
 			$data['term_props'][ $tax ] = array_map( 'absint', $props );
 		}
 
+		// A corrupted language description may lead to unexpected types.
+		$data['locale']    = is_string( $data['locale'] ?? null ) ? $data['locale'] : '';
+		$data['w3c']       = is_string( $data['w3c'] ?? null ) ? $data['w3c'] : '';
+		$data['flag_code'] = is_string( $data['flag_code'] ?? null ) ? $data['flag_code'] : '';
+
 		$data['is_rtl'] = ! empty( $data['is_rtl'] ) ? 1 : 0;
 
 		$positive_fields = array( 'term_group', 'page_on_front', 'page_for_posts' );
@@ -181,6 +179,30 @@ class PLL_Language_Factory {
 
 		if ( array_key_exists( 'fallbacks', $data ) && ! is_array( $data['fallbacks'] ) ) {
 			unset( $data['fallbacks'] );
+		}
+
+		$data['admin_flag'] = array();
+
+		if ( ! empty( $data['flag'] ) ) {
+			$data['admin_flag']['aria-hidden'] = str_replace( '<img', '<img aria-hidden="true" tabindex="-1"', $data['flag'] );
+			$data['admin_flag']['']            = str_replace(
+				'<img',
+				sprintf(
+					'<img lang="%1$s" dir="%2$s"',
+					esc_attr( $data['w3c'] ),
+					$data['is_rtl'] ? 'rtl' : 'ltr'
+				),
+				$data['flag']
+			);
+		} else {
+			$data['admin_flag']['aria-hidden'] = sprintf( '<abbr aria-hidden="true" tabindex="-1">%s</abbr>', esc_html( strtoupper( $data['slug'] ) ) );
+			$data['admin_flag']['']            = sprintf(
+				'<abbr title="%1$s" lang="%2$s" dir="%3$s">%4$s</abbr>',
+				esc_attr( $data['name'] ),
+				esc_attr( $data['w3c'] ),
+				$data['is_rtl'] ? 'rtl' : 'ltr',
+				esc_html( strtoupper( $data['slug'] ) )
+			);
 		}
 
 		/**
@@ -211,7 +233,7 @@ class PLL_Language_Factory {
 	 * Creates flag_url and flag language properties. Also takes care of custom flag.
 	 *
 	 * @since 1.2
-	 * @since 3.4 Moved from `PLL_Language`to `PLL_Language_Factory` and renamed
+	 * @since 3.4 Moved from `PLL_Language` to `PLL_Language_Factory` and renamed
 	 *            in favor of `get_flag()` (formerly `set_flag()`).
 	 *
 	 * @param string $flag_code Flag code.
@@ -281,17 +303,6 @@ class PLL_Language_Factory {
 			unset( $flags['custom_flag'] );
 		}
 
-		/**
-		 * Filters the flag title attribute.
-		 * Defaults to the language name.
-		 *
-		 * @since 0.7
-		 *
-		 * @param string $title  The flag title attribute.
-		 * @param string $slug   The language code.
-		 * @param string $locale The language locale.
-		 */
-		$title  = apply_filters( 'pll_flag_title', $name, $slug, $locale );
 		$return = array();
 
 		/**
@@ -323,7 +334,7 @@ class PLL_Language_Factory {
 			 */
 			$return[ $key ] = apply_filters(
 				'pll_get_flag',
-				PLL_Language::get_flag_html( $flag, $title, $name ),
+				PLL_Language::get_flag_html( $flag, $name ),
 				$slug
 			);
 		}

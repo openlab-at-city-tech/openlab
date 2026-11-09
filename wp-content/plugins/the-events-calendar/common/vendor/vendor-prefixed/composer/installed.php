@@ -2,9 +2,9 @@
   'root' => 
   array (
     'name' => 'the-events-calendar/tribe-common',
-    'pretty_version' => '6.10.3',
-    'version' => '6.10.3.0',
-    'reference' => '155ea4a60fefb910ca74fff78848341715a426e2',
+    'pretty_version' => 'dev-main',
+    'version' => 'dev-main',
+    'reference' => '3da1eb1be17960e744e4ad93bda9e95bdf00c919',
     'type' => 'wordpress-plugin',
     'install_path' => __DIR__ . '/../',
     'aliases' => 
@@ -50,6 +50,30 @@
       ),
       'dev_requirement' => false,
     ),
+    'myclabs/php-enum' => 
+    array (
+      'pretty_version' => '1.8.5',
+      'version' => '1.8.5.0',
+      'reference' => 'e7be26966b7398204a234f8673fdad5ac6277802',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../myclabs/php-enum',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'nyholm/psr7' => 
+    array (
+      'pretty_version' => '1.8.2',
+      'version' => '1.8.2.0',
+      'reference' => 'a71f2b11690f4b24d099d6b16690a90ae14fc6f3',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../nyholm/psr7',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
     'psr/container' => 
     array (
       'pretty_version' => '1.1.1',
@@ -57,6 +81,42 @@
       'reference' => '8622567409010282b7aeebe4bb841fe98b58dcaf',
       'type' => 'library',
       'install_path' => __DIR__ . '/../psr/container',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'psr/http-client' => 
+    array (
+      'pretty_version' => '1.0.3',
+      'version' => '1.0.3.0',
+      'reference' => 'bb5906edc1c324c9a05aa0873d40117941e5fa90',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../psr/http-client',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'psr/http-factory' => 
+    array (
+      'pretty_version' => '1.1.0',
+      'version' => '1.1.0.0',
+      'reference' => '2b4765fddfe3b508ac62f829e852b1501d3f6e8a',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../psr/http-factory',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'psr/http-message' => 
+    array (
+      'pretty_version' => '1.1',
+      'version' => '1.1.0.0',
+      'reference' => 'cb6ce4845ce34a8ad9e68117c10ee90a29919eba',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../psr/http-message',
       'aliases' => 
       array (
       ),
@@ -88,9 +148,9 @@
     ),
     'stellarwp/arrays' => 
     array (
-      'pretty_version' => '1.2.2',
-      'version' => '1.2.2.0',
-      'reference' => 'fe0a4cec1a299c196cc89bdba18ac99dea6bf5a2',
+      'pretty_version' => '1.3.2',
+      'version' => '1.3.2.0',
+      'reference' => 'e994abcdb5d76fb5fdea7f2e1549d0603c13f91e',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/arrays',
       'aliases' => 
@@ -100,11 +160,23 @@
     ),
     'stellarwp/assets' => 
     array (
-      'pretty_version' => '1.4.10',
-      'version' => '1.4.10.0',
-      'reference' => 'a7c196cd6a4189d3f8f1112c5e66bcf1a5d1f610',
+      'pretty_version' => '1.5.2',
+      'version' => '1.5.2.0',
+      'reference' => '55045a2751222c5ade7f192acfaada2cea9a92f7',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/assets',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'stellarwp/banners' => 
+    array (
+      'pretty_version' => '1.1.0',
+      'version' => '1.1.0.0',
+      'reference' => '782dc5754c5a68d1ccf9b90979a0d2a800d7f3fd',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../stellarwp/banners',
       'aliases' => 
       array (
       ),
@@ -134,6 +206,18 @@
       ),
       'dev_requirement' => false,
     ),
+    'stellarwp/harbor' => 
+    array (
+      'pretty_version' => 'v2.0.2',
+      'version' => '2.0.2.0',
+      'reference' => 'bc13f0ee39c7f1460aa746dddb183dcf0462c5d3',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../stellarwp/harbor',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
     'stellarwp/installer' => 
     array (
       'pretty_version' => '1.1.1',
@@ -143,6 +227,43 @@
       'install_path' => __DIR__ . '/../stellarwp/installer',
       'aliases' => 
       array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'stellarwp/licensing-api-client' => 
+    array (
+      'pretty_version' => '2.0.0',
+      'version' => '2.0.0.0',
+      'reference' => '6f9e0b3e49831f49b735a9544c5fb2fea4eeedeb',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../stellarwp/licensing-api-client',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'stellarwp/licensing-api-client-wordpress' => 
+    array (
+      'pretty_version' => '2.0.0',
+      'version' => '2.0.0.0',
+      'reference' => 'f4ece66587cd6de175ffd35d0fbc3dc06c76a1f8',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../stellarwp/licensing-api-client-wordpress',
+      'aliases' => 
+      array (
+      ),
+      'dev_requirement' => false,
+    ),
+    'stellarwp/migrations' => 
+    array (
+      'pretty_version' => 'dev-main',
+      'version' => 'dev-main',
+      'reference' => '84edb1bb995adc7c94fb5c2687756938121345a8',
+      'type' => 'library',
+      'install_path' => __DIR__ . '/../stellarwp/migrations',
+      'aliases' => 
+      array (
+        0 => '9999999-dev',
       ),
       'dev_requirement' => false,
     ),
@@ -184,9 +305,9 @@
     ),
     'stellarwp/shepherd' => 
     array (
-      'pretty_version' => '0.2.0',
-      'version' => '0.2.0.0',
-      'reference' => '63c02ff7d978452c2fd879eed910a756e7abd185',
+      'pretty_version' => '0.2.1',
+      'version' => '0.2.1.0',
+      'reference' => 'f35d201d44f9c9edb7b359b2c4c23d6b6220296f',
       'type' => 'library',
       'install_path' => __DIR__ . '/../stellarwp/shepherd',
       'aliases' => 

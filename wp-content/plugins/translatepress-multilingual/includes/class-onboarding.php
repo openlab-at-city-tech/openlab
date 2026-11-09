@@ -12,8 +12,7 @@ class TRP_Onboarding {
     protected $settings;
     protected $steps = [
         'welcome'           => TRP_Step_Welcome::class,
-        'install'           => TRP_Step_Install::class,
-        'license'           => TRP_Step_License::class,
+        'ai-api-key'        => TRP_Step_AI_API_Key::class,
         'languages'         => TRP_Step_Languages::class,
         'switcher'          => TRP_Step_Switcher::class,
         'autotranslation'   => TRP_Step_AutoTranslation::class,
@@ -100,6 +99,13 @@ class TRP_Onboarding {
     public function render_template(){
         $full_logo = TRP_PLUGIN_URL . 'assets/images/tp-logo-with-text-dark.svg';
         $small_logo = TRP_PLUGIN_URL . 'assets/images/tp-logo.png';
+
+        // Whether a paid version of TranslatePress is active. Exposed on the content wrapper so the
+        // onboarding script can detect Pro activation (performed on the WordPress "Add Plugins" page)
+        // and refresh just the step markup instead of reloading the whole page.
+        $trp    = TRP_Translate_Press::get_trp_instance();
+        $is_pro = ! in_array( 'TranslatePress', $trp->tp_product_name );
+
         ob_start();
         ?>
         <div id="trp-settings-page" class="wrap trp-onboarding">
@@ -129,7 +135,7 @@ class TRP_Onboarding {
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="trp-onboarding-content">
+            <div class="trp-onboarding-content" data-trp-is-pro="<?php echo $is_pro ? '1' : '0'; ?>">
                 <?php
                 $this->step_render();
                 ?>
@@ -161,6 +167,39 @@ class TRP_Onboarding {
     public function remove_admin_notices(){
             remove_all_actions( 'admin_notices' );
             remove_all_actions( 'all_admin_notices' );
+    }
+
+    /**
+     * Determine the state of the TranslatePress Pro plugin during onboarding.
+     *
+     * Used by the onboarding steps to decide whether to prompt the user to install Pro, activate the
+     * already-installed Pro plugin, or activate their license.
+     *
+     * @return string 'active' (a paid version is the active product), 'inactive' (a Pro plugin is
+     *                installed but not activated) or 'not_installed' (free version, no Pro plugin).
+     */
+    public static function get_pro_plugin_state(){
+        $trp = TRP_Translate_Press::get_trp_instance();
+
+        // A paid version being the active product means Pro is active.
+        if ( ! in_array( 'TranslatePress', $trp->tp_product_name ) ) {
+            return 'active';
+        }
+
+        // Otherwise look for a Pro plugin that is installed but not activated.
+        if ( ! function_exists( 'get_plugins' ) ) {
+            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+        }
+
+        $pro_slugs = array( 'translatepress-personal', 'translatepress-business', 'translatepress-developer' );
+        foreach ( get_plugins() as $plugin_path => $plugin_data ) {
+            $slug = explode( '/', $plugin_path )[0];
+            if ( in_array( $slug, $pro_slugs, true ) ) {
+                return is_plugin_active( $plugin_path ) ? 'active' : 'inactive';
+            }
+        }
+
+        return 'not_installed';
     }
 
     public function enqueue_scripts_and_styles(){
