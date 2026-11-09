@@ -28,18 +28,18 @@ if ( ! empty( $dlm_attributes['className'] ) ) {
 }
 ?>
 <aside
-	class="download-box<?php
+	class="dlm-download-box<?php
 	echo ( ! empty( $dlm_attributes['className'] ) ) ? ' ' . esc_attr( $dlm_attributes['className'] ) : ''; ?>">
 
 	<?php
 	$dlm_download->the_image(); ?>
 
 	<div
-		class="download-count"><?php
-		printf( esc_attr( _n( '1 download', '%d downloads', $dlm_download->get_download_count(), 'download-monitor' ) ), esc_html( $dlm_download->get_download_count() ) ) ?></div>
+		class="dlm-download-count"><?php
+		printf( esc_attr( _n( '%d download', '%d downloads', $dlm_download->get_download_count(), 'download-monitor' ) ), esc_html( $dlm_download->get_download_count() ) ) ?></div>
 
 	<div
-		class="download-box-content">
+		class="dlm-download-box-content">
 
 		<h1><?php
 			$dlm_download->the_title(); ?></h1>

@@ -39,15 +39,16 @@ class DLM_Integrated_Terms_And_Conditions {
 		add_action( 'dlm_no_access_after_message', array( $this, 'add_to_no_access_page' ) );
 		// add shortcode scripts to the no access page.
 		add_action( 'dlm_no_access_after_message', array( $this, 'add_scripts_to_no_access_page' ) );
+		add_filter( 'dlm_no_access_message', array( $this, 'maybe_hide_no_access_message' ), 10, 2 );
+
+		$options = new DLM_TC_Options();
+		$options->setup();
+
 		// Admin only classes.
 		if ( is_admin() ) {
 			// Download Option.
 			$download_option = new DLM_TC_Download_Option();
 			$download_option->setup();
-
-			// settings.
-			$options = new DLM_TC_Options();
-			$options->setup();
 		}
 	}
 
@@ -69,8 +70,6 @@ class DLM_Integrated_Terms_And_Conditions {
 	 */
 	public function add_to_no_access_page( $download ) {
 		if ( DLM_TC_Access_Manager::is_tc_locked( $download->get_id() ) ) {
-			wp_enqueue_style( 'dlm-frontend' );
-
 			// template handler
 			$template_handler = new DLM_Template_Handler();
 
@@ -103,5 +102,13 @@ class DLM_Integrated_Terms_And_Conditions {
 		if ( isset( $_REQUEST['action'] ) && 'no_access_dlm_xhr_download' === sanitize_Text_field( wp_unslash( $_REQUEST['action'] ) ) ) {
 			echo '<script src="' . esc_url( plugins_url( '/assets/js/dlm-terms-and-conditions' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', DLM_Integrated_Terms_And_Conditions::get_plugin_file() ) ) . '"></script>';
 		}
+	}
+
+	public function maybe_hide_no_access_message( $message, $download ) {
+		if ( $download && DLM_TC_Access_Manager::is_tc_locked( $download->get_id() ) ) {
+			return apply_filters( 'dlm_terms_and_conditions_access_text', __( 'You must accept the terms and conditions to download this file.', 'download-monitor' ) );
+		}
+
+		return $message;
 	}
 }

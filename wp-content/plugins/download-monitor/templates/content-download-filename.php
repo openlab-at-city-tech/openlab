@@ -4,7 +4,7 @@
  *
  * More info on overriding template files can be found here: https://www.download-monitor.com/kb/overriding-content-templates/
  *
- * @version 4.9.6
+ * @version 5.3.0
  *
  * @var DLM_Download       $dlm_download   The download object.
  * @var Attributes         $dlm_attributes The shortcode attributes.
@@ -45,8 +45,8 @@ echo
 DLM_Utils::generate_attributes( $attributes['link_attributes'] ) // phpcs:ignore WordPress.Security.EscapeOutput ?> >
 	<?php
 	echo esc_html( $dlm_download->get_version()->get_filename() ); ?>
-	(<?php
-	printf( esc_html( _n( '1 download', '%d downloads', $dlm_download->get_download_count(), 'download-monitor' ) ), esc_html( $dlm_download->get_download_count() ) ) ?>
+	(<span class="dlm-download-count-value"><?php
+		printf( esc_html( _n( '%d download', '%d downloads', $dlm_download->get_download_count(), 'download-monitor' ) ), esc_html( $dlm_download->get_download_count() ) ) ?></span>
 	)
 </a>
 <?php

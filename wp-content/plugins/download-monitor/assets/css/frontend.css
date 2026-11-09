@@ -1,4 +1,4 @@
-.download-box {
+.dlm-download-box {
   width: 250px;
   border: 1px solid #ccc;
   -moz-border-radius: 4px;
@@ -9,10 +9,10 @@
   margin: 1em auto;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-.download-box h1 {
+.dlm-download-box h1 {
   margin: 0.5em 0 !important;
 }
-.download-box img.wp-post-image {
+.dlm-download-box img.wp-post-image {
   margin: 0;
   padding: 0;
   display: block;
@@ -28,10 +28,10 @@
   border-top-right-radius: 3px;
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
-.download-box .download-box-content {
+.dlm-download-box .dlm-download-box-content {
   padding: 0 1em 1em;
 }
-.download-box .download-count {
+.dlm-download-box .dlm-download-count {
   -moz-border-radius: 1em;
   -webkit-border-radius: 1em;
   border-radius: 1em;
@@ -52,163 +52,137 @@
   border: 1px solid #bbb;
   margin: -0.5em -0.5em 0 0;
 }
-.download-button {
-  text-align: center;
-  text-decoration: none !important;
-  padding: 0.75em 1em;
-  color: #fff;
-  display: block;
-  font-size: 1.2em;
-  line-height: 1.5em;
-  background-color: #0099cc;
-  background-image: -webkit-linear-gradient(#009fd4, #0099cc, #0086b2);
-  background-image: -moz-linear-gradient(#009fd4, #0099cc, #0086b2);
-  -moz-border-radius: 4px;
-  -webkit-border-radius: 4px;
-  border-radius: 4px;
-  text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.5);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.4);
-  border: 1px solid #0086b2;
-  cursor: pointer;
+:where(.dlm-downloads) li {
+  margin-top: 0.5em;
 }
-.download-button:hover {
-  color: #fff;
-  background-color: #0099cc;
-  background-image: -webkit-linear-gradient(#0099cc, #0086b2);
-  background-image: -moz-linear-gradient(#0099cc, #0086b2);
+.dlm-download-default {
+  display: inline-block;
 }
-.download-button:visited {
-  color: #fff;
-  text-decoration: none;
+.dlm-download-button {
+  display: inline-flex;
+  flex-direction: column;
 }
-.download-button small {
+.dlm-download-button .dlm-button-meta {
   font-size: 0.8em;
   opacity: 0.8;
-  display: block;
 }
-.filetype-icon {
-  padding-left: 19px;
-  background-repeat: no-repeat;
-  background-position: left;
-  background-image: url(../images/filetypes/document.png);
-}
-.filetype-pdf {
+.dlm-filetype-pdf {
   background-image: url(../images/filetypes/document-pdf.png);
 }
-.filetype-m4r,
-.filetype-au,
-.filetype-snd,
-.filetype-mid,
-.filetype-midi,
-.filetype-kar,
-.filetype-mpga,
-.filetype-mp2,
-.filetype-mp3,
-.filetype-aif,
-.filetype-aiff,
-.filetype-aifc,
-.filetype-m3u,
-.filetype-ram,
-.filetype-rm,
-.filetype-rpm,
-.filetype-ra,
-.filetype-wav,
-.filetype-wave {
+.dlm-filetype-m4r,
+.dlm-filetype-au,
+.dlm-filetype-snd,
+.dlm-filetype-mid,
+.dlm-filetype-midi,
+.dlm-filetype-kar,
+.dlm-filetype-mpga,
+.dlm-filetype-mp2,
+.dlm-filetype-mp3,
+.dlm-filetype-aif,
+.dlm-filetype-aiff,
+.dlm-filetype-aifc,
+.dlm-filetype-m3u,
+.dlm-filetype-ram,
+.dlm-filetype-rm,
+.dlm-filetype-rpm,
+.dlm-filetype-ra,
+.dlm-filetype-wav,
+.dlm-filetype-wave {
   background-image: url(../images/filetypes/document-music.png);
 }
-.filetype-mpeg,
-.filetype-mpg,
-.filetype-mpe,
-.filetype-qt,
-.filetype-mov,
-.filetype-mxu,
-.filetype-avi,
-.filetype-movie,
-.filetype-mp4,
-.filetype-divx,
-.filetype-wmv {
+.dlm-filetype-mpeg,
+.dlm-filetype-mpg,
+.dlm-filetype-mpe,
+.dlm-filetype-qt,
+.dlm-filetype-mov,
+.dlm-filetype-mxu,
+.dlm-filetype-avi,
+.dlm-filetype-movie,
+.dlm-filetype-mp4,
+.dlm-filetype-divx,
+.dlm-filetype-wmv {
   background-image: url(../images/filetypes/document-film.png);
 }
-.filetype-zip,
-.filetype-gz,
-.filetype-rar,
-.filetype-sit,
-.filetype-tar,
-.filetype-7z {
+.dlm-filetype-zip,
+.dlm-filetype-gz,
+.dlm-filetype-rar,
+.dlm-filetype-sit,
+.dlm-filetype-tar,
+.dlm-filetype-7z {
   background-image: url(../images/filetypes/document-zipper.png);
 }
-.filetype-xls,
-.filetype-tsv,
-.filetype-csv,
-.filetype-xlsx {
+.dlm-filetype-xls,
+.dlm-filetype-tsv,
+.dlm-filetype-csv,
+.dlm-filetype-xlsx {
   background-image: url(../images/filetypes/document-excel.png);
 }
-.filetype-doc,
-.filetype-docx {
+.dlm-filetype-doc,
+.dlm-filetype-docx {
   background-image: url(../images/filetypes/document-word-text.png);
 }
-.filetype-ai {
+.dlm-filetype-ai {
   background-image: url(../images/filetypes/document-illustrator.png);
 }
-.filetype-swf {
+.dlm-filetype-swf {
   background-image: url(../images/filetypes/document-flash-movie.png);
 }
-.filetype-eps,
-.filetype-ps,
-.filetype-bmp,
-.filetype-gif,
-.filetype-ief,
-.filetype-jpeg,
-.filetype-jpg,
-.filetype-jpe,
-.filetype-png,
-.filetype-tiff,
-.filetype-tif,
-.filetype-djv,
-.filetype-wbmp,
-.filetype-ras,
-.filetype-pnm,
-.filetype-pbm,
-.filetype-pgm,
-.filetype-ppm,
-.filetype-rgb,
-.filetype-xbm,
-.filetype-xpm,
-.filetype-xwd {
+.dlm-filetype-eps,
+.dlm-filetype-ps,
+.dlm-filetype-bmp,
+.dlm-filetype-gif,
+.dlm-filetype-ief,
+.dlm-filetype-jpeg,
+.dlm-filetype-jpg,
+.dlm-filetype-jpe,
+.dlm-filetype-png,
+.dlm-filetype-tiff,
+.dlm-filetype-tif,
+.dlm-filetype-djv,
+.dlm-filetype-wbmp,
+.dlm-filetype-ras,
+.dlm-filetype-pnm,
+.dlm-filetype-pbm,
+.dlm-filetype-pgm,
+.dlm-filetype-ppm,
+.dlm-filetype-rgb,
+.dlm-filetype-xbm,
+.dlm-filetype-xpm,
+.dlm-filetype-xwd {
   background-image: url(../images/filetypes/document-image.png);
 }
-.filetype-psd {
+.dlm-filetype-psd {
   background-image: url(../images/filetypes/document-photoshop.png);
 }
-.filetype-ppt,
-.filetype-pptx {
+.dlm-filetype-ppt,
+.dlm-filetype-pptx {
   background-image: url(../images/filetypes/document-powerpoint.png);
 }
-.filetype-js,
-.filetype-css,
-.filetype-as,
-.filetype-htm,
-.filetype-htaccess,
-.filetype-sql,
-.filetype-html,
-.filetype-php,
-.filetype-xml,
-.filetype-xsl {
+.dlm-filetype-js,
+.dlm-filetype-css,
+.dlm-filetype-as,
+.dlm-filetype-htm,
+.dlm-filetype-htaccess,
+.dlm-filetype-sql,
+.dlm-filetype-html,
+.dlm-filetype-php,
+.dlm-filetype-xml,
+.dlm-filetype-xsl {
   background-image: url(../images/filetypes/document-code.png);
 }
-.filetype-rtx,
-.filetype-rtf {
+.dlm-filetype-rtx,
+.dlm-filetype-rtf {
   background-image: url(../images/filetypes/document-text-image.png);
 }
-.filetype-txt {
+.dlm-filetype-txt {
   background-image: url(../images/filetypes/document-text.png);
 }
-nav.download-monitor-pagination,
-#content nav.download-monitor-pagination {
+nav.dlm-download-monitor-pagination,
+#content nav.dlm-download-monitor-pagination {
   text-align: center;
 }
-nav.download-monitor-pagination ul,
-#content nav.download-monitor-pagination ul {
+nav.dlm-download-monitor-pagination ul,
+#content nav.dlm-download-monitor-pagination ul {
   display: inline-block;
   white-space: nowrap;
   padding: 0;
@@ -217,8 +191,8 @@ nav.download-monitor-pagination ul,
   border-right: 0;
   margin: 1px;
 }
-nav.download-monitor-pagination ul li,
-#content nav.download-monitor-pagination ul li {
+nav.dlm-download-monitor-pagination ul li,
+#content nav.dlm-download-monitor-pagination ul li {
   border-right: 1px solid #eee;
   padding: 0;
   margin: 0;
@@ -226,10 +200,10 @@ nav.download-monitor-pagination ul li,
   display: inline;
   overflow: hidden;
 }
-nav.download-monitor-pagination ul li a,
-#content nav.download-monitor-pagination ul li a,
-nav.download-monitor-pagination ul li span,
-#content nav.download-monitor-pagination ul li span {
+nav.dlm-download-monitor-pagination ul li a,
+#content nav.dlm-download-monitor-pagination ul li a,
+nav.dlm-download-monitor-pagination ul li span,
+#content nav.dlm-download-monitor-pagination ul li span {
   margin: 0;
   text-decoration: none;
   padding: 0;
@@ -240,12 +214,12 @@ nav.download-monitor-pagination ul li span,
   min-width: 1em;
   display: block;
 }
-nav.download-monitor-pagination ul li span.current,
-#content nav.download-monitor-pagination ul li span.current,
-nav.download-monitor-pagination ul li a:hover,
-#content nav.download-monitor-pagination ul li a:hover,
-nav.download-monitor-pagination ul li a:focus,
-#content nav.download-monitor-pagination ul li a:focus {
+nav.dlm-download-monitor-pagination ul li span.current,
+#content nav.dlm-download-monitor-pagination ul li span.current,
+nav.dlm-download-monitor-pagination ul li a:hover,
+#content nav.dlm-download-monitor-pagination ul li a:hover,
+nav.dlm-download-monitor-pagination ul li a:focus,
+#content nav.dlm-download-monitor-pagination ul li a:focus {
   background: #eee;
   color: #888888;
 }
@@ -289,7 +263,7 @@ data.dlm-hidden-info span {
 .dlm-hidden-info .progress.box {
   width: 100%;
 }
-.dlm-hidden-info .progress.box span.download-done::after {
+.dlm-hidden-info .progress.box span.dlm-download-done::after {
   content: '✓';
 }
 .dlm-hidden-info .progress.box .progress-inner {
@@ -314,25 +288,13 @@ data.dlm-hidden-info span {
   visibility: visible;
 }
 /* Comment below lines for the new XHR loader so that we know where to rever*/
-html body a.download-button {
+html body a.dlm-download-button {
   position: relative;
 }
-html body a.download-button.dlm-download-started {
+html body a.dlm-download-button.dlm-download-started {
   text-decoration: none;
 }
-html body a.download-button.dlm-download-complete::after {
-  content: '✓';
-  width: 20px;
-  right: -30px;
-  position: absolute;
-  height: 100%;
-  z-index: 3;
-  background: transparent;
-  color: green;
-  bottom: 0;
-  left: auto;
-}
-html body a.download-button::before {
+html body a.dlm-download-button::before {
   content: '';
   position: absolute;
   height: 2px;
@@ -345,85 +307,51 @@ html body a.download-button::before {
   box-shadow: 0px 0px 3px rgba(255, 0, 0, 0.8);
   border-radius: 5px;
 }
-html body a.download-button.download-Infinity::before {
+html body a.dlm-download-button.dlm-download-Infinity::before {
   animation: infinite-loading 1s infinite linear;
 }
-html body a.download-button.download-10:before {
+html body a.dlm-download-button.dlm-download-10:before {
   width: 10%;
 }
-html body a.download-button.download-20:before {
+html body a.dlm-download-button.dlm-download-20:before {
   width: 20%;
 }
-html body a.download-button.download-30:before {
+html body a.dlm-download-button.dlm-download-30:before {
   width: 30%;
 }
-html body a.download-button.download-40:before {
+html body a.dlm-download-button.dlm-download-40:before {
   width: 40%;
 }
-html body a.download-button.download-50:before {
+html body a.dlm-download-button.dlm-download-50:before {
   width: 50%;
 }
-html body a.download-button.download-60:before {
+html body a.dlm-download-button.dlm-download-60:before {
   width: 60%;
 }
-html body a.download-button.download-70:before {
+html body a.dlm-download-button.dlm-download-70:before {
   width: 70%;
 }
-html body a.download-button.download-80:before {
+html body a.dlm-download-button.dlm-download-80:before {
   width: 80%;
 }
-html body a.download-button.download-90:before {
+html body a.dlm-download-button.dlm-download-90:before {
   width: 90%;
 }
-html body a.download-button.download-100:before {
+html body a.dlm-download-button.dlm-download-100:before {
   width: 100%;
 }
-a.download-button.dlm-download-complete::after {
-  height: auto;
-  top: 50%;
-  transform: translateY(-50%);
-}
-a.download-button::before {
+a.dlm-download-button::before {
   z-index: 0;
 }
-a.download-button > * {
+a.dlm-download-button > * {
   z-index: 2;
   position: relative;
 }
-html body .download-link {
+html body .dlm-download-link {
   position: relative;
 }
-html body .download-link::before,
-html body .download-link::after {
-  content: '';
-  position: absolute;
-  right: -40px;
-  border-radius: 5px;
-  display: block;
-  opacity: 0;
-  z-index: -1;
-}
-html body .download-link.dlm-download-started {
+html body .dlm-download-link.dlm-download-started {
   text-decoration: none;
-}
-html body .download-link.dlm-download-started::before,
-html body .download-link.dlm-download-started::after {
-  opacity: 1;
-  z-index: 99;
-}
-html body .download-link.dlm-download-complete::after {
-  content: '✓';
-  opacity: 1;
-  z-index: 99;
-  background: transparent;
-  animation: none;
-  transform: translateY(-50%);
-  top: calc(50% - 5px);
-  line-height: initial;
-}
-html body .download-link.dlm-download-complete::before {
-  opacity: 0;
-  z-index: -1;
 }
 @keyframes lds-ellipsis1 {
   0% {
@@ -445,11 +373,43 @@ html body .download-link.dlm-download-complete::before {
   font-size: 12px;
   color: red;
 }
+@keyframes dlm-xhr-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dlm-spinner-rotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.dlm-download-started .dlm-original-content {
+  display: none;
+}
+.dlm-original-content,
+.dlm-xhr-loading-gif {
+  animation: dlm-xhr-fade-in 0.25s ease;
+}
+.dlm-xhr-loading-gif {
+  width: 22px;
+  height: 22px;
+  align-self: center;
+  margin: 5px 4px 5px 0;
+  vertical-align: middle;
+}
+.dlm-xhr-spinner .dlm-spinner-arc {
+  transform-origin: 22px 22px;
+  animation: dlm-spinner-rotate 0.9s linear infinite;
+}
 .dlm-xhr-progress {
   min-width: 75px;
   width: auto;
   display: inline-block;
   position: relative;
+  vertical-align: middle;
 }
 .dlm-no-access-modal-window {
   /*  position: fixed;

@@ -17,7 +17,7 @@ import {
 import { useMemo } from 'react';
 import dayjs from 'dayjs';
 
-const start = dayjs().subtract( 30, 'day' ).format( 'YYYY-MM-DD' );
+const start = dayjs().subtract( 29, 'day' ).format( 'YYYY-MM-DD' );
 const end = dayjs().format( 'YYYY-MM-DD' );
 
 function generateDateRange() {

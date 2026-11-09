@@ -16,8 +16,7 @@ class DLM_Template_Handler {
 			'dlm_available_templates',
 			array(
 				''             => __( 'Default - Title and count', 'download-monitor' ),
-				'button'       => __( 'Button - CSS styled button showing title and count', 'download-monitor' ),
-				'box'          => __( 'Box - Box showing thumbnail, title, count, short description, filename and filesize.', 'download-monitor' ),
+				'button'       => __( 'Button - Shows download title', 'download-monitor' ),
 				'filename'     => __( 'Filename - Filename and download count', 'download-monitor' ),
 				'title'        => __( 'Title - Shows download title only', 'download-monitor' ),
 				'version-list' => __( 'Version list - Lists all download versions in an unordered list', 'download-monitor' ),
@@ -144,7 +143,7 @@ class DLM_Template_Handler {
 		$default_attributes = array(
 			'link_attributes' => array(
 				'data-e-Disable-Page-Transition' => 'true',
-				'class'                          => array( 'download-link' ),
+				'class'                          => array( 'dlm-download-link' ),
 				'title'                          => $title,
 				'href'                           => $download->get_the_download_link(),
 				'rel'                            => 'nofollow',

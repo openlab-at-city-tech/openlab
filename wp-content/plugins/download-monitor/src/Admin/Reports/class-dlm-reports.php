@@ -22,7 +22,6 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 			add_filter( 'dlm_admin_menu_links', array( $this, 'add_admin_menu' ), 30 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'reports_scripts' ) );
 			add_action( 'admin_enqueue_scripts', array( $this, 'reports_widget_scripts' ) );
-			add_filter( 'dlm_header_logo_text', array( $this, 'add_page_title' ) );
 
 			add_action( 'wp_dashboard_setup', array( $this, 'register_dashboard_widget' ) );
 		}
@@ -187,7 +186,7 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 
 			// Add the title.
 			foreach ( $data as $key => $row ) {
-				$data[ $key ]['title'] = get_the_title( $row['download_id'] );
+				$data[ $key ]['title'] = html_entity_decode( get_the_title( $row['download_id'] ), ENT_QUOTES );
 			}
 
 			$data = apply_filters( 'dlm_reports_table_downloads_data', $data, $request );
@@ -263,7 +262,7 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 				foreach ( $downloads as $id => $data ) {
 					$id    = (int) $id;
 					$count = isset( $data['downloads'] ) ? (int) $data['downloads'] : 0;
-					$title = isset( $data['title'] ) ? sanitize_text_field( $data['title'] ) : '';
+					$title = isset( $data['title'] ) ? sanitize_text_field( html_entity_decode( $data['title'], ENT_QUOTES ) ) : '';
 
 					$day_total += $count;
 
@@ -459,7 +458,7 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 
 			// Add the title.
 			foreach ( $data as $key => $row ) {
-				$data[ $key ]['title'] = get_the_title( $row['download_id'] );
+				$data[ $key ]['title'] = html_entity_decode( get_the_title( $row['download_id'] ), ENT_QUOTES );
 			}
 
 			$data = apply_filters( 'dlm_reports_users_table_downloads_data', $data, $request );
@@ -648,12 +647,5 @@ if ( ! class_exists( 'DLM_Reports' ) ) {
 			);
 		}
 
-		public function add_page_title( $title ) {
-			if ( ! isset( $_GET['page'] ) || 'download-monitor-reports' !== $_GET['page'] ) {
-				return $title;
-			}
-
-			return __( 'Download Monitor', 'download-monitor' );
-		}
 	}
 }

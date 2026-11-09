@@ -91,7 +91,19 @@ class DLM_Modal {
 		// Check if the no_access_page is set.
 		$no_access_page = $settings->get_option( 'no_access_page' );
 		$download       = false;
-		if ( ! $no_access_page ) {
+
+		$restriction_type          = isset( $_POST['restriction'] ) && 'restriction-empty' !== $_POST['restriction'] ? sanitize_text_field( wp_unslash( $_POST['restriction'] ) ) : 'no_access_page';
+		$system_error_restrictions = array( 'no_file_path', 'no_file_paths', 'not_found', 'file_not_found' );
+
+		if ( in_array( $restriction_type, $system_error_restrictions, true ) ) {
+			ob_start();
+			if ( ! empty( $_POST['modal_text'] ) ) {
+				echo wp_kses_post( sanitize_text_field( wp_unslash( $_POST['modal_text'] ) ) );
+			} else {
+				echo '<p>' . esc_html__( 'An error occurred while trying to download the file.', 'download-monitor' ) . '</p>';
+			}
+			$content = ob_get_clean();
+		} elseif ( ! $no_access_page ) {
 			ob_start();
 
 			// template handler.
@@ -149,7 +161,6 @@ class DLM_Modal {
 			}
 		}
 
-		$restriction_type = isset( $_POST['restriction'] ) && 'restriction-empty' !== $_POST['restriction'] ? sanitize_text_field( wp_unslash( $_POST['restriction'] ) ) : 'no_access_page';
 		/**
 		 * Filter the title of the modal.
 		 *
@@ -223,6 +234,9 @@ class DLM_Modal {
 		$template_handler = new DLM_Template_Handler();
 		// Print scripts, dependencies and inline scripts in an object, so we can attach it to the modal.
 		ob_start();
+		// wp_enqueue_scripts does not fire in AJAX context. Register and enqueue dlm-frontend here
+		// so the modal overlay styles are always present in wp_print_styles() output.
+		wp_enqueue_style( 'dlm-frontend', download_monitor()->get_plugin_url() . '/assets/css/frontend-tailwind.min.css', array(), DLM_VERSION );
 		// print_emoji_styles is deprecated and triggers a PHP warning
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
 		wp_print_styles();

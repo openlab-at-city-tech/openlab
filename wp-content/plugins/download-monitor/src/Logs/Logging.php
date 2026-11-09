@@ -134,6 +134,47 @@ class DLM_Logging {
 	}
 
 	/**
+	 * @param int $download_id
+	 * @param int $version_id
+	 *
+	 * @return string
+	 */
+	public function generate_xhr_log_token( $download_id, $version_id ) {
+		$token = bin2hex( random_bytes( 32 ) );
+
+		set_transient(
+			'dlm_xhr_log_' . $token,
+			array(
+				'download_id' => absint( $download_id ),
+				'version_id'  => absint( $version_id ),
+			),
+			apply_filters( 'dlm_xhr_log_token_ttl', 30 * MINUTE_IN_SECONDS )
+		);
+
+		return $token;
+	}
+
+	/**
+	 * @param string $token
+	 * @param int    $download_id
+	 * @param int    $version_id
+	 *
+	 * @return bool
+	 */
+	private function consume_xhr_log_token( $token, $download_id, $version_id ) {
+		$key  = 'dlm_xhr_log_' . $token;
+		$data = get_transient( $key );
+		delete_transient( $key );
+
+		if ( ! is_array( $data ) || ! isset( $data['download_id'], $data['version_id'] ) ) {
+			return false;
+		}
+
+		return absint( $data['download_id'] ) === absint( $download_id )
+			&& absint( $data['version_id'] ) === absint( $version_id );
+	}
+
+	/**
 	 * Log the XHR download
 	 *
 	 * @return void
@@ -148,14 +189,27 @@ class DLM_Logging {
 
 		check_ajax_referer( 'dlm_ajax_nonce', 'nonce' );
 
+		$download_id = absint( $_POST['download_id'] );
+		$version_id  = absint( $_POST['version_id'] );
+
+		if ( ! isset( $_POST['log_token'] )
+			|| ! $this->consume_xhr_log_token( sanitize_text_field( wp_unslash( $_POST['log_token'] ) ), $download_id, $version_id )
+		) {
+			wp_send_json_error( 'Invalid or expired log token' );
+		}
+
 		// Let's make sure the DLM_DOING_XHR is defined
 		if ( ! defined( 'DLM_DOING_XHR' ) ) {
 			define( 'DLM_DOING_XHR', true );
 		}
 
-		$download_id = absint( $_POST['download_id'] );
-		$version_id  = absint( $_POST['version_id'] );
-		$status      = sanitize_text_field( wp_unslash( $_POST['status'] ) );
+		$status           = sanitize_text_field( wp_unslash( $_POST['status'] ) );
+		$allowed_statuses = apply_filters( 'dlm_xhr_log_allowed_statuses', array( 'completed', 'redirected', 'failed' ) );
+
+		if ( ! in_array( $status, $allowed_statuses, true ) ) {
+			wp_send_json_error( 'Invalid status' );
+		}
+
 		$cookie      = 'true' === $_POST['cookie'];
 		$current_url = ( isset( $_POST['currentURL'] ) ) ? esc_url_raw( $_POST['currentURL'] ) : '-';
 		// Set our objects
@@ -174,7 +228,62 @@ class DLM_Logging {
 		$download->set_version( $version );
 		// Truly log the corresponding status
 		$this->log( $download, $version, $status, $cookie, $current_url );
-		die();
+
+		if ( 'completed' !== $status ) {
+			die();
+		}
+
+		try {
+			$download = download_monitor()->service( 'download_repository' )->retrieve_single( $download_id );
+		} catch ( \Exception $e ) {
+			die();
+		}
+
+		$count    = $download->get_download_count();
+		$response = array( 'download_count' => $count );
+		$formats  = isset( $_POST['count_formats'] ) ? array_filter( array_map( 'sanitize_key', (array) $_POST['count_formats'] ) ) : array();
+
+		if ( $formats ) {
+			$response['counts'] = array();
+
+			foreach ( $formats as $format ) {
+				$response['counts'][ $format ] = $this->format_download_count_text( $format, $count );
+			}
+		}
+
+		wp_send_json_success( $response );
+	}
+
+	/**
+	 * Translate a download count into the requested display format.
+	 *
+	 * @param string $format
+	 * @param int    $count
+	 *
+	 * @return string
+	 */
+	private function format_download_count_text( $format, $count ) {
+		switch ( $format ) {
+			case 'standard':
+				return sprintf( _n( '%d download', '%d downloads', $count, 'download-monitor' ), $count );
+
+			case 'times':
+				return sprintf( _n( 'Downloaded %d time', 'Downloaded %d times', $count, 'download-monitor' ), $count );
+
+			case 'times-value':
+				return sprintf( _n( '%d time', '%d times', $count, 'download-monitor' ), $count );
+		}
+
+		/**
+		 * Filters the display text for a download count format that isn't
+		 * one of the built-in ones above. Defaults to the raw count.
+		 *
+		 * @hook dlm_xhr_download_count_format_text
+		 *
+		 * @param int    $count  The raw download count.
+		 * @param string $format The requested format key.
+		 */
+		return apply_filters( 'dlm_xhr_download_count_format_text', $count, $format );
 	}
 
 	/**

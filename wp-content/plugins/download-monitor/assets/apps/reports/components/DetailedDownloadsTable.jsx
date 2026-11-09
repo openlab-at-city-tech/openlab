@@ -145,6 +145,7 @@ export default function DetailedDownloadsTable( { usersData, isLoadingUsers } ) 
 	const table = useReactTable( {
 		data: filteredDownloadsData,
 		columns: tableColumns,
+		getRowId: ( row ) => String( row.ID ),
 		state: {
 			sorting,
 			pagination: {
@@ -226,8 +227,8 @@ export default function DetailedDownloadsTable( { usersData, isLoadingUsers } ) 
 						{ ( () => {
 							if ( isLoadingDownloads || isLoadingUsers ) {
 								return (
-									<tr>
-										<td colSpan={ columns.length } className={ styles.tableLoadingCell }>
+									<tr key="loading">
+										<td colSpan={ visibleColumns.length } className={ styles.tableLoadingCell }>
 											<Spinner />
 										</td>
 									</tr>
@@ -235,8 +236,8 @@ export default function DetailedDownloadsTable( { usersData, isLoadingUsers } ) 
 							}
 							if ( filteredDownloadsData.length === 0 ) {
 								return (
-									<tr>
-										<td colSpan={ columns.length } className={ styles.tableLoadingCell }>
+									<tr key="empty">
+										<td colSpan={ visibleColumns.length } className={ styles.tableLoadingCell }>
 											{ __( 'No downloads found.', 'download-monitor' ) }
 										</td>
 									</tr>

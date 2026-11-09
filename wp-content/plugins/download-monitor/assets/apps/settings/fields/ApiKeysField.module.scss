@@ -1,0 +1,16 @@
+.generator {
+	display: flex;
+	align-items: flex-end;
+	gap: 8px;
+	margin-bottom: 16px;
+
+	> :first-child {
+		flex: 1 1 auto;
+		max-width: 320px;
+	}
+}
+
+.wrapper table td,
+.wrapper table th {
+	vertical-align: middle;
+}

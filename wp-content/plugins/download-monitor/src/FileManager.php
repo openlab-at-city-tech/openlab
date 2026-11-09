@@ -332,6 +332,104 @@ if ( ! class_exists( 'DLM_File_Manager' ) ) {
 		}
 
 		/**
+		 * Find every Download Version whose stored file URL(s) contain $old_url and
+		 * update it to $new_url. Runs regardless of whether the Version is linked to
+		 * the attachment via the `dlm_download` meta or was simply added as a plain
+		 * URL (e.g. picked from the Media Library).
+		 *
+		 * @param  string  $old_url
+		 * @param  string  $new_url
+		 *
+		 * @return int[] IDs of the Versions that were updated.
+		 */
+		public function sync_version_urls( $old_url, $new_url ) {
+			global $wpdb;
+
+			if ( '' === $old_url || $old_url === $new_url ) {
+				return array();
+			}
+
+			// Narrow the candidates with a cheap LIKE on the filename first, since the
+			// stored JSON escapes slashes (so a LIKE on the full URL would never match).
+			$basename   = wp_basename( $old_url );
+			$candidates = $wpdb->get_results(
+				$wpdb->prepare(
+					"SELECT post_id, meta_value FROM {$wpdb->postmeta} WHERE meta_key = '_files' AND meta_value LIKE %s",
+					'%' . $wpdb->esc_like( $basename ) . '%'
+				)
+			);
+
+			$updated_version_ids = array();
+			$old_key             = $this->get_url_match_key( $old_url );
+
+			foreach ( $candidates as $candidate ) {
+				$urls = (array) json_decode( $candidate->meta_value );
+
+				if ( empty( $urls ) ) {
+					continue;
+				}
+
+				$changed = false;
+				foreach ( $urls as &$url ) {
+					if ( $old_url === $url || $old_key === $this->get_url_match_key( $url ) ) {
+						$url     = $new_url;
+						$changed = true;
+					}
+				}
+				unset( $url );
+
+				if ( ! $changed ) {
+					continue;
+				}
+
+				update_post_meta( $candidate->post_id, '_files', $this->json_encode_files( $urls ) );
+				$updated_version_ids[] = (int) $candidate->post_id;
+			}
+
+			return $updated_version_ids;
+		}
+
+		/**
+		 * Normalize a stored file URL/path so the same local file matches regardless of
+		 * how it was saved (absolute URL, http/https, relative URL or server path).
+		 *
+		 * @param  string  $url
+		 *
+		 * @return string
+		 */
+		private function get_url_match_key( $url ) {
+			$url     = trim( (string) $url );
+			$uploads = wp_upload_dir();
+			$basedir = str_replace( DIRECTORY_SEPARATOR, '/', $uploads['basedir'] );
+			$abspath = str_replace( DIRECTORY_SEPARATOR, '/', ABSPATH );
+			$fs_path = str_replace( DIRECTORY_SEPARATOR, '/', $url );
+
+			if ( '' !== $basedir && 0 === strpos( $fs_path, $basedir ) ) {
+				$url = $uploads['baseurl'] . substr( $fs_path, strlen( $basedir ) );
+			} elseif ( 0 === strpos( $fs_path, $abspath ) ) {
+				$url = site_url( '/' ) . substr( $fs_path, strlen( $abspath ) );
+			}
+
+			$parts = wp_parse_url( $url );
+			if ( empty( $parts['path'] ) ) {
+				return $url;
+			}
+
+			if ( ! empty( $parts['host'] ) ) {
+				if ( strtolower( $parts['host'] ) !== strtolower( (string) wp_parse_url( site_url(), PHP_URL_HOST ) ) ) {
+					return $url;
+				}
+
+				return rawurldecode( $parts['path'] );
+			}
+
+			// Relative paths are resolved against the WordPress root.
+			$site_path = trailingslashit( (string) wp_parse_url( site_url( '/' ), PHP_URL_PATH ) );
+
+			return rawurldecode( $site_path . ltrim( $parts['path'], '/' ) );
+		}
+
+		/**
 		 * Fallback for PHP < 5.4 where JSON_UNESCAPED_UNICODE does not exist.
 		 *
 		 * @param  array  $matches

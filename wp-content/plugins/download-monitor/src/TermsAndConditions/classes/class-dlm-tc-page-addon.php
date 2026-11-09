@@ -22,35 +22,36 @@ class DLM_TC_Page_Addon {
 	 * @return string
 	 */
 	public function page_addon_download_button( $content, $download_id ) {
+		$hijacked_content = $this->get_locked_content( $download_id );
 
-		// access manager
+		if ( '' !== $hijacked_content ) {
+			$content = $hijacked_content;
+		}
+
+		return $content;
+	}
+
+	private function get_locked_content( $download_id ) {
 		$access_manager = new DLM_TC_Access_Manager();
 
 		try {
 			$download = download_monitor()->service( 'download_repository' )->retrieve_single( $download_id );
 
-			// only replace button with form if user has no access to download
 			if ( false === $access_manager->check_access( true, $download, null ) ) {
-
-				// Check if modal is enabled, and we are doing an XHR request, otherwise use shortcode as it will output Tailwind CSS template.
 				if ( get_option( 'dlm_no_access_modal', false ) && apply_filters( 'do_dlm_xhr_access_modal', true, $download ) ) {
-					$modal            = new DLM_TC_Modal();
-					$hijacked_content = $modal->modal_content( $download_id );
-				} else {
-					$shortcode        = new DLM_TC_Shortcodes();
-					$hijacked_content = $shortcode->term_and_conditions_form( array( 'id' => $download_id ) );
+					$modal = new DLM_TC_Modal();
+
+					return $modal->modal_content( $download_id );
 				}
 
-				// Replace content if we've got content
-				if ( '' !== $hijacked_content ) {
-					$content = $hijacked_content;
-				}
+				$shortcode = new DLM_TC_Shortcodes();
+
+				return $shortcode->term_and_conditions_form( array( 'id' => $download_id ) );
 			}
 		} catch ( Exception $exception ) {
 			// no download found
 		}
 
-		// Return content
-		return $content;
+		return '';
 	}
 }

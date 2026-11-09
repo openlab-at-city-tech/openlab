@@ -3,7 +3,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly
-use WPChill\DownloadMonitor\Util;
 
 /**
  * Class DLM_Upsells
@@ -21,18 +20,7 @@ class DLM_Upsells {
 	 */
 	public static $instance;
 
-	public $extensions = array();
-
 	private $upsell_tabs = array();
-
-	/**
-	 * Holds the active license status.
-	 *
-	 * @since 4.9.4
-	 *
-	 * @var bool
-	 */
-	private $active_license = false;
 
 	/**
 	 * DLM_Upsells constructor.
@@ -41,9 +29,6 @@ class DLM_Upsells {
 	 */
 	public function __construct() {
 
-		if ( $this->check_license_validity() ) {
-			return;
-		}
 		// Add modal upsells through sub menu. Place here to run everywhere, not just on DLM pages.
 		add_action( 'admin_menu', array( $this, 'add_upsell_modals' ), 13 );
 
@@ -83,8 +68,6 @@ class DLM_Upsells {
 		$this->set_hooks();
 
 		$this->set_tabs();
-
-		$this->set_upsell_actions();
 	}
 
 	/**
@@ -94,27 +77,11 @@ class DLM_Upsells {
 	 */
 	public function set_hooks() {
 
-		add_action( 'dlm_tab_upsell_content_access', array( $this, 'access_tab_upsell' ), 15 );
-
-		add_action( 'dlm_tab_upsell_content_logging', array( $this, 'logging_tab_upsell' ), 15 );
-
-		add_action( 'dlm_tab_upsell_content_email_notification', array( $this, 'emails_tab_upsell' ), 15 );
-
-		add_action( 'dlm_tab_upsell_content_pages', array( $this, 'pages_tab_upsell' ), 15 );
-
-		add_action( 'dlm_tab_upsell_content_misc', array( $this, 'misc_tab_upsell' ), 15 );
-
-		add_action( 'dlm_tab_upsell_content_endpoints', array( $this, 'endpoint_tab_upsell' ), 15 );
-
 		add_filter( 'dlm_download_metaboxes', array( $this, 'add_meta_boxes' ), 30 );
 
 		add_filter( 'dlm_settings', array( $this, 'pro_tab_upsells' ), 99, 1 );
 
 		add_action( 'dlm_reports_page_end', array( $this, 'insights_upsell' ), 99 );
-
-		add_action( 'dlm_tab_upsell_content_pages', array( $this, 'pages_tab_upsell' ), 15 );
-
-		add_action( 'dlm_tab_section_content_access', array( $this, 'pro_blacklist_upsell' ), 15 );
 	}
 
 
@@ -197,18 +164,7 @@ class DLM_Upsells {
 			);
 		}
 
-		if ( ! $this->check_extension( 'dlm-buttons' ) ) {
-			$meta_boxes[] = array(
-				'id'       => 'dlm-buttons-upsell',
-				'title'    => esc_html__( 'Buttons', 'download-monitor' ),
-				'callback' => array( $this, 'output_buttons_upsell' ),
-				'screen'   => 'dlm_download',
-				'context'  => 'side',
-				'priority' => 40,
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-amazons-s3' ) || ! $this->check_extension( 'dlm-google-drive' ) ) {
+		if ( ! $this->check_extension( 'dlm-amazon-s3' ) || ! $this->check_extension( 'dlm-google-drive' ) ) {
 			$meta_boxes[] = array(
 				'id'       => 'dlm-external-hosting',
 				'title'    => esc_html__( 'External Hosting', 'download-monitor' ),
@@ -223,50 +179,26 @@ class DLM_Upsells {
 	}
 
 	/**
-	 * Set the existing extensions
-	 *
-	 * @since 4.4.5
+	 * @return DLM_Pro\Extensions\Extensions|DLM_Extensions_Base
 	 */
-	private function set_extensions() {
-
-		$dlm_Extensions = DLM_Admin_Extensions::get_instance();
-
-		$extensions = $dlm_Extensions->get_extensions();
-
-		foreach ( $extensions as $extension ) {
-			$this->extensions[] = $extension->product_id;
-		}
+	private static function get_extensions_provider() {
+		return class_exists( 'DLM_Pro\Extensions\Extensions' )
+			? DLM_Pro\Extensions\Extensions::get_instance()
+			: DLM_Extensions_Base::get_instance();
 	}
 
 	/**
-	 * Get existing extensions
+	 * Whether the given addon is already owned by the current plan — used to
+	 * decide whether to show its upsell.
 	 *
-	 * @since 4.9.9
-	 */
-	private function get_extensions() {
-		if ( empty( $this->extensions ) ) {
-			$this->set_extensions();
-		}
-
-		return $this->extensions;
-	}
-
-	/**
-	 * Check if extension exists
-	 *
-	 * @param $extension
+	 * @param string $extension
 	 *
 	 * @return bool
 	 *
 	 * @since 4.4.5
 	 */
 	public function check_extension( $extension ) {
-		$extensions = $this->get_extensions();
-		if ( empty( $extensions ) || ! in_array( $extension, $extensions ) ) {
-			return false;
-		}
-
-		return true;
+		return ! self::get_extensions_provider()->is_upgradable_addon( $extension );
 	}
 
 	/**
@@ -392,197 +324,6 @@ class DLM_Upsells {
 	}
 
 	/**
-	 * Add Upsell tabs content
-	 *
-	 * @since 4.4.5
-	 */
-	public function set_upsell_actions() {
-
-		foreach ( $this->upsell_tabs as $key => $tab ) {
-			if ( method_exists( 'DLM_Upsells', 'upsell_tab_content_' . $key ) ) {
-				add_action( 'dlm_tab_upsell_content_' . $key, array( $this, 'upsell_tab_content_' . $key ), 30, 1 );
-			}
-
-			foreach ( $tab['sections'] as $sub_key => $section ) {
-				if ( method_exists( 'DLM_Upsells', 'upsell_tab_section_content_' . $sub_key ) ) {
-					add_action( 'dlm_tab_upsell_section_content_' . $sub_key, array( $this, 'upsell_tab_section_content_' . $sub_key ), 30, 1 );
-				}
-			}
-		}
-	}
-
-	/**
-	 * Settings Access tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function access_tab_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-advanced-access-manager' ) ) {
-			$this->generate_upsell_box(
-				__( 'Advanced access manager', 'download-monitor' ),
-				__( 'Limit access to your downloads by setting advanced access rules and restrictions with this extension.', 'download-monitor' ),
-				'access',
-				'advanced-access-manager'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-email-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'Email Lock', 'download-monitor' ),
-				__( 'Require your users’ email addresses to send newsletters and create a list of your customers.', 'download-monitor' ),
-				'access',
-				'email-lock'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-gravity-forms' ) ) {
-			$this->generate_upsell_box(
-				__( 'Gravity Forms Lock', 'download-monitor' ),
-				__( 'Ask users to fill in a form created on Gravity Forms before they start downloading your files.', 'download-monitor' ),
-				'access',
-				'gravity-forms'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-ninja-forms' ) ) {
-			$this->generate_upsell_box(
-				__( 'Ninja Forms Lock', 'download-monitor' ),
-				__( 'Use the Ninja Forms - content locking extension to add forms easily to your download files.', 'download-monitor' ),
-				'access',
-				'ninja-forms'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-mailchimp-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'Mailchimp extension', 'download-monitor' ),
-				__( 'Create a MailChimp list and ask users to subscribe to it before accessing a downloadable file.', 'download-monitor' ),
-				'access',
-				'mailchimp-lock'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-cf7-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'Contact Form 7', 'download-monitor' ),
-				__( 'Require your users’ email addresses to send newsletters and create a list of your customers.', 'download-monitor' ),
-				'access',
-				'cf7-lock'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-wpforms-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'WP Forms', 'download-monitor' ),
-				__( 'Require your users’ email addresses to send newsletters and create a list of your customers.', 'download-monitor' ),
-				'access',
-				'wpforms-lock'
-			);
-		}
-	}
-
-	/**
-	 * Settings Logging tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function logging_tab_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-captcha' ) ) {
-			$this->generate_upsell_box(
-				__( 'Captcha', 'download-monitor' ),
-				__( 'Stop bots from spamming your downloads and ask users to complete Google reCAPTCHA.', 'download-monitor' ),
-				'logging',
-				'captcha'
-			);
-		}
-	}
-
-	/**
-	 * Settings Emails tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function emails_tab_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-email-notification' ) ) {
-			$this->generate_upsell_box(
-				__( 'Email notifications', 'download-monitor' ),
-				__( 'The Email Notification extension for Download Monitor sends you an email whenever one of your files is downloaded', 'download-monitor' ),
-				'email_notifications',
-				'email-notifications'
-			);
-		}
-	}
-
-	/**
-	 * Settings Logging tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function pages_tab_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-page-addon' ) ) {
-			$this->generate_upsell_box(
-				__( 'Page Addon', 'download-monitor' ),
-				__( 'List all downloads, categories, tags, and showcase info pages of each resource with a self-contained [download_page] shortcode!', 'download-monitor' ),
-				'pages',
-				'page-addon'
-			);
-		}
-	}
-
-	/**
-	 * Settings Misc tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function output_buttons_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-buttons' ) ) {
-			$this->generate_upsell_box(
-				__( 'Buttons', 'download-monitor' ),
-				__( 'The Buttons extension allows you to customize your download buttons as you please in order to improve the user experience. Create stunning buttons without needing any coding skills!', 'download-monitor' ),
-				'cpt',
-				'buttons'
-			);
-		}
-	}
-
-	/**
-	 * Settings Misc tab upsell
-	 *
-	 *
-	 * @since 4.4.5
-	 */
-	public function endpoint_tab_upsell() {
-
-		if ( ! $this->check_extension( 'dlm-csv-impoter' ) ) {
-			$this->generate_upsell_box(
-				__( 'Importer', 'download-monitor' ),
-				__( 'Easily import your downloads, including their categories, tags, and files.', 'download-monitor' ),
-				'endpoint',
-				'csv-impoter'
-			);
-		}
-
-		if ( ! $this->check_extension( 'dlm-csv-exporter' ) ) {
-			$this->generate_upsell_box(
-				__( 'Exporter', 'download-monitor' ),
-				__( 'With a single click, you can quickly export your downloads and their tags, categories, and file versions to a CSV file.', 'download-monitor' ),
-				'endpoint',
-				'csv-exporter'
-			);
-		}
-	}
-
-	/**
 	 * Output the DLM Downloading Page extension upsell
 	 *
 	 * @since 4.4.5
@@ -595,108 +336,6 @@ class DLM_Upsells {
 				__( 'Customize the downloading page by adding banners, ads, and anything you like.', 'download-monitor' ),
 				'downloading_page',
 				'downloading-page'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for Gravity Forms sub-tab
-	 *
-	 * @since 4.5.3
-	 */
-	public function upsell_tab_section_content_gravity_forms() {
-
-		if ( ! $this->check_extension( 'dlm-gravity-forms' ) ) {
-			$this->generate_upsell_box(
-				__( 'Gravity Forms Lock', 'download-monitor' ),
-				__( 'The Gravity Forms - content locking extension for Download Monitor allows you to require users to fill out a Gravity Forms form before they gain access to a download.', 'download-monitor' ),
-				'gravity_forms',
-				'gravity-forms'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for Ninja Forms sub-tab
-	 *
-	 * @since 4.5.3
-	 */
-	public function upsell_tab_section_content_ninja_forms() {
-
-		if ( ! $this->check_extension( 'dlm-ninja-forms' ) ) {
-			$this->generate_upsell_box(
-				__( 'Ninja Forms Lock', 'download-monitor' ),
-				__( 'The Ninja Forms - content locking extension for Download Monitor allows you to require users to fill in a Ninja Forms form before they gain access to a download.', 'download-monitor' ),
-				'ninja_forms',
-				'ninja-forms'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for Email Lock sub-tab
-	 *
-	 * @since 4.5.3
-	 */
-	public function upsell_tab_section_content_email_lock() {
-
-		if ( ! $this->check_extension( 'dlm-email-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'Email Lock', 'download-monitor' ),
-				__( 'The Email Lock extension for Download Monitor allows you to require users to fill in their email address before they gain access to a download.', 'download-monitor' ),
-				'email_lock',
-				'email-lock'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for Amazon S3 setting sub-tab
-	 *
-	 * @since 4.5.3
-	 */
-	public function upsell_tab_section_content_amazon_s3() {
-
-		if ( ! $this->check_extension( 'dlm-amazon-s3' ) ) {
-			$this->generate_upsell_box(
-				__( 'Amazon S3', 'download-monitor' ),
-				__( 'Link to files hosted on Amazon s3 so that you can serve secure, expiring download links.', 'download-monitor' ),
-				'amazon_s3',
-				'amazon-s3'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for Google Drive setting sub-tab
-	 *
-	 * @since 4.5.3
-	 */
-	public function upsell_tab_section_content_google_drive() {
-
-		if ( ! $this->check_extension( 'dlm-google-drive' ) ) {
-			$this->generate_upsell_box(
-				__( 'Google Drive', 'download-monitor' ),
-				__( 'With this extension, you can integrate your files from Google Drive into Download Monitor.', 'download-monitor' ),
-				'google_drive',
-				'google-drive'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for Captcha setting tab
-	 *
-	 * @since 4.4.5
-	 */
-	public function upsell_tab_content_captcha() {
-
-		if ( ! $this->check_extension( 'dlm=captcha' ) ) {
-			$this->generate_upsell_box(
-				__( 'Captcha extension', 'download-monitor' ),
-				__( 'The Captcha extension for Download Monitor allows you to require users to complete a Google reCAPTCHA before they gain access to a download.', 'download-monitor' ),
-				'captcha',
-				'captcha'
 			);
 		}
 	}
@@ -739,23 +378,6 @@ class DLM_Upsells {
 	}
 
 	/**
-	 * Upsell for Integration tab
-	 *
-	 * @since 4.4.5
-	 */
-	public function upsell_tab_content_integration() {
-
-		if ( ! $this->check_extension( 'dlm-captcha' ) ) {
-			$this->generate_upsell_box(
-				__( 'Captcha', 'download-monitor' ),
-				__( 'Stop bots from spamming your downloads and ask users to complete Google reCAPTCHA.', 'download-monitor' ),
-				'logging',
-				'captcha'
-			);
-		}
-	}
-
-	/**
 	 * Add lite vs pro page in menu
 	 *
 	 * @param [type] $links
@@ -763,6 +385,20 @@ class DLM_Upsells {
 	 * @return void
 	 */
 	public function add_lite_vs_pro_page( $links ) {
+
+		$provider       = self::get_extensions_provider();
+		$has_upgradable = false;
+
+		foreach ( array_keys( $provider->extensions ) as $slug ) {
+			if ( $provider->is_upgradable_addon( $slug ) ) {
+				$has_upgradable = true;
+				break;
+			}
+		}
+
+		if ( ! $has_upgradable ) {
+			return $links;
+		}
 
 		// Settings page.
 		$links[] = array(
@@ -797,22 +433,31 @@ class DLM_Upsells {
 	 */
 	public function filter_action_links( $links ) {
 
-		$dlm_extensions       = DLM_Admin_Extensions::get_instance();
-		$extensions           = $dlm_extensions->get_available_extensions();
-		$licensed_extensions  = $dlm_extensions->get_licensed_extensions();
-		$installed_extensions = $dlm_extensions->get_installed_extensions();
+		$provider       = self::get_extensions_provider();
+		$has_upgradable = false;
 
-		if ( 0 < count( $extensions ) ) {
-			if ( 0 !== count( $licensed_extensions ) && 0 < count( $installed_extensions ) ) { // If there are any licensed extensions ( active ) we show the Upgrade button, not the upgrade to PRO button.
-				$upgrade = array( '<a target="_blank" style="color: orange;font-weight: bold;" href="https://www.download-monitor.com/pricing/?utm_source=download-monitor&utm_medium=plugins-page&utm_campaign=upsell">' . esc_html__( 'Upgrade!', 'download-monitor' ) . '</a>' );
-			} else { // Show the upgrade to PRO button if no extensions are licensed.
-				$upgrade = array( '<a target="_blank" style="color: orange;font-weight: bold;" href="https://www.download-monitor.com/pricing/?utm_source=download-monitor&utm_medium=plugins-page&utm_campaign=upsell">' . esc_html__( 'Upgrade to Premium!', 'download-monitor' ) . '</a>' );
+		foreach ( array_keys( $provider->extensions ) as $slug ) {
+			if ( $provider->is_upgradable_addon( $slug ) ) {
+				$has_upgradable = true;
+				break;
 			}
-
-			return array_merge( $upgrade, $links );
 		}
 
-		return $links;
+		if ( ! $has_upgradable ) {
+			return $links;
+		}
+
+		if ( DLM_Pro_Compat::is_pro_outdated() ) {
+			$label = esc_html__( 'Update DLM Pro!', 'download-monitor' );
+			$url   = admin_url( 'plugins.php' );
+		} else {
+			$label = defined( 'DLM_PRO_VERSION' ) ? esc_html__( 'Upgrade!', 'download-monitor' ) : esc_html__( 'Upgrade to Premium!', 'download-monitor' );
+			$url   = 'https://www.download-monitor.com/pricing/?utm_source=download-monitor&utm_medium=plugins-page&utm_campaign=upsell';
+		}
+
+		$upgrade = array( '<a target="_blank" style="color: orange;font-weight: bold;" href="' . esc_url( $url ) . '">' . $label . '</a>' );
+
+		return array_merge( $upgrade, $links );
 	}
 
 	/**
@@ -887,115 +532,12 @@ class DLM_Upsells {
 	}
 
 	/**
-	 * Check the license validity
-	 *
-	 * @return bool
-	 * @since 4.9.4
-	 */
-	private function check_license_validity() {
-		// Return if we're doing ajax
-		if ( wp_doing_ajax() ) {
-			return true;
-		}
-
-		$return = false;
-		// First let's check the master license
-		$master_license = get_option( 'dlm_master_license', false );
-		if ( ! empty( $master_license ) ) {
-			$data = json_decode( $master_license, true );
-			// If the license is active, we return true
-			if ( ! empty( $data ) && 'active' === $data['status'] ) {
-				$return = true;
-			}
-		}
-		// Let's check the extensions licenses
-		// Retrieve all the extensions
-		if ( class_exists( 'Util\ExtensionLoader' ) ) {
-			require_once dirname( DLM_PLUGIN_FILE ) . 'src/Util/ExtensionLoader.php';
-		}
-		$loader   = new Util\ExtensionLoader();
-		$response = $loader->fetch();
-		// If we have an error, we return false
-		if ( is_array( $response ) && isset( $response['success'] ) && ! $response['success'] ) {
-			// Remove other upsells also by returning true
-			if ( $return ) {
-				add_filter( 'dlm_remove_upsells', '__return_true' );
-				// If the master license is active, and we have an error, we return true
-				return true;
-			}
-
-			return false;
-		}
-		$response = json_decode( $response, true );
-		// Cycle through the extensions
-		if ( ! empty( $response ) && ! empty( $response['extensions'] ) ) {
-			foreach ( $response['extensions'] as $extension ) {
-				// Skip if we don't have a product id
-				if ( ! isset( $extension['product_id'] ) ) {
-					continue;
-				}
-				// Retrieve data from the DB.
-				$ext_data = get_option( $extension['product_id'] . '-license', false );
-				// Check if the function exists, if not, we include it
-				if ( ! function_exists( 'is_plugin_active' ) ) {
-					require_once ABSPATH . 'wp-admin/includes/plugin.php';
-				}
-				// If we have a license, we check if it's active and return true
-				if ( ! empty( $ext_data ) && 'active' === $ext_data['status'] && is_plugin_active( $extension['product_id'] . '/' . $extension['product_id'] . '.php' ) ) {
-					$return = true;
-					break;
-				}
-			}
-		}
-		// Remove other upsells also by returning true
-		if ( $return ) {
-			add_filter( 'dlm_remove_upsells', '__return_true' );
-		}
-		// Set class variable. Can be used in other functions so that we don't have to check again.
-		$this->active_license = $return;
-		// Return the value
-		return $return;
-	}
-
-	/**
-	 * Upsell for Contact Form 7 Lock sub-tab
-	 *
-	 * @since 5.0.13
-	 */
-	public function upsell_tab_section_content_cf7_lock() {
-		if ( ! $this->check_extension( 'dlm-cf7-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'Contact Form 7', 'download-monitor' ),
-				__( 'The Contact Form 7 Lock extension for Download Monitor allows you to require users to fill out a Contact Form 7 form before they gain access to a download.', 'download-monitor' ),
-				'email_lock',
-				'email-lock'
-			);
-		}
-	}
-
-	/**
-	 * Upsell for WP Forms Lock sub-tab
-	 *
-	 * @since 5.0.13
-	 */
-	public function upsell_tab_section_content_wpforms_lock() {
-		if ( ! $this->check_extension( 'dlm-wpforms-lock' ) ) {
-			$this->generate_upsell_box(
-				__( 'WP Forms', 'download-monitor' ),
-				__( 'The WPForms Lock extension for Download Monitor allows you to require users to fill out a WPForms form before they gain access to a download.', 'download-monitor' ),
-				'email_lock',
-				'email-lock'
-			);
-		}
-	}
-
-	/**
 	 * Upsell page/modals
 	 *
 	 * @since 5.0.13
 	 */
 	public function add_upsell_modals() {
-		$upsells = DLm_Upsells::get_modal_upsells();
+		$upsells = DLM_Upsells::get_modal_upsells();
 		if ( ! empty( $upsells ) ) {
 			// Cycle through the upsells and add them as submenus
 			foreach ( $upsells as $key => $upsell ) {
@@ -1005,18 +547,27 @@ class DLM_Upsells {
 	}
 
 	/**
-	 * Modal upsells
+	 * Modal upsells — only for addons not already owned by the current plan.
 	 *
 	 * @since 5.0.13
 	 */
 	public static function get_modal_upsells() {
 		$upsells = array(
-			'dlm_aam'     => __( 'Global Rules', 'download-monitor' ),
-			'dlm_lm'      => __( 'Library Manager', 'download-monitor' ),
-			'dlm_buttons' => __( 'Buttons', 'download-monitor' ),
+			'dlm_aam' => array( __( 'Global Rules', 'download-monitor' ), 'dlm-advanced-access-manager' ),
+			'dlm_lm'  => array( __( 'Library Manager', 'download-monitor' ), 'dlm-page-addon' ),
 		);
 
-		return $upsells;
+		$provider = self::get_extensions_provider();
+		$result   = array();
+
+		foreach ( $upsells as $key => $upsell ) {
+			list( $label, $slug ) = $upsell;
+			if ( $provider->is_upgradable_addon( $slug ) ) {
+				$result[ $key ] = $label;
+			}
+		}
+
+		return $result;
 	}
 
 	public function inline_script_for_redirection() {
@@ -1040,6 +591,14 @@ class DLM_Upsells {
 	}
 
 	public function enhanced_metrics_upsells_script() {
+		if ( ! isset( $_GET['page'] ) || 'download-monitor-reports' !== $_GET['page'] ) {
+			return;
+		}
+
+		if ( $this->check_extension( 'dlm-enhanced-metrics' ) ) {
+			return;
+		}
+
 		$upsells_asset_file = require plugin_dir_path( DLM_PLUGIN_FILE ) . 'assets/js/upsells/upsells.asset.php';
 		$upsells_enqueue    = array(
 			'handle'       => 'dlm-reports-upsells',
@@ -1065,23 +624,5 @@ class DLM_Upsells {
 			array(),
 			$upsells_enqueue['version']
 		);
-	}
-
-	/**
-	 * Upsell for DLM Pro Remote bad bots blacklist & IP banlist.
-	 *
-	 * @since 5.0.13
-	 */
-	public function pro_blacklist_upsell() {
-		if ( ! $this->check_extension( 'dlm-pro' ) ) {
-			echo '<div class="wpchill-upsells-wrapper">';
-			$this->generate_upsell_box(
-				__( 'Blacklist protection', 'download-monitor' ),
-				__( 'Once enabled, known bots will no longer be able to trigger downloads for your files (GoogleBot, BingBot…). The blocklist updates automatically every week, so you don\'t need to do anything. You can also block specific IP addresses if needed.', 'download-monitor' ),
-				'dlm_pro',
-				'dlm_pro'
-			);
-			echo '</div>';
-		}
 	}
 }

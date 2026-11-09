@@ -2,8 +2,8 @@
 Contributors: wpchill, silkalns, barrykooij, mikejolley  
 Tags: download manager, file manager, digital store, ecommerce, password protection  
 Requires at least: 5.5  
-Tested up to: 7.0
-Stable tag: 5.1.13
+Tested up to: 7.1
+Stable tag: 5.3.7
 License: GPLv3  
 Requires PHP: 7.4
 
@@ -114,6 +114,107 @@ Admin hits are not counted, log out and try again!
 4. The quick add panel can be opened via a link about the post editor. This lets you quickly add a file and insert it into a post.
 
 == Changelog ==
+= 5.3.7 - 04.11.2026 =
+Fixed: Incorrect file names on some downloads.
+
+= 5.3.6 - 27.10.2026 =
+Improved: The Custom Fields box is now hidden by default when editing a download or a product and can be enabled from Screen Options.
+Fixed: Duplicating a download no longer breaks meta saved by other plugins and now also copies version meta.
+
+= 5.3.5 - 20.10.2026 =
+Fixed: Security update. Thanks to Karthik Ramakrishnan.
+
+= 5.3.4 - 09.10.2026 =
+Fixed: Downloads using relative file paths not being updated when the file is protected or unprotected from the Media Library.
+Fixed: Security update.
+
+= 5.3.3 - 08.10.2026 =
+Fixed: Remote files with spaces or special characters in the URL failing to download and logging PHP warnings.
+Fixed: Spaces and special characters being removed from file names when downloading.
+
+= 5.3.2 - 07.10.2026 =
+Improved: Settings page layout, with better field sizing and mobile display.
+Fixed: Anonymized IP logging not storing IPv6 addresses.
+Fixed: Download count display issue for some languages.
+Fixed: Compatibility issues with older Download Monitor Pro versions.
+Fixed: Download links not updating when protecting or unprotecting a file from the Media Library.
+
+= 5.3.1 - 30.09.2026 =
+Fixed: Google Drive Grant/Revoke access buttons not working from the Settings page.
+
+= 5.3.0 - 28.09.2026 =
+Changed: Reworked the Settings page.
+Fixed: Various bugfixes and stability improvements.
+
+= 5.2.11 - 28.09.2026 =
+Fixed: Security update.
+
+= 5.2.10 - 23.09.2026 =
+Fixed: Reports page could sometimes fail to load when switching to Detailed Reports.
+Added: Loading indicator when saving a quick-add download.
+
+= 5.2.9 - 07.09.2026 =
+Fixed: Minor translation issue.
+Fixed: Insert Download button not working in some editors.
+
+= 5.2.8 - 02.09.2026 =
+Fixed: PayPal checkout could fail without showing an error message.
+Fixed: Shop currency list limited to currencies supported by PayPal.
+
+= 5.2.7 - 29.07.2026 =
+Fixed: Hardened the XHR download logging endpoint against unauthorized log entries.
+
+= 5.2.6 - 27.07.2026 =
+Fixed: Security update. Thanks to Anirudh Gupta.
+
+= 5.2.5 - 16.07.2026 =
+Fixed: Download loading indicator styling.
+Added: The download_data shortcode now supports custom meta fields.
+
+= 5.2.4 - 14.07.2026 =
+Fixed: Frontend CSS is now always loaded on frontend pages.
+
+= 5.2.3 - 14.07.2026 =
+Fixed: Default download template link rendering inside lists.
+
+= 5.2.2 - 10.07.2026 =
+Changed: Title and Filename download templates restored to default link styling.
+Fixed: Terms & Conditions download behavior and admin list quick edit checkbox.
+
+= 5.2.1 - 07.07.2026 =
+Improved: File browser modal updated.
+Fixed: Downloads widget chart on the dashboard showing incorrect data.
+Fixed: Download title sometimes displayed incorrectly on the Reports page.
+Fixed: PHP notice shown on some admin pages about an incorrectly enqueued script.
+Fixed: File download not working correctly on Safari.
+Improved: Download button templates now integrate better with active theme styling.
+Fixed: Various Terms & Conditions issues, including messaging and translation support.
+
+= 5.2.0 - 15.06.2026 =
+Changed: Improved frontend CSS class naming to avoid conflicts with other plugins.
+Added: Filter to show extra version fields in the download editor.
+Fixed: PHP warning related to session handling on hosts with open_basedir restrictions.
+
+= 5.1.16 - 10.06.2026 =
+Removed: Short Description meta box from download edit page.
+Removed: ID field from Download Information meta box.
+Removed: Manual download count and File Date fields from version editor.
+Added: Title validation — publishing a download without a title now shows an error notice and keeps the download as draft.
+Fixed: Debug Download meta box is now hidden by default, togglable via Screen Options.
+Fixed: Version date is preserved on save instead of being overwritten.
+Fixed: Button styles and radio button selection color in Insert Download popup.
+Fixed: WPML translated endpoint resolution for current language in download handler.
+
+= 5.1.15 - 19.05.2026 =
+Fixed: Compatibility with Divi builder. No longer loading XHR javascript in builder.
+Added: Windows Server (IIS) support for dlm_uploads directory protection via web.config using requestFiltering.
+Fixed: session_start() failure when server session directory is missing, with graceful fallback to sys_get_temp_dir().
+
+= 5.1.14 - 14.04.2026 =
+Fixed: Polylang includes language prefix and any subdirectory.
+Fixed: Error handler returns HTTP 500 instead of 404/403.
+Fixed: No-access modal missing CSS when dlm-frontend was not pre-loaded on the page
+
 = 5.1.13 - 14.04.2026 =
 Fixed: Admin styles compatibility with WordPress 7.0.
 

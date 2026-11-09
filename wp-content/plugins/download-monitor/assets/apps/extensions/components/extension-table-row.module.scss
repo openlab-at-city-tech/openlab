@@ -1,0 +1,91 @@
+.unavailable {
+	opacity: 0.6;
+}
+
+.checkboxColumn {
+	padding: 12px 16px;
+	text-align: center;
+
+	input[type='checkbox'] {
+		margin: 0;
+		cursor: pointer;
+	}
+}
+
+.extensionColumn {
+	padding: 12px 16px;
+	text-align: left;
+}
+
+.extensionInfo {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.extensionDetails {
+	flex: 1;
+	min-width: 0;
+}
+
+.title {
+	display: block;
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--theme-text-color);
+	margin-bottom: 4px;
+}
+
+.actions {
+	margin-top: 4px;
+	font-size: 13px;
+}
+
+.actionLink {
+	color: var(--theme-link-initial-color);
+	text-decoration: none;
+	cursor: pointer;
+	transition: color 0.2s ease;
+
+	&:hover {
+		color: var(--theme-link-hover-color);
+		text-decoration: underline;
+	}
+}
+
+.dependencyNotice {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	margin-top: 4px;
+	font-size: 12px;
+	color: #d63638;
+}
+
+.warningIcon {
+	flex-shrink: 0;
+	color: #d63638;
+}
+
+.descriptionColumn {
+	padding: 12px 16px;
+	text-align: left;
+}
+
+.description {
+	font-size: 13px;
+	line-height: 1.6;
+	color: var(--theme-text-color);
+}
+
+.statusColumn {
+	padding: 12px 16px;
+	text-align: right;
+}
+
+.statusActions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+}

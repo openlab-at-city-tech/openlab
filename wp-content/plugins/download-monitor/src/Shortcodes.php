@@ -97,9 +97,6 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 		 * @return string
 		 */
 		public function download( $atts, $content = '' ) {
-			// enqueue style only on shortcode use
-			wp_enqueue_style( 'dlm-frontend' );
-
 			/**
 			 * Action to allow the adition of extra scripts and code related to the shortcode
 			 *
@@ -330,6 +327,12 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 						}
 
 						return $returnstr;
+					default:
+						$meta = get_post_meta( $id, $data, false );
+						if ( empty( $meta ) ) {
+							return '';
+						}
+						return count( $meta ) === 1 ? $meta[0] : implode( ', ', $meta );
 				}
 			} catch ( Exception $e ) {
 				return '[' . __( 'Download not found', 'download-monitor' )
@@ -355,8 +358,6 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 			 */
 			do_action( 'dlm_downloads_shortcode_scripts' );
 
-			// enqueue style only on shortcode use
-			wp_enqueue_style( 'dlm-frontend' );
 			extract(
 				shortcode_atts(
 					array(
@@ -387,7 +388,7 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 
 						// Output args
 						'template'                  => dlm_get_default_download_template(),
-						'loop_start'                => '<ul class="dlm-downloads">',
+						'loop_start'                => '<ul class="dlm-downloads wp-block-list">',
 						'loop_end'                  => '</ul>',
 						'before'                    => '<li>',
 						'after'                     => '</li>',
@@ -645,7 +646,8 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 
 			wp_reset_postdata();
 
-			return ob_get_clean();
+			$output = ob_get_clean();
+			return preg_replace( '/(\r?\n){2,}/', "\n", $output );
 		}
 
 		/**
@@ -744,10 +746,7 @@ if ( ! class_exists( 'DLM_Shortcodes' ) ) {
 						'download'          => $download,
 						'no_access_message' => ( ( $atts['show_message'] )
 							? wp_kses_post(
-								get_option(
-									'dlm_no_access_error',
-									''
-								)
+								apply_filters( 'dlm_no_access_message', get_option( 'dlm_no_access_error', '' ), $download )
 							) : '' ),
 					)
 				);

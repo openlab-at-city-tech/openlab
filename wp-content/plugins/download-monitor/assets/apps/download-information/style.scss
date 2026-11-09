@@ -1,0 +1,41 @@
+#download-monitor-information .dlm_information_panel {
+	select {
+		width: 100%;
+	}
+
+	.dlm-info-row__control {
+		display: flex;
+		align-items: stretch;
+
+		input {
+			width: auto;
+			flex: 1 1 auto;
+		}
+	}
+}
+
+.dlm-info-row__copy-btn {
+	flex: 0 0 auto !important;
+	width: 40px !important;
+	height: 30px !important;
+	padding: 0 !important;
+	margin: 0 0 0 5px !important;
+	display: inline-flex !important;
+	align-items: center !important;
+	justify-content: center !important;
+	line-height: 1 !important;
+
+	&:before {
+		margin: 0 !important;
+	}
+
+	&.is-copied {
+		background: #00a32a !important;
+		border-color: #00a32a !important;
+	}
+}
+
+.dlm-info-row__copied {
+	display: inline-block;
+	margin-left: 5px;
+}

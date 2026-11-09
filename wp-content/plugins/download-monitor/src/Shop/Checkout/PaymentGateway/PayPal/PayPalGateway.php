@@ -141,14 +141,16 @@ class PayPalGateway extends PaymentGateway\PaymentGateway {
 				'type'  => 'text',
 				'std'   => '',
 				'label' => __( 'Sandbox Client ID', 'download-monitor' ),
-				'desc'  => __( 'Your application sandbox client ID.', 'download-monitor' )
+				'desc'  => __( 'Your application sandbox client ID.', 'download-monitor' ),
+				'child' => true,
 			),
 			array(
 				'name'  => 'sandbox_client_secret',
 				'type'  => 'text',
 				'std'   => '',
 				'label' => __( 'Sandbox Client Secret', 'download-monitor' ),
-				'desc'  => __( 'Your application sandbox client secret.', 'download-monitor' )
+				'desc'  => __( 'Your application sandbox client secret.', 'download-monitor' ),
+				'child' => true,
 			),
 		) );
 	}
@@ -182,7 +184,23 @@ class PayPalGateway extends PaymentGateway\PaymentGateway {
 		try {
 			$payment->createOrder();
 		} catch ( \Exception $ex ) {
-			return new PaymentGateway\Result( false, '', __( 'Could not create payment. Please check your PayPal logs.', 'download-monitor' ) );
+			$raw_message = $ex->getMessage();
+			if ( $ex instanceof \WPChill\DownloadMonitor\Dependencies\PayPalHttp\HttpException ) {
+				$raw_message .= ' (HTTP ' . $ex->statusCode . ')';
+			}
+
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+				error_log( 'DLM PayPal createOrder failed: ' . $raw_message );
+			}
+
+			$error_message = __( 'We could not process your payment. Please try again, or contact us if the problem continues.', 'download-monitor' );
+
+			// admins only
+			if ( current_user_can( 'manage_options' ) ) {
+				$error_message .= ' ' . sprintf( __( '(Admin only) PayPal error: %s', 'download-monitor' ), $this->get_readable_paypal_error( $ex->getMessage() ) );
+			}
+
+			return new PaymentGateway\Result( false, '', $error_message );
 		}
 
 		// create local transaction
@@ -206,6 +224,10 @@ class PayPalGateway extends PaymentGateway\PaymentGateway {
 
 		// get the URL where user can pay
 		$approvalUrl = $payment->getApprovalLink();
+
+		if ( empty( $approvalUrl ) ) {
+			return new PaymentGateway\Result( false, '', __( 'Could not create payment. Please check your PayPal logs.', 'download-monitor' ) );
+		}
 
 		return new PaymentGateway\Result( true, $approvalUrl );
 	}
@@ -335,5 +357,31 @@ class PayPalGateway extends PaymentGateway\PaymentGateway {
 	private function cents_to_full( $fl_cents ) {
 
 		return number_format( ( $fl_cents / 100 ), 2, ".", "" );
+	}
+
+	/**
+	 * @param string $raw_message
+	 *
+	 * @return string
+	 */
+	private function get_readable_paypal_error( $raw_message ) {
+
+		$decoded = json_decode( $raw_message, true );
+
+		if ( is_array( $decoded ) ) {
+			if ( ! empty( $decoded['details'][0]['description'] ) ) {
+				return $decoded['details'][0]['description'];
+			}
+
+			if ( ! empty( $decoded['error_description'] ) ) {
+				return $decoded['error_description'];
+			}
+
+			if ( ! empty( $decoded['message'] ) ) {
+				return $decoded['message'];
+			}
+		}
+
+		return $raw_message;
 	}
 }

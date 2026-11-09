@@ -15,55 +15,47 @@ class DLM_Admin_OptionsUpsells {
 	 * @access public
 	 */
 	public function __construct() {
-		/**
-		 * @hook dlm_remove_upsells
-		 *
-		 * Remove upsells hook
-		 * @since 4.9.4
-		 *
-		 * @hooked DLM_Upsells check_license_validity - 10
-		 */
-		if ( apply_filters( 'dlm_remove_upsells', false ) ) {
-			return;
-		}
-
 		add_action( 'dlm_options_end', array( $this, 'add_upsells_products' ), 99 );
 	}
 
-	public function get_active_addons() {
-
-		return DLM_Product_Manager::get()->get_products();
+	/**
+	 * @return DLM_Pro\Extensions\Extensions|DLM_Extensions_Base
+	 */
+	private function get_extensions_provider() {
+		return class_exists( 'DLM_Pro\Extensions\Extensions' )
+			? DLM_Pro\Extensions\Extensions::get_instance()
+			: DLM_Extensions_Base::get_instance();
 	}
 
 	public function add_upsells_products() {
 
-		$active_addons = $this->get_active_addons();
+		$provider = $this->get_extensions_provider();
 
-		if ( ! array_key_exists( 'dlm-email-lock', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-email-lock' ) ) {
 			$this->render_email_lock_upsell();
 		}
 
-		if ( ! array_key_exists( 'dlm-captcha', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-captcha' ) ) {
 			$this->render_captcha_upsell();
 		}
 
-		if ( ! array_key_exists( 'dlm-mailchimp', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-mailchimp-lock' ) ) {
 			$this->render_mailchimp_upsell();
 		}
 
-		if ( ! array_key_exists( 'dlm-gravity-forms', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-gravity-forms' ) ) {
 			$this->render_gravity_forms_upsell();
 		}
 
-		if ( ! array_key_exists( 'dlm-ninja-forms', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-ninja-forms' ) ) {
 			$this->render_ninja_forms_upsell();
 		}
 
-		if ( ! array_key_exists( 'dlm-cf7-lock', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-cf7-lock' ) ) {
 			$this->render_cf7_forms_upsell();
 		}
 
-		if ( ! array_key_exists( 'dlm-wpforms-lock', $active_addons ) ) {
+		if ( $provider->is_upgradable_addon( 'dlm-wpforms-lock' ) ) {
 			$this->render_wp_forms_upsell();
 		}
 	}

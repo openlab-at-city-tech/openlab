@@ -2031,14 +2031,6 @@ class DLM_Admin_List_Table extends WP_List_Table {
 					'url'      => admin_url( 'edit.php?post_type=dlm_download' ),
 					'priority' => '1',
 				),
-				'suggest_feature' => array(
-					'name'     => esc_html__( 'Suggest a feature',
-					                          'download-monitor' ),
-					'icon'     => 'dashicons-external',
-					'url'      => 'https://forms.gle/3igARBBzrbp6M8Fc7',
-					'target'   => '_blank',
-					'priority' => '60',
-				),
 			);
 
 			if ( current_user_can( 'install_plugins' ) ) {
@@ -2052,8 +2044,6 @@ class DLM_Admin_List_Table extends WP_List_Table {
 
 			/**
 			 * Hook for DLM CPT table view tabs
-			 *
-			 * @hooked DLM_Admin_Extensions dlm_cpt_tabs()
 			 *
 			 * @moved  5.0.0 Moved here from CustomColumns.php
 			 */

@@ -7,106 +7,143 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Download Monitor\n"
 "Report-Msgid-Bugs-To: https://github.com/download-monitor/download-monitor/issues\n"
-"POT-Creation-Date: 2019-02-26 16:28:39+00:00\n"
+"POT-Creation-Date: 2026-10-05 12:16:16+00:00\n"
 "PO-Revision-Date: 2019-02-26 16:32+0000\n"
 "Last-Translator: Barry Kooij <mail@barrykooij.nl>\n"
 "Language-Team: Hungarian (Hungary) (http://www.transifex.com/barrykooijplugins/download-monitor/language/hu_HU/)\n"
+"Language: hu_HU\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: hu_HU\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: grunt-wp-i18n 0.4.9\n"
 
-#: assets/views/meta-box/shop.php:6
-msgid "Is Purchasable"
-msgstr ""
-
-#: assets/views/meta-box/shop.php:12
+#: assets/views/meta-box/product-information.php:6
 msgid "Price (%s)"
 msgstr ""
 
-#: assets/views/meta-box/version.php:8
-msgid "Remove"
-msgstr "Eltávolítás"
+#: assets/views/meta-box/product-information.php:13
+#: src/Admin/Reports/class-dlm-reports.php:590
+#: src/Admin/class-dlm-admin-list-table.php:2030
+#: src/Admin/class-dlm-network-settings.php:50
+#: src/Admin/class-dlm-network-settings.php:51 src/PostTypeManager.php:58
+msgid "Downloads"
+msgstr "Letöltés"
 
-#: assets/views/meta-box/version.php:9
+#: assets/views/meta-box/product-information.php:18
+#, fuzzy
+msgid "Select Downloads&hellip;"
+msgstr "Letöltés keresése"
+
+#: assets/views/meta-box/version.php:10
 msgid "Click to toggle"
 msgstr "Összezárás"
 
-#: assets/views/meta-box/version.php:10
-msgid "Version <span class=\"version\">%s</span> (%s)"
-msgstr "<span class=\"version\">%s</span> (%s) verzió"
+#: assets/views/meta-box/version.php:14
+#, fuzzy
+msgid "Version: "
+msgstr "verzió"
 
-#: assets/views/meta-box/version.php:10 assets/views/meta-box/version.php:24
+#: assets/views/meta-box/version.php:14 assets/views/meta-box/version.php:142
 msgid "n/a"
 msgstr "n/a"
 
-#: assets/views/meta-box/version.php:10
-msgid "Downloaded %s time"
-msgid_plural "Downloaded %s times"
-msgstr[0] "Letöltve %s alkalommal"
-msgstr[1] "Letöltve %s alkalommal"
+#: assets/views/meta-box/version.php:18
+#, fuzzy
+msgid "%s downloads"
+msgstr "1 letöltés"
 
-#: assets/views/meta-box/version.php:22 src/Admin/CustomColumns.php:28
-#: src/Admin/MediaInsert.php:241
-#: templates/shop/email/elements/downloads-table.php:10
-msgid "Version"
-msgstr "verzió"
+#: assets/views/meta-box/version.php:32 assets/views/meta-box/version.php:92
+#: src/Admin/WritePanels.php:258
+#, fuzzy
+msgid "Uploading file:"
+msgstr "Fájlfeltöltés"
 
-#: assets/views/meta-box/version.php:28
-msgid "File URL(s)"
-msgstr "Fájl URL cím(ek)"
+#: assets/views/meta-box/version.php:34 assets/views/meta-box/version.php:94
+#: src/Admin/WritePanels.php:263
+#, fuzzy
+msgid "File uploaded."
+msgstr "Fájl dátuma"
 
-#: assets/views/meta-box/version.php:31
-msgid ""
-"Enter one file path/URL per line - multiple files will be used as mirrors "
-"(chosen at random)."
-msgstr "Soronként egy fájl elérési utat/URL címet adjunk meg - a többes fájlok tükrözéshez kerülnek használatra (a választás véletlenszerű)."
+#: assets/views/meta-box/version.php:44
+#, fuzzy
+msgid "Drag & Drop here"
+msgstr "Húzzuk ide a fájlt"
 
-#: assets/views/meta-box/version.php:37
+#: assets/views/meta-box/version.php:52 assets/views/meta-box/version.php:105
+#: src/Admin/WritePanels.php:283
 msgid "Upload file"
 msgstr "Fájlfeltöltés"
 
-#: assets/views/meta-box/version.php:39
+#: assets/views/meta-box/version.php:55 assets/views/meta-box/version.php:108
+#: src/Admin/WritePanels.php:286
+msgid "Media Library"
+msgstr ""
+
+#: assets/views/meta-box/version.php:57 assets/views/meta-box/version.php:110
+#: src/Admin/WritePanels.php:288
 msgid "Choose a file"
 msgstr "Válasszunk egy fájlt"
 
-#: assets/views/meta-box/version.php:40
+#: assets/views/meta-box/version.php:58 assets/views/meta-box/version.php:111
+#: src/Admin/WritePanels.php:289
 msgid "Insert file URL"
 msgstr "Fájl URL címének beillesztése"
 
-#: assets/views/meta-box/version.php:44
+#: assets/views/meta-box/version.php:62 src/Admin/WritePanels.php:293
+msgid "Custom URL"
+msgstr ""
+
+#: assets/views/meta-box/version.php:67 assets/views/meta-box/version.php:117
+#: src/Admin/WritePanels.php:298
 msgid "Browse for file"
 msgstr "Tallózás"
 
-#: assets/views/meta-box/version.php:64 src/Admin/CustomColumns.php:31
-#: src/Admin/Dashboard.php:74 src/Widgets/Downloads.php:212
-msgid "Download count"
+#: assets/views/meta-box/version.php:90
+msgid "File URL(s); note: only enter multiple URLs in here if you want to use file mirrors"
+msgstr ""
+
+#: assets/views/meta-box/version.php:100
+msgid "Enter one file path/URL per line - multiple files will be used as mirrors (chosen at random)."
+msgstr "Soronként egy fájl elérési utat/URL címet adjunk meg - a többes fájlok tükrözéshez kerülnek használatra (a választás véletlenszerű)."
+
+#: assets/views/meta-box/version.php:132
+msgid "You can use %1$sDrag & Drop%2$s to upload files"
+msgstr ""
+
+#: assets/views/meta-box/version.php:139 src/Admin/MediaInsert.php:268
+#: src/Admin/class-dlm-admin-list-table.php:624
+#: templates/shop/email/elements/downloads-table.php:23
+msgid "Version"
+msgstr "verzió"
+
+#: assets/views/meta-box/version.php:148
+#, fuzzy
+msgid "Manual download count"
 msgstr "Letöltés számlálás"
 
-#: assets/views/meta-box/version.php:71
+#: assets/views/meta-box/version.php:150
+msgid "Taken into consideration for the total download count ( total = Download Monitor custom table count + manual download count )."
+msgstr ""
+
+#: assets/views/meta-box/version.php:158
 msgid "File Date"
 msgstr "Fájl dátuma"
 
-#: assets/views/meta-box/version.php:74
+#: assets/views/meta-box/version.php:163
 msgid "h"
 msgstr "ó"
 
-#: assets/views/meta-box/version.php:77
+#: assets/views/meta-box/version.php:168
 msgid "m"
 msgstr "p"
 
 #: assets/views/notice-lu-upgrade.php:7
-msgid ""
-"It looks like you upgraded to the latest version of Download Monitor from a "
-"legacy version (3.x)"
+msgid "It looks like you upgraded to the latest version of Download Monitor from a legacy version (3.x)"
 msgstr ""
 
 #: assets/views/notice-lu-upgrade.php:8
-msgid ""
-"Currently your downloads don't work like they should, we need to %s before "
-"they'll work again."
+msgid "Currently your downloads don't work like they should, we need to %s before they'll work again."
 msgstr ""
 
 #: assets/views/notice-lu-upgrade.php:8
@@ -114,10 +151,7 @@ msgid "upgrade your downloads"
 msgstr ""
 
 #: assets/views/notice-lu-upgrade.php:9
-msgid ""
-"We've created an upgrading tool that will do all the work for you. You can "
-"read more about this tool on %sour website (click here)%s or start the "
-"upgrade now."
+msgid "We've created an upgrading tool that will do all the work for you. You can read more about this tool on %sour website (click here)%s or start the upgrade now."
 msgstr ""
 
 #: assets/views/notice-lu-upgrade.php:10
@@ -137,11 +171,13 @@ msgid "Order Items"
 msgstr ""
 
 #: assets/views/order/page-order-details.php:25
-#: templates/shop/checkout/order-review.php:16
+#: includes/admin/wpchill/class-wpchill-about-us.php:65
+#: src/Shop/Util/PostType.php:19 templates/shop/checkout/order-review.php:23
 msgid "Product"
 msgstr ""
 
-#: assets/views/order/page-order-details.php:26 templates/shop/cart.php:20
+#: assets/views/order/page-order-details.php:26
+#: src/Shop/Admin/ProductTableColumns.php:37 templates/shop/cart.php:27
 msgid "Price"
 msgstr ""
 
@@ -151,9 +187,9 @@ msgstr ""
 
 #: assets/views/order/page-order-details.php:28
 #: assets/views/order/page-order-details.php:47
-#: src/Shop/Admin/OrderTable.php:154 templates/shop/cart/totals.php:25
-#: templates/shop/cart.php:22 templates/shop/checkout/order-review.php:17
-#: templates/shop/checkout/order-review.php:38
+#: src/Shop/Admin/OrderTable.php:155 templates/shop/cart/totals.php:32
+#: templates/shop/cart.php:29 templates/shop/checkout/order-review.php:24
+#: templates/shop/checkout/order-review.php:45
 msgid "Total"
 msgstr ""
 
@@ -161,18 +197,20 @@ msgstr ""
 msgid "Transactions"
 msgstr ""
 
-#: assets/views/order/page-order-details.php:67 src/Admin/CustomColumns.php:26
-#: src/Admin/WritePanels.php:79 src/Widgets/Downloads.php:206
+#: assets/views/order/page-order-details.php:67
+#: src/Shop/Admin/WritePanels.php:205 src/Widgets/Downloads.php:217
 msgid "ID"
 msgstr "ID"
 
-#: assets/views/order/page-order-details.php:68 src/Logs/LogExportCSV.php:76
-#: src/Logs/LoggingListTable.php:200 src/Shop/Admin/OrderTable.php:152
+#: assets/views/order/page-order-details.php:68
+#: src/Admin/class-dlm-admin-list-table.php:1439
+#: src/Shop/Admin/OrderTable.php:153 src/Shop/Admin/ProductTableColumns.php:38
 msgid "Date"
 msgstr "Dátum"
 
-#: assets/views/order/page-order-details.php:69 src/Logs/LogExportCSV.php:77
-#: src/Shop/Admin/OrderTable.php:153
+#: assets/views/order/page-order-details.php:69
+#: src/Admin/class-dlm-admin-list-table.php:1783
+#: src/Shop/Admin/OrderTable.php:154
 msgid "Status"
 msgstr "Állapot"
 
@@ -197,12 +235,12 @@ msgid "Customer"
 msgstr ""
 
 #: assets/views/order/page-order-details.php:141
-#: templates/shop/checkout/order-complete.php:21
+#: templates/shop/checkout/order-complete.php:29
 msgid "Order Details"
 msgstr ""
 
 #: assets/views/order/page-order-details.php:146
-#: templates/shop/checkout/order-complete.php:29
+#: templates/shop/checkout/order-complete.php:37
 msgid "Order Status"
 msgstr ""
 
@@ -215,7 +253,6 @@ msgid "Date created"
 msgstr ""
 
 #: assets/views/order/page-order-details.php:165
-#: src/Logs/LoggingListTable.php:198
 msgid "IP Address"
 msgstr "IP cím"
 
@@ -224,127 +261,439 @@ msgid "Payment Method"
 msgstr ""
 
 #: assets/views/order/page-order-overview.php:15
-#: src/Shop/Admin/Pages/Orders.php:21
+#: src/Shop/Admin/Pages/Orders.php:23
 msgid "Orders"
 msgstr ""
 
-#: includes/php-too-low.php:20
-msgid "PHP Version too low!"
+#: includes/admin/class-dlm-beta-testers.php:19
+msgid "Download Monitor - BETA testers - needed!"
 msgstr ""
 
-#: includes/php-too-low.php:23
-msgid ""
-"Download Monitor can't be loaded because it needs at least %s but the server"
-" that is hosting your WordPress website is running %s"
+#: includes/admin/class-dlm-beta-testers.php:20
+msgid "<p> We've been working (hard!) on Download Monitor 4.6.0 which comes with a ton of improvements. We need hlep testing it out to make sure we don't break anything.</p><p> Just click on this link %1$s, download and install Download Monitor 4.6.0 and test for issues. Please report any issue found back to us via: %2$s.</p>"
 msgstr ""
 
-#: includes/php-too-low.php:24 includes/php-too-low.php:25
-msgid "PHP Version %s"
+#: includes/admin/class-dlm-beta-testers.php:21
+msgid "New features in this version:"
 msgstr ""
 
-#: includes/php-too-low.php:28
-msgid ""
-"You can learn more about why it's important that you update and get tips on "
-"how to update by %s"
+#: includes/admin/class-dlm-beta-testers.php:29
+msgid "here"
 msgstr ""
 
-#: includes/php-too-low.php:29
-msgid "clicking this link"
+#: includes/admin/class-dlm-beta-testers.php:30
+msgid "contact us form"
 msgstr ""
 
-#: includes/php-too-low.php:32
-msgid ""
-"After you've upgraded your PHP version, Download Monitor will automatically "
-"load and work."
+#: includes/admin/class-dlm-beta-testers.php:106
+#: src/Admin/class-dlm-db-upgrader.php:185
+#: src/Admin/class-dlm-db-upgrader.php:262
+#: src/Admin/class-dlm-db-upgrader.php:347
+#: src/Admin/class-dlm-db-upgrader.php:431 src/AjaxHandler.php:371
+msgid "You do not have permission to do this."
 msgstr ""
 
-#: src/Admin/Admin.php:226 src/Admin/Extensions.php:34
-msgid "Download Monitor Extensions"
+#: includes/admin/class-dlm-review.php:21
+msgid "Hi there! Stoked to see you're using Download Monitor for a few days now - hope you like it! And if you do, please consider rating it. It would mean the world to us.  Keep on rocking!"
 msgstr ""
 
-#: src/Admin/Admin.php:226 src/DLM.php:259 src/Util/Onboarding.php:205
-msgid "Extensions"
+#: includes/admin/class-dlm-review.php:22
+msgid "Rate the plugin"
 msgstr ""
 
-#: src/Admin/Admin.php:276
-msgid ""
-"If you like %sDownload Monitor%s please leave us a %s★★★★★%s rating. A huge "
-"thank you from us in advance!"
+#: includes/admin/class-dlm-review.php:23
+msgid "Remind me later"
 msgstr ""
 
-#: src/Admin/AdminScripts.php:169 src/Admin/MediaInsert.php:36
-#: src/Admin/MediaInsert.php:55
+#: includes/admin/class-dlm-review.php:24
+msgid "Don't show again"
+msgstr ""
+
+#: includes/admin/class-dlm-review.php:116 src/AjaxHandler.php:293
+#: src/AjaxHandler.php:344
+msgid "You do not have permission to do this"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:137
+msgid "AVAILABLE WITH PREMIUM"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:138
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:29
+#: src/Admin/UpsellsTemplates/dlm_lm-modal-upsell.php:29
+msgid "Free vs Premium"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:139
+msgid "Get Premium"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:159
+#, fuzzy
+msgid "Downloading page"
+msgstr "Letöltés címke"
+
+#: includes/admin/class-dlm-upsells.php:170 src/Admin/Settings/Settings.php:292
+msgid "External Hosting"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:216 src/Admin/Settings/Settings.php:287
+msgid "Content Locking"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:220 src/Admin/OptionsUpsells.php:131
+#: src/Admin/Settings/Settings.php:679
+msgid "Ninja Forms"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:225 src/Admin/OptionsUpsells.php:114
+#: src/Admin/Settings/Settings.php:696
+msgid "Gravity Forms"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:232
+msgid "Email lock"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:237 src/Admin/OptionsUpsells.php:148
+#: src/Admin/Settings/Settings.php:714
+msgid "Contact Form 7"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:242
+msgid "WP Forms"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:249
+msgid "External hosting"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:252
+#: includes/admin/class-dlm-upsells.php:355 src/Admin/Settings/Settings.php:801
+#: src/RestAPI/class-dlm-extensions-base.php:139
+msgid "Amazon S3"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:257
+#: includes/admin/class-dlm-upsells.php:367 src/Admin/Settings/Settings.php:860
+#: src/RestAPI/class-dlm-extensions-base.php:146
+msgid "Google Drive"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:264 src/Admin/Settings/Settings.php:154
+msgid "Advanced"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:267
+#: src/RestAPI/class-dlm-extensions-base.php:125
+msgid "Document Library Manager (Page Addon)"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:272 src/Admin/Settings/Settings.php:186
+#: src/RestAPI/class-dlm-extensions-base.php:132
+#, fuzzy
+msgid "Downloading Page"
+msgstr "Letöltés címke"
+
+#: includes/admin/class-dlm-upsells.php:277
+#: includes/admin/class-dlm-upsells.php:287
+msgid "Captcha"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:284 src/Admin/Settings/Settings.php:297
+msgid "Integration"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:336
+msgid "Customize the downloading page by adding banners, ads, and anything you like."
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:358
+msgid "Use Amazon S3 links for Download Monitor files to run secure, expiring download links."
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:370
+msgid "With this extension, you can integrate your files from Google Drive into Download Monitor."
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:405
+#: includes/admin/class-dlm-upsells.php:406
+msgid "LITE vs Premium"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:451
+msgid "Update DLM Pro!"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:454
+msgid "Upgrade!"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:454
+msgid "Upgrade to Premium!"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:481
+msgid "Compare dates and view chart to see how you’ve done"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:485
+msgid "Show number of completed downloads per download"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:489
+msgid "Show number of redirected downloads per download"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:493
+#, fuzzy
+msgid "Show number of failed downloads per download"
+msgstr "Csak a regisztráltaknak szóló letöltés mutatása"
+
+#: includes/admin/class-dlm-upsells.php:497
+msgid "Show % of downloads from the total downloads number"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:501
+msgid "Show number of completed downloads by logged in users"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:505
+msgid "Show number of completed downloads by logged out users"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:509
+msgid "See active users and their download information"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:513
+msgid "Show the location from where in the site the user downloaded"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:517
+#, fuzzy
+msgid "Show the download's category"
+msgstr "Letöltési kategória frissítés"
+
+#: includes/admin/class-dlm-upsells.php:524
+#: src/RestAPI/class-dlm-extensions-base.php:90
+msgid "Enhanced Metrics"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:556
+msgid "Global Rules"
+msgstr ""
+
+#: includes/admin/class-dlm-upsells.php:557
+msgid "Library Manager"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:68
+#: includes/admin/uninstall/class-dlm-uninstall.php:122
+msgid "Uninstall"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:118
+msgid "Cleaning..."
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:139
+msgid "Sorry to see you go"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:140
+msgid " Caution!! This action CANNOT be undone"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:143
+msgid "Delete all data"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:144
+msgid "Select this to delete all data Download Monitor plugin and it's add-ons have set in your database."
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:147
+#, fuzzy
+msgid "Delete Download Monitor's options"
+msgstr "Download Monitor"
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:148
+msgid "Delete options set by Download Monitor plugin and it's add-ons  to options table in the database."
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:151
+msgid "Delete Download Monitor set transients"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:152
+msgid "Delete transients set by Download Monitor plugin and it's add-ons  to options table in the database."
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:155
+msgid "Delete dlm_download custom post type"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:156
+msgid "Delete custom post types set by Download Monitor plugin and it's add-ons in the database."
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:159
+msgid "Delete set tables  "
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:160
+msgid "Delete tables set by plugin (  Ex.: Logs table )"
+msgstr ""
+
+#: includes/admin/uninstall/class-dlm-uninstall.php:177
+msgid "You do not have permission to delete data from this plugin"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:34
+#: includes/admin/wpchill/class-wpchill-about-us.php:35
+msgid "About Us"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:57
+msgid "About WPChill"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:59
+msgid "Reliable WordPress Solutions Tailored for You"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:60
+msgid "At WPChill, our commitment goes beyond just creating WordPress solutions—we're dedicated to delivering user-friendly products that help people save time, money, and effort. Every product we offer is built with care, shaped by our experience, and backed by our promise to support our users every step of the way. When you choose WPChill, you're not just purchasing a product; you're gaining a reliable partner."
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:66
+#, fuzzy
+msgid "Description"
+msgstr "Rövid leírás"
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:67
+msgid "Website"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:68
+msgid "Try plugin"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:152
+msgid "Details"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:163
+msgid "Install"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:163
+msgid "Activate"
+msgstr ""
+
+#: includes/admin/wpchill/class-wpchill-about-us.php:167
+msgid "Active"
+msgstr ""
+
+#. Translators: %s represents the time elapsed (e.g., "5 minutes", "2 hours",
+#. "1 day").
+#: includes/admin/wpchill/class-wpchill-notifications.php:131
+msgid "%s ago"
+msgstr "%s telt el a letöltés óta"
+
+#: includes/backwards-compatibility/class-dlm-admin-extensions-compat.php:40
+msgid "DLM Pro needs an update"
+msgstr ""
+
+#. translators: 1: currently installed DLM Pro version, 2: minimum required
+#. version
+#: includes/backwards-compatibility/class-dlm-admin-extensions-compat.php:43
+msgid "You're running an outdated version of DLM Pro (%1$s). Please update it to version %2$s or later to keep using Download Monitor extensions."
+msgstr ""
+
+#: includes/backwards-compatibility/class-dlm-admin-extensions-compat.php:54
+msgid "Go to Plugins"
+msgstr ""
+
+#. translators: 1: currently installed DLM Pro version, 2: minimum required
+#. version, 3: opening link tag to the Plugins page, 4: closing link tag
+#: includes/backwards-compatibility/class-dlm-admin-extensions-compat.php:74
+msgid "Download Monitor: you're running an outdated version of DLM Pro (%1$s). Please update it to version %2$s or later to keep using Download Monitor extensions. %3$sGo to Plugins%4$s"
+msgstr ""
+
+#: src/Admin/Admin.php:248
+msgid "If you like %sDownload Monitor%s please leave us a %s★★★★★%s rating. A huge thank you from us in advance!"
+msgstr ""
+
+#: src/Admin/Admin.php:354
+#, fuzzy
+msgid "Endpoint already in use!"
+msgstr "Végső kimenet értéke"
+
+#. translators: %s is replaced with the endpoint.
+#: src/Admin/Admin.php:356
+msgid "The Download Monitor endpoint \"%s\" is already in use by a page or post. Please change the endpoint to something else."
+msgstr ""
+
+#: src/Admin/AdminScripts.php:207 src/Admin/class-dlm-admin-list-table.php:1063
+#: src/Shop/Admin/ProductTableColumns.php:97 src/Shop/Admin/WritePanels.php:212
+#: src/Shop/Util/Assets.php:70
+#, fuzzy
+msgid "Copy shortcode"
+msgstr "Rövidkód beillesztése"
+
+#: src/Admin/AdminScripts.php:208 src/Admin/WritePanels.php:150
+msgid "Copied"
+msgstr ""
+
+#: src/Admin/AdminScripts.php:261 src/Admin/MediaInsert.php:36
+#: src/Admin/MediaInsert.php:57
 msgid "Insert Download"
 msgstr "Letöltés beillesztése"
 
-#: src/Admin/AdminScripts.php:174
+#: src/Admin/AdminScripts.php:266
 msgid "Are you sure you want to delete this file ? "
 msgstr ""
 
-#: src/Admin/AdminScripts.php:175 src/Admin/MediaBrowser.php:34
+#: src/Admin/AdminScripts.php:267
 msgid "Browse for a file"
 msgstr "Tallózás.."
 
-#: src/Admin/CustomActions.php:61
+#: src/Admin/CustomActions.php:78
 msgid "Select a category"
 msgstr "Kategória választása"
 
-#: src/Admin/CustomActions.php:207
+#: src/Admin/CustomActions.php:239
 msgid "Download Monitor Data"
 msgstr ""
 
-#: src/Admin/CustomActions.php:209 src/Admin/WritePanels.php:129
+#: src/Admin/CustomActions.php:240 src/Admin/WritePanels.php:189
 msgid "Featured download"
 msgstr "Kiemelt letöltés"
 
-#: src/Admin/CustomActions.php:211 src/Admin/CustomColumns.php:33
-#: src/Admin/WritePanels.php:135
+#: src/Admin/CustomActions.php:241 src/Admin/WritePanels.php:195
 msgid "Members only"
 msgstr "Csak regisztrált felhasználóknak"
 
-#: src/Admin/CustomActions.php:213 src/Admin/WritePanels.php:141
+#: src/Admin/CustomActions.php:242 src/Admin/WritePanels.php:201
 msgid "Redirect to file"
 msgstr "Átirányítás fájlba"
 
-#: src/Admin/CustomColumns.php:24
-msgid "Image"
-msgstr "Kép"
+#: src/Admin/CustomActions.php:243
+msgid "Terms & Conditions required"
+msgstr ""
 
-#: src/Admin/CustomColumns.php:25 src/Widgets/Downloads.php:172
-#: src/Widgets/Downloads.php:202
-msgid "Title"
-msgstr "Cím"
+#: src/Admin/CustomActions.php:459
+#, fuzzy
+msgid "Download Duplicated"
+msgstr "Letöltés frissítve"
 
-#: src/Admin/CustomColumns.php:27 src/Logs/LoggingListTable.php:196
-msgid "File"
-msgstr "Fájl"
-
-#: src/Admin/CustomColumns.php:29 src/TaxonomyManager.php:27
-#: src/TaxonomyManager.php:30
-msgid "Categories"
-msgstr "Letöltési kategória"
-
-#: src/Admin/CustomColumns.php:30 src/TaxonomyManager.php:59
-#: src/TaxonomyManager.php:62
-msgid "Tags"
-msgstr "Letöltés címke"
-
-#: src/Admin/CustomColumns.php:32
-msgid "Featured"
-msgstr "Kiemelt"
-
-#: src/Admin/CustomColumns.php:34
-msgid "Redirect only"
-msgstr "Csak átirányítás"
-
-#: src/Admin/CustomColumns.php:35
-msgid "Date posted"
-msgstr "Dátum elküldve"
-
-#: src/Admin/CustomColumns.php:90 src/Admin/CustomColumns.php:97
-#: src/Admin/CustomColumns.php:104
-msgid "Yes"
-msgstr "Igen"
+#. translators: %s is replaced with the name of the duplicated download.
+#: src/Admin/CustomActions.php:461
+#, fuzzy
+msgid "Download \"%s\" successfully duplicated!"
+msgstr "A letöltés sikeresen létrehozva."
 
 #: src/Admin/CustomLabels.php:24
 msgid "Download title"
@@ -390,707 +739,1989 @@ msgstr "Y-m-d  H:i"
 msgid "Download draft updated."
 msgstr "Letöltés vázlat frissítve."
 
-#: src/Admin/Dashboard.php:23
-msgid "Popular Downloads"
-msgstr "Népszerű letöltések"
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:174
+#, fuzzy
+msgid "Approved Download Paths"
+msgstr "Összes letöltés-címke"
 
-#: src/Admin/Dashboard.php:60
-msgid "There are no stats available yet!"
-msgstr "Még nem érhető el statisztikai adat."
-
-#: src/Admin/Dashboard.php:73 src/Logs/LoggingListTable.php:195
-#: src/PostTypeManager.php:23
-msgid "Download"
-msgstr "Letöltés"
-
-#: src/Admin/Extensions.php:67
-msgid ""
-"Extend Download Monitor with its powerful free and paid extensions. %sClick "
-"here to browse all extensions%s"
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:201
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:224
+msgid "No path provided"
 msgstr ""
 
-#: src/Admin/MediaBrowser.php:108
-msgid "No files found"
-msgstr "Nem található fájl"
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:205
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:228
+msgid "You do not have permission to update the path"
+msgstr ""
 
-#: src/Admin/MediaInsert.php:66 src/Admin/MediaInsert.php:204
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:209
+#, fuzzy
+msgid "Path updated"
+msgstr "Letöltés frissítve"
+
+#: src/Admin/DownloadPaths/class-dlm-downloads-path.php:234
+msgid "Path enabled"
+msgstr ""
+
+#: src/Admin/MediaInsert.php:68 src/Admin/MediaInsert.php:231
 msgid "Insert Shortcode"
 msgstr "Rövidkód beillesztése"
 
-#: src/Admin/MediaInsert.php:67
+#: src/Admin/MediaInsert.php:73
 msgid "Quick-add download"
 msgstr "Gyors letöltés hozzáadás"
 
-#: src/Admin/MediaInsert.php:114
+#: src/Admin/MediaInsert.php:86
+msgid "You do not have sufficient permissions to perform this action."
+msgstr ""
+
+#: src/Admin/MediaInsert.php:126
 msgid "Error: File was not created."
 msgstr "Hiba: Nem hozható létre a fájl."
 
-#: src/Admin/MediaInsert.php:134
+#: src/Admin/MediaInsert.php:152
 msgid "Download successfully created."
 msgstr "A letöltés sikeresen létrehozva."
 
-#: src/Admin/MediaInsert.php:137
+#: src/Admin/MediaInsert.php:155
 msgid "Error: Download was not created."
 msgstr "Hiba: A letöltés nem hozható létre."
 
-#: src/Admin/MediaInsert.php:161
+#: src/Admin/MediaInsert.php:181
 msgid "Search download"
 msgstr ""
 
-#: src/Admin/MediaInsert.php:169
+#: src/Admin/MediaInsert.php:189
 msgid "Choose a download"
 msgstr "Válasszunk ki egy letöltést"
 
-#: src/Admin/MediaInsert.php:194
+#: src/Admin/MediaInsert.php:214 src/Admin/class-dlm-admin-list-table.php:1636
 msgid "Template"
 msgstr "Sablonminta"
 
-#: src/Admin/MediaInsert.php:196
+#: src/Admin/MediaInsert.php:224
 msgid "Template Name"
 msgstr "Sablonminta neve"
 
-#: src/Admin/MediaInsert.php:198
-msgid ""
-"Leaving this blank will use the default <code>content-download.php</code> "
-"template file. If you enter, for example, <code>image</code>, the <code"
-">content-download-image.php</code> template will be used instead."
+#: src/Admin/MediaInsert.php:226
+msgid "Leaving this blank will use the default <code>content-download.php</code> template file. If you enter, for example, <code>image</code>, the <code>content-download-image.php</code> template will be used instead."
 msgstr "Alapértelmezetként hagyjuk üresen a <code>content-download.php</code> mintasablon fájl használatához. Amennyiben pl. az <code>image</code> kerül megadásra, akkor a <code>content-download-image.php</code> mintasablon fog helyette használatba kerülni."
 
-#: src/Admin/MediaInsert.php:215
+#: src/Admin/MediaInsert.php:242
 msgid "Drop file here"
 msgstr "Húzzuk ide a fájlt"
 
-#: src/Admin/MediaInsert.php:220
+#: src/Admin/MediaInsert.php:245
 msgid "Select File"
 msgstr "Válasszunk egy fájlt"
 
-#: src/Admin/MediaInsert.php:224
-msgid "Enter URL manually"
-msgstr "URL megadása kézzel"
-
-#: src/Admin/MediaInsert.php:229
-msgid "Download URL"
-msgstr "Letöltési URL"
-
-#: src/Admin/MediaInsert.php:231
-msgid "Required URL"
-msgstr "Kötelező URL"
-
-#: src/Admin/MediaInsert.php:235 src/Logs/LogExportCSV.php:68
-msgid "Download Title"
-msgstr "Letöltés neve"
-
-#: src/Admin/MediaInsert.php:237
-msgid "Required title"
-msgstr "Kötelező cím"
-
-#: src/Admin/MediaInsert.php:243
-msgid "Optional version number"
-msgstr "Verziószám (opcionális)"
-
 #: src/Admin/MediaInsert.php:248
-msgid "Save Download"
-msgstr "Letöltés mentése"
-
-#: src/Admin/MediaInsert.php:304
-msgid "Allowed Files"
-msgstr "Engedélyezett fájlok"
-
-#: src/Admin/MediaInsert.php:354
 msgid "Please wait..."
 msgstr "Kis türelmet kérünk..."
 
-#: src/Admin/Reports/Page.php:23
+#: src/Admin/MediaInsert.php:253
+msgid "Enter URL manually"
+msgstr "URL megadása kézzel"
+
+#: src/Admin/MediaInsert.php:258
+msgid "Download URL"
+msgstr "Letöltési URL"
+
+#: src/Admin/MediaInsert.php:259
+msgid "Required URL"
+msgstr "Kötelező URL"
+
+#: src/Admin/MediaInsert.php:263
+msgid "Download Title"
+msgstr "Letöltés neve"
+
+#: src/Admin/MediaInsert.php:264
+msgid "Required title"
+msgstr "Kötelező cím"
+
+#: src/Admin/MediaInsert.php:269
+msgid "Optional version number"
+msgstr "Verziószám (opcionális)"
+
+#: src/Admin/MediaInsert.php:274
+msgid "Save Download"
+msgstr "Letöltés mentése"
+
+#: src/Admin/MediaInsert.php:351
+msgid "Allowed Files"
+msgstr "Engedélyezett fájlok"
+
+#: src/Admin/OptionsUpsells.php:68 src/Admin/Settings/Settings.php:478
+#: src/RestAPI/class-dlm-extensions-base.php:181
+msgid "Email Lock"
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:69
+msgid "Email locked downloads will only be available after user entered their email address."
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:80
+#, fuzzy
+msgid "Require Captcha"
+msgstr "Kötelező cím"
+
+#: src/Admin/OptionsUpsells.php:81
+msgid "User is required to complete a reCAPTCHA before access is granted to the download."
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:97
+msgid "Mailchimp lock"
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:98
+msgid "Require users to subscribe to a Mailchimp list before access is granted to the download."
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:115
+msgid "Require users to complete a Gravity Forms form before access is granted to the download."
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:132
+msgid "Require users to complete a Ninja Forms form before access is granted to the download."
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:149
+msgid "Require users to complete a Contact Form 7 form before access is granted to the download."
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:165 src/Admin/Settings/Settings.php:732
+msgid "WPForms"
+msgstr ""
+
+#: src/Admin/OptionsUpsells.php:166
+msgid "Require users to complete a WPForms form before access is granted to the download."
+msgstr ""
+
+#: src/Admin/Reports/class-dlm-reports-rest-api.php:155
+msgid "Sorry, you are not allowed to see data from this endpoint."
+msgstr ""
+
+#: src/Admin/Reports/class-dlm-reports.php:44
+#: src/Admin/Reports/class-dlm-reports.php:45
+#: src/Admin/Settings/Settings.php:240 src/Admin/Settings/Settings.php:1080
 msgid "Reports"
 msgstr ""
 
-#: src/Admin/Reports/Page.php:115
-msgid "Switch to %s"
-msgstr ""
-
-#: src/Admin/Reports/Page.php:140
-msgid "Per Day"
-msgstr ""
-
-#: src/Admin/Reports/Page.php:141
-msgid "Month"
-msgstr ""
-
-#: src/Admin/Reports/Page.php:180
-msgid "Download Reports"
-msgstr ""
-
-#: src/Admin/Settings/Fields/LazySelect.php:41
-msgid "Loading"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:22 src/DLM.php:258
-msgid "Settings"
-msgstr "Beállítások"
-
-#: src/Admin/Settings/Page.php:67
-msgid "Download Monitor Transients successfully cleared!"
-msgstr ""
-
-#: src/Admin/Settings/Page.php:101
-msgid "Settings successfully saved"
-msgstr "A beállítások sikeresen mentésre kerültek."
-
-#: src/Admin/Settings/Page.php:178
-msgid "Save Changes"
-msgstr "Módosítások mentlése"
-
-#: src/Admin/Settings/Page.php:203
-msgid ""
-"Because your server is running on nginx, our .htaccess file can't protect "
-"your downloads."
-msgstr ""
-
-#: src/Admin/Settings/Page.php:204
-msgid ""
-"Please add the following rules to your nginx config to disable direct file "
-"access: %s"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:65 src/Admin/Settings/Settings.php:309
+#: src/Admin/Settings/Settings.php:90 src/Admin/Settings/Settings.php:317
 msgid "General"
 msgstr "Általános"
 
-#: src/Admin/Settings/Settings.php:72
-msgid "Default Template"
-msgstr "Alapértelmezett mintasablon"
+#: src/Admin/Settings/Settings.php:93
+#, fuzzy
+msgid "General settings"
+msgstr "Általános"
 
-#: src/Admin/Settings/Settings.php:73
-msgid ""
-"Choose which template is used for <code>[download]</code> shortcodes by "
-"default (this can be overridden by the <code>format</code> argument)."
-msgstr "Válasszuk ki, hogy az alapértelmezett <code>[download]</code> rövidkód esetén melyik mintasablon legyen az alapértelmezett (ez a <code>format</code> argumentummal felülírható)."
-
-#: src/Admin/Settings/Settings.php:81
-msgid "Custom Template"
-msgstr "Egyedi sablonminta"
-
-#: src/Admin/Settings/Settings.php:82
-msgid ""
-"Leaving this blank will use the default <code>content-download.php</code> "
-"template file. If you enter, for example, <code>button</code>, the <code"
-">content-download-button.php</code> template will be used instead. You can "
-"add custom templates inside your theme folder."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:87
-msgid "X-Accel-Redirect / X-Sendfile"
-msgstr "X-Accel-Redirect / X-Sendfile"
-
-#: src/Admin/Settings/Settings.php:88 src/Admin/Settings/Settings.php:96
-#: src/Admin/Settings/Settings.php:104 src/Admin/Settings/Settings.php:112
-#: src/Admin/Settings/Settings.php:201 src/Admin/Settings/Settings.php:223
-#: src/Admin/Settings/Settings.php:231 src/Admin/Settings/Settings.php:379
-msgid "Enable"
-msgstr "Bekapcsol"
-
-#: src/Admin/Settings/Settings.php:89
-msgid ""
-"If supported, <code>X-Accel-Redirect</code> / <code>X-Sendfile</code> can be"
-" used to serve downloads instead of PHP (server requires "
-"<code>mod_xsendfile</code>)."
-msgstr "Amennyiben az <code>X-Accel-Redirect</code> / <code>X-Sendfile</code> támogatott, a PHP letöltés helyett használhatjuk (szerverkövetelmény: <code>mod_xsendfile</code>)."
-
-#: src/Admin/Settings/Settings.php:95
-msgid "Prevent hotlinking"
-msgstr "Közvetlen elérés megakadályozása"
-
-#: src/Admin/Settings/Settings.php:97
-msgid ""
-"If enabled, the download handler will check the PHP referer to see if it "
-"originated from your site and if not, redirect them to the homepage."
-msgstr "Amennyiben be van kapcsolva, a letöltés kiszolgálója ellenőrzi a PHP hivatkozást. Ha az nem az eredeti helyről származik, akkor a kezdőlapra lesz átirányítva."
-
-#: src/Admin/Settings/Settings.php:103
-msgid "Allow Proxy IP Override"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:105
-msgid ""
-"If enabled, Download Monitor will use the X_FORWARDED_FOR HTTP header set by"
-" proxies as the IP address. Note that anyone can set this header, making it "
-"less secure."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:111
-msgid "Include in Search"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:113
-msgid ""
-"If enabled, downloads will be included in the site's internal search "
-"results."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:121
-msgid "Endpoint"
-msgstr "Kimenet"
-
-#: src/Admin/Settings/Settings.php:129
+#: src/Admin/Settings/Settings.php:99
 msgid "download"
 msgstr "letöltés"
 
-#: src/Admin/Settings/Settings.php:130
+#: src/Admin/Settings/Settings.php:100
 msgid "Download Endpoint"
 msgstr "Letöltés kimeneti formátum"
 
-#: src/Admin/Settings/Settings.php:131
-msgid ""
-"Define what endpoint should be used for download links. By default this will"
-" be <code>%s</code>."
+#: src/Admin/Settings/Settings.php:101
+#, fuzzy
+msgid "Define what endpoint should be used for download links. By default this will be %1$s( %2$s )."
 msgstr "Határozzuk meg, hogy milyen kimeneti formát szeretnénk használni a letöltési hivatkozáshoz. Alapértelmezettkén ez használjuk: <code>%s</code>."
 
-#: src/Admin/Settings/Settings.php:136
+#: src/Admin/Settings/Settings.php:106
 msgid "Endpoint Value"
 msgstr "Végső kimenet értéke"
 
-#: src/Admin/Settings/Settings.php:137
-msgid ""
-"Define what unique value should be used on the end of your endpoint to "
-"identify the downloadable file. e.g. ID would give a link like "
-"<code>%s</code>"
+#: src/Admin/Settings/Settings.php:107
+#, fuzzy
+msgid "Define what unique value should be used on the end of your endpoint to identify the downloadable file. e.g. ID would give a link like <strong>10</strong> ( %1$s%2$s )"
 msgstr "Határozzuk meg, hogy milyen egyedi értéket szeretnénk használni a letöltési hivatkozáshoz. Alapértelmezettkén ez használjuk: <code>%s</code>."
 
-#: src/Admin/Settings/Settings.php:140 src/Logs/LogExportCSV.php:67
+#: src/Admin/Settings/Settings.php:110
 msgid "Download ID"
 msgstr "Letöltés ID"
 
-#: src/Admin/Settings/Settings.php:141
+#: src/Admin/Settings/Settings.php:111
 msgid "Download slug"
 msgstr "Letöltés slug"
 
-#: src/Admin/Settings/Settings.php:149
-msgid "Hashes"
+#: src/Admin/Settings/Settings.php:117
+msgid "Default Template"
+msgstr "Alapértelmezett mintasablon"
+
+#: src/Admin/Settings/Settings.php:118
+#, fuzzy
+msgid "Choose which template is used for <strong>[download]</strong> shortcodes by default (this can be overridden by the <strong>format</strong> argument)."
+msgstr "Válasszuk ki, hogy az alapértelmezett <code>[download]</code> rövidkód esetén melyik mintasablon legyen az alapértelmezett (ez a <code>format</code> argumentummal felülírható)."
+
+#: src/Admin/Settings/Settings.php:127
+msgid "Custom Template"
+msgstr "Egyedi sablonminta"
+
+#: src/Admin/Settings/Settings.php:128
+#, fuzzy
+msgid "Leaving this blank will use the default <strong>content-download.php</strong> template file. If you enter, for example, <strong>button</strong>, the <strong>content-download-button.php</strong> template will be used instead. You can add custom templates inside your theme folder."
+msgstr "Alapértelmezetként hagyjuk üresen a <code>content-download.php</code> mintasablon fájl használatához. Amennyiben pl. az <code>image</code> kerül megadásra, akkor a <code>content-download-image.php</code> mintasablon fog helyette használatba kerülni."
+
+#: src/Admin/Settings/Settings.php:134
+msgid "Include in Search"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:155
-msgid ""
-"Hashes can optionally be output via shortcodes, but may cause performance "
-"issues with large files. %sYou can read more about hashes here%s"
+#: src/Admin/Settings/Settings.php:136
+msgid "If enabled, downloads will be included in the site's internal search results."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:161
-msgid "MD5 hashes"
-msgstr "MD5 ellenőrzőszám"
-
-#: src/Admin/Settings/Settings.php:162
-msgid "Generate MD5 hash for uploaded files"
-msgstr "MD5 ellenőrzőszám létrehozása a feltöltött fájlok számára"
-
-#: src/Admin/Settings/Settings.php:169
-msgid "SHA1 hashes"
-msgstr "SHA1 ellenőrzőszám"
-
-#: src/Admin/Settings/Settings.php:170
-msgid "Generate SHA1 hash for uploaded files"
-msgstr "SHA1 ellenőrzőszám létrehozása a feltöltött fájlok számára"
-
-#: src/Admin/Settings/Settings.php:177
-msgid "SHA256 hashes"
+#: src/Admin/Settings/Settings.php:142
+msgid "Disable file browser"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:178
-msgid "Generate SHA256 hash for uploaded files"
+#: src/Admin/Settings/Settings.php:144
+#: src/Admin/class-dlm-network-settings.php:106
+msgid "Disables the directory file browser."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:179 src/Admin/Settings/Settings.php:187
-msgid ""
-"Hashes can optionally be output via shortcodes, but may cause performance "
-"issues with large files."
-msgstr "Az ellenőrzőszámot opcionálisan a rövidkódokon keresztül is elő lehet állítani, de a hosszú fájlok teljesítményproblémákat is okozhatnak."
-
-#: src/Admin/Settings/Settings.php:185
-msgid "CRC32B hashes"
-msgstr "CRC32B ellenőrzőszám"
-
-#: src/Admin/Settings/Settings.php:186
-msgid "Generate CRC32B hash for uploaded files"
-msgstr "CRC32B ellenőrzőszám létrehozása a feltöltött fájlok számára"
-
-#: src/Admin/Settings/Settings.php:195
-msgid "Logging"
-msgstr "Naplózás"
-
-#: src/Admin/Settings/Settings.php:203
-msgid "Download Log"
-msgstr "Letöltési napló"
-
-#: src/Admin/Settings/Settings.php:204
-msgid "Log download attempts, IP addresses and more."
-msgstr "Naplózzuk a letöltési próbálkozásokat, IP címeket és egyéb dolgokat."
-
-#: src/Admin/Settings/Settings.php:210 src/Admin/Settings/Settings.php:232
-msgid "IP Address Logging"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:211
-msgid ""
-"Define if and how you like to store IP addresses of users that download your"
-" files in your logs."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:214 src/Admin/Settings/Settings.php:232
-msgid "Store full IP address"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:215
-msgid "Store anonymized IP address (remove last 3 digits)"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:216
-msgid "Store no IP address"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:222
-msgid "User Agent Logging"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:224
-msgid ""
-"If enabled, the user agent (browser) the user uses to download the file will"
-" be stored in your logs."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:230
-msgid "Count unique IPs only"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:232
-msgid ""
-"If enabled, the counter for each download will only increment and create a "
-"log entry once per IP address. Note that this option only works if %s is set"
-" to %s."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:240
-msgid "Access"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:246 src/Installer.php:38
-#: src/UpgradeManager.php:56
-msgid "You do not have permission to access this download. %sGo to homepage%s"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:248
-msgid "No access message"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:249
-msgid ""
-"The message that will be displayed to visitors when they don't have access "
-"to a file."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:255
-msgid "Blacklist IPs"
-msgstr "Feketelistás IP címek"
-
-#: src/Admin/Settings/Settings.php:256
-msgid ""
-"List IP Addresses to blacklist, 1 per line. Use IP/CIDR netmask format for "
-"ranges. IPv4 examples: <code>198.51.100.1</code> or "
-"<code>198.51.100.0/24</code>. IPv6 examples: <code>2001:db8::1</code> or "
-"<code>2001:db8::/32</code>."
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:263
-msgid "Blacklist user agents"
-msgstr "Feketelistás felhasználói ügynökök"
-
-#: src/Admin/Settings/Settings.php:264
-msgid ""
-"List browser user agents to blacklist, 1 per line.  Partial matches are "
-"sufficient. Regex matching is allowed by surrounding the pattern with "
-"forward slashes, e.g. <code>/^Mozilla.+Googlebot/</code>"
-msgstr ""
-
-#: src/Admin/Settings/Settings.php:273
+#: src/Admin/Settings/Settings.php:157 src/Admin/Settings/Settings.php:405
 msgid "Pages"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:280
+#: src/Admin/Settings/Settings.php:162
 msgid "No Access Page"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:281
-msgid ""
-"Choose what page is displayed when the user has no access to a file. Don't "
-"forget to add the <code>[dlm_no_access]</code> shortcode to the page."
+#: src/Admin/Settings/Settings.php:163
+msgid "Choose what page is displayed when the user has no access to a file. Don't forget to add the <strong>[dlm_no_access]</strong> shortcode to the page."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:288
-msgid "Cart page"
+#: src/Admin/Settings/Settings.php:170
+msgid "No Access Modal"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:289
-msgid ""
-"Your cart page, make sure it has the <code>[dlm_cart]</code> shortcode."
+#: src/Admin/Settings/Settings.php:172
+msgid "Open no access message in a modal (pop-up) window."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:296
-msgid "Checkout page"
+#: src/Admin/Settings/Settings.php:178
+msgid "Use default modal"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:297
-msgid ""
-"Your checkout page, make sure it has the <code>[dlm_checkout]</code> "
-"shortcode."
+#: src/Admin/Settings/Settings.php:180
+msgid "When enabled, the content of the \"No Access page\" option will be displayed in the no access modal. If disabled, the modal will show content specific to each extension."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:306 src/Shop/Admin/WritePanels.php:18
+#: src/Admin/Settings/Settings.php:187
+msgid "Select what page should be displayed as the 'downloading page'."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:194
+msgid "Search -> Document Library Manager Page"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:195 src/Admin/Settings/Settings.php:1004
+msgid "Enable"
+msgstr "Bekapcsol"
+
+#: src/Admin/Settings/Settings.php:196
+msgid "Select a page to have downloads in <strong>WordPress</strong> search results link to your Document Library Manager page. Note that this page should have the %1$s shortcode. This is dependant on the %2$s setting."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:203
+msgid "Hide Page Content"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:205
+msgid "Hides the content present on the page containing the %s shortcode on the download's info/category/tags/search pages."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:211
+msgid "Access"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:215 src/Installer.php:38
+msgid "You do not have permission to access this download. %1$sGo to homepage%2$s"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:217
+msgid "No access message"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:218
+msgid "The message that will be displayed to visitors when they don't have access to a file."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:224
+#, fuzzy
+msgid "Hide Downloads?"
+msgstr "Letöltés megtekintése"
+
+#: src/Admin/Settings/Settings.php:225
+msgid "Hide downloads in %s overview that user has no access to."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:226
+msgid "Let Advanced Access Manager filter your downloads displayed by %s and remove downloads that the current user has no access to"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:232
+#, fuzzy
+msgid "Hide PA Downloads?"
+msgstr "Összes letöltés"
+
+#: src/Admin/Settings/Settings.php:233
+msgid "Hide downloads in Page Addon overview that user has not access to."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:234
+msgid "Note that this only works with the 'normal' Page Addon downloads and e.g. not with featured downloads or tags."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:245 src/Admin/Settings/Settings.php:259
+msgid "IP Address Logging"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:246
+msgid "Define if and how you like to store IP addresses of users that download your files in your logs."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:249 src/Admin/Settings/Settings.php:259
+msgid "Store full IP address"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:250
+msgid "Store anonymized IP address (remove last 3 digits)"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:251
+msgid "Store no IP address"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:257
+msgid "Count unique IPs only"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:259
+msgid "If enabled, the counter for each download will only increment and create a log entry once per IP address. Note that this option only works if %1$s is set to %2$s."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:265
+msgid "Max logs duration"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:266
+msgid "Remove download log entries older than the selected value. The removal process is executed daily."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:271
+msgid "Unlimited"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:272
+msgid "7 Days"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:273
+msgid "15 Days"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:274
+msgid "30 Days"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:275
+msgid "3 Months"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:276
+msgid "6 Months"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:277
+msgid "1 Year"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:302 src/Admin/Settings/Settings.php:1234
+#, fuzzy
+msgid "Emails"
+msgstr "Email"
+
+#: src/Admin/Settings/Settings.php:307
+#: src/Admin/UpsellsTemplates/dlm_lm-modal-upsell.php:12
+msgid "Document Library Manager"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:314 src/Admin/Settings/Settings.php:322
+#: src/Shop/Util/PostType.php:18
 msgid "Shop"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:314
+#: src/Admin/Settings/Settings.php:324
+msgid "If enabled, allows you to sell your downloads via Download Monitor."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:341
+msgid "Invoice Prefix"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:342
+msgid "This prefix is added to the invoice ID. Enter an unique prefix here."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:348
 msgid "Base Country"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:315
+#: src/Admin/Settings/Settings.php:349
 msgid "Where is your store located?"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:322
+#: src/Admin/Settings/Settings.php:357
 msgid "Currency"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:323
+#: src/Admin/Settings/Settings.php:358
 msgid "In what currency are you selling?"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:330
+#: src/Admin/Settings/Settings.php:366
 msgid "Currency Position"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:331
+#: src/Admin/Settings/Settings.php:367
 msgid "The position of the currency symbol."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:334
+#: src/Admin/Settings/Settings.php:370
 msgid "Left (%s)"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:335
+#: src/Admin/Settings/Settings.php:371
 msgid "Right (%s)"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:336
+#: src/Admin/Settings/Settings.php:372
 msgid "Left with space (%s)"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:337
+#: src/Admin/Settings/Settings.php:373
 msgid "Right with space (%s)"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:344
+#: src/Admin/Settings/Settings.php:381
 msgid "Decimal Separator"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:345
+#: src/Admin/Settings/Settings.php:382
 msgid "The decimal separator of displayed prices."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:351
+#: src/Admin/Settings/Settings.php:389
 msgid "Thousand Separator"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:352
+#: src/Admin/Settings/Settings.php:390
 msgid "The thousand separator of displayed prices."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:357
+#: src/Admin/Settings/Settings.php:396
 msgid "Disable Cart"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:358
-msgid "Disable"
+#: src/Admin/Settings/Settings.php:398
+msgid "If enabled, your customers will be sent to your checkout page directly."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:359
-msgid ""
-"If checked, your customers will be send to your checkout page directly."
+#: src/Admin/Settings/Settings.php:411
+msgid "Cart page"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:367
-msgid "Payment Methods"
+#: src/Admin/Settings/Settings.php:412
+msgid "Your cart page, make sure it has the <strong>[dlm_cart]</strong> shortcode."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:371
-msgid "Misc"
+#: src/Admin/Settings/Settings.php:420
+msgid "Checkout page"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:378
-msgid "Remove Data on Uninstall?"
+#: src/Admin/Settings/Settings.php:421
+msgid "Your checkout page, make sure it has the <strong>[dlm_checkout]</strong> shortcode."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:380
-msgid ""
-"Check this box if you would like to completely remove all Download Monitor "
-"data when the plugin is deleted."
+#: src/Admin/Settings/Settings.php:483
+msgid "Submitting email actions"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:386
-msgid "Clear all transients"
+#: src/Admin/Settings/Settings.php:484
+msgid "Select what should be unlocked upon email address submission. Only applies to Email Lock locked downloads."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:387
-msgid ""
-"Remove all Download Monitor transients, this can solve version caching "
-"issues."
+#: src/Admin/Settings/Settings.php:487
+#, fuzzy
+msgid "Unlock requested download"
+msgstr "Kiemelt letöltés"
+
+#: src/Admin/Settings/Settings.php:488
+msgid "Unlock all locked downloads"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:466
-msgid "Select Page"
+#: src/Admin/Settings/Settings.php:489
+#, fuzzy
+msgid "Email download link"
+msgstr "Letöltés szerkesztése"
+
+#: src/Admin/Settings/Settings.php:495
+#, fuzzy
+msgid "Double Opt-in"
+msgstr "Letöltési lehetőségek"
+
+#: src/Admin/Settings/Settings.php:497
+msgid "Require user to confirm the entered email and only after that the user can download the files."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:503
+msgid "Name field"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:505
+msgid "When toggled to ON this will show another field asking users to input their name. Note: When toggled to ON, the Name field also becomes a required field."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:510
+msgid "Opt-in field"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:517
+msgid "Add checkbox"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:518
+msgid "Enter your opt-in text. If you enter any text here, a checkbox will be added to your Email Lock forms that your users are required to check. If this field is left empty, no opt-in checkbox will be added."
 msgstr ""
 
 #: src/Admin/Settings/Settings.php:525
-msgid "Overview"
+#, fuzzy
+msgid "Email settings"
+msgstr "Beállítások"
+
+#: src/Admin/Settings/Settings.php:531
+msgid "\"From\" name"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:530
+#: src/Admin/Settings/Settings.php:532
+msgid "From whom should the email say it's from. If left empty %s will be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:540
+msgid "\"From\" address"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:541
+msgid "From what address should the email say it's from. If left empty %s will be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:550
+msgid "Confirmation email"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:560 src/Admin/Settings/Settings.php:658
+#: src/Admin/Settings/Settings.php:664
+msgid "Landing page"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:561
+msgid "The page where the user should land when clicking on the confirmation page. Default is our own dynamic template."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:569 src/Admin/Settings/Settings.php:621
+msgid "Page content"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:570
+msgid "The text to be shown after the user unlocked the Download and email confirmation is required. Placeholders like <code>%%download_title%%</code>, <code>%%download_ID%%</code>, <code>%%download_version%%</code> can be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:576 src/Admin/Settings/Settings.php:628
+msgid "Page title"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:577
+msgid "The page's title where the user should land when clicking on the confirmation page."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:585 src/Admin/Settings/Settings.php:637
+msgid "Email subject"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:586
+msgid "The confirmation email subject the user receives. Placeholders like <code>%%download_title%%</code>, <code>%%download_ID%%</code>, <code>%%download_version%%</code>, <code>%%site_url%%</code>, <code>%%site_title%%</code>, <code>%%date%%</code>, <code>%%client_name%%</code> can be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:594 src/Admin/Settings/Settings.php:646
+msgid "Email body content"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:595
+msgid "The confirmation email content the user receives. Placeholders like <code>%%confirmation_link%%</code>, <code>%%download_title%%</code>, <code>%%download_ID%%</code>, <code>%%download_version%%</code>, <code>%%site_url%%</code>, <code>%%site_title%%</code>, <code>%%date%%</code>, <code>%%client_name%%</code> can be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:602
+msgid "File delivery"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:612
+msgid "Landing Page"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:613
+msgid "The page where the user should land after clicking the Unlock Download. Default is our own dynamic template."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:622
+msgid "The text to be shown after the user unlocked the Download. Placeholders like <code>%%download_title%%</code>, <code>%%download_ID%%</code>, <code>%%download_version%%</code>, <code>%%resend_email_button%%</code> can be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:629
+msgid "The page's title where the user should land after clicking the Unlock Download."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:638
+msgid "The email subject the user should receive when the download unlock happens. Placeholders like <code>%%download_title%%</code>, <code>%%download_ID%%</code>, <code>%%download_version%%</code>, <code>%%site_url%%</code>, <code>%%site_title%%</code>, <code>%%date%%</code>, <code>%%client_name%%</code> can be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:647
+msgid "The email content the user should receive when the download unlock happens. Placeholders like <code>%%email_link%%</code>, <code>%%download_title%%</code>, <code>%%download_ID%%</code>, <code>%%download_version%%</code>, <code>%%site_url%%</code>, <code>%%site_title%%</code>, <code>%%date%%</code>, <code>%%client_name%%</code> can be used."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:653
+msgid "Email link"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:654
+msgid "Select whether to send the user a download link or a landing page link which includes the download."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:657
+#, fuzzy
+msgid "Download Link"
+msgstr "Letöltési lista"
+
+#: src/Admin/Settings/Settings.php:665
+msgid "The page where the user should land after clicking the link in the email. It should contain the download link."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:684 src/Admin/Settings/Settings.php:701
+#: src/Admin/Settings/Settings.php:719 src/Admin/Settings/Settings.php:737
+msgid "Completing form will unlock"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:685
+msgid "Select what should be unlocked upon completing a form. Only applies to Ninja Forms locked downloads."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:688
+#, fuzzy
+msgid "only form locked downloads"
+msgstr "Csak a kiemelt letöltések mutatása"
+
+#: src/Admin/Settings/Settings.php:689 src/Admin/Settings/Settings.php:707
+#: src/Admin/Settings/Settings.php:725 src/Admin/Settings/Settings.php:743
+#, fuzzy
+msgid "all locked downloads"
+msgstr "Összes letöltés"
+
+#: src/Admin/Settings/Settings.php:702
+msgid "Select what should be unlocked upon completing a form. Only applies to Gravity Forms locked downloads."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:705 src/Admin/Settings/Settings.php:723
+#: src/Admin/Settings/Settings.php:741
+#, fuzzy
+msgid "only requested download"
+msgstr "Csak a kiemelt letöltések mutatása"
+
+#: src/Admin/Settings/Settings.php:706 src/Admin/Settings/Settings.php:724
+#: src/Admin/Settings/Settings.php:742
+msgid "all downloads with the same form"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:720
+msgid "Select what should be unlocked upon completing a form. Only applies to Contact Form 7 locked downloads."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:738
+msgid "Select what should be unlocked upon completing a form. Only applies to WPForms locked downloads."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:750
+#, fuzzy
+msgid "Password Lock"
+msgstr "Jelszó kötelező"
+
+#: src/Admin/Settings/Settings.php:755
+msgid "Global password"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:756
+msgid "Enable for all downloads"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:757
+msgid "If enabled, ALL your downloads are locked with the password below. Unlocking any download unlocks every download."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:763
+#: src/Admin/class-dlm-admin-list-table.php:1509
+#: src/MembersLock/classes/class-dlm-members-modal.php:177
+#, fuzzy
+msgid "Password"
+msgstr "Jelszó kötelező"
+
+#: src/Admin/Settings/Settings.php:770
+msgid "Mailchimp"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:781
+msgid "Expiring Links"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:807
+msgid "AWS Access Key ID"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:808
+msgid "Your public AWS Access Key ID. To find this, go to your <a href=\"%s\" target=\"_blank\">Security Credentials page</a>."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:816
+msgid "AWS Secret Access Key"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:817
+msgid "Your secret AWS Access Key. To find this, go to your <a href=\"%s\" target=\"_blank\">Security Credentials page</a>."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:825
+msgid "AWS S3 Bucket Name"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:826
+msgid "Your AWS S3 bucket name. To find this, go to your <a href=\"%s\" target=\"_blank\">Buckets page</a>."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:834
+msgid "S3 Region"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:835
+msgid "Your S3 bucket region. If a region is not selected the Amazon S3 file browser will not work but the direct url functionality will be available."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:839
+msgid "Detect automatically"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:873
+msgid "Client id"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:874
+msgid "Insert the google client id you get from Google Cloud Console."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:882
+msgid "Client Secret Key"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:883
+msgid "Insert the google client secret key you get from Google Cloud Console."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:891
+msgid "Authorized JavaScript origins"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:892
+msgid "Copy and insert this in Google Cloud Console's Authorized JavaScript origins field."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:901
+msgid "Authorized redirect URIs"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:902
+msgid "Copy and insert this in Google Cloud Console's Authorized redirect URIs field."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:924 src/Admin/Settings/Settings.php:1015
+msgid "Turnstile"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:929
+msgid "Turnstile Site Key"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:930
+msgid "The Turnstile Site Key can be found in your Cloudflare dashboard. %s for more information on how to set this up."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:930 src/Admin/Settings/Settings.php:939
+#: src/Admin/Settings/Settings.php:973 src/Admin/Settings/Settings.php:982
+msgid "Please read our documentation"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:938
+msgid "Turnstile Secret Key"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:939
+msgid "The Turnstile Secret Key can be found in your Cloudflare dashboard. %s for more information on how to set this up."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:946 src/Admin/Settings/Settings.php:947
+#: src/Admin/Settings/Settings.php:989 src/Admin/Settings/Settings.php:990
+msgid "Please complete the captcha to download the file."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:948
+msgid "Turnstile Unlock Text"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:949 src/Admin/Settings/Settings.php:992
+msgid "The text displayed above your captcha field."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:955 src/Admin/Settings/Settings.php:1016
+msgid "reCAPTCHA"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:960
+msgid "reCAPTCHA type"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:961
+msgid "Select the version of the reCAPTCHA you are willing to use."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:965
+msgid "reCAPTCHA v2"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:966
+msgid "reCAPTCHA v3"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:972
+msgid "reCAPTCHA Site Key"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:973
+msgid "The Google reCAPTCHA Site Key can be found in your Google reCAPTCHA dashboard. %s for more information on how to set this up."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:981
+msgid "reCAPTCHA Secret Key"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:982
+msgid "The Google reCAPTCHA Secret Key can be found in your Google reCAPTCHA dashboard. %s for more information on how to set this up."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:991
+msgid "Captcha Unlock Text"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:998
+msgid "Global Mode"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1003
+msgid "Global mode"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1005
+msgid "If enabled, %sALL%s your downloads will be captcha locked."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1011
+msgid "Captcha type"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1012
+msgid "Select the type of the captcha you are willing to use."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1033
+msgid "What fields should be included in the email. Separate multiple fields by comma(,)."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1034
+msgid "Available fields"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1039
+#: src/RestAPI/class-dlm-extensions-base.php:104
+msgid "Email Notification"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1045
+#, fuzzy
+msgid "Email Addresses"
+msgstr "IP cím"
+
+#: src/Admin/Settings/Settings.php:1047
+msgid "Define which email addresses will receive download notifications and reports. Separate multiple addresses by comma(,)."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1052
+#, fuzzy
+msgid "Notification after a download"
+msgstr "Válasszunk ki egy letöltést"
+
+#: src/Admin/Settings/Settings.php:1053
+msgid "Receive download notifications per download."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1059
+msgid "Send notifications for"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1060
+msgid "You can send notifications for every or just selected downloads files. When \"Selected Downloads\" is selected, turn on notifications per download in the download edit screen."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1064 src/Admin/Settings/Settings.php:1092
+msgid "Never"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1065 src/PostTypeManager.php:56
+msgid "All Downloads"
+msgstr "Összes letöltés"
+
+#: src/Admin/Settings/Settings.php:1066
+#, fuzzy
+msgid "Selected Downloads"
+msgstr "Kiemelt letöltések"
+
+#: src/Admin/Settings/Settings.php:1073
+msgid "Email Fields"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1081
+msgid "Receive a periodic downloads report notification."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1087
+msgid "Report period"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1088
+msgid "You can send email notification on each download or a periodical downloads report."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1093
+msgid "Daily"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1094
+msgid "Weekly"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1095
+msgid "Monthly"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1102
+#, fuzzy
+msgid "Statistics"
+msgstr "Állapot"
+
+#: src/Admin/Settings/Settings.php:1103
+msgid "Sends a report containing the number of downloads per period, the most downloaded download and average downloads per day."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1109
+#, fuzzy
+msgid "Top 10 Downloads"
+msgstr "Népszerű letöltések"
+
+#: src/Admin/Settings/Settings.php:1110
+msgid "Sends a report containing the top 10 downloads (title and number of downloads)."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1116
+msgid "Top 10 Users"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1117
+msgid "Sends a report containing the top 10 users (name and number of downloads)."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1130
+#, fuzzy
+msgid "Base Settings"
+msgstr "Beállítások"
+
+#: src/Admin/Settings/Settings.php:1140
+msgid "Table Styling"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1150
+msgid "Grid Styling"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1160
+msgid "Minimal Styling"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1266
+msgid "Other"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1314
+msgid "Payment Gateways"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1319
 msgid "Enabled Gateways"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:531
+#: src/Admin/Settings/Settings.php:1320
 msgid "Check all payment methods you want to enable on your webshop."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:538
+#: src/Admin/Settings/Settings.php:1327
 msgid "Default Gateway"
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:539
+#: src/Admin/Settings/Settings.php:1328
 msgid "This payment method will be pre-selected on your checkout page."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:557
-msgid "Enabled"
+#: src/Admin/Settings/Settings.php:1457
+msgid "Web.config is missing."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:558
-msgid "Enable Gateway"
+#: src/Admin/Settings/Settings.php:1462
+msgid "You are protected by web.config."
 msgstr ""
 
-#: src/Admin/Settings/Settings.php:559
-msgid ""
-"Check this to allow your customers to use this payment method to pay at your"
-" checkout page."
+#: src/Admin/Settings/Settings.php:1468
+msgid "Htaccess is missing."
 msgstr ""
 
-#: src/Admin/WritePanels.php:32
+#: src/Admin/Settings/Settings.php:1473
+msgid "You are protected by htaccess."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1480
+msgid "Please add the following rules to your nginx config to disable direct file access: %s"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1484
+msgid "Because your server is running on nginx, our .htaccess file can't protect your downloads. %s"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1490
+msgid "Miscellaneous"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1495
+#, fuzzy
+msgid "Regenerate protection for uploads folder"
+msgstr "MD5 ellenőrzőszám létrehozása a feltöltött fájlok számára"
+
+#: src/Admin/Settings/Settings.php:1496
+msgid "Regenerates the .htaccess file."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1522 src/Admin/Settings/Settings.php:1555
+msgid "Robots.txt is missing."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1530
+msgid "You are protected by robots.txt."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1533
+msgid "Robots.txt file exists but dlm_uploads folder is not protected."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1540
+msgid "Robots.txt file is missing but site may have virtual robots.txt file. If you regenerate this you will loose the restrictions set in the virtual one. Please either update the virtual with the corresponding rules for dlm_uploads or regenerate and update the newly created one with the contents from the virtual file."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1543
+msgid "Robots.txt file is missing but site has virtual robots.txt file. If you regenerate this you will loose the restrictions set in the virtual one. Please either update the virtual with the corresponding rules for dlm_uploads or regenerate and update the newly created one with the contents from the virtual file."
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1561
+msgid "Regenerate crawler protection for uploads folder"
+msgstr ""
+
+#: src/Admin/Settings/Settings.php:1562
+msgid "Regenerates the robots.txt file."
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:12
+msgid "Advanced Access Manager"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:13
+msgid "The Advanced Access Manager extension allows you to create advanced download limitations per download and on a global level. "
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:15
+#, fuzzy
+msgid "Daily download limitation per Download."
+msgstr "Jelenítsük meg a letöltéseink listáját."
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:16
+msgid "Global daily download limitation"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:17
+msgid "Monthly download limitation per Download"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:18
+msgid "Global monthly download limitation"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:19
+msgid "Yearly download limitation per Download"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:20
+msgid "Date range download limitation"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:21
+#, fuzzy
+msgid "Role download limitation"
+msgstr "Letöltési lehetőségek"
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:22
+#, fuzzy
+msgid "IP download limitation"
+msgstr "Letöltési lehetőségek"
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:23
+#, fuzzy
+msgid "User download limitation"
+msgstr "Letöltési lehetőségek"
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:24
+msgid "Category download limitation"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_aam-modal-upsell.php:30
+#: src/Admin/UpsellsTemplates/dlm_lm-modal-upsell.php:30
+msgid "Get Premium!"
+msgstr ""
+
+#: src/Admin/UpsellsTemplates/dlm_lm-modal-upsell.php:13
+msgid "The Document Library Manager extension allows you to display your downloads in a modern table or grid view."
+msgstr ""
+
+#: src/Admin/WritePanels.php:67 src/Shop/Admin/WritePanels.php:33
+msgid "Publish"
+msgstr ""
+
+#: src/Admin/WritePanels.php:75
 msgid "Download Information"
 msgstr ""
 
-#: src/Admin/WritePanels.php:38
+#: src/Admin/WritePanels.php:83
 msgid "Download Options"
 msgstr "Letöltési lehetőségek"
 
-#: src/Admin/WritePanels.php:44
+#: src/Admin/WritePanels.php:91
 msgid "Downloadable Files/Versions"
 msgstr "Letölthető fájlok/Verziók"
 
-#: src/Admin/WritePanels.php:52
-msgid "Short Description"
-msgstr "Rövid leírás"
-
-#: src/Admin/WritePanels.php:85
+#: src/Admin/WritePanels.php:147
 msgid "URL"
 msgstr ""
 
-#: src/Admin/WritePanels.php:91
+#: src/Admin/WritePanels.php:148 src/Admin/class-dlm-admin-list-table.php:625
+#: src/Shop/Admin/ProductTableColumns.php:36 src/Shop/Admin/WritePanels.php:210
 msgid "Shortcode"
 msgstr ""
 
-#: src/Admin/WritePanels.php:99
-msgid "No download information for new downloads."
+#: src/Admin/WritePanels.php:149
+msgid "Copy"
 msgstr ""
 
-#: src/Admin/WritePanels.php:130
+#: src/Admin/WritePanels.php:190
 msgid "Mark this download as featured. Used by shortcodes and widgets."
 msgstr "Jelöljük meg ezt a letöltést kiemeltként. Rövidkódokhoz és widgethez használva."
 
-#: src/Admin/WritePanels.php:136
-msgid ""
-"Only logged in users will be able to access the file via a download link if "
-"this is enabled."
+#: src/Admin/WritePanels.php:196
+msgid "Only logged in users will be able to access the file via a download link if this is enabled."
 msgstr "Csak bejelentkezett felhasználók kapcsolódhatnak a letöltési fájloh, amennyiben ez bekapcsolt állapotú."
 
-#: src/Admin/WritePanels.php:142
-msgid ""
-"Don't force download. If the <code>dlm_uploads</code> folder is protected "
-"you may need to move your file."
+#: src/Admin/WritePanels.php:202
+msgid "Don't force download. If the <code>dlm_uploads</code> folder is protected you may need to move your file."
 msgstr ""
 
-#: src/Admin/WritePanels.php:186
+#: src/Admin/WritePanels.php:202
+msgid "Open in new tab"
+msgstr ""
+
+#: src/Admin/WritePanels.php:273
+msgid "Drag & Drop here to create a new version"
+msgstr ""
+
+#: src/Admin/WritePanels.php:338
 msgid "Add file"
 msgstr "Fájl hozzáadása"
 
-#: src/Admin/WritePanels.php:187
-msgid "Close all"
-msgstr "Összes bezárása"
+#: src/Admin/WritePanels.php:403
+msgid "You're trying to serve files from your server that are not in the enabled allowed paths. If you want to learn more about this, %1$sclick here%2$s"
+msgstr ""
 
-#: src/Admin/WritePanels.php:188
-msgid "Expand all"
-msgstr "Összes kinyitása"
+#: src/Admin/WritePanels.php:410
+msgid ""
+"You're trying to serve files from your server that are not in the enabled allowed paths. Please contact the network administrator to add or enable the path(s) for your website. \r\n"
+"                 If you want to learn more about this, %1$sclick here%2$s"
+msgstr ""
 
-#: src/Ajax/CreatePage.php:51
+#: src/Admin/WritePanels.php:431 src/Admin/WritePanels.php:437
+msgid "Recommended path:"
+msgstr ""
+
+#: src/Admin/WritePanels.php:439
+msgid "Add path"
+msgstr ""
+
+#: src/Admin/WritePanels.php:441
+msgid "This will add the download path to the \"Approved Download Path\" list. "
+msgstr ""
+
+#: src/Admin/WritePanels.php:443
+msgid "Path:"
+msgstr ""
+
+#: src/Admin/WritePanels.php:445
+#, fuzzy
+msgid "Enable path"
+msgstr "Bekapcsol"
+
+#: src/Admin/WritePanels.php:447
+msgid "This will enable the download path from the \"Approved Download Path\" list. "
+msgstr ""
+
+#: src/Admin/WritePanels.php:510
+msgid "Please add a title before publishing the download."
+msgstr ""
+
+#: src/Admin/WritePanels.php:693
+msgid "You are not allowed to upload files."
+msgstr ""
+
+#: src/Admin/WritePanels.php:702
+#, fuzzy
+msgid "File type not allowed."
+msgstr "Nem található a fájl"
+
+#: src/Admin/WritePanels.php:714
+msgid "Failed to write the file at: "
+msgstr ""
+
+#: src/Admin/class-dlm-admin-debug.php:363
+#, fuzzy
+msgid "Debug download"
+msgstr "1 letöltés"
+
+#: src/Admin/class-dlm-admin-debug.php:398
+msgid "Export the download and send it to Download Monitor's support team so that we can debug your problem much easier."
+msgstr ""
+
+#: src/Admin/class-dlm-admin-debug.php:411
+#, fuzzy
+msgid "Export download"
+msgstr "1 letöltés"
+
+#: src/Admin/class-dlm-admin-list-table.php:500
+#: src/Admin/class-dlm-admin-list-table.php:1234
+msgid "Restore"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:502
+#: src/Admin/class-dlm-admin-list-table.php:1199 src/PostTypeManager.php:66
+#: src/PostTypeManager.php:138 src/Shop/Admin/DownloadOption.php:38
+#: src/Shop/Util/PostType.php:22
+msgid "Edit"
+msgstr "Szerkesztés"
+
+#: src/Admin/class-dlm-admin-list-table.php:508
+msgid "Delete permanently"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:510
+msgid "Move to Trash"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:548
+#: src/Shop/Admin/OrderTable.php:280
+msgid "Filter"
+msgstr "Szűrés"
+
+#: src/Admin/class-dlm-admin-list-table.php:555
+#: src/Shop/Admin/OrderTable.php:286
+msgid "Empty Trash"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:622
+#: src/Admin/class-dlm-admin-list-table.php:1410
+#: src/Shop/Admin/ProductTableColumns.php:35 src/Widgets/Downloads.php:183
+#: src/Widgets/Downloads.php:213
+msgid "Title"
+msgstr "Cím"
+
+#: src/Admin/class-dlm-admin-list-table.php:623 src/TaxonomyManager.php:30
+#: src/TaxonomyManager.php:33
+msgid "Categories"
+msgstr "Letöltési kategória"
+
+#: src/Admin/class-dlm-admin-list-table.php:626
+#, fuzzy
+msgid "Download link"
+msgstr "Letöltés slug"
+
+#: src/Admin/class-dlm-admin-list-table.php:627
+#, fuzzy
+msgid "File Location"
+msgstr "Nem található a fájl"
+
+#: src/Admin/class-dlm-admin-list-table.php:628
+#, fuzzy
+msgid "File Type"
+msgstr "Fájl dátuma"
+
+#: src/Admin/class-dlm-admin-list-table.php:629 src/TaxonomyManager.php:68
+#: src/TaxonomyManager.php:71
+msgid "Tags"
+msgstr "Letöltés címke"
+
+#: src/Admin/class-dlm-admin-list-table.php:630 src/Widgets/Downloads.php:223
+msgid "Download count"
+msgstr "Letöltés számlálás"
+
+#: src/Admin/class-dlm-admin-list-table.php:631
+msgid "Featured"
+msgstr "Kiemelt"
+
+#: src/Admin/class-dlm-admin-list-table.php:632
+msgid "Locked"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:633
+msgid "Redirect only"
+msgstr "Csak átirányítás"
+
+#: src/Admin/class-dlm-admin-list-table.php:634
+msgid "Date posted"
+msgstr "Dátum elküldve"
+
+#: src/Admin/class-dlm-admin-list-table.php:637
+#: src/Admin/class-dlm-admin-list-table.php:1490
+msgid "Author"
+msgstr ""
+
+#. translators: Hidden accessibility text.
+#: src/Admin/class-dlm-admin-list-table.php:678
+#: src/Admin/class-dlm-admin-list-table.php:680
+#: src/Admin/class-dlm-admin-list-table.php:1705
+msgid "Comments"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:812
+#, fuzzy
+msgid "Select %s"
+msgstr "Válasszunk egy fájlt"
+
+#. translators: Hidden accessibility text. %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:822
+msgid "&#8220;%s&#8221; is locked"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:846
+#, fuzzy
+msgid "Unpublished"
+msgstr "Letöltés közzétéve."
+
+#. translators: 1: Post date, 2: Post time.
+#: src/Admin/class-dlm-admin-list-table.php:851
+#, fuzzy
+msgid "%1$s at %2$s"
+msgstr "%1$s %2$d"
+
+#. translators: Post date format. See
+#. https:www.php.net/manual/datetime.format.php
+#: src/Admin/class-dlm-admin-list-table.php:853
+msgid "Y/m/d"
+msgstr ""
+
+#. translators: Post time format. See
+#. https:www.php.net/manual/datetime.format.php
+#: src/Admin/class-dlm-admin-list-table.php:855
+msgid "g:i a"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:863
+#: src/Admin/class-dlm-admin-list-table.php:1797
+msgid "Published"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:866
+msgid "Missed schedule"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:868
+#: src/Admin/class-dlm-admin-list-table.php:1799
+msgid "Scheduled"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:871
+#, fuzzy
+msgid "Last Modified"
+msgstr "Dátum módosítva"
+
+#: src/Admin/class-dlm-admin-list-table.php:973
+#, fuzzy
+msgid "No file provided"
+msgstr "Nem található fájl"
+
+#: src/Admin/class-dlm-admin-list-table.php:1066
+#, fuzzy
+msgid "Copy download link"
+msgstr "1 letöltés"
+
+#: src/Admin/class-dlm-admin-list-table.php:1074
+msgid "Unknown"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1082
+#, fuzzy
+msgid "Remote"
+msgstr "Eltávolítás"
+
+#: src/Admin/class-dlm-admin-list-table.php:1085
+msgid "Local"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1198
+msgid "Edit &#8220;%s&#8221;"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1217
+msgid "Quick edit &#8220;%s&#8221; inline"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1218
+msgid "Quick&nbsp;Edit"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1224
+#, fuzzy
+msgid "Duplicate Download"
+msgstr "Letöltés mentése"
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1233
+msgid "Restore &#8220;%s&#8221; from the Trash"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1241
+msgid "Move &#8220;%s&#8221; to the Trash"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1251
+msgid "Delete &#8220;%s&#8221; permanently"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1252
+msgid "Delete Permanently"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1265
+msgid "Preview &#8220;%s&#8221;"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1266
+msgid "Preview"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1274
+msgid "View &#8220;%s&#8221;"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1275
+msgid "View"
+msgstr ""
+
+#. translators: %s: Post title.
+#: src/Admin/class-dlm-admin-list-table.php:1285
+msgid "Export &#8220;%s&#8221; as JSON"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1286
+#, fuzzy
+msgid "Export as JSON"
+msgstr "Exprt CSV formában"
+
+#: src/Admin/class-dlm-admin-list-table.php:1391
+#, fuzzy
+msgid "Bulk Edit"
+msgstr "Szerkesztés"
+
+#: src/Admin/class-dlm-admin-list-table.php:1391
+msgid "Quick Edit"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1419
+msgid "Slug"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1470
+#: src/Admin/class-dlm-admin-list-table.php:1590
+#: src/Admin/class-dlm-admin-list-table.php:1641
+#: src/Admin/class-dlm-admin-list-table.php:1708
+#: src/Admin/class-dlm-admin-list-table.php:1727
+#: src/Admin/class-dlm-admin-list-table.php:1788
+#: src/Admin/class-dlm-admin-list-table.php:1828
+#: src/Admin/class-dlm-admin-list-table.php:1865
+msgid "&mdash; No Change &mdash;"
+msgstr ""
+
+#. translators: Between password field and private checkbox on post quick edit
+#. interface.
+#: src/Admin/class-dlm-admin-list-table.php:1516
+msgid "&ndash;OR&ndash;"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1522
+#: src/Admin/class-dlm-admin-list-table.php:1803
+msgid "Private"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1578
+msgid "Parent"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1584
+msgid "Main Page (no parent)"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1619
+#: src/Shop/Admin/OrderTable.php:152 src/Widgets/Downloads.php:228
+msgid "Order"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1646 src/Widgets/Downloads.php:204
+msgid "Default template"
+msgstr "Alapértelmezett sablonminta"
+
+#: src/Admin/class-dlm-admin-list-table.php:1710
+#: src/Admin/class-dlm-admin-list-table.php:1729
+msgid "Allow"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1712
+#: src/Admin/class-dlm-admin-list-table.php:1731
+msgid "Do not allow"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1724
+#, fuzzy
+msgid "Pings"
+msgstr "Beállítások"
+
+#: src/Admin/class-dlm-admin-list-table.php:1752
+msgid "Allow Comments"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1764
+#, fuzzy
+msgid "Allow Pings"
+msgstr "Engedélyezett fájlok"
+
+#: src/Admin/class-dlm-admin-list-table.php:1811
+msgid "Pending Review"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1813
+msgid "Draft"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1825
+#: src/Admin/class-dlm-admin-list-table.php:1830
+msgid "Sticky"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1832
+msgid "Not Sticky"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1843
+msgid "Make this post sticky"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1929
+#: src/Admin/class-dlm-admin-list-table.php:1933
+msgid "Update"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1938
+msgid "Cancel"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:2038
+#: src/Admin/class-dlm-extensions-page.php:25
+msgid "Extensions"
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:89
+msgid "Update started, please wait. Don't close or exit this page. it will reload automatically when it's finished."
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:524
+msgid "Please <a href=\"#\" class=\"dlm-db-upgrade-link\">upgrade the database</a>."
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:529
+msgid "Hello there! We made some changes on how Download Monitor's data is structured. Please <a href=\"#\" class=\"dlm-db-upgrade-link\">click here</a> to upgrade your database"
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:534
+msgid "Resume Upgrade"
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:536
+#: src/Admin/class-dlm-db-upgrader.php:565
+msgid "Upgrade"
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:557
+msgid "Please <a href=\"#\" class=\"dlm-db-download_category-link\">upgrade the database</a>."
+msgstr ""
+
+#: src/Admin/class-dlm-db-upgrader.php:562
+msgid "Hello there! We made some changes on how Download Monitor's data is structured. Please make a backup of your database and click the upgrade button"
+msgstr ""
+
+#: src/Admin/class-dlm-empty-table.php:31
+msgid "Hi, there!"
+msgstr ""
+
+#: src/Admin/class-dlm-empty-table.php:34
+msgid "Grow your audience, track download performance and convert your traffic into sales with an easy-to-use digital downloads solution. "
+msgstr ""
+
+#: src/Admin/class-dlm-empty-table.php:43
+#, fuzzy
+msgid "Create your first Download"
+msgstr "Kiemelt letöltések"
+
+#: src/Admin/class-dlm-empty-table.php:46
+msgid "Need help? Check out %1$s our documentation%2$s."
+msgstr ""
+
+#: src/Admin/class-dlm-extensions-page.php:24
+msgid "Download Monitor Extensions"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:218
+#, fuzzy
+msgid "All files"
+msgstr "Engedélyezett fájlok"
+
+#. Plugin Name of the plugin/theme
+msgid "Download Monitor"
+msgstr "Download Monitor"
+
+#: src/Admin/class-dlm-media-library.php:318
+msgid "Protect"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:320
+msgid "Creates a Download based on this file and moves the file to Download Monitor's protected folder. Also replaces the attachment's URL with the download link."
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:323
+msgid "Unprotect"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:325
+msgid "Moves the file from Download Monitor's protected directory to the uploads directory. Also places back the original URL for this attachment."
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:327
+#, fuzzy
+msgid "Default file"
+msgstr "Alapértelmezett mintasablon"
+
+#: src/Admin/class-dlm-media-library.php:329
+msgid "No action is needed."
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:337
+msgid "DLM protect file"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:360
+msgid "You don't have permissions to create Downloads"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:373
+msgid "File protected. Download created"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:390
+msgid "You don't have permissions to unprotect file."
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:418
+#, fuzzy
+msgid "File unprotected."
+msgstr "Nem található a fájl"
+
+#: src/Admin/class-dlm-media-library.php:562
+#, fuzzy
+msgid "Download Monitor protected file"
+msgstr "Download Monitor"
+
+#: src/Admin/class-dlm-media-library.php:567
+#, fuzzy
+msgid "Download Monitor file"
+msgstr "Download Monitor"
+
+#: src/Admin/class-dlm-media-library.php:572
+msgid "Un-Protected"
+msgstr ""
+
+#: src/Admin/class-dlm-media-library.php:588
+#, fuzzy
+msgid "Download Monitor protect"
+msgstr "Download Monitor"
+
+#: src/Admin/class-dlm-network-settings.php:77
+#: src/Admin/class-dlm-network-settings.php:96
+msgid "Sorry, you are not allowed to access this page."
+msgstr ""
+
+#: src/Admin/class-dlm-network-settings.php:104
+msgid "Global disable file browser"
+msgstr ""
+
+#: src/Admin/class-dlm-network-settings.php:117
+#, fuzzy
+msgid "Download Monitor network settings"
+msgstr "Download Monitor"
+
+#: src/Admin/class-dlm-network-settings.php:196
+msgid "Save Changes"
+msgstr "Módosítások mentlése"
+
+#: src/Admin/class-dlm-plugin-status.php:65
+#, fuzzy
+msgid "Templates"
+msgstr "Sablonminta"
+
+#: src/Admin/class-dlm-plugin-status.php:298
+msgid "Download Monitor required modules / functions"
+msgstr ""
+
+#: src/Admin/class-dlm-plugin-status.php:316
+msgid "DLM - All required modules/functions are active!"
+msgstr ""
+
+#: src/Admin/class-dlm-plugin-status.php:319
+#: src/Admin/class-dlm-plugin-status.php:335
+msgid "Plugin functionality"
+msgstr ""
+
+#: src/Admin/class-dlm-plugin-status.php:324
+#: src/Admin/class-dlm-plugin-status.php:340
+msgid "Modules and functions help Download Monitor achieve the functionality you desire, and to do that we require that functions and modules, that Download Monitor depends on, be enabled."
+msgstr ""
+
+#: src/Admin/class-dlm-plugin-status.php:332
+msgid "DLM - One or more functions are missing!"
+msgstr ""
+
+#: src/Admin/class-dlm-plugin-status.php:344
+msgid "Ask your hosting service to enable the following required modules/functions!"
+msgstr ""
+
+#: src/Admin/class-dlm-plugin-status.php:350
+msgid "Functions:"
+msgstr ""
+
+#: src/Admin/class-dlm-settings-react-page.php:23
+#: src/Admin/class-dlm-settings-react-page.php:24 src/DLM.php:385
+msgid "Settings"
+msgstr "Beállítások"
+
+#: src/Ajax/CreatePage.php:48
 msgid "Couldn't create page"
 msgstr ""
 
-#: src/Ajax/CreatePage.php:56
+#: src/Ajax/CreatePage.php:53
 msgid "No page set"
 msgstr ""
 
-#: src/DLM.php:260
-msgid "Documentation"
+#: src/AjaxHandler.php:226
+msgid "You are not allowed in this directory"
 msgstr ""
 
-#: src/DownloadHandler.php:314
-msgid "Password Required"
-msgstr "Jelszó kötelező"
+#: src/AjaxHandler.php:337
+msgid "Nonce is required"
+msgstr ""
 
-#: src/DownloadHandler.php:320
+#: src/AjaxHandler.php:353
+msgid "Error while updating the column download_category"
+msgstr ""
+
+#: src/AjaxHandler.php:355
+msgid "Column download_category has been updated"
+msgstr ""
+
+#: src/AjaxHandler.php:357
+msgid "Column download_category is already updated"
+msgstr ""
+
+#: src/AjaxHandler.php:374
+msgid "No upsell provided."
+msgstr ""
+
+#: src/AjaxHandler.php:379
+#, fuzzy
+msgid "Upsell not found."
+msgstr "Nem található a fájl"
+
+#: src/DLM.php:541
+msgid "An error occurred while trying to download the file. Please try again."
+msgstr ""
+
+#: src/DLM.php:543 src/DownloadHandler.php:299 src/DownloadHandler.php:310
+#: src/RestAPI/class-dlm-download-rest.php:175
+#: src/RestAPI/class-dlm-download-rest.php:198
+#: src/RestAPI/class-dlm-download-rest.php:258
+#: src/class-dlm-download-error-handler.php:113
+#: src/class-dlm-download-error-handler.php:120
 msgid "Download does not exist."
 msgstr "Nem létező letöltés."
 
-#: src/DownloadHandler.php:320 src/DownloadHandler.php:397
-#: src/DownloadHandler.php:405 src/DownloadHandler.php:555
-msgid "Go to homepage &rarr;"
-msgstr "Kezdőlap &rarr;"
+#: src/DLM.php:545
+#, fuzzy
+msgid "No file path defined."
+msgstr "Nincs megadva a fájl elérési útvonala"
 
-#: src/DownloadHandler.php:320 src/DownloadHandler.php:397
-#: src/DownloadHandler.php:405 src/DownloadHandler.php:441
-#: src/DownloadHandler.php:555
-msgid "Download Error"
-msgstr "Letöltési hiba"
-
-#: src/DownloadHandler.php:397 src/DownloadHandler.php:405
+#: src/DLM.php:547 src/class-dlm-download-error-handler.php:65
+#: src/class-dlm-download-error-handler.php:93
 msgid "No file paths defined."
 msgstr "Nincs megadva a fájl elérési útvonala"
 
-#: src/DownloadHandler.php:477 src/DownloadHandler.php:495
-#: src/DownloadHandler.php:502 src/DownloadHandler.php:509
-msgid "Redirected to file"
-msgstr "Átirányítás a fájlhoz"
+#: src/DLM.php:549 src/class-dlm-download-error-handler.php:167
+#: src/class-dlm-download-error-handler.php:174
+msgid "Download is not allowed for this file type."
+msgstr ""
 
-#: src/DownloadHandler.php:548
-msgid "Redirected to remote file."
+#: src/DLM.php:551 src/class-dlm-download-error-handler.php:194
+#, fuzzy
+msgid "Access denied to this file."
 msgstr "Átirányítás a távoli fájlhoz"
 
-#: src/DownloadHandler.php:553 src/DownloadHandler.php:555
+#: src/DLM.php:553 src/class-dlm-download-error-handler.php:222
+msgid "Access denied. You do not have permission to download this file."
+msgstr ""
+
+#: src/DLM.php:555 src/DownloadHandler.php:782 src/DownloadHandler.php:800
+msgid "Something is wrong with the file path."
+msgstr ""
+
+#: src/DLM.php:557 src/DownloadHandler.php:461 src/DownloadHandler.php:466
+#: src/DownloadHandler.php:867 src/DownloadHandler.php:882
 msgid "File not found."
 msgstr "Nem található a fájl"
+
+#: src/DLM.php:974
+msgid "Terms & Conditions plugin deactivated"
+msgstr ""
+
+#: src/DLM.php:975
+msgid "Download Monitor - Terms & Conditions plugin was deactivated because it is now integrated within Download Monitor."
+msgstr ""
+
+#: src/DownloadHandler.php:315 src/DownloadHandler.php:468
+#: src/DownloadHandler.php:805 src/DownloadHandler.php:884
+#: src/class-dlm-download-error-handler.php:68
+#: src/class-dlm-download-error-handler.php:96
+#: src/class-dlm-download-error-handler.php:123
+#: src/class-dlm-download-error-handler.php:150
+#: src/class-dlm-download-error-handler.php:177
+#: src/class-dlm-download-error-handler.php:204
+msgid "Go to homepage &rarr;"
+msgstr "Kezdőlap &rarr;"
+
+#: src/DownloadHandler.php:319 src/DownloadHandler.php:470
+#: src/DownloadHandler.php:809 src/DownloadHandler.php:886
+#: src/class-dlm-download-error-handler.php:70
+#: src/class-dlm-download-error-handler.php:98
+#: src/class-dlm-download-error-handler.php:125
+#: src/class-dlm-download-error-handler.php:152
+#: src/class-dlm-download-error-handler.php:179
+#: src/class-dlm-download-error-handler.php:206
+#: src/class-dlm-download-error-handler.php:233
+msgid "Download Error"
+msgstr "Letöltési hiba"
+
+#: src/DownloadHandler.php:367
+msgid "Password Required"
+msgstr "Jelszó kötelező"
 
 #: src/DownloadPreview/Preview.php:84
 msgid "Select a download first"
 msgstr ""
 
-#: src/Gutenberg.php:50
+#: src/FileManager.php:618
+msgid "This file is already protected. Please reload your page."
+msgstr ""
+
+#: src/FileManager.php:702
+msgid "The post with ID: %d is not an attachment post type."
+msgstr ""
+
+#: src/FileManager.php:716
+msgid "The new path provided: %s is absolute. The new path must be a path relative to the WP uploads directory."
+msgstr ""
+
+#: src/FileManager.php:764
+msgid "There was an error making or verifying the directory at: %s"
+msgstr ""
+
+#: src/FileManager.php:989
+msgid "Rename failed when trying to move file from: %1$s, to: %2$s"
+msgstr ""
+
+#: src/Gutenberg.php:55
 msgid "Default from settings"
+msgstr ""
+
+#: src/Gutenberg.php:88
+msgid "Please select a download id"
+msgstr ""
+
+#: src/KeyGeneration/class-dlm-key-generation.php:237
+msgid "REST API"
 msgstr ""
 
 #: src/LegacyUpgrader/Page.php:17
@@ -1102,300 +2733,461 @@ msgid "Download Monitor - Legacy Upgrade"
 msgstr ""
 
 #: src/LegacyUpgrader/Page.php:42
-msgid ""
-"Welcome to the Download Monitor Legacy Upgrader. On this page we will "
-"upgrade your old Download Monitor (legacy) data so it will work with the "
-"latest version. If you're on this page, it should mean that you updated to "
-"this version from Download Monitor %s. If you're unsure if this is correct, "
-"or you want to read more about the legacy upgrade, we've setup a page that "
-"will explain this process in a lot more detail. %sClick here%s if to view "
-"that page."
+msgid "Welcome to the Download Monitor Legacy Upgrader. On this page we will upgrade your old Download Monitor (legacy) data so it will work with the latest version. If you're on this page, it should mean that you updated to this version from Download Monitor %s. If you're unsure if this is correct, or you want to read more about the legacy upgrade, we've setup a page that will explain this process in a lot more detail. %sClick here%s if to view that page."
 msgstr ""
 
 #: src/LegacyUpgrader/Page.php:46
-msgid ""
-"WARNING: We don't think your database needs upgrading. Only continue if "
-"you're 100% sure what you're doing!"
+msgid "WARNING: We don't think your database needs upgrading. Only continue if you're 100% sure what you're doing!"
 msgstr ""
 
 #: src/LegacyUpgrader/Page.php:48
 msgid "I'm sure I want to run the upgrader anyway"
 msgstr ""
 
-#: src/Logs/LogExportCSV.php:69
-msgid "Version ID"
-msgstr "Verzió-ID"
+#: src/Logs/Logging.php:268 templates/content-download-box.php:39
+#: templates/content-download-filename.php:49 templates/content-download.php:50
+#, fuzzy
+msgid "%d download"
+msgid_plural "%d downloads"
+msgstr[0] "1 letöltés"
+msgstr[1] "%d letöltés"
 
-#: src/Logs/LogExportCSV.php:70
-msgid "Filename"
-msgstr "Fájlnév"
+#: src/Logs/Logging.php:271 src/class-dlm-frontend-templates.php:88
+#: templates/content-download-button.php:55
+#, fuzzy
+msgid "Downloaded %d time"
+msgid_plural "Downloaded %d times"
+msgstr[0] "Letöltve %s alkalommal"
+msgstr[1] "Letöltve %s alkalommal"
 
-#: src/Logs/LogExportCSV.php:71
-msgid "User ID"
-msgstr "Felhasználó ID"
+#: src/Logs/Logging.php:274
+msgid "%d time"
+msgid_plural "%d times"
+msgstr[0] ""
+msgstr[1] ""
 
-#: src/Logs/LogExportCSV.php:72
-msgid "User Login"
-msgstr "Bejelentkezés"
-
-#: src/Logs/LogExportCSV.php:73
-msgid "User Email"
-msgstr "Email"
-
-#: src/Logs/LogExportCSV.php:74
-msgid "User IP"
-msgstr "Felhasználó IP"
-
-#: src/Logs/LogExportCSV.php:75 src/Logs/LoggingListTable.php:199
-msgid "User Agent"
-msgstr "Felhasználói azonosító ügynök"
-
-#: src/Logs/LogExportCSV.php:78
-msgid "Meta Data"
+#: src/MembersLock/classes/class-dlm-members-access-manager.php:62
+msgid "You'll need to log in to download the file."
 msgstr ""
 
-#: src/Logs/LogPage.php:23
-msgid "Logs"
-msgstr "Napló"
+#: src/MembersLock/classes/class-dlm-members-access-manager.php:76
+#, fuzzy
+msgid "Only members can download"
+msgstr "Csak a regisztráltaknak szóló letöltés mutatása"
 
-#: src/Logs/LogPage.php:80
-msgid "Download Logs"
-msgstr "Letöltési napló"
-
-#: src/Logs/LogPage.php:82
-msgid "Export CSV"
-msgstr "Exprt CSV formában"
-
-#: src/Logs/LogPage.php:83
-msgid "Are you sure you want to delete ALL log items?"
+#: src/MembersLock/classes/class-dlm-members-modal.php:137
+msgid "User name is required"
 msgstr ""
 
-#: src/Logs/LogPage.php:84
-msgid "Delete Logs"
-msgstr "Naplófájl törlése"
+#: src/MembersLock/classes/class-dlm-members-modal.php:138
+#, fuzzy
+msgid "Password is required"
+msgstr "Jelszó kötelező"
 
-#: src/Logs/LoggingListTable.php:67 src/Shop/Admin/OrderTable.php:98
-msgid "Delete"
+#: src/MembersLock/classes/class-dlm-members-modal.php:176
+msgid "Username or Email Address"
 msgstr ""
 
-#: src/Logs/LoggingListTable.php:94
-msgid "Download Complete"
-msgstr "A letöltés befejeződött"
-
-#: src/Logs/LoggingListTable.php:102
-msgid "%s ago"
-msgstr "%s telt el a letöltés óta"
-
-#: src/Logs/LoggingListTable.php:123
-msgid " (v%s)"
+#: src/MembersLock/classes/class-dlm-members-modal.php:178
+msgid "Remember Me"
 msgstr ""
 
-#: src/Logs/LoggingListTable.php:125
-msgid " (v%s no longer exists)"
+#: src/MembersLock/classes/class-dlm-members-modal.php:179
+msgid "Log In"
 msgstr ""
 
-#: src/Logs/LoggingListTable.php:129
-msgid "Download #%d (no longer exists)"
-msgstr "Letöltés #%d (már nem létezik)"
-
-#: src/Logs/LoggingListTable.php:163
-msgid "Non-member"
-msgstr "Nem regisztrált"
-
-#: src/Logs/LoggingListTable.php:197
-msgid "User"
-msgstr "Felhasználó"
-
-#: src/Logs/LoggingListTable.php:236
-msgid "Log entries deleted"
+#: src/MembersLock/classes/class-dlm-members-modal.php:263
+msgid "Too many login attempts. Please try again later."
 msgstr ""
 
-#: src/Logs/LoggingListTable.php:253
-msgid "Any status"
-msgstr "Minden állapot"
-
-#: src/Logs/LoggingListTable.php:255 src/Shop/Order/Status/Factory.php:27
-#: src/Shop/Order/Transaction/Factory.php:45
-msgid "Failed"
-msgstr "Hibás"
-
-#: src/Logs/LoggingListTable.php:257
-msgid "Redirected"
-msgstr "Átirányított"
-
-#: src/Logs/LoggingListTable.php:259 src/Shop/Order/Status/Factory.php:24
-msgid "Completed"
-msgstr "Komplett"
-
-#: src/Logs/LoggingListTable.php:277 src/Shop/Admin/OrderTable.php:249
-msgid "Show all dates"
-msgstr "Összes dátum mutatása"
-
-#: src/Logs/LoggingListTable.php:291 src/Shop/Admin/OrderTable.php:263
-msgid "%1$s %2$d"
-msgstr "%1$s %2$d"
-
-#: src/Logs/LoggingListTable.php:298
-msgid "Select a User"
+#: src/MembersLock/classes/class-dlm-members-modal.php:286
+msgid "Invalid username or password."
 msgstr ""
 
-#: src/Logs/LoggingListTable.php:317 src/Shop/Admin/OrderTable.php:271
-msgid "25 per page"
-msgstr "25/oldal"
+#: src/MembersLock/classes/class-dlm-members-modal.php:290
+msgid "Authentification successful."
+msgstr ""
 
-#: src/Logs/LoggingListTable.php:319 src/Shop/Admin/OrderTable.php:273
-msgid "50 per page"
-msgstr "50/oldal"
+#: src/MembersLock/classes/class-dlm-members-modal.php:291
+#, fuzzy
+msgid "Download link: "
+msgstr "Letöltés slug"
 
-#: src/Logs/LoggingListTable.php:321 src/Shop/Admin/OrderTable.php:275
-msgid "100 per page"
-msgstr "100/oldal"
+#: src/MembersLock/templates/members-form-modal.php:12
+msgid "Log in to your account to download the file!"
+msgstr ""
 
-#: src/Logs/LoggingListTable.php:323 src/Shop/Admin/OrderTable.php:277
-msgid "200 per page"
-msgstr "200/oldal"
-
-#: src/Logs/LoggingListTable.php:325 src/Shop/Admin/OrderTable.php:279
-msgid "Show All"
-msgstr "Összes mutatása"
-
-#: src/Logs/LoggingListTable.php:329 src/Shop/Admin/OrderTable.php:284
-msgid "Filter"
-msgstr "Szűrés"
-
-#: src/PostTypeManager.php:21
-msgid "All Downloads"
-msgstr "Összes letöltés"
-
-#: src/PostTypeManager.php:22
-msgid "Downloads"
+#: src/PostTypeManager.php:60
+msgid "Download"
 msgstr "Letöltés"
 
-#: src/PostTypeManager.php:24 src/PostTypeManager.php:75
+#: src/PostTypeManager.php:62 src/PostTypeManager.php:134
 msgid "Add New"
 msgstr "Új létrehozása"
 
-#: src/PostTypeManager.php:25
+#: src/PostTypeManager.php:64
 msgid "Add Download"
 msgstr "Letöltés hozzáadása"
 
-#: src/PostTypeManager.php:26 src/PostTypeManager.php:77
-msgid "Edit"
-msgstr "Szerkesztés"
-
-#: src/PostTypeManager.php:27
+#: src/PostTypeManager.php:68
 msgid "Edit Download"
 msgstr "Letöltés szerkesztése"
 
-#: src/PostTypeManager.php:28
+#: src/PostTypeManager.php:70
 msgid "New Download"
 msgstr "Új letöltés"
 
-#: src/PostTypeManager.php:29 src/PostTypeManager.php:30
+#: src/PostTypeManager.php:72 src/PostTypeManager.php:74
 msgid "View Download"
 msgstr "Letöltés megtekintése"
 
-#: src/PostTypeManager.php:31
+#: src/PostTypeManager.php:76
 msgid "Search Downloads"
 msgstr "Letöltés keresése"
 
-#: src/PostTypeManager.php:32
+#: src/PostTypeManager.php:78
 msgid "No Downloads found"
 msgstr "Nem található letöltés"
 
-#: src/PostTypeManager.php:33
+#: src/PostTypeManager.php:80
 msgid "No Downloads found in trash"
 msgstr "Nem található letöltés a lomtárban"
 
-#: src/PostTypeManager.php:34
+#: src/PostTypeManager.php:82
 msgid "Parent Download"
 msgstr "Letöltés szülő"
 
-#: src/PostTypeManager.php:36
+#: src/PostTypeManager.php:85
 msgid "This is where you can create and manage downloads for your site."
 msgstr "Ez az a rész, ahol a honlapunkhoz létrehozhatunk és kezelhetünk letöltéseket."
 
-#: src/PostTypeManager.php:72
+#: src/PostTypeManager.php:128
 msgid "All Download Versions"
 msgstr ""
 
-#: src/PostTypeManager.php:73
+#: src/PostTypeManager.php:130
 msgid "Download Versions"
 msgstr ""
 
-#: src/PostTypeManager.php:74
+#: src/PostTypeManager.php:132
 msgid "Download Version"
 msgstr ""
 
-#: src/PostTypeManager.php:76
+#: src/PostTypeManager.php:136
 msgid "Add Download Version"
 msgstr ""
 
-#: src/PostTypeManager.php:78
+#: src/PostTypeManager.php:140
 msgid "Edit Download Version"
 msgstr ""
 
-#: src/PostTypeManager.php:79
+#: src/PostTypeManager.php:142
 msgid "New Download Version"
 msgstr ""
 
-#: src/PostTypeManager.php:80 src/PostTypeManager.php:81
+#: src/PostTypeManager.php:144 src/PostTypeManager.php:146
 msgid "View Download Version"
 msgstr ""
 
-#: src/PostTypeManager.php:82
+#: src/PostTypeManager.php:148
 msgid "Search Download Versions"
 msgstr ""
 
-#: src/PostTypeManager.php:83
+#: src/PostTypeManager.php:150
 msgid "No Download Versions found"
 msgstr ""
 
-#: src/PostTypeManager.php:84
+#: src/PostTypeManager.php:152
 msgid "No Download Versions found in trash"
 msgstr ""
 
-#: src/PostTypeManager.php:85
+#: src/PostTypeManager.php:154
 msgid "Parent Download Version"
 msgstr ""
 
-#: src/Product/Product.php:188
-msgid "License successfully activated."
+#: src/RestAPI/class-dlm-download-rest.php:78
+#: src/RestAPI/class-dlm-download-rest.php:91
+#: src/RestAPI/class-dlm-download-rest.php:104
+#: src/RestAPI/class-dlm-version-rest.php:67
+#: src/RestAPI/class-dlm-version-rest.php:134
+#, fuzzy
+msgid "The download's ID"
+msgstr "Letöltés ID"
+
+#: src/RestAPI/class-dlm-download-rest.php:119
+#, fuzzy
+msgid "The download's title"
+msgstr "Letöltés elnevezése"
+
+#: src/RestAPI/class-dlm-download-rest.php:225
+msgid "Unable to create a download item."
 msgstr ""
 
-#: src/Product/Product.php:430
-msgid ""
-"<a href=\"%s\">Register your copy</a> of the <strong>%s</strong> extension "
-"to receive access to automatic upgrades and support. Need a license key? <a "
-"href=\"%s\" target=\"_blank\">Purchase one now</a>."
+#: src/RestAPI/class-dlm-download-rest.php:235
+msgid "You must provide a title."
 msgstr ""
 
-#: src/Shop/Admin/OrderTable.php:61
+#: src/RestAPI/class-dlm-download-rest.php:282
+msgid "Unable to update the download item."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:92
+#, fuzzy
+msgid "Deeper analytics and reporting on your downloads."
+msgstr "Jelenítsük meg a letöltéseink listáját."
+
+#: src/RestAPI/class-dlm-extensions-base.php:97
+msgid "Anti-spam (Captcha)"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:99
+msgid "Protect your downloads from bots with reCAPTCHA or Turnstile."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:106
+msgid "Send email notifications whenever a file is downloaded."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:111
+msgid "CSV Importer"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:113
+msgid "Bulk-import downloads from a CSV file."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:118
+msgid "CSV Exporter"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:120
+msgid "Export your download data and logs as CSV."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:127
+msgid "Easily show off your downloads in a clean table or stylish grid."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:134
+msgid "Show a dedicated \"please wait\" page while a download starts."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:141
+msgid "Serve your downloadable files directly from an Amazon S3 bucket."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:148
+msgid "Serve your downloadable files directly from Google Drive."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:153
+msgid "Rule-Based Access Management"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:155
+msgid "Fine-grained rules for who can access which downloads."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:160
+msgid "Ninja Forms Lock"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:162
+msgid "Require a Ninja Forms submission before granting access to a download."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:167
+msgid "Gravity Forms Lock"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:169
+msgid "Require a Gravity Forms submission before granting access to a download."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:174
+msgid "MailChimp Lock"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:176
+msgid "Require visitors to subscribe to a Mailchimp audience before downloading."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:183
+msgid "Require visitors to submit their email address before they can download a file."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:188
+msgid "WPForms Form Lock"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:190
+msgid "Require a WPForms submission before granting access to a download."
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:195
+msgid "Contact Form 7 Lock"
+msgstr ""
+
+#: src/RestAPI/class-dlm-extensions-base.php:197
+msgid "Require a Contact Form 7 submission before granting access to a download."
+msgstr ""
+
+#: src/RestAPI/class-dlm-rest-api.php:227
+msgid "Authentication failed"
+msgstr ""
+
+#: src/RestAPI/class-dlm-rest-api.php:235
+msgid "No user found for authentication keys."
+msgstr ""
+
+#: src/RestAPI/class-dlm-settings-rest.php:519
+msgid "Path already exists."
+msgstr ""
+
+#. translators: %s: date and time of last update
+#: src/RestAPI/class-dlm-settings-rest.php:759
+msgid "Agents list last updated on: %s"
+msgstr ""
+
+#: src/RestAPI/class-dlm-settings-rest.php:766
+msgid "unknown"
+msgstr ""
+
+#. translators: %s: date and time of next scheduled sync
+#: src/RestAPI/class-dlm-settings-rest.php:772
+msgid "Agents list not yet synced. Next sync scheduled for: %s"
+msgstr ""
+
+#: src/RestAPI/class-dlm-version-rest.php:83
+#: src/RestAPI/class-dlm-version-rest.php:96
+#: src/RestAPI/class-dlm-version-rest.php:109
+#, fuzzy
+msgid "The version's ID"
+msgstr "Verzió-ID"
+
+#: src/RestAPI/class-dlm-version-rest.php:114
+#: src/RestAPI/class-dlm-version-rest.php:139
+#, fuzzy
+msgid "The version's number"
+msgstr "Verziószám (opcionális)"
+
+#: src/RestAPI/class-dlm-version-rest.php:119
+#: src/RestAPI/class-dlm-version-rest.php:144
+msgid "The version's URL"
+msgstr ""
+
+#: src/RestAPI/class-dlm-version-rest.php:170
+#, fuzzy
+msgid "Download does not exist or does not have any versions."
+msgstr "Nem létező letöltés."
+
+#: src/RestAPI/class-dlm-version-rest.php:204
+#: src/RestAPI/class-dlm-version-rest.php:227
+#: src/RestAPI/class-dlm-version-rest.php:306
+#, fuzzy
+msgid "Version does not exist."
+msgstr "Nem létező letöltés."
+
+#: src/RestAPI/class-dlm-version-rest.php:278
+msgid "Unable to create a version item."
+msgstr ""
+
+#: src/RestAPI/class-dlm-version-rest.php:285
+#: src/RestAPI/class-dlm-version-rest.php:328
+msgid "You must provide a download_id."
+msgstr ""
+
+#: src/RestAPI/class-dlm-version-rest.php:323
+msgid "Unable to update the version item."
+msgstr ""
+
+#: src/Shop/Admin/DownloadOption.php:29
+msgid "Paid Only"
+msgstr ""
+
+#: src/Shop/Admin/DownloadOption.php:30
+msgid "Only users who purchased a product that contains this download will be able to access the file."
+msgstr ""
+
+#: src/Shop/Admin/DownloadOption.php:31
+msgid "View Products"
+msgstr ""
+
+#: src/Shop/Admin/OrderTable.php:62
 msgid "Trashed orders have been permanently deleted."
 msgstr ""
 
-#: src/Shop/Admin/OrderTable.php:151 src/Widgets/Downloads.php:217
-msgid "Order"
+#: src/Shop/Admin/OrderTable.php:99
+msgid "Delete"
 msgstr ""
 
-#: src/Shop/Admin/OrderTable.php:189
+#: src/Shop/Admin/OrderTable.php:190
 msgid "Orders deleted"
 msgstr ""
 
-#: src/Shop/Admin/OrderTable.php:199
+#: src/Shop/Admin/OrderTable.php:200 src/Widgets/Downloads.php:245
 msgid "All"
 msgstr ""
 
-#: src/Shop/Admin/OrderTable.php:290
-msgid "Empty Trash"
+#: src/Shop/Admin/OrderTable.php:250
+msgid "Show all dates"
+msgstr "Összes dátum mutatása"
+
+#: src/Shop/Admin/OrderTable.php:263
+msgid "%1$s %2$d"
+msgstr "%1$s %2$d"
+
+#: src/Shop/Admin/OrderTable.php:271
+msgid "25 per page"
+msgstr "25/oldal"
+
+#: src/Shop/Admin/OrderTable.php:272
+msgid "50 per page"
+msgstr "50/oldal"
+
+#: src/Shop/Admin/OrderTable.php:273
+msgid "100 per page"
+msgstr "100/oldal"
+
+#: src/Shop/Admin/OrderTable.php:274
+msgid "200 per page"
+msgstr "200/oldal"
+
+#: src/Shop/Admin/OrderTable.php:275
+msgid "Show All"
+msgstr "Összes mutatása"
+
+#: src/Shop/Admin/Pages/Orders.php:71
+msgid "Order with that ID could not be found"
 msgstr ""
 
-#: src/Shop/Admin/Pages/Orders.php:64
-msgid "Order with that ID could not be found"
+#: src/Shop/Admin/ProductTableColumns.php:34
+msgid "Image"
+msgstr "Kép"
+
+#: src/Shop/Admin/ProductTableColumns.php:87
+#, fuzzy
+msgid "No Downloads provided"
+msgstr "Nem található letöltés"
+
+#: src/Shop/Admin/WritePanels.php:41 src/Shop/Admin/WritePanels.php:49
+msgid "Product Information"
+msgstr ""
+
+#: src/Shop/Admin/WritePanels.php:207
+msgid "Copy ID"
+msgstr ""
+
+#: src/Shop/Admin/WritePanels.php:217
+msgid "No information for new products."
 msgstr ""
 
 #: src/Shop/Ajax/AdminChangeOrderStatus.php:28
 msgid "You are not allowed to do this."
+msgstr ""
+
+#: src/Shop/Ajax/AdminChangeOrderStatus.php:32
+msgid "We need and order id and a status."
 msgstr ""
 
 #: src/Shop/Ajax/PlaceOrder.php:84
@@ -1404,10 +3196,6 @@ msgstr ""
 
 #: src/Shop/Ajax/PlaceOrder.php:90
 msgid "Invalid Payment Gateway"
-msgstr ""
-
-#: src/Shop/Ajax/PlaceOrder.php:163
-msgid "Payment gateway error: %s"
 msgstr ""
 
 #: src/Shop/Checkout/Field.php:22
@@ -1442,100 +3230,96 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:21
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:24
 msgid "Pay with PayPal"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:92
-msgid ""
-"In order to allow users to pay via PayPal on your website, you need to "
-"create an application in PayPal's developer portal. After you've done so, "
-"please copy the Client ID and Secret and set them here."
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:87
+msgid "In order to allow users to pay via PayPal on your website, you need to create an application in PayPal's developer portal. After you've done so, please copy the Client ID and Secret and set them here."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:94
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:89
 msgid "Click here to create a new PayPal application"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:96
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:91
 msgid "Click here to read the full documentation page"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:98
-msgid ""
-"The same fields from your PayPal application but from the \"sandbox\" mode."
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:93
+msgid "The same fields from your PayPal application but from the \"sandbox\" mode."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:99
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:94
 msgid "Click here to read more on how to set this up"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:106
-msgid "Invoice Prefix"
-msgstr ""
-
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:107
-msgid ""
-"This prefix is added to the paypal invoice ID. If you run multiple stores "
-"with the same PayPal account, enter an unique prefix per store here."
-msgstr ""
-
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:112
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:100
 msgid "Application Details"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:123
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:111
 msgid "Application Client ID"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:124
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:112
 msgid "Your application client ID."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:130
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:118
 msgid "Application Client Secret"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:131
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:119
 msgid "Your application client secret."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:136
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:124
 msgid "Test Settings"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:146
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:134
 msgid "Sandbox"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:147
-msgid ""
-"Check to enable PayPal sandbox mode. This allows you to test your PayPal "
-"integration."
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:135
+msgid "Check to enable PayPal sandbox mode. This allows you to test your PayPal integration."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:148
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:136
 msgid "Enable Sandbox"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:155
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:143
 msgid "Sandbox Client ID"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:156
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:144
 msgid "Your application sandbox client ID."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:162
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:151
 msgid "Sandbox Client Secret"
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:163
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:152
 msgid "Your application sandbox client secret."
 msgstr ""
 
-#: src/Shop/Checkout/PaymentGateway/Test/TestGateway.php:17
-msgid "Test payments are not real payments, used for testing your website."
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:196
+msgid "We could not process your payment. Please try again, or contact us if the problem continues."
+msgstr ""
+
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:200
+msgid "(Admin only) PayPal error: %s"
+msgstr ""
+
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:222
+msgid "Error saving order with PayPal transaction."
+msgstr ""
+
+#: src/Shop/Checkout/PaymentGateway/PayPal/PayPalGateway.php:229
+msgid "Could not create payment. Please check your PayPal logs."
 msgstr ""
 
 #: src/Shop/Email/Handler.php:14
@@ -1546,31 +3330,31 @@ msgstr ""
 msgid "%s: New order"
 msgstr ""
 
-#: src/Shop/Email/VarParser.php:50
-#: templates/shop/checkout/order-complete.php:68
+#: src/Shop/Email/VarParser.php:65
+#: templates/shop/checkout/order-complete.php:124
 msgid "Download is no longer available"
 msgstr ""
 
-#: src/Shop/Email/VarParser.php:58 templates/content-download-box.php:29
-#: templates/shop/checkout/order-complete.php:74
+#: src/Shop/Email/VarParser.php:70 templates/content-download-box.php:68
+#: templates/shop/checkout/order-complete.php:129
 msgid "Download File"
 msgstr "Letöltés fájl"
 
-#: src/Shop/Email/VarParser.php:98
-#: templates/shop/checkout/order-complete.php:25
+#: src/Shop/Email/VarParser.php:118
+#: templates/shop/checkout/order-complete.php:33
 msgid "Order ID"
 msgstr ""
 
-#: src/Shop/Email/VarParser.php:102
-#: templates/shop/checkout/order-complete.php:33
+#: src/Shop/Email/VarParser.php:122
+#: templates/shop/checkout/order-complete.php:41
 msgid "Order Date"
 msgstr ""
 
-#: src/Shop/Email/VarParser.php:106
+#: src/Shop/Email/VarParser.php:126
 msgid "Order Total"
 msgstr ""
 
-#: src/Shop/Email/VarParser.php:113
+#: src/Shop/Email/VarParser.php:133
 msgid "Payment Gateway"
 msgstr ""
 
@@ -2570,245 +4354,114 @@ msgstr ""
 msgid "Zimbabwe"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:16
-msgid "Argentine Peso"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:17
+#: src/Shop/Helper/Currency.php:15
 msgid "Australian Dollars"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:18
-msgid "Bangladeshi Taka"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:19
+#: src/Shop/Helper/Currency.php:16
 msgid "Brazilian Real"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:20
-msgid "Bulgarian Lev"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:21
-msgid "Burundian Franc"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:22
+#: src/Shop/Helper/Currency.php:17
 msgid "Canadian Dollars"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:23
-msgid "CFA Franc"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:24
-msgid "Chilean Peso"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:25
+#: src/Shop/Helper/Currency.php:18
 msgid "Chinese Yuan"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:26
-msgid "Colombian Peso"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:27
+#: src/Shop/Helper/Currency.php:19
 msgid "Czech Koruna"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:28
-msgid "Djiboutian Franc"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:29
+#: src/Shop/Helper/Currency.php:20
 msgid "Danish Krone"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:30
-msgid "Dominican Peso"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:31
-msgid "Ethiopian Birr"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:32
-msgid "Egyptian Pound"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:33
+#: src/Shop/Helper/Currency.php:21
 msgid "Euros"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:34
-msgid "Ghanaian Cedi"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:35
+#: src/Shop/Helper/Currency.php:22
 msgid "Hong Kong Dollar"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:36
-msgid "Croatia kuna"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:37
+#: src/Shop/Helper/Currency.php:23
 msgid "Hungarian Forint"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:38
-msgid "Icelandic krona"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:39
-msgid "Indonesia Rupiah"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:40
-msgid "Indian Rupee"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:41
+#: src/Shop/Helper/Currency.php:24
 msgid "Israeli Shekel"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:42
-msgid "Iranian rial"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:43
+#: src/Shop/Helper/Currency.php:25
 msgid "Japanese Yen"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:44
-msgid "Kenyan Shilling"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:45
-msgid "Lao Kip"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:46
-msgid "South Korean Won"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:47
+#: src/Shop/Helper/Currency.php:26
 msgid "Malaysian Ringgits"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:48
+#: src/Shop/Helper/Currency.php:27
 msgid "Mexican Peso"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:49
-msgid "Nigerian Naira"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:50
-msgid "Norwegian Krone"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:51
-msgid "Nepali Rupee"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:52
+#: src/Shop/Helper/Currency.php:28
 msgid "New Zealand Dollar"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:53
+#: src/Shop/Helper/Currency.php:29
+msgid "Norwegian Krone"
+msgstr ""
+
+#: src/Shop/Helper/Currency.php:30
 msgid "Philippine Pesos"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:54
-msgid "Pakistani Rupee"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:55
+#: src/Shop/Helper/Currency.php:31
 msgid "Polish Zloty"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:56
-msgid "Paraguayan Guaraní"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:57
+#: src/Shop/Helper/Currency.php:32
 msgid "Pounds Sterling"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:58
-msgid "Romanian Leu"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:59
-msgid "Russian Ruble"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:60
-msgid "Rwandan Franc"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:61
+#: src/Shop/Helper/Currency.php:33
 msgid "Singapore Dollar"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:62
-msgid "South African rand"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:63
+#: src/Shop/Helper/Currency.php:34
 msgid "Swedish Krona"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:64
+#: src/Shop/Helper/Currency.php:35
 msgid "Swiss Franc"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:65
+#: src/Shop/Helper/Currency.php:36
 msgid "Thai Baht"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:66
-msgid "Tunisian Dinar"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:67
-msgid "Turkish Lira"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:68
+#: src/Shop/Helper/Currency.php:37
 msgid "Taiwan New Dollars"
 msgstr ""
 
-#: src/Shop/Helper/Currency.php:69
-msgid "Tanzanian Shilling"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:70
-msgid "Ukrainian Hryvnia"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:71
-msgid "Ugandan Shilling"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:72
-msgid "United Arab Emirates Dirham"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:73
+#: src/Shop/Helper/Currency.php:38
 msgid "US Dollars"
-msgstr ""
-
-#: src/Shop/Helper/Currency.php:74
-msgid "Vietnamese Dong"
 msgstr ""
 
 #: src/Shop/Order/Status/Factory.php:21
 msgid "Pending Payment"
 msgstr ""
+
+#: src/Shop/Order/Status/Factory.php:24
+msgid "Completed"
+msgstr "Komplett"
+
+#: src/Shop/Order/Status/Factory.php:27
+#: src/Shop/Order/Transaction/Factory.php:45
+msgid "Failed"
+msgstr "Hibás"
 
 #: src/Shop/Order/Status/Factory.php:30
 msgid "Refunded"
@@ -2826,8 +4479,9 @@ msgstr ""
 msgid "Success"
 msgstr ""
 
-#: src/Shop/Shortcode/Buy.php:74 src/Shortcodes.php:142 src/Shortcodes.php:261
-msgid "Download not found"
+#: src/Shop/Shortcode/Buy.php:71
+#, fuzzy
+msgid "Product not found"
 msgstr "Nem található a letöltés"
 
 #: src/Shop/Shortcode/Checkout.php:71
@@ -2846,246 +4500,257 @@ msgstr ""
 msgid "Please complete the fields highlighted in red"
 msgstr ""
 
+#: src/Shop/Util/Assets.php:71
+msgid "Shortcode copied"
+msgstr ""
+
 #: src/Shop/Util/Page.php:110
 msgid "no page"
 msgstr ""
 
-#: src/TaxonomyManager.php:29
+#: src/Shop/Util/PostType.php:17
+msgid "All Products"
+msgstr ""
+
+#: src/Shop/Util/PostType.php:20
+#, fuzzy
+msgid "Add New Product"
+msgstr "Új létrehozása"
+
+#: src/Shop/Util/PostType.php:21
+msgid "Add Product"
+msgstr ""
+
+#: src/Shop/Util/PostType.php:23
+msgid "Edit Product"
+msgstr ""
+
+#: src/Shop/Util/PostType.php:24
+msgid "New Product"
+msgstr ""
+
+#: src/Shop/Util/PostType.php:25 src/Shop/Util/PostType.php:26
+msgid "View Product"
+msgstr ""
+
+#: src/Shop/Util/PostType.php:27
+#, fuzzy
+msgid "Search Products"
+msgstr "Letöltés keresése"
+
+#: src/Shop/Util/PostType.php:28
+#, fuzzy
+msgid "No Products found"
+msgstr "Nem található letöltés"
+
+#: src/Shop/Util/PostType.php:29
+#, fuzzy
+msgid "No Products found in trash"
+msgstr "Nem található letöltés a lomtárban"
+
+#: src/Shop/Util/PostType.php:30
+#, fuzzy
+msgid "Parent Product"
+msgstr "Letöltés szülő"
+
+#: src/Shop/Util/PostType.php:33
+#, fuzzy
+msgid "This is where you can create and manage download products for your site."
+msgstr "Ez az a rész, ahol a honlapunkhoz létrehozhatunk és kezelhetünk letöltéseket."
+
+#: src/Shortcodes.php:55
+msgid "Logging is not enabled."
+msgstr ""
+
+#: src/Shortcodes.php:61
+msgid "Log table not present."
+msgstr ""
+
+#: src/Shortcodes.php:182
+#, fuzzy
+msgid "No download defined"
+msgstr "Nem található letöltés"
+
+#: src/Shortcodes.php:193 src/Shortcodes.php:338
+msgid "Download not found"
+msgstr "Nem található a letöltés"
+
+#: src/TaxonomyManager.php:32
 msgid "Download Categories"
 msgstr ""
 
-#: src/TaxonomyManager.php:31
+#: src/TaxonomyManager.php:34
 msgid "Download Category"
 msgstr "Letöltési kategória"
 
-#: src/TaxonomyManager.php:32
+#: src/TaxonomyManager.php:35
 msgid "Search Download Categories"
 msgstr "Keresés a letöltési kategóriákban"
 
-#: src/TaxonomyManager.php:33
+#: src/TaxonomyManager.php:36
 msgid "All Download Categories"
 msgstr "Összes letöltési kategória"
 
-#: src/TaxonomyManager.php:34 src/TaxonomyManager.php:35
+#: src/TaxonomyManager.php:37 src/TaxonomyManager.php:38
 msgid "Parent Download Category"
 msgstr "Szülő letöltési kategória"
 
-#: src/TaxonomyManager.php:36
+#: src/TaxonomyManager.php:39
 msgid "Edit Download Category"
 msgstr "Letöltési kategória szerkesztés"
 
-#: src/TaxonomyManager.php:37
+#: src/TaxonomyManager.php:40
 msgid "Update Download Category"
 msgstr "Letöltési kategória frissítés"
 
-#: src/TaxonomyManager.php:38
+#: src/TaxonomyManager.php:41
 msgid "Add New Download Category"
 msgstr "Új letöltési kategória"
 
-#: src/TaxonomyManager.php:39
+#: src/TaxonomyManager.php:42
 msgid "New Download Category Name"
 msgstr "Új letöltési kategória neve"
 
-#: src/TaxonomyManager.php:61
+#: src/TaxonomyManager.php:70
 msgid "Download Tags"
 msgstr ""
 
-#: src/TaxonomyManager.php:63
+#: src/TaxonomyManager.php:72
 msgid "Download Tag"
 msgstr "Letöltés címke"
 
-#: src/TaxonomyManager.php:64
+#: src/TaxonomyManager.php:73
 msgid "Search Download Tags"
 msgstr "Keresés a letöltési címkék között"
 
-#: src/TaxonomyManager.php:65
+#: src/TaxonomyManager.php:74
 msgid "All Download Tags"
 msgstr "Összes letöltés-címke"
 
-#: src/TaxonomyManager.php:66 src/TaxonomyManager.php:67
+#: src/TaxonomyManager.php:75 src/TaxonomyManager.php:76
 msgid "Parent Download Tag"
 msgstr "Szülő letöltési címke"
 
-#: src/TaxonomyManager.php:68
+#: src/TaxonomyManager.php:77
 msgid "Edit Download Tag"
 msgstr "Letöltési címke szerkesztése"
 
-#: src/TaxonomyManager.php:69
+#: src/TaxonomyManager.php:78
 msgid "Update Download Tag"
 msgstr "Letöltési címke frissítése"
 
-#: src/TaxonomyManager.php:70
+#: src/TaxonomyManager.php:79
 msgid "Add New Download Tag"
 msgstr "Új letöltési címke"
 
-#: src/TaxonomyManager.php:71
+#: src/TaxonomyManager.php:80
 msgid "New Download Tag Name"
 msgstr "Új letöltési címke neve:"
 
-#: src/TemplateHandler.php:16
+#: src/TemplateHandler.php:18
 msgid "Default - Title and count"
 msgstr "Alapértelmezett - Cím és számláló"
 
-#: src/TemplateHandler.php:17
-msgid "Button - CSS styled button showing title and count"
-msgstr "Gomb - CSS-sel formázott gomb, amely mutatja a címet és a számlálót"
-
-#: src/TemplateHandler.php:18
-msgid "Box - Box showing thumbnail, title, count, filename and filesize."
-msgstr "Doboz - A bélyegkép, cím, letöltés-szám, fájlnév és fájlméret doboz bemutatása"
-
 #: src/TemplateHandler.php:19
+#, fuzzy
+msgid "Button - Shows download title"
+msgstr "Cím - Csak a letöltés címét mutassa"
+
+#: src/TemplateHandler.php:20
 msgid "Filename - Filename and download count"
 msgstr "Fájlnév - Fájlnév és letöltés-szám"
 
-#: src/TemplateHandler.php:20
+#: src/TemplateHandler.php:21
 msgid "Title - Shows download title only"
 msgstr "Cím - Csak a letöltés címét mutassa"
 
-#: src/TemplateHandler.php:21
+#: src/TemplateHandler.php:22
 msgid "Version list - Lists all download versions in an unordered list"
 msgstr "Változások listája - Valamennyi letöltési verzió mutatása egy rendezetlen listában"
 
-#: src/TemplateHandler.php:22
+#: src/TemplateHandler.php:23
 msgid "Custom template"
 msgstr "Egyedi sablonminta"
 
-#: src/Util/Onboarding.php:69
-msgid "Creating"
+#: src/TemplateHandler.php:140
+msgid "Version %s"
+msgstr "%s verzió"
+
+#: src/TermsAndConditions/classes/class-dlm-tc-access-manager.php:88
+#: src/TermsAndConditions/dlm-integrated-terms-and-conditions.php:109
+msgid "You must accept the terms and conditions to download this file."
 msgstr ""
 
-#: src/Util/Onboarding.php:70 src/Util/Onboarding.php:137
-#: src/Util/Onboarding.php:163 src/Util/Onboarding.php:188
-msgid "Page Created"
+#: src/TermsAndConditions/classes/class-dlm-tc-download-option.php:34
+msgid "Terms & Conditions Required"
 msgstr ""
 
-#: src/Util/Onboarding.php:71 src/Util/Onboarding.php:143
-#: src/Util/Onboarding.php:169 src/Util/Onboarding.php:194
-msgid "Create Page"
+#: src/TermsAndConditions/classes/class-dlm-tc-download-option.php:35
+msgid "This download will only be downloadable after accepting the terms and conditions."
 msgstr ""
 
-#: src/Util/Onboarding.php:82
-msgid ""
-"Download Monitor is almost ready for use, %sclick here%s to finish the "
-"installation process."
+#: src/TermsAndConditions/classes/class-dlm-tc-modal.php:66
+msgid "You need to accept the terms and conditions before you can download."
 msgstr ""
 
-#: src/Util/Onboarding.php:103
-msgid "Welcome to "
+#: src/TermsAndConditions/classes/class-dlm-tc-modal.php:128
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:30
+#: src/TermsAndConditions/classes/class-dlm-tc-shortcodes.php:55
+#: src/TermsAndConditions/dlm-integrated-terms-and-conditions.php:81
+msgid "I accept the terms & conditions"
 msgstr ""
 
-#: src/Util/Onboarding.php:105
-msgid ""
-"Thank you for installing Download Monitor! We'd like to help you setup the "
-"plugin correctly so you can start sharing your files as quickly as possible."
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:25
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:28
+msgid "Terms & Conditions"
 msgstr ""
 
-#: src/Util/Onboarding.php:106
-msgid ""
-"With Download Monitor you can manage, track and offer downloads to your "
-"users using your WordPress website."
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:31
+msgid "Terms & Condition Text"
 msgstr ""
 
-#: src/Util/Onboarding.php:107
-msgid ""
-"On top of that, Download Monitor allows you to sell your downloads, turning "
-"your WordPress website into fully featured e-commerce website out of the "
-"box."
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:32
+msgid "The text that visitors need to accept, is displayed next to the checkbox. Use <code>%%terms_conditions%%</code> to add a link to the terms and conditions page selected below."
 msgstr ""
 
-#: src/Util/Onboarding.php:110
-msgid ""
-"You decide if you want to offer you downloads for free or want to start "
-"selling them (or both!). Whatever you decide, you chose the right plugin for"
-" the job!"
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:36
+msgid "Terms & Conditions page"
 msgstr ""
 
-#: src/Util/Onboarding.php:115
-msgid "Let's Create Your Pages"
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:39
+msgid "Terms and Conditions page"
 msgstr ""
 
-#: src/Util/Onboarding.php:117
-msgid ""
-"In order to function properly, Download Monitor needs to create some pages "
-"in your WordPress website."
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:40
+msgid "Choose what page the users are redirected to when they click <code>%%terms_conditions%%</code> in the acceptance message."
 msgstr ""
 
-#: src/Util/Onboarding.php:118
-msgid ""
-"We can create these pages for you here. If you click the 'Create Page' "
-"button we will create that page and add the required shortcode to it. We'll "
-"also make sure the newly created page is set in your settings page."
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:46
+msgid "Global setting"
 msgstr ""
 
-#: src/Util/Onboarding.php:121
-msgid ""
-"If you don't plan on selling downloads, you do not have to create the cart "
-"and checkout page. We recommend always creating the No Access page."
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:50
+msgid "All downloads require Terms & Conditions"
 msgstr ""
 
-#: src/Util/Onboarding.php:125 src/Util/PageCreator.php:14
+#: src/TermsAndConditions/classes/class-dlm-tc-options.php:51
+msgid "Require all of your downloads to have your terms & conditions checked."
+msgstr ""
+
+#: src/UpgradeManager.php:64
+msgid "You do not have permission to access this download. %sGo to homepage%s"
+msgstr ""
+
+#: src/Util/PageCreator.php:14
 msgid "No Access"
 msgstr ""
 
-#: src/Util/Onboarding.php:126
-msgid ""
-"The page your visitors see when they are not allowed to download a file."
-msgstr ""
-
-#: src/Util/Onboarding.php:151 src/Util/PageCreator.php:27
+#: src/Util/PageCreator.php:27
 msgid "Cart"
 msgstr ""
 
-#: src/Util/Onboarding.php:152
-msgid "Your shop cart page if you decide to sell downloads."
-msgstr ""
-
-#: src/Util/Onboarding.php:176 src/Util/PageCreator.php:40
+#: src/Util/PageCreator.php:40
 msgid "Checkout"
-msgstr ""
-
-#: src/Util/Onboarding.php:177
-msgid "Your shop checkout page if you decide to sell downloads."
-msgstr ""
-
-#: src/Util/Onboarding.php:207
-msgid ""
-"Power up your Download Monitor website with our official extensions. Our "
-"extensions allow you to add specific functionality to your Download Monitor "
-"powered website and come with our premium support and updates."
-msgstr ""
-
-#: src/Util/Onboarding.php:208
-msgid "Here's a quick sample of what we offer."
-msgstr ""
-
-#: src/Util/Onboarding.php:240
-msgid "View More Extensions"
-msgstr ""
-
-#: src/Util/Onboarding.php:245
-msgid "What's Next?"
-msgstr ""
-
-#: src/Util/Onboarding.php:248
-msgid ""
-"Now that your Download Monitor installation is done, it's time to setup your"
-" downloads. You can %sread more about creating your first Download here%s."
-msgstr ""
-
-#: src/Util/Onboarding.php:249
-msgid ""
-"If you need any help in setting up your downloads or having any other "
-"question about Download Monitor, we'd be happy to help you via our support "
-"forums."
-msgstr ""
-
-#: src/Util/Onboarding.php:251
-msgid "Click here to visit our Support Forum."
-msgstr ""
-
-#: src/Util/Onboarding.php:258
-msgid "Create Your First Download"
 msgstr ""
 
 #: src/Widgets/Downloads.php:28
@@ -3096,181 +4761,211 @@ msgstr "Jelenítsük meg a letöltéseink listáját."
 msgid "Downloads List"
 msgstr "Letöltési lista"
 
-#: src/Widgets/Downloads.php:55 src/Widgets/Downloads.php:162
+#: src/Widgets/Downloads.php:55 src/Widgets/Downloads.php:171
 msgid "Featured Downloads"
 msgstr "Kiemelt letöltések"
 
-#: src/Widgets/Downloads.php:180
+#: src/Widgets/Downloads.php:191
 msgid "Limit"
 msgstr ""
 
-#: src/Widgets/Downloads.php:188
+#: src/Widgets/Downloads.php:199
 msgid "Output template"
 msgstr ""
 
-#: src/Widgets/Downloads.php:193
-msgid "Default template"
-msgstr "Alapértelmezett sablonminta"
-
-#: src/Widgets/Downloads.php:197
+#: src/Widgets/Downloads.php:208
 msgid "Order by"
 msgstr ""
 
-#: src/Widgets/Downloads.php:204
+#: src/Widgets/Downloads.php:215
 msgid "Random"
 msgstr "Véletlenszerűen"
 
-#: src/Widgets/Downloads.php:208
+#: src/Widgets/Downloads.php:219
 msgid "Date added"
 msgstr "Hozzáadás dátuma"
 
-#: src/Widgets/Downloads.php:210
+#: src/Widgets/Downloads.php:221
 msgid "Date modified"
 msgstr "Dátum módosítva"
 
-#: src/Widgets/Downloads.php:222
+#: src/Widgets/Downloads.php:233
 msgid "ASC"
 msgstr "ASC"
 
-#: src/Widgets/Downloads.php:224
+#: src/Widgets/Downloads.php:235
 msgid "DESC"
 msgstr "DESC"
 
-#: src/Widgets/Downloads.php:232
+#: src/Widgets/Downloads.php:240
+#, fuzzy
+msgid "Category"
+msgstr "Letöltési kategória"
+
+#: src/Widgets/Downloads.php:263
 msgid "Show only featured downloads"
 msgstr "Csak a kiemelt letöltések mutatása"
 
-#: src/Widgets/Downloads.php:239
+#: src/Widgets/Downloads.php:270
 msgid "Show only members only downloads"
 msgstr "Csak a regisztráltaknak szóló letöltés mutatása"
 
-#: templates/content-download-box.php:18
-#: templates/content-download-filename.php:17
-#: templates/content-download.php:16
-msgid "1 download"
-msgid_plural "%d downloads"
-msgstr[0] "1 letöltés"
-msgstr[1] "%d letöltés"
+#: src/class-dlm-cron-jobs.php:51
+msgid "DLM Once Monthly"
+msgstr ""
 
-#: templates/content-download-box.php:27
-#: templates/content-download-filename.php:14
-#: templates/content-download-title.php:13 templates/content-download.php:13
-msgid "Version %s"
-msgstr "%s verzió"
+#: src/class-dlm-download-error-handler.php:58
+#, fuzzy
+msgid "No file path defined"
+msgstr "Nincs megadva a fájl elérési útvonala"
 
-#: templates/content-download-button.php:13
-msgid "Download &ldquo;%s&rdquo;"
-msgstr "Letöltés &ldquo;%s&rdquo;"
+#: src/class-dlm-download-error-handler.php:85
+#, fuzzy
+msgid "No file paths defined"
+msgstr "Nincs megadva a fájl elérési útvonala"
 
-#: templates/content-download-button.php:14
-#: templates/content-download-version-list.php:24
-msgid "Downloaded 1 time"
-msgid_plural "Downloaded %d times"
-msgstr[0] "Letöltve 1 alkalommal"
-msgstr[1] "Letöltve %d alkalommal"
+#: src/class-dlm-download-error-handler.php:140
+#: src/class-dlm-download-error-handler.php:147
+msgid "File has been deleted or moved."
+msgstr ""
 
-#: templates/content-download-no-version.php:12
+#: src/class-dlm-download-error-handler.php:201
+msgid "Access denied to this file"
+msgstr ""
+
+#: src/class-dlm-frontend-templates.php:82
 msgid "Please set a version in your WordPress admin"
 msgstr ""
 
-#: templates/content-download-no-version.php:13
+#: src/class-dlm-modal.php:103
+msgid "An error occurred while trying to download the file."
+msgstr ""
+
+#: src/class-dlm-modal.php:115 src/class-dlm-modal.php:159
+msgid "You do not have permission to download this file."
+msgstr ""
+
+#: src/class-dlm-modal.php:173 src/class-dlm-modal.php:174
+#: src/class-dlm-modal.php:176 src/class-dlm-modal.php:177
+msgid "Error!"
+msgstr ""
+
+#: src/class-dlm-modal.php:175 src/class-dlm-modal.php:178
+#: src/class-dlm-modal.php:179
+msgid "No access!"
+msgstr ""
+
+#: templates/content-download-box.php:19
+#: templates/content-download-button.php:19
+#: templates/content-download-filename.php:19
+#: templates/content-download-no-version.php:19
+#: templates/content-download-title.php:21
+#: templates/content-download-version-list.php:19
+#: templates/content-download.php:20
+#, fuzzy
+msgid "No download found"
+msgstr "Nem található letöltés"
+
+#: templates/content-download-button.php:49
+msgid "Download &ldquo;%s&rdquo;"
+msgstr "Letöltés &ldquo;%s&rdquo;"
+
+#: templates/content-download-no-version.php:50
 msgid "has no version set!"
 msgstr ""
 
-#: templates/shop/button/add-to-cart-box.php:25
-#: templates/shop/button/add-to-cart-box.php:27
+#: templates/no-access-modal.php:94
+#, fuzzy
+msgid "Close"
+msgstr "Összes bezárása"
+
+#: templates/shop/button/add-to-cart-box.php:29
+#: templates/shop/button/add-to-cart-box.php:31
 msgid "Purchase Now"
 msgstr ""
 
-#: templates/shop/button/add-to-cart.php:14
+#: templates/shop/button/add-to-cart.php:20
 msgid "Purchase &ldquo;%s&rdquo;"
 msgstr ""
 
-#: templates/shop/button/add-to-cart.php:16
-msgid "Instant Access!"
-msgstr ""
-
-#: templates/shop/cart/empty.php:6 templates/shop/checkout/empty.php:6
+#: templates/shop/cart/empty.php:13 templates/shop/checkout/empty.php:15
 msgid "Your cart is empty."
 msgstr ""
 
-#: templates/shop/cart/item.php:11
+#: templates/shop/cart/item.php:18
 msgid "Remove this item from your cart"
 msgstr ""
 
-#: templates/shop/cart/totals.php:11
-#: templates/shop/checkout/order-review.php:34
+#: templates/shop/cart/totals.php:18
+#: templates/shop/checkout/order-review.php:41
 msgid "Subtotal"
 msgstr ""
 
-#: templates/shop/cart.php:19
+#: templates/shop/cart.php:26
 msgid "Name"
 msgstr ""
 
-#: templates/shop/cart.php:21
+#: templates/shop/cart.php:28
 msgid "Quantity"
 msgstr ""
 
-#: templates/shop/cart.php:47
+#: templates/shop/cart.php:54
 msgid "Cart Totals"
 msgstr ""
 
-#: templates/shop/cart.php:56
+#: templates/shop/cart.php:63
 msgid "Proceed to checkout"
 msgstr ""
 
-#: templates/shop/checkout/error.php:11
+#: templates/shop/checkout/error.php:19
 msgid "Checkout error"
 msgstr ""
 
-#: templates/shop/checkout/no-access.php:6
+#: templates/shop/checkout/no-access.php:13
 msgid "You have no access to this order."
 msgstr ""
 
-#: templates/shop/checkout/order-complete.php:9
+#: templates/shop/checkout/order-complete.php:17
 msgid "Thank you for your order. Please find your order details below."
 msgstr ""
 
-#: templates/shop/checkout/order-complete.php:58
-#: templates/shop/email/elements/downloads-table.php:9
+#: templates/shop/checkout/order-complete.php:114
+#: templates/shop/email/elements/downloads-table.php:22
 msgid "Download name"
 msgstr ""
 
-#: templates/shop/checkout/order-complete.php:59
+#: templates/shop/checkout/order-complete.php:115
 msgid "Download version"
 msgstr ""
 
-#: templates/shop/checkout/submit-button.php:6
+#: templates/shop/checkout/order-complete.php:147
+#, fuzzy
+msgid "No items found."
+msgstr "Nem található fájl"
+
+#: templates/shop/checkout/submit-button.php:15
 msgid "Complete order"
 msgstr ""
 
-#: templates/shop/checkout.php:22
-msgid ""
-"Your browser does not support JavaScript which our checkout page requires to"
-" function properly."
+#: templates/shop/checkout.php:30
+msgid "Your browser does not support JavaScript which our checkout page requires to function properly."
 msgstr ""
 
-#: templates/shop/checkout.php:36
+#: templates/shop/checkout.php:45
 msgid "Billing details"
 msgstr ""
 
-#: templates/shop/checkout.php:40
+#: templates/shop/checkout.php:49
 msgid "Your order"
 msgstr ""
-
-#. Plugin Name of the plugin/theme
-msgid "Download Monitor"
-msgstr "Download Monitor"
 
 #. Plugin URI of the plugin/theme
 msgid "https://www.download-monitor.com"
 msgstr "https://www.download-monitor.com"
 
 #. Description of the plugin/theme
-msgid ""
-"A full solution for managing downloadable files, monitoring downloads and "
-"outputting download links and file information on your WordPress powered "
-"site."
+#, fuzzy
+msgid "A full solution for managing and selling downloadable files, monitoring downloads and outputting download links and file information on your WordPress powered site."
 msgstr "Teljes megoldás a letölthető fájlok kezeléséhez, a letöltések folyamatos ellenőrzése, letöltési hivatkozások és ~ fájlinformációk a WordPress alapú honlapokhoz."
 
 #. Author of the plugin/theme
@@ -3278,10 +4973,169 @@ msgid "WPChill"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "https://www.WPChill.com"
+msgid "https://wpchill.com"
 msgstr ""
 
-#: src/Admin/MediaInsert.php:217
+#: src/Admin/MediaInsert.php:243
 msgctxt "Drop file here *or* select file"
 msgid "or"
 msgstr "vagy"
+
+#. translators: %s: Number of posts.
+#: src/Admin/class-dlm-admin-list-table.php:382
+#, fuzzy
+msgctxt "posts"
+msgid "Mine <span class=\"count\">(%s)</span>"
+msgid_plural "Mine <span class=\"count\">(%s)</span>"
+msgstr[0] "<span class=\"version\">%s</span> (%s) verzió"
+msgstr[1] "<span class=\"version\">%s</span> (%s) verzió"
+
+#. translators: %s: Number of posts.
+#: src/Admin/class-dlm-admin-list-table.php:403
+#, fuzzy
+msgctxt "posts"
+msgid "All <span class=\"count\">(%s)</span>"
+msgid_plural "All <span class=\"count\">(%s)</span>"
+msgstr[0] "<span class=\"version\">%s</span> (%s) verzió"
+msgstr[1] "<span class=\"version\">%s</span> (%s) verzió"
+
+#. translators: %s: Number of posts.
+#: src/Admin/class-dlm-admin-list-table.php:462
+#, fuzzy
+msgctxt "posts"
+msgid "Sticky <span class=\"count\">(%s)</span>"
+msgid_plural "Sticky <span class=\"count\">(%s)</span>"
+msgstr[0] "<span class=\"version\">%s</span> (%s) verzió"
+msgstr[1] "<span class=\"version\">%s</span> (%s) verzió"
+
+#: src/Admin/class-dlm-admin-list-table.php:1242
+msgctxt "verb"
+msgid "Trash"
+msgstr ""
+
+#: src/Admin/class-dlm-admin-list-table.php:1862
+msgctxt "post format"
+msgid "Format"
+msgstr ""
+
+#~ msgid "File URL(s)"
+#~ msgstr "Fájl URL cím(ek)"
+
+#~ msgid "File"
+#~ msgstr "Fájl"
+
+#~ msgid "Yes"
+#~ msgstr "Igen"
+
+#~ msgid "There are no stats available yet!"
+#~ msgstr "Még nem érhető el statisztikai adat."
+
+#~ msgid "Settings successfully saved"
+#~ msgstr "A beállítások sikeresen mentésre kerültek."
+
+#~ msgid "X-Accel-Redirect / X-Sendfile"
+#~ msgstr "X-Accel-Redirect / X-Sendfile"
+
+#~ msgid "If supported, <code>X-Accel-Redirect</code> / <code>X-Sendfile</code> can be used to serve downloads instead of PHP (server requires <code>mod_xsendfile</code>)."
+#~ msgstr "Amennyiben az <code>X-Accel-Redirect</code> / <code>X-Sendfile</code> támogatott, a PHP letöltés helyett használhatjuk (szerverkövetelmény: <code>mod_xsendfile</code>)."
+
+#~ msgid "Prevent hotlinking"
+#~ msgstr "Közvetlen elérés megakadályozása"
+
+#~ msgid "If enabled, the download handler will check the PHP referer to see if it originated from your site and if not, redirect them to the homepage."
+#~ msgstr "Amennyiben be van kapcsolva, a letöltés kiszolgálója ellenőrzi a PHP hivatkozást. Ha az nem az eredeti helyről származik, akkor a kezdőlapra lesz átirányítva."
+
+#~ msgid "Endpoint"
+#~ msgstr "Kimenet"
+
+#~ msgid "MD5 hashes"
+#~ msgstr "MD5 ellenőrzőszám"
+
+#~ msgid "SHA1 hashes"
+#~ msgstr "SHA1 ellenőrzőszám"
+
+#~ msgid "Generate SHA1 hash for uploaded files"
+#~ msgstr "SHA1 ellenőrzőszám létrehozása a feltöltött fájlok számára"
+
+#~ msgid "Hashes can optionally be output via shortcodes, but may cause performance issues with large files."
+#~ msgstr "Az ellenőrzőszámot opcionálisan a rövidkódokon keresztül is elő lehet állítani, de a hosszú fájlok teljesítményproblémákat is okozhatnak."
+
+#~ msgid "CRC32B hashes"
+#~ msgstr "CRC32B ellenőrzőszám"
+
+#~ msgid "Generate CRC32B hash for uploaded files"
+#~ msgstr "CRC32B ellenőrzőszám létrehozása a feltöltött fájlok számára"
+
+#~ msgid "Logging"
+#~ msgstr "Naplózás"
+
+#~ msgid "Download Log"
+#~ msgstr "Letöltési napló"
+
+#~ msgid "Log download attempts, IP addresses and more."
+#~ msgstr "Naplózzuk a letöltési próbálkozásokat, IP címeket és egyéb dolgokat."
+
+#~ msgid "Blacklist IPs"
+#~ msgstr "Feketelistás IP címek"
+
+#~ msgid "Blacklist user agents"
+#~ msgstr "Feketelistás felhasználói ügynökök"
+
+#~ msgid "Expand all"
+#~ msgstr "Összes kinyitása"
+
+#~ msgid "Redirected to file"
+#~ msgstr "Átirányítás a fájlhoz"
+
+#~ msgid "Filename"
+#~ msgstr "Fájlnév"
+
+#~ msgid "User ID"
+#~ msgstr "Felhasználó ID"
+
+#~ msgid "User Login"
+#~ msgstr "Bejelentkezés"
+
+#~ msgid "User IP"
+#~ msgstr "Felhasználó IP"
+
+#~ msgid "User Agent"
+#~ msgstr "Felhasználói azonosító ügynök"
+
+#~ msgid "Logs"
+#~ msgstr "Napló"
+
+#~ msgid "Download Logs"
+#~ msgstr "Letöltési napló"
+
+#~ msgid "Delete Logs"
+#~ msgstr "Naplófájl törlése"
+
+#~ msgid "Download Complete"
+#~ msgstr "A letöltés befejeződött"
+
+#~ msgid "Download #%d (no longer exists)"
+#~ msgstr "Letöltés #%d (már nem létezik)"
+
+#~ msgid "Non-member"
+#~ msgstr "Nem regisztrált"
+
+#~ msgid "User"
+#~ msgstr "Felhasználó"
+
+#~ msgid "Any status"
+#~ msgstr "Minden állapot"
+
+#~ msgid "Redirected"
+#~ msgstr "Átirányított"
+
+#~ msgid "Button - CSS styled button showing title and count"
+#~ msgstr "Gomb - CSS-sel formázott gomb, amely mutatja a címet és a számlálót"
+
+#~ msgid "Box - Box showing thumbnail, title, count, filename and filesize."
+#~ msgstr "Doboz - A bélyegkép, cím, letöltés-szám, fájlnév és fájlméret doboz bemutatása"
+
+#~ msgid "Downloaded 1 time"
+#~ msgid_plural "Downloaded %d times"
+#~ msgstr[0] "Letöltve 1 alkalommal"
+#~ msgstr[1] "Letöltve %d alkalommal"

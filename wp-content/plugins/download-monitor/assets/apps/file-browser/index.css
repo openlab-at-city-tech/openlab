@@ -1,0 +1,233 @@
+/* ── Modal frame ─────────────────────────────────────────────── */
+.dlm-file-browser-modal .components-modal__frame {
+	width: 560px;
+	max-width: 92vw;
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+/* ── Modal header ────────────────────────────────────────────── */
+.dlm-file-browser-modal .components-modal__header {
+	padding: 20px 24px 0 24px;
+	border-bottom: none;
+	align-items: flex-start;
+	min-height: unset;
+}
+
+.dlm-file-browser-modal .components-modal__header-heading-container {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.dlm-file-browser-modal .components-modal__header h1,
+.dlm-file-browser-modal .components-modal__header-heading {
+	font-size: 16px !important;
+	font-weight: 700 !important;
+	color: #1e1e1e !important;
+	line-height: 1.4 !important;
+	margin: 0 !important;
+}
+
+/* ── Modal content area ──────────────────────────────────────── */
+.dlm-file-browser-modal .components-modal__content {
+	padding: 0;
+	overflow: hidden;
+}
+
+/* ── Wrapper ─────────────────────────────────────────────────── */
+.dlm-fb-wrap {
+	display: flex;
+	flex-direction: column;
+}
+
+/* ── Subtitle (shown directly below modal title via CSS on header) */
+.dlm-fb-subtitle {
+	font-size: 13px;
+	color: #50575e;
+	line-height: 1.5;
+	margin: 0;
+	padding: 2px 24px 0 24px;
+}
+
+/* ── Body description ─────────────────────────────────────────── */
+.dlm-fb-desc {
+	margin: 0;
+	padding: 16px 24px 14px;
+	font-size: 13px;
+	color: #1e1e1e;
+	line-height: 1.6;
+}
+
+/* ── Tree container ──────────────────────────────────────────── */
+.dlm-fb-tree-container {
+	margin: 0 24px;
+	border: 1px solid #dcdcde;
+	border-radius: 6px;
+	background: #f6f7f7;
+	min-height: 260px;
+	max-height: 360px;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+/* ── Tree lists ───────────────────────────────────────────────── */
+.dlm-fb-tree {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.dlm-fb-tree--root {
+	padding: 8px 0;
+}
+
+/* ── Item row (shared base) ───────────────────────────────────── */
+.dlm-fb-item__row {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	background: none;
+	border: none;
+	border-left: 3px solid transparent;
+	cursor: pointer;
+	text-align: left;
+	padding-top: 7px;
+	padding-bottom: 7px;
+	padding-right: 16px;
+	font-size: 13px;
+	color: #1e1e1e;
+	line-height: 1.4;
+	box-sizing: border-box;
+	transition: background-color 0.08s ease;
+}
+
+/* ── Arrow column ─────────────────────────────────────────────── */
+.dlm-fb-item__arrow {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	flex-shrink: 0;
+	color: #787c82;
+}
+
+.dlm-fb-item__arrow--spacer {
+	visibility: hidden;
+}
+
+.dlm-fb-item__arrow .dashicons {
+	font-size: 14px;
+	width: 14px;
+	height: 14px;
+}
+
+/* ── Icon column ──────────────────────────────────────────────── */
+.dlm-fb-item__icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	margin-right: 8px;
+	flex-shrink: 0;
+	color: #646970;
+}
+
+.dlm-fb-item__icon .dashicons {
+	font-size: 18px;
+	width: 18px;
+	height: 18px;
+}
+
+/* ── Item name ────────────────────────────────────────────────── */
+.dlm-fb-item__name {
+	flex: 1;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	font-weight: 400;
+}
+
+/* ── Folder row ───────────────────────────────────────────────── */
+.dlm-fb-folder__row:hover {
+	background-color: #e8e8e8;
+}
+
+.dlm-fb-folder__row .dlm-fb-item__name {
+	font-weight: 600;
+}
+
+/* ── File row ─────────────────────────────────────────────────── */
+.dlm-fb-file__row:hover {
+	background-color: #dce6f5;
+	border-left-color: #2271b1;
+}
+
+.dlm-fb-file__row:hover .dlm-fb-item__icon {
+	color: #2271b1;
+}
+
+/* ── Spinner inside row ───────────────────────────────────────── */
+.dlm-fb-item__spinner {
+	margin-left: 8px;
+	display: flex;
+	align-items: center;
+}
+
+.dlm-fb-item__spinner .components-spinner {
+	margin: 0;
+	width: 14px;
+	height: 14px;
+}
+
+/* ── Empty & error ────────────────────────────────────────────── */
+.dlm-fb-empty {
+	font-size: 12px;
+	color: #787c82;
+	font-style: italic;
+	padding-top: 6px;
+	padding-bottom: 6px;
+	padding-right: 16px;
+}
+
+.dlm-fb-empty--root {
+	padding: 32px 24px;
+	text-align: center;
+	font-size: 13px;
+}
+
+.dlm-fb-error {
+	padding: 16px;
+	color: #d63638;
+	font-size: 13px;
+}
+
+/* ── Loading ──────────────────────────────────────────────────── */
+.dlm-fb-loading {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	min-height: 200px;
+}
+
+/* ── Footer ───────────────────────────────────────────────────── */
+.dlm-fb-footer {
+	display: flex;
+	justify-content: flex-end;
+	padding: 16px 24px 20px;
+	margin-top: 16px;
+}
+
+.dlm-fb-footer .components-button.is-secondary {
+	border-color: #dcdcde;
+	color: #1e1e1e;
+	height: 36px;
+	padding: 0 16px;
+	font-size: 13px;
+	border-radius: 4px;
+}
+
+.dlm-fb-footer .components-button.is-secondary:hover {
+	border-color: #8c8f94;
+	color: #1e1e1e;
+}

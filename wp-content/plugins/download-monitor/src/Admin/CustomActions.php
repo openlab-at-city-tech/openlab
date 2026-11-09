@@ -348,6 +348,31 @@ class DLM_Custom_Actions {
 	}
 
 	/**
+	 * Copy post meta from one post to another
+	 *
+	 * @param int   $from_id
+	 * @param int   $to_id
+	 * @param array $ignored_keys
+	 */
+	private function copy_post_meta( $from_id, $to_id, $ignored_keys = array() ) {
+		$metas = get_post_meta( $from_id );
+		if ( ! is_array( $metas ) ) {
+			return;
+		}
+
+		foreach ( $metas as $meta_key => $meta_values ) {
+			if ( in_array( $meta_key, $ignored_keys, true ) ) {
+				continue;
+			}
+
+			// get_post_meta() without a key returns raw serialized values, add_post_meta() unslashes.
+			foreach ( $meta_values as $meta_value ) {
+				add_post_meta( $to_id, $meta_key, wp_slash( maybe_unserialize( $meta_value ) ) );
+			}
+		}
+	}
+
+	/**
 	 * AJAX callback, duplicate download
 	 */
 	public function ajax_duplicate_download() {
@@ -376,16 +401,7 @@ class DLM_Custom_Actions {
 			download_monitor()->service( 'download_repository' )->persist( $download );
 
 			// Set Meta's
-			$old_metas = get_post_meta( $download_id );
-			if ( count( $old_metas ) > 0 ) {
-				foreach ( $old_metas as $om_key => $om_vals ) {
-					if ( ! in_array( $om_key, $this->ignored_meta ) ) {
-						foreach ( $om_vals as $om_val ) {
-							add_post_meta( $download->get_id(), $om_key, $om_val );
-						}
-					}
-				}
-			}
+			$this->copy_post_meta( $download_id, $download->get_id(), array_merge( $this->ignored_meta, array( '_featured', '_members_only', '_redirect_only', '_new_tab' ) ) );
 
 			// Set Tags
 			$old_tags = wp_get_post_terms( $download_id, 'dlm_download_tag' );
@@ -413,22 +429,15 @@ class DLM_Custom_Actions {
 				/** @var DLM_Download_Version $file_version */
 				foreach ( $file_versions as $file_version ) {
 
+					$old_version_id = $file_version->get_id();
+
 					// set new data
 					$file_version->set_id( 0 );
 					$file_version->set_download_id( $download->get_id() );
 					$vr->persist( $file_version );
 
 					// Set meta values for this Version
-					$old_file_metas = get_post_meta( $file_version );
-					if ( is_array( $old_file_metas ) && count( $old_file_metas ) > 0 ) {
-						foreach ( $old_file_metas as $omf_key => $omf_vals ) {
-							if ( ! in_array( $omf_key, $this->ignored_meta ) ) {
-								foreach ( $omf_vals as $omf_val ) {
-									add_post_meta( $file_version->get_id(), $omf_key, $omf_val );
-								}
-							}
-						}
-					}
+					$this->copy_post_meta( $old_version_id, $file_version->get_id(), array_merge( $this->ignored_meta, array( '_version', '_files', '_filesize', '_md5', '_sha1', '_sha256', '_crc32' ) ) );
 				}
 			}
 

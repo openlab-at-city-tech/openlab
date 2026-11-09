@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 44" width="44" height="44">
+	<style>
+		.dlm-spinner-arc {
+			transform-origin: 22px 22px;
+			animation: dlm-spinner-rotate 0.9s linear infinite;
+		}
+		@keyframes dlm-spinner-rotate {
+			to { transform: rotate( 360deg ); }
+		}
+	</style>
+	<circle cx="22" cy="22" r="18" fill="none" stroke="#d7f0fa" stroke-width="6" />
+	<circle class="dlm-spinner-arc" cx="22" cy="22" r="18" fill="none" stroke="#1cb8e6" stroke-width="6" stroke-linecap="round" stroke-dasharray="28 200" />
+</svg>

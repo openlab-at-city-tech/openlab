@@ -12,7 +12,6 @@ class DLM_TC_Options {
 	public function setup() {
 
 		add_filter( 'dlm_settings', array( $this, 'add_settings' ) );
-		add_filter( 'dlm_settings_lazy_select_dlm_tc_content_page', array( $this, 'get_pages' ) );
 	}
 
 	/**
@@ -31,7 +30,7 @@ class DLM_TC_Options {
 				'std'   => __( 'I accept the terms & conditions', 'download-monitor' ),
 				'label' => __( 'Terms & Condition Text', 'download-monitor' ),
 				'desc'  => __( 'The text that visitors need to accept, is displayed next to the checkbox. Use <code>%%terms_conditions%%</code> to add a link to the terms and conditions page selected below.', 'download-monitor' ),
-				'type'  => 'textarea'
+				'type'  => 'editor'
 			),
 			array(
 				'title' => __( 'Terms & Conditions page', 'download-monitor' ),
@@ -40,7 +39,8 @@ class DLM_TC_Options {
 				'label'   => __( 'Terms and Conditions page', 'download-monitor' ),
 				'desc'    => __( "Choose what page the users are redirected to when they click <code>%%terms_conditions%%</code> in the acceptance message.", 'download-monitor' ),
 				'type'    => 'lazy_select',
-				'options' => array()
+				'options' => array(),
+				'width'   => 'half'
 			),
 			array(
 				'title' => __( 'Global setting', 'download-monitor' ),
@@ -54,30 +54,6 @@ class DLM_TC_Options {
 		);
 
 		return $settings;
-	}
-
-	/**
-	 * Return pages with ID => Page title format
-	 *
-	 * @return array
-	 */
-	public function get_pages() {
-
-		// pages
-		$pages = array( array( 'key' => 0, 'lbl' => __( 'Select Page', 'download-monitor' ) ) );
-
-		// get pages from db
-		$db_pages = get_pages();
-
-		// check and loop
-		if ( count( $db_pages ) > 0 ) {
-			foreach ( $db_pages as $db_page ) {
-				$pages[] = array( 'key' => $db_page->ID, 'lbl' => $db_page->post_title );
-			}
-		}
-
-		// return pages
-		return $pages;
 	}
 
 }

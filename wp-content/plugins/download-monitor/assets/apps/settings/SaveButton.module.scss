@@ -1,0 +1,29 @@
+.wrap {
+	box-shadow: none;
+	color: var(--theme-text-color);
+	font-weight: 500;
+	height: auto;
+	outline: none;
+	padding: 0;
+	margin-top: var(--theme-content-spacing);
+	padding-top: var(--theme-content-spacing);
+	border-top: 1px solid var(--theme-border-color);
+	position: relative;
+	text-align: left;
+	width: 100%;
+	box-sizing: border-box;
+	justify-content: flex-end;
+	display: flex;
+}
+
+.notice {
+	position: absolute;
+	right: 25px;
+	top: 50%;
+	transform: translateY(-50%);
+	background-color: #46b450;
+	color: white;
+	padding: 8px 16px;
+	border-radius: 6px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}

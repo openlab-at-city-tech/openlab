@@ -14,8 +14,12 @@ import TemplateInput from './components/TemplateInput';
 
 //setLocaleData( window.gutenberg_dlm_blocks.localeData, 'download-monitor' );
 
+const isDeprecated = !! ( window.dlmBlocks && window.dlmBlocks.buttonBlockDeprecated );
+
 registerBlockType( 'download-monitor/download-button', {
-	title: __( 'Download Button', 'download-monitor' ),
+	title: isDeprecated
+		? __( 'Download Button (Legacy)', 'download-monitor' )
+		: __( 'Download Button', 'download-monitor' ),
 	icon: 'download',
 	keywords: [
 		__( 'download', 'download-monitor' ),
@@ -23,6 +27,9 @@ registerBlockType( 'download-monitor/download-button', {
 		__( 'file', 'download-monitor' ),
 	],
 	category: 'common',
+	supports: {
+		inserter: ! isDeprecated,
+	},
 	attributes: {
 		download_id: {
 			type: 'number',

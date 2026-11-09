@@ -6,13 +6,6 @@
 class DLM_Network_Settings {
 
 	/**
-	 * The DLM_Downloads_Path_Table
-	 *
-	 * @var object $table Holds the table object.
-	 */
-	public $table;
-
-	/**
 	 * Holds the class object.
 	 *
 	 * @since 5.0.0

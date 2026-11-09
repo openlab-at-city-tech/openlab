@@ -4,7 +4,7 @@
  *
  * More info on overriding template files can be found here: https://www.download-monitor.com/kb/overriding-content-templates/
  *
- * @version 4.9.6
+ * @version 5.3.0
  *
  * @var DLM_Download       $dlm_download   The download object.
  * @var Attributes         $dlm_attributes The shortcode attributes.
@@ -41,18 +41,22 @@ if ( ! empty( $dlm_attributes['className'] ) ) {
 do_action( 'dlm_template_content_before_link', $dlm_download, $attributes, $template );
 ?>
 
+<div class="wp-block-button">
 <a <?php
 echo
 DLM_Utils::generate_attributes( $attributes['link_attributes'] ) // phpcs:ignore WordPress.Security.EscapeOutput ?> >
 	<?php
 	printf( esc_html__( 'Download &ldquo;%s&rdquo;', 'download-monitor' ), wp_kses_post( $dlm_download->get_title() ) ); ?>
-	<small><?php
+	<span class="dlm-button-meta"><?php
 		echo esc_html( $dlm_download->get_version()->get_filename() ); ?>
+		&ndash; <span
+			class="dlm-download-count-value"
+			data-count-format="times"><?php
+			printf( esc_html( _n( 'Downloaded %d time', 'Downloaded %d times', $dlm_download->get_download_count(), 'download-monitor' ) ), absint( $dlm_download->get_download_count() ) ) ?></span>
 		&ndash; <?php
-		printf( esc_html( _n( 'Downloaded 1 time', 'Downloaded %d times', $dlm_download->get_download_count(), 'download-monitor' ) ), absint( $dlm_download->get_download_count() ) ) ?>
-		&ndash; <?php
-		echo esc_html( $dlm_download->get_version()->get_filesize_formatted() ); ?></small>
+		echo esc_html( $dlm_download->get_version()->get_filesize_formatted() ); ?></span>
 </a>
+</div>
 <?php
 
 /**

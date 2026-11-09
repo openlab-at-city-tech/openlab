@@ -30,7 +30,12 @@ class DLM_Admin {
 
 		add_action( 'init', array( $this, 'required_classes' ), 30 );
 		// Remove admin notices from DLM pages
-		add_action( 'admin_notices', array(  $this, 'remove_admin_notices' ), 9 );
+		add_action( 'admin_notices', array(  $this, 'remove_admin_notices' ), 1 );
+		add_action( 'all_admin_notices', array(  $this, 'remove_admin_notices' ), 1 );
+
+		add_action( 'in_admin_header', array( $this, 'dlm_page_header' ) );
+		add_filter( 'dlm_page_header', array( $this, 'page_header_locations' ) );
+		add_action( 'current_screen', array( $this, 'check_settings_endpoint_conflict' ) );
 
 		// Admin menus
 		add_action( 'admin_menu', array( $this, 'admin_menu' ), 20 );
@@ -38,12 +43,6 @@ class DLM_Admin {
 		// setup settings
 		$settings = new DLM_Admin_Settings();
 		add_action( 'admin_init', array( $settings, 'register_settings' ) );
-
-		$settings->register_lazy_load_callbacks();
-
-		// setup settings page
-		$settings_page = new DLM_Settings_Page();
-		$settings_page->setup();
 
 		// Handle all functinality that involves Media Library
 		$dlm_media_library = DLM_Media_Library::get_instance();
@@ -185,8 +184,8 @@ class DLM_Admin {
 		/**
 		 * Hook for menu link
 		 *
-		 * @hooked DLM_Settings_Page add_settings_page() - 30
-		 * @hooked DLM_Admin_Extensions extensions_pages() - 30
+		 * @hooked DLM_Settings_React_Page settings_pages() - 20
+		 * @hooked DLM_Extensions_Page extensions_pages() - 30
 		 * @hooked DLM_Reports_Page add_admin_menu() - 30
 		 * @hooked Orders orders_menu() - 30
 		 *
@@ -211,10 +210,6 @@ class DLM_Admin {
 	 * Load our classes
 	 */
 	public function required_classes() {
-
-		// Loads the DLM Admin Extensions class
-		// Add Extensions pages
-		DLM_Admin_Extensions::get_instance();
 
 		// Load the DLM Admin Helper class
 		DLM_Admin_Helper::get_instance();
@@ -308,7 +303,68 @@ class DLM_Admin {
 		$screen = get_current_screen();
 		if ( isset( $screen->post_type ) && 'dlm_download' === $screen->post_type ) {
 			remove_all_actions( 'admin_notices' );
+			remove_all_actions( 'all_admin_notices' );
 		}
 
+	}
+
+	/**
+	 * Mount point for the React page header — rendered on every DLM
+	 * admin screen (see page_header_locations()).
+	 */
+	public static function dlm_page_header() {
+		if ( ! apply_filters( 'dlm_page_header', false ) ) {
+			return;
+		}
+
+		echo '<div id="dlm-page-header-app"></div>';
+	}
+
+	/**
+	 * @param $return
+	 *
+	 * @return bool|mixed
+	 */
+	public function page_header_locations( $return ) {
+		$current_screen = get_current_screen();
+
+		if ( 'dlm_download' === $current_screen->post_type ) {
+			return true;
+		}
+
+		return $return;
+	}
+
+	/**
+	 * Warn if the download endpoint conflicts with an existing page/post slug.
+	 */
+	public function check_settings_endpoint_conflict() {
+		$screen = get_current_screen();
+
+		if ( ! $screen || 'dlm_download_page_download-monitor-settings' !== $screen->base ) {
+			return;
+		}
+
+		$ep_value   = get_option( 'dlm_download_endpoint' );
+		$page_check = get_page_by_path( $ep_value, 'ARRAY_A', array( 'page', 'post' ) );
+		$cpt_check  = post_type_exists( $ep_value );
+
+		if ( $page_check || $cpt_check ) {
+			$notice = array(
+				'title'       => esc_html__( 'Endpoint already in use!', 'download-monitor' ),
+				// translators: %s is replaced with the endpoint.
+				'message'     => sprintf( esc_html__( 'The Download Monitor endpoint "%s" is already in use by a page or post. Please change the endpoint to something else.', 'download-monitor' ), get_option( 'dlm_download_endpoint' ) ),
+				'status'      => 'error',
+				'source'      => array(
+					'slug' => 'download-monitor',
+					'name' => 'Download Monitor',
+				),
+				'dismissible' => false,
+			);
+
+			WPChill_Notifications::add_notification( 'dlm-endpoint-in-use', $notice );
+		} else {
+			WPChill_Notifications::remove_notification( 'dlm-endpoint-in-use' );
+		}
 	}
 }

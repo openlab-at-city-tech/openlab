@@ -46,14 +46,10 @@ class DLM_Plugin_Status {
 	private function set_hooks() {
 		// Add Templates tab in the Download Monitor's settings page.
 		add_filter( 'dlm_settings', array( $this, 'status_tab' ), 15, 1 );
-		// Show the templates tab content.
-		add_action( 'dlm_tab_section_content_templates', array( $this, 'templates_content' ) );
 		// Add tests to the Site Health Info page.
 		add_filter( 'site_status_tests', array( $this, 'add_wp_tests' ), 30, 1 );
 		// Add required modules to the Site Health Info page.
 		add_filter( 'site_status_test_php_modules', array( $this, 'check_modules' ), 30, 1 );
-		// Hide the save button in the Templates tab.
-		add_filter( 'dlm_show_save_settings_button', array( $this, 'hide_save_button' ), 15, 3 );
 	}
 
 	/**
@@ -68,159 +64,15 @@ class DLM_Plugin_Status {
 		$settings['general']['sections']['templates'] = array(
 			'title'  => __( 'Templates', 'download-monitor' ),
 			'fields' => array(
-				// Add empty title field to show the templates tab, otherwise it won't show because of the
-				// "Hide empty sections" setting when having a license.
 				array(
 					'name'     => '',
-					'type'     => 'title',
-					'title'    => __( '', 'download-monitor' ),
+					'type'     => 'templates_table',
 					'priority' => 10,
 				),
 			),
 		);
 
 		return $settings;
-	}
-
-	/**
-	 * Show the templates tab content.
-	 *
-	 * @since 4.9.6
-	 */
-	public function templates_content() {
-		echo '<div class="wp-clearfix">';
-		$theme_info = $this->get_theme_info();
-
-		if ( empty( $theme_info['overrides'] ) ) {
-			echo '<h3>' . esc_html__( 'None of Download Monitor\'s output templates are being overridden by your theme.', 'download-monitor' ) . '</h3>';
-			echo '</div>';
-
-			return;
-		}
-
-		echo '<h3>' . sprintf( esc_html__( 'There are %s overriden templates!', 'download-monitor' ), count( $theme_info['overrides'] ) ) . '</h3>';
-		?>
-		<table
-			class='dlm-template-override'>
-			<thead>
-			<tr>
-				<td>
-					<?php
-					esc_html_e( 'Overridden file', 'download-monitor' );
-					?>
-					<div
-						class='wpchill-tooltip'>
-						<i>[?]</i>
-						<div
-							class='wpchill-tooltip-content'><?php
-							esc_html_e( 'The template that has been overridden.', 'download-monitor' ); ?></div>
-					</div>
-				</td>
-				<td>
-					<?php
-					esc_html_e( 'Overridden file version', 'download-monitor' );
-					?>
-					<div
-						class='wpchill-tooltip'>
-						<i>[?]</i>
-						<div
-							class='wpchill-tooltip-content'><?php
-							esc_html_e( 'The version of the overridden file.', 'download-monitor' ); ?></div>
-					</div>
-				</td>
-				<td>
-					<?php
-					esc_html_e( 'Core version', 'download-monitor' );
-					?>
-					<div
-						class='wpchill-tooltip'>
-						<i>[?]</i>
-						<div
-							class='wpchill-tooltip-content'><?php
-							esc_html_e( 'The version of the core file.', 'download-monitor' ); ?></div>
-					</div>
-				</td>
-				<td>
-					<?php
-					esc_html_e( 'Status', 'download-monitor' );
-					?>
-					<div
-						class='wpchill-tooltip'>
-						<i>[?]</i>
-						<div
-							class='wpchill-tooltip-content'><?php
-							esc_html_e( 'Action status. If core version is bigger than the overridden file version it is recommended to update the overridden file.', 'download-monitor' ); ?></div>
-					</div>
-				</td>
-				<td>
-					<?php
-					esc_html_e( 'Edit', 'download-monitor' );
-					?>
-					<div
-						class='wpchill-tooltip'>
-						<i>[?]</i>
-						<div
-							class='wpchill-tooltip-content'><?php
-							esc_html_e( 'Edit the file using the theme editor.', 'download-monitor' ); ?></div>
-					</div>
-				</td>
-			</tr>
-			</thead>
-			<tbody>
-			<?php
-			// Cycle through the overrides and show them in a table.
-			foreach ( $theme_info['overrides'] as $override ) {
-				$core_version        = ! empty( $override['core_version'] ) ? $override['core_version'] : '-';
-				$theme_version       = ! empty( $override['version'] ) ? $override['version'] : '-';
-				$theme_version_class = '';
-				$needs_update        = false;
-				if ( ! empty( $theme_version ) && version_compare( $theme_version, $core_version, '<' ) ) {
-					$theme_version_class = ' class="dlm-template-outdated"';
-					$needs_update        = true;
-				}
-				?>
-				<tr>
-					<td class="dlm-template-file">
-						<?php
-						echo '<strong>' . esc_html( $override['file'] ) . '</strong>'; ?>
-					</td>
-					<td class="dlm-template-version">
-						<?php
-						echo esc_html( $theme_version ); ?>
-					</td>
-					<td class="dlm-template-core-version">
-						<?php
-						echo esc_html( $core_version ); ?>
-					</td>
-					<td class="dlm-template-update <?php
-					echo esc_attr( $theme_version_class ) ?>">
-						<?php
-						if ( $needs_update ) {
-							echo '<span class="dashicons dashicons-warning" style="color:red;" title="needs update"></span>';
-						} else {
-							echo '<span class="dashicons dashicons-yes" style="color:green;"></span>';
-						}
-						?>
-					</td>
-					<td class='dlm-template-core-version'>
-						<?php
-						$edit_url = http_build_query(
-							array(
-								'file'  => str_replace( $theme_info['template'] . '/', '', $override['file'] ),
-								'theme' => $theme_info['template'],
-							)
-						);
-						echo '<a href="' . esc_url( admin_url( 'theme-editor.php?' ) . $edit_url ) . '" class="button button-secondary" target="_blank">' . esc_html__( 'Edit', 'download-monitor' ) . '</a>';
-						?>
-					</td>
-				</tr>
-				<?php
-			}
-			?>
-			</tbody>
-		</table>
-		<?php
-		echo '</div>';
 	}
 
 	/**
@@ -550,21 +402,5 @@ class DLM_Plugin_Status {
 	public function check_modules( $modules ) {
 		// For the moment we only return the modules from WordPress. Placed here for future use.
 		return $modules;
-	}
-
-	/**
-	 * Add the templates tab to the settings page.
-	 *
-	 * @param  array  $settings  Array of settings.
-	 *
-	 * @return bool
-	 * @since 5.0.0
-	 */
-	public function hide_save_button( $return, $settings, $active_section ) {
-		if ( 'templates' === $active_section ) {
-			return false;
-		}
-
-		return $return;
 	}
 }

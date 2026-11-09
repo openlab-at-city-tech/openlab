@@ -25,9 +25,12 @@ class DLM_Admin_Writepanels {
 	 */
 	public function __construct() {
 		add_action( 'add_meta_boxes_dlm_download', array( $this, 'add_meta_boxes' ), 15 );
+		add_filter( 'default_hidden_meta_boxes', array( $this, 'default_hidden_meta_boxes' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'save_post' ), 100, 2 );
 		add_action( 'dlm_save_meta_boxes', array( $this, 'save_meta_boxes' ), 100, 2 );
 		add_action( 'wp_ajax_dlm_upload_file', array( $this, 'upload_file' ) );
+		add_filter( 'redirect_post_location', array( $this, 'redirect_no_title' ), 10, 2 );
+		add_action( 'admin_notices', array( $this, 'notice_no_title' ), 8 );
 	}
 
 	/**
@@ -102,21 +105,24 @@ class DLM_Admin_Writepanels {
 			add_meta_box( $metabox['id'], $metabox['title'], $metabox['callback'], $metabox['screen'], $metabox['context'], 'high' );
 		}
 
-		// Excerpt.
-		if ( function_exists( 'wp_editor' ) ) {
-			remove_meta_box( 'postexcerpt', 'dlm_download', 'normal' );
-			add_meta_box(
-				'postexcerpt',
-				esc_html__( 'Short Description', 'download-monitor' ),
-				array(
-					$this,
-					'short_description',
-				),
-				'dlm_download',
-				'normal',
-				'high'
-			);
+		remove_meta_box( 'postexcerpt', 'dlm_download', 'normal' );
+	}
+
+	/**
+	 * Hide the Custom Fields metabox by default. Users can enable it from Screen Options.
+	 *
+	 * @param array     $hidden The default hidden metaboxes.
+	 * @param WP_Screen $screen The current screen.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function default_hidden_meta_boxes( $hidden, $screen ) {
+		if ( 'dlm_download' === $screen->id && ! in_array( 'postcustom', $hidden, true ) ) {
+			$hidden[] = 'postcustom';
 		}
+
+		return $hidden;
 	}
 
 	/**
@@ -140,59 +146,31 @@ class DLM_Admin_Writepanels {
 					$this->download_post = $GLOBALS['dlm_download'];
 				}
 			}
-
-			do_action( 'dlm_information_start', $this->download_post->get_id(), $this->download_post );
-			?>
-			<div>
-				<p>
-				<?php
-					echo esc_html__( 'ID', 'download-monitor' );
-				?>
-				</p>
-				<?php
-				echo '<input type="text" id="dlm-info-id" value="' . esc_attr( $this->download_post->get_id() ) . '" readonly onfocus="this.select()"/>';
-				?>
-				<a href="#" title="
-				<?php
-				esc_attr_e( 'Copy ID', 'download-monitor' );
-				?>
-				" class="copy-dlm-button button button-primary dashicons dashicons-format-gallery" data-item="Id" style="width:40px;"></a><span></span>
-			</div>
-			<div>
-				<p>
-				<?php
-					echo esc_html__( 'URL', 'download-monitor' );
-				?>
-				</p>
-				<?php
-				echo '<input type="text" id="dlm-info-id" value="' . esc_attr( $this->download_post->get_the_download_link() ) . '" readonly onfocus="this.select()"/>';
-				?>
-				<a href="#" title="
-				<?php
-				esc_attr_e( 'Copy URL', 'download-monitor' );
-				?>
-				" class="copy-dlm-button button button-primary dashicons dashicons-format-gallery" data-item="Url" style="width:40px;"></a><span></span>
-			</div>
-			<div>
-				<p>
-				<?php
-					echo esc_html__( 'Shortcode', 'download-monitor' );
-				?>
-				</p>
-				<?php
-				echo '<input type="text" id="dlm-info-id" value=\'[download id="' . esc_attr( $this->download_post->get_id() ) . '"]\' readonly onfocus="this.select()"/>';
-				?>
-				<a href="#" title="
-				<?php
-				esc_attr_e( 'Copy shortcode', 'download-monitor' );
-				?>
-				" class="copy-dlm-button button button-primary dashicons dashicons-format-gallery" data-item="Shortcode" style="width:40px;"></a><span></span>
-			</div>
-			<?php
-			do_action( 'dlm_information_end', $this->download_post->get_id(), $this->download_post );
 		} catch ( Exception $e ) {
-			echo '<p>' . esc_html__( 'No download information for new downloads.', 'download-monitor' ) . '</p>';
+			$this->download_post = new DLM_Download();
+			$this->download_post->set_id( $post->ID );
+			$this->download_post->set_post( $post );
 		}
+
+		echo '<div id="dlm-download-information-app"></div>';
+
+		wp_add_inline_script(
+			'dlm_download_information',
+			'window.dlmDownloadInformation = ' . wp_json_encode(
+				array(
+					'downloadId' => $this->download_post->get_id(),
+					'url'        => $this->download_post->get_the_download_link(),
+					'shortcode'  => '[download id="' . $this->download_post->get_id() . '"]',
+					'strings'    => array(
+						'url'       => __( 'URL', 'download-monitor' ),
+						'shortcode' => __( 'Shortcode', 'download-monitor' ),
+						'copy'      => __( 'Copy', 'download-monitor' ),
+						'copied'    => __( 'Copied', 'download-monitor' ),
+					),
+				)
+			) . ';',
+			'before'
+		);
 
 		echo '</div>';
 	}
@@ -426,6 +404,9 @@ class DLM_Admin_Writepanels {
 					if ( $remote_file ) {
 						continue;
 					}
+					if ( ! $file_path ) {
+						continue;
+					}
 					$f_path = str_replace( DLM_Utils::basename( $file_path ), '', $file_path );
 					// Check if the path is in the allowed paths and has not been added to the new paths array.
 					if ( $restriction && ! in_array( $f_path, $new_paths ) ) {
@@ -497,33 +478,55 @@ class DLM_Admin_Writepanels {
 			<?php
 			do_action( 'dlm_download_monitor_files_writepanel_end', $this->download_post );
 			?>
+			<div id="dlm-file-browser-root"></div>
 
 		</div>
 		<?php
 	}
 
 	/**
-	 * short_description function.
-	 *
-	 * @access public
-	 *
-	 * @param  WP_Post $post
-	 *
-	 * @return void
+	 * Add error query arg to redirect when title is missing, and force draft so the download isn't published.
+	 * $_POST is still available in this filter — same request as the save.
 	 */
-	public function short_description( $post ) {
-		$settings = array(
-			'textarea_name' => 'excerpt',
-			'editor_css'    => '<style>#wp-excerpt-editor-container .wp-editor-area{height:200px; width:100%;}</style>',
-			'teeny'         => true,
-			'dfw'           => false,
-			'tinymce'       => true,
-			'quicktags'     => false,
-			'wpautop'       => false,
-			'media_buttons' => false,
-		);
+	public function redirect_no_title( $location, $post_id ) {
+		static $processed = false;
+		if ( $processed ) {
+			return $location;
+		}
+		if ( 'dlm_download' !== get_post_type( $post_id ) ) {
+			return $location;
+		}
+		// phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! isset( $_POST['post_title'] ) || '' !== trim( sanitize_text_field( wp_unslash( $_POST['post_title'] ) ) ) ) {
+			return $location;
+		}
+		$processed = true;
+		// If dlm_nonce is still present, save_post didn't run — save meta data (files, versions, options) now.
+		// If save_post already ran, it unsets dlm_nonce, so we skip to avoid double-saving.
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( ! empty( $_POST['dlm_nonce'] ) && wp_verify_nonce( wp_unslash( $_POST['dlm_nonce'] ), 'save_meta_data' ) ) {
+			unset( $_POST['dlm_nonce'] );
+			$post = get_post( $post_id );
+			if ( $post ) {
+				$this->save_meta_boxes( $post_id, $post );
+			}
+		}
+		// Force draft and explicitly clear the title so WordPress doesn't show "Auto Draft".
+		wp_update_post( array( 'ID' => $post_id, 'post_status' => 'draft', 'post_title' => '' ) );
+		return add_query_arg( 'dlm_error', 'no_title', remove_query_arg( 'message', $location ) );
+	}
 
-		wp_editor( htmlspecialchars_decode( $post->post_excerpt ), 'excerpt', $settings );
+	/**
+	 * Show error notice — priority 8, before DLM removes admin_notices at priority 9.
+	 */
+	public function notice_no_title() {
+		$screen = get_current_screen();
+		if ( ! $screen || 'dlm_download' !== $screen->post_type ) {
+			return;
+		}
+		if ( isset( $_GET['dlm_error'] ) && 'no_title' === $_GET['dlm_error'] ) {
+			echo '<div class="notice notice-error"><p>' . esc_html__( 'Please add a title before publishing the download.', 'download-monitor' ) . '</p></div>';
+		}
 	}
 
 	/**
@@ -618,10 +621,16 @@ class DLM_Admin_Writepanels {
 			$downloadable_file_menu_order     = $_POST['downloadable_file_menu_order'];
 			$downloadable_file_version        = $_POST['downloadable_file_version'];
 			$downloadable_file_urls           = wp_unslash( $_POST['downloadable_file_urls'] );
-			$downloadable_file_date           = isset( $_POST['downloadable_file_date'] ) ? $_POST['downloadable_file_date'] : '';
-			$downloadable_file_date_hour      = isset( $_POST['downloadable_file_date_hour'] ) ? $_POST['downloadable_file_date_hour'] : array();
-			$downloadable_file_date_minute    = isset( $_POST['downloadable_file_date_minute'] ) ? $_POST['downloadable_file_date_minute'] : array();
-			$downloadable_file_download_count = isset( $_POST['downloadable_file_download_count'] ) ? $_POST['downloadable_file_download_count'] : array();
+			$downloadable_file_download_count = array();
+			$downloadable_file_date           = '';
+			$downloadable_file_date_hour      = array();
+			$downloadable_file_date_minute    = array();
+			if ( apply_filters( 'dlm_show_version_extra_fields', false ) ) {
+				$downloadable_file_download_count = isset( $_POST['downloadable_file_download_count'] ) ? $_POST['downloadable_file_download_count'] : array();
+				$downloadable_file_date           = isset( $_POST['downloadable_file_date'] ) ? $_POST['downloadable_file_date'] : '';
+				$downloadable_file_date_hour      = isset( $_POST['downloadable_file_date_hour'] ) ? $_POST['downloadable_file_date_hour'] : array();
+				$downloadable_file_date_minute    = isset( $_POST['downloadable_file_date_minute'] ) ? $_POST['downloadable_file_date_minute'] : array();
+			}
 
 			// loop
 			for ( $i = 0; $i <= max( array_keys( $downloadable_file_id ) ); $i ++ ) {
@@ -633,11 +642,11 @@ class DLM_Admin_Writepanels {
 				// sanatize post data
 				$file_id             = absint( $downloadable_file_id[ $i ] );
 				$file_menu_order     = absint( $downloadable_file_menu_order[ $i ] );
-				$file_version        = ( sanitize_text_field( $downloadable_file_version[ $i ] ) );
-				$file_date_hour      = ( ! empty( $downloadable_file_date_hour[ $i ] ) ) ? absint( $downloadable_file_date_hour[ $i ] ) : 0;
+				$file_version        = sanitize_text_field( $downloadable_file_version[ $i ] );
+				$file_download_count = isset( $downloadable_file_download_count[ $i ] ) ? sanitize_text_field( $downloadable_file_download_count[ $i ] ) : '';
+				$file_date_str       = ! empty( $downloadable_file_date[ $i ] ) ? sanitize_text_field( $downloadable_file_date[ $i ] ) : '';
+				$file_date_hour      = ! empty( $downloadable_file_date_hour[ $i ] ) ? absint( $downloadable_file_date_hour[ $i ] ) : 0;
 				$file_date_minute    = ! empty( $downloadable_file_date_minute[ $i ] ) ? absint( $downloadable_file_date_minute[ $i ] ) : 0;
-				$file_date           = ! empty( $downloadable_file_date[ $i ] ) ? sanitize_text_field( $downloadable_file_date[ $i ] ) : new DateTime();
-				$file_download_count = sanitize_text_field( $downloadable_file_download_count[ $i ] );
 				$files               = array_filter( array_map( 'trim', explode( "\n", $downloadable_file_urls[ $i ] ) ) );
 				$secured_files       = array();
 				$file_manager        = new DLM_File_Manager();
@@ -645,17 +654,6 @@ class DLM_Admin_Writepanels {
 				// only continue if there's a file_id
 				if ( ! $file_id ) {
 					continue;
-				}
-
-				// format correct file date
-				if ( empty( $file_date ) ) {
-					$file_date_obj = new DateTime( current_time( 'mysql' ) );
-				} else {
-					if ( is_object( $file_date ) ) {
-						$file_date_obj = new DateTime( $file_date->format( 'Y-m-d' ) . ' ' . $file_date_hour . ':' . $file_date_minute . ':00' );
-					} else {
-						$file_date_obj = new DateTime( $file_date . ' ' . $file_date_hour . ':' . $file_date_minute . ':00' );
-					}
 				}
 
 				try {
@@ -667,10 +665,15 @@ class DLM_Admin_Writepanels {
 					$version->set_author( get_current_user_id() );
 					$version->set_menu_order( $file_menu_order );
 					$version->set_version( $file_version );
-					$version->set_date( $file_date_obj );
+					// If date came from the form (extra fields enabled), use it; otherwise preserve existing.
+					if ( ! empty( $file_date_str ) ) {
+						$version->set_date( new DateTime( $file_date_str . ' ' . $file_date_hour . ':' . $file_date_minute . ':00' ) );
+					} elseif ( ! $version->get_date() ) {
+						$version->set_date( new DateTime() );
+					}
 					$version->set_mirrors( $files );
 
-					// only set download count if is posted
+					// Only update download count if submitted (extra fields enabled and value entered).
 					if ( '' !== $file_download_count ) {
 						$version->set_meta_download_count( $file_download_count );
 					}

@@ -40,8 +40,6 @@ class DLM_TC_Shortcodes {
 			return do_shortcode( '[download id="' . $atts['id'] . '"]' );
 		}
 
-		wp_enqueue_style( 'dlm-frontend' );
-
 		// get download
 		try {
 			$download = download_monitor()->service( 'download_repository' )->retrieve_single( absint( $atts['id'] ) );

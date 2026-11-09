@@ -32,8 +32,7 @@
     <key name="dlm_el_optin_thankyou_page_title"/>
     <key name="dlm_el_optin_email_subject"/>
     <key name="dlm_el_optin_email_content"/>
-    
-    
+    <key name="dlm_tc_text"/>
   </admin-texts>
   <shortcodes>
     <shortcode>
