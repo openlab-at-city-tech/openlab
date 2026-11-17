@@ -136,6 +136,11 @@ function wds_email_validate() {
 	$domain       = isset( $email_parts[1] ) ? strtolower( stripslashes( $email_parts[1] ) ) : '';
 	$account_type = isset( $_POST['openlab-account-type'] ) ? stripslashes( $_POST['openlab-account-type'] ) : 'student';
 
+	if ( 'login.cuny.edu' === $domain ) {
+		$bp->signup->errors['signup_email'] = 'CUNY Login addresses cannot be used to register. Please use your City Tech email address instead: @stu-mail.citytech.cuny.edu for students or @citytech.cuny.edu for faculty and staff.';
+		return;
+	}
+
 	switch ( $account_type ) {
 		case 'student':
 		case 'alumni':

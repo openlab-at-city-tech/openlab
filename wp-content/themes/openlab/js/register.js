@@ -224,6 +224,14 @@
 				return;
 			}
 
+			if ( /@login\.cuny\.edu$/i.test( email.trim() ) ) {
+				$validationdiv.hide();
+				$emaillabel.html( '<ul class="parsley-errors-list filled other-errors"><li role="alert">' + loginEmailMessage + '</li></ul>' );
+				$emaillabel.addClass( 'error' ).show();
+				set_account_type_fields();
+				return;
+			}
+
 			// Fade out and show a 'Checking' message.
 			$emaillabel.html('<p class="parsley-errors-list other-errors">&mdash; Checking...</p>');
 			$emaillabel.css('color', '#000');
@@ -815,6 +823,8 @@
 			});
 		}
 	});
+
+	var loginEmailMessage = 'CUNY Login addresses cannot be used to register. Please use your City Tech email address instead: @stu-mail.citytech.cuny.edu for students or @citytech.cuny.edu for faculty and staff.';
 
 	function getEnteredEmailType() {
 		var email = $('#signup_email').val().toLowerCase();
