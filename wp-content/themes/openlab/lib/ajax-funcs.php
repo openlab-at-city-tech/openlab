@@ -106,12 +106,18 @@ function openlab_ajax_help_post_autocomplete() {
 add_action('wp_ajax_openlab_ajax_help_post_autocomplete', 'openlab_ajax_help_post_autocomplete');
 
 /**
+ * Earliest UTC registration date at which an old-domain account counts as a partial match.
+ */
+const OPENLAB_EXISTING_ACCOUNT_CUTOFF = '2020-01-01 00:00:00';
+
+/**
  * AJAX handler for registration duplicate email check.
  *
  * Extracts the local-part (handle) of the submitted email, strips any
  * trailing digits to produce a handleBase, then queries the users table
- * for any existing account whose email matches handleBase@mail.citytech.cuny.edu
- * or handleBase{digits}@mail.citytech.cuny.edu.
+ * for any account whose email matches handleBase@mail.citytech.cuny.edu
+ * or handleBase{digits}@mail.citytech.cuny.edu and that registered on or
+ * after OPENLAB_EXISTING_ACCOUNT_CUTOFF. An exact match counts at any age.
  */
 function openlab_ajax_duplicate_email_check() {
 	$email = isset( $_GET['email'] ) ? sanitize_email( wp_unslash( $_GET['email'] ) ) : '';
@@ -144,8 +150,9 @@ function openlab_ajax_duplicate_email_check() {
 	$like       = $wpdb->esc_like( $handle_base ) . '%@mail.citytech.cuny.edu';
 	$candidates = $wpdb->get_col(
 		$wpdb->prepare(
-			"SELECT user_email FROM {$wpdb->users} WHERE user_email LIKE %s",
-			$like
+			"SELECT user_email FROM {$wpdb->users} WHERE user_email LIKE %s AND user_registered >= %s",
+			$like,
+			OPENLAB_EXISTING_ACCOUNT_CUTOFF
 		)
 	);
 
