@@ -386,8 +386,8 @@ class SharDB extends wpdb {
 					$error_details = array (
 						'referrer' => "{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}",
 						'host' => $host,
-						'error' => $this->use_mysqli ? mysqli_error( $this->dbhs[$dbhname] ) : mysql_error(),
-						'errno' => $this->use_mysqli ? mysqli_errno( $this->dbhs[$dbhname] ) : mysql_errno(),
+						'error' => $this->use_mysqli ? mysqli_connect_error() : mysql_error(),
+						'errno' => $this->use_mysqli ? mysqli_connect_errno() : mysql_errno(),
 						'tcp_responsive' => $this->tcp_responsive,
 					);
 					$msg = date( "Y-m-d H:i:s" ) . " Can't select $dbhname - ";
