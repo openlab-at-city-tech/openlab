@@ -77,7 +77,7 @@ function openlab_get_signup_avatar_visibility_value() {
 }
 
 /**
- * Updates a user's avatar visibility and invalidates relevant caches.
+ * Updates a user's avatar visibility.
  *
  * @param int    $user_id    ID of the user.
  * @param string $visibility Visibility level.
@@ -85,16 +85,7 @@ function openlab_get_signup_avatar_visibility_value() {
  */
 function openlab_update_user_avatar_visibility( $user_id, $visibility ) {
 	bp_update_user_meta( $user_id, 'avatar_visibility', $visibility );
-	openlab_bust_whos_online_cache();
 }
-
-/**
- * Delete openlab_whos_online transient when a new account is activated.
- *
- * This is necessary because the avatar privacy may be saved to the newly
- * created account *after* the markup for the "Who's Online" widget is generated.
- */
-add_action( 'bp_core_activated_user', 'openlab_bust_whos_online_cache', 20 );
 
 /**
  * AJAX callback for updating avatar privacy.

@@ -34,16 +34,11 @@ get_header();
             </div>
         </div>
 
-        <div class="box-1 left-box">
+        <div class="box-1 left-box whats-happening-box">
             <h2 class="title uppercase clearfix"><i id="refresh-activity-ct" class="refresh-button fa fa-refresh pull-right" aria-hidden="true"></i>What's Happening At City Tech?</h2>
             <div id="whats-happening-ct" class="left-block-content whats-happening-wrapper">
 				<div class="fade-wrapper" style="display: none;"></div>
             </div>
-        </div>
-
-        <div class="box-1 left-box" id="whos-online">
-            <h2 class="title uppercase">Who's Online?</h2>
-            <?php cuny_whos_online(); ?>
         </div>
     </div>
     <div id="home-right" class="col-sm-16">
