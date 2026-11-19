@@ -1,77 +1,40 @@
-=== Table of Contents Plus – Automatic Table of Contents for Posts & Pages ===
+=== Table of Contents Plus ===
 Contributors: aioseo, smub, benjaminprojas
-Tags: table of contents, toc, index, widget, anchor links
-Requires at least: 5.7
-Tested up to: 7.1
-Requires PHP: 7.4
-Stable tag: 202609.1
+Tags: table of contents, indexes, toc, sitemap, cms
+Requires at least: 3.2
+Tested up to: 6.7
+Stable tag: 2411.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Automatically add a table of contents to your posts and pages, with smooth scrolling, anchor links, and simple styling options.
+A powerful yet user friendly plugin that automatically creates a table of contents. Can also output a sitemap listing all pages and categories.
 
 
 == Description ==
 
-Table of Contents Plus automatically creates a table of contents for your long posts and pages by reading their headings. Your readers get a clickable summary at the top of the article, jump straight to the section they need, and stay on the page longer. Set it up once and every qualifying post gets a table of contents from then on, with no block to insert and no shortcode to remember.
+A powerful yet user friendly plugin that automatically creates a context specific index or table of contents (TOC) for long pages (and custom post types).  More than just a table of contents plugin, this plugin can also output a sitemap listing pages and/or categories across your entire site.
 
-A clear table of contents also helps search engines understand how your content is structured, and Google sometimes turns those headings into jump-to links in the search results. It is a small addition that improves navigation for readers and gives your long-form articles a better chance of standing out.
+Built from the ground up and with Wikipedia in mind, the table of contents by default appears before the first heading on a page.  This allows the author to insert lead-in content that may summarise or introduce the rest of the page.  It also uses a unique numbering scheme that doesn't get lost through CSS differences across themes.
 
-= Automatic Table of Contents for Every Long Post =
+This plugin is a great companion for content rich sites such as content management system oriented configurations.  That said, bloggers also have the same benefits when writing long structured articles.
 
-Turn the table of contents on for posts, pages, or any custom post type, and it appears automatically once an article has enough headings. You set the threshold, so short posts stay clean and only genuinely long content gets an index. Place the table of contents before the first heading, after the first paragraph, at the top, or at the bottom, so it fits the way you write.
+Includes an administration options panel where you can customise settings like display position, define the minimum number of headings before an index is displayed, other appearance, and more.  For power users, expand the advanced options to further tweak its behaviour - eg: exclude undesired heading levels like h5 and h6 from being included; disable the output of the included CSS file; adjust the top offset and more.  Using shortcodes, you can override default behaviour such as special exclusions on a specific page or even to hide the table of contents altogether.
 
-= Smooth Scrolling and Clean Anchor Links =
+Prefer to include the index in the sidebar?  Go to Appearance > Widgets and drag the TOC+ to your desired sidebar and position.
 
-Every entry in the table of contents is an anchor link that jumps to the matching heading. Smooth scrolling is on by default, so clicking an item glides down to the section instead of snapping to it. Anchor IDs are lowercase and hyphenated, which keeps your URLs readable and easy to share, for example yoursite.com/guide/#getting-started.
+Custom post types are supported, however, auto insertion works only when the_content() has been used by the custom post type.  Each post type will appear in the options panel, so enable the ones you want.
 
-= Style the Table of Contents to Match Your Theme =
-
-Choose from several ready-made themes or set your own colors for the background, border, title, and links. A live preview shows each theme before you apply it, so you see the result without saving and reloading. Set the width and font size, show a numbered list or a plain list, and nest sub-headings so the table of contents mirrors the structure of your article.
-
-= Decide Exactly Where the Table of Contents Appears =
-
-Show the table of contents across your whole site or limit it to one section by URL path, keep it off the homepage, and set how many headings an article needs before one shows up. Pick which heading levels to include, exclude individual headings by name with wildcard matching, and add the [no_toc] shortcode to any post to hide the table of contents on that page.
-
-= Table of Contents Widget and Shortcode =
-
-Want the table of contents in your sidebar? Add the Table of Contents Plus widget or block to any widget area and it follows the post being viewed. For full control over placement, the [toc] shortcode outputs the table of contents wherever you put it in your content, and it works inside synced (reusable) blocks.
-
-= A Table of Contents for Any Kind of Content =
-
-* Documentation and knowledge bases
-* Long-form guides and tutorials
-* Recipes and how-to posts
-* Wikis and reference pages
-* Product and support pages
-* Research and academic articles
-
-= Built by the AIOSEO Team =
-
-Table of Contents Plus is maintained by the team behind All in One SEO, the WordPress SEO toolkit used on over 3 million websites. It fits naturally alongside your SEO setup, since cleaner headings and readable anchor links improve the on-page navigation your SEO plugin already cares about.
-
-Custom post types are supported. Automatic insertion works whenever a post type outputs its content with the_content(), and each registered post type appears in the settings so you can enable the ones you want.
-
-= Table of Contents Plus and Other Table of Contents Tools =
-
-If you have been comparing table of contents options, you have probably seen Easy Table of Contents, LuckyWP Table of Contents, and Heroic Table of Contents. Table of Contents Plus has been maintained since 2013 with the same focus: automatic insertion and a light footprint, so you get a table of contents on every long post without adding a page builder or dropping a block into each article.
-
-= Branding Guidelines =
-
-When writing about this plugin, please use the correct branding:
-
-* Table of Contents Plus (correct)
-* TOC+ (correct short form)
-* Table of Contents+ (incorrect)
-* TableOfContents Plus (incorrect)
+Collaborate, participate, fork this plugin on [Github](https://github.com/zedzedzed/table-of-contents-plus/).
 
 
 == Screenshots ==
 
-1. The table of contents automatically added to the top of a post, with a numbered outline and smooth-scrolling anchor links.
-2. Display settings: choose which post types get a table of contents, where it appears, and which heading levels to include.
-3. Appearance settings: pick a theme with a live preview, or set your own colors, width, and list style.
-4. Behavior settings: let visitors collapse the table of contents and turn on smooth scrolling.
+1. An example of the table of contents, positioned at the top, right aligned, and a width of 275px
+2. An example of the sitemap_pages shortcode
+3. An example of the sitemap_posts shortcode
+4. The options panel found in Settings > TOC+
+5. Some advanced options
+6. The sitemap tab
 
 
 == Installation ==
@@ -81,42 +44,15 @@ The normal plugin install process applies, that is search for `table of contents
 1. Upload the `table-of-contents-plus` folder into your `/wp-content/plugins/` directory
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
-That's it!  The table of contents will appear on posts and pages with at least three headings.
+That's it!  The table of contents will appear on pages with at least four or more headings.
 
-You can change the default settings and more under the Table of Contents Plus menu.
-
-
-== Frequently Asked Questions ==
-
-= How do I add a table of contents to my posts? =
-
-Enable Table of Contents Plus for posts (or pages, or any post type) in the settings, and a table of contents appears automatically on any article with enough headings. You do not have to add a block or shortcode to each post.
-
-= Does the table of contents update automatically when I edit a post? =
-
-Yes. The table of contents is generated from your headings each time the page loads, so it always matches the current content.
-
-= Can I add the table of contents manually to a specific spot? =
-
-Yes. Use the [toc] shortcode to place the table of contents anywhere in your content, or add the widget or block to a sidebar. Use [no_toc] to hide it on a single post.
-
-= Can I choose which headings appear in the table of contents? =
-
-Yes. You can include or exclude heading levels h1 through h6, and exclude individual headings by name, with wildcard matching for patterns.
-
-= Can I show the table of contents in the sidebar? =
-
-Yes. Add the Table of Contents Plus widget or block to any widget area and it follows the post being viewed.
-
-= Does it work with custom post types? =
-
-Yes, as long as the post type outputs its content with the_content(). Each registered post type appears in the settings so you can enable the ones you want.
+You can change the default settings and more under Settings > TOC+
 
 
 == Shortcodes ==
 The plugin was designed to be as seamless and painfree as possible and did not require you to insert a shortcode for operation.  However, using the shortcode allows you to fully control the position of the table of contents within your page.  The following shortcodes are available with this plugin.
 
-When attributes are left out for the shortcodes below, they will fallback to the settings you defined under the Table of Contents Plus menu.
+When attributes are left out for the shortcodes below, they will fallback to the settings you defined under Settings > TOC+.  The following are detailed in the help tab.
 
 = [toc] =
 Lets you generate the table of contents at the preferred position.  Useful for sites that only require a TOC on a small handful of pages.  Supports the following attributes:
@@ -143,7 +79,6 @@ Lets you print out a listing of only pages. The following attributes are accepte
 * "exclude": IDs of the pages or categories you wish to exclude
 * "exclude_tree": ID of the page or category you wish to exclude including its all descendants
 * "child_of": "current" or page ID of the parent page. Defaults to 0 which includes all pages.
-* "post_type": name of a hierarchical custom post type to list instead of pages, e.g. `[sitemap_pages post_type="docs"]`. Defaults to "page".
 
 = [sitemap_categories] =
 Same as `[sitemap_pages]` but for categories.
@@ -154,7 +89,6 @@ This lets you print out an index of all published posts on your site.  By defaul
 * "order": text, either ASC or DESC
 * "orderby": text, popular options include "title", "date", "ID", and "rand". See [WP_Query](https://codex.wordpress.org/Class_Reference/WP_Query#Order_.26_Orderby_Parameters) for a list.
 * "separate": true/false (defaults to true), does not separate the lists by first letter when set to false.
-* "post_type": name of a custom post type to list instead of posts, e.g. `[sitemap_posts post_type="recipe"]`. Defaults to "post".
 
 Use the following CSS classes to customise the appearance of your listing:
 
@@ -164,57 +98,10 @@ Use the following CSS classes to customise the appearance of your listing:
 
 
 == Credits ==
-Table of Contents Plus was originally created and maintained for many years by Michael Tran (conjur3r). We are grateful for all the hard work he put in, and we are proud to continue building on it.
+This plugin was created and maintained for many years by conjur3r. We are grateful for all the hard work he put in and we are excited to continue to build on that!
 
 
 == Changelog ==
-= 202609.1 =
-* Released: 17 September 2026
-* Security hardening
-* Fixed: The Support link on the plugins page now opens our contact page
-
-= 202608.2 =
-* Released: 21 August 2026
-* Fixed: The Settings and About Us screens were blank after updating to 202608.1
-
-= 202608.1 =
-* Released: 19 August 2026
-* New: Minimize the live preview panel to a small button in the corner for more room while editing
-* Improved: The show/hide link labels now appear directly under the Collapse control, and only when the bracketed link style is selected
-
-= 202607.1 =
-* Released: 25 July 2026
-* New: Numbering style option — hierarchical (1.1.1.), decimal, Roman numerals or letters
-* New: Title alignment option — left, center or right
-* New: Collapse control style — a plus/minus icon, a caret, or the classic show/hide link in brackets
-* New: Live preview panel on the settings screen that updates as you change the appearance options
-* New: Refreshed plugin logo and admin menu icon
-* Fixed: The table of contents no longer appears on the blog posts index page — only on individual posts and pages
-* Fixed: Links in the Black theme are now white
-* Note: Existing sites keep the previous centered title and bracketed show/hide link; new installs use the new left-aligned title and plus/minus toggle
-= 202607 =
-* Released: 22 July 2026
-* New: Completely redesigned settings screen, rebuilt on the All in One SEO framework and reorganized into Display, Appearance, Behavior and Advanced tabs
-* New: Live preview for each table of contents theme so you can see a color scheme before selecting it
-* New: Redesigned About page
-* New: "Before first paragraph" and "After first paragraph" position options
-* New: post_type attribute on the [sitemap_pages] and [sitemap_posts] shortcodes to list custom post types
-* New: data-nosnippet attribute on the table of contents so search engines don't use it as the result snippet
-* New: wpml-config.xml so the heading text, show/hide labels and sitemap labels can be translated with WPML/Polylang
-* New: navigation role and ARIA label on the table of contents container, and a new toc_title_tag filter to change the title tag for better accessibility
-* Fixed: Bullet points no longer appear when the Numbered list option is enabled
-* Fixed: The first list item no longer overflows when List spacing is turned off
-* Fixed: Text in the Black theme is now light-colored for readability
-* Fixed: "Restrict path" option now works when WordPress is installed in a subdirectory (the path is matched against the site root instead of the domain root)
-* Fixed: Table of contents no longer appears in auto-generated excerpts
-* Fixed: Empty and image-only headings no longer produce blank items in the table of contents
-* Fixed: "Exclude headings" now correctly matches headings containing special characters such as ?, /, ( and &
-* Fixed: Smooth scroll no longer intercepts clicks on anchor links outside the table of contents (resolves conflicts with theme accordions and toggles)
-* Fixed: The show/hide toggle state is now remembered per page instead of applying to the entire site
-* Fixed: The show/hide toggle now works on sites using translation plugins such as TranslatePress
-* Fixed: The [toc] shortcode now works inside synced (reusable) blocks
-* Fixed: Help link in the settings page now points to the current documentation
-
 = 2411.1 =
 * Released: 21 November 2024
 * Security hardening reported by WPScan
@@ -224,7 +111,153 @@ Table of Contents Plus was originally created and maintained for many years by M
 * Security hardening reported by Patchstack
 * Plugin updates for compatibility with Plugin Check
 
+= 2408 =
+* Released: 14 August 2024
+* Redo XSS issue reported by wpscan
+
+= 2406 =
+* Released: 16 June 2024
+* Revert 'Do not output CSS/JS on pages not eligible' introduced in 2402 as it broke some clever edge cases
+* Fixed XSS issue requiring editor or higher privileges for show/hide text (thanks to wpscan)
+
+= 2402.1 =
+* Released: 22 February 2024
+* Fixed check for shortcode use (#164)
+
+= 2402 =
+* Released: 21 February 2024
+* Added option to generate TOC in REST requests, disabled by default (props ballpumpe)
+* Composer improvements (props mohjak)
+* Do not output CSS/JS on pages not eligible
+* Update POT translation file
+* Update links to help
+
+= 2311 =
+* Released: 7 November 2023
+* Bump tested WordPress version to 6.4
+* Do not trigger on REST requests (props steffenster)
+* Update include mechanism in init.php (props maciejmackowiak)
+
+= 2309 =
+* Released: 19 September 2023
+* Bump tested version to 6.3.1
+* Added `child_of` property to sitemap_pages shortcode (props flagsoft). This lets you output a listing of child pages for a set parent or "current". Property is optional and defaults to all pages. 
+* Fixed XSS possibility handling nonce while saving options (thanks to Patchstack)
+* Updated WordPress Coding Standard to 3.0
+
+= 2302 =
+* Released: 9 February 2023
+* Added `toc_brackets` CSS class to square brackets around show/hide text
+* Added a filter to the `toc_extract_headings` function (props Raymond Radet)
+* Refactor using WordPress-Extra coding standard
+
+= 2212 =
+* Released: 16 December 2022
+* Bump tested version to 6.1.1
+* When using the TOC+ widget, execute shortcodes beforehand (props endcoreCL)
+* When using the TOC+ widget, abort early when no post for edge cases (props jonas-hoebenreich)
+* Add start property to toc shortcode to override the minimum number of headings needed to display (props woutervanvliet)
+* Add no_numbers property to toc shortcode to disable leading heading indexes (props TedAvery)
+* Fixed XSS vulnerability in toc shortcode, class property (thanks to wpscan)
+* Fixed XSS vulnerabilities in sitemap_pages and sitemap_categories shortcodes, label property
+
+= 2106 =
+* Released: 23 June 2021
+* Add compatibility with Rank Math SEO
+* Bump tested WordPress version to 5.7
+* Add PHP coding style
+* Adhere to majority of coding tips
+
+= 2002 =
+* Released: 9 February 2020
+* Fixed encoding when using %PAGE_TITLE% or %PAGE_NAME%
+* Bump tested WordPress version to 5.3
+* Removed all local translations as you can find more up to date ones at translate.wordpress.org
+* Removed translators links from readme
+
+= 1601 =
+* Released: 5 January 2016
+* Bump tested WordPress version to 4.4
+* Add 'enable' and 'disable' API functions so a developer can better control the execution.
+* Add Brazilian Portuguese translation thanks to Blog de Niterói
+* Add Spanish translation thanks to David Saiz
+* TOC+ widget now adheres to a blank title if none provided. Thanks to [Dirk](http://dublue.com/plugins/toc/comment-page-11/#comment-5140) for the cue.
+* Updated jQuery Smooth Scroll 1.5.5 to 1.6.0
+* Updated text domain to better support translation packs.
+
+= 1509 =
+* Released: 4 September 2015
+* Added Hebrew translation thanks to Ahrale
+* Added Japaense translation thanks to シカマル
+* Added Greek translation thanks to Dimitrios Kaisaris
+* Updated jQuery Smooth Scroll 1.4.10 to 1.5.5
+* Supply both minified and unminified CSS and JS files, use minified versions.
+* Convert accented characters to ASCII in anchors.
+* Bump tested WordPress version to 4.3
+* Fixed: PHP notice introduced in WP 4.3
+* Fixed: javascript error with $.browser testing for Internet Explorer 7.
+* Plugin has moved to [GitHub](https://github.com/zedzedzed/table-of-contents-plus/) for better collaboration.
+* Help needed: preg_match_all failing with bad UTF8 characters producing no TOC. If you can help, please participate in this [issue](https://github.com/zedzedzed/table-of-contents-plus/issues/105).
+
+= 1507 =
+* Released: 5 July 2015
+* Added Danish translation courtesy of Cupunu
+* Simplified the translation duty by moving the help material to the plugin's website.
+* Updated translation file.
+
+= 1505 =
+* Released: 2 May 2015
+* Huge thanks to Jason for an updated Simplified Chinese translation.
+* Added collapse property to the toc shortcode.  When set to true, this will hide the table of contents when it loads.  Example usage: [toc collapse="true"]
+* Added label_show and label_hide properties to the toc shortcode.  This lets you change the "show" and "hide" link text when using the shortcode.
+* Bump tested WordPress version to 4.2.1.
+
+= 1408 =
+* Released: 1 August 2014
+* Added a human German translation courtesy Ben
+* Added "class" attribute to the TOC shortcode to allow for custom CSS classes to be added to the container.  Thanks to Joe for [suggesting it](http://dublue.com/plugins/toc/comment-page-7/#comment-2803)
+
+= 1407 =
+* Released: 5 July 2014
+* Added Ukrainian translation courtesy Michael Yunat
+* Added French translation courtesy Jean-Michel Duriez
+* Empty headings are now ignored, as suggested by [archon810](http://wordpress.org/support/topic/patch-ignore-empty-tags)
+* Removed German translation, may have been machine translated, [ref](http://wordpress.org/support/topic/excluding-headlines-special-characters)
+* Fixed: Special chars in TOC+ > Settings > Exclude Headings no longer get mangled on save.  Thanks to N-Z for [reporting it](http://wordpress.org/support/topic/excluding-headlines-special-characters).
+
+= 1404 =
+* Released: 18 April 2014
+* Bump WordPress support to 3.9
+* Fixed: Strip HTML tags from post titles for sitemap_posts so those items do not appear under a < heading. Thanks to [Rose](http://dublue.com/plugins/toc/comment-page-6/#comment-2311) for reporting it.
+* Fictitious: This release was powered by three blind mice.
+
+= 1402 =
+* Released: 19 February 2014
+* Added German translation courtesy Cord Peter
+* Modify toc_get_index API function to also reset minimum number of headings to 0.
+* Removing the TOC+ widget from the sidebar no longer requires you to uncheck the 'Show the table of contents only in the sidebar' option. It will be reset on removal.
+* Delay count of headings until disqualified have been removed. Thanks to [Simone di Saintjust](http://dublue.com/plugins/toc/comment-page-6/#comment-2190) for raising it.
+* Using the TOC+ widget, you can now limit the display to selected post types. Thanks to [Pete Markovic](http://dublue.com/plugins/toc/comment-page-6/#comment-2248) for the idea.
+* Updated translation file (extra options added).
+
+= 1311 =
+* Released: 10 November 2013
+* Added third parameter to toc_get_index API function to enable eligibility check (eg apply minimum heading check, is post type enabled, etc). This has been switched off by default and only affects those using the API. Thanks [Jonon](http://dublue.com/plugins/toc/comment-page-5/#comment-1943) for your comment.
+* Added Dutch translation courtesy Renee
+* Apply bullet option to TOC+ widget, thanks to [Thomas Pani for the patch](http://dublue.com/plugins/toc/comment-page-5/#comment-2040).
+
+= 1308 =
+* Released: 5 August 2013
+* Fix javascript issue with minimum jQuery version check (broke smooth scrolling using WordPress 3.6).
+* Replaced Slovak translation with a human translated version courtesy Boris Gereg.
+* Remove <!--TOC--> signature from source when using the shortcode but not allowed to print (eg on homepage).
+* Add "separate" attribute for sitemap_posts shortcode to not split by letter, thanks [DavidMjps](http://wordpress.org/support/topic/exclude-alphabetical-headings-on-sitemap) for the suggestion.
+
+= 1303.1 =
+* Released: 22 March 2013
+* New: added Polish translation, curtesy Jakub
+* Fixed: an issue in 1303 that ignored headings with the opening tag on the first line and the heading text on a new line.  Thanks to [richardsng](http://wordpress.org/support/topic/unable-to-display-the-full-toc) for the quick discovery.
+
 == Upgrade Notice ==
 
-= 202609.1 =
-This update includes security hardening. We recommend updating as soon as possible; your existing settings are preserved.
+Update folder with the latest files.  All previous options will be saved.
