@@ -6,7 +6,7 @@
 	"author": "WPMU DEV",
 	"repository": {
 		"type": "git",
-		"url": "git@bitbucket.org:incsub/broken-link-checker.git"
+		"url": "git@ssh.bitbucket.org:incsub/broken-link-checker.git"
 	},
 	"devDependencies": {
 		"@babel/core": "7.15.5",

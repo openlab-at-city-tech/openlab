@@ -3,7 +3,7 @@ Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images
 Requires at least: 5.2
 Tested up to: 7.1
-Stable tag: 2.4.15
+Stable tag: 2.4.15.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -207,6 +207,9 @@ We take plugin security incredibly seriously; if you have a bug or vulnerability
 6. Local Broken Link Checker engine settings
 
 == Changelog ==
+
+= 2.4.15.1 =
+* Improvement: Miscellaneous code improvements and bug fixes
 
 = 2.4.15 =
 * Fix: Fixing a broken link inside a block no longer changes other URLs in that block's settings, such as embeds and navigation links.
