@@ -37,15 +37,27 @@ class WPCOM_REST_API_V2_Endpoint_AI extends WP_REST_Controller {
 		$this->is_wpcom                     = true;
 		$this->wpcom_is_wpcom_only_endpoint = true;
 
+		add_action( 'rest_api_init', array( $this, 'maybe_register_routes' ) );
+	}
+
+	/**
+	 * Register routes on `rest_api_init`, gating on the AI feature state.
+	 *
+	 * The Jetpack_AI_Helper checks (which load the helper and instantiate
+	 * Search/Connection classes) run here rather than in the constructor so that
+	 * code is only loaded when the REST API is actually in use, not on every
+	 * front-end, cron, or login request.
+	 */
+	public function maybe_register_routes() {
 		if ( ! class_exists( 'Jetpack_AI_Helper' ) ) {
 			require_once JETPACK__PLUGIN_DIR . '_inc/lib/class-jetpack-ai-helper.php';
 		}
 
 		// Register routes that don't require Jetpack AI to be enabled.
-		add_action( 'rest_api_init', array( $this, 'register_basic_routes' ) );
+		$this->register_basic_routes();
 
 		if ( Jetpack_AI_Helper::is_ai_chat_enabled() ) {
-			add_action( 'rest_api_init', array( $this, 'register_ai_chat_routes' ) );
+			$this->register_ai_chat_routes();
 		}
 
 		if ( ! \Jetpack_AI_Helper::is_enabled() ) {
@@ -53,7 +65,7 @@ class WPCOM_REST_API_V2_Endpoint_AI extends WP_REST_Controller {
 		}
 
 		// Register routes that require Jetpack AI to be enabled.
-		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		$this->register_routes();
 	}
 
 	/**
@@ -225,10 +237,15 @@ class WPCOM_REST_API_V2_Endpoint_AI extends WP_REST_Controller {
 			return $response;
 		}
 
-		$data = json_decode( wp_remote_retrieve_body( $response ) );
+		$status_code = wp_remote_retrieve_response_code( $response );
+		$data        = json_decode( wp_remote_retrieve_body( $response ) );
 
-		if ( empty( $data->cache_key ) ) {
-			return new WP_Error( 'invalid_ask_response', __( 'Invalid response from the server.', 'jetpack' ), 400 );
+		// Forward the real upstream error instead of a generic 500. See SEARCH-351.
+		if ( $status_code >= 400 || empty( $data->cache_key ) ) {
+			$code    = isset( $data->code ) && is_scalar( $data->code ) ? (string) $data->code : 'invalid_ask_response';
+			$message = isset( $data->message ) && is_scalar( $data->message ) ? (string) $data->message : __( 'Invalid response from the server.', 'jetpack' );
+			$status  = $status_code >= 400 ? $status_code : 400;
+			return new WP_Error( $code, $message, array( 'status' => $status ) );
 		}
 
 		return $data;
@@ -246,7 +263,7 @@ class WPCOM_REST_API_V2_Endpoint_AI extends WP_REST_Controller {
 		$cache_key = $request->get_param( 'cache_key' );
 
 		if ( strpos( $cache_key, 'jp-search-ai-' ) !== 0 ) {
-			return new WP_Error( 'invalid_cache_key', __( 'Invalid cached context for the answer feedback.', 'jetpack' ), 400 );
+			return new WP_Error( 'invalid_cache_key', __( 'Invalid cached context for the answer feedback.', 'jetpack' ), array( 'status' => 400 ) );
 		}
 
 		$blog_id  = \Jetpack_Options::get_option( 'id' );
@@ -273,7 +290,7 @@ class WPCOM_REST_API_V2_Endpoint_AI extends WP_REST_Controller {
 		$data = json_decode( wp_remote_retrieve_body( $response ) );
 
 		if ( 'ok' !== $data ) {
-			return new WP_Error( 'invalid_feedback_response', __( 'Invalid response from the server.', 'jetpack' ), 400 );
+			return new WP_Error( 'invalid_feedback_response', __( 'Invalid response from the server.', 'jetpack' ), array( 'status' => 400 ) );
 		}
 
 		return $data;

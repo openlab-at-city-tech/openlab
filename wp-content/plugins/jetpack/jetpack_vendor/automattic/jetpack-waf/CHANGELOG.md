@@ -5,6 +5,83 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.31.0] - 2026-10-28
+### Added
+- Add the `jetpack_protect_firewall_provided_by_host` filter, which lets a host report its own firewall as active where Jetpack's can't run. [#53954]
+
+### Changed
+- Explain to a visitor blocked by the IP block list what happened and that site managers can log in for more information. [#54124]
+
+## [0.30.1] - 2026-10-26
+### Fixed
+- Leave days older than 30 out of the 30-day blocked-request count on sites that haven't blocked a request since. [#53822]
+
+## [0.30.0] - 2026-10-19
+### Added
+- Add a one-time test request the firewall blocks unless the IP allow list lets it through, and a reader for recently blocked requests. [#53193]
+
+### Fixed
+- Brute Force Protection: Fix correct logins being rejected after the math challenge, and keep the username and login destination when the password must be entered again. [#50681]
+- Brute Force Protection: Run login checks once per request instead of once per internal lookup. [#50681]
+- Read blocked-request counts from the database, so a persistent object cache no longer shows stale totals. [#53193]
+
+## [0.29.3] - 2026-10-12
+### Fixed
+- Brute Force Protection: Let new users set their password from a blocked IP, and stop sending recovery emails to accounts that have not set one yet. [#53323]
+
+## [0.29.2] - 2026-10-05
+### Changed
+- Internal updates.
+
+## [0.29.1] - 2026-09-28
+### Changed
+- Update dependencies. [#52691]
+
+### Fixed
+- Standalone mode: Avoid a fatal error for visitors on the IP block list. [#52682]
+- Standalone mode: Fix blank Jetpack admin pages when the bootstrap file points at an older copy of the plugin, and avoid a fatal error when that copy is gone. [#52539]
+
+## [0.29.0] - 2026-09-01
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+## [0.28.11] - 2026-07-13
+### Changed
+- Update dependencies. [#50360]
+
+## [0.28.10] - 2026-06-25
+### Changed
+- Defer WAF REST controller registration so the controller class only loads on REST API requests. [#49803]
+
+## [0.28.9] - 2026-06-22
+### Fixed
+- Retry key generation after transient activation failures. [#49768]
+
+## [0.28.8] - 2026-06-15
+### Fixed
+- Guard against malformed allowlist data. [#49481]
+- Skip rule evaluation when there is no HTTP request (e.g. server-side cron executed via a PHP CLI wrapper), preventing false-positive 403 blocks. [#49465]
+
+## [0.28.7] - 2026-06-08
+### Fixed
+- Brute Force Protection: Avoid a fatal error when rendering the login recovery form while an output buffer handler is active. [#49404]
+
+## [0.28.6] - 2026-06-01
+### Fixed
+- Brute Force Protection: Prevent PHP warning when username is invalid. [#49292]
+
+## [0.28.5] - 2026-05-25
+### Fixed
+- Phan: Address `PhanPluginDuplicateConditionalNullCoalescing` violations. [#48887]
+
+## [0.28.4] - 2026-05-19
+### Changed
+- Internal updates.
+
+## [0.28.3] - 2026-05-04
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
 ## [0.28.2] - 2026-03-23
 ### Security
 - WAF: Fix issue that potentially allowed bypassing WAF rules. [#47692]
@@ -529,6 +606,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Core: do not ship .phpcs.dir.xml in production builds.
 
+[0.31.0]: https://github.com/Automattic/jetpack-waf/compare/v0.30.1...v0.31.0
+[0.30.1]: https://github.com/Automattic/jetpack-waf/compare/v0.30.0...v0.30.1
+[0.30.0]: https://github.com/Automattic/jetpack-waf/compare/v0.29.3...v0.30.0
+[0.29.3]: https://github.com/Automattic/jetpack-waf/compare/v0.29.2...v0.29.3
+[0.29.2]: https://github.com/Automattic/jetpack-waf/compare/v0.29.1...v0.29.2
+[0.29.1]: https://github.com/Automattic/jetpack-waf/compare/v0.29.0...v0.29.1
+[0.29.0]: https://github.com/Automattic/jetpack-waf/compare/v0.28.11...v0.29.0
+[0.28.11]: https://github.com/Automattic/jetpack-waf/compare/v0.28.10...v0.28.11
+[0.28.10]: https://github.com/Automattic/jetpack-waf/compare/v0.28.9...v0.28.10
+[0.28.9]: https://github.com/Automattic/jetpack-waf/compare/v0.28.8...v0.28.9
+[0.28.8]: https://github.com/Automattic/jetpack-waf/compare/v0.28.7...v0.28.8
+[0.28.7]: https://github.com/Automattic/jetpack-waf/compare/v0.28.6...v0.28.7
+[0.28.6]: https://github.com/Automattic/jetpack-waf/compare/v0.28.5...v0.28.6
+[0.28.5]: https://github.com/Automattic/jetpack-waf/compare/v0.28.4...v0.28.5
+[0.28.4]: https://github.com/Automattic/jetpack-waf/compare/v0.28.3...v0.28.4
+[0.28.3]: https://github.com/Automattic/jetpack-waf/compare/v0.28.2...v0.28.3
 [0.28.2]: https://github.com/Automattic/jetpack-waf/compare/v0.28.1...v0.28.2
 [0.28.1]: https://github.com/Automattic/jetpack-waf/compare/v0.28.0...v0.28.1
 [0.28.0]: https://github.com/Automattic/jetpack-waf/compare/v0.27.11...v0.28.0

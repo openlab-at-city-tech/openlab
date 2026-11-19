@@ -333,7 +333,7 @@ class Jetpack_XMLRPC_Server {
 			if ( isset( $request['from'] ) ) {
 				$this->connection->add_register_request_param( 'from', (string) $request['from'] );
 			}
-			$registered = $this->connection->try_registration();
+			$registered = $this->connection->try_registration( true, true );
 			if ( is_wp_error( $registered ) ) {
 				return $this->error( $registered, 'remote_register' );
 			} elseif ( ! $registered ) {
@@ -588,9 +588,9 @@ class Jetpack_XMLRPC_Server {
 	 * @return \IXR_Error|string IXR_Error on failure, secret_2 on success.
 	 */
 	public function verify_action( $params ) {
-		$action        = isset( $params[0] ) ? $params[0] : '';
-		$verify_secret = isset( $params[1] ) ? $params[1] : '';
-		$state         = isset( $params[2] ) ? $params[2] : '';
+		$action        = $params[0] ?? '';
+		$verify_secret = $params[1] ?? '';
+		$state         = $params[2] ?? '';
 
 		$result = ( new Secrets() )->verify( $action, $verify_secret, $state );
 

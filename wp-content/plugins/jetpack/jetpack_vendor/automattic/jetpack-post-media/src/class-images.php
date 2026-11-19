@@ -180,6 +180,19 @@ class Images {
 		}
 		// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
 
+		// WooCommerce stores product gallery image IDs in the `_product_image_gallery`
+		// postmeta rather than in post_content, so get_post_galleries() does not see them.
+		// Append them as a synthetic gallery in the same `ids` shape the loop below expects.
+		if ( 'product' === $post->post_type ) {
+			$wc_gallery_ids = get_post_meta( $post->ID, '_product_image_gallery', true );
+			if ( ! empty( $wc_gallery_ids ) ) {
+				$galleries[] = array(
+					'ids'  => $wc_gallery_ids,
+					'size' => 'full',
+				);
+			}
+		}
+
 		foreach ( $galleries as $gallery ) {
 			if ( ! empty( $gallery['ids'] ) ) {
 				$image_ids  = explode( ',', $gallery['ids'] );
@@ -270,6 +283,9 @@ class Images {
 		$permalink = get_permalink( $post_id );
 
 		foreach ( $post_images as $post_image ) {
+			if ( ! $post_image instanceof \WP_Post ) {
+				continue;
+			}
 			$current_image = self::get_attachment_data( $post_image->ID, $permalink, $width, $height );
 			if ( false !== $current_image ) {
 				$images[] = $current_image;
@@ -839,7 +855,7 @@ class Images {
 
 		if ( is_array( $media ) ) {
 			foreach ( $media as $item ) {
-				if ( 'image' === $item['type'] ) {
+				if ( is_array( $item ) && isset( $item['type'] ) && 'image' === $item['type'] ) {
 					$image = $item;
 					break;
 				}
@@ -1105,7 +1121,7 @@ class Images {
 			return false;
 		}
 
-		if ( ! empty( $meta['videopress'] ) ) {
+		if ( isset( $meta['videopress']['poster'] ) && isset( $meta['videopress']['width'] ) && isset( $meta['videopress']['height'] ) ) {
 			// Use poster image for VideoPress videos.
 			$url         = $meta['videopress']['poster'];
 			$meta_width  = $meta['videopress']['width'];

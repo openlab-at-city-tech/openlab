@@ -168,12 +168,10 @@ class Partner_Coupon {
 	 * @param string $plugin_slug The plugin slug to differentiate between Jetpack connections.
 	 */
 	public function maybe_purge_coupon( $plugin_slug ) {
-		// Only run coupon checks on Jetpack admin pages.
-		// The "admin-ui" package is responsible for registering the Jetpack admin
-		// page for all Jetpack plugins and has hardcoded the settings page to be
-		// "jetpack", so we shouldn't need to allow for dynamic/custom values.
+		// Only run coupon checks where the redemption screen can show.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! isset( $_GET['page'] ) || 'jetpack' !== $_GET['page'] ) {
+		$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';
+		if ( ! in_array( $page, array( 'jetpack', 'my-jetpack' ), true ) ) {
 			return;
 		}
 
@@ -350,7 +348,7 @@ class Partner_Coupon {
 		return array(
 			'name'   => $supported_partners[ $prefix ]['name'],
 			'prefix' => $prefix,
-			'logo'   => isset( $supported_partners[ $prefix ]['logo'] ) ? $supported_partners[ $prefix ]['logo'] : null,
+			'logo'   => $supported_partners[ $prefix ]['logo'] ?? null,
 		);
 	}
 

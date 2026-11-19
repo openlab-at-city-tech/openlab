@@ -303,7 +303,7 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 				$input['status'] = 'pending';
 			}
 			$last_status = $post->post_status;
-			$new_status  = isset( $input['status'] ) ? $input['status'] : $last_status;
+			$new_status  = $input['status'] ?? $last_status;
 
 			// Make sure that drafts get the current date when transitioning to publish if not supplied in the post.
 			// Similarly, scheduled posts that are manually published before their scheduled date should have the date reset.
@@ -508,10 +508,10 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 			unset( $input['menu_order'] );
 		}
 
-		$publicize = isset( $input['publicize'] ) ? $input['publicize'] : null;
+		$publicize = $input['publicize'] ?? null;
 		unset( $input['publicize'] );
 
-		$publicize_custom_message = isset( $input['publicize_message'] ) ? $input['publicize_message'] : null;
+		$publicize_custom_message = $input['publicize_message'] ?? null;
 		unset( $input['publicize_message'] );
 
 		if ( isset( $input['featured_image'] ) ) {
@@ -520,16 +520,16 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 			unset( $input['featured_image'] );
 		}
 
-		$metadata = isset( $input['metadata'] ) ? $input['metadata'] : null;
+		$metadata = $input['metadata'] ?? null;
 		unset( $input['metadata'] );
 
-		$likes = isset( $input['likes_enabled'] ) ? $input['likes_enabled'] : null;
+		$likes = $input['likes_enabled'] ?? null;
 		unset( $input['likes_enabled'] );
 
-		$sharing = isset( $input['sharing_enabled'] ) ? $input['sharing_enabled'] : null;
+		$sharing = $input['sharing_enabled'] ?? null;
 		unset( $input['sharing_enabled'] );
 
-		$sticky = isset( $input['sticky'] ) ? $input['sticky'] : null;
+		$sticky = $input['sticky'] ?? null;
 		unset( $input['sticky'] );
 
 		foreach ( $input as $key => $value ) {
@@ -610,7 +610,7 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 				}
 			}
 
-			$insert['post_date'] = isset( $insert['post_date'] ) ? $insert['post_date'] : '';
+			$insert['post_date'] ??= '';
 
 			if ( $is_dtp_fb_post ) {
 				$insert = $this->dtp_fb_preprocess_post( $insert, $metadata );
@@ -708,7 +708,7 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 		// Set sharing status of the post.
 		if ( $new ) {
 			$sharing_enabled = isset( $sharing ) ? (bool) $sharing : true;
-			if ( false === $sharing_enabled ) {
+			if ( ! $sharing_enabled ) {
 				update_post_meta( $post_id, 'sharing_disabled', 1 );
 			}
 		} elseif ( isset( $sharing ) && true === $sharing ) {
@@ -757,7 +757,7 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 					continue;
 				}
 				foreach ( $service_connections as $service_connection ) {
-					update_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $service_connection->unique_id, 1 );
+					update_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $GLOBALS['publicize_ui']->publicize->get_connection_unique_id( $service_connection ), 1 );
 				}
 			}
 		} elseif ( is_array( $publicize ) && ( count( $publicize ) > 0 ) ) {
@@ -791,7 +791,7 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 				if ( ! in_array( $name, $publicize, true ) && ! array_key_exists( $name, $publicize ) ) {
 					// Skip the whole service by adding each connection ID.
 					foreach ( $service_connections as $service_connection ) {
-						update_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $service_connection->unique_id, 1 );
+						update_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $GLOBALS['publicize_ui']->publicize->get_connection_unique_id( $service_connection ), 1 );
 					}
 				} elseif ( ! empty( $publicize[ $name ] ) ) {
 					// Seems we're being asked to only push to [a] specific connection[s].
@@ -800,16 +800,16 @@ class WPCOM_JSON_API_Update_Post_v1_2_Endpoint extends WPCOM_JSON_API_Update_Pos
 
 					// Flag the connections we can't match with the requested list to be skipped.
 					foreach ( $service_connections as $service_connection ) {
-						if ( ! in_array( $service_connection->meta['connection_data']->id, $requested_connections, true ) ) {
-							update_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $service_connection->unique_id, 1 );
+						if ( ! in_array( (string) $GLOBALS['publicize_ui']->publicize->get_connection_id( $service_connection ), $requested_connections, true ) ) {
+							update_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $GLOBALS['publicize_ui']->publicize->get_connection_unique_id( $service_connection ), 1 );
 						} else {
-							delete_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $service_connection->unique_id );
+							delete_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $GLOBALS['publicize_ui']->publicize->get_connection_unique_id( $service_connection ) );
 						}
 					}
 				} else {
 					// delete all SKIP values; it's okay to publish to all connected IDs for this service.
 					foreach ( $service_connections as $service_connection ) {
-						delete_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $service_connection->unique_id );
+						delete_post_meta( $post_id, $GLOBALS['publicize_ui']->publicize->POST_SKIP . $GLOBALS['publicize_ui']->publicize->get_connection_unique_id( $service_connection ) );
 					}
 				}
 			}

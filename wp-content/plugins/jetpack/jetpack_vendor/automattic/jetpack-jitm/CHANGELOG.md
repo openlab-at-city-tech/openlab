@@ -5,17 +5,172 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.8] - 2026-11-02
+### Changed
+- Keep per-screen messages on My Jetpack working once it keeps its route in the p query argument. [#54296]
+- Update package dependencies. [#53869]
+
+## [5.1.7] - 2026-10-28
+### Changed
+- Update package dependencies. [#54118]
+
+## [5.1.6] - 2026-10-26
+### Changed
+- Update dependencies.
+
+## [5.1.5] - 2026-10-20
+### Changed
+- Internal updates.
+
+## [5.1.4] - 2026-10-19
+### Changed
+- Update package dependencies. [#53004]
+
+## [5.1.3] - 2026-10-14
+### Changed
+- Update dependencies.
+
+## [5.1.2] - 2026-10-12
+### Fixed
+- Request messages from the package's own REST route when the Jetpack plugin is not active, instead of first trying a route that does not exist. [#53251]
+
+## [5.1.1] - 2026-10-05
+### Changed
+- Update package dependencies. [#52999]
+
+## [5.1.0] - 2026-09-28
+### Added
+- Add a helper that clears admin notices from a screen while keeping Jetpack in-dashboard messages. [#52641]
+
+## [5.0.6] - 2026-09-23
+### Changed
+- Keep matching Settings messages on the new Jetpack Settings page. [#52589]
+
+## [5.0.5] - 2026-09-18
+### Changed
+- Update package dependencies. [#52187]
+
+## [5.0.4] - 2026-09-15
+### Fixed
+- Show JITMs on dashboards that render their notices area after the page loads. [#52204]
+
+## [5.0.3] - 2026-09-14
+### Changed
+- Internal updates.
+
+## [5.0.2] - 2026-09-08
+### Changed
+- Update package dependencies. [#51701]
+
+## [5.0.1] - 2026-09-01
+### Fixed
+- Load messages from the jetpack/v4 route when wpcom/v3 is unavailable, fixing missing messages and a console error on sites without the Jetpack plugin. [#51733]
+
+## [5.0.0] - 2026-08-26
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+## [4.3.52] - 2026-08-19
+### Changed
+- Internal updates.
+
+## [4.3.51] - 2026-08-10
+### Changed
+- Update dependencies. [#51095]
+
+## [4.3.50] - 2026-07-27
+### Changed
+- Update package dependencies. [#50751]
+
+## [4.3.49] - 2026-07-22
+### Changed
+- Update dependencies.
+
+## [4.3.48] - 2026-07-20
+### Changed
+- Update dependencies. [#50551]
+- Update package dependencies. [#50529]
+
+## [4.3.47] - 2026-07-13
+### Changed
+- Update dependencies.
+
+## [4.3.46] - 2026-07-09
+### Changed
+- Update dependencies.
+
+## [4.3.45] - 2026-07-06
+### Changed
+- Update package dependencies. [#50097] [#50183]
+
+## [4.3.44] - 2026-06-26
+### Changed
+- Update dependencies.
+
+## [4.3.43] - 2026-06-24
+### Changed
+- Performance: Defer loading the connection-specific JITM classes until a JITM hook fires, reducing the per-request PHP/opcache footprint. [#49806]
+
+## [4.3.42] - 2026-06-23
+### Changed
+- Update package dependencies. [#49831]
+
+## [4.3.41] - 2026-06-22
+### Changed
+- Update dependencies. [#49641]
+- Update package dependencies. [#49691]
+
+## [4.3.40] - 2026-06-10
+### Changed
+- Update package dependencies. [#49273]
+
+## [4.3.39] - 2026-06-08
+### Changed
+- Internal updates.
+
+## [4.3.38] - 2026-06-05
+### Changed
+- Update dependencies. [#49354]
+
+## [4.3.37] - 2026-06-01
+### Changed
+- Exclude additional unneeded files from the Composer package. [#49014]
+
+## [4.3.36] - 2026-05-21
+### Changed
+- Update package dependencies. [#48405]
+
+## [4.3.35] - 2026-05-19
+### Changed
+- Internal updates.
+
+## [4.3.34] - 2026-05-14
+### Changed
+- Update dependencies. [#48778]
+
+## [4.3.33] - 2026-05-11
+### Changed
+- Update dependencies.
+
+## [4.3.32] - 2026-05-04
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
+## [4.3.31] - 2026-04-20
+### Changed
+- Update package dependencies. [#48106]
+
 ## [4.3.30] - 2026-04-09
 ### Changed
 - Update package dependencies. [#47890]
 
 ## [4.3.29] - 2026-04-06
 ### Changed
-- Update dependencies. [#47157]
+- Update dependencies.
 
 ## [4.3.28] - 2026-03-30
 ### Changed
-- Update dependencies. [#47157]
+- Update dependencies.
 
 ## [4.3.27] - 2026-03-23
 ### Changed
@@ -35,7 +190,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.3.23] - 2026-02-23
 ### Changed
-- Update dependencies. [#47157]
+- Update dependencies.
 
 ## [4.3.22] - 2026-02-18
 ### Changed
@@ -59,7 +214,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.3.17] - 2026-01-26
 ### Changed
-- Update dependencies. [#46383]
+- Update dependencies.
 
 ## [4.3.16] - 2026-01-19
 ### Changed
@@ -79,11 +234,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.3.12] - 2025-12-11
 ### Changed
-- Update dependencies. [#45382]
+- Update dependencies.
 
 ## [4.3.11] - 2025-12-08
 ### Changed
-- Update dependencies. [#45382]
+- Update dependencies.
 
 ## [4.3.10] - 2025-12-01
 ### Changed
@@ -95,7 +250,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.3.8] - 2025-10-28
 ### Changed
-- Update dependencies. [#45382]
+- Update dependencies.
 
 ## [4.3.7] - 2025-10-06
 ### Changed
@@ -103,7 +258,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.3.6] - 2025-09-22
 ### Changed
-- Update dependencies. [#44615]
+- Update dependencies.
 
 ## [4.3.5] - 2025-09-19
 ### Changed
@@ -152,7 +307,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.24] - 2025-06-18
 ### Changed
-- Update dependencies. [#42554]
+- Update dependencies.
 
 ## [4.2.23] - 2025-06-06
 ### Changed
@@ -168,7 +323,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.20] - 2025-06-02
 ### Changed
-- Update dependencies. [#42554]
+- Update dependencies.
 
 ## [4.2.19] - 2025-05-26
 ### Changed
@@ -176,7 +331,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.18] - 2025-05-22
 ### Changed
-- Update dependencies. [#42554]
+- Update dependencies.
 
 ## [4.2.17] - 2025-05-15
 ### Changed
@@ -212,7 +367,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [4.2.10] - 2025-04-01
 ### Changed
-- Update dependencies. [#42554]
+- Update dependencies.
 
 ## [4.2.9] - 2025-03-31
 ### Changed
@@ -1086,6 +1241,44 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Update Jetpack to use new JITM package
 
+[5.1.8]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.7...v5.1.8
+[5.1.7]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.6...v5.1.7
+[5.1.6]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.5...v5.1.6
+[5.1.5]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.4...v5.1.5
+[5.1.4]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.3...v5.1.4
+[5.1.3]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.2...v5.1.3
+[5.1.2]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.1...v5.1.2
+[5.1.1]: https://github.com/Automattic/jetpack-jitm/compare/v5.1.0...v5.1.1
+[5.1.0]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.6...v5.1.0
+[5.0.6]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.5...v5.0.6
+[5.0.5]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.4...v5.0.5
+[5.0.4]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.3...v5.0.4
+[5.0.3]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.2...v5.0.3
+[5.0.2]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.1...v5.0.2
+[5.0.1]: https://github.com/Automattic/jetpack-jitm/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.52...v5.0.0
+[4.3.52]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.51...v4.3.52
+[4.3.51]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.50...v4.3.51
+[4.3.50]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.49...v4.3.50
+[4.3.49]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.48...v4.3.49
+[4.3.48]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.47...v4.3.48
+[4.3.47]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.46...v4.3.47
+[4.3.46]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.45...v4.3.46
+[4.3.45]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.44...v4.3.45
+[4.3.44]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.43...v4.3.44
+[4.3.43]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.42...v4.3.43
+[4.3.42]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.41...v4.3.42
+[4.3.41]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.40...v4.3.41
+[4.3.40]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.39...v4.3.40
+[4.3.39]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.38...v4.3.39
+[4.3.38]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.37...v4.3.38
+[4.3.37]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.36...v4.3.37
+[4.3.36]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.35...v4.3.36
+[4.3.35]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.34...v4.3.35
+[4.3.34]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.33...v4.3.34
+[4.3.33]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.32...v4.3.33
+[4.3.32]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.31...v4.3.32
+[4.3.31]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.30...v4.3.31
 [4.3.30]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.29...v4.3.30
 [4.3.29]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.28...v4.3.29
 [4.3.28]: https://github.com/Automattic/jetpack-jitm/compare/v4.3.27...v4.3.28

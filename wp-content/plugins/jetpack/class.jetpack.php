@@ -16,14 +16,18 @@ use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Rest_Authentication as Connection_Rest_Authentication;
 use Automattic\Jetpack\Connection\Secrets;
 use Automattic\Jetpack\Connection\Tokens;
+use Automattic\Jetpack\Connection\Utils as Connection_Utils;
 use Automattic\Jetpack\Connection\Webhooks\Authorize_Redirect;
 use Automattic\Jetpack\Constants;
 use Automattic\Jetpack\CookieState;
 use Automattic\Jetpack\Current_Plan as Jetpack_Plan;
 use Automattic\Jetpack\Device_Detection\User_Agent_Info;
 use Automattic\Jetpack\Errors;
+use Automattic\Jetpack\Feature_Policy;
 use Automattic\Jetpack\Files;
+use Automattic\Jetpack\Heartbeat;
 use Automattic\Jetpack\Identity_Crisis;
+use Automattic\Jetpack\Import\Main as Import_Main;
 use Automattic\Jetpack\Licensing;
 use Automattic\Jetpack\Modules;
 use Automattic\Jetpack\My_Jetpack\Initializer as My_Jetpack_Initializer;
@@ -31,7 +35,10 @@ use Automattic\Jetpack\Newsletter\Reader_Link;
 use Automattic\Jetpack\Paths;
 use Automattic\Jetpack\Plugin\Deprecate;
 use Automattic\Jetpack\Plugin\Tracking as Plugin_Tracking;
+use Automattic\Jetpack\Podcast\Podcast;
 use Automattic\Jetpack\Redirect;
+use Automattic\Jetpack\Scan_Page\Jetpack_Scan as Scan_Page_Init;
+use Automattic\Jetpack\SEO\Initializer as Jetpack_SEO_Initializer;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 use Automattic\Jetpack\Status\Visitor;
@@ -75,6 +82,15 @@ require_once JETPACK__PLUGIN_DIR . '_inc/lib/class.media.php';
  */
 class Jetpack {
 	/**
+	 * Marks a Jetpack plugin whose Backup dashboard follows the site's plan, not the backup module.
+	 *
+	 * @since 16.4
+	 *
+	 * @var bool
+	 */
+	const BACKUP_FOLLOWS_PLAN = true;
+
+	/**
 	 * XMLRPC server instance.
 	 *
 	 * @var null|Jetpack_XMLRPC_Server XMLRPC server used by Jetpack.
@@ -103,6 +119,9 @@ class Jetpack {
 		),
 		'latex'               => array(
 			array( 'wp-latex/wp-latex.php', 'WP LaTeX' ),
+		),
+		'random-redirect'     => array(
+			array( 'random-redirect/random-redirect.php', 'Random Redirect' ),
 		),
 		'sharedaddy'          => array(
 			array( 'sharedaddy/sharedaddy.php', 'Sharedaddy' ),
@@ -192,6 +211,9 @@ class Jetpack {
 			'Wordfence Security'                => 'wordfence/wordfence.php',
 			'All In One WP Security & Firewall' => 'all-in-one-wp-security-and-firewall/wp-security.php',
 			'iThemes Security'                  => 'better-wp-security/better-wp-security.php',
+		),
+		'random-redirect'    => array(
+			'Random Redirect 2' => 'random-redirect-2/random-redirect.php',
 		),
 		'related-posts'      => array(
 			'YARPP'                       => 'yet-another-related-posts-plugin/yarpp.php',
@@ -422,6 +444,14 @@ class Jetpack {
 	public static $instance = false;
 
 	/**
+	 * Resolved answer for `is_premium_analytics_enabled()`, or null before the first call.
+	 *
+	 * @since 16.1
+	 * @var bool|null
+	 */
+	private static $premium_analytics_enabled = null;
+
+	/**
 	 * Singleton
 	 *
 	 * @static
@@ -463,7 +493,7 @@ class Jetpack {
 					self::update_active_modules( $modules );
 				}
 
-				add_action( 'init', array( __CLASS__, 'activate_new_modules' ) );
+				self::register_upgrade_init_hooks();
 
 				// Upgrade to 4.3.0.
 				if ( Jetpack_Options::get_option( 'identity_crisis_whitelist' ) ) {
@@ -524,6 +554,9 @@ class Jetpack {
 				if ( false === get_option( 'wpcom_newsletter_send_default' ) ) {
 					add_option( 'wpcom_newsletter_send_default', 1 );
 				}
+
+				// Its handler went with the Recommendations assistant.
+				wp_clear_scheduled_hook( 'jetpack_recommend_videopress' );
 
 				if ( did_action( 'wp_loaded' ) ) {
 					self::upgrade_on_load();
@@ -632,8 +665,6 @@ class Jetpack {
 		add_action( 'mu_plugin_loaded', array( $this, 'add_configure_hook' ), 90 );
 		add_action( 'plugins_loaded', array( $this, 'late_initialization' ), 90 );
 
-		add_action( 'jetpack_verify_signature_error', array( $this, 'track_xmlrpc_error' ) );
-
 		/**
 		 * Prepare Gutenberg Editor functionality
 		 *
@@ -641,6 +672,7 @@ class Jetpack {
 		 * a longer investigation to see if code is expecting the Gutenberg class to always be available.
 		 */
 		require_once JETPACK__PLUGIN_DIR . 'class.jetpack-gutenberg.php';
+		\Automattic\Jetpack\Plugin\Unavailable_Blocks::init();
 		add_action( 'set_user_role', array( $this, 'maybe_clear_other_linked_admins_transient' ), 10, 3 );
 
 		add_action( 'jetpack_event_log', array( 'Jetpack', 'log' ), 10, 2 );
@@ -650,6 +682,11 @@ class Jetpack {
 
 		// Set up the REST authentication hooks.
 		Connection_Rest_Authentication::init();
+
+		// Register Jetpack-specific connection tests (sync health, etc.) with the connection
+		// package's health test suite. This runs on all requests (not just admin), because
+		// the connection/test REST endpoint can be called outside admin context.
+		add_action( 'jetpack_connection_tests_loaded', array( $this, 'register_jetpack_connection_tests' ) );
 
 		add_action( 'admin_init', array( $this, 'admin_init' ) );
 		add_action( 'admin_init', array( $this, 'dismiss_jetpack_notice' ) );
@@ -697,6 +734,9 @@ class Jetpack {
 		// Update the site's Jetpack plan and products from API on heartbeats.
 		add_action( 'jetpack_heartbeat', array( Jetpack_Plan::class, 'refresh_from_wpcom' ) );
 
+		// The Connection package fetches the site record for `jetpack/v4/site`; reuse it to refresh the plan.
+		add_action( 'jetpack_site_data_fetched', array( Jetpack_Plan::class, 'update_from_site_record' ) );
+
 		// Actually push the stats on shutdown.
 		if ( ! has_action( 'shutdown', array( $this, 'push_stats' ) ) ) {
 			add_action( 'shutdown', array( $this, 'push_stats' ) );
@@ -706,6 +746,7 @@ class Jetpack {
 		add_action( 'jetpack_site_registered', array( $this, 'activate_default_modules_on_site_register' ) );
 		add_action( 'jetpack_site_registered', array( $this, 'handle_unique_registrations_stats' ) );
 		add_action( 'jetpack_site_registered', array( Reader_Link::class, 'activate_on_connection' ), 9 );
+		add_action( 'jetpack_site_registered', array( \Automattic\Jetpack\Reprint_Export\Reprint_Exporter::class, 'discard_credentials' ) );
 
 		// Actions for Manager::authorize().
 		add_action( 'jetpack_authorize_starting', array( $this, 'authorize_starting' ) );
@@ -747,12 +788,193 @@ class Jetpack {
 		// Register product descriptions for partner coupon usage.
 		add_filter( 'jetpack_partner_coupon_products', array( $this, 'get_partner_coupon_product_descriptions' ) );
 
-		// Actions for conditional recommendations.
-		add_action( 'plugins_loaded', array( 'Jetpack_Recommendations', 'init_conditional_recommendation_actions' ) );
-
 		// Add 5-star
 		add_filter( 'plugin_row_meta', array( $this, 'add_5_star_review_link' ), 10, 2 );
 		add_action( 'init', array( Deprecate::class, 'instance' ) );
+
+		// Register Jetpack module management abilities (WordPress Abilities API, WP 6.9+).
+		\Automattic\Jetpack\Plugin\Abilities\Modules_Abilities::init();
+
+		// Register Connection abilities (WordPress Abilities API, WP 6.9+). Scoped to the
+		// Jetpack plugin for now: the Connection package no longer auto-wires these, so
+		// connection-only consumers (Boost, Protect, Search, etc.) do not register them yet.
+		\Automattic\Jetpack\Connection\Abilities\Connection_Abilities::init();
+	}
+
+	/**
+	 * Whether the current request should eagerly initialize the admin/REST-only
+	 * packages (the Import package and My Jetpack) now, at `plugins_loaded` time.
+	 *
+	 * Returns true for admin, cron, POST, and WP-CLI requests — the contexts,
+	 * knowable this early, where those packages have work to do. Returns false
+	 * for a plain front-end GET *and* for a REST request: the two can't be told
+	 * apart yet (this runs before `rest_api_init`), so callers defer the REST
+	 * case by initializing the package on `rest_api_init` instead, while a plain
+	 * page view never fires that hook and so loads nothing. This keeps
+	 * admin/REST-only PHP out of opcache on the front-end GET hot path.
+	 *
+	 * No in-repo code depends on the deferral. The one externally observable
+	 * change is timing: the packages' documented init hooks
+	 * (`jetpack_import_initialized`, `jetpack_feature_import_enabled`, and
+	 * `my_jetpack_init`) no longer fire on a plain front-end GET — they fire on
+	 * the admin, cron, POST, WP-CLI, and REST requests where the packages load.
+	 *
+	 * @return bool
+	 */
+	private static function should_eager_load_packages() {
+		$is_post_request = isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) );
+		$is_wp_cli       = Constants::is_true( 'WP_CLI' );
+
+		return is_admin() || wp_doing_cron() || $is_post_request || $is_wp_cli;
+	}
+
+	/**
+	 * Configure the Import package from a deferred hook.
+	 *
+	 * The eager path uses Config::ensure( 'import' ), but the deferred REST path
+	 * runs after Config::on_plugins_loaded() has already processed its feature
+	 * flags, so it needs a hookable bootstrap callback. Preserve Config's
+	 * feature-enabled action for hook consumers.
+	 *
+	 * @since 16.0
+	 *
+	 * @return void
+	 */
+	public static function configure_import_package() {
+		if ( class_exists( Import_Main::class ) ) {
+			Import_Main::configure();
+
+			if ( ! did_action( 'jetpack_feature_import_enabled' ) ) {
+				do_action( 'jetpack_feature_import_enabled' );
+			}
+		}
+	}
+
+	/**
+	 * What switching a module off leaves unchanged, for interfaces that still offer it; empty when nothing.
+	 *
+	 * @since 16.4
+	 *
+	 * @param string $module Module slug.
+	 * @return string
+	 */
+	public static function get_module_deactivation_note( $module ) {
+		return 'backup' === $module
+			? __( 'Backups are controlled by your site’s plan.', 'jetpack' )
+			: '';
+	}
+
+	/**
+	 * Whether to offer the bundled Backup dashboard; Backup::offers_jetpack_dashboard() decides.
+	 *
+	 * @return bool
+	 */
+	private static function offers_backup_dashboard() {
+		$product = 'Automattic\\Jetpack\\My_Jetpack\\Products\\Backup';
+
+		if ( method_exists( $product, 'offers_jetpack_dashboard' ) ) {
+			return $product::offers_jetpack_dashboard();
+		}
+
+		// Another plugin may have loaded an older My Jetpack without it: the same gates, on the current plan only.
+		if ( is_multisite() || ! self::is_connection_ready() || ! self::connection()->has_connected_owner() || ! Jetpack_Plan::supports( 'backups' ) ) {
+			return false;
+		}
+
+		/**
+		 * Filters whether the Jetpack plugin offers its bundled Backup dashboard.
+		 *
+		 * Resolved at the earliest `plugins_loaded` priority, so hook it from a mu-plugin.
+		 *
+		 * @since 16.3
+		 *
+		 * @param bool $enabled Whether to initialize the bundled Backup dashboard. Default true.
+		 */
+		return (bool) apply_filters( 'jetpack_backup_dashboard_enabled', true );
+	}
+
+	/**
+	 * Enable the bundled Backup dashboard.
+	 *
+	 * The standalone plugin initializes the package first, so with both active this is a no-op.
+	 *
+	 * @return void
+	 */
+	public static function configure_backup_package() {
+		if ( ! self::offers_backup_dashboard() ) {
+			return;
+		}
+
+		$backup = 'Automattic\\Jetpack\\Backup\\V0005\\Jetpack_Backup';
+
+		// An older package would take over the connection (see Jetpack_Backup::DEFAULT_INIT_OPTIONS);
+		// only the standalone plugin ships one that old, and it draws its own menu.
+		if ( ! class_exists( $backup ) || ! defined( $backup . '::DEFAULT_INIT_OPTIONS' ) ) {
+			return;
+		}
+
+		$backup::initialize( array( 'manage_connection' => false ) );
+	}
+
+	/**
+	 * Whether the bundled Stats v2 dashboard is enabled.
+	 *
+	 * Resolves `Enablement::is_enabled()` once per request (WOOA7S-1595). The classic Stats menu
+	 * stays beside Stats v2 until `jetpack-stats-classic-page-retired` retires it.
+	 *
+	 * The package has to be loadable for this to be true, so a site with the
+	 * flag on but a missing package answers false here and never adds the
+	 * Stats v2 menu (a warning is logged instead).
+	 *
+	 * @since 16.1
+	 *
+	 * @return bool
+	 */
+	public static function is_premium_analytics_enabled() {
+		if ( null !== self::$premium_analytics_enabled ) {
+			return self::$premium_analytics_enabled;
+		}
+
+		// The fallback covers an older package, loaded ahead of ours, that predates the shared rule and the retirement flag.
+		$enablement = 'Automattic\Jetpack\PremiumAnalytics\Enablement';
+		if ( method_exists( $enablement, 'is_enabled' ) ) {
+			$flag = $enablement::is_enabled();
+		} elseif ( ! self::is_module_active( 'stats' ) ) {
+			$flag = false;
+		} else {
+			/** This filter is documented in projects/packages/premium-analytics/src/class-enablement.php */
+			$flag = (bool) apply_filters(
+				'jetpack_premium_analytics_enabled',
+				(bool) get_option( 'jetpack_premium_analytics_enabled' )
+			);
+		}
+
+		self::$premium_analytics_enabled = $flag && class_exists( 'Automattic\Jetpack\PremiumAnalytics\Analytics' );
+
+		if ( $flag && ! self::$premium_analytics_enabled ) {
+			wp_trigger_error(
+				__METHOD__,
+				'The jetpack_premium_analytics_enabled flag is on but the Premium Analytics package is not loadable; keeping the Stats UI in place.'
+			);
+		}
+
+		return self::$premium_analytics_enabled;
+	}
+
+	/**
+	 * Expose the setting that turns the Premium Analytics dashboard on and off.
+	 *
+	 * Deliberately not behind is_premium_analytics_enabled(): this is the setting that flips that
+	 * check, so it has to answer while the dashboard is still off.
+	 *
+	 * @since 16.2
+	 *
+	 * @return void
+	 */
+	public static function register_premium_analytics_enablement_setting() {
+		if ( class_exists( 'Automattic\Jetpack\PremiumAnalytics\Enablement_Setting' ) ) {
+			\Automattic\Jetpack\PremiumAnalytics\Enablement_Setting::register();
+		}
 	}
 
 	/**
@@ -768,15 +990,116 @@ class Jetpack {
 				'sync',
 				'account_protection',
 				'waf',
-				'videopress',
-				'stats',
-				'stats_admin',
-				'import',
 			)
 			as $feature
 		) {
 			$config->ensure( $feature );
 		}
+
+		// Enable the VideoPress admin UI (the "Jetpack > VideoPress" dashboard) inside the
+		// Jetpack plugin, mirroring the standalone Jetpack VideoPress plugin. The dashboard
+		// only renders when the VideoPress module is active (Status::is_active()); when it
+		// is not, the menu item links to the My Jetpack interstitial to activate it.
+		$config->ensure( 'videopress', array( 'admin_ui' => true ) );
+
+		// The Backup dashboard is only an admin menu and REST routes, so it is deferred like Import below.
+		if ( self::should_eager_load_packages() ) {
+			self::configure_backup_package();
+		} else {
+			add_action( 'rest_api_init', array( __CLASS__, 'configure_backup_package' ), 0 );
+		}
+
+		/*
+		 * The Import package only registers `jetpack/v4/import` REST routes — it
+		 * does nothing when rendering a front-end page — so gate its `ensure()`
+		 * to keep its PHP out of opcache on the front-end GET hot path. It still
+		 * loads on admin, cron, POST, and WP-CLI requests, and on `rest_api_init`
+		 * for REST: a REST request can't be identified yet at `plugins_loaded`
+		 * (this runs before `Config::on_plugins_loaded`, and `rest_api_init`
+		 * fires later), so it is initialized directly when that hook fires, while
+		 * a plain page view never fires it and so loads nothing.
+		 *
+		 * JITM stays eager (above): unlike Import, its `register()` adds a
+		 * `jetpack_sync_before_send_updated_option` filter that records the
+		 * `jetpack_last_plugin_sync` transient, and a Jetpack Sync send can fire
+		 * on a plain front-end GET — including the dedicated-sync `spawn-sync`
+		 * GET, which runs on `init` and exits before `rest_api_init`. Deferring
+		 * JITM would skip that bookkeeping and leave its message cache stale after
+		 * a plugin change, so it loads on every request as before.
+		 */
+		if ( self::should_eager_load_packages() ) {
+			$config->ensure( 'import' );
+		} else {
+			add_action(
+				'rest_api_init',
+				array( __CLASS__, 'configure_import_package' ),
+				0
+			);
+		}
+
+		/*
+		 * The Stats and Stats Admin packages only do work when the Stats module
+		 * is active (the front-end tracking pixel) or on wp-admin, REST, cron,
+		 * POST, and WP-CLI requests: the Stats dashboard page, the stats /
+		 * stats-app REST endpoints (which the block editor also calls for
+		 * email-open rates), the transient-cleanup cron, the connection
+		 * package's package-version tracker (which runs on POSTs and reads the
+		 * `jetpack_package_versions` filter that Stats registers), and CLI
+		 * introspection such as the heartbeat inspector. On a plain front-end
+		 * GET page view with the module off they are inert: the pixel
+		 * short-circuits on `Stats\Main::should_track()` and every other entry
+		 * point only hooks rest_api_init, admin, cron, the POST-only tracker, or
+		 * is reached through WP-CLI.
+		 * Skip loading them — and eagerly constructing the Stats Admin REST
+		 * controller — on that hot path to keep their PHP out of opcache, but
+		 * keep loading them everywhere else exactly as before so the stats REST
+		 * permission mapping (view_stats, registered by Stats\Main), the
+		 * editor's stats-app calls, the cleanup cron, and the package-version
+		 * tracker are all unchanged.
+		 *
+		 * REST requests are not yet identifiable here (REST_REQUEST is defined
+		 * after plugins_loaded), so defer those to rest_api_init. Call the
+		 * package initializers directly rather than `$config->ensure()`: ensure()
+		 * only flags a feature for `Config::on_plugins_loaded()` (plugins_loaded
+		 * priority 2), which has already run by the time rest_api_init fires.
+		 * Priority 0 runs before each package's own priority-10 route
+		 * registration, so their routes still register within the same dispatch.
+		 * A plain page view never fires rest_api_init, so the packages stay
+		 * unloaded there. See JETPACK-1747.
+		 */
+		$is_post_request = isset( $_SERVER['REQUEST_METHOD'] ) && 'POST' === $_SERVER['REQUEST_METHOD'];
+		$is_wp_cli       = defined( 'WP_CLI' ) && WP_CLI;
+
+		if ( self::is_module_active( 'stats' ) || is_admin() || wp_doing_cron() || $is_post_request || $is_wp_cli ) {
+			$config->ensure( 'stats' );
+			$config->ensure( 'stats_admin' );
+		} else {
+			add_action(
+				'rest_api_init',
+				static function () {
+					if ( class_exists( 'Automattic\Jetpack\Stats\Main' ) ) {
+						\Automattic\Jetpack\Stats\Main::init();
+					}
+					if ( class_exists( 'Automattic\Jetpack\Stats_Admin\Main' ) ) {
+						\Automattic\Jetpack\Stats_Admin\Main::init();
+					}
+				},
+				0
+			);
+		}
+
+		// Stats v2 (WOOA7S-1595). Unlike Stats above it cannot be deferred when enabled — see
+		// Analytics::init() for why.
+		if ( self::is_premium_analytics_enabled() ) {
+			\Automattic\Jetpack\PremiumAnalytics\Analytics::init();
+			if ( class_exists( 'Automattic\Jetpack\WooCommerceStats\Analytics_Dashboard' ) ) {
+				\Automattic\Jetpack\WooCommerceStats\Analytics_Dashboard::init();
+			}
+		}
+
+		// Outside the check above on purpose — see Enablement_Setting. Deferred like Stats, to keep
+		// the autoload off the front-end hot path.
+		add_action( 'rest_api_init', array( __CLASS__, 'register_premium_analytics_enablement_setting' ), 0 );
 
 		$config->ensure(
 			'connection',
@@ -865,10 +1188,61 @@ class Jetpack {
 	 */
 	public function late_initialization() {
 		add_action( 'after_setup_theme', array( 'Jetpack', 'load_modules' ), -2 );
-		My_Jetpack_Initializer::init();
 
-		// Initialize Boost Speed Score
-		new Speed_Score( array(), 'jetpack-dashboard' );
+		/*
+		 * My Jetpack is a wp-admin dashboard. Its Initializer::init() only wires
+		 * up admin-menu, admin_init, and rest_api_init surfaces — and eagerly
+		 * loads every product class (backup, boost, protect, …) just to register
+		 * admin plugin-action links — so none of it is needed on a plain
+		 * front-end GET page view. (The pieces that do immediate work, e.g.
+		 * Connection REST authentication and Licensing, are already initialized
+		 * unconditionally in Jetpack's constructor, so they are unaffected here.)
+		 *
+		 * Gate the call to the request types where My Jetpack actually does work.
+		 * REST can't be detected yet at plugins_loaded, so initialize on
+		 * rest_api_init for that branch; a plain page view never fires it, so My
+		 * Jetpack stays unloaded there.
+		 */
+		if ( self::should_eager_load_packages() ) {
+			My_Jetpack_Initializer::init();
+		} else {
+			add_action( 'rest_api_init', array( My_Jetpack_Initializer::class, 'init' ), 0 );
+		}
+
+		Scan_Page_Init::initialize();
+		Jetpack_SEO_Initializer::init();
+
+		if ( ( new Modules() )->is_active( 'podcast' ) ) {
+			Podcast::init();
+		} else {
+			add_action(
+				'jetpack_register_gutenberg_extensions',
+				static function () {
+					Jetpack_Gutenberg::set_extension_unavailable( 'podcast-episode', 'missing_module', array( 'module' => 'podcast' ) );
+				}
+			);
+		}
+
+		/*
+		 * Initialize Boost Speed Score. It only does work on REST requests (the
+		 * dashboard speed-score endpoints) and on a few Jetpack Boost lifecycle
+		 * actions, so defer constructing it — and loading the boost-speed-score
+		 * package classes — until one of those hooks actually fires instead of on
+		 * every request. Priority 0 ensures the object's own callbacks (added in
+		 * its constructor at the default priority) still run for the firing hook.
+		 */
+		$initialize_speed_score = static function () {
+			static $initialized = false;
+			if ( $initialized ) {
+				return;
+			}
+			$initialized = true;
+			new Speed_Score( array(), 'jetpack-dashboard' );
+		};
+		add_action( 'rest_api_init', $initialize_speed_score, 0 );
+		add_action( 'jetpack_boost_deactivate', $initialize_speed_score, 0 );
+		add_action( 'jetpack_boost_environment_changed', $initialize_speed_score, 0 );
+		add_action( 'handle_environment_change', $initialize_speed_score, 0 );
 
 		/**
 		 * Fires when Jetpack is fully loaded and ready. This is the point where it's safe
@@ -985,6 +1359,7 @@ class Jetpack {
 			'single_user_site'         => array( 'Jetpack', 'is_single_user_site' ),
 			'updates'                  => array( 'Jetpack', 'get_updates' ),
 			'available_jetpack_blocks' => array( 'Jetpack_Gutenberg', 'get_availability' ), // Includes both Gutenberg blocks *and* plugins.
+			'theme_styles'             => array( 'Automattic\\Jetpack\\Plugin\\Theme_Styles_Sync', 'get_theme_styles' ),
 		);
 		return array_merge( $callables, $jetpack_callables );
 	}
@@ -1741,20 +2116,12 @@ class Jetpack {
 	 * @todo Store the result in core's object cache maybe?
 	 */
 	public static function get_active_plugins() {
-		$active_plugins = (array) get_option( 'active_plugins', array() );
-
-		if ( is_multisite() ) {
-			// Due to legacy code, active_sitewide_plugins stores them in the keys,
-			// whereas active_plugins stores them in the values.
-			$network_plugins = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
-			if ( $network_plugins ) {
-				$active_plugins = array_merge( $active_plugins, $network_plugins );
-			}
+		// Older Connection copies can load first and lack this method.
+		if ( ! method_exists( Heartbeat::class, 'get_active_plugins' ) ) {
+			return array();
 		}
 
-		sort( $active_plugins );
-
-		return array_unique( $active_plugins );
+		return Heartbeat::get_active_plugins();
 	}
 
 	/**
@@ -2049,6 +2416,10 @@ class Jetpack {
 					break;
 			}
 		}
+		if ( method_exists( Feature_Policy::class, 'ensure_hooks' ) ) {
+			Feature_Policy::ensure_hooks();
+		}
+
 		/**
 		 * Filters the array of default modules.
 		 *
@@ -2210,21 +2581,28 @@ class Jetpack {
 	/**
 	 * Return module name translation. Uses matching string created in modules/module-headings.php.
 	 *
+	 * The module list is globbed from `modules/` at runtime, so a module can be listed with no
+	 * entry in that generated file. Fall back to the untranslated header rather than overwriting
+	 * it with the null `jetpack_get_module_i18n()` returns for an unknown slug.
+	 *
 	 * @since 3.9.2
 	 *
 	 * @param array $modules Array of Jetpack modules.
 	 *
-	 * @return string|void
+	 * @return array
 	 */
 	public static function get_translated_modules( $modules ) {
 		foreach ( $modules as $index => $module ) {
 			$i18n_module = jetpack_get_module_i18n( $module['module'] );
-			if ( isset( $module['name'] ) ) {
-				$modules[ $index ]['name'] = $i18n_module['name'];
+			$name        = $i18n_module['name'] ?? null;
+			$description = $i18n_module['description'] ?? null;
+
+			if ( null !== $name && isset( $module['name'] ) ) {
+				$modules[ $index ]['name'] = $name;
 			}
-			if ( isset( $module['description'] ) ) {
-				$modules[ $index ]['description']       = $i18n_module['description'];
-				$modules[ $index ]['short_description'] = $i18n_module['description'];
+			if ( null !== $description && isset( $module['description'] ) ) {
+				$modules[ $index ]['description']       = $description;
+				$modules[ $index ]['short_description'] = $description;
 			}
 			if ( isset( $module['module_tags'] ) ) {
 				$modules[ $index ]['module_tags'] = array_map( 'jetpack_get_module_i18n_tag', $module['module_tags'] );
@@ -2539,7 +2917,7 @@ class Jetpack {
 	 */
 	public static function module_configuration_url( $module ) {
 		$module      = self::get_module_slug( $module );
-		$default_url = self::admin_url() . "#/settings?term=$module";
+		$default_url = self::admin_url( array( 'page' => 'jetpack-settings' ) ) . "#/settings?term=$module";
 		/**
 		 * Allows to modify configure_url of specific module to be able to redirect to some custom location.
 		 *
@@ -2626,6 +3004,8 @@ p {
 
 		Health::on_jetpack_activated();
 
+		\Automattic\Jetpack\Reprint_Export\Reprint_Exporter::discard_credentials();
+
 		if ( self::is_connection_ready() && method_exists( 'Automattic\Jetpack\Sync\Actions', 'do_only_first_initial_sync' ) ) {
 			Sync_Actions::do_only_first_initial_sync();
 		}
@@ -2670,7 +3050,7 @@ p {
 		if ( $plugins_path === $referer['path'] ) {
 			$source_type = 'list';
 		} elseif ( $plugins_install_path === $referer['path'] ) {
-			$tab = isset( $query_parts['tab'] ) ? $query_parts['tab'] : 'featured';
+			$tab = $query_parts['tab'] ?? 'featured';
 			switch ( $tab ) {
 				case 'popular':
 					$source_type = 'popular';
@@ -2682,8 +3062,8 @@ p {
 					$source_type = 'favorites';
 					break;
 				case 'search':
-					$source_type  = 'search-' . ( isset( $query_parts['type'] ) ? $query_parts['type'] : 'term' );
-					$source_query = isset( $query_parts['s'] ) ? $query_parts['s'] : null;
+					$source_type  = 'search-' . ( $query_parts['type'] ?? 'term' );
+					$source_query = $query_parts['s'] ?? null;
 					break;
 				default:
 					$source_type = 'featured';
@@ -2694,36 +3074,186 @@ p {
 	}
 
 	/**
-	 * Runs before bumping version numbers up to a new version
+	 * Runs before bumping version numbers up to a new version.
 	 *
-	 * @param string $version    Version:timestamp.
+	 * Only ever registered the hooks for the release post update modal, which has been removed.
+	 * No longer hooked to `updating_jetpack_version`.
+	 *
+	 * @deprecated 16.2
+	 *
+	 * @param string $version     Version:timestamp.
 	 * @param string $old_version Old Version:timestamp or false if not set yet.
 	 */
-	public static function do_version_bump( $version, $old_version ) {
-		if ( $old_version ) { // For existing Jetpack installations.
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_block_style' );
+	public static function do_version_bump( $version, $old_version ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable -- Signature preserved for the deprecation shim.
+		_deprecated_function( __METHOD__, 'jetpack-16.2' );
+	}
 
-			// If a front end page is visited after the update, the 'wp' action will fire.
-			add_action( 'wp', 'Jetpack::set_update_modal_display' );
+	/**
+	 * Enables the Newsletter (subscriptions) module for existing sites now that it is a default-on module.
+	 *
+	 * Fresh installs receive the module via its "Auto Activate: Yes" header, so this only handles sites
+	 * upgrading from a version where the module defaulted off. It runs once per site (guarded by the
+	 * subscriptions_default_on_migrated option). Fresh installs are marked as migrated immediately so the
+	 * migration never runs for them. After it has run, the user's choice to deactivate the module again
+	 * (for example from the My Jetpack Products page) is respected and never reverted.
+	 *
+	 * The module requires a connection, so on a disconnected site the migration is deferred without setting
+	 * the guard, allowing a later version bump to retry once the site is connected.
+	 *
+	 * @param string       $version     New Jetpack version:timestamp.
+	 * @param string|false $old_version Previous Jetpack version:timestamp, or false on a fresh install.
+	 */
+	public static function activate_subscriptions_module_for_existing_sites( $version, $old_version ) {
+		if ( get_option( 'jetpack_subscriptions_default_on_migrated' ) ) {
+			return;
+		}
 
-			// If an admin page is visited after the update, the 'current_screen' action will fire.
-			add_action( 'current_screen', 'Jetpack::set_update_modal_display' );
+		// Fresh installs get the module via its "Auto Activate: Yes" header. Mark them as migrated so a
+		// later opt-out is never reverted by the existing-site path on a subsequent version bump.
+		if ( ! $old_version ) {
+			update_option( 'jetpack_subscriptions_default_on_migrated', true );
+			return;
+		}
+
+		if ( ! self::is_connection_ready() ) {
+			return;
+		}
+
+		// Mark as migrated only once the module is active, so a transient activation failure is retried on
+		// a later version bump rather than being silently skipped.
+		if ( self::is_module_active( 'subscriptions' ) || self::activate_module( 'subscriptions', false, false ) ) {
+			update_option( 'jetpack_subscriptions_default_on_migrated', true );
 		}
 	}
 
 	/**
+	 * Option flag that records the AI master-switch opt-out reconciliation has run,
+	 * so it never runs twice.
+	 *
+	 * @var string
+	 */
+	const AI_MASTER_OPTOUT_MIGRATED_OPTION = 'jetpack_ai_master_optout_migrated';
+
+	/**
+	 * Register the on-upgrade init hooks whose relative ORDER matters, extracted so
+	 * the ordering can be asserted in tests without invoking plugin_upgrade() (whose
+	 * guards make it unreliable to trigger under test). activate_new_modules()
+	 * (init, default priority 10) auto-activates "Auto Activate: Yes" modules
+	 * including the `ai` master; reconcile_ai_master_optout() must run at a LATER
+	 * priority to honor an explicit AI opt-out.
+	 *
+	 * @return void
+	 */
+	public static function register_upgrade_init_hooks() {
+		add_action( 'init', array( __CLASS__, 'activate_new_modules' ) );
+		add_action( 'init', array( __CLASS__, 'reconcile_ai_master_optout' ), 20 );
+	}
+
+	/**
+	 * Preserves an explicit Jetpack AI opt-out when the `ai` module becomes the site-wide
+	 * master switch off WordPress.com Simple (self-hosted and Atomic).
+	 *
+	 * The `ai` module is "Auto Activate: Yes", so on upgrade {@see self::activate_new_modules()}
+	 * turns it on for connected sites — the desired default-on / auto-enable-on-connection
+	 * behavior, which this method deliberately leaves alone. The one case it corrects is a site
+	 * that had explicitly disabled Jetpack AI (the `jetpack_ai_enabled` option present and falsey)
+	 * before the module shipped: that opt-out must survive the module becoming the master, so the
+	 * module is deactivated for exactly those sites. An absent or truthy option is left untouched.
+	 *
+	 * Ordering is the whole point. `activate_new_modules()` is hooked on `init` at priority 10 and
+	 * auto-activates the module there; this method is hooked on `init` at priority 20 (see
+	 * {@see self::plugin_upgrade()}), so it runs AFTER the auto-activation and its deactivation is
+	 * the final state. A version-guarded block that ran inline during `plugins_loaded` would be
+	 * undone by the later auto-activation, which is why this is a late-init hook rather than an
+	 * inline upgrade step.
+	 *
+	 * WordPress.com Simple never runs modules — the option stays the master there — so this is a
+	 * no-op on Simple. The {@see self::AI_MASTER_OPTOUT_MIGRATED_OPTION} flag makes it run exactly
+	 * once, which matters because off-Simple the option is no longer the master after this runs:
+	 * a stale falsey option must not keep re-deactivating a module the user later turns back on.
+	 *
+	 * @return void
+	 */
+	public static function reconcile_ai_master_optout() {
+		if ( get_option( self::AI_MASTER_OPTOUT_MIGRATED_OPTION ) ) {
+			return;
+		}
+
+		// Simple keeps the `jetpack_ai_enabled` option as the master; modules don't run there.
+		if ( ( new Host() )->is_wpcom_simple() ) {
+			return;
+		}
+
+		// A sentinel default distinguishes an absent option (leave auto-activation alone) from one
+		// explicitly stored falsey (an opt-out to preserve).
+		$stored = get_option( 'jetpack_ai_enabled', 'not-set' );
+		if ( 'not-set' !== $stored && ! (bool) $stored ) {
+			( new Modules() )->deactivate( 'ai' );
+		}
+
+		update_option( self::AI_MASTER_OPTOUT_MIGRATED_OPTION, true );
+	}
+
+	/**
+	 * Deletes obsolete SEO module-state options without changing module activation.
+	 *
+	 * @since 16.3
+	 */
+	public static function cleanup_seo_module_state_options() {
+		delete_option( 'jetpack_seo_sitemap_enabled' );
+		delete_option( 'jetpack_seo_canonical_urls_enabled' );
+		delete_option( 'jetpack_seo_module_state_reconciled' );
+	}
+
+	/**
+	 * Seeds the Jetpack SEO discoverability cohort once, so the new SEO surface is
+	 * auto-discoverable on fresh installs but opt-in on existing ones (JETPACK-1700).
+	 *
+	 * Hooked on `updating_jetpack_version`, which fires on every install including the
+	 * first — with `$old_version === false` on a brand-new site (the same signal
+	 * {@see self::activate_subscriptions_module_for_existing_sites()} keys off). Fresh
+	 * installs are seeded visible; existing installs are seeded hidden and opt in later
+	 * via the legacy Traffic page or My Jetpack. Deactivation deletes the stored version,
+	 * so a reactivation before this option exists counts as fresh. `add_option()` makes
+	 * this seed-once: it never overrides a value a later opt-in (or opt-out) has set.
+	 * WordPress.com sites ignore this option entirely (always visible) — see
+	 * {@see \Automattic\Jetpack\SEO\Initializer::is_seo_surface_visible()}.
+	 *
+	 * @param string       $version     The new Jetpack version (unused).
+	 * @param string|false $old_version The previous version, or false on a fresh install.
+	 */
+	public static function seed_seo_visibility_cohort( $version, $old_version ) {
+		// Drop the superseded key (see VISIBILITY_OPTION); it plays no part in the seed.
+		delete_option( 'jetpack_seo_surface_visible' );
+		add_option( Jetpack_SEO_Initializer::VISIBILITY_OPTION, ! $old_version );
+	}
+
+	/**
 	 * Sets the display_update_modal state.
+	 *
+	 * The release post update modal that read this state has been removed. The write is kept so the
+	 * method still behaves as documented for the deprecation window. When this is deleted, also drop
+	 * the matching `display_update_modal` guard in Automattic\Jetpack\CookieState::should_set_cookie(),
+	 * which exists only to keep this key out of the cookie on the Jetpack admin screen.
+	 *
+	 * @deprecated 16.2
 	 */
 	public static function set_update_modal_display() {
+		_deprecated_function( __METHOD__, 'jetpack-16.2' );
 		self::state( 'display_update_modal', true );
 	}
 
 	/**
 	 * Enqueues the block library styles.
 	 *
+	 * Only ever used by the release post update modal, which has been removed.
+	 *
+	 * @deprecated 16.2
+	 *
 	 * @param string $hook The current admin page.
 	 */
 	public static function enqueue_block_style( $hook ) {
+		_deprecated_function( __METHOD__, 'jetpack-16.2' );
 		if ( 'toplevel_page_jetpack' === $hook ) {
 			wp_enqueue_style( 'wp-block-library' );
 		}
@@ -2853,6 +3383,8 @@ p {
 	 */
 	public static function jetpack_site_disconnected() {
 		Identity_Crisis::clear_all_idc_options();
+
+		\Automattic\Jetpack\Reprint_Export\Reprint_Exporter::discard_credentials();
 
 		// Delete all the sync related data. Since it could be taking up space.
 		Sender::get_instance()->uninstall();
@@ -3029,13 +3561,25 @@ p {
 	/**
 	 * Return stat data for WPCOM sync.
 	 *
+	 * The Sync stats module was this method's last caller and moved to the Connection package's
+	 * `Heartbeat::generate_stats_array()`, which assembles the heartbeat data through the
+	 * `jetpack_heartbeat_stats_array` filter. Note the package method does not include the extended
+	 * data from `get_additional_stat_data()`, so callers relying on `$extended` need to add it themselves.
+	 *
+	 * @deprecated 16.2
+	 *
 	 * @param bool $encode JSON encode the result.
 	 * @param bool $extended Adds additional stats data.
 	 *
 	 * @return array|string Stats data. Array if $encode is false. JSON-encoded string is $encode is true.
 	 */
 	public static function get_stat_data( $encode = true, $extended = true ) {
-		$data = Jetpack_Heartbeat::generate_stats_array();
+		_deprecated_function( __METHOD__, 'jetpack-16.2', 'Automattic\\Jetpack\\Heartbeat::generate_stats_array' );
+
+		$env_stats = method_exists( Heartbeat::class, 'get_environment_stats' )
+			? Heartbeat::get_environment_stats()
+			: array();
+		$data      = array_merge( Jetpack_Heartbeat::generate_stats_array(), $env_stats );
 
 		if ( $extended ) {
 			$additional_data = self::get_additional_stat_data();
@@ -3141,10 +3685,6 @@ p {
 
 		if ( ! ( is_multisite() && is_plugin_active_for_network( 'jetpack/jetpack.php' ) && ! is_network_admin() ) ) {
 			add_action( 'admin_enqueue_scripts', array( $this, 'deactivate_dialog' ) );
-		}
-
-		if ( isset( $_COOKIE['jetpackState']['display_update_modal'] ) ) {
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_block_style' );
 		}
 
 		add_filter( 'plugin_action_links_' . plugin_basename( JETPACK__PLUGIN_DIR . 'jetpack.php' ), array( $this, 'plugin_action_links' ) );
@@ -3395,7 +3935,7 @@ p {
 		}
 
 		$uploaded_files = array();
-		$global_post    = isset( $GLOBALS['post'] ) ? $GLOBALS['post'] : null;
+		$global_post    = $GLOBALS['post'] ?? null;
 		unset( $GLOBALS['post'] );
 		if ( empty( $_FILES['media']['name'] ) ) {
 			// Nothing to process, just return.
@@ -3404,7 +3944,7 @@ p {
 		foreach ( $_FILES['media']['name'] as $index => $name ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- As above, unslash sniff is wrong. Validation should happen below.
 			$file = array();
 			foreach ( $media_keys as $media_key ) {
-				$file[ $media_key ] = isset( $_FILES['media'][ $media_key ][ $index ] ) ? $_FILES['media'][ $media_key ][ $index ] : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- As above, the unslash sniff is wrong.
+				$file[ $media_key ] = $_FILES['media'][ $media_key ][ $index ] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash,,WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- As above, the unslash sniff is wrong.
 			}
 
 			list( $hmac_provided, $salt ) = isset( $_POST['_jetpack_file_hmac_media'][ $index ] ) ? explode( ':', filter_var( wp_unslash( $_POST['_jetpack_file_hmac_media'][ $index ] ) ) ) : array( 'no', '' ); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce should have been checked by the caller.
@@ -3502,7 +4042,7 @@ p {
 	public function plugin_action_links( $actions ) {
 		if ( current_user_can( 'jetpack_manage_modules' ) && ( self::is_connection_ready() || ( new Status() )->is_offline_mode() ) ) {
 			return array_merge(
-				array( 'settings' => sprintf( '<a href="%s">%s</a>', esc_url( self::admin_url( 'page=jetpack#/settings' ) ), __( 'Settings', 'jetpack' ) ) ),
+				array( 'settings' => sprintf( '<a href="%s">%s</a>', esc_url( self::admin_url( 'page=jetpack-settings#/settings' ) ), __( 'Settings', 'jetpack' ) ) ),
 				$actions
 			);
 		}
@@ -3540,7 +4080,7 @@ p {
 
 			// Add objects to be passed to the initial state of the app.
 			// Use wp_add_inline_script instead of wp_localize_script, see https://core.trac.wordpress.org/ticket/25280.
-			wp_add_inline_script( 'jetpack-plugins-page-js', 'var Initial_State=' . wp_json_encode( Jetpack_Redux_State_Helper::get_minimal_state(), JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ) . ';', 'before' );
+			wp_add_inline_script( 'jetpack-plugins-page-js', 'var Initial_State=' . wp_json_encode( Jetpack_Redux_State_Helper::get_plugins_page_state(), JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ) . ';', 'before' );
 
 			add_action( 'admin_footer', array( $this, 'jetpack_plugin_portal_containers' ) );
 		}
@@ -3628,6 +4168,30 @@ p {
 	 */
 
 	/**
+	 * Build the user-facing description stored alongside a registration error code.
+	 *
+	 * @since 16.2
+	 *
+	 * @see Automattic\Jetpack\Connection\Utils::get_registration_error_description()
+	 *
+	 * @param string $error_code The WP_Error code.
+	 * @param string $message    The WP_Error message.
+	 * @return string The description, empty when the message is not user-facing copy.
+	 */
+	public static function get_registration_error_description( $error_code, $message ) {
+		if ( method_exists( Connection_Utils::class, 'get_registration_error_description' ) ) {
+			return Connection_Utils::get_registration_error_description( $error_code, $message );
+		}
+
+		// Fallback for connection packages that predate it. A raw body would also overflow the state cookie.
+		if ( 'jetpack_id' === $error_code || is_numeric( $message ) ) {
+			return '';
+		}
+
+		return mb_substr( (string) $message, 0, 250 );
+	}
+
+	/**
 	 * Handles the page load events for the Jetpack admin page
 	 */
 	public function admin_page_load() {
@@ -3661,11 +4225,12 @@ p {
 					if ( $from ) {
 						static::connection()->add_register_request_param( 'from', (string) $from );
 					}
-					$registered = static::connection()->try_registration();
+					$registered = static::connection()->try_registration( true, true );
 					if ( is_wp_error( $registered ) ) {
 						$error = $registered->get_error_code();
 						self::state( 'error', $error );
-						self::state( 'error', $registered->get_error_message() );
+
+						self::state( 'error_description', self::get_registration_error_description( $error, $registered->get_error_message() ) );
 
 						/**
 						 * Jetpack registration Error.
@@ -3998,35 +4563,6 @@ p {
 </div>
 			<?php
 endif;
-	}
-
-	/**
-	 * We can't always respond to a signed XML-RPC request with a
-	 * helpful error message. In some circumstances, doing so could
-	 * leak information.
-	 *
-	 * Instead, track that the error occurred via a Jetpack_Option,
-	 * and send that data back in the heartbeat.
-	 * All this does is increment a number, but it's enough to find
-	 * trends.
-	 *
-	 * @param WP_Error $xmlrpc_error The error produced during
-	 *                               signature validation.
-	 */
-	public function track_xmlrpc_error( $xmlrpc_error ) {
-		$code = is_wp_error( $xmlrpc_error )
-			? $xmlrpc_error->get_error_code()
-			: 'should-not-happen';
-
-		$xmlrpc_errors = Jetpack_Options::get_option( 'xmlrpc_errors', array() );
-		if ( isset( $xmlrpc_errors[ $code ] ) && $xmlrpc_errors[ $code ] ) {
-			// No need to update the option if we already have
-			// this code stored.
-			return;
-		}
-		$xmlrpc_errors[ $code ] = true;
-
-		Jetpack_Options::update_option( 'xmlrpc_errors', $xmlrpc_errors, false );
 	}
 
 	/**
@@ -4458,7 +4994,7 @@ endif;
 		wp_send_json(
 			array(
 				'enabled' => $result,
-				'message' => get_transient( 'jetpack_https_test_message' ),
+				'message' => self::get_ssl_test_message(),
 			),
 			null, // @phan-suppress-current-line PhanTypeMismatchArgumentProbablyReal -- It takes null, but its phpdoc only says int.
 			JSON_UNESCAPED_SLASHES
@@ -4592,38 +5128,39 @@ endif;
 	 * @since 2.3.3
 	 */
 	public static function permit_ssl( $force_recheck = false ) {
-		// Do some fancy tests to see if ssl is being supported.
-		$ssl = false;
-		if ( ! $force_recheck ) {
-			$ssl = get_transient( 'jetpack_https_test' );
+		if ( ! method_exists( Heartbeat::class, 'permit_ssl' ) ) {
+			// Skip the SSL-fail notice when the check cannot run.
+			return true;
 		}
 
-		if ( $force_recheck || false === $ssl ) {
-			$message = '';
-			if ( ! str_starts_with( JETPACK__API_BASE, 'https' ) ) {
-				$ssl = 0;
-			} else {
-				$ssl = 1;
+		return Heartbeat::permit_ssl( $force_recheck );
+	}
 
-				if ( ! wp_http_supports( array( 'ssl' => true ) ) ) {
-					$ssl     = 0;
-					$message = __( 'WordPress reports no SSL support', 'jetpack' );
-				} else {
-					$response = wp_remote_get( JETPACK__API_BASE . 'test/1/' );
-					if ( is_wp_error( $response ) ) {
-						$ssl     = 0;
-						$message = __( 'WordPress reports no SSL support', 'jetpack' );
-					} elseif ( 'OK' !== wp_remote_retrieve_body( $response ) ) {
-						$ssl     = 0;
-						$message = __( 'Response was not OK: ', 'jetpack' ) . wp_remote_retrieve_body( $response );
-					}
-				}
-			}
-			set_transient( 'jetpack_https_test', $ssl, DAY_IN_SECONDS );
-			set_transient( 'jetpack_https_test_message', $message, DAY_IN_SECONDS );
+	/**
+	 * Returns a localized message describing the last SSL connectivity failure, if any.
+	 *
+	 * The Connection package's canonical SSL check stores a neutral reason code; this maps it to
+	 * a translated, `jetpack`-domain message for display in the admin notice and AJAX recheck.
+	 *
+	 * @since 16.1
+	 *
+	 * @return string The localized message, or an empty string when there is no failure.
+	 */
+	public static function get_ssl_test_message() {
+		if ( ! method_exists( Heartbeat::class, 'get_ssl_test_error' ) ) {
+			return '';
 		}
 
-		return (bool) $ssl;
+		$error = Heartbeat::get_ssl_test_error();
+
+		switch ( $error['code'] ) {
+			case 'no_ssl_support':
+				return __( 'WordPress reports no SSL support', 'jetpack' );
+			case 'bad_response':
+				return __( 'Response was not OK: ', 'jetpack' ) . $error['detail'];
+			default:
+				return '';
+		}
 	}
 
 	/**
@@ -4644,7 +5181,7 @@ endif;
 				<p>
 					<?php esc_html_e( 'Jetpack will re-test for HTTPS support once a day, but you can click here to try again immediately: ', 'jetpack' ); ?>
 					<a href="#" id="jetpack-recheck-ssl-button"><?php esc_html_e( 'Try again', 'jetpack' ); ?></a>
-					<span id="jetpack-recheck-ssl-output"><?php echo esc_html( get_transient( 'jetpack_https_test_message' ) ); ?></span>
+					<span id="jetpack-recheck-ssl-output"><?php echo esc_html( self::get_ssl_test_message() ); ?></span>
 				</p>
 				<p>
 					<?php
@@ -5034,13 +5571,18 @@ endif;
 	/**
 	 * Checks if the site is currently in an identity crisis.
 	 *
+	 * Now delegates to the Connection package so this matches what the heartbeat itself reports.
+	 * Note the package guards on `Connection\Manager::is_connected()` where this used to guard on
+	 * `Jetpack::is_connection_ready()`, so the `jetpack_is_connection_ready` filter no longer applies.
+	 *
+	 * @deprecated 16.2
+	 *
 	 * @return array|bool Array of options that are in a crisis, or false if everything is OK.
 	 */
 	public static function check_identity_crisis() {
-		if ( ! self::is_connection_ready() || ( new Status() )->is_offline_mode() || ! Identity_Crisis::validate_sync_error_idc_option() ) {
-			return false;
-		}
-		return Jetpack_Options::get_option( 'sync_error_idc' );
+		_deprecated_function( __METHOD__, 'jetpack-16.2', 'Automattic\\Jetpack\\Identity_Crisis::check_identity_crisis' );
+
+		return Identity_Crisis::check_identity_crisis();
 	}
 
 	/**
@@ -5186,6 +5728,17 @@ endif;
 			trigger_error( sprintf( 'Jetpack: Unable to find view file: %s', esc_html( $views_dir . $template ) ), E_USER_WARNING ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
 		}
 		return false;
+	}
+
+	/**
+	 * Register Jetpack-specific tests on the connection package's health test suite.
+	 *
+	 * @param \Automattic\Jetpack\Connection\Connection_Health_Tests $connection_tests The test suite instance.
+	 */
+	public function register_jetpack_connection_tests( $connection_tests ) {
+		require_once JETPACK__PLUGIN_DIR . '_inc/lib/debugger/class-jetpack-cxn-tests.php';
+		$jetpack_tests = new Jetpack_Cxn_Tests();
+		$jetpack_tests->register_tests_on( $connection_tests );
 	}
 
 	/**
@@ -5561,7 +6114,21 @@ endif;
 	 * $return array $filtered_data
 	 */
 	public static function jetpack_check_heartbeat_data() {
-		$raw_data = Jetpack_Heartbeat::generate_stats_array();
+		/*
+		 * Site environment stats (incl. wp-version/php-version checked below) now live in the Connection package,
+		 * and the IDC stat is contributed by the Connection package's `jetpack_heartbeat_stats_array` filter
+		 * callback. We rebuild the stat here rather than running that filter: the filter's callbacks have side
+		 * effects (Connection\Manager::add_stats_to_heartbeat() consumes and deletes the `xmlrpc_errors` option)
+		 * and return non-scalar values, neither of which is appropriate for this read-only diagnostic.
+		 */
+		$env_stats = method_exists( Heartbeat::class, 'get_environment_stats' )
+			? Heartbeat::get_environment_stats()
+			: array();
+		$raw_data  = array_merge(
+			Jetpack_Heartbeat::generate_stats_array(),
+			$env_stats,
+			array( 'identitycrisis' => Identity_Crisis::check_identity_crisis() ? 'yes' : 'no' )
+		);
 
 		$good    = array();
 		$caution = array();

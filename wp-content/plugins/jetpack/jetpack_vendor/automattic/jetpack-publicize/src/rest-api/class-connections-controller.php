@@ -7,8 +7,10 @@
 
 namespace Automattic\Jetpack\Publicize\REST_API;
 
+use Automattic\Jetpack\Connection\Rest_Authentication;
 use Automattic\Jetpack\Connection\Traits\WPCOM_REST_API_Proxy_Request;
 use Automattic\Jetpack\Publicize\Connections;
+use Automattic\Jetpack\Publicize\Jetpack_Social_Settings\Settings;
 use Automattic\Jetpack\Publicize\Publicize_Utils;
 use WP_Error;
 use WP_REST_Request;
@@ -104,7 +106,11 @@ class Connections_Controller extends Base_Controller {
 					'callback'            => array( $this, 'update_item' ),
 					'permission_callback' => array( $this, 'update_item_permissions_check' ),
 					'args'                => array(
-						'shared' => array(
+						'external_user_ID' => array(
+							'description' => __( 'External User Id - in case of services like Facebook.', 'jetpack-publicize-pkg' ),
+							'type'        => 'string',
+						),
+						'shared'           => array(
 							'description' => __( 'Whether the connection is shared with other users.', 'jetpack-publicize-pkg' ),
 							'type'        => 'boolean',
 						),
@@ -118,6 +124,55 @@ class Connections_Controller extends Base_Controller {
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			)
+		);
+
+		// This route receives pushes from WPCOM, so it is registered under the
+		// site-local jetpack/v4 namespace and never on WPCOM itself.
+		if ( ! Publicize_Utils::is_wpcom() ) {
+			register_rest_route(
+				'jetpack/v4',
+				'/publicize/connections/sync',
+				array(
+					array(
+						'methods'             => WP_REST_Server::CREATABLE,
+						'callback'            => array( $this, 'receive_updated_connections' ),
+						'permission_callback' => array( Rest_Authentication::class, 'is_signed_with_user_token' ),
+						'args'                => array(
+							// An empty value is accepted on purpose: a site with no connections left
+							// syncs an empty payload, which arrives here as an empty object.
+							'connections' => array(
+								'type'        => 'object',
+								'required'    => true,
+								'description' => __( 'The updated Publicize connections, keyed by service name.', 'jetpack-publicize-pkg' ),
+							),
+						),
+					),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Receive updated Publicize connections from WPCOM.
+	 *
+	 * REST replacement for the jetpack.updatePublicizeConnections XML-RPC method.
+	 *
+	 * Unusable connections are dropped rather than rejected: an error response would send
+	 * WPCOM down its XML-RPC fallback, which stores the same payload without the check.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response
+	 */
+	public function receive_updated_connections( $request ) {
+		/**
+		 * The route only registers on Jetpack sites, where the global is this package's Publicize.
+		 *
+		 * @var \Automattic\Jetpack\Publicize\Publicize $publicize
+		 */
+		global $publicize;
+
+		return rest_ensure_response(
+			$publicize->receive_updated_publicize_connections( $request->get_param( 'connections' ) )
 		);
 	}
 
@@ -224,13 +279,28 @@ class Connections_Controller extends Base_Controller {
 				'description' => __( 'Whether the connection is shared with other users.', 'jetpack-publicize-pkg' ),
 			),
 			'status'          => array(
-				'type'        => array( 'string', 'null' ),
 				'description' => __( 'The connection status.', 'jetpack-publicize-pkg' ),
-				'enum'        => array(
-					'ok',
-					'broken',
-					'must_reauth',
-					null,
+				'oneOf'       => array(
+					array(
+						'type' => 'string',
+						'enum' => array(
+							'ok',
+							'broken',
+							'must_reauth',
+						),
+					),
+					array(
+						'type' => 'null',
+					),
+				),
+			),
+			'template'        => array(
+				'type'        => 'string',
+				'description' => __( 'Per-connection message template override. Empty string means fall back to the global template.', 'jetpack-publicize-pkg' ),
+				'default'     => '',
+				'maxLength'   => Settings::MESSAGE_TEMPLATE_MAX_LENGTH,
+				'arg_options' => array(
+					'sanitize_callback' => array( Settings::class, 'sanitize_message_template' ),
 				),
 			),
 			'wpcom_user_id'   => array(
@@ -273,6 +343,14 @@ class Connections_Controller extends Base_Controller {
 			return $connections;
 		}
 
+		/*
+		 * The Jetpack site path proxies to WPCOM instead of going through Connections::get_all(),
+		 * so the filter is applied here too to keep both paths consistent.
+		 *
+		 * This filter is documented in projects/packages/publicize/src/class-connections.php
+		 */
+		$connections = (array) apply_filters( 'jetpack_publicize_connections', $connections );
+
 		$items = array();
 
 		foreach ( $connections as $item ) {
@@ -294,14 +372,46 @@ class Connections_Controller extends Base_Controller {
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return true|WP_Error True if the request has access to create items, WP_Error object otherwise.
 	 */
-	public function create_item_permissions_check( $request ) {// phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public function create_item_permissions_check( $request ) {
 		$permissions = parent::publicize_permissions_check();
 
 		if ( is_wp_error( $permissions ) ) {
 			return $permissions;
 		}
 
+		$shared_permission = $this->check_shared_param_permission( $request );
+
+		if ( is_wp_error( $shared_permission ) ) {
+			return $shared_permission;
+		}
+
 		return current_user_can( 'publish_posts' );
+	}
+
+	/**
+	 * Check whether the request is allowed to set the `shared` flag on a connection.
+	 *
+	 * Shared connections are usable by every author on the site, so only editors
+	 * and above may set the flag. Used by both the create and the update permission
+	 * check, so the rule cannot drift between the two.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return true|WP_Error True if the request may proceed, WP_Error object otherwise.
+	 */
+	protected function check_shared_param_permission( $request ) {
+		if ( ! $request->has_param( 'shared' ) ) {
+			return true;
+		}
+
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			return new WP_Error(
+				'rest_cannot_share_connection',
+				__( 'Sorry, you are not allowed to share connections with other users.', 'jetpack-publicize-pkg' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		return true;
 	}
 
 	/**
@@ -379,10 +489,10 @@ class Connections_Controller extends Base_Controller {
 			);
 		}
 
-		// If the connection is being marked/unmarked as shared.
-		if ( $request->has_param( 'shared' ) ) {
-			// Only editors and above can mark a connection as shared.
-			return current_user_can( 'edit_others_posts' );
+		$shared_permission = $this->check_shared_param_permission( $request );
+
+		if ( is_wp_error( $shared_permission ) ) {
+			return $shared_permission;
 		}
 
 		return current_user_can( 'publish_posts' );
@@ -402,6 +512,32 @@ class Connections_Controller extends Base_Controller {
 			$input = array(
 				'shared' => $request->get_param( 'shared' ),
 			);
+
+			$external_user_id = $request->get_param( 'external_user_ID' );
+			if ( ! empty( $external_user_id ) ) {
+				$input['external_user_ID'] = $external_user_id;
+			}
+
+			if ( $request->has_param( 'template' ) ) {
+				require_lib( 'publicize/util/message-templates' );
+
+				$template_value = Settings::sanitize_message_template( $request->get_param( 'template' ) );
+
+				/**
+				 * Only gate non-empty values. Clearing an existing override
+				 * must be allowed regardless of plan — otherwise users who
+				 * downgrade can't remove a previously-set template.
+				 */
+				if ( '' !== $template_value && ! \Publicize\can_use_per_connection_templates() ) {
+					return new WP_Error(
+						'rest_forbidden_per_connection_template',
+						__( 'Per-connection message templates require an upgraded plan.', 'jetpack-publicize-pkg' ),
+						array( 'status' => rest_authorization_required_code() )
+					);
+				}
+
+				$input['template'] = $template_value;
+			}
 
 			$result = Connections::wpcom_update_connection( $connection_id, $input );
 

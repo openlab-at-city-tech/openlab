@@ -455,6 +455,7 @@ class Jetpack_Carousel {
 				'url' => plugins_url( '_inc/blocks/swiper.js', JETPACK__PLUGIN_FILE ),
 			);
 			wp_localize_script( 'jetpack-carousel', 'jetpackSwiperLibraryPath', $swiper_library_path );
+			add_action( 'wp_footer', array( $this, 'prefetch_swiper_library' ) );
 
 			// Note: using  home_url() instead of admin_url() for ajaxurl to be sure  to get same domain on wpcom when using mapped domains (also works on self-hosted).
 			// Also: not hardcoding path since there is no guarantee site is running on site root in self-hosted context.
@@ -475,7 +476,6 @@ class Jetpack_Carousel {
 				'comment'                         => __( 'Comment', 'jetpack' ),
 				'post_comment'                    => __( 'Post Comment', 'jetpack' ),
 				'write_comment'                   => __( 'Write a Comment...', 'jetpack' ),
-				'loading_comments'                => __( 'Loading Comments...', 'jetpack' ),
 				'image_label'                     => __( 'Open image in full-screen.', 'jetpack' ),
 				'download_original'               => sprintf(
 					/* translators: %1s is the full-size image width, and %2s is the height. */
@@ -501,6 +501,10 @@ class Jetpack_Carousel {
 				'blog_id'                         => (int) get_current_blog_id(),
 				'meta_data'                       => array( 'camera', 'aperture', 'shutter_speed', 'focal_length', 'copyright' ),
 			);
+
+			if ( $localize_strings['display_comments'] ) {
+				$localize_strings['loading_comments'] = __( 'Loading Comments...', 'jetpack' );
+			}
 
 			/**
 			 * Handle WP stats for images in full-screen.
@@ -572,6 +576,22 @@ class Jetpack_Carousel {
 	}
 
 	/**
+	 * Hint the browser to fetch the Swiper library while it is idle.
+	 *
+	 * Swiper is only requested when the lightbox is first opened, which puts a network
+	 * round trip in front of that first click. This is deliberately `prefetch` rather than
+	 * `preload`: most visitors never open the lightbox, so the fetch must stay at low
+	 * priority and out of the way of the page's own images. `loadSwiper()` still loads the
+	 * library on demand, since a prefetch is a hint the browser is free to ignore.
+	 */
+	public function prefetch_swiper_library() {
+		printf(
+			'<link rel="prefetch" href="%s" as="script" />' . "\n",
+			esc_url( plugins_url( '_inc/blocks/swiper.js', JETPACK__PLUGIN_FILE ) )
+		);
+	}
+
+	/**
 	 * Generate the HTML skeleton that will be picked up by the Carousel JS and used for showing the carousel.
 	 */
 	public function add_carousel_skeleton() {
@@ -583,10 +603,11 @@ class Jetpack_Carousel {
 		$require_name_email = (int) get_option( 'require_name_email' );
 		/* translators: %s is replaced with a field name in the form, e.g. "Email" */
 		$required = ( $require_name_email ) ? __( '%s (Required)', 'jetpack' ) : '%s';
+		require_once JETPACK__PLUGIN_DIR . '_inc/lib/class-jetpack-spinner.php';
 		?>
-		<div id="jp-carousel-loading-overlay">
+		<div id="jp-carousel-loading-overlay" style="display: none;">
 			<div id="jp-carousel-loading-wrapper">
-				<span id="jp-carousel-library-loading">&nbsp;</span>
+				<span id="jp-carousel-library-loading"><?php echo Jetpack_Spinner::render( 40 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?></span>
 			</div>
 		</div>
 		<div class="jp-carousel-overlay<?php echo( $is_light ? ' jp-carousel-light' : '' ); ?>" style="display: none;">
@@ -638,7 +659,7 @@ class Jetpack_Carousel {
 						<div class="jp-carousel-pagination"></div>
 					</div>
 					<div class="jp-carousel-photo-title-container">
-						<h2 class="jp-carousel-photo-caption"></h2>
+						<div class="jp-carousel-photo-caption"></div>
 					</div>
 					<div class="jp-carousel-photo-icons-container">
 						<a href="#" class="jp-carousel-icon-btn jp-carousel-icon-info" aria-label="<?php esc_attr_e( 'Toggle photo metadata visibility', 'jetpack' ); ?>">
@@ -674,16 +695,16 @@ class Jetpack_Carousel {
 				<div class="jp-carousel-info-extra">
 					<div class="jp-carousel-info-content-wrapper">
 						<div class="jp-carousel-photo-title-container">
-							<h2 class="jp-carousel-photo-title"></h2>
+							<div class="jp-carousel-photo-title"></div>
 						</div>
 						<div class="jp-carousel-comments-wrapper">
 							<?php if ( $localize_strings['display_comments'] ) : ?>
 								<div id="jp-carousel-comments-loading">
-									<span><?php echo esc_html( $localize_strings['loading_comments'] ); ?></span>
+									<span><?php echo esc_html( $localize_strings['loading_comments'] ?? __( 'Loading Comments...', 'jetpack' ) ); ?></span>
 								</div>
 								<div class="jp-carousel-comments"></div>
 								<div id="jp-carousel-comment-form-container">
-									<span id="jp-carousel-comment-form-spinner">&nbsp;</span>
+									<span id="jp-carousel-comment-form-spinner"><?php echo Jetpack_Spinner::render( 20 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG markup. ?></span>
 									<div id="jp-carousel-comment-post-results"></div>
 									<?php if ( $use_local_comments ) : ?>
 										<?php if ( ! $localize_strings['is_logged_in'] && $localize_strings['comment_registration'] ) : ?>
@@ -754,13 +775,12 @@ class Jetpack_Carousel {
 						<div class="jp-carousel-image-meta">
 							<div class="jp-carousel-title-and-caption">
 								<div class="jp-carousel-photo-info">
-									<h3 class="jp-carousel-caption" itemprop="caption description"></h3>
+									<div class="jp-carousel-caption" itemprop="caption description"></div>
 								</div>
 
 								<div class="jp-carousel-photo-description"></div>
 							</div>
-							<ul class="jp-carousel-image-exif" style="display: none;"></ul>
-							<a class="jp-carousel-image-download" href="#" target="_blank" style="display: none;">
+							<a class="jp-carousel-image-download" href="#" aria-label="<?php esc_attr_e( 'Download image', 'jetpack' ); ?>" target="_blank" style="display: none;">
 								<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 									<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="3" y="3" width="19" height="18">
 										<path fill-rule="evenodd" clip-rule="evenodd" d="M5.84615 5V19H19.7775V12H21.7677V19C21.7677 20.1 20.8721 21 19.7775 21H5.84615C4.74159 21 3.85596 20.1 3.85596 19V5C3.85596 3.9 4.74159 3 5.84615 3H12.8118V5H5.84615ZM14.802 5V3H21.7677V10H19.7775V6.41L9.99569 16.24L8.59261 14.83L18.3744 5H14.802Z" fill="white"/>
@@ -828,6 +848,14 @@ class Jetpack_Carousel {
 		}
 		$selected_images = array();
 		foreach ( $matches[0] as $image_html ) {
+			// This image already carries the attributes this method adds, so adding
+			// them again would emit every one of them twice. Tiled Gallery output
+			// reaches this filter twice: once as 'jetpack_tiled_galleries_block_content'
+			// from inside the block's render callback, and again as 'the_content' when
+			// single image galleries are enabled. See JETPACK-1990.
+			if ( str_contains( $image_html, 'data-attachment-id=' ) ) {
+				continue;
+			}
 			if (
 				preg_match( '/(wp-image-|data-id=)\"?([0-9]+)\"?/i', $image_html, $class_id )
 				&& ! str_contains( $image_html, 'wp-block-jetpack-slideshow_image' )
@@ -942,11 +970,12 @@ class Jetpack_Carousel {
 
 		$attachment_id   = (int) $attachment->ID;
 		$orig_file       = wp_get_attachment_image_src( $attachment_id, 'full' );
-		$orig_file       = isset( $orig_file[0] ) ? $orig_file[0] : wp_get_attachment_url( $attachment_id );
+		$orig_file       = $orig_file[0] ?? wp_get_attachment_url( $attachment_id );
 		$meta            = wp_get_attachment_metadata( $attachment_id );
 		$size            = isset( $meta['width'] ) ? (int) $meta['width'] . ',' . (int) $meta['height'] : '';
 		$img_meta        = ( ! empty( $meta['image_meta'] ) ) ? (array) $meta['image_meta'] : array();
 		$comments_opened = (int) comments_open( $attachment_id );
+		$display_exif    = $this->test_1or0_option( Jetpack_Options::get_option_and_ensure_autoload( 'carousel_display_exif', true ) );
 
 		/**
 		 * Note: Cannot generate a filename from the width and height wp_get_attachment_image_src() returns because
@@ -964,25 +993,54 @@ class Jetpack_Carousel {
 		 */
 
 		$large_file_info = wp_get_attachment_image_src( $attachment_id, 'large' );
-		$large_file      = isset( $large_file_info[0] ) ? $large_file_info[0] : '';
+		$large_file      = $large_file_info[0] ?? '';
 
 		$attachment_title   = wptexturize( $attachment->post_title );
 		$attachment_desc    = wpautop( wptexturize( $attachment->post_content ) );
 		$attachment_caption = wpautop( wptexturize( $attachment->post_excerpt ) );
-
-		// See https://github.com/Automattic/jetpack/issues/2765.
-		if ( isset( $img_meta['keywords'] ) ) {
-			unset( $img_meta['keywords'] );
-		}
-
-		$img_meta = wp_json_encode( array_map( 'strval', array_filter( $img_meta, 'is_scalar' ) ), JSON_UNESCAPED_SLASHES | JSON_HEX_AMP );
 
 		$attr['data-attachment-id']   = $attachment_id;
 		$attr['data-permalink']       = esc_attr( get_permalink( $attachment_id ) );
 		$attr['data-orig-file']       = esc_attr( $orig_file );
 		$attr['data-orig-size']       = $size;
 		$attr['data-comments-opened'] = $comments_opened;
-		$attr['data-image-meta']      = esc_attr( $img_meta );
+
+		/*
+		Lets the Carousel show its "has comments" badge without fetching the comments
+		themselves. Omitted when there are none, which is the common case, so galleries
+		without comments pay nothing for it.
+		*/
+		$comments_count = (int) $attachment->comment_count;
+		if ( $comments_count > 0 ) {
+			$attr['data-comments-count'] = $comments_count;
+		}
+
+		if ( $display_exif ) {
+			// See https://github.com/Automattic/jetpack/issues/2765.
+			if ( isset( $img_meta['keywords'] ) ) {
+				unset( $img_meta['keywords'] );
+			}
+
+			/*
+			Filtering on `is_scalar` alone kept every "" and "0" in the metadata array, which
+			on a typical photo is most of it. The carousel skips those values when it renders
+			the EXIF panel anyway, so serialising them only inflates the page. Mirror that
+			check here: drop empties and numeric zeroes, but keep text that merely casts to
+			zero, such as a camera name.
+			*/
+			$img_meta = array_filter(
+				array_map( 'strval', array_filter( $img_meta, 'is_scalar' ) ),
+				function ( $value ) {
+					return '' !== $value && ! ( is_numeric( $value ) && 0.0 === (float) $value );
+				}
+			);
+
+			// With nothing left to show, the attribute itself is dead weight.
+			if ( ! empty( $img_meta ) ) {
+				$attr['data-image-meta'] = esc_attr( wp_json_encode( $img_meta, JSON_UNESCAPED_SLASHES | JSON_HEX_AMP ) );
+			}
+		}
+
 		// The lines below use `esc_attr( htmlspecialchars( ) )` because esc_attr tries to be too smart and won't double-encode, and we need that here.
 		$attr['data-image-title']       = esc_attr( htmlspecialchars( $attachment_title, ENT_COMPAT ) );
 		$attr['data-image-description'] = esc_attr( htmlspecialchars( $attachment_desc, ENT_COMPAT ) );
@@ -1007,7 +1065,7 @@ class Jetpack_Carousel {
 			return $html;
 		}
 
-		if ( isset( $post ) ) {
+		if ( $post instanceof WP_Post ) {
 			$blog_id = (int) get_current_blog_id();
 
 			$extra_data = array(
@@ -1078,7 +1136,7 @@ class Jetpack_Carousel {
 	/**
 	 * Retrieves comment information
 	 *
-	 * @return string
+	 * @return never
 	 */
 	public function get_attachment_comments() {
 		if ( ! headers_sent() ) {
@@ -1107,7 +1165,6 @@ class Jetpack_Carousel {
 				403,
 				JSON_UNESCAPED_SLASHES
 			);
-			return;
 		}
 
 		$attachment_post = get_post( $attachment_id );
@@ -1118,7 +1175,6 @@ class Jetpack_Carousel {
 				403,
 				JSON_UNESCAPED_SLASHES
 			);
-			return;
 		}
 
 		// This AJAX call should only be used to fetch comments of attachments.
@@ -1128,7 +1184,6 @@ class Jetpack_Carousel {
 				403,
 				JSON_UNESCAPED_SLASHES
 			);
-			return;
 		}
 
 		$parent_post = get_post_parent( $attachment_id );
@@ -1151,7 +1206,6 @@ class Jetpack_Carousel {
 					403,
 					JSON_UNESCAPED_SLASHES
 				);
-				return;
 			}
 
 			/*
@@ -1168,7 +1222,6 @@ class Jetpack_Carousel {
 					403,
 					JSON_UNESCAPED_SLASHES
 				);
-				return;
 			}
 		}
 

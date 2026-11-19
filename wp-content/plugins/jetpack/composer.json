@@ -11,58 +11,74 @@
 		"ext-fileinfo": "*",
 		"ext-json": "*",
 		"ext-openssl": "*",
-		"automattic/block-delimiter": "^0.3.5",
-		"automattic/jetpack-a8c-mc-stats": "^3.0.5",
-		"automattic/jetpack-account-protection": "^0.2.12",
-		"automattic/jetpack-admin-ui": "^0.8.0",
-		"automattic/jetpack-assets": "^4.3.31",
-		"automattic/jetpack-autoloader": "^5.0.16",
-		"automattic/jetpack-backup": "^4.2.51",
-		"automattic/jetpack-blaze": "^0.27.11",
-		"automattic/jetpack-blocks": "^3.3.0",
-		"automattic/jetpack-boost-speed-score": "^0.4.12",
-		"automattic/jetpack-classic-theme-helper": "^0.14.21",
-		"automattic/jetpack-compat": "^4.0.1",
-		"automattic/jetpack-composer-plugin": "^4.0.5",
-		"automattic/jetpack-config": "^3.1.1",
-		"automattic/jetpack-connection": "^8.3.0",
-		"automattic/jetpack-constants": "^3.0.8",
-		"automattic/jetpack-device-detection": "^3.4.0",
-		"automattic/jetpack-error": "^3.0.6",
-		"automattic/jetpack-external-connections": "^0.1.23",
-		"automattic/jetpack-external-media": "^0.8.10",
-		"automattic/jetpack-forms": "^7.18.0",
-		"automattic/jetpack-image-cdn": "^0.7.24",
-		"automattic/jetpack-import": "^0.9.15",
-		"automattic/jetpack-ip": "^0.4.10",
-		"automattic/jetpack-jitm": "^4.3.29",
-		"automattic/jetpack-licensing": "^3.1.5",
-		"automattic/jetpack-logo": "^3.0.5",
-		"automattic/jetpack-masterbar": "^0.27.19",
-		"automattic/jetpack-my-jetpack": "^5.34.3",
-		"automattic/jetpack-newsletter": "^0.8.3",
-		"automattic/jetpack-paypal-payments": "^0.6.13",
-		"automattic/jetpack-plugins-installer": "^0.5.7",
-		"automattic/jetpack-post-list": "^0.9.13",
-		"automattic/jetpack-post-media": "^0.1.1",
-		"automattic/jetpack-publicize": "^0.78.0",
-		"automattic/jetpack-redirect": "^3.0.9",
-		"automattic/jetpack-roles": "^3.0.8",
-		"automattic/jetpack-search": "^0.56.7",
-		"automattic/jetpack-stats": "^0.18.1",
-		"automattic/jetpack-stats-admin": "^0.30.9",
-		"automattic/jetpack-status": "^6.1.2",
-		"automattic/jetpack-subscribers-dashboard": "^0.5.1",
-		"automattic/jetpack-sync": "^4.35.0",
-		"automattic/jetpack-videopress": "^0.36.4",
-		"automattic/jetpack-waf": "^0.28.2",
-		"automattic/woocommerce-analytics": "^0.16.3"
+		"automattic/block-delimiter": "^0.4.1",
+		"automattic/jetpack-a8c-mc-stats": "^4.0.1",
+		"automattic/jetpack-account-protection": "^0.4.2",
+		"automattic/jetpack-activity-log": "^0.7.2",
+		"automattic/jetpack-admin-ui": "^0.14.11",
+		"automattic/jetpack-ads": "^0.1.7",
+		"automattic/jetpack-agents-manager": "^0.12.10",
+		"automattic/jetpack-assets": "^5.0.17",
+		"automattic/jetpack-autoloader": "^6.0.3",
+		"automattic/jetpack-backup": "^5.2.2",
+		"automattic/jetpack-blaze": "^0.29.14",
+		"automattic/jetpack-blocks": "^4.0.1",
+		"automattic/jetpack-boost-speed-score": "^0.6.2",
+		"automattic/jetpack-classic-theme-helper": "^0.15.11",
+		"automattic/jetpack-comments": "^0.8.2",
+		"automattic/jetpack-compat": "^5.0.1",
+		"automattic/jetpack-composer-plugin": "^5.0.1",
+		"automattic/jetpack-config": "^4.0.1",
+		"automattic/jetpack-connection": "^9.16.0",
+		"automattic/jetpack-constants": "^4.0.1",
+		"automattic/jetpack-device-detection": "^4.0.1",
+		"automattic/jetpack-error": "^4.0.1",
+		"automattic/jetpack-external-connections": "^0.2.9",
+		"automattic/jetpack-external-media": "^0.9.12",
+		"automattic/jetpack-feature-flags": "^0.2.1",
+		"automattic/jetpack-forms": "^8.3.7",
+		"automattic/jetpack-image-cdn": "^0.8.4",
+		"automattic/jetpack-import": "^0.10.1",
+		"automattic/jetpack-ip": "^0.7.1",
+		"automattic/jetpack-jitm": "^5.1.8",
+		"automattic/jetpack-knowledge": "^0.1.1",
+		"automattic/jetpack-licensing": "^4.1.1",
+		"automattic/jetpack-logo": "^4.0.2",
+		"automattic/jetpack-masterbar": "^0.30.2",
+		"automattic/jetpack-menu-badges": "^0.2.3",
+		"automattic/jetpack-monitor": "^0.1.0",
+		"automattic/jetpack-my-jetpack": "^6.15.0",
+		"automattic/jetpack-newsletter": "^0.18.4",
+		"automattic/jetpack-paypal-payments": "^0.13.3",
+		"automattic/jetpack-plugins-installer": "^0.6.1",
+		"automattic/jetpack-podcast": "^2.2.5",
+		"automattic/jetpack-post-list": "^0.10.10",
+		"automattic/jetpack-post-media": "^0.3.3",
+		"automattic/jetpack-premium-analytics": "^0.16.0",
+		"automattic/jetpack-protect": "^0.5.0",
+		"automattic/jetpack-publicize": "^0.88.9",
+		"automattic/jetpack-redirect": "^4.0.1",
+		"automattic/jetpack-roles": "^4.0.1",
+		"automattic/jetpack-scan-page": "^0.2.13",
+		"automattic/jetpack-search": "^8.4.0",
+		"automattic/jetpack-seo": "^0.10.3",
+		"automattic/jetpack-sharing-likes": "^0.6.0",
+		"automattic/jetpack-stats": "^0.24.0",
+		"automattic/jetpack-stats-admin": "^0.39.3",
+		"automattic/jetpack-status": "^7.1.1",
+		"automattic/jetpack-sync": "^5.4.4",
+		"automattic/jetpack-videopress": "^0.61.0",
+		"automattic/jetpack-waf": "^0.31.0",
+		"automattic/jetpack-woocommerce-stats": "^0.3.2",
+		"automattic/jetpack-wp-abilities": "^0.2.1",
+		"automattic/jetpack-wp-build-polyfills": "^0.7.2",
+		"automattic/woocommerce-analytics": "^0.18",
+		"wp-php-toolkit/reprint-server": "0.11.2"
 	},
 	"require-dev": {
 		"antecedent/patchwork": "^2.2",
-		"automattic/jetpack-changelogger": "^6.0.14",
-		"automattic/patchwork-redefine-exit": "^2.0.9",
-		"automattic/phpunit-select-config": "^1.0.4",
+		"automattic/patchwork-redefine-exit": "^3.0.1",
+		"automattic/phpunit-select-config": "^1.0.12",
 		"yoast/phpunit-polyfills": "^4.0.0"
 	},
 	"scripts": {
@@ -75,23 +91,21 @@
 		"phpunit": [
 			"tests/action-phpunit.sh"
 		],
-		"test-coverage": [
-			"@php tools/build-module-headings-translations.php",
-			"tests/action-test-coverage.sh"
-		],
-		"test-js": [
-			"pnpm concurrently 'pnpm:test-adminpage' 'pnpm:test-extensions'"
-		],
+		"test-js": "tests/action-test-js.sh",
+		"test-js-coverage": "tests/action-test-js.sh --coverage",
 		"test-php": [
 			"@php tools/build-module-headings-translations.php",
 			"tests/action-test-php.sh"
+		],
+		"test-php-coverage": [
+			"@php tools/build-module-headings-translations.php",
+			"tests/action-test-php-coverage.sh"
 		],
 		"watch": [
 			"Composer\\Config::disableProcessTimeout",
 			"pnpm run watch"
 		]
 	},
-	"repositories": [],
 	"autoload": {
 		"classmap": [
 			"src"
@@ -104,13 +118,20 @@
 		"platform": {
 			"ext-intl": "0.0.0"
 		},
-		"autoloader-suffix": "f11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ15_7_1",
+		"autoloader-suffix": "f11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ16_4",
 		"allow-plugins": {
 			"automattic/jetpack-autoloader": true,
 			"automattic/jetpack-composer-plugin": true
 		}
 	},
 	"extra": {
+		"autotagger": {
+			"v": false
+		},
+		"autorelease": {
+			"titlefmt": "Jetpack %s"
+		},
+		"wp-svn-autopublish": true,
 		"mirror-repo": "Automattic/jetpack-production",
 		"release-branch-prefix": [
 			"jetpack",

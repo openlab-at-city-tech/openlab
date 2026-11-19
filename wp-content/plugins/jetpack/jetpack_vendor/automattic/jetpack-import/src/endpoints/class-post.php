@@ -167,7 +167,7 @@ class Post extends \WP_REST_Posts_Controller {
 		if ( is_array( $metas ) ) {
 			foreach ( $metas as $meta_key => $meta_value ) {
 
-				$meta_value = maybe_unserialize( $meta_value );
+				$meta_value = self::unserialize_no_objects( $meta_value );
 				if ( $meta_key === '_edit_last' ) {
 					update_post_meta( $post_id, $meta_key, $meta_value );
 				} else {
@@ -178,6 +178,50 @@ class Post extends \WP_REST_Posts_Controller {
 				do_action( 'import_post_meta', $post_id, $meta_key, $meta_value );
 			}
 		}
+	}
+
+	/**
+	 * Restore an imported meta value as plain data.
+	 *
+	 * Imported meta is plain data (scalars and arrays), so serialized values are decoded without
+	 * class instantiation and any residual objects are dropped. This matches maybe_unserialize()
+	 * for non-serialized and object-free serialized values.
+	 *
+	 * @param mixed $value The raw meta value.
+	 * @return mixed A plain (object-free) value.
+	 */
+	private static function unserialize_no_objects( $value ) {
+		if ( ! is_string( $value ) || ! is_serialized( $value ) ) {
+			return $value;
+		}
+
+		// maybe_unserialize() decodes with no `allowed_classes`; call unserialize() directly with classes
+		// disallowed so meta is only ever restored as plain data. The is_serialized() guard above and the
+		// @ (warnings on malformed input) mirror maybe_unserialize()'s own behavior.
+		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize -- allowed_classes => false makes this decode safe.
+		$decoded = @unserialize( trim( $value ), array( 'allowed_classes' => false ) );
+
+		return self::strip_objects( $decoded );
+	}
+
+	/**
+	 * Recursively replace any objects in a decoded value with null.
+	 *
+	 * @param mixed $value Decoded value.
+	 * @return mixed The value with any objects removed.
+	 */
+	private static function strip_objects( $value ) {
+		if ( is_object( $value ) ) {
+			return null;
+		}
+
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $item ) {
+				$value[ $key ] = self::strip_objects( $item );
+			}
+		}
+
+		return $value;
 	}
 
 	/**
@@ -210,7 +254,6 @@ class Post extends \WP_REST_Posts_Controller {
 	 * @return array                  Array of term IDs.
 	 */
 	protected function get_term_ids_from_slugs( $term_slugs, $taxonomy_name ) {
-		// @phan-suppress-next-line PhanAccessMethodInternal @phan-suppress-current-line UnusedSuppression -- Fixed in WP 6.9, but then we need a suppression for the WP 6.8 compat run. @todo Remove this suppression when we drop WP <6.9.
 		return get_terms(
 			array(
 				'fields'     => 'ids',

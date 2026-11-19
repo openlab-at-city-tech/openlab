@@ -9,6 +9,7 @@
 namespace Automattic\Jetpack\Stats_Admin;
 
 use Automattic\Jetpack\Constants;
+use Automattic\Jetpack\Stats\Settings as Stats_Settings;
 use Automattic\Jetpack\Stats\WPCOM_Stats;
 use Jetpack_Options;
 use WP_Error;
@@ -42,6 +43,19 @@ class REST_Controller {
 	 */
 	public function __construct() {
 		$this->wpcom_stats = new WPCOM_Stats();
+	}
+
+	/**
+	 * Registers the REST routes on the `rest_api_init` hook.
+	 *
+	 * Instantiated here, rather than eagerly, so the controller class only loads
+	 * on requests that reach `rest_api_init`. Static so the callback can be
+	 * unregistered.
+	 *
+	 * @access public
+	 */
+	public static function register() {
+		( new self() )->register_rest_routes();
 	}
 
 	/**
@@ -153,6 +167,45 @@ class REST_Controller {
 			)
 		);
 
+		// Stats settings.
+		register_rest_route(
+			static::$namespace,
+			sprintf( '/sites/%d/jetpack-stats/settings', Jetpack_Options::get_option( 'id' ) ),
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_stats_settings' ),
+					'permission_callback' => array( $this, 'can_user_manage_stats_settings_callback' ),
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => array( $this, 'update_stats_settings' ),
+					'permission_callback' => array( $this, 'can_user_manage_stats_settings_callback' ),
+					'args'                => array(
+						'admin_bar'                  => array(
+							'description' => 'Show a chart of the last 48 hours of views in the admin bar',
+							'type'        => 'boolean',
+						),
+						'roles'                      => array(
+							'description' => 'Roles that can view Stats. `administrator` is always kept.',
+							'type'        => 'array',
+							'items'       => array( 'type' => 'string' ),
+							'minItems'    => 1,
+						),
+						'count_roles'                => array(
+							'description' => 'Roles whose logged-in page views are counted',
+							'type'        => 'array',
+							'items'       => array( 'type' => 'string' ),
+						),
+						'wpcom_reader_views_enabled' => array(
+							'description' => 'Show post views in the WordPress.com Reader',
+							'type'        => 'boolean',
+						),
+					),
+				),
+			)
+		);
+
 		// User feedback endpoint.
 		register_rest_route(
 			static::$namespace,
@@ -208,7 +261,7 @@ class REST_Controller {
 					),
 					'postponed_for' => array(
 						'type'        => 'number',
-						'default'     => null,
+						'default'     => 0,
 						'description' => 'Postponed for (in seconds)',
 						'minimum'     => 0,
 					),
@@ -237,7 +290,8 @@ class REST_Controller {
 					),
 					'postponed_for' => array(
 						'type'        => 'number',
-						'default'     => null,
+						// Forwarded to WPCOM as-is, whose schema rejects the null an omitted param would carry.
+						'default'     => 0,
 						'description' => 'Postponed for (in seconds)',
 						'minimum'     => 0,
 					),
@@ -252,6 +306,24 @@ class REST_Controller {
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_notice_status' ),
+				'permission_callback' => array( $this, 'can_user_view_general_stats_callback' ),
+				'args'                => array(
+					'include_details' => array(
+						'type'        => 'boolean',
+						'default'     => false,
+						'description' => 'Return a detail record per notice instead of a flat boolean map',
+					),
+				),
+			)
+		);
+
+		// Get referrer spam list.
+		register_rest_route(
+			static::$namespace,
+			sprintf( '/sites/%d/stats/referrers/spam', Jetpack_Options::get_option( 'id' ) ),
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_referrer_spam_list' ),
 				'permission_callback' => array( $this, 'can_user_view_general_stats_callback' ),
 			)
 		);
@@ -452,6 +524,19 @@ class REST_Controller {
 	}
 
 	/**
+	 * Only administrators can read or change the Stats settings, because `roles` decides who else can view Stats.
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function can_user_manage_stats_settings_callback() {
+		if ( current_user_can( 'manage_options' ) ) {
+			return true;
+		}
+
+		return $this->get_forbidden_error();
+	}
+
+	/**
 	 * Only administrators or users with capability `activate_wordads` can access the API.
 	 */
 	public function can_user_view_wordads_stats_callback() {
@@ -573,7 +658,7 @@ class REST_Controller {
 		if ( 200 !== $response_code ) {
 			return new WP_Error(
 				isset( $response_body['error'] ) ? 'remote-error-' . $response_body['error'] : 'remote-error',
-				isset( $response_body['message'] ) ? $response_body['message'] : 'unknown remote error',
+				$response_body['message'] ?? 'unknown remote error',
 				array( 'status' => $response_code )
 			);
 		}
@@ -674,7 +759,7 @@ class REST_Controller {
 		if ( 200 !== $response_code ) {
 			return new WP_Error(
 				isset( $response_body['error'] ) ? 'remote-error-' . $response_body['error'] : 'remote-error',
-				isset( $response_body['message'] ) ? $response_body['message'] : 'unknown remote error',
+				$response_body['message'] ?? 'unknown remote error',
 				array( 'status' => $response_code )
 			);
 		}
@@ -726,6 +811,93 @@ class REST_Controller {
 			null,
 			'wpcom',
 			false
+		);
+	}
+
+	/**
+	 * Get the Stats settings and the site's roles.
+	 *
+	 * @return array
+	 */
+	public function get_stats_settings() {
+		return $this->get_stats_settings_response();
+	}
+
+	/**
+	 * Save the Stats settings in the request.
+	 *
+	 * @param WP_REST_Request $req The request object.
+	 *
+	 * @return array|WP_Error The settings after the save, or why the values were refused.
+	 */
+	public function update_stats_settings( $req ) {
+		$params = $req->get_params();
+		$keys   = self::get_stats_settings_keys();
+
+		$stats_values = array_intersect_key( $params, array_flip( $keys ) );
+		if ( empty( $stats_values ) && ! isset( $params['wpcom_reader_views_enabled'] ) ) {
+			return new WP_Error(
+				'jetpack_stats_missing_setting_field',
+				sprintf(
+					/* translators: %s: comma-separated list of the settings that can be changed. */
+					__( 'Provide at least one of: %s.', 'jetpack-stats-admin' ),
+					implode( ', ', array_merge( $keys, array( 'wpcom_reader_views_enabled' ) ) )
+				),
+				array( 'status' => 400 )
+			);
+		}
+
+		if ( ! empty( $stats_values ) ) {
+			$result = Stats_Settings::update( $stats_values, $keys );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
+
+		if ( isset( $params['wpcom_reader_views_enabled'] ) ) {
+			$result = Stats_Settings::update_reader_views( (bool) $params['wpcom_reader_views_enabled'] );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
+
+		return $this->get_stats_settings_response();
+	}
+
+	/**
+	 * The Stats settings the Settings screen offers.
+	 *
+	 * @return string[]
+	 */
+	private static function get_stats_settings_keys() {
+		// Nothing reads `do_not_track`, so the screen does not offer it.
+		return array_values( array_diff( Stats_Settings::KEYS, array( 'do_not_track' ) ) );
+	}
+
+	/**
+	 * Build the settings response: the current values and the roles the toggles list.
+	 *
+	 * @return array
+	 */
+	private function get_stats_settings_response() {
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
+		$roles = array();
+		foreach ( get_editable_roles() as $slug => $role ) {
+			$roles[] = array(
+				'slug' => $slug,
+				'name' => translate_user_role( $role['name'] ),
+			);
+		}
+
+		return array(
+			'settings' => array_merge(
+				Stats_Settings::get( self::get_stats_settings_keys() ),
+				array( 'wpcom_reader_views_enabled' => (bool) get_option( 'wpcom_reader_views_enabled', true ) )
+			),
+			'roles'    => $roles,
 		);
 	}
 
@@ -1016,10 +1188,30 @@ class REST_Controller {
 	/**
 	 * Get stats notices.
 	 *
+	 * @param WP_REST_Request $req The request object.
 	 * @return array
 	 */
-	public function get_notice_status() {
-		return ( new Notices() )->get_notices_to_show();
+	public function get_notice_status( $req ) {
+		return ( new Notices() )->get_notices_to_show( (bool) $req->get_param( 'include_details' ) );
+	}
+
+	/**
+	 * Get the list of spam referrers.
+	 *
+	 * @return array
+	 */
+	public function get_referrer_spam_list() {
+		return WPCOM_Client::request_as_blog(
+			sprintf(
+				'/sites/%d/stats/referrers/spam',
+				Jetpack_Options::get_option( 'id' )
+			),
+			'v1.1',
+			array(
+				'timeout' => 5,
+				'method'  => 'GET',
+			)
+		);
 	}
 
 	/**
@@ -1211,13 +1403,13 @@ class REST_Controller {
 	public function get_site_purchases( $req ) {
 		return WPCOM_Client::request_as_blog_cached(
 			sprintf(
-				'/sites/%d/purchases?%s',
+				'/upgrades?site=%d&%s',
 				Jetpack_Options::get_option( 'id' ),
 				$this->filter_and_build_query_string(
 					$req->get_query_params()
 				)
 			),
-			'v1.1',
+			'v1.2',
 			array( 'timeout' => 10 ),
 			null,
 			'rest',

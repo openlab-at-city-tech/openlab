@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class JITM {
 
-	const PACKAGE_VERSION = '4.3.30';
+	const PACKAGE_VERSION = '5.1.8';
 
 	/**
 	 * List of screen IDs where JITMs are allowed to display.
@@ -40,11 +40,54 @@ class JITM {
 	);
 
 	/**
+	 * The lazily-resolved JITM instance used by the hooks registered in configure().
+	 *
+	 * @var Post_Connection_JITM|Pre_Connection_JITM|null
+	 */
+	private static $configured_instance;
+
+	/**
 	 * The configuration method that is called from the jetpack-config package.
+	 *
+	 * Registers the JITM hooks directly (rather than building a JITM instance up
+	 * front) and binds the instance-dependent callbacks to a lazily-resolved
+	 * instance, so the connection-specific JITM subclass and its dependencies are
+	 * only loaded when one of these hooks actually fires instead of on every
+	 * request. JITMs only render on admin screens and via the REST API.
 	 */
 	public static function configure() {
-		$jitm = self::get_instance();
-		$jitm->register();
+		if ( did_action( 'jetpack_registered_jitms' ) ) {
+			// JITMs have already been registered.
+			return;
+		}
+
+		if ( ! self::are_jitms_enabled() ) {
+			// Do nothing.
+			return;
+		}
+
+		add_action( 'rest_api_init', array( __NAMESPACE__ . '\\Rest_Api_Endpoints', 'register_endpoints' ) );
+
+		add_action(
+			'current_screen',
+			static function ( $screen ) {
+				self::get_configured_instance()->prepare_jitms( $screen );
+			}
+		);
+
+		/**
+		 * These are sync actions that we need to keep track of for jitms.
+		 */
+		add_filter(
+			'jetpack_sync_before_send_updated_option',
+			static function ( $params ) {
+				return self::get_configured_instance()->jetpack_track_last_sync_callback( $params );
+			},
+			99
+		);
+
+		/** This action is documented in projects/packages/jitm/src/class-jitm.php */
+		do_action( 'jetpack_registered_jitms' );
 	}
 
 	/**
@@ -59,6 +102,78 @@ class JITM {
 			$jitm = new Pre_Connection_JITM();
 		}
 		return $jitm;
+	}
+
+	/**
+	 * Lazily resolve and cache the connection-appropriate JITM instance used by
+	 * the hooks registered in configure().
+	 *
+	 * @return Post_Connection_JITM|Pre_Connection_JITM JITM instance.
+	 */
+	private static function get_configured_instance() {
+		if ( null === self::$configured_instance ) {
+			self::$configured_instance = self::get_instance();
+		}
+		return self::$configured_instance;
+	}
+
+	/**
+	 * Clears admin notices from the current screen, keeping JITMs.
+	 *
+	 * A screen that opted out through `jetpack_display_jitms_on_screen` has nothing
+	 * to keep, so it stays silent.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @return void
+	 */
+	public static function suppress_foreign_admin_notices() {
+		foreach ( array( 'admin_notices', 'all_admin_notices' ) as $hook ) {
+			$ours = self::collect_own_callbacks( $hook );
+
+			remove_all_actions( $hook );
+
+			foreach ( $ours as $priority => $callbacks ) {
+				foreach ( $callbacks as $callback ) {
+					add_action( $hook, $callback['function'], $priority, $callback['accepted_args'] );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Returns our callbacks on $hook, keyed by priority.
+	 *
+	 * Matched by class: `prepare_jitms()` hooks the cached instance and
+	 * `get_instance()` builds a fresh one, so comparing objects would miss.
+	 *
+	 * @since 5.1.0
+	 *
+	 * @param string $hook Hook name.
+	 * @return array<int, array<int, array{function: callable, accepted_args: int}>>
+	 */
+	private static function collect_own_callbacks( $hook ) {
+		global $wp_filter;
+
+		$kept = array();
+
+		if ( ! isset( $wp_filter[ $hook ] ) || ! is_object( $wp_filter[ $hook ] ) ) {
+			return $kept;
+		}
+
+		foreach ( $wp_filter[ $hook ]->callbacks as $priority => $callbacks ) {
+			foreach ( $callbacks as $callback ) {
+				if (
+					is_array( $callback['function'] )
+					&& isset( $callback['function'][0] )
+					&& $callback['function'][0] instanceof self
+				) {
+					$kept[ $priority ][] = $callback;
+				}
+			}
+		}
+
+		return $kept;
 	}
 
 	/**
@@ -100,6 +215,16 @@ class JITM {
 	 * @return bool True if JITMs are enabled, else false.
 	 */
 	public function jitms_enabled() {
+		return self::are_jitms_enabled();
+	}
+
+	/**
+	 * Static variant of jitms_enabled() so the enabled state can be checked
+	 * without building a JITM instance (used by configure()).
+	 *
+	 * @return bool True if JITMs are enabled, else false.
+	 */
+	private static function are_jitms_enabled() {
 		/**
 		 * Filter to turn off all just in time messages
 		 *
@@ -209,6 +334,8 @@ class JITM {
 				'activating_module_text' => esc_html__( 'Activating', 'jetpack-jitm' ),
 				'settings_module_text'   => esc_html__( 'Settings', 'jetpack-jitm' ),
 				'nonce'                  => wp_create_nonce( 'wp_rest' ),
+				// Only WordPress.com and the Jetpack plugin serve wpcom/v3/jitm; elsewhere the script uses this package's own route.
+				'has_wpcom_endpoint'     => ( new Host() )->is_wpcom_simple() || class_exists( 'Jetpack' ),
 			)
 		);
 	}

@@ -1,0 +1,848 @@
+<?php
+/**
+ * Collection of health tests for the Jetpack Connection.
+ *
+ * @package automattic/jetpack-connection
+ */
+
+namespace Automattic\Jetpack\Connection;
+
+use Automattic\Jetpack\Constants;
+use Automattic\Jetpack\Identity_Crisis;
+use Automattic\Jetpack\Redirect;
+use Automattic\Jetpack\Status;
+use Jetpack_Options;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit( 0 );
+}
+
+/**
+ * Class Connection_Health_Tests contains all connection-specific health tests.
+ *
+ * @since 8.5.0
+ */
+class Connection_Health_Tests extends Connection_Health_Test_Base {
+
+	/**
+	 * Connection_Health_Tests constructor.
+	 */
+	public function __construct() {
+		parent::__construct();
+
+		$methods = get_class_methods( static::class );
+
+		foreach ( $methods as $method ) {
+			if ( ! str_contains( $method, 'test__' ) ) {
+				continue;
+			}
+			$this->add_test( array( $this, $method ), $method, 'direct' );
+		}
+
+		/**
+		 * Fires after loading default connection health tests.
+		 *
+		 * Allows other packages or plugins to register additional tests.
+		 *
+		 * @since 7.1.0
+		 * @since 8.3.0 Passes the test suite instance.
+		 * @since 8.5.0 Moved from Jetpack_Cxn_Tests to Connection_Health_Tests.
+		 *
+		 * @param Connection_Health_Tests $this The Connection_Health_Tests instance.
+		 */
+		do_action( 'jetpack_connection_tests_loaded', $this );
+
+		/**
+		 * Determines if the WP.com testing suite should be included.
+		 *
+		 * @since 7.1.0
+		 * @since 8.1.0 Default false.
+		 *
+		 * @param bool $run_test To run the WP.com testing suite. Default false.
+		 */
+		if ( apply_filters( 'jetpack_debugger_run_self_test', false ) ) {
+			$this->add_test( array( $this, 'last__wpcom_self_test' ), 'test__wpcom_self_test', 'direct' );
+		}
+	}
+
+	/**
+	 * The test verifies the blog token exists.
+	 *
+	 * @return array
+	 */
+	protected function test__blog_token_if_exists() {
+		$name = 'test__blog_token_if_exists';
+
+		if ( ! $this->helper_is_connected() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'Your site is not connected to WordPress.com. No site token to check.', 'jetpack-connection' ),
+				)
+			);
+		}
+		$blog_token = $this->helper_get_blog_token();
+
+		if ( $blog_token ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		return self::connection_failing_test( $name, __( 'The site token used to authenticate with WordPress.com is missing.', 'jetpack-connection' ) );
+	}
+
+	/**
+	 * Test if Jetpack is connected.
+	 *
+	 * @return array
+	 */
+	protected function test__check_if_connected() {
+		$name = 'test__check_if_connected';
+
+		if ( ! $this->helper_get_blog_token() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'The site token used to authenticate with WordPress.com is missing.', 'jetpack-connection' ),
+				)
+			);
+		}
+
+		if ( $this->helper_is_connected() ) {
+			return self::passing_test(
+				array(
+					'name'             => $name,
+					'label'            => __( 'Your site is connected to WordPress.com', 'jetpack-connection' ),
+					'long_description' => sprintf(
+						'<p>%1$s</p>' .
+						'<p><span class="dashicons pass"><span class="screen-reader-text">%2$s</span></span> %3$s</p>',
+						self::helper_get_healthy_connection_text(),
+						/* translators: Screen reader text indicating a test has passed */
+						__( 'Passed', 'jetpack-connection' ),
+						__( 'Your site is connected to WordPress.com.', 'jetpack-connection' )
+					),
+				)
+			);
+		} elseif ( ( new Status() )->is_offline_mode() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'Your site is in Offline Mode.', 'jetpack-connection' ),
+				)
+			);
+		}
+
+		return self::connection_failing_test( $name, __( 'Your site is not connected to WordPress.com', 'jetpack-connection' ) );
+	}
+
+	/**
+	 * Test that the connection owner still exists on this site.
+	 *
+	 * @return array
+	 */
+	protected function test__master_user_exists_on_site() {
+		$name = 'test__master_user_exists_on_site';
+
+		if ( ! $this->helper_is_connected() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'Your site is not connected to WordPress.com. No connection owner to check.', 'jetpack-connection' ),
+				)
+			);
+		}
+		if ( ! ( new Manager() )->get_connection_owner_id() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'The site is connected to WordPress.com without a user. No connection owner to check.', 'jetpack-connection' ),
+				)
+			);
+		}
+		$local_user = $this->helper_retrieve_connection_owner();
+
+		if ( $local_user->exists() ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		return self::connection_failing_test(
+			$name,
+			__( 'The user who set up the Jetpack Connection no longer exists on this site.', 'jetpack-connection' )
+		);
+	}
+
+	/**
+	 * Test that the connection owner has the manage options capability (e.g. is an admin).
+	 *
+	 * @return array
+	 */
+	protected function test__master_user_can_manage_options() {
+		$name = 'test__master_user_can_manage_options';
+
+		if ( ! $this->helper_is_connected() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'Your site is not connected to WordPress.com.', 'jetpack-connection' ),
+				)
+			);
+		}
+		if ( ! ( new Manager() )->get_connection_owner_id() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'The site is connected to WordPress.com without a user. No connection owner to check.', 'jetpack-connection' ),
+				)
+			);
+		}
+		$owner_user = $this->helper_retrieve_connection_owner();
+
+		if ( user_can( $owner_user, 'manage_options' ) ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		/* translators: a WordPress username */
+		$connection_error = sprintf( __( 'The user (%s) who set up the Jetpack Connection is not an administrator.', 'jetpack-connection' ), $owner_user->user_login );
+		/* translators: a WordPress username */
+		$recommendation = sprintf( __( 'We recommend either upgrading the user (%s) or reconnecting your site to WordPress.com.', 'jetpack-connection' ), $owner_user->user_login );
+
+		return self::connection_failing_test( $name, $connection_error, $recommendation );
+	}
+
+	/**
+	 * Check for an Identity Crisis.
+	 *
+	 * @return array
+	 */
+	protected function test__identity_crisis() {
+		$name = 'test__identity_crisis';
+
+		if ( ! $this->helper_is_connected() ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'Your site is not connected to WordPress.com.', 'jetpack-connection' ),
+				)
+			);
+		}
+
+		$identity_crisis = $this->check_identity_crisis();
+
+		if ( ! $identity_crisis ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		$messages = array();
+
+		if ( isset( $identity_crisis['home'] ) && isset( $identity_crisis['wpcom_home'] ) && $identity_crisis['home'] !== $identity_crisis['wpcom_home'] ) {
+			$messages[] = sprintf(
+				/* translators: Two URLs. The first is the locally-recorded value, the second is the value as recorded on WP.com. */
+				__( 'Your home URL is set as `%1$s`, but your Jetpack Connection lists it as `%2$s`.', 'jetpack-connection' ),
+				$identity_crisis['home'],
+				$identity_crisis['wpcom_home']
+			);
+		}
+
+		if ( isset( $identity_crisis['siteurl'] ) && isset( $identity_crisis['wpcom_siteurl'] ) && $identity_crisis['siteurl'] !== $identity_crisis['wpcom_siteurl'] ) {
+			$messages[] = sprintf(
+				/* translators: Two URLs. The first is the locally-recorded value, the second is the value as recorded on WP.com. */
+				__( 'Your site URL is set as `%1$s`, but your Jetpack Connection lists it as `%2$s`.', 'jetpack-connection' ),
+				$identity_crisis['siteurl'],
+				$identity_crisis['wpcom_siteurl']
+			);
+		}
+
+		if ( empty( $messages ) ) {
+			$messages[] = __( 'A URL mismatch was detected between your site and WordPress.com.', 'jetpack-connection' );
+		}
+
+		return self::failing_test(
+			array(
+				'name'              => $name,
+				'short_description' => implode( ' ', $messages ),
+				'action_label'      => $this->helper_get_support_text(),
+				'action'            => $this->helper_get_support_url(),
+			)
+		);
+	}
+
+	/**
+	 * Check for Identity Crisis using connection package classes.
+	 *
+	 * @return array|false False if no IDC, array with crisis details otherwise.
+	 */
+	protected function check_identity_crisis() {
+		if ( ! ( new Manager() )->is_connected() || ( new Status() )->is_offline_mode() ) {
+			return false;
+		}
+
+		if ( ! class_exists( 'Automattic\Jetpack\Identity_Crisis' ) || ! Identity_Crisis::validate_sync_error_idc_option() ) {
+			return false;
+		}
+
+		return Jetpack_Options::get_option( 'sync_error_idc' );
+	}
+
+	/**
+	 * Tests the health of the connection tokens.
+	 *
+	 * @return array
+	 */
+	protected function test__connection_token_health() {
+		$name    = 'test__connection_token_health';
+		$m       = new Manager();
+		$user_id = get_current_user_id();
+
+		// Check if there's a connected logged in user.
+		if ( $user_id && ! $m->is_user_connected( $user_id ) ) {
+			$user_id = false;
+		}
+
+		// If no logged in user to check, let's see if there's a connection owner set.
+		if ( ! $user_id ) {
+			$user_id = Jetpack_Options::get_option( 'master_user' );
+			if ( $user_id && ! $m->is_user_connected( $user_id ) ) {
+				return self::connection_failing_test( $name, __( 'Missing token for the connection owner.', 'jetpack-connection' ) );
+			}
+		}
+
+		if ( $user_id ) {
+			return $this->check_tokens_health( $user_id );
+		}
+
+		return $this->check_blog_token_health();
+	}
+
+	/**
+	 * Tests blog token against WP.com's check-token-health endpoint.
+	 *
+	 * @return array
+	 */
+	protected function check_blog_token_health() {
+		$name  = 'test__connection_token_health';
+		$valid = ( new Tokens() )->validate_blog_token();
+
+		// A WP_Error, meaning the check could not run, is truthy.
+		if ( true !== $valid ) {
+			return self::connection_failing_test( $name, __( 'The site token used to authenticate with WordPress.com could not be validated.', 'jetpack-connection' ) );
+		}
+
+		return self::passing_test( array( 'name' => $name ) );
+	}
+
+	/**
+	 * Tests blog and user tokens against WP.com's check-token-health endpoint.
+	 *
+	 * @param int $user_id The user ID to check the tokens for.
+	 *
+	 * @return array
+	 */
+	protected function check_tokens_health( $user_id ) {
+		$name             = 'test__connection_token_health';
+		$validated_tokens = ( new Tokens() )->validate( $user_id );
+
+		if ( ! is_array( $validated_tokens ) || count( array_diff_key( array_flip( array( 'blog_token', 'user_token' ) ), $validated_tokens ) ) ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'Token health check failed to validate tokens.', 'jetpack-connection' ),
+				)
+			);
+		}
+
+		$invalid_tokens_exist = false;
+		foreach ( $validated_tokens as $validated_token ) {
+			if ( ! $validated_token['is_healthy'] ) {
+				$invalid_tokens_exist = true;
+				break;
+			}
+		}
+
+		if ( ! $invalid_tokens_exist ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		return self::connection_failing_test( $name, __( 'Invalid Jetpack Connection tokens.', 'jetpack-connection' ) );
+	}
+
+	/**
+	 * Tests connection status against WP.com's test-connection endpoint.
+	 *
+	 * @return array
+	 */
+	protected function test__wpcom_connection_test() {
+		$name = 'test__wpcom_connection_test';
+
+		$status      = new Status();
+		$skip_reason = '';
+
+		if ( $status->is_offline_mode() ) {
+			$skip_reason = __( 'Your site is in Offline Mode, so this test was skipped.', 'jetpack-connection' );
+		} elseif ( $status->in_safe_mode() ) {
+			$skip_reason = __( 'Your site is in Safe Mode, so this test was skipped.', 'jetpack-connection' );
+		} elseif ( ! ( new Manager() )->is_connected() ) {
+			$skip_reason = __( 'Your site is not communicating with WordPress.com, so this test was skipped.', 'jetpack-connection' );
+		} elseif ( ! $this->pass ) {
+			$skip_reason = __( 'A previous connection health test failed, so this test was skipped.', 'jetpack-connection' );
+		}
+
+		if ( $skip_reason ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => $skip_reason,
+				)
+			);
+		}
+
+		add_filter( 'http_request_timeout', array( static::class, 'increase_timeout' ) );
+		$response = Client::wpcom_json_api_request_as_blog(
+			sprintf( '/jetpack-blogs/%d/test-connection', Jetpack_Options::get_option( 'id' ) ),
+			Client::WPCOM_JSON_API_VERSION
+		);
+		remove_filter( 'http_request_timeout', array( static::class, 'increase_timeout' ) );
+
+		if ( is_wp_error( $response ) ) {
+			if ( str_contains( $response->get_error_message(), 'cURL error 28' ) ) {
+				return self::skipped_test(
+					array(
+						'name'              => $name,
+						'short_description' => self::helper_get_timeout_text(),
+					)
+				);
+			}
+
+			/* translators: %1$s is the error code, %2$s is the error message */
+			$message = sprintf( __( 'Connection test failed (#%1$s: %2$s)', 'jetpack-connection' ), $response->get_error_code(), $response->get_error_message() );
+			return self::connection_failing_test( $name, $message );
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		if ( ! $body ) {
+			return self::failing_test(
+				array(
+					'name'              => $name,
+					'short_description' => sprintf(
+						/* translators: %s is the HTTP status code returned by WordPress.com. */
+						__( 'Connection test failed: WordPress.com returned an empty response (status code: %s).', 'jetpack-connection' ),
+						wp_remote_retrieve_response_code( $response )
+					),
+					'action_label'      => $this->helper_get_support_text(),
+					'action'            => $this->helper_get_support_url(),
+				)
+			);
+		}
+
+		if ( 404 === wp_remote_retrieve_response_code( $response ) ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'The WordPress.com API returned a 404 error.', 'jetpack-connection' ),
+				)
+			);
+		}
+
+		return $this->evaluate_wpcom_connection_result( $name, json_decode( $body ), wp_remote_retrieve_response_code( $response ) );
+	}
+
+	/**
+	 * Turns a decoded WP.com test-connection response into a test result.
+	 *
+	 * Split out from test__wpcom_connection_test() so the decision logic can be
+	 * exercised without performing a signed remote request.
+	 *
+	 * Besides producing the Site Health result, this also keeps the Error_Handler
+	 * state for `xmlrpc_request_blocked` and `wpcom_ssl_verification_failed` in sync: a
+	 * result carrying one of those codes reports the matching error (making it
+	 * visible on Error_Handler surfaces such as admin notices and the dashboard),
+	 * and a connected result clears both. Runs from every entry point of the test:
+	 * Site Health page loads, Core's weekly Site Health cron, and the daily
+	 * connection check on the heartbeat cron.
+	 *
+	 * @param string      $name        The test name.
+	 * @param object|null $result      The JSON-decoded response body; null when the body was not valid JSON.
+	 * @param int|string  $status_code The HTTP status code of the WP.com response.
+	 *
+	 * @return array Test results.
+	 */
+	public function evaluate_wpcom_connection_result( $name, $result, $status_code ) {
+		if ( ! empty( $result->connected ) ) {
+			$this->clear_blocked_request_error();
+			$this->clear_ssl_verification_error();
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		// The site itself rejected WordPress.com's request (firewall, WAF, security
+		// plugin, or server rule). The connection token could be valid, but reconnecting would
+		// be rejected the same way - surface the real cause and don't offer a reconnect.
+		if ( isset( $result->error_code ) && 'xmlrpc_request_blocked' === $result->error_code ) {
+			$site_http_status = (int) ( $result->site_http_status ?? 0 );
+
+			$this->report_connection_state_error(
+				'xmlrpc_request_blocked',
+				'WordPress.com requests to the site are blocked',
+				array( 'site_http_status' => $site_http_status )
+			);
+
+			// A 4xx/5xx from the site means WP.com completed the TLS handshake to get
+			// it, so a lingering SSL-verification error is provably stale.
+			$this->clear_ssl_verification_error();
+
+			return $this->blocked_request_failing_test( $name, $site_http_status );
+		}
+
+		// WP.com could not verify the site's SSL certificate when connecting to it
+		// (expired, self-signed, or incomplete chain). The site itself never sees these
+		// failures — the TLS handshake dies before PHP runs — so WP.com's response to
+		// this signed request is the only evidence, and reconnecting would be rejected
+		// the same way. A stored blocked error is preserved: a failed handshake proves
+		// nothing about a blockage, and ERROR_LIFE_TIME bounds any staleness.
+		if ( isset( $result->error_code ) && 'wpcom_ssl_verification_failed' === $result->error_code ) {
+			$this->report_connection_state_error( 'wpcom_ssl_verification_failed', 'WordPress.com cannot verify the SSL certificate of the site' );
+
+			return $this->ssl_verification_failing_test( $name );
+		}
+
+		// An explicit `connected` property (falsy here, past the pass branch) proves
+		// WP.com actually ran its test and did not report a blockage or a certificate
+		// failure — a definitive other failure, so a lingering blocked or SSL error is
+		// stale and its suppressed-reconnect presentation would be wrong for this
+		// failure. The exception is a result WP.com marked `inconclusive` (a transport
+		// failure it could not classify, e.g. a timeout): that neither confirms nor
+		// disproves a stored error, so preserve it — clearing would flap the notice
+		// for a broken site that is also occasionally slow. Malformed bodies and
+		// service-error envelopes (no `connected` property) are likewise preserved.
+		// A wrongly preserved error is bounded by ERROR_LIFE_TIME anyway.
+		if ( is_object( $result ) && property_exists( $result, 'connected' ) && empty( $result->inconclusive ) ) {
+			$this->clear_blocked_request_error();
+			$this->clear_ssl_verification_error();
+		}
+
+		// WP.com could not complete the test (a transport failure it could not classify — e.g.
+		// a timeout, or a dev/sandbox site it cannot reach back). That neither confirms nor
+		// disproves the connection, so don't present it as a definitive failure with a reconnect
+		// CTA — skip, as we already do for a cURL timeout on the outgoing request.
+		if ( is_object( $result ) && ! empty( $result->inconclusive ) ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'WordPress.com could not complete the connection test. This is usually temporary.', 'jetpack-connection' ),
+				)
+			);
+		}
+
+		$message = isset( $result->message ) && '' !== $result->message
+			? $result->message
+			: __( 'Connection test failed.', 'jetpack-connection' );
+
+		// Append the status code only when it adds signal: a 200 means the request itself
+		// succeeded (the failure is in the connection, not the transport), so "(status code: 200)"
+		// is confusing noise.
+		if ( 200 !== (int) $status_code ) {
+			$message .= ' ' . sprintf(
+				/* translators: %s is the HTTP status code returned by WordPress.com. */
+				__( '(status code: %s)', 'jetpack-connection' ),
+				$status_code
+			);
+		}
+
+		return self::connection_failing_test( $name, $message );
+	}
+
+	/**
+	 * Reports a verified `local_state` connection error derived from a WP.com
+	 * test-connection result.
+	 *
+	 * Skipping the WP.com verification round-trip is safe here: the error was
+	 * derived from a response WP.com sent to a request this site initiated and
+	 * signed, so it is self-evidencing (same trust model as the outgoing flow).
+	 * The method_exists guard and the 'local_state' literal (which matches
+	 * Error_Handler::ERROR_TYPE_LOCAL_STATE) protect mid-plugin-update requests,
+	 * where a stale Error_Handler predating the factory and the constant can
+	 * already be loaded: reporting is best-effort and must never fatal.
+	 *
+	 * @since 9.3.0
+	 *
+	 * @param string $error_code    The error code, one of Error_Handler::$known_errors.
+	 * @param string $error_message The stored error message (display copy is resolved by the Error_Handler).
+	 * @param array  $extra_data    Additional error data, merged over the defaults.
+	 */
+	private function report_connection_state_error( $error_code, $error_message, array $extra_data = array() ) {
+		if ( ! method_exists( Error_Handler::class, 'build_connection_wp_error' ) ) {
+			return;
+		}
+
+		Error_Handler::get_instance()->report_error(
+			Error_Handler::build_connection_wp_error(
+				$error_code,
+				$error_message,
+				array( 'token' => '' ),
+				'local_state', // Error_Handler::ERROR_TYPE_LOCAL_STATE.
+				'', // Connection-state errors describe the site's environment, not one request, so they have no direction.
+				array_merge(
+					array(
+						'user_id' => 0,
+						// Reconnecting cannot fix a connection-state error, so it carries
+						// its remedy: no reconnect CTA on any surface.
+						'action'  => 'none',
+					),
+					$extra_data
+				)
+			),
+			false,
+			true
+		);
+	}
+
+	/**
+	 * Clears a stored `xmlrpc_request_blocked` error, when the loaded Error_Handler supports it.
+	 *
+	 * During a plugin update, a stale Error_Handler predating `delete_error_by_code()` can
+	 * already be in memory while this file is the new version on disk. State sync is
+	 * best-effort and must never fatal such a request, so it is skipped in that window.
+	 *
+	 * @since 8.10.0
+	 */
+	private function clear_blocked_request_error() {
+		if ( method_exists( Error_Handler::class, 'delete_error_by_code' ) ) {
+			Error_Handler::get_instance()->delete_error_by_code( 'xmlrpc_request_blocked' );
+		}
+	}
+
+	/**
+	 * Clears a stored `wpcom_ssl_verification_failed` error, when the loaded Error_Handler supports it.
+	 *
+	 * As with clear_blocked_request_error(), state sync is best-effort and skipped when a
+	 * stale Error_Handler predating the method is loaded mid-plugin-update.
+	 *
+	 * @since 9.3.0
+	 */
+	private function clear_ssl_verification_error() {
+		if ( method_exists( Error_Handler::class, 'delete_error_by_code' ) ) {
+			Error_Handler::get_instance()->delete_error_by_code( 'wpcom_ssl_verification_failed' );
+		}
+	}
+
+	/**
+	 * Builds a failing result for the case where the site is blocking WordPress.com's
+	 * connection test (e.g. firewall/WAF/security plugin).
+	 *
+	 * No reconnect action is offered because the connection token could be valid but
+	 * reconnecting would be rejected the same way.
+	 *
+	 * @param string $name             The test name.
+	 * @param int    $site_http_status The HTTP status the site returned, or 0 if unknown.
+	 *
+	 * @return array Test results.
+	 */
+	protected function blocked_request_failing_test( $name, $site_http_status = 0 ) {
+		// Only the first sentence varies with the status code. Keeping the explanation
+		// in its own string means it is written, translated, and edited once.
+		$blocked = $site_http_status
+			? sprintf(
+				/* translators: %d is the HTTP status code (e.g. 403) the site returned. */
+				__( 'WordPress.com reached your site but the request was blocked (HTTP %d).', 'jetpack-connection' ),
+				$site_http_status
+			)
+			: __( 'WordPress.com reached your site but the request was blocked.', 'jetpack-connection' );
+
+		$connection_error = $blocked . ' ' . __( 'This is usually caused by a security plugin, firewall, or server rule rejecting requests from WordPress.com.', 'jetpack-connection' );
+
+		$recommendation = sprintf(
+			/* translators: %1$s opens a link to Jetpack's IP allowlist documentation, %2$s closes it (it also carries hidden text noting the link opens in a new tab). Place them around the phrase that should be linked. */
+			__( 'Jetpack Connection uses your site\'s xmlrpc.php file to securely communicate with WordPress.com. Ask your host or security provider to %1$sallowlist Jetpack Connection IPs%2$s — reconnecting will not resolve this. If you need further help, contact Jetpack support.', 'jetpack-connection' ),
+			'<a href="' . esc_url( Redirect::get_url( 'https://jetpack.com/support/how-to-add-jetpack-ips-allowlist/' ) ) . '" target="_blank" rel="noopener noreferrer">',
+			sprintf(
+				/* translators: accessibility text */
+				'<span class="screen-reader-text"> %s</span></a>',
+				esc_html__( '(opens in a new tab)', 'jetpack-connection' )
+			)
+		);
+
+		return $this->connection_state_failing_test( $name, $connection_error, $recommendation );
+	}
+
+	/**
+	 * Builds a failing result for the case where WordPress.com could not verify the
+	 * site's SSL certificate when connecting to it.
+	 *
+	 * No reconnect action is offered because a reconnect would fail certificate
+	 * verification the same way.
+	 *
+	 * @since 9.3.0
+	 *
+	 * @param string $name The test name.
+	 *
+	 * @return array Test results.
+	 */
+	protected function ssl_verification_failing_test( $name ) {
+		$connection_error = __( 'WordPress.com could not establish a secure connection to your site because your site\'s SSL certificate could not be verified. This is usually caused by an expired or self-signed certificate, or a missing intermediate certificate.', 'jetpack-connection' );
+
+		$recommendation = __( 'Ask your hosting provider to renew your site\'s SSL certificate or complete its certificate chain. Reconnecting will not resolve this. If you need further help, contact Jetpack support.', 'jetpack-connection' );
+
+		return $this->connection_state_failing_test( $name, $connection_error, $recommendation );
+	}
+
+	/**
+	 * Builds a failing result for a connection-state failure that reconnecting cannot fix.
+	 *
+	 * No reconnect action is offered; contacting support is the only CTA.
+	 *
+	 * @since 9.3.0
+	 *
+	 * @param string $name             The test name.
+	 * @param string $connection_error The connection-specific error copy.
+	 * @param string $recommendation   The recommendation for resolving it.
+	 *
+	 * @return array Test results.
+	 */
+	protected function connection_state_failing_test( $name, $connection_error, $recommendation ) {
+		return self::failing_test(
+			array(
+				'name'              => $name,
+				'label'             => __( 'Your site is blocking requests from WordPress.com', 'jetpack-connection' ),
+				'short_description' => $connection_error,
+				'long_description'  => self::helper_get_reconnect_long_description( $connection_error, $recommendation ),
+				'action_label'      => $this->helper_get_support_text(),
+				'action'            => $this->helper_get_support_url(),
+			)
+		);
+	}
+
+	/**
+	 * Tests the port number to ensure it is an expected value.
+	 *
+	 * @return array
+	 */
+	protected function test__server_port_value() {
+		$name = 'test__server_port_value';
+
+		if ( ! isset( $_SERVER['HTTP_X_FORWARDED_PORT'] ) && ! isset( $_SERVER['SERVER_PORT'] ) ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => __( 'The server port values are not defined. This is most common when running PHP via a CLI.', 'jetpack-connection' ),
+				)
+			);
+		}
+		$site_port   = wp_parse_url( home_url(), PHP_URL_PORT );
+		$server_port = isset( $_SERVER['HTTP_X_FORWARDED_PORT'] ) ? (int) $_SERVER['HTTP_X_FORWARDED_PORT'] : (int) $_SERVER['SERVER_PORT'];
+		$http_ports  = array( 80 );
+		$https_ports = array( 80, 443 );
+
+		if ( defined( 'JETPACK_SIGNATURE__HTTP_PORT' ) ) {
+			$http_ports[] = JETPACK_SIGNATURE__HTTP_PORT;
+		}
+
+		if ( defined( 'JETPACK_SIGNATURE__HTTPS_PORT' ) ) {
+			$https_ports[] = JETPACK_SIGNATURE__HTTPS_PORT;
+		}
+
+		if ( $site_port ) {
+			return self::skipped_test( array( 'name' => $name ) );
+		}
+
+		if ( is_ssl() && in_array( $server_port, $https_ports, true ) ) {
+			return self::passing_test( array( 'name' => $name ) );
+		} elseif ( in_array( $server_port, $http_ports, true ) ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		if ( is_ssl() ) {
+			$needed_constant = 'JETPACK_SIGNATURE__HTTPS_PORT';
+		} else {
+			$needed_constant = 'JETPACK_SIGNATURE__HTTP_PORT';
+		}
+		return self::failing_test(
+			array(
+				'name'              => $name,
+				'short_description' => sprintf(
+					/* translators: %1$s - a PHP code snippet */
+					__(
+						'The server port value is unexpected.
+					Try adding the following to your wp-config.php file: %1$s',
+						'jetpack-connection'
+					),
+					"define( '$needed_constant', $server_port )"
+				),
+			)
+		);
+	}
+
+	/**
+	 * Test that PHP's XML library is installed.
+	 *
+	 * @return array Test results.
+	 */
+	protected function test__xml_parser_available() {
+		$name = 'test__xml_parser_available';
+		if ( function_exists( 'xml_parser_create' ) ) {
+			return self::passing_test( array( 'name' => $name ) );
+		}
+
+		return self::failing_test(
+			array(
+				'name'              => $name,
+				'label'             => __( 'PHP XML manipulation libraries are not available.', 'jetpack-connection' ),
+				'short_description' => __( 'Please ask your hosting provider to refer to our server requirements and enable PHP\'s XML module.', 'jetpack-connection' ),
+				'action_label'      => __( 'View our server requirements', 'jetpack-connection' ),
+				'action'            => Redirect::get_url( 'jetpack-support-server-requirements' ),
+			)
+		);
+	}
+
+	/**
+	 * Calls to WP.com to run the connection diagnostic testing suite.
+	 *
+	 * Intentionally added last as it will be skipped if any local failed conditions exist.
+	 *
+	 * @since 7.1.0
+	 *
+	 * @return array Test results.
+	 */
+	protected function last__wpcom_self_test() {
+		$name = 'test__wpcom_self_test';
+
+		$status = new Status();
+		if ( ! ( new Manager() )->is_connected() || $status->is_offline_mode() || $status->in_safe_mode() || ! $this->pass ) {
+			return self::skipped_test( array( 'name' => $name ) );
+		}
+
+		$self_xml_rpc_url = site_url( 'xmlrpc.php' );
+
+		$api_base = Constants::get_constant( 'JETPACK__API_BASE' );
+		if ( ! $api_base ) {
+			$api_base = Utils::DEFAULT_JETPACK__API_BASE;
+		}
+		$testsite_url = $api_base . 'testsite/1/?url=';
+
+		add_filter( 'http_request_timeout', array( static::class, 'increase_timeout' ), PHP_INT_MAX - 1 );
+
+		$response = wp_remote_get( $testsite_url . $self_xml_rpc_url );
+
+		remove_filter( 'http_request_timeout', array( static::class, 'increase_timeout' ), PHP_INT_MAX - 1 );
+
+		if ( 200 === wp_remote_retrieve_response_code( $response ) ) {
+			return self::passing_test( array( 'name' => $name ) );
+		} elseif ( is_wp_error( $response ) && str_contains( $response->get_error_message(), 'cURL error 28' ) ) {
+			return self::skipped_test(
+				array(
+					'name'              => $name,
+					'short_description' => self::helper_get_timeout_text(),
+				)
+			);
+		}
+
+		return self::failing_test(
+			array(
+				'name'              => $name,
+				'short_description' => sprintf(
+					/* translators: %1$s - A debugging url */
+					__( 'Jetpack.com detected an error on the WP.com Self Test. Visit the Jetpack Debug page for more info: %1$s, or contact support.', 'jetpack-connection' ),
+					Redirect::get_url( 'jetpack-support-debug', array( 'query' => 'url=' . rawurlencode( site_url() ) ) )
+				),
+				'action_label'      => $this->helper_get_support_text(),
+				'action'            => $this->helper_get_support_url(),
+			)
+		);
+	}
+}

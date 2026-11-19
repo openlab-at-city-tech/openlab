@@ -8,6 +8,7 @@
 namespace Automattic\Jetpack\Publicize;
 
 use Automattic\Jetpack\Assets;
+use Automattic\Jetpack\WP_Build_Polyfills\WP_Build_Polyfills;
 
 /**
  * Publicize_Assets class.
@@ -36,10 +37,7 @@ class Publicize_Assets {
 			return false;
 		}
 
-		/** This filter is documented in projects/packages/publicize/src/class-publicize-base.php */
-		$capability = apply_filters( 'jetpack_publicize_capability', 'publish_posts' );
-
-		return current_user_can( $capability );
+		return Publicize_Utils::current_user_can_access_publicize_data();
 	}
 
 	/**
@@ -58,6 +56,8 @@ class Publicize_Assets {
 
 		$script_to_load = class_exists( 'Jetpack' ) ? 'block-editor-jetpack' : 'block-editor-social';
 
+		self::register_wp_build_polyfills();
+
 		// Dequeue the old Social assets.
 		wp_dequeue_script( 'jetpack-social-editor' );
 		wp_dequeue_style( 'jetpack-social-editor' );
@@ -71,6 +71,23 @@ class Publicize_Assets {
 				'textdomain' => 'jetpack-publicize-pkg',
 				'enqueue'    => true,
 			)
+		);
+	}
+
+	/**
+	 * Register the wp-build polyfills Social's block editor bundles request.
+	 *
+	 * Runs only where enqueue_block_editor_scripts() loads those bundles, as the editor has no `page` slug
+	 * to gate on. Keep it there: below WP 7.1 it can replace Core's wp-private-apis and wp-rich-text editor-wide.
+	 */
+	public static function register_wp_build_polyfills() {
+		if ( ! class_exists( WP_Build_Polyfills::class ) ) {
+			return;
+		}
+
+		WP_Build_Polyfills::register(
+			'jetpack-social',
+			array( 'wp-theme', 'wp-private-apis', 'wp-rich-text' )
 		);
 	}
 }

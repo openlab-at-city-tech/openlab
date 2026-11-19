@@ -5,6 +5,169 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.4] - 2026-10-26
+### Fixed
+- Activity Log: Match the Activity Log events REST route case-insensitively. [#53967]
+
+## [5.4.3] - 2026-10-20
+### Changed
+- Internal updates.
+
+## [5.4.2] - 2026-10-15
+### Fixed
+- WooCommerce Analytics: Avoid a PHP 8.1+ deprecation notice when syncing refunds without a cost of goods value. [#53592]
+
+## [5.4.1] - 2026-10-07
+### Removed
+- Comments: Stop syncing the comment identity provider meta. [#53296]
+
+### Fixed
+- WooCommerce Analytics: Match WooCommerce's own order stats for refunds, so a full refund after a partial refund is no longer counted twice and refunds of never-paid orders no longer show as returns. [#53159]
+
+## [5.4.0] - 2026-10-05
+### Added
+- Sync the VideoPress site setting that turns off sharing for every video. [#52991]
+- Sync the `enable_blocks_comments` option. [#53031]
+
+### Removed
+- Remove the AI Launchpad options from the default synced options. [#52930]
+
+## [5.3.0] - 2026-09-28
+### Added
+- Sync the `videopress_playlist_index` option to WordPress.com. [#52728]
+
+## [5.2.0] - 2026-09-23
+### Added
+- Add a `jetpack_site_visibility` callable that reports -1 when the `jetpack_is_private_site` filter marks the site private, without changing the `blog_public` option. [#52353]
+
+## [5.1.3] - 2026-09-23
+### Fixed
+- WooCommerce Analytics: Fix a fatal error when syncing orders while WooCommerce Analytics is disabled. [#52681]
+
+## [5.1.2] - 2026-09-18
+### Added
+- Sync the comment meta Jetpack Comments writes for commenters signed in through WordPress.com. [#52166]
+
+## [5.1.1] - 2026-09-15
+### Changed
+- Internal updates.
+
+## [5.1.0] - 2026-09-08
+### Added
+- Add a consumer-configured WooCommerce Analytics sync module with checksum support. [#50715]
+- Sync the `jetpack_premium_analytics_enabled` option, so WordPress.com can see whether a site has the Premium Analytics dashboard turned on. [#51865]
+- Sync the `videopress_player_preload_disabled` option to WordPress.com. [#51991]
+
+### Fixed
+- WooCommerce Analytics: Guard optional WooCommerce symbols to avoid fatals on older versions and missing parent orders. [#50715]
+
+## [5.0.1] - 2026-09-01
+### Changed
+- Internal updates.
+
+## [5.0.0] - 2026-08-26
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+## [4.45.4] - 2026-08-19
+### Changed
+- Internal updates.
+
+## [4.45.3] - 2026-08-03
+### Changed
+- Internal updates.
+
+## [4.45.2] - 2026-07-13
+### Added
+- Sync the AI Launchpad state options (`wpcom_ai_launchpad_enabled`, `_dismissed`, `_completed`) so the wpcom `/sites` endpoint can expose them for Atomic sites. [#50455]
+
+## [4.45.1] - 2026-07-09
+### Changed
+- Update dependencies.
+
+## [4.45.0] - 2026-07-06
+### Added
+- Sync the `videopress_auto_subtitles_disabled` option to WordPress.com. [#50014]
+
+## [4.44.1] - 2026-06-25
+### Fixed
+- Refresh the synced `get_plugins` callable when a plugin is deleted, so removed plugins no longer linger in cached plugin lists. [#49913]
+
+## [4.44.0] - 2026-06-23
+### Added
+- Add the Jetpack Social image focal point to the post meta sync whitelist. [#49818]
+- Add WooCommerce order total (total, currency) to the synced woocommerce_new_order and woocommerce_order_status_changed actions when the order reaches a paid status, so WPcom can aggregate revenue. [#49689]
+
+## [4.43.1] - 2026-06-22
+### Added
+- Add WooCommerce countries, shipping, and tax calculation options to the sync whitelist. [#49324]
+
+## [4.43.0] - 2026-06-15
+### Added
+- Add options from assorted WooCommerce settings pages to sync whitelist, as part of activity log improvements. [#49520]
+- Send WooCommerce customer account detail updates. [#49551]
+
+## [4.42.0] - 2026-06-10
+### Added
+- Add options from WooCommerce Subscriptions and Emails settings pages to sync whitelist, as part of activity log improvements. [#49461]
+
+## [4.41.1] - 2026-06-09
+### Fixed
+- Sync: Mirror cross-object post meta delete-all events. [#49430]
+
+## [4.41.0] - 2026-06-08
+### Added
+- Add options from Advanced WooCommerce settings pages to sync whitelist. [#49435] [#49371]
+
+## [4.40.0] - 2026-06-08
+### Added
+- Add options from Payments WooCommerce settings pages to sync whitelist. [#49200]
+
+## [4.39.1] - 2026-06-05
+### Changed
+- Internal updates.
+
+## [4.39.0] - 2026-06-01
+### Added
+- Add options from the Products WooCommerce settings pages to sync whitelist, as part of activity log improvements. [#48200]
+
+### Fixed
+- Sync: Fix PHP warnings from undefined array keys, null property access, and deprecated null arguments across multiple sync modules. [#49232]
+
+## [4.38.4] - 2026-05-25
+### Fixed
+- Options: Include late sync whitelist entries in cached option modules. [#49076]
+
+## [4.38.3] - 2026-05-21
+### Added
+- Sync: Whitelist the new Jetpack Search ai_answers_enabled, search_suggestions_enabled, override_woocommerce_search_template, and reader_chat options so they propagate to WPcom. [#48945]
+
+### Fixed
+- Phan: Address PhanPluginDuplicateConditionalNullCoalescing violations. [#48887]
+
+## [4.38.2] - 2026-05-19
+### Changed
+- Internal updates.
+
+## [4.38.1] - 2026-05-14
+### Added
+- Sync wp_guideline CPT when Jetpack Search AI Answers is enabled. [#48592]
+
+### Fixed
+- Always register the Search sync module when the Search package is present, so updates to instant_search_enabled and jetpack_search_experience are queued regardless of the current option value. [#48745]
+
+## [4.38.0] - 2026-05-11
+### Added
+- Activity Log: Add custom event support with a non-public custom post type, guarded REST route, and class API for creating entries. [#48567]
+- Sync: Whitelist the `jetpack_social_message_template` and `jetpack_search_experience` options so they propagate to WordPress.com. [#48638] [#48540]
+
+## [4.37.0] - 2026-05-04
+### Added
+- Sync: Add project_collection taxonomy to taxonomy allowlist. [#48392]
+
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
 ## [4.36.0] - 2026-04-15
 ### Added
 - Add WooCommerce Accounts and Privacy settings page options to sync whitelist, as part of activity log improvements. [#48041]
@@ -1724,6 +1887,40 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Packages: Move sync to a classmapped package
 
+[5.4.4]: https://github.com/Automattic/jetpack-sync/compare/v5.4.3...v5.4.4
+[5.4.3]: https://github.com/Automattic/jetpack-sync/compare/v5.4.2...v5.4.3
+[5.4.2]: https://github.com/Automattic/jetpack-sync/compare/v5.4.1...v5.4.2
+[5.4.1]: https://github.com/Automattic/jetpack-sync/compare/v5.4.0...v5.4.1
+[5.4.0]: https://github.com/Automattic/jetpack-sync/compare/v5.3.0...v5.4.0
+[5.3.0]: https://github.com/Automattic/jetpack-sync/compare/v5.2.0...v5.3.0
+[5.2.0]: https://github.com/Automattic/jetpack-sync/compare/v5.1.3...v5.2.0
+[5.1.3]: https://github.com/Automattic/jetpack-sync/compare/v5.1.2...v5.1.3
+[5.1.2]: https://github.com/Automattic/jetpack-sync/compare/v5.1.1...v5.1.2
+[5.1.1]: https://github.com/Automattic/jetpack-sync/compare/v5.1.0...v5.1.1
+[5.1.0]: https://github.com/Automattic/jetpack-sync/compare/v5.0.1...v5.1.0
+[5.0.1]: https://github.com/Automattic/jetpack-sync/compare/v5.0.0...v5.0.1
+[5.0.0]: https://github.com/Automattic/jetpack-sync/compare/v4.45.4...v5.0.0
+[4.45.4]: https://github.com/Automattic/jetpack-sync/compare/v4.45.3...v4.45.4
+[4.45.3]: https://github.com/Automattic/jetpack-sync/compare/v4.45.2...v4.45.3
+[4.45.2]: https://github.com/Automattic/jetpack-sync/compare/v4.45.1...v4.45.2
+[4.45.1]: https://github.com/Automattic/jetpack-sync/compare/v4.45.0...v4.45.1
+[4.45.0]: https://github.com/Automattic/jetpack-sync/compare/v4.44.1...v4.45.0
+[4.44.1]: https://github.com/Automattic/jetpack-sync/compare/v4.44.0...v4.44.1
+[4.44.0]: https://github.com/Automattic/jetpack-sync/compare/v4.43.1...v4.44.0
+[4.43.1]: https://github.com/Automattic/jetpack-sync/compare/v4.43.0...v4.43.1
+[4.43.0]: https://github.com/Automattic/jetpack-sync/compare/v4.42.0...v4.43.0
+[4.42.0]: https://github.com/Automattic/jetpack-sync/compare/v4.41.1...v4.42.0
+[4.41.1]: https://github.com/Automattic/jetpack-sync/compare/v4.41.0...v4.41.1
+[4.41.0]: https://github.com/Automattic/jetpack-sync/compare/v4.40.0...v4.41.0
+[4.40.0]: https://github.com/Automattic/jetpack-sync/compare/v4.39.1...v4.40.0
+[4.39.1]: https://github.com/Automattic/jetpack-sync/compare/v4.39.0...v4.39.1
+[4.39.0]: https://github.com/Automattic/jetpack-sync/compare/v4.38.4...v4.39.0
+[4.38.4]: https://github.com/Automattic/jetpack-sync/compare/v4.38.3...v4.38.4
+[4.38.3]: https://github.com/Automattic/jetpack-sync/compare/v4.38.2...v4.38.3
+[4.38.2]: https://github.com/Automattic/jetpack-sync/compare/v4.38.1...v4.38.2
+[4.38.1]: https://github.com/Automattic/jetpack-sync/compare/v4.38.0...v4.38.1
+[4.38.0]: https://github.com/Automattic/jetpack-sync/compare/v4.37.0...v4.38.0
+[4.37.0]: https://github.com/Automattic/jetpack-sync/compare/v4.36.0...v4.37.0
 [4.36.0]: https://github.com/Automattic/jetpack-sync/compare/v4.35.0...v4.36.0
 [4.35.0]: https://github.com/Automattic/jetpack-sync/compare/v4.34.0...v4.35.0
 [4.34.0]: https://github.com/Automattic/jetpack-sync/compare/v4.33.0...v4.34.0

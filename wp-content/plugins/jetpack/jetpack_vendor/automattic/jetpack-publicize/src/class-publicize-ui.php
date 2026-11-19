@@ -13,7 +13,7 @@ use Automattic\Jetpack\Publicize\Publicize_Utils as Utils;
 use Automattic\Jetpack\Status\Host;
 
 /**
- * Only user facing pieces of Publicize are found here.
+ * Classic editor integration: the Publicize metabox on the post screen, and its assets.
  */
 class Publicize_UI {
 	/**
@@ -24,7 +24,7 @@ class Publicize_UI {
 	public $publicize;
 
 	/**
-	 * URL to Sharing settings page in wordpress.com
+	 * URL of the admin page where Publicize connections are managed.
 	 *
 	 * @var string
 	 */
@@ -58,99 +58,7 @@ class Publicize_UI {
 		add_action( 'admin_head-post.php', array( $this, 'post_page_metabox_assets' ) );
 		add_action( 'admin_head-post-new.php', array( $this, 'post_page_metabox_assets' ) );
 
-		// Management of publicize (sharing screen, ajax/lightbox popup, and metabox on post screen).
 		add_action( 'post_submitbox_misc_actions', array( $this, 'post_page_metabox' ) );
-	}
-
-	/**
-	 * If the ShareDaddy plugin is not active we need to add the sharing settings page to the menu still
-	 *
-	 * @deprecated 0.42.3
-	 */
-	public function sharing_menu() {
-		add_submenu_page(
-			'options-general.php',
-			esc_html__( 'Sharing Settings', 'jetpack-publicize-pkg' ),
-			esc_html__( 'Sharing', 'jetpack-publicize-pkg' ),
-			'publish_posts',
-			'sharing',
-			array( $this, 'wrapper_admin_page' )
-		);
-	}
-
-	/**
-	 * Add admin page with wrapper.
-	 *
-	 * @deprecated 0.42.3
-	 */
-	public function wrapper_admin_page() {
-		if ( class_exists( 'Jetpack_Admin_Page' ) ) {
-			\Jetpack_Admin_Page::wrap_ui( array( $this, 'management_page' ) );
-		}
-	}
-
-	/**
-	 * Management page to load if Sharedaddy is not active so the 'pre_admin_screen_sharing' action exists.
-	 *
-	 * @deprecated 0.42.3
-	 */
-	public function management_page() {
-		?>
-		<div class="wrap">
-			<div class="icon32" id="icon-options-general"><br /></div>
-			<h1><?php esc_html_e( 'Sharing Settings', 'jetpack-publicize-pkg' ); ?></h1>
-
-			<?php
-			/** This action is documented in modules/sharedaddy/sharing.php */
-			do_action( 'pre_admin_screen_sharing' );
-			?>
-		</div>
-		<?php
-	}
-
-	/**
-	 * Styling for the sharing screen and popups
-	 * JS for the options and switching
-	 *
-	 * @deprecated 0.42.3
-	 */
-	public function load_assets() {
-		if ( class_exists( 'Jetpack_Admin_Page' ) ) {
-			\Jetpack_Admin_Page::load_wrapper_styles();
-		}
-	}
-
-	/**
-	 * Lists the current user's publicized accounts for the blog
-	 * looks exactly like Publicize v1 for now, UI and functionality updates will come after the move to keyring
-	 *
-	 * @deprecated 0.42.3
-	 */
-	public function admin_page() {
-		?>
-		<h2 id="publicize"><?php esc_html_e( 'Jetpack Social', 'jetpack-publicize-pkg' ); ?></h2>
-		<p><?php esc_html_e( 'Connect social media services to automatically share new posts.', 'jetpack-publicize-pkg' ); ?></p>
-		<h4>
-			<?php
-			printf(
-				wp_kses(
-					/* translators: %s is the link to the Publicize page in Calypso */
-					__( "We've made some updates to Jetpack Social. Please visit the <a href='%s' class='jptracks' data-jptracks-name='legacy_publicize_settings'>WordPress.com sharing page</a> to manage your Jetpack Social connections or use the button below.", 'jetpack-publicize-pkg' ),
-					array(
-						'a' => array(
-							'href'               => array(),
-							'class'              => array(),
-							'data-jptracks-name' => array(),
-						),
-					)
-				),
-				esc_url( $this->publicize->publicize_connections_url() )
-			);
-			?>
-		</h4>
-
-		<a href="<?php echo esc_url( $this->publicize->publicize_connections_url() ); ?>" class="button button-primary jptracks" data-jptracks-name='legacy_publicize_settings'><?php esc_html_e( 'Jetpack Social Settings', 'jetpack-publicize-pkg' ); ?></a>
-		<?php
 	}
 
 	/**
@@ -204,8 +112,8 @@ class Publicize_UI {
 		$default_suffix = $this->publicize->default_suffix;
 		$default_suffix = preg_replace( '/%([0-9])\$s/', '" + %\\1$s + "', wp_json_encode( (string) $default_suffix, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP ) );
 
-		$max_length = defined( 'JETPACK_PUBLICIZE_TWITTER_LENGTH' ) ? JETPACK_PUBLICIZE_TWITTER_LENGTH : 280;
-		$max_length = $max_length - 24; // t.co link, space.
+		$max_length  = defined( 'JETPACK_PUBLICIZE_TWITTER_LENGTH' ) ? JETPACK_PUBLICIZE_TWITTER_LENGTH : 280;
+		$max_length -= 24; // t.co link, space.
 
 		?>
 
@@ -401,6 +309,9 @@ jQuery( function($) {
 	font-size: 16px;
 	text-decoration: none;
 }
+.publicize-placeholders-help {
+	margin: 0.5rem 0 1rem;
+}
 </style>
 		<?php
 	}
@@ -570,14 +481,36 @@ jQuery( function($) {
 
 		$is_post_published = 'publish' === get_post_status( $post->ID );
 
+		$templates_enabled = $this->publicize->has_paid_features();
+
+		$placeholders = $this->get_message_placeholders();
+
 		?>
 
 			</ul>
 
 			<?php if ( ! $is_social_note ) : ?>
 				<label for="wpas-title"><?php esc_html_e( 'Custom Message:', 'jetpack-publicize-pkg' ); ?></label>
-				<span id="wpas-title-counter" class="alignright hide-if-no-js">0</span>
+				<?php if ( ! $templates_enabled ) : ?>
+					<span id="wpas-title-counter" class="alignright hide-if-no-js">0</span>
+				<?php endif; ?>
 				<textarea name="wpas_title" id="wpas-title"><?php echo esc_textarea( $title ); ?></textarea>
+				<?php if ( $templates_enabled && ! empty( $placeholders ) ) : ?>
+					<details class="publicize-placeholders-help">
+						<summary><?php esc_html_e( 'Available placeholders', 'jetpack-publicize-pkg' ); ?></summary>
+						<p>
+							<?php esc_html_e( 'Use placeholders to automatically insert post details.', 'jetpack-publicize-pkg' ); ?>
+						</p>
+						<ul>
+							<?php foreach ( $placeholders as $placeholder ) : ?>
+								<li>
+									<code><?php echo esc_html( $placeholder['id'] ); ?></code>
+									&mdash; <?php echo esc_html( $placeholder['label'] ); ?>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</details>
+				<?php endif; ?>
 				<a href="#" class="hide-if-no-js button" id="publicize-form-hide"><?php esc_html_e( 'OK', 'jetpack-publicize-pkg' ); ?></a>
 				<input type="hidden" name="wpas[0]" value="1" />
 			<?php endif; ?>
@@ -594,5 +527,17 @@ jQuery( function($) {
 		<?php
 
 		return ob_get_clean();
+	}
+
+	/**
+	 * Get the catalogue of placeholders supported in custom Publicize messages.
+	 *
+	 * Sourced from WPCOM via `Message_Templates_Placeholders` so the metabox
+	 * hint can never drift from the resolver in `Template_Parser`.
+	 *
+	 * @return array<int, array{id: string, label: string}> Ordered list of placeholders.
+	 */
+	private function get_message_placeholders() {
+		return Message_Templates_Placeholders::get_all();
 	}
 }

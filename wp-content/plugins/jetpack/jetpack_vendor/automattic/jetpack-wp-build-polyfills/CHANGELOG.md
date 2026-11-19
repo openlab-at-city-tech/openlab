@@ -5,6 +5,196 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.7.2] - 2026-11-02
+### Changed
+- Update package dependencies. [#53869]
+
+## [0.7.1] - 2026-10-28
+### Changed
+- Update dependencies.
+
+## [0.7.0] - 2026-10-26
+### Added
+- Add emit-widget-strings, which writes a gettext reference stub for widget.json metadata so the strings reach translation catalogs. [#53850]
+
+## [0.6.5] - 2026-10-20
+### Changed
+- Internal updates.
+
+## [0.6.4] - 2026-10-19
+### Changed
+- Update package dependencies. [#53004]
+
+### Fixed
+- Keep the newest bundled copy of a polyfilled script module when several plugins register it, and take widget-primitives from Gutenberg only from 24.1.0. [#53004]
+
+## [0.6.3] - 2026-10-14
+### Changed
+- Cache stamped bundles so repeat builds only re-stamp the bundles that changed. [#53459]
+
+## [0.6.2] - 2026-10-12
+### Changed
+- Update dependencies.
+
+## [0.6.1] - 2026-10-05
+### Changed
+- Internal updates.
+
+## [0.6.0] - 2026-09-23
+### Added
+- Add a `WP_Build_Screen_Id` helper that hooks a wp-build dashboard's screen-ID alias before the generated enqueue check and the restore after, so the two can't be hooked out of order or one dropped. [#52583]
+- Add `loadI18nManifest()` to cache another build's i18n manifest by URL, so its lazy bundles can load catalogs on demand. [#52634]
+
+## [0.5.8] - 2026-09-23
+### Fixed
+- Exclude `src/js/` from published package. [#52650]
+
+## [0.5.7] - 2026-09-21
+### Fixed
+- Apply polyfills and a higher WordPress version threshold that `register()` receives after the polyfills are already registered, instead of silently ignoring them. [#52470]
+
+## [0.5.6] - 2026-09-18
+### Changed
+- Update package dependencies. [#52187]
+
+### Fixed
+- Keep the dashboard frame steady while it loads and when switching admin pages. [#52235]
+
+## [0.5.5] - 2026-09-15
+### Changed
+- Update dependencies.
+
+## [0.5.4] - 2026-09-14
+### Changed
+- Update dependencies.
+
+## [0.5.3] - 2026-09-09
+### Changed
+- Internal updates.
+
+## [0.5.2] - 2026-09-08
+### Changed
+- Update package dependencies. [#51701]
+- Update the widget dashboard dependencies used by Premium Analytics. [#51939]
+
+### Fixed
+- Keep WordPress 7.0's DataViews on the private-apis polyfill's allowlist, so the block editor loads where the polyfill replaces Core's private-apis. [#51701]
+- Replace Gutenberg's widget-primitives script module with the bundled one when the active Gutenberg predates 23.9.0, so dashboards built on widget-dashboard 0.6 load. [#51701]
+
+## [0.5.1] - 2026-09-01
+### Changed
+- Update package dependencies. [#51303] [#51802]
+
+### Fixed
+- Continue the wp-admin menu color behind the boot page frame on WordPress.com and third-party admin color schemes. [#51619]
+- Keep the page header and content in view when the wp-admin menu is taller than the window. [#51696]
+
+## [0.5.0] - 2026-08-26
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+## [0.4.0] - 2026-08-10
+### Added
+- Add a script module polyfill for @wordpress/widget-primitives. [#50509]
+
+### Changed
+- Update package dependencies. [#50509]
+
+## [0.3.0] - 2026-08-03
+### Added
+- Add a build-time export-contract check that fails the build when a polyfilled package imports a symbol the shipped version of another polyfilled package does not export — the Jetpack 16.0 blank-dashboard failure mode. [#50676]
+- Add a stamp-textdomains post-build tool and a shared loadI18nCatalogs helper for translating wp-build dashboard JavaScript. strip-unminified-prod now replaces string-bearing unminified bundles with i18n reference stubs instead of deleting them, so string extraction keeps working on production builds. [#50762]
+- Add a wp-rich-text polyfill: replace core's rich-text on WordPress 7.0 and older, where it lacks the private APIs newer dashboard dependencies unlock at load time. Replaced core scripts now keep their footer placement and translations. [#50908]
+
+### Fixed
+- Free a stalled translation-catalog download's concurrency slot so queued downloads still run. [#50950]
+- Throttle translation catalog downloads and stop requesting widget catalogs at boot — they now load on demand via loadBundleI18nCatalog(). [#50904]
+
+## [0.2.5] - 2026-07-27
+### Changed
+- Update package dependencies. [#50751]
+
+## [0.2.4] - 2026-07-22
+### Changed
+- Update dependencies.
+
+## [0.2.3] - 2026-07-20
+### Changed
+- Update dependencies. [#50551]
+- Update package dependencies. [#50529]
+
+## [0.2.2] - 2026-07-13
+### Changed
+- Update dependencies.
+
+## [0.2.1] - 2026-07-09
+### Changed
+- Update package dependencies. [#49272]
+
+## [0.2.0] - 2026-07-06
+### Changed
+- Update package dependencies. [#50097] [#50183]
+
+### Fixed
+- Strip unminified JS from widgets. [#50130]
+
+## [0.1.18] - 2026-06-26
+### Changed
+- Update package dependencies. [#49271]
+
+## [0.1.17] - 2026-06-25
+### Changed
+- Pin `@wordpress/private-apis` to an exact version instead of the floating `next` tag. [#49838]
+
+## [0.1.16] - 2026-06-23
+### Fixed
+- Private APIs: Keep the private APIs polyfill active through WordPress 7.0 and older Gutenberg versions. [#49793]
+- Private APIs: Track the @next private-apis release so the bundled allowlist covers newer dashboard packages such as @wordpress/widget-dashboard. [#49793]
+
+## [0.1.15] - 2026-06-22
+### Changed
+- Update package dependencies. [#49631] [#49691] [#49757]
+
+## [0.1.14] - 2026-06-15
+### Changed
+- Internal updates.
+
+## [0.1.13] - 2026-06-09
+### Changed
+- Update package dependencies. [#49273]
+
+## [0.1.12] - 2026-06-08
+### Changed
+- Update dependencies. [#49354]
+
+## [0.1.11] - 2026-06-01
+### Changed
+- Update package dependencies. [#48404] [#49152]
+
+## [0.1.10] - 2026-05-25
+### Changed
+- Update package dependencies. [#48405]
+
+## [0.1.9] - 2026-05-19
+### Fixed
+- Fix notices loading on older WordPress versions by bundling a compatibility helper for newer `@wordpress/notices` dependencies. [#48743]
+
+## [0.1.8] - 2026-05-14
+### Changed
+- Update dependencies. [#48778]
+
+## [0.1.7] - 2026-05-11
+### Changed
+- Build: Update @wordpress/admin-ui to 2.0.0. [#48410]
+
+## [0.1.6] - 2026-05-04
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
+## [0.1.5] - 2026-04-20
+### Changed
+- Update package dependencies. [#48106] [#48141]
+
 ## [0.1.4] - 2026-04-15
 ### Changed
 - Update package dependencies. [#47907]
@@ -35,6 +225,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Add @wordpress/ui to devDependencies so the boot module bundles it instead of externalizing it as an unregistered wp-ui script handle, which caused a blank page at runtime. [#47727]
 
+[0.7.2]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.7.1...v0.7.2
+[0.7.1]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.7.0...v0.7.1
+[0.7.0]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.6.5...v0.7.0
+[0.6.5]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.6.4...v0.6.5
+[0.6.4]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.6.3...v0.6.4
+[0.6.3]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.6.2...v0.6.3
+[0.6.2]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.6.1...v0.6.2
+[0.6.1]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.6.0...v0.6.1
+[0.6.0]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.8...v0.6.0
+[0.5.8]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.7...v0.5.8
+[0.5.7]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.6...v0.5.7
+[0.5.6]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.5...v0.5.6
+[0.5.5]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.4...v0.5.5
+[0.5.4]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.3...v0.5.4
+[0.5.3]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.2...v0.5.3
+[0.5.2]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.1...v0.5.2
+[0.5.1]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.5.0...v0.5.1
+[0.5.0]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.4.0...v0.5.0
+[0.4.0]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.2.5...v0.3.0
+[0.2.5]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.2.4...v0.2.5
+[0.2.4]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.2.3...v0.2.4
+[0.2.3]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.2.2...v0.2.3
+[0.2.2]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.2.1...v0.2.2
+[0.2.1]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.2.0...v0.2.1
+[0.2.0]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.18...v0.2.0
+[0.1.18]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.17...v0.1.18
+[0.1.17]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.16...v0.1.17
+[0.1.16]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.15...v0.1.16
+[0.1.15]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.14...v0.1.15
+[0.1.14]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.13...v0.1.14
+[0.1.13]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.12...v0.1.13
+[0.1.12]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.11...v0.1.12
+[0.1.11]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.10...v0.1.11
+[0.1.10]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.9...v0.1.10
+[0.1.9]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.8...v0.1.9
+[0.1.8]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.7...v0.1.8
+[0.1.7]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.6...v0.1.7
+[0.1.6]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.5...v0.1.6
+[0.1.5]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.4...v0.1.5
 [0.1.4]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.3...v0.1.4
 [0.1.3]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.2...v0.1.3
 [0.1.2]: https://github.com/Automattic/jetpack-wp-build-polyfills/compare/v0.1.1...v0.1.2

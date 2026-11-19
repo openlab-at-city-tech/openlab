@@ -1,0 +1,240 @@
+<?php
+/**
+ * Widget Types API: Widget_Type class.
+ *
+ * Premium Analytics ships its own copy of the dashboard widget-type registry
+ * (the core/Gutenberg version lives behind an experimental flag and is not
+ * available in stable WordPress). PA-namespaced so it never collides with a
+ * future core API.
+ *
+ * @package automattic/jetpack-premium-analytics
+ */
+
+namespace Automattic\Jetpack\PremiumAnalytics;
+
+/**
+ * Represents a single dashboard widget type.
+ *
+ * Holds the metadata for a widget discovered by the build pipeline. Stored
+ * inside Widget_Type_Registry once registered, and consumed by host code that
+ * needs to enumerate or look up widget types.
+ *
+ * The shape is intentionally minimal: identity (`name`) plus the script-module
+ * handles the build pipeline produced for the widget. Placement and host
+ * concerns (which page or sidebar uses the widget) live with the consumer, not
+ * on the type definition.
+ */
+#[\AllowDynamicProperties]
+class Widget_Type {
+
+	/**
+	 * Allowed values for the `presentation` field. Treated as the single
+	 * source of truth across the registry, REST response, and any consumer
+	 * that needs to validate or enumerate the set.
+	 */
+	const PRESENTATION_VALUES = array( 'framed', 'content-bleed', 'full-bleed' );
+
+	/**
+	 * Widget type key. Namespaced identifier, e.g. `jpa/hello-world`.
+	 *
+	 * @var string
+	 */
+	public $name;
+
+	/**
+	 * Script-module handle for the widget render module.
+	 *
+	 * Null when the widget folder did not ship a render entry point at build
+	 * time.
+	 *
+	 * @var string|null
+	 */
+	public $render_module = null;
+
+	/**
+	 * Script-module handle for the widget metadata module.
+	 *
+	 * Null when the widget folder did not ship a widget entry point at build
+	 * time.
+	 *
+	 * @var string|null
+	 */
+	public $widget_module = null;
+
+	/**
+	 * Authoring intent about how the widget wants to render. Static and
+	 * declarative; not a user-editable attribute.
+	 *
+	 * One of {@see self::PRESENTATION_VALUES} (first entry is the default).
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var string|null
+	 */
+	public $presentation = null;
+
+	/**
+	 * Widget types are grouped into categories to help users browse and
+	 * discover them. Static and declarative; not a user-editable attribute.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var string|null
+	 */
+	public $category = null;
+
+	/**
+	 * Human-readable title that names the widget type. Translated
+	 * at registration time using the widget's text domain.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var string|null
+	 */
+	public $title = null;
+
+	/**
+	 * Human-readable description of what the widget type does.
+	 * Translated at registration time using the widget's text domain.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var string|null
+	 */
+	public $description = null;
+
+	/**
+	 * Contextual help note: `content` plus optional `links`.
+	 * Translated at registration time using the widget's text domain.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var array|null
+	 */
+	public $help = null;
+
+	/**
+	 * Registered icon name (`collection/icon-name`), resolved on the client
+	 * through the application's icon resolver.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var string|null
+	 */
+	public $icon = null;
+
+	/**
+	 * Declarative actions the widget exposes. Each entry carries `id`,
+	 * `label`, `href`, and optional `download`/`openInNewTab`/`icon`/
+	 * `relevance`. Labels are translated at registration time using the
+	 * widget's text domain.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var array|null
+	 */
+	public $actions = null;
+
+	/**
+	 * Attribute schema, one entry per setting of a widget instance: a DataViews
+	 * field in its JSON form, plus the keys the dashboard reads on top of a
+	 * field (`relevance`, so far). User-facing strings are translated at
+	 * registration time using the widget's text domain.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @var array|null
+	 */
+	public $attributes = null;
+
+	/**
+	 * Alternative terms used to match the widget type when searching,
+	 * e.g. "calendar" for an events widget. Translated at registration
+	 * time using the widget's text domain.
+	 *
+	 * Null when the widget did not declare the field.
+	 *
+	 * @var string[]|null
+	 */
+	public $keywords = null;
+
+	/**
+	 * Text domain the widget's metadata strings and built bundles are registered under.
+	 *
+	 * @since 0.9.0
+	 *
+	 * @var string|null
+	 */
+	public $textdomain = null;
+
+	/**
+	 * URL of the i18n manifest of the build that serves the widget's modules, for the client to
+	 * load their translation catalogs from. Empty for a build whose init module runs on the
+	 * dashboard page, which is the package's own.
+	 *
+	 * @since 0.9.0
+	 *
+	 * @var string|null
+	 */
+	public $i18n_manifest = null;
+
+	/**
+	 * Names this widget type registered under before the current one, so a layout persisted
+	 * with an old name keeps rendering it. Null when the type was never renamed.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @var string[]|null
+	 */
+	public $former_names = null;
+
+	/**
+	 * Plan feature the widget cannot show anything without, such as `videos`. A plan that lacks
+	 * it shows the widget locked. Null when every plan includes the widget.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @var string|null
+	 */
+	public $plan_feature = null;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param string $name Widget type name including namespace.
+	 * @param array  $args Optional. Widget type arguments. Each key is copied
+	 *                     onto the corresponding object property. Default empty
+	 *                     array.
+	 */
+	public function __construct( $name, $args = array() ) {
+		$this->name = $name;
+		$this->set_props( $args );
+	}
+
+	/**
+	 * Returns whether this widget type ships a renderable script module.
+	 *
+	 * @return bool
+	 */
+	public function is_renderable() {
+		return ! empty( $this->render_module );
+	}
+
+	/**
+	 * Hydrates the widget type properties from the args array.
+	 *
+	 * @param array $args Widget type arguments.
+	 */
+	public function set_props( $args ) {
+		if ( ! is_array( $args ) ) {
+			return;
+		}
+
+		unset( $args['name'] );
+
+		foreach ( $args as $property_name => $property_value ) {
+			$this->$property_name = $property_value;
+		}
+	}
+}

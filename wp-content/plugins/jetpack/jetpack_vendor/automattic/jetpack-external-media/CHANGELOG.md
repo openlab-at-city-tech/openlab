@@ -5,6 +5,158 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.12] - 2026-11-02
+### Changed
+- Update package dependencies. [#53869]
+
+## [0.9.11] - 2026-10-28
+### Changed
+- Google Photos: Use @wordpress/ui components for the connection, picker and album views. [#54097]
+- Update package dependencies. [#54118]
+
+## [0.9.10] - 2026-10-26
+### Removed
+- Google Photos: Remove the unused filters for the legacy, non-picker view. [#54046]
+
+## [0.9.9] - 2026-10-19
+### Changed
+- Update dependencies. [#53618]
+- Update package dependencies. [#53004]
+
+## [0.9.8] - 2026-10-12
+### Changed
+- Update dependencies. [#53250]
+
+### Fixed
+- Google Photos: Show a reconnect prompt when the Google connection is rejected, explain when the Google account has no Google Photos set up, and start a new picker session when the saved one no longer exists. [#53303]
+
+## [0.9.7] - 2026-10-05
+### Changed
+- Update package dependencies. [#52955] [#52999]
+
+### Fixed
+- Google Photos: Show an error with a retry option when the picker cannot be opened, instead of loading indefinitely. [#53076]
+- Make the featured image picker fill the full width of the sidebar. [#52888]
+
+## [0.9.6] - 2026-09-29
+### Changed
+- Update dependencies.
+
+## [0.9.5] - 2026-09-28
+### Fixed
+- Fix the width of the Select Media button in narrow block placeholders, such as the Media & Text block. [#52631]
+
+## [0.9.4] - 2026-09-21
+### Changed
+- Update package dependencies. [#52187]
+
+### Fixed
+- Rename the `mediaSource` Tracks prop to `media_source` so the event is no longer rejected at ingest. [#52415]
+
+## [0.9.3] - 2026-09-15
+### Changed
+- Update dependencies. [#52269]
+
+## [0.9.2] - 2026-09-09
+### Changed
+- Update dependencies.
+
+## [0.9.1] - 2026-09-08
+### Changed
+- Update package dependencies. [#51701]
+
+## [0.9.0] - 2026-09-01
+### Changed
+- Update package dependencies. [#51303] [#51802]
+
+### Removed
+- Minimum supported PHP version is now 7.4. [#51515]
+
+## [0.8.30] - 2026-08-20
+### Changed
+- Update package dependencies. [#50509]
+
+## [0.8.29] - 2026-08-03
+### Changed
+- Update dependencies.
+
+## [0.8.28] - 2026-07-27
+### Changed
+- Update dependencies. [#50719]
+- Update package dependencies. [#50751]
+
+## [0.8.27] - 2026-07-20
+### Changed
+- Update package dependencies. [#50510] [#50529]
+
+## [0.8.26] - 2026-07-13
+### Changed
+- Update package dependencies. [#49272]
+
+## [0.8.25] - 2026-07-06
+### Changed
+- Update package dependencies. [#50097] [#50183]
+
+## [0.8.24] - 2026-06-29
+### Changed
+- Internal updates.
+
+## [0.8.23] - 2026-06-25
+### Changed
+- Update package dependencies. [#49831]
+
+## [0.8.22] - 2026-06-22
+### Changed
+- Update package dependencies. [#49631] [#49691] [#49757]
+
+## [0.8.21] - 2026-06-15
+### Changed
+- Update package dependencies. [#49273]
+
+## [0.8.20] - 2026-06-08
+### Changed
+- Update dependencies. [#49354]
+
+## [0.8.19] - 2026-06-01
+### Changed
+- Update package dependencies. [#48404]
+
+## [0.8.18] - 2026-05-25
+### Changed
+- Update package dependencies. [#48405]
+
+## [0.8.17] - 2026-05-19
+### Changed
+- Exclude development files from production builds. [#47365]
+- Update dependencies. [#48778]
+
+## [0.8.16] - 2026-05-11
+### Changed
+- Update dependencies.
+
+## [0.8.15] - 2026-05-04
+### Changed
+- Internal: No longer require automattic/jetpack-changelogger as a per-project dev dependency. [#48225]
+
+## [0.8.14] - 2026-04-27
+### Changed
+- Update dependencies.
+
+## [0.8.13] - 2026-04-20
+### Changed
+- Update package dependencies. [#48106] [#48141]
+
+## [0.8.12] - 2026-04-15
+### Changed
+- Update package dependencies. [#47907]
+
+### Fixed
+- Media Library: Fix Import Media button styling for WordPress 7.0. [#48083]
+
+## [0.8.11] - 2026-04-13
+### Changed
+- Update package dependencies. [#47890]
+
 ## [0.8.10] - 2026-04-06
 ### Changed
 - Update package dependencies. [#47899]
@@ -14,7 +166,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.9] - 2026-03-30
 ### Changed
-- Update dependencies. [#47038]
+- Update dependencies.
 
 ## [0.8.8] - 2026-03-23
 ### Changed
@@ -31,7 +183,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.8.5] - 2026-03-02
 ### Changed
-- Update dependencies. [#47038]
+- Update dependencies.
 
 ## [0.8.4] - 2026-02-26
 ### Changed
@@ -76,7 +228,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.7.2] - 2026-01-06
 ### Changed
-- Update dependencies. [#46383]
+- Update dependencies.
 
 ## [0.7.1] - 2025-12-22
 ### Changed
@@ -103,7 +255,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.12] - 2025-11-18
 ### Changed
-- Update dependencies. [#45553]
+- Update dependencies.
 
 ## [0.5.11] - 2025-11-17
 ### Changed
@@ -111,7 +263,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.10] - 2025-11-10
 ### Changed
-- Update dependencies. [#45553]
+- Update dependencies.
 
 ## [0.5.9] - 2025-11-03
 ### Changed
@@ -132,7 +284,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.5] - 2025-09-29
 ### Changed
-- Update dependencies. [#44940]
+- Update dependencies.
 
 ## [0.5.4] - 2025-09-22
 ### Fixed
@@ -144,7 +296,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.5.2] - 2025-09-15
 ### Changed
-- Update dependencies. [#44940]
+- Update dependencies.
 
 ## [0.5.1] - 2025-09-08
 ### Changed
@@ -192,11 +344,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.4.2] - 2025-06-30
 ### Changed
-- Update dependencies. [#43971]
+- Update dependencies.
 
 ## [0.4.1] - 2025-06-24
 ### Changed
-- Update dependencies. [#43971]
+- Update dependencies.
 
 ## [0.4.0] - 2025-06-23
 ### Changed
@@ -225,7 +377,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.3.9] - 2025-05-15
 ### Changed
-- Update dependencies. [#42943]
+- Update dependencies.
 
 ## [0.3.8] - 2025-05-12
 ### Changed
@@ -319,6 +471,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix the button size in the editor for Gutenberg 18 or below. [#41619]
 - Media Library: Fix the Import Media button color in some color schemes. [#41664]
 
+[0.9.12]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.11...v0.9.12
+[0.9.11]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.10...v0.9.11
+[0.9.10]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.9...v0.9.10
+[0.9.9]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.8...v0.9.9
+[0.9.8]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.7...v0.9.8
+[0.9.7]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.6...v0.9.7
+[0.9.6]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.5...v0.9.6
+[0.9.5]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.4...v0.9.5
+[0.9.4]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.3...v0.9.4
+[0.9.3]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.2...v0.9.3
+[0.9.2]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.1...v0.9.2
+[0.9.1]: https://github.com/Automattic/jetpack-external-media/compare/v0.9.0...v0.9.1
+[0.9.0]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.30...v0.9.0
+[0.8.30]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.29...v0.8.30
+[0.8.29]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.28...v0.8.29
+[0.8.28]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.27...v0.8.28
+[0.8.27]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.26...v0.8.27
+[0.8.26]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.25...v0.8.26
+[0.8.25]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.24...v0.8.25
+[0.8.24]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.23...v0.8.24
+[0.8.23]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.22...v0.8.23
+[0.8.22]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.21...v0.8.22
+[0.8.21]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.20...v0.8.21
+[0.8.20]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.19...v0.8.20
+[0.8.19]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.18...v0.8.19
+[0.8.18]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.17...v0.8.18
+[0.8.17]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.16...v0.8.17
+[0.8.16]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.15...v0.8.16
+[0.8.15]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.14...v0.8.15
+[0.8.14]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.13...v0.8.14
+[0.8.13]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.12...v0.8.13
+[0.8.12]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.11...v0.8.12
+[0.8.11]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.10...v0.8.11
 [0.8.10]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.9...v0.8.10
 [0.8.9]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.8...v0.8.9
 [0.8.8]: https://github.com/Automattic/jetpack-external-media/compare/v0.8.7...v0.8.8

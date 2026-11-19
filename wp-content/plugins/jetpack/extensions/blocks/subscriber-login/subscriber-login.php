@@ -30,8 +30,12 @@ require_once __DIR__ . '/class-jetpack-subscription-site.php';
  * registration if we need to.
  */
 function register_block() {
+	if ( ! Jetpack::is_module_active( 'subscriptions' ) ) {
+		Jetpack_Gutenberg::set_extension_unavailable( 'subscriber-login', 'missing_module', array( 'module' => 'subscriptions' ) );
+		return;
+	}
+
 	if (
-		! Jetpack::is_module_active( 'subscriptions' ) ||
 		! class_exists( 'Jetpack_Memberships' ) ||
 		! class_exists( 'Automattic\Jetpack\Extensions\Premium_Content\Subscription_Service\Abstract_Token_Subscription_Service' )
 	) {
@@ -94,9 +98,14 @@ function get_subscriber_login_url( $redirect ) {
 		return wpcom_logmein_redirect_url( $redirect, false, null, 'link', get_current_blog_id() );
 	}
 
-	// On self-hosted we will save and hide the token
+	// On self-hosted we will save and hide the token.
+	// rawurlencode the redirect before nesting it: it is already percent-encoded
+	// (e.g. an emoji or non-ASCII slug comes through as %F0%9F%8C%91), and add_query_arg
+	// does not encode the values it inserts. Without this extra layer the value is
+	// over-decoded to raw bytes by the time it reaches the subscribers/auth endpoint,
+	// which strips it and 404s. See NL-273.
 	$redirect_url = get_site_url() . '/wp-json/jetpack/v4/subscribers/auth';
-	$redirect_url = add_query_arg( 'redirect_url', $redirect, $redirect_url );
+	$redirect_url = add_query_arg( 'redirect_url', rawurlencode( $redirect ), $redirect_url );
 
 	return add_query_arg(
 		array(
@@ -108,12 +117,15 @@ function get_subscriber_login_url( $redirect ) {
 }
 
 /**
- * Determines whether the current visitor is a logged in user or a subscriber.
+ * Determines whether the visitor has a subscriber session for the login UI.
+ *
+ * WordPress sessions count on Simple; other hosts require the subscriber cookie.
+ * Content access validates the token separately.
  *
  * @return bool
  */
 function is_subscriber_logged_in() {
-	return is_user_logged_in() || Abstract_Token_Subscription_Service::has_token_from_cookie();
+	return ( ( new Host() )->is_wpcom_simple() && is_user_logged_in() ) || Abstract_Token_Subscription_Service::has_token_from_cookie();
 }
 
 /**

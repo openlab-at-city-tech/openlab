@@ -84,7 +84,7 @@ class Jetpack_Media_Meta_Extractor {
 			$extracted = self::get_image_fields( $post, array(), $extract_alt_text );
 
 			// Turn off images so we can safely call extract_from_content() below.
-			$what_to_extract = $what_to_extract - self::IMAGES;
+			$what_to_extract -= self::IMAGES;
 		}
 
 		if ( function_exists( 'restore_current_blog' ) ) {
@@ -160,8 +160,20 @@ class Jetpack_Media_Meta_Extractor {
 
 		// Always look for shortcodes.
 		// If we don't want them, we'll just remove them, so we don't grab them as links below.
-		$shortcode_pattern = '/' . get_shortcode_regex() . '/s';
-		if ( preg_match_all( $shortcode_pattern, $content, $matches ) ) {
+		// Limit the regex to tags in the content as `do_shortcode()` does; otherwise the regex can get too big.
+		// See also: https://github.com/WordPress/wordpress-develop/blob/7.1.3/src/wp-includes/shortcodes.php#L255-L272
+		global $shortcode_tags;
+		$shortcode_pattern = null;
+		if ( str_contains( $content, '[' ) && ! empty( $shortcode_tags ) && is_array( $shortcode_tags ) ) {
+			// Find all registered tag names in $content.
+			preg_match_all( '@\[([^<>&/\[\]\x00-\x20=]++)@', $content, $matches );
+			$tagnames = array_intersect( array_keys( $shortcode_tags ), $matches[1] );
+
+			if ( ! empty( $tagnames ) ) {
+				$shortcode_pattern = '/' . get_shortcode_regex( $tagnames ) . '/s';
+			}
+		}
+		if ( $shortcode_pattern && preg_match_all( $shortcode_pattern, $content, $matches ) ) {
 
 			$shortcode_total_count = 0;
 			$shortcode_type_counts = array();
@@ -349,7 +361,11 @@ class Jetpack_Media_Meta_Extractor {
 
 					// Check whether this "link" is really an embed.
 					foreach ( $oembed->providers as $matchmask => $data ) {
-						list( $providerurl, $regex ) = $data; // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+						// Guard against malformed oEmbed providers.
+						if ( ! isset( $data[0] ) ) {
+							continue;
+						}
+						$regex = $data[1] ?? false;
 
 						// Turn the asterisk-type provider URLs into regex.
 						if ( ! $regex ) {
