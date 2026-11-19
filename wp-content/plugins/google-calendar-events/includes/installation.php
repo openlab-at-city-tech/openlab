@@ -34,8 +34,14 @@ class Installation
 		self::create_terms();
 		self::create_options();
 
+		if (function_exists('simcal_apply_connect_defaults_on_plugin_event')) {
+			simcal_apply_connect_defaults_on_plugin_event();
+		}
+		// Flag to redirect to the Connect page on first admin load after activation.
+		update_option('simple-calendar_redirect_to_connect', 1);
+
 		// Clear cache on activation.
-		simcal_delete_feed_transients();
+		simcal_delete_plugin_transients();
 
 		do_action('simcal_activated');
 	}
@@ -49,6 +55,9 @@ class Installation
 	{
 		flush_rewrite_rules();
 
+		include_once 'functions/shared.php';
+		simcal_delete_plugin_transients();
+
 		do_action('simcal_deactivated');
 	}
 
@@ -60,7 +69,7 @@ class Installation
 	public static function create_terms()
 	{
 		$taxonomies = [
-			'calendar_feed' => ['google', 'grouped-calendar'],
+			'calendar_feed' => ['google', 'grouped-calendar', 'ics-feed', 'sc-event'],
 			'calendar_type' => ['default-calendar'],
 		];
 

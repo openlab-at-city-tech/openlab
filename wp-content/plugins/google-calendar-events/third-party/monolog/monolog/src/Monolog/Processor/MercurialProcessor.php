@@ -11,39 +11,41 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
-use SimpleCalendar\plugin_deps\Monolog\Level;
 use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Injects Hg branch and Hg revision number in all records
  *
  * @author Jonathan A. Schweder <jonathanschweder@gmail.com>
+ *
+ * @phpstan-import-type LevelName from \Monolog\Logger
+ * @phpstan-import-type Level from \Monolog\Logger
  */
 class MercurialProcessor implements ProcessorInterface
 {
-    private Level $level;
+    /** @var Level */
+    private $level;
     /** @var array{branch: string, revision: string}|array<never>|null */
     private static $cache = null;
     /**
-     * @param int|string|Level $level The minimum logging level at which this Processor will be triggered
+     * @param int|string $level The minimum logging level at which this Processor will be triggered
      *
-     * @phpstan-param value-of<Level::VALUES>|value-of<Level::NAMES>|Level|LogLevel::* $level
+     * @phpstan-param Level|LevelName|LogLevel::* $level
      */
-    public function __construct(int|string|Level $level = Level::Debug)
+    public function __construct($level = Logger::DEBUG)
     {
         $this->level = Logger::toMonologLevel($level);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function __invoke(LogRecord $record): LogRecord
+    public function __invoke(array $record): array
     {
         // return if the level is not high enough
-        if ($record->level->isLowerThan($this->level)) {
+        if ($record['level'] < $this->level) {
             return $record;
         }
-        $record->extra['hg'] = self::getMercurialInfo();
+        $record['extra']['hg'] = self::getMercurialInfo();
         return $record;
     }
     /**
@@ -51,15 +53,12 @@ class MercurialProcessor implements ProcessorInterface
      */
     private static function getMercurialInfo(): array
     {
-        if (self::$cache !== null) {
+        if (self::$cache) {
             return self::$cache;
         }
         $result = explode(' ', trim((string) shell_exec('hg id -nb')));
-        if (\count($result) >= 3) {
+        if (count($result) >= 3) {
             return self::$cache = ['branch' => $result[1], 'revision' => $result[2]];
-        }
-        if (\count($result) === 2) {
-            return self::$cache = ['branch' => $result[1], 'revision' => $result[0]];
         }
         return self::$cache = [];
     }

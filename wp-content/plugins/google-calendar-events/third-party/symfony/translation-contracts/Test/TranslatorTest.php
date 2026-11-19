@@ -10,10 +10,7 @@
  */
 namespace SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\Test;
 
-use SimpleCalendar\plugin_deps\PHPUnit\Framework\Attributes\DataProvider;
-use SimpleCalendar\plugin_deps\PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use SimpleCalendar\plugin_deps\PHPUnit\Framework\TestCase;
-use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatableMessage;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorTrait;
 /**
@@ -31,7 +28,7 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorTrait;
  */
 class TranslatorTest extends TestCase
 {
-    private string $defaultLocale;
+    private $defaultLocale;
     protected function setUp(): void
     {
         $this->defaultLocale = \Locale::getDefault();
@@ -41,7 +38,10 @@ class TranslatorTest extends TestCase
     {
         \Locale::setDefault($this->defaultLocale);
     }
-    public function getTranslator(): TranslatorInterface
+    /**
+     * @return TranslatorInterface
+     */
+    public function getTranslator()
     {
         return new class implements TranslatorInterface
         {
@@ -51,7 +51,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider getTransTests
      */
-    #[DataProvider('getTransTests')]
     public function testTrans($expected, $id, $parameters)
     {
         $translator = $this->getTranslator();
@@ -60,7 +59,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider getTransChoiceTests
      */
-    #[DataProvider('getTransChoiceTests')]
     public function testTransChoiceWithExplicitLocale($expected, $id, $number)
     {
         $translator = $this->getTranslator();
@@ -71,8 +69,6 @@ class TranslatorTest extends TestCase
      *
      * @dataProvider getTransChoiceTests
      */
-    #[DataProvider('getTransChoiceTests')]
-    #[RequiresPhpExtension('intl')]
     public function testTransChoiceWithDefaultLocale($expected, $id, $number)
     {
         $translator = $this->getTranslator();
@@ -81,7 +77,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider getTransChoiceTests
      */
-    #[DataProvider('getTransChoiceTests')]
     public function testTransChoiceWithEnUsPosix($expected, $id, $number)
     {
         $translator = $this->getTranslator();
@@ -96,7 +91,6 @@ class TranslatorTest extends TestCase
     /**
      * @requires extension intl
      */
-    #[RequiresPhpExtension('intl')]
     public function testGetLocaleReturnsDefaultLocaleIfNotSet()
     {
         $translator = $this->getTranslator();
@@ -107,11 +101,7 @@ class TranslatorTest extends TestCase
     }
     public static function getTransTests()
     {
-        yield ['Symfony is great!', 'Symfony is great!', []];
-        yield ['Symfony is awesome!', 'Symfony is %what%!', ['%what%' => 'awesome']];
-        if (class_exists(TranslatableMessage::class)) {
-            yield ['He said "Symfony is awesome!".', 'He said "%what%".', ['%what%' => new TranslatableMessage('Symfony is %what%!', ['%what%' => 'awesome'])]];
-        }
+        return [['Symfony is great!', 'Symfony is great!', []], ['Symfony is awesome!', 'Symfony is %what%!', ['%what%' => 'awesome']]];
     }
     public static function getTransChoiceTests()
     {
@@ -129,7 +119,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider getInterval
      */
-    #[DataProvider('getInterval')]
     public function testInterval($expected, $number, $interval)
     {
         $translator = $this->getTranslator();
@@ -142,7 +131,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider getChooseTests
      */
-    #[DataProvider('getChooseTests')]
     public function testChoose($expected, $id, $number, $locale = null)
     {
         $translator = $this->getTranslator();
@@ -156,11 +144,10 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider getNonMatchingMessages
      */
-    #[DataProvider('getNonMatchingMessages')]
     public function testThrowExceptionIfMatchingMessageCannotBeFound($id, $number)
     {
-        $translator = $this->getTranslator();
         $this->expectException(\InvalidArgumentException::class);
+        $translator = $this->getTranslator();
         $translator->trans($id, ['%count%' => $number]);
     }
     public static function getNonMatchingMessages()
@@ -251,7 +238,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider failingLangcodes
      */
-    #[DataProvider('failingLangcodes')]
     public function testFailedLangcodes($nplural, $langCodes)
     {
         $matrix = $this->generateTestData($langCodes);
@@ -260,7 +246,6 @@ class TranslatorTest extends TestCase
     /**
      * @dataProvider successLangcodes
      */
-    #[DataProvider('successLangcodes')]
     public function testLangcodes($nplural, $langCodes)
     {
         $matrix = $this->generateTestData($langCodes);
@@ -270,8 +255,10 @@ class TranslatorTest extends TestCase
      * This array should contain all currently known langcodes.
      *
      * As it is impossible to have this ever complete we should try as hard as possible to have it almost complete.
+     *
+     * @return array
      */
-    public static function successLangcodes(): array
+    public static function successLangcodes()
     {
         return [['1', ['ay', 'bo', 'cgg', 'dz', 'id', 'ja', 'jbo', 'ka', 'kk', 'km', 'ko', 'ky']], ['2', ['nl', 'fr', 'en', 'de', 'de_GE', 'hy', 'hy_AM', 'en_US_POSIX']], ['3', ['be', 'bs', 'cs', 'hr']], ['4', ['cy', 'mt', 'sl']], ['6', ['ar']]];
     }
@@ -283,24 +270,25 @@ class TranslatorTest extends TestCase
      *
      * @return array with nplural together with langcodes
      */
-    public static function failingLangcodes(): array
+    public static function failingLangcodes()
     {
         return [['1', ['fa']], ['2', ['jbo']], ['3', ['cbs']], ['4', ['gd', 'kw']], ['5', ['ga']]];
     }
     /**
      * We validate only on the plural coverage. Thus the real rules is not tested.
      *
-     * @param string $nplural Plural expected
-     * @param array  $matrix  Containing langcodes and their plural index values
+     * @param string $nplural       Plural expected
+     * @param array  $matrix        Containing langcodes and their plural index values
+     * @param bool   $expectSuccess
      */
-    protected function validateMatrix(string $nplural, array $matrix, bool $expectSuccess = \true)
+    protected function validateMatrix($nplural, $matrix, $expectSuccess = \true)
     {
         foreach ($matrix as $langCode => $data) {
             $indexes = array_flip($data);
             if ($expectSuccess) {
                 $this->assertCount($nplural, $indexes, "Langcode '{$langCode}' has '{$nplural}' plural forms.");
             } else {
-                $this->assertNotCount($nplural, $indexes, "Langcode '{$langCode}' has '{$nplural}' plural forms.");
+                $this->assertNotEquals((int) $nplural, \count($indexes), "Langcode '{$langCode}' has '{$nplural}' plural forms.");
             }
         }
     }

@@ -21,30 +21,17 @@ class PermissionList extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'permissions';
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#permissionList"`.
-     *
      * @var string
      */
     public $kind;
     /**
-     * The page token for the next page of permissions. This field will be absent
-     * if the end of the permissions list has been reached. If the token is
-     * rejected for any reason, it should be discarded, and pagination should be
-     * restarted from the first page of results. The page token is typically valid
-     * for several hours. However, if new items are added or removed, your
-     * expected results might differ.
-     *
      * @var string
      */
     public $nextPageToken;
     protected $permissionsType = Permission::class;
     protected $permissionsDataType = 'array';
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#permissionList"`.
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -58,14 +45,7 @@ class PermissionList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * The page token for the next page of permissions. This field will be absent
-     * if the end of the permissions list has been reached. If the token is
-     * rejected for any reason, it should be discarded, and pagination should be
-     * restarted from the first page of results. The page token is typically valid
-     * for several hours. However, if new items are added or removed, your
-     * expected results might differ.
-     *
-     * @param string $nextPageToken
+     * @param string
      */
     public function setNextPageToken($nextPageToken)
     {
@@ -79,10 +59,7 @@ class PermissionList extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->nextPageToken;
     }
     /**
-     * The list of permissions. If `nextPageToken` is populated, then this list
-     * may be incomplete and an additional page of results should be fetched.
-     *
-     * @param Permission[] $permissions
+     * @param Permission[]
      */
     public function setPermissions($permissions)
     {

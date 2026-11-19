@@ -28,15 +28,6 @@ use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
 use LogicException;
-/**
- * **IMPORTANT**:
- * This class does not validate the credential configuration. A security
- * risk occurs when a credential configuration configured with malicious urls
- * is used.
- * When the credential configuration is accepted from an
- * untrusted source, you should validate it before creating this class.
- * @see https://cloud.google.com/docs/authentication/external/externally-sourced-credentials
- */
 class ImpersonatedServiceAccountCredentials extends CredentialsLoader implements SignBlobInterface, GetUniverseDomainInterface
 {
     use CacheTrait;
@@ -74,10 +65,8 @@ class ImpersonatedServiceAccountCredentials extends CredentialsLoader implements
      *     @type string[]                       $delegates The delegates to impersonate
      * }
      * @param string|null $targetAudience The audience to request an ID token.
-     * @param string|string[]|null $defaultScope The scopes to be used if no "scopes" field exists
-     *                                           in the `$jsonKey`.
      */
-    public function __construct(string|array|null $scope, string|array $jsonKey, private ?string $targetAudience = null, string|array|null $defaultScope = null)
+    public function __construct(string|array|null $scope, string|array $jsonKey, private ?string $targetAudience = null)
     {
         if (is_string($jsonKey)) {
             if (!file_exists($jsonKey)) {
@@ -94,8 +83,6 @@ class ImpersonatedServiceAccountCredentials extends CredentialsLoader implements
         if (!array_key_exists('source_credentials', $jsonKey)) {
             throw new LogicException('json key is missing the source_credentials field');
         }
-        $jsonKeyScope = $jsonKey['scopes'] ?? null;
-        $scope = ($scope ?: $jsonKeyScope) ?: $defaultScope;
         if ($scope && $targetAudience) {
             throw new InvalidArgumentException('Scope and targetAudience cannot both be supplied');
         }
@@ -108,13 +95,7 @@ class ImpersonatedServiceAccountCredentials extends CredentialsLoader implements
                 // an ID token, the narrowest scope we can request is `iam`.
                 $scope = self::IAM_SCOPE;
             }
-            $jsonKey['source_credentials'] = match ($jsonKey['source_credentials']['type'] ?? null) {
-                // Do not pass $defaultScope to ServiceAccountCredentials
-                'service_account' => new ServiceAccountCredentials($scope, $jsonKey['source_credentials']),
-                'authorized_user' => new UserRefreshCredentials($scope, $jsonKey['source_credentials']),
-                'external_account' => new ExternalAccountCredentials($scope, $jsonKey['source_credentials']),
-                default => throw new \InvalidArgumentException('invalid value in the type field'),
-            };
+            $jsonKey['source_credentials'] = CredentialsLoader::makeCredentials($scope, $jsonKey['source_credentials']);
         }
         $this->targetScope = $scope ?? [];
         $this->lifetime = $jsonKey['lifetime'] ?? 3600;

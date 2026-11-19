@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../scss/admin-global.scss"],
+  "sourcesContent": ["/* Global admin styles used across wp-admin screens. */\n\n/* Admin menu \"New!\" badge for Connect submenu. */\n#adminmenu .sc_menu_badge_new {\n\tcolor: #f18200;\n\tfont-size: 10px;\n\tmargin-left: 3px;\n\tvertical-align: super;\n}\n/* edit post page styles */\n.simcal-settings-mask {\n\tposition: absolute;\n\ttop: 0;\n\tleft: 0;\n\tright: 0;\n\tbottom: 0;\n\tbackground: #00000099;\n\tbackdrop-filter: blur(10px);\n\t-webkit-backdrop-filter: blur(10px);\n\tdisplay: flex;\n\tflex-direction: column;\n\talign-items: center;\n\tjustify-content: center;\n\tgap: 20px;\n\tz-index: 10;\n}\n\n.simcal-settings-mask__message {\n\tfont-family: Poppins, sans-serif;\n\tfont-weight: 600;\n\tfont-size: 30px;\n\tline-height: 42px;\n\tletter-spacing: 0;\n\ttext-align: center;\n\tcolor: #ffffff;\n\tmargin: 0;\n\tpadding: 0 24px;\n}\n"],
+  "mappings": ";;;;;AAGA,CAAA,UAAA,CAAA,kBACC,MAAA,QACA,UAAA,KACA,YAAA,IACA,eAAA,MAGD,CAAA,qBACC,SAAA,SACA,MAAA,EAIA,WAAA,MACA,gBAAA,KAAA,MACA,wBAAA,KAAA,MACA,QAAA,KACA,eAAA,OACA,YAAA,OACA,gBAAA,OACA,IAAA,KACA,QAAA,GAGD,CAAA,8BACC,YAAA,OAAA,CAAA,WACA,YAAA,IACA,UAAA,KACA,YAAA,KACA,eAAA,EACA,WAAA,OACA,MAAA,KAlCD,OAmCC,EAnCD,QAoCC,EAAA",
+  "names": []
+}

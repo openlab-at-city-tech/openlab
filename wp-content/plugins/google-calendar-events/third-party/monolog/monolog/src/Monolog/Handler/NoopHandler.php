@@ -11,7 +11,6 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * No-op
  *
@@ -24,16 +23,16 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 class NoopHandler extends Handler
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function isHandling(LogRecord $record): bool
+    public function isHandling(array $record): bool
     {
         return \true;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function handle(LogRecord $record): bool
+    public function handle(array $record): bool
     {
         return \false;
     }

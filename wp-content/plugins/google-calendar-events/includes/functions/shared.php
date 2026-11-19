@@ -61,6 +61,154 @@ function simcal_get_url($url)
 }
 
 /**
+ * Whether any premium add-on has a valid, verified license.
+ *
+ * Used to gate free-plugin features such as removing the "Powered by" credit.
+ *
+ * @since 4.3.2
+ *
+ * @return bool
+ */
+function simcal_has_valid_addon_license()
+{
+	$has_valid = false;
+	$statuses = get_option('simple-calendar_licenses_status', []);
+
+	if (is_array($statuses)) {
+		foreach ($statuses as $status) {
+			if ('valid' === $status) {
+				$has_valid = true;
+				break;
+			}
+		}
+	}
+
+	/**
+	 * Filter whether a valid premium add-on license is active.
+	 *
+	 * @since 4.3.2
+	 *
+	 * @param bool $has_valid True when at least one add-on license status is "valid".
+	 */
+	return (bool) apply_filters('simcal_has_valid_addon_license', $has_valid);
+}
+
+/**
+ * UTC cutoff for mandatory Powered by behavior on new calendars.
+ *
+ * Calendars created on or after this date use the new rules; older calendars keep the previous optional setting.
+ *
+ * @since 4.3.2
+ *
+ * @return string MySQL datetime in UTC.
+ */
+function simcal_get_powered_by_cutoff_datetime()
+{
+	/**
+	 * Filter the Powered by feature cutoff datetime (UTC).
+	 *
+	 * @since 4.3.2
+	 *
+	 * @param string $datetime MySQL datetime string in UTC.
+	 */
+	return (string) apply_filters('simcal_powered_by_cutoff_datetime', '2026-11-10 00:00:00');
+}
+
+/**
+ * Whether a calendar was created on or after the Powered by cutoff.
+ *
+ * @since 4.3.2
+ *
+ * @param int $calendar_id Calendar post ID.
+ *
+ * @return bool
+ */
+function simcal_is_powered_by_cutoff_calendar($calendar_id)
+{
+	$calendar_id = absint($calendar_id);
+	$post = get_post($calendar_id);
+
+	if (!$post || 'calendar' !== $post->post_type) {
+		return false;
+	}
+
+	$gmt = $post->post_date_gmt;
+	if (empty($gmt) || '0000-00-00 00:00:00' === $gmt) {
+		$gmt = get_gmt_from_date($post->post_date);
+	}
+
+	$is_cutoff = $gmt >= simcal_get_powered_by_cutoff_datetime();
+
+	/**
+	 * Filter whether a calendar is subject to the Powered by cutoff rules.
+	 *
+	 * @since 4.3.2
+	 *
+	 * @param bool $is_cutoff   Whether the calendar is on/after the cutoff.
+	 * @param int  $calendar_id Calendar post ID.
+	 */
+	return (bool) apply_filters('simcal_is_powered_by_cutoff_calendar', $is_cutoff, $calendar_id);
+}
+
+/**
+ * Whether the Powered by credit is mandatory for a calendar.
+ *
+ * True only for calendars created on/after the cutoff when no Pro add-on has a valid license.
+ * Old calendars are never mandatory and keep the previous optional behavior.
+ *
+ * @since 4.3.2
+ *
+ * @param int $calendar_id Calendar post ID.
+ *
+ * @return bool
+ */
+function simcal_is_powered_by_mandatory($calendar_id)
+{
+	$mandatory = simcal_is_powered_by_cutoff_calendar($calendar_id) && !simcal_has_valid_addon_license();
+
+	/**
+	 * Filter whether the Powered by credit is mandatory for a calendar.
+	 *
+	 * @since 4.3.2
+	 *
+	 * @param bool $mandatory   Whether the credit is mandatory.
+	 * @param int  $calendar_id Calendar post ID.
+	 */
+	return (bool) apply_filters('simcal_is_powered_by_mandatory', $mandatory, absint($calendar_id));
+}
+
+/**
+ * Whether the admin can show/manage the Spread the Word setting for a calendar.
+ *
+ * Old calendars: always visible. New calendars: only when a Pro add-on license is valid.
+ *
+ * @since 4.3.2
+ *
+ * @param int $calendar_id Calendar post ID.
+ *
+ * @return bool
+ */
+function simcal_can_manage_powered_by($calendar_id)
+{
+	$calendar_id = absint($calendar_id);
+	$can_manage = true;
+
+	if (simcal_is_powered_by_cutoff_calendar($calendar_id)) {
+		$can_manage = simcal_has_valid_addon_license();
+	}
+
+	/**
+	 * Filter whether the Spread the Word setting can be managed for a calendar.
+	 *
+	 * @since 4.3.2
+	 *
+	 * @param bool $can_manage  Whether the setting is shown and editable.
+	 * @param int  $calendar_id Calendar post ID.
+	 */
+	return (bool) apply_filters('simcal_can_manage_powered_by', $can_manage, $calendar_id);
+}
+
+/**
  * Get events feed types.
  *
  * @since  3.0.0
@@ -71,6 +219,27 @@ function simcal_get_feed_types()
 {
 	$objects = \SimpleCalendar\plugin()->objects;
 	return $objects instanceof \SimpleCalendar\Objects ? $objects->get_feed_types() : [];
+}
+
+/**
+ * Get human-readable feed type labels without bootstrapping feed objects.
+ *
+ * @since  4.0.6
+ *
+ * @return array
+ */
+function simcal_get_feed_type_labels()
+{
+	$labels = apply_filters('simcal_feed_type_labels', []);
+	$types = simcal_get_feed_types();
+
+	foreach ($types as $type) {
+		if (!isset($labels[$type])) {
+			$labels[$type] = ucwords(str_replace('-', ' ', $type));
+		}
+	}
+
+	return $labels;
 }
 
 /**
@@ -175,6 +344,15 @@ function simcal_common_scripts_variables()
 			'short' => simcal_get_calendar_names_i18n('day', 'short'),
 		],
 		'meridiem' => simcal_get_calendar_names_i18n('meridiem'),
+		'expand_events' => __('Show more events', 'google-calendar-events'),
+		'collapse_events' => __('Hide additional events', 'google-calendar-events'),
+		'sc_event' => [
+			'start_required' => __('Start datetime is required.', 'google-calendar-events'),
+			'end_required' => __('End datetime is required.', 'google-calendar-events'),
+			'end_after_start' => __('End datetime must be greater than the start datetime.', 'google-calendar-events'),
+			'location_no_results' => __('No matching locations found.', 'google-calendar-events'),
+			'location_search_error' => __('Could not look up locations. Please try again.', 'google-calendar-events'),
+		],
 	];
 
 	return array_merge($vars, apply_filters('simcal_common_scripts_variables', []));
@@ -197,14 +375,18 @@ function simcal_get_calendars($exclude = '', $cached = true)
 	if (!$calendars || $cached === false) {
 		$posts = get_posts([
 			'post_type' => 'calendar',
-			'nopaging' => true,
+			'posts_per_page' => -1,
+			'orderby' => 'title',
+			'order' => 'ASC',
+			'no_found_rows' => true,
+			'update_post_meta_cache' => false,
+			'update_post_term_cache' => false,
 		]);
 
 		$calendars = [];
 		foreach ($posts as $post) {
-			$calendars[$post->ID] = $post->post_title;
+			$calendars[(int) $post->ID] = $post->post_title;
 		}
-		asort($calendars);
 
 		set_transient('_simple-calendar_feed_ids', $calendars, 604800);
 	}
@@ -424,6 +606,38 @@ function simcal_esc_timezone($tz, $default = 'UTC')
 }
 
 /**
+ * Clear plugin-level transients (OAuth throttles, Pro tokens, auxiliary caches).
+ *
+ * @since 4.0.6
+ */
+function simcal_delete_plugin_transients()
+{
+	delete_transient('simcal_oauth_token_check_throttle');
+
+	$auth_token = get_option('simple_calendar_auth_site_token');
+	if (!empty($auth_token)) {
+		delete_transient('simcal_oauth_calendar_list_' . md5((string) $auth_token));
+	}
+
+	delete_transient('simple-calendar_google-pro-access-token');
+
+	global $wpdb;
+
+	$like_patterns = [
+		$wpdb->esc_like('_transient__simple-calendar_feed_id_') . '%',
+		$wpdb->esc_like('_transient_timeout__simple-calendar_feed_id_') . '%',
+	];
+
+	foreach ($like_patterns as $pattern) {
+		$wpdb->query($wpdb->prepare("DELETE FROM {$wpdb->options} WHERE option_name LIKE %s", $pattern));
+	}
+
+	simcal_delete_feed_transients();
+
+	do_action('simcal_delete_plugin_transients');
+}
+
+/**
  * Clear feed transients cache.
  *
  * @since  3.0.0
@@ -434,7 +648,12 @@ function simcal_esc_timezone($tz, $default = 'UTC')
  */
 function simcal_delete_feed_transients($id = '')
 {
-	$grouped_ids = get_post_meta($id, '_grouped_calendars_ids', true);
+	$clear_plugin_transients = '' === $id;
+
+	$grouped_ids =
+		is_numeric($id) || $id instanceof WP_Post
+			? get_post_meta($id instanceof WP_Post ? $id->ID : $id, '_grouped_calendars_ids', true)
+			: null;
 
 	// If there are group IDs we need to construct an array to pass along with the grouped IDs + the original $post_id
 	if (is_array($grouped_ids)) {
@@ -469,6 +688,22 @@ function simcal_delete_feed_transients($id = '')
 				foreach ($feed_types as $feed_type) {
 					delete_transient('_simple-calendar_feed_id_' . strval($calendar->id) . '_' . $feed_type);
 				}
+				/**
+				 * Clear Pro ICS subscription feed cache for this calendar.
+				 *
+				 * @since 4.1.0
+				 *
+				 * @param int $calendar_id Calendar post ID.
+				 */
+				do_action('simcal_clear_ics_feed_cache', $calendar->id);
+				/**
+				 * Fires after feed transients for a calendar are deleted.
+				 *
+				 * @since 4.3.2
+				 *
+				 * @param int $calendar_id Calendar post ID.
+				 */
+				do_action('simcal_deleted_feed_transients', $calendar->id);
 			}
 		}
 	} else {
@@ -478,6 +713,8 @@ function simcal_delete_feed_transients($id = '')
 			foreach ($feed_types as $feed_type) {
 				delete_transient('_simple-calendar_feed_id_' . strval($calendar->id) . '_' . $feed_type);
 			}
+			do_action('simcal_clear_ics_feed_cache', $calendar->id);
+			do_action('simcal_deleted_feed_transients', $calendar->id);
 		}
 	}
 

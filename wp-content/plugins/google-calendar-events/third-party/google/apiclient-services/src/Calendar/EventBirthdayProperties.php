@@ -20,40 +20,19 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventBirthdayProperties extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Resource name of the contact this birthday event is linked to. This can be
-     * used to fetch contact details from People API. Format: "people/c12345".
-     * Read-only.
-     *
      * @var string
      */
     public $contact;
     /**
-     * Custom type label specified for this event. This is populated if
-     * birthdayProperties.type is set to "custom". Read-only.
-     *
      * @var string
      */
     public $customTypeName;
     /**
-     * Type of birthday or special event. Possible values are: - "anniversary" -
-     * An anniversary other than birthday. Always has a contact.  - "birthday" - A
-     * birthday event. This is the default value.  - "custom" - A special date
-     * whose label is further specified in the customTypeName field. Always has a
-     * contact.  - "other" - A special date which does not fall into the other
-     * categories, and does not have a custom label. Always has a contact.  -
-     * "self" - Calendar owner's own birthday. Cannot have a contact.  The
-     * Calendar API only supports creating events with the type "birthday". The
-     * type cannot be changed after the event is created.
-     *
      * @var string
      */
     public $type;
     /**
-     * Resource name of the contact this birthday event is linked to. This can be
-     * used to fetch contact details from People API. Format: "people/c12345".
-     * Read-only.
-     *
-     * @param string $contact
+     * @param string
      */
     public function setContact($contact)
     {
@@ -67,10 +46,7 @@ class EventBirthdayProperties extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->contact;
     }
     /**
-     * Custom type label specified for this event. This is populated if
-     * birthdayProperties.type is set to "custom". Read-only.
-     *
-     * @param string $customTypeName
+     * @param string
      */
     public function setCustomTypeName($customTypeName)
     {
@@ -84,17 +60,7 @@ class EventBirthdayProperties extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->customTypeName;
     }
     /**
-     * Type of birthday or special event. Possible values are: - "anniversary" -
-     * An anniversary other than birthday. Always has a contact.  - "birthday" - A
-     * birthday event. This is the default value.  - "custom" - A special date
-     * whose label is further specified in the customTypeName field. Always has a
-     * contact.  - "other" - A special date which does not fall into the other
-     * categories, and does not have a custom label. Always has a contact.  -
-     * "self" - Calendar owner's own birthday. Cannot have a contact.  The
-     * Calendar API only supports creating events with the type "birthday". The
-     * type cannot be changed after the event is created.
-     *
-     * @param string $type
+     * @param string
      */
     public function setType($type)
     {

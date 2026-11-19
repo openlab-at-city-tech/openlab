@@ -34,10 +34,48 @@ class Objects
 		add_filter(
 			'simcal_get_feed_types',
 			function ($feed_types) {
-				return array_merge($feed_types, ['google', 'grouped-calendars']);
+				return array_merge($feed_types, ['google', 'grouped-calendars', 'ics-feed', 'sc-event']);
 			},
 			10,
-			1
+			1,
+		);
+
+		add_filter(
+			'simcal_feed_type_labels',
+			function ($labels) {
+				return array_merge($labels, [
+					'google' => __('Google Calendar', 'google-calendar-events'),
+					'grouped-calendars' => __('Grouped Calendar', 'google-calendar-events'),
+					'ics-feed' => __('ICS Feed', 'google-calendar-events'),
+					'sc-event' => __('SC Event', 'google-calendar-events'),
+				]);
+			},
+			10,
+			1,
+		);
+
+		// Register ICS save/upload hooks on admin requests (does not alter core save flow).
+		add_action(
+			'admin_init',
+			function () {
+				if (!class_exists('SimpleCalendar\\Feeds\\Admin\\Ics_Feed_Admin')) {
+					return;
+				}
+				\SimpleCalendar\Feeds\Admin\Ics_Feed_Admin::register_hooks();
+			},
+			5,
+		);
+
+		// Register SC Event feed meta save hooks on admin requests.
+		add_action(
+			'admin_init',
+			function () {
+				if (!class_exists('SimpleCalendar\\Feeds\\Admin\\Sc_Event_Admin')) {
+					return;
+				}
+				\SimpleCalendar\Feeds\Admin\Sc_Event_Admin::register_hooks();
+			},
+			5,
 		);
 
 		// Add default calendar type.
@@ -49,7 +87,7 @@ class Objects
 				]);
 			},
 			10,
-			1
+			1,
 		);
 
 		// Add default admin objects.
@@ -64,7 +102,7 @@ class Objects
 					]);
 				},
 				10,
-				1
+				1,
 			);
 		}
 
@@ -276,6 +314,18 @@ class Objects
 
 		if (in_array($type, $types)) {
 			$class_name = $this->make_class_name($name, $type);
+			/**
+			 * Swap or override a resolved object class name.
+			 *
+			 * Used by add-ons to extend core classes (e.g. ICS Feed Pro).
+			 *
+			 * @since 4.1.0
+			 *
+			 * @param string $class_name Fully-qualified class name.
+			 * @param string $name       Object slug.
+			 * @param string $type       Object type.
+			 */
+			$class_name = apply_filters('simcal_object_class_name', $class_name, $name, $type);
 			$parent = '\\' . __NAMESPACE__ . '\Abstracts\\' . implode('_', array_map('ucfirst', explode('-', $type)));
 			$class = class_exists($class_name) ? new $class_name($args) : false;
 

@@ -21,92 +21,47 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'items';
     /**
-     * The user's access role for this calendar. Read-only. Possible values are: -
-     * "none" - The user has no access.  - "freeBusyReader" - The user has read
-     * access to free/busy information.  - "reader" - The user has read access to
-     * the calendar. Private events will appear to users with reader access, but
-     * event details will be hidden.  - "writer" - The user has read and write
-     * access to the calendar. Private events will appear to users with writer
-     * access, and event details will be visible.  - "owner" - The user has
-     * manager access to the calendar. This role has all of the permissions of the
-     * writer role with the additional ability to see and modify access levels of
-     * other users. Important: the owner role is different from the calendar's
-     * data owner. A calendar has a single data owner, but can have multiple users
-     * with owner role.
-     *
      * @var string
      */
     public $accessRole;
     protected $defaultRemindersType = EventReminder::class;
     protected $defaultRemindersDataType = 'array';
     /**
-     * Description of the calendar. Read-only.
-     *
      * @var string
      */
     public $description;
     /**
-     * ETag of the collection.
-     *
      * @var string
      */
     public $etag;
     protected $itemsType = Event::class;
     protected $itemsDataType = 'array';
     /**
-     * Type of the collection ("calendar#events").
-     *
      * @var string
      */
     public $kind;
     /**
-     * Token used to access the next page of this result. Omitted if no further
-     * results are available, in which case nextSyncToken is provided.
-     *
      * @var string
      */
     public $nextPageToken;
     /**
-     * Token used at a later point in time to retrieve only the entries that have
-     * changed since this result was returned. Omitted if further results are
-     * available, in which case nextPageToken is provided.
-     *
      * @var string
      */
     public $nextSyncToken;
     /**
-     * Title of the calendar. Read-only.
-     *
      * @var string
      */
     public $summary;
     /**
-     * The time zone of the calendar. Read-only.
-     *
      * @var string
      */
     public $timeZone;
     /**
-     * Last modification time of the calendar (as a RFC3339 timestamp). Read-only.
-     *
      * @var string
      */
     public $updated;
     /**
-     * The user's access role for this calendar. Read-only. Possible values are: -
-     * "none" - The user has no access.  - "freeBusyReader" - The user has read
-     * access to free/busy information.  - "reader" - The user has read access to
-     * the calendar. Private events will appear to users with reader access, but
-     * event details will be hidden.  - "writer" - The user has read and write
-     * access to the calendar. Private events will appear to users with writer
-     * access, and event details will be visible.  - "owner" - The user has
-     * manager access to the calendar. This role has all of the permissions of the
-     * writer role with the additional ability to see and modify access levels of
-     * other users. Important: the owner role is different from the calendar's
-     * data owner. A calendar has a single data owner, but can have multiple users
-     * with owner role.
-     *
-     * @param string $accessRole
+     * @param string
      */
     public function setAccessRole($accessRole)
     {
@@ -120,11 +75,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->accessRole;
     }
     /**
-     * The default reminders on the calendar for the authenticated user. These
-     * reminders apply to all events on this calendar that do not explicitly
-     * override them (i.e. do not have reminders.useDefault set to True).
-     *
-     * @param EventReminder[] $defaultReminders
+     * @param EventReminder[]
      */
     public function setDefaultReminders($defaultReminders)
     {
@@ -138,9 +89,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->defaultReminders;
     }
     /**
-     * Description of the calendar. Read-only.
-     *
-     * @param string $description
+     * @param string
      */
     public function setDescription($description)
     {
@@ -154,9 +103,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->description;
     }
     /**
-     * ETag of the collection.
-     *
-     * @param string $etag
+     * @param string
      */
     public function setEtag($etag)
     {
@@ -170,9 +117,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->etag;
     }
     /**
-     * List of events on the calendar.
-     *
-     * @param Event[] $items
+     * @param Event[]
      */
     public function setItems($items)
     {
@@ -186,9 +131,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->items;
     }
     /**
-     * Type of the collection ("calendar#events").
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -202,10 +145,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * Token used to access the next page of this result. Omitted if no further
-     * results are available, in which case nextSyncToken is provided.
-     *
-     * @param string $nextPageToken
+     * @param string
      */
     public function setNextPageToken($nextPageToken)
     {
@@ -219,11 +159,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->nextPageToken;
     }
     /**
-     * Token used at a later point in time to retrieve only the entries that have
-     * changed since this result was returned. Omitted if further results are
-     * available, in which case nextPageToken is provided.
-     *
-     * @param string $nextSyncToken
+     * @param string
      */
     public function setNextSyncToken($nextSyncToken)
     {
@@ -237,9 +173,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->nextSyncToken;
     }
     /**
-     * Title of the calendar. Read-only.
-     *
-     * @param string $summary
+     * @param string
      */
     public function setSummary($summary)
     {
@@ -253,9 +187,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->summary;
     }
     /**
-     * The time zone of the calendar. Read-only.
-     *
-     * @param string $timeZone
+     * @param string
      */
     public function setTimeZone($timeZone)
     {
@@ -269,9 +201,7 @@ class Events extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->timeZone;
     }
     /**
-     * Last modification time of the calendar (as a RFC3339 timestamp). Read-only.
-     *
-     * @param string $updated
+     * @param string
      */
     public function setUpdated($updated)
     {

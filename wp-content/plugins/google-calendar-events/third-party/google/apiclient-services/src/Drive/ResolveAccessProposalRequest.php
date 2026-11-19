@@ -19,74 +19,39 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
 class ResolveAccessProposalRequest extends \SimpleCalendar\plugin_deps\Google\Collection
 {
-    /**
-     * Unspecified action
-     */
-    public const ACTION_ACTION_UNSPECIFIED = 'ACTION_UNSPECIFIED';
-    /**
-     * The user accepts the access proposal. Note: If this action is used, the
-     * `role` field must have at least one value.
-     */
-    public const ACTION_ACCEPT = 'ACCEPT';
-    /**
-     * The user denies the access proposal.
-     */
-    public const ACTION_DENY = 'DENY';
     protected $collection_key = 'role';
     /**
-     * Required. The action to take on the access proposal.
-     *
      * @var string
      */
     public $action;
     /**
-     * Optional. The roles that the approver has allowed, if any. For more
-     * information, see [Roles and
-     * permissions](https://developers.google.com/workspace/drive/api/guides/ref-
-     * roles). Note: This field is required for the `ACCEPT` action.
-     *
      * @var string[]
      */
     public $role;
     /**
-     * Optional. Whether to send an email to the requester when the access
-     * proposal is denied or accepted.
-     *
      * @var bool
      */
     public $sendNotification;
     /**
-     * Optional. Indicates the view for this access proposal. This should only be
-     * set when the proposal belongs to a view. Only `published` is supported.
-     *
      * @var string
      */
     public $view;
     /**
-     * Required. The action to take on the access proposal.
-     *
-     * Accepted values: ACTION_UNSPECIFIED, ACCEPT, DENY
-     *
-     * @param self::ACTION_* $action
+     * @param string
      */
     public function setAction($action)
     {
         $this->action = $action;
     }
     /**
-     * @return self::ACTION_*
+     * @return string
      */
     public function getAction()
     {
         return $this->action;
     }
     /**
-     * Optional. The roles that the approver has allowed, if any. For more
-     * information, see [Roles and
-     * permissions](https://developers.google.com/workspace/drive/api/guides/ref-
-     * roles). Note: This field is required for the `ACCEPT` action.
-     *
-     * @param string[] $role
+     * @param string[]
      */
     public function setRole($role)
     {
@@ -100,10 +65,7 @@ class ResolveAccessProposalRequest extends \SimpleCalendar\plugin_deps\Google\Co
         return $this->role;
     }
     /**
-     * Optional. Whether to send an email to the requester when the access
-     * proposal is denied or accepted.
-     *
-     * @param bool $sendNotification
+     * @param bool
      */
     public function setSendNotification($sendNotification)
     {
@@ -117,10 +79,7 @@ class ResolveAccessProposalRequest extends \SimpleCalendar\plugin_deps\Google\Co
         return $this->sendNotification;
     }
     /**
-     * Optional. Indicates the view for this access proposal. This should only be
-     * set when the proposal belongs to a view. Only `published` is supported.
-     *
-     * @param string $view
+     * @param string
      */
     public function setView($view)
     {

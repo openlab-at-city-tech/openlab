@@ -21,14 +21,6 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'entryPoints';
     /**
-     * The ID of the conference. Can be used by developers to keep track of
-     * conferences, should not be displayed to users. The ID value is formed
-     * differently for each conference solution type:   - eventHangout: ID is not
-     * set. (This conference type is deprecated.) - eventNamedHangout: ID is the
-     * name of the Hangout. (This conference type is deprecated.) - hangoutsMeet:
-     * ID is the 10-letter meeting code, for example aaa-bbbb-ccc. - addOn: ID is
-     * defined by the third-party provider.  Optional.
-     *
      * @var string
      */
     public $conferenceId;
@@ -39,33 +31,17 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $entryPointsType = EntryPoint::class;
     protected $entryPointsDataType = 'array';
     /**
-     * Additional notes (such as instructions from the domain administrator, legal
-     * notices) to display to the user. Can contain HTML. The maximum length is
-     * 2048 characters. Optional.
-     *
      * @var string
      */
     public $notes;
     protected $parametersType = ConferenceParameters::class;
     protected $parametersDataType = '';
     /**
-     * The signature of the conference data. Generated on server side. Unset for a
-     * conference with a failed create request. Optional for a conference with a
-     * pending create request.
-     *
      * @var string
      */
     public $signature;
     /**
-     * The ID of the conference. Can be used by developers to keep track of
-     * conferences, should not be displayed to users. The ID value is formed
-     * differently for each conference solution type:   - eventHangout: ID is not
-     * set. (This conference type is deprecated.) - eventNamedHangout: ID is the
-     * name of the Hangout. (This conference type is deprecated.) - hangoutsMeet:
-     * ID is the 10-letter meeting code, for example aaa-bbbb-ccc. - addOn: ID is
-     * defined by the third-party provider.  Optional.
-     *
-     * @param string $conferenceId
+     * @param string
      */
     public function setConferenceId($conferenceId)
     {
@@ -79,11 +55,7 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->conferenceId;
     }
     /**
-     * The conference solution, such as Google Meet. Unset for a conference with a
-     * failed create request. Either conferenceSolution and at least one
-     * entryPoint, or createRequest is required.
-     *
-     * @param ConferenceSolution $conferenceSolution
+     * @param ConferenceSolution
      */
     public function setConferenceSolution(ConferenceSolution $conferenceSolution)
     {
@@ -97,12 +69,7 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->conferenceSolution;
     }
     /**
-     * A request to generate a new conference and attach it to the event. The data
-     * is generated asynchronously. To see whether the data is present check the
-     * status field. Either conferenceSolution and at least one entryPoint, or
-     * createRequest is required.
-     *
-     * @param CreateConferenceRequest $createRequest
+     * @param CreateConferenceRequest
      */
     public function setCreateRequest(CreateConferenceRequest $createRequest)
     {
@@ -116,12 +83,7 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->createRequest;
     }
     /**
-     * Information about individual conference entry points, such as URLs or phone
-     * numbers. All of them must belong to the same conference. Either
-     * conferenceSolution and at least one entryPoint, or createRequest is
-     * required.
-     *
-     * @param EntryPoint[] $entryPoints
+     * @param EntryPoint[]
      */
     public function setEntryPoints($entryPoints)
     {
@@ -135,11 +97,7 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->entryPoints;
     }
     /**
-     * Additional notes (such as instructions from the domain administrator, legal
-     * notices) to display to the user. Can contain HTML. The maximum length is
-     * 2048 characters. Optional.
-     *
-     * @param string $notes
+     * @param string
      */
     public function setNotes($notes)
     {
@@ -153,10 +111,7 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->notes;
     }
     /**
-     * Additional properties related to a conference. An example would be a
-     * solution-specific setting for enabling video streaming.
-     *
-     * @param ConferenceParameters $parameters
+     * @param ConferenceParameters
      */
     public function setParameters(ConferenceParameters $parameters)
     {
@@ -170,11 +125,7 @@ class ConferenceData extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->parameters;
     }
     /**
-     * The signature of the conference data. Generated on server side. Unset for a
-     * conference with a failed create request. Optional for a conference with a
-     * pending create request.
-     *
-     * @param string $signature
+     * @param string
      */
     public function setSignature($signature)
     {

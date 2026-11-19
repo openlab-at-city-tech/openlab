@@ -30,7 +30,7 @@ trait LoggingTrait
      */
     private function logRequest(RpcLogEvent $event): void
     {
-        $debugEvent = ['timestamp' => $event->timestamp, 'severity' => strtoupper(LogLevel::DEBUG), 'processId' => $event->processId ?? null, 'requestId' => $event->requestId ?? null, 'rpcName' => $event->rpcName ?? null];
+        $debugEvent = ['timestamp' => $event->timestamp, 'severity' => strtoupper(LogLevel::DEBUG), 'processId' => $event->processId ?? null, 'requestId' => $event->requestId ?? null];
         $debugEvent = array_filter($debugEvent, fn($value) => !is_null($value));
         $jsonPayload = ['request.method' => $event->method, 'request.url' => $event->url, 'request.headers' => $event->headers, 'request.payload' => $this->truncatePayload($event->payload), 'request.jwt' => $this->getJwtToken($event->headers ?? []), 'retryAttempt' => $event->retryAttempt];
         // Remove null values

@@ -21,38 +21,25 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'items';
     /**
-     * Etag of the collection.
-     *
      * @var string
      */
     public $etag;
     protected $itemsType = Setting::class;
     protected $itemsDataType = 'array';
     /**
-     * Type of the collection ("calendar#settings").
-     *
      * @var string
      */
     public $kind;
     /**
-     * Token used to access the next page of this result. Omitted if no further
-     * results are available, in which case nextSyncToken is provided.
-     *
      * @var string
      */
     public $nextPageToken;
     /**
-     * Token used at a later point in time to retrieve only the entries that have
-     * changed since this result was returned. Omitted if further results are
-     * available, in which case nextPageToken is provided.
-     *
      * @var string
      */
     public $nextSyncToken;
     /**
-     * Etag of the collection.
-     *
-     * @param string $etag
+     * @param string
      */
     public function setEtag($etag)
     {
@@ -66,9 +53,7 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->etag;
     }
     /**
-     * List of user settings.
-     *
-     * @param Setting[] $items
+     * @param Setting[]
      */
     public function setItems($items)
     {
@@ -82,9 +67,7 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->items;
     }
     /**
-     * Type of the collection ("calendar#settings").
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -98,10 +81,7 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * Token used to access the next page of this result. Omitted if no further
-     * results are available, in which case nextSyncToken is provided.
-     *
-     * @param string $nextPageToken
+     * @param string
      */
     public function setNextPageToken($nextPageToken)
     {
@@ -115,11 +95,7 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->nextPageToken;
     }
     /**
-     * Token used at a later point in time to retrieve only the entries that have
-     * changed since this result was returned. Omitted if further results are
-     * available, in which case nextPageToken is provided.
-     *
-     * @param string $nextSyncToken
+     * @param string
      */
     public function setNextSyncToken($nextSyncToken)
     {

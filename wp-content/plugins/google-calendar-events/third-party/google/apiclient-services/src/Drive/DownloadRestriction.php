@@ -20,22 +20,15 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class DownloadRestriction extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Whether download and copy is restricted for readers.
-     *
      * @var bool
      */
     public $restrictedForReaders;
     /**
-     * Whether download and copy is restricted for writers. If `true`, download is
-     * also restricted for readers.
-     *
      * @var bool
      */
     public $restrictedForWriters;
     /**
-     * Whether download and copy is restricted for readers.
-     *
-     * @param bool $restrictedForReaders
+     * @param bool
      */
     public function setRestrictedForReaders($restrictedForReaders)
     {
@@ -49,10 +42,7 @@ class DownloadRestriction extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->restrictedForReaders;
     }
     /**
-     * Whether download and copy is restricted for writers. If `true`, download is
-     * also restricted for readers.
-     *
-     * @param bool $restrictedForWriters
+     * @param bool
      */
     public function setRestrictedForWriters($restrictedForWriters)
     {

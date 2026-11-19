@@ -11,9 +11,8 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
-use SimpleCalendar\plugin_deps\Monolog\Level;
+use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Monolog\Utils;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Logs to Cube.
  *
@@ -23,13 +22,18 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
  */
 class CubeHandler extends AbstractProcessingHandler
 {
-    private ?\Socket $udpConnection = null;
-    private ?\CurlHandle $httpConnection = null;
-    private string $scheme;
-    private string $host;
-    private int $port;
+    /** @var resource|\Socket|null */
+    private $udpConnection = null;
+    /** @var resource|\CurlHandle|null */
+    private $httpConnection = null;
+    /** @var string */
+    private $scheme;
+    /** @var string */
+    private $host;
+    /** @var int */
+    private $port;
     /** @var string[] */
-    private array $acceptedSchemes = ['http', 'udp'];
+    private $acceptedSchemes = ['http', 'udp'];
     /**
      * Create a Cube handler
      *
@@ -37,18 +41,18 @@ class CubeHandler extends AbstractProcessingHandler
      *                                   A valid url must consist of three parts : protocol://host:port
      *                                   Only valid protocols used by Cube are http and udp
      */
-    public function __construct(string $url, int|string|Level $level = Level::Debug, bool $bubble = \true)
+    public function __construct(string $url, $level = Logger::DEBUG, bool $bubble = \true)
     {
         $urlInfo = parse_url($url);
         if ($urlInfo === \false || !isset($urlInfo['scheme'], $urlInfo['host'], $urlInfo['port'])) {
             throw new \UnexpectedValueException('URL "' . $url . '" is not valid');
         }
-        if (!\in_array($urlInfo['scheme'], $this->acceptedSchemes, \true)) {
+        if (!in_array($urlInfo['scheme'], $this->acceptedSchemes)) {
             throw new \UnexpectedValueException('Invalid protocol (' . $urlInfo['scheme'] . ').' . ' Valid options are ' . implode(', ', $this->acceptedSchemes));
         }
         $this->scheme = $urlInfo['scheme'];
         $this->host = $urlInfo['host'];
-        $this->port = $urlInfo['port'];
+        $this->port = (int) $urlInfo['port'];
         parent::__construct($level, $bubble);
     }
     /**
@@ -59,7 +63,7 @@ class CubeHandler extends AbstractProcessingHandler
      */
     protected function connectUdp(): void
     {
-        if (!\extension_loaded('sockets')) {
+        if (!extension_loaded('sockets')) {
             throw new MissingExtensionException('The sockets extension is required to use udp URLs with the CubeHandler');
         }
         $udpConnection = socket_create(\AF_INET, \SOCK_DGRAM, 0);
@@ -79,7 +83,7 @@ class CubeHandler extends AbstractProcessingHandler
      */
     protected function connectHttp(): void
     {
-        if (!\extension_loaded('curl')) {
+        if (!extension_loaded('curl')) {
             throw new MissingExtensionException('The curl extension is required to use http URLs with the CubeHandler');
         }
         $httpConnection = curl_init('http://' . $this->host . ':' . $this->port . '/1.0/event/put');
@@ -91,21 +95,21 @@ class CubeHandler extends AbstractProcessingHandler
         curl_setopt($this->httpConnection, \CURLOPT_RETURNTRANSFER, \true);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    protected function write(LogRecord $record): void
+    protected function write(array $record): void
     {
-        $date = $record->datetime;
+        $date = $record['datetime'];
         $data = ['time' => $date->format('Y-m-d\TH:i:s.uO')];
-        $context = $record->context;
-        if (isset($context['type'])) {
-            $data['type'] = $context['type'];
-            unset($context['type']);
+        unset($record['datetime']);
+        if (isset($record['context']['type'])) {
+            $data['type'] = $record['context']['type'];
+            unset($record['context']['type']);
         } else {
-            $data['type'] = $record->channel;
+            $data['type'] = $record['channel'];
         }
-        $data['data'] = $context;
-        $data['data']['level'] = $record->level;
+        $data['data'] = $record['context'];
+        $data['data']['level'] = $record['level'];
         if ($this->scheme === 'http') {
             $this->writeHttp(Utils::jsonEncode($data));
         } else {
@@ -114,24 +118,21 @@ class CubeHandler extends AbstractProcessingHandler
     }
     private function writeUdp(string $data): void
     {
-        if (null === $this->udpConnection) {
+        if (!$this->udpConnection) {
             $this->connectUdp();
         }
-        if (null === $this->udpConnection) {
-            throw new \LogicException('No UDP socket could be opened');
-        }
-        socket_send($this->udpConnection, $data, \strlen($data), 0);
+        socket_send($this->udpConnection, $data, strlen($data), 0);
     }
     private function writeHttp(string $data): void
     {
-        if (null === $this->httpConnection) {
+        if (!$this->httpConnection) {
             $this->connectHttp();
         }
         if (null === $this->httpConnection) {
             throw new \LogicException('No connection could be established');
         }
         curl_setopt($this->httpConnection, \CURLOPT_POSTFIELDS, '[' . $data . ']');
-        curl_setopt($this->httpConnection, \CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . \strlen('[' . $data . ']')]);
-        Curl\Util::execute($this->httpConnection, 5);
+        curl_setopt($this->httpConnection, \CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Content-Length: ' . strlen('[' . $data . ']')]);
+        Curl\Util::execute($this->httpConnection, 5, \false);
     }
 }

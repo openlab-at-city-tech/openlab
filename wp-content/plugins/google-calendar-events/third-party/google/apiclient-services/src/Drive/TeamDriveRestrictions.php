@@ -20,52 +20,29 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Whether administrative privileges on this Team Drive are required to modify
-     * restrictions.
-     *
      * @var bool
      */
     public $adminManagedRestrictions;
     /**
-     * Whether the options to copy, print, or download files inside this Team
-     * Drive, should be disabled for readers and commenters. When this restriction
-     * is set to `true`, it will override the similarly named field to `true` for
-     * any file inside this Team Drive.
-     *
      * @var bool
      */
     public $copyRequiresWriterPermission;
     /**
-     * Whether access to this Team Drive and items inside this Team Drive is
-     * restricted to users of the domain to which this Team Drive belongs. This
-     * restriction may be overridden by other sharing policies controlled outside
-     * of this Team Drive.
-     *
      * @var bool
      */
     public $domainUsersOnly;
     protected $downloadRestrictionType = DownloadRestriction::class;
     protected $downloadRestrictionDataType = '';
     /**
-     * If true, only users with the organizer role can share folders. If false,
-     * users with either the organizer role or the file organizer role can share
-     * folders.
-     *
      * @var bool
      */
     public $sharingFoldersRequiresOrganizerPermission;
     /**
-     * Whether access to items inside this Team Drive is restricted to members of
-     * this Team Drive.
-     *
      * @var bool
      */
     public $teamMembersOnly;
     /**
-     * Whether administrative privileges on this Team Drive are required to modify
-     * restrictions.
-     *
-     * @param bool $adminManagedRestrictions
+     * @param bool
      */
     public function setAdminManagedRestrictions($adminManagedRestrictions)
     {
@@ -79,12 +56,7 @@ class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->adminManagedRestrictions;
     }
     /**
-     * Whether the options to copy, print, or download files inside this Team
-     * Drive, should be disabled for readers and commenters. When this restriction
-     * is set to `true`, it will override the similarly named field to `true` for
-     * any file inside this Team Drive.
-     *
-     * @param bool $copyRequiresWriterPermission
+     * @param bool
      */
     public function setCopyRequiresWriterPermission($copyRequiresWriterPermission)
     {
@@ -98,12 +70,7 @@ class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->copyRequiresWriterPermission;
     }
     /**
-     * Whether access to this Team Drive and items inside this Team Drive is
-     * restricted to users of the domain to which this Team Drive belongs. This
-     * restriction may be overridden by other sharing policies controlled outside
-     * of this Team Drive.
-     *
-     * @param bool $domainUsersOnly
+     * @param bool
      */
     public function setDomainUsersOnly($domainUsersOnly)
     {
@@ -117,9 +84,7 @@ class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->domainUsersOnly;
     }
     /**
-     * Download restrictions applied by shared drive managers.
-     *
-     * @param DownloadRestriction $downloadRestriction
+     * @param DownloadRestriction
      */
     public function setDownloadRestriction(DownloadRestriction $downloadRestriction)
     {
@@ -133,11 +98,7 @@ class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->downloadRestriction;
     }
     /**
-     * If true, only users with the organizer role can share folders. If false,
-     * users with either the organizer role or the file organizer role can share
-     * folders.
-     *
-     * @param bool $sharingFoldersRequiresOrganizerPermission
+     * @param bool
      */
     public function setSharingFoldersRequiresOrganizerPermission($sharingFoldersRequiresOrganizerPermission)
     {
@@ -151,10 +112,7 @@ class TeamDriveRestrictions extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->sharingFoldersRequiresOrganizerPermission;
     }
     /**
-     * Whether access to items inside this Team Drive is restricted to members of
-     * this Team Drive.
-     *
-     * @param bool $teamMembersOnly
+     * @param bool
      */
     public function setTeamMembersOnly($teamMembersOnly)
     {

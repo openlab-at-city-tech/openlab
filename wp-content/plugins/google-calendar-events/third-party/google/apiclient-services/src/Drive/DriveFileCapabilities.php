@@ -20,324 +20,179 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Output only. Whether the current user is the pending owner of the file. Not
-     * populated for shared drive files.
-     *
      * @var bool
      */
     public $canAcceptOwnership;
     /**
-     * Output only. Whether the current user can add children to this folder. This
-     * is always `false` when the item isn't a folder.
-     *
      * @var bool
      */
     public $canAddChildren;
     /**
-     * Output only. Whether the current user can add a folder from another drive
-     * (different shared drive or My Drive) to this folder. This is `false` when
-     * the item isn't a folder. Only populated for items in shared drives.
-     *
      * @var bool
      */
     public $canAddFolderFromAnotherDrive;
     /**
-     * Output only. Whether the current user can add a parent for the item without
-     * removing an existing parent in the same request. Not populated for shared
-     * drive files.
-     *
      * @var bool
      */
     public $canAddMyDriveParent;
     /**
-     * Output only. Whether the current user can change the
-     * `copyRequiresWriterPermission` restriction of this file.
-     *
      * @var bool
      */
     public $canChangeCopyRequiresWriterPermission;
     /**
-     * Output only. Whether the current user can change the owner or organizer-
-     * applied download restrictions of the file.
-     *
-     * @var bool
-     */
-    public $canChangeItemDownloadRestriction;
-    /**
-     * Output only. Whether the current user can change the
-     * `securityUpdateEnabled` field on link share metadata.
-     *
      * @var bool
      */
     public $canChangeSecurityUpdateEnabled;
     /**
-     * Deprecated: Output only.
-     *
-     * @deprecated
      * @var bool
      */
     public $canChangeViewersCanCopyContent;
     /**
-     * Output only. Whether the current user can comment on this file.
-     *
      * @var bool
      */
     public $canComment;
     /**
-     * Output only. Whether the current user can copy this file. For an item in a
-     * shared drive, whether the current user can copy non-folder descendants of
-     * this item, or this item if it's not a folder.
-     *
      * @var bool
      */
     public $canCopy;
     /**
-     * Output only. Whether the current user can delete this file.
-     *
      * @var bool
      */
     public $canDelete;
     /**
-     * Output only. Whether the current user can delete children of this folder.
-     * This is `false` when the item isn't a folder. Only populated for items in
-     * shared drives.
-     *
      * @var bool
      */
     public $canDeleteChildren;
     /**
-     * Whether a user can disable inherited permissions.
-     *
      * @var bool
      */
     public $canDisableInheritedPermissions;
     /**
-     * Output only. Whether the current user can download this file.
-     *
      * @var bool
      */
     public $canDownload;
     /**
-     * Output only. Whether the current user can edit this file. Other factors may
-     * limit the type of changes a user can make to a file. For example, see
-     * `canChangeCopyRequiresWriterPermission` or `canModifyContent`.
-     *
      * @var bool
      */
     public $canEdit;
     /**
-     * Whether a user can re-enable inherited permissions.
-     *
      * @var bool
      */
     public $canEnableInheritedPermissions;
     /**
-     * Output only. Whether the current user can list the children of this folder.
-     * This is always `false` when the item isn't a folder.
-     *
      * @var bool
      */
     public $canListChildren;
     /**
-     * Output only. Whether the current user can modify the content of this file.
-     *
      * @var bool
      */
     public $canModifyContent;
     /**
-     * Deprecated: Output only. Use one of `canModifyEditorContentRestriction`,
-     * `canModifyOwnerContentRestriction`, or `canRemoveContentRestriction`.
-     *
-     * @deprecated
      * @var bool
      */
     public $canModifyContentRestriction;
     /**
-     * Output only. Whether the current user can add or modify content
-     * restrictions on the file which are editor restricted.
-     *
      * @var bool
      */
     public $canModifyEditorContentRestriction;
     /**
-     * Output only. Whether the current user can modify the labels on the file.
-     *
      * @var bool
      */
     public $canModifyLabels;
     /**
-     * Output only. Whether the current user can add or modify content
-     * restrictions which are owner restricted.
-     *
      * @var bool
      */
     public $canModifyOwnerContentRestriction;
     /**
-     * Output only. Whether the current user can move children of this folder
-     * outside of the shared drive. This is `false` when the item isn't a folder.
-     * Only populated for items in shared drives.
-     *
      * @var bool
      */
     public $canMoveChildrenOutOfDrive;
     /**
-     * Deprecated: Output only. Use `canMoveChildrenOutOfDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canMoveChildrenOutOfTeamDrive;
     /**
-     * Output only. Whether the current user can move children of this folder
-     * within this drive. This is `false` when the item isn't a folder. Note that
-     * a request to move the child may still fail depending on the current user's
-     * access to the child and to the destination folder.
-     *
      * @var bool
      */
     public $canMoveChildrenWithinDrive;
     /**
-     * Deprecated: Output only. Use `canMoveChildrenWithinDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canMoveChildrenWithinTeamDrive;
     /**
-     * Deprecated: Output only. Use `canMoveItemOutOfDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canMoveItemIntoTeamDrive;
     /**
-     * Output only. Whether the current user can move this item outside of this
-     * drive by changing its parent. Note that a request to change the parent of
-     * the item may still fail depending on the new parent that's being added.
-     *
      * @var bool
      */
     public $canMoveItemOutOfDrive;
     /**
-     * Deprecated: Output only. Use `canMoveItemOutOfDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canMoveItemOutOfTeamDrive;
     /**
-     * Output only. Whether the current user can move this item within this drive.
-     * Note that a request to change the parent of the item may still fail
-     * depending on the new parent that's being added and the parent that is being
-     * removed.
-     *
      * @var bool
      */
     public $canMoveItemWithinDrive;
     /**
-     * Deprecated: Output only. Use `canMoveItemWithinDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canMoveItemWithinTeamDrive;
     /**
-     * Deprecated: Output only. Use `canMoveItemWithinDrive` or
-     * `canMoveItemOutOfDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canMoveTeamDriveItem;
     /**
-     * Output only. Whether the current user can read the shared drive to which
-     * this file belongs. Only populated for items in shared drives.
-     *
      * @var bool
      */
     public $canReadDrive;
     /**
-     * Output only. Whether the current user can read the labels on the file.
-     *
      * @var bool
      */
     public $canReadLabels;
     /**
-     * Output only. Whether the current user can read the revisions resource of
-     * this file. For a shared drive item, whether revisions of non-folder
-     * descendants of this item, or this item if it's not a folder, can be read.
-     *
      * @var bool
      */
     public $canReadRevisions;
     /**
-     * Deprecated: Output only. Use `canReadDrive` instead.
-     *
-     * @deprecated
      * @var bool
      */
     public $canReadTeamDrive;
     /**
-     * Output only. Whether the current user can remove children from this folder.
-     * This is always `false` when the item isn't a folder. For a folder in a
-     * shared drive, use `canDeleteChildren` or `canTrashChildren` instead.
-     *
      * @var bool
      */
     public $canRemoveChildren;
     /**
-     * Output only. Whether there's a content restriction on the file that can be
-     * removed by the current user.
-     *
      * @var bool
      */
     public $canRemoveContentRestriction;
     /**
-     * Output only. Whether the current user can remove a parent from the item
-     * without adding another parent in the same request. Not populated for shared
-     * drive files.
-     *
      * @var bool
      */
     public $canRemoveMyDriveParent;
     /**
-     * Output only. Whether the current user can rename this file.
-     *
      * @var bool
      */
     public $canRename;
     /**
-     * Output only. Whether the current user can modify the sharing settings for
-     * this file.
-     *
      * @var bool
      */
     public $canShare;
     /**
-     * Output only. Whether the current user can move this file to trash.
-     *
      * @var bool
      */
     public $canTrash;
     /**
-     * Output only. Whether the current user can trash children of this folder.
-     * This is `false` when the item isn't a folder. Only populated for items in
-     * shared drives.
-     *
      * @var bool
      */
     public $canTrashChildren;
     /**
-     * Output only. Whether the current user can restore this file from trash.
-     *
      * @var bool
      */
     public $canUntrash;
     /**
-     * Output only. Whether the current user is the pending owner of the file. Not
-     * populated for shared drive files.
-     *
-     * @param bool $canAcceptOwnership
+     * @param bool
      */
     public function setCanAcceptOwnership($canAcceptOwnership)
     {
@@ -351,10 +206,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canAcceptOwnership;
     }
     /**
-     * Output only. Whether the current user can add children to this folder. This
-     * is always `false` when the item isn't a folder.
-     *
-     * @param bool $canAddChildren
+     * @param bool
      */
     public function setCanAddChildren($canAddChildren)
     {
@@ -368,11 +220,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canAddChildren;
     }
     /**
-     * Output only. Whether the current user can add a folder from another drive
-     * (different shared drive or My Drive) to this folder. This is `false` when
-     * the item isn't a folder. Only populated for items in shared drives.
-     *
-     * @param bool $canAddFolderFromAnotherDrive
+     * @param bool
      */
     public function setCanAddFolderFromAnotherDrive($canAddFolderFromAnotherDrive)
     {
@@ -386,11 +234,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canAddFolderFromAnotherDrive;
     }
     /**
-     * Output only. Whether the current user can add a parent for the item without
-     * removing an existing parent in the same request. Not populated for shared
-     * drive files.
-     *
-     * @param bool $canAddMyDriveParent
+     * @param bool
      */
     public function setCanAddMyDriveParent($canAddMyDriveParent)
     {
@@ -404,10 +248,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canAddMyDriveParent;
     }
     /**
-     * Output only. Whether the current user can change the
-     * `copyRequiresWriterPermission` restriction of this file.
-     *
-     * @param bool $canChangeCopyRequiresWriterPermission
+     * @param bool
      */
     public function setCanChangeCopyRequiresWriterPermission($canChangeCopyRequiresWriterPermission)
     {
@@ -421,27 +262,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeCopyRequiresWriterPermission;
     }
     /**
-     * Output only. Whether the current user can change the owner or organizer-
-     * applied download restrictions of the file.
-     *
-     * @param bool $canChangeItemDownloadRestriction
-     */
-    public function setCanChangeItemDownloadRestriction($canChangeItemDownloadRestriction)
-    {
-        $this->canChangeItemDownloadRestriction = $canChangeItemDownloadRestriction;
-    }
-    /**
-     * @return bool
-     */
-    public function getCanChangeItemDownloadRestriction()
-    {
-        return $this->canChangeItemDownloadRestriction;
-    }
-    /**
-     * Output only. Whether the current user can change the
-     * `securityUpdateEnabled` field on link share metadata.
-     *
-     * @param bool $canChangeSecurityUpdateEnabled
+     * @param bool
      */
     public function setCanChangeSecurityUpdateEnabled($canChangeSecurityUpdateEnabled)
     {
@@ -455,17 +276,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeSecurityUpdateEnabled;
     }
     /**
-     * Deprecated: Output only.
-     *
-     * @deprecated
-     * @param bool $canChangeViewersCanCopyContent
+     * @param bool
      */
     public function setCanChangeViewersCanCopyContent($canChangeViewersCanCopyContent)
     {
         $this->canChangeViewersCanCopyContent = $canChangeViewersCanCopyContent;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanChangeViewersCanCopyContent()
@@ -473,9 +290,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canChangeViewersCanCopyContent;
     }
     /**
-     * Output only. Whether the current user can comment on this file.
-     *
-     * @param bool $canComment
+     * @param bool
      */
     public function setCanComment($canComment)
     {
@@ -489,11 +304,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canComment;
     }
     /**
-     * Output only. Whether the current user can copy this file. For an item in a
-     * shared drive, whether the current user can copy non-folder descendants of
-     * this item, or this item if it's not a folder.
-     *
-     * @param bool $canCopy
+     * @param bool
      */
     public function setCanCopy($canCopy)
     {
@@ -507,9 +318,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canCopy;
     }
     /**
-     * Output only. Whether the current user can delete this file.
-     *
-     * @param bool $canDelete
+     * @param bool
      */
     public function setCanDelete($canDelete)
     {
@@ -523,11 +332,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDelete;
     }
     /**
-     * Output only. Whether the current user can delete children of this folder.
-     * This is `false` when the item isn't a folder. Only populated for items in
-     * shared drives.
-     *
-     * @param bool $canDeleteChildren
+     * @param bool
      */
     public function setCanDeleteChildren($canDeleteChildren)
     {
@@ -541,9 +346,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDeleteChildren;
     }
     /**
-     * Whether a user can disable inherited permissions.
-     *
-     * @param bool $canDisableInheritedPermissions
+     * @param bool
      */
     public function setCanDisableInheritedPermissions($canDisableInheritedPermissions)
     {
@@ -557,9 +360,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDisableInheritedPermissions;
     }
     /**
-     * Output only. Whether the current user can download this file.
-     *
-     * @param bool $canDownload
+     * @param bool
      */
     public function setCanDownload($canDownload)
     {
@@ -573,11 +374,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canDownload;
     }
     /**
-     * Output only. Whether the current user can edit this file. Other factors may
-     * limit the type of changes a user can make to a file. For example, see
-     * `canChangeCopyRequiresWriterPermission` or `canModifyContent`.
-     *
-     * @param bool $canEdit
+     * @param bool
      */
     public function setCanEdit($canEdit)
     {
@@ -591,9 +388,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canEdit;
     }
     /**
-     * Whether a user can re-enable inherited permissions.
-     *
-     * @param bool $canEnableInheritedPermissions
+     * @param bool
      */
     public function setCanEnableInheritedPermissions($canEnableInheritedPermissions)
     {
@@ -607,10 +402,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canEnableInheritedPermissions;
     }
     /**
-     * Output only. Whether the current user can list the children of this folder.
-     * This is always `false` when the item isn't a folder.
-     *
-     * @param bool $canListChildren
+     * @param bool
      */
     public function setCanListChildren($canListChildren)
     {
@@ -624,9 +416,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canListChildren;
     }
     /**
-     * Output only. Whether the current user can modify the content of this file.
-     *
-     * @param bool $canModifyContent
+     * @param bool
      */
     public function setCanModifyContent($canModifyContent)
     {
@@ -640,18 +430,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canModifyContent;
     }
     /**
-     * Deprecated: Output only. Use one of `canModifyEditorContentRestriction`,
-     * `canModifyOwnerContentRestriction`, or `canRemoveContentRestriction`.
-     *
-     * @deprecated
-     * @param bool $canModifyContentRestriction
+     * @param bool
      */
     public function setCanModifyContentRestriction($canModifyContentRestriction)
     {
         $this->canModifyContentRestriction = $canModifyContentRestriction;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanModifyContentRestriction()
@@ -659,10 +444,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canModifyContentRestriction;
     }
     /**
-     * Output only. Whether the current user can add or modify content
-     * restrictions on the file which are editor restricted.
-     *
-     * @param bool $canModifyEditorContentRestriction
+     * @param bool
      */
     public function setCanModifyEditorContentRestriction($canModifyEditorContentRestriction)
     {
@@ -676,9 +458,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canModifyEditorContentRestriction;
     }
     /**
-     * Output only. Whether the current user can modify the labels on the file.
-     *
-     * @param bool $canModifyLabels
+     * @param bool
      */
     public function setCanModifyLabels($canModifyLabels)
     {
@@ -692,10 +472,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canModifyLabels;
     }
     /**
-     * Output only. Whether the current user can add or modify content
-     * restrictions which are owner restricted.
-     *
-     * @param bool $canModifyOwnerContentRestriction
+     * @param bool
      */
     public function setCanModifyOwnerContentRestriction($canModifyOwnerContentRestriction)
     {
@@ -709,11 +486,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canModifyOwnerContentRestriction;
     }
     /**
-     * Output only. Whether the current user can move children of this folder
-     * outside of the shared drive. This is `false` when the item isn't a folder.
-     * Only populated for items in shared drives.
-     *
-     * @param bool $canMoveChildrenOutOfDrive
+     * @param bool
      */
     public function setCanMoveChildrenOutOfDrive($canMoveChildrenOutOfDrive)
     {
@@ -727,17 +500,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveChildrenOutOfDrive;
     }
     /**
-     * Deprecated: Output only. Use `canMoveChildrenOutOfDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canMoveChildrenOutOfTeamDrive
+     * @param bool
      */
     public function setCanMoveChildrenOutOfTeamDrive($canMoveChildrenOutOfTeamDrive)
     {
         $this->canMoveChildrenOutOfTeamDrive = $canMoveChildrenOutOfTeamDrive;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanMoveChildrenOutOfTeamDrive()
@@ -745,12 +514,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveChildrenOutOfTeamDrive;
     }
     /**
-     * Output only. Whether the current user can move children of this folder
-     * within this drive. This is `false` when the item isn't a folder. Note that
-     * a request to move the child may still fail depending on the current user's
-     * access to the child and to the destination folder.
-     *
-     * @param bool $canMoveChildrenWithinDrive
+     * @param bool
      */
     public function setCanMoveChildrenWithinDrive($canMoveChildrenWithinDrive)
     {
@@ -764,17 +528,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveChildrenWithinDrive;
     }
     /**
-     * Deprecated: Output only. Use `canMoveChildrenWithinDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canMoveChildrenWithinTeamDrive
+     * @param bool
      */
     public function setCanMoveChildrenWithinTeamDrive($canMoveChildrenWithinTeamDrive)
     {
         $this->canMoveChildrenWithinTeamDrive = $canMoveChildrenWithinTeamDrive;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanMoveChildrenWithinTeamDrive()
@@ -782,17 +542,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveChildrenWithinTeamDrive;
     }
     /**
-     * Deprecated: Output only. Use `canMoveItemOutOfDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canMoveItemIntoTeamDrive
+     * @param bool
      */
     public function setCanMoveItemIntoTeamDrive($canMoveItemIntoTeamDrive)
     {
         $this->canMoveItemIntoTeamDrive = $canMoveItemIntoTeamDrive;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanMoveItemIntoTeamDrive()
@@ -800,11 +556,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveItemIntoTeamDrive;
     }
     /**
-     * Output only. Whether the current user can move this item outside of this
-     * drive by changing its parent. Note that a request to change the parent of
-     * the item may still fail depending on the new parent that's being added.
-     *
-     * @param bool $canMoveItemOutOfDrive
+     * @param bool
      */
     public function setCanMoveItemOutOfDrive($canMoveItemOutOfDrive)
     {
@@ -818,17 +570,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveItemOutOfDrive;
     }
     /**
-     * Deprecated: Output only. Use `canMoveItemOutOfDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canMoveItemOutOfTeamDrive
+     * @param bool
      */
     public function setCanMoveItemOutOfTeamDrive($canMoveItemOutOfTeamDrive)
     {
         $this->canMoveItemOutOfTeamDrive = $canMoveItemOutOfTeamDrive;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanMoveItemOutOfTeamDrive()
@@ -836,12 +584,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveItemOutOfTeamDrive;
     }
     /**
-     * Output only. Whether the current user can move this item within this drive.
-     * Note that a request to change the parent of the item may still fail
-     * depending on the new parent that's being added and the parent that is being
-     * removed.
-     *
-     * @param bool $canMoveItemWithinDrive
+     * @param bool
      */
     public function setCanMoveItemWithinDrive($canMoveItemWithinDrive)
     {
@@ -855,17 +598,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveItemWithinDrive;
     }
     /**
-     * Deprecated: Output only. Use `canMoveItemWithinDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canMoveItemWithinTeamDrive
+     * @param bool
      */
     public function setCanMoveItemWithinTeamDrive($canMoveItemWithinTeamDrive)
     {
         $this->canMoveItemWithinTeamDrive = $canMoveItemWithinTeamDrive;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanMoveItemWithinTeamDrive()
@@ -873,18 +612,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveItemWithinTeamDrive;
     }
     /**
-     * Deprecated: Output only. Use `canMoveItemWithinDrive` or
-     * `canMoveItemOutOfDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canMoveTeamDriveItem
+     * @param bool
      */
     public function setCanMoveTeamDriveItem($canMoveTeamDriveItem)
     {
         $this->canMoveTeamDriveItem = $canMoveTeamDriveItem;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanMoveTeamDriveItem()
@@ -892,10 +626,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canMoveTeamDriveItem;
     }
     /**
-     * Output only. Whether the current user can read the shared drive to which
-     * this file belongs. Only populated for items in shared drives.
-     *
-     * @param bool $canReadDrive
+     * @param bool
      */
     public function setCanReadDrive($canReadDrive)
     {
@@ -909,9 +640,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canReadDrive;
     }
     /**
-     * Output only. Whether the current user can read the labels on the file.
-     *
-     * @param bool $canReadLabels
+     * @param bool
      */
     public function setCanReadLabels($canReadLabels)
     {
@@ -925,11 +654,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canReadLabels;
     }
     /**
-     * Output only. Whether the current user can read the revisions resource of
-     * this file. For a shared drive item, whether revisions of non-folder
-     * descendants of this item, or this item if it's not a folder, can be read.
-     *
-     * @param bool $canReadRevisions
+     * @param bool
      */
     public function setCanReadRevisions($canReadRevisions)
     {
@@ -943,17 +668,13 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canReadRevisions;
     }
     /**
-     * Deprecated: Output only. Use `canReadDrive` instead.
-     *
-     * @deprecated
-     * @param bool $canReadTeamDrive
+     * @param bool
      */
     public function setCanReadTeamDrive($canReadTeamDrive)
     {
         $this->canReadTeamDrive = $canReadTeamDrive;
     }
     /**
-     * @deprecated
      * @return bool
      */
     public function getCanReadTeamDrive()
@@ -961,11 +682,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canReadTeamDrive;
     }
     /**
-     * Output only. Whether the current user can remove children from this folder.
-     * This is always `false` when the item isn't a folder. For a folder in a
-     * shared drive, use `canDeleteChildren` or `canTrashChildren` instead.
-     *
-     * @param bool $canRemoveChildren
+     * @param bool
      */
     public function setCanRemoveChildren($canRemoveChildren)
     {
@@ -979,10 +696,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRemoveChildren;
     }
     /**
-     * Output only. Whether there's a content restriction on the file that can be
-     * removed by the current user.
-     *
-     * @param bool $canRemoveContentRestriction
+     * @param bool
      */
     public function setCanRemoveContentRestriction($canRemoveContentRestriction)
     {
@@ -996,11 +710,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRemoveContentRestriction;
     }
     /**
-     * Output only. Whether the current user can remove a parent from the item
-     * without adding another parent in the same request. Not populated for shared
-     * drive files.
-     *
-     * @param bool $canRemoveMyDriveParent
+     * @param bool
      */
     public function setCanRemoveMyDriveParent($canRemoveMyDriveParent)
     {
@@ -1014,9 +724,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRemoveMyDriveParent;
     }
     /**
-     * Output only. Whether the current user can rename this file.
-     *
-     * @param bool $canRename
+     * @param bool
      */
     public function setCanRename($canRename)
     {
@@ -1030,10 +738,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canRename;
     }
     /**
-     * Output only. Whether the current user can modify the sharing settings for
-     * this file.
-     *
-     * @param bool $canShare
+     * @param bool
      */
     public function setCanShare($canShare)
     {
@@ -1047,9 +752,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canShare;
     }
     /**
-     * Output only. Whether the current user can move this file to trash.
-     *
-     * @param bool $canTrash
+     * @param bool
      */
     public function setCanTrash($canTrash)
     {
@@ -1063,11 +766,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canTrash;
     }
     /**
-     * Output only. Whether the current user can trash children of this folder.
-     * This is `false` when the item isn't a folder. Only populated for items in
-     * shared drives.
-     *
-     * @param bool $canTrashChildren
+     * @param bool
      */
     public function setCanTrashChildren($canTrashChildren)
     {
@@ -1081,9 +780,7 @@ class DriveFileCapabilities extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->canTrashChildren;
     }
     /**
-     * Output only. Whether the current user can restore this file from trash.
-     *
-     * @param bool $canUntrash
+     * @param bool
      */
     public function setCanUntrash($canUntrash)
     {

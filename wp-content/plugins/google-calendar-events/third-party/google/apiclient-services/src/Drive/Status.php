@@ -21,30 +21,19 @@ class Status extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'details';
     /**
-     * The status code, which should be an enum value of google.rpc.Code.
-     *
      * @var int
      */
     public $code;
     /**
-     * A list of messages that carry the error details. There is a common set of
-     * message types for APIs to use.
-     *
      * @var array[]
      */
     public $details;
     /**
-     * A developer-facing error message, which should be in English. Any user-
-     * facing error message should be localized and sent in the
-     * google.rpc.Status.details field, or localized by the client.
-     *
      * @var string
      */
     public $message;
     /**
-     * The status code, which should be an enum value of google.rpc.Code.
-     *
-     * @param int $code
+     * @param int
      */
     public function setCode($code)
     {
@@ -58,10 +47,7 @@ class Status extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->code;
     }
     /**
-     * A list of messages that carry the error details. There is a common set of
-     * message types for APIs to use.
-     *
-     * @param array[] $details
+     * @param array[]
      */
     public function setDetails($details)
     {
@@ -75,11 +61,7 @@ class Status extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->details;
     }
     /**
-     * A developer-facing error message, which should be in English. Any user-
-     * facing error message should be localized and sent in the
-     * google.rpc.Status.details field, or localized by the client.
-     *
-     * @param string $message
+     * @param string
      */
     public function setMessage($message)
     {

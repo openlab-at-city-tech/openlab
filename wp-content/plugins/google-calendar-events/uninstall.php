@@ -32,7 +32,7 @@ if ($delete_settings === true || $erase_data === true) {
 	$wpdb->query(
 		"
 DELETE FROM $wpdb->options WHERE option_name LIKE '%simple-calendar%';
-"
+",
 	);
 }
 
@@ -41,8 +41,8 @@ if ($erase_data === true) {
 	// Delete calendar posts.
 	$wpdb->query(
 		"
-DELETE FROM {$wpdb->posts} WHERE post_type IN ( 'calendar' );
-"
+DELETE FROM {$wpdb->posts} WHERE post_type IN ( 'calendar', 'sc-event' );
+",
 	);
 
 	// Delete calendar postmeta.
@@ -51,7 +51,7 @@ DELETE meta FROM {$wpdb->postmeta} meta LEFT JOIN {$wpdb->posts} posts ON posts.
 ");
 
 	// Delete calendar terms.
-	$terms = get_terms(['calendar_category', 'calendar_feed', 'calendar_type']);
+	$terms = get_terms(['calendar_category', 'calendar_feed', 'calendar_type', 'sc-event-category', 'sc-event-tag']);
 	if (!empty($terms) && is_array($terms)) {
 		foreach ($terms as $term) {
 			wp_delete_term($term->term_id, $term->taxonomy);

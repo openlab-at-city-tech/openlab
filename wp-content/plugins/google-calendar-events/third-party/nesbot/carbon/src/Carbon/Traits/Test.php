@@ -168,7 +168,7 @@ trait Test
         }
         $time = $testInstance instanceof self ? $testInstance->rawFormat(static::MOCK_DATETIME_FORMAT) : $testInstance->format(static::MOCK_DATETIME_FORMAT);
     }
-    private static function setDefaultTimezone($timezone, DateTimeInterface $date = null)
+    private static function setDefaultTimezone($timezone, ?DateTimeInterface $date = null)
     {
         $previous = null;
         $success = \false;

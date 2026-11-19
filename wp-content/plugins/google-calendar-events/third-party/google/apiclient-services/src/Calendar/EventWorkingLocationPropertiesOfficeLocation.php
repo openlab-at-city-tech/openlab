@@ -20,43 +20,27 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 class EventWorkingLocationPropertiesOfficeLocation extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * An optional building identifier. This should reference a building ID in the
-     * organization's Resources database.
-     *
      * @var string
      */
     public $buildingId;
     /**
-     * An optional desk identifier.
-     *
      * @var string
      */
     public $deskId;
     /**
-     * An optional floor identifier.
-     *
      * @var string
      */
     public $floorId;
     /**
-     * An optional floor section identifier.
-     *
      * @var string
      */
     public $floorSectionId;
     /**
-     * The office name that's displayed in Calendar Web and Mobile clients. We
-     * recommend you reference a building name in the organization's Resources
-     * database.
-     *
      * @var string
      */
     public $label;
     /**
-     * An optional building identifier. This should reference a building ID in the
-     * organization's Resources database.
-     *
-     * @param string $buildingId
+     * @param string
      */
     public function setBuildingId($buildingId)
     {
@@ -70,9 +54,7 @@ class EventWorkingLocationPropertiesOfficeLocation extends \SimpleCalendar\plugi
         return $this->buildingId;
     }
     /**
-     * An optional desk identifier.
-     *
-     * @param string $deskId
+     * @param string
      */
     public function setDeskId($deskId)
     {
@@ -86,9 +68,7 @@ class EventWorkingLocationPropertiesOfficeLocation extends \SimpleCalendar\plugi
         return $this->deskId;
     }
     /**
-     * An optional floor identifier.
-     *
-     * @param string $floorId
+     * @param string
      */
     public function setFloorId($floorId)
     {
@@ -102,9 +82,7 @@ class EventWorkingLocationPropertiesOfficeLocation extends \SimpleCalendar\plugi
         return $this->floorId;
     }
     /**
-     * An optional floor section identifier.
-     *
-     * @param string $floorSectionId
+     * @param string
      */
     public function setFloorSectionId($floorSectionId)
     {
@@ -118,11 +96,7 @@ class EventWorkingLocationPropertiesOfficeLocation extends \SimpleCalendar\plugi
         return $this->floorSectionId;
     }
     /**
-     * The office name that's displayed in Calendar Web and Mobile clients. We
-     * recommend you reference a building name in the organization's Resources
-     * database.
-     *
-     * @param string $label
+     * @param string
      */
     public function setLabel($label)
     {

@@ -19,88 +19,38 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
 class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
 {
-    /**
-     * Whether this calendar automatically accepts invitations. Only valid for
-     * resource calendars.
-     *
-     * @var bool
-     */
-    public $autoAcceptInvitations;
     protected $conferencePropertiesType = ConferenceProperties::class;
     protected $conferencePropertiesDataType = '';
     /**
-     * The email of the owner of the calendar. Set only for secondary calendars.
-     * Read-only.
-     *
-     * @var string
-     */
-    public $dataOwner;
-    /**
-     * Description of the calendar. Optional.
-     *
      * @var string
      */
     public $description;
     /**
-     * ETag of the resource.
-     *
      * @var string
      */
     public $etag;
     /**
-     * Identifier of the calendar. To retrieve IDs call the calendarList.list()
-     * method.
-     *
      * @var string
      */
     public $id;
     /**
-     * Type of the resource ("calendar#calendar").
-     *
      * @var string
      */
     public $kind;
     /**
-     * Geographic location of the calendar as free-form text. Optional.
-     *
      * @var string
      */
     public $location;
     /**
-     * Title of the calendar.
-     *
      * @var string
      */
     public $summary;
     /**
-     * The time zone of the calendar. (Formatted as an IANA Time Zone Database
-     * name, e.g. "Europe/Zurich".) Optional.
-     *
      * @var string
      */
     public $timeZone;
     /**
-     * Whether this calendar automatically accepts invitations. Only valid for
-     * resource calendars.
-     *
-     * @param bool $autoAcceptInvitations
-     */
-    public function setAutoAcceptInvitations($autoAcceptInvitations)
-    {
-        $this->autoAcceptInvitations = $autoAcceptInvitations;
-    }
-    /**
-     * @return bool
-     */
-    public function getAutoAcceptInvitations()
-    {
-        return $this->autoAcceptInvitations;
-    }
-    /**
-     * Conferencing properties for this calendar, for example what types of
-     * conferences are allowed.
-     *
-     * @param ConferenceProperties $conferenceProperties
+     * @param ConferenceProperties
      */
     public function setConferenceProperties(ConferenceProperties $conferenceProperties)
     {
@@ -114,26 +64,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->conferenceProperties;
     }
     /**
-     * The email of the owner of the calendar. Set only for secondary calendars.
-     * Read-only.
-     *
-     * @param string $dataOwner
-     */
-    public function setDataOwner($dataOwner)
-    {
-        $this->dataOwner = $dataOwner;
-    }
-    /**
-     * @return string
-     */
-    public function getDataOwner()
-    {
-        return $this->dataOwner;
-    }
-    /**
-     * Description of the calendar. Optional.
-     *
-     * @param string $description
+     * @param string
      */
     public function setDescription($description)
     {
@@ -147,9 +78,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->description;
     }
     /**
-     * ETag of the resource.
-     *
-     * @param string $etag
+     * @param string
      */
     public function setEtag($etag)
     {
@@ -163,10 +92,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->etag;
     }
     /**
-     * Identifier of the calendar. To retrieve IDs call the calendarList.list()
-     * method.
-     *
-     * @param string $id
+     * @param string
      */
     public function setId($id)
     {
@@ -180,9 +106,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->id;
     }
     /**
-     * Type of the resource ("calendar#calendar").
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -196,9 +120,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->kind;
     }
     /**
-     * Geographic location of the calendar as free-form text. Optional.
-     *
-     * @param string $location
+     * @param string
      */
     public function setLocation($location)
     {
@@ -212,9 +134,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->location;
     }
     /**
-     * Title of the calendar.
-     *
-     * @param string $summary
+     * @param string
      */
     public function setSummary($summary)
     {
@@ -228,10 +148,7 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->summary;
     }
     /**
-     * The time zone of the calendar. (Formatted as an IANA Time Zone Database
-     * name, e.g. "Europe/Zurich".) Optional.
-     *
-     * @param string $timeZone
+     * @param string
      */
     public function setTimeZone($timeZone)
     {

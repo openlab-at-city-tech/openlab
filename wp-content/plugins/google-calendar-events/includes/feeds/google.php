@@ -6,9 +6,25 @@
  */
 namespace SimpleCalendar\Feeds;
 
+use SimpleCalendar\plugin_deps\Google\Collection as Google_Collection;
+use SimpleCalendar\plugin_deps\Google\Model as Google_Model;
 use SimpleCalendar\plugin_deps\Google\Service\Calendar as Google_Service_Calendar;
 use SimpleCalendar\plugin_deps\Google\Client as Google_Client;
 use SimpleCalendar\plugin_deps\Google\Service\Calendar\Event as Google_Service_Calendar_Event;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventAttendee as Google_Service_Calendar_EventAttendee;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventAttachment as Google_Service_Calendar_EventAttachment;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventBirthdayProperties as Google_Service_Calendar_EventBirthdayProperties;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventCreator as Google_Service_Calendar_EventCreator;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventDateTime as Google_Service_Calendar_EventDateTime;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventExtendedProperties as Google_Service_Calendar_EventExtendedProperties;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventFocusTimeProperties as Google_Service_Calendar_EventFocusTimeProperties;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventGadget as Google_Service_Calendar_EventGadget;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventOrganizer as Google_Service_Calendar_EventOrganizer;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventOutOfOfficeProperties as Google_Service_Calendar_EventOutOfOfficeProperties;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventReminder as Google_Service_Calendar_EventReminder;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventReminders as Google_Service_Calendar_EventReminders;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventSource as Google_Service_Calendar_EventSource;
+use SimpleCalendar\plugin_deps\Google\Service\Calendar\EventWorkingLocationProperties as Google_Service_Calendar_EventWorkingLocationProperties;
 use SimpleCalendar\plugin_deps\Google\Service\Calendar\Events as Google_Service_Calendar_Events;
 use SimpleCalendar\plugin_deps\Google\Service\Exception as Google_Service_Exception;
 
@@ -106,12 +122,11 @@ class Google extends Feed
 		$settings = get_option('simple-calendar_settings_feeds');
 		$this->google_api_key = isset($settings['google']['api_key']) ? esc_attr($settings['google']['api_key']) : '';
 		$this->google_client_scopes = [Google_Service_Calendar::CALENDAR_READONLY];
-		$this->google_client = $this->get_client();
 
 		if ($this->post_id > 0) {
 			// Google query args.
 			$this->google_calendar_id = $this->esc_google_calendar_id(
-				get_post_meta($this->post_id, '_google_calendar_id', true)
+				get_post_meta($this->post_id, '_google_calendar_id', true),
 			);
 			$this->google_events_recurring = esc_attr(get_post_meta($this->post_id, '_google_events_recurring', true));
 			// note that google_search_query is used in a URL param and not as HTML output, so don't use esc_attr() on it
@@ -192,7 +207,7 @@ class Google extends Feed
 
 							// Event title & description.
 							$title = $event->getSummary() ?? '';
-							$title = strip_tags($title);
+							$title = wp_strip_all_tags($title);
 							$title = !empty($title)
 								? sanitize_text_field(iconv(mb_detect_encoding($title, mb_detect_order(), true), 'UTF-8', $title))
 								: '';
@@ -234,7 +249,7 @@ class Google extends Feed
 										$date->hour,
 										$date->minute,
 										$date->second,
-										$date->timezone
+										$date->timezone,
 									);
 									$google_start2 = Carbon::create(
 										$date->year,
@@ -243,7 +258,7 @@ class Google extends Feed
 										$date->hour,
 										$date->minute,
 										$date->second,
-										$event->getStart()->timeZone
+										$event->getStart()->timeZone,
 									);
 
 									// Get the offset in hours
@@ -264,7 +279,7 @@ class Google extends Feed
 									$date->hour,
 									$date->minute,
 									$date->second,
-									$start_timezone
+									$start_timezone,
 								);
 								$google_start_utc = Carbon::create(
 									$date->year,
@@ -273,7 +288,7 @@ class Google extends Feed
 									$date->hour,
 									$date->minute,
 									$date->second,
-									'UTC'
+									'UTC',
 								);
 
 								$this->timezone = $start_timezone;
@@ -315,7 +330,7 @@ class Google extends Feed
 											$date->hour,
 											$date->minute,
 											$date->second,
-											$date->timezone
+											$date->timezone,
 										);
 										$google_start2 = Carbon::create(
 											$date->year,
@@ -324,7 +339,7 @@ class Google extends Feed
 											$date->hour,
 											$date->minute,
 											$date->second,
-											$event->getEnd()->timeZone
+											$event->getEnd()->timeZone,
 										);
 
 										// Get the offset in hours
@@ -345,7 +360,7 @@ class Google extends Feed
 										$date->hour,
 										$date->minute,
 										$date->second,
-										$end_timezone
+										$end_timezone,
 									);
 									$google_end_utc = Carbon::create(
 										$date->year,
@@ -354,7 +369,7 @@ class Google extends Feed
 										$date->hour,
 										$date->minute,
 										$date->second,
-										'UTC'
+										'UTC',
 									);
 								}
 								// End.
@@ -382,10 +397,18 @@ class Google extends Feed
 							$start_location = $end_location = $event->getLocation();
 
 							// Recurring event.
+							// Expanded instances only have recurringEventId; attach master RRULE when available.
 							$recurrence = $event->getRecurrence();
 							$recurring_id = $event->getRecurringEventId();
 							if (!$recurrence && $recurring_id) {
-								$recurrence = true;
+								if (
+									!empty($response['recurrence_map'][$recurring_id]) &&
+									is_array($response['recurrence_map'][$recurring_id])
+								) {
+									$recurrence = $response['recurrence_map'][$recurring_id];
+								} else {
+									$recurrence = true;
+								}
 							}
 
 							// Event link.
@@ -425,13 +448,13 @@ class Google extends Feed
 
 					if (!empty($calendar['events'])) {
 						ksort($calendar['events'], SORT_NUMERIC);
-
-						set_transient(
-							'_simple-calendar_feed_id_' . strval($this->post_id) . '_' . $this->type,
-							$calendar,
-							max(absint($this->cache), 1) // Since a value of 0 means forever we set the minimum here to 1 if the user has set it to be 0
-						);
 					}
+
+					set_transient(
+						'_simple-calendar_feed_id_' . strval($this->post_id) . '_' . $this->type,
+						$calendar,
+						max(absint($this->cache), 1), // Since a value of 0 means forever we set the minimum here to 1 if the user has set it to be 0
+					);
 				}
 			} else {
 				$message = __('While trying to retrieve events, Google returned an error:', 'google-calendar-events');
@@ -439,7 +462,7 @@ class Google extends Feed
 				$message .=
 					__(
 						'Please ensure that both your Google Calendar ID and API Key are valid and that the Google Calendar you want to display is public.',
-						'google-calendar-events'
+						'google-calendar-events',
 					) . '<br><br>';
 				$message .= __('Only you can see this notice.', 'google-calendar-events');
 
@@ -562,6 +585,7 @@ class Google extends Feed
 			$simple_calendar_auth_site_token = get_option('simple_calendar_auth_site_token');
 			$response = '';
 			$backgroundcolor = '';
+			$event_labels = [];
 			if (
 				isset($simple_calendar_auth_site_token) &&
 				!empty($simple_calendar_auth_site_token) &&
@@ -570,13 +594,34 @@ class Google extends Feed
 			) {
 				$response_arr = apply_filters('simple_calendar_oauth_list_events', '', $id, $args);
 
-				$response = unserialize($response_arr['data']);
+				if (!is_array($response_arr)) {
+					throw new Google_Service_Exception(
+						esc_html__('Unable to fetch calendar events via OAuth.', 'google-calendar-events'),
+						1,
+					);
+				}
+
+				if (isset($response_arr['Error']) && !empty($response_arr['Error'])) {
+					throw new Google_Service_Exception(esc_html((string) $response_arr['Error']), 1);
+				}
+
+				if (!isset($response_arr['data']) || !is_string($response_arr['data']) || $response_arr['data'] === '') {
+					$message = !empty($response_arr['message'])
+						? (string) $response_arr['message']
+						: __('Unable to fetch calendar events via OAuth.', 'google-calendar-events');
+					throw new Google_Service_Exception(esc_html($message), 1);
+				}
+
+				$response = $this->oauth_unserialize_events_response($response_arr['data']);
 				if (isset($response_arr['backgroundcolor']) && !empty($response_arr['backgroundcolor'])) {
 					$backgroundcolor = $response_arr['backgroundcolor'];
 				}
+				if (isset($response_arr['event_labels']) && is_array($response_arr['event_labels'])) {
+					$event_labels = $response_arr['event_labels'];
+				}
 
-				if (isset($response['Error']) && !empty($response['Error'])) {
-					throw new Google_Service_Exception($response['Error'], 1);
+				if (is_array($response) && isset($response['Error']) && !empty($response['Error'])) {
+					throw new Google_Service_Exception(esc_html((string) $response['Error']), 1);
 				}
 			} else {
 				$response = $google->events->listEvents($id, $args);
@@ -591,11 +636,110 @@ class Google extends Feed
 					'url' => esc_url('//www.google.com/calendar/embed?src=' . $id),
 					'events' => $response->getItems(),
 					'backgroundcolor' => $backgroundcolor,
+					'event_labels' => $event_labels,
 				];
+
+				// Expanded instances omit RRULE; fetch masters so ICS export can keep weekly series.
+				if (!empty($args['singleEvents'])) {
+					$calendar['recurrence_map'] = $this->fetch_recurrence_map($id, $args, $google);
+				}
 			}
 		}
 
 		return $calendar;
+	}
+
+	/**
+	 * Fetch unexpanded events and map master event IDs to recurrence rule lines.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @param string                                 $id     Google Calendar ID.
+	 * @param array                                  $args   Args used for the expanded events query.
+	 * @param \Google_Service_Calendar|null          $google Calendar service (API key path).
+	 * @return array<string, string[]>
+	 */
+	protected function fetch_recurrence_map($id, array $args, $google = null)
+	{
+		$master_args = $args;
+		unset($master_args['singleEvents'], $master_args['orderBy']);
+
+		$masters = null;
+		$feed_type = wp_get_object_terms($this->post_id, 'calendar_feed');
+		$simple_calendar_auth_site_token = get_option('simple_calendar_auth_site_token');
+
+		try {
+			if (
+				isset($simple_calendar_auth_site_token) &&
+				!empty($simple_calendar_auth_site_token) &&
+				isset($feed_type[0]->slug) &&
+				$feed_type[0]->slug != 'google'
+			) {
+				$response_arr = apply_filters('simple_calendar_oauth_list_events', '', $id, $master_args);
+				if (is_array($response_arr) && !empty($response_arr['data']) && is_string($response_arr['data'])) {
+					$masters = $this->oauth_unserialize_events_response($response_arr['data']);
+				}
+			} elseif ($google) {
+				$masters = $google->events->listEvents($id, $master_args);
+			}
+		} catch (\Exception $e) {
+			return [];
+		}
+
+		if (!($masters instanceof Google_Service_Calendar_Events)) {
+			return [];
+		}
+
+		$map = [];
+		foreach ((array) $masters->getItems() as $master) {
+			if (!($master instanceof Google_Service_Calendar_Event)) {
+				continue;
+			}
+			$rules = $master->getRecurrence();
+			if (empty($rules) || !is_array($rules)) {
+				continue;
+			}
+			$master_id = $master->getId();
+			if (!empty($master_id)) {
+				$map[$master_id] = $rules;
+			}
+		}
+
+		return $map;
+	}
+
+	/**
+	 * Unserialize OAuth proxy events response with a restricted class allowlist.
+	 *
+	 * @since  3.5.4
+	 *
+	 * @param string $data Serialized events payload from the auth proxy.
+	 * @return mixed
+	 */
+	private function oauth_unserialize_events_response($data)
+	{
+		return unserialize($data, [
+			'allowed_classes' => [
+				Google_Service_Calendar_Events::class,
+				Google_Service_Calendar_Event::class,
+				Google_Service_Calendar_EventAttendee::class,
+				Google_Service_Calendar_EventAttachment::class,
+				Google_Service_Calendar_EventBirthdayProperties::class,
+				Google_Service_Calendar_EventCreator::class,
+				Google_Service_Calendar_EventDateTime::class,
+				Google_Service_Calendar_EventExtendedProperties::class,
+				Google_Service_Calendar_EventFocusTimeProperties::class,
+				Google_Service_Calendar_EventGadget::class,
+				Google_Service_Calendar_EventOrganizer::class,
+				Google_Service_Calendar_EventOutOfOfficeProperties::class,
+				Google_Service_Calendar_EventReminder::class,
+				Google_Service_Calendar_EventReminders::class,
+				Google_Service_Calendar_EventSource::class,
+				Google_Service_Calendar_EventWorkingLocationProperties::class,
+				Google_Model::class,
+				Google_Collection::class,
+			],
+		]);
 	}
 
 	/**
@@ -608,13 +752,26 @@ class Google extends Feed
 	 */
 	private function get_client()
 	{
+		if ($this->google_client instanceof Google_Client) {
+			return $this->google_client;
+		}
+
+		static $clients = [];
+
+		$curl_options = apply_filters('simcal_google_client_curl_options', []);
+		$cache_key = md5(
+			$this->google_api_key . wp_json_encode($this->google_client_scopes) . wp_json_encode($curl_options),
+		);
+		if (isset($clients[$cache_key])) {
+			$this->google_client = $clients[$cache_key];
+			return $this->google_client;
+		}
+
 		$client = new Google_Client();
 		$client->setApplicationName('Simple Calendar');
 		$client->setScopes($this->google_client_scopes);
 		$client->setDeveloperKey($this->google_api_key);
 		$client->setAccessType('online');
-
-		$curl_options = apply_filters('simcal_google_client_curl_options', []);
 
 		if (!empty($curl_options)) {
 			$guzzle = new Client([
@@ -623,6 +780,9 @@ class Google extends Feed
 
 			$client->setHttpClient($guzzle);
 		}
+
+		$clients[$cache_key] = $client;
+		$this->google_client = $client;
 
 		return $client;
 	}
@@ -637,6 +797,8 @@ class Google extends Feed
 	 */
 	protected function get_service()
 	{
-		return $this->google_client instanceof Google_Client ? new Google_Service_Calendar($this->google_client) : null;
+		$client = $this->get_client();
+
+		return $client instanceof Google_Client ? new Google_Service_Calendar($client) : null;
 	}
 }

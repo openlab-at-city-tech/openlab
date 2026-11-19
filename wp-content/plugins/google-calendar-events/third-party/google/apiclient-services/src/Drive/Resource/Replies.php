@@ -30,9 +30,7 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\ReplyList;
 class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
     /**
-     * Creates a reply to a comment. For more information, see [Manage comments and
-     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
-     * comments). (replies.create)
+     * Creates a reply to a comment. (replies.create)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
@@ -48,9 +46,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('create', [$params], Reply::class);
     }
     /**
-     * Deletes a reply. For more information, see [Manage comments and
-     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
-     * comments). (replies.delete)
+     * Deletes a reply. (replies.delete)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
@@ -65,9 +61,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('delete', [$params]);
     }
     /**
-     * Gets a reply by ID. For more information, see [Manage comments and
-     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
-     * comments). (replies.get)
+     * Gets a reply by ID. (replies.get)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
@@ -75,7 +69,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
      * @param array $optParams Optional parameters.
      *
      * @opt_param bool includeDeleted Whether to return deleted replies. Deleted
-     * replies don't include their original content.
+     * replies will not include their original content.
      * @return Reply
      * @throws \Google\Service\Exception
      */
@@ -86,19 +80,17 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('get', [$params], Reply::class);
     }
     /**
-     * Lists a comment's replies. For more information, see [Manage comments and
-     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
-     * comments). (replies.listReplies)
+     * Lists a comment's replies. (replies.listReplies)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.
      * @param array $optParams Optional parameters.
      *
      * @opt_param bool includeDeleted Whether to include deleted replies. Deleted
-     * replies don't include their original content.
+     * replies will not include their original content.
      * @opt_param int pageSize The maximum number of replies to return per page.
      * @opt_param string pageToken The token for continuing a previous list request
-     * on the next page. This should be set to the value of `nextPageToken` from the
+     * on the next page. This should be set to the value of 'nextPageToken' from the
      * previous response.
      * @return ReplyList
      * @throws \Google\Service\Exception
@@ -110,10 +102,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
         return $this->call('list', [$params], ReplyList::class);
     }
     /**
-     * Updates a reply with patch semantics. For more information, see [Manage
-     * comments and
-     * replies](https://developers.google.com/workspace/drive/api/guides/manage-
-     * comments). (replies.update)
+     * Updates a reply with patch semantics. (replies.update)
      *
      * @param string $fileId The ID of the file.
      * @param string $commentId The ID of the comment.

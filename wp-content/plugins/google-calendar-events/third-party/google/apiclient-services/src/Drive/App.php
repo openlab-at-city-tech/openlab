@@ -21,157 +21,101 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'secondaryMimeTypes';
     /**
-     * Whether the app is authorized to access data on the user's Drive.
-     *
      * @var bool
      */
     public $authorized;
     /**
-     * The template URL to create a file with this app in a given folder. The
-     * template contains the {folderId} to be replaced by the folder ID house the
-     * new file.
-     *
      * @var string
      */
     public $createInFolderTemplate;
     /**
-     * The URL to create a file with this app.
-     *
      * @var string
      */
     public $createUrl;
     /**
-     * Whether the app has Drive-wide scope. An app with Drive-wide scope can
-     * access all files in the user's Drive.
-     *
      * @var bool
      */
     public $hasDriveWideScope;
     protected $iconsType = AppIcons::class;
     protected $iconsDataType = 'array';
     /**
-     * The ID of the app.
-     *
      * @var string
      */
     public $id;
     /**
-     * Whether the app is installed.
-     *
      * @var bool
      */
     public $installed;
     /**
-     * Output only. Identifies what kind of resource this is. Value: the fixed
-     * string "drive#app".
-     *
      * @var string
      */
     public $kind;
     /**
-     * A long description of the app.
-     *
      * @var string
      */
     public $longDescription;
     /**
-     * The name of the app.
-     *
      * @var string
      */
     public $name;
     /**
-     * The type of object this app creates such as a Chart. If empty, the app name
-     * should be used instead.
-     *
      * @var string
      */
     public $objectType;
     /**
-     * The template URL for opening files with this app. The template contains
-     * {ids} or {exportIds} to be replaced by the actual file IDs. For more
-     * information, see Open Files for the full documentation.
-     *
      * @var string
      */
     public $openUrlTemplate;
     /**
-     * The list of primary file extensions.
-     *
      * @var string[]
      */
     public $primaryFileExtensions;
     /**
-     * The list of primary MIME types.
-     *
      * @var string[]
      */
     public $primaryMimeTypes;
     /**
-     * The ID of the product listing for this app.
-     *
      * @var string
      */
     public $productId;
     /**
-     * A link to the product listing for this app.
-     *
      * @var string
      */
     public $productUrl;
     /**
-     * The list of secondary file extensions.
-     *
      * @var string[]
      */
     public $secondaryFileExtensions;
     /**
-     * The list of secondary MIME types.
-     *
      * @var string[]
      */
     public $secondaryMimeTypes;
     /**
-     * A short description of the app.
-     *
      * @var string
      */
     public $shortDescription;
     /**
-     * Whether this app supports creating objects.
-     *
      * @var bool
      */
     public $supportsCreate;
     /**
-     * Whether this app supports importing from Google Docs.
-     *
      * @var bool
      */
     public $supportsImport;
     /**
-     * Whether this app supports opening more than one file.
-     *
      * @var bool
      */
     public $supportsMultiOpen;
     /**
-     * Whether this app supports creating files when offline.
-     *
      * @var bool
      */
     public $supportsOfflineCreate;
     /**
-     * Whether the app is selected as the default handler for the types it
-     * supports.
-     *
      * @var bool
      */
     public $useByDefault;
     /**
-     * Whether the app is authorized to access data on the user's Drive.
-     *
-     * @param bool $authorized
+     * @param bool
      */
     public function setAuthorized($authorized)
     {
@@ -185,11 +129,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->authorized;
     }
     /**
-     * The template URL to create a file with this app in a given folder. The
-     * template contains the {folderId} to be replaced by the folder ID house the
-     * new file.
-     *
-     * @param string $createInFolderTemplate
+     * @param string
      */
     public function setCreateInFolderTemplate($createInFolderTemplate)
     {
@@ -203,9 +143,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->createInFolderTemplate;
     }
     /**
-     * The URL to create a file with this app.
-     *
-     * @param string $createUrl
+     * @param string
      */
     public function setCreateUrl($createUrl)
     {
@@ -219,10 +157,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->createUrl;
     }
     /**
-     * Whether the app has Drive-wide scope. An app with Drive-wide scope can
-     * access all files in the user's Drive.
-     *
-     * @param bool $hasDriveWideScope
+     * @param bool
      */
     public function setHasDriveWideScope($hasDriveWideScope)
     {
@@ -236,9 +171,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->hasDriveWideScope;
     }
     /**
-     * The various icons for the app.
-     *
-     * @param AppIcons[] $icons
+     * @param AppIcons[]
      */
     public function setIcons($icons)
     {
@@ -252,9 +185,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->icons;
     }
     /**
-     * The ID of the app.
-     *
-     * @param string $id
+     * @param string
      */
     public function setId($id)
     {
@@ -268,9 +199,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->id;
     }
     /**
-     * Whether the app is installed.
-     *
-     * @param bool $installed
+     * @param bool
      */
     public function setInstalled($installed)
     {
@@ -284,10 +213,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->installed;
     }
     /**
-     * Output only. Identifies what kind of resource this is. Value: the fixed
-     * string "drive#app".
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -301,9 +227,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * A long description of the app.
-     *
-     * @param string $longDescription
+     * @param string
      */
     public function setLongDescription($longDescription)
     {
@@ -317,9 +241,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->longDescription;
     }
     /**
-     * The name of the app.
-     *
-     * @param string $name
+     * @param string
      */
     public function setName($name)
     {
@@ -333,10 +255,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->name;
     }
     /**
-     * The type of object this app creates such as a Chart. If empty, the app name
-     * should be used instead.
-     *
-     * @param string $objectType
+     * @param string
      */
     public function setObjectType($objectType)
     {
@@ -350,11 +269,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->objectType;
     }
     /**
-     * The template URL for opening files with this app. The template contains
-     * {ids} or {exportIds} to be replaced by the actual file IDs. For more
-     * information, see Open Files for the full documentation.
-     *
-     * @param string $openUrlTemplate
+     * @param string
      */
     public function setOpenUrlTemplate($openUrlTemplate)
     {
@@ -368,9 +283,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->openUrlTemplate;
     }
     /**
-     * The list of primary file extensions.
-     *
-     * @param string[] $primaryFileExtensions
+     * @param string[]
      */
     public function setPrimaryFileExtensions($primaryFileExtensions)
     {
@@ -384,9 +297,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->primaryFileExtensions;
     }
     /**
-     * The list of primary MIME types.
-     *
-     * @param string[] $primaryMimeTypes
+     * @param string[]
      */
     public function setPrimaryMimeTypes($primaryMimeTypes)
     {
@@ -400,9 +311,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->primaryMimeTypes;
     }
     /**
-     * The ID of the product listing for this app.
-     *
-     * @param string $productId
+     * @param string
      */
     public function setProductId($productId)
     {
@@ -416,9 +325,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->productId;
     }
     /**
-     * A link to the product listing for this app.
-     *
-     * @param string $productUrl
+     * @param string
      */
     public function setProductUrl($productUrl)
     {
@@ -432,9 +339,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->productUrl;
     }
     /**
-     * The list of secondary file extensions.
-     *
-     * @param string[] $secondaryFileExtensions
+     * @param string[]
      */
     public function setSecondaryFileExtensions($secondaryFileExtensions)
     {
@@ -448,9 +353,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->secondaryFileExtensions;
     }
     /**
-     * The list of secondary MIME types.
-     *
-     * @param string[] $secondaryMimeTypes
+     * @param string[]
      */
     public function setSecondaryMimeTypes($secondaryMimeTypes)
     {
@@ -464,9 +367,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->secondaryMimeTypes;
     }
     /**
-     * A short description of the app.
-     *
-     * @param string $shortDescription
+     * @param string
      */
     public function setShortDescription($shortDescription)
     {
@@ -480,9 +381,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->shortDescription;
     }
     /**
-     * Whether this app supports creating objects.
-     *
-     * @param bool $supportsCreate
+     * @param bool
      */
     public function setSupportsCreate($supportsCreate)
     {
@@ -496,9 +395,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->supportsCreate;
     }
     /**
-     * Whether this app supports importing from Google Docs.
-     *
-     * @param bool $supportsImport
+     * @param bool
      */
     public function setSupportsImport($supportsImport)
     {
@@ -512,9 +409,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->supportsImport;
     }
     /**
-     * Whether this app supports opening more than one file.
-     *
-     * @param bool $supportsMultiOpen
+     * @param bool
      */
     public function setSupportsMultiOpen($supportsMultiOpen)
     {
@@ -528,9 +423,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->supportsMultiOpen;
     }
     /**
-     * Whether this app supports creating files when offline.
-     *
-     * @param bool $supportsOfflineCreate
+     * @param bool
      */
     public function setSupportsOfflineCreate($supportsOfflineCreate)
     {
@@ -544,10 +437,7 @@ class App extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->supportsOfflineCreate;
     }
     /**
-     * Whether the app is selected as the default handler for the types it
-     * supports.
-     *
-     * @param bool $useByDefault
+     * @param bool
      */
     public function setUseByDefault($useByDefault)
     {

@@ -20,33 +20,19 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class AppIcons extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Category of the icon. Allowed values are: * `application` - The icon for
-     * the application. * `document` - The icon for a file associated with the
-     * app. * `documentShared` - The icon for a shared file associated with the
-     * app.
-     *
      * @var string
      */
     public $category;
     /**
-     * URL for the icon.
-     *
      * @var string
      */
     public $iconUrl;
     /**
-     * Size of the icon. Represented as the maximum of the width and height.
-     *
      * @var int
      */
     public $size;
     /**
-     * Category of the icon. Allowed values are: * `application` - The icon for
-     * the application. * `document` - The icon for a file associated with the
-     * app. * `documentShared` - The icon for a shared file associated with the
-     * app.
-     *
-     * @param string $category
+     * @param string
      */
     public function setCategory($category)
     {
@@ -60,9 +46,7 @@ class AppIcons extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->category;
     }
     /**
-     * URL for the icon.
-     *
-     * @param string $iconUrl
+     * @param string
      */
     public function setIconUrl($iconUrl)
     {
@@ -76,9 +60,7 @@ class AppIcons extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->iconUrl;
     }
     /**
-     * Size of the icon. Represented as the maximum of the width and height.
-     *
-     * @param int $size
+     * @param int
      */
     public function setSize($size)
     {

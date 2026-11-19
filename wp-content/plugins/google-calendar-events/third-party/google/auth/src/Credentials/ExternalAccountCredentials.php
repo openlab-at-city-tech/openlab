@@ -34,15 +34,6 @@ use SimpleCalendar\plugin_deps\Google\Auth\UpdateMetadataInterface;
 use SimpleCalendar\plugin_deps\Google\Auth\UpdateMetadataTrait;
 use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request;
 use InvalidArgumentException;
-/**
- * **IMPORTANT**:
- * This class does not validate the credential configuration. A security
- * risk occurs when a credential configuration configured with malicious urls
- * is used.
- * When the credential configuration is accepted from an
- * untrusted source, you should validate it before creating this class.
- * @see https://cloud.google.com/docs/authentication/external/externally-sourced-credentials
- */
 class ExternalAccountCredentials implements FetchAuthTokenInterface, UpdateMetadataInterface, GetQuotaProjectInterface, GetUniverseDomainInterface, ProjectIdProviderInterface
 {
     use UpdateMetadataTrait;

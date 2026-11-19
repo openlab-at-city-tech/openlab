@@ -257,7 +257,7 @@ class Factory
         $this->className = $className;
         return $this;
     }
-    public function className(string $className = null)
+    public function className(?string $className = null)
     {
         return $className === null ? $this->getClassName() : $this->setClassName($className);
     }
@@ -270,7 +270,7 @@ class Factory
         $this->settings = $settings;
         return $this;
     }
-    public function settings(array $settings = null)
+    public function settings(?array $settings = null)
     {
         return $settings === null ? $this->getSettings() : $this->setSettings($settings);
     }

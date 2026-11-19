@@ -11,14 +11,12 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
-use SimpleCalendar\plugin_deps\Elastic\Transport\Exception\TransportException;
 use SimpleCalendar\plugin_deps\Elastica\Document;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\ElasticaFormatter;
-use SimpleCalendar\plugin_deps\Monolog\Level;
+use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Elastica\Client;
 use SimpleCalendar\plugin_deps\Elastica\Exception\ExceptionInterface;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Elastic Search handler
  *
@@ -34,32 +32,22 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
  *    $log->pushHandler($handler);
  *
  * @author Jelle Vink <jelle.vink@gmail.com>
- * @phpstan-type Options array{
- *     index: string,
- *     type: string,
- *     ignore_error: bool
- * }
- * @phpstan-type InputOptions array{
- *     index?: string,
- *     type?: string,
- *     ignore_error?: bool
- * }
  */
 class ElasticaHandler extends AbstractProcessingHandler
 {
-    protected Client $client;
+    /**
+     * @var Client
+     */
+    protected $client;
     /**
      * @var mixed[] Handler config options
-     * @phpstan-var Options
      */
-    protected array $options;
+    protected $options = [];
     /**
      * @param Client  $client  Elastica Client object
      * @param mixed[] $options Handler configuration
-     *
-     * @phpstan-param InputOptions $options
      */
-    public function __construct(Client $client, array $options = [], int|string|Level $level = Level::Debug, bool $bubble = \true)
+    public function __construct(Client $client, array $options = [], $level = Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->client = $client;
@@ -72,14 +60,14 @@ class ElasticaHandler extends AbstractProcessingHandler
         ], $options);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    protected function write(LogRecord $record): void
+    protected function write(array $record): void
     {
-        $this->bulkSend([$record->formatted]);
+        $this->bulkSend([$record['formatted']]);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
@@ -90,22 +78,20 @@ class ElasticaHandler extends AbstractProcessingHandler
     }
     /**
      * @return mixed[]
-     *
-     * @phpstan-return Options
      */
     public function getOptions(): array
     {
         return $this->options;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getDefaultFormatter(): FormatterInterface
     {
         return new ElasticaFormatter($this->options['index'], $this->options['type']);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handleBatch(array $records): void
     {
@@ -123,7 +109,7 @@ class ElasticaHandler extends AbstractProcessingHandler
     {
         try {
             $this->client->addDocuments($documents);
-        } catch (ExceptionInterface|TransportException $e) {
+        } catch (ExceptionInterface $e) {
             if (!$this->options['ignore_error']) {
                 throw new \RuntimeException("Error sending messages to Elasticsearch", 0, $e);
             }

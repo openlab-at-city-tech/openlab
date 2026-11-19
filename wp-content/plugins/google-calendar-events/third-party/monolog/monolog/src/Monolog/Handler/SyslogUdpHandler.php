@@ -12,9 +12,8 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
 use DateTimeInterface;
+use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Monolog\Handler\SyslogUdp\UdpSocket;
-use SimpleCalendar\plugin_deps\Monolog\Level;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 use SimpleCalendar\plugin_deps\Monolog\Utils;
 /**
  * A Handler for logging to a remote syslogd server.
@@ -28,25 +27,27 @@ class SyslogUdpHandler extends AbstractSyslogHandler
     const RFC5424 = 1;
     const RFC5424e = 2;
     /** @var array<self::RFC*, string> */
-    private array $dateFormats = [self::RFC3164 => 'M d H:i:s', self::RFC5424 => \DateTime::RFC3339, self::RFC5424e => \DateTime::RFC3339_EXTENDED];
-    protected UdpSocket $socket;
-    protected string $ident;
+    private $dateFormats = array(self::RFC3164 => 'M d H:i:s', self::RFC5424 => \DateTime::RFC3339, self::RFC5424e => \DateTime::RFC3339_EXTENDED);
+    /** @var UdpSocket */
+    protected $socket;
+    /** @var string */
+    protected $ident;
     /** @var self::RFC* */
-    protected int $rfc;
+    protected $rfc;
     /**
-     * @param  string                    $host     Either IP/hostname or a path to a unix socket (port must be 0 then)
-     * @param  int                       $port     Port number, or 0 if $host is a unix socket
-     * @param  string|int                $facility Either one of the names of the keys in $this->facilities, or a LOG_* facility constant
-     * @param  bool                      $bubble   Whether the messages that are handled can bubble up the stack or not
-     * @param  string                    $ident    Program name or tag for each log message.
-     * @param  int                       $rfc      RFC to format the message for.
-     * @throws MissingExtensionException when there is no socket extension
+     * @param string     $host     Either IP/hostname or a path to a unix socket (port must be 0 then)
+     * @param int        $port     Port number, or 0 if $host is a unix socket
+     * @param string|int $facility Either one of the names of the keys in $this->facilities, or a LOG_* facility constant
+     * @param bool       $bubble   Whether the messages that are handled can bubble up the stack or not
+     * @param string     $ident    Program name or tag for each log message.
+     * @param int        $rfc      RFC to format the message for.
+     * @throws MissingExtensionException
      *
      * @phpstan-param self::RFC* $rfc
      */
-    public function __construct(string $host, int $port = 514, string|int $facility = \LOG_USER, int|string|Level $level = Level::Debug, bool $bubble = \true, string $ident = 'php', int $rfc = self::RFC5424)
+    public function __construct(string $host, int $port = 514, $facility = \LOG_USER, $level = Logger::DEBUG, bool $bubble = \true, string $ident = 'php', int $rfc = self::RFC5424)
     {
-        if (!\extension_loaded('sockets')) {
+        if (!extension_loaded('sockets')) {
             throw new MissingExtensionException('The sockets extension is required to use the SyslogUdpHandler');
         }
         parent::__construct($facility, $level, $bubble);
@@ -54,10 +55,10 @@ class SyslogUdpHandler extends AbstractSyslogHandler
         $this->rfc = $rfc;
         $this->socket = new UdpSocket($host, $port);
     }
-    protected function write(LogRecord $record): void
+    protected function write(array $record): void
     {
-        $lines = $this->splitMessageIntoLines($record->formatted);
-        $header = $this->makeCommonSyslogHeader($this->toSyslogPriority($record->level), $record->datetime);
+        $lines = $this->splitMessageIntoLines($record['formatted']);
+        $header = $this->makeCommonSyslogHeader($this->logLevels[$record['level']], $record['datetime']);
         foreach ($lines as $line) {
             $this->socket->write($line, $header);
         }
@@ -72,13 +73,13 @@ class SyslogUdpHandler extends AbstractSyslogHandler
      */
     private function splitMessageIntoLines($message): array
     {
-        if (\is_array($message)) {
+        if (is_array($message)) {
             $message = implode("\n", $message);
         }
         $lines = preg_split('/$\R?^/m', (string) $message, -1, \PREG_SPLIT_NO_EMPTY);
         if (\false === $lines) {
             $pcreErrorCode = preg_last_error();
-            throw new \RuntimeException('Could not preg_split: ' . $pcreErrorCode . ' / ' . preg_last_error_msg());
+            throw new \RuntimeException('Could not preg_split: ' . $pcreErrorCode . ' / ' . Utils::pcreLastErrorMessage($pcreErrorCode));
         }
         return $lines;
     }
@@ -88,12 +89,10 @@ class SyslogUdpHandler extends AbstractSyslogHandler
     protected function makeCommonSyslogHeader(int $severity, DateTimeInterface $datetime): string
     {
         $priority = $severity + $this->facility;
-        $pid = getmypid();
-        if (\false === $pid) {
+        if (!$pid = getmypid()) {
             $pid = '-';
         }
-        $hostname = gethostname();
-        if (\false === $hostname) {
+        if (!$hostname = gethostname()) {
             $hostname = '-';
         }
         if ($this->rfc === self::RFC3164) {
@@ -108,8 +107,6 @@ class SyslogUdpHandler extends AbstractSyslogHandler
     }
     /**
      * Inject your own socket, mainly used for testing
-     *
-     * @return $this
      */
     public function setSocket(UdpSocket $socket): self
     {

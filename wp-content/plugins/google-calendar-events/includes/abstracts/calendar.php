@@ -9,6 +9,7 @@ namespace SimpleCalendar\Abstracts;
 use SimpleCalendar\plugin_deps\Carbon\Carbon;
 use SimpleCalendar\Events\Event;
 use SimpleCalendar\Events\Event_Builder;
+use SimpleCalendar\Events\Event_Schema;
 use SimpleCalendar\Events\Events;
 
 if (!defined('ABSPATH')) {
@@ -664,25 +665,15 @@ abstract class Calendar
 		} elseif ('this_month' == $calendar_begins) {
 			$start_dt = Carbon::today($this->timezone)->startOfMonth();
 		} elseif ('months_before' == $calendar_begins) {
-			$start_dt = Carbon::today($this->timezone)
-				->subMonths($nth)
-				->startOfMonth();
+			$start_dt = Carbon::today($this->timezone)->subMonths($nth)->startOfMonth();
 		} elseif ('months_after' == $calendar_begins) {
-			$start_dt = Carbon::today($this->timezone)
-				->addMonths($nth)
-				->startOfMonth();
+			$start_dt = Carbon::today($this->timezone)->addMonths($nth)->startOfMonth();
 		} elseif ('this_year' == $calendar_begins) {
-			$start_dt = Carbon::today($this->timezone)
-				->startOfYear()
-				->addHour();
+			$start_dt = Carbon::today($this->timezone)->startOfYear()->addHour();
 		} elseif ('years_before' == $calendar_begins) {
-			$start_dt = Carbon::today($this->timezone)
-				->subYears($nth)
-				->startOfYear();
+			$start_dt = Carbon::today($this->timezone)->subYears($nth)->startOfYear();
 		} elseif ('years_after' == $calendar_begins) {
-			$start_dt = Carbon::today($this->timezone)
-				->addYears($nth)
-				->startOfYear();
+			$start_dt = Carbon::today($this->timezone)->addYears($nth)->startOfYear();
 		} elseif ('custom_date' == $calendar_begins) {
 			if ($date = get_post_meta($this->id, '_calendar_begins_custom_date', true)) {
 				$start_dt = Carbon::createFromFormat('Y-m-d', esc_attr($date), $this->timezone)
@@ -771,7 +762,26 @@ abstract class Calendar
 	}
 
 	/**
+	 * Get always-on Event schema microdata for an event wrapper.
+	 *
+	 * @since  4.1.2
+	 *
+	 * @param  Event $event Event object.
+	 *
+	 * @return string
+	 */
+	public function get_event_schema_meta(Event $event)
+	{
+		$event_schema = new Event_Schema($event);
+
+		return $event_schema->get_schema_meta();
+	}
+
+	/**
 	 * Get "Add to Google Calendar" link.
+	 *
+	 * Instance method so subclasses can override it. Prefer this when a
+	 * Calendar instance is available (e.g. template tags).
 	 *
 	 * @since  3.1.3
 	 *
@@ -780,6 +790,23 @@ abstract class Calendar
 	 * @return string
 	 */
 	public function get_add_to_gcal_url(Event $event)
+	{
+		return self::build_add_to_gcal_url($event);
+	}
+
+	/**
+	 * Build an "Add to Google Calendar" URL without a Calendar instance.
+	 *
+	 * Use when no Calendar object is available (e.g. SC Event single pages).
+	 * Subclasses that customize the URL should override get_add_to_gcal_url().
+	 *
+	 * @since 4.2.3
+	 *
+	 * @param Event $event Event object to be parsed.
+	 *
+	 * @return string
+	 */
+	public static function build_add_to_gcal_url(Event $event)
 	{
 		$base_url = 'https://calendar.google.com/calendar/render';
 		// Was https://www.google.com/calendar/render
@@ -800,21 +827,31 @@ abstract class Calendar
 		// "location" (address) should work with an address, just a name or blank.
 		$params = [
 			'action' => 'TEMPLATE',
-			'text' => urlencode(strip_tags($event->title)),
+			'text' => rawurlencode(wp_strip_all_tags((string) $event->title)),
 			'dates' => $gcal_dt_string,
-			'details' => urlencode($event->description),
-			'location' => urlencode($event->start_location['address']),
+			'details' => rawurlencode(wp_strip_all_tags((string) $event->description)),
+			'location' => rawurlencode(wp_strip_all_tags((string) ($event->start_location['address'] ?? ''))),
 			'trp' => 'false',
 		];
 
 		// "ctz" (timezone) arg should be included unless all-day OR 'UTC'.
 		if (!$is_all_day && 'UTC' !== $event->timezone) {
-			$params['ctz'] = urlencode($event->timezone);
+			$params['ctz'] = rawurlencode($event->timezone);
 		}
 
-		$params = array_map('sanitize_text_field', $params);
-
-		$url = esc_url(add_query_arg($params, sanitize_url($base_url)));
+		$url =
+			$base_url .
+			'?' .
+			implode(
+				'&',
+				array_map(
+					function ($k, $v) {
+						return $k . '=' . $v;
+					},
+					array_keys($params),
+					array_values($params),
+				),
+			);
 
 		return $url;
 	}
@@ -831,78 +868,215 @@ abstract class Calendar
 		$view = empty($view) ? $this->view : $this->get_view($view);
 
 		if ($view instanceof Calendar_View) {
-			if (!empty($this->errors)) {
-				if (current_user_can('manage_options')) {
-					echo '<pre><code>';
-					foreach ($this->errors as $error) {
-						echo $error;
-					}
-					echo '</code></pre>';
+			if (!empty($this->errors) && current_user_can('manage_options')) {
+				echo '<pre><code>';
+				foreach ($this->errors as $error) {
+					echo esc_html($error);
 				}
-			} else {
-				// Get a CSS class from the class name of the calendar view (minus namespace part).
-				$view_name = implode('-', array_map('lcfirst', explode('_', strtolower(get_class($view)))));
-				$view_class = substr($view_name, strrpos($view_name, '\\') + 1);
-
-				$calendar_class = trim(
-					implode(
-						' simcal-',
-						apply_filters('simcal_calendar_class', ['simcal-calendar', $this->type, $view_class], $this->id)
-					)
-				);
-
-				echo '<div class="' .
-					$calendar_class .
-					'" ' .
-					'data-calendar-id="' .
-					$this->id .
-					'" ' .
-					'data-timezone="' .
-					$this->timezone .
-					'" ' .
-					'data-offset="' .
-					$this->offset .
-					'" ' .
-					'data-week-start="' .
-					$this->week_starts .
-					'" ' .
-					'data-calendar-start="' .
-					$this->start .
-					'" ' .
-					'data-calendar-end="' .
-					$this->end .
-					'" ' .
-					'data-events-first="' .
-					$this->earliest_event .
-					'" ' .
-					'data-events-last="' .
-					$this->latest_event .
-					'"' .
-					'>';
-
-				do_action('simcal_calendar_html_before', $this->id);
-
-				$view->html();
-
-				do_action('simcal_calendar_html_after', $this->id);
-
-				//$settings = get_option( 'simple-calendar_settings_calendars' );
-				$poweredby = get_post_meta($this->id, '_poweredby', true);
-
-				if ('yes' == $poweredby) {
-					$align = is_rtl() ? 'left' : 'right';
-					echo '<small class="simcal-powered simcal-align-' .
-						$align .
-						'">' .
-						sprintf(
-							__('Powered by <a href="%s" target="_blank">Simple Calendar</a>', 'google-calendar-events'),
-							simcal_get_url('home')
-						) .
-						'</small>';
-				}
-
-				echo '</div>';
+				echo '</code></pre>';
 			}
+
+			$this->render_view_shell($view, true);
+			$this->render_empty_events_notice();
+		}
+	}
+
+	/**
+	 * Render a single calendar view shell.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @param Calendar_View $view        Calendar view instance.
+	 * @param bool          $powered_by  Whether to output the powered-by credit.
+	 * @param bool          $html_hooks  Whether to fire before/after HTML actions.
+	 */
+	protected function render_view_shell($view, $powered_by = true, $html_hooks = true)
+	{
+		if (!($view instanceof Calendar_View)) {
+			return;
+		}
+
+		// Get a CSS class from the class name of the calendar view (minus namespace part).
+		$view_name = implode('-', array_map('lcfirst', explode('_', strtolower(get_class($view)))));
+		$view_class = substr($view_name, strrpos($view_name, '\\') + 1);
+
+		$calendar_class = trim(
+			implode(
+				' simcal-',
+				apply_filters('simcal_calendar_class', ['simcal-calendar', $this->type, $view_class], $this->id),
+			),
+		);
+
+		echo '<div class="' .
+			esc_attr($calendar_class) .
+			'" ' .
+			'data-calendar-id="' .
+			esc_attr($this->id) .
+			'" ' .
+			'data-timezone="' .
+			esc_attr($this->timezone) .
+			'" ' .
+			'data-offset="' .
+			esc_attr($this->offset) .
+			'" ' .
+			'data-week-start="' .
+			esc_attr($this->week_starts) .
+			'" ' .
+			'data-calendar-start="' .
+			esc_attr($this->start) .
+			'" ' .
+			'data-calendar-end="' .
+			esc_attr($this->end) .
+			'" ' .
+			'data-events-first="' .
+			esc_attr($this->earliest_event) .
+			'" ' .
+			'data-events-last="' .
+			esc_attr($this->latest_event) .
+			'"' .
+			'>';
+
+		if ($html_hooks) {
+			do_action('simcal_calendar_html_before', $this->id);
+		}
+
+		$view->html();
+
+		if ($html_hooks) {
+			do_action('simcal_calendar_html_after', $this->id);
+		}
+
+		if ($powered_by) {
+			$this->render_powered_by();
+		}
+
+		echo '</div>';
+	}
+
+	/**
+	 * Whether the current user can see frontend diagnostic notices.
+	 *
+	 * Administrators and Editors can see these notices. Site visitors cannot.
+	 *
+	 * @since 4.2.0
+	 *
+	 * @return bool
+	 */
+	protected function user_can_view_empty_events_notice()
+	{
+		$can_view = current_user_can('edit_others_posts');
+
+		/**
+		 * Filter whether the current user can see the empty-events diagnostic notice.
+		 *
+		 * @since 4.2.0
+		 *
+		 * @param bool     $can_view Whether the user can view the notice.
+		 * @param Calendar $calendar Calendar instance.
+		 */
+		return (bool) apply_filters('simcal_user_can_view_empty_events_notice', $can_view, $this);
+	}
+
+	/**
+	 * Output an admin-only notice when no events are displayed.
+	 *
+	 * Helps administrators and editors diagnose missing events, commonly caused
+	 * by a private Google Calendar or private events.
+	 *
+	 * @since 4.2.0
+	 */
+	protected function render_empty_events_notice()
+	{
+		if (!$this->user_can_view_empty_events_notice()) {
+			return;
+		}
+
+		$has_errors = !empty($this->errors);
+		$has_no_events = empty($this->events);
+		$show_notice = $has_errors || $has_no_events;
+
+		/**
+		 * Filter whether to display the empty-events diagnostic notice.
+		 *
+		 * @since 4.2.0
+		 *
+		 * @param bool     $show_notice Whether to show the notice.
+		 * @param Calendar $calendar    Calendar instance.
+		 */
+		if (!apply_filters('simcal_show_empty_events_notice', $show_notice, $this)) {
+			return;
+		}
+
+		$docs_base =
+			simcal_get_url('docs') . '/why-the-google-calendar-pro-add-on-is-essential-for-displaying-private-events/';
+		$docs_url = function_exists('simcal_ga_campaign_url')
+			? simcal_ga_campaign_url($docs_base, 'core-plugin', 'empty-events-notice')
+			: add_query_arg(
+				[
+					'utm_source' => 'inside-plugin',
+					'utm_medium' => 'link',
+					'utm_campaign' => 'core-plugin',
+					'utm_content' => 'empty-events-notice',
+				],
+				$docs_base,
+			);
+
+		/**
+		 * Filter the prerequisites documentation URL shown in the empty-events notice.
+		 *
+		 * @since 4.2.0
+		 *
+		 * @param string   $docs_url Documentation URL.
+		 * @param Calendar $calendar Calendar instance.
+		 */
+		$docs_url = apply_filters('simcal_empty_events_notice_docs_url', $docs_url, $this);
+
+		echo '<div class="simcal-empty-events-notice" role="note">';
+		echo '<p>';
+		echo wp_kses(
+			sprintf(
+				/* translators: %s: URL to the prerequisites documentation. */
+				__(
+					'No events are showing. This often happens when the Google Calendar or its events are set to private. The calendar must be public, and events should not be private. <a href="%s" target="_blank" rel="noopener noreferrer">View prerequisites</a>.',
+					'google-calendar-events',
+				),
+				esc_url($docs_url),
+			),
+			[
+				'a' => [
+					'href' => true,
+					'target' => true,
+					'rel' => true,
+				],
+			],
+		);
+		echo '</p>';
+		echo '<p class="simcal-empty-events-notice-meta">';
+		echo esc_html__('Only administrators and editors can see this notice.', 'google-calendar-events');
+		echo '</p>';
+		echo '</div>';
+	}
+
+	/**
+	 * Output the powered-by credit.
+	 *
+	 * @since 4.2.0
+	 */
+	protected function render_powered_by()
+	{
+		$poweredby = get_post_meta($this->id, '_poweredby', true);
+
+		// Old calendars show the credit only when opted in, as before.
+		// New calendars created after the cutoff always show the credit when no Pro add-on has a valid license.
+		if ('yes' == $poweredby || simcal_is_powered_by_mandatory($this->id)) {
+			$align = is_rtl() ? 'left' : 'right';
+			$credit = sprintf(
+				/* translators: %s: URL to the Simple Calendar website */
+				__('Powered by <a href="%s" target="_blank">Simple Calendar</a>', 'google-calendar-events'),
+				esc_url(simcal_get_url('home')),
+			);
+
+			echo '<small class="simcal-powered simcal-align-' . esc_attr($align) . '">' . wp_kses_post($credit) . '</small>';
 		}
 	}
 }

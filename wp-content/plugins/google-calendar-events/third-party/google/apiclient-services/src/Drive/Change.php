@@ -20,67 +20,45 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class Change extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * The type of the change. Possible values are `file` and `drive`.
-     *
      * @var string
      */
     public $changeType;
     protected $driveType = Drive::class;
     protected $driveDataType = '';
     /**
-     * The ID of the shared drive associated with this change.
-     *
      * @var string
      */
     public $driveId;
     protected $fileType = DriveFile::class;
     protected $fileDataType = '';
     /**
-     * The ID of the file which has changed.
-     *
      * @var string
      */
     public $fileId;
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#change"`.
-     *
      * @var string
      */
     public $kind;
     /**
-     * Whether the file or shared drive has been removed from this list of
-     * changes, for example by deletion or loss of access.
-     *
      * @var bool
      */
     public $removed;
     protected $teamDriveType = TeamDrive::class;
     protected $teamDriveDataType = '';
     /**
-     * Deprecated: Use `driveId` instead.
-     *
-     * @deprecated
      * @var string
      */
     public $teamDriveId;
     /**
-     * The time of this change (RFC 3339 date-time).
-     *
      * @var string
      */
     public $time;
     /**
-     * Deprecated: Use `changeType` instead.
-     *
-     * @deprecated
      * @var string
      */
     public $type;
     /**
-     * The type of the change. Possible values are `file` and `drive`.
-     *
-     * @param string $changeType
+     * @param string
      */
     public function setChangeType($changeType)
     {
@@ -94,11 +72,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->changeType;
     }
     /**
-     * The updated state of the shared drive. Present if the changeType is drive,
-     * the user is still a member of the shared drive, and the shared drive has
-     * not been deleted.
-     *
-     * @param Drive $drive
+     * @param Drive
      */
     public function setDrive(Drive $drive)
     {
@@ -112,9 +86,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->drive;
     }
     /**
-     * The ID of the shared drive associated with this change.
-     *
-     * @param string $driveId
+     * @param string
      */
     public function setDriveId($driveId)
     {
@@ -128,10 +100,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->driveId;
     }
     /**
-     * The updated state of the file. Present if the type is file and the file has
-     * not been removed from this list of changes.
-     *
-     * @param DriveFile $file
+     * @param DriveFile
      */
     public function setFile(DriveFile $file)
     {
@@ -145,9 +114,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->file;
     }
     /**
-     * The ID of the file which has changed.
-     *
-     * @param string $fileId
+     * @param string
      */
     public function setFileId($fileId)
     {
@@ -161,10 +128,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->fileId;
     }
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#change"`.
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -178,10 +142,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->kind;
     }
     /**
-     * Whether the file or shared drive has been removed from this list of
-     * changes, for example by deletion or loss of access.
-     *
-     * @param bool $removed
+     * @param bool
      */
     public function setRemoved($removed)
     {
@@ -195,17 +156,13 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->removed;
     }
     /**
-     * Deprecated: Use `drive` instead.
-     *
-     * @deprecated
-     * @param TeamDrive $teamDrive
+     * @param TeamDrive
      */
     public function setTeamDrive(TeamDrive $teamDrive)
     {
         $this->teamDrive = $teamDrive;
     }
     /**
-     * @deprecated
      * @return TeamDrive
      */
     public function getTeamDrive()
@@ -213,17 +170,13 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->teamDrive;
     }
     /**
-     * Deprecated: Use `driveId` instead.
-     *
-     * @deprecated
-     * @param string $teamDriveId
+     * @param string
      */
     public function setTeamDriveId($teamDriveId)
     {
         $this->teamDriveId = $teamDriveId;
     }
     /**
-     * @deprecated
      * @return string
      */
     public function getTeamDriveId()
@@ -231,9 +184,7 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->teamDriveId;
     }
     /**
-     * The time of this change (RFC 3339 date-time).
-     *
-     * @param string $time
+     * @param string
      */
     public function setTime($time)
     {
@@ -247,17 +198,13 @@ class Change extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->time;
     }
     /**
-     * Deprecated: Use `changeType` instead.
-     *
-     * @deprecated
-     * @param string $type
+     * @param string
      */
     public function setType($type)
     {
         $this->type = $type;
     }
     /**
-     * @deprecated
      * @return string
      */
     public function getType()

@@ -11,16 +11,20 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * An optional interface to allow labelling Monolog processors.
  *
  * @author Nicolas Grekas <p@tchwork.com>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 interface ProcessorInterface
 {
     /**
-     * @return LogRecord The processed record
+     * @return array The processed record
+     *
+     * @phpstan-param  Record $record
+     * @phpstan-return Record
      */
-    public function __invoke(LogRecord $record);
+    public function __invoke(array $record);
 }

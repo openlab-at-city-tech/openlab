@@ -22,27 +22,19 @@ class Label extends \SimpleCalendar\plugin_deps\Google\Model
     protected $fieldsType = LabelField::class;
     protected $fieldsDataType = 'map';
     /**
-     * The ID of the label.
-     *
      * @var string
      */
     public $id;
     /**
-     * This is always drive#label
-     *
      * @var string
      */
     public $kind;
     /**
-     * The revision ID of the label.
-     *
      * @var string
      */
     public $revisionId;
     /**
-     * A map of the fields on the label, keyed by the field's ID.
-     *
-     * @param LabelField[] $fields
+     * @param LabelField[]
      */
     public function setFields($fields)
     {
@@ -56,9 +48,7 @@ class Label extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->fields;
     }
     /**
-     * The ID of the label.
-     *
-     * @param string $id
+     * @param string
      */
     public function setId($id)
     {
@@ -72,9 +62,7 @@ class Label extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->id;
     }
     /**
-     * This is always drive#label
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -88,9 +76,7 @@ class Label extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->kind;
     }
     /**
-     * The revision ID of the label.
-     *
-     * @param string $revisionId
+     * @param string
      */
     public function setRevisionId($revisionId)
     {

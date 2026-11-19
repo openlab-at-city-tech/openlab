@@ -19,8 +19,8 @@ class_exists(IntlFormatter::class);
  */
 class MessageFormatter implements MessageFormatterInterface, IntlFormatterInterface
 {
-    private TranslatorInterface $translator;
-    private IntlFormatterInterface $intlFormatter;
+    private $translator;
+    private $intlFormatter;
     /**
      * @param TranslatorInterface|null $translator An identity translator to use as selector for pluralization
      */
@@ -29,10 +29,19 @@ class MessageFormatter implements MessageFormatterInterface, IntlFormatterInterf
         $this->translator = $translator ?? new IdentityTranslator();
         $this->intlFormatter = $intlFormatter ?? new IntlFormatter();
     }
-    public function format(string $message, string $locale, array $parameters = []): string
+    /**
+     * {@inheritdoc}
+     */
+    public function format(string $message, string $locale, array $parameters = [])
     {
-        return $this->translator->trans($message, $parameters, null, $locale);
+        if ($this->translator instanceof TranslatorInterface) {
+            return $this->translator->trans($message, $parameters, null, $locale);
+        }
+        return strtr($message, $parameters);
     }
+    /**
+     * {@inheritdoc}
+     */
     public function formatIntl(string $message, string $locale, array $parameters = []): string
     {
         return $this->intlFormatter->formatIntl($message, $locale, $parameters);

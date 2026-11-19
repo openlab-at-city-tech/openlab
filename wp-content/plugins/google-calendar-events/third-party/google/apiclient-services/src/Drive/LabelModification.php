@@ -23,27 +23,19 @@ class LabelModification extends \SimpleCalendar\plugin_deps\Google\Collection
     protected $fieldModificationsType = LabelFieldModification::class;
     protected $fieldModificationsDataType = 'array';
     /**
-     * This is always `"drive#labelModification"`.
-     *
      * @var string
      */
     public $kind;
     /**
-     * The ID of the label to modify.
-     *
      * @var string
      */
     public $labelId;
     /**
-     * If true, the label will be removed from the file.
-     *
      * @var bool
      */
     public $removeLabel;
     /**
-     * The list of modifications to this label's fields.
-     *
-     * @param LabelFieldModification[] $fieldModifications
+     * @param LabelFieldModification[]
      */
     public function setFieldModifications($fieldModifications)
     {
@@ -57,9 +49,7 @@ class LabelModification extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->fieldModifications;
     }
     /**
-     * This is always `"drive#labelModification"`.
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -73,9 +63,7 @@ class LabelModification extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * The ID of the label to modify.
-     *
-     * @param string $labelId
+     * @param string
      */
     public function setLabelId($labelId)
     {
@@ -89,9 +77,7 @@ class LabelModification extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->labelId;
     }
     /**
-     * If true, the label will be removed from the file.
-     *
-     * @param bool $removeLabel
+     * @param bool
      */
     public function setRemoveLabel($removeLabel)
     {

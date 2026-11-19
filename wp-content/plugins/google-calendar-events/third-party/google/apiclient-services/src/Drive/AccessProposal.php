@@ -21,47 +21,33 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'rolesAndViews';
     /**
-     * The creation time.
-     *
      * @var string
      */
     public $createTime;
     /**
-     * The file ID that the proposal for access is on.
-     *
      * @var string
      */
     public $fileId;
     /**
-     * The ID of the access proposal.
-     *
      * @var string
      */
     public $proposalId;
     /**
-     * The email address of the user that will receive permissions, if accepted.
-     *
      * @var string
      */
     public $recipientEmailAddress;
     /**
-     * The message that the requester added to the proposal.
-     *
      * @var string
      */
     public $requestMessage;
     /**
-     * The email address of the requesting user.
-     *
      * @var string
      */
     public $requesterEmailAddress;
     protected $rolesAndViewsType = AccessProposalRoleAndView::class;
     protected $rolesAndViewsDataType = 'array';
     /**
-     * The creation time.
-     *
-     * @param string $createTime
+     * @param string
      */
     public function setCreateTime($createTime)
     {
@@ -75,9 +61,7 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->createTime;
     }
     /**
-     * The file ID that the proposal for access is on.
-     *
-     * @param string $fileId
+     * @param string
      */
     public function setFileId($fileId)
     {
@@ -91,9 +75,7 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->fileId;
     }
     /**
-     * The ID of the access proposal.
-     *
-     * @param string $proposalId
+     * @param string
      */
     public function setProposalId($proposalId)
     {
@@ -107,9 +89,7 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->proposalId;
     }
     /**
-     * The email address of the user that will receive permissions, if accepted.
-     *
-     * @param string $recipientEmailAddress
+     * @param string
      */
     public function setRecipientEmailAddress($recipientEmailAddress)
     {
@@ -123,9 +103,7 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->recipientEmailAddress;
     }
     /**
-     * The message that the requester added to the proposal.
-     *
-     * @param string $requestMessage
+     * @param string
      */
     public function setRequestMessage($requestMessage)
     {
@@ -139,9 +117,7 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->requestMessage;
     }
     /**
-     * The email address of the requesting user.
-     *
-     * @param string $requesterEmailAddress
+     * @param string
      */
     public function setRequesterEmailAddress($requesterEmailAddress)
     {
@@ -155,12 +131,7 @@ class AccessProposal extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->requesterEmailAddress;
     }
     /**
-     * A wrapper for the role and view of an access proposal. For more
-     * information, see [Roles and
-     * permissions](https://developers.google.com/workspace/drive/api/guides/ref-
-     * roles).
-     *
-     * @param AccessProposalRoleAndView[] $rolesAndViews
+     * @param AccessProposalRoleAndView[]
      */
     public function setRolesAndViews($rolesAndViews)
     {

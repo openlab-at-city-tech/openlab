@@ -27,5 +27,8 @@ namespace SimpleCalendar\plugin_deps\Monolog;
  */
 interface ResettableInterface
 {
-    public function reset(): void;
+    /**
+     * @return void
+     */
+    public function reset();
 }

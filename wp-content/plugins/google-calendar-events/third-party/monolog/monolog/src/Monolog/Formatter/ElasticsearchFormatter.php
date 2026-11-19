@@ -12,7 +12,6 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
 
 use DateTimeInterface;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Format a log message into an Elasticsearch record
  *
@@ -23,11 +22,11 @@ class ElasticsearchFormatter extends NormalizerFormatter
     /**
      * @var string Elasticsearch index name
      */
-    protected string $index;
+    protected $index;
     /**
      * @var string Elasticsearch record type
      */
-    protected string $type;
+    protected $type;
     /**
      * @param string $index Elasticsearch index name
      * @param string $type  Elasticsearch record type
@@ -35,20 +34,22 @@ class ElasticsearchFormatter extends NormalizerFormatter
     public function __construct(string $index, string $type)
     {
         // Elasticsearch requires an ISO 8601 format date with optional millisecond precision.
-        parent::__construct(DateTimeInterface::ATOM);
+        parent::__construct(DateTimeInterface::ISO8601);
         $this->index = $index;
         $this->type = $type;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function format(LogRecord $record)
+    public function format(array $record)
     {
         $record = parent::format($record);
         return $this->getDocument($record);
     }
     /**
      * Getter index
+     *
+     * @return string
      */
     public function getIndex(): string
     {
@@ -56,6 +57,8 @@ class ElasticsearchFormatter extends NormalizerFormatter
     }
     /**
      * Getter type
+     *
+     * @return string
      */
     public function getType(): string
     {

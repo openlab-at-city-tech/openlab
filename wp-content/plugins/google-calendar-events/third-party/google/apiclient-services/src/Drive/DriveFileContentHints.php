@@ -20,19 +20,13 @@ namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 class DriveFileContentHints extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
-     * Text to be indexed for the file to improve fullText queries. This is
-     * limited to 128 KB in length and may contain HTML elements.
-     *
      * @var string
      */
     public $indexableText;
     protected $thumbnailType = DriveFileContentHintsThumbnail::class;
     protected $thumbnailDataType = '';
     /**
-     * Text to be indexed for the file to improve fullText queries. This is
-     * limited to 128 KB in length and may contain HTML elements.
-     *
-     * @param string $indexableText
+     * @param string
      */
     public function setIndexableText($indexableText)
     {
@@ -46,10 +40,7 @@ class DriveFileContentHints extends \SimpleCalendar\plugin_deps\Google\Model
         return $this->indexableText;
     }
     /**
-     * A thumbnail for the file. This will only be used if Google Drive cannot
-     * generate a standard thumbnail.
-     *
-     * @param DriveFileContentHintsThumbnail $thumbnail
+     * @param DriveFileContentHintsThumbnail
      */
     public function setThumbnail(DriveFileContentHintsThumbnail $thumbnail)
     {

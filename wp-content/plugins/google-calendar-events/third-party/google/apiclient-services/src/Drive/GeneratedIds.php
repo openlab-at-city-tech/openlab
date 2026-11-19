@@ -21,28 +21,19 @@ class GeneratedIds extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'ids';
     /**
-     * The IDs generated for the requesting user in the specified space.
-     *
      * @var string[]
      */
     public $ids;
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#generatedIds"`.
-     *
      * @var string
      */
     public $kind;
     /**
-     * The type of file that can be created with these IDs.
-     *
      * @var string
      */
     public $space;
     /**
-     * The IDs generated for the requesting user in the specified space.
-     *
-     * @param string[] $ids
+     * @param string[]
      */
     public function setIds($ids)
     {
@@ -56,10 +47,7 @@ class GeneratedIds extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->ids;
     }
     /**
-     * Identifies what kind of resource this is. Value: the fixed string
-     * `"drive#generatedIds"`.
-     *
-     * @param string $kind
+     * @param string
      */
     public function setKind($kind)
     {
@@ -73,9 +61,7 @@ class GeneratedIds extends \SimpleCalendar\plugin_deps\Google\Collection
         return $this->kind;
     }
     /**
-     * The type of file that can be created with these IDs.
-     *
-     * @param string $space
+     * @param string
      */
     public function setSpace($space)
     {

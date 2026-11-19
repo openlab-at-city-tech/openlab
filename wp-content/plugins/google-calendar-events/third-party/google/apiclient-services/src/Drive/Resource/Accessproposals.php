@@ -31,13 +31,10 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\ResolveAccessProposalRequest
 class Accessproposals extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
     /**
-     * Retrieves an access proposal by ID. For more information, see [Manage pending
-     * access
-     * proposals](https://developers.google.com/workspace/drive/api/guides/pending-
-     * access). (accessproposals.get)
+     * Retrieves an AccessProposal by ID. (accessproposals.get)
      *
-     * @param string $fileId Required. The ID of the item the request is on.
-     * @param string $proposalId Required. The ID of the access proposal to resolve.
+     * @param string $fileId Required. The id of the item the request is on.
+     * @param string $proposalId Required. The id of the access proposal to resolve.
      * @param array $optParams Optional parameters.
      * @return AccessProposal
      * @throws \Google\Service\Exception
@@ -49,17 +46,14 @@ class Accessproposals extends \SimpleCalendar\plugin_deps\Google\Service\Resourc
         return $this->call('get', [$params], AccessProposal::class);
     }
     /**
-     * List the access proposals on a file. For more information, see [Manage
-     * pending access
-     * proposals](https://developers.google.com/workspace/drive/api/guides/pending-
-     * access). Note: Only approvers are able to list access proposals on a file. If
-     * the user isn't an approver, a 403 error is returned.
+     * List the AccessProposals on a file. Note: Only approvers are able to list
+     * AccessProposals on a file. If the user is not an approver, returns a 403.
      * (accessproposals.listAccessproposals)
      *
-     * @param string $fileId Required. The ID of the item the request is on.
+     * @param string $fileId Required. The id of the item the request is on.
      * @param array $optParams Optional parameters.
      *
-     * @opt_param int pageSize Optional. The number of results per page.
+     * @opt_param int pageSize Optional. The number of results per page
      * @opt_param string pageToken Optional. The continuation token on the list of
      * access requests.
      * @return ListAccessProposalsResponse
@@ -72,13 +66,10 @@ class Accessproposals extends \SimpleCalendar\plugin_deps\Google\Service\Resourc
         return $this->call('list', [$params], ListAccessProposalsResponse::class);
     }
     /**
-     * Approves or denies an access proposal. For more information, see [Manage
-     * pending access
-     * proposals](https://developers.google.com/workspace/drive/api/guides/pending-
-     * access). (accessproposals.resolve)
+     * Used to approve or deny an Access Proposal. (accessproposals.resolve)
      *
-     * @param string $fileId Required. The ID of the item the request is on.
-     * @param string $proposalId Required. The ID of the access proposal to resolve.
+     * @param string $fileId Required. The id of the item the request is on.
+     * @param string $proposalId Required. The id of the access proposal to resolve.
      * @param ResolveAccessProposalRequest $postBody
      * @param array $optParams Optional parameters.
      * @throws \Google\Service\Exception

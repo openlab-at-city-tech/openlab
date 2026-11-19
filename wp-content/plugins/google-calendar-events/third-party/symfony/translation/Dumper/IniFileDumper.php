@@ -18,7 +18,10 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  */
 class IniFileDumper extends FileDumper
 {
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
+    /**
+     * {@inheritdoc}
+     */
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
         $output = '';
         foreach ($messages->all($domain) as $source => $target) {
@@ -27,7 +30,10 @@ class IniFileDumper extends FileDumper
         }
         return $output;
     }
-    protected function getExtension(): string
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtension()
     {
         return 'ini';
     }

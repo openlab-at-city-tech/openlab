@@ -12,10 +12,9 @@ declare (strict_types=1);
 namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 
 use SimpleCalendar\plugin_deps\Gelf\PublisherInterface;
-use SimpleCalendar\plugin_deps\Monolog\Level;
+use SimpleCalendar\plugin_deps\Monolog\Logger;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\GelfMessageFormatter;
 use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Handler to send messages to a Graylog2 (http://www.graylog2.org) server
  *
@@ -27,24 +26,24 @@ class GelfHandler extends AbstractProcessingHandler
     /**
      * @var PublisherInterface the publisher object that sends the message to the server
      */
-    protected PublisherInterface $publisher;
+    protected $publisher;
     /**
      * @param PublisherInterface $publisher a gelf publisher object
      */
-    public function __construct(PublisherInterface $publisher, int|string|Level $level = Level::Debug, bool $bubble = \true)
+    public function __construct(PublisherInterface $publisher, $level = Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         $this->publisher = $publisher;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    protected function write(LogRecord $record): void
+    protected function write(array $record): void
     {
-        $this->publisher->publish($record->formatted);
+        $this->publisher->publish($record['formatted']);
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     protected function getDefaultFormatter(): FormatterInterface
     {

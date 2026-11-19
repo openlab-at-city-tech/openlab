@@ -18,7 +18,10 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  */
 class QtFileDumper extends FileDumper
 {
-    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = []): string
+    /**
+     * {@inheritdoc}
+     */
+    public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
         $dom = new \DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = \true;
@@ -43,7 +46,10 @@ class QtFileDumper extends FileDumper
         }
         return $dom->saveXML();
     }
-    protected function getExtension(): string
+    /**
+     * {@inheritdoc}
+     */
+    protected function getExtension()
     {
         return 'ts';
     }

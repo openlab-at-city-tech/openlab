@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Formatter;
 use MongoDB\BSON\Type;
 use MongoDB\BSON\UTCDateTime;
 use SimpleCalendar\plugin_deps\Monolog\Utils;
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Formats a record for use with the MongoDBHandler.
  *
@@ -22,10 +21,12 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
  */
 class MongoDBFormatter implements FormatterInterface
 {
-    private bool $exceptionTraceAsString;
-    private int $maxNestingLevel;
+    /** @var bool */
+    private $exceptionTraceAsString;
+    /** @var int */
+    private $maxNestingLevel;
     /**
-     * @param int  $maxNestingLevel        0 means infinite nesting, the $record itself is level 1, $record->context is 2
+     * @param int  $maxNestingLevel        0 means infinite nesting, the $record itself is level 1, $record['context'] is 2
      * @param bool $exceptionTraceAsString set to false to log exception traces as a sub documents instead of strings
      */
     public function __construct(int $maxNestingLevel = 3, bool $exceptionTraceAsString = \true)
@@ -34,18 +35,18 @@ class MongoDBFormatter implements FormatterInterface
         $this->exceptionTraceAsString = $exceptionTraceAsString;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * @return mixed[]
      */
-    public function format(LogRecord $record): array
+    public function format(array $record): array
     {
         /** @var mixed[] $res */
-        $res = $this->formatArray($record->toArray());
+        $res = $this->formatArray($record);
         return $res;
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      *
      * @return array<mixed[]>
      */
@@ -71,9 +72,9 @@ class MongoDBFormatter implements FormatterInterface
                 $array[$name] = $this->formatDate($value, $nestingLevel + 1);
             } elseif ($value instanceof \Throwable) {
                 $array[$name] = $this->formatException($value, $nestingLevel + 1);
-            } elseif (\is_array($value)) {
+            } elseif (is_array($value)) {
                 $array[$name] = $this->formatArray($value, $nestingLevel + 1);
-            } elseif (\is_object($value) && !$value instanceof Type) {
+            } elseif (is_object($value) && !$value instanceof Type) {
                 $array[$name] = $this->formatObject($value, $nestingLevel + 1);
             }
         }

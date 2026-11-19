@@ -42,7 +42,7 @@ final class Utils
         $promise = new Promise([$queue, 'run']);
         $queue->add(function () use ($task, $promise): void {
             try {
-                if (Is::pending($promise)) {
+                if (State::isPending($promise)) {
                     $promise->resolve($task());
                 }
             } catch (\Throwable $e) {
@@ -67,9 +67,13 @@ final class Utils
     {
         try {
             return ['state' => PromiseInterface::FULFILLED, 'value' => $promise->wait()];
-        } catch (RejectionException $e) {
-            return ['state' => PromiseInterface::REJECTED, 'reason' => $e->getReason()];
         } catch (\Throwable $e) {
+            if ($e instanceof AggregateException) {
+                return ['state' => PromiseInterface::REJECTED, 'reason' => $e];
+            }
+            if ($e instanceof RejectionException) {
+                return ['state' => PromiseInterface::REJECTED, 'reason' => $e->getReason()];
+            }
             return ['state' => PromiseInterface::REJECTED, 'reason' => $e];
         }
     }
@@ -85,6 +89,7 @@ final class Utils
      */
     public static function inspectAll($promises): array
     {
+        $promises = self::prepareIterable($promises, __FUNCTION__);
         $results = [];
         foreach ($promises as $key => $promise) {
             $results[$key] = self::inspect($promise);
@@ -104,6 +109,7 @@ final class Utils
      */
     public static function unwrap($promises): array
     {
+        $promises = self::prepareIterable($promises, __FUNCTION__);
         $results = [];
         foreach ($promises as $key => $promise) {
             $results[$key] = $promise->wait();
@@ -123,11 +129,12 @@ final class Utils
      */
     public static function all($promises, bool $recursive = \false): PromiseInterface
     {
+        $promises = self::prepareIterable($promises, __FUNCTION__);
         $results = [];
         $promise = Each::of($promises, function ($value, $idx) use (&$results): void {
             $results[$idx] = $value;
         }, function ($reason, $idx, Promise $aggregate): void {
-            if (Is::pending($aggregate)) {
+            if (State::isPending($aggregate)) {
                 $aggregate->reject($reason);
             }
         })->then(function () use (&$results) {
@@ -136,8 +143,13 @@ final class Utils
         });
         if (\true === $recursive) {
             $promise = $promise->then(function ($results) use ($recursive, &$promises) {
+                // A consumed generator cannot be traversed again, so a
+                // recursive pass has nothing further to observe.
+                if ($promises instanceof \Generator) {
+                    return $results;
+                }
                 foreach ($promises as $promise) {
-                    if (Is::pending($promise)) {
+                    if (State::isPending($promise)) {
                         return self::all($promises, $recursive);
                     }
                 }
@@ -162,10 +174,11 @@ final class Utils
      */
     public static function some(int $count, $promises): PromiseInterface
     {
+        $promises = self::prepareIterable($promises, __FUNCTION__);
         $results = [];
         $rejections = [];
         return Each::of($promises, function ($value, $idx, PromiseInterface $p) use (&$results, $count): void {
-            if (Is::settled($p)) {
+            if (State::isSettled($p)) {
                 return;
             }
             $results[$idx] = $value;
@@ -190,6 +203,7 @@ final class Utils
      */
     public static function any($promises): PromiseInterface
     {
+        $promises = self::prepareIterable($promises, __FUNCTION__);
         return self::some(1, $promises)->then(function ($values) {
             return $values[0];
         });
@@ -206,6 +220,7 @@ final class Utils
      */
     public static function settle($promises): PromiseInterface
     {
+        $promises = self::prepareIterable($promises, __FUNCTION__);
         $results = [];
         return Each::of($promises, function ($value, $idx) use (&$results): void {
             $results[$idx] = ['state' => PromiseInterface::FULFILLED, 'value' => $value];
@@ -215,5 +230,20 @@ final class Utils
             ksort($results);
             return $results;
         });
+    }
+    private static function prepareIterable($promises, string $method): iterable
+    {
+        if (is_iterable($promises)) {
+            return $promises;
+        }
+        self::triggerNonIterableDeprecation($promises, $method);
+        return [$promises];
+    }
+    private static function triggerNonIterableDeprecation($promises, string $method): void
+    {
+        if (is_iterable($promises)) {
+            return;
+        }
+        \SimpleCalendar\plugin_deps\trigger_deprecation('guzzlehttp/promises', '2.5', 'Passing a non-iterable to %s::%s() is deprecated; guzzlehttp/promises 3.0 will require an iterable.', self::class, $method);
     }
 }

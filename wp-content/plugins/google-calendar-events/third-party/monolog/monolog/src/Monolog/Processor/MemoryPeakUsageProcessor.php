@@ -11,7 +11,6 @@ declare (strict_types=1);
  */
 namespace SimpleCalendar\plugin_deps\Monolog\Processor;
 
-use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 /**
  * Injects memory_get_peak_usage in all records
  *
@@ -21,15 +20,15 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
 class MemoryPeakUsageProcessor extends MemoryProcessor
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
-    public function __invoke(LogRecord $record): LogRecord
+    public function __invoke(array $record): array
     {
         $usage = memory_get_peak_usage($this->realUsage);
         if ($this->useFormatting) {
             $usage = $this->formatBytes($usage);
         }
-        $record->extra['memory_peak_usage'] = $usage;
+        $record['extra']['memory_peak_usage'] = $usage;
         return $record;
     }
 }

@@ -19,7 +19,7 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
 abstract class Handler implements HandlerInterface
 {
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function handleBatch(array $records): void
     {
@@ -28,7 +28,7 @@ abstract class Handler implements HandlerInterface
         }
     }
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function close(): void
     {
@@ -41,9 +41,16 @@ abstract class Handler implements HandlerInterface
             // do nothing
         }
     }
-    public function __serialize(): array
+    public function __sleep()
     {
         $this->close();
-        return (array) $this;
+        $reflClass = new \ReflectionClass($this);
+        $keys = [];
+        foreach ($reflClass->getProperties() as $reflProp) {
+            if (!$reflProp->isStatic()) {
+                $keys[] = $reflProp->getName();
+            }
+        }
+        return $keys;
     }
 }
