@@ -54,7 +54,7 @@ function RenderLinkLibrarySearchForm( $libraryoptions ) {
 	$output .= "<input type='submit' id='searchbutton' value='" . $searchlabel . "' />";
 
 	if ( $showsearchreset ) {
-		$output .= "<input type='submit' id='resetbutton' value='" . esc_html__( 'Reset search', 'link-library' ) . "' />";
+		$output .= "<input type='submit' id='resetbutton' value='" . __( 'Reset search', 'link-library' ) . "' />";
 	}
 
 	$output .= "</div>\n";

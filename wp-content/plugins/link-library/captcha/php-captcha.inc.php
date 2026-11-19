@@ -1,9 +1,4 @@
 <?php
-
-if ( !defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
-
    /***************************************************************/
    /* PhpCaptcha - A visual and audio CAPTCHA generation library
    
@@ -214,14 +209,14 @@ if ( !defined( 'ABSPATH' ) ) {
          for ($i = 0; $i < $this->iNumLines; $i++) {
             // allocate colour
             if ($this->bUseColour) {
-               $iLineColour = imagecolorallocate($this->oImage, wp_rand(100, 250), wp_rand(100, 250), wp_rand(100, 250));
+               $iLineColour = imagecolorallocate($this->oImage, rand(100, 250), rand(100, 250), rand(100, 250));
             } else {
-               $iwp_randColour = wp_rand(100, 250);
-               $iLineColour = imagecolorallocate($this->oImage, $iwp_randColour, $iwp_randColour, $iwp_randColour);
+               $iRandColour = rand(100, 250);
+               $iLineColour = imagecolorallocate($this->oImage, $iRandColour, $iRandColour, $iRandColour);
             }
             
             // draw line
-            imageline($this->oImage, wp_rand(0, $this->iWidth), wp_rand(0, $this->iHeight), wp_rand(0, $this->iWidth), wp_rand(0, $this->iHeight), $iLineColour);
+            imageline($this->oImage, rand(0, $this->iWidth), rand(0, $this->iHeight), rand(0, $this->iWidth), rand(0, $this->iHeight), $iLineColour);
          }
       }
       
@@ -250,11 +245,11 @@ if ( !defined( 'ABSPATH' ) ) {
          // loop through and generate the code letter by letter
          for ($i = 0; $i < $this->iNumChars; $i++) {
             if (count($this->aCharSet) > 0) {
-               // select wp_random character and add to code string
-               $this->sCode .= $this->aCharSet[array_wp_rand($this->aCharSet)];
+               // select random character and add to code string
+               $this->sCode .= $this->aCharSet[array_rand($this->aCharSet)];
             } else {
-               // select wp_random character and add to code string
-               $this->sCode .= chr(wp_rand(65, 90));
+               // select random character and add to code string
+               $this->sCode .= chr(rand(65, 90));
             }
          }
          
@@ -274,40 +269,40 @@ if ( !defined( 'ABSPATH' ) ) {
 	 {
 		if ($this->bUseColour) {
 			if ($this->bCharShadow)
-				$palette[$i] = imagecolorallocate($this->oImage, wp_rand(0, 100), wp_rand(0, 100), wp_rand(0, 100));
+				$palette[$i] = imagecolorallocate($this->oImage, rand(0, 100), rand(0, 100), rand(0, 100));
 			else
 			{
-				$palette[$i] = imagecolorallocate($this->oImage, wp_rand(0, 100), wp_rand(0, 100), wp_rand(0, 100));
+				$palette[$i] = imagecolorallocate($this->oImage, rand(0, 100), rand(0, 100), rand(0, 100));
 			}
 		}
 		else
 		{
 			if ($this->bCharShadow)
-				$palette[$i] = imagecolorallocate($this->oImage, $iwp_randColour, $iwp_randColour, $iwp_randColour);
+				$palette[$i] = imagecolorallocate($this->oImage, $iRandColour, $iRandColour, $iRandColour);
 			else
 			{
-				$iwp_randColour = wp_rand(0, 100);
-				$palette[$i] = imagecolorallocate($this->oImage, $iwp_randColour, $iwp_randColour, $iwp_randColour);
+				$iRandColour = rand(0, 100);
+				$palette[$i] = imagecolorallocate($this->oImage, $iRandColour, $iRandColour, $iRandColour);
 			}
 		}
 	 }
 	 
          for ($i = 0; $i < strlen($this->sCode); $i++) {
-            // select wp_random font
-            $sCurrentFont = $this->aFonts[array_wp_rand($this->aFonts)];
+            // select random font
+            $sCurrentFont = $this->aFonts[array_rand($this->aFonts)];
             
-               $iTextColour = $palette[array_wp_rand($this->aFonts)];
+               $iTextColour = $palette[array_rand($this->aFonts)];
             
                if ($this->bCharShadow) {
                   // shadow colour
-                  $iShadowColour = $palette[array_wp_rand($this->aFonts)];
+                  $iShadowColour = $palette[array_rand($this->aFonts)];
                }
             
-            // select wp_random font size
-            $iFontSize = wp_rand($this->iMinFontSize, $this->iMaxFontSize);
+            // select random font size
+            $iFontSize = rand($this->iMinFontSize, $this->iMaxFontSize);
             
-            // select wp_random angle
-            $iAngle = wp_rand(-30, 30);
+            // select random angle
+            $iAngle = rand(-30, 30);
             
             // get dimensions of character in selected font and text size
             $aCharDetails = imageftbbox($iFontSize, $iAngle, $sCurrentFont, $this->sCode[$i], array());
@@ -321,12 +316,12 @@ if ( !defined( 'ABSPATH' ) ) {
             imagefttext($this->oImage, $iFontSize, $iAngle, $iX, $iY, $iTextColour, $sCurrentFont, $this->sCode[$i], array());
             
             if ($this->bCharShadow) {
-               $iOffsetAngle = wp_rand(-30, 30);
+               $iOffsetAngle = rand(-30, 30);
                
-               $iwp_randOffsetX = wp_rand(-5, 5);
-               $iwp_randOffsetY = wp_rand(-5, 5);
+               $iRandOffsetX = rand(-5, 5);
+               $iRandOffsetY = rand(-5, 5);
                
-               imagefttext($this->oImage, $iFontSize, $iOffsetAngle, $iX + $iwp_randOffsetX, $iY + $iwp_randOffsetY, $iShadowColour, $sCurrentFont, $this->sCode[$i], array());
+               imagefttext($this->oImage, $iFontSize, $iOffsetAngle, $iX + $iRandOffsetX, $iY + $iRandOffsetY, $iShadowColour, $sCurrentFont, $this->sCode[$i], array());
             }
          }
       }
@@ -362,8 +357,8 @@ if ( !defined( 'ABSPATH' ) ) {
             
             // create background image
             if (is_array($this->vBackgroundImages)) {
-               $iwp_randImage = array_wp_rand($this->vBackgroundImages);
-               $oBackgroundImage = imagecreatefromjpeg($this->vBackgroundImages[$iwp_randImage]);
+               $iRandImage = array_rand($this->vBackgroundImages);
+               $oBackgroundImage = imagecreatefromjpeg($this->vBackgroundImages[$iRandImage]);
             } else {
                $oBackgroundImage = imagecreatefromjpeg($this->vBackgroundImages);
             }

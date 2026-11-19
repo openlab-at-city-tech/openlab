@@ -130,7 +130,7 @@ function link_library_generate_rss_feed () {
 
 	if ( $options['publishrssfeed'] ) {
         header( 'Content-Type: '. feed_content_type('rss') . '; charset=' . get_option('blog_charset') );
-        print( esc_html( $rss->getFeed() ) );    
+        print( $rss->getFeed() );    
     } else {
         header( 'Location: ' . home_url() );
     }

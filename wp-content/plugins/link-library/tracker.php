@@ -1,7 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-
 function link_library_process_ajax_tracker( $my_link_library_plugin ) {
 
 	if ( !current_user_can('administrator') ) {

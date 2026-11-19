@@ -1,7 +1,5 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-
 function link_library_process_user_submission( $my_link_library_plugin ) {
 	check_admin_referer( 'LL_ADDLINK_FORM' );
 
@@ -379,7 +377,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 
 					if ( $current_user ) {
 						if ( $genoptions['bp_log_activity'] && function_exists( 'bp_activity_add' ) ) {
-							$action_message = $current_user->display_name . ' ' . esc_html__( 'added link', 'link-library' ) . ' ' . esc_html( stripslashes( $captureddata['link_name'] ) ) . ' ' . esc_html__( 'in category', 'link-library' ) . ' ';
+							$action_message = $current_user->display_name . ' ' . __( 'added link', 'link-library' ) . ' ' . esc_html( stripslashes( $captureddata['link_name'] ) ) . ' ' . __( 'in category', 'link-library' ) . ' ';
 
 							$catcounter = 1;
 							foreach( $newlinkcatlist as $new_cat_id => $new_cat_name ) {
@@ -610,29 +608,29 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						$headers = "MIME-Version: 1.0\r\n";
 						$headers .= "Content-type: text/html; charset=utf-8\r\n";
 
-						$emailmessage = esc_html__( 'A user submitted a new link to your Wordpress Link database.', 'link-library' ) . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link Name', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_name'] ) ) . "<br />";
-						$emailmessage .= esc_html__( 'Link Address', 'link-library' ) . ": <a href='" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "'>" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "</a><br />";
-						$emailmessage .= esc_html__( 'Link RSS', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_rss'] ) ) . "<br />";
-						$emailmessage .= esc_html__( 'Link Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_description'] ) ) . "<br />";
-						$emailmessage .= esc_html__( 'Link Large Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_textfield'] ) ) . "<br />";
-						$emailmessage .= esc_html__( 'Link Notes', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_notes'] ) ) . "<br />";
-						$emailmessage .= esc_html__( 'Link Category', 'link-library' ) . ": " . $link_category_name . "( " . implode( ', ', $captureddata['link_category'] ) . " )<br /><br />";
+						$emailmessage = __( 'A user submitted a new link to your Wordpress Link database.', 'link-library' ) . "<br /><br />";
+						$emailmessage .= __( 'Link Name', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_name'] ) ) . "<br />";
+						$emailmessage .= __( 'Link Address', 'link-library' ) . ": <a href='" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "'>" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "</a><br />";
+						$emailmessage .= __( 'Link RSS', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_rss'] ) ) . "<br />";
+						$emailmessage .= __( 'Link Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_description'] ) ) . "<br />";
+						$emailmessage .= __( 'Link Large Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_textfield'] ) ) . "<br />";
+						$emailmessage .= __( 'Link Notes', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_notes'] ) ) . "<br />";
+						$emailmessage .= __( 'Link Category', 'link-library' ) . ": " . $link_category_name . "( " . implode( ', ', $captureddata['link_category'] ) . " )<br /><br />";
 						if ( !empty( $link_tags_name ) ) {
-							$emailmessage .= esc_html__( 'Link Tags', 'link-library' ) . ": " . $link_tags_name . "( " . implode( ', ', $captureddata['link_tags'] ) . " )<br /><br />";
+							$emailmessage .= __( 'Link Tags', 'link-library' ) . ": " . $link_tags_name . "( " . implode( ', ', $captureddata['link_tags'] ) . " )<br /><br />";
 						}
 
-						$emailmessage .= esc_html__( 'Reciprocal Link', 'link-library' ) . ": " . $captureddata['ll_reciprocal'] . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link Secondary Address', 'link-library' ) . ": " . $captureddata['ll_secondwebaddr'] . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link Telephone', 'link-library' ) . ": " . $captureddata['ll_telephone'] . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link E-mail', 'link-library' ) . ": " . $captureddata['ll_email'] . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link Submitter', 'link-library' ) . ": " . $username . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
-						$emailmessage .= esc_html__( 'Link Submitter E-mail', 'link-library' ) . ": " . $captureddata['ll_submitteremail'] . "<br /><br />";
+						$emailmessage .= __( 'Reciprocal Link', 'link-library' ) . ": " . $captureddata['ll_reciprocal'] . "<br /><br />";
+						$emailmessage .= __( 'Link Secondary Address', 'link-library' ) . ": " . $captureddata['ll_secondwebaddr'] . "<br /><br />";
+						$emailmessage .= __( 'Link Telephone', 'link-library' ) . ": " . $captureddata['ll_telephone'] . "<br /><br />";
+						$emailmessage .= __( 'Link E-mail', 'link-library' ) . ": " . $captureddata['ll_email'] . "<br /><br />";
+						$emailmessage .= __( 'Link Submitter', 'link-library' ) . ": " . $username . "<br /><br />";
+						$emailmessage .= __( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
+						$emailmessage .= __( 'Link Submitter E-mail', 'link-library' ) . ": " . $captureddata['ll_submitteremail'] . "<br /><br />";
 						
-						$emailmessage .= esc_html__( 'Link Comment', 'link-library' ) . ": " . $captureddata['ll_submittercomment'] . "<br /><br />";
+						$emailmessage .= __( 'Link Comment', 'link-library' ) . ": " . $captureddata['ll_submittercomment'] . "<br /><br />";
 
-						$emailmessage .= esc_html__( 'Referenced Link', 'link-library' ) . ": ";
+						$emailmessage .= __( 'Referenced Link', 'link-library' ) . ": ";
 
 						if ( !empty( $captureddata['ll_linkreference'] ) ) {
 							$referenced_link = get_posts( array( 'post_type' => 'link_library_links', 'include' => array( $captureddata['ll_linkreference'] ), 'numberposts' => 1 ) );
@@ -667,14 +665,14 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 						}
 
 						if ( !$genoptions['suppressemailfooter'] ) {
-							$emailmessage .= "<br /><br />" . esc_html__('Message generated by', 'link-library') . " <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
+							$emailmessage .= "<br /><br />" . __('Message generated by', 'link-library') . " <a href='https://ylefebvre.github.io/wordpress-plugins/link-library/'>Link Library</a> for Wordpress";
 						}
 
 						if ( !empty( $genoptions['moderationnotificationtitle'] ) ) {
 							$emailtitle = stripslashes( $genoptions['moderationnotificationtitle'] );
 							$emailtitle = str_replace( '%linkname%', esc_html( stripslashes( $captureddata['link_name'] ) ), $emailtitle );
 						} else {
-							$emailtitle = htmlspecialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) . " - " . esc_html__( 'New link added', 'link-library' ) . ": " . htmlspecialchars( $captureddata['link_name'] );
+							$emailtitle = htmlspecialchars_decode( get_option( 'blogname' ), ENT_QUOTES ) . " - " . __( 'New link added', 'link-library' ) . ": " . htmlspecialchars( $captureddata['link_name'] );
 						}
 
 						wp_mail( $adminmail, $emailtitle, $emailmessage, $headers );
@@ -688,73 +686,73 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 							$submitteremailheaders .= "From: \"" . $genoptions['moderatorname'] . "\" <" . $genoptions['moderatoremail'] . ">\n";
 						}
 
-						$submitteremailtitle = esc_html__( 'Link Submission Confirmation', 'link-library' );
+						$submitteremailtitle = __( 'Link Submission Confirmation', 'link-library' );
 
-						$submitteremailmessage = '<p>' . esc_html__( 'Thank you for your link submission on ', 'link-library' );
+						$submitteremailmessage = '<p>' . __( 'Thank you for your link submission on ', 'link-library' );
 						$submitteremailmessage .= esc_html( get_bloginfo( 'name' ) ) . '</p>';
 
 						if ( $options['showuserlinks'] == false ) {
-							$submitteremailmessage .= '<p>' . esc_html__( 'Your link will appear once approved by the site administrator.', 'link-library' ) . '</p>';
+							$submitteremailmessage .= '<p>' . __( 'Your link will appear once approved by the site administrator.', 'link-library' ) . '</p>';
 						} elseif ( $options['showuserlinks'] == true ) {
-							$submitteremailmessage .= '<p>' . esc_html__( 'Your link will immediately be added to the site.', 'link-library' ) . '</p>';
+							$submitteremailmessage .= '<p>' . __( 'Your link will immediately be added to the site.', 'link-library' ) . '</p>';
 						}
 
 						if ( !empty( $options['emailextracontent'] ) ) {
 							$submitteremailmessage .= '<p>' . $options['emailextracontent'] . '</p>';
 						}
 
-						$submitteremailmessage .= esc_html__( 'Link Name', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_name'] ) ) . "<br />";
-						$submitteremailmessage .= esc_html__( 'Link Address', 'link-library' ) . ": <a href='" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "'>" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "</a><br />";
+						$submitteremailmessage .= __( 'Link Name', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_name'] ) ) . "<br />";
+						$submitteremailmessage .= __( 'Link Address', 'link-library' ) . ": <a href='" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "'>" . esc_html( stripslashes( $captureddata['link_url'] ) ) . "</a><br />";
 
 						if ( 'show' == $options['showaddlinkrss'] || 'required' == $options['showaddlinkrss'] ) {
-							$submitteremailmessage .= esc_html__( 'Link RSS', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_rss'] ) ) . "<br />";
+							$submitteremailmessage .= __( 'Link RSS', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_rss'] ) ) . "<br />";
 						}
 
 						if ( 'show' == $options['showaddlinkdesc'] || 'required' == $options['showaddlinkdesc'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_description'] ) ) . "<br />";
+							$submitteremailmessage .= __( 'Link Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_description'] ) ) . "<br />";
 						}
 
 						if ( 'show' == $options['showuserlargedescription'] || 'required' == $options['showuserlargedescription'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Large Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_textfield'] ) ) . "<br />";
+							$submitteremailmessage .= __( 'Link Large Description', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_textfield'] ) ) . "<br />";
 						}
 
 						if ( 'show' == $options['showaddlinknotes'] || 'required' == $options['showaddlinknotes'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Notes', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_notes'] ) ) . "<br />";
+							$submitteremailmessage .= __( 'Link Notes', 'link-library' ) . ": " . esc_html( stripslashes( $captureddata['link_notes'] ) ) . "<br />";
 						}
 
-						$submitteremailmessage .= esc_html__( 'Link Category', 'link-library' ) . ": " . $link_category_name . " ( " . $captureddata['link_category'] . " )<br /><br />";
-						$submitteremailmessage .= esc_html__( 'Link Tags', 'link-library' ) . ": " . $link_tags_name_name . " ( " . $captureddata['link_tags'] . " )<br /><br />";
+						$submitteremailmessage .= __( 'Link Category', 'link-library' ) . ": " . $link_category_name . " ( " . $captureddata['link_category'] . " )<br /><br />";
+						$submitteremailmessage .= __( 'Link Tags', 'link-library' ) . ": " . $link_tags_name_name . " ( " . $captureddata['link_tags'] . " )<br /><br />";
 
 						if ( 'show' == $options['showaddlinkreciprocal'] || 'required' == $options['showaddlinkreciprocal'] ) {
-							$submitteremailmessage .= esc_html__( 'Reciprocal Link', 'link-library' ) . ": " . $captureddata['ll_reciprocal'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Reciprocal Link', 'link-library' ) . ": " . $captureddata['ll_reciprocal'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showaddlinksecondurl'] || 'required' == $options['showaddlinksecondurl'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Secondary Address', 'link-library' ) . ": " . $captureddata['ll_secondwebaddr'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Link Secondary Address', 'link-library' ) . ": " . $captureddata['ll_secondwebaddr'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showaddlinktelephone'] || 'required' == $options['showaddlinktelephone'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Telephone', 'link-library' ) . ": " . $captureddata['ll_telephone'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Link Telephone', 'link-library' ) . ": " . $captureddata['ll_telephone'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showaddlinkemail'] || 'required' == $options['showaddlinkemail'] ) {
-							$submitteremailmessage .= esc_html__( 'Link E-mail', 'link-library' ) . ": " . $captureddata['ll_email'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Link E-mail', 'link-library' ) . ": " . $captureddata['ll_email'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showlinksubmittername'] || 'required' == $options['showlinksubmittername'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Link Submitter Name', 'link-library' ) . ": " . $captureddata['ll_submittername'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showaddlinksubmitteremail'] || 'required' == $options['showaddlinksubmitteremail'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Submitter E-mail', 'link-library' ) . ": " . $captureddata['ll_submitteremail'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Link Submitter E-mail', 'link-library' ) . ": " . $captureddata['ll_submitteremail'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showlinksubmittercomment'] || 'required' == $options['showlinksubmittercomment'] ) {
-							$submitteremailmessage .= esc_html__( 'Link Comment', 'link-library' ) . ": " . $captureddata['ll_submittercomment'] . "<br /><br />";
+							$submitteremailmessage .= __( 'Link Comment', 'link-library' ) . ": " . $captureddata['ll_submittercomment'] . "<br /><br />";
 						}
 
 						if ( 'show' == $options['showlinkreferencelist'] || 'required' == $options['showlinkreferencelist'] ) {
-							$submitteremailmessage .= esc_html__( 'Referenced Link', 'link-library' ) . ": ";
+							$submitteremailmessage .= __( 'Referenced Link', 'link-library' ) . ": ";
 							if ( !empty( $captureddata['ll_linkreference'] ) ) {
 								$referenced_link = get_posts( array( 'post_type' => 'link_library_links', 'include' => array( $captureddata['ll_linkreference'] ), 'numberposts' => 1 ) );
 	
@@ -822,7 +820,7 @@ function link_library_process_user_submission( $my_link_library_plugin ) {
 	set_transient( 'll_user_form_' . $nonce, $captureddata, 10 );
 	$redirectaddress = esc_url_raw( add_query_arg( 'formdata', 'll_user_form_' . $nonce, $redirectaddress ) );
 
-	wp_safe_redirect( $redirectaddress );
+	wp_redirect( $redirectaddress );
 	exit;
 }
 

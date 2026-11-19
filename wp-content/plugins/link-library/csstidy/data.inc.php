@@ -1,9 +1,4 @@
 <?php
-
-if ( !defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
-
 /**
  * Various CSS Data for CSSTidy
  *

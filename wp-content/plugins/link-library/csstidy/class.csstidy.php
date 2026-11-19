@@ -1,9 +1,5 @@
 <?php
 
-if ( !defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
-
 /**
  * CSSTidy - CSS Parser and Optimiser
  *
@@ -471,6 +467,53 @@ class csstidy {
 			$this->log('Removed unnecessary backslash', 'Information');
 		}
 		return '';
+	}
+
+	/**
+	 * Write formatted output to a file
+	 * @param string $filename
+	 * @param string $doctype when printing formatted, is a shorthand for the document type
+	 * @param bool $externalcss when printing formatted, indicates whether styles to be attached internally or as an external stylesheet
+	 * @param string $title when printing formatted, is the title to be added in the head of the document
+	 * @param string $lang when printing formatted, gives a two-letter language code to be added to the output
+	 * @access public
+	 * @version 1.4
+	 */
+	public function write_page($filename, $doctype='xhtml1.1', $externalcss=true, $title='', $lang='en') {
+		$this->write($filename, true);
+	}
+
+	/**
+	 * Write plain output to a file
+	 * @param string $filename
+	 * @param bool $formatted whether to print formatted or not
+	 * @param string $doctype when printing formatted, is a shorthand for the document type
+	 * @param bool $externalcss when printing formatted, indicates whether styles to be attached internally or as an external stylesheet
+	 * @param string $title when printing formatted, is the title to be added in the head of the document
+	 * @param string $lang when printing formatted, gives a two-letter language code to be added to the output
+	 * @param bool $pre_code whether to add pre and code tags around the code (for light HTML formatted templates)
+	 * @access public
+	 * @version 1.4
+	 */
+	public function write($filename, $formatted=false, $doctype='xhtml1.1', $externalcss=true, $title='', $lang='en', $pre_code=true) {
+		$filename .= ( $formatted) ? '.xhtml' : '.css';
+
+		if (!is_dir('temp')) {
+			$madedir = mkdir('temp');
+			if (!$madedir) {
+				print 'Could not make directory "temp" in ' . dirname(__FILE__);
+				exit;
+			}
+		}
+		$handle = fopen('temp/' . $filename, 'w');
+		if ($handle) {
+			if (!$formatted) {
+				fwrite($handle, $this->print->plain());
+			} else {
+				fwrite($handle, $this->print->formatted_page($doctype, $externalcss, $title, $lang, $pre_code));
+			}
+		}
+		fclose($handle);
 	}
 
 	/**

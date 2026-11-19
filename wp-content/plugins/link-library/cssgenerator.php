@@ -1,9 +1,5 @@
 <?php
 
-if ( !defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
-
 function link_library_generate_css( $my_link_library_plugin ) {
 	$options = '';
 	$genoptions = '';
@@ -14,7 +10,7 @@ function link_library_generate_css( $my_link_library_plugin ) {
 	header("Content-type: text/css");
 
 	if ( isset( $genoptions['fullstylesheet'] ) ) {
-		echo esc_html( stripslashes( $genoptions['fullstylesheet'] ) );
+		echo stripslashes( $genoptions['fullstylesheet'] );
 	}
 
 	for ( $i = 1; $i <= $genoptions['numberstylesets']; $i++ ) {
@@ -26,7 +22,7 @@ function link_library_generate_css( $my_link_library_plugin ) {
 		$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
 		if ( !empty( $options['stylesheet'] ) ) {
-			echo esc_html( stripslashes( $options['stylesheet'] ) ) . "\n";
+			echo stripslashes( $options['stylesheet'] ) . "\n";
 		}
 	}
 

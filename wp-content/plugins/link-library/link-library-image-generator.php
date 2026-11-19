@@ -24,7 +24,7 @@ function verify_file_bounds(string $userInput, string $baseFolder): bool {
 function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $thumbnailsize, $thumbnailgenerator ) {
 
     if ( !current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'Not allowed', 'link-library' ) );
+		wp_die( __( 'Not allowed', 'link-library' ) );
 	}
 
     $status = false;
@@ -57,9 +57,9 @@ function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filep
         $uploads = wp_upload_dir();
 
         if ( !file_exists( $uploads['basedir'] ) ) {
-            return esc_html__( 'Please create a folder called uploads under your Wordpress /wp-content/ directory with write permissions to use this functionality.', 'link-library' );
+            return __( 'Please create a folder called uploads under your Wordpress /wp-content/ directory with write permissions to use this functionality.', 'link-library' );
         } elseif ( !is_writable( $uploads['basedir'] ) ) {
-            return esc_html__( 'Please make sure that the /wp-content/uploads/ directory has write permissions to use this functionality.', 'link-library' );
+            return __( 'Please make sure that the /wp-content/uploads/ directory has write permissions to use this functionality.', 'link-library' );
         } else {
             if ( !file_exists( $uploads['basedir'] . '/' . $filepath ) ) {
                 mkdir( $uploads['basedir'] . '/' . $filepath );
@@ -73,7 +73,7 @@ function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filep
                         $tempfile = download_url( $genthumburl );
                         if ( !is_wp_error( $tempfile ) ) {
                             copy( $tempfile, $img );
-                            wp_delete_file( $tempfile );
+                            unlink( $tempfile );
                             $status = true;
                         }
             } elseif ( $thumbnailgenerator == 'google' && ( $mode == 'thumb' || $mode == 'thumbonly' ) ) {
@@ -129,7 +129,7 @@ function ll_get_link_image( $url, $name, $mode, $linkid, $cid, $filepath, $filep
             if ( $filepathtype == 'absolute' || empty( $filepathtype ) ) {
                 $newimagedata = $uploads['baseurl'] . "/" . $filepath . "/" . $linkid . ".png";
             } elseif ( $filepathtype == 'relative' ) {
-                $parsedaddress = wp_parse_url( $uploads['baseurl'] );
+                $parsedaddress = parse_url( $uploads['baseurl'] );
                 $newimagedata  = $parsedaddress['path'] . "/" . $filepath . "/" . $linkid . ".png";
             }
 
@@ -182,11 +182,11 @@ function link_library_ajax_image_generator ( $my_link_library_plugin_admin ) {
     $linkid = intval($_POST['linkid']);
 
     if ( in_array( $generaloptions['thumbnailgenerator'], array( 'robothumb', 'thumbshots', 'google', 'wordpressmshots' ) ) ) {
-	    echo esc_html( ll_get_link_image($url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $generaloptions['thumbnailsize'], $generaloptions['thumbnailgenerator'] ) );
+	    echo ll_get_link_image($url, $name, $mode, $linkid, $cid, $filepath, $filepathtype, $generaloptions['thumbnailsize'], $generaloptions['thumbnailgenerator'] );
     } elseif ( 'pagepeeker' == $generaloptions['thumbnailgenerator'] ) {
-	    echo esc_html( ll_get_link_image($url, $name, $mode, $linkid, $generaloptions['pagepeekerid'], $filepath, $filepathtype, $generaloptions['pagepeekersize'], $generaloptions['thumbnailgenerator'] ) );
+	    echo ll_get_link_image($url, $name, $mode, $linkid, $generaloptions['pagepeekerid'], $filepath, $filepathtype, $generaloptions['pagepeekersize'], $generaloptions['thumbnailgenerator'] );
     } elseif ( 'shrinktheweb' == $generaloptions['thumbnailgenerator'] ) {
-	    echo esc_html( ll_get_link_image($url, $name, $mode, $linkid, $generaloptions['shrinkthewebaccesskey'], $filepath, $filepathtype, $generaloptions['stwthumbnailsize'], $generaloptions['thumbnailgenerator'] ) );
+	    echo ll_get_link_image($url, $name, $mode, $linkid, $generaloptions['shrinkthewebaccesskey'], $filepath, $filepathtype, $generaloptions['stwthumbnailsize'], $generaloptions['thumbnailgenerator'] );
     }
 
     exit;
@@ -195,7 +195,7 @@ function link_library_ajax_image_generator ( $my_link_library_plugin_admin ) {
 function link_library_image_generator( $LLPluginClass, $options = array(), $autogen = false ) {
 
     if ( !current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'Not allowed', 'link-library' ) );
+		wp_die( __( 'Not allowed', 'link-library' ) );
 	}
 
     $genoptions = get_option( 'LinkLibraryGeneral' );
@@ -218,9 +218,9 @@ function link_library_image_generator( $LLPluginClass, $options = array(), $auto
     $uploads = wp_upload_dir();
 
     if ( !file_exists( $uploads['basedir'] ) ) {
-        echo "<div id='message' class='updated fade'><p><strong>" . esc_html__( 'Please create a folder called uploads under your Wordpress /wp-content/ directory with write permissions to use this functionality.', 'link-library' ) . "</strong></p></div>";
+        echo "<div id='message' class='updated fade'><p><strong>" . __( 'Please create a folder called uploads under your Wordpress /wp-content/ directory with write permissions to use this functionality.', 'link-library' ) . "</strong></p></div>";
     } elseif ( !is_writable( $uploads['basedir'] ) ) {
-        echo "<div id='message' class='updated fade'><p><strong>" . esc_html__( 'Please make sure that the /wp-content/uploads/ directory has write permissions to use this functionality.', 'link-library' ) . "</strong></p></div>";
+        echo "<div id='message' class='updated fade'><p><strong>" . __( 'Please make sure that the /wp-content/uploads/ directory has write permissions to use this functionality.', 'link-library' ) . "</strong></p></div>";
     } else {
         if ( !file_exists( $uploads['basedir'] . '/' . $filepath ) ) {
             mkdir( $uploads['basedir'] . '/' . $filepath );
@@ -272,13 +272,13 @@ function link_library_image_generator( $LLPluginClass, $options = array(), $auto
             wp_reset_postdata();
 
             if ( isset( $_GET['genthumbs'] ) ) {
-                echo "<div id='message' class='updated fade'><p><strong>" . esc_html__( 'Thumbnails successfully generated!', 'link-library' ) . "</strong></p></div>";
+                echo "<div id='message' class='updated fade'><p><strong>" . __( 'Thumbnails successfully generated!', 'link-library' ) . "</strong></p></div>";
             } elseif ( isset( $_GET['genfavicons'] ) ) {
-                echo "<div id='message' class='updated fade'><p><strong>" . esc_html__( 'Favicons successfully generated!', 'link-library' ) . "</strong></p></div>";
+                echo "<div id='message' class='updated fade'><p><strong>" . __( 'Favicons successfully generated!', 'link-library' ) . "</strong></p></div>";
             } elseif ( isset( $_GET['genthumbsingle'] ) ) {
-                echo "<div id='message' class='updated fade'><p><strong>" . esc_html__( 'Thumbnail successfully generated for', 'link-library' ) . " " . esc_html( $linkname ) . ".</strong></p></div>";
+                echo "<div id='message' class='updated fade'><p><strong>" . __( 'Thumbnail successfully generated for', 'link-library' ) . " " . $linkname . ".</strong></p></div>";
             } elseif ( isset( $_GET['genfaviconsingle'] ) ) {
-                echo "<div id='message' class='updated fade'><p><strong>" . esc_html__( 'Favicon successfully generated for', 'link-library' ) . " " . esc_html( $linkname ) . ".</strong></p></div>";
+                echo "<div id='message' class='updated fade'><p><strong>" . __( 'Favicon successfully generated for', 'link-library' ) . " " . $linkname . ".</strong></p></div>";
             }
         }
     }

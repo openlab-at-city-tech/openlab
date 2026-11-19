@@ -646,14 +646,14 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
 						} else {
 							$output .= $settings;
 						}
-						$output .= "' onclick='showcategory( jQuery(\".catdropdown" . $settings . "\").val() )'>" . esc_html__('Go!', 'link-library') . "</button>";
+						$output .= "' onclick='showcategory( jQuery(\".catdropdown" . $settings . "\").val() )'>" . __('Go!', 'link-library') . "</button>";
 		            }
 		            $output .= '</form>';
 	            }
 
 				if ( 'togglesshowhideall' == $flatlist ) {
-					$output .= '<div class="linkcatname cattogglehideall">' . esc_html__( 'Hide all', 'link-library' ) . '</div>';
-					$output .= '<div class="linkcatname cattoggleshowall">' . esc_html__( 'Show all', 'link-library' ) . '</div>';
+					$output .= '<div class="linkcatname cattogglehideall">' . __( 'Hide all', 'link-library' ) . '</div>';
+					$output .= '<div class="linkcatname cattoggleshowall">' . __( 'Show all', 'link-library' ) . '</div>';
 				}
 
 	            $output .= "</div>\n";
@@ -691,7 +691,7 @@ function RenderLinkLibraryCategories( $LLPluginClass, $generaloptions, $libraryo
                 $output .= "</script>\n";
             }
         } else {
-            $output .= '<div>' . esc_html__('No categories found', 'link-library') . '.</div>';
+            $output .= '<div>' . __('No categories found', 'link-library') . '.</div>';
         }
 
         if ( 0 == $level && defined( 'REST_REQUEST' ) && REST_REQUEST ) {

@@ -1,9 +1,5 @@
 <?php
 
-if ( !defined( 'ABSPATH' ) ) {
-	exit;
-} // Exit if accessed directly
-
 function link_library_60_update( $plugin_class, $continue = false ) {
 	update_option( 'LinkLibrary60Update', true );
 
@@ -13,7 +9,13 @@ function link_library_60_update( $plugin_class, $continue = false ) {
 	$link_count = $wpdb->get_var( $link_query );
 
 	if ( $link_count > 0 ) {
-		$all_link_cats = $wpdb->get_results( $wpdb->prepare( 'SELECT t.name, t.term_id, tt.description FROM %1sterms t LEFT JOIN %1sterm_taxonomy tt ON (t.term_id = tt.term_id) LEFT JOIN %1sterm_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) WHERE tt.taxonomy = "link_category" ', $plugin_class->db_prefix(), $plugin_class->db_prefix(), $plugin_class->db_prefix() ) );
+		$all_link_cats_query = 'SELECT t.name, t.term_id, tt.description ';
+		$all_link_cats_query .= 'FROM ' . $plugin_class->db_prefix() . 'terms t ';
+		$all_link_cats_query .= 'LEFT JOIN ' . $plugin_class->db_prefix() . 'term_taxonomy tt ON (t.term_id = tt.term_id) ';
+		$all_link_cats_query .= 'LEFT JOIN ' . $plugin_class->db_prefix() . 'term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ';
+		$all_link_cats_query .= 'WHERE tt.taxonomy = "link_category" ';
+
+		$all_link_cats = $wpdb->get_results( $all_link_cats_query );
 
 		foreach ( $all_link_cats as $link_cat ) {
 			$cat_string = $link_cat->name;
@@ -70,14 +72,27 @@ function link_library_60_update( $plugin_class, $continue = false ) {
 
 		dbDelta ( $meta_creation_query );
 
-		$links_to_import = $wpdb->get_results( $wpdb->prepare( "SELECT distinct l.link_id as import_link_id, l.link_name, l.link_url, l.link_rss, l.link_description, l.link_notes, GROUP_CONCAT( t.name ) as cat_name, l.link_visible, le.link_second_url, le.link_telephone, le.link_email, le.link_reciprocal, l.link_image, le.link_textfield, le.link_no_follow, l.link_rating, l.link_target, l.link_updated, le.link_visits, le.link_submitter, le.link_submitter_name, le.link_submitter_email, le.link_addl_rel, le.link_featured, le.link_manual_updated, l.link_owner FROM %1sterms t LEFT JOIN %1sterm_taxonomy tt ON (t.term_id = tt.term_id) LEFT JOIN %1sterm_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) LEFT JOIN %1slinks l ON (tr.object_id = l.link_id) LEFT JOIN %1slinks_extrainfo le ON (l.link_id = le.link_id) WHERE tt.taxonomy = 'link_category' GROUP BY l.link_id ", $plugin_class->db_prefix(), $plugin_class->db_prefix(), $plugin_class->db_prefix(), $plugin_class->db_prefix(), $plugin_class->db_prefix() ) );
+		$links_import_query = "SELECT distinct l.link_id as import_link_id, l.link_name, l.link_url, l.link_rss, l.link_description, l.link_notes, ";
+		$links_import_query .= "GROUP_CONCAT( t.name ) as cat_name, l.link_visible, le.link_second_url, le.link_telephone, le.link_email, le.link_reciprocal, ";
+		$links_import_query .= "l.link_image, le.link_textfield, le.link_no_follow, l.link_rating, l.link_target, l.link_updated, le.link_visits, ";
+		$links_import_query .= "le.link_submitter, le.link_submitter_name, le.link_submitter_email, le.link_addl_rel, le.link_featured, le.link_manual_updated, l.link_owner ";
+		$links_import_query .= "FROM " . $plugin_class->db_prefix() . "terms t ";
+		$links_import_query .= "LEFT JOIN " . $plugin_class->db_prefix() . "term_taxonomy tt ON (t.term_id = tt.term_id) ";
+		$links_import_query .= "LEFT JOIN " . $plugin_class->db_prefix() . "term_relationships tr ON (tt.term_taxonomy_id = tr.term_taxonomy_id) ";
+		$links_import_query .= "LEFT JOIN " . $plugin_class->db_prefix() . "links l ON (tr.object_id = l.link_id) ";
+		$links_import_query .= "LEFT JOIN " . $plugin_class->db_prefix() . "links_extrainfo le ON (l.link_id = le.link_id) ";
+		$links_import_query .= "WHERE tt.taxonomy = 'link_category' ";
+		$links_import_query .= "GROUP BY l.link_id ";
+
+		$links_to_import = $wpdb->get_results( $links_import_query );
 
 		foreach ( $links_to_import as $link_to_import ) {
 
 			global $wpdb;
 
 			if ( $continue ) {
-				$wpdb->query( $wpdb->prepare( 'SELECT ID FROM %s p, %s pm WHERE post_title = "%s" AND post_type = \'link_library_links\' AND p.ID = pm.post_ID and pm.meta_key = "link_url" and pm.meta_value = "%s"', $wpdb->posts, $wpdb->postmeta, $link_to_import->link_name, $link_to_import->link_url ) );
+				$query = 'SELECT ID FROM ' . $wpdb->posts . ' p, ' . $wpdb->postmeta . ' pm WHERE post_title = "' . $link_to_import->link_name. '" AND post_type = \'link_library_links\' AND p.ID = pm.post_ID and pm.meta_key = "link_url" and pm.meta_value = "' . $link_to_import->link_url . '"';
+				$wpdb->query( $query );
 
 				if ( $wpdb->num_rows ) {
 					continue;
