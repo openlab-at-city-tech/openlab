@@ -26,7 +26,7 @@
 
 <!-- wp:social-link {"url":"#","service":"instagram"} /-->
 
-<!-- wp:social-link {"url":"#","service":"wordpress"} /--></ul>
+<!-- wp:social-link {"url":"#","service":"WordPress"} /--></ul>
 <!-- /wp:social-links --></div>
 <!-- /wp:group --></div>
 <!-- /wp:column -->
@@ -45,7 +45,7 @@
 
 <!-- wp:navigation-link {"label":"Our Stores","url":"#","kind":"custom","isTopLevelLink":true} /-->
 
-<!-- wp:navigation-link {"label":"Buy Now","type":"link","opensInNewTab":true,"url":"https://www.cretathemes.com/products/portfolio-wordpress-theme","kind":"custom","className":"buypro"} /-->
+<!-- wp:navigation-link {"label":"Buy Now","type":"link","opensInNewTab":true,"url":"https://www.cretathemes.com/products/portfolio-WordPress-theme","kind":"custom","className":"buypro"} /-->
 <!-- /wp:navigation --></div>
 <!-- /wp:column -->
 
@@ -113,7 +113,7 @@
 
 <!-- wp:group {"className":"rights-box wow bounceInUp","layout":{"type":"flex","flexWrap":"nowrap","justifyContent":"space-between"}} -->
 <div class="wp-block-group rights-box wow bounceInUp"><!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0px","right":"0px","bottom":"0px","left":"0px"},"padding":{"top":"0","right":"0","bottom":"0","left":"0"}},"elements":{"link":{"color":{"text":"var:preset|color|white"}}}},"textColor":"white","fontSize":"medium"} -->
-<p class="has-white-color has-text-color has-link-color has-medium-font-size" style="margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><a class="copyright-text" target="_blank" rel="noreferrer noopener" href="https://www.cretathemes.com/products/free-freelancer-wordpress-theme"><?php esc_html_e('FSE Freelancer Portfolio','fse-freelancer-portfolio'); ?></a>.<?php esc_html_e('All Rights Reserved.','fse-freelancer-portfolio'); ?></p>
+<p class="has-white-color has-text-color has-link-color has-medium-font-size" style="margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><a class="copyright-text" target="_blank" rel="noreferrer noopener" href="https://www.cretathemes.com/products/free-freelancer-WordPress-theme"><?php esc_html_e('FSE Freelancer Portfolio','fse-freelancer-portfolio'); ?></a>.<?php esc_html_e('All Rights Reserved.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:navigation {"textColor":"white","overlayBackgroundColor":"background","overlayTextColor":"foreground","layout":{"type":"flex","justifyContent":"right"}} -->

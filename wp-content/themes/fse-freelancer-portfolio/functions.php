@@ -20,14 +20,14 @@ if ( ! function_exists( 'fse_freelancer_portfolio_support' ) ) :
 		add_editor_style(get_stylesheet_directory_uri() . '/assets/css/editor-style.css');
 
 		/* Theme Credit link */
-		define('FSE_FREELANCER_PORTFOLIO_BUY_NOW',__('https://www.cretathemes.com/products/portfolio-wordpress-theme','fse-freelancer-portfolio'));
+		define('FSE_FREELANCER_PORTFOLIO_BUY_NOW',__('https://www.cretathemes.com/products/portfolio-WordPress-theme','fse-freelancer-portfolio'));
 		define('FSE_FREELANCER_PORTFOLIO_PRO_DEMO',__('https://pattern.cretathemes.com/fse-freelancer-portfolio/','fse-freelancer-portfolio'));
 		define('FSE_FREELANCER_PORTFOLIO_THEME_DOC',__('https://pattern.cretathemes.com/pro-guide/fse-freelancer-portfolio/','fse-freelancer-portfolio'));
 		define('FSE_FREELANCER_PORTFOLIO_PRO_THEME_DOC',__('https://pattern.cretathemes.com/pro-guide/fse-freelancer-portfolio/','fse-freelancer-portfolio'));
-		define('FSE_FREELANCER_PORTFOLIO_SUPPORT',__('https://wordpress.org/support/theme/fse-freelancer-portfolio/','fse-freelancer-portfolio'));
-		define('FSE_FREELANCER_PORTFOLIO_REVIEW',__('https://wordpress.org/support/theme/fse-freelancer-portfolio/reviews/#new-post','fse-freelancer-portfolio'));
-		define('FSE_FREELANCER_PORTFOLIO_PRO_THEME_BUNDLE',__('https://www.cretathemes.com/products/wordpress-theme-bundle','fse-freelancer-portfolio'));
-		define('FSE_FREELANCER_PORTFOLIO_PRO_ALL_THEMES',__('https://www.cretathemes.com/collections/wordpress-block-themes','fse-freelancer-portfolio'));
+		define('FSE_FREELANCER_PORTFOLIO_SUPPORT',__('https://WordPress.org/support/theme/fse-freelancer-portfolio/','fse-freelancer-portfolio'));
+		define('FSE_FREELANCER_PORTFOLIO_REVIEW',__('https://WordPress.org/support/theme/fse-freelancer-portfolio/reviews/#new-post','fse-freelancer-portfolio'));
+		define('FSE_FREELANCER_PORTFOLIO_PRO_THEME_BUNDLE',__('https://www.cretathemes.com/products/WordPress-theme-bundle','fse-freelancer-portfolio'));
+		define('FSE_FREELANCER_PORTFOLIO_PRO_ALL_THEMES',__('https://www.cretathemes.com/collections/WordPress-block-themes','fse-freelancer-portfolio'));
 
 	}
 endif;
@@ -199,7 +199,7 @@ function your_plugin_adminbar_link($wp_admin_bar) {
     $wp_admin_bar->add_node([
         'id'    => 'yourplugin_upgrade',
         'title' => ' Upgrade to Pro',
-        'href'  => 'https://www.cretathemes.com/products/portfolio-wordpress-theme',
+        'href'  => 'https://www.cretathemes.com/products/portfolio-WordPress-theme',
         'meta'  => array(
             'target' => '_blank',
         )

@@ -43,7 +43,7 @@ function install_and_activate_creta_testimonial_plugin() {
         [
             'slug'     => 'creta-testimonial-showcase',
             'file'     => 'creta-testimonial-showcase/creta-testimonial-showcase.php',
-            'url'      => 'https://downloads.wordpress.org/plugin/creta-testimonial-showcase.latest-stable.zip',
+            'url'      => 'https://downloads.WordPress.org/plugin/creta-testimonial-showcase.latest-stable.zip',
         ]
     ];
 
