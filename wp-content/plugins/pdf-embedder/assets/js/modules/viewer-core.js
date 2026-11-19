@@ -277,7 +277,7 @@ jQuery( document ).ready( function( $ ) {
 	};
 
 	pdfembPagesViewer.prototype.setSizesBasedOnPage = function( page ) {
-		var vp = page.getViewport( 1.0 ); // scale = 1.0
+		var vp = page.getViewport( { scale: 1.0 } );
 
 		this.pageWidth = vp.width;
 		this.pageHeight = vp.height;
@@ -698,7 +698,7 @@ jQuery( document ).ready( function( $ ) {
 
 			if ( ! widthfactor || ! heightfactor ) {
 				// calculate factors
-				var vp = page.getViewport( 1.0 ); // scale = 1.0
+				var vp = page.getViewport( { scale: 1.0 } );
 
 				widthfactor = vp.width / self.pageWidth;
 				heightfactor = vp.height / self.pageHeight;
@@ -731,6 +731,15 @@ jQuery( document ).ready( function( $ ) {
 				canvasscale = self.canvasscale,
 				zoom = self.zoom;
 
+			// Container is not measurable yet (e.g. embed inside a hidden tab/
+			// accordion/modal) — `getImageData` further down throws IndexSizeError
+			// on a 0-width canvas. Clear the pending-drawing-round so a later
+			// renderPage call (once the container becomes visible) can proceed.
+			if ( ! wantCanvasWidth || ! wantCanvasHeight || ! widthfactor || ! heightfactor ) {
+				innerdiv.data( 'pending-drawing-round', '' );
+				return;
+			}
+
 			canvas.css( 'width', wantCanvasWidth * widthfactor );
 			canvas.css( 'height', wantCanvasHeight * heightfactor );
 
@@ -742,7 +751,7 @@ jQuery( document ).ready( function( $ ) {
 			}
 
 			// Render PDF page into canvas context
-			var viewport = page.getViewport( canvasscale * zoom / 100 );
+			var viewport = page.getViewport( { scale: canvasscale * zoom / 100 } );
 
 			// if ( typeof offscreenCanvas !== 'undefined' ) {
 			//     releaseCanvas( offscreenCanvas );

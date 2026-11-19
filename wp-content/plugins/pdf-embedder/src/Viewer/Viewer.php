@@ -4,7 +4,6 @@ namespace PDFEmbedder\Viewer;
 
 use PDFEmbedder\Options;
 use PDFEmbedder\Helpers\Links;
-use PDFEmbedder\Helpers\Check;
 use PDFEmbedder\Helpers\Assets;
 
 /**
@@ -42,7 +41,9 @@ class Viewer implements ViewerInterface {
 	 */
 	public function render(): string { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.TooHigh
 
-		$title = ! empty( $this->atts['title'] ) ? $this->atts['title'] : Links::make_title_from_url( $this->atts['url'] );
+		$title = ! empty( $this->atts['title'] )
+			? $this->atts['title']
+			: rawurldecode( Links::make_title_from_url( $this->atts['url'] ) );
 
 		$html_node   = '';
 		$extra_style = '';
@@ -99,7 +100,17 @@ class Viewer implements ViewerInterface {
 
 		$html_node .= '</a>';
 
-		return $html_node;
+		// Wrap with the block-style class so block themes' `is-layout-constrained`
+		// applies its `max-width: var(--wp--style--global--content-size)` to the
+		// wrapper rather than directly to `.pdfemb-viewer`. viewer-core.js sizes
+		// the canvas from `divContainer.parent().width()`, which without this
+		// wrapper would return the unconstrained content-area width (~1060px)
+		// even though `.pdfemb-viewer` itself is rendered at ~620px — the canvas
+		// would then overflow its visible container. The class is also targeted
+		// by `block/build/style-index.css`, so the wrapper participates in the
+		// block's existing CSS surface. Both shortcode and block render through
+		// this method, so both get the fix.
+		return '<div class="wp-block-pdfemb-pdf-embedder-viewer">' . $html_node . '</div>';
 	}
 
 	/**

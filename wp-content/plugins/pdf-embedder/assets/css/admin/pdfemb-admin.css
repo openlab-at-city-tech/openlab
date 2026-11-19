@@ -268,7 +268,7 @@
 #pdfemb-content #pdfemb-mobile-section .demo a.upgrade:hover,
 #pdfemb-content #pdfemb-secure-section .demo a.upgrade:hover,
 #pdfemb-content #pdfemb-watermarks-section .demo a.upgrade:hover {
-  background-color: rgb(0, 156.3, 89.7893617021);
+  background-color: rgb(0%, 61.2941176471%, 35.211514393%);
 }
 #pdfemb-content #pdfemb-get-pro-section-banner {
   padding: 30px 50px;
@@ -326,7 +326,7 @@
   background-color: #008D51;
 }
 #pdfemb-content #pdfemb-get-pro-section-banner .pdfemb-get-pro-button a:hover {
-  background-color: rgb(0, 156.3, 89.7893617021);
+  background-color: rgb(0%, 61.2941176471%, 35.211514393%);
 }
 #pdfemb-content #pdfemb-get-pro-section-banner .pdfemb-get-pro-button .discount {
   display: flex;

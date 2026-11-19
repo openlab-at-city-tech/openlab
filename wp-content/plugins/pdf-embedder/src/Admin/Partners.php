@@ -18,7 +18,7 @@ class Partners {
 	 *
 	 * @since 4.7.0
 	 */
-	public function hooks() {
+	public function hooks(): void {
 
 		add_action( 'wp_ajax_pdfemb_partners_install', [ $this, 'install_partner' ] );
 		add_action( 'wp_ajax_pdfemb_partners_activate', [ $this, 'activate_partner' ] );
@@ -30,7 +30,7 @@ class Partners {
 	 *
      * @since 4.7.0
 	 */
-	public function show() {
+	public function show(): void {
 
 		foreach ( $this->get_plugins() as $plugin ) {
 			$this->show_plugin_card( $plugin );
@@ -44,7 +44,7 @@ class Partners {
 	 *
 	 * @param array $plugin Plugin data.
 	 */
-	public function show_plugin_card( array $plugin ) {
+	public function show_plugin_card( array $plugin ): void {
 
 		if ( ! $plugin ) {
 			return;
@@ -138,10 +138,13 @@ class Partners {
 	 *
 	 * @since 4.7.0
 	 */
-	public function activate_partner() {
+	public function activate_partner(): void {
 
-		// Run a security check first.
 		check_admin_referer( 'pdfemb-activate-partner', 'nonce' );
+
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( [ 'error' => esc_html__( 'Insufficient permissions.', 'pdf-embedder' ) ] );
+		}
 
 		// Activate the addon.
 		if ( isset( $_POST['basename'] ) ) {
@@ -162,9 +165,14 @@ class Partners {
 	 *
 	 * @since 4.7.0
 	 */
-	public function deactivate_partner() {
-		// Run a security check first.
+	public function deactivate_partner(): void {
+
 		check_admin_referer( 'pdfemb-deactivate-partner', 'nonce' );
+
+		// WP has no `deactivate_plugins` capability — `activate_plugins` gates both activate and deactivate.
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			wp_send_json_error( [ 'error' => esc_html__( 'Insufficient permissions.', 'pdf-embedder' ) ] );
+		}
 
 		// Deactivate the addon.
 		if ( isset( $_POST['basename'] ) ) {
@@ -180,13 +188,22 @@ class Partners {
 	 *
 	 * @since 4.7.0
 	 */
-	public function install_partner() {
+	public function install_partner(): void {
 
 		check_admin_referer( 'pdfemb-install-partner', 'nonce' );
+
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			wp_send_json_error( [ 'error' => esc_html__( 'Insufficient permissions.', 'pdf-embedder' ) ] );
+		}
 
 		// Install the addon.
 		if ( isset( $_POST['download_url'] ) ) {
 			$download_url = esc_url_raw( wp_unslash( $_POST['download_url'] ) );
+
+			// Restrict the download URL to the known partner list to prevent arbitrary-zip install.
+			if ( ! in_array( $download_url, array_column( $this->get_plugins(), 'url' ), true ) ) {
+				wp_send_json_error( [ 'error' => esc_html__( 'Unsupported plugin.', 'pdf-embedder' ) ] );
+			}
 
 			// Set the current screen to avoid undefined notices.
 			set_current_screen();

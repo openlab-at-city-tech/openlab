@@ -162,7 +162,6 @@ class SendUsageTask extends Task {
 				'httpversion' => '1.1',
 				'blocking'    => true,
 				'body'        => $this->get_data(),
-				'sslverify'   => apply_filters( 'https_local_ssl_verify', false ), // phpcs:ignore WPForms.PHP.ValidateHooks.InvalidHookName,WPForms.Comments.PHPDocHooks.RequiredHookDocumentation
 				'user-agent'  => $this->get_user_agent(),
 			]
 		);

@@ -1,3 +1,24 @@
+= 5.0.2 =
+* Changed: Compatibility with WordPress 7.1.
+* Fixed: The PDF Viewer could get stuck on "Loading..." after a plugin update until browser and CDN caches were cleared.
+
+= 5.0.1 =
+* Fixed: Occasional fatal errors that could be triggered during WordPress cron runs when other plugins (such as SEO indexers) parsed post content containing PDF Embedder.
+* Fixed: A "source width is 0" JavaScript error that broke the PDF Viewer in hidden containers or when caching plugins served stale assets after 5.0.0.
+
+= 5.0.0 =
+* IMPORTANT: The minimum WordPress version has been raised to WordPress 6.6.
+* IMPORTANT: The minimum PHP version has been raised to PHP 7.4.
+* Added: Live PDF preview in the Block Editor that matches the front-end Viewer, with the file picker moved to the block sidebar.
+* Changed: Compatibility with WordPress 7.0.
+* Changed: The block has been updated to API version 3 for the new iframe-based Block Editor, so embedded PDFs continue to render correctly inside the editor preview.
+* Changed: Updated the bundled PDF.js rendering library to v2.16.105, bringing years of upstream improvements, security fixes, and broader PDF compatibility, and aligning it with the Premium plugin.
+* Changed: PDFs with image-heavy or scanned content (such as JPEG2000 or JBIG2) now render noticeably faster.
+* Changed: The Block Editor PDF preview is now compatible with multilingual sites running Polylang or WPML where the admin's home URL resolves to a language-prefixed path.
+* Fixed: When the shortcode `title` attribute was not provided, PDF files with Arabic, Chinese, or other non-ASCII characters in their file names had the URL-encoded form (e.g. `%D9%83%D8%AA%D8%A7%D8%A8`) shown as the fallback link text before the PDF Viewer loaded.
+* Fixed: A broken or empty PDF Viewer was displayed on the front end when post content tried to embed a PDF from the `/securepdfs/` folder, which is created by PDF Embedder Premium's Pro plan. The Viewer is now hidden in this scenario.
+* Fixed: Hardened various security checks across the plugin.
+
 = 4.9.3 =
 * Changed: Compatibility with WordPress 6.9.
 * Changed: "Get Started" section in the plugin admin area can now be closed by clicking the same link in the plugin header again.
@@ -16,8 +37,8 @@
 * Fixed: Do not output debug information in the browser console when the PDF file has some True Type fonts incorrect data. PDF Rendering is still fine.
 
 = 4.9.0 =
-* IMPORTANT: The minimum WordPress version has been raised to WordPress v6.1.
-* IMPORTANT: The minimum PHP version has been raised to PHP v7.2.
+* IMPORTANT: The minimum WordPress version has been raised to WordPress 6.1.
+* IMPORTANT: The minimum PHP version has been raised to PHP 7.2.
 * Added: A new dismissible "Get Started" section was added to the plugin settings page to help you get started with the plugin.
 * Changed: Compatibility with WordPress 6.7.
 * Changed: Various plugin admin area improvements.
@@ -37,7 +58,7 @@
 * Changed: Make the PDF Embedder block extensible.
 * Changed: Improved the look and feel of the PDF Embedder block inside the Block Editor.
 * Changed: Removed some unnecessary files from the released version to decrease the zip size.
-* Fixed: Improved performance for the majority of sites by not loading an internal Action Scheduler library (which was also updated to v3.7.4) when it is not used.
+* Fixed: Improved performance for the majority of sites by not loading an internal Action Scheduler library (which was also updated to 3.7.4) when it is not used.
 * Fixed: Hide the Toolbar Hover options in the block if the "No Toolbar" option is chosen.
 * Fixed: Security fixes in the way certain PDF files are rendered to prevent arbitrary scripts execution.
 
@@ -46,8 +67,8 @@
 * Fixed: Improved handling of incorrect URLs supplied to the shortcode - PDF viewer won't even try to render it.
 
 = 4.7.0 =
-* IMPORTANT: The minimum WordPress version has been raised to WordPress v5.8.
-* IMPORTANT: The minimum PHP version has been raised to PHP v7.0.
+* IMPORTANT: The minimum WordPress version has been raised to WordPress 5.8.
+* IMPORTANT: The minimum PHP version has been raised to PHP 7.0.
 * IMPORTANT: If you are using a caching plugin and added PDF Embedder JS files to the exclusion list, you will need to do that again due to changed file names.
 * Added: New option for the toolbar location called "No Toolbar" is now available. It allows you to hide the toolbar completely.
 * Changed: Plugin admin area interface has been refreshed.

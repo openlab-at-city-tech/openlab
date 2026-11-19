@@ -1,0 +1,46 @@
+#elementor-element--promotion__dialog .dialog-header .eicon-close {
+  margin-inline-start: 10px;
+}
+
+#elementor-element--promotion__dialog.pdfemb-elementor-education-dialog .dialog-header .eicon-pro-icon {
+  display: none !important;
+}
+#elementor-element--promotion__dialog.pdfemb-elementor-education-dialog .dialog-header .eicon-close {
+  margin-inline-start: auto;
+}
+
+#elementor-element--promotion__dialog.pdfemb-elementor-education-dialog .dialog-buttons-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#elementor-element--promotion__dialog img.pdfemb-elementor-education-banner {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 3px;
+  margin-block-end: 12px;
+}
+
+#elementor-element--promotion__dialog a.pdfemb-elementor-education-docs {
+  font-size: 12px;
+  color: var(--e-a-color-txt-muted);
+  text-decoration: underline;
+}
+#elementor-element--promotion__dialog a.pdfemb-elementor-education-docs:hover {
+  color: var(--e-a-color-txt);
+}
+
+.elementor-element .icon i.pdfemb-elementor-icon,
+.elementor-element-wrapper .icon i.pdfemb-elementor-icon,
+.elementor-panel i.pdfemb-elementor-icon,
+i.pdfemb-elementor-icon {
+  display: inline-block;
+  width: 28px;
+  height: 28px;
+  background-image: var(--pdfemb-elementor-icon-url);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}

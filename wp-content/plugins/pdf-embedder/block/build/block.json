@@ -1,6 +1,6 @@
 {
   "$schema": "https://schemas.wp.org/trunk/block.json",
-  "apiVersion": 2,
+  "apiVersion": 3,
   "name": "pdfemb/pdf-embedder-viewer",
   "version": "4.9.0",
   "title": "PDF Embedder",

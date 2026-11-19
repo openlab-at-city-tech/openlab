@@ -5,6 +5,11 @@ namespace PDFEmbedder\Admin\Pages;
 use PDFEmbedder\Helpers\Links;
 use PDFEmbedder\Helpers\Assets;
 
+/**
+ * Class GetPro.
+ *
+ * @since 4.9.0
+ */
 class GetPro extends Page {
 
 	public const SLUG = 'get-pro';
@@ -26,7 +31,7 @@ class GetPro extends Page {
 		<p>
 			<?php
 			echo wp_kses(
-				__( "We know that you'll truly love PDF Embedder. <strong>It has over 300+ five-star ratings (⭐⭐⭐⭐⭐) and is active on over 300,000 websites!", 'pdf-embedder' ),
+				__( "We know that you'll truly love PDF Embedder. <strong>It has over 400 five-star ratings (⭐⭐⭐⭐⭐) and is active on over 300,000 websites!</strong>", 'pdf-embedder' ),
 				[
 					'strong' => [],
 				]

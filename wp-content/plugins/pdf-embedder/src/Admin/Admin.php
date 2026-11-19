@@ -42,6 +42,12 @@ class Admin {
 		( new Education\DemoContent() )->hooks();
 		( new Education\GetStarted() )->hooks();
 
+		// Skipped when Elementor isn't active so the class, which typehints
+		// Elementor internals, isn't autoloaded on sites without it.
+		if ( did_action( 'elementor/loaded' ) ) {
+			( new Education\Elementor() )->hooks();
+		}
+
 		// Styles used inside Media library screens.
 		if ( $pagenow === 'upload.php' ) {
 			wp_enqueue_style(
@@ -113,7 +119,7 @@ class Admin {
 	 *
 	 * @since 4.7.0
 	 */
-	public function register_menu() {
+	public function register_menu(): void { // phpcs:ignore WPForms.PHP.HooksMethod.InvalidPlaceForAddingHooks
 
 		if ( Multisite::is_network_activated() ) {
 			$hook = add_submenu_page(
@@ -142,7 +148,7 @@ class Admin {
 	 *
 	 * @since 4.8.0
 	 */
-	public function enqueue_admin_styles() {
+	public function enqueue_admin_styles(): void {
 
 		wp_enqueue_script(
 			'pdfemb_admin',
@@ -164,6 +170,7 @@ class Admin {
 					'deactivate'       => esc_html__( 'Deactivate', 'pdf-embedder' ),
 					'deactivate_nonce' => wp_create_nonce( 'pdfemb-deactivate-partner' ),
 					'deactivating'     => esc_html__( 'Deactivating...', 'pdf-embedder' ),
+					'getstarted_nonce' => wp_create_nonce( 'pdfemb-getstarted' ),
 					'inactive'         => esc_html__( 'Status: Inactive', 'pdf-embedder' ),
 					'install'          => esc_html__( 'Install', 'pdf-embedder' ),
 					'install_nonce'    => wp_create_nonce( 'pdfemb-install-partner' ),
@@ -183,7 +190,7 @@ class Admin {
 	}
 
 	/**
-     * Register sections used in plugin admin area.
+     * Register sections used in the plugin admin area.
 	 *
 	 * @since 4.7.0
 	 *
@@ -360,7 +367,7 @@ class Admin {
 				</p>
 				<p class="links">
 					<?php
-					$support_url = pdf_embedder()->is_premium() ? Links::get_utm_link( 'https://wp-pdf.com/contact/', 'Admin - Footer', 'Support' ) : 'https://wordpress.org/support/plugin/pdf-embedder/';
+					$support_url = pdf_embedder()->is_premium() ? Links::get_utm_link( 'https://wp-pdf.com/account/support/', 'Admin - Footer', 'Support' ) : 'https://wordpress.org/support/plugin/pdf-embedder/';
 					?>
 					<a href="<?php echo esc_url( $support_url ); ?>" target="_blank"><?php esc_html_e( 'Support', 'pdf-embedder' ); ?></a>
 					<span>/</span>
@@ -443,7 +450,7 @@ class Admin {
 			return $text;
 		}
 
-		$url  = 'https://wordpress.org/support/plugin/pdf-embedder/reviews/?filter=5#new-post';
+		$url  = WPorgReview::REVIEW_URL;
 		$text = sprintf(
 			wp_kses( /* translators: $1$s - PDF Embedder plugin name, $2$s - WP.org review link, $3$s - WP.org review link. */
 				__( 'Please rate %1$s <a href="%2$s" target="_blank" rel="noopener noreferrer">&#9733;&#9733;&#9733;&#9733;&#9733;</a> on <a href="%3$s" target="_blank">WordPress.org</a> to help us spread the word.', 'pdf-embedder' ),
@@ -653,6 +660,7 @@ class Admin {
 
 		if (
 			! isset( $_POST[ Options::KEY ] ) ||
+			! isset( $_POST['section'] ) ||
 			! is_array( $_POST[ Options::KEY ] )
 		) {
 			/*
@@ -673,8 +681,11 @@ class Admin {
 			exit;
 		}
 
-		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		pdf_embedder()->options()->save( wp_unslash( $_POST[ Options::KEY ] ), sanitize_key( $_POST['section'] ) );
+		pdf_embedder()->options()->save(
+			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			wp_unslash( $_POST[ Options::KEY ] ),
+			sanitize_key( $_POST['section'] )
+		);
 
 		$error_code    = [];
 		$error_setting = [];
