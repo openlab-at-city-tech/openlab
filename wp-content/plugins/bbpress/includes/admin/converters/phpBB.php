@@ -10,7 +10,7 @@
 /**
  * Implementation of phpBB v3 Converter.
  *
- * @since 2.3.0 bbPress (r4689)
+ * @since 2.2.0 bbPress (r4101)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/phpbb
  */
@@ -141,22 +141,22 @@ class phpBB extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Forum Subscriptions Section ***************************************/
@@ -720,8 +720,8 @@ class phpBB extends BBP_Converter_Base {
 	 */
 	public function callback_savepass( $field, $row ) {
 		return array(
-			'hash' => $field,
-			'salt' => $row['user_form_salt']
+			'hash' => wp_slash( (string) $field ),
+			'salt' => isset( $row['user_form_salt'] ) ? wp_slash( (string) $row['user_form_salt'] ) : ''
 		);
 	}
 
@@ -729,7 +729,7 @@ class phpBB extends BBP_Converter_Base {
 	 * Check for correct password
 	 *
 	 * @param string $password The password in plain text
-	 * @param string $hash The stored password hash
+	 * @param string $serialized_pass The stored password hash
 	 *
 	 * @link Original source for password functions http://openwall.com/phpass/
 	 * @link phpass is now included in WP Core https://core.trac.wordpress.org/browser/trunk/wp-includes/class-phpass.php
@@ -737,13 +737,59 @@ class phpBB extends BBP_Converter_Base {
 	 * @return bool Returns true if the password is correct, false if not.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-		$pass_array = unserialize( $serialized_pass );
-		if ( strlen( $pass_array['hash'] ) == 34 ) {
-			return ( $this->_hash_crypt_private( $password, $pass_array['hash'], $itoa64 ) === $pass_array['hash'] ) ? true : false;
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if the password hash is invalid
+		if ( ! is_array( $pass_array ) || empty( $pass_array['hash'] ) || ! is_string( $pass_array['hash'] ) ) {
+			return false;
 		}
 
-		return ( md5( $password ) === $pass_array['hash'] ) ? true : false;
+		// Modern phpBB hashes use PHP's password hashing API
+		if ( ( strpos( $pass_array['hash'], '$2' ) === 0 ) || ( strpos( $pass_array['hash'], '$argon2' ) === 0 ) ) {
+			return password_verify( $password, $pass_array['hash'] );
+		}
+
+		// phpBB can wrap a legacy phpass hash in bcrypt
+		if ( preg_match( '#^\$([HP])\\\\(2[ay])\$([./0-9A-Za-z]{9})\$([0-9]{2})\\\\([./0-9A-Za-z]{22})\$([./0-9A-Za-z]{31})$#D', $pass_array['hash'], $matches ) ) {
+			return $this->authenticate_combined_pass( $password, $matches )
+				|| $this->authenticate_combined_pass( md5( $password ), $matches );
+		}
+
+		// Encrypted
+		if ( strlen( $pass_array['hash'] ) === 34 ) {
+
+			// ASCII
+			$itoa64 = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
+			// Compare using private crypt
+			return hash_equals(
+				$this->_hash_crypt_private( $password, $pass_array['hash'], $itoa64 ),
+				$pass_array['hash']
+			);
+		}
+
+		// Unencrypted
+		return hash_equals(
+			md5( $password ),
+			$pass_array['hash']
+		);
+	}
+
+	/**
+	 * Check a phpBB combined phpass and bcrypt password hash.
+	 *
+	 * @param string $password The password in plain text.
+	 * @param array  $matches  Parsed components of the combined hash.
+	 * @return bool True if the password is correct, false if not.
+	 */
+	private function authenticate_combined_pass( $password, $matches ) {
+		$itoa64      = './0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+		$phpass_hash = $this->_hash_crypt_private( $password, '$' . $matches[1] . '$' . $matches[3], $itoa64 );
+		$bcrypt_hash = '$' . $matches[2] . '$' . $matches[4] . '$' . $matches[5] . $matches[6];
+
+		return password_verify( substr( $phpass_hash, 12 ), $bcrypt_hash );
 	}
 
 	/**
@@ -753,7 +799,7 @@ class phpBB extends BBP_Converter_Base {
 		$output = '*';
 
 		// Check for correct hash
-		if ( substr( $setting, 0, 3 ) != '$H$' ) {
+		if ( ! in_array( substr( $setting, 0, 3 ), array( '$H$', '$P$' ), true ) ) {
 			return $output;
 		}
 
@@ -766,7 +812,7 @@ class phpBB extends BBP_Converter_Base {
 		$count = 1 << $count_log2;
 		$salt  = substr( $setting, 4, 8 );
 
-		if ( strlen( $salt ) != 8 ) {
+		if ( strlen( $salt ) !== 8 ) {
 			return $output;
 		}
 
@@ -782,18 +828,16 @@ class phpBB extends BBP_Converter_Base {
 			$hash = md5( $salt . $password, true );
 			do {
 				$hash = md5( $hash . $password, true );
-			}
-			while ( --$count );
+			} while ( --$count );
 		} else {
 			$hash = pack( 'H*', md5( $salt . $password ) );
 			do {
 				$hash = pack( 'H*', md5( $hash . $password ) );
-			}
-			while ( --$count );
+			} while ( --$count );
 		}
 
-		$output = substr($setting, 0, 12);
-		$output .= $this->_hash_encode64($hash, 16, $itoa64);
+		$output = substr( $setting, 0, 12 );
+		$output .= $this->_hash_encode64( $hash, 16, $itoa64 );
 
 		return $output;
 	}
@@ -809,11 +853,11 @@ class phpBB extends BBP_Converter_Base {
 			$value = ord( $input[ $i++ ] );
 			$output .= $itoa64[ $value & 0x3f ];
 
-			if ($i < $count) {
+			if ( $i < $count ) {
 				$value |= ord( $input[ $i ] ) << 8;
 			}
 
-			$output .= $itoa64[( $value >> 6 ) & 0x3f];
+			$output .= $itoa64[ ( $value >> 6 ) & 0x3f ];
 
 			if ( $i++ >= $count ) {
 				break;
@@ -823,13 +867,13 @@ class phpBB extends BBP_Converter_Base {
 				$value |= ord( $input[ $i ] ) << 16;
 			}
 
-			$output .= $itoa64[( $value >> 12 ) & 0x3f];
+			$output .= $itoa64[ ( $value >> 12 ) & 0x3f ];
 
 			if ( $i++ >= $count ) {
 				break;
 			}
 
-			$output .= $itoa64[($value >> 18) & 0x3f];
+			$output .= $itoa64[ ( $value >> 18 ) & 0x3f ];
 		} while ( $i < $count );
 
 		return $output;

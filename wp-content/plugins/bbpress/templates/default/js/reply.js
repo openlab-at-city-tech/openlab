@@ -1,10 +1,9 @@
-/* globals tinyMCE */
-addReply = {
+var addReply = {
 
 	/**
 	 * Move the reply form when "Reply" is clicked.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.2 bbPress (r6965)
 	 * @param {string} replyId
 	 * @param {string} parentId
 	 * @param {string} respondId
@@ -58,7 +57,7 @@ addReply = {
 		/**
 		 * When cancelling a Reply.
 		 *
-		 * @since 2.6.2
+		 * @since 2.6.2 bbPress (r6965)
 		 * @returns {void}
 		 */
 		cancel.onclick = function () {
@@ -74,7 +73,7 @@ addReply = {
 	/**
 	 * Cancel the reply form.
 	 *
-	 * @since 2.6.6
+	 * @since 2.6.6 bbPress (r7147)
 	 * @returns {void}
 	 */
 	cancelForm: function () {
@@ -108,7 +107,7 @@ addReply = {
 	/**
 	 * Scrolls to the top of the page.
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.2 bbPress (r6965)
 	 * @return {void}
 	 */
 	scrollToForm: function() {
@@ -121,7 +120,8 @@ addReply = {
 			destination = ( position + elemRect.top ),
 			negative    = ( destination < position ), // jshint ignore:line
 			adminbar    = t.getElement( 'wpadminbar'),
-			offset      = 0;
+			offset      = 0,
+			distance    = 0;
 
 		/* Offset by the adminbar */
 		if ( adminbar && ( typeof ( adminbar ) !== 'undefined' ) ) {
@@ -184,7 +184,7 @@ addReply = {
 	/**
 	 * Get an element by ID
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.2 bbPress (r6965)
 	 * @param {string} e
 	 * @returns {HTMLElement} Element
 	 */
@@ -195,7 +195,7 @@ addReply = {
 	/**
 	 * Remove the Editor
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.2 bbPress (r6965)
 	 * @returns {void}
 	 */
 	removeEditor: function () {
@@ -219,7 +219,7 @@ addReply = {
 	/**
 	 * Add the Editor
 	 *
-	 * @since 2.6.2
+	 * @since 2.6.2 bbPress (r6965)
 	 * @returns {void}
 	 */
 	addEditor: function () {

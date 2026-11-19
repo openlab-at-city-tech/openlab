@@ -1,5 +1,3 @@
-/*jshint sub:true*/
-/* global document, jQuery, ajaxurl, BBP_Converter */
 jQuery( document ).ready( function ( $ ) {
 	'use strict';
 
@@ -12,10 +10,16 @@ jQuery( document ).ready( function ( $ ) {
 		spinner  = $( '#bbp-converter-spinner'  ),
 		settings = $( '#bbp-converter-settings' ),
 		password = $( '#_bbp_converter_db_pass' ),
+		password_clear = $( '#_bbp_converter_db_pass_clear' ),
 		toggle   = $( '.bbp-db-pass-toggle'     ),
 		step_p   = $( '#bbp-converter-step-percentage'  ),
 		total_p  = $( '#bbp-converter-total-percentage' ),
 		fields   = settings.find( 'table:first-of-type input, table:first-of-type select' );
+
+	// A fresh page starts a new import after the previous one completed.
+	if ( BBP_Converter.state.finished ) {
+		restart.prop( 'checked', true );
+	}
 
 	/**
 	 * Show/hide db password button toggle
@@ -35,6 +39,18 @@ jQuery( document ).ready( function ( $ ) {
 
 		e.preventDefault();
 	});
+
+	password.on( 'input', function() {
+		if ( password.val() ) {
+			password_clear.prop( 'checked', false );
+		}
+	} );
+
+	password_clear.on( 'change', function() {
+		if ( password_clear.prop( 'checked' ) ) {
+			password.val( '' );
+		}
+	} );
 
 	/**
 	 * Start button click
@@ -99,10 +115,6 @@ jQuery( document ).ready( function ( $ ) {
 			values[ field.name ] = field.value;
 		} );
 
-		if ( values['_bbp_converter_restart'] ) {
-			restart.removeAttr( 'checked' );
-		}
-
 		if ( values['_bbp_converter_delay_time'] ) {
 			BBP_Converter.state.delay = parseInt( values['_bbp_converter_delay_time'], 10 ) * 1000;
 		}
@@ -129,17 +141,20 @@ jQuery( document ).ready( function ( $ ) {
 
 				// Success
 				if ( true === response.success ) {
+					restart.prop( 'checked', false );
 					bbp_converter_step( data );
 
 				// Failure
 				} else {
-					bbp_converter_stop();
+					bbp_converter_stop( null, data && data.message );
 				}
 
 			} catch( e ) {
 				bbp_converter_stop();
 			}
-		}, 'json' );
+		}, 'json' ).fail( function() {
+			bbp_converter_stop();
+		} );
 	}
 
 	/**
@@ -152,8 +167,8 @@ jQuery( document ).ready( function ( $ ) {
 	 */
 	function bbp_converter_step( data ) {
 
-		// Bail if not running
-		if ( ! BBP_Converter.state.running ) {
+		// Bail if not running, unless the final request completed
+		if ( ! BBP_Converter.state.running && ( true !== data.finished ) ) {
 			return;
 		}
 
@@ -164,7 +179,8 @@ jQuery( document ).ready( function ( $ ) {
 		bbp_converter_wait();
 
 		// Done
-		if ( data.current_step === data.final_step ) {
+		if ( true === data.finished ) {
+			restart.prop( 'checked', true );
 			bbp_converter_stop(
 				BBP_Converter.strings.button_start,
 				BBP_Converter.strings.import_complete
@@ -222,7 +238,7 @@ jQuery( document ).ready( function ( $ ) {
 
 		start.hide();
 		stop.show();
-console.log( fields );
+
 		spinner.css( 'visibility', 'visible' );
 		fields.prop( 'readonly', true );
 
@@ -306,10 +322,10 @@ console.log( fields );
 			if ( remaining <= 0 ) {
 				clearInterval( BBP_Converter.state.status );
 
-				if ( parseInt( data.current_step, 10 ) < parseInt( data.final_step, 10 ) ) {
-					status.text( BBP_Converter.strings.status_up_next.replace( '%s', data.current_step ) );
-				} else {
+				if ( true === data.finished ) {
 					status.text( BBP_Converter.strings.status_complete );
+				} else {
+					status.text( BBP_Converter.strings.status_up_next.replace( '%s', data.current_step ) );
 				}
 			}
 		}, 1000 );

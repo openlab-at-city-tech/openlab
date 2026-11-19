@@ -1,0 +1,495 @@
+<?php
+
+/**
+ * bbPress REST API.
+ *
+ * @package bbPress
+ * @subpackage REST
+ */
+
+// Exit if accessed directly
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Check single-user REST reads against non-forum published posts.
+ *
+ * WordPress counts all published REST post types without checking whether
+ * bbPress topics and replies belong to restricted forums.
+ *
+ * @since 2.6.19 bbPress (r7710)
+ *
+ * @param mixed           $response Current REST response.
+ * @param array           $handler  Matched route handler.
+ * @param WP_REST_Request $request  REST request.
+ * @return mixed REST response or error.
+ */
+function bbp_filter_rest_user_discovery( $response, $handler, $request ) {
+	$callback = isset( $handler['callback'] ) ? $handler['callback'] : null;
+
+	if ( null !== $response || ! is_array( $callback ) || ! isset( $callback[0], $callback[1] ) ) {
+		return $response;
+	}
+
+	if ( ! $callback[0] instanceof WP_REST_Users_Controller || 'get_item' !== $callback[1] || ! in_array( $request->get_method(), array( 'GET', 'HEAD' ), true ) ) {
+		return $response;
+	}
+
+	$user_id = (int) $request->get_param( 'id' );
+
+	if ( $user_id <= 0 || get_current_user_id() === $user_id || current_user_can( 'list_users' ) || current_user_can( 'edit_user', $user_id ) ) {
+		return $response;
+	}
+
+	$post_types = array_values( array_diff( get_post_types( array( 'show_in_rest' => true ), 'names' ), bbp_get_post_types() ) );
+
+	if ( ! empty( $post_types ) && count_user_posts( $user_id, $post_types ) ) {
+		return $response;
+	}
+
+	return new WP_Error(
+		'rest_user_cannot_view',
+		esc_html__( 'Sorry, you are not allowed to list users.', 'bbpress' ),
+		array( 'status' => rest_authorization_required_code() )
+	);
+}
+
+/**
+ * Prevent revision access after a forum password changes.
+ *
+ * Revision and autosave controllers use edit_post for reads, which does not
+ * check inherited passwords.
+ *
+ * @since 2.6.22 bbPress (r8279)
+ *
+ * @param mixed           $response Current REST response.
+ * @param array           $handler  Matched route handler.
+ * @param WP_REST_Request $request  REST request.
+ * @return mixed REST response or error.
+ */
+function bbp_filter_rest_password_required_revisions( $response, $handler, $request ) {
+	$callback = isset( $handler['callback'] ) ? $handler['callback'] : null;
+
+	if ( null !== $response || ! is_array( $callback ) || ! isset( $callback[0] ) ) {
+		return $response;
+	}
+
+	if ( ! ( $callback[0] instanceof WP_REST_Revisions_Controller ) && ! ( $callback[0] instanceof WP_REST_Autosaves_Controller ) ) {
+		return $response;
+	}
+
+	$parent_id = ! empty( $request['parent'] ) ? (int) $request['parent'] : (int) $request['id'];
+	$parent    = get_post( $parent_id );
+
+	if (
+		! empty( $parent )
+		&& in_array( $parent->post_type, array( bbp_get_topic_post_type(), bbp_get_reply_post_type() ), true )
+		&& ! current_user_can( 'moderate', $parent_id )
+		&& bbp_get_password_required_id( $parent_id )
+	) {
+		return new WP_Error(
+			'bbp_rest_cannot_edit_forum_content',
+			esc_html__( 'You are not allowed to edit this forum content.', 'bbpress' ),
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+
+	return $response;
+}
+
+/**
+ * REST API controller for bbPress post types.
+ *
+ * @since 2.6.17 bbPress (r7482)
+ */
+class BBP_REST_Posts_Controller extends WP_REST_Posts_Controller {
+
+	/**
+	 * Check edit access against current passwords.
+	 *
+	 * @since 2.6.22 bbPress (r8279)
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return bool Whether the post can be edited.
+	 */
+	protected function check_update_permission( $post ) {
+		if ( ! parent::check_update_permission( $post ) ) {
+			return false;
+		}
+
+		return ! (
+			$this->is_forum_content( $post )
+			&& ! current_user_can( 'moderate', $post->ID )
+			&& bbp_get_password_required_id( $post->ID )
+		);
+	}
+
+	/**
+	 * Require public parent topics in REST reply collections.
+	 *
+	 * @since 2.6.22 bbPress (r8276)
+	 *
+	 * @param array                $prepared_args Optional. Prepared WP_Query arguments.
+	 * @param WP_REST_Request|null $request       Optional. Full details about the request.
+	 * @return array Query arguments.
+	 */
+	protected function prepare_items_query( $prepared_args = array(), $request = null ) {
+		$query_args = parent::prepare_items_query( $prepared_args, $request );
+		$query_args['_bbp_rest_collection'] = true;
+
+		if ( ( bbp_get_reply_post_type() === $this->post_type ) && ! current_user_can( 'edit_others_replies' ) ) {
+			$query_args['_bbp_public_topic_replies'] = true;
+		}
+
+		return $query_args;
+	}
+
+	/**
+	 * Apply bbPress's strict block list before creating a topic or reply.
+	 *
+	 * @since 2.6.19 bbPress (r7624)
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return true|WP_Error True if the request has access, WP_Error otherwise.
+	 */
+	public function create_item_permissions_check( $request ) {
+		if ( in_array( $this->post_type, array( bbp_get_topic_post_type(), bbp_get_reply_post_type() ), true ) && ! bbp_current_user_can_post_in_forums() ) {
+			$message = ( bbp_get_topic_post_type() === $this->post_type )
+				? __( 'The forums are not accepting new topics.', 'bbpress' )
+				: __( 'The forums are not accepting new replies.', 'bbpress' );
+
+			return new WP_Error( 'bbp_rest_forums_closed', $message, array( 'status' => 403 ) );
+		}
+
+		$retval = parent::create_item_permissions_check( $request );
+
+		if ( is_wp_error( $retval ) || ! $retval || ! in_array( $this->post_type, array( bbp_get_topic_post_type(), bbp_get_reply_post_type() ), true ) ) {
+			return $retval;
+		}
+
+		if ( ! bbp_check_for_moderation( array(), bbp_get_current_user_id(), $this->get_moderation_title( $request, null ), $this->get_moderation_content( $request, null ), true ) ) {
+			return new WP_Error(
+				'bbp_rest_disallowed_content',
+				esc_html__( 'This forum content cannot be created at this time.', 'bbpress' ),
+				array( 'status' => 400 )
+			);
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Checks if a post can be updated.
+	 *
+	 * @since 2.6.17 bbPress (r7490)
+	 * @since 2.6.19 bbPress (r7684) Check the topic forum on edits.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return true|WP_Error True if the request has access to update the item, WP_Error object otherwise.
+	 */
+	public function update_item_permissions_check( $request ) {
+		$retval = parent::update_item_permissions_check( $request );
+
+		if ( is_wp_error( $retval ) ) {
+			return $retval;
+		}
+
+		$post = isset( $request['id'] ) ? get_post( $request['id'] ) : null;
+		if ( ! empty( $post ) && ! $this->check_read_permission( $post ) ) {
+			return new WP_Error(
+				'bbp_rest_cannot_edit_forum_content',
+				esc_html__( 'You are not allowed to edit this forum content.', 'bbpress' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		// Match the front-end topic edit check for category forums.
+		if ( ! empty( $post ) && ( bbp_get_topic_post_type() === $post->post_type ) ) {
+			$topic_forum_id = bbp_get_topic_forum_id( $post->ID );
+
+			if ( bbp_is_forum_category( $topic_forum_id ) ) {
+				return new WP_Error(
+					'bbp_rest_cannot_edit_topic_forum',
+					esc_html__( 'You are not allowed to edit this topic in its forum.', 'bbpress' ),
+					array( 'status' => rest_authorization_required_code() )
+				);
+			}
+		}
+
+		// REST requests do not use the front-end edit query flags that enforce
+		// bbPress's edit lock in the topic and reply capability mappings.
+		if ( ! empty( $post ) && $this->is_forum_content( $post ) ) {
+			$can_moderate = current_user_can( 'moderate', $post->ID );
+
+			if ( ! $can_moderate ) {
+				// Only moderators may change status or move the edit window.
+				if ( $request->has_param( 'status' ) && ( $request['status'] !== $post->post_status ) ) {
+					return new WP_Error(
+						'bbp_rest_cannot_change_status',
+						esc_html__( 'You are not allowed to change this forum content status.', 'bbpress' ),
+						array( 'status' => rest_authorization_required_code() )
+					);
+				}
+
+				if ( $this->is_post_date_changed( $request, $post ) ) {
+					return new WP_Error(
+						'bbp_rest_cannot_change_date',
+						esc_html__( 'You are not allowed to change this forum content date.', 'bbpress' ),
+						array( 'status' => rest_authorization_required_code() )
+					);
+				}
+
+				// Pending posts may have a zero GMT date even when they are recent.
+				$post_date_gmt = ( '0000-00-00 00:00:00' === $post->post_date_gmt )
+					? get_gmt_from_date( $post->post_date )
+					: $post->post_date_gmt;
+
+				if ( ( bbp_get_current_user_id() === (int) $post->post_author ) && bbp_past_edit_lock( $post_date_gmt ) ) {
+					return new WP_Error(
+						'bbp_rest_edit_lock',
+						esc_html__( 'You can no longer edit this forum content.', 'bbpress' ),
+						array( 'status' => rest_authorization_required_code() )
+					);
+				}
+			}
+
+			if ( ! bbp_check_for_moderation( array(), (int) $post->post_author, $this->get_moderation_title( $request, $post ), $this->get_moderation_content( $request, $post ), true ) ) {
+				return new WP_Error(
+					'bbp_rest_disallowed_content',
+					esc_html__( 'This forum content cannot be edited at this time.', 'bbpress' ),
+					array( 'status' => 400 )
+				);
+			}
+		}
+
+		$forum_id = ! empty( $post ) ? bbp_get_forum_id( $post->ID ) : 0;
+		$forum    = bbp_get_forum( $forum_id );
+
+		if ( empty( $forum ) ) {
+			return $retval;
+		}
+
+		$parent_changed = $request->has_param( 'parent' ) && ( (int) $request['parent'] !== (int) $forum->post_parent );
+		$status_changed = $request->has_param( 'status' ) && ( $request['status'] !== $forum->post_status );
+		$order_changed  = $request->has_param( 'menu_order' ) && ( (int) $request['menu_order'] !== (int) $forum->menu_order );
+
+		if ( ( $parent_changed || $order_changed ) && ! current_user_can( 'assign_moderators' ) ) {
+			return new WP_Error(
+				'bbp_rest_cannot_edit_forum_structure',
+				esc_html__( 'You are not allowed to change this forum structure.', 'bbpress' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		if ( $status_changed && ! current_user_can( 'manage_forum_attributes', $forum_id ) ) {
+			return new WP_Error(
+				'bbp_rest_cannot_edit_forum_visibility',
+				esc_html__( 'You are not allowed to change this forum visibility.', 'bbpress' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Apply bbPress moderation to REST edits before WordPress saves the post.
+	 *
+	 * @since 2.6.19 bbPress (r7614)
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response|WP_Error Response or error from WordPress.
+	 */
+	public function update_item( $request ) {
+		$post = isset( $request['id'] ) ? get_post( $request['id'] ) : null;
+
+		if ( ! empty( $post ) && $this->is_forum_content( $post ) && in_array( $post->post_status, bbp_get_public_topic_statuses(), true ) ) {
+			$title   = $this->get_moderation_title( $request, $post );
+			$content = $this->get_moderation_content( $request, $post );
+
+			if ( ! bbp_check_for_moderation( array(), (int) $post->post_author, $title, $content ) ) {
+				$request->set_param( 'status', bbp_get_pending_status_id() );
+			}
+		}
+
+		return parent::update_item( $request );
+	}
+
+	/**
+	 * Whether a post is a topic or reply.
+	 *
+	 * @since 2.6.19 bbPress (r7614)
+	 *
+	 * @param WP_Post $post Post to check.
+	 * @return bool Whether this is forum content.
+	 */
+	private function is_forum_content( $post ) {
+		return in_array( $post->post_type, array( bbp_get_topic_post_type(), bbp_get_reply_post_type() ), true );
+	}
+
+	/**
+	 * Whether a REST request changes a topic or reply publication date.
+	 *
+	 * @since 2.6.19 bbPress (r7614)
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_Post         $post    Existing post.
+	 * @return bool Whether the date would change.
+	 */
+	private function is_post_date_changed( $request, $post ) {
+		$post_date_gmt = ( '0000-00-00 00:00:00' === $post->post_date_gmt )
+			? get_gmt_from_date( $post->post_date )
+			: $post->post_date_gmt;
+
+		if ( $request->has_param( 'date' ) ) {
+			$dates = is_string( $request['date'] ) ? rest_get_date_with_gmt( $request['date'], false ) : false;
+
+			if ( empty( $dates ) || ( $post->post_date !== $dates[0] ) ) {
+				return true;
+			}
+		}
+
+		if ( $request->has_param( 'date_gmt' ) ) {
+			$dates = is_string( $request['date_gmt'] ) ? rest_get_date_with_gmt( $request['date_gmt'], true ) : false;
+
+			if ( empty( $dates ) || ( $post_date_gmt !== $dates[1] ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get the title that bbPress moderation should check.
+	 *
+	 * @since 2.6.19 bbPress (r7614)
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_Post|null    $post    Existing post, or null when creating.
+	 * @return string Title to check.
+	 */
+	private function get_moderation_title( $request, $post ) {
+		if ( ! $request->has_param( 'title' ) ) {
+			return empty( $post ) ? '' : $post->post_title;
+		}
+
+		$title = $request['title'];
+
+		return is_string( $title )
+			? $title
+			: ( ! empty( $title['raw'] ) ? $title['raw'] : ( empty( $post ) ? '' : $post->post_title ) );
+	}
+
+	/**
+	 * Get the content that bbPress moderation should check.
+	 *
+	 * @since 2.6.19 bbPress (r7614)
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @param WP_Post|null    $post    Existing post, or null when creating.
+	 * @return string Content to check.
+	 */
+	private function get_moderation_content( $request, $post ) {
+		if ( ! $request->has_param( 'content' ) ) {
+			return empty( $post ) ? '' : $post->post_content;
+		}
+
+		$content = $request['content'];
+
+		return is_string( $content )
+			? $content
+			: ( isset( $content['raw'] ) ? $content['raw'] : ( empty( $post ) ? '' : $post->post_content ) );
+	}
+
+	/**
+	 * Checks if a post can be read.
+	 *
+	 * @since 2.6.17 bbPress (r7482)
+	 * @since 2.6.19 bbPress (r7682) Check the parent topic for replies.
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return bool Whether the post can be read.
+	 */
+	public function check_read_permission( $post ) {
+		$post_type = get_post_type_object( $post->post_type );
+		if ( ! $this->check_is_post_type_allowed( $post_type ) ) {
+			return false;
+		}
+
+		$can_read           = parent::check_read_permission( $post );
+		$user_id            = bbp_get_current_user_id();
+		$password_parent_id = 0;
+
+		// Get the forum ID for this post
+		switch ( $post->post_type ) {
+			case bbp_get_forum_post_type() :
+				$forum_id          = $post->ID;
+				$password_parent_id = bbp_get_forum_parent_id( $post->ID );
+				break;
+
+			case bbp_get_topic_post_type() :
+				$forum_id          = bbp_get_topic_forum_id( $post->ID );
+				$password_parent_id = $forum_id;
+				break;
+
+			case bbp_get_reply_post_type() :
+				$forum_id          = bbp_get_reply_forum_id( $post->ID );
+				$password_parent_id = bbp_get_reply_topic_id( $post->ID );
+				break;
+
+			default :
+				$forum_id = 0;
+				break;
+		}
+
+		// Do not expose content below a forum outside a registered visibility
+		$visibility_forum_ids = array();
+		if ( ! empty( $forum_id ) ) {
+			$visibility_forum_ids = ( bbp_get_forum_post_type() === $post->post_type )
+				? bbp_get_forum_ancestors( $forum_id )
+				: array_merge( array( $forum_id ), bbp_get_forum_ancestors( $forum_id ) );
+			$visibility_forum_ids = wp_parse_id_list( $visibility_forum_ids );
+		}
+
+		foreach ( $visibility_forum_ids as $visibility_forum_id ) {
+			if ( ! bbp_is_forum_visibility_valid( $visibility_forum_id ) ) {
+				return false;
+			}
+		}
+
+		// Check access to restricted forums and their ancestors
+		$restricted = ! empty( $forum_id ) && bbp_is_forum_restricted( $forum_id, true );
+		$moderator  = $restricted && is_user_logged_in() && bbp_is_user_forum_moderator( $user_id, $forum_id );
+
+		// Allow filtered moderators to read the restricted forum object
+		$moderator_can_read = $moderator
+			&& ( bbp_get_forum_post_type() === $post->post_type )
+			&& in_array( $post->post_status, array( bbp_get_private_status_id(), bbp_get_hidden_status_id() ), true );
+
+		if ( ! $can_read && ! $moderator_can_read ) {
+			return false;
+		}
+
+		if ( bbp_is_forum_restricted_for_user( $forum_id, $user_id ) ) {
+			return false;
+		}
+
+		// WordPress checks only the requested object's password. bbPress forum
+		// content also inherits password requirements from its parents.
+		if ( ! empty( $password_parent_id ) && bbp_get_password_required_id( $password_parent_id ) ) {
+			return false;
+		}
+
+		// A public reply cannot expose an unreadable topic
+		if ( bbp_get_reply_post_type() === $post->post_type ) {
+			$topic_id = bbp_get_reply_topic_id( $post->ID );
+			$topic    = ! empty( $topic_id ) ? bbp_get_topic( $topic_id ) : null;
+
+			if ( empty( $topic ) || ! $this->check_read_permission( $topic ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+}

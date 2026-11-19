@@ -5,7 +5,7 @@
  *
  * @package    bbPress
  * @subpackage Administration
- * @since      2.6.0
+ * @since      2.6.0 bbPress (r5886)
  * @access     private
  *
  * @see WP_Posts_List_Table
@@ -35,14 +35,19 @@ class BBP_Topic_Replies_List_Table extends WP_List_Table {
 	public function __construct( $args = array() ) {
 
 		// Parse arguments
-		$args = bbp_parse_args( $args, array(
-			'singular' => 'reply',
-			'plural'   => 'replies',
-			'ajax'     => false
-		), 'topic_replies_list_table' );
+		$args = bbp_parse_args(
+			$args,
+			array(
+				'singular' => 'reply',
+				'plural'   => 'replies',
+				'ajax'     => false
+			),
+			'topic_replies_list_table'
+		);
 
 		// Construct the list table
-		parent::__construct( $args );	}
+		parent::__construct( $args );
+	}
 
 	/**
 	 * Setup the list-table columns
@@ -113,9 +118,9 @@ class BBP_Topic_Replies_List_Table extends WP_List_Table {
 	 */
 	public function column_bbp_topic_reply_author( $item = '' ) {
 		bbp_reply_author_avatar( $item->ID, 50 );
-		bbp_reply_author_display_name( $item->ID );
+		echo esc_html( bbp_get_reply_author_display_name( $item->ID ) );
 		echo '<br>';
-		bbp_reply_author_email( $item->ID );
+		echo esc_html( bbp_get_reply_author_email( $item->ID ) );
 		echo '<br>';
 		bbp_author_ip( array( 'post_id' => $item->ID ) );
 	}
@@ -141,12 +146,12 @@ class BBP_Topic_Replies_List_Table extends WP_List_Table {
 
 		// Define actions array
 		$actions = array(
-			'view' => '<a href="' . bbp_get_reply_url( $item->ID )  . '">' . esc_html__( 'View', 'bbpress' ) . '</a>'
+			'view' => '<a href="' . esc_url( bbp_get_reply_url( $item->ID ) ) . '">' . esc_html__( 'View', 'bbpress' ) . '</a>'
 		);
 
 		// Prepend `edit` link
 		if ( current_user_can( 'edit_reply', $item->ID ) ) {
-			$actions['edit'] = '<a href="' . get_edit_post_link( $item->ID ) . '">' . esc_html__( 'Edit', 'bbpress' ) . '</a>';
+			$actions['edit'] = '<a href="' . esc_url( get_edit_post_link( $item->ID ) ) . '">' . esc_html__( 'Edit', 'bbpress' ) . '</a>';
 			$actions         = array_reverse( $actions );
 		}
 
@@ -214,30 +219,31 @@ class BBP_Topic_Replies_List_Table extends WP_List_Table {
 		}
 
 		// Query for replies
-		$reply_query  = new WP_Query( array(
-			'post_type'           => bbp_get_reply_post_type(),
-			'post_status'         => $statuses,
-			'post_parent'         => $topic_id,
-			'posts_per_page'      => $per_page,
-			'paged'               => $current_page,
-			'orderby'             => $orderby,
-			'order'               => ucwords( $order ),
-			'hierarchical'        => false,
-			'ignore_sticky_posts' => true
-		) );
-
-		// Get the total number of replies, for pagination
-		$total_items = bbp_get_topic_reply_count( $topic_id );
+		$reply_query  = new WP_Query(
+			array(
+				'post_type'           => bbp_get_reply_post_type(),
+				'post_status'         => $statuses,
+				'post_parent'         => $topic_id,
+				'posts_per_page'      => $per_page,
+				'paged'               => $current_page,
+				'orderby'             => $orderby,
+				'order'               => ucwords( $order ),
+				'hierarchical'        => false,
+				'ignore_sticky_posts' => true
+			)
+		);
 
 		// Set list table items to queried posts
 		$this->items = $reply_query->posts;
 
 		// Set the pagination arguments
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,
-			'per_page'    => $per_page,
-			'total_pages' => ceil( $total_items / $per_page )
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => (int) $reply_query->found_posts,
+				'per_page'    => $per_page,
+				'total_pages' => (int) $reply_query->max_num_pages
+			)
+		);
 	}
 
 	/**
@@ -313,7 +319,7 @@ class BBP_Topic_Replies_List_Table extends WP_List_Table {
 	/**
 	 * Generates content for a single row of the table
 	 *
-	 * @since 2.6.0
+	 * @since 2.6.0 bbPress (r6546)
 	 * @access public
 	 *
 	 * @param object $item The current item
@@ -330,10 +336,10 @@ class BBP_Topic_Replies_List_Table extends WP_List_Table {
 
 		// Hierarchy
 		if ( ! empty( $item->post_parent ) ) {
-		    $count    = count( get_post_ancestors( $item->ID ) );
-		    $classes .= ' level-'. $count;
+			$count    = count( get_post_ancestors( $item->ID ) );
+			$classes .= ' level-'. $count;
 		} else {
-		    $classes .= ' level-0';
+			$classes .= ' level-0';
 		} ?>
 
 		<tr id="post-<?php echo esc_attr( $item->ID ); ?>" class="<?php echo implode( ' ', get_post_class( $classes, $item->ID ) ); ?>">

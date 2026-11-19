@@ -10,19 +10,11 @@
 /**
  * Implementation of Vanilla 2.0.18.1 Converter
  *
- * @since 2.3.0 bbPress (r4717)
+ * @since 2.3.0 bbPress (r4718)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/vanilla
  */
 class Vanilla extends BBP_Converter_Base {
-
-	/**
-	 * Main Constructor
-	 *
-	 */
-	public function __construct() {
-		parent::__construct();
-	}
 
 	/**
 	 * Sets up the field mappings
@@ -469,10 +461,26 @@ class Vanilla extends BBP_Converter_Base {
 
 		// Store old user password (Stored in usermeta)
 		$this->field_map[] = array(
+			'from_tablename'  => 'User',
+			'from_fieldname'  => 'Password',
+			'to_type'         => 'user',
+			'to_fieldname'    => '_bbp_password',
+			'callback_method' => 'callback_savepass'
+		);
+
+		// Password hash method (Used by the password callback above)
+		$this->field_map[] = array(
 			'from_tablename' => 'User',
-			'from_fieldname' => 'Password',
+			'from_fieldname' => 'HashMethod',
 			'to_type'        => 'user',
-			'to_fieldname'   => '_bbp_password'
+			'to_fieldname'   => ''
+		);
+
+		// User password verify class (Stored in usermeta for verifying password)
+		$this->field_map[] = array(
+			'to_type'      => 'user',
+			'to_fieldname' => '_bbp_class',
+			'default'      => 'Vanilla'
 		);
 
 		// User name.
@@ -570,8 +578,9 @@ class Vanilla extends BBP_Converter_Base {
 	 * @param int $parent Vanilla v2.x Parent ID
 	 * @return int
 	 */
+	// phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.parentFound -- Preserve the public parameter name for PHP 8 named arguments.
 	public function callback_forum_parent( $parent = 0 ) {
-		if ( $parent == -1 ) {
+		if ( -1 === (int) $parent ) {
 			return 0;
 		} else {
 			return $parent;
@@ -590,19 +599,86 @@ class Vanilla extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This method is to save the salt and password together. That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * Store Vanilla's password hash with its hash method.
+	 *
+	 * WordPress unslashes metadata before storage, so pre-slash the source value
+	 * to preserve legacy plaintext passwords containing quotes or backslashes.
+	 *
+	 * @param string $field Password hash or legacy plaintext password.
+	 * @param array  $row   Source database row.
+	 * @return array|bool Password metadata, or false if invalid.
 	 */
 	public function callback_savepass( $field, $row ) {
-		return false;
+		if ( ! is_string( $field ) ) {
+			return false;
+		}
+
+		$method = isset( $row['HashMethod'] ) && is_string( $row['HashMethod'] )
+			? $row['HashMethod']
+			: '';
+
+		return wp_slash(
+			array(
+				'hash'   => $field,
+				'method' => $method,
+			)
+		);
 	}
 
 	/**
-	 * This method is to take the pass out of the database and compare
-	 * to a pass the user has typed in.
+	 * Check a password against Vanilla 2 authentication metadata.
+	 *
+	 * Vanilla 2.0.18.1 generated portable phpass hashes, while retaining
+	 * compatibility with legacy MD5 hashes and plaintext passwords.
+	 *
+	 * @param string $password        Password in plain text.
+	 * @param string $serialized_pass Serialized authentication metadata.
+	 * @return bool Whether the password is correct.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		return false;
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['method'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['method'] ) ) {
+			return false;
+		}
+
+		// This converter targets Vanilla's native password formats only
+		if ( '' !== $pass_array['method'] && 0 !== strcasecmp( 'Vanilla', $pass_array['method'] ) ) {
+			return false;
+		}
+
+		$hash = $pass_array['hash'];
+
+		if ( '' === $hash || '*' === $hash ) {
+			return false;
+		}
+
+		// Vanilla used phpass for hashes beginning with "$" or "_"
+		if ( '$' === $hash[0] || '_' === $hash[0] ) {
+			require_once ABSPATH . WPINC . '/class-phpass.php';
+
+			$hasher = new PasswordHash( 8, true );
+
+			return $hasher->CheckPassword( $password, $hash );
+		}
+
+		if ( empty( $password ) ) {
+			return false;
+		}
+
+		/*
+		 * Legacy MD5 and plaintext imports can share an empty HashMethod. Treat
+		 * digest-shaped values only as MD5 so the stored hash is not a password.
+		 * A plaintext password with this shape cannot be distinguished and must
+		 * be reset.
+		 */
+		if ( preg_match( '/\A[a-f0-9]{32}\z/i', $hash ) ) {
+			return hash_equals( $hash, md5( $password ) );
+		}
+
+		return hash_equals( $hash, $password );
 	}
 }

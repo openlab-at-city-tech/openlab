@@ -10,7 +10,7 @@
 /**
  * Implementation of vBulletin v3.x Converter.
  *
- * @since 2.5.0 bbPress (r5151)
+ * @since 2.5.0 bbPress (r5152)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/vbulletin
  */
@@ -139,22 +139,22 @@ class vBulletin3 extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date( 'Y-m-d H:i:s' )
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
-		$this->field_map[]	 = array(
+		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date( 'Y-m-d H:i:s' )
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
-		$this->field_map[]	 = array(
+		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date( 'Y-m-d H:i:s' )
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
-		$this->field_map[]	 = array(
+		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date( 'Y-m-d H:i:s' )
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Forum Subscriptions Section ***************************************/
@@ -509,7 +509,7 @@ class vBulletin3 extends BBP_Converter_Base {
 			'to_fieldname'    => 'post_modified',
 			'callback_method' => 'callback_datetime'
 		);
-		$this->field_map[]	 = array(
+		$this->field_map[] = array(
 			'from_tablename'  => 'post',
 			'from_fieldname'  => 'dateline',
 			'to_type'         => 'reply',
@@ -635,27 +635,39 @@ class vBulletin3 extends BBP_Converter_Base {
 
 
 	/**
-	 * This method is to save the salt and password together.  That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * This method saves the salt and password together so they can be retrieved
+	 * as one value during authentication. WordPress unslashes metadata values,
+	 * so the salt is pre-slashed to preserve vBulletin's printable ASCII salts.
+	 * Password hashes are hexadecimal and do not require slashing.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash'	 => $field, 'salt'	 => $row['salt'] );
+		$pass_array = array(
+			'hash' => $field,
+			'salt' => isset( $row['salt'] ) ? wp_slash( (string) $row['salt'] ) : ''
+		);
+
 		return $pass_array;
 	}
 
 	/**
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
-	 *
-	 * vBulletin passwords do not work. Maybe use the below plugin's approach?
-	 *
-	 * @link https://wordpress.org/extend/plugins/vb-user-copy/
-	 * @link https://plugins.trac.wordpress.org/browser/vb-user-copy/trunk/vb_user_copy.php
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ) . $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['salt'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['salt'] ) ) {
+			return false;
+		}
+
+		// Return comparison
+		return hash_equals(
+			$pass_array['hash'],
+			md5( md5( $password ) . $pass_array['salt'] )
+		);
 	}
 
 	/**
@@ -665,7 +677,7 @@ class vBulletin3 extends BBP_Converter_Base {
 	 * @return string WordPress safe
 	 */
 	public function callback_forum_type( $status = 0 ) {
-		if ( $status == -1 ) {
+		if ( -1 === (int) $status ) {
 			$status = 'category';
 		} else {
 			$status = 'forum';
@@ -736,7 +748,7 @@ class vBulletin3 extends BBP_Converter_Base {
 		// Replace '[QUOTE]' with '<blockquote>'
 		$vbulletin_markup = preg_replace( '/\[QUOTE\]/', '<blockquote>', $vbulletin_markup );
 		// Replace '[QUOTE=User Name($1);PostID($2)]' with '<em>@$1 $2 wrote:</em><blockquote>"
-		$vbulletin_markup = preg_replace( '/\[QUOTE=(.*?);(.*?)\]/' , '<em>@$1 $2 wrote:</em><blockquote>', $vbulletin_markup );
+		$vbulletin_markup = preg_replace( '/\[QUOTE=(.*?);(.*?)\]/', '<em>@$1 $2 wrote:</em><blockquote>', $vbulletin_markup );
 		// Replace '[/QUOTE]' with '</blockquote>'
 		$vbulletin_markup = preg_replace( '/\[\/QUOTE\]/', '</blockquote>', $vbulletin_markup );
 		// Replace '[MENTION=###($1)]User Name($2)[/MENTION]' with '@$2"

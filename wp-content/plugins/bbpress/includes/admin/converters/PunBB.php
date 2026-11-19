@@ -10,7 +10,7 @@
 /**
  * Implementation of PunBB v1.4.2 Forum converter.
  *
- * @since 2.5.0 bbPress (r5153)
+ * @since 2.5.0 bbPress (r5154)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/punbb
  */
@@ -123,22 +123,22 @@ class PunBB extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Forum Subscriptions Section ***************************************/
@@ -505,7 +505,7 @@ class PunBB extends BBP_Converter_Base {
 
 		// User password verify class (Stored in usermeta for verifying password)
 		$this->field_map[] = array(
-			'to_type'      => 'users',
+			'to_type'      => 'user',
 			'to_fieldname' => '_bbp_class',
 			'default'      => 'PunBB'
 		);
@@ -671,7 +671,12 @@ class PunBB extends BBP_Converter_Base {
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'salt' => $row['salt'] );
+		// Preserve backslashes when WordPress unslashes metadata on write.
+		$pass_array = array(
+			'hash' => $field,
+			'salt' => isset( $row['salt'] ) ? wp_slash( (string) $row['salt'] ) : ''
+		);
+
 		return $pass_array;
 	}
 
@@ -680,8 +685,35 @@ class PunBB extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $password ). $pass_array['salt'] ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_array( $pass_array ) || ! isset( $pass_array['hash'] ) || ! is_string( $pass_array['hash'] ) || ( isset( $pass_array['salt'] ) && ! is_string( $pass_array['salt'] ) ) ) {
+			return false;
+		}
+
+		$salt = isset( $pass_array['salt'] ) ? $pass_array['salt'] : '';
+
+		// Salted SHA-1 from PunBB 1.3 and newer
+		if ( 40 === strlen( $pass_array['hash'] ) && hash_equals( $pass_array['hash'], sha1( $salt . sha1( $password ) ) ) ) {
+			return true;
+		}
+
+		// Legacy unsalted MD5 from PunBB 1.2 and earlier
+		if ( 40 !== strlen( $pass_array['hash'] ) ) {
+			return hash_equals(
+				$pass_array['hash'],
+				md5( $password )
+			);
+		}
+
+		// Legacy unsalted SHA-1 from PunBB 1.2 and earlier
+		return hash_equals(
+			$pass_array['hash'],
+			sha1( $password )
+		);
 	}
 
 	/**

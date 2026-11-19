@@ -8,9 +8,9 @@
  */
 
 /**
- * Implementation of Invision Power Board v3.x converter.
+ * Implementation of Invision Power Board v3.1-3.4 converter.
  *
- * @since 2.3.0 bbPress (r4713)
+ * @since 2.1.0 bbPress (r3816)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/invision
  */
@@ -137,24 +137,24 @@ class Invision extends BBP_Converter_Base {
 
 		// Forum dates.
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_date',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_date',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_date_gmt',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_date_gmt',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_modified',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_modified',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
-			'to_type'         => 'forum',
-			'to_fieldname'    => 'post_modified_gmt',
-			'default' => date('Y-m-d H:i:s')
+			'to_type'      => 'forum',
+			'to_fieldname' => 'post_modified_gmt',
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Topic Section *****************************************************/
@@ -482,7 +482,7 @@ class Invision extends BBP_Converter_Base {
 	 * @return string WordPress safe
 	 */
 	public function callback_forum_type( $status = 0 ) {
-		if ( $status == -1 ) {
+		if ( -1 === (int) $status ) {
 			$status = 'category';
 		} else {
 			$status = 'forum';
@@ -522,12 +522,14 @@ class Invision extends BBP_Converter_Base {
 	}
 
 	/**
-	 * This method is to save the salt and password together.  That
-	 * way when we authenticate it we can get it out of the database
-	 * as one value. Array values are auto sanitized by WordPress.
+	 * Save the salt and password together. Pre-slash the salt because WordPress
+	 * removes one layer of slashes when storing user metadata.
 	 */
 	public function callback_savepass( $field, $row ) {
-		return array( 'hash' => $field, 'salt' => $row['members_pass_salt'] );
+		return array(
+			'hash' => $field,
+			'salt' => isset( $row['members_pass_salt'] ) ? wp_slash( (string) $row['members_pass_salt'] ) : ''
+		);
 	}
 
 	/**
@@ -535,21 +537,66 @@ class Invision extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] == md5( md5( $pass_array['salt'] ) . md5( $this->to_char( $password ) ) ) );
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['salt'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['salt'] ) ) {
+			return false;
+		}
+
+		$salt_hash = md5( $pass_array['salt'] );
+		$hash      = md5( $salt_hash . md5( $this->clean_password( $password ) ) );
+		$old_hash  = md5( $salt_hash . md5( $this->to_char( $password ) ) );
+
+		// Retain support for metadata compatible with the historical verifier
+		$hash_matches     = hash_equals( $pass_array['hash'], $hash );
+		$old_hash_matches = hash_equals( $pass_array['hash'], $old_hash );
+
+		return $hash_matches || $old_hash_matches;
 	}
 
+	/**
+	 * Apply IP.Board 3's password input cleaning.
+	 *
+	 * @param string $password Password in plain text.
+	 * @return string Cleaned password.
+	 */
+	private function clean_password( $password ) {
+		$password = str_replace( '&#032;', ' ', $password );
+		$password = str_replace( array( "\r\n", "\n\r", "\r" ), "\n", $password );
+		$password = str_replace( '&', '&amp;', $password );
+		$password = str_replace( '<!--', '&#60;&#33;--', $password );
+		$password = str_replace( '-->', '--&#62;', $password );
+		$password = str_ireplace( '<script', '&#60;script', $password );
+		$password = str_replace( '>', '&gt;', $password );
+		$password = str_replace( '<', '&lt;', $password );
+		$password = str_replace( '"', '&quot;', $password );
+		$password = str_replace( "\n", '<br />', $password );
+		$password = str_replace( '$', '&#036;', $password );
+		$password = str_replace( '!', '&#33;', $password );
+
+		return str_replace( "'", '&#39;', $password );
+	}
+
+	/**
+	 * Apply the historical bbPress Invision password transformation.
+	 *
+	 * @param string $input Password in plain text.
+	 * @return string Transformed password.
+	 */
 	private function to_char( $input ) {
-		$output = "";
-		for ( $i = 0; $i < strlen( $input ); $i++ ) {
-			$j = ord( $input[$i] );
+		$output = '';
+		$length = strlen( $input );
+		for ( $i = 0; $i < $length; $i++ ) {
+			$j = ord( $input[ $i ] );
 			if ( ( $j >= 65 && $j <= 90 )
 				|| ( $j >= 97 && $j <= 122 )
-				|| ( $j >= 48 && $j <= 57 ) )
-			{
-				$output .= $input[$i];
+				|| ( $j >= 48 && $j <= 57 ) ) {
+				$output .= $input[ $i ];
 			} else {
-				$output .= "&#" . ord( $input[$i] ) . ";";
+				$output .= '&#' . ord( $input[ $i ] ) . ';';
 			}
 		}
 		return $output;

@@ -12,14 +12,20 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 
-<form method="post" action="<?php bbp_wp_login_action( array( 'action' => 'lostpassword', 'context' => 'login_post' ) ); ?>" class="bbp-login-form">
+<form method="post" action="<?php   bbp_wp_login_action(
+	array(
+		'action'  => 'lostpassword',
+		'context' => 'login_post'
+	)
+);
+?>" class="bbp-login-form">
 	<fieldset class="bbp-form">
 		<legend><?php esc_html_e( 'Lost Password', 'bbpress' ); ?></legend>
 
 		<div class="bbp-username">
 			<p>
 				<label for="user_login" class="hide"><?php esc_html_e( 'Username or Email', 'bbpress' ); ?>: </label>
-				<input type="text" name="user_login" value="" size="20" id="user_login" maxlength="100" autocomplete="off" />
+				<input type="text" name="user_login" value="" size="20" id="user_login" maxlength="100" autocomplete="off" required="required" />
 			</p>
 		</div>
 

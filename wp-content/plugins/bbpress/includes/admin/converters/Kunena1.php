@@ -10,7 +10,7 @@
 /**
  * Implementation of Kunena v1.x Forums for Joomla Forum converter.
  *
- * @since 2.5.0 bbPress (r5144)
+ * @since 2.5.0 bbPress (r5145)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/kunena/
  */
@@ -135,22 +135,22 @@ class Kunena1 extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Topic Section *****************************************************/
@@ -398,20 +398,12 @@ class Kunena1 extends BBP_Converter_Base {
 			'callback_method' => 'callback_savepass'
 		);
 
-		// Store old user salt (This is only used for the SELECT row info for the above password save)
-//		$this->field_map[] = array(
-//			'from_tablename' => 'user',
-//			'from_fieldname' => 'salt',
-//			'to_type'        => 'user',
-//			'to_fieldname'   => ''
-//		);
-
 		// User password verify class (Stored in usermeta for verifying password)
-//		$this->field_map[] = array(
-//			'to_type'      => 'user',
-//			'to_fieldname' => '_bbp_class',
-//			'default'      => 'Kunena1'
-//		);
+		$this->field_map[] = array(
+			'to_type'      => 'user',
+			'to_fieldname' => '_bbp_class',
+			'default'      => 'Kunena1'
+		);
 
 		// User name.
 		$this->field_map[] = array(
@@ -452,18 +444,28 @@ class Kunena1 extends BBP_Converter_Base {
 	 * way when we authenticate it we can get it out of the database
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
-	public function callback_savepass($field, $row) {
-		$pass_array = array('hash' => $field, 'salt' => $row['salt']);
-		return $pass_array;
+	public function callback_savepass( $field, $row ) {
+		return array( 'hash' => $field );
 	}
 
 	/**
 	 * This method is to take the pass out of the database and compare
 	 * to a pass the user has typed in.
 	 */
-	public function authenticate_pass($password, $serialized_pass) {
-		$pass_array = unserialize($serialized_pass);
-		return ( $pass_array['hash'] == md5(md5($password) . $pass_array['salt']) );
+	public function authenticate_pass( $password, $serialized_pass ) {
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'] ) || ! is_string( $pass_array['hash'] ) ) {
+			return false;
+		}
+
+		$parts = explode( ':', $pass_array['hash'], 2 );
+		$salt  = isset( $parts[1] ) ? $parts[1] : '';
+
+		return hash_equals( $parts[0], md5( $password . $salt ) );
 	}
 
 	/**
@@ -473,7 +475,7 @@ class Kunena1 extends BBP_Converter_Base {
 	 * @return string WordPress safe
 	 */
 	public function callback_forum_type( $status = 0 ) {
-		if ( $status == 0 ) {
+		if ( empty( $status ) ) {
 			$status = 'category';
 		} else {
 			$status = 'forum';

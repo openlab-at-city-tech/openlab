@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Return the strategy used for storing user engagements
  *
- * @since 2.6.0 bbPress (r6722)
+ * @since 2.6.0 bbPress (r6723)
  *
  * @param string $rel_key  The key used to index this relationship
  * @param string $rel_type The type of meta to look in
@@ -31,14 +31,14 @@ function bbp_user_engagements_interface( $rel_key = '', $rel_type = 'post' ) {
  * Base strategy class for interfacing with User Engagements, which other
  * classes will extend.
  *
- * @since 2.6.0 bbPress (r6722)
+ * @since 2.6.0 bbPress (r6739)
  */
 class BBP_User_Engagements_Base {
 
 	/**
 	 * Type of strategy being used.
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @var string
 	 */
@@ -47,7 +47,7 @@ class BBP_User_Engagements_Base {
 	/**
 	 * Add a user id to an object
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -58,13 +58,13 @@ class BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function add_user_to_object( $object_id = 0, $user_id = 0, $meta_key = '', $meta_type = 'post', $unique = false ) {
-
+		// Intentionally empty
 	}
 
 	/**
 	 * Remove a user id from an object
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -74,13 +74,13 @@ class BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function remove_user_from_object( $object_id = 0, $user_id = 0, $meta_key = '', $meta_type = 'post' ) {
-
+		// Intentionally empty
 	}
 
 	/**
 	 * Remove a user id from all objects
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $user_id   The user id
 	 * @param string $meta_key  The relationship key
@@ -89,13 +89,13 @@ class BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function remove_user_from_all_objects( $user_id = 0, $meta_key = '', $meta_type = 'post' ) {
-
+		// Intentionally empty
 	}
 
 	/**
 	 * Remove an object from all users
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -105,13 +105,13 @@ class BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function remove_object_from_all_users( $object_id = 0, $meta_key = '', $meta_type = 'post' ) {
-
+		// Intentionally empty
 	}
 
 	/**
 	 * Remove all users from all objects
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param string $meta_key  The relationship key
 	 * @param string $meta_type The relationship type (usually 'post')
@@ -119,13 +119,13 @@ class BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function remove_all_users_from_all_objects( $meta_key = '', $meta_type = 'post' ) {
-
+		// Intentionally empty
 	}
 
 	/**
 	 * Get users of an object
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param string $meta_key  The key used to index this relationship
@@ -134,13 +134,13 @@ class BBP_User_Engagements_Base {
 	 * @return array Returns ids of users
 	 */
 	public function get_users_for_object( $object_id = 0, $meta_key = '', $meta_type = 'post' ) {
-
+		// Intentionally empty
 	}
 
 	/**
 	 * Get the part of the query responsible for JOINing objects to relationships.
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param array  $args
 	 * @param string $meta_key
@@ -149,21 +149,21 @@ class BBP_User_Engagements_Base {
 	 * @return array
 	 */
 	public function get_query( $args = array(), $context_key = '', $meta_key = '', $meta_type = 'post' ) {
-
+		// Intentionally empty
 	}
 }
 
 /**
  * Meta strategy for interfacing with User Engagements
  *
- * @since 2.6.0 bbPress (r6722)
+ * @since 2.6.0 bbPress (r6723)
  */
 class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 
 	/**
 	 * Type of strategy being used.
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @var string
 	 */
@@ -172,7 +172,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Add a user id to an object
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6723)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -189,7 +189,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Remove a user id from an object
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6723)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -205,7 +205,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Remove a user id from all objects
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6723)
 	 *
 	 * @param int    $user_id   The user id
 	 * @param string $meta_key  The relationship key
@@ -220,7 +220,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Remove an object from all users
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6723)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -236,7 +236,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Remove all users from all objects
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6723)
 	 *
 	 * @param string $meta_key  The relationship key
 	 * @param string $meta_type The relationship type (usually 'post')
@@ -250,7 +250,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Get users of an object
 	 *
-	 * @since 2.6.0 bbPress (r6722)
+	 * @since 2.6.0 bbPress (r6723)
 	 *
 	 * @param int    $object_id The object id
 	 * @param string $meta_key  The key used to index this relationship
@@ -265,7 +265,7 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 	/**
 	 * Get the part of the query responsible for JOINing objects to relationships.
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param array  $args
 	 * @param string $meta_key
@@ -278,21 +278,25 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 		// Backwards compat for pre-2.6.0
 		if ( is_numeric( $args ) ) {
 			$args = array(
-				'meta_query' => array( array(
-					'key'     => $meta_key,
-					'value'   => bbp_get_user_id( $args, false, false ),
-					'compare' => 'NUMERIC'
-				) )
+				'meta_query' => array(
+					array(
+						'key'     => $meta_key,
+						'value'   => bbp_get_user_id( $args, false, false ),
+						'compare' => 'NUMERIC'
+					)
+				)
 			);
 		}
 
 		// Default arguments
 		$defaults = array(
-			'meta_query' => array( array(
-				'key'     => $meta_key,
-				'value'   => bbp_get_displayed_user_id(),
-				'compare' => 'NUMERIC'
-			) )
+			'meta_query' => array(
+				array(
+					'key'     => $meta_key,
+					'value'   => bbp_get_displayed_user_id(),
+					'compare' => 'NUMERIC'
+				)
+			)
 		);
 
 		// Parse arguments
@@ -303,14 +307,14 @@ class BBP_User_Engagements_Meta extends BBP_User_Engagements_Base {
 /**
  * Term strategy for interfacing with User Engagements
  *
- * @since 2.6.0 bbPress (r6737)
+ * @since 2.6.0 bbPress (r6739)
  */
 class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 
 	/**
 	 * Type of strategy being used.
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @var string
 	 */
@@ -319,7 +323,7 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 	/**
 	 * Register an engagement taxonomy just-in-time for immediate use
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param string $tax_key
 	 * @param string $object_type
@@ -332,34 +336,38 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 		}
 
 		// Register the taxonomy
-		register_taxonomy( $tax_key, 'bbp_' . $object_type, array(
-			'labels'                => array(),
-			'description'           => '',
-			'public'                => false,
-			'publicly_queryable'    => false,
-			'hierarchical'          => false,
-			'show_ui'               => false,
-			'show_in_menu'          => false,
-			'show_in_nav_menus'     => false,
-			'show_tagcloud'         => false,
-			'show_in_quick_edit'    => false,
-			'show_admin_column'     => false,
-			'meta_box_cb'           => false,
-			'capabilities'          => array(),
-			'rewrite'               => false,
-			'query_var'             => '',
-			'update_count_callback' => '',
-			'show_in_rest'          => false,
-			'rest_base'             => false,
-			'rest_controller_class' => false,
-			'_builtin'              => false
-		) );
+		register_taxonomy(
+			$tax_key,
+			'bbp_' . $object_type,
+			array(
+				'labels'                => array(),
+				'description'           => '',
+				'public'                => false,
+				'publicly_queryable'    => false,
+				'hierarchical'          => false,
+				'show_ui'               => false,
+				'show_in_menu'          => false,
+				'show_in_nav_menus'     => false,
+				'show_tagcloud'         => false,
+				'show_in_quick_edit'    => false,
+				'show_admin_column'     => false,
+				'meta_box_cb'           => false,
+				'capabilities'          => array(),
+				'rewrite'               => false,
+				'query_var'             => '',
+				'update_count_callback' => '',
+				'show_in_rest'          => false,
+				'rest_base'             => false,
+				'rest_controller_class' => false,
+				'_builtin'              => false
+			)
+		);
 	}
 
 	/**
 	 * Add a user id to an object
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -380,7 +388,7 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 	/**
 	 * Remove a user id from an object
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -400,7 +408,8 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 	/**
 	 * Remove a user id from all objects
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
+	 * @since 2.6.20 bbPress (r7958) Avoid a warning when the user relationship does not exist.
 	 *
 	 * @param int    $user_id   The user id
 	 * @param string $meta_key  The relationship key
@@ -414,29 +423,41 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 		$this->jit_taxonomy( $tax_key );
 		$term     = get_term_by( 'slug', $user_key, $tax_key );
 
+		// Bail if term does not exist.
+		if ( empty( $term ) ) {
+			return false;
+		}
+
 		return wp_delete_term( $term->term_id, $tax_key );
 	}
 
 	/**
 	 * Remove an object from all users
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
+	 * @since 2.6.17 bbPress (r7468) Limit removal to the requested relationship taxonomy.
+	 * @since 2.6.20 bbPress (r7988) Return true after removing the requested relationships.
 	 *
 	 * @param int    $object_id The object id
-	 * @param int    $user_id   The user id
 	 * @param string $meta_key  The relationship key
 	 * @param string $meta_type The relationship type (usually 'post')
 	 *
-	 * @return bool Returns true on success, false on failure
+	 * @return bool Always returns true; term relationship removal does not report failures
 	 */
 	public function remove_object_from_all_users( $object_id = 0, $meta_key = '', $meta_type = 'post' ) {
-		return wp_delete_object_term_relationships( $object_id, get_object_taxonomies( 'bbp_user' ) );
+		$tax_key = "{$meta_key}_{$meta_type}";
+		$this->jit_taxonomy( $tax_key );
+
+		wp_delete_object_term_relationships( $object_id, $tax_key );
+
+		return true;
 	}
 
 	/**
 	 * Remove all users from all objects
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
+	 * @since 2.6.20 bbPress (r7958) Implement bulk term relationship cleanup.
 	 *
 	 * @param string $meta_key  The relationship key
 	 * @param string $meta_type The relationship type (usually 'post')
@@ -444,13 +465,40 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function remove_all_users_from_all_objects( $meta_key = '', $meta_type = 'post' ) {
-		// TODO
+		$tax_key = "{$meta_key}_{$meta_type}";
+		$this->jit_taxonomy( $tax_key );
+		$term_ids = get_terms(
+			array(
+				'taxonomy'               => $tax_key,
+				'hide_empty'             => false,
+				'fields'                 => 'ids',
+				'orderby'                => 'none',
+				'cache_results'          => false,
+				'update_term_meta_cache' => false
+			)
+		);
+
+		// Bail if terms cannot be queried.
+		if ( is_wp_error( $term_ids ) ) {
+			return false;
+		}
+
+		// Delete all relationship terms and their object relationships.
+		foreach ( $term_ids as $term_id ) {
+			$deleted = wp_delete_term( $term_id, $tax_key );
+
+			if ( is_wp_error( $deleted ) ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
 	 * Get users of an object
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param int    $object_id The object id
 	 * @param string $meta_key  The key used to index this relationship
@@ -464,10 +512,12 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 		$this->jit_taxonomy( $tax_key );
 
 		// Get terms
-		$terms = get_terms( array(
-			'object_ids' => $object_id,
-			'taxonomy'   => $tax_key
-		) );
+		$terms = get_terms(
+			array(
+				'object_ids' => $object_id,
+				'taxonomy'   => $tax_key
+			)
+		);
 
 		// Slug part to replace
 		$user_ids = array();
@@ -484,7 +534,7 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 	/**
 	 * Get the part of the query responsible for JOINing objects to relationships.
 	 *
-	 * @since 2.6.0 bbPress (r6737)
+	 * @since 2.6.0 bbPress (r6739)
 	 *
 	 * @param array  $args
 	 * @param string $meta_key
@@ -502,21 +552,25 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
 		// Backwards compat for pre-2.6.0
 		if ( is_numeric( $args ) ) {
 			$args = array(
-				'tax_query' => array( array(
-					'taxonomy' => $tax_key,
-					'terms'    => $user_key . bbp_get_user_id( $args, false, false ),
-					'field'    => 'slug'
-				) )
+				'tax_query' => array(
+					array(
+						'taxonomy' => $tax_key,
+						'terms'    => $user_key . bbp_get_user_id( $args, false, false ),
+						'field'    => 'slug'
+					)
+				)
 			);
 		}
 
 		// Default arguments
 		$defaults = array(
-			'tax_query' => array( array(
-				'taxonomy' => $tax_key,
-				'terms'    => $user_key . bbp_get_displayed_user_id(),
-				'field'    => 'slug'
-			) )
+			'tax_query' => array(
+				array(
+					'taxonomy' => $tax_key,
+					'terms'    => $user_key . bbp_get_displayed_user_id(),
+					'field'    => 'slug'
+				)
+			)
 		);
 
 		// Parse arguments
@@ -534,14 +588,14 @@ class BBP_User_Engagements_Term extends BBP_User_Engagements_Base {
  * it needs to do weird things to maintain the 2.5 status-quo. Do not use this
  * strategy as an example when building your own.
  *
- * @since 2.6.0 bbPress (r6844)
+ * @since 2.6.0 bbPress (r6876)
  */
 class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 
 	/**
 	 * Type of strategy being used.
 	 *
-	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.0 bbPress (r6876)
 	 *
 	 * @var string
 	 */
@@ -550,15 +604,16 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	/**
 	 * Private function to map 2.6 meta keys to 2.5 user-option keys.
 	 *
-	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.0 bbPress (r6876)
 	 *
 	 * @param string $meta_key
 	 * @param int    $object_id
 	 * @param bool   $prefix
+	 * @param string $context_key
 	 *
 	 * @return string
 	 */
-	private function get_user_option_key( $meta_key = '', $object_id = 0, $prefix = false ) {
+	private function get_user_option_key( $meta_key = '', $object_id = 0, $prefix = false, $context_key = '' ) {
 		switch ( $meta_key ) {
 
 			// Favorites
@@ -570,9 +625,13 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 			case '_bbp_subscription' :
 
 				// Maybe guess at post type
-				$post_type = ! empty( $object_id )
-					? get_post_type( $object_id )
-					: bbp_get_topic_post_type();
+				if ( ! empty( $object_id ) ) {
+					$post_type = get_post_type( $object_id );
+				} elseif ( 'get_user_forum_subscriptions' === $context_key ) {
+					$post_type = bbp_get_forum_post_type();
+				} else {
+					$post_type = bbp_get_topic_post_type();
+				}
 
 				// Forums & Topics used different keys :/
 				$key = ( bbp_get_forum_post_type() === $post_type )
@@ -602,7 +661,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * This method exists to provide backwards compatibility with bbPress 2.5,
 	 * which had caching surrounding the FIND_IN_SET usermeta queries.
 	 *
-	 * @since 2.6.3 bbPress (r6991)
+	 * @since 2.6.3 bbPress (r6992)
 	 *
 	 * @param string $meta_key
 	 * @param int    $object_id
@@ -653,7 +712,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * This method exists to provide backwards compatibility with bbPress 2.5,
 	 * which had caching surrounding the FIND_IN_SET queries in usermeta.
 	 *
-	 * @since 2.6.3 bbPress (r6991)
+	 * @since 2.6.3 bbPress (r6992)
 	 *
 	 * @param string $meta_key
 	 * @param int    $object_id
@@ -672,7 +731,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * This method exists to provide backwards compatibility with bbPress 2.5,
 	 * which had caching surrounding the FIND_IN_SET queries in usermeta.
 	 *
-	 * @since 2.6.3 bbPress (r6991)
+	 * @since 2.6.3 bbPress (r6992)
 	 *
 	 * @param string $meta_key
 	 * @param int    $object_id
@@ -692,7 +751,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * This method exists to provide backwards compatibility with bbPress 2.5,
 	 * which had caching surrounding the FIND_IN_SET queries in usermeta.
 	 *
-	 * @since 2.6.3 bbPress (r6991)
+	 * @since 2.6.3 bbPress (r6992)
 	 *
 	 * @param string $meta_key
 	 * @param int    $object_id
@@ -708,7 +767,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	/**
 	 * Turn a comma-separated string into an array of integers
 	 *
-	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.0 bbPress (r6876)
 	 *
 	 * @param string $results
 	 * @return array
@@ -721,6 +780,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * Add a user id to an object
 	 *
 	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.20 bbPress (r7989) Normalize object IDs before strict lookups.
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -731,10 +791,11 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function add_user_to_object( $object_id = 0, $user_id = 0, $meta_key = '', $meta_type = 'post', $unique = false ) {
+		$object_id  = absint( $object_id );
 		$retval     = false;
 		$option_key = $this->get_user_option_key( $meta_key, $object_id );
 		$object_ids = $this->parse_comma_list( get_user_option( $option_key, $user_id ) );
-		$exists     = array_search( $object_id, $object_ids );
+		$exists     = array_search( $object_id, $object_ids, true );
 
 		// Not already added, so add it
 		if ( false === $exists ) {
@@ -756,6 +817,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * Remove a user id from an object
 	 *
 	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.20 bbPress (r7989) Normalize object IDs before strict lookups.
 	 *
 	 * @param int    $object_id The object id
 	 * @param int    $user_id   The user id
@@ -765,10 +827,11 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * @return bool Returns true on success, false on failure
 	 */
 	public function remove_user_from_object( $object_id = 0, $user_id = 0, $meta_key = '', $meta_type = 'post' ) {
+		$object_id  = absint( $object_id );
 		$retval     = false;
 		$option_key = $this->get_user_option_key( $meta_key, $object_id );
 		$object_ids = $this->parse_comma_list( get_user_option( $option_key, $user_id ) );
-		$exists     = array_search( $object_id, $object_ids );
+		$exists     = array_search( $object_id, $object_ids, true );
 
 		// Exists, so remove it
 		if ( false !== $exists ) {
@@ -826,9 +889,9 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * Remove an object from all users
 	 *
 	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.20 bbPress (r7988) Report partial cleanup failures.
 	 *
 	 * @param int    $object_id The object id
-	 * @param int    $user_id   The user id
 	 * @param string $meta_key  The relationship key
 	 * @param string $meta_type The relationship type (usually 'post')
 	 *
@@ -841,7 +904,6 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 		$u_count  = count( $user_ids );
 
 		// Count number of removals
-		$removed  = array();
 		$r_count  = 0;
 
 		// Users have engaged, so remove them
@@ -849,11 +911,10 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 
 			// Loop through users and remove them from the object
 			foreach ( $user_ids as $user_id ) {
-				$removed[] = $this->remove_user_from_object( $object_id, $user_id, $meta_key, $meta_type );
+				if ( $this->remove_user_from_object( $object_id, $user_id, $meta_key, $meta_type ) ) {
+					++$r_count;
+				}
 			}
-
-			// Count the removed users
-			$r_count = count( $removed );
 		}
 
 		// Return true if successfully removed from all users
@@ -864,6 +925,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 * Remove all users from all objects
 	 *
 	 * @since 2.6.0 bbPress (r6844)
+	 * @since 2.6.20 bbPress (r7988) Report partial cleanup failures.
 	 *
 	 * @param string $meta_key  The relationship key
 	 * @param string $meta_type The relationship type (usually 'post')
@@ -875,11 +937,10 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 		// Query for users
 		$option_key = $this->get_user_option_key( $meta_key, 0, true );
 		$bbp_db     = bbp_db();
-		$user_ids   = $bbp_db->get_col( "SELECT user_id FROM {$bbp_db->usermeta} WHERE meta_key = '{$option_key}'" );
+		$user_ids   = $bbp_db->get_col( $bbp_db->prepare( "SELECT user_id FROM {$bbp_db->usermeta} WHERE meta_key = %s", $option_key ) );
 		$u_count    = count( $user_ids );
 
 		// Count number of removals
-		$removed    = array();
 		$r_count    = 0;
 
 		// Users have engaged, so remove them
@@ -887,11 +948,10 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 
 			// Loop through users and remove their user options
 			foreach ( $user_ids as $user_id ) {
-				$removed[] = $this->remove_user_from_all_objects( $user_id, $meta_key );
+				if ( $this->remove_user_from_all_objects( $user_id, $meta_key ) ) {
+					++$r_count;
+				}
 			}
-
-			// Count the removed users
-			$r_count = count( $removed );
 		}
 
 		// Return true if successfully removed from all users
@@ -921,7 +981,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 		if ( false === $user_ids ) {
 			$option_key = $this->get_user_option_key( $meta_key, $object_id, true );
 			$bbp_db     = bbp_db();
-			$user_ids   = $bbp_db->get_col( "SELECT user_id FROM {$bbp_db->usermeta} WHERE meta_key = '{$option_key}' and FIND_IN_SET('{$object_id}', meta_value) > 0" );
+			$user_ids   = $bbp_db->get_col( $bbp_db->prepare( "SELECT user_id FROM {$bbp_db->usermeta} WHERE meta_key = %s AND FIND_IN_SET( %d, meta_value ) > 0", $option_key, $object_id ) );
 
 			// Always cache results (even if empty, to prevent multiple misses)
 			$this->cache_set( $meta_key, $object_id, $user_ids );
@@ -944,7 +1004,7 @@ class BBP_User_Engagements_User extends BBP_User_Engagements_Base {
 	 */
 	public function get_query( $args = array(), $context_key = '', $meta_key = '', $meta_type = 'post' ) {
 		$user_id    = bbp_get_user_id( $args, true, true );
-		$option_key = $this->get_user_option_key( $meta_key );
+		$option_key = $this->get_user_option_key( $meta_key, 0, false, $context_key );
 		$object_ids = $this->parse_comma_list( get_user_option( $option_key, $user_id ) );
 
 		// Maybe trick WP_Query into ".ID IN (0)" to return no results

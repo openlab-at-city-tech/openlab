@@ -22,7 +22,7 @@ if ( ! class_exists( 'BBP_Component' ) ) :
  * @package bbPress
  * @subpackage Classes
  *
- * @since 2.0.0 bbPress (r2688)
+ * @since 2.0.0 bbPress (r2700)
  */
 class BBP_Component {
 
@@ -30,27 +30,27 @@ class BBP_Component {
 	 * @var string Unique name (for internal identification)
 	 * @internal
 	 */
-	var $name;
+	public $name;
 
 	/**
 	 * @var Unique ID (normally for custom post type)
 	 */
-	var $id;
+	public $id;
 
 	/**
 	 * @var string Unique slug (used in query string and permalinks)
 	 */
-	var $slug;
+	public $slug;
 
 	/**
 	 * @var WP_Query The loop for this component
 	 */
-	var $query;
+	public $query;
 
 	/**
 	 * @var string The current ID of the queried object
 	 */
-	var $current_id;
+	public $current_id;
 
 
 	/** Methods ***************************************************************/
@@ -58,7 +58,7 @@ class BBP_Component {
 	/**
 	 * bbPress Component loader
 	 *
-	 * @since 2.0.0 bbPress (r2700)
+	 * @since 2.1.0 bbPress (r3829)
 	 *
 	 * @param array $args Required. Supports these args:
 	 *  - name: Unique name (for internal identification)
@@ -80,7 +80,7 @@ class BBP_Component {
 	/**
 	 * Component global variables
 	 *
-	 * @since 2.0.0 bbPress (r2700)
+	 * @since 2.0.0 bbPress (r3376)
 	 *
 	 * @access private
 	 */
@@ -93,7 +93,7 @@ class BBP_Component {
 	/**
 	 * Include required files
 	 *
-	 * @since 2.0.0 bbPress (r2700)
+	 * @since 2.0.0 bbPress (r3376)
 	 *
 	 * @access private
 	 */
@@ -104,7 +104,7 @@ class BBP_Component {
 	/**
 	 * Setup the actions
 	 *
-	 * @since 2.0.0 bbPress (r2700)
+	 * @since 2.0.0 bbPress (r3376)
 	 *
 	 * @access private
 	 */
@@ -151,7 +151,7 @@ class BBP_Component {
 	 * @since 2.0.0 bbPress (r2700)
 	 */
 	public function generate_rewrite_rules( $wp_rewrite ) {
-		do_action_ref_array( 'bbp_' . $this->name . '_generate_rewrite_rules', $wp_rewrite );
+		do_action_ref_array( 'bbp_' . $this->name . '_generate_rewrite_rules', array( &$wp_rewrite ) );
 	}
 }
 endif; // BBP_Component
@@ -193,7 +193,7 @@ class BBP_Walker_Dropdown extends Walker {
 	/**
 	 * Set the tree_type
 	 *
-	 * @since 2.0.0 bbPress (r2746)
+	 * @since 2.1.0 bbPress (r3829)
 	 */
 	public function __construct() {
 		$this->tree_type = bbp_get_forum_post_type();
@@ -222,10 +222,12 @@ class BBP_Walker_Dropdown extends Walker {
 		// - the post type is a forum
 		// - the forum is a category
 		// - forum is closed
-		if (	( true === $args['disable_categories'] )
+		if ( ( true === $args['disable_categories'] )
 				&& ( bbp_get_forum_post_type() === $object->post_type )
 				&& ( bbp_is_forum_category( $object->ID )
-					|| ( ! current_user_can( 'edit_forum', $object->ID ) && bbp_is_forum_closed( $object->ID )
+					|| ( ! current_user_can( 'edit_forum', $object->ID )
+						&& bbp_is_forum_closed( $object->ID )
+						&& ( ! bbp_is_topic_edit() || ( (int) bbp_get_topic_forum_id() !== (int) $object->ID ) )
 				)
 			) ) {
 			$output .= ' disabled="disabled" value=""';
@@ -490,6 +492,7 @@ class BBP_Walker_Reply_Dropdown extends Walker {
 
 		// Determine reply title (either post_title, or excerpt of post_content)
 		$title = ! empty( $object->post_title ) ? $object->post_title : wp_html_excerpt( $object->post_content, 10 );
+		/* translators: 1: Reply ID, 2: Reply title */
 		$title   = sprintf( esc_html__( '%1$s - %2$s', 'bbpress' ), (int) $object->ID, $title );
 		$title   = apply_filters( 'bbp_walker_dropdown_post_title', $title, $output, $object, $depth, $args );
 

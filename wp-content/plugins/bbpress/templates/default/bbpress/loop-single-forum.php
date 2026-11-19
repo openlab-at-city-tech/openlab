@@ -15,13 +15,19 @@ defined( 'ABSPATH' ) || exit;
 <ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?>>
 	<li class="bbp-forum-info">
 
-		<?php if ( bbp_is_user_home() && bbp_is_subscriptions() ) : ?>
+		<?php if ( bbp_is_subscriptions() && bbp_current_user_can_manage_engagements( 'subscription' ) ) : ?>
 
 			<span class="bbp-row-actions">
 
 				<?php do_action( 'bbp_theme_before_forum_subscription_action' ); ?>
 
-				<?php bbp_forum_subscription_link( array( 'before' => '', 'subscribe' => '+', 'unsubscribe' => '&times;' ) ); ?>
+				<?php bbp_forum_subscription_link(
+					array(
+						'before'      => '',
+						'subscribe'   => '+',
+						'unsubscribe' => '&times;'
+					)
+				); ?>
 
 				<?php do_action( 'bbp_theme_after_forum_subscription_action' ); ?>
 
@@ -67,7 +73,12 @@ defined( 'ABSPATH' ) || exit;
 
 			<?php do_action( 'bbp_theme_before_topic_author' ); ?>
 
-			<span class="bbp-topic-freshness-author"><?php bbp_author_link( array( 'post_id' => bbp_get_forum_last_active_id(), 'size' => 14 ) ); ?></span>
+			<span class="bbp-topic-freshness-author"><?php bbp_author_link(
+				array(
+					'post_id' => bbp_get_forum_last_active_id(),
+					'size'    => 14
+				)
+			); ?></span>
 
 			<?php do_action( 'bbp_theme_after_topic_author' ); ?>
 

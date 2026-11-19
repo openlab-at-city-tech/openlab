@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @see wp_check_post_lock()
  *
- * @since 2.6.0 bbPress (r6340)
+ * @since 2.6.0 bbPress (r6341)
  *
  * @param int $post_id ID of the post to check for editing
  * @return integer False: not locked or locked by current user. Int: user ID of user with lock.
@@ -23,21 +23,21 @@ defined( 'ABSPATH' ) || exit;
 function bbp_check_post_lock( $post_id = 0 ) {
 
 	// Bail if no post
-	if ( !$post = get_post( $post_id ) ) {
+	if ( ! $post = get_post( $post_id ) ) {
 		return false;
 	}
 
 	// Bail if no lock
-	if ( !$lock = get_post_meta( $post->ID, '_edit_lock', true ) ) {
+	if ( ! $lock = get_post_meta( $post->ID, '_edit_lock', true ) ) {
 		return false;
 	}
 
 	// Get lock
 	$lock = explode( ':', $lock );
 	$time = $lock[0];
-	$user = (int) isset( $lock[1] )
-		? $lock[1]
-		: get_post_meta( $post->ID, '_edit_last', true );
+	$user = isset( $lock[1] )
+		? (int) $lock[1]
+		: (int) get_post_meta( $post->ID, '_edit_last', true );
 
 	// Filter editing window duration
 	$time_window = apply_filters( 'bbp_check_post_lock_window', 3 * MINUTE_IN_SECONDS );
@@ -53,16 +53,16 @@ function bbp_check_post_lock( $post_id = 0 ) {
 /**
  * Mark the post as currently being edited by the current user
  *
- * @since 2.6.0 bbPress (r6340)
+ * @since 2.6.0 bbPress (r6341)
  *
  * @param int $post_id ID of the post to being edited
  * @return bool|array Returns false if the post doesn't exist of there is no current user, or
- * 	an array of the lock time and the user ID.
+ *  an array of the lock time and the user ID.
  */
 function bbp_set_post_lock( $post_id = 0 ) {
 
 	// Bail if no post
-	if ( !$post = get_post( $post_id ) ) {
+	if ( ! $post = get_post( $post_id ) ) {
 		return false;
 	}
 

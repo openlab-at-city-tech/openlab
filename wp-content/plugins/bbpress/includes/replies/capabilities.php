@@ -18,21 +18,31 @@
  */
 function bbp_get_reply_caps() {
 
-	// Filter & return
-	return (array) apply_filters( 'bbp_get_reply_caps', array(
-		'edit_posts'          => 'edit_replies',
-		'edit_others_posts'   => 'edit_others_replies',
-		'publish_posts'       => 'publish_replies',
-		'read_private_posts'  => 'read_private_replies',
-		'delete_posts'        => 'delete_replies',
-		'delete_others_posts' => 'delete_others_replies'
-	) );
+	/**
+	 * Filters the reply capabilities.
+	 *
+	 * @since 2.0.0 bbPress (r2593)
+	 *
+	 * @param array $caps An array of reply capabilities with keys mapping to WordPress capabilities.
+	 */
+	return (array) apply_filters(
+		'bbp_get_reply_caps',
+		array(
+			'create_posts'        => 'create_replies',
+			'edit_posts'          => 'edit_replies',
+			'edit_others_posts'   => 'edit_others_replies',
+			'publish_posts'       => 'publish_replies',
+			'read_private_posts'  => 'read_private_replies',
+			'delete_posts'        => 'delete_replies',
+			'delete_others_posts' => 'delete_others_replies'
+		)
+	);
 }
 
 /**
  * Maps topic capabilities
  *
- * @since 2.2.0 bbPress (r4242)
+ * @since 2.2.0 bbPress (r4244)
  *
  * @param array  $caps    Capabilities for meta capability.
  * @param string $cap     Capability name.
@@ -45,13 +55,23 @@ function bbp_map_reply_meta_caps( $caps = array(), $cap = '', $user_id = 0, $arg
 
 	// What capability is being checked?
 	switch ( $cap ) {
+		case 'create_replies' :
+			$caps = bbp_user_can_post_in_forums( $user_id )
+				? map_meta_cap( 'edit_replies', $user_id )
+				: array( 'do_not_allow' );
+			break;
 
 		/** Reading ***********************************************************/
 
 		case 'read_reply' :
+			$can_read = user_can( $user_id, 'spectate' ) || bbp_is_anonymous();
+
+			if ( ! $can_read && ! empty( $args[0] ) ) {
+				$can_read = (bool) apply_filters( 'bbp_allow_read_without_spectate', false, $user_id, (int) $args[0], $cap );
+			}
 
 			// User cannot spectate
-			if ( ! user_can( $user_id, 'spectate' ) ) {
+			if ( ! $can_read ) {
 				$caps = array( 'do_not_allow' );
 
 			// Do some post ID based logic
@@ -71,7 +91,15 @@ function bbp_map_reply_meta_caps( $caps = array(), $cap = '', $user_id = 0, $arg
 
 					// Post is public
 					if ( bbp_get_public_status_id() === $_post->post_status ) {
-						$caps = array( 'spectate' );
+
+						// Anonymous users do not have caps, but can 'exist'
+						if ( bbp_is_anonymous() ) {
+							$caps = array( 'exist' );
+
+						// Registered users need the 'spectate' cap
+						} else {
+							$caps = array( 'spectate' );
+						}
 
 					// User is author so allow read
 					} elseif ( (int) $user_id === (int) $_post->post_author ) {
@@ -93,6 +121,10 @@ function bbp_map_reply_meta_caps( $caps = array(), $cap = '', $user_id = 0, $arg
 		/** Publishing ********************************************************/
 
 		case 'publish_replies' :
+			if ( ! bbp_user_can_post_in_forums( $user_id ) ) {
+				$caps = array( 'do_not_allow' );
+				break;
+			}
 
 			// Moderators can always publish
 			if ( user_can( $user_id, 'moderate' ) ) {
@@ -141,9 +173,26 @@ function bbp_map_reply_meta_caps( $caps = array(), $cap = '', $user_id = 0, $arg
 
 				// Get post type object
 				$post_type = get_post_type_object( $_post->post_type );
+				$forum_id  = bbp_get_reply_forum_id( $_post->ID );
+
+				// An auto-draft's first save creates a reply.
+				if ( 'auto-draft' === $_post->post_status && ! bbp_user_can_post_in_forums( $user_id ) ) {
+					$caps = array( 'do_not_allow' );
+
+				// Frozen forums permit edits only by Keymasters and Moderators.
+				} elseif ( ! bbp_user_can_edit_in_forums( $user_id ) ) {
+					$caps = array( 'do_not_allow' );
+
+				// Anonymous users cannot edit existing replies
+				} elseif ( empty( $user_id ) ) {
+					$caps = array( 'do_not_allow' );
 
 				// Add 'do_not_allow' cap if user is spam or deleted
-				if ( bbp_is_user_inactive( $user_id ) ) {
+				} elseif ( bbp_is_user_inactive( $user_id ) ) {
+					$caps = array( 'do_not_allow' );
+
+				// User cannot edit a reply in a restricted forum they cannot read
+				} elseif ( bbp_is_forum_restricted_for_user( $forum_id, $user_id ) ) {
 					$caps = array( 'do_not_allow' );
 
 				// Moderators can always edit forum content

@@ -36,7 +36,7 @@ function bbp_get_default_options() {
 
 			/** Flags *************************************************************/
 
-			'_bbp_flag_initial_content'   => 1,         // Flag to indicate initial content was created
+			'_bbp_flag_initial_content'   => 1,         // Flag to create initial content
 
 			/** Features **********************************************************/
 
@@ -58,6 +58,7 @@ function bbp_get_default_options() {
 
 			/** Settings **********************************************************/
 
+			'_bbp_forums_status'          => 'open',    // Site-wide forum content status
 			'_bbp_default_role'           => $role,     // Default forums role
 			'_bbp_edit_lock'              => 5,         // Lock post editing after 5 minutes
 			'_bbp_throttle_time'          => 10,        // Throttle post time to 10 seconds
@@ -160,7 +161,7 @@ function bbp_get_default_options() {
  * Hooked to bbp_activate, it is only called once when bbPress is activated.
  * This is non-destructive, so existing settings will not be overridden.
  *
- * @since 2.0.0 bbPress (r3421)
+ * @since 2.0.0 bbPress (r2786)
  */
 function bbp_add_options() {
 
@@ -196,7 +197,7 @@ function bbp_delete_options() {
  * Add filters to each bbPress option and allow them to be overloaded from
  * inside the $bbp->options array.
  *
- * @since 2.0.0 bbPress (r3451)
+ * @since 2.0.0 bbPress (r3452)
  */
 function bbp_setup_option_filters() {
 
@@ -215,7 +216,7 @@ function bbp_setup_option_filters() {
  *
  * This function should not be called directly.
  *
- * @since 2.0.0 bbPress (r3451)
+ * @since 2.6.0 bbPress (r6544)
  * @access private
  *
  * @param bool   $value  Default value false
@@ -239,7 +240,7 @@ function bbp_filter_pre_get_option( $value = false, $option = '' ) {
  *
  * This function should not be called directly.
  *
- * @since 2.6.0 bbPress (r3451)
+ * @since 2.6.0 bbPress (r6544)
  * @access private
  *
  * @param bool $value Optional. Default value false
@@ -264,7 +265,7 @@ function bbp_filter_default_option( $default = false, $option = '', $passed_defa
 /**
  * Loads & caches bbPress options if a persistent cache is not being used.
  *
- * @since 2.6.0
+ * @since 2.6.0 bbPress (r6544)
  */
 function bbp_pre_load_options() {
 
@@ -322,10 +323,125 @@ function bbp_pre_load_options() {
 
 /** Active? *******************************************************************/
 
+/** Forum Status **************************************************************/
+
+/**
+ * Return the available site-wide forum statuses.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @return array Status labels keyed by status ID.
+ */
+function bbp_get_forums_statuses() {
+	$statuses = array(
+		'open'   => _x( 'Open',   'Site-wide forum status', 'bbpress' ),
+		'closed' => _x( 'Closed', 'Site-wide forum status', 'bbpress' ),
+		'frozen' => _x( 'Frozen', 'Site-wide forum status', 'bbpress' )
+	);
+
+	return (array) apply_filters( 'bbp_get_forums_statuses', $statuses );
+}
+
+/**
+ * Get the site-wide forums status.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @return string Valid status key, or open when the saved value is invalid.
+ */
+function bbp_get_forums_status() {
+	$status   = get_option( '_bbp_forums_status', 'open' );
+	$statuses = bbp_get_forums_statuses();
+
+	return is_string( $status ) && isset( $statuses[ $status ] )
+		? $status
+		: 'open';
+}
+
+/**
+ * Check the site-wide forums status.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @param string $status Status to check.
+ * @return bool Whether the current status matches.
+ */
+function bbp_is_forums_status( $status ) {
+	return is_string( $status ) && ( bbp_get_forums_status() === $status );
+}
+
+/**
+ * Check whether a user is a Keymaster or site-wide Moderator.
+ *
+ * Read the assigned capability directly so scoped BuddyPress and forum
+ * moderation cannot grant a site-wide exception.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @param int $user_id User ID.
+ * @return bool Whether the user has a site-wide moderation role or capability.
+ */
+function bbp_user_is_keymaster_or_moderator( $user_id ) {
+	$user = get_userdata( (int) $user_id );
+
+	return $user && ( bbp_is_user_keymaster( $user->ID ) || ! empty( $user->allcaps['moderate'] ) );
+}
+
+/**
+ * Check whether the site-wide status allows a user to post anywhere.
+ *
+ * This policy supplements the existing post-type and per-forum permissions.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @param int $user_id User ID.
+ * @return bool Whether the site-wide status allows posting in all forums.
+ */
+function bbp_user_can_post_in_forums( $user_id ) {
+	if ( bbp_is_forums_status( 'open' ) ) {
+		$retval = true;
+	} elseif ( bbp_is_forums_status( 'frozen' ) ) {
+		$retval = false;
+	} else {
+		$retval = bbp_user_is_keymaster_or_moderator( $user_id );
+	}
+
+	return (bool) apply_filters( 'bbp_user_can_post_in_forums', $retval, $user_id, bbp_get_forums_status() );
+}
+
+/**
+ * Check whether the site-wide status allows the current user to post anywhere.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @return bool Whether the site-wide status allows posting in all forums.
+ */
+function bbp_current_user_can_post_in_forums() {
+	return bbp_user_can_post_in_forums( get_current_user_id() );
+}
+
+/**
+ * Check whether the site-wide status permits a user to edit forums, topics, and replies.
+ *
+ * @since 2.6.20 bbPress (r7854)
+ *
+ * @param int $user_id User ID.
+ * @return bool Whether the site-wide status permits the user to edit.
+ */
+function bbp_user_can_edit_in_forums( $user_id ) {
+	if ( ! bbp_is_forums_status( 'frozen' ) ) {
+		$retval = true;
+	} else {
+		$retval = bbp_user_is_keymaster_or_moderator( $user_id );
+	}
+
+	return (bool) apply_filters( 'bbp_user_can_edit_in_forums', $retval, $user_id, bbp_get_forums_status() );
+}
+
 /**
  * Checks if favorites feature is enabled.
  *
- * @since 2.0.0 bbPress (r2658)
+ * @since 2.0.0 bbPress (r2680)
  *
  * @param bool $default Optional.Default value true
  * @return bool Is favorites enabled or not
@@ -339,7 +455,7 @@ function bbp_is_favorites_active( $default = 1 ) {
 /**
  * Checks if subscription feature is enabled.
  *
- * @since 2.0.0 bbPress (r2658)
+ * @since 2.0.0 bbPress (r2668)
  *
  * @param bool $default Optional.Default value true
  * @return bool Is subscription enabled or not
@@ -353,7 +469,7 @@ function bbp_is_subscriptions_active( $default = 1 ) {
 /**
  * Checks if engagements feature is enabled.
  *
- * @since 2.6.0 bbPress (r6320)
+ * @since 2.6.0 bbPress (r6321)
  *
  * @param bool $default Optional.Default value true
  * @return bool Is engagements enabled or not
@@ -367,7 +483,7 @@ function bbp_is_engagements_active( $default = 1 ) {
 /**
  * Is content editing available when posting new topics & replies?
  *
- * @since 2.6.0 bbPress (r6441)
+ * @since 2.6.0 bbPress (r6442)
  *
  * @param bool $default Optional. Default value false
  * @return bool Is content editing allowed?
@@ -381,7 +497,7 @@ function bbp_allow_content_edit( $default = 1 ) {
 /**
  * Is content throttling engaged when posting new topics & replies?
  *
- * @since 2.6.0 bbPress (r6441)
+ * @since 2.6.0 bbPress (r6442)
  *
  * @param bool $default Optional. Default value false
  * @return bool Is content throttling allowed?
@@ -395,7 +511,7 @@ function bbp_allow_content_throttle( $default = 1 ) {
 /**
  * Are topic tags allowed
  *
- * @since 2.2.0 bbPress (r4097)
+ * @since 2.2.0 bbPress (r4098)
  *
  * @param bool $default Optional. Default value true
  * @return bool Are tags allowed?
@@ -424,7 +540,7 @@ function bbp_allow_forum_mods( $default = 1 ) {
 /**
  * Are moderators allowed to edit users
  *
- * @since 2.6.0 bbPress (r6562)
+ * @since 2.6.0 bbPress (r6563)
  *
  * @param bool $default Optional. Default value true.
  *
@@ -439,7 +555,7 @@ function bbp_allow_super_mods( $default = 0 ) {
 /**
  * Is forum-wide searching allowed
  *
- * @since 2.4.0 bbPress (r4970)
+ * @since 2.4.0 bbPress (r4971)
  *
  * @param bool $default Optional. Default value true
  * @return bool Is forum-wide searching allowed?
@@ -453,15 +569,18 @@ function bbp_allow_search( $default = 1 ) {
 /**
  * Are threaded replies allowed
  *
- * @since 2.4.0 bbPress (r4964)
+ * @since 2.4.0 bbPress (r4963)
  *
  * @param bool $default Optional. Default value false
  * @return bool Are threaded replies allowed?
  */
 function bbp_allow_threaded_replies( $default = 0 ) {
 
+	// Apply the legacy filter first for backward compatibility
+	$allow = (bool) apply_filters( '_bbp_allow_threaded_replies', (bool) get_option( '_bbp_allow_threaded_replies', $default ) );
+
 	// Filter & return
-	return (bool) apply_filters( '_bbp_allow_threaded_replies', (bool) get_option( '_bbp_allow_threaded_replies', $default ) );
+	return (bool) apply_filters( 'bbp_allow_threaded_replies', $allow );
 }
 
 /**
@@ -481,7 +600,7 @@ function bbp_thread_replies_depth( $default = 2 ) {
 /**
  * Are topic and reply revisions allowed
  *
- * @since 2.0.0 bbPress (r3412)
+ * @since 2.0.0 bbPress (r3416)
  *
  * @param bool $default Optional. Default value true
  * @return bool Are revisions allowed?
@@ -495,7 +614,7 @@ function bbp_allow_revisions( $default = 1 ) {
 /**
  * Is the anonymous posting allowed?
  *
- * @since 2.0.0 bbPress (r2659)
+ * @since 2.0.0 bbPress (r2617)
  *
  * @param bool $default Optional. Default value
  * @return bool Is anonymous posting allowed?
@@ -538,7 +657,7 @@ function bbp_get_default_role( $default = 'bbp_participant' ) {
 /**
  * Use the WordPress editor if available
  *
- * @since 2.0.0 bbPress (r3386)
+ * @since 2.1.0 bbPress (r3586)
  *
  * @param bool $default Optional. Default value true
  * @return bool Use WP editor?
@@ -552,7 +671,7 @@ function bbp_use_wp_editor( $default = 1 ) {
 /**
  * Use WordPress's oEmbed API
  *
- * @since 2.1.0 bbPress (r3752)
+ * @since 2.1.0 bbPress (r3753)
  *
  * @param bool $default Optional. Default value true
  * @return bool Use oEmbed?
@@ -566,7 +685,7 @@ function bbp_use_autoembed( $default = 1 ) {
 /**
  * Get the current theme package ID
  *
- * @since 2.1.0 bbPress (r3829)
+ * @since 2.1.0 bbPress (r3830)
  *
  * @param string $default Optional. Default value 'default'
  * @return string ID of the theme-package
@@ -605,7 +724,7 @@ function bbp_title_max_length( $default = 80 ) {
  * Output the number of minutes a topic or reply can be edited after it's
  * published. Used by `bbp_past_edit_lock()`.
  *
- * @since 2.6.0 bbPress (r6868)
+ * @since 2.6.0 bbPress (r6869)
  *
  * @param bool $default Optional. Default value 5
  */
@@ -616,7 +735,7 @@ function bbp_edit_lock( $default = 5 ) {
 	 * Return the number of minutes a topic or reply can be edited after it's
 	 * published. Used by `bbp_past_edit_lock()`.
 	 *
-	 * @since 2.6.0 bbPress (r6868)
+	 * @since 2.6.0 bbPress (r6869)
 	 *
 	 * @param bool $default Optional. Default value 5
 	 * @return int Is anonymous posting allowed?
@@ -714,33 +833,57 @@ function bbp_settings_integration( $default = 'basic' ) {
 }
 
 /**
- * How to interact with engagements
+ * Check whether an engagements strategy is valid.
  *
- * There are 3 possible strategies:
+ * @since 2.6.20 bbPress (r8009)
+ *
+ * @param string $strategy Engagements strategy to check.
+ * @return bool Whether the strategy class exists and is not the base class.
+ */
+function bbp_is_valid_engagements_strategy( $strategy ) {
+	if ( ! is_string( $strategy ) ) {
+		return false;
+	}
+
+	$class_name         = 'BBP_User_Engagements_' . ucwords( $strategy );
+	$disallowed_classes = array(
+		strtolower( 'BBP_User_Engagements_Base' ),
+	);
+
+	return class_exists( $class_name ) && ! in_array( strtolower( $class_name ), $disallowed_classes, true );
+}
+
+/**
+ * How to interact with engagements.
+ *
+ * There are 3 bundled strategies:
  * - 'meta' 2.6 and higher. Uses multiple postmeta keys.
  * - 'user' Pre-2.6. Uses comma-separated string of IDs in usermeta.
  * - 'term' Alternate. Uses taxonomy term relationships.
  *
- * @since 2.6.0 bbPress (r6875)
+ * @since 2.6.0 bbPress (r6876)
+ * @since 2.6.20 bbPress (r8009) Validates stored and filtered strategy values.
  *
- * @param bool $default Optional. Default value false
- * @return string How to interact with engagements
+ * @param string $default Optional. Default value 'meta'.
+ * @return string Valid engagements strategy, or 'meta' if invalid.
  */
 function bbp_engagements_strategy( $default = 'meta' ) {
 
 	// Get the option value
 	$integration = get_option( '_bbp_engagements_strategy', $default );
 
-	// Check that class exists, or fallback
-	$class_name  = 'BBP_User_Engagements_' . ucwords( $integration );
-
 	// Fallback to 'meta' if invalid
-	if ( ! class_exists( $class_name ) ) {
+	if ( ! bbp_is_valid_engagements_strategy( $integration ) ) {
 		$integration = 'meta';
 	}
 
-	// Filter & return
-	return apply_filters( 'bbp_engagements_strategy', $integration, $default );
+	// Filter the integration
+	$integration = apply_filters( 'bbp_engagements_strategy', $integration, $default );
+
+	// Return a valid integration
+	return bbp_is_valid_engagements_strategy( $integration )
+		? $integration
+		: 'meta';
 }
 
 /** Slugs *********************************************************************/
@@ -748,7 +891,7 @@ function bbp_engagements_strategy( $default = 'meta' ) {
 /**
  * Return the root slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'forums'
  * @return string
@@ -762,7 +905,7 @@ function bbp_get_root_slug( $default = 'forums' ) {
 /**
  * Are we including the root slug in front of forum pages?
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param bool $default Optional. Default value true
  * @return bool
@@ -790,7 +933,7 @@ function bbp_show_on_root( $default = 'forums' ) {
 /**
  * Maybe return the root slug, based on whether or not it's included in the url
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'forums'
  * @return string
@@ -808,7 +951,7 @@ function bbp_maybe_get_root_slug() {
 /**
  * Return the single forum slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'forum'
  * @return string
@@ -822,7 +965,7 @@ function bbp_get_forum_slug( $default = 'forum' ) {
 /**
  * Return the topic archive slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'topics'
  * @return string
@@ -836,7 +979,7 @@ function bbp_get_topic_archive_slug( $default = 'topics' ) {
 /**
  * Return the reply archive slug
  *
- * @since 2.4.0 bbPress (r4925)
+ * @since 2.4.0 bbPress (r4926)
  *
  * @param string $default Optional. Default value 'replies'
  * @return string
@@ -850,7 +993,7 @@ function bbp_get_reply_archive_slug( $default = 'replies' ) {
 /**
  * Return the single topic slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'topic'
  * @return string
@@ -864,7 +1007,7 @@ function bbp_get_topic_slug( $default = 'topic' ) {
 /**
  * Return the topic-tag taxonomy slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3762)
  *
  * @param string $default Optional. Default value 'topic-tag'
  * @return string
@@ -878,7 +1021,7 @@ function bbp_get_topic_tag_tax_slug( $default = 'topic-tag' ) {
 /**
  * Return the single reply slug (used mostly for editing)
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'reply'
  * @return string
@@ -892,7 +1035,7 @@ function bbp_get_reply_slug( $default = 'reply' ) {
 /**
  * Return the single user slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'users'
  * @return string
@@ -906,7 +1049,7 @@ function bbp_get_user_slug( $default = 'users' ) {
 /**
  * Return the single user favorites slug
  *
- * @since 2.2.0 bbPress (r4187)
+ * @since 2.2.0 bbPress (r4188)
  *
  * @param string $default Optional. Default value 'favorites'
  * @return string
@@ -920,7 +1063,7 @@ function bbp_get_user_favorites_slug( $default = 'favorites' ) {
 /**
  * Return the single user subscriptions slug
  *
- * @since 2.2.0 bbPress (r4187)
+ * @since 2.2.0 bbPress (r4188)
  *
  * @param string $default Optional. Default value 'subscriptions'
  * @return string
@@ -948,7 +1091,7 @@ function bbp_get_user_engagements_slug( $default = 'engagements' ) {
 /**
  * Return the topic view slug
  *
- * @since 2.1.0 bbPress (r3759)
+ * @since 2.1.0 bbPress (r3760)
  *
  * @param string $default Optional. Default value 'view'
  * @return string
@@ -957,6 +1100,26 @@ function bbp_get_view_slug( $default = 'view' ) {
 
 	// Filter & return
 	return apply_filters( 'bbp_get_view_slug', bbp_maybe_get_root_slug() . get_option( '_bbp_view_slug', $default ) );
+}
+
+/**
+ * Return the route root slugs.
+ *
+ * @since 2.6.21 bbPress (r8065)
+ *
+ * @return array Route root slugs.
+ */
+function bbp_get_route_root_slugs() {
+	$slugs = array(
+		bbp_get_topic_slug(),
+		bbp_get_topic_tag_tax_slug(),
+		bbp_get_reply_slug(),
+		bbp_get_user_slug(),
+		bbp_get_view_slug(),
+	);
+
+	// Filter & return
+	return (array) apply_filters( 'bbp_get_route_root_slugs', $slugs );
 }
 
 /**
@@ -976,7 +1139,7 @@ function bbp_get_search_slug( $default = 'search' ) {
 /**
  * Return the edit slug
  *
- * @since 2.6.2 bbPress (r6965)
+ * @since 2.6.2 bbPress (r6966)
  *
  * @param string $default Optional. Default value 'edit'
  * @return string
@@ -992,7 +1155,7 @@ function bbp_get_edit_slug( $default = 'edit' ) {
 /**
  * Checks if there is a previous BuddyPress Forum configuration
  *
- * @since 2.1.0 bbPress (r3790)
+ * @since 2.1.0 bbPress (r3791)
  *
  * @param string $default Optional. Default empty string
  * @return string The location of the bb-config.php file, if any

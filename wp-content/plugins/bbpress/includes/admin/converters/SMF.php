@@ -10,7 +10,7 @@
 /**
  * Implementation of SMF Forum converter.
  *
- * @since 2.5.0 bbPress (r5189)
+ * @since 2.5.0 bbPress (r5191)
  *
  * @link Codex Docs https://codex.bbpress.org/import-forums/smf
  */
@@ -137,22 +137,22 @@ class SMF extends BBP_Converter_Base {
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_date_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 		$this->field_map[] = array(
 			'to_type'      => 'forum',
 			'to_fieldname' => 'post_modified_gmt',
-			'default'      => date('Y-m-d H:i:s')
+			'default'      => date( 'Y-m-d H:i:s' ) // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		);
 
 		/** Forum Subscriptions Section ***************************************/
@@ -666,7 +666,11 @@ class SMF extends BBP_Converter_Base {
 	 * as one value. Array values are auto sanitized by WordPress.
 	 */
 	public function callback_savepass( $field, $row ) {
-		$pass_array = array( 'hash' => $field, 'username' => $row['member_name'] );
+		$pass_array = array(
+			'hash'     => $field,
+			'username' => isset( $row['member_name'] ) ? wp_slash( (string) $row['member_name'] ) : ''
+		);
+
 		return $pass_array;
 	}
 
@@ -675,8 +679,23 @@ class SMF extends BBP_Converter_Base {
 	 * to a pass the user has typed in.
 	 */
 	public function authenticate_pass( $password, $serialized_pass ) {
-		$pass_array = unserialize( $serialized_pass );
-		return ( $pass_array['hash'] === sha1( strtolower( $pass_array['username'] ) . $password ) ? true : false );
+		if ( ! is_string( $serialized_pass ) ) {
+			return false;
+		}
+
+		// Unserialize the password, with safeguards
+		$pass_array = $this->unserialize_pass( $serialized_pass );
+
+		// Bail if missing or invalid values
+		if ( ! is_string( $password ) || ! is_array( $pass_array ) || ! isset( $pass_array['hash'], $pass_array['username'] ) || ! is_string( $pass_array['hash'] ) || ! is_string( $pass_array['username'] ) ) {
+			return false;
+		}
+
+		// Return comparison
+		return hash_equals(
+			$pass_array['hash'],
+			sha1( strtolower( $pass_array['username'] ) . $password )
+		);
 	}
 
 	/**
@@ -736,75 +755,75 @@ class SMF extends BBP_Converter_Base {
 	protected function callback_html( $field ) {
 
 		// Strips SMF custom HTML first from $field before parsing $field to parser.php
-		$SMF_markup = $field;
-		$SMF_markup = html_entity_decode( $SMF_markup );
+		$smf_markup = $field;
+		$smf_markup = html_entity_decode( $smf_markup );
 
 		// Replace '[quote]' with '<blockquote>'
-		$SMF_markup = preg_replace( '/\[quote\]/',        '<blockquote>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[quote\]/',       '<blockquote>',  $smf_markup );
 		// Replace '[quote ($1)]' with '<blockquote>"
-		$SMF_markup = preg_replace( '/\[quote (.*?)\]/' , '<blockquote>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[quote (.*?)\]/', '<blockquote>',  $smf_markup );
 		// Replace '[/quote]' with '</blockquote>'
-		$SMF_markup = preg_replace( '/\[\/quote\]/',      '</blockquote>', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/quote\]/',     '</blockquote>', $smf_markup );
 
 		// Replace '[glow]' with ''
-		$SMF_markup = preg_replace( '/\[glow\]/',   '',       $SMF_markup );
+		$smf_markup = preg_replace( '/\[glow\]/',   '',       $smf_markup );
 		// Replace '[glow]' with ''
-		$SMF_markup = preg_replace( '/\[glow=(.*?)\]/',   '', $SMF_markup );
+		$smf_markup = preg_replace( '/\[glow=(.*?)\]/',   '', $smf_markup );
 		// Replace '[/glow]' with ''
-		$SMF_markup = preg_replace( '/\[\/glow\]/', '',       $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/glow\]/', '',       $smf_markup );
 
 		// Replace '[shadow]' with ''
-		$SMF_markup = preg_replace( '/\[shadow\]/',   '',       $SMF_markup );
+		$smf_markup = preg_replace( '/\[shadow\]/',   '',       $smf_markup );
 		// Replace '[shadow]' with ''
-		$SMF_markup = preg_replace( '/\[shadow=(.*?)\]/',   '', $SMF_markup );
+		$smf_markup = preg_replace( '/\[shadow=(.*?)\]/',   '', $smf_markup );
 		// Replace '[/shadow]' with ''
-		$SMF_markup = preg_replace( '/\[\/shadow\]/', '',       $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/shadow\]/', '',       $smf_markup );
 
 		// Replace '[move]' with ''
-		$SMF_markup = preg_replace( '/\[move\]/',   '', $SMF_markup );
+		$smf_markup = preg_replace( '/\[move\]/',   '', $smf_markup );
 		// Replace '[/move]' with ''
-		$SMF_markup = preg_replace( '/\[\/move\]/', '', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/move\]/', '', $smf_markup );
 
 		// Replace '[table]' with '<table>'
-		$SMF_markup = preg_replace( '/\[table\]/',   '<table>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[table\]/',   '<table>',  $smf_markup );
 		// Replace '[/table]' with '</table>'
-		$SMF_markup = preg_replace( '/\[\/table\]/', '</table>', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/table\]/', '</table>', $smf_markup );
 		// Replace '[tr]' with '<tr>'
-		$SMF_markup = preg_replace( '/\[tr\]/',   '<tr>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[tr\]/',   '<tr>',  $smf_markup );
 		// Replace '[/tr]' with '</tr>'
-		$SMF_markup = preg_replace( '/\[\/tr\]/', '</tr>', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/tr\]/', '</tr>', $smf_markup );
 		// Replace '[td]' with '<td>'
-		$SMF_markup = preg_replace( '/\[td\]/',   '<td>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[td\]/',   '<td>',  $smf_markup );
 		// Replace '[/td]' with '</td>'
-		$SMF_markup = preg_replace( '/\[\/td\]/', '</td>', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/td\]/', '</td>', $smf_markup );
 
 		// Replace '[list]' with '<ul>'
-		$SMF_markup = preg_replace( '/\[list\]/',     '<ul>',                      $SMF_markup );
+		$smf_markup = preg_replace( '/\[list\]/',     '<ul>',                      $smf_markup );
 		// Replace '[liist type=decimal]' with '<ol type="a">'
-		$SMF_markup = preg_replace( '/\[list\ type=decimal\]/',   '<ol type="a">', $SMF_markup );
+		$smf_markup = preg_replace( '/\[list\ type=decimal\]/',   '<ol type="a">', $smf_markup );
 		// Replace '[li]' with '<li>'
-		$SMF_markup = preg_replace( '/\[li\]/',   '<li>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[li\]/',   '<li>',  $smf_markup );
 		// Replace '[/li]' with '</li>'
-		$SMF_markup = preg_replace( '/\[\/li\]/', '</li>', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/li\]/', '</li>', $smf_markup );
 
 		// Replace '[tt]' with '<tt>'
-		$SMF_markup = preg_replace( '/\[tt\]/',   '<tt>',  $SMF_markup );
+		$smf_markup = preg_replace( '/\[tt\]/',   '<tt>',  $smf_markup );
 		// Replace '[/tt]' with '</tt>'
-		$SMF_markup = preg_replace( '/\[\/tt\]/', '</tt>', $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/tt\]/', '</tt>', $smf_markup );
 
 		// Replace '<br />' with '<br>'
-		$SMF_markup = preg_replace( '/\<br \/\>/', '<br>', $SMF_markup );
+		$smf_markup = preg_replace( '/\<br \/\>/', '<br>', $smf_markup );
 
 		// Replace '[size=$1]' with '<span style="font-size:$1%;">$3</span>'
-		$SMF_markup = preg_replace( '/\[size=(.*?)\]/', '<span style="font-size:$1">', $SMF_markup );
+		$smf_markup = preg_replace( '/\[size=(.*?)\]/', '<span style="font-size:$1">', $smf_markup );
 		// Replace '[/size]' with '</span>'
-		$SMF_markup = preg_replace( '/\[\/size\]/',     '</span>',                     $SMF_markup );
+		$smf_markup = preg_replace( '/\[\/size\]/',     '</span>',                     $smf_markup );
 
 		// Replace non-break space '&nbsp;' with space ' '
-		$SMF_markup = preg_replace( '/&nbsp;/', ' ', $SMF_markup );
+		$smf_markup = preg_replace( '/&nbsp;/', ' ', $smf_markup );
 
 		// Now that SMF custom HTML has been stripped put the cleaned HTML back in $field
-		$field = $SMF_markup;
+		$field = $smf_markup;
 
 		// Parse out any bbCodes in $field with the BBCode 'parser.php'
 		return parent::callback_html( $field );

@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * If there is no raw DB version, this is the first installation
  *
- * @since 2.1.0 bbPress (r3764)
+ * @since 2.1.0 bbPress (r3765)
  *
  * @return bool True if update, False if not
  */
@@ -63,12 +63,12 @@ function bbp_is_activation( $basename = '' ) {
 	}
 
 	// Bail if not activating
-	if ( empty( $action ) || ! in_array( $action, array( 'activate', 'activate-selected', true ) ) ) {
+	if ( empty( $action ) || ! in_array( $action, array( 'activate', 'activate-selected' ), true ) ) {
 		return false;
 	}
 
 	// The plugin(s) being activated
-	if ( $action === 'activate' ) {
+	if ( 'activate' === $action ) {
 		$plugins = isset( $_GET['plugin'] ) ? array( $_GET['plugin'] ) : array();
 	} else {
 		$plugins = isset( $_POST['checked'] ) ? (array) $_POST['checked'] : array();
@@ -118,7 +118,7 @@ function bbp_is_deactivation( $basename = '' ) {
 	}
 
 	// The plugin(s) being deactivated
-	if ( $action === 'deactivate' ) {
+	if ( 'deactivate' === $action ) {
 		$plugins = isset( $_GET['plugin'] ) ? array( $_GET['plugin'] ) : array();
 	} else {
 		$plugins = isset( $_POST['checked'] ) ? (array) $_POST['checked'] : array();
@@ -151,8 +151,25 @@ function bbp_version_bump() {
  * Setup the bbPress updater
  *
  * @since 2.0.0 bbPress (r3419)
+ * @since 2.6.19 bbPress (r7645) Moved to "bbp_current_screen" hook
+ *
+ * @param WP_Screen|null $current_screen Current admin screen.
  */
-function bbp_setup_updater() {
+function bbp_setup_updater( $current_screen = null ) {
+	global $pagenow;
+
+	// Only run during a real site or network admin screen
+	if ( ! $current_screen instanceof WP_Screen ||
+		( ! $current_screen->in_admin( 'site' ) && ! $current_screen->in_admin( 'network' ) ) ||
+		wp_doing_ajax() ||
+		in_array( $pagenow, array( 'admin-ajax.php', 'admin-post.php' ), true ) ) {
+		return;
+	}
+
+	// Only forum keymasters and site administrators may start an upgrade
+	if ( ! current_user_can( 'bbp_tools_upgrade_page' ) && ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 
 	// Bail if no update needed
 	if ( ! bbp_is_update() ) {
@@ -167,30 +184,30 @@ function bbp_setup_updater() {
  * Runs when a new site is created in a multisite network, and bbPress is active
  * on that site (hooked to `bbp_new_site`)
  *
- * @since 2.6.0 bbPress (r6779)
+ * @since 2.6.0 bbPress (r6780)
  */
 function bbp_setup_new_site( $site_id = 0 ) {
 
 	// Look for initial content
-	$created = is_multisite()
+	$create = is_multisite()
 		? get_blog_option( $site_id, '_bbp_flag_initial_content', false )
 		: get_option( '_bbp_flag_initial_content', false );
 
 	// Maybe create the initial content
-	if ( ! empty( $created ) ) {
+	if ( ! empty( $create ) ) {
 		bbp_create_initial_content();
 
-		// Flag initial content as created
+		// Disable future initial content creation
 		is_multisite()
-			? update_blog_option( $site_id, '_bbp_flag_initial_content', true )
-			: update_option( '_bbp_flag_initial_content', true );
+			? update_blog_option( $site_id, '_bbp_flag_initial_content', false )
+			: update_option( '_bbp_flag_initial_content', false );
 	}
 }
 
 /**
  * Create a default forum, topic, and reply
  *
- * @since 2.1.0 bbPress (r3767)
+ * @since 2.1.0 bbPress (r3768)
  *
  * @param array $args Array of arguments to override default values
  */
@@ -200,36 +217,44 @@ function bbp_create_initial_content( $args = array() ) {
 	$user_id = get_current_user_id();
 
 	// Parse arguments against default values
-	$r = bbp_parse_args( $args, array(
-		'forum_author'  => $user_id,
-		'forum_parent'  => 0,
-		'forum_status'  => 'publish',
-		'forum_title'   => esc_html__( 'General',            'bbpress' ),
-		'forum_content' => esc_html__( 'General Discussion', 'bbpress' ),
+	$r = bbp_parse_args(
+		$args,
+		array(
+			'forum_author'  => $user_id,
+			'forum_parent'  => 0,
+			'forum_status'  => 'publish',
+			'forum_title'   => esc_html__( 'General',            'bbpress' ),
+			'forum_content' => esc_html__( 'General Discussion', 'bbpress' ),
 
-		'topic_author'  => $user_id,
-		'topic_title'   => esc_html__( 'Hello World!',                                  'bbpress' ),
-		'topic_content' => esc_html__( 'This is the very first topic in these forums.', 'bbpress' ),
+			'topic_author'  => $user_id,
+			'topic_title'   => esc_html__( 'Hello World!',                                  'bbpress' ),
+			'topic_content' => esc_html__( 'This is the very first topic in these forums.', 'bbpress' ),
 
-		'reply_author'  => $user_id,
-		'reply_content' => esc_html__( 'And this is the very first reply.', 'bbpress' ),
-	), 'create_initial_content' );
+			'reply_author'  => $user_id,
+			'reply_content' => esc_html__( 'And this is the very first reply.', 'bbpress' ),
+		),
+		'create_initial_content'
+	);
 
 	// Use the same time for each post
+	// phpcs:disable WordPress.DateTime.RestrictedFunctions.date_date
 	$current_time = time();
 	$forum_time   = date( 'Y-m-d H:i:s', $current_time - 60 * 60 * 80 );
 	$topic_time   = date( 'Y-m-d H:i:s', $current_time - 60 * 60 * 60 );
 	$reply_time   = date( 'Y-m-d H:i:s', $current_time - 60 * 60 * 40 );
+	// phpcs:enable
 
 	// Create the initial forum
-	$forum_id = bbp_insert_forum( array(
-		'post_author'  => $r['forum_author'],
-		'post_parent'  => $r['forum_parent'],
-		'post_status'  => $r['forum_status'],
-		'post_title'   => $r['forum_title'],
-		'post_content' => $r['forum_content'],
-		'post_date'    => $forum_time
-	) );
+	$forum_id = bbp_insert_forum(
+		array(
+			'post_author'  => $r['forum_author'],
+			'post_parent'  => $r['forum_parent'],
+			'post_status'  => $r['forum_status'],
+			'post_title'   => $r['forum_title'],
+			'post_content' => $r['forum_content'],
+			'post_date'    => $forum_time
+		)
+	);
 
 	// Create the initial topic
 	$topic_id = bbp_insert_topic(
@@ -273,7 +298,7 @@ function bbp_create_initial_content( $args = array() ) {
  * This is most-often used when the data schema changes, but should also be used
  * to correct issues with bbPress meta-data silently on software update.
  *
- * @since 2.2.0 bbPress (r4104)
+ * @since 2.2.0 bbPress (r4105)
  */
 function bbp_version_updater() {
 
@@ -282,10 +307,15 @@ function bbp_version_updater() {
 
 	// Only run updater if previous installation exists
 	if ( ! empty( $raw_db_version ) ) {
+		// Discard converter progress SQL saved by older password upgrades.
+		if ( $raw_db_version < 264 ) {
+			delete_option( '_bbp_converter_query' );
+		}
 
 		/** 2.0 Branch ********************************************************/
 
 		// 2.0, 2.0.1, 2.0.2, 2.0.3
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
 		if ( $raw_db_version < 200 ) {
 			// No changes
 		}
@@ -318,6 +348,7 @@ function bbp_version_updater() {
 		/** 2.3 Branch ********************************************************/
 
 		// 2.3.x
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
 		if ( $raw_db_version < 230 ) {
 			// No changes
 		}
@@ -325,6 +356,7 @@ function bbp_version_updater() {
 		/** 2.4 Branch ********************************************************/
 
 		// 2.4.x
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
 		if ( $raw_db_version < 240 ) {
 			// No changes
 		}
@@ -332,6 +364,7 @@ function bbp_version_updater() {
 		/** 2.5 Branch ********************************************************/
 
 		// 2.5.x
+		// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
 		if ( $raw_db_version < 250 ) {
 			// No changes
 		}
@@ -410,7 +443,7 @@ function bbp_version_updater() {
 /**
  * Redirect user to the "What's New" page on activation
  *
- * @since 2.2.0 bbPress (r4389)
+ * @since 2.2.0 bbPress (r4390)
  *
  * @internal Used internally to redirect bbPress to the about page on activation
  *
@@ -430,7 +463,7 @@ function bbp_add_activation_redirect() {
 /**
  * Redirect user to "What's New" page on activation
  *
- * @since 2.2.0 bbPress (r4389)
+ * @since 2.2.0 bbPress (r4390)
  *
  * @internal Used internally to redirect bbPress to the about page on activation
  *
@@ -517,7 +550,7 @@ function bbp_make_current_user_keymaster() {
 /**
  * Return the number of pending upgrades
  *
- * @since 2.6.0 bbPress (r6895)
+ * @since 2.6.0 bbPress (r6896)
  *
  * @param string $type Type of pending upgrades (upgrade|repair|empty)
  *
@@ -530,7 +563,7 @@ function bbp_get_pending_upgrade_count( $type = '' ) {
 /**
  * Return an array of pending upgrades
  *
- * @since 2.6.0 bbPress (r6895)
+ * @since 2.6.0 bbPress (r6896)
  *
  * @param string $type Type of pending upgrades (upgrade|repair|empty)
  *
@@ -554,7 +587,7 @@ function bbp_get_pending_upgrades( $type = '' ) {
 /**
  * Add an upgrade ID to pending upgrades array
  *
- * @since 2.6.0 bbPress (r6895)
+ * @since 2.6.0 bbPress (r6896)
  *
  * @param string $upgrade_id
  */
@@ -575,7 +608,7 @@ function bbp_add_pending_upgrade( $upgrade_id = '' ) {
 /**
  * Add an upgrade ID to pending upgrades array
  *
- * @since 2.6.0 bbPress (r6895)
+ * @since 2.6.0 bbPress (r6896)
  *
  * @param string $upgrade_id
  */
@@ -599,7 +632,7 @@ function bbp_remove_pending_upgrade( $upgrade_id = '' ) {
 /**
  * Delete all pending upgrades
  *
- * @since 2.6.0 bbPress (r6895)
+ * @since 2.6.0 bbPress (r6896)
  */
 function bbp_clear_pending_upgrades() {
 	return delete_option( '_bbp_db_pending_upgrades' );
@@ -608,7 +641,7 @@ function bbp_clear_pending_upgrades() {
 /**
  * Maybe append an upgrade count to a string
  *
- * @since 2.6.0 bbPress (r6896)
+ * @since 2.6.0 bbPress (r6897)
  *
  * @param string $string Text to append count to
  * @param string $type   Type of pending upgrades (upgrade|repair|empty)
@@ -622,8 +655,11 @@ function bbp_maybe_append_pending_upgrade_count( $string = '', $type = '' ) {
 
 	// Append the count to the string
 	if ( ! empty( $count ) ) {
-		$suffix = ' <span class="awaiting-mod count-' . absint( $count ) . '"><span class="pending-count">' . bbp_number_format( $count ) . '</span></span>';
-		$string = "{$string}{$suffix}";
+		$count_i18n = bbp_number_format_i18n( $count );
+		/* translators: %s: Number of pending upgrades. */
+		$text        = sprintf( _n( '%s pending upgrade', '%s pending upgrades', $count, 'bbpress' ), $count_i18n );
+		$suffix      = ' <span class="awaiting-mod bbp-menu-count count-' . absint( $count ) . '"><span class="pending-count" aria-hidden="true">' . esc_html( $count_i18n ) . '</span><span class="screen-reader-text">' . esc_html( $text ) . '</span></span>';
+		$string      = "{$string}{$suffix}";
 	}
 
 	// Return the string, maybe with a count

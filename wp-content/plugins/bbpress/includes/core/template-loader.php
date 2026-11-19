@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * Note that the _edit() checks are ahead of their counterparts, to prevent them
  * from being stomped on accident.
  *
- * @since 2.0.0 bbPress (r3032)
+ * @since 2.0.0 bbPress (r3311)
  *
  * @param string $template
  *
@@ -29,61 +29,61 @@ defined( 'ABSPATH' ) || exit;
 function bbp_template_include_theme_supports( $template = '' ) {
 
 	// Editing a user
-	if     ( bbp_is_single_user_edit() && ( $new_template = bbp_get_single_user_edit_template() ) ) :
+	if ( bbp_is_single_user_edit() && ( $new_template = bbp_get_single_user_edit_template() ) ) :
 
 	// User favorites
-	elseif ( bbp_is_favorites()        && ( $new_template = bbp_get_favorites_template()        ) ) :
+	elseif ( bbp_is_favorites() && ( $new_template = bbp_get_favorites_template()        ) ) :
 
 	// User favorites
-	elseif ( bbp_is_subscriptions()    && ( $new_template = bbp_get_subscriptions_template()    ) ) :
+	elseif ( bbp_is_subscriptions() && ( $new_template = bbp_get_subscriptions_template()    ) ) :
 
 	// Viewing a user
-	elseif ( bbp_is_single_user()      && ( $new_template = bbp_get_single_user_template()      ) ) :
+	elseif ( bbp_is_single_user() && ( $new_template = bbp_get_single_user_template()      ) ) :
 
 	// Single View
-	elseif ( bbp_is_single_view()      && ( $new_template = bbp_get_single_view_template()      ) ) :
+	elseif ( bbp_is_single_view() && ( $new_template = bbp_get_single_view_template()      ) ) :
 
 	// Search
-	elseif ( bbp_is_search()           && ( $new_template = bbp_get_search_template()           ) ) :
+	elseif ( bbp_is_search() && ( $new_template = bbp_get_search_template()           ) ) :
 
 	// Forum edit
-	elseif ( bbp_is_forum_edit()       && ( $new_template = bbp_get_forum_edit_template()       ) ) :
+	elseif ( bbp_is_forum_edit() && ( $new_template = bbp_get_forum_edit_template()       ) ) :
 
 	// Single Forum
-	elseif ( bbp_is_single_forum()     && ( $new_template = bbp_get_single_forum_template()     ) ) :
+	elseif ( bbp_is_single_forum() && ( $new_template = bbp_get_single_forum_template()     ) ) :
 
 	// Forum Archive
-	elseif ( bbp_is_forum_archive()    && ( $new_template = bbp_get_forum_archive_template()    ) ) :
+	elseif ( bbp_is_forum_archive() && ( $new_template = bbp_get_forum_archive_template()    ) ) :
 
 	// Topic merge
-	elseif ( bbp_is_topic_merge()      && ( $new_template = bbp_get_topic_merge_template()      ) ) :
+	elseif ( bbp_is_topic_merge() && ( $new_template = bbp_get_topic_merge_template()      ) ) :
 
 	// Topic split
-	elseif ( bbp_is_topic_split()      && ( $new_template = bbp_get_topic_split_template()      ) ) :
+	elseif ( bbp_is_topic_split() && ( $new_template = bbp_get_topic_split_template()      ) ) :
 
 	// Topic edit
-	elseif ( bbp_is_topic_edit()       && ( $new_template = bbp_get_topic_edit_template()       ) ) :
+	elseif ( bbp_is_topic_edit() && ( $new_template = bbp_get_topic_edit_template()       ) ) :
 
 	// Single Topic
-	elseif ( bbp_is_single_topic()     && ( $new_template = bbp_get_single_topic_template()     ) ) :
+	elseif ( bbp_is_single_topic() && ( $new_template = bbp_get_single_topic_template()     ) ) :
 
 	// Topic Archive
-	elseif ( bbp_is_topic_archive()    && ( $new_template = bbp_get_topic_archive_template()    ) ) :
+	elseif ( bbp_is_topic_archive() && ( $new_template = bbp_get_topic_archive_template()    ) ) :
 
 	// Reply move
-	elseif ( bbp_is_reply_move()       && ( $new_template = bbp_get_reply_move_template()       ) ) :
+	elseif ( bbp_is_reply_move() && ( $new_template = bbp_get_reply_move_template()       ) ) :
 
 	// Editing a reply
-	elseif ( bbp_is_reply_edit()       && ( $new_template = bbp_get_reply_edit_template()       ) ) :
+	elseif ( bbp_is_reply_edit() && ( $new_template = bbp_get_reply_edit_template()       ) ) :
 
 	// Single Reply
-	elseif ( bbp_is_single_reply()     && ( $new_template = bbp_get_single_reply_template()     ) ) :
+	elseif ( bbp_is_single_reply() && ( $new_template = bbp_get_single_reply_template()     ) ) :
 
 	// Editing a topic tag
-	elseif ( bbp_is_topic_tag_edit()   && ( $new_template = bbp_get_topic_tag_edit_template()   ) ) :
+	elseif ( bbp_is_topic_tag_edit() && ( $new_template = bbp_get_topic_tag_edit_template()   ) ) :
 
 	// Viewing a topic tag
-	elseif ( bbp_is_topic_tag()        && ( $new_template = bbp_get_topic_tag_template()        ) ) :
+	elseif ( bbp_is_topic_tag() && ( $new_template = bbp_get_topic_tag_template()        ) ) :
 	endif;
 
 	// A bbPress template file was located, so override the WordPress template
@@ -127,7 +127,7 @@ function bbp_is_template_included() {
  * Attempt to load a custom bbPress functions file, similar to each themes
  * functions.php file.
  *
- * @since 2.1.0 bbPress (r3732)
+ * @since 2.1.0 bbPress (r3734)
  *
  * @global string $pagenow
  */
@@ -188,7 +188,7 @@ function bbp_get_single_user_edit_template() {
 /**
  * Get the user favorites template
  *
- * @since 2.2.0 bbPress (r4225)
+ * @since 2.2.0 bbPress (r4228)
  *
  * @return string Path to template file
  */
@@ -209,7 +209,7 @@ function bbp_get_favorites_template() {
 /**
  * Get the user subscriptions template
  *
- * @since 2.2.0 bbPress (r4225)
+ * @since 2.2.0 bbPress (r4228)
  *
  * @return string Path to template file
  */
@@ -403,7 +403,7 @@ function bbp_get_reply_edit_template() {
 /**
  * Get the reply move template
  *
- * @since 2.3.0 bbPress (r4521)
+ * @since 2.3.0 bbPress (r4522)
  *
  * @return string Path to template file
  */
@@ -417,7 +417,7 @@ function bbp_get_reply_move_template() {
 /**
  * Get the topic template
  *
- * @since 2.0.0 bbPress (r3311)
+ * @since 2.0.0 bbPress (r3422)
  *
  * @return string Path to template file
  */
@@ -434,7 +434,7 @@ function bbp_get_topic_tag_template() {
 /**
  * Get the topic edit template
  *
- * @since 2.0.0 bbPress (r3311)
+ * @since 2.0.0 bbPress (r3348)
  *
  * @return string Path to template file
  */
@@ -449,14 +449,13 @@ function bbp_get_topic_tag_edit_template() {
 }
 
 /**
- * Get the templates to use as the endpoint for bbPress template parts
+ * Get the theme compatibility template hierarchy.
  *
- * @since 2.0.0 bbPress (r3311)
- * @since 2.6.0 bbPress (r5950) Added `singular.php` to template stack
+ * @since 2.6.22 bbPress (r8344)
  *
- * @return string Path to template file
+ * @return array Template filenames.
  */
-function bbp_get_theme_compat_templates() {
+function bbp_get_theme_compat_template_hierarchy() {
 	$templates = array(
 		'plugin-bbpress.php',
 		'bbpress.php',
@@ -468,5 +467,53 @@ function bbp_get_theme_compat_templates() {
 		'singular.php',
 		'index.php'
 	);
-	return bbp_get_query_template( 'bbpress', $templates );
+
+	// Filter & return
+	return (array) apply_filters( 'bbp_get_theme_compat_template_hierarchy', $templates );
+}
+
+/**
+ * Get the templates to use as the endpoint for bbPress template parts
+ *
+ * @since 2.0.0 bbPress (r3311)
+ * @since 2.6.0 bbPress (r5950) Added `singular.php` to template stack
+ *
+ * @return string Path to template file
+ */
+function bbp_get_theme_compat_templates() {
+	return bbp_get_query_template( 'bbpress', bbp_get_theme_compat_template_hierarchy() );
+}
+
+/**
+ * Get the theme canvas template, used for Block Themes.
+ *
+ * @since 2.6.17 bbPress (r7425)
+ * @since 2.6.22 bbPress (r8344) Locate a compatible Block Template.
+ *
+ * @return string Path to canvas file.
+ */
+function bbp_get_theme_canvas_template() {
+	$bbp       = bbpress();
+	$templates = ! empty( $bbp->theme_compat->templates )
+		? $bbp->theme_compat->templates
+		: array();
+	$templates = array_merge(
+		$templates,
+		array_diff( bbp_get_theme_compat_template_hierarchy(), $templates )
+	);
+	$templates = (array) apply_filters( 'bbp_get_bbpress_template', $templates );
+
+	// Stash the possible templates for this query
+	bbp_set_theme_compat_templates( $templates );
+
+	// Locate a compatible Block Template
+	$template = locate_block_template( '', 'bbpress', $templates );
+
+	// Fall back to the default WordPress Canvas
+	if ( empty( $template ) ) {
+		$template = ABSPATH . WPINC . '/template-canvas.php';
+	}
+
+	// Filter & return
+	return apply_filters( 'bbp_get_theme_canvas_template', $template );
 }

@@ -19,6 +19,7 @@ add_filter( 'bbp_is_user_home',     'bbp_filter_is_user_home',      10, 1 );
 // Group Forum Root
 add_action( 'load-settings_page_bbpress', 'bbp_maybe_create_group_forum_root' );
 add_action( 'bbp_delete_forum',           'bbp_maybe_delete_group_forum_root' );
+add_action( 'bbp_delete_forum',           'bbp_remove_forum_id_from_all_groups' );
 
 /** BuddyPress Helpers ********************************************************/
 
@@ -114,6 +115,7 @@ function bbp_filter_is_user_home( $is = false ) {
  * Add the topic title to the <title> if viewing a single group forum topic
  *
  * @since 2.5.0 bbPress (r5161)
+ * @since 2.6.20 bbPress (r8027) Match group topics with a non-singular slug query.
  *
  * @param string $new_title The title to filter
  * @param string $old_title (Not used)
@@ -127,17 +129,44 @@ function bbp_filter_modify_page_title( $new_title = '', $old_title = '', $sep = 
 
 		// Only filter for single group forum topics
 		if ( bp_is_group_forum_topic() || bp_is_group_forum_topic_edit() ) {
+			if ( ! bp_group_is_visible( bp_get_current_group_id() ) ) {
+				return $new_title;
+			}
 
-			// Get the topic
-			$topic = get_posts( array(
-				'name'        => bp_action_variable( 1 ),
-				'post_status' => array_keys( bbp_get_topic_statuses() ),
-				'post_type'   => bbp_get_topic_post_type(),
-				'numberposts' => 1
-			) );
+			$forum_ids = bbp_get_group_forum_ids();
 
-			// Add the topic title to the <title>
-			$new_title .= bbp_get_topic_title( $topic[0]->ID ) . ' ' . $sep . ' ';
+			if ( empty( $forum_ids ) ) {
+				return $new_title;
+			}
+
+			$topic_args = array(
+				'post_name__in'   => array( bp_action_variable( 1 ) ),
+				'post_parent__in' => $forum_ids,
+				'post_status'     => array_keys( bbp_get_topic_statuses() ),
+				'post_type'       => bbp_get_topic_post_type(),
+				'numberposts'     => 1
+			);
+
+			// Pending topics use an explicit ID within their group route.
+			if ( bbp_is_group_pending_topic() ) {
+				$topic_id = bbp_get_group_pending_topic_id();
+
+				if ( ! empty( $topic_id ) ) {
+					$topic_args['p'] = $topic_id;
+				} else {
+					$topic_args['post__in'] = array( 0 );
+				}
+
+				unset( $topic_args['post_name__in'] );
+			}
+
+			// Get a topic belonging to the current group's forums
+			$topic = get_posts( $topic_args );
+
+			// Add the title only when the topic and its forum are readable
+			if ( ! empty( $topic ) && bbp_user_can_view_forum( array( 'forum_id' => $topic[0]->post_parent ) ) && ( bbp_is_topic_public( $topic[0]->ID ) || current_user_can( 'read_topic', $topic[0]->ID ) ) ) {
+				$new_title .= bbp_get_topic_title( $topic[0]->ID ) . ' ' . $sep . ' ';
+			}
 		}
 	}
 
@@ -289,14 +318,14 @@ function bbp_member_forums_subscriptions_content() {
 /**
  * Clean up the group root setting if the forum is being deleted
  *
- * @since 2.6.0 bbPress (r6479)
+ * @since 2.6.0 bbPress (r6485)
  *
  * @param int $forum_id The forum ID being deleted
  */
 function bbp_maybe_delete_group_forum_root( $forum_id = 0 ) {
 
 	// Bail if no forum ID
-	$forum_id = bbp_get_forum_id();
+	$forum_id = bbp_get_forum_id( $forum_id );
 	if ( empty( $forum_id ) ) {
 		return;
 	}
@@ -313,7 +342,7 @@ function bbp_maybe_delete_group_forum_root( $forum_id = 0 ) {
 /**
  * Handle the new group forum root creation
  *
- * @since 2.6.0 bbPress (r6479)
+ * @since 2.6.0 bbPress (r6485)
  *
  * @return
  */
@@ -336,11 +365,7 @@ function bbp_maybe_create_group_forum_root() {
 
 	// Create new forum
 	$forum_id = bbp_insert_forum(
-
-		// Post
 		array( 'post_title' => esc_html__( 'Group Forums', 'bbpress' ) ),
-
-		// Meta
 		array( 'forum_type' => 'category' )
 	);
 
@@ -351,10 +376,15 @@ function bbp_maybe_create_group_forum_root() {
 		update_option( '_bbp_group_forums_root_id', $forum_id );
 
 		// Redirect
-		bbp_redirect( add_query_arg( array(
-			'page'    => 'bbpress',
-			'updated' => true
-		), admin_url( 'options-general.php' ) ) );
+		bbp_redirect(
+			add_query_arg(
+				array(
+					'page'    => 'bbpress',
+					'updated' => true
+				),
+				admin_url( 'options-general.php' )
+			)
+		);
 	}
 }
 
@@ -368,11 +398,11 @@ function bbp_maybe_create_group_forum_root() {
  */
 
 /**
- * Get forum ID's for a group
+ * Get forum IDs for a group
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int $group_id Group ID
  */
 function bbp_get_group_forum_ids( $group_id = 0 ) {
 
@@ -397,11 +427,11 @@ function bbp_get_group_forum_ids( $group_id = 0 ) {
 }
 
 /**
- * Get group ID's for a forum
+ * Get group IDs for a forum
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $forum_id
+ * @param int $forum_id Forum ID
  */
 function bbp_get_forum_group_ids( $forum_id = 0 ) {
 
@@ -426,11 +456,12 @@ function bbp_get_forum_group_ids( $forum_id = 0 ) {
 }
 
 /**
- * Get forum ID's for a group
+ * Update forum IDs for a group
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int   $group_id Group ID
+ * @param array $forum_ids Forum IDs
  */
 function bbp_update_group_forum_ids( $group_id = 0, $forum_ids = array() ) {
 
@@ -447,11 +478,12 @@ function bbp_update_group_forum_ids( $group_id = 0, $forum_ids = array() ) {
 }
 
 /**
- * Update group ID's for a forum
+ * Update group IDs for a forum
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $forum_id
+ * @param int   $forum_id Forum ID
+ * @param array $group_ids Group IDs
  */
 function bbp_update_forum_group_ids( $forum_id = 0, $group_ids = array() ) {
 	$forum_id = bbp_get_forum_id( $forum_id );
@@ -466,9 +498,10 @@ function bbp_update_forum_group_ids( $forum_id = 0, $group_ids = array() ) {
 /**
  * Add a group to a forum
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int $forum_id Forum ID
+ * @param int $group_id Group ID
  */
 function bbp_add_group_id_to_forum( $forum_id = 0, $group_id = 0 ) {
 
@@ -491,11 +524,12 @@ function bbp_add_group_id_to_forum( $forum_id = 0, $group_id = 0 ) {
 }
 
 /**
- * Remove a forum from a group
+ * Add a forum to a group
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int $group_id Group ID
+ * @param int $forum_id Forum ID
  */
 function bbp_add_forum_id_to_group( $group_id = 0, $forum_id = 0 ) {
 
@@ -520,9 +554,10 @@ function bbp_add_forum_id_to_group( $group_id = 0, $forum_id = 0 ) {
 /**
  * Remove a group from a forum
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int $forum_id Forum ID
+ * @param int $group_id Group ID
  */
 function bbp_remove_group_id_from_forum( $forum_id = 0, $group_id = 0 ) {
 
@@ -547,9 +582,10 @@ function bbp_remove_group_id_from_forum( $forum_id = 0, $group_id = 0 ) {
 /**
  * Remove a forum from a group
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int $group_id Group ID
+ * @param int $forum_id Forum ID
  */
 function bbp_remove_forum_id_from_group( $group_id = 0, $forum_id = 0 ) {
 
@@ -572,11 +608,11 @@ function bbp_remove_forum_id_from_group( $group_id = 0, $forum_id = 0 ) {
 }
 
 /**
- * Remove a group from all forums
+ * Remove a group ID from all associated forums
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $group_id
+ * @param int $group_id Group ID
  */
 function bbp_remove_group_id_from_all_forums( $group_id = 0 ) {
 
@@ -590,16 +626,16 @@ function bbp_remove_group_id_from_all_forums( $group_id = 0 ) {
 
 	// Loop through forums and remove this group from each one
 	foreach ( $forum_ids as $forum_id ) {
-		bbp_remove_group_id_from_forum( $group_id, $forum_id );
+		bbp_remove_group_id_from_forum( $forum_id, $group_id );
 	}
 }
 
 /**
- * Remove a forum from all groups
+ * Remove a forum ID from all associated groups
  *
- * @since 2.1.0 bbPress (r3653)
+ * @since 2.1.0 bbPress (r3654)
  *
- * @param int $forum_id
+ * @param int $forum_id Forum ID
  */
 function bbp_remove_forum_id_from_all_groups( $forum_id = 0 ) {
 
@@ -609,14 +645,14 @@ function bbp_remove_forum_id_from_all_groups( $forum_id = 0 ) {
 
 	// Loop through groups and remove this forum from each one
 	foreach ( $group_ids as $group_id ) {
-		bbp_remove_forum_id_from_group( $forum_id, $group_id );
+		bbp_remove_forum_id_from_group( $group_id, $forum_id );
 	}
 }
 
 /**
  * Return true if a forum is a group forum
  *
- * @since 2.3.0 bbPress (r4571)
+ * @since 2.3.0 bbPress (r4572)
  *
  * @param int $forum_id
  * @return bool True if it is a group forum, false if not
@@ -636,12 +672,59 @@ function bbp_is_forum_group_forum( $forum_id = 0 ) {
 	return (bool) apply_filters( 'bbp_is_forum_group_forum', $retval, $forum_id, $group_ids );
 }
 
+/** Group Topic Routing ******************************************************/
+
+/**
+ * Return whether the current group route identifies a pending topic by ID.
+ *
+ * @since 2.6.20 bbPress (r7881)
+ *
+ * @return bool Whether this is a pending group topic route.
+ */
+function bbp_is_group_pending_topic() {
+	return bp_is_group()
+		&& bp_is_current_action( 'forum' )
+		&& bp_is_action_variable( 'topic', 0 )
+		&& bp_is_action_variable( bbp_get_pending_status_id(), 1 )
+		&& isset( $_GET['bbp_topic_id'] );
+}
+
+/**
+ * Return the readable pending topic ID from the current group route.
+ *
+ * @since 2.6.20 bbPress (r7881)
+ *
+ * @return int Pending topic ID, or 0 when the route is invalid or unreadable.
+ */
+function bbp_get_group_pending_topic_id() {
+
+	// Bail if this is not a pending group topic route.
+	if ( ! bbp_is_group_pending_topic() ) {
+		return 0;
+	}
+
+	$topic_id  = absint( wp_unslash( $_GET['bbp_topic_id'] ) );
+	$forum_id  = bbp_get_topic_forum_id( $topic_id );
+	$forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
+
+	// Topic must be pending, belong to this group, and be readable.
+	if ( ! bbp_is_topic_pending( $topic_id )
+		|| ! in_array( $forum_id, $forum_ids, true )
+		|| ! current_user_can( 'read_forum', $forum_id )
+		|| ! current_user_can( 'read_topic', $topic_id )
+	) {
+		$topic_id = 0;
+	}
+
+	return (int) apply_filters( 'bbp_get_group_pending_topic_id', $topic_id );
+}
+
 /*** Group Member Status ******************************************************/
 
 /**
  * Is the current user an admin of the current group
  *
- * @since 2.3.0 bbPress (r4632)
+ * @since 2.3.0 bbPress (r4633)
  *
  * @return bool If current user is an admin of the current group
  */
@@ -666,7 +749,7 @@ function bbp_group_is_admin() {
 /**
  * Is the current user a moderator of the current group
  *
- * @since 2.3.0 bbPress (r4632)
+ * @since 2.3.0 bbPress (r4633)
  *
  * @return bool If current user is a moderator of the current group
  */
@@ -691,7 +774,7 @@ function bbp_group_is_mod() {
 /**
  * Is the current user a member of the current group
  *
- * @since 2.3.0 bbPress (r4632)
+ * @since 2.3.0 bbPress (r4633)
  *
  * @return bool If current user is a member of the current group
  */
@@ -716,7 +799,7 @@ function bbp_group_is_member() {
 /**
  * Is the current user banned from the current group
  *
- * @since 2.3.0 bbPress (r4632)
+ * @since 2.3.0 bbPress (r4633)
  *
  * @return bool If current user is banned from the current group
  */
@@ -741,7 +824,7 @@ function bbp_group_is_banned() {
 /**
  * Is the current user the creator of the current group
  *
- * @since 2.3.0 bbPress (r4632)
+ * @since 2.3.0 bbPress (r4633)
  *
  * @return bool If current user the creator of the current group
  */
@@ -775,10 +858,18 @@ function bbp_group_is_creator() {
 function bbp_get_activity_actions() {
 
 	// Filter & return
-	return (array) apply_filters( 'bbp_get_activity_actions', array(
-		'topic' => esc_html__( '%1$s started the topic %2$s in the forum %3$s',    'bbpress' ),
-		'reply' => esc_html__( '%1$s replied to the topic %2$s in the forum %3$s', 'bbpress' )
-	) );
+	return (array) apply_filters( 'bbp_get_activity_actions',
+		array(
+
+			'topic' =>
+			/* translators: 1: User linked profile, 2: Topic linked title, 3: Forum linked title */
+			esc_html__( '%1$s started the topic %2$s in the forum %3$s', 'bbpress' ),
+
+			'reply' =>
+			/* translators: 1: User linked profile, 2: Topic linked title, 3: Forum linked title */
+			esc_html__( '%1$s replied to the topic %2$s in the forum %3$s', 'bbpress' )
+		)
+	);
 }
 
 /**
@@ -804,6 +895,7 @@ function bbp_format_activity_action_new_post( $type = '', $action = '', $activit
 	}
 
 	// Bail if intercepted
+	// phpcs:ignore PHPCompatibility.FunctionUse.ArgumentFunctionsReportCurrentValue.NeedsInspection
 	$intercept = bbp_maybe_intercept( __FUNCTION__, func_get_args() );
 	if ( bbp_is_intercepted( $intercept ) ) {
 		return $intercept;
@@ -820,14 +912,12 @@ function bbp_format_activity_action_new_post( $type = '', $action = '', $activit
 		}
 
 	// General component (bbpress/forums/other)
-	} else {
-		if ( 'topic' === $type ) {
+	} elseif ( 'topic' === $type ) {
 			$topic_id = bbp_get_topic_id( $activity->item_id );
 			$forum_id = bbp_get_forum_id( $activity->secondary_item_id );
 		} else {
-			$topic_id = bbp_get_topic_id( $activity->secondary_item_id );
-			$forum_id = bbp_get_topic_forum_id( $topic_id );
-		}
+		$topic_id = bbp_get_topic_id( $activity->secondary_item_id );
+		$forum_id = bbp_get_topic_forum_id( $topic_id );
 	}
 
 	// User link for topic author
