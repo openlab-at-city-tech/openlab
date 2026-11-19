@@ -48,6 +48,10 @@ class EachPromise implements PromisorInterface
      */
     public function __construct($iterable, array $config = [])
     {
+        if (!\is_iterable($iterable)) {
+            \WpToTwitter_Vendor\trigger_deprecation('guzzlehttp/promises', '2.5', 'Passing a non-iterable to %s::%s() is deprecated; guzzlehttp/promises 3.0 will require an iterable.', __CLASS__, __FUNCTION__);
+            $iterable = [$iterable];
+        }
         $this->iterable = Create::iterFor($iterable);
         if (isset($config['concurrency'])) {
             $this->concurrency = $config['concurrency'];
@@ -70,6 +74,18 @@ class EachPromise implements PromisorInterface
             /** @psalm-assert Promise $this->aggregate */
             $this->iterable->rewind();
             $this->refillPending();
+            if (!$this->pending) {
+                Utils::queue()->add(function () : void {
+                    if (!$this->aggregate || Is::settled($this->aggregate)) {
+                        return;
+                    }
+                    try {
+                        $this->checkIfFinished();
+                    } catch (\Throwable $e) {
+                        $this->aggregate->reject($e);
+                    }
+                });
+            }
         } catch (\Throwable $e) {
             $this->aggregate->reject($e);
         }
@@ -113,7 +129,7 @@ class EachPromise implements PromisorInterface
             return;
         }
         // Add only up to N pending promises.
-        $concurrency = \is_callable($this->concurrency) ? \call_user_func($this->concurrency, \count($this->pending)) : $this->concurrency;
+        $concurrency = \is_callable($this->concurrency) ? ($this->concurrency)(\count($this->pending)) : $this->concurrency;
         $concurrency = \max($concurrency - \count($this->pending), 0);
         // Concurrency may be set to 0 to disallow new promises.
         if (!$concurrency) {
@@ -140,12 +156,12 @@ class EachPromise implements PromisorInterface
         $idx = $this->nextPendingIndex++;
         $this->pending[$idx] = $promise->then(function ($value) use($idx, $key) : void {
             if ($this->onFulfilled) {
-                \call_user_func($this->onFulfilled, $value, $key, $this->aggregate);
+                ($this->onFulfilled)($value, $key, $this->aggregate);
             }
             $this->step($idx);
         }, function ($reason) use($idx, $key) : void {
             if ($this->onRejected) {
-                \call_user_func($this->onRejected, $reason, $key, $this->aggregate);
+                ($this->onRejected)($reason, $key, $this->aggregate);
             }
             $this->step($idx);
         });

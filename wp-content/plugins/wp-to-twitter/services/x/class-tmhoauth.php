@@ -5,7 +5,7 @@
  * @category OAuth
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -32,7 +32,7 @@ class TmhOAuth {
 	/**
 	 * The response from X.com.
 	 *
-	 * @var $response
+	 * @var array $response
 	 */
 	public $response = array();
 
@@ -164,7 +164,7 @@ class TmhOAuth {
 	 *
 	 * @param mixed $data the scalar or array to encode.
 	 *
-	 * @return null|array $data encoded in a way compatible with OAuth
+	 * @return array|string $data encoded in a way compatible with OAuth
 	 */
 	private function safe_encode( $data ) {
 		if ( is_array( $data ) ) {
@@ -211,6 +211,8 @@ class TmhOAuth {
 			'oauth_consumer_key'     => $this->config['consumer_key'],
 			'oauth_signature_method' => $this->config['oauth_signature_method'],
 		);
+
+		$_defaults = array();
 
 		// include the user token if it exists.
 		if ( $this->config['user_token'] ) {
@@ -305,6 +307,9 @@ class TmhOAuth {
 			$params               = array();
 		}
 
+		$_signing_params = array();
+		$kv              = array();
+
 		// signing parameters are request parameters + OAuth default parameters.
 		$this->signing_params = array_merge( $this->get_defaults(), (array) $params );
 
@@ -396,6 +401,7 @@ class TmhOAuth {
 	 */
 	private function prepare_auth_header() {
 		unset( $this->headers['Authorization'] );
+		$kv = array();
 
 		uksort( $this->auth_params, 'strcmp' );
 		if ( ! $this->config['as_header'] ) :
@@ -658,12 +664,14 @@ class TmhOAuth {
 	 */
 	private function curlit() {
 		$this->response['raw'] = '';
-
+		$ps                    = array();
+		$headers               = array();
 		// method handling.
 		switch ( $this->method ) {
 			case 'POST':
 				break;
 			default:
+				$params = array();
 				// GET, DELETE request so convert the parameters to a querystring.
 				if ( ! empty( $this->request_params ) ) {
 					foreach ( $this->request_params as $k => $v ) {

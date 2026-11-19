@@ -3,11 +3,11 @@ Contributors: joedolson
 Donate link: https://xposterpro.com
 Tags: bluesky, post, social, sharing, mastodon
 Requires at least: 6.4
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 7.4
-License: GPLv3
+License: GPLv2
 Text Domain: wp-to-twitter
-Stable tag: 5.0.8
+Stable tag: 5.1.1
 
 Posts to Bluesky, Mastodon or X when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
@@ -58,6 +58,35 @@ Translating my plug-ins is always appreciated. Work on XPoster translations at <
 Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter">GitHub repository of plug-in extensions</a>.
 
 == Changelog ==
+
+= 5.1.1 =
+
+* Change: Two logic changes to try and make status update sending more consistent.
+* Testing: Add unit tests to test status update cases.
+
+= 5.1.0 =
+
+* Bug fix: 400 error returned by BlueSky if no URL resolved in external URI.
+* Bug fix: Return notices for each service in AJAX post rather than just the last one.
+* Bug fix: Don't prevent re-saving keys if credentials are masked.
+* Change: Make $post_this status non-persistent, so the "Don't Post/Post" value is not retained permanently.
+* Change: Update post status classification to account for previous post object values.
+* Change: Implement post locking as primary duplicate prevention mechanism.
+* Update GuzzleHTTP.
+* Add debugging routes to catch connection data.
+* Verify post types are an array before evaluating.
+* Don't overwrite mentions when parsing handles in Bluesky mentions.
+* Fix an untranslatable string.
+* Updates to function docs.
+* Define some variables that could potentially be undefined.
+* Remove code on dead paths.
+
+= 5.0.9 =
+
+* Update CSS for WordPress 7.0
+* Change tested to.
+* Update hook docs format.
+* Clean up a few potentially undefined $vars.
 
 = 5.0.8 =
 

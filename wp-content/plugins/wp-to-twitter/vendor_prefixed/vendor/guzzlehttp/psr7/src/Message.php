@@ -26,7 +26,7 @@ final class Message
             throw new \InvalidArgumentException('Unknown message type');
         }
         foreach ($message->getHeaders() as $name => $values) {
-            if (\strtolower($name) === 'set-cookie') {
+            if (\is_string($name) && \strtolower($name) === 'set-cookie') {
                 foreach ($values as $value) {
                     $msg .= "\r\n{$name}: " . $value;
                 }
@@ -56,16 +56,59 @@ final class Message
         }
         $body->rewind();
         $summary = $body->read($truncateAt);
-        $body->rewind();
         if ($size > $truncateAt) {
+            if (\preg_match('//u', $summary) !== 1) {
+                $summary = self::trimTrailingIncompleteUtf8Character($summary, $body->read(3));
+            }
             $summary .= ' (truncated...)';
         }
+        $body->rewind();
         // Matches any printable character, including unicode characters:
         // letters, marks, numbers, punctuation, spacing, and separators.
         if (\preg_match('/[^\\pL\\pM\\pN\\pP\\pS\\pZ\\n\\r\\t]/u', $summary) !== 0) {
             return null;
         }
         return $summary;
+    }
+    /**
+     * Trims a partial UTF-8 character from the end of a truncated string.
+     */
+    private static function trimTrailingIncompleteUtf8Character(string $summary, string $lookahead) : string
+    {
+        $length = \strlen($summary);
+        if ($length === 0) {
+            return $summary;
+        }
+        $start = $length - 1;
+        while ($start >= 0) {
+            $byte = \ord($summary[$start]);
+            if ($byte < 0x80 || $byte > 0xbf) {
+                break;
+            }
+            --$start;
+        }
+        if ($start < 0) {
+            return $summary;
+        }
+        $lead = \ord($summary[$start]);
+        if ($lead >= 0xc2 && $lead <= 0xdf) {
+            $expectedLength = 2;
+        } elseif ($lead >= 0xe0 && $lead <= 0xef) {
+            $expectedLength = 3;
+        } elseif ($lead >= 0xf0 && $lead <= 0xf4) {
+            $expectedLength = 4;
+        } else {
+            return $summary;
+        }
+        $availableLength = $length - $start;
+        if ($availableLength >= $expectedLength) {
+            return $summary;
+        }
+        $sequence = \substr($summary, $start) . \substr($lookahead, 0, $expectedLength - $availableLength);
+        if (\strlen($sequence) !== $expectedLength || \preg_match('//u', $sequence) !== 1) {
+            return $summary;
+        }
+        return \substr($summary, 0, $start);
     }
     /**
      * Attempts to rewind a message body and throws an exception on failure.
@@ -119,7 +162,7 @@ final class Message
         $count = \preg_match_all(Rfc7230::HEADER_REGEX, $rawHeaders, $headerLines, \PREG_SET_ORDER);
         // If these aren't the same, then one line didn't match and there's an invalid header.
         if ($count !== \substr_count($rawHeaders, "\n")) {
-            // Folding is deprecated, see https://tools.ietf.org/html/rfc7230#section-3.2.4
+            // Folding is deprecated, see https://datatracker.ietf.org/doc/html/rfc7230#section-3.2.4
             if (\preg_match(Rfc7230::HEADER_FOLD_REGEX, $rawHeaders)) {
                 throw new \InvalidArgumentException('Invalid header syntax: Obsolete line folding');
             }
@@ -139,18 +182,32 @@ final class Message
      */
     public static function parseRequestUri(string $path, array $headers) : string
     {
+        $host = self::getHostFromHeaders($headers);
+        // If no host is found, then a full URI cannot be constructed.
+        if ($host === null) {
+            return $path;
+        }
+        $scheme = \substr($host, -4) === ':443' ? 'https' : 'http';
+        return $scheme . '://' . $host . '/' . \ltrim($path, '/');
+    }
+    /**
+     * @param array $headers Array of headers (each value an array).
+     */
+    private static function getHostFromHeaders(array $headers) : ?string
+    {
         $hostKey = \array_filter(\array_keys($headers), function ($k) {
             // Numeric array keys are converted to int by PHP.
             $k = (string) $k;
             return \strtolower($k) === 'host';
         });
-        // If no host is found, then a full URI cannot be constructed.
         if (!$hostKey) {
-            return $path;
+            return null;
         }
         $host = $headers[\reset($hostKey)][0];
-        $scheme = \substr($host, -4) === ':443' ? 'https' : 'http';
-        return $scheme . '://' . $host . '/' . \ltrim($path, '/');
+        if (!\is_string($host) || Rfc7230::parseHostHeader($host) === null) {
+            throw new \InvalidArgumentException('Invalid request string');
+        }
+        return $host;
     }
     /**
      * Parses a request message string into a request object.
@@ -160,6 +217,9 @@ final class Message
     public static function parseRequest(string $message) : RequestInterface
     {
         $data = self::parseMessage($message);
+        if (\strpbrk($data['start-line'], "\r\n") !== \false) {
+            throw new \InvalidArgumentException('Invalid request string');
+        }
         $matches = [];
         if (!\preg_match('/^[\\S]+\\s+([a-zA-Z]+:\\/\\/|\\/).*/', $data['start-line'], $matches)) {
             throw new \InvalidArgumentException('Invalid request string');
@@ -177,9 +237,12 @@ final class Message
     public static function parseResponse(string $message) : ResponseInterface
     {
         $data = self::parseMessage($message);
-        // According to https://tools.ietf.org/html/rfc7230#section-3.1.2 the space
-        // between status-code and reason-phrase is required. But browsers accept
-        // responses without space and reason as well.
+        if (\strpbrk($data['start-line'], "\r\n") !== \false) {
+            throw new \InvalidArgumentException('Invalid response string');
+        }
+        // According to https://datatracker.ietf.org/doc/html/rfc7230#section-3.1.2
+        // the space between status-code and reason-phrase is required. But
+        // browsers accept responses without space and reason as well.
         if (!\preg_match('/^HTTP\\/.* [0-9]{3}( .*|$)/', $data['start-line'])) {
             throw new \InvalidArgumentException('Invalid response string: ' . $data['start-line']);
         }

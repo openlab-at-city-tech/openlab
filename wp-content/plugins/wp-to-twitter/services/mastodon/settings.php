@@ -5,9 +5,40 @@
  * @category Mastodon
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.xposterpro.com
  */
+
+/**
+ * Normalize a Mastodon instance value entered in settings.
+ *
+ * Accepts host or URL and returns a normalized base instance URL.
+ *
+ * @param string $instance Raw instance value.
+ *
+ * @return string Normalized instance URL.
+ */
+function wpt_normalize_mastodon_instance( $instance ) {
+	$instance = sanitize_text_field( trim( (string) $instance ) );
+	if ( '' === $instance ) {
+		return '';
+	}
+
+	if ( ! preg_match( '#^https?://#i', $instance ) ) {
+		$instance = 'https://' . $instance;
+	}
+
+	$parts = wp_parse_url( $instance );
+	if ( ! is_array( $parts ) || empty( $parts['host'] ) ) {
+		return '';
+	}
+
+	$scheme = ( isset( $parts['scheme'] ) && in_array( strtolower( $parts['scheme'] ), array( 'http', 'https' ), true ) ) ? strtolower( $parts['scheme'] ) : 'https';
+	$host   = strtolower( $parts['host'] );
+	$port   = isset( $parts['port'] ) ? ':' . (int) $parts['port'] : '';
+
+	return untrailingslashit( $scheme . '://' . $host . $port );
+}
 
 /**
  * Update Mastodon settings.
@@ -23,30 +54,37 @@ function wpt_update_mastodon_settings( $auth = false, $post = false ) {
 					wp_die( 'Oops, please try again.' );
 				}
 
-				if ( ! empty( $post['wpt_mastodon_token'] ) && ! empty( $post['wpt_mastodon_instance'] ) ) {
-					$ack = sanitize_text_field( trim( $post['wpt_mastodon_token'] ) );
-					$acs = sanitize_text_field( trim( untrailingslashit( $post['wpt_mastodon_instance'] ) ) );
+				$ack        = isset( $post['wpt_mastodon_token'] ) ? sanitize_text_field( trim( $post['wpt_mastodon_token'] ) ) : '';
+				$acs        = isset( $post['wpt_mastodon_instance'] ) ? wpt_normalize_mastodon_instance( $post['wpt_mastodon_instance'] ) : '';
+				$is_masked  = ( false !== stripos( $ack, '***' ) );
+				$stored_ack = ( ! $auth ) ? get_option( 'wpt_mastodon_token', '' ) : get_user_meta( $auth, 'wpt_mastodon_token', true );
+				$stored_acs = ( ! $auth ) ? get_option( 'wpt_mastodon_instance', '' ) : get_user_meta( $auth, 'wpt_mastodon_instance', true );
 
-					if ( ! $auth ) {
-						// If values are filled with asterisks, do not update; these are masked values.
-						if ( stripos( $ack, '***' ) === false ) {
-							update_option( 'wpt_mastodon_token', $ack );
-						}
-						if ( stripos( $acs, '***' ) === false ) {
-							update_option( 'wpt_mastodon_instance', $acs );
-						}
-					} else {
-						if ( stripos( $ack, '***' ) === false ) {
-							update_user_meta( $auth, 'wpt_mastodon_token', $ack );
-						}
-						if ( stripos( $acs, '***' ) === false ) {
-							update_user_meta( $auth, 'wpt_mastodon_instance', $acs );
-						}
+				if ( ! $auth ) {
+					if ( '' !== $acs ) {
+						update_option( 'wpt_mastodon_instance', $acs );
+						$stored_acs = $acs;
 					}
+					if ( '' !== $ack && ! $is_masked ) {
+						update_option( 'wpt_mastodon_token', $ack );
+						$stored_ack = $ack;
+					}
+				} else {
+					if ( '' !== $acs ) {
+						update_user_meta( $auth, 'wpt_mastodon_instance', $acs );
+						$stored_acs = $acs;
+					}
+					if ( '' !== $ack && ! $is_masked ) {
+						update_user_meta( $auth, 'wpt_mastodon_token', $ack );
+						$stored_ack = $ack;
+					}
+				}
+
+				if ( '' !== $stored_ack && '' !== $stored_acs ) {
 					$message  = 'failed';
 					$validate = array(
-						'token'    => $ack,
-						'instance' => $acs,
+						'token'    => $stored_ack,
+						'instance' => $stored_acs,
 					);
 					$verify   = wpt_mastodon_connection( $auth, $validate );
 					if ( isset( $verify['username'] ) ) {
@@ -141,7 +179,7 @@ function wtt_connect_mastodon( $auth = false ) {
 				<li><?php echo esc_html_e( 'Click on "New application".', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Name your application.', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Add your website URL', 'wp-to-twitter' ); ?></li>
-				<li><?php echo wp_kses_post( 'Set the API Scopes for your application. Required: <code>read</code>, <code>write:statuses</code> and <code>write:media</code>.', 'wp-to-twitter' ); ?></li>
+				<li><?php echo wp_kses_post( __( 'Set the API Scopes for your application. Required: <code>read</code>, <code>write:statuses</code> and <code>write:media</code>.', 'wp-to-twitter' ) ); ?></li>
 				<li><?php echo esc_html_e( 'Submit your application.', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Select your application from the list of "Your Applications."', 'wp-to-twitter' ); ?></li>
 				<li><?php echo esc_html_e( 'Copy your Access Token', 'wp-to-twitter' ); ?></li>

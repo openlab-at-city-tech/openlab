@@ -5,7 +5,7 @@
  * @category OAuth
  * @package  XPoster
  * @author   https://github.com/Eleirbag89, documented and adapted to WP code style.
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -123,13 +123,14 @@ class Wpt_Bluesky_Api {
 		if ( ! empty( $mentions ) ) {
 			$new_facets = array();
 			foreach ( $mentions as $mention ) {
+				$handle   = $mention['handle'];
 				$post     = array(
 					'handle' => trim( str_replace( '@', '', $handle ) ),
 				);
 				$did      = add_query_arg( $post, 'https://bsky.social/xrpc/com.atproto.identity.resolveHandle' );
 				$response = json_decode( wp_remote_get( $did )['body'] );
-				$id       = ( property_exists( $response, 'did' ) ) ? $response->did : false;
-				if ( ! $id ) {
+				$did      = ( property_exists( $response, 'did' ) ) ? $response->did : false;
+				if ( ! $did ) {
 					continue;
 				}
 				$new_facets[] = array(
@@ -140,7 +141,7 @@ class Wpt_Bluesky_Api {
 					'features' => array(
 						array(
 							'$type' => 'app.bsky.richtext.facet#mention',
-							'did'   => $id,
+							'did'   => $did,
 						),
 					),
 				);

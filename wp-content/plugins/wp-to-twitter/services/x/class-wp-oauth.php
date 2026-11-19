@@ -177,7 +177,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param object        $consumer Consumer object.
 		 * @param string|object $token Token or object with secret property.
 		 *
-		 * @return base 64 signature.
+		 * @return string base 64 signature.
 		 */
 		public function build_signature( $request, $consumer, $token ) {
 			$base_string          = $request->get_signature_base_string();
@@ -275,7 +275,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param object $consumer Consumer object.
 		 * @param string $token Token.
 		 *
-		 * @return Encoded signature.
+		 * @return string Encoded signature.
 		 */
 		public function build_signature( $request, $consumer, $token ) {
 			$base_string          = $request->get_signature_base_string();
@@ -489,7 +489,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param string $name Parameter name.
 		 *
-		 * @return Parameter value.
+		 * @return mixed Parameter value.
 		 */
 		public function get_parameter( $name ) {
 			return isset( $this->parameters[ $name ] ) ? $this->parameters[ $name ] : null;
@@ -607,7 +607,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param string $realm If realm not null.
 		 * @throws WPOAuthException Exception message.
 		 *
-		 * @return Header string.
+		 * @return string Header string.
 		 */
 		public function to_header( $realm = null ) {
 			$first = true;
@@ -677,7 +677,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Util function: current timestamp
 		 *
-		 * @return current time.
+		 * @return int current time.
 		 */
 		private static function generate_timestamp() {
 			// make sure that timestamp is in UTC.
@@ -689,7 +689,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Util function: current nonce
 		 *
-		 * @return md5 string.
+		 * @return string md5 string.
 		 */
 		private static function generate_nonce() {
 			$mt   = microtime();
@@ -752,7 +752,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param object $request Request object.
 		 *
-		 * @return new token.
+		 * @return string token.
 		 */
 		public function fetch_request_token( &$request ) {
 			$this->get_version( $request );
@@ -776,7 +776,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param object $request Request object.
 		 *
-		 * @return new token.
+		 * @return string new token.
 		 */
 		public function fetch_access_token( &$request ) {
 			$this->get_version( $request );
@@ -800,7 +800,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param object $request Request object.
 		 *
-		 * @return consumer & token.
+		 * @return array consumer & token.
 		 */
 		public function verify_request( &$request ) {
 			$this->get_version( $request );
@@ -839,7 +839,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param object $request Request.
 		 * @throws WPOAuthException Exception message.
 		 *
-		 * @return signature methods.
+		 * @return object signature methods.
 		 */
 		private function get_signature_method( &$request ) {
 			$signature_method = $request->get_parameter( 'oauth_signature_method' );
@@ -1076,7 +1076,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param string $string An encoded string.
 		 *
-		 * @return $string A decoded string.
+		 * @return string $string A decoded string.
 		 */
 		public static function urldecode_rfc3986( $string ) {
 			return urldecode( $string );
@@ -1090,7 +1090,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param string  $header Header string.
 		 * @param boolean $only_allow_oauth_parameters Strip off non-oauth params.
 		 *
-		 * @return Return parameters array.
+		 * @return array Return parameters array.
 		 */
 		public static function split_header( $header, $only_allow_oauth_parameters = true ) {
 			$pattern = '/(([-_a-z]*)=("([^"]*)"|([^,]*)),?)/';
@@ -1116,7 +1116,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Helper to try to sort out headers for people who aren't running apache
 		 *
-		 * @return headers
+		 * @return array headers
 		 */
 		public static function get_headers() {
 			if ( function_exists( 'apache_request_headers' ) ) {

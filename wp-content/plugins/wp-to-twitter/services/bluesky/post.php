@@ -5,7 +5,7 @@
  * @category Post from WordPress.
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.xposter.com
  */
 
@@ -22,15 +22,15 @@ require_once plugin_dir_path( __FILE__ ) . 'class-wpt-bluesky-api.php';
  * @param int|bool $auth Connection context.
  * @param int      $attachment Attachment ID.
  * @param array    $status Array of posting information.
- * @param int      $id Post ID.
+ * @param int      $post_ID Post ID.
  * @param string   $request_type Whether an upload or card should be added to Bluesky request.
  *
  * @return array Image blob array to be posted with status.
  */
-function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $id, $request_type = 'upload' ) {
+function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $post_ID, $request_type = 'upload' ) {
 	$request = array();
 	if ( $connection ) {
-		$card = ( function_exists( 'wpt_card_data' ) ) ? wpt_card_data( $id, 'og' ) : false;
+		$card = ( function_exists( 'wpt_card_data' ) ) ? wpt_card_data( $post_ID, 'og' ) : false;
 		if ( ! $card ) {
 			// If there's no card data, return early.
 			return $request;
@@ -38,7 +38,7 @@ function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $id
 		if ( $attachment ) {
 			$allowed = wpt_check_mime_type( $attachment, 'bluesky' );
 			if ( ! $allowed ) {
-				wpt_mail( 'Media upload mime type not accepted by Bluesky', get_post_mime_type( $attachment ), $id );
+				wpt_mail( 'Media upload mime type not accepted by Bluesky', get_post_mime_type( $attachment ), $post_ID );
 
 				return $request;
 			}
@@ -48,10 +48,10 @@ function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $id
 			 *
 			 * @hook wpt_uploaded_image_alt
 			 *
-			 * @param {string} $alt_text Text stored in media library as alt.
-			 * @param {int}    $attachment Attachment ID.
+			 * @param string $alt_text Text stored in media library as alt.
+			 * @param int    $attachment Attachment ID.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$alt_text   = apply_filters( 'wpt_uploaded_image_alt', $alt_text, $attachment );
 			$path       = wpt_attachment_path( $attachment, 'large' );
@@ -67,7 +67,7 @@ function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $id
 			if ( ! ( in_array( $mimetype, $mimetypes, true ) && (int) $size < 1000000 ) ) {
 				return $request;
 			}
-			$attachment_data = wpt_image_binary( $attachment, $id, 'bluesky' );
+			$attachment_data = wpt_image_binary( $attachment, $post_ID, 'bluesky' );
 			if ( ! $attachment_data ) {
 				return $request;
 			}
@@ -88,29 +88,31 @@ function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $id
 					),
 				);
 			} else {
-				$card    = wpt_card_data( $id, 'og' );
+				$card    = ( function_exists( 'wpt_card_data' ) ) ? wpt_card_data( $post_ID, 'og' ) : false;
+				$url     = ( get_the_permalink( $post_ID ) ) ? get_the_permalink( $post_ID ) : home_url();
 				$request = array(
 					'$type'    => 'app.bsky.embed.external',
 					'external' => array(
-						'uri'         => get_the_permalink( $id ),
+						'uri'         => $url,
 						'title'       => $card['title'],
 						'description' => $card['description'],
 						'thumb'       => $blob['blob'],
 					),
 				);
 			}
-			wpt_mail( 'Media Uploaded (Bluesky)', "$auth, $attachment" . PHP_EOL . wpt_format_error( $blob ), $id );
+			wpt_mail( 'Media Uploaded (Bluesky)', "$auth, $attachment" . PHP_EOL . wpt_format_error( $blob ), $post_ID );
 		}
 		if ( ! $attachment && 'card' === $request_type ) {
+			$url     = ( get_the_permalink( $post_ID ) ) ? get_the_permalink( $post_ID ) : home_url();
 			$request = array(
 				'$type'    => 'app.bsky.embed.external',
 				'external' => array(
-					'uri'         => get_the_permalink( $id ),
+					'uri'         => $url,
 					'title'       => $card['title'],
 					'description' => $card['description'],
 				),
 			);
-			wpt_mail( 'Bluesky Card without media', "$auth, $attachment" . PHP_EOL . wpt_format_error( $request ), $id );
+			wpt_mail( 'Bluesky Card without media', "$auth, $attachment" . PHP_EOL . wpt_format_error( $request ), $post_ID );
 
 		}
 	}
@@ -123,26 +125,26 @@ function wpt_upload_bluesky_media( $connection, $auth, $attachment, $status, $id
  *
  * @param object $connection Connection to Bluesky.
  * @param mixed  $auth Main site or specific author ID.
- * @param int    $id Post ID.
+ * @param int    $post_ID Post ID.
  * @param array  $status Array of information sent to Bluesky.
  * @param array  $image Array of image data to add to Bluesky post.
  *
  * @return array
  */
-function wpt_send_post_to_bluesky( $connection, $auth, $id, $status, $image ) {
+function wpt_send_post_to_bluesky( $connection, $auth, $post_ID, $status, $image ) {
 	$notice = '';
 	/**
 	 * Turn on staging mode. Staging mode is automatically turned on if WPT_STAGING_MODE constant is defined.
 	 *
 	 * @hook wpt_staging_mode
-	 * @param {bool}     $staging_mode True to enable staging mode.
-	 * @param {int|bool} $auth Current author.
-	 * @param {int}      $id Post ID.
-	 * @param {string}   $service Service being put into staging.
+	 * @param bool     $staging_mode True to enable staging mode.
+	 * @param int|bool $auth Current author.
+	 * @param int      $post_ID Post ID.
+	 * @param string   $service Service being put into staging.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
-	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id, 'bluesky' );
+	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $post_ID, 'bluesky' );
 	$status_text  = $status['text'];
 	if ( ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) || $staging_mode ) {
 		// if in staging mode, we'll behave as if the update succeeded, but not send it.
@@ -156,14 +158,14 @@ function wpt_send_post_to_bluesky( $connection, $auth, $id, $status, $image ) {
 		 * Filter the approval to send a Bluesky post.
 		 *
 		 * @hook wpt_do_bluesky_post
-		 * @param {bool}     $do_post Return false to cancel this post.
-		 * @param {int|bool} $auth Author.
-		 * @param {int}      $id Post ID.
-		 * @param {string}   $text Status update text.
+		 * @param bool     $do_post Return false to cancel this post.
+		 * @param int|bool $auth Author.
+		 * @param int      $post_ID Post ID.
+		 * @param string   $text Status update text.
 		 *
-		 * @return {bool}
+		 * @return bool
 		 */
-		$do_post   = apply_filters( 'wpt_do_bluesky_post', true, $auth, $id, $status['text'] );
+		$do_post   = apply_filters( 'wpt_do_bluesky_post', true, $auth, $post_ID, $status['text'] );
 		$status_id = false;
 		$success   = false;
 		// Change status array to Bluesky expectation.
@@ -180,15 +182,16 @@ function wpt_send_post_to_bluesky( $connection, $auth, $id, $status, $image ) {
 		 *
 		 * @hook wpt_filter_bluesky_status
 		 *
-		 * @param {array}    $status Array of parameters sent to Bluesky.
-		 * @param {int}      $post Post ID being tweeted.
-		 * @param {int|bool} $auth Authoring context.
+		 * @param array    $status Array of parameters sent to Bluesky.
+		 * @param int      $post Post ID being tweeted.
+		 * @param int|bool $auth Authoring context.
 		 *
-		 * @return {array}
+		 * @return array
 		 */
-		$status = apply_filters( 'wpt_filter_bluesky_status', $status, $id, $auth );
+		$status = apply_filters( 'wpt_filter_bluesky_status', $status, $post_ID, $auth );
 		if ( $do_post ) {
 			$return = $connection->post_status( $status );
+			wpt_mail( 'Bluesky Connection Data', print_r( $return, 1 ), $post_ID );
 			if ( isset( $return['cid'] ) ) {
 				$success   = true;
 				$http_code = 200;

@@ -5,7 +5,7 @@
  * @category Core
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  *
  * The first PHP Library to support WPOAuth for X.com's REST API.
@@ -27,7 +27,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Contains the last HTTP status code returned
 		 *
-		 * @var status code
+		 * @var int status code
 		 */
 		public $http_code;
 		/**
@@ -57,7 +57,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Contains the last API call
 		 *
-		 * @var $last_api_call
+		 * @var string $last_api_call
 		 */
 		private $last_api_call;
 		/**
@@ -76,7 +76,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Set API URLS
 		 *
-		 * @return access token endpoint.
+		 * @return string access token endpoint.
 		 */
 		protected function access_token_url() {
 			return 'https://api.twitter.com/oauth/access_token';
@@ -85,7 +85,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Set authentication URL.
 		 *
-		 * @return authentication endpoint.
+		 * @return string authentication endpoint.
 		 */
 		protected function authenticate_url() {
 			return 'https://api.twitter.com/oauth/authenticate';
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Set authorization URL.
 		 *
-		 * @return authorization endpoint.
+		 * @return string authorization endpoint.
 		 */
 		protected function authorize_url() {
 			return 'https://api.twitter.com/oauth/authorize';
@@ -103,7 +103,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Set request Token URL.
 		 *
-		 * @return request token ednpoint.
+		 * @return string request token ednpoint.
 		 */
 		protected function request_token_url() {
 			return 'https://api.twitter.com/oauth/request_token';
@@ -112,7 +112,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Debug helpers
 		 *
-		 * @return last query's http code response.
+		 * @return int last query's http code response.
 		 */
 		public function last_status_code() {
 			return $this->http_code;
@@ -121,7 +121,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		/**
 		 * Return last API call.
 		 *
-		 * @return last query API call.
+		 * @return string last query API call.
 		 */
 		public function last_api_call() {
 			return $this->last_api_call;
@@ -164,7 +164,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @param string $response_string String from response.
 		 *
-		 * @return a key/value array
+		 * @return array key/value array
 		 */
 		public function wp_oauth_parse_response( $response_string ) {
 			$r = array();
@@ -184,7 +184,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 *
 		 * @param array $token Token array.
 		 *
-		 * @returns a string
+		 * @return string
 		 */
 		public function getauthorize_url( $token ) {
 			if ( is_array( $token ) ) {
@@ -231,7 +231,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 * @param string $url URL.
 		 * @param array  $parameters Request params.
 		 *
-		 * @return array decoded response.
+		 * @return mixed decoded response.
 		 */
 		public function post( $url, $parameters = array() ) {
 			$response = $this->wp_oauth_request( $url, $parameters, 'POST' );
@@ -248,7 +248,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 * @param string $url URL.
 		 * @param array  $parameters Request params.
 		 *
-		 * @return decoded response.
+		 * @return string decoded response.
 		 */
 		public function media( $url, $parameters = array() ) {
 			$response = $this->wp_oauth_request( $url, $parameters, 'MEDIA' );
@@ -265,7 +265,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 		 * @param string $url URL.
 		 * @param array  $parameters Request params.
 		 *
-		 * @return decoded response.
+		 * @return mixed decoded response.
 		 */
 		public function get( $url, $parameters = array() ) {
 			$response = $this->wp_oauth_request( $url, $parameters, 'GET' );
@@ -319,10 +319,10 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 			 *
 			 * @hook wpt_uploaded_image_alt
 			 *
-			 * @param {string} $alt_text Text stored in media library as alt.
-			 * @param {int}    $attachment Attachment ID.
+			 * @param string $alt_text Text stored in media library as alt.
+			 * @param int    $attachment Attachment ID.
 			 *
-			 * @return {string}
+			 * @return string
 			 */
 			$alt_text = apply_filters( 'wpt_uploaded_image_alt', $alt_text, $attachment );
 			if ( '' !== $alt_text ) {

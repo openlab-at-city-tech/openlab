@@ -3,6 +3,234 @@
 Please refer to [UPGRADING](UPGRADING.md) guide for upgrading to a major version.
 
 
+## 7.12.1 - 2026-06-18
+
+### Changed
+
+- Adjusted `guzzlehttp/psr7` version constraint to `^2.12.1`
+
+### Fixed
+
+- Reject proxy URLs with a malformed scheme in the cURL handlers instead of letting libcurl mishandle them
+
+### Security
+
+- Reject HTTPS proxies when the installed libcurl lacks HTTPS-proxy support (GHSA-wpwq-4j6v-78m3)
+- Reject dot-only cookie `Domain` attributes as match-all (GHSA-cwxw-98qj-8qjx)
+
+
+## 7.12.0 - 2026-06-16
+
+### Added
+
+- Added `RequestOptions` constants for `curl`, `retries`, and `stream_context`
+
+### Changed
+
+- Adjusted `guzzlehttp/psr7` version constraint to `^2.12`
+- Constrain cURL transport sharing to safe libcurl DNS and SSL session support
+- Resolve proxy environment variables in the cURL handlers; libcurl no longer reads the environment itself
+- Ignore proxy environment variables when the `proxy` request option makes a decision
+- Disable proxy environment variables on Windows SAPIs other than CLI (httpoxy hardening)
+- Redact proxy credentials from cURL handler error messages, following `Psr7\Utils::redactUserInfo()`
+- Normalize no-proxy domain and IP literal matching across the cURL and stream handlers
+
+### Deprecated
+
+- Deprecated the request-level `handler` option, which will be ignored in 8.0
+- Deprecated raw cURL request options outside the built-in cURL handlers' allow-list
+- Deprecated the `CURLOPT_PROXYTYPE` cURL request option; set the proxy type via a scheme-prefixed proxy URL
+- Deprecated PHP stream context options outside the built-in stream handler allow-list
+- Deprecated passing `ntlm` as a built-in `auth` type
+- Deprecated `Utils::describeType()`
+- Deprecated non-finite floats in the `query` and `form_params` options; 8.0 rejects them
+- Deprecated non-string scalar values in the `body` option; 8.0 rejects them
+
+### Fixed
+
+- Fix cURL TLS and HTTP/2 capability detection using libcurl feature checks
+- Fix proxy `no` list matches being re-proxied through environment-configured proxies by libcurl
+- Fix `no` list and `NO_PROXY` matching to support IP CIDR ranges, matching libcurl
+- Fix the stream handler not applying scheme-less proxies and their credentials
+
+
+## 7.11.2 - 2026-06-12
+
+### Fixed
+
+- Fixed non-finite float values emitting coercion warnings on PHP 8.5
+
+
+## 7.11.1 - 2026-06-07
+
+### Fixed
+
+- Ignore request-level `transport_sharing`, matching other unknown request options
+
+
+## 7.11.0 - 2026-06-02
+
+### Added
+
+- Added support for providing the `proxy` request option's `no` value as a comma-delimited string
+- Added the `protocols` request option to restrict allowed URI schemes for request transfers
+- Added `cert_type` and `ssl_key_type` request options for TLS certificate and private-key file types
+- Added PHP stream handler support for the `ssl_key` request option
+- Added transport sharing via the `transport_sharing` client and cURL handler options
+
+### Changed
+
+- Adjusted `guzzlehttp/promises` version constraint to `^2.5`
+- Adjusted `guzzlehttp/psr7` version constraint to `^2.11`
+- Allowed domainless `SetCookie` instances to be stored without wildcard request matching
+- Changed no-proxy matching to respect request ports for host-and-port rules
+- Prevented `CurlMultiHandler` destructors from throwing during cleanup
+- Improved invalid response handling across handlers
+
+### Deprecated
+
+- Deprecated non-iterable `Pool` request collections, which will be rejected in 8.0
+- Deprecated non-uppercase easy request methods; 8.0 preserves method casing
+- Deprecated non-string `headers` request option values, which will be rejected in 8.0
+- Deprecated empty `headers` request option value arrays, which will be rejected in 8.0
+- Deprecated empty and malformed request protocol versions, which will be rejected in 8.0
+- Deprecated conflicting raw cURL request options, including `CURLOPT_SHARE`, which will be rejected in 8.0
+- Deprecated scalar-coerced `idn_conversion` request option values, which will be rejected in 8.0
+- Deprecated invalid documented request option value types, which will be rejected in 8.0
+- Deprecated selected request options ignored by incompatible built-in handlers, which will be rejected in 8.0
+- Deprecated `RequestException::wrapException()`, which will be removed in 8.0
+- Deprecated `RetryMiddleware::exponentialDelay()`, which will be removed in 8.0
+
+
+## 7.10.6 - 2026-06-01
+
+### Fixed
+
+- `CurlMultiHandler` now rejects the promise when `CurlFactory::finish()` throws, preserving sibling transfers
+- `SetCookie` now normalizes unparseable `Expires` values to `null` instead of `false`
+- Fix stream handler decoded `gzip`/`deflate` truncation by dropping invalid `Content-Length`
+
+
+## 7.10.5 - 2026-05-27
+
+### Fixed
+
+- Defer cURL multi cancellation cleanup until after progress callbacks return
+- Classify additional stream handler connection failures as `ConnectException`
+
+
+## 7.10.4 - 2026-05-22
+
+### Fixed
+
+- Fix IPv6 literal matching in no-proxy rules
+- Handle cURL multi completion messages without handles after cancelled transfers
+- Fix magic client request methods such as `options()` to uppercase inferred HTTP methods
+
+
+## 7.10.3 - 2026-05-20
+
+### Fixed
+
+- Fail clearly when an HTTP response header line is invalid
+- Remove middleware by name when the name is also a callable string
+- Treat empty request protocol versions as HTTP/1.1
+
+
+## 7.10.2 - 2026-05-20
+
+### Fixed
+
+- Normalize HTTP version request options before applying them to PSR-7 requests
+- Use string values for headers generated by request preparation and response decoding
+
+
+## 7.10.1 - 2026-05-19
+
+### Fixed
+
+- Fail clearly when cURL options cannot be applied
+- Fail clearly when the certificate option is malformed
+- Fail clearly when JSON decode depth is invalid
+- Fail clearly when session cookie data is malformed
+- Fail clearly when the stream progress option is not callable
+- Prevent response creation failures from exposing stale cURL responses
+
+
+## 7.10.0 - 2025-08-23
+
+### Added
+
+- Support for PHP 8.5
+
+### Changed
+
+- Adjusted `guzzlehttp/promises` version constraint to `^2.3`
+- Adjusted `guzzlehttp/psr7` version constraint to `^2.8`
+
+
+## 7.9.3 - 2025-03-27
+
+### Changed
+
+- Remove explicit content-length header for GET requests
+- Improve compatibility with bad servers for boolean cookie values
+
+
+## 7.9.2 - 2024-07-24
+
+### Fixed
+
+- Adjusted handler selection to use cURL if its version is 7.21.2 or higher, rather than 7.34.0
+
+
+## 7.9.1 - 2024-07-19
+
+### Fixed
+
+- Fix TLS 1.3 check for HTTP/2 requests
+
+
+## 7.9.0 - 2024-07-18
+
+### Changed
+
+- Improve protocol version checks to provide feedback around unsupported protocols
+- Only select the cURL handler by default if 7.34.0 or higher is linked
+- Improved `CurlMultiHandler` to avoid busy wait if possible
+- Dropped support for EOL `guzzlehttp/psr7` v1
+- Improved URI user info redaction in errors
+
+## 7.8.2 - 2024-07-18
+
+### Added
+
+- Support for PHP 8.4
+
+
+## 7.8.1 - 2023-12-03
+
+### Changed
+
+- Updated links in docs to their canonical versions
+- Replaced `call_user_func*` with native calls
+
+
+## 7.8.0 - 2023-08-27
+
+### Added
+
+- Support for PHP 8.3
+- Added automatic closing of handles on `CurlFactory` object destruction
+
+
+## 7.7.1 - 2023-08-27
+
+### Changed
+
+- Remove the need for `AllowDynamicProperties` in `CurlMultiHandler`
+
+
 ## 7.7.0 - 2023-05-21
 
 ### Added
@@ -628,7 +856,8 @@ object).
   * Note: This has been changed in 5.0.3 to now encode query string values by
     default unless the `rawString` argument is provided when setting the query
     string on a URL: Now allowing many more characters to be present in the
-    query string without being percent encoded. See https://tools.ietf.org/html/rfc3986#appendix-A
+    query string without being percent encoded. See
+    https://datatracker.ietf.org/doc/html/rfc3986#appendix-A
 
 
 ## 5.0.1 - 2014-10-16
@@ -860,7 +1089,7 @@ interfaces.
 ## 4.0.0 - 2014-03-29
 
 * For information on changes and upgrading, see:
-  https://github.com/guzzle/guzzle/blob/master/UPGRADING.md#3x-to-40
+  https://github.com/guzzle/guzzle/blob/4.x/UPGRADING.md#3x-to-40
 * Added `GuzzleHttp\batch()` as a convenience function for sending requests in
   parallel without needing to write asynchronous code.
 * Restructured how events are added to `GuzzleHttp\ClientInterface::sendAll()`.
@@ -893,7 +1122,7 @@ interfaces.
 
 ## 4.0.0-rc.1 - 2014-03-15
 
-* See https://github.com/guzzle/guzzle/blob/master/UPGRADING.md#3x-to-40
+* See https://github.com/guzzle/guzzle/blob/4.x/UPGRADING.md#3x-to-40
 
 ## 3.8.1 - 2014-01-28
 
@@ -1167,7 +1396,7 @@ interfaces.
 
 ## 3.4.0 - 2013-04-11
 
-* Bug fix: URLs are now resolved correctly based on https://tools.ietf.org/html/rfc3986#section-5.2. #289
+* Bug fix: URLs are now resolved correctly based on https://datatracker.ietf.org/doc/html/rfc3986#section-5.2. #289
 * Bug fix: Absolute URLs with a path in a service description will now properly override the base URL. #289
 * Bug fix: Parsing a query string with a single PHP array value will now result in an array. #263
 * Bug fix: Better normalization of the User-Agent header to prevent duplicate headers. #264.

@@ -5,7 +5,7 @@
  * @category OAuth
  * @package  XPoster
  * @author   https://github.com/Eleirbag89, documented and adapted to WP code style.
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 

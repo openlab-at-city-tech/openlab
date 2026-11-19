@@ -5,7 +5,7 @@
  * @category Metabox
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -77,7 +77,7 @@ function wpt_add_twitter_inner_box( $post ) {
 			<p class='jtw'>
 				<label for="wpt_custom_tweet"><?php esc_html_e( 'Custom Status Update', 'wp-to-twitter' ); ?></label><br/>
 				<textarea class="wpt_tweet_box widefat" name="_jd_twitter" id="wpt_custom_tweet" placeholder="<?php echo esc_attr( $template ); ?>" rows="2" cols="60"><?php echo esc_textarea( stripslashes( $custom_update ) ); ?></textarea>
-			</p>		
+			</p>
 			<div role="alert" class="x-notification notice inline notice-info hidden"><p><?php esc_html_e( 'X length limit reached:', 'wp-to-twitter' ); ?> <span></span></p></div>
 			<div role="alert" class="bluesky-notification notice inline notice-info hidden"><p><?php esc_html_e( 'Bluesky length limit reached:', 'wp-to-twitter' ); ?> <span></span></p></div>
 			<div role="alert" class="mastodon-notification notice inline notice-info hidden"><p><?php esc_html_e( 'Mastodon length limit reached:', 'wp-to-twitter' ); ?> <span></span></p></div>
@@ -119,7 +119,7 @@ function wpt_add_twitter_inner_box( $post ) {
 				 *
 				 * @hook wpt_after_meta_template_box
 				 *
-				 * @param {int} $post_ID Post ID.
+				 * @param int $post_ID Post ID.
 				 */
 				do_action( 'wpt_after_meta_template_box', $post->ID );
 				if ( get_option( 'jd_keyword_format' ) === '2' ) {

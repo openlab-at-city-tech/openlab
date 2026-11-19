@@ -6,15 +6,25 @@ $loader = require_once __DIR__.'/autoload.php';
 
 // Exposed classes. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-classes
-if (!class_exists('ComposerAutoloaderInitec64a760bf896e301866df9232c77bd4', false) && !interface_exists('ComposerAutoloaderInitec64a760bf896e301866df9232c77bd4', false) && !trait_exists('ComposerAutoloaderInitec64a760bf896e301866df9232c77bd4', false)) {
-    spl_autoload_call('WpToTwitter_Vendor\ComposerAutoloaderInitec64a760bf896e301866df9232c77bd4');
+if (!class_exists('ComposerAutoloaderInit9684a9f14dc959b50e886713cd5474f0', false) && !interface_exists('ComposerAutoloaderInit9684a9f14dc959b50e886713cd5474f0', false) && !trait_exists('ComposerAutoloaderInit9684a9f14dc959b50e886713cd5474f0', false)) {
+    spl_autoload_call('WpToTwitter_Vendor\ComposerAutoloaderInit9684a9f14dc959b50e886713cd5474f0');
 }
 
 // Exposed functions. For more information see:
 // https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#exposing-functions
+if (!function_exists('composerRequire9684a9f14dc959b50e886713cd5474f0')) {
+    function composerRequire9684a9f14dc959b50e886713cd5474f0() {
+        return \WpToTwitter_Vendor\composerRequire9684a9f14dc959b50e886713cd5474f0(...func_get_args());
+    }
+}
 if (!function_exists('trigger_deprecation')) {
     function trigger_deprecation() {
         return \WpToTwitter_Vendor\trigger_deprecation(...func_get_args());
+    }
+}
+if (!function_exists('http_get_last_response_headers')) {
+    function http_get_last_response_headers() {
+        return \WpToTwitter_Vendor\http_get_last_response_headers(...func_get_args());
     }
 }
 

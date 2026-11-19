@@ -4,17 +4,19 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitec64a760bf896e301866df9232c77bd4
+class ComposerStaticInit9684a9f14dc959b50e886713cd5474f0
 {
     public static $files = array (
-        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
+        'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
+        '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
     );
 
     public static $prefixLengthsPsr4 = array (
         'W' => 
         array (
+            'WpToTwitter_Vendor\\Symfony\\Polyfill\\Php80\\' => 42,
             'WpToTwitter_Vendor\\Psr\\Http\\Message\\' => 36,
             'WpToTwitter_Vendor\\Psr\\Http\\Client\\' => 35,
             'WpToTwitter_Vendor\\Noweh\\TwitterApi\\' => 36,
@@ -26,6 +28,10 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
     );
 
     public static $prefixDirsPsr4 = array (
+        'WpToTwitter_Vendor\\Symfony\\Polyfill\\Php80\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
+        ),
         'WpToTwitter_Vendor\\Psr\\Http\\Message\\' => 
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
@@ -59,6 +65,7 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'WpToTwitter_Vendor\\Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\BodySummarizer' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/BodySummarizer.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\BodySummarizerInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/BodySummarizerInterface.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Client' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Client.php',
@@ -83,10 +90,13 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\CurlFactoryInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/CurlFactoryInterface.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\CurlHandler' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/CurlHandler.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\CurlMultiHandler' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/CurlMultiHandler.php',
+        'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\CurlShareHandleState' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/CurlShareHandleState.php',
+        'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\CurlVersion' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/CurlVersion.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\EasyHandle' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/EasyHandle.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\HeaderProcessor' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/HeaderProcessor.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\MockHandler' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/MockHandler.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\Proxy' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/Proxy.php',
+        'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\ProxyEnvironment' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/ProxyEnvironment.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Handler\\StreamHandler' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Handler/StreamHandler.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\MessageFormatter' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/MessageFormatter.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\MessageFormatterInterface' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/MessageFormatterInterface.php',
@@ -129,6 +139,7 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
         'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\Query' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Query.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\Request' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Request.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\Response' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Response.php',
+        'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\Rfc3986' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Rfc3986.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\Rfc7230' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Rfc7230.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\ServerRequest' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/ServerRequest.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Psr7\\Stream' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/Stream.php',
@@ -145,6 +156,7 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
         'WpToTwitter_Vendor\\GuzzleHttp\\RetryMiddleware' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/RetryMiddleware.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Subscriber\\Oauth\\Oauth1' => __DIR__ . '/..' . '/guzzlehttp/oauth-subscriber/src/Oauth1.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\TransferStats' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/TransferStats.php',
+        'WpToTwitter_Vendor\\GuzzleHttp\\TransportSharing' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/TransportSharing.php',
         'WpToTwitter_Vendor\\GuzzleHttp\\Utils' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/Utils.php',
         'WpToTwitter_Vendor\\Noweh\\TwitterApi\\AbstractController' => __DIR__ . '/..' . '/noweh/twitter-api-v2-php/src/AbstractController.php',
         'WpToTwitter_Vendor\\Noweh\\TwitterApi\\Client' => __DIR__ . '/..' . '/noweh/twitter-api-v2-php/src/Client.php',
@@ -162,6 +174,7 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
         'WpToTwitter_Vendor\\Noweh\\TwitterApi\\UserLookup' => __DIR__ . '/..' . '/noweh/twitter-api-v2-php/src/UserLookup.php',
         'WpToTwitter_Vendor\\Noweh\\TwitterApi\\UserMeLookup' => __DIR__ . '/..' . '/noweh/twitter-api-v2-php/src/UserMeLookup.php',
         'WpToTwitter_Vendor\\Noweh\\TwitterApi\\UserMutes' => __DIR__ . '/..' . '/noweh/twitter-api-v2-php/src/UserMutes.php',
+        'WpToTwitter_Vendor\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/PhpToken.php',
         'WpToTwitter_Vendor\\Psr\\Http\\Client\\ClientExceptionInterface' => __DIR__ . '/..' . '/psr/http-client/src/ClientExceptionInterface.php',
         'WpToTwitter_Vendor\\Psr\\Http\\Client\\ClientInterface' => __DIR__ . '/..' . '/psr/http-client/src/ClientInterface.php',
         'WpToTwitter_Vendor\\Psr\\Http\\Client\\NetworkExceptionInterface' => __DIR__ . '/..' . '/psr/http-client/src/NetworkExceptionInterface.php',
@@ -179,14 +192,19 @@ class ComposerStaticInitec64a760bf896e301866df9232c77bd4
         'WpToTwitter_Vendor\\Psr\\Http\\Message\\UploadedFileInterface' => __DIR__ . '/..' . '/psr/http-message/src/UploadedFileInterface.php',
         'WpToTwitter_Vendor\\Psr\\Http\\Message\\UriFactoryInterface' => __DIR__ . '/..' . '/psr/http-factory/src/UriFactoryInterface.php',
         'WpToTwitter_Vendor\\Psr\\Http\\Message\\UriInterface' => __DIR__ . '/..' . '/psr/http-message/src/UriInterface.php',
+        'WpToTwitter_Vendor\\Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
+        'WpToTwitter_Vendor\\Symfony\\Polyfill\\Php80\\Php80' => __DIR__ . '/..' . '/symfony/polyfill-php80/Php80.php',
+        'WpToTwitter_Vendor\\Symfony\\Polyfill\\Php80\\PhpToken' => __DIR__ . '/..' . '/symfony/polyfill-php80/PhpToken.php',
+        'WpToTwitter_Vendor\\UnhandledMatchError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/UnhandledMatchError.php',
+        'WpToTwitter_Vendor\\ValueError' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/ValueError.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitec64a760bf896e301866df9232c77bd4::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitec64a760bf896e301866df9232c77bd4::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitec64a760bf896e301866df9232c77bd4::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9684a9f14dc959b50e886713cd5474f0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9684a9f14dc959b50e886713cd5474f0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9684a9f14dc959b50e886713cd5474f0::$classMap;
 
         }, null, ClassLoader::class);
     }

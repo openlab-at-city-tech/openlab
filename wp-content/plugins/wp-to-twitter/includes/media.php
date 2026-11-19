@@ -5,7 +5,7 @@
  * @category Status Updates
  * @package  XPoster
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-to-twitter/
  */
 
@@ -143,10 +143,10 @@ function wpt_post_with_media( $post_ID ) {
 	 * Filter whether this post should upload media.
 	 *
 	 * @hook wpt_upload_media
-	 * @param {bool} $upload True to allow this post to upload media.
-	 * @param {int}  $post_ID Post ID.
+	 * @param bool $upload True to allow this post to upload media.
+	 * @param int  $post_ID Post ID.
 	 *
-	 * @return {bool}
+	 * @return bool
 	 */
 	return apply_filters( 'wpt_upload_media', $return, $post_ID );
 }

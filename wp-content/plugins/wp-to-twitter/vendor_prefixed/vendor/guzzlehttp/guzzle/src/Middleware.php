@@ -48,7 +48,7 @@ final class Middleware
      *
      * @return callable(callable): callable Returns a function that accepts the next handler.
      */
-    public static function httpErrors(BodySummarizerInterface $bodySummarizer = null) : callable
+    public static function httpErrors(?BodySummarizerInterface $bodySummarizer = null) : callable
     {
         return static function (callable $handler) use($bodySummarizer) : callable {
             return static function ($request, array $options) use($handler, $bodySummarizer) {
@@ -104,7 +104,7 @@ final class Middleware
      *
      * @return callable Returns a function that accepts the next handler.
      */
-    public static function tap(callable $before = null, callable $after = null) : callable
+    public static function tap(?callable $before = null, ?callable $after = null) : callable
     {
         return static function (callable $handler) use($before, $after) : callable {
             return static function (RequestInterface $request, array $options) use($handler, $before, $after) {
@@ -145,7 +145,7 @@ final class Middleware
      *
      * @return callable Returns a function that accepts the next handler.
      */
-    public static function retry(callable $decider, callable $delay = null) : callable
+    public static function retry(callable $decider, ?callable $delay = null) : callable
     {
         return static function (callable $handler) use($decider, $delay) : RetryMiddleware {
             return new RetryMiddleware($decider, $handler, $delay);
@@ -155,11 +155,11 @@ final class Middleware
      * Middleware that logs requests, responses, and errors using a message
      * formatter.
      *
-     * @phpstan-param \Psr\Log\LogLevel::* $logLevel  Level at which to log requests.
-     *
      * @param LoggerInterface                            $logger    Logs messages.
      * @param MessageFormatterInterface|MessageFormatter $formatter Formatter used to create message strings.
      * @param string                                     $logLevel  Level at which to log requests.
+     *
+     * @phpstan-param \Psr\Log\LogLevel::* $logLevel Level at which to log requests.
      *
      * @return callable Returns a function that accepts the next handler.
      */
