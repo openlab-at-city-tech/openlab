@@ -1,8 +1,10 @@
 <?php
-/**
- * Trait for Really Simple CAPTCHA Filesystem
- */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+/**
+ * Trait for Really Simple CAPTCHA Filesystem.
+ */
 trait ReallySimpleCaptcha_Filesystem {
 
 	/**

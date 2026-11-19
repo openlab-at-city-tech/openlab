@@ -3,16 +3,18 @@
  * Plugin Name: Really Simple CAPTCHA
  * Plugin URI: https://contactform7.com/captcha/
  * Description: Really Simple CAPTCHA is a CAPTCHA module intended to be called from other plugins. It is originally created for my Contact Form 7 plugin.
- * Author: Takayuki Miyoshi
- * Author URI: https://ideasilo.wordpress.com/
+ * Author: Rock Lobster Inc.
+ * Author URI: https://github.com/rocklobster-in/
  * License: GPL v2 or later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Version: 2.4
- * Requires at least: 6.6
- * Requires PHP: 7.4
+ * Version: 2.5
+ * Requires at least: 7.1
+ * Requires PHP: 8.3
  */
 
-define( 'REALLYSIMPLECAPTCHA_VERSION', '2.4' );
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
+define( 'REALLYSIMPLECAPTCHA_VERSION', '2.5' );
 
 require_once __DIR__ . '/includes/filesystem.php';
 

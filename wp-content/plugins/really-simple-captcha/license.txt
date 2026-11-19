@@ -1,4 +1,6 @@
-Really Simple CAPTCHA - WordPress Plugin, 2007-2025 Takayuki Miyoshi
+Really Simple CAPTCHA WordPress Plugin
+
+Copyright (C) 2007-2025 Takayuki Miyoshi 2025-2026 Rock Lobster Inc.
 Really Simple CAPTCHA is distributed under the terms of the GNU GPL
 
 This program is free software; you can redistribute it and/or modify

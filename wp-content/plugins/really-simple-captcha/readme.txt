@@ -1,13 +1,13 @@
 === Really Simple CAPTCHA ===
-Contributors: takayukister
-Donate link: https://contactform7.com/donate/
+Contributors: rocklobsterinc, takayukister
 Tags: captcha
-Requires at least: 6.6
-Tested up to: 6.7
-Stable tag: 2.4
-Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Donate link: https://contactform7.com/donate/
+Stable tag: 2.5
+Requires at least: 7.1
+Requires PHP: 8.3
+Tested up to: 7.1
 
 Really Simple CAPTCHA is a CAPTCHA module intended to be called from other plugins. It is originally created for my Contact Form 7 plugin.
 
@@ -91,6 +91,12 @@ If you have any further questions, please submit them [to the support forum](htt
 1. screenshot-1.png
 
 == Changelog ==
+
+= 2.5 =
+
+* Bumps up the minimum required WordPress version to 7.1.
+* Bumps up the minimum required PHP version to 8.3.
+* Changes the author name to Rock Lobster Inc. (a Japan-based company that the original author, Takayuki Miyoshi, owns)
 
 = 2.4 =
 
