@@ -5,9 +5,13 @@
  * @category Toolbar
  * @package  WP Accessibility
  * @author   Joe Dolson
- * @license  GPLv3
+ * @license  GPLv2
  * @link     https://www.joedolson.com/wp-accessibility/
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Toolbar class.
@@ -32,7 +36,7 @@ function wpa_register_scripts() {
 	wp_register_script(
 		'wpa-toolbar',
 		$wpatb,
-		array(),
+		array( 'wp-accessibility' ),
 		$wpa_version,
 		array(
 			'in_footer' => true,
@@ -74,32 +78,26 @@ function wpa_toolbar_enqueue_scripts() {
 	 *
 	 * @hook wpa_toolbar_css
 	 *
-	 * @param {string} $url URL to stylesheet for accessibility toolbar.
+	 * @param string $url URL to stylesheet for accessibility toolbar.
 	 *
 	 * @return string
 	 */
 	$toolbar_styles = apply_filters( 'wpa_toolbar_css', plugins_url( 'toolbar/css/a11y.css', __FILE__ ) );
 	wp_register_style( 'wpa-toolbar', $toolbar_styles, array( 'ui-font' ), $wpa_version );
 
-	// Font resizing stylesheet.
-	$fontsize_stylesheet = ( 'on' === get_option( 'wpa_alternate_fontsize' ) ) ? 'a11y-fontsize-alt' : 'a11y-fontsize';
 	/**
 	 * Filter the URL to the stylesheet controlling large font views.
 	 *
 	 * @hook wpa_fontsize_css
 	 *
-	 * @param {string} $stylesheet URL for increased font size stylesheet.
+	 * @param string $stylesheet URL for increased font size stylesheet. Default empty string.
 	 *
 	 * @return string
 	 */
-	$fontsize = apply_filters( 'wpa_fontsize_css', plugins_url( 'toolbar/css/' . $fontsize_stylesheet . '.css', __FILE__ ) );
-	wp_register_style( 'ui-fontsize.css', $fontsize, array(), $wpa_version );
-	if ( 'on' === get_option( 'wpa_alternate_fontsize' ) ) {
-		$vars = 'html { --wpa-font-size: 150%; }';
-	} else {
-		$vars = 'html { --wpa-font-size: clamp( 24px, 1.5rem, 36px ); --wpa-h1-size : clamp( 48px, 3rem, 72px ); --wpa-h2-size : clamp( 40px, 2.5rem, 60px ); --wpa-h3-size : clamp( 32px, 2rem, 48px ); --wpa-h4-size : clamp( 28px, 1.75rem, 42px ); --wpa-sub-list-size: 1.1em; --wpa-sub-sub-list-size: 1em; } ';
+	$fontsize = apply_filters( 'wpa_fontsize_css', '' );
+	if ( $fontsize ) {
+		wp_register_style( 'ui-fontsize.css', $fontsize, array(), $wpa_version );
 	}
-	wp_add_inline_style( 'ui-fontsize.css', $vars );
 
 	// Control toolbar font size.
 	$toolbar_size = get_option( 'wpa_toolbar_size' );
@@ -108,8 +106,10 @@ function wpa_toolbar_enqueue_scripts() {
 	if ( get_option( 'wpa_toolbar_size' ) && 'on' === get_option( 'wpa_toolbar' ) ) {
 		wp_add_inline_style( 'wpa-toolbar', '.a11y-toolbar ul li button { font-size: ' . $toolbar_size . ' !important; }' );
 	}
-	if ( $toolbar_styles && $fontsize ) {
+	if ( $toolbar_styles ) {
 		wp_enqueue_style( 'wpa-toolbar' );
+	}
+	if ( $fontsize ) {
 		wp_enqueue_style( 'ui-fontsize.css' );
 	}
 }
@@ -188,7 +188,7 @@ function wpa_toolbar_js() {
 	 *
 	 * @hook wpa_move_toolbar
 	 *
-	 * @param {string} $el Target element selector.
+	 * @param string $el Target element selector.
 	 *
 	 * @return string
 	 */
@@ -204,6 +204,18 @@ function wpa_toolbar_js() {
 	$enable_fontsize  = ( 'off' === get_option( 'wpa_toolbar_fs' ) ) ? 'false' : 'true';
 	$enable_contrast  = ( 'off' === get_option( 'wpa_toolbar_ct' ) ) ? 'false' : 'true';
 
+	/**
+	 * Filter the URL to the stylesheet controlling large font views.
+	 *
+	 * @hook wpa_fontsize_css
+	 *
+	 * @param string $stylesheet URL for increased font size stylesheet. Default empty string.
+	 *
+	 * @return string
+	 */
+	$custom_fontsize = apply_filters( 'wpa_fontsize_css', '' ) ? '1' : '0';
+	$factor          = ( '' !== get_option( 'wpa_font_factor', '' ) ) ? esc_attr( get_option( 'wpa_font_factor' ) ) : '1.6';
+
 	return array(
 		'location'         => $location,
 		'is_rtl'           => $is_rtl,
@@ -212,9 +224,11 @@ function wpa_toolbar_js() {
 		'contrast'         => $contrast,
 		'grayscale'        => $grayscale,
 		'fontsize'         => $fontsize,
+		'custom_fontsize'  => $custom_fontsize,
 		'custom_location'  => $custom_location,
 		'enable_grayscale' => $enable_grayscale,
 		'enable_fontsize'  => $enable_fontsize,
 		'enable_contrast'  => $enable_contrast,
+		'factor'           => $factor,
 	);
 }
