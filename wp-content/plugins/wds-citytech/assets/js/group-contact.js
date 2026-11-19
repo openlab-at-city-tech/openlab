@@ -44,11 +44,15 @@ window.wp = window.wp || {};
 		 * Generate a user-related list item.
 		 */
 		function create_list_item( nicename, label ) {
-			var li = '';
+			var $li = $( '<li class="group-contact-member">' )
+				.attr( { id: 'group-contact-' + nicename, 'data-nicename': nicename } )
+				.text( label )
+				.append(
+					$( '<input type="hidden" name="group-contact-js[]">' ).val( nicename ),
+					'<span class="group-contact-remove"> <a href="#"><span class="fa fa-minus-circle"></span><span class="screen-reader-text">Remove Contact</span></a></span>'
+				);
 
-			li = '<li id="group-contact-' + nicename + '" class="group-contact-member" data-nicename="' + nicename + '"><span class="group-contact-remove"><a href="#"><span class="fa fa-minus-circle"></span><span class="screen-reader-text">Remove Contact</span></a></span> ' + label + '<input type="hidden" name="group-contact-js[]" value="' + nicename + '"></li>';
-			li = '<li id="group-contact-' + nicename + '" class="group-contact-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="group-contact-js[]" value="' + nicename + '"><span class="group-contact-remove"> <a href="#"><span class="fa fa-minus-circle"></span><span class="screen-reader-text">Remove Contact</span></a></span></li>';
-			$( '#group-contact-list' ).append( li );
+			$( '#group-contact-list' ).append( $li );
 		}
 	}
 

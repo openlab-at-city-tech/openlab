@@ -27,7 +27,7 @@ window.wp = window.wp || {};
 			} );
 
 			// Init existing items.
-			$existing = JSON.parse( OL_Addl_Faculty_Existing );
+			$existing = OL_Addl_Faculty_Existing;
 			$.each( $existing, function( k, v ) {
 				create_list_item( v.value, v.label );
 			} );
@@ -43,8 +43,15 @@ window.wp = window.wp || {};
 		 * Generate a user-related list item.
 		 */
 		function create_list_item( nicename, label ) {
-			var li = '<li id="addl-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="additional-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"><span class="sr-only">Remove</span><span class="fa fa-minus-circle"></span></a></span></li>';
-			$( '#additional-faculty-list' ).append( li );
+			var $li = $( '<li class="addl-faculty-member">' )
+				.attr( { id: 'addl-faculty-' + nicename, 'data-nicename': nicename } )
+				.text( label )
+				.append(
+					$( '<input type="hidden" name="additional-faculty-js[]">' ).val( nicename ),
+					'<span class="addl-faculty-remove"> <a href="#"><span class="sr-only">Remove</span><span class="fa fa-minus-circle"></span></a></span>'
+				);
+
+			$( '#additional-faculty-list' ).append( $li );
 		}
 	}
 
@@ -75,7 +82,7 @@ window.wp = window.wp || {};
 			} );
 
 			// Init existing items.
-			$existing = JSON.parse( OL_Primary_Faculty_Existing );
+			$existing = OL_Primary_Faculty_Existing;
 			$.each( $existing, function( k, v ) {
 				create_list_item( v.value, v.label );
 			} );
@@ -91,8 +98,15 @@ window.wp = window.wp || {};
 		 * Generate a user-related list item.
 		 */
 		function create_list_item( nicename, label ) {
-			var li = '<li id="primary-faculty-' + nicename + '" class="addl-faculty-member" data-nicename="' + nicename + '">' + label + '<input type="hidden" name="primary-faculty-js[]" value="' + nicename + '"><span class="addl-faculty-remove"> <a href="#"><span class="sr-only">Remove</span><span class="fa fa-minus-circle"></span></a></span></li>';
-			$( '#primary-faculty-list' ).append( li );
+			var $li = $( '<li class="addl-faculty-member">' )
+				.attr( { id: 'primary-faculty-' + nicename, 'data-nicename': nicename } )
+				.text( label )
+				.append(
+					$( '<input type="hidden" name="primary-faculty-js[]">' ).val( nicename ),
+					'<span class="addl-faculty-remove"> <a href="#"><span class="sr-only">Remove</span><span class="fa fa-minus-circle"></span></a></span>'
+				);
+
+			$( '#primary-faculty-list' ).append( $li );
 		}
 	}
 

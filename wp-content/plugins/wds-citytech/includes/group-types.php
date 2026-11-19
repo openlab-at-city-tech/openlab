@@ -354,7 +354,7 @@ function openlab_course_faculty_metabox() {
 	}
 
 	// Enqueue JS and CSS.
-	wp_enqueue_script( 'openlab-additional-faculty', plugins_url() . '/wds-citytech/assets/js/additional-faculty.js', array( 'jquery-ui-autocomplete' ) );
+	wp_enqueue_script( 'openlab-additional-faculty', plugins_url() . '/wds-citytech/assets/js/additional-faculty.js', array( 'jquery-ui-autocomplete' ), OL_VERSION );
 	wp_enqueue_style( 'openlab-additional-faculty', plugins_url() . '/wds-citytech/assets/css/additional-faculty.css' );
 
 	$group_id = 0;
@@ -375,8 +375,9 @@ function openlab_course_faculty_metabox() {
 		foreach ( $primary_faculty as $primary_faculty_id ) {
 			$primary_faculty_user   = new WP_User( $primary_faculty_id );
 			$primary_faculty_data[] = array(
-				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $primary_faculty_user->ID ) ), esc_html( $primary_faculty_user->user_nicename ) ),
-				'value' => esc_attr( $primary_faculty_user->user_nicename ),
+				// BuddyPress returns names HTML-escaped. additional-faculty.js inserts text, so decode.
+				'label' => sprintf( '%s (%s)', wp_specialchars_decode( bp_core_get_user_displayname( $primary_faculty_user->ID ), ENT_QUOTES ), $primary_faculty_user->user_nicename ),
+				'value' => $primary_faculty_user->user_nicename,
 			);
 		}
 	}
@@ -388,8 +389,8 @@ function openlab_course_faculty_metabox() {
 		foreach ( $addl_faculty as $fid ) {
 			$f                   = new WP_User( $fid );
 			$addl_faculty_data[] = array(
-				'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $fid ) ), esc_html( $f->user_nicename ) ),
-				'value' => esc_attr( $f->user_nicename ),
+				'label' => sprintf( '%s (%s)', wp_specialchars_decode( bp_core_get_user_displayname( $fid ), ENT_QUOTES ), $f->user_nicename ),
+				'value' => $f->user_nicename,
 			);
 		}
 	} else {
@@ -403,9 +404,9 @@ function openlab_course_faculty_metabox() {
 		<fieldset>
 			<legend class="panel-heading">Faculty</legend>
 			<div class="panel-body">
-				<?php /* Data about existing faculty */ ?>
-				<script type="text/javascript">var OL_Primary_Faculty_Existing = '<?php echo json_encode( $primary_faculty_data ); ?>';</script>
-				<script type="text/javascript">var OL_Addl_Faculty_Existing = '<?php echo json_encode( $addl_faculty_data ); ?>';</script>
+				<?php /* Data about existing faculty. Not HTML-escaped: additional-faculty.js inserts it as text. */ ?>
+				<script type="text/javascript">var OL_Primary_Faculty_Existing = <?php echo wp_json_encode( $primary_faculty_data, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ); ?>;</script>
+				<script type="text/javascript">var OL_Addl_Faculty_Existing = <?php echo wp_json_encode( $addl_faculty_data, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ); ?>;</script>
 
 				<div class="subpanel">
 					<?php wp_nonce_field( 'openlab_faculty_autocomplete', '_ol_faculty_autocomplete_nonce', false ); ?>
@@ -473,8 +474,9 @@ function openlab_additional_faculty_autocomplete_cb() {
 	$retval = array();
 	foreach ( (array) $found as $u ) {
 		$retval[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( $u->display_name ), esc_html( $u->user_nicename ) ),
-			'value' => esc_attr( $u->user_nicename ),
+			// Not HTML-escaped: additional-faculty.js inserts these as text.
+			'label' => sprintf( '%s (%s)', $u->display_name, $u->user_nicename ),
+			'value' => $u->user_nicename,
 		);
 	}
 
@@ -562,7 +564,7 @@ function openlab_group_contact_field() {
 	}
 
 	// Enqueue JS and CSS.
-	wp_enqueue_script( 'openlab-group-contact', plugins_url() . '/wds-citytech/assets/js/group-contact.js', array( 'jquery-ui-autocomplete' ) );
+	wp_enqueue_script( 'openlab-group-contact', plugins_url() . '/wds-citytech/assets/js/group-contact.js', array( 'jquery-ui-autocomplete' ), OL_VERSION );
 	wp_enqueue_style( 'openlab-group-contact', plugins_url() . '/wds-citytech/assets/css/group-contact.css' );
 
 	$existing_contacts = array();
@@ -578,8 +580,9 @@ function openlab_group_contact_field() {
 	foreach ( $existing_contacts as $uid ) {
 		$u                        = new WP_User( $uid );
 		$existing_contacts_data[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( bp_core_get_user_displayname( $uid ) ), esc_html( $u->user_nicename ) ),
-			'value' => esc_attr( $u->user_nicename ),
+			// BuddyPress returns names HTML-escaped. group-contact.js inserts text, so decode.
+			'label' => sprintf( '%s (%s)', wp_specialchars_decode( bp_core_get_user_displayname( $uid ), ENT_QUOTES ), $u->user_nicename ),
+			'value' => $u->user_nicename,
 		);
 	}
 
@@ -647,8 +650,9 @@ function openlab_group_contact_autocomplete_cb() {
 	$retval = array();
 	foreach ( $q->results as $u ) {
 		$retval[] = array(
-			'label' => sprintf( '%s (%s)', esc_html( $u->fullname ), esc_html( $u->user_nicename ) ),
-			'value' => esc_attr( $u->user_nicename ),
+			// BuddyPress returns names HTML-escaped. group-contact.js inserts text, so decode.
+			'label' => sprintf( '%s (%s)', wp_specialchars_decode( $u->fullname, ENT_QUOTES ), $u->user_nicename ),
+			'value' => $u->user_nicename,
 		);
 	}
 
