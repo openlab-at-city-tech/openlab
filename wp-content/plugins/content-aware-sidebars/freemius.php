@@ -39,6 +39,7 @@ function cas_fs() {
             ],
             'anonymous_mode'    => CAS_IS_PLAYGROUND_PREVIEW,
             'is_live'           => true,
+            'is_org_compliant'  => true,
         ] );
         $cas_fs->add_filter( 'connect-header', function ( $text ) use($cas_fs) {
             return '<h2>' . sprintf( __( 'Thank you for installing %s!', 'content-aware-sidebars' ), esc_html( $cas_fs->get_plugin_name() ) ) . '</h2>';

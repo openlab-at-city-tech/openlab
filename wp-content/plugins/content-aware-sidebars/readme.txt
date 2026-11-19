@@ -2,10 +2,10 @@
 Contributors: intoxstudio, devinstitute, freemius
 Donate link: #
 Tags: custom sidebars, sidebar, classic widgets, widget, bbpress
-Requires at least: 5.6
-Requires PHP: 7.1
-Tested up to: 6.9
-Stable tag: 3.21.3
+Requires at least: 5.8
+Requires PHP: 7.4
+Tested up to: 7.1
+Stable tag: 3.21.4
 License: GPLv3
 
 Display new sidebars on any post, page, category etc. Works with Classic Widgets, Block Widgets, and all themes!
@@ -193,51 +193,11 @@ Of course! Check out the links below:
 
 ####Highlights
 
-= 3.21.3 =
+= 3.21.4 =
 
-* [new] wordpress 6.9 support
-* [new] minimum wordpress version 5.6
-* [fixed] language options missing from polylang condition
-* [updated] wp-content-aware-engine library
+* [new] wordpress 7.1 support
+* [new] minimum wordpress version 5.8
+* [new] minimum php version 7.4
 * [updated] freemius sdk
-
-= 3.21.2 =
-
-* [new] ui improvements
-* [new] wordpress 6.8 support
-* [updated] freemius sdk
-
-= 3.21.1 =
-
-* [new] performance improvements
-
-= 3.21 =
-
-* [new] performance improvements
-* [new] ui improvements
-* [new] wordpress 6.7 support
-* [fixed] stop bluehost-wordpress-plugin from breaking the plugin
-* [updated] wp-content-aware-engine library
-* [updated] freemius sdk
-
-**Pro Plan:**
-
-* [fixed] buddypress group visibility
-
-= 3.20 =
-
-* [new] option to display widget area on password protected content
-* [new] performance improvements
-* [new] wordpress 6.5 support
-* [new] minimum wordpress version 5.5
-* [new] minimum php version 7.1
-* [fixed] improved compatibility with wpml plugin
-* [updated] buddypress 12 compatibility
-* [updated] wp-content-aware-engine library
-* [updated] freemius sdk
-
-**Pro Plan:**
-
-* [updated] more themes supported by sticky option
 
 See changelog.txt for previous changes.
