@@ -76,8 +76,9 @@ trait Shortcode {
 
         $this->unsubscribe = __( 'unsubscribe', 'subscribe2' ); //ACTION replacement in unsubscribing in confirmation email
 
-        if ( ! empty( $_GET['s2_unsub'] ) ) {
-	        $this->unsubscribe( sanitize_email( base64_decode( $_GET['s2_unsub'] ) ) );
+        if ( ! empty( $_GET['s2_unsub'] ) && is_string( $_GET['s2_unsub'] ) ) {
+	        $key = ( isset( $_GET['s2_key'] ) && is_string( $_GET['s2_key'] ) ) ? sanitize_text_field( wp_unslash( $_GET['s2_key'] ) ) : '';
+	        $this->unsubscribe( sanitize_email( base64_decode( wp_unslash( $_GET['s2_unsub'] ) ) ), $key );
         }
     }
 
@@ -103,6 +104,8 @@ trait Shortcode {
 			),
 			$atts
 		);
+		$args['size'] = is_scalar( $args['size'] ) ? $args['size'] : 20;
+		$args['link'] = is_string( $args['link'] ) ? $args['link'] : '';
 
 		// If link is true return a link to the page with the ajax class.
 		if ( '1' === $this->subscribe2_options['ajax'] && '' !== $args['link'] && ! is_user_logged_in() ) {
@@ -124,7 +127,7 @@ trait Shortcode {
 		$subscribe_button_value   = apply_filters( 's2_subscribe_button', __( 'Subscribe', 'subscribe2' ) );
 
 		// If a button is hidden, show only other.
-		$hide = strtolower( $args['hide'] );
+		$hide = ( isset( $args['hide'] ) && is_string( $args['hide'] ) ) ? strtolower( $args['hide'] ) : '';
 		if ( 'subscribe' === $hide ) {
 			$this->input_form_action = '<input type="submit" name="unsubscribe" value="' . esc_attr( $unsubscribe_button_value ) . '" />';
 		} elseif ( 'unsubscribe' === $hide ) {
@@ -153,24 +156,28 @@ trait Shortcode {
 		}
 
 		// Allow remote setting of email in form.
-		$email = ! empty( $_REQUEST['email'] ) ? sanitize_email( $_REQUEST['email'] ) : '';
-		if ( ! empty( $email ) && false !== $this->validate_email( $email ) ) {
-			$value = $email;
-		} elseif ( 'true' === strtolower( $args['nojs'] ) ) {
-			$value = '';
+		$email = ( isset( $_REQUEST['email'] ) && is_string( $_REQUEST['email'] ) ) ? sanitize_email( wp_unslash( $_REQUEST['email'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$value = ( ! empty( $email ) && false !== $this->validate_email( $email ) ) ? $email : '';
+
+		// Prompt text is rendered as a placeholder attribute, never as inline JavaScript.
+		$nojs = ( isset( $args['nojs'] ) && is_string( $args['nojs'] ) ) ? strtolower( $args['nojs'] ) : '';
+		if ( 'true' === $nojs ) {
+			$placeholder = '';
 		} else {
-			$value = __( 'Enter email address...', 'subscribe2' );
+			$placeholder = ' placeholder="' . esc_attr__( 'Enter email address...', 'subscribe2' ) . '"';
 		}
 
 		// If wrap is true add paragraph html tags.
 		$wrap_text = '';
-		if ( 'true' === strtolower( $args['wrap'] ) ) {
+		$wrap      = ( isset( $args['wrap'] ) && is_string( $args['wrap'] ) ) ? strtolower( $args['wrap'] ) : '';
+		if ( 'true' === $wrap ) {
 			$wrap_text = '</p><p>';
 		}
 
 		// Deploy some anti-spam measures.
 		$antispam_text = '';
-		if ( 'true' !== strtolower( $args['noantispam'] ) ) {
+		$noantispam    = ( isset( $args['noantispam'] ) && is_string( $args['noantispam'] ) ) ? strtolower( $args['noantispam'] ) : '';
+		if ( 'true' !== $noantispam ) {
 			$antispam_text  = '<span style="display:none !important">';
 			$antispam_text .= '<label for="firstname">' . __( 'Leave This Blank:', 'subscribe2' ) . '</label><input type="text" id="firstname" name="firstname" />';
 			$antispam_text .= '<label for="lastname">' . __( 'Leave This Blank Too:', 'subscribe2' ) . '</label><input type="text" id="lastname" name="lastname" />';
@@ -186,10 +193,12 @@ trait Shortcode {
 		}
 
 		// Build default form.
-		if ( 'true' === strtolower( $args['nojs'] ) ) {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . esc_attr( $value ) . '" size="' . esc_attr( $args['size'] ) . '" />' . $wrap_text . $this->input_form_action . '</p></form>';
-		} else {
-			$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $_SERVER['REMOTE_ADDR'] ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . esc_attr( $value ) . '" size="' . esc_attr( $args['size'] ) . '" onfocus="if (this.value === \'' . $value . '\') {this.value = \'\';}" onblur="if (this.value === \'\') {this.value = \'' . $value . '\';}" />' . $wrap_text . $this->input_form_action . '</p></form>' . "\r\n";
+		$remote_addr = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
+
+		$this->form = '<form name="' . $form_name . '" method="post"' . $action . '><input type="hidden" name="ip" value="' . esc_attr( $remote_addr ) . '" />' . $antispam_text . '<p><label for="s2email">' . __( 'Your email:', 'subscribe2' ) . '</label><br><input type="email" name="email" id="s2email" value="' . esc_attr( $value ) . '" size="' . esc_attr( $args['size'] ) . '"' . $placeholder . ' />' . $wrap_text . $this->input_form_action . '</p></form>';
+
+		if ( 'true' !== $nojs ) {
+			$this->form .= "\r\n";
 		}
 		$this->s2form = apply_filters( 's2_form', $this->form, $args );
 
@@ -199,7 +208,7 @@ trait Shortcode {
 
 		// Anti spam sign up measure.
 		if ( isset( $_POST['subscribe'] ) || isset( $_POST['unsubscribe'] ) ) {
-			if ( ! empty( $_POST['firstname'] ) || ! empty( $_POST['lastname'] ) || ( ! empty( $_POST['uri'] ) && 'http://' !== sanitize_url( $_POST['uri'] ) ) ) {
+			if ( ! empty( $_POST['firstname'] ) || ! empty( $_POST['lastname'] ) || ( ! empty( $_POST['uri'] ) && is_string( $_POST['uri'] ) && 'http://' !== sanitize_url( $_POST['uri'] ) ) ) {
 				// Looks like some invisible-to-user fields were changed; falsely report success.
 				return $this->confirmation_sent;
 			}
@@ -210,13 +219,13 @@ trait Shortcode {
 			}
 
 			global $wpdb;
-			$this->email = sanitize_email( $_POST['email'] );
+			$this->email = ( isset( $_POST['email'] ) && is_string( $_POST['email'] ) ) ? sanitize_email( $_POST['email'] ) : '';
 			if ( false === $this->validate_email( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->not_an_email;
 			} elseif ( $this->is_barred( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->barred_domain;
 			} else {
-				$this->ip = rest_is_ip_address( $_POST['ip'] ) ? $_POST['ip'] : $this->get_remote_ip();
+				$this->ip = ( isset( $_POST['ip'] ) && is_string( $_POST['ip'] ) && rest_is_ip_address( $_POST['ip'] ) ) ? $_POST['ip'] : $this->get_remote_ip();
 				if ( is_int( $this->lockout ) && $this->lockout > 0 ) {
 					$date = current_datetime( $this->lockout )->format( 'H:i:s.u' );
 					$ips  = $wpdb->get_col(
@@ -293,7 +302,7 @@ trait Shortcode {
 	/**
 	 * Collect and return the IP address of the remote client machine.
 	 *
-	 * @return bool
+	 * @return string|false
 	 */
 	public function get_remote_ip() {
 		$remote_ip = false;
@@ -310,12 +319,18 @@ trait Shortcode {
 		);
 
 		foreach ( $address_headers as $header ) {
-			if ( array_key_exists( $header, $_SERVER ) ) {
-				// HTTP_X_FORWARDED_FOR can contain a chain of comma-separated
-				// addresses. The first one is the original client. It can't be
-				// trusted for authenticity, but we don't need to for this purpose.
-				$address_chain = explode( ',', $_SERVER[ $header ] );
-				$remote_ip     = trim( $address_chain[0] );
+			if ( ! array_key_exists( $header, $_SERVER ) || ! is_string( $_SERVER[ $header ] ) ) {
+				continue;
+			}
+
+			// HTTP_X_FORWARDED_FOR can contain a chain of comma-separated
+			// addresses. The first one is the original client. It can't be
+			// trusted for authenticity, but we don't need to for this purpose.
+			$address_chain = explode( ',', $_SERVER[ $header ] );
+			$address       = trim( $address_chain[0] );
+
+			if ( rest_is_ip_address( $address ) ) {
+				$remote_ip = $address;
 				break;
 			}
 		}

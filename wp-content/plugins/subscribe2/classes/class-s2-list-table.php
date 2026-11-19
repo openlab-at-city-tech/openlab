@@ -65,14 +65,14 @@ class S2_List_Table extends WP_List_Table {
 				'edit' => sprintf( '<a href="?page=%s&amp;id=%d">%s</a>', 's2', rawurlencode( $item['id'] ), __( 'Edit', 'subscribe2' ) ),
 			);
 
-			return sprintf( '%1$s %2$s', $item['email'], $this->row_actions( $actions ) );
+			return sprintf( '%1$s %2$s', esc_html( $item['email'] ), $this->row_actions( $actions ) );
 		}
 
 		if ( '0' === $mysubscribe2->is_public( $item['email'] ) ) {
-			return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', $item['email'], $item['ip'] );
+			return sprintf( '<span style="color:#FF0000"><abbr title="%2$s">%1$s</abbr></span>', esc_html( $item['email'] ), esc_attr( $item['ip'] ) );
 		}
 
-		return sprintf( '<abbr title="%2$s">%1$s</abbr>', $item['email'], $item['ip'] );
+		return sprintf( '<abbr title="%2$s">%1$s</abbr>', esc_html( $item['email'] ), esc_attr( $item['ip'] ) );
 	}
 
 	/**
@@ -102,7 +102,7 @@ class S2_List_Table extends WP_List_Table {
 	 * @return string
 	 */
 	public function column_cb( $item ) {
-		return sprintf( '<input type="checkbox" name="%1$s[]" value="%2$s" />', $this->_args['singular'], $item['email'] );
+		return sprintf( '<input type="checkbox" name="%1$s[]" value="%2$s" />', $this->_args['singular'], esc_attr( $item['email'] ) );
 	}
 
 	/**

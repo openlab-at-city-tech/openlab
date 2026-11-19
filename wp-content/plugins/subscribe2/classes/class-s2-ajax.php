@@ -6,6 +6,13 @@
 class S2_Ajax {
 
 	/**
+	 * Suffix used to load minified or development scripts.
+	 *
+	 * @var string
+	 */
+	public $script_debug = '';
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -92,13 +99,12 @@ class S2_Ajax {
 				'for' => true,
 			),
 			'input' => array(
-				'id'      => true,
-				'name'    => true,
-				'onblur'  => true,
-				'onfocus' => true,
-				'size'    => true,
-				'type'    => true,
-				'value'   => true,
+				'id'          => true,
+				'name'        => true,
+				'placeholder' => true,
+				'size'        => true,
+				'type'        => true,
+				'value'       => true,
 			),
 			'p'     => true,
 			'br'    => true,
@@ -119,7 +125,12 @@ class S2_Ajax {
 			wp_die();
 		}
 
-		$data = ! empty( $_POST['data'] ) ? array_map( 'sanitize_text_field', $_POST['data'] ) : array();
+		$data = array();
+		if ( ! empty( $_POST['data'] ) && is_array( $_POST['data'] ) ) {
+			foreach ( $_POST['data'] as $key => $value ) {
+				$data[ $key ] = is_scalar( $value ) ? sanitize_text_field( $value ) : '';
+			}
+		}
 		if ( ! empty( $data['firstname'] ) || ! empty( $data['lastname'] ) || ( isset( $data['uri'] ) && 'http://' !== $data['uri'] ) ) {
 			// Looks like some invisible-to-user fields were changed, falsely report success.
 			echo '<p>' . esc_html__( 'A confirmation message is on its way!', 'subscribe2' ) . '</p>';
@@ -128,8 +139,8 @@ class S2_Ajax {
 
 		global $s2_frontend, $wpdb;
 
-		$s2_frontend->email = sanitize_email( $data['email'] );
-		$s2_frontend->ip    = ! empty( $data['ip'] ) ? sanitize_text_field( $data['ip'] ) : '';
+		$s2_frontend->email = isset( $data['email'] ) ? sanitize_email( $data['email'] ) : '';
+		$s2_frontend->ip    = ( ! empty( $data['ip'] ) && rest_is_ip_address( $data['ip'] ) ) ? $data['ip'] : '';
 
 		if ( false === $s2_frontend->validate_email( $s2_frontend->email ) ) {
 			echo '<p>' . esc_html__( 'Sorry, but that does not look like an email address to me.', 'subscribe2' ) . '</p>';
@@ -151,7 +162,7 @@ class S2_Ajax {
 				printf( wp_kses_post( __( 'To manage your subscription options please <a href="%1$s">login.</a>', 'subscribe2' ) ), esc_url( get_option( 'siteurl' ) . '/wp-login.php' ) );
 			}
 
-			if ( 'subscribe' === $data['button'] ) {
+			if ( isset( $data['button'] ) && 'subscribe' === $data['button'] ) {
 				if ( '1' !== $s2_frontend->is_public( $s2_frontend->email ) ) {
 					// The user is unknown or inactive.
 					$s2_frontend->add( $s2_frontend->email );
@@ -166,7 +177,7 @@ class S2_Ajax {
 					// They're already subscribed.
 					echo '<p>' . esc_html__( 'That email address is already subscribed.', 'subscribe2' ) . '</p>';
 				}
-			} elseif ( 'unsubscribe' === $data['button'] ) {
+			} elseif ( isset( $data['button'] ) && 'unsubscribe' === $data['button'] ) {
 				if ( false === $s2_frontend->is_public( $s2_frontend->email ) ) {
 					echo '<p>' . esc_html__( 'That email address is not subscribed.', 'subscribe2' ) . '</p>';
 				} else {

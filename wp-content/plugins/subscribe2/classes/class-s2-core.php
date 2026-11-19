@@ -37,81 +37,114 @@ class S2_Core {
 	public $filtered = 0;
 
 	/**
+	 * True while sending a preview rather than a real notification.
+	 *
+	 * Left null (never false) so isset() stays false for normal sends and the
+	 * wpmq_mail queue path in mail() is used.
+	 *
+	 * @var bool|null
+	 */
+	public $preview_email = null;
+
+	/**
+	 * Subscriber email address being processed.
+	 *
+	 * @var string|null
+	 */
+	public $email;
+
+	/**
+	 * IP address recorded against a subscription request.
+	 *
+	 * @var string|null
+	 */
+	public $ip;
+
+	/**
+	 * Message returned to the visitor after a form action.
+	 *
+	 * @var string|null
+	 */
+	public $message;
+
+	/**
 	 * State variable for affect processing.
+	 *
+	 * Null outside digest sends so {COUNT} renders as an empty string.
 	 *
 	 * @var int|null
 	 */
-	public $post_count;
+	public $post_count = null;
 
 	/**
 	 * Post title used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $post_title;
+	public $post_title = '';
 
 	/**
 	 * Post title used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $post_title_text;
+	public $post_title_text = '';
 
 	/**
 	 * Post permalink used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $permalink;
+	public $permalink = '';
 
 	/**
 	 * Post date used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $post_date;
+	public $post_date = '';
 
 	/**
 	 * Post time used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $post_time;
+	public $post_time = '';
 
 	/**
 	 * State myname used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $myname;
+	public $myname = '';
 
 	/**
 	 * State myemail used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $myemail;
+	public $myemail = '';
 
 	/**
 	 * State author used for substitute() function.
 	 *
 	 * @var string|null
 	 */
-	public $authorname;
+	public $authorname = '';
 
 	/**
 	 * Post category names used for substitute() function.
 	 *
-	 * @var array|null
+	 * @var string
 	 */
-	public $post_cat_names;
+	public $post_cat_names = '';
 
 	/**
 	 * Post tag names used for substitute() function.
 	 *
-	 * @var array|null
+	 * @var string
 	 */
-	public $post_tag_names;
+	public $post_tag_names = '';
 	public $script_debug;
 	public $word_wrap;
 	public $excerpt_length;
@@ -181,7 +214,7 @@ class S2_Core {
 		$string = str_replace( '{AUTHORNAME}', stripslashes( $this->authorname ), $string );
 		$string = str_replace( '{CATS}', $this->post_cat_names, $string );
 		$string = str_replace( '{TAGS}', $this->post_tag_names, $string );
-		$string = str_replace( '{COUNT}', $this->post_count, $string );
+		$string = str_replace( '{COUNT}', (string) $this->post_count, $string );
 
 		if ( ! empty( $digest_post_ids ) ) {
 			return apply_filters( 's2_custom_keywords', $string, $digest_post_ids );
@@ -245,13 +278,14 @@ class S2_Core {
 				}
 
                 // Parse unsubscribe shortcode.
-                $mailtext = $this->parse_unsubscribe_link( $mailtext, $recipient );
+                // Per-recipient copy: the link carries this recipient's key, so it must not leak into the next email.
+                $recipient_mailtext = $this->parse_unsubscribe_link( $mailtext, $recipient );
 
 				// Use the mail queue provided we are not sending a preview.
 				if ( function_exists( 'wpmq_mail' ) && ! isset( $this->preview_email ) ) {
-					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments, 0 );
+					$status = wp_mail( $recipient, $subject, $recipient_mailtext, $headers, $attachments, 0 );
 				} else {
-					$status = wp_mail( $recipient, $subject, $mailtext, $headers, $attachments );
+					$status = wp_mail( $recipient, $subject, $recipient_mailtext, $headers, $attachments );
 				}
 			}
 
@@ -402,11 +436,23 @@ class S2_Core {
 			return str_replace('{UNSUBLINK}', '', $content );
 		}
 
+		$recipient = sanitize_email( $recipient );
 		$page_url  = get_page_link( $this->subscribe2_options['s2_unsub_page'] );
 		$query     = parse_url( $page_url, PHP_URL_QUERY );
-		$page_url .= ( ( $query ? '&' : '?' ) . 's2_unsub=' . base64_encode( $recipient ) );
+		$page_url .= ( $query ? '&' : '?' ) . 's2_unsub=' . rawurlencode( base64_encode( $recipient ) ) . '&s2_key=' . rawurlencode( $this->unsubscribe_key( $recipient ) );
 
 		return str_replace('{UNSUBLINK}', $page_url, $content );
+	}
+
+	/**
+	 * Secret key that proves an unsubscribe link was issued by this site for this address.
+	 *
+	 * @param string $email
+	 *
+	 * @return string
+	 */
+	public function unsubscribe_key( $email ) {
+		return wp_hash( 's2_unsub|' . strtolower( $email ) );
 	}
 
 	/**
@@ -436,7 +482,7 @@ class S2_Core {
 	 */
 	public function get_tracking_link( $link ) {
 		if ( empty( $link ) ) {
-			return;
+			return '';
 		}
 
 		$delimiter = '';
@@ -1301,6 +1347,21 @@ class S2_Core {
 		}
 
 		return is_email( $email );
+	}
+
+	/**
+	 * Split a comma/whitespace separated list of emails into sanitized addresses.
+	 *
+	 * @param mixed $list Raw (slashed) request value.
+	 *
+	 * @return array
+	 */
+	public function sanitize_email_list( $list ) {
+		if ( ! is_string( $list ) ) {
+			return array();
+		}
+
+		return array_values( array_filter( array_map( 'sanitize_email', preg_split( '/[\s,]+/', wp_unslash( $list ) ) ) ) );
 	}
 
 	/**
@@ -2384,7 +2445,8 @@ class S2_Core {
 				header( 'Pragma: no-cache' );
 				header( 'Expires: 0' );
 
-				echo esc_html( $this->prepare_export( sanitize_text_field( $_POST['exportcsv'] ) ) );
+				$export_emails = isset( $_POST['exportcsv'] ) ? $this->sanitize_email_list( $_POST['exportcsv'] ) : array();
+				echo $this->prepare_export( implode( ",\r\n", $export_emails ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- CSV file download, not HTML.
 				exit( 0 );
 			}
 		} else {
