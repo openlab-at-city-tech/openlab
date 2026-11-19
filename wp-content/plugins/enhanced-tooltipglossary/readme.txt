@@ -4,8 +4,8 @@ Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
 Tags: glossary, vocabulary, dictionary, tooltip, lexicon
 Requires at least: 5.4.0
-Tested up to: 6.9
-Stable tag: 4.5.3
+Tested up to: 7.0
+Stable tag: 4.5.7
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -27,7 +27,6 @@ This WordPress glossary plugin automatically transforms your content into an int
 * **Improves conversion rates** by helping users understand your products and services better
 
 **12+ years of development** means you get a battle-tested solution that works seamlessly with any WordPress site.
-
 
 ## How Can This Glossary Plugin Help Your Website?
 
@@ -267,7 +266,6 @@ List of all [WordPress Plugins](https://www.cminds.com) by CreativeMinds
 
 Note: You must have a call to wp_head() in your template in order for the Tooltip js and css to work properly.  If your theme does not support them you will need to link to these files manually in your theme (not recommended).
 
-
 == Frequently Asked Questions ==
 
 > [More FAQ's](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/#faq)
@@ -275,7 +273,6 @@ Note: You must have a call to wp_head() in your template in order for the Toolti
 > [Free Version User Guide](https://creativeminds.helpscoutdocs.com/article/2162-cm-tooltip-cmtg-free-version-tutorial)
 
 > [Detailed User Guide](https://creativeminds.helpscoutdocs.com/category/6-tooltip-glossary-cmtg)
-
 
 = Does my main glossary page need to be titled "Glossary"? =
 
@@ -373,6 +370,26 @@ Yes. The free version includes a guided Setup Wizard to help you quickly configu
 12. Glossary Wizard Example - Sample step from the glossary setup process for new installations
 
 == Changelog ==
+
+= 4.5.7 =
+Release Date: 11 Oct 2026
+* Security: Added manage_options capability checks to package registration, deregistration, and skip-registration AJAX handlers.
+* Security: Restricted package administration shortcodes and registration helpers to users with the manage_options capability.
+* Security: Added plugin- and box-specific nonce checks to guide, upgrade, and registration visibility changes.
+* Security: Added nonce verification to registration, deregistration, skip-registration, and deactivation-feedback AJAX requests.
+* Updated registration and feedback forms and visibility links to send the required security tokens.
+* Synchronized the plugin header, version constant, package configuration, and stable tag to 4.5.7.
+
+= 4.5.6 =
+* Fixed tooltip accessibility for mobile screen readers
+* Improved package loading process
+
+= 4.5.5 =
+* Fixed issue with Turkish language
+* Resolved PHP warnings
+
+= 4.5.4 =
+* Improvements
 
 = 4.5.3 =
 * Added new method of displaying tooltips
@@ -540,18 +557,15 @@ Release Date: 20th Oct 2022
 
 = 4.1.1 =
 Release Date: 20th Oct 2022
-
 * Bug: Fixed the positioning of the tooltip on the keyboard focus
 * General bugfixes
 
 = 4.1.0 =
 Release Date: 6th Sep 2022
-
 * Security fix
 
 =  4.0.10 = 
 Release Date: 22nd May 2022
-
 * Bug fix and compatibility to WP 6
 
 =  4.0.5 29th = 
@@ -562,36 +576,30 @@ Release Date: Jan 2022
 
 =  3.9.21 = 
 Release Date: 31st Aug 2021
-
 * Fixed the issue with the missing aria-label
 * Fixed the missing esc for attributes in shortcode
 
 =  3.9.20 =  
 Release Date: 26th July 2021
-
 * Fixed the bug in the comment count
 * Fixed the bug in settings
 
 =  3.9.19 = 
 Release Date: 13th July 2021
-
 * Re-added the option to distinguish between case sensitive/case insensitive term search
 * Fixed the issue with the text widgets parsing
 * Fixed the PHP 8.0.0 bug
 
 =  3.9.18 = 
 Release Date: 9th July 2021
-
 * Fixed the bug in AMP class
 * Added the option to hide from search results
 
 =  3.9.17 = 
 Release Date: 25th June 2021
-
 * Improved WCAG compliance
 * Fixed the package issue
 * Fixed the delay when showing tooltips
-
 
 = Earlier versions =
 For the changelog of earlier versions, please refer to [the changelog on cminds.com](https://www.cminds.com/cm-tooltip-free-version-glossary-changelog/)

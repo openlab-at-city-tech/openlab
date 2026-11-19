@@ -717,7 +717,7 @@
 						</tr>
 					</table>
 				</div>
-				<div class="block onlyinpro">
+				<div class="block">
 					<h3 class="section-title">
 						<span>Alphabetic index</span>
 						<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">

@@ -48,12 +48,29 @@ class CMTT_Settings extends \CMTT\Settings {
         return $option_value;
     }
 
-    public static function beforeSaveOption($option_value, $option_name) {
+    /*
+	public static function beforeSaveOption($option_value, $option_name) {
         if ($option_name == 'cmtt_index_letters') {
             $option_value = array_map('mb_strtolower', explode(',', sanitize_text_field(str_replace(' ','',$option_value))));
         }
         return $option_value;
     }
+	*/
+	
+	public static function beforeSaveOption($option_value, $option_name) {
+		if ($option_name == 'cmtt_index_letters') {
+			$letters = explode(',', sanitize_text_field(str_replace(' ', '', $option_value)));
+			$option_value = array_map(function ($letter) {
+				$letter = str_replace(
+					array('I', 'İ'),
+					array('ı', 'i'),
+					$letter
+				);
+				return mb_strtolower($letter, 'UTF-8');
+			}, $letters);
+		}
+		return $option_value;
+	}
 
     public static function preAfterSaveSettings($post, $messages) {
 

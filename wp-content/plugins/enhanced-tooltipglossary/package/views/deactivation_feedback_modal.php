@@ -105,6 +105,7 @@ $confirmation_message = apply_filters( 'cm_uninstall_confirmation_message', '' )
                         method: 'POST',
                         data: {
                             'action': 'cm-submit-uninstall-reason',
+                            'cminds_nonce': <?php echo wp_json_encode(wp_create_nonce('cminds_uninstall_reason')); ?>,
                             'plugin_slug': $slug.val(),
                             'deactivation_reason': ( 0 !== $input.length ) ? $input.val().trim() : '',
                             'data_agree': $data_agree.is( ':checked' ),

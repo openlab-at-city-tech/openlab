@@ -536,7 +536,8 @@ CM_Tooltip.gtooltip = function ( opts ) {
                 }
 
                 tooltipContainer.innerHTML = DOMPurify.sanitize(content);
-                jQuery( '#tt' ).removeAttr( 'aria-label');
+                //jQuery( '#tt' ).removeAttr( 'aria-label');
+                tooltipContainer.removeAttribute('aria-label');
 
                 if ( jQuery( tooltipContainer ).find( '.glossaryItemBody' ).length ) {
                     let tooltipBody = jQuery( tooltipContainer ).find( '.glossaryItemBody' );

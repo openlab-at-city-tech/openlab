@@ -1,5 +1,4 @@
 <?php
-
 class CMTT_AMP {
 
 	public static function init() {
@@ -19,10 +18,7 @@ class CMTT_AMP {
 		add_filter( 'cmtt_num_letter_additional_attributes', array( __CLASS__, 'numAdditionalAttributes' ), 10, 4 );
 		add_filter( 'cmtt_index_num_label', array( __CLASS__, 'numLabel' ), 10, 3 );
 
-		add_filter( 'cmtt_letter_letter_additional_attributes', array(
-			__CLASS__,
-			'letterAdditionalAttributes'
-		), 10, 7 );
+		add_filter( 'cmtt_letter_letter_additional_attributes', array( __CLASS__, 'letterAdditionalAttributes' ), 10, 7 );
 		add_filter( 'cmtt_index_letter_label', array( __CLASS__, 'letterLabel' ), 10, 3 );
 
 		add_filter( 'cmtt_index_glossary_page_link', array( __CLASS__, 'replaceGlossarylink' ) );
@@ -39,20 +35,14 @@ class CMTT_AMP {
 			<form id="cmttForm" method="get" action="<?php echo esc_attr( $shortcodeAtts['glossary_page_link'] ); ?>"
 			target="_top">
 			<input type="hidden" name="amp" value="1"/>
-			<input type="hidden" name="disable_listnav"
-			       value="<?php echo (int) ( isset( $shortcodeAtts['disable_listnav'] ) && $shortcodeAtts['disable_listnav'] ); ?>"/>
+			<input type="hidden" name="disable_listnav" value="<?php echo (int) ( isset( $shortcodeAtts['disable_listnav'] ) && $shortcodeAtts['disable_listnav'] ); ?>"/>
 			<input type="hidden" name="exact_search" value="<?php echo (int) $exactSearch; ?>"/>
 			<input type="hidden" name="show_search" value="<?php echo (int) $showSearchButton; ?>"/>
-			<input type="hidden" name="glossary-hide-terms"
-			       value="<?php echo (int) ( isset( $shortcodeAtts['hide_terms'] ) && $shortcodeAtts['hide_terms'] ); ?>"/>
-			<input type="hidden" name="glossary-hide-categories"
-			       value="<?php echo (int) ( isset( $shortcodeAtts['hide_categories'] ) && $shortcodeAtts['hide_categories'] ); ?>"/>
-			<input type="hidden" name="glossary-hide-abbrevs"
-			       value="<?php echo (int) ( isset( $shortcodeAtts['hide_abbrevs'] ) && $shortcodeAtts['hide_abbrevs'] ); ?>"/>
-			<input type="hidden" name="glossary-hide-synonyms"
-			       value="<?php echo (int) ( isset( $shortcodeAtts['hide_synonyms'] ) && $shortcodeAtts['hide_synonyms'] ); ?>"/>
-			<input type="hidden" name="glossary-perpage"
-			       value="<?php echo (int) ( isset( $shortcodeAtts['perpage'] ) ? $shortcodeAtts['perpage'] : \CM\CMTT_Settings::get( 'cmtt_perPage' ) ); ?>"/>
+			<input type="hidden" name="glossary-hide-terms" value="<?php echo (int) ( isset( $shortcodeAtts['hide_terms'] ) && $shortcodeAtts['hide_terms'] ); ?>"/>
+			<input type="hidden" name="glossary-hide-categories" value="<?php echo (int) ( isset( $shortcodeAtts['hide_categories'] ) && $shortcodeAtts['hide_categories'] ); ?>"/>
+			<input type="hidden" name="glossary-hide-abbrevs" value="<?php echo (int) ( isset( $shortcodeAtts['hide_abbrevs'] ) && $shortcodeAtts['hide_abbrevs'] ); ?>"/>
+			<input type="hidden" name="glossary-hide-synonyms" value="<?php echo (int) ( isset( $shortcodeAtts['hide_synonyms'] ) && $shortcodeAtts['hide_synonyms'] ); ?>"/>
+			<input type="hidden" name="glossary-perpage" value="<?php echo (int) ( isset( $shortcodeAtts['perpage'] ) ? $shortcodeAtts['perpage'] : \CM\CMTT_Settings::get( 'cmtt_perPage' ) ); ?>"/>
 			<input type="hidden" name="post_id" value="<?php echo ! empty( $post ) ? $post->ID : ''; ?>"/>
 			<?php
 			$new_content = ob_get_clean();
@@ -72,7 +62,6 @@ class CMTT_AMP {
 		$turn_on_amp = (bool) \CM\CMTT_Settings::get( 'cmtt_glossaryTurnOnAmp', 0 );
 		$amp1        = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 		$amp2        = function_exists( 'ampforwp_is_amp_endpoint' ) && ampforwp_is_amp_endpoint();
-
 		return $turn_on_amp && ( $amp1 || $amp2 );
 	}
 
@@ -80,13 +69,11 @@ class CMTT_AMP {
 		if ( CMTT_AMP::is_amp_endpoint() ) {
 			$html = "#";
 		}
-
 		return $html;
 	}
 
 	public static function allAdditionalAttributes( $html, $selectedClass, $postsCount ) {
 		$html .= self::add_amp_attributes( 'all', 'ln-all ln-serv-letter' . $selectedClass, $postsCount );
-
 		return $html;
 	}
 
@@ -115,7 +102,6 @@ class CMTT_AMP {
 		 * Prepend count to the current label
 		 */
 		$html = self::add_amp_letter_counts( $postsCount, $showCounts ) . $html;
-
 		return $html;
 	}
 
@@ -131,15 +117,12 @@ class CMTT_AMP {
 		if ( ! CMTT_AMP::is_amp_endpoint() || ! $showCounts ) {
 			return '';
 		}
-
 		$countElement = '<span class="ln-letter-count-amp">' . $num . '</span>';
-
 		return $countElement;
 	}
 
 	public static function numAdditionalAttributes( $html, $disabledClass, $selectedClass, $postsCount ) {
 		$html .= self::add_amp_attributes( 'num', 'ln-_ ln-serv-letter' . $disabledClass . $selectedClass, $postsCount );
-
 		return $html;
 	}
 
@@ -148,13 +131,11 @@ class CMTT_AMP {
 		 * Prepend count to the current label
 		 */
 		$html = self::add_amp_letter_counts( $postsCount, $showCounts ) . $html;
-
 		return $html;
 	}
 
 	public static function letterAdditionalAttributes( $html, $key, $letter, $lastClass, $disabledClass, $selectedClass, $postsCount ) {
 		$html .= self::add_amp_attributes( $key, 'lnletter-' . $letter . ' ln-serv-letter' . $lastClass . $disabledClass . $selectedClass, $postsCount );
-
 		return $html;
 	}
 
@@ -163,7 +144,6 @@ class CMTT_AMP {
 		 * Prepend count to the current label
 		 */
 		$html = self::add_amp_letter_counts( $postsCount, $showCounts ) . $html;
-
 		return $html;
 	}
 
@@ -187,7 +167,6 @@ class CMTT_AMP {
 		if ( CMTT_AMP::is_amp_endpoint() ) {
 			$html = self::convert_amp_bind_attributes( $html );
 		}
-
 		return $html;
 	}
 
