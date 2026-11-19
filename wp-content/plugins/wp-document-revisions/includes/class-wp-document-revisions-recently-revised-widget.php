@@ -6,6 +6,11 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Recently revised documents widget.
  */
@@ -13,7 +18,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	/**
 	 * The default data
 	 *
-	 * @var array
+	 * @var array<string, mixed>
 	 */
 	public $defaults = array(
 		'title'       => '',
@@ -42,12 +47,14 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	/**
 	 * Generate widget contents.
 	 *
-	 * @param Array  $args the widget arguments.
-	 * @param Object $instance the WP Document Revisions instance.
+	 * @param mixed[]              $args the widget arguments.
+	 * @param array<string, mixed> $instance the WP Document Revisions instance.
+	 * @return string|false the widget markup, or false on buffering failure.
 	 */
 	public function widget_gen( array $args, $instance ) {
 		global $wpdr;
 		if ( ! $wpdr ) {
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound
 			$wpdr = new WP_Document_Revisions();
 		}
 
@@ -109,16 +116,18 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 			if ( $instance['show_pdf'] ) {
 				// find mimetype.
 				$doc_attach = $wpdr->get_document( $document->ID );
-				$mimetype   = $wpdr->get_doc_mimetype( get_attached_file( $doc_attach->ID ) );
+				$mimetype   = $wpdr->get_doc_mimetype( get_attached_file( $doc_attach->ID ), $doc_attach->ID );
 				if ( 'application/pdf' === strtolower( $mimetype ) ) {
 					$pdf = ' <small>' . __( '(PDF)', 'wp-document-revisions' ) . '</small>';
 				}
 			}
 			?>
 			<li>
-				<h<?php echo esc_attr( $h_n ); ?> class="wp-block-post-title"><a href="<?php echo esc_url( $link ); ?>"<?php echo ( $instance['new_tab'] ? ' target="_blank"' : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static string ?>><?php echo esc_html( get_the_title( $document->ID ) ) . wp_kses_post( $pdf ); ?></a></h<?php echo esc_attr( $h_n ); ?>>
+				<h<?php echo esc_attr( (string) $h_n ); ?> class="wp-block-post-title"><a href="<?php echo esc_url( $link ); ?>"<?php echo ( $instance['new_tab'] ? ' target="_blank"' : '' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static string ?>><?php echo esc_html( get_the_title( $document->ID ) ) . wp_kses_post( $pdf ); ?></a></h<?php echo esc_attr( (string) $h_n ); ?>>
 				<?php
-				if ( (bool) $instance['show_thumb'] ) {
+				// Password-protected documents don't show their thumbnail or description.
+				$protected = post_password_required( $document->ID );
+				if ( (bool) $instance['show_thumb'] && ! $protected ) {
 					$image = '<!-- ' . __( 'No thumbnail available.', 'wp-document-revisions' ) . ' -->';
 					$thumb = get_post_thumbnail_id( $document->ID );
 					if ( $thumb ) {
@@ -148,8 +157,8 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 					echo $image . '<br />';
 				}
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo ( (bool) $instance['show_descr'] && ! is_numeric( $document->post_content ) ) ? '<div class="wp-block-paragraph">' . wp_kses_post( preg_replace( '/<!--\s*WPDR \s*\d+ -->/', '', $document->post_content ) ) . '</div>' : '';
-				printf( esc_html( $format_string ), esc_html( human_time_diff( strtotime( $document->post_modified_gmt ) ) ), esc_html( get_the_author_meta( 'display_name', $document->post_author ) ) );
+				echo ( (bool) $instance['show_descr'] && ! $protected && ! is_numeric( $document->post_content ) ) ? '<div class="wp-block-paragraph">' . wp_kses_post( $document->post_content ) . '</div>' : '';
+				printf( esc_html( $format_string ), esc_html( human_time_diff( strtotime( $document->post_modified_gmt ) ) ), esc_html( get_the_author_meta( 'display_name', $wpdr->get_revision_author( $document ) ) ) );
 				?>
 			</li>
 			<?php
@@ -165,8 +174,9 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	/**
 	 * Callback to display widget contents in classic widget.
 	 *
-	 * @param Array  $args the widget arguments.
-	 * @param Object $instance the WP Document Revisions instance.
+	 * @param array<string, mixed> $args the widget arguments.
+	 * @param array<string, mixed> $instance the WP Document Revisions instance.
+	 * @return void
 	 */
 	public function widget( $args, $instance ) {
 
@@ -179,7 +189,7 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	/**
 	 * Callback to display widget options form.
 	 *
-	 * @param Object $instance the WP Document Revisions instance.
+	 * @param array<string, mixed> $instance the WP Document Revisions instance.
 	 */
 	public function form( $instance ) {
 
@@ -199,9 +209,12 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 		</p>
 		<p>
 			<?php esc_html_e( 'Posts to Show:', 'wp-document-revisions' ); ?><br />
-			<?php foreach ( $instance['post_status'] as $status => $value ) : ?>
-				<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'post_status_' . $status ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_status_' . $status ) ); ?>" type="text" <?php checked( $value ); ?> />
-				<label for="<?php echo esc_attr( $this->get_field_name( 'post_status_' . $status ) ); ?>"><?php echo esc_html( ucwords( $status ) ); ?></label><br />
+			<?php
+			foreach ( $instance['post_status'] as $status => $value ) :
+				$status_object = get_post_status_object( $status );
+				?>
+				<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'post_status_' . $status ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'post_status_' . $status ) ); ?>" <?php checked( $value ); ?> />
+				<label for="<?php echo esc_attr( $this->get_field_id( 'post_status_' . $status ) ); ?>"><?php echo esc_html( $status_object ? $status_object->label : ucwords( $status ) ); ?></label><br />
 			<?php endforeach; ?>
 		</p>
 		<p>
@@ -225,25 +238,27 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 			<input type="checkbox" id="<?php echo esc_attr( $this->get_field_id( 'new_tab' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'new_tab' ) ); ?>" <?php checked( $instance['new_tab'] ); ?> /> <?php esc_html_e( 'Yes', 'wp-document-revisions' ); ?>
 		</p>
 		<?php
+		return null;
 	}
 
 
 	/**
 	 * Sanitizes options and saves.
 	 *
-	 * @param Object $new_instance the new instance.
-	 * @param Object $old_instance the old instance.
+	 * @param array<string, mixed> $new_instance the new instance.
+	 * @param array<string, mixed> $old_instance the old instance.
+	 * @return array<string, mixed> the sanitized instance to save.
 	 */
 	public function update( $new_instance, $old_instance ) {
 
 		$instance                = $old_instance;
 		$instance['title']       = wp_strip_all_tags( $new_instance['title'] );
 		$instance['numberposts'] = (int) $new_instance['numberposts'];
-		$instance['show_thumb']  = (bool) $new_instance['show_thumb'];
-		$instance['show_descr']  = (bool) $new_instance['show_descr'];
-		$instance['show_author'] = (bool) $new_instance['show_author'];
-		$instance['show_pdf']    = (bool) $new_instance['show_pdf'];
-		$instance['new_tab']     = (bool) $new_instance['new_tab'];
+		$instance['show_thumb']  = ! empty( $new_instance['show_thumb'] );
+		$instance['show_descr']  = ! empty( $new_instance['show_descr'] );
+		$instance['show_author'] = ! empty( $new_instance['show_author'] );
+		$instance['show_pdf']    = ! empty( $new_instance['show_pdf'] );
+		$instance['new_tab']     = ! empty( $new_instance['new_tab'] );
 
 		// merge post statuses into an array.
 		foreach ( $this->defaults['post_status'] as $status => $value ) {
@@ -260,8 +275,8 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 	 * @since 3.3.0
 	 */
 	public function documents_widget_block(): void {
-		if ( ! function_exists( 'register_block_type' ) ) {
-			// Gutenberg is not active, e.g. Old WP version installed.
+		if ( ! function_exists( 'register_block_type' ) || ! WP_Document_Revisions_Front_End::blocks_enabled() ) {
+			// Gutenberg is not active (e.g. old WP version installed), or the site turned the blocks off.
 			return;
 		}
 
@@ -284,46 +299,16 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 				)
 			);
 		}
-
-		// set translations.
-		if ( function_exists( 'wp_set_script_translations' ) ) {
-			$registry = \WP_Block_Type_Registry::get_instance();
-			$block    = $registry->get_registered( 'wp-document-revisions/documents-widget' );
-			if ( $block && ! empty( $block->editor_script_handles ) ) {
-				wp_set_script_translations( $block->editor_script_handles[0], 'wp-document-revisions' );
-			}
-		}
-
-		// Find sizes for images for PDFs. (Logic based on /wp-admin/includes/image.php).
-		$merged_sizes = array(
-			'thumbnail',
-			'medium',
-			'large',
-		);
-
-		/**
-		 * Filters the image sizes generated for non-image mime types.
-		 *
-		 * @since 4.7.0
-		 *
-		 * @param string[] $merged_sizes An array of image size names.
-		 * @param array    $metadata     Current attachment metadata.
-		 */
-		$merged_sizes = apply_filters( 'fallback_intermediate_image_sizes', $merged_sizes, array() );
-
-		if ( function_exists( 'get_intermediate_image_sizes' ) ) {
-			$registered_sizes = get_intermediate_image_sizes();
-			$merged_sizes     = array_merge( $registered_sizes, $merged_sizes );
-		}
 	}
 
 
 	/**
 	 * Render widget block server side.
 	 *
-	 * @param array  $atts     block attributes coming from block.
-	 * @param string $content  Optional. Block content. Default empty string.
+	 * @param array<string, mixed> $atts     block attributes coming from block.
+	 * @param string               $content  Optional. Block content. Default empty string.
 	 * @since 3.3.0
+	 * @return string the rendered block markup.
 	 */
 	public function wpdr_documents_widget_display( array $atts, string $content = '' ) {
 		// Create the two parameter sets.
@@ -353,8 +338,20 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 			$args['after_title']  = '</h2>';
 		}
 
-		$output = $this->widget_gen( $args, $instance );
-		return $output;
+		$inner = $this->widget_gen( $args, $instance );
+		if ( empty( $inner ) ) {
+			return '';
+		}
+
+		// set the block styling.
+		// get instance of front_end class.
+		global $wpdr_fe;
+		$wrapper = $wpdr_fe->get_block_attributes();
+		if ( ! empty( $wrapper ) ) {
+			$inner = '<div ' . $wrapper . '>' . $inner . '</div>';
+		}
+
+		return $inner;
 	}
 
 	/**
@@ -369,16 +366,8 @@ class WP_Document_Revisions_Recently_Revised_Widget extends WP_Widget {
 		global $wpdr_widget;
 
 		register_widget( $wpdr_widget );
-	}
 
-	/**
-	 * Callback to register the recently revised widget block.
-	 *
-	 * Call with low priority to let taxonomies be registered.
-	 */
-	public function wpdr_widgets_block_init(): void {
-		global $wpdr_widget;
-
+		// register the block.
 		$wpdr_widget->documents_widget_block();
 	}
 }

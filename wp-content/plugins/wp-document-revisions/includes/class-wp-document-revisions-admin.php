@@ -6,8 +6,27 @@
  * @package WP Document Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
- * The WP Admin backend object
+ * The WP Admin backend object.
+ *
+ * Methods of the parent {@see WP_Document_Revisions} instance are callable on
+ * this class natively via {@see WP_Document_Revisions_Admin::__call()}, which
+ * forwards to `self::$parent`. The `@method` tags below document that forwarding
+ * so static analysis can resolve the calls; they add no runtime behavior.
+ *
+ * @method bool verify_post_type( $documentish = false )
+ * @method WP_Post|false get_document( $post_id )
+ * @method WP_Post[] get_documents( ?array<string, mixed> $args = array(), bool $return_attachments = false )
+ * @method string format_doc_id( int $post_id )
+ * @method string document_upload_dir()
+ * @method string document_slug()
+ * @method bool document_link_date()
+ * @method string|false get_document_lock( $document )
  */
 class WP_Document_Revisions_Admin {
 
@@ -30,20 +49,6 @@ class WP_Document_Revisions_Admin {
 	public static $instance;
 
 	/**
-	 * The last_but_one revision
-	 *
-	 * @var int | null
-	 */
-	private static $last_but_one_revn = null;
-
-	/**
-	 * The last_but_one revision excerpt
-	 *
-	 * @var string | null
-	 */
-	private static $last_revn_excerpt = null;
-
-	/**
 	 * The last revision
 	 *
 	 * @var int | null
@@ -58,11 +63,25 @@ class WP_Document_Revisions_Admin {
 	private static $attachmts = null;
 
 	/**
+	 * User meta key recording that a user dismissed (or acted on) the review prompt.
+	 *
+	 * @var string
+	 */
+	const REVIEW_DISMISSED_META = 'wpdr_review_dismissed';
+
+	/**
+	 * Minimum number of documents (any status) before the review prompt is shown.
+	 *
+	 * @var int
+	 */
+	const REVIEW_MIN_DOCS = 5;
+
+	/**
 	 * Register's admin hooks
 	 * Note: we are at auth_redirect, first possible hook is admin_menu
 	 *
 	 * @since 0.5
-	 * @param unknown $instance (optional, reference).
+	 * @param object|null $instance (optional, reference).
 	 */
 	public function __construct( $instance = null ) {
 		self::$instance = &$this;
@@ -82,27 +101,35 @@ class WP_Document_Revisions_Admin {
 		add_action( 'admin_head', array( $this, 'make_private' ), 20 );
 		add_action( 'set_object_terms', array( $this, 'workflow_state_save' ), 10, 6 );
 		add_action( 'save_post_document', array( $this, 'save_document' ) );
-		add_action( 'admin_init', array( $this, 'enqueue_edit_scripts' ) );
+		add_filter( 'wp_insert_post_data', array( $this, 'restore_document_attachment_id' ), 10, 2 );
 		add_action( '_wp_put_post_revision', array( $this, 'revision_filter' ), 10, 1 );
 		add_filter( 'wp_save_post_revision_post_has_changed', array( $this, 'identify_last_but_one' ), 10, 3 );
 		add_filter( 'default_hidden_meta_boxes', array( $this, 'hide_postcustom_metabox' ), 10, 2 );
-		add_action( 'admin_print_footer_scripts', array( $this, 'bind_upload_cb' ), 99 );
 		add_action( 'admin_head', array( $this, 'hide_upload_header' ) );
 		add_action( 'admin_head', array( $this, 'check_upload_files' ) );
-		add_filter( 'media_upload_tabs', array( $this, 'media_upload_tabs_computer' ) );
 		// Although the Post Type Supports Editor, don't use block editor.
 		add_filter( 'use_block_editor_for_post', array( $this, 'no_use_block_editor' ), 10, 2 );
 		add_action( 'edit_form_after_title', array( $this, 'prepare_editor' ) );
 		add_filter( 'wp_editor_settings', array( $this, 'document_editor_setting' ), 10, 2 );
 		add_filter( 'tiny_mce_before_init', array( $this, 'modify_content_class' ) );
+		add_filter( 'content_edit_pre', array( $this, 'remove_attachment_id' ) );
 
 		// document list.
 		add_filter( 'manage_document_posts_columns', array( $this, 'rename_author_column' ) );
 		add_filter( 'manage_document_posts_columns', array( $this, 'add_currently_editing_column' ), 20 );
 		add_action( 'manage_document_posts_custom_column', array( $this, 'currently_editing_column_cb' ), 10, 2 );
 		add_action( 'restrict_manage_posts', array( $this, 'filter_documents_list' ) );
-		add_filter( 'parse_query', array( $this, 'convert_workflow_state_to_post_status' ) );
+		add_filter( 'manage_document_posts_columns', array( $this, 'add_file_columns' ), 30 );
+		add_action( 'manage_document_posts_custom_column', array( $this, 'file_columns_cb' ), 10, 2 );
+		add_filter( 'manage_edit-document_sortable_columns', array( $this, 'file_sortable_columns' ) );
+		add_action( 'pre_get_posts', array( $this, 'file_filter_query_var' ) );
+		add_filter( 'posts_clauses', array( $this, 'file_columns_clauses' ), 10, 2 );
+		add_action( 'parse_query', array( $this, 'convert_workflow_state_to_post_status' ) );
 		add_filter( 'wp_dropdown_users_args', array( $this, 'filter_user_dropdown' ), 10, 2 );
+		add_action( 'admin_notices', array( $this, 'empty_state_notice' ) );
+		add_action( 'admin_notices', array( $this, 'review_prompt' ) );
+		add_action( 'admin_init', array( $this, 'handle_review_dismissal' ) );
+		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 
 		// settings.
 		add_action( 'admin_init', array( $this, 'settings_fields' ) );
@@ -119,18 +146,27 @@ class WP_Document_Revisions_Admin {
 		add_action( 'edit_user_profile_update', array( $this, 'profile_update_cb' ) );
 
 		// Queue up JS.
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_edit_scripts' ) );
 
 		// media filters.
 		add_action( 'admin_init', array( $this, 'filter_from_media' ) );
 		add_filter( 'ajax_query_attachments_args', array( $this, 'filter_from_media_grid' ) );
+		add_filter( 'wp_prepare_attachment_for_js', array( $this, 'clean_attachment_for_js' ), 10, 2 );
 
 		// cleanup.
 		add_action( 'before_delete_post', array( $this, 'list_attachments_with_document' ) );
 		add_action( 'delete_post', array( $this, 'delete_attachments_with_document' ) );
 
-		// edit flow or publishpress support.
-		add_action( 'init', array( $this, 'disable_workflow_states' ), 1901 );  // After main class called.
+		// edit flow or publishpress support. disable_workflow_states() returns a
+		// bool for the editor guard that also calls it; as an init action the
+		// return value is unused, so wrap it to honour the void callback contract.
+		add_action(
+			'init',
+			function () {
+				$this->disable_workflow_states();
+			},
+			1901
+		);  // After main class called.
 
 		// admin css.
 		add_filter( 'admin_body_class', array( $this, 'admin_body_class_filter' ) );
@@ -143,8 +179,8 @@ class WP_Document_Revisions_Admin {
 	 * Provides support to call functions of the parent class natively.
 	 *
 	 * @since 1.0
-	 * @param string $funct the function to call.
-	 * @param array  $args  the arguments to pass to the function.
+	 * @param string  $funct the function to call.
+	 * @param mixed[] $args  the arguments to pass to the function.
 	 * @return mixed the result of the function.
 	 */
 	public function __call( $funct, array $args ) {

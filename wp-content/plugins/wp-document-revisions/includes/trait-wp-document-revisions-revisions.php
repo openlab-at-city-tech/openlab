@@ -5,10 +5,24 @@
  * @package WP_Document_Revisions
  */
 
+// direct file access protection.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
 /**
  * Revision data, caching, and lock management functionality for WP_Document_Revisions.
  */
 trait WP_Document_Revisions_Revisions {
+
+	/**
+	 * List of document revisions to keep (used to keep them if other processes would delete them).
+	 *
+	 * @var int[][]
+	 *
+	 * @since 3.7.0
+	 */
+	private static $revns = array();
 
 	/**
 	 * Retrieves all revisions for a given post (including the current post)
@@ -18,31 +32,32 @@ trait WP_Document_Revisions_Revisions {
 	 *
 	 * @since 1.0
 	 * @param ?int $post_id the post ID.
-	 * @return array array of post objects
+	 * @return WP_Post[] array of post objects
 	 */
 	public function get_revisions( ?int $post_id ) {
 		$document = get_post( $post_id );
 
 		if ( ! $document || 'document' !== $document->post_type ) {
-			return false;
+			return array();
 		}
 
 		$cache = wp_cache_get( $post_id, 'document_revisions' );
-		if ( $cache ) {
-			return $cache;
+		if ( is_array( $cache ) && $cache ) {
+			return $this->clone_revisions( $cache );
 		}
 
 		// Before post is saved GMT fields are zero.
 		if ( '0000-00-00 00:00:00' === $document->post_modified_gmt ) {
-			$document->post_modified_gmt = current_time( 'mysql', 1 );
+			$document->post_modified_gmt = current_time( 'mysql', true );
 		}
 		// correct the modified date.
-		$document->post_date = gmdate( 'Y-m-d H:i:s', (int) get_post_modified_time( 'U', null, $post_id ) );
+		$document->post_date = gmdate( 'Y-m-d H:i:s', (int) get_post_modified_time( 'U', false, $post_id ) );
 
 		// fix for Quotes in the most recent post because it comes from get_post.
 		$document->post_excerpt = html_entity_decode( $document->post_excerpt );
 
 		// get revisions, remove autosaves, and prepend the post.
+		// phpcs:disable WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters
 		$get_revs = wp_get_post_revisions(
 			$post_id,
 			array(
@@ -50,11 +65,11 @@ trait WP_Document_Revisions_Revisions {
 				'suppress_filters' => true,   // try to avoid 'perm' overrides.
 			)
 		);
+		// phpcs:enable WordPressVIPMinimum.Performance.WPQueryParams.SuppressFilters_suppress_filters
 
-		$revs     = array();
-		$post_rev = $post_id . '-autosave-v1';
+		$revs = array();
 		foreach ( $get_revs as $id => &$get_rev ) {
-			if ( $get_rev->post_name !== $post_rev ) {
+			if ( ! wp_is_post_autosave( $get_rev ) ) {
 				// not an autosave.
 				$revs[ $id ] = $get_rev;
 			}
@@ -63,9 +78,100 @@ trait WP_Document_Revisions_Revisions {
 
 		wp_cache_set( $post_id, $revs, 'document_revisions' );
 
-		return $revs;
+		return $this->clone_revisions( $revs );
 	}
 
+	/**
+	 * Copies a list of revisions so callers can't change the cached objects.
+	 *
+	 * The non-persistent object cache returns arrays by value, but the WP_Post objects
+	 * inside are shared, so a caller changing one (as get_latest_revision() does)
+	 * changed every later get_revisions() result in the request.
+	 *
+	 * @since 5.6.0
+	 * @param WP_Post[] $revisions the cached revisions.
+	 * @return WP_Post[]
+	 */
+	private function clone_revisions( array $revisions ): array {
+		return array_map(
+			static function ( $revision ) {
+				return clone $revision;
+			},
+			$revisions
+		);
+	}
+
+	/**
+	 * Clears a document's cached revisions when it, one of its revisions or one of its
+	 * attachments changes.
+	 *
+	 * Hooked to clean_post_cache, which core runs whenever a post is inserted, updated
+	 * or deleted, so revisions deleted with wp_delete_post_revision() and attachments
+	 * added or deleted are covered, not just saves of the document.
+	 *
+	 * @since 5.6.0
+	 * @param int          $post_id the post ID.
+	 * @param WP_Post|null $post    the post object.
+	 */
+	public function flush_revision_cache( $post_id, $post = null ): void {
+		$post = $post instanceof WP_Post ? $post : get_post( (int) $post_id );
+		if ( ! $post ) {
+			return;
+		}
+
+		$documents = array();
+		if ( 'document' === $post->post_type ) {
+			$documents[] = (int) $post->ID;
+		}
+		if ( $post->post_parent && 'document' === get_post_type( $post->post_parent ) ) {
+			$documents[] = (int) $post->post_parent;
+		}
+
+		foreach ( $documents as $document_id ) {
+			wp_cache_delete( $document_id, 'document_revision_indices' );
+			wp_cache_delete( $document_id, 'document_revisions' );
+		}
+	}
+
+
+	/**
+	 * Returns the user who saved a document version.
+	 *
+	 * The document itself comes first in get_revisions(), and a document's post_author
+	 * is its owner, not whoever uploaded the current file. For the document, this
+	 * returns the author of its latest revision (WordPress records the saving user
+	 * there), falling back to the owner when there are no revisions yet or the latest
+	 * one has no author (e.g. saved by cron or WP-CLI). For a revision, it returns the
+	 * revision's author.
+	 *
+	 * @since 5.6.0
+	 * @param int|WP_Post $revision the document or revision.
+	 * @return int user ID, or 0 if unknown.
+	 */
+	public function get_revision_author( $revision ): int {
+		$revision = get_post( $revision );
+		if ( ! $revision ) {
+			return 0;
+		}
+
+		$author = (int) $revision->post_author;
+		if ( 'document' === $revision->post_type ) {
+			$revisions = $this->get_revisions( $revision->ID );
+			if ( isset( $revisions[1] ) && (int) $revisions[1]->post_author > 0 ) {
+				$author = (int) $revisions[1]->post_author;
+			}
+		}
+
+		/**
+		 * Filters the user shown as having saved a document version.
+		 *
+		 * @since 5.6.0
+		 *
+		 * @param int     $author   user ID.
+		 * @param WP_Post $revision the document or revision.
+		 */
+		return (int) apply_filters( 'document_revision_author', $author, $revision );
+	}
 
 	/**
 	 * Returns a modified WP Query object of a document and its revisions
@@ -74,7 +180,7 @@ trait WP_Document_Revisions_Revisions {
 	 * @since 1.0.4
 	 * @param int  $post_id the ID of the document.
 	 * @param bool $feed (optional) whether this is a feed.
-	 * @return obj|bool the WP_Query object, false on failure
+	 * @return WP_Query|bool the WP_Query object, false on failure
 	 */
 	public function get_revision_query( int $post_id, bool $feed = false ) {
 		$posts = $this->get_revisions( $post_id );
@@ -108,8 +214,8 @@ trait WP_Document_Revisions_Revisions {
 	/**
 	 * Given a post ID, returns the latest revision attachment.
 	 *
-	 * @param Int $post_id the post id.
-	 * @return object latest revision object
+	 * @param int $post_id the post id.
+	 * @return WP_Post|false latest revision object
 	 */
 	public function get_latest_revision( $post_id ) {
 		if ( is_object( $post_id ) ) {
@@ -133,7 +239,7 @@ trait WP_Document_Revisions_Revisions {
 
 			$latest_attachment = reset( $attachments );
 			if ( is_numeric( $revisions[0]->post_content ) ) {
-				$revisions[0]->post_content = $this->format_doc_id( $revisions[0]->post_content );
+				$revisions[0]->post_content = $this->format_doc_id( (int) $revisions[0]->post_content );
 			} elseif ( empty( $revisions[0]->post_content ) ) {
 				$revisions[0]->post_content = $this->format_doc_id( $latest_attachment->ID );
 			}
@@ -148,7 +254,7 @@ trait WP_Document_Revisions_Revisions {
 	 *
 	 * @since 0.5
 	 * @param int $revision_id the revision ID.
-	 * @return int revision number
+	 * @return int|false revision number, or false if the revision has no parent.
 	 */
 	public function get_revision_number( int $revision_id ) {
 		$revision = get_post( $revision_id );
@@ -172,7 +278,7 @@ trait WP_Document_Revisions_Revisions {
 	public function override_lock( bool $send_notice = true ): void {
 		check_ajax_referer( 'wp-document-revisions', 'nonce' );
 
-		$post_id = ( isset( $_POST['post_id'] ) ? sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : false );
+		$post_id = ( isset( $_POST['post_id'] ) ? (int) sanitize_text_field( wp_unslash( $_POST['post_id'] ) ) : false );
 
 		// verify current user can edit
 		// consider a specific permission check here.
@@ -186,24 +292,45 @@ trait WP_Document_Revisions_Revisions {
 			wp_die( '-1' );
 		}
 
+		$this->take_document_lock( $post_id, $current_owner, $send_notice );
+
+		wp_die( '1' );
+	}
+
+	/**
+	 * Gives the current user the lock on a document, notifying the previous owner.
+	 *
+	 * Callers are responsible for checking that the current user may override the lock.
+	 *
+	 * @since 5.6.0
+	 * @param int  $post_id     the document ID.
+	 * @param int  $owner_id    the user who held the lock, or 0 if unknown.
+	 * @param bool $send_notice (optional) whether or not to send an e-mail to the former lock owner.
+	 */
+	public function take_document_lock( int $post_id, int $owner_id, bool $send_notice = true ): void {
 		// update the lock.
 		wp_set_post_lock( $post_id );
 
 		// get the current user ID.
-		$current_user = wp_get_current_user();
+		$current_user_id = get_current_user_id();
 
 		/**
 		 * Filters the option to send a locked document override email.
 		 *
 		 * @param boolean $send_notice selector whether to send the locked document.
 		 */
-		if ( apply_filters( 'send_document_override_notice', $send_notice ) ) {
-			$this->send_override_notice( $post_id, $current_owner, $current_user->ID );
+		if ( apply_filters( 'send_document_override_notice', $send_notice ) && $owner_id ) { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$this->send_override_notice( $post_id, $owner_id, $current_user_id );
 		}
 
-		do_action( 'document_lock_override', $post_id, $current_user->ID, $current_owner );
-
-		wp_die( '1' );
+		/**
+		 * Fires after a user overrides another user's lock on a document.
+		 *
+		 * @param int $post_id         the document ID.
+		 * @param int $current_user_id the user who now holds the lock.
+		 * @param int $owner_id        the user who held the lock.
+		 */
+		do_action( 'document_lock_override', $post_id, $current_user_id, $owner_id );
 	}
 
 
@@ -225,11 +352,11 @@ trait WP_Document_Revisions_Revisions {
 	 * Given a post object, returns all attached uploads.
 	 *
 	 * @since 0.5
-	 * @param object $document (optional) post object.
-	 * @return object all attached uploads
+	 * @param WP_Post|int|null $document (optional) post object.
+	 * @return WP_Post[] all attached uploads
 	 */
-	public function get_attachments( $document = '' ) {
-		if ( '' === $document ) {
+	public function get_attachments( $document = null ) {
+		if ( is_null( $document ) || '' === $document ) {
 			global $post;
 			$document = $post;
 		}
@@ -265,7 +392,7 @@ trait WP_Document_Revisions_Revisions {
 		/**
 		 * Filters the plugin query to fetch all the attachments of a parent post.
 		 *
-		 * @param array $args Delivered WP Query to fetch all attachments for a document.
+		 * @param mixed[] $args Delivered WP Query to fetch all attachments for a document.
 		 */
 		$args = apply_filters( 'document_revision_query', $args );
 
@@ -276,7 +403,7 @@ trait WP_Document_Revisions_Revisions {
 	 * Checks if document is locked, if so, returns the lock holder's name.
 	 *
 	 * @since 0.5
-	 * @param object|int $document the post object or postID.
+	 * @param WP_Post|int $document the post object or postID.
 	 * @return bool|string false if no lock, user's display name if locked
 	 */
 	public function get_document_lock( $document ) {
@@ -298,8 +425,8 @@ trait WP_Document_Revisions_Revisions {
 		/**
 		 * Filters the user locking the document file.
 		 *
-		 * @param string $user     user locking the document.
-		 * @param object $document Post object.
+		 * @param int|false $user     user ID locking the document, or false if none.
+		 * @param WP_Post   $document Post object.
 		 */
 		$user = apply_filters( 'document_lock_check', $user, $document );
 
@@ -317,7 +444,7 @@ trait WP_Document_Revisions_Revisions {
 	 *
 	 * @since 0.5
 	 * @param int $post_id the parent post id.
-	 * @return array array of revisions
+	 * @return int[] 1-indexed array of revision post IDs
 	 */
 	public function get_revision_indices( int $post_id ): array {
 		$cache = wp_cache_get( $post_id, 'document_revision_indices' );
@@ -335,10 +462,9 @@ trait WP_Document_Revisions_Revisions {
 		$i = 1;
 
 		// ignore autosaves keeping only real revisions.
-		$output   = array();
-		$post_rev = $post_id . '-autosave-v1';
+		$output = array();
 		foreach ( $revs as $rev ) {
-			if ( $rev->post_name !== $post_rev ) {
+			if ( ! wp_is_post_autosave( $rev ) ) {
 				// not an autosave.
 				$output[ $i++ ] = $rev->ID;
 			}
@@ -379,7 +505,7 @@ trait WP_Document_Revisions_Revisions {
 		$lock_owner = get_userdata( $owner_id );
 
 		// get the current user's details.
-		$current_user = wp_get_current_user( $current_user_id );
+		$current_user = get_userdata( $current_user_id );
 
 		// get the post.
 		$document = get_post( $post_id );
@@ -392,7 +518,7 @@ trait WP_Document_Revisions_Revisions {
 		 *
 		 * @param string $subject delivered email subject text.
 		 */
-		$subject = apply_filters( 'lock_override_notice_subject', $subject );
+		$subject = apply_filters( 'lock_override_notice_subject', $subject ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		// build the message.
 		// translators: %s is the user's name.
@@ -407,15 +533,15 @@ trait WP_Document_Revisions_Revisions {
 		 *
 		 * @param string $message delivered email message text.
 		 */
-		$message = apply_filters( 'lock_override_notice_message', $message );
+		$message = apply_filters( 'lock_override_notice_message', $message ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 
 		/**
 		 * Filters the lost lock document email text.
 		 *
-		 * @param string $message         lost lock email message text.
-		 * @param int    $post_id         document id.
-		 * @param int    $current_user_id current user id (who has lost lock).
-		 * @param object $lock_owner      locking user details.
+		 * @param string  $message         lost lock email message text.
+		 * @param int     $post_id         document id.
+		 * @param int     $current_user_id current user id (who has lost lock).
+		 * @param WP_User $lock_owner      locking user details.
 		 */
 		$message = apply_filters( 'document_lock_override_email', $message, $post_id, $current_user_id, $lock_owner );
 
@@ -430,11 +556,11 @@ trait WP_Document_Revisions_Revisions {
 	 * @param WP_Post|false|null $delete       Whether to go forward with deletion.
 	 * @param WP_Post            $post         Post object.
 	 * @param bool               $force_delete Whether to bypass the Trash.
-	 * @return WP_Post | null  Null - No opinion (will run deletion); $post - Bypass delete.
+	 * @return WP_Post|false|null  Null - No opinion (will run deletion); $post - Bypass delete.
 	 */
 	public function possibly_delete_revision( $delete, WP_Post $post, bool $force_delete ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		// bail if not a revision, an autosave or already decided not to delete.
-		if ( 'revision' !== $post->post_type || str_contains( $post->post_name, '-autosave-v1' ) || ! is_null( $delete ) ) {
+		if ( 'revision' !== $post->post_type || wp_is_post_autosave( $post ) || ! is_null( $delete ) ) {
 			// only process revisions.
 			return $delete;
 		}
@@ -491,7 +617,12 @@ trait WP_Document_Revisions_Revisions {
 		if ( ! array_key_exists( $doc, self::$revns ) ) {
 			global $wpdr;
 			$all_revns           = $wpdr->get_revisions( $doc );
-			self::$revns[ $doc ] = array_slice( $all_revns, 0, $keep );
+			self::$revns[ $doc ] = array_map(
+				static function ( WP_Post $revision ): int {
+					return (int) $revision->ID;
+				},
+				array_slice( $all_revns, 0, $keep )
+			);
 		}
 
 		if ( in_array( $post->ID, self::$revns[ $doc ], true ) ) {
