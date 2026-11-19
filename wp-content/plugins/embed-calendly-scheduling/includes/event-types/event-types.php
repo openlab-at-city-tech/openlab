@@ -14,6 +14,10 @@ class EMCS_Event_Types
 
             $event_types = self::fetch_event_types_from_calendly();
 
+            if (is_wp_error($event_types)) {
+                return [];
+            }
+
             if (!empty($event_types)) {
                 self::cache_calendly_event_types($event_types);
 
@@ -124,8 +128,15 @@ class EMCS_Event_Types
                 $api_key = emcs_decrypt_key($options['emcs_v2api_key']);
                 $calendly = new EMCS_API('v2', $api_key);
 
+                $events = $calendly->emcs_get_events();
+
+                // If v2 returned a WP_Error, propagate it for the caller to display
+                if (is_wp_error($events)) {
+                    return $events;
+                }
+
                 // retry v1 key if v2 key returns empty results
-                if ($calendly->emcs_get_events() === FALSE) {
+                if ($events === FALSE) {
 
                     $api_key = emcs_decrypt_key($options['emcs_v1api_key']);
                     $calendly = new EMCS_API('v1', $api_key);
@@ -133,7 +144,7 @@ class EMCS_Event_Types
                     return $calendly->emcs_get_events();
                 }
 
-                return $calendly->emcs_get_events();
+                return $events;
             }
         } elseif (!empty($options['emcs_v1api_key'])) {
 
@@ -195,8 +206,18 @@ class EMCS_Event_Types
 
     public static function sync_event_types()
     {
-        self::flush_event_types();
         $event_types = self::fetch_event_types_from_calendly();
+
+        if (is_wp_error($event_types)) {
+            return $event_types;
+        }
+
+        self::flush_event_types();
+
+        if ($event_types === false) {
+            return false;
+        }
+
         self::cache_calendly_event_types($event_types);
     }
 

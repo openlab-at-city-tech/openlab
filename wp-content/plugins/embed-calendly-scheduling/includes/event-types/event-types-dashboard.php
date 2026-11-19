@@ -39,14 +39,12 @@ class EMCS_Event_Types_Dashboard
         <div class="emcs-subtitle">
             <?php esc_html_e('Event Types', 'embed-calendly-scheduling'); ?>
             <div class="emcs-sync-event-types">
-                <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-                    <input type="hidden" name="action" value="emcs_sync_event_types">
-                    <?php wp_nonce_field('emcs_sync_event_types_action', '_wpnonce', true, true); ?>
-                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button">
-                        <span class="dashicons dashicons-update-alt emcs-dashicon"></span>
-                        <?php esc_html_e('Sync', 'embed-calendly-scheduling'); ?>
-                    </button>
-                </form>
+                <div class="emcs-links">
+                    <a href="https://simpma.com/contact/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Ask a Question', 'embed-calendly-scheduling'); ?></a> |
+                    <a href="https://simpma.com/blog/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Articles', 'embed-calendly-scheduling'); ?></a> |
+                    <a href="https://simpma.com/work-with-us/?utm_source=plugin&utm_medium=menu&utm_campaign=hire" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Hire An Expert', 'embed-calendly-scheduling'); ?></a> |
+                    <a href="https://simpma.com/emc/pricing/?utm_source=plugin&utm_medium=menu&utm_campaign=pro" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Get Pro', 'embed-calendly-scheduling'); ?></a>
+                </div>
             </div>
         </div>
         <div class="emcs-wrapper">
@@ -54,6 +52,33 @@ class EMCS_Event_Types_Dashboard
 
             self::display_greeting();
             self::display_greeting_listener();
+            self::display_sync_error();
+
+            ?>
+
+            <div class="emcs-sync-event-types">
+                <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
+                    <input type="hidden" name="action" value="emcs_sync_event_types">
+                    <?php wp_nonce_field('emcs_sync_event_types_action', '_wpnonce', true, true); ?>
+                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button">
+                        <span class="dashicons dashicons-update-alt emcs-dashicon"></span>
+                        <?php esc_html_e('Sync', 'embed-calendly-scheduling'); ?>
+                    </button>
+                </form><br><br>
+            </div>
+
+            <div class="emcs-availability">
+                <?php
+                printf(
+                    /* translators: %s: example shortcode */
+                    esc_html__('Display your availability summary with: %s', 'embed-calendly-scheduling'),
+                    '<strong>' . esc_html('[calendly_availability theme="default" text_color="#cc3366"]') . '</strong>'
+                );
+                ?><br><br>
+                <?php esc_html_e('Or copy the shortcode below to embed your booking widget on a page.', 'embed-calendly-scheduling'); ?>
+            </div>
+
+            <?php
 
             if (empty($events)) {
                 esc_html_e('No event types in your account', 'embed-calendly-scheduling');
@@ -131,6 +156,56 @@ class EMCS_Event_Types_Dashboard
             }
         }
 
+        private static function display_sync_error()
+        {
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            if (!isset($_GET['emcs_sync_error'])) {
+                return;
+            }
+
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $error_msg = isset($_GET['emcs_error_msg']) ? sanitize_text_field(wp_unslash($_GET['emcs_error_msg'])) : '';
+
+            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+            $error_code = isset($_GET['emcs_error_code']) ? sanitize_text_field(wp_unslash($_GET['emcs_error_code'])) : '';
+
+            $message = '';
+
+            if ($error_code) {
+                $message = sprintf(
+                    /* translators: %1$d HTTP error code, %2$s error message */
+                    __('Calendly sync failed (HTTP %1$d): %2$s', 'embed-calendly-scheduling'),
+                    (int) $error_code,
+                    $error_msg
+                );
+            } elseif ($error_msg) {
+                $message = sprintf(
+                    /* translators: %s error message */
+                    __('Calendly sync failed: %s', 'embed-calendly-scheduling'),
+                    $error_msg
+                );
+            } else {
+                $message = __('Calendly sync failed. Please check your API key and try again.', 'embed-calendly-scheduling');
+            }
+
+            // Remove the query args from the URL so the notice doesn't persist
+            $clean_url = remove_query_arg(array('emcs_sync_error', 'emcs_error_msg', 'emcs_error_code'));
+    ?>
+    <div class="emcs-sync-error notice notice-error is-dismissible">
+        <p><?php echo esc_html($message); ?></p>
+        <p class="emcs-sync-error-hint"><?php esc_html_e('Check your API key in Settings and ensure your Calendly account is active.', 'embed-calendly-scheduling'); ?></p>
+    </div>
+    <script>
+        (function() {
+            var cleanUrl = <?php echo json_encode($clean_url); ?>;
+            if (window.location.search.indexOf('emcs_sync_error') !== -1 && cleanUrl) {
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        })();
+    </script>
+<?php
+        }
+
         private static function display_greeting()
         {
             $option = get_option('emcs_display_greeting');
@@ -162,7 +237,7 @@ class EMCS_Event_Types_Dashboard
                 ),
                 'emcs_display_greeting_action'
             );
-    ?>
+?>
     <div class="emcs-dashboard-greeting">
         <?php esc_html_e('Thanks for using EMC! How\'s your experience?', 'embed-calendly-scheduling'); ?>
         <div class="emcs-greeting-right">

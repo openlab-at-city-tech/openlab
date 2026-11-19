@@ -28,34 +28,36 @@ class EMCS_Customizer
         <div class="emcs-subtitle">
             <?php esc_html_e('Widget Customizer', 'embed-calendly-scheduling'); ?>
             <div class="emcs-sync-event-types">
-                <form action="<?php echo esc_url(admin_url('admin-post.php')); ?>" method="POST">
-                    <input type="hidden" name="action" value="emcs_sync_event_types">
-                    <?php wp_nonce_field('emcs_sync_event_types_action', '_wpnonce', true, true); ?>
-                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button">
-                        <span class="dashicons dashicons-update-alt emcs-dashicon"></span>
-                        <?php esc_html_e('Sync', 'embed-calendly-scheduling'); ?>
-                    </button>
-                </form>
+                <div class="emcs-links">
+                    <a href="https://simpma.com/contact/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Ask a Question', 'embed-calendly-scheduling'); ?></a> |
+                    <a href="https://simpma.com/blog/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Articles', 'embed-calendly-scheduling'); ?></a> |
+                    <a href="https://simpma.com/work-with-us/?utm_source=plugin&utm_medium=menu&utm_campaign=hire" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Hire An Expert', 'embed-calendly-scheduling'); ?></a> |
+                    <a href="https://simpma.com/emc/pricing/?utm_source=plugin&utm_medium=menu&utm_campaign=pro" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Get Pro', 'embed-calendly-scheduling'); ?></a>
+                </div>
             </div>
         </div>
-        <div class="emcs-container emcs-customizer">
+        <div class="emcs-customizer-notice">
             <?php
-
-            if (empty($emcs_events)) {
-                /* translators: %1$s opens a div tag, %2$s closes a div tag */
-                printf(wp_kses_post(__('%1$sCreate an event type in your Calendly account to begin customization.%1$s', 'embed-calendly-scheduling')), '<div class="emcs-text-center">', '</div>');
-                return;
-            }
-
-            $owner = EMCS_Event_Types::extract_event_type_owner($emcs_events[0]->url);
+            printf(
+                /* translators: 1: opening anchor tag, 2: closing anchor tag */
+                esc_html__('Want your booking widget to match your brand? %1$sUnlock Pro >>%2$s', 'embed-calendly-scheduling'),
+                '<a href="' . esc_url('https://simpma.com/emc/pricing/?utm_source=plugin&utm_medium=customizer-notice') . '" target="_blank" rel="noopener noreferrer">',
+                '</a>'
+            );
             ?>
-            <div class="emcs-embed-title"><?php esc_html_e('Customize Widget', 'embed-calendly-scheduling'); ?></div>
-            <?php
-            include_once(EMCS_INCLUDES . 'widget-customizer/choose-customizer.php');
-            include_once(EMCS_CUSTOMIZER_TEMPLATES . 'inline-form-customizer.php');
-            include_once(EMCS_CUSTOMIZER_TEMPLATES . 'popup-text-customizer.php');
-            include_once(EMCS_CUSTOMIZER_TEMPLATES . 'popup-button-customizer.php');
-            ?>
+            <br><br>
+            <small>
+                <span class="dashicons dashicons-yes" aria-hidden="true"></span> <?php esc_html_e('Full Customizer', 'embed-calendly-scheduling'); ?>
+            </small>
+            <small>
+                <span class="dashicons dashicons-yes" aria-hidden="true"></span> <?php esc_html_e('Multiple Event Types', 'embed-calendly-scheduling'); ?>
+            </small>
+            <small>
+                <span class="dashicons dashicons-yes" aria-hidden="true"></span> <?php esc_html_e('Track Bookings', 'embed-calendly-scheduling'); ?>
+            </small>
+        </div>
+        <div class="emcs-customizer">
+            <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-customizer.png'); ?>" width="100%" alt="emc customizer demo">
         </div>
 <?php
     }
