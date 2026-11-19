@@ -16,10 +16,10 @@
 
 <!-- wp:group {"align":"full","style":{"spacing":{"blockGap":"0"}},"backgroundColor":"quinary","layout":{"type":"constrained"}} -->
 <div class="wp-block-group alignfull has-quinary-background-color has-background">
-	
+
 	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"120px"},"padding":{"top":"var:preset|spacing|80","bottom":"var:preset|spacing|80"}}}} -->
 	<div class="wp-block-columns alignwide" style="padding-top:var(--wp--preset--spacing--80);padding-bottom:var(--wp--preset--spacing--80)">
-		
+
 
 		<!-- wp:column {"width":"60%","style":{"spacing":{"blockGap":"var:preset|spacing|20"}}} -->
 		<div class="wp-block-column" style="flex-basis:60%">
@@ -45,10 +45,10 @@
 
 		<!-- wp:column {"width":"20%","style":{"spacing":{"blockGap":"var:preset|spacing|20"}}} -->
 		<div class="wp-block-column" style="flex-basis:20%">
-			
+
 			<!-- wp:heading {"level":6,"fontSize":"small"} -->
 			<h6 class="wp-block-heading has-small-font-size"><?php esc_html_e( 'Quick Links', 'patterns-docs' ); ?></h6>
-			<!-- /wp:heading -->     
+			<!-- /wp:heading -->
 
 			<!-- wp:navigation {"overlayMenu":"never","style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical"}} -->
 				<!-- wp:navigation-link {"label":"<?php esc_html_e( 'General Setting', 'patterns-docs' ); ?>","url":"#"} /-->
@@ -62,10 +62,10 @@
 
 		<!-- wp:column {"width":"20%","style":{"spacing":{"blockGap":"var:preset|spacing|20"}}} -->
 		<div class="wp-block-column" style="flex-basis:20%">
-			
+
 			<!-- wp:heading {"level":6,"fontSize":"small"} -->
 			<h6 class="wp-block-heading has-small-font-size"><?php esc_html_e( 'Contact', 'patterns-docs' ); ?></h6>
-			<!-- /wp:heading -->  
+			<!-- /wp:heading -->
 			<!-- wp:group {"style":{"spacing":{"blockGap":"var:preset|spacing|20"}},"layout":{"type":"flex","orientation":"vertical"}} -->
 			<div class="wp-block-group"><!-- wp:paragraph {"className":"pwp-txt-dec-non ","style":{"elements":{"link":{"color":{"text":"var:preset|color|tertiary"},":hover":{"color":{"text":"var:preset|color|primary"}}}}}} -->
 			<p class="pwp-txt-dec-non has-link-color"><a href="<?php echo esc_url( 'tel:000 - 9874 563 210' ); ?>"><?php esc_html_e( '000 - 9874 563 210', 'patterns-docs' ); ?></a></p>
@@ -82,13 +82,13 @@
 	<!-- /wp:columns -->
 
 	<!-- wp:group {"align":"full","style":{"border":{"top":{"color":"var:preset|color|quaternary","style":"solid","width":"1px"}},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}},"backgroundColor":"default","layout":{"type":"constrained"}} -->
-	<div class="wp-block-group alignfull has-default-background-color has-background" style="border-top-color:var(--wp--preset--color--quaternary);border-top-style:solid;border-top-width:1px;padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">        
-   
+	<div class="wp-block-group alignfull has-default-background-color has-background" style="border-top-color:var(--wp--preset--color--quaternary);border-top-style:solid;border-top-width:1px;padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">
+
 		<!-- wp:pattern {"slug":"patterns-docs/copyright"} /-->
 	</div>
 	<!-- /wp:group -->
 
 <!-- wp:pattern {"slug":"patterns-docs/scroll-to-top-button"} /-->
- 
+
 </div>
 <!-- /wp:group -->

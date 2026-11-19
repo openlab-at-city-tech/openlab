@@ -27,9 +27,9 @@ class Patterns_Docs_Info {
 	 *
 	 * @since    1.0.0
 	 * @access   public
-	 * @var      string    $hook_suffix    Store current added Menu hook_suffix.
+	 * @var      array $hook_suffix Store current added Menu hook_suffix.
 	 */
-	private $hook_suffix;
+	private $hook_suffix = array();
 
 	/**
 	 * Empty Constructor

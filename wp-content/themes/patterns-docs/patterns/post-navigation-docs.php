@@ -14,7 +14,7 @@
 ?>
 <!-- wp:group {"align":"wide","style":{"spacing":{"padding":{"right":"0","left":"0"}}},"layout":{"type":"constrained","contentSize":"1320px"}} -->
 <div class="wp-block-group alignwide" style="padding-right:0;padding-left:0">
-	
+
 <!-- wp:spacer {"height":"var:preset|spacing|20"} -->
 <div style="height:var(--wp--preset--spacing--20)" aria-hidden="true" class="wp-block-spacer"></div>
 <!-- /wp:spacer -->

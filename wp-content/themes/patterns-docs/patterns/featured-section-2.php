@@ -2,7 +2,7 @@
 /**
  * Title: Featured Section 2
  * Slug: patterns-docs/featured-section-2
- * Categories: featured
+ * Categories: media, columns, text, featured
  * Description: A layout with an image in the left column and a title, content, and Card 2 pattern in the right column.
  *
  * @package    Patterns_Docs
