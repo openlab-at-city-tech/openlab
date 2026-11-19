@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 /**
  * A list of themes. For now they will be sorted outside this file,

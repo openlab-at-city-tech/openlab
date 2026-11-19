@@ -101,4 +101,4 @@
 		});
 		return h;
 	}
-})(jQuery)
+})(window.metaslider_jQuery || jQuery)

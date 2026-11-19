@@ -59,8 +59,8 @@ class MetaSlider_Widget extends WP_Widget
     public function update($new_instance, $old_instance)
     {
         $instance = array();
-        $instance['slider_id'] = strip_tags($new_instance['slider_id']);
-        $instance['title'] = strip_tags($new_instance['title']);
+        $instance['slider_id'] = wp_strip_all_tags($new_instance['slider_id']);
+        $instance['title'] = wp_strip_all_tags($new_instance['title']);
 
         return $instance;
     }
@@ -92,6 +92,7 @@ class MetaSlider_Widget extends WP_Widget
                 'post_status' => 'publish',
                 'orderby' => 'date',
                 'order' => 'ASC',
+                // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
                 'posts_per_page' => -1
             ));
 

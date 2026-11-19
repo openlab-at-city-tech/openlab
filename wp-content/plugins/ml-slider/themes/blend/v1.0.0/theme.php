@@ -41,7 +41,7 @@ class MetaSlider_Theme_Blend extends MetaSlider_Theme_Base
     public function enqueue_assets()
     {
         wp_enqueue_style('metaslider_blend_theme_styles', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/style.css', array('metaslider-public'), METASLIDER_VERSION);
-        wp_enqueue_script('metaslider_theme_five_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script.js', array('jquery'), METASLIDER_VERSION, true);
+        wp_enqueue_script('metaslider_theme_five_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script' . metaslider_asset_suffix() . '.js', array('jquery'), METASLIDER_VERSION, true);
     }
 }
 

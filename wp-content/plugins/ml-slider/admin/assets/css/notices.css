@@ -6,6 +6,11 @@
     padding-right: 130px!important;
 }
 
+/* WordPress 7.1 tints .updated notices green */
+.updraft-ad-container.updated {
+    background-color: #fff;
+}
+
 .updraft-ad-container > h1 {
     color: #dd6923;
     font-weight: 700;
@@ -132,10 +137,10 @@ h4.updraft_advert_heading {
 }
 
 #wpadminbar #wp-admin-bar-ms-main-menu .ab-item #metaslider-main-menu-icon {
-	background-size: 18px;
+	background-size: 30px auto;
 	background-repeat: no-repeat;
 	background-position: left center;
-	width: 18px;
+	width: 30px;
 	height: 32px;
 	float: left;
 	margin-right: 5px;

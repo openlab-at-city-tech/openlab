@@ -131,7 +131,7 @@ class MetaSlider_Slideshows
             $sanitized_customize = [];
 
             foreach ( $new_settings['theme_customize'] as $item => $value ) {
-                $sanitized_item     = strip_tags( $item );
+                $sanitized_item     = wp_strip_all_tags( $item );
 
                 // Add to sanitized array only if both key and value are not empty and color is valid
                 // @TODO - Check if setting exists in manifest files (customize.php)
@@ -244,7 +244,7 @@ class MetaSlider_Slideshows
             'post_status' => array('inherit', 'publish'),
             'orderby' => 'modified',
             'suppress_filters' => 1, // wpml, ignore language filter
-            'posts_per_page' => -1,
+            'posts_per_page' => count($slideshow_ids),
             'post__in' => $slideshow_ids
         );
         $slideshows = get_posts($args);
@@ -277,6 +277,7 @@ class MetaSlider_Slideshows
                 'post_status' => array('publish'),
                 'lang' => '', // polylang, ignore language filter
                 'suppress_filters' => 1,
+                // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
                 'posts_per_page' => -1,
                 'orderby' => 'menu_order',
                 'order' => 'ASC',
@@ -781,6 +782,7 @@ class MetaSlider_Slideshows
             'post_status' => array('publish'),
             'lang' => '', // polylang, ingore language filter
             'suppress_filters' => 1, // wpml, ignore language filter
+            // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
             'posts_per_page' => -1,
             'tax_query' => array(
                 array(
@@ -933,6 +935,7 @@ class MetaSlider_Slideshows
             'post_status' => array('inherit', 'publish'),
             'orderby' => 'modified',
             'suppress_filters' => 1, // wpml, ignore language filter
+            // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
             'posts_per_page' => -1
         );
 
@@ -1031,6 +1034,7 @@ class MetaSlider_Slideshows
             'post_type' => array('attachment', 'ml-slide'),
             'post_status' => array('inherit', 'publish'),
             'lang' => '',
+            // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
             'posts_per_page' => -1,
             'tax_query' => array(
                 array(
@@ -1112,6 +1116,10 @@ class MetaSlider_Slideshows
         }
         $settings = new MetaSlider_Slideshow_Settings($slideshow_id);
 
+        // get_single() returns a WP_Error when the setting is missing, so guard before casting to int.
+        $width = $settings->get_single('width');
+        $preview_width = is_numeric($width) && (int) $width > 0 ? (int) $width : 700;
+
         try {
             ob_start();
 
@@ -1140,7 +1148,7 @@ class MetaSlider_Slideshows
             }
             #preview-container {
                 min-height: 100%;
-                max-width: <?php echo (int) $settings->get_single('width') > 0 ? (int) $settings->get_single('width') : 700; ?>px;
+                max-width: <?php echo (int) $preview_width; ?>px;
                 margin: 0 auto;
                 display: -webkit-box;
                 display: -ms-flexbox;
@@ -1191,7 +1199,7 @@ class MetaSlider_Slideshows
      * @return int|WP_Error - Attachment ID on success, WP_Error on failure
      */
     public function import_file_to_media_library( $image_url ) {
-        $parsed = parse_url( $image_url );
+        $parsed = parse_url( $image_url ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
         $scheme = $parsed['scheme'] ?? '';
         $host   = $parsed['host'] ?? '';
         $path   = $parsed['path'] ?? '';
@@ -1210,7 +1218,7 @@ class MetaSlider_Slideshows
             return new WP_Error( 'invalid_file_type', __( 'URL does not point to an allowed file type.', 'ml-slider' ) );
         }
 
-        $site_host = parse_url( home_url(), PHP_URL_HOST );
+        $site_host = parse_url( home_url(), PHP_URL_HOST ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
         if ( $host && $host !== $site_host ) {
             $ip = gethostbyname( $host );
             if (
@@ -1234,7 +1242,7 @@ class MetaSlider_Slideshows
 
         // Get the filename and extension
         $file_array = [
-            'name'     => basename( parse_url( $image_url, PHP_URL_PATH ) ),
+            'name'     => basename( parse_url( $image_url, PHP_URL_PATH ) ), // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url
             'tmp_name' => $tmp,
         ];
 
@@ -1243,7 +1251,7 @@ class MetaSlider_Slideshows
 
         // Cleanup temp file if there was an error
         if ( is_wp_error( $attachment_id ) ) {
-            @unlink( $file_array['tmp_name'] );
+            @unlink( $file_array['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink
             return $attachment_id;
         }
 

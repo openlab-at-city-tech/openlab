@@ -90,6 +90,39 @@ function metaslider_pro_is_active()
 }
 
 /**
+ * File suffix for a script or style that has a minified copy: '.min', or '' when SCRIPT_DEBUG is on
+ *
+ * @since 3.114.0
+ *
+ * @return string
+ */
+function metaslider_asset_suffix()
+{
+    return defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
+}
+
+/**
+ * Translated name of a device key used by the mobile settings ('smartphone', 'tablet', 'laptop', 'desktop')
+ *
+ * @since 3.114.0
+ *
+ * @param string $device Device key
+ *
+ * @return string
+ */
+function metaslider_device_label($device)
+{
+    $labels = array(
+        'smartphone' => __('Smartphone', 'ml-slider'),
+        'tablet'     => __('Tablet', 'ml-slider'),
+        'laptop'     => __('Laptop', 'ml-slider'),
+        'desktop'    => __('Desktop', 'ml-slider'),
+    );
+
+    return isset($labels[$device]) ? $labels[$device] : $device;
+}
+
+/**
  * Returns true if the user does not have the pro version installed
  *
  * @return bool
@@ -133,7 +166,7 @@ function metaslider_user_is_ready_for_notices()
         'post_status' => 'publish',
         'suppress_filters' => 1, // wpml, ignore language filter
         'order' => 'ASC',
-        'posts_per_page' => -1
+        'posts_per_page' => 1
     );
 
     // If no slideshows, don't show a notice
@@ -197,6 +230,7 @@ function metaslider_has_trashed_slides($slider_id)
         'post_type' => array('attachment', 'ml-slide'),
         'post_status' => array('trash'),
         'lang' => '',
+        // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
         'posts_per_page' => -1,
         'tax_query' => array(
             array(
@@ -271,6 +305,60 @@ function metaslider_version()
 function metaslider_this_is_trash($slide)
 {
     return (is_object($slide) && "trash" === $slide->post_status);
+}
+
+/**
+ * Whether a post is a MetaSlider slide: an ml-slide post, or a legacy attachment slide tagged to a slideshow
+ *
+ * @since 3.114.0
+ *
+ * @param int $post_id Post ID
+ * @return bool
+ */
+function metaslider_is_slide($post_id)
+{
+    $post_type = get_post_type($post_id);
+
+    return 'ml-slide' === $post_type
+        || ('attachment' === $post_type && has_term('', 'ml-slider', $post_id));
+}
+
+/**
+ * Stop an AJAX request with a JSON error unless $slider_id is a slideshow the current user can edit
+ *
+ * @since 3.114.0
+ *
+ * @param int $slider_id Slideshow ID sent with the request
+ * @return void
+ */
+function metaslider_verify_slideshow_for_ajax($slider_id)
+{
+    if ('ml-slider' !== get_post_type($slider_id)) {
+        wp_send_json_error(esc_html__('Bad request. This is not a slideshow.', 'ml-slider'), 400);
+    }
+
+    if (! current_user_can('edit_post', $slider_id)) {
+        wp_send_json_error(esc_html__('Access denied', 'ml-slider'), 403);
+    }
+}
+
+/**
+ * Stop an AJAX request with a JSON error unless $slide_id is a slide the current user can edit
+ *
+ * @since 3.114.0
+ *
+ * @param int $slide_id Slide ID sent with the request
+ * @return void
+ */
+function metaslider_verify_slide_for_ajax($slide_id)
+{
+    if (! metaslider_is_slide($slide_id)) {
+        wp_send_json_error(esc_html__('Bad request. This is not a slide.', 'ml-slider'), 400);
+    }
+
+    if (! current_user_can('edit_post', $slide_id)) {
+        wp_send_json_error(esc_html__('Access denied', 'ml-slider'), 403);
+    }
 }
 
 /**
@@ -416,7 +504,8 @@ function metaslider_upgrade_pro_small_btn( $text = '', $tooltip = true )
     
     $link = 'https://www.metaslider.com/upgrade?utm_source=lite&utm_medium=banner&utm_campaign=pro';
     return '<a class="dashicons dashicons-lock is-pro-setting tipsy-tooltip-top" original-title="' . 
-        esc_attr( $text ) . '" href="' . 
+        esc_attr( $text ) . '" aria-label="' .
+        esc_attr( $text ) . '" href="' .
         esc_url( $link ) . '" target="_blank"></a>';
 }
 
@@ -438,7 +527,8 @@ function metaslider_install_lightbox_small_btn($text = '')
     
     $link = 'https://wordpress.org/plugins/ml-slider-lightbox/';
     return '<a class="dashicons dashicons-external is-free-setting tipsy-tooltip-top" original-title="' . 
-        esc_attr( $text ) . '" href="' . 
+        esc_attr( $text ) . '" aria-label="' .
+        esc_attr( $text ) . '" href="' .
         esc_url( $link ) . '" target="_blank"></a>';
 }
 
@@ -495,10 +585,103 @@ function metaslider_intermediate_image_src( $width, $attachment_id )
 }
 
 /**
+ * Get the folder that holds the HTML Purifier definition cache
+ *
+ * @since 3.114.0
+ *
+ * @return string
+ */
+function metaslider_html_purifier_cache_dir()
+{
+    return WP_CONTENT_DIR . '/cache/metaslider/htmlpurifier';
+}
+
+/**
+ * Get a direct filesystem instance, which needs no credentials for files PHP wrote itself
+ *
+ * @since 3.114.0
+ *
+ * @return WP_Filesystem_Direct
+ */
+function metaslider_direct_filesystem()
+{
+    require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+    require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+    // Normally set by WP_Filesystem(), which front-end requests never call
+    if ( ! defined( 'FS_CHMOD_DIR' ) ) {
+        define( 'FS_CHMOD_DIR', ( fileperms( ABSPATH ) & 0777 | 0755 ) );
+    }
+    if ( ! defined( 'FS_CHMOD_FILE' ) ) {
+        define( 'FS_CHMOD_FILE', ( fileperms( ABSPATH . 'index.php' ) & 0777 | 0644 ) );
+    }
+
+    return new WP_Filesystem_Direct( null );
+}
+
+/**
+ * Create this version's HTML Purifier cache folder, blocked from direct web access
+ *
+ * @since 3.114.0
+ *
+ * @return string|false The folder path, or false if it can't be written to
+ */
+function metaslider_prepare_html_purifier_cache_dir()
+{
+    $root = metaslider_html_purifier_cache_dir();
+    // Versioned so a plugin update never reads a cache built by an older bundled library
+    $dir = $root . '/' . METASLIDER_VERSION;
+    if ( ! wp_mkdir_p( $dir ) || ! wp_is_writable( $dir ) ) {
+        return false;
+    }
+
+    // The cached files get unserialized, so keep them from being listed or fetched over the web
+    $silence = "<?php\n// Silence is golden.\n";
+    $guards  = array(
+        $root . '/index.php' => $silence,
+        $dir . '/index.php'  => $silence,
+        $root . '/.htaccess' => "<IfModule mod_authz_core.c>\n\tRequire all denied\n</IfModule>\n<IfModule !mod_authz_core.c>\n\tDeny from all\n</IfModule>\n",
+    );
+    $filesystem = metaslider_direct_filesystem();
+    foreach ( $guards as $file => $contents ) {
+        if ( ! $filesystem->exists( $file ) ) {
+            $filesystem->put_contents( $file, $contents, FS_CHMOD_FILE );
+        }
+    }
+
+    return $dir;
+}
+
+/**
+ * Delete HTML Purifier definition caches left by other plugin versions, e.g. after a plugin update
+ *
+ * @since 3.114.0
+ *
+ * @return void
+ */
+function metaslider_clear_html_purifier_cache()
+{
+    $dirs = glob( metaslider_html_purifier_cache_dir() . '/*', GLOB_ONLYDIR );
+    if ( empty( $dirs ) ) {
+        return;
+    }
+
+    $filesystem = metaslider_direct_filesystem();
+    foreach ( $dirs as $dir ) {
+        // Other sites on the network, or other requests, may already be using this version's cache
+        if ( basename( $dir ) !== METASLIDER_VERSION ) {
+            $filesystem->rmdir( $dir, true );
+        }
+    }
+}
+
+/**
  * Filter unsafe HTML from slide content (e.g. caption)
  * 
  * @since 3.103
- * 
+ * @since 3.113.1 Use the prefixed MSHTMLPurifier classes so another plugin's copy of
+ *                the library can no longer answer for ours.
+ * @since 3.114.0 Store the definition cache in wp-content/cache instead of the plugin folder.
+ *
  * @param string $content    The HTML content to be purified
  * @param array  $slide      The slide data such as id, caption, caption_raw, etc.
  * @param int    $slider_id  The slideshow ID
@@ -509,14 +692,24 @@ function metaslider_intermediate_image_src( $width, $attachment_id )
 function metaslider_filter_unsafe_html( $content, $slide, $slider_id, $settings )
 {
     try {
-        if ( ! class_exists( 'HTMLPurifier_Config' ) || ! class_exists( 'HTMLPurifier' ) ) {
-            $autoloader = METASLIDER_PATH . 'lib/htmlpurifier/library/HTMLPurifier.auto.php';
+        if ( ! class_exists( 'MSHTMLPurifier_Config' ) || ! class_exists( 'MSHTMLPurifier' ) ) {
+            $autoloader = METASLIDER_PATH . 'lib/htmlpurifier/library/MSHTMLPurifier.auto.php';
             if ( ! file_exists( $autoloader ) ) {
                 throw new RuntimeException( 'HTMLPurifier autoloader not found: ' . $autoloader );
             }
             require_once( $autoloader );
         }
-        $config = HTMLPurifier_Config::createDefault();
+        $config = MSHTMLPurifier_Config::createDefault();
+        // Keep the definition cache out of the plugin folder, where it fails checksum checks
+        static $cache_dir = null;
+        if ( null === $cache_dir ) {
+            $cache_dir = metaslider_prepare_html_purifier_cache_dir();
+        }
+        if ( $cache_dir ) {
+            $config->set( 'Cache.SerializerPath', $cache_dir );
+        } else {
+            $config->set( 'Cache.DefinitionImpl', null );
+        }
         // How to filter:
         // add_filter('metaslider_html_purifier_config', function($config) {
         //     $config->set('HTML.Allowed', 'a[href|target]');
@@ -524,7 +717,7 @@ function metaslider_filter_unsafe_html( $content, $slide, $slider_id, $settings 
         //     return $config;
         // });
         $config   = apply_filters('metaslider_html_purifier_config', $config, $slide, $slider_id, $settings);
-        $purifier = new HTMLPurifier( $config );
+        $purifier = new MSHTMLPurifier( $config );
         $content  = $purifier->purify( $content );
     } catch ( Throwable $e ) {
         $content = htmlspecialchars( do_shortcode( $content ), ENT_NOQUOTES, 'UTF-8' );

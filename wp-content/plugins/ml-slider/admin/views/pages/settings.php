@@ -34,6 +34,7 @@
                 <nav class="flex-1 px-2 py-1 bg-white">
                     <a
                         href="#"
+                        aria-label="<?php esc_attr_e('Settings', 'ml-slider'); ?>"
                         @click.prevent="loadPage('settings')"
                         @keydown.space.prevent="loadPage('settings')"
                         @keyup.enter.prevent="loadPage('settings')"
@@ -50,6 +51,7 @@
                     </a>
                     <a
                         href="#"
+                        aria-label="<?php esc_attr_e('Help Center', 'ml-slider'); ?>"
                         @click.prevent="loadPage('helpcenter')"
                         @keydown.space.prevent="loadPage('helpcenter')"
                         @keyup.enter.prevent="loadPage('helpcenter')"
@@ -66,6 +68,7 @@
                     </a>
                     <a
                         href="#"
+                        aria-label="<?php esc_attr_e('Import', 'ml-slider'); ?>"
                         @click.prevent="loadPage('import')"
                         @keydown.space.prevent="loadPage('import')"
                         @keyup.enter.prevent="loadPage('import')"
@@ -81,6 +84,7 @@
                     </a>
                     <a
                         href="#"
+                        aria-label="<?php esc_attr_e('Export', 'ml-slider'); ?>"
                         @click.prevent="loadPage('export')"
                         @keydown.space.prevent="loadPage('export')"
                         @keyup.enter.prevent="loadPage('export')"

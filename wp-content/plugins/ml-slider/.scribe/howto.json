@@ -1,0 +1,27 @@
+{
+    "plugin": {
+        "main_file": "ml-slider.php"
+    },
+    "requires_plugins": [],
+    "seed": ".scribe/seed.php",
+    "admin_pages": [
+        {
+            "name": "Slideshows",
+            "path": "admin.php?page=metaslider",
+            "wait_for": "#wpbody-content"
+        },
+        {
+            "name": "Quick Start",
+            "path": "admin.php?page=metaslider-start",
+            "wait_for": "#wpbody-content"
+        },
+        {
+            "name": "Settings & Help",
+            "path": "admin.php?page=metaslider-settings",
+            "wait_for": "#wpbody-content"
+        }
+    ],
+    "guides_path": "docs/public/guides",
+    "specs_path": "docs/guides-src",
+    "style_guide": "docs/STYLE.md"
+}

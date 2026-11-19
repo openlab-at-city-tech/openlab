@@ -46,7 +46,7 @@ class MetaSlider_Theme_Clarity extends MetaSlider_Theme_Base
             array( 'metaslider-public' ), 
             METASLIDER_VERSION 
         );
-        wp_enqueue_script('metaslider_clarity_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script.js', array('jquery'), METASLIDER_VERSION, true);
+        wp_enqueue_script('metaslider_clarity_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script' . metaslider_asset_suffix() . '.js', array('jquery'), METASLIDER_VERSION, true);
     }
 }
 

@@ -188,7 +188,7 @@ return $options;
         // if preview
         if (isset($_REQUEST['action']) && 'ms_get_preview' == $_REQUEST['action']) {
             if (isset($_REQUEST['theme_id'])) {
-                $theme_id = sanitize_text_field($_REQUEST['theme_id']);
+                $theme_id = sanitize_text_field($_REQUEST['theme_id']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
             }
         }
     
@@ -263,6 +263,7 @@ return $options;
             'post_status' => array('inherit', 'publish'),
             'lang' => '', // polylang, ingore language filter
             'suppress_filters' => 1, // wpml, ignore language filter
+            // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
             'posts_per_page' => -1,
             'tax_query' => array(
                 array(
@@ -300,34 +301,26 @@ return $options;
 
     /**
      * Build CSS to customize theme colors
-     * 
+     *
      * @since 3.93
-     * 
-     * @param string $theme                 Theme name in lowercase. e.g. 'bitono'
-     * @param array|string $settings        Slideshow settings
-     * @param array|string $slideshow_id    Slideshow id 
-     * 
+     *
+     * @param string $theme        Theme name in lowercase. e.g. 'bitono'
+     * @param array  $stored_data  The customize values to build CSS from - a custom v2 theme's
+     *                              own stored data, or the slideshow's ml-slider_settings one.
+     * @param int    $slideshow_id Slideshow id
+     *
      * @return string
      */
-    public function theme_customize_css($theme, $settings, $slideshow_id)
+    public function theme_customize_css($theme, $stored_data, $slideshow_id)
     {
-        $theme_settings = get_post_meta($slideshow_id, 'metaslider_slideshow_theme', true);
-
-        // @since 3.94 - Are we using this core theme through a custom theme v2?
-        if (isset($theme_settings['folder']) && '_theme_v2' === substr($theme_settings['folder'], 0, 9)) {
-            $custom_themes  = get_option('metaslider-themes');
-            $stored_data    = isset($custom_themes[$theme_settings['folder']]) && isset($custom_themes[$theme_settings['folder']]['customize']) 
-                            ? $custom_themes[$theme_settings['folder']]['customize']
-                            : array();
-        } else {
-            // Is a core theme - customization settings are stored in ml-slider_settings postmeta db
-            $stored_data = $settings['theme_customize'];
-        }
-
         $themes_class = MetaSlider_Themes::get_instance();
 
-        $type       = isset($theme_settings['type']) ? $theme_settings['type'] : 'free';
-        $manifest   = $themes_class->get_theme_manifest( $theme, $type );
+        // $theme is always the base theme's own id (custom v2 themes reuse their base theme's
+        // class), so its own registered type - not whether this is a custom v2 wrapper - is what
+        // decides whether the manifest lookup needs to fall back to premium/extra theme folders.
+        $type     = $themes_class->get_theme_type($theme);
+        $type     = $type ? $type : 'free';
+        $manifest = $themes_class->get_theme_manifest($theme, $type);
 
         $output = $themes_class->build_customize_css($manifest, $stored_data, $slideshow_id);
 
@@ -336,39 +329,75 @@ return $options;
 
     /**
      * Add inline CSS to customize theme design
-     * 
+     *
      * @since 3.93.0 - Moved from each theme.php file
+     * @since 3.114.0 Uses the previewed theme on REST preview requests too
      */
     public function theme_customize($css, $settings, $slideshow_id)
     {
-        // @since 3.98 - Reset css to avoid including css from a previous slideshow's instance
-        $css = '';
-
         // /wp-admin/admin.php?page=metaslider-theme-editor&theme_slug=<slug>1&version=v2
-        $is_theme_editor_screen = is_admin() 
-            && function_exists('get_current_screen') 
+        $is_theme_editor_screen = is_admin()
+            && function_exists('get_current_screen')
             && ($screen = get_current_screen())
             && 'slideshow-pro_page_metaslider-theme-editor' === $screen->id
-            && isset($_GET['version']) 
+            && isset($_GET['version'])
             && $_GET['version'] == 'v2';
 
-        /* This CSS only works with Flexslider
-         * Important: even if is empty, 'theme_customize' is required in 'ml-slider_settings' postmeta db 
-         * for themes created with v2 theme editor */
-        $doesnt_use_customize = $settings['type'] !== 'flex' || ! isset($settings['theme_customize']);
-
-        
-        if ($is_theme_editor_screen || $doesnt_use_customize) {
-            return $css;
+        // This CSS only works with Flexslider markup, regardless of theme type.
+        if ($is_theme_editor_screen || 'flex' !== $settings['type']) {
+            // @since 3.98 - Reset css to avoid including css from a previous slideshow's instance
+            return '';
         }
 
-        $css = $this->theme_customize_css(
-            $this->id,
-            $settings,
-            $slideshow_id
-        );
+        // The slideshow's actually-saved theme - not the preview override - since
+        // $settings['theme_customize'] always holds THIS theme's stored colors, whatever
+        // theme is being previewed.
+        $theme_settings = get_post_meta($slideshow_id, 'metaslider_slideshow_theme', true);
+        $saved_theme_id = isset($theme_settings['folder']) ? $theme_settings['folder'] : false;
 
-        return $css;
+        /* Resolve the theme actually being rendered: an explicit preview override (e.g. the
+         * theme picker's own Preview button, which can target a candidate theme that differs
+         * from what's saved) if present, else the slideshow's saved theme. Everything below
+         * stays paired against this SAME theme - mixing one theme's manifest with a different
+         * theme's stored customize values produces mismatched CSS (see git history on this file). */
+        $theme_id = false;
+        // The theme picker loads its preview through the REST API, where is_admin() is false
+        $is_preview_request = is_admin() || (defined('REST_REQUEST') && REST_REQUEST);
+        if ($is_preview_request && isset($_REQUEST['action']) && 'ms_get_preview' == $_REQUEST['action'] && isset($_REQUEST['theme_id'])) {
+            $theme_id = sanitize_text_field($_REQUEST['theme_id']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+        }
+        if (!$theme_id) {
+            $theme_id = $saved_theme_id;
+        }
+
+        // Custom themes reuse a core theme's class under their own unique folder.
+        $is_custom = $theme_id && '_theme' === substr($theme_id, 0, strlen('_theme'));
+
+        if ($is_custom) {
+            $custom_themes = get_option('metaslider-themes');
+            $base          = isset($custom_themes[$theme_id]['base']) ? $custom_themes[$theme_id]['base'] : false;
+
+            // Bail (including when the base couldn't be resolved at all) rather than let every
+            // registered instance build/overwrite $css when we can't confirm which one owns it.
+            if ($this->id !== $base) {
+                return $css;
+            }
+
+            // A custom theme carries its own customize data, independent of this slideshow's
+            // settings - it may be assigned to many slideshows, or just being previewed here.
+            $stored_data = isset($custom_themes[$theme_id]['customize']) ? $custom_themes[$theme_id]['customize'] : array();
+        } else {
+            // $settings['theme_customize'] belongs to $saved_theme_id, not to whatever's being
+            // previewed - bail unless the rendered theme IS the slideshow's own saved theme, or a
+            // preview of a different core theme would inherit the saved theme's colors.
+            if ($theme_id !== $saved_theme_id || ! isset($settings['theme_customize']) || $this->id !== $theme_id) {
+                return $css;
+            }
+
+            $stored_data = $settings['theme_customize'];
+        }
+
+        return $this->theme_customize_css($this->id, $stored_data, $slideshow_id);
     }
 
     /**

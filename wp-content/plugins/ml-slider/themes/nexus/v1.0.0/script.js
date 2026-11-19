@@ -30,6 +30,6 @@
 		}
 		$(window).trigger('resize');
 	});
-})(jQuery)
+})(window.metaslider_jQuery || jQuery)
 
 

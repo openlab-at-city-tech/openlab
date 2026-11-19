@@ -1,4 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
+
 /**
  * A list of settings to customize themes that applies to all themes.
  * 
@@ -32,6 +36,7 @@ return array(
             ),
             array(
                 'label' => esc_html__('Progress Bar', 'ml-slider'),
+                'info' => esc_html__('The color of the progress bar shown while a slide is displayed, if enabled.', 'ml-slider'),
                 'name' => 'slideshow_progress_bar_color',
                 'type' => 'color',
                 'default' => '#fff',

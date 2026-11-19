@@ -81,10 +81,6 @@ class MetaSliderSystemCheck
 return;
         }
 
-        // max_input_vars is not available < PHP5.3.9
-        if (version_compare(phpversion(), '5.3.9', '<')) {
-return;
-        }
         $max_input_vars = ini_get('max_input_vars'); // phpcs:ignore PHPCompatibility.IniDirectives.NewIniDirectives.max_input_varsFound
 
         $error = sprintf(
@@ -174,7 +170,7 @@ return;
         }
 
         $child_footer = get_stylesheet_directory() . '/footer.php';
-        $parent_footer = TEMPLATEPATH . '/footer.php';
+        $parent_footer = TEMPLATEPATH . '/footer.php'; // phpcs:ignore WordPress.WP.DiscouragedConstants.TEMPLATEPATHUsageFound
         $theme_type = 'parent';
 
         if (file_exists($child_footer)) {

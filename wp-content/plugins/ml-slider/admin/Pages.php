@@ -41,6 +41,18 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             $this->notices = new MetaSlider_Notices($this->plugin);
         });
         add_action('admin_enqueue_scripts', array($this, 'load_upgrade_page_assets'));
+        // @since 3.112 - Make sure CSS is loaded in all admin pages
+        add_action('admin_head', array($this, 'print_menu_icon_style'));
+    }
+
+    /**
+     * Keeps the admin menu icon at full size on every wp-admin page, not just ours
+     *
+     * @since 3.112
+     */
+    public function print_menu_icon_style()
+    {
+        echo '<style>#adminmenu .toplevel_page_metaslider .wp-menu-image.svg { background-size: 30px auto; }</style>';
     }
 
     /**
@@ -90,6 +102,9 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
 
     /**
      * Loads in custom javascript
+     *
+     * @since 3.112.0-beta.4 Localized unsplashImageQuality/pixabayImageQuality/pixabayVideoQuality (#2365)
+     * @since 3.114.1 Localized request_nonce, loading and usage_error for the "View Usage" window (#2613)
      */
     public function load_javascript()
     {
@@ -161,6 +176,9 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'duplicate_slide_nonce' => wp_create_nonce('metaslider_duplicate_slide'),
             'quickstart_slideshow_nonce' => wp_create_nonce('metaslider_quickstart_slideshow'),
             'legacy_notification_nonce' => wp_create_nonce('metaslider_legacy_notification'),
+            'request_nonce' => wp_create_nonce('metaslider_request'),
+            'loading' => esc_html__('Loading...', 'ml-slider'),
+            'usage_error' => esc_html__('Could not load the usage. Please try again.', 'ml-slider'),
             'useWithCaution' => esc_html__("Caution: This setting is for advanced developers only. If you're unsure, leave it checked.", "ml-slider"),
             'locale' => preg_replace('/[^a-z]/', '', get_locale()),
             'newSlideOrder' => isset( $global_settings['newSlideOrder'] ) 
@@ -211,8 +229,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
 
         // Register components and add support for the REST API / Admin AJAX
         do_action('metaslider_register_admin_components');
-        $dev = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG;
-        wp_register_script('metaslider-admin-components', METASLIDER_ADMIN_URL . 'assets/dist/js/app' . ($dev ? '' : '.min') . '.js', array('jquery','wp-i18n'), METASLIDER_ASSETS_VERSION, true);
+        wp_register_script('metaslider-admin-components', METASLIDER_ADMIN_URL . 'assets/dist/js/app' . metaslider_asset_suffix() . '.js', array('jquery','wp-i18n'), METASLIDER_ASSETS_VERSION, true);
 
         // Check if rest is available
         $is_rest_enabled = $this->is_rest_enabled();
@@ -237,6 +254,15 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'autoThemeConfig' => ! isset( $global_settings['autoThemeConfig'] )
                 || (bool) $global_settings['autoThemeConfig'] ? 1 : 0,
             'theme_notice_dismissed' => get_user_option( 'metaslider_theme_notice_dismissed', get_current_user_id() ) ? 1 : 0,
+            // Exposed here (rather than fetched separately) so the Unsplash/Pixabay pickers -
+            // including MetaSlider Slideshow Pro's separately-bundled Pixabay Video picker, which
+            // reads this same shared window.metaslider_api object - can use it as their initial
+            // quality default without an extra AJAX round-trip (#2365)
+            'unsplashImageQuality' => isset( $global_settings['unsplashImageQuality'] ) ? $global_settings['unsplashImageQuality'] : 'optimized',
+            'pixabayImageQuality' => isset( $global_settings['pixabayImageQuality'] ) ? $global_settings['pixabayImageQuality'] : 'largeImageURL',
+            'pixabayVideoQuality' => isset( $global_settings['pixabayVideoQuality'] ) ? $global_settings['pixabayVideoQuality'] : 'medium',
+            'docs_link' => 'https://www.metaslider.com/docs/',
+            'support_link' => 'https://www.metaslider.com/support/',
         ));
         wp_enqueue_script('metaslider-admin-components');
     }
@@ -247,7 +273,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
     public function load_upgrade_page_assets()
     {
         if ('upgrade-metaslider' == $this->current_page || !is_plugin_active('ml-slider-pro/ml-slider-pro.php')){
-            wp_enqueue_style('metaslider-upgrade-styles', METASLIDER_ADMIN_URL . 'assets/css/upgrade.css', false, METASLIDER_ASSETS_VERSION);
+            wp_enqueue_style('metaslider-upgrade-styles', METASLIDER_ADMIN_URL . 'assets/css/upgrade' . metaslider_asset_suffix() . '.css', false, METASLIDER_ASSETS_VERSION);
         }
     }
 
@@ -292,7 +318,7 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
         $this->current_page = $slug;
         $capability = apply_filters('metaslider_capability', MetaSliderPlugin::DEFAULT_CAPABILITY_EDIT_SLIDES);
 
-        $dashboard_icon = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(__FILE__) . '/assets/metaslider.svg'));
+        $dashboard_icon = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(__FILE__) . '/assets/metaslider-white.svg'));
 
         $page = ('' == $parent) ? add_menu_page($title, $title, $capability, $slug, array($this, $method), $dashboard_icon) : add_submenu_page($parent, $title, $title, $capability, $slug, array($this, $method));
 

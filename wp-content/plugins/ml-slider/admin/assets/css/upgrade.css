@@ -74,7 +74,7 @@ img.addons {
     text-align: center;
 }
 
-.metaslider_feat_table h4 {
+.metaslider_feat_table h3 {
     font-size: 1.7em;
     line-height: 1;
 	margin: 5px 0;
@@ -199,7 +199,7 @@ img.addons {
 	.metaslider_half_width {
 		width: 100% !important;
     }
-    .metaslider_feat_table h4 {
+    .metaslider_feat_table h3 {
         margin-left: 10px;
     }
 }

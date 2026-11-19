@@ -21,7 +21,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 
 	<?php 
 	if ( isset( $_GET['create-slideshow'] ) && ! empty( $_GET['slug'] ) ) : 
-		$slug = sanitize_text_field( $_GET['slug'] );
+		$slug = sanitize_text_field( $_GET['slug'] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 		?>
 		<div>
 			<div class="quickstart_importing_loading">
@@ -107,11 +107,11 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 					</h1>
 				</div>
 				<div id="ms-qs-sections" class="mb-1">
-					<a href="#" data-section="demo_group" class="mr-2 mb-2 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-lg bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white">
+					<a href="#" data-section="demo_group" class="mr-2 mb-2 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-lg bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white" aria-label="<?php esc_attr_e( 'Start with a demo', 'ml-slider' ); ?>">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 -ml-1 pr-1">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42" />
 						</svg> <?php esc_html_e( 'Start with a demo', 'ml-slider' ) ?>
-					</a><a href="#" data-section="images_group" class="mr-2 mb-2 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-lg bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white">
+					</a><a href="#" data-section="images_group" class="mr-2 mb-2 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-lg bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white" aria-label="<?php esc_attr_e( 'Use your own media', 'ml-slider' ); ?>">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 -ml-1 pr-1">
 							<path stroke-linecap="round" stroke-linejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
 						</svg> <?php esc_html_e( 'Use your own media', 'ml-slider' ) ?>
@@ -120,7 +120,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 							admin_url( 'admin-post.php?action=metaslider_create_slider' ), 
 							'metaslider_create_slider' 
 						) ) 
-						?>" data-section="false" class="mr-2 mb-2 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-lg bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white">
+						?>" data-section="false" class="mr-2 mb-2 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md transition ease-in-out duration-150 md:w-auto md:text-lg bg-orange hover:bg-orange-darker active:bg-orange-darkest text-white" aria-label="<?php esc_attr_e( 'Blank slideshow', 'ml-slider' ); ?>">
 						<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 -ml-1 pr-1">
 							<path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
 						</svg> <?php esc_html_e( 'Blank slideshow', 'ml-slider' ) ?>
@@ -131,7 +131,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 
 					<!-- Demo -->
 					<div id="demo_group" style="">
-						<h3 class="ms-heading"><?php esc_html_e('Import a demo slideshow', 'ml-slider'); ?></h3>
+						<h2 class="ms-heading"><?php esc_html_e('Import a demo slideshow', 'ml-slider'); ?></h2>
 						<p>
 							<?php 
 								echo apply_filters( 'metaslider_quickstart_description', esc_html__('Use sample slides to quickly create a new slideshow.', 'ml-slider'));  //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -146,9 +146,11 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 										<option value="vimeo"><?php echo esc_html( 'Vimeo' ) ?></option>
 										<option value="youtube"><?php echo esc_html( 'YouTube' ) ?></option>
 										<option value="tiktok"><?php echo esc_html( 'TikTok' ) ?></option>
+										<option value="livid"><?php echo esc_html( 'Livid' ) ?></option>
 										<option value="external"><?php esc_html_e( 'External Image', 'ml-slider' ) ?></option>
 										<option value="external_video"><?php esc_html_e( 'External Video', 'ml-slider' ) ?></option>
 										<option value="custom_html"><?php esc_html_e( 'Custom HTML', 'ml-slider' ) ?></option>
+										<option value="gradient"><?php esc_html_e( 'Background Color', 'ml-slider' ) ?></option>
 										<option value="woocommerce"><?php esc_html_e( 'WooCommerce', 'ml-slider' ) ?></option>
 										<option value="post_feed"><?php esc_html_e( 'Post Feed', 'ml-slider' ) ?></option>
 										<option value="html_overlay"><?php esc_html_e( 'Layer Slide', 'ml-slider' ) ?></option>
@@ -344,7 +346,7 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 												<p class="text-white font-normal text-sm mb-3">
 													<?php esc_html_e( 'Upgrade now to unlock this demo slideshow!', 'ml-slider') ?>
 												</p>
-												<a class="w-full inline-flex items-center justify-center px-5 py-2 border border-transparent rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto text-base" href="https://www.metaslider.com/upgrade?utm_source=lite&utm_medium=banner&utm_campaign=pro" target="_blank">
+												<a class="w-full inline-flex items-center justify-center px-5 py-2 border border-transparent rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto text-base" href="https://www.metaslider.com/upgrade?utm_source=lite&utm_medium=banner&utm_campaign=pro" target="_blank" aria-label="<?php esc_attr_e( 'Upgrade now', 'ml-slider'); ?>">
 													<?php esc_html_e( 'Upgrade now', 'ml-slider') ?>
 													<span class="dashicons dashicons-external border-0"></span>
 												</a>
@@ -363,22 +365,22 @@ $demo_slideshows = apply_filters( 'metaslider_quickstart_options_data', $demo_sl
 
 					<!-- Images -->
 					<div id="images_group" style="display:none;">
-						<h3 class="ms-heading"><?php esc_html_e('Create a slideshow with your images', 'ml-slider'); ?></h3>
+						<h2 class="ms-heading"><?php esc_html_e('Create a slideshow with your images', 'ml-slider'); ?></h2>
 						<p><?php esc_html_e('Choose your own images to start a new slideshow.', 'ml-slider'); ?></p>
 						<div>
 							<div id="plupload-upload-ui" class="hide-if-no-js">
 								<p id="loading-add-sample-slides-notice" style="display: none;">
 									<span style="background-image: url(<?php echo esc_url(admin_url( '/images/loading.gif' )); ?>);">
 										<span>
-											<?php _e( 'Uploading images...', 'ml-slider' ); ?>
+											<?php esc_html_e( 'Uploading images...', 'ml-slider' ); ?>
 										</span>
 									</span>
 								</p>
 								<div id="drag-drop-area" style="min-height:270px">
 									<div class="drag-drop-inside" style="margin: 80px auto 0;width: 100%; text-align: center;">
 										<div class="drag-drop-info">
-											<p class="font-semibold text-base leading-7"><?php _e('Drop files to upload'); ?></p>
-											<p class="font-semibold text-base leading-7"><?php _ex('or', 'Uploader: Drop files to upload - or - Select Files', 'ml-slider'); ?></p>
+											<p class="font-semibold text-base leading-7"><?php esc_html_e('Drop files to upload'); ?></p>
+											<p class="font-semibold text-base leading-7"><?php echo esc_html_x('or', 'Uploader: Drop files to upload - or - Select Files', 'ml-slider'); ?></p>
 											<p class="drag-drop-buttons mt-5">
 												<input id="plupload-browse-button" type="button" value="<?php esc_attr_e('Select Files'); ?>" class="button text-sm" />
 												<button id="quickstart-browse-button" class="button text-sm"><?php esc_html_e('Open Media Library', 'ml-slider'); ?></button>

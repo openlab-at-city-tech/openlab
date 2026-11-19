@@ -67,6 +67,7 @@ class MetaSlider_Api
         add_action('wp_ajax_ms_get_single_slideshow', array(self::$instance, 'get_single_slideshow'));
         add_action('wp_ajax_ms_get_legacy_slideshows', array(self::$instance, 'get_legacy_slideshows'));
         add_action('wp_ajax_ms_get_preview', array(self::$instance, 'get_preview'));
+        add_action('wp_ajax_ms_get_slideshow_usage', array(self::$instance, 'get_slideshow_usage'));
         add_action('wp_ajax_ms_delete_slideshow', array(self::$instance, 'delete_slideshow'));
         add_action('wp_ajax_ms_duplicate_slideshow', array(self::$instance, 'duplicate_slideshow'));
         add_action('wp_ajax_ms_save_slideshow', array(self::$instance, 'save_slideshow'));
@@ -82,10 +83,12 @@ class MetaSlider_Api
 
         // Slides
         add_action('wp_ajax_ms_import_images', array(self::$instance, 'import_images'));
+        add_action('wp_ajax_ms_import_video', array(self::$instance, 'import_video'));
         add_action( 'wp_ajax_ms_import_others', array( self::$instance, 'import_others' ) );
 
         // Settings
         add_action('wp_ajax_ms_update_user_setting', array(self::$instance, 'save_user_setting'));
+        add_action('wp_ajax_ms_campaign_response', array(self::$instance, 'save_campaign_response'));
         add_action('wp_ajax_ms_get_user_details', array(self::$instance, 'get_user_details'));
         add_action('wp_ajax_ms_update_all_slideshow_settings', array(self::$instance, 'save_all_slideshow_settings'));
         add_action('wp_ajax_ms_update_single_slideshow_setting', array(self::$instance, 'save_single_slideshow_setting'));
@@ -97,6 +100,10 @@ class MetaSlider_Api
         add_action('wp_ajax_ms_get_global_settings', array(self::$instance, 'get_global_settings'));
         add_action('wp_ajax_ms_update_global_settings', array(self::$instance, 'save_global_settings'));
         add_action('wp_ajax_ms_update_global_settings_single', array(self::$instance, 'save_global_settings_single'));
+
+        /* Ask MetaSlider help panel
+         * @since 3.113.0
+         */
 
         // Other
         add_action('wp_ajax_set_tour_status', array(self::$instance, 'set_tour_status'));
@@ -157,7 +164,7 @@ class MetaSlider_Api
             if (method_exists($request, 'get_param')) {
                 $results[$param] = $request->get_param($param);
             } else {
-                $results[$param] = isset($_REQUEST[$param]) ? stripslashes_deep(sanitize_text_field($_REQUEST[$param])) : null;
+                $results[$param] = isset($_REQUEST[$param]) ? stripslashes_deep(sanitize_text_field($_REQUEST[$param])) : null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
             }
         }
 
@@ -238,6 +245,31 @@ class MetaSlider_Api
         }
 
         wp_send_json_success($slideshows, 200);
+    }
+
+    /**
+     * Returns the content that uses a slideshow, for the "View Usage" window
+     *
+     * @since 3.114.1
+     *
+     * @param object|null $request The request
+     */
+    public function get_slideshow_usage($request = null)
+    {
+        if (!$this->can_access()) {
+            $this->deny_access();
+        }
+
+        $data = $this->get_request_data($request, array('slideshow_id'));
+        $html = MetaSlider_Admin_Table::get_posts_using_slideshow(absint($data['slideshow_id']));
+
+        if (esc_html__('Not found.', 'ml-slider') === $html) {
+            $html = esc_html__('This slideshow is not used in any published content.', 'ml-slider');
+        }
+
+        wp_send_json_success(array(
+            'html' => $html
+        ), 200);
     }
 
     /**
@@ -623,6 +655,8 @@ class MetaSlider_Api
     /**
      * Save a slideshow
      *
+     * @since 3.114.0 Only saves slides the user can edit, in a slideshow they can edit
+     *
      * @param object $request The request
      */
     public function save_slideshow($request)
@@ -633,8 +667,17 @@ class MetaSlider_Api
 
         $data = $this->get_request_data($request, array('slideshow_id', 'attachment', 'count'));
 
+        metaslider_verify_slideshow_for_ajax(absint($data['slideshow_id']));
+
+        // Check every slide before saving any, so a refused slide doesn't leave the slideshow half saved
+        if (isset($data['attachment']) && is_array($data['attachment'])) {
+            foreach (array_keys($data['attachment']) as $slide_id) {
+                metaslider_verify_slide_for_ajax((int) $slide_id);
+            }
+        }
+
         // If we are missing the count, then it's likely the payload was truncated
-        if (!$data['count'] && version_compare(phpversion(), '5.3.9', '>=')) {
+        if (!$data['count']) {
             // If the input vars count is close to the max allowed, assume that the data was truncated and inform the user to increase the value
             // phpcs:ignore WordPress.Security.NonceVerification.Missing
             $current_vars = count($_POST, COUNT_RECURSIVE);
@@ -887,6 +930,35 @@ class MetaSlider_Api
     }
 
     /**
+     * Record the site's answer to a campaign popup
+     *
+     * @since 3.114.1
+     *
+     * @param object $request The request
+     */
+    public function save_campaign_response($request)
+    {
+        if (!$this->can_access()) {
+            $this->deny_access();
+        }
+
+        // Matches MetaSlider_Campaigns::for_editor(): only users who see the popup can answer it
+        if (!current_user_can(MetaSlider_Campaigns::CAPABILITY)) {
+            $this->deny_access();
+        }
+
+        $data = $this->get_request_data($request, array('campaign', 'response'));
+
+        $response = is_scalar($data['response']) ? sanitize_key((string) $data['response']) : '';
+
+        if (!is_scalar($data['campaign']) || !MetaSlider_Campaigns::respond((string) $data['campaign'], $response)) {
+            wp_send_json_error(array('message' => __('This answer could not be saved.', 'ml-slider')), 400);
+        }
+
+        wp_send_json_success('OK', 200);
+    }
+
+    /**
      * Get current user's email for optin email
      */
     public function get_user_details()
@@ -988,6 +1060,9 @@ class MetaSlider_Api
      * Save global settings whether multisite or other
      *
      * @param object $request The request
+     *
+     * @since 3.112.0-beta.4 Added unsplashImageQuality/pixabayImageQuality/pixabayVideoQuality (#2365)
+     * @since 3.114.1 Added dashboardUsageOnClick (#2613)
      */
     public function save_global_settings($request)
     {
@@ -1005,6 +1080,8 @@ class MetaSlider_Api
 
         $settings = array(
             'license'         => isset($raw['license'])         ? sanitize_text_field($raw['license'])  : '',
+            // Keep the stored value when optIn isn't sent - only the sign-up popup sends it (#2541)
+            'optIn'           => isset($raw['optIn'])            ? (bool) $raw['optIn']                  : MetaSlider_Email_Collection::site_is_optin(),
             'adminBar'        => isset($raw['adminBar'])         ? (bool) $raw['adminBar']               : true,
             'editLink'        => isset($raw['editLink'])         ? (bool) $raw['editLink']               : false,
             'legacy'          => isset($raw['legacy'])           ? (bool) $raw['legacy']                 : true,
@@ -1014,19 +1091,72 @@ class MetaSlider_Api
             'tinyMce'         => isset($raw['tinyMce'])          ? (bool) $raw['tinyMce']                : true,
             'fixTouchSwipe'   => isset($raw['fixTouchSwipe'])    ? (bool) $raw['fixTouchSwipe']          : false,
             'autoThemeConfig' => isset($raw['autoThemeConfig'])  ? (bool) $raw['autoThemeConfig']        : true,
-            'dashboardSort'   => isset($raw['dashboardSort'])    ? sanitize_key($raw['dashboardSort'])    : 'ID',
+            'dashboardUsageOnClick' => isset($raw['dashboardUsageOnClick']) ? (bool) $raw['dashboardUsageOnClick'] : false,
+            // sanitize_key() would lowercase 'ID' to 'id', breaking both the
+            // select's display and WP_Query's case-sensitive orderby match.
+            'dashboardSort'   => isset($raw['dashboardSort']) && in_array($raw['dashboardSort'], array('ID', 'post_title', 'post_date'), true)
+                ? $raw['dashboardSort']
+                : 'ID',
             'dashboardOrder'  => isset($raw['dashboardOrder'])   ? sanitize_key($raw['dashboardOrder'])   : 'asc',
             'dashboardItems'  => isset($raw['dashboardItems'])   ? absint($raw['dashboardItems'])         : 10,
+            // Quality/size tiers picked when importing an image/video from these external
+            // services - each list is that service's own real, finite vocabulary, so an
+            // allowlist (rather than sanitize_key()) is used to reject anything else outright.
+            // 'raw'/'full' are deliberately excluded from Unsplash's list - both can exceed what
+            // WordPress can actually process (up to ~49MP), and WordPress would just scale them
+            // back down to 2560px anyway (big_image_size_threshold, #2365).
+            'unsplashImageQuality' => isset($raw['unsplashImageQuality']) && in_array($raw['unsplashImageQuality'], array('optimized', 'regular'), true)
+                ? $raw['unsplashImageQuality']
+                : 'optimized',
+            // fullHDURL/imageURL deliberately excluded here (unlike the per-photo picker) - both
+            // are only sometimes present depending on the photo/API key, so they're not safe to
+            // rely on as an always-available global default.
+            'pixabayImageQuality' => isset($raw['pixabayImageQuality']) && in_array($raw['pixabayImageQuality'], array('webformatURL', 'largeImageURL'), true)
+                ? $raw['pixabayImageQuality']
+                : 'largeImageURL',
+            'pixabayVideoQuality' => isset($raw['pixabayVideoQuality']) && in_array($raw['pixabayVideoQuality'], array('tiny', 'small', 'medium', 'large'), true)
+                ? $raw['pixabayVideoQuality']
+                : 'small',
         );
 
         // TODO: validate the license if not ''
+
+        $was_optin = MetaSlider_Email_Collection::site_is_optin();
 
         update_option('metaslider_global_settings', $settings, true);
 
         // for legacy library
         update_option('metaslider_new_user', 'old');
 
-        wp_send_json_success($settings, 200);
+        // Hand the collected email to the connect service. This no-ops when the
+        // same address was already sent, so it's safe to call on every save.
+        $response = $settings;
+
+        if ($settings['optIn']) {
+            // Reported back so the opt-in modal can tell the user whether to go
+            // and look for their confirmation email, and so the whole exchange
+            // with the connect service is visible to the browser
+            $optin = MetaSlider_Email_Collection::optin();
+            $response['optinEmailSent'] = $optin['status'];
+
+            // A failed sign-up must not opt the site in, or the popup never asks again (#2529)
+            if (!$was_optin && !in_array($optin['status'], array('subscribed', 'duplicate'), true)) {
+                $settings['optIn'] = false;
+                $response['optIn'] = false;
+                update_option('metaslider_global_settings', $settings, true);
+            }
+
+            // The full exchange with the connect service, shown in the opt-in
+            // modal for debugging. Off by default - it names internal
+            // endpoints and is only useful while developing. Force it on the
+            // same way as metaslider_always_show_optin_notice, e.g. from
+            // wp-config.php: add_filter('metaslider_always_show_connect_report', '__return_true');
+            if (apply_filters('metaslider_always_show_connect_report', false)) {
+                $response['optinReport'] = $optin;
+            }
+        }
+
+        wp_send_json_success($response, 200);
     }
 
     /**
@@ -1055,7 +1185,39 @@ class MetaSlider_Api
         }
 
         $value = call_user_func($allowed[$key], $data['setting_value']);
+
+        // sanitize_email() silently reduces garbage input to '', which would
+        // otherwise get stored and fail validation downstream. Reject it here
+        // instead, unless they're intentionally clearing the field.
+        if ('optin_email' === $key && '' !== $data['setting_value'] && ! is_email($value)) {
+            wp_send_json_error('Please enter a valid email address.', 400);
+            return;
+        }
+
         update_option('metaslider_' . $key, $value, true);
+
+        // Clearing the address while still opted in would otherwise leave
+        // optIn true with nothing to send - the next unrelated settings save
+        // would find no valid email and report 'invalid' with nothing to show
+        // for it. Opting out here as well keeps that combination from existing.
+        if ('optin_email' === $key && '' === $value) {
+            $settings = get_option('metaslider_global_settings');
+            if (is_array($settings) && !empty($settings['optIn'])) {
+                $settings['optIn'] = false;
+                update_option('metaslider_global_settings', $settings, true);
+            }
+        }
+
+        // Submitting the opt-in form is a deliberate request to subscribe, so
+        // clear the "already handed off" marker and let the save that follows
+        // send a fresh confirmation. Without this, anyone re-opting in after
+        // losing the email (or being removed at the Mailjet end) would be told
+        // to check an inbox that never receives anything.
+        if ('optin_email' === $key) {
+            delete_option('metaslider_optin_email_sent');
+            // A deliberate retry from the popup shouldn't wait out the failure pause (#2536)
+            delete_transient(MetaSlider_Email_Collection::retry_cooldown_key($value));
+        }
 
         wp_send_json_success('OK', 200);
     }
@@ -1064,7 +1226,7 @@ class MetaSlider_Api
      * Get ids of images based on filename. Used during import
      *
      * @deprecated 3.103 - We no longer use filenames to identify images during import
-     * 
+     *
      * @param object $request The request
      */
     public function get_image_ids_from_file_name($request)
@@ -1141,8 +1303,66 @@ class MetaSlider_Api
     }
 
     /**
-     * Import theme images
+     * Import a downloaded video file (e.g. a picked Pixabay video) and create a media
+     * library attachment for it. Unlike import_images(), this never attaches the result to
+     * any slide - the client (the Local Video module) wires the returned attachment ID into
+     * its own postmeta/AJAX actions afterwards, since a video's postmeta model
+     * (repeatable ml-slider_video_id) is slide-type specific and not something this
+     * generic endpoint should know about.
+     *
+     * @since 3.112
      * 
+     * @param object $request The request
+     */
+    public function import_video($request)
+    {
+        if (!$this->can_access()) {
+            $this->deny_access();
+        }
+
+        $data = $this->get_request_data($request, array('image_data'));
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- REST route access is checked by can_access() above.
+        if (empty($_FILES['files']['tmp_name'])) {
+            wp_send_json_error(array('message' => __('No video file was received by the server.', 'ml-slider')), 400);
+        }
+
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- REST route access is checked by can_access(), and uploaded files are validated by process_uploads().
+        $videos = $this->process_uploads($_FILES['files'], $data['image_data'], 'video/');
+
+        if (empty($videos)) {
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- REST route access is checked by can_access(); read-only, used to build a diagnostic message, never persisted or output unescaped.
+            $filename = isset($_FILES['files']['name']) ? reset($_FILES['files']['name']) : '';
+            // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- REST route access is checked by can_access(); this is a PHP-generated temp file path, validated by wp_check_filetype_and_ext() below, not user text to sanitize.
+            $tmp_name = isset($_FILES['files']['tmp_name']) ? reset($_FILES['files']['tmp_name']) : '';
+            $filetype = $tmp_name ? wp_check_filetype_and_ext($tmp_name, $filename) : array('type' => false);
+
+            wp_send_json_error(array(
+                'message' => sprintf(
+                    /* translators: 1: uploaded filename, 2: mime type WordPress detected, or "none" */
+                    __('The video "%1$s" was rejected before upload (detected type: %2$s). It may be an unsupported format or exceed this server\'s upload limit.', 'ml-slider'),
+                    sanitize_text_field($filename),
+                    $filetype['type'] ? $filetype['type'] : __('none', 'ml-slider')
+                )
+            ), 400);
+        }
+
+        $attachment_ids = MetaSlider_Image::instance()->import($videos, null, array(), 'video/');
+        if (is_wp_error($attachment_ids) || empty($attachment_ids)) {
+            wp_send_json_error(array(
+                'message' => is_wp_error($attachment_ids) ? $attachment_ids->get_error_message() : __('The video could not be imported.', 'ml-slider')
+            ), 400);
+        }
+
+        wp_send_json_success(array('attachment_id' => $attachment_ids[0]), 200);
+    }
+
+    /**
+     * Import theme images
+     *
+     * @since 3.113.0 Each row now reports the attachment_id it imported
+     * @since 3.113.0 A slide_type other than 'image' only imports the attachment and hands it back
+     *
      * @param object $request The request
      */
     public function import_images($request)
@@ -1151,7 +1371,7 @@ class MetaSlider_Api
             $this->deny_access();
         }
 
-        $data = $this->get_request_data($request, array('slideshow_id', 'theme_id', 'slide_id', 'image_data', 'extra'));
+        $data = $this->get_request_data($request, array('slideshow_id', 'theme_id', 'slide_id', 'slide_type', 'image_data', 'extra'));
 
         // Sanitize extra data
         if ( isset( $data['extra'] ) && is_array( $data['extra'] ) ) {
@@ -1179,6 +1399,19 @@ class MetaSlider_Api
             ), 400);
         }
 
+        // Only image slides are built here - any other new slide type (e.g. Pro's Layer Slide) is created by its own module from the attachment
+        $slide_type = empty($data['slide_type']) ? 'image' : sanitize_key($data['slide_type']);
+        if (is_null($data['slide_id']) && 'image' !== $slide_type) {
+            $attachments = array();
+            foreach ($image_ids as $image_id) {
+                $attachments[] = array(
+                    'attachment_id' => absint($image_id),
+                    'slideshow_id' => absint($data['slideshow_id'])
+                );
+            }
+            wp_send_json($attachments);
+        }
+
         $errors = array();
         $html_rows = array();
         $method = is_null($data['slide_id']) ? 'create_slide' : 'update';
@@ -1192,10 +1425,31 @@ class MetaSlider_Api
                 $imageSlide = new MetaImageSlide();
                 $imageSlide->set_slide( $slide->slide_id );
 
-                $html_rows[] = array(
-                    'slide_id' => $slide->slide_id
-                    //'html' => $imageSlide->get_admin_slide()
+                $row = array(
+                    'slide_id' => $slide->slide_id,
+                    'slideshow_id' => absint( $data['slideshow_id'] ),
+                    // Callers replacing media on an existing slide need this to keep their own
+                    // "currently selected" state in sync - e.g. the Local Video cover button
+                    'attachment_id' => absint( $image_id ),
+                    'thumbnail_url_small' => $imageSlide->get_intermediate_image_src( 240 ),
+                    'thumbnail_url_medium' => $imageSlide->get_intermediate_image_src( 768 ),
+                    'thumbnail_url_large' => $imageSlide->get_intermediate_image_src( 1024 )
                 );
+
+                // Only the "add new slide" flow needs the full rendered row - the "replace existing
+                // slide" path, and the other import/images callers, always full-page-reload and never
+                // read this field, so skip the extra query + render cost for them.
+                if ( 'create_slide' === $method ) {
+                    $imageSlide->set_slider( absint( $data['slideshow_id'] ) );
+
+                    // Match MetaImageSlide::add_slide()'s render for a brand new slide (used by the Media Library "Add Slide" flow too)
+                    $imageSlide->settings['width'] = 0;
+                    $imageSlide->settings['height'] = 0;
+
+                    $row['html'] = $imageSlide->get_admin_slide();
+                }
+
+                $html_rows[] = $row;
             }
         }
 
@@ -1266,7 +1520,7 @@ class MetaSlider_Api
      *
      * @return array An array with image data
      */
-    public function process_uploads($files, $data = null)
+    public function process_uploads($files, $data = null, $mime_prefix = 'image/')
     {
         $images = array();
         foreach ($files['tmp_name'] as $index => $tmp_name) {
@@ -1281,15 +1535,19 @@ class MetaSlider_Api
                 continue;
             }
 
-            // Verify is an actual image
+            // Verify the file matches the expected type. SVG is never allowed here regardless of
+            // $mime_prefix - WP core already blocks it by default, this is defense-in-depth.
             $filetype = wp_check_filetype_and_ext( $tmp_name, $files['name'][$index] );
-            if ( ! $filetype['type'] || strpos( $filetype['type'], 'image/') !== 0 ) {
+            if ( ! $filetype['type'] || strpos( $filetype['type'], $mime_prefix) !== 0 || 'image/svg+xml' === $filetype['type'] ) {
                 continue;
             }
 
-            $image_info = @getimagesize( $tmp_name );
-            if ( $image_info === false ) {
-                continue;
+            // getimagesize() only applies to images - a video file would always fail it
+            if ('image/' === $mime_prefix) {
+                $image_info = @getimagesize( $tmp_name );
+                if ( $image_info === false ) {
+                    continue;
+                }
             }
 
             // Ignore images too large for the server (According to WP)
@@ -1428,6 +1686,12 @@ if (class_exists('WP_REST_Controller')) :
                 'permission_callback' => array($this->api, 'can_access')
             )));
 
+            register_rest_route($this->namespace, '/import/video', array(array(
+                'methods' => 'POST',
+                'callback' => array($this->api, 'import_video'),
+                'permission_callback' => array($this->api, 'can_access')
+            )));
+
             register_rest_route($this->namespace, '/import/others', array(
                 array(
                     'methods' => 'POST',
@@ -1445,6 +1709,12 @@ if (class_exists('WP_REST_Controller')) :
             register_rest_route($this->namespace, '/settings/user/save', array(array(
                 'methods' => 'POST',
                 'callback' => array($this->api, 'save_user_setting'),
+                'permission_callback' => array($this->api, 'can_access')
+            )));
+
+            register_rest_route($this->namespace, '/campaigns/response', array(array(
+                'methods' => 'POST',
+                'callback' => array($this->api, 'save_campaign_response'),
                 'permission_callback' => array($this->api, 'can_access')
             )));
 

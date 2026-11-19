@@ -25,7 +25,7 @@ die('No direct access.');
         </div>
     </div>
     <div class="default"><?php echo $image_title ? esc_html($image_title) : "<span class='no-content'>&nbsp;</span>"; ?></div>
-    <input tabindex="0" type="text" size="50" name="attachment[<?php echo esc_attr($slide_id); ?>][title]" value="<?php echo esc_attr($title); ?>">
+    <input tabindex="0" type="text" size="50" aria-label="<?php esc_attr_e('Image Title Text', 'ml-slider'); ?>" name="attachment[<?php echo esc_attr($slide_id); ?>][title]" value="<?php echo esc_attr($title); ?>">
 </div>
 <div class="row can-inherit alt<?php echo esc_attr($inherit_image_alt_class); ?>">
     <div class="mb-1 image-alt-label">
@@ -52,5 +52,5 @@ die('No direct access.');
         </div>
     </div>
     <div class="default"><?php echo $image_alt ? esc_html($image_alt) : "<span class='no-content'>&nbsp;</span>"; ?></div>
-    <input tabindex="0" type="text" size="50" name="attachment[<?php echo esc_attr($slide_id); ?>][alt]" value="<?php echo esc_attr($alt); ?>">
+    <input tabindex="0" type="text" size="50" aria-label="<?php esc_attr_e('Image Alt Text', 'ml-slider'); ?>" name="attachment[<?php echo esc_attr($slide_id); ?>][alt]" value="<?php echo esc_attr($alt); ?>">
 </div>

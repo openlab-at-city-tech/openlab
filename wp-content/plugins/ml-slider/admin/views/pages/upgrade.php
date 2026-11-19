@@ -10,7 +10,7 @@
                     <h1>MetaSlider</h1>
                 </th>
                 <th colspan="2">
-                    <h3><?php esc_html_e('Comparison Chart', 'ml-slider'); ?></h3>
+                    <h2><?php esc_html_e('Comparison Chart', 'ml-slider'); ?></h2>
                 </th>
             </tr>
         </thead>
@@ -27,7 +27,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Create unlimited slideshows', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Create unlimited slideshows', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Create and manage as many slideshows as you need.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot available"></div></td>
@@ -35,7 +35,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Regular updates', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Regular updates', 'ml-slider');?></h3>
                     <p><?php esc_html_e('We keep MetaSlider compatible with the latest versions of WordPress.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot available"></div></td>
@@ -43,7 +43,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Intelligent image cropping', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Intelligent image cropping', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Unique Smart Crop functionality ensures your slides are perfectly resized.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot available"></div></td>
@@ -51,7 +51,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Toggle your slide\'s visibility', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Toggle your slide\'s visibility', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Hide any slide, without having to delete them.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot available"></div></td>
@@ -59,7 +59,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Thumbnail navigation', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Thumbnail navigation', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Allow users to browse your slideshows using thumbnail navigation.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -67,7 +67,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add YouTube, Vimeo and Tiktok slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add YouTube, Vimeo and Tiktok slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Easily include videos hosted by YouTube, Vimeo or TikTok.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -75,7 +75,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add local video slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add local video slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Create slideshows with videos from your WordPress media library.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -83,7 +83,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add external video slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add external video slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Create slideshows with external videos.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -91,7 +91,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Extra premium themes', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Extra premium themes', 'ml-slider');?></h3>
                     <p><?php esc_html_e('MetaSlider Slideshow Pro provides stylish and exclusive themes for your slideshows.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -99,7 +99,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add slide layers', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add slide layers', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Add layers to your slides with over 50 available transition effects.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -107,7 +107,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add Post Feed slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add Post Feed slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Easily build slides based on your WordPress posts.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -115,7 +115,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add Custom HTML slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add Custom HTML slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Design slides using images, HTML and CSS', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -123,7 +123,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add Background Color slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add Background Color slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Create slides using a solid or gradient background color and text.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -131,7 +131,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add Post Images slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add Post Images slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Extract images from the current post and displays them as slides.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -139,7 +139,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add custom CSS', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Add custom CSS', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Customize your slideshows to fit with your website.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -147,7 +147,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Schedule your slides', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Schedule your slides', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Add a start/end date to individual slides.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -155,7 +155,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('WooCommerce integrations', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('WooCommerce integrations', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Display your products as slides with support for product galleries.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -163,7 +163,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Advanced Custom Fields integrations', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Advanced Custom Fields integrations', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Display ACF image and gallery fields.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -171,7 +171,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('The Events Calendar integrations', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('The Events Calendar integrations', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Display your events as slides.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -179,7 +179,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Repeating Slides support', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Repeating Slides support', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Repeat a slide multiple times.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
@@ -187,7 +187,7 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Premium support', 'ml-slider');?></h4>
+                    <h3><?php esc_html_e('Premium support', 'ml-slider');?></h3>
                     <p><?php esc_html_e('Have your specific queries addressed directly by our experts.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>

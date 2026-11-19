@@ -41,6 +41,7 @@ if (!defined('ABSPATH')) {
                 $listtable->search_box(esc_html__('Search', 'ml-slider'), 'search_slideshow');
                 if(isset($_REQUEST['page'])) {
             ?>
+                    <?php // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- output through esc_attr() below. ?>
                     <input type="hidden" name="page" value="<?php echo esc_attr($_REQUEST['page']); ?>" />
             <?php
                 }

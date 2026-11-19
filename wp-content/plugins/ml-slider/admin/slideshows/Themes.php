@@ -32,6 +32,14 @@ class MetaSlider_Themes
     public $supported_slideshow_libraries = array('flex', 'responsive', 'nivo', 'coin');
 
     /**
+     * Resolved theme roots, keyed by the path they were resolved from
+     *
+     * @var array
+     * @since 3.113.0
+     */
+    private $theme_root_cache = array();
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -47,6 +55,141 @@ class MetaSlider_Themes
             self::$instance = new self();
         }
         return self::$instance;
+    }
+
+    /**
+     * Get normalized theme roots that are allowed to load theme PHP files.
+     *
+     * @since 3.113.0
+     *
+     * @return array
+     */
+    private function get_allowed_theme_roots()
+    {
+        $roots = array();
+        $core_root = $this->resolve_theme_root(METASLIDER_THEMES_PATH);
+        if ($core_root) {
+            $roots[] = $core_root;
+        }
+
+        $extra_themes = apply_filters('metaslider_extra_themes', array());
+        foreach ($extra_themes as $location) {
+            if (! is_string($location)) {
+                continue;
+            }
+
+            $extra_root = $this->resolve_theme_root($location);
+            if ($extra_root) {
+                $roots[] = $extra_root;
+            }
+        }
+
+        return array_values(array_unique($roots));
+    }
+
+    /**
+     * Resolve a theme root to a normalized real path, once per request.
+     *
+     * @since 3.113.0
+     *
+     * @param string $path Theme root path.
+     * @return string|false
+     */
+    private function resolve_theme_root($path)
+    {
+        if (! isset($this->theme_root_cache[$path])) {
+            $real_path = realpath($path);
+            $this->theme_root_cache[$path] = ($real_path && is_dir($real_path))
+                ? trailingslashit(wp_normalize_path($real_path))
+                : false;
+        }
+
+        return $this->theme_root_cache[$path];
+    }
+
+    /**
+     * Is this real path inside one of the allowed theme roots?
+     *
+     * Paths are normalized first, since realpath() keeps Windows backslashes
+     * while trailingslashit() always adds a forward slash.
+     *
+     * @since 3.113.0
+     *
+     * @param string $real_path Real path to a theme file or directory.
+     * @return bool
+     */
+    private function is_inside_theme_roots($real_path)
+    {
+        $real_path = wp_normalize_path($real_path);
+        foreach ($this->get_allowed_theme_roots() as $allowed_root) {
+            if (0 === strpos($real_path, $allowed_root)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Validate a theme directory against the allowed theme roots.
+     *
+     * @since 3.113.0
+     *
+     * @param string $root   Theme root path.
+     * @param string $folder Theme folder.
+     * @return string|false
+     */
+    private function get_validated_theme_directory($root, $folder)
+    {
+        // The folder name is used as given - traversal is caught by the root
+        // check below, so third-party folder names keep working.
+        $folder = trim((string) $folder);
+        if ('' === $folder) {
+            return false;
+        }
+
+        $theme_dir = realpath(trailingslashit($root) . $folder);
+        if (! $theme_dir || ! is_dir($theme_dir)) {
+            return false;
+        }
+
+        $theme_dir = trailingslashit(wp_normalize_path($theme_dir));
+
+        return $this->is_inside_theme_roots($theme_dir) ? $theme_dir : false;
+    }
+
+    /**
+     * Include a theme PHP file after validating path and filename allowlists.
+     *
+     * @since 3.113.0
+     *
+     * @param string $file              Candidate file path.
+     * @param array  $allowed_filenames Allowed PHP filenames.
+     * @param bool   $once              Whether to include once.
+     * @return mixed|false
+     */
+    private function include_allowed_theme_file($file, $allowed_filenames, $once = false)
+    {
+        $allowed_file = realpath($file);
+        if (! $allowed_file || ! is_file($allowed_file)) {
+            return false;
+        }
+
+        if (! in_array(basename($allowed_file), $allowed_filenames, true)) {
+            return false;
+        }
+
+        if (! $this->is_inside_theme_roots($allowed_file)) {
+            return false;
+        }
+
+        if ($once) {
+            // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable -- Filename is allowlisted and the real path is confined to the theme roots above.
+            return include_once $allowed_file;
+        }
+
+        // phpcs:ignore WordPressVIPMinimum.Files.IncludingFile.UsingVariable -- Filename is allowlisted and the real path is confined to the theme roots above.
+        return include $allowed_file;
     }
 
     /**
@@ -99,14 +242,16 @@ class MetaSlider_Themes
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
             // Make sure there is a manifest
-            if (file_exists(trailingslashit($location) . 'manifest.php')) {
-                $manifest = include(trailingslashit($location) . 'manifest.php');
+            $manifest = $this->include_allowed_theme_file(trailingslashit($location) . 'manifest.php', array('manifest.php'));
+            if (is_array($manifest)) {
 
                 // Make sure each theme has an existing folder, title, description
                 foreach ($manifest as $data) {
+                    $theme_folder = isset($data['folder']) ? $data['folder'] : '';
+                    $theme_dir = $this->get_validated_theme_directory($location, $theme_folder);
                     if (isset($data['folder'])
-                        && file_exists($folder = trailingslashit($location) . $data['folder'])
-                        && isset($data['title']) 
+                        && $theme_dir
+                        && isset($data['title'])
                         && isset($data['description'])
                         && isset($data['screenshot_dir'])
                     ) {
@@ -114,12 +259,12 @@ class MetaSlider_Themes
                         $data['type'] = isset($data['type']) ? $data['type'] : 'external';
                         
                         // Set a temporary array key to pass the customize.php file location
-                        if (file_exists($customize = trailingslashit($folder) . 'customize.php')) {
+                        if ($customize = realpath($theme_dir . 'customize.php')) {
                             $data['theme_customize_temp_'] = $customize;
                         }
 
                         // Set a temporary array key to pass the settings.php file location
-                        if (file_exists($edit_settings = trailingslashit($folder) . 'settings.php')) {
+                        if ($edit_settings = realpath($theme_dir . 'settings.php')) {
                             $data['theme_edit_settings_temp_'] = $edit_settings;
                         }
 
@@ -156,12 +301,13 @@ class MetaSlider_Themes
 
             // Check if we use a different customize.php file (e.g. is an external theme) for this theme or default
             $customize_file = isset($item['theme_customize_temp_']) ? $item['theme_customize_temp_'] : METASLIDER_THEMES_PATH . $folder . '/customize.php';
-            
-            if (in_array($item['type'], array('free', 'premium', 'external')) 
-                && file_exists($customize_file)
-            ) {
-                $customize_settings = (include $customize_file);
-                $themes[$folder]['customize'] = $this->merge_theme_customizations($customize_settings);
+
+            // Only include the file for theme types that use it
+            if (in_array($item['type'], array('free', 'premium', 'external'))) {
+                $customize_settings = $this->include_allowed_theme_file($customize_file, array('customize.php'));
+                if (is_array($customize_settings)) {
+                    $themes[$folder]['customize'] = $this->merge_theme_customizations($customize_settings);
+                }
             }
 
             // Remove temporary array keys
@@ -207,8 +353,8 @@ class MetaSlider_Themes
             $edit_settings_file = isset($item['theme_edit_settings_temp_']) ? $item['theme_edit_settings_temp_'] : METASLIDER_THEMES_PATH . $folder . '/settings.php';
             
             if ( in_array( $item['type'], array( 'free', 'premium', 'external' ) ) ) {
-                if ( file_exists($edit_settings_file) ) {
-                    $edit_settings = ( include $edit_settings_file );
+                $edit_settings = $this->include_allowed_theme_file($edit_settings_file, array('settings.php'));
+                if (is_array($edit_settings)) {
                     $merged_settings = array_merge( $default_settings, $edit_settings );
                     $themes[$folder]['edit_settings'] = $merged_settings;
                 } else {
@@ -243,10 +389,10 @@ class MetaSlider_Themes
     {
         $customize_file = $alt_customize_file 
                         ? $alt_customize_file 
-                        : METASLIDER_THEMES_PATH . $theme . '/customize.php';
+                        : METASLIDER_THEMES_PATH . sanitize_key($theme) . '/customize.php';
         
-        if (file_exists($customize_file)) {
-            $customize_settings = (include $customize_file);
+        $customize_settings = $this->include_allowed_theme_file($customize_file, array('customize.php'));
+        if (is_array($customize_settings)) {
             $data = $this->merge_theme_customizations($customize_settings);
         } else {
             $data = array();
@@ -457,12 +603,13 @@ return $theme;
      */
     public function get_latest_version($folder)
     {
+        $folder = sanitize_key($folder);
 
         // If the changelog isn't there for some reason just assume it's v1.0.0
-        if (!file_exists(METASLIDER_THEMES_PATH . trailingslashit($folder) . 'changelog.php')) {
+        $changelog = $this->include_allowed_theme_file(METASLIDER_THEMES_PATH . trailingslashit($folder) . 'changelog.php', array('changelog.php'));
+        if (! is_array($changelog)) {
             return 'v1.0.0';
         }
-        $changelog = (include METASLIDER_THEMES_PATH . trailingslashit($folder) . 'changelog.php');
         return current(array_keys($changelog));
     }
 
@@ -774,8 +921,8 @@ return $theme;
         remove_filter( 'metaslider_css_classes', array( $this, 'add_no_theme_class' ), 10, 3 );
 
         // Check our themes for a match
-        if (file_exists(METASLIDER_THEMES_PATH . $this->theme_id )) {
-            $theme_dir = METASLIDER_THEMES_PATH . $this->theme_id;
+        if ($validated_theme_dir = $this->get_validated_theme_directory(METASLIDER_THEMES_PATH, $this->theme_id)) {
+            $theme_dir = $validated_theme_dir;
         }
 
         /**
@@ -790,8 +937,8 @@ return $theme;
          */
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
-            if (file_exists(trailingslashit($location) . $this->theme_id)) {
-                $theme_dir = trailingslashit($location) . $this->theme_id;
+            if ($validated_theme_dir = $this->get_validated_theme_directory($location, $this->theme_id)) {
+                $theme_dir = $validated_theme_dir;
             }
         }
 
@@ -803,8 +950,8 @@ return $theme;
             }
 
             require_once(METASLIDER_THEMES_PATH . 'ms-theme-base.php');
-            $theme_file = trailingslashit( $theme_dir ) . trailingslashit( $theme['version'] ) . 'theme.php';
-            return file_exists( $theme_file ) ? include_once $theme_file : false;
+            $theme_file = trailingslashit($theme_dir) . trailingslashit(trim($theme['version'])) . 'theme.php';
+            return $this->include_allowed_theme_file($theme_file, array('theme.php'), true);
         }
         
         // This should be a custom theme (pro)
@@ -1112,8 +1259,8 @@ return $theme;
 
         $replace = array(
             $id,
-            strip_tags( $value ),
-            strip_tags( $value )
+            wp_strip_all_tags( $value ),
+            wp_strip_all_tags( $value )
         );
 
         return str_replace($search, $replace, $css);

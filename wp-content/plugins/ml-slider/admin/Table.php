@@ -14,7 +14,8 @@ class MetaSlider_Admin_Table extends WP_List_table
         // Check if we filter by theme
         $nonce_valid = isset($_REQUEST['search_wpnonce']) && wp_verify_nonce(sanitize_key($_REQUEST['search_wpnonce']), 'metaslider_search_slideshows');
         if ($nonce_valid && isset($_POST['metaslider_theme'])) {
-            $theme_param = sanitize_text_field($_POST['metaslider_theme']);
+            $theme_param = sanitize_text_field($_POST['metaslider_theme']); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only used as the base URL for add_query_arg()/remove_query_arg() below, which handle escaping.
             $current_uri = isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '';
             if ($theme_param !== '') {
                 $_GET['metaslider_theme'] = $theme_param;
@@ -30,7 +31,7 @@ class MetaSlider_Admin_Table extends WP_List_table
         $this->_column_headers = array($columns, $hidden, $sortable);
 
         if (isset($_REQUEST['s'])) {
-            $table_data = $this->table_data(sanitize_text_field($_REQUEST['s']));
+            $table_data = $this->table_data(sanitize_text_field(wp_unslash($_REQUEST['s'])));
         } else {
             $table_data = $this->table_data();
         }
@@ -55,9 +56,11 @@ class MetaSlider_Admin_Table extends WP_List_table
         $columns = ['slides', 'post_title', 'post_date', 'slide_count', 'slideshow_type', 'slideshow_theme'];
         $global_settings = get_option( 'metaslider_global_settings' );
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- validated against the $columns allow-list on the next line.
         $orderBy = $_GET['orderby'] ?? $global_settings['dashboardSort'] ?? 'ID';
         $orderBy = in_array($orderBy, $columns, true) ? $orderBy : 'ID';
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only ever compared against the literal 'asc' below.
         $order = $_GET['order'] ?? $global_settings['dashboardOrder'] ?? 'asc';
 
         $status = isset($_GET['post_status']) && 'trash' === $_GET['post_status'] ? 'trash' : 'publish';
@@ -81,7 +84,7 @@ class MetaSlider_Admin_Table extends WP_List_table
             $each_slide['slide_count'] = count($slideshow_slides);
         }
 
-        $theme_filter = isset($_REQUEST['metaslider_theme']) ? sanitize_text_field($_REQUEST['metaslider_theme']) : '';
+        $theme_filter = isset($_REQUEST['metaslider_theme']) ? sanitize_text_field($_REQUEST['metaslider_theme']) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
         if ($theme_filter !== '') {
             $query_results = array_values(array_filter($query_results, function ($slide) use ($theme_filter) {
                 return $theme_filter === '__none__'
@@ -141,27 +144,37 @@ class MetaSlider_Admin_Table extends WP_List_table
         
         $views = [];
         $parameters = ['action', 'slideshows', 'post_status', '_wpnonce', 'paged'];
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only ever compared against fixed status strings below.
         $current = $_REQUEST['post_status'] ?? 'all';
         $base_url = remove_query_arg($parameters);
     
-        // Helper function to generate view links
-        $generate_view_link = function ($status, $label) use ($base_url, $current) {
-            $count = $this->slideshow_count($status);
-            if ($count == 0 && $status === 'trash') {
-                return null;
-            }
-            $url = ($status === 'all') ? $base_url : add_query_arg('post_status', $status, $base_url);
-            $class = ($current === $status) ? ' class="current"' : '';
-            return "<a href='" . esc_url($url) . "' {$class}>" . esc_html__($label, 'ml-slider') . " ({$count})</a>";
-        };
-    
-        $views['all'] = $generate_view_link('all', 'Published');
+        $views['all'] = $this->generate_view_link($base_url, $current, 'all', 'Published');
         
-        if ($trash_link = $generate_view_link('trash', 'Trash')) {
+        if ($trash_link = $this->generate_view_link($base_url, $current, 'trash', 'Trash')) {
             $views['trash'] = $trash_link;
         }
     
         return $views;
+    }
+
+    /**
+     * Generate a status filter link for the slideshow table.
+     *
+     * @param string $base_url Base admin URL.
+     * @param string $current Current status filter.
+     * @param string $status Status represented by the link.
+     * @param string $label Link label.
+     * @return string|null
+     */
+    private function generate_view_link($base_url, $current, $status, $label)
+    {
+        $count = $this->slideshow_count($status);
+        if ($count == 0 && $status === 'trash') {
+            return null;
+        }
+        $url = ($status === 'all') ? $base_url : add_query_arg('post_status', $status, $base_url);
+        $class = ($current === $status) ? ' class="current"' : '';
+        return "<a href='" . esc_url($url) . "' {$class}>" . esc_html__($label, 'ml-slider') . " ({$count})</a>";
     }
     
     private function slideshow_count($status = 'all')
@@ -192,7 +205,7 @@ class MetaSlider_Admin_Table extends WP_List_table
     public function get_columns()
     {
         $columns = array(
-            'cb' => '<input type="checkbox" />',
+            'cb' => '<input type="checkbox" aria-label="' . esc_attr__('Select all slideshows', 'ml-slider') . '" />',
             'slideshow_thumb' => esc_html__('Preview', 'ml-slider'),
             'post_title' => esc_html__('Title', 'ml-slider'),
             'slideshow_type' => esc_html__('Type of Slides', 'ml-slider'),
@@ -202,6 +215,7 @@ class MetaSlider_Admin_Table extends WP_List_table
             'ID' => esc_html__('Shortcode', 'ml-slider')
         );
 
+        // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- only ever compared against the literal 'trash' below.
         $status = $_REQUEST['post_status'] ?? 'publish';
         if ($status !== 'trash') {
             $columns['used_on'] = __('Usage', 'ml-slider');
@@ -226,15 +240,19 @@ class MetaSlider_Admin_Table extends WP_List_table
     {
         $logo = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(__FILE__) . '/assets/metaslider.svg'));
         if (get_post_type($slideId) == 'attachment') {
-            $image = wp_get_attachment_image_src($slideId, 'thumbnail');
+            $thumbnail_id = $slideId;
         } else {
-            $image = wp_get_attachment_image_src(get_post_thumbnail_id($slideId), 'thumbnail');
+            $thumbnail_id = get_post_thumbnail_id($slideId);
         }
 
+        $image = wp_get_attachment_image_src($thumbnail_id, 'thumbnail');
+
         if (isset($image[0])) {
-            $slidethumb = "<img src='". esc_url($image[0]) ."'>";
+            // File-name titles make poor alt text, so only the image's own alt text is used
+            $image_alt  = get_post_meta($thumbnail_id, '_wp_attachment_image_alt', true);
+            $slidethumb = "<img src='". esc_url($image[0]) ."' alt='" . esc_attr($image_alt) . "'>";
         } else {
-            $slidethumb = "<img src='". $logo ."' class='thumb-logo'>";
+            $slidethumb = "<img src='". $logo ."' class='thumb-logo' alt=''>";
         }
         return $slidethumb;
     }
@@ -267,6 +285,7 @@ class MetaSlider_Admin_Table extends WP_List_table
             'order' => 'ASC',
             'lang' => '',
             'suppress_filters' => 1,
+            // phpcs:ignore WordPressVIPMinimum.Performance.NoPaging.posts_per_page_posts_per_page
             'posts_per_page' => -1,
             'tax_query' => array(
                 array(
@@ -303,14 +322,17 @@ class MetaSlider_Admin_Table extends WP_List_table
     public function column_cb($item)
     {
         return sprintf(
-            '<input type="checkbox" name="slideshows[]" value="%d" />', (int)$item['ID']
+            '<input type="checkbox" name="slideshows[]" value="%d" aria-label="%s" />',
+            (int)$item['ID'],
+            /* translators: %s: slideshow title */
+            esc_attr(sprintf(__('Select %s', 'ml-slider'), $item['post_title']))
         );
     }
 
     public function column_slideshow_thumb($item)
     {
         $logo = 'data:image/svg+xml;base64,' . base64_encode(file_get_contents(dirname(__FILE__) . '/assets/metaslider.svg'));
-        $placeholder = "<img src='". $logo ."' class='thumb-logo'>";
+        $placeholder = "<img src='". $logo ."' class='thumb-logo' alt=''>";
         $numberOfSlides = count($item['slideshow_thumb']);
 
         $thumbHtml = "<div class='w-16 h-16 bg-gray-light slidethumb'>";
@@ -395,9 +417,12 @@ class MetaSlider_Admin_Table extends WP_List_table
     public function column_used_on($item)
     {
         $slideshow_id = $item['ID'];
-        $pages = $this->get_posts_using_slideshow($slideshow_id);
+        $global_settings = metaslider_global_settings();
+        // Load usage on click, the lookup can be slow on large sites (#2613)
+        $on_click = !empty($global_settings['dashboardUsageOnClick']);
+        $pages = $on_click ? '' : self::get_posts_using_slideshow($slideshow_id);
         
-        if ($pages !== esc_html__('Not found.', 'ml-slider')) {
+        if ($on_click || $pages !== esc_html__('Not found.', 'ml-slider')) {
             return '<button class="open-modal button" data-id="' . esc_attr($slideshow_id) . '">'
                 . esc_html__('View Usage', 'ml-slider') . '</button>
                 <div class="modal-overlay" id="overlay-' . esc_attr($slideshow_id) . '" style="display: none;"></div>
@@ -405,8 +430,8 @@ class MetaSlider_Admin_Table extends WP_List_table
                     <div class="modal-content">
                         <span class="close-modal" data-id="' . esc_attr($slideshow_id) . '">&times;</span>
                         <h3 class="text-lg font-medium m-0 leading-6 text-gray-darkest">'
-                            . esc_html__('Content Using This Slideshow', 'ml-slider') . '</h3>' 
-                            . $pages . '
+                            . esc_html__('Content Using This Slideshow', 'ml-slider') . '</h3>
+                            <div class="usage-results">' . $pages . '</div>
                     </div>
                 </div>';
         } else {
@@ -415,17 +440,19 @@ class MetaSlider_Admin_Table extends WP_List_table
     }
     
     
-    private function get_posts_using_slideshow($slideshow_id)
+    /**
+     * @since 3.114.1 Public and static, so the "View Usage" AJAX request can use it (#2613)
+     */
+    public static function get_posts_using_slideshow($slideshow_id)
     {
         global $wpdb;
         $results = [];
 
         $posts = $wpdb->get_results(
             $wpdb->prepare(
-                "SELECT ID, post_title, post_type FROM {$wpdb->posts} WHERE post_status = %s AND (post_content LIKE %s OR post_content REGEXP %s)",
+                "SELECT ID, post_title, post_type, post_content FROM {$wpdb->posts} WHERE post_status = %s AND post_content LIKE %s",
                 'publish',
-                '%' . $wpdb->esc_like("[metaslider id=\"$slideshow_id\"") . '%',
-                '\\[metaslider[^]]*id=[\"\\\']?' . $slideshow_id . '[\"\\\']?[^]]*\\]'
+                '%' . $wpdb->esc_like('[metaslider') . '%'
             )
         );
 
@@ -433,6 +460,10 @@ class MetaSlider_Admin_Table extends WP_List_table
         $grouped_results = [];
     
         foreach ($posts as $post) {
+            // REGEXP in SQL is too slow on large sites, so match the ID here (#2613)
+            if (!preg_match('/\[metaslider[^]]*id=["\']?' . $slideshow_id . '["\']?[^]]*]/', $post->post_content)) {
+                continue;
+            }
             $post_type_obj = get_post_type_object($post->post_type);
             $post_type_label = $post_type_obj ? $post_type_obj->labels->singular_name : ucfirst($post->post_type);
     
@@ -467,7 +498,7 @@ class MetaSlider_Admin_Table extends WP_List_table
 
         $output = '';
         foreach ($grouped_results as $category => $items) {
-            $output .= "<h5>{$category}:</h5><ul>" . implode('', $items) . "</ul>";
+            $output .= "<h4>{$category}:</h4><ul>" . implode('', $items) . "</ul>";
         }
     
         return empty($output) ? esc_html__('Not found.', 'ml-slider') : $output;
@@ -476,6 +507,7 @@ class MetaSlider_Admin_Table extends WP_List_table
     public function extra_tablenav( $which )
     {
         if ( $which == "top" ) {
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- output through esc_attr() below.
             echo '<input type="hidden" name="page" value="' . esc_attr($_REQUEST['page'] ?? 'metaslider') . '">';
             $this->render_filters();
             if (isset($_REQUEST['post_status']) && $_REQUEST['post_status'] == "trash") {
@@ -513,7 +545,7 @@ class MetaSlider_Admin_Table extends WP_List_table
 
         asort($themes);
 
-        $current = isset($_REQUEST['metaslider_theme']) ? sanitize_text_field($_REQUEST['metaslider_theme']) : '';
+        $current = isset($_REQUEST['metaslider_theme']) ? sanitize_text_field($_REQUEST['metaslider_theme']) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
 
         echo '<div class="alignleft actions">';
         echo '<select name="metaslider_theme" id="metaslider-theme-filter">';
@@ -544,6 +576,11 @@ class MetaSlider_Admin_Table extends WP_List_table
         return $table_data;
     }
 
+    /**
+     * Trash, restore or permanently delete the selected slideshows
+     *
+     * @since 3.114.0 Only acts on slideshows the user can delete
+     */
     protected function process_action()
     {
         $action = $this->current_action();
@@ -576,16 +613,23 @@ class MetaSlider_Admin_Table extends WP_List_table
                 if(is_array($_REQUEST['slideshows'])) {
                     $slideshows = array_map('intval', $_REQUEST['slideshows']);
                 } else {
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- intval() cast on the next line.
                     $toArray = array($_REQUEST['slideshows']);
                     $slideshows = array_map('intval', $toArray);
                 }
             } else {
                 //single slider
                 if(isset($_REQUEST['id'])) {
+                    // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- intval() cast on the next line.
                     $toArray = array($_REQUEST['id']);
                     $slideshows = array_map('intval', $toArray);
                 }
             }
+
+            // Only act on slideshows the user can delete, never on other posts
+            $slideshows = array_filter(isset($slideshows) ? $slideshows : array(), function ($slideshow_id) {
+                return 'ml-slider' === get_post_type($slideshow_id) && current_user_can('delete_post', $slideshow_id);
+            });
 
             switch ( $action ) {
                 case 'delete':

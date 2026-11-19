@@ -211,16 +211,52 @@ class MetaSliderQuickstart
                 'demo' => 'https://demo.metaslider.com/sporting-spirit/'
             ),
             array(
+                'slug' => 'local-video',
+                'label' => __( 'Local Video', 'ml-slider' ),
+                'is_dummy' => false, // Is Free
+                'price' => 'free',
+                'theme' => 'blend',
+                'type' => array( 'local_video' ),
+                'features' => array( 'boxed' ),
+                'animation' => array( 'slide' ),
+                'integration' => false,
+                'demo' => 'https://demo.metaslider.com/local-video-slideshow/'
+            ),
+            array(
                 'slug' => 'marathon-journey',
                 'label' => esc_html__( 'Marathon Journey', 'ml-slider' ),
                 'type' => array( 'local_video' ),
-                'is_dummy' => true, // Is Pro
-                'price' => 'pro',
+                'is_dummy' => false, // Is Free
+                'price' => 'free',
                 'theme' => 'nexus',
                 'features' => array( 'boxed', 'video-caption' ),
                 'animation' => array( 'fade' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/marathon-journey/'
+            ),
+            array(
+                'slug' => 'daily-routine-videos',
+                'label' => esc_html__( 'Daily Routine Videos', 'ml-slider' ),
+                'type' => array( 'local_video' ),
+                'is_dummy' => false, // Is Free
+                'price' => 'free',
+                'theme' => 'bubble',
+                'features' => array( 'boxed' ),
+                'animation' => array( 'fade' ),
+                'integration' => false,
+                'demo' => 'https://demo.metaslider.com/daily-routine-videos/'
+            ),
+            array(
+                'slug' => 'livid-slideshow',
+                'label' => 'Livid',
+                'is_dummy' => false, // Is Free
+                'price' => 'free',
+                'theme' => 'bubble',
+                'type' => array( 'livid' ),
+                'features' => array( 'boxed' ),
+                'animation' => array( 'slide' ),
+                'integration' => false,
+                'demo' => 'https://demo.metaslider.com/livid-slideshow/'
             ),
             array(
                 'slug' => 'cars-display',
@@ -365,18 +401,6 @@ class MetaSliderQuickstart
                 'animation' => array( 'slide', 'vertical' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/tiktok-vertical-videos/'
-            ),
-            array(
-                'slug' => 'daily-routine-videos',
-                'label' => esc_html__( 'Daily Routine Videos', 'ml-slider' ),
-                'type' => array( 'local_video' ),
-                'is_dummy' => true, // Is Pro
-                'price' => 'pro',
-                'theme' => 'bubble',
-                'features' => array( 'boxed' ),
-                'animation' => array( 'fade' ),
-                'integration' => false,
-                'demo' => 'https://demo.metaslider.com/daily-routine-videos/'
             ),
             array(
                 'slug' => 'coffee-brewing-guide',
@@ -571,18 +595,6 @@ class MetaSliderQuickstart
                 'demo' => 'https://demo.metaslider.com/vimeo-slideshow/'
             ),
             array(
-                'slug' => 'local-video',
-                'label' => __( 'Local Video', 'ml-slider' ),
-                'is_dummy' => true, // Is Pro
-                'price' => 'pro',
-                'theme' => 'blend',
-                'type' => array( 'local_video' ),
-                'features' => array( 'boxed' ),
-                'animation' => array( 'slide' ),
-                'integration' => false,
-                'demo' => 'https://demo.metaslider.com/local-video-slideshow/'
-            ),
-            array(
                 'slug' => 'layer-slides',
                 'label' => __( 'Layer Slides', 'ml-slider' ),
                 'is_dummy' => true, // Is Pro
@@ -677,6 +689,18 @@ class MetaSliderQuickstart
                 'animation' => array( 'flip' ),
                 'integration' => false,
                 'demo' => 'https://demo.metaslider.com/playful-pets/'
+            ),
+            array(
+                'slug' => 'background-color',
+                'label' => __( 'Background Color', 'ml-slider' ),
+                'is_dummy' => true, // Is Pro
+                'price' => 'pro',
+                'theme' => 'default-base',
+                'type' => array( 'gradient' ),
+                'features' => array( 'boxed' ),
+                'animation' => array( 'fade' ),
+                'integration' => false,
+                'demo' => false
             )
         );
 
@@ -735,6 +759,7 @@ class MetaSliderQuickstart
      * Get slide type translatable label
      *
      * @since 3.107.0
+     * @since 3.113.0 Added the Livid slide type.
      *
      * @param string $type Slide type. e.g. 'external', 'image', etc.
      *
@@ -765,6 +790,9 @@ class MetaSliderQuickstart
             case 'tiktok':
                 return 'TikTok';
                 break;
+            case 'livid':
+                return 'Livid';
+                break;
             case 'custom_html':
                 return __( 'Custom HTML', 'ml-slider' );
                 break;
@@ -773,6 +801,9 @@ class MetaSliderQuickstart
                 break;
             case 'post_feed':
                 return __( 'Post Feed', 'ml-slider' );
+                break;
+            case 'gradient':
+                return __( 'Background Color', 'ml-slider' );
                 break;
         }
     }

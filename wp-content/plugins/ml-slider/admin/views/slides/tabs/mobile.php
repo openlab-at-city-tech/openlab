@@ -28,6 +28,8 @@
     if (isset($settings['type']) && $settings['type'] == 'flex') {
         $hide_css = 'display: block';
     }
+    // Slide types with no caption of their own (e.g. Livid video) set this to false
+    $show_hide_caption = !isset($show_hide_caption) || $show_hide_caption;
 ?>
 <div class="row flex-setting" style="<?php echo esc_attr($hide_css); ?>">
     <label style="margin-right: 20px;"><?php esc_html_e("Hide slide on:", "ml-slider"); ?></label>
@@ -63,11 +65,12 @@
             }
     ?>
             <span class="mobile-checkbox-wrap">
-                <input type="checkbox" name="attachment[<?php echo esc_attr($slide_id); ?>][hide_slide_<?php echo esc_attr($value); ?>]" class="mobile-checkbox tipsy-tooltip-top" title="<?php echo esc_attr($tooltip); ?>" <?php echo esc_attr($checked_slide); ?> />
+                <input type="checkbox" name="attachment[<?php echo esc_attr($slide_id); ?>][hide_slide_<?php echo esc_attr($value); ?>]" class="mobile-checkbox tipsy-tooltip-top" title="<?php echo esc_attr($tooltip); ?>" aria-label="<?php echo esc_attr(sprintf(/* translators: %s: device name, e.g. Smartphone */ __('Hide slide on %s', 'ml-slider'), metaslider_device_label($value))); ?>" <?php echo esc_attr($checked_slide); ?> />
                 <span class="dashicons <?php echo esc_attr( 'dashicons-' . $value ); ?>"></span>
             </span>
     <?php } ?>
 </div>
+<?php if ($show_hide_caption) { ?>
 <div class="row">
     <label style="margin-right: 4px;"><?php esc_html_e("Hide caption on:", "ml-slider"); ?></label>
     <?php
@@ -102,8 +105,9 @@
             }
     ?>
             <span class="mobile-checkbox-wrap">
-                <input type="checkbox" name="attachment[<?php echo esc_attr($slide_id); ?>][hide_caption_<?php echo esc_attr($value); ?>]" class="mobile-checkbox tipsy-tooltip-top" title="<?php echo esc_attr($tooltip); ?>" <?php echo esc_attr($checked_caption); ?> />
+                <input type="checkbox" name="attachment[<?php echo esc_attr($slide_id); ?>][hide_caption_<?php echo esc_attr($value); ?>]" class="mobile-checkbox tipsy-tooltip-top" title="<?php echo esc_attr($tooltip); ?>" aria-label="<?php echo esc_attr(sprintf(/* translators: %s: device name, e.g. Smartphone */ __('Hide caption on %s', 'ml-slider'), metaslider_device_label($value))); ?>" <?php echo esc_attr($checked_caption); ?> />
                 <span class="dashicons <?php echo esc_attr( 'dashicons-' . $value ); ?> "></span>
             </span>
     <?php } ?>
 </div>
+<?php } ?>

@@ -119,6 +119,8 @@ class MetaImageSlide extends MetaSlide
      * TODO: deprecate this in favor of only allowing single slide creation
      *
      * @return string The status message and if success, the count of slides added
+     *
+     * @since 3.114.0 Only creates slides in a slideshow the user can edit
      */
     public function ajax_create_image_slides()
     {
@@ -147,25 +149,17 @@ class MetaImageSlide extends MetaSlide
             );
         }
 
-        $capability = apply_filters('metaslider_capability', MetaSliderPlugin::DEFAULT_CAPABILITY_EDIT_SLIDES);
-        if (! current_user_can($capability)) {
-            wp_send_json_error(
-                [
-                    'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
-                ],
-                403
-            );
-        }
-
         if(empty($_POST['slider_id'])) {
             $slider_id = MetaSlider_Slideshows::create();
         } else {
             $slider_id = absint($_POST['slider_id']);
+            metaslider_verify_slideshow_for_ajax($slider_id);
         }
 
         $slides = $this->create_slides(
             $slider_id,
-            array_map(array($this, 'make_image_slide_data'), $_POST['selection']) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+            // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- each element is absint()'d inside make_image_slide_data().
+            array_map(array($this, 'make_image_slide_data'), $_POST['selection'])
         );
 
         if (is_wp_error($slides)) {
@@ -222,6 +216,8 @@ class MetaImageSlide extends MetaSlide
     /**
      * Ajax wrapper to create new cropped images.
      *
+     * @since 3.114.0 Only resizes a slide and slideshow the user can edit
+     *
      * @return string The status message
      */
     public function ajax_resize_slide()
@@ -253,6 +249,8 @@ class MetaImageSlide extends MetaSlide
 
         $slideshow_id = absint($_POST['slider_id']);
         $slide_id = absint($_POST['slide_id']);
+        metaslider_verify_slide_for_ajax($slide_id);
+        metaslider_verify_slideshow_for_ajax($slideshow_id);
         $settings = get_post_meta($slideshow_id, 'ml-slider_settings', true);
         if (empty($settings) || !is_array($settings)) {
             $settings = array();
@@ -275,6 +273,7 @@ class MetaImageSlide extends MetaSlide
      * Ajax wrapper to save crop position for a given slide image.
      *
      * @since 3.93
+     * @since 3.114.0 Only changes a slide the user can edit
      * 
      * @return string The status message
      */
@@ -305,10 +304,13 @@ class MetaImageSlide extends MetaSlide
             );
         }
 
+        $slide_id = absint($_POST['slide_id']);
+        metaslider_verify_slide_for_ajax($slide_id);
+
         $result = update_post_meta(
-            absint($_POST['slide_id']), 
+            $slide_id, 
             'ml-slider_crop_position', 
-            sanitize_text_field($_POST['crop_position'])
+            sanitize_text_field($_POST['crop_position']) // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
         );
 
         if (is_wp_error($result)) {
@@ -396,6 +398,13 @@ class MetaImageSlide extends MetaSlide
         return array('slide_id' => $new_slide_id, 'html' => $this->get_admin_slide());
     }
 
+    /**
+     * Ajax wrapper for duplicate_slide().
+     *
+     * @since 3.114.0 Only duplicates a slide the user can edit, into a slideshow they can edit
+     *
+     * @return void
+     */
     public function ajax_duplicate_slide()
     {
         if (! isset($_REQUEST['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_REQUEST['_wpnonce']), 'metaslider_duplicate_slide')) {
@@ -424,10 +433,12 @@ class MetaImageSlide extends MetaSlide
             );
         }
 
-        $result = $this->duplicate_slide(
-            absint($_POST['slider_id']),
-            absint($_POST['slide_id'])
-        );
+        $slider_id = absint($_POST['slider_id']);
+        $slide_id  = absint($_POST['slide_id']);
+        metaslider_verify_slideshow_for_ajax($slider_id);
+        metaslider_verify_slide_for_ajax($slide_id);
+
+        $result = $this->duplicate_slide($slider_id, $slide_id);
 
         wp_send_json_success($result, 200);
     }
@@ -596,27 +607,7 @@ class MetaImageSlide extends MetaSlide
             );
         }
 
-        // Adds schedule tab
-        ob_start();
-        include METASLIDER_PATH . 'admin/views/slides/tabs/schedule.php';
-        $schedule_tab = ob_get_contents();
-        ob_end_clean();
-
-        $tabs['schedule'] = array(
-            'title' => __('Schedule', 'ml-slider'),
-            'content' => $schedule_tab
-        );
-
-        // Adds Advanced tab
-        ob_start();
-        include METASLIDER_PATH . 'admin/views/slides/tabs/advanced.php';
-        $advanced_tab = ob_get_contents();
-        ob_end_clean();
-
-        $tabs['advanced'] = array(
-            'title' => __('Advanced', 'ml-slider'),
-            'content' => $advanced_tab
-        );
+        $tabs = $this->add_pro_upsell_tabs($tabs);
 
         return apply_filters("metaslider_image_slide_tabs", $tabs, $this->slide, $this->slider, $this->settings);
     }
@@ -814,7 +805,7 @@ class MetaImageSlide extends MetaSlide
             'title' => $slide['title']
         );
 
-        if ($this->settings['smartCrop'] == 'disabled_pad') {
+        if (isset($this->settings['smartCrop']) && $this->settings['smartCrop'] == 'disabled_pad') {
             $image_attributes['style'] = $this->flex_smart_pad($image_attributes, $slide);
         }
 
@@ -1166,6 +1157,9 @@ class MetaImageSlide extends MetaSlide
      * Add lazy load placeholder through src attribute and move actual image URL to data-ms-src
      * 
      * @since 3.101
+     * @since 3.113.1 Placeholder generation moved to lazy_load_placeholder(), which
+     *                falls back to a 1x1 GIF instead of fataling on an unusable size
+     * @since 3.114.0 The srcset swap only touches the slide's own image, once, and skips images with no srcset
      */
     public function image_attributes( $attributes, $slide, $slider_id )
     {
@@ -1182,61 +1176,144 @@ class MetaImageSlide extends MetaSlide
                 return $attributes;
             }
 
-            try {
-                $width  = $attributes['width'];
-                $height = $attributes['height'];
-
-                // Create a blank image with lowest ratio
-                for ( $i = $height; $i > 1; $i-- ) {
-                    if ( ( $width % $i ) == 0 && ( $height % $i ) == 0 ) {
-                        $width = $width / $i;
-                        $height = $height / $i;
-                    }
-                }
-                $image = imagecreatetruecolor( $width, $height );
-
-                // Make it transparent
-                imagesavealpha( $image, true );
-                imagealphablending( $image, false );
-                $white = imagecolorallocatealpha( $image, 255, 255, 255, 127 );
-                imagefill( $image, 0, 0, $white );
-
-                // Capture the image output
-                ob_start();
-                    imagepng( $image );
-                    $contents = base64_encode( ob_get_contents() );
-                ob_end_clean();
-
-                // Free up the memory
-                imagedestroy( $image );
-            } catch ( Exception $e ) {
-                // 1x1 pixel backup - Note: might need some creative CSS to make this work given the dimensions
-                $contents = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
-            }
-
-            // Convert to base64
-            $data_uri = "data:image/jpeg;base64," . $contents;
+            // Livid's poster image passes no size, which lazy_load_placeholder() turns into its 1x1 fallback
+            $data_uri = $this->lazy_load_placeholder(
+                isset( $attributes['width'] ) ? $attributes['width'] : 0,
+                isset( $attributes['height'] ) ? $attributes['height'] : 0
+            );
 
             $attributes['data-ms-src'] = $attributes['src'];
             $attributes['src'] = $data_uri;
 
-            // If cropping is disabled, filter the WP image
-            if ( isset( $settings['smartCrop'] ) && $settings['smartCrop'] == 'disabled' ) {
-                add_filter( 
-                    'wp_get_attachment_image_attributes', 
-                    function( $attributes, $attachment, $size ) use ( $data_uri ) {
-                        $attributes['src'] = $data_uri;
+            // If cropping is disabled, filter the WP image of slide types build_image_tag() renders with it
+            $slide_type    = ! empty( $slide['id'] ) ? get_post_meta( $slide['id'], 'ml-slider_type', true ) : '';
+            $attachment_id = 0;
+            if ( isset( $settings['smartCrop'] ) && $settings['smartCrop'] == 'disabled'
+                && ! empty( $slide['id'] )
+                && in_array( $slide_type, array( '', 'image', 'html_overlay' ), true )
+            ) {
+                $attachment_id = 'attachment' === get_post_type( $slide['id'] )
+                    ? (int) $slide['id']
+                    : (int) get_post_thumbnail_id( $slide['id'] );
+            }
+
+            // A slide with no image never reaches wp_get_attachment_image(), so its callback would never come off
+            if ( ! empty( $attachment_id ) ) {
+                $placehold_image = function( $attributes, $attachment ) use ( $data_uri, $attachment_id, &$placehold_image ) {
+                    // This slide's image only, once, so other images keep their real src (#2490)
+                    if ( ! isset( $attachment->ID ) || (int) $attachment->ID !== $attachment_id ) {
+                        return $attributes;
+                    }
+                    remove_filter( 'wp_get_attachment_image_attributes', $placehold_image, 10 );
+
+                    $attributes['src'] = $data_uri;
+
+                    // A placeholder srcset with nothing saved to restore would hide the image for good (#2490)
+                    if ( isset( $attributes['srcset'] ) ) {
                         $attributes['data-ms-srcset'] = $attributes['srcset'];
                         $attributes['srcset'] = $data_uri;
-                        
-                        return $attributes;
-                    }, 
-                    10, 
-                    3
-                );
+                    }
+
+                    return $attributes;
+                };
+
+                add_filter( 'wp_get_attachment_image_attributes', $placehold_image, 10, 2 );
             }
         }
 
         return $attributes;
+    }
+
+    /**
+     * Transparent placeholder image for lazy loading, as a data URI
+     *
+     * Falls back to a 1x1 transparent GIF when the slideshow has no usable width
+     * or height setting, when the ratio is too large to draw, or when GD is missing -
+     * PHP 8 raises an Error, not an Exception, for a non-numeric or zero size, so it
+     * can't be caught below (#2488)
+     *
+     * @since 3.113.1
+     *
+     * @param mixed $width  Width setting, may be empty or non-numeric
+     * @param mixed $height Height setting, may be empty or non-numeric
+     *
+     * @return string
+     */
+    public function lazy_load_placeholder( $width, $height )
+    {
+        // 1x1 pixel backup - Note: might need some creative CSS to make this work given the dimensions
+        $fallback = 'data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+
+        // A placeholder only carries the aspect ratio, so a larger one is a runaway
+        // setting - and allocating it exhausts memory, which PHP cannot catch
+        $max_pixels = 1000000;
+
+        $width  = is_numeric( $width ) ? absint( $width ) : 0;
+        $height = is_numeric( $height ) ? absint( $height ) : 0;
+
+        if ( $width < 1 || $height < 1 || ! function_exists( 'imagecreatetruecolor' ) ) {
+            return $fallback;
+        }
+
+        // Draw at the lowest ratio the size reduces to
+        $divisor = $this->greatest_common_divisor( $width, $height );
+        $width   = intdiv( $width, $divisor );
+        $height  = intdiv( $height, $divisor );
+
+        if ( ( $width * $height ) > $max_pixels ) {
+            return $fallback;
+        }
+
+        // Discard a half-filled output buffer if capturing the image throws
+        $ob_level = ob_get_level();
+
+        try {
+            $image = imagecreatetruecolor( $width, $height );
+
+            // Make it transparent
+            imagesavealpha( $image, true );
+            imagealphablending( $image, false );
+            $white = imagecolorallocatealpha( $image, 255, 255, 255, 127 );
+            imagefill( $image, 0, 0, $white );
+
+            // Capture the image output
+            ob_start();
+                imagepng( $image );
+                $contents = base64_encode( ob_get_contents() );
+            ob_end_clean();
+
+            // Free up the memory
+            imagedestroy( $image );
+        } catch ( Throwable $e ) {
+            while ( ob_get_level() > $ob_level ) {
+                ob_end_clean();
+            }
+
+            return $fallback;
+        }
+
+        return 'data:image/png;base64,' . $contents;
+    }
+
+    /**
+     * Greatest common divisor of two positive integers, used to reduce a
+     * placeholder to the lowest ratio it can be drawn at
+     *
+     * @since 3.113.1
+     *
+     * @param int $a First integer
+     * @param int $b Second integer
+     *
+     * @return int
+     */
+    private function greatest_common_divisor( $a, $b )
+    {
+        while ( $b ) {
+            $remainder = $a % $b;
+            $a = $b;
+            $b = $remainder;
+        }
+
+        return $a;
     }
 }

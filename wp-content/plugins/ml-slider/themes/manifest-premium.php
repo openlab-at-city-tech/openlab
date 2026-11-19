@@ -1,4 +1,7 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
 /**
  * These themes type 'premium' are listed 
