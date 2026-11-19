@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or exit;
+defined('ABSPATH') || exit;
 
 /**
  * Class MC4WP_Contact_Form_7_Integration
@@ -171,6 +171,6 @@ class MC4WP_Contact_Form_7_Integration extends MC4WP_Integration
         if (! is_object($form)) {
             return '';
         }
-        return sprintf('<a href="%s">%s</a>', admin_url('admin.php?page=wpcf7&post=' . $object_id), $form->title());
+        return sprintf('<a href="%s">%s</a>', esc_url(admin_url('admin.php?page=wpcf7&post=' . $object_id)), esc_html($form->title()));
     }
 }

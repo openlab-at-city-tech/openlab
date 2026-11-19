@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Returns a Form instance
  *
@@ -66,7 +69,7 @@ function mc4wp_get_forms(array $args = [])
 function mc4wp_show_form($form_id = 0, $config = [], $echo = true)
 {
     /** @var MC4WP_Form_Manager $forms */
-    $forms = mc4wp('forms');
+    $forms = mc4wp_get_service('forms');
     return $forms->output_form($form_id, $config, $echo);
 }
 
@@ -80,5 +83,5 @@ function mc4wp_show_form($form_id = 0, $config = [], $echo = true)
  */
 function mc4wp_get_submitted_form()
 {
-    return mc4wp('forms')->get_submitted_form();
+    return mc4wp_get_service('forms')->get_submitted_form();
 }

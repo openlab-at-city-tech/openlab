@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Class MC4WP_Form_Listener
  *
@@ -20,22 +23,28 @@ class MC4WP_Form_Listener
 
     public function action_init()
     {
-        if (empty($_POST['_mc4wp_form_id'])) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Missing -- forms are for logged-out visitors, explicitly not using a nonce here
+        $form_data = $_POST;
+        if (empty($form_data['_mc4wp_form_id'])) {
             return;
         }
 
         // get form instance
         try {
-            $form_id = (int) $_POST['_mc4wp_form_id'];
+            $form_id = (int) $form_data['_mc4wp_form_id'];
             $form    = mc4wp_get_form($form_id);
+
+            // only accept submissions on published forms
+            if ($form->status !== 'publish') {
+                return;
+            }
         } catch (Exception $e) {
             return;
         }
 
+
         // sanitize request data
-        $request_data = $_POST;
-        $request_data = mc4wp_sanitize_deep($request_data);
-        $request_data = stripslashes_deep($request_data);
+        $request_data = mc4wp_sanitize_deep($form_data);
 
         // bind request to form & validate
         $form->handle_request($request_data);
@@ -118,7 +127,7 @@ class MC4WP_Form_Listener
             }
 
             // send a subscribe request to Mailchimp for each list
-            $result = $mailchimp->list_subscribe($list_id, $subscriber->email_address, $subscriber->to_array(), $form->settings['update_existing'], $form->settings['replace_interests']);
+            $result = $mailchimp->list_subscribe($list_id, $subscriber->email_address, $subscriber->to_array(), $form->settings['update_existing'], $form->settings['replace_interests'], $form->settings['update_only_empty_fields']);
         }
 
         $log = $this->get_log();
@@ -287,7 +296,7 @@ class MC4WP_Form_Listener
 
     private function request_wants_json()
     {
-        if (isset($_SERVER['HTTP_ACCEPT']) && false !== strpos($_SERVER['HTTP_ACCEPT'], 'application/json')) {
+        if (isset($_SERVER['HTTP_ACCEPT']) && false !== strpos(wp_unslash($_SERVER['HTTP_ACCEPT']), 'application/json')) {
             return true;
         }
 
@@ -299,7 +308,7 @@ class MC4WP_Form_Listener
      */
     protected function get_api()
     {
-        return mc4wp('api');
+        return mc4wp_get_service('api');
     }
 
     /**
@@ -307,6 +316,6 @@ class MC4WP_Form_Listener
      */
     protected function get_log()
     {
-        return mc4wp('log');
+        return mc4wp_get_service('log');
     }
 }

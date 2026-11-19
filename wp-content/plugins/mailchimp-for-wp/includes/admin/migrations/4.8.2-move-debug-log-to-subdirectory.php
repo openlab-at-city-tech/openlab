@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or exit;
+defined('ABSPATH') || exit;
 
 // get old filename
 $upload_dir   = wp_upload_dir(null, false);
@@ -11,8 +11,8 @@ if (is_file($old_filename)) {
     $new_filename = $upload_dir['basedir'] . '/mailchimp-for-wp/debug-log.php';
     $dir          = dirname($new_filename);
     if (! is_dir($dir)) {
-        mkdir($dir, 0755, true);
+        wp_mkdir_p($dir);
     }
 
-    rename($old_filename, $new_filename);
+    rename($old_filename, $new_filename); // phpcs:ignore WordPress.WP.AlternativeFunctions.rename_rename
 }

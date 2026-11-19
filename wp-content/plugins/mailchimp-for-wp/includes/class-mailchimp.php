@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Helper class for dealing with common API requests.
  */
@@ -24,11 +27,12 @@ class MC4WP_MailChimp
      * @param array $args
      * @param bool $update_existing Update information if this email is already on list?
      * @param bool $replace_interests Replace interest groupings, only if update_existing is true.
+     * @param bool $update_only_empty_fields Only update merge fields that are empty in Mailchimp already.
      *
      * @return null|object
      * @throws Exception
      */
-    public function list_subscribe($list_id, $email_address, array $args = [], $update_existing = false, $replace_interests = true)
+    public function list_subscribe($list_id, $email_address, array $args = [], $update_existing = false, $replace_interests = true, $update_only_empty_fields = false)
     {
         $this->reset_error();
         $default_args         = [
@@ -76,6 +80,14 @@ class MC4WP_MailChimp
                     ]
                 );
             }
+
+            if ($update_existing && $update_only_empty_fields && isset($existing_member_data->merge_fields) && isset($args['merge_fields']) && is_array($args['merge_fields'])) {
+                $args['merge_fields'] = $this->update_only_empty_fields((array) $existing_member_data->merge_fields, $args['merge_fields']);
+
+                if (empty($args['merge_fields'])) {
+                    unset($args['merge_fields']);
+                }
+            }
         } catch (MC4WP_API_Resource_Not_Found_Exception $e) {
             // subscriber does not exist (not an issue in this case)
         } catch (MC4WP_API_Exception $e) {
@@ -113,6 +125,62 @@ class MC4WP_MailChimp
     }
 
     /**
+     * Remove incoming merge fields that already have a value in Mailchimp.
+     *
+     * @param array $existing_merge_fields
+     * @param array $incoming_merge_fields
+     * @return array
+     */
+    private function update_only_empty_fields(array $existing_merge_fields, array $incoming_merge_fields)
+    {
+        foreach ($incoming_merge_fields as $key => $value) {
+            if (! array_key_exists($key, $existing_merge_fields)) {
+                continue;
+            }
+
+            $existing_value = $existing_merge_fields[ $key ];
+
+            if (is_array($value) && is_array($existing_value)) {
+                $filtered_value = $this->update_only_empty_fields($existing_value, $value);
+                if (empty($filtered_value)) {
+                    unset($incoming_merge_fields[ $key ]);
+                } else {
+                    $incoming_merge_fields[ $key ] = $filtered_value;
+                }
+
+                continue;
+            }
+
+            if (! $this->is_empty_mailchimp_value($existing_value) || $this->is_empty_mailchimp_value($value)) {
+                unset($incoming_merge_fields[ $key ]);
+            }
+        }
+
+        return $incoming_merge_fields;
+    }
+
+    /**
+     * Determine if a Mailchimp field value should count as empty.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    private function is_empty_mailchimp_value($value)
+    {
+        if (is_array($value)) {
+            foreach ($value as $item) {
+                if (! $this->is_empty_mailchimp_value($item)) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return $value === '' || $value === null;
+    }
+
+    /**
      * Format tags to send to Mailchimp.
      *
      * @param $tags array new tags to add
@@ -126,12 +194,12 @@ class MC4WP_MailChimp
             if (is_string($tag)) {
                 $formatted_tags[] = [
                     'name' => $tag,
-                    'status' => 'active'
+                    'status' => 'active',
                 ];
             } elseif (is_array($tag) && isset($tag['name'])) {
                 $formatted_tags[] = [
                     'name' => $tag['name'],
-                    'status' => isset($tag['status']) ? $tag['status'] : 'active'
+                    'status' => isset($tag['status']) ? $tag['status'] : 'active',
                 ];
             }
         }
@@ -156,9 +224,9 @@ class MC4WP_MailChimp
             return true;
         }
 
-        $api = $this->get_api();
+        $api  = $this->get_api();
         $data = [
-              'tags' => $this->merge_and_format_member_tags($tags),
+                'tags' => $this->merge_and_format_member_tags($tags),
         ];
 
         try {
@@ -560,7 +628,7 @@ class MC4WP_MailChimp
     }
 
     /**
-     * @return string
+     * @return mixed
      */
     public function get_error_code()
     {
@@ -573,6 +641,6 @@ class MC4WP_MailChimp
      */
     private function get_api()
     {
-        return mc4wp('api');
+        return mc4wp_get_service('api');
     }
 }

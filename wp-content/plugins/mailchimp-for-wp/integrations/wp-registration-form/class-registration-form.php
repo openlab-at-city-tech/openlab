@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or exit;
+defined('ABSPATH') || exit;
 
 /**
  * Class MC4WP_Registration_Form_Integration
@@ -34,6 +34,7 @@ class MC4WP_Registration_Form_Integration extends MC4WP_User_Integration
             add_action('um_after_register_fields', [ $this, 'maybe_output_checkbox' ], 20);
             add_action('register_form', [ $this, 'maybe_output_checkbox' ], 20);
             add_action('woocommerce_register_form', [ $this, 'maybe_output_checkbox' ], 20);
+            add_action('user_new_form', [ $this, 'maybe_output_user_new_checkbox' ], 20);
         }
 
         add_action('um_user_register', [ $this, 'subscribe_from_registration' ], 90, 1);
@@ -43,6 +44,35 @@ class MC4WP_Registration_Form_Integration extends MC4WP_User_Integration
             $this->name        = 'UltimateMember';
             $this->description = 'Subscribes people from your UltimateMember registration form.';
         }
+    }
+
+    /**
+     * Output checkbox in the admin "Add New User" form.
+     */
+    public function maybe_output_user_new_checkbox($form_type)
+    {
+        if ('add-new-user' !== $form_type || $this->shown) {
+            return;
+        }
+
+        $this->shown = true;
+        $this->output_user_new_checkbox();
+    }
+
+    /**
+     * Output checkbox as a form-table row.
+     */
+    public function output_user_new_checkbox()
+    {
+        $checkbox_id = esc_attr($this->checkbox_name);
+        echo '<table class="form-table" role="presentation">';
+        echo '<tr>';
+        echo '<th scope="row">', esc_html__('Mailchimp subscribe', 'mailchimp-for-wp'), '</th>';
+        echo '<td>';
+        $this->output_checkbox();
+        echo '</td>';
+        echo '</tr>';
+        echo '</table>';
     }
 
     /**
@@ -65,7 +95,6 @@ class MC4WP_Registration_Form_Integration extends MC4WP_User_Integration
      */
     public function subscribe_from_registration($user_id)
     {
-
         // was sign-up checkbox checked?
         if (! $this->triggered()) {
             return false;

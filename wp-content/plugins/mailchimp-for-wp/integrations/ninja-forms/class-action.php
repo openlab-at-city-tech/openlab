@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 /**
  * Class MC4WP_Ninja_Forms_Action
  */
@@ -129,7 +132,7 @@ class MC4WP_Ninja_Forms_Action extends NF_Abstracts_Action
                 'label' => '-',
                 'value' => 0,
                 'fields' => [],
-            ]
+            ],
         ];
 
         foreach ($lists as $list) {

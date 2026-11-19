@@ -36,6 +36,7 @@ class MC4WP_Container implements ArrayAccess
     public function get($name)
     {
         if (! $this->has($name)) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Exception text is not direct output and is escaped at render time.
             throw new Exception(sprintf('No service named %s was registered.', $name));
         }
 
@@ -57,6 +58,7 @@ class MC4WP_Container implements ArrayAccess
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Whether a offset exists
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetexists.php
      *
      * @param mixed $offset <p>
@@ -68,8 +70,7 @@ class MC4WP_Container implements ArrayAccess
      * <p>
      * The return value will be casted to boolean if non-boolean was returned.
      */
-    #[\ReturnTypeWillChange]
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->has($offset);
     }
@@ -77,6 +78,7 @@ class MC4WP_Container implements ArrayAccess
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to retrieve
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetget.php
      *
      * @param mixed $offset <p>
@@ -85,6 +87,7 @@ class MC4WP_Container implements ArrayAccess
      *
      * @return mixed Can return all value types.
      */
+    // PHP 8.1 expects a mixed return type here, but the plugin still supports PHP 7.4.
     #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
@@ -94,6 +97,7 @@ class MC4WP_Container implements ArrayAccess
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to set
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetset.php
      *
      * @param mixed $offset <p>
@@ -105,8 +109,7 @@ class MC4WP_Container implements ArrayAccess
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->services[ $offset ] = $value;
     }
@@ -114,6 +117,7 @@ class MC4WP_Container implements ArrayAccess
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Offset to unset
+     *
      * @link http://php.net/manual/en/arrayaccess.offsetunset.php
      *
      * @param mixed $offset <p>
@@ -122,8 +126,7 @@ class MC4WP_Container implements ArrayAccess
      *
      * @return void
      */
-    #[\ReturnTypeWillChange]
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->services[ $offset ]);
     }

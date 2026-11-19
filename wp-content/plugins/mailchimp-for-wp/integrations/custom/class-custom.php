@@ -1,9 +1,10 @@
 <?php
 
-defined('ABSPATH') or exit;
+defined('ABSPATH') || exit;
 
 /**
  * Class MC4WP_Custom_Integration
+ *
  * @ignore
  */
 class MC4WP_Custom_Integration extends MC4WP_Integration
@@ -56,7 +57,7 @@ class MC4WP_Custom_Integration extends MC4WP_Integration
         }
 
         // ignore requests from bots, crawlers and link previews
-        if (empty($_SERVER['HTTP_USER_AGENT']) || preg_match('/bot|crawl|spider|seo|lighthouse|facebookexternalhit|preview/i', $_SERVER['HTTP_USER_AGENT'])) {
+        if (empty($_SERVER['HTTP_USER_AGENT']) || preg_match('/bot|crawl|spider|seo|lighthouse|facebookexternalhit|preview/i', wp_unslash($_SERVER['HTTP_USER_AGENT']))) {
             return false;
         }
 
@@ -66,8 +67,8 @@ class MC4WP_Custom_Integration extends MC4WP_Integration
         }
 
         // ignore requests where HTTP Referer does not contain hostname from home_url
-        $site_hostname = parse_url(get_home_url(), PHP_URL_HOST);
-        if (strpos($_SERVER['HTTP_REFERER'], $site_hostname) === false) {
+        $site_hostname = wp_parse_url(get_home_url(), PHP_URL_HOST);
+        if (strpos(wp_unslash($_SERVER['HTTP_REFERER']), $site_hostname) === false) {
             return false;
         }
 
@@ -128,6 +129,6 @@ class MC4WP_Custom_Integration extends MC4WP_Integration
      */
     public function get_ui_elements()
     {
-        return [ 'lists', 'double_optin', 'update_existing', 'replace_interests' ];
+        return [ 'lists', 'double_optin', 'update_existing', 'update_only_empty_fields', 'replace_interests' ];
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-defined('ABSPATH') or exit;
+defined('ABSPATH') || exit;
 
 /**
  * Adds MC4WP_Widget widget.
@@ -54,14 +54,17 @@ class MC4WP_Form_Widget extends WP_Widget
         $instance_settings = array_merge($this->default_instance_settings, $instance_settings);
         $title             = apply_filters('widget_title', $instance_settings['title'], $instance_settings, $this->id_base);
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core/theme widget wrappers are trusted HTML.
         echo $args['before_widget'];
 
         if (! empty($title)) {
+            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Widget title and wrappers intentionally allow filtered markup.
             echo $args['before_title'] . $title . $args['after_title'];
         }
 
         mc4wp_show_form($instance_settings['form_id']);
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Core/theme widget wrappers are trusted HTML.
         echo $args['after_widget'];
     }
 
@@ -78,8 +81,8 @@ class MC4WP_Form_Widget extends WP_Widget
     {
         $settings = array_merge($this->default_instance_settings, (array) $settings); ?>
         <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Title:', 'mailchimp-for-wp'); ?></label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($settings['title']); ?>" />
+            <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'mailchimp-for-wp'); ?></label>
+            <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($settings['title']); ?>" />
         </p>
 
 
@@ -96,7 +99,16 @@ class MC4WP_Form_Widget extends WP_Widget
         ?>
 
         <p class="description">
-            <?php printf(__('You can edit your sign-up form in the <a href="%s">Mailchimp for WordPress form settings</a>.', 'mailchimp-for-wp'), admin_url('admin.php?page=mailchimp-for-wp-forms')); ?>
+            <?php
+            echo wp_kses(
+                sprintf(
+                    // translators: %s is the URL to the plugin form settings page.
+                    __('You can edit your sign-up form in the <a href="%s">Mailchimp for WordPress form settings</a>.', 'mailchimp-for-wp'),
+                    esc_url(admin_url('admin.php?page=mailchimp-for-wp-forms'))
+                ),
+                [ 'a' => [ 'href' => [] ] ]
+            );
+            ?>
         </p>
         <?php
     }

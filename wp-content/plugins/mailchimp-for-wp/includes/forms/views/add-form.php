@@ -1,4 +1,4 @@
-<?php defined('ABSPATH') or exit; ?>
+<?php defined('ABSPATH') || exit; ?>
 <div id="mc4wp-admin" class="wrap mc4wp-settings">
     <div class="mc4wp-row">
         <div class="main-content mc4wp-col">
@@ -46,7 +46,10 @@
                         } else {
                             ?>
                         <p class="mc4wp-notice">
-                            <?php echo sprintf(wp_kses(__('No Mailchimp audiences found. Did you <a href="%s">connect with Mailchimp</a>?', 'mailchimp-for-wp'), [ 'a' => [ 'href' => [] ] ]), admin_url('admin.php?page=mailchimp-for-wp')); ?>
+                            <?php
+                            // translators: %s is the URL to the Mailchimp for WordPress settings page.
+                            printf(wp_kses(__('No Mailchimp audiences found. Did you <a href="%s">connect with Mailchimp</a>?', 'mailchimp-for-wp'), [ 'a' => [ 'href' => [] ] ]), esc_url(admin_url('admin.php?page=mailchimp-for-wp')));
+                            ?>
                         </p>
                             <?php
                         }

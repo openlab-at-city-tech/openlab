@@ -1,5 +1,8 @@
 <?php
 
+defined('ABSPATH') || exit;
+
+
 $opts = $opts ?? [];
 $opts = true === is_array($opts) ?
     $opts :
@@ -33,6 +36,7 @@ if ('1' === $enabled) {
     <?php
 }
 $procaptcha_api = MC4WP_Procaptcha::get_instance();
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Captcha provider returns required widget markup.
 echo $procaptcha_api->print_captcha_element(true, true);
 ?>
 
@@ -50,8 +54,7 @@ echo $procaptcha_api->print_captcha_element(true, true);
         </label>
         <p class="description">
         <?php
-            echo
-            sprintf(
+            printf(
                 // translators: %1$s: opening anchor tag, %2$s: closing anchor tag
                 esc_html__('The API key for connecting with your Procaptcha account. %1$s Get your Site key here %2$s', 'mailchimp-for-wp'),
                 '<a href="https://portal.prosopo.io/site-management" target="_blank">',

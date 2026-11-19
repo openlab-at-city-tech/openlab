@@ -1,4 +1,7 @@
 <?php
+
+defined('ABSPATH') || exit;
+
 /**
  * @var object[] $merge_fields
  * @var object[] $interest_categories
@@ -17,7 +20,8 @@
     <tbody>
     <?php foreach ($merge_fields as $f) { ?>
         <tr>
-            <td><?php echo esc_html($f->name); ?> <?php
+            <td><?php echo esc_html($f->name); ?>
+            <?php
             if ($f->required) {
                 ?>
                 <span class="mc4wp-red">*</span>

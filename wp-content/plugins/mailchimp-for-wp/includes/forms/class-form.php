@@ -24,7 +24,10 @@ class MC4WP_Form
      */
     public static function throw_not_found_exception($post_id)
     {
+        // translators: %d is the form post ID.
         $message = sprintf(__('There is no form with ID %d, perhaps it was deleted?', 'mailchimp-for-wp'), $post_id);
+
+        // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped -- Exception text is not direct output and is escaped at render time.
         throw new Exception($message);
     }
 
@@ -42,8 +45,19 @@ class MC4WP_Form
         } else {
             $post_id = (int) $post;
 
+            // if no explicit ID given, query the first published form
             if ($post_id === 0) {
-                $post_id = (int) get_option('mc4wp_default_form_id', 0);
+                $posts = get_posts([
+                    'post_type' => 'mc4wp-form',
+                    'numberposts' => 1,
+                    'post_status' => 'publish',
+                    'orderby' => 'ID',
+                    'order' => 'ASC',
+                ]);
+                if ($posts) {
+                    $post    = $posts[0];
+                    $post_id = $post->ID;
+                }
             }
         }
 
@@ -293,7 +307,7 @@ class MC4WP_Form
 
         // restrict allowed HTML in messages to a safe subset
         $allowed_attributes = array_fill_keys([ 'class', 'id', 'style', 'href', 'target', 'src', 'width', 'height', 'alt' ], true);
-        $allowed_html = array_fill_keys([ 'strong', 'b', 'em', 'i', 'a', 'br', 'span', 'img' ], $allowed_attributes);
+        $allowed_html       = array_fill_keys([ 'strong', 'b', 'em', 'i', 'a', 'br', 'span', 'img' ], $allowed_attributes);
 
         foreach ($messages as $key => $message_text) {
             // overwrite default text with text in form meta.
@@ -302,7 +316,7 @@ class MC4WP_Form
             }
 
             // run final value through gettext filter to allow translation of stored setting values
-            $messages[ $key ] = __($message_text, 'mailchimp-for-wp');
+            $messages[ $key ] = __($message_text, 'mailchimp-for-wp'); // phpcs:ignore
         }
 
         return $messages;
@@ -334,6 +348,7 @@ class MC4WP_Form
 
     /**
     * Add notice to this form when it is rendered
+     *
     * @param string $text
     * @param string $type
     */
@@ -397,19 +412,19 @@ class MC4WP_Form
 
         // perform some basic anti-spam checks
         // User-Agent header should be set and not bot-like
-        if (empty($_SERVER['HTTP_USER_AGENT']) || preg_match('/bot|crawl|spider|seo|lighthouse|facebookexternalhit|preview/', strtolower($_SERVER['HTTP_USER_AGENT']))) {
+        if (empty($_SERVER['HTTP_USER_AGENT']) || preg_match('/bot|crawl|spider|seo|lighthouse|facebookexternalhit|preview/i', wp_unslash($_SERVER['HTTP_USER_AGENT']))) {
             $errors[] = 'spam.user_agent';
-        // _mc4wp_timestamp field should be between 30 days ago (to deal with aggressively cached pages) and 2 seconds ago
+            // _mc4wp_timestamp field should be between 30 days ago (to deal with aggressively cached pages) and 2 seconds ago
         } elseif (! isset($this->raw_data['_mc4wp_timestamp']) || $this->raw_data['_mc4wp_timestamp'] < (time() - DAY_IN_SECONDS * 90) || $this->raw_data['_mc4wp_timestamp'] > ( time() - 2 )) {
             $errors[] = 'spam.timestamp';
-        // _mc4wp_honeypot field should be submitted and empty
+            // _mc4wp_honeypot field should be submitted and empty
         } elseif (! isset($this->raw_data['_mc4wp_honeypot']) || '' !== $this->raw_data['_mc4wp_honeypot']) {
             $errors[] = 'spam.honeypot';
         }
 
         if (empty($errors)) {
             // validate email field
-            if (empty($this->data['EMAIL']) || ! is_email($this->data['EMAIL'])) {
+            if (false === mc4wp_is_email($this->data['EMAIL'])) {
                 $errors[] = 'invalid_email';
             }
 
@@ -480,9 +495,60 @@ class MC4WP_Form
             }
         }
 
+        // only accept lists the site owner chose for this form, ignore the requested lists otherwise
+        if (isset($config['lists'])) {
+            $config['lists'] = $this->filter_requested_lists($config['lists']);
+            if (empty($config['lists'])) {
+                unset($config['lists']);
+            }
+        }
+
         if (! empty($config)) {
             $this->set_config($config);
         }
+    }
+
+    /**
+     * Filters lists from the request down to the lists the site owner chose for this form: the lists in the form settings,
+     * lists in the form content (like a list choice field) or lists from a signed shortcode argument.
+     *
+     * @param string|array $lists
+     * @return array
+     */
+    private function filter_requested_lists($lists): array
+    {
+        $signature = isset($this->raw_data['_mc4wp_lists_signature']) ? (string) $this->raw_data['_mc4wp_lists_signature'] : '';
+        $signed    = is_string($lists) && $signature !== '' && hash_equals($this->get_lists_signature($lists), $signature);
+
+        if (! is_array($lists)) {
+            $lists = array_map('trim', explode(',', (string) $lists));
+        }
+
+        $allowed = (array) $this->settings['lists'];
+        $content = $this->content;
+        $lists   = array_filter(
+            $lists,
+            function ($list_id) use ($signed, $allowed, $content) {
+                if (! is_string($list_id) || ! preg_match('/^[a-z0-9]+$/i', $list_id)) {
+                    return false;
+                }
+
+                return $signed || in_array($list_id, $allowed, true) || preg_match('/\b' . $list_id . '\b/', $content);
+            }
+        );
+
+        return array_values($lists);
+    }
+
+    /**
+     * Returns the signature for a lists argument of this form, so that it can be trusted when submitted.
+     *
+     * @param string $lists Comma-separated list ID's
+     * @return string
+     */
+    public function get_lists_signature(string $lists): string
+    {
+        return wp_hash($this->ID . '|' . $lists);
     }
 
     /**
@@ -515,8 +581,12 @@ class MC4WP_Form
         $ignored_field_names = apply_filters('mc4wp_form_ignored_field_names', $ignored_field_names, $form);
 
         foreach ($data as $key => $value) {
+            if (! is_string($key) || strlen($key) > 191) {
+                continue;
+            }
+
             // skip fields in ignored field names
-            if ($key[0] === '_' || in_array($key, $ignored_field_names, true)) {
+            if ($key === '' || $key[0] === '_' || in_array($key, $ignored_field_names, true)) {
                 continue;
             }
 
@@ -755,7 +825,8 @@ class MC4WP_Form
         $message = $this->messages['error'];
 
         // if error key contains a dot, use only part before the dot (example: spam.honeypot)
-        if (($dot_pos = strpos($key, '.')) !== false) {
+        $dot_pos = strpos($key, '.');
+        if ($dot_pos !== false) {
             $key = substr($key, 0, $dot_pos);
         }
 
