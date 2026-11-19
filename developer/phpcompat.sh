@@ -5,8 +5,6 @@ dirs=("wp-content/plugins" "wp-content/themes" "wp-content/mu-plugins" "wp-conte
 passing=0
 
 ignores=(
-  'wp-content/plugins/anthologize/vendor/pear/'
-  'wp-content/plugins/anthologize/vendor/tecnickcom/tcpdf/'
   'wp-content/plugins/awesome-flickr-gallery-plugin/afgFlickr/afgFlickr.php'
 #  'wp-content/plugins/backtype-connect/parser_php4.php'
   'wp-content/plugins/bbpress/includes/users/template.php' # punt
