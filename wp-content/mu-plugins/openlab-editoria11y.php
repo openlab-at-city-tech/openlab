@@ -12,7 +12,7 @@
 add_action(
 	'init',
 	function() {
-		if ( ! class_exists( 'Editoria11y\Installer' ) ) {
+		if ( ! class_exists( 'Editoria11y' ) ) {
 			return;
 		}
 
@@ -41,6 +41,6 @@ add_action(
 		}
 
 		delete_option( 'editoria11y_db_version' );
-		\Editoria11y\Installer::check_tables();
+		Editoria11y::check_tables();
 	}
 );

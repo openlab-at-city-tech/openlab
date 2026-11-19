@@ -33,6 +33,7 @@
     padding: .5rem 1rem .5rem .5rem;
     margin: .5rem 0 .5rem 1rem;
     cursor: pointer;
+    width: fit-content;
     font-weight: 300;
   }
 
@@ -61,7 +62,6 @@
     text-align: left;
     border: 0;
 }
-
 #ed1 td:last-child {
     padding-right: 1em;
 }
@@ -70,15 +70,11 @@
     font-style: italic;
 }
 
-#ed1 td.numeric {
-    width: 3em;
-    text-align: right;
-}
-#ed1 td.widen {
+#ed1 td:nth-child(2), #ed1 td:nth-child(3) {
     width: 25%;
 }
 
-#ed1result td:last-child {
+#ed1result td:nth-child(2) {
     width: auto;
 }
 #ed1dismiss td:last-child {

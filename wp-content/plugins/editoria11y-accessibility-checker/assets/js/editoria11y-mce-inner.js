@@ -8,26 +8,19 @@ const letsGo = function() {
 
     /*
     * Local copies of Editoria11y functions that don't work across frames.
-    * In 3.x, the parent module exposes UI/State/refresh on parent.Ed11y for this iframe to use.
-    * @todo verify: scroll/selection helpers (updateTipLocations, alignTip, rangeChange,
-    * checkEditableIntersects) are no longer exported. Library 3.x watchForChanges may
-    * cover most of this internally; calling parent.Ed11y.refresh() is the closest public analogue.
     * */
     document.addEventListener('keydown', () => {
-      parent.Ed11y.UI.interaction = true;
+      parent.Ed11y.interaction = true;
     });
     document.addEventListener('click', () => {
-      parent.Ed11y.UI.interaction = true;
+      parent.Ed11y.interaction = true;
     });
-    // Debounced: scroll fires continuously and refresh() re-walks tip
-    // positions — undebounced this ran a full recompute per scroll frame.
-    let ed11yScrollTimer = null;
     document.addEventListener('scroll', function() {
-      // Trigger a refresh so the public API recomputes positions.
+      parent.Ed11y.scrollPending = parent.Ed11y.scrollPending < 2 ? parent.Ed11y.scrollPending + 1 : parent.Ed11y.scrollPending;
+      requestAnimationFrame(() => parent.Ed11y.updateTipLocations());
       // Trigger on scrolling other containers, unless it will flicker a tip.
-      if (parent.Ed11y.UI?.openTip?.button) {
-        window.clearTimeout(ed11yScrollTimer);
-        ed11yScrollTimer = window.setTimeout(() => parent.Ed11y.refresh(), 150);
+      if (parent.Ed11y.openTip.button) {
+        parent.Ed11y.alignTip(parent.Ed11y.openTip.button.shadowRoot.querySelector('button'), parent.Ed11y.openTip.tip);
       }
     }, true);
     const debounce = (callback, wait) => {
@@ -40,9 +33,9 @@ const letsGo = function() {
       };
     };
     const selectionChanged = debounce(() => {
-      // @todo verify: rangeChange / checkEditableIntersects not exported in 3.x.
-      if (!parent.Ed11y.UI.running) {
-        parent.Ed11y.refresh();
+      if (!parent.Ed11y.running && parent.Ed11y.rangeChange(window.getSelection()?.anchorNode)) {
+        parent.Ed11y.updateTipLocations();
+        parent.Ed11y.checkEditableIntersects(true);
       }
     }, 100);
     document.addEventListener('selectionchange', function() {
