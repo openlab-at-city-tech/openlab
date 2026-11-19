@@ -81,7 +81,7 @@ const handleKeyboardShortcuts = ( event ) => {
 		if ( $( '#table-editor' ).contains( document.activeElement ) ) { // eslint-disable-line @wordpress/no-global-active-element
 			const $active_textarea = ( 'TEXTAREA' === document.activeElement.tagName ) ? document.activeElement : null; // eslint-disable-line @wordpress/no-global-active-element
 			// Blur the active textarea to make sure that all change events were triggered.
-			$active_textarea?.blur(); // eslint-disable-line @wordpress/no-global-active-element
+			$active_textarea?.blur();
 			// Open the "Insert Link", "Insert Image", or Advanced Editor" dialog.
 			tp.callbacks[ action ].open_dialog( $active_textarea );
 		}

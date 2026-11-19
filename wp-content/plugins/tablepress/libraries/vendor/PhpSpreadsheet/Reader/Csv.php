@@ -707,15 +707,15 @@ class Csv extends BaseReader
 	}
 
 	/**
-	 * Php8.4 deprecates use of anything other than null string
-	 * as escape Character.
-	 *
-	 * @param resource $stream
-	 * @param null|int<0, max> $length
-	 *
-	 * @return array<int,?string>|false
-	 */
-	private static function getCsv(
+				 * Php8.4 deprecates use of anything other than null string
+				 * as escape Character.
+				 *
+				 * @param resource $stream
+				 * @param null|int<0, max> $length
+				 *
+				 * @return mixed[]|false
+				 */
+				private static function getCsv(
 		$stream,
 		?int $length = null,
 		string $separator = ',',

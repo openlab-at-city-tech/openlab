@@ -170,17 +170,6 @@ abstract class TablePress_View {
 		$this->add_text_box( 'default_nonce_fields', array( $this, 'default_nonce_fields' ), 'header', false );
 		$this->add_text_box( 'action_nonce_field', array( $this, 'action_nonce_field' ), 'header', false );
 		$this->add_text_box( 'action_field', array( $this, 'action_field' ), 'header', false );
-
-		if ( tb_tp_fs()->is_plan_or_trial__premium_only( 'pro' ) && ! tb_tp_fs()->is_paying_or_trial__premium_only() ) {
-			$message = '<span class="dashicons dashicons-warning" style="color:#cc1818"></span> ';
-			$message .= '<strong>' . sprintf( __( 'Your TablePress %s premium license has expired!', 'tablepress' ), tb_tp_fs()->is_plan_or_trial( 'max', true ) ? 'Max' : 'Pro' ) . '</strong> ';
-			$message .= sprintf(
-				__( 'Please <a href="%1$s"><strong>renew your license now</strong></a> to continue receiving direct developer support, new features, and security updates for TablePress.', 'tablepress' ),
-				esc_url( tb_tp_fs()->checkout_url( WP_FS__PERIOD_ANNUALLY, false ) ),
-			);
-
-			$this->add_header_message( $message, 'is-warning not-dismissible' );
-		}
 	}
 
 	/**

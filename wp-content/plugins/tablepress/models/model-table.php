@@ -627,6 +627,13 @@ class TablePress_Table_Model extends TablePress_Model {
 			do_action( $cache_flush_hook );
 		}
 
+		// Cloudflare APO.
+		if ( class_exists( '\Cloudflare\APO\WordPress\Hooks' ) ) {
+			$_cloudflare = new \Cloudflare\APO\WordPress\Hooks();
+			if ( is_callable( array( $_cloudflare, 'purgeCacheEverything' ) ) ) {
+				$_cloudflare->purgeCacheEverything();
+			}
+		}
 		// Kinsta.
 		if ( isset( $GLOBALS['kinsta_cache'] ) && ! empty( $GLOBALS['kinsta_cache']->kinsta_cache_purge ) && is_callable( array( $GLOBALS['kinsta_cache']->kinsta_cache_purge, 'purge_complete_caches' ) ) ) {
 			$GLOBALS['kinsta_cache']->kinsta_cache_purge->purge_complete_caches(); // @phpstan-ignore method.nonObject

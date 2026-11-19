@@ -214,7 +214,7 @@ class TablePress_List_View extends TablePress_View {
 
 			$title = '<em>' . __( 'Welcome!', 'tablepress' ) . '</em>';
 
-			$this->add_header_message( $message, 'is-info not-dismissible', $title );
+			$this->add_header_message( $message, 'notice-info not-dismissible', $title );
 		}
 
 		if ( $data['messages']['donation_nag'] ) {
@@ -251,7 +251,7 @@ class TablePress_List_View extends TablePress_View {
 
 			$title = '<em>' . sprintf( __( 'Thank you for updating to TablePress %s!', 'tablepress' ), TablePress::version ) . '</em>';
 
-			$this->add_header_message( $message, 'is-info not-dismissible', $title );
+			$this->add_header_message( $message, 'notice-info not-dismissible', $title );
 		}
 
 		$this->process_action_messages( array(
@@ -261,7 +261,7 @@ class TablePress_List_View extends TablePress_View {
 			'success_copy'                => _n( 'The table was copied successfully.', 'The tables were copied successfully.', 1, 'tablepress' )
 				. ( ( false !== $data['table_id'] )
 					? ' ' . ( current_user_can( 'tablepress_edit_table', $data['table_id'] )
-						? sprintf( __( 'You can now <a href="%1$s">edit the copied table</a>, which has the table ID “%2$s”.', 'tablepress' ), esc_url( TablePress::url( array( 'action' => 'edit', 'table_id' => $data['table_id'] ) ) ), $data['table_id'] )
+						? sprintf( __( 'You can now <a href="%1$s">edit the copied table</a>, which has the table ID “%2$s”.', 'tablepress' ), esc_url( TablePress::url( array( 'action' => 'edit', 'table_id' => $data['table_id'] ) ) ), esc_html( $data['table_id'] ) )
 						: sprintf( __( 'The copied table has the table ID &#8220;%s&#8221;.', 'tablepress' ), esc_html( $data['table_id'] ) ) )
 					: ''
 				),

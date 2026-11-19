@@ -365,7 +365,7 @@ class TablePress_Import_PHPSpreadsheet extends TablePress_Import_Base {
 							continue; // Keep value of first cell.
 						} elseif ( $row_idx === $first_cell[1] && $column_idx > $first_cell[0] ) {
 							$table['data'][ $row_idx - 1 ][ $column_idx - 1 ] = '#colspan#';
-						} elseif ( $row_idx > $first_cell[1] && $column_idx === $first_cell[0] ) {
+						} elseif ( $row_idx > $first_cell[1] && $column_idx === $first_cell[0] ) { // @phpstan-ignore booleanAnd.alwaysFalse, identical.alwaysFalse
 							$table['data'][ $row_idx - 1 ][ $column_idx - 1 ] = '#rowspan#';
 						} else {
 							$table['data'][ $row_idx - 1 ][ $column_idx - 1 ] = '#span#';

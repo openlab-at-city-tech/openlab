@@ -82,7 +82,9 @@ class TablePress_Preview_Table_View extends TablePress_View {
 		}
 		?>
 </p>
+<div class="preview">
 		<?php echo $this->data['body_html']; ?>
+</div>
 </div>
 </body>
 </html>

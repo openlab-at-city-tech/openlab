@@ -3,7 +3,7 @@
 namespace TablePress\PhpOffice\PhpSpreadsheet;
 
 use TablePress\PhpOffice\PhpSpreadsheet\Reader\CsvNoEscape;
-use TablePress\PhpOffice\PhpSpreadsheet\Reader\IReader;
+use TablePress\PhpOffice\PhpSpreadsheet\Reader\IReader2 as IReader;
 use TablePress\PhpOffice\PhpSpreadsheet\Shared\File;
 
 /**
@@ -112,6 +112,8 @@ abstract class IOFactory
 	 *                                 IOFactory::READER_*.
 	 * @param array<string, class-string<IReader>> $mergeArray supplied readers will be merged with
 	 *        default readers, allowing specification of a partial list.
+	 *
+	 * @throws Reader\Exception
 	 */
 	public static function createReaderForFile(string $filename, ?array $readers = null, array $mergeArray = []): IReader
 	{

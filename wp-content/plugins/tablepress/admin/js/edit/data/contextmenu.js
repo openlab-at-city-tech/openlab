@@ -8,7 +8,7 @@
  */
 
 /* globals tp */
-/* eslint-disable jsdoc/check-param-names, jsdoc/valid-types, jsdoc/no-undefined-types */
+/* eslint-disable jsdoc/check-param-names, jsdoc/no-undefined-types */
 
 /**
  * WordPress dependencies.

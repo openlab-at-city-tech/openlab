@@ -8,7 +8,7 @@
  */
 
 /* globals jexcel, jQuery, jspreadsheet, tp, wp, wpLink */
-/* eslint-disable jsdoc/check-param-names, jsdoc/valid-types */
+/* eslint-disable jsdoc/check-param-names */
 
 /**
  * WordPress dependencies.

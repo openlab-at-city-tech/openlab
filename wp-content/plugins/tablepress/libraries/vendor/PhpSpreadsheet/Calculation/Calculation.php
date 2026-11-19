@@ -90,6 +90,19 @@ class Calculation extends CalculationLocale
 	 */
 	private bool $calculationCacheEnabled = true;
 
+	/**
+	 * Maximum number of entries in the formula token cache.
+	 * Default 0 (disabled). Set via setFormulaTokenCacheMaxSize() to enable.
+	 */
+	private int $formulaTokenCacheMaxSize = 0;
+
+	/**
+	 * Cache of parsed formula tokens, keyed by the raw formula string.
+	 *
+	 * @var array<string, array<mixed>|bool>
+	 */
+	private array $formulaTokenCache = [];
+
 	private BranchPruner $branchPruner;
 
 	protected bool $branchPruningEnabled = true;
@@ -244,6 +257,7 @@ class Calculation extends CalculationLocale
 	{
 		$this->clearCalculationCache();
 		$this->branchPruner->clearBranchStore();
+		$this->formulaTokenCache = [];
 	}
 
 	/**
@@ -367,6 +381,44 @@ class Calculation extends CalculationLocale
 	public function clearCalculationCache(): void
 	{
 		$this->calculationCache = [];
+	}
+
+	/**
+	 * Clear the formula token cache.
+	 */
+	public function clearFormulaTokenCache(): void
+	{
+		$this->formulaTokenCache = [];
+	}
+
+	/**
+	 * Get the current number of entries in the formula token cache.
+	 */
+	public function getFormulaTokenCacheSize(): int
+	{
+		return count($this->formulaTokenCache);
+	}
+
+	/**
+	 * Set the maximum number of entries in the formula token cache.
+	 * Set to 0 to disable caching (default), or a positive integer to enable.
+	 */
+	public function setFormulaTokenCacheMaxSize(int $size): self
+	{
+		$this->formulaTokenCacheMaxSize = max(0, $size);
+		if ($this->formulaTokenCacheMaxSize === 0) {
+			$this->formulaTokenCache = [];
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Get the maximum number of entries allowed in the formula token cache.
+	 */
+	public function getFormulaTokenCacheMaxSize(): int
+	{
+		return $this->formulaTokenCacheMaxSize;
 	}
 
 	/**
@@ -571,6 +623,12 @@ class Calculation extends CalculationLocale
 	 */
 	public function parseFormula(string $formula)
 	{
+		// Check the formula token cache first (only when caching is enabled)
+		if ($this->formulaTokenCacheMaxSize > 0 && isset($this->formulaTokenCache[$formula])) {
+			return $this->formulaTokenCache[$formula];
+		}
+
+		$originalFormula = $formula;
 		$formula = Preg::replaceCallback(
 			self::CALCULATION_REGEXP_CELLREF_SPILL,
 			fn (array $matches) => 'ANCHORARRAY(' . substr($matches[0], 0, -1) . ')',
@@ -588,7 +646,19 @@ class Calculation extends CalculationLocale
 		}
 
 		//    Parse the formula and return the token stack
-		return $this->internalParseFormula($formula);
+		$result = $this->internalParseFormula($formula);
+
+		// Cache the result when caching is enabled (clear cache if it exceeds the maximum size)
+		if ($this->formulaTokenCacheMaxSize > 0) {
+			if (count($this->formulaTokenCache) >= $this->formulaTokenCacheMaxSize) {
+				$this->formulaTokenCache = [];
+			}
+			// Cache key is the original formula string (before ANCHORARRAY transformation)
+			// to ensure consistent lookup regardless of internal transformations.
+			$this->formulaTokenCache[$originalFormula] = $result;
+		}
+
+		return $result;
 	}
 
 	/**
@@ -1519,7 +1589,7 @@ class Calculation extends CalculationLocale
 						// unescape any apostrophes or double quotes in worksheet name
 						$val = str_replace(["''", '""'], ["'", '"'], $val);
 						$column = 'A';
-						if (($testPrevOp !== null && $testPrevOp['value'] === ':') && $pCellParent !== null) {
+						if (($testPrevOp !== null && $testPrevOp['value'] === ':') && $pCellParent !== null) { // @phpstan-ignore-line
 							$column = $pCellParent->getHighestDataColumn($val);
 						}
 						$val = "{$rowRangeReference[2]}{$column}{$rowRangeReference[7]}";
@@ -1533,7 +1603,7 @@ class Calculation extends CalculationLocale
 						// unescape any apostrophes or double quotes in worksheet name
 						$val = str_replace(["''", '""'], ["'", '"'], $val);
 						$row = '1';
-						if (($testPrevOp !== null && $testPrevOp['value'] === ':') && $pCellParent !== null) {
+						if (($testPrevOp !== null && $testPrevOp['value'] === ':') && $pCellParent !== null) { // @phpstan-ignore-line
 							$row = $pCellParent->getHighestDataRow($val);
 						}
 						$val = "{$val}{$row}";
@@ -2025,13 +2095,13 @@ class Calculation extends CalculationLocale
 
 						break;
 				}
-			} elseif (($token === '~') || ($token === '%')) {
+			} elseif (($token === '~') || ($token === '%')) { // @phpstan-ignore-line
 				// if the token is a unary operator, pop one value off the stack, do the operation, and push it back on
 				if (($arg = $stack->pop()) === null) {
 					return $this->raiseFormulaError('Internal error - Operand value missing from stack');
 				}
 				$arg = $arg['value'];
-				if ($token === '~') {
+				if ($token === '~') { // @phpstan-ignore-line
 					$this->debugLog->writeDebugLog('Evaluating Negation of %s', $this->showValue($arg));
 					$multiplier = -1;
 				} else {
@@ -2309,7 +2379,7 @@ class Calculation extends CalculationLocale
 				}
 			} else {
 				// if the token is a number, boolean, string or an Excel error, push it onto the stack
-				/** @var ?string $token */
+				/** @var null|numeric-string $token */
 				if (isset(self::EXCEL_CONSTANTS[strtoupper($token ?? '')])) {
 					$excelConstant = strtoupper("$token");
 					$stack->push('Constant Value', self::EXCEL_CONSTANTS[$excelConstant]);

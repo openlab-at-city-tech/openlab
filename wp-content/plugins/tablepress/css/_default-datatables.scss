@@ -196,11 +196,6 @@ div.dt-scroll-body {
 
 	}
 
-	/* Empty footers should be hidden for improved accessibility. */
-	.tablepress tfoot:empty {
-		display: none;
-	}
-
 	.dt-layout-row {
 		display: flex;
 		flex-wrap: wrap;

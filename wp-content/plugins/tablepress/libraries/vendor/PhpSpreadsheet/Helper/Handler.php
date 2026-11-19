@@ -2,7 +2,8 @@
 
 namespace TablePress\PhpOffice\PhpSpreadsheet\Helper;
 
-class Handler
+/** @internal */
+final class Handler
 {
 	private static string $invalidHex = 'Y';
 

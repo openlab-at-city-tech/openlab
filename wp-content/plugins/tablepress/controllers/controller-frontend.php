@@ -978,6 +978,13 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 			case 'name':
 			case 'description':
 				$output = $table[ $field ];
+				// Replace any & with &amp; that is not already an encoded entity (from function htmlentities2 in WP 2.8).
+				// A complete htmlentities2() or htmlspecialchars() would encode <HTML> tags, which we don't want.
+				$output = (string) preg_replace( '/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,4};)/', '&amp;', $output );
+				/** This filter is documented in classes/class-render.php */
+				if ( apply_filters( 'tablepress_apply_nl2br', true, $table_id ) ) {
+					$output = nl2br( $output );
+				}
 				break;
 			case 'last_modified':
 				switch ( $format ) {

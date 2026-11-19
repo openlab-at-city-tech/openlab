@@ -98,7 +98,7 @@ class TablePress_Import_View extends TablePress_View {
 				'tables'                 => $data['tables'],
 				'importSource'           => $data['import_source'],
 				'importType'             => $data['import_type'],
-				'importUrl'              => esc_url( $data['import_url'] ),
+				'importUrl'              => $data['import_url'],
 				'importServer'           => $data['import_server'],
 				'importFormField'        => $data['import_form-field'],
 				'importExistingTable'    => $data['import_existing_table'],

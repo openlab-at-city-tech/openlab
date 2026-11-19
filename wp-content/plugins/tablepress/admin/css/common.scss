@@ -10,7 +10,7 @@
 // Load the Sass string module, for use in the `unicode` function.
 @use "sass:string";
 
-/* Load WordPress color schemes, which normally are only loaded on WP admin screens that use the block editor. */
+/* Load WordPress color schemes, which normally are only loaded on WP admin screens that use the block editor. This and the dependency in package.json are only needed for WP < 6.9. */
 @use "~@wordpress/base-styles/colors";
 @use "~@wordpress/base-styles/mixins";
 @include mixins.wordpress-admin-schemes();
@@ -47,20 +47,6 @@ body.wait * {
 
 	#tablepress-body {
 		padding: 0 20px;
-	}
-
-	/* Reset artificial margin/padding for metaboxes, introduced in WP 7.0. */
-	#poststuff #post-body {
-		margin: 0;
-
-		@media only screen and (min-width: 851px) {
-			&.columns-2 {
-				margin-right: 300px;
-			}
-		}
-	}
-	.metabox-holder .postbox-container .meta-box-sortables {
-		padding: 0;
 	}
 
 	/* Metabox titles should have the same height, with and without the "?" button. */
@@ -264,9 +250,6 @@ body.wait * {
 			border-right: none;
 			border-bottom: none;
 
-			&.is-info {
-				border-left-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
-			}
 
 			&.is-dismissible {
 				padding-right: 38px;
@@ -286,6 +269,9 @@ body.wait * {
 			}
 		}
 
+		&.notice-info {
+			border-left-color: var(--wp-components-color-accent, var(--wp-admin-theme-color, #3858e9));
+		}
 		.components-notice__content {
 			margin: 0;
 		}

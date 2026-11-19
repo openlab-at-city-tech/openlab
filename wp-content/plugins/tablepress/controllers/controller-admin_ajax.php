@@ -296,7 +296,7 @@ class TablePress_Admin_AJAX_Controller extends TablePress_Controller {
 				$body_html .= __( 'To insert a table into a post or page, paste its Shortcode at the desired place in the editor.', 'tablepress' ) . ' '
 					. __( 'Each table has a unique ID that needs to be adjusted in that Shortcode.', 'tablepress' );
 			}
-			$body_html .= '</p>' . $_render->get_output( 'html' ) . '</div>';
+			$body_html .= '</p><div class="preview">' . $_render->get_output( 'html' ) . '</div></div>';
 		} else {
 			$head_html = '';
 			$body_html = __( 'The preview could not be loaded.', 'tablepress' );
