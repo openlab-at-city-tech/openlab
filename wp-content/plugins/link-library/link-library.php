@@ -3,10 +3,12 @@
 Plugin Name: Link Library
 Plugin URI: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.10.1
+Version: 7.10.7
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 A plugin for the blogging MySQL/PHP-based WordPress.
 Copyright 2026 Yannick Lefebvre
@@ -416,7 +418,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				array(
 					array(
 						'slug' => 'link-library',
-						'title' => __( 'Link Library', 'link-library' ),
+						'title' => esc_html__( 'Link Library', 'link-library' ),
 						'icon'  => 'wordpress',
 					),
 				)
@@ -492,21 +494,21 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 			$post_type_args = array(
 				'labels' => array(
-					'name' => __( 'Link Library', 'link-library' ),
-					'singular_name' => __( 'Link', 'link-library' ),
-					'add_new' => __( 'Add New', 'link-library' ),
-					'add_new_item' => __( 'Add New Link', 'link-library' ),
-					'edit' => __( 'Edit', 'link-library' ),
-					'edit_item' => __( 'Edit Link', 'link-library' ),
-					'new_item' => __( 'New Link', 'link-library' ),
-					'view' => __( 'View', 'link-library' ),
-					'view_item' => __( 'View Link', 'link-library' ),
-					'search_items' => __( 'Search Links', 'link-library' ),
-					'not_found' => __( 'No Links found', 'link-library' ),
-					'not_found_in_trash' => __( 'No Links found in Trash', 'link-library' ),
-					'parent' => __( 'Parent Link', 'link-library' ),
-					'all_items' => __( 'All Links', 'link-library' ),
-					'menu_name' => _x('Link Library %%PENDING_COUNT%%', 'Link Library', 'link-library'),
+					'name' => esc_html__( 'Link Library', 'link-library' ),
+					'singular_name' => esc_html__( 'Link', 'link-library' ),
+					'add_new' => esc_html__( 'Add New', 'link-library' ),
+					'add_new_item' => esc_html__( 'Add New Link', 'link-library' ),
+					'edit' => esc_html__( 'Edit', 'link-library' ),
+					'edit_item' => esc_html__( 'Edit Link', 'link-library' ),
+					'new_item' => esc_html__( 'New Link', 'link-library' ),
+					'view' => esc_html__( 'View', 'link-library' ),
+					'view_item' => esc_html__( 'View Link', 'link-library' ),
+					'search_items' => esc_html__( 'Search Links', 'link-library' ),
+					'not_found' => esc_html__( 'No Links found', 'link-library' ),
+					'not_found_in_trash' => esc_html__( 'No Links found in Trash', 'link-library' ),
+					'parent' => esc_html__( 'Parent Link', 'link-library' ),
+					'all_items' => esc_html__( 'All Links', 'link-library' ),
+					'menu_name' => esc_html_x('Link Library %%PENDING_COUNT%%', 'Link Library', 'link-library'),
 				),
 				'show_in_nav_menu' => true,
 				'show_ui' => true,
@@ -546,9 +548,9 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				'link_library_links',
 				array(
 					'labels' => array(
-						'name' => __( 'Link Library Categories', 'link-library' ),
-						'add_new_item' => __( 'Add New Link Library Category', 'link-library' ),
-						'new_item_name' => __( 'New Link Library Category', 'link-library' )
+						'name' => esc_html__( 'Link Library Categories', 'link-library' ),
+						'add_new_item' => esc_html__( 'Add New Link Library Category', 'link-library' ),
+						'new_item_name' => esc_html__( 'New Link Library Category', 'link-library' )
 					),
 					'show_ui' => ( $genoptions['cattaxonomy'] == 'link_library_category' ? true : false ),
 					'show_tagcloud' => false,
@@ -563,9 +565,9 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				'link_library_links',
 				array(
 					'hierarchical' => false,
-					'labels' => array( 'name' => __( 'Tags', 'link-library' ),
-									'add_new_item' => __( 'Add New Link Library Tag', 'link-library' ),
-									'new_item_name' => __( 'New Link Library Tag', 'link-library' ) ),
+					'labels' => array( 'name' => esc_html__( 'Tags', 'link-library' ),
+									'add_new_item' => esc_html__( 'Add New Link Library Tag', 'link-library' ),
+									'new_item_name' => esc_html__( 'New Link Library Tag', 'link-library' ) ),
 					'show_ui' => ( $genoptions['tagtaxonomy'] == 'link_library_tags' ? true : false ),
 					'rewrite' => false,
 					'show_in_rest' => true
@@ -1047,10 +1049,10 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$options = get_option( $settingsname );
 				$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
-				$feedtitle = ( empty( $options['rssfeedtitle'] ) ? __('Link Library Generated Feed', 'link-library') : $options['rssfeedtitle'] );
+				$feedtitle = ( empty( $options['rssfeedtitle'] ) ? esc_html__('Link Library Generated Feed', 'link-library') : $options['rssfeedtitle'] );
 
 				$xpath = $this->relativePath( dirname( __FILE__ ), ABSPATH );
-				echo '<link rel="alternate" type="application/rss+xml" title="' . esc_html( stripslashes( $feedtitle ) ) . '" href="' . home_url('/feed/linklibraryfeed?settingsset=' . $rss_settings/* . '&xpath=' . $xpath*/) . '" />';
+				echo '<link rel="alternate" type="application/rss+xml" title="' . esc_html( stripslashes( $feedtitle ) ) . '" href="' . esc_url( home_url('/feed/linklibraryfeed?settingsset=' . $rss_settings/* . '&xpath=' . $xpath*/) ) . '" />';
 				unset( $xpath );
 			}
 
@@ -1058,7 +1060,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				$genoptions = get_option( 'LinkLibraryGeneral' );
 				if ( isset( $genoptions['fullstylesheet'] ) ) {
 					echo "<style id='LinkLibraryStyle' type='text/css'>\n";
-					echo stripslashes( sanitize_text_field( $genoptions['fullstylesheet'] ) );
+					echo esc_html( stripslashes( sanitize_text_field( $genoptions['fullstylesheet'] ) ) );
 					echo "</style>\n";
 				}
 			}
@@ -1074,8 +1076,8 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 						$options = wp_parse_args( $options, ll_reset_options( 1, 'list', 'return' ) );
 
 						if ( !empty( $options['stylesheet'] ) ) {
-							echo "<style id='LinkLibrarySettings" . $setting . "Style' type='text/css'>\n";
-							echo stripslashes( sanitize_text_field( $options['stylesheet'] ) ) . "\n";
+							echo "<style id='LinkLibrarySettings" . intval( $setting ) . "Style' type='text/css'>\n";
+							echo esc_html( stripslashes( sanitize_text_field( $options['stylesheet'] ) ) ) . "\n";
 							echo "</style>\n";
 						}
 					}				
@@ -1282,11 +1284,11 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 		/* Output for users trying to directly call Link Library function, as was possible in pre-1.0 versions */
 
 		function LinkLibraryCategories() {
-			return __( 'Link Library no longer supports calling this function with individual arguments. Please use the admin panel to configure Link Library and the do_shortcode function to use Link Library output in your code.', 'link-library' );
+			return esc_html__( 'Link Library no longer supports calling this function with individual arguments. Please use the admin panel to configure Link Library and the do_shortcode function to use Link Library output in your code.', 'link-library' );
 		}
 
 		function LinkLibrary() {
-			return __( 'Link Library no longer supports calling this function with individual arguments. Please use the admin panel to configure Link Library and the do_shortcode function to use Link Library output in your code.', 'link-library' );
+			return esc_html__( 'Link Library no longer supports calling this function with individual arguments. Please use the admin panel to configure Link Library and the do_shortcode function to use Link Library output in your code.', 'link-library' );
 		}
 
 		/********************************************** Function to Process [link-library-cats] shortcode *********************************************/
@@ -1644,10 +1646,10 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				'includetagsids' => '',
 				'excludetagsids' => '',
 				'showtagfilters' => true,
-				'taglabel' => __( 'Tag', 'link-library' ),
+				'taglabel' => esc_html__( 'Tag', 'link-library' ),
 				'showpricefilters' => true,
-				'pricelabel' => __( 'Price', 'link-library' ),
-				'alphabeticlabel' => __( 'Link Name', 'link-library' ),
+				'pricelabel' => esc_html__( 'Price', 'link-library' ),
+				'alphabeticlabel' => esc_html__( 'Link Name', 'link-library' ),
 				'showalphabeticfilters' => true,
 				'showapplybutton' => false,
 				'settings' => ''
@@ -1949,17 +1951,17 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 			$linklibraryoutput .= RenderLinkLibrary( $linkcount, $this, $genoptions, $options, intval( $settings ), false, 0, 0, true, false );
 
 			if ( isset( $_POST['ajaxupdate'] ) ) {
-				echo $linklibraryoutput;
+				echo esc_html( $linklibraryoutput );
 
 				if ( $genoptions['debugmode'] ) {
-					echo "\n<!-- Execution Time: " . ( microtime( true ) - $mainoutputstarttime ) . "-->\n";
+					echo "\n<!-- Execution Time: " . esc_html( microtime( true ) - $mainoutputstarttime ) . "-->\n";
 				}
 				exit;
 			} else {
 				if ( $genoptions['debugmode'] ) {
 					$timeoutput = "\n<!-- [link-library] shortcode execution time: " . ( microtime( true ) - $mainoutputstarttime ) . "-->\n";
 				}
-				return $linklibraryoutput . ( true == $genoptions['debugmode'] ? $timeoutput : '' );
+				return $linklibraryoutput . esc_html( true == $genoptions['debugmode'] ? $timeoutput : '' );
 			}
 		}
 
@@ -2293,7 +2295,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 				wp_enqueue_style( 'colorboxstyle', plugins_url( 'colorbox/colorbox.css', __FILE__ ) );
 			}
 
-			if ( $load_recaptcha && $genoptions['captchagenerator'] ) {
+			if ( $load_recaptcha && $genoptions['captchagenerator'] == 'recaptcha' ) {
 				wp_enqueue_script( 'google_recaptcha', 'https://www.google.com/recaptcha/api.js', array(), false, true );
 			}
 
@@ -2438,7 +2440,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 						$content = str_replace( '[link_price_or_free]', $link_price, $content );
 						$content = $this->ll_replace_all_between( '[currency_or_free]', '[/currency_or_free]', $content, $link_price_currency_or_free );
 					} else {
-						$content = str_replace( '[link_price_or_free]', __( 'Free', 'link-library' ), $content );
+						$content = str_replace( '[link_price_or_free]', esc_html__( 'Free', 'link-library' ), $content );
 						$content = $this->ll_replace_all_between( '[currency_or_free]', '[/currency_or_free]', $content, '' );
 					}
 
@@ -2447,11 +2449,6 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 					$content = str_replace( '[link_category]', $link_terms_list, $content );
 				}
 			}
-
-			global $wp_embed;
-			$content = $wp_embed->run_shortcode( $content );
-
-			$content = do_shortcode( $content );
 
 			//return nl2br( $content );
 			return $content;
@@ -2533,19 +2530,19 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 			$category_list_override = ( !empty( $instance['cat_list_override'] ) ? esc_attr( $instance['cat_list_override'] ) : '' );
 			?>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'widget_title' ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'widget_title' ) ); ?>">
 					<?php echo 'Widget Title:'; ?>
 					<input type="text"
-						id="<?php echo $this->get_field_id( 'widget_title' );?>"
-						name="<?php echo $this->get_field_name( 'widget_title' ); ?>"
-						value="<?php echo $widget_title; ?>" />
+						id="<?php echo esc_attr( $this->get_field_id( 'widget_title' ) );?>"
+						name="<?php echo esc_attr( $this->get_field_name( 'widget_title' ) ); ?>"
+						value="<?php echo esc_attr( $widget_title ); ?>" />
 				</label>
 			</p>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'selected_library' ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'selected_library' ) ); ?>">
 					<?php echo 'Select library configuration to display:'; ?>
-					<select id="<?php echo $this->get_field_id( 'selected_library' ); ?>"
-							name="<?php echo $this->get_field_name( 'selected_library' ); ?>">
+					<select id="<?php echo esc_attr( $this->get_field_id( 'selected_library' ) ); ?>"
+							name="<?php echo esc_attr( $this->get_field_name( 'selected_library' ) ); ?>">
 						<?php if ( empty( $genoptions['numberstylesets'] ) ) {
 							$numberofsets = 1;
 						} else {
@@ -2557,19 +2554,19 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 							$tempoptions          = get_option( $tempoptionname );
 							$tempoptions = wp_parse_args( $tempoptions, ll_reset_options( 1, 'list', 'return' ) );
 
-							echo '<option value="' . $counter . '" ' . selected( $selected_library, $counter ) . '>' . $tempoptions['settingssetname'] . '</option>';
+							echo '<option value="' . intval( $counter ) . '" ' . selected( $selected_library, $counter ) . '>' . esc_html( $tempoptions['settingssetname'] ) . '</option>';
 						}
 						?>
 					</select>
 				</label>
 			</p>
 			<p>
-				<label for="<?php echo $this->get_field_id( 'cat_list_override' ); ?>">
+				<label for="<?php echo esc_attr( $this->get_field_id( 'cat_list_override' ) ); ?>">
 					<?php echo 'Comma-separated list of categories to display:'; ?>
 					<input type="text"
-						id="<?php echo $this->get_field_id( 'cat_list_override' );?>"
-						name="<?php echo $this->get_field_name( 'cat_list_override' ); ?>"
-						value="<?php echo $category_list_override; ?>" />
+						id="<?php echo esc_attr( $this->get_field_id( 'cat_list_override' ) );?>"
+						name="<?php echo esc_attr( $this->get_field_name( 'cat_list_override' ) ); ?>"
+						value="<?php echo esc_attr( $category_list_override ); ?>" />
 				</label>
 			</p>
 		<?php }
@@ -2583,9 +2580,9 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 			$category_list_override = ( !empty( $instance['cat_list_override'] ) ? esc_attr( $instance['cat_list_override'] ) : '' );
 
 			// Display widget title
-			echo $before_widget . $before_title;
-			echo apply_filters( 'widget_title', $widget_title );
-			echo $after_title;
+			echo esc_html( $before_widget . $before_title );
+			echo esc_html( apply_filters( 'widget_title', $widget_title ) );
+			echo esc_html( $after_title );
 
 			$shortcode_string = '[link-library settings="' . $selected_library . '"';
 
@@ -2597,7 +2594,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 			echo do_shortcode( $shortcode_string );
 
-			echo $after_widget;
+			echo esc_html( $after_widget );
 		}
 	}
 

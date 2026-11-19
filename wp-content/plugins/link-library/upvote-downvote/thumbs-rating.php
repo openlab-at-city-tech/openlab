@@ -229,7 +229,7 @@ if (! function_exists ( 'thumbs_rating_add_vote_callback' )) :
 		// Retrieve the meta value from the DB
 		$results = thumbs_rating_getlink ( $post_ID, $type_of_vote, false, $likelabel );
 
-		die ( $results ) ;
+		die ( esc_html( $results ) ) ;
 	}
 
 	add_action ( 'wp_ajax_thumbs_rating_add_vote', 'thumbs_rating_add_vote_callback' );

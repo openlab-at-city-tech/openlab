@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
   /* ================================================== \\
 
   You have received a copy of the GNU Lesser General PublicLicense along with this library.
@@ -398,14 +400,14 @@
       // Title parser // Empty titles not allowed
       if (empty ($title)) :
       
-        die ("<font face=\"verdana\" size=\"2\">Error code: <strong>001</strong> - Item's element title is mandatory! - <a href=\"http://rssgenesis.sourceforge.net/index.html#ec001\" target=\"_blank\">Documentation</a></font>");
+        die (esc_html( "<font face=\"verdana\" size=\"2\">Error code: <strong>001</strong> - Item's element title is mandatory! - <a href=\"http://rssgenesis.sourceforge.net/index.html#ec001\" target=\"_blank\">Documentation</a></font>") );
       
       endif;
       
       // Link parser // Checks absolutes URIs
       if (!preg_match ("(^(ht|f)tp(s)?://)", $link)) :
       
-        die ("<font face=\"verdana\" size=\"2\">Error code: <strong>002</strong> - Item's element link is mandatory! - <a href=\"http://rssgenesis.sourceforge.net/index.html#ec002\" target=\"_blank\">Documentation</a></font>");
+        die (esc_html( "<font face=\"verdana\" size=\"2\">Error code: <strong>002</strong> - Item's element link is mandatory! - <a href=\"http://rssgenesis.sourceforge.net/index.html#ec002\" target=\"_blank\">Documentation</a></font>") );
       
       endif;
       
@@ -521,7 +523,7 @@
       // Checks if creation was successful //
       if (!$file) :
       
-        die ("<font face=\"verdana\" size=\"2\">Critical Error: <strong>Unable to create: $name</strong></font>");
+        die ( esc_html( "<font face=\"verdana\" size=\"2\">Critical Error: <strong>Unable to create: $name</strong></font>" ) );
         
       endif;
       
@@ -535,7 +537,7 @@
       header ("Content-type: application/rss+xml");
       
       // Display RSS file //
-      echo file_get_contents ($name);
+      echo esc_html( file_get_contents ( $name ) );
       
     }
 	

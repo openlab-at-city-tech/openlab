@@ -13,7 +13,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 	$output = '<div class="linklibrary-filters">';
 	$output .= '<fieldset>';
-	$output .= '<legend>' . __( 'Filters', 'link-library' ) . '</legend>';
+	$output .= '<legend>' . esc_html__( 'Filters', 'link-library' ) . '</legend>';
 
 	if ( isset( $_GET['link_price'] ) && !empty( $_GET['link_price'] ) ) {
 		$prev_link_price = sanitize_text_field( $_GET['link_price'] );
@@ -118,7 +118,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		$output .= '<div class="tag-filters-title">' . esc_html( $price_label ) . '</div>';
 
 		$output .= '<div class="price-filters-choices">';
-		$output .= '<input type="checkbox" name="link_price" class="link_price" ' . checked( $prev_link_price, 'free', false ) . ' value="free"/> ' . __( 'Free', 'link-library' ) . '<br/>';
+		$output .= '<input type="checkbox" name="link_price" class="link_price" ' . checked( $prev_link_price, 'free', false ) . ' value="free"/> ' . esc_html__( 'Free', 'link-library' ) . '<br/>';
 		$output .= '</div>';
 
 		if ( !$showapplybutton ) {
@@ -177,7 +177,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		$output .= '<div class="alphabetic-filters-choices">';
 		$output .= '<select name="link_letter" class="link_letter">';
-		$output .= '<option value="">' . __( 'All', 'link-library' ) . '<br/>';
+		$output .= '<option value="">' . esc_html__( 'All', 'link-library' ) . '<br/>';
 		$output .= '<option disabled>_________<br/>';
 
 		foreach( range( 'A', 'Z' ) as $v ){
@@ -251,7 +251,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 	}
 
 	if ( $showapplybutton ) {
-		$output .= '<div class="applyfiltersbutton"><input id="applyfilters" type="button" value="' . __( 'Apply Filters', 'link-library' ) . '"></div>';
+		$output .= '<div class="applyfiltersbutton"><input id="applyfilters" type="button" value="' . esc_html__( 'Apply Filters', 'link-library' ) . '"></div>';
 
 		$output .= '<script type="text/javascript">';
 

@@ -20,11 +20,11 @@ function rss_library_display_pagination( $previouspagenumber, $nextpagenumber, $
 			$argumentarray = array( 'rsslibrarypage' => $previouspagenumber ); 
 			$targetaddress = esc_url( add_query_arg( $argumentarray ), '/' . $wp->request );
 
-			$paginationoutput .= '<a href="' . $targetaddress . '">' . __( 'Previous', 'link-library' ) . '</a>';
+			$paginationoutput .= '<a href="' . $targetaddress . '">' . esc_html__( 'Previous', 'link-library' ) . '</a>';
 
 			$paginationoutput .= '</span>';
 		} else {
-			$paginationoutput .= '<span class="previousnextinactive">' . __('Previous', 'link-library') . '</span>';
+			$paginationoutput .= '<span class="previousnextinactive">' . esc_html__('Previous', 'link-library') . '</span>';
 		}
 
 		$dotabove = false;
@@ -60,11 +60,11 @@ function rss_library_display_pagination( $previouspagenumber, $nextpagenumber, $
 			$argumentarray = array( 'rsslibrarypage' => $nextpagenumber ); 
 			$targetaddress = esc_url( add_query_arg( $argumentarray ), '/' . $wp->request );
 
-			$paginationoutput .= '<a href="' . $targetaddress . '">' . __( 'Next', 'link-library' ) . '</a>';
+			$paginationoutput .= '<a href="' . $targetaddress . '">' . esc_html__( 'Next', 'link-library' ) . '</a>';
 
 			$paginationoutput .= '</span>';
 		} else {
-			$paginationoutput .= '<span class="previousnextinactive">' . __('Next', 'link-library') . '</span>';
+			$paginationoutput .= '<span class="previousnextinactive">' . esc_html__('Next', 'link-library') . '</span>';
 		}
 
 		$paginationoutput .= '</div><!-- Div Pagination -->';
@@ -366,14 +366,14 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 					}
 
 				} else {
-					$output .= '<span class="nolinksfoundincat">' . __( 'No links found', 'link-library' ) . '</span>';
+					$output .= '<span class="nolinksfoundincat">' . esc_html__( 'No links found', 'link-library' ) . '</span>';
 				}
 			}
 		} else {
-			$output .= '<span class="nolinkstodisplay">' . __( 'All of your links must be assigned at least to one category to be displayed', 'link-library') . '</span>';
+			$output .= '<span class="nolinkstodisplay">' . esc_html__( 'All of your links must be assigned at least to one category to be displayed', 'link-library') . '</span>';
 		}
 	} else {
-		$output .= '<span class="nolinksfoundallcats">' . __( 'No links found', 'link-library' ) . '</span>';
+		$output .= '<span class="nolinksfoundallcats">' . esc_html__( 'No links found', 'link-library' ) . '</span>';
 	}
 
 	$currentcategory = $currentcategory + 1;
@@ -426,5 +426,5 @@ function RenderRSSLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $se
 
 	wp_reset_postdata();
 
-	return do_shortcode( $output );
+	return $output;
 }

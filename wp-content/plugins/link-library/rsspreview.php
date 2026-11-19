@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 function link_library_generate_rss_preview( $my_link_library_plugin ) {
 $linkid = intval( $_GET['linkid'] );
 $itemcount = intval( $_GET['previewcount'] );
@@ -29,7 +31,7 @@ if ( !empty( $link ) && 'link_library_links' == $link->post_type && 'publish' ==
 
 		<html xmlns="http://www.w3.org/1999/xhtml">
 		<head>
-			<title><?php echo ( empty( $_GET['feed'] ) ) ? 'RSS_PHP' : 'RSS_PHP: ' . $link->post_title; ?></title>
+			<title><?php echo ( empty( $_GET['feed'] ) ) ? 'RSS_PHP' : 'RSS_PHP: ' . esc_html( $link->post_title ); ?></title>
 
 			<!-- META HTTP-EQUIV -->
 			<meta http-equiv="content-type" content="text/html; charset=UTF-8; ?>" />
@@ -37,7 +39,7 @@ if ( !empty( $link ) && 'link_library_links' == $link->post_type && 'publish' ==
 
 			<?php if ( isset( $genoptions['stylesheet'] ) && !empty( $genoptions['stylesheet'] ) ) { ?>
 				<style id='LinkLibraryStyle' type='text/css'>
-					<?php echo stripslashes( $genoptions['fullstylesheet'] ); ?>
+					<?php echo esc_html( stripslashes( $genoptions['fullstylesheet'] ) ); ?>
 				</style>
 			<?php } ?>
 
@@ -48,8 +50,8 @@ if ( !empty( $link ) && 'link_library_links' == $link->post_type && 'publish' ==
 			<?php if ( $rss_items ) { ?>
 				<?php foreach($rss_items as $item): ?>
 					<div class="ll_rss_preview_title" style="padding:0 5px 5px;">
-						<h1><a target="feedwindow" href="<?php echo $item->get_permalink(); ?>"><?php echo $item->get_title(); ?></a><div class='ll_rss_preview_date'><?php echo $item->get_date('j F Y | g:i a'); ?></div></h1>
-						<div class='ll_rss_preview_content'><?php echo $item->get_description(); ?></div>
+						<h1><a target="feedwindow" href="<?php echo esc_url( $item->get_permalink() ); ?>"><?php echo esc_html( $item->get_title() ); ?></a><div class='ll_rss_preview_date'><?php echo esc_html( $item->get_date('j F Y | g:i a') ); ?></div></h1>
+						<div class='ll_rss_preview_content'><?php echo esc_html( $item->get_description() ); ?></div>
 					</div>
 					<br />
 				<?php

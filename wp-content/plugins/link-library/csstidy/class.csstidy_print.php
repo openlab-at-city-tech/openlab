@@ -1,5 +1,9 @@
 <?php
 
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
+
 /**
  * CSSTidy - CSS Parser and Optimiser
  *
@@ -187,7 +191,7 @@ class csstidy_print {
 		}
 
 		if ($this->parser->get_cfg('timestamp')) {
-			array_unshift($this->tokens, array(COMMENT, ' CSSTidy ' . $this->parser->version . ': ' . date('r') . ' '));
+			array_unshift($this->tokens, array(COMMENT, ' CSSTidy ' . $this->parser->version . ': ' . gmdate('r') . ' '));
 		}
 
 		if (!empty($this->charset)) {

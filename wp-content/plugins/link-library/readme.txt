@@ -2,9 +2,9 @@
 Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
 Tags: link, list, directory, page, library
-Requires at least: 4.4
-Tested up to: 7.1.4
-Stable tag: 7.10.1
+Requires at least: 5.9
+Tested up to: 7.1
+Stable tag: 7.10.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,25 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.10.7 =
+* Fix to prevent load of google recaptcha when using easycaptcha
+
+= 7.10.6 =
+* Removed debug code
+
+= 7.10.5 =
+* Fixed link missing category checker
+
+= 7.10.4 =
+* Fixed issue with category selection boxes not appearing correctly
+
+= 7.10.3 =
+* Fixed potential security issues
+
+= 7.10.2 =
+* Fixed potential security issues
+* Started work on cleaning plugin code based on Plugin Check plugin recommendations
 
 = 7.10.1 =
 * Fixed potential security issues

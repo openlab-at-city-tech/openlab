@@ -1,5 +1,9 @@
 <?php
 
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
+
 /* An autoloader for ReCaptcha\Foo classes. This should be required()
  * by the user before attempting to instantiate any of the ReCaptcha
  * classes.

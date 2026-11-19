@@ -1,5 +1,9 @@
 <?php
 
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
+
 require('php-captcha.inc.php');
 
 $fonts = array('', 'Bd', 'BI', 'It', 'MoBd', 'MoBI', 'MoIt', 'Mono', 'Se', 'SeBd');

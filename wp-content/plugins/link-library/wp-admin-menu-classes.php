@@ -1,4 +1,6 @@
 <?php
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 /* wp-admin-menu-classes.php
 
 Classes to encapsulate access to admin menu global arrays $menu and $submenu
@@ -185,7 +187,7 @@ class WP_AdminMenuSection {
 			case 'before':    // TODO: Implement this
 			case 'top':       // TODO: Implement this
 			default:
-		    wp_die("where='{$args['where']}' not yet implemented in WP_AdminMenuSection->initialize().");
+		    wp_die( esc_html( "where='{$args['where']}' not yet implemented in WP_AdminMenuSection->initialize()." ) );
 		}
 		$this->refresh($section['slug']);
 		return $this;
@@ -244,7 +246,7 @@ class WP_AdminMenuSection {
 			case 'after':     // TODO: Implement this
 			case 'before':    // TODO: Implement this
 			default:
-		    wp_die("where='{$args['where']}' not yet implemented in WP_AdminMenuSection->add_item().");
+		    wp_die( esc_html( "where='{$args['where']}' not yet implemented in WP_AdminMenuSection->add_item()." ) );
 		}
 		$this->refresh();
 		return new WP_AdminMenuItem($slug,$last_index);

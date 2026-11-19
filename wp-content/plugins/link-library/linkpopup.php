@@ -1,5 +1,9 @@
 <?php
 
+if ( !defined( 'ABSPATH' ) ) {
+	exit;
+} // Exit if accessed directly
+
 function link_library_popup_content( $my_link_library_plugin ) {
     if ( isset( $_GET['linkid'] ) && isset( $_GET['settings'] ) ) {
         $link_id = intval( $_GET['linkid'] );
@@ -93,7 +97,7 @@ function link_library_popup_content( $my_link_library_plugin ) {
                 $target = ' target="' . $target . '"';
         }
 
-        $popup_text = ( !empty( $options['link_popup_text'] ) ? stripslashes($options['link_popup_text']) : __( '%link_image%<br />Click through to visit %link_name%.', 'link-library') );
+        $popup_text = ( !empty( $options['link_popup_text'] ) ? stripslashes($options['link_popup_text']) : esc_html__( '%link_image%<br />Click through to visit %link_name%.', 'link-library') );
 
         if ( ( strpos( $popup_text, '%link_image%' ) !== false ) && !empty( $link_image ) ) {
             $imageoutput = '<a href="';
