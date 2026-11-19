@@ -1,4 +1,10 @@
 <?php
+// direct file access is intentional here because this file acts as an entry point for the reverse proxy system
+if(!defined('ABSPATH'))
+    define('ABSPATH', dirname(__DIR__, 4) . '/');
+if(!defined('ABSPATH'))
+    exit;
+
 error_reporting(0);
 
 include 'config.php';
@@ -95,8 +101,6 @@ if(isset($request_headers['content-type'])) {
 }
 
 if(isset($request_headers['Content-Type']) and strpos($request_headers['Content-Type'], 'multipart/form-data;') !== false) {
-    //$request_headers['Content-Type'] = 'multipart/form-data'; // remove boundary
-    $request_headers['Content-Type'] = 'application/x-www-form-urlencoded';
     $is_multipart = true;
     $request_headers['Content-Length'] = '';
 
@@ -133,13 +137,12 @@ if(isset($_SERVER['HTTP_X_FORWARDED_FOR']) and !empty($_SERVER['HTTP_X_FORWARDED
 //exit;
 
 if(!function_exists('curl_init')) {
-    if(function_exists('http_response_code'))
-        http_response_code(500);
-
+    http_response_code(500);
     echo 'PHP Curl library is required';
     exit;
 }
 
+// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_close, WordPress.WP.AlternativeFunctions.curl_curl_errno, WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Direct cURL usage is required here because we do not include WP Core
 // proxy request
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $page_url);
@@ -150,27 +153,31 @@ if(defined('CURL_IPRESOLVE_V4')) curl_setopt($ch, CURLOPT_IPRESOLVE, CURL_IPRESO
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 2);
 curl_setopt($ch, CURLOPT_CAINFO, dirname(__FILE__).'/cacert.pem');
+curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+curl_setopt($ch, CURLOPT_TIMEOUT, 60);
 
 switch($_SERVER['REQUEST_METHOD']) {
     case 'POST': {
         curl_setopt($ch, CURLOPT_POST, true);
         if(isset($is_multipart)) {
-            http_build_query_for_curl($_POST, $new_post);
-            $new_post2 = array();
-            foreach($new_post as $key => $value)
-                $new_post2[] = $key.'='.urlencode($value);
-            $new_post = implode('&', $new_post2);
-            $headers[] = 'Content-Length: '.strlen($new_post);
+            $multipart_boundary = substr($request_headers['Content-Type'], strpos($request_headers['Content-Type'], 'boundary=') + 9);
+
+            $new_post = array();
+            http_build_query_for_curl_multipart($_POST, $new_post, null, $multipart_boundary);
+
+            // add files
+            if(count($_FILES) > 0)
+                http_build_files_for_curl_multipart($_FILES, $new_post, null, $multipart_boundary);
+
+            // add final boundary
+            $new_post[] = "--$multipart_boundary--";
+            $new_post[] = "";
+
+            $new_post = implode("\r\n", $new_post);
+
+            $headers[] = 'Content-Length: ' . strlen($new_post);
             curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $new_post);
-
-        } elseif(isset($request_headers['Content-Type']) and strpos($request_headers['Content-Type'], 'multipart/form-data') !== false) {
-            http_build_query_for_curl($_POST, $new_post);
-
-            $new_post = array('a'=>1,'b'=>2);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, $new_post); // todo: think about $_FILES: http://php.net/manual/en/class.curlfile.php
-            //curl_setopt($ch, CURLOPT_HTTPHEADER, array());
-            file_put_contents(dirname(__FILE__).'/debug.txt', print_r($new_post, true)."\n", FILE_APPEND);
         } else {
             curl_setopt($ch, CURLOPT_POSTFIELDS, file_get_contents('php://input'));
         }
@@ -190,10 +197,30 @@ if($debug) {
 }
 
 $response = curl_exec($ch);
+$curl_errno = curl_errno($ch);
 $response_info = curl_getinfo($ch);
 curl_close($ch);
+// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_close, WordPress.WP.AlternativeFunctions.curl_curl_errno, WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
 //print_r($response_info);
+
+if($response === false or $curl_errno !== 0) {
+    if($curl_errno === CURLE_OPERATION_TIMEDOUT) {
+        http_response_code(504);
+        header('Content-Type: text/html; charset=UTF-8');
+        header('Cache-Control: no-cache, no-store');
+        if(!isset($_SERVER['REQUEST_METHOD']) or $_SERVER['REQUEST_METHOD'] !== 'HEAD')
+            echo '<h1>Gateway Timeout:</h1><p>The translation server did not respond in time.</p>';
+    } else {
+        http_response_code(502);
+        header('Content-Type: text/html; charset=UTF-8');
+        header('Cache-Control: no-cache, no-store');
+        if(!isset($_SERVER['REQUEST_METHOD']) or $_SERVER['REQUEST_METHOD'] !== 'HEAD')
+            echo '<h1>Bad Gateway:</h1><p>Unable to retrieve a complete response from the translation server.</p>';
+    }
+
+    exit;
+}
 
 $header_size = $response_info['header_size'];
 $header = substr($response, 0, $header_size);
@@ -262,22 +289,68 @@ if(isset($_GET['language_edit'])) {
     $html = str_replace('/tdn-bin/', $protocol . '://' . $_SERVER['HTTP_HOST'] . '/' . $glang . '/tdn-bin/', $html);
 }
 
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- Raw output is required here because this response is emitted as part of the reverse proxy system
 if(function_exists('gzencode') and isset($return_gz) and $return_gz and zlib_get_coding_type() == false)
     echo gzencode($html);
 else
     echo $html;
+// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 
-function http_build_query_for_curl($arrays, &$new = array(), $prefix = null) { // flatten multidimentional array for post
-    if(is_object($arrays)) {
+function http_build_query_for_curl_multipart($arrays, &$new, $prefix, $multipart_boundary) {
+    if(is_object($arrays))
         $arrays = get_object_vars($arrays);
-    }
 
-    foreach($arrays AS $key => $value) {
-        $k = isset($prefix) ? $prefix . '[' . $key . ']' : $key;
+    foreach($arrays as $key => $value) {
+        $k = isset($prefix) ? $prefix . '[' . str_replace(array("\0", "\"", "\r", "\n"), '_', $key) . ']' : str_replace(array("\0", "\"", "\r", "\n"), '_', $key);
         if(is_array($value) or is_object($value)) {
-            http_build_query_for_curl($value, $new, $k);
+            http_build_query_for_curl_multipart($value, $new, $k, $multipart_boundary);
         } else {
-            $new[$k] = $value;
+            $new[$k] = implode("\r\n", array(
+                "--$multipart_boundary",
+                "Content-Disposition: form-data; name=\"$k\"",
+                '',
+                filter_var($value),
+            ));
+        }
+    }
+}
+
+function http_build_files_for_curl_multipart($arrays, &$new, $prefix, $multipart_boundary) {
+    if(is_object($arrays))
+        $arrays = get_object_vars($arrays);
+
+    foreach($arrays as $key => $value) {
+        $k = isset($prefix) ? $prefix . '[' . str_replace(array("\0", "\"", "\r", "\n"), '_', $key) . ']' : str_replace(array("\0", "\"", "\r", "\n"), '_', $key);
+        if(isset($value['name'], $value['tmp_name'], $value['error']) and (is_array($value['name']) or is_object($value['name']))) {
+            // multiple files, one level array case, todo: multidimensional case e.g. documents[page][front] documents[page][back]
+            foreach($value['name'] as $i => $name) {
+                if(empty($value['tmp_name'][$i]) or $value['error'][$i] !== UPLOAD_ERR_OK or !is_uploaded_file($value['tmp_name'][$i]))
+                    continue;
+
+                $v = str_replace(array("\0", "\"", "\r", "\n"), '_', $name);
+                $data = file_get_contents($value['tmp_name'][$i]);
+                $kk = $k.'['.$i.']';
+                $new[$kk] = implode("\r\n", array(
+                    "--$multipart_boundary",
+                    "Content-Disposition: form-data; name=\"{$kk}\"; filename=\"{$v}\"",
+                    'Content-Type: application/octet-stream',
+                    '',
+                    $data,
+                ));
+            }
+        } elseif(isset($value['name'], $value['tmp_name'], $value['error'])) {
+            if(empty($value['tmp_name']) or $value['error'] !== UPLOAD_ERR_OK or !is_uploaded_file($value['tmp_name']))
+                continue;
+
+            $v = str_replace(array("\0", "\"", "\r", "\n"), '_', $value['name']);
+            $data = file_get_contents($value['tmp_name']);
+            $new[$k] = implode("\r\n", array(
+                "--$multipart_boundary",
+                "Content-Disposition: form-data; name=\"{$k}\"; filename=\"{$v}\"",
+                'Content-Type: application/octet-stream',
+                '',
+                $data,
+            ));
         }
     }
 }

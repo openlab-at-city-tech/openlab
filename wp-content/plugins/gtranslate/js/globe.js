@@ -1,4 +1,4 @@
-(function(){
+(function(){if(!(document.currentScript instanceof HTMLScriptElement))return;
     var gt = window.gtranslateSettings || {};
     gt = gt[document.currentScript.getAttribute('data-gt-widget-id')] || gt;
 
@@ -76,10 +76,7 @@
     }
 
     var current_lang = document.querySelector('html').getAttribute('lang')||default_language;
-    if(url_structure == 'none') {
-        var googtrans_matches = document.cookie.match('(^|;) ?googtrans=([^;]*)(;|$)');
-        current_lang = googtrans_matches && googtrans_matches[2].split('/')[2] || current_lang;
-    }
+    if(url_structure == 'none') {try{var stored=JSON.parse(localStorage.getItem('__GT_TRANSLATE_LANGS'));if(stored && typeof stored.tgtLang=='string')current_lang=stored.tgtLang;}catch(e){}}
 
     if(!lang_array[current_lang])
         current_lang = default_language;
@@ -109,14 +106,6 @@
     widget_css += '.gsatelite img{border-radius:50%;opacity:0.9;transition:all 0.3s;width:'+flag_size+'px;height:'+flag_size+'px;object-fit:cover}';
     widget_css += '.gsatelite:hover img{opacity:1;transform:scale(1.3)}';
     widget_css += '.gsatelite.gt-current-lang img{opacity:1;box-shadow:rgba(0,0,0,0.5) 0 0 35px 20px;transform:scale(1.3)}';
-
-    if(url_structure == 'none') {
-        widget_code += '<div id="google_translate_element2"></div>';
-
-        widget_css += "div.skiptranslate,#google_translate_element2{display:none!important}";
-        widget_css += "body{top:0!important}";
-        widget_css += "font font{background-color:transparent!important;box-shadow:none!important;position:initial!important}";
-    }
 
     if(horizontal_position != 'inline')
         widget_code = '<div class="gt_switcher_wrapper" style="position:fixed;'+vertical_position+':15px;'+horizontal_position+':15px;z-index:999999;">' + widget_code + '</div>';
@@ -162,16 +151,13 @@
     });
 
     if(url_structure == 'none') {
-        function get_current_lang() {var keyValue = document.cookie.match('(^|;) ?googtrans=([^;]*)(;|$)');return keyValue ? keyValue[2].split('/')[2] : null;}
-        function fire_event(element,event){try{if(document.createEventObject){var evt=document.createEventObject();element.fireEvent('on'+event,evt)}else{var evt=document.createEvent('HTMLEvents');evt.initEvent(event,true,true);element.dispatchEvent(evt)}}catch(e){}}
-        function load_tlib(){if(!window.gt_translate_script){window.gt_translate_script=document.createElement('script');gt_translate_script.src='https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit2';document.body.appendChild(gt_translate_script);}}
-        window.doGTranslate = function(lang_pair){if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var lang=lang_pair.split('|')[1];if(get_current_lang() == null && lang == lang_pair.split('|')[0])return;var teCombo;var sel=document.getElementsByTagName('select');for(var i=0;i<sel.length;i++)if(sel[i].className.indexOf('goog-te-combo')!=-1){teCombo=sel[i];break;}if(document.getElementById('google_translate_element2')==null||document.getElementById('google_translate_element2').innerHTML.length==0||teCombo.length==0||teCombo.innerHTML.length==0){setTimeout(function(){doGTranslate(lang_pair)},500)}else{teCombo.value=lang;fire_event(teCombo,'change');fire_event(teCombo,'change')}}
-        window.googleTranslateElementInit2=function(){new google.translate.TranslateElement({pageLanguage:default_language,autoDisplay:false},'google_translate_element2')};
+        function load_tlib(callback){if(!window.gt_translate_script){window.gt_translate_script=document.createElement('script');gt_translate_script.src='https://cdn.gtranslate.net/widgets/latest/lib.min.js';document.body.appendChild(gt_translate_script);if(callback)gt_translate_script.addEventListener('load',callback,{once:true});}else{callback&&callback();}}
+        window.doGTranslate = function(lang_pair){if(lang_pair.value)lang_pair=lang_pair.value;if(lang_pair=='')return;var parts=lang_pair.split('|');var source_lang=parts[0];var target_lang=parts[1];load_tlib(function(){__GT.translator.translate(source_lang,target_lang)})}
 
         if(current_lang != default_language)
             load_tlib();
         else
-            document.querySelectorAll(u_class).forEach(function(e){e.addEventListener('pointerenter',load_tlib)});
+            document.querySelectorAll(u_class).forEach(function(e){e.addEventListener('pointerenter',load_tlib);e.addEventListener('focusin',load_tlib)});
 
         document.querySelectorAll(u_class + ' a[data-gt-lang]').forEach(function(e){e.addEventListener('click', function(evt) {
             evt.preventDefault();
@@ -194,12 +180,9 @@
 
         if(current_lang == default_language && preferred_language != default_language && languages.includes(preferred_language)) {
             if(url_structure == 'none') {
-                load_tlib();
-                window.gt_translate_script.onload=function(){
-                    doGTranslate(default_language+'|'+preferred_language);
-                    document.querySelectorAll(u_class+' a.gt-current-lang').forEach(function(e){e.classList.remove('gt-current-lang')});
-                    document.querySelector(u_class+' a[data-gt-lang="'+preferred_language+'"]').classList.add('gt-current-lang');
-                };
+                doGTranslate(default_language+'|'+preferred_language);
+                document.querySelectorAll(u_class+' a.gt-current-lang').forEach(function(e){e.classList.remove('gt-current-lang')});
+                document.querySelector(u_class+' a[data-gt-lang="'+preferred_language+'"]').classList.add('gt-current-lang');
             } else
                 document.querySelectorAll(u_class+' a[data-gt-lang="'+preferred_language+'"]').forEach(function(e){location.href=e.href});
         }

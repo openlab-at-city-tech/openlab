@@ -1,4 +1,10 @@
 <?php
+// direct file access is intentional here because this file acts as an entry point for the reverse proxy system
+if(!defined('ABSPATH'))
+    define('ABSPATH', dirname(__DIR__, 4) . '/');
+if(!defined('ABSPATH'))
+    exit;
+
 header('Content-Type: application/json');
 error_reporting(0);
 
@@ -30,6 +36,7 @@ if(file_exists($wp_config_dir) and isset($_POST['access_key'])) {
 }
 
 if(!isset($_POST['subject'])) {
+    // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Raw output is required here because this response is emitted as part of the reverse proxy system
     die($body);
 }
 
@@ -41,6 +48,7 @@ if(!function_exists('curl_init')) {
     exit;
 }
 
+// phpcs:disable WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_close, WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- Direct cURL usage is required here because we do not include WP Core
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, 'https://tdns.gtranslate.net/tdn-bin/email-translate?lang='.$glang);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -60,5 +68,7 @@ if($debug) {
 $response = curl_exec($ch);
 $response_info = curl_getinfo($ch);
 curl_close($ch);
+// phpcs:enable WordPress.WP.AlternativeFunctions.curl_curl_init, WordPress.WP.AlternativeFunctions.curl_curl_setopt, WordPress.WP.AlternativeFunctions.curl_curl_exec, WordPress.WP.AlternativeFunctions.curl_curl_getinfo, WordPress.WP.AlternativeFunctions.curl_curl_close, WordPress.WP.AlternativeFunctions.file_system_operations_fopen
 
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Raw output is required here because this response is emitted as part of the reverse proxy system
 echo $response;
