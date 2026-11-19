@@ -25,7 +25,7 @@ class IgConversionStrategy implements ConversionStrategy
         $permalink = $item->data[MediaItem::PERMALINK] ?? '';
 
         if (empty($shortcode) || empty($permalink)) {
-            if (preg_match('/instagram\.com\/p\/([^\/]+)/i', $permalink, $matches)) {
+            if (preg_match('#instagram\.com/(?:[^/?\#]+/)?(?:p|reels?)/([^/?\#]+)#i', $permalink, $matches)) {
                 if (isset($matches[1])) {
                     $shortcode = $matches[1];
                 }

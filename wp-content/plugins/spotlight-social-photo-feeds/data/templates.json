@@ -1928,5 +1928,32 @@
       ""
     ],
     "design": {}
+  },
+  {
+    "sid": 0,
+    "id": "thumbnailGallery",
+    "name": "Thumbnail Gallery",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2026/10/Thumbnail-Gallery.png",
+    "tier": 10,
+    "keywords": [
+      "thumbnail",
+      "gallery",
+      "portfolio",
+      "travel"
+    ],
+    "design": {}
+  },
+  {
+    "sid": 0,
+    "id": "polaroid",
+    "name": "Polaroid Sticker",
+    "thumbnail": "https://spotlightwp.com/wp-content/uploads/2026/10/Polaroid-Sticker.png",
+    "date": 1790640000,
+    "tier": 10,
+    "keywords": [
+      "polaroid",
+      "sticker"
+    ],
+    "design": {}
   }
 ]

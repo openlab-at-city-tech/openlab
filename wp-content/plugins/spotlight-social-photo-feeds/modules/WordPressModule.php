@@ -107,6 +107,15 @@ class WordPressModule extends Module
                     }
                 }
             ),
+            // The 2023 survey banner was removed in 1.8.1, so its "survey done" flag is no longer read.
+            'migrations/1.8.1/delete_survey_option' => new FuncService(
+                [],
+                function ($oldVer, $newVer) {
+                    if (version_compare($oldVer ?? '0.0', '1.8.1', '<')) {
+                        delete_option('sli_did_survey');
+                    }
+                }
+            ),
         ];
     }
 
@@ -179,6 +188,7 @@ class WordPressModule extends Module
                 [
                 'migrations/*/check_personal_account',
                 'migrations/1.7.2/delete_error_log',
+                'migrations/1.8.1/delete_survey_option',
                 ]
             ),
         ];

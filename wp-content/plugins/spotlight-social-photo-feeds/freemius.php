@@ -34,7 +34,7 @@ if ( !function_exists( 'sliFreemius' ) ) {
             }
         }
         $sliFreemius->override_i18n( [
-            'account'    => __( 'License', 'sl-insta' ),
+            'account'    => ( $sliFreemius->is_paying_or_trial() ? __( 'License', 'sl-insta' ) : __( 'Account', 'sl-insta' ) ),
             'contact-us' => __( 'Help', 'sl-insta' ),
         ] );
         return $sliFreemius;
@@ -56,6 +56,43 @@ if ( !function_exists( 'sliFreemius' ) ) {
     sliFreemius()->add_filter( 'freemius_pricing_js_path', function () {
         return plugin_dir_path( SL_INSTA_FILE ) . '/ui/freemius-pricing/freemius-pricing.js';
     } );
+    // Open Help inside the admin on Free too. Since SDK 2.9, Freemius turns Help into an external link that opens in a
+    // new tab for free versions, so on Free I hide that link and add an admin page that renders the same contact form.
+    if ( !sliFreemius()->is_premium() ) {
+        sliFreemius()->add_filter(
+            'is_submenu_visible',
+            function ( $isVisible, $menuId ) {
+                return ( $menuId === 'contact' ? false : $isVisible );
+            },
+            10,
+            2
+        );
+        // Runs after Freemius adds its menu items, so Help can go right above Pricing as it does on the paid plans
+        add_action( 'admin_menu', function () {
+            global $submenu;
+            // Until the user opts in or skips, Freemius replaces the menu with the opt-in page. Adding Help then would
+            // make it the menu's only item, so WordPress would link "Instagram Feeds" to Help instead of the opt-in.
+            if ( sliFreemius()->is_activation_mode() ) {
+                return;
+            }
+            $parent = 'spotlight-instagram';
+            $slugs = array_column( array_values( $submenu[$parent] ?? [] ), 2 );
+            $position = array_search( $parent . '-pricing', $slugs, true );
+            $label = __( 'Help', 'sl-insta' );
+            $hook = add_submenu_page(
+                $parent,
+                sliFreemius()->get_plugin_name() . ' &ndash; ' . $label,
+                '<span class="fs-submenu-item spotlight-social-photo-feeds contact">' . $label . '</span>',
+                'manage_options',
+                $parent . '-help',
+                [sliFreemius(), '_contact_page_render'],
+                ( $position === false ? null : $position )
+            );
+            if ( $hook ) {
+                add_action( 'load-' . $hook, ['Freemius', '_clean_admin_content_section'] );
+            }
+        }, WP_FS__LOWEST_PRIORITY + 1 );
+    }
     // Signal that SDK was initiated.
     do_action( 'sli_freemius_loaded' );
 }

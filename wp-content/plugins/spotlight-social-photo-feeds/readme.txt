@@ -1,271 +1,316 @@
-=== Spotlight Social Feeds - Block, Shortcode, and Widget ===
+=== Spotlight Social Photo Feed ===
 
-Contributors: RebelCode, spotlightsocialfeeds, markzahra, Mekku, jeangalea, gabygalea, omidakhavan
+Contributors: RebelCode, spotlightsocialfeeds, markzahra, jeangalea, gabygalea, omidakhavan
 Plugin URI: https://spotlightwp.com
 Tags: Instagram, Instagram feed, Instagram embed, Instagram widget, Instagram block
-Requires at least: 5.7
+Requires at least: 6.3
 Requires PHP: 7.1
-Tested up to: 7.0
-Stable tag: 1.7.4
+Tested up to: 7.1
+Stable tag: 1.9.0
 License: GPLv3
 
-Instagram feeds made easy. Responsive, customizable, accessible, and SEO-friendly out of the box. Includes Instagram blocks & oEmbed support.
+Embed Instagram feeds and photo galleries anywhere on your site. Responsive, accessible and SEO-friendly, with a block, shortcode, and widget.
 
 == Description ==
 
-**Embed [Instagram](https://www.instagram.com/) feeds anywhere on your website.** Choose a beautifully designed template, connect your Instagram account, and customize unlimited galleries to display across your website.
+= Instagram Feed Plugin for WordPress =
 
-[**Instagram Feed Demos**](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_topdemos) | [Instagram Slider Gallery](https://spotlightwp.com/instagram-slider/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_topslider)
+**Spotlight embeds your Instagram feed anywhere on your WordPress site.** Pick a layout, connect your Instagram account, and customize the design in a live preview, and your site will update itself every time you post to Instagram.
 
-== Follow 3 simple steps... ==
+It's used on 60,000+ websites and holds a 4.7-star rating from more than 170 reviews.
 
-1. Select an Instagram feed design*
-2. [Connect](https://docs.spotlightwp.com/category/517-connecting-accounts) an Instagram account
-3. Display your Instagram feed on your website
+[**See All Template Designs**](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_topdemos) | [Get Spotlight Instagram Feeds PRO](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_toppro) | Take the [Interactive Tour](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_toptour#tour)
 
-Create and embed multiple Instagram feeds using posts from as many Instagram accounts as you want.
-
-*Or create your own, it's fully customizable.
+**New:** The unique Polaroid Sticker and Thumbnail Gallery templates are now available in Spotlight Essentials. [See them on the demo page](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_newbanner).
 
 == Free Features ==
 
-Get everything you need to display an Instagram feed for free. Every gallery blends in perfectly with your website, adapting to fit in perfectly with your theme's design and fonts.
+The free version gives you everything you need to run a good-looking Instagram feed, and every feed picks up your theme's fonts so it fits in with the rest of your site.
 
-- Connect **unlimited Instagram accounts**
-- Display **unlimited Instagram feeds** across your website
-- Combine multiple Instagram accounts in a single feed
-- Supports photos, videos, reels, and gallery posts
-- Embed singular Instagram posts with our **Instagram oEmbed support**
-- **Free pre-designed templates** (or design your own)
-- 20+ design customization options
-- Set the **number of columns and posts** for each feed
-- **Order your Instagram posts** by date, popularity, or at random
-- **Customize the design per device** (responsive by default)
-- Add a **popup lightbox** to show larger photos, reels, and videos
-- **Custom feed header** with your account's avatar and bio
-- Customize and translate the **“Follow” and "Load more" buttons**
-- Embed your Instagram feed using a block, shortcode, or widget
+- Connect **unlimited Instagram accounts** and create **unlimited Instagram feeds**
+- Combine posts from several Instagram accounts in a single feed
+- Show photos, videos, reels, and carousel (gallery) posts in your feed
+- Start from a **pre-designed template** or build your own design
+- 20+ design options, including columns, number of posts and image ratio
+- **Customize each feed per device** for desktop, tablet and phone
+- Order posts by date, popularity or at random
+- A **popup lightbox** that shows photos at full size without sending visitors to Instagram
+- A **feed header** with your profile photo and bio
+- **"Follow" and "Load more" buttons** you can restyle and translate
+- Embed singular Instagram posts with **Instagram oEmbed support**
+- Add Instagram feeds using a block, shortcode, or widget
 
-**Agencies and developers**: Ask clients to use the Spotlight [Access Token Generator](https://spotlightwp.com/access-token-generator/) instead of asking them for their private Instagram account login details. It's safer and faster.
+**Agencies and freelancers:** send clients the Spotlight [Access Token Generator](https://spotlightwp.com/access-token-generator/) so they can give you access to their Instagram account without sharing their Instagram password.
 
-== Why People Are Loving Spotlight  ==
+== Who Uses Spotlight ==
 
-In just over two years, Spotlight has been downloaded over 400,000 times and is currently in use on 50,000+ websites around the world. These are the main reasons people keep coming back to it.
+Spotlight works best for businesses whose Instagram already does a lot of the selling, and where a fresh feed on the website helps visitors decide to book, visit or buy.
 
-**#1 Keep your website updated, automatically**
-Gone are the days of manually updating your website's gallery with new photos, videos, and reels every week. You have access to Instagram on the go, so simply post to the app and Spotlight will automatically update your website for you.
+**Hotels, tours and holiday rentals:** Show recent guest photos and destination shots on your booking pages, so people see what the experience actually looks like before they commit.
 
-**#2 Show people what you're up to**
-Instagram is a great platform for building relationships with your followers. Share that same experience with your website visitors and show off your followers' love for what you do.
+**Restaurants, cafés and bars:** Put today's specials, new menu items, and events on your homepage without logging in to WordPress every time something changes.
 
-**#3 Create new connections**
-Increase social engagement and grow your Instagram following with a "Follow on Instagram" button directly within your website's Instagram feed.
+**Online shops:** Link Instagram posts to the products in them and turn your feed into a shoppable gallery with Spotlight PRO and WooCommerce.
 
-== "Finally, a social plugin that simply works" - Georgia G. ==
+**Photographers, artists and creatives:** Use your Instagram as a portfolio that keeps itself up to date, with a lightbox that shows your work at full size.
 
-There are many Instagram plugins for WordPress, but we wanted to create something that simply worked. No fluff and no annoying ads, just what you really need.
+**Venues and event organizers:** Use a hashtag feed with Spotlight PRO to pull in what attendees are posting, then hand-pick the posts you want to show.
 
-**#1 Professionally designed templates**
-Our designers took care of every detail to make your your Instagram galleries are ready to go from the moment you connect an Instagram account.
+**Agencies:** Connect as many client accounts as you need, create a separate feed for each site and manage everything from one screen.
 
-**#2 Fully customizable and responsive**
-All designs are fully responsive right out of the box. You can also create your own custom designs, creating different looks for every device type.
+== Why Spotlight ==
 
-**#3 Added SEO value for your website**
-Your Instagram posts have SEO value in themselves. Spotlight's feeds are embedded directly on your website and crawled by search engines. The dynamic content and ALT tags (taken from the Instagram post captions) help boost your SEO. Spotlight also includes its own clever caching and image optimization to help with website performance.
+**Your site stays up to date on its own.** Post to Instagram as you normally would and Spotlight adds the new posts to your website automatically.
 
-**#4 Accessible right out of the box**
-Spotlight is accessible for users as well as website visitors. The entire interface as well as embedded Instagram feeds can be navigated using your keyboard and all images include ALT tags.
+**It looks like part of your site.** Feeds inherit your theme's fonts, and you can adjust spacing, colors and layouts until the feed matches your design. If you know CSS, you can add your own styles to each feed.
 
-== Fast and Helpful Support ==
+**It's built with performance in mind.** Spotlight downloads optimized thumbnails to your own server, caches your feeds and works alongside WP Rocket and LiteSpeed Cache. If Instagram has an outage, your feed keeps showing the last posts it imported.
 
-We provide support for both the free and premium versions of Spotlight.
+**It's good for SEO.** Feeds are part of your page HTML rather than sitting in an iframe, so search engines can crawl them, and every image gets alt text based on its Instagram caption.
 
-We are constantly working on new innovative features to make your Instagram content work harder for your business. Whenever you have a question or want to request a new feature , we're just a quick message away.
+**It's accessible.** Visitors can navigate feeds, the lightbox, and the buttons with a keyboard, and screen readers get clear labels and alt text.
 
-- [Documentation](https://docs.spotlightwp.com/)
-- [Free support (forum)](https://wordpress.org/support/plugin/spotlight-social-photo-feeds/)
-- [Premium & pre-sales support (email)](https://spotlightwp.com/support/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_support)
+== Works With Your Favorite Tools ==
 
-== Spotlight's Premium Upgrades ==
+Spotlight fits into the tools you already use.
 
-[Spotlight offers premium plans](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgrade) with additional customization options and features for those looking to get more value from their Instagram content.
+- **Block editor:** add the Spotlight Instagram Feed block to any post, page or template
+- **Classic themes:** use the Spotlight widget in any widget area
+- **Elementor:** a dedicated Spotlight widget in Essentials and above
+- **Divi, Beaver Builder and other page builders:** drop in the shortcode anywhere they accept one
+- **WooCommerce:** link Instagram posts to your products with Spotlight PRO
+- **WP Rocket and LiteSpeed Cache:** Spotlight works alongside both to keep your pages fast
 
-**[Spotlight Essentials](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_essentials)**
-- Everything in Free plus...
-- Unlock all templates and layouts
-- Unlock all customisation options
-- Show Instagram stories (just like in the app)
-- Elementor integration (a dedicated Spotlight widget)
+== Spotlight PRO ==
 
-**[Spotlight PRO](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_pro)**
-- Everything in Free and Essentials plus...
-- Display public [**Instagram hashtag feeds**](https://spotlightwp.com/instagram-hashtag-feeds/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradehashtag)
-- Display [**tagged Instagram posts**](https://spotlightwp.com/tagged-post-feeds/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradetagged)
-- Create combined feeds with multiple source types (account, hashtag, tagged)
-- Filter your Instagram feed by keywords or phrases in captions
-- Filter your Instagram feed by hashtags
-- Moderate your feed by hand-selecting the posts to show or hide
-- [**Instagram link in bio**](https://spotlightwp.com/link-in-bio/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradelinkinbio) pages to drive traffic from Instagram to your website (think Linktree or Lnk.bio)
-- [**Shoppable Instagram feeds**](https://spotlightwp.com/shoppable-instagram-feed-wordpress/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradeshoppable) to increase eCommerce sales through your social media content
-- WooCommerce integration (link posts to products)
+Spotlight PRO is our most popular premium plan, and it's the one to look at if you want your feed to do more than display your own posts.
 
-**[Spotlight Agency](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_all_access)**
-- Everything in Free, Essentials, and PRO plus...
-- Instagram account **insights**
-- Instagram post insights
-- Feed engagement **analytics**
-- Feed promotion analytics
-- Google analytics integration
-- **Media management** to control image and video quality and storage
+- Everything in Essentials, including every premium template, customization option, and Instagram stories.
+- **[Hashtag feeds](https://spotlightwp.com/instagram-hashtag-feeds/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradehashtag):** Display public posts from across Instagram that use a hashtag, which is ideal for campaigns, events and user-generated content.
+- **[Tagged posts](https://spotlightwp.com/tagged-post-feeds/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradetagged):** Show the posts your customers have tagged you in.
+- **[Shoppable feeds](https://spotlightwp.com/shoppable-instagram-feed-wordpress/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradeshoppable):** Link posts to WooCommerce products, pages or any URL.
+- **[Link in bio pages](https://spotlightwp.com/link-in-bio/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradelinkinbio):** Send your Instagram traffic to a page on your own site rather than a third-party link tool.
+- **Moderation and filtering:** Hand-pick the posts to show or hide, or filter them by caption keywords and hashtags.
 
+The **Essentials** plan unlocks every layout and design option, including premium templates such as the new **Polaroid Sticker**, which frames each post like a polaroid photo stuck to a wall, and the **Thumbnail Gallery**, which shows one large featured post with a row of thumbnails to browse the rest. You can [try both on the demo page](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_newtemplates). Essentials also plays videos and reels in the lightbox, and adds Instagram stories and a dedicated Elementor widget. The **Agency** plan adds Instagram and feed analytics, media management, and licenses for up to 20 sites.
 
-[**Premium Instagram Demos**](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradedemo)
+All plans come with email support and a 30-day money-back guarantee. [Compare the plans](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgrade) or [try the premium demos](https://spotlightwp.com/demo/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_upgradedemo).
 
-== User Reviews and Testimonials ==
+== What Users Say ==
 
-Spotlight helps tens of thousands of website owners display Instagram feeds. Here are a few testimonials from our 100+ reviews.
-
-Taken directly from the WordPress Plugin Repository...
-
-**Finally, a social plugin that simply works**
-"This plugin is easy to install and I had no issues linking to my client’s Instagram feed. [...] It is my new go-to. I am so happy I can finally say my hunt is over for the perfect social feeds plugin." - [@georgiag](https://wordpress.org/support/topic/finally-a-social-plugin-that-simply-works/)
+**Great extension, highly recommended**
+"Not only is the plugin extremely easy to use with its sleek interface, but it's also worth noting that the free version is generous compared to other extensions. [...]" - [@fairycookies](https://wordpress.org/support/topic/great-extension-highly-recommended/)
 
 **My new go-to for Instagram feeds**
-"This plugin has a slick back-end to get you connected, whilst the front end works perfectly on the page – it’s snappy and fits with your theme. The key feature for me was the image lightbox popup, so your site visitor remains on the page and doesn’t jump over to Instagram to get distracted! I’m pleased to report that this feature works perfectly in the free version. Oh, and support replies and fixes within several hours!" - [@photomaldives](https://wordpress.org/support/topic/my-new-go-to-for-instagram-feeds-5%e2%ad%90/)
+"The key feature for me was the image lightbox popup, so your site visitor remains on the page and doesn't jump over to Instagram to get distracted. I'm pleased to report that this feature works perfectly in the free version. [...]" - [@photomaldives](https://wordpress.org/support/topic/my-new-go-to-for-instagram-feeds-5%e2%ad%90/)
 
-**Perfect and easy to use**
-"Was looking for an IG gallery plugin and this one did not disappoint. The free version offers a good amount of features and the premium one is solid as well, providing more customization. Support is top-notch and quick to respond." - [@littleeasy](https://wordpress.org/support/topic/perfect-and-easy-to-use-22/)
+**A plugin that just works, plain and simple**
+"[...] this is a plugin I've been using for years to display Instagram photos on different WordPress websites. And the few times I've had an issue (usually on the Instagram API side), the support team has always responded quickly and kindly." - [@olimate](https://wordpress.org/support/topic/a-plugin-that-just-works-plain-and-simple/)
 
-**Great plugin, easy to customize**
-"I have been using this plugin for a few months, and I’m really happy with it. I like that it’s easy to customize and looks really great both on a computer screen and on a mobile phone’s screen." - [@misselenat](https://wordpress.org/support/topic/great-plugin-easy-to-customize-7/)
+== As Featured In ==
 
-== Recommended by the experts ==
-
-The following are media highlights of Spotlight Instagram Feeds across various well-respected publications.
-
-- Hubspot: [Top 3 Free Instagram Plugins for WordPress](https://blog.hubspot.com/website/top-free-instagram-plugins-wordpress-site)
-- Elementor: [Best Instagram Plugins for WordPress](https://elementor.com/blog/best-instagram-plugins-wordpress/)
-- Kinsta: [WordPress Instagram Plugins](https://kinsta.com/blog/wordpress-instagram-plugin/)
-- BobWP: [How to Improve WooCommerce Sales Using Instagram](https://bobwp.com/how-to-improve-woocommerce-sales-using-your-instagram-feed/)
-- Avada: [Use Instagram Feeds to Boost Traffic and Conversions](https://theme-fusion.com/how-to-use-instagram-feeds-to-boost-traffic-and-conversions/)
-- Elegant Themes: [7 Great Instagram Plugins for Sharing Your Feed](https://www.elegantthemes.com/blog/wordpress/instagram-plugins-for-sharing-your-feed)
-- aThemes: [Best WordPress Instagram Plugins 2020](https://athemes.com/collections/best-wordpress-instagram-plugins/)
+- Kinsta: [WordPress Instagram Plugins for Displaying Interactive Feeds](https://kinsta.com/blog/wordpress-instagram-plugin/)
+- HubSpot: [The Top Instagram Plugins for WordPress](https://blog.hubspot.com/website/top-free-instagram-plugins-wordpress-site)
+- Elegant Themes: [Best WordPress Instagram Plugins](https://www.elegantthemes.com/blog/wordpress/best-wordpress-instagram-plugins)
+- aThemes: [Best WordPress Instagram Plugins](https://athemes.com/collections/best-wordpress-instagram-plugins/)
 - WPExplorer: [How to Add Instagram Photos to WordPress](https://www.wpexplorer.com/add-instagram-wordpress/)
+- Elementor: [Best Instagram Plugins for WordPress](https://elementor.com/blog/best-instagram-plugins-wordpress/)
 - WP Mayor: [How to Import Instagram Photos to WordPress](https://wpmayor.com/import-instagram-photos-wordpress/)
 
+== Support ==
 
-**Disclaimer**
+We support both the free and premium versions of Spotlight.
 
-Spotlight Instagram Feeds, also known as Spotlight Social Media Feeds or SpotlightWP, is a RebelCode product officially verified by Facebook to make use of the official Instagram(tm) API. It is not affiliated with or endorsed by Instagram and/or Facebook.
+- [Documentation](https://spotlightwp.com/help/)
+- [Free support on the WordPress.org forum](https://wordpress.org/support/plugin/spotlight-social-photo-feeds/)
+- [Premium and pre-sales support by email](https://spotlightwp.com/support/?utm_source=readme&utm_medium=readme_desc&utm_campaign=readme_desc_support)
+
+== Disclaimer ==
+
+Spotlight Social Photo Feed is a RebelCode product that uses the official [Instagram](https://www.instagram.com/)(tm) API. It is not affiliated with or endorsed by Instagram, Facebook, or Meta.
 
 == Installation ==
 
-= Installation Method 1 =
+= From your WordPress dashboard =
 
-1. Go to the Plugins page in your WordPress site's dashboard.
-2. Click on the "Add New" button.
-3. Search for “Spotlight Social Media Feeds”.
-4. Click on the "Install" button next to it, then hit "Activate".
-5. Go to the “Instagram Feeds” menu item to get started.
+1. Go to Plugins > Add Plugin.
+2. Search for "Spotlight Social Photo Feed".
+3. Click "Install Now", then "Activate".
+4. Go to the "Instagram Feeds" menu item to create your first feed.
 
-= Installation Method 2 =
+= By uploading the zip file =
 
-1. Click on the "Download" button above.
-2. Upload the zip file to your site from the Plugins page in your WordPress site's dashboard.
+1. Click the "Download" button on this page.
+2. Go to Plugins > Add Plugin > Upload Plugin and upload the zip file.
 3. Activate the plugin.
-4. Go to the “Instagram Feeds” menu item to get started.
+4. Go to the "Instagram Feeds" menu item to create your first feed.
 
-= Step 1. Choose a template or design your own =
+= Step 1: Choose a layout =
 
-Choose one of our fully responsive and beautifully design Instagram feed templates or design your own. The templates are also fully customizable so you can change every detail to make it match your website perfectly.
+Every new feed starts with a choice of layout. Pick the one closest to what you want, since you can change every detail later. You can also import a feed you've exported from another site at this step.
 
-= Step 2. Connect Your Instagram Account =
+= Step 2: Connect your Instagram account =
 
-Follow the instructions to connect your, or your clients' Instagram account. You may connect multiple Instagram accounts and manage them all from the Accounts settings page. More information on how to connect Instagram accounts in Spotlight is provided in our documentation [here](https://docs.spotlightwp.com/category/517-connecting-accounts).
+If you haven't connected an account yet, Spotlight walks you through it next. You'll need an Instagram Business or Creator account, which is free to switch to in the Instagram app. You can connect as many accounts as you like and manage them from the Accounts settings page. See the [guide to connecting accounts](https://spotlightwp.com/help/connect-your-instagram-account/) for more detail.
 
-= Step 3. Embed Your Instagram Feed =
+= Step 3: Customize your feed =
 
-Spotlight provides three methods to embed your Instagram feed anywhere on your website.
+Adjust the design in the live preview and switch between desktop, tablet and phone to fine-tune each one.
 
-- [Block](https://docs.spotlightwp.com/article/581-block) - "Spotlight Instagram Feed"
-- [Widget](https://docs.spotlightwp.com/article/580-widget) - "Spotlight Instagram Feed"
-- [Shortcode](https://docs.spotlightwp.com/article/579-shortcode) - [instagram feed="456"]
+= Step 4: Embed your feed =
+
+Add your feed anywhere on your site using one of these methods:
+
+- [Block](https://spotlightwp.com/help/block/): "Spotlight Instagram Feed"
+- [Widget](https://spotlightwp.com/help/widget/): "Spotlight Instagram Feed Widget"
+- [Shortcode](https://spotlightwp.com/help/shortcode/): [instagram feed="456"], replacing 456 with your feed's ID
 
 == Frequently Asked Questions ==
 
-= How can I only display posts that use any Instagram hashtag? =
+= What kind of Instagram account do I need? =
 
-With [Spotlight PRO](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_hashtag) you can use either of the two options.
-
-First, you can choose to display posts that include a specific hashtag from all across Instagram. ([Learn more](https://docs.spotlightwp.com/article/622-how-to-display-hashtag-feeds)).
-
-Second, you can use Hashtag filtering to show or hide posts from your connected Instagram account that use a specific hashtag. [Learn more.](https://spotlightwp.com/features/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_hashtagfeed)
+You need an Instagram Business or Creator account. Instagram no longer lets third-party apps display posts from personal accounts, so if yours is a personal account you'll need to switch it first. Switching is free and only takes a minute in the Instagram app's settings, and it doesn't affect your followers or your existing posts. If you're not sure which one to pick, our guide to [Instagram Creator vs Business accounts](https://spotlightwp.com/instagram-creator-vs-business-account/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_accounttype) compares the two.
 
 - - -
 
-= Can I display posts from multiple Instagram accounts in one gallery? =
+= How do I add an Instagram feed to WordPress? =
 
-Yes. With Spotlight, you can create feeds that feature photos, videos, and reels from multiple Instagram accounts within the same feed. Simply connect the Instagram user accounts you want to display posts from and select them in the "Connect" step of the feed editor in Spotlight.
-
-- - -
-
-= How many Instagram accounts can I connect? =
-
-Spotlight has no limit on the number of Instagram accounts you may connect. So long as you have legitimate access to those accounts, you can connect them directly through Spotlight or by using an Instagram access token (for developers).
+Install and activate Spotlight, go to "Instagram Feeds", choose a layout and connect your account. Once you're happy with the design, add the feed to any page using the Spotlight block, the widget, or the shortcode. The steps under Installation cover this in more detail.
 
 - - -
 
-= Where can I find my Instagram Access Token and User ID? =
+= Can I show posts from multiple Instagram accounts in one feed? =
 
-Option 1: Use Spotlight's [Access Token Generator](https://spotlightwp.com/access-token-generator/).
-
-Option 2: If your Instagram account is already connected in Spotlight, go to Instagram Feeds > Settings. From the first page, Accounts, click on the Instagram username or the "info" option under Actions. Enter your admin account's password to view the access token details.
+Yes. Connect each account you want to use, then select them all in the feed editor. Spotlight combines their posts into one feed.
 
 - - -
 
-= How many feeds can I set up and display? =
+= How many accounts and feeds can I create? =
 
-Spotlight sets no limit on the number of feeds you can set up. Design one for your footer, another for the sidebar, and one to fill an entire page - let your imagination run free. You can even show multiple feeds on the same page!
-
-- - -
-
-= Can I display multiple Instagram feeds on the same page or site? =
-
-Yes. With Spotlight you can embed multiple Instagram feeds on a single page, a single post, in widget areas, and across your entire website. There are no limits and each feed can be unique or re-used in multiple places.
+There's no limit. You can connect as many accounts as you have legitimate access to and create as many feeds as you need, and you can show several different feeds on the same page.
 
 - - -
 
-= Can I show full-size photos and play Instagram videos directly on my website? =
+= Can visitors watch Instagram videos and reels on my site? =
 
-Yes, Spotlight's free version includes a lightbox (popup) that will display your photos and playable videos in their full size over your entire website. Keep site visitors exactly where you want them - on your website!
-
-If you want to enhance the popup, [Spotlight PRO adds a sidebar](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_fullsizeandvideos) to display your Instagram captions, comments, published date, and more.
+Yes, with Spotlight Essentials or above. Free feeds include your video and reel posts, and the free lightbox shows photos at full size. Upgrading to Essentials lets visitors play videos and reels in the lightbox without leaving your site. Spotlight PRO also adds a sidebar to the lightbox with the caption, likes, comments, and date.
 
 - - -
 
-= Can I hand-pick specific posts to hide or show in my Instagram feed? =
+= Can I display an Instagram hashtag feed? =
 
-Yes, we understand that you may have certain posts that you don't want to show on your website. By using the Moderation option in Spotlight Pro you can hand-pick the photos, videos, and reels that you either want to show or hide on your website. [Learn more.](https://spotlightwp.com/features/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_moderation)
+Yes, with [Spotlight PRO](https://spotlightwp.com/pricing/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_hashtag). You can show public posts from across Instagram that use a hashtag, or filter your own feed to show or hide posts with certain hashtags. Our step-by-step guide shows [how to embed an Instagram hashtag feed in WordPress](https://spotlightwp.com/embed-instagram-hashtag-feed-wordpress/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_hashtagguide).
 
 - - -
 
-= Will Spotlight's Instagram feeds work well with my theme? =
+= Can I hide specific posts from my feed? =
 
-Yes, aside from the customisation options provided by Spotlight itself, the plugin is also set up to use your theme's fonts to completely match your brand's look and feel on your website.
+Yes. Spotlight PRO's moderation tool lets you click through your posts and choose which ones to show or hide, and you can also filter by keywords in captions. [See the moderation and filtering options](https://spotlightwp.com/features/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_moderation).
+
+- - -
+
+= Can I make my Instagram feed shoppable? =
+
+Yes. With Spotlight PRO you can link each post to a WooCommerce product, a page or any URL, so visitors can go straight from a photo to the product in it. Our walkthrough shows [how to create shoppable posts in WordPress](https://spotlightwp.com/how-to-create-shoppable-posts-wordpress-instagram/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_shoppable) from start to finish.
+
+- - -
+
+= Can I embed a single Instagram post? =
+
+Yes. Spotlight adds Instagram oEmbed support to WordPress for free, so you can embed individual posts as well as full feeds. Meta has changed how Instagram embeds work in 2026, and our article on [Instagram embeds in WordPress](https://spotlightwp.com/instagram-embed-wordpress/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_embed) explains what that means for your site.
+
+- - -
+
+= Will Spotlight slow down my website? =
+
+No, Spotlight loads feeds without iframes, stores optimized thumbnails on your own server rather than pulling every image from Instagram, caches feed data, and works alongside WP Rocket and LiteSpeed Cache to provide the best performance possible.
+
+- - -
+
+= How often does my feed update, and what happens if Instagram goes down? =
+
+Spotlight checks Instagram for new posts on a regular schedule and updates your feeds in the background. Because posts and thumbnails are stored on your site, your feed keeps working even if Instagram is having problems.
+
+- - -
+
+= Why isn't my Instagram feed showing? =
+
+It usually comes down to the account connection (including personal accounts that need switching to Business or Creator), a caching or optimization plugin interfering with the feed, or WordPress's scheduled tasks not running. Our troubleshooting guide covers [7 fixes for an Instagram feed not showing in WordPress](https://spotlightwp.com/instagram-feed-not-showing-wordpress/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_notshowing), and you can always ask us on the support forum.
+
+- - -
+
+= How do I connect a client's account without their password? =
+
+Send your client the [Access Token Generator](https://spotlightwp.com/access-token-generator/). They sign in to Instagram themselves and send you the access token, which you can paste straight into Spotlight. To see the token for an account that's already connected, go to Instagram Feeds > Settings > Accounts, click the account's username and enter your WordPress password.
+
+- - -
+
+= Will Spotlight work with my theme and page builder? =
+
+Yes. Feeds use your theme's fonts by default, and the Spotlight block, widget and shortcode work with the block editor, classic themes and most page builders. Spotlight Essentials and above add a dedicated Elementor widget, and our guide shows [two ways to add an Instagram feed to Elementor](https://spotlightwp.com/how-to-add-elementor-instagram-feed/?utm_source=readme&utm_medium=readme_faq&utm_campaign=readme_faq_elementor).
 
 
 == Screenshots ==
 
-1. Embed Instagram feeds anywhere on your website with Spotlight (free).
-2. Create multiple Instagram galleries in seconds with Spotlight’s powerful feed editor.
-3. Spotlight includes a free popup lightbox to display your Instagram photos, videos, and reels.
-4. All Spotlight Instagram feeds are automatically accessible and help boost your website’s SEO.
-5. Every Instagram feed is fully responsive by default and can also be customized per device.
-6. [Premium] Display your tagged Instagram posts and Instagram hashtag feeds.
-7. [Premium] Create shoppable Instagram Feeds and Instagram bio link pages in seconds. Link Instagram posts to articles, products, recipes, and much more.
+1. Display your Instagram feed on your WordPress website, updated automatically every time you post.
+2. Choose from free Instagram feed templates like Tall Grid, Squircle Grid, Gallery and Wave, or design your own.
+3. Customize your Instagram gallery’s columns, spacing, image ratio and hover details to match your brand.
+4. Responsive Instagram feeds that look great on desktop, tablet and mobile, with separate settings for each screen size.
+5. Accessible, SEO-friendly Instagram feeds with alt text generated automatically from each post’s caption.
+6. A popup lightbox lets visitors browse your Instagram photos without leaving your site, with a caption and comments sidebar in Essentials.
+7. [Essentials] Unlock every Instagram feed layout and template, including the new Polaroid Sticker and Thumbnail Gallery.
+8. [PRO] Display Instagram hashtag feeds and posts you’ve been tagged in.
+9. [PRO] Filter and moderate your Instagram feed by hashtag, caption keyword or hand-picked posts.
 
 == Changelog ==
+
+= 1.9.0 (2026-11-19) =
+
+**Added**
+- A Black Friday 2026 offer on the free version until 1 December 2026: a banner on the Feeds and Guides pages with 50% off the first year of every plan, and Black Friday upgrade buttons.
+
+**Fixed**
+- A fatal error on sites where another plugin loads version 3 of the `psr/log` package.
+
+= 1.8.1 (2026-10-21) =
+
+**Added**
+- Added a "Recommended plugins" page to the Instagram Feeds menu, listing other plugins from the Spotlight team.
+- Added a dismissible banner on the Feeds screen that recommends Vireo Analytics, a free analytics plugin with a report for Spotlight feeds.
+
+**Changed**
+- The Help page now opens inside the WordPress admin on the free version too, instead of in a new tab.
+- On the free version, the account menu item is now called "Account" instead of "License".
+- Updated Freemius SDK to the latest version.
+
+**Fixed**
+- Upgrade and PRO badges showed on top of the feed editor's sidebar section headers when scrolling.
+
+**Removed**
+- Removed the survey banner from the Feeds screen.
+
+= 1.8.0 (2026-10-07) =
+
+**Added**
+- New feeds now start with a layout choice. Users with a connected account go straight to the customizer; users without one are guided through connecting first.
+- Feeds can be imported from the new feed layout step.
+
+**Changed**
+- The Spotlight block is now registered from block.json (Block API v3), so it works in the iframed block editor.
+- The Follow button is now a single link, so keyboard and screen reader users get one clear control.
+- Updated the UI build tools and dependencies to fix known security vulnerabilities.
+- Spotlight now requires WordPress 6.3 or later.
+
+**Fixed**
+- The profile photo was slightly off-centre in the Centered header style.
+- Spacing issues in the new feed screens on mobile.
+- The selected preview device button in the feed editor could show its icon blue on blue.
+- The feed editor preview flashed when switching to tablet or phone.
+- The plugin menu showed a "License" item that led to a "not allowed" page on sites not connected to Freemius.
+- The "Help" menu item on free sites left the WordPress admin instead of opening in a new tab.
+
+**Removed**
+- Removed an unused survey endpoint that contained a hardcoded external webhook URL.
 
 = 1.7.5 (2026-03-10) =
 

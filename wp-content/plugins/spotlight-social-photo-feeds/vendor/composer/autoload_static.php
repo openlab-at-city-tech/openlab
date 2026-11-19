@@ -4,11 +4,10 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbdc3697e84b22990637d14f7a517766f
+class ComposerStaticInit0077a2443ad28a124e82df798514c615
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
-        '8d50dc88e56bace65e1e72f6017983ed' => __DIR__ . '/..' . '/freemius/wordpress-sdk/start.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -27,7 +26,6 @@ class ComposerStaticInitbdc3697e84b22990637d14f7a517766f
         ),
         'P' =>
         array (
-            'Psr\\Log\\' => 8,
             'Psr\\Http\\Message\\' => 17,
             'Psr\\Http\\Client\\' => 16,
             'Psr\\Container\\' => 14,
@@ -88,10 +86,6 @@ class ComposerStaticInitbdc3697e84b22990637d14f7a517766f
         array (
             0 => __DIR__ . '/..' . '/rebelcode/atlas/src',
         ),
-        'Psr\\Log\\' =>
-        array (
-            0 => __DIR__ . '/..' . '/psr/log/Psr/Log',
-        ),
         'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
@@ -142,9 +136,9 @@ class ComposerStaticInitbdc3697e84b22990637d14f7a517766f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbdc3697e84b22990637d14f7a517766f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbdc3697e84b22990637d14f7a517766f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbdc3697e84b22990637d14f7a517766f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0077a2443ad28a124e82df798514c615::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0077a2443ad28a124e82df798514c615::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0077a2443ad28a124e82df798514c615::$classMap;
 
         }, null, ClassLoader::class);
     }

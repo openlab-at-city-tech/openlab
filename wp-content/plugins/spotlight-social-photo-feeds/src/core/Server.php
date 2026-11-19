@@ -17,7 +17,6 @@ use RebelCode\Spotlight\Instagram\Engine\Data\Feed\StoryFeed;
 use RebelCode\Spotlight\Instagram\Engine\Data\Item\MediaChild;
 use RebelCode\Spotlight\Instagram\Engine\Data\Item\MediaComment;
 use RebelCode\Spotlight\Instagram\Engine\Data\Item\MediaItem;
-use RebelCode\Spotlight\Instagram\Engine\Data\Item\MediaProductType;
 use RebelCode\Spotlight\Instagram\Engine\IgPostStore;
 use RebelCode\Spotlight\Instagram\Feeds\FeedManager;
 use RebelCode\Spotlight\Instagram\Utils\Arrays;
@@ -170,7 +169,7 @@ class Server
             'permalink' => $item->data[MediaItem::PERMALINK],
             'shortcode' => $item->data[MediaItem::SHORTCODE] ?? '',
             'videoTitle' => $item->data[MediaItem::VIDEO_TITLE] ?? '',
-            'productType' => $item->data[MediaItem::MEDIA_PRODUCT_TYPE] ?? MediaProductType::FEED,
+            'productType' => MediaItem::getProductType($item),
             'thumbnail' => $item->data[MediaItem::THUMBNAIL_URL],
             'thumbnails' => $item->data[MediaItem::THUMBNAILS],
             'likesCount' => $item->data[MediaItem::LIKES_COUNT],

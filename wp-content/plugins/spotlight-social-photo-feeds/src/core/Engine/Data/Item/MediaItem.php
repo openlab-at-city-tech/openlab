@@ -41,6 +41,39 @@ class MediaItem
     const MEDIA_SIZE = 'media_size';
     const SOURCE_TYPE = 'source_type';
     const SOURCE_NAME = 'source_name';
+    // -----------------------
+    // PATTERNS
+    // -----------------------
+    /** Matches Instagram Reel permalinks, with or without a username segment before the "reel" path. */
+    const REEL_PERMALINK_PATTERN = '#^https?://(?:[a-z0-9-]+\.)*instagram\.com/(?:[^/?\#]+/)?reels?/#i';
+
+    /**
+     * Retrieves an item's product type.
+     *
+     * The API only returns `media_product_type` for media owned by a business account, so the stored value is often
+     * empty. When it is, I detect Reels from the permalink and treat every other post as a feed post.
+     */
+    public static function getProductType(Item $item): string
+    {
+        $productType = $item->get(static::MEDIA_PRODUCT_TYPE);
+        if (is_string($productType) && $productType !== '') {
+            return $productType;
+        }
+
+        $permalink = $item->get(static::PERMALINK);
+        $isReel = $item->get(static::MEDIA_TYPE) === 'VIDEO' &&
+                  is_string($permalink) &&
+                  preg_match(static::REEL_PERMALINK_PATTERN, $permalink) === 1;
+
+        return $isReel ? MediaProductType::REELS : MediaProductType::FEED;
+    }
+
+    /** Checks if an item is a Reel video. */
+    public static function isReel(Item $item): bool
+    {
+        return $item->get(static::MEDIA_TYPE) === 'VIDEO' &&
+               static::getProductType($item) === MediaProductType::REELS;
+    }
 
     /** Checks if an item is a story post, regardless of whether or not it's expired. */
     public static function isStory(Item $item): bool

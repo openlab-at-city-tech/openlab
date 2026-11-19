@@ -16,7 +16,6 @@ return array(
     'RebelCode\\Psr7\\' => array($vendorDir . '/rebelcode/psr7/src'),
     'RebelCode\\Iris\\' => array($vendorDir . '/rebelcode/iris-engine/src'),
     'RebelCode\\Atlas\\' => array($vendorDir . '/rebelcode/atlas/src'),
-    'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Psr\\Http\\Message\\' => array($vendorDir . '/psr/http-factory/src', $vendorDir . '/psr/http-message/src'),
     'Psr\\Http\\Client\\' => array($vendorDir . '/psr/http-client/src'),
     'Psr\\Container\\' => array($vendorDir . '/psr/container/src'),
