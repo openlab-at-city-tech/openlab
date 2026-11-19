@@ -6,7 +6,7 @@
  *  ZOTPRESS REQUEST CLASS
  *
  *  Based on Sean Huber's CURL library with additions by Mike Purvis.
- *  Checks for updates every 10 minutes.
+ *  Checks for updates every 10 minutes or based on cache timer setting.
  *
  *  Requires: request url (e.g. https://api.zotero.org/...), api user id (can be accessed from request url)
  *  Returns: array with json and headers (json-formatted)
@@ -19,7 +19,7 @@ if ( ! class_exists('ZotpressRequest') )
     {
         public  $update = false,
                 $request_error = false,
-                $check_every_n_mins = 10, // 10 minutes
+                $check_every_n_mins = 10, // 10 minutes by default
                 $api_user_id,
                 $request_type = 'item';
 
@@ -135,6 +135,12 @@ if ( ! class_exists('ZotpressRequest') )
                 + ( $timeElapsed->i )
                 + ( $timeElapsed->s * 0.0166667 );
 
+            // 7.4.4: Added cache timer
+            if ( get_option("Zotpress_DefaultCacheTimer")
+                    && is_int( get_option("Zotpress_DefaultCacheTimer") )
+                    && get_option("Zotpress_DefaultCacheTimer") >= 10 )
+                $this->check_every_n_mins = get_option("Zotpress_DefaultCacheTimer");
+
             if ( $timeElapsedMin > $this->check_every_n_mins )
                 return true;
             else // Not time yet
@@ -147,14 +153,6 @@ if ( ! class_exists('ZotpressRequest') )
             global $wpdb;
 
             // First, check db to see if cached version exists
-            // $zp_query =
-            //         "
-            //         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
-            //         FROM ".$wpdb->prefix."zotpress_cache
-            //         WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
-            //         AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
-            //         ";
-            // $zp_results = $wpdb->get_results( $zp_query, OBJECT );
             $zp_results = $wpdb->get_results(
                 $wpdb->prepare(
                     "
@@ -209,15 +207,6 @@ if ( ! class_exists('ZotpressRequest') )
             if ( $this->update === false )
             {
                 // First, check db to see if cached version exists
-                // $zp_query =
-                //         "
-                //         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
-                //         FROM ".$wpdb->prefix."zotpress_cache
-                //         WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
-                //         AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
-                //         ";
-                // $zp_results = $wpdb->get_results( $zp_query, OBJECT ); unset($zp_query);
-
                 $zp_results = $wpdb->get_results(
                     $wpdb->prepare(
                         "
@@ -268,15 +257,6 @@ if ( ! class_exists('ZotpressRequest') )
             global $wpdb;
 
             // First, check db to see if cached version exists
-            // $zp_query =
-            //         "
-            //         SELECT DISTINCT ".$wpdb->prefix."zotpress_cache.*
-            //         FROM ".$wpdb->prefix."zotpress_cache
-            //         WHERE ".$wpdb->prefix."zotpress_cache.request_id = '".md5( $url )."'
-            //         AND ".$wpdb->prefix."zotpress_cache.api_user_id = '".$this->api_user_id."'
-            //         ";
-            // $zp_results = $wpdb->get_results($zp_query, OBJECT); unset($zp_query);
-
             $zp_results = $wpdb->get_results(
                 $wpdb->prepare(
                     "

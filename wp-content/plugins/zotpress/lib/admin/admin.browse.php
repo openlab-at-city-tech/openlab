@@ -29,7 +29,6 @@ if ( $zp_accounts_total > 0 )
     }
     elseif ( get_option("Zotpress_DefaultAccount") )
     {
-        // $zp_account_temp = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".get_option("Zotpress_DefaultAccount")."'", OBJECT);
         $zp_account_temp = $wpdb->get_row(
             $wpdb->prepare(
                 "SELECT * FROM `".$wpdb->prefix."zotpress` 
@@ -128,7 +127,6 @@ if ( $zp_accounts_total > 0 )
         <span id="ZOTPRESS_PLUGIN_URL"><?php echo esc_url(ZOTPRESS_PLUGIN_URL); ?></span>
 
         <?php
-        // echo $zpLib->getLib();
         echo wp_kses(
                 $zpLib->getLib(),
                 array(

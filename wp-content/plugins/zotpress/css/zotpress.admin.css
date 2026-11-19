@@ -430,8 +430,8 @@ form#zp-Add input#upload_image_button {
 
 form#zp-Add div.message {
     position: absolute;
-    bottom: 1.1em;
-    right: 8.5em;
+    bottom: 1.1rem;
+    right: 8.5rem;
     width: 100%;
 }
 div.zp-Loading {
@@ -608,6 +608,93 @@ zp-Browse-Bar
 
 */
 
+.zp-Browse-Bar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#zp-Browse-Search,
+.zp-Browse-Collections, 
+.zp-Browse-Tags {
+    position: relative;
+    flex: 1 0 31%;
+    width: auto;
+}
+#zp-Browse-Search-Input {
+    border: 1px solid #ccc;
+    border-bottom-color: #000;
+    margin-right: 15px;
+    width: calc(100% - 30px);
+}
+
+#zp-Browse-Search-X {
+    z-index: 1;
+    top: 0.6rem;
+    right: calc(30px + 0.5rem);
+    position: absolute;
+
+    background-color: #000;
+    border-radius: 1rem;
+    color: #fff;
+    padding: 0.15rem;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1;
+    width: 1rem;
+    height: 1rem;
+
+    display: none;
+}
+
+#zp-Browse-Search-Results {
+    border-bottom: 1px solid #eee;
+    margin: 40px 0 0;
+}
+
+#zp-Browse-Search-Results .zp-Entry {
+    padding: 0 30px;
+}
+
+#zp-Browse-Search-Results .zpSearchResultsItem.hidden {
+    display: block !important;
+}
+
+div.zp-Entry label {
+    color: #ccc;
+    display: inline;
+    font-family: "Georgia", serif;
+    font-size: 0.85em;
+    text-transform: uppercase;
+}
+
+div.zp-Entry input.item_key {
+    border: none;
+    box-shadow: none;
+    color: #ccc;
+    display: inline-block;
+    font-family: "Georgia", serif;
+    font-style: italic;
+    font-weight: normal;
+    margin-bottom: 2em;
+}
+
+div#zp-Zotpress div.zp-Entry-Image a.upload, 
+div#zp-Zotpress div.zp-Entry-Image a.upload:link, 
+div#zp-Zotpress div.zp-Entry-Image a.upload:visited {
+    background-color: #F6F6F6;
+    border: 2px solid #F6F6F6;
+    border-bottom: 2px solid #eee;
+    color: #ccc;
+    display: block;
+    font-size: 0.9em;
+    font-weight: bold;
+    line-height: 2em;
+    text-align: center;
+    text-decoration: none;
+    width: 150px;
+}
+
 div#zp-Zotpress div#zp-Options-Wrapper,
 div#zp-Zotpress div.zp-Browse-Wrapper {
     position: relative;
@@ -672,6 +759,13 @@ div#zp-Zotpress div#zp-Options-Wrapper div.zp-Column-Inner {
 .zp-Browse-Tags .zp-Browse-Select {
     margin-right: 0;
     margin-left: 15px;
+}
+.zp-Browse-Select::after {
+    float: right;
+    margin-top: -1.75rem;
+    margin-right: 1rem;
+    content: '▼';
+    height: 1rem;
 }
 
 .zp-Browse-Select select {

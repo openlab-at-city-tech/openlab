@@ -66,7 +66,7 @@
             </p>
 
             <p>
-                <?php esc_html_e('You can build shortcodes and search for items in your library using the <strong>Zotpresss Reference</strong> widget on the post/page add/edit screens. Below, you can find attributes and options for each kind of Zotpress shortcode.','zotpress'); ?>
+                <?php esc_html_e('You can build shortcodes and search for items in your library using the Zotpresss Reference widget on the post/page add/edit screens. Below, you can find attributes and options for each kind of Zotpress shortcode.','zotpress'); ?>
             </p>
 
             <p>

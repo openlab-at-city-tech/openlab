@@ -43,6 +43,7 @@ jQuery(document).ready(function()
 			
 			// zp_params.zpUsedCache = false; if ( jQuery(".ZP_USED_CACHE", $instance).text().trim().length > 0 && jQuery(".ZP_USED_CACHE", $instance).text() == "true" ) zp_params.zpUsedCache = true;
 			zp_params.zpUpdateNeeded = false; if ( jQuery(".ZP_UPDATENEEDED", $instance).text().trim().length > 0 && jQuery(".ZP_UPDATENEEDED", $instance).text() == "true" ) zp_params.zpUpdateNeeded = true;
+			zp_params.zpCacheTimer = false; if ( jQuery(".ZP_CACHETIMER", $instance).text().trim().length > 0 ) zp_params.zpCacheTimer = jQuery(".ZP_CACHETIMER", $instance).text();
 			zp_params.zpJSON = false; if ( jQuery(".ZP_JSON", $instance).text().trim().length > 0 ) zp_params.zpJSON = jQuery(".ZP_JSON", $instance).text().trim();
 
 			zp_params.zpForceNumsCount = 1;
@@ -170,7 +171,7 @@ jQuery(document).ready(function()
 	function zp_get_items ( request_start, request_last, $instance, params, update )
 	{
 		console.log('zp: calling zp_get_items with update check?', update);
-		console.log('zp: is an update needed?', params.zpUpdateNeeded);
+		console.log('zp: is an update needed?', params.zpUpdateNeeded, '(every '+params.zpCacheTimer+' mins)');
 		
 		if ( typeof(request_start) === "undefined" || request_start == "false" || request_start == "" )
 			request_start = 0;

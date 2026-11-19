@@ -43,6 +43,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
             // kfeuerherm: added next nine lines 15 November 2019
             delete_option( 'Zotpress_cache_version' );
             delete_option( 'Zotpress_DefaultCPT' );
+            delete_option( 'Zotpress_DefaultCacheTimer' );
             delete_option( 'Zotpress_DefaultAccount' );
             delete_option( 'Zotpress_DefaultEditor' );
             delete_option( 'Zotpress_DefaultStyle' );
@@ -203,6 +204,7 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
         // Delete options
         delete_option( 'Zotpress_DefaultCPT' );
+        delete_option( 'Zotpress_DefaultCacheTimer' );
         delete_option( 'Zotpress_DefaultAccount' );
         delete_option( 'Zotpress_DefaultStyle' );
         delete_option( 'Zotpress_StyleList' );

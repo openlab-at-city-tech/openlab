@@ -4,7 +4,10 @@
 function zotpress_strip_quotes($string)
 {
     // Strip quotes and decode
-    $string = str_replace("”", "", str_replace('"','', html_entity_decode( $string )));
+    // 7.4.5: Vulnerability reported in use of html_entity_decode()
+    // which converts not just quotes but all html entities; maybe remove for now
+    // $string = str_replace("”", "", str_replace('"','', html_entity_decode( $string )));
+    $string = str_replace("”", "", str_replace('"','', $string));
     return $string;
 }
 
@@ -17,7 +20,8 @@ function Zotpress_zotpressInText ($atts)
     *
     */
 
-    extract(shortcode_atts(array(
+    // extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
 
         'item' => false,
         'items' => false,
@@ -34,38 +38,36 @@ function Zotpress_zotpressInText ($atts)
         'nickname' => false,
         'nick' => false
 
-    ), $atts));
+    ), $atts);
+
+    global $post, $wpdb;
 
 
-    // PREPARE ATTRIBUTES
-    if ( $items )
-        $items = zotpress_strip_quotes( str_replace(" ", "", $items ));
-    elseif ( $item )
-        $items = zotpress_strip_quotes( str_replace(" ", "", $item ));
+    // +---------------------------+
+    // | FORMAT & CLEAN PARAMETERS |
+    // +---------------------------+
 
-    $pages = zotpress_strip_quotes( $pages );
-    $format = zotpress_strip_quotes( $format );
-    $brackets = zotpress_strip_quotes( $brackets );
+    if ( $atts['items'] )
+        $atts['items'] = zotpress_strip_quotes( str_replace(" ", "", $atts['items'] ));
+    elseif ( $atts['item'] )
+        $atts['items'] = zotpress_strip_quotes( str_replace(" ", "", $atts['item'] ));
 
-    $etal = zotpress_strip_quotes( $etal );
-    if ( $etal == "default" ) $etal = false;
+    // 7.4.3 via 3.9.10: Use the Zotpress_prep_ajax_request_vars() function on intext
+    $zpr = Zotpress_prep_ajax_request_vars($wpdb, $atts, false, true);
 
-    $separator = zotpress_strip_quotes( $separator );
-    if ( $separator == "default" ) $separator = false;
+    // 7.4.5: Bug and vulnerability? Now uses $zpr
+    // $items = $atts['items'];
+    $items = $zpr['item_key'];
 
-    $and = zotpress_strip_quotes( $and );
-    if ( $and == "default" ) $and = false;
+    $pages = $zpr['pages']; // 7.4.3: Is this used?
+    $format = $zpr['format'];
+    $brackets = $zpr['brackets'];
+    $etal = $zpr['etal'];
+    $separator = $zpr['separator'];
+    $and = $zpr['and'];
 
-    if ( $userid ) $api_user_id = zotpress_strip_quotes( $userid );
-    if ( $nickname ) $nickname = zotpress_strip_quotes( $nickname );
-    if ( $nick ) $nickname = zotpress_strip_quotes( $nick );
-
-
-
-    // GET ACCOUNTS
-
-    global $wpdb;
-    global $post;
+    $api_user_id = $zpr['api_user_id'];
+    $nickname = $zpr['nickname'];
 
     // Turn on/off minified versions if testing/live
     $minify = ''; if ( ZOTPRESS_LIVEMODE ) $minify = '.min';
@@ -76,7 +78,6 @@ function Zotpress_zotpressInText ($atts)
 
     if ( $nickname !== false )
     {
-        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE nickname='".$nickname."'", OBJECT);
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
@@ -92,7 +93,6 @@ function Zotpress_zotpressInText ($atts)
     }
     elseif ( $api_user_id !== false )
     {
-        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$api_user_id."'", OBJECT);
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
@@ -112,7 +112,7 @@ function Zotpress_zotpressInText ($atts)
         if ( get_option("Zotpress_DefaultAccount") !== false )
         {
             $api_user_id = get_option("Zotpress_DefaultAccount");
-            // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id ='".$api_user_id."'", OBJECT);
+
             $zp_account = $wpdb->get_row(
                 $wpdb->prepare(
                     "
@@ -130,6 +130,7 @@ function Zotpress_zotpressInText ($atts)
         }
     }
 
+
     // Format in-text items:
     // Handle the possible formats of item/s for in-text
     //
@@ -143,6 +144,7 @@ function Zotpress_zotpressInText ($atts)
 
     $all_page_instances = array();
     $all_page_instances_str = "";
+    // var_dump("tessst",$items);
 
     // // Add `ppp` in front of pages, so we can ignore pages later
 	// $intextitem["items"] = preg_replace( "/((?=[^}]),(?=[^{]))+/", ",ppp", $intextitem["items"] );
@@ -155,14 +157,22 @@ function Zotpress_zotpressInText ($atts)
     // if ( strpos( $items, $api_user_id ) === false ) // WRONG: assumes default/global api_user_id rather than the one for this shortcode
     if ( strpos( $items, ":" ) === false )
     {
-        if (strpos( $items, "{" ) !== false) {
+        if ( strpos( $items, "{" ) !== false ) {
             $items = str_replace( "{", "{".$api_user_id.":", $items );
-        } elseif (strpos( $items, "," ) !== false) {
+        } elseif ( strpos( $items, "," ) !== false ) {
             $items = "{".$api_user_id.":" . str_replace( ",", "},{".$api_user_id.":", $items )."}";
         } else // assume unformatted and single, so place at front
         {
             $items = "{".$api_user_id.":".$items."}";
         }
+    }
+    // 7.4.5: Account for {:____}
+    else if ( strpos($items, "{:") !== false )
+    {
+        // Add the userid in
+        $items = str_replace( "{:", "{".$api_user_id.":", $items );
+        // $api_user_id
+        // $newstr = substr_replace($oldstr, $str_to_insert, $pos, 0);
     }
 
     // Determine page instances and where
@@ -225,7 +235,8 @@ function Zotpress_zotpressInText ($atts)
     // REVIEW: Changed for new item format
     // e.g., zp-ID--66010-FKNL6ECC-_-66010-FZF9BN8L--wp406
     // $instance_id = "zp-ID-".$api_user_id."-" . str_replace( " ", "_", str_replace( "&", "_", str_replace( "+", "_", str_replace( "/", "_", str_replace( "{", "-", str_replace( "}", "-", str_replace( ",", "_", $items ) ) ) ) ) ) ) ."-".$post->ID;
-    $instance_id = "zp-InText-zp-ID-" . str_replace( " ", "_", str_replace( "&", "_", str_replace( "+", "_", str_replace( "/", "_", str_replace( "{", "-", str_replace( "}", "-", str_replace( ":", "-", str_replace( ",", "_", $items ) ) ) ) ) ) ) ) ."-wp".$post->ID;
+    // 7.4.5: Escape to fix the vulnerability
+    $instance_id = esc_attr(sanitize_text_field(wp_strip_all_tags("zp-InText-zp-ID-" . str_replace( " ", "_", str_replace( "&", "_", str_replace( "+", "_", str_replace( "/", "_", str_replace( "{", "-", str_replace( "}", "-", str_replace( ":", "-", str_replace( ",", "_", $items ) ) ) ) ) ) ) ) ."-wp".$post->ID)));
 
     // Set up array for this post, if it doesn't exist
 	if ( ! isset( $GLOBALS['zp_shortcode_instances'][$post->ID] ) )
@@ -233,10 +244,7 @@ function Zotpress_zotpressInText ($atts)
 
     // Determine if all items are np
     if ( $all_np )
-    {
-        // $all_page_instances = array("np");
         $all_page_instances_str = "np";
-    }
 
     // Then, add the instance to the array
     // REVIEW: Don't need api_user_id ... or maybe need multiple?
@@ -256,7 +264,8 @@ function Zotpress_zotpressInText ($atts)
 	// 				class="zp-InText-Citation loading"
 	// 				rel="{ \'api_user_id\': \''.$api_user_id.'\', \'pages\': \''.$pages.'\', \'items\': \''.$items.'\', \'format\': \''.$format.'\', \'brackets\': \''.$brackets.'\', \'etal\': \''.$etal.'\', \'separator\': \''.$separator.'\', \'and\': \''.$and.'\' }"></span>';
     // $output = '<span class="'.$instance_id.' zp-InText-Citation loading" rel="{ \'pages\': \''.join("--", $all_page_instances).'\', \'items\': \''.$items.'\', \'format\': \''.$format.'\', \'brackets\': \''.$brackets.'\', \'etal\': \''.$etal.'\', \'separator\': \''.$separator.'\', \'and\': \''.$and.'\' }"></span>';
-    $output = '<span class="'.$instance_id.' zp-InText-Citation loading" rel="{ \'pages\': \''.$all_page_instances_str.'\', \'items\': \''.$items.'\', \'format\': \''.$format.'\', \'brackets\': \''.$brackets.'\', \'etal\': \''.$etal.'\', \'separator\': \''.$separator.'\', \'and\': \''.$and.'\' }"></span>';
+    // 7.4.5: Fixing vulnerability
+    $output = '<span class="'.esc_attr(sanitize_text_field(wp_strip_all_tags($instance_id))).' zp-InText-Citation loading" rel="{ \'pages\': \''.esc_attr(sanitize_text_field(wp_strip_all_tags($all_page_instances_str))).'\', \'items\': \''.esc_attr(sanitize_text_field(wp_strip_all_tags($items))).'\', \'format\': \''.$format.'\', \'brackets\': \''.$brackets.'\', \'etal\': \''.$etal.'\', \'separator\': \''.$separator.'\', \'and\': \''.$and.'\' }"></span>';
 
     return $output;
 }
