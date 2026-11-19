@@ -19,6 +19,7 @@ class RestApi {
             new PublicApi(),
             new SettingApi(),
             new SyncApi(),
+            new PostTypeApi(),
         );
 
         foreach ( $rest_apis as $rest_api ) {

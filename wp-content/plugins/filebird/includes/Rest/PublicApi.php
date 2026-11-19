@@ -32,6 +32,76 @@ class PublicApi {
 			)
 		);
 
+		//GET http://yoursite/wp-json/filebird/public/v1/post-type-folders/?post_type=
+		register_rest_route(
+			NJFB_REST_PUBLIC_URL,
+			'post-type-folders',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this->controller, 'publicRestApiGetPostTypeFolders' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
+		//GET http://yoursite/wp-json/filebird/public/v1/post-type-folder/posts/?post_type=&folder_id=&per_page=&page=
+		register_rest_route(
+			NJFB_REST_PUBLIC_URL,
+			'post-type-folder/posts',
+			array(
+				'methods'             => 'GET',
+				'callback'            => array( $this->controller, 'publicRestApiGetPostTypeFolderPosts' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
+		//POST http://yoursite/wp-json/filebird/public/v1/post-type-folders
+		//post_type=&title=&parent=
+		register_rest_route(
+			NJFB_REST_PUBLIC_URL,
+			'post-type-folders',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this->controller, 'publicRestApiNewPostTypeFolder' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
+		//POST http://yoursite/wp-json/filebird/public/v1/post-type-folder/update
+		//post_type=&id=&title=&parent=
+		register_rest_route(
+			NJFB_REST_PUBLIC_URL,
+			'post-type-folder/update',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this->controller, 'publicRestApiUpdatePostTypeFolder' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
+		//POST http://yoursite/wp-json/filebird/public/v1/post-type-folder/delete
+		//post_type=&ids=
+		register_rest_route(
+			NJFB_REST_PUBLIC_URL,
+			'post-type-folder/delete',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this->controller, 'publicRestApiDeletePostTypeFolder' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
+		//POST http://yoursite/wp-json/filebird/public/v1/post-type-folder/set-posts
+		//post_type=&folderId=&ids=
+		register_rest_route(
+			NJFB_REST_PUBLIC_URL,
+			'post-type-folder/set-posts',
+			array(
+				'methods'             => 'POST',
+				'callback'            => array( $this->controller, 'publicRestApiSetPostTypeFolder' ),
+				'permission_callback' => array( $this, 'permission_callback' ),
+			)
+		);
+
 		//GET http://yoursite/wp-json/filebird/public/v1/folder/?folder_id=
 		register_rest_route(
 			NJFB_REST_PUBLIC_URL,
@@ -109,17 +179,14 @@ class PublicApi {
 	}
 
     private function getBearerToken() {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		$token   = null;
 		$headers = $this->getAuthorizationHeader();
-		// HEADER: Get the access token from the header
+		// The key is only ever read from the Authorization header. Accepting it
+		// from the query string leaks it into proxy, CDN and access logs.
 		if ( ! empty( $headers ) ) {
 			if ( preg_match( '/Bearer\s(\S+)/', $headers, $matches ) ) {
 				$token = $matches[1];
 			}
-		}
-		if ( is_null( $token ) && isset( $_REQUEST['token'] ) ) {
-			$token = $_REQUEST['token'];
 		}
 		return $token;
 	}
@@ -130,9 +197,13 @@ class PublicApi {
 
 	public function permission_callback( $request ) {
 		$key = get_option( 'fbv_rest_api_key', '' );
-		if ( \strlen( $key ) == 40 ) {
-			return $key === $this->getBearerToken();
+
+		if ( \strlen( $key ) !== 40 ) {
+			return false;
 		}
-		return false;
+
+		$token = $this->getBearerToken();
+
+		return is_string( $token ) && hash_equals( $key, $token );
 	}
 }

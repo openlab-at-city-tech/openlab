@@ -1,0 +1,79 @@
+/* YayMail install confirmation modal — self-contained, no cross-module dependency. */
+#yaymail-confirm-modal {
+	position: fixed;
+	inset: 0;
+	z-index: 100001;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: rgba( 0, 0, 0, .4 );
+}
+.yaymail-confirm-dialog {
+	background: #fff;
+	border-radius: 8px;
+	padding: 20px;
+	width: 320px;
+	max-width: calc( 100% - 32px );
+	position: relative;
+	box-shadow: 0 5px 15px rgba( 0, 0, 0, .15 );
+}
+.yaymail-confirm-x {
+	position: absolute;
+	top: 10px;
+	right: 12px;
+	background: none;
+	border: none;
+	font-size: 22px;
+	line-height: 1;
+	cursor: pointer;
+	color: #666;
+	padding: 0;
+	width: 28px;
+	height: 28px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.yaymail-confirm-x:hover {
+	color: #000;
+}
+.yaymail-confirm-dialog h3 {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0 0 10px;
+	padding-right: 24px;
+	color: #1d2427;
+}
+.yaymail-confirm-dialog > p {
+	margin: 0 0 14px;
+	color: #444;
+	font-size: 14px;
+	line-height: 1.5;
+}
+.yaymail-confirm-actions {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 12px;
+	background: #f7f8f9;
+	margin: 16px -20px -20px;
+	padding: 14px 20px;
+	border-radius: 0 0 8px 8px;
+}
+/* "No, thanks" — primary-button box (same size as Install Now) but ghosted:
+   transparent fill + WP-blue text; hover fills a soft blue bg. ID-scoped so it
+   overrides WP core's .button-primary styles. */
+#yaymail-confirm-modal .yaymail-confirm-cancel.button-primary {
+	background: transparent;
+	border-color: transparent;
+	color: #3858e9;
+	box-shadow: none;
+	text-shadow: none;
+}
+#yaymail-confirm-modal .yaymail-confirm-cancel.button-primary:hover,
+#yaymail-confirm-modal .yaymail-confirm-cancel.button-primary:focus {
+	background: #e6eaf4;
+	border-color: transparent;
+	color: #3858e9;
+	box-shadow: none;
+}

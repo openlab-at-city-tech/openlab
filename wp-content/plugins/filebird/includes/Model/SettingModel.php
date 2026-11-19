@@ -3,6 +3,7 @@ namespace FileBird\Model;
 
 use FileBird\Utils\Singleton;
 use FileBird\Admin\Settings;
+use FileBird\Classes\Schedule;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -35,6 +36,10 @@ class SettingModel {
 			'enable_cache_optimization' => array(
 				'get' => 'getEnableCacheOptimization',
 				'set' => 'setEnableCacheOptimization',
+			),
+			'AUTO_BACKUP'         => array(
+				'get' => 'getAutoBackup',
+				'set' => 'setAutoBackup',
 			),
 		);
 	}
@@ -89,6 +94,15 @@ class SettingModel {
 
 	public function setFolderSearchMethod( $value ) {
 		update_option( 'njt_fbv_is_search_using_api', $value );
+	}
+
+	public function getAutoBackup() {
+		return get_option( 'njt_fbv_auto_backup', '1' ) === '1';
+	}
+
+	public function setAutoBackup( $value ) {
+		update_option( 'njt_fbv_auto_backup', $value ? '1' : '0' );
+		Schedule::syncBackupSchedule();
 	}
 
 	public function getEnableCacheOptimization() {

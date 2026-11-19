@@ -15,9 +15,8 @@ msgstr ""
 "X-Poedit-Flags-xgettext: --add-comments=translators:\n"
 "X-Poedit-WPHeader: filebird.php\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-KeywordsList: __;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;"
-"esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;"
-"_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
+"X-Poedit-KeywordsList: "
+"__;_e;_n:1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;esc_attr__;esc_attr_e;esc_attr_x:1,2c;esc_html__;esc_html_e;esc_html_x:1,2c;_n_noop:1,2;_nx_noop:3c,1,2;__ngettext_noop:1,2\n"
 "X-Poedit-SearchPath-0: .\n"
 "X-Poedit-SearchPathExcluded-0: *.min.js\n"
 "X-Poedit-SearchPathExcluded-1: apps\n"
@@ -167,9 +166,9 @@ msgstr ""
 #: includes/Admin/Settings.php:110 views/particle/activation_fail.php:10
 #, php-format
 msgid ""
-"This license was used with <i>%s</i>, please <a href=\"https://1.envato."
-"market/Get-FileBird\" target=\"_blank\"><strong>purchase another license</"
-"strong></a>, or <a href=\"https://ninjateam.org/support\" "
+"This license was used with <i>%s</i>, please <a href=\"https://"
+"1.envato.market/Get-FileBird\" target=\"_blank\"><strong>purchase another "
+"license</strong></a>, or <a href=\"https://ninjateam.org/support\" "
 "target=\"_blank\"><strong>contact support</strong></a>"
 msgstr ""
 
@@ -1329,4 +1328,199 @@ msgstr ""
 
 #. Author URI of the plugin/theme
 msgid "https://ninjateam.org"
+msgstr ""
+
+#: Addons/PostType/Controllers/Main.php:67
+#: Addons/PostType/Controllers/Main.php:230
+#: Addons/PostType/Controllers/Main.php:366 Controller/Api.php:55
+#: Controller/Api.php:90 Controller/Api.php:150
+msgid "Post Type not enabled."
+msgstr ""
+
+#: Addons/PostType/Controllers/Main.php:134
+msgid "Could not edit this folder (author error)"
+msgstr ""
+
+#: Addons/PostType/Controllers/Main.php:151
+msgid "Could not edit this folder"
+msgstr ""
+
+#: Addons/PostType/Controllers/Main.php:195
+msgid "Author Error"
+msgstr ""
+
+#: Addons/PostType/Init.php:152
+msgid "Filebird %s Folder"
+msgstr ""
+
+#: Addons/PostType/Init.php:153
+msgid "Search Folders"
+msgstr ""
+
+#: Addons/PostType/Init.php:155
+msgid "Parent Folder"
+msgstr ""
+
+#: Addons/PostType/Init.php:156
+msgid "Parent Folder:"
+msgstr ""
+
+#: Addons/PostType/Init.php:157
+msgid "Edit Folder"
+msgstr ""
+
+#: Addons/PostType/Init.php:158
+msgid "Update Folder"
+msgstr ""
+
+#: Addons/PostType/Init.php:159
+msgid "Add New Folder"
+msgstr ""
+
+#: Addons/PostType/Init.php:160
+msgid "New Folder Name"
+msgstr ""
+
+#: Addons/PostType/Models/Main.php:193 Addons/PostType/Models/Main.php:197
+msgid "(Copy)"
+msgstr ""
+
+#: Admin/Settings.php:115
+msgid ""
+"It seems you don't have any valid FileBird license. Please <a "
+"rel=\"noreferrer noopener\" href=\"https://ninjateam.org/support\" "
+"target=\"_blank\"><strong>contact support</strong></a> to get help or <a "
+"rel=\"noreferrer noopener\" href=\"https://1.envato.market/Get-FileBird\" "
+"target=\"_blank\"><strong>purchase a FileBird license</strong></a>"
+msgstr ""
+
+#: Admin/Settings.php:117
+msgid ""
+"This license was used with <i>%s</i>, please <a rel=\"noreferrer noopener\" "
+"href=\"https://1.envato.market/Get-FileBird\" "
+"target=\"_blank\"><strong>purchase another license</strong></a>, or <a "
+"rel=\"noreferrer noopener\" href=\"https://ninjateam.org/support\" "
+"target=\"_blank\"><strong>contact support</strong></a>"
+msgstr ""
+
+#: Admin/Settings.php:162 Classes/Core.php:105 Classes/Review.php:34
+#: Support/WPML.php:82
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: Admin/Settings.php:177
+msgid "Settings saved!"
+msgstr ""
+
+#: Classes/Convert.php:96
+msgid "You are not authorized to insert old data."
+msgstr ""
+
+#: Classes/Convert.php:115 Classes/Convert.php:140
+msgid "You are not authorized to clear all data."
+msgstr ""
+
+#: Controller/FolderController.php:60 Controller/FolderController.php:85
+#: Controller/FolderController.php:117 Controller/FolderController.php:311
+#: Controller/FolderController.php:341
+msgid "Sorry, you are not allowed to manage folders."
+msgstr ""
+
+#: Controller/FolderController.php:146
+msgid "Drag node not found"
+msgstr ""
+
+#: Controller/FolderController.php:358
+msgid "Permisson Denied."
+msgstr ""
+
+#: Controller/SyncController.php:14
+msgid "Sorry, you are not allowed to export CSV."
+msgstr ""
+
+#: Controller/SyncController.php:133
+msgid "Sorry, you are not allowed to import CSV."
+msgstr ""
+
+#: Controller/SyncController.php:158
+msgid "Sorry, you are not allowed to get import CSV detail."
+msgstr ""
+
+#: I18n.php:72
+msgid "Most recent folder"
+msgstr ""
+
+#: I18n.php:206
+msgid ""
+"Please see FileBird API for developers\n"
+"\t\t\t<a\n"
+"\t\t\t  target=\"_blank\"\n"
+"\t\t\t  href=\"https://ninjateam.gitbook.io/filebird/integrations/developer-"
+"zone/apis\"\n"
+"\t\t\t  rel=\"noreferrer noopener\"\n"
+"\t\t\t>here</a>."
+msgstr ""
+
+#: I18n.php:256
+msgid "Explore the best of FileBird:"
+msgstr ""
+
+#: I18n.php:258
+msgid "Advanced sorting"
+msgstr ""
+
+#: I18n.php:259
+msgid "Color-coded folders"
+msgstr ""
+
+#: I18n.php:260
+msgid "Fully organize pages, post, CPTs"
+msgstr ""
+
+#: I18n.php:261
+msgid "Folder themes (Windows & Dropbox)"
+msgstr ""
+
+#: I18n.php:262
+msgid "20+ page builders supported"
+msgstr ""
+
+#: I18n.php:263
+msgid "WPML, Polylang & multilingual support"
+msgstr ""
+
+#: I18n.php:264
+msgid "One-time payment & auto-update"
+msgstr ""
+
+#: I18n.php:294
+msgid "Document Library"
+msgstr ""
+
+#: I18n.php:295
+msgid "Enable cache optimization"
+msgstr ""
+
+#: I18n.php:297
+msgid "Lifetime License"
+msgstr ""
+
+#: I18n.php:301
+msgid "Enable searching for folder names using API"
+msgstr ""
+
+#: I18n.php:304
+msgid "Select post types to scan"
+msgstr ""
+
+#: I18n.php:305
+msgid "Scan"
+msgstr ""
+
+#: I18n.php:306
+msgid "Search"
+msgstr ""
+
+#: I18n.php:307
+msgid "No posts found!"
 msgstr ""

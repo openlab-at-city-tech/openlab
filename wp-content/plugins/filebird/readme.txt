@@ -1,10 +1,11 @@
 === FileBird - WordPress Media Library Folders & File Manager ===
 Contributors: ninjateam
 Donate link: https://ninjateam.org/wordpress-media-library-folders/ 
-Tags: wordpress media library folders, wp media folders, media, media folders, file manager
+Tags: wordpress media library folders, organization, media, media folders, file manager
 Requires at least: 3.0
-Tested up to: 6.9
-Stable tag: 6.5.2
+Requires PHP: 7.4
+Tested up to: 7.1
+Stable tag: 6.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,27 +13,29 @@ Organize thousands of WordPress media files in folders / categories with ease.
 
 == Description ==
 
-**Best plugin of all time to categorize WordPress media library with folders.**
+**The #1 WordPress plugin to organize your media library with folders.**
 
-Let's organize WordPress media library folders using a drag and drop organizer.
+✨ **NEW:** Organize WordPress pages and posts too, with the same drag-and-drop folders you already use for media.
 
-[**TEST DRIVE**](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://1.envato.market/FileBird-Premium) 💎
+[**TEST DRIVE**](https://media-folder.ninjateam.org/create/) | [**GO PRO (Lifetime License)**](https://ninjateam.org/wordpress-media-library-folders/) 💎
 
 FileBird transforms your WordPress media library with intuitive folder organization, smooth drag & drop, and smart sorting. Locate images faster, easily insert them into Gutenberg blocks, quickly identify and remove unused files.
 
 The free version allows you to create **unlimited main folders** and **subfolders**.
 
-📌 [Documentation](https://ninjateam.gitbook.io/filebird/) | [Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro)
+📌 [FileBird Cloud Extension](https://ninjateam.org/downloads/filebird-cloud-integration-dropbox-and-google-drive/?utm_source=wp-org&utm_medium=filebird-addons) | [Document Library Extension](https://ninjateam.org/wordpress-document-library/?utm_source=wp-org&utm_medium=filebird-addons)
 
 [youtube https://www.youtube.com/watch?v=NjeEbqmMVwU]
 
+[Compare FileBird Free vs Pro](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro/)
+
 ###⚡️ FEATURES
 
-FileBird allows you to create virtual folders to [categorize your WordPress media file uploads](https://ninjateam.org/how-to-organize-your-wordpress-media-library/). So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
+FileBird allows you to create virtual folders to [categorize your WordPress media file uploads](https://ninjateam.org/how-to-organize-your-wordpress-media-library/?utm_source=wp-org&utm_medium=filebird). So when you move files and folders around, it won’t break the permalinks to your images in the page/post content.
 
 With FileBird, you can save time on WP media management, search for any files & folders, sort them out, add product image gallery, download/export media folders, etc. That’s a great way to boost your admin workflow and productivity.
 
-**NEW - Folder Tree Themes (PRO)**
+**Folder Tree Themes (PRO)**
 Instead of the traditional gray shade of folder icon, now you can transform your "Folderella" into **Dropbox** theme or **Windows 11** styling.
 
 **Download Media Folder (PRO)**
@@ -113,24 +116,24 @@ You won’t see WordPress media library not loading, as FileBird smart-loads one
 
 * Upload multiple folders and their files directly from your computer to WordPress
 * Create a gallery from folders using the Gutenberg block of FileBird gallery 
-* [Create WordPress document gallery](https://ninjateam.org/document-gallery-wordpress/) with shortcode
+* [Create WordPress document gallery](https://ninjateam.org/document-gallery-wordpress/?utm_source=wp-org&utm_medium=filebird) with shortcode
 * Resize the left sidebar to get an overview of all folders
 * Upload files to a specific folder by choosing the destination folder from the dropdown
 * Easily **search** for the name of file/folder
 * From the page/post composer, **browse** files and folders in the FileBird UI
-* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/) with a drag-and-drop email builder, you can quickly find the images you need
+* While [customizing WooCommerce email](https://yaycommerce.com/woocommerce-email-template-customization/?utm_source=wp-org&utm_medium=filebird) with a drag-and-drop email builder, you can quickly find the images you need
 * Keep your folders uncluttered by clearing out the old files using the **Sort by file size** feature
 * Press ESC to exit bulk select mode
 
 ###⛩️ PREMIUM COMPATIBILITY
 
-With [FileBird Pro](https://1.envato.market/FileBird-Premium), you will be able to use folders to organize posts, pages, WooCommerce products, coupons, templates, and other custom post types. These premium-only features include integrations with third-party themes and plugins.
+With [FileBird Pro](https://ninjateam.org/wordpress-media-library-folders/), you will be able to use folders to organize posts, pages, WooCommerce products, coupons, templates, and other custom post types. These premium-only features include integrations with third-party themes and plugins.
 
 **THEMES**
 
-* Avada – #1 WordPress best selling theme of all time
+* Avada - WordPress best selling theme of all time
 * Divi - Theme from ElegantThemes
-* Enfold – The user-friendliest WordPress Theme ever made
+* Enfold - The user-friendliest WordPress Theme ever made
 * Uncode – The highly anticipated Frontend Editor
 * Jupiter - Elementor Multi-Purpose Theme
 * Flatsome – Best selling WooCommerce Theme
@@ -138,7 +141,7 @@ With [FileBird Pro](https://1.envato.market/FileBird-Premium), you will be able 
 * XStore - Responsive Multi-Purpose WooCommerce WordPress Theme
 * KLEO - Community Multi Purpose BuddyPress Theme
 * Bricks Builder
-* And a lot more +++
+* And a lot more
 
 **PLUGINS**
 
@@ -182,6 +185,15 @@ No, it makes no changes to your images on the site's front end.
 = If I create a folder or category, does this override the default WordPress path `wp-content/uploads/`? =
 No, it does not. The plugin helps organize files into folders visually. Every file permalink/URL remains unchanged.
 
+= Can I migrate my existing folders from another plugin? =
+Yes. FileBird automatically detects and imports folder structures from Enhanced Media Library, WP Media Folder by JoomUnited, WordPress Media Library Folders by Max Foundry, Real Media Library, HappyFiles, and a few others. Your files stay in their folders after the switch without manual re-sorting.
+
+= Can I use folders for pages, posts, or WooCommerce products? =
+Yes. The free version includes basic folder support for posts and pages (one folder level). Deeper organization, including WooCommerce products, coupons, and other custom post types, plus multi-level folders for posts/pages, is available in FileBird Pro.
+
+= Is FileBird compatible with my page builder or theme? =
+FileBird's free version works inside the core Media Library, Elementor free version and block editor. Deeper integrations with page builders and themes (Elementor Pro, Divi, Avada, Beaver Builder, WPBakery, and others) are part of FileBird Pro. Check the [compatibility list](https://ninjateam.gitbook.io/filebird/compare-filebird-free-and-pro) for the full breakdown.
+
 = What happens to my site if I uninstall FileBird? =
 No worries, your website will be completely unaffected. Upon deactivation, all your files can be found in the default WordPress media library.
 
@@ -189,10 +201,7 @@ No worries, your website will be completely unaffected. Upon deactivation, all y
 You can reach us here [https://ninjateam.org/support/](https://ninjateam.org/support/)
 
 = Why should I buy the premium plugin? =
-If you wish to use FileBird folders in all premium page builders, you can [upgrade to FileBird PRO](https://codecanyon.net/item/media-folders-manager-for-wordpress/21715379?irgwc=1&clickid=ynBwuiXfXxyORfPwUx0Mo3QWUkiVPZQJY3UNU00&iradid=275988&irpid=418490&iradtype=ONLINE_TRACKING_LINK&irmptype=mediapartner&mp_value1=&utm_campaign=af_impact_radius_418490&utm_medium=affiliate&utm_source=impact_radius). Premium features include advanced sort & filtering for both files and folders, [download entire media folders](https://ninjateam.org/download-wordpress-media-library/), more themes, plugins & page builders supported.
-
-= Is that a one-time payment for FileBird Pro?
-Yes! FileBird lifetime license costs you a **one-time** fee, you can use it on a single site, and get unlimited updates.
+If you wish to use FileBird folders in all premium page builders, you can [upgrade to FileBird Pro](https://ninjateam.org/wordpress-media-library-folders/). Premium features include advanced sort & filtering for both files and folders, [download entire media folders](https://ninjateam.org/download-wordpress-media-library/), more themes, plugins & page builders supported.
 
 Happy Organizing! 😍
 
@@ -201,13 +210,54 @@ Happy Organizing! 😍
 2. Drag and drop to organize folders
 3. Bulk select and move files to a folder
 4. Rename folder in smart context menu
-5. Sort folders
-6. Sort files
+5. Sort folders in your WordPress media library
+6. Sort files to find unused images
 7. Upload files to a specific folder
 8. FileBird gallery block settings
 
-
 == Changelog ==
+
+= Oct 13, 2026 - Version 6.5.9 =
+- Added: Backup management
+- Improved: Accessibility of the folder tree and settings page
+- Improved: Security (thanks to George Theodoridis)
+- Fixed: Conflict with [WP Duplicate Page](https://wordpress.org/plugins/wp-duplicate-page/)
+- Fixed: Folder download producing a corrupted zip on folders with many files (Pro version)
+
+= Aug 22, 2026 - Version 6.5.8 =
+- Added: FileBird Gallery module for Divi Builder (Pro version)
+- Added: Support moving media and posts to folders on touch devices
+- Updated: License handling (only for Pro version sold on NinjaTeam official website)
+- Fixed: Sort files by name issue
+- Fixed: Drag-and-drop handle for the WordPress 7.1 list table
+- Fixed: Issue with uploading image to selected folder (browser's built-in file uploaded)
+
+= Jul 27, 2026 - Version 6.5.7 =
+- New: Native license activation mode (for purchases made directly on https://ninjateam.org)
+- Updated: RU language files
+- Updated: APIs for post types
+- Improved: Creating a new page while selecting a folder categorizes that page in that folder
+- Fixed: Import CSV issue
+- Fixed: Drag to reorder images (Block Gallery)
+- Fixed: WordFence security issue
+
+= Jun 19, 2026 - Version 6.5.5 =
+- Fixed: Compatibility issue with Admin Column (Pro version)
+
+= May 22, 2026 – Version 6.5.4 =
+- Fixed: UI issues in WordPress 7.0
+- Fixed: Translation strings in several languages
+- Improved: UI elements in the Tools screen
+
+= May 11, 2026 - Version 6.5.3 =
+- Added: Folders for post/page (1 level folder supported) in FileBird free version
+- Added: File counter in both parent folder and subfolders in FileBird free version
+- Updated: Remove Document Library settings 
+- Updated: Hide "Create first folders" 3 months when user dismisses it
+- Improved: Compatible with WordPress 7.0
+- Improved: Compatible with FIFU plugin
+- Fixed: Block layout issue
+- Fixed: CSS issue on Zen Browser
 
 = Dec 5, 2025 - Version 6.5.2 =
 - Added: Auto rename when add new folder and it's name exists
@@ -478,438 +528,4 @@ Happy Organizing! 😍
 - Fixed: Compatible with Enhanced Media plugin
 - Fixed: Some bugs
 
-= Feb 9, 2022 – Version 4.9.9.1 =
-- Optimized code
-
-= Jan 7, 2022 – Version 4.9.9 =
-- Fixed: Slow query 
-- Fixed: File permissions
-- Fixed: Hide tab Import/Export error
-
-= Dec 30, 2021 - Version 4.9.8 =
-- Added: Import/Export folder structure into CSV
-- Added: Flat/Default tree view in modal
-- Improved: UI and text
-- Fixed: Conflict with Envato Market plugin
-
-= Dec 14, 2021 – Version 4.9.7 =
-- Fixed: Conflict with ACF 
-- Fixed: Error in folder.php
-
-= Dec 06, 2021 - Version 4.9.6 =
-- Added: Support MailPoet
-
-= Dec 02, 2021 - Version 4.9.5 =
-- Added: Folder selector in Edit media
-- Fixed: WooCommerce conflict (break Upload Theme button)
-
-= Nov 10, 2021 – Version 4.9.4 =
-- Fixed: Elementor With PolyLang wrong folder counter
-- Fixed: Image ALT in FileBird Gutenberg Gallery
-
-= Sep 30, 2021 =
-- Updated: Some notice
-
-= Sep 14, 2021 - Version 4.9.3 =
-- Added: Import folders for Folders by Premio
-- Fixed: Compatible with WordPress old version.
-
-= Sep 9, 2021 - Version 4.9.2 =
-- Improved: Import notice
-- Fixed: Some small bugs
-
-= Aug 25, 2021 - Version 4.9.1 =
-- Fixed: Gutenberg widgets missing
-
-= Aug 13, 2021 - Version 4.9 =
-- Added: Infinite scroll
-- Added: Plugin activation alert
-- Added: Sorting by File Name in FileBird Gallery
-- Improved: Folder name sorting
-- Improved: German translation
-- Fixed: Drag files in Tablet
-
-= Jul 21, 2021 - Version 4.8 =
-- Fixed: Compatible with WordPress 5.8
-- Fixed: Replace image 
-
-= Jul 15, 2021 - Version 4.7.8 =
-- Fixed: Conflict with Photo Gallery plugin
-- Fixed: ACF warning
-- Fixed: ACF meta field image can't load
-- Fixed: WPML Counter (in WPML last version 4.4.10)
-
-= Jul 2, 2021 - Version 4.7.7 =
-- Added: Notice when a license was used
-- Supported: Enhanced Media Library
-- Supported: Media Library Assistant
-- Improved: Load large files
-- Improved: Translation (Added missing strings)
-- Fixed: Loading Uncategorized folder
-- Fixed: Context menu position
-- Fixed: Security
-- Fixed: Small bugs
-
-= Jun 11, 2021 - Version 4.7.4 =
-- Updated: Languages
-- Fixed: JS conflict with Divi builder
-- Fixed: WPML non translated mode make folder counter and files in folders get wrong
-- Fixed: Conflict with Debug Bar plugin
-- Fixed: PolyLang get missing files in folder
-- Fixed: Folder always loading
-- Fixed: Important security updates.
-
-= May 26, 2021 - Version 4.7.3 =
-- Improved: FileBird UI in Mobile
-- Improved: Library
-- Improved: Translations, update POT file
-- Fixed: Auto Update function conflict with plugins and themes
-- Fixed: Image validation for ACF plugin
-- Fixed: Gutenberg issues (Wrong tag in frontend, Large images chosen when create gallery)
-- Fixed: Missing language "NL"
-- Fixed: RestAPI (404 Error)
-- Fixed: WPML/Polylang Full Compatible modes in Setting Media, support "All languages in admin bar", Counter
-
-= Apr 07, 2021 - Version 4.7.2 =
-- Improved: Tooltip
-- Improved: UI
-- Optimized: FileBird zip size
-- Fixed: Can't set folder Uncategorized as default in folder load
-- Fixed: Update database make folders duplicated when "Each user folder mode" enabled
-
-= Apr 01, 2021 - Version 4.7.1 =
-- Added: Upload multiple images in multiple folders when upload processing
-- Fixed: Append wrong folders in right side
-
-= Mar 30, 2021 - Version 4.7 =
-- Added: New Resize bar
-- Improved: Performance
-- Improved: Optimize code
-- Improved: UI
-- Improved: Text
-- Supported: PHP 8 and greater
-- Supported: Tatsu Builder
-- Fixed: Counter in WPML
-- Fixed: Tooltip bugs
-- Fixed: Can't set "Uncategorized" default folder load
-- Fixed: Reorder on Edit gallery
-- Fixed: Small bugs
-
-= Feb 5, 2021 - Version 4.5 =
-- New feature: Download folder (Pro)
-- Added: Unlimited folders
-- Added: Limited file explorer with 3rd party plugins
-- Improved: Performance
-- Fixed: Draggable for tablet
-- Fixed: Edit Gallery
-- Fixed: Over The Max Number Of attachmentID
-- Fixed: FileBird Gallery selector in Gutenberg
-- Fixed: Duplicate folder when import
-- Fixed: Folder scroll
-- Fixed: Folder counter bug when moving images in user-based folder mode
-- Fixed: Conflict with Picu plugin
-- Fixed: Conflict with TutorLMS plugin
-- Disable: Draggable attachment in Mobile
-
-= Dec 21, 2020 - Version 4.3.1 =
-- Added: Support shortcode for Document Gallery
-- Added: API - Get folder detail by folder_id
-- Fixed: Modal append (Conflict with Yoast SEO)
-- Fixed: Conflict with Uncode theme
-- Fixed: Not loading media when uploaded by different modal in Elementor
-- Fixed: Reset file selection when move file in bulk select
-
-= Dec 14, 2020 - Version 4.3 =
-- Added: Press ESC key to exit Bulk select mode
-- Improved: Alert text
-- Improved: Icon size and default folders with long names in some languages
-- Fixed: Missing folder container
-- Fixed: Security
-- Fixed: SQL
-- Fixed: Upload new image can't insert to the post in modal
-- Fixed: Prevent reload attachments when sort folders
-
-= Nov 25, 2020 - Version 4.2 =
-- Added: Set previous folder selected as default folder
-- Added: Compatible with Oxygen Builder
-- Fixed: ACF warning
-- Fixed: Conflict with WPML rest API
-- Fixed: CSS conflict with The Grid plugin
-- Improved: Prevent warning when upload folder containing desktop.ini or .DS_Store file
-
-= Oct 27, 2020 - Version 4.1 =
-- Added: Set default folder to open
-- Added: New APIs
-- Added: Support ACF
-- Improved: Notice of creating the first folder
-- Removed: Folder selector when no item available in modal popup
-- Fixed: Some bugs in folder container
-
-= Sep 16, 2020 - Version 4.0.7 =
-- Added: User can use API to create folders
-- Improved: Cut/Paste function
-- Fixed: Counter with Polylang
-- Fixed: Import function
-- Fixed: Counter in import message
-
-= Aug 26, 2020 - Version 4.0.6 =
-- Added: Compatible with Cornerstone Page Builder (From X Theme)
-- Fixed: Browser security issue with Microsoft Edge, Firefox
-- Fixed: Conflict jQuery-UI with ACF plugin
-- Fixed: Can't create table 'fbv_attachment_folder'
-- Fixed: Screen Option hidden in Media Upload
-
-= 4.0.5 =
-- Fixed: Cache issues
-- Fixed: Mobile view
-- Fixed: Compatible with The7 theme
-- Fixed: Improve performance on modal
-- Fixed: Upload bugs
-- Fixed: Count on parent folder
-- Fixed: Small bugs
-
-= 4.0.4 =
-- Improved: Notifications
-- Improved: Keep old folders from 4.0 version
-- Improved: Performance
-
-= 4.0.3 =
-- Added: Gutenberg block
-- Improved: Keep old folders from 4.0 version after update database
-- Improved: UI/UX
-
-= 4.0.2 =
-- Fixed: Update FileBird database
-- Fixed: Bulk delete folders
-- Fixed: Some small bugs
-
-= 4.0.1 =
-- Fixed: Auto import folders from old version
-
-= 4.0 =
-- Added: New designs
-- Added: Use new technology
-- Added: Smooth performance for unlimited folders and large numbers of files
-- Added: REST API for developers
-- Added: Sort files by Name, Date, Modified, Author (PRO)
-- Added: Bulk select folders
-- Added: Bulk delete folders
-- Added: Wipe old data
-- Added: Clean all data
-- Added: Import from Media Library Assistant
-- Added: Import from WP Media Folder by JoomUnited
-- Added: Support Brizy builder
-- Added: Support Fusion builder (PRO)
-- Added: Compatible with KnowherePro theme
-- Improved: Switchers
-- Improved: Text and Popups
-- Improved: Documentation
-- Fixed: Special characters in folder name
-- Fixed: Auto detect site width
-- Fixed: SQL syntax errors
-- Fixed: Bugs in list view
-- Fixed: Duplicate queries
-- Fixed: Bugs with WPML
-- Fixed: Small bugs
-
-= 2.8 =
-- Added: Support Thrive Architect
-- Added: Language files for Taiwan (Thanks to soga172)
-- Fixed: List view order item bug
-- Fixed: WPML bug
-- Fixed: Scroll bar
-- Fixed: Some smart bugs
-- Fixed: Tree view show modal
-
-= 2.7 =
-- Added: New FileBird layout
-- Added: New icon
-- Added: Separate Folder(s) for different user
-- Added: Import files from 2 media library plugins (Enhanced Media Library by webbistro and WordPress Media Library Folders by Max Foundry)
-- Added: Folder sort, folder search
-- Fixed: Support PolyLang
-- Fixed: Count
-- Fixed: Splitter
-- Fixed: Rename folder in list view mode
-- Fixed: Some bugs in right to left screen
-- Fixed: Move large folders
-- Fixed: Filter is hidden when using Smush plugin
-- Removed: Unused css
-- Removed: Unused libraries
-
-= 2.6 =
-- Added: FileBird Gallery Block
-- Improved: Optimize FileBird Modal
-- Fixed: Can't edit Image in media setting
-- Fixed: CSS corrupts site menu
-- Fixed: Conflict with Menubar icon plugin
-- Fixed: Uncategorised view the following error message
-- Fixed: Some small bugs
-
-= 2.5.1 =
-- Improved: Remove unuse CSS
-- Fixed: Elementor
-- Fixed: List view don't load images
-- Fixed: ACF plugin CSS conflict
-- Fixed: Remove trigger which conflict with Divi builder
-- Fixed: Conflict with Gridd Theme
-- Fixed: Count uncategories items
-
-= 2.5 =
-- Added: Option turn on/off load FileBird JS at front-end for page builders
-- Improved: Removed CDN for customScrollBar
-- Fixed: Small bug will Elementor
-- Fixed: Select option doesn’t not change in modal popup upload
-- Fixed: Only call move image when moving folder position
-
-= 2.4.2 =
-- Fixed: Go Pro version links
-
-= 2.4.1 =
-- Fixed: Security required
-
-= 2.4 =
-- Improved: Performance and Optimize Code
-- Improved: Optimize Code
-- Improved: Optimize Code
-- Fixed: Sorting error in list view
-- Fixed: Conflict with WordPress Customize Function
-- Fixed: Some small bugs
-- Fixed: "nt_wmc_folder" in Google Search Console results
-- Fixed: Error in full front end Divi Page Builder editor
-- Fixed: PHP notice on line 582 and 586
-- Fixed: Load JS script on front end
-- Fixed: Error "FileBird is loading" on Elementor builder
-- Fixed: Compatible with FooGallery and Final Tiles Grid Gallery
-- Fixed: Warning notice in WordPress
-- Fixed: Margin Overlay
-- Fixed: Other small bugs
-
-= 2.3 =
-Jul 24, 2019 - Version 2.3
-* Improved: Fast append treeview
-* Improved: Prevent public folders link
-* Improved: CSS UI
-* Fixed: Prevent plublic taxonomy folder
-* Fixed: Query database callback alltime
-* Fixed: FileBird treeview show on top left in product editor in WooCommerce
-* Fixed: Can't drop file when create first folder
-* Fixed: Work with WPML when Post Types Translation: Media tick not translatable
-* Fixed: 10 folders create in Lite version
-* Fixed: Bulk select moving images into folders by itself
-* Fixed: Move folder with length folder text
-* Fixed: Resize bar not save in min minimum width
-* Fixed: Remove map file library
-* Fixed: Conflict photo gallery
-
-= 2.2 =
-Jun 13, 2019 - Version 2.2
-* Added: RTL display
-* Added: Hebrew language
-* Added: Support Advanced Custom Field
-* Fixed: Create new folders in edit attachment page
-* Fixed: RTL languages in Beaver and Divi builder
-
-= 2.1 =
-Jun 04, 2019 - Version 2.1
-* Improved: Change drag-drop library
-* Improved: Optimize drag-drop
-* Improved: Change drag-drop to trigger folders, list view
-* Improved: Change syntax jQuery
-* Fixed: CSS not show in all folders treeview from classic editor
-* Fixed: Move many files
-* Fixed: Move all categories
-* Fixed: Auto Deselect bulk when none file
-* Fixed: Count file selected in bulk select
-* Fixed: Conflict with Avada theme
-* Updated: CSS
-* Removed: Unused files
-
-= 2.0 =
-May 29, 2019 - Version 2.0
-* Added: Treeview interface in page, post, custom post type
-* Added: Treeview interface in Divi Builder, Beaver Builder, Visual Composer, WPBakery Page Builder, Elementor Builder
-* Added: Treeview interface for Gutenberg
-* Added: Bulk auto deselect when change folder
-* Added: Compatible with WPML 4.x version
-* Fixed: WPML 3.9 conflict
-* Fixed: Move one file not click image
-* Fixed: CSS over when edit folder
-* Fixed: Load too much database
-* Fixed: Treeview interface Elementor Builder
-* Fixed: Upload images
-* Improved: No load FileBird files on frontend if not use builder
-* Improved: Optimize FileBird
-* Improved: UI/UX
-* Removed: Unused files
-
-= 1.8 =
-Mar 13, 2019 – Version 1.8
-* Added: Compatible with Elementor
-* Added: Compatible with Visual Composer
-* Added: Compatible with Beaver Builder
-* Added: Refresh folder
-* Added: Save position for resizable sidebar
-* Added: Russian Translation
-* Improved: Languages and Documentation
-Improved: Doesn't jump to destination folder when moving files
-* Improved: CSS
-* Improved: Clean code
-* Fixed: Removed WordPress notification
-* Fixed: Categories dropdown from Media Library popup
-* Fixed: Folder structure when insert files in page/post
-* Fixed: Press double clicks for OK/cancel button
-* Fixed: Bulk select error
-* Fixed: Scroll to view folders
-* Fixed: Many small bugs
-
-= 1.7 =
-Dec 14, 2018 – Version 1.7
-* Added: Drag and drop files to folders for List mode
-* Added: Count items after dragging
-* Added: Load effect while dragging
-* Added: Hover effect (List mode and gird mode)
-* Added: Show loading progress bar when upload file
-* Improved: CSS
-* Improved: Clean code
-* Improved: Loading effect smoother
-* Fixed: Resize bug when dragging back
-* Fixed: Hide list attachments after load attachment
-* Fixed: Conflict with 404 to 301 plugin
-* Fixed: Error in Theme Customize Tab
-* Fixed: Some small bugs
-
-= 1.6 =
-Aug 15, 2018 – Version 1.6
-* Fixed: Some small bugs
-
-= 1.5 =
-July 2, 2018 – Version 1.5
-* Added: Display location latest folder place use.
-* Improved: New UI/UX
-* Improved: Change icons
-* Improved: CSS styles
-
-= 1.4 =
-March 28, 2018 – Version 1.4
-* Improved: New drag and drop Javascript
-* Fixed: JS conflicts
-
-= 1.3 =
-March 18, 2018 – Version 1.3
-* Fixed: Load files in folder
-* Fixed: More bugs
-
-= 1.2 =
-March 10, 2018 – Version 1.2
-* Fixed: Drag and drop files
-* Fixed: More bugs
-
-= 1.1 =
-March 5, 2018 – Version 1.1
-* Fixed: JS conflicts
-* Fixed: Drag and drop folders
-
-= 1.0 =
-May 1, 2016 – Version 1.0
-* Version 1.0 Initial Release
+**[View full changelog here →](https://ninjateam.gitbook.io/filebird/other-links/changelog)**

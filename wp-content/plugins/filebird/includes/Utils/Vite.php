@@ -52,8 +52,14 @@ class Vite {
 	}
 
 	public static function enqueue_preload( $script ) {
+		// WordPress outputs importmap via admin_print_footer_scripts at priority 9.
+		// Module scripts and modulepreload must appear AFTER the importmap or Firefox
+		// rejects it ("Import maps are not allowed after a module load or preload has started").
+		// Dev preamble uses priority 9 so it runs after importmap (registered earlier by WP core)
+		// but before the main Vite script printed by _wp_footer_scripts at priority 10.
+		$priority = NJFB_DEVELOPMENT ? 9 : 10;
 		add_action(
-			'admin_head',
+			'admin_print_footer_scripts',
 			function() use ( $script ) {
 				if ( NJFB_DEVELOPMENT ) {
 					echo '<script type="module">
@@ -68,7 +74,8 @@ class Vite {
 						echo ( '<link rel="modulepreload" href="' . esc_url( $url ) . '">' );
 					}
 				}
-			}
+			},
+			$priority
 		);
 	}
 
@@ -80,7 +87,7 @@ class Vite {
 		}
 
 		// wp_enqueue_script( self::CLIENT_SCRIPT_HANDLE, self::HOST . '@vite/client', array(), NJFB_VERSION, false );
-		wp_enqueue_script( "module/filebird/$entry", $url, false, true, NJFB_DEVELOPMENT ? true : false );
+		wp_enqueue_script( "module/filebird/$entry", $url, false, true, true );
 
 		return "module/filebird/$entry";
 	}

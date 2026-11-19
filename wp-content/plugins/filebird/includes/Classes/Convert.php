@@ -141,6 +141,8 @@ class Convert {
 				)
 			);
 		}
+		$this->deletePostTypeFolders();
+
 		$table_name = $wpdb->prefix . 'fbv';
 		if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->esc_like( $table_name ) ) ) == $table_name ) {
 			FolderModel::deleteAll();
@@ -162,6 +164,58 @@ class Convert {
 			);
 		}
 
+	}
+
+	private function deletePostTypeFolders() {
+		global $wpdb;
+
+		$prefix     = 'fbv_pt_tax_';
+		$taxonomies = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT DISTINCT `taxonomy` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` LIKE %s",
+				$wpdb->esc_like( $prefix ) . '%'
+			)
+		);
+
+		foreach ( $taxonomies as $taxonomy ) {
+			$term_ids = $wpdb->get_col( $wpdb->prepare( "SELECT `term_id` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` = %s", $taxonomy ) );
+
+			if ( empty( $term_ids ) ) {
+				continue;
+			}
+
+			$object_ids = $wpdb->get_col(
+				$wpdb->prepare(
+					"SELECT DISTINCT `tr`.`object_id`
+					FROM {$wpdb->term_relationships} AS `tr`
+					INNER JOIN {$wpdb->term_taxonomy} AS `tt` ON `tt`.`term_taxonomy_id` = `tr`.`term_taxonomy_id`
+					WHERE `tt`.`taxonomy` = %s",
+					$taxonomy
+				)
+			);
+
+			$queries = array(
+				"DELETE FROM {$wpdb->termmeta} WHERE `term_id` IN (SELECT `term_id` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` = %s) AND `term_id` NOT IN (SELECT `term_id` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` != %s)",
+				"DELETE FROM {$wpdb->terms} WHERE `term_id` IN (SELECT `term_id` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` = %s) AND `term_id` NOT IN (SELECT `term_id` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` != %s)",
+				"DELETE FROM {$wpdb->term_relationships} WHERE `term_taxonomy_id` IN (SELECT `term_taxonomy_id` FROM {$wpdb->term_taxonomy} WHERE `taxonomy` = %s)",
+				"DELETE FROM {$wpdb->term_taxonomy} WHERE `taxonomy` = %s",
+			);
+
+			foreach ( $queries as $query ) {
+				$args = array_fill( 0, substr_count( $query, '%s' ), $taxonomy );
+				// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+				$wpdb->query( $wpdb->prepare( $query, $args ) );
+			}
+
+			foreach ( $object_ids as $object_id ) {
+				wp_cache_delete( $object_id, "{$taxonomy}_relationships" );
+			}
+
+			clean_term_cache( $term_ids, $taxonomy );
+
+			delete_option( "{$taxonomy}_children" );
+			delete_option( 'fbv_' . substr( $taxonomy, strlen( $prefix ) ) . '_folder_colors' );
+		}
 	}
 
 	public function ajaxNoThanks( $request ) {

@@ -68,8 +68,14 @@ $styles  = '--columns: ' . esc_attr( $attributes['columns'] ) . ';';
 $styles .= '--space: ' . esc_attr( $attributes['spaceAroundImage'] ) . 'px;';
 $styles .= '--min-width: ' . esc_attr( $attributes['imgMinWidth'] ) . 'px;';
 
-$html  = '';
-$html .= '<ul class="' . esc_attr( $ulClass ) . '" style="' . $styles . '">';
+$html = '';
+$wrapper_attributes = get_block_wrapper_attributes(
+	array(
+		'class' => $ulClass,
+		'style' => $styles,
+	)
+);
+$html .= '<ul ' . $wrapper_attributes . '>';
 
 $lis = array();
 foreach ( $posts as $post ) {
@@ -93,7 +99,7 @@ foreach ( $posts as $post ) {
             break;
     }
 
-    $img  = '<img src="' . esc_attr( $imageSrc ) . '" alt="' . esc_html( $imageAlt ) . '"';
+    $img  = '<img src="' . esc_attr( $imageSrc ) . '" alt="' . esc_attr( $imageAlt ) . '"';
     $img .= ' class="' . "wp-image-{$post->ID}" . '"/>';
 
     $li  = '<li class="blocks-gallery-item">';

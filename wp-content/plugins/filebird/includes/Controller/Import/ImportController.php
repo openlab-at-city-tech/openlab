@@ -3,6 +3,7 @@
 namespace FileBird\Controller\Import;
 
 use FileBird\Admin\Settings;
+use FileBird\Classes\Helpers;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -154,6 +155,36 @@ class ImportController {
 		);
 
         register_rest_route(
+            NJFB_REST_URL,
+            'get-backup-files',
+            array(
+                'methods'             => \WP_REST_Server::READABLE,
+                'callback'            => array( $this, 'get_backup_files' ),
+                'permission_callback' => array( $this, 'backup_permission_callback' ),
+            )
+        );
+
+        register_rest_route(
+            NJFB_REST_URL,
+            'download-backup',
+            array(
+                'methods'             => \WP_REST_Server::CREATABLE,
+                'callback'            => array( $this, 'download_backup' ),
+                'permission_callback' => array( $this, 'backup_permission_callback' ),
+            )
+        );
+
+        register_rest_route(
+            NJFB_REST_URL,
+            'backup-now',
+            array(
+                'methods'             => \WP_REST_Server::CREATABLE,
+                'callback'            => array( $this, 'backup_now' ),
+                'permission_callback' => array( $this, 'backup_permission_callback' ),
+            )
+        );
+
+        register_rest_route(
 			NJFB_REST_URL,
 			self::IMPORT_ENDPOINT . '/run/(?P<prefix>[a-zA-Z]+)',
 			array(
@@ -166,6 +197,14 @@ class ImportController {
 
     public function permission_callback() {
 		return current_user_can( 'upload_files' );
+    }
+
+    /**
+     * A backup holds the whole folder structure and is only reachable from the
+     * settings page, so keep it to the same capability that page requires.
+     */
+    public function backup_permission_callback() {
+        return current_user_can( 'manage_options' );
     }
 
     public static function get_counters( $prefix ) {
@@ -191,6 +230,68 @@ class ImportController {
         $data          = DataImport::get( $prefix );
 
         return $import_method->get_attachments( $data );
+    }
+
+    public function get_backup_files( $request ) {
+        global $wpdb;
+        $backup_files = $wpdb->get_col( $wpdb->prepare( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s ORDER BY option_id DESC", Helpers::backupOptionLike() ) );
+
+        $meta    = Helpers::getBackupsMeta();
+        $changed = false;
+
+        $formatted_backup_files = array();
+        foreach ( $backup_files as $option_name ) {
+            $id = substr( $option_name, strlen( 'filebird_backup_' ) );
+
+            // Backups made before FileBird stored meta: count them once and remember it.
+            if ( ! isset( $meta[ $id ] ) ) {
+                $meta[ $id ] = array_merge(
+                    array(
+                        'type' => '',
+                        'note' => '',
+                    ),
+                    Helpers::countBackupRows( get_option( $option_name, array() ) )
+                );
+                $changed     = true;
+            }
+
+            $formatted_backup_files[] = array_merge(
+                $meta[ $id ],
+                array(
+                    'id'   => $id,
+                    'name' => Helpers::backupName( $id ),
+                )
+            );
+        }
+
+        if ( $changed ) {
+            update_option( Helpers::BACKUP_META_OPTION, $meta, false );
+        }
+
+        wp_send_json_success( array( 'backup_files' => $formatted_backup_files ) );
+    }
+
+    public function download_backup( $request ) {
+        $id      = sanitize_key( $request->get_param( 'id' ) );
+        $folders = get_option( 'filebird_backup_' . $id, array() );
+
+        if ( is_array( $folders ) && empty( $folders ) ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'There are no folders in this backup file.', 'filebird' ) ) );
+        }
+        if ( ! $folders ) {
+            wp_send_json_error( array( 'message' => esc_html__( 'Backup file not found', 'filebird' ) ) );
+        }
+
+        wp_send_json_success(
+            array(
+                'filename' => 'filebird_' . $id . '.csv',
+                'folders'  => $folders,
+            )
+        );
+    }
+
+    public function backup_now( $request ) {
+        wp_send_json_success( array( Helpers::backupFileBird( 'manual' ) ) );
     }
 
     public function run_import( $request ) {

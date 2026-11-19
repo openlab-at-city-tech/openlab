@@ -95,10 +95,18 @@ class UserSettingModel {
 		$meta = get_user_meta( $this->userId, self::DEFAULT_SORT_FILES, true );
 
 		if ( ! empty( $meta ) ) {
-			$parse = explode( '-', $meta );
+			$parse   = explode( '-', $meta );
+			$orderby = $parse[0];
+
+			// Settings used to offer "name" (post_name, the slug) next to "title" (post_title).
+			// Only post_title matches the label the library renders, so the slug option was dropped
+			// and anyone still holding it is moved over to the title one.
+			if ( 'name' === $orderby ) {
+				$orderby = 'title';
+			}
 
 			return array(
-				'orderby' => $parse[0],
+				'orderby' => $orderby,
 				'order'   => $parse[1] ?? '',
 			);
 		}

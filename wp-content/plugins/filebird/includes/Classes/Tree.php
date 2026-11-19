@@ -5,6 +5,8 @@ defined( 'ABSPATH' ) || exit;
 
 use FileBird\Model\Folder as FolderModel;
 use FileBird\Model\UserSettingModel;
+use FileBird\Support\Polylang;
+use FileBird\Support\WPML;
 
 class Tree {
 	private $order    = null;
@@ -74,13 +76,47 @@ class Tree {
 			if ( count( $post__in ) == 0 ) {
 				$post__in = array( 0 );
 			}
-			$where[] = '(ID IN (' . implode( ', ', $post__in ) . '))';
+			$sanitized_ids = array_map( 'intval', $post__in );
+			$where[]       = '(ID IN (' . implode( ', ', $sanitized_ids ) . '))';
 		} elseif ( $folder_id == 0 ) {
 			return 0;//return 0 if this is uncategorized folder
 		}
 
-		$where = apply_filters( 'fbv_get_count_where_query', $where );
-		$query = apply_filters( 'fbv_get_count_query', $select . implode( ' AND ', $where ), $folder_id, $lang );
+		$where = array_merge( $where, Helpers::buildExclusionConditions() );
+
+		// FrmPro compatibility: exclude temporary/hidden attachments when not using the attachment filter.
+		if ( class_exists( 'FrmProFileField' ) ) {
+			if ( current_user_can( 'frm_edit_entries' ) ) {
+				// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$frm_show = isset( $_GET['frm-attachment-filter'] ) ? absint( $_GET['frm-attachment-filter'] ) : false;
+				// Fallback: parse Referer header (REST API calls won't carry page's $_GET params).
+				if ( false === $frm_show ) {
+					$referer = isset( $_SERVER['HTTP_REFERER'] ) ? $_SERVER['HTTP_REFERER'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+					if ( $referer ) {
+						$referer_query = wp_parse_url( $referer, PHP_URL_QUERY );
+						if ( $referer_query ) {
+							parse_str( $referer_query, $referer_params );
+							$frm_show = isset( $referer_params['frm-attachment-filter'] ) ? absint( $referer_params['frm-attachment-filter'] ) : false;
+						}
+					}
+				}
+			} else {
+				$frm_show = false;
+			}
+			$frm_joins  = "LEFT JOIN {$wpdb->postmeta} AS frm_tmp ON (posts.ID = frm_tmp.post_id AND frm_tmp.meta_key = '_frm_temporary') ";
+			$frm_joins .= "LEFT JOIN {$wpdb->postmeta} AS frm_file ON (posts.ID = frm_file.post_id AND frm_file.meta_key = '_frm_file') ";
+			$select     = "SELECT COUNT(*) FROM {$wpdb->posts} as posts {$frm_joins}WHERE ";
+
+			// _frm_temporary: always exclude.
+			$where[] = 'frm_tmp.post_id IS NULL';
+			// _frm_file: exclude unless the attachment filter is active.
+			$where[] = $frm_show ? 'frm_file.post_id IS NOT NULL' : 'frm_file.post_id IS NULL';
+		}
+
+		$query = $select . implode( ' AND ', $where );
+		$query = Polylang::applyCountQuery( $query, $folder_id, $lang );
+		$query = WPML::applyCountQuery( $query, $folder_id, $lang );
+
 		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
 		return (int) $wpdb->get_var( $query );
 	}

@@ -38,12 +38,19 @@ class ModuleSvg {
         if ( ! isset( $file['tmp_name'] ) ) {
             return $file;
         }
-
         $file_name   = isset( $file['name'] ) ? $file['name'] : '';
         $wp_filetype = wp_check_filetype_and_ext( $file['tmp_name'], $file_name );
         $type        = ! empty( $wp_filetype['type'] ) ? $wp_filetype['type'] : '';
 
-        if ( 'image/svg+xml' !== $type ) {
+        $type = ! empty( $wp_filetype['type'] ) ? strtolower( trim( (string) $wp_filetype['type'] ) ) : '';
+
+        // Remove optional MIME parameters like:
+        // image/svg+xml; charset=utf-8
+        $type = explode( ';', $type )[0];
+        $ext = strtolower( pathinfo( $file['name'], PATHINFO_EXTENSION ) );
+
+        // Only continue for SVG uploads.
+        if ( 'image/svg+xml' !== $type && 'svg' !== $ext ) {
             return $file;
         }
 

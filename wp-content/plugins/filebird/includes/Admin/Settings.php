@@ -19,6 +19,7 @@ class Settings {
 		add_filter( 'plugin_action_links_' . NJFB_PLUGIN_BASE_NAME, array( $this, 'addActionLinks' ) );
 		add_filter( 'plugin_row_meta', array( $this, 'plugin_row_meta' ), 10, 2 );
 		add_action( 'admin_menu', array( $this, 'settingsMenu' ) );
+		add_action( 'wp_ajax_fbv_save_post_type_settings', array( $this, 'savePostTypeSettings' ) );
 		add_action( 'in_admin_header', array( $this, 'in_admin_header' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
@@ -71,7 +72,18 @@ class Settings {
 			foreach ( $postTypes as $key => $value ) {
 				$postTypes[ $key ] = get_post_type_object( $key )->labels->singular_name;
 			}
-
+			$enabledPostType     = get_option( 'fbv_enabled_posttype', array() );
+			if( ! is_array( $enabledPostType ) ) {
+				$enabledPostType     = explode( ',', $enabledPostType );
+			}
+			$enabledPostType     = array_values(
+				array_filter(
+					$enabledPostType,
+					function( $post_type ) {
+						return $post_type === 'post' || $post_type === 'page';
+					}
+				)
+			);
 			$wpmlActiveLanguages = apply_filters( 'wpml_active_languages', null, array( 'skip_missing' => 0 ) );
 
 			wp_localize_script(
@@ -79,12 +91,11 @@ class Settings {
 				'fbv_admin',
 				array(
 					'post_types'         => $postTypes,
-					'enabled_post_types' => array(),
+					'enabled_post_types' => $enabledPostType,
 					'rest_api_key'       => get_option( 'fbv_rest_api_key', '' ),
 					'wpml'               => array(
 						'display_sync' => ! empty( $wpmlActiveLanguages ),
 					),
-					'is_fbdl_activated' => class_exists( '\FileBird_Document_Library\\DocumentLibrary' )
 				)
 			);
 		}
@@ -106,9 +117,9 @@ class Settings {
 		if ( '' !== $filebird_activation_error ) {
 			$filebird_activation_error = apply_filters( 'filebird_activation_error', $filebird_activation_error );
 			if ( 'no-purchase' == $filebird_activation_error ) {
-				$filebird_activation_error = __( 'It seems you don\'t have any valid FileBird license. Please <a href="https://ninjateam.org/support" target="_blank"><strong>contact support</strong></a> to get help or <a href="https://1.envato.market/Get-FileBird" target="_blank"><strong>purchase a FileBird license</strong></a>', 'filebird' );
+				$filebird_activation_error = __( 'It seems you don\'t have any valid FileBird license. Please <a rel="noreferrer noopener" href="https://ninjateam.org/support" target="_blank"><strong>contact support</strong></a> to get help or <a rel="noreferrer noopener" href="https://ninjateam.org/wordpress-media-library-folders/" target="_blank"><strong>purchase a FileBird license</strong></a>', 'filebird' );
 			} elseif ( 'code-is-used' == $filebird_activation_error ) {
-				$filebird_activation_error = sprintf( __( 'This license was used with <i>%s</i>, please <a href="https://1.envato.market/Get-FileBird" target="_blank"><strong>purchase another license</strong></a>, or <a href="https://ninjateam.org/support" target="_blank"><strong>contact support</strong></a>', 'filebird' ), esc_html( $filebird_activation_old_domain ) );
+				$filebird_activation_error = sprintf( __( 'This license was used with <i>%s</i>, please <a rel="noreferrer noopener" href="https://ninjateam.org/wordpress-media-library-folders/" target="_blank"><strong>purchase another license</strong></a>, or <a rel="noreferrer noopener" href="https://ninjateam.org/support" target="_blank"><strong>contact support</strong></a>', 'filebird' ), esc_html( $filebird_activation_old_domain ) );
 			}
 			$notice = '<div style="margin-bottom: 1rem !important;" class="njt-warning-notice filebird-notice notice notice-warning is-dismissible wp-md:fb-max-w-[1060px] fb-m-auto"><p>' . $filebird_activation_error . '</p><button type="button" class="notice-dismiss" onClick="jQuery(\'.njt-warning-notice\').remove()"><span class="screen-reader-text">' . __( 'Dismiss this notice.', 'filebird' ) . '</span></button></div>';
 		}
@@ -146,5 +157,29 @@ class Settings {
 		);
 
 		return array_merge( $settingsLinks, $links );
+	}
+	public function savePostTypeSettings() {
+		check_ajax_referer( 'fbv_nonce', 'nonce', true );
+		
+		// Check if user has permission to manage options
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array( 'mess' => __( 'You do not have permission to perform this action.', 'filebird' ) ),
+				403
+			);
+		}
+		
+		$fbv_enabled_posttype = '';
+		if ( isset( $_POST['post_types'] ) ) {
+			$post_types           = Helpers::sanitize_array( $_POST['post_types'] );
+			$post_types           = array_filter( $post_types, function( $post_type ) {
+				return $post_type === 'post' || $post_type === 'page';
+			});
+			$fbv_enabled_posttype = implode( ',', $post_types );
+		}
+		update_option( 'fbv_enabled_posttype', $fbv_enabled_posttype );
+		wp_send_json_success(
+			array( 'mess' => __( 'Settings saved!', 'filebird' ) )
+		);
 	}
 }
