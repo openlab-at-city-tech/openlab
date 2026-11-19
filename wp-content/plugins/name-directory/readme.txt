@@ -6,8 +6,8 @@ Donate link: https://ko-fi.com/jeroenpeters
 Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
-Tested up to: 7.0
-Stable tag: 1.33.1
+Tested up to: 7.1
+Stable tag: 1.34.3
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -184,7 +184,7 @@ Yes, every now and then I come across an installed version of the plugin. Here i
 
 1. [Dutch Budgie website - How to name your bird](https://www.parkietenvilla.nl/namenlijst/)
 1. [Alabama Orthopaedic Society - Member list](https://aosdocs.com/find-an-orthopaedist/)
-1. [Hattem24 Begrippenlijst - Nieuws over Hattem](https://hattem24.nl/begrippenlijst/) (Dutch local newssite with a glossary)
+1. [Hattem24 Begrippenlijst](https://www.hattem24.nl/begrippenlijst/) (Dutch local newssite with a glossary)
 1. [Convertus - Paid Search Terms](https://www.convertus.com/search-glossary/)
 1. [Venlo's Waordeboek (Dutch Limburgian Dialect Dictionary)](https://veldekevenlo.nl/waordebook/)
 1. [Donegal Member Directory (multiple directories)](https://thisisdonegal.ie/members-directory/)
@@ -263,6 +263,27 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 
 == Changelog ==
+
+= 1.34.3 | October 1st, 2026 =
+ * Security: Prevent new public submissions from executing shortcodes by default; shortcode execution can be enabled for trusted entries in the admin
+ * Security: Secured shortcode
+ * Enhancement: Tested with WordPress 7.2 alpha
+
+= 1.34.2 | September 19, 2026 =
+ * Enhancement: Code optimization
+ * Security: Secured a few extra variables
+
+= 1.34.1 | September 5, 2026 =
+ * Bugfix: Patched a PHP 7.4 specific security issue, thanks to PatchStack researcher hhhai for reporting this issue
+
+= 1.34.0 | August 15, 2026 =
+ * Added ability to show the submitter's name in the directory (thank you @ryankline)
+ * Bugfix: Fixed a bug where the ID of the directory might have contained a wrong number in the approve-suggestion-email
+ * Enhancement: Tested with WordPress 7.1
+
+= 1.33.2 | June 13, 2026 =
+ * Enhancement: Tested with WordPress 7.0 final
+ * Enhancement: Tested with new WordPress 7.1 nightly build
 
 = 1.33.1 | April 17, 2026 =
  * Bugfix: Don't show the Submit form if it has been disabled in the settings (thank you Jibbius)
@@ -819,4 +840,3 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 = 0.5 =
 * First version for private use
-

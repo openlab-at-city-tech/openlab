@@ -299,20 +299,22 @@ function name_directory_get_directory_by_search_query($search_query, $include_de
 	global $wpdb;
 	global $name_directory_table_directory_name;
 
-	$sql_filter = "";
-
 	if(! empty($wildcard))
 	{
-		$search_query = "%" . $search_query . "%";
+		$search_query = "%" . $wpdb->esc_like($search_query) . "%";
+	}
+	else
+	{
+		$search_query = $wpdb->esc_like($search_query);
 	}
 
 	if(empty($include_description))
 	{
-		$sql_filter = " AND (`name` LIKE '" . $search_query . "') ";
+		$sql_filter = $wpdb->prepare(" AND (`name` LIKE %s) ", $search_query);
 	}
 	else
 	{
-		$sql_filter = " AND (`name` LIKE '" . $search_query . "' OR `description` LIKE '" . $search_query . "') ";
+		$sql_filter = $wpdb->prepare(" AND (`name` LIKE %s OR `description` LIKE %s) ", $search_query, $search_query);
 	}
 
 	$directories = $wpdb->get_results(sprintf("
@@ -387,10 +389,10 @@ function name_directory_get_single_name($id)
  * Notify the admin that a new name has been submitted to the directory and
  * that this name has to be reviewed first before publishing
  */
-function name_directory_notify_admin_of_new_submission($directory, $input)
+function name_directory_notify_admin_of_new_submission($directory_id, $input)
 {
     $notification_address = get_option('admin_email');
-    $directory = name_directory_get_directory_properties($directory);
+    $directory = name_directory_get_directory_properties($directory_id);
     if(! empty($directory['email_for_submission'])) {
         $notification_address = $directory['email_for_submission'];
     }
@@ -404,7 +406,7 @@ function name_directory_notify_admin_of_new_submission($directory, $input)
         sprintf("%s: %s", __('Submitted by', 'name-directory'), sanitize_text_field($input['name_directory_submitter'])) . "\n\n" .
         __('This new submission does not have the published status.', 'name-directory') . ' ' .
         __('Please login to your WordPress admin to review and accept the submission.', 'name-directory') . "\n\n" .
-        sprintf("Link: %s/wp-admin/admin.php?page=name-directory&sub=manage-directory&dir=%d&status=unpublished", get_option('home'), $directory) . "\n\n" .
+        sprintf("Link: %s/wp-admin/admin.php?page=name-directory&sub=manage-directory&dir=%d&status=unpublished", get_option('home'), $directory_id) . "\n\n" .
         sprintf("Your %s WordPress site", get_option('blogname')));
 }
 
