@@ -1,9 +1,9 @@
 === Advanced Editor Tools ===
 Contributors: automattic, azaozz
-Tags: block editor, classic editor, editor, Gutenberg, formatting, tinymce, write
-Requires at least: 5.9
-Tested up to: 6.3
-Stable tag: 5.9.2
+Tags: block editor, classic editor, editor, Gutenberg, tinymce
+Requires at least: 6.5
+Tested up to: 7.1
+Stable tag: 5.10.1
 Requires PHP: 5.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -46,6 +46,12 @@ In that terms Advanced Editor Tools does not affect your website's user privacy 
 If manual installation is required, please make sure that the plugin files are in a folder named "tinymce-advanced" (not two nested folders) in the WordPress plugins folder, usually "wp-content/plugins".
 
 == Changelog ==
+
+= 5.10.1 =
+* Fixed minimum requirements, some housekeeping.
+
+= 5.10.0 =
+* Fixed the Classic Paragraph block crashing in WordPress 7.0 and newer. It now uses the same implementation as the Classic block in WordPress: a content preview in the editor canvas, and TinyMCE in a popup for editing.
 
 = 5.9.2 =
 * Fixed a typo in the plugin header version string.
@@ -315,8 +321,3 @@ Re-save the settings or click the "Restore Default Settings" button on the plugi
 7. Settings for the toolbars in Classic Paragraph and Classic blocks.
 8. Additional options.
 9. Advanced options for tables.
-
-== Upgrade Notice ==
-
-= 5.2.0 =
-Another large upgrade. Includes advanced options for tables, updated import and export of settings, and further improvements for the block editor.
