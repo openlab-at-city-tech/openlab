@@ -32,10 +32,10 @@ class Akismet {
 		10516 => 'FOUR_PLUS_MONTHS_OVER_LIMIT',
 	);
 
-	private static $last_comment                                = '';
-	private static $initiated                                   = false;
-	private static $last_comment_result                         = null;
-	private static $comment_as_submitted_allowed_keys           = array(
+	private static $last_comment                      = '';
+	private static $initiated                         = false;
+	private static $last_comment_result               = null;
+	private static $comment_as_submitted_allowed_keys = array(
 		'blog'                 => '',
 		'blog_charset'         => '',
 		'blog_lang'            => '',
@@ -151,6 +151,19 @@ class Akismet {
 	}
 
 	/**
+	 * Return a visually-hidden "(opens in a new tab)" hint for screen readers.
+	 *
+	 * Append this inside a link (or pass it as a translation placeholder) so assistive
+	 * technology announces that the link opens in a new tab. The phrase is translated
+	 * once here and reused everywhere, so translators never handle the span markup.
+	 *
+	 * @return string
+	 */
+	public static function get_new_tab_screen_reader_html() {
+		return '<span class="screen-reader-text"> ' . esc_html__( '(opens in a new tab)', 'akismet' ) . '</span>';
+	}
+
+	/**
 	 * Exchange the API key for a token that can only be used to access stats pages.
 	 *
 	 * @return string
@@ -185,13 +198,13 @@ class Akismet {
 	public static function verify_key( $key, $ip = null ) {
 		// Shortcut for obviously invalid keys.
 		if ( strlen( $key ) != 12 ) {
-			return 'invalid';
+			return self::KEY_STATUS_INVALID;
 		}
 
 		$response = self::check_key_status( $key, $ip );
 
-		if ( $response[1] != 'valid' && $response[1] != 'invalid' ) {
-			return 'failed';
+		if ( $response[1] != self::KEY_STATUS_VALID && $response[1] != self::KEY_STATUS_INVALID ) {
+			return self::KEY_STATUS_FAILED;
 		}
 
 		return $response[1];
@@ -424,25 +437,23 @@ class Akismet {
 		self::$last_comment_result = null;
 
 		// Skip the Akismet check if the comment matches the Disallowed Keys list.
-		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-			$comment_author       = isset( $commentdata['comment_author'] ) ? $commentdata['comment_author'] : '';
-			$comment_author_email = isset( $commentdata['comment_author_email'] ) ? $commentdata['comment_author_email'] : '';
-			$comment_author_url   = isset( $commentdata['comment_author_url'] ) ? $commentdata['comment_author_url'] : '';
-			$comment_content      = isset( $commentdata['comment_content'] ) ? $commentdata['comment_content'] : '';
-			$comment_author_ip    = isset( $commentdata['comment_author_IP'] ) ? $commentdata['comment_author_IP'] : '';
-			$comment_agent        = isset( $commentdata['comment_agent'] ) ? $commentdata['comment_agent'] : '';
+		$comment_author       = isset( $commentdata['comment_author'] ) ? $commentdata['comment_author'] : '';
+		$comment_author_email = isset( $commentdata['comment_author_email'] ) ? $commentdata['comment_author_email'] : '';
+		$comment_author_url   = isset( $commentdata['comment_author_url'] ) ? $commentdata['comment_author_url'] : '';
+		$comment_content      = isset( $commentdata['comment_content'] ) ? $commentdata['comment_content'] : '';
+		$comment_author_ip    = isset( $commentdata['comment_author_IP'] ) ? $commentdata['comment_author_IP'] : '';
+		$comment_agent        = isset( $commentdata['comment_agent'] ) ? $commentdata['comment_agent'] : '';
 
-			if ( wp_check_comment_disallowed_list( $comment_author, $comment_author_email, $comment_author_url, $comment_content, $comment_author_ip, $comment_agent ) ) {
-				$commentdata['akismet_result'] = 'skipped';
-				$commentdata['comment_meta']['akismet_result'] = 'skipped';
+		if ( wp_check_comment_disallowed_list( $comment_author, $comment_author_email, $comment_author_url, $comment_content, $comment_author_ip, $comment_agent ) ) {
+			$commentdata['akismet_result']                 = 'skipped';
+			$commentdata['comment_meta']['akismet_result'] = 'skipped';
 
-				$commentdata['akismet_skipped_microtime'] = microtime( true );
-				$commentdata['comment_meta']['akismet_skipped_microtime'] = $commentdata['akismet_skipped_microtime'];
+			$commentdata['akismet_skipped_microtime']                 = microtime( true );
+			$commentdata['comment_meta']['akismet_skipped_microtime'] = $commentdata['akismet_skipped_microtime'];
 
-				self::set_last_comment( $commentdata );
+			self::set_last_comment( $commentdata );
 
-				return $commentdata;
-			}
+			return $commentdata;
 		}
 
 		$comment = $commentdata;
@@ -561,12 +572,12 @@ class Akismet {
 		}
 
 		if ( isset( $response[0]['x-akismet-pro-tip'] ) ) {
-			$commentdata['akismet_pro_tip'] = $response[0]['x-akismet-pro-tip'];
+			$commentdata['akismet_pro_tip']                 = $response[0]['x-akismet-pro-tip'];
 			$commentdata['comment_meta']['akismet_pro_tip'] = $response[0]['x-akismet-pro-tip'];
 		}
 
 		if ( isset( $response[0]['x-akismet-guid'] ) ) {
-			$commentdata['akismet_guid'] = $response[0]['x-akismet-guid'];
+			$commentdata['akismet_guid']                 = $response[0]['x-akismet-guid'];
 			$commentdata['comment_meta']['akismet_guid'] = $response[0]['x-akismet-guid'];
 
 			if ( 'false' === $response[1] ) {
@@ -576,7 +587,7 @@ class Akismet {
 					// Prevent this comment from reaching Active status (keep in Pending) until
 					// it's finished being checked.
 					$commentdata['comment_approved'] = '0';
-					self::$last_comment_result = '0';
+					self::$last_comment_result       = '0';
 
 					// Indicate that we should schedule a fallback so that if the site never receives a
 					// followup from Akismet, the emails will still be sent. We don't schedule it here
@@ -707,12 +718,8 @@ class Akismet {
 					// Status could be spam or trash, depending on the WP version and whether this change applies:
 					// https://core.trac.wordpress.org/changeset/34726
 					if ( $comment->comment_approved == 'spam' || $comment->comment_approved == 'trash' ) {
-						if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-							if ( wp_check_comment_disallowed_list( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent ) ) {
-								self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
-							} else {
-								self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
-							}
+						if ( wp_check_comment_disallowed_list( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent ) ) {
+							self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
 						} else {
 							self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
 						}
@@ -721,7 +728,7 @@ class Akismet {
 					// The comment wasn't sent to Akismet because it matched the disallowed comment keys.
 					self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
 					self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped-disallowed' );
-				} else if ( ! isset( self::$last_comment['akismet_result'] ) ) {
+				} elseif ( ! isset( self::$last_comment['akismet_result'] ) ) {
 					// Add a generic skipped history item.
 					self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped' );
 				} else {
@@ -742,7 +749,7 @@ class Akismet {
 	 * schedule the fallback moderation/notification emails using the comment ID instead
 	 * of relying on a lookup of the GUID in the commentmeta table.
 	 *
-	 * @param int $id The comment ID.
+	 * @param int    $id The comment ID.
 	 * @param object $comment The comment object.
 	 */
 	public static function schedule_email_fallback( $id, $comment ) {
@@ -789,7 +796,7 @@ class Akismet {
 	 * schedule the fallback moderation/notification emails using the comment ID instead
 	 * of relying on a lookup of the GUID in the commentmeta table.
 	 *
-	 * @param int $id The comment ID.
+	 * @param int    $id The comment ID.
 	 * @param object $comment The comment object.
 	 */
 	public static function schedule_approval_fallback( $id, $comment ) {
@@ -823,7 +830,7 @@ class Akismet {
 
 				if ( ! $comment ) {
 					self::log( 'Comment #' . $comment_id . ' no longer exists.' );
-				} else if ( check_comment( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent, $comment->comment_type ) ) {
+				} elseif ( check_comment( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent, $comment->comment_type ) ) {
 					self::log( 'Approving comment #' . $comment_id );
 
 					wp_set_comment_status( $comment_id, 1 );
@@ -1424,7 +1431,7 @@ class Akismet {
 		$api_key = self::get_api_key();
 
 		$status = self::verify_key( $api_key );
-		if ( get_option( 'akismet_alert_code' ) || $status == 'invalid' ) {
+		if ( get_option( 'akismet_alert_code' ) || $status == self::KEY_STATUS_INVALID ) {
 			// since there is currently a problem with the key, reschedule a check for 6 hours hence
 			wp_schedule_single_event( time() + 21600, 'akismet_schedule_cron_recheck' );
 			do_action( 'akismet_scheduled_recheck', 'key-problem-' . get_option( 'akismet_alert_code' ) . '-' . $status );
@@ -1597,7 +1604,7 @@ class Akismet {
 			// If the comment got sent to the API and got a response, it will have a GUID.
 
 			return ( $comment1['akismet_guid'] == $comment2['akismet_guid'] );
-		} else if ( ! empty( $comment1['akismet_skipped_microtime'] ) && ! empty( $comment2['akismet_skipped_microtime'] ) ) {
+		} elseif ( ! empty( $comment1['akismet_skipped_microtime'] ) && ! empty( $comment2['akismet_skipped_microtime'] ) ) {
 			// It won't have a GUID if it didn't get sent to the API because it matched the disallowed list,
 			// but it should have a microtimestamp to use here for matching against the comment DB entry it matches.
 			return ( strval( $comment1['akismet_skipped_microtime'] ) == strval( $comment2['akismet_skipped_microtime'] ) );
@@ -1639,7 +1646,7 @@ class Akismet {
 	 */
 	public static function get_fields_for_comment_matching( $comment_id ) {
 		return array(
-			'akismet_guid' => get_comment_meta( $comment_id, 'akismet_guid', true ),
+			'akismet_guid'              => get_comment_meta( $comment_id, 'akismet_guid', true ),
 			'akismet_skipped_microtime' => get_comment_meta( $comment_id, 'akismet_skipped_microtime', true ),
 		);
 	}
@@ -1715,7 +1722,7 @@ class Akismet {
 	 * with emails for comments that will be automatically cleared or spammed on the next retry.
 	 *
 	 * @param bool $maybe_notify Whether the notification email will be sent.
-	 * @param int   $comment_id The ID of the relevant comment.
+	 * @param int  $comment_id The ID of the relevant comment.
 	 * @return bool Whether the notification email should still be sent.
 	 */
 	public static function disable_emails_if_unreachable( $maybe_notify, $comment_id ) {
@@ -1999,7 +2006,8 @@ class Akismet {
 	 * @return array $form
 	 */
 	public static function prepare_custom_form_values( $form, $data = null ) {
-		if ( 'fluentform/akismet_fields' === current_filter() && did_filter( 'fluentform_akismet_fields' ) ) {
+		// did_filter() is WP 6.1+. Older versions don't store filter history.
+		if ( 'fluentform/akismet_fields' === current_filter() && function_exists( 'did_filter' ) && did_filter( 'fluentform_akismet_fields' ) ) {
 			// Already updated the form fields via the legacy filter.
 			return $form;
 		}
@@ -2282,9 +2290,9 @@ p {
 					),
 					array(
 						'a' => array(
-							'href' => array(),
+							'href'   => array(),
 							'target' => array(),
-							'rel' => array(),
+							'rel'    => array(),
 						),
 					)
 				) .

@@ -26,7 +26,7 @@ $query_args = array_merge( $query_args, $utm_args );
 
 $url = add_query_arg( $query_args, 'https://akismet.com/get/' );
 ?>
-<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $submit_classes_attr ); ?>" target="_blank">
+<a href="<?php echo esc_url( $url ); ?>" class="<?php echo esc_attr( $submit_classes_attr ); ?>" target="_blank" rel="noopener">
 	<?php echo esc_html( is_string( $text ) ? $text : '' ); ?>
-	<span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'akismet' ); ?></span>
+	<?php echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper. ?>
 </a>

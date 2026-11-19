@@ -1,7 +1,7 @@
 <?php
 
 /** @var array|WP_Error $compatible_plugins */
-$bypass_cache = ! empty( $_GET['akismet_refresh_compatible_plugins'] );
+$bypass_cache       = ! empty( $_GET['akismet_refresh_compatible_plugins'] );
 $compatible_plugins = Akismet_Compatible_Plugins::get_installed_compatible_plugins( $bypass_cache );
 if ( is_array( $compatible_plugins ) ) :
 
@@ -24,8 +24,9 @@ if ( is_array( $compatible_plugins ) ) :
 			echo '<p>';
 
 			if ( 0 === $compatible_plugin_count ) {
-				echo '<a class="akismet-external-link" href="https://akismet.com/developers/plugins-and-libraries/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=compatible_plugins">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/developers/plugins-and-libraries/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=compatible_plugins#wordpress-plugins" target="_blank" rel="noopener">';
 				echo esc_html( __( 'See supported integrations', 'akismet' ) );
+				echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper.
 				echo '</a>';
 			} else {
 				echo esc_html(
@@ -74,22 +75,20 @@ if ( is_array( $compatible_plugins ) ) :
 							<div class="akismet-compatible-plugins__card-detail">
 								<h3 class="akismet-compatible-plugins__card-title"><?php echo esc_html( $compatible_plugin['name'] ); ?></h3>
 								<div class="akismet-compatible-plugins__docs">
+									<?php
+									$documentation_aria_label = sprintf(
+										/* translators: The placeholder is the name of a plugin, like "Jetpack" . */
+										__( 'Documentation for %s (opens in a new tab)', 'akismet' ),
+										$compatible_plugin['name']
+									);
+									?>
 									<a
 										class="akismet-external-link"
 										href="<?php echo esc_url( $compatible_plugin['help_url'] ); ?>"
-										aria-label="
-											<?php
-
-											echo esc_attr(
-												sprintf(
-													/* translators: The placeholder is the name of a plugin, like "Jetpack" . */
-													__( 'Documentation for %s', 'akismet' ),
-													$compatible_plugin['name']
-												)
-											);
-
-											?>
-									"><?php esc_html_e( 'View documentation', 'akismet' ); ?></a>
+										target="_blank"
+										rel="nofollow noopener"
+										aria-label="<?php echo esc_attr( $documentation_aria_label ); ?>"
+									><?php esc_html_e( 'View documentation', 'akismet' ); ?></a>
 								</div>
 							</div>
 						</li>

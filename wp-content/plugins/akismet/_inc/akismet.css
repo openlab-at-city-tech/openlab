@@ -36,10 +36,12 @@
     color: #AAA;
     font-style: italic;
 }
-table.comments td.comment p a {
+table.comments td.comment p a,
+table.comments th.comment p a {
     text-decoration: underline;
 }
-table.comments td.comment p a:after {
+table.comments td.comment p a:after,
+table.comments th.comment p a:after {
     content: attr(href);
     color: #aaa;
     display: inline-block; /* Show the URL without the link's underline extending under it. */
@@ -355,10 +357,6 @@ table.comments td.comment p a:after {
     border-color: #005082;
 }
 
-.akismet-is-primary:hover {
-	border-color: #005082;
-}
-
 .akismet-section-header {
 	position: relative;
 	margin: 0 auto 0.625rem auto;
@@ -437,7 +435,7 @@ div.error.akismet-usage-limit-alert {
 }
 
 .akismet-usage-limit-alert .akismet-usage-limit-cta {
-	border-color: none;
+	border: none;
 	text-align: right;
 }
 

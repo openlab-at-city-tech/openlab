@@ -1,14 +1,11 @@
 <?php
 //phpcs:disable VariableAnalysis
 // There are "undefined" variables here because they're defined in the code that includes this file as a template.
-$kses_allow_link   = array(
-	'a' => array(
-		'href'   => true,
-		'target' => true,
-		'class'  => true,
-	),
-);
+$kses_allow_link   = Akismet_Admin::get_link_kses_allowed_elements();
 $kses_allow_strong = array( 'strong' => true );
+
+// Screen-reader new-tab hint, reused as the %2$s placeholder in the links below.
+$opens_in_new_tab = Akismet::get_new_tab_screen_reader_html();
 
 if ( ! isset( $type ) ) {
 	$type = false; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
@@ -54,14 +51,14 @@ if ( ! isset( $type ) ) {
 			<h3 class="akismet-alert-header"><?php esc_html_e( 'We detected commercial activity on your site', 'akismet' ); ?></h3>
 			<p class="akismet-alert-info">
 				<?php
-					/* translators: The placeholder is a URL. */
-					echo wp_kses( sprintf( __( 'Your current subscription is for <a class="akismet-external-link" href="%s">personal, non-commercial use</a>. Please upgrade your plan to continue using Akismet.', 'akismet' ), esc_url( 'https://akismet.com/support/getting-started/free-or-paid/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=commercial_support' ) ), $kses_allow_link );
+					/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+					echo wp_kses( sprintf( __( 'Your current subscription is for <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">personal, non-commercial use%2$s</a>. Please upgrade your plan to continue using Akismet.', 'akismet' ), esc_url( 'https://akismet.com/support/getting-started/free-or-paid/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=commercial_support' ), $opens_in_new_tab ), $kses_allow_link );
 				?>
 			</p>
 			<p class="akismet-alert-info">
 				<?php
-					/* translators: The placeholder is a URL to the contact form. */
-					echo wp_kses( sprintf( __( 'If you believe your site should not be classified as commercial, <a class="akismet-external-link" href="%s">please get in touch</a>', 'akismet' ), esc_url( 'https://akismet.com/contact/?purpose=commercial&utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=commercial_contact' ) ), $kses_allow_link );
+					/* translators: 1: URL to the contact form, 2: hidden screen-reader text noting the link opens in a new tab. */
+					echo wp_kses( sprintf( __( 'If you believe your site should not be classified as commercial, <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">please get in touch%2$s</a>', 'akismet' ), esc_url( 'https://akismet.com/contact/?purpose=commercial&utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=commercial_contact' ), $opens_in_new_tab ), $kses_allow_link );
 				?>
 			</p>
 		</div>
@@ -70,10 +67,10 @@ if ( ! isset( $type ) ) {
 			Akismet::view(
 				'get',
 				array(
-					'text'         => __( 'Upgrade plan', 'akismet' ),
-					'classes'      => array( 'akismet-alert-button', 'akismet-button' ),
-					'redirect'     => 'upgrade',
-					'utm_content'  => 'commercial_upgrade',
+					'text'        => __( 'Upgrade plan', 'akismet' ),
+					'classes'     => array( 'akismet-alert-button', 'akismet-button' ),
+					'redirect'    => 'upgrade',
+					'utm_content' => 'commercial_upgrade',
 				)
 			);
 			?>
@@ -89,9 +86,10 @@ if ( ! isset( $type ) ) {
 		<?php
 		echo wp_kses(
 			sprintf(
-				/* translators: the placeholder is a clickable URL that leads to more information regarding an error code. */
-				__( 'For more information, see the <a class="akismet-external-link" href="%s">error documentation on akismet.com</a>', 'akismet' ),
-				esc_url( 'https://akismet.com/developers/detailed-docs/errors/akismet-error-' . absint( $code ) . '?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=error_info' )
+				/* translators: 1: clickable URL that leads to more information regarding an error code, 2: hidden screen-reader text noting the link opens in a new tab. */
+				__( 'For more information, see the <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">error documentation on akismet.com%2$s</a>', 'akismet' ),
+				esc_url( 'https://akismet.com/developers/detailed-docs/errors/akismet-error-' . absint( $code ) . '?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=error_info' ),
+				$opens_in_new_tab
 			),
 			$kses_allow_link
 		);
@@ -117,8 +115,8 @@ if ( ! isset( $type ) ) {
 	</p>
 	<p>
 		<?php
-		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'Please contact your web host or firewall administrator and give them <a class="akismet-external-link" href="%s" target="_blank">this information about Akismet&#8217;s system requirements</a>', 'akismet' ), esc_url( 'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq_php' ) ), array_merge( $kses_allow_link, $kses_allow_strong, array( 'code' => true ) ) );
+		/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'Please contact your web host or firewall administrator and give them <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">this information about Akismet&#8217;s system requirements%2$s</a>', 'akismet' ), esc_url( 'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq_php' ), $opens_in_new_tab ), array_merge( $kses_allow_link, $kses_allow_strong, array( 'code' => true ) ) );
 		?>
 	</p>
 </div>
@@ -128,8 +126,8 @@ if ( ! isset( $type ) ) {
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Your site can&#8217;t connect to the Akismet servers.', 'akismet' ); ?></h3>
 	<p>
 	<?php
-		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'Your firewall may be blocking Akismet from connecting to its API. Please contact your host and refer to <a class="akismet-external-link" href="%s" target="_blank">our guide about firewalls</a>', 'akismet' ), esc_url( 'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq_firewall' ) ), $kses_allow_link );
+		/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'Your firewall may be blocking Akismet from connecting to its API. Please contact your host and refer to <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">our guide about firewalls%2$s</a>', 'akismet' ), esc_url( 'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq_firewall' ), $opens_in_new_tab ), $kses_allow_link );
 	?>
 	</p>
 </div>
@@ -139,8 +137,8 @@ if ( ! isset( $type ) ) {
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Your Akismet plan has been cancelled.', 'akismet' ); ?></h3>
 	<p>
 		<?php
-		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'Please visit <a class="akismet-external-link" href="%s" target="_blank">Akismet.com</a> to purchase a new subscription.', 'akismet' ), esc_url( 'https://akismet.com/pricing/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=pricing_cancelled' ) ), $kses_allow_link );
+		/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'Please visit <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">Akismet.com%2$s</a> to purchase a new subscription.', 'akismet' ), esc_url( 'https://akismet.com/pricing/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=pricing_cancelled' ), $opens_in_new_tab ), $kses_allow_link );
 		?>
 	</p>
 </div>
@@ -150,8 +148,8 @@ if ( ! isset( $type ) ) {
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'Your Akismet subscription is suspended.', 'akismet' ); ?></h3>
 	<p>
 		<?php
-		/* translators: The placeholder is a URL. */
-		echo wp_kses( sprintf( __( 'Please contact <a class="akismet-external-link" href="%s" target="_blank">Akismet support</a> for assistance.', 'akismet' ), esc_url( 'https://akismet.com/contact/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=support_suspended' ) ), $kses_allow_link );
+		/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'Please contact <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">Akismet support%2$s</a> for assistance.', 'akismet' ), esc_url( 'https://akismet.com/contact/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=support_suspended' ), $opens_in_new_tab ), $kses_allow_link );
 		?>
 	</p>
 </div>
@@ -161,8 +159,8 @@ if ( ! isset( $type ) ) {
 	<h3 class="akismet-alert__heading"><?php echo esc_html( $time_saved ); ?></h3>
 	<p>
 		<?php
-		/* translators: the placeholder is a clickable URL to the Akismet account upgrade page. */
-		echo wp_kses( sprintf( __( 'You can help us fight spam and upgrade your account by <a class="akismet-external-link" href="%s" target="_blank">contributing a token amount</a>', 'akismet' ), esc_url( 'https://akismet.com/pricing?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=upgrade_contribution' ) ), $kses_allow_link );
+		/* translators: 1: clickable URL to the Akismet account upgrade page, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'You can help us fight spam and upgrade your account by <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">contributing a token amount%2$s</a>', 'akismet' ), esc_url( 'https://akismet.com/pricing?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=upgrade_contribution' ), $opens_in_new_tab ), $kses_allow_link );
 		?>
 	</p>
 </div>
@@ -172,8 +170,8 @@ if ( ! isset( $type ) ) {
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'There is a problem with your API key.', 'akismet' ); ?></h3>
 	<p>
 		<?php
-		/* translators: The placeholder is a URL to the Akismet contact form. */
-		echo wp_kses( sprintf( __( 'Please contact <a class="akismet-external-link" href="%s" target="_blank">Akismet support</a> for assistance.', 'akismet' ), esc_url( 'https://akismet.com/contact/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=support_missing' ) ), $kses_allow_link );
+		/* translators: 1: URL to the Akismet contact form, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'Please contact <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">Akismet support%2$s</a> for assistance.', 'akismet' ), esc_url( 'https://akismet.com/contact/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=support_missing' ), $opens_in_new_tab ), $kses_allow_link );
 		?>
 	</p>
 </div>
@@ -183,8 +181,8 @@ if ( ! isset( $type ) ) {
 	<h3 class="akismet-alert__heading"><?php esc_html_e( 'You don&#8217;t have an Akismet plan.', 'akismet' ); ?></h3>
 	<p>
 		<?php
-		/* translators: the placeholder is the URL to the Akismet pricing page. */
-		echo wp_kses( sprintf( __( 'Please <a class="akismet-external-link" href="%s" target="_blank">choose a free or paid plan</a> so Akismet can protect your site from spam.', 'akismet' ), esc_url( 'https://akismet.com/pricing?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=choose_plan' ) ), $kses_allow_link );
+		/* translators: 1: URL to the Akismet pricing page, 2: hidden screen-reader text noting the link opens in a new tab. */
+		echo wp_kses( sprintf( __( 'Please <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">choose a free or paid plan%2$s</a> so Akismet can protect your site from spam.', 'akismet' ), esc_url( 'https://akismet.com/pricing?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=choose_plan' ), $opens_in_new_tab ), $kses_allow_link );
 		?>
 	</p>
 	<p><?php echo esc_html__( 'Once you\'ve chosen a plan, return here to complete your setup.', 'akismet' ); ?></p>
@@ -232,9 +230,10 @@ if ( ! isset( $type ) ) {
 		<?php
 		echo wp_kses(
 			sprintf(
-				/* translators: The placeholder is a URL to the Akismet contact form. */
-				__( 'Please enter a new key or <a class="akismet-external-link" href="%s" target="_blank">contact Akismet support</a>', 'akismet' ),
-				'https://akismet.com/contact/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=support_invalid_key'
+				/* translators: 1: URL to the Akismet contact form, 2: hidden screen-reader text noting the link opens in a new tab. */
+				__( 'Please enter a new key or <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">contact Akismet support%2$s</a>', 'akismet' ),
+				'https://akismet.com/contact/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=support_invalid_key',
+				$opens_in_new_tab
 			),
 			$kses_allow_link
 		);
@@ -249,9 +248,10 @@ if ( ! isset( $type ) ) {
 		<?php
 		echo wp_kses(
 			sprintf(
-				/* translators: The placeholder is a URL. */
-				__( 'The connection to akismet.com could not be established. Please refer to <a class="akismet-external-link" href="%s" target="_blank">our guide about firewalls</a> and check your server configuration.', 'akismet' ),
-				'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq'
+				/* translators: 1: URL, 2: hidden screen-reader text noting the link opens in a new tab. */
+				__( 'The connection to akismet.com could not be established. Please refer to <a class="akismet-external-link" href="%1$s" target="_blank" rel="noopener">our guide about firewalls%2$s</a> and check your server configuration.', 'akismet' ),
+				'https://akismet.com/akismet-hosting-faq/?utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=hosting_faq',
+				$opens_in_new_tab
 			),
 			$kses_allow_link
 		);
@@ -297,24 +297,27 @@ if ( ! isset( $type ) ) {
 					)
 				);
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank" rel="noopener">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
+				echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper.
 				echo '</a>';
 
 				break;
 			case 'SECOND_MONTH_OVER_LIMIT':
 				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for two consecutive months. Next month, we will restrict your account after you reach the limit. Increase your limit to make sure your site stays protected from spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank" rel="noopener">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
+				echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper.
 				echo '</a>';
 
 				break;
 			case 'THIRD_MONTH_APPROACHING_LIMIT':
 				echo esc_html( __( 'Your Akismet usage is nearing your plan&#8217;s limit for the third consecutive month. We will restrict your account after you reach the limit. Increase your limit to make sure your site stays protected from spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank" rel="noopener">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
+				echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper.
 				echo '</a>';
 
 				break;
@@ -322,8 +325,9 @@ if ( ! isset( $type ) ) {
 			case 'FOUR_PLUS_MONTHS_OVER_LIMIT':
 				echo esc_html( __( 'Your Akismet usage has been over your plan&#8217;s limit for three consecutive months. We have restricted your account for the rest of the month. Increase your limit to make sure your site stays protected from spam.', 'akismet' ) );
 				echo '&nbsp;';
-				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank">';
+				echo '<a class="akismet-external-link" href="https://akismet.com/support/general/akismet-api-usage-limits/?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=usage_limit_docs" target="_blank" rel="noopener">';
 				echo esc_html( __( 'Learn more about usage limits', 'akismet' ) );
+				echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper.
 				echo '</a>';
 
 				break;
@@ -334,7 +338,7 @@ if ( ! isset( $type ) ) {
 		</p>
 	</div>
 	<div class="akismet-usage-limit-cta">
-		<a href="<?php echo esc_url( $upgrade_url . ( strpos( $upgrade_url, '?' ) !== false ? '&' : '?' ) . 'utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=usage_limit_upgrade' ); ?>" class="button" target="_blank">
+		<a href="<?php echo esc_url( $upgrade_url . ( strpos( $upgrade_url, '?' ) !== false ? '&' : '?' ) . 'utm_source=akismet_plugin&utm_campaign=plugin_static_link&utm_medium=in_plugin&utm_content=usage_limit_upgrade' ); ?>" class="button" target="_blank" rel="noopener">
 			<?php
 			if ( isset( $upgrade_via_support ) && $upgrade_via_support ) {
 				// Direct user to contact support.
@@ -362,6 +366,7 @@ if ( ! isset( $type ) ) {
 				);
 			}
 			?>
+			<?php echo Akismet::get_new_tab_screen_reader_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Returns markup escaped in the helper. ?>
 		</a>
 	</div>
 </div>

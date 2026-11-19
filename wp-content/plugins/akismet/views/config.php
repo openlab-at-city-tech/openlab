@@ -328,7 +328,7 @@ $kses_allow_link_href = array(
 						<div class="akismet-card-actions">
 							<?php if ( $akismet_user->status === Akismet::USER_STATUS_ACTIVE ) : ?>
 								<div class="akismet-card-actions__secondary-action">
-									<a href="https://akismet.com/account?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=account_overview" class="akismet-external-link" aria-label="Account overview on akismet.com"><?php esc_html_e( 'Account overview', 'akismet' ); ?></a>
+									<a href="https://akismet.com/account?utm_source=akismet_plugin&amp;utm_campaign=plugin_static_link&amp;utm_medium=in_plugin&amp;utm_content=account_overview" class="akismet-external-link" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Account overview on akismet.com (opens in a new tab)', 'akismet' ); ?>"><?php esc_html_e( 'Account overview', 'akismet' ); ?></a>
 								</div>
 							<?php endif; ?>
 							<div id="publishing-action">
