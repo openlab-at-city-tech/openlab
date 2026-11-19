@@ -591,6 +591,54 @@ function openlab_save_meta_data_at_registration( $usermeta ) {
 add_filter( 'bp_signup_usermeta', 'openlab_save_meta_data_at_registration' );
 
 /**
+ * Adds the posted fields of the account type's profile group to the signup.
+ *
+ * BuddyPress 14.5.3+ saves only its signup fields when a form posts other fields. Do not mark
+ * the account type fields as signup fields to fix this. The theme overrides `members/register.php`,
+ * so BuddyPress then shows all of them in the Base section of the form.
+ *
+ * @param array $usermeta Signup meta.
+ * @return array
+ */
+function openlab_add_account_type_fields_to_signup( $usermeta ) {
+	if ( empty( $usermeta['account_type'] ) || empty( $_POST['signup_profile_field_ids'] ) ) {
+		return $usermeta;
+	}
+
+	$groups = bp_xprofile_get_groups(
+		[
+			'exclude_groups' => openlab_get_exclude_groups_for_account_type( $usermeta['account_type'] ),
+			'fetch_fields'   => true,
+		]
+	);
+
+	$group_field_ids = [];
+	foreach ( $groups as $group ) {
+		$group_field_ids = array_merge( $group_field_ids, wp_parse_id_list( wp_list_pluck( (array) $group->fields, 'id' ) ) );
+	}
+
+	$field_ids = array_intersect( wp_parse_id_list( wp_unslash( $_POST['signup_profile_field_ids'] ) ), $group_field_ids );
+
+	// Copied as BuddyPress copies its own signup fields in bp_core_screen_signup().
+	foreach ( $field_ids as $field_id ) {
+		if ( ! empty( $_POST[ 'field_' . $field_id ] ) ) {
+			$usermeta[ 'field_' . $field_id ] = $_POST[ 'field_' . $field_id ];
+		}
+
+		if ( ! empty( $_POST[ 'field_' . $field_id . '_visibility' ] ) ) {
+			$usermeta[ 'field_' . $field_id . '_visibility' ] = $_POST[ 'field_' . $field_id . '_visibility' ];
+		}
+	}
+
+	$saved_ids = isset( $usermeta['profile_field_ids'] ) ? wp_parse_id_list( $usermeta['profile_field_ids'] ) : [];
+
+	$usermeta['profile_field_ids'] = implode( ',', array_unique( array_merge( $saved_ids, $field_ids ) ) );
+
+	return $usermeta;
+}
+add_filter( 'bp_signup_usermeta', 'openlab_add_account_type_fields_to_signup', 20 );
+
+/**
  * Processes academic unit data on account activation.
  */
 function openlab_process_academic_unit_data_at_activation( $user_id, $key, $data ) {
