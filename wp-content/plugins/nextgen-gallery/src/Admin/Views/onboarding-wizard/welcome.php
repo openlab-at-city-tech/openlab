@@ -13,7 +13,7 @@
 <div class="nextgen-gallery-onboarding-wizard-step nextgen-gallery-onboarding-wizard-step-welcome">
 	<div class="nextgen-gallery-onboarding-welcome-content">
 		<h1><?php esc_html_e( 'Welcome to Imagely Setup Wizard!', 'nggallery' ); ?></h1>
-		<p><?php esc_html_e( 'Crafting exquisite, responsive photo galleries for your website takes just minutes. You are only 5 minutes away for creating your first gallery!', 'nggallery' ); ?></p>
+		<p><?php esc_html_e( 'Crafting exquisite, responsive photo galleries for your website takes just minutes. You are only 5 minutes away from creating your first gallery!', 'nggallery' ); ?></p>
 		<div class="nextgen-gallery-onboarding-wizard-cta">
 			<a href="#" class="button nextgen-gallery-onboarding-wizard-primary-btn btn-large nextgen-gallery-button-dark nextgen-gallery-button-primary" id="nextgen-gallery-get-started-btn"><?php esc_html_e( 'Let\'s Get Started → ', 'nggallery' ); ?></a>
 		</div>

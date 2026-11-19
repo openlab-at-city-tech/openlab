@@ -729,6 +729,64 @@ class Controller {
 	}
 
 	/**
+	 * Returns the 'ajax_pagination_referrer' request parameter, or an empty string unless it is an http(s) URL on
+	 * this site's own host and port, without credentials.
+	 *
+	 * The value can come from the request body and is used as the base of pagination links that ajax_pagination.js
+	 * fetches and injects into the page, so a foreign host must never be accepted. The raw value is returned so
+	 * callers keep decoding it as before; both the raw and the decoded form must pass.
+	 *
+	 * @return string
+	 */
+	public function get_pagination_referrer() {
+		$referrer = Router::get_instance()->get_parameter( 'ajax_pagination_referrer' );
+
+		if ( ! is_string( $referrer ) || '' === $referrer ) {
+			return '';
+		}
+
+		$default_ports = [
+			'http'  => 80,
+			'https' => 443,
+		];
+
+		$home        = \wp_parse_url( \home_url() );
+		$home_host   = isset( $home['host'] ) ? strtolower( $home['host'] ) : '';
+		$home_scheme = isset( $home['scheme'] ) ? strtolower( $home['scheme'] ) : '';
+		$home_port   = isset( $home['port'] ) ? (int) $home['port'] : null;
+
+		// A different port is a different origin. Compare explicit ports, treating the scheme default as none.
+		if ( isset( $default_ports[ $home_scheme ] ) && $home_port === $default_ports[ $home_scheme ] ) {
+			$home_port = null;
+		}
+
+		foreach ( [ $referrer, urldecode( $referrer ) ] as $url ) {
+			// Backslashes and control characters are normalized differently by browsers than by wp_parse_url().
+			if ( preg_match( '#[\\\\\x00-\x1f\x7f]#', $url ) ) {
+				return '';
+			}
+
+			$parts  = \wp_parse_url( $url );
+			$scheme = isset( $parts['scheme'] ) ? strtolower( $parts['scheme'] ) : '';
+			if ( ! is_array( $parts )
+				|| ! isset( $default_ports[ $scheme ] )
+				|| empty( $parts['host'] )
+				|| strtolower( $parts['host'] ) !== $home_host
+				|| isset( $parts['user'] )
+				|| isset( $parts['pass'] ) ) {
+				return '';
+			}
+
+			$port = isset( $parts['port'] ) && (int) $parts['port'] !== $default_ports[ $scheme ] ? (int) $parts['port'] : null;
+			if ( $port !== $home_port ) {
+				return '';
+			}
+		}
+
+		return $referrer;
+	}
+
+	/**
 	 * Returns an url to view the displayed gallery using an alternate display type
 	 *
 	 * @param DisplayedGallery $displayed_gallery The displayed gallery object.

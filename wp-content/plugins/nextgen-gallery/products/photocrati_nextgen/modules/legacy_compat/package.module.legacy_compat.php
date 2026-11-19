@@ -4,11 +4,11 @@
  */
 class A_Gallery_Display_Factory extends Mixin
 {
-    public function displayed_gallery($properties = array(), $mapper = false, $context = false)
+    public function displayed_gallery($properties = [], $mapper = false, $context = false)
     {
         return new C_Displayed_Gallery($properties, $mapper, $context);
     }
-    public function display_type($properties = array(), $mapper = false, $context = false)
+    public function display_type($properties = [], $mapper = false, $context = false)
     {
         return new \C_Display_Type($properties, $mapper, $context);
     }
@@ -40,8 +40,8 @@ class C_Display_Type extends C_DataMapper_Model
      *
      * @var array
      */
-    public $__settings = array();
-    public function define($properties = array(), $mapper = false, $context = false)
+    public $__settings = [];
+    public function define($properties = [], $mapper = false, $context = false)
     {
         parent::define($mapper, $properties, $context);
         $this->add_mixin('Mixin_Display_Type_Instance_Methods');
@@ -54,7 +54,7 @@ class C_Display_Type extends C_DataMapper_Model
      * @param FALSE|C_Display_Type_Mapper   $mapper
      * @param FALSE|string|array            $context
      */
-    public function initialize($properties = array(), $mapper = false, $context = false)
+    public function initialize($properties = [], $mapper = false, $context = false)
     {
         // If no mapper was specified, then get the mapper.
         if (!$mapper) {
@@ -143,7 +143,7 @@ class C_Display_Type_Controller extends C_MVC_Controller
      *
      * @var array
      */
-    protected static $_instances = array();
+    protected static $_instances = [];
     /**
      * Parent controller wrapper.
      *
@@ -254,7 +254,7 @@ class Mixin_Display_Type_Controller extends Mixin
     {
         return $this->object->parent_controller_wrapper->get_entity_statistics($entities, $named_size, $style_images);
     }
-    public function create_view($template, $params = array(), $context = null)
+    public function create_view($template, $params = [], $context = null)
     {
         if (isset($params['displayed_gallery'])) {
             if (isset($params['displayed_gallery']->display_settings)) {
@@ -284,7 +284,7 @@ class Mixin_Display_Type_Controller extends Mixin
     {
         return $this->object->parent_controller_wrapper->get_alternative_displayed_gallery($displayed_gallery);
     }
-    public function prepare_legacy_parameters($images, $displayed_gallery, $params = array())
+    public function prepare_legacy_parameters($images, $displayed_gallery, $params = [])
     {
         return $this->object->parent_controller_wrapper->prepare_legacy_parameters($images, $displayed_gallery, $params);
     }
@@ -303,7 +303,7 @@ class C_Display_Type_Mapper extends C_CustomPost_DataMapper_Driver
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     public function define($context = false, $not_used = false)
     {
         $object_name = 'display_type';
@@ -466,7 +466,7 @@ class C_Displayed_Gallery extends C_DataMapper_Model
      *
      * @var array
      */
-    protected static $_random_image_ids_cache = array();
+    protected static $_random_image_ids_cache = [];
     /**
      * Defines the displayed gallery.
      *
@@ -475,7 +475,7 @@ class C_Displayed_Gallery extends C_DataMapper_Model
      * @param false|string|array                 $context   Optional context.
      * @return void
      */
-    public function define($properties = array(), $mapper = false, $context = false)
+    public function define($properties = [], $mapper = false, $context = false)
     {
         parent::define($mapper, $properties, $context);
         $this->add_mixin('Mixin_Displayed_Gallery_Instance_Methods');
@@ -489,7 +489,7 @@ class C_Displayed_Gallery extends C_DataMapper_Model
      * @param false|string|array                 $context   Optional context.
      * @return void
      */
-    public function initialize($properties = array(), $mapper = false, $context = false)
+    public function initialize($properties = [], $mapper = false, $context = false)
     {
         if (!$mapper) {
             $mapper = $this->get_registry()->get_utility($this->_mapper_interface);
@@ -920,7 +920,7 @@ class C_Displayed_Gallery extends C_DataMapper_Model
      * @param int   $offset
      * @return array
      */
-    public function _entities_to_galleries_and_albums($entity_ids, $id_only = false, $exclusions = array(), $limit = false, $offset = false)
+    public function _entities_to_galleries_and_albums($entity_ids, $id_only = false, $exclusions = [], $limit = false, $offset = false)
     {
         $retval = [];
         $gallery_ids = [];
@@ -1400,7 +1400,7 @@ class C_Displayed_Gallery_Mapper extends C_CustomPost_DataMapper_Driver
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     public function define($context = false, $not_used = false)
     {
         parent::define('displayed_gallery', [$context, 'displayed_gallery', 'display_gallery']);
@@ -1487,13 +1487,13 @@ class C_Displayed_Gallery_Source_Manager
      *
      * @var array
      */
-    private $_sources = array();
+    private $_sources = [];
     /**
      * Registered entity types.
      *
      * @var array
      */
-    private $_entity_types = array();
+    private $_entity_types = [];
     /**
      * Whether defaults have been registered.
      *
@@ -1852,13 +1852,13 @@ class C_Gallery_Storage extends C_Component
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     /**
      * Gallery absolute path cache.
      *
      * @var array
      */
-    public static $gallery_abspath_cache = array();
+    public static $gallery_abspath_cache = [];
     /**
      * Image mapper instance.
      *
@@ -1897,7 +1897,7 @@ class C_Gallery_Storage extends C_Component
      */
     public function __call($method, $args)
     {
-        if (preg_match('/^get_(\\w+)_(abspath|url|dimensions|html|size_params)$/', $method, $match)) {
+        if (preg_match('/^get_(\w+)_(abspath|url|dimensions|html|size_params)$/', $method, $match)) {
             if (isset($match[1]) && isset($match[2]) && !$this->has_method($method)) {
                 $method = 'get_image_' . $match[2];
                 $args[] = $match[1];
@@ -2053,7 +2053,7 @@ class C_Gallery_Storage extends C_Component
         $dirname = preg_replace("#\\x{00a0}#siu", ' ', $dirname);
         $dirname = str_replace($special_chars, '', $dirname);
         $dirname = str_replace(['%20', '+'], '-', $dirname);
-        $dirname = preg_replace('/[\\r\\n\\t -]+/', '-', $dirname);
+        $dirname = preg_replace('/[\r\n\t -]+/', '-', $dirname);
         $dirname = trim($dirname, '.-_');
         return $dirname;
     }
@@ -2091,7 +2091,7 @@ class C_Gallery_Storage extends C_Component
      * @param array  $params
      * @return null|object
      */
-    public function generate_image_clone($image_path, $clone_path, $params)
+    public function generate_image_clone($image_path, $clone_path, $params, $image = null)
     {
         $crop = isset($params['crop']) ? $params['crop'] : null;
         $watermark = isset($params['watermark']) ? $params['watermark'] : null;
@@ -2206,7 +2206,8 @@ class C_Gallery_Storage extends C_Component
                     $watermark_setting_keys = ['wmFont', 'wmType', 'wmPos', 'wmXpos', 'wmYpos', 'wmPath', 'wmText', 'wmOpaque', 'wmFont', 'wmSize', 'wmColor'];
                     foreach ($watermark_setting_keys as $watermark_key) {
                         if (!isset($params[$watermark_key])) {
-                            $params[$watermark_key] = $settings[$watermark_key];
+                            // A key the settings row never stored reads as null, as it always did, without the PHP 8 warning.
+                            $params[$watermark_key] = $settings[$watermark_key] ?? null;
                         }
                     }
                     // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
@@ -2217,13 +2218,22 @@ class C_Gallery_Storage extends C_Component
                     }
                 }
                 $watermark = strval($watermark);
+                $watermarked = null;
                 if ('image' === $watermark) {
                     $thumbnail->watermarkImgPath = $params['wmPath'];
-                    $thumbnail->watermarkImage($params['wmPos'], $params['wmXpos'], $params['wmYpos']);
+                    $watermarked = $thumbnail->watermarkImage($params['wmPos'], $params['wmXpos'], $params['wmYpos']);
                 } elseif ('text' === $watermark) {
                     $thumbnail->watermarkText = $params['wmText'];
                     $thumbnail->watermarkCreateText($params['wmColor'], $params['wmFont'], $params['wmSize'], $params['wmOpaque']);
-                    $thumbnail->watermarkImage($params['wmPos'], $params['wmXpos'], $params['wmYpos']);
+                    $watermarked = $thumbnail->watermarkImage($params['wmPos'], $params['wmXpos'], $params['wmYpos']);
+                }
+                // A caller that exists to watermark (Set Watermark, #1104) must not get a
+                // "success" for an image saved without one: a refused, unreachable or
+                // non-PNG watermark (#1084) stops here, before anything is written. Other
+                // callers (front-end sizes) keep rendering the image unwatermarked.
+                if (false === $watermarked && !empty($params['watermark_required'])) {
+                    $thumbnail->destruct();
+                    return null;
                 }
                 // phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
                 if ($rotation && in_array(abs($rotation), [90, 180, 270])) {
@@ -2246,10 +2256,14 @@ class C_Gallery_Storage extends C_Component
                     $thumbnail->format = strtoupper($format_list[$clone_format]);
                 }
                 $thumbnail = apply_filters('ngg_before_save_thumbnail', $thumbnail);
-                // Always retrieve metadata from the backup when possible
-                $backup_path = $image_path . '_backup';
+                // Always retrieve metadata from the backup when possible. Since #1107 the original
+                // is no longer a sibling of the served file, so it is only locatable when the
+                // caller passed the image entity; the sibling check remains for a path-only call
+                // and for an original the migration has not moved yet. Kept in step with
+                // \Imagely\NGG\DataStorage\Manager::generate_image_clone().
+                $backup_path = $image ? \Imagely\NGG\DataStorage\Manager::get_instance()->resolve_backup_abspath($image) : $image_path . '_backup';
                 // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-                $exif_abspath = @file_exists($backup_path) ? $backup_path : $image_path;
+                $exif_abspath = $backup_path && @file_exists($backup_path) ? $backup_path : $image_path;
                 // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
                 $exif_iptc = @\Imagely\NGG\DataStorage\EXIFWriter::read_metadata($exif_abspath);
                 $thumbnail->save($destpath, $quality);
@@ -2556,13 +2570,13 @@ class C_Gallery_Storage extends C_Component
         // Re-encoding at unchanged dimensions only costs JPEG quality, so leave the file untouched.
         $storage_manager = \Imagely\NGG\DataStorage\Manager::get_instance();
         if (!$storage_manager->is_resize_needed($image_abspath, $params)) {
-            $storage_manager->sync_unresized_image_metadata($image_abspath);
+            $storage_manager->sync_unresized_image_metadata($image_abspath, $image);
             if ($save) {
                 $this->object->update_image_dimension_metadata($image, $image_abspath);
             }
             return true;
         }
-        $generated = $this->object->generate_image_clone($image_abspath, $image_abspath, $params);
+        $generated = $this->object->generate_image_clone($image_abspath, $image_abspath, $params, $image);
         if ($generated && $save) {
             $this->object->update_image_dimension_metadata($image, $image_abspath);
         }
@@ -2618,7 +2632,7 @@ class C_Gallery_Storage extends C_Component
             $degree = 270;
         }
         $parameters = ['rotation' => $degree];
-        $generated = $this->object->generate_image_clone($image_abspath, $image_abspath, $this->object->get_image_size_params($image, 'full', $parameters), $parameters);
+        $generated = $this->object->generate_image_clone($image_abspath, $image_abspath, $this->object->get_image_size_params($image, 'full', $parameters), $image);
         if ($generated && $save) {
             $this->object->update_image_dimension_metadata($image, $image_abspath);
         }
@@ -2804,11 +2818,17 @@ class C_Gallery_Storage extends C_Component
                     case 'full':
                         $retval = path_join($gallery_path, $image->filename);
                         break;
+                    // Originals live under their own root outside the web-served gallery
+                    // directory, so the containment base for this size is that root. Kept in step
+                    // with \Imagely\NGG\DataStorage\Manager::get_computed_image_abspath().
                     case 'backup':
-                        $retval = path_join($gallery_path, $image->filename . '_backup');
+                        $ngg_storage_manager = \Imagely\NGG\DataStorage\Manager::get_instance();
+                        $retval = $ngg_storage_manager->resolve_backup_abspath($image);
                         // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-                        if (!@file_exists($retval)) {
+                        if (empty($retval) || !@file_exists($retval)) {
                             $retval = path_join($gallery_path, $image->filename);
+                        } elseif ($ngg_storage_manager->is_path_within_originals_root($retval)) {
+                            $containment_base = $ngg_storage_manager->get_originals_abspath($image->galleryid);
                         }
                         break;
                     case 'thumbnail':
@@ -2877,7 +2897,14 @@ class C_Gallery_Storage extends C_Component
                 // refused row renders as a blank slot with nothing for support to search for.
                 // Through Manager::log_path_refusal() - every occurrence under WP_DEBUG, at most one
                 // line per hour without it, because this runs once per image per request.
-                if ($retval && !\Imagely\NGG\DataStorage\Manager::get_instance()->is_path_within_gallery_dir($gallery_path, $retval)) {
+                // An original resolved into the originals root is legitimately outside the gallery
+                // directory; $containment_base was set to that root in case 'backup' above, and the
+                // generic contain_path() check below enforces it. Kept in step with
+                // \Imagely\NGG\DataStorage\Manager::get_computed_image_abspath() - without this
+                // the twin refuses every relocated original and returns null, which breaks
+                // C_Gallery_Storage::recover_image() and logs a false refusal on every render.
+                $outside_gallery_dir_allowed = 'backup' === $size && $containment_base !== $gallery_path;
+                if ($retval && !$outside_gallery_dir_allowed && !\Imagely\NGG\DataStorage\Manager::get_instance()->is_path_within_gallery_dir($gallery_path, $retval)) {
                     \Imagely\NGG\DataStorage\Manager::get_instance()->log_path_refusal(sprintf('NextGEN Gallery: refused stored path for image #%s (gallery #%s, size "%s") - %s does not resolve inside the gallery directory (%s)', isset($image->pid) ? $image->pid : '?', isset($image->galleryid) ? $image->galleryid : '?', $size, $retval, $gallery_path), \Imagely\NGG\DataStorage\Manager::REFUSAL_STORED_PATH);
                     $retval = null;
                 }
@@ -2979,7 +3006,7 @@ class C_Gallery_Storage extends C_Component
      * @param array      $attributes (optional)
      * @return string
      */
-    public function get_image_html($image, $size = 'full', $attributes = array())
+    public function get_image_html($image, $size = 'full', $attributes = [])
     {
         $retval = '';
         if (is_numeric($image)) {
@@ -3032,6 +3059,15 @@ class C_Gallery_Storage extends C_Component
      */
     public function _get_computed_image_url($image, $size = 'full')
     {
+        // Originals are not web-addressable, by design (#1107). This copy is the one POPE
+        // registers, so it is what Pro and third-party code reach through
+        // Mixin_GalleryStorage_Base_Getters::get_image_url() - and unlike the namespaced copy the
+        // path here resolves to a real file, so without this guard the returned URL would carry
+        // the keyed path segment that protects every original on the site. Kept in step with
+        // \Imagely\NGG\DataStorage\Manager::get_computed_image_url().
+        if ('backup' === \Imagely\NGG\DataStorage\Manager::get_instance()->normalize_image_size_name($size)) {
+            return null;
+        }
         $retval = null;
         $dynthumbs = C_Dynamic_Thumbnails_Manager::get_instance();
         // Get the image abspath
@@ -3106,7 +3142,7 @@ class C_Gallery_Storage extends C_Component
         }
         return $retval;
     }
-    public function get_image_size_params($image, $size, $params = array(), $skip_defaults = false)
+    public function get_image_size_params($image, $size, $params = [], $skip_defaults = false)
     {
         // Get the image entity
         if (is_numeric($image)) {
@@ -3312,6 +3348,9 @@ class C_Gallery_Storage extends C_Component
                 $this->object->_delete_gallery_directory($file->getPathname());
             }
         }
+        // Our own deny rule and index stub: the image-only allow-list above cannot remove them, and
+        // they would keep the directory alive after the gallery is gone.
+        \Imagely\NGG\DataStorage\Manager::get_instance()->remove_directory_guard($abspath);
         // DO NOT remove directories that still have files in them. Note: '.' and '..' are included with getSize()
         $empty = true;
         foreach ($iterator as $file) {
@@ -3470,11 +3509,17 @@ class C_Gallery_Storage extends C_Component
             $image_id = $image->{$image->id_field};
             $storage_manager = \Imagely\NGG\DataStorage\Manager::get_instance();
             // Bound with this (legacy) layer's own gallery abspath so the boundary and the target
-            // path (also from this layer) are computed consistently. When it cannot be resolved
-            // (e.g. the gallery row is gone), skip the unlinks but still let the record be removed,
+            // path (also from this layer) are computed consistently, then put that directory through
+            // the same server-side test the modern route uses: the `path` column is writable, so a
+            // boundary taken straight from it asserts nothing about where the unlinks land (#1085).
+            // When it cannot be resolved (e.g. the gallery row is gone) or is not a directory
+            // NextGEN may delete files in, skip the unlinks but still let the record be removed,
             // rather than leaving an orphaned image permanently undeletable.
-            $gallery_abspath = $this->object->get_gallery_abspath($image->galleryid);
-            $bounded_deletable = !empty($gallery_abspath);
+            $gallery_abspath = $storage_manager->get_deletion_boundary($this->object->get_gallery_abspath($image->galleryid), $image->galleryid);
+            $bounded_deletable = '' !== $gallery_abspath;
+            // Resolved once for every size of this image, not per size - the same fixed query count
+            // the modern Manager::delete_image() keeps.
+            $other_dirs = $bounded_deletable ? $storage_manager->get_other_gallery_directories($image->galleryid) : null;
             // Delete only a particular image size
             if ($size) {
                 $abspath = $this->object->get_image_abspath($image, $size);
@@ -3482,7 +3527,7 @@ class C_Gallery_Storage extends C_Component
                 // unlink but still update metadata. A path that resolves outside the gallery directory
                 // is refused, and only image-type files are ever removed.
                 if ($bounded_deletable && !empty($abspath)) {
-                    if (!$storage_manager->is_deletion_path_allowed($gallery_abspath, $abspath)) {
+                    if (!$storage_manager->is_deletion_path_allowed($gallery_abspath, $abspath, $storage_manager->get_originals_abspath($image->galleryid)) || $storage_manager->path_is_inside_another_gallery($abspath, $image->galleryid, $gallery_abspath, $other_dirs)) {
                         return false;
                     }
                     do_action('ngg_delete_image', $image_id, $size);
@@ -3509,7 +3554,7 @@ class C_Gallery_Storage extends C_Component
                         if (empty($image_abspath)) {
                             continue;
                         }
-                        if (!$storage_manager->is_deletion_path_allowed($gallery_abspath, $image_abspath)) {
+                        if (!$storage_manager->is_deletion_path_allowed($gallery_abspath, $image_abspath, $storage_manager->get_originals_abspath($image->galleryid)) || $storage_manager->path_is_inside_another_gallery($image_abspath, $image->galleryid, $gallery_abspath, $other_dirs)) {
                             return false;
                         }
                         if (!$storage_manager->is_removable_image_path($image_abspath)) {
@@ -3567,7 +3612,7 @@ class C_Gallery_Storage extends C_Component
                             if ($named_size === 'thumbnail') {
                                 unset($image->meta_data[$named_size]['crop_frame']);
                             }
-                            $thumbnail = $this->object->generate_image_clone($full_abspath, $this->object->get_image_abspath($image, $named_size), $this->object->get_image_size_params($image, $named_size));
+                            $thumbnail = $this->object->generate_image_clone($full_abspath, $this->object->get_image_abspath($image, $named_size), $this->object->get_image_size_params($image, $named_size), $image);
                             if ($thumbnail) {
                                 $thumbnail->destruct();
                             }
@@ -3742,7 +3787,7 @@ class C_Gallery_Storage extends C_Component
             natsort($found);
             $last = array_pop($found);
             $last = basename($last);
-            if (preg_match('/^(\\d+)_/', $last, $match)) {
+            if (preg_match('/^(\d+)_/', $last, $match)) {
                 $num = intval($match[1]) + 1;
             }
         }
@@ -3753,7 +3798,7 @@ class C_Gallery_Storage extends C_Component
         $filename = $filename ? $filename : uniqid('nextgen-gallery');
         $filename = preg_replace('#^/#', '', $filename);
         $filename = sanitize_file_name($filename);
-        if (preg_match('/\\-(png|jpg|gif|jpeg|jpg_backup)$/i', $filename, $match)) {
+        if (preg_match('/\-(png|jpg|gif|jpeg|jpg_backup)$/i', $filename, $match)) {
             $filename = str_replace($match[0], '.' . $match[1], $filename);
         }
         /*
@@ -3810,6 +3855,8 @@ class C_Gallery_Storage extends C_Component
             if (!wp_is_writable($gallery_abspath)) {
                 throw new E_InsufficientWriteAccessException(false, esc_html($gallery_abspath), false);
             }
+            // Same deny rule the modern Manager writes here, and for the same reason; see there.
+            \Imagely\NGG\DataStorage\Manager::get_instance()->protect_directory($gallery_abspath);
             // Sanitize the filename for storing in the DB
             $filename = $this->sanitize_filename_for_db($filename);
             // Ensure that the filename is valid. Uses the shared allow-list rather than its own
@@ -3877,7 +3924,7 @@ class C_Gallery_Storage extends C_Component
             }
             // Seed alttext/slug for new images only; replacing an existing image (e.g. a Lightroom republish) must not reset user-entered values (#976).
             if ($is_new || empty($image->alttext)) {
-                $image->alttext = preg_replace('#\\.\\w{2,4}$#', '', $filename);
+                $image->alttext = preg_replace('#\.\w{2,4}$#', '', $filename);
             }
             if ($is_new || empty($image->image_slug)) {
                 $image->image_slug = nggdb::get_unique_slug(sanitize_title_with_dashes($image->alttext), 'image');
@@ -3931,7 +3978,14 @@ class C_Gallery_Storage extends C_Component
             // Automatically watermark the main image if requested
             if ($settings->get('watermark_automatically_at_upload', 0)) {
                 $image_abspath = $this->object->get_image_abspath($image, 'full');
-                $this->object->generate_image_clone($image_abspath, $image_abspath, ['watermark' => true]);
+                // watermark_required: if the watermark cannot be loaded, keep the upload as it
+                // is (not re-encoded without one) and tell the admins (log + admin notice), instead
+                // of failing silently (#1104).
+                if (!$this->object->generate_image_clone($image_abspath, $image_abspath, ['watermark' => true, 'watermark_required' => true], $image)) {
+                    error_log(sprintf('NextGEN Gallery: image #%d was uploaded without its automatic watermark - the watermark image or font in the watermark settings could not be loaded.', (int) $image_id));
+                    // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+                    \Imagely\NGG\Admin\Notifications\WatermarkUploadFailed::record();
+                }
             }
             // Notify other plugins that an image has been added
             do_action('ngg_added_new_image', $image);
@@ -4243,7 +4297,7 @@ class C_NextGEN_Wizard_Manager extends C_Component
      *
      * @var array Unused.
      */
-    public static $_instances = array();
+    public static $_instances = [];
     /**
      * Unused.
      *
@@ -5140,8 +5194,13 @@ class C_NggLegacy_Thumbnail
             $color = '000000';
         }
         // set font path
-        $wmFontPath = NGGALLERY_ABSPATH . 'fonts/' . $wmFont;
-        if (!is_readable($wmFontPath)) {
+        // SECURITY: the font is a file name inside the bundled fonts directory, never a
+        // path. basename() strips any "../" traversal so wmFont cannot walk out of fonts/
+        // to read an arbitrary file through is_readable()/FreeType below.
+        $wmFontPath = NGGALLERY_ABSPATH . 'fonts/' . basename(str_replace('\\', '/', (string) $wmFont));
+        // is_file(), not is_readable(): an empty or refused font name leaves the fonts/
+        // directory itself, which is readable and would reach FreeType as a "font".
+        if (!is_file($wmFontPath) || !is_readable($wmFontPath)) {
             return;
         }
         // This function requires both the GD library and the FreeType library.
@@ -5239,6 +5298,8 @@ class C_NggLegacy_Thumbnail
      * @param string $relPOS
      * @param int    $xPOS
      * @param int    $yPOS
+     * @return bool True when the watermark was composited; false when its image
+     *              could not be loaded (refused, unreachable or not a PNG).
      */
     public function watermarkImage($relPOS = 'botRight', $xPOS = 0, $yPOS = 0)
     {
@@ -5246,19 +5307,50 @@ class C_NggLegacy_Thumbnail
         if (is_resource($this->watermarkImgPath) || $this->watermarkImgPath instanceof GdImage) {
             $this->workingImage = $this->watermarkImgPath;
         } else {
-            // (possibly) search for the file from the document root
-            if (!is_file($this->watermarkImgPath)) {
-                $fs = C_Fs::get_instance();
-                if (is_file($fs->join_paths($fs->get_document_root('content'), $this->watermarkImgPath))) {
-                    $this->watermarkImgPath = $fs->get_document_root('content') . $this->watermarkImgPath;
-                }
+            // SECURITY: this legacy twin is force-loaded on the front end for Pro < 4.0
+            // and is reached by C_Gallery_Storage::generate_image_clone() with the saved
+            // wmPath, so it needs the same handling as the modern Thumbnail.
+            if (!is_string($this->watermarkImgPath) || '' === $this->watermarkImgPath) {
+                return false;
             }
-            // Would you really want to use anything other than a png?
-            // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-            $this->workingImage = @imagecreatefrompng($this->watermarkImgPath);
+            if (false !== strpos(str_replace('\\', '/', $this->watermarkImgPath), '://')) {
+                // Only http(s) is a legitimate watermark source (the documented "HTTP url"
+                // option, #1104); fetch it through wp_safe_remote_get(), which refuses
+                // internal/loopback hosts and closes the SSRF imagecreatefrompng()'s own
+                // fopen wrapper would allow. Every other wrapper (phar://, file://, php://,
+                // data://, …) is refused — opening one reads/deserialises attacker data (#1084).
+                if (!preg_match('#^https?://#i', str_replace('\\', '/', $this->watermarkImgPath))) {
+                    return false;
+                }
+                $response = wp_safe_remote_get($this->watermarkImgPath, array('timeout' => 10));
+                if (is_wp_error($response) || 200 !== (int) wp_remote_retrieve_response_code($response)) {
+                    return false;
+                }
+                $body = wp_remote_retrieve_body($response);
+                // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+                $this->workingImage = $body ? @imagecreatefromstring($body) : false;
+            } else {
+                // SECURITY: contain the local path to the install (ABSPATH, WP_CONTENT_DIR
+                // or uploads) before touching the filesystem. Without this a "../../.."
+                // traversal reaches any readable PNG and composites it into a publicly
+                // served thumbnail (arbitrary-file disclosure), the existence check doubles
+                // as a path oracle, and on Windows a UNC path makes the server connect to
+                // that host. resolve_watermark_path() contains each candidate before probing
+                // it and returns the canonical path: open that, never the raw one, because
+                // the OS follows a symlink before applying "..".
+                $fs = C_Fs::get_instance();
+                $contained = \Imagely\NGG\Util\Security::resolve_watermark_path($this->watermarkImgPath, $fs->join_paths($fs->get_document_root('content'), $this->watermarkImgPath));
+                if (null === $contained) {
+                    return false;
+                }
+                $this->watermarkImgPath = $contained;
+                // Would you really want to use anything other than a png?
+                // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+                $this->workingImage = @imagecreatefrompng($this->watermarkImgPath);
+            }
             // if it's not a valid file die...
             if (empty($this->workingImage) || !$this->workingImage) {
-                return;
+                return false;
             }
         }
         imagealphablending($this->workingImage, false);
@@ -5316,6 +5408,7 @@ class C_NggLegacy_Thumbnail
         } else {
             $this->imagecopymerge_alpha($this->newImage, $this->workingImage, $dest_x, $dest_y, 0, 0, $watermarkfile_width, $watermarkfile_height, 100);
         }
+        return true;
     }
     /**
      * Wrapper to imagecopymerge() that allows PNG transparency
@@ -5368,7 +5461,7 @@ class C_Router_Wrapper extends Mixin
      *
      * @var array
      */
-    protected static $instances = array();
+    protected static $instances = [];
     /**
      * Context.
      *
@@ -5423,11 +5516,22 @@ class Mixin_GalleryStorage_Base_Dynamic extends Mixin
             $thumbnail = null;
             if ($size == 'full' && $settings->imgBackup == 1) {
                 // XXX change this? 'full' should be the resized path and 'original' the _backup path
-                $backup_path = $this->object->get_backup_abspath($image);
+                // Kept in step with \Imagely\NGG\DataStorage\Manager::generate_image_size():
+                // the pre-regeneration master goes to the originals root, not beside the served
+                // image, which is what #1107 was about.
+                $manager = \Imagely\NGG\DataStorage\Manager::get_instance();
+                $backup_path = $manager->resolve_backup_abspath($image);
                 // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-                if (!@file_exists($backup_path)) {
+                if (empty($backup_path) || !@file_exists($backup_path)) {
+                    $backup_path = $manager->get_backup_write_abspath($image);
                     // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-                    @copy($filename, $backup_path);
+                    if ($backup_path && @copy($filename, $backup_path)) {
+                        $manager->discard_legacy_backup($image);
+                    } else {
+                        // Kept in step with
+                        // \Imagely\NGG\DataStorage\Manager::generate_image_size().
+                        $manager->log_path_refusal(sprintf('NextGEN Gallery: could not keep an original for image #%s before regenerating its full size; the pre-resize master is not retained.', is_object($image) && isset($image->pid) ? $image->pid : '?'), \Imagely\NGG\DataStorage\Manager::REFUSAL_ORIGINALS_DIR);
+                    }
                 }
             }
             // Generate the thumbnail using WordPress
@@ -5499,7 +5603,7 @@ class Mixin_GalleryStorage_Base_Dynamic extends Mixin
                 }
             }
             $clone_path = $existing_image_abpath;
-            $thumbnail = $this->object->generate_image_clone($filename, $clone_path, $params);
+            $thumbnail = $this->object->generate_image_clone($filename, $clone_path, $params, $image);
             // We successfully generated the thumbnail
             if ($thumbnail != null) {
                 $clone_path = $thumbnail->fileName;
@@ -5571,13 +5675,13 @@ class Mixin_GalleryStorage_Base_Getters extends Mixin
      *
      * @var array
      */
-    public static $image_abspath_cache = array();
+    public static $image_abspath_cache = [];
     /**
      * Cache for image URLs.
      *
      * @var array
      */
-    public static $image_url_cache = array();
+    public static $image_url_cache = [];
     /**
      * Gets the absolute path of the backup of an original image.
      *
@@ -5586,12 +5690,10 @@ class Mixin_GalleryStorage_Base_Getters extends Mixin
      */
     public function get_backup_abspath($image)
     {
-        $retval = null;
-        $image_path = $this->object->get_image_abspath($image);
-        if ($image_path) {
-            $retval = $image_path . '_backup';
-        }
-        return $retval;
+        // Delegated rather than recomputed: since #1107 the original lives under its own root
+        // outside the web root, and a second copy of that path logic here would drift. Kept in
+        // step with \Imagely\NGG\DataStorage\Manager::get_backup_abspath().
+        return \Imagely\NGG\DataStorage\Manager::get_instance()->resolve_backup_abspath($image);
     }
     /**
      * Gets backup dimensions for an image.
@@ -5611,7 +5713,10 @@ class Mixin_GalleryStorage_Base_Getters extends Mixin
      */
     public function get_backup_url($image)
     {
-        return $this->object->get_image_url($image, 'backup');
+        // Originals are deliberately not web-reachable since #1107, so there is no URL to return.
+        // Kept as a stub because this is a published legacy accessor; it has no callers in any of
+        // the plugins.
+        return false;
     }
     /**
      * Gets the absolute path where the image is stored. Can optionally return the path for a particular sized image.
@@ -5710,9 +5815,17 @@ class Mixin_GalleryStorage_Base_Management extends Mixin
     {
         $retval = false;
         $image_path = $this->object->get_image_abspath($image);
+        // The write target is the originals root, never a sibling of the served image: a master
+        // written beside the published file is anonymously fetchable (#1107). Kept in step with
+        // \Imagely\NGG\DataStorage\Manager::backup_image().
+        $manager = \Imagely\NGG\DataStorage\Manager::get_instance();
+        $backup_path = $image_path ? $manager->get_backup_write_abspath($image) : null;
         // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-        if ($image_path && @file_exists($image_path)) {
-            $retval = copy($image_path, $this->object->get_backup_abspath($image));
+        if ($image_path && $backup_path && @file_exists($image_path)) {
+            $retval = copy($image_path, $backup_path);
+            if ($retval) {
+                $manager->discard_legacy_backup($image);
+            }
             // Store the dimensions of the image
             if (function_exists('getimagesize')) {
                 $mapper = C_Image_Mapper::get_instance();
@@ -5751,10 +5864,10 @@ class Mixin_GalleryStorage_Base_Upload extends Mixin
      * @param array[string] $filenames
      * @return array|bool FALSE on failure
      */
-    public function import_gallery_from_fs($abspath, $gallery_id = null, $create_new_gallerypath = true, $gallery_title = null, $filenames = array())
+    public function import_gallery_from_fs($abspath, $gallery_id = null, $create_new_gallerypath = true, $gallery_title = null, $filenames = [])
     {
         // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-        if (@(!file_exists($abspath))) {
+        if (@!file_exists($abspath)) {
             return false;
         }
         $fs = C_Fs::get_instance();
@@ -5851,13 +5964,13 @@ class Mixin_Validation extends Mixin
      *
      * @var array
      */
-    public $_default_msgs = array('validates_presence_of' => '%s should be present', 'validates_presence_with' => '%s should be present with %s', 'validates_uniqueness_of' => '%s should be unique', 'validates_confirmation_of' => '%s should match confirmation', 'validates_exclusion_of' => '%s is reserved', 'validates_format_of' => '%s is invalid', 'validates_inclusion_of' => '%s is not included in the list', 'validates_numericality_of' => '%s is not numeric', 'validates_less_than' => '%s is too small', 'validates_greater_than' => '%s is too large', 'validates_equals' => '%s is invalid');
+    public $_default_msgs = ['validates_presence_of' => '%s should be present', 'validates_presence_with' => '%s should be present with %s', 'validates_uniqueness_of' => '%s should be unique', 'validates_confirmation_of' => '%s should match confirmation', 'validates_exclusion_of' => '%s is reserved', 'validates_format_of' => '%s is invalid', 'validates_inclusion_of' => '%s is not included in the list', 'validates_numericality_of' => '%s is not numeric', 'validates_less_than' => '%s is too small', 'validates_greater_than' => '%s is too large', 'validates_equals' => '%s is invalid'];
     /**
      * Default validation patterns.
      *
      * @var array
      */
-    public $_default_patterns = array('email_address' => '//');
+    public $_default_patterns = ['email_address' => '//'];
     /**
      * Clears all errors for the object
      */
@@ -6135,7 +6248,7 @@ class Mixin_Validation extends Mixin
      * @param array  $values
      * @param string $msg
      */
-    public function validates_inclusion_of($property, $values = array(), $msg = false)
+    public function validates_inclusion_of($property, $values = [], $msg = false)
     {
         if (!is_array($values)) {
             $values = [$values];
@@ -6183,7 +6296,7 @@ class Mixin_Validation extends Mixin
      * @param array  $exclusions
      * @param string $msg
      */
-    public function validates_exclusion_of($property, $exclusions = array(), $msg = false)
+    public function validates_exclusion_of($property, $exclusions = [], $msg = false)
     {
         $invalid = false;
         if (!is_array($exclusions)) {
@@ -6227,7 +6340,7 @@ class Mixin_Validation extends Mixin
      * @param array  $scope
      * @param string $msg
      */
-    public function validates_uniqueness_of($property, $scope = array(), $msg = false)
+    public function validates_uniqueness_of($property, $scope = [], $msg = false)
     {
         // Get any entities that have the same property.
         $mapper = $this->object->get_mapper();
@@ -6260,7 +6373,7 @@ class Mixin_Validation extends Mixin
      * @param array        $with
      * @param string       $msg
      */
-    public function validates_presence_of($properties, $with = array(), $msg = false)
+    public function validates_presence_of($properties, $with = [], $msg = false)
     {
         $missing = [];
         if (!is_array($properties)) {

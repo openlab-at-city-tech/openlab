@@ -1035,8 +1035,14 @@ class LegacyThumbnail {
 			$color = '000000';
 		}
 		// set font path.
-		$wmFontPath = NGGALLERY_ABSPATH . 'fonts/' . $wmFont;
-		if ( ! is_readable( $wmFontPath ) ) {
+		// SECURITY: the font is a file NAME inside the bundled fonts directory, never a
+		// path. basename() strips any "../" traversal so wmFont cannot walk out of
+		// fonts/ to read an arbitrary file (e.g. "../../../../etc/passwd") through
+		// is_readable()/FreeType below.
+		$wmFontPath = NGGALLERY_ABSPATH . 'fonts/' . basename( str_replace( '\\', '/', (string) $wmFont ) );
+		// is_file(), not is_readable(): an empty or refused font name leaves the fonts/
+		// directory itself, which is readable and would reach FreeType as a "font".
+		if ( ! is_file( $wmFontPath ) || ! is_readable( $wmFontPath ) ) {
 			return;
 		}
 
@@ -1158,6 +1164,8 @@ class LegacyThumbnail {
 	 * @param string $relPOS
 	 * @param int    $xPOS
 	 * @param int    $yPOS
+	 * @return bool True when the watermark was composited; false when its image
+	 *              could not be loaded (refused, unreachable or not a PNG).
 	 */
 	public function watermarkImage( $relPOS = 'botRight', $xPOS = 0, $yPOS = 0 ) {
 
@@ -1165,24 +1173,56 @@ class LegacyThumbnail {
 		if ( is_resource( $this->watermarkImgPath ) || $this->watermarkImgPath instanceof \GdImage ) {
 			$this->workingImage = $this->watermarkImgPath;
 		} else {
-			// (possibly) search for the file from the document root.
-			if ( ! is_file( $this->watermarkImgPath ) ) {
-				$fs = \Imagely\NGG\Util\Filesystem::get_instance();
-				if ( is_file( $fs->join_paths( $fs->get_document_root( 'content' ), $this->watermarkImgPath ) ) ) {
-					$this->watermarkImgPath = $fs->get_document_root( 'content' ) . $this->watermarkImgPath;
+			if ( ! is_string( $this->watermarkImgPath ) || '' === $this->watermarkImgPath ) {
+				return false;
+			}
+
+			if ( false !== strpos( str_replace( '\\', '/', $this->watermarkImgPath ), '://' ) ) {
+				// SECURITY: a scheme is present. Only http(s) is a legitimate watermark
+				// source — the form documents "an HTTP url" and customers rely on it
+				// (#1104) — and it is fetched through wp_safe_remote_get(), which refuses
+				// internal/loopback hosts, closing the SSRF that imagecreatefrompng()'s own
+				// fopen wrapper would allow. Every other wrapper (phar://, file://, php://,
+				// data://, …) is refused outright: opening one reads or deserialises
+				// attacker-chosen data (#1084, object injection on PHP <= 7.4).
+				if ( ! preg_match( '#^https?://#i', str_replace( '\\', '/', $this->watermarkImgPath ) ) ) {
+					return false;
 				}
+				$response = wp_safe_remote_get( $this->watermarkImgPath, [ 'timeout' => 10 ] );
+				if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
+					return false;
+				}
+				$body = wp_remote_retrieve_body( $response );
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$this->workingImage = $body ? @imagecreatefromstring( $body ) : false;
+			} else {
+				// SECURITY: contain the local path to the install (ABSPATH, WP_CONTENT_DIR
+				// or uploads) before touching the filesystem. Without this, a "../../.."
+				// traversal in the saved wmPath reaches any PNG the web-server user can read
+				// and composites it into a publicly served thumbnail (arbitrary-file
+				// disclosure), the existence check doubles as a path oracle, and on Windows a
+				// UNC path makes the server connect to that host. resolve_watermark_path()
+				// tries the site-root and content-root forms, contains each before probing
+				// it, and returns the canonical path: open that, never the raw one, because
+				// the OS follows a symlink before applying "..".
+				$fs        = \Imagely\NGG\Util\Filesystem::get_instance();
+				$contained = \Imagely\NGG\Util\Security::resolve_watermark_path(
+					$this->watermarkImgPath,
+					$fs->join_paths( $fs->get_document_root( 'content' ), $this->watermarkImgPath )
+				);
+				if ( null === $contained ) {
+					return false;
+				}
+				$this->watermarkImgPath = $contained;
+
+				// Would you really want to use anything other than a png?
+				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
 			}
 
-			if ( empty( $this->watermarkImgPath ) ) {
-				return;
-			}
-
-			// Would you really want to use anything other than a png?
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$this->workingImage = @imagecreatefrompng( $this->watermarkImgPath );
 			// if it's not a valid file die...
 			if ( empty( $this->workingImage ) || ( ! $this->workingImage ) ) {
-				return;
+				return false;
 			}
 		}
 
@@ -1255,6 +1295,8 @@ class LegacyThumbnail {
 				100
 			);
 		}
+
+		return true;
 	}
 
 	/**

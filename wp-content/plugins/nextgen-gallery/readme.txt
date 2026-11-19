@@ -2,7 +2,7 @@
 Contributors: photocrati, imagely
 Tags: gallery, wordpress gallery plugin, photo gallery, image gallery, slideshow
 Requires at least: 5.5.4
-Stable tag: 4.5.5
+Stable tag: 4.5.6
 Tested up to: 7.1
 License: GPLv3
 Requires PHP: 7.4
@@ -196,6 +196,26 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+
+= 4.5.6 - 11.09.2026 =
+* Fixed: Security hardening on the Tag page (CVE-2026-119611). We recommend updating.
+* Fixed: Security hardening on lightbox captions (CVE-2026-116550). We recommend updating.
+* Fixed: Security hardening on Lightroom publishing (CVE-2026-118191). We recommend updating.
+* Fixed: Security hardening on image metadata handling. We recommend updating.
+* Fixed: Security hardening on how full-size image originals are stored. We recommend updating.
+* Fixed: Security hardening on gallery and image deletion. We recommend updating.
+* Fixed: Security hardening on the watermark settings. We recommend updating.
+* Fixed: Security hardening on the gallery shortcode. We recommend updating.
+* Fixed: Security hardening on the Other Options screens. We recommend updating.
+* Fixed: Security hardening on the settings REST API. We recommend updating.
+* Fixed: Security hardening on album pages. We recommend updating.
+* Fixed: Shortcodes from other plugins, such as Envira Gallery and Soliloquy, no longer stop working after an SEO plugin builds an image sitemap on the same request.
+* Fixed: The image crop tool now crops the image, and a failed crop no longer replaces the image with its original upload.
+* Fixed: Manage Galleries shows the right number of pages after a search.
+* Fixed: The Pro Blog display's image spacing setting is saved and applied.
+* Fixed: WPML translations of album gallery and sub-album titles are shown again.
+* Fixed: The setup wizard shows the upgrade offer only to NextGEN Gallery users, not to Pro, Plus or Starter users.
+* Fixed: Importing from Google Photos sends the picker session, so the selected photos are imported.
 
 = 4.5.5 - 10.29.2026 =
 * Fixed: Security hardening on the Shutter and Shutter Reloaded lightboxes, so a link title, such as one inside a visitor's comment, is shown as text instead of being run as code (CVE-2026-116563). We recommend updating.

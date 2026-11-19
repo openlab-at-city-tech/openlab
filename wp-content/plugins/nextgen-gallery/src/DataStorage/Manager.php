@@ -48,6 +48,39 @@ class Manager {
 	const REFUSAL_LOG_THROTTLE_PREFIX = 'ngg_refusal_logged_';
 
 	/**
+	 * Directory under wp-content that holds the untouched originals ("backups") of gallery images.
+	 *
+	 * Backups used to live beside the image they belong to, as "<served image path>_backup". That
+	 * made the master of every published image fetchable by any anonymous visitor who appended a
+	 * fixed suffix to a thumbnail URL printed on the page, because the gallery directory is
+	 * web-served and the free plugin shipped no deny rule for it (#1107).
+	 */
+	const ORIGINALS_DIRNAME = 'ngg-originals';
+
+	/**
+	 * Contents of the index stub write_directory_guard() drops into a guarded directory.
+	 *
+	 * Shared so remove_directory_guard() can compare against it byte for byte.
+	 *
+	 * @var string
+	 */
+	const GUARD_INDEX_CONTENTS = "<?php\n// Silence is golden.\n";
+
+	/**
+	 * Option holding the per-site segment of the originals path.
+	 *
+	 * The wp-content directory is web-served, so moving the originals into a well-known directory
+	 * under it would only have replaced one derivable URL with another: the gallery slug and the
+	 * filename are both
+	 * printed in the public markup, so "ngg-originals/<gallery>/<file>_backup" would be just as
+	 * guessable as the old sibling path. A random segment nobody can derive from the markup is what
+	 * closes that on every web server, including the nginx and IIS hosts that cannot be covered by
+	 * the per-directory deny rule written alongside it.
+	 */
+	const ORIGINALS_KEY_OPTION = 'ngg_originals_key';
+
+
+	/**
 	 * Refusal kinds. Each throttles independently, so a frequent benign one cannot consume the
 	 * hour's single line and hide a rare serious one.
 	 */
@@ -60,7 +93,12 @@ class Manager {
 	const REFUSAL_GALLERY_OUTSIDE = 'gallery_outside_locations';
 	const REFUSAL_MASS_ASSIGNMENT = 'mass_assignment';
 	const REFUSAL_DIRS_DEGENERATE = 'deletion_dirs_degenerate';
+	const REFUSAL_ORIGINALS_KEY   = 'originals_key_unwritable';
+	const REFUSAL_ORIGINALS_DIR   = 'originals_dir_unwritable';
+	const REFUSAL_ORIGINALS_GUARD = 'originals_guard_unwritable';
+	const REFUSAL_LEGACY_BACKUP   = 'legacy_backup_retained';
 	const REFUSAL_URL_UNMAPPED    = 'url_unmapped';
+	const REFUSAL_DELETE_BOUNDARY = 'delete_boundary';
 	const REFUSAL_ATTACH_IMAGE    = 'attach_image';
 
 	/**
@@ -77,8 +115,21 @@ class Manager {
 	 * request. Everything else - a refused mass assignment is an authenticated, low-frequency
 	 * XML-RPC or Lightroom edit - is logged every time, because for those the log is the only
 	 * channel that reaches anybody and one line per hour would hide the 2nd..Nth refusal.
+	 *
+	 * A refusal that repeats once per row of a bulk operation counts as a hot path for this
+	 * purpose: the deletion-boundary refusal below is reached once per image of a "delete images"
+	 * batch, so an ungated line would write several hundred identical entries for one click while
+	 * saying nothing the first one did not.
 	 */
 	const THROTTLED_REFUSAL_KINDS = [
+		// Reachable once per request from an anonymous front-end render: resolving an original's
+		// path needs the key, so an unwritable option would otherwise log on every visitor hit.
+		self::REFUSAL_ORIGINALS_KEY,
+		// Reachable once per image: both fire from generate_image_size(), which a library-wide
+		// "resize images" or "recreate thumbnails" run and the relocation migration both drive
+		// per image, so an unthrottled line is one per image per pass.
+		self::REFUSAL_ORIGINALS_DIR,
+		self::REFUSAL_ORIGINALS_GUARD,
 		self::REFUSAL_STORED_PATH,
 		self::REFUSAL_CLONE_WRITE,
 		self::REFUSAL_GENERATE_SIZE,
@@ -88,6 +139,7 @@ class Manager {
 		self::REFUSAL_GALLERY_OUTSIDE,
 		self::REFUSAL_DIRS_DEGENERATE,
 		self::REFUSAL_URL_UNMAPPED,
+		self::REFUSAL_DELETE_BOUNDARY,
 	];
 
 	/**
@@ -185,6 +237,13 @@ class Manager {
 	 * @var array
 	 */
 	protected static $gallery_abspath_cache = [];
+
+	/**
+	 * Directories whose "*_backup" deny rule this request has already written, keyed "<blog>|<path>".
+	 *
+	 * @var array<string,true>
+	 */
+	protected static $protected_dirs_cache = [];
 
 	/**
 	 * Image absolute path cache.
@@ -297,8 +356,18 @@ class Manager {
 		$retval     = false;
 		$image_path = $this->get_image_abspath( $image );
 
-		if ( $image_path && @file_exists( $image_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$retval = copy( $image_path, $this->get_backup_abspath( $image ) );
+		$backup_path = $image_path ? $this->get_backup_write_abspath( $image ) : null;
+
+		// A null target means the originals directory could not be created or the stored filename
+		// did not resolve inside it. Copying to the old sibling path as a fallback would put the
+		// master back in the web-served gallery directory, which is the exposure this moved away
+		// from (#1107), so the backup is skipped instead.
+		if ( $image_path && $backup_path && @file_exists( $image_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			$retval = copy( $image_path, $backup_path );
+
+			if ( $retval ) {
+				$this->discard_legacy_backup( $image );
+			}
 
 			// Store the dimensions of the image.
 			if ( function_exists( 'getimagesize' ) ) {
@@ -723,7 +792,7 @@ class Manager {
 	 * @param array  $params
 	 * @return null|object
 	 */
-	public function generate_image_clone( $image_path, $clone_path, $params ) {
+	public function generate_image_clone( $image_path, $clone_path, $params, $image = null ) {
 		$crop       = isset( $params['crop'] ) ? $params['crop'] : null;
 		$watermark  = isset( $params['watermark'] ) ? $params['watermark'] : null;
 		$reflection = isset( $params['reflection'] ) ? $params['reflection'] : null;
@@ -874,7 +943,9 @@ class Manager {
 					];
 					foreach ( $watermark_setting_keys as $watermark_key ) {
 						if ( ! isset( $params[ $watermark_key ] ) ) {
-							$params[ $watermark_key ] = $settings[ $watermark_key ];
+							// A key the settings row never stored (wmFont on an install that never saved the
+							// watermark tab) reads as null, as it always did, without the PHP 8 warning.
+							$params[ $watermark_key ] = $settings[ $watermark_key ] ?? null;
 						}
 					}
 
@@ -887,13 +958,23 @@ class Manager {
 
 				$watermark = strval( $watermark );
 
+				$watermarked = null;
 				if ( $watermark == 'image' ) {
 					$thumbnail->watermarkImgPath = $params['wmPath'];
-					$thumbnail->watermarkImage( $params['wmPos'], $params['wmXpos'], $params['wmYpos'] );
+					$watermarked                 = $thumbnail->watermarkImage( $params['wmPos'], $params['wmXpos'], $params['wmYpos'] );
 				} elseif ( $watermark == 'text' ) {
 					$thumbnail->watermarkText = $params['wmText'];
 					$thumbnail->watermarkCreateText( $params['wmColor'], $params['wmFont'], $params['wmSize'], $params['wmOpaque'] );
-					$thumbnail->watermarkImage( $params['wmPos'], $params['wmXpos'], $params['wmYpos'] );
+					$watermarked = $thumbnail->watermarkImage( $params['wmPos'], $params['wmXpos'], $params['wmYpos'] );
+				}
+
+				// A caller that exists to watermark (Set Watermark, #1104) must not get a
+				// "success" for an image saved without one: a refused, unreachable or
+				// non-PNG watermark (#1084) stops here, before anything is written. Other
+				// callers (front-end sizes) keep rendering the image unwatermarked.
+				if ( false === $watermarked && ! empty( $params['watermark_required'] ) ) {
+					$thumbnail->destruct();
+					return null;
 				}
 
 				if ( $rotation && in_array( abs( $rotation ), [ 90, 180, 270 ], true ) ) {
@@ -920,9 +1001,12 @@ class Manager {
 
 				$thumbnail = apply_filters( 'ngg_before_save_thumbnail', $thumbnail );
 
-				// Always retrieve metadata from the backup when possible.
-				$backup_path  = $image_path . '_backup';
-				$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_path; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				// Always retrieve metadata from the backup when possible. Since #1107 the original
+				// is no longer a sibling of the served file, so it can only be found when the
+				// caller passed the image entity; the sibling check stays as the fallback for a
+				// path-only call and for an original the migration has not moved yet.
+				$backup_path  = $image ? $this->resolve_backup_abspath( $image ) : $image_path . '_backup';
+				$exif_abspath = ( $backup_path && @file_exists( $backup_path ) ) ? $backup_path : $image_path; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 				$exif_iptc = EXIFWriter::read_metadata( $exif_abspath );
 
@@ -1337,14 +1421,14 @@ class Manager {
 
 		// Re-encoding at unchanged dimensions only costs JPEG quality, so leave the pixels untouched.
 		if ( ! $this->is_resize_needed( $image_abspath, $params ) ) {
-			$this->sync_unresized_image_metadata( $image_abspath );
+			$this->sync_unresized_image_metadata( $image_abspath, $image );
 			if ( $save ) {
 				$this->update_image_dimension_metadata( $image, $image_abspath );
 			}
 			return true;
 		}
 
-		$generated = $this->generate_image_clone( $image_abspath, $image_abspath, $params );
+		$generated = $this->generate_image_clone( $image_abspath, $image_abspath, $params, $image );
 
 		if ( $generated && $save ) {
 			$this->update_image_dimension_metadata( $image, $image_abspath );
@@ -1406,15 +1490,23 @@ class Manager {
 	 * only correction orientations correct_exif_rotation() leaves alone (mirrored/transposed) get.
 	 * PEL rewrites only the metadata segments, so the compressed image data is kept as-is.
 	 *
-	 * @param string $image_abspath
+	 * @param string      $image_abspath
+	 * @param object|null $image Image entity, so the original can be found after #1107 relocated it.
 	 */
-	public function sync_unresized_image_metadata( $image_abspath ) {
+	public function sync_unresized_image_metadata( $image_abspath, $image = null ) {
 		if ( ! $image_abspath || ! EXIFWriter::is_jpeg_file( $image_abspath ) ) {
 			return;
 		}
 
-		$backup_path  = $image_abspath . '_backup';
-		$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_abspath; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// Through the resolver when the entity is known, because the original is no longer a
+		// sibling of the served file. Suffixing the path still finds a pre-migration sibling, but
+		// after the move it finds nothing and the fallback below silently reads the file this is
+		// about to write - which is the whole restore turning into a no-op, with nothing saying so.
+		$backup_path = is_object( $image )
+			? (string) $this->resolve_backup_abspath( $image )
+			: $image_abspath . '_backup';
+
+		$exif_abspath = ( '' !== $backup_path && @file_exists( $backup_path ) ) ? $backup_path : $image_abspath; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 
 		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		@EXIFWriter::write_metadata( $image_abspath, EXIFWriter::read_metadata( $exif_abspath ) );
@@ -1447,7 +1539,7 @@ class Manager {
 	 * @param string $image_abspath Absolute path to JPEG.
 	 * @return bool Whether the file was re-oriented successfully.
 	 */
-	private function correct_exif_rotation_with_imagick( $image_abspath ) {
+	private function correct_exif_rotation_with_imagick( $image_abspath, $image = null ) {
 		if ( defined( 'NGG_DISABLE_IMAGICK' ) && NGG_DISABLE_IMAGICK ) {
 			return false;
 		}
@@ -1462,8 +1554,9 @@ class Manager {
 			return false;
 		}
 
-		$backup_path    = $image_abspath . '_backup';
-		$exif_from_path = @file_exists( $backup_path ) ? $backup_path : $image_abspath; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// See generate_image_clone(): the original is only locatable from the entity since #1107.
+		$backup_path    = $image ? $this->resolve_backup_abspath( $image ) : $image_abspath . '_backup';
+		$exif_from_path = ( $backup_path && @file_exists( $backup_path ) ) ? $backup_path : $image_abspath; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 		$exif_iptc      = EXIFWriter::read_metadata( $exif_from_path );
 
 		try {
@@ -1532,7 +1625,7 @@ class Manager {
 			wp_raise_memory_limit( 'image' );
 		}
 
-		if ( $this->correct_exif_rotation_with_imagick( $image_abspath ) ) {
+		if ( $this->correct_exif_rotation_with_imagick( $image_abspath, $image ) ) {
 			if ( $save ) {
 				$this->update_image_dimension_metadata( $image, $image_abspath );
 			}
@@ -1556,7 +1649,7 @@ class Manager {
 			$image_abspath,
 			$image_abspath,
 			$this->get_image_size_params( $image, 'full', $parameters ),
-			$parameters
+			$image
 		);
 
 		if ( $generated && $save ) {
@@ -1618,6 +1711,643 @@ class Manager {
 	 */
 	public function get_full_url( $image ) {
 		return $this->get_image_url( $image, 'full' );
+	}
+
+	/**
+	 * Returns the per-site random segment of the originals path, creating it on first use.
+	 *
+	 * Stored rather than derived: deriving it from a WordPress salt would change the path for every
+	 * already-stored original the moment a site rotated its salts, orphaning every backup on disk.
+	 *
+	 * @return string 32 lowercase hex characters.
+	 */
+	public function get_originals_key() {
+		// Memoised for the request, keyed by blog. Without the memo a single write resolves the
+		// key twice - once to build the path, once to create its directory - and if the option did
+		// not persist, those two calls mint different keys and the copy lands beside a directory
+		// that was never created. Keyed by blog because the option is per-blog and this plugin
+		// switches: XMLRPC\Controller::_login() switches to a caller-supplied blog id, and the
+		// network-activation loop switches per site. A plain static would hand blog B blog A's key
+		// and so blog A's path. Same shape as self::$deletion_dirs_cache.
+		static $memo = [];
+
+		$blog = function_exists( 'get_current_blog_id' ) ? (int) get_current_blog_id() : 0;
+
+		if ( isset( $memo[ $blog ] ) ) {
+			return $memo[ $blog ];
+		}
+
+		$key = get_option( self::ORIGINALS_KEY_OPTION );
+
+		if ( is_string( $key ) && 1 === preg_match( '/^[0-9a-f]{32}$/', $key ) ) {
+			$memo[ $blog ] = $key;
+
+			return $memo[ $blog ];
+		}
+
+		// wp_generate_password() is seeded from random_bytes() where available and is what core
+		// uses for the equivalent job. random_bytes() throws rather than returning false when the
+		// platform has no usable entropy, and this is reachable from a front-end render, so the
+		// throw is caught to keep the fail-closed path below rather than fataling the page.
+		try {
+			$key = function_exists( 'random_bytes' )
+				? bin2hex( random_bytes( 16 ) )
+				: md5( wp_generate_password( 64, true, true ) );
+		} catch ( \Exception $e ) {
+			$key = md5( wp_generate_password( 64, true, true ) );
+		}
+
+		$key = strtolower( $key );
+
+		// Claimed with a bare INSERT rather than update_option(), so exactly one request can mint
+		// the key. get_option()-then-update_option() is a read-then-write race, and this is
+		// reachable from anonymous front-end renders (Pro's HiDPI display resolves the 'backup'
+		// size per image), so two overlapping first views after an upgrade could each mint a
+		// different key. The loser's key then wins the option while originals have already been
+		// renamed under the winner's, leaving those masters unreachable with their legacy siblings
+		// already deleted. Same mechanism and the same reasoning as
+		// Installer::_insert_upgrade_lock(); core's add_option() cannot be used because it ends in
+		// INSERT ... ON DUPLICATE KEY UPDATE, which upserts and reports success to both writers.
+		//
+		// autoload 'yes', unlike the upgrade lock: every image path resolution reads this,
+		// including on front-end renders, so it must come with alloptions.
+		global $wpdb;
+
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$suppress   = $wpdb->suppress_errors( true );
+		$inserted   = $wpdb->query(
+			$wpdb->prepare(
+				"INSERT INTO {$wpdb->options} (option_name, option_value, autoload) VALUES ( %s, %s, 'yes' )",
+				self::ORIGINALS_KEY_OPTION,
+				$key
+			)
+		);
+		$last_error = $wpdb->last_error;
+		$wpdb->suppress_errors( $suppress );
+		// phpcs:enable
+
+		if ( false === $inserted ) {
+			// A duplicate-key error means another request minted first. That key is the real one,
+			// so adopt it rather than returning ours - returning ours would be the exact
+			// divergence this INSERT exists to prevent.
+			if ( false !== \stripos( $last_error, 'duplicate' ) ) {
+				// The losing INSERT left a negative cache entry from the get_option() above.
+				\wp_cache_delete( 'alloptions', 'options' );
+				\wp_cache_delete( self::ORIGINALS_KEY_OPTION, 'options' );
+				\wp_cache_delete( 'notoptions', 'options' );
+
+				$winner = get_option( self::ORIGINALS_KEY_OPTION );
+
+				if ( is_string( $winner ) && 1 === preg_match( '/^[0-9a-f]{32}$/', $winner ) ) {
+					$memo[ $blog ] = $winner;
+
+					return $memo[ $blog ];
+				}
+			}
+
+			// Anything else, or a duplicate whose stored value is not a usable key, fails closed:
+			// a key that exists only in this request would have originals written under it and
+			// then be unreachable from the next one, which loses the masters more quietly than not
+			// writing them at all. '' makes callers resolve no originals path and fall back to the
+			// legacy location, which is readable either way.
+			$this->log_path_refusal(
+				'NextGEN Gallery: could not persist ' . self::ORIGINALS_KEY_OPTION
+					. '; image originals cannot be relocated until this write succeeds.'
+					. ( $last_error ? ' (' . $last_error . ')' : '' ),
+				self::REFUSAL_ORIGINALS_KEY
+			);
+			$memo[ $blog ] = '';
+
+			return $memo[ $blog ];
+		}
+
+		// The raw INSERT bypassed add_option()'s cache writes, so clear what a prior miss left.
+		\wp_cache_delete( 'alloptions', 'options' );
+		\wp_cache_delete( self::ORIGINALS_KEY_OPTION, 'options' );
+		\wp_cache_delete( 'notoptions', 'options' );
+
+		$memo[ $blog ] = $key;
+
+		return $memo[ $blog ];
+	}
+
+	/**
+	 * Absolute path of the root that holds every gallery's untouched originals.
+	 *
+	 * @return string
+	 */
+	public function get_originals_root() {
+		$key = $this->get_originals_key();
+
+		if ( '' === $key ) {
+			return null;
+		}
+
+		return wp_normalize_path( path_join( $this->get_originals_base(), $key ) );
+	}
+
+	/**
+	 * The shared parent of every site's keyed originals directory.
+	 *
+	 * Under the uploads directory rather than straight under wp-content: a managed host commonly
+	 * makes only uploads writable, and rooting the originals somewhere unwritable turns every
+	 * backup into a silent no-op - which is worse than the exposure this moved away from, because
+	 * rotation restore and Pro digital downloads then have no master to work from. Uploads is just
+	 * as web-served, so the random segment and the deny rule still carry the security property.
+	 *
+	 * @return string
+	 */
+	public function get_originals_base() {
+		$uploads = wp_get_upload_dir();
+		$basedir = ( is_array( $uploads ) && ! empty( $uploads['basedir'] ) )
+			? $uploads['basedir']
+			: path_join( wp_normalize_path( WP_CONTENT_DIR ), 'uploads' );
+
+		return wp_normalize_path( path_join( wp_normalize_path( $basedir ), self::ORIGINALS_DIRNAME ) );
+	}
+
+	/**
+	 * Absolute path of the directory holding one gallery's untouched originals.
+	 *
+	 * Keyed by gallery id rather than by the gallery's directory name on purpose: the gallery
+	 * directory is renamed when the gallery is renamed, and mirroring that here would mean a rename
+	 * had to move every original too, with every original orphaned when the move half-failed. The
+	 * id never changes, so the originals never have to move.
+	 *
+	 * @param int|object $gallery Gallery id or entity.
+	 * @return string|null Null when the gallery cannot be identified.
+	 */
+	public function get_originals_abspath( $gallery ) {
+		if ( is_numeric( $gallery ) ) {
+			$gallery_id = (int) $gallery;
+		} elseif ( is_object( $gallery ) && isset( $gallery->gid ) ) {
+			$gallery_id = (int) $gallery->gid;
+		} else {
+			$gallery_id = 0;
+		}
+
+		if ( $gallery_id <= 0 ) {
+			return null;
+		}
+
+		$root = $this->get_originals_root();
+
+		if ( empty( $root ) ) {
+			return null;
+		}
+
+		return wp_normalize_path( path_join( $root, (string) $gallery_id ) );
+	}
+
+	/**
+	 * Absolute path an image's original is stored at under the originals root.
+	 *
+	 * The basename deliberately keeps the historic "_backup" suffix. Only the directory moves.
+	 * A great deal of code - the removable- and allowed-extension lists here, the upload
+	 * de-duplication regex, EXIFWriter::is_jpeg_file(), and Pro's commerce code - recognises an
+	 * original by that suffix or by the "jpg_backup" pseudo-extension it produces, and renaming the
+	 * file as well as moving it would have had to change all of it in lockstep.
+	 *
+	 * @param int|object $image Image id or entity.
+	 * @return string|null
+	 */
+	public function get_originals_image_abspath( $image ) {
+		if ( is_numeric( $image ) ) {
+			$image = $this->image_mapper->find( $image );
+		}
+
+		if ( ! is_object( $image ) || empty( $image->filename ) || empty( $image->galleryid ) ) {
+			return null;
+		}
+
+		$dir = $this->get_originals_abspath( $image->galleryid );
+
+		if ( empty( $dir ) ) {
+			return null;
+		}
+
+		// The filename column is writable through the editing endpoints and path_join() happily
+		// joins "../", so the joined path is confirmed to still resolve inside this gallery's
+		// originals directory - the same guard get_computed_image_abspath() applies to the served
+		// path. Without it, a poisoned filename would turn the backup read into an arbitrary file
+		// read and the backup write into an arbitrary file write.
+		return Security::contain_path( path_join( $dir, $image->filename . '_backup' ), $dir );
+	}
+
+	/**
+	 * Resolves where an image's original is, or should be written.
+	 *
+	 * Reads prefer the relocated file, fall back to a legacy sibling that has not been migrated yet,
+	 * and writes always target the relocated path - which is what the final fallback gives a caller
+	 * using this as a write target. That ordering is what lets the relocation ship before the
+	 * migration has finished walking a large library, and what keeps a half-finished or failed
+	 * migration from making originals unreadable.
+	 *
+	 * @param int|object $image Image id or entity.
+	 * @return string|null
+	 */
+	public function resolve_backup_abspath( $image ) {
+		$relocated = $this->get_originals_image_abspath( $image );
+
+		if ( ! empty( $relocated ) && @file_exists( $relocated ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return $relocated;
+		}
+
+		$legacy = $this->get_legacy_backup_abspath( $image );
+
+		if ( ! empty( $legacy ) && @file_exists( $legacy ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return $legacy;
+		}
+
+		// Neither exists: hand back the relocated path, which is where a write must go. Falling
+		// back to the legacy sibling here would re-create the exposure for every upload made
+		// before the migration runs.
+		//
+		// Deliberately creates nothing. This resolver is reached from
+		// get_computed_image_abspath()'s 'backup' case, which runs on anonymous front-end gallery
+		// renders - Pro's HiDPI display calls get_image_abspath( $image, 'backup', true ) once per
+		// rendered image, and $check_existence bypasses the memo cache - so a mkdir or an .htaccess
+		// write here would let an unauthenticated visitor drive filesystem work on every request.
+		// Directory creation belongs to get_backup_write_abspath(), the only caller that needs it.
+		if ( ! empty( $relocated ) ) {
+			return $relocated;
+		}
+
+		return $legacy;
+	}
+
+	/**
+	 * Where a newly written original must go.
+	 *
+	 * Always the relocated path, never the legacy sibling: writing a fresh master beside the
+	 * served image would re-create the exposure for that image even on a site whose other
+	 * originals have already been migrated.
+	 *
+	 * @param int|object $image Image id or entity.
+	 * @return string|null Null when the directory could not be created or the stored filename did
+	 *                     not resolve inside it; the caller must then skip the write.
+	 */
+	public function get_backup_write_abspath( $image ) {
+		$relocated = $this->get_originals_image_abspath( $image );
+
+		if ( empty( $relocated ) || ! $this->prepare_originals_dir( $image ) ) {
+			return null;
+		}
+
+		return $relocated;
+	}
+
+	/**
+	 * Removes an image's original from its pre-#1107 sibling location.
+	 *
+	 * Called after a successful write to the relocated path, so that a site which has not been
+	 * migrated yet does not end up keeping two copies of the master with the web-served one still
+	 * fetchable.
+	 *
+	 * @param int|object $image Image id or entity.
+	 * @return bool True when no legacy copy remains.
+	 */
+	public function discard_legacy_backup( $image ) {
+		if ( is_numeric( $image ) ) {
+			$image = $this->image_mapper->find( $image );
+		}
+
+		if ( ! is_object( $image ) || empty( $image->galleryid ) ) {
+			return false;
+		}
+
+		$legacy = $this->get_legacy_backup_abspath( $image );
+
+		if ( empty( $legacy ) || ! @file_exists( $legacy ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return true;
+		}
+
+		// Bounded to the gallery directory and to the "*_backup" extension allow-list, for the same
+		// reason every other unlink here is: the filename this path is built from comes out of the
+		// database and is writable through the editing endpoints.
+		$gallery_abspath = $this->get_gallery_abspath( $image->galleryid );
+
+		$removed = ! empty( $gallery_abspath )
+			&& $this->is_deletion_path_allowed( $gallery_abspath, $legacy )
+			&& $this->is_removable_image_path( $legacy )
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
+			&& @unlink( $legacy );
+
+		// Logged, because the caller has just written the relocated copy and will carry on as if
+		// the move completed. When this fails the site holds two copies of the master and the old
+		// one is still at the anonymously derivable "<thumbnail path>_backup" URL that #1107 is
+		// about - every later read resolves to the relocated copy, so nothing would ever touch the
+		// exposed one again or say that it is there.
+		if ( ! $removed ) {
+			$this->log_path_refusal(
+				sprintf(
+					'NextGEN Gallery: kept the superseded original at %s for image #%s; it stays web-readable until it is removed.',
+					$legacy,
+					isset( $image->pid ) ? $image->pid : '?'
+				),
+				self::REFUSAL_LEGACY_BACKUP
+			);
+		}
+
+		return $removed;
+	}
+
+	/**
+	 * The pre-#1107 location of an image's original: a sibling of the served file.
+	 *
+	 * Only migration and the read fallback in resolve_backup_abspath() should need this. New
+	 * originals are never written here.
+	 *
+	 * @param int|object $image Image id or entity.
+	 * @return string|null
+	 */
+	public function get_legacy_backup_abspath( $image ) {
+		$image_path = $this->get_image_abspath( $image, 'full' );
+
+		return $image_path ? $image_path . '_backup' : null;
+	}
+
+	/**
+	 * Creates and hardens the originals directory for an image's gallery.
+	 *
+	 * @param int|object $image Image id or entity.
+	 * @return string|null The directory, or null when it could not be created.
+	 */
+	public function prepare_originals_dir( $image ) {
+		if ( is_numeric( $image ) ) {
+			$image = $this->image_mapper->find( $image );
+		}
+
+		if ( ! is_object( $image ) || empty( $image->galleryid ) ) {
+			return null;
+		}
+
+		$dir = $this->get_originals_abspath( $image->galleryid );
+
+		if ( empty( $dir ) ) {
+			return null;
+		}
+
+		if ( ! @is_dir( $dir ) && ! wp_mkdir_p( $dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			// Deliberately names the gallery and the shared base, never $dir: $dir carries the
+			// keyed segment, which is the primary control for every original on the site, and
+			// log_path_refusal() writes through error_log() - which on a default install is
+			// wp-content/debug.log, a web-served file. The key never rotates, so one logged line
+			// would stay valid for the life of the site.
+			$this->log_path_refusal(
+				sprintf(
+					'NextGEN Gallery: could not create the originals directory for gallery #%s under %s; this image keeps no untouched original.',
+					isset( $image->galleryid ) ? $image->galleryid : '?',
+					$this->get_originals_base()
+				),
+				self::REFUSAL_ORIGINALS_DIR
+			);
+
+			return null;
+		}
+
+		// Hardening the root, not the per-gallery directory: an Apache deny rule is inherited by
+		// every subdirectory, so one file at the root covers every gallery and there is nothing to
+		// re-write when a gallery is added.
+		//
+		// A failed guard is logged but does not fail the write. The random path segment is the
+		// primary control and it still holds; refusing to keep an original because a defence-in-
+		// depth file could not be written would trade a real feature for no security gain.
+		if ( ! $this->harden_originals_root() ) {
+			$this->log_path_refusal(
+				sprintf( 'NextGEN Gallery: could not write the deny rule under %s; image originals are stored there behind an unguessable path only.', $this->get_originals_base() ),
+				self::REFUSAL_ORIGINALS_GUARD
+			);
+		}
+
+		return $dir;
+	}
+
+	/**
+	 * Writes the deny rule and directory-index stub at the originals root.
+	 *
+	 * Defence in depth, not the fix: per-directory configuration is Apache-specific, which is
+	 * exactly why the random path segment above exists. What this adds is that on the Apache and
+	 * LiteSpeed majority the originals stay unreachable even if that segment leaks, and that the
+	 * root cannot be listed to discover it.
+	 *
+	 * Runs at most once per request once it has succeeded.
+	 *
+	 * @return bool Whether both the base and the keyed directory are guarded.
+	 */
+	public function harden_originals_root() {
+		// Caches success only, per blog. Latching unconditionally - as this first did, by setting
+		// the flag before doing the work - meant one failed attempt suppressed every retry for the
+		// rest of the request, including after prepare_originals_dir() had just created the
+		// directory the first attempt found missing. Keyed by blog because the base it guards is
+		// per-blog under multisite: a single flag let the first blog's success skip the guard for
+		// every other blog visited in the same request.
+		static $hardened = [];
+
+		$blog = function_exists( 'get_current_blog_id' ) ? (int) get_current_blog_id() : 0;
+
+		if ( ! empty( $hardened[ $blog ] ) ) {
+			return true;
+		}
+
+		$ok   = true;
+		$root = $this->get_originals_root();
+
+		if ( empty( $root ) ) {
+			return false;
+		}
+
+		// Both the shared base and the keyed directory under it: the base is the one an attacker
+		// can name, so it is the one that must not be listable - a directory index there would
+		// disclose the keyed segment that is the primary control.
+		foreach ( [ $this->get_originals_base(), $root ] as $dir ) {
+			if ( ! @is_dir( $dir ) && ! wp_mkdir_p( $dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				$ok = false;
+				continue;
+			}
+
+			if ( ! $this->write_directory_guard( $dir, self::guard_lines_deny_all() ) ) {
+				$ok = false;
+			}
+		}
+
+		$hardened[ $blog ] = $ok;
+
+		return $ok;
+	}
+
+	/**
+	 * Apache directives denying every request below a directory.
+	 *
+	 * Each directive is wrapped in an IfModule guard so that a host without the module serves the
+	 * directory as before instead of returning 500 for the whole tree - a broken .htaccess written
+	 * into wp-content would take out more than the originals.
+	 *
+	 * @return string[]
+	 */
+	private static function guard_lines_deny_all() {
+		return [
+			'<IfModule mod_authz_core.c>',
+			'	Require all denied',
+			'</IfModule>',
+			'<IfModule !mod_authz_core.c>',
+			'	<IfModule mod_access_compat.c>',
+			'		Order allow,deny',
+			'		Deny from all',
+			'	</IfModule>',
+			'</IfModule>',
+		];
+	}
+
+	/**
+	 * Writes an .htaccess guard plus an index.php stub into a directory.
+	 *
+	 * Writing goes through insert_with_markers(), so a guard is updated in place on later runs and
+	 * anything the site owner put in the same file is left untouched.
+	 *
+	 * @param string   $dir   Absolute path of the directory to guard.
+	 * @param string[] $lines Directives to write between the markers.
+	 * @return bool Whether the deny rule is now in place.
+	 */
+	public function write_directory_guard( $dir, array $lines ) {
+		if ( empty( $dir ) || ! @is_dir( $dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return false;
+		}
+
+		// Stops a directory index from listing what the deny rule is protecting (and, at the
+		// originals root, from disclosing the random segment) on a host that ignores .htaccess.
+		$index = path_join( $dir, 'index.php' );
+		if ( ! @file_exists( $index ) // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+			&& false === @file_put_contents( $index, self::GUARD_INDEX_CONTENTS ) ) {
+			// Counted as failure: on a host that ignores .htaccess the stub is the only thing
+			// stopping a directory index from disclosing the keyed segment, so reporting success
+			// with it missing would leave half the guard absent with nothing saying so.
+			return false;
+		}
+
+		$htaccess = path_join( $dir, '.htaccess' );
+
+		if ( ! function_exists( 'insert_with_markers' ) ) {
+			if ( ! @is_readable( ABSPATH . 'wp-admin/includes/misc.php' ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				return false;
+			}
+			require_once ABSPATH . 'wp-admin/includes/misc.php';
+		}
+
+		// insert_with_markers() refuses a file it cannot write and returns false; it also needs the
+		// file to exist before it will append to it.
+		if ( ! @file_exists( $htaccess ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( false === @file_put_contents( $htaccess, '' ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+				return false;
+			}
+		}
+
+		return (bool) insert_with_markers( $htaccess, 'NextGEN Gallery Originals', $lines );
+	}
+
+	/**
+	 * Apache directives denying the "*_backup" originals inside a web-served gallery directory.
+	 *
+	 * RedirectMatch, from mod_alias, deliberately. The container form this file uses for the
+	 * originals root needs AllowOverride All for <FilesMatch> and AuthConfig for Require, and on a
+	 * host with AllowOverride FileInfo - common hardening, and enough for WordPress's own rewrite
+	 * block - Apache aborts with "not allowed here" and returns 500 for every request under the
+	 * directory, which here means every image in the gallery. RedirectMatch needs only FileInfo, so
+	 * the worst case on a host that does not allow it is that the file is ignored.
+	 *
+	 * The gallery directory has to keep serving its images, so this denies the originals by name
+	 * rather than denying the directory.
+	 *
+	 * @return string[]
+	 */
+	private static function guard_lines_deny_backups() {
+		return [
+			'<IfModule mod_alias.c>',
+			chr( 9 ) . 'RedirectMatch 403 "_backup$"',
+			'</IfModule>',
+		];
+	}
+
+	/**
+	 * Writes the "*_backup" deny rule into a gallery's own directory.
+	 *
+	 * Defence in depth, for the originals the relocation cannot move: a gallery given up on after
+	 * the retry bound, an orphan in a shared or "keep original location" directory, a filename the
+	 * sweep does not recognise as an image, and siblings that reappear after the migration has
+	 * finished (a downgrade then re-upgrade, a files-only restore). Those files sit at the
+	 * anonymously derivable URL #1107 is about, and nothing else in the free plugin covers them.
+	 *
+	 * Apache and LiteSpeed only. nginx and IIS ignore it, which is why relocating the originals,
+	 * not this, is the fix. Pro's image-protection module writes this file wholesale rather than
+	 * through insert_with_markers(), so on a Pro site with that module active this block can be
+	 * dropped on its next sweep; Pro writes an equivalent rule of its own in that case.
+	 *
+	 * @param int|object $gallery Gallery id or entity.
+	 * @return bool
+	 */
+	public function protect_gallery_directory( $gallery ) {
+		return $this->protect_directory( $this->get_gallery_abspath( $gallery ) );
+	}
+
+	/**
+	 * Writes the "*_backup" deny rule into a gallery directory given by path.
+	 *
+	 * The path form exists for the directories that have no gallery row to look an abspath up
+	 * from: a folder left behind by a gallery deleted with "delete images" off still holds its
+	 * originals and still serves them. See protect_gallery_directory() for what the rule is and
+	 * which servers honour it.
+	 *
+	 * @param string $abspath Absolute path to a gallery directory.
+	 * @return bool
+	 */
+	public function protect_directory( $abspath ) {
+		if ( empty( $abspath ) || ! @is_dir( $abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return false;
+		}
+
+		// Memoised per request, successes only: import_image_file() calls this per upload, so a
+		// bulk import would otherwise rewrite the same .htaccess once per image. A failure is not
+		// cached - whatever blocked the write may be gone by the next call. Keyed by blog, since
+		// this plugin switches blogs mid-request.
+		$blog = function_exists( 'get_current_blog_id' ) ? (int) get_current_blog_id() : 0;
+		$memo = $blog . '|' . wp_normalize_path( $abspath );
+
+		if ( isset( self::$protected_dirs_cache[ $memo ] ) ) {
+			return true;
+		}
+
+		// Never write into one of the shared bases themselves. A "keep original location" import
+		// can point a gallery at the uploads root, where a deny rule would reach unrelated media,
+		// and a gallerypath set to the content root would be worse still.
+		if ( ! $this->is_gallery_directory_deletable( $abspath ) ) {
+			return false;
+		}
+
+		if ( ! $this->write_directory_guard( $abspath, self::guard_lines_deny_backups() ) ) {
+			return false;
+		}
+
+		self::$protected_dirs_cache[ $memo ] = true;
+
+		return true;
+	}
+
+	/**
+	 * Whether a path resolves inside the originals root.
+	 *
+	 * @param string $path Absolute path.
+	 * @return bool
+	 */
+	public function is_path_within_originals_root( $path ) {
+		if ( empty( $path ) || ! is_string( $path ) ) {
+			return false;
+		}
+
+		$root   = $this->canonicalize_path( $this->get_originals_root() );
+		$target = $this->canonicalize_path( $path );
+
+		return '' !== $root && '' !== $target && $this->path_contains( $root, $target );
 	}
 
 	public function get_gallery_root() {
@@ -1775,10 +2505,18 @@ class Manager {
 						$retval = \path_join( $gallery_path, $image->filename );
 						break;
 
+					// Originals live under their own root, outside the web-served gallery
+					// directory, so the containment base for this size is that root rather than
+					// the gallery directory - see get_originals_abspath() and #1107. A legacy
+					// original that the migration has not moved yet still resolves inside the
+					// gallery directory, which is why the base is chosen from the resolved path
+					// instead of from the size name.
 					case 'backup':
-						$retval = \path_join( $gallery_path, $image->filename . '_backup' );
-						if ( ! @file_exists( $retval ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+						$retval = $this->resolve_backup_abspath( $image );
+						if ( empty( $retval ) || ! @file_exists( $retval ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 							$retval = \path_join( $gallery_path, $image->filename );
+						} elseif ( $this->is_path_within_originals_root( $retval ) ) {
+							$containment_base = $this->get_originals_abspath( $image->galleryid );
 						}
 						break;
 
@@ -1854,7 +2592,19 @@ class Manager {
 				// Through log_path_refusal(): every occurrence under WP_DEBUG, at most one line per
 				// hour without it. This runs once per image per request, so an ungated line would
 				// grow the log on every visitor request.
-				if ( $retval && ! $this->is_path_within_gallery_dir( $gallery_path, $retval ) ) {
+				// An original resolved into the originals root is legitimately outside the gallery
+				// directory; its own containment base was set above, and the generic check below
+				// enforces it. Every other size must still resolve inside the gallery directory.
+				//
+				// Keyed on the size rather than on "$containment_base changed": $containment_base
+				// is assigned in several branches of the switch, so an identity comparison would
+				// hand this bypass to any future branch that reassigns it. This gate is the #933
+				// containment check and it should only ever be relaxed for the one size that is
+				// stored outside the gallery directory by design.
+				$outside_gallery_dir_allowed = 'backup' === $size
+					&& $containment_base !== $gallery_path;
+
+				if ( $retval && ! $outside_gallery_dir_allowed && ! $this->is_path_within_gallery_dir( $gallery_path, $retval ) ) {
 					$this->log_path_refusal(
 						sprintf(
 							'NextGEN Gallery: refused stored path for image #%s (gallery #%s, size "%s") - %s does not resolve inside the gallery directory (%s)',
@@ -2367,6 +3117,17 @@ class Manager {
 	}
 
 	public function get_computed_image_url( $image, $size = 'full' ) {
+		// Originals are not web-addressable, by design (#1107). Refused here rather than at each
+		// caller because the keyed path segment is the primary control: with
+		// NGG_GALLERY_ROOT_TYPE = 'content' the gallery root is WP_CONTENT_DIR, so the generic
+		// "strip the root, prefix the content URL" logic below would happily mint
+		// <WP_CONTENT_URL>/ngg-originals/<key>/... and print the secret into markup or a REST
+		// payload, handing over every original on the site. No caller does this today; this makes
+		// it so none can.
+		if ( 'backup' === $this->normalize_image_size_name( $size ) ) {
+			return null;
+		}
+
 		$retval    = null;
 		$dynthumbs = \Imagely\NGG\DynamicThumbnails\Manager::get_instance();
 
@@ -2800,6 +3561,15 @@ class Manager {
 			}
 		}
 
+		// Our own deny rule and index stub: not image files, so the allow-list above cannot remove
+		// them, and they would keep the directory alive forever. They go only once nothing else is
+		// left, because the rule is the one thing keeping a "*_backup" the allow-list could not
+		// remove from being web-readable again - the migration treats jpe/jfif/tif/bmp/avif/heic
+		// as masters, and none of those is in the configured upload types.
+		if ( $this->holds_nothing_but_guard( $abspath ) ) {
+			$this->remove_directory_guard( $abspath );
+		}
+
 		// DO NOT remove directories that still have files in them. Note: '.' and '..' are included with getSize().
 		$empty = true;
 		foreach ( $iterator as $file ) {
@@ -2812,6 +3582,106 @@ class Manager {
 		if ( $empty ) {
 			@rmdir( $iterator->getPath() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.PHP.NoSilencedErrors.Discouraged
 		}
+	}
+
+	/**
+	 * Whether a directory contains nothing but this plugin's guard files.
+	 *
+	 * Gates the removal in delete_gallery_directory(): the deny rule must outlive anything the
+	 * image allow-list could not unlink, or a surviving "*_backup" becomes web-readable again.
+	 * Unreadable counts as "not empty", so the rule stays on a guess rather than going.
+	 *
+	 * @param string $dir Absolute path to the directory.
+	 * @return bool
+	 */
+	public function holds_nothing_but_guard( $dir ) {
+		if ( empty( $dir ) || ! @is_dir( $dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return false;
+		}
+
+		$entries = @scandir( $dir ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_operations_scandir
+
+		if ( false === $entries ) {
+			// Unreadable: assume something is in there rather than drop the rule on a guess.
+			return false;
+		}
+
+		foreach ( $entries as $entry ) {
+			if ( '.' === $entry || '..' === $entry ) {
+				continue;
+			}
+
+			if ( '.htaccess' !== $entry && 'index.php' !== $entry ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Removes the guard this plugin wrote into a directory, and nothing else.
+	 *
+	 * Counterpart to write_directory_guard(). delete_gallery_directory() unlinks image files only,
+	 * by design, so the guard survived it and left every swept gallery folder behind as an empty
+	 * shell. It is called only once holds_nothing_but_guard() confirms nothing else is left.
+	 *
+	 * Narrow about what counts as ours: only the marker block is cut from the .htaccess, so
+	 * anything the site owner put in the same file stays, and the file itself goes only if nothing
+	 * but whitespace is left. The index stub is removed only when it matches GUARD_INDEX_CONTENTS
+	 * byte for byte, so a real index.php stays and keeps the directory alive.
+	 *
+	 * @param string $dir Absolute path to the directory.
+	 * @return void
+	 */
+	public function remove_directory_guard( $dir ) {
+		if ( empty( $dir ) || ! @is_dir( $dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return;
+		}
+
+		$index = path_join( $dir, 'index.php' );
+
+		if ( @is_file( $index ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( self::GUARD_INDEX_CONTENTS === @file_get_contents( $index ) ) {
+				@unlink( $index ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
+			}
+		}
+
+		$htaccess = path_join( $dir, '.htaccess' );
+
+		if ( ! @is_file( $htaccess ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPress.PHP.NoSilencedErrors.Discouraged
+		$contents = @file_get_contents( $htaccess );
+
+		if ( false === $contents ) {
+			return;
+		}
+
+		// Cut the block out rather than calling insert_with_markers() with an empty line set: that
+		// leaves the BEGIN/END markers and their "dynamically generated" preamble in place, so the
+		// file is never empty and the directory still cannot be removed.
+		$stripped = preg_replace(
+			'/\n*# BEGIN NextGEN Gallery Originals\n.*?# END NextGEN Gallery Originals[ \t]*\n?/s',
+			'',
+			$contents
+		);
+
+		if ( null === $stripped || $stripped === $contents ) {
+			return;
+		}
+
+		if ( '' === trim( $stripped ) ) {
+			@unlink( $htaccess ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
+
+			return;
+		}
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents, WordPress.PHP.NoSilencedErrors.Discouraged
+		@file_put_contents( $htaccess, $stripped, LOCK_EX );
 	}
 
 	/**
@@ -2954,20 +3824,31 @@ class Manager {
 		}
 
 		// Delete the gallery's own image files, each bounded to the gallery directory, rather than
-		// recursively removing the directory tree. This clears the gallery's images (including a
-		// "keep original location" import that lives under the uploads base) without touching
-		// unrelated media that may share the directory, so a tampered gallery path cannot wipe the
-		// media library.
+		// recursively removing the directory tree. This clears the gallery's images without
+		// touching unrelated media that may share the directory. The boundary is the one
+		// is_gallery_directory_deletable() defines, so a gallery pointed outside the dedicated
+		// NextGEN gallery folder - a tampered path, or a "keep original location" import under the
+		// uploads base - drops its records and leaves every file alone (#1085).
 		$gallery_id = is_numeric( $gallery )
 			? (int) $gallery
 			: ( is_object( $gallery ) && isset( $gallery->gid ) ? $gallery->gid : null );
+
+		// Resolved once, not per image per size. Every image in this loop belongs to this one
+		// gallery, so the boundary is identical for all of them - including the '' that refuses the
+		// lot - while get_deletion_boundary() reads and canonicalizes every gallery row on each
+		// call. Left inside the loop, a gallery of 500 images at 5 sizes on a site with 1,000
+		// galleries spent ~47s of PHP on 2,500 identical full-table scans and could exceed the time
+		// limit mid-delete, leaving some files gone, the rest in place and the records still there.
+		$gallery_boundary = $gallery_id ? $this->get_deletion_boundary( $abspath, $gallery_id ) : '';
+		$other_dirs       = $gallery_id ? $this->other_gallery_directories( $gallery_id ) : null;
 
 		if ( $gallery_id ) {
 			foreach ( $this->image_mapper->find_all_for_gallery( $gallery_id ) as $image ) {
 				foreach ( $this->get_image_sizes( $image ) as $named_size ) {
 					$image_abspath = $this->get_image_abspath( $image, $named_size );
 					if ( empty( $image_abspath )
-						|| ! $this->is_image_path_within_gallery( $image, $image_abspath )
+						|| ! $this->is_deletion_path_allowed( $gallery_boundary, $image_abspath )
+						|| $this->path_is_inside_another_gallery( $image_abspath, $gallery_id, $abspath, $other_dirs )
 						|| ! $this->is_removable_image_path( $image_abspath ) ) {
 						continue;
 					}
@@ -2981,9 +3862,48 @@ class Manager {
 		// Only recursively remove the directory tree itself when it is a dedicated NextGEN gallery
 		// folder (never a shared or "keep original location" import location), to clean up leftover
 		// empty sub-directories and backups.
-		if ( @file_exists( $abspath ) && $this->is_gallery_directory_deletable( $abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		if ( @file_exists( $abspath ) // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			&& $this->is_gallery_directory_deletable( $abspath )
+			&& ! $this->directory_belongs_to_another_gallery( $abspath, $gallery_id ) ) {
 			$this->delete_gallery_directory( $abspath );
 		}
+
+		// The gallery's relocated originals live outside that tree, so removing the gallery
+		// directory does not reach them. Left behind they would be masters of deleted images,
+		// kept indefinitely.
+		$this->delete_originals_directory( $gallery_id );
+	}
+
+	/**
+	 * Removes a gallery's directory of relocated originals.
+	 *
+	 * Only files carrying one of the allowed image extensions are unlinked, and only inside the
+	 * originals root, so a tampered gallery id cannot turn this into an arbitrary delete.
+	 *
+	 * @param int|null $gallery_id Gallery id.
+	 * @return void
+	 */
+	public function delete_originals_directory( $gallery_id ) {
+		if ( empty( $gallery_id ) ) {
+			return;
+		}
+
+		$dir = $this->get_originals_abspath( $gallery_id );
+
+		if ( empty( $dir ) || ! $this->is_path_within_originals_root( $dir ) || ! @is_dir( $dir ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			return;
+		}
+
+		foreach ( (array) glob( path_join( $dir, '*' ) ) as $file ) {
+			if ( ! @is_file( $file ) || ! $this->is_removable_image_path( $file ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				continue;
+			}
+			@unlink( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.unlink_unlink, WordPress.PHP.NoSilencedErrors.Discouraged
+		}
+
+		// Only succeeds once the directory holds nothing else, which is what we want: anything we
+		// did not recognise is left in place rather than removed.
+		@rmdir( $dir ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_rmdir, WordPress.PHP.NoSilencedErrors.Discouraged
 	}
 
 	/**
@@ -3005,11 +3925,18 @@ class Manager {
 			$image_id = $image->{$image->id_field};
 
 			// The gallery directory that bounds every unlink for this image. When it cannot be
-			// resolved (e.g. the gallery row is gone), there is nothing to bound the file to: skip the
-			// unlinks but still let the record be removed, rather than leaving an orphaned image
-			// permanently undeletable.
-			$gallery_abspath   = $this->get_gallery_abspath( $image->galleryid );
-			$bounded_deletable = ! empty( $gallery_abspath );
+			// resolved (e.g. the gallery row is gone), or when it is not a directory NextGEN may
+			// delete files in, there is nothing to bound the file to: skip the unlinks but still let
+			// the record be removed, rather than leaving an orphaned image permanently undeletable.
+			$gallery_abspath   = $this->get_deletion_boundary( $this->get_gallery_abspath( $image->galleryid ), $image->galleryid );
+			$bounded_deletable = '' !== $gallery_abspath;
+			// Resolved once for every size of this image, not per size.
+			$other_dirs = $bounded_deletable ? $this->other_gallery_directories( $image->galleryid ) : null;
+
+			// The second accepted base, scoped to this image's gallery. The 'backup' size resolves
+			// here, and every size is validated before any is unlinked, so without this the first
+			// relocated original aborts the whole delete and the image becomes undeletable.
+			$originals_abspath = $this->get_originals_abspath( $image->galleryid );
 
 			// Delete only a particular image size.
 			if ( $size ) {
@@ -3019,7 +3946,8 @@ class Manager {
 				// not a deletion target: skip the unlink but still update the metadata. A path that
 				// resolves outside the gallery directory is refused.
 				if ( $bounded_deletable && ! empty( $abspath ) ) {
-					if ( ! $this->is_deletion_path_allowed( $gallery_abspath, $abspath ) ) {
+					if ( ! $this->is_deletion_path_allowed( $gallery_abspath, $abspath, $originals_abspath )
+						|| $this->path_is_inside_another_gallery( $abspath, $image->galleryid, $gallery_abspath, $other_dirs ) ) {
 						return false;
 					}
 					do_action( 'ngg_delete_image', $image_id, $size );
@@ -3044,7 +3972,8 @@ class Manager {
 						if ( empty( $image_abspath ) ) {
 							continue;
 						}
-						if ( ! $this->is_deletion_path_allowed( $gallery_abspath, $image_abspath ) ) {
+						if ( ! $this->is_deletion_path_allowed( $gallery_abspath, $image_abspath, $originals_abspath )
+							|| $this->path_is_inside_another_gallery( $image_abspath, $image->galleryid, $gallery_abspath, $other_dirs ) ) {
 							return false;
 						}
 						if ( ! $this->is_removable_image_path( $image_abspath ) ) {
@@ -3080,7 +4009,510 @@ class Manager {
 	 * @return bool
 	 */
 	protected function is_image_path_within_gallery( $image, $abspath ) {
-		return $this->is_deletion_path_allowed( $this->get_gallery_abspath( $image->galleryid ), $abspath );
+		return $this->is_deletion_path_allowed(
+			$this->get_deletion_boundary( $this->get_gallery_abspath( $image->galleryid ), $image->galleryid ),
+			$abspath,
+			$this->get_originals_abspath( $image->galleryid )
+		);
+	}
+
+	/**
+	 * The canonical directories of every gallery other than $gallery_id.
+	 *
+	 * Rows whose stored `path` does not resolve to a usable directory are skipped rather than
+	 * trusted. An empty `path` resolves to the WordPress root, which contains every gallery
+	 * directory on the install, so a single such row made every nesting test answer "claimed" and
+	 * silently stopped all file deletion. A shared base (the uploads base, wp-content, the storage
+	 * root, the document root) is skipped for the same reason.
+	 *
+	 * @param int|null $gallery_id Gallery to exclude; its own row is never a conflict.
+	 * @return string[]|null Canonical directories without trailing slashes, or null when the rows
+	 *                       could not be read (the caller must fail closed).
+	 */
+	protected function other_gallery_directories( $gallery_id = null ) {
+		global $wpdb;
+
+		if ( ! isset( $wpdb ) || ! $wpdb->ready ) {
+			return null;
+		}
+
+		$table = $this->gallery_mapper->get_table_name();
+
+		$wpdb->last_error = '';
+
+		// Table name resolved from the mapper, never from input; there is nothing else to prepare.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$rows = $wpdb->get_results( "SELECT `gid`, `path` FROM `{$table}`" );
+
+		if ( '' !== (string) $wpdb->last_error ) {
+			return null;
+		}
+
+		if ( empty( $rows ) ) {
+			return [];
+		}
+
+		$dirs   = $this->get_deletion_dirs();
+		$shared = isset( $dirs['shared'] ) ? $dirs['shared'] : [];
+
+		// The gallery base too. A row whose path resolves to it contains every gallery on the
+		// install, so it would make every containment test answer "claimed": every new gallery
+		// would be refused as sitting inside it.
+		$gallery_base = rtrim( $this->canonicalize_path( $this->get_upload_abspath() ), '/' );
+		if ( '' !== $gallery_base ) {
+			$shared[] = $gallery_base;
+		}
+
+		$retval = [];
+
+		foreach ( $rows as $row ) {
+			if ( null !== $gallery_id && (int) $row->gid === (int) $gallery_id ) {
+				continue;
+			}
+
+			$stored = isset( $row->path ) ? (string) $row->path : '';
+
+			// A blank path is not a claim on anything; resolving it yields the WordPress root.
+			if ( '' === trim( $stored ) ) {
+				continue;
+			}
+
+			$other = $this->canonicalize_path(
+				$this->get_computed_gallery_abspath( (object) [ 'path' => $stored ] )
+			);
+
+			if ( '' === $other ) {
+				continue;
+			}
+
+			$other     = rtrim( $other, '/' );
+			$is_shared = false;
+
+			foreach ( $shared as $shared_dir ) {
+				if ( $other === rtrim( $shared_dir, '/' ) ) {
+					$is_shared = true;
+					break;
+				}
+			}
+
+			if ( $is_shared ) {
+				continue;
+			}
+
+			$retval[] = $other;
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Whether $base is this blog's own legacy ms-files uploads base, "blogs.dir/<current id>/files".
+	 *
+	 * Lexical, and keyed on the current blog id, so another subsite's "blogs.dir/<other>/files"
+	 * never qualifies - path_targets_another_site() refuses that one separately.
+	 *
+	 * @param string $base Canonical gallery base.
+	 * @param array  $dirs get_deletion_dirs().
+	 * @return bool
+	 */
+	protected function is_own_ms_files_uploads_base( $base, $dirs ) {
+		if ( ! function_exists( 'is_multisite' ) || ! is_multisite() ) {
+			return false;
+		}
+
+		$uploads = isset( $dirs['uploads'] ) ? rtrim( (string) $dirs['uploads'], '/' ) : '';
+
+		if ( '' === $uploads || rtrim( $base, '/' ) !== $uploads ) {
+			return false;
+		}
+
+		$blog_id = function_exists( 'get_current_blog_id' ) ? (int) get_current_blog_id() : 0;
+
+		return self::is_ms_files_base_for_blog( $uploads, $blog_id );
+	}
+
+	/**
+	 * The segment test behind is_own_ms_files_uploads_base(), with the blog id passed in, so it is
+	 * assertable from a single-site test run.
+	 *
+	 * @param string $path    Canonical path.
+	 * @param int    $blog_id Blog id the base must belong to.
+	 * @return bool
+	 */
+	public static function is_ms_files_base_for_blog( $path, $blog_id ) {
+		$segments = explode( '/', trim( wp_normalize_path( (string) $path ), '/' ) );
+		$count    = count( $segments );
+
+		return $count >= 3
+			&& 'files' === strtolower( $segments[ $count - 1 ] )
+			&& ctype_digit( $segments[ $count - 2 ] )
+			&& (int) $segments[ $count - 2 ] === (int) $blog_id
+			&& 'blogs.dir' === strtolower( $segments[ $count - 3 ] );
+	}
+
+	/**
+	 * Whether a path is one of the shared bases rather than a gallery's own directory.
+	 *
+	 * The gallery base, the uploads base, wp-content, the storage root and the document root are
+	 * all directories galleries live *under*, never a single gallery's folder, so a path that
+	 * resolves to one of them is not a claim on anything.
+	 *
+	 * @param string $abspath Absolute path.
+	 * @return bool
+	 */
+	public function is_shared_gallery_location( $abspath ) {
+		$path = rtrim( $this->canonicalize_path( $abspath ), '/' );
+
+		if ( '' === $path ) {
+			return true;
+		}
+
+		$dirs   = $this->get_deletion_dirs();
+		$shared = isset( $dirs['shared'] ) ? $dirs['shared'] : [];
+
+		foreach ( array_merge( $shared, [ $this->get_upload_abspath() ] ) as $shared_dir ) {
+			if ( '' === (string) $shared_dir ) {
+				continue;
+			}
+
+			if ( $path === rtrim( $this->canonicalize_path( $shared_dir ), '/' ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Public accessor for other_gallery_directories(), so the legacy C_Gallery_Storage twin can
+	 * resolve the row set once per operation the same way this class does.
+	 *
+	 * @param int|null $gallery_id Gallery to exclude.
+	 * @return string[]|null
+	 */
+	public function get_other_gallery_directories( $gallery_id = null ) {
+		return $this->other_gallery_directories( $gallery_id );
+	}
+
+	/**
+	 * Whether a file sits inside some other gallery's directory.
+	 *
+	 * The per-file half of the nesting rule that get_deletion_boundary() no longer applies to the
+	 * gallery directory as a whole. A parent gallery from a recursive keep-location import must
+	 * delete its own files, but not the ones living in a child gallery's sub-directory, so the test
+	 * moves from "is this gallery's directory nested" to "is this file in a nested child".
+	 *
+	 * A file is owned by the gallery with the *most specific* directory containing it, so the test
+	 * is comparative rather than absolute. A child gallery's files always sit inside its parent's
+	 * directory too, and an absolute "is this inside any other gallery" test therefore refused a
+	 * child the right to delete its own photos.
+	 *
+	 * $others lets a caller resolve the row set once for a whole operation. Reading it per file
+	 * would reintroduce the full-table scan per image per size that delete_gallery()'s boundary
+	 * hoist removed, and memoizing it in a static went stale instead: gallery rows roll back
+	 * between tests and change between requests, so a cached set invented claims for directories
+	 * whose galleries no longer existed, which refused legitimate saves and deletes.
+	 *
+	 * @param string        $abspath    Absolute file path about to be unlinked.
+	 * @param int|null      $gallery_id The gallery the deletion is for.
+	 * @param string|null   $own_dir    That gallery's own directory. Defaults to the one
+	 *                                  resolved for $gallery_id.
+	 * @param string[]|null $others     Pre-resolved other-gallery directories, or null to read
+	 *                                  them now.
+	 * @return bool
+	 */
+	public function path_is_inside_another_gallery( $abspath, $gallery_id = null, $own_dir = null, $others = null ) {
+		$target = $this->canonicalize_path( $abspath );
+
+		if ( '' === $target ) {
+			return true;
+		}
+
+		if ( null === $own_dir && null !== $gallery_id ) {
+			$own_dir = $this->get_gallery_abspath( $gallery_id );
+		}
+
+		$own = '' === (string) $own_dir ? '' : rtrim( $this->canonicalize_path( $own_dir ), '/' );
+
+		if ( null === $others ) {
+			$others = $this->other_gallery_directories( $gallery_id );
+		}
+
+		if ( null === $others ) {
+			return true;
+		}
+
+		foreach ( $others as $other ) {
+			if ( ! $this->path_contains( $other, $target ) ) {
+				continue;
+			}
+
+			// Another gallery contains the file. It only owns it when its directory is more
+			// specific than ours, which is what distinguishes "the file is in my child's folder"
+			// (refuse) from "my folder happens to sit inside my parent's" (allow).
+			if ( '' === $own || strlen( $other ) > strlen( $own ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a path points inside a *different* site's uploads directory on multisite.
+	 *
+	 * WordPress gives each subsite `<uploads>/sites/<blog id>`, and the Gallery Path is a plain
+	 * relative path that Settings\GalleryPathValidation accepts as long as it stays under the
+	 * galleries root. A main-site administrator - or anyone holding the delegable NextGEN settings
+	 * capability - can therefore set it to `uploads/sites/3`, title a gallery `2026`, and have the
+	 * server derive `uploads/sites/3/2026`: a directory belonging to subsite 3, which every
+	 * containment test then accepts because it is measured against the *current* blog's uploads
+	 * base. Deleting that gallery removes another site's media.
+	 *
+	 * Lexical on purpose, so it answers for a relative setting value as well as a resolved path, and
+	 * so it cannot be defeated by a directory that does not exist yet. The current blog's own
+	 * `sites/<id>` segment is allowed, which keeps the main-site default (`uploads/sites/1/...` on
+	 * installs that use it) and single-site layouts such as WP VIP's `uploads/gallery` working.
+	 *
+	 * @param string $path Absolute or relative path.
+	 * @return bool
+	 */
+	public function path_targets_another_site( $path ) {
+		if ( ! function_exists( 'is_multisite' ) || ! is_multisite() ) {
+			return false;
+		}
+
+		// Only the part below wp-content is WordPress's layout. Above it is the host's, and real
+		// hosting paths carry the same segments - "/home/sites/12345/public_html/..." - which
+		// would otherwise make every gallery on the network read as another site's.
+		return self::path_targets_blog_other_than(
+			self::path_below_content_dir( $path, defined( 'WP_CONTENT_DIR' ) ? WP_CONTENT_DIR : '' ),
+			function_exists( 'get_current_blog_id' ) ? (int) get_current_blog_id() : 0
+		);
+	}
+
+	/**
+	 * The part of $path below the content directory, or $path unchanged when it is not inside it.
+	 *
+	 * Pure, so it is assertable from a single-site run.
+	 *
+	 * @param string $path        Absolute or relative path.
+	 * @param string $content_dir WP_CONTENT_DIR.
+	 * @return string
+	 */
+	public static function path_below_content_dir( $path, $content_dir ) {
+		$path    = wp_normalize_path( (string) $path );
+		$content = rtrim( wp_normalize_path( (string) $content_dir ), '/' );
+
+		if ( '' === $content ) {
+			return $path;
+		}
+
+		if ( $path === $content ) {
+			return '';
+		}
+
+		if ( 0 === strpos( $path, $content . '/' ) ) {
+			return substr( $path, strlen( $content ) );
+		}
+
+		return $path;
+	}
+
+	/**
+	 * The segment test behind path_targets_another_site(), with the blog id passed in.
+	 *
+	 * Split out so it is assertable from a single-site test run. The wrapper above returns early
+	 * when `is_multisite()` is false, which is every CI leg, so a suite that only calls the wrapper
+	 * asserts nothing about the rule itself: the guard could be deleted outright and stay green.
+	 *
+	 * @param string $path    Absolute or relative path.
+	 * @param int    $blog_id The blog whose own `sites/<id>` segment is permitted.
+	 * @return bool
+	 */
+	public static function path_targets_blog_other_than( $path, $blog_id ) {
+		$path = wp_normalize_path( (string) $path );
+
+		if ( '' === $path ) {
+			return false;
+		}
+
+		$blog_id  = (int) $blog_id;
+		$segments = explode( '/', trim( $path, '/' ) );
+
+		// Both per-site media layouts WordPress has shipped: "uploads/sites/<id>" (current) and
+		// "blogs.dir/<id>/files" (ms-files, still live on older networks - it is the layout the
+		// cross-subsite exploit in #714 / #750 actually used).
+		foreach ( $segments as $index => $segment ) {
+			$segment = strtolower( $segment );
+
+			if ( 'sites' !== $segment && 'blogs.dir' !== $segment ) {
+				continue;
+			}
+
+			// Below this blog's own "sites/<id>" (or "blogs.dir/<id>") everything is this site's,
+			// so a later segment named "sites" is a folder - a gallery titled "Sites" - not the
+			// shared container. Treating it as one stopped such a gallery deleting its files.
+			if ( isset( $segments[ $index + 1 ] )
+				&& ctype_digit( $segments[ $index + 1 ] )
+				&& (int) $segments[ $index + 1 ] === $blog_id ) {
+				return false;
+			}
+
+			// A trailing "sites" (or "blogs.dir") with nothing after it is the shared container
+			// every subsite lives in, e.g. a Gallery Path of "uploads/sites/". It names no id, so
+			// the id test below cannot see it, and a gallery titled "3" then has "uploads/sites/3"
+			// derived for it - strictly inside that base, and subsite 3's directory. Refused as a
+			// base in its own right; is_gallery_directory_deletable() also applies this test to the
+			// gallery directory, which catches the derived path from the other end.
+			if ( ! isset( $segments[ $index + 1 ] ) ) {
+				return true;
+			}
+
+			$next = $segments[ $index + 1 ];
+
+			if ( ctype_digit( $next ) && (int) $next !== $blog_id ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Whether a directory is claimed by a gallery other than the one being acted on - because it is
+	 * that gallery's directory, contains it, or sits inside it.
+	 *
+	 * Containment inside the NextGEN gallery base is not ownership. Two galleries may hold the same
+	 * `path`: the legacy Manage Gallery screen allows an in-base relocation, and a keep-location
+	 * folder import sets the path server-side to any directory under the import root. Gallery
+	 * deletion authorizes on the attacker's *own* row only (nggAdmin::can_manage_this_gallery() on
+	 * `$gallery->author`), so without this test a user who may manage only their own galleries can
+	 * point one at another author's gallery folder and have their own delete remove the victim's
+	 * originals, thumbnails and backups.
+	 *
+	 * Fails closed: an unresolvable target, or a read that errored, answers true.
+	 *
+	 * $include_nested controls whether a parent/child relationship counts. The deletion side always
+	 * passes true: removing a directory recursively takes its children with it, and a child means
+	 * the target holds another gallery's images. The writer side passes false for a path outside the
+	 * dedicated gallery base, because a "keep original location" recursive import legitimately
+	 * creates exactly that shape - import_gallery_from_fs() saves each sub-folder's gallery first,
+	 * then the parent whose path contains them - and refusing it there failed the import after the
+	 * sub-galleries had already been created.
+	 *
+	 * @param string      $abspath        Directory about to be deleted.
+	 * @param int|null    $gallery_id     The gallery the deletion is for; its own row is not a conflict.
+	 * @param bool|string $include_nested true: a directory that contains, or sits inside, another
+	 *                                    gallery's directory counts as claimed. false: only the
+	 *                                    same directory does. 'inside': the same directory, or one
+	 *                                    strictly inside another gallery's - but not one that merely
+	 *                                    contains another gallery, which is what a recursive
+	 *                                    keep-location import's parent legitimately does.
+	 * @return bool
+	 */
+	public function directory_belongs_to_another_gallery( $abspath, $gallery_id = null, $include_nested = true ) {
+		$target = $this->canonicalize_path( $abspath );
+
+		if ( '' === $target ) {
+			return true;
+		}
+
+		$target = rtrim( $target, '/' );
+
+		$others = $this->other_gallery_directories( $gallery_id );
+
+		if ( null === $others ) {
+			// The row set could not be read; fail closed.
+			return true;
+		}
+
+		foreach ( $others as $other ) {
+			// The same directory is always a conflict. Nesting is only one when the caller asks for
+			// it - see $include_nested.
+			if ( $other === $target ) {
+				return true;
+			}
+
+			if ( 'inside' === $include_nested ) {
+				if ( $this->path_contains( $other, $target ) ) {
+					return true;
+				}
+
+				continue;
+			}
+
+			if ( $include_nested
+				&& ( $this->path_contains( $other, $target ) || $this->path_contains( $target, $other ) ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * The directory a per-image deletion may be bounded to, or '' when there is none.
+	 *
+	 * This is the server's answer to "where may this gallery's files be deleted from", and it is
+	 * deliberately *not* "wherever the gallery row says the gallery lives". The `path` column is
+	 * writable through the legacy Manage Gallery screen, so deriving the boundary from it alone
+	 * made the containment test in is_deletion_path_allowed() true by construction: point a gallery
+	 * at "wp-content/uploads/2026/10", scan the folder into it, then delete the rows, and every
+	 * image file in that month's media-library folder is unlinked one row at a time - reaching,
+	 * by composing per-image deletes, exactly the outcome is_gallery_directory_deletable() refuses
+	 * for the recursive route (#1085).
+	 *
+	 * Both routes therefore now measure against the same ruler. A gallery outside the dedicated
+	 * NextGEN gallery folder - one imported with "keep original location", or created under an
+	 * earlier Gallery Path - keeps its image rows deletable, but its files are left on disk: that
+	 * folder is shared with whatever else put files there, and NextGEN has no claim on them.
+	 *
+	 * @param string|null $gallery_abspath Gallery directory as resolved for the image's gallery.
+	 * @param int|null    $gallery_id      The gallery being acted on, so its own row is not read as
+	 *                                     a conflicting claim on its own directory.
+	 * @return string The directory to bound unlinks to, or '' when files must not be deleted.
+	 */
+	public function get_deletion_boundary( $gallery_abspath, $gallery_id = null ) {
+		if ( empty( $gallery_abspath ) || ! is_string( $gallery_abspath ) ) {
+			return '';
+		}
+
+		if ( ! $this->is_gallery_directory_deletable( $gallery_abspath ) ) {
+			$this->log_path_refusal(
+				sprintf(
+					'NextGEN Gallery: refusing to delete image files in "%s" - a gallery directory outside the dedicated NextGEN gallery folder bounds nothing, so the image records are removed and the files are left in place',
+					$gallery_abspath
+				),
+				self::REFUSAL_DELETE_BOUNDARY
+			);
+
+			return '';
+		}
+
+		// Inside the base is not the same as owned. See directory_belongs_to_another_gallery().
+		//
+		// Only an *exact* claim bounds nothing here. Counting nesting at this level made parent and
+		// child rows of a recursive keep-location import veto each other - on multisite the import
+		// root is the gallery base, so both sit in-base - and every delete on such an install
+		// returned a '' boundary, kept the files on disk and still reported success. The nested
+		// case is handled where it belongs instead: the recursive directory removal in
+		// delete_gallery() still refuses nesting in both directions, and a per-file target that
+		// lands inside a nested child gallery's directory is refused by
+		// is_deletion_path_allowed() via path_is_inside_another_gallery().
+		if ( $this->directory_belongs_to_another_gallery( $gallery_abspath, $gallery_id, false ) ) {
+			$this->log_path_refusal(
+				sprintf(
+					'NextGEN Gallery: refusing to delete image files in "%s" - another gallery claims that directory, so the image records are removed and the files are left in place',
+					$gallery_abspath
+				),
+				self::REFUSAL_DELETE_BOUNDARY
+			);
+
+			return '';
+		}
+
+		return $gallery_abspath;
 	}
 
 	/**
@@ -3100,7 +4532,7 @@ class Manager {
 	 * @param string $abspath         File that is about to be deleted.
 	 * @return bool
 	 */
-	public function is_deletion_path_allowed( $gallery_abspath, $abspath ) {
+	public function is_deletion_path_allowed( $gallery_abspath, $abspath, $originals_abspath = null ) {
 		if ( empty( $abspath ) || ! is_string( $abspath ) || empty( $gallery_abspath ) ) {
 			return false;
 		}
@@ -3117,21 +4549,51 @@ class Manager {
 			return false;
 		}
 
-		// The target must resolve inside the gallery directory.
+		// The target must resolve inside the gallery directory, or - for an image's relocated
+		// original - inside THAT gallery's own originals directory. Without the second case every
+		// image would become undeletable: "backup" is one of the sizes get_image_sizes() reports
+		// (backup_image() stores a width under meta_data['backup']), delete_image() validates
+		// every size before unlinking any, and a single out-of-bounds size aborts the whole
+		// delete.
+		//
+		// Scoped to one gallery deliberately. Accepting the originals root as a whole would make
+		// this the only term in the predicate that does not name the gallery it was asked about,
+		// so is_deletion_path_allowed( <gallery A>, <originals>/<gallery B>/x.jpg_backup ) would
+		// pass - and this function is the gate two arbitrary-file-deletion reports (#886, #1085)
+		// converged on, so it should not be the place where a bound stops being per-gallery.
 		$target = $this->canonicalize_path( $abspath );
 
-		return '' !== $target && $this->path_contains( $gallery, $target );
+		if ( '' === $target ) {
+			return false;
+		}
+
+		if ( $this->path_contains( $gallery, $target ) ) {
+			return true;
+		}
+
+		if ( null === $originals_abspath ) {
+			return false;
+		}
+
+		$originals = $this->canonicalize_path( $originals_abspath );
+
+		return '' !== $originals
+			&& $this->is_path_within_originals_root( $originals )
+			&& $this->path_contains( $originals, $target );
 	}
 
 	/**
-	 * Whether a gallery directory is safe to recursively delete.
+	 * Whether a gallery directory is one NextGEN may delete files in - the single test both
+	 * deletion routes measure against, the recursive directory removal and the per-image unlinks
+	 * reached through get_deletion_boundary().
 	 *
-	 * A gallery's filesystem path is writable through XML-RPC/REST, so it could be pointed at a
-	 * shared directory. Only a directory strictly inside the dedicated NextGEN gallery base may be
-	 * recursively removed. Anything in the wider uploads tree (e.g. "wp-content/uploads/2026") is
-	 * refused, so a tampered path cannot trigger a recursive delete of the media library. A gallery
-	 * kept at its original import location under the uploads base is not removed here (its shared
-	 * folder may hold unrelated media); its image files are deleted per image instead.
+	 * A gallery's filesystem path is writable through the legacy Manage Gallery screen, so it could
+	 * be pointed at a shared directory. Only a directory strictly inside the dedicated NextGEN
+	 * gallery base qualifies. Anything in the wider uploads tree (e.g. "wp-content/uploads/2026")
+	 * is refused, so a tampered path can trigger neither a recursive delete of the media library
+	 * nor the same outcome composed out of per-image deletes (#1085). A gallery kept at its
+	 * original import location under the uploads base is therefore left on disk entirely - its
+	 * shared folder may hold unrelated media - while its image records stay deletable.
 	 *
 	 * @param string $abspath Absolute path to the gallery directory that would be deleted.
 	 * @return bool
@@ -3146,6 +4608,98 @@ class Manager {
 
 		if ( '' === $dir || '' === $base ) {
 			return false;
+		}
+
+		// The base the containment is measured against must itself be a dedicated gallery folder.
+		// On an install whose Gallery Path has been pointed at a shared directory - the uploads
+		// base, wp-content, the storage root, the document root - every media-library folder is
+		// "strictly inside the NextGEN gallery base", and the refusal this method documents would
+		// hold only on paper. Fails closed: on such an install no directory is recursively removed
+		// and no image file is unlinked, rather than the whole media tree being fair game.
+		$dirs = $this->get_deletion_dirs();
+
+		// On a legacy ms-files network the subsite's own uploads base, "blogs.dir/<id>/files", is
+		// also the Gallery Path that layout ships with (#714). Refusing it as a shared base, which
+		// it is on every other layout, stopped every gallery on such a subsite from deleting a
+		// single file, where the merge base deleted them. It is exempt from the two uploads-base
+		// refusals below only for this blog's own id, and the date folders WordPress keeps directly
+		// under it stay protected by the numeric first-segment test that follows.
+		$own_ms_files_base = $this->is_own_ms_files_uploads_base( $base, $dirs );
+
+		foreach ( $dirs['shared'] as $shared_dir ) {
+			if ( rtrim( $base, '/' ) === rtrim( $shared_dir, '/' ) ) {
+				if ( $own_ms_files_base && rtrim( $shared_dir, '/' ) === rtrim( $dirs['uploads'], '/' ) ) {
+					continue;
+				}
+
+				return false;
+			}
+		}
+
+		if ( $own_ms_files_base ) {
+			$below = trim( substr( rtrim( $dir, '/' ), strlen( rtrim( $base, '/' ) ) ), '/' );
+			$first = '' === $below ? '' : explode( '/', $below )[0];
+
+			// The base itself, or a directory whose first segment is numeric, is WordPress's media
+			// (the "2026" in "files/2026/10"), never a gallery.
+			if ( '' === $first || ctype_digit( $first ) ) {
+				return false;
+			}
+		}
+
+		// Exact match above is not enough on its own, because one level of nesting walks past it.
+		// WordPress keeps its own media in numeric date directories under the uploads base
+		// ("2026", "2026/10"), and the Gallery Path may be set to one of them:
+		// Settings\GalleryPathValidation only requires a relative path under the galleries root, so
+		// "uploads/2026" is accepted, a gallery slugged "10" then has its path *server-set* to
+		// "uploads/2026/10", and every containment test here passes - reproducing #1085 one level
+		// below the shared base, with no tampered `path` column and no relocation needed.
+		//
+		// A dedicated gallery folder is never a bare number, so a base whose remainder below the
+		// uploads base is entirely numeric is refused. This stays deliberately narrower than
+		// "refuse anything inside the uploads base": WP VIP installs may only write under uploads
+		// and set the Gallery Path to "wp-content/uploads/gallery" (#153), which a subtree test
+		// would break and this one accepts.
+		// A base inside another subsite's uploads tree is refused outright - the numeric-remainder
+		// test below cannot see it, because it measures against *this* blog's uploads base.
+		//
+		// $dir is tested too, not just $base. Testing the base alone left the shared container
+		// open: a Gallery Path of "uploads/sites/" names no id, so it passed, and a gallery titled
+		// "3" then had "uploads/sites/3" derived for it - inside that base, and another site's
+		// directory, recursively removed on delete.
+		if ( $this->path_targets_another_site( $base ) || $this->path_targets_another_site( $dir ) ) {
+			return false;
+		}
+
+		// A base that *contains* the uploads base is refused. The shared-base test above is exact
+		// match, and the numeric-remainder test below only runs when uploads contains the base, so
+		// a base one level above a relocated media library (UPLOADS / upload_path pointing at
+		// "wp-content/files/uploads", Gallery Path "wp-content/files/") slipped past both: an
+		// in-base relocation to "uploads/2026/10" was then accepted and the media library was
+		// deletable. The dedicated layouts never contain uploads - "wp-content/gallery",
+		// "uploads/sites/<id>/nggallery" and the WP VIP "uploads/gallery" are all inside it or
+		// beside it - so they stay deletable.
+		if ( '' !== $dirs['uploads'] && ! $own_ms_files_base && $this->path_contains( $base, $dirs['uploads'] ) ) {
+			return false;
+		}
+
+		if ( '' !== $dirs['uploads'] && $this->path_contains( $dirs['uploads'], $base ) ) {
+			$below = trim( substr( rtrim( $base, '/' ), strlen( rtrim( $dirs['uploads'], '/' ) ) ), '/' );
+
+			if ( '' !== $below ) {
+				$all_numeric = true;
+
+				foreach ( explode( '/', $below ) as $segment ) {
+					if ( ! ctype_digit( $segment ) ) {
+						$all_numeric = false;
+						break;
+					}
+				}
+
+				if ( $all_numeric ) {
+					return false;
+				}
+			}
 		}
 
 		// Must be strictly inside the NextGEN gallery base, never the base itself.
@@ -3188,7 +4742,7 @@ class Manager {
 	 * every per-size deletion check. Every entry is canonicalized so a symlinked media tree (NFS,
 	 * bind mount, symlinked wp-content) resolves the same way a gallery path does.
 	 *
-	 * @return array{anchors: string[], protected: string[], protected_trees: string[]}
+	 * @return array{anchors: string[], protected: string[], protected_trees: string[], shared: string[], uploads: string}
 	 */
 	private function get_deletion_dirs() {
 		$blog = function_exists( 'get_current_blog_id' ) ? get_current_blog_id() : 0;
@@ -3237,13 +4791,32 @@ class Manager {
 
 		$anchors = array_values( array_filter( [ $root, $ngg_base, $uploads ], $drop_empty ) );
 
+		$content_root = $resolve( $fs->get_document_root( 'content' ) );
+		$doc_root     = $resolve( $fs->get_document_root() );
+
 		$protected = array_values(
 			array_filter(
 				[
 					$root,
-					$resolve( $fs->get_document_root( 'content' ) ),
-					$resolve( $fs->get_document_root() ),
+					$content_root,
+					$doc_root,
 					$ngg_base,
+					$uploads,
+				],
+				$drop_empty
+			)
+		);
+
+		// The shared bases galleries legitimately live *under*. Same membership as $protected minus
+		// the NextGEN gallery base, because is_gallery_directory_deletable() has to ask whether its
+		// own base has been pointed at one of these - a question $protected cannot answer, since the
+		// NextGEN base is a member of it by construction.
+		$shared = array_values(
+			array_filter(
+				[
+					$root,
+					$content_root,
+					$doc_root,
 					$uploads,
 				],
 				$drop_empty
@@ -3265,6 +4838,12 @@ class Manager {
 					$resolve( $fs->join_paths( $abspath, 'wp-admin' ) ),
 					$resolve( $fs->join_paths( $abspath, 'wp-includes' ) ),
 					$resolve( get_theme_root() ),
+					// The originals tree is a shared, cross-gallery location that sits inside the
+					// uploads anchor, so without this a gallery whose path pointed at it would
+					// pass is_within_gallery_locations() and then serve as a containment base for
+					// is_deletion_path_allowed() - the gate #886 and #1085 converged on. Listed
+					// here so that holds whatever gallerypath is set to.
+					$resolve( $this->get_originals_base() ),
 				],
 				$drop_empty
 			)
@@ -3274,6 +4853,8 @@ class Manager {
 			'anchors'         => $anchors,
 			'protected'       => $protected,
 			'protected_trees' => $protected_trees,
+			'shared'          => $shared,
+			'uploads'         => $uploads,
 		];
 
 		// Two degenerate conditions, in both directions - an empty anchor list fails closed and
@@ -3576,7 +5157,8 @@ class Manager {
 							$thumbnail = $this->generate_image_clone(
 								$full_abspath,
 								$this->get_image_abspath( $image, $named_size ),
-								$this->get_image_size_params( $image, $named_size )
+								$this->get_image_size_params( $image, $named_size ),
+								$image
 							);
 							if ( $thumbnail ) {
 								$thumbnail->destruct();
@@ -3966,6 +5548,13 @@ class Manager {
 				throw new \E_InsufficientWriteAccessException( false, esc_html( $gallery_abspath ), false );
 			}
 
+			// Deny rule for this folder. The #1107 relocation only visits galleries a site already
+			// had, so without this a gallery created afterwards would carry no rule - and the rule
+			// is what covers an original that reappears in the folder later (a downgrade and
+			// re-upgrade, a files-only restore). Result ignored: defence in depth must not fail an
+			// upload.
+			$this->protect_directory( $gallery_abspath );
+
 			// Sanitize the filename for storing in the DB.
 			$filename = $this->sanitize_filename_for_db( $filename );
 
@@ -4251,7 +5840,21 @@ class Manager {
 			// Automatically watermark the main image if requested.
 			if ( $settings->get( 'watermark_automatically_at_upload', 0 ) ) {
 				$image_abspath = $this->get_image_abspath( $image, 'full' );
-				$this->generate_image_clone( $image_abspath, $image_abspath, [ 'watermark' => true ] );
+				// watermark_required: if the watermark cannot be loaded, keep the upload as it
+				// is (not re-encoded without one) and tell the admins (log + admin notice), instead
+				// of failing silently (#1104).
+				if ( ! $this->generate_image_clone(
+					$image_abspath,
+					$image_abspath,
+					[
+						'watermark'          => true,
+						'watermark_required' => true,
+					],
+					$image
+				) ) {
+					error_log( sprintf( 'NextGEN Gallery: image #%d was uploaded without its automatic watermark - the watermark image or font in the watermark settings could not be loaded.', (int) $image_id ) ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+					\Imagely\NGG\Admin\Notifications\WatermarkUploadFailed::record();
+				}
 			}
 
 			// Ensure the Pope framework is loaded before this action fires. Third-party plugins
@@ -4314,10 +5917,30 @@ class Manager {
 			$thumbnail = null;
 
 			if ( $size == 'full' && $settings->get( 'imgBackup' ) == 1 ) {
-				$backup_path = $this->get_backup_abspath( $image );
+				$backup_path = $this->resolve_backup_abspath( $image );
 
-				if ( ! @file_exists( $backup_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-					@copy( $filename, $backup_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				if ( empty( $backup_path ) || ! @file_exists( $backup_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					// Written to the originals root, never beside the served image: this is the
+					// pre-regeneration master, which is exactly the file #1107 was about.
+					$backup_path = $this->get_backup_write_abspath( $image );
+
+					if ( $backup_path && @copy( $filename, $backup_path ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+						$this->discard_legacy_backup( $image );
+					} else {
+						// Not fatal - generation continues, as it did before the relocation - but
+						// the user asked for originals to be kept and this one will not be, and
+						// the 'full' size below is written over the file it would have preserved.
+						// The old target was a sibling in a directory that had just accepted the
+						// upload, so it effectively could not fail; the new one depends on the
+						// uploads directory being writable, so it can.
+						$this->log_path_refusal(
+							sprintf(
+								'NextGEN Gallery: could not keep an original for image #%s before regenerating its full size; the pre-resize master is not retained.',
+								is_object( $image ) && isset( $image->pid ) ? $image->pid : '?'
+							),
+							self::REFUSAL_ORIGINALS_DIR
+						);
+					}
 				}
 			}
 
@@ -4426,10 +6049,10 @@ class Manager {
 			// after the destination gates, so the skip shares their refusals and the save/error
 			// contract below. Callers then get true instead of a thumbnail object.
 			if ( 'full' === $size && ! $this->is_resize_needed( $filename, $params ) ) {
-				$this->sync_unresized_image_metadata( $filename );
+				$this->sync_unresized_image_metadata( $filename, $image );
 				$thumbnail = true;
 			} else {
-				$thumbnail = $this->generate_image_clone( $filename, $clone_path, $params );
+				$thumbnail = $this->generate_image_clone( $filename, $clone_path, $params, $image );
 			}
 
 			// We successfully generated the thumbnail.
@@ -4579,14 +6202,7 @@ class Manager {
 	 */
 	// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- false positive, no user input here
 	public function get_backup_abspath( $image ) {
-		$retval = null;
-
-		$image_path = $this->get_image_abspath( $image );
-		if ( $image_path ) {
-			$retval = $image_path . '_backup';
-		}
-
-		return $retval;
+		return $this->resolve_backup_abspath( $image );
 	}
 
 	/**
@@ -4622,11 +6238,13 @@ class Manager {
 			return false;
 		}
 
-		$backup_abspath = $this->get_backup_abspath( $image );
+		$backup_abspath = $this->get_backup_write_abspath( $image );
 
 		if ( empty( $backup_abspath ) || ! @copy( $original, $backup_abspath ) ) { // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			return false;
 		}
+
+		$this->discard_legacy_backup( $image );
 
 		$dimensions = @getimagesize( $backup_abspath ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 

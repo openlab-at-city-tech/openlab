@@ -11,6 +11,7 @@
  * @var string $offset_label
  * @var string $position_label
  * @var string $preview_label
+ * @var string $preview_nonce
  * @var string $refresh_url
  * @var string $refresh_label
  * @var string $thumbnail_url
@@ -69,6 +70,14 @@
 		</td>
 	</tr>
 
+	<?php if ( ! empty( $stored_refused_message ) ) { ?>
+		<tr>
+			<td colspan="2">
+				<div class="notice notice-error inline"><p><?php echo esc_html( $stored_refused_message ); ?></p></div>
+			</td>
+		</tr>
+	<?php } ?>
+
 	<tr class="watermark_field hidden">
 		<td>
 			<?php echo esc_html( $position_label ); ?>
@@ -124,6 +133,8 @@
 			<td>
 				<img src='<?php echo esc_url( $thumbnail_url . '?' . time() ); ?>'/>
 				<button id='nextgen_settings_preview_refresh' class="button-primary" data-refresh-url='<?php echo esc_attr( $refresh_url ); ?>'><?php echo esc_html( $refresh_label ); ?></button>
+				<?php // The nonce sits AFTER the button: the refresh handler does self.prev() to find the <img>, so a field between them would be picked up instead (#1084 review). form.serialize() still sends it from here. ?>
+				<input type="hidden" name="watermark_preview_nonce" value="<?php echo esc_attr( $preview_nonce ); ?>" />
 			</td>
 		</tr>
 	<?php } ?>

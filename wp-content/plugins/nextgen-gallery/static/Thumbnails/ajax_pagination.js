@@ -14,6 +14,9 @@ jQuery(function ($) {
 
 				if ($gallery.hasClass('ngg-ajax-pagination-none')) return;
 
+				// The response is injected into the page, so only fetch it from this site. Other links navigate normally.
+				if (this.origin !== window.location.origin) return;
+
 				e.preventDefault();
 
 				self.toggle_busy(true);

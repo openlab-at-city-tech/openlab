@@ -7,6 +7,13 @@
 	NextGEN Gallery: locally patched so a close request always wins over an
 	in-flight open / next-prev animation, and so no timing window can leave
 	isAnimating or isClosing stuck. See awesomemotive/nextgen-gallery#1075.
+
+	Also patched so a caption is written as text unless the nggCaptionHTML
+	option returns true for its source element (CVE-2026-116550, #1188).
+	Upstream 2.10+ has its own boolean captionHTML option; do not map
+	nggCaptionHTML onto it, since a function there is truthy and would parse
+	every caption as HTML again.
+
 	Re-verify or re-apply these patches when this file is upgraded.
 */
 'use strict';
@@ -130,6 +137,9 @@ var SimpleLightbox = /*#__PURE__*/ (function () {
 			captionSelector: 'img',
 			captionType: 'attr',
 			captionsData: 'title',
+			// NextGEN patch (#1188): true, false, or function (element) returning a boolean.
+			// Unless it is (or returns) true, the caption is written as text, never parsed as HTML.
+			nggCaptionHTML: true,
 			captionPosition: 'bottom',
 			captionClass: '',
 			close: true,
@@ -937,12 +947,12 @@ var SimpleLightbox = /*#__PURE__*/ (function () {
 						_this5.fadeIn(_this5.domNodes.image, 300, function () {
 							_this5.isAnimating = false;
 
-							_this5.setCaption(captionText, imageWidth);
+							_this5.setCaption(captionText, imageWidth, captionContainer);
 						});
 					} else {
 						_this5.isAnimating = false;
 
-						_this5.setCaption(captionText, imageWidth);
+						_this5.setCaption(captionText, imageWidth, captionContainer);
 					}
 
 					if (_this5.options.additionalHtml && !_this5.domNodes.additionalHtml) {
@@ -1679,7 +1689,7 @@ var SimpleLightbox = /*#__PURE__*/ (function () {
 		},
 		{
 			key: 'setCaption',
-			value: function setCaption(captionText, imageWidth) {
+			value: function setCaption(captionText, imageWidth, captionContainer) {
 				var _this7 = this;
 
 				if (
@@ -1688,9 +1698,21 @@ var SimpleLightbox = /*#__PURE__*/ (function () {
 					captionText !== '' &&
 					typeof captionText !== 'undefined'
 				) {
+					var captionHTML =
+						typeof this.options.nggCaptionHTML === 'function'
+							? this.options.nggCaptionHTML(captionContainer)
+							: this.options.nggCaptionHTML;
+
 					this.hide(this.domNodes.caption);
 					this.domNodes.caption.style.width = imageWidth + 'px';
-					this.domNodes.caption.innerHTML = captionText;
+					// SECURITY (#1188): a caption the caller has not vouched for is set as text.
+					// getAttribute() returns the entity-decoded title, so innerHTML would parse
+					// "&lt;img onerror=...&gt;" from a comment link as a live element.
+					if (captionHTML === true) {
+						this.domNodes.caption.innerHTML = captionText;
+					} else {
+						this.domNodes.caption.textContent = captionText;
+					}
 					this.domNodes.image.appendChild(this.domNodes.caption);
 					setTimeout(function () {
 						_this7.fadeIn(_this7.domNodes.caption, 300);

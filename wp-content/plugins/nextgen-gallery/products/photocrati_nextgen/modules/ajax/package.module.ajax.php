@@ -11,7 +11,7 @@ class C_Ajax_Controller extends C_MVC_Controller
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     /**
      * Returns an instance of this class
      *
@@ -43,7 +43,7 @@ class C_Ajax_Controller extends C_MVC_Controller
      *
      * @var string[]
      */
-    const RESERVED_ACTIONS = array('index');
+    const RESERVED_ACTIONS = ['index'];
     /**
      * Returns the action names this endpoint is allowed to dispatch to.
      *
@@ -62,8 +62,7 @@ class C_Ajax_Controller extends C_MVC_Controller
          * Registering a name here only makes it reachable -- it grants nothing. Each
          * action is still responsible for its own nonce and capability checks, and an
          * action that omits them is reachable unauthenticated, because this endpoint
-         * answers on 'init'. (Of the defaults below, get_watermark_preview_url checks
-         * the capability but not a nonce; see the follow-up on issue #1087.)
+         * answers on 'init'.
          *
          * @param string[] $actions Registered action names, without the '_action' suffix.
          */

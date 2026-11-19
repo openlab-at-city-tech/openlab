@@ -121,6 +121,13 @@ class SharedController extends ParentController {
 	public $breadcrumb_cache = [];
 
 	/**
+	 * Contained `?gallery=` drill-downs this request; read by Pro's lightbox store.
+	 *
+	 * @var array<string,bool>
+	 */
+	public static $contained_request_galleries = [];
+
+	/**
 	 * Cache of album children from the database.
 	 *
 	 * @var array
@@ -843,6 +850,9 @@ class SharedController extends ParentController {
 				return $displayed_gallery;
 			}
 
+			// Vouch only once contained.
+			self::$contained_request_galleries[ (string) $gallery ] = true;
+
 			$gallery_params = [
 				'source'                  => 'galleries',
 				'container_ids'           => [ $gallery ],
@@ -969,7 +979,7 @@ class SharedController extends ParentController {
 		// an exact match for what the child renders, so it is carried whole - the same slice the
 		// standalone render path applies, which is the parity #787 asks for.
 		$out = ! empty( $stored[ $child_type ] ) && is_array( $stored[ $child_type ] )
-			? $this->filter_child_display_settings( $stored[ $child_type ], $child_type )
+			? $this->filter_child_display_settings( GalleryMapper::normalize_display_type_settings( $child_type, $stored[ $child_type ] ), $child_type )
 			: [];
 
 		$geometry = $this->cross_type_child_settings( $stored, $child_type, $out, $gallery_entity->display_type ?? '' );
@@ -1262,6 +1272,15 @@ class SharedController extends ParentController {
 		// Are we to display a gallery? Ensure our 'gallery' isn't just a paginated album view.
 		$gallery = $router->get_parameter( 'gallery' );
 		$album   = $router->get_parameter( 'album' );
+
+		// Array params (`?gallery[]=`) would fatal below.
+		if ( ! is_scalar( $gallery ) ) {
+			$gallery = null;
+		}
+		if ( ! is_scalar( $album ) ) {
+			$album = null;
+		}
+
 		if ( $gallery && strpos( $gallery, 'nggpage--' ) !== 0 ) {
 			// Resolve the drill-down before claiming the one-gallery-per-post slot. The
 			// alternate comes back unchanged when ?gallery= names a gallery outside this
@@ -1505,12 +1524,11 @@ class SharedController extends ParentController {
 
 		$app = $router->get_routed_app();
 
-		$ajax_pagination_referrer = $router->get_parameter( 'ajax_pagination_referrer' );
-		$pagination_result        = $this->create_pagination(
+		$pagination_result = $this->create_pagination(
 			$this->get_current_page( $displayed_gallery ),
 			$displayed_gallery->get_entity_count(),
 			$params['galleries_per_page'],
-			urldecode( $ajax_pagination_referrer ? $ajax_pagination_referrer : '' )
+			urldecode( $this->get_pagination_referrer() )
 		);
 
 		$params['displayed_gallery'] = $displayed_gallery;

@@ -15,6 +15,9 @@ use Imagely\NGG\DataStorage\Manager;
  * others decide authorization ('author', 'galleryid'). Those columns are maintained by the storage
  * manager and the upload/import routines, which is where their values are validated, so they are
  * never accepted from a property bag.
+ *
+ * The classic Other Options settings forms go through filter_settings_form(), which keeps each
+ * form's posted array to the setting names that form renders.
  */
 class MassAssignment {
 
@@ -207,44 +210,109 @@ class MassAssignment {
 		// newline would otherwise forge log entries, and a request carrying thousands of junk
 		// keys would write all of them.
 		if ( $refused ) {
-			// Nested refusals are kept in preference to top-level ones. strip_denied_nested()
-			// APPENDS its findings (display_type_settings.<type>.display_view and friends) to the
-			// end of $refused, and those are the entries the deny-list exists for - the template
-			// redirection in #932's proof of concept is one. Slicing the first N would let a
-			// request pad itself with 20 unrecognised top-level names and push the interesting
-			// refusal out of the only local trace, inverting the point of writing this line on
-			// every occurrence.
-			//
-			// Split on the recorded boundary, NOT on whether the key text contains a dot. Top-level
-			// refused keys are arbitrary names lifted from the request - the same untrusted origin
-			// this block sanitizes for - so a caller could send 20 junk keys named "a.b" and have
-			// them classified as nested, taking the reserved budget and re-opening the same hole
-			// at the cost of one character per key. Position is set by us and cannot be forged.
-			$top_level = array_slice( $refused, 0, $top_level_refused );
-			$nested    = array_slice( $refused, $top_level_refused );
-
-			$logged = array_slice( $nested, 0, self::MAX_LOGGED_REFUSED_KEYS );
-			$logged = array_merge( $logged, array_slice( $top_level, 0, self::MAX_LOGGED_REFUSED_KEYS - count( $logged ) ) );
-
-			$remainder = count( $refused ) - count( $logged );
-			$rendered  = implode( ', ', array_map( [ self::class, 'sanitize_key_for_log' ], $logged ) );
-
-			if ( $remainder > 0 ) {
-				$rendered .= sprintf( ' and %d more', $remainder );
-			}
-
-			Manager::get_instance()->log_path_refusal(
-				sprintf(
-					'NextGEN Gallery: refused to assign %s propert%s [%s] - not in the assignable allow-list',
-					$type,
-					count( $refused ) === 1 ? 'y' : 'ies',
-					$rendered
-				),
-				Manager::REFUSAL_MASS_ASSIGNMENT
-			);
+			self::log_refused( $type, $refused, $top_level_refused );
 		}
 
 		return $kept;
+	}
+
+	/**
+	 * Reduces a classic settings form's posted array to the setting names that form renders.
+	 *
+	 * The Other Options forms each post one array (image_options, thumbnail_settings,
+	 * watermark_options, misc_settings) and hand it to Settings::set(), which writes every key it
+	 * is given into the single ngg_options row (#1174). That row also holds settings none of these
+	 * forms render - the store's payment-gateway credentials among them - while the screen is gated
+	 * only on 'NextGEN Change options', which the Roles screen can delegate to any role. Keeping
+	 * each form to its own field list means a form can only change what it shows.
+	 *
+	 * A browser posting the rendered form never sends a key outside that list, so a refusal here
+	 * means the request was hand-built. It is logged like the entity refusals above and not shown
+	 * on the page.
+	 *
+	 * @param mixed      $posted  The form's posted array. Anything that is not an array yields [].
+	 * @param string     $form    The form's context, e.g. 'image_options'.
+	 * @param string[]   $keys    Setting names the form renders.
+	 * @param array|null $refused Out. Posted keys that were dropped, in the order supplied.
+	 * @return array The subset of $posted the form may save.
+	 */
+	public static function filter_settings_form( $posted, $form, array $keys, &$refused = null ) {
+		$refused = [];
+
+		if ( ! is_array( $posted ) ) {
+			if ( null !== $posted && '' !== $posted ) {
+				$refused = [ self::REFUSED_WHOLE_BAG ];
+				self::log_refused( $form . ' settings form', $refused, 1 );
+			}
+
+			return [];
+		}
+
+		/**
+		 * Filters the setting names a classic settings form may save.
+		 *
+		 * A module that adds a field to one of these forms adds its setting name here (or extends
+		 * the form's _get_assignable_keys() through an adapter), otherwise the posted value is
+		 * dropped.
+		 *
+		 * @param string[] $keys Setting names the form renders.
+		 * @param string   $form The form's context, e.g. 'image_options'.
+		 */
+		$keys = (array) apply_filters( 'ngg_settings_form_assignable_keys', $keys, $form );
+
+		$kept    = array_intersect_key( $posted, array_flip( $keys ) );
+		$refused = self::key_list( array_diff_key( $posted, $kept ) );
+
+		if ( $refused ) {
+			self::log_refused( $form . ' settings form', $refused, count( $refused ) );
+		}
+
+		return $kept;
+	}
+
+	/**
+	 * Writes one bounded log line naming the keys a filter refused.
+	 *
+	 * @param string   $subject           What was being assigned, e.g. 'gallery' or 'image_options settings form'.
+	 * @param string[] $refused           Refused keys, top-level ones first.
+	 * @param int      $top_level_refused How many leading entries of $refused are top-level keys.
+	 */
+	private static function log_refused( $subject, array $refused, $top_level_refused ) {
+		// Nested refusals are kept in preference to top-level ones. strip_denied_nested()
+		// APPENDS its findings (display_type_settings.<type>.display_view and friends) to the
+		// end of $refused, and those are the entries the deny-list exists for - the template
+		// redirection in #932's proof of concept is one. Slicing the first N would let a
+		// request pad itself with 20 unrecognised top-level names and push the interesting
+		// refusal out of the only local trace, inverting the point of writing this line on
+		// every occurrence.
+		//
+		// Split on the recorded boundary, NOT on whether the key text contains a dot. Top-level
+		// refused keys are arbitrary names lifted from the request - the same untrusted origin
+		// this block sanitizes for - so a caller could send 20 junk keys named "a.b" and have
+		// them classified as nested, taking the reserved budget and re-opening the same hole
+		// at the cost of one character per key. Position is set by us and cannot be forged.
+		$top_level = array_slice( $refused, 0, $top_level_refused );
+		$nested    = array_slice( $refused, $top_level_refused );
+
+		$logged = array_slice( $nested, 0, self::MAX_LOGGED_REFUSED_KEYS );
+		$logged = array_merge( $logged, array_slice( $top_level, 0, self::MAX_LOGGED_REFUSED_KEYS - count( $logged ) ) );
+
+		$remainder = count( $refused ) - count( $logged );
+		$rendered  = implode( ', ', array_map( [ self::class, 'sanitize_key_for_log' ], $logged ) );
+
+		if ( $remainder > 0 ) {
+			$rendered .= sprintf( ' and %d more', $remainder );
+		}
+
+		Manager::get_instance()->log_path_refusal(
+			sprintf(
+				'NextGEN Gallery: refused to assign %s propert%s [%s] - not in the assignable allow-list',
+				$subject,
+				count( $refused ) === 1 ? 'y' : 'ies',
+				$rendered
+			),
+			Manager::REFUSAL_MASS_ASSIGNMENT
+		);
 	}
 
 	/**

@@ -255,16 +255,19 @@ class nggAdmin {
 		$storage = \Imagely\NGG\DataStorage\Manager::get_instance();
 
 		// XXX NextGEN Legacy was only handling watermarks at this stage, so we're forcefully disabling all else.
+		// watermark_required: a watermark that cannot be loaded (refused path, unreachable
+		// URL, missing font) fails the operation instead of re-saving the image without one
+		// and reporting success (#1104).
 		$params = [
-			'watermark'  => true,
-			'reflection' => false,
-			'crop'       => false,
+			'watermark'          => true,
+			'watermark_required' => true,
+			'reflection'         => false,
+			'crop'               => false,
 		];
 		$result = $storage->generate_image_size( $image, 'full', $params );
 
 		if ( ! $result ) {
-			// XXX there isn't any error handling unfortunately at the moment in the generate_thumbnail functions, need a way to return proper error status.
-			return __( 'Error while applying watermark to image.', 'nggallery' );
+			return __( 'Error while applying watermark to image. Check that the watermark image or font in the watermark settings can be loaded.', 'nggallery' );
 		}
 
 		// success.

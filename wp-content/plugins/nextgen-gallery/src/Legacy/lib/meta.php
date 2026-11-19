@@ -99,7 +99,7 @@ class nggMeta {
 
 		// return one element if requested
 		if ($object) {
-			return $meta[$object];
+			return $this->maybe_escape( $meta[$object] );
 		}
 
 		// removed saved parameter we don't need that to show
@@ -113,11 +113,7 @@ class nggMeta {
 		}
 
 		// on request sanitize the output
-		if ( $this->sanitize == true ) {
-			array_walk( $meta, 'esc_html' );
-		}
-
-		return $meta;
+		return $this->maybe_escape( $meta );
 	}
 
 	/**
@@ -221,15 +217,11 @@ class nggMeta {
 		// return one element if requested
 		if ( $object == true ) {
 			$value = isset( $this->exif_array[$object] ) ? $this->exif_array[$object] : false;
-			return $value;
+			return $this->maybe_escape( $value );
 		}
 
 		// on request sanitize the output
-		if ( $this->sanitize == true ) {
-			array_walk( $this->exif_array, 'esc_html' );
-		}
-
-		return $this->exif_array;
+		return $this->maybe_escape( $this->exif_array );
 	}
 
 	/**
@@ -316,15 +308,11 @@ class nggMeta {
 
 		// return one element if requested
 		if ($object) {
-			return ( isset( $this->iptc_array[$object] ) ) ? $this->iptc_array[$object] : null;
+			return $this->maybe_escape( isset( $this->iptc_array[$object] ) ? $this->iptc_array[$object] : null );
 		}
 
 		// on request sanitize the output
-		if ( $this->sanitize == true ) {
-			array_walk( $this->iptc_array, 'esc_html' );
-		}
-
-		return $this->iptc_array;
+		return $this->maybe_escape( $this->iptc_array );
 	}
 
 	/**
@@ -473,15 +461,11 @@ class nggMeta {
 
 		// return one element if requested
 		if ($object != false ) {
-			return isset( $this->xmp_array[$object] ) ? $this->xmp_array[$object] : false;
+			return $this->maybe_escape( isset( $this->xmp_array[$object] ) ? $this->xmp_array[$object] : false );
 		}
 
 		// on request sanitize the output
-		if ( $this->sanitize == true ) {
-			array_walk( $this->xmp_array, 'esc_html' );
-		}
-
-		return $this->xmp_array;
+		return $this->maybe_escape( $this->xmp_array );
 	}
 
 	/**
@@ -660,6 +644,29 @@ class nggMeta {
 	 */
 	public function sanitize() {
 		$this->sanitize = true;
+	}
+
+	/**
+	 * HTML-escapes string meta values when sanitize() was requested.
+	 *
+	 * SECURITY (#1109): see Imagely\NGG\DataStorage\MetaData::maybe_escape(). The
+	 * old array_walk( $arr, 'esc_html' ) discarded esc_html()'s return value, so
+	 * sanitize() never escaped anything. Returns an escaped copy; the cached
+	 * arrays stay raw.
+	 *
+	 * @param mixed $value Meta value or array of values.
+	 * @return mixed
+	 */
+	protected function maybe_escape( $value ) {
+		if ( ! $this->sanitize ) {
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			return array_map( array( $this, 'maybe_escape' ), $value );
+		}
+
+		return is_string( $value ) ? esc_html( $value ) : $value;
 	}
 
 	/**

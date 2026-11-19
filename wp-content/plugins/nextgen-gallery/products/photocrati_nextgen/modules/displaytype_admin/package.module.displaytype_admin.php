@@ -144,7 +144,7 @@ class Mixin_Display_Type_Form extends Mixin
      * @param bool   $in_footer
      * @param string $version
      */
-    public function enqueue_script($handle, $source = '', $dependencies = array(), $in_footer = false, $version = NGG_SCRIPT_VERSION)
+    public function enqueue_script($handle, $source = '', $dependencies = [], $in_footer = false, $version = NGG_SCRIPT_VERSION)
     {
         wp_enqueue_script($handle, $source, $dependencies, $version, $in_footer);
     }
@@ -159,7 +159,7 @@ class Mixin_Display_Type_Form extends Mixin
      * @param string $media
      * @param string $version
      */
-    public function enqueue_style($handle, $source = '', $dependencies = array(), $media = 'all', $version = NGG_SCRIPT_VERSION)
+    public function enqueue_style($handle, $source = '', $dependencies = [], $media = 'all', $version = NGG_SCRIPT_VERSION)
     {
         wp_enqueue_style($handle, $source, $dependencies, $version, $media);
     }
@@ -201,7 +201,7 @@ class Mixin_Display_Type_Form extends Mixin
      * @param array $attributes
      * @return boolean
      */
-    public function save_action($attributes = array())
+    public function save_action($attributes = [])
     {
         $model = $this->object->get_model();
         if ($model) {
@@ -296,7 +296,7 @@ class Mixin_Display_Type_Form extends Mixin
             }
             /* Scan for template files and create array */
             $files = scandir($dir);
-            $template_files = preg_grep('/^.+\\-(template|view).php$/i', $files);
+            $template_files = preg_grep('/^.+\-(template|view).php$/i', $files);
             $template_files = $template_files ? array_combine($template_files, $template_files) : [];
             /* For custom templates only, append directory name placeholder */
             foreach ($template_files as $key => $value) {

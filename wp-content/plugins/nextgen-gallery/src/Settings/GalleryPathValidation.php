@@ -81,6 +81,18 @@ class GalleryPathValidation {
 			);
 		}
 
+		// On multisite, "under the galleries root" still admits another subsite's uploads tree:
+		// a main-site administrator could set `uploads/sites/3` here, and a gallery titled `2026`
+		// then has `uploads/sites/3/2026` derived for it server-side, so deleting that gallery
+		// removes subsite 3's media. Refused at the writer as well as on the deletion side, which
+		// is where DataStorage\Manager::path_targets_another_site() is also consulted.
+		if ( \Imagely\NGG\DataStorage\Manager::get_instance()->path_targets_another_site( $gallery_abspath ) ) {
+			return new WP_Error(
+				'invalid_gallerypath',
+				__( 'Gallery path may not point inside another site\'s uploads directory.', 'nggallery' )
+			);
+		}
+
 		return true;
 	}
 }

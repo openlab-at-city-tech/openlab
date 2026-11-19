@@ -104,6 +104,20 @@ class A_Image_Options_Form extends Mixin
         return __('Image Options', 'nggallery');
     }
     /**
+     * Setting names this form renders, and so the only ones save_action() may write.
+     *
+     * Every key the posted array carries is written into ngg_options, the same row that holds
+     * the store's payment-gateway credentials, so anything not listed here is dropped (#1174).
+     * 'gallerypath' is rendered only on a single site, the main site or for a super admin;
+     * save_action() applies the same rule.
+     *
+     * @return string[]
+     */
+    public function _get_assignable_keys()
+    {
+        return ['gallerypath', 'deleteImg', 'activateTags', 'appendType', 'maxImages', 'relatedHeading', 'galSort', 'galSortDir', 'imgAutoResize', 'imgWidth', 'imgHeight', 'imgQuality', 'imgBackup'];
+    }
+    /**
      * Returns the options available for sorting images
      *
      * @return array
@@ -158,6 +172,7 @@ class A_Image_Options_Form extends Mixin
     public function save_action($image_options)
     {
         $save = true;
+        $image_options = \Imagely\NGG\Util\MassAssignment::filter_settings_form($image_options, 'image_options', $this->object->_get_assignable_keys());
         if ($image_options) {
             // Update the gallery path. Moves all images to the new location.
             if (isset($image_options['gallerypath']) && (!is_multisite() || is_main_site() || is_super_admin())) {
@@ -206,6 +221,9 @@ class A_Image_Options_Form extends Mixin
                         break;
                 }
             }
+            // Watermark values are saved by the Watermarks form, through its validator (#1084);
+            // never accept them from this form's request.
+            unset($image_options['wmPath'], $image_options['wmFont']);
             // Update image options.
             if ($save) {
                 $this->object->get_model()->set($image_options)->save();
@@ -226,7 +244,7 @@ class A_Image_Options_Form extends Mixin
         @mkdir($dst);
         // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_mkdir, WordPress.PHP.NoSilencedErrors.Discouraged
         // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-        while (false !== ($file = readdir($dir))) {
+        while (false !== $file = readdir($dir)) {
             if ($file != '.' && $file != '..') {
                 if (is_dir($src . '/' . $file)) {
                     if (!$this->object->recursive_copy($src . '/' . $file, $dst . '/' . $file)) {
@@ -253,7 +271,7 @@ class A_Image_Options_Form extends Mixin
         $retval = false;
         $fp = opendir($dir);
         // phpcs:ignore Generic.CodeAnalysis.AssignmentInCondition.FoundInWhileCondition
-        while (false !== ($file = readdir($fp))) {
+        while (false !== $file = readdir($fp)) {
             if ($file != '.' && $file != '..') {
                 $file = $dir . '/' . $file;
                 if (is_dir($file)) {
@@ -357,6 +375,21 @@ class A_Miscellaneous_Form extends Mixin
     {
         return __('Miscellaneous', 'nggallery');
     }
+    /**
+     * Setting names this form renders, and so the only ones save_action() may write.
+     *
+     * Every key the posted array carries is written into ngg_options, the same row that holds
+     * the store's payment-gateway credentials, so anything not listed here is dropped (#1174).
+     *
+     * useMediaRSS and galleries_in_feeds come from misc_tab.php, the rest from the _render_*_field()
+     * calls in render().
+     *
+     * @return string[]
+     */
+    public function _get_assignable_keys()
+    {
+        return ['useMediaRSS', 'galleries_in_feeds', 'router_param_slug', 'maximum_entity_count', 'random_widget_cache_ttl', 'use_alternate_random_method', 'disable_fontawesome', 'disable_ngg_tags_page', 'dynamic_image_filename_separator_use_dash'];
+    }
     public function enqueue_static_resources()
     {
         wp_enqueue_script('ngg-progressbar');
@@ -380,7 +413,7 @@ class A_Miscellaneous_Form extends Mixin
          *
          * @var array $settings
          */
-        $settings = $this->object->param('misc_settings');
+        $settings = \Imagely\NGG\Util\MassAssignment::filter_settings_form($this->object->param('misc_settings'), 'miscellaneous', $this->object->_get_assignable_keys());
         if ($settings) {
             // The Media RSS setting is actually a local setting, not a global one.
             $local_settings = \Imagely\NGG\Settings\Settings::get_instance();
@@ -402,6 +435,9 @@ class A_Miscellaneous_Form extends Mixin
             if ($settings['maximum_entity_count'] <= 0) {
                 $settings['maximum_entity_count'] = 500;
             }
+            // Watermark values are saved by the Watermarks form, through its validator (#1084);
+            // never accept them from this form's request.
+            unset($settings['wmPath'], $settings['wmFont']);
             // Save both setting groups.
             $this->object->get_model()->set($settings)->save();
             $local_settings->save();
@@ -572,6 +608,22 @@ class A_Thumbnail_Options_Form extends Mixin
     {
         return __('Thumbnail Options', 'nggallery');
     }
+    /**
+     * Setting names this form renders, and so the only ones save_action() may write.
+     *
+     * Every key the posted array carries is written into ngg_options, the same row that holds
+     * the store's payment-gateway credentials, so anything not listed here is dropped (#1174).
+     *
+     * thumbwidth and thumbheight are rendered by src/Legacy/admin/thumbnails-template.php, which
+     * thumbnail_options_tab.php includes with these field names. The template's thumbquality field
+     * is commented out, so it is not listed.
+     *
+     * @return string[]
+     */
+    public function _get_assignable_keys()
+    {
+        return ['thumbwidth', 'thumbheight', 'thumbfix'];
+    }
     public function render()
     {
         $settings = $this->object->get_model();
@@ -579,7 +631,7 @@ class A_Thumbnail_Options_Form extends Mixin
     }
     public function save_action()
     {
-        $settings = $this->object->param('thumbnail_settings');
+        $settings = \Imagely\NGG\Util\MassAssignment::filter_settings_form($this->object->param('thumbnail_settings'), 'thumbnail_options', $this->object->_get_assignable_keys());
         if ($settings) {
             // Sanitize.
             foreach ($settings as $key => &$value) {
@@ -604,6 +656,14 @@ class A_Watermarking_Ajax_Actions extends Mixin
      */
     public function get_watermark_preview_url_action()
     {
+        // SECURITY: verify a nonce in addition to the capability check. Without it this
+        // handler is CSRF-reachable: a request forged against a logged-in settings-capable
+        // user would render a preview with an attacker-chosen watermark path. The sibling
+        // handlers in this module already pair a capability with a nonce.
+        $nonce = isset($_REQUEST['watermark_preview_nonce']) ? sanitize_text_field(wp_unslash($_REQUEST['watermark_preview_nonce'])) : '';
+        if (!wp_verify_nonce($nonce, 'ngg_watermark_preview')) {
+            return ['thumbnail_url' => '', 'error' => __('Your session has expired. Reload the page and try again.', 'nggallery')];
+        }
         if (\Imagely\NGG\Util\Security::is_allowed('nextgen_edit_settings')) {
             $imagegen = \Imagely\NGG\DynamicThumbnails\Manager::get_instance();
             $mapper = \Imagely\NGG\DataMappers\Image::get_instance();
@@ -615,7 +675,22 @@ class A_Watermarking_Ajax_Actions extends Mixin
              * @var array $watermark_options
              */
             $watermark_options = $this->param('watermark_options');
-            $sizeinfo = ['crop' => false, 'height' => 250, 'quality' => 100, 'watermark' => true, 'wmColor' => trim(esc_sql($watermark_options['wmColor'])), 'wmFont' => trim(esc_sql($watermark_options['wmFont'])), 'wmOpaque' => intval(trim($watermark_options['wmOpaque'])), 'wmPath' => trim(esc_sql($watermark_options['wmPath'])), 'wmPos' => trim(esc_sql($watermark_options['wmPos'])), 'wmSize' => intval(trim($watermark_options['wmSize'])), 'wmText' => trim(esc_sql($watermark_options['wmText'])), 'wmType' => trim(esc_sql($watermark_options['wmType'])), 'wmXpos' => intval(trim($watermark_options['wmXpos'])), 'wmYpos' => intval(trim($watermark_options['wmYpos']))];
+            if (!is_array($watermark_options)) {
+                $watermark_options = [];
+            }
+            // A refused image path would otherwise render a preview with no watermark and
+            // no reason; say why, as the REST preview does.
+            $wm_path_raw = isset($watermark_options['wmPath']) && is_string($watermark_options['wmPath']) ? trim($watermark_options['wmPath']) : '';
+            $wm_path = \Imagely\NGG\Util\Security::sanitize_watermark_option('wmPath', $wm_path_raw);
+            if ('image' === ($watermark_options['wmType'] ?? '') && '' !== $wm_path_raw && '' === $wm_path) {
+                return ['thumbnail_url' => '', 'error' => __('Watermark image path is not allowed.', 'nggallery')];
+            }
+            $wm_font_raw = isset($watermark_options['wmFont']) && is_string($watermark_options['wmFont']) ? trim($watermark_options['wmFont']) : '';
+            $wm_font = \Imagely\NGG\Util\Security::sanitize_watermark_option('wmFont', $wm_font_raw);
+            if ('text' === ($watermark_options['wmType'] ?? '') && '' !== $wm_font_raw && '' === $wm_font) {
+                return ['thumbnail_url' => '', 'error' => __('Watermark font is not allowed.', 'nggallery')];
+            }
+            $sizeinfo = ['crop' => false, 'height' => 250, 'quality' => 100, 'watermark' => true, 'wmColor' => trim(esc_sql($watermark_options['wmColor'])), 'wmFont' => $wm_font, 'wmOpaque' => intval(trim($watermark_options['wmOpaque'])), 'wmPath' => $wm_path, 'wmPos' => trim(esc_sql($watermark_options['wmPos'])), 'wmSize' => intval(trim($watermark_options['wmSize'])), 'wmText' => trim(esc_sql($watermark_options['wmText'])), 'wmType' => trim(esc_sql($watermark_options['wmType'])), 'wmXpos' => intval(trim($watermark_options['wmXpos'])), 'wmYpos' => intval(trim($watermark_options['wmYpos']))];
             $size = $imagegen->get_size_name($sizeinfo);
             if (empty($image)) {
                 return ['thumbnail_url' => '', 'error' => 'Could not find image to generate preview for'];
@@ -647,6 +722,23 @@ class A_Watermarks_Form extends Mixin
     public function get_title()
     {
         return __('Watermarks', 'nggallery');
+    }
+    /**
+     * Setting names this form renders, and so the only ones save_action() may write.
+     *
+     * Every key the posted array carries is written into ngg_options, the same row that holds
+     * the store's payment-gateway credentials, so anything not listed here is dropped (#1174).
+     *
+     * wmPath comes from _render_watermark_image_fields() and wmText, wmOpaque, wmFont, wmSize and
+     * wmColor from _render_watermark_text_fields(). Both are always rendered; the page script only
+     * shows the one matching wmType. An adapter that adds a watermark source through
+     * _get_watermark_sources() must add its fields here too.
+     *
+     * @return string[]
+     */
+    public function _get_assignable_keys()
+    {
+        return ['watermark_automatically_at_upload', 'wmType', 'wmPos', 'wmXpos', 'wmYpos', 'wmPath', 'wmText', 'wmOpaque', 'wmFont', 'wmSize', 'wmColor'];
     }
     /**
      * Gets all fonts installed for watermarking
@@ -744,7 +836,30 @@ class A_Watermarks_Form extends Mixin
          */
         $settings = $this->get_model();
         $image = $this->object->_get_preview_image();
-        return $this->render_partial('photocrati-nextgen_other_options#watermarks_tab', ['watermark_automatically_at_upload_value' => $settings->get('watermark_automatically_at_upload', 0), 'watermark_automatically_at_upload_label' => __('Automatically watermark images during upload:', 'nggallery'), 'watermark_automatically_at_upload_label_yes' => __('Yes', 'nggallery'), 'watermark_automatically_at_upload_label_no' => __('No', 'nggallery'), 'notice' => __('Please note: You can only activate the watermark under Manage Gallery. This action cannot be undone.', 'nggallery'), 'watermark_source_label' => __('How will you generate a watermark?', 'nggallery'), 'watermark_sources' => $this->object->_get_watermark_sources(), 'watermark_fields' => $this->object->_get_watermark_source_fields($settings), 'watermark_source' => $settings->get('wmType'), 'position_label' => __('Position:', 'nggallery'), 'position' => $settings->get('wmPos'), 'offset_label' => __('Offset:', 'nggallery'), 'offset_x' => $settings->get('wmXpos'), 'offset_y' => $settings->get('wmYpos'), 'hidden_label' => __('(Show Customization Options)', 'nggallery'), 'active_label' => __('(Hide Customization Options)', 'nggallery'), 'thumbnail_url' => $image['url'], 'preview_label' => __('Preview of saved settings:', 'nggallery'), 'refresh_label' => __('Refresh preview image', 'nggallery'), 'refresh_url' => $settings->get('ajax_url')], true);
+        return $this->render_partial('photocrati-nextgen_other_options#watermarks_tab', ['watermark_automatically_at_upload_value' => $settings->get('watermark_automatically_at_upload', 0), 'watermark_automatically_at_upload_label' => __('Automatically watermark images during upload:', 'nggallery'), 'watermark_automatically_at_upload_label_yes' => __('Yes', 'nggallery'), 'watermark_automatically_at_upload_label_no' => __('No', 'nggallery'), 'notice' => __('Please note: You can only activate the watermark under Manage Gallery. This action cannot be undone.', 'nggallery'), 'watermark_source_label' => __('How will you generate a watermark?', 'nggallery'), 'watermark_sources' => $this->object->_get_watermark_sources(), 'watermark_fields' => $this->object->_get_watermark_source_fields($settings), 'watermark_source' => $settings->get('wmType'), 'position_label' => __('Position:', 'nggallery'), 'position' => $settings->get('wmPos'), 'offset_label' => __('Offset:', 'nggallery'), 'offset_x' => $settings->get('wmXpos'), 'offset_y' => $settings->get('wmYpos'), 'hidden_label' => __('(Show Customization Options)', 'nggallery'), 'active_label' => __('(Hide Customization Options)', 'nggallery'), 'thumbnail_url' => $image['url'], 'preview_label' => __('Preview of saved settings:', 'nggallery'), 'refresh_label' => __('Refresh preview image', 'nggallery'), 'refresh_url' => $settings->get('ajax_url'), 'preview_nonce' => wp_create_nonce('ngg_watermark_preview'), 'stored_refused_message' => $this->object->_get_stored_refused_message($settings)], true);
+    }
+    /**
+     * Warns when the stored watermark image path or font is one the validator now refuses.
+     *
+     * Such a value (saved before #1084, or written straight to the options) is kept so the
+     * other tabs still save, but the renderers skip it: new thumbnails get no watermark.
+     * Say so on every visit, not only after a save (#1125 review).
+     *
+     * @param object $settings Settings model.
+     * @return string Message, or '' when the active watermark source is valid.
+     */
+    public function _get_stored_refused_message($settings)
+    {
+        $type = (string) $settings->get('wmType', '');
+        $key = 'image' === $type ? 'wmPath' : ('text' === $type ? 'wmFont' : '');
+        if ('' === $key) {
+            return '';
+        }
+        $stored = trim((string) $settings->get($key, ''));
+        if ('' === $stored || '' !== \Imagely\NGG\Util\Security::sanitize_watermark_option($key, $stored)) {
+            return '';
+        }
+        return 'wmPath' === $key ? __('The saved watermark image path is not allowed, so images are not being watermarked. Choose a file inside your WordPress install or an http(s) URL.', 'nggallery') : __('The saved watermark font is not allowed, so images are not being watermarked. Choose a font from the list.', 'nggallery');
     }
     /**
      * Save the form action.
@@ -756,8 +871,11 @@ class A_Watermarks_Form extends Mixin
             require_once ABSPATH . '/wp-admin/includes/file.php';
             WP_Filesystem();
         }
-        $settings = $this->object->param('watermark_options');
-        if (is_array($settings)) {
+        $settings = \Imagely\NGG\Util\MassAssignment::filter_settings_form($this->object->param('watermark_options'), 'watermarks', $this->object->_get_assignable_keys());
+        $refused = [];
+        $kept = [];
+        // An absent or non-array post filters to [], which must not save or drop the preview image.
+        if ($settings) {
             // Sanitize.
             foreach ($settings as $key => &$value) {
                 switch ($key) {
@@ -778,7 +896,33 @@ class A_Watermarks_Form extends Mixin
                     case 'wmText':
                         $value = \Imagely\NGG\DataStorage\Sanitizer::strip_html($value);
                         break;
+                    case 'wmPath':
+                    case 'wmFont':
+                        // SECURITY (#1084): same validator as the REST settings route.
+                        $submitted = is_string($value) ? trim($value) : '';
+                        $value = \Imagely\NGG\Util\Security::sanitize_watermark_option($key, $value);
+                        if ('' !== $submitted && '' === $value) {
+                            // Keep the stored value rather than blanking it (a blank image path
+                            // with wmType=image blocks saving the other tabs, #487). Report it
+                            // only when the admin changed it: the form posts the stored value on
+                            // every save, and a pre-existing refused path would nag each time.
+                            $stored = trim((string) \Imagely\NGG\Settings\Settings::get_instance()->get($key, ''));
+                            if ($submitted === $stored) {
+                                $kept[] = $key;
+                            } else {
+                                $refused[] = $key;
+                            }
+                        }
+                        break;
                 }
+            }
+            unset($value);
+            foreach ($kept as $kept_key) {
+                unset($settings[$kept_key]);
+            }
+            foreach ($refused as $refused_key) {
+                unset($settings[$refused_key]);
+                $this->object->get_model()->add_error('wmPath' === $refused_key ? __('Watermark image path is not allowed. It must be a file inside your WordPress install or an http(s) URL.', 'nggallery') : __('Watermark font is not allowed.', 'nggallery'), $refused_key);
             }
             $this->object->get_model()->set($settings)->save();
             $image = $this->object->_get_preview_image();
@@ -802,11 +946,18 @@ class C_Settings_Model extends C_Component
      */
     public $wrapper = null;
     /**
+     * Validation errors added by the settings forms (Mixin_Validation). A real property:
+     * through __set() they would land in the settings wrapper and be lost (#1084).
+     *
+     * @var array
+     */
+    public $_errors = [];
+    /**
      * Instances cache.
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     /**
      * Gets an instance of the settings model.
      *

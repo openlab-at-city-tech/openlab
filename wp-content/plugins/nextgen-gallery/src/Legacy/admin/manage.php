@@ -428,7 +428,12 @@ class nggManageGallery {
 	}
 
 	public function render_recover_action_link( $id, $picture ) {
-		if ( ! file_exists( $picture->imagePath . '_backup' ) ) {
+		// Resolved rather than derived from imagePath: since #1107 the original lives under the
+		// originals root, so testing the sibling path alone would hide the Recover link for every
+		// image whose master has been relocated.
+		$backup = \Imagely\NGG\DataStorage\Manager::get_instance()->resolve_backup_abspath( $picture->pid );
+
+		if ( empty( $backup ) || ! file_exists( $backup ) ) {
 			return false;
 		}
 

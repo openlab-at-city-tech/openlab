@@ -1140,6 +1140,63 @@ class API {
 	public $_start_time;
 
 	/**
+	 * The target gallery's directory when get_staging_gallery_base() refused it because
+	 * another gallery claims it, else ''. Only used to word the per-image error.
+	 *
+	 * @var string
+	 */
+	protected $staging_base_overlap = '';
+
+	/**
+	 * The target gallery's directory when get_staging_gallery_base() refused it because the
+	 * Gallery Path setting is a shared folder (see is_shared_gallery_path_base()), else ''.
+	 * Only used to word the per-image error.
+	 *
+	 * @var string
+	 */
+	protected $staging_base_shared = '';
+
+	/**
+	 * The target gallery's directory when get_staging_gallery_base() refused it because the
+	 * gallery table could not be read to check which gallery owns it, else ''. Only used to
+	 * word the per-image error.
+	 *
+	 * @var string
+	 */
+	protected $staging_base_error = '';
+
+	/**
+	 * Per-job context for is_in_another_gallery_dir(), set by get_staging_gallery_base():
+	 * the job's gallery id, the storage manager, and the other galleries' directory forms
+	 * (null until read, false when the read failed).
+	 *
+	 * @var int
+	 */
+	protected $staging_gallery_id = 0;
+
+	/**
+	 * The job's StorageManager, see $staging_gallery_id.
+	 *
+	 * @var object|null
+	 */
+	protected $staging_storage = null;
+
+	/**
+	 * The other galleries' directory forms, see $staging_gallery_id.
+	 *
+	 * @var string[]|false|null
+	 */
+	protected $staging_other_dirs = null;
+
+	/**
+	 * The staged path is_staged_image_path() refused because it sits inside another
+	 * gallery's directory, else ''. Only used to word the per-image error.
+	 *
+	 * @var string
+	 */
+	protected $staging_file_claimed = '';
+
+	/**
 	 * Gets an API instance.
 	 *
 	 * @param bool|string $context
@@ -2413,7 +2470,7 @@ class API {
 	 * @param object      $wp_fs         WP_Filesystem instance.
 	 * @return bool
 	 */
-	protected function is_staged_image_path( $image_path, $images_folder, $wp_fs ): bool {
+	protected function is_staged_image_path( $image_path, $images_folder, $wp_fs, $gallery_base = null ): bool {
 		if ( ! is_string( $image_path ) || ! $this->is_safe_path_string( $image_path ) ) {
 			return false;
 		}
@@ -2428,7 +2485,462 @@ class API {
 			return true;
 		}
 
+		// SECURITY (#1086): on a direct filesystem the staged path must also sit inside
+		// a server-derived staging root (the gallery base or the client's default
+		// wp-content/ngg/lightroom, see is_within_staging_base()), not merely inside the
+		// caller-supplied $images_folder (which the request controls). contain_path() adds a realpath()
+		// symlink pass the lexical is_path_within() above lacks, and returns null for any
+		// path outside the base, so a job cannot steer the read-and-delete at files
+		// elsewhere under wp-content (the media library, other galleries). When a base is
+		// supplied it is required: an empty base means the server could not derive a
+		// staging root, so fail closed rather than revert to the caller-string-only
+		// check. $gallery_base is null only for legacy callers that pass no base.
+		if ( null !== $gallery_base && ! $this->is_within_staging_base( $image_path, $gallery_base ) ) {
+			return false;
+		}
+
+		// Inside a staging root is not ownership: the file must not sit in another gallery's
+		// directory either (see is_in_another_gallery_dir()).
+		if ( null !== $gallery_base && $this->is_in_another_gallery_dir( $image_path ) ) {
+			$this->staging_file_claimed = (string) $image_path;
+
+			return false;
+		}
+
 		return $this->is_valid_filename( $image_path );
+	}
+
+	/**
+	 * The target gallery's storage directory as a staging root, or '' when it is not one.
+	 *
+	 * SECURITY (#1086): the gallery's stored `path` is writable by its manager (legacy
+	 * Manage Gallery, keep-location folder import), so it can be pointed at the media
+	 * library. Accept it only where deleting the gallery's own directory is allowed:
+	 * strictly inside the NextGEN gallery base and not a protected directory. There is
+	 * no fallback to the galleries root, which may be the whole site. '' leaves only the
+	 * client's default wp-content/ngg/lightroom root (see is_within_staging_base()).
+	 *
+	 * Inside the base is not ownership: a manager can point their gallery at another
+	 * gallery's directory (#1085), and a keep-location import can nest one gallery's
+	 * directory in another's. A base that another gallery row resolves to, contains, or
+	 * sits inside is refused too, so a job cannot read, republish or delete that
+	 * gallery's files. Such a gallery still publishes through the default root.
+	 *
+	 * @param object          $storage StorageManager instance.
+	 * @param object|int|null $gallery Target gallery.
+	 * @return string
+	 */
+	protected function get_staging_gallery_base( $storage, $gallery ): string {
+		$this->staging_base_overlap = '';
+		$this->staging_base_shared  = '';
+		$this->staging_base_error   = '';
+		$this->staging_file_claimed = '';
+		$this->staging_other_dirs   = null;
+		$this->staging_storage      = $storage;
+		$this->staging_gallery_id   = is_object( $gallery ) ? (int) ( isset( $gallery->gid ) ? $gallery->gid : 0 ) : (int) $gallery;
+
+		if ( null == $gallery ) {
+			return '';
+		}
+
+		$gallery_base = $storage->get_gallery_abspath( $gallery );
+
+		if ( ! is_string( $gallery_base ) || ! $storage->is_gallery_directory_deletable( $gallery_base ) ) {
+			return '';
+		}
+
+		if ( $this->is_shared_gallery_path_base( $storage ) ) {
+			$this->staging_base_shared = $gallery_base;
+			return '';
+		}
+
+		// Without an id the gallery's own row would count as a conflict: fail closed.
+		$gallery_id = is_object( $gallery ) ? ( isset( $gallery->gid ) ? $gallery->gid : 0 ) : $gallery;
+
+		$claim = $this->get_staging_base_claim( $storage, $gallery_base, (int) $gallery_id );
+
+		if ( 'overlap' === $claim ) {
+			$this->staging_base_overlap = $gallery_base;
+		} elseif ( 'error' === $claim ) {
+			$this->staging_base_error = $gallery_base;
+		}
+
+		return '' === $claim ? $gallery_base : '';
+	}
+
+	/**
+	 * Whether a gallery other than the job's own claims a staging base: its directory equals
+	 * the base, contains it, or sits inside it.
+	 *
+	 * SECURITY (#1085/#1086): inside the gallery base is not ownership. Two galleries may hold
+	 * the same `path` (legacy Manage Gallery relocation, keep-location folder import), so a
+	 * manager could point their gallery at another gallery's folder and have a job read and
+	 * delete that gallery's files. Kept here rather than in StorageManager, because #1143 adds
+	 * its own Manager::directory_belongs_to_another_gallery() and two copies of one method in
+	 * that class would be a fatal "cannot redeclare" once both PRs are merged.
+	 *
+	 * A gallery row with an empty `path` resolves to the galleries root, which holds none of
+	 * its files under a dedicated base, so it is not counted as a claim on every directory.
+	 *
+	 * Fails closed: an unresolvable base, or a gallery table read that errored, is a claim.
+	 *
+	 * @param object $storage    StorageManager instance.
+	 * @param string $base       Candidate staging base (the job's gallery directory).
+	 * @param int    $gallery_id The job's gallery; its own row is not a claim.
+	 * @return string '' when unclaimed, 'overlap' when another gallery claims it, 'error' when
+	 *                the claim could not be checked.
+	 */
+	protected function get_staging_base_claim( $storage, $base, $gallery_id ): string {
+		$base_forms = $this->fold_path_forms( $this->resolve_path_forms( (string) $base ) );
+
+		if ( empty( $base_forms ) ) {
+			return 'error';
+		}
+
+		$other_dirs = $this->get_other_gallery_dirs( $storage, $gallery_id );
+
+		if ( false === $other_dirs ) {
+			return 'error';
+		}
+
+		foreach ( $other_dirs as $other ) {
+			foreach ( $base_forms as $target ) {
+				// The same folder, or a base that holds another gallery's folder, is a claim.
+				// A base below another gallery's folder is one only inside that gallery's own
+				// thumbs/, cache/ or dynamic/ subfolders: a gallery keeps no files deeper, and
+				// an ancestor row (an old path of wp-content/, say) must not claim every
+				// gallery folder below it.
+				if ( $other === $target || 0 === strpos( $other, $target . '/' ) ) {
+					return 'overlap';
+				}
+
+				foreach ( [ 'thumbs', 'cache', 'dynamic' ] as $sub ) {
+					if ( $target === $other . '/' . $sub || 0 === strpos( $target, $other . '/' . $sub . '/' ) ) {
+						return 'overlap';
+					}
+				}
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Whether a staged file sits among the files of a gallery other than the job's own.
+	 *
+	 * SECURITY (#1086): the default wp-content/ngg/lightroom root is accepted for every job,
+	 * and a keep-location folder import can make a directory under it some gallery's
+	 * folder. Without this test a job could read and delete that gallery's images through
+	 * the default root. Fails closed when the gallery table could not be read.
+	 *
+	 * @param string $path Staged file path.
+	 * @return bool
+	 */
+	protected function is_in_another_gallery_dir( $path ): bool {
+		if ( null === $this->staging_storage ) {
+			return false;
+		}
+
+		$other_dirs = $this->get_other_gallery_dirs( $this->staging_storage, $this->staging_gallery_id );
+
+		if ( false === $other_dirs ) {
+			return true;
+		}
+
+		// Only where a gallery keeps its own files: directly in its folder, or in its
+		// thumbs/, cache/ or dynamic/ subfolders. An ancestor folder (an old row whose path
+		// is wp-content/, say) does not claim every directory below it, which would refuse
+		// every publish through the default root.
+		foreach ( $this->fold_path_forms( $this->resolve_path_forms( (string) $path ) ) as $form ) {
+			$parent = dirname( $form );
+
+			foreach ( $other_dirs as $other ) {
+				if ( $parent === $other ) {
+					return true;
+				}
+
+				foreach ( [ 'thumbs', 'cache', 'dynamic' ] as $sub ) {
+					if ( $parent === $other . '/' . $sub || 0 === strpos( $parent, $other . '/' . $sub . '/' ) ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * The directory forms of every gallery except $gallery_id, read once per job.
+	 *
+	 * A gallery row with an empty `path` resolves to the galleries root, which holds none of
+	 * its files under a dedicated base, so it is left out rather than counted as a claim on
+	 * every directory.
+	 *
+	 * @param object $storage    StorageManager instance.
+	 * @param int    $gallery_id The job's gallery; its own row is left out.
+	 * @return string[]|false False when the gallery table could not be read (fail closed).
+	 */
+	protected function get_other_gallery_dirs( $storage, $gallery_id ) {
+		global $wpdb;
+
+		if ( null !== $this->staging_other_dirs && (int) $gallery_id === $this->staging_gallery_id ) {
+			return $this->staging_other_dirs;
+		}
+
+		$dirs = false;
+
+		if ( ! isset( $wpdb ) || ! $wpdb->ready ) {
+			$this->log_once( 'staging_claim_no_db', 'NextGEN Gallery: Lightroom could not read the gallery table to check the staging folder, so staged files were refused.' );
+		} else {
+			$table = GalleryMapper::get_instance()->get_table_name();
+
+			$wpdb->last_error = '';
+
+			// Table name resolved from the mapper, never from input; there is nothing else to prepare.
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$rows = $wpdb->get_results( "SELECT `gid`, `path` FROM `{$table}`" );
+
+			if ( '' !== (string) $wpdb->last_error ) {
+				$this->log_once(
+					'staging_claim_db_error',
+					'NextGEN Gallery: Lightroom could not read the gallery table to check the staging folder, so staged files were refused: ' . wp_strip_all_tags( (string) $wpdb->last_error, true )
+				);
+			} else {
+				$dirs = [];
+
+				foreach ( (array) $rows as $row ) {
+					if ( (int) $row->gid === (int) $gallery_id ) {
+						continue;
+					}
+
+					$path = isset( $row->path ) ? trim( (string) $row->path ) : '';
+
+					if ( '' === trim( $path, '/\\.' ) ) {
+						continue;
+					}
+
+					$other_dir = $storage->get_computed_gallery_abspath( (object) [ 'path' => $path ] );
+
+					if ( is_string( $other_dir ) && '' !== $other_dir ) {
+						$dirs = array_merge( $dirs, $this->fold_path_forms( $this->resolve_path_forms( $other_dir ) ) );
+					}
+				}
+
+				$dirs = array_values( array_unique( $dirs ) );
+			}
+		}
+
+		if ( (int) $gallery_id === $this->staging_gallery_id ) {
+			$this->staging_other_dirs = $dirs;
+		}
+
+		return $dirs;
+	}
+
+	/**
+	 * Drops empty forms and lowercases them, on every OS.
+	 *
+	 * SECURITY (#1086): every caller compares these forms to refuse a path (another gallery's
+	 * folder, a claimed staging base, a shared Gallery Path), so folding can only refuse more.
+	 * Folding on Windows alone missed case-insensitive POSIX filesystems (macOS, Docker
+	 * Desktop and CIFS mounts), where realpath() keeps the casing it was given: a staged
+	 * `ngg/lightroom/FOO/` passed the check against a gallery stored at `ngg/lightroom/foo/`.
+	 * is_code_directory_path() folds on every OS for the same reason (#1029).
+	 *
+	 * @param string[] $forms
+	 * @return string[]
+	 */
+	protected function fold_path_forms( array $forms ): array {
+		$forms = array_values( array_filter( $forms, 'strlen' ) );
+
+		return array_map( 'strtolower', $forms );
+	}
+
+	/**
+	 * Whether the NextGEN Gallery Path setting points at a shared folder rather than a
+	 * dedicated gallery folder.
+	 *
+	 * SECURITY (#1086): is_gallery_directory_deletable() only requires a gallery directory
+	 * strictly inside the Gallery Path base. GalleryPathValidation accepts
+	 * `wp-content/uploads/`, `wp-content/` or a date folder such as `wp-content/uploads/2026/`
+	 * as that base, and then every media library folder is "inside the gallery base", so a
+	 * gallery repointed at `uploads/2026/10` became a staging root whose files a publish
+	 * read and deleted. The base is refused when it is the uploads base, wp-content, the
+	 * storage root or the WordPress root, or when everything below the uploads base is
+	 * numeric (WordPress's own year/month folders). The same rule as #1143's
+	 * is_gallery_directory_deletable(). Dedicated bases (`wp-content/gallery/`,
+	 * `wp-content/uploads/gallery/` on WP VIP) stay accepted; a refused site still
+	 * publishes through the default wp-content/ngg/lightroom root. On multisite the
+	 * network uploads root, the `sites/` container and other sites' folders are refused too.
+	 *
+	 * @param object $storage StorageManager instance.
+	 * @return bool True when the base is shared or cannot be resolved (fails closed).
+	 */
+	protected function is_shared_gallery_path_base( $storage ): bool {
+		$base = $storage->get_upload_abspath();
+
+		if ( ! is_string( $base ) || '' === trim( $base ) ) {
+			return true;
+		}
+
+		$wp_upload = wp_get_upload_dir();
+		$uploads   = isset( $wp_upload['basedir'] ) ? wp_normalize_path( (string) $wp_upload['basedir'] ) : '';
+
+		// On a multisite subsite the uploads base is uploads/sites/<id>; the network's
+		// uploads root above it, and the sites/ container, are shared folders too.
+		$network = '';
+		if ( '' !== $uploads && $this->is_multisite_install() ) {
+			$network = (string) preg_replace( '#/sites/[0-9]+/?$#', '', $uploads );
+		}
+
+		$shared = array_filter( [ $uploads, $network, WP_CONTENT_DIR, (string) $storage->get_gallery_root(), ABSPATH ] );
+
+		$shared_forms = [];
+		foreach ( $shared as $dir ) {
+			$shared_forms = array_merge( $shared_forms, $this->resolve_path_forms( $dir ) );
+		}
+
+		$shared_forms  = $this->fold_path_forms( $shared_forms );
+		$upload_forms  = '' !== $uploads ? $this->fold_path_forms( $this->resolve_path_forms( $uploads ) ) : [];
+		$network_forms = '' !== $network ? $this->fold_path_forms( $this->resolve_path_forms( $network ) ) : [];
+		$base_forms    = $this->fold_path_forms( $this->resolve_path_forms( $base ) );
+
+		foreach ( $base_forms as $base_form ) {
+			if ( in_array( $base_form, $shared_forms, true ) ) {
+				return true;
+			}
+
+			// A base that holds a shared folder is shared too: with uploads relocated to
+			// wp-content/files/uploads, a Gallery Path of wp-content/files/ (or legacy
+			// ms-files blogs.dir/<id>/) contains the whole media library.
+			$base_prefix = rtrim( $base_form, '/' ) . '/';
+			foreach ( $shared_forms as $shared_form ) {
+				if ( 0 === strpos( $shared_form, $base_prefix ) ) {
+					return true;
+				}
+			}
+
+			foreach ( $upload_forms as $upload_form ) {
+				if ( 0 !== strpos( $base_form, $upload_form . '/' ) ) {
+					continue;
+				}
+
+				$below = substr( $base_form, strlen( $upload_form ) + 1 );
+
+				if ( 1 === preg_match( '#^[0-9]+(/[0-9]+)*$#', $below ) ) {
+					return true;
+				}
+			}
+
+			// The sites/ container, a site's uploads root or date folders (sites/3,
+			// sites/3/2026), or anything in another site's uploads, as #1143's
+			// path_targets_another_site(). This site's own sites/<id>/<folder> stays accepted.
+			foreach ( $network_forms as $network_form ) {
+				if ( 0 !== strpos( $base_form, $network_form . '/' ) ) {
+					continue;
+				}
+
+				$below = substr( $base_form, strlen( $network_form ) + 1 );
+
+				if ( 1 === preg_match( '#^sites(/[0-9]+)*$#', $below ) ) {
+					return true;
+				}
+
+				if ( 1 === preg_match( '#^sites/([0-9]+)(/|$)#', $below, $match ) && (int) $match[1] !== $this->current_blog_id() ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Wrapped so the multisite rule in is_shared_gallery_path_base() can be exercised on a
+	 * single-site test install.
+	 *
+	 * @return bool
+	 */
+	protected function is_multisite_install(): bool {
+		return function_exists( 'is_multisite' ) && is_multisite();
+	}
+
+	/**
+	 * The current blog id, wrapped for the same reason as is_multisite_install().
+	 *
+	 * @return int
+	 */
+	protected function current_blog_id(): int {
+		return function_exists( 'get_current_blog_id' ) ? (int) get_current_blog_id() : 0;
+	}
+
+	/**
+	 * Whether a local path sits inside a staging root the request cannot name.
+	 *
+	 * Two server-side roots are accepted: the target gallery's own storage directory
+	 * ($gallery_base), and the Lightroom client's default FTP staging root,
+	 * WP_CONTENT_DIR/ngg/lightroom, where the client uploads _LR_<collection>/ folders
+	 * (publish_service.lua targetSubfolder default). Without the second root every FTP
+	 * publish on a direct-filesystem host was refused. Both are fixed on the server, so a
+	 * job still cannot steer the read-and-delete or rmdir() anywhere else under wp-content.
+	 * An empty $gallery_base fails closed for that root.
+	 *
+	 * @param string $path
+	 * @param string $gallery_base
+	 * @return bool
+	 */
+	protected function is_within_staging_base( $path, $gallery_base ): bool {
+		$roots = [];
+		if ( '' !== (string) $gallery_base ) {
+			$roots[] = $this->normalize_bitnami_path( (string) $gallery_base );
+		}
+		if ( defined( 'WP_CONTENT_DIR' ) ) {
+			$roots[] = $this->normalize_bitnami_path( WP_CONTENT_DIR . DIRECTORY_SEPARATOR . 'ngg' . DIRECTORY_SEPARATOR . 'lightroom' );
+		}
+
+		$path = $this->normalize_bitnami_path( (string) $path );
+		foreach ( $roots as $root ) {
+			if ( null !== \Imagely\NGG\Util\Security::contain_path( $path, $root ) ) {
+				return true;
+			}
+		}
+
+		// Windows only, as in is_valid_filename(): contain_path() compares case-sensitively
+		// and Windows paths are not, so a staging path whose casing differs from the root
+		// would be refused for a difference the OS does not make. Every resolved form of
+		// the path (lexical and realpath) must sit inside the root, so a junction planted
+		// in the staging folder cannot point the read-and-delete somewhere else.
+		if ( '\\' === DIRECTORY_SEPARATOR && $this->is_safe_path_string( $path ) ) {
+			$path_forms = $this->resolve_path_forms( $path );
+
+			foreach ( $roots as $root ) {
+				$root_forms = $this->resolve_path_forms( $root );
+				$contained  = ! empty( $path_forms );
+
+				foreach ( $path_forms as $form ) {
+					$inside = false;
+
+					foreach ( $root_forms as $root_form ) {
+						if ( $this->is_path_within( $form, $root_form ) ) {
+							$inside = true;
+							break;
+						}
+					}
+
+					if ( ! $inside ) {
+						$contained = false;
+						break;
+					}
+				}
+
+				if ( $contained ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -2785,6 +3297,18 @@ class API {
 									$images_folder = $path_prefix . $fs_sep . $storage_path . $fs_sep;
 									$images_folder = str_replace( [ '\\', '/' ], $fs_sep, $images_folder );
 
+									// SECURITY (#1086): derive a staging root the request cannot name.
+									// $images_folder is assembled entirely from caller-supplied app_config
+									// (ftp_path/full_path) and the task's storage_path, so is_staged_image_path()'s
+									// containment check would otherwise compare two attacker-chosen strings and
+									// the delete()/rmdir() below could target any directory under wp-content. The
+									// target gallery's own storage directory is derivable server-side from the
+									// task's gallery id, and is used only while it sits inside the NextGEN
+									// gallery base (see get_staging_gallery_base()). This gates the
+									// direct-filesystem path only (see is_staged_image_path()); the
+									// remote/FTP case keeps its existing #1003 limitation.
+									$gallery_base = $this->get_staging_gallery_base( $storage, $gallery );
+
 									$images             = $task_object['image_list'];
 									$result_images      = isset( $task_result['image_list'] ) ? $task_result['image_list'] : [];
 									$images_todo        = array_values( $this->_array_filter_by_entry( $images, $result_images, 'localId' ) );
@@ -2904,7 +3428,7 @@ class API {
 											} else {
 												$image_path = $images_folder . $image_path;
 
-												if ( $this->is_staged_image_path( $image_path, $images_folder, $wp_fs )
+												if ( $this->is_staged_image_path( $image_path, $images_folder, $wp_fs, $gallery_base )
 													&& $wp_fs->exists( $image_path ) ) {
 													$image_data = $wp_fs->get_contents( $image_path );
 
@@ -2926,9 +3450,23 @@ class API {
 													// republished under the destination name, and then deleted, because the
 													// delete is skipped only for non-image bytes. Credit to #1032 for this
 													// one; reproduced before fixing.
+													// SECURITY (#1086 B2): $staged_not_image was only ever truthy when
+													// get_contents() returned a non-empty string, so a directory (false) left
+													// it false and the delete below - gated only on ! $staged_not_image -
+													// still ran on it. The delete now also requires a regular file with an
+													// allowed image extension. An unreadable or zero-byte staged image is
+													// still deleted, as a56cc352 requires: it was never going to be imported,
+													// and leaving it would orphan it and make the rmdir() below fail.
+													$staged_is_image = is_string( $image_data ) && '' !== $image_data
+														&& $this->is_image_data( $image_data, (string) $image_filename )
+														&& $storage->is_allowed_image_extension( $image_path );
+
 													$staged_not_image = is_string( $image_data ) && '' !== $image_data
-														&& ( ! $this->is_image_data( $image_data, (string) $image_filename )
-															|| ! $storage->is_allowed_image_extension( $image_path ) );
+														&& ! $staged_is_image;
+
+													$staged_removable = ! $staged_not_image
+														&& $wp_fs->is_file( $image_path )
+														&& $storage->is_allowed_image_extension( $image_path );
 
 													if ( $staged_not_image ) {
 														$image_data = null;
@@ -2951,7 +3489,8 @@ class API {
 														$image_error = __( 'The image file was read but is empty (%1$s).', 'nggallery' );
 													}
 
-													// Not deleted when the file turned out not to be an image: that is
+													// Not deleted when the file turned out not to be an image, or is not a
+													// regular file with an image extension (a directory, say): that is
 													// someone else's file, and removing it would be the destructive half
 													// of #1003.
 													//
@@ -2961,7 +3500,7 @@ class API {
 													// the file was orphaned in a web-served directory that rmdir() could
 													// then not remove. Reporting the failure above is the actual fix.
 													// delete temporary image.
-													if ( ! $staged_not_image && ! $wp_fs->delete( $image_path ) ) {
+													if ( $staged_removable && ! $wp_fs->delete( $image_path ) ) {
 														// Checked for the same reason as the rmdir() below - a failed delete
 														// leaves the full-resolution original in a web-served directory with
 														// the task marked done - and logged here because the file remaining
@@ -2972,7 +3511,7 @@ class API {
 															'NextGEN Gallery: Lightroom could not remove a staged original, so it is still on disk: ' . wp_strip_all_tags( (string) $image_path, true )
 														);
 													}
-												} elseif ( ! $this->is_staged_image_path( $image_path, $images_folder, $wp_fs ) ) {
+												} elseif ( ! $this->is_staged_image_path( $image_path, $images_folder, $wp_fs, $gallery_base ) ) {
 													// Distinguished from a missing file, and recorded: a host whose staging
 													// folder falls outside the allow-list published fine before this release
 													// and now fails every image, so "could not find" sends the photographer
@@ -2983,7 +3522,52 @@ class API {
 													// path is "outside the folders this site allows" is advice they cannot
 													// act on - and for the site owner, someone steering a read-and-delete at
 													// plugin files should not look like an open_basedir false positive.
-													if ( $this->is_code_directory_path( $image_path ) ) {
+													if ( '' !== $this->staging_file_claimed && (string) $image_path === $this->staging_file_claimed && false === $this->staging_other_dirs ) {
+														// The gallery table could not be read, so ownership could not be
+														// checked (the cause is logged by get_other_gallery_dirs()).
+														/* translators: %1$s: image filename */
+														$image_error = __( 'NextGEN could not check which gallery owns the staging folder, so it did not read the staged file. Try the publish again (%1$s).', 'nggallery' );
+													} elseif ( '' !== $this->staging_base_error
+														&& null !== Security::contain_path( $this->normalize_bitnami_path( (string) $image_path ), $this->normalize_bitnami_path( $this->staging_base_error ) ) ) {
+														// Staged inside the gallery's own folder, but the gallery table could
+														// not be read to check that no other gallery claims it (the cause is
+														// logged by get_other_gallery_dirs()).
+														/* translators: %1$s: image filename */
+														$image_error = __( 'NextGEN could not check which gallery owns the staging folder, so it did not read the staged file. Try the publish again (%1$s).', 'nggallery' );
+													} elseif ( '' !== $this->staging_file_claimed && (string) $image_path === $this->staging_file_claimed ) {
+														// Inside a staging root, but also inside another gallery's folder (see
+														// is_in_another_gallery_dir()).
+														$this->log_once(
+															'staged_path_other_gallery_' . md5( (string) $image_path ),
+															'NextGEN Gallery: Lightroom refused a staged path inside another gallery\'s folder: ' . wp_strip_all_tags( (string) $image_path, true )
+														);
+
+														/* translators: %1$s: image filename */
+														$image_error = __( 'The staged file is inside another gallery\'s folder, so NextGEN will not read it. Stage Lightroom uploads in a folder no gallery uses, such as the default wp-content/ngg/lightroom (%1$s).', 'nggallery' );
+													} elseif ( '' !== $this->staging_base_overlap
+														&& null !== Security::contain_path( $this->normalize_bitnami_path( (string) $image_path ), $this->normalize_bitnami_path( $this->staging_base_overlap ) ) ) {
+														// Staged inside the gallery's own folder, which another gallery's
+														// folder matches, contains or sits inside (see
+														// get_staging_gallery_base()). Name the fix the photographer can make.
+														$this->log_once(
+															'staged_path_overlap_' . md5( (string) $image_path ),
+															'NextGEN Gallery: Lightroom refused a staged path in a gallery folder another gallery also uses: ' . wp_strip_all_tags( (string) $image_path, true )
+														);
+
+														/* translators: %1$s: image filename */
+														$image_error = __( 'This gallery\'s folder overlaps another gallery\'s folder, so NextGEN will not read staged files from it. Set the Lightroom FTP staging folder back to the default, wp-content/ngg/lightroom (%1$s).', 'nggallery' );
+													} elseif ( '' !== $this->staging_base_shared
+														&& null !== Security::contain_path( $this->normalize_bitnami_path( (string) $image_path ), $this->normalize_bitnami_path( $this->staging_base_shared ) ) ) {
+														// Staged inside the gallery's own folder, but the Gallery Path setting
+														// is a shared folder (see is_shared_gallery_path_base()).
+														$this->log_once(
+															'staged_path_shared_base_' . md5( (string) $image_path ),
+															'NextGEN Gallery: Lightroom refused a staged path in a gallery folder under a shared Gallery Path: ' . wp_strip_all_tags( (string) $image_path, true )
+														);
+
+														/* translators: %1$s: image filename */
+														$image_error = __( 'The NextGEN Gallery Path setting points at a shared folder, such as the media library, so NextGEN will not read staged files from this gallery\'s folder. Set the Lightroom FTP staging folder back to the default, wp-content/ngg/lightroom (%1$s).', 'nggallery' );
+													} elseif ( $this->is_code_directory_path( $image_path ) ) {
 														$this->log_once(
 															'staged_path_code_dir_' . md5( (string) $image_path ),
 															'NextGEN Gallery: Lightroom refused a staged path inside a plugin, theme or translation directory: ' . wp_strip_all_tags( (string) $image_path, true )
@@ -2999,6 +3583,9 @@ class API {
 
 														/* translators: %1$s: image filename */
 														$image_error = __( 'The staged file is outside the folders this site allows NextGEN to read (%1$s).', 'nggallery' );
+
+														// A custom FTP staging folder elsewhere in wp-content lands here, so say how to fix it.
+														$image_error .= ' ' . __( 'Set the Lightroom FTP staging folder back to the default, wp-content/ngg/lightroom.', 'nggallery' );
 													}
 												} elseif ( is_multisite() ) {
 														/* translators: %1$s: image filename */
@@ -3073,7 +3660,13 @@ class API {
 
 									// if images have finished processing, remove the folder used to store the temporary images (the folder should be empty due to delete() calls above).
 									if ( ! $image_list_unfinished && $storage_path != null && $storage_path != $fs_sep && $path_prefix != null && $path_prefix != $fs_sep ) {
-										if ( $this->is_permitted_fs_path( $images_folder, $wp_fs ) ) {
+										// SECURITY (#1086): on a direct filesystem the directory removed must sit
+										// inside the server-derived gallery base, not just pass is_permitted_fs_path()
+										// (whose bound is the same caller-supplied region). This stops rmdir() from
+										// removing a caller-named directory anywhere under wp-content.
+										$rmdir_contained = ! is_object( $wp_fs ) || ! isset( $wp_fs->method ) || 'direct' !== $wp_fs->method
+											|| $this->is_within_staging_base( $images_folder, $gallery_base );
+										if ( $rmdir_contained && $this->is_permitted_fs_path( $images_folder, $wp_fs ) ) {
 											// Not recursive, and returns false on a non-empty directory.
 											// Discarding that made the only non-removal that happens in
 											// practice the silent one.

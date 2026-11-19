@@ -12,19 +12,19 @@ $onboarding = new Onboarding_Wizard();
 
 // Check if license key is already verified.
 $ngg_pro_key = get_option( 'photocrati_license_default', null );
+
+// get license data. Only Lite gets the upgrade pitch; a premium tier is asked to activate its key.
+$license_type = $onboarding->get_license_type();
+$is_lite      = 'lite' === $license_type;
 ?>
 <div class="nextgen-gallery-onboarding-form-step nextgen-gallery-wizard-license-key" id="summary">
 	<div class="nextgen-gallery-onboarding-wizard-body">
 		<div class="steps"><?php esc_html_e( 'Step - 4 of 5', 'nggallery' ); ?></div>
 		<div class="nextgen-gallery-onboarding-settings-row no-border no-margin">
 			<div class="settings-name">
-				<h2><?php esc_html_e( 'Upgrade to Pro', 'nggallery' ); ?></h2>
+				<h2><?php echo esc_html( $is_lite ? __( 'Upgrade to Pro', 'nggallery' ) : __( 'Activate your license', 'nggallery' ) ); ?></h2>
 				<div class="name small-margin">
 				</div>
-				<?php
-				// get license data.
-				$license_type = $onboarding->get_license_type();
-				?>
 				<div class="nextgen-gallery-onboarding-description">
 
 					<?php
@@ -37,11 +37,19 @@ $ngg_pro_key = get_option( 'photocrati_license_default', null );
 		<div class="license-cta-box">
 			<div class="">
 				<?php
-				printf(
-				// Translators: %s is the link to upgrade to PRO.
-					__( 'To unlock these features, <strong><a target="_blank" href="%s">Upgrade to PRO</a></strong> and enter your license key below', 'nggallery' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					esc_url( 'https://imagely.com/lite/?utm_source=liteplugin&utm_medium=wizard&utm_campaign=wizard&utm_content=' . \Imagely\NGG\Admin\App::get_utm_version() )
-				);
+				if ( $is_lite ) {
+					printf(
+					// Translators: %s is the link to upgrade to PRO.
+						__( 'To unlock these features, <strong><a target="_blank" href="%s">Upgrade to PRO</a></strong> and enter your license key below', 'nggallery' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						esc_url( 'https://imagely.com/lite/?utm_source=liteplugin&utm_medium=wizard&utm_campaign=wizard&utm_content=' . \Imagely\NGG\Admin\App::get_utm_version() )
+					);
+				} else {
+					printf(
+						/* translators: %s: license type, e.g. Pro, Plus or Starter */
+						esc_html__( 'Enter your NextGEN %s license key below to activate it and receive updates.', 'nggallery' ),
+						esc_html( ucfirst( $license_type ) )
+					);
+				}
 				?>
 			</div>
 			<div class="nextgen-gallery-row" id="selected-add-ons">

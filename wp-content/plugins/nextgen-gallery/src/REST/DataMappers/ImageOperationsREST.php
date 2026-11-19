@@ -741,7 +741,10 @@ class ImageOperationsREST {
 		try {
 			$result = \nggAdmin::set_watermark( $image_id );
 
-			if ( $result ) {
+			// set_watermark() returns '1' on success and an error message otherwise; the
+			// message is a non-empty string, so a truthiness check reported every failure
+			// as "applied successfully" (#1104).
+			if ( '1' === $result ) {
 				$storage = StorageManager::get_instance();
 				$storage->flush_image_cache( $image_id );
 
@@ -754,7 +757,7 @@ class ImageOperationsREST {
 
 			return new WP_Error(
 				'watermark_failed',
-				__( 'Failed to apply watermark', 'nggallery' ),
+				is_string( $result ) && '' !== $result ? $result : __( 'Failed to apply watermark', 'nggallery' ),
 				[ 'status' => 500 ]
 			);
 		} catch ( \Exception $e ) {
@@ -848,10 +851,12 @@ class ImageOperationsREST {
 		$storage  = StorageManager::get_instance();
 
 		try {
-			$image_path  = $storage->get_image_abspath( $image_id );
-			$backup_path = $image_path . '_backup';
+			$image_path = $storage->get_image_abspath( $image_id );
+			// The untouched original is the better metadata source, and since #1107 it no longer
+			// sits beside the served file - resolve_backup_abspath() finds it in either location.
+			$backup_path = $storage->resolve_backup_abspath( $image_id );
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-			$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_path;
+			$exif_abspath = ( $backup_path && @file_exists( $backup_path ) ) ? $backup_path : $image_path;
 			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 			$exif_iptc = @EXIFWriter::read_metadata( $exif_abspath );
 
@@ -1017,6 +1022,12 @@ class ImageOperationsREST {
 	/**
 	 * Crop an image and regenerate all sizes
 	 *
+	 * The full-size file is cropped in place, the way rotate and resize change it, and every other
+	 * size is then rebuilt from the cropped file. When the crop fails the full-size file is put back
+	 * exactly as this request found it, from a snapshot taken just before the crop. The upload
+	 * backup is never used for that: it holds the image as uploaded, so restoring it would also
+	 * undo every rotate, resize or watermark applied since (#1179).
+	 *
 	 * @param WP_REST_Request $request The request object.
 	 * @return WP_REST_Response|WP_Error
 	 */
@@ -1027,6 +1038,12 @@ class ImageOperationsREST {
 		$w        = $request->get_param( 'w' );
 		$h        = $request->get_param( 'h' );
 		$rr       = $request->get_param( 'rr' );
+
+		$image         = null;
+		$meta_before   = null;
+		$original_path = null;
+		$snapshot_path = null;
+		$cropped       = false;
 
 		try {
 			$storage = StorageManager::get_instance();
@@ -1040,22 +1057,9 @@ class ImageOperationsREST {
 				);
 			}
 
-			// Calculate the crop frame using the resize ratio
-			$x = round( $x * $rr, 0 );
-			$y = round( $y * $rr, 0 );
-			$w = round( $w * $rr, 0 );
-			$h = round( $h * $rr, 0 );
-
-			$crop_frame = [
-				'x'      => $x,
-				'y'      => $y,
-				'width'  => $w,
-				'height' => $h,
-			];
-
 			// Get the original image path
 			$original_path = $storage->get_image_abspath( $image_id );
-			if ( ! file_exists( $original_path ) ) {
+			if ( ! $original_path || ! file_exists( $original_path ) ) {
 				return new WP_Error(
 					'original_not_found',
 					__( 'Original image file not found', 'nggallery' ),
@@ -1063,10 +1067,97 @@ class ImageOperationsREST {
 				);
 			}
 
-			// Create a backup of the original
-			$backup_path = $original_path . '_backup';
-			if ( ! file_exists( $backup_path ) ) {
-				copy( $original_path, $backup_path );
+			$dimensions = @getimagesize( $original_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			if ( ! $dimensions ) {
+				return new WP_Error(
+					'crop_failed',
+					__( 'The image file could not be read', 'nggallery' ),
+					[ 'status' => 500 ]
+				);
+			}
+
+			// Calculate the crop frame using the resize ratio
+			$x = (int) round( $x * $rr, 0 );
+			$y = (int) round( $y * $rr, 0 );
+			$w = (int) round( $w * $rr, 0 );
+			$h = (int) round( $h * $rr, 0 );
+
+			// A frame that starts off the image, or has no area, has nothing to crop, and a zero width
+			// or height divides by zero in the generator. One that runs past the far edge (a rounding
+			// overshoot from the resize ratio, typically) is trimmed to the edge.
+			if ( $x < 0 || $y < 0 || $x >= $dimensions[0] || $y >= $dimensions[1] ) {
+				return self::invalid_crop_frame_error();
+			}
+
+			$w = min( $w, $dimensions[0] - $x );
+			$h = min( $h, $dimensions[1] - $y );
+
+			if ( $w < 1 || $h < 1 ) {
+				return self::invalid_crop_frame_error();
+			}
+
+			// The generator scales the frame by its width over final_width; equal values crop the
+			// frame as given, and the output is the frame's own size.
+			$crop_frame = [
+				'x'            => $x,
+				'y'            => $y,
+				'width'        => $w,
+				'height'       => $h,
+				'final_width'  => $w,
+				'final_height' => $h,
+			];
+
+			// Back the original up before cropping over it. This goes to the originals root
+			// outside the web root, not beside the served image: written there it would be an
+			// anonymously fetchable copy of the uncropped master (#1107).
+			//
+			// Fail closed, unlike the other backup sites. backup_image() and
+			// generate_image_size() lose nothing by skipping a backup, but this endpoint crops
+			// over the full-size image, so proceeding without one destroys the only copy of the
+			// user's master. get_backup_write_abspath() returns null when the originals directory
+			// cannot be created, which is a real outcome on a host that only makes uploads
+			// writable, and the restore paths below cannot help once the source is gone.
+			$backup_path = $storage->resolve_backup_abspath( $image_id );
+
+			if ( ! $backup_path || ! file_exists( $backup_path ) ) {
+				$backup_path = $storage->get_backup_write_abspath( $image_id );
+
+				// Whether anything was already at the write target, captured immediately before
+				// the copy: a copy that fails part-way leaves a truncated file there, and
+				// resolve_backup_abspath() would hand that back on the next attempt as though it
+				// were a real original. The crop would then proceed over the master and the
+				// restore below would put the truncated file back.
+				$backup_pre_existed = $backup_path && file_exists( $backup_path );
+
+				if ( ! $backup_path || ! copy( $original_path, $backup_path ) ) {
+					// Only our own part-written file is removed. A backup that was already there
+					// is somebody's real original and must never be touched on a failure path.
+					if ( $backup_path && ! $backup_pre_existed ) {
+						@unlink( $backup_path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.unlink_unlink
+					}
+
+					return new WP_Error(
+						'backup_failed',
+						__( 'The original image could not be backed up, so it was not cropped. Check that the uploads directory is writable.', 'nggallery' ),
+						[ 'status' => 500 ]
+					);
+				}
+
+				$storage->discard_legacy_backup( $image_id );
+			}
+
+			// The state to return to if the crop fails. It lives in the system temp directory rather
+			// than beside the image, so it is never served from the gallery directory.
+			if ( ! function_exists( 'wp_tempnam' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/file.php';
+			}
+			$snapshot_path = wp_tempnam( 'ngg-crop-' . $image_id );
+			if ( ! $snapshot_path || ! copy( $original_path, $snapshot_path ) ) {
+				return new WP_Error(
+					'crop_failed',
+					__( 'The image could not be prepared for cropping. Check that the temporary directory is writable.', 'nggallery' ),
+					[ 'status' => 500 ]
+				);
 			}
 
 			// Crop the original image
@@ -1075,29 +1166,51 @@ class ImageOperationsREST {
 				'reflection' => false,
 				'crop'       => true,
 				'crop_frame' => $crop_frame,
+				'width'      => $w,
+				'height'     => $h,
 			];
 
 			// Crop and save the original
-			$result = $storage->generate_image( $image_id, $params );
+			$meta_before = $image->meta_data;
+			$result      = $storage->generate_image_size( $image, 'full', $params );
 			if ( ! $result ) {
-				// Restore from backup if crop fails
-				if ( file_exists( $backup_path ) ) {
-					copy( $backup_path, $original_path );
-				}
+				self::restore_crop_snapshot( $snapshot_path, $original_path, $image, $meta_before );
 				return new WP_Error(
 					'crop_failed',
 					__( 'Failed to crop image', 'nggallery' ),
 					[ 'status' => 500 ]
 				);
 			}
+			if ( is_object( $result ) ) {
+				$result->destruct();
+			}
+			$cropped = true;
 
-			// Regenerate all sizes
-			$sizes = $storage->get_image_sizes( $image_id );
-			foreach ( $sizes as $size ) {
-				if ( 'backup' === $size ) {
+			// Every stored crop frame, including the one just recorded for the full size, is in the
+			// coordinates of the uncropped image. Left in place, the next thumbnail rebuild would cut
+			// that old area out of the new, smaller file.
+			if ( is_array( $image->meta_data ) ) {
+				$frames_cleared = false;
+				foreach ( $image->meta_data as $size => $size_meta ) {
+					if ( is_array( $size_meta ) && isset( $size_meta['crop_frame'] ) ) {
+						unset( $image->meta_data[ $size ]['crop_frame'] );
+						$frames_cleared = true;
+					}
+				}
+				if ( $frames_cleared ) {
+					ImageMapper::get_instance()->save( $image );
+				}
+			}
+
+			// Regenerate every other size from the cropped file, each with its own settings.
+			foreach ( $storage->get_image_sizes( $image ) as $size ) {
+				if ( 'full' === $size || 'backup' === $size ) {
 					continue;
 				}
-				$storage->generate_image( $image_id, $params, $size );
+				$sized = $storage->generate_image_size( $image, $size );
+				if ( is_object( $sized ) ) {
+					$sized->destruct();
+				}
 			}
 
 			$storage->flush_image_cache( $image_id );
@@ -1107,16 +1220,59 @@ class ImageOperationsREST {
 					'message' => __( 'Image cropped and all sizes regenerated successfully', 'nggallery' ),
 				]
 			);
-		} catch ( \Exception $e ) {
-			// Restore from backup if any error occurs
-			if ( isset( $backup_path ) && file_exists( $backup_path ) ) {
-				copy( $backup_path, $original_path );
+		} catch ( \Throwable $e ) {
+			// Once the crop is saved the full-size file and its stored dimensions agree, so a failure
+			// while rebuilding the other sizes must not put the uncropped file back under them.
+			if ( ! $cropped ) {
+				self::restore_crop_snapshot( $snapshot_path, $original_path, $image, $meta_before );
 			}
 			return new WP_Error(
 				'crop_failed',
 				$e->getMessage(),
 				[ 'status' => 500 ]
 			);
+		} finally {
+			if ( $snapshot_path && file_exists( $snapshot_path ) ) {
+				wp_delete_file( $snapshot_path );
+			}
+		}
+	}
+
+	/**
+	 * The error for a crop frame that does not select part of the image.
+	 *
+	 * @return WP_Error
+	 */
+	private static function invalid_crop_frame_error() {
+		return new WP_Error(
+			'invalid_crop_frame',
+			__( 'The crop area must have a width and height and start inside the image.', 'nggallery' ),
+			[ 'status' => 400 ]
+		);
+	}
+
+	/**
+	 * Put the full-size file, and the dimensions stored for it, back as they were before the crop.
+	 *
+	 * The generator saves the new dimensions before its ngg_generated_image action runs, so a failure
+	 * raised from that action would otherwise leave the restored file described as the cropped one.
+	 *
+	 * @param string|null       $snapshot_path Copy of the full-size file taken before the crop.
+	 * @param string|null       $original_path The full-size file.
+	 * @param Image|object|null $image         The image being cropped.
+	 * @param array|null        $meta_before   Its meta_data before the crop.
+	 */
+	private static function restore_crop_snapshot( $snapshot_path, $original_path, $image, $meta_before ) {
+		if ( ! $snapshot_path || ! $original_path || ! file_exists( $snapshot_path ) ) {
+			return;
+		}
+
+		copy( $snapshot_path, $original_path );
+		clearstatcache( true, $original_path );
+
+		if ( $image && null !== $meta_before && $image->meta_data !== $meta_before ) {
+			$image->meta_data = $meta_before;
+			ImageMapper::get_instance()->save( $image );
 		}
 	}
 

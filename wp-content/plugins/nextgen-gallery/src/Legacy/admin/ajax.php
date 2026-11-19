@@ -199,11 +199,13 @@ function ngg_ajax_operation() {
 
 			// This will read the EXIF and then write it with the Orientation tag reset.
 			case 'strip_orientation_tag':
-				$storage     = \Imagely\NGG\DataStorage\Manager::get_instance();
-				$image_path  = $storage->get_image_abspath( $id );
-				$backup_path = $image_path . '_backup';
+				$storage    = \Imagely\NGG\DataStorage\Manager::get_instance();
+				$image_path = $storage->get_image_abspath( $id );
+				// Since #1107 the untouched original no longer sits beside the served file;
+				// resolve_backup_abspath() finds it in either location.
+				$backup_path = $storage->resolve_backup_abspath( $id );
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				$exif_abspath = @file_exists( $backup_path ) ? $backup_path : $image_path;
+				$exif_abspath = ( $backup_path && @file_exists( $backup_path ) ) ? $backup_path : $image_path;
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
 				$exif_iptc = @\Imagely\NGG\DataStorage\EXIFWriter::read_metadata( $exif_abspath );
 				foreach ( $storage->get_image_sizes( $id ) as $size ) {

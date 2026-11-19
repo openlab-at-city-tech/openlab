@@ -2,7 +2,7 @@
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 4.5.5
+ * Version: 4.5.6
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=pluginuri
  * Author URI: https://www.imagely.com/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=authoruri
@@ -28,6 +28,8 @@ use Imagely\NGG\Admin\Onboarding_Wizard;
 use Imagely\NGG\Admin\App;
 use Imagely\NGG\Migrations\AddGalleryDates;
 use Imagely\NGG\Migrations\NormalizeDisplayTypeSettings;
+use Imagely\NGG\Migrations\RelocateImageBackups;
+use Imagely\NGG\Util\Security;
 
 /**
  * Clean Exit Exception for graceful shutdown.
@@ -274,6 +276,15 @@ class C_NextGEN_Bootstrap {
 				( new MenuNudge() )->hooks();
 				( new Ecommerce_Preview() )->hooks();
 				AddGalleryDates::migrate( false );
+				// Moves the originals written before #1107 out of the web-served gallery
+				// directories. Batched, so it runs over several admin requests.
+				//
+				// Gated rather than hung straight off admin_init: is_admin() is true for
+				// admin-ajax.php and admin-post.php, and core fires admin_init in both of them
+				// before any auth-cookie check, so a bare registration lets an unauthenticated
+				// request drive a batch of rename()/glob()/.htaccess work. nextgen-gallery#934 is
+				// the site-down incident that shape caused once already.
+				add_action( 'admin_init', [ $this, 'maybe_relocate_image_backups' ] );
 				// Deferred to admin_init: the normalization needs every display-type controller
 				// registered (Pro registers its own on ngg_initialized, which fires below), so it
 				// cannot run inline here or it would skip all Pro display types.
@@ -287,6 +298,134 @@ class C_NextGEN_Bootstrap {
 
 			do_action( 'ngg_initialized' );
 		}
+	}
+
+	/**
+	 * Runs one batch of the #1107 originals relocation, if this request may do so.
+	 *
+	 * @return void
+	 */
+	public function maybe_relocate_image_backups() {
+		// Never on an AJAX request: admin-ajax.php reaches admin_init before WordPress has decided
+		// who the caller is, and its nopriv actions are reachable with no account at all.
+		// admin-post.php fires admin_init too and is not excluded here - the capability check
+		// below is what covers it, and unlike admin-ajax.php it has no unauthenticated surface
+		// that should be doing this work.
+		if ( wp_doing_ajax() || ( defined( 'DOING_AJAX' ) && DOING_AJAX ) ) {
+			return;
+		}
+
+		// A real, logged-in administrator loading a real admin page. The capability is the one
+		// NextGEN already uses for library-wide management.
+		if ( ! is_user_logged_in()
+			|| ! ( Security::is_allowed( 'NextGEN Manage gallery' ) || current_user_can( 'manage_options' ) ) ) {
+			return;
+		}
+
+		// One batch at a time. Without this, several admin tabs open at once each walk the same
+		// cursor position and race each other's rename() calls over the same files - and since a
+		// failed move now cleans up after itself, that race can delete a master another request
+		// has just moved.
+		//
+		// get_transient() then set_transient() did not actually prevent it: both requests read no
+		// lock and both proceeded. The lock is taken atomically instead, the same way
+		// Installer::can_do_upgrade() does it.
+		if ( ! $this->take_relocation_lock() ) {
+			return;
+		}
+
+		try {
+			RelocateImageBackups::migrate( false );
+		} finally {
+			$this->release_relocation_lock();
+		}
+	}
+
+	/**
+	 * Takes the originals-relocation lock, atomically.
+	 *
+	 * A bare INSERT is the mechanism: core's add_option()/update_option() end in
+	 * INSERT ... ON DUPLICATE KEY UPDATE, which upserts and reports success to every caller, so
+	 * they cannot hand a lock to exactly one request. MySQL rejecting the second INSERT on the
+	 * option_name unique key is what does that. Mirrors Installer::_insert_upgrade_lock().
+	 *
+	 * @return bool Whether this request now holds the lock.
+	 */
+	private function take_relocation_lock() {
+		global $wpdb;
+
+		if ( $this->insert_relocation_lock() ) {
+			return true;
+		}
+
+		// Someone else holds it. Reclaim only a lock left behind by a run that died, and decide
+		// staleness inside the DELETE so two requests cannot both read it as stale before either
+		// writes. Only the request whose DELETE removes the row gets to retry.
+		//
+		// $wpdb->prepare() has no placeholder for table identifiers; {$wpdb->options} is core's
+		// own property, never user input.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$reclaimed = $wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->options}
+				WHERE option_name = 'ngg_originals_relocation_lock'
+					AND option_value REGEXP '^[0-9]+$'
+					AND CAST( option_value AS UNSIGNED ) < %d",
+				time() - ( 5 * MINUTE_IN_SECONDS )
+			)
+		);
+		// phpcs:enable
+
+		if ( ! $reclaimed ) {
+			return false;
+		}
+
+		wp_cache_delete( 'ngg_originals_relocation_lock', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
+
+		return $this->insert_relocation_lock();
+	}
+
+	/**
+	 * The raw INSERT behind take_relocation_lock().
+	 *
+	 * @return bool
+	 */
+	private function insert_relocation_lock() {
+		global $wpdb;
+
+		// Errors are suppressed because a duplicate-key hit is the expected "someone else holds
+		// it" outcome, not a problem to log. A different failure simply means no lock was taken,
+		// and the batch is skipped this request rather than run unguarded.
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		$suppress = $wpdb->suppress_errors( true );
+		$inserted = $wpdb->query(
+			$wpdb->prepare(
+				"INSERT INTO {$wpdb->options} (option_name, option_value, autoload) VALUES ( 'ngg_originals_relocation_lock', %s, 'no' )",
+				time()
+			)
+		);
+		$wpdb->suppress_errors( $suppress );
+		// phpcs:enable
+
+		if ( false === $inserted ) {
+			return false;
+		}
+
+		// The raw INSERT bypassed add_option()'s cache writes.
+		wp_cache_delete( 'ngg_originals_relocation_lock', 'options' );
+		wp_cache_delete( 'notoptions', 'options' );
+
+		return true;
+	}
+
+	/**
+	 * Releases the originals-relocation lock.
+	 *
+	 * @return void
+	 */
+	private function release_relocation_lock() {
+		delete_option( 'ngg_originals_relocation_lock' );
 	}
 
 	/**
@@ -913,6 +1052,10 @@ class C_NextGEN_Bootstrap {
 			add_filter( 'cron_schedules', [ $this, 'add_ngg_schedule' ] );
 			add_action( 'ngg_delete_expired_transients', [ $this, 'delete_expired_transients' ] );
 			add_action( 'wp', [ $this, 'schedule_cron_jobs' ] );
+			// The relocation cannot depend on somebody opening wp-admin: an auto-updating site or
+			// a multisite subsite whose admins never log in would keep every existing original
+			// publicly downloadable indefinitely (#1107).
+			add_action( 'ngg_relocate_image_backups', [ $this, 'cron_relocate_image_backups' ] );
 		}
 
 		// Start the plugin!
@@ -928,6 +1071,7 @@ class C_NextGEN_Bootstrap {
 
 		add_action( 'admin_init', [ '\Imagely\NGG\Admin\RequirementsManager', 'register_requirements' ], -20 );
 		add_action( 'all_admin_notices', [ $this, 'render_jquery_wp_55_warning' ] );
+		add_action( 'all_admin_notices', [ $this, 'render_originals_relocation_warning' ] );
 
 		// Necessary hack for the datamapper to order query results.
 		add_filter( 'posts_orderby', [ '\Imagely\NGG\DataStorage\Manager', 'wp_query_order_by' ], 10, 2 );
@@ -1139,6 +1283,74 @@ class C_NextGEN_Bootstrap {
 		if ( ! wp_next_scheduled( 'ngg_delete_expired_transients' ) ) {
 			wp_schedule_event( time(), 'ngg_custom', 'ngg_delete_expired_transients' );
 		}
+
+		// Only while there is still something to move. Installer::update() clears the done flag on
+		// every version change, so this re-arms itself after an upgrade and stops again once the
+		// relocation reports finished.
+		if ( ! get_option( 'ngg_originals_relocated' ) && ! wp_next_scheduled( 'ngg_relocate_image_backups' ) ) {
+			wp_schedule_event( time() + MINUTE_IN_SECONDS, 'ngg_custom', 'ngg_relocate_image_backups' );
+		}
+	}
+
+	/**
+	 * Runs one batch of the #1107 originals relocation from WP-Cron.
+	 *
+	 * Deliberately the same locked batch the admin hook runs, not a bigger one: #934 is the
+	 * site-down incident an unbounded migration caused, so cron gets no more work per invocation
+	 * than a page load does, and the atomic lock keeps a cron run and an admin page load from
+	 * overlapping.
+	 *
+	 * @return void
+	 */
+	public function cron_relocate_image_backups() {
+		if ( get_option( 'ngg_originals_relocated' ) ) {
+			wp_clear_scheduled_hook( 'ngg_relocate_image_backups' );
+			return;
+		}
+
+		if ( ! $this->take_relocation_lock() ) {
+			return;
+		}
+
+		try {
+			if ( RelocateImageBackups::migrate( false ) ) {
+				wp_clear_scheduled_hook( 'ngg_relocate_image_backups' );
+			}
+		} finally {
+			$this->release_relocation_lock();
+		}
+	}
+
+	/**
+	 * Warns administrators that some image originals could not be moved out of the web root.
+	 *
+	 * The ngg_originals_relocation_incomplete option is written when the relocation gives up on a
+	 * gallery.
+	 * Without this nothing reads it: the only other trace is a log line, which no site owner sees,
+	 * and the masters involved stay at the URL #1107 is about.
+	 *
+	 * @return void
+	 */
+	public function render_originals_relocation_warning() {
+		$incomplete = (array) get_option( 'ngg_originals_relocation_incomplete', [] );
+
+		if ( empty( $incomplete ) ) {
+			return;
+		}
+
+		if ( ! Security::is_allowed( 'NextGEN Manage gallery' ) && ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-error"><p><strong>%s</strong><br />%s</p></div>',
+			esc_html__( 'NextGEN Gallery: some original images are still publicly downloadable.', 'nggallery' ),
+			sprintf(
+				/* translators: %s: comma-separated list of gallery IDs. */
+				esc_html__( 'The full-size originals for gallery ID(s) %s could not be moved out of the publicly served gallery folder, so they can still be downloaded by anyone who can view the gallery. This is usually a file-permission problem on the uploads directory. Fix the permissions and reload any admin page to retry.', 'nggallery' ),
+				esc_html( implode( ', ', array_map( 'intval', $incomplete ) ) )
+			)
+		);
 	}
 
 	/**
@@ -1307,7 +1519,7 @@ class C_NextGEN_Bootstrap {
 		define( 'NGG_PRODUCT_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PLUGIN_DIR, '/\\' ), 'products' ] ) );
 		define( 'NGG_MODULE_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PRODUCT_DIR, '/\\' ), 'photocrati_nextgen', 'modules' ] ) );
 		define( 'NGG_PLUGIN_STARTED_AT', microtime() );
-		define( 'NGG_PLUGIN_VERSION', '4.5.5' );
+		define( 'NGG_PLUGIN_VERSION', '4.5.6' );
 
 		$random_version = function_exists( 'wp_rand' ) ? wp_rand( 0, mt_getrandmax() ) : mt_rand( 0, mt_getrandmax() ); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_mt_rand
 		define( 'NGG_SCRIPT_VERSION', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? (string) $random_version : NGG_PLUGIN_VERSION );

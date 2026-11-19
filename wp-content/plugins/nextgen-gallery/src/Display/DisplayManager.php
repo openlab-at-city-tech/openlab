@@ -287,7 +287,7 @@ class DisplayManager {
 				// Get settings for the current display type
 				$current_display_type = ! empty( $gallery->display_type ) ? $gallery->display_type : 'photocrati-nextgen_basic_thumbnails';
 				if ( isset( $gallery->display_type_settings[ $current_display_type ] ) ) {
-					$display_params = array_merge( $display_params, $gallery->display_type_settings[ $current_display_type ] );
+					$display_params = array_merge( $display_params, GalleryMapper::normalize_display_type_settings( $current_display_type, $gallery->display_type_settings[ $current_display_type ] ) );
 				}
 			}
 
@@ -1001,7 +1001,7 @@ class DisplayManager {
 			// Get settings for the current display type
 			$current_display_type = ! empty( $gallery->display_type ) ? $gallery->display_type : 'photocrati-nextgen_basic_thumbnails';
 			if ( isset( $gallery->display_type_settings[ $current_display_type ] ) ) {
-				$display_params = array_merge( $display_params, $gallery->display_type_settings[ $current_display_type ] );
+				$display_params = array_merge( $display_params, GalleryMapper::normalize_display_type_settings( $current_display_type, $gallery->display_type_settings[ $current_display_type ] ) );
 			}
 		}
 

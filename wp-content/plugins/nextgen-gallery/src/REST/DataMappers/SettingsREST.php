@@ -265,6 +265,18 @@ class SettingsREST {
 		// Convert to string for processing
 		$string_value = (string) $value;
 
+		// SECURITY: the watermark image path and font name must never persist as a
+		// stream wrapper or a traversing path. Without this, a "phar://" or
+		// "../../../../etc/..." wmPath saved into ngg_options reaches the watermark sink
+		// for every anonymous visitor of a watermarked gallery (object injection on
+		// PHP <= 7.4, SSRF, and arbitrary readable-PNG disclosure). wmFont is a file name
+		// inside the bundled fonts directory, never a path. These run before the
+		// value-based HTML/newline branches below, which would otherwise return a
+		// "../x.png<x>" or newline-carrying value without reaching these checks.
+		if ( 'wmFont' === $key || 'wmPath' === $key ) {
+			return \Imagely\NGG\Util\Security::sanitize_watermark_option( $key, $string_value );
+		}
+
 		// Fields that should preserve HTML and newlines
 		if ( self::should_preserve_html( $key, $string_value ) ) {
 			return wp_kses_post( $string_value );
@@ -383,13 +395,108 @@ class SettingsREST {
 	}
 
 	/**
+	 * Settings keys only a manage_options caller may read or write (gateway credentials, licence keys).
+	 *
+	 * Lives in the free plugin so the gate survives Pro being deactivated (#1163).
+	 *
+	 * @return string[]
+	 */
+	public static function admin_only_setting_keys() {
+		$keys = [
+			'ecommerce_cheque_enable',
+			'ecommerce_cheque_instructions',
+			'ecommerce_paypal_enable',
+			'ecommerce_paypal_sandbox',
+			'ecommerce_paypal_email',
+			'ecommerce_paypal_username',
+			'ecommerce_paypal_password',
+			'ecommerce_paypal_signature',
+			'ecommerce_paypal_std_enable',
+			'ecommerce_paypal_std_sandbox',
+			'ecommerce_paypal_std_email',
+			'ecommerce_test_gateway_enable',
+			'ecommerce_stripe_enable',
+			'ecommerce_stripe_key_public',
+			'ecommerce_stripe_key_private',
+			'ecommerce_stripe_webhook_secret',
+			'ecommerce_stripe_webhook_hash',
+			'ecommerce_stripe_webhook_in_sync',
+			'ecommerce_stripe_connect_enable',
+			'ecommerce_paypal_checkout_enable',
+			'ecommerce_paypal_checkout_sandbox',
+			'ecommerce_paypal_checkout_client_id',
+			'ecommerce_paypal_checkout_client_secret',
+			'ecommerce_paypal_checkout_notification_id',
+			'ecommerce_paypal_checkout_notification_hash',
+			'ecommerce_braintree_enable',
+			'ecommerce_braintree_sandbox',
+			'ecommerce_braintree_merchant_id',
+			'ecommerce_braintree_public_key',
+			'ecommerce_braintree_private_key',
+			'ecommerce_braintree_enable_paypal',
+			'ecommerce_braintree_pass_client_data',
+			'ecommerce_studio_email',
+			'ecommerce_email_notification_recipient',
+			'license_key',
+			'imagely_license_key',
+			'stripe_cus_id',
+			'stripe_card_info',
+		];
+
+		/**
+		 * Filters the settings keys withheld from callers without manage_options.
+		 *
+		 * @param string[] $keys Setting keys.
+		 */
+		return (array) apply_filters( 'ngg_settings_rest_admin_only_keys', $keys );
+	}
+
+	/**
+	 * Settings array with admin-only keys removed for a caller without manage_options.
+	 *
+	 * @param array $data Settings array.
+	 * @return array
+	 */
+	protected static function redact_admin_only_settings( array $data ) {
+		if ( current_user_can( 'manage_options' ) ) {
+			return $data;
+		}
+		return array_diff_key( $data, array_flip( self::admin_only_setting_keys() ) );
+	}
+
+	/**
 	 * Get all settings
 	 *
 	 * @return \WP_REST_Response
 	 */
 	public static function get_settings() {
 		$settings = Settings::get_instance();
-		return new WP_REST_Response( $settings->to_array(), 200 );
+		return new WP_REST_Response( self::redact_admin_only_settings( $settings->to_array() ), 200 );
+	}
+
+	/**
+	 * Drops a wmPath/wmFont the watermark validator refuses from a settings request.
+	 *
+	 * The stored value is kept and the rest of the request still saves. Refusing the
+	 * whole request instead would block every other setting: the admin app sends the
+	 * full settings object on every change, from tabs that hold their own (possibly
+	 * stale) copy, so a refused path could never be told apart from a real edit
+	 * (#487). Storing '' instead would silently switch watermarking off. The admin
+	 * sees the refusal where the path is edited: the Watermarking tab previews every
+	 * change through get_watermark_preview(), which reports "not allowed".
+	 *
+	 * @param array $new_settings Request settings; refused watermark keys are removed.
+	 * @return void
+	 */
+	protected static function drop_refused_watermark_values( array &$new_settings ) {
+		foreach ( [ 'wmPath', 'wmFont' ] as $key ) {
+			if ( ! isset( $new_settings[ $key ] ) || ! is_string( $new_settings[ $key ] ) || '' === trim( $new_settings[ $key ] ) ) {
+				continue;
+			}
+			if ( '' === \Imagely\NGG\Util\Security::sanitize_watermark_option( $key, $new_settings[ $key ] ) ) {
+				unset( $new_settings[ $key ] );
+			}
+		}
 	}
 
 	/**
@@ -422,6 +529,13 @@ class SettingsREST {
 		if ( ! is_array( $new_settings ) ) {
 			$new_settings = [];
 		}
+		if ( ! current_user_can( 'manage_options' ) && array_intersect_key( $new_settings, array_flip( self::admin_only_setting_keys() ) ) ) {
+			return new WP_Error(
+				'settings_admin_only',
+				__( 'Payment gateway and license settings can only be changed by a site administrator.', 'nggallery' ),
+				[ 'status' => 403 ]
+			);
+		}
 		if ( is_multisite() && isset( $new_settings['gallerypath'] ) && ! is_main_site() && ! is_super_admin() ) {
 			unset( $new_settings['gallerypath'] );
 		}
@@ -431,6 +545,7 @@ class SettingsREST {
 				return $gallerypath_validation;
 			}
 		}
+		self::drop_refused_watermark_values( $new_settings );
 		$settings = Settings::get_instance();
 
 		foreach ( $new_settings as $key => $value ) {
@@ -453,7 +568,7 @@ class SettingsREST {
 			 */
 			do_action( 'ngg_settings_updated', $new_settings, $settings );
 
-			return new WP_REST_Response( $settings->to_array(), 200 );
+			return new WP_REST_Response( self::redact_admin_only_settings( $settings->to_array() ), 200 );
 		} catch ( \Exception $e ) {
 			return new WP_Error(
 				'settings_update_failed',
@@ -509,7 +624,7 @@ class SettingsREST {
 				return $gallerypath_validation;
 			}
 		}
-
+		self::drop_refused_watermark_values( $new_settings );
 		$settings = GlobalSettings::get_instance();
 
 		foreach ( $new_settings as $key => $value ) {
@@ -528,6 +643,19 @@ class SettingsREST {
 				[ 'status' => 500 ]
 			);
 		}
+	}
+
+	/**
+	 * The error returned for a watermark path outside the install.
+	 *
+	 * @return WP_Error
+	 */
+	private static function watermark_path_not_allowed() {
+		return new WP_Error(
+			'invalid_watermark_image',
+			__( 'Watermark image path is not allowed.', 'nggallery' ),
+			[ 'status' => 400 ]
+		);
 	}
 
 	/**
@@ -583,26 +711,26 @@ class SettingsREST {
 
 			// Allow either absolute URLs, absolute filesystem paths, or server-relative paths.
 			$is_url = is_string( $wm_path ) && preg_match( '/^https?:\/\//i', $wm_path );
-			$is_abs = is_string( $wm_path ) && ( 0 === strpos( $wm_path, '/' ) || preg_match( '/^[A-Za-z]:[\\\\\/]*/', $wm_path ) );
 			// phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf -- URL case has no file check.
 			if ( $is_url ) {
 				// URL will be downloaded later; no file_exists check here.
-			} elseif ( $is_abs ) {
-				// Absolute filesystem path must exist
-				if ( ! file_exists( $wm_path ) ) {
-					return new WP_Error(
-						'invalid_watermark_image',
-						__( 'Watermark image file does not exist.', 'nggallery' ),
-						[ 'status' => 400 ]
-					);
-				}
 			} else {
-				// Treat as server-relative path under ABSPATH
-				$full_path = ABSPATH . ltrim( $wm_path, '/' );
-				if ( ! file_exists( $full_path ) ) {
+				// SECURITY (#1084): contain before probing, with the same candidates and
+				// roots as settings save and the render sinks, so the preview accepts the
+				// same local paths a real thumbnail uses. Checking existence first let a
+				// settings user test whether any server path exists from the 400 message.
+				$fs           = \Imagely\NGG\Util\Filesystem::get_instance();
+				$content_path = $fs->join_paths( $fs->get_document_root( 'content' ), $wm_path );
+				// sanitize_watermark_option() also refuses non-http wrappers (phar://, …).
+				if ( '' === \Imagely\NGG\Util\Security::sanitize_watermark_option( 'wmPath', $wm_path ) ) {
+					return self::watermark_path_not_allowed();
+				}
+				// One message for "missing" and "outside the install": only in-root
+				// candidates are probed, so the answer never depends on an outside file.
+				if ( null === \Imagely\NGG\Util\Security::resolve_watermark_path( $wm_path, $content_path ) ) {
 					return new WP_Error(
 						'invalid_watermark_image',
-						__( 'Watermark image file does not exist.', 'nggallery' ),
+						__( 'Watermark image file does not exist inside the WordPress install.', 'nggallery' ),
 						[ 'status' => 400 ]
 					);
 				}
@@ -773,13 +901,20 @@ class SettingsREST {
 					$tmp_download_path = $tmp_path;
 				} elseif ( $is_abs ) {
 					// Path-traversal hardening: resolve symlinks/.. segments and constrain absolute paths to ABSPATH or the uploads dir only.
-					$real_wm_path  = realpath( $final_wm_path ); // realpath normalizes ../ and resolves symlinks before allowlist check.
+					// SECURITY (#1084): realpath() the contained candidate, never the raw value: on
+					// Windows a raw UNC path would open SMB to that host before the checks below.
+					$fs            = \Imagely\NGG\Util\Filesystem::get_instance();
+					$resolved_path = \Imagely\NGG\Util\Security::resolve_watermark_path( $final_wm_path, $fs->join_paths( $fs->get_document_root( 'content' ), $final_wm_path ) );
+					$real_wm_path  = null === $resolved_path ? false : realpath( $resolved_path ); // realpath normalizes ../ and resolves symlinks before allowlist check.
 					$upload_dir    = wp_upload_dir();
 					$real_abspath  = realpath( ABSPATH ); // Normalize ABSPATH too so string prefix match is apples-to-apples.
 					$real_uploads  = isset( $upload_dir['basedir'] ) ? realpath( $upload_dir['basedir'] ) : false; // Uploads dir may live outside ABSPATH on some installs.
 					$under_abspath = ( $real_wm_path && $real_abspath && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_abspath ) ) ); // trailingslashit prevents partial dir-name match (e.g. /var/www/html_secret matching /var/www/html).
 					$under_uploads = ( $real_wm_path && $real_uploads && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_uploads ) ) ); // Allow uploads dir when outside ABSPATH.
-					if ( ! $real_wm_path || ( ! $under_abspath && ! $under_uploads ) ) {
+					// wp-content may be relocated outside ABSPATH; the render sinks accept it too.
+					$real_content  = defined( 'WP_CONTENT_DIR' ) ? realpath( WP_CONTENT_DIR ) : false;
+					$under_content = ( $real_wm_path && $real_content && 0 === strpos( trailingslashit( $real_wm_path ), trailingslashit( $real_content ) ) );
+					if ( ! $real_wm_path || ( ! $under_abspath && ! $under_uploads && ! $under_content ) ) {
 						// Reject arbitrary filesystem reads (e.g. /etc/passwd) via watermark path — prior code copied any readable file into a public previews dir.
 						return new WP_Error(
 							'invalid_watermark_image',
@@ -844,7 +979,7 @@ class SettingsREST {
 				'wmXpos'    => intval( $watermark_options['wmXpos'] ?? 0 ),
 				'wmYpos'    => intval( $watermark_options['wmYpos'] ?? 0 ),
 				'wmPath'    => sanitize_text_field( $final_wm_path ),
-				'wmFont'    => sanitize_text_field( $watermark_options['wmFont'] ?? 'arial.ttf' ),
+				'wmFont'    => \Imagely\NGG\Util\Security::sanitize_watermark_option( 'wmFont', $watermark_options['wmFont'] ?? 'arial.ttf' ),
 				'wmSize'    => intval( $watermark_options['wmSize'] ?? 30 ),
 				'wmColor'   => sanitize_text_field( $watermark_options['wmColor'] ?? 'ffffff' ),
 				'wmOpaque'  => intval( $watermark_options['wmOpaque'] ?? 33 ),
@@ -919,6 +1054,22 @@ class SettingsREST {
 			);
 		}
 
+		// Non-admins must not wipe admin-only keys: refuse ecommerce, downgrade all, restore after.
+		$preserved = [];
+		if ( ! current_user_can( 'manage_options' ) ) {
+			if ( 'ecommerce' === $settings_type ) {
+				return new WP_Error(
+					'settings_admin_only',
+					__( 'Payment gateway and license settings can only be changed by a site administrator.', 'nggallery' ),
+					[ 'status' => 403 ]
+				);
+			}
+			if ( 'all' === $settings_type ) {
+				$settings_type = 'non_ecommerce';
+			}
+			$preserved = array_intersect_key( Settings::get_instance()->to_array(), array_flip( self::admin_only_setting_keys() ) );
+		}
+
 		try {
 			global $wpdb;
 
@@ -947,6 +1098,14 @@ class SettingsREST {
 						__( 'Invalid settings type. Must be "all", "non_ecommerce", or "ecommerce".', 'nggallery' ),
 						[ 'status' => 400 ]
 					);
+			}
+
+			if ( $preserved ) {
+				$settings = Settings::get_instance();
+				foreach ( $preserved as $key => $value ) {
+					$settings->set( $key, $value );
+				}
+				$settings->save();
 			}
 
 			return new WP_REST_Response(

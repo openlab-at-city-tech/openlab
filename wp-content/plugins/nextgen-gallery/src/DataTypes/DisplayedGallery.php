@@ -864,6 +864,11 @@ class DisplayedGallery extends Model {
 			->order_by( 'ordered_by', 'DESC' )
 			->run_query();
 
+		if ( ! $id_only && ! is_admin() ) {
+			$galleries = $this->_translate_album_children( $galleries, 'gallery' );
+			$albums    = $this->_translate_album_children( $albums, 'album' );
+		}
+
 		// Reorder entities according to order specified in entity_ids.
 		foreach ( $entity_ids as $entity_id ) {
 			if ( substr( $entity_id, 0, 1 ) == 'a' ) {
@@ -896,6 +901,47 @@ class DisplayedGallery extends Model {
 		// Limit the entities.
 		if ( $limit ) {
 			$retval = array_slice( $retval, $offset, $limit );
+		}
+
+		return $retval;
+	}
+
+	/**
+	 * Translates the title and description of an album's child galleries or sub-albums.
+	 *
+	 * These rows come from run_query() without a model, so the mapper's set_defaults() (which
+	 * translates on the front end) never runs for them. Each row is cloned first: the mapper's
+	 * query cache hands back the same objects on a repeated query, and translating them in place
+	 * would leak the translated text into the cache.
+	 *
+	 * @param array  $entities Gallery or album rows.
+	 * @param string $type     'gallery' or 'album'; prefix of the registered WPML string names.
+	 * @return array
+	 */
+	public function _translate_album_children( $entities, $type ) {
+		$retval = [];
+		foreach ( $entities as $entity ) {
+			$entity = clone $entity;
+			$id     = $entity->{$entity->id_field};
+
+			// Album rows carry both name/albumdesc and their title/galdesc aliases; breadcrumbs read name.
+			$fields = 'album' === $type
+				? [
+					'name'      => '_name',
+					'title'     => '_name',
+					'albumdesc' => '_description',
+					'galdesc'   => '_description',
+				]
+				: [
+					'title'   => '_name',
+					'galdesc' => '_description',
+				];
+			foreach ( $fields as $field => $suffix ) {
+				if ( ! empty( $entity->$field ) ) {
+					$entity->$field = I18N::translate( $entity->$field, $type . '_' . $id . $suffix );
+				}
+			}
+			$retval[] = $entity;
 		}
 
 		return $retval;
@@ -1125,6 +1171,11 @@ class DisplayedGallery extends Model {
 					$mapper->select()->where( [ "{$album_key} IN %s", $this->container_ids ] );
 				}
 				$retval = $mapper->run_query();
+
+				// Same run_query() gap as the album children: these rows feed the root breadcrumb.
+				if ( ! is_admin() ) {
+					$retval = $this->_translate_album_children( $retval, 'album' );
+				}
 			}
 		}
 

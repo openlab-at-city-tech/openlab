@@ -32,18 +32,29 @@ class nggSitemaps {
 		// Backward check for older images
 		$p->post_content = NextGEN_shortcodes::convert_shortcode( $p->post_content );
 
-		// Don't process the images in the normal way
+		// Don't process the images in the normal way. Swap the collectors in for every registered
+		// shortcode only while this post is scanned, then put the registrations back: this filter
+		// runs once per sitemap entry, and leaving them swapped broke every other plugin's shortcode
+		// (Envira, Soliloquy, ...) and NextGEN's own [nggallery] for the rest of the request. The
+		// collectors are registered with WordPress directly, not through the NextGEN shortcode
+		// manager, so its [nggallery] / [singlepic] callbacks are never replaced either.
+		global $shortcode_tags;
+		$registered_shortcodes = $shortcode_tags;
 		remove_all_shortcodes();
 
 		// We cannot parse at this point a album, just galleries & single images
-		\Imagely\NGG\Display\Shortcodes::add( 'singlepic', array( &$this, 'add_images' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'thumb', array( &$this, 'add_images' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'nggallery', array( &$this, 'add_gallery' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'imagebrowser', array( &$this, 'add_gallery' ) );
-		\Imagely\NGG\Display\Shortcodes::add( 'slideshow', array( &$this, 'add_gallery' ) );
+		add_shortcode( 'singlepic', array( &$this, 'add_images' ) );
+		add_shortcode( 'thumb', array( &$this, 'add_images' ) );
+		add_shortcode( 'nggallery', array( &$this, 'add_gallery' ) );
+		add_shortcode( 'imagebrowser', array( &$this, 'add_gallery' ) );
+		add_shortcode( 'slideshow', array( &$this, 'add_gallery' ) );
 
-		// Search now for shortcodes
-		do_shortcode( $p->post_content );
+		try {
+			// Search now for shortcodes
+			do_shortcode( $p->post_content );
+		} finally {
+			$shortcode_tags = $registered_shortcodes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Restores the registrations saved above.
+		}
 
 		return $this->images;
 	}

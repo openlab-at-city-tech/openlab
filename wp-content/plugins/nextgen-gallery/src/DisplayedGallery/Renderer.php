@@ -362,6 +362,9 @@ class Renderer {
 			$lookup = false;
 		} elseif ( $app->get_parameter( 'show' ) ) {
 			$lookup = false;
+		} elseif ( $app->get_parameter( 'ajax_pagination_referrer' ) ) {
+			// The cache key does not include the request body, so output built from this parameter must not be cached.
+			$lookup = false;
 		} elseif ( $controller->is_cachable() === false ) {
 			$lookup = false;
 		} elseif ( ! NGG_RENDERING_CACHE_ENABLED ) {

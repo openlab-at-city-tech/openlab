@@ -276,8 +276,15 @@ class LegacyImage {
 				if ( $this->_displayed_gallery && isset( $this->_displayed_gallery->display_settings ) ) {
 					$ds = $this->_displayed_gallery->display_settings;
 					if ( isset( $ds['override_thumbnail_settings'] ) && $ds['override_thumbnail_settings'] ) {
-						$w = $ds['thumbnail_width'];
-						$h = $ds['thumbnail_height'];
+						/*
+						 * Cast before the fallback below tests these, not after. A value such as
+						 * "<script>alert(1)</script>" is truthy as a string, so casting afterwards
+						 * would skip the fallback and then emit width="0" -- valid markup that
+						 * declares the wrong intrinsic size. Casting here makes an unusable value 0,
+						 * which is what the fallback is looking for.
+						 */
+						$w = absint( $ds['thumbnail_width'] );
+						$h = absint( $ds['thumbnail_height'] );
 					}
 				}
 				if ( ! $w || ! $h ) {
@@ -290,11 +297,62 @@ class LegacyImage {
 						$storage = $this->get_storage();
 						$storage->generate_thumbnail( $this->_orig_image );
 					}
-					$w = $this->_orig_image->meta_data['thumbnail']['width'];
-					$h = $this->_orig_image->meta_data['thumbnail']['height'];
+
+					/*
+					 * generate_thumbnail() returns a bool and legitimately fails -- an offloaded or
+					 * missing thumbnail file, an unwritable cache directory, its own recursion guard --
+					 * without repopulating meta_data['thumbnail'] on this object. Reading the key
+					 * unconditionally therefore indexes null, which is the PHP 8 notice behind #1065.
+					 * Fall back to the resolver the modern Thumbnails views use for exactly this case
+					 * (#891), which substitutes the size the thumbnail is configured to render at.
+					 */
+					if ( isset(
+						$this->_orig_image->meta_data['thumbnail']['width'],
+						$this->_orig_image->meta_data['thumbnail']['height']
+					) ) {
+						$w = $this->_orig_image->meta_data['thumbnail']['width'];
+						$h = $this->_orig_image->meta_data['thumbnail']['height'];
+					} else {
+						$dimensions = $this->get_storage()->get_image_dimensions_or_default(
+							$this->_orig_image,
+							'thumbnail'
+						);
+						if ( is_array( $dimensions ) ) {
+							$w = $dimensions['width'];
+							$h = $dimensions['height'];
+						}
+					}
 				}
 
-				return "width='{$w}' height='{$h}'";
+				/*
+				 * SECURITY: both dimensions can originate from the display-settings bag, which
+				 * carries every unconsumed [ngg] shortcode attribute (Renderer::params_to_displayed_gallery()
+				 * copies them in, and DisplayedGallery::merge_display_settings() lets them override the
+				 * stored display-type defaults). The assembled string is echoed raw by the bundled legacy
+				 * views and by any theme template under nggallery/, so it is escaped here, at the one point
+				 * every caller converges on, rather than at each sink.
+				 *
+				 * A dimension is always a pixel count, so absint() is the correct domain for it and leaves
+				 * nothing an attribute context can act on; esc_attr() then holds the guarantee for the
+				 * templates even if a future caller relaxes the cast. The cast is repeated here because
+				 * the fallback above reads stored meta, which a bad migration can leave the string
+				 * "Array" (#882).
+				 */
+				$w = absint( $w );
+				$h = absint( $h );
+
+				/*
+				 * A dimension that still does not resolve is left out, never emitted as 0. An empty
+				 * attribute is discarded by browsers, so the stylesheet sizes the image and the gallery
+				 * still looks right; width="0" is honoured instead, and since the Thumbnails stylesheet
+				 * sets height:auto but never width, it collapses the thumbnail to nothing (#891,
+				 * nextgen-gallery-pro#694). Omitting both is what the modern views settled on.
+				 */
+				if ( ! $w || ! $h ) {
+					return '';
+				}
+
+				return 'width="' . esc_attr( $w ) . '" height="' . esc_attr( $h ) . '"';
 
 			case 'slug':
 				$gallery              = $this->get_legacy_gallery( $this->__get( 'galleryid' ) );

@@ -287,6 +287,18 @@ class Installer {
 			// failing probe re-reports.
 			\delete_option( 'ngg_schema_check_reported' );
 
+			// Re-arm the #1107 originals relocation on every version change. Its DONE flag is
+			// otherwise permanent, so "*_backup" siblings that appear after it latched - a
+			// downgrade then re-upgrade, a files-only restore, a folder of a gallery deleted with
+			// deleteImg off - would never be swept and would stay at the anonymously derivable
+			// URL. Re-running is cheap when there is nothing to move: the batch skips every image
+			// whose original is already relocated.
+			\delete_option( 'ngg_originals_relocated' );
+			\delete_option( 'ngg_originals_relocation_cursor' );
+			\delete_option( 'ngg_originals_relocation_passes' );
+			\delete_option( 'ngg_originals_relocation_incomplete' );
+			\delete_option( 'ngg_originals_relocation_dirs_cursor' );
+
 			// Clear APC cache.
 			if ( \function_exists( 'apc_clear_cache' ) ) {
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged

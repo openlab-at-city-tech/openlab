@@ -238,6 +238,10 @@ class M_NextGen_Admin extends C_Base_Module {
 
 		$notices->add( 'nextgen_first_run_notification', 'C_NextGen_First_Run_Notification_Wizard' );
 
+		// An upload that could not be watermarked (#1104) is reported until an admin
+		// dismisses it; the next miss shows it again.
+		$notices->add( \Imagely\NGG\Admin\Notifications\WatermarkUploadFailed::TRANSIENT, new \Imagely\NGG\Admin\Notifications\WatermarkUploadFailed() );
+
 		$notices->add( 'mailchimp_opt_in', 'C_Mailchimp_OptIn_Notice' );
 	}
 

@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 										?>
 				" 
 					<?php
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $image->size contains safe HTML size attributes
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- LegacyImage::__get( 'size' ) casts both dimensions with absint() and escapes them with esc_attr(), so the assembled width/height pair carries no caller-supplied markup.
 					echo $image->size;
 					?>
 				/>

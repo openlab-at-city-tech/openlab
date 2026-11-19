@@ -39,7 +39,7 @@ class C_Form extends C_MVC_Controller
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     /**
      * Page instance.
      *
@@ -109,7 +109,7 @@ class Mixin_Form_Instance_Methods extends Mixin
      * @param array $attributes
      * @return bool
      */
-    public function save_action($attributes = array())
+    public function save_action($attributes = [])
     {
         if (!$attributes) {
             $attributes = [];
@@ -314,7 +314,7 @@ class C_NextGen_Admin_Page_Controller extends C_MVC_Controller
      *
      * @var array
      */
-    public static $_instances = array();
+    public static $_instances = [];
     /**
      * Page name.
      *
@@ -499,7 +499,7 @@ class Mixin_NextGen_Admin_Page_Instance_Methods extends Mixin
         $action_param = $this->object->param('action');
         $action = $action_param ? $action_param : '';
         $retval = preg_quote($action, '/');
-        $retval = strtolower(preg_replace('/[^\\w]/', '_', $retval));
+        $retval = strtolower(preg_replace('/[^\w]/', '_', $retval));
         return preg_replace('/_{2,}/', '_', $retval) . '_action';
     }
     /**
@@ -605,7 +605,7 @@ class C_NextGen_Admin_Page_Manager extends C_Component
      *
      * @var array
      */
-    public $_pages = array();
+    public $_pages = [];
     /**
      * Gets an instance of the Page Manager
      *
@@ -699,7 +699,7 @@ class C_NextGen_Admin_Page_Manager extends C_Component
 class Mixin_Page_Manager extends Mixin
 {
     // phpcs:ignore Generic.Files.OneObjectStructurePerFile.MultipleFound
-    public function add($slug, $properties = array())
+    public function add($slug, $properties = [])
     {
         if (!isset($properties['adapter'])) {
             $properties['adapter'] = null;
@@ -848,21 +848,21 @@ class C_NextGen_First_Run_Notification_Wizard
     public function render()
     {
         $block = <<<'EOT'
-        <style>
-            div#ngg-wizard-video {
-                width: 710px;
-                max-width: 710px;
-            }
-        </style>
-        <div class="hidden" id="ngg-wizard-video" style="border: none">
-            <iframe width="640"
-                    height="480"
-                    src="https://www.youtube.com/embed/ZAYj6D5XXNk"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; encrypted-media;"
-                    allowfullscreen></iframe>
-        </div>
-EOT;
+                <style>
+                    div#ngg-wizard-video {
+                        width: 710px;
+                        max-width: 710px;
+                    }
+                </style>
+                <div class="hidden" id="ngg-wizard-video" style="border: none">
+                    <iframe width="640"
+                            height="480"
+                            src="https://www.youtube.com/embed/ZAYj6D5XXNk"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media;"
+                            allowfullscreen></iframe>
+                </div>
+        EOT;
         return __('Thanks for installing Imagely! Want help creating your first gallery?', 'nggallery') . ' <a href="' . esc_url(admin_url('index.php?page=nextgen-gallery-setup-wizard')) . '" >' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=imagely&tab=general')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
     }
     public function get_css_class()

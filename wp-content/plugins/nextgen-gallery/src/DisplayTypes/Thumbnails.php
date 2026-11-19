@@ -125,7 +125,7 @@ class Thumbnails extends ParentController {
 					$current_page,
 					$total,
 					$images_per_page,
-					urldecode( $router->get_parameter( 'ajax_pagination_referrer' ) ? $router->get_parameter( 'ajax_pagination_referrer' ) : '' )
+					urldecode( $this->get_pagination_referrer() )
 				);
 				$app               = $router->get_routed_app();
 				$app->remove_parameter( 'ajax_pagination_referrer' );
@@ -165,7 +165,7 @@ class Thumbnails extends ParentController {
 			$slideshow_link = '';
 			if ( $display_settings['show_slideshow_link'] ) {
 				// origin_url is necessary for ajax operations. slideshow_link_origin will NOT always exist.
-				$origin_url     = $router->get_parameter( 'ajax_pagination_referrer' );
+				$origin_url     = $this->get_pagination_referrer();
 				$slideshow_link = $this->get_url_for_alternate_display_type(
 					$displayed_gallery,
 					NGG_BASIC_SLIDESHOW,
