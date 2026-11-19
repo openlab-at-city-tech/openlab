@@ -1,11 +1,11 @@
 <?php
 /**
-** A base module for the following types of tags:
-** 	[text] and [text*]		# Single-line text
-** 	[email] and [email*]	# Email address
-** 	[url] and [url*]		# URL
-** 	[tel] and [tel*]		# Telephone number
-**/
+ * Text fields
+ *
+ * @link https://contactform7.com/text-fields/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -110,7 +110,7 @@ function wpcf7_swv_add_text_rules( $schema, $contact_form ) {
 
 	foreach ( $tags as $tag ) {
 		if ( $tag->is_required() ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'required', array(
 					'field' => $tag->name,
 					'error' => wpcf7_get_message( 'invalid_required' ),
@@ -119,7 +119,7 @@ function wpcf7_swv_add_text_rules( $schema, $contact_form ) {
 		}
 
 		if ( 'email' === $tag->basetype ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'email', array(
 					'field' => $tag->name,
 					'error' => wpcf7_get_message( 'invalid_email' ),
@@ -128,7 +128,7 @@ function wpcf7_swv_add_text_rules( $schema, $contact_form ) {
 		}
 
 		if ( 'url' === $tag->basetype ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'url', array(
 					'field' => $tag->name,
 					'error' => wpcf7_get_message( 'invalid_url' ),
@@ -137,7 +137,7 @@ function wpcf7_swv_add_text_rules( $schema, $contact_form ) {
 		}
 
 		if ( 'tel' === $tag->basetype ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'tel', array(
 					'field' => $tag->name,
 					'error' => wpcf7_get_message( 'invalid_tel' ),
@@ -146,7 +146,7 @@ function wpcf7_swv_add_text_rules( $schema, $contact_form ) {
 		}
 
 		if ( $minlength = $tag->get_minlength_option() ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'minlength', array(
 					'field' => $tag->name,
 					'threshold' => absint( $minlength ),
@@ -156,7 +156,7 @@ function wpcf7_swv_add_text_rules( $schema, $contact_form ) {
 		}
 
 		if ( $maxlength = $tag->get_maxlength_option( '400' ) ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'maxlength', array(
 					'field' => $tag->name,
 					'threshold' => absint( $maxlength ),
@@ -227,25 +227,41 @@ function wpcf7_tag_generator_text( $contact_form, $options ) {
 		'text' => array(
 			'display_name' => __( 'Text field', 'contact-form-7' ),
 			'heading' => __( 'Text field form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/text-fields/">single-line plain text input field</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to text fields doc */
+				__( 'Generates a form-tag for a <a href="%s">single-line plain text input field</a>.', 'contact-form-7' ),
+				'https://contactform7.com/text-fields/'
+			),
 			'maybe_purpose' => 'author_name',
 		),
 		'email' => array(
 			'display_name' => __( 'Email address field', 'contact-form-7' ),
 			'heading' => __( 'Email address field form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for an <a href="https://contactform7.com/text-fields/">email address input field</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to text fields doc */
+				__( 'Generates a form-tag for an <a href="%s">email address input field</a>.', 'contact-form-7' ),
+				'https://contactform7.com/text-fields/'
+			),
 			'maybe_purpose' => 'author_email',
 		),
 		'url' => array(
 			'display_name' => __( 'URL field', 'contact-form-7' ),
 			'heading' => __( 'URL field form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/text-fields/">URL input field</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to text fields doc */
+				__( 'Generates a form-tag for a <a href="%s">URL input field</a>.', 'contact-form-7' ),
+				'https://contactform7.com/text-fields/'
+			),
 			'maybe_purpose' => 'author_url',
 		),
 		'tel' => array(
 			'display_name' => __( 'Telephone number field', 'contact-form-7' ),
 			'heading' => __( 'Telephone number field form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/text-fields/">telephone number input field</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to text fields doc */
+				__( 'Generates a form-tag for a <a href="%s">telephone number input field</a>.', 'contact-form-7' ),
+				'https://contactform7.com/text-fields/'
+			),
 			'maybe_purpose' => 'author_tel',
 		),
 	);

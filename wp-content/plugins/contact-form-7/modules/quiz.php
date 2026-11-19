@@ -1,7 +1,11 @@
 <?php
 /**
-** A base module for [quiz]
-**/
+ * Quiz
+ *
+ * @link https://contactform7.com/quiz/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -204,7 +208,11 @@ function wpcf7_tag_generator_quiz( $contact_form, $options ) {
 		'quiz' => array(
 			'display_name' => __( 'Quiz', 'contact-form-7' ),
 			'heading' => __( 'Quiz form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/quiz/">quiz</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to quiz field doc */
+				__( 'Generates a form-tag for a <a href="%s">quiz</a>.', 'contact-form-7' ),
+				'https://contactform7.com/quiz/'
+			),
 		),
 	);
 

@@ -1,7 +1,11 @@
 <?php
 /**
-** A base module for [submit]
-**/
+ * Submit button
+ *
+ * @link https://contactform7.com/submit-button/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -55,7 +59,11 @@ function wpcf7_tag_generator_submit( $contact_form, $options ) {
 		'submit' => array(
 			'display_name' => __( 'Submit button', 'contact-form-7' ),
 			'heading' => __( 'Submit button form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a <a href="https://contactform7.com/submit-button/">submit button</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to submit button doc */
+				__( 'Generates a form-tag for a <a href="%s">submit button</a>.', 'contact-form-7' ),
+				'https://contactform7.com/submit-button/'
+			),
 		),
 	);
 

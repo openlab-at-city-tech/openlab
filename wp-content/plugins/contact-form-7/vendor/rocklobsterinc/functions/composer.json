@@ -1,0 +1,35 @@
+{
+  "name": "rocklobsterinc/functions",
+  "description": "Rock Lobster's PHP function library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Takayuki Miyoshi",
+      "role": "Developer"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "src/functions.php"
+    ]
+  },
+  "archive": {
+    "exclude": [
+      "/.*",
+      "/package-lock.json",
+      "/package.json"
+    ]
+  },
+  "scripts": {
+    "lint": "parallel-lint src/",
+    "test": "phpunit"
+  },
+  "require": {
+    "php": ">=8.3",
+    "symfony/polyfill-mbstring": "^1.43"
+  },
+  "require-dev": {
+    "php-parallel-lint/php-parallel-lint": "^1.4",
+    "phpunit/phpunit": "^12.5"
+  }
+}

@@ -3,6 +3,7 @@
  * Contact form helper functions
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
  * Wrapper function of WPCF7_ContactForm::get_instance().
@@ -19,9 +20,9 @@ function wpcf7_contact_form( $post ) {
  * Searches for a contact form by an old unit ID.
  *
  * @param int $old_id Old unit ID.
- * @return WPCF7_ContactForm Contact form object.
+ * @return WPCF7_ContactForm|null Contact form object, or null if not found.
  */
-function wpcf7_get_contact_form_by_old_id( $old_id ) {
+function wpcf7_get_contact_form_by_old_id( $old_id ): ?WPCF7_ContactForm {
 	$contact_forms = WPCF7_ContactForm::find( array(
 		'meta_query' => array(
 			array(
@@ -33,9 +34,11 @@ function wpcf7_get_contact_form_by_old_id( $old_id ) {
 		'posts_per_page' => 1,
 	) );
 
-	if ( $contact_forms ) {
-		return wpcf7_contact_form( $contact_forms[0] );
+	if ( empty( $contact_forms ) ) {
+		return null;
 	}
+
+	return wpcf7_contact_form( $contact_forms[0] );
 }
 
 
@@ -90,14 +93,14 @@ function wpcf7_get_contact_form_by_title( $title ) {
 
 
 /**
- * Wrapper function of WPCF7_ContactForm::get_current().
+ * Returns the contact form that is currently processed.
  *
- * @return WPCF7_ContactForm Contact form object.
+ * This is a wrapper for WPCF7_ContactForm::get_current().
+ *
+ * @return WPCF7_ContactForm|null Contact form object, or null if none is set.
  */
-function wpcf7_get_current_contact_form() {
-	if ( $current = WPCF7_ContactForm::get_current() ) {
-		return $current;
-	}
+function wpcf7_get_current_contact_form(): ?WPCF7_ContactForm {
+	return WPCF7_ContactForm::get_current();
 }
 
 

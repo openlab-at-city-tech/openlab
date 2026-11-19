@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 add_filter( 'wpcf7_mail_html_body', 'wpcf7_mail_html_body_autop', 10, 1 );
 
 /**
@@ -386,7 +388,7 @@ class WPCF7_Mail {
 			$uploaded_files = $submission->uploaded_files();
 
 			foreach ( (array) $uploaded_files as $name => $paths ) {
-				if ( false !== strpos( $template, "[{$name}]" ) ) {
+				if ( str_contains( $template, "[{$name}]" ) ) {
 					$attachments = array_merge( $attachments, (array) $paths );
 				}
 			}
@@ -395,7 +397,7 @@ class WPCF7_Mail {
 		foreach ( explode( "\n", $template ) as $line ) {
 			$line = trim( $line );
 
-			if ( '' === $line or '[' === substr( $line, 0, 1 ) ) {
+			if ( '' === $line or str_starts_with( $line, '[' ) ) {
 				continue;
 			}
 

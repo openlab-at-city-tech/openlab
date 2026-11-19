@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 if ( ! class_exists( 'WPCF7_Service' ) ) {
 	return;
 }
@@ -11,9 +13,7 @@ class WPCF7_Stripe extends WPCF7_Service {
 
 
 	public static function get_instance() {
-		if ( empty( self::$instance ) ) {
-			self::$instance = new self();
-		}
+		self::$instance ??= new self();
 
 		return self::$instance;
 	}
@@ -180,7 +180,7 @@ class WPCF7_Stripe extends WPCF7_Service {
 
 		$formatter->append_preformatted(
 			wpcf7_link(
-				__( 'https://contactform7.com/stripe-integration/', 'contact-form-7' ),
+				'https://contactform7.com/stripe-integration/',
 				__( 'Stripe integration', 'contact-form-7' )
 			)
 		);

@@ -1,0 +1,244 @@
+{
+    "packages": [
+        {
+            "name": "rocklobsterinc/form-data-tree",
+            "version": "v2.0.10",
+            "version_normalized": "2.0.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rocklobster-in/form-data-tree-php.git",
+                "reference": "cb238c45ad91de97b783da7544040e4f4c7bcec1"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rocklobster-in/form-data-tree-php/zipball/cb238c45ad91de97b783da7544040e4f4c7bcec1",
+                "reference": "cb238c45ad91de97b783da7544040e4f4c7bcec1",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.3",
+                "rocklobsterinc/functions": "^v1.1"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.4"
+            },
+            "time": "2026-10-29T11:22:46+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "RockLobsterInc\\FormDataTree\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Takayuki Miyoshi",
+                    "role": "Developer"
+                }
+            ],
+            "description": "FormDataTree for PHP",
+            "support": {
+                "issues": "https://github.com/rocklobster-in/form-data-tree-php/issues",
+                "source": "https://github.com/rocklobster-in/form-data-tree-php/tree/v2.0.10"
+            },
+            "install-path": "../rocklobsterinc/form-data-tree"
+        },
+        {
+            "name": "rocklobsterinc/functions",
+            "version": "v1.1.0",
+            "version_normalized": "1.1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rocklobster-in/functions-php.git",
+                "reference": "11e12a3ecdcc2a35f0aa3e1bc3dbcfd2ae0c4a33"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rocklobster-in/functions-php/zipball/11e12a3ecdcc2a35f0aa3e1bc3dbcfd2ae0c4a33",
+                "reference": "11e12a3ecdcc2a35f0aa3e1bc3dbcfd2ae0c4a33",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.3",
+                "symfony/polyfill-mbstring": "^1.43"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpunit/phpunit": "^12.5"
+            },
+            "time": "2026-10-26T02:23:59+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Takayuki Miyoshi",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Rock Lobster's PHP function library",
+            "support": {
+                "issues": "https://github.com/rocklobster-in/functions-php/issues",
+                "source": "https://github.com/rocklobster-in/functions-php/tree/v1.1.0"
+            },
+            "install-path": "../rocklobsterinc/functions"
+        },
+        {
+            "name": "rocklobsterinc/swv",
+            "version": "v2.0.8",
+            "version_normalized": "2.0.8.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/rocklobster-in/swv-php.git",
+                "reference": "b4ba20fafce0e60c317a777f230748e4204f790d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/rocklobster-in/swv-php/zipball/b4ba20fafce0e60c317a777f230748e4204f790d",
+                "reference": "b4ba20fafce0e60c317a777f230748e4204f790d",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.3",
+                "rocklobsterinc/form-data-tree": "^v2.0",
+                "rocklobsterinc/functions": "^v1.1"
+            },
+            "require-dev": {
+                "php-parallel-lint/php-parallel-lint": "^1.4",
+                "phpunit/phpunit": "^12.5"
+            },
+            "time": "2026-10-26T04:05:53+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "src/functions.php"
+                ],
+                "psr-4": {
+                    "RockLobsterInc\\Swv\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Takayuki Miyoshi",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Schema-Woven Validation for PHP",
+            "support": {
+                "issues": "https://github.com/rocklobster-in/swv-php/issues",
+                "source": "https://github.com/rocklobster-in/swv-php/tree/v2.0.8"
+            },
+            "install-path": "../rocklobsterinc/swv"
+        },
+        {
+            "name": "symfony/polyfill-mbstring",
+            "version": "v1.43.3",
+            "version_normalized": "1.43.3.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "122889ed24dc000165bcbfd77ec412f15cbdfc6a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/122889ed24dc000165bcbfd77ec412f15cbdfc6a",
+                "reference": "122889ed24dc000165bcbfd77ec412f15cbdfc6a",
+                "shasum": ""
+            },
+            "require": {
+                "ext-iconv": "*",
+                "php": ">=7.2"
+            },
+            "provide": {
+                "ext-mbstring": "*"
+            },
+            "suggest": {
+                "ext-mbstring": "For best performance"
+            },
+            "time": "2026-10-28T09:35:49+00:00",
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/symfony/polyfill",
+                    "name": "symfony/polyfill"
+                }
+            },
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "bootstrap.php"
+                ],
+                "psr-4": {
+                    "Symfony\\Polyfill\\Mbstring\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Nicolas Grekas",
+                    "email": "p@tchwork.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony polyfill for the Mbstring extension",
+            "homepage": "https://symfony.com",
+            "keywords": [
+                "compatibility",
+                "mbstring",
+                "polyfill",
+                "portable",
+                "shim"
+            ],
+            "support": {
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.43.3"
+            },
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/nicolas-grekas",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "install-path": "../symfony/polyfill-mbstring"
+        }
+    ],
+    "dev": true,
+    "dev-package-names": []
+}

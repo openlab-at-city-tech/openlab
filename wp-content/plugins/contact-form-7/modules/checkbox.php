@@ -1,7 +1,11 @@
 <?php
 /**
-** A base module for [checkbox], [checkbox*], and [radio]
-**/
+ * Checkboxes and radio buttons
+ *
+ * @link https://contactform7.com/checkboxes-radio-buttons-and-menus/
+ */
+
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /* form_tag handler */
 
@@ -202,7 +206,7 @@ function wpcf7_swv_add_checkbox_rules( $schema, $contact_form ) {
 
 	foreach ( $tags as $tag ) {
 		if ( $tag->is_required() or 'radio' === $tag->type ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'required', array(
 					'field' => $tag->name,
 					'error' => wpcf7_get_message( 'invalid_required' ),
@@ -211,7 +215,7 @@ function wpcf7_swv_add_checkbox_rules( $schema, $contact_form ) {
 		}
 
 		if ( 'radio' === $tag->type or $tag->has_option( 'exclusive' ) ) {
-			$schema->add_rule(
+			$schema->addRule(
 				wpcf7_swv_create_rule( 'maxitems', array(
 					'field' => $tag->name,
 					'threshold' => 1,
@@ -292,7 +296,7 @@ function wpcf7_swv_add_checkbox_enum_rules( $schema, $contact_form ) {
 			}
 		);
 
-		$schema->add_rule(
+		$schema->addRule(
 			wpcf7_swv_create_rule( 'enum', array(
 				'field' => $field,
 				'accept' => array_values( $field_values ),
@@ -365,12 +369,20 @@ function wpcf7_tag_generator_checkbox( $contact_form, $options ) {
 		'checkbox' => array(
 			'display_name' => __( 'Checkboxes', 'contact-form-7' ),
 			'heading' => __( 'Checkboxes form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a group of <a href="https://contactform7.com/checkboxes-radio-buttons-and-menus/">checkboxes</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to checkboxes doc */
+				__( 'Generates a form-tag for a group of <a href="%s">checkboxes</a>.', 'contact-form-7' ),
+				'https://contactform7.com/checkboxes-radio-buttons-and-menus/'
+			),
 		),
 		'radio' => array(
 			'display_name' => __( 'Radio buttons', 'contact-form-7' ),
 			'heading' => __( 'Radio buttons form-tag generator', 'contact-form-7' ),
-			'description' => __( 'Generates a form-tag for a group of <a href="https://contactform7.com/checkboxes-radio-buttons-and-menus/">radio buttons</a>.', 'contact-form-7' ),
+			'description' => sprintf(
+				/* translators: %s: URL to radio buttons doc */
+				__( 'Generates a form-tag for a group of <a href="%s">radio buttons</a>.', 'contact-form-7' ),
+				'https://contactform7.com/checkboxes-radio-buttons-and-menus/'
+			),
 		),
 	);
 
