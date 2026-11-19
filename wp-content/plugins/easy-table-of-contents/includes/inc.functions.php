@@ -334,6 +334,61 @@ function eztoc_auto_device_target_status(){
         return $status;
 }
 /**
+ * Get normalized sticky TOC device target option.
+ *
+ * @since 2.0.80
+ *
+ * @return string
+ */
+function eztoc_get_sticky_device_target() {
+
+    $target = ezTOC_Option::get( 'sticky_device_target', '' );
+
+    if ( 'Select' === $target ) {
+        $target = '';
+    }
+
+    // Backward compatibility: desktop + legacy tablet checkbox.
+    if ( 'desktop' === $target && ezTOC_Option::get( 'sticky_enable_on_tablet' ) ) {
+        $target = 'desktop_tablet';
+    }
+
+    $allowed = array(
+        '',
+        'desktop',
+        'tablet',
+        'mobile',
+        'desktop_tablet',
+        'desktop_mobile',
+        'tablet_mobile',
+    );
+
+    if ( ! in_array( $target, $allowed, true ) ) {
+        return '';
+    }
+
+    return $target;
+}
+
+/**
+ * Check whether sticky TOC device targeting uses client-side viewport detection.
+ *
+ * @since 2.0.80
+ *
+ * @param string $target Optional normalized device target.
+ *
+ * @return bool
+ */
+function eztoc_sticky_device_target_uses_client_detection( $target = null ) {
+
+    if ( null === $target ) {
+        $target = eztoc_get_sticky_device_target();
+    }
+
+    return ! empty( $target );
+}
+
+/**
  * Check for the enable support of sticky toc/toggle
  * @since 2.0.60
  */
@@ -408,27 +463,6 @@ function eztoc_stikcy_enable_support_status() {
             }
         }
     }
-
-    if ( $status ) {
-        //Device Eligibility
-        //@since 2.0.60
-        if ( ezTOC_Option::get( 'sticky_device_target' ) == 'mobile' ) {
-            if ( function_exists( 'wp_is_mobile' ) && wp_is_mobile() ) {
-                $status = true;
-            }else{
-                $status = false;
-            }
-        }
-
-        if ( ezTOC_Option::get( 'sticky_device_target' ) == 'desktop' ) {
-            if( function_exists( 'wp_is_mobile' ) && wp_is_mobile() ) {
-                $status = false;
-            }else{
-                $status = true;
-            }
-        }
-
-      }    
 
     }
     //This is legacy filter, will be removed in future updates.
@@ -611,7 +645,7 @@ function eztoc_redirect( ) {
 		//phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reason: Nonce not required here
         if( !isset( $_GET['activate-multi'] ) )
         {
-            wp_safe_redirect( "options-general.php?page=table-of-contents#welcome" );
+            wp_safe_redirect( admin_url( 'admin.php?page=table-of-contents' ) );
         }
     }
 }
@@ -634,31 +668,48 @@ function eztoc_wp_strip_all_tags( $text, $remove_breaks = false ) {
 	if ( ! is_scalar( $text ) ) {
 		/*
 		 * To maintain consistency with pre-PHP 8 error levels,
-		 * wp_trigger_error() is used to trigger an E_USER_WARNING,
-		 * rather than _doing_it_wrong(), which triggers an E_USER_NOTICE.
+		 * trigger an E_USER_WARNING rather than _doing_it_wrong(),
+		 * which triggers an E_USER_NOTICE.
+		 * Use trigger_error() for WP < 6.4 compatibility (min supported: 5.0).
 		 */
-		wp_trigger_error(
-			'',
-			sprintf(
-				/* translators: 1: The function name, 2: The argument number, 3: The argument name, 4: The expected type, 5: The provided type. */
-				__( 'Warning: %1$s expects parameter %2$s (%3$s) to be a %4$s, %5$s given.', 'easy-table-of-contents' ),
-				__FUNCTION__,
-				'#1',
-				'$text',
-				'string',
-				gettype( $text )
-			),
-			E_USER_WARNING
+		$message = sprintf(
+			/* translators: 1: The function name, 2: The argument number, 3: The argument name, 4: The expected type, 5: The provided type. */
+			__( 'Warning: %1$s expects parameter %2$s (%3$s) to be a %4$s, %5$s given.', 'easy-table-of-contents' ),
+			__FUNCTION__,
+			'#1',
+			'$text',
+			'string',
+			gettype( $text )
 		);
+
+		if ( function_exists( 'wp_trigger_error' ) ) {
+			wp_trigger_error( '', $message, E_USER_WARNING );
+		} else {
+			// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_trigger_error
+			trigger_error( esc_html( $message ), E_USER_WARNING );
+		}
 
 		return '';
 	}
 
 	$text = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $text );
-    //This is legacy hook,  will be removed in future updates.
-	$text = wp_strip_all_tags( $text, apply_filters( 'ez_toc_allowable_tags', '' ) ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
-    //This is new hook, please use this for future compatibility 
-    $text = wp_strip_all_tags( $text, apply_filters( 'eztoc_allowable_tags', '' ) );
+
+	/*
+	 * wp_strip_all_tags() does not accept an allow-list. Its second argument is
+	 * $remove_breaks, so a value such as '<br>' is cast to true and every tag,
+	 * including preserved line breaks, is removed.
+	 */
+	// This is a legacy hook and will be removed in future updates.
+	$allowable_tags = apply_filters( 'ez_toc_allowable_tags', '' ); //phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy hook name.
+	// This is the new hook. Use this for future compatibility.
+	$allowable_tags = apply_filters( 'eztoc_allowable_tags', $allowable_tags );
+
+	if ( is_string( $allowable_tags ) && '' !== $allowable_tags ) {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.strip_tags_strip_tags -- Allow-listed tags such as <br> must be kept. wp_strip_all_tags() cannot do that.
+		$text = strip_tags( $text, $allowable_tags );
+	} else {
+		$text = wp_strip_all_tags( $text );
+	}
 
 	if ( $remove_breaks ) {
 		$text = preg_replace( '/[\r\n\t ]+/', ' ', $text );
@@ -673,12 +724,19 @@ function eztoc_wp_strip_all_tags( $text, $remove_breaks = false ) {
  */
 
 add_filter( 'ez_toc_allowable_tags', 'eztoc_link_allow_br_tag' );
+add_filter( 'eztoc_allowable_tags', 'eztoc_link_allow_br_tag' );
 
 function eztoc_link_allow_br_tag( $tags ) {
 
     if ( ezTOC_Option::get( 'prsrv_line_brk' ) ) {
 
-        $tags = '<br>';
+        if ( ! is_string( $tags ) ) {
+            $tags = '';
+        }
+
+        if ( false === stripos( $tags, '<br>' ) ) {
+            $tags .= '<br>';
+        }
 
     }
 

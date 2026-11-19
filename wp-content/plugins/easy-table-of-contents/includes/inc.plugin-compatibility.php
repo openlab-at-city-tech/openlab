@@ -120,6 +120,356 @@ add_filter(
 );
 
 /**
+ * Ultimate FAQ Accordion Plugin compatibility.
+ *
+ * FAQ blocks render question/category headings that must not appear in the page TOC.
+ *
+ * @link https://wordpress.org/plugins/ultimate-faqs/
+ * @since 2.0.83
+ */
+add_filter(
+	'ez_toc_exclude_by_selector',
+	'eztoc_ultimate_faqs_exclude_by_selector'
+);
+add_filter(
+	'eztoc_exclude_by_selector',
+	'eztoc_ultimate_faqs_exclude_by_selector'
+);
+/**
+ * Exclude Ultimate FAQ nodes from eligible TOC headings.
+ *
+ * @param array $selectors Selector map passed to ezTOC heading extraction.
+ * @return array
+ */
+function eztoc_ultimate_faqs_exclude_by_selector( $selectors ) {
+
+	if ( ! eztoc_is_plugin_active( 'ultimate-faqs/ultimate-faqs.php' ) ) {
+		return $selectors;
+	}
+
+	$selectors['ultimate-faqs-list']       = '#ewd-ufaq-faq-list';
+	$selectors['ultimate-faqs-faqs']       = '.ewd-ufaq-faqs';
+	$selectors['ultimate-faqs-categories'] = '.ewd-ufaq-faq-categories';
+	$selectors['ultimate-faqs-faq-div']    = '.ewd-ufaq-faq-div';
+	$selectors['ultimate-faqs-faq-title']  = '.ewd-ufaq-faq-title';
+
+	return $selectors;
+}
+
+add_filter( 'ez_toc_extract_headings_content', 'eztoc_ultimate_faqs_strip_from_headings_content', 10, 1 );
+add_filter( 'eztoc_extract_headings_content', 'eztoc_ultimate_faqs_strip_from_headings_content', 10, 1 );
+
+/**
+ * Remove rendered Ultimate FAQ markup before heading extraction.
+ *
+ * FAQ question titles are often real h2–h6 elements and would otherwise duplicate
+ * or nest under the preceding page heading in the TOC.
+ *
+ * @param string $content Post content being scanned for headings.
+ * @return string
+ */
+function eztoc_ultimate_faqs_strip_from_headings_content( $content ) {
+
+	if ( ! eztoc_is_plugin_active( 'ultimate-faqs/ultimate-faqs.php' ) || false === strpos( $content, 'ewd-ufaq' ) ) {
+		return $content;
+	}
+
+	if ( ! class_exists( 'TagFilter' ) ) {
+		if ( phpversion() <= 5.6 ) {
+			require_once EZ_TOC_PATH . '/includes/vendor/ultimate-web-scraper/tag_filter56.php';
+		} else {
+			require_once EZ_TOC_PATH . '/includes/vendor/ultimate-web-scraper/tag_filter.php';
+		}
+	}
+
+	$tag_filter_options           = TagFilter::GetHTMLOptions();
+	$tag_filter_options['charset'] = get_option( 'blog_charset' );
+	$html                         = TagFilter::Explode( $content, $tag_filter_options );
+	$faq_selectors                = implode(
+		',',
+		array(
+			'#ewd-ufaq-faq-list',
+			'.ewd-ufaq-faqs',
+			'.ewd-ufaq-faq-categories',
+			'.ewd-ufaq-faq-div',
+		)
+	);
+	$nodes                        = $html->Find( $faq_selectors );
+
+	if ( empty( $nodes['success'] ) || empty( $nodes['ids'] ) ) {
+		return $content;
+	}
+
+	$ids_to_remove = eztoc_ultimate_faqs_get_top_level_node_ids( $html, $nodes['ids'] );
+
+	foreach ( $ids_to_remove as $id ) {
+		$html->Remove( $id );
+	}
+
+	return $html->Implode( 0, $tag_filter_options );
+}
+
+/**
+ * Keep only outermost FAQ nodes when multiple nested selectors match.
+ *
+ * @param TagFilterNodes $html TagFilter node tree.
+ * @param array          $ids  Matched node IDs.
+ * @return array
+ */
+function eztoc_ultimate_faqs_get_top_level_node_ids( $html, $ids ) {
+
+	$top_level = array();
+
+	foreach ( $ids as $id ) {
+		$is_nested = false;
+
+		foreach ( $ids as $other_id ) {
+			if ( (int) $id === (int) $other_id ) {
+				continue;
+			}
+
+			if ( eztoc_ultimate_faqs_node_is_descendant_of( $html, $id, $other_id ) ) {
+				$is_nested = true;
+				break;
+			}
+		}
+
+		if ( ! $is_nested ) {
+			$top_level[] = $id;
+		}
+	}
+
+	return $top_level;
+}
+
+/**
+ * Whether a FAQ node is nested inside another matched FAQ node.
+ *
+ * @param TagFilterNodes $html        TagFilter node tree.
+ * @param int            $node_id     Candidate node ID.
+ * @param int            $ancestor_id Potential ancestor node ID.
+ * @return bool
+ */
+function eztoc_ultimate_faqs_node_is_descendant_of( $html, $node_id, $ancestor_id ) {
+
+	$node_id     = (int) $node_id;
+	$ancestor_id = (int) $ancestor_id;
+
+	if ( ! isset( $html->nodes[ $node_id ] ) ) {
+		return false;
+	}
+
+	$parent = $html->nodes[ $node_id ]['parent'];
+
+	while ( false !== $parent && isset( $html->nodes[ $parent ] ) ) {
+		if ( (int) $parent === $ancestor_id ) {
+			return true;
+		}
+
+		$parent = $html->nodes[ $parent ]['parent'];
+	}
+
+	return false;
+}
+
+add_filter(
+	'ez_toc_strip_shortcodes_tagnames',
+	'eztoc_ultimate_faqs_strip_shortcodes_tagnames',
+	10,
+	2
+);
+add_filter(
+	'eztoc_strip_shortcodes_tagnames',
+	'eztoc_ultimate_faqs_strip_shortcodes_tagnames',
+	10,
+	2
+);
+/**
+ * Strip Ultimate FAQ shortcodes during TOC content processing (memory-fix path).
+ *
+ * @param array  $tags_to_remove Shortcode tags to strip.
+ * @param string $content        Post content being processed.
+ * @return array
+ */
+function eztoc_ultimate_faqs_strip_shortcodes_tagnames( $tags_to_remove, $content ) {
+
+	if ( ! eztoc_is_plugin_active( 'ultimate-faqs/ultimate-faqs.php' ) ) {
+		return $tags_to_remove;
+	}
+
+	$faq_shortcodes = array(
+		'ultimate-faqs',
+		'ultimate-faq-search',
+		'select-faq',
+		'popular-faqs',
+		'recent-faqs',
+		'submit-question',
+	);
+
+	return array_merge( $tags_to_remove, $faq_shortcodes );
+}
+
+/**
+ * Whether `the_content` is running inside another `the_content` filter (e.g. per-FAQ answer).
+ *
+ * @since 2.0.86
+ * @return bool
+ */
+function eztoc_ultimate_faqs_is_nested_the_content() {
+
+	global $wp_current_filter;
+
+	if ( empty( $wp_current_filter ) ) {
+		return false;
+	}
+
+	$depth = 0;
+
+	foreach ( (array) $wp_current_filter as $filter ) {
+		if ( 'the_content' === $filter ) {
+			$depth++;
+		}
+	}
+
+	return $depth > 1;
+}
+
+/**
+ * Skip EZ TOC on nested FAQ plugin `the_content` calls to avoid OOM and duplicate TOC output.
+ *
+ * Ultimate FAQ and Helpie FAQ run apply_filters( 'the_content', ... ) on each FAQ answer while
+ * rendering embedded FAQ lists, which would otherwise trigger full TOC processing per item.
+ *
+ * @since 2.0.86
+ * @return bool
+ */
+function eztoc_ultimate_faqs_should_skip_the_content() {
+
+	if ( ! eztoc_ultimate_faqs_is_nested_the_content() ) {
+		return false;
+	}
+
+	return eztoc_is_plugin_active( 'ultimate-faqs/ultimate-faqs.php' )
+		|| eztoc_is_plugin_active( 'helpie-faq/helpie-faq.php' );
+}
+
+/**
+ * Remove Ultimate FAQ Gutenberg blocks from raw post content before nested the_content / do_blocks.
+ *
+ * Prevents the full FAQ list from being expanded during EZ TOC heading extraction.
+ *
+ * @since 2.0.86
+ * @param string $content Raw post content.
+ * @return string
+ */
+function eztoc_ultimate_faqs_strip_blocks_from_process_content( $content ) {
+
+	if ( ! is_string( $content ) || '' === $content || false === strpos( $content, 'ewd-ultimate-faqs' ) ) {
+		return $content;
+	}
+
+	$content = preg_replace( '/<!-- wp:ewd-ultimate-faqs\/[\S]+ \/-->\s*/s', '', $content );
+	$content = preg_replace( '/<!-- wp:ewd-ultimate-faqs\/[\S]+[\s\S]*?<!-- \/wp:ewd-ultimate-faqs\/[\S]+ -->\s*/s', '', $content );
+
+	return $content;
+}
+
+/**
+ * Helpie FAQ Plugin compatibility.
+ *
+ * FAQ blocks render question/category headings that must not appear in the page TOC.
+ *
+ * @link https://wordpress.org/plugins/helpie-faq/
+ * @since 2.0.87
+ */
+add_filter(
+	'ez_toc_exclude_by_selector',
+	'eztoc_helpie_faq_exclude_by_selector'
+);
+add_filter(
+	'eztoc_exclude_by_selector',
+	'eztoc_helpie_faq_exclude_by_selector'
+);
+add_filter(
+	'ez_toc_maybe_apply_the_content_filter',
+	'eztoc_helpie_faq_maybe_skip_nested_the_content'
+);
+add_filter(
+	'eztoc_maybe_apply_the_content_filter',
+	'eztoc_helpie_faq_maybe_skip_nested_the_content'
+);
+add_filter(
+	'ez_toc_strip_shortcodes_tagnames',
+	'eztoc_helpie_faq_strip_shortcodes_tagnames',
+	10,
+	2
+);
+add_filter(
+	'eztoc_strip_shortcodes_tagnames',
+	'eztoc_helpie_faq_strip_shortcodes_tagnames',
+	10,
+	2
+);
+
+/**
+ * Exclude Helpie FAQ nodes from eligible TOC headings.
+ *
+ * @param array $selectors Selector map passed to ezTOC heading extraction.
+ * @return array
+ */
+function eztoc_helpie_faq_exclude_by_selector( $selectors ) {
+
+	if ( ! eztoc_is_plugin_active( 'helpie-faq/helpie-faq.php' ) ) {
+		return $selectors;
+	}
+
+	$selectors['helpie-faq']           = '.helpie-faq';
+	$selectors['helpie-faq-group']   = '.helpie-faq-group';
+	$selectors['helpie-faq-accordian'] = '.helpie-faq-accordian';
+
+	return $selectors;
+}
+
+/**
+ * Skip EZ TOC auto-insert on nested Helpie FAQ `the_content` calls.
+ *
+ * @since 2.0.87
+ *
+ * @param bool $apply Whether to apply the `the_content` TOC callback.
+ * @return bool
+ */
+function eztoc_helpie_faq_maybe_skip_nested_the_content( $apply ) {
+
+	if ( ! $apply || ! eztoc_is_plugin_active( 'helpie-faq/helpie-faq.php' ) ) {
+		return $apply;
+	}
+
+	return eztoc_ultimate_faqs_is_nested_the_content() ? false : $apply;
+}
+
+/**
+ * Strip Helpie FAQ shortcodes during TOC content processing.
+ *
+ * @param array  $tags_to_remove Shortcode tags to strip.
+ * @param string $content        Post content being processed.
+ * @return array
+ */
+function eztoc_helpie_faq_strip_shortcodes_tagnames( $tags_to_remove, $content ) {
+
+	if ( ! eztoc_is_plugin_active( 'helpie-faq/helpie-faq.php' ) ) {
+		return $tags_to_remove;
+	}
+
+	if ( false === strpos( $content, 'helpie_faq' ) ) {
+		return $tags_to_remove;
+	}
+
+	$tags_to_remove[] = 'helpie_faq';
+
+	return $tags_to_remove;
+}
+
+/**
  * Do not allow `the_content` TOC callback to run when editing a page in Visual Composer.
  *
  * @link https://wordpress.org/support/topic/correct-method-to-determine-if-using-frontend-editor/#post-12404679
@@ -662,16 +1012,28 @@ function eztoc_social_pro_by_mediavine_com($content){
 add_filter('ez_toc_modify_process_page_content', 'eztoc_parse_gutenberg_reusable_block',10,1);
 
 function eztoc_parse_gutenberg_reusable_block($content){
-	
-	if(function_exists('do_blocks')){
-		if(has_block('easytoc/toc')){
-			$content =  str_replace( '<!-- wp:easytoc/toc /-->', 'eztoctempblock', $content );		
-			$content = do_blocks($content);
-			$content =  str_replace( 'eztoctempblock', '<!-- wp:easytoc/toc /-->', $content );				
-		}else{
-			$content = do_blocks($content);
-		}			
+
+	/*
+	 * Core already ran do_blocks() at priority 9 on this same the_content pass.
+	 * Calling it again re-renders every block and times out on long posts.
+	 */
+	if ( doing_filter( 'the_content' ) ) {
+		return $content;
 	}
+
+	// Skip when content is already rendered HTML (no block comments left).
+	if ( ! function_exists( 'do_blocks' ) || ! function_exists( 'has_blocks' ) || ! has_blocks( $content ) ) {
+		return $content;
+	}
+
+	if ( has_block( 'easytoc/toc', $content ) ) {
+		$content = str_replace( '<!-- wp:easytoc/toc /-->', 'eztoctempblock', $content );
+		$content = do_blocks( $content );
+		$content = str_replace( 'eztoctempblock', '<!-- wp:easytoc/toc /-->', $content );
+	} else {
+		$content = do_blocks( $content );
+	}
+
 	return $content;
 }
 
@@ -772,8 +1134,8 @@ function eztoc_sidebar_has_toc_status_cfs($status){
 
  function eztoc_guttenberg_has_toc($status){
 
-	$block_post_template = get_block_template(get_stylesheet() . '//' .'single');
-	$block_page_template = get_block_template(get_stylesheet() . '//' .'page');
+	$block_post_template = function_exists('get_block_template') ? get_block_template(get_stylesheet() . '//' .'single') : null;
+	$block_page_template = function_exists('get_block_template') ? get_block_template(get_stylesheet() . '//' .'page') : null;
 	if(is_single() && is_object($block_post_template) && (has_shortcode($block_post_template->content,'toc') || has_shortcode($block_post_template->content,'ez-toc')))
 	{
 		$status=true;
@@ -1005,50 +1367,73 @@ function eztoc_perfmatters_touch_css($css){
   	return $css;
 }
 /**
- * Woodmart + WPbakery Gallery compatibility
+ * Woodmart + WPbakery Gallery compatibility.
+ *
+ * Older WoodMart releases ship these parts as css/parts/*.min.css. WoodMart 8.6+
+ * ships plain *.css only, and lib-owl-carousel was removed when the theme moved
+ * from Owl Carousel to Swiper. Register a part only when that file exists.
+ *
  * @since 2.0.58
  */
-function eztoc_woodmart_gallery_fix(){
-	if(function_exists('woodmart_load_classes') && class_exists('Vc_Manager')){
-		
-		if(!wp_style_is('el-section-title')){
-			wp_register_style( 'el-section-title', WOODMART_THEME_DIR.'/css/parts/el-section-title.min.css', array() ,ezTOC::VERSION );
-			wp_enqueue_style( 'el-section-title' );
-		}
-		
-		if(!wp_style_is('wd-section-title-style-simple-and-brd')){
-		wp_register_style( 'wd-section-title-style-simple-and-brd', WOODMART_THEME_DIR.'/css/parts/el-section-title-style-simple-and-brd.min.css', array() ,ezTOC::VERSION);
-		wp_enqueue_style( 'wd-section-title-style-simple-and-brd' );
-		}
-		
-		if(!wp_style_is('wd-owl-carousel')){
-			wp_register_style( 'wd-owl-carousel', WOODMART_THEME_DIR.'/css/parts/lib-owl-carousel.min.css', array() ,ezTOC::VERSION);
-			wp_enqueue_style( 'wd-owl-carousel' );
-		}
-		
-		if(!wp_style_is('wd-image-gallery')){
-			wp_register_style( 'wd-image-gallery', WOODMART_THEME_DIR.'/css/parts/el-gallery.min.css', array() ,ezTOC::VERSION);
-			wp_enqueue_style( 'wd-image-gallery' );
+function eztoc_woodmart_gallery_fix() {
+	if ( ! function_exists( 'woodmart_load_classes' ) || ! class_exists( 'Vc_Manager' ) || ! defined( 'WOODMART_THEME_DIR' ) ) {
+		return;
+	}
+
+	$styles = array(
+		'el-section-title'                      => 'el-section-title',
+		'wd-section-title-style-simple-and-brd' => 'el-section-title-style-simple-and-brd',
+		'wd-owl-carousel'                       => 'lib-owl-carousel',
+		'wd-image-gallery'                      => 'el-gallery',
+		'wd-accordion'                          => 'el-accordion',
+		'wd-tabs'                               => 'el-tabs',
+		'wd-team-member'                        => 'el-team-member',
+	);
+
+	foreach ( $styles as $handle => $basename ) {
+		if ( wp_style_is( $handle, 'enqueued' ) ) {
+			continue;
 		}
 
-		if(!wp_style_is('wd-accordion')){
-			wp_register_style( 'wd-accordion', WOODMART_THEME_DIR.'/css/parts/el-accordion.min.css', array() ,ezTOC::VERSION);
-			wp_enqueue_style( 'wd-accordion' );
-		}
-		
-		if(!wp_style_is('wd-tabs')){
-			wp_register_style( 'wd-tabs', WOODMART_THEME_DIR.'/css/parts/el-tabs.min.css', array() ,ezTOC::VERSION);
-			wp_enqueue_style( 'wd-tabs' );
+		// Keep a URL the theme already registered instead of replacing it.
+		if ( ! wp_style_is( $handle, 'registered' ) ) {
+			$src = eztoc_woodmart_css_part_src( $basename );
+			if ( '' === $src ) {
+				continue;
+			}
+			wp_register_style( $handle, $src, array(), ezTOC::VERSION );
 		}
 
-		if(!wp_style_is('wd-team-member')){
-			wp_register_style( 'wd-team-member', WOODMART_THEME_DIR.'/css/parts/el-team-member.min.css', array() ,ezTOC::VERSION);
-			wp_enqueue_style( 'wd-team-member' );
-		}
-			
-	}	
+		wp_enqueue_style( $handle );
+	}
 }
-add_action('wp_enqueue_scripts', 'eztoc_woodmart_gallery_fix');
+add_action( 'wp_enqueue_scripts', 'eztoc_woodmart_gallery_fix' );
+
+/**
+ * URL for a WoodMart css/parts stylesheet, or an empty string when it is not shipped.
+ *
+ * Prefers the minified file used by older WoodMart releases, then the plain file
+ * shipped since WoodMart 8.6.
+ *
+ * @since 2.0.89
+ *
+ * @param string $basename File name without an extension.
+ * @return string
+ */
+function eztoc_woodmart_css_part_src( $basename ) {
+	$theme_path = defined( 'WOODMART_THEMEROOT' ) ? WOODMART_THEMEROOT : get_template_directory();
+	$relative   = '/css/parts/' . $basename;
+
+	if ( file_exists( $theme_path . $relative . '.min.css' ) ) {
+		return WOODMART_THEME_DIR . $relative . '.min.css';
+	}
+
+	if ( file_exists( $theme_path . $relative . '.css' ) ) {
+		return WOODMART_THEME_DIR . $relative . '.css';
+	}
+
+	return '';
+}
 
 /**
  * Ad inserter plugin compatibility
@@ -1377,3 +1762,9 @@ add_filter( 'ez_toc_apply_filter_status_manually', function( $default ) {
     }
     return $default;
 } );
+
+add_action( 'wp_enqueue_scripts', function () {
+    if ( function_exists( 'fusion_builder_activate' ) ) {
+        wp_enqueue_script( 'eztoc-anchor-fix' );
+    }
+}, 20 );
