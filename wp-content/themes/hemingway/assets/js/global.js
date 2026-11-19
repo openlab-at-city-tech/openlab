@@ -21,7 +21,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	// Show mobile-menu > 700.
-	$(window).resize(function() {
+	$(window).on( 'resize', function() {
 		if ($(window).width() > 800) {
 			$(".toggle").removeClass("active");
 			$(".mobile-menu").hide();
@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
 	});
 	
 	// Cool header image scroll.
-	$(window).scroll(function(e){
+	$(window).on( 'scroll', function(e){
 		if ($(window).width() > 800) {
 			$('.header').css({
 				'bottom' : -($(this).scrollTop()/3)+"px",
@@ -68,14 +68,14 @@ jQuery(document).ready(function($) {
 
 	resizeVideo(vidSelector);
 
-	$(window).resize(function() {
+	$(window).on( 'resize', function() {
 		resizeVideo(vidSelector);
 	});
 	
 	// Smooth scroll to header.
-    $('.tothetop').click(function(){
+    $('.tothetop').on( 'click', function(){
 		$('html,body').animate({scrollTop: 0}, 500);
-		$(this).unbind("mouseenter mouseleave");
+		$(this).off("mouseenter mouseleave");
         return false;
     });
 
