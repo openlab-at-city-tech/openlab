@@ -1,0 +1,12 @@
+<wpml-config>
+	<admin-texts>
+		<key name="toc-options">
+			<key name="heading_text" />
+			<key name="visibility_show" />
+			<key name="visibility_hide" />
+			<key name="exclude" />
+			<key name="sitemap_pages" />
+			<key name="sitemap_categories" />
+		</key>
+	</admin-texts>
+</wpml-config>

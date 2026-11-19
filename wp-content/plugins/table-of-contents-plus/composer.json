@@ -1,17 +1,27 @@
 {
-    "name": "dublue/table-of-contents-plus",
-    "type": "wordpress-plugin",
-    "authors": [
-        {
-            "name": "Michael Tran"
-        }
-    ],
-    "config": {
-        "allow-plugins": {
-            "dealerdirect/phpcodesniffer-composer-installer": true
-        }
-    },
-    "require-dev": {
-        "wp-coding-standards/wpcs": "^3.0"
-    }
+	"name": "awesomemotive/aioseo-table-of-contents-plus",
+	"description": "A powerful yet user friendly plugin that automatically creates a table of contents.",
+	"config": {
+		"bin-dir": "bin",
+		"preferred-install": "dist",
+		"platform": {
+			"php": "7.0"
+		},
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"autoload": {
+		"psr-4": {
+			"AIOSEO\\TableOfContents\\": "app/"
+		}
+	},
+	"require": {
+		"woocommerce/action-scheduler": "3.9.2"
+	},
+	"require-dev": {
+		"instituteweb/composer-scripts": "^1.1",
+		"vlucas/phpdotenv": "^5.4.1",
+		"wp-coding-standards/wpcs": "^3.0"
+	}
 }
