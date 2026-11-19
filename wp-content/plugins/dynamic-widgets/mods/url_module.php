@@ -3,7 +3,6 @@
  * URL Module
  * Can't use DWOpts object because value = the serialized values
  *
- * @version $Id: date_module.php 437634 2011-09-13 19:19:13Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

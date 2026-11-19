@@ -168,20 +168,9 @@
 		}
 	}
 
-	// URL
+	// Domain
 	if ( ! empty($_POST['domain_value']) ) {
-		$domains = array();
-
-		$domain_values = trim($_POST['domain_value']);
-		$domain_values = str_replace("\r", "", $domain_values);
-		$domain_values = explode("\n", $domain_values);
-
-		foreach ( $domain_values as $domain ) {
-			$url = trim($domain);
-			if ( ! empty($domain) ) {
-				$domains[] = $domain;
-			}
-		}
+		$domains = DWDomain::parse($_POST['domain_value']);
 
 		if ( count($domains) > 0 ) {
 			$DW->addDomains($widget_id, $_POST['domain'], $domains);

@@ -2,7 +2,6 @@
 /**
  * Week Module
  *
- * @version $Id: week_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2012 Jacco Drabbe
  */
 

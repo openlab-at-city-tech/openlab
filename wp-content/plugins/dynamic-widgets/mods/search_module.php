@@ -2,7 +2,6 @@
 /**
  * Search Module
  *
- * @version $Id: search_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

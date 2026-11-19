@@ -2,7 +2,6 @@
 /**
  * Device Module
  *
- * @version $Id$
  * @copyright 2014 Jacco Drabbe
  */
 

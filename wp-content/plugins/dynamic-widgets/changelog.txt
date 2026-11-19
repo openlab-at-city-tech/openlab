@@ -1,3 +1,44 @@
+= Version 1.5.16 =
+
+* Bugfix for Parameter must be an array or an object that implements Countable in dynwid_worker.php on line 526 when using PHP > 7.3
+
+= Version 1.5.15 =
+
+* Bugfix for Pages childs not being saved anymore and als going into opposite direction. Thanks to @sovabarmak for debugging and fixing!
+
+= Version 1.5.14 =
+
+* Bugfix for a problem introduced in WordPress 5 when using the Pages module. Kudo's to @fjaeker for doing debugging for this!
+
+= Version 1.5.13 =
+
+* Widened the database fields
+* Added domain name / servername support
+
+= Version 1.5.12 =
+
+* Added conditional check for client IP address (handy when using CLI).
+* Added support for featured image
+* (Temporary) removed QTranslate and all it's forks support because of code clashes.
+
+= Version 1.5.11 =
+
+* Added Shortcode matching support by request of Nathan Wright of NW Consulting who made a financial contribution to make this feature possible.
+* Fixed a possible vulnerability in the DW settings found by Mike Esptein
+
+= Version 1.5.10 =
+
+* Added Japanese language file (locale: ja) - Arigato chacomv!
+* Added security preventing calling scripts creatively
+* Added detection of QTranslate-X
+
+= Version 1.5.9 =
+
+* Added support for IP range
+* Bugfix for URL and Pages module does not show the green checkmark and not showing the settings made
+* Bugfix for Single Post Catregory is saved wrong
+* Bugfix for Strict warning notice in author_module.php at line 42
+
 = Version 1.5.8 =
 
 * Renamed Mobile Device to Device for more expansion. WARNING: When you upgrade manually, remove the dynamic-widgets directory first!

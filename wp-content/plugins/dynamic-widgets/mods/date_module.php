@@ -3,7 +3,6 @@
  * Date Module
  * Can't use DWOpts object because value = the actual date
  *
- * @version $Id: date_module.php 2968917 2023-09-19 21:10:22Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
 

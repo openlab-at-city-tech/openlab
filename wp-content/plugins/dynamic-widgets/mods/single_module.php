@@ -2,7 +2,6 @@
 /**
  * Single Post Module
  *
- * @version $Id: single_module.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

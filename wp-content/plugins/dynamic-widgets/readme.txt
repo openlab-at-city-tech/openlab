@@ -1,8 +1,8 @@
 === Dynamic Widgets ===
 Contributors: vivwebs, Qurl
 Tags: widget, dynamic, rules, logic, condition
-Tested up to: 6.9
-Stable tag: 1.6.6
+Tested up to: 7.1
+Stable tag: 1.7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -115,6 +115,7 @@ Installation of this plugin is fairly easy:
 5. Edit the desired widgets.
 
 == Frequently Asked Questions ==
+
 = What are the (system) requirements to use this plugin? =
 
 1. A properly working WordPress site (doh!).
@@ -176,7 +177,17 @@ Since version 3.8, WPEC uses the by WordPress provided Custom Post Types and Cus
 * Confirm you really want to uninstall the plugin. After the cleanup, the plugin is deactivated automaticly.
 * Remove the directory 'dynamic-widgets' underneath to the `/wp-content/plugins/` directory.
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the Dynamic Widgets plugin through the [Patchstack Vulnerability Disclosure  Program](https://patchstack.com/database/vdp/9e5fb1b2-6d09-4f0e-b840-7051049d66f4). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 == Changelog ==
+
+= Version 1.7.0 =
+
+* Fixed the Domain condition: "No, except" with more than one domain hid the widget on every domain
+* Domain matching now ignores upper/lower case and a port in the host name (e.g. :8080), unless the listed domain includes that port
+* Note: a listed domain without a port now also matches when the site is reached on a non-standard port (e.g. example.com also matches example.com:8080). Add the port to the domain to match only that port
 
 = Version 1.6.6 =
 
@@ -199,47 +210,6 @@ Since version 3.8, WPEC uses the by WordPress provided Custom Post Types and Cus
 = Version 1.6 =
 * Several bugfixes including XSS vulnerability
 * Fixed typos throughout UI
-
-= Version 1.5.16 =
-
-* Bugfix for Parameter must be an array or an object that implements Countable in dynwid_worker.php on line 526 when using PHP > 7.3
-
-= Version 1.5.15 =
-
-* Bugfix for Pages childs not being saved anymore and als going into opposite direction. Thanks to @sovabarmak for debugging and fixing!
-
-= Version 1.5.14 =
-
-* Bugfix for a problem introduced in WordPress 5 when using the Pages module. Kudo's to @fjaeker for doing debugging for this!
-
-= Version 1.5.13 =
-
-* Widened the database fields
-* Added domain name / servername support
-
-= Version 1.5.12 =
-
-* Added conditional check for client IP address (handy when using CLI).
-* Added support for featured image
-* (Temporary) removed QTranslate and all it's forks support because of code clashes.
-
-= Version 1.5.11 =
-
-* Added Shortcode matching support by request of Nathan Wright of NW Consulting who made a financial contribution to make this feature possible.
-* Fixed a possible vulnerability in the DW settings found by Mike Esptein
-
-= Version 1.5.10 =
-
-* Added Japanese language file (locale: ja) - Arigato chacomv!
-* Added security preventing calling scripts creatively
-* Added detection of QTranslate-X
-
-= Version 1.5.9 =
-
-* Added support for IP range
-* Bugfix for URL and Pages module does not show the green checkmark and not showing the settings made
-* Bugfix for Single Post Catregory is saved wrong
-* Bugfix for Strict warning notice in author_module.php at line 42
 
 == Upgrade Notice ==
 

@@ -2,7 +2,6 @@
 /**
  * QTranslate Module
  *
- * @version $Id: qtranslate_module.php 420121 2011-08-06 17:56:22Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 
