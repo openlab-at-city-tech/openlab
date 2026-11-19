@@ -127,20 +127,30 @@ class Elementor extends Page_Builder_Base {
 		 * @since 3.1.0
 		 */
 		$css = apply_filters( 'neve_elementor_colors', $css );
-		$css = Dynamic_Css::minify_css( $css );
+		$css = wp_strip_all_tags( Dynamic_Css::minify_css( $css ) );
 		wp_add_inline_style( 'neve-style', $css );
 	}
 
 	/**
 	 * Filter rest responses to add Neve Palette Colors to pages using Elementor.
 	 *
-	 * @param \WP_REST_Response $response request response.
-	 * @param array             $handler request handler.
-	 * @param \WP_REST_Request  $request rest request.
-	 * @return \WP_REST_Response
+	 * @param \WP_REST_Response|\WP_Error $response request response.
+	 * @param array                       $handler request handler.
+	 * @param \WP_REST_Request            $request rest request.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function alter_global_colors_front_end( $response, $handler, \WP_REST_Request $request ) {
-		$route         = $request->get_route();
+		$route = $request->get_route();
+
+		// Elementor never knows Neve IDs, so not-found is expected on the colors route.
+		$is_color_not_found = is_wp_error( $response )
+			&& 'global_not_found' === $response->get_error_code()
+			&& 0 === strpos( $route, '/elementor/v1/globals/colors/' );
+
+		if ( is_wp_error( $response ) && ! $is_color_not_found ) {
+			return $response;
+		}
+
 		$rest_to_slugs = [
 			'nvprimaryaccent'   => 'nv-primary-accent',
 			'nvsecondaryaccent' => 'nv-secondary-accent',
@@ -178,12 +188,16 @@ class Elementor extends Page_Builder_Base {
 	/**
 	 * Filter rest responses to add Neve Palette Colors to Elementor.
 	 *
-	 * @param \WP_REST_Response $response request response.
-	 * @param array             $handler request handler.
-	 * @param \WP_REST_Request  $request rest request.
-	 * @return \WP_REST_Response
+	 * @param \WP_REST_Response|\WP_Error $response request response.
+	 * @param array                       $handler request handler.
+	 * @param \WP_REST_Request            $request rest request.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public function alter_global_colors_in_picker( $response, $handler, \WP_REST_Request $request ) {
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
 		$route = $request->get_route();
 
 		if ( $route !== '/elementor/v1/globals' ) {

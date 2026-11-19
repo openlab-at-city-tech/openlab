@@ -99,7 +99,7 @@ class Colors_Background extends Base_Customizer {
 					'default_values'        => neve_get_global_colors_default(),
 					'input_attrs'           => [
 						'link' => [
-							'url'     => esc_url( 'https://docs.themeisle.com/article/1314-global-colors-in-neve' ),
+							'url'     => esc_url_raw( tsdk_utmify( 'https://docs.themeisle.com/neve/global-colors-in-neve', 'global-colors', 'customizer' ) ),
 							'string'  => esc_html__( 'How the color system works', 'neve' ),
 							'new_tab' => true,
 						],
@@ -150,6 +150,11 @@ class Colors_Background extends Base_Customizer {
 
 		foreach ( $value['palettes'] as $slug => $args ) {
 			foreach ( $args['colors'] as $key => $color_val ) {
+				// Keys become CSS custom property names.
+				if ( sanitize_key( $key ) !== $key ) {
+					unset( $value['palettes'][ $slug ]['colors'][ $key ] );
+					continue;
+				}
 				$value['palettes'][ $slug ]['colors'][ $key ] = neve_sanitize_colors( $color_val );
 			}
 		}
@@ -176,7 +181,7 @@ class Colors_Background extends Base_Customizer {
 		foreach ( $value as $slug => $options ) {
 			$color = neve_sanitize_colors( $options['val'] );
 
-			if ( ! $color ) {
+			if ( ! $color || sanitize_key( $slug ) !== $slug ) {
 				unset( $value[ $slug ] );
 				continue;
 			}

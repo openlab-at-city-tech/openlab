@@ -102,17 +102,31 @@ class Logger extends Abstract_Module {
 	 * @return bool Is logger active?
 	 */
 	private function is_logger_active() {
+		return self::is_logging_active( $this->product );
+	}
+
+	/**
+	 * Check if the logging consent is granted for a product.
+	 *
+	 * Shared with the other telemetry modules (e.g. the crash reporter) so the
+	 * consent semantics live in a single place.
+	 *
+	 * @param \ThemeisleSDK\Product $product Product to check.
+	 *
+	 * @return bool Is logging active for the product?
+	 */
+	public static function is_logging_active( $product ) {
 		if ( apply_filters( 'themeisle_sdk_disable_telemetry', false ) ) {
 			return false;
 		}
 		$default = 'no';
 
-		if ( ! $this->product->is_wordpress_available() ) {
+		if ( ! $product->is_wordpress_available() ) {
 			$default = 'yes';
 		} else {
 			$all_products = Loader::get_products();
-			foreach ( $all_products as $product ) {
-				if ( $product->requires_license() ) {
+			foreach ( $all_products as $registered_product ) {
+				if ( $registered_product->requires_license() ) {
 					$default = 'yes';
 					break;
 				}
@@ -120,7 +134,7 @@ class Logger extends Abstract_Module {
 		}
 
 
-		return ( get_option( $this->product->get_key() . '_logger_flag', $default ) === 'yes' );
+		return ( get_option( $product->get_key() . '_logger_flag', $default ) === 'yes' );
 	}
 	/**
 	 * Add notification to queue.

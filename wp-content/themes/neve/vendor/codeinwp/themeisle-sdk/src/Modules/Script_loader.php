@@ -132,8 +132,7 @@ class Script_Loader extends Abstract_Module {
 	 * @return void
 	 */
 	public function load_survey( $handler, $data = array() ) {
-		global $themeisle_sdk_max_path;
-		$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/survey/survey_deps.asset.php';
+		$asset_file = $this->get_asset_file( 'assets/js/build/survey/survey_deps.asset.php' );
 
 		wp_enqueue_script(
 			$handler,
@@ -223,8 +222,7 @@ class Script_Loader extends Abstract_Module {
 	 * @return void
 	 */
 	public function load_tracking( $handler ) {
-		global $themeisle_sdk_max_path;
-		$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/tracking/tracking.asset.php';
+		$asset_file = $this->get_asset_file( 'assets/js/build/tracking/tracking.asset.php' );
 
 		wp_enqueue_script(
 			$handler,

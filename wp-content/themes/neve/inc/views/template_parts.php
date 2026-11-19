@@ -319,11 +319,10 @@ class Template_Parts extends Base_View {
 		$markup             = '<div class="' . esc_attr( $image_wrap_classes ) . '">';
 
 		if ( ! $skip_link ) {
-			$markup .= '<a href="' . esc_url( get_the_permalink( $post_id ) ) . '" rel="bookmark" title="' . the_title_attribute(
-				array(
-					'echo' => false,
-				)
-			) . '">';
+			// No title attribute — screen readers announce it on top of the
+			// link name (double announcement). The accessible name is the
+			// destination post's title instead.
+			$markup .= '<a href="' . esc_url( get_the_permalink( $post_id ) ) . '" rel="bookmark" aria-label="' . esc_attr( wp_strip_all_tags( get_the_title( $post_id ?? 0 ) ) ) . '">';
 		}
 
 		$pid     = $post_id ? $post_id : get_the_ID();
@@ -566,7 +565,13 @@ class Template_Parts extends Base_View {
 			'excerpt',
 		);
 
-		return json_decode( get_theme_mod( 'neve_post_content_ordering', wp_json_encode( $default_ordered_components ) ), $associative );
+		$content_order = get_theme_mod( 'neve_post_content_ordering', wp_json_encode( $default_ordered_components ) );
+
+		if ( is_string( $content_order ) ) {
+			$content_order = json_decode( $content_order, $associative );
+		}
+
+		return is_array( $content_order ) ? $content_order : $default_ordered_components;
 	}
 
 	/**

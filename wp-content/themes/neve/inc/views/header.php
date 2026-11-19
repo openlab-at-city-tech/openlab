@@ -132,13 +132,13 @@ class Header extends Base_View {
 
 		$id = 'nv-menu-item-search-' . self::$primary_nav_instance_no;
 
-		$search     .= '<' . esc_attr( $tag ) . ' class="' . esc_attr( $class ) . '" id="' . esc_attr( $id ) . '"  aria-label="search">';
+		$search     .= '<' . esc_attr( $tag ) . ' class="' . esc_attr( $class ) . '" id="' . esc_attr( $id ) . '">';
 		$extra_attrs = apply_filters( 'neve_search_menu_item_filter', '', self::$primary_nav_instance_no );
-		$search     .= '<a href="#" class="nv-nav-search-icon" ' . $extra_attrs . '>' . neve_search_icon() . '</a>';
+		$search     .= '<button type="button" class="nv-nav-search-icon" aria-label="' . esc_attr__( 'Search', 'neve' ) . '" aria-expanded="false" ' . $extra_attrs . '>' . neve_search_icon() . '</button>';
 		$search     .= '<div class="nv-nav-search">';
 		if ( $responsive === true ) {
 			$search .= '<div class="container close-container">';
-			$search .= '<a class="button button-secondary close-responsive-search">' . __( 'Close', 'neve' ) . '</a>';
+			$search .= '<button type="button" class="button button-secondary close-responsive-search">' . __( 'Close', 'neve' ) . '</button>';
 			$search .= '</div>';
 		}
 		if ( version_compare( get_bloginfo( 'version' ), '5.2.0', '>=' ) ) {
@@ -163,6 +163,10 @@ class Header extends Base_View {
 	 */
 	private function get_nav_menu_cart( $responsive = false ) {
 		if ( ! class_exists( 'WooCommerce', false ) ) {
+			return '';
+		}
+
+		if ( ! isset( WC()->cart ) || ! WC()->cart instanceof \WC_Cart ) { // @phpstan-ignore-line
 			return '';
 		}
 
@@ -283,14 +287,26 @@ class Header extends Base_View {
 			}
 		}
 
-		Tracker::track(
-			array(
+		// Cache the active state and only send when it changes or the refresh window has elapsed.
+		// `wp_update_nav_menu` fires multiple times per save and the value is near-static per site,
+		// so sending unconditionally floods the tracking pipeline with duplicate readings.
+		$last  = get_option( 'neve_mm_active_state', null );
+		$now   = $has_mm ? 'yes' : 'no';
+		$stale = ! get_transient( 'neve_mm_tracked' );
+
+		if ( $now !== $last || $stale ) {
+			update_option( 'neve_mm_active_state', $now );
+			set_transient( 'neve_mm_tracked', 1, MONTH_IN_SECONDS );
+
+			Tracker::track(
 				array(
-					'feature'          => 'mega-menu-free',
-					'featureComponent' => 'is-active',
-					'featureValue'     => $has_mm,
-				),
-			)
-		);
+					array(
+						'feature'          => 'mega-menu-free',
+						'featureComponent' => 'is-active',
+						'featureValue'     => $has_mm,
+					),
+				)
+			);
+		}
 	}
 }

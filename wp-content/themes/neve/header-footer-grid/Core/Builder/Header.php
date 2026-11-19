@@ -39,6 +39,7 @@ class Header extends Abstract_Builder {
 	const BACKGROUND_HEADING = 'background_heading';
 	const ADVANCED_STYLE     = 'advanced_style';
 	const BACKGROUND_SETTING = 'background';
+	const DISABLE_HEADER     = 'neve_disable_header';
 
 	/**
 	 * Default color for global header background
@@ -66,7 +67,7 @@ class Header extends Abstract_Builder {
 					$this->get_property( 'title' ),
 					/* translators: %s link text */
 					sprintf(
-						'<br/><a target="_blank" rel="external noopener noreferrer" href="https://docs.themeisle.com/article/946-neve-doc#header"><span class="screen-reader-text">%s</span><svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 512 512" width="12" height="12" style="margin-right: 5px;"><path fill="currentColor" d="M432 320H400a16 16 0 0 0-16 16V448H64V128H208a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16H48A48 48 0 0 0 0 112V464a48 48 0 0 0 48 48H400a48 48 0 0 0 48-48V336A16 16 0 0 0 432 320ZM488 0h-128c-21.4 0-32 25.9-17 41l35.7 35.7L135 320.4a24 24 0 0 0 0 34L157.7 377a24 24 0 0 0 34 0L435.3 133.3 471 169c15 15 41 4.5 41-17V24A24 24 0 0 0 488 0Z"/></svg>%s</a>',
+						'<br/><a target="_blank" rel="external noopener noreferrer" href="' . esc_url( tsdk_utmify( 'https://docs.themeisle.com/neve/neve-doc#build-your-custom-header-footer', 'header-builder', 'customizer' ) ) . '"><span class="screen-reader-text">%s</span><svg xmlns="http://www.w3.org/2000/svg" focusable="false" role="img" viewBox="0 0 512 512" width="12" height="12" style="margin-right: 5px;"><path fill="currentColor" d="M432 320H400a16 16 0 0 0-16 16V448H64V128H208a16 16 0 0 0 16-16V80a16 16 0 0 0-16-16H48A48 48 0 0 0 0 112V464a48 48 0 0 0 48 48H400a48 48 0 0 0 48-48V336A16 16 0 0 0 432 320ZM488 0h-128c-21.4 0-32 25.9-17 41l35.7 35.7L135 320.4a24 24 0 0 0 0 34L157.7 377a24 24 0 0 0 34 0L435.3 133.3 471 169c15 15 41 4.5 41-17V24A24 24 0 0 0 488 0Z"/></svg>%s</a>',
 						esc_html__( '(opens in a new tab)', 'neve' ),
 						esc_html__( 'Read full documentation', 'neve' )
 					)
@@ -111,6 +112,8 @@ class Header extends Abstract_Builder {
 	 */
 	public function customize_register( WP_Customize_Manager $wp_customize ) {
 		if ( ! neve_is_new_builder() ) {
+			$this->customize_legacy_global_header( $wp_customize );
+
 			return parent::customize_register( $wp_customize );
 		}
 
@@ -207,10 +210,87 @@ class Header extends Abstract_Builder {
 	}
 
 	/**
+	 * Arguments of the setting behind the toggle that hides the header on every page.
+	 *
+	 * @return array{default: false, transport: string, sanitize_callback: string}
+	 */
+	private function get_disable_header_setting_args(): array {
+		return [
+			'default'           => false,
+			'transport'         => 'refresh',
+			'sanitize_callback' => 'neve_sanitize_checkbox',
+		];
+	}
+
+	/**
+	 * Arguments of the toggle that hides the header on every page.
+	 *
+	 * @return array{label: string, section: string, type: string, priority: int}
+	 */
+	private function get_disable_header_control_args(): array {
+		return [
+			'label'    => esc_html__( 'Disable Header', 'neve' ),
+			'section'  => 'neve_pro_global_header_settings',
+			'type'     => 'neve_toggle_control',
+			'priority' => 5,
+		];
+	}
+
+	/**
+	 * Registers the header toggle for the legacy builder.
+	 *
+	 * The legacy builder has no global header settings tabs, so the toggle is a plain control
+	 * and any Neve Pro controls in the section keep showing as before.
+	 *
+	 * @param WP_Customize_Manager $wp_customize The Customize Manager.
+	 *
+	 * @return void
+	 */
+	private function customize_legacy_global_header( WP_Customize_Manager $wp_customize ) {
+		if ( $wp_customize->get_section( 'neve_pro_global_header_settings' ) === null ) {
+			$wp_customize->add_section(
+				'neve_pro_global_header_settings',
+				[
+					'title'    => __( 'Global Header Settings', 'neve' ),
+					'priority' => 200,
+					'panel'    => 'hfg_header',
+				]
+			);
+		}
+
+		$setting_args = $this->get_disable_header_setting_args();
+
+		// Theme Check reads the sanitize_callback key from the add_setting() call itself.
+		$wp_customize->add_setting(
+			self::DISABLE_HEADER,
+			[
+				'default'           => $setting_args['default'],
+				'transport'         => $setting_args['transport'],
+				'sanitize_callback' => $setting_args['sanitize_callback'],
+			]
+		);
+		$wp_customize->add_control( self::DISABLE_HEADER, $this->get_disable_header_control_args() );
+	}
+
+	/**
 	 * Registers controls for global header background
 	 */
 	private function customize_global_header() {
 		$section_id = 'neve_pro_global_header_settings';
+
+		// Not a conditional header setting: it hides every header layout at once.
+		SettingsManager::get_instance()->add(
+			array_merge(
+				$this->get_disable_header_setting_args(),
+				$this->get_disable_header_control_args(),
+				[
+					'id'       => self::DISABLE_HEADER,
+					'noformat' => true,
+					'group'    => $section_id,
+					'tab'      => 'general',
+				]
+			)
+		);
 
 		SettingsManager::get_instance()->add(
 			[

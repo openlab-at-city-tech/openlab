@@ -41,6 +41,10 @@ class Dynamic_Css {
 		$desktop_css = '';
 		$tablet_css = '';
 		foreach ( $classes as $class ) {
+			if ( ! class_exists( $class ) ) {
+				continue;
+			}
+
 			$object = new $class();
 			$object->init();
 			$mobile_css .= $object->get_style( 'mobile' );
@@ -68,18 +72,25 @@ class Dynamic_Css {
 			$this->legacy_style();
 		}
 
-		$this->generator = $is_for_gutenberg ? new Gutenberg() : new Frontend();
-		$_subscribers = $this->generator->get();
+		$generator_class = $is_for_gutenberg ? Gutenberg::class : Frontend::class;
+		$generated_css = '';
 
-		$_subscribers = array_merge( $_subscribers, apply_filters( 'neve_style_subscribers', [] ) );
+		if ( class_exists( $generator_class ) ) {
+			$this->generator = new $generator_class();
+			$_subscribers = $this->generator->get();
 
-		$this->generator->set( $_subscribers );
+			$_subscribers = array_merge( $_subscribers, apply_filters( 'neve_style_subscribers', [] ) );
 
-		$style = apply_filters( 'neve_dynamic_style_output', $this->generator->generate(), $is_for_gutenberg ? 'gutenberg' : 'frontend' );
+			$this->generator->set( $_subscribers );
+
+			$generated_css = $this->generator->generate();
+		}
+
+		$style = apply_filters( 'neve_dynamic_style_output', $generated_css, $is_for_gutenberg ? 'gutenberg' : 'frontend' );
 
 		$style .= self::get_root_css();
 
-		$style = self::minify_css( $style );
+		$style = wp_strip_all_tags( self::minify_css( $style ) );
 
 		wp_add_inline_style( $is_for_gutenberg ? self::GUTENBERG_HANDLE : self::FRONTEND_HANDLE, $style );
 	}
@@ -104,7 +115,7 @@ class Dynamic_Css {
 
 		$css = ':root{' . $this->get_css_vars() . '}';
 		$css .= apply_filters( 'neve_after_css_root', $css );
-		wp_add_inline_style( 'nv-css-vars', self::minify_css($css ) );
+		wp_add_inline_style( 'nv-css-vars', wp_strip_all_tags( self::minify_css($css ) ) );
 
 		/**
 		 * Custom colors needs a separate style to prevent overwriting the main color for the pallets.
