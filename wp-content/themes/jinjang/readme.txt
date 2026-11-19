@@ -1,8 +1,8 @@
 === JinJang ===
 Contributors: Automattic
-Requires at least: 5.8
-Tested up to: 6.3
-Requires PHP: 5.7
+Requires at least: 6
+Tested up to: 6.8
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -11,6 +11,18 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 JinJang is a blog theme with a split, 50:50 layout like Yan Yang.
 
 == Changelog ==
+
+= 1.0.5 =
+* Removing .gitkeep files
+
+= 1.0.4 =
+* Fixed overflow issue with stack block
+
+= 1.0.3 =
+* Added hover style to navigation block.
+
+= 1.0.2 =
+* Add css unit to styles.spacing.padding value to regain default paddings on menu overlay (#8653)
 
 = 1.0.1 =
 * Lossless image optimization (#7671)
