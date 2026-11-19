@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: FileBird Document Library (Lite) 1.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/FileBird-Addons\n"
-"POT-Creation-Date: 2026-01-14T04:17:55+00:00\n"
+"POT-Creation-Date: 2026-08-12T02:42:22+00:00\n"
 "PO-Revision-Date: 2026-01-08 08:59+0000\n"
 "Last-Translator: jose.vila@avl.gva.es\n"
 "Language-Team: Català\n"
@@ -69,8 +69,7 @@ msgid "Support"
 msgstr "Suport"
 
 #: includes/DocumentLibraryShortcode.php:17
-#: includes/DocumentLibraryShortcode.php:18 blocks/dist/index.js:1
-#: blocks/src/Edit.js:123
+#: includes/DocumentLibraryShortcode.php:18 blocks/dist/index.js:2
 msgid "Document Library"
 msgstr "Biblioteca de documents"
 
@@ -82,9 +81,7 @@ msgstr "Configuració"
 msgid "Settings Saved"
 msgstr "Configuració guardada"
 
-#: includes/DocumentSettings.php:68 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/Edit.js:141
-#: blocks/src/shortcode/App.js:90
+#: includes/DocumentSettings.php:68 blocks/dist/index.js:2
 msgid "Document Library Settings"
 msgstr "Configuració de la biblioteca de documents"
 
@@ -105,203 +102,171 @@ msgid ""
 "Enable this option if you are using a cache plugin or want to force cache "
 "optimization for document library."
 msgstr ""
-"Activa aquesta opció si estàs utilitzant un complement de memòria cau o "
-"vols forçar l'optimització de la memòria cau per a la biblioteca de "
-"documents."
+"Activa aquesta opció si estàs utilitzant un complement de memòria cau o vols "
+"forçar l'optimització de la memòria cau per a la biblioteca de documents."
 
 #: includes/DocumentSettings.php:108
 msgid "Save Settings"
 msgstr "Guarda la configuració"
 
 #: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/LayoutControl.js:31
 msgid "Items per page"
 msgstr "Elements per pàgina"
 
 #: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/PaginationControl.js:57
+msgid "Grid view"
+msgstr "Vista de graella"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+msgid "List view"
+msgstr "Vista de llista"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
+msgid "Pagination"
+msgstr "Paginació"
+
+#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
 msgid "Showing"
 msgstr "Mostrant"
 
 #: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/PaginationControl.js:59
 msgid "to"
 msgstr "a"
 
 #: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/PaginationControl.js:61
 msgid "of"
 msgstr "de"
 
 #: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/PaginationControl.js:63
 msgid "files"
 msgstr "fitxers"
 
 #: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/PaginationControl.js:75
 msgid "Previous"
 msgstr "Anterior"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/components/PaginationControl.js:107
+#. translators: %s: page number.
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
+msgid "Page %s"
+msgstr "Pàgina %s"
+
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "Next"
 msgstr "Següent"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/Grid.js:27
-#: blocks/src/components/Layout/List.js:40
-#: blocks/src/components/Layout/List.js:88
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "Download"
 msgstr "Descarregar"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:18
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "File"
 msgstr "Fitxer"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:24
-#: blocks/src/Edit.js:17 blocks/src/shortcode/components/Setting/Setting.js:15
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "Size"
 msgstr "Mida"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:30
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "Type"
 msgstr "Tipus"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Layout/List.js:35
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "Last Modified"
 msgstr "Última modificació"
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/components/Empty.js:11
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "No attachments found."
 msgstr "No s'han trobat fitxers adjunts."
 
-#: blocks/dist/frontend.js:1 blocks/dist/index.js:1
-#: blocks/dist/shortcode/shortcode.js:1 blocks/services/services.js:22
-#: blocks/src/Edit.js:40 blocks/src/shortcode/components/Setting/Setting.js:38
+#: blocks/dist/frontend.js:2 blocks/dist/index.js:2
 msgid "Network response was not ok."
 msgstr "La xarxa no respon."
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:10 blocks/src/shortcode/components/Setting/Setting.js:8
+#: blocks/dist/index.js:2
 msgid "Grid"
 msgstr "Graella"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:11 blocks/src/shortcode/components/Setting/Setting.js:9
+#: blocks/dist/index.js:2
 msgid "List"
 msgstr "Llista"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:15 blocks/src/shortcode/components/Setting/Setting.js:13
+#: blocks/dist/index.js:2
 msgid "Name"
 msgstr "Nom"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:16 blocks/src/shortcode/components/Setting/Setting.js:14
+#: blocks/dist/index.js:2
 msgid "Modified date"
 msgstr "Data de modificació"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:21 blocks/src/shortcode/components/Setting/Setting.js:19
+#: blocks/dist/index.js:2
 msgid "Ascending"
 msgstr "Ascendent"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:22 blocks/src/shortcode/components/Setting/Setting.js:20
+#: blocks/dist/index.js:2
 msgid "Descending"
 msgstr "Descendent"
 
-#: blocks/dist/index.js:1 blocks/src/index.js:9
+#: blocks/dist/index.js:2
 msgid "FileBird Document Library"
 msgstr "FileBird Document Library"
 
-#: blocks/dist/index.js:1 blocks/src/index.js:10
+#: blocks/dist/index.js:2
 msgid "Display folder item in a document library."
 msgstr "Mostra una carpeta en una biblioteca de documents."
 
-#: blocks/dist/index.js:1 blocks/src/Edit.js:124
+#: blocks/dist/index.js:2
 msgid "Select an image to remove this placeholder"
 msgstr "Seleccione una imatge per a eliminar este marcador de posició"
 
-#: blocks/dist/index.js:1 blocks/src/Edit.js:135
+#: blocks/dist/index.js:2
 msgid "Please select a folder"
 msgstr "Seleccione una carpeta"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:144
-#: blocks/src/shortcode/components/Setting/Setting.js:137
+#: blocks/dist/index.js:2
 msgid "Folder"
 msgstr "Carpeta"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:155
-#: blocks/src/shortcode/components/Setting/Setting.js:147
+#: blocks/dist/index.js:2
+msgid "Library title"
+msgstr "Títol de la biblioteca"
+
+#: blocks/dist/index.js:2
 msgid "Column"
 msgstr "Columna"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:166
-#: blocks/src/shortcode/components/Setting/Setting.js:156
+#: blocks/dist/index.js:2
 msgid "Limit items"
 msgstr "Límit"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:176
-#: blocks/src/shortcode/components/Setting/Setting.js:166
+#: blocks/dist/index.js:2
 msgid "Layout display"
 msgstr "Distribució"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:182
-#: blocks/src/shortcode/components/Setting/Setting.js:172
+#: blocks/dist/index.js:2
 msgid "Sort By"
 msgstr "Ordenat per"
 
-#: blocks/dist/index.js:1 blocks/dist/shortcode/shortcode.js:1
-#: blocks/src/Edit.js:188
-#: blocks/src/shortcode/components/Setting/Setting.js:178
+#: blocks/dist/index.js:2
 msgid "Sort Type"
 msgstr "Ordenat per tipus"
 
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:54
-msgid "Copied!"
-msgstr "Copiat!"
+#~ msgid "Copied!"
+#~ msgstr "Copiat!"
 
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:54
-msgid "Copy"
-msgstr "Copiar"
+#~ msgid "Copy"
+#~ msgstr "Copiar"
 
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:83
-msgid "FileBird Document Library Shortcode Generator"
-msgstr "Generador de codis"
+#~ msgid "FileBird Document Library Shortcode Generator"
+#~ msgstr "Generador de codis"
 
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:97
-msgid "Generate"
-msgstr "Generar"
+#~ msgid "Generate"
+#~ msgstr "Generar"
 
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:104
-msgid "Love FileBird Document Library"
-msgstr "M'encanta FileBird Document Library"
+#~ msgid "Love FileBird Document Library"
+#~ msgstr "M'encanta FileBird Document Library"
 
-#: blocks/dist/shortcode/shortcode.js:1 blocks/src/shortcode/App.js:110
-msgid "Please write us a glowing review here."
-msgstr "Per favor, escriu una ressenya ací."
+#~ msgid "Please write us a glowing review here."
+#~ msgstr "Per favor, escriu una ressenya ací."
 
 #~ msgid "Show"
 #~ msgstr "Mostrar"
-
-#~ msgid "Library title"
-#~ msgstr "Títol de la biblioteca"

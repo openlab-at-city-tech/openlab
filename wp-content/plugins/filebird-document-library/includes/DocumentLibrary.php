@@ -230,6 +230,16 @@ class DocumentLibrary extends AbstractBlock {
 			return $id > 0;
 		} );
 
+		if ( empty( $ids ) ) {
+			return new \WP_REST_Response(
+				array(
+					'files'       => array(),
+					'foundPosts'  => 0,
+					'maxNumPages' => 0,
+				)
+			);
+		}
+
 		$where_arr[] = '`folder_id` IN (' . implode( ',', $ids ) . ')';
 		$in_not_in   = $wpdb->get_col( "SELECT `attachment_id` FROM {$wpdb->prefix}fbv_attachment_folder" . ' WHERE ' . implode( ' AND ', apply_filters( 'fbv_in_not_in_where_query', $where_arr, $ids ) ) );
 
