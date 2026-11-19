@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TIOB\\Abilities\\Starter_Sites' => $baseDir . '/includes/Abilities/Starter_Sites.php',
     'TIOB\\Admin' => $baseDir . '/includes/Admin.php',
     'TIOB\\Editor' => $baseDir . '/includes/Editor.php',
     'TIOB\\Elementor' => $baseDir . '/includes/Elementor.php',
@@ -35,6 +36,7 @@ return array(
     'TIOB\\Main' => $baseDir . '/includes/Main.php',
     'TIOB\\Rest_Server' => $baseDir . '/includes/Rest_Server.php',
     'TIOB\\Sites_Listing' => $baseDir . '/includes/Sites_Listing.php',
+    'TIOB\\Starter_Ranking' => $baseDir . '/includes/Starter_Ranking.php',
     'TIOB\\TI_Beaver' => $baseDir . '/includes/TI_Beaver.php',
     'TIOB\\WP_Cli' => $baseDir . '/includes/WP_Cli.php',
     'TIOB\\White_Label_Config' => $baseDir . '/includes/White_Label_Config.php',

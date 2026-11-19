@@ -20,9 +20,19 @@ class Sites_Listing {
 	/**
 	 * Key of transient where we save the sites list.
 	 *
+	 * The key is version-stamped so that a plugin update always busts a
+	 * potentially stuck cache.
+	 *
 	 * @var string
 	 */
-	private $transient_key = 'tiob_sites';
+	private $transient_key = 'tiob_sites_' . TIOB_VERSION;
+
+	/**
+	 * How long the sites list cache is considered fresh, in seconds.
+	 *
+	 * @var int
+	 */
+	private $cache_ttl = 12 * HOUR_IN_SECONDS;
 
 	/**
 	 * The onboarding config.
@@ -35,6 +45,7 @@ class Sites_Listing {
 	 * Initialize the Class.
 	 */
 	public function init() {
+		// Personalization is applied on the client via /starter_order.
 		$this->onboarding_config = array(
 			'remote'      => $this->get_sites(),
 			'upsell'      => array(),
@@ -107,11 +118,10 @@ class Sites_Listing {
 	 * @return array
 	 */
 	private function get_sites() {
-		$cache = get_transient( $this->transient_key );
+		$response  = $this->get_cached_sites();
+		$is_cached = ( $response !== false );
 
-		if ( $cache !== false ) {
-			$response = $cache;
-		} else {
+		if ( ! $is_cached ) {
 			$response = wp_remote_get( esc_url( self::get_api_path() ) );
 
 			if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
@@ -159,9 +169,43 @@ class Sites_Listing {
 			}
 		}
 
-		set_transient( $this->transient_key, $response, 12 * HOUR_IN_SECONDS );
+		if ( ! $is_cached ) {
+			set_transient(
+				$this->transient_key,
+				array(
+					'fetched_at' => time(),
+					'data'       => $response,
+				),
+				$this->cache_ttl
+			);
+		}
 
 		return $response;
+	}
+
+	/**
+	 * Get the cached sites list, if it is still fresh.
+	 *
+	 * Instead of relying solely on the transient timeout row - which external
+	 * DB/transient cleanup tools can strip, leaving the value non-expiring and
+	 * served forever - we embed our own `fetched_at` timestamp in the payload
+	 * and validate it on read.
+	 *
+	 * @return array|false The cached sites data, or false when there is no
+	 *                     fresh cache and a fresh fetch is required.
+	 */
+	private function get_cached_sites() {
+		$cache = get_transient( $this->transient_key );
+
+		if ( ! is_array( $cache ) || ! isset( $cache['fetched_at'], $cache['data'] ) ) {
+			return false;
+		}
+
+		if ( ( time() - (int) $cache['fetched_at'] ) >= $this->cache_ttl ) {
+			return false;
+		}
+
+		return $cache['data'];
 	}
 
 	/**

@@ -123,6 +123,10 @@ class Dashboard_Widget extends Abstract_Module {
 		}
 		?>
 		<style type="text/css">
+			#dashboard-widgets #themeisle .hndle {
+				padding-left: 39px;
+			}
+
 			#themeisle ul li.ti-dw-recommend-item {
 				padding-left: 7px;
 				border-top: 1px solid #eee;
@@ -135,7 +139,6 @@ class Dashboard_Widget extends Abstract_Module {
 				background-repeat: no-repeat;
 				background-position: 2% 50%;
 				background-size: 25px;
-				padding-left: 39px;
 			}
 
 			#themeisle .inside {

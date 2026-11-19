@@ -1,14 +1,14 @@
 === Starter Sites & Templates by Neve ===
 Contributors: themeisle
-Tags: neve, templates, patterns, blocks, starter, sites, demo, content, import
+Tags: starter sites, templates, block patterns, neve, gutenberg
 Requires at least: 5.5
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 5.6
-Stable tag: 1.2.27
+Stable tag: 1.4.9
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 
-This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs.
+Access 100+ Gutenberg templates and ready-to-use starter sites for WordPress. All designs work with the Neve theme. One-click import, fully responsive.
 
 == Description ==
 
@@ -28,11 +28,18 @@ You can check the full collection on [demosites.io](https://demosites.io/)
 = Can I import just one page from one starter site? =
 Yes, you can choose to import either one template or the entire starter site.
 
+== External services ==
+
+The Starter Sites & Templates library is powered by a cloud service run by ThemeIsle. This section explains what data is sent to it and when. By using these features you agree to ThemeIsle's [Terms](https://themeisle.com/terms/) and [Privacy Policy](https://themeisle.com/privacy-policy/). No account is required to browse the free starter-sites collection.
+
+= ThemeIsle starter-sites service (api.themeisle.com) =
+The plugin contacts ThemeIsle's service to fetch the starter-sites and templates catalog, to order it by relevance to your site (and to run searches), and to validate your license. For relevance ordering and search it sends your site address (home URL), your site title, the page builder you use, and — when you search — your search text; if you have a ThemeIsle license, it also sends your license key. These requests are made when you browse or search the library, and apply to local and staging sites too. Service provided by ThemeIsle — [Terms](https://themeisle.com/terms/), [Privacy Policy](https://themeisle.com/privacy-policy/).
+
 == Changelog ==
 
-##### [Version 1.2.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.26...v1.2.27) (2026-04-23)
+##### [Version 1.4.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.8...v1.4.9) (2026-11-13)
 
-- Menus and widgets are now matched more reliably, reducing the chance of things breaking or linking incorrectly. 
+- Enhanced security
 - Updated dependencies
 
 

@@ -5,6 +5,8 @@ const trailingSlashIt = ( str ) => untrailingSlashIt( str ) + '/';
 
 const ONBOARDING_CAT = {
 	business: __( 'Business', 'templates-patterns-collection' ),
+	blog: __( 'Blog', 'templates-patterns-collection' ),
+	portfolio: __( 'Portfolio', 'templates-patterns-collection' ),
 	education: __( 'Education', 'templates-patterns-collection' ),
 	woocommerce: __( 'eCommerce', 'templates-patterns-collection' ),
 	news: __( 'News', 'templates-patterns-collection' ),
@@ -49,6 +51,12 @@ const textToFileURL = ( text ) => {
 	return URL.createObjectURL( blob );
 };
 
+const decodeHtmlEntities = ( str ) => {
+	const txt = document.createElement( 'textarea' );
+	txt.innerHTML = str;
+	return txt.value;
+};
+
 export {
 	trailingSlashIt,
 	untrailingSlashIt,
@@ -56,4 +64,5 @@ export {
 	EDITOR_MAP,
 	ONBOARDING_CAT,
 	textToFileURL,
+	decodeHtmlEntities,
 };

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit83e8f88535db501a6924104796531662
+class ComposerStaticInit6192030226a17e12bd803670cb9d49ac
 {
     public static $files = array (
         '50f1a0479b2a5847c529d784c54cebe2' => __DIR__ . '/..' . '/codeinwp/themeisle-sdk/load.php',
@@ -26,6 +26,7 @@ class ComposerStaticInit83e8f88535db501a6924104796531662
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TIOB\\Abilities\\Starter_Sites' => __DIR__ . '/../..' . '/includes/Abilities/Starter_Sites.php',
         'TIOB\\Admin' => __DIR__ . '/../..' . '/includes/Admin.php',
         'TIOB\\Editor' => __DIR__ . '/../..' . '/includes/Editor.php',
         'TIOB\\Elementor' => __DIR__ . '/../..' . '/includes/Elementor.php',
@@ -54,6 +55,7 @@ class ComposerStaticInit83e8f88535db501a6924104796531662
         'TIOB\\Main' => __DIR__ . '/../..' . '/includes/Main.php',
         'TIOB\\Rest_Server' => __DIR__ . '/../..' . '/includes/Rest_Server.php',
         'TIOB\\Sites_Listing' => __DIR__ . '/../..' . '/includes/Sites_Listing.php',
+        'TIOB\\Starter_Ranking' => __DIR__ . '/../..' . '/includes/Starter_Ranking.php',
         'TIOB\\TI_Beaver' => __DIR__ . '/../..' . '/includes/TI_Beaver.php',
         'TIOB\\WP_Cli' => __DIR__ . '/../..' . '/includes/WP_Cli.php',
         'TIOB\\White_Label_Config' => __DIR__ . '/../..' . '/includes/White_Label_Config.php',
@@ -62,9 +64,9 @@ class ComposerStaticInit83e8f88535db501a6924104796531662
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit83e8f88535db501a6924104796531662::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit83e8f88535db501a6924104796531662::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit83e8f88535db501a6924104796531662::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6192030226a17e12bd803670cb9d49ac::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6192030226a17e12bd803670cb9d49ac::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6192030226a17e12bd803670cb9d49ac::$classMap;
 
         }, null, ClassLoader::class);
     }

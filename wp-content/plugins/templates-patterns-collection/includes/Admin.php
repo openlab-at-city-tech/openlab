@@ -29,6 +29,12 @@ class Admin {
 	const VISITED_LIBRARY_OPT     = 'tiob_library_visited';
 
 	/**
+	 * Docs pages the dashboard links to. Use the final URLs: a redirect drops the UTM parameters.
+	 */
+	const TEMPLATE_CLOUD_DOCS         = 'https://docs.themeisle.com/neve/neve-template-cloud-library';
+	const IMPORT_TROUBLESHOOTING_DOCS = 'https://docs.themeisle.com/neve/starter-sites-library-import-is-not-working';
+
+	/**
 	 * Admin page slug
 	 *
 	 * @var string
@@ -75,7 +81,7 @@ class Admin {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
 		add_filter( 'ti_tpc_editor_data', array( $this, 'add_tpc_editor_data' ), 20 );
 		add_action( 'admin_init', array( $this, 'activation_redirect' ) );
-		add_filter( 'themeisle_sdk_blackfriday_data', array( $this, 'add_black_friday_data' ) );
+		add_filter( 'templates_patterns_collection_ai_connect_metadata', array( $this, 'add_ai_connect_metadata' ) );
 
 		$this->setup_white_label();
 
@@ -159,6 +165,38 @@ class Admin {
 
 		update_option( self::TC_NEW_NOTICE_DISMISSED, 'yes' );
 		$this->ensure_ajax_response( $response );
+	}
+
+	/**
+	 * Decide if the business/agency variant of the onboarding promo text should be shown.
+	 *
+	 * @return bool
+	 */
+	private function should_show_business_agency_promo_text() {
+		$license_data = License::get_license_data();
+		$license_key  = isset( $license_data->key ) ? strtolower( trim( (string) $license_data->key ) ) : '';
+		$license_tier = License::get_license_tier( 0 );
+		$raw_tier     = isset( $license_data->tier ) ? absint( $license_data->tier ) : 0;
+		$neve_plan    = $this->neve_license_plan();
+
+		if ( $license_key === '' || $license_key === 'free' ) {
+			return false;
+		}
+
+		if ( ! License::has_active_license() || ! $this->has_valid_addons() ) {
+			return false;
+		}
+
+		if ( -1 !== $neve_plan ) {
+			// The normalized Neve plan uses mapped TPC tiers, where Business and Agency are 2 and 3.
+			return in_array( $neve_plan, array( 2, 3 ), true );
+		}
+
+		if ( in_array( $raw_tier, array( 1, 2, 7, 12, 18 ), true ) ) {
+			return false;
+		}
+
+		return in_array( $license_tier, array( 2, 3 ), true );
 	}
 
 
@@ -416,12 +454,28 @@ class Admin {
 	 *
 	 * @return bool
 	 */
-	private function neve_theme_has_support( $feature ) {
+	private static function neve_theme_has_support( $feature ) {
 		if ( defined( 'NEVE_COMPATIBILITY_FEATURES' ) ) {
 			$features = NEVE_COMPATIBILITY_FEATURES;
 			return isset( $features[ $feature ] );
 		}
 		return false;
+	}
+
+	/**
+	 * Capability required to open the starter sites screen.
+	 *
+	 * The screen is a Neve dashboard sub-page when the theme provides the
+	 * dedicated menu, and an Appearance page otherwise.
+	 *
+	 * @return string
+	 */
+	public static function get_starter_sites_capability() {
+		if ( self::neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+			return 'activate_plugins';
+		}
+
+		return 'install_plugins';
 	}
 
 	/**
@@ -449,11 +503,11 @@ class Admin {
 	 */
 	private function add_theme_page_for_tiob( $page_data, $offset = 2 ) {
 
-		if ( $this->neve_theme_has_support( 'theme_dedicated_menu' ) ) {
+		if ( self::neve_theme_has_support( 'theme_dedicated_menu' ) ) {
 			global $submenu;
 
 			$theme_page = 'neve-welcome';
-			$capability = 'activate_plugins';
+			$capability = self::get_starter_sites_capability();
 			add_submenu_page(
 				$theme_page,
 				$page_data['page_title'],
@@ -534,7 +588,7 @@ class Admin {
 		$starter_site_data = array(
 			'page_title' => __( 'Starter Sites', 'templates-patterns-collection' ),
 			'menu_title' => $this->get_prefix_for_menu_item() . __( 'Onboarding', 'templates-patterns-collection' ),
-			'capability' => 'install_plugins',
+			'capability' => self::get_starter_sites_capability(),
 			'menu_slug'  => 'neve-onboarding',
 			'callback'   => array(
 				$this,
@@ -711,18 +765,19 @@ class Admin {
 			wp_set_script_translations( 'tiobObd', 'templates-patterns-collection' );
 
 			if ( ! empty( $this->google_fonts ) ) {
-				$font_chunks = array_chunk( $this->google_fonts, absint( count( $this->google_fonts ) / 5 ) );
+				$chunk_length = max( 1, absint( count( $this->google_fonts ) / 5 ) );
+				$font_chunks  = array_chunk( $this->google_fonts, $chunk_length );
 				foreach ( $font_chunks as $index => $fonts_chunk ) {
 					wp_enqueue_style(
 						'tiob-google-fonts-' . $index,
-						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap"',
+						'https://fonts.googleapis.com/css?family=' . implode( '|', $fonts_chunk ) . '&display=swap',
 						array(),
 						$onboarding_dependencies['version']
 					);
 				}
 			}
 
-			do_action( 'themeisle_internal_page', TIOB_BASENAME, 'onboarding' );
+			do_action( 'themeisle_internal_page', 'templates-patterns-collection', 'onboarding' );
 		}
 
 		$is_tiob_page = strpos( $screen->id, '_page_tiob-plugin' ) !== false;
@@ -751,7 +806,7 @@ class Admin {
 
 		wp_set_script_translations( 'tiob', 'templates-patterns-collection' );
 
-		do_action( 'themeisle_internal_page', TIOB_BASENAME, 'onboarding' );
+		do_action( 'themeisle_internal_page', 'templates-patterns-collection', 'onboarding' );
 	}
 
 	/**
@@ -789,6 +844,7 @@ class Admin {
 			),
 			'cleanupAllowed'                => ( ! empty( get_transient( Active_State::STATE_NAME ) ) ) ? 'yes' : 'no',
 			'onboarding'                    => array(),
+			'adminUrl'                      => admin_url(),
 			'hasFileSystem'                 => WP_Filesystem(),
 			'themesURL'                     => admin_url( 'themes.php' ),
 			'themeAction'                   => $this->get_theme_action(),
@@ -804,6 +860,7 @@ class Admin {
 			'upsellNotifications'           => $this->get_upsell_notifications(),
 			'isValidLicense'                => $this->has_valid_addons(),
 			'licenseTIOB'                   => License::get_license_data(),
+			'onboardingShowProNoticeText'   => $this->should_show_business_agency_promo_text(),
 			'emailSubscribe'                => array(
 				'ajaxURL'    => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'nonce'      => wp_create_nonce( 'skip_subscribe_nonce' ),
@@ -827,6 +884,7 @@ class Admin {
 			'onboardingAllowed'             => $this->should_load_onboarding(),
 			'onboardingRedirect'            => admin_url( 'admin.php?page=neve-onboarding' ),
 			'tiobSettings'                  => admin_url( 'admin.php?page=tiob-plugin#settings' ),
+			'templateCloudDocs'             => tsdk_utmify( self::TEMPLATE_CLOUD_DOCS, 'templatescloud', 'my-library' ),
 			'links'                         => array(
 				array(
 					'label'       => __( 'Support', 'templates-patterns-collection' ),
@@ -845,7 +903,7 @@ class Admin {
 				),
 				array(
 					'label'     => __( 'Documentation', 'templates-patterns-collection' ),
-					'url'       => tsdk_utmify( 'https://docs.themeisle.com/article/1354-neve-template-cloud-library', 'settings_page' ),
+					'url'       => tsdk_utmify( self::TEMPLATE_CLOUD_DOCS, 'settings_page', 'settings' ),
 					'is_button' => true,
 				),
 			),
@@ -1073,7 +1131,11 @@ class Admin {
 			),
 		);
 
-		if ( class_exists( '\Neve\Core\Settings\Mods', false ) ) {
+		$has_neve_font_pairs = class_exists( '\Neve\Core\Settings\Mods', false )
+			&& defined( '\Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS' )
+			&& property_exists( '\Neve\Core\Settings\Config', 'typography_default_pairs' );
+
+		if ( $has_neve_font_pairs ) {
 			$font_pair_neve = apply_filters(
 				'neve_font_pairings',
 				\Neve\Core\Settings\Mods::get( \Neve\Core\Settings\Config::MODS_TPOGRAPHY_FONT_PAIRS, \Neve\Core\Settings\Config::$typography_default_pairs )
@@ -1308,7 +1370,7 @@ class Admin {
 			'rest_not_working'            => sprintf(
 			/* translators: 1 - 'here'. */
 				__( 'It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working#rest-api" target="_blank" rel="external noreferrer noopener">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ) )
+				sprintf( '<a href="%2$s" target="_blank" rel="external noreferrer noopener">%1$s<i class="dashicons dashicons-external"></i></a>', __( 'here', 'templates-patterns-collection' ), esc_url( tsdk_utmify( self::IMPORT_TROUBLESHOOTING_DOCS, 'rest-api', 'starter-sites' ) . '#1-checking-the-sites-library-api' ) )
 			),
 			'error_report'                => sprintf(
 			/* translators: 1 - 'get in touch'. */
@@ -1318,7 +1380,7 @@ class Admin {
 			'troubleshooting'             => sprintf(
 			/* translators: 1 - 'troubleshooting guide'. */
 				__( 'Hi! It seems there is a configuration issue with your server that\'s causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work.', 'templates-patterns-collection' ),
-				sprintf( '<a href="https://docs.themeisle.com/article/1157-starter-sites-library-import-is-not-working" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ) )
+				sprintf( '<a href="%2$s" target="_blank" rel="external noreferrer noopener">%1$s <i class="dashicons dashicons-external"></i></a>', __( 'troubleshooting guide', 'templates-patterns-collection' ), esc_url( tsdk_utmify( self::IMPORT_TROUBLESHOOTING_DOCS, 'import-error', 'starter-sites' ) ) )
 			),
 			'support'                     => sprintf(
 			/* translators: 1 - 'get in touch'. */
@@ -1398,28 +1460,28 @@ class Admin {
 	}
 
 	/**
-	 * Add Black Friday data.
+	 * Opt in to the SDK "Connect your AI agent" module.
 	 *
-	 * @param array $configs The configuration array for the loaded products.
+	 * Importing or reverting a starter site replaces large parts of a site, so
+	 * those abilities are left for the site owner to switch on.
 	 *
 	 * @return array
 	 */
-	public function add_black_friday_data( $configs ) {
-		$config = $configs['default'];
-
-		// translators: %1$s - plugin name, %2$s - HTML tag, %3$s - discount, %4$s - HTML tag, %5$s - company name.
-		$message_template = __( 'Brought to you by the team behind %1$s— our biggest sale of the year is here: %2$sup to %3$s OFF%4$s on premium products from %5$s! Limited-time only.', 'templates-patterns-collection' );
-
-		$config['message']  = sprintf( $message_template, 'Starter Sites & Templates by Neve', '<strong>', '70%', '</strong>', '<strong>Themeisle</strong>' );
-		$config['sale_url'] = add_query_arg(
-			array(
-				'utm_term' => 'free',
+	public function add_ai_connect_metadata() {
+		return array(
+			'name'           => 'Starter Sites & Templates by Neve',
+			'notice_cases'   => array(
+				__( 'find a starter site for your niche', 'templates-patterns-collection' ),
+				__( 'compare the plugins each starter site needs', 'templates-patterns-collection' ),
+				__( 'review your last starter site import', 'templates-patterns-collection' ),
 			),
-			tsdk_translate_link( tsdk_utmify( 'https://themeisle.link/all-bf', 'bfcm', 'templates-patterns-collection' ) )
+			'prompts'        => array(
+				__( 'Find a Starter Sites & Templates by Neve starter site for a restaurant, built for Elementor.', 'templates-patterns-collection' ),
+				__( 'Which free starter sites suit a photography portfolio? Give me their previews.', 'templates-patterns-collection' ),
+				__( 'Find me a bakery starter site that works with the block editor and comes with a shop.', 'templates-patterns-collection' ),
+			),
+			'ability_prefix' => 'starter-sites',
+			'abilities'      => array( 'neve/starter-site-list' ),
 		);
-
-		$configs[ TIOB_BASENAME ] = $config;
-
-		return $configs;
 	}
 }

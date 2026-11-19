@@ -904,15 +904,19 @@ class Licenser extends Abstract_Module {
 
 			return $_transient_data;
 		}
+		$this->product->setup_from_fileheaders();
 		$api_response = $this->api_request();
 		if ( false !== $api_response && is_object( $api_response ) && isset( $api_response->new_version ) ) {
+			$plugin = $this->product->get_slug() . '/' . $this->product->get_file();
 			if ( ! isset( $api_response->plugin ) ) {
-				$api_response->plugin = $this->product->get_slug() . '/' . $this->product->get_file();
+				$api_response->plugin = $plugin;
 			}
 			if ( version_compare( $this->product->get_version(), $api_response->new_version, '<' ) ) {
-				$_transient_data->response[ $this->product->get_slug() . '/' . $this->product->get_file() ] = $api_response;
+				$_transient_data->response[ $plugin ] = $api_response;
+				unset( $_transient_data->no_update[ $plugin ] );
 			} else {
-				$_transient_data->no_update[ $this->product->get_slug() . '/' . $this->product->get_file() ] = $api_response;
+				$_transient_data->no_update[ $plugin ] = $api_response;
+				unset( $_transient_data->response[ $plugin ] );
 			}
 		}
 

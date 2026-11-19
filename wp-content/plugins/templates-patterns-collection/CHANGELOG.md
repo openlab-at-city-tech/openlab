@@ -1,3 +1,85 @@
+##### [Version 1.4.9](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.8...v1.4.9) (2026-11-13)
+
+- Enhanced security
+- Updated dependencies
+
+##### [Version 1.4.8](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.7...v1.4.8) (2026-11-05)
+
+- Fixed starter site import failing when PHP dom extension is missing.
+- Updated dependencies
+
+##### [Version 1.4.7](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.6...v1.4.7) (2026-10-22)
+
+- Fixed untranslated labels in the Gutenberg, Elementor, and Beaver Builder template libraries.
+- Fixed starter site imports failing on slow connections.
+- Fixed required plugin checkboxes staying selected with a Required label.
+- Updated dependencies
+
+##### [Version 1.4.6](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.5...v1.4.6) (2026-09-30)
+
+- Added AI agent support: let AI assistants browse and import starter sites for you.
+
+##### [Version 1.4.5](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.4...v1.4.5) (2026-09-23)
+
+- Fixed admin crashes with older Neve theme versions.
+- Fixed onboarding crashes when Google font lists contain fewer than five families.
+- Fixed Zelle front-page migration when Elementor cannot import the template.
+- Fixed broken layouts and demo-site links in imported Elementor pages.
+- Fixed starter-site imports adding duplicate page links to existing menus.
+- Updated dependencies
+
+##### [Version 1.4.4](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.3...v1.4.4) (2026-08-12)
+
+- Improved license activation to show a clear notice when a license plan does not include Templates Cloud.
+
+##### [Version 1.4.3](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.2...v1.4.3) (2026-08-04)
+
+- Fixed an issue where the starter sites list rewrote its cache during routine requests instead of reusing it, adding unnecessary work on page loads.
+- Improved the starter site search so results appear more responsively and better match what you type.
+
+##### [Version 1.4.2](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.1...v1.4.2) (2026-07-22)
+
+- Fixed a fatal error that could occur during site import when the import file was missing or empty; a clear error message is now shown instead.
+
+##### [Version 1.4.1](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.4.0...v1.4.1) (2026-07-10)
+
+- Improve caching in site listing
+- Fix decoding of HTML entities in site listing
+
+#### [Version 1.4.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.3.0...v1.4.0) (2026-06-23)
+
+> Things are getting better every day. 🚀
+- Improve Starter Sites Onboarding Layout and Discovery
+- Add a Four-Column Starter Sites Grid on Larger Screens
+- Refine Onboarding Banners and Upgrade Messaging
+- Improve Starter Site Color Variant Preview and Filtering
+- Use Site Title to Improve Starter Site Ranking and Search
+- Improve Starter Sites Onboarding Layout and Discovery
+- Add a Four-Column Starter Sites Grid on Larger Screens
+- Refine Onboarding Banners and Upgrade Messaging
+- Improve Starter Site Color Variant Preview and Filtering
+- Use Site Title to Improve Starter Site Ranking and Search
+- Starter sites now show 4 per row on laptop and desktop, so you can see more designs at a glance.
+- Tidier library: the promotional banner is replaced with a subtle subtitle, and the upgrade prompt is smaller with clearer wording.
+- Color variants: select a color to preview every matching starter site in that palette; sites with a single palette no longer show an empty color control.
+- Smarter results: your site title is now used to better order and search the starter-sites library.
+- Performance improvements for Starter Site wizard.
+
+#### [Version 1.3.0](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.29...v1.3.0) (2026-06-18)
+
+- Starter Sites: redesigned, AI-powered experience - A faster, smarter way to find the right starting point, with sites shown right away, personalized ordering, improved natural-language search, and infinite scroll.
+
+##### [Version 1.2.29](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.28...v1.2.29) (2026-05-21)
+
+- Updated dependencies
+- Enhanced the onboarding experience.
+- Added 100+ new starter sites.
+
+##### [Version 1.2.28](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.27...v1.2.28) (2026-05-07)
+
+- Source font pairings from the website on demo import
+- Update dependencies
+
 ##### [Version 1.2.27](https://github.com/Codeinwp/templates-patterns-collection/compare/v1.2.26...v1.2.27) (2026-04-23)
 
 - Menus and widgets are now matched more reliably, reducing the chance of things breaking or linking incorrectly. 

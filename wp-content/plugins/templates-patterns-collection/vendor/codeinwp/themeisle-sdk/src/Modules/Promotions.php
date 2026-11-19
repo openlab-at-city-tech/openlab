@@ -113,11 +113,25 @@ class Promotions extends Abstract_Module {
 	private $option_masteriyo = 'themeisle_sdk_promotions_masteriyo_installed';
 
 	/**
+	 * Option key for Easy MCP AI promos.
+	 *
+	 * @var string
+	 */
+	private $option_easy_mcp = 'themeisle_sdk_promotions_easy_mcp_installed';
+
+	/**
 	 * Loaded promotion.
 	 *
 	 * @var string
 	 */
 	private $loaded_promo;
+
+	/**
+	 * Whether promotions were processed for the current screen.
+	 *
+	 * @var bool
+	 */
+	private $available_promotions_loaded = false;
 
 	/**
 	 * Woo promotions.
@@ -148,6 +162,15 @@ class Promotions extends Abstract_Module {
 			return false;
 		}
 
+		// Registered for every user: the notices save their dismiss state through /wp/v2/settings, which is not an admin request.
+		add_action( 'init', array( $this, 'register_settings' ), 99 );
+		add_action( 'admin_init', array( $this, 'register_reference' ), 99 );
+
+		// load() only renders promotions for users who can install plugins, so skip the environment checks for everyone else.
+		if ( ! current_user_can( 'install_plugins' ) ) {
+			return false;
+		}
+
 		$this->debug        = apply_filters( 'themeisle_sdk_promo_debug', $this->debug );
 		$promotions_to_load = apply_filters( $product->get_key() . '_load_promotions', array() );
 
@@ -160,6 +183,7 @@ class Promotions extends Abstract_Module {
 		$promotions_to_load[] = 'wp_full_pay';
 		$promotions_to_load[] = 'feedzy_import';
 		$promotions_to_load[] = 'learning-management-system';
+		$promotions_to_load[] = 'easy-mcp';
 
 		if ( defined( 'NEVE_VERSION' ) || defined( 'WPMM_PATH' ) || defined( 'OTTER_BLOCKS_VERSION' ) || defined( 'OBFX_URL' ) ) {
 			$promotions_to_load[] = 'feedzy_embed';
@@ -175,8 +199,6 @@ class Promotions extends Abstract_Module {
 				unset( $this->promotions[ $slug ] );
 			}
 		}
-		add_action( 'init', array( $this, 'register_settings' ), 99 );
-		add_action( 'admin_init', array( $this, 'register_reference' ), 99 );
 
 		return ! empty( $this->promotions );
 	}
@@ -202,19 +224,223 @@ class Promotions extends Abstract_Module {
 		add_filter( 'attachment_fields_to_edit', array( $this, 'add_attachment_field' ), 10, 2 );
 		add_action( 'current_screen', [ $this, 'load_available' ] );
 		add_action( 'elementor/editor/after_enqueue_scripts', array( $this, 'enqueue' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_visualizer_block_editor_shim' ), 100 );
 		add_action( 'wp_ajax_tisdk_update_option', array( $this, 'dismiss_promotion' ) );
+		add_filter( 'plugins_api_result', array( $this, 'inject_visualizer_block_directory_suggestion' ), 10, 3 );
+		add_filter( 'option_visualizer-activated', array( $this, 'suppress_visualizer_onboarding_in_editor' ) );
 		add_filter( 'themeisle_sdk_ran_promos', '__return_true' );
 
 		if ( get_option( $this->option_neve, false ) !== true ) {
-			add_action( 'wp_ajax_themeisle_sdk_dismiss_notice', 'ThemeisleSDK\Modules\Notification::regular_dismiss' );
+			add_action( 'wp_ajax_themeisle_sdk_dismiss_notice', 'ThemeisleSDK\Modules\Notification::dismiss' );
 		}
+	}
+
+
+	/**
+	 * Inject Visualizer as the first block-directory suggestion for chart queries.
+	 *
+	 * @param object|WP_Error $res    Response object or WP_Error.
+	 * @param string          $action The API action.
+	 * @param object          $args   The API arguments.
+	 * @return object|WP_Error
+	 */
+	public function inject_visualizer_block_directory_suggestion( $res, $action, $args ) {
+		if ( 'query_plugins' !== $action || ! is_object( $args ) || empty( $args->block ) ) {
+			return $res;
+		}
+
+		if ( ! $this->should_suggest_visualizer( $args->block ) ) {
+			return $res;
+		}
+
+		if ( $this->is_plugin_installed( 'visualizer' ) ) {
+			return $res;
+		}
+
+		$plugin = $this->get_visualizer_block_directory_data();
+		if ( empty( $plugin ) ) {
+			return $res;
+		}
+
+		if ( is_wp_error( $res ) ) {
+			$res = (object) array( 'plugins' => array() );
+		}
+
+		if ( ! isset( $res->plugins ) || ! is_array( $res->plugins ) ) {
+			$res->plugins = array();
+		}
+
+		$res->plugins = array_values(
+			array_filter(
+				$res->plugins,
+				function ( $existing ) use ( $plugin ) {
+					return ! isset( $existing['slug'] ) || $existing['slug'] !== $plugin['slug'];
+				}
+			)
+		);
+
+		array_unshift( $res->plugins, $plugin );
+
+		return $res;
+	}
+
+	/**
+	 * Check if the query should trigger the Visualizer suggestion.
+	 *
+	 * @param string $term Search term.
+	 * @return bool
+	 */
+	private function should_suggest_visualizer( $term ) {
+		$term = strtolower( (string) $term );
+		return false !== strpos( $term, 'chart' ) || false !== strpos( $term, 'visualizer' ) || false !== strpos( $term, 'visualization' ) || false !== strpos( $term, 'graph' );
+	}
+
+	/**
+	 * Build the plugin data for Visualizer block directory results.
+	 *
+	 * @return array
+	 */
+	private function get_visualizer_block_directory_data() {
+		$slug        = 'visualizer';
+		$plugin_info = $this->call_plugin_api( $slug );
+
+		if ( is_wp_error( $plugin_info ) || empty( $plugin_info ) ) {
+			return array();
+		}
+
+		$icons = array();
+		if ( ! empty( $plugin_info->icons ) ) {
+			if ( ! empty( $plugin_info->icons['1x'] ) ) {
+				$icons['1x'] = $plugin_info->icons['1x'];
+			}
+			if ( ! empty( $plugin_info->icons['2x'] ) ) {
+				$icons['2x'] = $plugin_info->icons['2x'];
+			}
+		}
+
+		$name = isset( $plugin_info->name ) ? $plugin_info->name : 'Visualizer';
+
+		return array(
+			'slug'                => $slug,
+			'name'                => $name,
+			'short_description'   => isset( $plugin_info->short_description ) ? $plugin_info->short_description : '',
+			'author'              => isset( $plugin_info->author ) ? wp_strip_all_tags( $plugin_info->author ) : '',
+			'rating'              => isset( $plugin_info->rating ) ? (int) $plugin_info->rating : 0,
+			'num_ratings'         => isset( $plugin_info->num_ratings ) ? (int) $plugin_info->num_ratings : 0,
+			'active_installs'     => isset( $plugin_info->active_installs ) ? (int) $plugin_info->active_installs : 0,
+			'author_block_rating' => isset( $plugin_info->author_block_rating ) ? (int) $plugin_info->author_block_rating : 0,
+			'author_block_count'  => isset( $plugin_info->author_block_count ) ? (int) $plugin_info->author_block_count : 0,
+			'icons'               => $icons,
+			'last_updated'        => isset( $plugin_info->last_updated ) ? $plugin_info->last_updated : gmdate( 'Y-m-d H:i:s' ),
+			'blocks'              => array(
+				array(
+					'name'  => 'visualizer/chart',
+					'title' => $name,
+				),
+			),
+		);
+	}
+
+
+	/**
+	 * Prevent Visualizer onboarding redirects while in the block editor.
+	 *
+	 * @param mixed $value Option value.
+	 * @return mixed
+	 */
+	public function suppress_visualizer_onboarding_in_editor( $value ) {
+		if ( ! $this->is_block_editor_screen() ) {
+			return $value;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Add a small compatibility shim for Visualizer's block editor bundle.
+	 *
+	 * Visualizer's "Display an existing chart" flow reads
+	 * `google.visualization.Version` before the Google Charts loader has fully
+	 * populated `google.visualization`, which can throw after dynamic install.
+	 *
+	 * @return void
+	 */
+	public function enqueue_visualizer_block_editor_shim() {
+		global $themeisle_sdk_max_version;
+
+		if ( ! $this->is_block_editor_screen() ) {
+			return;
+		}
+
+		if ( ! wp_script_is( 'visualizer-gutenberg-block', 'enqueued' ) ) {
+			return;
+		}
+
+		wp_register_script(
+			'ti-sdk-visualizer-editor-shim',
+			'',
+			array(),
+			$themeisle_sdk_max_version,
+			true
+		);
+		wp_enqueue_script( 'ti-sdk-visualizer-editor-shim' );
+		wp_add_inline_script(
+			'ti-sdk-visualizer-editor-shim',
+			'window.google = window.google || {}; window.google.visualization = window.google.visualization || {}; window.google.visualization.Version = window.google.visualization.Version || "current";'
+		);
+	}
+
+	/**
+	 * Check if the current admin screen is the block editor.
+	 *
+	 * @return bool
+	 */
+	private function is_block_editor_screen() {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return $this->is_block_editor_request();
+		}
+
+		$screen = get_current_screen();
+		if ( is_object( $screen ) && method_exists( $screen, 'is_block_editor' ) && $screen->is_block_editor() ) {
+			return true;
+		}
+
+		return $this->is_block_editor_request();
+	}
+
+	/**
+	 * Detect block editor requests before the current screen is available.
+	 *
+	 * @return bool
+	 */
+	private function is_block_editor_request() {
+		global $pagenow;
+
+		if ( 'post-new.php' === $pagenow ) {
+			$post_type = isset( $_GET['post_type'] ) ? sanitize_key( $_GET['post_type'] ) : 'post';
+
+			return function_exists( 'use_block_editor_for_post_type' ) ? use_block_editor_for_post_type( $post_type ) : true;
+		}
+
+		if ( 'post.php' === $pagenow && isset( $_GET['post'] ) ) {
+			$post_id = absint( $_GET['post'] );
+
+			return function_exists( 'use_block_editor_for_post' ) ? use_block_editor_for_post( $post_id ) : true;
+		}
+
+		return false;
 	}
 
 	/**
 	 * Load available promotions.
 	 */
 	public function load_available() {
-		$this->promotions = $this->filter_by_screen_and_merge();
+		if ( $this->available_promotions_loaded ) {
+			return;
+		}
+
+		$this->available_promotions_loaded = true;
+		$this->promotions                  = $this->filter_by_screen_and_merge();
 		if ( empty( $this->promotions ) ) {
 			return;
 		}
@@ -264,6 +490,10 @@ class Promotions extends Abstract_Module {
 
 		if ( isset( $_GET['wp_full_pay_reference_key'] ) ) {
 			update_option( 'wp_full_pay_reference_key', sanitize_key( $_GET['wp_full_pay_reference_key'] ) );
+		}
+
+		if ( isset( $_GET['easy_mcp_reference_key'] ) ) {
+			update_option( 'easy_mcp_reference_key', sanitize_key( $_GET['easy_mcp_reference_key'] ) );
 		}
 
 		if ( isset( $_GET['feedzy_reference_key'] ) || ( isset( $_GET['from'], $_GET['plugin'] ) && $_GET['from'] === 'import' && str_starts_with( sanitize_key( $_GET['plugin'] ), 'feedzy' ) ) ) {
@@ -369,6 +599,16 @@ class Promotions extends Abstract_Module {
 				'default'           => false,
 			)
 		);
+		register_setting(
+			'themeisle_sdk_settings',
+			$this->option_easy_mcp,
+			array(
+				'type'              => 'boolean',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'show_in_rest'      => true,
+				'default'           => false,
+			)
+		);
 	}
 
 	/**
@@ -422,25 +662,31 @@ class Promotions extends Abstract_Module {
 		$has_ppom                  = defined( 'PPOM_VERSION' ) || $this->is_plugin_installed( 'woocommerce-product-addon' );
 		$has_redirection_cf7       = defined( 'WPCF7_PRO_REDIRECT_PLUGIN_VERSION' ) || $this->is_plugin_installed( 'wpcf7-redirect' );
 		$had_redirection_cf7_promo = get_option( $this->option_redirection_cf7, false );
+		$is_min_php_7_4            = version_compare( PHP_VERSION, '7.4', '>=' );
+		$is_min_php_7_2            = version_compare( PHP_VERSION, '7.2', '>=' );
+		$can_check_plugin_install  = $this->can_check_plugin_install_promo();
 		$has_hyve                  = defined( 'HYVE_LITE_VERSION' ) || $this->is_plugin_installed( 'hyve' ) || $this->is_plugin_installed( 'hyve-lite' );
 		$had_hyve_from_promo       = get_option( $this->option_hyve, false );
-		$has_hyve_conditions       = version_compare( get_bloginfo( 'version' ), '6.2', '>=' ) && $this->has_support_page();
+		$has_hyve_conditions       = $is_min_php_7_4 && ! $has_hyve && ! $had_hyve_from_promo && version_compare( get_bloginfo( 'version' ), '6.2', '>=' ) && $can_check_plugin_install && $this->has_support_page();
 		$has_wfp_full_pay          = defined( 'WP_FULL_STRIPE_BASENAME' ) || $this->is_plugin_installed( 'wp-full-stripe-free' );
 		$had_wfp_from_promo        = get_option( $this->option_wp_full_pay, false );
-		$has_wfp_conditions        = $this->has_donate_page();
+		$has_wfp_conditions        = ! $has_wfp_full_pay && ! $had_wfp_from_promo && $can_check_plugin_install && $this->has_donate_page();
 		$is_min_req_v              = version_compare( get_bloginfo( 'version' ), '5.8', '>=' );
 		$current_theme             = wp_get_theme();
 		$has_neve                  = $current_theme->template === 'neve' || $current_theme->parent() === 'neve';
 		$has_neve_from_promo       = get_option( $this->option_neve, false );
 		$has_enough_attachments    = $this->has_min_media_attachments();
 		$has_enough_old_posts      = $this->has_old_posts();
-		$is_min_php_7_4            = version_compare( PHP_VERSION, '7.4', '>=' );
-		$has_feedzy                = defined( 'FEEDZY_BASEFILE' ) || $this->is_plugin_installed( 'feedzy-rss-feedss' );
+		$has_feedzy                = defined( 'FEEDZY_BASEFILE' ) || $this->is_plugin_installed( 'feedzy-rss-feeds' );
 		$had_feedzy_from_promo     = get_option( $this->option_feedzy, false );
-		$has_masteriyo             = defined( 'MASTERIYO_VERSION' ) || $this->is_plugin_installed( 'learning-management-system' );
 		$had_masteriyo_from_promo  = get_option( $this->option_masteriyo, false );
-		$has_masteriyo_conditions  = $this->has_lms_tagline();
-		$is_min_php_7_2            = version_compare( PHP_VERSION, '7.2', '>=' );
+		$has_masteriyo_conditions  = $is_min_php_7_2 && ! $had_masteriyo_from_promo && ! $this->has_active_lms_plugin() && $can_check_plugin_install && $this->has_lms_tagline();
+		$has_easy_mcp              = defined( 'EASY_MCP_AI_VERSION' ) || $this->any_plugin_dir_exists( array( 'easy-mcp-ai' ) );
+		$had_easy_mcp_from_promo   = get_option( $this->option_easy_mcp, false );
+		$has_easy_mcp_base         = $is_min_php_7_4 && ! $has_easy_mcp && ! $had_easy_mcp_from_promo && version_compare( get_bloginfo( 'version' ), '7.0', '>=' );
+		$has_easy_mcp_conditions   = $has_easy_mcp_base && $can_check_plugin_install && ! $this->has_mcp_plugin_installed() && $this->has_ai_usage_signal();
+		// On the own-profile screen the Application Passwords section itself is the intent signal.
+		$has_easy_mcp_profile_conditions = $this->can_check_profile_promo() && $has_easy_mcp_base && wp_is_application_passwords_available_for_user( wp_get_current_user() ) && ! $this->has_mcp_plugin_installed();
 
 		$all = [
 			'optimole'                   => [
@@ -538,20 +784,30 @@ class Promotions extends Abstract_Module {
 			],
 			'hyve'                       => [
 				'hyve-plugins-install' => [
-					'env'    => $is_min_php_7_4 && ! $has_hyve && ! $had_hyve_from_promo && $has_hyve_conditions,
+					'env'    => $has_hyve_conditions,
 					'screen' => 'plugin-install',
 				],
 			],
 			'wp_full_pay'                => [
 				'wp-full-pay-plugins-install' => [
-					'env'    => ! $has_wfp_full_pay && ! $had_wfp_from_promo && $has_wfp_conditions,
+					'env'    => $has_wfp_conditions,
 					'screen' => 'plugin-install',
 				],
 			],
 			'learning-management-system' => [
 				'masteriyo-plugins-install' => [
-					'env'    => $is_min_php_7_2 && ! $has_masteriyo && ! $had_masteriyo_from_promo && $has_masteriyo_conditions,
+					'env'    => $has_masteriyo_conditions,
 					'screen' => 'plugin-install',
+				],
+			],
+			'easy-mcp'                   => [
+				'easy-mcp-plugins-install' => [
+					'env'    => $has_easy_mcp_conditions,
+					'screen' => 'plugin-install',
+				],
+				'easy-mcp-profile'         => [
+					'env'    => $has_easy_mcp_profile_conditions,
+					'screen' => 'profile',
 				],
 			],
 		];
@@ -621,6 +877,7 @@ class Promotions extends Abstract_Module {
 		$is_editor         = method_exists( $current_screen, 'is_block_editor' ) && $current_screen->is_block_editor();
 		$is_theme_install  = isset( $current_screen->id ) && ( $current_screen->id === 'theme-install' );
 		$is_plugin_install = isset( $current_screen->id ) && ( $current_screen->id === 'plugin-install' );
+		$is_profile        = isset( $current_screen->id ) && $current_screen->id === 'profile';
 		$is_product        = isset( $current_screen->id ) && $current_screen->id === 'product';
 		$is_import         = isset( $current_screen->id ) && $current_screen->id === 'import';
 		$is_cf7_install    = isset( $current_screen->id ) && function_exists( 'str_contains' ) ? str_contains( $current_screen->id, 'page_wpcf7' ) : false;
@@ -630,7 +887,16 @@ class Promotions extends Abstract_Module {
 		$is_older             = time() > ( $product_install_time + ( 3 * DAY_IN_SECONDS ) );
 		$is_newer             = time() < ( $product_install_time + ( 6 * HOUR_IN_SECONDS ) );
 		foreach ( $this->promotions as $slug => $promos ) {
+			if ( ! is_array( $promos ) ) {
+				continue;
+			}
+
 			foreach ( $promos as $key => $data ) {
+				if ( ! is_array( $data ) || ! array_key_exists( 'screen', $data ) ) {
+					unset( $this->promotions[ $slug ][ $key ] );
+
+					continue;
+				}
 
 				$data = wp_parse_args(
 					$data,
@@ -703,6 +969,11 @@ class Promotions extends Abstract_Module {
 							unset( $this->promotions[ $slug ][ $key ] );
 						}
 						break;
+					case 'profile':
+						if ( ! $is_profile ) {
+							unset( $this->promotions[ $slug ][ $key ] );
+						}
+						break;
 				}
 			}
 
@@ -753,6 +1024,10 @@ class Promotions extends Abstract_Module {
 
 			if ( $this->get_upsells_dismiss_time( 'masteriyo-plugins-install' ) === false ) {
 				add_action( 'admin_notices', [ $this, 'render_masteriyo_notice' ] );
+			}
+
+			if ( $this->get_upsells_dismiss_time( 'easy-mcp-plugins-install' ) === false || $this->get_upsells_dismiss_time( 'easy-mcp-profile' ) === false ) {
+				add_action( 'admin_notices', [ $this, 'render_easy_mcp_notice' ] );
 			}
 
 			add_action( 'load-import.php', [ $this, 'add_import' ] );
@@ -824,6 +1099,11 @@ class Promotions extends Abstract_Module {
 				add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
 				add_action( 'admin_notices', [ $this, 'render_masteriyo_notice' ] );
 				break;
+			case 'easy-mcp-plugins-install':
+			case 'easy-mcp-profile':
+				add_action( 'admin_enqueue_scripts', [ $this, 'enqueue' ] );
+				add_action( 'admin_notices', [ $this, 'render_easy_mcp_notice' ] );
+				break;
 		}
 	}
 
@@ -863,12 +1143,11 @@ class Promotions extends Abstract_Module {
 	 * Enqueue the assets.
 	 */
 	public function enqueue() {
-		global $themeisle_sdk_max_path;
 		$handle            = 'ti-sdk-promo';
 		$saved             = $this->get_upsells_dismiss_time();
 		$themeisle_sdk_src = $this->get_sdk_uri();
 		$user              = wp_get_current_user();
-		$asset_file        = require $themeisle_sdk_max_path . '/assets/js/build/promos/index.asset.php';
+		$asset_file        = $this->get_asset_file( 'assets/js/build/promos/index.asset.php' );
 		$deps              = array_merge( $asset_file['dependencies'], [ 'updates' ] );
 
 		$themes                                = wp_get_themes();
@@ -919,6 +1198,8 @@ class Promotions extends Abstract_Module {
 				'wpFullPayDash'          => esc_url( add_query_arg( [ 'page' => 'wpfs-settings-stripe' ], admin_url( 'admin.php' ) ) ),
 				'masteriyoActivationUrl' => $this->get_plugin_activation_link( 'masteriyo' ),
 				'masteriyoDash'          => esc_url( add_query_arg( [ 'page' => 'masteriyo-onboard' ], admin_url( 'index.php' ) ) ),
+				'easyMcpActivationUrl'   => add_query_arg( 'easy_mcp_reference_key', 'n-' . $this->product->get_key(), remove_query_arg( 'optimole_reference_key', $this->get_plugin_activation_link( 'easy-mcp-ai' ) ) ),
+				'easyMcpDash'            => esc_url( add_query_arg( [ 'page' => 'easy-mcp-ai' ], admin_url( 'admin.php' ) ) ),
 				'nevePreviewURL'         => esc_url( add_query_arg( [ 'theme' => 'neve' ], admin_url( 'theme-install.php' ) ) ),
 				'neveAction'             => $neve_action,
 				'activateNeveURL'        => esc_url(
@@ -983,6 +1264,22 @@ class Promotions extends Abstract_Module {
 	 */
 	public function render_masteriyo_notice() {
 		echo '<div id="ti-masteriyo-notice" class="notice notice-info ti-sdk-om-notice"></div>';
+	}
+
+	/**
+	 * Render Easy MCP AI notice.
+	 */
+	public function render_easy_mcp_notice() {
+		// A product on this site already offers the connector in its own words.
+		if ( class_exists( Ai_Connect::class ) && Ai_Connect::has_products() ) {
+			return;
+		}
+		// Cards are injected only when a paid product loaded Featured_plugins; only then can this request already show one.
+		if ( apply_filters( 'themeisle_sdk_plugin_api_filter_registered', false ) && $this->is_easy_mcp_card_request() ) {
+			return;
+		}
+
+		echo '<div id="ti-easy-mcp-notice" class="notice notice-info ti-sdk-om-notice"></div>';
 	}
 
 	/**
@@ -1399,74 +1696,395 @@ class Promotions extends Abstract_Module {
 	 * Check if the user has a support page.
 	 */
 	public function has_support_page() {
-		$transient_name = 'tisdk_has_support_page';
-		$has_support    = get_transient( $transient_name );
+		$page_title_matches = $this->get_page_title_keyword_matches();
 
-		if ( false === $has_support ) {
-			global $wpdb;
-
-			// We use %i escape identifier that was added in WP 6.2.0, hence need to ignore PHPCS warning.
-			// We only show this notice to users on higher version as that is the minimum for Hyve as well.
-			$query = $wpdb->get_var( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->prepare( // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
-					'SELECT ID FROM %i WHERE post_type = %s AND post_status = %s AND post_title LIKE %s LIMIT 1', // phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnsupportedPlaceholder
-					$wpdb->posts,
-					'page',
-					'publish',
-					'%support%'
-				)
-			);
-
-			$has_support = $query ? 'yes' : 'no';
-
-			set_transient( $transient_name, $has_support, 7 * DAY_IN_SECONDS );
-		}
-
-		return 'yes' === $has_support;
+		return 'yes' === $page_title_matches['support'];
 	}
 
 	/**
 	 * Check if the user has a donate page.
 	 */
 	public function has_donate_page() {
-		$transient_name = 'tisdk_has_donate_page';
-		$has_donate     = get_transient( $transient_name );
+		$page_title_matches = $this->get_page_title_keyword_matches();
 
-		if ( false === $has_donate ) {
-			global $wpdb;
-
-			$query = $wpdb->get_var( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-				$wpdb->prepare(
-					'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type = %s AND post_status = %s AND post_title LIKE %s LIMIT 1',
-					'page',
-					'publish',
-					'%donate%'
-				)
-			);
-
-			$has_donate = $query ? 'yes' : 'no';
-
-			set_transient( $transient_name, $has_donate, 7 * DAY_IN_SECONDS );
-		}
-
-		return 'yes' === $has_donate;
+		return 'yes' === $page_title_matches['donate'];
 	}
 
 	/**
-	 * Check if the tagline contains LMS related keywords.
+	 * Check if the tagline or a published page title contains LMS related keywords.
 	 *
-	 * @return bool True if the tagline contains LMS-related keywords, false otherwise.
+	 * @return bool True if LMS-related keywords are found, false otherwise.
 	 */
 	public function has_lms_tagline() {
-		$tagline      = strtolower( get_bloginfo( 'description' ) );
-		$lms_keywords = array( 'learning', 'courses' );
+		$tagline = strtolower( get_bloginfo( 'description' ) );
 
-		foreach ( $lms_keywords as $keyword ) {
-			if ( strpos( $tagline, $keyword ) !== false ) {
+		foreach ( $this->get_lms_keywords() as $keyword ) {
+			if ( $this->has_lms_keyword_match( $tagline, $keyword ) ) {
+				return true;
+			}
+		}
+
+		return $this->has_lms_page_title();
+	}
+
+	/**
+	 * Check if a supported LMS plugin is active.
+	 *
+	 * @return bool True if an LMS plugin is active, false otherwise.
+	 */
+	private function has_active_lms_plugin() {
+		if ( defined( 'MASTERIYO_VERSION' ) ) {
+			return true;
+		}
+
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		$lms_plugins = array(
+			'tutor/tutor.php',
+			'sfwd-lms/sfwd_lms.php',
+			'lifterlms/lifterlms.php',
+			'sensei-lms/sensei-lms.php',
+			'learnpress/learnpress.php',
+			'masterstudy-lms-learning-management-system/masterstudy-lms-learning-management-system.php',
+			'learning-management-system/lms.php',
+		);
+
+		foreach ( $lms_plugins as $plugin ) {
+			if ( is_plugin_active( $plugin ) || ( is_multisite() && is_plugin_active_for_network( $plugin ) ) ) {
 				return true;
 			}
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check if the site shows signs of AI usage.
+	 *
+	 * @return bool True if an AI plugin is installed or a REST API application password is in use.
+	 */
+	public function has_ai_usage_signal() {
+		return $this->has_ai_plugin_installed() || $this->has_application_password_in_use();
+	}
+
+	/**
+	 * Check if the current plugin-install request already surfaces the Easy MCP AI card,
+	 * so the notice is not stacked on top of it: the Featured tab injects the card on
+	 * WordPress 6.9+ and AI-related searches prepend it.
+	 *
+	 * @return bool True if the Easy MCP AI card is expected on the current request.
+	 */
+	private function is_easy_mcp_card_request() {
+		$current_screen = get_current_screen();
+		if ( ! isset( $current_screen->id ) || 'plugin-install' !== $current_screen->id ) {
+			return false;
+		}
+
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		$tab    = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : '';
+		$search = isset( $_GET['s'] ) ? strtolower( sanitize_text_field( wp_unslash( $_GET['s'] ) ) ) : '';
+		$paged  = isset( $_GET['paged'] ) ? (int) $_GET['paged'] : 1;
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
+
+		// Cards are only injected on the first results page.
+		if ( $paged > 1 ) {
+			return false;
+		}
+
+		if ( '' === $tab || 'featured' === $tab ) {
+			return version_compare( get_bloginfo( 'version' ), '6.9', '>=' );
+		}
+
+		if ( '' !== $search ) {
+			return Featured_Plugins::matches_ai_search_keywords( $search ) && ! Featured_Plugins::matches_lms_search_keywords( $search );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a known AI plugin is installed, active or not.
+	 *
+	 * @return bool True if an AI plugin is installed, false otherwise.
+	 */
+	private function has_ai_plugin_installed() {
+		return $this->any_plugin_dir_exists(
+			array(
+				'ai-engine',
+				'gpt3-ai-content-generator',
+				'getgenie',
+				'bertha-ai',
+				'hyve',
+				'hyve-lite',
+			)
+		);
+	}
+
+	/**
+	 * Check if any of the given plugin slugs has a directory in the plugins folder.
+	 *
+	 * @param array $slugs Plugin slugs.
+	 *
+	 * @return bool True if at least one plugin directory exists, false otherwise.
+	 */
+	private function any_plugin_dir_exists( $slugs ) {
+		foreach ( $slugs as $slug ) {
+			if ( is_dir( WP_PLUGIN_DIR . '/' . $slug ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a REST API application password is in use on the site.
+	 *
+	 * @return bool True if an application password is in use, false otherwise.
+	 */
+	private function has_application_password_in_use() {
+		return class_exists( 'WP_Application_Passwords' ) && method_exists( 'WP_Application_Passwords', 'is_in_use' ) && \WP_Application_Passwords::is_in_use();
+	}
+
+	/**
+	 * Check if the current request is a profile screen where the Application
+	 * Passwords section lives — a user wiring up an external REST client.
+	 *
+	 * @return bool True if a profile promo can be displayed, false otherwise.
+	 */
+	private function can_check_profile_promo() {
+		if ( ! is_admin() || ! current_user_can( 'install_plugins' ) ) {
+			return false;
+		}
+
+		$current_screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( isset( $current_screen->id ) ) {
+			return 'profile' === $current_screen->id;
+		}
+
+		global $pagenow;
+
+		return isset( $pagenow ) && 'profile.php' === $pagenow;
+	}
+
+	/**
+	 * Check if a competing MCP server plugin is installed, active or not.
+	 *
+	 * AI Engine ships an optional MCP feature but is intentionally kept in the
+	 * AI-usage signals instead — its primary identity is an AI framework.
+	 *
+	 * @return bool True if an MCP server plugin is installed, false otherwise.
+	 */
+	private function has_mcp_plugin_installed() {
+		return $this->any_plugin_dir_exists(
+			array(
+				'vibe-ai',
+				'royal-mcp',
+				'stifli-flex-mcp',
+				'miniorange-secure-mcp-server',
+				'wsp-mcp-ai-agents-connector',
+				'cowboy-mcp',
+				'nibwp',
+			)
+		);
+	}
+
+	/**
+	 * Check if the current request can display a plugin install promo.
+	 *
+	 * @return bool True if a plugin install promo can be displayed, false otherwise.
+	 */
+	private function can_check_plugin_install_promo() {
+		if ( ! is_admin() || ! current_user_can( 'install_plugins' ) ) {
+			return false;
+		}
+
+		$current_screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( isset( $current_screen->id ) ) {
+			return $current_screen->id === 'plugin-install';
+		}
+
+		global $pagenow;
+
+		return isset( $pagenow ) && $pagenow === 'plugin-install.php';
+	}
+
+	/**
+	 * Check if a published page title contains LMS related keywords.
+	 *
+	 * @return bool True if an LMS-related page title is found, false otherwise.
+	 */
+	private function has_lms_page_title() {
+		$lms_page_title_signal = get_transient( 'tisdk_lms_page_title_signal_v1' );
+
+		if ( in_array( $lms_page_title_signal, array( 'yes', 'no' ), true ) ) {
+			return 'yes' === $lms_page_title_signal;
+		}
+
+		$has_lms_page_title = $this->has_published_page_title_with_keywords( $this->get_lms_page_title_keywords() );
+
+		set_transient( 'tisdk_lms_page_title_signal_v1', $has_lms_page_title ? 'yes' : 'no', 7 * DAY_IN_SECONDS );
+
+		return $has_lms_page_title;
+	}
+
+	/**
+	 * Get cached keyword matches for published page titles.
+	 *
+	 * @return array Page title keyword matches.
+	 */
+	private function get_page_title_keyword_matches() {
+		$default_matches = array(
+			'support' => 'no',
+			'donate'  => 'no',
+		);
+
+		$page_title_matches = get_transient( 'tisdk_page_title_signals_v1' );
+
+		if ( is_array( $page_title_matches ) && empty( array_diff_key( $default_matches, $page_title_matches ) ) ) {
+			return array_merge( $default_matches, $page_title_matches );
+		}
+
+		global $wpdb;
+
+		$select_clauses = array();
+		$query_values   = array();
+		$page_checks    = $this->get_page_title_checks();
+
+		foreach ( $page_checks as $match_key => $keywords ) {
+			$match_clauses = array();
+
+			$query_values[] = 'page';
+			$query_values[] = 'publish';
+
+			foreach ( $keywords as $keyword ) {
+				$match_clauses[] = 'post_title LIKE %s';
+				$query_values[]  = '%' . $wpdb->esc_like( $keyword ) . '%';
+			}
+
+			$select_clauses[] = 'EXISTS( SELECT 1 FROM ' . $wpdb->posts . ' WHERE post_type = %s AND post_status = %s AND ( ' . implode( ' OR ', $match_clauses ) . ' ) LIMIT 1 ) AS has_' . $match_key;
+		}
+
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		$query = $wpdb->get_row( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SELECT ' . implode( ', ', $select_clauses ),
+				$query_values
+			),
+			ARRAY_A
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+
+		$page_title_matches = $default_matches;
+
+		if ( is_array( $query ) ) {
+			foreach ( array_keys( $page_checks ) as $match_key ) {
+				$page_title_matches[ $match_key ] = ! empty( $query[ 'has_' . $match_key ] ) ? 'yes' : 'no';
+			}
+		}
+
+		set_transient( 'tisdk_page_title_signals_v1', $page_title_matches, 7 * DAY_IN_SECONDS );
+
+		return $page_title_matches;
+	}
+
+	/**
+	 * Check if a keyword matches content.
+	 *
+	 * @param string $content Content to check.
+	 * @param string $keyword Keyword to look for.
+	 *
+	 * @return bool True if the keyword matches, false otherwise.
+	 */
+	private function has_lms_keyword_match( $content, $keyword ) {
+		if ( in_array( $keyword, array( 'lms', 'course', 'class' ), true ) ) {
+			return preg_match( '/(^|[^a-z0-9])' . preg_quote( $keyword, '/' ) . '([^a-z0-9]|$)/', $content ) === 1;
+		}
+
+		return strpos( $content, $keyword ) !== false;
+	}
+
+	/**
+	 * Get LMS related keywords.
+	 *
+	 * @return array LMS related keywords.
+	 */
+	private function get_lms_keywords() {
+		return array(
+			'lms',
+			'learning',
+			'course',
+			'courses',
+			'academy',
+			'training',
+			'lesson',
+			'lessons',
+			'class',
+			'classes',
+			'student',
+			'students',
+			'teach',
+			'teaching',
+			'tutor',
+			'quiz',
+			'education',
+			'online course',
+			'online courses',
+		);
+	}
+
+	/**
+	 * Get LMS related keywords for page title matching.
+	 *
+	 * @return array LMS related keywords.
+	 */
+	private function get_lms_page_title_keywords() {
+		return array_values( array_diff( $this->get_lms_keywords(), array( 'lms', 'course', 'class' ) ) );
+	}
+
+	/**
+	 * Check if a published page title contains any of the provided keywords.
+	 *
+	 * @param array $keywords Keywords to look for.
+	 *
+	 * @return bool True if a matching page title is found, false otherwise.
+	 */
+	private function has_published_page_title_with_keywords( $keywords ) {
+		if ( empty( $keywords ) ) {
+			return false;
+		}
+
+		global $wpdb;
+
+		$query_values = array( 'page', 'publish' );
+		$clauses      = array();
+
+		foreach ( $keywords as $keyword ) {
+			$clauses[]      = 'post_title LIKE %s';
+			$query_values[] = '%' . $wpdb->esc_like( $keyword ) . '%';
+		}
+
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+		$page_title_match = $wpdb->get_var( //phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SELECT 1 FROM ' . $wpdb->posts . ' WHERE post_type = %s AND post_status = %s AND ( ' . implode( ' OR ', $clauses ) . ' ) LIMIT 1',
+				$query_values
+			)
+		);
+		// phpcs:enable WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+
+		return ! empty( $page_title_match );
+	}
+
+	/**
+	 * Get page title keyword checks.
+	 *
+	 * @return array Page title keyword checks.
+	 */
+	private function get_page_title_checks() {
+		return array(
+			'support' => array( 'support' ),
+			'donate'  => array( 'donate' ),
+		);
 	}
 }

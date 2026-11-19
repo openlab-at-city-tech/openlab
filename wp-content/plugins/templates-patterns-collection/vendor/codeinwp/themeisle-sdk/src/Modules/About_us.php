@@ -41,6 +41,40 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class About_Us extends Abstract_Module {
 	/**
+	 * Sort weight for products that are not explicitly ranked.
+	 *
+	 * @var int
+	 */
+	const SORT_WEIGHT_UNRANKED = 99;
+
+	/**
+	 * Hand-picked display order for featured products, keyed by WP.org slug.
+	 *
+	 * @var array
+	 */
+	const COMMON_PRODUCTS_PRIORITY = [
+		'neve'                     => 0,
+		'otter-blocks'             => 1,
+		'wp-cloudflare-page-cache' => 2,
+		'optimole-wp'              => 3,
+		'hyve-lite'                => 4,
+		'wp-full-stripe-free'      => 5,
+		'insert-php'               => 6, // Woody plugin slug on WP.org.
+		'anti-spam'                => 7, // Titan Anti-spam & Security plugin slug on WP.org.
+	];
+
+	/**
+	 * Sort weight per install status, lowest shows first.
+	 *
+	 * @var array
+	 */
+	const STATUS_PRIORITY = [
+		'not-installed' => 0,
+		'installed'     => 1,
+		'active'        => 2,
+	];
+
+	/**
 	 * About data.
 	 *
 	 * @var array $about_data About page data, received from the filter.
@@ -181,9 +215,8 @@ class About_Us extends Abstract_Module {
 		if ( strpos( $current_screen->id, $this->get_about_page_slug() ) === false ) {
 			return;
 		}
-		global $themeisle_sdk_max_path;
 		$handle     = 'ti-sdk-about-' . $this->product->get_key();
-		$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/about/about.asset.php';
+		$asset_file = $this->get_asset_file( 'assets/js/build/about/about.asset.php' );
 		$deps       = array_merge( $asset_file['dependencies'], [ 'updates' ] );
 
 		do_action( 'themeisle_internal_page', $this->product->get_slug(), 'about_us' );
@@ -203,14 +236,24 @@ class About_Us extends Abstract_Module {
 	private function get_about_localization_data() {
 		$links         = isset( $this->about_data['page_menu'] ) ? $this->about_data['page_menu'] : [];
 		$product_pages = isset( $this->about_data['product_pages'] ) ? $this->about_data['product_pages'] : [];
+		$page_slug     = $this->get_about_page_slug();
 
 		return [
 			'links'              => $links,
 			'logoUrl'            => $this->about_data['logo'],
 			'productPages'       => $this->get_product_pages_data( $product_pages ),
 			'products'           => $this->get_other_products_data(),
+			'services'           => [
+				'websiteDesignUrl' => tsdk_utmify( 'https://themeisle.com/wordpress-website-design/', 'services-website-design', $page_slug ),
+				'supportUrl'       => tsdk_utmify( 'https://themeisle.com/wordpress-support/', 'services-support', $page_slug ),
+				'speedUrl'         => tsdk_utmify( 'https://themeisle.com/wordpress-speed-optimization/', 'services-speed-optimization', $page_slug ),
+				'seoFoundationUrl' => tsdk_utmify( 'https://themeisle.com/wordpress-seo-foundation/', 'services-seo-foundation', $page_slug ),
+				'maintenanceUrl'   => tsdk_utmify( 'https://themeisle.com/wordpress-maintenance/', 'services-maintenance', $page_slug ),
+				'hackedRepairUrl'  => tsdk_utmify( 'https://themeisle.com/wordpress-hacked-site-repair/', 'services-hacked-site-repair', $page_slug ),
+				'exploreAllUrl'    => tsdk_utmify( 'https://themeisle.com/services/', 'services-explore-all', $page_slug ),
+			],
 			'homeUrl'            => esc_url( home_url() ),
-			'pageSlug'           => $this->get_about_page_slug(),
+			'pageSlug'           => $page_slug,
 			'currentProduct'     => [
 				'slug' => $this->product->get_key(),
 				'name' => $this->product->get_name(),
@@ -225,6 +268,7 @@ class About_Us extends Abstract_Module {
 				'newsHeading'      => Loader::$labels['about_us']['newsHeading'],
 				'emailPlaceholder' => Loader::$labels['about_us']['emailPlaceholder'],
 				'signMeUp'         => Loader::$labels['about_us']['signMeUp'],
+				'services'         => Loader::$labels['about_us']['services'],
 				'installNow'       => Loader::$labels['about_us']['installNow'],
 				'activate'         => Loader::$labels['about_us']['activate'],
 				'learnMore'        => Loader::$labels['about_us']['learnMore'],
@@ -353,6 +397,15 @@ class About_Us extends Abstract_Module {
 			'feedzy-rss-feeds'                    => [
 				'name' => 'Feedzy',
 			],
+			'insert-php'                          => [
+				'name' => 'Woody Code Snippets',
+			],
+			'wpcf7-redirect'                      => [
+				'name' => 'Redirection for Contact Form 7',
+			],
+			'anti-spam'                           => [
+				'name' => 'Titan Anti-spam & Security',
+			],
 			'woocommerce-product-addon'           => [
 				'name'      => 'PPOM',
 				'condition' => class_exists( 'WooCommerce', false ),
@@ -391,6 +444,9 @@ class About_Us extends Abstract_Module {
 			'wp-full-stripe-free'                 => [
 				'name' => 'WP Full Pay',
 			],
+			'easy-mcp-ai'                         => [
+				'name' => 'Easy MCP AI',
+			],
 		];
 
 		foreach ( $products as $slug => $product ) {
@@ -422,6 +478,11 @@ class About_Us extends Abstract_Module {
 			$products[ $slug ]['status']         = $this->is_plugin_active( $slug ) ? 'active' : $products[ $slug ]['status'];
 			$products[ $slug ]['activationLink'] = $this->get_plugin_activation_link( $slug );
 
+			if ( 'easy-mcp-ai' === $slug ) {
+				// The shared builder stamps optimole_reference_key on every non-Otter slug; carry Easy MCP attribution instead.
+				$products[ $slug ]['activationLink'] = add_query_arg( 'easy_mcp_reference_key', 'a-' . $this->product->get_key(), remove_query_arg( 'optimole_reference_key', $products[ $slug ]['activationLink'] ) );
+			}
+
 
 			if ( isset( $product['skip_api'] ) ) {
 				continue;
@@ -439,7 +500,37 @@ class About_Us extends Abstract_Module {
 			}
 		}
 
+		uksort(
+			$products,
+			function ( $left_slug, $right_slug ) use ( $products ) {
+				return $this->get_product_sort_key( $left_slug, $products )
+					<=> $this->get_product_sort_key( $right_slug, $products );
+			}
+		);
+
 		return $products;
+	}
+
+	/**
+	 * Build a comparable sort key tuple for a product slug.
+	 *
+	 * @param string $slug     Product slug.
+	 * @param array  $products All products keyed by slug.
+	 *
+	 * @return array
+	 */
+	private function get_product_sort_key( $slug, $products ) {
+		$status        = isset( $products[ $slug ]['status'] ) ? $products[ $slug ]['status'] : 'not-installed';
+		$is_active     = 'active' === $status ? 1 : 0;
+		$common_weight = isset( self::COMMON_PRODUCTS_PRIORITY[ $slug ] ) ? self::COMMON_PRODUCTS_PRIORITY[ $slug ] : self::SORT_WEIGHT_UNRANKED;
+
+		// Install status only breaks ties between unranked products.
+		$status_weight = self::SORT_WEIGHT_UNRANKED === $common_weight
+			? ( isset( self::STATUS_PRIORITY[ $status ] ) ? self::STATUS_PRIORITY[ $status ] : self::SORT_WEIGHT_UNRANKED )
+			: 0;
+
+		// Tuple order = sort precedence: active last, featured rank, status, then slug.
+		return array( $is_active, $common_weight, $status_weight, $slug );
 	}
 
 	/**

@@ -1,0 +1,145 @@
+/* Self-contained, like the AI Connect module: products that ship a CSS reset
+   with their dashboard must not change how the hub looks. */
+.ti-support-hub, .ti-support-modal {
+	/* One accent drives every shade; a product overrides it with `primary_color`. */
+	--ti-support-accent: #4b56d2;
+	--ti-support-accent-dark: color-mix(in srgb, var(--ti-support-accent) 85%, #000);
+	--ti-support-accent-soft: color-mix(in srgb, var(--ti-support-accent) 45%, #fff);
+	--ti-support-accent-tint: color-mix(in srgb, var(--ti-support-accent) 9%, #fff);
+	--ti-support-ring: color-mix(in srgb, var(--ti-support-accent) 22%, transparent);
+	--ti-support-glow: color-mix(in srgb, var(--ti-support-accent) 55%, transparent);
+	--ti-support-text: #1e1e1e;
+	--ti-support-muted: #646a75;
+	--ti-support-field: #f6f7f9;
+	--ti-support-border: #e3e5ea;
+	--ti-support-radius: 14px;
+	--ti-support-shadow: 0 18px 50px -12px rgba(15, 23, 42, .28), 0 2px 8px rgba(15, 23, 42, .06);
+}
+.ti-support-hub, .ti-support-hub *, .ti-support-modal, .ti-support-modal * { box-sizing: border-box !important; }
+.ti-support-hub, .ti-support-dialog { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif !important; font-size: 14px !important; line-height: 1.5 !important; color: var(--ti-support-text) !important; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+.ti-support-hub .dashicons, .ti-support-dialog .dashicons { font-family: dashicons !important; font-size: 18px !important; width: 18px !important; height: 18px !important; line-height: 1 !important; }
+.ti-support-chat-icon { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: none !important; }
+.ti-support-chat-icon svg { display: block !important; width: 22px !important; height: 22px !important; }
+.ti-support-chat-front { stroke: var(--ti-support-accent); stroke-width: 1.6px; paint-order: stroke; }
+.ti-support-hub [hidden], .ti-support-modal [hidden], .ti-support-modal[hidden] { display: none !important; }
+
+@keyframes ti-support-rise { from { opacity: 0; transform: translateY(10px) scale(.98); } to { opacity: 1; transform: none; } }
+@keyframes ti-support-fade { from { opacity: 0; } to { opacity: 1; } }
+
+/* Launcher */
+.ti-support-hub { position: fixed; right: 24px; bottom: 24px; z-index: 99990; display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+.ti-support-launcher { display: inline-flex !important; align-items: center !important; gap: 9px !important; padding: 0 22px 0 18px !important; min-height: 50px !important; border: 0 !important; border-radius: 999px !important; background: var(--ti-support-accent) !important; color: #fff !important; font-family: inherit !important; font-size: 16px !important; font-weight: 600 !important; letter-spacing: .01em !important; cursor: pointer !important; box-shadow: 0 10px 24px -6px var(--ti-support-glow), 0 2px 6px rgba(15, 23, 42, .12) !important; transition: background .15s ease, transform .15s ease, box-shadow .15s ease !important; }
+.ti-support-launcher:hover, .ti-support-launcher:focus { background: var(--ti-support-accent-dark) !important; color: #fff !important; outline: none !important; transform: translateY(-1px); box-shadow: 0 14px 28px -8px var(--ti-support-glow), 0 3px 8px rgba(15, 23, 42, .14) !important; }
+.ti-support-launcher:active { transform: translateY(0); }
+.ti-support-launcher:focus-visible { box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--ti-support-accent) !important; }
+.ti-support-launcher .ti-support-chat-icon svg { width: 20px !important; height: 20px !important; }
+
+/* Panel */
+.ti-support-panel { width: 384px; max-width: calc(100vw - 48px); max-height: calc(100vh - 130px); overflow: auto; background: #fff; border-radius: var(--ti-support-radius); box-shadow: var(--ti-support-shadow); animation: ti-support-rise .22s cubic-bezier(.2, .8, .3, 1); overscroll-behavior: contain; }
+.ti-support-header { position: relative; display: flex; align-items: flex-start; gap: 14px; padding: 22px 52px 22px 22px; background: linear-gradient(135deg, var(--ti-support-accent) 0%, var(--ti-support-accent-dark) 100%); color: #fff; }
+.ti-support-header-icon { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: none !important; width: 42px !important; height: 42px !important; border-radius: 50% !important; background: rgba(255, 255, 255, .18) !important; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .22) !important; color: #fff !important; }
+.ti-support-header-icon .ti-support-chat-front { stroke: var(--ti-support-accent); }
+.ti-support-header-text { min-width: 0; padding-top: 1px; }
+.ti-support-header h2 { margin: 0 0 4px !important; padding: 0 !important; color: #fff !important; font-size: 16px !important; font-weight: 700 !important; line-height: 1.3 !important; letter-spacing: -.01em !important; }
+.ti-support-header p { margin: 0 !important; color: rgba(255, 255, 255, .86) !important; font-size: 13.5px !important; line-height: 1.5 !important; }
+.ti-support-close { position: absolute !important; top: 14px !important; right: 14px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 30px !important; height: 30px !important; border: 0 !important; border-radius: 50% !important; background: transparent !important; color: #fff !important; cursor: pointer !important; padding: 0 !important; opacity: .85 !important; transition: background .15s ease, opacity .15s ease !important; }
+.ti-support-close:hover, .ti-support-close:focus-visible { opacity: 1 !important; background: rgba(255, 255, 255, .18) !important; outline: none !important; }
+.ti-support-close .dashicons { font-size: 20px !important; width: 20px !important; height: 20px !important; }
+.ti-support-body { padding: 18px 22px 22px; }
+
+.ti-support-form { display: flex; flex-direction: column; gap: 6px; }
+.ti-support-label { display: block; font-weight: 600 !important; margin: 8px 0 2px !important; font-size: 13.5px !important; color: var(--ti-support-text) !important; }
+.ti-support-form .ti-support-label:first-child, .ti-support-attached + .ti-support-label { margin-top: 0 !important; }
+.ti-support-message, .ti-support-email { display: block !important; width: 100% !important; margin: 0 !important; padding: 10px 12px !important; font-family: inherit !important; font-size: 14px !important; line-height: 1.5 !important; color: var(--ti-support-text) !important; background: #fff !important; border: 1px solid var(--ti-support-border) !important; border-radius: 9px !important; box-shadow: none !important; resize: vertical; transition: border-color .15s ease, box-shadow .15s ease, background .15s ease !important; }
+.ti-support-message { min-height: 112px !important; }
+.ti-support-email { min-height: 42px !important; }
+.ti-support-message::-moz-placeholder, .ti-support-email::-moz-placeholder { color: #8e939c !important; opacity: 1 !important; }
+.ti-support-message::placeholder, .ti-support-email::placeholder { color: #8e939c !important; opacity: 1 !important; }
+.ti-support-message:hover, .ti-support-email:hover { border-color: #cfd3db !important; }
+.ti-support-message:focus, .ti-support-email:focus { border-color: var(--ti-support-accent) !important; box-shadow: 0 0 0 3px var(--ti-support-ring) !important; background: #fff !important; outline: none !important; }
+/* WordPress restyles checkboxes and radios with appearance:none and a ::before glyph
+   sized for 16px boxes. Go back to the native controls so they scale and center. */
+.ti-support-hub input[type="checkbox"], .ti-support-dialog input[type="checkbox"], .ti-support-dialog input[type="radio"] { -webkit-appearance: auto !important; -moz-appearance: auto !important; appearance: auto !important; border: 0 !important; background: none !important; box-shadow: none !important; padding: 0 !important; margin: 0 !important; vertical-align: middle !important; accent-color: var(--ti-support-accent); cursor: pointer !important; }
+.ti-support-hub input[type="checkbox"]::before, .ti-support-dialog input[type="checkbox"]::before, .ti-support-dialog input[type="radio"]::before { content: none !important; display: none !important; }
+.ti-support-hub input[type="checkbox"], .ti-support-dialog input[type="checkbox"] { border-radius: 4px !important; }
+.ti-support-dialog input[type="radio"] { border-radius: 50% !important; }
+.ti-support-hub input[type="checkbox"]:focus-visible, .ti-support-dialog input[type="checkbox"]:focus-visible, .ti-support-dialog input[type="radio"]:focus-visible { outline: 2px solid var(--ti-support-accent) !important; outline-offset: 2px !important; }
+.ti-support-check { display: flex !important; align-items: center !important; gap: 10px !important; margin: 0 !important; min-width: 0; font-weight: 400 !important; font-size: 13.5px !important; line-height: 1.4 !important; cursor: pointer !important; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+.ti-support-check input { flex: none !important; width: 17px !important; height: 17px !important; }
+.ti-support-check-row { display: flex; align-items: center; gap: 6px; margin-top: 12px; }
+.ti-support-included-toggle { display: inline-flex !important; align-items: center !important; justify-content: center !important; flex: none !important; width: 22px !important; height: 22px !important; padding: 0 !important; border: 0 !important; border-radius: 50% !important; background: none !important; color: #8e939c !important; cursor: pointer !important; box-shadow: none !important; transition: color .15s ease, background .15s ease !important; }
+.ti-support-included-toggle .dashicons { font-size: 16px !important; width: 16px !important; height: 16px !important; }
+.ti-support-included-toggle:hover, .ti-support-included-toggle:focus-visible, .ti-support-included-toggle[aria-expanded="true"] { color: var(--ti-support-accent) !important; background: var(--ti-support-accent-tint) !important; outline: none !important; }
+.ti-support-included { margin: 8px 0 0 !important; padding: 10px 12px !important; background: var(--ti-support-accent-tint) !important; border-radius: 8px !important; color: #3f4453 !important; font-size: 12.5px !important; line-height: 1.5 !important; animation: ti-support-fade .15s ease; }
+.ti-support-attached { display: flex; flex-direction: column; gap: 4px; margin: 0 0 12px !important; padding: 10px 12px !important; background: #fff !important; border: 1px dashed #cfd3db !important; border-radius: 9px !important; color: #3c3f45 !important; font-size: 13px !important; line-height: 1.5 !important; overflow-wrap: anywhere; }
+.ti-support-attached-label { display: inline-flex !important; align-items: center !important; gap: 5px !important; color: var(--ti-support-muted) !important; font-size: 11.5px !important; font-weight: 600 !important; letter-spacing: .04em !important; text-transform: uppercase !important; }
+.ti-support-attached-label .dashicons { font-size: 14px !important; width: 14px !important; height: 14px !important; color: var(--ti-support-accent) !important; }
+.ti-support-attached-text { display: block; max-height: 4.5em; overflow: auto; }
+.ti-support-error { margin: 8px 0 0 !important; padding: 8px 12px !important; border-radius: 8px !important; background: #fdecec !important; color: #b32d2e !important; font-size: 13px !important; }
+.ti-support-hub .button, .ti-support-dialog .button { display: inline-flex !important; align-items: center !important; justify-content: center !important; margin: 0 !important; padding: 0 20px !important; min-height: 44px !important; font-family: inherit !important; font-size: 15px !important; font-weight: 600 !important; line-height: 1 !important; letter-spacing: .01em !important; text-decoration: none !important; white-space: nowrap !important; border-radius: 9px !important; cursor: pointer !important; box-shadow: none !important; -webkit-appearance: none !important; -moz-appearance: none !important; appearance: none !important; transition: background .15s ease, box-shadow .15s ease, transform .1s ease !important; }
+.ti-support-hub .button-primary, .ti-support-dialog .button-primary { color: #fff !important; background: var(--ti-support-accent) !important; border: 0 !important; box-shadow: 0 1px 2px rgba(15, 23, 42, .12), 0 6px 14px -6px var(--ti-support-glow) !important; }
+.ti-support-hub .button-primary:hover, .ti-support-dialog .button-primary:hover { color: #fff !important; background: var(--ti-support-accent-dark) !important; }
+.ti-support-hub .button-primary:active, .ti-support-dialog .button-primary:active { transform: translateY(1px); }
+.ti-support-hub .button-primary:focus-visible, .ti-support-dialog .button-primary:focus-visible { outline: none !important; box-shadow: 0 0 0 3px #fff, 0 0 0 6px var(--ti-support-accent) !important; }
+.ti-support-hub .button-primary:disabled, .ti-support-dialog .button-primary:disabled { background: var(--ti-support-accent-soft) !important; box-shadow: none !important; cursor: default !important; transform: none !important; }
+.ti-support-hub .button-small { min-height: 38px !important; padding: 0 16px !important; font-size: 14px !important; }
+.ti-support-send { width: 100% !important; margin-top: 14px !important; }
+
+.ti-support-sent { text-align: center; padding: 20px 0 8px; animation: ti-support-fade .2s ease; }
+.ti-support-sent .dashicons { display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 56px !important; height: 56px !important; border-radius: 50% !important; background: var(--ti-support-accent-tint) !important; color: var(--ti-support-accent) !important; font-size: 30px !important; }
+.ti-support-sent h3 { margin: 12px 0 4px !important; font-size: 16px !important; font-weight: 700 !important; }
+.ti-support-sent p { margin: 0 !important; color: var(--ti-support-muted) !important; }
+
+.ti-support-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 0; padding: 12px 16px; background: var(--ti-support-field); border-top: 1px solid var(--ti-support-border); }
+.ti-support-links a + a::before { content: ""; display: block; width: 1px; height: 16px; margin: 0 7px 0 14px; background: #d3d6dd; }
+.ti-support-links a { display: inline-flex !important; align-items: center !important; gap: 7px !important; padding: 4px 0 !important; color: #3c3f45 !important; text-decoration: none !important; font-size: 13.5px !important; font-weight: 500 !important; border-radius: 6px !important; transition: color .15s ease !important; }
+.ti-support-links a:hover, .ti-support-links a:focus-visible { color: var(--ti-support-accent) !important; outline: none !important; }
+.ti-support-links .dashicons { color: #5a5f6a !important; transition: color .15s ease !important; }
+.ti-support-links a:hover .dashicons { color: var(--ti-support-accent) !important; }
+
+/* Nudges */
+.ti-support-nudges { display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+.ti-support-nudge { position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 12px; width: 384px; max-width: calc(100vw - 48px); padding: 18px 48px 18px 20px; background: #fff; border-left: 5px solid var(--ti-support-accent); border-radius: 12px; box-shadow: var(--ti-support-shadow); animation: ti-support-rise .25s cubic-bezier(.2, .8, .3, 1); }
+.ti-support-nudge-body { min-width: 0; }
+.ti-support-nudge-body strong { display: block; font-size: 16px !important; font-weight: 500 !important; line-height: 1.4 !important; letter-spacing: -.005em !important; }
+.ti-support-nudge-body p { margin: 4px 0 0 !important; color: var(--ti-support-muted) !important; font-size: 13px !important; line-height: 1.45 !important; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.ti-support-nudge-actions { display: flex; align-items: center; gap: 4px; }
+.ti-support-nudge-dismiss { position: absolute !important; top: 12px !important; right: 10px !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; width: 30px !important; height: 30px !important; border: 0 !important; border-radius: 50% !important; background: none !important; color: #5a5f6a !important; cursor: pointer !important; padding: 0 !important; transition: background .15s ease, color .15s ease !important; }
+.ti-support-nudge-dismiss:hover, .ti-support-nudge-dismiss:focus-visible { color: var(--ti-support-text) !important; background: var(--ti-support-field) !important; outline: none !important; }
+.ti-support-nudge-dismiss .dashicons { font-size: 20px !important; width: 20px !important; height: 20px !important; }
+
+/* "Get help with this" inside red notices */
+.ti-support-notice-link { white-space: nowrap; }
+
+/* Deactivation window */
+.ti-support-modal { position: fixed; inset: 0; z-index: 100100; display: flex; align-items: flex-start; justify-content: center; padding: 56px 16px; overflow-y: auto; animation: ti-support-fade .15s ease; }
+.ti-support-backdrop { position: fixed; inset: 0; background: rgba(17, 20, 35, .55); backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+.ti-support-dialog { position: relative !important; width: 100% !important; max-width: 560px !important; background: #fff !important; border-radius: 16px !important; box-shadow: 0 30px 70px -20px rgba(15, 23, 42, .45), 0 4px 14px rgba(15, 23, 42, .08) !important; padding: 28px 32px 26px !important; animation: ti-support-rise .22s cubic-bezier(.2, .8, .3, 1); }
+.ti-support-dialog h2 { margin: 0 0 4px !important; padding: 0 !important; font-size: 21px !important; font-weight: 700 !important; line-height: 1.3 !important; letter-spacing: -.01em !important; color: var(--ti-support-text) !important; }
+.ti-support-deactivate-subtitle { margin: 0 0 18px !important; color: var(--ti-support-muted) !important; font-size: 15px !important; }
+.ti-support-reasons { margin: 0 0 16px !important; padding: 0 !important; list-style: none !important; }
+.ti-support-reasons li { margin: 0 !important; padding: 0 !important; border-bottom: 1px solid var(--ti-support-border); }
+.ti-support-reasons li:last-child { border-bottom: 0; }
+.ti-support-reasons label { display: flex !important; align-items: center !important; gap: 14px !important; margin: 0 -10px !important; padding: 13px 10px !important; border-radius: 8px !important; font-size: 15.5px !important; cursor: pointer !important; transition: background .12s ease !important; -webkit-user-select: none; -moz-user-select: none; user-select: none; }
+.ti-support-reasons label:hover { background: var(--ti-support-field) !important; }
+.ti-support-reasons input { flex: none !important; width: 19px !important; height: 19px !important; }
+.ti-support-reasons input:checked + span { color: var(--ti-support-accent) !important; font-weight: 600 !important; }
+.ti-support-dialog .ti-support-message { margin: 0 0 16px !important; min-height: 104px !important; font-size: 15px !important; }
+.ti-support-deactivate-details { display: flex; flex-direction: column; gap: 10px; margin-bottom: 4px; }
+.ti-support-inline { display: flex !important; align-items: center !important; gap: 12px !important; color: var(--ti-support-muted) !important; font-size: 14.5px !important; }
+.ti-support-inline span { flex: none; }
+.ti-support-inline .ti-support-email { background: #fff !important; min-height: 46px !important; font-size: 15px !important; }
+.ti-support-deactivate-details .ti-support-check { margin: 2px 0 0 !important; color: #3f4453 !important; font-size: 14.5px !important; }
+.ti-support-deactivate-details .ti-support-check input { width: 18px !important; height: 18px !important; }
+.ti-support-deactivate-actions { display: flex; align-items: center; justify-content: space-between; margin-top: 22px; }
+.ti-support-cancel { display: inline-flex !important; align-items: center !important; min-height: 44px !important; padding: 0 6px !important; border: 0 !important; border-radius: 8px !important; background: none !important; color: var(--ti-support-muted) !important; cursor: pointer !important; text-decoration: none !important; font-family: inherit !important; font-size: 15px !important; font-weight: 500 !important; transition: color .15s ease, background .15s ease !important; }
+.ti-support-cancel:hover, .ti-support-cancel:focus-visible { color: var(--ti-support-text) !important; background: var(--ti-support-field) !important; outline: none !important; }
+@media (max-width: 600px) {
+	.ti-support-hub { right: 16px; bottom: 16px; }
+	.ti-support-dialog { padding: 22px 20px !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+	.ti-support-panel, .ti-support-nudge, .ti-support-modal, .ti-support-dialog, .ti-support-sent { animation: none !important; }
+	.ti-support-launcher, .ti-support-launcher:hover { transform: none !important; }
+}
+

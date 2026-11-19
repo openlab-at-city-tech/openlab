@@ -146,7 +146,8 @@ export const SiteSettings = ( {
 		<div
 			className={ classnames(
 				'ob-site-settings',
-				fetching ? 'fetching' : ''
+				fetching ? 'fetching' : '',
+				step === 4 && canImport ? 'is-step-4-features' : ''
 			) }
 		>
 			{ ! fetching ? (
@@ -189,6 +190,9 @@ export const SiteSettings = ( {
 										<TypographyControl
 											siteStyle={ siteStyle }
 											setSiteStyle={ setSiteStyle }
+											importDataDefault={
+												importDataDefault
+											}
 										/>
 									</>
 								) }
