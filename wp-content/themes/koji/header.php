@@ -215,16 +215,16 @@ $html_class = is_admin_bar_showing() ? ' showing-admin-bar' : ''; ?>
 
 				<div class="search-overlay cover-modal" aria-expanded="false">
 
-					<div class="section-inner search-overlay-form-wrapper">
-						<?php echo get_search_form(); ?>
-					</div><!-- .section-inner -->
-
 					<button type="button" class="toggle search-untoggle" data-toggle-target=".search-overlay" data-set-focus=".search-toggle:visible">
 						<div class="search-untoggle-inner">
 							<img aria-hidden="true" src="<?php echo esc_url( get_template_directory_uri() ); ?>/assets/images/icons/cross.svg" />
 						</div>
 						<span class="screen-reader-text"><?php _e( 'Hide the search overlay', 'koji' ); ?></span>
 					</button><!-- .search-untoggle -->
+
+					<div class="section-inner search-overlay-form-wrapper">
+						<?php echo get_search_form(); ?>
+					</div><!-- .section-inner -->
 
 				</div><!-- .search-overlay -->
 

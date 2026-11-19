@@ -113,7 +113,8 @@ if ( ! function_exists( 'koji_enqueue_scripts' ) ) :
 
 		// AJAX Load More
 		wp_localize_script( 'koji_construct', 'koji_ajax_load_more', array(
-			'ajaxurl'   => esc_url( $ajax_url ),
+			'ajaxurl' => esc_url( $ajax_url ),
+			'nonce'   => wp_create_nonce( 'koji_ajax_load_more_nonce' ),
 		) );
 
 	}
@@ -255,8 +256,8 @@ if ( ! function_exists( 'koji_widget_areas' ) ) :
 			'name' 			=> __( 'Sidebar', 'koji' ),
 			'id' 			=> 'sidebar',
 			'description' 	=> __( 'Widgets in this area will be shown below the main menu.', 'koji' ),
-			'before_title' 	=> '<h2 class="widget-title">',
-			'after_title' 	=> '</h2>',
+			'before_title' 	=> '<p class="widget-title">',
+			'after_title' 	=> '</p>',
 			'before_widget' => '<div id="%1$s" class="widget %2$s"><div class="widget-content">',
 			'after_widget' 	=> '</div><div class="clear"></div></div>',
 		) );
@@ -744,7 +745,50 @@ endif;
 if ( ! function_exists( 'koji_ajax_load_more' ) ) :
 	function koji_ajax_load_more() {
 
-		$query_args = json_decode( wp_unslash( $_POST['json_data'] ), true );
+		check_ajax_referer( 'koji_ajax_load_more_nonce', 'nonce' );
+
+		$raw_args = json_decode( wp_unslash( $_POST['json_data'] ), true );
+
+		if ( ! is_array( $raw_args ) ) {
+			wp_die();
+		}
+
+		// Whitelist only the query vars this feature actually needs.
+		$allowed_keys = array(
+			'paged',
+			'post_type',
+			'posts_per_page',
+			'cat',
+			'category_name',
+			'tag',
+			'author',
+			's',
+			'order',
+			'orderby',
+		);
+
+		$query_args = array();
+		foreach ( $allowed_keys as $key ) {
+			if ( isset( $raw_args[ $key ] ) ) {
+				$query_args[ $key ] = $raw_args[ $key ];
+			}
+		}
+
+		// Restrict post_type to what's actually allowed for preview output.
+		$allowed_post_types = apply_filters( 'koji_allowed_post_types_for_lazy_loading', array( 'post', 'page', 'product', 'jetpack-portfolio', 'any' ) );
+
+		// Default the query_args to post.
+		if ( empty( $query_args['post_type'] ) || is_array( $query_args['post_type'] ) ) {
+			$query_args['post_type'] = 'post';
+		}
+
+		// If we're querying a post type that's not allowed, exit.
+		if ( ! in_array( $query_args['post_type'], $allowed_post_types, true ) ) {
+			wp_die();
+		}
+
+		// Only ever load published posts.
+		$query_args['post_status'] = 'publish';
 
 		$ajax_query = new WP_Query( $query_args );
 
@@ -766,7 +810,7 @@ if ( ! function_exists( 'koji_ajax_load_more' ) ) :
 
 		endif;
 
-		die();
+		wp_die();
 
 	}
 	add_action( 'wp_ajax_nopriv_koji_ajax_load_more', 'koji_ajax_load_more' );
@@ -866,8 +910,13 @@ endif;
 if ( ! function_exists( 'koji_block_editor_styles' ) ) :
 	function koji_block_editor_styles() {
 
-		wp_enqueue_style( 'koji-block-editor-styles', get_template_directory_uri() . '/assets/css/koji-block-editor-styles.css', array(), '1.0', 'all' );
+		// Only load in the editor. Hooked to enqueue_block_assets so the styles reach the iframed editor canvas.
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		wp_enqueue_style( 'koji-block-editor-styles', get_template_directory_uri() . '/assets/css/koji-block-editor-styles.css', array(), wp_get_theme( 'koji' )->get( 'Version' ), 'all' );
 
 	}
-	add_action( 'enqueue_block_editor_assets', 'koji_block_editor_styles', 1 );
+	add_action( 'enqueue_block_assets', 'koji_block_editor_styles', 1 );
 endif;

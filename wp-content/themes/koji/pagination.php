@@ -24,55 +24,86 @@ if ( ! array_key_exists( 'paged', $query_args ) || 0 == $query_args['paged'] ) {
 
 }
 
-// Only show if we have more pages to load
-if ( $query_args['max_num_pages'] > $query_args['paged'] ) :
+// Check if this post type is allowed for lazy loading.
+$post_type = get_post_type() ?: 'post';
+$allowed_post_types = apply_filters( 'koji_allowed_post_types_for_lazy_loading', array( 'post', 'page', 'product', 'jetpack-portfolio', 'any' ) );
 
-	// Encode our modified query
-	$json_query_args = wp_json_encode( $query_args ); ?>
+$has_previous_link = get_previous_posts_link();
+$has_next_link     = get_next_posts_link();
+$pagination_class  = ( ! $has_previous_link ) ? ' only-next' : '';
 
+// If this post type is allowed to be loaded with lazy loading, output the default pagination.
+if ( in_array( $post_type, $allowed_post_types ) ) : 
+	// Only show if we have more pages to load
+	if ( $query_args['max_num_pages'] > $query_args['paged'] ) :
+
+		// Determine the pagination content type for the load more button.
+		if ( is_search() ) {
+			$load_more_content_type = __( 'search results', 'koji' );
+		} else {
+			$post_type_object = get_post_type_object( $post_type );
+			$load_more_content_type = esc_html( ! empty( $post_type_object->labels->name ) ? strtolower( $post_type_object->labels->name ) : $post_type_object->label );
+		}
+
+		// Encode our modified query
+		$json_query_args = wp_json_encode( $query_args ); ?>
+
+		<section class="pagination-wrapper mpad-u-0 mpad-d-80 tpad-d-100 dpad-d-180">
+
+			<div id="pagination" data-query-args="<?php echo esc_attr( $json_query_args ); ?>" data-load-more-target=".load-more-target">
+
+				<button type="button" id="load-more" class="mfs-32 tfs-36 dfs-48 color-dark-gray color-black-hover" aria-controls="posts">
+					<?php
+					/* Translators: $s = name of the pagination content type, plural (e.g. "posts", "search results") */
+					printf( _x( 'Load more %s', 'Translators: $s = name of the pagination content type, plural (e.g. "posts", "search results")', 'koji' ), $load_more_content_type ); ?>
+				</button>
+
+				<p class="out-of-posts" aria-live="polite" aria-relevant="text"><?php _e( 'No more posts to load.', 'koji' ); ?></p>
+
+				<div class="loading-icon">
+					<?php koji_loading_indicator(); ?>
+				</div>
+
+				<?php if ( $has_previous_link || $has_next_link ) : ?>
+
+					<nav class="link-pagination<?php echo $pagination_class; ?>">
+
+						<?php if ( $has_previous_link ) : ?>
+							<?php previous_posts_link( __( '&larr; Previous Page', 'koji' ) ); ?>
+						<?php endif; ?>
+
+						<?php if ( $has_next_link ) : ?>
+							<?php next_posts_link( __( 'Next Page &rarr;', 'koji' ) ); ?>
+						<?php endif; ?>
+
+					</nav><!-- .link-pagination -->
+
+				<?php endif; ?>
+
+			</div><!-- #pagination -->
+
+		</section><!-- .pagination-wrapper -->
+
+		<?php
+	endif;
+// If this post type is not allowed to be loaded with lazy loading, maybe output a fallback navigation.
+elseif ( $has_previous_link || $has_next_link ) :
+	?>
 	<section class="pagination-wrapper mpad-u-0 mpad-d-80 tpad-d-100 dpad-d-180">
 
-		<div id="pagination" data-query-args="<?php echo esc_attr( $json_query_args ); ?>" data-load-more-target=".load-more-target">
+		<nav class="link-pagination fallback-pagination<?php echo $pagination_class; ?>">
 
-			<button type="button" id="load-more" class="mfs-32 tfs-36 dfs-48 color-dark-gray color-black-hover" aria-controls="posts"><?php _e( 'Load more', 'koji' ); ?></button>
-
-			<p class="out-of-posts" aria-live="polite" aria-relevant="text"><?php _e( 'Nothing more to load.', 'koji' ); ?></p>
-
-			<div class="loading-icon">
-				<?php koji_loading_indicator(); ?>
-			</div>
-
-			<?php
-
-			$has_previous_link = get_previous_posts_link();
-			$has_next_link = get_next_posts_link();
-
-			if ( $has_previous_link || $has_next_link ) :
-
-				if ( ! $has_previous_link ) {
-					$pagination_class = ' only-next';
-				} else {
-					$pagination_class = '';
-				}
-
-				?>
-
-				<nav class="link-pagination<?php echo $pagination_class; ?>">
-
-					<?php if ( get_previous_posts_link() ) : ?>
-						<?php previous_posts_link( __( '&larr; Previous Page', 'koji' ) ); ?>
-					<?php endif; ?>
-
-					<?php if ( get_next_posts_link() ) : ?>
-						<?php next_posts_link( __( 'Next Page &rarr;', 'koji' ) ); ?>
-					<?php endif; ?>
-
-				</nav><!-- .posts-pagination -->
-
+			<?php if ( $has_previous_link ) : ?>
+				<?php previous_posts_link( __( '&larr; Previous Page', 'koji' ) ); ?>
 			<?php endif; ?>
 
-		</div><!-- #oa-paging -->
+			<?php if ( $has_next_link ) : ?>
+				<?php next_posts_link( __( 'Next Page &rarr;', 'koji' ) ); ?>
+			<?php endif; ?>
+
+		</nav><!-- .link-pagination -->
 
 	</section><!-- .pagination-wrapper -->
-
-<?php endif; ?>
+	<?php
+endif;
+?>

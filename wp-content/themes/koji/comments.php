@@ -58,7 +58,12 @@ if ( $comments_number ) :
 
 <?php if ( comments_open() || pings_open() ) :
 
-	comment_form( 'comment_notes_before=&comment_notes_after=' );
+	comment_form( array(
+		'comments_notes_before' => '',
+		'comments_notes_after'  => '',
+		'title_reply_before'    => '<h2 id="reply-title" class="comment-reply-title">',
+		'title_reply_after'     => '</h2>',
+	) );
 
 else : ?>
 
