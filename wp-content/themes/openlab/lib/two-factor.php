@@ -12,24 +12,6 @@ add_action(
 	0
 );
 
-add_filter(
-	'two_factor_providers',
-	function( $providers ) {
-		// Remove all providers except 'Two_Factor_Totp'.
-		$new_providers = [];
-		foreach ( $providers as $provider_name => $provider ) {
-			if ( 'Two_Factor_Totp' !== $provider_name ) {
-				continue;
-			}
-
-			$new_providers[ $provider_name ] = $provider;
-		}
-
-		return $new_providers;
-	},
-	9999
-);
-
 function openlab_2fa_settings() {
 	wp_enqueue_script(
 		'openlab-bp-two-factor',
