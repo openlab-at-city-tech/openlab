@@ -37,6 +37,8 @@ class IconsManager {
 			$_fa_library[ $library ] = [];
 
 			foreach ( self::fontawesome() as $icon => $data ) {
+				$icon = strtolower( $icon );
+
 				if ( in_array( $library, $data['s'] ) ) {
 					$_fa_library[ $library ][ $icon ] = [
 						'value' => "fa{$library} fa-{$icon}"

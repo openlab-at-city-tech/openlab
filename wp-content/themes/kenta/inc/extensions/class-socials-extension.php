@@ -149,7 +149,7 @@ if ( ! class_exists( 'Kenta_Socials_Extension' ) ) {
 							'#24292e' => 'Github',
 							'#f8713f' => 'Gitlab',
 							'#1caae7' => 'Skype',
-							'#1074a8' => 'Wordpress',
+							'#1074a8' => 'WordPress',
 							'#fd6721' => 'Hacker News',
 							'#eb7e2f' => 'Ok',
 							'#c40812' => 'Flipboard',

@@ -11,14 +11,14 @@ class ComposerStaticInit269f5b1387916dc70df116bfa958837b
     );
 
     public static $prefixLengthsPsr4 = array (
-        'L' => 
+        'L' =>
         array (
             'LottaFramework\\' => 15,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'LottaFramework\\' => 
+        'LottaFramework\\' =>
         array (
             0 => __DIR__ . '/../..' . '/src',
         ),
