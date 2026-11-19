@@ -1,0 +1,324 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress.com - Themes - Stewart\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-30T04:35:02+00:00\n"
+"PO-Revision-Date: 2024-10-25 05:47:20+0000\n"
+"Language: sv_SE\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+
+#: patterns/hidden-comments.php
+msgctxt "Pattern title"
+msgid "Hidden Comments"
+msgstr "Dolda kommentarer"
+
+#: patterns/footer-default.php
+#: patterns/footer-left.php
+msgctxt "Pattern title"
+msgid "Default footer"
+msgstr "Standardsidfot"
+
+#: patterns/sidebar-introduction.php
+msgctxt "Pattern title"
+msgid "Sidebar with introduction"
+msgstr "Sidopanel med introduktion"
+
+#: patterns/sidebar-default.php
+msgctxt "Pattern title"
+msgid "Default sidebar"
+msgstr "Standard sidopanel"
+
+#: patterns/sidebar-categories-tags.php
+msgctxt "Pattern title"
+msgid "Sidebar with categories and tags"
+msgstr "Sidopanel med kategorier och etiketter"
+
+#: patterns/sidebar-border.php
+msgctxt "Pattern title"
+msgid "Sidebar with border"
+msgstr "Sidopanel med ram"
+
+#: patterns/sidebar-background.php
+msgctxt "Pattern title"
+msgid "Sidebar with background color"
+msgstr "Sidopanel med bakgrundsfärg"
+
+#: patterns/posts-list.php
+msgctxt "Pattern title"
+msgid "Post list"
+msgstr "Inläggslista"
+
+#: patterns/page-contact.php
+msgctxt "Pattern title"
+msgid "Contact page"
+msgstr "Kontaktsida"
+
+#: patterns/page-about.php
+msgctxt "Pattern title"
+msgid "About page"
+msgstr "”Om”-sida"
+
+#: patterns/header-traditional.php
+msgctxt "Pattern title"
+msgid "Traditional header"
+msgstr "Traditionellt sidhuvud"
+
+#: patterns/header-traditional-background.php
+msgctxt "Pattern title"
+msgid "Traditional header with color background"
+msgstr "Traditionellt sidhuvud med färgad bakgrund"
+
+#: patterns/footer-nav-right.php
+msgctxt "Pattern title"
+msgid "Footer with right navigation"
+msgstr "Sidfot med höger navigation"
+
+#: patterns/footer-nav-left.php
+msgctxt "Pattern title"
+msgid "Footer with left navigation"
+msgstr "Sidfot med vänster navigation"
+
+#: patterns/footer-right.php
+msgctxt "Pattern title"
+msgid "Right-aligned footer"
+msgstr "Högerjusterad sidfot"
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://wordpress.com/theme/stewart"
+msgstr "https://wordpress.com/theme/stewart"
+
+#: functions.php:46
+msgid "Featured"
+msgstr "Utvalt"
+
+#: functions.php:45
+msgid "Images"
+msgstr "Bilder"
+
+#: functions.php:50
+msgid "Query"
+msgstr "Sökfråga"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr "Extra stor"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge"
+msgstr "Enorm"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Gigantic"
+msgstr "Gigantisk"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Foreground"
+msgstr "Förgrund"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr "Bakgrund"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr "Primär"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr "Sekundär"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary"
+msgstr "Tertiär"
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and background"
+msgstr "Förgrund och bakgrund"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank"
+msgstr "Tom"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Header and Footer Only"
+msgstr "Endast sidhuvud och sidfot"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr "Sidhuvud"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr "Sidfot"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Sidebar"
+msgstr "Sidopanel"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Sidebar and Footer Only"
+msgstr "Endast sidopanel och sidfot"
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Background and Foreground"
+msgstr "Bakgrund och förgrund"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Work Sans"
+msgstr "Work Sans"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header with Site Title and Navigation"
+msgstr "Sidhuvud med webbplatsrubrik och navigation"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr "Liten"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr "Normal"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Stor"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr "Pytteliten"
+
+#: patterns/sidebar-categories-tags.php:32
+msgid "Tags"
+msgstr "Etiketter"
+
+#. Description of the theme
+#: style.css
+msgid "Stewart is a modern blogging theme with a left sidebar. Its default color scheme is a striking combination of orange and light gray, to give your blog a sophisticated appearance from day one."
+msgstr "Stewart är ett modernt bloggtema med en sidopanel till vänster. Dess standardfärgschema är en slående kombination av orange och ljusgrå för att ge din blogg ett sofistikerat utseende från dag ett."
+
+#: patterns/sidebar-blogging.php:50
+msgid "Latest Comments"
+msgstr "Senaste kommentarer"
+
+#: patterns/sidebar-categories-tags.php:18
+msgid "Categories"
+msgstr "Kategorier"
+
+#: patterns/sidebar-blogging.php:18
+msgid "Start here"
+msgstr "Börja här"
+
+#: patterns/sidebar-blogging.php:36
+msgid "Archives"
+msgstr "Arkiv"
+
+#: patterns/page-contact.php:68
+msgid "@instagram"
+msgstr "@instagram"
+
+#: patterns/page-contact.php:34
+msgid "Email"
+msgstr "E-post"
+
+#: patterns/page-contact.php:42
+msgid "Instagram"
+msgstr "Instagram"
+
+#: patterns/page-contact.php:60
+msgid "email@example.com"
+msgstr "email@example.com"
+
+#: patterns/page-contact.php:52
+msgid "@twitter"
+msgstr "@twitter"
+
+#: patterns/footer-default.php:23
+#: patterns/footer-left.php:24
+#: patterns/footer-nav-left.php:26
+#: patterns/footer-nav-right.php:24
+#: patterns/footer-right.php:24
+msgid "https://wordpress.org"
+msgstr "https://sv.wordpress.org"
+
+#: patterns/page-about.php:37
+msgid "Experience"
+msgstr "Upplev"
+
+#: patterns/page-contact.php:26
+msgid "Twitter"
+msgstr "Twitter"
+
+#: patterns/page-about.php:59
+msgid "Awards"
+msgstr "Utmärkelser"
+
+#: patterns/page-about.php:13
+msgid "Jenn<br>Stewart"
+msgstr "Jenn<br>Stewart"
+
+#: patterns/page-about.php:29
+#: patterns/sidebar-introduction.php:12
+msgid "A collage featuring the portrait of a woman."
+msgstr "Ett collage med porträttet av en kvinna."
+
+#: patterns/page-about.php:70
+msgid "Seems to unite some of the best blessings of existence."
+msgstr "Verkar förena några av tillvarons bästa välsignelser."
+
+#: patterns/page-about.php:47
+msgid "The mildness of her temper had hardly allowed her to impose any restraint."
+msgstr "Det milda humöret hade knappast tillåtit henne att utöva någon återhållsamhet."
+
+#: patterns/page-about.php:75
+msgid "Nearly twenty-one years in the world with very little to distress or vex her."
+msgstr "Nästan tjugoett år i världen med mycket lite att plåga eller irritera henne."
+
+#. Translators: WordPress link.
+#: patterns/footer-default.php:22
+#: patterns/footer-left.php:23
+#: patterns/footer-nav-left.php:25
+#: patterns/footer-nav-right.php:23
+#: patterns/footer-right.php:23
+msgid "Proudly powered by %s"
+msgstr "Drivs med %s"
+
+#: functions.php:49
+msgid "Sidebar"
+msgstr "Sidopanel"
+
+#: functions.php:47
+msgid "Footers"
+msgstr "Sidfötter"
+
+#: functions.php:48
+msgid "Pages"
+msgstr "Sidor"

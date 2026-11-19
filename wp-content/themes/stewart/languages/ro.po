@@ -1,0 +1,348 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WordPress.com - Themes - Stewart\n"
+"Report-Msgid-Bugs-To: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-10-25T05:47:28+00:00\n"
+"PO-Revision-Date: 2024-10-25 05:47:20+0000\n"
+"Language: ro\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < 20)) ? 1 : 2);\n"
+"X-Generator: GlotPress/2.4.0-alpha\n"
+
+#: patterns/hidden-comments.php
+msgctxt "Pattern title"
+msgid "Hidden Comments"
+msgstr "Comentarii ascunse"
+
+#: patterns/sidebar-introduction.php
+msgctxt "Pattern title"
+msgid "Sidebar with introduction"
+msgstr "Bară laterală cu introducere"
+
+#: patterns/sidebar-default.php
+msgctxt "Pattern title"
+msgid "Default sidebar"
+msgstr "Bară laterală implicită"
+
+#: patterns/sidebar-categories-tags.php
+msgctxt "Pattern title"
+msgid "Sidebar with categories and tags"
+msgstr "Bară laterală cu categorii și etichete"
+
+#: patterns/sidebar-border.php
+msgctxt "Pattern title"
+msgid "Sidebar with border"
+msgstr "Bară laterală cu chenar"
+
+#: patterns/sidebar-blogging.php
+msgctxt "Pattern title"
+msgid "Blogging sidebar"
+msgstr "Bară laterală de blogging"
+
+#: patterns/sidebar-background.php
+msgctxt "Pattern title"
+msgid "Sidebar with background color"
+msgstr "Bară laterală cu culoare de fundal"
+
+#: patterns/posts-list.php
+msgctxt "Pattern title"
+msgid "Post list"
+msgstr "Listă cu articole"
+
+#: patterns/page-contact.php
+msgctxt "Pattern title"
+msgid "Contact page"
+msgstr "Pagină Contact"
+
+#: patterns/page-about.php
+msgctxt "Pattern title"
+msgid "About page"
+msgstr "Pagină Despre"
+
+#: patterns/header-traditional.php
+msgctxt "Pattern title"
+msgid "Traditional header"
+msgstr "Antet tradițional"
+
+#: patterns/header-traditional-background.php
+msgctxt "Pattern title"
+msgid "Traditional header with color background"
+msgstr "Antet tradițional cu fundal colorat"
+
+#: patterns/header-image.php
+msgctxt "Pattern title"
+msgid "Header image"
+msgstr "Imagine antet"
+
+#: patterns/footer-right.php
+msgctxt "Pattern title"
+msgid "Right-aligned footer"
+msgstr "Subsol aliniat în dreapta"
+
+#: patterns/footer-nav-right.php
+msgctxt "Pattern title"
+msgid "Footer with right navigation"
+msgstr "Subsol cu navigare în dreapta"
+
+#: patterns/footer-nav-left.php
+msgctxt "Pattern title"
+msgid "Footer with left navigation"
+msgstr "Subsol cu navigare în stânga"
+
+#: patterns/footer-default.php
+#: patterns/footer-left.php
+msgctxt "Pattern title"
+msgid "Default footer"
+msgstr "Subsol implicit"
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://wordpress.com/theme/stewart"
+msgstr "https://wordpress.com/theme/stewart"
+
+#: functions.php:46
+msgid "Featured"
+msgstr "Reprezentativ"
+
+#: functions.php:45
+msgid "Images"
+msgstr "Fotografii"
+
+#: functions.php:50
+msgid "Query"
+msgstr "Interogare"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr "Subsol"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Sidebar"
+msgstr "Bară laterală"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header with Site Title and Navigation"
+msgstr "Antet cu titlu site-ului și navigare"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr "Antet"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Sidebar and Footer Only"
+msgstr "Numai bară laterală și subsol"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Header and Footer Only"
+msgstr "Numai antet și subsol"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank"
+msgstr "Pagină goală"
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and background"
+msgstr "Prim-plan și fundal"
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Background and Foreground"
+msgstr "Fundal și prim-plan "
+
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary"
+msgstr "Terțiară"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr "Secundară"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr "Principală"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr "Fundal"
+
+#: theme.json
+msgctxt "Color name"
+msgid "Foreground"
+msgstr "Prim-plan"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Work Sans"
+msgstr "Work Sans"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Gigantic"
+msgstr "Gigantic"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge"
+msgstr "Foarte mare"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr "Foarte mare"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Mare"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr "Normal"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr "Mic"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr "Foarte mic"
+
+#. Description of the theme
+#: style.css
+msgid "Stewart is a modern blogging theme with a left sidebar. Its default color scheme is a striking combination of orange and light gray, to give your blog a sophisticated appearance from day one."
+msgstr "Stewart este o temă modernă de blogging cu o bară laterală în stânga. Schema sa implicită de culori este o combinație frapantă de portocaliu și gri deschis care îi oferă blogului tău un aspect sofisticat din prima zi."
+
+#: patterns/sidebar-categories-tags.php:32
+msgid "Tags"
+msgstr "Etichete"
+
+#: patterns/sidebar-categories-tags.php:18
+msgid "Categories"
+msgstr "Categorii"
+
+#: patterns/sidebar-blogging.php:50
+msgid "Latest Comments"
+msgstr "Ultimele comentarii"
+
+#: patterns/sidebar-blogging.php:36
+msgid "Archives"
+msgstr "Arhive"
+
+#: patterns/sidebar-blogging.php:18
+msgid "Start here"
+msgstr "Începe de aici"
+
+#: patterns/page-contact.php:80
+msgid "The artist: handsome, and clever, with a comfortable home and happy disposition, seemed to unite some of the best blessings of existence; and had lived nearly twenty-one years in the world with very little to distress or vex her."
+msgstr "Artista: frumoasă și inteligentă, cu o casă confortabilă și bună dispoziție, părea să reunească unele dintre marile binecuvântări ale existenței; și trăise aproape douăzeci și unu de ani pe lume, cu foarte puține motive de îngrijorare sau supărare."
+
+#: patterns/page-contact.php:68
+msgid "@instagram"
+msgstr "@instagram"
+
+#: patterns/page-contact.php:60
+msgid "email@example.com"
+msgstr "email@example.com"
+
+#: patterns/page-contact.php:52
+msgid "@twitter"
+msgstr "@twitter"
+
+#: patterns/page-contact.php:42
+msgid "Instagram"
+msgstr "Instagram"
+
+#: patterns/page-contact.php:34
+msgid "Email"
+msgstr "e-mail"
+
+#: patterns/page-contact.php:26
+msgid "Twitter"
+msgstr "Twitter "
+
+#: patterns/page-about.php:75
+msgid "Nearly twenty-one years in the world with very little to distress or vex her."
+msgstr "Aproape douăzeci și unu de ani pe lume, cu foarte puține motive de îngrijorare sau supărare."
+
+#: patterns/page-about.php:70
+msgid "Seems to unite some of the best blessings of existence."
+msgstr "Pare să reunească unele dintre marile binecuvântări ale existenței."
+
+#: patterns/page-about.php:59
+msgid "Awards"
+msgstr "Premii"
+
+#: patterns/page-about.php:47
+msgid "The mildness of her temper had hardly allowed her to impose any restraint."
+msgstr "Blândețea temperamentului cu greu i-a permis să-și impună vreo restricție."
+
+#: patterns/page-about.php:37
+msgid "Experience"
+msgstr "Experiență"
+
+#: patterns/page-about.php:29
+#: patterns/sidebar-introduction.php:12
+msgid "A collage featuring the portrait of a woman."
+msgstr "Un colaj care prezintă portretul unei femei."
+
+#: patterns/page-about.php:22
+msgid "The artist: handsome, clever, and rich, with a comfortable home and happy disposition, seemed to unite some of the best blessings of existence; and had lived nearly twenty-one years in the world with very little to distress or vex her."
+msgstr "Artista: frumoasă, inteligentă și bogată, cu o casă confortabilă și bună dispoziție, părea să reunească unele dintre marile binecuvântări ale existenței; și trăise aproape douăzeci și unu de ani pe lume, cu foarte puține motive de îngrijorare sau supărare."
+
+#: patterns/page-about.php:13
+msgid "Jenn<br>Stewart"
+msgstr "Jenn<br>Stewart"
+
+#: patterns/header-image.php:13
+#: patterns/page-contact.php:14
+#: patterns/sidebar-background.php:15
+msgid "An abstract image featuring a brushstroke."
+msgstr "O imagine abstractă cu o pensulă."
+
+#: patterns/footer-default.php:23
+#: patterns/footer-left.php:24
+#: patterns/footer-nav-left.php:26
+#: patterns/footer-nav-right.php:24
+#: patterns/footer-right.php:24
+msgid "https://wordpress.org"
+msgstr "https://wordpress.org"
+
+#. Translators: WordPress link.
+#: patterns/footer-default.php:22
+#: patterns/footer-left.php:23
+#: patterns/footer-nav-left.php:25
+#: patterns/footer-nav-right.php:23
+#: patterns/footer-right.php:23
+msgid "Proudly powered by %s"
+msgstr "Propulsată cu mândrie de %s"
+
+#: functions.php:49
+msgid "Sidebar"
+msgstr "Bară laterală"
+
+#: functions.php:48
+msgid "Pages"
+msgstr "Pagini"
+
+#: functions.php:47
+msgid "Footers"
+msgstr "Subsoluri"
