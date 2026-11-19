@@ -525,8 +525,9 @@ function bp_core_fetch_avatar( $args = '' ) {
 	// Check for directory.
 	if ( ! $params['force_default'] && file_exists( $avatar_folder_dir ) ) {
 
-		// Open directory.
-		if ( $av_dir = opendir( $avatar_folder_dir ) ) {
+		// Open the directory.
+		$av_dir = opendir( $avatar_folder_dir );
+		if ( $av_dir ) {
 
 			// Stash files in an array once to check for one that matches.
 			$avatar_files = array();
@@ -565,10 +566,10 @@ function bp_core_fetch_avatar( $args = '' ) {
 					}
 				}
 			}
-		}
 
-		// Close the avatar directory.
-		closedir( $av_dir );
+			// Close the directory.
+			closedir( $av_dir );
+		}
 
 		// If we found a locally uploaded avatar.
 		if ( isset( $avatar_url ) ) {
@@ -855,14 +856,17 @@ function bp_core_delete_existing_avatar( $args = '' ) {
 		return false;
 	}
 
-	if ( $av_dir = opendir( $avatar_folder_dir ) ) {
+	$av_dir = opendir( $avatar_folder_dir );
+	if ( $av_dir ) {
 		while ( false !== ( $avatar_file = readdir( $av_dir ) ) ) {
 			if ( ( preg_match( '/-bpfull/', $avatar_file ) || preg_match( '/-bpthumb/', $avatar_file ) ) && '.' !== $avatar_file && '..' !== $avatar_file ) {
 				@unlink( $avatar_folder_dir . '/' . $avatar_file );
 			}
 		}
+
+		// Close the directory.
+		closedir( $av_dir );
 	}
-	closedir( $av_dir );
 
 	@rmdir( $avatar_folder_dir );
 
@@ -882,9 +886,6 @@ function bp_core_delete_existing_avatar( $args = '' ) {
  * Ajax delete an avatar for a given object and item id.
  *
  * @since 2.3.0
- *
- * @return string|null A JSON object containing success data if the avatar was deleted,
- *                     error message otherwise.
  */
 function bp_avatar_ajax_delete() {
 	if ( ! bp_is_post_request() ) {
@@ -918,7 +919,7 @@ function bp_avatar_ajax_delete() {
 		)
 	) ) {
 		$return = array(
-			'avatar'        => esc_url(
+			'avatar'        => esc_url_raw(
 				bp_core_fetch_avatar(
 					array(
 						'object'  => $avatar_data['object'],
@@ -966,13 +967,13 @@ function bp_core_avatar_handle_upload( $file, $upload_dir_filter ) {
 	/**
 	 * Filters whether or not to handle uploading.
 	 *
-	 * If you want to override this function, make sure you return false.
+	 * If you want to override this function, make sure you return `false`.
 	 *
 	 * @since 1.2.4
 	 *
-	 * @param bool   $value             Whether or not to crop.
+	 * @param bool   $pre_filter        Whether or not to crop. Defaults to true.
 	 * @param array  $file              Appropriate entry from $_FILES superglobal.
-	 * @parma string $upload_dir_filter A filter to be applied to 'upload_dir'.
+	 * @param string $upload_dir_filter A filter to be applied to 'upload_dir'.
 	 */
 	if ( ! apply_filters( 'bp_core_pre_avatar_handle_upload', true, $file, $upload_dir_filter ) ) {
 		return true;
@@ -1418,7 +1419,7 @@ function bp_avatar_ajax_set() {
 
 		} else {
 			$return = array(
-				'avatar'        => esc_url(
+				'avatar'        => esc_url_raw(
 					bp_core_fetch_avatar(
 						array(
 							'object'  => $avatar_data['object'],
@@ -1482,7 +1483,7 @@ function bp_avatar_ajax_set() {
 
 	if ( $cropped_avatar ) {
 		$return = array(
-			'avatar'        => esc_url(
+			'avatar'        => esc_url_raw(
 				bp_core_fetch_avatar(
 					array(
 						'object'  => $avatar_data['object'],
@@ -1776,7 +1777,7 @@ function bp_core_avatar_url() {
  * @since 1.0.0
  *
  * @param int $user_id ID of the user whose avatar is being checked.
- * @return bool True if the user has uploaded a local avatar. Otherwise false.
+ * @return bool True if the user has uploaded a local avatar. Otherwise, false.
  */
 function bp_get_user_has_avatar( $user_id = 0 ) {
 
@@ -2067,8 +2068,6 @@ function bp_core_avatar_default_thumb( $type = 'gravatar', $params = array() ) {
  * @param WP_Query|null $posts_query The main query object.
  */
 function bp_core_avatar_reset_query( $posts_query = null ) {
-	$reset_w = false;
-
 	// Group's avatar edit screen.
 	if ( bp_is_group_admin_page() ) {
 		$reset_w = bp_is_group_admin_screen( 'group-avatar' );
@@ -2217,7 +2216,7 @@ function bp_avatar_history_is_disabled() {
 	 * @since 10.0.0
 	 *
 	 * @param bool $avatar_history True to disable avatar history. False otherwise.
-	 *                    Default: `false`.
+	 *                             Default: `false`.
 	 */
 	return apply_filters( 'bp_disable_avatar_history', false );
 }
@@ -2269,6 +2268,24 @@ function bp_avatar_get_version( $item_id = 0, $object = 'user', $timestamp = '',
  * @return array          The list of previous uploaded avatars.
  */
 function bp_avatar_get_avatars_history( $item_id = 0, $object = 'user', $type = 'full' ) {
+	/**
+	 * Filter to short-circuit the avatars history retrieval process.
+	 *
+	 * If you want to override this function, make sure you return something other than `null`.
+	 *
+	 * @since 14.5.0
+	 *
+	 * @param null|array $pre_filter Null to proceed with the default handling, or an array of avatars to override it.
+	 * @param int        $item_id    The item ID we need the avatar version for.
+	 * @param string     $object     The object the item ID relates to.
+	 * @param string     $type       Get the `full`, `thumb` or `both` versions.
+	 */
+	$pre_filter = apply_filters( 'bp_pre_avatar_get_avatars_history', null, $item_id, $object, $type );
+
+	if ( null !== $pre_filter ) {
+		return $pre_filter;
+	}
+
 	if ( ! $item_id ) {
 		return array();
 	}
@@ -2410,10 +2427,7 @@ function bp_avatar_ajax_recycle_previous_avatar() {
 		// Init recycle vars.
 		$recycle_timestamp = bp_core_current_time( true, 'timestamp' );
 		$recycle_errors    = array();
-		$avatar_types      = array(
-			'full'  => '',
-			'thumb' => '',
-		);
+		$avatar_types      = array();
 
 		// Use the found previous avatar.
 		$avatar                = $avatars[ $avatar_id ];
@@ -2499,7 +2513,7 @@ function bp_avatar_ajax_recycle_previous_avatar() {
 	}
 
 	$return = array(
-		'avatar'        => esc_url(
+		'avatar'        => esc_url_raw(
 			bp_core_fetch_avatar(
 				array(
 					'object'  => $object,
@@ -2597,13 +2611,9 @@ function bp_avatar_ajax_delete_previous_avatar() {
 		);
 	}
 
-	$avatar_types = array(
-		'full'  => '',
-		'thumb' => '',
-	);
-
 	// Use the found previous avatar.
 	$avatar                = $avatars[ $avatar_id ];
+	$avatar_types          = array();
 	$avatar_types['full']  = $avatar->path;
 	$avatar_types['thumb'] = str_replace( $suffix, '-bpthumb', $avatar->path );
 

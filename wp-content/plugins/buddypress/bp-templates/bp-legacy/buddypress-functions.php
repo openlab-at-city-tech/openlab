@@ -84,11 +84,8 @@ class BP_Legacy extends BP_Theme_Compat {
 		add_action( 'bp_enqueue_community_scripts', array( $this, 'enqueue_scripts'  ) ); // Enqueue theme JS
 		add_action( 'bp_enqueue_community_scripts', array( $this, 'localize_scripts' ) ); // Enqueue theme script localization
 
-		/** This filter is documented in bp-core/bp-core-dependency.php */
-		if ( is_buddypress() || ! apply_filters( 'bp_enqueue_assets_in_bp_pages_only', true ) ) {
-			// Body no-js class.
-			add_filter( 'body_class', array( $this, 'add_nojs_body_class' ), 20, 1 );
-		}
+		// Body no-js class.
+		add_filter( 'body_class', array( $this, 'add_nojs_body_class' ), 20, 1 );
 
 		/** Buttons ***********************************************************/
 
@@ -475,12 +472,16 @@ class BP_Legacy extends BP_Theme_Compat {
 	 *
 	 * @since 1.7.0
 	 *
-	 * @param array $classes Array of classes to append to body tag.
-	 * @return array $classes
+	 * @param string[] $classes Array of classes to append to body tag.
+	 * @return string[]
 	 */
 	public function add_nojs_body_class( $classes ) {
-		if ( ! in_array( 'no-js', $classes ) )
-			$classes[] = 'no-js';
+		/** This filter is documented in bp-core/bp-core-dependency.php */
+		if ( ! is_buddypress() && apply_filters( 'bp_enqueue_assets_in_bp_pages_only', true ) ) {
+			return $classes;
+		}
+
+		$classes[] = 'no-js';
 
 		return array_unique( $classes );
 	}
@@ -492,8 +493,7 @@ class BP_Legacy extends BP_Theme_Compat {
 	 *
 	 * @since 1.7.0
 	 */
-	public function localize_scripts() {
-	}
+	public function localize_scripts() {}
 
 	/**
 	 * Outputs sitewide notices markup in the footer.
@@ -858,6 +858,10 @@ function bp_legacy_theme_object_template_loader() {
 		return;
 	}
 
+	if ( ! bp_current_user_can( 'bp_view', array( 'bp_component' => $object ) ) ) {
+		return;
+	}
+
 	/**
 	 * AJAX requests happen too early to be seen by bp_update_is_directory()
 	 * so we do it manually here to ensure templates load with the correct
@@ -924,6 +928,10 @@ function bp_legacy_theme_requests_template_loader() {
  */
 function bp_legacy_theme_activity_template_loader() {
 	if ( ! bp_is_post_request() ) {
+		return;
+	}
+
+	if ( ! bp_current_user_can( 'bp_view', array( 'bp_component' => 'activity' ) ) ) {
 		return;
 	}
 
@@ -1368,6 +1376,11 @@ function bp_legacy_theme_get_single_activity_content() {
 		exit; // @todo: error?
 	}
 
+	// Ensure that the user is allowed to read the activity item.
+	if ( ! bp_activity_user_can_read( $activity ) ) {
+		exit;
+	}
+
 	/**
 	 * Fires before the return of an activity's full, non-excerpted content via a POST request.
 	 *
@@ -1627,6 +1640,7 @@ function bp_legacy_theme_ajax_joinleave_group() {
 		case 'join_group' :
 			if ( ! bp_current_user_can( 'groups_join_group', array( 'group_id' => $group->id ) ) ) {
 				esc_html_e( 'Error joining group', 'buddypress' );
+				break;
 			}
 
 			/*
