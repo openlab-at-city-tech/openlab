@@ -1,0 +1,2478 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: editoria11y 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/editoria11y\n"
+"POT-Creation-Date: 2026-08-10T21:11:15-04:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: Editoria11y\n"
+"Language: cs\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
+
+#. Plugin Name of the plugin
+#: editoria11y.php
+msgid "Editoria11y Accessibility Checker (CSA)"
+msgstr "Editoria11y – kontrola přístupnosti (CSA)"
+
+#. Plugin URI of the plugin
+#: editoria11y.php
+msgid "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+msgstr "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+
+#. Description of the plugin
+#: editoria11y.php
+msgid "User friendly content quality assurance, plus the CSA developer suite: ~50 additional code and contrast tests, a custom test builder, role-based test configuration, and a site crawler."
+msgstr "Uživatelsky přívětivá kontrola kvality obsahu doplněná o vývojářskou sadu CSA: ~50 dalších testů kódu a kontrastu, nástroj pro sestavení vlastních testů, konfigurace testů podle rolí a prohledávač webu."
+
+#. Author of the plugin
+#: editoria11y.php
+msgid "Princeton University, WDS"
+msgstr "Princeton University, WDS"
+
+#. Author URI of the plugin
+#: editoria11y.php
+msgid "https://editoria11y.com"
+msgstr "https://editoria11y.com"
+
+#: editoria11y.php:131
+msgid "Editoria11y is missing its vendored dependencies. Run \"composer install\" inside the plugin directory or reinstall the plugin from a complete release archive."
+msgstr "Editoria11y postrádá své závislosti dodávané s pluginem. Spusťte příkaz „composer install“ v adresáři pluginu nebo plugin přeinstalujte z úplného archivu vydání."
+
+#: editoria11y.php:399
+msgid "Every five minutes (Editoria11y rehash)"
+msgstr "Každých pět minut (Editoria11y přepočet)"
+
+#: editoria11y.php:405
+msgid "Every fifteen minutes (Editoria11y license watchdog)"
+msgstr "Každých patnáct minut (Editoria11y kontrola licence)"
+
+#: src/Admin/CsvExport.php:161 src/Admin/Dashboard.php:150
+msgid "Page"
+msgstr "Stránka"
+
+#: src/Admin/CsvExport.php:162
+msgid "URL"
+msgstr "URL"
+
+#: src/Admin/CsvExport.php:163
+msgid "Issue"
+msgstr "Upozornění"
+
+#: src/Admin/CsvExport.php:164 src/Admin/Dashboard.php:158
+msgid "Count"
+msgstr "Počet"
+
+#: src/Admin/CsvExport.php:165 src/Admin/Dashboard.php:155
+msgid "Author"
+msgstr "Autor"
+
+#: src/Admin/CsvExport.php:166
+msgid "Page Type"
+msgstr "Typ stránky"
+
+#: src/Admin/CsvExport.php:167
+msgid "Detected on"
+msgstr "Datum zjištění"
+
+#: src/Admin/CsvExport.php:168 src/Admin/Dashboard.php:153
+#: src/Form/CrawlerPage.php:206 src/Form/CustomRulesPage.php:194
+#: src/Form/NetworkCustomRulesPage.php:154
+msgid "Status"
+msgstr "Stav"
+
+#: src/Admin/CsvExport.php:169 src/Form/CustomRulesPage.php:317
+#: src/Form/NetworkCustomRulesPage.php:192
+msgid "Edit"
+msgstr "Upravit"
+
+#: src/Admin/Dashboard.php:35 src/Admin/Dashboard.php:53
+#: src/Admin/Dashboard.php:202
+msgid "Editoria11y Accessibility Report"
+msgstr "Editoria11y – zpráva o přístupnosti"
+
+#: src/Admin/Dashboard.php:36
+msgid "Accessibility"
+msgstr "Přístupnost"
+
+#: src/Admin/Dashboard.php:71
+msgid "Error:"
+msgstr "Chyba:"
+
+#: src/Admin/Dashboard.php:72
+msgid "Editoria11y database tables are missing."
+msgstr "Databázové tabulky Editoria11y chybí."
+
+#. translators: 1: bug report link, 2: site health page link.
+#: src/Admin/Dashboard.php:75
+#, php-format
+msgid "Try deactivating and reactivating the plugin to reset config and recreate the tables, or %1$s with the information from the WordPress, Server and Database sections on your %2$s."
+msgstr "Zkuste plugin deaktivovat a znovu aktivovat, čímž se obnoví konfigurace a znovu vytvoří tabulky, nebo %1$s s informacemi ze sekcí WordPress, Server a Databáze na %2$s."
+
+#: src/Admin/Dashboard.php:76
+msgid "post a bug report"
+msgstr "nahlaste chybu"
+
+#: src/Admin/Dashboard.php:77
+msgid "site health page"
+msgstr "stránce Zdraví webu"
+
+#: src/Admin/Dashboard.php:129
+msgid "View all issues"
+msgstr "Zobrazit všechna upozornění"
+
+#: src/Admin/Dashboard.php:130
+msgid "View issues on all pages"
+msgstr "Zobrazit upozornění na všech stránkách"
+
+#. translators: %s: name of an alert/test, e.g. "Image is missing alt text".
+#: src/Admin/Dashboard.php:132
+#, php-format
+msgid "Alert report: \"%s\""
+msgstr "Zpráva upozornění: „%s“"
+
+#. translators: %s: post type slug, e.g. "page" or "post".
+#: src/Admin/Dashboard.php:134
+#, php-format
+msgid "Alerts on pages of type \"%s\""
+msgstr "Upozornění na stránkách typu „%s“"
+
+#: src/Admin/Dashboard.php:135
+msgid "Alerts on pages created by author"
+msgstr "Upozornění na stránkách vytvořených autorem"
+
+#. translators: %s: author display name.
+#: src/Admin/Dashboard.php:137
+#, php-format
+msgid "Alerts on pages created by %s"
+msgstr "Upozornění na stránkách vytvořených uživatelem %s"
+
+#: src/Admin/Dashboard.php:138
+msgid "Alerts dismissed by"
+msgstr "Upozornění zamítnutá uživatelem"
+
+#. translators: %s: user display name of the dismissor.
+#: src/Admin/Dashboard.php:140
+#, php-format
+msgid "Alerts dismissed by %s"
+msgstr "Upozornění zamítnutá uživatelem %s"
+
+#. translators: %s: post-status label, e.g. "Published" or "Draft".
+#: src/Admin/Dashboard.php:142
+#, php-format
+msgid "%s pages"
+msgstr "Stránky: %s"
+
+#: src/Admin/Dashboard.php:143
+msgid "API error."
+msgstr "Chyba API."
+
+#: src/Admin/Dashboard.php:144
+msgid "Your login session expired. Reload this page to continue."
+msgstr "Vaše přihlášení vypršelo. Chcete-li pokračovat, obnovte tuto stránku."
+
+#: src/Admin/Dashboard.php:145
+msgid "loading..."
+msgstr "načítání…"
+
+#. translators: %d: pagination page number.
+#: src/Admin/Dashboard.php:147
+#, php-format
+msgid "Page %d"
+msgstr "Stránka %d"
+
+#: src/Admin/Dashboard.php:148
+msgid "Alerts"
+msgstr "Upozornění"
+
+#: src/Admin/Dashboard.php:149
+msgid "Dev alerts"
+msgstr "Vývojářská upozornění"
+
+#: src/Admin/Dashboard.php:151
+msgid "Path"
+msgstr "Cesta"
+
+#: src/Admin/Dashboard.php:152
+msgid "Type"
+msgstr "Typ"
+
+#: src/Admin/Dashboard.php:154
+msgid "Updated"
+msgstr "Aktualizováno"
+
+#: src/Admin/Dashboard.php:156
+msgid "Detected"
+msgstr "Zjištěno"
+
+#: src/Admin/Dashboard.php:157
+msgid "Alert"
+msgstr "Upozornění"
+
+#: src/Admin/Dashboard.php:159
+msgid "Pages"
+msgstr "Stránky"
+
+#: src/Admin/Dashboard.php:160
+msgid "On"
+msgstr "Zapnuto"
+
+#: src/Admin/Dashboard.php:161
+msgid "Dismissed alert"
+msgstr "Zamítnuté upozornění"
+
+#: src/Admin/Dashboard.php:162
+msgid "Marked"
+msgstr "Označeno"
+
+#: src/Admin/Dashboard.php:163
+msgid "Current"
+msgstr "Aktuální"
+
+#: src/Admin/Dashboard.php:164
+msgid "By"
+msgstr "Od"
+
+#: src/Admin/Dashboard.php:165
+msgid "Alerts by page"
+msgstr "Upozornění podle stránky"
+
+#: src/Admin/Dashboard.php:166
+msgid "Recent alerts"
+msgstr "Nedávná upozornění"
+
+#: src/Admin/Dashboard.php:167
+msgid "Alert types"
+msgstr "Typy upozornění"
+
+#: src/Admin/Dashboard.php:168
+msgid "Dismissals"
+msgstr "Zamítnutí"
+
+#: src/Admin/Dashboard.php:169
+msgid "Recent dismissals"
+msgstr "Nedávná zamítnutí"
+
+#: src/Admin/Dashboard.php:170
+msgid "Download results as CSV"
+msgstr "Stáhnout výsledky jako CSV"
+
+#: src/Admin/Dashboard.php:171
+msgid "None"
+msgstr "Žádné"
+
+#: src/Admin/Dashboard.php:172
+msgid "No"
+msgstr "Ne"
+
+#: src/Admin/Dashboard.php:173
+msgid "Yes"
+msgstr "Ano"
+
+#: src/Admin/Dashboard.php:174
+msgid "n/a"
+msgstr "n/a"
+
+#: src/Admin/Dashboard.php:175 src/functions.php:1795
+msgid "Empty button-style link"
+msgstr "Prázdný odkaz ve stylu tlačítka"
+
+#. translators: tooltip on a column header that's currently sorted descending.
+#: src/Admin/Dashboard.php:177
+msgid "descending"
+msgstr "descending"
+
+#. translators: tooltip on a column header that's currently sorted ascending.
+#: src/Admin/Dashboard.php:179
+msgid "ascending"
+msgstr "ascending"
+
+#. translators: %d: number of result rows returned (singular form).
+#: src/Admin/Dashboard.php:182
+#, php-format
+msgid "%d result"
+msgstr "%d výsledek"
+
+#. translators: %d: number of result rows returned (plural form).
+#: src/Admin/Dashboard.php:184
+#, php-format
+msgid "%d results"
+msgstr "%d výsledků"
+
+#: src/CoActivationGuard.php:139
+msgid "A duplicate copy of Editoria11y Accessibility Checker (the free version) was deactivated here: Editoria11y CSA is already active and provides the same checks."
+msgstr "Duplicitní kopie pluginu Editoria11y – kontrola přístupnosti (bezplatná verze) zde byla deaktivována: Editoria11y CSA je již aktivní a poskytuje stejné kontroly."
+
+#: src/Controller/ApiCrawler.php:122
+msgid "The crawler is a premium feature."
+msgstr "Prohledávač je prémiová funkce."
+
+#: src/Controller/ApiCrawler.php:129
+msgid "Editoria11y database update did not complete; the crawler is paused until an administrator retries the update."
+msgstr "Aktualizace databáze Editoria11y nebyla dokončena; prohledávač je pozastaven, dokud správce aktualizaci nezopakuje."
+
+#: src/Controller/ApiDismissals.php:83
+msgid "Results not recorded"
+msgstr "Výsledky nebyly zaznamenány"
+
+#: src/Controller/ApiDismissals.php:572 src/Controller/ApiResults.php:925
+msgid "Editoria11y database update did not complete; writes are paused until an administrator retries the update."
+msgstr "Aktualizace databáze Editoria11y nebyla dokončena; zápisy jsou pozastaveny, dokud správce aktualizaci nezopakuje."
+
+#: src/Controller/ApiDismissals.php:597 src/Controller/ApiResults.php:950
+msgid "Editoria11y database update did not complete; the dashboard is paused until an administrator retries the update."
+msgstr "Aktualizace databáze Editoria11y nebyla dokončena; přehled je pozastaven, dokud správce aktualizaci nezopakuje."
+
+#: src/CustomRules.php:273
+msgid "Machine name is required."
+msgstr "Strojový název je povinný."
+
+#: src/CustomRules.php:276
+msgid "Machine name must be lowercase letters, digits, and underscores, starting with a letter."
+msgstr "Strojový název musí obsahovat pouze malá písmena, číslice a podtržítka a musí začínat písmenem."
+
+#: src/CustomRules.php:281
+msgid "Admin label is required."
+msgstr "Administrátorský popisek je povinný."
+
+#: src/CustomRules.php:286
+msgid "Test grouping ID is required."
+msgstr "ID skupiny testů je povinné."
+
+#: src/CustomRules.php:293
+msgid "Test grouping ID may only contain letters, digits, and underscores."
+msgstr "ID skupiny testů může obsahovat pouze písmena, číslice a podtržítka."
+
+#. translators: %s is a reserved test key like TABLES_SEMANTIC_HEADING.
+#: src/CustomRules.php:298
+#, php-format
+msgid "Test grouping ID \"%s\" is reserved by the v3 migration drop list and cannot be used."
+msgstr "ID skupiny testů „%s“ je vyhrazeno seznamem pro migraci v3 a nelze jej použít."
+
+#: src/CustomRules.php:305
+msgid "Tip title is required."
+msgstr "Nadpis tipu je povinný."
+
+#: src/CustomRules.php:312
+msgid "Tip details must contain some visible text."
+msgstr "Podrobnosti tipu musí obsahovat nějaký viditelný text."
+
+#: src/CustomRules.php:317
+msgid "Alert type must be Error or Manual check."
+msgstr "Typ upozornění musí být Chyba nebo Ruční kontrola."
+
+#: src/CustomRules.php:323
+msgid "Dismiss key must be Text content or Attributes."
+msgstr "Klíč zamítnutí musí být Textový obsah nebo Atributy."
+
+#: src/CustomRules.php:329
+msgid "Filter selector looks like a CSS rule block, not a selector. Remove the curly braces."
+msgstr "Selektor filtru vypadá jako blok CSS pravidel, nikoli selektor. Odstraňte složené závorky."
+
+#: src/CustomRules.php:332
+msgid "Filter selector has an unclosed quote, bracket, or parenthesis. The browser would reject it and skip every custom rule on the page."
+msgstr "Selektor filtru obsahuje neuzavřenou uvozovku, hranatou nebo kulatou závorku. Prohlížeč by ho odmítl a přeskočil všechna vlastní pravidla na stránce."
+
+#: src/CustomRules.php:342
+msgid "At least one rule criterion is required: a filter selector OR one or more include-text strings."
+msgstr "Je vyžadováno alespoň jedno kritérium pravidla: selektor filtru NEBO jeden či více řetězců pro shodu textu."
+
+#. translators: %s is an unknown element-set value.
+#: src/CustomRules.php:352
+#, php-format
+msgid "Element set \"%s\" is not one of the recognized element categories."
+msgstr "Sada prvků „%s“ není jednou z rozpoznaných kategorií prvků."
+
+#: src/Form/CrawlerPage.php:59 src/Form/CrawlerPage.php:60
+msgid "Editoria11y Crawler"
+msgstr "Editoria11y – prohledávač"
+
+#: src/Form/CrawlerPage.php:126
+msgid "You do not have permission to use the crawler."
+msgstr "Nemáte oprávnění používat prohledávač."
+
+#: src/Form/CrawlerPage.php:130 src/Form/CustomRulesPage.php:111
+#: src/Form/SettingsPage.php:236 src/Form/SettingsPage.php:237
+msgid "Editoria11y"
+msgstr "Editoria11y"
+
+#: src/Form/CrawlerPage.php:146 src/Form/SettingsPage.php:288
+msgid "Crawler"
+msgstr "Prohledávač"
+
+#: src/Form/CrawlerPage.php:149
+msgid "The crawler is a CSA feature. Activate CSA to schedule sitewide accessibility scans across posts, pages, and custom post types."
+msgstr "Prohledávač je funkce CSA. Aktivujte CSA, abyste mohli plánovat celoplošné kontroly přístupnosti příspěvků, stránek a vlastních typů příspěvků."
+
+#: src/Form/CrawlerPage.php:162
+msgid "Manual crawl"
+msgstr "Ruční prohledávání"
+
+#: src/Form/CrawlerPage.php:166
+msgid "Editoria11y reports populate and update in real time as editors work, so a manual crawl is generally only helpful when first installing the plugin or after making major theme or configuration changes."
+msgstr "Zprávy Editoria11y se vyplňují a aktualizují v reálném čase při práci editorů. Ruční prohledávání je proto obecně užitečné pouze při prvním instalování pluginu nebo po zásadních změnách motivu nebo konfigurace."
+
+#: src/Form/CrawlerPage.php:176 src/Form/CustomRulesPage.php:501
+#: src/Form/NetworkCustomRulesPage.php:288 src/Form/NetworkLicensePage.php:416
+msgid "Cancel"
+msgstr "Zrušit"
+
+#: src/Form/CrawlerPage.php:181
+msgid "This tab needs to remain open and in the foreground during the crawl."
+msgstr "Tato záložka musí během prohledávání zůstat otevřená a v popředí."
+
+#: src/Form/CrawlerPage.php:188
+msgid "Browsers pause API operations in background tabs."
+msgstr "Prohlížeče pozastavují operace API v záložkách na pozadí."
+
+#: src/Form/CrawlerPage.php:196
+msgid "Filter which pages will be crawled"
+msgstr "Filtrovat stránky, které budou prohledávány"
+
+#: src/Form/CrawlerPage.php:200
+msgid "Content type"
+msgstr "Typ obsahu"
+
+#: src/Form/CrawlerPage.php:218
+msgid "Filter by"
+msgstr "Filtrovat podle"
+
+#: src/Form/CrawlerPage.php:221 src/Form/CrawlerPage.php:254
+msgid "Date created"
+msgstr "Datum vytvoření"
+
+#: src/Form/CrawlerPage.php:222 src/Form/CrawlerPage.php:255
+msgid "Date modified"
+msgstr "Datum úpravy"
+
+#: src/Form/CrawlerPage.php:224
+msgid "From"
+msgstr "Od"
+
+#: src/Form/CrawlerPage.php:226
+msgid "To"
+msgstr "Do"
+
+#: src/Form/CrawlerPage.php:231
+msgid "Content alerts"
+msgstr "Upozornění k obsahu"
+
+#: src/Form/CrawlerPage.php:234 src/Form/CrawlerPage.php:244
+msgid "Any"
+msgstr "Libovolné"
+
+#: src/Form/CrawlerPage.php:235
+msgid "Has alerts"
+msgstr "Má upozornění"
+
+#: src/Form/CrawlerPage.php:236
+msgid "No alerts"
+msgstr "Žádná upozornění"
+
+#: src/Form/CrawlerPage.php:241
+msgid "Developer alerts"
+msgstr "Vývojářská upozornění"
+
+#: src/Form/CrawlerPage.php:245
+msgid "Has dev alerts"
+msgstr "Má vývojářská upozornění"
+
+#: src/Form/CrawlerPage.php:246
+msgid "No dev alerts"
+msgstr "Žádná vývojářská upozornění"
+
+#: src/Form/CrawlerPage.php:251
+msgid "Sort by"
+msgstr "Řadit podle"
+
+#: src/Form/CrawlerPage.php:256
+msgid "Title"
+msgstr "Název"
+
+#: src/Form/CrawlerPage.php:259
+msgid "Newest first"
+msgstr "Nejnovější jako první"
+
+#: src/Form/CrawlerPage.php:260
+msgid "Oldest first"
+msgstr "Nejstarší jako první"
+
+#: src/Form/CrawlerPage.php:266
+msgid "Apply filters"
+msgstr "Použít filtry"
+
+#: src/Form/CrawlerPage.php:269
+msgid "Crawl preview"
+msgstr "Náhled prohledávání"
+
+#: src/Form/CrawlerPage.php:288
+msgid "Crawl delay"
+msgstr "Prodleva prohledávání"
+
+#. translators: %d: number of milliseconds between iframe loads.
+#: src/Form/CrawlerPage.php:290
+#, php-format
+msgid "%d ms"
+msgstr "%d ms"
+
+#: src/Form/CrawlerPage.php:291
+msgid "Start crawling"
+msgstr "Spustit prohledávání"
+
+#: src/Form/CrawlerPage.php:292
+msgid "Pause crawl"
+msgstr "Pozastavit prohledávání"
+
+#: src/Form/CrawlerPage.php:293
+msgid "Resume crawl"
+msgstr "Obnovit prohledávání"
+
+#: src/Form/CrawlerPage.php:294
+msgid "Back to dashboard"
+msgstr "Zpět na přehled"
+
+#: src/Form/CrawlerPage.php:295
+msgid "No matching content. Adjust the filters and apply."
+msgstr "Žádný odpovídající obsah. Upravte filtry a použijte je."
+
+#: src/Form/CrawlerPage.php:296
+msgid "Could not load the page list. Reload this page to retry; if the problem persists, your login session may have expired."
+msgstr "Nepodařilo se načíst seznam stránek. Obnovte tuto stránku a zkuste to znovu; pokud problém přetrvává, možná vypršelo vaše přihlášení."
+
+#. translators: %s: human-readable duration like "30 seconds" or "5 minutes".
+#: src/Form/CrawlerPage.php:298
+#, php-format
+msgid "Estimated time: %s"
+msgstr "Odhadovaný čas: %s"
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (singular form).
+#: src/Form/CrawlerPage.php:301
+#, php-format
+msgid "Showing %1$d of %2$d matching page."
+msgstr "Zobrazena %1$d z %2$d odpovídající stránky."
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (plural form).
+#: src/Form/CrawlerPage.php:303
+#, php-format
+msgid "Showing %1$d of %2$d matching pages."
+msgstr "Zobrazeno %1$d z %2$d odpovídajících stránek."
+
+#. translators: %d: whole-number count of seconds remaining (singular form).
+#: src/Form/CrawlerPage.php:307
+#, php-format
+msgid "%d second"
+msgstr "%d sekunda"
+
+#. translators: %d: whole-number count of seconds remaining (plural form).
+#: src/Form/CrawlerPage.php:309
+#, php-format
+msgid "%d seconds"
+msgstr "%d sekund"
+
+#. translators: %d: whole-number count of minutes remaining (singular form).
+#: src/Form/CrawlerPage.php:313
+#, php-format
+msgid "%d minute"
+msgstr "%d minuta"
+
+#. translators: %d: whole-number count of minutes remaining (plural form).
+#: src/Form/CrawlerPage.php:315
+#, php-format
+msgid "%d minutes"
+msgstr "%d minut"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (singular form).
+#: src/Form/CrawlerPage.php:319
+#, php-format
+msgid "%s hour"
+msgstr "%s hodina"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (plural form).
+#: src/Form/CrawlerPage.php:321
+#, php-format
+msgid "%s hours"
+msgstr "%s hodin"
+
+#: src/Form/CustomRulesPage.php:84 src/Form/CustomRulesPage.php:85
+msgid "Editoria11y Custom Rules"
+msgstr "Editoria11y – vlastní pravidla"
+
+#: src/Form/CustomRulesPage.php:104 src/Form/CustomRulesPage.php:338
+#: src/Form/CustomRulesPage.php:880 src/Form/CustomRulesPage.php:1030
+msgid "You do not have permission to manage custom rules."
+msgstr "Nemáte oprávnění spravovat vlastní pravidla."
+
+#: src/Form/CustomRulesPage.php:143 src/Form/CustomRulesPage.php:174
+msgid "Custom Rules"
+msgstr "Vlastní pravidla"
+
+#: src/Form/CustomRulesPage.php:146
+msgid "Custom rules are a CSA feature. Activate CSA to add and edit rules; existing rules remain stored and become editable again on reactivation."
+msgstr "Vlastní pravidla jsou funkce CSA. Aktivujte CSA, abyste mohli přidávat a upravovat pravidla; stávající pravidla zůstanou uložena a po opětovné aktivaci budou opět editovatelná."
+
+#: src/Form/CustomRulesPage.php:176 src/Form/NetworkCustomRulesPage.php:136
+msgid "Add New"
+msgstr "Přidat nové"
+
+#: src/Form/CustomRulesPage.php:181
+msgid "Each rule pairs a CSS selector (and/or text-content match) with an alert shown to users. Rules ship over the cached static config alongside built-in tests."
+msgstr "Každé pravidlo páruje CSS selektor (a/nebo shodu textového obsahu) s upozorněním zobrazeným uživatelům. Pravidla jsou doručována přes statickou konfiguraci spolu s vestavěnými testy."
+
+#: src/Form/CustomRulesPage.php:191 src/Form/NetworkCustomRulesPage.php:151
+msgid "Test"
+msgstr "Test"
+
+#: src/Form/CustomRulesPage.php:192
+msgid "Source"
+msgstr "Zdroj"
+
+#: src/Form/CustomRulesPage.php:193 src/Form/NetworkCustomRulesPage.php:152
+msgid "Elements"
+msgstr "Prvky"
+
+#: src/Form/CustomRulesPage.php:201
+msgid "No custom rules defined yet."
+msgstr "Zatím nejsou definována žádná vlastní pravidla."
+
+#: src/Form/CustomRulesPage.php:202 src/Form/NetworkCustomRulesPage.php:162
+msgid "Add your first rule"
+msgstr "Přidejte první pravidlo"
+
+#: src/Form/CustomRulesPage.php:239
+msgid "Active (enforced)"
+msgstr "Aktivní (vynuceno)"
+
+#: src/Form/CustomRulesPage.php:241
+msgid "Disabled on this site"
+msgstr "Zakázáno na tomto webu"
+
+#: src/Form/CustomRulesPage.php:243
+msgid "Overridden by a site rule with the same ID"
+msgstr "Přepsáno pravidlem webu se stejným ID"
+
+#: src/Form/CustomRulesPage.php:245 src/Form/CustomRulesPage.php:304
+#: src/Form/CustomRulesPage.php:600 src/Form/CustomRulesPage.php:604
+#: src/Form/NetworkCustomRulesPage.php:176 src/Form/SettingsFields.php:786
+msgid "Active"
+msgstr "Aktivní"
+
+#: src/Form/CustomRulesPage.php:248
+msgid "Disabled in network defaults"
+msgstr "Zakázáno ve výchozích nastaveních sítě"
+
+#: src/Form/CustomRulesPage.php:252
+msgid "From network (locked)"
+msgstr "Ze sítě (zamčeno)"
+
+#: src/Form/CustomRulesPage.php:253
+msgid "From network"
+msgstr "Ze sítě"
+
+#: src/Form/CustomRulesPage.php:256
+msgid "Enable on this site"
+msgstr "Aktivovat na tomto webu"
+
+#: src/Form/CustomRulesPage.php:257
+msgid "Disable on this site"
+msgstr "Zakázat na tomto webu"
+
+#: src/Form/CustomRulesPage.php:277
+msgid "Locked by network admin"
+msgstr "Zamčeno správcem sítě"
+
+#: src/Form/CustomRulesPage.php:305 src/Form/NetworkCustomRulesPage.php:177
+msgid "Disabled"
+msgstr "Zakázáno"
+
+#: src/Form/CustomRulesPage.php:322
+msgid "This site"
+msgstr "Tento web"
+
+#: src/Form/CustomRulesPage.php:353
+msgid "No matching network rule found to toggle."
+msgstr "Nebylo nalezeno žádné odpovídající síťové pravidlo k přepnutí."
+
+#: src/Form/CustomRulesPage.php:360
+msgid "This rule is locked by the network admin and cannot be disabled per-site."
+msgstr "Toto pravidlo je zamčeno správcem sítě a nelze ho zakázat pro jednotlivé weby."
+
+#: src/Form/CustomRulesPage.php:369
+msgid "Network rule disabled on this site."
+msgstr "Síťové pravidlo bylo na tomto webu zakázáno."
+
+#: src/Form/CustomRulesPage.php:370
+msgid "Network rule re-enabled on this site."
+msgstr "Síťové pravidlo bylo na tomto webu znovu aktivováno."
+
+#: src/Form/CustomRulesPage.php:398
+msgid "(text match only)"
+msgstr "(pouze shoda textu)"
+
+#: src/Form/CustomRulesPage.php:435
+msgid "Custom rule not found"
+msgstr "Vlastní pravidlo nebylo nalezeno"
+
+#: src/Form/CustomRulesPage.php:438
+msgid "Return to the rules list"
+msgstr "Zpět na seznam pravidel"
+
+#: src/Form/CustomRulesPage.php:483
+msgid "Edit custom rule"
+msgstr "Upravit vlastní pravidlo"
+
+#: src/Form/CustomRulesPage.php:484 src/Form/SettingsFields.php:247
+msgid "Add custom rule"
+msgstr "Přidat vlastní pravidlo"
+
+#: src/Form/CustomRulesPage.php:489
+msgid "All custom rules"
+msgstr "Všechna vlastní pravidla"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Save rule"
+msgstr "Uložit pravidlo"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Create rule"
+msgstr "Vytvořit pravidlo"
+
+#: src/Form/CustomRulesPage.php:507
+msgid "Delete this custom rule?"
+msgstr "Smazat toto vlastní pravidlo?"
+
+#: src/Form/CustomRulesPage.php:508 src/Form/NetworkCustomRulesPage.php:295
+msgid "Delete"
+msgstr "Smazat"
+
+#: src/Form/CustomRulesPage.php:551
+msgid "Admin label for the configuration page"
+msgstr "Administrátorský popisek pro stránku konfigurace"
+
+#: src/Form/CustomRulesPage.php:564
+msgid "Test grouping ID"
+msgstr "ID skupiny testů"
+
+#: src/Form/CustomRulesPage.php:576
+msgid "Letters, numbers and underscores only.<br>Rules that share an ID will be grouped on dashboard reports."
+msgstr "Pouze písmena, číslice a podtržítka.<br>Pravidla se stejným ID budou seskupena ve zprávách přehledu."
+
+#: src/Form/CustomRulesPage.php:585
+msgid "Machine name"
+msgstr "Strojový název"
+
+#: src/Form/CustomRulesPage.php:595
+msgid "Lowercase letters, digits, and underscores only. Cannot be changed after creation."
+msgstr "Pouze malá písmena, číslice a podtržítka. Po vytvoření nelze změnit."
+
+#: src/Form/CustomRulesPage.php:609
+msgid "Disabled rules stay in network storage but are not sent to any site."
+msgstr "Zakázaná pravidla zůstávají uložena v síti, ale nejsou odesílána žádnému webu."
+
+#: src/Form/CustomRulesPage.php:611
+msgid "Disabled rules stay in storage but are not sent to the browser."
+msgstr "Zakázaná pravidla zůstanou uložena, ale nejsou odesílána do prohlížeče."
+
+#: src/Form/CustomRulesPage.php:619 src/Form/NetworkCustomRulesPage.php:153
+msgid "Lock"
+msgstr "Zamknout"
+
+#: src/Form/CustomRulesPage.php:623
+msgid "Lock this rule across the network"
+msgstr "Zamknout toto pravidlo v celé síti"
+
+#: src/Form/CustomRulesPage.php:627
+msgid "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favor of this one. Unlocked rules can be disabled per-site."
+msgstr "Zamčená pravidla jsou vynucena na každém webu: správci jednotlivých webů je nemohou zakázat a pravidlo webu se stejným ID je potlačeno ve prospěch tohoto. Nezamčená pravidla lze na jednotlivých webech zakázat."
+
+#: src/Form/CustomRulesPage.php:639
+msgid "Alert content"
+msgstr "Obsah upozornění"
+
+#: src/Form/CustomRulesPage.php:643
+msgid "Tip title"
+msgstr "Nadpis tipu"
+
+#: src/Form/CustomRulesPage.php:654
+msgid "Tip details"
+msgstr "Podrobnosti tipu"
+
+#. translators: %s is the comma-separated list of allowed HTML tags.
+#: src/Form/CustomRulesPage.php:663
+#, php-format
+msgid "HTML displayed in the tooltip. The provided template is optional.<br>Allowed tags: %s."
+msgstr "HTML zobrazené v nástrojovém tipu. Poskytnutá šablona je nepovinná.<br>Povolené značky: %s."
+
+#: src/Form/CustomRulesPage.php:677
+msgid "Alert type"
+msgstr "Typ upozornění"
+
+#: src/Form/CustomRulesPage.php:682
+msgid "Error"
+msgstr "Chyba"
+
+#: src/Form/CustomRulesPage.php:685
+msgid "Manual check"
+msgstr "Ruční kontrola"
+
+#: src/Form/CustomRulesPage.php:691
+msgid "Dismiss key"
+msgstr "Klíč zamítnutí"
+
+#: src/Form/CustomRulesPage.php:696
+msgid "Text content"
+msgstr "Textový obsah"
+
+#: src/Form/CustomRulesPage.php:699
+msgid "Attributes on tag (e.g. href and src)"
+msgstr "Atributy značky (např. href a src)"
+
+#: src/Form/CustomRulesPage.php:703
+msgid "How dismissals are tracked. 'Text content' uses the text inside the element, 'Attributes on tag' uses its attributes (href, id, class, src)."
+msgstr "Způsob sledování zamítnutí. „Textový obsah“ používá text uvnitř prvku, „Atributy značky“ používá atributy značky (href, id, class, src)."
+
+#: src/Form/CustomRulesPage.php:712
+msgid "Elements to check"
+msgstr "Prvky ke kontrole"
+
+#: src/Form/CustomRulesPage.php:715
+msgid "These sets contain elements that match your check area and skip over configuration."
+msgstr "Tyto sady obsahují prvky, které odpovídají oblasti kontroly a přeskočí konfiguraci."
+
+#: src/Form/CustomRulesPage.php:724
+msgid "Common choices"
+msgstr "Časté volby"
+
+#: src/Form/CustomRulesPage.php:728
+msgid "All text elements: Headings, Paragraphs, Blockquotes and Lists"
+msgstr "Všechny textové prvky: Nadpisy, Odstavce, Blokové citace a Seznamy"
+
+#: src/Form/CustomRulesPage.php:729 src/TestNames.php:378
+msgid "Links"
+msgstr "Odkazy"
+
+#: src/Form/CustomRulesPage.php:730
+msgid "Paragraphs"
+msgstr "Odstavce"
+
+#: src/Form/CustomRulesPage.php:731 src/TestNames.php:381
+msgid "Headings"
+msgstr "Nadpisy"
+
+#: src/Form/CustomRulesPage.php:732 src/TestNames.php:380
+msgid "Images"
+msgstr "Obrázky"
+
+#: src/Form/CustomRulesPage.php:733
+msgid "All elements"
+msgstr "Všechny prvky"
+
+#: src/Form/CustomRulesPage.php:734
+msgid "...other..."
+msgstr "…jiné…"
+
+#: src/Form/CustomRulesPage.php:739
+msgid "Specific elements and combinations"
+msgstr "Konkrétní prvky a kombinace"
+
+#: src/Form/CustomRulesPage.php:751
+msgid "Note: combining Links with Paragraphs and other text containers can lead to duplicate alerts."
+msgstr "Poznámka: kombinace Odkazů s Odstavci a dalšími textovými kontejnery může vést k duplicitním upozorněním."
+
+#: src/Form/CustomRulesPage.php:761
+msgid "When tip should appear"
+msgstr "Kdy se má tip zobrazit"
+
+#: src/Form/CustomRulesPage.php:764
+msgid "This test builder allows for simple text and attribute tests."
+msgstr "Tento nástroj pro sestavení testu umožňuje jednoduché testy textu a atributů."
+
+#: src/Form/CustomRulesPage.php:773
+msgid "Select by attributes"
+msgstr "Vybrat podle atributů"
+
+#: src/Form/CustomRulesPage.php:783
+msgid "Match using CSS selectors.<br>Use :not() to skip elements, e.g. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Use attribute selectors for URLs, e.g. <code>[href*=\".dev/\"]</code>."
+msgstr "Shoda pomocí CSS selektorů.<br>Pomocí :not() přeskočte prvky, např. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Pro URL používejte selektory atributů, např. <code>[href*=\".dev/\"]</code>."
+
+#: src/Form/CustomRulesPage.php:795
+msgid "Select by text"
+msgstr "Vybrat podle textu"
+
+#: src/Form/CustomRulesPage.php:800
+msgid "Flag elements containing any of these text strings. One per line."
+msgstr "Označte prvky obsahující kterýkoli z těchto textových řetězců. Jeden na řádek."
+
+#: src/Form/CustomRulesPage.php:805 src/Form/CustomRulesPage.php:809
+msgid "Case sensitive"
+msgstr "Rozlišovat velikost písmen"
+
+#: src/Form/CustomRulesPage.php:815
+msgid "Exclude elements that match this text"
+msgstr "Vyloučit prvky, které odpovídají tomuto textu"
+
+#: src/Form/CustomRulesPage.php:820
+msgid "Don't flag elements if they contain any of these words or phrases. E.g., a link to a development server is ok if it contains \"dev.\" One per line."
+msgstr "Neoznačujte prvky, pokud obsahují některé z těchto slov nebo frází. Např. odkaz na vývojový server je v pořádku, pokud obsahuje „dev“. Jeden na řádek."
+
+#: src/Form/CustomRulesPage.php:952
+msgid "Custom rule saved."
+msgstr "Vlastní pravidlo bylo uloženo."
+
+#: src/Form/CustomRulesPage.php:1041
+msgid "No matching custom rule found to delete."
+msgstr "Nebylo nalezeno žádné odpovídající vlastní pravidlo ke smazání."
+
+#: src/Form/CustomRulesPage.php:1048
+msgid "Custom rule deleted."
+msgstr "Vlastní pravidlo bylo smazáno."
+
+#: src/Form/MigrationPanel.php:77
+msgid "Editoria11y needs to update its database tables."
+msgstr "Editoria11y potřebuje aktualizovat databázové tabulky."
+
+#: src/Form/MigrationPanel.php:81
+msgid "Editoria11y database update encountered an error during finalization."
+msgstr "Aktualizace databáze Editoria11y narazila na chybu při finalizaci."
+
+#: src/Form/MigrationPanel.php:82
+msgid "Editoria11y is updating existing dismissal records in the background."
+msgstr "Editoria11y aktualizuje stávající záznamy zamítnutí na pozadí."
+
+#: src/Form/MigrationPanel.php:85
+msgid "Editoria11y database update failed and writes are paused."
+msgstr "Aktualizace databáze Editoria11y selhala a zápisy jsou pozastaveny."
+
+#: src/Form/MigrationPanel.php:94
+msgid "Open Editoria11y settings"
+msgstr "Otevřít nastavení Editoria11y"
+
+#: src/Form/MigrationPanel.php:121
+msgid "Update failed. Please retry."
+msgstr "Aktualizace selhala. Zkuste to znovu."
+
+#. translators: 1: number of legacy dismissals already migrated, 2: total count detected at start.
+#: src/Form/MigrationPanel.php:123
+#, php-format
+msgid "Migrating dismissals: %1$d of %2$d processed."
+msgstr "Migrace zamítnutí: zpracováno %1$d z %2$d."
+
+#: src/Form/MigrationPanel.php:124
+msgid "Database update complete."
+msgstr "Aktualizace databáze byla dokončena."
+
+#: src/Form/MigrationPanel.php:125
+msgid "Working…"
+msgstr "Pracuji…"
+
+#: src/Form/MigrationPanel.php:126
+msgid "A previous update attempt did not finish."
+msgstr "Předchozí pokus o aktualizaci nebyl dokončen."
+
+#: src/Form/MigrationPanel.php:127
+msgid "A schema update is required."
+msgstr "Je vyžadována aktualizace schématu."
+
+#: src/Form/MigrationPanel.php:128
+msgid "Background data update is in progress. Click below to drive it to completion now."
+msgstr "Na pozadí probíhá aktualizace dat. Kliknutím níže ji nyní dokončete."
+
+#: src/Form/MigrationPanel.php:132
+msgid "Editoria11y database update"
+msgstr "Editoria11y – aktualizace databáze"
+
+#: src/Form/MigrationPanel.php:134
+msgid "Checking schema state…"
+msgstr "Kontrola stavu schématu…"
+
+#: src/Form/MigrationPanel.php:138
+msgid "Run update now"
+msgstr "Spustit aktualizaci nyní"
+
+#: src/Form/MigrationPanel.php:141
+msgid "Retry"
+msgstr "Opakovat"
+
+#: src/Form/MigrationPanel.php:268 src/Form/NetworkLicensePage.php:196
+msgid "Insufficient permissions."
+msgstr "Nedostatečná oprávnění."
+
+#: src/Form/NetworkCustomRulesPage.php:70
+#: src/Form/NetworkCustomRulesPage.php:71
+#: src/Form/NetworkCustomRulesPage.php:114
+msgid "Editoria11y network custom rules"
+msgstr "Editoria11y – vlastní pravidla sítě"
+
+#: src/Form/NetworkCustomRulesPage.php:107
+#: src/Form/NetworkCustomRulesPage.php:311
+#: src/Form/NetworkCustomRulesPage.php:384 src/Form/NetworkSettingsPage.php:154
+#: src/Form/NetworkSettingsPage.php:511
+msgid "Insufficient privileges."
+msgstr "Nedostatečná oprávnění."
+
+#: src/Form/NetworkCustomRulesPage.php:134
+msgid "Network custom rules"
+msgstr "Vlastní pravidla sítě"
+
+#: src/Form/NetworkCustomRulesPage.php:141
+msgid "Rules defined here apply to every site on the network. Locked rules cannot be disabled per-site."
+msgstr "Pravidla definovaná zde platí pro každý web v síti. Zamčená pravidla nelze na jednotlivých webech zakázat."
+
+#: src/Form/NetworkCustomRulesPage.php:161
+msgid "No network rules defined yet."
+msgstr "Zatím nejsou definována žádná síťová pravidla."
+
+#: src/Form/NetworkCustomRulesPage.php:179
+msgid "Locked"
+msgstr "Zamčeno"
+
+#: src/Form/NetworkCustomRulesPage.php:180
+msgid "Unlocked"
+msgstr "Nezamčeno"
+
+#: src/Form/NetworkCustomRulesPage.php:224
+msgid "Network rule not found"
+msgstr "Síťové pravidlo nebylo nalezeno"
+
+#: src/Form/NetworkCustomRulesPage.php:227
+msgid "Return to the network rules list"
+msgstr "Zpět na seznam síťových pravidel"
+
+#: src/Form/NetworkCustomRulesPage.php:270
+msgid "Edit network custom rule"
+msgstr "Upravit vlastní pravidlo sítě"
+
+#: src/Form/NetworkCustomRulesPage.php:271 src/Form/SettingsFields.php:210
+msgid "Add network custom rule"
+msgstr "Přidat vlastní pravidlo sítě"
+
+#: src/Form/NetworkCustomRulesPage.php:276
+msgid "All network rules"
+msgstr "Všechna síťová pravidla"
+
+#: src/Form/NetworkCustomRulesPage.php:294
+msgid "Delete this network rule? Every site on the network will stop receiving it."
+msgstr "Smazat toto síťové pravidlo? Každý web v síti přestane pravidlo dostávat."
+
+#: src/Form/NetworkCustomRulesPage.php:369
+msgid "Network custom rule saved."
+msgstr "Vlastní pravidlo sítě bylo uloženo."
+
+#: src/Form/NetworkCustomRulesPage.php:395
+msgid "No matching network rule found to delete."
+msgstr "Nebylo nalezeno žádné odpovídající síťové pravidlo ke smazání."
+
+#: src/Form/NetworkCustomRulesPage.php:402
+msgid "Network custom rule deleted."
+msgstr "Vlastní pravidlo sítě bylo smazáno."
+
+#: src/Form/NetworkDefaultsWorker.php:478
+msgid "Tests + roles assignment"
+msgstr "Přiřazení testů a rolí"
+
+#: src/Form/NetworkLicensePage.php:58 src/Form/NetworkLicensePage.php:59
+msgid "Editoria11y license"
+msgstr "Editoria11y – licence"
+
+#: src/Form/NetworkLicensePage.php:83 src/FreemiusAccessControl.php:283
+msgid "Only network administrators can manage the Editoria11y license."
+msgstr "Licenci Editoria11y mohou spravovat pouze správci sítě."
+
+#: src/Form/NetworkLicensePage.php:94
+msgid "Starting…"
+msgstr "Spouštím…"
+
+#: src/Form/NetworkLicensePage.php:95
+msgid "Cancelling…"
+msgstr "Ruším…"
+
+#: src/Form/NetworkLicensePage.php:96
+msgid "Resetting…"
+msgstr "Resetuji…"
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:98
+#, php-format
+msgid "Activated %1$d of %2$d sites."
+msgstr "Aktivováno %1$d z %2$d webů."
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:100
+#, php-format
+msgid "Deactivated %1$d of %2$d sites."
+msgstr "Deaktivováno %1$d z %2$d webů."
+
+#: src/Form/NetworkLicensePage.php:101
+msgid "License activated on every site in the network."
+msgstr "Licence byla aktivována na každém webu v síti."
+
+#: src/Form/NetworkLicensePage.php:102
+msgid "License deactivated on every site in the network."
+msgstr "Licence byla deaktivována na každém webu v síti."
+
+#: src/Form/NetworkLicensePage.php:103
+msgid "Activation cancelled. Already-activated sites keep their license."
+msgstr "Aktivace byla zrušena. Weby, které již byly aktivovány, si svou licenci zachovají."
+
+#: src/Form/NetworkLicensePage.php:104
+msgid "Deactivation cancelled. Already-deactivated sites stay deactivated."
+msgstr "Deaktivace byla zrušena. Weby, které již byly deaktivovány, zůstávají deaktivovány."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:106
+#, php-format
+msgid "Activation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Aktivace skončila s %d weby v chybovém stavu. Prohlédněte si níže uvedený seznam a po odstranění příčiny akci opakujte."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:108
+#, php-format
+msgid "Deactivation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Deaktivace skončila s %d weby v chybovém stavu. Prohlédněte si níže uvedený seznam a po odstranění příčiny akci opakujte."
+
+#: src/Form/NetworkLicensePage.php:109
+msgid "An unknown error occurred."
+msgstr "Došlo k neznámé chybě."
+
+#. translators: The <a>…</a> tags mark the phrase that will be rendered as a link to https://editoria11y.com/license. Keep the tags around the equivalent phrase in your language; do not add an href.
+#: src/Form/NetworkLicensePage.php:111
+msgid "Paste your <a>Editoria11y CSA license key</a> to begin."
+msgstr "Vložte svůj <a>licenční klíč Editoria11y CSA</a> a začněte."
+
+#: src/Form/NetworkLicensePage.php:112
+msgid "Deactivate the Editoria11y CSA license on every site in this network? Each site's license slot will be returned to your Freemius account."
+msgstr "Deaktivovat licenci Editoria11y CSA na každém webu v této síti? Licenční slot každého webu bude vrácen na váš účet Freemius."
+
+#: src/Form/NetworkLicensePage.php:113
+msgid "Activate a license network-wide"
+msgstr "Aktivovat licenci v celé síti"
+
+#: src/Form/NetworkLicensePage.php:114
+msgid "Deactivate licenses network-wide"
+msgstr "Deaktivovat licence v celé síti"
+
+#: src/Form/NetworkLicensePage.php:115
+msgid "Activation in progress"
+msgstr "Probíhá aktivace"
+
+#: src/Form/NetworkLicensePage.php:116
+msgid "Deactivation in progress"
+msgstr "Probíhá deaktivace"
+
+#: src/Form/NetworkLicensePage.php:120
+msgid "Editoria11y CSA license"
+msgstr "Editoria11y CSA – licence"
+
+#: src/Form/NetworkLicensePage.php:123
+msgid "Background licensing tasks run slowly via WP-Cron; leave this page open to run a batch every 15 seconds."
+msgstr "Úlohy licencování na pozadí běží přes WP-Cron pomalu; ponechte tuto stránku otevřenou, aby se každých 15 sekund spustila jedna dávka."
+
+#: src/Form/NetworkLicensePage.php:138
+msgid "JavaScript is required to use this page."
+msgstr "Pro použití této stránky je vyžadován JavaScript."
+
+#: src/Form/NetworkLicensePage.php:171
+msgid "DISABLE_WP_CRON is enabled on this site. The activation worker depends on WP-Cron firing — make sure your system cron is hitting wp-cron.php, or activation will not progress."
+msgstr "Na tomto webu je povolena konstanta DISABLE_WP_CRON. Aktivační proces závisí na spouštění WP-Cron – ověřte, že váš systémový cron volá wp-cron.php, jinak aktivace nepostoupí."
+
+#: src/Form/NetworkLicensePage.php:347
+msgid "Activate on every site in this network"
+msgstr "Aktivovat na každém webu v této síti"
+
+#: src/Form/NetworkLicensePage.php:378
+msgid "License key"
+msgstr "Licenční klíč"
+
+#: src/Form/NetworkLicensePage.php:389
+msgid "Deactivate license network-wide"
+msgstr "Deaktivovat licenci v celé síti"
+
+#: src/Form/NetworkLicensePage.php:401
+msgid "Removes the Editoria11y CSA license from every site on the network. Each site's install record stays in place; only the license link is cleared."
+msgstr "Odstraní licenci Editoria11y CSA ze všech webů v síti. Záznam instalace každého webu zůstane zachován; vymaže se pouze propojení s licencí."
+
+#: src/Form/NetworkLicensePage.php:460
+msgid "Retry failed sites"
+msgstr "Opakovat pro weby s chybou"
+
+#: src/Form/NetworkLicensePage.php:473
+msgid "Modify network license"
+msgstr "Upravit síťovou licenci"
+
+#: src/Form/NetworkLicensePage.php:492
+msgid "Back"
+msgstr "Zpět"
+
+#: src/Form/NetworkLicensePage.php:503
+msgid "Done"
+msgstr "Hotovo"
+
+#: src/Form/NetworkLicensePage.php:510
+msgid "Cancelled"
+msgstr "Zrušeno"
+
+#: src/Form/NetworkLicensePage.php:518
+msgid "Errors"
+msgstr "Chyby"
+
+#: src/Form/NetworkLicenseWorker.php:392
+msgid "License key is required."
+msgstr "Licenční klíč je povinný."
+
+#: src/Form/NetworkLicenseWorker.php:400 src/Form/NetworkLicenseWorker.php:456
+msgid "An activation run is already in progress."
+msgstr "Aktivace již probíhá."
+
+#: src/Form/NetworkLicenseWorker.php:528
+msgid "No previous errors to retry."
+msgstr "Nejsou žádné předchozí chyby k opakování."
+
+#: src/Form/NetworkLicenseWorker.php:538
+msgid "License key is no longer stored. Start a new activation."
+msgstr "Licenční klíč již není uložen. Zahajte novou aktivaci."
+
+#: src/Form/NetworkLicenseWorker.php:626
+msgid "Freemius SDK wrapper unavailable."
+msgstr "Wrapper Freemius SDK není dostupný."
+
+#: src/Form/NetworkLicenseWorker.php:803
+msgid "SDK _deactivate_license() method unavailable."
+msgstr "Metoda SDK _deactivate_license() není dostupná."
+
+#: src/Form/NetworkLicenseWorker.php:853
+msgid "Deactivation API call did not clear the install license."
+msgstr "Volání API pro deaktivaci nevymazalo licenci instalace."
+
+#: src/Form/NetworkLicenseWorker.php:947
+msgid "No valid sites in batch."
+msgstr "V dávce nejsou žádné platné weby."
+
+#: src/Form/NetworkLicenseWorker.php:1053
+msgid "Activation API returned an unspecified error."
+msgstr "Aktivační API vrátilo nespecifikovanou chybu."
+
+#: src/Form/NetworkLicenseWorker.php:1055
+msgid "Install record not created after API call."
+msgstr "Záznam instalace nebyl vytvořen po volání API."
+
+#: src/Form/NetworkSettingsPage.php:77 src/Form/NetworkSettingsPage.php:78
+msgid "Editoria11y defaults"
+msgstr "Editoria11y – výchozí nastavení"
+
+#: src/Form/NetworkSettingsPage.php:103
+msgid "Defaults"
+msgstr "Výchozí hodnoty"
+
+#: src/Form/NetworkSettingsPage.php:110 src/Form/SettingsPage.php:287
+msgid "Custom rules"
+msgstr "Vlastní pravidla"
+
+#: src/Form/NetworkSettingsPage.php:140
+msgid "Heads up: \"Default for all sites\" and \"Override for all sites\" overwrite a site's current value whenever that value is still an Editoria11y default or a previous network default — including a per-site value that happens to match a default."
+msgstr "Pozor: „Výchozí pro všechny weby“ a „Přepsat pro všechny weby“ přepíšou aktuální hodnotu webu vždy, když je tato hodnota stále výchozí hodnotou Editoria11y nebo předchozí výchozí hodnotou sítě – včetně hodnoty jednotlivého webu, která výchozí hodnotě jen náhodou odpovídá."
+
+#: src/Form/NetworkSettingsPage.php:176
+msgid "Editoria11y default or locked network settings"
+msgstr "Editoria11y – výchozí nebo zamčená síťová nastavení"
+
+#: src/Form/NetworkSettingsPage.php:180
+msgid "Network defaults saved."
+msgstr "Výchozí nastavení sítě byla uložena."
+
+#: src/Form/NetworkSettingsPage.php:186
+msgid "Network defaults were not saved."
+msgstr "Výchozí nastavení sítě nebyla uložena."
+
+#: src/Form/NetworkSettingsPage.php:187
+msgid "You changed the following settings, but their propagation dropdown is still set to \"No network default\" — your change would not reach any site. Set the dropdown to \"Default for new sites\", \"Default for all sites\", or \"Override for all sites\" — or revert the value — and save again."
+msgstr "Změnili jste následující nastavení, ale jejich rozevírací nabídka šíření je stále nastavena na „Bez výchozí hodnoty sítě“ – vaše změna by se nedostala na žádný web. Nastavte rozevírací nabídku na „Výchozí pro nové weby“, „Výchozí pro všechny weby“ nebo „Přepsat pro všechny weby“ – nebo hodnotu vraťte zpět – a uložte znovu."
+
+#: src/Form/NetworkSettingsPage.php:213
+msgid "Save network defaults"
+msgstr "Uložit výchozí nastavení sítě"
+
+#. translators: 1: processed sites, 2: total sites, 3: sites updated
+#: src/Form/NetworkSettingsPage.php:311
+#, php-format
+msgid "%1$s of %2$s sites visited (%3$s updated)."
+msgstr "Navštíveno %1$s z %2$s webů (%3$s aktualizováno)."
+
+#. translators: %s: human-readable duration estimate
+#: src/Form/NetworkSettingsPage.php:327
+#, php-format
+msgid "Estimated %s remaining."
+msgstr "Odhadovaný zbývající čas: %s."
+
+#. translators: %s: number of errors recorded
+#: src/Form/NetworkSettingsPage.php:340
+#, php-format
+msgid "Errors: %s (most recent retained). Check server logs for details."
+msgstr "Chyby: %s (zachovány nejnovější). Podrobnosti najdete v protokolech serveru."
+
+#: src/Form/NetworkSettingsPage.php:349
+msgid "Saving the form now will restart propagation with the new settings."
+msgstr "Uložením formuláře nyní se šíření restartuje s novými nastaveními."
+
+#: src/Form/NetworkSettingsPage.php:412
+msgid "Propagating network defaults to existing sites…"
+msgstr "Šíření výchozích nastavení sítě do stávajících webů…"
+
+#: src/Form/NetworkSettingsPage.php:415
+msgid "Network defaults propagated."
+msgstr "Výchozí nastavení sítě byla rozšířena."
+
+#: src/Form/NetworkSettingsPage.php:418
+msgid "Network defaults propagation failed."
+msgstr "Šíření výchozích nastavení sítě selhalo."
+
+#: src/Form/NetworkSettingsPage.php:421
+msgid "Network defaults propagation idle."
+msgstr "Šíření výchozích nastavení sítě je nečinné."
+
+#: src/Form/SettingsContext.php:214
+msgid "Managed at the network level"
+msgstr "Spravováno na úrovni sítě"
+
+#: src/Form/SettingsContext.php:283 src/Form/SettingsContext.php:318
+msgid "— No network default —"
+msgstr "— Bez výchozí hodnoty sítě —"
+
+#: src/Form/SettingsContext.php:284 src/Form/SettingsContext.php:319
+msgid "Default for new sites"
+msgstr "Výchozí pro nové weby"
+
+#: src/Form/SettingsContext.php:285 src/Form/SettingsContext.php:320
+msgid "Default for all sites (skip custom values)"
+msgstr "Výchozí pro všechny weby (přeskočit vlastní hodnoty)"
+
+#: src/Form/SettingsContext.php:286 src/Form/SettingsContext.php:321
+msgid "Override for all sites (delete custom values)"
+msgstr "Přepsat pro všechny weby (odstranit vlastní hodnoty)"
+
+#: src/Form/SettingsContext.php:326
+msgid "Propagation"
+msgstr "Šíření"
+
+#: src/Form/SettingsFields.php:68
+msgid "Include all parts of the page that contain your theme and content."
+msgstr "Zahrněte všechny části stránky, které obsahují váš motiv a obsah."
+
+#: src/Form/SettingsFields.php:69
+msgid "Exclude elements that show unhelpful, repetitive, or inaccurate alerts."
+msgstr "Vyloučte prvky, které zobrazují neužitečná, opakující se nebo nepřesná upozornění."
+
+#: src/Form/SettingsFields.php:71
+msgid "If you need help:"
+msgstr "Pokud potřebujete pomoc:"
+
+#: src/Form/SettingsFields.php:72
+msgid "Configuration Guide"
+msgstr "Průvodce konfigurací"
+
+#: src/Form/SettingsFields.php:73
+msgid "Issue Queue"
+msgstr "Fronta problémů"
+
+#: src/Form/SettingsFields.php:74
+msgid "Support contacts"
+msgstr "Kontakty podpory"
+
+#: src/Form/SettingsFields.php:84
+msgid "Define the parts of each page Editoria11y checks. Activating CSA unlocks an additional \"developer area\" superset that runs more checks and routes alerts to the roles you choose."
+msgstr "Definujte části každé stránky, které Editoria11y kontroluje. Aktivací CSA se odemkne doplňková nadmnožina „vývojářské oblasti“, která provádí více kontrol a směruje upozornění na vámi zvolené role."
+
+#: src/Form/SettingsFields.php:98
+msgid "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licenses can split tests between roles."
+msgstr "Tyto testy odhalují problémy, které mohou opravit editoři obsahu. Jednotlivé kontroly lze vypnout; weby s licencí CSA mohou testy rozdělit mezi role."
+
+#: src/Form/SettingsFields.php:114
+msgid "Apply all the tests and role assignments below to"
+msgstr "Použít všechna níže uvedená přiřazení testů a rolí na"
+
+#: src/Form/SettingsFields.php:123
+msgid "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA license for site administrators and developers."
+msgstr "Tyto testy odhalují problémy, které obvykle vyžadují změny motivu nebo pluginu, a jsou součástí licence CSA pro správce webu a vývojáře."
+
+#: src/Form/SettingsFields.php:133
+msgid "The \"tests + roles assignment\" propagation setting under \"Modify content tests\" above also governs the template-test selection — both are stored together."
+msgstr "Nastavení šíření „přiřazení testů a rolí“ v části „Upravit testy obsahu“ výše řídí také výběr testů šablon – obojí je uloženo společně."
+
+#: src/Form/SettingsFields.php:160
+msgid "Managed at the network level."
+msgstr "Spravováno na úrovni sítě."
+
+#: src/Form/SettingsFields.php:193
+msgid "Network-level custom rules apply to every site in the network."
+msgstr "Vlastní pravidla na úrovni sítě platí pro každý web v síti."
+
+#. translators: %d is the number of network custom rules defined (active + inactive).
+#: src/Form/SettingsFields.php:204
+#, php-format
+msgid "Manage network custom rules (%d defined)"
+msgid_plural "Manage network custom rules (%d defined)"
+msgstr[0] "Spravovat vlastní pravidla sítě (%d definováno)"
+msgstr[1] "Spravovat vlastní pravidla sítě (%d definována)"
+msgstr[2] "Spravovat vlastní pravidla sítě (%d definováno)"
+
+#: src/Form/SettingsFields.php:230
+msgid "Define your own accessibility tests. Each rule pairs a CSS selector with a tip shown to users; rules ship over the cached static config alongside the built-in test catalog."
+msgstr "Definujte vlastní testy přístupnosti. Každé pravidlo páruje CSS selektor s tipem zobrazeným uživatelům; pravidla jsou doručována přes statickou konfiguraci spolu s vestavěným katalogem testů."
+
+#. translators: %d is the number of custom rules active on this site (per-site rules plus network rules not disabled here).
+#: src/Form/SettingsFields.php:241
+#, php-format
+msgid "Manage custom rules (%d active)"
+msgid_plural "Manage custom rules (%d active)"
+msgstr[0] "Spravovat vlastní pravidla (%d aktivní)"
+msgstr[1] "Spravovat vlastní pravidla (%d aktivní)"
+msgstr[2] "Spravovat vlastní pravidla (%d aktivních)"
+
+#: src/Form/SettingsFields.php:257
+msgid "Custom rules let CSA admins register additional accessibility tests with their own selectors, labels, and tip content. Activate CSA to manage them here."
+msgstr "Vlastní pravidla umožňují správcům CSA registrovat další testy přístupnosti s vlastními selektory, popisky a obsahem tipů. Aktivujte CSA, abyste je zde mohli spravovat."
+
+#: src/Form/SettingsFields.php:294
+msgid "Choose when the control panel should open and show inline tips. \"Start open if there are any alerts\" is recommended, as it helps tips get noticed over time."
+msgstr "Zvolte, kdy se má ovládací panel otevírat a zobrazovat vložené tipy. Doporučuje se možnost „Otevřít při jakýchkoli upozorněních“, protože pomáhá, aby si uživatelé tipů postupně všimli."
+
+#: src/Form/SettingsFields.php:312
+msgid "Choose whether to show inline tips while editing post and page content. The checker always hides while editing templates and layouts."
+msgstr "Zvolte, zda zobrazovat vložené tipy při úpravách obsahu příspěvků a stránek. Kontrola se při úpravách šablon a rozvržení vždy skrývá."
+
+#: src/Form/SettingsFields.php:333
+msgid "Provide CSS selectors. Content authors will only see the alerts within these parts of the page. Do not provide selectors that nest within each other, or the inner content will be checked twice."
+msgstr "Zadejte CSS selektory. Autoři obsahu uvidí upozornění pouze v těchto částech stránky. Nezadávejte selektory, které jsou do sebe vnořeny – jinak bude vnitřní obsah kontrolován dvakrát."
+
+#: src/Form/SettingsFields.php:343
+msgid "The default is <code>main</code> or <code>body</code>, depending on theme."
+msgstr "Výchozí hodnota je <code>main</code> nebo <code>body</code> podle motivu."
+
+#: src/Form/SettingsFields.php:365
+msgid ""
+"If Editoria11y is flagging things editors cannot fix, e.g., theme-generated \"read more\" links or social media widgets,\n"
+"\t\t\t\tprovide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+msgstr ""
+"Pokud Editoria11y označuje věci, které editoři nemohou opravit, např. tématem generované odkazy „číst dál“ nebo widgety sociálních sítí,\n"
+"\t\t\t\tzadejte CSS selektory prvků, které má ignorovat. Buďte konkrétní, např. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+
+#: src/Form/SettingsFields.php:376
+msgid "If you are new at this, start by opening your browser's developer tools, inspecting the element you do not want flagged, and looking for unique-looking CSS selectors."
+msgstr "Pokud s tím začínáte, otevřete vývojářské nástroje prohlížeče, prozkoumejte prvek, který nechcete označovat, a hledejte výrazně unikátní CSS selektory."
+
+#. translators: %s is the built-in list of always-ignored CSS selectors.
+#: src/Form/SettingsFields.php:387
+#, php-format
+msgid "Selectors you add are appended to the built-in list, which is always ignored: %s"
+msgstr "Selektory, které přidáte, se připojí k vestavěnému seznamu, který je vždy ignorován: %s"
+
+#: src/Form/SettingsFields.php:434
+msgid "Set to the number of other themes or plugins that will be injecting custom result JS events. Editoria11y will wait until it receives this number of <code>ed11yResume</code> notifications before showing results."
+msgstr "Nastavte na počet dalších motivů nebo pluginů, které budou vkládat vlastní JS události výsledků. Editoria11y počká, dokud neobdrží tento počet notifikací <code>ed11yResume</code>, a pak zobrazí výsledky."
+
+#: src/Form/SettingsFields.php:457
+msgid "Used to block checking on site sections or admin pages."
+msgstr "Používá se k zablokování kontroly na sekcích webu nebo stránkách administrace."
+
+#: src/Form/SettingsFields.php:485
+msgid "Autodetect"
+msgstr "Autodetekce"
+
+#: src/Form/SettingsFields.php:486
+msgid "Only user-editable content"
+msgstr "Pouze obsah editovatelný uživatelem"
+
+#: src/Form/SettingsFields.php:487
+msgid "Other"
+msgstr "Jiné"
+
+#: src/Form/SettingsFields.php:492
+msgid "Developer scan area"
+msgstr "Oblast skenování pro vývojáře"
+
+#: src/Form/SettingsFields.php:510
+msgid "\"Autodetect\" selects:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+msgstr "„Autodetekce“ vybírá:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+
+#: src/Form/SettingsFields.php:527
+msgid "Specify regions to check"
+msgstr "Určit oblasti ke kontrole"
+
+#: src/Form/SettingsFields.php:542
+msgid "Alerts in these regions will be shown to both developers and editors. One selector per line."
+msgstr "Upozornění v těchto oblastech se zobrazí jak vývojářům, tak editorům. Jeden selektor na řádek."
+
+#: src/Form/SettingsFields.php:574
+msgid "These parts of the page will be ignored entirely."
+msgstr "Tyto části stránky budou zcela ignorovány."
+
+#: src/Form/SettingsFields.php:608
+msgid "Developer roles"
+msgstr "Role vývojářů"
+
+#: src/Form/SettingsFields.php:626
+msgid "Unchecked roles only see content checks."
+msgstr "Nezaškrtnuté role vidí pouze kontroly obsahu."
+
+#: src/Form/SettingsFields.php:649
+msgid "Start open if there are new alerts"
+msgstr "Otevřít při nových upozorněních"
+
+#: src/Form/SettingsFields.php:650
+msgid "Start open if there are any alerts"
+msgstr "Otevřít při jakýchkoli upozorněních"
+
+#: src/Form/SettingsFields.php:651
+msgid "Always start open"
+msgstr "Vždy otevřít"
+
+#: src/Form/SettingsFields.php:652
+msgid "Start minimized"
+msgstr "Spustit minimalizovaně"
+
+#: src/Form/SettingsFields.php:780
+msgid "Rule"
+msgstr "Pravidlo"
+
+#: src/Form/SettingsFields.php:784
+msgid "Show to"
+msgstr "Zobrazit pro"
+
+#: src/Form/SettingsFields.php:825
+msgid "Everyone"
+msgstr "Všichni"
+
+#: src/Form/SettingsFields.php:826
+msgid "Developers only"
+msgstr "Pouze vývojáři"
+
+#: src/Form/SettingsFields.php:827
+msgid "Off"
+msgstr "Vypnuto"
+
+#: src/Form/SettingsFields.php:844
+msgid "(Part of CSA suite)"
+msgstr "(Součást sady CSA)"
+
+#: src/Form/SettingsFields.php:881
+msgid "Remind the editor that these linked documents need a manual check"
+msgstr "Připomenout editorovi, že tyto propojené dokumenty vyžadují ruční kontrolu"
+
+#: src/Form/SettingsFields.php:882
+msgid "Add or remove filetypes. Set to \"false\" to disable the test altogether. Providing any value will override the default."
+msgstr "Přidejte nebo odeberte typy souborů. Nastavte na „false“ pro úplné zakázání testu. Zadání jakékoli hodnoty přepíše výchozí nastavení."
+
+#: src/Form/SettingsFields.php:886
+msgid "Remove elements that match these selectors before testing link text"
+msgstr "Odstraňte prvky odpovídající těmto selektorům před testováním textu odkazu"
+
+#: src/Form/SettingsFields.php:887
+msgid "Provide a CSS selector for elements your themes or plugins programmatically add to links (usually external or open-in-new-window markers), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests."
+msgstr "Zadejte CSS selektor pro prvky, které vaše motivy nebo pluginy programově přidávají k odkazům (obvykle označení externích odkazů nebo odkazů otevírajících se v novém okně), aby mohly být ignorovány při kontrole textu odkazu v testech „odkaz nemá text“ a „text odkazu není smysluplný“."
+
+#: src/Form/SettingsFields.php:891
+msgid "Remove these strings before testing link text"
+msgstr "Odstraňte tyto řetězce před testováním textu odkazu"
+
+#: src/Form/SettingsFields.php:892
+msgid "Provide a pipe-separated (\"|\") list of phrases your themes or plugins programmatically add to links to hint a purpose (external, mail, phone, open-in-new-window), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests; e.g.: (link is external)|(link sends email)."
+msgstr "Zadejte seznam frází oddělených svislítkem („|“), které vaše motivy nebo pluginy programově přidávají k odkazům jako nápovědu účelu (externí, e-mail, telefon, otevřít v novém okně), aby mohly být ignorovány při kontrole textu odkazu v testech „odkaz nemá text“ a „text odkazu není smysluplný“; např.: (odkaz je externí)|(odkaz odesílá e-mail)."
+
+#: src/Form/SettingsFields.php:896
+msgid "Strings in links that indicate new tabs"
+msgstr "Řetězce v odkazech signalizující nové záložky"
+
+#: src/Form/SettingsFields.php:897
+msgid "Provide a pipe-separated list of phrases your site uses to warn users a link opens in a new tab; e.g.: new tab|new window|external."
+msgstr "Zadejte seznam frází oddělených svislítkem, které váš web používá k varování uživatelů, že odkaz se otevírá na nové záložce; např.: new tab|new window|external."
+
+#: src/Form/SettingsFields.php:905
+msgid "Embeds flagged as needing manual review"
+msgstr "Vložené objekty označené jako vyžadující ruční kontrolu"
+
+#: src/Form/SettingsFields.php:906
+msgid "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualizations entirely, disable that test above."
+msgstr "Přidáno k vestavěnému seznamu detekce (Looker/Data Studio, Tableau, Power BI, Qlik). Zadejte seznam domén nebo částí URL oddělených čárkami. Chcete-li zcela zastavit označování vizualizací, zakažte výše uvedený test."
+
+#: src/Form/SettingsFields.php:911
+msgid "Videos flagged as needing a manual check for captions"
+msgstr "Videa označená jako vyžadující ruční kontrolu titulků"
+
+#: src/Form/SettingsFields.php:912
+msgid "Added to the built-in detection list (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard and generic video URLs). Provide a comma-separated list of domains or URL fragments, e.g. yuja.com. To stop flagging videos entirely, disable that test above."
+msgstr "Přidáno k vestavěnému seznamu detekce (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard a obecné URL adresy videí). Zadejte seznam domén nebo částí URL oddělených čárkami, např. yuja.com. Chcete-li zcela zastavit označování videí, zakažte výše uvedený test."
+
+#: src/Form/SettingsFields.php:917
+msgid "Audio flagged as needing a manual check for transcripts"
+msgstr "Zvukové nahrávky označené jako vyžadující ruční kontrolu přepisů"
+
+#: src/Form/SettingsFields.php:918
+msgid "Added to the built-in detection list (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts and other major hosts). Provide a comma-separated list of domains or URL fragments. To stop flagging audio entirely, disable that test above."
+msgstr "Přidáno k vestavěnému seznamu detekce (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts a další velké hostingy). Zadejte seznam domén nebo částí URL oddělených čárkami. Chcete-li zcela zastavit označování zvukových záznamů, zakažte výše uvedený test."
+
+#: src/Form/SettingsFields.php:923
+msgid "Remind editor that content in these embeds needs manual review"
+msgstr "Připomenout editorovi, že obsah v těchto vložených objektech vyžaduje ruční kontrolu"
+
+#: src/Form/SettingsFields.php:924
+msgid "Provide a comma-separated list of selectors you wish to flag for the editor, e.g.: .my-embedded-feed, #my-social-link-block."
+msgstr "Zadejte čárkami oddělený seznam selektorů, které chcete označit pro editora, např.: .my-embedded-feed, #my-social-link-block."
+
+#: src/Form/SettingsFields.php:936
+msgid "Do not check contrast for these elements"
+msgstr "Nekontrolovat kontrast pro tyto prvky"
+
+#: src/Form/SettingsFields.php:949
+msgid "Provide a comma-separated list of selectors for elements to ignore for all users."
+msgstr "Zadejte čárkami oddělený seznam selektorů prvků, které mají být ignorovány pro všechny uživatele."
+
+#: src/Form/SettingsFields.php:978
+msgid "Assertiveness"
+msgstr "Razantnost"
+
+#: src/Form/SettingsFields.php:980
+msgid "Checker mode for content roles"
+msgstr "Režim kontroly pro role obsahu"
+
+#: src/Form/SettingsFields.php:988
+msgid "Checker mode for developer roles"
+msgstr "Režim kontroly pro role vývojářů"
+
+#: src/Form/SettingsFields.php:996
+msgid "Checker mode inside editor"
+msgstr "Režim kontroly uvnitř editoru"
+
+#: src/Form/SettingsFields.php:1002
+msgid "Theme and plugin compatibility"
+msgstr "Kompatibilita motivu a pluginů"
+
+#: src/Form/SettingsFields.php:1004
+msgid "Editoria11y theme"
+msgstr "Motiv Editoria11y"
+
+#: src/Form/SettingsFields.php:1009
+msgid "Pin panel to"
+msgstr "Ukotvit panel k"
+
+#: src/Form/SettingsFields.php:1015
+msgid "Right"
+msgstr "Vpravo"
+
+#: src/Form/SettingsFields.php:1016
+msgid "Left"
+msgstr "Vlevo"
+
+#: src/Form/SettingsFields.php:1022
+msgid "Shift panel position if it overlaps these elements"
+msgstr "Posunout panel, pokud překrývá tyto prvky"
+
+#: src/Form/SettingsFields.php:1023
+msgid "Comma-separated selectors for competing widgets, e.g. .interface-interface-skeleton__sidebar."
+msgstr "Čárkami oddělené selektory pro konkurující widgety, např. .interface-interface-skeleton__sidebar."
+
+#: src/Form/SettingsFields.php:1028
+msgid "Do not check on pages with these elements"
+msgstr "Nekontrolovat na stránkách s těmito prvky"
+
+#: src/Form/SettingsFields.php:1032
+msgid "JS injected custom rules"
+msgstr "Vlastní pravidla vložená přes JS"
+
+#: src/Form/SettingsFields.php:1038
+msgid "Don't show edit links on tips in these containers"
+msgstr "Nezobrazovat odkazy pro úpravy v tipech uvnitř těchto kontejnerů"
+
+#: src/Form/SettingsFields.php:1039
+msgid "Provide a comma-separated list of page sections where edit links should not show. To hide the links everywhere, set this field to an asterisk (*)."
+msgstr "Zadejte čárkami oddělený seznam sekcí stránky, kde se nemají zobrazovat odkazy pro úpravy. Chcete-li je skrýt všude, nastavte toto pole na hvězdičku (*)."
+
+#: src/Form/SettingsFields.php:1058
+msgid "Handling tips on hidden content"
+msgstr "Zpracování tipů na skrytém obsahu"
+
+#: src/Form/SettingsFields.php:1060
+msgid "Warn users if elements might not be visible when jumping to tips"
+msgstr "Varovat uživatele, pokud prvky nemusí být viditelné při přechodu na tipy"
+
+#: src/Form/SettingsFields.php:1067
+msgid "Elements with overflow hidden"
+msgstr "Prvky se skrytým přetečením"
+
+#: src/Form/SettingsFields.php:1068
+msgid "Sometimes buttons get drawn and visually truncated outside the bounds of a positioned element. Provide a selector list."
+msgstr "Tlačítka jsou někdy vykreslována a vizuálně ořezávána mimo hranice pozicovaného prvku. Zadejte seznam selektorů."
+
+#: src/Form/SettingsFields.php:1073
+msgid "Theme JS will handle revealing hidden tooltips inside these containers"
+msgstr "JS motivu zajistí zobrazení skrytých nástrojových tipů uvnitř těchto kontejnerů"
+
+#: src/Form/SettingsFields.php:1074
+msgid "Editoria11y detects hidden tooltips and warns the user when they try to jump to them from the panel. For elements on this list, Editoria11y will dispatch a JS event instead of a warning, so custom JS in your theme can first reveal the hidden tip (e.g., open an accordion or tab panel)."
+msgstr "Editoria11y detekuje skryté nástrojové tipy a varuje uživatele, když se z panelu pokusí na ně přejít. U prvků na tomto seznamu Editoria11y místo varování odešle JS událost, aby vlastní JS ve vašem motivu mohl nejprve odhalit skrytý tip (např. otevřít harmoniku nebo záložkový panel)."
+
+#: src/Form/SettingsFields.php:1085
+msgid "Detecting dynamic and shadow content"
+msgstr "Detekce dynamického a shadow obsahu"
+
+#: src/Form/SettingsFields.php:1088
+msgid "Dynamically refresh if new content appears"
+msgstr "Dynamicky obnovit při výskytu nového obsahu"
+
+#: src/Form/SettingsFields.php:1094
+msgid "Watch for changes anywhere on the page"
+msgstr "Sledovat změny kdekoli na stránce"
+
+#: src/Form/SettingsFields.php:1095
+msgid "Only watch for changes to content containers present on load"
+msgstr "Sledovat pouze změny kontejnerů obsahu přítomných při načtení"
+
+#: src/Form/SettingsFields.php:1096
+msgid "Do not watch for changes"
+msgstr "Nesledovat změny"
+
+#: src/Form/SettingsFields.php:1099
+msgid "Set to \"anywhere\" if changes are being missed; set to \"do not watch\" if you notice performance issues."
+msgstr "Nastavte na „kdekoli“, pokud jsou přehlíženy změny; nastavte na „nesledovat“, pokud zaznamenáte problémy s výkonem."
+
+#: src/Form/SettingsFields.php:1103
+msgid "Check inside these specific Web components"
+msgstr "Kontrolovat uvnitř těchto konkrétních webových komponent"
+
+#: src/Form/SettingsFields.php:1104
+msgid "Provide selectors for elements with shadow DOM you want tested. E.g.: my-fancy-accordion-widget, my-magical-slideshow."
+msgstr "Zadejte selektory pro prvky se shadow DOM, které chcete testovat. Např.: my-fancy-accordion-widget, my-magical-slideshow."
+
+#: src/Form/SettingsFields.php:1108
+msgid "Auto-detect any Web components"
+msgstr "Automaticky detekovat webové komponenty"
+
+#: src/Form/SettingsFields.php:1109
+msgid "This is easier to configure than specifying components, but may slow test runs on very complicated pages."
+msgstr "Je to snadnější na konfiguraci než zadávání jednotlivých komponent, ale může zpomalit běh testů na velmi složitých stránkách."
+
+#: src/Form/SettingsFields.php:1120
+msgid "Syncing results to reports"
+msgstr "Synchronizace výsledků se zprávami"
+
+#: src/Form/SettingsFields.php:1137
+msgid "Only admins can view reports"
+msgstr "Zprávy mohou zobrazovat pouze správci"
+
+#: src/Form/SettingsFields.php:1142
+msgid "By default both admins and editors can view reports."
+msgstr "Výchozím nastavením je, že zprávy mohou zobrazovat správci i editoři."
+
+#: src/Form/SettingsFields.php:1155
+msgid "Hide reports shortcut on toggle"
+msgstr "Skrýt zkratku ke zprávám na přepínači"
+
+#: src/Form/SettingsFields.php:1162
+msgid "Reports will still be available on the WordPress admin dashboard."
+msgstr "Zprávy budou stále dostupné v administrátorském přehledu WordPress."
+
+#: src/Form/SettingsFields.php:1172
+msgid "Remove redundant base url from URLs"
+msgstr "Odebrat nadbytečnou základní URL z adres URL"
+
+#: src/Form/SettingsFields.php:1184
+msgid "Provide base URL (\"/mysite\") if your site is installed in a subdirectory. Subdirectories tend to get duplicated (/mysite/mysite/mypage) and throw errors from the API."
+msgstr "Zadejte základní URL („/mysite“), pokud je váš web nainstalován v podadresáři. Podadresáře mají tendenci se duplikovat (/mysite/mysite/mypage) a způsobovat chyby API."
+
+#: src/Form/SettingsFields.php:1189
+msgid "Preserve query parameters"
+msgstr "Zachovat parametry dotazu"
+
+#: src/Form/SettingsFields.php:1190
+msgid "The dashboard ignores most parameters: results for both /news?f=1 and /news?f=2 will show up as just /news. Provide a comma-separated list of parameters that are meaningful and should appear as separate pages in results."
+msgstr "Přehled ignoruje většinu parametrů: výsledky pro /news?f=1 i /news?f=2 se zobrazí pouze jako /news. Zadejte čárkami oddělený seznam parametrů, které jsou smysluplné a mají se ve výsledcích zobrazovat jako samostatné stránky."
+
+#: src/Form/SettingsFields.php:1194
+msgid "Disable sync altogether"
+msgstr "Zcela zakázat synchronizaci"
+
+#: src/Form/SettingsFields.php:1195
+msgid "Syncing test results is required for the issue dashboard, dismissal dashboard, and \"mark OK\" buttons."
+msgstr "Synchronizace výsledků testů je vyžadována pro přehled problémů, přehled zamítnutí a tlačítka „označit OK“."
+
+#: src/Form/SettingsFields.php:1206
+msgid "Heading outline position of editable content"
+msgstr "Pozice osnovy nadpisů editovatelného obsahu"
+
+#: src/Form/SettingsFields.php:1208
+msgid "To check headings while editing, Editoria11y needs to know what the first heading level should be in each editable field. Body fields should generally be at the H2 level."
+msgstr "Aby mohl Editoria11y kontrolovat nadpisy při editaci, potřebuje vědět, jaká by měla být první úroveň nadpisu v každém editovatelném poli. Pole těla by obecně měla být na úrovni H2."
+
+#: src/Form/SettingsFields.php:1213
+msgid "H2 level content (body content)"
+msgstr "Obsah úrovně H2 (obsah těla)"
+
+#: src/Form/SettingsFields.php:1214
+msgid "Body fields are preceded by an H1 (the post or page title), so their highest heading level should be H2."
+msgstr "Pole těla jsou uvozena nadpisem H1 (název příspěvku nebo stránky), takže jejich nejvyšší úroveň nadpisu by měla být H2."
+
+#: src/Form/SettingsFields.php:1218
+msgid "H3 level content (blocks or widgets with separate titles)"
+msgstr "Obsah úrovně H3 (bloky nebo widgety s vlastními nadpisy)"
+
+#: src/Form/SettingsFields.php:1219
+msgid "The highest heading level should be H3."
+msgstr "Nejvyšší úroveň nadpisu by měla být H3."
+
+#: src/Form/SettingsFields.php:1223
+msgid "H4 level content (deeply nested blocks or widgets)"
+msgstr "Obsah úrovně H4 (hluboce vnořené bloky nebo widgety)"
+
+#: src/Form/SettingsFields.php:1224
+msgid "The highest heading level should be H4."
+msgstr "Nejvyšší úroveň nadpisu by měla být H4."
+
+#: src/Form/SettingsPage.php:126
+msgid "becoming a supporter"
+msgstr "stát se podporovatelem"
+
+#: src/Form/SettingsPage.php:139
+msgid "free version at WordPress.org"
+msgstr "bezplatnou verzi na WordPress.org"
+
+#. translators: %s: link reading "free version at WordPress.org".
+#: src/Form/SettingsPage.php:146
+#, php-format
+msgid "This site has the community-supported \"CSA\" version of Editoria11y installed rather than the %s."
+msgstr "Na tomto webu je nainstalována komunitně podporovaná verze „CSA“ Editoria11y, nikoli %s."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:155
+#, php-format
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key or view options for %s."
+msgstr "Chcete-li aktivovat komunitně podporované funkce a nadále dostávat aktualizace, zadejte svůj stávající licenční klíč, nebo si prohlédněte možnosti pro %s."
+
+#: src/Form/SettingsPage.php:169
+msgid "This site is running the free version of Editoria11y from WordPress.org. The community-supported (CSA) features are not active."
+msgstr "Na tomto webu běží bezplatná verze Editoria11y z WordPress.org. Komunitně podporované funkce (CSA) nejsou aktivní."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:175
+#, php-format
+msgid "Unlock the community-supported features and continued updates by %s."
+msgstr "Odemkněte komunitně podporované funkce a nepřetržité aktualizace – stačí %s."
+
+#: src/Form/SettingsPage.php:203
+msgid "Editoria11y License & Account"
+msgstr "Editoria11y – licence a účet"
+
+#: src/Form/SettingsPage.php:262
+msgid "Settings"
+msgstr "Nastavení"
+
+#: src/Form/SettingsPage.php:272 src/Form/SettingsPage.php:284
+#: src/Form/SettingsPage.php:291
+msgid "License & Account"
+msgstr "Licence a účet"
+
+#: src/Form/SettingsPage.php:548
+msgid "Getting started"
+msgstr "Začínáme"
+
+#: src/Form/SettingsPage.php:557
+msgid "Modify content tests"
+msgstr "Upravit testy obsahu"
+
+#: src/Form/SettingsPage.php:563 src/Form/SettingsPage.php:577
+msgid "Tests by group"
+msgstr "Testy podle skupiny"
+
+#: src/Form/SettingsPage.php:571
+msgid "Modify template tests"
+msgstr "Upravit testy šablon"
+
+#: src/Form/SettingsPage.php:588
+msgid "Custom rules (CSA)"
+msgstr "Vlastní pravidla (CSA)"
+
+#: src/Form/SettingsPage.php:603
+msgid "Parts of the page to test"
+msgstr "Části stránky ke kontrole"
+
+#: src/Form/SettingsPage.php:611
+msgid "Do not check for any errors inside these elements"
+msgstr "Nekontrolovat žádné chyby uvnitř těchto prvků"
+
+#: src/Form/SettingsPage.php:622
+msgid "Page regions with user-editable content"
+msgstr "Oblasti stránky s uživatelsky editovatelným obsahem"
+
+#: src/Form/SettingsPage.php:632
+msgid "Do not check for content errors inside these elements"
+msgstr "Nekontrolovat chyby obsahu uvnitř těchto prvků"
+
+#: src/Form/SettingsPage.php:635
+msgid "Errors in these elements should only be shown to developers"
+msgstr "Chyby v těchto prvcích by měly být zobrazovány pouze vývojářům"
+
+#: src/Form/SettingsPage.php:651
+msgid "Roles that will see developer alerts"
+msgstr "Role, které uvidí vývojářská upozornění"
+
+#: src/Form/SettingsPage.php:666
+msgid "Advanced settings"
+msgstr "Pokročilá nastavení"
+
+#: src/Form/SettingsPage.php:684
+msgid "Editoria11y Settings"
+msgstr "Nastavení Editoria11y"
+
+#: src/Form/SettingsPage.php:699
+msgid "Save Settings"
+msgstr "Uložit nastavení"
+
+#: src/FreemiusAccessControl.php:222
+msgid "unknown"
+msgstr "neznámý"
+
+#. translators: 1: loaded SDK version, 2: highest tested SDK version
+#: src/FreemiusAccessControl.php:227
+#, php-format
+msgid "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network license activation page may not behave as expected; review release notes or contact support if you hit issues."
+msgstr "Editoria11y CSA: načtené Freemius SDK (verze %1$s) je novější než nejvýše testovaná verze (%2$s). Jiný plugin využívající Freemius na tomto webu obsahuje novější sestavení SDK. Stránka aktivace síťové licence nemusí fungovat podle očekávání; pokud narazíte na problémy, prostudujte poznámky k vydání nebo kontaktujte podporu."
+
+#: src/FreemiusAccessControl.php:503
+msgid "Editoria11y network licenses are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+msgstr "Síťové licence Editoria11y se aktivují z vyhrazené stránky, která postupně zpracovává každý web v síti v dávkách řízených cronem. Díky tomu se obchází limit SDK pro 1 000 webů a stránka zůstává responzivní i na rozsáhlých multisites."
+
+#: src/FreemiusAccessControl.php:509
+msgid "Open Editoria11y license page"
+msgstr "Otevřít stránku licence Editoria11y"
+
+#: src/FreemiusAccessControl.php:565
+msgid "Per-site license rows are not shown to keep this page responsive on large networks. The license you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → License & Account."
+msgstr "Řádky licencí pro jednotlivé weby se nezobrazují, aby tato stránka zůstala responzivní na velkých sítích. Licence, kterou zvolíte níže, platí pro každý web v síti. Chcete-li ji aktivovat nebo deaktivovat pro konkrétní weby, navštivte nastavení každého webu: Nastavení → Editoria11y → Licence a účet."
+
+#: src/FreemiusContactFallback.php:121 src/FreemiusContactFallback.php:122
+#: src/FreemiusContactFallback.php:150 src/FreemiusContactFallback.php:210
+msgid "Contact Editoria11y"
+msgstr "Kontaktujte Editoria11y"
+
+#: src/FreemiusContactFallback.php:206
+msgid "Editoria11y library forums"
+msgstr "Fóra knihovny Editoria11y"
+
+#. translators: 1: @itmaybejj GitHub profile link, 2: #Drupal Slack invite link, 3: #WordPress Slack chat link, 4: #WPCampus Slack invite link, 5: #DigiCol Slack invite link.
+#: src/FreemiusContactFallback.php:215
+#, php-format
+msgid "Lead maintainer %1$s can usually be found on Slack for informal support, configuration tips and debugging any time the sun is up in the western hemisphere in %2$s, %3$s, %4$s and %5$s."
+msgstr "Hlavní správce projektu %1$s je obvykle k zastižení na Slacku v kanálech %2$s, %3$s, %4$s a %5$s, a to kdykoli je na západní polokouli nad obzorem slunce – pro neformální podporu, konfigurační tipy a pomoc s laděním."
+
+#. translators: %s: link to the Editoria11y library GitHub discussions page.
+#: src/FreemiusContactFallback.php:228
+#, php-format
+msgid "Check the %s for roadmap proposals and discussions."
+msgstr "Návrhy plánu rozvoje a diskuse najdete na %s."
+
+#: src/FreemiusContactFallback.php:234
+msgid "Formal support:"
+msgstr "Formální podpora:"
+
+#: src/FreemiusContactFallback.php:237
+msgid "Editoria11y Library issue queue"
+msgstr "Fronta problémů knihovny Editoria11y"
+
+#: src/FreemiusContactFallback.php:239
+msgid "Editoria11y WordPress issue queue"
+msgstr "Fronta problémů Editoria11y pro WordPress"
+
+#: src/FreemiusContactFallback.php:241
+msgid "Editoria11y Drupal issue queue"
+msgstr "Fronta problémů Editoria11y pro Drupal"
+
+#: src/FreemiusContactFallback.php:243
+msgid "Submit a support request"
+msgstr "Odeslat žádost o podporu"
+
+#: src/FreemiusPricingPage.php:163
+msgid "Editoria11y CSA pricing"
+msgstr "Editoria11y CSA – ceník"
+
+#: src/FreemiusPricingPage.php:225
+msgid "Support the project"
+msgstr "Podpořte projekt"
+
+#: src/FreemiusPricingPage.php:228
+msgid "Editoria11y promotes accessibility in a unique way. Its tools are highly effective at helping non-technical authors prepare content that can be enjoyed equally by disabled Web users. We consider this a public good, so <strong>Editoria11y will always be free to use</strong>."
+msgstr "Editoria11y prosazuje přístupnost jedinečným způsobem. Jeho nástroje jsou vysoce efektivní v tom, jak pomáhají netechnickým autorům připravovat obsah, který si mohou stejnou měrou užít i uživatelé webu se zdravotním postižením. Považujeme to za veřejně prospěšnou věc, a proto <strong>Editoria11y bude vždy zdarma k použití</strong>."
+
+#: src/FreemiusPricingPage.php:232
+msgid "Editoria11y is not, however, free to develop or support."
+msgstr "Vývoj a podpora Editoria11y však zdarma nejsou."
+
+#: src/FreemiusPricingPage.php:234
+msgid "The Community Supported Add-ons (CSA) project fills the gap: project members support the development of the Editoria11y library, its CMS plugins, and the CSA suite: a rapidly growing set of quality assurance tools that provide similar functionality to commercial products, open-source and on-prem. In return, they get access to premium features and support."
+msgstr "Tuto mezeru zaplňuje projekt Community Supported Add-ons (CSA): jeho členové podporují vývoj knihovny Editoria11y, jejích CMS pluginů a sady CSA – rychle rostoucí sady nástrojů pro kontrolu kvality, které nabízejí podobnou funkčnost jako komerční produkty, open-source řešení i on-premise nástroje. Na oplátku získávají přístup k prémiovým funkcím a podpoře."
+
+#: src/FreemiusPricingPage.php:239
+msgid "lower (or higher!) support levels"
+msgstr "nižší (nebo vyšší!) úrovně podpory"
+
+#. translators: %s: link to the CSA supporters page and drop the "farmshare" word in languages without the concept.
+#: src/FreemiusPricingPage.php:245
+#, php-format
+msgid "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licenses."
+msgstr "Jde o model ve stylu <strong>přispějte, jak můžete</strong>. Web Editoria11y LLC nabízí možnosti pro %s, možnosti přispívat jako vývojář nebo tester, a možnosti mezplatformních licencí a licencí pro neomezený počet webů."
+
+#: src/functions.php:234
+msgid "Network Super Admin"
+msgstr "Super administrátor sítě"
+
+#: src/functions.php:1796
+msgid "Empty link"
+msgstr "Prázdný odkaz"
+
+#: src/functions.php:1797
+msgid "The button style link is missing its URL."
+msgstr "Odkazu ve stylu tlačítka chybí adresa URL."
+
+#: src/functions.php:1798
+msgid "Edit Media"
+msgstr "Upravit médium"
+
+#: src/TestNames.php:46
+msgid "This alt text is a filename, not a description"
+msgstr "Tento alternativní text je název souboru, ne popis"
+
+#: src/TestNames.php:47 src/TestNames.php:48
+msgid "Is this a clear and concise description of the image?"
+msgstr "Je toto jasný a stručný popis obrázku?"
+
+#: src/TestNames.php:49
+msgid "This alt text may be a placeholder"
+msgstr "Alternativní text může být zástupný"
+
+#: src/TestNames.php:50
+msgid "This alt text is unpronounceable"
+msgstr "Tento alternativní text nelze vyslovit"
+
+#: src/TestNames.php:51
+msgid "This custom input field is missing a label"
+msgstr "Tomuto vlastnímu vstupnímu poli chybí popisek"
+
+#: src/TestNames.php:52
+msgid "Button is missing an accessible label"
+msgstr "Tlačítku chybí přístupný popisek"
+
+#: src/TestNames.php:53
+msgid "Button has an invalid ARIA label"
+msgstr "Tlačítko má neplatný ARIA popisek"
+
+#: src/TestNames.php:54
+msgid "Button name repeats the word \"button\""
+msgstr "Název tlačítka opakuje slovo „button“"
+
+#: src/TestNames.php:55
+msgid "This button is unpronounceable"
+msgstr "Toto tlačítko nelze vyslovit"
+
+#: src/TestNames.php:56
+msgid "Text does not have enough contrast to be easily legible"
+msgstr "Text nemá dostatečný kontrast pro snadné čtení"
+
+#: src/TestNames.php:57
+msgid "Graphic or icon does not have enough contrast"
+msgstr "Grafika nebo ikona nemá dostatečný kontrast"
+
+#: src/TestNames.php:58
+msgid "Input does not provide enough contrast to be easily legible"
+msgstr "Vstupní pole nemá dostatečný kontrast pro snadné čtení"
+
+#: src/TestNames.php:59
+msgid "Placeholder text does not have enough contrast to be easily legible"
+msgstr "Zástupný text nemá dostatečný kontrast pro snadné čtení"
+
+#: src/TestNames.php:60
+msgid "Does this placeholder text have enough contrast?"
+msgstr "Má tento zástupný text dostatečný kontrast?"
+
+#: src/TestNames.php:61
+msgid "Does this text have enough contrast?"
+msgstr "Má tento text dostatečný kontrast?"
+
+#: src/TestNames.php:62
+msgid "Does this graphic or icon have enough contrast?"
+msgstr "Má tato grafika nebo ikona dostatečný kontrast?"
+
+#: src/TestNames.php:63
+msgid "Duplicate ID attribute"
+msgstr "Duplicitní atribut ID"
+
+#: src/TestNames.php:64
+msgid "This link has a tooltip with the same text as the link"
+msgstr "Tento odkaz má tooltip se stejným textem jako odkaz"
+
+#: src/TestNames.php:65
+msgid "Does this audio have a transcript?"
+msgstr "Má tento zvukový obsah přepis?"
+
+#: src/TestNames.php:66
+msgid "Is this visualization accessible?"
+msgstr "Je tato vizualizace přístupná?"
+
+#: src/TestNames.php:67
+msgid "Embedded iframes need manual checks"
+msgstr "Vložené prvky iframe vyžadují ruční kontrolu"
+
+#: src/TestNames.php:68
+msgid "Frame missing \"title\" attribute"
+msgstr "Rámci chybí atribut „title“"
+
+#: src/TestNames.php:69
+msgid "Frame with tabindex=\"-1\" will not be keyboard accessible."
+msgstr "Rámec s tabindex=\"-1\" nebude dostupný pomocí klávesnice."
+
+#: src/TestNames.php:70
+msgid "Is this video accurately captioned?"
+msgstr "Je toto video přesně titulkováno?"
+
+#: src/TestNames.php:71
+msgid "This heading has no text"
+msgstr "Tento nadpis nemá žádný text"
+
+#: src/TestNames.php:72
+msgid "This image is used as a heading, so it needs alt text"
+msgstr "Tento obrázek je použit jako nadpis, proto potřebuje alternativní text"
+
+#: src/TestNames.php:73
+msgid "The first heading on this page is a subheading"
+msgstr "První nadpis na této stránce je podnadpis"
+
+#: src/TestNames.php:74
+msgid "Can this heading be shorter?"
+msgstr "Může být tento nadpis kratší?"
+
+#: src/TestNames.php:75
+msgid "This page is missing a Heading 1"
+msgstr "Na této stránce chybí nadpis 1. úrovně"
+
+#: src/TestNames.php:76
+msgid "This heading is tagged at the wrong level"
+msgstr "Tento nadpis je označen na nesprávné úrovni"
+
+#: src/TestNames.php:77
+msgid "This element cannot be described by screen readers"
+msgstr "Tento prvek nemohou čtečky obrazovky popsat"
+
+#: src/TestNames.php:78
+msgid "This heading is unpronounceable"
+msgstr "Tento nadpis nelze vyslovit"
+
+#: src/TestNames.php:79
+msgid "Can this alt text be shorter?"
+msgstr "Může být tento alternativní text kratší?"
+
+#: src/TestNames.php:80
+msgid "Is this image actually meaningless?"
+msgstr "Je tento obrázek skutečně bez významu?"
+
+#: src/TestNames.php:81
+msgid "Image in a carousel or gallery marked as decorative"
+msgstr "Obrázek v karuselu nebo galerii je označen jako dekorativní"
+
+#: src/TestNames.php:82
+msgid "This captioned image has no alt text"
+msgstr "Tento obrázek s popiskem nemá alternativní text"
+
+#: src/TestNames.php:83
+msgid "Alt text should not be the same as caption text"
+msgstr "Alternativní text by neměl být stejný jako text popisku"
+
+#: src/TestNames.php:84
+msgid "Is there a visible label for this field?"
+msgstr "Má toto pole viditelný popisek?"
+
+#: src/TestNames.php:85
+msgid "Prefer visible labels to placeholders"
+msgstr "Preferujte viditelné popisky před zástupnými texty"
+
+#: src/TestNames.php:86
+msgid "Is this reset button needed?"
+msgstr "Je toto tlačítko pro reset nutné?"
+
+#: src/TestNames.php:87
+msgid "This input has an empty label"
+msgstr "Toto vstupní pole má prázdný popisek"
+
+#: src/TestNames.php:88
+msgid "Visible label does not match invisible label"
+msgstr "Viditelný popisek neodpovídá neviditelnému popisku"
+
+#: src/TestNames.php:89
+msgid "This image input is missing alt text"
+msgstr "Tomuto obrázkovému tlačítku chybí alternativní text"
+
+#: src/TestNames.php:90
+msgid "This input is not connected to a label"
+msgstr "Toto vstupní pole není propojeno s popiskem"
+
+#: src/TestNames.php:91
+msgid "Language tag does not match the content"
+msgstr "Jazykový atribut neodpovídá obsahu"
+
+#: src/TestNames.php:92
+msgid "This content appears to be in a different language"
+msgstr "Zdá se, že tento obsah je v jiném jazyce"
+
+#: src/TestNames.php:93
+msgid "This alt text appears to be in a different language"
+msgstr "Zdá se, že tento alternativní text je v jiném jazyce"
+
+#: src/TestNames.php:94
+msgid "Alt text used as a link should not be a URL"
+msgstr "Alternativní text použitý jako odkaz by neměl být URL"
+
+#: src/TestNames.php:95 src/TestNames.php:96
+msgid "This linked alt might not be clear and concise"
+msgstr "Alternativní text tohoto odkazovaného obrázku nemusí být jasný a stručný"
+
+#: src/TestNames.php:97
+msgid "Linked images need pronounceable alt text"
+msgstr "Obrázky jako odkazy potřebují vyslovitelný alternativní text"
+
+#: src/TestNames.php:98
+msgid "Manual check: link contains \"click here\""
+msgstr "Tento odkaz obsahuje „klikněte zde“"
+
+#: src/TestNames.php:99
+msgid "Link article titles, not DOI numbers"
+msgstr "Odkazujte na názvy článků, ne na čísla DOI"
+
+#: src/TestNames.php:100
+msgid "This link contains no words"
+msgstr "Tento odkaz neobsahuje žádná slova"
+
+#: src/TestNames.php:101
+msgid "Link with invalid \"aria-labelledby\" attribute"
+msgstr "Odkaz s neplatným atributem „aria-labelledby“"
+
+#: src/TestNames.php:102
+msgid "This link needs a label"
+msgstr "Tento odkaz potřebuje popisek"
+
+#: src/TestNames.php:103
+msgid "Link points to a file without warning"
+msgstr "Odkaz vede na soubor bez upozornění"
+
+#: src/TestNames.php:104
+msgid "Links with the same text link to different pages"
+msgstr "Odkazy se stejným textem vedou na různé stránky"
+
+#: src/TestNames.php:105
+msgid "Does this alt text describe the link or the image?"
+msgstr "Popisuje tento alternativní text odkaz nebo obrázek?"
+
+#: src/TestNames.php:106
+msgid "Does this alt text make sense as part of this link?"
+msgstr "Dává tento alternativní text smysl jako součást tohoto odkazu?"
+
+#: src/TestNames.php:107
+msgid "Can this linked alt text be shorter?"
+msgstr "Může být tento alternativní text odkazu kratší?"
+
+#: src/TestNames.php:108
+msgid "This linked image needs alt text"
+msgstr "Tento odkazovaný obrázek potřebuje alternativní text"
+
+#: src/TestNames.php:109
+msgid "Does this linked image need a description?"
+msgstr "Potřebuje tento odkazovaný obrázek popis?"
+
+#: src/TestNames.php:110
+msgid "Is this link actually a button?"
+msgstr "Je tento odkaz ve skutečnosti tlačítko?"
+
+#: src/TestNames.php:111
+msgid "Does this link open a new tab without warning?"
+msgstr "Otevírá tento odkaz novou záložku bez upozornění?"
+
+#: src/TestNames.php:112
+msgid "This linked alt text may be a placeholder"
+msgstr "Alternativní text tohoto odkazu může být zástupný"
+
+#: src/TestNames.php:113
+msgid "This link only contains generic words"
+msgstr "Tento odkaz obsahuje pouze obecná slova"
+
+#: src/TestNames.php:114
+msgid "The purpose of this link is visually hidden"
+msgstr "Účel tohoto odkazu je vizuálně skrytý"
+
+#: src/TestNames.php:115
+msgid "Does this image's alt describe the image or the link?"
+msgstr "Popisuje alternativní text tohoto obrázku obrázek, nebo odkaz?"
+
+#: src/TestNames.php:116
+msgid "Are the symbols or emoji in this link meaningful?"
+msgstr "Jsou symboly nebo emoji v tomto odkazu smysluplné?"
+
+#: src/TestNames.php:117
+msgid "This link is unpronounceable"
+msgstr "Tento odkaz nelze vyslovit"
+
+#: src/TestNames.php:118
+msgid "Link text should not be a URL"
+msgstr "Text odkazu by neměl být URL"
+
+#: src/TestNames.php:119
+msgid "Meta tag for page language missing"
+msgstr "Chybí meta tag jazyka stránky"
+
+#: src/TestNames.php:120
+msgid "Did you mean a different language code?"
+msgstr "Nemělo to být jiný kód jazyka?"
+
+#: src/TestNames.php:121
+msgid "Invalid language code"
+msgstr "Neplatný kód jazyka"
+
+#: src/TestNames.php:122
+msgid "Page language may not match the content"
+msgstr "Jazyk stránky nemusí odpovídat obsahu"
+
+#: src/TestNames.php:123
+msgid "Meta tag limits how much users can enlarge text"
+msgstr "Meta tag omezuje možnost zvětšení textu"
+
+#: src/TestNames.php:124
+msgid "Meta tag automatically refreshes page"
+msgstr "Meta tag automaticky obnovuje stránku"
+
+#: src/TestNames.php:125
+msgid "Meta tag prevents users from enlarging text"
+msgstr "Meta tag zabraňuje uživatelům zvětšit text"
+
+#: src/TestNames.php:126
+msgid "Meta tag for page title missing"
+msgstr "Chybí meta tag názvu stránky"
+
+#: src/TestNames.php:127
+msgid "Invalid HTML: image has no alt attribute"
+msgstr "Neplatné HTML: obrázku chybí atribut alt"
+
+#: src/TestNames.php:128
+msgid "Invalid HTML: linked image missing alt attribute"
+msgstr "Neplatné HTML: odkazovanému obrázku chybí atribut alt"
+
+#: src/TestNames.php:129
+msgid "Invalid HTML: image in link missing alt attribute"
+msgstr "Neplatné HTML: obrázku v odkazu chybí atribut alt"
+
+#: src/TestNames.php:130
+msgid "This link target may be invalid"
+msgstr "Cíl tohoto odkazu může být neplatný"
+
+#: src/TestNames.php:131
+msgid "Should this quote be a heading?"
+msgstr "Měla by být tato citace nadpisem?"
+
+#: src/TestNames.php:132
+msgid "Has this document been tagged for screen readers?"
+msgstr "Je tento dokument označen pro čtečky obrazovky?"
+
+#: src/TestNames.php:133
+msgid "Should this bold text be a heading?"
+msgstr "Měl by být tento tučný text nadpisem?"
+
+#: src/TestNames.php:134
+msgid "Should this have list formatting?"
+msgstr "Měl by mít tento obsah formátování seznamu?"
+
+#: src/TestNames.php:135
+msgid "Broken same-page link"
+msgstr "Nefunkční odkaz na stejné stránce"
+
+#: src/TestNames.php:136
+msgid "Do not justify text"
+msgstr "Nepoužívejte zarovnání do bloku"
+
+#: src/TestNames.php:137
+msgid "Nested interactive layout components"
+msgstr "Vnořené interaktivní komponenty rozvržení"
+
+#: src/TestNames.php:138
+msgid "Is there an alternative for this PDF?"
+msgstr "Existuje alternativa k tomuto PDF?"
+
+#: src/TestNames.php:139
+msgid "Text is too small"
+msgstr "Text je příliš malý"
+
+#: src/TestNames.php:140
+msgid "Large blocks of emphasized text are harder to read"
+msgstr "Velké bloky zvýrazněného textu jsou hůře čitelné"
+
+#: src/TestNames.php:141
+msgid "Do not use sub/superscript as visual formatting"
+msgstr "Nepoužívejte dolní a horní index jen pro vizuální formátování"
+
+#: src/TestNames.php:142
+msgid "Only links should be underlined"
+msgstr "Podtržené by měly být pouze odkazy"
+
+#: src/TestNames.php:143
+msgid "Is this uppercase text needed?"
+msgstr "Je tento text velkými písmeny nutný?"
+
+#: src/TestNames.php:144
+msgid "Are there redundant words in this alt text?"
+msgstr "Obsahuje tento alternativní text nadbytečná slova?"
+
+#: src/TestNames.php:145
+msgid "Tabindex overrides interrupt the focus order"
+msgstr "Přepsání hodnot tabindex narušuje pořadí zaměření"
+
+#: src/TestNames.php:146
+msgid "This header cell needs text"
+msgstr "Tato buňka záhlaví potřebuje text"
+
+#: src/TestNames.php:147
+msgid "This table has an invalid headers attribute"
+msgstr "Tato tabulka má neplatný atribut headers"
+
+#: src/TestNames.php:148
+msgid "This table needs a header row and/or column"
+msgstr "Tato tabulka potřebuje řádek nebo sloupec záhlaví"
+
+#: src/TestNames.php:149
+msgid "Content headings should not be used inside tables"
+msgstr "Nadpisy obsahu by se neměly používat uvnitř tabulek"
+
+#: src/TestNames.php:150
+msgid "Invalid HTML list"
+msgstr "Neplatný seznam HTML"
+
+#: src/TestNames.php:379
+msgid "Linked images"
+msgstr "Propojené obrázky"
+
+#: src/TestNames.php:382
+msgid "Tables"
+msgstr "Tabulky"
+
+#: src/TestNames.php:383
+msgid "Text formatting"
+msgstr "Formátování textu"
+
+#: src/TestNames.php:384
+msgid "Video, audio, frames"
+msgstr "Video, zvuk, rámce"
+
+#: src/TestNames.php:385
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: src/TestNames.php:386
+msgid "Forms"
+msgstr "Formuláře"
+
+#: src/TestNames.php:387
+msgid "ARIA and focus"
+msgstr "ARIA a fokus"
+
+#: src/TestNames.php:388
+msgid "Page metadata"
+msgstr "Metadata stránky"

@@ -1,0 +1,90 @@
+#adminmenu {
+
+	/* Our own deep-link pages and the Freemius account / contact / pricing /
+	   add-ons / affiliation pages all register as submenus of Settings now
+	   that the Freemius menu is unified onto our settings page (menu.slug ===
+	   'ed11y'). They are reachable via the nav-tab row, so hide the redundant
+	   sidebar rows. Matched by URL suffix; our settings page (`page=ed11y`)
+	   and Custom rules / Crawler stay reachable, only these submenus hide. */
+	a[href$="ed11y-custom-rules"],
+	a[href$="ed11y-crawler"],
+	a[href$="ed11y-account"],
+	a[href$="ed11y-contact"],
+	a[href$="ed11y-pricing"],
+	a[href$="ed11y-addons"],
+	a[href$="ed11y-affiliation"] {
+		display: none;
+	}
+}
+
+/* Freemius accessibility shims ========================= */
+.fs-close:focus-visible {
+	outline: 2px solid #2271b1;
+	outline-offset: 2px;
+	border-radius: 2px;
+}
+
+/* * SDK default is `#aaa` (~2.5:1 against white) — fails WCAG 1.4.11
+ * non-text contrast. Bumping to #555 (~7.5:1) covers both notices and
+ * modals; hover state stays distinct via #1d2327 (the WP charcoal). */
+body {
+
+	.fs-notice label.fs-plugin-title {
+		background-color: rgba(0,0,0,.5);
+	}
+
+	.fs-notice .fs-close,
+	.fs-modal .fs-close {
+		color: #555;
+	}
+
+	label.fs-tag.fs-warn {
+		background: #ffba00;
+		color: #111;
+	}
+
+	label.fs-tag.fs-success {
+		background: #368b3e;
+	}
+
+	.fs-notice .fs-close:hover,
+	.fs-modal .fs-close:hover {
+		color: #1d2327;
+	}
+
+	.fs-frame {
+		filter: brightness(0.9) contrast(1.5);
+	}
+}
+
+@media (forced-colors: active) {
+	.fs-close:focus-visible {
+		outline: 2px solid Highlight;
+	}
+}
+
+/* Tighten the sticky-notice width so a one-line message doesn't sprawl
+ * across the whole admin column, and undo the SDK's float:right on the
+ * close button so it lays out predictably alongside our title chrome. */
+body {
+	.fs-notice {
+		max-width: max-content;
+	}
+
+	.fs-notice .fs-close {
+		float: none;
+		font-weight: 500;
+		text-align: right;
+	}
+
+	.fs-secure-notice {
+		position: relative;
+		left: initial;
+	}
+}
+
+/*@media(width > 960px) {
+	a[href="admin.php?page=editoria11y"] .dashicons-before::before {
+		margin-top: .5em;
+	}
+}*/

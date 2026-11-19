@@ -1,0 +1,48 @@
+/*
+ * Editoria11y CSA — pricing page overrides.
+ *
+ * Loaded only on `admin.php?page=ed11y-pricing` via the SDK's
+ * `pricing/css_path` filter (see src/FreemiusPricingPage.php).
+ *
+ * What we hide and why:
+ *
+ *   .fs-section--custom-implementation
+ *     Freemius's hardcoded "Need more sites, custom implementation
+ *     and dedicated support?" section. The string is baked into the
+ *     minified pricing React app (vendor/.../assets/js/pricing/
+ *     freemius-pricing.js) and there is no PHP filter for it. The
+ *     "Click here to contact us" link inside it points at
+ *     admin.php?page=ed11y-contact, which 403s whenever the SDK
+ *     is in activation mode (no active license) because the contact
+ *     submenu is not registered in that state. We replace the box
+ *     entirely with our own enterprise CTA injected via the
+ *     `templates/pricing.php` filter (see FreemiusPricingPage::
+ *     inject_enterprise_banner()).
+ *
+ *   .fs-section--badges
+ *     Optional — uncomment if you also want to drop the
+ *     "Secure payments / McAfee / PayPal / CloudFlare" trust badges
+ *     row underneath. Left visible by default because removing it
+ *     unprompted is a content decision, not a bug fix.
+ */
+
+#fs_pricing .fs-section--custom-implementation {
+	display: none !important;
+}
+
+/* Wrapper for the enterprise banner we inject in place of the
+   hidden section above. Inherits the SDK pricing page's max-width
+   from the surrounding #fs_pricing.wrap. */
+.ed11ycsa-enterprise-banner {
+	margin: 2em auto;
+	max-width: 960px;
+	padding: 1.5em;
+	background: #fff;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+	p {
+		font-size: 1rem;
+	}
+}

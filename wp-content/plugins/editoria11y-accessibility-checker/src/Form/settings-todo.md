@@ -1,0 +1,14 @@
+Drupal-specific descriptions to review
+These are fields where the Drupal text references Drupal concepts/APIs/modules and may need a deliberately different WordPress phrasing — leaving them as-is for now:
+
+Getting started section intro — Drupal version mentions "View Editoria11y checker" / "Mark OK" permissions, links to drupal.org issue queue and editoria11y.com configuration guide.
+specify_root (Other: specify regions) — Drupal description is "For many sites, the site theme is wrapped in .dialog-off-canvas-main-canvas while editing." That selector is from Drupal's off-canvas dialog system; needs a WP-equivalent or a generic replacement. Current WP wording is "CSS selectors developers should scan when 'Other' is selected above. One selector per line." — workable but worth deciding.
+ignore_all_if_absent ("Hide all alerts on pages where these elements are not present") — exists in Drupal, not in WP. Drupal's suggested selector .contextual-region a[href*="/edit"] is Drupal-only. Decide whether the WP plugin should grow this field.
+ck5_table_headers ("Assign headers to CKEditor tables on insert") — Drupal-only field; CKEditor isn't WP's default editor. Skip unless you want a Gutenberg-table equivalent.
+disable_live ("Do not check any content while it is being edited") — Drupal description's example form[id^="node-article"] is Drupal-specific; WP's livecheck UI is a select instead of a checkbox, so the field shape differs.
+Theme compatibility section intro tip — Drupal renders a "Configuration tips" callout about the ed11y-element-panel toggle and z-index/overflow troubleshooting. Could be ported to WP's section intro if useful.
+Sync section intro — Drupal note: "Remember that results only sync to the dashboard when viewing nodes. Results shown while editing or viewing previews or revisions will not sync." Mentions "nodes". A WP version might say "when viewing posts/pages on the front end."
+live_h2 extended help — Drupal lists form[id^="node-"] #edit-body-wrapper .ck-content (CKEditor on Drupal nodes) and form[id^="node-"] #edit-body-wrapper .is-root-container (Drupal Gutenberg). For WP, sample selectors would be different (Gutenberg post editor .is-root-container, classic #wp-content-editor-container, etc.).
+Links group intro — Drupal version cross-promotes the "Link Purpose Icons" and "External Links" Drupal contrib modules. WP equivalent (if any) would be plugin recommendations.
+watch_for_changes Drupal extra — references Drupal.Ed11y.refresh(). WP equivalent in 3.x is Ed11y.refresh() from the ESM entry point — worth deciding whether to advertise that here.
+Per-test description payloads — every test row's Drupal description is just the test key (e.g. "LINK_SYMBOLS"); these are the same placeholders WP would emit. Not language-specific, just unfinished on both sides.

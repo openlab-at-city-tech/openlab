@@ -1,0 +1,2472 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: editoria11y 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/editoria11y\n"
+"POT-Creation-Date: 2026-08-10T21:11:15-04:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: Editoria11y\n"
+"Language: ko\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+#. Plugin Name of the plugin
+#: editoria11y.php
+msgid "Editoria11y Accessibility Checker (CSA)"
+msgstr "Editoria11y 접근성 검사기 (CSA)"
+
+#. Plugin URI of the plugin
+#: editoria11y.php
+msgid "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+msgstr "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+
+#. Description of the plugin
+#: editoria11y.php
+msgid "User friendly content quality assurance, plus the CSA developer suite: ~50 additional code and contrast tests, a custom test builder, role-based test configuration, and a site crawler."
+msgstr "사용자 친화적인 콘텐츠 품질 검사와 함께 CSA 개발자 도구 모음을 제공합니다: 추가 코드 및 대비 테스트 약 50종, 사용자 정의 테스트 빌더, 역할별 테스트 설정, 사이트 크롤러."
+
+#. Author of the plugin
+#: editoria11y.php
+msgid "Princeton University, WDS"
+msgstr "프린스턴 대학교, WDS"
+
+#. Author URI of the plugin
+#: editoria11y.php
+msgid "https://editoria11y.com"
+msgstr "https://editoria11y.com"
+
+#: editoria11y.php:131
+msgid "Editoria11y is missing its vendored dependencies. Run \"composer install\" inside the plugin directory or reinstall the plugin from a complete release archive."
+msgstr "Editoria11y에 필요한 종속성이 누락되었습니다. 플러그인 디렉토리 내부에서 \"composer install\"을 실행하거나, 전체 릴리스 아카이브에서 플러그인을 다시 설치하십시오."
+
+#: editoria11y.php:399
+msgid "Every five minutes (Editoria11y rehash)"
+msgstr "5분마다 (Editoria11y 리해시)"
+
+#: editoria11y.php:405
+msgid "Every fifteen minutes (Editoria11y license watchdog)"
+msgstr "15분마다 (Editoria11y 라이선스 워치독)"
+
+#: src/Admin/CsvExport.php:161 src/Admin/Dashboard.php:150
+msgid "Page"
+msgstr "페이지"
+
+#: src/Admin/CsvExport.php:162
+msgid "URL"
+msgstr "URL"
+
+#: src/Admin/CsvExport.php:163
+msgid "Issue"
+msgstr "이슈"
+
+#: src/Admin/CsvExport.php:164 src/Admin/Dashboard.php:158
+msgid "Count"
+msgstr "수량"
+
+#: src/Admin/CsvExport.php:165 src/Admin/Dashboard.php:155
+msgid "Author"
+msgstr "작성자"
+
+#: src/Admin/CsvExport.php:166
+msgid "Page Type"
+msgstr "페이지 유형"
+
+#: src/Admin/CsvExport.php:167
+msgid "Detected on"
+msgstr "감지 날짜"
+
+#: src/Admin/CsvExport.php:168 src/Admin/Dashboard.php:153
+#: src/Form/CrawlerPage.php:206 src/Form/CustomRulesPage.php:194
+#: src/Form/NetworkCustomRulesPage.php:154
+msgid "Status"
+msgstr "상태"
+
+#: src/Admin/CsvExport.php:169 src/Form/CustomRulesPage.php:317
+#: src/Form/NetworkCustomRulesPage.php:192
+msgid "Edit"
+msgstr "수정"
+
+#: src/Admin/Dashboard.php:35 src/Admin/Dashboard.php:53
+#: src/Admin/Dashboard.php:202
+msgid "Editoria11y Accessibility Report"
+msgstr "Editoria11y 접근성 보고서"
+
+#: src/Admin/Dashboard.php:36
+msgid "Accessibility"
+msgstr "접근성"
+
+#: src/Admin/Dashboard.php:71
+msgid "Error:"
+msgstr "오류:"
+
+#: src/Admin/Dashboard.php:72
+msgid "Editoria11y database tables are missing."
+msgstr "Editoria11y 데이터베이스 테이블이 누락되었습니다."
+
+#. translators: 1: bug report link, 2: site health page link.
+#: src/Admin/Dashboard.php:75
+#, php-format
+msgid "Try deactivating and reactivating the plugin to reset config and recreate the tables, or %1$s with the information from the WordPress, Server and Database sections on your %2$s."
+msgstr "설정을 재설정하고 테이블을 다시 만들려면 플러그인을 비활성화한 후 다시 활성화해 보십시오. 또는 %2$s의 WordPress, 서버, 데이터베이스 섹션에 있는 정보를 포함하여 %1$s해 주십시오."
+
+#: src/Admin/Dashboard.php:76
+msgid "post a bug report"
+msgstr "버그 리포트 제출"
+
+#: src/Admin/Dashboard.php:77
+msgid "site health page"
+msgstr "사이트 상태 페이지"
+
+#: src/Admin/Dashboard.php:129
+msgid "View all issues"
+msgstr "모든 문제 보기"
+
+#: src/Admin/Dashboard.php:130
+msgid "View issues on all pages"
+msgstr "모든 페이지의 문제 보기"
+
+#. translators: %s: name of an alert/test, e.g. "Image is missing alt text".
+#: src/Admin/Dashboard.php:132
+#, php-format
+msgid "Alert report: \"%s\""
+msgstr "경고 보고서: \"%s\""
+
+#. translators: %s: post type slug, e.g. "page" or "post".
+#: src/Admin/Dashboard.php:134
+#, php-format
+msgid "Alerts on pages of type \"%s\""
+msgstr "\"%s\" 유형의 페이지에 있는 경고"
+
+#: src/Admin/Dashboard.php:135
+msgid "Alerts on pages created by author"
+msgstr "작성자가 생성한 페이지의 경고"
+
+#. translators: %s: author display name.
+#: src/Admin/Dashboard.php:137
+#, php-format
+msgid "Alerts on pages created by %s"
+msgstr "%s님이 생성한 페이지의 경고"
+
+#: src/Admin/Dashboard.php:138
+msgid "Alerts dismissed by"
+msgstr "경고를 무시한 사용자:"
+
+#. translators: %s: user display name of the dismissor.
+#: src/Admin/Dashboard.php:140
+#, php-format
+msgid "Alerts dismissed by %s"
+msgstr "%s님이 경고를 무시함"
+
+#. translators: %s: post-status label, e.g. "Published" or "Draft".
+#: src/Admin/Dashboard.php:142
+#, php-format
+msgid "%s pages"
+msgstr "%s개 페이지"
+
+#: src/Admin/Dashboard.php:143
+msgid "API error."
+msgstr "API 오류입니다."
+
+#: src/Admin/Dashboard.php:144
+msgid "Your login session expired. Reload this page to continue."
+msgstr "로그인 세션이 만료되었습니다. 계속하려면 이 페이지를 새로고침하십시오."
+
+#: src/Admin/Dashboard.php:145
+msgid "loading..."
+msgstr "로딩 중..."
+
+#. translators: %d: pagination page number.
+#: src/Admin/Dashboard.php:147
+#, php-format
+msgid "Page %d"
+msgstr "%d 페이지"
+
+#: src/Admin/Dashboard.php:148
+msgid "Alerts"
+msgstr "경고"
+
+#: src/Admin/Dashboard.php:149
+msgid "Dev alerts"
+msgstr "개발자 경고"
+
+#: src/Admin/Dashboard.php:151
+msgid "Path"
+msgstr "경로"
+
+#: src/Admin/Dashboard.php:152
+msgid "Type"
+msgstr "유형"
+
+#: src/Admin/Dashboard.php:154
+msgid "Updated"
+msgstr "업데이트됨"
+
+#: src/Admin/Dashboard.php:156
+msgid "Detected"
+msgstr "감지됨"
+
+#: src/Admin/Dashboard.php:157
+msgid "Alert"
+msgstr "경고"
+
+#: src/Admin/Dashboard.php:159
+msgid "Pages"
+msgstr "페이지"
+
+#: src/Admin/Dashboard.php:160
+msgid "On"
+msgstr "위치"
+
+#: src/Admin/Dashboard.php:161
+msgid "Dismissed alert"
+msgstr "무시된 경고"
+
+#: src/Admin/Dashboard.php:162
+msgid "Marked"
+msgstr "표시됨"
+
+#: src/Admin/Dashboard.php:163
+msgid "Current"
+msgstr "현재"
+
+#: src/Admin/Dashboard.php:164
+msgid "By"
+msgstr "작성자"
+
+#: src/Admin/Dashboard.php:165
+msgid "Alerts by page"
+msgstr "페이지별 경고"
+
+#: src/Admin/Dashboard.php:166
+msgid "Recent alerts"
+msgstr "최근 경고"
+
+#: src/Admin/Dashboard.php:167
+msgid "Alert types"
+msgstr "경고 유형"
+
+#: src/Admin/Dashboard.php:168
+msgid "Dismissals"
+msgstr "무시 내역"
+
+#: src/Admin/Dashboard.php:169
+msgid "Recent dismissals"
+msgstr "최근 무시 내역"
+
+#: src/Admin/Dashboard.php:170
+msgid "Download results as CSV"
+msgstr "결과를 CSV로 다운로드"
+
+#: src/Admin/Dashboard.php:171
+msgid "None"
+msgstr "없음"
+
+#: src/Admin/Dashboard.php:172
+msgid "No"
+msgstr "아니요"
+
+#: src/Admin/Dashboard.php:173
+msgid "Yes"
+msgstr "예"
+
+#: src/Admin/Dashboard.php:174
+msgid "n/a"
+msgstr "해당 없음"
+
+#: src/Admin/Dashboard.php:175 src/functions.php:1795
+msgid "Empty button-style link"
+msgstr "비어 있는 버튼 스타일 링크"
+
+#. translators: tooltip on a column header that's currently sorted descending.
+#: src/Admin/Dashboard.php:177
+msgid "descending"
+msgstr "내림차순"
+
+#. translators: tooltip on a column header that's currently sorted ascending.
+#: src/Admin/Dashboard.php:179
+msgid "ascending"
+msgstr "오름차순"
+
+#. translators: %d: number of result rows returned (singular form).
+#: src/Admin/Dashboard.php:182
+#, php-format
+msgid "%d result"
+msgstr "%d개의 결과"
+
+#. translators: %d: number of result rows returned (plural form).
+#: src/Admin/Dashboard.php:184
+#, php-format
+msgid "%d results"
+msgstr "%d개의 결과"
+
+#: src/CoActivationGuard.php:139
+msgid "A duplicate copy of Editoria11y Accessibility Checker (the free version) was deactivated here: Editoria11y CSA is already active and provides the same checks."
+msgstr "Editoria11y 접근성 검사기(무료 버전)의 중복 사본이 여기에서 비활성화되었습니다. Editoria11y CSA가 이미 활성화되어 있으며 동일한 검사를 제공합니다."
+
+#: src/Controller/ApiCrawler.php:122
+msgid "The crawler is a premium feature."
+msgstr "크롤러는 프리미엄 기능입니다."
+
+#: src/Controller/ApiCrawler.php:129
+msgid "Editoria11y database update did not complete; the crawler is paused until an administrator retries the update."
+msgstr "Editoria11y 데이터베이스 업데이트가 완료되지 않았습니다. 관리자가 업데이트를 다시 시도할 때까지 크롤러가 일시 중지됩니다."
+
+#: src/Controller/ApiDismissals.php:83
+msgid "Results not recorded"
+msgstr "결과가 기록되지 않음"
+
+#: src/Controller/ApiDismissals.php:572 src/Controller/ApiResults.php:925
+msgid "Editoria11y database update did not complete; writes are paused until an administrator retries the update."
+msgstr "Editoria11y 데이터베이스 업데이트가 완료되지 않았습니다. 관리자가 업데이트를 다시 시도할 때까지 쓰기 작업이 일시 중지됩니다."
+
+#: src/Controller/ApiDismissals.php:597 src/Controller/ApiResults.php:950
+msgid "Editoria11y database update did not complete; the dashboard is paused until an administrator retries the update."
+msgstr "Editoria11y 데이터베이스 업데이트가 완료되지 않았습니다. 관리자가 업데이트를 다시 시도할 때까지 대시보드가 일시 중지됩니다."
+
+#: src/CustomRules.php:273
+msgid "Machine name is required."
+msgstr "머신 이름은 필수입니다."
+
+#: src/CustomRules.php:276
+msgid "Machine name must be lowercase letters, digits, and underscores, starting with a letter."
+msgstr "머신 이름은 문자로 시작해야 하며 소문자, 숫자 및 언더바(_)만 사용할 수 있습니다."
+
+#: src/CustomRules.php:281
+msgid "Admin label is required."
+msgstr "관리자 라벨은 필수입니다."
+
+#: src/CustomRules.php:286
+msgid "Test grouping ID is required."
+msgstr "테스트 그룹 ID는 필수입니다."
+
+#: src/CustomRules.php:293
+msgid "Test grouping ID may only contain letters, digits, and underscores."
+msgstr "테스트 그룹 ID에는 문자, 숫자 및 언더바(_)만 포함할 수 있습니다."
+
+#. translators: %s is a reserved test key like TABLES_SEMANTIC_HEADING.
+#: src/CustomRules.php:298
+#, php-format
+msgid "Test grouping ID \"%s\" is reserved by the v3 migration drop list and cannot be used."
+msgstr "\"%s\" 테스트 그룹 ID는 v3 마이그레이션 드롭 리스트에 예약되어 있어 사용할 수 없습니다."
+
+#: src/CustomRules.php:305
+msgid "Tip title is required."
+msgstr "팁 제목은 필수입니다."
+
+#: src/CustomRules.php:312
+msgid "Tip details must contain some visible text."
+msgstr "팁 상세 내용에는 표시 가능한 텍스트가 포함되어야 합니다."
+
+#: src/CustomRules.php:317
+msgid "Alert type must be Error or Manual check."
+msgstr "경고 유형은 'Error(오류)' 또는 'Manual check(수동 확인)'여야 합니다."
+
+#: src/CustomRules.php:323
+msgid "Dismiss key must be Text content or Attributes."
+msgstr "무시 키는 'Text content(텍스트 내용)' 또는 'Attributes(속성)'여야 합니다."
+
+#: src/CustomRules.php:329
+msgid "Filter selector looks like a CSS rule block, not a selector. Remove the curly braces."
+msgstr "필터 선택자가 선택자가 아닌 CSS 규칙 블록처럼 보입니다. 중괄호{}를 제거하십시오."
+
+#: src/CustomRules.php:332
+msgid "Filter selector has an unclosed quote, bracket, or parenthesis. The browser would reject it and skip every custom rule on the page."
+msgstr "필터 선택자에 닫히지 않은 인용부호, 대괄호 또는 소괄호가 있습니다. 브라우저가 이를 거부하여 페이지의 모든 사용자 정의 규칙을 건너뛰게 됩니다."
+
+#: src/CustomRules.php:342
+msgid "At least one rule criterion is required: a filter selector OR one or more include-text strings."
+msgstr "최소 하나 이상의 규칙 기준이 필요합니다: 필터 선택자 또는 하나 이상의 포함 텍스트 문자열 중 하나가 있어야 합니다."
+
+#. translators: %s is an unknown element-set value.
+#: src/CustomRules.php:352
+#, php-format
+msgid "Element set \"%s\" is not one of the recognized element categories."
+msgstr "\"%s\" 요소 세트는 인식된 요소 카테고리에 포함되지 않습니다."
+
+#: src/Form/CrawlerPage.php:59 src/Form/CrawlerPage.php:60
+msgid "Editoria11y Crawler"
+msgstr "Editoria11y 크롤러"
+
+#: src/Form/CrawlerPage.php:126
+msgid "You do not have permission to use the crawler."
+msgstr "크롤러를 사용할 권한이 없습니다."
+
+#: src/Form/CrawlerPage.php:130 src/Form/CustomRulesPage.php:111
+#: src/Form/SettingsPage.php:236 src/Form/SettingsPage.php:237
+msgid "Editoria11y"
+msgstr "Editoria11y"
+
+#: src/Form/CrawlerPage.php:146 src/Form/SettingsPage.php:288
+msgid "Crawler"
+msgstr "크롤러"
+
+#: src/Form/CrawlerPage.php:149
+msgid "The crawler is a CSA feature. Activate CSA to schedule sitewide accessibility scans across posts, pages, and custom post types."
+msgstr "크롤러는 CSA 기능입니다. CSA를 활성화하여 글, 페이지 및 사용자 정의 포스트 유형에 대해 사이트 전체의 접근성 스캔을 예약하십시오."
+
+#: src/Form/CrawlerPage.php:162
+msgid "Manual crawl"
+msgstr "수동 크롤링"
+
+#: src/Form/CrawlerPage.php:166
+msgid "Editoria11y reports populate and update in real time as editors work, so a manual crawl is generally only helpful when first installing the plugin or after making major theme or configuration changes."
+msgstr "Editoria11y 보고서는 편집자가 작업함에 따라 실시간으로 채워지고 업데이트됩니다. 따라서 수동 크롤링은 일반적으로 플러그인을 처음 설치하거나 테마 또는 설정에 큰 변경이 있을 때만 유용합니다."
+
+#: src/Form/CrawlerPage.php:176 src/Form/CustomRulesPage.php:501
+#: src/Form/NetworkCustomRulesPage.php:288 src/Form/NetworkLicensePage.php:416
+msgid "Cancel"
+msgstr "취소"
+
+#: src/Form/CrawlerPage.php:181
+msgid "This tab needs to remain open and in the foreground during the crawl."
+msgstr "크롤링이 진행되는 동안 이 탭은 열려 있어야 하며 전면(포그라운드)에 있어야 합니다."
+
+#: src/Form/CrawlerPage.php:188
+msgid "Browsers pause API operations in background tabs."
+msgstr "브라우저는 백그라운드 탭에서 API 작업을 일시 중지합니다."
+
+#: src/Form/CrawlerPage.php:196
+msgid "Filter which pages will be crawled"
+msgstr "크롤링할 페이지 필터링"
+
+#: src/Form/CrawlerPage.php:200
+msgid "Content type"
+msgstr "콘텐츠 유형"
+
+#: src/Form/CrawlerPage.php:218
+msgid "Filter by"
+msgstr "필터 기준"
+
+#: src/Form/CrawlerPage.php:221 src/Form/CrawlerPage.php:254
+msgid "Date created"
+msgstr "생성 날짜"
+
+#: src/Form/CrawlerPage.php:222 src/Form/CrawlerPage.php:255
+msgid "Date modified"
+msgstr "수정 날짜"
+
+#: src/Form/CrawlerPage.php:224
+msgid "From"
+msgstr "시작"
+
+#: src/Form/CrawlerPage.php:226
+msgid "To"
+msgstr "종료"
+
+#: src/Form/CrawlerPage.php:231
+msgid "Content alerts"
+msgstr "콘텐츠 경고"
+
+#: src/Form/CrawlerPage.php:234 src/Form/CrawlerPage.php:244
+msgid "Any"
+msgstr "모두"
+
+#: src/Form/CrawlerPage.php:235
+msgid "Has alerts"
+msgstr "경고 있음"
+
+#: src/Form/CrawlerPage.php:236
+msgid "No alerts"
+msgstr "경고 없음"
+
+#: src/Form/CrawlerPage.php:241
+msgid "Developer alerts"
+msgstr "개발자 경고"
+
+#: src/Form/CrawlerPage.php:245
+msgid "Has dev alerts"
+msgstr "개발자 경고 있음"
+
+#: src/Form/CrawlerPage.php:246
+msgid "No dev alerts"
+msgstr "개발자 경고 없음"
+
+#: src/Form/CrawlerPage.php:251
+msgid "Sort by"
+msgstr "정렬 기준"
+
+#: src/Form/CrawlerPage.php:256
+msgid "Title"
+msgstr "제목"
+
+#: src/Form/CrawlerPage.php:259
+msgid "Newest first"
+msgstr "최신순"
+
+#: src/Form/CrawlerPage.php:260
+msgid "Oldest first"
+msgstr "오래된순"
+
+#: src/Form/CrawlerPage.php:266
+msgid "Apply filters"
+msgstr "필터 적용"
+
+#: src/Form/CrawlerPage.php:269
+msgid "Crawl preview"
+msgstr "크롤링 미리보기"
+
+#: src/Form/CrawlerPage.php:288
+msgid "Crawl delay"
+msgstr "크롤링 지연"
+
+#. translators: %d: number of milliseconds between iframe loads.
+#: src/Form/CrawlerPage.php:290
+#, php-format
+msgid "%d ms"
+msgstr "%d ms"
+
+#: src/Form/CrawlerPage.php:291
+msgid "Start crawling"
+msgstr "크롤링 시작"
+
+#: src/Form/CrawlerPage.php:292
+msgid "Pause crawl"
+msgstr "크롤링 일시 중지"
+
+#: src/Form/CrawlerPage.php:293
+msgid "Resume crawl"
+msgstr "크롤링 재개"
+
+#: src/Form/CrawlerPage.php:294
+msgid "Back to dashboard"
+msgstr "대시보드로 돌아가기"
+
+#: src/Form/CrawlerPage.php:295
+msgid "No matching content. Adjust the filters and apply."
+msgstr "일치하는 콘텐츠가 없습니다. 필터를 조정하고 다시 적용하십시오."
+
+#: src/Form/CrawlerPage.php:296
+msgid "Could not load the page list. Reload this page to retry; if the problem persists, your login session may have expired."
+msgstr "페이지 목록을 불러올 수 없습니다. 다시 시도하려면 이 페이지를 새로고침하십시오. 문제가 계속되면 로그인 세션이 만료되었을 수 있습니다."
+
+#. translators: %s: human-readable duration like "30 seconds" or "5 minutes".
+#: src/Form/CrawlerPage.php:298
+#, php-format
+msgid "Estimated time: %s"
+msgstr "예상 시간: %s"
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (singular form).
+#: src/Form/CrawlerPage.php:301
+#, php-format
+msgid "Showing %1$d of %2$d matching page."
+msgstr "일치하는 페이지 중 %1$d/%2$d 표시 중."
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (plural form).
+#: src/Form/CrawlerPage.php:303
+#, php-format
+msgid "Showing %1$d of %2$d matching pages."
+msgstr "일치하는 페이지 중 %1$d/%2$d 표시 중."
+
+#. translators: %d: whole-number count of seconds remaining (singular form).
+#: src/Form/CrawlerPage.php:307
+#, php-format
+msgid "%d second"
+msgstr "%d초"
+
+#. translators: %d: whole-number count of seconds remaining (plural form).
+#: src/Form/CrawlerPage.php:309
+#, php-format
+msgid "%d seconds"
+msgstr "%d초"
+
+#. translators: %d: whole-number count of minutes remaining (singular form).
+#: src/Form/CrawlerPage.php:313
+#, php-format
+msgid "%d minute"
+msgstr "%d분"
+
+#. translators: %d: whole-number count of minutes remaining (plural form).
+#: src/Form/CrawlerPage.php:315
+#, php-format
+msgid "%d minutes"
+msgstr "%d분"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (singular form).
+#: src/Form/CrawlerPage.php:319
+#, php-format
+msgid "%s hour"
+msgstr "%s시간"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (plural form).
+#: src/Form/CrawlerPage.php:321
+#, php-format
+msgid "%s hours"
+msgstr "%s시간"
+
+#: src/Form/CustomRulesPage.php:84 src/Form/CustomRulesPage.php:85
+msgid "Editoria11y Custom Rules"
+msgstr "Editoria11y 사용자 정의 규칙"
+
+#: src/Form/CustomRulesPage.php:104 src/Form/CustomRulesPage.php:338
+#: src/Form/CustomRulesPage.php:880 src/Form/CustomRulesPage.php:1030
+msgid "You do not have permission to manage custom rules."
+msgstr "사용자 정의 규칙을 관리할 권한이 없습니다."
+
+#: src/Form/CustomRulesPage.php:143 src/Form/CustomRulesPage.php:174
+msgid "Custom Rules"
+msgstr "사용자 정의 규칙"
+
+#: src/Form/CustomRulesPage.php:146
+msgid "Custom rules are a CSA feature. Activate CSA to add and edit rules; existing rules remain stored and become editable again on reactivation."
+msgstr "사용자 정의 규칙은 CSA 기능입니다. 규칙을 추가하고 편집하려면 CSA를 활성화하십시오. 기존 규칙은 저장되어 있으며 재활성화 시 다시 편집할 수 있습니다."
+
+#: src/Form/CustomRulesPage.php:176 src/Form/NetworkCustomRulesPage.php:136
+msgid "Add New"
+msgstr "새로 추가"
+
+#: src/Form/CustomRulesPage.php:181
+msgid "Each rule pairs a CSS selector (and/or text-content match) with an alert shown to users. Rules ship over the cached static config alongside built-in tests."
+msgstr "각 규칙은 CSS 선택자(및/또는 텍스트 내용 일치)를 사용자에게 표시되는 경고와 결합합니다. 규칙은 기본 테스트와 함께 캐싱된 정적 구성에 포함되어 전송됩니다."
+
+#: src/Form/CustomRulesPage.php:191 src/Form/NetworkCustomRulesPage.php:151
+msgid "Test"
+msgstr "테스트"
+
+#: src/Form/CustomRulesPage.php:192
+msgid "Source"
+msgstr "출처"
+
+#: src/Form/CustomRulesPage.php:193 src/Form/NetworkCustomRulesPage.php:152
+msgid "Elements"
+msgstr "요소"
+
+#: src/Form/CustomRulesPage.php:201
+msgid "No custom rules defined yet."
+msgstr "정의된 사용자 정의 규칙이 없습니다."
+
+#: src/Form/CustomRulesPage.php:202 src/Form/NetworkCustomRulesPage.php:162
+msgid "Add your first rule"
+msgstr "첫 번째 규칙 추가하기"
+
+#: src/Form/CustomRulesPage.php:239
+msgid "Active (enforced)"
+msgstr "활성화됨 (강제 적용)"
+
+#: src/Form/CustomRulesPage.php:241
+msgid "Disabled on this site"
+msgstr "이 사이트에서 비활성화됨"
+
+#: src/Form/CustomRulesPage.php:243
+msgid "Overridden by a site rule with the same ID"
+msgstr "동일한 ID를 가진 사이트 규칙에 의해 무시됨"
+
+#: src/Form/CustomRulesPage.php:245 src/Form/CustomRulesPage.php:304
+#: src/Form/CustomRulesPage.php:600 src/Form/CustomRulesPage.php:604
+#: src/Form/NetworkCustomRulesPage.php:176 src/Form/SettingsFields.php:786
+msgid "Active"
+msgstr "활성화됨"
+
+#: src/Form/CustomRulesPage.php:248
+msgid "Disabled in network defaults"
+msgstr "네트워크 기본값에서 비활성화됨"
+
+#: src/Form/CustomRulesPage.php:252
+msgid "From network (locked)"
+msgstr "네트워크에서 가져옴 (잠금)"
+
+#: src/Form/CustomRulesPage.php:253
+msgid "From network"
+msgstr "네트워크에서 가져옴"
+
+#: src/Form/CustomRulesPage.php:256
+msgid "Enable on this site"
+msgstr "이 사이트에서 활성화"
+
+#: src/Form/CustomRulesPage.php:257
+msgid "Disable on this site"
+msgstr "이 사이트에서 비활성화"
+
+#: src/Form/CustomRulesPage.php:277
+msgid "Locked by network admin"
+msgstr "네트워크 관리자에 의해 잠김"
+
+#: src/Form/CustomRulesPage.php:305 src/Form/NetworkCustomRulesPage.php:177
+msgid "Disabled"
+msgstr "비활성화됨"
+
+#: src/Form/CustomRulesPage.php:322
+msgid "This site"
+msgstr "이 사이트"
+
+#: src/Form/CustomRulesPage.php:353
+msgid "No matching network rule found to toggle."
+msgstr "전환할 일치하는 네트워크 규칙을 찾을 수 없습니다."
+
+#: src/Form/CustomRulesPage.php:360
+msgid "This rule is locked by the network admin and cannot be disabled per-site."
+msgstr "이 규칙은 네트워크 관리자에 의해 잠겨 있어 사이트별로 비활성화할 수 없습니다."
+
+#: src/Form/CustomRulesPage.php:369
+msgid "Network rule disabled on this site."
+msgstr "이 사이트에서 네트워크 규칙이 비활성화되었습니다."
+
+#: src/Form/CustomRulesPage.php:370
+msgid "Network rule re-enabled on this site."
+msgstr "이 사이트에서 네트워크 규칙이 다시 활성화되었습니다."
+
+#: src/Form/CustomRulesPage.php:398
+msgid "(text match only)"
+msgstr "(텍스트 일치만 해당)"
+
+#: src/Form/CustomRulesPage.php:435
+msgid "Custom rule not found"
+msgstr "사용자 정의 규칙을 찾을 수 없음"
+
+#: src/Form/CustomRulesPage.php:438
+msgid "Return to the rules list"
+msgstr "규칙 목록으로 돌아가기"
+
+#: src/Form/CustomRulesPage.php:483
+msgid "Edit custom rule"
+msgstr "사용자 정의 규칙 수정"
+
+#: src/Form/CustomRulesPage.php:484 src/Form/SettingsFields.php:247
+msgid "Add custom rule"
+msgstr "사용자 정의 규칙 추가"
+
+#: src/Form/CustomRulesPage.php:489
+msgid "All custom rules"
+msgstr "모든 사용자 정의 규칙"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Save rule"
+msgstr "규칙 저장"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Create rule"
+msgstr "규칙 생성"
+
+#: src/Form/CustomRulesPage.php:507
+msgid "Delete this custom rule?"
+msgstr "이 사용자 정의 규칙을 삭제하시겠습니까?"
+
+#: src/Form/CustomRulesPage.php:508 src/Form/NetworkCustomRulesPage.php:295
+msgid "Delete"
+msgstr "삭제"
+
+#: src/Form/CustomRulesPage.php:551
+msgid "Admin label for the configuration page"
+msgstr "설정 페이지용 관리자 라벨"
+
+#: src/Form/CustomRulesPage.php:564
+msgid "Test grouping ID"
+msgstr "테스트 그룹 ID"
+
+#: src/Form/CustomRulesPage.php:576
+msgid "Letters, numbers and underscores only.<br>Rules that share an ID will be grouped on dashboard reports."
+msgstr "문자, 숫자 및 언더바(_)만 사용 가능합니다.<br>동일한 ID를 공유하는 규칙은 대시보드 보고서에서 그룹화됩니다."
+
+#: src/Form/CustomRulesPage.php:585
+msgid "Machine name"
+msgstr "머신 이름"
+
+#: src/Form/CustomRulesPage.php:595
+msgid "Lowercase letters, digits, and underscores only. Cannot be changed after creation."
+msgstr "소문자, 숫자 및 언더바(_)만 사용 가능합니다. 생성 후에는 변경할 수 없습니다."
+
+#: src/Form/CustomRulesPage.php:609
+msgid "Disabled rules stay in network storage but are not sent to any site."
+msgstr "비활성화된 규칙은 네트워크 저장소에 유지되지만 어떠한 사이트에도 전송되지 않습니다."
+
+#: src/Form/CustomRulesPage.php:611
+msgid "Disabled rules stay in storage but are not sent to the browser."
+msgstr "비활성화된 규칙은 저장소에 유지되지만 브라우저로 전송되지 않습니다."
+
+#: src/Form/CustomRulesPage.php:619 src/Form/NetworkCustomRulesPage.php:153
+msgid "Lock"
+msgstr "잠금"
+
+#: src/Form/CustomRulesPage.php:623
+msgid "Lock this rule across the network"
+msgstr "이 규칙을 네트워크 전체에서 잠금"
+
+#: src/Form/CustomRulesPage.php:627
+msgid "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favor of this one. Unlocked rules can be disabled per-site."
+msgstr "잠긴 규칙은 모든 사이트에 강제 적용됩니다. 사이트별 관리자는 이를 비활성화할 수 없으며, 동일한 ID를 공유하는 사이트별 규칙은 이 규칙이 우선하여 무시됩니다. 잠기지 않은 규칙은 사이트별로 비활성화할 수 있습니다."
+
+#: src/Form/CustomRulesPage.php:639
+msgid "Alert content"
+msgstr "경고 내용"
+
+#: src/Form/CustomRulesPage.php:643
+msgid "Tip title"
+msgstr "팁 제목"
+
+#: src/Form/CustomRulesPage.php:654
+msgid "Tip details"
+msgstr "팁 세부 정보"
+
+#. translators: %s is the comma-separated list of allowed HTML tags.
+#: src/Form/CustomRulesPage.php:663
+#, php-format
+msgid "HTML displayed in the tooltip. The provided template is optional.<br>Allowed tags: %s."
+msgstr "툴팁에 표시되는 HTML입니다. 템플릿은 선택 사항입니다.<br>허용된 태그: %s."
+
+#: src/Form/CustomRulesPage.php:677
+msgid "Alert type"
+msgstr "경고 유형"
+
+#: src/Form/CustomRulesPage.php:682
+msgid "Error"
+msgstr "오류"
+
+#: src/Form/CustomRulesPage.php:685
+msgid "Manual check"
+msgstr "수동 확인"
+
+#: src/Form/CustomRulesPage.php:691
+msgid "Dismiss key"
+msgstr "무시 키"
+
+#: src/Form/CustomRulesPage.php:696
+msgid "Text content"
+msgstr "텍스트 내용"
+
+#: src/Form/CustomRulesPage.php:699
+msgid "Attributes on tag (e.g. href and src)"
+msgstr "태그의 속성(예: href 및 src)"
+
+#: src/Form/CustomRulesPage.php:703
+msgid "How dismissals are tracked. 'Text content' uses the text inside the element, 'Attributes on tag' uses its attributes (href, id, class, src)."
+msgstr "무시 내역을 추적하는 방식입니다. “텍스트 내용”은 요소 내부의 텍스트를 사용하고, “태그의 속성”은 속성(href, id, class, src)을 사용합니다."
+
+#: src/Form/CustomRulesPage.php:712
+msgid "Elements to check"
+msgstr "검사할 요소"
+
+#: src/Form/CustomRulesPage.php:715
+msgid "These sets contain elements that match your check area and skip over configuration."
+msgstr "이 세트에는 검사 영역과 일치하는 요소가 포함되어 있어 설정을 건너뛸 수 있습니다."
+
+#: src/Form/CustomRulesPage.php:724
+msgid "Common choices"
+msgstr "일반적인 선택"
+
+#: src/Form/CustomRulesPage.php:728
+msgid "All text elements: Headings, Paragraphs, Blockquotes and Lists"
+msgstr "모든 텍스트 요소: 제목, 단락, 인용구 및 목록"
+
+#: src/Form/CustomRulesPage.php:729 src/TestNames.php:378
+msgid "Links"
+msgstr "링크"
+
+#: src/Form/CustomRulesPage.php:730
+msgid "Paragraphs"
+msgstr "단락"
+
+#: src/Form/CustomRulesPage.php:731 src/TestNames.php:381
+msgid "Headings"
+msgstr "제목"
+
+#: src/Form/CustomRulesPage.php:732 src/TestNames.php:380
+msgid "Images"
+msgstr "이미지"
+
+#: src/Form/CustomRulesPage.php:733
+msgid "All elements"
+msgstr "모든 요소"
+
+#: src/Form/CustomRulesPage.php:734
+msgid "...other..."
+msgstr "...기타..."
+
+#: src/Form/CustomRulesPage.php:739
+msgid "Specific elements and combinations"
+msgstr "특정 요소 및 조합"
+
+#: src/Form/CustomRulesPage.php:751
+msgid "Note: combining Links with Paragraphs and other text containers can lead to duplicate alerts."
+msgstr "참고: 링크를 단락 또는 기타 텍스트 컨테이너와 결합하면 중복된 경고가 발생할 수 있습니다."
+
+#: src/Form/CustomRulesPage.php:761
+msgid "When tip should appear"
+msgstr "팁이 표시되어야 할 시점"
+
+#: src/Form/CustomRulesPage.php:764
+msgid "This test builder allows for simple text and attribute tests."
+msgstr "이 테스트 빌더를 사용하면 간단한 텍스트 및 속성 테스트가 가능합니다."
+
+#: src/Form/CustomRulesPage.php:773
+msgid "Select by attributes"
+msgstr "속성으로 선택"
+
+#: src/Form/CustomRulesPage.php:783
+msgid "Match using CSS selectors.<br>Use :not() to skip elements, e.g. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Use attribute selectors for URLs, e.g. <code>[href*=\".dev/\"]</code>."
+msgstr "CSS 선택자를 사용하여 일치시킵니다.<br>:not()을 사용하여 요소를 제외할 수 있습니다(예: <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>).<br>URL의 경우 속성 선택자를 사용하십시오(예: <code>[href*=\".dev/\"]</code>)."
+
+#: src/Form/CustomRulesPage.php:795
+msgid "Select by text"
+msgstr "텍스트로 선택"
+
+#: src/Form/CustomRulesPage.php:800
+msgid "Flag elements containing any of these text strings. One per line."
+msgstr "다음 텍스트 문자열 중 하나라도 포함하는 요소를 표시합니다. 한 줄에 하나씩 입력하십시오."
+
+#: src/Form/CustomRulesPage.php:805 src/Form/CustomRulesPage.php:809
+msgid "Case sensitive"
+msgstr "대소문자 구분"
+
+#: src/Form/CustomRulesPage.php:815
+msgid "Exclude elements that match this text"
+msgstr "이 텍스트와 일치하는 요소 제외"
+
+#: src/Form/CustomRulesPage.php:820
+msgid "Don't flag elements if they contain any of these words or phrases. E.g., a link to a development server is ok if it contains \"dev.\" One per line."
+msgstr "이 단어나 문구가 포함된 요소는 표시하지 않습니다. 예를 들어, \"dev\"가 포함된 개발 서버 링크는 허용됩니다. 한 줄에 하나씩 입력하십시오."
+
+#: src/Form/CustomRulesPage.php:952
+msgid "Custom rule saved."
+msgstr "사용자 정의 규칙이 저장되었습니다."
+
+#: src/Form/CustomRulesPage.php:1041
+msgid "No matching custom rule found to delete."
+msgstr "삭제할 일치하는 사용자 정의 규칙을 찾을 수 없습니다."
+
+#: src/Form/CustomRulesPage.php:1048
+msgid "Custom rule deleted."
+msgstr "사용자 정의 규칙이 삭제되었습니다."
+
+#: src/Form/MigrationPanel.php:77
+msgid "Editoria11y needs to update its database tables."
+msgstr "Editoria11y 데이터베이스 테이블을 업데이트해야 합니다."
+
+#: src/Form/MigrationPanel.php:81
+msgid "Editoria11y database update encountered an error during finalization."
+msgstr "Editoria11y 데이터베이스 업데이트 마무리 단계에서 오류가 발생했습니다."
+
+#: src/Form/MigrationPanel.php:82
+msgid "Editoria11y is updating existing dismissal records in the background."
+msgstr "Editoria11y가 백그라운드에서 기존 무시 기록을 업데이트하고 있습니다."
+
+#: src/Form/MigrationPanel.php:85
+msgid "Editoria11y database update failed and writes are paused."
+msgstr "Editoria11y 데이터베이스 업데이트에 실패하여 쓰기 작업이 일시 중지되었습니다."
+
+#: src/Form/MigrationPanel.php:94
+msgid "Open Editoria11y settings"
+msgstr "Editoria11y 설정 열기"
+
+#: src/Form/MigrationPanel.php:121
+msgid "Update failed. Please retry."
+msgstr "업데이트 실패. 다시 시도하십시오."
+
+#. translators: 1: number of legacy dismissals already migrated, 2: total count detected at start.
+#: src/Form/MigrationPanel.php:123
+#, php-format
+msgid "Migrating dismissals: %1$d of %2$d processed."
+msgstr "무시 기록 마이그레이션 중: %2$d개 중 %1$d개 처리됨."
+
+#: src/Form/MigrationPanel.php:124
+msgid "Database update complete."
+msgstr "데이터베이스 업데이트가 완료되었습니다."
+
+#: src/Form/MigrationPanel.php:125
+msgid "Working…"
+msgstr "작업 중..."
+
+#: src/Form/MigrationPanel.php:126
+msgid "A previous update attempt did not finish."
+msgstr "이전 업데이트 시도가 완료되지 않았습니다."
+
+#: src/Form/MigrationPanel.php:127
+msgid "A schema update is required."
+msgstr "스키마 업데이트가 필요합니다."
+
+#: src/Form/MigrationPanel.php:128
+msgid "Background data update is in progress. Click below to drive it to completion now."
+msgstr "백그라운드 데이터 업데이트가 진행 중입니다. 아래를 클릭하여 지금 완료하십시오."
+
+#: src/Form/MigrationPanel.php:132
+msgid "Editoria11y database update"
+msgstr "Editoria11y 데이터베이스 업데이트"
+
+#: src/Form/MigrationPanel.php:134
+msgid "Checking schema state…"
+msgstr "스키마 상태 확인 중..."
+
+#: src/Form/MigrationPanel.php:138
+msgid "Run update now"
+msgstr "지금 업데이트 실행"
+
+#: src/Form/MigrationPanel.php:141
+msgid "Retry"
+msgstr "재시도"
+
+#: src/Form/MigrationPanel.php:268 src/Form/NetworkLicensePage.php:196
+msgid "Insufficient permissions."
+msgstr "권한이 부족합니다."
+
+#: src/Form/NetworkCustomRulesPage.php:70
+#: src/Form/NetworkCustomRulesPage.php:71
+#: src/Form/NetworkCustomRulesPage.php:114
+msgid "Editoria11y network custom rules"
+msgstr "Editoria11y 네트워크 사용자 정의 규칙"
+
+#: src/Form/NetworkCustomRulesPage.php:107
+#: src/Form/NetworkCustomRulesPage.php:311
+#: src/Form/NetworkCustomRulesPage.php:384 src/Form/NetworkSettingsPage.php:154
+#: src/Form/NetworkSettingsPage.php:511
+msgid "Insufficient privileges."
+msgstr "권한이 부족합니다."
+
+#: src/Form/NetworkCustomRulesPage.php:134
+msgid "Network custom rules"
+msgstr "네트워크 사용자 정의 규칙"
+
+#: src/Form/NetworkCustomRulesPage.php:141
+msgid "Rules defined here apply to every site on the network. Locked rules cannot be disabled per-site."
+msgstr "여기서 정의된 규칙은 네트워크의 모든 사이트에 적용됩니다. 잠긴 규칙은 사이트별로 비활성화할 수 없습니다."
+
+#: src/Form/NetworkCustomRulesPage.php:161
+msgid "No network rules defined yet."
+msgstr "아직 정의된 네트워크 규칙이 없습니다."
+
+#: src/Form/NetworkCustomRulesPage.php:179
+msgid "Locked"
+msgstr "잠김"
+
+#: src/Form/NetworkCustomRulesPage.php:180
+msgid "Unlocked"
+msgstr "잠금 해제"
+
+#: src/Form/NetworkCustomRulesPage.php:224
+msgid "Network rule not found"
+msgstr "네트워크 규칙을 찾을 수 없음"
+
+#: src/Form/NetworkCustomRulesPage.php:227
+msgid "Return to the network rules list"
+msgstr "네트워크 규칙 목록으로 돌아가기"
+
+#: src/Form/NetworkCustomRulesPage.php:270
+msgid "Edit network custom rule"
+msgstr "네트워크 사용자 정의 규칙 수정"
+
+#: src/Form/NetworkCustomRulesPage.php:271 src/Form/SettingsFields.php:210
+msgid "Add network custom rule"
+msgstr "네트워크 사용자 정의 규칙 추가"
+
+#: src/Form/NetworkCustomRulesPage.php:276
+msgid "All network rules"
+msgstr "모든 네트워크 규칙"
+
+#: src/Form/NetworkCustomRulesPage.php:294
+msgid "Delete this network rule? Every site on the network will stop receiving it."
+msgstr "이 네트워크 규칙을 삭제하시겠습니까? 네트워크의 모든 사이트에서 이 규칙을 받지 못하게 됩니다."
+
+#: src/Form/NetworkCustomRulesPage.php:369
+msgid "Network custom rule saved."
+msgstr "네트워크 사용자 정의 규칙이 저장되었습니다."
+
+#: src/Form/NetworkCustomRulesPage.php:395
+msgid "No matching network rule found to delete."
+msgstr "삭제할 일치하는 네트워크 규칙을 찾을 수 없습니다."
+
+#: src/Form/NetworkCustomRulesPage.php:402
+msgid "Network custom rule deleted."
+msgstr "네트워크 사용자 정의 규칙이 삭제되었습니다."
+
+#: src/Form/NetworkDefaultsWorker.php:478
+msgid "Tests + roles assignment"
+msgstr "테스트 + 역할 할당"
+
+#: src/Form/NetworkLicensePage.php:58 src/Form/NetworkLicensePage.php:59
+msgid "Editoria11y license"
+msgstr "Editoria11y 라이선스"
+
+#: src/Form/NetworkLicensePage.php:83 src/FreemiusAccessControl.php:283
+msgid "Only network administrators can manage the Editoria11y license."
+msgstr "Editoria11y 라이선스는 네트워크 관리자만 관리할 수 있습니다."
+
+#: src/Form/NetworkLicensePage.php:94
+msgid "Starting…"
+msgstr "시작 중…"
+
+#: src/Form/NetworkLicensePage.php:95
+msgid "Cancelling…"
+msgstr "취소 중…"
+
+#: src/Form/NetworkLicensePage.php:96
+msgid "Resetting…"
+msgstr "재설정 중…"
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:98
+#, php-format
+msgid "Activated %1$d of %2$d sites."
+msgstr "%2$d개 사이트 중 %1$d개가 활성화되었습니다."
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:100
+#, php-format
+msgid "Deactivated %1$d of %2$d sites."
+msgstr "%2$d개 사이트 중 %1$d개가 비활성화되었습니다."
+
+#: src/Form/NetworkLicensePage.php:101
+msgid "License activated on every site in the network."
+msgstr "네트워크의 모든 사이트에서 라이선스가 활성화되었습니다."
+
+#: src/Form/NetworkLicensePage.php:102
+msgid "License deactivated on every site in the network."
+msgstr "네트워크의 모든 사이트에서 라이선스가 비활성화되었습니다."
+
+#: src/Form/NetworkLicensePage.php:103
+msgid "Activation cancelled. Already-activated sites keep their license."
+msgstr "활성화가 취소되었습니다. 이미 활성화된 사이트는 라이선스를 유지합니다."
+
+#: src/Form/NetworkLicensePage.php:104
+msgid "Deactivation cancelled. Already-deactivated sites stay deactivated."
+msgstr "비활성화가 취소되었습니다. 이미 비활성화된 사이트는 비활성화 상태로 유지됩니다."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:106
+#, php-format
+msgid "Activation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "%d개 사이트에서 오류가 발생하여 활성화가 완료되었습니다. 아래 목록을 검토하고 원인을 수정한 후 다시 시도하십시오."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:108
+#, php-format
+msgid "Deactivation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "%d개 사이트에서 오류가 발생하여 비활성화가 완료되었습니다. 아래 목록을 검토하고 원인을 수정한 후 다시 시도하십시오."
+
+#: src/Form/NetworkLicensePage.php:109
+msgid "An unknown error occurred."
+msgstr "알 수 없는 오류가 발생했습니다."
+
+#. translators: The <a>…</a> tags mark the phrase that will be rendered as a link to https://editoria11y.com/license. Keep the tags around the equivalent phrase in your language; do not add an href.
+#: src/Form/NetworkLicensePage.php:111
+msgid "Paste your <a>Editoria11y CSA license key</a> to begin."
+msgstr "<a>Editoria11y CSA 라이선스 키</a>를 붙여넣어 시작하십시오."
+
+#: src/Form/NetworkLicensePage.php:112
+msgid "Deactivate the Editoria11y CSA license on every site in this network? Each site's license slot will be returned to your Freemius account."
+msgstr "이 네트워크의 모든 사이트에서 Editoria11y CSA 라이선스를 비활성화하시겠습니까? 각 사이트의 라이선스 슬롯이 Freemius 계정으로 반환됩니다."
+
+#: src/Form/NetworkLicensePage.php:113
+msgid "Activate a license network-wide"
+msgstr "네트워크 전체에서 라이선스 활성화"
+
+#: src/Form/NetworkLicensePage.php:114
+msgid "Deactivate licenses network-wide"
+msgstr "네트워크 전체에서 라이선스 비활성화"
+
+#: src/Form/NetworkLicensePage.php:115
+msgid "Activation in progress"
+msgstr "활성화 진행 중"
+
+#: src/Form/NetworkLicensePage.php:116
+msgid "Deactivation in progress"
+msgstr "비활성화 진행 중"
+
+#: src/Form/NetworkLicensePage.php:120
+msgid "Editoria11y CSA license"
+msgstr "Editoria11y CSA 라이선스"
+
+#: src/Form/NetworkLicensePage.php:123
+msgid "Background licensing tasks run slowly via WP-Cron; leave this page open to run a batch every 15 seconds."
+msgstr "백그라운드 라이선스 작업은 WP-Cron을 통해 느리게 실행됩니다. 15초마다 배치를 실행하려면 이 페이지를 열어 두십시오."
+
+#: src/Form/NetworkLicensePage.php:138
+msgid "JavaScript is required to use this page."
+msgstr "이 페이지를 사용하려면 JavaScript가 필요합니다."
+
+#: src/Form/NetworkLicensePage.php:171
+msgid "DISABLE_WP_CRON is enabled on this site. The activation worker depends on WP-Cron firing — make sure your system cron is hitting wp-cron.php, or activation will not progress."
+msgstr "이 사이트에서 DISABLE_WP_CRON이 활성화되어 있습니다. 활성화 작업은 WP-Cron 실행에 의존합니다. 시스템 크론이 wp-cron.php를 호출하는지 확인하지 않으면 활성화가 진행되지 않습니다."
+
+#: src/Form/NetworkLicensePage.php:347
+msgid "Activate on every site in this network"
+msgstr "이 네트워크의 모든 사이트에서 활성화"
+
+#: src/Form/NetworkLicensePage.php:378
+msgid "License key"
+msgstr "라이선스 키"
+
+#: src/Form/NetworkLicensePage.php:389
+msgid "Deactivate license network-wide"
+msgstr "네트워크 전체에서 라이선스 비활성화"
+
+#: src/Form/NetworkLicensePage.php:401
+msgid "Removes the Editoria11y CSA license from every site on the network. Each site's install record stays in place; only the license link is cleared."
+msgstr "네트워크의 모든 사이트에서 Editoria11y CSA 라이선스를 제거합니다. 각 사이트의 설치 기록은 유지되며 라이선스 연결만 해제됩니다."
+
+#: src/Form/NetworkLicensePage.php:460
+msgid "Retry failed sites"
+msgstr "실패한 사이트 재시도"
+
+#: src/Form/NetworkLicensePage.php:473
+msgid "Modify network license"
+msgstr "네트워크 라이선스 수정"
+
+#: src/Form/NetworkLicensePage.php:492
+msgid "Back"
+msgstr "뒤로"
+
+#: src/Form/NetworkLicensePage.php:503
+msgid "Done"
+msgstr "완료"
+
+#: src/Form/NetworkLicensePage.php:510
+msgid "Cancelled"
+msgstr "취소됨"
+
+#: src/Form/NetworkLicensePage.php:518
+msgid "Errors"
+msgstr "오류"
+
+#: src/Form/NetworkLicenseWorker.php:392
+msgid "License key is required."
+msgstr "라이선스 키는 필수입니다."
+
+#: src/Form/NetworkLicenseWorker.php:400 src/Form/NetworkLicenseWorker.php:456
+msgid "An activation run is already in progress."
+msgstr "활성화 작업이 이미 진행 중입니다."
+
+#: src/Form/NetworkLicenseWorker.php:528
+msgid "No previous errors to retry."
+msgstr "재시도할 이전 오류가 없습니다."
+
+#: src/Form/NetworkLicenseWorker.php:538
+msgid "License key is no longer stored. Start a new activation."
+msgstr "라이선스 키가 더 이상 저장되어 있지 않습니다. 새 활성화를 시작하십시오."
+
+#: src/Form/NetworkLicenseWorker.php:626
+msgid "Freemius SDK wrapper unavailable."
+msgstr "Freemius SDK 래퍼를 사용할 수 없습니다."
+
+#: src/Form/NetworkLicenseWorker.php:803
+msgid "SDK _deactivate_license() method unavailable."
+msgstr "SDK _deactivate_license() 메서드를 사용할 수 없습니다."
+
+#: src/Form/NetworkLicenseWorker.php:853
+msgid "Deactivation API call did not clear the install license."
+msgstr "비활성화 API 호출이 설치 라이선스를 해제하지 못했습니다."
+
+#: src/Form/NetworkLicenseWorker.php:947
+msgid "No valid sites in batch."
+msgstr "배치에 유효한 사이트가 없습니다."
+
+#: src/Form/NetworkLicenseWorker.php:1053
+msgid "Activation API returned an unspecified error."
+msgstr "활성화 API에서 지정되지 않은 오류가 반환되었습니다."
+
+#: src/Form/NetworkLicenseWorker.php:1055
+msgid "Install record not created after API call."
+msgstr "API 호출 후 설치 기록이 생성되지 않았습니다."
+
+#: src/Form/NetworkSettingsPage.php:77 src/Form/NetworkSettingsPage.php:78
+msgid "Editoria11y defaults"
+msgstr "Editoria11y 기본값"
+
+#: src/Form/NetworkSettingsPage.php:103
+msgid "Defaults"
+msgstr "기본값"
+
+#: src/Form/NetworkSettingsPage.php:110 src/Form/SettingsPage.php:287
+msgid "Custom rules"
+msgstr "사용자 정의 규칙"
+
+#: src/Form/NetworkSettingsPage.php:140
+msgid "Heads up: \"Default for all sites\" and \"Override for all sites\" overwrite a site's current value whenever that value is still an Editoria11y default or a previous network default — including a per-site value that happens to match a default."
+msgstr "참고: “모든 사이트의 기본값”과 “모든 사이트 재정의”는, 사이트의 현재 값이 여전히 Editoria11y 기본값이거나 이전 네트워크 기본값과 같을 경우 그 값을 덮어씁니다. 우연히 기본값과 일치하는 사이트별 값도 포함됩니다."
+
+#: src/Form/NetworkSettingsPage.php:176
+msgid "Editoria11y default or locked network settings"
+msgstr "Editoria11y 기본값 또는 잠긴 네트워크 설정"
+
+#: src/Form/NetworkSettingsPage.php:180
+msgid "Network defaults saved."
+msgstr "네트워크 기본값이 저장되었습니다."
+
+#: src/Form/NetworkSettingsPage.php:186
+msgid "Network defaults were not saved."
+msgstr "네트워크 기본값이 저장되지 않았습니다."
+
+#: src/Form/NetworkSettingsPage.php:187
+msgid "You changed the following settings, but their propagation dropdown is still set to \"No network default\" — your change would not reach any site. Set the dropdown to \"Default for new sites\", \"Default for all sites\", or \"Override for all sites\" — or revert the value — and save again."
+msgstr "다음 설정을 변경하셨지만, 전파 드롭다운이 여전히 “네트워크 기본값 없음”으로 설정되어 있어 변경 사항이 어떠한 사이트에도 반영되지 않습니다. 드롭다운을 “신규 사이트의 기본값”, “모든 사이트의 기본값” 또는 “모든 사이트 재정의”로 설정하거나 값을 되돌린 후 다시 저장하십시오."
+
+#: src/Form/NetworkSettingsPage.php:213
+msgid "Save network defaults"
+msgstr "네트워크 기본값 저장"
+
+#. translators: 1: processed sites, 2: total sites, 3: sites updated
+#: src/Form/NetworkSettingsPage.php:311
+#, php-format
+msgid "%1$s of %2$s sites visited (%3$s updated)."
+msgstr "%2$s개 사이트 중 %1$s개 방문 완료 (%3$s개 업데이트됨)."
+
+#. translators: %s: human-readable duration estimate
+#: src/Form/NetworkSettingsPage.php:327
+#, php-format
+msgid "Estimated %s remaining."
+msgstr "남은 예상 시간: %s."
+
+#. translators: %s: number of errors recorded
+#: src/Form/NetworkSettingsPage.php:340
+#, php-format
+msgid "Errors: %s (most recent retained). Check server logs for details."
+msgstr "오류: %s건 (최신 내용 보관 중). 자세한 내용은 서버 로그를 확인하십시오."
+
+#: src/Form/NetworkSettingsPage.php:349
+msgid "Saving the form now will restart propagation with the new settings."
+msgstr "지금 폼을 저장하면 새 설정으로 전파가 다시 시작됩니다."
+
+#: src/Form/NetworkSettingsPage.php:412
+msgid "Propagating network defaults to existing sites…"
+msgstr "기존 사이트에 네트워크 기본값 전파 중…"
+
+#: src/Form/NetworkSettingsPage.php:415
+msgid "Network defaults propagated."
+msgstr "네트워크 기본값이 전파되었습니다."
+
+#: src/Form/NetworkSettingsPage.php:418
+msgid "Network defaults propagation failed."
+msgstr "네트워크 기본값 전파에 실패했습니다."
+
+#: src/Form/NetworkSettingsPage.php:421
+msgid "Network defaults propagation idle."
+msgstr "네트워크 기본값 전파가 대기 중입니다."
+
+#: src/Form/SettingsContext.php:214
+msgid "Managed at the network level"
+msgstr "네트워크 수준에서 관리됨"
+
+#: src/Form/SettingsContext.php:283 src/Form/SettingsContext.php:318
+msgid "— No network default —"
+msgstr "— 네트워크 기본값 없음 —"
+
+#: src/Form/SettingsContext.php:284 src/Form/SettingsContext.php:319
+msgid "Default for new sites"
+msgstr "신규 사이트의 기본값"
+
+#: src/Form/SettingsContext.php:285 src/Form/SettingsContext.php:320
+msgid "Default for all sites (skip custom values)"
+msgstr "모든 사이트의 기본값 (사용자 지정 값 건너뛰기)"
+
+#: src/Form/SettingsContext.php:286 src/Form/SettingsContext.php:321
+msgid "Override for all sites (delete custom values)"
+msgstr "모든 사이트 재정의 (사용자 지정 값 삭제)"
+
+#: src/Form/SettingsContext.php:326
+msgid "Propagation"
+msgstr "전파"
+
+#: src/Form/SettingsFields.php:68
+msgid "Include all parts of the page that contain your theme and content."
+msgstr "테마와 콘텐츠를 포함하는 페이지의 모든 부분을 포함합니다."
+
+#: src/Form/SettingsFields.php:69
+msgid "Exclude elements that show unhelpful, repetitive, or inaccurate alerts."
+msgstr "도움이 되지 않거나, 반복적이거나, 부정확한 경고를 표시하는 요소를 제외합니다."
+
+#: src/Form/SettingsFields.php:71
+msgid "If you need help:"
+msgstr "도움이 필요한 경우:"
+
+#: src/Form/SettingsFields.php:72
+msgid "Configuration Guide"
+msgstr "설정 가이드"
+
+#: src/Form/SettingsFields.php:73
+msgid "Issue Queue"
+msgstr "이슈 큐"
+
+#: src/Form/SettingsFields.php:74
+msgid "Support contacts"
+msgstr "지원 연락처"
+
+#: src/Form/SettingsFields.php:84
+msgid "Define the parts of each page Editoria11y checks. Activating CSA unlocks an additional \"developer area\" superset that runs more checks and routes alerts to the roles you choose."
+msgstr "Editoria11y가 검사할 각 페이지의 부분을 정의합니다. CSA를 활성화하면 더 많은 검사를 실행하고 선택한 역할에 경고를 전달하는 추가적인 \"개발자 영역\" 상위 집합을 사용할 수 있습니다."
+
+#: src/Form/SettingsFields.php:98
+msgid "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licenses can split tests between roles."
+msgstr "이 테스트들은 콘텐츠 편집자가 수정할 수 있는 문제를 감지합니다. 테스트는 개별적으로 비활성화할 수 있으며, CSA 라이선스가 있는 사이트는 테스트를 역할별로 분리할 수 있습니다."
+
+#: src/Form/SettingsFields.php:114
+msgid "Apply all the tests and role assignments below to"
+msgstr "아래의 모든 테스트 및 역할 할당 적용 대상"
+
+#: src/Form/SettingsFields.php:123
+msgid "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA license for site administrators and developers."
+msgstr "이 테스트들은 일반적으로 테마나 플러그인 변경이 필요한 문제를 감지하며, 사이트 관리자 및 개발자를 위한 CSA 라이선스의 일부입니다."
+
+#: src/Form/SettingsFields.php:133
+msgid "The \"tests + roles assignment\" propagation setting under \"Modify content tests\" above also governs the template-test selection — both are stored together."
+msgstr "“콘텐츠 테스트 수정” 아래의 “테스트 + 역할 할당” 전파 설정은 템플릿 테스트 선택도 함께 제어합니다. 두 설정은 함께 저장됩니다."
+
+#: src/Form/SettingsFields.php:160
+msgid "Managed at the network level."
+msgstr "네트워크 수준에서 관리됩니다."
+
+#: src/Form/SettingsFields.php:193
+msgid "Network-level custom rules apply to every site in the network."
+msgstr "네트워크 수준 사용자 정의 규칙은 네트워크의 모든 사이트에 적용됩니다."
+
+#. translators: %d is the number of network custom rules defined (active + inactive).
+#: src/Form/SettingsFields.php:204
+#, php-format
+msgid "Manage network custom rules (%d defined)"
+msgid_plural "Manage network custom rules (%d defined)"
+msgstr[0] "네트워크 사용자 정의 규칙 관리 (%d개 정의됨)"
+
+#: src/Form/SettingsFields.php:230
+msgid "Define your own accessibility tests. Each rule pairs a CSS selector with a tip shown to users; rules ship over the cached static config alongside the built-in test catalog."
+msgstr "자신만의 접근성 테스트를 정의하십시오. 각 규칙은 CSS 선택자를 사용자에게 표시되는 팁과 결합합니다. 규칙은 기본 테스트 카탈로그와 함께 캐싱된 정적 구성에 포함되어 전송됩니다."
+
+#. translators: %d is the number of custom rules active on this site (per-site rules plus network rules not disabled here).
+#: src/Form/SettingsFields.php:241
+#, php-format
+msgid "Manage custom rules (%d active)"
+msgid_plural "Manage custom rules (%d active)"
+msgstr[0] "사용자 정의 규칙 관리 (%d개 활성화됨)"
+
+#: src/Form/SettingsFields.php:257
+msgid "Custom rules let CSA admins register additional accessibility tests with their own selectors, labels, and tip content. Activate CSA to manage them here."
+msgstr "사용자 정의 규칙을 통해 CSA 관리자는 자신만의 선택자, 라벨 및 팁 내용을 사용하여 추가적인 접근성 테스트를 등록할 수 있습니다. 여기에서 관리하려면 CSA를 활성화하십시오."
+
+#: src/Form/SettingsFields.php:294
+msgid "Choose when the control panel should open and show inline tips. \"Start open if there are any alerts\" is recommended, as it helps tips get noticed over time."
+msgstr "제어판이 열리고 인라인 팁을 표시할 시점을 선택하십시오. 팁이 시간이 지남에 따라 눈에 띄도록 “경고가 하나라도 있으면 열린 상태로 시작”을 권장합니다."
+
+#: src/Form/SettingsFields.php:312
+msgid "Choose whether to show inline tips while editing post and page content. The checker always hides while editing templates and layouts."
+msgstr "글 및 페이지 콘텐츠 편집 중 인라인 팁 표시 여부를 선택하십시오. 검사기는 템플릿 및 레이아웃 편집 중에는 항상 숨겨집니다."
+
+#: src/Form/SettingsFields.php:333
+msgid "Provide CSS selectors. Content authors will only see the alerts within these parts of the page. Do not provide selectors that nest within each other, or the inner content will be checked twice."
+msgstr "CSS 선택자를 제공하십시오. 콘텐츠 작성자는 페이지의 이 부분 내에서 발생하는 경고만 보게 됩니다. 서로 중첩되는 선택자를 제공하지 마십시오. 그렇지 않으면 내부 콘텐츠가 두 번 검사될 수 있습니다."
+
+#: src/Form/SettingsFields.php:343
+msgid "The default is <code>main</code> or <code>body</code>, depending on theme."
+msgstr "기본값은 테마에 따라 <code>main</code> 또는 <code>body</code>입니다."
+
+#: src/Form/SettingsFields.php:365
+msgid ""
+"If Editoria11y is flagging things editors cannot fix, e.g., theme-generated \"read more\" links or social media widgets,\n"
+"\t\t\t\tprovide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+msgstr "Editoria11y가 편집자가 수정할 수 없는 항목(예: 테마에서 생성된 \"더 읽기\" 링크 또는 소셜 미디어 위젯)을 표시하는 경우, 무시하고 싶은 요소에 대한 CSS 선택자를 제공하십시오. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>와 같이 구체적으로 작성하십시오."
+
+#: src/Form/SettingsFields.php:376
+msgid "If you are new at this, start by opening your browser's developer tools, inspecting the element you do not want flagged, and looking for unique-looking CSS selectors."
+msgstr "처음 시작하는 경우, 브라우저의 개발자 도구를 열어 표시하고 싶지 않은 요소를 검사하고 고유한 CSS 선택자를 찾아보십시오."
+
+#. translators: %s is the built-in list of always-ignored CSS selectors.
+#: src/Form/SettingsFields.php:387
+#, php-format
+msgid "Selectors you add are appended to the built-in list, which is always ignored: %s"
+msgstr "추가한 선택자는 항상 무시되는 기본 제공 목록에 추가됩니다: %s"
+
+#: src/Form/SettingsFields.php:434
+msgid "Set to the number of other themes or plugins that will be injecting custom result JS events. Editoria11y will wait until it receives this number of <code>ed11yResume</code> notifications before showing results."
+msgstr "커스텀 결과 JS 이벤트를 삽입할 다른 테마나 플러그인의 개수를 설정하십시오. Editoria11y는 결과를 표시하기 전에 이 숫자만큼의 <code>ed11yResume</code> 알림을 받을 때까지 기다립니다."
+
+#: src/Form/SettingsFields.php:457
+msgid "Used to block checking on site sections or admin pages."
+msgstr "사이트 섹션 또는 관리자 페이지에서 검사를 차단하는 데 사용됩니다."
+
+#: src/Form/SettingsFields.php:485
+msgid "Autodetect"
+msgstr "자동 감지"
+
+#: src/Form/SettingsFields.php:486
+msgid "Only user-editable content"
+msgstr "사용자 편집 가능 콘텐츠만"
+
+#: src/Form/SettingsFields.php:487
+msgid "Other"
+msgstr "기타"
+
+#: src/Form/SettingsFields.php:492
+msgid "Developer scan area"
+msgstr "개발자 스캔 영역"
+
+#: src/Form/SettingsFields.php:510
+msgid "\"Autodetect\" selects:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+msgstr "\"자동 감지\" 선택 시:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+
+#: src/Form/SettingsFields.php:527
+msgid "Specify regions to check"
+msgstr "검사할 영역 지정"
+
+#: src/Form/SettingsFields.php:542
+msgid "Alerts in these regions will be shown to both developers and editors. One selector per line."
+msgstr "이 영역의 경고는 개발자와 편집자 모두에게 표시됩니다. 한 줄에 선택자 하나씩 입력하십시오."
+
+#: src/Form/SettingsFields.php:574
+msgid "These parts of the page will be ignored entirely."
+msgstr "페이지의 이 부분들은 완전히 무시됩니다."
+
+#: src/Form/SettingsFields.php:608
+msgid "Developer roles"
+msgstr "개발자 역할"
+
+#: src/Form/SettingsFields.php:626
+msgid "Unchecked roles only see content checks."
+msgstr "체크되지 않은 역할은 콘텐츠 검사만 볼 수 있습니다."
+
+#: src/Form/SettingsFields.php:649
+msgid "Start open if there are new alerts"
+msgstr "새 경고가 있으면 열린 상태로 시작"
+
+#: src/Form/SettingsFields.php:650
+msgid "Start open if there are any alerts"
+msgstr "경고가 하나라도 있으면 열린 상태로 시작"
+
+#: src/Form/SettingsFields.php:651
+msgid "Always start open"
+msgstr "항상 열린 상태로 시작"
+
+#: src/Form/SettingsFields.php:652
+msgid "Start minimized"
+msgstr "최소화된 상태로 시작"
+
+#: src/Form/SettingsFields.php:780
+msgid "Rule"
+msgstr "규칙"
+
+#: src/Form/SettingsFields.php:784
+msgid "Show to"
+msgstr "표시 대상"
+
+#: src/Form/SettingsFields.php:825
+msgid "Everyone"
+msgstr "모든 사용자"
+
+#: src/Form/SettingsFields.php:826
+msgid "Developers only"
+msgstr "개발자 전용"
+
+#: src/Form/SettingsFields.php:827
+msgid "Off"
+msgstr "끄기"
+
+#: src/Form/SettingsFields.php:844
+msgid "(Part of CSA suite)"
+msgstr "(CSA 제품군의 일부)"
+
+#: src/Form/SettingsFields.php:881
+msgid "Remind the editor that these linked documents need a manual check"
+msgstr "이 연결된 문서들에 수동 확인이 필요함을 편집자에게 알립니다."
+
+#: src/Form/SettingsFields.php:882
+msgid "Add or remove filetypes. Set to \"false\" to disable the test altogether. Providing any value will override the default."
+msgstr "파일 유형을 추가하거나 제거합니다. 테스트를 아예 비활성화하려면 \"false\"로 설정하십시오. 값을 입력하면 기본값이 무시됩니다."
+
+#: src/Form/SettingsFields.php:886
+msgid "Remove elements that match these selectors before testing link text"
+msgstr "링크 텍스트를 테스트하기 전에 이 선택자와 일치하는 요소를 제거합니다."
+
+#: src/Form/SettingsFields.php:887
+msgid "Provide a CSS selector for elements your themes or plugins programmatically add to links (usually external or open-in-new-window markers), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests."
+msgstr "테마나 플러그인이 링크에 프로그래밍 방식으로 추가하는 요소(보통 외부 링크 또는 새 창 열기 표시)의 CSS 선택자를 제공하여, \"링크에 텍스트가 없음\" 및 \"링크 텍스트가 의미 없음\" 테스트 시 무시되도록 합니다."
+
+#: src/Form/SettingsFields.php:891
+msgid "Remove these strings before testing link text"
+msgstr "링크 텍스트를 테스트하기 전에 이 문자열을 제거합니다"
+
+#: src/Form/SettingsFields.php:892
+msgid "Provide a pipe-separated (\"|\") list of phrases your themes or plugins programmatically add to links to hint a purpose (external, mail, phone, open-in-new-window), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests; e.g.: (link is external)|(link sends email)."
+msgstr "테마나 플러그인이 링크의 목적(외부, 메일, 전화, 새 창 열기 등)을 나타내기 위해 추가하는 문구들을 파이프(\"|\")로 구분하여 목록으로 제공하십시오. 이렇게 하면 \"링크에 텍스트가 없음\" 및 \"링크 텍스트가 의미 없음\" 테스트 시 무시할 수 있습니다. 예: (link is external)|(link sends email)."
+
+#: src/Form/SettingsFields.php:896
+msgid "Strings in links that indicate new tabs"
+msgstr "새 탭을 나타내는 링크 내 문자열"
+
+#: src/Form/SettingsFields.php:897
+msgid "Provide a pipe-separated list of phrases your site uses to warn users a link opens in a new tab; e.g.: new tab|new window|external."
+msgstr "사이트에서 링크가 새 탭에서 열린다는 것을 사용자에게 알리는 문구들을 파이프(\"|\")로 구분하여 제공하십시오. 예: new tab|new window|external."
+
+#: src/Form/SettingsFields.php:905
+msgid "Embeds flagged as needing manual review"
+msgstr "수동 검토가 필요한 것으로 표시된 임베드"
+
+#: src/Form/SettingsFields.php:906
+msgid "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualizations entirely, disable that test above."
+msgstr "기본 제공 감지 목록(Looker/Data Studio, Tableau, Power BI, Qlik)에 추가됩니다. 도메인 또는 URL 일부를 쉼표로 구분하여 입력하십시오. 시각화 표시를 완전히 중단하려면 위의 해당 테스트를 비활성화하십시오."
+
+#: src/Form/SettingsFields.php:911
+msgid "Videos flagged as needing a manual check for captions"
+msgstr "자막 수동 확인이 필요한 것으로 표시된 비디오"
+
+#: src/Form/SettingsFields.php:912
+msgid "Added to the built-in detection list (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard and generic video URLs). Provide a comma-separated list of domains or URL fragments, e.g. yuja.com. To stop flagging videos entirely, disable that test above."
+msgstr "기본 제공 감지 목록(YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard 및 일반 비디오 URL)에 추가됩니다. 도메인 또는 URL 일부를 쉼표로 구분하여 입력하십시오(예: yuja.com). 비디오 표시를 완전히 중단하려면 위의 해당 테스트를 비활성화하십시오."
+
+#: src/Form/SettingsFields.php:917
+msgid "Audio flagged as needing a manual check for transcripts"
+msgstr "대본 수동 확인이 필요한 것으로 표시된 오디오"
+
+#: src/Form/SettingsFields.php:918
+msgid "Added to the built-in detection list (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts and other major hosts). Provide a comma-separated list of domains or URL fragments. To stop flagging audio entirely, disable that test above."
+msgstr "기본 제공 감지 목록(SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts 및 기타 주요 호스팅 서비스)에 추가됩니다. 도메인 또는 URL 일부를 쉼표로 구분하여 입력하십시오. 오디오 표시를 완전히 중단하려면 위의 해당 테스트를 비활성화하십시오."
+
+#: src/Form/SettingsFields.php:923
+msgid "Remind editor that content in these embeds needs manual review"
+msgstr "이 임베드 내의 콘텐츠에 수동 검토가 필요함을 편집자에게 알립니다"
+
+#: src/Form/SettingsFields.php:924
+msgid "Provide a comma-separated list of selectors you wish to flag for the editor, e.g.: .my-embedded-feed, #my-social-link-block."
+msgstr "편집자에게 알리고 싶은 선택자 목록을 쉼표로 구분하여 제공하십시오. 예: .my-embedded-feed, #my-social-link-block."
+
+#: src/Form/SettingsFields.php:936
+msgid "Do not check contrast for these elements"
+msgstr "이 요소들에 대해서는 대비를 검사하지 않음"
+
+#: src/Form/SettingsFields.php:949
+msgid "Provide a comma-separated list of selectors for elements to ignore for all users."
+msgstr "모든 사용자에 대해 무시할 요소의 선택자 목록을 쉼표로 구분하여 제공하십시오."
+
+#: src/Form/SettingsFields.php:978
+msgid "Assertiveness"
+msgstr "적극성"
+
+#: src/Form/SettingsFields.php:980
+msgid "Checker mode for content roles"
+msgstr "콘텐츠 역할에 대한 검사 모드"
+
+#: src/Form/SettingsFields.php:988
+msgid "Checker mode for developer roles"
+msgstr "개발자 역할에 대한 검사 모드"
+
+#: src/Form/SettingsFields.php:996
+msgid "Checker mode inside editor"
+msgstr "편집기 내부 검사 모드"
+
+#: src/Form/SettingsFields.php:1002
+msgid "Theme and plugin compatibility"
+msgstr "테마 및 플러그인 호환성"
+
+#: src/Form/SettingsFields.php:1004
+msgid "Editoria11y theme"
+msgstr "Editoria11y 테마"
+
+#: src/Form/SettingsFields.php:1009
+msgid "Pin panel to"
+msgstr "패널 고정 위치"
+
+#: src/Form/SettingsFields.php:1015
+msgid "Right"
+msgstr "오른쪽"
+
+#: src/Form/SettingsFields.php:1016
+msgid "Left"
+msgstr "왼쪽"
+
+#: src/Form/SettingsFields.php:1022
+msgid "Shift panel position if it overlaps these elements"
+msgstr "이 요소들과 겹칠 경우 패널 위치를 이동함"
+
+#: src/Form/SettingsFields.php:1023
+msgid "Comma-separated selectors for competing widgets, e.g. .interface-interface-skeleton__sidebar."
+msgstr "경쟁하는 위젯의 쉼표로 구분된 선택자입니다(예: .interface-interface-skeleton__sidebar)."
+
+#: src/Form/SettingsFields.php:1028
+msgid "Do not check on pages with these elements"
+msgstr "이 요소가 포함된 페이지에서는 검사하지 않음"
+
+#: src/Form/SettingsFields.php:1032
+msgid "JS injected custom rules"
+msgstr "JS로 주입된 사용자 정의 규칙"
+
+#: src/Form/SettingsFields.php:1038
+msgid "Don't show edit links on tips in these containers"
+msgstr "이 컨테이너 안에 있는 팁에는 수정 링크를 표시하지 않음"
+
+#: src/Form/SettingsFields.php:1039
+msgid "Provide a comma-separated list of page sections where edit links should not show. To hide the links everywhere, set this field to an asterisk (*)."
+msgstr "수정 링크를 표시하지 않을 페이지 섹션 목록을 쉼표로 구분하여 제공하십시오. 모든 곳에서 링크를 숨기려면 별표(*)를 입력하십시오."
+
+#: src/Form/SettingsFields.php:1058
+msgid "Handling tips on hidden content"
+msgstr "숨겨진 콘텐츠의 팁 처리 방식"
+
+#: src/Form/SettingsFields.php:1060
+msgid "Warn users if elements might not be visible when jumping to tips"
+msgstr "팁으로 이동할 때 요소가 보이지 않을 가능성이 있으면 사용자에게 알림"
+
+#: src/Form/SettingsFields.php:1067
+msgid "Elements with overflow hidden"
+msgstr "overflow: hidden이 설정된 요소"
+
+#: src/Form/SettingsFields.php:1068
+msgid "Sometimes buttons get drawn and visually truncated outside the bounds of a positioned element. Provide a selector list."
+msgstr "때로는 버튼이 위치 지정된 요소의 경계를 넘어 시각적으로 잘릴 수 있습니다. 선택자 목록을 제공하십시오."
+
+#: src/Form/SettingsFields.php:1073
+msgid "Theme JS will handle revealing hidden tooltips inside these containers"
+msgstr "이 컨테이너 내부의 숨겨진 툴팁은 테마 JS에서 처리합니다."
+
+#: src/Form/SettingsFields.php:1074
+msgid "Editoria11y detects hidden tooltips and warns the user when they try to jump to them from the panel. For elements on this list, Editoria11y will dispatch a JS event instead of a warning, so custom JS in your theme can first reveal the hidden tip (e.g., open an accordion or tab panel)."
+msgstr "Editoria11y는 숨겨진 툴팁을 감지하고 패널에서 해당 팁으로 이동하려고 할 때 사용자에게 경고합니다. 이 목록에 포함된 요소의 경우, Editoria11y는 경고 대신 JS 이벤트를 발생시키므로 테마의 커스텀 JS가 먼저 숨겨진 팁을 표시(예: 아코디언 또는 탭 패널 열기)할 수 있습니다."
+
+#: src/Form/SettingsFields.php:1085
+msgid "Detecting dynamic and shadow content"
+msgstr "동적 및 Shadow DOM 콘텐츠 감지"
+
+#: src/Form/SettingsFields.php:1088
+msgid "Dynamically refresh if new content appears"
+msgstr "새 콘텐츠가 나타나면 동적으로 새로고침"
+
+#: src/Form/SettingsFields.php:1094
+msgid "Watch for changes anywhere on the page"
+msgstr "페이지 전체의 변경 사항 감시"
+
+#: src/Form/SettingsFields.php:1095
+msgid "Only watch for changes to content containers present on load"
+msgstr "로드 시 존재하는 콘텐츠 컨테이너의 변경 사항만 감시"
+
+#: src/Form/SettingsFields.php:1096
+msgid "Do not watch for changes"
+msgstr "변경 사항을 감시하지 않음"
+
+#: src/Form/SettingsFields.php:1099
+msgid "Set to \"anywhere\" if changes are being missed; set to \"do not watch\" if you notice performance issues."
+msgstr "변경 사항이 누락되면 \"어디든\"으로 설정하고, 성능 문제가 발생하면 \"감시하지 않음\"으로 설정하십시오."
+
+#: src/Form/SettingsFields.php:1103
+msgid "Check inside these specific Web components"
+msgstr "이 특정 Web 컴포넌트 내부를 검사"
+
+#: src/Form/SettingsFields.php:1104
+msgid "Provide selectors for elements with shadow DOM you want tested. E.g.: my-fancy-accordion-widget, my-magical-slideshow."
+msgstr "테스트하려는 Shadow DOM 요소의 선택자를 제공하십시오. 예: my-fancy-accordion-widget, my-magical-slideshow."
+
+#: src/Form/SettingsFields.php:1108
+msgid "Auto-detect any Web components"
+msgstr "모든 Web 컴포넌트 자동 감지"
+
+#: src/Form/SettingsFields.php:1109
+msgid "This is easier to configure than specifying components, but may slow test runs on very complicated pages."
+msgstr "컴포넌트를 지정하는 것보다 설정하기는 쉽지만, 매우 복잡한 페이지에서는 테스트 실행 속도가 느려질 수 있습니다."
+
+#: src/Form/SettingsFields.php:1120
+msgid "Syncing results to reports"
+msgstr "결과를 보고서에 동기화"
+
+#: src/Form/SettingsFields.php:1137
+msgid "Only admins can view reports"
+msgstr "관리자만 보고서를 볼 수 있음"
+
+#: src/Form/SettingsFields.php:1142
+msgid "By default both admins and editors can view reports."
+msgstr "기본적으로 관리자와 편집자 모두 보고서를 볼 수 있습니다."
+
+#: src/Form/SettingsFields.php:1155
+msgid "Hide reports shortcut on toggle"
+msgstr "토글 시 보고서 바로가기 숨기기"
+
+#: src/Form/SettingsFields.php:1162
+msgid "Reports will still be available on the WordPress admin dashboard."
+msgstr "보고서는 여전히 WordPress 관리자 대시보드에서 사용할 수 있습니다."
+
+#: src/Form/SettingsFields.php:1172
+msgid "Remove redundant base url from URLs"
+msgstr "URL에서 중복된 기본 URL 제거"
+
+#: src/Form/SettingsFields.php:1184
+msgid "Provide base URL (\"/mysite\") if your site is installed in a subdirectory. Subdirectories tend to get duplicated (/mysite/mysite/mypage) and throw errors from the API."
+msgstr "사이트가 하위 디렉토리에 설치된 경우 기본 URL(\"/mysite\")을 제공하십시오. 하위 디렉토리는 중복되는 경향이 있으며(/mysite/mysite/mypage) API에서 오류를 발생시킵니다."
+
+#: src/Form/SettingsFields.php:1189
+msgid "Preserve query parameters"
+msgstr "쿼리 매개변수 유지"
+
+#: src/Form/SettingsFields.php:1190
+msgid "The dashboard ignores most parameters: results for both /news?f=1 and /news?f=2 will show up as just /news. Provide a comma-separated list of parameters that are meaningful and should appear as separate pages in results."
+msgstr "대시보드는 대부분의 매개변수를 무시합니다(예: /news?f=1과 /news?f=2 모두 /news로 표시됨). 의미가 있고 결과에서 별도의 페이지로 나타나야 하는 매개변수 목록을 쉼표로 구분하여 제공하십시오."
+
+#: src/Form/SettingsFields.php:1194
+msgid "Disable sync altogether"
+msgstr "동기화 완전히 비활성화"
+
+#: src/Form/SettingsFields.php:1195
+msgid "Syncing test results is required for the issue dashboard, dismissal dashboard, and \"mark OK\" buttons."
+msgstr "이슈 대시보드, 무시 대시보드 및 \"확인(OK)으로 표시\" 버튼을 사용하려면 테스트 결과 동기화가 필요합니다."
+
+#: src/Form/SettingsFields.php:1206
+msgid "Heading outline position of editable content"
+msgstr "편집 가능한 콘텐츠의 제목 개요 위치"
+
+#: src/Form/SettingsFields.php:1208
+msgid "To check headings while editing, Editoria11y needs to know what the first heading level should be in each editable field. Body fields should generally be at the H2 level."
+msgstr "편집 중에 제목을 확인하려면 Editoria11y가 각 편집 가능한 필드의 첫 번째 제목 수준을 알아야 합니다. 본문 필드는 일반적으로 H2 수준이어야 합니다."
+
+#: src/Form/SettingsFields.php:1213
+msgid "H2 level content (body content)"
+msgstr "H2 수준 콘텐츠 (본문 내용)"
+
+#: src/Form/SettingsFields.php:1214
+msgid "Body fields are preceded by an H1 (the post or page title), so their highest heading level should be H2."
+msgstr "본문 필드 앞에는 H1(글 또는 페이지 제목)이 있으므로, 가장 높은 제목 수준은 H2가 되어야 합니다."
+
+#: src/Form/SettingsFields.php:1218
+msgid "H3 level content (blocks or widgets with separate titles)"
+msgstr "H3 수준 콘텐츠 (별도 제목이 있는 블록 또는 위젯)"
+
+#: src/Form/SettingsFields.php:1219
+msgid "The highest heading level should be H3."
+msgstr "가장 높은 제목 수준은 H3여야 합니다."
+
+#: src/Form/SettingsFields.php:1223
+msgid "H4 level content (deeply nested blocks or widgets)"
+msgstr "H4 수준 콘텐츠 (깊게 중첩된 블록 또는 위젯)"
+
+#: src/Form/SettingsFields.php:1224
+msgid "The highest heading level should be H4."
+msgstr "가장 높은 제목 수준은 H4여야 합니다."
+
+#: src/Form/SettingsPage.php:126
+msgid "becoming a supporter"
+msgstr "후원자 되기"
+
+#: src/Form/SettingsPage.php:139
+msgid "free version at WordPress.org"
+msgstr "WordPress.org의 무료 버전"
+
+#. translators: %s: link reading "free version at WordPress.org".
+#: src/Form/SettingsPage.php:146
+#, php-format
+msgid "This site has the community-supported \"CSA\" version of Editoria11y installed rather than the %s."
+msgstr "이 사이트에는 %s 대신 커뮤니티 지원 “CSA” 버전의 Editoria11y가 설치되어 있습니다."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:155
+#, php-format
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key or view options for %s."
+msgstr "커뮤니티 지원 기능을 활성화하고 업데이트를 계속 받으려면, 기존 라이선스 키를 입력하거나 %s 옵션을 확인하십시오."
+
+#: src/Form/SettingsPage.php:169
+msgid "This site is running the free version of Editoria11y from WordPress.org. The community-supported (CSA) features are not active."
+msgstr "이 사이트는 WordPress.org의 Editoria11y 무료 버전을 실행하고 있습니다. 커뮤니티 지원(CSA) 기능은 활성화되어 있지 않습니다."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:175
+#, php-format
+msgid "Unlock the community-supported features and continued updates by %s."
+msgstr "%s를 통해 커뮤니티 지원 기능과 지속적인 업데이트의 잠금을 해제하십시오."
+
+#: src/Form/SettingsPage.php:203
+msgid "Editoria11y License & Account"
+msgstr "Editoria11y 라이선스 및 계정"
+
+#: src/Form/SettingsPage.php:262
+msgid "Settings"
+msgstr "설정"
+
+#: src/Form/SettingsPage.php:272 src/Form/SettingsPage.php:284
+#: src/Form/SettingsPage.php:291
+msgid "License & Account"
+msgstr "라이선스 및 계정"
+
+#: src/Form/SettingsPage.php:548
+msgid "Getting started"
+msgstr "시작하기"
+
+#: src/Form/SettingsPage.php:557
+msgid "Modify content tests"
+msgstr "콘텐츠 테스트 수정"
+
+#: src/Form/SettingsPage.php:563 src/Form/SettingsPage.php:577
+msgid "Tests by group"
+msgstr "그룹별 테스트"
+
+#: src/Form/SettingsPage.php:571
+msgid "Modify template tests"
+msgstr "템플릿 테스트 수정"
+
+#: src/Form/SettingsPage.php:588
+msgid "Custom rules (CSA)"
+msgstr "사용자 정의 규칙 (CSA)"
+
+#: src/Form/SettingsPage.php:603
+msgid "Parts of the page to test"
+msgstr "테스트할 페이지 부분"
+
+#: src/Form/SettingsPage.php:611
+msgid "Do not check for any errors inside these elements"
+msgstr "이 요소 내부의 오류는 검사하지 않음"
+
+#: src/Form/SettingsPage.php:622
+msgid "Page regions with user-editable content"
+msgstr "사용자 편집 가능 콘텐츠가 있는 페이지 영역"
+
+#: src/Form/SettingsPage.php:632
+msgid "Do not check for content errors inside these elements"
+msgstr "이 요소 내부의 콘텐츠 오류는 검사하지 않음"
+
+#: src/Form/SettingsPage.php:635
+msgid "Errors in these elements should only be shown to developers"
+msgstr "이 요소의 오류는 개발자에게만 표시되어야 함"
+
+#: src/Form/SettingsPage.php:651
+msgid "Roles that will see developer alerts"
+msgstr "개발자 경고를 볼 역할"
+
+#: src/Form/SettingsPage.php:666
+msgid "Advanced settings"
+msgstr "고급 설정"
+
+#: src/Form/SettingsPage.php:684
+msgid "Editoria11y Settings"
+msgstr "Editoria11y 설정"
+
+#: src/Form/SettingsPage.php:699
+msgid "Save Settings"
+msgstr "설정 저장"
+
+#: src/FreemiusAccessControl.php:222
+msgid "unknown"
+msgstr "알 수 없음"
+
+#. translators: 1: loaded SDK version, 2: highest tested SDK version
+#: src/FreemiusAccessControl.php:227
+#, php-format
+msgid "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network license activation page may not behave as expected; review release notes or contact support if you hit issues."
+msgstr "Editoria11y CSA: 로드된 Freemius SDK(버전 %1$s)가 가장 높은 테스트 버전(%2$s)보다 최신입니다. 이 사이트의 다른 Freemius 사용 플러그인이 더 새로운 SDK 빌드를 포함하고 있습니다. 네트워크 라이선스 활성화 페이지가 예상대로 작동하지 않을 수 있습니다. 문제가 발생하면 릴리스 노트를 검토하거나 지원팀에 문의하십시오."
+
+#: src/FreemiusAccessControl.php:503
+msgid "Editoria11y network licenses are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+msgstr "Editoria11y 네트워크 라이선스는 크론 기반 배치로 네트워크의 모든 사이트를 순차적으로 처리하는 전용 페이지에서 활성화됩니다. 이를 통해 SDK의 1,000개 사이트 제한을 피하고 대규모 멀티사이트에서도 페이지 응답성을 유지합니다."
+
+#: src/FreemiusAccessControl.php:509
+msgid "Open Editoria11y license page"
+msgstr "Editoria11y 라이선스 페이지 열기"
+
+#: src/FreemiusAccessControl.php:565
+msgid "Per-site license rows are not shown to keep this page responsive on large networks. The license you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → License & Account."
+msgstr "대규모 네트워크에서 페이지 응답성을 유지하기 위해 사이트별 라이선스 행은 표시되지 않습니다. 아래에서 선택한 라이선스는 네트워크의 모든 사이트에 적용됩니다. 개별 사이트에서 활성화 또는 비활성화하려면 각 사이트의 설정 → Editoria11y → 라이선스 및 계정을 방문하십시오."
+
+#: src/FreemiusContactFallback.php:121 src/FreemiusContactFallback.php:122
+#: src/FreemiusContactFallback.php:150 src/FreemiusContactFallback.php:210
+msgid "Contact Editoria11y"
+msgstr "Editoria11y 문의하기"
+
+#: src/FreemiusContactFallback.php:206
+msgid "Editoria11y library forums"
+msgstr "Editoria11y 라이브러리 포럼"
+
+#. translators: 1: @itmaybejj GitHub profile link, 2: #Drupal Slack invite link, 3: #WordPress Slack chat link, 4: #WPCampus Slack invite link, 5: #DigiCol Slack invite link.
+#: src/FreemiusContactFallback.php:215
+#, php-format
+msgid "Lead maintainer %1$s can usually be found on Slack for informal support, configuration tips and debugging any time the sun is up in the western hemisphere in %2$s, %3$s, %4$s and %5$s."
+msgstr "리드 메인테이너 %1$s는 서반구에 해가 떠 있는 동안이라면 대개 %2$s, %3$s, %4$s, %5$s의 Slack에서 비공식적인 지원, 설정 팁, 디버깅 도움을 받을 수 있습니다."
+
+#. translators: %s: link to the Editoria11y library GitHub discussions page.
+#: src/FreemiusContactFallback.php:228
+#, php-format
+msgid "Check the %s for roadmap proposals and discussions."
+msgstr "로드맵 제안과 논의는 %s에서 확인하십시오."
+
+#: src/FreemiusContactFallback.php:234
+msgid "Formal support:"
+msgstr "정식 지원:"
+
+#: src/FreemiusContactFallback.php:237
+msgid "Editoria11y Library issue queue"
+msgstr "Editoria11y 라이브러리 이슈 큐"
+
+#: src/FreemiusContactFallback.php:239
+msgid "Editoria11y WordPress issue queue"
+msgstr "Editoria11y WordPress 이슈 큐"
+
+#: src/FreemiusContactFallback.php:241
+msgid "Editoria11y Drupal issue queue"
+msgstr "Editoria11y Drupal 이슈 큐"
+
+#: src/FreemiusContactFallback.php:243
+msgid "Submit a support request"
+msgstr "지원 요청 제출"
+
+#: src/FreemiusPricingPage.php:163
+msgid "Editoria11y CSA pricing"
+msgstr "Editoria11y CSA 요금제"
+
+#: src/FreemiusPricingPage.php:225
+msgid "Support the project"
+msgstr "프로젝트 후원하기"
+
+#: src/FreemiusPricingPage.php:228
+msgid "Editoria11y promotes accessibility in a unique way. Its tools are highly effective at helping non-technical authors prepare content that can be enjoyed equally by disabled Web users. We consider this a public good, so <strong>Editoria11y will always be free to use</strong>."
+msgstr "Editoria11y는 독특한 방식으로 접근성을 증진합니다. 이 도구는 비기술직 작성자가 장애가 있는 웹 사용자도 동일하게 이용할 수 있는 콘텐츠를 준비하도록 돕는 데 매우 효과적입니다. 우리는 이를 공공재로 여기기 때문에, <strong>Editoria11y는 항상 무료로 사용할 수 있습니다</strong>."
+
+#: src/FreemiusPricingPage.php:232
+msgid "Editoria11y is not, however, free to develop or support."
+msgstr "그러나 Editoria11y를 개발하고 지원하는 것은 무료가 아닙니다."
+
+#: src/FreemiusPricingPage.php:234
+msgid "The Community Supported Add-ons (CSA) project fills the gap: project members support the development of the Editoria11y library, its CMS plugins, and the CSA suite: a rapidly growing set of quality assurance tools that provide similar functionality to commercial products, open-source and on-prem. In return, they get access to premium features and support."
+msgstr "이 공백을 채우는 것이 커뮤니티 지원 애드온(CSA) 프로젝트입니다: 프로젝트 회원들은 Editoria11y 라이브러리, 그 CMS 플러그인들, 그리고 상업용 제품(오픈소스 및 온프레미스)과 유사한 기능을 제공하며 빠르게 성장하고 있는 품질 보증 도구 모음인 CSA 제품군의 개발을 지원합니다. 그 대가로 회원들은 프리미엄 기능과 지원을 이용할 수 있습니다."
+
+#: src/FreemiusPricingPage.php:239
+msgid "lower (or higher!) support levels"
+msgstr "더 낮은(또는 더 높은!) 지원 등급"
+
+#. translators: %s: link to the CSA supporters page and drop the "farmshare" word in languages without the concept.
+#: src/FreemiusPricingPage.php:245
+#, php-format
+msgid "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licenses."
+msgstr "이것은 <strong>가능한 만큼 기여하는</strong> 방식입니다. Editoria11y LLC 사이트에서는 %s 옵션, 코더 또는 테스터로 기여하는 옵션, 그리고 크로스 플랫폼 및 무제한 사이트 라이선스 옵션을 제공합니다."
+
+#: src/functions.php:234
+msgid "Network Super Admin"
+msgstr "네트워크 최고 관리자"
+
+#: src/functions.php:1796
+msgid "Empty link"
+msgstr "비어 있는 링크"
+
+#: src/functions.php:1797
+msgid "The button style link is missing its URL."
+msgstr "이 버튼 스타일 링크에 URL이 없습니다."
+
+#: src/functions.php:1798
+msgid "Edit Media"
+msgstr "미디어 수정"
+
+#: src/TestNames.php:46
+msgid "This alt text is a filename, not a description"
+msgstr "이 대체 텍스트는 설명이 아닌 파일 이름입니다"
+
+#: src/TestNames.php:47 src/TestNames.php:48
+msgid "Is this a clear and concise description of the image?"
+msgstr "이 이미지에 대한 명확하고 간결한 설명인가요?"
+
+#: src/TestNames.php:49
+msgid "This alt text may be a placeholder"
+msgstr "이 대체 텍스트는 자리 표시자일 수 있습니다"
+
+#: src/TestNames.php:50
+msgid "This alt text is unpronounceable"
+msgstr "이 대체 텍스트는 발음할 수 없습니다"
+
+#: src/TestNames.php:51
+msgid "This custom input field is missing a label"
+msgstr "이 사용자 정의 입력 필드에 레이블이 없습니다"
+
+#: src/TestNames.php:52
+msgid "Button is missing an accessible label"
+msgstr "버튼에 접근 가능한 레이블이 없습니다"
+
+#: src/TestNames.php:53
+msgid "Button has an invalid ARIA label"
+msgstr "버튼에 유효하지 않은 ARIA 레이블이 있습니다"
+
+#: src/TestNames.php:54
+msgid "Button name repeats the word \"button\""
+msgstr "버튼 이름에 “버튼”이라는 단어가 반복됩니다"
+
+#: src/TestNames.php:55
+msgid "This button is unpronounceable"
+msgstr "이 버튼은 발음할 수 없습니다"
+
+#: src/TestNames.php:56
+msgid "Text does not have enough contrast to be easily legible"
+msgstr "텍스트의 명암비가 낮아 읽기 어렵습니다"
+
+#: src/TestNames.php:57
+msgid "Graphic or icon does not have enough contrast"
+msgstr "그래픽 또는 아이콘의 명암비가 충분하지 않습니다"
+
+#: src/TestNames.php:58
+msgid "Input does not provide enough contrast to be easily legible"
+msgstr "입력 필드의 명암비가 낮아 읽기 어렵습니다"
+
+#: src/TestNames.php:59
+msgid "Placeholder text does not have enough contrast to be easily legible"
+msgstr "자리 표시자 텍스트의 명암비가 낮아 읽기 어렵습니다"
+
+#: src/TestNames.php:60
+msgid "Does this placeholder text have enough contrast?"
+msgstr "이 자리 표시자 텍스트의 명암비가 충분한가요?"
+
+#: src/TestNames.php:61
+msgid "Does this text have enough contrast?"
+msgstr "이 텍스트의 명암비가 충분한가요?"
+
+#: src/TestNames.php:62
+msgid "Does this graphic or icon have enough contrast?"
+msgstr "이 그래픽 또는 아이콘의 명암비가 충분한가요?"
+
+#: src/TestNames.php:63
+msgid "Duplicate ID attribute"
+msgstr "ID 속성이 중복되어 있습니다"
+
+#: src/TestNames.php:64
+msgid "This link has a tooltip with the same text as the link"
+msgstr "이 링크에 링크 텍스트와 동일한 내용의 툴팁이 있습니다"
+
+#: src/TestNames.php:65
+msgid "Does this audio have a transcript?"
+msgstr "이 오디오에 텍스트 대본이 있나요?"
+
+#: src/TestNames.php:66
+msgid "Is this visualization accessible?"
+msgstr "이 시각화 자료는 접근 가능한가요?"
+
+#: src/TestNames.php:67
+msgid "Embedded iframes need manual checks"
+msgstr "삽입된 iframe은 수동 검토가 필요합니다"
+
+#: src/TestNames.php:68
+msgid "Frame missing \"title\" attribute"
+msgstr "프레임에 “title” 속성이 없습니다"
+
+#: src/TestNames.php:69
+msgid "Frame with tabindex=\"-1\" will not be keyboard accessible."
+msgstr "tabindex=\"-1\"인 프레임은 키보드로 접근할 수 없습니다."
+
+#: src/TestNames.php:70
+msgid "Is this video accurately captioned?"
+msgstr "이 동영상에 정확한 자막이 있나요?"
+
+#: src/TestNames.php:71
+msgid "This heading has no text"
+msgstr "이 제목에 텍스트가 없습니다"
+
+#: src/TestNames.php:72
+msgid "This image is used as a heading, so it needs alt text"
+msgstr "이 이미지가 제목으로 사용되고 있으므로 대체 텍스트가 필요합니다"
+
+#: src/TestNames.php:73
+msgid "The first heading on this page is a subheading"
+msgstr "이 페이지의 첫 번째 제목이 하위 제목입니다"
+
+#: src/TestNames.php:74
+msgid "Can this heading be shorter?"
+msgstr "이 제목을 더 짧게 할 수 있나요?"
+
+#: src/TestNames.php:75
+msgid "This page is missing a Heading 1"
+msgstr "이 페이지에 제목 1이 없습니다"
+
+#: src/TestNames.php:76
+msgid "This heading is tagged at the wrong level"
+msgstr "이 제목의 수준이 잘못 지정되어 있습니다"
+
+#: src/TestNames.php:77
+msgid "This element cannot be described by screen readers"
+msgstr "이 요소는 스크린 리더가 설명할 수 없습니다"
+
+#: src/TestNames.php:78
+msgid "This heading is unpronounceable"
+msgstr "이 제목은 발음할 수 없습니다"
+
+#: src/TestNames.php:79
+msgid "Can this alt text be shorter?"
+msgstr "이 대체 텍스트를 더 짧게 할 수 있나요?"
+
+#: src/TestNames.php:80
+msgid "Is this image actually meaningless?"
+msgstr "이 이미지가 실제로 의미 없는 이미지인가요?"
+
+#: src/TestNames.php:81
+msgid "Image in a carousel or gallery marked as decorative"
+msgstr "캐러셀 또는 갤러리의 이미지가 장식용으로 표시되어 있습니다"
+
+#: src/TestNames.php:82
+msgid "This captioned image has no alt text"
+msgstr "캡션이 있는 이미지에 대체 텍스트가 없습니다"
+
+#: src/TestNames.php:83
+msgid "Alt text should not be the same as caption text"
+msgstr "대체 텍스트와 캡션 텍스트가 동일해서는 안 됩니다"
+
+#: src/TestNames.php:84
+msgid "Is there a visible label for this field?"
+msgstr "이 필드에 보이는 레이블이 있나요?"
+
+#: src/TestNames.php:85
+msgid "Prefer visible labels to placeholders"
+msgstr "자리 표시자보다 보이는 레이블 사용을 권장합니다"
+
+#: src/TestNames.php:86
+msgid "Is this reset button needed?"
+msgstr "이 초기화 버튼이 필요한가요?"
+
+#: src/TestNames.php:87
+msgid "This input has an empty label"
+msgstr "이 입력 필드에 빈 레이블이 있습니다"
+
+#: src/TestNames.php:88
+msgid "Visible label does not match invisible label"
+msgstr "보이는 레이블이 숨겨진 레이블과 일치하지 않습니다"
+
+#: src/TestNames.php:89
+msgid "This image input is missing alt text"
+msgstr "이 이미지 입력에 대체 텍스트가 없습니다"
+
+#: src/TestNames.php:90
+msgid "This input is not connected to a label"
+msgstr "이 입력 필드가 레이블과 연결되어 있지 않습니다"
+
+#: src/TestNames.php:91
+msgid "Language tag does not match the content"
+msgstr "언어 태그가 콘텐츠와 일치하지 않습니다"
+
+#: src/TestNames.php:92
+msgid "This content appears to be in a different language"
+msgstr "이 콘텐츠는 다른 언어로 작성된 것 같습니다"
+
+#: src/TestNames.php:93
+msgid "This alt text appears to be in a different language"
+msgstr "이 대체 텍스트는 다른 언어로 작성된 것 같습니다"
+
+#: src/TestNames.php:94
+msgid "Alt text used as a link should not be a URL"
+msgstr "링크 대체 텍스트로 URL을 사용해서는 안 됩니다"
+
+#: src/TestNames.php:95 src/TestNames.php:96
+msgid "This linked alt might not be clear and concise"
+msgstr "이 링크의 대체 텍스트가 명확하고 간결하지 않을 수 있습니다"
+
+#: src/TestNames.php:97
+msgid "Linked images need pronounceable alt text"
+msgstr "링크 이미지에는 발음 가능한 대체 텍스트가 필요합니다"
+
+#: src/TestNames.php:98
+msgid "Manual check: link contains \"click here\""
+msgstr "이 링크에 “여기를 클릭”이 포함되어 있습니다"
+
+#: src/TestNames.php:99
+msgid "Link article titles, not DOI numbers"
+msgstr "DOI 번호가 아닌 논문 제목에 링크를 연결하세요"
+
+#: src/TestNames.php:100
+msgid "This link contains no words"
+msgstr "이 링크에 텍스트가 없습니다"
+
+#: src/TestNames.php:101
+msgid "Link with invalid \"aria-labelledby\" attribute"
+msgstr "“aria-labelledby” 속성이 유효하지 않은 링크"
+
+#: src/TestNames.php:102
+msgid "This link needs a label"
+msgstr "이 링크에 레이블이 필요합니다"
+
+#: src/TestNames.php:103
+msgid "Link points to a file without warning"
+msgstr "링크가 경고 없이 파일을 가리킵니다"
+
+#: src/TestNames.php:104
+msgid "Links with the same text link to different pages"
+msgstr "동일한 텍스트의 링크가 다른 페이지를 가리킵니다"
+
+#: src/TestNames.php:105
+msgid "Does this alt text describe the link or the image?"
+msgstr "이 대체 텍스트가 링크를 설명하나요, 이미지를 설명하나요?"
+
+#: src/TestNames.php:106
+msgid "Does this alt text make sense as part of this link?"
+msgstr "이 대체 텍스트가 링크의 일부로 적절한가요?"
+
+#: src/TestNames.php:107
+msgid "Can this linked alt text be shorter?"
+msgstr "이 링크의 대체 텍스트를 더 짧게 할 수 있나요?"
+
+#: src/TestNames.php:108
+msgid "This linked image needs alt text"
+msgstr "링크로 사용된 이미지에 대체 텍스트가 필요합니다"
+
+#: src/TestNames.php:109
+msgid "Does this linked image need a description?"
+msgstr "이 링크 이미지에 설명이 필요한가요?"
+
+#: src/TestNames.php:110
+msgid "Is this link actually a button?"
+msgstr "이 링크가 실제로는 버튼인가요?"
+
+#: src/TestNames.php:111
+msgid "Does this link open a new tab without warning?"
+msgstr "이 링크가 경고 없이 새 탭을 여나요?"
+
+#: src/TestNames.php:112
+msgid "This linked alt text may be a placeholder"
+msgstr "이 링크의 대체 텍스트는 자리 표시자일 수 있습니다"
+
+#: src/TestNames.php:113
+msgid "This link only contains generic words"
+msgstr "이 링크에 일반적인 단어만 포함되어 있습니다"
+
+#: src/TestNames.php:114
+msgid "The purpose of this link is visually hidden"
+msgstr "이 링크의 목적이 시각적으로 숨겨져 있습니다"
+
+#: src/TestNames.php:115
+msgid "Does this image's alt describe the image or the link?"
+msgstr "이 이미지의 대체 텍스트가 이미지를 설명하나요, 링크를 설명하나요?"
+
+#: src/TestNames.php:116
+msgid "Are the symbols or emoji in this link meaningful?"
+msgstr "이 링크의 기호나 이모지가 의미 있는가요?"
+
+#: src/TestNames.php:117
+msgid "This link is unpronounceable"
+msgstr "이 링크는 발음할 수 없습니다"
+
+#: src/TestNames.php:118
+msgid "Link text should not be a URL"
+msgstr "링크 텍스트가 URL이어서는 안 됩니다"
+
+#: src/TestNames.php:119
+msgid "Meta tag for page language missing"
+msgstr "페이지 언어 메타 태그가 없습니다"
+
+#: src/TestNames.php:120
+msgid "Did you mean a different language code?"
+msgstr "다른 언어 코드를 의도하셨나요?"
+
+#: src/TestNames.php:121
+msgid "Invalid language code"
+msgstr "유효하지 않은 언어 코드"
+
+#: src/TestNames.php:122
+msgid "Page language may not match the content"
+msgstr "페이지 언어가 콘텐츠와 일치하지 않을 수 있습니다"
+
+#: src/TestNames.php:123
+msgid "Meta tag limits how much users can enlarge text"
+msgstr "메타 태그가 텍스트 확대를 제한합니다"
+
+#: src/TestNames.php:124
+msgid "Meta tag automatically refreshes page"
+msgstr "메타 태그가 페이지를 자동으로 새로 고침합니다"
+
+#: src/TestNames.php:125
+msgid "Meta tag prevents users from enlarging text"
+msgstr "메타 태그가 텍스트 확대를 차단합니다"
+
+#: src/TestNames.php:126
+msgid "Meta tag for page title missing"
+msgstr "페이지 제목 메타 태그가 없습니다"
+
+#: src/TestNames.php:127
+msgid "Invalid HTML: image has no alt attribute"
+msgstr "잘못된 HTML: 이미지에 alt 속성이 없습니다"
+
+#: src/TestNames.php:128
+msgid "Invalid HTML: linked image missing alt attribute"
+msgstr "잘못된 HTML: 링크 이미지에 alt 속성이 없습니다"
+
+#: src/TestNames.php:129
+msgid "Invalid HTML: image in link missing alt attribute"
+msgstr "잘못된 HTML: 링크 내 이미지에 alt 속성이 없습니다"
+
+#: src/TestNames.php:130
+msgid "This link target may be invalid"
+msgstr "이 링크 대상이 유효하지 않을 수 있습니다"
+
+#: src/TestNames.php:131
+msgid "Should this quote be a heading?"
+msgstr "이 인용문이 제목이어야 하나요?"
+
+#: src/TestNames.php:132
+msgid "Has this document been tagged for screen readers?"
+msgstr "이 문서가 스크린 리더를 위해 태그 처리되었나요?"
+
+#: src/TestNames.php:133
+msgid "Should this bold text be a heading?"
+msgstr "이 굵은 텍스트가 제목이어야 하나요?"
+
+#: src/TestNames.php:134
+msgid "Should this have list formatting?"
+msgstr "이 항목에 목록 서식을 사용해야 하나요?"
+
+#: src/TestNames.php:135
+msgid "Broken same-page link"
+msgstr "끊어진 페이지 내 링크"
+
+#: src/TestNames.php:136
+msgid "Do not justify text"
+msgstr "양쪽 맞춤 텍스트를 사용하지 마세요"
+
+#: src/TestNames.php:137
+msgid "Nested interactive layout components"
+msgstr "중첩된 인터랙티브 레이아웃 컴포넌트"
+
+#: src/TestNames.php:138
+msgid "Is there an alternative for this PDF?"
+msgstr "이 PDF에 대한 대안이 있나요?"
+
+#: src/TestNames.php:139
+msgid "Text is too small"
+msgstr "텍스트 크기가 너무 작습니다"
+
+#: src/TestNames.php:140
+msgid "Large blocks of emphasized text are harder to read"
+msgstr "강조 텍스트가 너무 많으면 읽기 어렵습니다"
+
+#: src/TestNames.php:141
+msgid "Do not use sub/superscript as visual formatting"
+msgstr "위첨자/아래첨자를 시각적 서식으로 사용하지 마세요"
+
+#: src/TestNames.php:142
+msgid "Only links should be underlined"
+msgstr "링크에만 밑줄을 사용해야 합니다"
+
+#: src/TestNames.php:143
+msgid "Is this uppercase text needed?"
+msgstr "이 대문자 텍스트가 필요한가요?"
+
+#: src/TestNames.php:144
+msgid "Are there redundant words in this alt text?"
+msgstr "이 대체 텍스트에 불필요한 단어가 있나요?"
+
+#: src/TestNames.php:145
+msgid "Tabindex overrides interrupt the focus order"
+msgstr "Tabindex 재정의가 포커스 순서를 방해합니다"
+
+#: src/TestNames.php:146
+msgid "This header cell needs text"
+msgstr "이 머리글 셀에 텍스트가 필요합니다"
+
+#: src/TestNames.php:147
+msgid "This table has an invalid headers attribute"
+msgstr "이 표에 유효하지 않은 headers 속성이 있습니다"
+
+#: src/TestNames.php:148
+msgid "This table needs a header row and/or column"
+msgstr "이 표에 머리글 행 또는 열이 필요합니다"
+
+#: src/TestNames.php:149
+msgid "Content headings should not be used inside tables"
+msgstr "표 안에 콘텐츠 제목을 사용해서는 안 됩니다"
+
+#: src/TestNames.php:150
+msgid "Invalid HTML list"
+msgstr "잘못된 HTML 목록"
+
+#: src/TestNames.php:379
+msgid "Linked images"
+msgstr "링크된 이미지"
+
+#: src/TestNames.php:382
+msgid "Tables"
+msgstr "표"
+
+#: src/TestNames.php:383
+msgid "Text formatting"
+msgstr "텍스트 서식"
+
+#: src/TestNames.php:384
+msgid "Video, audio, frames"
+msgstr "비디오, 오디오, 프레임"
+
+#: src/TestNames.php:385
+msgid "Contrast"
+msgstr "대비"
+
+#: src/TestNames.php:386
+msgid "Forms"
+msgstr "양식"
+
+#: src/TestNames.php:387
+msgid "ARIA and focus"
+msgstr "ARIA 및 포커스"
+
+#: src/TestNames.php:388
+msgid "Page metadata"
+msgstr "페이지 메타데이터"

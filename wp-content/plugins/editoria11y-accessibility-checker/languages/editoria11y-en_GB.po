@@ -1,0 +1,139 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: editoria11y\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/editoria11y\n"
+"Language-Team: Editoria11y\n"
+"Language: en_GB\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+# British English dialect overlay. Contains ONLY entries that differ from
+# American English (color/colour, organize/organise, etc.). Empty msgstr in
+# WP's locale layer falls through to the msgid, so the file IS the manifest
+# of overrides — no point listing strings whose translation == source.
+#
+# Append new dialect-sensitive entries via:
+#   python3 scripts/scan-dialect-strings.py --apply
+#
+# Hand-edit overrides for license-as-verb, dialect-specific phrasing, etc.
+# The scanner skips msgids already present, so manual entries are safe.
+
+msgid "Element set \"%s\" is not one of the recognized element categories."
+msgstr "Element set \"%s\" is not one of the recognised element categories."
+
+msgid "Start minimized"
+msgstr "Start minimised"
+
+msgid "Editoria11y License & Account"
+msgstr "Editoria11y Licence & Account"
+
+msgid "Editoria11y License"
+msgstr "Editoria11y Licence"
+
+msgid "License & Account"
+msgstr "Licence & Account"
+
+msgid "Is this visualization accessible?"
+msgstr "Is this visualisation accessible?"
+
+msgid "Large blocks of emphasized text are harder to read"
+msgstr "Large blocks of emphasised text are harder to read"
+
+msgid "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favor of this one. Unlocked rules can be disabled per-site."
+msgstr "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favour of this one. Unlocked rules can be disabled per-site."
+
+msgid "Editoria11y license"
+msgstr "Editoria11y licence"
+
+msgid "Only network administrators can manage the Editoria11y license."
+msgstr "Only network administrators can manage the Editoria11y licence."
+
+msgid "License activated on every site in the network."
+msgstr "Licence activated on every site in the network."
+
+msgid "License deactivated on every site in the network."
+msgstr "Licence deactivated on every site in the network."
+
+msgid "Activation cancelled. Already-activated sites keep their license."
+msgstr "Activation cancelled. Already-activated sites keep their licence."
+
+msgid "Paste your Editoria11y CSA license key to begin."
+msgstr "Paste your Editoria11y CSA licence key to begin."
+
+msgid "Deactivate the Editoria11y CSA license on every site in this network? Each site's license slot will be returned to your Freemius account."
+msgstr "Deactivate the Editoria11y CSA licence on every site in this network? Each site's licence slot will be returned to your Freemius account."
+
+msgid "Activate your license"
+msgstr "Activate your licence"
+
+msgid "Deactivate license network-wide"
+msgstr "Deactivate licence network-wide"
+
+msgid "Editoria11y CSA license"
+msgstr "Editoria11y CSA licence"
+
+msgid "Activate your Editoria11y CSA license on every site in this network. Activation runs in the background via WP-Cron; you can leave this page open or come back later."
+msgstr "Activate your Editoria11y CSA licence on every site in this network. Activation runs in the background via WP-Cron; you can leave this page open or come back later."
+
+msgid "License key"
+msgstr "Licence key"
+
+msgid "Removes the Editoria11y CSA license from every site on the network. Each site's install record stays in place; only the license link is cleared."
+msgstr "Removes the Editoria11y CSA licence from every site on the network. Each site's install record stays in place; only the licence link is cleared."
+
+msgid "License key is required."
+msgstr "Licence key is required."
+
+msgid "License key is no longer stored. Start a new activation."
+msgstr "Licence key is no longer stored. Start a new activation."
+
+msgid "Deactivation API call did not clear the install license."
+msgstr "Deactivation API call did not clear the install licence."
+
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key below or view options for %s."
+msgstr "To activate the community-supported features and continue receiving updates, either enter your existing licence key below or view options for %s."
+
+msgid "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network license activation page may not behave as expected; review release notes or contact support if you hit issues."
+msgstr "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network licence activation page may not behave as expected; review release notes or contact support if you hit issues."
+
+msgid "Editoria11y network licenses are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+msgstr "Editoria11y network licences are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+
+msgid "Open Editoria11y license page"
+msgstr "Open Editoria11y licence page"
+
+msgid "Per-site license rows are not shown to keep this page responsive on large networks. The license you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → License & Account."
+msgstr "Per-site licence rows are not shown to keep this page responsive on large networks. The licence you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → Licence & Account."
+
+msgid "Every fifteen minutes (Editoria11y license watchdog)"
+msgstr "Every fifteen minutes (Editoria11y licence watchdog)"
+
+msgid "Paste your <a>Editoria11y CSA license key</a> to begin."
+msgstr "Paste your <a>Editoria11y CSA licence key</a> to begin."
+
+msgid "Activate a license network-wide"
+msgstr "Activate a licence network-wide"
+
+msgid "Deactivate licenses network-wide"
+msgstr "Deactivate licences network-wide"
+
+msgid "Modify network license"
+msgstr "Modify network licence"
+
+msgid "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licenses can split tests between roles."
+msgstr "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licences can split tests between roles."
+
+msgid "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA license for site administrators and developers."
+msgstr "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA licence for site administrators and developers."
+
+msgid "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualizations entirely, disable that test above."
+msgstr "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualisations entirely, disable that test above."
+
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key or view options for %s."
+msgstr "To activate the community-supported features and continue receiving updates, either enter your existing licence key or view options for %s."
+
+msgid "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licenses."
+msgstr "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licences."
+

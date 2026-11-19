@@ -1,0 +1,2476 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: editoria11y 3\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/editoria11y\n"
+"POT-Creation-Date: 2026-08-10T21:11:15-04:00\n"
+"PO-Revision-Date: 2026-2-12 10:00+0000\n"
+"Language-Team: Editoria11y\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. Plugin Name of the plugin
+#: editoria11y.php
+msgid "Editoria11y Accessibility Checker (CSA)"
+msgstr "Editoria11y-Barrierefreiheitsprüfer (CSA)"
+
+#. Plugin URI of the plugin
+#: editoria11y.php
+msgid "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+msgstr "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+
+#. Description of the plugin
+#: editoria11y.php
+msgid "User friendly content quality assurance, plus the CSA developer suite: ~50 additional code and contrast tests, a custom test builder, role-based test configuration, and a site crawler."
+msgstr "Benutzerfreundliche Qualitätssicherung für Inhalte, plus die CSA-Entwicklersuite: ~50 zusätzliche Code- und Kontrasttests, ein Test-Builder für individuelle Tests, rollenbasierte Testkonfiguration und ein Website-Crawler."
+
+#. Author of the plugin
+#: editoria11y.php
+msgid "Princeton University, WDS"
+msgstr "Princeton University, WDS"
+
+#. Author URI of the plugin
+#: editoria11y.php
+msgid "https://editoria11y.com"
+msgstr "https://editoria11y.com"
+
+#: editoria11y.php:131
+msgid "Editoria11y is missing its vendored dependencies. Run \"composer install\" inside the plugin directory or reinstall the plugin from a complete release archive."
+msgstr "Editoria11y fehlen die mitgelieferten Abhängigkeiten. Führen Sie \"composer install\" im Plugin-Verzeichnis aus oder installieren Sie das Plugin aus einem vollständigen Release-Archiv neu."
+
+#: editoria11y.php:399
+msgid "Every five minutes (Editoria11y rehash)"
+msgstr "Alle fünf Minuten (Editoria11y-Neuberechnung)"
+
+#: editoria11y.php:405
+msgid "Every fifteen minutes (Editoria11y license watchdog)"
+msgstr "Alle fünfzehn Minuten (Editoria11y-Lizenzüberwachung)"
+
+#: src/Admin/CsvExport.php:161 src/Admin/Dashboard.php:150
+msgid "Page"
+msgstr "Seite"
+
+#: src/Admin/CsvExport.php:162
+msgid "URL"
+msgstr "URL"
+
+#: src/Admin/CsvExport.php:163
+msgid "Issue"
+msgstr "Meldung"
+
+#: src/Admin/CsvExport.php:164 src/Admin/Dashboard.php:158
+msgid "Count"
+msgstr "Anzahl"
+
+#: src/Admin/CsvExport.php:165 src/Admin/Dashboard.php:155
+msgid "Author"
+msgstr "Autor"
+
+#: src/Admin/CsvExport.php:166
+msgid "Page Type"
+msgstr "Seitentyp"
+
+#: src/Admin/CsvExport.php:167
+msgid "Detected on"
+msgstr "Erkannt am"
+
+#: src/Admin/CsvExport.php:168 src/Admin/Dashboard.php:153
+#: src/Form/CrawlerPage.php:206 src/Form/CustomRulesPage.php:194
+#: src/Form/NetworkCustomRulesPage.php:154
+msgid "Status"
+msgstr "Status"
+
+#: src/Admin/CsvExport.php:169 src/Form/CustomRulesPage.php:317
+#: src/Form/NetworkCustomRulesPage.php:192
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: src/Admin/Dashboard.php:35 src/Admin/Dashboard.php:53
+#: src/Admin/Dashboard.php:202
+msgid "Editoria11y Accessibility Report"
+msgstr "Editoria11y-Barrierefreiheitsbericht"
+
+#: src/Admin/Dashboard.php:36
+msgid "Accessibility"
+msgstr "Barrierefreiheit"
+
+#: src/Admin/Dashboard.php:71
+msgid "Error:"
+msgstr "Fehler:"
+
+#: src/Admin/Dashboard.php:72
+msgid "Editoria11y database tables are missing."
+msgstr "Die Editoria11y-Datenbanktabellen fehlen."
+
+#. translators: 1: bug report link, 2: site health page link.
+#: src/Admin/Dashboard.php:75
+#, php-format
+msgid "Try deactivating and reactivating the plugin to reset config and recreate the tables, or %1$s with the information from the WordPress, Server and Database sections on your %2$s."
+msgstr "Versuchen Sie, das Plugin zu deaktivieren und erneut zu aktivieren, um die Konfiguration zurückzusetzen und die Tabellen neu zu erstellen, oder %1$s mit den Angaben aus den Abschnitten „WordPress“, „Server“ und „Datenbank“ auf Ihrer %2$s."
+
+#: src/Admin/Dashboard.php:76
+msgid "post a bug report"
+msgstr "einen Fehlerbericht einreichen"
+
+#: src/Admin/Dashboard.php:77
+msgid "site health page"
+msgstr "Website-Zustand-Seite"
+
+#: src/Admin/Dashboard.php:129
+msgid "View all issues"
+msgstr "Alle Probleme anzeigen"
+
+#: src/Admin/Dashboard.php:130
+msgid "View issues on all pages"
+msgstr "Probleme auf allen Seiten anzeigen"
+
+#. translators: %s: name of an alert/test, e.g. "Image is missing alt text".
+#: src/Admin/Dashboard.php:132
+#, php-format
+msgid "Alert report: \"%s\""
+msgstr "Meldungsbericht: \"%s\""
+
+#. translators: %s: post type slug, e.g. "page" or "post".
+#: src/Admin/Dashboard.php:134
+#, php-format
+msgid "Alerts on pages of type \"%s\""
+msgstr "Meldungen auf Seiten vom Typ \"%s\""
+
+#: src/Admin/Dashboard.php:135
+msgid "Alerts on pages created by author"
+msgstr "Meldungen auf Seiten eines bestimmten Autors"
+
+#. translators: %s: author display name.
+#: src/Admin/Dashboard.php:137
+#, php-format
+msgid "Alerts on pages created by %s"
+msgstr "Meldungen auf Seiten von %s"
+
+#: src/Admin/Dashboard.php:138
+msgid "Alerts dismissed by"
+msgstr "Ausgeblendete Meldungen von"
+
+#. translators: %s: user display name of the dismissor.
+#: src/Admin/Dashboard.php:140
+#, php-format
+msgid "Alerts dismissed by %s"
+msgstr "Ausgeblendete Meldungen von %s"
+
+#. translators: %s: post-status label, e.g. "Published" or "Draft".
+#: src/Admin/Dashboard.php:142
+#, php-format
+msgid "%s pages"
+msgstr "%s Seiten"
+
+#: src/Admin/Dashboard.php:143
+msgid "API error."
+msgstr "API-Fehler."
+
+#: src/Admin/Dashboard.php:144
+msgid "Your login session expired. Reload this page to continue."
+msgstr "Ihre Anmeldesitzung ist abgelaufen. Laden Sie diese Seite neu, um fortzufahren."
+
+#: src/Admin/Dashboard.php:145
+msgid "loading..."
+msgstr "wird geladen …"
+
+#. translators: %d: pagination page number.
+#: src/Admin/Dashboard.php:147
+#, php-format
+msgid "Page %d"
+msgstr "Seite %d"
+
+#: src/Admin/Dashboard.php:148
+msgid "Alerts"
+msgstr "Meldungen"
+
+#: src/Admin/Dashboard.php:149
+msgid "Dev alerts"
+msgstr "Entwicklermeldungen"
+
+#: src/Admin/Dashboard.php:151
+msgid "Path"
+msgstr "Pfad"
+
+#: src/Admin/Dashboard.php:152
+msgid "Type"
+msgstr "Typ"
+
+#: src/Admin/Dashboard.php:154
+msgid "Updated"
+msgstr "Aktualisiert"
+
+#: src/Admin/Dashboard.php:156
+msgid "Detected"
+msgstr "Erkannt"
+
+#: src/Admin/Dashboard.php:157
+msgid "Alert"
+msgstr "Meldung"
+
+#: src/Admin/Dashboard.php:159
+msgid "Pages"
+msgstr "Seiten"
+
+#: src/Admin/Dashboard.php:160
+msgid "On"
+msgstr "Am"
+
+#: src/Admin/Dashboard.php:161
+msgid "Dismissed alert"
+msgstr "Ausgeblendete Meldung"
+
+#: src/Admin/Dashboard.php:162
+msgid "Marked"
+msgstr "Markiert"
+
+#: src/Admin/Dashboard.php:163
+msgid "Current"
+msgstr "Aktuell"
+
+#: src/Admin/Dashboard.php:164
+msgid "By"
+msgstr "Von"
+
+#: src/Admin/Dashboard.php:165
+msgid "Alerts by page"
+msgstr "Meldungen nach Seite"
+
+#: src/Admin/Dashboard.php:166
+msgid "Recent alerts"
+msgstr "Kürzlich aufgetretene Probleme"
+
+#: src/Admin/Dashboard.php:167
+msgid "Alert types"
+msgstr "Meldungstypen"
+
+#: src/Admin/Dashboard.php:168
+msgid "Dismissals"
+msgstr "Ausblendungen"
+
+#: src/Admin/Dashboard.php:169
+msgid "Recent dismissals"
+msgstr "Kürzlich ausgeblendete Meldungen"
+
+#: src/Admin/Dashboard.php:170
+msgid "Download results as CSV"
+msgstr "Ergebnisse als CSV herunterladen"
+
+#: src/Admin/Dashboard.php:171
+msgid "None"
+msgstr "Keine"
+
+#: src/Admin/Dashboard.php:172
+msgid "No"
+msgstr "Nein"
+
+#: src/Admin/Dashboard.php:173
+msgid "Yes"
+msgstr "Ja"
+
+#: src/Admin/Dashboard.php:174
+msgid "n/a"
+msgstr "k. A."
+
+#: src/Admin/Dashboard.php:175 src/functions.php:1795
+msgid "Empty button-style link"
+msgstr "Leerer Link im Button-Stil"
+
+#. translators: tooltip on a column header that's currently sorted descending.
+#: src/Admin/Dashboard.php:177
+msgid "descending"
+msgstr "absteigend"
+
+#. translators: tooltip on a column header that's currently sorted ascending.
+#: src/Admin/Dashboard.php:179
+msgid "ascending"
+msgstr "aufsteigend"
+
+#. translators: %d: number of result rows returned (singular form).
+#: src/Admin/Dashboard.php:182
+#, php-format
+msgid "%d result"
+msgstr "%d Ergebnis"
+
+#. translators: %d: number of result rows returned (plural form).
+#: src/Admin/Dashboard.php:184
+#, php-format
+msgid "%d results"
+msgstr "%d Ergebnisse"
+
+#: src/CoActivationGuard.php:139
+msgid "A duplicate copy of Editoria11y Accessibility Checker (the free version) was deactivated here: Editoria11y CSA is already active and provides the same checks."
+msgstr "Eine doppelte Kopie von Editoria11y-Barrierefreiheitsprüfer (die kostenlose Version) wurde hier deaktiviert: Editoria11y CSA ist bereits aktiv und bietet dieselben Prüfungen."
+
+#: src/Controller/ApiCrawler.php:122
+msgid "The crawler is a premium feature."
+msgstr "Der Crawler ist eine Premium-Funktion."
+
+#: src/Controller/ApiCrawler.php:129
+msgid "Editoria11y database update did not complete; the crawler is paused until an administrator retries the update."
+msgstr "Das Editoria11y-Datenbank-Update wurde nicht abgeschlossen; der Crawler ist pausiert, bis ein Administrator das Update erneut ausführt."
+
+#: src/Controller/ApiDismissals.php:83
+msgid "Results not recorded"
+msgstr "Ergebnisse nicht gespeichert"
+
+#: src/Controller/ApiDismissals.php:572 src/Controller/ApiResults.php:925
+msgid "Editoria11y database update did not complete; writes are paused until an administrator retries the update."
+msgstr "Das Editoria11y-Datenbank-Update wurde nicht abgeschlossen; Schreibvorgänge sind pausiert, bis ein Administrator das Update erneut ausführt."
+
+#: src/Controller/ApiDismissals.php:597 src/Controller/ApiResults.php:950
+msgid "Editoria11y database update did not complete; the dashboard is paused until an administrator retries the update."
+msgstr "Das Editoria11y-Datenbank-Update wurde nicht abgeschlossen; das Dashboard ist pausiert, bis ein Administrator das Update erneut ausführt."
+
+#: src/CustomRules.php:273
+msgid "Machine name is required."
+msgstr "Maschinenname ist erforderlich."
+
+#: src/CustomRules.php:276
+msgid "Machine name must be lowercase letters, digits, and underscores, starting with a letter."
+msgstr "Der Maschinenname darf nur Kleinbuchstaben, Ziffern und Unterstriche enthalten und muss mit einem Buchstaben beginnen."
+
+#: src/CustomRules.php:281
+msgid "Admin label is required."
+msgstr "Admin-Bezeichnung ist erforderlich."
+
+#: src/CustomRules.php:286
+msgid "Test grouping ID is required."
+msgstr "Testgruppen-ID ist erforderlich."
+
+#: src/CustomRules.php:293
+msgid "Test grouping ID may only contain letters, digits, and underscores."
+msgstr "Die Testgruppen-ID darf nur Buchstaben, Ziffern und Unterstriche enthalten."
+
+#. translators: %s is a reserved test key like TABLES_SEMANTIC_HEADING.
+#: src/CustomRules.php:298
+#, php-format
+msgid "Test grouping ID \"%s\" is reserved by the v3 migration drop list and cannot be used."
+msgstr "Die Testgruppen-ID \"%s\" ist durch die v3-Migrations-Sperrliste reserviert und kann nicht verwendet werden."
+
+#: src/CustomRules.php:305
+msgid "Tip title is required."
+msgstr "Tipp-Titel ist erforderlich."
+
+#: src/CustomRules.php:312
+msgid "Tip details must contain some visible text."
+msgstr "Tipp-Details müssen sichtbaren Text enthalten."
+
+#: src/CustomRules.php:317
+msgid "Alert type must be Error or Manual check."
+msgstr "Meldungstyp muss \"Fehler\" oder \"Manuelle Prüfung\" sein."
+
+#: src/CustomRules.php:323
+msgid "Dismiss key must be Text content or Attributes."
+msgstr "Schließen-Schlüssel muss \"Textinhalt\" oder \"Attribute\" sein."
+
+#: src/CustomRules.php:329
+msgid "Filter selector looks like a CSS rule block, not a selector. Remove the curly braces."
+msgstr "Der Filter-Selektor sieht wie ein CSS-Regelblock aus, nicht wie ein Selektor. Entfernen Sie die geschweiften Klammern."
+
+#: src/CustomRules.php:332
+msgid "Filter selector has an unclosed quote, bracket, or parenthesis. The browser would reject it and skip every custom rule on the page."
+msgstr "Der Filter-Selektor hat ein nicht geschlossenes Anführungszeichen, eine nicht geschlossene eckige Klammer oder runde Klammer. Der Browser würde ihn zurückweisen und jede benutzerdefinierte Regel auf der Seite überspringen."
+
+#: src/CustomRules.php:342
+msgid "At least one rule criterion is required: a filter selector OR one or more include-text strings."
+msgstr "Mindestens ein Regelkriterium ist erforderlich: ein Filter-Selektor ODER ein oder mehrere Einschluss-Textbausteine."
+
+#. translators: %s is an unknown element-set value.
+#: src/CustomRules.php:352
+#, php-format
+msgid "Element set \"%s\" is not one of the recognized element categories."
+msgstr "Elementsatz \"%s\" gehört zu keiner der bekannten Elementkategorien."
+
+#: src/Form/CrawlerPage.php:59 src/Form/CrawlerPage.php:60
+msgid "Editoria11y Crawler"
+msgstr "Editoria11y-Crawler"
+
+#: src/Form/CrawlerPage.php:126
+msgid "You do not have permission to use the crawler."
+msgstr "Sie haben keine Berechtigung, den Crawler zu verwenden."
+
+#: src/Form/CrawlerPage.php:130 src/Form/CustomRulesPage.php:111
+#: src/Form/SettingsPage.php:236 src/Form/SettingsPage.php:237
+msgid "Editoria11y"
+msgstr "Editoria11y"
+
+#: src/Form/CrawlerPage.php:146 src/Form/SettingsPage.php:288
+msgid "Crawler"
+msgstr "Crawler"
+
+#: src/Form/CrawlerPage.php:149
+msgid "The crawler is a CSA feature. Activate CSA to schedule sitewide accessibility scans across posts, pages, and custom post types."
+msgstr "Der Crawler ist eine CSA-Funktion. Aktivieren Sie CSA, um seitenweite Barrierefreiheitsprüfungen für Beiträge, Seiten und benutzerdefinierte Beitragstypen zu planen."
+
+#: src/Form/CrawlerPage.php:162
+msgid "Manual crawl"
+msgstr "Manueller Crawl"
+
+#: src/Form/CrawlerPage.php:166
+msgid "Editoria11y reports populate and update in real time as editors work, so a manual crawl is generally only helpful when first installing the plugin or after making major theme or configuration changes."
+msgstr "Editoria11y-Berichte werden während der redaktionellen Arbeit in Echtzeit befüllt und aktualisiert. Ein manueller Crawl ist daher meist nur bei der Erstinstallation des Plugins oder nach größeren Theme- oder Konfigurationsänderungen sinnvoll."
+
+#: src/Form/CrawlerPage.php:176 src/Form/CustomRulesPage.php:501
+#: src/Form/NetworkCustomRulesPage.php:288 src/Form/NetworkLicensePage.php:416
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: src/Form/CrawlerPage.php:181
+msgid "This tab needs to remain open and in the foreground during the crawl."
+msgstr "Dieser Tab muss während des Crawl-Vorgangs geöffnet und im Vordergrund bleiben."
+
+#: src/Form/CrawlerPage.php:188
+msgid "Browsers pause API operations in background tabs."
+msgstr "Browser pausieren API-Vorgänge in Hintergrund-Tabs."
+
+#: src/Form/CrawlerPage.php:196
+msgid "Filter which pages will be crawled"
+msgstr "Filtern, welche Seiten gecrawlt werden"
+
+#: src/Form/CrawlerPage.php:200
+msgid "Content type"
+msgstr "Inhaltstyp"
+
+#: src/Form/CrawlerPage.php:218
+msgid "Filter by"
+msgstr "Filtern nach"
+
+#: src/Form/CrawlerPage.php:221 src/Form/CrawlerPage.php:254
+msgid "Date created"
+msgstr "Erstellungsdatum"
+
+#: src/Form/CrawlerPage.php:222 src/Form/CrawlerPage.php:255
+msgid "Date modified"
+msgstr "Änderungsdatum"
+
+#: src/Form/CrawlerPage.php:224
+msgid "From"
+msgstr "Von"
+
+#: src/Form/CrawlerPage.php:226
+msgid "To"
+msgstr "Bis"
+
+#: src/Form/CrawlerPage.php:231
+msgid "Content alerts"
+msgstr "Inhaltsmeldungen"
+
+#: src/Form/CrawlerPage.php:234 src/Form/CrawlerPage.php:244
+msgid "Any"
+msgstr "Beliebig"
+
+#: src/Form/CrawlerPage.php:235
+msgid "Has alerts"
+msgstr "Hat Meldungen"
+
+#: src/Form/CrawlerPage.php:236
+msgid "No alerts"
+msgstr "Keine Meldungen"
+
+#: src/Form/CrawlerPage.php:241
+msgid "Developer alerts"
+msgstr "Entwicklermeldungen"
+
+#: src/Form/CrawlerPage.php:245
+msgid "Has dev alerts"
+msgstr "Hat Entwicklermeldungen"
+
+#: src/Form/CrawlerPage.php:246
+msgid "No dev alerts"
+msgstr "Keine Entwicklermeldungen"
+
+#: src/Form/CrawlerPage.php:251
+msgid "Sort by"
+msgstr "Sortieren nach"
+
+#: src/Form/CrawlerPage.php:256
+msgid "Title"
+msgstr "Titel"
+
+#: src/Form/CrawlerPage.php:259
+msgid "Newest first"
+msgstr "Neueste zuerst"
+
+#: src/Form/CrawlerPage.php:260
+msgid "Oldest first"
+msgstr "Älteste zuerst"
+
+#: src/Form/CrawlerPage.php:266
+msgid "Apply filters"
+msgstr "Filter anwenden"
+
+#: src/Form/CrawlerPage.php:269
+msgid "Crawl preview"
+msgstr "Crawl-Vorschau"
+
+#: src/Form/CrawlerPage.php:288
+msgid "Crawl delay"
+msgstr "Crawl-Verzögerung"
+
+#. translators: %d: number of milliseconds between iframe loads.
+#: src/Form/CrawlerPage.php:290
+#, php-format
+msgid "%d ms"
+msgstr "%d ms"
+
+#: src/Form/CrawlerPage.php:291
+msgid "Start crawling"
+msgstr "Crawling starten"
+
+#: src/Form/CrawlerPage.php:292
+msgid "Pause crawl"
+msgstr "Crawl pausieren"
+
+#: src/Form/CrawlerPage.php:293
+msgid "Resume crawl"
+msgstr "Crawl fortsetzen"
+
+#: src/Form/CrawlerPage.php:294
+msgid "Back to dashboard"
+msgstr "Zurück zum Dashboard"
+
+#: src/Form/CrawlerPage.php:295
+msgid "No matching content. Adjust the filters and apply."
+msgstr "Keine passenden Inhalte. Passen Sie die Filter an und wenden Sie sie an."
+
+#: src/Form/CrawlerPage.php:296
+msgid "Could not load the page list. Reload this page to retry; if the problem persists, your login session may have expired."
+msgstr "Die Seitenliste konnte nicht geladen werden. Laden Sie diese Seite neu, um es erneut zu versuchen; besteht das Problem weiterhin, ist möglicherweise Ihre Anmeldesitzung abgelaufen."
+
+#. translators: %s: human-readable duration like "30 seconds" or "5 minutes".
+#: src/Form/CrawlerPage.php:298
+#, php-format
+msgid "Estimated time: %s"
+msgstr "Geschätzte Dauer: %s"
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (singular form).
+#: src/Form/CrawlerPage.php:301
+#, php-format
+msgid "Showing %1$d of %2$d matching page."
+msgstr "%1$d von %2$d passender Seite wird angezeigt."
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (plural form).
+#: src/Form/CrawlerPage.php:303
+#, php-format
+msgid "Showing %1$d of %2$d matching pages."
+msgstr "%1$d von %2$d passenden Seiten werden angezeigt."
+
+#. translators: %d: whole-number count of seconds remaining (singular form).
+#: src/Form/CrawlerPage.php:307
+#, php-format
+msgid "%d second"
+msgstr "%d Sekunde"
+
+#. translators: %d: whole-number count of seconds remaining (plural form).
+#: src/Form/CrawlerPage.php:309
+#, php-format
+msgid "%d seconds"
+msgstr "%d Sekunden"
+
+#. translators: %d: whole-number count of minutes remaining (singular form).
+#: src/Form/CrawlerPage.php:313
+#, php-format
+msgid "%d minute"
+msgstr "%d Minute"
+
+#. translators: %d: whole-number count of minutes remaining (plural form).
+#: src/Form/CrawlerPage.php:315
+#, php-format
+msgid "%d minutes"
+msgstr "%d Minuten"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (singular form).
+#: src/Form/CrawlerPage.php:319
+#, php-format
+msgid "%s hour"
+msgstr "%s Stunde"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (plural form).
+#: src/Form/CrawlerPage.php:321
+#, php-format
+msgid "%s hours"
+msgstr "%s Stunden"
+
+#: src/Form/CustomRulesPage.php:84 src/Form/CustomRulesPage.php:85
+msgid "Editoria11y Custom Rules"
+msgstr "Editoria11y: Benutzerdefinierte Regeln"
+
+#: src/Form/CustomRulesPage.php:104 src/Form/CustomRulesPage.php:338
+#: src/Form/CustomRulesPage.php:880 src/Form/CustomRulesPage.php:1030
+msgid "You do not have permission to manage custom rules."
+msgstr "Sie haben keine Berechtigung, benutzerdefinierte Regeln zu verwalten."
+
+#: src/Form/CustomRulesPage.php:143 src/Form/CustomRulesPage.php:174
+msgid "Custom Rules"
+msgstr "Benutzerdefinierte Regeln"
+
+#: src/Form/CustomRulesPage.php:146
+msgid "Custom rules are a CSA feature. Activate CSA to add and edit rules; existing rules remain stored and become editable again on reactivation."
+msgstr "Benutzerdefinierte Regeln sind eine CSA-Funktion. Aktivieren Sie CSA, um Regeln hinzuzufügen und zu bearbeiten; vorhandene Regeln bleiben gespeichert und werden bei einer Reaktivierung wieder bearbeitbar."
+
+#: src/Form/CustomRulesPage.php:176 src/Form/NetworkCustomRulesPage.php:136
+msgid "Add New"
+msgstr "Neu hinzufügen"
+
+#: src/Form/CustomRulesPage.php:181
+msgid "Each rule pairs a CSS selector (and/or text-content match) with an alert shown to users. Rules ship over the cached static config alongside built-in tests."
+msgstr "Jede Regel verknüpft einen CSS-Selektor (und/oder eine Textinhaltsübereinstimmung) mit einer Meldung, die den Benutzern angezeigt wird. Regeln werden zusammen mit den eingebauten Tests über die zwischengespeicherte statische Konfiguration ausgeliefert."
+
+#: src/Form/CustomRulesPage.php:191 src/Form/NetworkCustomRulesPage.php:151
+msgid "Test"
+msgstr "Test"
+
+#: src/Form/CustomRulesPage.php:192
+msgid "Source"
+msgstr "Quelle"
+
+#: src/Form/CustomRulesPage.php:193 src/Form/NetworkCustomRulesPage.php:152
+msgid "Elements"
+msgstr "Elemente"
+
+#: src/Form/CustomRulesPage.php:201
+msgid "No custom rules defined yet."
+msgstr "Es wurden noch keine benutzerdefinierten Regeln definiert."
+
+#: src/Form/CustomRulesPage.php:202 src/Form/NetworkCustomRulesPage.php:162
+msgid "Add your first rule"
+msgstr "Erste Regel hinzufügen"
+
+#: src/Form/CustomRulesPage.php:239
+msgid "Active (enforced)"
+msgstr "Aktiv (erzwungen)"
+
+#: src/Form/CustomRulesPage.php:241
+msgid "Disabled on this site"
+msgstr "Auf dieser Website deaktiviert"
+
+#: src/Form/CustomRulesPage.php:243
+msgid "Overridden by a site rule with the same ID"
+msgstr "Durch eine Website-Regel mit derselben ID überschrieben"
+
+#: src/Form/CustomRulesPage.php:245 src/Form/CustomRulesPage.php:304
+#: src/Form/CustomRulesPage.php:600 src/Form/CustomRulesPage.php:604
+#: src/Form/NetworkCustomRulesPage.php:176 src/Form/SettingsFields.php:786
+msgid "Active"
+msgstr "Aktiv"
+
+#: src/Form/CustomRulesPage.php:248
+msgid "Disabled in network defaults"
+msgstr "In den Netzwerkstandards deaktiviert"
+
+#: src/Form/CustomRulesPage.php:252
+msgid "From network (locked)"
+msgstr "Vom Netzwerk (gesperrt)"
+
+#: src/Form/CustomRulesPage.php:253
+msgid "From network"
+msgstr "Vom Netzwerk"
+
+#: src/Form/CustomRulesPage.php:256
+msgid "Enable on this site"
+msgstr "Auf dieser Website aktivieren"
+
+#: src/Form/CustomRulesPage.php:257
+msgid "Disable on this site"
+msgstr "Auf dieser Website deaktivieren"
+
+#: src/Form/CustomRulesPage.php:277
+msgid "Locked by network admin"
+msgstr "Vom Netzwerkadministrator gesperrt"
+
+#: src/Form/CustomRulesPage.php:305 src/Form/NetworkCustomRulesPage.php:177
+msgid "Disabled"
+msgstr "Deaktiviert"
+
+#: src/Form/CustomRulesPage.php:322
+msgid "This site"
+msgstr "Diese Website"
+
+#: src/Form/CustomRulesPage.php:353
+msgid "No matching network rule found to toggle."
+msgstr "Keine passende Netzwerkregel zum Umschalten gefunden."
+
+#: src/Form/CustomRulesPage.php:360
+msgid "This rule is locked by the network admin and cannot be disabled per-site."
+msgstr "Diese Regel ist vom Netzwerkadministrator gesperrt und kann nicht pro Website deaktiviert werden."
+
+#: src/Form/CustomRulesPage.php:369
+msgid "Network rule disabled on this site."
+msgstr "Netzwerkregel auf dieser Website deaktiviert."
+
+#: src/Form/CustomRulesPage.php:370
+msgid "Network rule re-enabled on this site."
+msgstr "Netzwerkregel auf dieser Website wieder aktiviert."
+
+#: src/Form/CustomRulesPage.php:398
+msgid "(text match only)"
+msgstr "(nur Textübereinstimmung)"
+
+#: src/Form/CustomRulesPage.php:435
+msgid "Custom rule not found"
+msgstr "Benutzerdefinierte Regel nicht gefunden"
+
+#: src/Form/CustomRulesPage.php:438
+msgid "Return to the rules list"
+msgstr "Zurück zur Regelliste"
+
+#: src/Form/CustomRulesPage.php:483
+msgid "Edit custom rule"
+msgstr "Benutzerdefinierte Regel bearbeiten"
+
+#: src/Form/CustomRulesPage.php:484 src/Form/SettingsFields.php:247
+msgid "Add custom rule"
+msgstr "Benutzerdefinierte Regel hinzufügen"
+
+#: src/Form/CustomRulesPage.php:489
+msgid "All custom rules"
+msgstr "Alle benutzerdefinierten Regeln"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Save rule"
+msgstr "Regel speichern"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Create rule"
+msgstr "Regel erstellen"
+
+#: src/Form/CustomRulesPage.php:507
+msgid "Delete this custom rule?"
+msgstr "Diese benutzerdefinierte Regel löschen?"
+
+#: src/Form/CustomRulesPage.php:508 src/Form/NetworkCustomRulesPage.php:295
+msgid "Delete"
+msgstr "Löschen"
+
+#: src/Form/CustomRulesPage.php:551
+msgid "Admin label for the configuration page"
+msgstr "Admin-Bezeichnung für die Konfigurationsseite"
+
+#: src/Form/CustomRulesPage.php:564
+msgid "Test grouping ID"
+msgstr "Testgruppen-ID"
+
+#: src/Form/CustomRulesPage.php:576
+msgid "Letters, numbers and underscores only.<br>Rules that share an ID will be grouped on dashboard reports."
+msgstr "Nur Buchstaben, Zahlen und Unterstriche.<br>Regeln mit derselben ID werden in Dashboard-Berichten gruppiert."
+
+#: src/Form/CustomRulesPage.php:585
+msgid "Machine name"
+msgstr "Maschinenname"
+
+#: src/Form/CustomRulesPage.php:595
+msgid "Lowercase letters, digits, and underscores only. Cannot be changed after creation."
+msgstr "Nur Kleinbuchstaben, Ziffern und Unterstriche. Kann nach dem Anlegen nicht mehr geändert werden."
+
+#: src/Form/CustomRulesPage.php:609
+msgid "Disabled rules stay in network storage but are not sent to any site."
+msgstr "Deaktivierte Regeln bleiben im Netzwerkspeicher, werden aber an keine Website ausgeliefert."
+
+#: src/Form/CustomRulesPage.php:611
+msgid "Disabled rules stay in storage but are not sent to the browser."
+msgstr "Deaktivierte Regeln bleiben gespeichert, werden aber nicht an den Browser ausgeliefert."
+
+#: src/Form/CustomRulesPage.php:619 src/Form/NetworkCustomRulesPage.php:153
+msgid "Lock"
+msgstr "Sperren"
+
+#: src/Form/CustomRulesPage.php:623
+msgid "Lock this rule across the network"
+msgstr "Diese Regel netzwerkweit sperren"
+
+#: src/Form/CustomRulesPage.php:627
+msgid "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favor of this one. Unlocked rules can be disabled per-site."
+msgstr "Gesperrte Regeln werden auf jeder Website erzwungen: Website-Administratoren können sie nicht deaktivieren, und eine Website-Regel mit derselben ID wird zugunsten dieser Regel unterdrückt. Entsperrte Regeln können pro Website deaktiviert werden."
+
+#: src/Form/CustomRulesPage.php:639
+msgid "Alert content"
+msgstr "Warnungsinhalt"
+
+#: src/Form/CustomRulesPage.php:643
+msgid "Tip title"
+msgstr "Tipp-Titel"
+
+#: src/Form/CustomRulesPage.php:654
+msgid "Tip details"
+msgstr "Tipp-Details"
+
+#. translators: %s is the comma-separated list of allowed HTML tags.
+#: src/Form/CustomRulesPage.php:663
+#, php-format
+msgid "HTML displayed in the tooltip. The provided template is optional.<br>Allowed tags: %s."
+msgstr "HTML, das im Tooltip angezeigt wird. Die bereitgestellte Vorlage ist optional.<br>Erlaubte Tags: %s."
+
+#: src/Form/CustomRulesPage.php:677
+msgid "Alert type"
+msgstr "Meldungstyp"
+
+#: src/Form/CustomRulesPage.php:682
+msgid "Error"
+msgstr "Fehler"
+
+#: src/Form/CustomRulesPage.php:685
+msgid "Manual check"
+msgstr "Manuelle Prüfung"
+
+#: src/Form/CustomRulesPage.php:691
+msgid "Dismiss key"
+msgstr "Schließen-Schlüssel"
+
+#: src/Form/CustomRulesPage.php:696
+msgid "Text content"
+msgstr "Textinhalt"
+
+#: src/Form/CustomRulesPage.php:699
+msgid "Attributes on tag (e.g. href and src)"
+msgstr "Attribute am Tag (z.B. href und src)"
+
+#: src/Form/CustomRulesPage.php:703
+msgid "How dismissals are tracked. 'Text content' uses the text inside the element, 'Attributes on tag' uses its attributes (href, id, class, src)."
+msgstr "Wie Schließungen verfolgt werden. 'Textinhalt' verwendet den Text innerhalb des Elements, 'Attribute am Tag' verwendet seine Attribute (href, id, class, src)."
+
+#: src/Form/CustomRulesPage.php:712
+msgid "Elements to check"
+msgstr "Zu prüfende Elemente"
+
+#: src/Form/CustomRulesPage.php:715
+msgid "These sets contain elements that match your check area and skip over configuration."
+msgstr "Diese Sätze enthalten Elemente, die zu Ihrem Prüfbereich passen und die Konfiguration überspringen."
+
+#: src/Form/CustomRulesPage.php:724
+msgid "Common choices"
+msgstr "Häufige Auswahl"
+
+#: src/Form/CustomRulesPage.php:728
+msgid "All text elements: Headings, Paragraphs, Blockquotes and Lists"
+msgstr "Alle Textelemente: Überschriften, Absätze, Blockzitate und Listen"
+
+#: src/Form/CustomRulesPage.php:729 src/TestNames.php:378
+msgid "Links"
+msgstr "Links"
+
+#: src/Form/CustomRulesPage.php:730
+msgid "Paragraphs"
+msgstr "Absätze"
+
+#: src/Form/CustomRulesPage.php:731 src/TestNames.php:381
+msgid "Headings"
+msgstr "Überschriften"
+
+#: src/Form/CustomRulesPage.php:732 src/TestNames.php:380
+msgid "Images"
+msgstr "Bilder"
+
+#: src/Form/CustomRulesPage.php:733
+msgid "All elements"
+msgstr "Alle Elemente"
+
+#: src/Form/CustomRulesPage.php:734
+msgid "...other..."
+msgstr "...andere..."
+
+#: src/Form/CustomRulesPage.php:739
+msgid "Specific elements and combinations"
+msgstr "Spezifische Elemente und Kombinationen"
+
+#: src/Form/CustomRulesPage.php:751
+msgid "Note: combining Links with Paragraphs and other text containers can lead to duplicate alerts."
+msgstr "Hinweis: Die Kombination von Links mit Absätzen und anderen Textcontainern kann zu doppelten Warnungen führen."
+
+#: src/Form/CustomRulesPage.php:761
+msgid "When tip should appear"
+msgstr "Wann der Tipp erscheinen soll"
+
+#: src/Form/CustomRulesPage.php:764
+msgid "This test builder allows for simple text and attribute tests."
+msgstr "Dieser Test-Builder ermöglicht einfache Text- und Attributprüfungen."
+
+#: src/Form/CustomRulesPage.php:773
+msgid "Select by attributes"
+msgstr "Nach Attributen auswählen"
+
+#: src/Form/CustomRulesPage.php:783
+msgid "Match using CSS selectors.<br>Use :not() to skip elements, e.g. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Use attribute selectors for URLs, e.g. <code>[href*=\".dev/\"]</code>."
+msgstr "Übereinstimmung mit CSS-Selektoren.<br>Verwenden Sie :not() zum Überspringen von Elementen, z. B. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Verwenden Sie Attributselektoren für URLs, z. B. <code>[href*=\".dev/\"]</code>."
+
+#: src/Form/CustomRulesPage.php:795
+msgid "Select by text"
+msgstr "Nach Text auswählen"
+
+#: src/Form/CustomRulesPage.php:800
+msgid "Flag elements containing any of these text strings. One per line."
+msgstr "Elemente markieren, die einen dieser Texte enthalten. Einer pro Zeile."
+
+#: src/Form/CustomRulesPage.php:805 src/Form/CustomRulesPage.php:809
+msgid "Case sensitive"
+msgstr "Groß-/Kleinschreibung beachten"
+
+#: src/Form/CustomRulesPage.php:815
+msgid "Exclude elements that match this text"
+msgstr "Elemente ausschließen, die diesem Text entsprechen"
+
+#: src/Form/CustomRulesPage.php:820
+msgid "Don't flag elements if they contain any of these words or phrases. E.g., a link to a development server is ok if it contains \"dev.\" One per line."
+msgstr "Elemente nicht markieren, wenn sie eines dieser Wörter oder Phrasen enthalten. Z.B. ist ein Link zu einem Entwicklungsserver in Ordnung, wenn er \"dev.\" enthält. Einer pro Zeile."
+
+#: src/Form/CustomRulesPage.php:952
+msgid "Custom rule saved."
+msgstr "Benutzerdefinierte Regel gespeichert."
+
+#: src/Form/CustomRulesPage.php:1041
+msgid "No matching custom rule found to delete."
+msgstr "Keine passende benutzerdefinierte Regel zum Löschen gefunden."
+
+#: src/Form/CustomRulesPage.php:1048
+msgid "Custom rule deleted."
+msgstr "Benutzerdefinierte Regel gelöscht."
+
+#: src/Form/MigrationPanel.php:77
+msgid "Editoria11y needs to update its database tables."
+msgstr "Editoria11y muss seine Datenbanktabellen aktualisieren."
+
+#: src/Form/MigrationPanel.php:81
+msgid "Editoria11y database update encountered an error during finalization."
+msgstr "Beim Abschluss des Editoria11y-Datenbank-Updates ist ein Fehler aufgetreten."
+
+#: src/Form/MigrationPanel.php:82
+msgid "Editoria11y is updating existing dismissal records in the background."
+msgstr "Editoria11y aktualisiert vorhandene Ausblendungsdatensätze im Hintergrund."
+
+#: src/Form/MigrationPanel.php:85
+msgid "Editoria11y database update failed and writes are paused."
+msgstr "Editoria11y-Datenbank-Update fehlgeschlagen; Schreibvorgänge sind pausiert."
+
+#: src/Form/MigrationPanel.php:94
+msgid "Open Editoria11y settings"
+msgstr "Editoria11y-Einstellungen öffnen"
+
+#: src/Form/MigrationPanel.php:121
+msgid "Update failed. Please retry."
+msgstr "Update fehlgeschlagen. Bitte erneut versuchen."
+
+#. translators: 1: number of legacy dismissals already migrated, 2: total count detected at start.
+#: src/Form/MigrationPanel.php:123
+#, php-format
+msgid "Migrating dismissals: %1$d of %2$d processed."
+msgstr "Migration der Ausblendungen: %1$d von %2$d verarbeitet."
+
+#: src/Form/MigrationPanel.php:124
+msgid "Database update complete."
+msgstr "Datenbank-Update abgeschlossen."
+
+#: src/Form/MigrationPanel.php:125
+msgid "Working…"
+msgstr "Wird ausgeführt …"
+
+#: src/Form/MigrationPanel.php:126
+msgid "A previous update attempt did not finish."
+msgstr "Ein vorheriger Update-Versuch wurde nicht abgeschlossen."
+
+#: src/Form/MigrationPanel.php:127
+msgid "A schema update is required."
+msgstr "Ein Schema-Update ist erforderlich."
+
+#: src/Form/MigrationPanel.php:128
+msgid "Background data update is in progress. Click below to drive it to completion now."
+msgstr "Im Hintergrund läuft eine Datenaktualisierung. Klicken Sie unten, um sie jetzt abzuschließen."
+
+#: src/Form/MigrationPanel.php:132
+msgid "Editoria11y database update"
+msgstr "Editoria11y-Datenbank-Update"
+
+#: src/Form/MigrationPanel.php:134
+msgid "Checking schema state…"
+msgstr "Schema-Status wird geprüft …"
+
+#: src/Form/MigrationPanel.php:138
+msgid "Run update now"
+msgstr "Update jetzt ausführen"
+
+#: src/Form/MigrationPanel.php:141
+msgid "Retry"
+msgstr "Erneut versuchen"
+
+#: src/Form/MigrationPanel.php:268 src/Form/NetworkLicensePage.php:196
+msgid "Insufficient permissions."
+msgstr "Unzureichende Berechtigungen."
+
+#: src/Form/NetworkCustomRulesPage.php:70
+#: src/Form/NetworkCustomRulesPage.php:71
+#: src/Form/NetworkCustomRulesPage.php:114
+msgid "Editoria11y network custom rules"
+msgstr "Benutzerdefinierte Netzwerkregeln von Editoria11y"
+
+#: src/Form/NetworkCustomRulesPage.php:107
+#: src/Form/NetworkCustomRulesPage.php:311
+#: src/Form/NetworkCustomRulesPage.php:384 src/Form/NetworkSettingsPage.php:154
+#: src/Form/NetworkSettingsPage.php:511
+msgid "Insufficient privileges."
+msgstr "Unzureichende Berechtigungen."
+
+#: src/Form/NetworkCustomRulesPage.php:134
+msgid "Network custom rules"
+msgstr "Benutzerdefinierte Netzwerkregeln"
+
+#: src/Form/NetworkCustomRulesPage.php:141
+msgid "Rules defined here apply to every site on the network. Locked rules cannot be disabled per-site."
+msgstr "Die hier definierten Regeln gelten für jede Website im Netzwerk. Gesperrte Regeln können nicht pro Website deaktiviert werden."
+
+#: src/Form/NetworkCustomRulesPage.php:161
+msgid "No network rules defined yet."
+msgstr "Es wurden noch keine Netzwerkregeln definiert."
+
+#: src/Form/NetworkCustomRulesPage.php:179
+msgid "Locked"
+msgstr "Gesperrt"
+
+#: src/Form/NetworkCustomRulesPage.php:180
+msgid "Unlocked"
+msgstr "Entsperrt"
+
+#: src/Form/NetworkCustomRulesPage.php:224
+msgid "Network rule not found"
+msgstr "Netzwerkregel nicht gefunden"
+
+#: src/Form/NetworkCustomRulesPage.php:227
+msgid "Return to the network rules list"
+msgstr "Zurück zur Netzwerkregelliste"
+
+#: src/Form/NetworkCustomRulesPage.php:270
+msgid "Edit network custom rule"
+msgstr "Benutzerdefinierte Netzwerkregel bearbeiten"
+
+#: src/Form/NetworkCustomRulesPage.php:271 src/Form/SettingsFields.php:210
+msgid "Add network custom rule"
+msgstr "Benutzerdefinierte Netzwerkregel hinzufügen"
+
+#: src/Form/NetworkCustomRulesPage.php:276
+msgid "All network rules"
+msgstr "Alle Netzwerkregeln"
+
+#: src/Form/NetworkCustomRulesPage.php:294
+msgid "Delete this network rule? Every site on the network will stop receiving it."
+msgstr "Diese Netzwerkregel löschen? Alle Websites im Netzwerk erhalten sie dann nicht mehr."
+
+#: src/Form/NetworkCustomRulesPage.php:369
+msgid "Network custom rule saved."
+msgstr "Benutzerdefinierte Netzwerkregel gespeichert."
+
+#: src/Form/NetworkCustomRulesPage.php:395
+msgid "No matching network rule found to delete."
+msgstr "Keine passende Netzwerkregel zum Löschen gefunden."
+
+#: src/Form/NetworkCustomRulesPage.php:402
+msgid "Network custom rule deleted."
+msgstr "Benutzerdefinierte Netzwerkregel gelöscht."
+
+#: src/Form/NetworkDefaultsWorker.php:478
+msgid "Tests + roles assignment"
+msgstr "Testzuweisung und Rollenzuweisung"
+
+#: src/Form/NetworkLicensePage.php:58 src/Form/NetworkLicensePage.php:59
+msgid "Editoria11y license"
+msgstr "Editoria11y-Lizenz"
+
+#: src/Form/NetworkLicensePage.php:83 src/FreemiusAccessControl.php:283
+msgid "Only network administrators can manage the Editoria11y license."
+msgstr "Nur Netzwerkadministratoren können die Editoria11y-Lizenz verwalten."
+
+#: src/Form/NetworkLicensePage.php:94
+msgid "Starting…"
+msgstr "Wird gestartet …"
+
+#: src/Form/NetworkLicensePage.php:95
+msgid "Cancelling…"
+msgstr "Wird abgebrochen …"
+
+#: src/Form/NetworkLicensePage.php:96
+msgid "Resetting…"
+msgstr "Wird zurückgesetzt …"
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:98
+#, php-format
+msgid "Activated %1$d of %2$d sites."
+msgstr "%1$d von %2$d Websites aktiviert."
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:100
+#, php-format
+msgid "Deactivated %1$d of %2$d sites."
+msgstr "%1$d von %2$d Websites deaktiviert."
+
+#: src/Form/NetworkLicensePage.php:101
+msgid "License activated on every site in the network."
+msgstr "Lizenz auf jeder Website im Netzwerk aktiviert."
+
+#: src/Form/NetworkLicensePage.php:102
+msgid "License deactivated on every site in the network."
+msgstr "Lizenz auf jeder Website im Netzwerk deaktiviert."
+
+#: src/Form/NetworkLicensePage.php:103
+msgid "Activation cancelled. Already-activated sites keep their license."
+msgstr "Aktivierung abgebrochen. Bereits aktivierte Websites behalten ihre Lizenz."
+
+#: src/Form/NetworkLicensePage.php:104
+msgid "Deactivation cancelled. Already-deactivated sites stay deactivated."
+msgstr "Deaktivierung abgebrochen. Bereits deaktivierte Websites bleiben deaktiviert."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:106
+#, php-format
+msgid "Activation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Aktivierung abgeschlossen, bei %d Website(s) mit Fehler. Prüfen Sie die Liste unten und wiederholen Sie den Vorgang, sobald die Ursache behoben ist."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:108
+#, php-format
+msgid "Deactivation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Deaktivierung abgeschlossen, bei %d Website(s) mit Fehler. Prüfen Sie die Liste unten und wiederholen Sie den Vorgang, sobald die Ursache behoben ist."
+
+#: src/Form/NetworkLicensePage.php:109
+msgid "An unknown error occurred."
+msgstr "Ein unbekannter Fehler ist aufgetreten."
+
+#. translators: The <a>…</a> tags mark the phrase that will be rendered as a link to https://editoria11y.com/license. Keep the tags around the equivalent phrase in your language; do not add an href.
+#: src/Form/NetworkLicensePage.php:111
+msgid "Paste your <a>Editoria11y CSA license key</a> to begin."
+msgstr "Fügen Sie Ihren <a>Editoria11y-CSA-Lizenzschlüssel</a> ein, um zu beginnen."
+
+#: src/Form/NetworkLicensePage.php:112
+msgid "Deactivate the Editoria11y CSA license on every site in this network? Each site's license slot will be returned to your Freemius account."
+msgstr "Die Editoria11y-CSA-Lizenz auf jeder Website in diesem Netzwerk deaktivieren? Jeder Lizenzplatz wird an Ihr Freemius-Konto zurückgegeben."
+
+#: src/Form/NetworkLicensePage.php:113
+msgid "Activate a license network-wide"
+msgstr "Eine Lizenz netzwerkweit aktivieren"
+
+#: src/Form/NetworkLicensePage.php:114
+msgid "Deactivate licenses network-wide"
+msgstr "Lizenzen netzwerkweit deaktivieren"
+
+#: src/Form/NetworkLicensePage.php:115
+msgid "Activation in progress"
+msgstr "Aktivierung läuft"
+
+#: src/Form/NetworkLicensePage.php:116
+msgid "Deactivation in progress"
+msgstr "Deaktivierung läuft"
+
+#: src/Form/NetworkLicensePage.php:120
+msgid "Editoria11y CSA license"
+msgstr "Editoria11y-CSA-Lizenz"
+
+#: src/Form/NetworkLicensePage.php:123
+msgid "Background licensing tasks run slowly via WP-Cron; leave this page open to run a batch every 15 seconds."
+msgstr "Hintergrund-Lizenzierungsaufgaben laufen über WP-Cron nur langsam ab. Lassen Sie diese Seite geöffnet, um alle 15 Sekunden einen Stapel auszuführen."
+
+#: src/Form/NetworkLicensePage.php:138
+msgid "JavaScript is required to use this page."
+msgstr "JavaScript ist erforderlich, um diese Seite zu verwenden."
+
+#: src/Form/NetworkLicensePage.php:171
+msgid "DISABLE_WP_CRON is enabled on this site. The activation worker depends on WP-Cron firing — make sure your system cron is hitting wp-cron.php, or activation will not progress."
+msgstr "DISABLE_WP_CRON ist auf dieser Website aktiviert. Der Aktivierungsworker ist auf das Auslösen von WP-Cron angewiesen — stellen Sie sicher, dass Ihr System-Cron wp-cron.php aufruft, sonst schreitet die Aktivierung nicht voran."
+
+#: src/Form/NetworkLicensePage.php:347
+msgid "Activate on every site in this network"
+msgstr "Auf jeder Website in diesem Netzwerk aktivieren"
+
+#: src/Form/NetworkLicensePage.php:378
+msgid "License key"
+msgstr "Lizenzschlüssel"
+
+#: src/Form/NetworkLicensePage.php:389
+msgid "Deactivate license network-wide"
+msgstr "Lizenz netzwerkweit deaktivieren"
+
+#: src/Form/NetworkLicensePage.php:401
+msgid "Removes the Editoria11y CSA license from every site on the network. Each site's install record stays in place; only the license link is cleared."
+msgstr "Entfernt die Editoria11y-CSA-Lizenz von jeder Website im Netzwerk. Der Installationseintrag jeder Website bleibt erhalten; nur die Lizenzverknüpfung wird gelöscht."
+
+#: src/Form/NetworkLicensePage.php:460
+msgid "Retry failed sites"
+msgstr "Fehlgeschlagene Websites erneut versuchen"
+
+#: src/Form/NetworkLicensePage.php:473
+msgid "Modify network license"
+msgstr "Netzwerklizenz ändern"
+
+#: src/Form/NetworkLicensePage.php:492
+msgid "Back"
+msgstr "Zurück"
+
+#: src/Form/NetworkLicensePage.php:503
+msgid "Done"
+msgstr "Fertig"
+
+#: src/Form/NetworkLicensePage.php:510
+msgid "Cancelled"
+msgstr "Abgebrochen"
+
+#: src/Form/NetworkLicensePage.php:518
+msgid "Errors"
+msgstr "Fehler"
+
+#: src/Form/NetworkLicenseWorker.php:392
+msgid "License key is required."
+msgstr "Lizenzschlüssel ist erforderlich."
+
+#: src/Form/NetworkLicenseWorker.php:400 src/Form/NetworkLicenseWorker.php:456
+msgid "An activation run is already in progress."
+msgstr "Eine Aktivierung läuft bereits."
+
+#: src/Form/NetworkLicenseWorker.php:528
+msgid "No previous errors to retry."
+msgstr "Keine früheren Fehler zum erneuten Versuchen."
+
+#: src/Form/NetworkLicenseWorker.php:538
+msgid "License key is no longer stored. Start a new activation."
+msgstr "Lizenzschlüssel ist nicht mehr gespeichert. Starten Sie eine neue Aktivierung."
+
+#: src/Form/NetworkLicenseWorker.php:626
+msgid "Freemius SDK wrapper unavailable."
+msgstr "Freemius-SDK-Wrapper nicht verfügbar."
+
+#: src/Form/NetworkLicenseWorker.php:803
+msgid "SDK _deactivate_license() method unavailable."
+msgstr "SDK-Methode _deactivate_license() nicht verfügbar."
+
+#: src/Form/NetworkLicenseWorker.php:853
+msgid "Deactivation API call did not clear the install license."
+msgstr "Der API-Aufruf zur Deaktivierung hat die Installationslizenz nicht gelöscht."
+
+#: src/Form/NetworkLicenseWorker.php:947
+msgid "No valid sites in batch."
+msgstr "Keine gültigen Websites im Stapel."
+
+#: src/Form/NetworkLicenseWorker.php:1053
+msgid "Activation API returned an unspecified error."
+msgstr "Die Aktivierungs-API hat einen unbekannten Fehler zurückgegeben."
+
+#: src/Form/NetworkLicenseWorker.php:1055
+msgid "Install record not created after API call."
+msgstr "Installationseintrag wurde nach dem API-Aufruf nicht erstellt."
+
+#: src/Form/NetworkSettingsPage.php:77 src/Form/NetworkSettingsPage.php:78
+msgid "Editoria11y defaults"
+msgstr "Editoria11y-Standardwerte"
+
+#: src/Form/NetworkSettingsPage.php:103
+msgid "Defaults"
+msgstr "Standardwerte"
+
+#: src/Form/NetworkSettingsPage.php:110 src/Form/SettingsPage.php:287
+msgid "Custom rules"
+msgstr "Benutzerdefinierte Regeln"
+
+#: src/Form/NetworkSettingsPage.php:140
+msgid "Heads up: \"Default for all sites\" and \"Override for all sites\" overwrite a site's current value whenever that value is still an Editoria11y default or a previous network default — including a per-site value that happens to match a default."
+msgstr "Zu Ihrer Information: „Standard für alle Websites“ und „Überschreiben für alle Websites“ überschreiben den aktuellen Wert einer Website immer dann, wenn dieser Wert noch einem Editoria11y-Standard oder einem früheren Netzwerkstandard entspricht — auch wenn ein websitespezifischer Wert zufällig mit einem Standardwert übereinstimmt."
+
+#: src/Form/NetworkSettingsPage.php:176
+msgid "Editoria11y default or locked network settings"
+msgstr "Editoria11y-Standard- oder gesperrte Netzwerkeinstellungen"
+
+#: src/Form/NetworkSettingsPage.php:180
+msgid "Network defaults saved."
+msgstr "Netzwerkstandards gespeichert."
+
+#: src/Form/NetworkSettingsPage.php:186
+msgid "Network defaults were not saved."
+msgstr "Netzwerkstandards wurden nicht gespeichert."
+
+#: src/Form/NetworkSettingsPage.php:187
+msgid "You changed the following settings, but their propagation dropdown is still set to \"No network default\" — your change would not reach any site. Set the dropdown to \"Default for new sites\", \"Default for all sites\", or \"Override for all sites\" — or revert the value — and save again."
+msgstr "Sie haben die folgenden Einstellungen geändert, aber deren Weitergabe-Dropdown ist noch auf „Kein Netzwerkstandard“ gesetzt — Ihre Änderung würde keine Website erreichen. Setzen Sie das Dropdown auf „Standard für neue Websites“, „Standard für alle Websites“ oder „Überschreiben für alle Websites“ — oder machen Sie den Wert rückgängig — und speichern Sie erneut."
+
+#: src/Form/NetworkSettingsPage.php:213
+msgid "Save network defaults"
+msgstr "Netzwerkstandards speichern"
+
+#. translators: 1: processed sites, 2: total sites, 3: sites updated
+#: src/Form/NetworkSettingsPage.php:311
+#, php-format
+msgid "%1$s of %2$s sites visited (%3$s updated)."
+msgstr "%1$s von %2$s Websites besucht (%3$s aktualisiert)."
+
+#. translators: %s: human-readable duration estimate
+#: src/Form/NetworkSettingsPage.php:327
+#, php-format
+msgid "Estimated %s remaining."
+msgstr "Geschätzte verbleibende Zeit: %s."
+
+#. translators: %s: number of errors recorded
+#: src/Form/NetworkSettingsPage.php:340
+#, php-format
+msgid "Errors: %s (most recent retained). Check server logs for details."
+msgstr "Fehler: %s (aktuellster Fehler gespeichert). Details finden Sie in den Serverprotokollen."
+
+#: src/Form/NetworkSettingsPage.php:349
+msgid "Saving the form now will restart propagation with the new settings."
+msgstr "Wenn Sie das Formular jetzt speichern, wird die Weitergabe mit den neuen Einstellungen neu gestartet."
+
+#: src/Form/NetworkSettingsPage.php:412
+msgid "Propagating network defaults to existing sites…"
+msgstr "Netzwerkstandards werden an bestehende Websites weitergegeben …"
+
+#: src/Form/NetworkSettingsPage.php:415
+msgid "Network defaults propagated."
+msgstr "Netzwerkstandards weitergegeben."
+
+#: src/Form/NetworkSettingsPage.php:418
+msgid "Network defaults propagation failed."
+msgstr "Weitergabe der Netzwerkstandards fehlgeschlagen."
+
+#: src/Form/NetworkSettingsPage.php:421
+msgid "Network defaults propagation idle."
+msgstr "Weitergabe der Netzwerkstandards inaktiv."
+
+#: src/Form/SettingsContext.php:214
+msgid "Managed at the network level"
+msgstr "Auf Netzwerkebene verwaltet"
+
+#: src/Form/SettingsContext.php:283 src/Form/SettingsContext.php:318
+msgid "— No network default —"
+msgstr "— Kein Netzwerkstandard —"
+
+#: src/Form/SettingsContext.php:284 src/Form/SettingsContext.php:319
+msgid "Default for new sites"
+msgstr "Standard für neue Websites"
+
+#: src/Form/SettingsContext.php:285 src/Form/SettingsContext.php:320
+msgid "Default for all sites (skip custom values)"
+msgstr "Standard für alle Websites (benutzerdefinierte Werte werden übersprungen)"
+
+#: src/Form/SettingsContext.php:286 src/Form/SettingsContext.php:321
+msgid "Override for all sites (delete custom values)"
+msgstr "Überschreiben für alle Websites (benutzerdefinierte Werte werden gelöscht)"
+
+#: src/Form/SettingsContext.php:326
+msgid "Propagation"
+msgstr "Weitergabe"
+
+#: src/Form/SettingsFields.php:68
+msgid "Include all parts of the page that contain your theme and content."
+msgstr "Fügen Sie alle Teile der Seite ein, die Ihr Theme und Ihre Inhalte enthalten."
+
+#: src/Form/SettingsFields.php:69
+msgid "Exclude elements that show unhelpful, repetitive, or inaccurate alerts."
+msgstr "Elemente ausschließen, die wenig hilfreiche, sich wiederholende oder ungenaue Meldungen anzeigen."
+
+#: src/Form/SettingsFields.php:71
+msgid "If you need help:"
+msgstr "Wenn Sie Hilfe benötigen:"
+
+#: src/Form/SettingsFields.php:72
+msgid "Configuration Guide"
+msgstr "Konfigurationsanleitung"
+
+#: src/Form/SettingsFields.php:73
+msgid "Issue Queue"
+msgstr "Issue-Tracker"
+
+#: src/Form/SettingsFields.php:74
+msgid "Support contacts"
+msgstr "Support-Kontakte"
+
+#: src/Form/SettingsFields.php:84
+msgid "Define the parts of each page Editoria11y checks. Activating CSA unlocks an additional \"developer area\" superset that runs more checks and routes alerts to the roles you choose."
+msgstr "Legen Sie fest, welche Teile jeder Seite Editoria11y prüft. Durch Aktivieren von CSA wird ein zusätzlicher \"Entwicklerbereich\" freigeschaltet, der weitere Prüfungen ausführt und Meldungen an die von Ihnen gewählten Rollen sendet."
+
+#: src/Form/SettingsFields.php:98
+msgid "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licenses can split tests between roles."
+msgstr "Diese Tests erkennen Probleme, die Redakteure selbst beheben können. Einzelne Prüfungen können deaktiviert werden; Websites mit einer CSA-Lizenz können Tests zwischen Rollen aufteilen."
+
+#: src/Form/SettingsFields.php:114
+msgid "Apply all the tests and role assignments below to"
+msgstr "Alle unten aufgeführten Tests und Rollenzuweisungen anwenden auf"
+
+#: src/Form/SettingsFields.php:123
+msgid "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA license for site administrators and developers."
+msgstr "Diese Tests erkennen Probleme, die in der Regel Anpassungen am Theme oder Plugin erfordern, und sind Teil der CSA-Lizenz für Website-Administratoren und Entwickler."
+
+#: src/Form/SettingsFields.php:133
+msgid "The \"tests + roles assignment\" propagation setting under \"Modify content tests\" above also governs the template-test selection — both are stored together."
+msgstr "Die Weitergabe-Einstellung „Test- und Rollenzuweisung“ unter „Inhaltstests anpassen“ oben gilt auch für die Auswahl der Template-Tests — beide werden zusammen gespeichert."
+
+#: src/Form/SettingsFields.php:160
+msgid "Managed at the network level."
+msgstr "Wird auf Netzwerkebene verwaltet."
+
+#: src/Form/SettingsFields.php:193
+msgid "Network-level custom rules apply to every site in the network."
+msgstr "Benutzerdefinierte Regeln auf Netzwerkebene gelten für jede Website im Netzwerk."
+
+#. translators: %d is the number of network custom rules defined (active + inactive).
+#: src/Form/SettingsFields.php:204
+#, php-format
+msgid "Manage network custom rules (%d defined)"
+msgid_plural "Manage network custom rules (%d defined)"
+msgstr[0] "Benutzerdefinierte Netzwerkregeln verwalten (%d definiert)"
+msgstr[1] "Benutzerdefinierte Netzwerkregeln verwalten (%d definiert)"
+
+#: src/Form/SettingsFields.php:230
+msgid "Define your own accessibility tests. Each rule pairs a CSS selector with a tip shown to users; rules ship over the cached static config alongside the built-in test catalog."
+msgstr "Definieren Sie eigene Barrierefreiheitstests. Jede Regel verknüpft einen CSS-Selektor mit einem Hinweis, der den Benutzern angezeigt wird; Regeln werden zusammen mit dem eingebauten Testkatalog über die zwischengespeicherte statische Konfiguration ausgeliefert."
+
+#. translators: %d is the number of custom rules active on this site (per-site rules plus network rules not disabled here).
+#: src/Form/SettingsFields.php:241
+#, php-format
+msgid "Manage custom rules (%d active)"
+msgid_plural "Manage custom rules (%d active)"
+msgstr[0] "Benutzerdefinierte Regeln verwalten (%d aktiv)"
+msgstr[1] "Benutzerdefinierte Regeln verwalten (%d aktiv)"
+
+#: src/Form/SettingsFields.php:257
+msgid "Custom rules let CSA admins register additional accessibility tests with their own selectors, labels, and tip content. Activate CSA to manage them here."
+msgstr "Mit benutzerdefinierten Regeln können CSA-Administratoren zusätzliche Barrierefreiheitstests mit eigenen Selektoren, Bezeichnungen und Hinweistexten registrieren. Aktivieren Sie CSA, um sie hier zu verwalten."
+
+#: src/Form/SettingsFields.php:294
+msgid "Choose when the control panel should open and show inline tips. \"Start open if there are any alerts\" is recommended, as it helps tips get noticed over time."
+msgstr "Wählen Sie, wann das Bedienfeld geöffnet werden und Inline-Hinweise anzeigen soll. „Geöffnet starten, wenn Meldungen vorhanden sind“ wird empfohlen, da Hinweise so mit der Zeit besser wahrgenommen werden."
+
+#: src/Form/SettingsFields.php:312
+msgid "Choose whether to show inline tips while editing post and page content. The checker always hides while editing templates and layouts."
+msgstr "Wählen Sie, ob beim Bearbeiten von Beitrags- und Seiteninhalten Inline-Hinweise angezeigt werden sollen. Beim Bearbeiten von Templates und Layouts ist der Prüfer immer ausgeblendet."
+
+#: src/Form/SettingsFields.php:333
+msgid "Provide CSS selectors. Content authors will only see the alerts within these parts of the page. Do not provide selectors that nest within each other, or the inner content will be checked twice."
+msgstr "Geben Sie CSS-Selektoren an. Inhaltsautoren sehen Meldungen nur innerhalb dieser Seitenbereiche. Verwenden Sie keine ineinander verschachtelten Selektoren, da der innere Inhalt sonst doppelt geprüft wird."
+
+#: src/Form/SettingsFields.php:343
+msgid "The default is <code>main</code> or <code>body</code>, depending on theme."
+msgstr "Standardmäßig ist es je nach Theme <code>main</code> oder <code>body</code>."
+
+#: src/Form/SettingsFields.php:365
+msgid ""
+"If Editoria11y is flagging things editors cannot fix, e.g., theme-generated \"read more\" links or social media widgets,\n"
+"\t\t\t\tprovide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+msgstr ""
+"Wenn Editoria11y Elemente meldet, die Redakteure nicht beheben können, z. B. vom Theme erzeugte \"Weiterlesen\"-Links oder Social-Media-Widgets,\n"
+"\t\t\t\tgeben Sie CSS-Selektoren für Elemente an, die ignoriert werden sollen. Seien Sie dabei möglichst spezifisch, z. B. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+
+#: src/Form/SettingsFields.php:376
+msgid "If you are new at this, start by opening your browser's developer tools, inspecting the element you do not want flagged, and looking for unique-looking CSS selectors."
+msgstr "Wenn Sie damit noch nicht vertraut sind, öffnen Sie die Entwicklertools Ihres Browsers, untersuchen Sie das Element, das nicht markiert werden soll, und suchen Sie nach eindeutigen CSS-Selektoren."
+
+#. translators: %s is the built-in list of always-ignored CSS selectors.
+#: src/Form/SettingsFields.php:387
+#, php-format
+msgid "Selectors you add are appended to the built-in list, which is always ignored: %s"
+msgstr "Von Ihnen hinzugefügte Selektoren werden an die eingebaute Liste angehängt, die immer ignoriert wird: %s"
+
+#: src/Form/SettingsFields.php:434
+msgid "Set to the number of other themes or plugins that will be injecting custom result JS events. Editoria11y will wait until it receives this number of <code>ed11yResume</code> notifications before showing results."
+msgstr "Setzen Sie diesen Wert auf die Anzahl weiterer Themes oder Plugins, die eigene JS-Ergebnis-Events auslösen. Editoria11y wartet, bis es diese Anzahl an <code>ed11yResume</code>-Benachrichtigungen erhalten hat, bevor es Ergebnisse anzeigt."
+
+#: src/Form/SettingsFields.php:457
+msgid "Used to block checking on site sections or admin pages."
+msgstr "Wird verwendet, um die Prüfung in bestimmten Site-Bereichen oder auf Admin-Seiten zu unterbinden."
+
+#: src/Form/SettingsFields.php:485
+msgid "Autodetect"
+msgstr "Automatisch erkennen"
+
+#: src/Form/SettingsFields.php:486
+msgid "Only user-editable content"
+msgstr "Nur benutzerbearbeitbare Inhalte"
+
+#: src/Form/SettingsFields.php:487
+msgid "Other"
+msgstr "Andere"
+
+#: src/Form/SettingsFields.php:492
+msgid "Developer scan area"
+msgstr "Entwickler-Prüfbereich"
+
+#: src/Form/SettingsFields.php:510
+msgid "\"Autodetect\" selects:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+msgstr "\"Automatisch erkennen\" wählt:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+
+#: src/Form/SettingsFields.php:527
+msgid "Specify regions to check"
+msgstr "Zu prüfende Bereiche angeben"
+
+#: src/Form/SettingsFields.php:542
+msgid "Alerts in these regions will be shown to both developers and editors. One selector per line."
+msgstr "Meldungen in diesen Bereichen werden sowohl Entwicklern als auch Redakteuren angezeigt. Ein Selektor pro Zeile."
+
+#: src/Form/SettingsFields.php:574
+msgid "These parts of the page will be ignored entirely."
+msgstr "Diese Teile der Seite werden vollständig ignoriert."
+
+#: src/Form/SettingsFields.php:608
+msgid "Developer roles"
+msgstr "Entwicklerrollen"
+
+#: src/Form/SettingsFields.php:626
+msgid "Unchecked roles only see content checks."
+msgstr "Nicht ausgewählte Rollen sehen ausschließlich Inhaltsprüfungen."
+
+#: src/Form/SettingsFields.php:649
+msgid "Start open if there are new alerts"
+msgstr "Geöffnet starten, wenn neue Meldungen vorhanden sind"
+
+#: src/Form/SettingsFields.php:650
+msgid "Start open if there are any alerts"
+msgstr "Geöffnet starten, wenn Meldungen vorhanden sind"
+
+#: src/Form/SettingsFields.php:651
+msgid "Always start open"
+msgstr "Immer geöffnet starten"
+
+#: src/Form/SettingsFields.php:652
+msgid "Start minimized"
+msgstr "Minimiert starten"
+
+#: src/Form/SettingsFields.php:780
+msgid "Rule"
+msgstr "Regel"
+
+#: src/Form/SettingsFields.php:784
+msgid "Show to"
+msgstr "Anzeigen für"
+
+#: src/Form/SettingsFields.php:825
+msgid "Everyone"
+msgstr "Alle"
+
+#: src/Form/SettingsFields.php:826
+msgid "Developers only"
+msgstr "Nur Entwickler"
+
+#: src/Form/SettingsFields.php:827
+msgid "Off"
+msgstr "Aus"
+
+#: src/Form/SettingsFields.php:844
+msgid "(Part of CSA suite)"
+msgstr "(Teil der CSA-Suite)"
+
+#: src/Form/SettingsFields.php:881
+msgid "Remind the editor that these linked documents need a manual check"
+msgstr "Hinweis für Redakteure, dass diese verlinkten Dokumente manuell geprüft werden müssen"
+
+#: src/Form/SettingsFields.php:882
+msgid "Add or remove filetypes. Set to \"false\" to disable the test altogether. Providing any value will override the default."
+msgstr "Dateitypen hinzufügen oder entfernen. Mit \"false\" wird die Prüfung vollständig deaktiviert. Jeder andere Wert überschreibt die Standardeinstellung."
+
+#: src/Form/SettingsFields.php:886
+msgid "Remove elements that match these selectors before testing link text"
+msgstr "Elemente entfernen, die diesen Selektoren entsprechen, bevor Linktexte geprüft werden"
+
+#: src/Form/SettingsFields.php:887
+msgid "Provide a CSS selector for elements your themes or plugins programmatically add to links (usually external or open-in-new-window markers), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests."
+msgstr "Geben Sie einen CSS-Selektor für Elemente an, die Ihre Themes oder Plugins programmatisch zu Links hinzufügen (üblicherweise Markierungen für externe Links oder \"in neuem Fenster öffnen\"), damit sie bei den Prüfungen \"Link ohne Text\" und \"Linktext nicht aussagekräftig\" ignoriert werden können."
+
+#: src/Form/SettingsFields.php:891
+msgid "Remove these strings before testing link text"
+msgstr "Diese Textbausteine entfernen, bevor der Linktext geprüft wird"
+
+#: src/Form/SettingsFields.php:892
+msgid "Provide a pipe-separated (\"|\") list of phrases your themes or plugins programmatically add to links to hint a purpose (external, mail, phone, open-in-new-window), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests; e.g.: (link is external)|(link sends email)."
+msgstr "Geben Sie eine durch senkrechte Striche (\"|\") getrennte Liste von Textbausteinen an, die Ihre Themes oder Plugins programmatisch zu Links hinzufügen, um deren Zweck anzudeuten (extern, E-Mail, Telefon, in neuem Fenster öffnen), damit sie bei den Prüfungen \"Link ohne Text\" und \"Linktext nicht aussagekräftig\" ignoriert werden können; z. B.: (link is external)|(link sends email)."
+
+#: src/Form/SettingsFields.php:896
+msgid "Strings in links that indicate new tabs"
+msgstr "Textbausteine, die anzeigen, dass ein Link eine neue Registerkarte öffnet"
+
+#: src/Form/SettingsFields.php:897
+msgid "Provide a pipe-separated list of phrases your site uses to warn users a link opens in a new tab; e.g.: new tab|new window|external."
+msgstr "Geben Sie eine durch senkrechte Striche getrennte Liste von Hinweistexten an, mit denen Ihre Site Benutzer warnt, dass ein Link in einem neuen Tab geöffnet wird; z. B.: new tab|new window|external."
+
+#: src/Form/SettingsFields.php:905
+msgid "Embeds flagged as needing manual review"
+msgstr "Einbettungen, die als manuell zu prüfen markiert werden"
+
+#: src/Form/SettingsFields.php:906
+msgid "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualizations entirely, disable that test above."
+msgstr "Wird zur eingebauten Erkennungsliste hinzugefügt (Looker/Data Studio, Tableau, Power BI, Qlik). Geben Sie eine kommagetrennte Liste von Domains oder URL-Fragmenten an. Um Visualisierungen vollständig von der Markierung auszunehmen, deaktivieren Sie den obigen Test."
+
+#: src/Form/SettingsFields.php:911
+msgid "Videos flagged as needing a manual check for captions"
+msgstr "Videos, die als manuell auf Untertitel zu prüfen markiert werden"
+
+#: src/Form/SettingsFields.php:912
+msgid "Added to the built-in detection list (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard and generic video URLs). Provide a comma-separated list of domains or URL fragments, e.g. yuja.com. To stop flagging videos entirely, disable that test above."
+msgstr "Wird zur eingebauten Erkennungsliste hinzugefügt (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard und generische Video-URLs). Geben Sie eine kommagetrennte Liste von Domains oder URL-Fragmenten an, z. B. yuja.com. Um Videos vollständig von der Markierung auszunehmen, deaktivieren Sie den obigen Test."
+
+#: src/Form/SettingsFields.php:917
+msgid "Audio flagged as needing a manual check for transcripts"
+msgstr "Audios, die als manuell auf Transkripte zu prüfen markiert werden"
+
+#: src/Form/SettingsFields.php:918
+msgid "Added to the built-in detection list (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts and other major hosts). Provide a comma-separated list of domains or URL fragments. To stop flagging audio entirely, disable that test above."
+msgstr "Wird zur eingebauten Erkennungsliste hinzugefügt (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts und andere große Anbieter). Geben Sie eine kommagetrennte Liste von Domains oder URL-Fragmenten an. Um Audioinhalte vollständig von der Markierung auszunehmen, deaktivieren Sie den obigen Test."
+
+#: src/Form/SettingsFields.php:923
+msgid "Remind editor that content in these embeds needs manual review"
+msgstr "Redakteure daran erinnern, dass eingebettete Inhalte manuell geprüft werden müssen"
+
+#: src/Form/SettingsFields.php:924
+msgid "Provide a comma-separated list of selectors you wish to flag for the editor, e.g.: .my-embedded-feed, #my-social-link-block."
+msgstr "Geben Sie eine kommagetrennte Liste von Selektoren an, die im Editor hervorgehoben werden sollen, z. B.: .my-embedded-feed, #my-social-link-block."
+
+#: src/Form/SettingsFields.php:936
+msgid "Do not check contrast for these elements"
+msgstr "Kontrast für diese Elemente nicht prüfen"
+
+#: src/Form/SettingsFields.php:949
+msgid "Provide a comma-separated list of selectors for elements to ignore for all users."
+msgstr "Geben Sie eine kommaseparierte Liste von Selektoren für Elemente an, die für alle Benutzer ignoriert werden sollen."
+
+#: src/Form/SettingsFields.php:978
+msgid "Assertiveness"
+msgstr "Deutlichkeit"
+
+#: src/Form/SettingsFields.php:980
+msgid "Checker mode for content roles"
+msgstr "Prüfmodus für Inhaltsrollen"
+
+#: src/Form/SettingsFields.php:988
+msgid "Checker mode for developer roles"
+msgstr "Prüfmodus für Entwicklerrollen"
+
+#: src/Form/SettingsFields.php:996
+msgid "Checker mode inside editor"
+msgstr "Prüfmodus im Editor"
+
+#: src/Form/SettingsFields.php:1002
+msgid "Theme and plugin compatibility"
+msgstr "Theme- und Plugin-Kompatibilität"
+
+#: src/Form/SettingsFields.php:1004
+msgid "Editoria11y theme"
+msgstr "Editoria11y-Theme"
+
+#: src/Form/SettingsFields.php:1009
+msgid "Pin panel to"
+msgstr "Panel anheften an"
+
+#: src/Form/SettingsFields.php:1015
+msgid "Right"
+msgstr "Rechts"
+
+#: src/Form/SettingsFields.php:1016
+msgid "Left"
+msgstr "Links"
+
+#: src/Form/SettingsFields.php:1022
+msgid "Shift panel position if it overlaps these elements"
+msgstr "Panel verschieben, wenn es diese Elemente überlappt"
+
+#: src/Form/SettingsFields.php:1023
+msgid "Comma-separated selectors for competing widgets, e.g. .interface-interface-skeleton__sidebar."
+msgstr "Kommagetrennte Selektoren für konkurrierende Widgets, z. B. .interface-interface-skeleton__sidebar."
+
+#: src/Form/SettingsFields.php:1028
+msgid "Do not check on pages with these elements"
+msgstr "Keine Prüfung auf Seiten, die diese Elemente enthalten"
+
+#: src/Form/SettingsFields.php:1032
+msgid "JS injected custom rules"
+msgstr "Per JS eingefügte benutzerdefinierte Regeln"
+
+#: src/Form/SettingsFields.php:1038
+msgid "Don't show edit links on tips in these containers"
+msgstr "In diesen Containern keine Bearbeiten-Links in Hinweisen anzeigen"
+
+#: src/Form/SettingsFields.php:1039
+msgid "Provide a comma-separated list of page sections where edit links should not show. To hide the links everywhere, set this field to an asterisk (*)."
+msgstr "Geben Sie eine kommagetrennte Liste von Seitenbereichen an, in denen keine Bearbeiten-Links angezeigt werden sollen. Um die Links überall auszublenden, setzen Sie dieses Feld auf ein Sternchen (*)."
+
+#: src/Form/SettingsFields.php:1058
+msgid "Handling tips on hidden content"
+msgstr "Umgang mit Hinweisen zu verborgenen Inhalten"
+
+#: src/Form/SettingsFields.php:1060
+msgid "Warn users if elements might not be visible when jumping to tips"
+msgstr "Benutzer warnen, wenn Elemente beim Springen zu Hinweisen möglicherweise nicht sichtbar sind"
+
+#: src/Form/SettingsFields.php:1067
+msgid "Elements with overflow hidden"
+msgstr "Elemente mit overflow hidden"
+
+#: src/Form/SettingsFields.php:1068
+msgid "Sometimes buttons get drawn and visually truncated outside the bounds of a positioned element. Provide a selector list."
+msgstr "Manchmal werden Schaltflächen teilweise außerhalb eines positionierten Elements gezeichnet. Geben Sie dafür Selektoren an."
+
+#: src/Form/SettingsFields.php:1073
+msgid "Theme JS will handle revealing hidden tooltips inside these containers"
+msgstr "Das Theme-JS sorgt für das Einblenden versteckter Tooltips in diesen Containern"
+
+#: src/Form/SettingsFields.php:1074
+msgid "Editoria11y detects hidden tooltips and warns the user when they try to jump to them from the panel. For elements on this list, Editoria11y will dispatch a JS event instead of a warning, so custom JS in your theme can first reveal the hidden tip (e.g., open an accordion or tab panel)."
+msgstr "Editoria11y erkennt verborgene Tooltips und warnt Benutzer, wenn sie aus dem Panel zu diesen springen möchten. Für Elemente in dieser Liste löst Editoria11y stattdessen ein JS-Event aus, damit eigenes JS in Ihrem Theme den verborgenen Hinweis zunächst sichtbar machen kann (z. B. durch Öffnen eines Akkordeons oder Tab-Panels)."
+
+#: src/Form/SettingsFields.php:1085
+msgid "Detecting dynamic and shadow content"
+msgstr "Erkennung dynamischer und Shadow-DOM-Inhalte"
+
+#: src/Form/SettingsFields.php:1088
+msgid "Dynamically refresh if new content appears"
+msgstr "Dynamisch aktualisieren, wenn neue Inhalte erscheinen"
+
+#: src/Form/SettingsFields.php:1094
+msgid "Watch for changes anywhere on the page"
+msgstr "Auf Änderungen überall auf der Seite achten"
+
+#: src/Form/SettingsFields.php:1095
+msgid "Only watch for changes to content containers present on load"
+msgstr "Nur Änderungen an beim Laden vorhandenen Inhaltscontainern beobachten"
+
+#: src/Form/SettingsFields.php:1096
+msgid "Do not watch for changes"
+msgstr "Nicht auf Änderungen achten"
+
+#: src/Form/SettingsFields.php:1099
+msgid "Set to \"anywhere\" if changes are being missed; set to \"do not watch\" if you notice performance issues."
+msgstr "Auf \"anywhere\" setzen, wenn Änderungen übersehen werden; auf \"do not watch\", wenn Leistungsprobleme auftreten."
+
+#: src/Form/SettingsFields.php:1103
+msgid "Check inside these specific Web components"
+msgstr "Innerhalb dieser Webkomponenten prüfen"
+
+#: src/Form/SettingsFields.php:1104
+msgid "Provide selectors for elements with shadow DOM you want tested. E.g.: my-fancy-accordion-widget, my-magical-slideshow."
+msgstr "Geben Sie Selektoren für Elemente mit Shadow-DOM an, die geprüft werden sollen, z. B.: my-fancy-accordion-widget, my-magical-slideshow."
+
+#: src/Form/SettingsFields.php:1108
+msgid "Auto-detect any Web components"
+msgstr "Alle Webkomponenten automatisch erkennen"
+
+#: src/Form/SettingsFields.php:1109
+msgid "This is easier to configure than specifying components, but may slow test runs on very complicated pages."
+msgstr "Dies ist einfacher zu konfigurieren als einzelne Komponenten anzugeben, kann jedoch auf komplexen Seiten langsamer sein."
+
+#: src/Form/SettingsFields.php:1120
+msgid "Syncing results to reports"
+msgstr "Synchronisierung der Ergebnisse in Berichte"
+
+#: src/Form/SettingsFields.php:1137
+msgid "Only admins can view reports"
+msgstr "Nur Administratoren dürfen Berichte einsehen"
+
+#: src/Form/SettingsFields.php:1142
+msgid "By default both admins and editors can view reports."
+msgstr "Standardmäßig können sowohl Administratoren als auch Redakteure die Berichte einsehen."
+
+#: src/Form/SettingsFields.php:1155
+msgid "Hide reports shortcut on toggle"
+msgstr "Verknüpfung zu Berichten im Umschalter ausblenden"
+
+#: src/Form/SettingsFields.php:1162
+msgid "Reports will still be available on the WordPress admin dashboard."
+msgstr "Berichte bleiben weiterhin im WordPress-Admin-Dashboard verfügbar."
+
+#: src/Form/SettingsFields.php:1172
+msgid "Remove redundant base url from URLs"
+msgstr "Redundante Basis-URL aus URLs entfernen"
+
+#: src/Form/SettingsFields.php:1184
+msgid "Provide base URL (\"/mysite\") if your site is installed in a subdirectory. Subdirectories tend to get duplicated (/mysite/mysite/mypage) and throw errors from the API."
+msgstr "Geben Sie die Basis-URL (\"/mysite\") an, wenn Ihre Installation in einem Unterverzeichnis liegt. Unterverzeichnisse können doppelt erscheinen (/mysite/mysite/mypage) und API-Fehler verursachen."
+
+#: src/Form/SettingsFields.php:1189
+msgid "Preserve query parameters"
+msgstr "Abfrageparameter beibehalten"
+
+#: src/Form/SettingsFields.php:1190
+msgid "The dashboard ignores most parameters: results for both /news?f=1 and /news?f=2 will show up as just /news. Provide a comma-separated list of parameters that are meaningful and should appear as separate pages in results."
+msgstr "Das Dashboard ignoriert die meisten Parameter: Ergebnisse für /news?f=1 und /news?f=2 erscheinen beide als /news. Geben Sie eine kommagetrennte Liste relevanter Parameter an, die in den Ergebnissen als eigene Seiten erscheinen sollen."
+
+#: src/Form/SettingsFields.php:1194
+msgid "Disable sync altogether"
+msgstr "Synchronisierung vollständig deaktivieren"
+
+#: src/Form/SettingsFields.php:1195
+msgid "Syncing test results is required for the issue dashboard, dismissal dashboard, and \"mark OK\" buttons."
+msgstr "Die Synchronisierung der Testergebnisse ist erforderlich für das Problem-Dashboard, das Ausblendungs-Dashboard und die \"Als OK markieren\"-Schaltflächen."
+
+#: src/Form/SettingsFields.php:1206
+msgid "Heading outline position of editable content"
+msgstr "Überschriftenebene für bearbeitbare Inhalte"
+
+#: src/Form/SettingsFields.php:1208
+msgid "To check headings while editing, Editoria11y needs to know what the first heading level should be in each editable field. Body fields should generally be at the H2 level."
+msgstr "Damit Überschriften während der Bearbeitung geprüft werden können, muss Editoria11y wissen, welche erste Überschriftenebene in jedem bearbeitbaren Feld erwartet wird. Inhaltsfelder sollten in der Regel mit H2 beginnen."
+
+#: src/Form/SettingsFields.php:1213
+msgid "H2 level content (body content)"
+msgstr "Inhalte auf H2-Ebene (Hauptinhalt)"
+
+#: src/Form/SettingsFields.php:1214
+msgid "Body fields are preceded by an H1 (the post or page title), so their highest heading level should be H2."
+msgstr "Vor Inhaltsfeldern steht eine H1 (der Beitrags- oder Seitentitel), daher sollte ihre höchste Überschriftenebene H2 sein."
+
+#: src/Form/SettingsFields.php:1218
+msgid "H3 level content (blocks or widgets with separate titles)"
+msgstr "Inhalte auf H3-Ebene (Blöcke oder Widgets mit eigenen Titeln)"
+
+#: src/Form/SettingsFields.php:1219
+msgid "The highest heading level should be H3."
+msgstr "Die höchste Überschriftenebene sollte H3 sein."
+
+#: src/Form/SettingsFields.php:1223
+msgid "H4 level content (deeply nested blocks or widgets)"
+msgstr "Inhalte auf H4-Ebene (tief verschachtelte Blöcke oder Widgets)"
+
+#: src/Form/SettingsFields.php:1224
+msgid "The highest heading level should be H4."
+msgstr "Die höchste Überschriftenebene sollte H4 sein."
+
+#: src/Form/SettingsPage.php:126
+msgid "becoming a supporter"
+msgstr "Unterstützer werden"
+
+#: src/Form/SettingsPage.php:139
+msgid "free version at WordPress.org"
+msgstr "kostenlose Version auf WordPress.org"
+
+#. translators: %s: link reading "free version at WordPress.org".
+#: src/Form/SettingsPage.php:146
+#, php-format
+msgid "This site has the community-supported \"CSA\" version of Editoria11y installed rather than the %s."
+msgstr "Auf dieser Website ist die von der Community unterstützte „CSA“-Version von Editoria11y installiert und nicht die %s."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:155
+#, php-format
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key or view options for %s."
+msgstr "Um die von der Community unterstützten Funktionen zu aktivieren und weiterhin Updates zu erhalten, geben Sie Ihren vorhandenen Lizenzschlüssel ein oder sehen Sie sich die Optionen für %s an."
+
+#: src/Form/SettingsPage.php:169
+msgid "This site is running the free version of Editoria11y from WordPress.org. The community-supported (CSA) features are not active."
+msgstr "Auf dieser Website läuft die kostenlose Version von Editoria11y von WordPress.org. Die von der Community unterstützten (CSA-)Funktionen sind nicht aktiv."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:175
+#, php-format
+msgid "Unlock the community-supported features and continued updates by %s."
+msgstr "Schalten Sie die von der Community unterstützten Funktionen und fortlaufende Updates frei, indem Sie %s."
+
+#: src/Form/SettingsPage.php:203
+msgid "Editoria11y License & Account"
+msgstr "Editoria11y-Lizenz & Konto"
+
+#: src/Form/SettingsPage.php:262
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: src/Form/SettingsPage.php:272 src/Form/SettingsPage.php:284
+#: src/Form/SettingsPage.php:291
+msgid "License & Account"
+msgstr "Lizenz & Konto"
+
+#: src/Form/SettingsPage.php:548
+msgid "Getting started"
+msgstr "Erste Schritte"
+
+#: src/Form/SettingsPage.php:557
+msgid "Modify content tests"
+msgstr "Inhaltstests anpassen"
+
+#: src/Form/SettingsPage.php:563 src/Form/SettingsPage.php:577
+msgid "Tests by group"
+msgstr "Tests nach Gruppe"
+
+#: src/Form/SettingsPage.php:571
+msgid "Modify template tests"
+msgstr "Template-Tests anpassen"
+
+#: src/Form/SettingsPage.php:588
+msgid "Custom rules (CSA)"
+msgstr "Benutzerdefinierte Regeln (CSA)"
+
+#: src/Form/SettingsPage.php:603
+msgid "Parts of the page to test"
+msgstr "Zu prüfende Teile der Seite"
+
+#: src/Form/SettingsPage.php:611
+msgid "Do not check for any errors inside these elements"
+msgstr "Keine Fehler innerhalb dieser Elemente prüfen"
+
+#: src/Form/SettingsPage.php:622
+msgid "Page regions with user-editable content"
+msgstr "Seitenbereiche mit benutzerbearbeitbaren Inhalten"
+
+#: src/Form/SettingsPage.php:632
+msgid "Do not check for content errors inside these elements"
+msgstr "Keine Inhaltsfehler innerhalb dieser Elemente prüfen"
+
+#: src/Form/SettingsPage.php:635
+msgid "Errors in these elements should only be shown to developers"
+msgstr "Fehler in diesen Elementen sollen nur Entwicklern angezeigt werden"
+
+#: src/Form/SettingsPage.php:651
+msgid "Roles that will see developer alerts"
+msgstr "Rollen, die Entwicklermeldungen sehen dürfen"
+
+#: src/Form/SettingsPage.php:666
+msgid "Advanced settings"
+msgstr "Erweiterte Einstellungen"
+
+#: src/Form/SettingsPage.php:684
+msgid "Editoria11y Settings"
+msgstr "Editoria11y-Einstellungen"
+
+#: src/Form/SettingsPage.php:699
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+#: src/FreemiusAccessControl.php:222
+msgid "unknown"
+msgstr "unbekannt"
+
+#. translators: 1: loaded SDK version, 2: highest tested SDK version
+#: src/FreemiusAccessControl.php:227
+#, php-format
+msgid "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network license activation page may not behave as expected; review release notes or contact support if you hit issues."
+msgstr "Editoria11y CSA: Das geladene Freemius-SDK (Version %1$s) ist neuer als die höchste getestete Version (%2$s). Ein anderes Plugin auf dieser Website enthält eine neuere SDK-Version. Die Netzwerk-Lizenzaktivierungsseite verhält sich möglicherweise nicht wie erwartet; überprüfen Sie die Versionshinweise oder wenden Sie sich bei Problemen an den Support."
+
+#: src/FreemiusAccessControl.php:503
+msgid "Editoria11y network licenses are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+msgstr "Editoria11y-Netzwerklizenzen werden über eine eigene Seite aktiviert, die alle Websites im Netzwerk in cron-gesteuerten Stapeln durchläuft. Dies umgeht das 1.000-Website-Limit des SDK und hält die Seite auch bei großen Multisite-Installationen reaktionsfähig."
+
+#: src/FreemiusAccessControl.php:509
+msgid "Open Editoria11y license page"
+msgstr "Editoria11y-Lizenzseite öffnen"
+
+#: src/FreemiusAccessControl.php:565
+msgid "Per-site license rows are not shown to keep this page responsive on large networks. The license you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → License & Account."
+msgstr "Einzelne Website-Lizenzzeilen werden nicht angezeigt, um die Seite auch in großen Netzwerken reaktionsfähig zu halten. Die unten gewählte Lizenz gilt für jede Website im Netzwerk. Um einzelne Websites zu aktivieren oder zu deaktivieren, besuchen Sie Einstellungen → Editoria11y → Lizenz & Konto der jeweiligen Website."
+
+#: src/FreemiusContactFallback.php:121 src/FreemiusContactFallback.php:122
+#: src/FreemiusContactFallback.php:150 src/FreemiusContactFallback.php:210
+msgid "Contact Editoria11y"
+msgstr "Editoria11y kontaktieren"
+
+#: src/FreemiusContactFallback.php:206
+msgid "Editoria11y library forums"
+msgstr "Editoria11y-Forum"
+
+#. translators: 1: @itmaybejj GitHub profile link, 2: #Drupal Slack invite link, 3: #WordPress Slack chat link, 4: #WPCampus Slack invite link, 5: #DigiCol Slack invite link.
+#: src/FreemiusContactFallback.php:215
+#, php-format
+msgid "Lead maintainer %1$s can usually be found on Slack for informal support, configuration tips and debugging any time the sun is up in the western hemisphere in %2$s, %3$s, %4$s and %5$s."
+msgstr "Lead-Maintainer %1$s ist meist auf Slack zu erreichen – für informellen Support, Konfigurationstipps und Debugging, sooft in der westlichen Hemisphäre die Sonne scheint, in %2$s, %3$s, %4$s und %5$s."
+
+#. translators: %s: link to the Editoria11y library GitHub discussions page.
+#: src/FreemiusContactFallback.php:228
+#, php-format
+msgid "Check the %s for roadmap proposals and discussions."
+msgstr "Vorschläge zur Roadmap und Diskussionen finden Sie im %s."
+
+#: src/FreemiusContactFallback.php:234
+msgid "Formal support:"
+msgstr "Formeller Support:"
+
+#: src/FreemiusContactFallback.php:237
+msgid "Editoria11y Library issue queue"
+msgstr "Issue-Tracker der Editoria11y-Bibliothek"
+
+#: src/FreemiusContactFallback.php:239
+msgid "Editoria11y WordPress issue queue"
+msgstr "Issue-Tracker des Editoria11y-WordPress-Plugins"
+
+#: src/FreemiusContactFallback.php:241
+msgid "Editoria11y Drupal issue queue"
+msgstr "Issue-Tracker des Editoria11y-Drupal-Moduls"
+
+#: src/FreemiusContactFallback.php:243
+msgid "Submit a support request"
+msgstr "Support-Anfrage stellen"
+
+#: src/FreemiusPricingPage.php:163
+msgid "Editoria11y CSA pricing"
+msgstr "Editoria11y-CSA-Preise"
+
+#: src/FreemiusPricingPage.php:225
+msgid "Support the project"
+msgstr "Das Projekt unterstützen"
+
+#: src/FreemiusPricingPage.php:228
+msgid "Editoria11y promotes accessibility in a unique way. Its tools are highly effective at helping non-technical authors prepare content that can be enjoyed equally by disabled Web users. We consider this a public good, so <strong>Editoria11y will always be free to use</strong>."
+msgstr "Editoria11y fördert Barrierefreiheit auf einzigartige Weise. Seine Werkzeuge helfen technisch weniger versierten Autoren sehr wirksam dabei, Inhalte zu erstellen, die von Menschen mit Behinderungen im Web ebenso gut genutzt werden können. Wir betrachten dies als ein öffentliches Gut, daher <strong>wird Editoria11y immer kostenlos nutzbar sein</strong>."
+
+#: src/FreemiusPricingPage.php:232
+msgid "Editoria11y is not, however, free to develop or support."
+msgstr "Die Entwicklung und der Support von Editoria11y sind jedoch nicht kostenlos."
+
+#: src/FreemiusPricingPage.php:234
+msgid "The Community Supported Add-ons (CSA) project fills the gap: project members support the development of the Editoria11y library, its CMS plugins, and the CSA suite: a rapidly growing set of quality assurance tools that provide similar functionality to commercial products, open-source and on-prem. In return, they get access to premium features and support."
+msgstr "Das „Community Supported Add-ons“ (CSA)-Projekt schließt diese Lücke: Projektmitglieder unterstützen die Entwicklung der Editoria11y-Bibliothek, ihrer CMS-Plugins und der CSA-Suite – einer schnell wachsenden Sammlung von Qualitätssicherungswerkzeugen mit vergleichbarer Funktionalität wie kommerzielle Produkte, Open-Source- und On-Premise-Lösungen. Im Gegenzug erhalten sie Zugang zu Premium-Funktionen und Support."
+
+#: src/FreemiusPricingPage.php:239
+msgid "lower (or higher!) support levels"
+msgstr "niedrigere (oder höhere!) Unterstützungsstufen"
+
+#. translators: %s: link to the CSA supporters page and drop the "farmshare" word in languages without the concept.
+#: src/FreemiusPricingPage.php:245
+#, php-format
+msgid "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licenses."
+msgstr "Dies ist ein <strong>„Geben Sie, was Sie können“</strong>-Modell der Solidarischen Landwirtschaft. Die Website der Editoria11y LLC bietet Optionen für %s, Möglichkeiten, sich stattdessen als Entwickler oder Tester einzubringen, sowie Optionen für plattformübergreifende und unbegrenzte Website-Lizenzen."
+
+#: src/functions.php:234
+msgid "Network Super Admin"
+msgstr "Netzwerk-Super-Admin"
+
+#: src/functions.php:1796
+msgid "Empty link"
+msgstr "Leerer Link"
+
+#: src/functions.php:1797
+msgid "The button style link is missing its URL."
+msgstr "Dem Link im Button-Stil fehlt die URL."
+
+#: src/functions.php:1798
+msgid "Edit Media"
+msgstr "Medium bearbeiten"
+
+#: src/TestNames.php:46
+msgid "This alt text is a filename, not a description"
+msgstr "Dieser Alt-Text ist ein Dateiname, keine Beschreibung"
+
+#: src/TestNames.php:47 src/TestNames.php:48
+msgid "Is this a clear and concise description of the image?"
+msgstr "Ist dies eine klare und prägnante Beschreibung des Bildes?"
+
+#: src/TestNames.php:49
+msgid "This alt text may be a placeholder"
+msgstr "Dieser Alt-Text ist möglicherweise ein Platzhalter"
+
+#: src/TestNames.php:50
+msgid "This alt text is unpronounceable"
+msgstr "Dieser Alt-Text ist unaussprechlich"
+
+#: src/TestNames.php:51
+msgid "This custom input field is missing a label"
+msgstr "Diesem benutzerdefinierten Eingabefeld fehlt eine Beschriftung"
+
+#: src/TestNames.php:52
+msgid "Button is missing an accessible label"
+msgstr "Schaltfläche hat keine zugängliche Beschriftung"
+
+#: src/TestNames.php:53
+msgid "Button has an invalid ARIA label"
+msgstr "Schaltfläche hat ein ungültiges ARIA-Label"
+
+#: src/TestNames.php:54
+msgid "Button name repeats the word \"button\""
+msgstr "Der Name der Schaltfläche wiederholt das Wort „button“"
+
+#: src/TestNames.php:55
+msgid "This button is unpronounceable"
+msgstr "Diese Schaltfläche ist nicht aussprechbar"
+
+#: src/TestNames.php:56
+msgid "Text does not have enough contrast to be easily legible"
+msgstr "Der Text hat nicht genügend Kontrast, um gut lesbar zu sein"
+
+#: src/TestNames.php:57
+msgid "Graphic or icon does not have enough contrast"
+msgstr "Grafik oder Symbol hat nicht genügend Kontrast"
+
+#: src/TestNames.php:58
+msgid "Input does not provide enough contrast to be easily legible"
+msgstr "Eingabefeld hat nicht genügend Kontrast, um gut lesbar zu sein"
+
+#: src/TestNames.php:59
+msgid "Placeholder text does not have enough contrast to be easily legible"
+msgstr "Platzhaltertext hat nicht genügend Kontrast, um gut lesbar zu sein"
+
+#: src/TestNames.php:60
+msgid "Does this placeholder text have enough contrast?"
+msgstr "Hat dieser Platzhaltertext genügend Kontrast?"
+
+#: src/TestNames.php:61
+msgid "Does this text have enough contrast?"
+msgstr "Hat dieser Text genügend Kontrast?"
+
+#: src/TestNames.php:62
+msgid "Does this graphic or icon have enough contrast?"
+msgstr "Hat diese Grafik oder dieses Symbol genügend Kontrast?"
+
+#: src/TestNames.php:63
+msgid "Duplicate ID attribute"
+msgstr "Doppeltes ID-Attribut"
+
+#: src/TestNames.php:64
+msgid "This link has a tooltip with the same text as the link"
+msgstr "Dieser Link hat einen Tooltip mit dem gleichen Text wie der Link"
+
+#: src/TestNames.php:65
+msgid "Does this audio have a transcript?"
+msgstr "Hat dieses Audio eine Transkription?"
+
+#: src/TestNames.php:66
+msgid "Is this visualization accessible?"
+msgstr "Ist diese Visualisierung barrierefrei?"
+
+#: src/TestNames.php:67
+msgid "Embedded iframes need manual checks"
+msgstr "Eingebettete iframes erfordern manuelle Prüfungen"
+
+#: src/TestNames.php:68
+msgid "Frame missing \"title\" attribute"
+msgstr "Frame ohne „title“-Attribut"
+
+#: src/TestNames.php:69
+msgid "Frame with tabindex=\"-1\" will not be keyboard accessible."
+msgstr "Frame mit tabindex=\"-1\" ist nicht per Tastatur erreichbar."
+
+#: src/TestNames.php:70
+msgid "Is this video accurately captioned?"
+msgstr "Ist dieses Video korrekt untertitelt?"
+
+#: src/TestNames.php:71
+msgid "This heading has no text"
+msgstr "Diese Überschrift hat keinen Text"
+
+#: src/TestNames.php:72
+msgid "This image is used as a heading, so it needs alt text"
+msgstr "Dieses Bild wird als Überschrift verwendet und benötigt deshalb Alt-Text"
+
+#: src/TestNames.php:73
+msgid "The first heading on this page is a subheading"
+msgstr "Die erste Überschrift auf dieser Seite ist eine Unterüberschrift"
+
+#: src/TestNames.php:74
+msgid "Can this heading be shorter?"
+msgstr "Kann diese Überschrift kürzer sein?"
+
+#: src/TestNames.php:75
+msgid "This page is missing a Heading 1"
+msgstr "Diese Seite hat keine Überschrift der Ebene 1"
+
+#: src/TestNames.php:76
+msgid "This heading is tagged at the wrong level"
+msgstr "Diese Überschrift ist auf der falschen Ebene ausgezeichnet"
+
+#: src/TestNames.php:77
+msgid "This element cannot be described by screen readers"
+msgstr "Dieses Element kann von Screenreadern nicht beschrieben werden"
+
+#: src/TestNames.php:78
+msgid "This heading is unpronounceable"
+msgstr "Diese Überschrift ist nicht aussprechbar"
+
+#: src/TestNames.php:79
+msgid "Can this alt text be shorter?"
+msgstr "Kann dieser Alt-Text kürzer sein?"
+
+#: src/TestNames.php:80
+msgid "Is this image actually meaningless?"
+msgstr "Ist dieses Bild wirklich bedeutungslos?"
+
+#: src/TestNames.php:81
+msgid "Image in a carousel or gallery marked as decorative"
+msgstr "Bild in einem Karussell oder einer Galerie als dekorativ markiert"
+
+#: src/TestNames.php:82
+msgid "This captioned image has no alt text"
+msgstr "Dieses Bild mit Bildunterschrift hat keinen Alt-Text"
+
+#: src/TestNames.php:83
+msgid "Alt text should not be the same as caption text"
+msgstr "Alt-Text sollte nicht identisch mit der Bildunterschrift sein"
+
+#: src/TestNames.php:84
+msgid "Is there a visible label for this field?"
+msgstr "Gibt es eine sichtbare Beschriftung für dieses Feld?"
+
+#: src/TestNames.php:85
+msgid "Prefer visible labels to placeholders"
+msgstr "Sichtbare Beschriftungen bevorzugen statt Platzhalter"
+
+#: src/TestNames.php:86
+msgid "Is this reset button needed?"
+msgstr "Wird diese „Zurücksetzen“-Schaltfläche benötigt?"
+
+#: src/TestNames.php:87
+msgid "This input has an empty label"
+msgstr "Dieses Eingabefeld hat eine leere Beschriftung"
+
+#: src/TestNames.php:88
+msgid "Visible label does not match invisible label"
+msgstr "Sichtbare Beschriftung stimmt nicht mit der unsichtbaren überein"
+
+#: src/TestNames.php:89
+msgid "This image input is missing alt text"
+msgstr "Dieses Bild-Eingabefeld hat keinen Alt-Text"
+
+#: src/TestNames.php:90
+msgid "This input is not connected to a label"
+msgstr "Dieses Eingabefeld ist nicht mit einer Beschriftung verbunden"
+
+#: src/TestNames.php:91
+msgid "Language tag does not match the content"
+msgstr "Sprach-Tag stimmt nicht mit dem Inhalt überein"
+
+#: src/TestNames.php:92
+msgid "This content appears to be in a different language"
+msgstr "Dieser Inhalt scheint in einer anderen Sprache zu sein"
+
+#: src/TestNames.php:93
+msgid "This alt text appears to be in a different language"
+msgstr "Dieser Alt-Text scheint in einer anderen Sprache zu sein"
+
+#: src/TestNames.php:94
+msgid "Alt text used as a link should not be a URL"
+msgstr "Als Link verwendeter Alt-Text sollte keine URL sein"
+
+#: src/TestNames.php:95 src/TestNames.php:96
+msgid "This linked alt might not be clear and concise"
+msgstr "Dieser verlinkte Alt-Text ist möglicherweise nicht klar und prägnant"
+
+#: src/TestNames.php:97
+msgid "Linked images need pronounceable alt text"
+msgstr "Verlinkte Bilder benötigen aussprechbaren Alt-Text"
+
+#: src/TestNames.php:98
+msgid "Manual check: link contains \"click here\""
+msgstr "Dieser Link enthält „Hier klicken“"
+
+#: src/TestNames.php:99
+msgid "Link article titles, not DOI numbers"
+msgstr "Artikel sollten über ihren Titel verlinkt werden, nicht über DOI-Nummern"
+
+#: src/TestNames.php:100
+msgid "This link contains no words"
+msgstr "Dieser Link enthält keine Wörter."
+
+#: src/TestNames.php:101
+msgid "Link with invalid \"aria-labelledby\" attribute"
+msgstr "Link mit ungültigem „aria-labelledby“-Attribut"
+
+#: src/TestNames.php:102
+msgid "This link needs a label"
+msgstr "Dieser Link benötigt eine Beschriftung"
+
+#: src/TestNames.php:103
+msgid "Link points to a file without warning"
+msgstr "Link führt zu einer Datei ohne vorherigen Hinweis"
+
+#: src/TestNames.php:104
+msgid "Links with the same text link to different pages"
+msgstr "Mehrere Links mit demselben Text führen zu verschiedenen Seiten"
+
+#: src/TestNames.php:105
+msgid "Does this alt text describe the link or the image?"
+msgstr "Beschreibt dieser Alt-Text den Link oder das Bild?"
+
+#: src/TestNames.php:106
+msgid "Does this alt text make sense as part of this link?"
+msgstr "Ergibt dieser Alt-Text im Kontext dieses Links Sinn?"
+
+#: src/TestNames.php:107
+msgid "Can this linked alt text be shorter?"
+msgstr "Kann dieser verlinkte Alt-Text kürzer sein?"
+
+#: src/TestNames.php:108
+msgid "This linked image needs alt text"
+msgstr "Dieses verlinkte Bild benötigt Alt-Text"
+
+#: src/TestNames.php:109
+msgid "Does this linked image need a description?"
+msgstr "Benötigt dieses verlinkte Bild eine Beschreibung?"
+
+#: src/TestNames.php:110
+msgid "Is this link actually a button?"
+msgstr "Ist dieser Link tatsächlich eine Schaltfläche?"
+
+#: src/TestNames.php:111
+msgid "Does this link open a new tab without warning?"
+msgstr "Öffnet dieser Link eine neue Registerkarte ohne Hinweis?"
+
+#: src/TestNames.php:112
+msgid "This linked alt text may be a placeholder"
+msgstr "Dieser verlinkte Alt-Text ist möglicherweise ein Platzhalter"
+
+#: src/TestNames.php:113
+msgid "This link only contains generic words"
+msgstr "Dieser Link enthält nur generische Wörter"
+
+#: src/TestNames.php:114
+msgid "The purpose of this link is visually hidden"
+msgstr "Der Zweck dieses Links ist visuell verborgen"
+
+#: src/TestNames.php:115
+msgid "Does this image's alt describe the image or the link?"
+msgstr "Beschreibt dieser Alt-Text das Bild oder den Link?"
+
+#: src/TestNames.php:116
+msgid "Are the symbols or emoji in this link meaningful?"
+msgstr "Sind die Symbole oder Emojis in diesem Link sinnvoll?"
+
+#: src/TestNames.php:117
+msgid "This link is unpronounceable"
+msgstr "Dieser Link ist nicht aussprechbar"
+
+#: src/TestNames.php:118
+msgid "Link text should not be a URL"
+msgstr "Linktext sollte keine URL sein"
+
+#: src/TestNames.php:119
+msgid "Meta tag for page language missing"
+msgstr "Meta-Tag für die Seitensprache fehlt"
+
+#: src/TestNames.php:120
+msgid "Did you mean a different language code?"
+msgstr "Meinten Sie einen anderen Sprachcode?"
+
+#: src/TestNames.php:121
+msgid "Invalid language code"
+msgstr "Ungültiger Sprachcode"
+
+#: src/TestNames.php:122
+msgid "Page language may not match the content"
+msgstr "Die Seitensprache stimmt möglicherweise nicht mit dem Inhalt überein"
+
+#: src/TestNames.php:123
+msgid "Meta tag limits how much users can enlarge text"
+msgstr "Meta-Tag begrenzt die mögliche Textvergrößerung"
+
+#: src/TestNames.php:124
+msgid "Meta tag automatically refreshes page"
+msgstr "Meta-Tag aktualisiert die Seite automatisch"
+
+#: src/TestNames.php:125
+msgid "Meta tag prevents users from enlarging text"
+msgstr "Meta-Tag verhindert die Vergrößerung von Text"
+
+#: src/TestNames.php:126
+msgid "Meta tag for page title missing"
+msgstr "Meta-Tag für den Seitentitel fehlt"
+
+#: src/TestNames.php:127
+msgid "Invalid HTML: image has no alt attribute"
+msgstr "Ungültiges HTML: Bild ohne Alt-Attribut"
+
+#: src/TestNames.php:128
+msgid "Invalid HTML: linked image missing alt attribute"
+msgstr "Ungültiges HTML: verlinktes Bild ohne Alt-Attribut"
+
+#: src/TestNames.php:129
+msgid "Invalid HTML: image in link missing alt attribute"
+msgstr "Ungültiges HTML: Bild im Link ohne Alt-Attribut"
+
+#: src/TestNames.php:130
+msgid "This link target may be invalid"
+msgstr "Dieses Linkziel könnte ungültig sein"
+
+#: src/TestNames.php:131
+msgid "Should this quote be a heading?"
+msgstr "Sollte dieses Zitat eine Überschrift sein?"
+
+#: src/TestNames.php:132
+msgid "Has this document been tagged for screen readers?"
+msgstr "Wurde dieses Dokument für Screenreader ausgezeichnet?"
+
+#: src/TestNames.php:133
+msgid "Should this bold text be a heading?"
+msgstr "Sollte dieser fett gesetzte Text eine Überschrift sein?"
+
+#: src/TestNames.php:134
+msgid "Should this have list formatting?"
+msgstr "Sollte das als Liste formatiert sein?"
+
+#: src/TestNames.php:135
+msgid "Broken same-page link"
+msgstr "Defekter Link innerhalb derselben Seite"
+
+#: src/TestNames.php:136
+msgid "Do not justify text"
+msgstr "Text nicht im Blocksatz ausrichten"
+
+#: src/TestNames.php:137
+msgid "Nested interactive layout components"
+msgstr "Verschachtelte interaktive Layout-Komponenten"
+
+#: src/TestNames.php:138
+msgid "Is there an alternative for this PDF?"
+msgstr "Gibt es eine Alternative zu diesem PDF?"
+
+#: src/TestNames.php:139
+msgid "Text is too small"
+msgstr "Text ist zu klein"
+
+#: src/TestNames.php:140
+msgid "Large blocks of emphasized text are harder to read"
+msgstr "Große Textblöcke mit Hervorhebung sind schwerer zu lesen"
+
+#: src/TestNames.php:141
+msgid "Do not use sub/superscript as visual formatting"
+msgstr "Hoch-/Tiefstellung nicht als reine visuelle Formatierung verwenden"
+
+#: src/TestNames.php:142
+msgid "Only links should be underlined"
+msgstr "Nur Links sollten unterstrichen sein"
+
+#: src/TestNames.php:143
+msgid "Is this uppercase text needed?"
+msgstr "Ist dieser GROSSBUCHSTABENTEXT notwendig?"
+
+#: src/TestNames.php:144
+msgid "Are there redundant words in this alt text?"
+msgstr "Enthält dieser Alt-Text redundante Wörter?"
+
+#: src/TestNames.php:145
+msgid "Tabindex overrides interrupt the focus order"
+msgstr "Tabindex-Überschreibungen stören die Fokusreihenfolge"
+
+#: src/TestNames.php:146
+msgid "This header cell needs text"
+msgstr "Diese Tabellenkopfzelle benötigt Text"
+
+#: src/TestNames.php:147
+msgid "This table has an invalid headers attribute"
+msgstr "Diese Tabelle hat ein ungültiges headers-Attribut"
+
+#: src/TestNames.php:148
+msgid "This table needs a header row and/or column"
+msgstr "Dieser Tabelle fehlen Kopfzeilen in Zeile und/oder Spalte"
+
+#: src/TestNames.php:149
+msgid "Content headings should not be used inside tables"
+msgstr "Inhaltsüberschriften gehören nicht in Tabellen"
+
+#: src/TestNames.php:150
+msgid "Invalid HTML list"
+msgstr "Ungültige HTML-Liste"
+
+#: src/TestNames.php:379
+msgid "Linked images"
+msgstr "Verlinkte Bilder"
+
+#: src/TestNames.php:382
+msgid "Tables"
+msgstr "Tabellen"
+
+#: src/TestNames.php:383
+msgid "Text formatting"
+msgstr "Textformatierung"
+
+#: src/TestNames.php:384
+msgid "Video, audio, frames"
+msgstr "Video, Audio, Frames"
+
+#: src/TestNames.php:385
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: src/TestNames.php:386
+msgid "Forms"
+msgstr "Formulare"
+
+#: src/TestNames.php:387
+msgid "ARIA and focus"
+msgstr "ARIA und Fokus"
+
+#: src/TestNames.php:388
+msgid "Page metadata"
+msgstr "Seiten-Metadaten"

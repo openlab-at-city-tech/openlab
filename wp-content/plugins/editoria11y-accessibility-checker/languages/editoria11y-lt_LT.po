@@ -1,0 +1,2478 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: editoria11y 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/editoria11y\n"
+"POT-Creation-Date: 2026-08-10T21:11:15-04:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: Editoria11y\n"
+"Language: lt\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. Plugin Name of the plugin
+#: editoria11y.php
+msgid "Editoria11y Accessibility Checker (CSA)"
+msgstr "„Editoria11y“ prieinamumo kontrolė (CSA)"
+
+#. Plugin URI of the plugin
+#: editoria11y.php
+msgid "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+msgstr "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+
+#. Description of the plugin
+#: editoria11y.php
+msgid "User friendly content quality assurance, plus the CSA developer suite: ~50 additional code and contrast tests, a custom test builder, role-based test configuration, and a site crawler."
+msgstr "Patogi naudotojams turinio kokybės kontrolė, papildyta CSA programuotojų paketu: ~50 papildomų kodo ir kontrasto testų, tinkintas testų kūrimo įrankis, testų konfigūravimas pagal vaidmenis ir svetainės skanorius."
+
+#. Author of the plugin
+#: editoria11y.php
+msgid "Princeton University, WDS"
+msgstr "Princetonos universitetas, WDS"
+
+#. Author URI of the plugin
+#: editoria11y.php
+msgid "https://editoria11y.com"
+msgstr "https://editoria11y.com"
+
+#: editoria11y.php:131
+msgid "Editoria11y is missing its vendored dependencies. Run \"composer install\" inside the plugin directory or reinstall the plugin from a complete release archive."
+msgstr "„Editoria11y“ trūksta priklausomų bibliotekų. Paleiskite komandą „composer install“ pluginų kataloge arba perinstaliuokite pluginą iš pilno išskleistų archyvų."
+
+#: editoria11y.php:399
+msgid "Every five minutes (Editoria11y rehash)"
+msgstr "Kas penkias minutes („Editoria11y“ atnaujinimas)"
+
+#: editoria11y.php:405
+msgid "Every fifteen minutes (Editoria11y license watchdog)"
+msgstr "Kas penkiolika minučių („Editoria11y“ licencijos prižiūrėtojas)"
+
+#: src/Admin/CsvExport.php:161 src/Admin/Dashboard.php:150
+msgid "Page"
+msgstr "Puslapis"
+
+#: src/Admin/CsvExport.php:162
+msgid "URL"
+msgstr "URL"
+
+#: src/Admin/CsvExport.php:163
+msgid "Issue"
+msgstr "Problema"
+
+#: src/Admin/CsvExport.php:164 src/Admin/Dashboard.php:158
+msgid "Count"
+msgstr "Kiekis"
+
+#: src/Admin/CsvExport.php:165 src/Admin/Dashboard.php:155
+msgid "Author"
+msgstr "Autorius"
+
+#: src/Admin/CsvExport.php:166
+msgid "Page Type"
+msgstr "Puslapio tipas"
+
+#: src/Admin/CsvExport.php:167
+msgid "Detected on"
+msgstr "Aptikta data"
+
+#: src/Admin/CsvExport.php:168 src/Admin/Dashboard.php:153
+#: src/Form/CrawlerPage.php:206 src/Form/CustomRulesPage.php:194
+#: src/Form/NetworkCustomRulesPage.php:154
+msgid "Status"
+msgstr "Būsena"
+
+#: src/Admin/CsvExport.php:169 src/Form/CustomRulesPage.php:317
+#: src/Form/NetworkCustomRulesPage.php:192
+msgid "Edit"
+msgstr "Redaguoti"
+
+#: src/Admin/Dashboard.php:35 src/Admin/Dashboard.php:53
+#: src/Admin/Dashboard.php:202
+msgid "Editoria11y Accessibility Report"
+msgstr "„Editoria11y“ prieinamumo ataskaita"
+
+#: src/Admin/Dashboard.php:36
+msgid "Accessibility"
+msgstr "Prieinamumas"
+
+#: src/Admin/Dashboard.php:71
+msgid "Error:"
+msgstr "Klaida:"
+
+#: src/Admin/Dashboard.php:72
+msgid "Editoria11y database tables are missing."
+msgstr "Trūksta „Editoria11y“ duomenų bazės lentelių."
+
+#. translators: 1: bug report link, 2: site health page link.
+#: src/Admin/Dashboard.php:75
+#, php-format
+msgid "Try deactivating and reactivating the plugin to reset config and recreate the tables, or %1$s with the information from the WordPress, Server and Database sections on your %2$s."
+msgstr "Pabandykite išjungti ir iš naujo įjungti įskiepį, kad atstatytumėte konfigūraciją ir iš naujo sukurtumėte lenteles, arba %1$s su informacija iš „WordPress“, serverio ir duomenų bazės skilčių, esančia jūsų %2$s."
+
+#: src/Admin/Dashboard.php:76
+msgid "post a bug report"
+msgstr "pateikite klaidos pranešimą"
+
+#: src/Admin/Dashboard.php:77
+msgid "site health page"
+msgstr "svetainės sveikatos puslapyje"
+
+#: src/Admin/Dashboard.php:129
+msgid "View all issues"
+msgstr "Peržiūrėti visas problemas"
+
+#: src/Admin/Dashboard.php:130
+msgid "View issues on all pages"
+msgstr "Peržiūrėti problemas visuose puslapiuose"
+
+#. translators: %s: name of an alert/test, e.g. "Image is missing alt text".
+#: src/Admin/Dashboard.php:132
+#, php-format
+msgid "Alert report: \"%s\""
+msgstr "Įspėjimo ataskaita: „%s“"
+
+#. translators: %s: post type slug, e.g. "page" or "post".
+#: src/Admin/Dashboard.php:134
+#, php-format
+msgid "Alerts on pages of type \"%s\""
+msgstr "Įspėjimai puslapio typu „%s“"
+
+#: src/Admin/Dashboard.php:135
+msgid "Alerts on pages created by author"
+msgstr "Įspėjimai puslapiuose, kuriuose autorius sukūrė turinį"
+
+#. translators: %s: author display name.
+#: src/Admin/Dashboard.php:137
+#, php-format
+msgid "Alerts on pages created by %s"
+msgstr "Įspėjimai puslapiuose, kuriuos sukūrė %s"
+
+#: src/Admin/Dashboard.php:138
+msgid "Alerts dismissed by"
+msgstr "Įspėjimai atšaukti vartotojo"
+
+#. translators: %s: user display name of the dismissor.
+#: src/Admin/Dashboard.php:140
+#, php-format
+msgid "Alerts dismissed by %s"
+msgstr "Įspėjimai atšaukti vartotojo %s"
+
+#. translators: %s: post-status label, e.g. "Published" or "Draft".
+#: src/Admin/Dashboard.php:142
+#, php-format
+msgid "%s pages"
+msgstr "%s puslapiai"
+
+#: src/Admin/Dashboard.php:143
+msgid "API error."
+msgstr "API klaida."
+
+#: src/Admin/Dashboard.php:144
+msgid "Your login session expired. Reload this page to continue."
+msgstr "Jūsų prisijungimo sesija baigėsi. Įkelkite šį puslapį iš naujo, kad galėtumėte tęsti."
+
+#: src/Admin/Dashboard.php:145
+msgid "loading..."
+msgstr "kraunama..."
+
+#. translators: %d: pagination page number.
+#: src/Admin/Dashboard.php:147
+#, php-format
+msgid "Page %d"
+msgstr "%d puslapis"
+
+#: src/Admin/Dashboard.php:148
+msgid "Alerts"
+msgstr "Įspėjimai"
+
+#: src/Admin/Dashboard.php:149
+msgid "Dev alerts"
+msgstr "Programuotojų įspėjimai"
+
+#: src/Admin/Dashboard.php:151
+msgid "Path"
+msgstr "Kelias"
+
+#: src/Admin/Dashboard.php:152
+msgid "Type"
+msgstr "Tipas"
+
+#: src/Admin/Dashboard.php:154
+msgid "Updated"
+msgstr "Atnaujinta"
+
+#: src/Admin/Dashboard.php:156
+msgid "Detected"
+msgstr "Aptikta"
+
+#: src/Admin/Dashboard.php:157
+msgid "Alert"
+msgstr "Įspėjimas"
+
+#: src/Admin/Dashboard.php:159
+msgid "Pages"
+msgstr "Puslapiai"
+
+#: src/Admin/Dashboard.php:160
+msgid "On"
+msgstr "Komandoje / Pagal"
+
+#: src/Admin/Dashboard.php:161
+msgid "Dismissed alert"
+msgstr "Atšauktas įspėjimas"
+
+#: src/Admin/Dashboard.php:162
+msgid "Marked"
+msgstr "Pažymėta"
+
+#: src/Admin/Dashboard.php:163
+msgid "Current"
+msgstr "Esama"
+
+#: src/Admin/Dashboard.php:164
+msgid "By"
+msgstr "Per / Nuo"
+
+#: src/Admin/Dashboard.php:165
+msgid "Alerts by page"
+msgstr "Įspėjimai pagal puslapius"
+
+#: src/Admin/Dashboard.php:166
+msgid "Recent alerts"
+msgstr "Naujausi įspėjimai"
+
+#: src/Admin/Dashboard.php:167
+msgid "Alert types"
+msgstr "Įspėjimų tipai"
+
+#: src/Admin/Dashboard.php:168
+msgid "Dismissals"
+msgstr "Atšaukimai"
+
+#: src/Admin/Dashboard.php:169
+msgid "Recent dismissals"
+msgstr "Naujausi atšaukimai"
+
+#: src/Admin/Dashboard.php:170
+msgid "Download results as CSV"
+msgstr "Atsisiųsti rezultatus CSV formatu"
+
+#: src/Admin/Dashboard.php:171
+msgid "None"
+msgstr "Nėra"
+
+#: src/Admin/Dashboard.php:172
+msgid "No"
+msgstr "Ne"
+
+#: src/Admin/Dashboard.php:173
+msgid "Yes"
+msgstr "Taip"
+
+#: src/Admin/Dashboard.php:174
+msgid "n/a"
+msgstr "n/a"
+
+#: src/Admin/Dashboard.php:175 src/functions.php:1795
+msgid "Empty button-style link"
+msgstr "Tuščia mygtuko stiliaus nuoroda"
+
+#. translators: tooltip on a column header that's currently sorted descending.
+#: src/Admin/Dashboard.php:177
+msgid "descending"
+msgstr "nuolėtine tvarka"
+
+#. translators: tooltip on a column header that's currently sorted ascending.
+#: src/Admin/Dashboard.php:179
+msgid "ascending"
+msgstr "augimąja tvarka"
+
+#. translators: %d: number of result rows returned (singular form).
+#: src/Admin/Dashboard.php:182
+#, php-format
+msgid "%d result"
+msgstr "%d rezultatas"
+
+#. translators: %d: number of result rows returned (plural form).
+#: src/Admin/Dashboard.php:184
+#, php-format
+msgid "%d results"
+msgstr "%d rezultatai"
+
+#: src/CoActivationGuard.php:139
+msgid "A duplicate copy of Editoria11y Accessibility Checker (the free version) was deactivated here: Editoria11y CSA is already active and provides the same checks."
+msgstr "„Editoria11y“ prieinamumo kontrolės (nemokamos versijos) dublikatas čia buvo deaktyvuotas: „Editoria11y CSA“ jau aktyvus ir atlieka tuos pačius patikrinimus."
+
+#: src/Controller/ApiCrawler.php:122
+msgid "The crawler is a premium feature."
+msgstr "Skanorius (crawler) yra mokama funkcija."
+
+#: src/Controller/ApiCrawler.php:129
+msgid "Editoria11y database update did not complete; the crawler is paused until an administrator retries the update."
+msgstr "„Editoria11y“ duomenų bazės atnaujinimas nebaigtas; skanavimas sustabdytas, kol administratorius iš naujo nepaleis atnaujinimo."
+
+#: src/Controller/ApiDismissals.php:83
+msgid "Results not recorded"
+msgstr "Rezultatai neįrašyti"
+
+#: src/Controller/ApiDismissals.php:572 src/Controller/ApiResults.php:925
+msgid "Editoria11y database update did not complete; writes are paused until an administrator retries the update."
+msgstr "„Editoria11y“ duomenų bazės atnaujinimas nebaigtas; įrašai sustabdyti, kol administratorius iš naujo nepaleis atnaujinimo."
+
+#: src/Controller/ApiDismissals.php:597 src/Controller/ApiResults.php:950
+msgid "Editoria11y database update did not complete; the dashboard is paused until an administrator retries the update."
+msgstr "„Editoria11y“ duomenų bazės atnaujinimas nebaigtas; valdymo skydelis sustabdytas, kol administratorius iš naujo nepaleis atnaujinimo."
+
+#: src/CustomRules.php:273
+msgid "Machine name is required."
+msgstr "Reikalingas mašininis pavadinimas."
+
+#: src/CustomRules.php:276
+msgid "Machine name must be lowercase letters, digits, and underscores, starting with a letter."
+msgstr "Mašininis pavadinimas gali skirtis tik mažosiomis raidėmis, skaitmenimis ir brūkšnėmis, pradedant nuo raidės."
+
+#: src/CustomRules.php:281
+msgid "Admin label is required."
+msgstr "Reikalinga administratoriaus etiketė."
+
+#: src/CustomRules.php:286
+msgid "Test grouping ID is required."
+msgstr "Reikalingas testų grupės ID."
+
+#: src/CustomRules.php:293
+msgid "Test grouping ID may only contain letters, digits, and underscores."
+msgstr "Testų grupės ID gali skirtis tik raidėmis, skaitmenimis ir brūkšnėmis."
+
+#. translators: %s is a reserved test key like TABLES_SEMANTIC_HEADING.
+#: src/CustomRules.php:298
+#, php-format
+msgid "Test grouping ID \"%s\" is reserved by the v3 migration drop list and cannot be used."
+msgstr "Testų grupės ID „%s“ yra rezervuotas v3 migracijos sąraše, todėl jo negalima naudoti."
+
+#: src/CustomRules.php:305
+msgid "Tip title is required."
+msgstr "Reikalingas patarimo pavadinimas."
+
+#: src/CustomRules.php:312
+msgid "Tip details must contain some visible text."
+msgstr "Patarimo išsamė turi turėti matomą tekstą."
+
+#: src/CustomRules.php:317
+msgid "Alert type must be Error or Manual check."
+msgstr "Įspėjimo tipas turi būti „Error“ arba „Manual check“."
+
+#: src/CustomRules.php:323
+msgid "Dismiss key must be Text content or Attributes."
+msgstr "Atšaukimo raktas turi būti „Text content“ arba „Attributes“."
+
+#: src/CustomRules.php:329
+msgid "Filter selector looks like a CSS rule block, not a selector. Remove the curly braces."
+msgstr "Filtro selektorius atrodo kaip CSS taisyklės blokas, o ne selektorius. Pašalinkite riestinius skliaustus."
+
+#: src/CustomRules.php:332
+msgid "Filter selector has an unclosed quote, bracket, or parenthesis. The browser would reject it and skip every custom rule on the page."
+msgstr "Filtro selektoriuje yra neuždaryta kabutė, laužtinis skliaustas arba lenktinis skliaustas. Naršyklė jį atmestų ir praleistų visas tinkintąsias puslapio taisykles."
+
+#: src/CustomRules.php:342
+msgid "At least one rule criterion is required: a filter selector OR one or more include-text strings."
+msgstr "Reikalingas bent vienas taisyklės kriterijus: filtro selektorius ARBA viena ar daugiau įtraukiamo teksto eilučių."
+
+#. translators: %s is an unknown element-set value.
+#: src/CustomRules.php:352
+#, php-format
+msgid "Element set \"%s\" is not one of the recognized element categories."
+msgstr "Elementų rinkinys „%s“ nėra vienas iš atpažįstamų elementų kategorijų."
+
+#: src/Form/CrawlerPage.php:59 src/Form/CrawlerPage.php:60
+msgid "Editoria11y Crawler"
+msgstr "„Editoria11y“ skanorius"
+
+#: src/Form/CrawlerPage.php:126
+msgid "You do not have permission to use the crawler."
+msgstr "Neturite leidimo naudoti skanoriaus."
+
+#: src/Form/CrawlerPage.php:130 src/Form/CustomRulesPage.php:111
+#: src/Form/SettingsPage.php:236 src/Form/SettingsPage.php:237
+msgid "Editoria11y"
+msgstr "„Editoria11y“"
+
+#: src/Form/CrawlerPage.php:146 src/Form/SettingsPage.php:288
+msgid "Crawler"
+msgstr "Skanorius"
+
+#: src/Form/CrawlerPage.php:149
+msgid "The crawler is a CSA feature. Activate CSA to schedule sitewide accessibility scans across posts, pages, and custom post types."
+msgstr "Skanorius yra CSA funkcija. Įjunkite CSA, kad galėtumėte suplanuoti visos svetainės prieinamumo skanavimą įrašams, puslapiams ir pritaikytiems įrašų tipams."
+
+#: src/Form/CrawlerPage.php:162
+msgid "Manual crawl"
+msgstr "Rankinis skanavimas"
+
+#: src/Form/CrawlerPage.php:166
+msgid "Editoria11y reports populate and update in real time as editors work, so a manual crawl is generally only helpful when first installing the plugin or after making major theme or configuration changes."
+msgstr "„Editoria11y“ ataskaitos užsipildo ir atnaujinamos realiuoju laiku, todėl rankinis skanavimas paprastai naudingas tik pirmai diegiant pluginą arba po didelių temos ar konfigūracijos pakeitimų."
+
+#: src/Form/CrawlerPage.php:176 src/Form/CustomRulesPage.php:501
+#: src/Form/NetworkCustomRulesPage.php:288 src/Form/NetworkLicensePage.php:416
+msgid "Cancel"
+msgstr "Atšaukti"
+
+#: src/Form/CrawlerPage.php:181
+msgid "This tab needs to remain open and in the foreground during the crawl."
+msgstr "Skanavimo metu šis langas turi būti atidarytas ir matomas pirmame planarame."
+
+#: src/Form/CrawlerPage.php:188
+msgid "Browsers pause API operations in background tabs."
+msgstr "Naršyklės sustabdo API operacijas fone veikančiuose languose."
+
+#: src/Form/CrawlerPage.php:196
+msgid "Filter which pages will be crawled"
+msgstr "Filtruoti, kurie puslapiai bus skanuojami"
+
+#: src/Form/CrawlerPage.php:200
+msgid "Content type"
+msgstr "Turinio tipas"
+
+#: src/Form/CrawlerPage.php:218
+msgid "Filter by"
+msgstr "Filtruoti pagal"
+
+#: src/Form/CrawlerPage.php:221 src/Form/CrawlerPage.php:254
+msgid "Date created"
+msgstr "Sukurta data"
+
+#: src/Form/CrawlerPage.php:222 src/Form/CrawlerPage.php:255
+msgid "Date modified"
+msgstr "Atnaujinta data"
+
+#: src/Form/CrawlerPage.php:224
+msgid "From"
+msgstr "Nuo"
+
+#: src/Form/CrawlerPage.php:226
+msgid "To"
+msgstr "Iki"
+
+#: src/Form/CrawlerPage.php:231
+msgid "Content alerts"
+msgstr "Turinio įspėjimai"
+
+#: src/Form/CrawlerPage.php:234 src/Form/CrawlerPage.php:244
+msgid "Any"
+msgstr "Visi"
+
+#: src/Form/CrawlerPage.php:235
+msgid "Has alerts"
+msgstr "Yra įspėjimų"
+
+#: src/Form/CrawlerPage.php:236
+msgid "No alerts"
+msgstr "Nėra įspėjimų"
+
+#: src/Form/CrawlerPage.php:241
+msgid "Developer alerts"
+msgstr "Programuotojų įspėjimai"
+
+#: src/Form/CrawlerPage.php:245
+msgid "Has dev alerts"
+msgstr "Yra programuotojų įspėjimų"
+
+#: src/Form/CrawlerPage.php:246
+msgid "No dev alerts"
+msgstr "Nėra programuotojų įspėjimų"
+
+#: src/Form/CrawlerPage.php:251
+msgid "Sort by"
+msgstr "Rūšiuoti pagal"
+
+#: src/Form/CrawlerPage.php:256
+msgid "Title"
+msgstr "Pavadinimas"
+
+#: src/Form/CrawlerPage.php:259
+msgid "Newest first"
+msgstr "Pirmiausia naujausi"
+
+#: src/Form/CrawlerPage.php:260
+msgid "Oldest first"
+msgstr "Pirmiausia seniausi"
+
+#: src/Form/CrawlerPage.php:266
+msgid "Apply filters"
+msgstr "Taikyti filtrus"
+
+#: src/Form/CrawlerPage.php:269
+msgid "Crawl preview"
+msgstr "Skanavimo peržiūra"
+
+#: src/Form/CrawlerPage.php:288
+msgid "Crawl delay"
+msgstr "Skanavimo vėlavimas"
+
+#. translators: %d: number of milliseconds between iframe loads.
+#: src/Form/CrawlerPage.php:290
+#, php-format
+msgid "%d ms"
+msgstr "%d ms"
+
+#: src/Form/CrawlerPage.php:291
+msgid "Start crawling"
+msgstr "Pradėti skanavimą"
+
+#: src/Form/CrawlerPage.php:292
+msgid "Pause crawl"
+msgstr "Sustabdyti skanavimą"
+
+#: src/Form/CrawlerPage.php:293
+msgid "Resume crawl"
+msgstr "Atnaujinti skanavimą"
+
+#: src/Form/CrawlerPage.php:294
+msgid "Back to dashboard"
+msgstr "Atgal į valdymą skydelį"
+
+#: src/Form/CrawlerPage.php:295
+msgid "No matching content. Adjust the filters and apply."
+msgstr "Atitinkamo turinio nerasta. Keiskite filtrus ir pritaikykite juos."
+
+#: src/Form/CrawlerPage.php:296
+msgid "Could not load the page list. Reload this page to retry; if the problem persists, your login session may have expired."
+msgstr "Nepavyko įkelti puslapių sąrašo. Įkelkite šį puslapį iš naujo, kad pabandytumėte dar kartą; jei problema tęsiasi, jūsų prisijungimo sesija galėjo baigtis."
+
+#. translators: %s: human-readable duration like "30 seconds" or "5 minutes".
+#: src/Form/CrawlerPage.php:298
+#, php-format
+msgid "Estimated time: %s"
+msgstr "Preliminarus laikas: %s"
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (singular form).
+#: src/Form/CrawlerPage.php:301
+#, php-format
+msgid "Showing %1$d of %2$d matching page."
+msgstr "Rodoma %1$d iš %2$d atitikčių puslapio."
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (plural form).
+#: src/Form/CrawlerPage.php:303
+#, php-format
+msgid "Showing %1$d of %2$d matching pages."
+msgstr "Rodoma %1$d iš %2$d atitikčių puslapio."
+
+#. translators: %d: whole-number count of seconds remaining (singular form).
+#: src/Form/CrawlerPage.php:307
+#, php-format
+msgid "%d second"
+msgstr "%d sekundė"
+
+#. translators: %d: whole-number count of seconds remaining (plural form).
+#: src/Form/CrawlerPage.php:309
+#, php-format
+msgid "%d seconds"
+msgstr "%d sekundės"
+
+#. translators: %d: whole-number count of minutes remaining (singular form).
+#: src/Form/CrawlerPage.php:313
+#, php-format
+msgid "%d minute"
+msgstr "%d minutė"
+
+#. translators: %d: whole-number count of minutes remaining (plural form).
+#: src/Form/CrawlerPage.php:315
+#, php-format
+msgid "%d minutes"
+msgstr "%d minutės"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (singular form).
+#: src/Form/CrawlerPage.php:319
+#, php-format
+msgid "%s hour"
+msgstr "%s valanda"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (plural form).
+#: src/Form/CrawlerPage.php:321
+#, php-format
+msgid "%s hours"
+msgstr "%s valandos"
+
+#: src/Form/CustomRulesPage.php:84 src/Form/CustomRulesPage.php:85
+msgid "Editoria11y Custom Rules"
+msgstr "„Editoria11y“ pristatikytos taisyklės"
+
+#: src/Form/CustomRulesPage.php:104 src/Form/CustomRulesPage.php:338
+#: src/Form/CustomRulesPage.php:880 src/Form/CustomRulesPage.php:1030
+msgid "You do not have permission to manage custom rules."
+msgstr "Neturite leidimo valdyti pristatytas taisrules."
+
+#: src/Form/CustomRulesPage.php:143 src/Form/CustomRulesPage.php:174
+msgid "Custom Rules"
+msgstr "Pristatikytos taisyklės"
+
+#: src/Form/CustomRulesPage.php:146
+msgid "Custom rules are a CSA feature. Activate CSA to add and edit rules; existing rules remain stored and become editable again on reactivation."
+msgstr "Pristatikytos taisyklės yra CSA funkcija. Įjunkite CSA, kad galėtumėte pridėti ir redaguoti taisrules; esamos taisyklės išliks išsaugotos ir vėl bus redaguojamos po aktyvavimo."
+
+#: src/Form/CustomRulesPage.php:176 src/Form/NetworkCustomRulesPage.php:136
+msgid "Add New"
+msgstr "Pridėti naują"
+
+#: src/Form/CustomRulesPage.php:181
+msgid "Each rule pairs a CSS selector (and/or text-content match) with an alert shown to users. Rules ship over the cached static config alongside built-in tests."
+msgstr "Kiekvienoje taisyklėje CSS selektorius (ir/ar tekstinio turinio sutapimas) par{}uojamas su įspėjimu, „rodoma vartotojams“. Taisyklės siunčiamos kartu su išlaikytu statiniu konfigūracijos failu ir įprastaisiais testais."
+
+#: src/Form/CustomRulesPage.php:191 src/Form/NetworkCustomRulesPage.php:151
+msgid "Test"
+msgstr "Testas"
+
+#: src/Form/CustomRulesPage.php:192
+msgid "Source"
+msgstr "Šaltinis"
+
+#: src/Form/CustomRulesPage.php:193 src/Form/NetworkCustomRulesPage.php:152
+msgid "Elements"
+msgstr "Elementai"
+
+#: src/Form/CustomRulesPage.php:201
+msgid "No custom rules defined yet."
+msgstr "Pristatikytas taisrules dar nėra apibrėžtas."
+
+#: src/Form/CustomRulesPage.php:202 src/Form/NetworkCustomRulesPage.php:162
+msgid "Add your first rule"
+msgstr "Pridėkite pirmąją taisyklę"
+
+#: src/Form/CustomRulesPage.php:239
+msgid "Active (enforced)"
+msgstr "Aktyvi (priverstinė)"
+
+#: src/Form/CustomRulesPage.php:241
+msgid "Disabled on this site"
+msgstr "Išjungta šioje svetainėje"
+
+#: src/Form/CustomRulesPage.php:243
+msgid "Overridden by a site rule with the same ID"
+msgstr "Perrašyta svetainės taisykle su tuo pačiu ID"
+
+#: src/Form/CustomRulesPage.php:245 src/Form/CustomRulesPage.php:304
+#: src/Form/CustomRulesPage.php:600 src/Form/CustomRulesPage.php:604
+#: src/Form/NetworkCustomRulesPage.php:176 src/Form/SettingsFields.php:786
+msgid "Active"
+msgstr "Aktyvi"
+
+#: src/Form/CustomRulesPage.php:248
+msgid "Disabled in network defaults"
+msgstr "Išjungta tinklo numatytosiose reikšmėse"
+
+#: src/Form/CustomRulesPage.php:252
+msgid "From network (locked)"
+msgstr "Iš tinklo (užrakinta)"
+
+#: src/Form/CustomRulesPage.php:253
+msgid "From network"
+msgstr "Iš tinklo"
+
+#: src/Form/CustomRulesPage.php:256
+msgid "Enable on this site"
+msgstr "Įjungti šioje svetainėje"
+
+#: src/Form/CustomRulesPage.php:257
+msgid "Disable on this site"
+msgstr "Išjungti šioje svetainėje"
+
+#: src/Form/CustomRulesPage.php:277
+msgid "Locked by network admin"
+msgstr "Užrakinta tinklo administratoriaus"
+
+#: src/Form/CustomRulesPage.php:305 src/Form/NetworkCustomRulesPage.php:177
+msgid "Disabled"
+msgstr "Išjungta"
+
+#: src/Form/CustomRulesPage.php:322
+msgid "This site"
+msgstr "Ši svetainė"
+
+#: src/Form/CustomRulesPage.php:353
+msgid "No matching network rule found to toggle."
+msgstr "Nerasta atitinkanti tinklo taisyklė, kurią būtų galima perjungti."
+
+#: src/Form/CustomRulesPage.php:360
+msgid "This rule is locked by the network admin and cannot be disabled per-site."
+msgstr "Ši taisyklė yra užrakinta tinklo administratoriaus ir negali būti išjungta atskirai kiekvienoje svetainėje."
+
+#: src/Form/CustomRulesPage.php:369
+msgid "Network rule disabled on this site."
+msgstr "Tinklo taisyklė išjungta šioje svetainėje."
+
+#: src/Form/CustomRulesPage.php:370
+msgid "Network rule re-enabled on this site."
+msgstr "Tinklo taisyklė vėl įjungta šioje svetainėje."
+
+#: src/Form/CustomRulesPage.php:398
+msgid "(text match only)"
+msgstr "(tik tekstinio sutapimo atveju)"
+
+#: src/Form/CustomRulesPage.php:435
+msgid "Custom rule not found"
+msgstr "Pristatikta taisyklė nerasta"
+
+#: src/Form/CustomRulesPage.php:438
+msgid "Return to the rules list"
+msgstr "Grįžti prie taisrules sąrašo"
+
+#: src/Form/CustomRulesPage.php:483
+msgid "Edit custom rule"
+msgstr "Redaguoti pristatiktą taisyklę"
+
+#: src/Form/CustomRulesPage.php:484 src/Form/SettingsFields.php:247
+msgid "Add custom rule"
+msgstr "Pridėti pristatiktą taisyklę"
+
+#: src/Form/CustomRulesPage.php:489
+msgid "All custom rules"
+msgstr "Visos pristatiktos taisyklės"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Save rule"
+msgstr "Išsaugoti taisyklę"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Create rule"
+msgstr "Sukurti taisyklę"
+
+#: src/Form/CustomRulesPage.php:507
+msgid "Delete this custom rule?"
+msgstr "Ištrinti šią tinkintą taisyklę?"
+
+#: src/Form/CustomRulesPage.php:508 src/Form/NetworkCustomRulesPage.php:295
+msgid "Delete"
+msgstr "Ištrinti"
+
+#: src/Form/CustomRulesPage.php:551
+msgid "Admin label for the configuration page"
+msgstr "Administratoriaus etiketė konfigūracijos puslapiams"
+
+#: src/Form/CustomRulesPage.php:564
+msgid "Test grouping ID"
+msgstr "Testų grupės ID"
+
+#: src/Form/CustomRulesPage.php:576
+msgid "Letters, numbers and underscores only.<br>Rules that share an ID will be grouped on dashboard reports."
+msgstr "Tik raidės, skaitmenys ir brūkšnės.<br>Taisyklės, turinčios tą patį ID, bus sugrupuotos ataskaitose."
+
+#: src/Form/CustomRulesPage.php:585
+msgid "Machine name"
+msgstr "Mašininis pavadinimas"
+
+#: src/Form/CustomRulesPage.php:595
+msgid "Lowercase letters, digits, and underscores only. Cannot be changed after creation."
+msgstr "Tik mažosios raidės, skaitmenys ir brūkšnės. Negalima pakeisti sukūrius po sukurimo."
+
+#: src/Form/CustomRulesPage.php:609
+msgid "Disabled rules stay in network storage but are not sent to any site."
+msgstr "Išjungtos taisyklės išlieka tinklo saugykloje, tačiau nėra siunčiamos jokiai svetainei."
+
+#: src/Form/CustomRulesPage.php:611
+msgid "Disabled rules stay in storage but are not sent to the browser."
+msgstr "Išjungtos taisyklės išlieka saugykloje, tačiau nėra siunčiamos naršyklei."
+
+#: src/Form/CustomRulesPage.php:619 src/Form/NetworkCustomRulesPage.php:153
+msgid "Lock"
+msgstr "Užrakinti"
+
+#: src/Form/CustomRulesPage.php:623
+msgid "Lock this rule across the network"
+msgstr "Užrakinti šią taisyklę visame tinkle"
+
+#: src/Form/CustomRulesPage.php:627
+msgid "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favor of this one. Unlocked rules can be disabled per-site."
+msgstr "Užrakintos taisyklės yra priverstinai taikomos kiekvienoje svetainėje: svetainės administratoriai negali jų išjungti, o svetainės taisyklė su tuo pačiu ID nuslopinama šios naudai. Neužrakintas taisykles galima išjungti atskirai kiekvienoje svetainėje."
+
+#: src/Form/CustomRulesPage.php:639
+msgid "Alert content"
+msgstr "Įspėjimo turinys"
+
+#: src/Form/CustomRulesPage.php:643
+msgid "Tip title"
+msgstr "Patarimo pavadinimas"
+
+#: src/Form/CustomRulesPage.php:654
+msgid "Tip details"
+msgstr "Patarimo informacija"
+
+#. translators: %s is the comma-separated list of allowed HTML tags.
+#: src/Form/CustomRulesPage.php:663
+#, php-format
+msgid "HTML displayed in the tooltip. The provided template is optional.<br>Allowed tags: %s."
+msgstr "HTML, rodomas įšvarstyme. Šablonas yra neprivalomas.<br>Leistinos žymos: %s."
+
+#: src/Form/CustomRulesPage.php:677
+msgid "Alert type"
+msgstr "Įspėjimo tipas"
+
+#: src/Form/CustomRulesPage.php:682
+msgid "Error"
+msgstr "Klaida"
+
+#: src/Form/CustomRulesPage.php:685
+msgid "Manual check"
+msgstr "Rankinis patikrinimas"
+
+#: src/Form/CustomRulesPage.php:691
+msgid "Dismiss key"
+msgstr "Atšaukimo raktas"
+
+#: src/Form/CustomRulesPage.php:696
+msgid "Text content"
+msgstr "Teksto turinys"
+
+#: src/Form/CustomRulesPage.php:699
+msgid "Attributes on tag (e.g. href and src)"
+msgstr "Žymos atributai (pvz., href ir src)"
+
+#: src/Form/CustomRulesPage.php:703
+msgid "How dismissals are tracked. 'Text content' uses the text inside the element, 'Attributes on tag' uses its attributes (href, id, class, src)."
+msgstr "Kaip atsekami atšaukimai. „Teksto turinys“ naudoja elemento viduje esantį tekstą, „Žymos atributai“ naudoja jų atributus (href, id, class, src)."
+
+#: src/Form/CustomRulesPage.php:712
+msgid "Elements to check"
+msgstr "Elementai, kurie tikriniami"
+
+#: src/Form/CustomRulesPage.php:715
+msgid "These sets contain elements that match your check area and skip over configuration."
+msgstr "Šie rinkiniai turi elementus, kurie atitinka jūsų patikros zoną ir apsaugo nuo konfigūracijos klaidų."
+
+#: src/Form/CustomRulesPage.php:724
+msgid "Common choices"
+msgstr "Dažmi čekiai"
+
+#: src/Form/CustomRulesPage.php:728
+msgid "All text elements: Headings, Paragraphs, Blockquotes and Lists"
+msgstr "Visi tekstiniai elementai: Antraštės, pastraipos, citatos ir sąrašai"
+
+#: src/Form/CustomRulesPage.php:729 src/TestNames.php:378
+msgid "Links"
+msgstr "Nuorodos"
+
+#: src/Form/CustomRulesPage.php:730
+msgid "Paragraphs"
+msgstr "Pastraipos"
+
+#: src/Form/CustomRulesPage.php:731 src/TestNames.php:381
+msgid "Headings"
+msgstr "Antraštės"
+
+#: src/Form/CustomRulesPage.php:732 src/TestNames.php:380
+msgid "Images"
+msgstr "Vaizdai"
+
+#: src/Form/CustomRulesPage.php:733
+msgid "All elements"
+msgstr "Visi elementai"
+
+#: src/Form/CustomRulesPage.php:734
+msgid "...other..."
+msgstr "...kitų..."
+
+#: src/Form/CustomRulesPage.php:739
+msgid "Specific elements and combinations"
+msgstr "Konkrečios dalys ir kombinacijos"
+
+#: src/Form/CustomRulesPage.php:751
+msgid "Note: combining Links with Paragraphs and other text containers can lead to duplicate alerts."
+msgstr "Pastaba: nuorodų su pastraipomis ir kitais tekstiniais konteineriais derinimas gali sukelti dubliuojamų įspėjimų."
+
+#: src/Form/CustomRulesPage.php:761
+msgid "When tip should appear"
+msgstr "Kada turi atsirasti patarimas"
+
+#: src/Form/CustomRulesPage.php:764
+msgid "This test builder allows for simple text and attribute tests."
+msgstr "Šis testų kūrimo įrankis leidžia atlikti paprastus tekstinius ir atributų testus."
+
+#: src/Form/CustomRulesPage.php:773
+msgid "Select by attributes"
+msgstr "Pasirinkti pagal atributus"
+
+#: src/Form/CustomRulesPage.php:783
+msgid "Match using CSS selectors.<br>Use :not() to skip elements, e.g. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Use attribute selectors for URLs, e.g. <code>[href*=\".dev/\"]</code>."
+msgstr "Suderinti naudojant CSS selektorius.<br>Naudokite :not(), kad praleistumėte elementus, pvz. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Naudokite atributų selektorius URL adresams, pvz. <code>[href*=\".dev/\"]</code>."
+
+#: src/Form/CustomRulesPage.php:795
+msgid "Select by text"
+msgstr "Pasirinkti pagal tekstą"
+
+#: src/Form/CustomRulesPage.php:800
+msgid "Flag elements containing any of these text strings. One per line."
+msgstr "Pažymėkite elementus, kuriuose yra bent viena iš šių tekstinių stringų. Po vienos eilutėje."
+
+#: src/Form/CustomRulesPage.php:805 src/Form/CustomRulesPage.php:809
+msgid "Case sensitive"
+msgstr "Atkreipiamumas į didžiųms ir mažosioms raidžių skirtumą"
+
+#: src/Form/CustomRulesPage.php:815
+msgid "Exclude elements that match this text"
+msgstr "Išskirti elementus, kurie atitinka šį tekstą"
+
+#: src/Form/CustomRulesPage.php:820
+msgid "Don't flag elements if they contain any of these words or phrases. E.g., a link to a development server is ok if it contains \"dev.\" One per line."
+msgstr "Nežymėkite elementų, jei juose yra šių žodžių ar frazių. Pvz., nuoroda į „dev.“ serverą yra gerai, jei ji turi „dev.“. Po vienos eilutėje."
+
+#: src/Form/CustomRulesPage.php:952
+msgid "Custom rule saved."
+msgstr "Tinkinta taisyklė išsaugota."
+
+#: src/Form/CustomRulesPage.php:1041
+msgid "No matching custom rule found to delete."
+msgstr "Nerasta atitinkanti tinkinta taisyklė, kurią būtų galima ištrinti."
+
+#: src/Form/CustomRulesPage.php:1048
+msgid "Custom rule deleted."
+msgstr "Tinkinta taisyklė ištrinta."
+
+#: src/Form/MigrationPanel.php:77
+msgid "Editoria11y needs to update its database tables."
+msgstr "„Editoria11y“ reikia atnaujinti duomenų bazės lenteles."
+
+#: src/Form/MigrationPanel.php:81
+msgid "Editoria11y database update encountered an error during finalization."
+msgstr "„Editoria11y“ duomenų bazės atnaujinimas baigiantis susidūrė su klaida."
+
+#: src/Form/MigrationPanel.php:82
+msgid "Editoria11y is updating existing dismissal records in the background."
+msgstr "„Editoria11y“ fone atnaujina esamus atšaukimų įrašus."
+
+#: src/Form/MigrationPanel.php:85
+msgid "Editoria11y database update failed and writes are paused."
+msgstr "„Editoria11y“ duomenų bazės atnaujinimas nepavyko ir įrašai sustabdyti."
+
+#: src/Form/MigrationPanel.php:94
+msgid "Open Editoria11y settings"
+msgstr "Atidaryti „Editoria11y“ nustatymus"
+
+#: src/Form/MigrationPanel.php:121
+msgid "Update failed. Please retry."
+msgstr "Atnaujinimas nepavyko. Bandykite dar kartą."
+
+#. translators: 1: number of legacy dismissals already migrated, 2: total count detected at start.
+#: src/Form/MigrationPanel.php:123
+#, php-format
+msgid "Migrating dismissals: %1$d of %2$d processed."
+msgstr "Perkeliami atšaukimai: apdorota %1$d iš %2$d."
+
+#: src/Form/MigrationPanel.php:124
+msgid "Database update complete."
+msgstr "Duomenų bazės atnaujinimas baigtas."
+
+#: src/Form/MigrationPanel.php:125
+msgid "Working…"
+msgstr "Vykdoma…"
+
+#: src/Form/MigrationPanel.php:126
+msgid "A previous update attempt did not finish."
+msgstr "Ankstesnis atnaujinimo bandymas nebuvo baigtas."
+
+#: src/Form/MigrationPanel.php:127
+msgid "A schema update is required."
+msgstr "Reikalingas schemos atnaujinimas."
+
+#: src/Form/MigrationPanel.php:128
+msgid "Background data update is in progress. Click below to drive it to completion now."
+msgstr "Fone vykdomas duomenų atnaujinimas. Spustelėkite žemiau, kad užbaigtumėte dabar."
+
+#: src/Form/MigrationPanel.php:132
+msgid "Editoria11y database update"
+msgstr "„Editoria11y“ duomenų bazės atnaujinimas"
+
+#: src/Form/MigrationPanel.php:134
+msgid "Checking schema state…"
+msgstr "Tikrinama schemos būsena…"
+
+#: src/Form/MigrationPanel.php:138
+msgid "Run update now"
+msgstr "Paleisti atnaujinimą dabar"
+
+#: src/Form/MigrationPanel.php:141
+msgid "Retry"
+msgstr "Bandyti dar kartą"
+
+#: src/Form/MigrationPanel.php:268 src/Form/NetworkLicensePage.php:196
+msgid "Insufficient permissions."
+msgstr "Nepakanka teisių."
+
+#: src/Form/NetworkCustomRulesPage.php:70
+#: src/Form/NetworkCustomRulesPage.php:71
+#: src/Form/NetworkCustomRulesPage.php:114
+msgid "Editoria11y network custom rules"
+msgstr "„Editoria11y“ tinklo tinkintosios taisyklės"
+
+#: src/Form/NetworkCustomRulesPage.php:107
+#: src/Form/NetworkCustomRulesPage.php:311
+#: src/Form/NetworkCustomRulesPage.php:384 src/Form/NetworkSettingsPage.php:154
+#: src/Form/NetworkSettingsPage.php:511
+msgid "Insufficient privileges."
+msgstr "Nepakanka teisių."
+
+#: src/Form/NetworkCustomRulesPage.php:134
+msgid "Network custom rules"
+msgstr "Tinklo tinkintosios taisyklės"
+
+#: src/Form/NetworkCustomRulesPage.php:141
+msgid "Rules defined here apply to every site on the network. Locked rules cannot be disabled per-site."
+msgstr "Čia apibrėžtos taisyklės taikomos kiekvienai tinklo svetainei. Užrakintų taisyklių negalima išjungti atskirai kiekvienoje svetainėje."
+
+#: src/Form/NetworkCustomRulesPage.php:161
+msgid "No network rules defined yet."
+msgstr "Tinklo taisyklių dar nėra apibrėžta."
+
+#: src/Form/NetworkCustomRulesPage.php:179
+msgid "Locked"
+msgstr "Užrakinta"
+
+#: src/Form/NetworkCustomRulesPage.php:180
+msgid "Unlocked"
+msgstr "Neužrakinta"
+
+#: src/Form/NetworkCustomRulesPage.php:224
+msgid "Network rule not found"
+msgstr "Tinklo taisyklė nerasta"
+
+#: src/Form/NetworkCustomRulesPage.php:227
+msgid "Return to the network rules list"
+msgstr "Grįžti prie tinklo taisyklių sąrašo"
+
+#: src/Form/NetworkCustomRulesPage.php:270
+msgid "Edit network custom rule"
+msgstr "Redaguoti tinklo tinkintąją taisyklę"
+
+#: src/Form/NetworkCustomRulesPage.php:271 src/Form/SettingsFields.php:210
+msgid "Add network custom rule"
+msgstr "Pridėti tinklo tinkintąją taisyklę"
+
+#: src/Form/NetworkCustomRulesPage.php:276
+msgid "All network rules"
+msgstr "Visos tinklo taisyklės"
+
+#: src/Form/NetworkCustomRulesPage.php:294
+msgid "Delete this network rule? Every site on the network will stop receiving it."
+msgstr "Ištrinti šią tinklo taisyklę? Kiekviena tinklo svetainė nustos ją gauti."
+
+#: src/Form/NetworkCustomRulesPage.php:369
+msgid "Network custom rule saved."
+msgstr "Tinklo tinkintoji taisyklė išsaugota."
+
+#: src/Form/NetworkCustomRulesPage.php:395
+msgid "No matching network rule found to delete."
+msgstr "Nerasta atitinkanti tinklo taisyklė, kurią būtų galima ištrinti."
+
+#: src/Form/NetworkCustomRulesPage.php:402
+msgid "Network custom rule deleted."
+msgstr "Tinklo tinkintoji taisyklė ištrinta."
+
+#: src/Form/NetworkDefaultsWorker.php:478
+msgid "Tests + roles assignment"
+msgstr "Testų ir vaidmenų priskyrimas"
+
+#: src/Form/NetworkLicensePage.php:58 src/Form/NetworkLicensePage.php:59
+msgid "Editoria11y license"
+msgstr "„Editoria11y“ licencija"
+
+#: src/Form/NetworkLicensePage.php:83 src/FreemiusAccessControl.php:283
+msgid "Only network administrators can manage the Editoria11y license."
+msgstr "Tik tinklo administratoriai gali valdyti „Editoria11y“ licenciją."
+
+#: src/Form/NetworkLicensePage.php:94
+msgid "Starting…"
+msgstr "Pradedama…"
+
+#: src/Form/NetworkLicensePage.php:95
+msgid "Cancelling…"
+msgstr "Atšaukiama…"
+
+#: src/Form/NetworkLicensePage.php:96
+msgid "Resetting…"
+msgstr "Atstatoma…"
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:98
+#, php-format
+msgid "Activated %1$d of %2$d sites."
+msgstr "Aktyvuota %1$d iš %2$d svetainių."
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:100
+#, php-format
+msgid "Deactivated %1$d of %2$d sites."
+msgstr "Deaktyvuota %1$d iš %2$d svetainių."
+
+#: src/Form/NetworkLicensePage.php:101
+msgid "License activated on every site in the network."
+msgstr "Licencija aktyvuota kiekvienoje tinklo svetainėje."
+
+#: src/Form/NetworkLicensePage.php:102
+msgid "License deactivated on every site in the network."
+msgstr "Licencija deaktyvuota kiekvienoje tinklo svetainėje."
+
+#: src/Form/NetworkLicensePage.php:103
+msgid "Activation cancelled. Already-activated sites keep their license."
+msgstr "Aktyvavimas atšauktas. Jau aktyvuotos svetainės išlaiko savo licenciją."
+
+#: src/Form/NetworkLicensePage.php:104
+msgid "Deactivation cancelled. Already-deactivated sites stay deactivated."
+msgstr "Deaktyvavimas atšauktas. Jau deaktyvuotos svetainės lieka deaktyvuotos."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:106
+#, php-format
+msgid "Activation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Aktyvavimas baigtas, tačiau %d svetainėse įvyko klaida. Peržiūrėkite žemiau esantį sąrašą ir bandykite dar kartą ištaisius priežastį."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:108
+#, php-format
+msgid "Deactivation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Deaktyvavimas baigtas, tačiau %d svetainėse įvyko klaida. Peržiūrėkite žemiau esantį sąrašą ir bandykite dar kartą ištaisius priežastį."
+
+#: src/Form/NetworkLicensePage.php:109
+msgid "An unknown error occurred."
+msgstr "Įvyko nežinoma klaida."
+
+#. translators: The <a>…</a> tags mark the phrase that will be rendered as a link to https://editoria11y.com/license. Keep the tags around the equivalent phrase in your language; do not add an href.
+#: src/Form/NetworkLicensePage.php:111
+msgid "Paste your <a>Editoria11y CSA license key</a> to begin."
+msgstr "Norėdami pradėti, įklijuokite <a>„Editoria11y“ CSA licencijos raktą</a>."
+
+#: src/Form/NetworkLicensePage.php:112
+msgid "Deactivate the Editoria11y CSA license on every site in this network? Each site's license slot will be returned to your Freemius account."
+msgstr "Deaktyvuoti „Editoria11y“ CSA licenciją kiekvienoje šio tinklo svetainėje? Kiekvienos svetainės licencijos vieta bus grąžinta į jūsų „Freemius“ paskyrą."
+
+#: src/Form/NetworkLicensePage.php:113
+msgid "Activate a license network-wide"
+msgstr "Aktyvuoti licenciją visame tinkle"
+
+#: src/Form/NetworkLicensePage.php:114
+msgid "Deactivate licenses network-wide"
+msgstr "Deaktyvuoti licencijas visame tinkle"
+
+#: src/Form/NetworkLicensePage.php:115
+msgid "Activation in progress"
+msgstr "Vyksta aktyvavimas"
+
+#: src/Form/NetworkLicensePage.php:116
+msgid "Deactivation in progress"
+msgstr "Vyksta deaktyvavimas"
+
+#: src/Form/NetworkLicensePage.php:120
+msgid "Editoria11y CSA license"
+msgstr "„Editoria11y“ CSA licencija"
+
+#: src/Form/NetworkLicensePage.php:123
+msgid "Background licensing tasks run slowly via WP-Cron; leave this page open to run a batch every 15 seconds."
+msgstr "Fone vykdomos licencijavimo užduotys per WP-Cron veikia lėtai; palikite šį puslapį atidarytą, kad grupė būtų paleidžiama kas 15 sekundžių."
+
+#: src/Form/NetworkLicensePage.php:138
+msgid "JavaScript is required to use this page."
+msgstr "Šiam puslapiui naudoti reikalingas „JavaScript“."
+
+#: src/Form/NetworkLicensePage.php:171
+msgid "DISABLE_WP_CRON is enabled on this site. The activation worker depends on WP-Cron firing — make sure your system cron is hitting wp-cron.php, or activation will not progress."
+msgstr "Šioje svetainėje įjungtas DISABLE_WP_CRON. Aktyvavimo procesas priklauso nuo WP-Cron paleidimo — įsitikinkite, kad jūsų sistemos cron kreipiasi į wp-cron.php, kitaip aktyvavimas nesivystys."
+
+#: src/Form/NetworkLicensePage.php:347
+msgid "Activate on every site in this network"
+msgstr "Aktyvuoti kiekvienoje šio tinklo svetainėje"
+
+#: src/Form/NetworkLicensePage.php:378
+msgid "License key"
+msgstr "Licencijos raktas"
+
+#: src/Form/NetworkLicensePage.php:389
+msgid "Deactivate license network-wide"
+msgstr "Deaktyvuoti licenciją visame tinkle"
+
+#: src/Form/NetworkLicensePage.php:401
+msgid "Removes the Editoria11y CSA license from every site on the network. Each site's install record stays in place; only the license link is cleared."
+msgstr "Pašalina „Editoria11y“ CSA licenciją iš kiekvienos tinklo svetainės. Kiekvienos svetainės įdiegimo įrašas išlieka; išvalomas tik licencijos siejimas."
+
+#: src/Form/NetworkLicensePage.php:460
+msgid "Retry failed sites"
+msgstr "Bandyti iš naujo nepavykusias svetaines"
+
+#: src/Form/NetworkLicensePage.php:473
+msgid "Modify network license"
+msgstr "Keisti tinklo licenciją"
+
+#: src/Form/NetworkLicensePage.php:492
+msgid "Back"
+msgstr "Atgal"
+
+#: src/Form/NetworkLicensePage.php:503
+msgid "Done"
+msgstr "Atlikta"
+
+#: src/Form/NetworkLicensePage.php:510
+msgid "Cancelled"
+msgstr "Atšaukta"
+
+#: src/Form/NetworkLicensePage.php:518
+msgid "Errors"
+msgstr "Klaidos"
+
+#: src/Form/NetworkLicenseWorker.php:392
+msgid "License key is required."
+msgstr "Licencijos raktas yra privalomas."
+
+#: src/Form/NetworkLicenseWorker.php:400 src/Form/NetworkLicenseWorker.php:456
+msgid "An activation run is already in progress."
+msgstr "Aktyvavimas jau vyksta."
+
+#: src/Form/NetworkLicenseWorker.php:528
+msgid "No previous errors to retry."
+msgstr "Nėra ankstesnių klaidų, kurias būtų galima pakartoti."
+
+#: src/Form/NetworkLicenseWorker.php:538
+msgid "License key is no longer stored. Start a new activation."
+msgstr "Licencijos raktas nebėra saugomas. Pradėkite naują aktyvavimą."
+
+#: src/Form/NetworkLicenseWorker.php:626
+msgid "Freemius SDK wrapper unavailable."
+msgstr "Freemius SDK apvalkalas nepasiekiamas."
+
+#: src/Form/NetworkLicenseWorker.php:803
+msgid "SDK _deactivate_license() method unavailable."
+msgstr "SDK _deactivate_license() metodas nepasiekiamas."
+
+#: src/Form/NetworkLicenseWorker.php:853
+msgid "Deactivation API call did not clear the install license."
+msgstr "Deaktyvavimo API iškvietimas neišvalė diegimo licencijos."
+
+#: src/Form/NetworkLicenseWorker.php:947
+msgid "No valid sites in batch."
+msgstr "Grupėje nėra galiojančių svetainių."
+
+#: src/Form/NetworkLicenseWorker.php:1053
+msgid "Activation API returned an unspecified error."
+msgstr "Aktyvavimo API grąžino nenurodytą klaidą."
+
+#: src/Form/NetworkLicenseWorker.php:1055
+msgid "Install record not created after API call."
+msgstr "Diegimo įrašas nesukurtas po API iškvietimo."
+
+#: src/Form/NetworkSettingsPage.php:77 src/Form/NetworkSettingsPage.php:78
+msgid "Editoria11y defaults"
+msgstr "„Editoria11y“ numatytosios reikšmės"
+
+#: src/Form/NetworkSettingsPage.php:103
+msgid "Defaults"
+msgstr "Numatytosios reikšmės"
+
+#: src/Form/NetworkSettingsPage.php:110 src/Form/SettingsPage.php:287
+msgid "Custom rules"
+msgstr "Tinkintosios taisyklės"
+
+#: src/Form/NetworkSettingsPage.php:140
+msgid "Heads up: \"Default for all sites\" and \"Override for all sites\" overwrite a site's current value whenever that value is still an Editoria11y default or a previous network default — including a per-site value that happens to match a default."
+msgstr "Atkreipkite dėmesį: parinktys „Numatytoji visoms svetainėms“ ir „Perrašyti visoms svetainėms“ perrašo svetainės esamą reikšmę, kai ta reikšmė tebėra „Editoria11y“ numatytoji arba ankstesnė tinklo numatytoji reikšmė — įskaitant atskiros svetainės reikšmę, kuri sutampa su numatytąja."
+
+#: src/Form/NetworkSettingsPage.php:176
+msgid "Editoria11y default or locked network settings"
+msgstr "„Editoria11y“ numatytieji arba užrakinti tinklo nustatymai"
+
+#: src/Form/NetworkSettingsPage.php:180
+msgid "Network defaults saved."
+msgstr "Tinklo numatytosios reikšmės išsaugotos."
+
+#: src/Form/NetworkSettingsPage.php:186
+msgid "Network defaults were not saved."
+msgstr "Tinklo numatytosios reikšmės nebuvo išsaugotos."
+
+#: src/Form/NetworkSettingsPage.php:187
+msgid "You changed the following settings, but their propagation dropdown is still set to \"No network default\" — your change would not reach any site. Set the dropdown to \"Default for new sites\", \"Default for all sites\", or \"Override for all sites\" — or revert the value — and save again."
+msgstr "Pakeitėte šiuos nustatymus, tačiau jų platinimo išskleidžiamasis meniu vis dar nustatytas kaip „Nėra tinklo numatytosios reikšmės“ — jūsų pakeitimas nepasiektas jokios svetainės. Nustatykite išskleidžiamąjį meniu į „Numatytoji naujoms svetainėms“, „Numatytoji visoms svetainėms“ arba „Perrašyti visoms svetainėms“ — arba grąžinkite reikšmę — ir išsaugokite dar kartą."
+
+#: src/Form/NetworkSettingsPage.php:213
+msgid "Save network defaults"
+msgstr "Išsaugoti tinklo numatytąsias reikšmes"
+
+#. translators: 1: processed sites, 2: total sites, 3: sites updated
+#: src/Form/NetworkSettingsPage.php:311
+#, php-format
+msgid "%1$s of %2$s sites visited (%3$s updated)."
+msgstr "Aplankyta %1$s iš %2$s svetainių (atnaujinta %3$s)."
+
+#. translators: %s: human-readable duration estimate
+#: src/Form/NetworkSettingsPage.php:327
+#, php-format
+msgid "Estimated %s remaining."
+msgstr "Apytikslis laikas: liko %s."
+
+#. translators: %s: number of errors recorded
+#: src/Form/NetworkSettingsPage.php:340
+#, php-format
+msgid "Errors: %s (most recent retained). Check server logs for details."
+msgstr "Klaidos: %s (saugoma paskutinė). Išsamesnę informaciją rasite serverio žurnaluose."
+
+#: src/Form/NetworkSettingsPage.php:349
+msgid "Saving the form now will restart propagation with the new settings."
+msgstr "Išsaugojus formą dabar, platinimas prasidės iš naujo su naujais nustatymais."
+
+#: src/Form/NetworkSettingsPage.php:412
+msgid "Propagating network defaults to existing sites…"
+msgstr "Platinamos tinklo numatytosios reikšmės esamoms svetainėms…"
+
+#: src/Form/NetworkSettingsPage.php:415
+msgid "Network defaults propagated."
+msgstr "Tinklo numatytosios reikšmės išplatintos."
+
+#: src/Form/NetworkSettingsPage.php:418
+msgid "Network defaults propagation failed."
+msgstr "Tinklo numatytųjų reikšmių platinimas nepavyko."
+
+#: src/Form/NetworkSettingsPage.php:421
+msgid "Network defaults propagation idle."
+msgstr "Tinklo numatytųjų reikšmių platinimas neaktyvus."
+
+#: src/Form/SettingsContext.php:214
+msgid "Managed at the network level"
+msgstr "Valdoma tinklo lygiu"
+
+#: src/Form/SettingsContext.php:283 src/Form/SettingsContext.php:318
+msgid "— No network default —"
+msgstr "— Nėra tinklo numatytosios reikšmės —"
+
+#: src/Form/SettingsContext.php:284 src/Form/SettingsContext.php:319
+msgid "Default for new sites"
+msgstr "Numatytoji naujoms svetainėms"
+
+#: src/Form/SettingsContext.php:285 src/Form/SettingsContext.php:320
+msgid "Default for all sites (skip custom values)"
+msgstr "Numatytoji visoms svetainėms (praleidžiant tinkintas reikšmes)"
+
+#: src/Form/SettingsContext.php:286 src/Form/SettingsContext.php:321
+msgid "Override for all sites (delete custom values)"
+msgstr "Perrašyti visoms svetainėms (pašalinant tinkintas reikšmes)"
+
+#: src/Form/SettingsContext.php:326
+msgid "Propagation"
+msgstr "Platinimas"
+
+#: src/Form/SettingsFields.php:68
+msgid "Include all parts of the page that contain your theme and content."
+msgstr "Įtraukite visas puslapio dalis, kuriose yra jūsų tema ir turinys."
+
+#: src/Form/SettingsFields.php:69
+msgid "Exclude elements that show unhelpful, repetitive, or inaccurate alerts."
+msgstr "Neįtraukite elementų, kurie rodo nenaudingus, pasikartojančius ar netikslus įspėjimus."
+
+#: src/Form/SettingsFields.php:71
+msgid "If you need help:"
+msgstr "Jei jums reikia pagalbos:"
+
+#: src/Form/SettingsFields.php:72
+msgid "Configuration Guide"
+msgstr "Konfigūracijos vadovas"
+
+#: src/Form/SettingsFields.php:73
+msgid "Issue Queue"
+msgstr "Klaidų sąrašas"
+
+#: src/Form/SettingsFields.php:74
+msgid "Support contacts"
+msgstr "Pagalbos kontaktai"
+
+#: src/Form/SettingsFields.php:84
+msgid "Define the parts of each page Editoria11y checks. Activating CSA unlocks an additional \"developer area\" superset that runs more checks and routes alerts to the roles you choose."
+msgstr "Nurodykite kiekvieno puslapio dalis, kurias tikrina „Editoria11y“. Aktyvavus CSA, atsiskleidžia papildoma „programuotojų sritis“, kuri atlieka daugiau patikrinimų ir nukreipia įspėjimus jūsų pasirinktiems vaidmenims."
+
+#: src/Form/SettingsFields.php:98
+msgid "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licenses can split tests between roles."
+msgstr "Šie testai aptinka problemas, kurias turinio redaktoriai gali ištaisyti. Patikrinimus galima atskirai išjungti; svetainės su CSA licencijomis gali paskirstyti testus pagal vaidmenis."
+
+#: src/Form/SettingsFields.php:114
+msgid "Apply all the tests and role assignments below to"
+msgstr "Taikyti visus žemiau esančius testus ir vaidmenų priskyrimus"
+
+#: src/Form/SettingsFields.php:123
+msgid "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA license for site administrators and developers."
+msgstr "Šie testai aptinka problemas, kurias paprastai reikia ištaisyti pakeičiant temą arba įskiepį; jie yra CSA licencijos dalis, skirta svetainės administratoriams ir programuotojams."
+
+#: src/Form/SettingsFields.php:133
+msgid "The \"tests + roles assignment\" propagation setting under \"Modify content tests\" above also governs the template-test selection — both are stored together."
+msgstr "Platinimo nustatymas „Testų ir vaidmenų priskyrimas“ skiltyje „Keisti turinio testus“ aukščiau taip pat valdo šablonų testų pasirinkimą — abu saugomi kartu."
+
+#: src/Form/SettingsFields.php:160
+msgid "Managed at the network level."
+msgstr "Valdoma tinklo lygiu."
+
+#: src/Form/SettingsFields.php:193
+msgid "Network-level custom rules apply to every site in the network."
+msgstr "Tinklo lygio tinkintosios taisyklės taikomos kiekvienai tinklo svetainei."
+
+#. translators: %d is the number of network custom rules defined (active + inactive).
+#: src/Form/SettingsFields.php:204
+#, php-format
+msgid "Manage network custom rules (%d defined)"
+msgid_plural "Manage network custom rules (%d defined)"
+msgstr[0] "Tvarkyti tinklo tinkintąją taisyklę (%d apibrėžta)"
+msgstr[1] "Tvarkyti tinklo tinkintąsias taisykles (%d apibrėžtos)"
+msgstr[2] "Tvarkyti tinklo tinkintąsias taisykles (%d apibrėžta)"
+
+#: src/Form/SettingsFields.php:230
+msgid "Define your own accessibility tests. Each rule pairs a CSS selector with a tip shown to users; rules ship over the cached static config alongside the built-in test catalog."
+msgstr "Nurodykite savo prieinamumo testus. Kiekviena taisyklė susieja CSS selektorių su patarimais, rodomais vartotojams; taisyklės perduodamos kartu su išsaugotu statiniu konfigūracijos failu ir įtaisytuoju testų katalogu."
+
+#. translators: %d is the number of custom rules active on this site (per-site rules plus network rules not disabled here).
+#: src/Form/SettingsFields.php:241
+#, php-format
+msgid "Manage custom rules (%d active)"
+msgid_plural "Manage custom rules (%d active)"
+msgstr[0] "Tvarkyti tinkintąją taisyklę (%d aktyvi)"
+msgstr[1] "Tvarkyti tinkintąsias taisykles (%d aktyvios)"
+msgstr[2] "Tvarkyti tinkintąsias taisykles (%d aktyvių)"
+
+#: src/Form/SettingsFields.php:257
+msgid "Custom rules let CSA admins register additional accessibility tests with their own selectors, labels, and tip content. Activate CSA to manage them here."
+msgstr "Tinkintosios taisyklės leidžia CSA administratoriams registruoti papildomus prieinamumo testus su savo selektoriais, etiketėmis ir patarimų turiniu. Aktyvuokite CSA, kad galėtumėte jas tvarkyti čia."
+
+#: src/Form/SettingsFields.php:294
+msgid "Choose when the control panel should open and show inline tips. \"Start open if there are any alerts\" is recommended, as it helps tips get noticed over time."
+msgstr "Pasirinkite, kada valdymo skydelis turėtų atidaryti ir rodyti įterptas rekomendacijas. Rekomenduojama „Atidaryti, jei yra bet kokių įspėjimų“ — tai padeda pastebėti patarimus laikui bėgant."
+
+#: src/Form/SettingsFields.php:312
+msgid "Choose whether to show inline tips while editing post and page content. The checker always hides while editing templates and layouts."
+msgstr "Pasirinkite, ar rodyti įterptas rekomendacijas redaguojant įrašų ir puslapių turinį. Tikrintuvas visada slepiasi redaguojant šablonus ir maketus."
+
+#: src/Form/SettingsFields.php:333
+msgid "Provide CSS selectors. Content authors will only see the alerts within these parts of the page. Do not provide selectors that nest within each other, or the inner content will be checked twice."
+msgstr "Nurodykite CSS selektorius. Turinio autoriai matys tik įspėjimus šiose puslapio dalyse. Nenurodykite selektorių, kurie įdėti vienas į kitą, nes vidinis turinys bus tikrinamas du kartus."
+
+#: src/Form/SettingsFields.php:343
+msgid "The default is <code>main</code> or <code>body</code>, depending on theme."
+msgstr "Numatytasis yra <code>main</code> arba <code>body</code>, priklausomai nuo temos."
+
+#: src/Form/SettingsFields.php:365
+msgid ""
+"If Editoria11y is flagging things editors cannot fix, e.g., theme-generated \"read more\" links or social media widgets,\n"
+"\t\t\t\tprovide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+msgstr ""
+"Jei „Editoria11y“ žymi dalykus, kurių redaktoriai negali ištaisyti, pvz., temos sugeneruotas „skaityti daugiau“ nuorodas ar socialinių tinklų valdiklius,\n"
+"\t\t\t\tnurodykite CSS selektorius elementams, kuriuos norėtumėte ignoruoti. Būkite tikslūs, pvz. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+
+#: src/Form/SettingsFields.php:376
+msgid "If you are new at this, start by opening your browser's developer tools, inspecting the element you do not want flagged, and looking for unique-looking CSS selectors."
+msgstr "Jei tai darote pirmą kartą, pradėkite atidarydami naršyklės kūrėjo įrankius, apžiūrėkite elementą, kurio nenorite pažymėti, ir ieškokite unikaliai atrodančių CSS selektorių."
+
+#. translators: %s is the built-in list of always-ignored CSS selectors.
+#: src/Form/SettingsFields.php:387
+#, php-format
+msgid "Selectors you add are appended to the built-in list, which is always ignored: %s"
+msgstr "Jūsų pridėti selektoriai yra papildomi prie įtaisytojo sąrašo, kuris visada ignoruojamas: %s"
+
+#: src/Form/SettingsFields.php:434
+msgid "Set to the number of other themes or plugins that will be injecting custom result JS events. Editoria11y will wait until it receives this number of <code>ed11yResume</code> notifications before showing results."
+msgstr "Nustatykite kitų temų ar įskiepių, kurie įterps pasirinktus JS rezultatų įvykius, skaičių. „Editoria11y“ lauks, kol gaus tiek <code>ed11yResume</code> pranešimų, ir tik tada rodys rezultatus."
+
+#: src/Form/SettingsFields.php:457
+msgid "Used to block checking on site sections or admin pages."
+msgstr "Naudojama blokuoti tikrinimą svetainės skyriuose arba administratoriaus puslapiuose."
+
+#: src/Form/SettingsFields.php:485
+msgid "Autodetect"
+msgstr "Automatinis aptikimas"
+
+#: src/Form/SettingsFields.php:486
+msgid "Only user-editable content"
+msgstr "Tik vartotojo redaguojamas turinys"
+
+#: src/Form/SettingsFields.php:487
+msgid "Other"
+msgstr "Kita"
+
+#: src/Form/SettingsFields.php:492
+msgid "Developer scan area"
+msgstr "Programuotojų nuskaitymo sritis"
+
+#: src/Form/SettingsFields.php:510
+msgid "\"Autodetect\" selects:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+msgstr "„Automatinis aptikimas“ pasirenka:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+
+#: src/Form/SettingsFields.php:527
+msgid "Specify regions to check"
+msgstr "Nurodyti tikrintinas sritis"
+
+#: src/Form/SettingsFields.php:542
+msgid "Alerts in these regions will be shown to both developers and editors. One selector per line."
+msgstr "Šiose srityse esantys įspėjimai bus rodomi tiek programuotojams, tiek redaktoriams. Vienas selektorius eilutėje."
+
+#: src/Form/SettingsFields.php:574
+msgid "These parts of the page will be ignored entirely."
+msgstr "Šios puslapio dalys bus visiškai ignoruojamos."
+
+#: src/Form/SettingsFields.php:608
+msgid "Developer roles"
+msgstr "Programuotojų vaidmenys"
+
+#: src/Form/SettingsFields.php:626
+msgid "Unchecked roles only see content checks."
+msgstr "Nepažymėti vaidmenys mato tik turinio patikrinimus."
+
+#: src/Form/SettingsFields.php:649
+msgid "Start open if there are new alerts"
+msgstr "Atidaryti, jei yra naujų įspėjimų"
+
+#: src/Form/SettingsFields.php:650
+msgid "Start open if there are any alerts"
+msgstr "Atidaryti, jei yra bet kokių įspėjimų"
+
+#: src/Form/SettingsFields.php:651
+msgid "Always start open"
+msgstr "Visada atidaryti"
+
+#: src/Form/SettingsFields.php:652
+msgid "Start minimized"
+msgstr "Pradėti sumažintą"
+
+#: src/Form/SettingsFields.php:780
+msgid "Rule"
+msgstr "Taisyklė"
+
+#: src/Form/SettingsFields.php:784
+msgid "Show to"
+msgstr "Rodyti"
+
+#: src/Form/SettingsFields.php:825
+msgid "Everyone"
+msgstr "Visi"
+
+#: src/Form/SettingsFields.php:826
+msgid "Developers only"
+msgstr "Tik programuotojai"
+
+#: src/Form/SettingsFields.php:827
+msgid "Off"
+msgstr "Išjungta"
+
+#: src/Form/SettingsFields.php:844
+msgid "(Part of CSA suite)"
+msgstr "(CSA paketo dalis)"
+
+#: src/Form/SettingsFields.php:881
+msgid "Remind the editor that these linked documents need a manual check"
+msgstr "Priminti redaktoriui, kad šiuose susietuose dokumentuose reikia rankinio patikrinimo"
+
+#: src/Form/SettingsFields.php:882
+msgid "Add or remove filetypes. Set to \"false\" to disable the test altogether. Providing any value will override the default."
+msgstr "Pridėkite arba pašalinkite failų tipus. Nustatykite „false“, kad visiškai išjungtumėte testą. Bet kokia reikšmė pakeis numatytąją."
+
+#: src/Form/SettingsFields.php:886
+msgid "Remove elements that match these selectors before testing link text"
+msgstr "Pašalinti elementus, atitinkančius šiuos selektorius, prieš tikrinant nuorodų tekstą"
+
+#: src/Form/SettingsFields.php:887
+msgid "Provide a CSS selector for elements your themes or plugins programmatically add to links (usually external or open-in-new-window markers), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests."
+msgstr "Nurodykite CSS selektorių elementams, kuriuos jūsų temos ar įskiepiai programiškai prideda prie nuorodų (paprastai tai išoriniai arba „atidaryti naujame lange“ žymikliai), kad jie būtų ignoruojami tikrinant nuorodų tekstą pagal testus „nuoroda neturi teksto“ ir „nuorodos tekstas nėra prasmingas“."
+
+#: src/Form/SettingsFields.php:891
+msgid "Remove these strings before testing link text"
+msgstr "Pašalinti šias eilutes prieš tikrinant nuorodų tekstą"
+
+#: src/Form/SettingsFields.php:892
+msgid "Provide a pipe-separated (\"|\") list of phrases your themes or plugins programmatically add to links to hint a purpose (external, mail, phone, open-in-new-window), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests; e.g.: (link is external)|(link sends email)."
+msgstr "Nurodykite sąrašą frazių, atskirtų vertikaliu brūkšniu („|“), kurias jūsų temos ar įskiepiai programiškai prideda prie nuorodų, nurodant jų paskirtį (išorinė, el. paštas, telefonas, atidaryti naujame lange), kad jos būtų ignoruojamos tikrinant nuorodų tekstą pagal testus „nuoroda neturi teksto“ ir „nuorodos tekstas nėra prasmingas“; pvz.: (link is external)|(link sends email)."
+
+#: src/Form/SettingsFields.php:896
+msgid "Strings in links that indicate new tabs"
+msgstr "Nuorodų eilutės, nurodančios naujus skirtukus"
+
+#: src/Form/SettingsFields.php:897
+msgid "Provide a pipe-separated list of phrases your site uses to warn users a link opens in a new tab; e.g.: new tab|new window|external."
+msgstr "Nurodykite sąrašą frazių, atskirtų vertikaliu brūkšniu, kurias jūsų svetainė naudoja perspėdama vartotojus, kad nuoroda atsidaro naujame skirtuke; pvz.: new tab|new window|external."
+
+#: src/Form/SettingsFields.php:905
+msgid "Embeds flagged as needing manual review"
+msgstr "Įterpimai, pažymėti kaip reikalaujantys rankinės peržiūros"
+
+#: src/Form/SettingsFields.php:906
+msgid "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualizations entirely, disable that test above."
+msgstr "Papildoma prie įtaisytojo aptikimo sąrašo (Looker/Data Studio, Tableau, Power BI, Qlik). Nurodykite kableliais atskirtą domenų arba URL fragmentų sąrašą. Norėdami visiškai nebežymėti vizualizacijų, išjunkite šį testą aukščiau."
+
+#: src/Form/SettingsFields.php:911
+msgid "Videos flagged as needing a manual check for captions"
+msgstr "Vaizdo įrašai, pažymėti kaip reikalaujantys rankinio subtitrų patikrinimo"
+
+#: src/Form/SettingsFields.php:912
+msgid "Added to the built-in detection list (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard and generic video URLs). Provide a comma-separated list of domains or URL fragments, e.g. yuja.com. To stop flagging videos entirely, disable that test above."
+msgstr "Papildoma prie įtaisytojo aptikimo sąrašo (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard ir bendrieji vaizdo įrašų URL). Nurodykite kableliais atskirtą domenų arba URL fragmentų sąrašą, pvz. yuja.com. Norėdami visiškai nebežymėti vaizdo įrašų, išjunkite šį testą aukščiau."
+
+#: src/Form/SettingsFields.php:917
+msgid "Audio flagged as needing a manual check for transcripts"
+msgstr "Garso įrašai, pažymėti kaip reikalaujantys rankinio transkriptų patikrinimo"
+
+#: src/Form/SettingsFields.php:918
+msgid "Added to the built-in detection list (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts and other major hosts). Provide a comma-separated list of domains or URL fragments. To stop flagging audio entirely, disable that test above."
+msgstr "Papildoma prie įtaisytojo aptikimo sąrašo (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts ir kitos pagrindinės talpyklos). Nurodykite kableliais atskirtą domenų arba URL fragmentų sąrašą. Norėdami visiškai nebežymėti garso įrašų, išjunkite šį testą aukščiau."
+
+#: src/Form/SettingsFields.php:923
+msgid "Remind editor that content in these embeds needs manual review"
+msgstr "Priminti redaktoriui, kad turinys šiuose įterpiniuose reikalauja rankinės peržiūros"
+
+#: src/Form/SettingsFields.php:924
+msgid "Provide a comma-separated list of selectors you wish to flag for the editor, e.g.: .my-embedded-feed, #my-social-link-block."
+msgstr "Nurodykite kableliais atskirtą selektorių sąrašą, kuriuos norite žymėti redaktoriui, pvz.: .my-embedded-feed, #my-social-link-block."
+
+#: src/Form/SettingsFields.php:936
+msgid "Do not check contrast for these elements"
+msgstr "Netikrinti kontrasto šiems elementams"
+
+#: src/Form/SettingsFields.php:949
+msgid "Provide a comma-separated list of selectors for elements to ignore for all users."
+msgstr "Nurodykite kableliais atskirtą selektorių sąrašą elementams, kuriuos reikia ignoruoti visiems vartotojams."
+
+#: src/Form/SettingsFields.php:978
+msgid "Assertiveness"
+msgstr "Primygtinumas"
+
+#: src/Form/SettingsFields.php:980
+msgid "Checker mode for content roles"
+msgstr "Tikrintuvo režimas turinio vaidmenims"
+
+#: src/Form/SettingsFields.php:988
+msgid "Checker mode for developer roles"
+msgstr "Tikrintuvo režimas programuotojų vaidmenims"
+
+#: src/Form/SettingsFields.php:996
+msgid "Checker mode inside editor"
+msgstr "Tikrintuvo režimas redaktoriaus viduje"
+
+#: src/Form/SettingsFields.php:1002
+msgid "Theme and plugin compatibility"
+msgstr "Temos ir įskiepių suderinamumas"
+
+#: src/Form/SettingsFields.php:1004
+msgid "Editoria11y theme"
+msgstr "„Editoria11y“ tema"
+
+#: src/Form/SettingsFields.php:1009
+msgid "Pin panel to"
+msgstr "Prisegti skydelį prie"
+
+#: src/Form/SettingsFields.php:1015
+msgid "Right"
+msgstr "Dešinė"
+
+#: src/Form/SettingsFields.php:1016
+msgid "Left"
+msgstr "Kairė"
+
+#: src/Form/SettingsFields.php:1022
+msgid "Shift panel position if it overlaps these elements"
+msgstr "Perkelti skydelio padėtį, jei jis persidengia su šiais elementais"
+
+#: src/Form/SettingsFields.php:1023
+msgid "Comma-separated selectors for competing widgets, e.g. .interface-interface-skeleton__sidebar."
+msgstr "Kableliais atskirti konkuruojančių valdiklių selektoriai, pvz. .interface-interface-skeleton__sidebar."
+
+#: src/Form/SettingsFields.php:1028
+msgid "Do not check on pages with these elements"
+msgstr "Netikrinti puslapiuose su šiais elementais"
+
+#: src/Form/SettingsFields.php:1032
+msgid "JS injected custom rules"
+msgstr "JS įterpiamos tinkintosios taisyklės"
+
+#: src/Form/SettingsFields.php:1038
+msgid "Don't show edit links on tips in these containers"
+msgstr "Nerodyti redagavimo nuorodų patarimams šiuose konteineriuose"
+
+#: src/Form/SettingsFields.php:1039
+msgid "Provide a comma-separated list of page sections where edit links should not show. To hide the links everywhere, set this field to an asterisk (*)."
+msgstr "Nurodykite kableliais atskirtą puslapio sekcijų sąrašą, kuriose neturėtų rodyti redagavimo nuorodų. Norėdami slėpti nuorodas visur, šiame lauke įveskite žvaigždutę (*)."
+
+#: src/Form/SettingsFields.php:1058
+msgid "Handling tips on hidden content"
+msgstr "Paslėpto turinio patarimų tvarkymas"
+
+#: src/Form/SettingsFields.php:1060
+msgid "Warn users if elements might not be visible when jumping to tips"
+msgstr "Įspėti vartotojus, jei elementai gali būti nematomi pereinant prie patarimų"
+
+#: src/Form/SettingsFields.php:1067
+msgid "Elements with overflow hidden"
+msgstr "Elementai su paslėptu perpildymu"
+
+#: src/Form/SettingsFields.php:1068
+msgid "Sometimes buttons get drawn and visually truncated outside the bounds of a positioned element. Provide a selector list."
+msgstr "Kartais mygtukai nupiešiami ir vizualiai apkarpomi už pozicionuoto elemento ribų. Nurodykite selektorių sąrašą."
+
+#: src/Form/SettingsFields.php:1073
+msgid "Theme JS will handle revealing hidden tooltips inside these containers"
+msgstr "Temos JS tvarkys paslėptų patarimų atskleidimą šiuose konteineriuose"
+
+#: src/Form/SettingsFields.php:1074
+msgid "Editoria11y detects hidden tooltips and warns the user when they try to jump to them from the panel. For elements on this list, Editoria11y will dispatch a JS event instead of a warning, so custom JS in your theme can first reveal the hidden tip (e.g., open an accordion or tab panel)."
+msgstr "„Editoria11y“ aptinka paslėptus patarimus ir įspėja vartotoją, kai jis bando prie jų pereiti iš skydelio. Elementams šiame sąraše „Editoria11y“ siųs JS įvykį vietoj įspėjimo, kad jūsų temos pritaikytas JS pirmiausia galėtų atskleisti paslėptą patarimą (pvz., atidaryti akordeoną ar skirtukų skydelį)."
+
+#: src/Form/SettingsFields.php:1085
+msgid "Detecting dynamic and shadow content"
+msgstr "Dinaminio ir šešėlinio turinio aptikimas"
+
+#: src/Form/SettingsFields.php:1088
+msgid "Dynamically refresh if new content appears"
+msgstr "Dinamiškai atnaujinti, jei atsiranda naujas turinys"
+
+#: src/Form/SettingsFields.php:1094
+msgid "Watch for changes anywhere on the page"
+msgstr "Stebėti pakeitimus bet kurioje puslapio vietoje"
+
+#: src/Form/SettingsFields.php:1095
+msgid "Only watch for changes to content containers present on load"
+msgstr "Stebėti tik turinio konteinerių, esančių įkrovimo metu, pakeitimus"
+
+#: src/Form/SettingsFields.php:1096
+msgid "Do not watch for changes"
+msgstr "Nestebėti pakeitimų"
+
+#: src/Form/SettingsFields.php:1099
+msgid "Set to \"anywhere\" if changes are being missed; set to \"do not watch\" if you notice performance issues."
+msgstr "Nustatykite „bet kur“, jei pakeitimai nepastebimi; nustatykite „nestebėti“, jei pastebite našumo problemų."
+
+#: src/Form/SettingsFields.php:1103
+msgid "Check inside these specific Web components"
+msgstr "Tikrinti šių konkrečių žiniatinklio komponentų vidų"
+
+#: src/Form/SettingsFields.php:1104
+msgid "Provide selectors for elements with shadow DOM you want tested. E.g.: my-fancy-accordion-widget, my-magical-slideshow."
+msgstr "Nurodykite selektorius elementams su šešėliniu DOM, kuriuos norite tikrinti. Pvz.: my-fancy-accordion-widget, my-magical-slideshow."
+
+#: src/Form/SettingsFields.php:1108
+msgid "Auto-detect any Web components"
+msgstr "Automatiškai aptikti žiniatinklio komponentus"
+
+#: src/Form/SettingsFields.php:1109
+msgid "This is easier to configure than specifying components, but may slow test runs on very complicated pages."
+msgstr "Tai lengviau konfigūruoti nei nurodyti konkrečius komponentus, tačiau gali lėtinti testų vykdymą labai sudėtinguose puslapiuose."
+
+#: src/Form/SettingsFields.php:1120
+msgid "Syncing results to reports"
+msgstr "Rezultatų sinchronizavimas su ataskaitomis"
+
+#: src/Form/SettingsFields.php:1137
+msgid "Only admins can view reports"
+msgstr "Tik administratoriai gali peržiūrėti ataskaitas"
+
+#: src/Form/SettingsFields.php:1142
+msgid "By default both admins and editors can view reports."
+msgstr "Pagal numatytuosius nustatymus tiek administratoriai, tiek redaktoriai gali peržiūrėti ataskaitas."
+
+#: src/Form/SettingsFields.php:1155
+msgid "Hide reports shortcut on toggle"
+msgstr "Slėpti ataskaitų spartiklį perjungiklyje"
+
+#: src/Form/SettingsFields.php:1162
+msgid "Reports will still be available on the WordPress admin dashboard."
+msgstr "Ataskaitos vis tiek bus pasiekiamos „WordPress“ administratoriaus valdymo skydelyje."
+
+#: src/Form/SettingsFields.php:1172
+msgid "Remove redundant base url from URLs"
+msgstr "Pašalinti pasikartojantį bazinį URL iš adresų"
+
+#: src/Form/SettingsFields.php:1184
+msgid "Provide base URL (\"/mysite\") if your site is installed in a subdirectory. Subdirectories tend to get duplicated (/mysite/mysite/mypage) and throw errors from the API."
+msgstr "Nurodykite bazinį URL (\"/mysite\"), jei jūsų svetainė įdiegta pakatalogoje. Pakatalogiai dažnai dubliuojami (/mysite/mysite/mypage) ir sukelia API klaidas."
+
+#: src/Form/SettingsFields.php:1189
+msgid "Preserve query parameters"
+msgstr "Išsaugoti užklausos parametrus"
+
+#: src/Form/SettingsFields.php:1190
+msgid "The dashboard ignores most parameters: results for both /news?f=1 and /news?f=2 will show up as just /news. Provide a comma-separated list of parameters that are meaningful and should appear as separate pages in results."
+msgstr "Valdymo skydelis ignoruoja daugumą parametrų: tiek /news?f=1, tiek /news?f=2 rezultatai bus rodomi kaip /news. Nurodykite kableliais atskirtą parametrų sąrašą, kurie yra prasmingai atskiri ir turėtų rodytis kaip atskiri puslapiai rezultatuose."
+
+#: src/Form/SettingsFields.php:1194
+msgid "Disable sync altogether"
+msgstr "Visiškai išjungti sinchronizavimą"
+
+#: src/Form/SettingsFields.php:1195
+msgid "Syncing test results is required for the issue dashboard, dismissal dashboard, and \"mark OK\" buttons."
+msgstr "Testų rezultatų sinchronizavimas reikalingas problemų valdymo skydeliui, atšaukimų skydeliui ir mygtukams „pažymėti kaip gerai“."
+
+#: src/Form/SettingsFields.php:1206
+msgid "Heading outline position of editable content"
+msgstr "Redaguojamo turinio antraščių struktūros padėtis"
+
+#: src/Form/SettingsFields.php:1208
+msgid "To check headings while editing, Editoria11y needs to know what the first heading level should be in each editable field. Body fields should generally be at the H2 level."
+msgstr "Norėdamas tikrinti antraštes redagavimo metu, „Editoria11y“ turi žinoti, koks turėtų būti pirmasis antraštės lygis kiekviename redaguojamame lauke. Turinio laukai paprastai turėtų būti H2 lygyje."
+
+#: src/Form/SettingsFields.php:1213
+msgid "H2 level content (body content)"
+msgstr "H2 lygio turinys (pagrindinis turinys)"
+
+#: src/Form/SettingsFields.php:1214
+msgid "Body fields are preceded by an H1 (the post or page title), so their highest heading level should be H2."
+msgstr "Turinio laukams prieina H1 (įrašo arba puslapio pavadinimas), todėl aukščiausias jų antraštės lygis turėtų būti H2."
+
+#: src/Form/SettingsFields.php:1218
+msgid "H3 level content (blocks or widgets with separate titles)"
+msgstr "H3 lygio turinys (blokai arba valdikliai su atskirais pavadinimais)"
+
+#: src/Form/SettingsFields.php:1219
+msgid "The highest heading level should be H3."
+msgstr "Aukščiausias antraštės lygis turėtų būti H3."
+
+#: src/Form/SettingsFields.php:1223
+msgid "H4 level content (deeply nested blocks or widgets)"
+msgstr "H4 lygio turinys (giliai įdėti blokai arba valdikliai)"
+
+#: src/Form/SettingsFields.php:1224
+msgid "The highest heading level should be H4."
+msgstr "Aukščiausias antraštės lygis turėtų būti H4."
+
+#: src/Form/SettingsPage.php:126
+msgid "becoming a supporter"
+msgstr "tapti rėmėju"
+
+#: src/Form/SettingsPage.php:139
+msgid "free version at WordPress.org"
+msgstr "nemokama versija WordPress.org svetainėje"
+
+#. translators: %s: link reading "free version at WordPress.org".
+#: src/Form/SettingsPage.php:146
+#, php-format
+msgid "This site has the community-supported \"CSA\" version of Editoria11y installed rather than the %s."
+msgstr "Šioje svetainėje įdiegta bendruomenės palaikoma „CSA“ Editoria11y versija, o ne %s."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:155
+#, php-format
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key or view options for %s."
+msgstr "Norėdami aktyvuoti bendruomenės palaikomas funkcijas ir gauti tolimesnius naujinimus, įveskite savo esamą licencijos raktą arba peržiūrėkite parinktis, kaip %s."
+
+#: src/Form/SettingsPage.php:169
+msgid "This site is running the free version of Editoria11y from WordPress.org. The community-supported (CSA) features are not active."
+msgstr "Šioje svetainėje veikia nemokama „Editoria11y“ versija iš WordPress.org. Bendruomenės palaikomos (CSA) funkcijos yra neaktyvios."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:175
+#, php-format
+msgid "Unlock the community-supported features and continued updates by %s."
+msgstr "Norėdami atrakinti bendruomenės palaikomas funkcijas ir tolimesnius naujinimus, reikia %s."
+
+#: src/Form/SettingsPage.php:203
+msgid "Editoria11y License & Account"
+msgstr "„Editoria11y“ licencija ir paskyra"
+
+#: src/Form/SettingsPage.php:262
+msgid "Settings"
+msgstr "Nustatymai"
+
+#: src/Form/SettingsPage.php:272 src/Form/SettingsPage.php:284
+#: src/Form/SettingsPage.php:291
+msgid "License & Account"
+msgstr "Licencija ir paskyra"
+
+#: src/Form/SettingsPage.php:548
+msgid "Getting started"
+msgstr "Darbo pradžia"
+
+#: src/Form/SettingsPage.php:557
+msgid "Modify content tests"
+msgstr "Keisti turinio testus"
+
+#: src/Form/SettingsPage.php:563 src/Form/SettingsPage.php:577
+msgid "Tests by group"
+msgstr "Testai pagal grupes"
+
+#: src/Form/SettingsPage.php:571
+msgid "Modify template tests"
+msgstr "Keisti šablonų testus"
+
+#: src/Form/SettingsPage.php:588
+msgid "Custom rules (CSA)"
+msgstr "Tinkintosios taisyklės (CSA)"
+
+#: src/Form/SettingsPage.php:603
+msgid "Parts of the page to test"
+msgstr "Tikrintinos puslapio dalys"
+
+#: src/Form/SettingsPage.php:611
+msgid "Do not check for any errors inside these elements"
+msgstr "Netikrinti jokių klaidų šių elementų viduje"
+
+#: src/Form/SettingsPage.php:622
+msgid "Page regions with user-editable content"
+msgstr "Puslapio sritys su vartotojo redaguojamu turiniu"
+
+#: src/Form/SettingsPage.php:632
+msgid "Do not check for content errors inside these elements"
+msgstr "Netikrinti turinio klaidų šių elementų viduje"
+
+#: src/Form/SettingsPage.php:635
+msgid "Errors in these elements should only be shown to developers"
+msgstr "Klaidos šiuose elementuose turėtų būti rodomos tik programuotojams"
+
+#: src/Form/SettingsPage.php:651
+msgid "Roles that will see developer alerts"
+msgstr "Vaidmenys, kurie matys programuotojų įspėjimus"
+
+#: src/Form/SettingsPage.php:666
+msgid "Advanced settings"
+msgstr "Išplėstiniai nustatymai"
+
+#: src/Form/SettingsPage.php:684
+msgid "Editoria11y Settings"
+msgstr "„Editoria11y“ nustatymai"
+
+#: src/Form/SettingsPage.php:699
+msgid "Save Settings"
+msgstr "Išsaugoti nustatymus"
+
+#: src/FreemiusAccessControl.php:222
+msgid "unknown"
+msgstr "nežinoma"
+
+#. translators: 1: loaded SDK version, 2: highest tested SDK version
+#: src/FreemiusAccessControl.php:227
+#, php-format
+msgid "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network license activation page may not behave as expected; review release notes or contact support if you hit issues."
+msgstr "„Editoria11y“ CSA: įkeltas Freemius SDK (versija %1$s) yra naujesnė nei aukščiausia išbandyta versija (%2$s). Kitas šioje svetainėje naudojamas Freemius įskiepis yra įdiegęs naujesnę SDK versiją. Tinklo licencijos aktyvavimo puslapis gali elgtis netikėtai; peržiūrėkite leidimo pastabas arba susisiekite su palaikymo tarnyba, jei kils problemų."
+
+#: src/FreemiusAccessControl.php:503
+msgid "Editoria11y network licenses are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+msgstr "„Editoria11y“ tinklo licencijos aktyvuojamos iš specialaus puslapio, kuris eina per kiekvieną tinklo svetainę cron valdomomis grupėmis. Taip išvengiama SDK 1 000 svetainių apribojimo ir puslapis išlieka reaguojantis didelėse daugiasvetainėse sistemose."
+
+#: src/FreemiusAccessControl.php:509
+msgid "Open Editoria11y license page"
+msgstr "Atidaryti „Editoria11y“ licencijos puslapį"
+
+#: src/FreemiusAccessControl.php:565
+msgid "Per-site license rows are not shown to keep this page responsive on large networks. The license you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → License & Account."
+msgstr "Atskirų svetainių licencijų eilutės nerodomos, kad puslapis išliktų reaguojantis dideliuose tinkluose. Žemiau pasirinkta licencija taikoma kiekvienai tinklo svetainei. Norėdami aktyvuoti ar deaktyvuoti atskirose svetainėse, apsilankykite kiekvienos svetainės nustatymuose: Nustatymai → Editoria11y → Licencija ir paskyra."
+
+#: src/FreemiusContactFallback.php:121 src/FreemiusContactFallback.php:122
+#: src/FreemiusContactFallback.php:150 src/FreemiusContactFallback.php:210
+msgid "Contact Editoria11y"
+msgstr "Susisiekti su „Editoria11y“"
+
+#: src/FreemiusContactFallback.php:206
+msgid "Editoria11y library forums"
+msgstr "„Editoria11y“ bibliotekos forumai"
+
+#. translators: 1: @itmaybejj GitHub profile link, 2: #Drupal Slack invite link, 3: #WordPress Slack chat link, 4: #WPCampus Slack invite link, 5: #DigiCol Slack invite link.
+#: src/FreemiusContactFallback.php:215
+#, php-format
+msgid "Lead maintainer %1$s can usually be found on Slack for informal support, configuration tips and debugging any time the sun is up in the western hemisphere in %2$s, %3$s, %4$s and %5$s."
+msgstr "Pagrindinį prižiūrėtoją %1$s dažniausiai galima rasti „Slack“ platformoje, kur teikiama neformali pagalba, konfigūravimo patarimai ir derinimas visada, kai saulė šviečia vakarų pusrutulyje – %2$s, %3$s, %4$s ir %5$s."
+
+#. translators: %s: link to the Editoria11y library GitHub discussions page.
+#: src/FreemiusContactFallback.php:228
+#, php-format
+msgid "Check the %s for roadmap proposals and discussions."
+msgstr "Peržiūrėkite %s, kur rasite planų pasiūlymus ir diskusijas."
+
+#: src/FreemiusContactFallback.php:234
+msgid "Formal support:"
+msgstr "Formali pagalba:"
+
+#: src/FreemiusContactFallback.php:237
+msgid "Editoria11y Library issue queue"
+msgstr "„Editoria11y“ bibliotekos klaidų sąrašas"
+
+#: src/FreemiusContactFallback.php:239
+msgid "Editoria11y WordPress issue queue"
+msgstr "„Editoria11y“ WordPress klaidų sąrašas"
+
+#: src/FreemiusContactFallback.php:241
+msgid "Editoria11y Drupal issue queue"
+msgstr "„Editoria11y“ Drupal klaidų sąrašas"
+
+#: src/FreemiusContactFallback.php:243
+msgid "Submit a support request"
+msgstr "Pateikti pagalbos užklausą"
+
+#: src/FreemiusPricingPage.php:163
+msgid "Editoria11y CSA pricing"
+msgstr "„Editoria11y“ CSA kainos"
+
+#: src/FreemiusPricingPage.php:225
+msgid "Support the project"
+msgstr "Paremkite projektą"
+
+#: src/FreemiusPricingPage.php:228
+msgid "Editoria11y promotes accessibility in a unique way. Its tools are highly effective at helping non-technical authors prepare content that can be enjoyed equally by disabled Web users. We consider this a public good, so <strong>Editoria11y will always be free to use</strong>."
+msgstr "„Editoria11y“ unikaliu būdu skatina prieinamumą. Jo įrankiai ypač veiksmingai padeda netechniškiems autoriams parengti turinį, kuriuo gali vienodai džiaugtis ir neįgalūs interneto naudotojai. Mes tai laikome viešuoju gėriu, todėl <strong>„Editoria11y“ visada bus nemokamas naudoti</strong>."
+
+#: src/FreemiusPricingPage.php:232
+msgid "Editoria11y is not, however, free to develop or support."
+msgstr "Tačiau „Editoria11y“ kurti ir palaikyti nėra nemokama."
+
+#: src/FreemiusPricingPage.php:234
+msgid "The Community Supported Add-ons (CSA) project fills the gap: project members support the development of the Editoria11y library, its CMS plugins, and the CSA suite: a rapidly growing set of quality assurance tools that provide similar functionality to commercial products, open-source and on-prem. In return, they get access to premium features and support."
+msgstr "Bendruomenės palaikomų priedų (CSA) projektas užpildo šią spragą: projekto nariai prisideda prie „Editoria11y“ bibliotekos, jos TVS įskiepių ir CSA paketo kūrimo — sparčiai augančio kokybės kontrolės įrankių rinkinio, teikiančio panašų funkcionalumą kaip komerciniai, atvirojo kodo ir vietoje diegiami (on-prem) produktai. Už tai jie gauna prieigą prie premium funkcijų ir palaikymo."
+
+#: src/FreemiusPricingPage.php:239
+msgid "lower (or higher!) support levels"
+msgstr "žemesni (arba aukštesni!) palaikymo lygiai"
+
+#. translators: %s: link to the CSA supporters page and drop the "farmshare" word in languages without the concept.
+#: src/FreemiusPricingPage.php:245
+#, php-format
+msgid "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licenses."
+msgstr "Tai <strong>prisidėkite, kiek galite</strong> modelis. „Editoria11y LLC“ svetainėje rasite parinktis (%s), galimybę prisidėti kaip programuotojui ar testuotojui, taip pat parinktis kelioms platformoms ir neribotam svetainių skaičiui skirtoms licencijoms."
+
+#: src/functions.php:234
+msgid "Network Super Admin"
+msgstr "Tinklo super administratorius"
+
+#: src/functions.php:1796
+msgid "Empty link"
+msgstr "Tuščia nuoroda"
+
+#: src/functions.php:1797
+msgid "The button style link is missing its URL."
+msgstr "Mygtuko stiliaus nuorodai trūksta URL."
+
+#: src/functions.php:1798
+msgid "Edit Media"
+msgstr "Redaguoti mediją"
+
+#: src/TestNames.php:46
+msgid "This alt text is a filename, not a description"
+msgstr "Šis alternatyvusis tekstas yra failo pavadinimas, o ne aprašymas"
+
+#: src/TestNames.php:47 src/TestNames.php:48
+msgid "Is this a clear and concise description of the image?"
+msgstr "Ar tai aiškus ir glaustas vaizdo aprašymas?"
+
+#: src/TestNames.php:49
+msgid "This alt text may be a placeholder"
+msgstr "Šis alternatyvusis tekstas gali būti tik vietaženklis"
+
+#: src/TestNames.php:50
+msgid "This alt text is unpronounceable"
+msgstr "Šio alternatyvaus teksto neįmanoma ištarti"
+
+#: src/TestNames.php:51
+msgid "This custom input field is missing a label"
+msgstr "Šiam pasirinktiniam įvesties laukui trūksta žymės"
+
+#: src/TestNames.php:52
+msgid "Button is missing an accessible label"
+msgstr "Mygtukui trūksta prieinamo pavadinimo"
+
+#: src/TestNames.php:53
+msgid "Button has an invalid ARIA label"
+msgstr "Mygtukas turi netinkamą ARIA žymę"
+
+#: src/TestNames.php:54
+msgid "Button name repeats the word \"button\""
+msgstr "Mygtuko pavadinime kartojamas žodis „button“"
+
+#: src/TestNames.php:55
+msgid "This button is unpronounceable"
+msgstr "Šio mygtuko neįmanoma ištarti"
+
+#: src/TestNames.php:56
+msgid "Text does not have enough contrast to be easily legible"
+msgstr "Teksto kontrastas per mažas, kad būtų lengva skaityti"
+
+#: src/TestNames.php:57
+msgid "Graphic or icon does not have enough contrast"
+msgstr "Grafikos arba piktogramos kontrastas per mažas"
+
+#: src/TestNames.php:58
+msgid "Input does not provide enough contrast to be easily legible"
+msgstr "Įvesties lauko kontrastas per mažas, kad būtų lengva skaityti"
+
+#: src/TestNames.php:59
+msgid "Placeholder text does not have enough contrast to be easily legible"
+msgstr "Vietaženklio teksto kontrastas per mažas, kad būtų lengva skaityti"
+
+#: src/TestNames.php:60
+msgid "Does this placeholder text have enough contrast?"
+msgstr "Ar šio vietaženklio teksto kontrastas pakankamas?"
+
+#: src/TestNames.php:61
+msgid "Does this text have enough contrast?"
+msgstr "Ar šio teksto kontrastas pakankamas?"
+
+#: src/TestNames.php:62
+msgid "Does this graphic or icon have enough contrast?"
+msgstr "Ar šios grafikos arba piktogramos kontrastas pakankamas?"
+
+#: src/TestNames.php:63
+msgid "Duplicate ID attribute"
+msgstr "Pasikartojantis ID atributas"
+
+#: src/TestNames.php:64
+msgid "This link has a tooltip with the same text as the link"
+msgstr "Šioje nuorodoje yra patarimas su tokiu pačiu tekstu kaip nuorodoje"
+
+#: src/TestNames.php:65
+msgid "Does this audio have a transcript?"
+msgstr "Ar šis garsas turi transkripciją?"
+
+#: src/TestNames.php:66
+msgid "Is this visualization accessible?"
+msgstr "Ar ši vizualizacija prieinama?"
+
+#: src/TestNames.php:67
+msgid "Embedded iframes need manual checks"
+msgstr "Įterptieji rėmeliai reikalauja patikrinimo rankiniu būdu"
+
+#: src/TestNames.php:68
+msgid "Frame missing \"title\" attribute"
+msgstr "Rėmeliui trūksta atributo „title“"
+
+#: src/TestNames.php:69
+msgid "Frame with tabindex=\"-1\" will not be keyboard accessible."
+msgstr "Rėmelis su tabindex=\"-1\" nebus pasiekiamas klaviatūra."
+
+#: src/TestNames.php:70
+msgid "Is this video accurately captioned?"
+msgstr "Ar šis vaizdo įrašas tiksliai subtitruotas?"
+
+#: src/TestNames.php:71
+msgid "This heading has no text"
+msgstr "Ši antraštė neturi teksto"
+
+#: src/TestNames.php:72
+msgid "This image is used as a heading, so it needs alt text"
+msgstr "Šis vaizdas naudojamas kaip antraštė, todėl jam reikia alternatyvaus teksto"
+
+#: src/TestNames.php:73
+msgid "The first heading on this page is a subheading"
+msgstr "Pirmoji šio puslapio antraštė yra žemesnio lygio"
+
+#: src/TestNames.php:74
+msgid "Can this heading be shorter?"
+msgstr "Ar ši antraštė galėtų būti trumpesnė?"
+
+#: src/TestNames.php:75
+msgid "This page is missing a Heading 1"
+msgstr "Šiame puslapyje trūksta 1 lygio antraštės"
+
+#: src/TestNames.php:76
+msgid "This heading is tagged at the wrong level"
+msgstr "Ši antraštė pažymėta neteisingu lygiu"
+
+#: src/TestNames.php:77
+msgid "This element cannot be described by screen readers"
+msgstr "Ekrano skaitytuvai negali aprašyti šio elemento"
+
+#: src/TestNames.php:78
+msgid "This heading is unpronounceable"
+msgstr "Šios antraštės neįmanoma ištarti"
+
+#: src/TestNames.php:79
+msgid "Can this alt text be shorter?"
+msgstr "Ar šis alternatyvusis tekstas galėtų būti trumpesnis?"
+
+#: src/TestNames.php:80
+msgid "Is this image actually meaningless?"
+msgstr "Ar šis vaizdas iš tikrųjų neprasmingas?"
+
+#: src/TestNames.php:81
+msgid "Image in a carousel or gallery marked as decorative"
+msgstr "Karuselės arba galerijos vaizdas pažymėtas kaip dekoratyvinis"
+
+#: src/TestNames.php:82
+msgid "This captioned image has no alt text"
+msgstr "Šiam vaizdui su antrašte trūksta alternatyvaus teksto"
+
+#: src/TestNames.php:83
+msgid "Alt text should not be the same as caption text"
+msgstr "Alternatyvusis tekstas neturėtų sutapti su antraštės tekstu"
+
+#: src/TestNames.php:84
+msgid "Is there a visible label for this field?"
+msgstr "Ar šis laukas turi matomą žymenį?"
+
+#: src/TestNames.php:85
+msgid "Prefer visible labels to placeholders"
+msgstr "Teikite pirmenybę matomiems žymenims, o ne vietaženkliam tekstui"
+
+#: src/TestNames.php:86
+msgid "Is this reset button needed?"
+msgstr "Ar šis atstatymo mygtukas reikalingas?"
+
+#: src/TestNames.php:87
+msgid "This input has an empty label"
+msgstr "Šio įvesties lauko žymuo yra tuščias"
+
+#: src/TestNames.php:88
+msgid "Visible label does not match invisible label"
+msgstr "Matomas žymuo nesutampa su nematomu žymeniu"
+
+#: src/TestNames.php:89
+msgid "This image input is missing alt text"
+msgstr "Šiam vaizdo įvesties laukui trūksta alternatyvaus teksto"
+
+#: src/TestNames.php:90
+msgid "This input is not connected to a label"
+msgstr "Šis įvesties laukas nesusietas su žymeniu"
+
+#: src/TestNames.php:91
+msgid "Language tag does not match the content"
+msgstr "Kalbos žyma neatitinka turinio"
+
+#: src/TestNames.php:92
+msgid "This content appears to be in a different language"
+msgstr "Atrodo, kad šis turinys yra kita kalba"
+
+#: src/TestNames.php:93
+msgid "This alt text appears to be in a different language"
+msgstr "Atrodo, kad šis alternatyvusis tekstas yra kita kalba"
+
+#: src/TestNames.php:94
+msgid "Alt text used as a link should not be a URL"
+msgstr "Kaip nuoroda naudojamas alternatyvusis tekstas neturėtų būti URL"
+
+#: src/TestNames.php:95 src/TestNames.php:96
+msgid "This linked alt might not be clear and concise"
+msgstr "Šis susieto vaizdo alternatyvusis tekstas gali būti neaiškus ir neglaustas"
+
+#: src/TestNames.php:97
+msgid "Linked images need pronounceable alt text"
+msgstr "Susietiems vaizdams reikia ištariamo alternatyvaus teksto"
+
+#: src/TestNames.php:98
+msgid "Manual check: link contains \"click here\""
+msgstr "Šioje nuorodoje yra „spustelėkite čia“"
+
+#: src/TestNames.php:99
+msgid "Link article titles, not DOI numbers"
+msgstr "Nurodykite straipsnių pavadinimus, o ne DOI numerius"
+
+#: src/TestNames.php:100
+msgid "This link contains no words"
+msgstr "Šioje nuorodoje nėra žodžių"
+
+#: src/TestNames.php:101
+msgid "Link with invalid \"aria-labelledby\" attribute"
+msgstr "Nuoroda su netinkamu atributu „aria-labelledby“"
+
+#: src/TestNames.php:102
+msgid "This link needs a label"
+msgstr "Šiai nuorodai reikia žymens"
+
+#: src/TestNames.php:103
+msgid "Link points to a file without warning"
+msgstr "Nuoroda veda į failą be perspėjimo"
+
+#: src/TestNames.php:104
+msgid "Links with the same text link to different pages"
+msgstr "Vienodą tekstą turinčios nuorodos veda į skirtingus puslapius"
+
+#: src/TestNames.php:105
+msgid "Does this alt text describe the link or the image?"
+msgstr "Ar šis alternatyvusis tekstas aprašo nuorodą, ar vaizdą?"
+
+#: src/TestNames.php:106
+msgid "Does this alt text make sense as part of this link?"
+msgstr "Ar šis alternatyvusis tekstas prasmingai papildo nuorodą?"
+
+#: src/TestNames.php:107
+msgid "Can this linked alt text be shorter?"
+msgstr "Ar šis susieto vaizdo alternatyvusis tekstas galėtų būti trumpesnis?"
+
+#: src/TestNames.php:108
+msgid "This linked image needs alt text"
+msgstr "Šiam susietam vaizdui reikia alternatyvaus teksto"
+
+#: src/TestNames.php:109
+msgid "Does this linked image need a description?"
+msgstr "Ar šiam susietam vaizdui reikia aprašymo?"
+
+#: src/TestNames.php:110
+msgid "Is this link actually a button?"
+msgstr "Ar ši nuoroda iš tikrųjų yra mygtukas?"
+
+#: src/TestNames.php:111
+msgid "Does this link open a new tab without warning?"
+msgstr "Ar ši nuoroda atsidaro naujame skirtuke be perspėjimo?"
+
+#: src/TestNames.php:112
+msgid "This linked alt text may be a placeholder"
+msgstr "Šis susieto vaizdo alternatyvusis tekstas gali būti tik vietaženklis"
+
+#: src/TestNames.php:113
+msgid "This link only contains generic words"
+msgstr "Šioje nuorodoje yra tik bendrieji žodžiai"
+
+#: src/TestNames.php:114
+msgid "The purpose of this link is visually hidden"
+msgstr "Šios nuorodos paskirtis yra vizualiai paslėpta"
+
+#: src/TestNames.php:115
+msgid "Does this image's alt describe the image or the link?"
+msgstr "Ar šio vaizdo alternatyvusis tekstas aprašo vaizdą, ar nuorodą?"
+
+#: src/TestNames.php:116
+msgid "Are the symbols or emoji in this link meaningful?"
+msgstr "Ar šioje nuorodoje esantys simboliai ar jaustukai yra prasmingi?"
+
+#: src/TestNames.php:117
+msgid "This link is unpronounceable"
+msgstr "Šios nuorodos neįmanoma ištarti"
+
+#: src/TestNames.php:118
+msgid "Link text should not be a URL"
+msgstr "Nuorodos tekstas neturėtų būti URL"
+
+#: src/TestNames.php:119
+msgid "Meta tag for page language missing"
+msgstr "Trūksta puslapio kalbos meta žymos"
+
+#: src/TestNames.php:120
+msgid "Did you mean a different language code?"
+msgstr "Ar turėjote omenyje kitą kalbos kodą?"
+
+#: src/TestNames.php:121
+msgid "Invalid language code"
+msgstr "Netinkamas kalbos kodas"
+
+#: src/TestNames.php:122
+msgid "Page language may not match the content"
+msgstr "Puslapio kalba gali neatitikti turinio"
+
+#: src/TestNames.php:123
+msgid "Meta tag limits how much users can enlarge text"
+msgstr "Meta žyma riboja, kiek vartotojai gali padidinti tekstą"
+
+#: src/TestNames.php:124
+msgid "Meta tag automatically refreshes page"
+msgstr "Meta žyma automatiškai atnaujina puslapį"
+
+#: src/TestNames.php:125
+msgid "Meta tag prevents users from enlarging text"
+msgstr "Meta žyma neleidžia vartotojams padidinti teksto"
+
+#: src/TestNames.php:126
+msgid "Meta tag for page title missing"
+msgstr "Trūksta puslapio pavadinimo meta žymos"
+
+#: src/TestNames.php:127
+msgid "Invalid HTML: image has no alt attribute"
+msgstr "Netinkamas HTML: vaizdas neturi atributo alt"
+
+#: src/TestNames.php:128
+msgid "Invalid HTML: linked image missing alt attribute"
+msgstr "Netinkamas HTML: susietam vaizdui trūksta atributo alt"
+
+#: src/TestNames.php:129
+msgid "Invalid HTML: image in link missing alt attribute"
+msgstr "Netinkamas HTML: nuorodoje esančiam vaizdui trūksta atributo alt"
+
+#: src/TestNames.php:130
+msgid "This link target may be invalid"
+msgstr "Šios nuorodos paskirtis gali būti netinkama"
+
+#: src/TestNames.php:131
+msgid "Should this quote be a heading?"
+msgstr "Ar ši citata turėtų būti antraštė?"
+
+#: src/TestNames.php:132
+msgid "Has this document been tagged for screen readers?"
+msgstr "Ar šis dokumentas pažymėtas ekrano skaitytuvams?"
+
+#: src/TestNames.php:133
+msgid "Should this bold text be a heading?"
+msgstr "Ar šis paryškintas tekstas turėtų būti antraštė?"
+
+#: src/TestNames.php:134
+msgid "Should this have list formatting?"
+msgstr "Ar tam reikia sąrašo formatavimo?"
+
+#: src/TestNames.php:135
+msgid "Broken same-page link"
+msgstr "Neveikianti to paties puslapio nuoroda"
+
+#: src/TestNames.php:136
+msgid "Do not justify text"
+msgstr "Nelygiuokite teksto iš abiejų pusių"
+
+#: src/TestNames.php:137
+msgid "Nested interactive layout components"
+msgstr "Vienas į kitą įterpti interaktyvūs išdėstymo komponentai"
+
+#: src/TestNames.php:138
+msgid "Is there an alternative for this PDF?"
+msgstr "Ar yra šio PDF alternatyva?"
+
+#: src/TestNames.php:139
+msgid "Text is too small"
+msgstr "Tekstas per mažas"
+
+#: src/TestNames.php:140
+msgid "Large blocks of emphasized text are harder to read"
+msgstr "Dideli išryškinto teksto blokai yra sunkiau skaitomi"
+
+#: src/TestNames.php:141
+msgid "Do not use sub/superscript as visual formatting"
+msgstr "Nenaudokite apatinio/viršutinio indekso vizualiniam formatavimui"
+
+#: src/TestNames.php:142
+msgid "Only links should be underlined"
+msgstr "Pabraukimas turėtų būti naudojamas tik nuorodoms"
+
+#: src/TestNames.php:143
+msgid "Is this uppercase text needed?"
+msgstr "Ar šis didžiosiomis raidėmis rašytas tekstas reikalingas?"
+
+#: src/TestNames.php:144
+msgid "Are there redundant words in this alt text?"
+msgstr "Ar alternatyviame tekste yra nereikalingų žodžių?"
+
+#: src/TestNames.php:145
+msgid "Tabindex overrides interrupt the focus order"
+msgstr "Tabindex perėjimai sutrikdo fokusavimo tvarką"
+
+#: src/TestNames.php:146
+msgid "This header cell needs text"
+msgstr "Šiame antraštės langelyje reikia teksto"
+
+#: src/TestNames.php:147
+msgid "This table has an invalid headers attribute"
+msgstr "Šioje lentelėje yra netinkamas antraščių atributas"
+
+#: src/TestNames.php:148
+msgid "This table needs a header row and/or column"
+msgstr "Šiai lentelei reikia antraštės eilutės ir (arba) stulpelio"
+
+#: src/TestNames.php:149
+msgid "Content headings should not be used inside tables"
+msgstr "Turinio antraštės neturėtų būti naudojamos lentelėse"
+
+#: src/TestNames.php:150
+msgid "Invalid HTML list"
+msgstr "Netinkamas HTML sąrašas"
+
+#: src/TestNames.php:379
+msgid "Linked images"
+msgstr "Susieti vaizdai"
+
+#: src/TestNames.php:382
+msgid "Tables"
+msgstr "Lentelės"
+
+#: src/TestNames.php:383
+msgid "Text formatting"
+msgstr "Teksto formatavimas"
+
+#: src/TestNames.php:384
+msgid "Video, audio, frames"
+msgstr "Vaizdo įrašai, garso įrašai, rėmeliai"
+
+#: src/TestNames.php:385
+msgid "Contrast"
+msgstr "Kontrastas"
+
+#: src/TestNames.php:386
+msgid "Forms"
+msgstr "Formos"
+
+#: src/TestNames.php:387
+msgid "ARIA and focus"
+msgstr "ARIA ir fokusas"
+
+#: src/TestNames.php:388
+msgid "Page metadata"
+msgstr "Puslapio metaduomenys"

@@ -1,0 +1,2480 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: editoria11y 3.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/editoria11y\n"
+"POT-Creation-Date: 2026-08-10T21:11:15-04:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language-Team: Editoria11y\n"
+"Language: sl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);\n"
+
+#. Plugin Name of the plugin
+#: editoria11y.php
+msgid "Editoria11y Accessibility Checker (CSA)"
+msgstr "Editoria11y Accessibility Checker (CSA)"
+
+#. Plugin URI of the plugin
+#: editoria11y.php
+msgid "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+msgstr "https://wordpress.org/plugins/editoria11y-accessibility-checker/"
+
+#. Description of the plugin
+#: editoria11y.php
+msgid "User friendly content quality assurance, plus the CSA developer suite: ~50 additional code and contrast tests, a custom test builder, role-based test configuration, and a site crawler."
+msgstr "Uporabniku prijazno zagotavljanje kakovosti vsebine, poleg razvijalskega paketa CSA: ~50 dodatnih testov kode in kontrasta, gradnik testov po meri, konfiguracija testov glede na vloge in plazilec mesta."
+
+#. Author of the plugin
+#: editoria11y.php
+msgid "Princeton University, WDS"
+msgstr "Princeton University, WDS"
+
+#. Author URI of the plugin
+#: editoria11y.php
+msgid "https://editoria11y.com"
+msgstr "https://editoria11y.com"
+
+#: editoria11y.php:131
+msgid "Editoria11y is missing its vendored dependencies. Run \"composer install\" inside the plugin directory or reinstall the plugin from a complete release archive."
+msgstr "Editoria11y nima nameščenih odvisnosti. Zaženite »composer install« v mapi vtičnika ali ga znova namestite iz celotnega arhiva."
+
+#: editoria11y.php:399
+msgid "Every five minutes (Editoria11y rehash)"
+msgstr "Vsakih pet minut (Editoria11y osvežitev)"
+
+#: editoria11y.php:405
+msgid "Every fifteen minutes (Editoria11y license watchdog)"
+msgstr "Vsakih petnajst minut (Editoria11y nadzornik licence)"
+
+#: src/Admin/CsvExport.php:161 src/Admin/Dashboard.php:150
+msgid "Page"
+msgstr "Stran"
+
+#: src/Admin/CsvExport.php:162
+msgid "URL"
+msgstr "URL"
+
+#: src/Admin/CsvExport.php:163
+msgid "Issue"
+msgstr "Težava"
+
+#: src/Admin/CsvExport.php:164 src/Admin/Dashboard.php:158
+msgid "Count"
+msgstr "Število"
+
+#: src/Admin/CsvExport.php:165 src/Admin/Dashboard.php:155
+msgid "Author"
+msgstr "Avtor"
+
+#: src/Admin/CsvExport.php:166
+msgid "Page Type"
+msgstr "Vrsta strani"
+
+#: src/Admin/CsvExport.php:167
+msgid "Detected on"
+msgstr "Zaznano dne"
+
+#: src/Admin/CsvExport.php:168 src/Admin/Dashboard.php:153
+#: src/Form/CrawlerPage.php:206 src/Form/CustomRulesPage.php:194
+#: src/Form/NetworkCustomRulesPage.php:154
+msgid "Status"
+msgstr "Stanje"
+
+#: src/Admin/CsvExport.php:169 src/Form/CustomRulesPage.php:317
+#: src/Form/NetworkCustomRulesPage.php:192
+msgid "Edit"
+msgstr "Uredi"
+
+#: src/Admin/Dashboard.php:35 src/Admin/Dashboard.php:53
+#: src/Admin/Dashboard.php:202
+msgid "Editoria11y Accessibility Report"
+msgstr "Poročilo o dostopnosti Editoria11y"
+
+#: src/Admin/Dashboard.php:36
+msgid "Accessibility"
+msgstr "Dostopnost"
+
+#: src/Admin/Dashboard.php:71
+msgid "Error:"
+msgstr "Napaka:"
+
+#: src/Admin/Dashboard.php:72
+msgid "Editoria11y database tables are missing."
+msgstr "Tabele baze podatkov Editoria11y manjkajo."
+
+#. translators: 1: bug report link, 2: site health page link.
+#: src/Admin/Dashboard.php:75
+#, php-format
+msgid "Try deactivating and reactivating the plugin to reset config and recreate the tables, or %1$s with the information from the WordPress, Server and Database sections on your %2$s."
+msgstr "Poskusite onemogočiti in znova omogočiti vtičnik, da ponastavite konfiguracijo in znova ustvarite tabele, ali %1$s z informacijami iz razdelkov WordPress, Strežnik in Baza podatkov na vaši %2$s."
+
+#: src/Admin/Dashboard.php:76
+msgid "post a bug report"
+msgstr "oddajte poročilo o napaki"
+
+#: src/Admin/Dashboard.php:77
+msgid "site health page"
+msgstr "strani zdravja mesta"
+
+#: src/Admin/Dashboard.php:129
+msgid "View all issues"
+msgstr "Prikaži vse težave"
+
+#: src/Admin/Dashboard.php:130
+msgid "View issues on all pages"
+msgstr "Prikaži težave na vseh straneh"
+
+#. translators: %s: name of an alert/test, e.g. "Image is missing alt text".
+#: src/Admin/Dashboard.php:132
+#, php-format
+msgid "Alert report: \"%s\""
+msgstr "Poročilo o opozorilu: „%s“"
+
+#. translators: %s: post type slug, e.g. "page" or "post".
+#: src/Admin/Dashboard.php:134
+#, php-format
+msgid "Alerts on pages of type \"%s\""
+msgstr "Opozorila na straneh vrste „%s“"
+
+#: src/Admin/Dashboard.php:135
+msgid "Alerts on pages created by author"
+msgstr "Opozorila na straneh, ki jih je ustvaril avtor"
+
+#. translators: %s: author display name.
+#: src/Admin/Dashboard.php:137
+#, php-format
+msgid "Alerts on pages created by %s"
+msgstr "Opozorila na straneh, ki jih je ustvaril(-a) %s"
+
+#: src/Admin/Dashboard.php:138
+msgid "Alerts dismissed by"
+msgstr "Opozorila, ki jih je zavrgel"
+
+#. translators: %s: user display name of the dismissor.
+#: src/Admin/Dashboard.php:140
+#, php-format
+msgid "Alerts dismissed by %s"
+msgstr "Opozorila, ki jih je zavrgel(-a) %s"
+
+#. translators: %s: post-status label, e.g. "Published" or "Draft".
+#: src/Admin/Dashboard.php:142
+#, php-format
+msgid "%s pages"
+msgstr "%s strani"
+
+#: src/Admin/Dashboard.php:143
+msgid "API error."
+msgstr "Napaka API."
+
+#: src/Admin/Dashboard.php:144
+msgid "Your login session expired. Reload this page to continue."
+msgstr "Vaša prijavna seja je potekla. Znova naložite to stran, da nadaljujete."
+
+#: src/Admin/Dashboard.php:145
+msgid "loading..."
+msgstr "nalaganje..."
+
+#. translators: %d: pagination page number.
+#: src/Admin/Dashboard.php:147
+#, php-format
+msgid "Page %d"
+msgstr "Stran %d"
+
+#: src/Admin/Dashboard.php:148
+msgid "Alerts"
+msgstr "Opozorila"
+
+#: src/Admin/Dashboard.php:149
+msgid "Dev alerts"
+msgstr "Razvijalska opozorila"
+
+#: src/Admin/Dashboard.php:151
+msgid "Path"
+msgstr "Pot"
+
+#: src/Admin/Dashboard.php:152
+msgid "Type"
+msgstr "Vrsta"
+
+#: src/Admin/Dashboard.php:154
+msgid "Updated"
+msgstr "Posodobljeno"
+
+#: src/Admin/Dashboard.php:156
+msgid "Detected"
+msgstr "Zaznano"
+
+#: src/Admin/Dashboard.php:157
+msgid "Alert"
+msgstr "Opozorilo"
+
+#: src/Admin/Dashboard.php:159
+msgid "Pages"
+msgstr "Strani"
+
+#: src/Admin/Dashboard.php:160
+msgid "On"
+msgstr "Na"
+
+#: src/Admin/Dashboard.php:161
+msgid "Dismissed alert"
+msgstr "Zavrnjeno opozorilo"
+
+#: src/Admin/Dashboard.php:162
+msgid "Marked"
+msgstr "Označeno"
+
+#: src/Admin/Dashboard.php:163
+msgid "Current"
+msgstr "Trenutno"
+
+#: src/Admin/Dashboard.php:164
+msgid "By"
+msgstr "Od"
+
+#: src/Admin/Dashboard.php:165
+msgid "Alerts by page"
+msgstr "Opozorila po straneh"
+
+#: src/Admin/Dashboard.php:166
+msgid "Recent alerts"
+msgstr "Nedavna opozorila"
+
+#: src/Admin/Dashboard.php:167
+msgid "Alert types"
+msgstr "Vrste opozoril"
+
+#: src/Admin/Dashboard.php:168
+msgid "Dismissals"
+msgstr "Zavrnjeni elementi"
+
+#: src/Admin/Dashboard.php:169
+msgid "Recent dismissals"
+msgstr "Nedavno zavrnjeni elementi"
+
+#: src/Admin/Dashboard.php:170
+msgid "Download results as CSV"
+msgstr "Prenesi rezultate kot CSV"
+
+#: src/Admin/Dashboard.php:171
+msgid "None"
+msgstr "Brez"
+
+#: src/Admin/Dashboard.php:172
+msgid "No"
+msgstr "Ne"
+
+#: src/Admin/Dashboard.php:173
+msgid "Yes"
+msgstr "Da"
+
+#: src/Admin/Dashboard.php:174
+msgid "n/a"
+msgstr "n/a"
+
+#: src/Admin/Dashboard.php:175 src/functions.php:1795
+msgid "Empty button-style link"
+msgstr "Prazna povezava v slogu gumba"
+
+#. translators: tooltip on a column header that's currently sorted descending.
+#: src/Admin/Dashboard.php:177
+msgid "descending"
+msgstr "padajoče"
+
+#. translators: tooltip on a column header that's currently sorted ascending.
+#: src/Admin/Dashboard.php:179
+msgid "ascending"
+msgstr "naraščajoče"
+
+#. translators: %d: number of result rows returned (singular form).
+#: src/Admin/Dashboard.php:182
+#, php-format
+msgid "%d result"
+msgstr "%d rezultat"
+
+#. translators: %d: number of result rows returned (plural form).
+#: src/Admin/Dashboard.php:184
+#, php-format
+msgid "%d results"
+msgstr "%d rezultatov"
+
+#: src/CoActivationGuard.php:139
+msgid "A duplicate copy of Editoria11y Accessibility Checker (the free version) was deactivated here: Editoria11y CSA is already active and provides the same checks."
+msgstr "Podvojena kopija vtičnika Editoria11y Accessibility Checker (brezplačna različica) je bila tukaj deaktivirana: Editoria11y CSA je že aktiven in zagotavlja enaka preverjanja."
+
+#: src/Controller/ApiCrawler.php:122
+msgid "The crawler is a premium feature."
+msgstr "Plazilec je funkcija premium različice."
+
+#: src/Controller/ApiCrawler.php:129
+msgid "Editoria11y database update did not complete; the crawler is paused until an administrator retries the update."
+msgstr "Posodobitev baze podatkov Editoria11y ni bila dokončana; plazilec je zaustavljen, dokler skrbnik ne ponovi posodobitve."
+
+#: src/Controller/ApiDismissals.php:83
+msgid "Results not recorded"
+msgstr "Rezultati niso bili zabeleženi"
+
+#: src/Controller/ApiDismissals.php:572 src/Controller/ApiResults.php:925
+msgid "Editoria11y database update did not complete; writes are paused until an administrator retries the update."
+msgstr "Posodobitev baze podatkov Editoria11y ni bila dokončana; zapisovanje je zaustavljeno, dokler skrbnik ne ponovi posodobitve."
+
+#: src/Controller/ApiDismissals.php:597 src/Controller/ApiResults.php:950
+msgid "Editoria11y database update did not complete; the dashboard is paused until an administrator retries the update."
+msgstr "Posodobitev baze podatkov Editoria11y ni bila dokončana; nadzorna plošča je zaustavljena, dokler skrbnik ne ponovi posodobitve."
+
+#: src/CustomRules.php:273
+msgid "Machine name is required."
+msgstr "Strojno ime je obvezno."
+
+#: src/CustomRules.php:276
+msgid "Machine name must be lowercase letters, digits, and underscores, starting with a letter."
+msgstr "Strojno ime mora vsebovati samo male črke, številke in podčrtaje ter se začeti s črko."
+
+#: src/CustomRules.php:281
+msgid "Admin label is required."
+msgstr "Oznaka za skrbnika je obvezna."
+
+#: src/CustomRules.php:286
+msgid "Test grouping ID is required."
+msgstr "ID za skupino testov je obvezen."
+
+#: src/CustomRules.php:293
+msgid "Test grouping ID may only contain letters, digits, and underscores."
+msgstr "ID za skupino testov lahko vsebuje samo črke, številke in podčrtaje."
+
+#. translators: %s is a reserved test key like TABLES_SEMANTIC_HEADING.
+#: src/CustomRules.php:298
+#, php-format
+msgid "Test grouping ID \"%s\" is reserved by the v3 migration drop list and cannot be used."
+msgstr "ID za skupino testov „%s“ je rezerviran za migracijski seznam v3 in ga ni mogoče uporabiti."
+
+#: src/CustomRules.php:305
+msgid "Tip title is required."
+msgstr "Naslov namiga je obvezen."
+
+#: src/CustomRules.php:312
+msgid "Tip details must contain some visible text."
+msgstr "Podrobnosti namiga morajo vsebovati vidno besedilo."
+
+#: src/CustomRules.php:317
+msgid "Alert type must be Error or Manual check."
+msgstr "Vrsta opozorila mora biti Napaka ali Ročno preverjanje."
+
+#: src/CustomRules.php:323
+msgid "Dismiss key must be Text content or Attributes."
+msgstr "Ključ za zavrnitev mora biti Besedilna vsebina ali Atributi."
+
+#: src/CustomRules.php:329
+msgid "Filter selector looks like a CSS rule block, not a selector. Remove the curly braces."
+msgstr "Izbirnik filtra izgleda kot blok pravil CSS, ne kot izbirnik. Odstranite zavite oklepaje."
+
+#: src/CustomRules.php:332
+msgid "Filter selector has an unclosed quote, bracket, or parenthesis. The browser would reject it and skip every custom rule on the page."
+msgstr "Izbirnik filtra ima nezaprt narekovaj, oglati oklepaj ali navadni oklepaj. Brskalnik bi ga zavrnil in preskočil vsa pravila po meri na strani."
+
+#: src/CustomRules.php:342
+msgid "At least one rule criterion is required: a filter selector OR one or more include-text strings."
+msgstr "Zahtevano je vsaj eno merilo pravila: izbirnik filtra ALI ena ali več vključitvenih besedilnih nizov."
+
+#. translators: %s is an unknown element-set value.
+#: src/CustomRules.php:352
+#, php-format
+msgid "Element set \"%s\" is not one of the recognized element categories."
+msgstr "Nabor elementov „%s“ ni ena od prepoznanih kategorij elementov."
+
+#: src/Form/CrawlerPage.php:59 src/Form/CrawlerPage.php:60
+msgid "Editoria11y Crawler"
+msgstr "Editoria11y Crawler"
+
+#: src/Form/CrawlerPage.php:126
+msgid "You do not have permission to use the crawler."
+msgstr "Nimate dovoljenja za uporabo plazilca."
+
+#: src/Form/CrawlerPage.php:130 src/Form/CustomRulesPage.php:111
+#: src/Form/SettingsPage.php:236 src/Form/SettingsPage.php:237
+msgid "Editoria11y"
+msgstr "Editoria11y"
+
+#: src/Form/CrawlerPage.php:146 src/Form/SettingsPage.php:288
+msgid "Crawler"
+msgstr "Crawler"
+
+#: src/Form/CrawlerPage.php:149
+msgid "The crawler is a CSA feature. Activate CSA to schedule sitewide accessibility scans across posts, pages, and custom post types."
+msgstr "Plazilec je funkcija CSA. Aktivirajte CSA za načrtovanje sitewide pregledov dostopnosti po prispevkih, straneh in tipih po meri."
+
+#: src/Form/CrawlerPage.php:162
+msgid "Manual crawl"
+msgstr "Ročno pregledovanje"
+
+#: src/Form/CrawlerPage.php:166
+msgid "Editoria11y reports populate and update in real time as editors work, so a manual crawl is generally only helpful when first installing the plugin or after making major theme or configuration changes."
+msgstr "Poročila Editoria11y se v realnem času posodabljajo med delom urednikov, zato je ročno pregledovanje na splošno koristno le ob prvi namestitvi vtičnika ali po večjih spremembah teme oziroma konfiguracije."
+
+#: src/Form/CrawlerPage.php:176 src/Form/CustomRulesPage.php:501
+#: src/Form/NetworkCustomRulesPage.php:288 src/Form/NetworkLicensePage.php:416
+msgid "Cancel"
+msgstr "Prekliči"
+
+#: src/Form/CrawlerPage.php:181
+msgid "This tab needs to remain open and in the foreground during the crawl."
+msgstr "Ta zavihek mora ostati odprt in v ospredju med pregledovanjem."
+
+#: src/Form/CrawlerPage.php:188
+msgid "Browsers pause API operations in background tabs."
+msgstr "Brskalniki prekinejo API operacije v zavihkih v ozadju."
+
+#: src/Form/CrawlerPage.php:196
+msgid "Filter which pages will be crawled"
+msgstr "Filtrirajte, katere strani bodo pregledane"
+
+#: src/Form/CrawlerPage.php:200
+msgid "Content type"
+msgstr "Vrsta vsebine"
+
+#: src/Form/CrawlerPage.php:218
+msgid "Filter by"
+msgstr "Filtriraj po"
+
+#: src/Form/CrawlerPage.php:221 src/Form/CrawlerPage.php:254
+msgid "Date created"
+msgstr "Datum nastanka"
+
+#: src/Form/CrawlerPage.php:222 src/Form/CrawlerPage.php:255
+msgid "Date modified"
+msgstr "Datum spremembe"
+
+#: src/Form/CrawlerPage.php:224
+msgid "From"
+msgstr "Od"
+
+#: src/Form/CrawlerPage.php:226
+msgid "To"
+msgstr "Do"
+
+#: src/Form/CrawlerPage.php:231
+msgid "Content alerts"
+msgstr "Opozorila o vsebini"
+
+#: src/Form/CrawlerPage.php:234 src/Form/CrawlerPage.php:244
+msgid "Any"
+msgstr "Karkoli"
+
+#: src/Form/CrawlerPage.php:235
+msgid "Has alerts"
+msgstr "Ima opozorila"
+
+#: src/Form/CrawlerPage.php:236
+msgid "No alerts"
+msgstr "Brez opozoril"
+
+#: src/Form/CrawlerPage.php:241
+msgid "Developer alerts"
+msgstr "Razvijalska opozorila"
+
+#: src/Form/CrawlerPage.php:245
+msgid "Has dev alerts"
+msgstr "Ima razvijalska opozorila"
+
+#: src/Form/CrawlerPage.php:246
+msgid "No dev alerts"
+msgstr "Brez razvijalskih opozoril"
+
+#: src/Form/CrawlerPage.php:251
+msgid "Sort by"
+msgstr "Razvrsti po"
+
+#: src/Form/CrawlerPage.php:256
+msgid "Title"
+msgstr "Naslov"
+
+#: src/Form/CrawlerPage.php:259
+msgid "Newest first"
+msgstr "Najprej najnovejše"
+
+#: src/Form/CrawlerPage.php:260
+msgid "Oldest first"
+msgstr "Najprej najstarejše"
+
+#: src/Form/CrawlerPage.php:266
+msgid "Apply filters"
+msgstr "Uporabi filtre"
+
+#: src/Form/CrawlerPage.php:269
+msgid "Crawl preview"
+msgstr "Predogled pregledovanja"
+
+#: src/Form/CrawlerPage.php:288
+msgid "Crawl delay"
+msgstr "Zamik med pregledovanjem"
+
+#. translators: %d: number of milliseconds between iframe loads.
+#: src/Form/CrawlerPage.php:290
+#, php-format
+msgid "%d ms"
+msgstr "%d ms"
+
+#: src/Form/CrawlerPage.php:291
+msgid "Start crawling"
+msgstr "Začni pregledovanje"
+
+#: src/Form/CrawlerPage.php:292
+msgid "Pause crawl"
+msgstr "Ustavi pregledovanje"
+
+#: src/Form/CrawlerPage.php:293
+msgid "Resume crawl"
+msgstr "Nadaljuj pregledovanje"
+
+#: src/Form/CrawlerPage.php:294
+msgid "Back to dashboard"
+msgstr "Nazaj na nadzorno ploščo"
+
+#: src/Form/CrawlerPage.php:295
+msgid "No matching content. Adjust the filters and apply."
+msgstr "Ni ujemajočih se vsebin. Prilagodite filtre in jih uporabite."
+
+#: src/Form/CrawlerPage.php:296
+msgid "Could not load the page list. Reload this page to retry; if the problem persists, your login session may have expired."
+msgstr "Seznama strani ni bilo mogoče naložiti. Znova naložite to stran za nov poskus; če se težava ponavlja, je vaša prijavna seja morda potekla."
+
+#. translators: %s: human-readable duration like "30 seconds" or "5 minutes".
+#: src/Form/CrawlerPage.php:298
+#, php-format
+msgid "Estimated time: %s"
+msgstr "Predviden čas: %s"
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (singular form).
+#: src/Form/CrawlerPage.php:301
+#, php-format
+msgid "Showing %1$d of %2$d matching page."
+msgstr "Prikazujem %1$d od %2$d ujemajoče strani."
+
+#. translators: 1: number of URLs shown in this batch, 2: total matching URLs across all batches (plural form).
+#: src/Form/CrawlerPage.php:303
+#, php-format
+msgid "Showing %1$d of %2$d matching pages."
+msgstr "Prikazujem %1$d od %2$d ujemajočih strani."
+
+#. translators: %d: whole-number count of seconds remaining (singular form).
+#: src/Form/CrawlerPage.php:307
+#, php-format
+msgid "%d second"
+msgstr "%d sekundo"
+
+#. translators: %d: whole-number count of seconds remaining (plural form).
+#: src/Form/CrawlerPage.php:309
+#, php-format
+msgid "%d seconds"
+msgstr "%d sekund"
+
+#. translators: %d: whole-number count of minutes remaining (singular form).
+#: src/Form/CrawlerPage.php:313
+#, php-format
+msgid "%d minute"
+msgstr "%d minuto"
+
+#. translators: %d: whole-number count of minutes remaining (plural form).
+#: src/Form/CrawlerPage.php:315
+#, php-format
+msgid "%d minutes"
+msgstr "%d minut"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (singular form).
+#: src/Form/CrawlerPage.php:319
+#, php-format
+msgid "%s hour"
+msgstr "%s uro"
+
+#. translators: %s: hours remaining as a decimal, e.g. "2.5" (plural form).
+#: src/Form/CrawlerPage.php:321
+#, php-format
+msgid "%s hours"
+msgstr "%s ur"
+
+#: src/Form/CustomRulesPage.php:84 src/Form/CustomRulesPage.php:85
+msgid "Editoria11y Custom Rules"
+msgstr "Editoria11y Pravila po meri"
+
+#: src/Form/CustomRulesPage.php:104 src/Form/CustomRulesPage.php:338
+#: src/Form/CustomRulesPage.php:880 src/Form/CustomRulesPage.php:1030
+msgid "You do not have permission to manage custom rules."
+msgstr "Nimate dovoljenja za upravljanje pravil po meri."
+
+#: src/Form/CustomRulesPage.php:143 src/Form/CustomRulesPage.php:174
+msgid "Custom Rules"
+msgstr "Pravila po meri"
+
+#: src/Form/CustomRulesPage.php:146
+msgid "Custom rules are a CSA feature. Activate CSA to add and edit rules; existing rules remain stored and become editable again on reactivation."
+msgstr "Pravila po meri so funkcija CSA. Aktivirajte CSA za dodajanje in urejanje pravil; obstoječa pravila ostanejo shranjena in jih bo mogoče znova urejati ob ponovni aktivaciji."
+
+#: src/Form/CustomRulesPage.php:176 src/Form/NetworkCustomRulesPage.php:136
+msgid "Add New"
+msgstr "Dodaj novo"
+
+#: src/Form/CustomRulesPage.php:181
+msgid "Each rule pairs a CSS selector (and/or text-content match) with an alert shown to users. Rules ship over the cached static config alongside built-in tests."
+msgstr "Vsako pravilo poveže izbirnik CSS (in/ali ujemanje vsebine besedila) z opozorilom, ki se prikaže uporabnikom. Pravila se prenesejo prek predpomnjene statične konfiguracije skupaj z vgrajenimi testi."
+
+#: src/Form/CustomRulesPage.php:191 src/Form/NetworkCustomRulesPage.php:151
+msgid "Test"
+msgstr "Test"
+
+#: src/Form/CustomRulesPage.php:192
+msgid "Source"
+msgstr "Vir"
+
+#: src/Form/CustomRulesPage.php:193 src/Form/NetworkCustomRulesPage.php:152
+msgid "Elements"
+msgstr "Elementi"
+
+#: src/Form/CustomRulesPage.php:201
+msgid "No custom rules defined yet."
+msgstr "Ni še definiranih pravil po meri."
+
+#: src/Form/CustomRulesPage.php:202 src/Form/NetworkCustomRulesPage.php:162
+msgid "Add your first rule"
+msgstr "Dodajte svoje prvo pravilo"
+
+#: src/Form/CustomRulesPage.php:239
+msgid "Active (enforced)"
+msgstr "Aktivno (uveljavljeno)"
+
+#: src/Form/CustomRulesPage.php:241
+msgid "Disabled on this site"
+msgstr "Onemogočeno na tem mestu"
+
+#: src/Form/CustomRulesPage.php:243
+msgid "Overridden by a site rule with the same ID"
+msgstr "Preglašeno s pravilom mesta z istim ID-jem"
+
+#: src/Form/CustomRulesPage.php:245 src/Form/CustomRulesPage.php:304
+#: src/Form/CustomRulesPage.php:600 src/Form/CustomRulesPage.php:604
+#: src/Form/NetworkCustomRulesPage.php:176 src/Form/SettingsFields.php:786
+msgid "Active"
+msgstr "Aktivno"
+
+#: src/Form/CustomRulesPage.php:248
+msgid "Disabled in network defaults"
+msgstr "Onemogočeno v privzetih nastavitvah omrežja"
+
+#: src/Form/CustomRulesPage.php:252
+msgid "From network (locked)"
+msgstr "Iz omrežja (zaklenjeno)"
+
+#: src/Form/CustomRulesPage.php:253
+msgid "From network"
+msgstr "Iz omrežja"
+
+#: src/Form/CustomRulesPage.php:256
+msgid "Enable on this site"
+msgstr "Omogoči na tem mestu"
+
+#: src/Form/CustomRulesPage.php:257
+msgid "Disable on this site"
+msgstr "Onemogoči na tem mestu"
+
+#: src/Form/CustomRulesPage.php:277
+msgid "Locked by network admin"
+msgstr "Zaklenjeno s strani skrbnika omrežja"
+
+#: src/Form/CustomRulesPage.php:305 src/Form/NetworkCustomRulesPage.php:177
+msgid "Disabled"
+msgstr "Onemogočeno"
+
+#: src/Form/CustomRulesPage.php:322
+msgid "This site"
+msgstr "To mesto"
+
+#: src/Form/CustomRulesPage.php:353
+msgid "No matching network rule found to toggle."
+msgstr "Ni najdeno nobeno ujemajoče pravilo omrežja za preklop."
+
+#: src/Form/CustomRulesPage.php:360
+msgid "This rule is locked by the network admin and cannot be disabled per-site."
+msgstr "To pravilo je zaklenjeno s strani skrbnika omrežja in ga ni mogoče onemogočiti za posamezno mesto."
+
+#: src/Form/CustomRulesPage.php:369
+msgid "Network rule disabled on this site."
+msgstr "Pravilo omrežja je onemogočeno na tem mestu."
+
+#: src/Form/CustomRulesPage.php:370
+msgid "Network rule re-enabled on this site."
+msgstr "Pravilo omrežja je znova omogočeno na tem mestu."
+
+#: src/Form/CustomRulesPage.php:398
+msgid "(text match only)"
+msgstr "(samo ujemanje besedila)"
+
+#: src/Form/CustomRulesPage.php:435
+msgid "Custom rule not found"
+msgstr "Pravilo po meri ni najdeno"
+
+#: src/Form/CustomRulesPage.php:438
+msgid "Return to the rules list"
+msgstr "Vrni se na seznam pravil"
+
+#: src/Form/CustomRulesPage.php:483
+msgid "Edit custom rule"
+msgstr "Uredi pravilo po meri"
+
+#: src/Form/CustomRulesPage.php:484 src/Form/SettingsFields.php:247
+msgid "Add custom rule"
+msgstr "Dodaj pravilo po meri"
+
+#: src/Form/CustomRulesPage.php:489
+msgid "All custom rules"
+msgstr "Vsa pravila po meri"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Save rule"
+msgstr "Shrani pravilo"
+
+#: src/Form/CustomRulesPage.php:499 src/Form/NetworkCustomRulesPage.php:286
+msgid "Create rule"
+msgstr "Ustvari pravilo"
+
+#: src/Form/CustomRulesPage.php:507
+msgid "Delete this custom rule?"
+msgstr "Izbriši to pravilo po meri?"
+
+#: src/Form/CustomRulesPage.php:508 src/Form/NetworkCustomRulesPage.php:295
+msgid "Delete"
+msgstr "Izbriši"
+
+#: src/Form/CustomRulesPage.php:551
+msgid "Admin label for the configuration page"
+msgstr "Skrbniška oznaka za konfiguracijo"
+
+#: src/Form/CustomRulesPage.php:564
+msgid "Test grouping ID"
+msgstr "ID za skupino testov"
+
+#: src/Form/CustomRulesPage.php:576
+msgid "Letters, numbers and underscores only.<br>Rules that share an ID will be grouped on dashboard reports."
+msgstr "Samo črke, številke in podčrtaji.<br>Pravila z enakim ID-jem bodo združena v poročilih nadzorne plošče."
+
+#: src/Form/CustomRulesPage.php:585
+msgid "Machine name"
+msgstr "Strojno ime"
+
+#: src/Form/CustomRulesPage.php:595
+msgid "Lowercase letters, digits, and underscores only. Cannot be changed after creation."
+msgstr "Samo male črke, številke in podčrtaji. Po ustvarjanju ni mogoče spremeniti."
+
+#: src/Form/CustomRulesPage.php:609
+msgid "Disabled rules stay in network storage but are not sent to any site."
+msgstr "Onemogočena pravila ostanejo shranjena v omrežju, vendar niso poslana nobenemu mestu."
+
+#: src/Form/CustomRulesPage.php:611
+msgid "Disabled rules stay in storage but are not sent to the browser."
+msgstr "Onemogočena pravila ostanejo shranjena, vendar niso poslana brskalniku."
+
+#: src/Form/CustomRulesPage.php:619 src/Form/NetworkCustomRulesPage.php:153
+msgid "Lock"
+msgstr "Zakleni"
+
+#: src/Form/CustomRulesPage.php:623
+msgid "Lock this rule across the network"
+msgstr "Zakleni to pravilo v celotnem omrežju"
+
+#: src/Form/CustomRulesPage.php:627
+msgid "Locked rules are enforced on every site: per-site admins cannot disable them, and a per-site rule sharing this ID is suppressed in favor of this one. Unlocked rules can be disabled per-site."
+msgstr "Zaklenjena pravila so uveljavljena na vsakem mestu: skrbniki posameznih mest jih ne morejo onemogočiti, pravilo posameznega mesta z istim ID-jem pa je zatrto v korist tega. Odklenjena pravila je mogoče onemogočiti za posamezno mesto."
+
+#: src/Form/CustomRulesPage.php:639
+msgid "Alert content"
+msgstr "Vsebina opozorila"
+
+#: src/Form/CustomRulesPage.php:643
+msgid "Tip title"
+msgstr "Naslov namiga"
+
+#: src/Form/CustomRulesPage.php:654
+msgid "Tip details"
+msgstr "Podrobnosti namiga"
+
+#. translators: %s is the comma-separated list of allowed HTML tags.
+#: src/Form/CustomRulesPage.php:663
+#, php-format
+msgid "HTML displayed in the tooltip. The provided template is optional.<br>Allowed tags: %s."
+msgstr "HTML, prikazan v namigovalnem oknu. Predloga je neobvezna.<br>Dovoljene oznake: %s."
+
+#: src/Form/CustomRulesPage.php:677
+msgid "Alert type"
+msgstr "Vrsta opozorila"
+
+#: src/Form/CustomRulesPage.php:682
+msgid "Error"
+msgstr "Napaka"
+
+#: src/Form/CustomRulesPage.php:685
+msgid "Manual check"
+msgstr "Ročno preverjanje"
+
+#: src/Form/CustomRulesPage.php:691
+msgid "Dismiss key"
+msgstr "Ključ za zavrnitev"
+
+#: src/Form/CustomRulesPage.php:696
+msgid "Text content"
+msgstr "Besedilna vsebina"
+
+#: src/Form/CustomRulesPage.php:699
+msgid "Attributes on tag (e.g. href and src)"
+msgstr "Atributi na oznaki (npr. href in src)"
+
+#: src/Form/CustomRulesPage.php:703
+msgid "How dismissals are tracked. 'Text content' uses the text inside the element, 'Attributes on tag' uses its attributes (href, id, class, src)."
+msgstr "Kako se sledijo zavrnitve. „Besedilna vsebina“ uporablja besedilo znotraj elementa, „Atributi na oznaki“ uporablja njegove atribute (href, id, class, src)."
+
+#: src/Form/CustomRulesPage.php:712
+msgid "Elements to check"
+msgstr "Elementi za preverjanje"
+
+#: src/Form/CustomRulesPage.php:715
+msgid "These sets contain elements that match your check area and skip over configuration."
+msgstr "Ti nabori vsebujejo elemente, ki ustrezajo vašemu območju preverjanja in preskočijo konfiguracijo."
+
+#: src/Form/CustomRulesPage.php:724
+msgid "Common choices"
+msgstr "Pogoste izbire"
+
+#: src/Form/CustomRulesPage.php:728
+msgid "All text elements: Headings, Paragraphs, Blockquotes and Lists"
+msgstr "Vsi besedilni elementi: naslovi, odstavki, blokci citatov in seznami"
+
+#: src/Form/CustomRulesPage.php:729 src/TestNames.php:378
+msgid "Links"
+msgstr "Povezave"
+
+#: src/Form/CustomRulesPage.php:730
+msgid "Paragraphs"
+msgstr "Odstavki"
+
+#: src/Form/CustomRulesPage.php:731 src/TestNames.php:381
+msgid "Headings"
+msgstr "Naslovi"
+
+#: src/Form/CustomRulesPage.php:732 src/TestNames.php:380
+msgid "Images"
+msgstr "Slike"
+
+#: src/Form/CustomRulesPage.php:733
+msgid "All elements"
+msgstr "Vsi elementi"
+
+#: src/Form/CustomRulesPage.php:734
+msgid "...other..."
+msgstr "...drugo..."
+
+#: src/Form/CustomRulesPage.php:739
+msgid "Specific elements and combinations"
+msgstr "Specifični elementi in kombinacije"
+
+#: src/Form/CustomRulesPage.php:751
+msgid "Note: combining Links with Paragraphs and other text containers can lead to duplicate alerts."
+msgstr "Opomba: kombiniranje Povezav z Odstavki in drugimi besedilnimi vsebniki lahko privede do podvojenih opozoril."
+
+#: src/Form/CustomRulesPage.php:761
+msgid "When tip should appear"
+msgstr "Kdaj naj se namig prikaže"
+
+#: src/Form/CustomRulesPage.php:764
+msgid "This test builder allows for simple text and attribute tests."
+msgstr "Ta gradnik testov omogoča preproste teste besedila in atributov."
+
+#: src/Form/CustomRulesPage.php:773
+msgid "Select by attributes"
+msgstr "Izberi po atributih"
+
+#: src/Form/CustomRulesPage.php:783
+msgid "Match using CSS selectors.<br>Use :not() to skip elements, e.g. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Use attribute selectors for URLs, e.g. <code>[href*=\".dev/\"]</code>."
+msgstr "Ujemanje z izbirniki CSS.<br>Uporabite :not() za izpuščanje elementov, npr. <code>:is(.check1, .check2):not(.ignore, .ignore *)</code>.<br>Uporabite izbirnike atributov za URL-je, npr. <code>[href*=\".dev/\"]</code>."
+
+#: src/Form/CustomRulesPage.php:795
+msgid "Select by text"
+msgstr "Izberi po besedilu"
+
+#: src/Form/CustomRulesPage.php:800
+msgid "Flag elements containing any of these text strings. One per line."
+msgstr "Označi elemente, ki vsebujejo katerikoli od teh besedilnih nizov. Po eden v vrstici."
+
+#: src/Form/CustomRulesPage.php:805 src/Form/CustomRulesPage.php:809
+msgid "Case sensitive"
+msgstr "Razlikuje velike in male črke"
+
+#: src/Form/CustomRulesPage.php:815
+msgid "Exclude elements that match this text"
+msgstr "Izključi elemente, ki se ujemajo s tem besedilom"
+
+#: src/Form/CustomRulesPage.php:820
+msgid "Don't flag elements if they contain any of these words or phrases. E.g., a link to a development server is ok if it contains \"dev.\" One per line."
+msgstr "Ne označi elementov, ki vsebujejo katero od teh besed ali stavkov. Npr. povezava do razvojnega strežnika je v redu, če vsebuje „dev.“ Po eden v vrstici."
+
+#: src/Form/CustomRulesPage.php:952
+msgid "Custom rule saved."
+msgstr "Pravilo po meri shranjeno."
+
+#: src/Form/CustomRulesPage.php:1041
+msgid "No matching custom rule found to delete."
+msgstr "Ni najdeno nobeno ujemajoče pravilo po meri za brisanje."
+
+#: src/Form/CustomRulesPage.php:1048
+msgid "Custom rule deleted."
+msgstr "Pravilo po meri izbrisano."
+
+#: src/Form/MigrationPanel.php:77
+msgid "Editoria11y needs to update its database tables."
+msgstr "Editoria11y mora posodobiti svoje tabele baze podatkov."
+
+#: src/Form/MigrationPanel.php:81
+msgid "Editoria11y database update encountered an error during finalization."
+msgstr "Pri zaključevanju posodobitve baze podatkov Editoria11y je prišlo do napake."
+
+#: src/Form/MigrationPanel.php:82
+msgid "Editoria11y is updating existing dismissal records in the background."
+msgstr "Editoria11y posodablja obstoječe zapise o zavrnjenih elementih v ozadju."
+
+#: src/Form/MigrationPanel.php:85
+msgid "Editoria11y database update failed and writes are paused."
+msgstr "Posodobitev baze podatkov Editoria11y ni uspela in zapisovanje je zaustavljeno."
+
+#: src/Form/MigrationPanel.php:94
+msgid "Open Editoria11y settings"
+msgstr "Odpri nastavitve Editoria11y"
+
+#: src/Form/MigrationPanel.php:121
+msgid "Update failed. Please retry."
+msgstr "Posodobitev ni uspela. Poskusite znova."
+
+#. translators: 1: number of legacy dismissals already migrated, 2: total count detected at start.
+#: src/Form/MigrationPanel.php:123
+#, php-format
+msgid "Migrating dismissals: %1$d of %2$d processed."
+msgstr "Migracijo zavrnitev: obdelano %1$d od %2$d."
+
+#: src/Form/MigrationPanel.php:124
+msgid "Database update complete."
+msgstr "Posodobitev baze podatkov dokončana."
+
+#: src/Form/MigrationPanel.php:125
+msgid "Working…"
+msgstr "Delam…"
+
+#: src/Form/MigrationPanel.php:126
+msgid "A previous update attempt did not finish."
+msgstr "Prejšnji poskus posodobitve ni bil dokončan."
+
+#: src/Form/MigrationPanel.php:127
+msgid "A schema update is required."
+msgstr "Zahtevana je posodobitev sheme."
+
+#: src/Form/MigrationPanel.php:128
+msgid "Background data update is in progress. Click below to drive it to completion now."
+msgstr "Posodabljanje podatkov v ozadju poteka. Kliknite spodaj, da ga zdaj dokončate."
+
+#: src/Form/MigrationPanel.php:132
+msgid "Editoria11y database update"
+msgstr "Posodobitev baze podatkov Editoria11y"
+
+#: src/Form/MigrationPanel.php:134
+msgid "Checking schema state…"
+msgstr "Preverjanje stanja sheme…"
+
+#: src/Form/MigrationPanel.php:138
+msgid "Run update now"
+msgstr "Zaženite posodobitev zdaj"
+
+#: src/Form/MigrationPanel.php:141
+msgid "Retry"
+msgstr "Poskusi znova"
+
+#: src/Form/MigrationPanel.php:268 src/Form/NetworkLicensePage.php:196
+msgid "Insufficient permissions."
+msgstr "Nezadostna dovoljenja."
+
+#: src/Form/NetworkCustomRulesPage.php:70
+#: src/Form/NetworkCustomRulesPage.php:71
+#: src/Form/NetworkCustomRulesPage.php:114
+msgid "Editoria11y network custom rules"
+msgstr "Editoria11y pravila po meri za omrežje"
+
+#: src/Form/NetworkCustomRulesPage.php:107
+#: src/Form/NetworkCustomRulesPage.php:311
+#: src/Form/NetworkCustomRulesPage.php:384 src/Form/NetworkSettingsPage.php:154
+#: src/Form/NetworkSettingsPage.php:511
+msgid "Insufficient privileges."
+msgstr "Nezadostne pravice."
+
+#: src/Form/NetworkCustomRulesPage.php:134
+msgid "Network custom rules"
+msgstr "Pravila po meri za omrežje"
+
+#: src/Form/NetworkCustomRulesPage.php:141
+msgid "Rules defined here apply to every site on the network. Locked rules cannot be disabled per-site."
+msgstr "Pravila, definirana tukaj, veljajo za vsako mesto v omrežju. Zaklenjenih pravil ni mogoče onemogočiti za posamezno mesto."
+
+#: src/Form/NetworkCustomRulesPage.php:161
+msgid "No network rules defined yet."
+msgstr "Ni še definiranih pravil za omrežje."
+
+#: src/Form/NetworkCustomRulesPage.php:179
+msgid "Locked"
+msgstr "Zaklenjeno"
+
+#: src/Form/NetworkCustomRulesPage.php:180
+msgid "Unlocked"
+msgstr "Odklenjeno"
+
+#: src/Form/NetworkCustomRulesPage.php:224
+msgid "Network rule not found"
+msgstr "Pravilo omrežja ni najdeno"
+
+#: src/Form/NetworkCustomRulesPage.php:227
+msgid "Return to the network rules list"
+msgstr "Vrni se na seznam pravil omrežja"
+
+#: src/Form/NetworkCustomRulesPage.php:270
+msgid "Edit network custom rule"
+msgstr "Uredi pravilo po meri za omrežje"
+
+#: src/Form/NetworkCustomRulesPage.php:271 src/Form/SettingsFields.php:210
+msgid "Add network custom rule"
+msgstr "Dodaj pravilo po meri za omrežje"
+
+#: src/Form/NetworkCustomRulesPage.php:276
+msgid "All network rules"
+msgstr "Vsa pravila omrežja"
+
+#: src/Form/NetworkCustomRulesPage.php:294
+msgid "Delete this network rule? Every site on the network will stop receiving it."
+msgstr "Izbriši to pravilo omrežja? Vsako mesto v omrežju ga bo prenehalo prejemati."
+
+#: src/Form/NetworkCustomRulesPage.php:369
+msgid "Network custom rule saved."
+msgstr "Pravilo po meri za omrežje shranjeno."
+
+#: src/Form/NetworkCustomRulesPage.php:395
+msgid "No matching network rule found to delete."
+msgstr "Ni najdeno nobeno ujemajoče pravilo omrežja za brisanje."
+
+#: src/Form/NetworkCustomRulesPage.php:402
+msgid "Network custom rule deleted."
+msgstr "Pravilo po meri za omrežje izbrisano."
+
+#: src/Form/NetworkDefaultsWorker.php:478
+msgid "Tests + roles assignment"
+msgstr "Dodelitev testov in vlog"
+
+#: src/Form/NetworkLicensePage.php:58 src/Form/NetworkLicensePage.php:59
+msgid "Editoria11y license"
+msgstr "Licenca Editoria11y"
+
+#: src/Form/NetworkLicensePage.php:83 src/FreemiusAccessControl.php:283
+msgid "Only network administrators can manage the Editoria11y license."
+msgstr "Licenco Editoria11y lahko upravljajo samo skrbniki omrežja."
+
+#: src/Form/NetworkLicensePage.php:94
+msgid "Starting…"
+msgstr "Zaganjanje…"
+
+#: src/Form/NetworkLicensePage.php:95
+msgid "Cancelling…"
+msgstr "Preklic…"
+
+#: src/Form/NetworkLicensePage.php:96
+msgid "Resetting…"
+msgstr "Ponastavitev…"
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:98
+#, php-format
+msgid "Activated %1$d of %2$d sites."
+msgstr "Aktivirano %1$d od %2$d mest."
+
+#. translators: 1: sites processed, 2: total sites in network.
+#: src/Form/NetworkLicensePage.php:100
+#, php-format
+msgid "Deactivated %1$d of %2$d sites."
+msgstr "Deaktivirano %1$d od %2$d mest."
+
+#: src/Form/NetworkLicensePage.php:101
+msgid "License activated on every site in the network."
+msgstr "Licenca aktivirana na vsakem mestu v omrežju."
+
+#: src/Form/NetworkLicensePage.php:102
+msgid "License deactivated on every site in the network."
+msgstr "Licenca deaktivirana na vsakem mestu v omrežju."
+
+#: src/Form/NetworkLicensePage.php:103
+msgid "Activation cancelled. Already-activated sites keep their license."
+msgstr "Aktivacija preklicana. Že aktivirana mesta obdržijo svojo licenco."
+
+#: src/Form/NetworkLicensePage.php:104
+msgid "Deactivation cancelled. Already-deactivated sites stay deactivated."
+msgstr "Deaktivacija preklicana. Že deaktivirana mesta ostanejo deaktivirana."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:106
+#, php-format
+msgid "Activation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Aktivacija zaključena z %d mesti v napaki. Preglejte spodnji seznam in poskusite znova, ko je vzrok odpravljen."
+
+#. translators: %d: number of sites that errored.
+#: src/Form/NetworkLicensePage.php:108
+#, php-format
+msgid "Deactivation finished with %d sites in error. Review the list below and retry once the cause is fixed."
+msgstr "Deaktivacija zaključena z %d mesti v napaki. Preglejte spodnji seznam in poskusite znova, ko je vzrok odpravljen."
+
+#: src/Form/NetworkLicensePage.php:109
+msgid "An unknown error occurred."
+msgstr "Prišlo je do neznane napake."
+
+#. translators: The <a>…</a> tags mark the phrase that will be rendered as a link to https://editoria11y.com/license. Keep the tags around the equivalent phrase in your language; do not add an href.
+#: src/Form/NetworkLicensePage.php:111
+msgid "Paste your <a>Editoria11y CSA license key</a> to begin."
+msgstr "Prilepite svoj <a>licenčni ključ Editoria11y CSA</a> za začetek."
+
+#: src/Form/NetworkLicensePage.php:112
+msgid "Deactivate the Editoria11y CSA license on every site in this network? Each site's license slot will be returned to your Freemius account."
+msgstr "Deaktivirajte licenco Editoria11y CSA na vsakem mestu v tem omrežju? Licenčna mesta vsakega spletnega mesta bodo vrnjena na vaš račun Freemius."
+
+#: src/Form/NetworkLicensePage.php:113
+msgid "Activate a license network-wide"
+msgstr "Aktivirajte licenco v celotnem omrežju"
+
+#: src/Form/NetworkLicensePage.php:114
+msgid "Deactivate licenses network-wide"
+msgstr "Deaktivirajte licence v celotnem omrežju"
+
+#: src/Form/NetworkLicensePage.php:115
+msgid "Activation in progress"
+msgstr "Aktivacija v teku"
+
+#: src/Form/NetworkLicensePage.php:116
+msgid "Deactivation in progress"
+msgstr "Deaktivacija v teku"
+
+#: src/Form/NetworkLicensePage.php:120
+msgid "Editoria11y CSA license"
+msgstr "Licenca Editoria11y CSA"
+
+#: src/Form/NetworkLicensePage.php:123
+msgid "Background licensing tasks run slowly via WP-Cron; leave this page open to run a batch every 15 seconds."
+msgstr "Opravila licenciranja v ozadju potekajo počasi prek WP-Cron; pustite to stran odprto, da se vsakih 15 sekund izvede serija."
+
+#: src/Form/NetworkLicensePage.php:138
+msgid "JavaScript is required to use this page."
+msgstr "Za uporabo te strani je potreben JavaScript."
+
+#: src/Form/NetworkLicensePage.php:171
+msgid "DISABLE_WP_CRON is enabled on this site. The activation worker depends on WP-Cron firing — make sure your system cron is hitting wp-cron.php, or activation will not progress."
+msgstr "DISABLE_WP_CRON je omogočen na tem mestu. Delavec aktivacije je odvisen od sprožitve WP-Cron — zagotovite, da vaš sistemski cron dosega wp-cron.php, sicer aktivacija ne bo napredovala."
+
+#: src/Form/NetworkLicensePage.php:347
+msgid "Activate on every site in this network"
+msgstr "Aktiviraj na vsakem mestu v tem omrežju"
+
+#: src/Form/NetworkLicensePage.php:378
+msgid "License key"
+msgstr "Licenčni ključ"
+
+#: src/Form/NetworkLicensePage.php:389
+msgid "Deactivate license network-wide"
+msgstr "Deaktivirajte licenco v celotnem omrežju"
+
+#: src/Form/NetworkLicensePage.php:401
+msgid "Removes the Editoria11y CSA license from every site on the network. Each site's install record stays in place; only the license link is cleared."
+msgstr "Odstrani licenco Editoria11y CSA z vsakega mesta v omrežju. Zapis namestitve vsakega mesta ostane nedotaknjen; izbriše se samo povezava z licenco."
+
+#: src/Form/NetworkLicensePage.php:460
+msgid "Retry failed sites"
+msgstr "Ponovi za mesta z napakami"
+
+#: src/Form/NetworkLicensePage.php:473
+msgid "Modify network license"
+msgstr "Spremenite omrežno licenco"
+
+#: src/Form/NetworkLicensePage.php:492
+msgid "Back"
+msgstr "Nazaj"
+
+#: src/Form/NetworkLicensePage.php:503
+msgid "Done"
+msgstr "Končano"
+
+#: src/Form/NetworkLicensePage.php:510
+msgid "Cancelled"
+msgstr "Preklicano"
+
+#: src/Form/NetworkLicensePage.php:518
+msgid "Errors"
+msgstr "Napake"
+
+#: src/Form/NetworkLicenseWorker.php:392
+msgid "License key is required."
+msgstr "Licenčni ključ je zahtevan."
+
+#: src/Form/NetworkLicenseWorker.php:400 src/Form/NetworkLicenseWorker.php:456
+msgid "An activation run is already in progress."
+msgstr "Aktivacija je že v teku."
+
+#: src/Form/NetworkLicenseWorker.php:528
+msgid "No previous errors to retry."
+msgstr "Ni prejšnjih napak za ponovitev."
+
+#: src/Form/NetworkLicenseWorker.php:538
+msgid "License key is no longer stored. Start a new activation."
+msgstr "Licenčni ključ ni več shranjen. Začnite novo aktivacijo."
+
+#: src/Form/NetworkLicenseWorker.php:626
+msgid "Freemius SDK wrapper unavailable."
+msgstr "Ovojnik Freemius SDK ni na voljo."
+
+#: src/Form/NetworkLicenseWorker.php:803
+msgid "SDK _deactivate_license() method unavailable."
+msgstr "Metoda SDK _deactivate_license() ni na voljo."
+
+#: src/Form/NetworkLicenseWorker.php:853
+msgid "Deactivation API call did not clear the install license."
+msgstr "Klic API za deaktivacijo ni počistil licence namestitve."
+
+#: src/Form/NetworkLicenseWorker.php:947
+msgid "No valid sites in batch."
+msgstr "V seriji ni veljavnih mest."
+
+#: src/Form/NetworkLicenseWorker.php:1053
+msgid "Activation API returned an unspecified error."
+msgstr "API za aktivacijo je vrnil nedoločeno napako."
+
+#: src/Form/NetworkLicenseWorker.php:1055
+msgid "Install record not created after API call."
+msgstr "Zapis namestitve ni bil ustvarjen po klicu API."
+
+#: src/Form/NetworkSettingsPage.php:77 src/Form/NetworkSettingsPage.php:78
+msgid "Editoria11y defaults"
+msgstr "Privzete nastavitve Editoria11y"
+
+#: src/Form/NetworkSettingsPage.php:103
+msgid "Defaults"
+msgstr "Privzete nastavitve"
+
+#: src/Form/NetworkSettingsPage.php:110 src/Form/SettingsPage.php:287
+msgid "Custom rules"
+msgstr "Pravila po meri"
+
+#: src/Form/NetworkSettingsPage.php:140
+msgid "Heads up: \"Default for all sites\" and \"Override for all sites\" overwrite a site's current value whenever that value is still an Editoria11y default or a previous network default — including a per-site value that happens to match a default."
+msgstr "Pozor: „Privzeto za vsa mesta“ in „Prepiši za vsa mesta“ prepišeta trenutno vrednost mesta, kadar je ta vrednost še vedno privzeta vrednost Editoria11y ali prejšnja privzeta vrednost omrežja — vključno z vrednostjo posameznega mesta, ki se po naključju ujema s privzeto vrednostjo."
+
+#: src/Form/NetworkSettingsPage.php:176
+msgid "Editoria11y default or locked network settings"
+msgstr "Privzete ali zaklenjene omrežne nastavitve Editoria11y"
+
+#: src/Form/NetworkSettingsPage.php:180
+msgid "Network defaults saved."
+msgstr "Privzete nastavitve omrežja shranjene."
+
+#: src/Form/NetworkSettingsPage.php:186
+msgid "Network defaults were not saved."
+msgstr "Privzete nastavitve omrežja niso bile shranjene."
+
+#: src/Form/NetworkSettingsPage.php:187
+msgid "You changed the following settings, but their propagation dropdown is still set to \"No network default\" — your change would not reach any site. Set the dropdown to \"Default for new sites\", \"Default for all sites\", or \"Override for all sites\" — or revert the value — and save again."
+msgstr "Spremenili ste naslednje nastavitve, vendar je njihov spustni meni za razširitev še vedno nastavljen na „Brez privzete nastavitve omrežja“ — vaša sprememba ne bo dosegla nobenega mesta. Nastavite spustni meni na „Privzeto za nova mesta“, „Privzeto za vsa mesta“ ali „Prepiši za vsa mesta“ — ali povrnite vrednost — in znova shranite."
+
+#: src/Form/NetworkSettingsPage.php:213
+msgid "Save network defaults"
+msgstr "Shrani privzete nastavitve omrežja"
+
+#. translators: 1: processed sites, 2: total sites, 3: sites updated
+#: src/Form/NetworkSettingsPage.php:311
+#, php-format
+msgid "%1$s of %2$s sites visited (%3$s updated)."
+msgstr "%1$s od %2$s mest obiskanih (%3$s posodobljenih)."
+
+#. translators: %s: human-readable duration estimate
+#: src/Form/NetworkSettingsPage.php:327
+#, php-format
+msgid "Estimated %s remaining."
+msgstr "Ocenjeno preostalo: %s."
+
+#. translators: %s: number of errors recorded
+#: src/Form/NetworkSettingsPage.php:340
+#, php-format
+msgid "Errors: %s (most recent retained). Check server logs for details."
+msgstr "Napake: %s (ohranjena je najnovejša). Za podrobnosti preverite strežniške dnevnike."
+
+#: src/Form/NetworkSettingsPage.php:349
+msgid "Saving the form now will restart propagation with the new settings."
+msgstr "Shranjevanje obrazca zdaj bo znova zagnalo razširitev z novimi nastavitvami."
+
+#: src/Form/NetworkSettingsPage.php:412
+msgid "Propagating network defaults to existing sites…"
+msgstr "Razširjanje privzetih nastavitev omrežja na obstoječa mesta…"
+
+#: src/Form/NetworkSettingsPage.php:415
+msgid "Network defaults propagated."
+msgstr "Privzete nastavitve omrežja so razširjene."
+
+#: src/Form/NetworkSettingsPage.php:418
+msgid "Network defaults propagation failed."
+msgstr "Razširjanje privzetih nastavitev omrežja ni uspelo."
+
+#: src/Form/NetworkSettingsPage.php:421
+msgid "Network defaults propagation idle."
+msgstr "Razširjanje privzetih nastavitev omrežja je nedejavno."
+
+#: src/Form/SettingsContext.php:214
+msgid "Managed at the network level"
+msgstr "Upravljano na ravni omrežja"
+
+#: src/Form/SettingsContext.php:283 src/Form/SettingsContext.php:318
+msgid "— No network default —"
+msgstr "— Brez privzete nastavitve omrežja —"
+
+#: src/Form/SettingsContext.php:284 src/Form/SettingsContext.php:319
+msgid "Default for new sites"
+msgstr "Privzeto za nova mesta"
+
+#: src/Form/SettingsContext.php:285 src/Form/SettingsContext.php:320
+msgid "Default for all sites (skip custom values)"
+msgstr "Privzeto za vsa mesta (prezri vrednosti po meri)"
+
+#: src/Form/SettingsContext.php:286 src/Form/SettingsContext.php:321
+msgid "Override for all sites (delete custom values)"
+msgstr "Prepiši za vsa mesta (izbriši vrednosti po meri)"
+
+#: src/Form/SettingsContext.php:326
+msgid "Propagation"
+msgstr "Razširitev"
+
+#: src/Form/SettingsFields.php:68
+msgid "Include all parts of the page that contain your theme and content."
+msgstr "Vključite vse dele strani, ki vsebujejo vašo temo in vsebino."
+
+#: src/Form/SettingsFields.php:69
+msgid "Exclude elements that show unhelpful, repetitive, or inaccurate alerts."
+msgstr "Izključite elemente, ki prikazujejo nekoristna, ponavljajoča se ali netočna opozorila."
+
+#: src/Form/SettingsFields.php:71
+msgid "If you need help:"
+msgstr "Če potrebujete pomoč:"
+
+#: src/Form/SettingsFields.php:72
+msgid "Configuration Guide"
+msgstr "Navodila za konfiguracijo"
+
+#: src/Form/SettingsFields.php:73
+msgid "Issue Queue"
+msgstr "Čakalna vrsta težav"
+
+#: src/Form/SettingsFields.php:74
+msgid "Support contacts"
+msgstr "Stiki za podporo"
+
+#: src/Form/SettingsFields.php:84
+msgid "Define the parts of each page Editoria11y checks. Activating CSA unlocks an additional \"developer area\" superset that runs more checks and routes alerts to the roles you choose."
+msgstr "Določite dele vsake strani, ki jih Editoria11y preverja. Aktiviranje CSA odklene dodatno nadmnožico „razvijalsko območje“, ki izvaja več pregledov in usmerja opozorila k izbranim vlogam."
+
+#: src/Form/SettingsFields.php:98
+msgid "These tests detect issues content editors can fix. Checks can be individually turned off; sites with CSA licenses can split tests between roles."
+msgstr "Ti testi zaznavajo težave, ki jih lahko odpravijo uredniki vsebine. Preverjanja je mogoče posamično izklopiti; mesta s licencami CSA lahko razdelijo teste med vloge."
+
+#: src/Form/SettingsFields.php:114
+msgid "Apply all the tests and role assignments below to"
+msgstr "Uporabi vse teste in dodelitve vlog spodaj za"
+
+#: src/Form/SettingsFields.php:123
+msgid "These tests detect issues that usually need theme or plugin changes to fix, and are part of the CSA license for site administrators and developers."
+msgstr "Ti testi zaznavajo težave, ki jih običajno lahko odpravite le s spremembami teme ali vtičnika, in so del licence CSA za skrbnike mest in razvijalce."
+
+#: src/Form/SettingsFields.php:133
+msgid "The \"tests + roles assignment\" propagation setting under \"Modify content tests\" above also governs the template-test selection — both are stored together."
+msgstr "Nastavitev razširitve „dodelitev testov in vlog“ pod „Spremenite teste vsebine“ zgoraj ureja tudi izbiro testov predlog — oba sta shranjena skupaj."
+
+#: src/Form/SettingsFields.php:160
+msgid "Managed at the network level."
+msgstr "Upravljano na ravni omrežja."
+
+#: src/Form/SettingsFields.php:193
+msgid "Network-level custom rules apply to every site in the network."
+msgstr "Pravila po meri na ravni omrežja veljajo za vsako mesto v omrežju."
+
+#. translators: %d is the number of network custom rules defined (active + inactive).
+#: src/Form/SettingsFields.php:204
+#, php-format
+msgid "Manage network custom rules (%d defined)"
+msgid_plural "Manage network custom rules (%d defined)"
+msgstr[0] "Upravljaj pravila po meri za omrežje (%d definirano)"
+msgstr[1] "Upravljaj pravila po meri za omrežje (%d definirani)"
+msgstr[2] "Upravljaj pravila po meri za omrežje (%d definirana)"
+msgstr[3] "Upravljaj pravila po meri za omrežje (%d definiranih)"
+
+#: src/Form/SettingsFields.php:230
+msgid "Define your own accessibility tests. Each rule pairs a CSS selector with a tip shown to users; rules ship over the cached static config alongside the built-in test catalog."
+msgstr "Določite lastne teste dostopnosti. Vsako pravilo poveže izbirnik CSS z namigom, ki se prikaže uporabnikom; pravila se prenesejo prek predpomnjene statične konfiguracije skupaj z vgrajenim katalogom testov."
+
+#. translators: %d is the number of custom rules active on this site (per-site rules plus network rules not disabled here).
+#: src/Form/SettingsFields.php:241
+#, php-format
+msgid "Manage custom rules (%d active)"
+msgid_plural "Manage custom rules (%d active)"
+msgstr[0] "Upravljaj pravila po meri (%d aktivno)"
+msgstr[1] "Upravljaj pravila po meri (%d aktivni)"
+msgstr[2] "Upravljaj pravila po meri (%d aktivna)"
+msgstr[3] "Upravljaj pravila po meri (%d aktivnih)"
+
+#: src/Form/SettingsFields.php:257
+msgid "Custom rules let CSA admins register additional accessibility tests with their own selectors, labels, and tip content. Activate CSA to manage them here."
+msgstr "Pravila po meri omogočajo skrbnikom CSA registriranje dodatnih testov dostopnosti z lastnimi izbirniki, oznakami in vsebino namigov. Aktivirajte CSA za upravljanje tukaj."
+
+#: src/Form/SettingsFields.php:294
+msgid "Choose when the control panel should open and show inline tips. \"Start open if there are any alerts\" is recommended, as it helps tips get noticed over time."
+msgstr "Izberite, kdaj naj se nadzorna plošča odpre in prikaže vrstične namige. Priporočena je možnost „Odpri ob kateremkoli opozorilu“, saj pomaga, da namigi sčasoma pridejo do izraza."
+
+#: src/Form/SettingsFields.php:312
+msgid "Choose whether to show inline tips while editing post and page content. The checker always hides while editing templates and layouts."
+msgstr "Izberite, ali naj se prikazujejo vrstični namigi med urejanjem vsebine prispevkov in strani. Pregledovalnik se vedno skrije med urejanjem predlog in postavitev."
+
+#: src/Form/SettingsFields.php:333
+msgid "Provide CSS selectors. Content authors will only see the alerts within these parts of the page. Do not provide selectors that nest within each other, or the inner content will be checked twice."
+msgstr "Navedite izbirnike CSS. Avtorji vsebine bodo videli opozorila le znotraj teh delov strani. Ne navajajte medsebojno vgnezdenih izbirnikov, sicer bo notranja vsebina preverjena dvakrat."
+
+#: src/Form/SettingsFields.php:343
+msgid "The default is <code>main</code> or <code>body</code>, depending on theme."
+msgstr "Privzeto je <code>main</code> ali <code>body</code>, odvisno od teme."
+
+#: src/Form/SettingsFields.php:365
+msgid ""
+"If Editoria11y is flagging things editors cannot fix, e.g., theme-generated \"read more\" links or social media widgets,\n"
+"\t\t\t\tprovide CSS selectors for elements you would like it to ignore. Be specific, e.g. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+msgstr ""
+"Če Editoria11y označuje stvari, ki jih uredniki ne morejo popraviti, npr. povezave „preberi več“ ali gradnike za socialna omrežja, ki jih ustvari tema,\n"
+"\t\t\t\tnavedite izbirnike CSS za elemente, ki naj jih prezre. Bodite natančni, npr. <code>.read-more a, .wp-block-post-excerpt__more-link, #comments h3</code>"
+
+#: src/Form/SettingsFields.php:376
+msgid "If you are new at this, start by opening your browser's developer tools, inspecting the element you do not want flagged, and looking for unique-looking CSS selectors."
+msgstr "Če ste novi pri tem, začnite z odprtjem razvijalskih orodij brskalnika, pregledajte element, ki ga ne želite označenega, in poiščite edinstvene izbirnike CSS."
+
+#. translators: %s is the built-in list of always-ignored CSS selectors.
+#: src/Form/SettingsFields.php:387
+#, php-format
+msgid "Selectors you add are appended to the built-in list, which is always ignored: %s"
+msgstr "Izbirniki, ki jih dodate, se dodajo vgrajenemu seznamu, ki je vedno prezrt: %s"
+
+#: src/Form/SettingsFields.php:434
+msgid "Set to the number of other themes or plugins that will be injecting custom result JS events. Editoria11y will wait until it receives this number of <code>ed11yResume</code> notifications before showing results."
+msgstr "Nastavite na število tem ali vtičnikov, ki bodo vrivali pogojne JS dogodke za rezultate. Editoria11y bo počakal, da prejme to število <code>ed11yResume</code> obvestil, preden prikaže rezultate."
+
+#: src/Form/SettingsFields.php:457
+msgid "Used to block checking on site sections or admin pages."
+msgstr "Uporablja se za blokiranje pregledov na odsekih mesta ali skrbniških straneh."
+
+#: src/Form/SettingsFields.php:485
+msgid "Autodetect"
+msgstr "Samodejno zaznavanje"
+
+#: src/Form/SettingsFields.php:486
+msgid "Only user-editable content"
+msgstr "Samo vsebina, ki jo je mogoče urejati"
+
+#: src/Form/SettingsFields.php:487
+msgid "Other"
+msgstr "Drugo"
+
+#: src/Form/SettingsFields.php:492
+msgid "Developer scan area"
+msgstr "Razvijalsko območje skeniranja"
+
+#: src/Form/SettingsFields.php:510
+msgid "\"Autodetect\" selects:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+msgstr "„Samodejno zaznavanje“ izbere:<br><em><code>body &gt; *:not(#wpadminbar, script, style, .ed11y-element)</code></em>"
+
+#: src/Form/SettingsFields.php:527
+msgid "Specify regions to check"
+msgstr "Določite območja za preverjanje"
+
+#: src/Form/SettingsFields.php:542
+msgid "Alerts in these regions will be shown to both developers and editors. One selector per line."
+msgstr "Opozorila v teh območjih bodo prikazana tako razvijalcem kot urednikom. En izbirnik v vrstici."
+
+#: src/Form/SettingsFields.php:574
+msgid "These parts of the page will be ignored entirely."
+msgstr "Ti deli strani bodo v celoti prezrti."
+
+#: src/Form/SettingsFields.php:608
+msgid "Developer roles"
+msgstr "Razvijalske vloge"
+
+#: src/Form/SettingsFields.php:626
+msgid "Unchecked roles only see content checks."
+msgstr "Neoznačene vloge vidijo samo preverjanja vsebine."
+
+#: src/Form/SettingsFields.php:649
+msgid "Start open if there are new alerts"
+msgstr "Odpri ob novih opozorilih"
+
+#: src/Form/SettingsFields.php:650
+msgid "Start open if there are any alerts"
+msgstr "Odpri ob kateremkoli opozorilu"
+
+#: src/Form/SettingsFields.php:651
+msgid "Always start open"
+msgstr "Vedno odpri"
+
+#: src/Form/SettingsFields.php:652
+msgid "Start minimized"
+msgstr "Začni pomanjšano"
+
+#: src/Form/SettingsFields.php:780
+msgid "Rule"
+msgstr "Pravilo"
+
+#: src/Form/SettingsFields.php:784
+msgid "Show to"
+msgstr "Prikaži za"
+
+#: src/Form/SettingsFields.php:825
+msgid "Everyone"
+msgstr "Vsi"
+
+#: src/Form/SettingsFields.php:826
+msgid "Developers only"
+msgstr "Samo razvijalci"
+
+#: src/Form/SettingsFields.php:827
+msgid "Off"
+msgstr "Izklopljeno"
+
+#: src/Form/SettingsFields.php:844
+msgid "(Part of CSA suite)"
+msgstr "(Del paketa CSA)"
+
+#: src/Form/SettingsFields.php:881
+msgid "Remind the editor that these linked documents need a manual check"
+msgstr "Urednika opomni, da je treba te povezane dokumente ročno preveriti"
+
+#: src/Form/SettingsFields.php:882
+msgid "Add or remove filetypes. Set to \"false\" to disable the test altogether. Providing any value will override the default."
+msgstr "Dodajte ali odstranite tipe datotek. Nastavite na „false“ za popolno onemogočitev testa. Katera koli vrednost bo preglasila privzeto."
+
+#: src/Form/SettingsFields.php:886
+msgid "Remove elements that match these selectors before testing link text"
+msgstr "Pred testiranjem besedila povezave odstranite elemente, ki se ujemajo s temi izbirniki"
+
+#: src/Form/SettingsFields.php:887
+msgid "Provide a CSS selector for elements your themes or plugins programmatically add to links (usually external or open-in-new-window markers), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests."
+msgstr "Navedite izbirnik CSS za elemente, ki jih vaše teme ali vtičniki programatično dodajajo k povezavam (ponavadi oznake za zunanje ali novookenske povezave), da jih je mogoče prezreti pri preverjanju besedila za testa „povezava nima besedila“ in „besedilo povezave ni smiselno“."
+
+#: src/Form/SettingsFields.php:891
+msgid "Remove these strings before testing link text"
+msgstr "Pred testiranjem besedila povezave odstranite te nize"
+
+#: src/Form/SettingsFields.php:892
+msgid "Provide a pipe-separated (\"|\") list of phrases your themes or plugins programmatically add to links to hint a purpose (external, mail, phone, open-in-new-window), so they can be ignored when the link text is checked for the \"link has no text\" and \"link text is not meaningful\" tests; e.g.: (link is external)|(link sends email)."
+msgstr "Navedite s cevjo (\"|\") ločen seznam stavkov, ki jih vaše teme ali vtičniki programatično dodajajo k povezavam za nakazovanje namena (zunanja, pošta, telefon, odpri v novem oknu), da jih je mogoče prezreti pri preverjanju za testa „povezava nima besedila“ in „besedilo povezave ni smiselno“; npr.: (link is external)|(link sends email)."
+
+#: src/Form/SettingsFields.php:896
+msgid "Strings in links that indicate new tabs"
+msgstr "Nizi v povezavah, ki označujejo nove zavihke"
+
+#: src/Form/SettingsFields.php:897
+msgid "Provide a pipe-separated list of phrases your site uses to warn users a link opens in a new tab; e.g.: new tab|new window|external."
+msgstr "Navedite s cevjo ločen seznam stavkov, ki jih vaše spletno mesto uporablja za opozarjanje uporabnikov, da se povezava odpre v novem zavihku; npr.: new tab|new window|external."
+
+#: src/Form/SettingsFields.php:905
+msgid "Embeds flagged as needing manual review"
+msgstr "Vdelana vsebina, označena kot potrebna ročnega pregleda"
+
+#: src/Form/SettingsFields.php:906
+msgid "Added to the built-in detection list (Looker/Data Studio, Tableau, Power BI, Qlik). Provide a comma-separated list of domains or URL fragments. To stop flagging visualizations entirely, disable that test above."
+msgstr "Dodano vgrajenemu seznamu za zaznavanje (Looker/Data Studio, Tableau, Power BI, Qlik). Navedite z vejico ločen seznam domen ali delov URL-jev. Za popolno prenehanje označevanja vizualizacij onemogočite ta test zgoraj."
+
+#: src/Form/SettingsFields.php:911
+msgid "Videos flagged as needing a manual check for captions"
+msgstr "Videoposnetki, označeni kot potrebni ročnega preverjanja podnapisov"
+
+#: src/Form/SettingsFields.php:912
+msgid "Added to the built-in detection list (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard and generic video URLs). Provide a comma-separated list of domains or URL fragments, e.g. yuja.com. To stop flagging videos entirely, disable that test above."
+msgstr "Dodano vgrajenemu seznamu za zaznavanje (YouTube, Vimeo, Panopto, Wistia, Dailymotion, Brightcove, Vidyard in splošni URL-ji videoposnetkov). Navedite z vejico ločen seznam domen ali delov URL-jev, npr. yuja.com. Za popolno prenehanje označevanja videoposnetkov onemogočite ta test zgoraj."
+
+#: src/Form/SettingsFields.php:917
+msgid "Audio flagged as needing a manual check for transcripts"
+msgstr "Zvok, označen kot potreben ročnega preverjanja prepisov"
+
+#: src/Form/SettingsFields.php:918
+msgid "Added to the built-in detection list (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts and other major hosts). Provide a comma-separated list of domains or URL fragments. To stop flagging audio entirely, disable that test above."
+msgstr "Dodano vgrajenemu seznamu za zaznavanje (SoundCloud, Simplecast, Podbean, Buzzsprout, Spotify, Apple Podcasts in drugi večji ponudniki). Navedite z vejico ločen seznam domen ali delov URL-jev. Za popolno prenehanje označevanja zvoka onemogočite ta test zgoraj."
+
+#: src/Form/SettingsFields.php:923
+msgid "Remind editor that content in these embeds needs manual review"
+msgstr "Urednika opomni, da vsebina v teh vdelavah potrebuje ročni pregled"
+
+#: src/Form/SettingsFields.php:924
+msgid "Provide a comma-separated list of selectors you wish to flag for the editor, e.g.: .my-embedded-feed, #my-social-link-block."
+msgstr "Navedite z vejico ločen seznam izbirnikov, ki jih želite označiti za urednika, npr.: .my-embedded-feed, #my-social-link-block."
+
+#: src/Form/SettingsFields.php:936
+msgid "Do not check contrast for these elements"
+msgstr "Ne preverjajte kontrasta za te elemente"
+
+#: src/Form/SettingsFields.php:949
+msgid "Provide a comma-separated list of selectors for elements to ignore for all users."
+msgstr "Navedite z vejico ločen seznam izbirnikov za elemente, ki jih prezrite za vse uporabnike."
+
+#: src/Form/SettingsFields.php:978
+msgid "Assertiveness"
+msgstr "Asertivnost"
+
+#: src/Form/SettingsFields.php:980
+msgid "Checker mode for content roles"
+msgstr "Način pregledovalnika za vsebinske vloge"
+
+#: src/Form/SettingsFields.php:988
+msgid "Checker mode for developer roles"
+msgstr "Način pregledovalnika za razvijalske vloge"
+
+#: src/Form/SettingsFields.php:996
+msgid "Checker mode inside editor"
+msgstr "Način pregledovalnika znotraj urejevalnika"
+
+#: src/Form/SettingsFields.php:1002
+msgid "Theme and plugin compatibility"
+msgstr "Združljivost tem in vtičnikov"
+
+#: src/Form/SettingsFields.php:1004
+msgid "Editoria11y theme"
+msgstr "Tema Editoria11y"
+
+#: src/Form/SettingsFields.php:1009
+msgid "Pin panel to"
+msgstr "Pripni ploščo na"
+
+#: src/Form/SettingsFields.php:1015
+msgid "Right"
+msgstr "Desno"
+
+#: src/Form/SettingsFields.php:1016
+msgid "Left"
+msgstr "Levo"
+
+#: src/Form/SettingsFields.php:1022
+msgid "Shift panel position if it overlaps these elements"
+msgstr "Premakni položaj plošče, če se prekriva s temi elementi"
+
+#: src/Form/SettingsFields.php:1023
+msgid "Comma-separated selectors for competing widgets, e.g. .interface-interface-skeleton__sidebar."
+msgstr "Z vejico ločeni izbirniki za tekmovalne gradnike, npr. .interface-interface-skeleton__sidebar."
+
+#: src/Form/SettingsFields.php:1028
+msgid "Do not check on pages with these elements"
+msgstr "Ne preverj na straneh s temi elementi"
+
+#: src/Form/SettingsFields.php:1032
+msgid "JS injected custom rules"
+msgstr "JS vnesena pravila po meri"
+
+#: src/Form/SettingsFields.php:1038
+msgid "Don't show edit links on tips in these containers"
+msgstr "Ne prikazuj uredniških povezav v namigih v teh vsebnikih"
+
+#: src/Form/SettingsFields.php:1039
+msgid "Provide a comma-separated list of page sections where edit links should not show. To hide the links everywhere, set this field to an asterisk (*)."
+msgstr "Navedite z vejico ločen seznam odsekov strani, kjer uredniške povezave ne smejo biti prikazane. Za skrivanje povsod nastavite to polje na zvezdico (*)."
+
+#: src/Form/SettingsFields.php:1058
+msgid "Handling tips on hidden content"
+msgstr "Obravnava namigov pri skritih vsebinah"
+
+#: src/Form/SettingsFields.php:1060
+msgid "Warn users if elements might not be visible when jumping to tips"
+msgstr "Opozorite uporabnike, če elementi morda ne bodo vidni pri skoku na namige"
+
+#: src/Form/SettingsFields.php:1067
+msgid "Elements with overflow hidden"
+msgstr "Elementi s skrito prekoračitvijo (overflow hidden)"
+
+#: src/Form/SettingsFields.php:1068
+msgid "Sometimes buttons get drawn and visually truncated outside the bounds of a positioned element. Provide a selector list."
+msgstr "Včasih se gumbi narišejo in vizualno odrežejo izven meja pozicioniranega elementa. Navedite seznam izbirnikov."
+
+#: src/Form/SettingsFields.php:1073
+msgid "Theme JS will handle revealing hidden tooltips inside these containers"
+msgstr "JS teme bo upravljal razkrivanje skritih namigovalnih oken znotraj teh vsebnikov"
+
+#: src/Form/SettingsFields.php:1074
+msgid "Editoria11y detects hidden tooltips and warns the user when they try to jump to them from the panel. For elements on this list, Editoria11y will dispatch a JS event instead of a warning, so custom JS in your theme can first reveal the hidden tip (e.g., open an accordion or tab panel)."
+msgstr "Editoria11y zazna skrita namigovalna okna in uporabnika opozori, ko skuša do njih skočiti iz plošče. Za elemente na tem seznamu bo Editoria11y namesto opozorila poslal JS dogodek, da bo prilagojen JS v vaši temi lahko najprej razkril skriti namig (npr. odprl harmoniko ali zavihek)."
+
+#: src/Form/SettingsFields.php:1085
+msgid "Detecting dynamic and shadow content"
+msgstr "Zaznavanje dinamičnih in senčnih vsebin"
+
+#: src/Form/SettingsFields.php:1088
+msgid "Dynamically refresh if new content appears"
+msgstr "Dinamično osvežuj ob pojavu nove vsebine"
+
+#: src/Form/SettingsFields.php:1094
+msgid "Watch for changes anywhere on the page"
+msgstr "Opazuj spremembe kjerkoli na strani"
+
+#: src/Form/SettingsFields.php:1095
+msgid "Only watch for changes to content containers present on load"
+msgstr "Opazuj samo spremembe vsebinskih vsebnikov, ki so prisotni ob nalaganju"
+
+#: src/Form/SettingsFields.php:1096
+msgid "Do not watch for changes"
+msgstr "Ne opazuj sprememb"
+
+#: src/Form/SettingsFields.php:1099
+msgid "Set to \"anywhere\" if changes are being missed; set to \"do not watch\" if you notice performance issues."
+msgstr "Nastavite na „kjerkoli“, če spremembe niso zaznane; nastavite na „ne opazuj“, če opazite težave z zmogljivostjo."
+
+#: src/Form/SettingsFields.php:1103
+msgid "Check inside these specific Web components"
+msgstr "Preverite znotraj teh specifičnih spletnih komponent"
+
+#: src/Form/SettingsFields.php:1104
+msgid "Provide selectors for elements with shadow DOM you want tested. E.g.: my-fancy-accordion-widget, my-magical-slideshow."
+msgstr "Navedite izbirnike za elemente s senčnim DOM, ki jih želite testirati. Npr.: my-fancy-accordion-widget, my-magical-slideshow."
+
+#: src/Form/SettingsFields.php:1108
+msgid "Auto-detect any Web components"
+msgstr "Samodejno zaznaj spletne komponente"
+
+#: src/Form/SettingsFields.php:1109
+msgid "This is easier to configure than specifying components, but may slow test runs on very complicated pages."
+msgstr "To je lažje konfigurirati kot določanje komponent, vendar lahko upočasni testiranja na zelo zapletenih straneh."
+
+#: src/Form/SettingsFields.php:1120
+msgid "Syncing results to reports"
+msgstr "Sinhronizacija rezultatov v poročila"
+
+#: src/Form/SettingsFields.php:1137
+msgid "Only admins can view reports"
+msgstr "Poročila si lahko ogledajo samo skrbniki"
+
+#: src/Form/SettingsFields.php:1142
+msgid "By default both admins and editors can view reports."
+msgstr "Privzeto si poročila lahko ogledajo tako skrbniki kot uredniki."
+
+#: src/Form/SettingsFields.php:1155
+msgid "Hide reports shortcut on toggle"
+msgstr "Skrij bližnjico do poročil na stikalu"
+
+#: src/Form/SettingsFields.php:1162
+msgid "Reports will still be available on the WordPress admin dashboard."
+msgstr "Poročila bodo še vedno na voljo na skrbniški nadzorni plošči WordPress."
+
+#: src/Form/SettingsFields.php:1172
+msgid "Remove redundant base url from URLs"
+msgstr "Odstrani odvečni osnovni URL iz URL-jev"
+
+#: src/Form/SettingsFields.php:1184
+msgid "Provide base URL (\"/mysite\") if your site is installed in a subdirectory. Subdirectories tend to get duplicated (/mysite/mysite/mypage) and throw errors from the API."
+msgstr "Navedite osnovni URL (\"/mysite\"), če je vaše spletno mesto nameščeno v podmapi. Podmape se nagibajo k podvajanju (/mysite/mysite/mypage) in povzročajo napake API."
+
+#: src/Form/SettingsFields.php:1189
+msgid "Preserve query parameters"
+msgstr "Ohrani parametre poizvedbe"
+
+#: src/Form/SettingsFields.php:1190
+msgid "The dashboard ignores most parameters: results for both /news?f=1 and /news?f=2 will show up as just /news. Provide a comma-separated list of parameters that are meaningful and should appear as separate pages in results."
+msgstr "Nadzorna plošča prezre večino parametrov: rezultati za /news?f=1 in /news?f=2 se prikažejo samo kot /news. Navedite z vejico ločen seznam parametrov, ki so smiselni in bi se morali pojaviti kot ločene strani v rezultatih."
+
+#: src/Form/SettingsFields.php:1194
+msgid "Disable sync altogether"
+msgstr "Popolnoma onemogoči sinhronizacijo"
+
+#: src/Form/SettingsFields.php:1195
+msgid "Syncing test results is required for the issue dashboard, dismissal dashboard, and \"mark OK\" buttons."
+msgstr "Sinhronizacija rezultatov testov je potrebna za nadzorno ploščo težav, nadzorno ploščo zavrnjenih in gumbe „označi OK“."
+
+#: src/Form/SettingsFields.php:1206
+msgid "Heading outline position of editable content"
+msgstr "Položaj hierarhije naslovov urejevalne vsebine"
+
+#: src/Form/SettingsFields.php:1208
+msgid "To check headings while editing, Editoria11y needs to know what the first heading level should be in each editable field. Body fields should generally be at the H2 level."
+msgstr "Za preverjanje naslovov med urejanjem mora Editoria11y vedeti, katera je prva raven naslova v vsakem polju za urejanje. Polja z vsebino naj bi bila na splošno na ravni H2."
+
+#: src/Form/SettingsFields.php:1213
+msgid "H2 level content (body content)"
+msgstr "Vsebina na ravni H2 (vsebina telesa)"
+
+#: src/Form/SettingsFields.php:1214
+msgid "Body fields are preceded by an H1 (the post or page title), so their highest heading level should be H2."
+msgstr "Polja z vsebino jim pred njimi sledi H1 (naslov prispevka ali strani), zato mora biti njihova najvišja raven naslova H2."
+
+#: src/Form/SettingsFields.php:1218
+msgid "H3 level content (blocks or widgets with separate titles)"
+msgstr "Vsebina na ravni H3 (bloki ali gradniki z ločenimi naslovi)"
+
+#: src/Form/SettingsFields.php:1219
+msgid "The highest heading level should be H3."
+msgstr "Najvišja raven naslova mora biti H3."
+
+#: src/Form/SettingsFields.php:1223
+msgid "H4 level content (deeply nested blocks or widgets)"
+msgstr "Vsebina na ravni H4 (globoko vgnezdeni bloki ali gradniki)"
+
+#: src/Form/SettingsFields.php:1224
+msgid "The highest heading level should be H4."
+msgstr "Najvišja raven naslova mora biti H4."
+
+#: src/Form/SettingsPage.php:126
+msgid "becoming a supporter"
+msgstr "postanete podpornik"
+
+#: src/Form/SettingsPage.php:139
+msgid "free version at WordPress.org"
+msgstr "brezplačna različica na WordPress.org"
+
+#. translators: %s: link reading "free version at WordPress.org".
+#: src/Form/SettingsPage.php:146
+#, php-format
+msgid "This site has the community-supported \"CSA\" version of Editoria11y installed rather than the %s."
+msgstr "Na tem mestu je nameščena skupnostno podprta različica „CSA“ Editoria11y namesto %s."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:155
+#, php-format
+msgid "To activate the community-supported features and continue receiving updates, either enter your existing license key or view options for %s."
+msgstr "Če želite aktivirati skupnostno podprte funkcije in nadaljevati prejemanje posodobitev, vnesite obstoječi licenčni ključ ali si oglejte možnosti za %s."
+
+#: src/Form/SettingsPage.php:169
+msgid "This site is running the free version of Editoria11y from WordPress.org. The community-supported (CSA) features are not active."
+msgstr "To mesto uporablja brezplačno različico Editoria11y z WordPress.org. Skupnostno podprte (CSA) funkcije niso aktivne."
+
+#. translators: %s: link reading "becoming a supporter".
+#: src/Form/SettingsPage.php:175
+#, php-format
+msgid "Unlock the community-supported features and continued updates by %s."
+msgstr "Odklenite skupnostno podprte funkcije in nadaljnje posodobitve s tem, da %s."
+
+#: src/Form/SettingsPage.php:203
+msgid "Editoria11y License & Account"
+msgstr "Licenca in račun Editoria11y"
+
+#: src/Form/SettingsPage.php:262
+msgid "Settings"
+msgstr "Nastavitve"
+
+#: src/Form/SettingsPage.php:272 src/Form/SettingsPage.php:284
+#: src/Form/SettingsPage.php:291
+msgid "License & Account"
+msgstr "Licenca in račun"
+
+#: src/Form/SettingsPage.php:548
+msgid "Getting started"
+msgstr "Začetek"
+
+#: src/Form/SettingsPage.php:557
+msgid "Modify content tests"
+msgstr "Spremenite teste vsebine"
+
+#: src/Form/SettingsPage.php:563 src/Form/SettingsPage.php:577
+msgid "Tests by group"
+msgstr "Testi po skupinah"
+
+#: src/Form/SettingsPage.php:571
+msgid "Modify template tests"
+msgstr "Spremenite teste predlog"
+
+#: src/Form/SettingsPage.php:588
+msgid "Custom rules (CSA)"
+msgstr "Pravila po meri (CSA)"
+
+#: src/Form/SettingsPage.php:603
+msgid "Parts of the page to test"
+msgstr "Deli strani za testiranje"
+
+#: src/Form/SettingsPage.php:611
+msgid "Do not check for any errors inside these elements"
+msgstr "Ne iščite napak znotraj teh elementov"
+
+#: src/Form/SettingsPage.php:622
+msgid "Page regions with user-editable content"
+msgstr "Območja strani z vsebino, ki jo je mogoče urejati"
+
+#: src/Form/SettingsPage.php:632
+msgid "Do not check for content errors inside these elements"
+msgstr "Ne iščite napak vsebine znotraj teh elementov"
+
+#: src/Form/SettingsPage.php:635
+msgid "Errors in these elements should only be shown to developers"
+msgstr "Napake v teh elementih naj bodo prikazane samo razvijalcem"
+
+#: src/Form/SettingsPage.php:651
+msgid "Roles that will see developer alerts"
+msgstr "Vloge, ki bodo videle razvijalska opozorila"
+
+#: src/Form/SettingsPage.php:666
+msgid "Advanced settings"
+msgstr "Napredne nastavitve"
+
+#: src/Form/SettingsPage.php:684
+msgid "Editoria11y Settings"
+msgstr "Nastavitve Editoria11y"
+
+#: src/Form/SettingsPage.php:699
+msgid "Save Settings"
+msgstr "Shrani nastavitve"
+
+#: src/FreemiusAccessControl.php:222
+msgid "unknown"
+msgstr "neznano"
+
+#. translators: 1: loaded SDK version, 2: highest tested SDK version
+#: src/FreemiusAccessControl.php:227
+#, php-format
+msgid "Editoria11y CSA: the loaded Freemius SDK (version %1$s) is newer than the highest tested version (%2$s). Another Freemius-using plugin on this site has bundled a newer SDK build. The network license activation page may not behave as expected; review release notes or contact support if you hit issues."
+msgstr "Editoria11y CSA: naloženi Freemius SDK (različica %1$s) je novejši od najvišje testirane različice (%2$s). Drug vtičnik, ki uporablja Freemius na tem mestu, je priložil novejšo gradnjo SDK. Stran za aktivacijo omrežne licence morda ne bo delovala kot pričakovano; preglejte opombe ob izdaji ali se obrnite na podporo, če naletite na težave."
+
+#: src/FreemiusAccessControl.php:503
+msgid "Editoria11y network licenses are activated from a dedicated page that walks every site in the network in cron-driven batches. This avoids the SDK's 1,000-site limit and keeps the page responsive on large multisites."
+msgstr "Omrežne licence Editoria11y se aktivirajo z namenske strani, ki obdela vsako mesto v omrežju v serijah, ki jih poganja cron. S tem se izognemo omejitvi 1.000 mest v SDK in ohranjamo odzivnost strani na velikih večmestnih namestitvah."
+
+#: src/FreemiusAccessControl.php:509
+msgid "Open Editoria11y license page"
+msgstr "Odpri stran licence Editoria11y"
+
+#: src/FreemiusAccessControl.php:565
+msgid "Per-site license rows are not shown to keep this page responsive on large networks. The license you choose below applies to every site in the network. To activate or deactivate on individual sites, visit each site's per-site Settings → Editoria11y → License & Account."
+msgstr "Vrstice licenc za posamezna mesta niso prikazane, da ohranimo odzivnost strani v velikih omrežjih. Licenca, ki jo izberete spodaj, velja za vsako mesto v omrežju. Za aktivacijo ali deaktivacijo na posameznih mestih obiščite Nastavitve → Editoria11y → Licenca in račun za vsako mesto posebej."
+
+#: src/FreemiusContactFallback.php:121 src/FreemiusContactFallback.php:122
+#: src/FreemiusContactFallback.php:150 src/FreemiusContactFallback.php:210
+msgid "Contact Editoria11y"
+msgstr "Stik z Editoria11y"
+
+#: src/FreemiusContactFallback.php:206
+msgid "Editoria11y library forums"
+msgstr "Forumi knjižnice Editoria11y"
+
+#. translators: 1: @itmaybejj GitHub profile link, 2: #Drupal Slack invite link, 3: #WordPress Slack chat link, 4: #WPCampus Slack invite link, 5: #DigiCol Slack invite link.
+#: src/FreemiusContactFallback.php:215
+#, php-format
+msgid "Lead maintainer %1$s can usually be found on Slack for informal support, configuration tips and debugging any time the sun is up in the western hemisphere in %2$s, %3$s, %4$s and %5$s."
+msgstr "Vodilnega vzdrževalca %1$s ponavadi najdete na Slacku za neformalno podporo, nasvete o konfiguraciji in odpravljanje napak, kadarkoli je na zahodni polobli dan, v %2$s, %3$s, %4$s in %5$s."
+
+#. translators: %s: link to the Editoria11y library GitHub discussions page.
+#: src/FreemiusContactFallback.php:228
+#, php-format
+msgid "Check the %s for roadmap proposals and discussions."
+msgstr "Preverite %s za predloge načrta razvoja in razprave."
+
+#: src/FreemiusContactFallback.php:234
+msgid "Formal support:"
+msgstr "Uradna podpora:"
+
+#: src/FreemiusContactFallback.php:237
+msgid "Editoria11y Library issue queue"
+msgstr "Čakalna vrsta težav knjižnice Editoria11y"
+
+#: src/FreemiusContactFallback.php:239
+msgid "Editoria11y WordPress issue queue"
+msgstr "Čakalna vrsta težav Editoria11y za WordPress"
+
+#: src/FreemiusContactFallback.php:241
+msgid "Editoria11y Drupal issue queue"
+msgstr "Čakalna vrsta težav Editoria11y za Drupal"
+
+#: src/FreemiusContactFallback.php:243
+msgid "Submit a support request"
+msgstr "Oddajte zahtevo za podporo"
+
+#: src/FreemiusPricingPage.php:163
+msgid "Editoria11y CSA pricing"
+msgstr "Cene Editoria11y CSA"
+
+#: src/FreemiusPricingPage.php:225
+msgid "Support the project"
+msgstr "Podprite projekt"
+
+#: src/FreemiusPricingPage.php:228
+msgid "Editoria11y promotes accessibility in a unique way. Its tools are highly effective at helping non-technical authors prepare content that can be enjoyed equally by disabled Web users. We consider this a public good, so <strong>Editoria11y will always be free to use</strong>."
+msgstr "Editoria11y na edinstven način spodbuja dostopnost. Njegova orodja so zelo učinkovita pri pomoči netehničnim avtorjem pri pripravi vsebine, ki jo lahko enakovredno uporabljajo tudi invalidni uporabniki spleta. To razumemo kot javno dobro, zato <strong>bo Editoria11y vedno brezplačen za uporabo</strong>."
+
+#: src/FreemiusPricingPage.php:232
+msgid "Editoria11y is not, however, free to develop or support."
+msgstr "Razvoj in podpora Editoria11y pa nista brezplačna."
+
+#: src/FreemiusPricingPage.php:234
+msgid "The Community Supported Add-ons (CSA) project fills the gap: project members support the development of the Editoria11y library, its CMS plugins, and the CSA suite: a rapidly growing set of quality assurance tools that provide similar functionality to commercial products, open-source and on-prem. In return, they get access to premium features and support."
+msgstr "Projekt Community Supported Add-ons (CSA) zapolnjuje to vrzel: člani projekta podpirajo razvoj knjižnice Editoria11y, njenih vtičnikov za CMS in paketa CSA: hitro rastočega nabora orodij za zagotavljanje kakovosti, ki ponujajo podobno funkcionalnost kot komercialni, odprtokodni in lokalno nameščeni izdelki. V zameno dobijo dostop do premium funkcij in podpore."
+
+#: src/FreemiusPricingPage.php:239
+msgid "lower (or higher!) support levels"
+msgstr "nižje (ali višje!) ravni podpore"
+
+#. translators: %s: link to the CSA supporters page and drop the "farmshare" word in languages without the concept.
+#: src/FreemiusPricingPage.php:245
+#, php-format
+msgid "This is a <strong>contribute what you can</strong> \"farmshare\" model. The Editoria11y LLC site has options for %s, options to contribute as a coder or tester instead, and options for cross-platform and unlimited-site licenses."
+msgstr "To je model <strong>prispevaj, kolikor zmoreš</strong>. Spletno mesto Editoria11y LLC ponuja možnosti za %s, možnosti za prispevanje v vlogi razvijalca ali testerja, ter možnosti za medplatformne licence in licence za neomejeno število mest."
+
+#: src/functions.php:234
+msgid "Network Super Admin"
+msgstr "Super skrbnik omrežja"
+
+#: src/functions.php:1796
+msgid "Empty link"
+msgstr "Prazna povezava"
+
+#: src/functions.php:1797
+msgid "The button style link is missing its URL."
+msgstr "Povezavi v slogu gumba manjka URL."
+
+#: src/functions.php:1798
+msgid "Edit Media"
+msgstr "Uredi predstavnostno vsebino"
+
+#: src/TestNames.php:46
+msgid "This alt text is a filename, not a description"
+msgstr "Besedilo alt je ime datoteke, ne opis"
+
+#: src/TestNames.php:47 src/TestNames.php:48
+msgid "Is this a clear and concise description of the image?"
+msgstr "Ali je to jasen in jedrnat opis slike?"
+
+#: src/TestNames.php:49
+msgid "This alt text may be a placeholder"
+msgstr "Besedilo alt je morda samo nadomestno besedilo"
+
+#: src/TestNames.php:50
+msgid "This alt text is unpronounceable"
+msgstr "Besedilo alt ni izgovorljivo"
+
+#: src/TestNames.php:51
+msgid "This custom input field is missing a label"
+msgstr "Temu polju po meri manjka oznaka"
+
+#: src/TestNames.php:52
+msgid "Button is missing an accessible label"
+msgstr "Gumb nima dostopne oznake"
+
+#: src/TestNames.php:53
+msgid "Button has an invalid ARIA label"
+msgstr "Gumb ima neveljavno ARIA-oznako"
+
+#: src/TestNames.php:54
+msgid "Button name repeats the word \"button\""
+msgstr "Ime gumba ponavlja besedo „button“"
+
+#: src/TestNames.php:55
+msgid "This button is unpronounceable"
+msgstr "Ta gumb ni izgovorljiv"
+
+#: src/TestNames.php:56
+msgid "Text does not have enough contrast to be easily legible"
+msgstr "Besedilo nima zadostnega kontrasta za dobro berljivost"
+
+#: src/TestNames.php:57
+msgid "Graphic or icon does not have enough contrast"
+msgstr "Grafika ali ikona nima zadostnega kontrasta"
+
+#: src/TestNames.php:58
+msgid "Input does not provide enough contrast to be easily legible"
+msgstr "Polje nima zadostnega kontrasta za dobro berljivost"
+
+#: src/TestNames.php:59
+msgid "Placeholder text does not have enough contrast to be easily legible"
+msgstr "Nadomestno besedilo nima zadostnega kontrasta za dobro berljivost"
+
+#: src/TestNames.php:60
+msgid "Does this placeholder text have enough contrast?"
+msgstr "Ali ima to nadomestno besedilo zadosten kontrast?"
+
+#: src/TestNames.php:61
+msgid "Does this text have enough contrast?"
+msgstr "Ali ima to besedilo zadosten kontrast?"
+
+#: src/TestNames.php:62
+msgid "Does this graphic or icon have enough contrast?"
+msgstr "Ali ima ta grafika ali ikona zadosten kontrast?"
+
+#: src/TestNames.php:63
+msgid "Duplicate ID attribute"
+msgstr "Podvojen atribut ID"
+
+#: src/TestNames.php:64
+msgid "This link has a tooltip with the same text as the link"
+msgstr "Ta povezava ima namig z enakim besedilom kot sama povezava"
+
+#: src/TestNames.php:65
+msgid "Does this audio have a transcript?"
+msgstr "Ali ima ta zvočni zapis transkript?"
+
+#: src/TestNames.php:66
+msgid "Is this visualization accessible?"
+msgstr "Ali je ta vizualizacija dostopna?"
+
+#: src/TestNames.php:67
+msgid "Embedded iframes need manual checks"
+msgstr "Vgrajeni okvirji iframe zahtevajo ročno preverjanje"
+
+#: src/TestNames.php:68
+msgid "Frame missing \"title\" attribute"
+msgstr "Okvirju manjka atribut „title“"
+
+#: src/TestNames.php:69
+msgid "Frame with tabindex=\"-1\" will not be keyboard accessible."
+msgstr "Okvir s tabindex=\"-1\" ne bo dostopen prek tipkovnice."
+
+#: src/TestNames.php:70
+msgid "Is this video accurately captioned?"
+msgstr "Ali ima ta videoposnetek točne podnapise?"
+
+#: src/TestNames.php:71
+msgid "This heading has no text"
+msgstr "Ta naslov nima besedila"
+
+#: src/TestNames.php:72
+msgid "This image is used as a heading, so it needs alt text"
+msgstr "Ta slika se uporablja kot naslov in potrebuje besedilo alt"
+
+#: src/TestNames.php:73
+msgid "The first heading on this page is a subheading"
+msgstr "Prvi naslov na tej strani je podnaslov"
+
+#: src/TestNames.php:74
+msgid "Can this heading be shorter?"
+msgstr "Ali je ta naslov lahko krajši?"
+
+#: src/TestNames.php:75
+msgid "This page is missing a Heading 1"
+msgstr "Na tej strani manjka Naslov 1"
+
+#: src/TestNames.php:76
+msgid "This heading is tagged at the wrong level"
+msgstr "Ta naslov je označen na napačni ravni"
+
+#: src/TestNames.php:77
+msgid "This element cannot be described by screen readers"
+msgstr "Tega elementa bralniki zaslona ne morejo opisati"
+
+#: src/TestNames.php:78
+msgid "This heading is unpronounceable"
+msgstr "Ta naslov ni izgovorljiv"
+
+#: src/TestNames.php:79
+msgid "Can this alt text be shorter?"
+msgstr "Ali je to besedilo alt lahko krajše?"
+
+#: src/TestNames.php:80
+msgid "Is this image actually meaningless?"
+msgstr "Ali je ta slika res brez pomena?"
+
+#: src/TestNames.php:81
+msgid "Image in a carousel or gallery marked as decorative"
+msgstr "Slika v diapozitivni predstavitvi ali galeriji je označena kot dekorativna"
+
+#: src/TestNames.php:82
+msgid "This captioned image has no alt text"
+msgstr "Ta slika s podpisom nima besedila alt"
+
+#: src/TestNames.php:83
+msgid "Alt text should not be the same as caption text"
+msgstr "Besedilo alt ne sme biti enako besedilu podpisa"
+
+#: src/TestNames.php:84
+msgid "Is there a visible label for this field?"
+msgstr "Ali ima to polje vidno oznako?"
+
+#: src/TestNames.php:85
+msgid "Prefer visible labels to placeholders"
+msgstr "Namesto nadomestnega besedila raje uporabite vidne oznake"
+
+#: src/TestNames.php:86
+msgid "Is this reset button needed?"
+msgstr "Ali je ta gumb za ponastavitev potreben?"
+
+#: src/TestNames.php:87
+msgid "This input has an empty label"
+msgstr "To vnosno polje ima prazno oznako"
+
+#: src/TestNames.php:88
+msgid "Visible label does not match invisible label"
+msgstr "Vidna oznaka se ne ujema z nevidno oznako"
+
+#: src/TestNames.php:89
+msgid "This image input is missing alt text"
+msgstr "Temu slikovnemu vnosnemu polju manjka besedilo alt"
+
+#: src/TestNames.php:90
+msgid "This input is not connected to a label"
+msgstr "To vnosno polje ni povezano z oznako"
+
+#: src/TestNames.php:91
+msgid "Language tag does not match the content"
+msgstr "Jezikovni atribut se ne ujema z vsebino"
+
+#: src/TestNames.php:92
+msgid "This content appears to be in a different language"
+msgstr "Ta vsebina je morda v drugem jeziku"
+
+#: src/TestNames.php:93
+msgid "This alt text appears to be in a different language"
+msgstr "To besedilo alt je morda v drugem jeziku"
+
+#: src/TestNames.php:94
+msgid "Alt text used as a link should not be a URL"
+msgstr "Besedilo alt, ki se uporablja kot povezava, ne sme biti URL"
+
+#: src/TestNames.php:95 src/TestNames.php:96
+msgid "This linked alt might not be clear and concise"
+msgstr "Besedilo alt te povezane slike morda ni jasno in jedrnato"
+
+#: src/TestNames.php:97
+msgid "Linked images need pronounceable alt text"
+msgstr "Povezane slike potrebujejo izgovorljivo besedilo alt"
+
+#: src/TestNames.php:98
+msgid "Manual check: link contains \"click here\""
+msgstr "Ta povezava vsebuje „kliknite tukaj“"
+
+#: src/TestNames.php:99
+msgid "Link article titles, not DOI numbers"
+msgstr "Povežite naslove člankov, ne številk DOI"
+
+#: src/TestNames.php:100
+msgid "This link contains no words"
+msgstr "Ta povezava ne vsebuje besedila"
+
+#: src/TestNames.php:101
+msgid "Link with invalid \"aria-labelledby\" attribute"
+msgstr "Povezava z neveljavnim atributom „aria-labelledby“"
+
+#: src/TestNames.php:102
+msgid "This link needs a label"
+msgstr "Ta povezava potrebuje oznako"
+
+#: src/TestNames.php:103
+msgid "Link points to a file without warning"
+msgstr "Povezava kaže na datoteko brez opozorila"
+
+#: src/TestNames.php:104
+msgid "Links with the same text link to different pages"
+msgstr "Povezave z enakim besedilom vodijo na različne strani"
+
+#: src/TestNames.php:105
+msgid "Does this alt text describe the link or the image?"
+msgstr "Ali to besedilo alt opisuje povezavo ali sliko?"
+
+#: src/TestNames.php:106
+msgid "Does this alt text make sense as part of this link?"
+msgstr "Ali je to besedilo alt smiselno kot del te povezave?"
+
+#: src/TestNames.php:107
+msgid "Can this linked alt text be shorter?"
+msgstr "Ali je lahko besedilo alt te povezane slike krajše?"
+
+#: src/TestNames.php:108
+msgid "This linked image needs alt text"
+msgstr "Ta povezana slika potrebuje besedilo alt"
+
+#: src/TestNames.php:109
+msgid "Does this linked image need a description?"
+msgstr "Ali ta povezana slika potrebuje opis?"
+
+#: src/TestNames.php:110
+msgid "Is this link actually a button?"
+msgstr "Ali je ta povezava pravzaprav gumb?"
+
+#: src/TestNames.php:111
+msgid "Does this link open a new tab without warning?"
+msgstr "Ali ta povezava odpre nov zavihek brez opozorila?"
+
+#: src/TestNames.php:112
+msgid "This linked alt text may be a placeholder"
+msgstr "Besedilo alt te povezane slike je morda nadomestno besedilo"
+
+#: src/TestNames.php:113
+msgid "This link only contains generic words"
+msgstr "Ta povezava vsebuje samo splošne besede"
+
+#: src/TestNames.php:114
+msgid "The purpose of this link is visually hidden"
+msgstr "Namen te povezave je vizualno skrit"
+
+#: src/TestNames.php:115
+msgid "Does this image's alt describe the image or the link?"
+msgstr "Ali besedilo alt te slike opisuje sliko ali povezavo?"
+
+#: src/TestNames.php:116
+msgid "Are the symbols or emoji in this link meaningful?"
+msgstr "Ali so simboli ali emojiji v tej povezavi smiselni?"
+
+#: src/TestNames.php:117
+msgid "This link is unpronounceable"
+msgstr "Ta povezava ni izgovorljiva"
+
+#: src/TestNames.php:118
+msgid "Link text should not be a URL"
+msgstr "Besedilo povezave ne sme biti URL"
+
+#: src/TestNames.php:119
+msgid "Meta tag for page language missing"
+msgstr "Manjka meta-atribut za jezik strani"
+
+#: src/TestNames.php:120
+msgid "Did you mean a different language code?"
+msgstr "Ste mislili drugo jezikovno kodo?"
+
+#: src/TestNames.php:121
+msgid "Invalid language code"
+msgstr "Neveljavna jezikovna koda"
+
+#: src/TestNames.php:122
+msgid "Page language may not match the content"
+msgstr "Jezik strani morda ne ustreza vsebini"
+
+#: src/TestNames.php:123
+msgid "Meta tag limits how much users can enlarge text"
+msgstr "Meta-atribut omejuje povečavo besedila"
+
+#: src/TestNames.php:124
+msgid "Meta tag automatically refreshes page"
+msgstr "Meta-atribut samodejno osveži stran"
+
+#: src/TestNames.php:125
+msgid "Meta tag prevents users from enlarging text"
+msgstr "Meta-atribut preprečuje povečavo besedila"
+
+#: src/TestNames.php:126
+msgid "Meta tag for page title missing"
+msgstr "Manjka meta-atribut za naslov strani"
+
+#: src/TestNames.php:127
+msgid "Invalid HTML: image has no alt attribute"
+msgstr "Neveljaven HTML: slika nima atributa alt"
+
+#: src/TestNames.php:128
+msgid "Invalid HTML: linked image missing alt attribute"
+msgstr "Neveljaven HTML: povezana slika nima atributa alt"
+
+#: src/TestNames.php:129
+msgid "Invalid HTML: image in link missing alt attribute"
+msgstr "Neveljaven HTML: sliki v povezavi manjka atribut alt"
+
+#: src/TestNames.php:130
+msgid "This link target may be invalid"
+msgstr "Cilj te povezave je morda neveljaven"
+
+#: src/TestNames.php:131
+msgid "Should this quote be a heading?"
+msgstr "Ali bi moral biti ta citat naslov?"
+
+#: src/TestNames.php:132
+msgid "Has this document been tagged for screen readers?"
+msgstr "Ali je ta dokument ustrezno označen za bralnike zaslona?"
+
+#: src/TestNames.php:133
+msgid "Should this bold text be a heading?"
+msgstr "Ali bi moralo biti to krepko besedilo naslov?"
+
+#: src/TestNames.php:134
+msgid "Should this have list formatting?"
+msgstr "Ali naj bi to bilo oblikovano kot seznam?"
+
+#: src/TestNames.php:135
+msgid "Broken same-page link"
+msgstr "Pokvarjena notranja povezava"
+
+#: src/TestNames.php:136
+msgid "Do not justify text"
+msgstr "Ne poravnavajte besedila obojestransko"
+
+#: src/TestNames.php:137
+msgid "Nested interactive layout components"
+msgstr "Gnezdene interaktivne komponente postavitve"
+
+#: src/TestNames.php:138
+msgid "Is there an alternative for this PDF?"
+msgstr "Ali obstaja alternativa za ta PDF?"
+
+#: src/TestNames.php:139
+msgid "Text is too small"
+msgstr "Besedilo je premajhno"
+
+#: src/TestNames.php:140
+msgid "Large blocks of emphasized text are harder to read"
+msgstr "Veliki bloki poudarjenega besedila so težje berljivi"
+
+#: src/TestNames.php:141
+msgid "Do not use sub/superscript as visual formatting"
+msgstr "Ne uporabljajte indeksa/eksponenta zgolj za vizualno oblikovanje"
+
+#: src/TestNames.php:142
+msgid "Only links should be underlined"
+msgstr "Podčrtano naj bo samo besedilo povezav"
+
+#: src/TestNames.php:143
+msgid "Is this uppercase text needed?"
+msgstr "Ali je to besedilo z VELIKIMI ČRKAMI potrebno?"
+
+#: src/TestNames.php:144
+msgid "Are there redundant words in this alt text?"
+msgstr "Ali so v tem besedilu alt odvečne besede?"
+
+#: src/TestNames.php:145
+msgid "Tabindex overrides interrupt the focus order"
+msgstr "Vrednosti tabindex motijo vrstni red fokusa"
+
+#: src/TestNames.php:146
+msgid "This header cell needs text"
+msgstr "Ta celica glave tabele potrebuje besedilo"
+
+#: src/TestNames.php:147
+msgid "This table has an invalid headers attribute"
+msgstr "Ta tabela ima neveljaven atribut headers"
+
+#: src/TestNames.php:148
+msgid "This table needs a header row and/or column"
+msgstr "Ta tabela potrebuje glavo vrstice in/ali stolpca"
+
+#: src/TestNames.php:149
+msgid "Content headings should not be used inside tables"
+msgstr "Vsebinskih naslovov ne uporabljajte znotraj tabel"
+
+#: src/TestNames.php:150
+msgid "Invalid HTML list"
+msgstr "Neveljaven seznam HTML"
+
+#: src/TestNames.php:379
+msgid "Linked images"
+msgstr "Povezane slike"
+
+#: src/TestNames.php:382
+msgid "Tables"
+msgstr "Tabele"
+
+#: src/TestNames.php:383
+msgid "Text formatting"
+msgstr "Oblikovanje besedila"
+
+#: src/TestNames.php:384
+msgid "Video, audio, frames"
+msgstr "Video, zvok, okvirji"
+
+#: src/TestNames.php:385
+msgid "Contrast"
+msgstr "Kontrast"
+
+#: src/TestNames.php:386
+msgid "Forms"
+msgstr "Obrazci"
+
+#: src/TestNames.php:387
+msgid "ARIA and focus"
+msgstr "ARIA in fokus"
+
+#: src/TestNames.php:388
+msgid "Page metadata"
+msgstr "Metapodatki strani"

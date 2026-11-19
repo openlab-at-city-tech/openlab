@@ -1,21 +1,146 @@
 /*.editoria11y-settings .inside img {width: 100%;}code > strong {color: darkred;font-weight: 600;background-color: #ffeeee;}#poststuff form > h2 {font-size: 18px;padding: 10px 5px 10px 5px;margin: 0;line-height: 1.4;border-bottom: 1px solid #bababa;}.form-table td fieldset.editoria11y-vertical label {display: inline-block;margin-right: 2em !important;}h2.postbox-heading {font-size: 19px !important;margin: 10px 0 0 0 !important;padding: 8px 0 0 12px !important;line-height: 1 !important;}h3.postbox-heading {font-size: 18px !important;margin: 10px 0 0 0;}.postbox .inside p, .postbox .inside li {margin: 0;font-size: 14px;}.postbox .inside li {list-style: disc;margin: 0 0 5px 10px;}.postbox .inside ul {margin: 10px;}form.ed11y-form-admin td p {max-width: 40em;}.regular-text, textarea {width: 40em;}.announcement-component {margin-bottom: 15px;max-width: 840px;border: 1px solid #c3c4c7;box-shadow: 0 1px 1px rgb(0 0 0 / 4%);background: #fff;padding: 10px 15px 15px 15px;}.announcement-component h2.announcement-heading {margin: 10px 0 5px 0 !important;font-size: 1.3em !important;padding: 0 !important;line-height: 1 !important;}.announcement-component > p {margin: 0 !important;font-size: 1.1em !important;}.ed11y-admin-badge{box-sizing:border-box;display:inline-block;background-color:#207bb7;color:#fff;border-radius:7px;text-align:center;font-size:1em;font-weight:600;padding:.05em .5em .1em;line-height:inherit}*/
-::placeholder {
-    opacity: .8;
-    font-family: 'Courier New', Courier, monospace;
+
+#wpbody-content form {
+
+    th,
+    label,
+    summary {
+        font-size: 15px;
+    }
+
+    summary {
+        margin: -0.5em -0.75em;
+        padding: 0.575em 0.75em;
+    }
+
+    summary,
+    input {
+        &:hover {
+            outline: -webkit-focus-ring-color auto 1px;
+        }
+    }
+
+    summary+* {
+        margin-top: .5rem;
+    }
+
+    p,
+    .description {
+        font-size: 13px;
+    }
+
+    th {
+        min-width: 200px;
+    }
+
+    legend,
+    h2 {
+        font-size: 1.5em;
+        font-weight: 500;
+        border-bottom: 1px solid #0004;
+        display: block;
+        padding: 3em 0 .5em;
+        width: 100%;
+    }
+
+    td p:has(label) {
+        padding: 1em 0 .5em;
+    }
+
+    ::placeholder {
+        opacity: .8;
+        font-family: 'Courier New', Courier, monospace;
+    }
+
+    details {
+        th {
+            padding: 15px 10px;
+            line-height: 1.3;
+        }
+
+        &> :is(textarea, p, input, select) {
+            margin-left: .75rem;
+            max-width: calc(100% - .75rem);
+        }
+
+        &> :is(textarea, input, select) {
+            margin-left: .75rem;
+            max-width: calc(100% - 1.5rem);
+        }
+    }
+
+    label {
+        font-weight: 500;
+    }
+
+    td label p {
+        line-height: 1.2em;
+        padding: 0 0 2px;
+    }
+
+    code {
+        display: inline-block;
+        border-radius: 2px;
+        box-shadow: inset 0 0 1px #999;
+        font-size: 90%;
+    }
+
+    .ed11y-network-mode {
+        border: 1px solid #0003;
+        padding: 1rem;
+        width: max-content;
+        margin: 1rem 0;
+        border-radius: .5rem;
+    }
+
+    td .ed11y-network-mode {
+        margin-left: -1rem;
+    }
+
+    details .ed11y-network-mode {
+        margin-left: 0;
+    }
+
+    .ed11y-network-lock {
+        padding: .25rem 0 .75rem;
+
+        label {
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+        &:has(:checked) {
+            filter: brightness(.75) contrast(1.25);
+
+            label {
+                font-weight: 700;
+            }
+        }
+    }
+
 }
 
-#poststuff h2 {
-    font-size: 1.33em;
-    padding: 1em 0 0;
-    border-bottom: 1px solid silver;
+.ed11y-banner {
+    margin: 2em auto;
+    max-width: 960px;
+    padding: 1.5em;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+
+    p,
+    li {
+        font-size: 1rem;
+    }
+
+    ol,
+    ul {
+        list-style: initial;
+
+        li {
+            margin: .5em 0 .5em 1em;
+        }
+    }
+
 }
-
-code {
-    display: inline-block;
-    border-radius: 2px;
-    box-shadow: inset 0 0 1px #999;
-}
-
-
-
-
