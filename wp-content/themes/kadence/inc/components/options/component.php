@@ -137,46 +137,46 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function normalize_palette_option( $value ) {
 		if ( $value && ! empty( $value ) ) {
-			$palette = json_decode( $value, true );
+			$palette          = json_decode( $value, true );
 			$extended_palette = [ 
 				[
 					'color' => '#FfFfFf',
-					'slug' => 'palette10',
-					'name' => 'Palette Color Complement',
+					'slug'  => 'palette10',
+					'name'  => 'Palette Color Complement',
 				], 
 				[
 					'color' => '#13612e',
-					'slug' => 'palette11',
-					'name' => 'Palette Color Success',
+					'slug'  => 'palette11',
+					'name'  => 'Palette Color Success',
 				], 
 				[
 					'color' => '#1159af',
-					'slug' => 'palette12',
-					'name' => 'Palette Color Info',
+					'slug'  => 'palette12',
+					'name'  => 'Palette Color Info',
 				], 
 				[
 					'color' => '#b82105',
-					'slug' => 'palette13',
-					'name' => 'Palette Color Alert',
+					'slug'  => 'palette13',
+					'name'  => 'Palette Color Alert',
 				], 
 				[
 					'color' => '#f7630c',
-					'slug' => 'palette14',
-					'name' => 'Palette Color Warning',
+					'slug'  => 'palette14',
+					'name'  => 'Palette Color Warning',
 				], 
 				[
 					'color' => '#f5a524',
-					'slug' => 'palette15',
-					'name' => 'Palette Color Rating',
-				]
+					'slug'  => 'palette15',
+					'name'  => 'Palette Color Rating',
+				],
 			];
-			if( isset( $palette['palette'] ) && is_array( $palette['palette'] ) && sizeof( $palette['palette'] ) == 9 ) {
+			if ( isset( $palette['palette'] ) && is_array( $palette['palette'] ) && sizeof( $palette['palette'] ) == 9 ) {
 				$palette['palette'] = array_merge( $palette['palette'], $extended_palette );
 			}
-			if( isset( $palette['second-palette'] ) && is_array( $palette['second-palette'] ) && sizeof( $palette['second-palette'] ) == 9 ) {
+			if ( isset( $palette['second-palette'] ) && is_array( $palette['second-palette'] ) && sizeof( $palette['second-palette'] ) == 9 ) {
 				$palette['second-palette'] = array_merge( $palette['second-palette'], $extended_palette );
 			}
-			if( isset( $palette['third-palette'] ) && is_array( $palette['third-palette'] ) && sizeof( $palette['third-palette'] ) == 9 ) {
+			if ( isset( $palette['third-palette'] ) && is_array( $palette['third-palette'] ) && sizeof( $palette['third-palette'] ) == 9 ) {
 				$palette['third-palette'] = array_merge( $palette['third-palette'], $extended_palette );
 			}
 
@@ -189,6 +189,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 	/**
 	 * Gets template tags to expose as methods on the Template_Tags class instance, accessible through `kadence()`.
+	 *
+	 * @since 1.6.0 Adds the customizer_palette_option template tag.
 	 *
 	 * @return array Associative array of $method_name => $callback_info pairs. Each $callback_info must either be
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
@@ -203,6 +205,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'sub_option'                 => [ $this, 'sub_option' ],
 			'sidebar_options'            => [ $this, 'sidebar_options' ],
 			'palette_option'             => [ $this, 'palette_option' ],
+			'customizer_palette_option'  => [ $this, 'customizer_palette_option' ],
 			'get_palette'                => [ $this, 'get_palette' ],
 			'get_default_palette'        => [ $this, 'get_default_palette' ],
 			'get_palette_for_customizer' => [ $this, 'get_palette_for_customizer' ],
@@ -302,12 +305,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						],
 					],
 					'boxed_shadow'                         => [
-						'color'   => 'rgba(0,0,0,0.05)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 15,
-						'spread'  => -10,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.05)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 15,
+						'spread'   => -10,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'boxed_border_radius'                  => [
@@ -328,12 +331,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						],
 					],
 					'boxed_grid_shadow'                    => [
-						'color'   => 'rgba(0,0,0,0.05)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 15,
-						'spread'  => -10,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.05)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 15,
+						'spread'   => -10,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'boxed_grid_border_radius'             => [
@@ -552,38 +555,38 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						],
 					],
 					'buttons_shadow'                       => [
-						'color'   => 'rgba(0,0,0,0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => -7,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'buttons_shadow_hover'                 => [
-						'color'   => 'rgba(0,0,0,0.1)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 25,
-						'spread'  => -7,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.1)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 25,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					// Buttons Secondary.
-					'buttons_secondary_color'                        => [
+					'buttons_secondary_color'              => [
 						'color' => 'palette3',
 						'hover' => 'palette9',
 					],
-					'buttons_secondary_background'                   => [
+					'buttons_secondary_background'         => [
 						'color' => 'palette7',
 						'hover' => 'palette2',
 					],
-					'buttons_secondary_border_colors'                => [
+					'buttons_secondary_border_colors'      => [
 						'color' => '',
 						'hover' => '',
 					],
-					'buttons_secondary_border'                       => [],
-					'buttons_secondary_border_radius'                => [
+					'buttons_secondary_border'             => [],
+					'buttons_secondary_border_radius'      => [
 						'size' => [
 							'mobile'  => '',
 							'tablet'  => '',
@@ -595,7 +598,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 							'desktop' => 'px',
 						],
 					],
-					'buttons_secondary_typography'                   => [
+					'buttons_secondary_typography'         => [
 						'size'       => [
 							'desktop' => '',
 						],
@@ -607,7 +610,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'weight'     => '',
 						'variant'    => '',
 					],
-					'buttons_secondary_padding'                      => [
+					'buttons_secondary_padding'            => [
 						'size'   => [ 
 							'desktop' => [ '', '', '', '' ],
 						],
@@ -618,35 +621,35 @@ class Component implements Component_Interface, Templating_Component_Interface {
 							'desktop' => false,
 						],
 					],
-					'buttons_secondary_shadow'                       => [
-						'color'   => 'rgba(0,0,0,0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => -7,
-						'inset'   => false,
+					'buttons_secondary_shadow'             => [
+						'color'    => 'rgba(0,0,0,0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => true,
 					],
-					'buttons_secondary_shadow_hover'                 => [
-						'color'   => 'rgba(0,0,0,0.1)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 25,
-						'spread'  => -7,
-						'inset'   => false,
+					'buttons_secondary_shadow_hover'       => [
+						'color'    => 'rgba(0,0,0,0.1)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 25,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => true,
 					],
 					// Buttons Outline.
-					'buttons_outline_color'                        => [
+					'buttons_outline_color'                => [
 						'color' => '',
 						'hover' => '',
 					],
-					'buttons_outline_border_colors'                => [
+					'buttons_outline_border_colors'        => [
 						'color' => '',
 						'hover' => '',
 					],
-					'buttons_outline_border'                       => [],
-					'buttons_outline_border_radius'                => [
+					'buttons_outline_border'               => [],
+					'buttons_outline_border_radius'        => [
 						'size' => [
 							'mobile'  => '',
 							'tablet'  => '',
@@ -658,7 +661,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 							'desktop' => 'px',
 						],
 					],
-					'buttons_outline_typography'                   => [
+					'buttons_outline_typography'           => [
 						'size'       => [
 							'desktop' => '',
 						],
@@ -670,7 +673,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'weight'     => '',
 						'variant'    => '',
 					],
-					'buttons_outline_padding'                      => [
+					'buttons_outline_padding'              => [
 						'size'   => [ 
 							'desktop' => [ '', '', '', '' ],
 						],
@@ -681,25 +684,25 @@ class Component implements Component_Interface, Templating_Component_Interface {
 							'desktop' => false,
 						],
 					],
-					'buttons_outline_shadow'                       => [
-						'color'   => 'rgba(0,0,0,0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => -7,
-						'inset'   => false,
+					'buttons_outline_shadow'               => [
+						'color'    => 'rgba(0,0,0,0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => true,
 					],
-					'buttons_outline_shadow_hover'                 => [
-						'color'   => 'rgba(0,0,0,0.1)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 25,
-						'spread'  => -7,
-						'inset'   => false,
+					'buttons_outline_shadow_hover'         => [
+						'color'    => 'rgba(0,0,0,0.1)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 25,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => true,
 					],
-					//image
+					// image
 					'image_border_radius'                  => [
 						'size' => [
 							'mobile'  => '',
@@ -712,7 +715,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 							'desktop' => 'px',
 						],
 					],
-					//footer/header
+					// footer/header
 					'enable_footer_on_bottom'              => true,
 					'enable_scroll_to_id'                  => true,
 					'blocks_header'                        => false,
@@ -1254,18 +1257,18 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'style' => 'solid',
 						'color' => 'rgba(255,255,255,0.1)',
 					],
-					'dropdown_navigation_border_radius'             => [
+					'dropdown_navigation_border_radius'    => [
 						'size'   => [ 0, 0, 0, 0 ],
 						'unit'   => 'px',
 						'locked' => true,
 					],
 					'dropdown_navigation_shadow'           => [
-						'color'   => 'rgba(0,0,0,0.1)',
-						'hOffset' => 0,
-						'vOffset' => 2,
-						'blur'    => 13,
-						'spread'  => 0,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.1)',
+						'hOffset'  => 0,
+						'vOffset'  => 2,
+						'blur'     => 13,
+						'spread'   => 0,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'dropdown_navigation_typography'       => [
@@ -1453,21 +1456,21 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'unit'  => 'px',
 					],
 					'header_button_shadow'                 => [
-						'color'   => 'rgba(0,0,0,0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => -7,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'header_button_shadow_hover'           => [
-						'color'   => 'rgba(0,0,0,0.1)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 25,
-						'spread'  => -7,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.1)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 25,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'header_button_margin'                 => [
@@ -1758,21 +1761,21 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'locked' => false,
 					],
 					'mobile_button_shadow'                 => [
-						'color'   => 'rgba(0,0,0,0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => -7,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'mobile_button_shadow_hover'           => [
-						'color'   => 'rgba(0,0,0,0.1)',
-						'hOffset' => 0,
-						'vOffset' => 15,
-						'blur'    => 25,
-						'spread'  => -7,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.1)',
+						'hOffset'  => 0,
+						'vOffset'  => 15,
+						'blur'     => 25,
+						'spread'   => -7,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'mobile_button_radius'                 => [
@@ -1943,7 +1946,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						],
 					],
 					'header_sticky_bottom_border'          => [],
-					'header_sticky_box_shadow'                 => [
+					'header_sticky_box_shadow'             => [
 						'color'   => 'rgba(0,0,0,0)',
 						'hOffset' => 0,
 						'vOffset' => 0,
@@ -3293,21 +3296,21 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'style' => 'none',
 					],
 					'product_archive_button_shadow'        => [
-						'color'   => 'rgba(0,0,0,0.0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => 0,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0.0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => 0,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'product_archive_button_shadow_hover'  => [
-						'color'   => 'rgba(0,0,0,0)',
-						'hOffset' => 0,
-						'vOffset' => 0,
-						'blur'    => 0,
-						'spread'  => 0,
-						'inset'   => false,
+						'color'    => 'rgba(0,0,0,0)',
+						'hOffset'  => 0,
+						'vOffset'  => 0,
+						'blur'     => 0,
+						'spread'   => 0,
+						'inset'    => false,
 						'disabled' => false,
 					],
 					'product_archive_button_radius'        => [
@@ -4470,7 +4473,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					'sfwd-assignment_comments'             => true,
 					// MISC
 					'ie11_basic_support'                   => false,
-					'theme_json_mode'                      => $version_1_3_0_changes ? true : false,
+					// Off until saved, like Editor\Component::disable_json_optionally() reads it.
+					'theme_json_mode'                      => false,
 					'microdata'                            => true,
 					'social_links_open_new_tab'            => $version_1_3_0_changes ? false : true,
 				]
@@ -4980,17 +4984,46 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				{"color":"#b82105","slug":"palette13","name":"Palette Color Alert"},
 				{"color":"#f7630c","slug":"palette14","name":"Palette Color Warning"},
 				{"color":"#f5a524","slug":"palette15","name":"Palette Color Rating"}],
-				"active":"palette"}' );
+				"active":"palette"}' 
+			);
 		}
 		return self::$default_palette;
 	}
 	/**
 	 * Get Palette Option.
 	 *
+	 * @since 1.6.0 Passes the color through the `kadence_site_palette_option` filter, which returns the Site Editor's color in Full Site Editing mode.
+	 *
 	 * @param string $subkey         option subkey.
 	 * @param string $active_palette the active palette.
 	 */
 	public function palette_option( $subkey, $active_palette = null ) {
+		$value = $this->customizer_palette_option( $subkey, $active_palette );
+
+		if ( ! empty( $active_palette ) ) {
+			return $value;
+		}
+
+		/**
+		 * Filters a color of the active palette. Full Site Editing mode returns the Site Editor's color.
+		 *
+		 * @since 1.6.0
+		 *
+		 * @param string $value  The Customizer's color.
+		 * @param string $subkey option subkey.
+		 */
+		return apply_filters( 'kadence_site_palette_option', $value, $subkey );
+	}
+
+	/**
+	 * Get Palette Option as the Customizer holds it.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param string $subkey         option subkey.
+	 * @param string $active_palette the active palette.
+	 */
+	public function customizer_palette_option( $subkey, $active_palette = null ) {
 		if ( is_null( self::$palette ) ) {
 			$palette = get_option( 'kadence_global_palette' );
 			if ( $palette && ! empty( $palette ) ) {
@@ -5002,7 +5035,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$active = ! empty( $active_palette ) ? $active_palette : apply_filters( 'kadence_active_palette', ( self::$palette && is_array( self::$palette ) && isset( self::$palette['active'] ) && ! empty( self::$palette['active'] ) ? self::$palette['active'] : 'palette' ) );
 		$value  = '';
 		if ( self::$palette && is_array( self::$palette ) && isset( self::$palette[ $active ] ) && is_array( self::$palette[ $active ] ) ) {
-			$palette_number = (int) preg_replace('/[^0-9]/', '', $subkey) - 1;
+			$palette_number = (int) preg_replace( '/[^0-9]/', '', $subkey ) - 1;
 			$palette_item   = ( isset( self::$palette[ $active ][ $palette_number ] ) && is_array( self::$palette[ $active ][ $palette_number ] ) ? self::$palette[ $active ][ $palette_number ] : [] );
 			if ( isset( $palette_item['slug'] ) && $palette_item['slug'] === $subkey ) {
 				// #FfFfFf is the key to sync palette 10 with the complement color.

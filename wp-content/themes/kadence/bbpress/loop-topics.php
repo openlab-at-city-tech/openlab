@@ -22,7 +22,10 @@ do_action( 'bbp_template_before_topics_loop' ); ?>
 
 	<li class="bbp-body">
 
-		<?php while ( bbp_topics() ) : bbp_the_topic(); ?>
+		<?php
+		while ( bbp_topics() ) :
+			bbp_the_topic();
+			?>
 
 			<?php bbp_get_template_part( 'loop', 'single-topic' ); ?>
 
@@ -39,4 +42,5 @@ do_action( 'bbp_template_before_topics_loop' ); ?>
 	</li>
 </ul><!-- #bbp-forum-<?php bbp_forum_id(); ?> -->
 
-<?php do_action( 'bbp_template_after_topics_loop' );
+<?php
+do_action( 'bbp_template_after_topics_loop' );

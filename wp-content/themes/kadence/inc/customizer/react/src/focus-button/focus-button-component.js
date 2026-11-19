@@ -40,6 +40,7 @@ class FocusButtonComponent extends Component {
 						</span>
 					</Button>
 				</div>
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

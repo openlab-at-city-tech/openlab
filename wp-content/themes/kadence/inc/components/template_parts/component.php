@@ -9,12 +9,6 @@ namespace Kadence\Template_Parts;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use function Kadence\kadence;
-use function add_action;
-use function add_filter;
-use function do_action;
-use function is_active_sidebar;
-use function dynamic_sidebar;
 
 /**
  * Class for managing template parts.
@@ -29,7 +23,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'template_parts';
 	}
 
@@ -46,10 +40,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'get_template' => array( $this, 'get_template' ),
-		);
+	public function template_tags(): array {
+		return [
+			'get_template' => [ $this, 'get_template' ],
+		];
 	}
 
 	/**
@@ -59,7 +53,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $name The name of the specialised template.
 	 * @param array  $args          Arguments. (default: array).
 	 */
-	public static function get_template( $slug, $name = null, $args = array() ) {
+	public static function get_template( $slug, $name = null, $args = [] ) {
 
 		/**
 		 * Pass custom variables to the template file.

@@ -729,6 +729,7 @@ class ColorComponent extends Component {
 						</a>
 					</span>
 				)}
+			{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

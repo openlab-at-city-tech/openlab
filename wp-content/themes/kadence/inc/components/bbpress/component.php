@@ -11,15 +11,10 @@ use Kadence\Kadence_CSS;
 use Kadence\Component_Interface;
 use Kadence_Blocks_Frontend;
 use function Kadence\kadence;
-use function bbp_is_single_user_profile;
 use function is_bbpress;
 use function bbp_is_search;
 use function add_action;
 use function add_filter;
-use function have_posts;
-use function the_post;
-use function is_search;
-use function get_template_part;
 use function get_post_type;
 
 /**
@@ -34,13 +29,13 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'bbpress';
 	}
 
@@ -48,17 +43,17 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'bbpress_styles' ), 60 );
-		add_action( 'bbpress_end_form_search', array( $this, 'add_search_icon' ) );
-		add_filter( 'kadence_post_layout', array( $this, 'bbpress_user_layout' ), 99 );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 80 );
-		add_filter( 'post_class', array( $this, 'post_class' ), 10, 3 );
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ), 20 );
-		add_filter( 'bbp_breadcrumb_separator', array( $this, 'change_bbpress_separator' ), 10 );
-		add_filter( 'bbp_get_reply_admin_links', array( $this, 'admin_reply_links' ), 10, 3 );
-		add_filter( 'bbp_get_topic_admin_links', array( $this, 'admin_reply_links' ), 10, 3 );
-		add_action( 'kadence_single_title_info_area', array( $this, 'bbpress_single_meta' ) );
-		add_filter( 'kadence_theme_options_defaults', array( $this, 'bbpress_option_defaults' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'bbpress_styles' ], 60 );
+		add_action( 'bbpress_end_form_search', [ $this, 'add_search_icon' ] );
+		add_filter( 'kadence_post_layout', [ $this, 'bbpress_user_layout' ], 99 );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 80 );
+		add_filter( 'post_class', [ $this, 'post_class' ], 10, 3 );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ], 20 );
+		add_filter( 'bbp_breadcrumb_separator', [ $this, 'change_bbpress_separator' ], 10 );
+		add_filter( 'bbp_get_reply_admin_links', [ $this, 'admin_reply_links' ], 10, 3 );
+		add_filter( 'bbp_get_topic_admin_links', [ $this, 'admin_reply_links' ], 10, 3 );
+		add_action( 'kadence_single_title_info_area', [ $this, 'bbpress_single_meta' ] );
+		add_filter( 'kadence_theme_options_defaults', [ $this, 'bbpress_option_defaults' ] );
 	}
 	/**
 	 * Filters admin links output.
@@ -76,7 +71,7 @@ class Component implements Component_Interface {
 	 *
 	 * @param array $classes An array of post class names.
 	 * @param array $class   An array of additional class names added to the post.
-	 * @param int    $post_id The post ID..
+	 * @param int   $post_id The post ID..
 	 */
 	public function post_class( $classes, $class, $post_ID ) {
 		if ( is_admin() ) {
@@ -85,7 +80,7 @@ class Component implements Component_Interface {
 		if ( is_bbpress() && ( 'topic' === get_post_type() || bbp_is_search() ) ) {
 			// $post = get_post( $post_id );
 			// if ( 'topic' === $post->post_type ) {
-				//print_r( $classes );
+				// print_r( $classes );
 			$entry = array_search( 'entry', $classes );
 			if ( is_numeric( $entry ) ) {
 				unset( $classes[ $entry ] );
@@ -98,7 +93,7 @@ class Component implements Component_Interface {
 			if ( is_numeric( $single ) ) {
 				unset( $classes[ $single ] );
 			}
-			//}
+			// }
 		}
 		return $classes;
 	}
@@ -126,12 +121,12 @@ class Component implements Component_Interface {
 	public function bbpress_user_layout( $layout ) {
 		if ( is_bbpress() && bbp_is_single_user() ) {
 			$layout = wp_parse_args(
-				array(
-					'feature'          => 'hide',
-					'comments'         => 'hide',
-					'navigation'       => 'hide',
-					'transparent'      => 'disable',
-				),
+				[
+					'feature'     => 'hide',
+					'comments'    => 'hide',
+					'navigation'  => 'hide',
+					'transparent' => 'disable',
+				],
 				$layout
 			);
 		}
@@ -143,7 +138,7 @@ class Component implements Component_Interface {
 	 */
 	public function bbpress_styles() {
 		if ( is_bbpress() ) {
-			wp_enqueue_style( 'kadence-bbpress', get_theme_file_uri( '/assets/css/bbpress.min.css' ), array(), KADENCE_VERSION );
+			wp_enqueue_style( 'kadence-bbpress', get_theme_file_uri( '/assets/css/bbpress.min.css' ), [], KADENCE_VERSION );
 		}
 	}
 	/**
@@ -155,10 +150,10 @@ class Component implements Component_Interface {
 			echo '<span class="bbpress-back-to-forum-wrap"><a href="' . esc_url( bbp_get_forum_permalink( bbp_get_topic_forum_id() ) ) . '" class="bbpress-back-to-forum">' . kadence()->get_icon( 'arrow-left-alt', '', true ) . ' ' . __( 'Back to:', 'kadence' ) . ' ' . bbp_get_forum_title( bbp_get_topic_forum_id() ) . '</a></span>';
 			echo '<span class="bbpress-meta-replies-wrap"><span class="bbpress-meta-replies">' . bbp_get_topic_reply_count() . ' ' . esc_html__( 'Replies', 'kadence' ) . '</span></span>';
 			echo '<span class="bbpress-meta-subscribe-wrap">';
-			bbp_topic_subscription_link( array( 'before' => '' ) );
+			bbp_topic_subscription_link( [ 'before' => '' ] );
 			echo '</span>';
 			echo '<span class="bbpress-meta-favorite-wrap">';
-			bbp_topic_favorite_link( array( 'before' => '' ) );
+			bbp_topic_favorite_link( [ 'before' => '' ] );
 			echo '</span>';
 			do_action( 'kadence_bbpress_single_topic_meta' );
 			echo '</div>';
@@ -170,367 +165,367 @@ class Component implements Component_Interface {
 	 * @param array $defaults the bbpress options.
 	 */
 	public function bbpress_option_defaults( $defaults ) {
-		$bbpress_add = array(
-			'forum_layout'             => 'normal',
-			'forum_content_style'      => 'boxed',
-			'forum_vertical_padding'   => 'show',
-			'forum_sidebar_id'         => 'sidebar-primary',
-			'forum_background'         => '',
-			'forum_content_background' => '',
-			'forum_title'              => true,
-			'forum_title_layout'       => 'normal',
-			'forum_title_height'       => array(
-				'size' => array(
+		$bbpress_add = [
+			'forum_layout'                           => 'normal',
+			'forum_content_style'                    => 'boxed',
+			'forum_vertical_padding'                 => 'show',
+			'forum_sidebar_id'                       => 'sidebar-primary',
+			'forum_background'                       => '',
+			'forum_content_background'               => '',
+			'forum_title'                            => true,
+			'forum_title_layout'                     => 'normal',
+			'forum_title_height'                     => [
+				'size' => [
 					'mobile'  => '',
 					'tablet'  => '',
 					'desktop' => '',
-				),
-				'unit' => array(
+				],
+				'unit' => [
 					'mobile'  => 'px',
 					'tablet'  => 'px',
 					'desktop' => 'px',
-				),
-			),
-			'forum_title_inner_layout' => 'standard',
-			'forum_title_background'   => array(
-				'desktop' => array(
+				],
+			],
+			'forum_title_inner_layout'               => 'standard',
+			'forum_title_background'                 => [
+				'desktop' => [
 					'color' => '',
-				),
-			),
-			'forum_title_featured_image' => false,
-			'forum_title_overlay_color'  => array(
+				],
+			],
+			'forum_title_featured_image'             => false,
+			'forum_title_overlay_color'              => [
 				'color' => '',
-			),
-			'forum_title_top_border'    => array(),
-			'forum_title_bottom_border' => array(),
-			'forum_title_align'         => array(
+			],
+			'forum_title_top_border'                 => [],
+			'forum_title_bottom_border'              => [],
+			'forum_title_align'                      => [
 				'mobile'  => '',
 				'tablet'  => '',
 				'desktop' => '',
-			),
-			'forum_title_font'   => array(
-				'size' => array(
+			],
+			'forum_title_font'                       => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-				'color'   => '',
-			),
-			'forum_title_breadcrumb_color' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+				'color'      => '',
+			],
+			'forum_title_breadcrumb_color'           => [
 				'color' => '',
 				'hover' => '',
-			),
-			'forum_title_breadcrumb_font'   => array(
-				'size' => array(
+			],
+			'forum_title_breadcrumb_font'            => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'forum_title_search_width' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'forum_title_search_width'               => [
 				'size' => '300',
 				'unit' => 'px',
-			),
-			'forum_title_search_border' => array(
+			],
+			'forum_title_search_border'              => [
 				'width' => '',
 				'unit'  => '',
 				'style' => '',
 				'color' => '',
-			),
-			'forum_title_search_color'       => array(
-				'color'  => '',
-				'hover'  => '',
-			),
-			'forum_title_search_background'       => array(
-				'color'  => '',
-				'hover'  => '',
-			),
-			'forum_title_search_typography'        => array(
-				'size' => array(
+			],
+			'forum_title_search_color'               => [
+				'color' => '',
+				'hover' => '',
+			],
+			'forum_title_search_background'          => [
+				'color' => '',
+				'hover' => '',
+			],
+			'forum_title_search_typography'          => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'forum_title_search_margin' => array(
-				'size'   => array( 1, 0, 1, 0 ),
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'forum_title_search_margin'              => [
+				'size'   => [ 1, 0, 1, 0 ],
 				'unit'   => 'em',
 				'locked' => false,
-			),
-			'forum_title_elements'           => array( 'title', 'breadcrumb', 'search', 'description' ),
-			'forum_title_element_title' => array(
+			],
+			'forum_title_elements'                   => [ 'title', 'breadcrumb', 'search', 'description' ],
+			'forum_title_element_title'              => [
 				'enabled' => true,
-			),
-			'forum_title_element_description' => array(
+			],
+			'forum_title_element_description'        => [
 				'enabled' => false,
-			),
-			'forum_title_element_breadcrumb' => array(
-				'enabled' => true,
+			],
+			'forum_title_element_breadcrumb'         => [
+				'enabled'    => true,
 				'show_title' => true,
-			),
-			'forum_title_element_search' => array(
+			],
+			'forum_title_element_search'             => [
 				'enabled' => false,
-			),
+			],
 			// Forum Archive.
-			'forum_archive_layout'             => 'normal',
-			'forum_archive_content_style'      => 'boxed',
-			'forum_archive_vertical_padding'   => 'show',
-			'forum_archive_sidebar_id'         => 'sidebar-primary',
-			'forum_archive_background'         => '',
-			'forum_archive_content_background' => '',
-			'forum_archive_title'              => true,
-			'forum_archive_title_layout'       => 'above',
-			'forum_archive_title_height'       => array(
-				'size' => array(
+			'forum_archive_layout'                   => 'normal',
+			'forum_archive_content_style'            => 'boxed',
+			'forum_archive_vertical_padding'         => 'show',
+			'forum_archive_sidebar_id'               => 'sidebar-primary',
+			'forum_archive_background'               => '',
+			'forum_archive_content_background'       => '',
+			'forum_archive_title'                    => true,
+			'forum_archive_title_layout'             => 'above',
+			'forum_archive_title_height'             => [
+				'size' => [
 					'mobile'  => '',
 					'tablet'  => '',
 					'desktop' => '',
-				),
-				'unit' => array(
+				],
+				'unit' => [
 					'mobile'  => 'px',
 					'tablet'  => 'px',
 					'desktop' => 'px',
-				),
-			),
-			'forum_archive_title_inner_layout' => 'standard',
-			'forum_archive_title_background'   => array(
-				'desktop' => array(
+				],
+			],
+			'forum_archive_title_inner_layout'       => 'standard',
+			'forum_archive_title_background'         => [
+				'desktop' => [
 					'color' => '',
-				),
-			),
-			'forum_archive_title_featured_image' => false,
-			'forum_archive_title_overlay_color'  => array(
+				],
+			],
+			'forum_archive_title_featured_image'     => false,
+			'forum_archive_title_overlay_color'      => [
 				'color' => '',
-			),
-			'forum_archive_title_top_border'    => array(),
-			'forum_archive_title_bottom_border' => array(),
-			'forum_archive_title_align'         => array(
+			],
+			'forum_archive_title_top_border'         => [],
+			'forum_archive_title_bottom_border'      => [],
+			'forum_archive_title_align'              => [
 				'mobile'  => '',
 				'tablet'  => '',
 				'desktop' => '',
-			),
-			'forum_archive_title_font'   => array(
-				'size' => array(
+			],
+			'forum_archive_title_font'               => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-				'color'   => '',
-			),
-			'forum_archive_title_breadcrumb_color' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+				'color'      => '',
+			],
+			'forum_archive_title_breadcrumb_color'   => [
 				'color' => '',
 				'hover' => '',
-			),
-			'forum_archive_title_breadcrumb_font'   => array(
-				'size' => array(
+			],
+			'forum_archive_title_breadcrumb_font'    => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'forum_archive_title_search_width' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'forum_archive_title_search_width'       => [
 				'size' => '300',
 				'unit' => 'px',
-			),
-			'forum_archive_title_search_border' => array(
+			],
+			'forum_archive_title_search_border'      => [
 				'width' => '',
 				'unit'  => '',
 				'style' => '',
 				'color' => '',
-			),
-			'forum_archive_title_search_color'       => array(
-				'color'  => '',
-				'hover'  => '',
-			),
-			'forum_archive_title_search_background'       => array(
-				'color'  => '',
-				'hover'  => '',
-			),
-			'forum_archive_title_search_typography'        => array(
-				'size' => array(
+			],
+			'forum_archive_title_search_color'       => [
+				'color' => '',
+				'hover' => '',
+			],
+			'forum_archive_title_search_background'  => [
+				'color' => '',
+				'hover' => '',
+			],
+			'forum_archive_title_search_typography'  => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'forum_archive_title_search_margin' => array(
-				'size'   => array( 1, 0, 1, 0 ),
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'forum_archive_title_search_margin'      => [
+				'size'   => [ 1, 0, 1, 0 ],
 				'unit'   => 'em',
 				'locked' => false,
-			),
-			'forum_archive_title_elements'           => array( 'title', 'breadcrumb', 'search' ),
-			'forum_archive_title_element_title' => array(
+			],
+			'forum_archive_title_elements'           => [ 'title', 'breadcrumb', 'search' ],
+			'forum_archive_title_element_title'      => [
 				'enabled' => true,
-			),
-			'forum_archive_title_element_breadcrumb' => array(
-				'enabled' => false,
+			],
+			'forum_archive_title_element_breadcrumb' => [
+				'enabled'    => false,
 				'show_title' => true,
-			),
-			'forum_archive_title_element_search' => array(
+			],
+			'forum_archive_title_element_search'     => [
 				'enabled' => true,
-			),
+			],
 			// Topic.
-			'topic_layout'             => 'normal',
-			'topic_content_style'      => 'boxed',
-			'topic_vertical_padding'   => 'show',
-			'topic_sidebar_id'         => 'sidebar-primary',
-			'topic_background'         => '',
-			'topic_content_background' => '',
-			'topic_title'              => true,
-			'topic_title_layout'       => 'normal',
-			'topic_title_height'       => array(
-				'size' => array(
+			'topic_layout'                           => 'normal',
+			'topic_content_style'                    => 'boxed',
+			'topic_vertical_padding'                 => 'show',
+			'topic_sidebar_id'                       => 'sidebar-primary',
+			'topic_background'                       => '',
+			'topic_content_background'               => '',
+			'topic_title'                            => true,
+			'topic_title_layout'                     => 'normal',
+			'topic_title_height'                     => [
+				'size' => [
 					'mobile'  => '',
 					'tablet'  => '',
 					'desktop' => '',
-				),
-				'unit' => array(
+				],
+				'unit' => [
 					'mobile'  => 'px',
 					'tablet'  => 'px',
 					'desktop' => 'px',
-				),
-			),
-			'topic_title_inner_layout' => 'standard',
-			'topic_title_background'   => array(
-				'desktop' => array(
+				],
+			],
+			'topic_title_inner_layout'               => 'standard',
+			'topic_title_background'                 => [
+				'desktop' => [
 					'color' => '',
-				),
-			),
-			'topic_title_overlay_color'  => array(
+				],
+			],
+			'topic_title_overlay_color'              => [
 				'color' => '',
-			),
-			'topic_title_top_border'    => array(),
-			'topic_title_bottom_border' => array(),
-			'topic_title_align'         => array(
+			],
+			'topic_title_top_border'                 => [],
+			'topic_title_bottom_border'              => [],
+			'topic_title_align'                      => [
 				'mobile'  => '',
 				'tablet'  => '',
 				'desktop' => '',
-			),
-			'topic_title_font'   => array(
-				'size' => array(
+			],
+			'topic_title_font'                       => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-				'color'   => '',
-			),
-			'topic_title_breadcrumb_color' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+				'color'      => '',
+			],
+			'topic_title_breadcrumb_color'           => [
 				'color' => '',
 				'hover' => '',
-			),
-			'topic_title_breadcrumb_font'   => array(
-				'size' => array(
+			],
+			'topic_title_breadcrumb_font'            => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'topic_title_info_color' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'topic_title_info_color'                 => [
 				'color' => '',
 				'hover' => '',
-			),
-			'topic_title_info_font'   => array(
-				'size' => array(
+			],
+			'topic_title_info_font'                  => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'topic_title_search_width' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'topic_title_search_width'               => [
 				'size' => '300',
 				'unit' => 'px',
-			),
-			'topic_title_search_border' => array(
+			],
+			'topic_title_search_border'              => [
 				'width' => '',
 				'unit'  => '',
 				'style' => '',
 				'color' => '',
-			),
-			'topic_title_search_color'       => array(
-				'color'  => '',
-				'hover'  => '',
-			),
-			'topic_title_search_background'       => array(
-				'color'  => '',
-				'hover'  => '',
-			),
-			'topic_title_search_typography'        => array(
-				'size' => array(
+			],
+			'topic_title_search_color'               => [
+				'color' => '',
+				'hover' => '',
+			],
+			'topic_title_search_background'          => [
+				'color' => '',
+				'hover' => '',
+			],
+			'topic_title_search_typography'          => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'topic_title_search_margin' => array(
-				'size'   => array( 1, 0, 1, 0 ),
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'topic_title_search_margin'              => [
+				'size'   => [ 1, 0, 1, 0 ],
 				'unit'   => 'em',
 				'locked' => false,
-			),
-			'topic_title_elements'           => array( 'title', 'breadcrumb', 'search', 'info' ),
-			'topic_title_element_title' => array(
+			],
+			'topic_title_elements'                   => [ 'title', 'breadcrumb', 'search', 'info' ],
+			'topic_title_element_title'              => [
 				'enabled' => true,
-			),
-			'topic_title_element_info' => array(
+			],
+			'topic_title_element_info'               => [
 				'enabled' => true,
-			),
-			'topic_title_element_breadcrumb' => array(
-				'enabled' => false,
+			],
+			'topic_title_element_breadcrumb'         => [
+				'enabled'    => false,
 				'show_title' => true,
-			),
-			'topic_title_element_search' => array(
+			],
+			'topic_title_element_search'             => [
 				'enabled' => false,
-			),
-		);
+			],
+		];
 		$defaults = array_merge( $bbpress_add, $defaults );
 
 		return $defaults;
@@ -555,7 +550,7 @@ class Component implements Component_Interface {
 	 */
 	public function generate_bbpress_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -970,11 +965,11 @@ class Component implements Component_Interface {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
 			foreach ( self::$google_fonts as $key => $font ) {
 				if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-					$add_font = array(
+					$add_font                           = [
 						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
+						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+					];
 					$ktblocks_instance::$gfonts[ $key ] = $add_font;
 				} else {
 					foreach ( $font['fontvariants'] as $variant ) {
@@ -985,7 +980,7 @@ class Component implements Component_Interface {
 				}
 			}
 		} else {
-			add_filter( 'kadence_theme_google_fonts_array', array( $this, 'filter_in_fonts' ) );
+			add_filter( 'kadence_theme_google_fonts_array', [ $this, 'filter_in_fonts' ] );
 		}
 	}
 	/**
@@ -998,11 +993,11 @@ class Component implements Component_Interface {
 		// Enqueue Google Fonts.
 		foreach ( self::$google_fonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $font_array ) ) {
-				$add_font = array(
+				$add_font           = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$font_array[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {

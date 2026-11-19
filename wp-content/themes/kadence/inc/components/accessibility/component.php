@@ -8,15 +8,7 @@
 namespace Kadence\Accessibility;
 
 use Kadence\Component_Interface;
-use function Kadence\kadence;
-use WP_Post;
-use function add_action;
 use function add_filter;
-use function wp_enqueue_script;
-use function get_theme_file_uri;
-use function get_theme_file_path;
-use function wp_script_add_data;
-use function wp_localize_script;
 
 /**
  * Class for improving accessibility among various core features.
@@ -28,7 +20,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'accessibility';
 	}
 
@@ -36,9 +28,9 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'nav_menu_link_attributes', array( $this, 'filter_nav_menu_link_attributes_aria_current' ), 10, 2 );
-		add_filter( 'page_menu_link_attributes', array( $this, 'filter_nav_menu_link_attributes_aria_current' ), 10, 2 );
-		add_filter( 'kadence_before_header', array( $this, 'skip_to_content_link' ), 2 );
+		add_filter( 'nav_menu_link_attributes', [ $this, 'filter_nav_menu_link_attributes_aria_current' ], 10, 2 );
+		add_filter( 'page_menu_link_attributes', [ $this, 'filter_nav_menu_link_attributes_aria_current' ], 10, 2 );
+		add_filter( 'kadence_before_header', [ $this, 'skip_to_content_link' ], 2 );
 	}
 
 	/**

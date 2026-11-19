@@ -37,7 +37,17 @@ defined( 'ABSPATH' ) || exit;
 	<div class="bbp-reply-content">
 		<div class="bbp-head-area">
 
-		<div class="reply-author-displayname"><?php bbp_reply_author_link( array( 'sep' => ' ', 'show_role' => false, 'type' => 'name' ) ); ?></div>
+		<div class="reply-author-displayname">
+		<?php
+		bbp_reply_author_link(
+			[
+				'sep'       => ' ',
+				'show_role' => false,
+				'type'      => 'name',
+			] 
+		);
+		?>
+		</div>
 
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>

@@ -123,6 +123,7 @@ class AvailableComponent extends Component {
 						return renderItem( item, 'available' );
 					} ) }
 				</div>
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

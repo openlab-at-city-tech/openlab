@@ -7,11 +7,11 @@
 
 namespace Kadence;
 
-$align = ( kadence()->sub_option( 'footer_widget4_align', 'desktop' ) ? kadence()->sub_option( 'footer_widget4_align', 'desktop' ) : 'default' );
+$align        = ( kadence()->sub_option( 'footer_widget4_align', 'desktop' ) ? kadence()->sub_option( 'footer_widget4_align', 'desktop' ) : 'default' );
 $tablet_align = ( kadence()->sub_option( 'footer_widget4_align', 'tablet' ) ? kadence()->sub_option( 'footer_widget4_align', 'tablet' ) : 'default' );
 $mobile_align = ( kadence()->sub_option( 'footer_widget4_align', 'mobile' ) ? kadence()->sub_option( 'footer_widget4_align', 'mobile' ) : 'default' );
 
-$valign = ( kadence()->sub_option( 'footer_widget4_vertical_align', 'desktop' ) ? kadence()->sub_option( 'footer_widget4_vertical_align', 'desktop' ) : 'default' );
+$valign        = ( kadence()->sub_option( 'footer_widget4_vertical_align', 'desktop' ) ? kadence()->sub_option( 'footer_widget4_vertical_align', 'desktop' ) : 'default' );
 $tablet_valign = ( kadence()->sub_option( 'footer_widget4_vertical_align', 'tablet' ) ? kadence()->sub_option( 'footer_widget4_vertical_align', 'tablet' ) : 'default' );
 $mobile_valign = ( kadence()->sub_option( 'footer_widget4_vertical_align', 'mobile' ) ? kadence()->sub_option( 'footer_widget4_vertical_align', 'mobile' ) : 'default' );
 

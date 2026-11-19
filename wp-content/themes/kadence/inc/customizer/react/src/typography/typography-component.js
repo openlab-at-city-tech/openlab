@@ -1689,6 +1689,7 @@ class TypographyComponent extends Component {
 						)}
 					</div>
 				)}
+			{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

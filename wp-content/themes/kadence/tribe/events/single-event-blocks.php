@@ -12,7 +12,6 @@
  * @link http://evnt.is/1aiy
  *
  * @version 4.7
- *
  */
 
 $event_id = $this->get( 'post_id' );
@@ -22,7 +21,7 @@ $is_recurring = '';
 if ( ! empty( $event_id ) && function_exists( 'tribe_is_recurring_event' ) ) {
 	$is_recurring = tribe_is_recurring_event( $event_id );
 }
-$classes = apply_filters( 'tribe_default_events_block_single_classes', array( 'tribe-events-single', 'tribe-blocks-editor' ) );
+$classes = apply_filters( 'tribe_default_events_block_single_classes', [ 'tribe-events-single', 'tribe-blocks-editor' ] );
 ?>
 
 <div id="tribe-events-content" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>">

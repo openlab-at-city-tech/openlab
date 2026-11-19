@@ -14,7 +14,7 @@ if ( empty( $slug ) ) {
 		$current_tax = get_taxonomy( $queried_object->taxonomy );
 		if ( is_object( $current_tax ) && property_exists( $current_tax, 'object_type' ) ) {
 			$post_types = $current_tax->object_type;
-			$slug = $post_types[0];
+			$slug       = $post_types[0];
 		}
 	}
 }

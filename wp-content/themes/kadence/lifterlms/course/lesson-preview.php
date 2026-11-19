@@ -2,15 +2,14 @@
 /**
  * Template for a lesson preview element
  *
- * @author      LifterLMS
- * @package     LifterLMS/Templates
- * @since       1.0.0
- * @version     4.4.0
+ * @author LifterLMS
+ * @package LifterLMS/Templates
+ * @since 1.0.0
+ * @version 4.4.0
  */
 
 namespace Kadence;
 
-use LLMS_Course;
 use function llms_page_restricted;
 use function llms_get_restriction_message;
 use function llms_get_excerpt;
@@ -42,7 +41,7 @@ $data_msg     = $restrictions['is_restricted'] ? ' data-tooltip-msg="' . esc_htm
 			<?php if ( 'course' === get_post_type( get_the_ID() ) ) : ?>	
 				<aside class="llms-extra">
 					<?php // translators: %1$d is lession order %2$d is the total number of lessions. ?>
-					<span class="llms-lesson-counter"><?php printf( _x( '%1$d of %2$d', 'lesson order within section', 'kadence' ), isset( $order ) ? $order : $lesson->get_order(), $total_lessons ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+					<span class="llms-lesson-counter"><?php printf( _x( '%1$d of %2$d', 'lesson order within section', 'kadence' ), $order ?? $lesson->get_order(), $total_lessons ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 					<?php echo $lesson->get_preview_icon_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</aside>
 

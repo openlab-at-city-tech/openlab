@@ -27,9 +27,9 @@ $course_id      = $course_post_id;
 $user_id        = get_current_user_id();
 
 $cg_short_description = get_post_meta( $post->ID, '_learndash_course_grid_short_description', true );
-$enable_video = get_post_meta( $post->ID, '_learndash_course_grid_enable_video_preview', true );
-$embed_code   = get_post_meta( $post->ID, '_learndash_course_grid_video_embed_code', true );
-$button_text  = get_post_meta( $post->ID, '_learndash_course_grid_custom_button_text', true );
+$enable_video         = get_post_meta( $post->ID, '_learndash_course_grid_enable_video_preview', true );
+$embed_code           = get_post_meta( $post->ID, '_learndash_course_grid_video_embed_code', true );
+$button_text          = get_post_meta( $post->ID, '_learndash_course_grid_custom_button_text', true );
 
 if ( isset( $shortcode_atts['course_id'] ) ) {
 	$button_link = learndash_get_step_permalink( get_the_ID(), $shortcode_atts['course_id'] );
@@ -42,9 +42,9 @@ $button_link = apply_filters( 'learndash_course_grid_custom_button_link', $butto
 $button_text = isset( $button_text ) && ! empty( $button_text ) ? $button_text : __( 'See more...', 'kadence' );
 $button_text = apply_filters( 'learndash_course_grid_custom_button_text', $button_text, $course_post_id );
 
-$options = get_option( 'sfwd_cpt_options' );
+$options          = get_option( 'sfwd_cpt_options' );
 $currency_setting = class_exists( 'LearnDash_Settings_Section' ) ? LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Section_PayPal', 'paypal_currency' ) : null;
-$currency = '';
+$currency         = '';
 
 if ( isset( $currency_setting ) || ! empty( $currency_setting ) ) {
 	$currency = $currency_setting;
@@ -54,9 +54,9 @@ if ( isset( $currency_setting ) || ! empty( $currency_setting ) ) {
 
 if ( class_exists( 'NumberFormatter' ) ) {
 
-	$locale = get_locale();
+	$locale        = get_locale();
 	$number_format = new NumberFormatter( $locale . '@currency=' . $currency, NumberFormatter::CURRENCY );
-	$currency = $number_format->getSymbol( NumberFormatter::CURRENCY_SYMBOL );
+	$currency      = $number_format->getSymbol( NumberFormatter::CURRENCY_SYMBOL );
 }
 
 /**
@@ -67,15 +67,15 @@ if ( class_exists( 'NumberFormatter' ) ) {
  */
 $currency = apply_filters( 'learndash_course_grid_currency', $currency, $course_id );
 
-$course_options           = get_post_meta( $course_post_id, "_sfwd-courses", true );
-$legacy_short_description = isset( $course_options['sfwd-courses_course_short_description'] ) ? $course_options['sfwd-courses_course_short_description'] : '';
+$course_options           = get_post_meta( $course_post_id, '_sfwd-courses', true );
+$legacy_short_description = $course_options['sfwd-courses_course_short_description'] ?? '';
 // For LD >= 3.0.
 if ( function_exists( 'learndash_get_course_price' ) ) {
 	$price_args = learndash_get_course_price( $course_id );
-	$price = $price_args['price'];
+	$price      = $price_args['price'];
 	$price_type = $price_args['type'];
 } else {
-	$price = $course_options && isset( $course_options['sfwd-courses_course_price'] ) ? $course_options['sfwd-courses_course_price'] : __( 'Free', 'kadence' );
+	$price      = $course_options && isset( $course_options['sfwd-courses_course_price'] ) ? $course_options['sfwd-courses_course_price'] : __( 'Free', 'kadence' );
 	$price_type = $course_options && isset( $course_options['sfwd-courses_course_price_type'] ) ? $course_options['sfwd-courses_course_price_type'] : '';
 }
 
@@ -90,7 +90,7 @@ if ( ! empty( $cg_short_description ) ) {
 /**
  * Filter: individual grid class
  *
- * @param int 	$course_id Course ID
+ * @param int   $course_id Course ID
  * @param array $course_options Course options
  * @var string
  */
@@ -103,7 +103,7 @@ $price_text = '';
 
 if ( is_numeric( $price ) && ! empty( $price ) ) {
 	$price_format = apply_filters( 'learndash_course_grid_price_text_format', '{currency}{price}' );
-	$price_text   = str_replace( array( '{currency}', '{price}' ), array( $currency, $price ), $price_format );
+	$price_text   = str_replace( [ '{currency}', '{price}' ], [ $currency, $price ], $price_format );
 } elseif ( is_string( $price ) && ! empty( $price ) ) {
 	$price_text = $price;
 } elseif ( empty( $price ) ) {
@@ -134,8 +134,8 @@ if ( $has_access && ! $is_completed && $price_type != 'open' && empty( $ribbon_t
 		$ribbon_text   = __( 'Completed', 'kadence' );
 	} else {
 		$course_class .= ' learndash-available';
-		$class .= ' ribbon-enrolled';
-		$ribbon_text = '';
+		$class        .= ' ribbon-enrolled';
+		$ribbon_text   = '';
 	}
 } elseif ( $price_type == 'closed' && empty( $price ) ) {
 	$class        .= ' ribbon-enrolled';
@@ -152,15 +152,13 @@ if ( $has_access && ! $is_completed && $price_type != 'open' && empty( $ribbon_t
 	} else {
 		$ribbon_text = '';
 	}
-} else {
-	if ( empty( $ribbon_text ) ) {
+} elseif ( empty( $ribbon_text ) ) {
 		$class        .= ! empty( $course_options['sfwd-courses_course_price'] ) ? ' price_' . $currency : ' free';
 		$course_class .= ' learndash-not-available learndash-incomplete';
 		$ribbon_text   = $price_text;
-	} else {
-		$class        .= ' custom';
-		$course_class .= ' learndash-not-available learndash-incomplete';
-	}
+} else {
+	$class        .= ' custom';
+	$course_class .= ' learndash-not-available learndash-incomplete';
 }
 
 /**
@@ -179,8 +177,8 @@ if ( '' == $ribbon_text ) {
 /**
  * Filter: individual course ribbon class names
  *
- * @param string $class     	 Returned class names
- * @param int    $course_id 	 Course ID
+ * @param string $class          Returned class names
+ * @param int    $course_id      Course ID
  * @param array  $course_options Course's options
  * @var string
  */
@@ -190,7 +188,7 @@ $class = apply_filters( 'learndash_course_grid_ribbon_class', $class, $course_id
  * Filter: individual course container class names
  *
  * @param string $course_class   Returned class names
- * @param int    $course_id 	 Course ID
+ * @param int    $course_id      Course ID
  * @param array  $course_options Course's options
  * @var string
  */
@@ -214,13 +212,19 @@ ob_start();
 				<?php
 				// Retrive oembed HTML if URL provided.
 				if ( preg_match( '/^http/', $embed_code ) ) {
-					echo wp_oembed_get( wp_kses_post( $embed_code ), array( 'height' => 600, 'width' => 400 ) );
+					echo wp_oembed_get(
+						wp_kses_post( $embed_code ),
+						[
+							'height' => 600,
+							'width'  => 400,
+						] 
+					);
 				} else {
 					echo wp_kses_post( $embed_code );
 				}
 				?>
 			</div>
-			<?php elseif( has_post_thumbnail() ) : ?>
+			<?php elseif ( has_post_thumbnail() ) : ?>
 			<a href="<?php echo esc_url( $button_link ); ?>" rel="bookmark">
 				<?php the_post_thumbnail( $thumb_size ); ?>
 			</a>
@@ -228,7 +232,7 @@ ob_start();
 			<a href="<?php echo esc_url( $button_link ); ?>" rel="bookmark">
 				<img alt="" src="<?php echo esc_url( plugins_url( 'no_image.jpg', LEARNDASH_COURSE_GRID_FILE ) ); ?>"/>
 			</a>
-			<?php endif;?>
+			<?php endif; ?>
 		<?php endif; ?>
 
 		<?php if ( $shortcode_atts['show_content'] == 'true' ) : ?>
@@ -250,9 +254,9 @@ ob_start();
  * Filter: course grid HTML output
  *
  * @param string $output         Individual course grid HTML output
- * @param object $post 	         LD course WP_Post object
+ * @param object $post           LD course WP_Post object
  * @param array  $shortcode_atts Shortcode attributes used for this course grid output
  * @param int    $user_id        Current user ID this course grid is displayed to
- * @return string 				 Filtered course grid HTML output
+ * @return string                Filtered course grid HTML output
  */
 echo apply_filters( 'learndash_course_grid_html_output', ob_get_clean(), $post, $shortcode_atts, $user_id ); /* phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped */

@@ -26,9 +26,9 @@ class Kadence_Section_Pro extends WP_Customize_Section {
 	/**
 	 * Link for pro version.
 	 *
-	 * @since  1.0.10
+	 * @since 1.0.10
 	 * @access public
-	 * @var    string
+	 * @var string
 	 */
 	public $pro_link = '';
 	/**

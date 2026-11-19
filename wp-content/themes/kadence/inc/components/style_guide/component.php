@@ -8,6 +8,7 @@
 namespace Kadence\Style_Guide;
 
 use Kadence\Component_Interface;
+use function Kadence\is_fse_mode;
 use function Kadence\kadence;
 
 /**
@@ -27,9 +28,9 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'customize_preview_init', array( $this, 'preview_scripts' ) );
-		add_action( 'customize_controls_enqueue_scripts', array( $this, 'controls_scripts' ) );
-		add_action( 'wp_footer', array( $this, 'style_guide_template' ) );
+		add_action( 'customize_preview_init', [ $this, 'preview_scripts' ] );
+		add_action( 'customize_controls_enqueue_scripts', [ $this, 'controls_scripts' ] );
+		add_action( 'wp_footer', [ $this, 'style_guide_template' ] );
 	}
 
 
@@ -40,8 +41,8 @@ class Component implements Component_Interface {
 	 * @return void
 	 */
 	public function preview_scripts() {
-		wp_enqueue_style( 'kadence-style-guide-styles', get_template_directory_uri() . '/assets/css/style-guide.min.css', array(), KADENCE_VERSION );
-		wp_enqueue_script( 'kadence-style-guide-previewer', get_template_directory_uri() . '/assets/js/style-guide-previewer.min.js', array( 'jquery', 'customize-preview' ), KADENCE_VERSION, false );
+		wp_enqueue_style( 'kadence-style-guide-styles', get_template_directory_uri() . '/assets/css/style-guide.min.css', [], KADENCE_VERSION );
+		wp_enqueue_script( 'kadence-style-guide-previewer', get_template_directory_uri() . '/assets/js/style-guide-previewer.min.js', [ 'jquery', 'customize-preview' ], KADENCE_VERSION, false );
 	}
 
 	/**
@@ -51,8 +52,8 @@ class Component implements Component_Interface {
 	 * @return void
 	 */
 	public function controls_scripts() {
-		wp_enqueue_script( 'kadence-style-guide-controls', get_template_directory_uri() . '/assets/js/style-guide-controls.min.js', array(), KADENCE_VERSION );
-		wp_enqueue_style( 'kadence-style-guide-controls', get_template_directory_uri() . '/assets/css/style-guide-controls.min.css', array(), KADENCE_VERSION );
+		wp_enqueue_script( 'kadence-style-guide-controls', get_template_directory_uri() . '/assets/js/style-guide-controls.min.js', [], KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-style-guide-controls', get_template_directory_uri() . '/assets/css/style-guide-controls.min.css', [], KADENCE_VERSION );
 	}
 
 	/**
@@ -78,94 +79,95 @@ class Component implements Component_Interface {
 	 *
 	 * @return mixed HTML Markup.
 	 * @since 4.8.0
+	 * @since 1.6.0 Leaves out the palette control link in Full Site Editing mode.
 	 */
 	public function render_style_guide_markup() {
 		$settings = apply_filters(
 			'kadence_style_guide_color_palette',
-			array(
-				'color_groups' => array(
-					'accent' => array(
-						'title' => __( 'Accents', 'kadence' ),
-						'colors' => array(
-							'palette1' => array(
+			[
+				'color_groups' => [
+					'accent'   => [
+						'title'  => __( 'Accents', 'kadence' ),
+						'colors' => [
+							'palette1'  => [
 								'title' => __( 'Accent', 'kadence' ),
 								'code'  => 'var(--global-palette1)',
-							),
-							'palette2' => array(
+							],
+							'palette2'  => [
 								'title' => __( 'Accent - alt', 'kadence' ),
 								'code'  => 'var(--global-palette2)',
-							),
-							'palette10' => array(
+							],
+							'palette10' => [
 								'title' => __( 'Accent - complement', 'kadence' ),
 								'code'  => 'var(--global-palette10)',
-							),
-						),
-					),
-					'contrast' => array(
-						'title' => __( 'Contrast', 'kadence' ),
-						'colors' => array(
-							'palette3' => array(
+							],
+						],
+					],
+					'contrast' => [
+						'title'  => __( 'Contrast', 'kadence' ),
+						'colors' => [
+							'palette3' => [
 								'title' => __( 'Strongest text', 'kadence' ),
 								'code'  => 'var(--global-palette3)',
-							),
-							'palette4' => array(
+							],
+							'palette4' => [
 								'title' => __( 'Strong text', 'kadence' ),
 								'code'  => 'var(--global-palette4)',
-							),
-							'palette5' => array(
+							],
+							'palette5' => [
 								'title' => __( 'Medium text', 'kadence' ),
 								'code'  => 'var(--global-palette5)',
-							),
-							'palette6' => array(
+							],
+							'palette6' => [
 								'title' => __( 'Subtle text', 'kadence' ),
 								'code'  => 'var(--global-palette6)',
-							),
-						),
-					),
-					'base' => array(
-						'title' => __( 'Base', 'kadence' ),
-						'colors' => array(
-							'palette7' => array(
+							],
+						],
+					],
+					'base'     => [
+						'title'  => __( 'Base', 'kadence' ),
+						'colors' => [
+							'palette7' => [
 								'title' => __( 'Subtle background', 'kadence' ),
 								'code'  => 'var(--global-palette7)',
-							),
-							'palette8' => array(
+							],
+							'palette8' => [
 								'title' => __( 'Lighter background', 'kadence' ),
 								'code'  => 'var(--global-palette8)',
-							),
-							'palette9' => array(
+							],
+							'palette9' => [
 								'title' => __( 'White or offwhite', 'kadence' ),
 								'code'  => 'var(--global-palette9)',
-							),
-						),
-					),
-					'notice' => array(
-						'title' => __( 'Notices', 'kadence' ),
-						'colors' => array(
-							'palette11' => array(
+							],
+						],
+					],
+					'notice'   => [
+						'title'  => __( 'Notices', 'kadence' ),
+						'colors' => [
+							'palette11' => [
 								'title' => __( 'Success', 'kadence' ),
 								'code'  => 'var(--global-palette11)',
-							),
-							'palette12' => array(
+							],
+							'palette12' => [
 								'title' => __( 'Info', 'kadence' ),
 								'code'  => 'var(--global-palette12)',
-							),
-							'palette13' => array(
+							],
+							'palette13' => [
 								'title' => __( 'Alert', 'kadence' ),
 								'code'  => 'var(--global-palette13)',
-							),
-							'palette14' => array(
+							],
+							'palette14' => [
 								'title' => __( 'Warning', 'kadence' ),
 								'code'  => 'var(--global-palette14)',
-							),
-							'palette15' => array(
+							],
+							'palette15' => [
 								'title' => __( 'Rating', 'kadence' ),
 								'code'  => 'var(--global-palette15)',
-							),
-						),
-					),
-				),
-			)
+							],
+						],
+					],
+				],
+			]
 		);
 
 		ob_start();
@@ -179,7 +181,7 @@ class Component implements Component_Interface {
 					<div class="kt-sg-2-col-grid">
 						<div class="kt-styler-card">
 							<p class="kt-sg-card-title"> <?php esc_html_e( 'Site Title & Logo', 'kadence' ); ?>
-							<div class="kt-sg-element-wrap kt-sg-logo-section <?php echo esc_attr( kadence()->option('logo-title-inline' ) ? 'kt-logo-title-inline' : '' ); ?>">
+							<div class="kt-sg-element-wrap kt-sg-logo-section <?php echo esc_attr( kadence()->option( 'logo-title-inline' ) ? 'kt-logo-title-inline' : '' ); ?>">
 								<?php echo do_shortcode( $this->get_style_guide_shortcut_trigger( 'section', 'title_tagline' ) ); ?>
 								<?php do_action( 'kadence_site_branding' ); ?>
 							</div>
@@ -198,19 +200,19 @@ class Component implements Component_Interface {
 								<div class="kt-sg-button-element-wrap">
 									<div class="kt-sg-element-wrap">
 										<?php echo do_shortcode( $this->get_style_guide_shortcut_trigger( 'section', 'kadence_customizer_general_buttons', 'general', '', true ) ); ?>
-										<button class="button kt-quick-tour-item-trigger" <?php echo $this->get_style_guide_shortcut_trigger_attributes( 'section', 'kadence_customizer_general_buttons'); ?>>
+										<button class="button kt-quick-tour-item-trigger" <?php echo $this->get_style_guide_shortcut_trigger_attributes( 'section', 'kadence_customizer_general_buttons' ); ?>>
 											<?php esc_html_e( 'Base', 'kadence' ); ?> 
 										</button>
 									</div>
 									<div class="kt-sg-element-wrap">
 										<?php echo do_shortcode( $this->get_style_guide_shortcut_trigger( 'section', 'kadence_customizer_secondary_button', 'general', '', true ) ); ?>
-										<button class="button button-style-secondary kt-quick-tour-item-trigger" <?php echo $this->get_style_guide_shortcut_trigger_attributes( 'section', 'kadence_customizer_secondary_button'); ?>>
+										<button class="button button-style-secondary kt-quick-tour-item-trigger" <?php echo $this->get_style_guide_shortcut_trigger_attributes( 'section', 'kadence_customizer_secondary_button' ); ?>>
 											<?php esc_html_e( 'Secondary', 'kadence' ); ?> 
 										</button>
 									</div>
 									<div class="kt-sg-element-wrap">
 										<?php echo do_shortcode( $this->get_style_guide_shortcut_trigger( 'section', 'kadence_customizer_outline_button', 'general', '', true ) ); ?>
-										<button class="button button-style-outline kt-quick-tour-item-trigger" <?php echo $this->get_style_guide_shortcut_trigger_attributes( 'section', 'kadence_customizer_outline_button'); ?>>
+										<button class="button button-style-outline kt-quick-tour-item-trigger" <?php echo $this->get_style_guide_shortcut_trigger_attributes( 'section', 'kadence_customizer_outline_button' ); ?>>
 											<?php esc_html_e( 'Outline', 'kadence' ); ?> 
 										</button>
 									</div>
@@ -232,7 +234,12 @@ class Component implements Component_Interface {
 									foreach ( $group['colors'] as $key => $data_attrs ) {
 										?>
 										<div class="kt-sg-color-item-wrap">
-											<?php echo do_shortcode( $this->get_style_guide_shortcut_trigger( 'control', 'kadence_color_palette', 'general', 'data-reference="kt-' . esc_attr( $key ) . '"' ) ); ?>
+											<?php
+											// The Site Editor owns the palette in Full Site Editing mode, so there is no palette control to open.
+											if ( ! is_fse_mode() ) {
+												echo do_shortcode( $this->get_style_guide_shortcut_trigger( 'control', 'kadence_color_palette', 'general', 'data-reference="kt-' . esc_attr( $key ) . '"' ) );
+											}
+											?>
 											<span class="kt-sg-color-picker" style="background:<?php echo esc_attr( $data_attrs['code'] ); ?>"> </span>
 											<span class="kt-sg-field-title"> <?php echo esc_html( $data_attrs['title'] ); ?>
 										</div>

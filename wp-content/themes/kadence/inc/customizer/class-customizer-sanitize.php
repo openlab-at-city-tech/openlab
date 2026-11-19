@@ -7,7 +7,6 @@
 
 namespace Kadence;
 
-use WP_Customize_Control;
 use function sanitize_text_field;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -47,7 +46,7 @@ class Customizer_Sanitize {
 		if ( ! is_array( $start_value ) ) {
 			return self::kadence_sanitize_key_string( $start_value );
 		}
-		$new_value = array();
+		$new_value = [];
 		foreach ( $start_value as $key => $value ) {
 			// Sanitize key, remove spaces and special characters.
 			$key = self::kadence_sanitize_key_string( $key );
@@ -121,7 +120,7 @@ class Customizer_Sanitize {
 		if ( ! is_array( $start_value ) ) {
 			return '';
 		}
-		$new_value = array();
+		$new_value = [];
 		foreach ( $start_value as $key => $value ) {
 			// Sanitize key, remove spaces and special characters.
 			$key               = self::kadence_sanitize_key_string( $key );

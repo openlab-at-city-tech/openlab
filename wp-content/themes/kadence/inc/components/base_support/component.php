@@ -9,11 +9,6 @@ namespace Kadence\Base_Support;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use Kadence_Blocks_Frontend;
-use Kadence_Blocks_Pro_Frontend;
-use WP_Upgrader;
-use WP_Ajax_Upgrader_Skin;
-use Plugin_Upgrader;
 use function Kadence\kadence;
 use function add_action;
 use function add_filter;
@@ -87,7 +82,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'base_support';
 	}
 
@@ -95,29 +90,30 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'after_setup_theme', array( $this, 'action_essential_theme_support' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'install_starter_script' ) );
-		add_action( 'admin_notices', array( $this, 'kadence_starter_templates_notice' ) );
-		add_action( 'admin_notices', array( $this, 'kadence_turn_off_gutenberg_plugin_notice' ) );
-		add_action( 'wp_ajax_kadence_dismiss_notice', array( $this, 'ajax_dismiss_starter_notice' ) );
-		add_action( 'wp_ajax_kadence_dismiss_gutenberg_notice', array( $this, 'ajax_dismiss_gutenberg_notice' ) );
-		add_action( 'wp_ajax_kadence_install_starter', array( $this, 'install_plugin_ajax_callback' ) );
-		add_action( 'wp_head', array( $this, 'action_add_pingback_header' ) );
-		add_action( 'wp_head', array( $this, 'action_add_no_js_remove_script' ), 2 );
-		add_action( 'wp_footer', array( $this, 'action_add_scrollbar_offset_script' ), 2 );
-		add_filter( 'body_class', array( $this, 'filter_body_classes_add_hfeed' ) );
-		add_filter( 'embed_defaults', array( $this, 'filter_embed_dimensions' ) );
-		add_filter( 'theme_scandir_exclusions', array( $this, 'filter_scandir_exclusions_for_optional_templates' ) );
-		add_filter( 'script_loader_tag', array( $this, 'filter_script_loader_tag' ), 10, 2 );
-		add_filter( 'body_class', array( $this, 'filter_body_classes_add_link_style' ) );
-		add_filter( 'get_search_form', array( $this, 'add_search_icon' ), 99 );
-		add_filter( 'get_product_search_form', array( $this, 'add_search_icon' ), 99 );
-		add_filter( 'embed_oembed_html', array( $this, 'classic_embed_wrap' ), 90, 4 );
-		add_filter( 'excerpt_length', array( $this, 'custom_excerpt_length' ) );
+		add_action( 'after_setup_theme', [ $this, 'action_essential_theme_support' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'install_starter_script' ] );
+		// 05/06/2026: this banner is temporarily commented out until kadence starter templates experience is updated.
+		// add_action( 'admin_notices', array( $this, 'kadence_starter_templates_notice' ) );
+		add_action( 'admin_notices', [ $this, 'kadence_turn_off_gutenberg_plugin_notice' ] );
+		add_action( 'wp_ajax_kadence_dismiss_notice', [ $this, 'ajax_dismiss_starter_notice' ] );
+		add_action( 'wp_ajax_kadence_dismiss_gutenberg_notice', [ $this, 'ajax_dismiss_gutenberg_notice' ] );
+		add_action( 'wp_ajax_kadence_install_starter', [ $this, 'install_plugin_ajax_callback' ] );
+		add_action( 'wp_head', [ $this, 'action_add_pingback_header' ] );
+		add_action( 'wp_head', [ $this, 'action_add_no_js_remove_script' ], 2 );
+		add_action( 'wp_footer', [ $this, 'action_add_scrollbar_offset_script' ], 2 );
+		add_filter( 'body_class', [ $this, 'filter_body_classes_add_hfeed' ] );
+		add_filter( 'embed_defaults', [ $this, 'filter_embed_dimensions' ] );
+		add_filter( 'theme_scandir_exclusions', [ $this, 'filter_scandir_exclusions_for_optional_templates' ] );
+		add_filter( 'script_loader_tag', [ $this, 'filter_script_loader_tag' ], 10, 2 );
+		add_filter( 'body_class', [ $this, 'filter_body_classes_add_link_style' ] );
+		add_filter( 'get_search_form', [ $this, 'add_search_icon' ], 99 );
+		add_filter( 'get_product_search_form', [ $this, 'add_search_icon' ], 99 );
+		add_filter( 'embed_oembed_html', [ $this, 'classic_embed_wrap' ], 90, 4 );
+		add_filter( 'excerpt_length', [ $this, 'custom_excerpt_length' ] );
 		add_filter( 'the_author_description', 'wpautop' );
-		add_action( 'admin_init', array( $this, 'set_theme_initial_version' ) );
-		add_action( 'init', array( $this, 'setup_content_filter' ), 9 );
-		add_action( 'wp', array( $this, 'setup_header_block_css' ), 99 );
+		add_action( 'admin_init', [ $this, 'set_theme_initial_version' ] );
+		add_action( 'init', [ $this, 'setup_content_filter' ], 9 );
+		add_action( 'wp', [ $this, 'setup_header_block_css' ], 99 );
 	}
 	/**
 	 * Add the header block css to the head tag.
@@ -157,8 +153,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function setup_content_filter() {
 		global $wp_embed;
-		add_filter( 'kadence_theme_the_content', array( $wp_embed, 'run_shortcode' ), 8 );
-		add_filter( 'kadence_theme_the_content', array( $wp_embed, 'autoembed'     ), 8 );
+		add_filter( 'kadence_theme_the_content', [ $wp_embed, 'run_shortcode' ], 8 );
+		add_filter( 'kadence_theme_the_content', [ $wp_embed, 'autoembed' ], 8 );
 		add_filter( 'kadence_theme_the_content', 'do_blocks' );
 		add_filter( 'kadence_theme_the_content', 'wptexturize' );
 		add_filter( 'kadence_theme_the_content', 'shortcode_unautop' );
@@ -192,7 +188,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		} else {
 			return;
 		}
-		$config = get_option( 'kadence_starter_templates_config', '' );
+		$config          = get_option( 'kadence_starter_templates_config', '' );
 		$use_site_assist = apply_filters( 'kadence_starter_site_assist_enabled', true );
 		if ( ! empty( $config ) ) {
 			$config = json_decode( $config, true );
@@ -216,11 +212,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		wp_localize_script(
 			'kadence-starter-install',
 			'kadenceStarterInstall',
-			array(
+			[
 				'ajax_url'   => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce' => wp_create_nonce( 'kadence-ajax-verification' ),
 				'status'     => $data_action,
-			)
+			]
 		);
 	}
 	/**
@@ -240,10 +236,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		wp_localize_script(
 			'kadence-gutenberg-deactivate',
 			'kadenceGutenbergDeactivate',
-			array(
+			[
 				'ajax_url'   => admin_url( 'admin-ajax.php' ),
 				'ajax_nonce' => wp_create_nonce( 'kadence-ajax-verification' ),
-			)
+			]
 		);
 	}
 	/**
@@ -291,8 +287,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Option to Install Starter Templates
 	 */
 	public function install_starter_script() {
-		wp_register_script( 'kadence-starter-install', get_template_directory_uri() . '/assets/js/admin-activate.min.js', array( 'jquery' ), KADENCE_VERSION, false );
-		wp_register_script( 'kadence-gutenberg-deactivate', get_template_directory_uri() . '/assets/js/gutenberg-notice.min.js', array( 'jquery' ), KADENCE_VERSION, false );
+		wp_register_script( 'kadence-starter-install', get_template_directory_uri() . '/assets/js/admin-activate.min.js', [ 'jquery' ], KADENCE_VERSION, false );
+		wp_register_script( 'kadence-gutenberg-deactivate', get_template_directory_uri() . '/assets/js/gutenberg-notice.min.js', [ 'jquery' ], KADENCE_VERSION, false );
 	}
 	/**
 	 * Active Plugin Check
@@ -311,10 +307,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public static function get_active_plugins() {
 
-		self::$active_plugins = (array) get_option( 'active_plugins', array() );
+		self::$active_plugins = (array) get_option( 'active_plugins', [] );
 
 		if ( is_multisite() ) {
-			self::$active_plugins = array_merge( self::$active_plugins, get_site_option( 'active_sitewide_plugins', array() ) );
+			self::$active_plugins = array_merge( self::$active_plugins, get_site_option( 'active_sitewide_plugins', [] ) );
 		}
 	}
 	/**
@@ -339,23 +335,23 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( 'install' === $status ) {
 			$api = plugins_api(
 				'plugin_information',
-				array(
-					'slug' => 'kadence-starter-templates',
-					'fields' => array(
+				[
+					'slug'   => 'kadence-starter-templates',
+					'fields' => [
 						'short_description' => false,
-						'sections' => false,
-						'requires' => false,
-						'rating' => false,
-						'ratings' => false,
-						'downloaded' => false,
-						'last_updated' => false,
-						'added' => false,
-						'tags' => false,
-						'compatibility' => false,
-						'homepage' => false,
-						'donate_link' => false,
-					),
-				)
+						'sections'          => false,
+						'requires'          => false,
+						'rating'            => false,
+						'ratings'           => false,
+						'downloaded'        => false,
+						'last_updated'      => false,
+						'added'             => false,
+						'tags'              => false,
+						'compatibility'     => false,
+						'homepage'          => false,
+						'donate_link'       => false,
+					],
+				]
 			);
 			if ( ! is_wp_error( $api ) ) {
 
@@ -402,14 +398,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			if ( kadence()->sub_option( 'search_archive_element_excerpt', 'words' ) ) {
 				$length = intval( kadence()->sub_option( 'search_archive_element_excerpt', 'words' ) );
 			}
-		} else if ( 'post' === get_post_type() ) {
+		} elseif ( 'post' === get_post_type() ) {
 			if ( kadence()->sub_option( 'post_archive_element_excerpt', 'words' ) ) {
 				$length = intval( kadence()->sub_option( 'post_archive_element_excerpt', 'words' ) );
 			}
-		} else {
-			if ( kadence()->sub_option( get_post_type() . '_archive_element_excerpt', 'words' ) ) {
+		} elseif ( kadence()->sub_option( get_post_type() . '_archive_element_excerpt', 'words' ) ) {
 				$length = intval( kadence()->sub_option( get_post_type() . '_archive_element_excerpt', 'words' ) );
-			}
 		}
 		return $length;
 	}
@@ -444,15 +438,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Wrap embedded media for responsive embeds, pre blocks.
 	 *
-	 * @param  string $cache The oEmbed markup.
-	 * @param  string $url The URL being embedded.
-	 * @param  array  $attr An array of attributes.
-	 * @param  string $post_ID the post id.
+	 * @param string $cache The oEmbed markup.
+	 * @param string $url The URL being embedded.
+	 * @param array  $attr An array of attributes.
+	 * @param string $post_ID the post id.
 	 */
-	public function classic_embed_wrap( $cache, $url, $attr = array(), $post_ID = '' ) {
+	public function classic_embed_wrap( $cache, $url, $attr = [], $post_ID = '' ) {
 		if ( doing_filter( 'the_content' ) && ! has_blocks() && ! empty( $cache ) && ! empty( $url ) ) {
-			$do_wrap = false;
-			$patterns = array(
+			$do_wrap  = false;
+			$patterns = [
 				'#http://((m|www)\.)?youtube\.com/watch.*#i',
 				'#https://((m|www)\.)?youtube\.com/watch.*#i',
 				'#http://((m|www)\.)?youtube\.com/playlist.*#i',
@@ -467,8 +461,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'#https?://(www\.)?funnyordie\.com/videos/.*#i',
 				'#https?://vine.co/v/.*#i',
 				'#https?://(www\.)?collegehumor\.com/video/.*#i',
-				'#https?://(www\.|embed\.)?ted\.com/talks/.*#i'
-			);
+				'#https?://(www\.|embed\.)?ted\.com/talks/.*#i',
+			];
 			$patterns = apply_filters( 'kadence_maybe_wrap_embed_patterns', $patterns );
 			foreach ( $patterns as $pattern ) {
 				$do_wrap = preg_match( $pattern, $url );
@@ -487,17 +481,17 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'get_version'                          => array( $this, 'get_version' ),
-			'get_asset_version'                    => array( $this, 'get_asset_version' ),
-			'get_post_types'                       => array( $this, 'get_post_types' ),
-			'get_post_types_objects'               => array( $this, 'get_post_types_objects' ),
-			'get_post_types_to_ignore'             => array( $this, 'get_post_types_to_ignore' ),
-			'get_transparent_post_types_to_ignore' => array( $this, 'get_transparent_post_types_to_ignore' ),
-			'get_public_post_types_to_ignore'      => array( $this, 'get_public_post_types_to_ignore' ),
-			'customizer_quick_link'                => array( $this, 'customizer_quick_link' ),
-		);
+	public function template_tags(): array {
+		return [
+			'get_version'                          => [ $this, 'get_version' ],
+			'get_asset_version'                    => [ $this, 'get_asset_version' ],
+			'get_post_types'                       => [ $this, 'get_post_types' ],
+			'get_post_types_objects'               => [ $this, 'get_post_types_objects' ],
+			'get_post_types_to_ignore'             => [ $this, 'get_post_types_to_ignore' ],
+			'get_transparent_post_types_to_ignore' => [ $this, 'get_transparent_post_types_to_ignore' ],
+			'get_public_post_types_to_ignore'      => [ $this, 'get_public_post_types_to_ignore' ],
+			'customizer_quick_link'                => [ $this, 'customizer_quick_link' ],
+		];
 	}
 	/**
 	 * If in customizer output the quicklink.
@@ -518,7 +512,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public static function get_post_types_to_ignore() {
 		if ( is_null( self::$ignore_post_types ) ) {
-			$ignore_post_types = array(
+			$ignore_post_types       = [
 				'post',
 				'page',
 				'product',
@@ -565,7 +559,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'topic',
 				'reply',
 				'tribe_events',
-			);
+			];
 			self::$ignore_post_types = apply_filters( 'kadence_customizer_post_type_ignore_array', $ignore_post_types );
 		}
 
@@ -579,7 +573,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public static function get_transparent_post_types_to_ignore() {
 		if ( is_null( self::$transparent_ignore_post_types ) ) {
-			$transparent_ignore_post_types = array(
+			$transparent_ignore_post_types       = [
 				'post',
 				'page',
 				'product',
@@ -617,7 +611,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'sfwd-assignment',
 				'tutor_quiz',
 				'tutor_assignments',
-			);
+			];
 			self::$transparent_ignore_post_types = apply_filters( 'kadence_transparent_post_type_ignore_array', $transparent_ignore_post_types );
 		}
 
@@ -631,7 +625,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public static function get_public_post_types_to_ignore() {
 		if ( is_null( self::$public_ignore_post_types ) ) {
-			$public_ignore_post_types = array(
+			$public_ignore_post_types       = [
 				'elementor_library',
 				'fl-theme-layout',
 				'kt_size_chart',
@@ -659,7 +653,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'sfwd-certificates',
 				'sfwd-transactions',
 				'reply',
-			);
+			];
 			self::$public_ignore_post_types = apply_filters( 'kadence_public_post_type_ignore_array', $public_ignore_post_types );
 		}
 
@@ -673,15 +667,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public static function get_post_types() {
 		if ( is_null( self::$post_types ) ) {
-			$args             = array(
-				'public' => true,
+			$args             = [
+				'public'       => true,
 				'show_in_rest' => true,
-				'_builtin' => false,
-			);
-			$builtin = array(
+				'_builtin'     => false,
+			];
+			$builtin          = [
 				'post',
 				'page',
-			);
+			];
 			$output           = 'names'; // names or objects, note names is the default.
 			$operator         = 'and';
 			$post_types       = get_post_types( $args, $output, $operator );
@@ -698,13 +692,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public static function get_post_types_objects() {
 		if ( is_null( self::$post_types_objects ) ) {
-			$args             = array(
-				'public' => true,
+			$args                     = [
+				'public'   => true,
 				'_builtin' => false,
-			);
-			$output           = 'objects'; // names or objects, note names is the default.
-			$operator         = 'and';
-			$post_types       = get_post_types( $args, $output, $operator );
+			];
+			$output                   = 'objects'; // names or objects, note names is the default.
+			$operator                 = 'and';
+			$post_types               = get_post_types( $args, $output, $operator );
 			self::$post_types_objects = apply_filters( 'kadence_public_post_type_objects', $post_types );
 		}
 
@@ -731,7 +725,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		// Ensure WordPress theme features render in HTML5 markup.
 		add_theme_support(
 			'html5',
-			array(
+			[
 				'search-form',
 				'comment-form',
 				'comment-list',
@@ -739,7 +733,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'caption',
 				'script',
 				'style',
-			)
+			]
 		);
 
 		add_theme_support( 'custom-units' );
@@ -752,10 +746,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		add_theme_support( 'responsive-embeds' );
 
 		if ( ! kadence()->option( 'post_comments_date' ) ) {
-			add_filter( 'get_comment_date', array( $this, 'remove_comment_date' ), 20, 3 );
-			add_filter( 'get_comment_time', array( $this, 'remove_comment_time' ), 20, 5 );
+			add_filter( 'get_comment_date', [ $this, 'remove_comment_date' ], 20, 3 );
+			add_filter( 'get_comment_time', [ $this, 'remove_comment_time' ], 20, 5 );
 		}
-
 	}
 	/**
 	 * Adds a tiny script to remove no-js class.
@@ -802,7 +795,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $classes Classes for the body element.
 	 * @return array Filtered body classes.
 	 */
-	public function filter_body_classes_add_hfeed( array $classes ) : array {
+	public function filter_body_classes_add_hfeed( array $classes ): array {
 		// Check if we should add the hfeed class.
 		if ( ! kadence()->option( 'microdata' ) || ! apply_filters( 'kadence_microdata', true, 'body-class' ) ) {
 			return $classes;
@@ -820,7 +813,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $classes Classes for the body element.
 	 * @return array Filtered body classes.
 	 */
-	public function filter_body_classes_add_link_style( array $classes ) : array {
+	public function filter_body_classes_add_link_style( array $classes ): array {
 		if ( ! kadence()->option( 'enable_scroll_to_id' ) ) {
 			$classes[] = 'no-anchor-scroll';
 		}
@@ -845,7 +838,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $dimensions An array of embed width and height values in pixels (in that order).
 	 * @return array Filtered dimensions array.
 	 */
-	public function filter_embed_dimensions( array $dimensions ) : array {
+	public function filter_embed_dimensions( array $dimensions ): array {
 		$dimensions['width'] = 720;
 		return $dimensions;
 	}
@@ -858,10 +851,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $exclusions the default directories to exclude.
 	 * @return array Filtered exclusions.
 	 */
-	public function filter_scandir_exclusions_for_optional_templates( array $exclusions ) : array {
+	public function filter_scandir_exclusions_for_optional_templates( array $exclusions ): array {
 		return array_merge(
 			$exclusions,
-			array( 'optional' )
+			[ 'optional' ]
 		);
 	}
 
@@ -878,7 +871,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function filter_script_loader_tag( $tag, $handle ) {
 
-		foreach ( array( 'async', 'defer' ) as $attr ) {
+		foreach ( [ 'async', 'defer' ] as $attr ) {
 			if ( ! wp_scripts()->get_data( $handle, $attr ) ) {
 				continue;
 			}
@@ -900,7 +893,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Theme version number.
 	 */
-	public function get_version() : string {
+	public function get_version(): string {
 		static $theme_version = null;
 
 		if ( null === $theme_version ) {
@@ -918,7 +911,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $filepath Asset file path.
 	 * @return string Asset version number.
 	 */
-	public function get_asset_version( string $filepath ) : string {
+	public function get_asset_version( string $filepath ): string {
 		if ( WP_DEBUG ) {
 			return (string) filemtime( $filepath );
 		}

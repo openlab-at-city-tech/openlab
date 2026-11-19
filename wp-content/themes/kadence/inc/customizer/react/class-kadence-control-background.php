@@ -28,20 +28,20 @@ class Kadence_Control_Background extends WP_Customize_Media_Control {
 	 *
 	 * @var array
 	 */
-	public $default = array();
+	public $default = [];
 
 	/**
 	 * Additional arguments passed to JS.
 	 *
 	 * @var array
 	 */
-	public $input_attrs = array(
-		'attachments' => array(
-			'desktop' => array(),
-			'tablet'  => array(),
-			'mobile'  => array(),
-		),
-	);
+	public $input_attrs = [
+		'attachments' => [
+			'desktop' => [],
+			'tablet'  => [],
+			'mobile'  => [],
+		],
+	];
 	/**
 	 * Additional arguments passed to JS.
 	 *
@@ -56,7 +56,7 @@ class Kadence_Control_Background extends WP_Customize_Media_Control {
 		parent::to_json();
 		$value = $this->value();
 		if ( $value && is_array( $value ) ) {
-			foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+			foreach ( [ 'desktop', 'tablet', 'mobile' ] as $device ) {
 				if ( isset( $value[ $device ] ) && isset( $value[ $device ]['image'] ) && isset( $value[ $device ]['image']['url'] ) && ! empty( $value[ $device ]['image']['url'] ) ) {
 					$attachment_id                               = attachment_url_to_postid( $value[ $device ]['image']['url'] );
 					$this->input_attrs['attachments'][ $device ] = wp_prepare_attachment_for_js( $attachment_id );
@@ -64,7 +64,7 @@ class Kadence_Control_Background extends WP_Customize_Media_Control {
 			}
 		}
 		$this->json['input_attrs'] = $this->input_attrs;
-		$this->json['default'] = $this->default;
+		$this->json['default']     = $this->default;
 	}
 	/**
 	 * Empty Render Function to prevent errors.

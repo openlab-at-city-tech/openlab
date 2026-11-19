@@ -8,7 +8,7 @@
 namespace Kadence;
 
 global $post;
-$defaults = array(
+$defaults          = [
 	'id'                     => 'meta',
 	'enabled'                => false,
 	'divider'                => 'dot',
@@ -32,11 +32,11 @@ $defaults = array(
 	'categoriesLabel'        => '',
 	'comments'               => false,
 	'commentsCondition'      => false,
-);
+];
 $slug              = ( is_search() ? 'search' : get_post_type() );
 $elements          = kadence()->option( $slug . '_archive_element_meta', $defaults );
-$title_meta        = array();
-$meta_labels       = array();
+$title_meta        = [];
+$meta_labels       = [];
 $meta_divider      = 'dot';
 $author_image      = false;
 $author_link       = true;
@@ -135,7 +135,7 @@ $post_type_obj = get_post_type_object( get_post_type() );
 				if ( ! empty( $author_string ) ) {
 					$author_output = '<span class="posted-by">';
 					if ( $author_image ) {
-						$author_output .= '<span class="author-avatar"' . ( $author_image_size && 25 !== $author_image_size ? ' style="width:' . esc_attr( $author_image_size ) . 'px; height:' . esc_attr( $author_image_size ) . 'px;"' : '' ) .'>';
+						$author_output .= '<span class="author-avatar"' . ( $author_image_size && 25 !== $author_image_size ? ' style="width:' . esc_attr( $author_image_size ) . 'px; height:' . esc_attr( $author_image_size ) . 'px;"' : '' ) . '>';
 						if ( $author_link ) {
 							if ( get_the_author_meta( 'url' ) && apply_filters( 'kadence_author_use_profile_link', true ) ) {
 								$author_output .= sprintf(

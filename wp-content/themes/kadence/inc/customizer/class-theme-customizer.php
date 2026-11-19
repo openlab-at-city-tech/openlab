@@ -7,33 +7,13 @@
 
 namespace Kadence;
 
-use Kadence_Control_Builder;
-use Kadence_Control_Builder_Tabs;
-use Customizer_Sanitize;
-use WP_Customize_Control;
-use LearnDash_Settings_Section;
-use Kadence\WebFont_Loader;
 use function Kadence\kadence;
 use function add_action;
-use function get_template_part;
 use function add_filter;
 use function wp_enqueue_style;
 use function get_template_directory;
-use function wp_style_add_data;
-use function get_theme_file_uri;
-use function get_theme_file_path;
-use function wp_styles;
-use function esc_attr;
 use function esc_url;
-use function wp_style_is;
-use function _doing_it_wrong;
-use function wp_print_styles;
-use function post_password_required;
-use function get_option;
-use function comments_open;
-use function get_comments_number;
 use function apply_filters;
-use function add_query_arg;
 use function wp_add_inline_style;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -58,7 +38,7 @@ class Theme_Customizer {
 	 *
 	 * @var the theme settings array.
 	 */
-	public static $settings = array();
+	public static $settings = [];
 
 	/**
 	 * Panels.
@@ -78,14 +58,14 @@ class Theme_Customizer {
 	 *
 	 * @var array
 	 */
-	private static $sections_added = array();
+	private static $sections_added = [];
 
 	/**
 	 * Panels added.
 	 *
 	 * @var array
 	 */
-	private static $panels_added = array();
+	private static $panels_added = [];
 
 	/**
 	 * Capability for customizer access.
@@ -99,28 +79,28 @@ class Theme_Customizer {
 	 *
 	 * @var null
 	 */
-	private static $contexts = array();
+	private static $contexts = [];
 
 	/**
 	 * Live Preview Control Data for customizer controls.
 	 *
 	 * @var null
 	 */
-	private static $live_control = array();
+	private static $live_control = [];
 
 	/**
 	 * Choices Data for customizer controls.
 	 *
 	 * @var null
 	 */
-	private static $choices = array();
+	private static $choices = [];
 
 	/**
 	 * Holds theme settings array sections.
 	 *
 	 * @var the theme settings sections.
 	 */
-	public static $settings_sections = array(
+	public static $settings_sections = [
 		'general-layout',
 		'general-colors',
 		'general-button',
@@ -173,7 +153,7 @@ class Theme_Customizer {
 		'custom-layout',
 		'search-layout',
 		'404-layout',
-	);
+	];
 	/**
 	 * Instance Control.
 	 */
@@ -188,51 +168,50 @@ class Theme_Customizer {
 	 */
 	public function __construct() {
 
-		add_action( 'customize_register', array( $this, 'create_settings_array' ), 1 );
+		add_action( 'customize_register', [ $this, 'create_settings_array' ], 1 );
 
-		add_action( 'customize_register', array( $this, 'register_controls' ) );
+		add_action( 'customize_register', [ $this, 'register_controls' ] );
 
-		add_action( 'customize_register', array( $this, 'register_settings' ) );
+		add_action( 'customize_register', [ $this, 'register_settings' ] );
 
-		add_action( 'customize_register', array( $this, 'add_controls' ) );
+		add_action( 'customize_register', [ $this, 'add_controls' ] );
 
-		add_action( 'customize_register', array( $this, 'override_defaults' ), 20 );
+		add_action( 'customize_register', [ $this, 'override_defaults' ], 20 );
 
-		add_action( 'customize_register', array( $this, 'add_woocommerce_choices' ), 20 );
+		add_action( 'customize_register', [ $this, 'add_woocommerce_choices' ], 20 );
 
-		add_action( 'customize_register', array( $this, 'upgrade_section' ), 15 );
+		add_action( 'customize_register', [ $this, 'upgrade_section' ], 15 );
 
-		add_action( 'customize_section_active', array( $this, 'active_footer_widgets' ), 20, 2 );
+		add_action( 'customize_section_active', [ $this, 'active_footer_widgets' ], 20, 2 );
 
-		add_filter( 'customize_controls_enqueue_scripts', array( $this, 'convert_beaver_custom_fonts' ), 5 );
+		add_filter( 'customize_controls_enqueue_scripts', [ $this, 'convert_beaver_custom_fonts' ], 5 );
 
-		add_filter( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customizer_scripts' ) );
+		add_filter( 'customize_controls_enqueue_scripts', [ $this, 'enqueue_customizer_scripts' ] );
 
-		add_action( 'customize_preview_init', array( $this, 'action_enqueue_customize_preview_scripts' ) );
+		add_action( 'customize_preview_init', [ $this, 'action_enqueue_customize_preview_scripts' ] );
 
-		add_filter( 'customizer_widgets_section_args', array( $this, 'customizer_custom_widget_areas' ), 10, 3 );
+		add_filter( 'customizer_widgets_section_args', [ $this, 'customizer_custom_widget_areas' ], 10, 3 );
 
-		add_action( 'wp_ajax_kadence_flush_fonts_folder', array( $this, 'ajax_delete_fonts_folder' ) );
-
+		add_action( 'wp_ajax_kadence_flush_fonts_folder', [ $this, 'ajax_delete_fonts_folder' ] );
 	}
 	/**
 	 * Add a filter that matches beaver builder custom font filter.
 	 */
 	public function convert_beaver_custom_fonts() {
-		$beaver_fonts = apply_filters( 'kadence_theme_add_custom_fonts', array() );
+		$beaver_fonts = apply_filters( 'kadence_theme_add_custom_fonts', [] );
 		if ( ! empty( $beaver_fonts ) && is_array( $beaver_fonts ) ) {
 			add_filter(
 				'kadence_theme_custom_fonts',
-				function( $custom_fonts ) use( $beaver_fonts ) {
+				function ( $custom_fonts ) use ( $beaver_fonts ) {
 					foreach ( $beaver_fonts as $font_name => $args ) {
-						$weights_arg = array();
+						$weights_arg = [];
 						if ( is_array( $args ) && isset( $args['weights'] ) && is_array( $args['weights'] ) ) {
 							$weights_arg = $args['weights'];
 						}
-						$font_slug = ( is_array( $args ) && isset( $args['fallback'] ) && ! empty( $args['fallback'] ) ? '"' . $font_name . '", ' . $args['fallback'] : $font_name );
-						$custom_fonts[ $font_slug  ] = array(
+						$font_slug                  = ( is_array( $args ) && isset( $args['fallback'] ) && ! empty( $args['fallback'] ) ? '"' . $font_name . '", ' . $args['fallback'] : $font_name );
+						$custom_fonts[ $font_slug ] = [
 							'v' => $weights_arg,
-						);
+						];
 					}
 					return $custom_fonts;
 				},
@@ -256,7 +235,7 @@ class Theme_Customizer {
 		}
 		if ( class_exists( '\Kadence\WebFont_Loader' ) ) {
 			$font_loader = new \Kadence\WebFont_Loader( '' );
-			$removed = $font_loader->delete_fonts_folder();
+			$removed     = $font_loader->delete_fonts_folder();
 			if ( ! $removed ) {
 				wp_send_json_error( 'failed_to_flush' );
 			}
@@ -269,18 +248,18 @@ class Theme_Customizer {
 	 */
 	public function add_woocommerce_choices() {
 		if ( class_exists( 'woocommerce' ) ) {
-			$options         = self::$choices['header_desktop_items'];
-			$options['cart'] = array(
+			$options                               = self::$choices['header_desktop_items'];
+			$options['cart']                       = [
 				'name'    => esc_html__( 'Cart', 'kadence' ),
 				'section' => 'kadence_customizer_cart',
-			);
+			];
 			self::$choices['header_desktop_items'] = $options;
 			// Mobile Cart.
-			$options         = self::$choices['header_mobile_items'];
-			$options['mobile-cart'] = array(
+			$options                              = self::$choices['header_mobile_items'];
+			$options['mobile-cart']               = [
 				'name'    => esc_html__( 'Cart', 'kadence' ),
 				'section' => 'kadence_customizer_mobile_cart',
-			);
+			];
 			self::$choices['header_mobile_items'] = $options;
 		}
 	}
@@ -395,29 +374,29 @@ class Theme_Customizer {
 		if ( isset( $wp_customize->selective_refresh ) ) {
 			$wp_customize->selective_refresh->add_partial(
 				'blogname',
-				array(
+				[
 					'selector'        => '.site-title',
-					'render_callback' => function() {
+					'render_callback' => function () {
 						bloginfo( 'name' );
 					},
-				)
+				]
 			);
 			$wp_customize->selective_refresh->add_partial(
 				'blogdescription',
-				array(
+				[
 					'selector'        => '.site-description',
-					'render_callback' => function() {
+					'render_callback' => function () {
 						bloginfo( 'description' );
 					},
-				)
+				]
 			);
 			$wp_customize->selective_refresh->add_partial(
 				'custom_logo',
-				array(
+				[
 					'selector'            => '.site-branding',
 					'container_inclusive' => true,
 					'render_callback'     => 'Kadence\site_branding',
-				)
+				]
 			);
 		}
 
@@ -426,63 +405,63 @@ class Theme_Customizer {
 			$id = $opt_name_key . '[custom_logo]';
 			$wp_customize->add_setting(
 				$id,
-				array(
+				[
 					'type'              => 'option',
 					'transport'         => 'postMessage',
 					'capability'        => self::get_capability(),
 					'default'           => isset( $setting['default'] ) && $control_class !== 'Kadence_Control_Background' ? $setting['default'] : '',
-					'sanitize_callback' => array( 'Kadence\Customizer_Sanitize', 'kadence_sanitize_option' ),
-				)
+					'sanitize_callback' => [ 'Kadence\Customizer_Sanitize', 'kadence_sanitize_option' ],
+				]
 			);
-			$control_config = array(
+			$control_config = [
 				'settings'        => $id,
-				'section'      => 'title_tagline',
+				'section'         => 'title_tagline',
 				'capability'      => self::get_capability(),
 				'priority'        => 4,
-				'label'        => esc_html__( 'Logo', 'kadence' ),
-				'mime_type'    => 'image',
+				'label'           => esc_html__( 'Logo', 'kadence' ),
+				'mime_type'       => 'image',
 				'active_callback' => '__return_true',
-			);
+			];
 			$wp_customize->add_control( new \WP_Customize_Media_Control( $wp_customize, $id, $control_config ) );
 			$wp_customize->selective_refresh->add_partial(
 				$id,
-				array(
+				[
 					'selector'            => '.site-branding',
 					'container_inclusive' => true,
 					'render_callback'     => 'Kadence\site_branding',
-				)
+				]
 			);
-			$general_tab = array(
-				array(
+			$general_tab           = [
+				[
 					'setting' => '__current_tab',
 					'value'   => 'general',
-				),
-			);
-			self::$contexts[$id] = $general_tab;
+				],
+			];
+			self::$contexts[ $id ] = $general_tab;
 		}
 
 		/**
 		 * Add Tab Conditionals
 		 */
-		$general_tab = array(
-			array(
+		$general_tab                       = [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		);
+			],
+		];
 		self::$contexts['custom_logo']     = $general_tab;
 		self::$contexts['blogname']        = $general_tab;
 		self::$contexts['blogdescription'] = $general_tab;
 
-		$palette_live = array(
-			array(
+		$palette_live = [
+			[
 				'type'     => 'palette',
 				'selector' => ':root',
 				'property' => 'global-palette',
 				'pattern'  => '$',
 				'key'      => 'palette',
-			),
-		);
+			],
+		];
 
 		self::$live_control['kadence_global_palette'] = $palette_live;
 	}
@@ -542,23 +521,23 @@ class Theme_Customizer {
 				new \Kadence_Section_Pro(
 					$wp_customize,
 					'kadence_pro_upgrade',
-					array(
+					[
 						'title'    => esc_html__( 'More Options Available in Kadence Pro', 'kadence' ),
 						'pro_link' => esc_url( \Kadence\kadence()->get_pro_url( 'https://www.kadencewp.com/kadence-theme/premium/', 'https://www.kadencewp.com/kadence-theme/premium/', 'in-app', 'theme-customizer' ) ),
 						'priority' => 1,
-					)
+					]
 				)
 			);
 			$wp_customize->add_control(
 				new \Kadence_Control_Blank(
 					$wp_customize,
 					'pro-notice',
-					array(
+					[
 						'label'    => '',
 						'section'  => 'kadence_pro_upgrade',
-						'settings' => array(),
+						'settings' => [],
 						'priority' => 0,
-					)
+					]
 				)
 			);
 		}
@@ -582,64 +561,64 @@ class Theme_Customizer {
 	public static function get_panels() {
 		// Define panels.
 		if ( is_null( self::$panels ) ) {
-			$panels = array(
-				'design' => array(
+			$panels = [
+				'design'    => [
 					'title'    => __( 'Colors & Fonts', 'kadence' ),
 					'priority' => 18,
-				),
-				'header' => array(
+				],
+				'header'    => [
 					'title'    => __( 'Header', 'kadence' ),
 					'priority' => 20,
-				),
-				'footer' => array(
+				],
+				'footer'    => [
 					'title'    => __( 'Footer', 'kadence' ),
 					'priority' => 22,
-				),
-				'general' => array(
+				],
+				'general'   => [
 					'title'    => __( 'General', 'kadence' ),
 					'priority' => 23,
-				),
-				'all_posts' => array(
+				],
+				'all_posts' => [
 					'title'    => __( 'Posts/Pages Layout', 'kadence' ),
 					'priority' => 24,
-				),
-			);
+				],
+			];
 			if ( class_exists( 'SFWD_LMS' ) ) {
-				$extra_learn['learndash'] = array(
+				$extra_learn['learndash'] = [
 					'title'    => __( 'LearnDash', 'kadence' ),
 					'priority' => 25,
-				);
-				$panels = array_merge(
+				];
+				$panels                   = array_merge(
 					$panels,
 					$extra_learn
 				);
 			}
 			if ( class_exists( 'LifterLMS' ) ) {
-				$extra_lifter['lifterlms'] = array(
+				$extra_lifter['lifterlms'] = [
 					'title'    => __( 'LifterLMS', 'kadence' ),
 					'priority' => 25,
-				);
-				$panels = array_merge(
+				];
+				$panels                    = array_merge(
 					$panels,
 					$extra_lifter
 				);
 			}
 			if ( class_exists( 'BBPress' ) ) {
-				$extra_bbpress['bbpress'] = array(
+				$extra_bbpress['bbpress'] = [
 					'title'    => __( 'bbPress', 'kadence' ),
 					'priority' => 25,
-				);
-				$panels = array_merge(
+				];
+				$panels                   = array_merge(
 					$panels,
 					$extra_bbpress
 				);
 			}
 			if ( class_exists( 'TUTOR\Tutor' ) ) {
-				$extra_tutor['tutorlms'] = array(
+				$extra_tutor['tutorlms'] = [
 					'title'    => __( 'TutorLMS', 'kadence' ),
 					'priority' => 25,
-				);
-				$panels = array_merge(
+				];
+				$panels                  = array_merge(
 					$panels,
 					$extra_tutor
 				);
@@ -660,745 +639,745 @@ class Theme_Customizer {
 	public static function get_sections() {
 		// Define sections.
 		if ( is_null( self::$sections ) ) {
-			$sections = array(
-				'site_identity' => array(
+			$sections = [
+				'site_identity'              => [
 					'title'    => __( 'Site Identity', 'kadence' ),
 					'priority' => 25,
-				),
-				'general_layout' => array(
+				],
+				'general_layout'             => [
 					'title'    => __( 'Layout', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 7,
-				),
-				'sidebar' => array(
+				],
+				'sidebar'                    => [
 					'title'    => __( 'Sidebar', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 8,
-				),
-				'sidebar_design' => array(
+				],
+				'sidebar_design'             => [
 					'title'    => __( 'Sidebar Design', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 8,
-				),
-				'general_colors' => array(
+				],
+				'general_colors'             => [
 					'title'    => __( 'Colors', 'kadence' ),
 					'panel'    => 'design',
 					'priority' => 9,
-				),
-				'general_buttons' => array(
+				],
+				'general_buttons'            => [
 					'title'    => __( 'Base Button Styles', 'kadence' ),
 					'panel'    => 'design',
 					'priority' => 12,
-				),
-				'secondary_button' => array(
+				],
+				'secondary_button'           => [
 					'title'    => __( 'Secondary Button', 'kadence' ),
 					'panel'    => 'design',
 					'priority' => 13,
-				),
-				'outline_button' => array(
+				],
+				'outline_button'             => [
 					'title'    => __( 'Outline Button', 'kadence' ),
 					'panel'    => 'design',
 					'priority' => 14,
-				),
-				'general_typography' => array(
+				],
+				'general_typography'         => [
 					'title'    => __( 'Typography', 'kadence' ),
 					'panel'    => 'design',
 					'priority' => 11,
-				),
-				'general_image' => array(
+				],
+				'general_image'              => [
 					'title'    => __( 'Images', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 11,
-				),
-				'scroll_up' => array(
+				],
+				'scroll_up'                  => [
 					'title'    => __( 'Scroll To Top', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 12,
-				),
-				'scroll_up_design' => array(
+				],
+				'scroll_up_design'           => [
 					'title'    => __( 'Scroll To Top', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 12,
-				),
-				'general_social' => array(
+				],
+				'general_social'             => [
 					'title'    => __( 'Social Links', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 20,
-				),
-				'general_comments' => array(
+				],
+				'general_comments'           => [
 					'title'    => __( 'Comments', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 20,
-				),
-				'general_performance' => array(
+				],
+				'general_performance'        => [
 					'title'    => __( 'Performance', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 21,
-				),
-				'breadcrumbs' => array(
+				],
+				'breadcrumbs'                => [
 					'title'    => __( 'Breadcrumbs', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 20,
-				),
-				'general_404' => array(
+				],
+				'general_404'                => [
 					'title'    => __( '404 Page Layout', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 20,
-				),
-				'general_404_design' => array(
+				],
+				'general_404_design'         => [
 					'title'    => __( '404 Page Layout', 'kadence' ),
 					'panel'    => 'general',
 					'priority' => 20,
-				),
-				'header_layout' => array(
+				],
+				'header_layout'              => [
 					'title'    => __( 'Header Layout', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 8,
-				),
-				'header_builder' => array(
+				],
+				'header_builder'             => [
 					'title'    => __( 'Header Builder', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 9,
-				),
-				'header_top' => array(
+				],
+				'header_top'                 => [
 					'title'    => __( 'Top Row', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				),
-				'header_main' => array(
+				],
+				'header_main'                => [
 					'title'    => __( 'Main Row', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				),
-				'header_bottom' => array(
+				],
+				'header_bottom'              => [
 					'title'    => __( 'Bottom Row', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				),
-				'header_popup' => array(
+				],
+				'header_popup'               => [
 					'title'    => __( 'Header Off Canvas', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				),
-				'header_popup_design' => array(
+				],
+				'header_popup_design'        => [
 					'title'    => __( 'Header Off Canvas', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				),
-				'title_tagline' => array(
+				],
+				'title_tagline'              => [
 					'title'    => __( 'Site Identity', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'primary_navigation' => array(
+				],
+				'primary_navigation'         => [
 					'title'    => __( 'Primary Navigation', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'secondary_navigation' => array(
+				],
+				'secondary_navigation'       => [
 					'title'    => __( 'Secondary Navigation', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'dropdown_navigation' => array(
+				],
+				'dropdown_navigation'        => [
 					'title'    => __( 'Dropdown Navigation', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'dropdown_navigation_design' => array(
+				],
+				'dropdown_navigation_design' => [
 					'title'    => __( 'Dropdown Navigation', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_trigger' => array(
+				],
+				'mobile_trigger'             => [
 					'title'    => __( 'Mobile Trigger', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_trigger_design' => array(
+				],
+				'mobile_trigger_design'      => [
 					'title'    => __( 'Mobile Trigger', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_navigation' => array(
+				],
+				'mobile_navigation'          => [
 					'title'    => __( 'Mobile Navigation', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_button' => array(
+				],
+				'mobile_button'              => [
 					'title'    => __( 'Header Mobile Button', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_button_design' => array(
+				],
+				'mobile_button_design'       => [
 					'title'    => __( 'Header Mobile Button', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_html' => array(
+				],
+				'mobile_html'                => [
 					'title'    => __( 'Header Mobile HTML', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_html' => array(
+				],
+				'header_html'                => [
 					'title'    => __( 'HTML Editor', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_html_design' => array(
+				],
+				'header_html_design'         => [
 					'title'    => __( 'HTML Editor', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'cart' => array(
+				],
+				'cart'                       => [
 					'title'    => __( 'Header Cart', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'cart_design' => array(
+				],
+				'cart_design'                => [
 					'title'    => __( 'Header Cart Design', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_cart' => array(
+				],
+				'mobile_cart'                => [
 					'title'    => __( 'Mobile Header Cart', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_cart_design' => array(
+				],
+				'mobile_cart_design'         => [
 					'title'    => __( 'Mobile Header Cart', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_button' => array(
+				],
+				'header_button'              => [
 					'title'    => __( 'Header Button', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_button_design' => array(
+				],
+				'header_button_design'       => [
 					'title'    => __( 'Header Button', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_social' => array(
+				],
+				'header_social'              => [
 					'title'    => __( 'Header Social', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_social_design' => array(
+				],
+				'header_social_design'       => [
 					'title'    => __( 'Header Social', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_social' => array(
+				],
+				'mobile_social'              => [
 					'title'    => __( 'Header Social', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'mobile_social_design' => array(
+				],
+				'mobile_social_design'       => [
 					'title'    => __( 'Header Social', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_search' => array(
+				],
+				'header_search'              => [
 					'title'    => __( 'Header Search', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'transparent_header' => array(
+				],
+				'transparent_header'         => [
 					'title'    => __( 'Transparent Header', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'transparent_header_design' => array(
+				],
+				'transparent_header_design'  => [
 					'title'    => __( 'Transparent Header', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_sticky' => array(
+				],
+				'header_sticky'              => [
 					'title'    => __( 'Sticky Header', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'header_sticky_design' => array(
+				],
+				'header_sticky_design'       => [
 					'title'    => __( 'Sticky Header', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 20,
-				),
-				'footer_layout' => array(
+				],
+				'footer_layout'              => [
 					'title'    => __( 'Footer Layout', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 8,
-				),
-				'footer_builder' => array(
+				],
+				'footer_builder'             => [
 					'title'    => __( 'Footer Builder', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 9,
-				),
-				'footer_top' => array(
+				],
+				'footer_top'                 => [
 					'title'    => __( 'Footer Top', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_top_design' => array(
+				],
+				'footer_top_design'          => [
 					'title'    => __( 'Footer Top', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_middle' => array(
+				],
+				'footer_middle'              => [
 					'title'    => __( 'Footer Middle', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_middle_design' => array(
+				],
+				'footer_middle_design'       => [
 					'title'    => __( 'Footer Middle', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_bottom' => array(
+				],
+				'footer_bottom'              => [
 					'title'    => __( 'Footer Bottom', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_bottom_design' => array(
+				],
+				'footer_bottom_design'       => [
 					'title'    => __( 'Footer Bottom', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_html' => array(
+				],
+				'footer_html'                => [
 					'title'    => __( 'Footer Copyright HTML', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_social' => array(
+				],
+				'footer_social'              => [
 					'title'    => __( 'Footer Social', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_social_design' => array(
+				],
+				'footer_social_design'       => [
 					'title'    => __( 'Footer Social', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'footer_navigation' => array(
+				],
+				'footer_navigation'          => [
 					'title'    => __( 'Footer Navigation', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				),
-				'page_layout' => array(
+				],
+				'page_layout'                => [
 					'title'    => __( 'Page Layout', 'kadence' ),
 					'panel'    => 'all_posts',
 					'priority' => 3,
-				),
-				'search' => array(
+				],
+				'search'                     => [
 					'title'    => __( 'Search Results', 'kadence' ),
 					'priority' => 24,
-				),
-				'search_design' => array(
+				],
+				'search_design'              => [
 					'title'    => __( 'Search Results', 'kadence' ),
 					'priority' => 24,
-				),
-				'post_layout' => array(
+				],
+				'post_layout'                => [
 					'title'    => __( 'Single Post Layout', 'kadence' ),
 					'panel'    => 'all_posts',
 					'priority' => 7,
-				),
-				'post_layout_design' => array(
+				],
+				'post_layout_design'         => [
 					'title'    => __( 'Single Post Layout', 'kadence' ),
 					'panel'    => 'all_posts',
 					'priority' => 7,
-				),
-				'post_archive' => array(
+				],
+				'post_archive'               => [
 					'title'    => __( 'Archive Layout', 'kadence' ),
 					'panel'    => 'all_posts',
 					'priority' => 8,
-				),
-				'post_archive_design' => array(
+				],
+				'post_archive_design'        => [
 					'title'    => __( 'Archive Layout', 'kadence' ),
 					'panel'    => 'all_posts',
 					'priority' => 8,
-				),
+				],
 				// 'custom_post' => array(
-				// 	'title'    => __( 'Custom Post Types', 'kadence' ),
-				// 	'panel'    => 'all_posts',
-				// 	'priority' => 24,
+				// 'title'    => __( 'Custom Post Types', 'kadence' ),
+				// 'panel'    => 'all_posts',
+				// 'priority' => 24,
 				// ),
-			);
+			];
 			if ( ( defined( 'GUTENBERG_VERSION' ) && version_compare( GUTENBERG_VERSION, '10.6.2', '>' ) ) || version_compare( substr( get_bloginfo( 'version' ), 0, 3 ), '5.8', '>=' ) ) {
-				$blocks_extra['sidebar-widgets-footer1'] = array(
+				$blocks_extra['sidebar-widgets-footer1']        = [
 					'title'    => __( 'Widget Footer 1 Settings', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-footer2'] = array(
+				];
+				$blocks_extra['sidebar-widgets-footer2']        = [
 					'title'    => __( 'Widget Footer 2 Settings', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-footer3'] = array(
+				];
+				$blocks_extra['sidebar-widgets-footer3']        = [
 					'title'    => __( 'Widget Footer 3 Settings', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-footer4'] = array(
+				];
+				$blocks_extra['sidebar-widgets-footer4']        = [
 					'title'    => __( 'Widget Footer 4 Settings', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-footer5'] = array(
+				];
+				$blocks_extra['sidebar-widgets-footer5']        = [
 					'title'    => __( 'Widget Footer 5 Settings', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-footer6'] = array(
+				];
+				$blocks_extra['sidebar-widgets-footer6']        = [
 					'title'    => __( 'Widget Footer 6 Settings', 'kadence' ),
 					'panel'    => 'footer',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-header1'] = array(
+				];
+				$blocks_extra['sidebar-widgets-header1']        = [
 					'title'    => __( 'Widget Header Settings', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-header2'] = array(
+				];
+				$blocks_extra['sidebar-widgets-header2']        = [
 					'title'    => __( 'Widget Area Settings', 'kadence' ),
 					'panel'    => 'header',
 					'priority' => 10,
-				);
-				$blocks_extra['sidebar-widgets-product-filter'] = array(
+				];
+				$blocks_extra['sidebar-widgets-product-filter'] = [
 					'title'    => __( 'Catalog Off Canvas Sidebar Settings', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 18,
-				);
-				$sections = array_merge(
+				];
+				$sections                                       = array_merge(
 					$sections,
 					$blocks_extra
 				);
 			}
 			if ( class_exists( 'woocommerce' ) ) {
-				$extra_woo['woocommerce_product_catalog'] = array(
+				$extra_woo['woocommerce_product_catalog']        = [
 					'title'    => __( 'Product Catalog', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 10,
-				);
-				$extra_woo['woocommerce_product_catalog_design'] = array(
+				];
+				$extra_woo['woocommerce_product_catalog_design'] = [
 					'title'    => __( 'Product Catalog', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 10,
-				);
-				$extra_woo['product_layout'] = array(
+				];
+				$extra_woo['product_layout']                     = [
 					'title'    => __( 'Single Product Layout', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 10,
-				);
-				$extra_woo['product_layout_design'] = array(
+				];
+				$extra_woo['product_layout_design']              = [
 					'title'    => __( 'Single Product Layout', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 10,
-				);
-				$extra_woo['account_layout'] = array(
+				];
+				$extra_woo['account_layout']                     = [
 					'title'    => __( 'My Account Layout', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 24,
-				);
-				$extra_woo['woocommerce_store_notice_design'] = array(
+				];
+				$extra_woo['woocommerce_store_notice_design']    = [
 					'title'    => __( 'Store Notice', 'kadence' ),
 					'panel'    => 'woocommerce',
 					'priority' => 10,
-				);
-				$sections = array_merge(
+				];
+				$sections                                        = array_merge(
 					$sections,
 					$extra_woo
 				);
 			}
 			if ( class_exists( 'SFWD_LMS' ) ) {
-				$extra_learn = array();
-				$extra_learn['sfwd_courses_layout'] = array(
+				$extra_learn                                       = [];
+				$extra_learn['sfwd_courses_layout']                = [
 					'title'    => __( 'Course Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 10,
-				);
-				$extra_learn['sfwd_courses_layout_design'] = array(
+				];
+				$extra_learn['sfwd_courses_layout_design']         = [
 					'title'    => __( 'Course Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 10,
-				);
-				$extra_learn['sfwd_courses_archive_layout'] = array(
+				];
+				$extra_learn['sfwd_courses_archive_layout']        = [
 					'title'    => __( 'Course Archive Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 11,
-				);
-				$extra_learn['sfwd_courses_archive_layout_design'] = array(
+				];
+				$extra_learn['sfwd_courses_archive_layout_design'] = [
 					'title'    => __( 'Course Archive Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 11,
-				);
-				$extra_learn['sfwd_lesson_layout'] = array(
+				];
+				$extra_learn['sfwd_lesson_layout']                 = [
 					'title'    => __( 'Lesson Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_lesson_layout_design'] = array(
+				];
+				$extra_learn['sfwd_lesson_layout_design']          = [
 					'title'    => __( 'Lesson Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_quiz_layout'] = array(
+				];
+				$extra_learn['sfwd_quiz_layout']                   = [
 					'title'    => __( 'Quiz Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_quiz_layout_design'] = array(
+				];
+				$extra_learn['sfwd_quiz_layout_design']            = [
 					'title'    => __( 'Quiz Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_topic_layout'] = array(
+				];
+				$extra_learn['sfwd_topic_layout']                  = [
 					'title'    => __( 'Topic Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_topic_layout_design'] = array(
+				];
+				$extra_learn['sfwd_topic_layout_design']           = [
 					'title'    => __( 'Topic Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_groups_layout'] = array(
+				];
+				$extra_learn['sfwd_groups_layout']                 = [
 					'title'    => __( 'Groups Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 11,
-				);
-				$extra_learn['sfwd_groups_layout_design'] = array(
+				];
+				$extra_learn['sfwd_groups_layout_design']          = [
 					'title'    => __( 'Groups Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 11,
-				);
-				$extra_learn['sfwd_essays_layout'] = array(
+				];
+				$extra_learn['sfwd_essays_layout']                 = [
 					'title'    => __( 'Essay Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 11,
-				);
-				$extra_learn['sfwd_essays_layout_design'] = array(
+				];
+				$extra_learn['sfwd_essays_layout_design']          = [
 					'title'    => __( 'Essay Layout', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 11,
-				);
-				$extra_learn['sfwd_design'] = array(
+				];
+				$extra_learn['sfwd_design']                        = [
 					'title'    => __( 'Learn Dash Design', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_grid_layout'] = array(
+				];
+				$extra_learn['sfwd_grid_layout']                   = [
 					'title'    => __( 'Course Grid Design', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
-				$extra_learn['sfwd_grid_layout_design'] = array(
+				];
+				$extra_learn['sfwd_grid_layout_design']            = [
 					'title'    => __( 'Course Grid Design', 'kadence' ),
 					'panel'    => 'learndash',
 					'priority' => 12,
-				);
+				];
 				$sections = array_merge(
 					$sections,
 					$extra_learn
 				);
 			}
 			if ( class_exists( 'BBPress' ) ) {
-				$extra_bbpress = array();
-				$extra_bbpress['topic_layout'] = array(
+				$extra_bbpress                         = [];
+				$extra_bbpress['topic_layout']         = [
 					'title'    => __( 'Topic Layout', 'kadence' ),
 					'panel'    => 'bbpress',
 					'priority' => 10,
-				);
-				$extra_bbpress['topic_layout_design'] = array(
+				];
+				$extra_bbpress['topic_layout_design']  = [
 					'title'    => __( 'Topic Layout', 'kadence' ),
 					'panel'    => 'bbpress',
 					'priority' => 10,
 					'type'     => 'design-hidden',
-				);
-				$extra_bbpress['forum_layout'] = array(
+				];
+				$extra_bbpress['forum_layout']         = [
 					'title'    => __( 'Forum Layout', 'kadence' ),
 					'panel'    => 'bbpress',
 					'priority' => 10,
-				);
-				$extra_bbpress['forum_layout_design'] = array(
+				];
+				$extra_bbpress['forum_layout_design']  = [
 					'title'    => __( 'Forum Layout', 'kadence' ),
 					'panel'    => 'bbpress',
 					'priority' => 10,
 					'type'     => 'design-hidden',
-				);
-				$extra_bbpress['forum_archive'] = array(
+				];
+				$extra_bbpress['forum_archive']        = [
 					'title'    => __( 'Forum Archive', 'kadence' ),
 					'panel'    => 'bbpress',
 					'priority' => 10,
-				);
-				$extra_bbpress['forum_archive_design'] = array(
+				];
+				$extra_bbpress['forum_archive_design'] = [
 					'title'    => __( 'Forum Archive', 'kadence' ),
 					'panel'    => 'bbpress',
 					'priority' => 10,
 					'type'     => 'design-hidden',
-				);
-				$sections = array_merge(
+				];
+				$sections                              = array_merge(
 					$sections,
 					$extra_bbpress
 				);
 			}
 			if ( class_exists( 'LifterLMS' ) ) {
-				$extra_lifter['course_layout'] = array(
+				$extra_lifter['course_layout']                  = [
 					'title'    => __( 'Course Layout', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 10,
-				);
-				$extra_lifter['course_layout_design'] = array(
+				];
+				$extra_lifter['course_layout_design']           = [
 					'title'    => __( 'Course Layout', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 10,
-				);
-				$extra_lifter['course_archive'] = array(
+				];
+				$extra_lifter['course_archive']                 = [
 					'title'    => __( 'Course Archive', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 11,
-				);
-				$extra_lifter['course_archive_design'] = array(
+				];
+				$extra_lifter['course_archive_design']          = [
 					'title'    => __( 'Course Archive', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 11,
-				);
-				$extra_lifter['lesson_layout'] = array(
+				];
+				$extra_lifter['lesson_layout']                  = [
 					'title'    => __( 'Lesson Layout', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 12,
-				);
-				$extra_lifter['lesson_layout_design'] = array(
+				];
+				$extra_lifter['lesson_layout_design']           = [
 					'title'    => __( 'Lesson Layout', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 12,
-				);
-				$extra_lifter['llms_quiz_layout'] = array(
+				];
+				$extra_lifter['llms_quiz_layout']               = [
 					'title'    => __( 'Quiz Layout', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 13,
-				);
-				$extra_lifter['llms_membership_layout'] = array(
+				];
+				$extra_lifter['llms_membership_layout']         = [
 					'title'    => __( 'Membership Layout', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 14,
-				);
-				$extra_lifter['llms_membership_archive'] = array(
+				];
+				$extra_lifter['llms_membership_archive']        = [
 					'title'    => __( 'Membership Archive', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 15,
-				);
-				$extra_lifter['llms_membership_archive_design'] = array(
+				];
+				$extra_lifter['llms_membership_archive_design'] = [
 					'title'    => __( 'Membership Archive', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 15,
-				);
-				$extra_lifter['llms_dashboard_layout'] = array(
+				];
+				$extra_lifter['llms_dashboard_layout']          = [
 					'title'    => __( 'User Dashboard', 'kadence' ),
 					'panel'    => 'lifterlms',
 					'priority' => 16,
-				);
-				$sections = array_merge(
+				];
+				$sections                                       = array_merge(
 					$sections,
 					$extra_lifter
 				);
 			}
 			if ( class_exists( 'TUTOR\Tutor' ) ) {
-				$extra_tutor['courses_layout'] = array(
+				$extra_tutor['courses_layout']                = [
 					'title'    => __( 'Course Layout', 'kadence' ),
 					'panel'    => 'tutorlms',
 					'priority' => 10,
-				);
-				$extra_tutor['courses_layout_design'] = array(
+				];
+				$extra_tutor['courses_layout_design']         = [
 					'title'    => __( 'Course Layout', 'kadence' ),
 					'panel'    => 'tutorlms',
 					'priority' => 10,
-				);
-				$extra_tutor['courses_archive_layout'] = array(
+				];
+				$extra_tutor['courses_archive_layout']        = [
 					'title'    => __( 'Course Archive Layout', 'kadence' ),
 					'panel'    => 'tutorlms',
 					'priority' => 11,
-				);
-				$extra_tutor['courses_archive_layout_design'] = array(
+				];
+				$extra_tutor['courses_archive_layout_design'] = [
 					'title'    => __( 'Course Archive Layout', 'kadence' ),
 					'panel'    => 'tutorlms',
 					'priority' => 11,
-				);
-				$sections = array_merge(
+				];
+				$sections                                     = array_merge(
 					$sections,
 					$extra_tutor
 				);
 			}
 			if ( defined( 'TRIBE_EVENTS_FILE' ) ) {
-				$extra_events['tribe_events_layout'] = array(
+				$extra_events['tribe_events_layout']        = [
 					'title'    => __( 'Single Event Layout', 'kadence' ),
 					'panel'    => 'tribe_customizer',
 					'priority' => 80,
-				);
-				$extra_events['tribe_events_layout_design'] = array(
+				];
+				$extra_events['tribe_events_layout_design'] = [
 					'title'    => __( 'Single Event Layout', 'kadence' ),
 					'panel'    => 'tribe_customizer',
 					'priority' => 80,
-				);
-				$extra_events['tribe_events_archive'] = array(
+				];
+				$extra_events['tribe_events_archive']       = [
 					'title'    => __( 'Events Layout', 'kadence' ),
 					'panel'    => 'tribe_customizer',
 					'priority' => 85,
-				);
-				$sections = array_merge(
+				];
+				$sections                                   = array_merge(
 					$sections,
 					$extra_events
 				);
 			}
 			$post_types        = kadence()->get_post_types_objects();
-			$extras_post_types = array();
+			$extras_post_types = [];
 			$add_extras        = false;
 			foreach ( $post_types as $post_type_item ) {
 				$post_type_name  = $post_type_item->name;
 				$post_type_label = $post_type_item->label;
 				$ignore_type     = kadence()->get_post_types_to_ignore();
-				$panel_name = 'all_posts';
-				$panel_priority = 10;
+				$panel_name      = 'all_posts';
+				$panel_priority  = 10;
 				if ( ! in_array( $post_type_name, $ignore_type, true ) ) {
 					if ( $post_type_name === 'ld-exam' ) {
-						$panel_name = 'learndash';
+						$panel_name     = 'learndash';
 						$panel_priority = 40;
 					}
-					$add_extras = true;
-					$extras_post_types[ $post_type_name . '_layout' ] = array(
+					$add_extras                                       = true;
+					$extras_post_types[ $post_type_name . '_layout' ] = [
 						'title'    => $post_type_label . ' ' . __( 'Layout', 'kadence' ),
 						'panel'    => $panel_name,
 						'priority' => $panel_priority,
-					);
-					$extras_post_types[ $post_type_name . '_layout_design' ] = array(
+					];
+					$extras_post_types[ $post_type_name . '_layout_design' ] = [
 						'title'    => $post_type_label . ' ' . __( 'Layout', 'kadence' ),
 						'panel'    => $panel_name,
 						'priority' => $panel_priority,
 						'type'     => 'design-hidden',
-					);
+					];
 					if ( $post_type_name !== 'ld-exam' ) {
-						$extras_post_types[ $post_type_name . '_archive' ] = array(
+						$extras_post_types[ $post_type_name . '_archive' ]        = [
 							'title'    => $post_type_label . ' ' . __( 'Archive', 'kadence' ),
 							'panel'    => $panel_name,
 							'priority' => $panel_priority,
-						);
-						$extras_post_types[ $post_type_name . '_archive_design' ] = array(
+						];
+						$extras_post_types[ $post_type_name . '_archive_design' ] = [
 							'title'    => $post_type_label . ' ' . __( 'Archive', 'kadence' ),
 							'panel'    => $panel_name,
 							'priority' => $panel_priority,
 							'type'     => 'design-hidden',
-						);
+						];
 					}
 				}
 			}
 			if ( $add_extras ) {
-				$extras_post_types['custom_posts_placeholder'] = array(
+				$extras_post_types['custom_posts_placeholder'] = [
 					'title'    => __( 'Custom Post Types', 'kadence' ),
 					'panel'    => 'all_posts',
 					'priority' => 9,
-				);
-				$final_sections = array_merge(
+				];
+				$final_sections                                = array_merge(
 					$sections,
 					$extras_post_types
 				);
@@ -1453,12 +1432,12 @@ class Theme_Customizer {
 			// Define Sanitize Function.
 			if ( isset( $setting['sanitize'] ) && ! empty( $setting['sanitize'] ) ) {
 				if ( substr( $setting['sanitize'], 0, 8 ) === 'kadence_' ) {
-					$sanitize_function = array( 'Kadence\Customizer_Sanitize', $setting['sanitize'] );
+					$sanitize_function = [ 'Kadence\Customizer_Sanitize', $setting['sanitize'] ];
 				} else {
 					$sanitize_function = $setting['sanitize'];
 				}
 			} else {
-				$sanitize_function = array( 'Kadence\Customizer_Sanitize', 'kadence_sanitize_option' );
+				$sanitize_function = [ 'Kadence\Customizer_Sanitize', 'kadence_sanitize_option' ];
 				$sanitize_function = '';
 			}
 			if ( 'option' === kadence()->get_option_type() ) {
@@ -1471,56 +1450,54 @@ class Theme_Customizer {
 						$setting_id = $opt_name_key . '[' . $id . ']';
 						$wp_customize->add_setting(
 							$setting_id,
-							array(
+							[
 								'type'              => 'option',
 								'default'           => kadence()->default( $id ),
-								'transport'         => isset( $setting['transport'] ) ? $setting['transport'] : 'postMessage',
+								'transport'         => $setting['transport'] ?? 'postMessage',
 								'capability'        => self::get_capability(),
 								'sanitize_callback' => $sanitize_function,
-							)
+							]
 						);
 					}
 				} else {
 					$wp_customize->add_setting(
 						$id,
-						array(
+						[
 							'type'              => 'option',
-							'transport'         => isset( $setting['transport'] ) ? $setting['transport'] : 'postMessage',
+							'transport'         => $setting['transport'] ?? 'postMessage',
 							'capability'        => self::get_capability(),
 							'default'           => isset( $setting['default'] ) && $control_class !== 'Kadence_Control_Background' ? $setting['default'] : '',
 							'sanitize_callback' => $sanitize_function,
-						)
+						]
+					);
+				}
+			} elseif ( isset( $setting['settings'] ) && is_array( $setting['settings'] ) ) {
+				foreach ( $setting['settings'] as $setting_key => $id ) {
+					if ( 'option' === kadence()->get_option_type() ) {
+						$id = self::get_option_name() . '[' . $id . ']';
+					}
+					$wp_customize->add_setting(
+						$id,
+						[
+							'type'              => kadence()->get_option_type(),
+							'default'           => kadence()->default( $id ),
+							'transport'         => $setting['transport'] ?? 'postMessage',
+							'capability'        => self::get_capability(),
+							'sanitize_callback' => $sanitize_function,
+						]
 					);
 				}
 			} else {
-				if ( isset( $setting['settings'] ) && is_array( $setting['settings'] ) ) {
-					foreach ( $setting['settings'] as $setting_key => $id ) {
-						if ( 'option' === kadence()->get_option_type() ) {
-							$id = self::get_option_name() . '[' . $id . ']';
-						}
-						$wp_customize->add_setting(
-							$id,
-							array(
-								'type'              => kadence()->get_option_type(),
-								'default'           => kadence()->default( $id ),
-								'transport'         => isset( $setting['transport'] ) ? $setting['transport'] : 'postMessage',
-								'capability'        => self::get_capability(),
-								'sanitize_callback' => $sanitize_function,
-							)
-						);
-					}
-				} else {
-					$wp_customize->add_setting(
-						$setting_key,
-						array(
-							'type'              => kadence()->get_option_type(),
-							'transport'         => isset( $setting['transport'] ) ? $setting['transport'] : 'postMessage',
-							'capability'        => self::get_capability(),
-							'default'           => isset( $setting['default'] ) && $control_class !== 'Kadence_Control_Background' ? $setting['default'] : '',
-							'sanitize_callback' => $sanitize_function,
-						)
-					);
-				}
+				$wp_customize->add_setting(
+					$setting_key,
+					[
+						'type'              => kadence()->get_option_type(),
+						'transport'         => $setting['transport'] ?? 'postMessage',
+						'capability'        => self::get_capability(),
+						'default'           => isset( $setting['default'] ) && $control_class !== 'Kadence_Control_Background' ? $setting['default'] : '',
+						'sanitize_callback' => $sanitize_function,
+					]
+				);
 			}
 		}
 	}
@@ -1549,11 +1526,11 @@ class Theme_Customizer {
 				$section = $sections[ $section_key ];
 
 				// Section config.
-				$section_config = array(
+				$section_config = [
 					'title'    => $section['title'],
-					'priority' => ( isset( $section['priority'] ) ? $section['priority'] : 10 ),
-					'type'     => ( isset( $section['type'] ) ? $section['type'] : 'default' ),
-				);
+					'priority' => ( $section['priority'] ?? 10 ),
+					'type'     => ( $section['type'] ?? 'default' ),
+				];
 
 				// Description.
 				if ( ! empty( $section['description'] ) ) {
@@ -1612,11 +1589,11 @@ class Theme_Customizer {
 				$panel = $panels[ $panel_key ];
 
 				// Panel config.
-				$panel_config = array(
+				$panel_config = [
 					'title'      => $panel['title'],
-					'priority'   => ( isset( $panel['priority'] ) ? $panel['priority'] : 10 ),
+					'priority'   => ( $panel['priority'] ?? 10 ),
 					'capability' => self::get_capability(),
-				);
+				];
 
 				// Panel description.
 				if ( ! empty( $panel['description'] ) ) {
@@ -1685,18 +1662,18 @@ class Theme_Customizer {
 				$control_class = 'WP_Customize_Control';
 			}
 			if ( isset( $setting['settings'] ) && false === $setting['settings'] ) {
-				$control_config = array(
-					'settings' => array(),
-					'priority' => isset( $setting['priority'] ) ? $setting['priority'] : 10,
-				);
+				$control_config = [
+					'settings' => [],
+					'priority' => $setting['priority'] ?? 10,
+				];
 			} else {
 				// Control configuration.
-				$control_config = array(
+				$control_config = [
 					'settings'        => $setting_key,
 					'capability'      => self::get_capability(),
-					'priority'        => isset( $setting['priority'] ) ? $setting['priority'] : 10,
-					'active_callback' => ( isset( $setting['active_callback'] ) ? array( $this, 'active_callback' ) : '__return_true' ),
-				);
+					'priority'        => $setting['priority'] ?? 10,
+					'active_callback' => ( isset( $setting['active_callback'] ) ? [ $this, 'active_callback' ] : '__return_true' ),
+				];
 			}
 			// Title.
 			if ( ! empty( $setting['label'] ) ) {
@@ -1751,7 +1728,7 @@ class Theme_Customizer {
 				$control_config['labels'] = $setting['labels'];
 			}
 			if ( isset( $setting['settings'] ) && ! empty( $setting['settings'] ) && is_array( $setting['settings'] ) ) {
-				$settings_array = array();
+				$settings_array = [];
 				foreach ( $setting['settings'] as $s_key => $s_id ) {
 					$settings_array[ $s_key ] = $s_id;
 				}
@@ -1760,17 +1737,15 @@ class Theme_Customizer {
 			if ( ! empty( $opt_name_key = apply_filters( 'kadence_settings_key_custom_mapping', '', $setting_key ) ) ) {
 				$setting_key = $opt_name_key . '[' . $setting_key . ']';
 				if ( isset( $setting['settings'] ) && ! empty( $setting['settings'] ) && is_array( $setting['settings'] ) ) {
-					$settings_array = array();
+					$settings_array = [];
 					foreach ( $setting['settings'] as $s_key => $s_id ) {
 						$settings_array[ $s_key ] = $opt_name_key . '[' . $s_id . ']';
 					}
 					$control_config['settings'] = $settings_array;
+				} elseif ( isset( $setting['settings'] ) && false === $setting['settings'] ) {
+						$control_config['settings'] = [];
 				} else {
-					if ( isset( $setting['settings'] ) && false === $setting['settings'] ) {
-						$control_config['settings'] = array();
-					} else {
-						$control_config['settings'] = $setting_key;
-					}
+					$control_config['settings'] = $setting_key;
 				}
 			}
 			// Add control.
@@ -1875,101 +1850,101 @@ class Theme_Customizer {
 			return;
 		}
 		$palette_presets = '{"basic":[{"color":"#2B6CB0"},{"color":"#215387"},{"color":"#222222"},{"color":"#3B3B3B"},{"color":"#515151"},{"color":"#626262"},{"color":"#E1E1E1"},{"color":"#F7F7F7"},{"color":"#ffffff"}],"palette":[{"color":"#255FDD"},{"color":"#00F2FF"},{"color":"#1A202C"},{"color":"#2D3748"},{"color":"#4A5568"},{"color":"#718096"},{"color":"#EDF2F7"},{"color":"#F7FAFC"},{"color":"#ffffff"}],"first-palette":[{"color":"#3296ff"},{"color":"#003174"},{"color":"#ffffff"},{"color":"#f7fafc"},{"color":"#edf2f7"},{"color":"#cbd2d9"},{"color":"#1A202C"},{"color":"#252c39"},{"color":"#2D3748"}],"orange":[{"color":"#e47b02"},{"color":"#ed8f0c"},{"color":"#1f2933"},{"color":"#3e4c59"},{"color":"#52606d"},{"color":"#7b8794"},{"color":"#f3f4f7"},{"color":"#f9f9fb"},{"color":"#ffffff"}],"third-palette":[{"color":"#E21E51"},{"color":"#4d40ff"},{"color":"#040037"},{"color":"#032075"},{"color":"#514d7c"},{"color":"#666699"},{"color":"#deddeb"},{"color":"#efeff5"},{"color":"#f8f9fa"}],"forth-palette":[{"color":"#E21E51"},{"color":"#4d40ff"},{"color":"#f8f9fa"},{"color":"#efeff5"},{"color":"#deddeb"},{"color":"#c3c2d6"},{"color":"#040037"},{"color":"#221e5b"},{"color":"#514D7C"}],"fifth-palette":[{"color":"#049f82"},{"color":"#008f72"},{"color":"#222222"},{"color":"#353535"},{"color":"#454545"},{"color":"#676767"},{"color":"#eeeeee"},{"color":"#f7f7f7"},{"color":"#ffffff"}],"sixth-palette":[{"color":"#dd6b20"},{"color":"#cf3033"},{"color":"#27241d"},{"color":"#423d33"},{"color":"#504a40"},{"color":"#625d52"},{"color":"#e8e6e1"},{"color":"#faf9f7"},{"color":"#ffffff"}]}';
-		$fonts = array(
-			array(
-				'name' => 'Montserrat & Source Sans Pro',
+		$fonts           = [
+			[
+				'name'  => 'Montserrat & Source Sans Pro',
 				'hfont' => 'Montserrat',
 				'bfont' => 'Source Sans Pro',
-				'hv'    => array( '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/montserrat.jpg',
-			),
-			array(
-				'name' => 'Libre Franklin & Libre Baskerville',
+				'hv'    => [ '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/montserrat.jpg',
+			],
+			[
+				'name'  => 'Libre Franklin & Libre Baskerville',
 				'hfont' => 'Libre Franklin',
 				'bfont' => 'Libre Baskerville',
-				'hv'    => array( '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/libre.jpg',
-			),
-			array(
-				'name' => 'Proza Libre & Open Sans',
+				'hv'    => [ '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/libre.jpg',
+			],
+			[
+				'name'  => 'Proza Libre & Open Sans',
 				'hfont' => 'Proza Libre',
 				'bfont' => 'Open Sans',
-				'hv'    => array( 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/proza.jpg',
-			),
-			array(
-				'name' => 'Work Sans & Work Sans',
+				'hv'    => [ 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/proza.jpg',
+			],
+			[
+				'name'  => 'Work Sans & Work Sans',
 				'hfont' => 'Work Sans',
 				'bfont' => 'Work Sans',
-				'hv'    => array( '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/worksans.jpg',
-			),
-			array(
-				'name' => 'Josefin Sans & Lato',
+				'hv'    => [ '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/worksans.jpg',
+			],
+			[
+				'name'  => 'Josefin Sans & Lato',
 				'hfont' => 'Josefin Sans',
 				'bfont' => 'Lato',
-				'hv'    => array( '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/josefin.jpg',
-			),
-			array(
-				'name' => 'Oswald & Open Sans',
+				'hv'    => [ '100', '100italic', '200', '200italic', '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/josefin.jpg',
+			],
+			[
+				'name'  => 'Oswald & Open Sans',
 				'hfont' => 'Oswald',
 				'bfont' => 'Open Sans',
-				'hv'    => array( '200', '300', 'regular', '500', '600', '700' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/oswald.jpg',
-			),
-			array(
-				'name' => 'Nunito & Roboto',
+				'hv'    => [ '200', '300', 'regular', '500', '600', '700' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/oswald.jpg',
+			],
+			[
+				'name'  => 'Nunito & Roboto',
 				'hfont' => 'Nunito',
 				'bfont' => 'Roboto',
-				'hv'    => array( '200', '200italic', '300', '300italic', 'regular', 'italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/nunito.jpg',
-			),
-			array(
-				'name' => 'Rubik & Karla',
+				'hv'    => [ '200', '200italic', '300', '300italic', 'regular', 'italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/nunito.jpg',
+			],
+			[
+				'name'  => 'Rubik & Karla',
 				'hfont' => 'Rubik',
 				'bfont' => 'Karla',
-				'hv'    => array( '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/rubik.jpg',
-			),
-			array(
-				'name' => 'Lora & Merriweather',
+				'hv'    => [ '300', '300italic', 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/rubik.jpg',
+			],
+			[
+				'name'  => 'Lora & Merriweather',
 				'hfont' => 'Lora',
 				'bfont' => 'Merriweather',
-				'hv'    => array( 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/lora.jpg',
-			),
-			array(
-				'name' => 'Playfair Display & Raleway',
+				'hv'    => [ 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/lora.jpg',
+			],
+			[
+				'name'  => 'Playfair Display & Raleway',
 				'hfont' => 'Playfair Display',
 				'bfont' => 'Raleway',
-				'hv'    => array( 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/playfair.jpg',
-			),
-			array(
-				'name' => 'Antic Didone & Raleway',
+				'hv'    => [ 'regular', 'italic', '500', '500italic', '600', '600italic', '700', '700italic', '800', '800italic', '900', '900italic' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/playfair.jpg',
+			],
+			[
+				'name'  => 'Antic Didone & Raleway',
 				'hfont' => 'Antic Didone',
 				'bfont' => 'Raleway',
-				'hv'    =>array( 'regular' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/antic.jpg',
-			),
-			array(
-				'name' => 'Gilda Display & Raleway',
+				'hv'    => [ 'regular' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/antic.jpg',
+			],
+			[
+				'name'  => 'Gilda Display & Raleway',
 				'hfont' => 'Gilda Display',
 				'bfont' => 'Raleway',
-				'hv'    => array( 'regular' ),
-				'img'  => get_template_directory_uri() . '/assets/images/fonts/gilda.jpg',
-			),
-		);
-		$path     = get_template_directory_uri() . '/inc/customizer/';
-		$dir_path = get_template_directory() . '/inc/customizer/';
+				'hv'    => [ 'regular' ],
+				'img'   => get_template_directory_uri() . '/assets/images/fonts/gilda.jpg',
+			],
+		];
+		$path            = get_template_directory_uri() . '/inc/customizer/';
+		$dir_path        = get_template_directory() . '/inc/customizer/';
 		wp_enqueue_style( 'kadence-customizer-styles', $path . 'css/kadence-customizer.css', false, KADENCE_VERSION );
 		if ( is_rtl() ) {
 			wp_enqueue_style( 'kadence-customizer-rtl', $path . 'css/rtl-kadence-customizer.css', false, KADENCE_VERSION );
 		}
 		// Enqueue Customizer script.
 		$google_font_variants = include $dir_path . 'google-font-variants.php';
-		$editor_dependencies = array(
+		$editor_dependencies  = [
 			'jquery',
 			'customize-controls',
 			'wp-i18n',
@@ -1982,26 +1957,26 @@ class Theme_Customizer {
 			'wp-compose',
 			'wp-polyfill',
 			'wp-primitives',
-		);
+		];
 		// Overide Core Text scripts because of naming issues.
-		wp_enqueue_script( 'customizer-text-widgets', get_template_directory_uri() . '/assets/js/text-widgets.min.js', array( 'jquery', 'backbone', 'editor', 'wp-util', 'wp-a11y', 'text-widgets' ), KADENCE_VERSION, false );
+		wp_enqueue_script( 'customizer-text-widgets', get_template_directory_uri() . '/assets/js/text-widgets.min.js', [ 'jquery', 'backbone', 'editor', 'wp-util', 'wp-a11y', 'text-widgets' ], KADENCE_VERSION, false );
 		wp_enqueue_script( 'kadence-customizer-controls', get_template_directory_uri() . '/assets/js/admin/customizer.js', $editor_dependencies, KADENCE_VERSION, true );
-		wp_enqueue_style( 'kadence-customizer-controls', $path . 'react/build/controls.css', array( 'wp-components' ), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-customizer-controls', $path . 'react/build/controls.css', [ 'wp-components' ], KADENCE_VERSION );
 		wp_localize_script(
 			'kadence-customizer-controls',
 			'kadenceCustomizerControlsData',
-			array(
-				'contexts'           => self::get_control_contexts(),
-				'choices'            => self::get_builder_choices(),
-				'palette'            => kadence()->get_palette_for_customizer(),
-				'gfontvars'          => $google_font_variants,
-				'cfontvars'          => apply_filters( 'kadence_theme_custom_fonts', array() ),
-				'palettePresets'     => apply_filters( 'kadence_theme_palette_presets', $palette_presets ),
-				'flushFonts'         => wp_create_nonce( 'kadence-local-fonts-flush' ),
-				'fontPairs'          => apply_filters( 'kadence_font_pairs_array', $fonts ),
-				'source'             => apply_filters( 'kadence_settings_extra_source', false ),
-				'blockWidgets'       => ( ( defined( 'GUTENBERG_VERSION' ) && version_compare( GUTENBERG_VERSION, '10.6.2', '>' ) ) || version_compare( substr( get_bloginfo( 'version' ), 0, 3 ), '5.8', '>=' ) ? true : false ),
-			)
+			[
+				'contexts'       => self::get_control_contexts(),
+				'choices'        => self::get_builder_choices(),
+				'palette'        => kadence()->get_palette_for_customizer(),
+				'gfontvars'      => $google_font_variants,
+				'cfontvars'      => apply_filters( 'kadence_theme_custom_fonts', [] ),
+				'palettePresets' => apply_filters( 'kadence_theme_palette_presets', $palette_presets ),
+				'flushFonts'     => wp_create_nonce( 'kadence-local-fonts-flush' ),
+				'fontPairs'      => apply_filters( 'kadence_font_pairs_array', $fonts ),
+				'source'         => apply_filters( 'kadence_settings_extra_source', false ),
+				'blockWidgets'   => ( ( defined( 'GUTENBERG_VERSION' ) && version_compare( GUTENBERG_VERSION, '10.6.2', '>' ) ) || version_compare( substr( get_bloginfo( 'version' ), 0, 3 ), '5.8', '>=' ) ? true : false ),
+			]
 		);
 		$css = ':root {
 			--global-palette1: ' . kadence()->palette_option( 'palette1' ) . ';
@@ -2084,14 +2059,14 @@ class Theme_Customizer {
 	public function action_enqueue_customize_preview_scripts() {
 		$path = get_template_directory_uri() . '/inc/customizer/';
 		wp_enqueue_style( 'kadence-customizer-preview', $path . 'css/kadence-customizer-preview.css', false, KADENCE_VERSION );
-		wp_enqueue_script( 'kadence-webfont-js', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js', array( 'jquery' ), '1.6.26', true );
-		wp_enqueue_script( 'kadence-customizer-preview', $path . 'js/kadence-customizer-preview.min.js', array( 'customize-preview' ), KADENCE_VERSION, true );
+		wp_enqueue_script( 'kadence-webfont-js', 'https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js', [ 'jquery' ], '1.6.26', true );
+		wp_enqueue_script( 'kadence-customizer-preview', $path . 'js/kadence-customizer-preview.min.js', [ 'customize-preview' ], KADENCE_VERSION, true );
 		wp_localize_script(
 			'kadence-customizer-preview',
 			'kadenceCustomizerPreviewData',
-			array(
+			[
 				'liveControl' => self::get_live_control_data(),
-			)
+			]
 		);
 	}
 
@@ -2208,6 +2183,5 @@ class Theme_Customizer {
 
 		return $active;
 	}
-
 }
 Theme_Customizer::get_instance();

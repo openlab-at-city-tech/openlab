@@ -1,10 +1,10 @@
 === Kadence ===
-Contributors: britner
+Contributors: britner, stellarwp
 Tags: translation-ready, accessibility-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
-Requires at least: 6.3
-Tested up to: 6.9.1
+Requires at least: 6.6
+Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.4.5
+Stable tag: 1.6.0
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,22 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+
+= 1.6.0 | 5th November 2026
+* Add: Added Full Site Editing mode (Alpha), off by default. Turned on in Appearance > Kadence, it lets the header, footer and templates be edited in the Site Editor, with the Kadence palette, fonts and buttons in Global Styles.
+* Update: Raised the minimum WordPress version to 6.6.
+* Fix: Corrected the Optimized Group Block setting in the Customizer.
+* Fix: Gave Outline buttons in the block editor the Customizer's button padding, as on the front end.
+
+= 1.5.2 | 23rd July 2026
+* Update: Theme ownership and contributor metadata updated for Liquid Web.
+
+= 1.5.1 | 24th June 2026
+* fix: prevent fatal in woo_extra_body_classes on taxonomy archives
+
+= 1.5.0 | 11th May 2026
+* Tweak: When Kadence Shop Kit's Image Swap module is active, the "Product Image Hover Switch" setting is now disabled to prevent conflicts.
+* Tweak: The AI Starter Templates notice has been temporarily removed.
 
 = 1.4.5 | 25th February 2026
 * Fix: Archive Title color reset not working in Customizer
@@ -100,7 +116,7 @@ Please report security bugs found in the Kadence theme's source code through the
 = 1.2.28 | 17th July 2025
 * Fix: Duplicated banner roles removed.
 * Fix: Store notice placement above the content.
-* Fix: Circle shape for radial gradient color selector. 
+* Fix: Circle shape for radial gradient color selector.
 * Fix: Scroll to id on WooCommerce single product tabs.
 * Fix: Overlapping text in some Woo Commerce product carts.
 * Fix: Tutor LMS course layout title typography settings.
@@ -217,7 +233,7 @@ Please report security bugs found in the Kadence theme's source code through the
 == 1.2.4 | 10th April 2024 ==
 * Add: Option for transparent header on events archive.
 * Update: Google Font choices.
-* Update: Default icons for social, X and Instagram. 
+* Update: Default icons for social, X and Instagram.
 * Fix: CSS with payments on product pages.
 * Fix: CSS with TEC single events.
 * Fix: Editor width in unboxed mode.
@@ -237,7 +253,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Update: Post styles in editor when using iframe editor.
 * Fix: Issue with possible desktop touch devices and top level menu items.
 * Fix: Issue with transparent header and tribe events.
-* Fix: Issue with button styles in the customizer. 
+* Fix: Issue with button styles in the customizer.
 
 == 1.1.51 | 15th January 2024 ==
 * Fix: Issue with starter templates admin page link.
@@ -321,25 +337,25 @@ Please report security bugs found in the Kadence theme's source code through the
 * Fix: CSS specificity with social.
 * Fix: Issue with quantity spinner.
 
-== 1.1.36 | 27th March 2023 == 
+== 1.1.36 | 27th March 2023 ==
 * Fix: Issue with woocommerce dropdown scroll bars.
 
-== 1.1.35 | 27th March 2023 == 
+== 1.1.35 | 27th March 2023 ==
 * Update: 6.2 css issue with editor title.
 * Update: Editor style tweak.
 
-== 1.1.34 | 22nd March 2023 == 
+== 1.1.34 | 22nd March 2023 ==
 * Update: Splide JS to prevent conflicts.
 * Fix: Issue with posts block.
 
-== 1.1.33 | 20th March 2023 == 
+== 1.1.33 | 20th March 2023 ==
 * Update: Editor styling of form.
 * Update: Support for thirdpary woo plugins and ajax cart.
 * Update: Improve accessibility of tabing through dropdown navigation.
 * Fix: Various RTL css issues.
 * Fix: Inherit image ratio issue with featured images.
 * Fix: LMS sidebar issue on archive template.
-* Fix: Issue with css specificity in customizer. 
+* Fix: Issue with css specificity in customizer.
 * Fix: Issue with mini cart dropdown when lots of products added.
 * Fix: Issue with woocommerce single purchase products and custom quantity spinners.
 * Fix: Issue with sticky header background possibly applied twice on mobile.
@@ -352,7 +368,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Fix: Mobile empty cart class.
 * Fix: Role Landmark issue when using above content title.
 
-== 1.1.32 | 31st January 2023 == 
+== 1.1.32 | 31st January 2023 ==
 * Update: CSS styling of some buttons.
 * Update: Dropdown aria label for accessibility.
 * Update: Mobile close js to ignore tabs.
@@ -362,7 +378,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Fix: Palette, type pairings popover in customizer.
 * Fix: Issue possible issue with heading spacing in editor.
 
-== 1.1.31 | 3rd November 2022 == 
+== 1.1.31 | 3rd November 2022 ==
 * Update: Popover css for customizer for 6.1
 * Update: Gradient picker to allow global colors.
 * Update: Secondary Product image in loop size.
@@ -534,7 +550,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Fix: Typo in comments.
 * Fix: Issue with some customizer settings.
 * Fix: Issue in mobile nav styling.
-* Fix: Issue with grammarly. 
+* Fix: Issue with grammarly.
 * Fix: Possible issue with some plugins and ajax add to cart.
 * Fix: Display category font fallback.
 
@@ -611,7 +627,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Fix: Remove wrong text domain.
 * Fix: Possible issue with singe item in stock.
 * Fix: Issue with carousel nav showing shadow.
-* Fix: Issue with local preload google fonts. 
+* Fix: Issue with local preload google fonts.
 
 == 1.0.26 | 14th June 2021 ==
 * Update: Spacing around image in some situations.
@@ -702,8 +718,8 @@ Please report security bugs found in the Kadence theme's source code through the
 * Add: Link style to footer html.
 * Add: Option for 4 columns in post archive.
 * Add: Lightbox gallery support for core gallery block.
-* Update: Allow Gradient options in custom post type 
-* Fix: Issue with classes when archive is empty. 
+* Update: Allow Gradient options in custom post type
+* Fix: Issue with classes when archive is empty.
 * Fix: Issue with post block on unboxed pages.
 * Fix: Child theme breaking the css when using assets/css/ folder structure.
 
@@ -994,7 +1010,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Add: Option for site name title for latest posts home page.
 * Add: Option to use RankMath or Yoast Breadcrumbs.
 * Add: Filter for Logo url.
-* Add: Collapse control for footer columns. 
+* Add: Collapse control for footer columns.
 * Add: Filter for author output.
 * Fix: Footer navigation overflow alignment not working correctly.
 * Fix: Search Custom Excert Length.
@@ -1123,7 +1139,7 @@ Please report security bugs found in the Kadence theme's source code through the
 
 == 0.7.9 | 24th June 2020 ==
 * Add: global palette into Elementor Pro dynamic colors.
-* Add: Option to add padding around the logo area. 
+* Add: Option to add padding around the logo area.
 * Update: CSS for better mobile cart with other languages.
 * Update: Sticky header to support boom bar.
 * Fix: Styling when Lazy Load for comments is used.
@@ -1141,7 +1157,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Fix: issue with meta comments showing in post loop.
 * Fix: issue with WooCommerce Print Invoices/Packing Lists by SkyVerge.
 * Add: Another Facebook Icon option.
-* Update: css for issue with sticky topbar on mobile. 
+* Update: css for issue with sticky topbar on mobile.
 * Add: support for 'scroll' class for scroll to id.
 * Update: Meta options icon divider.
 * Update: WPML support.
@@ -1156,14 +1172,14 @@ Please report security bugs found in the Kadence theme's source code through the
 
 == 0.7.5 | 5th June 2020 ==
 * Fix: Align image css when elementor template is used.
-* Fix: Issue with comments in firefox. 
+* Fix: Issue with comments in firefox.
 * Add: Initial Tutor LMS support for courses.
 
 == 0.7.4 | 3rd June 2020 ==
 * Add: Footer link style.
 * Add: Option for site title color hover/active.
 * Update: Change comment form to show asterisk for required fields
-* Update: tweak CSS load order as a workaround for some servers having issues with combining css. 
+* Update: tweak CSS load order as a workaround for some servers having issues with combining css.
 * Fix: Editor width if sidebar width is changed.
 * Fix: Issue with behind featured image not showing in some instances.
 * Fix: Issue with strong when body font is below 400.
@@ -1243,7 +1259,7 @@ Please report security bugs found in the Kadence theme's source code through the
 * Add: Single product related products toggle.
 * Add: Single product related products columns.
 * Add: Single product option to hide weight and dimensions.
-* Add: Archive product title font options. 
+* Add: Archive product title font options.
 * Add: Option to turn off default sorting in woocommerce archives.
 * Add: Option to turn off results count in woocommerce archives.
 * Add: Better product block support.
@@ -1393,11 +1409,11 @@ Feather Icons is licensed under the MIT License.
 Source: https://feathericons.com
 
 * Free IcoMoon Icons, IcoMoon
-FontAwesome licensed under the SIL OFL 1.1 
+FontAwesome licensed under the SIL OFL 1.1
 Source: https://icomoon.io/#icons-icomoon
 
-* Free FontAwesome Icons, Dave Gandy 
-FontAwesome licensed under the SIL OFL 1.1 
+* Free FontAwesome Icons, Dave Gandy
+FontAwesome licensed under the SIL OFL 1.1
 Source: https://github.com/FortAwesome/Font-Awesome
 
 * Photos in screenshot from https://stocksnap.io/ under license Creative Commons Zero https://stocksnap.io/license and from https://pexels.com under license Creative Commons Zero https://www.pexels.com/creative-commons-images/ and from https://www.kadencewp.com/alogo/ under license Creative Commons Zero https://creativecommons.org/publicdomain/zero/1.0/

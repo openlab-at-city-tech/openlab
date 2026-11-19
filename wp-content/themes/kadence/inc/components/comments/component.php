@@ -38,7 +38,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'comments';
 	}
 
@@ -46,9 +46,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_comment_reply_script' ) );
-		add_filter( 'comment_form_default_fields', array( $this, 'filter_default_fields_markup' ) );
-		add_filter( 'comment_form_defaults', array( $this, 'filter_default_markup' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'action_enqueue_comment_reply_script' ] );
+		add_filter( 'comment_form_default_fields', [ $this, 'filter_default_fields_markup' ] );
+		add_filter( 'comment_form_defaults', [ $this, 'filter_default_markup' ] );
 	}
 
 	/**
@@ -58,10 +58,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'the_comments' => array( $this, 'the_comments' ),
-		);
+	public function template_tags(): array {
+		return [
+			'the_comments' => [ $this, 'the_comments' ],
+		];
 	}
 
 	/**
@@ -90,14 +90,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $args Optional. Array of arguments. See `wp_list_comments()` documentation for a list of supported
 	 *                    arguments.
 	 */
-	public function the_comments( array $args = array() ) {
+	public function the_comments( array $args = [] ) {
 		$args = array_merge(
 			$args,
-			array(
+			[
 				'style'       => 'ol',
 				'short_ping'  => true,
 				'avatar_size' => 60,
-			)
+			]
 		);
 
 		$amp_live_list = kadence()->using_amp_live_list_comments();
@@ -116,7 +116,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			>
 			<?php
 
-			add_filter( 'navigation_markup_template', array( $this, 'filter_add_amp_live_list_pagination_attribute' ) );
+			add_filter( 'navigation_markup_template', [ $this, 'filter_add_amp_live_list_pagination_attribute' ] );
 		}
 
 		?>
@@ -128,7 +128,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		the_comments_navigation();
 
 		if ( $amp_live_list ) {
-			remove_filter( 'navigation_markup_template', array( $this, 'filter_add_amp_live_list_pagination_attribute' ) );
+			remove_filter( 'navigation_markup_template', [ $this, 'filter_add_amp_live_list_pagination_attribute' ] );
 
 			?>
 				<div update>
@@ -146,11 +146,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return array Filtered markup.
 	 */
 	public function filter_default_fields_markup( $fields ) {
-		$commenter = wp_get_current_commenter();
-		$req       = get_option( 'require_name_email' );
-		$aria_req  = ( $req ? " aria-required='true' required='required'" : '' );
-		$label_req = ( $req ? ' <span class="required">*</span>' : '' );
-		$show_web  = kadence()->option( 'comment_form_remove_web' );
+		$commenter        = wp_get_current_commenter();
+		$req              = get_option( 'require_name_email' );
+		$aria_req         = ( $req ? " aria-required='true' required='required'" : '' );
+		$label_req        = ( $req ? ' <span class="required">*</span>' : '' );
+		$show_web         = kadence()->option( 'comment_form_remove_web' );
 		$fields['author'] = '<div class="comment-input-wrap ' . ( $show_web ? 'no-url-field' : 'has-url-field' ) . '"><p class="comment-form-author"><input aria-label="' . esc_attr__( 'Name', 'kadence' ) . '" id="author" name="author" type="text" placeholder="' . esc_attr__( 'John Doe', 'kadence' ) . '" value="' . esc_attr( $commenter['comment_author'] ) . '" size="30" maxlength="245"' . $aria_req . ' /><label class="float-label" for="author">' . esc_html__( 'Name', 'kadence' ) . $label_req . '</label></p>';
 
 		$fields['email'] = '<p class="comment-form-email"><input aria-label="' . esc_attr__( 'Email', 'kadence' ) . '" id="email" name="email" type="email" placeholder="' . esc_attr__( 'john@example.com', 'kadence' ) . '" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="30" maxlength="100" aria-describedby="email-notes"' . $aria_req . ' /><label class="float-label" for="email">' . esc_html__( 'Email', 'kadence' ) . $label_req . '</label></p>';
@@ -187,7 +187,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $markup Navigation markup.
 	 * @return string Filtered markup.
 	 */
-	public function filter_add_amp_live_list_pagination_attribute( string $markup ) : string {
+	public function filter_add_amp_live_list_pagination_attribute( string $markup ): string {
 		return preg_replace( '/(\s*<[a-z0-9_-]+)/i', '$1 pagination ', $markup, 1 );
 	}
 }

@@ -8,13 +8,6 @@
 namespace Kadence\Beaver;
 
 use Kadence\Component_Interface;
-use function Kadence\kadence;
-use function add_action;
-use function have_posts;
-use function the_post;
-use function is_search;
-use function get_template_part;
-use function get_post_type;
 use FLBuilderModel;
 
 /**
@@ -27,7 +20,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'beaver';
 	}
 
@@ -35,7 +28,7 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'kadence_entry_content_class', array( $this, 'filter_content_entry_class' ) );
+		add_filter( 'kadence_entry_content_class', [ $this, 'filter_content_entry_class' ] );
 	}
 	/**
 	 * Filters the content entry class for beaver builder so css doesn't conflict.

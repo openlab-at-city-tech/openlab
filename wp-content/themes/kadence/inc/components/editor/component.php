@@ -8,6 +8,7 @@
 namespace Kadence\Editor;
 
 use Kadence\Component_Interface;
+use function Kadence\is_fse_mode;
 use function Kadence\kadence;
 use function add_action;
 use function add_filter;
@@ -25,7 +26,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'editor';
 	}
 
@@ -33,218 +34,276 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'after_setup_theme', array( $this, 'action_add_editor_support' ) );
-		add_filter( 'admin_body_class', array( $this, 'filter_admin_body_class' ) );
+		add_action( 'after_setup_theme', [ $this, 'action_add_editor_support' ] );
+		add_filter( 'admin_body_class', [ $this, 'filter_admin_body_class' ] );
 		remove_action( 'admin_head-post.php', 'kadence_blocks_admin_editor_width', 100 );
 		remove_action( 'admin_head-post-new.php', 'kadence_blocks_admin_editor_width', 100 );
-		add_filter( 'kadence_blocks_editor_width', array( $this, 'kadence_blocks_admin_editor_width_filter' ), 100 );
-		add_action( 'after_setup_theme', array( $this, 'google_font_add_editor_styles' ) );
-		add_filter( 'theme_file_path', array( $this, 'disable_json_optionally' ), 10, 2 );
-		add_filter( 'wp_theme_json_data_theme', array( $this, 'edit_theme_json' ), 10 );
+		add_filter( 'kadence_blocks_editor_width', [ $this, 'kadence_blocks_admin_editor_width_filter' ], 100 );
+		add_action( 'after_setup_theme', [ $this, 'google_font_add_editor_styles' ] );
+		add_filter( 'theme_file_path', [ $this, 'disable_json_optionally' ], 10, 2 );
+		add_filter( 'wp_theme_json_data_theme', [ $this, 'edit_theme_json' ], 10 );
 	}
 	/**
-	 * Edit the theme.json file optionally.
+	 * Re-injects a copy of theme.json for classic sites that hide the file.
+	 *
+	 * Frozen legacy compatibility. This duplicate exists only so classic sites with
+	 * `theme_json_mode` off still receive the settings the hidden file would have
+	 * provided. Settings and presets added to theme.json are deliberately NOT ported
+	 * in here: those sites keep this frozen set, and can reach the current one by
+	 * turning the setting on or by opting into Full Site Editing mode.
+	 *
+	 * Does not run in FSE mode, where theme.json is mandatory and read directly, so
+	 * there is no third variant of the data to reason about.
+	 *
+	 * The all-false `styles.elements.button` block below is NOT dead weight, and the
+	 * same block in theme.json is not either. A `false` in `styles` overrides the
+	 * matching value in WordPress's own styles.elements.button
+	 * (wp-includes/theme.json) and then emits nothing, so core's default is dropped
+	 * from the generated stylesheet. theme.json uses empty strings instead (one per
+	 * side for padding), because the theme.json schema rejects `false` for these
+	 * keys; core skips an empty value the same way, so both copies generate
+	 * identical CSS. The eight keys
+	 * suppress exactly these declarations on
+	 * `:root :where(.wp-element-button, .wp-block-button__link)`:
+	 *
+	 * - spacing.padding           -> padding-top/right/bottom/left
+	 * - border.width              -> border-width: 0
+	 * - color.background          -> background-color: #32373c
+	 * - color.text                -> color: #fff
+	 * - typography.fontFamily     -> font-family: inherit
+	 * - typography.fontSize       -> font-size: inherit
+	 * - typography.lineHeight     -> line-height: inherit
+	 * - typography.textDecoration -> text-decoration: none
+	 *
+	 * Core's fontStyle, fontWeight, letterSpacing and textTransform have no false
+	 * here, which is why those four are the only button declarations the theme emits
+	 * today. Deleting the block restores all eleven suppressed declarations and
+	 * changes rendering, so it stays in both copies. theme.json is strict JSON and
+	 * cannot carry this note, which is why it lives here.
+	 *
+	 * @since 1.6.0 Skipped in Full Site Editing mode, where WordPress reads theme.json directly.
+	 *
+	 * @see Component::disable_json_optionally() The matching hiding filter.
 	 *
 	 * @param object $theme_json the path to the theme.json file.
 	 */
 	public function edit_theme_json( $theme_json ) {
+		if ( is_fse_mode() ) {
+			return $theme_json;
+		}
 		$theme_mode = get_theme_mod( 'theme_json_mode', false );
 		if ( ! $theme_mode ) {
-			$new_data = array(
+			$new_data = [
 				'version'  => 2,
-				"settings" => array(
-					"appearanceTools" => true,
-					"border" => [
-						"color" => true, 
-						"radius" => true, 
-						"style" => true, 
-						"width" => true 
+				'settings' => [
+					'appearanceTools' => true,
+					'border'          => [
+						'color'  => true, 
+						'radius' => true, 
+						'style'  => true, 
+						'width'  => true, 
 					], 
-					"color" => [
-						"custom" => true, 
-						"defaultPalette" => false, 
-						"link" => true, 
-						"palette" => [
+					'color'           => [
+						'custom'         => true, 
+						'defaultPalette' => false, 
+						'link'           => true, 
+						'palette'        => [
 							[
-								"name" => "Accent", 
-								"slug" => "theme-palette1", 
-								"color" => "var(--global-palette1)" 
+								'name'  => 'Accent', 
+								'slug'  => 'theme-palette1', 
+								'color' => 'var(--global-palette1)', 
 							], 
 							[
-								"name" => "Accent - alt", 
-								"slug" => "theme-palette2", 
-								"color" => "var(--global-palette2)" 
+								'name'  => 'Accent - alt', 
+								'slug'  => 'theme-palette2', 
+								'color' => 'var(--global-palette2)', 
 							], 
 							[
-								"name" => "Strongest text", 
-								"slug" => "theme-palette3", 
-								"color" => "var(--global-palette3)" 
+								'name'  => 'Strongest text', 
+								'slug'  => 'theme-palette3', 
+								'color' => 'var(--global-palette3)', 
 							], 
 							[
-								"name" => "Strong Text", 
-								"slug" => "theme-palette4", 
-								"color" => "var(--global-palette4)" 
+								'name'  => 'Strong Text', 
+								'slug'  => 'theme-palette4', 
+								'color' => 'var(--global-palette4)', 
 							], 
 							[
-								"name" => "Medium text", 
-								"slug" => "theme-palette5", 
-								"color" => "var(--global-palette5)" 
+								'name'  => 'Medium text', 
+								'slug'  => 'theme-palette5', 
+								'color' => 'var(--global-palette5)', 
 							], 
 							[
-								"name" => "Subtle Text", 
-								"slug" => "theme-palette6", 
-								"color" => "var(--global-palette6)" 
+								'name'  => 'Subtle Text', 
+								'slug'  => 'theme-palette6', 
+								'color' => 'var(--global-palette6)', 
 							], 
 							[
-								"name" => "Subtle Background", 
-								"slug" => "theme-palette7", 
-								"color" => "var(--global-palette7)" 
+								'name'  => 'Subtle Background', 
+								'slug'  => 'theme-palette7', 
+								'color' => 'var(--global-palette7)', 
 							], 
 							[
-								"name" => "Lighter Background", 
-								"slug" => "theme-palette8", 
-								"color" => "var(--global-palette8)" 
+								'name'  => 'Lighter Background', 
+								'slug'  => 'theme-palette8', 
+								'color' => 'var(--global-palette8)', 
 							], 
 							[
-								"name" => "White or offwhite", 
-								"slug" => "theme-palette9", 
-								"color" => "var(--global-palette9)" 
+								'name'  => 'White or offwhite', 
+								'slug'  => 'theme-palette9', 
+								'color' => 'var(--global-palette9)', 
 							],
 							[
-								"name" => "Accent - Complement", 
-								"slug" => "theme-palette10", 
-								"color" => "var(--global-palette10)" 
+								'name'  => 'Accent - Complement', 
+								'slug'  => 'theme-palette10', 
+								'color' => 'var(--global-palette10)', 
 							],
 							[
-								"name" => "Notices - Success", 
-								"slug" => "theme-palette11", 
-								"color" => "var(--global-palette11)" 
+								'name'  => 'Notices - Success', 
+								'slug'  => 'theme-palette11', 
+								'color' => 'var(--global-palette11)', 
 							],
 							[
-								"name" => "Notices - Info", 
-								"slug" => "theme-palette12", 
-								"color" => "var(--global-palette12)" 
+								'name'  => 'Notices - Info', 
+								'slug'  => 'theme-palette12', 
+								'color' => 'var(--global-palette12)', 
 							],
 							[
-								"name" => "Notices - Alert", 
-								"slug" => "theme-palette13", 
-								"color" => "var(--global-palette13)" 
+								'name'  => 'Notices - Alert', 
+								'slug'  => 'theme-palette13', 
+								'color' => 'var(--global-palette13)', 
 							],
 							[
-								"name" => "Notices - Warning", 
-								"slug" => "theme-palette14", 
-								"color" => "var(--global-palette14)" 
+								'name'  => 'Notices - Warning', 
+								'slug'  => 'theme-palette14', 
+								'color' => 'var(--global-palette14)', 
 							],
 							[
-								"name" => "Notices - Rating", 
-								"slug" => "theme-palette15", 
-								"color" => "var(--global-palette15)" 
-							]
-						]
+								'name'  => 'Notices - Rating', 
+								'slug'  => 'theme-palette15', 
+								'color' => 'var(--global-palette15)', 
+							],
+						],
 					], 
-					"layout" => [
-						"contentSize" => "var(--global-calc-content-width)", 
-						"wideSize" => "var(--global-calc-wide-content-width)", 
-						"fullSize" => "none" 
+					'layout'          => [
+						'contentSize' => 'var(--global-calc-content-width)', 
+						'wideSize'    => 'var(--global-calc-wide-content-width)', 
 					], 
-					"spacing" => [
-						"blockGap" => null, 
-						"margin" => true, 
-						"padding" => true, 
-						"units" => [
-							"px", 
-							"em", 
-							"rem", 
-							"vh", 
-							"vw", 
-							"%" 
-						] 
-					], 
-					"typography" => [
-					"customFontSize" => true, 
-					"fontSizes" => [
-						[
-							"name" => "Small", 
-							"slug" => "small", 
-							"size" => "var(--global-font-size-small)" 
+					'spacing'         => [
+						'blockGap' => null, 
+						'margin'   => true, 
+						'padding'  => true, 
+						'units'    => [
+							'px', 
+							'em', 
+							'rem', 
+							'vh', 
+							'vw', 
+							'%', 
 						], 
-						[
-							"name" => "Medium", 
-							"slug" => "medium", 
-							"size" => "var(--global-font-size-medium)" 
-						], 
-						[
-						"name" => "Large", 
-						"slug" => "large", 
-						"size" => "var(--global-font-size-large)" 
-						], 
-						[
-							"name" => "Larger", 
-							"slug" => "larger", 
-							"size" => "var(--global-font-size-larger)" 
-						], 
-						[
-							"name" => "XX-Large", 
-							"slug" => "xxlarge", 
-							"size" => "var(--global-font-size-xxlarge)" 
-						] 
 					], 
-					"lineHeight" => true 
-					] 
-				),
-			  	"styles" => [
-					"elements" => [
-						"button" => [
-							"spacing" => [
-								"padding" => false 
+					'typography'      => [
+						'customFontSize' => true, 
+						'fontSizes'      => [
+							[
+								'name' => 'Small', 
+								'slug' => 'small', 
+								'size' => 'var(--global-font-size-small)', 
 							], 
-							"border" => [
-								"width" => false 
+							[
+								'name' => 'Medium', 
+								'slug' => 'medium', 
+								'size' => 'var(--global-font-size-medium)', 
+							], 
+							[
+								'name' => 'Large', 
+								'slug' => 'large', 
+								'size' => 'var(--global-font-size-large)', 
+							], 
+							[
+								'name' => 'Larger', 
+								'slug' => 'larger', 
+								'size' => 'var(--global-font-size-larger)', 
+							], 
+							[
+								'name' => 'XX-Large', 
+								'slug' => 'xxlarge', 
+								'size' => 'var(--global-font-size-xxlarge)', 
+							], 
+						], 
+						'lineHeight'     => true, 
+					], 
+				],
+				'styles'   => [
+					'elements' => [
+						'button' => [
+							'spacing'    => [
+								'padding' => false, 
+							], 
+							'border'     => [
+								'width' => false, 
 							],
-							"color" => [
-								"background" => false, 
-								"text" => false 
+							'color'      => [
+								'background' => false, 
+								'text'       => false, 
 							],
-							"typography" => [
-								"fontFamily" => false, 
-								"fontSize" => false, 
-								"lineHeight" => false, 
-								"textDecoration" => false 
-							]
-						]
-					]
-				]
-			);
+							'typography' => [
+								'fontFamily'     => false, 
+								'fontSize'       => false, 
+								'lineHeight'     => false, 
+								'textDecoration' => false, 
+							],
+						],
+					],
+				],
+			];
 
 			return $theme_json->update_with( $new_data );
 		}
 		return $theme_json;
 	}
 	/**
-	 * Disables the theme.json file optionally.
+	 * Hides theme.json from WordPress when a classic site opts out of it.
+	 *
+	 * Frozen legacy compatibility. Classic sites get theme.json only when the
+	 * `theme_json_mode` setting is stored as on. A site that never saved it reads
+	 * as off here, and the Customizer's default is off to match. New theme.json
+	 * behavior is not to be routed through this filter.
+	 *
+	 * In FSE mode theme.json is mandatory: the real path is returned whatever the
+	 * setting stores, and the stored value is left untouched so classic mode honors
+	 * it again if FSE mode is turned back off.
+	 *
+	 * Registered during theme setup, which matters: wp_theme_has_theme_json()
+	 * memoizes its answer in a function-level static that cannot be flushed, so the
+	 * first caller in a request fixes the answer for that whole request. This filter
+	 * has to be in place before anything can ask.
+	 *
+	 * @since 1.6.0 Always keeps theme.json in Full Site Editing mode.
+	 *
+	 * @see Component::edit_theme_json() The matching data duplicate.
 	 *
 	 * @param string $path the path to the theme.json file.
+	 * @param string $file the file WordPress is resolving, relative to the theme.
 	 */
 	public function disable_json_optionally( $path, $file ) {
-		$length = strlen( 'kadence/theme.json' );
-		if ( ! empty( $file ) && 'theme.json' === $file && substr( $path, -$length ) === 'kadence/theme.json' ) {
-			$theme_mode = get_theme_mod( 'theme_json_mode', false );
-			if ( ! $theme_mode ) {
-				// Set the path to a file that doesn't exist.
-				$new_path = str_replace( 'kadence/theme.json', 'kadence/missing-theme.json', $path );
-				return $new_path;
-			} else {
-				return $path;
-			}
+		if ( 'theme.json' !== $file || ! str_ends_with( $path, 'kadence/theme.json' ) ) {
+			return $path;
 		}
-		return $path;
+
+		if ( is_fse_mode() || get_theme_mod( 'theme_json_mode', false ) ) {
+			return $path;
+		}
+
+		// Set the path to a file that doesn't exist.
+		return str_replace( 'kadence/theme.json', 'kadence/missing-theme.json', $path );
 	}
 	/**
 	 * Registers an editor stylesheet for the current theme.
 	 */
 	public function google_font_add_editor_styles() {
 		if ( kadence()->sub_option( 'base_font', 'google' ) ) {
-			$font        = kadence()->option( 'base_font' );
+			$font = kadence()->option( 'base_font' );
 			if ( $font['family'] ) {
 				$font_string = $font['family'] . ':' . ( $font['variant'] ? $font['variant'] : '400' ) . ',700';
 				if ( kadence()->sub_option( 'heading_font', 'google' ) ) {
@@ -253,11 +312,11 @@ class Component implements Component_Interface {
 						$font_string .= '%7C' . $heading_font['family'] . ':400,700';
 					}
 				}
-				$font_url    = str_replace( ',', '%2C', '//fonts.googleapis.com/css?family=' . $font_string );
+				$font_url = str_replace( ',', '%2C', '//fonts.googleapis.com/css?family=' . $font_string );
 				add_editor_style( $font_url );
 			}
 		} elseif ( kadence()->sub_option( 'heading_font', 'google' ) ) {
-			$font        = kadence()->option( 'heading_font' );
+			$font = kadence()->option( 'heading_font' );
 			if ( $font['family'] ) {
 				$font_string = $font['family'] . ':400,700';
 				$font_url    = str_replace( ',', '%2C', '//fonts.googleapis.com/css?family=' . $font_string );
@@ -282,26 +341,26 @@ class Component implements Component_Interface {
 		$screen = get_current_screen();
 		if ( 'post' == $screen->base ) {
 			global $post;
-			$post_type  = get_post_type();
-			$post_layout = array(
-				'layout'           => 'normal',
-				'boxed'            => 'boxed',
-				'feature'          => 'hide',
-				'comments'         => 'hide',
-				'navigation'       => 'hide',
-				'title'            => 'normal',
-				'sidebar'          => 'none',
-				'padding'         => 'show',
-			);
+			$post_type   = get_post_type();
+			$post_layout = [
+				'layout'     => 'normal',
+				'boxed'      => 'boxed',
+				'feature'    => 'hide',
+				'comments'   => 'hide',
+				'navigation' => 'hide',
+				'title'      => 'normal',
+				'sidebar'    => 'none',
+				'padding'    => 'show',
+			];
 			$post_layout = apply_filters( 'kadence_post_layout', $post_layout );
 
-			$postlayout   = get_post_meta( $post->ID, '_kad_post_layout', true );
-			$postboxed    = get_post_meta( $post->ID, '_kad_post_content_style', true );
-			$postfeature  = get_post_meta( $post->ID, '_kad_post_feature', true );
-			$vpadding     = get_post_meta( $post->ID, '_kad_post_vertical_padding', true );
-			$postnav      = get_post_meta( $post->ID, '_kad_post_navigation', true );
-			$posttitle    = get_post_meta( $post->ID, '_kad_post_title', true );
-			$postsidebar  = get_post_meta( $post->ID, '_kad_post_layout', true );
+			$postlayout  = get_post_meta( $post->ID, '_kad_post_layout', true );
+			$postboxed   = get_post_meta( $post->ID, '_kad_post_content_style', true );
+			$postfeature = get_post_meta( $post->ID, '_kad_post_feature', true );
+			$vpadding    = get_post_meta( $post->ID, '_kad_post_vertical_padding', true );
+			$postnav     = get_post_meta( $post->ID, '_kad_post_navigation', true );
+			$posttitle   = get_post_meta( $post->ID, '_kad_post_title', true );
+			$postsidebar = get_post_meta( $post->ID, '_kad_post_layout', true );
 			if ( isset( $postlayout ) && ( 'left' === $postsidebar || 'right' === $postsidebar ) ) {
 				$post_layout['sidebar'] = $postlayout;
 			} elseif ( ( isset( $postlayout ) && 'default' === $postlayout ) || empty( $postlayout ) ) {
@@ -357,13 +416,13 @@ class Component implements Component_Interface {
 			}
 			if ( isset( $postlayout ) && ( 'narrow' === $postlayout || 'fullwidth' === $postlayout ) ) {
 				$post_layout['layout'] = $postlayout;
-			} else if ( isset( $postlayout ) && ( 'left' === $postlayout || 'right' === $postlayout ) ) {
+			} elseif ( isset( $postlayout ) && ( 'left' === $postlayout || 'right' === $postlayout ) ) {
 				$post_layout['layout'] = 'narrow';
 			} elseif ( ( isset( $postlayout ) && 'default' === $postlayout ) || empty( $postlayout ) ) {
 				$option_layout = kadence()->option( $post_type . '_layout' );
 				if ( 'narrow' === $option_layout || 'fullwidth' === $option_layout ) {
 					$post_layout['layout'] = $option_layout;
-				} else if ( 'left' === $option_layout || 'right' === $option_layout ) {
+				} elseif ( 'left' === $option_layout || 'right' === $option_layout ) {
 					$post_layout['layout'] = 'narrow';
 				}
 			}

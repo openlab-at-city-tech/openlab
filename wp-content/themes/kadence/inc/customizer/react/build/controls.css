@@ -5132,6 +5132,11 @@ p.kt-box-shadow-title {
   opacity: 0;
 }
 
+.kadence-control-disabled .components-button-group {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .kadence-font-pair-popover > .components-popover__content {
   padding: 0 12px 12px;
 }

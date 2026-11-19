@@ -9,7 +9,6 @@ namespace Kadence\Custom_Header;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use function add_action;
 use function apply_filters;
 use function Kadence\kadence;
 use function get_template_part;
@@ -33,35 +32,35 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @var value for center column;
 	 */
-	protected static $center = array();
+	protected static $center = [];
 
 	/**
 	 * Holds sides column display.
 	 *
 	 * @var value for center column;
 	 */
-	protected static $sides = array();
+	protected static $sides = [];
 
 	/**
 	 * Holds sides column display.
 	 *
 	 * @var value for center column;
 	 */
-	protected static $mobile_sides = array();
+	protected static $mobile_sides = [];
 
 	/**
 	 * Holds center column display.
 	 *
 	 * @var value for center column;
 	 */
-	protected static $mobile_center = array();
+	protected static $mobile_center = [];
 
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'custom_header';
 	}
 
@@ -77,16 +76,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'render_header'             => array( $this, 'render_header' ),
-			'display_header_row'        => array( $this, 'display_header_row' ),
-			'has_center_column'         => array( $this, 'has_center_column' ),
-			'has_side_columns'          => array( $this, 'has_side_columns' ),
-			'display_mobile_header_row' => array( $this, 'display_mobile_header_row' ),
-			'has_mobile_center_column'  => array( $this, 'has_mobile_center_column' ),
-			'has_mobile_side_columns'   => array( $this, 'has_mobile_side_columns' ),
-		);
+	public function template_tags(): array {
+		return [
+			'render_header'             => [ $this, 'render_header' ],
+			'display_header_row'        => [ $this, 'display_header_row' ],
+			'has_center_column'         => [ $this, 'has_center_column' ],
+			'has_side_columns'          => [ $this, 'has_side_columns' ],
+			'display_mobile_header_row' => [ $this, 'display_mobile_header_row' ],
+			'has_mobile_center_column'  => [ $this, 'has_mobile_center_column' ],
+			'has_mobile_side_columns'   => [ $this, 'has_mobile_side_columns' ],
+		];
 	}
 	/**
 	 * Adds support to render header columns.
@@ -95,7 +94,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function display_header_row( $row = 'main' ) {
 		$display = false;
-		foreach ( array( 'left', 'center', 'right' ) as $column ) {
+		foreach ( [ 'left', 'center', 'right' ] as $column ) {
 			$elements = kadence()->option( 'header_desktop_items' );
 			if ( isset( $elements ) && isset( $elements[ $row ] ) && isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][ $row . '_' . $column ] ) && ! empty( $elements[ $row ][ $row . '_' . $column ] ) ) {
 				$display = true;
@@ -112,7 +111,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function display_mobile_header_row( $row = 'main' ) {
 		$display = false;
-		foreach ( array( 'left', 'center', 'right' ) as $column ) {
+		foreach ( [ 'left', 'center', 'right' ] as $column ) {
 			$elements = kadence()->option( 'header_mobile_items' );
 			if ( isset( $elements ) && isset( $elements[ $row ] ) && isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][ $row . '_' . $column ] ) && ! empty( $elements[ $row ][ $row . '_' . $column ] ) ) {
 				$display = true;

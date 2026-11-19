@@ -20,7 +20,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'rankmath';
 	}
 
@@ -28,12 +28,12 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'add_styles' ), 60 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'add_styles' ], 60 );
 	}
 	/**
 	 * Add some css styles for Restrict Content Pro
 	 */
 	public function add_styles() {
-		wp_enqueue_style( 'kadence-rankmath', get_theme_file_uri( '/assets/css/rankmath.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-rankmath', get_theme_file_uri( '/assets/css/rankmath.min.css' ), [], KADENCE_VERSION );
 	}
 }

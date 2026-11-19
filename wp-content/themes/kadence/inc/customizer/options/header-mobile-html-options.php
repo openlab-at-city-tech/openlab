@@ -21,177 +21,177 @@ ob_start(); ?>
 </div>
 <?php
 $compontent_tabs = ob_get_clean();
-$settings = array(
-	'mobile_html_tabs' => array(
+$settings        = [
+	'mobile_html_tabs'       => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'mobile_html',
 		'settings'     => false,
 		'priority'     => 1,
 		'description'  => $compontent_tabs,
-	),
-	'mobile_html_content' => array(
+	],
+	'mobile_html_content'    => [
 		'control_type' => 'kadence_editor_control',
 		'section'      => 'mobile_html',
 		'sanitize'     => 'wp_kses_post',
 		'priority'     => 4,
 		'default'      => kadence()->default( 'mobile_html_content' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'id' => 'mobile_html',
-		),
-		'partial'      => array(
+		],
+		'partial'      => [
 			'selector'            => '.mobile-html',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\mobile_html',
-		),
-	),
-	'mobile_html_wpautop' => array(
+		],
+	],
+	'mobile_html_wpautop'    => [
 		'control_type' => 'kadence_switch_control',
 		'sanitize'     => 'kadence_sanitize_toggle',
 		'section'      => 'mobile_html',
 		'default'      => kadence()->default( 'mobile_html_wpautop' ),
 		'label'        => esc_html__( 'Automatically Add Paragraphs', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'partial'      => array(
+			],
+		],
+		'partial'      => [
 			'selector'            => '.mobile-html',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\mobile_html',
-		),
-	),
-	'mobile_html_typography' => array(
+		],
+	],
+	'mobile_html_typography' => [
 		'control_type' => 'kadence_typography_control',
 		'section'      => 'mobile_html',
 		'label'        => esc_html__( 'Font', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'mobile_html_typography' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_typography',
 				'selector' => '.mobile-html',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => '$',
 					'tablet'  => '$',
 					'mobile'  => '$',
-				),
+				],
 				'property' => 'font',
 				'key'      => 'typography',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'id' => 'mobile_html_typography',
-		),
-	),
-	'mobile_html_link_color' => array(
+		],
+	],
+	'mobile_html_link_color' => [
 		'control_type' => 'kadence_color_control',
 		'section'      => 'mobile_html',
 		'label'        => esc_html__( 'Link Colors', 'kadence' ),
 		'default'      => kadence()->default( 'mobile_html_link_color' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '.mobile-html a',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'color',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'selector' => '.mobile-html a:hover',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'hover',
-			),
-		),
-		'context'      => array(
-			array(
+			],
+		],
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'input_attrs'  => array(
-			'colors' => array(
-				'color' => array(
+			],
+		],
+		'input_attrs'  => [
+			'colors' => [
+				'color' => [
 					'tooltip' => __( 'Initial Color', 'kadence' ),
 					'palette' => true,
-				),
-				'hover' => array(
+				],
+				'hover' => [
 					'tooltip' => __( 'Hover Color', 'kadence' ),
 					'palette' => true,
-				),
-			),
-		),
-	),
-	'mobile_html_link_style' => array(
+				],
+			],
+		],
+	],
+	'mobile_html_link_style' => [
 		'control_type' => 'kadence_select_control',
 		'section'      => 'mobile_html',
 		'default'      => kadence()->default( 'mobile_html_link_style' ),
 		'label'        => esc_html__( 'Link Style', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'input_attrs'  => array(
-			'options' => array(
-				'normal' => array(
+			],
+		],
+		'input_attrs'  => [
+			'options' => [
+				'normal' => [
 					'name' => __( 'Underline', 'kadence' ),
-				),
-				'plain' => array(
+				],
+				'plain'  => [
 					'name' => __( 'No Underline', 'kadence' ),
-				),
-			),
-		),
-		'live_method'     => array(
-			array(
+				],
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '#mobile-header .mobile-html',
 				'pattern'  => 'inner-link-style-$',
 				'key'      => '',
-			),
-		),
-	),
-	'mobile_html_margin' => array(
+			],
+		],
+	],
+	'mobile_html_margin'     => [
 		'control_type' => 'kadence_measure_control',
 		'section'      => 'mobile_html',
 		'priority'     => 10,
 		'default'      => kadence()->default( 'mobile_html_margin' ),
 		'label'        => esc_html__( 'Margin', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '.mobile-html',
 				'property' => 'margin',
 				'pattern'  => '$',
 				'key'      => 'measure',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'responsive' => false,
-		),
-	),
-);
+		],
+	],
+];
 
 Theme_Customizer::add_settings( $settings );
 

@@ -157,6 +157,25 @@ export const baseControl = wp.customize.KadenceControl = wp.customize.Control.ex
 	},
 
 	/**
+	 * Returns a WP-style warning notice React element if a notice string is
+	 * provided via input_attrs.notice, otherwise returns null.
+	 * Call this inside any child component's render() to get universal notice support.
+	 *
+	 * @returns {wp.element.Element|null}
+	 */
+	renderNotice: function() {
+		var control = this;
+		if ( ! control.params.input_attrs || ! control.params.input_attrs.notice ) {
+			return null;
+		}
+		return wp.element.createElement(
+			'div',
+			{ className: 'notice notice-warning kadence-control-notice' },
+			wp.element.createElement( 'p', { dangerouslySetInnerHTML: { __html: control.params.input_attrs.notice } } )
+		);
+	},
+
+	/**
 	 * This is not working with autofocus.
 	 *
 	 * @param {object} [args] Args.

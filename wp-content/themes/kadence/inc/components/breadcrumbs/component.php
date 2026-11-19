@@ -12,14 +12,6 @@ use Kadence\Templating_Component_Interface;
 use function Kadence\kadence;
 use WPSEO_Primary_Term;
 use WPSEO_Taxonomy_Meta;
-use WP_Post;
-use function add_action;
-use function add_filter;
-use function wp_enqueue_script;
-use function get_theme_file_uri;
-use function get_theme_file_path;
-use function wp_script_add_data;
-use function wp_localize_script;
 use function rank_math_the_breadcrumbs;
 use function yoast_breadcrumb;
 use function seopress_display_breadcrumbs;
@@ -59,27 +51,27 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @var array
 	 */
-	private $settings = array();
+	private $settings = [];
 
 	/**
 	 * Local breadcrumb args.
 	 *
 	 * @var array
 	 */
-	private $args = array();
+	private $args = [];
 
 	/**
 	 * Breadcrumb post types.
 	 *
 	 * @var array
 	 */
-	private $post_types = array();
+	private $post_types = [];
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'breadcrumbs';
 	}
 
@@ -96,18 +88,18 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'get_breadcrumb' => array( $this, 'get_breadcrumb' ),
-			'print_breadcrumb' => array( $this, 'print_breadcrumb' ),
-		);
+	public function template_tags(): array {
+		return [
+			'get_breadcrumb'   => [ $this, 'get_breadcrumb' ],
+			'print_breadcrumb' => [ $this, 'print_breadcrumb' ],
+		];
 	}
 	/**
 	 * Get the breadcrumbs.
 	 *
 	 * @param array $args Arguments.
 	 */
-	public function print_breadcrumb( $args = array() ) {
+	public function print_breadcrumb( $args = [] ) {
 		if ( 'rankmath' === kadence()->option( 'breadcrumb_engine' ) ) {
 			if ( function_exists( 'rank_math_the_breadcrumbs' ) ) {
 				echo '<div class="kadence-breadcrumbs rankmath-bc-wrap">';
@@ -116,7 +108,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 		} elseif ( 'yoast' === kadence()->option( 'breadcrumb_engine' ) ) {
 			if ( function_exists( 'yoast_breadcrumb' ) ) {
-				yoast_breadcrumb( '<div class="kadence-breadcrumbs yoast-bc-wrap">','</div>' );
+				yoast_breadcrumb( '<div class="kadence-breadcrumbs yoast-bc-wrap">', '</div>' );
 			}
 		} elseif ( 'seopress' === kadence()->option( 'breadcrumb_engine' ) ) {
 			if ( function_exists( 'seopress_display_breadcrumbs' ) ) {
@@ -124,14 +116,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				seopress_display_breadcrumbs();
 				echo '</div>';
 			}
-		} else {
-			if ( function_exists( 'is_bbpress' ) && is_bbpress() && function_exists( 'bbp_breadcrumb' ) ) {
+		} elseif ( function_exists( 'is_bbpress' ) && is_bbpress() && function_exists( 'bbp_breadcrumb' ) ) {
 				echo '<div class="kadence-breadcrumbs bbpress-topic-meta">';
 				bbp_breadcrumb();
 				echo '</div>';
-			} else {
-				echo kadence()->get_breadcrumb( $args );
-			}
+		} else {
+			echo kadence()->get_breadcrumb( $args );
 		}
 	}
 	/**
@@ -140,12 +130,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param array $args Arguments.
 	 * @return string
 	 */
-	public function get_breadcrumb( $args = array() ) {
-		$this->args = apply_filters(
+	public function get_breadcrumb( $args = [] ) {
+		$this->args       = apply_filters(
 			'kadence_local_breadcrumb_args',
 			wp_parse_args(
 				$args,
-				array(
+				[
 					'home_title'     => __( 'Home', 'kadence' ),
 					'404_title'      => __( 'Error 404', 'kadence' ),
 					'search_title'   => __( 'Search results for', 'kadence' ),
@@ -158,12 +148,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					'staff_id'       => '',
 					'testimonial_id' => '',
 					'gallery_id'     => 'none',
-				)
+				]
 			)
 		);
-		$this->settings = wp_parse_args(
-			apply_filters( 'kadence_breadcrumb_args', array() ),
-			array(
+		$this->settings   = wp_parse_args(
+			apply_filters( 'kadence_breadcrumb_args', [] ),
+			[
 				'home'             => true,
 				'home_icon'        => kadence()->option( 'breadcrumb_home_icon' ),
 				'before'           => '<span class="kadence-bread-current">',
@@ -178,87 +168,87 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'link_after'       => '</span>',
 				'link_in_before'   => '<span>',
 				'link_in_after'    => '</span>',
-			)
+			]
 		);
 		$this->post_types = wp_parse_args(
-			apply_filters( 'kadence_breadcrumb_post_types', array() ),
-			array(
-				'product'      => array(
+			apply_filters( 'kadence_breadcrumb_post_types', [] ),
+			[
+				'product'      => [
 					'post_type'     => 'product',
 					'taxonomy'      => 'product_cat',
 					'archive_page'  => 'shop',
 					'archive_label' => '',
-				),
-				'portfolio'    => array(
+				],
+				'portfolio'    => [
 					'post_type'     => 'portfolio',
 					'taxonomy'      => 'portfolio-type',
 					'archive_page'  => $this->args['portfolio_id'],
 					'archive_label' => '',
-				),
-				'post'         => array(
+				],
+				'post'         => [
 					'post_type'     => 'post',
 					'taxonomy'      => 'category',
 					'archive_page'  => $this->args['blog_id'],
 					'archive_label' => '',
-				),
-				'staff'        => array(
+				],
+				'staff'        => [
 					'post_type'     => 'staff',
 					'taxonomy'      => 'staff-group',
 					'archive_page'  => $this->args['staff_id'],
 					'archive_label' => '',
-				),
-				'testimonial'  => array(
+				],
+				'testimonial'  => [
 					'post_type'     => 'testimonial',
 					'taxonomy'      => 'testimonial-group',
 					'archive_page'  => $this->args['testimonial_id'],
 					'archive_label' => '',
-				),
-				'kt_gallery'  => array(
+				],
+				'kt_gallery'   => [
 					'post_type'     => 'kt_gallery',
 					'taxonomy'      => 'kt_album',
 					'archive_page'  => $this->args['gallery_id'],
 					'archive_label' => '',
-				),
-				'tribe_events' => array(
+				],
+				'tribe_events' => [
 					'post_type'     => 'tribe_events',
 					'taxonomy'      => 'tribe_events_cat',
 					'archive_page'  => 'tribe_events',
 					'archive_label' => '',
-				),
-				'event'        => array(
+				],
+				'event'        => [
 					'post_type'     => 'event',
 					'taxonomy'      => 'event-category',
 					'archive_page'  => '',
 					'archive_label' => '',
-				),
-				'podcast'      => array(
+				],
+				'podcast'      => [
 					'post_type'     => 'podcast',
 					'taxonomy'      => 'series',
 					'archive_page'  => '',
 					'archive_label' => '',
-				),
-				'course'      => array(
+				],
+				'course'       => [
 					'post_type'     => 'course',
 					'taxonomy'      => 'course_cat',
 					'archive_page'  => get_option( 'lifterlms_shop_page_id' ),
 					'archive_label' => '',
-				),
-				'lesson'      => array(
+				],
+				'lesson'       => [
 					'post_type'     => 'lesson',
 					'taxonomy'      => '',
 					'custom'        => 'liferlms',
 					'archive_page'  => get_option( 'lifterlms_shop_page_id' ),
 					'archive_label' => '',
-				),
-				'ht_kb'      => array(
+				],
+				'ht_kb'        => [
 					'post_type'     => 'ht_kb',
 					'taxonomy'      => 'ht_kb_category',
 					'archive_page'  => 'archive',
 					'archive_label' => esc_html__( 'Knowledge Base', 'kadence' ),
-				),
-			)
+				],
+			]
 		);
-		$html = '';
+		$html             = '';
 
 		if ( ! is_front_page() ) {
 			$html .= $this->settings['wrap_before'];
@@ -288,7 +278,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$html .= $this->get_crumbs_product_tag();
 			} elseif ( $this->is_wc_attribute() ) {
 				$html .= $this->get_crumbs_product_attribute();
-			}  elseif ( function_exists( 'dokan_is_store_page' ) && dokan_is_store_page() ) {
+			} elseif ( function_exists( 'dokan_is_store_page' ) && dokan_is_store_page() ) {
 				$html .= $this->get_crumbs_dokan_store();
 			} elseif ( is_category() ) {
 				$html .= $this->get_crumbs_category();
@@ -332,7 +322,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		 * function does not produce fatal errors when the WooCommerce 
 		 * is not  activated
 		 */
-		if ( is_tax() && function_exists( 'taxonomy_is_product_attribute') ) { 
+		if ( is_tax() && function_exists( 'taxonomy_is_product_attribute' ) ) { 
 			// now we know for sure that the queried object is a taxonomy
 			$tax_obj = get_queried_object();
 			return taxonomy_is_product_attribute( $tax_obj->taxonomy );
@@ -383,7 +373,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	private function get_crumbs_frontpage() {
 		if ( $this->settings['home_icon'] ) {
-			$output = $this->settings['link_before'] . '<a href="' . esc_url( $this->settings['home_link'] ) . '" title="'. esc_attr( $this->args['home_title'] ) . '" itemprop="url" class="kadence-bc-home kadence-bc-home-icon" ' . ( $this->args['color_style'] ? 'style="' . esc_attr( $this->args['color_style'] ) . '"' : '' ) . '>' . $this->settings['link_in_before'] . kadence()->get_icon( 'home' ) . $this->settings['link_in_after'] . '</a>' . $this->settings['link_after'];
+			$output = $this->settings['link_before'] . '<a href="' . esc_url( $this->settings['home_link'] ) . '" title="' . esc_attr( $this->args['home_title'] ) . '" itemprop="url" class="kadence-bc-home kadence-bc-home-icon" ' . ( $this->args['color_style'] ? 'style="' . esc_attr( $this->args['color_style'] ) . '"' : '' ) . '>' . $this->settings['link_in_before'] . kadence()->get_icon( 'home' ) . $this->settings['link_in_after'] . '</a>' . $this->settings['link_after'];
 		} else {
 			$output = $this->settings['link_before'] . '<a href="' . esc_url( $this->settings['home_link'] ) . '" itemprop="url" class="kadence-bc-home" ' . ( $this->args['color_style'] ? 'style="' . esc_attr( $this->args['color_style'] ) . '"' : '' ) . '>' . $this->settings['link_in_before'] . esc_html( $this->args['home_title'] ) . $this->settings['link_in_after'] . '</a>' . $this->settings['link_after'];
 		}
@@ -424,7 +414,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		global $post;
 		$parent_id    = $post->post_parent;
 		$html         = '';
-		$parentcrumbs = array();
+		$parentcrumbs = [];
 
 		if ( $parent_id ) {
 			while ( $parent_id ) {
@@ -503,7 +493,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Get dokan store.
 	 */
 	private function get_crumbs_dokan_store() {
-		$html = '';
+		$html       = '';
 		$store_user = dokan()->vendor->get( get_query_var( 'author' ) );
 		return $html . $this->settings['before'] . $store_user->get_shop_name() . $this->settings['after'];
 	}
@@ -517,11 +507,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return false;
 		}
 		// find custom post types with archives.
-		$args = array(
+		$args                       = [
 			'has_archive' => true,
 			'_builtin'    => false,
-		);
-		$output = 'names';
+		];
+		$output                     = 'names';
 		$archived_custom_post_types = get_post_types( $args, $output );
 
 		// if there are no custom post types, then the current post can't be one.
@@ -573,7 +563,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		} elseif ( $this->check_has_archive( get_post_type() ) ) {
 			$post_type_obj = get_post_type_object( get_post_type() );
 			$parent_title  = apply_filters( 'post_type_archive_title', $post_type_obj->labels->name, get_post_type() );
-			$html        .= sprintf( $this->get_link(), get_post_type_archive_link( get_post_type() ), $parent_title ) . $this->get_sep();
+			$html         .= sprintf( $this->get_link(), get_post_type_archive_link( get_post_type() ), $parent_title ) . $this->get_sep();
 		}
 		return $html;
 	}
@@ -588,10 +578,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$terms     = wp_get_post_terms(
 			$post_id,
 			$taxonomy,
-			array(
+			[
 				'orderby' => 'parent',
 				'order'   => 'DESC',
-			)
+			]
 		);
 		if ( $terms && ! is_wp_error( $terms ) ) {
 			if ( is_array( $terms ) ) {
@@ -657,7 +647,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	private function get_custom_crumb( $custom ) {
 		global $post;
-		$html      = '';
+		$html = '';
 		if ( 'liferlms' === $custom ) {
 			$parent_course = get_post_meta( $post->ID, '_llms_parent_course', true );
 			if ( $parent_course ) {
@@ -706,7 +696,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( $this->post_types['post']['archive_page'] ) {
 			$html .= $this->get_archive_crumb( $this->post_types['post']['archive_page'], $this->post_types['post']['archive_label'] );
 		}
-		$userdata = get_userdata( $author );
+		$userdata     = get_userdata( $author );
 		$title_output = ( $this->args['show_title'] ? $this->settings['before'] . $userdata->display_name . $this->settings['after'] : '' );
 		return $html . $title_output;
 	}
@@ -714,7 +704,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Get author
 	 */
 	private function get_crumbs_archive() {
-		$html = '';
+		$html         = '';
 		$title_output = ( $this->args['show_title'] ? $this->settings['before'] . get_the_archive_title() . $this->settings['after'] : '' );
 		return $html . $title_output;
 	}
@@ -783,7 +773,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		global $post;
 		$html         = '';
 		$parent_id    = $post->post_parent;
-		$parentcrumbs = array();
+		$parentcrumbs = [];
 		if ( $parent_id ) {
 			while ( $parent_id ) {
 				$page           = get_page( $parent_id );

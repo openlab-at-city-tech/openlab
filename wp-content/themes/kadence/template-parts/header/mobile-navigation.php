@@ -8,7 +8,7 @@
 namespace Kadence;
 
 ?>
-<div class="site-header-item site-header-focus-item site-header-item-mobile-navigation mobile-navigation-layout-stretch-<?php echo ( kadence()->option( 'mobile_navigation_stretch' ) ? 'true' : 'false' ); ?>" data-section="kadence_customizer_mobile_navigation">
+<div class="site-header-item site-header-focus-item site-header-item-mobile-navigation mobile-navigation-layout-stretch-<?php echo kadence()->option( 'mobile_navigation_stretch' ) ? 'true' : 'false'; ?>" data-section="kadence_customizer_mobile_navigation">
 	<?php
 	/**
 	 * Kadence Mobile Navigation

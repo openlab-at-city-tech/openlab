@@ -8,14 +8,8 @@
 namespace Kadence\BeaverThemer;
 
 use Kadence\Component_Interface;
-use function Kadence\kadence;
 use function add_action;
 use function add_theme_support;
-use function have_posts;
-use function the_post;
-use function is_search;
-use function get_template_part;
-use function get_post_type;
 use FLThemeBuilderLayoutData;
 
 /**
@@ -28,7 +22,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'beaverthemer';
 	}
 
@@ -36,9 +30,9 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'after_setup_theme', array( $this, 'action_add_beaver_support' ) );
-		add_filter( 'fl_theme_builder_part_hooks', array( $this, 'register_part_hooks' ) );
-		add_action( 'wp', array( $this, 'header_footer_render' ) );
+		add_action( 'after_setup_theme', [ $this, 'action_add_beaver_support' ] );
+		add_filter( 'fl_theme_builder_part_hooks', [ $this, 'register_part_hooks' ] );
+		add_action( 'wp', [ $this, 'header_footer_render' ] );
 	}
 	/**
 	 * Adds theme support for the Beaver builder plugin.
@@ -74,28 +68,28 @@ class Component implements Component_Interface {
 	 * Adds theme support for the Beaver hooks.
 	 */
 	public function register_part_hooks() {
-		return array(
-			array(
+		return [
+			[
 				'label' => 'Header',
-				'hooks' => array(
+				'hooks' => [
 					'kadence_before_header' => 'Before Header',
 					'kadence_after_header'  => 'After Header',
-				),
-			),
-			array(
+				],
+			],
+			[
 				'label' => 'Content',
-				'hooks' => array(
+				'hooks' => [
 					'kadence_before_main_content' => 'Before Content',
 					'kadence_after_main_content'  => 'After Content',
-				),
-			),
-			array(
+				],
+			],
+			[
 				'label' => 'Footer',
-				'hooks' => array(
+				'hooks' => [
 					'kadence_before_footer' => 'Before Footer',
 					'kadence_after_footer'  => 'After Footer',
-				),
-			),
-		);
+				],
+			],
+		];
 	}
 }

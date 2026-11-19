@@ -210,6 +210,7 @@ class RangeComponent extends Component {
 						</div>
 					</Fragment>
 				) }
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

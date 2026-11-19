@@ -10,15 +10,9 @@ namespace Kadence\LearnDash;
 use Kadence\Component_Interface;
 use Kadence\Kadence_CSS;
 use Kadence_Blocks_Frontend;
-use LearnDash_Settings_Section;
 use function Kadence\kadence;
 use function add_action;
 use function add_filter;
-use function have_posts;
-use function the_post;
-use function is_search;
-use function get_template_part;
-use function get_post_type;
 
 /**
  * Class for adding LearnDash plugin support.
@@ -32,14 +26,14 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'learndash';
 	}
 
@@ -47,13 +41,13 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'learndash_styles' ), 60 );
-		add_filter( 'learndash_wrapper_class', array( $this, 'learndash_lesson_class' ), 10, 2 );
-		add_filter( 'learndash_course_grid_template', array( $this, 'learndash_course_grid_template' ), 10 );
-		add_filter( 'ld_course_list', array( $this, 'learndash_course_grid_class' ), 10, 3 );
-		add_action( 'after_setup_theme', array( $this, 'action_add_editor_styles' ) );
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ), 20 );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 80 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'learndash_styles' ], 60 );
+		add_filter( 'learndash_wrapper_class', [ $this, 'learndash_lesson_class' ], 10, 2 );
+		add_filter( 'learndash_course_grid_template', [ $this, 'learndash_course_grid_template' ], 10 );
+		add_filter( 'ld_course_list', [ $this, 'learndash_course_grid_class' ], 10, 3 );
+		add_action( 'after_setup_theme', [ $this, 'action_add_editor_styles' ] );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ], 20 );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 80 );
 	}
 	/**
 	 * Filters HTML output of course list.
@@ -92,11 +86,11 @@ class Component implements Component_Interface {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
 			foreach ( self::$google_fonts as $key => $font ) {
 				if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-					$add_font = array(
+					$add_font                           = [
 						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
+						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+					];
 					$ktblocks_instance::$gfonts[ $key ] = $add_font;
 				} else {
 					foreach ( $font['fontvariants'] as $variant ) {
@@ -107,7 +101,7 @@ class Component implements Component_Interface {
 				}
 			}
 		} else {
-			add_filter( 'kadence_theme_google_fonts_array', array( $this, 'filter_in_fonts' ) );
+			add_filter( 'kadence_theme_google_fonts_array', [ $this, 'filter_in_fonts' ] );
 		}
 	}
 	/**
@@ -120,11 +114,11 @@ class Component implements Component_Interface {
 		// Enqueue Google Fonts.
 		foreach ( self::$google_fonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $font_array ) ) {
-				$add_font = array(
+				$add_font           = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$font_array[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {
@@ -170,12 +164,12 @@ class Component implements Component_Interface {
 	 * Add some css styles for learndash
 	 */
 	public function learndash_styles() {
-		wp_enqueue_style( 'kadence-learndash', get_theme_file_uri( '/assets/css/learndash.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-learndash', get_theme_file_uri( '/assets/css/learndash.min.css' ), [], KADENCE_VERSION );
 		if ( class_exists( 'LearnDash_Settings_Section' ) && apply_filters( 'kadence_learndash_colors', true ) && ! defined( 'LDX_DESIGN_UPGRADE_PRO_LEARNDASH_VERSION' ) ) {
-			$colors = array(
+			$colors = [
 				'primary'   => \LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_primary' ),
 				'secondary' => \LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_secondary' ),
-			);
+			];
 			if ( ( isset( $colors['primary'] ) && empty( $colors['primary'] ) ) || apply_filters( 'kadence_override_learndash_colors', false ) ) {
 				ob_start();
 				?>
@@ -184,7 +178,7 @@ class Component implements Component_Interface {
 				}
 				.ld-course-list-items .ld_course_grid .thumbnail.course .ld_course_grid_price.ribbon-enrolled:before {
 					border-top-color:  var(--global-palette-btn-bg);
-    				border-right-color:  var(--global-palette-btn-bg);
+					border-right-color:  var(--global-palette-btn-bg);
 				}
 				.ld-course-list-items .ld_course_grid .btn-primary {
 					border-color: var(--global-palette-btn-bg);
@@ -416,9 +410,9 @@ class Component implements Component_Interface {
 
 			// Check if color has 6 or 3 characters and get values.
 		if ( strlen( $color ) == 6 ) {
-			$hex = array( $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] );
+			$hex = [ $color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5] ];
 		} elseif ( strlen( $color ) == 3 ) {
-			$hex = array( $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] );
+			$hex = [ $color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2] ];
 		} else {
 			return $default;
 		}
@@ -459,7 +453,7 @@ class Component implements Component_Interface {
 	 */
 	public function generate_ld_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );

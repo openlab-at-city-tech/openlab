@@ -28,7 +28,7 @@ class Kadence_Control_Available extends WP_Customize_Control {
 	 *
 	 * @var array
 	 */
-	public $input_attrs = array();
+	public $input_attrs = [];
 
 	/**
 	 * Refresh the parameters passed to the JavaScript via JSON.

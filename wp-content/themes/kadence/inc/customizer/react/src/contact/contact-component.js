@@ -294,6 +294,7 @@ class ContactComponent extends Component {
 						</Button>
 					</div>
 				) }
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

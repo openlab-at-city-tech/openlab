@@ -10,8 +10,6 @@ namespace Kadence\Image_Sizes;
 use Kadence\Component_Interface;
 use function Kadence\kadence;
 use WP_Post;
-use function add_filter;
-use function is_active_sidebar;
 
 /**
  * Class for managing responsive image sizes.
@@ -23,7 +21,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'image_sizes';
 	}
 
@@ -31,8 +29,8 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		//add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_content_image_sizes_attr' ), 10, 2 );
-		//add_filter( 'wp_get_attachment_image_attributes', array( $this, 'filter_post_thumbnail_sizes_attr' ), 10, 3 );
+		// add_filter( 'wp_calculate_image_sizes', array( $this, 'filter_content_image_sizes_attr' ), 10, 2 );
+		// add_filter( 'wp_get_attachment_image_attributes', array( $this, 'filter_post_thumbnail_sizes_attr' ), 10, 3 );
 	}
 
 	/**
@@ -43,7 +41,7 @@ class Component implements Component_Interface {
 	 *                      values in pixels (in that order).
 	 * @return string A source size value for use in a content image 'sizes' attribute.
 	 */
-	public function filter_content_image_sizes_attr( string $sizes, array $size ) : string {
+	public function filter_content_image_sizes_attr( string $sizes, array $size ): string {
 		$width = $size[0];
 
 		if ( 740 <= $width ) {
@@ -65,7 +63,7 @@ class Component implements Component_Interface {
 	 * @param string|array $size       Registered image size or flat array of height and width dimensions.
 	 * @return array The filtered attributes for the image markup.
 	 */
-	public function filter_post_thumbnail_sizes_attr( array $attr, WP_Post $attachment, $size ) : array {
+	public function filter_post_thumbnail_sizes_attr( array $attr, WP_Post $attachment, $size ): array {
 		$attr['sizes'] = '100vw';
 
 		if ( kadence()->has_sidebar() ) {

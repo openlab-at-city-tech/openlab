@@ -12,12 +12,8 @@ use Kadence\Kadence_CSS;
 use Kadence_Blocks_Frontend;
 use function Kadence\kadence;
 use function add_action;
-use function have_posts;
-use function the_post;
 use function apply_filters;
 use function get_template_part;
-use function tribe_get_events_link;
-use function tribe_get_event_label_plural;
 
 
 /**
@@ -32,14 +28,14 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'the_events_calendar';
 	}
 
@@ -47,16 +43,16 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'kadence_tribe_events_before_main_tag', array( $this, 'tribe_wapper_before' ) );
-		add_action( 'kadence_tribe_events_after_main_tag', array( $this, 'tribe_wapper_after' ) );
-		add_action( 'kadence_tribe_archive_events_before_template', array( $this, 'tribe_archive_wapper_before' ), 5 );
-		add_action( 'kadence_tribe_archive_events_after_template', array( $this, 'tribe_archive_wapper_after' ) );
-		add_action( 'kadence_tribe_events_header', array( $this, 'tribe_event_title_area' ), 10, 2 );
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ), 20 );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 80 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'tribe_styles' ), 60 );
-		add_filter( 'kadence_theme_options_defaults', array( $this, 'add_option_defaults' ) );
-		add_filter( 'tribe_default_events_block_single_classes', array( $this, 'events_template_classes' ) );
+		add_action( 'kadence_tribe_events_before_main_tag', [ $this, 'tribe_wapper_before' ] );
+		add_action( 'kadence_tribe_events_after_main_tag', [ $this, 'tribe_wapper_after' ] );
+		add_action( 'kadence_tribe_archive_events_before_template', [ $this, 'tribe_archive_wapper_before' ], 5 );
+		add_action( 'kadence_tribe_archive_events_after_template', [ $this, 'tribe_archive_wapper_after' ] );
+		add_action( 'kadence_tribe_events_header', [ $this, 'tribe_event_title_area' ], 10, 2 );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ], 20 );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 80 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'tribe_styles' ], 60 );
+		add_filter( 'kadence_theme_options_defaults', [ $this, 'add_option_defaults' ] );
+		add_filter( 'tribe_default_events_block_single_classes', [ $this, 'events_template_classes' ] );
 	}
 	/**
 	 * Add event template classes.
@@ -89,7 +85,7 @@ class Component implements Component_Interface {
 	 */
 	public function generate_events_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -211,24 +207,24 @@ class Component implements Component_Interface {
 		$css->render_background( kadence()->sub_option( 'tribe_events_archive_content_background', 'mobile' ), $css );
 		$css->stop_media_query();
 
-		$new_styles   = [];
+		$new_styles = [];
 		$css->set_selector( '#primary .tribe-events, #primary .tribe-events-single' );
 		// Events Bar.
 		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_text_color' ) ) {
 			$text_color = $this->get_tribe_option( 'tec_events_bar', 'events_bar_text_color' );
 			// Text color.
 			if ( ! empty( $text_color ) ) {
-				$css->add_property( '--tec-color-text-events-bar-input', $text_color);
-				$css->add_property( '--tec-color-text-events-bar-input-placeholder', $text_color);
-				$css->add_property( '--tec-color-text-view-selector-list-item', $text_color);
-				$css->add_property( '--tec-color-text-view-selector-list-item-hover', $text_color);
+				$css->add_property( '--tec-color-text-events-bar-input', $text_color );
+				$css->add_property( '--tec-color-text-events-bar-input-placeholder', $text_color );
+				$css->add_property( '--tec-color-text-view-selector-list-item', $text_color );
+				$css->add_property( '--tec-color-text-view-selector-list-item-hover', $text_color );
 			}
 		}
 
 		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'find_events_button_text_color' ) ) {
-			$button_text_color     = $this->get_tribe_option( 'tec_events_bar', 'find_events_button_text_color' );
+			$button_text_color = $this->get_tribe_option( 'tec_events_bar', 'find_events_button_text_color' );
 			if ( ! empty( $button_text_color ) ) {
-				$css->add_property( '--tec-color-text-events-bar-submit-button', $button_text_color);
+				$css->add_property( '--tec-color-text-events-bar-submit-button', $button_text_color );
 			}
 		}
 
@@ -244,9 +240,9 @@ class Component implements Component_Interface {
 			}
 
 			if ( ! empty( $icon_color ) ) {
-				$css->add_property( '--tec-color-icon-events-bar', $icon_color);
-				$css->add_property( '--tec-color-icon-events-bar-hover', $icon_color);
-				$css->add_property( '--tec-color-icon-events-bar-active', $icon_color);
+				$css->add_property( '--tec-color-icon-events-bar', $icon_color );
+				$css->add_property( '--tec-color-icon-events-bar-hover', $icon_color );
+				$css->add_property( '--tec-color-icon-events-bar-active', $icon_color );
 			}
 		}
 
@@ -259,13 +255,13 @@ class Component implements Component_Interface {
 		}
 
 		if ( ! empty( $button_color ) ) {
-			$css->add_property( '--tec-color-background-events-bar-submit-button', $button_color);
-			//$new_styles[] = "--tec-color-background-events-bar-submit-button: {$button_color};";
+			$css->add_property( '--tec-color-background-events-bar-submit-button', $button_color );
+			// $new_styles[] = "--tec-color-background-events-bar-submit-button: {$button_color};";
 		}
 
 		if ( ! empty( $button_color_rgb ) ) {
-			$css->add_property( '--tec-color-background-events-bar-submit-button-hover', 'rgba( ' . $button_color_rgb . ', 0.8)');
-			$css->add_property( '--tec-color-background-events-bar-submit-button-active', 'rgba( ' . $button_color_rgb . ', 0.9)');
+			$css->add_property( '--tec-color-background-events-bar-submit-button-hover', 'rgba( ' . $button_color_rgb . ', 0.8)' );
+			$css->add_property( '--tec-color-background-events-bar-submit-button-active', 'rgba( ' . $button_color_rgb . ', 0.9)' );
 
 		}
 
@@ -282,22 +278,22 @@ class Component implements Component_Interface {
 			}
 
 			if ( ! empty( $background_color ) ) {
-				$css->add_property( '--tec-color-background-events-bar', $background_color);
-				$css->add_property( '--tec-color-background-events-bar-tabs', $background_color);
+				$css->add_property( '--tec-color-background-events-bar', $background_color );
+				$css->add_property( '--tec-color-background-events-bar-tabs', $background_color );
 			}
 		}
 
 		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_border_color_choice' ) ) {
 			$border_color = $this->get_tribe_option( 'tec_events_bar', 'events_bar_border_color' );
 			if ( ! empty( $border_color ) ) {
-				$css->add_property( '--tec-color-border-events-bar', $border_color);
+				$css->add_property( '--tec-color-border-events-bar', $border_color );
 			}
 		}
 		// Event Title overrides.
 		if ( $this->should_include_tribe_setting_css( 'global_elements', 'event_title_color' ) ) {
-			$title_color  = $this->get_tribe_option( 'global_elements', 'event_title_color' );
-			$css->add_property( '--tec-color-text-events-title', $title_color);
-			$css->add_property( '--tec-color-text-event-title', $title_color);
+			$title_color = $this->get_tribe_option( 'global_elements', 'event_title_color' );
+			$css->add_property( '--tec-color-text-events-title', $title_color );
+			$css->add_property( '--tec-color-text-event-title', $title_color );
 		}
 		if (
 			$this->should_include_tribe_setting_css( 'month_view', 'multiday_event_bar_color_choice' )
@@ -305,19 +301,20 @@ class Component implements Component_Interface {
 		) {
 			$bar_color     = $this->get_tribe_option( 'month_view', 'multiday_event_bar_color' );
 			$bar_color_rgb = $css->hex2rgb( $bar_color );
-			$css->add_property( '--tec-color-background-primary-multiday', 'rgba( ' . $bar_color_rgb . ', 0.24)');
-			$css->add_property( '--tec-color-background-primary-multiday-hover', 'rgba( ' . $bar_color_rgb . ', 0.34)');
-			$css->add_property( '--tec-color-background-primary-multiday-active', 'rgba( ' . $bar_color_rgb . ', 0.34)');
-			$css->add_property( '--tec-color-background-secondary-multiday', 'rgba( ' . $bar_color_rgb . ', 0.24)');
-			$css->add_property( '--tec-color-background-secondary-multiday-hover', 'rgba( ' . $bar_color_rgb . ', 0.34)');
+			$css->add_property( '--tec-color-background-primary-multiday', 'rgba( ' . $bar_color_rgb . ', 0.24)' );
+			$css->add_property( '--tec-color-background-primary-multiday-hover', 'rgba( ' . $bar_color_rgb . ', 0.34)' );
+			$css->add_property( '--tec-color-background-primary-multiday-active', 'rgba( ' . $bar_color_rgb . ', 0.34)' );
+			$css->add_property( '--tec-color-background-secondary-multiday', 'rgba( ' . $bar_color_rgb . ', 0.24)' );
+			$css->add_property( '--tec-color-background-secondary-multiday-hover', 'rgba( ' . $bar_color_rgb . ', 0.34)' );
 		}
-		if ( $this->should_include_tribe_setting_css( 'month_view', 'date_marker_color' )  ) {
+		if ( $this->should_include_tribe_setting_css( 'month_view', 'date_marker_color' ) ) {
 			$date_marker_color = $this->get_tribe_option( 'month_view', 'date_marker_color' );
-			$css->add_property( '--tec-color-day-marker-month', $date_marker_color);
-			$css->add_property( '--tec-color-day-marker-past-month', $date_marker_color);
+			$css->add_property( '--tec-color-day-marker-month', $date_marker_color );
+			$css->add_property( '--tec-color-day-marker-past-month', $date_marker_color );
 		}
-		if ( $this->should_include_tribe_setting_css( 'month_view', 'days_of_week_color' )  ) {
-			$days_of_week_color = $this->get_tribe_option( 'month_view', 'days_of_week_color' );$css->add_property( '--tec-color-text-day-of-week-month', $days_of_week_color);
+		if ( $this->should_include_tribe_setting_css( 'month_view', 'days_of_week_color' ) ) {
+			$days_of_week_color = $this->get_tribe_option( 'month_view', 'days_of_week_color' );
+			$css->add_property( '--tec-color-text-day-of-week-month', $days_of_week_color );
 		}
 
 		self::$google_fonts = $css->fonts_output();
@@ -340,7 +337,7 @@ class Component implements Component_Interface {
 			return '';
 		}
 
-		return tribe( 'customizer' )->get_option( array( $section, $setting ) );
+		return tribe( 'customizer' )->get_option( [ $section, $setting ] );
 	}
 	/**
 	 * Check if a setting should be included in the CSS output by making sure it's not the default.
@@ -357,7 +354,7 @@ class Component implements Component_Interface {
 		if ( ! function_exists( 'tribe' ) ) {
 			return false;
 		}
-		$setting_value = tribe( 'customizer' )->get_option( array( $section_slug, $setting ) );
+		$setting_value = tribe( 'customizer' )->get_option( [ $section_slug, $setting ] );
 		$section       = tribe( 'customizer' )->get_section( $section_slug );
 		// Something has gone wrong and we can't get the section.
 		if ( false === $section ) {
@@ -381,7 +378,7 @@ class Component implements Component_Interface {
 			if ( ! kadence()->show_in_content_title() ) {
 				return;
 			}
-			$classes   = array();
+			$classes   = [];
 			$classes[] = 'entry-header';
 			$classes[] = 'tribe_events-title';
 			$classes[] = 'title-align-' . ( kadence()->sub_option( 'tribe_events_title_align', 'desktop' ) ? kadence()->sub_option( 'tribe_events_title_align', 'desktop' ) : 'inherit' );
@@ -418,7 +415,7 @@ class Component implements Component_Interface {
 							do_action( 'kadence_single_after_entry_title' );
 							break;
 						default:
-							# code...
+							// code...
 							break;
 					}
 				}
@@ -439,100 +436,100 @@ class Component implements Component_Interface {
 	 */
 	public function add_option_defaults( $defaults ) {
 		// event.
-		$event_addons = array(
-			'tribe_events_title'              => true,
-			'tribe_events_title_layout'       => 'normal',
-			'tribe_events_title_inner_layout' => 'standard',
-			'tribe_events_title_height'       => array(
-				'size' => array(
+		$event_addons = [
+			'tribe_events_title'                      => true,
+			'tribe_events_title_layout'               => 'normal',
+			'tribe_events_title_inner_layout'         => 'standard',
+			'tribe_events_title_height'               => [
+				'size' => [
 					'mobile'  => '',
 					'tablet'  => '',
 					'desktop' => '',
-				),
-				'unit' => array(
+				],
+				'unit' => [
 					'mobile'  => 'px',
 					'tablet'  => 'px',
 					'desktop' => 'px',
-				),
-			),
-			'tribe_events_title_font' => array(
-				'size' => array(
+				],
+			],
+			'tribe_events_title_font'                 => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-				'color'   => '',
-			),
-			'tribe_events_layout'           => 'narrow',
-			'tribe_events_content_style'    => 'boxed',
-			'tribe_events_vertical_padding' => 'show',
-			'tribe_events_sidebar_id'       => 'sidebar-primary',
-			'tribe_events_title_elements'   => array( 'breadcrumb', 'back_link', 'title' ),
-			'tribe_events_title_element_title' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+				'color'      => '',
+			],
+			'tribe_events_layout'                     => 'narrow',
+			'tribe_events_content_style'              => 'boxed',
+			'tribe_events_vertical_padding'           => 'show',
+			'tribe_events_sidebar_id'                 => 'sidebar-primary',
+			'tribe_events_title_elements'             => [ 'breadcrumb', 'back_link', 'title' ],
+			'tribe_events_title_element_title'        => [
 				'enabled' => true,
-			),
-			'tribe_events_title_element_breadcrumb' => array(
-				'enabled' => false,
+			],
+			'tribe_events_title_element_breadcrumb'   => [
+				'enabled'    => false,
 				'show_title' => true,
-			),
-			'tribe_events_title_element_back_link' => array(
+			],
+			'tribe_events_title_element_back_link'    => [
 				'enabled' => true,
-			),
-			'tribe_events_background'         => '',
-			'tribe_events_content_background' => '',
-			'tribe_events_title_background'   => array(
-				'desktop' => array(
+			],
+			'tribe_events_background'                 => '',
+			'tribe_events_content_background'         => '',
+			'tribe_events_title_background'           => [
+				'desktop' => [
 					'color' => '',
-				),
-			),
-			'tribe_events_title_featured_image' => false,
-			'tribe_events_title_overlay_color'  => array(
+				],
+			],
+			'tribe_events_title_featured_image'       => false,
+			'tribe_events_title_overlay_color'        => [
 				'color' => '',
-			),
-			'tribe_events_title_top_border'    => array(),
-			'tribe_events_title_bottom_border' => array(),
-			'tribe_events_title_align'         => array(
+			],
+			'tribe_events_title_top_border'           => [],
+			'tribe_events_title_bottom_border'        => [],
+			'tribe_events_title_align'                => [
 				'mobile'  => '',
 				'tablet'  => '',
 				'desktop' => '',
-			),
-			'tribe_events_title_breadcrumb_color' => array(
+			],
+			'tribe_events_title_breadcrumb_color'     => [
 				'color' => '',
 				'hover' => '',
-			),
-			'tribe_events_title_breadcrumb_font'   => array(
-				'size' => array(
+			],
+			'tribe_events_title_breadcrumb_font'      => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
-			'tribe_events_title_back_link_color' => array(
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
+			'tribe_events_title_back_link_color'      => [
 				'color' => '',
 				'hover' => '',
-			),
-			'tribe_events_title_back_link_font'   => array(
-				'size' => array(
+			],
+			'tribe_events_title_back_link_font'       => [
+				'size'       => [
 					'desktop' => '',
-				),
-				'lineHeight' => array(
+				],
+				'lineHeight' => [
 					'desktop' => '',
-				),
-				'family'  => 'inherit',
-				'google'  => false,
-				'weight'  => '',
-				'variant' => '',
-			),
+				],
+				'family'     => 'inherit',
+				'google'     => false,
+				'weight'     => '',
+				'variant'    => '',
+			],
 			'tribe_events_archive_title'              => false,
 			'tribe_events_archive_title_layout'       => 'normal',
 			'tribe_events_archive_layout'             => 'normal',
@@ -540,8 +537,8 @@ class Component implements Component_Interface {
 			'tribe_events_archive_content_style'      => 'unboxed',
 			'tribe_events_archive_vertical_padding'   => 'show',
 			'transparent_header_tribe_events_archive' => true,
-		);
-		$defaults = array_merge(
+		];
+		$defaults     = array_merge(
 			$defaults,
 			$event_addons
 		);
@@ -593,7 +590,7 @@ class Component implements Component_Interface {
 	 * Add some css styles for Tribe Events
 	 */
 	public function tribe_styles() {
-		wp_enqueue_style( 'kadence-tribe', get_theme_file_uri( '/assets/css/tribe-events.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-tribe', get_theme_file_uri( '/assets/css/tribe-events.min.css' ), [], KADENCE_VERSION );
 	}
 	/**
 	 * Enqueue Frontend Fonts
@@ -606,11 +603,11 @@ class Component implements Component_Interface {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
 			foreach ( self::$google_fonts as $key => $font ) {
 				if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-					$add_font = array(
+					$add_font                           = [
 						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
+						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+					];
 					$ktblocks_instance::$gfonts[ $key ] = $add_font;
 				} else {
 					foreach ( $font['fontvariants'] as $variant ) {
@@ -621,7 +618,7 @@ class Component implements Component_Interface {
 				}
 			}
 		} else {
-			add_filter( 'kadence_theme_google_fonts_array', array( $this, 'filter_in_fonts' ) );
+			add_filter( 'kadence_theme_google_fonts_array', [ $this, 'filter_in_fonts' ] );
 		}
 	}
 	/**
@@ -634,11 +631,11 @@ class Component implements Component_Interface {
 		// Enqueue Google Fonts.
 		foreach ( self::$google_fonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $font_array ) ) {
-				$add_font = array(
+				$add_font           = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$font_array[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {

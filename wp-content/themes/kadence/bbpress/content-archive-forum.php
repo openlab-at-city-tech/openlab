@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 
 <div id="bbpress-forums" class="bbpress-wrapper">
 
-	<?php //bbp_get_template_part( 'form', 'search' ); ?>
+	<?php // bbp_get_template_part( 'form', 'search' ); ?>
 
 	<?php bbp_breadcrumb(); ?>
 

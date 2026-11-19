@@ -7,16 +7,8 @@
 
 namespace Kadence\Nav_Menus;
 
-use Kadence\Component_Interface;
-use Kadence\Templating_Component_Interface;
-use function Kadence\kadence;
-use WP_Post;
-use WP_Query;
 use function add_action;
 use function add_filter;
-use function register_nav_menus;
-use function has_nav_menu;
-use function wp_nav_menu;
 
 /**
  * Class for adding collapse option to navigation widget.
@@ -27,17 +19,17 @@ class Nav_Widget_Settings {
 	 *
 	 * @var array;
 	 */
-	protected $defaults = array(
+	protected $defaults = [
 		'collapse' => false,
-	);
+	];
 	/**
 	 * Default widgets.
 	 *
 	 * @var array;
 	 */
-	protected $widgets = array(
+	protected $widgets = [
 		'nav_menu',
-	);
+	];
 	/**
 	 * Construct.
 	 *
@@ -45,9 +37,9 @@ class Nav_Widget_Settings {
 	 */
 	public function __construct() {
 		// Hook in all the right places.
-		add_action( 'in_widget_form', array( $this, 'add_settings' ), 10, 3 );
-		add_filter( 'widget_update_callback', array( $this, 'save_settings' ), 10, 4 );
-		add_filter( 'widget_nav_menu_args', array( $this, 'frontend_settings' ), 10, 4 );
+		add_action( 'in_widget_form', [ $this, 'add_settings' ], 10, 3 );
+		add_filter( 'widget_update_callback', [ $this, 'save_settings' ], 10, 4 );
+		add_filter( 'widget_nav_menu_args', [ $this, 'frontend_settings' ], 10, 4 );
 	}
 
 	/**

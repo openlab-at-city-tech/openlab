@@ -9,7 +9,6 @@ namespace Kadence\Custom_Footer;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
-use function add_action;
 use function apply_filters;
 use function Kadence\kadence;
 use function get_template_part;
@@ -29,7 +28,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'custom_footer';
 	}
 
@@ -45,12 +44,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'render_footer'            => array( $this, 'render_footer' ),
-			'display_footer_row'       => array( $this, 'display_footer_row' ),
-			'footer_column_item_count' => array( $this, 'footer_column_item_count' ),
-		);
+	public function template_tags(): array {
+		return [
+			'render_footer'            => [ $this, 'render_footer' ],
+			'display_footer_row'       => [ $this, 'display_footer_row' ],
+			'footer_column_item_count' => [ $this, 'footer_column_item_count' ],
+		];
 	}
 	/**
 	 * Checks to see if the row has any content.
@@ -60,7 +59,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function display_footer_row( $row = 'middle' ) {
 		$display = false;
-		foreach ( array( '1', '2', '3', '4', '5' ) as $column ) {
+		foreach ( [ '1', '2', '3', '4', '5' ] as $column ) {
 			$elements = kadence()->option( 'footer_items' );
 			if ( isset( $elements ) && isset( $elements[ $row ] ) && isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][ $row . '_' . $column ] ) && ! empty( $elements[ $row ][ $row . '_' . $column ] ) ) {
 				$display = true;
@@ -91,7 +90,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $column the name of the column.
 	 */
 	public function footer_column_item_count( $row = 'middle', $column = '1' ) {
-		$count = 0;
+		$count    = 0;
 		$elements = kadence()->option( 'footer_items' );
 		if ( isset( $elements ) && isset( $elements[ $row ] ) && isset( $elements[ $row ][ $row . '_' . $column ] ) && is_array( $elements[ $row ][ $row . '_' . $column ] ) && ! empty( $elements[ $row ][ $row . '_' . $column ] ) ) {
 			$count = count( $elements[ $row ][ $row . '_' . $column ] );

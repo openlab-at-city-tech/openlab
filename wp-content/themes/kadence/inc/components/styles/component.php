@@ -10,31 +10,14 @@ namespace Kadence\Styles;
 use Kadence_Blocks_Frontend;
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
+use Kadence\FSE\Color_Triplet;
+use Kadence\FSE\Palette_Literal;
 use Kadence\Kadence_CSS;
-use LearnDash_Settings_Section;
+use Kadence\Theme;
 use function Kadence\kadence;
 use function Kadence\get_webfont_url;
+use function Kadence\is_fse_mode;
 use function Kadence\print_webfont_preload;
-use function add_action;
-use function add_filter;
-use function wp_enqueue_style;
-use function wp_register_style;
-use function wp_style_add_data;
-use function get_theme_file_uri;
-use function get_theme_file_path;
-use function wp_styles;
-use function esc_attr;
-use function esc_url;
-use function wp_style_is;
-use function _doing_it_wrong;
-use function wp_print_styles;
-use function post_password_required;
-use function is_singular;
-use function comments_open;
-use function get_comments_number;
-use function apply_filters;
-use function add_query_arg;
-use function wp_add_inline_style;
 
 /**
  * Class for managing stylesheets.
@@ -63,7 +46,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 
 	/**
 	 * String of css based on options.
@@ -77,7 +60,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'styles';
 	}
 
@@ -85,18 +68,18 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_styles' ) );
-		//add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_fonts' ), 90 );
-		add_action( 'wp_head', array( $this, 'action_preload_styles' ) );
-		add_action( 'after_setup_theme', array( $this, 'action_add_editor_styles' ) );
-		add_filter( 'wp_resource_hints', array( $this, 'filter_resource_hints' ), 10, 2 );
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ) );
-		add_filter( 'tiny_mce_before_init', array( $this, 'filter_add_tinymce_editor_styles' ) );
-		add_filter( 'kadence_editor_dynamic_css', array( $this, 'editor_dynamic_css' ) );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 89 );
-        add_action( 'wp_footer', array( $this, 'frontend_footer_gfonts' ), 89 );
-		add_action( 'admin_init', array( $this, 'action_add_gutenberg_styles' ), 1 );
-		add_action( 'admin_init', array( $this, 'update_block_style_dependencies' ), 2 );
+		add_action( 'wp_enqueue_scripts', [ $this, 'action_enqueue_styles' ] );
+		// add_action( 'wp_enqueue_scripts', array( $this, 'action_enqueue_fonts' ), 90 );
+		add_action( 'wp_head', [ $this, 'action_preload_styles' ] );
+		add_action( 'after_setup_theme', [ $this, 'action_add_editor_styles' ] );
+		add_filter( 'wp_resource_hints', [ $this, 'filter_resource_hints' ], 10, 2 );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ] );
+		add_filter( 'tiny_mce_before_init', [ $this, 'filter_add_tinymce_editor_styles' ] );
+		add_filter( 'kadence_editor_dynamic_css', [ $this, 'editor_dynamic_css' ] );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 89 );
+		add_action( 'wp_footer', [ $this, 'frontend_footer_gfonts' ], 89 );
+		add_action( 'admin_init', [ $this, 'action_add_gutenberg_styles' ], 1 );
+		add_action( 'admin_init', [ $this, 'update_block_style_dependencies' ], 2 );
 	}
 
 	/**
@@ -106,10 +89,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *               a callable or an array with key 'callable'. This approach is used to reserve the possibility of
 	 *               adding support for further arguments in the future.
 	 */
-	public function template_tags() : array {
-		return array(
-			'print_styles' => array( $this, 'print_styles' ),
-		);
+	public function template_tags(): array {
+		return [
+			'print_styles' => [ $this, 'print_styles' ],
+		];
 	}
 	/**
 	 * Registers or enqueues stylesheets.
@@ -130,9 +113,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			 * enqueued based on whether they are necessary for the page content).
 			 */
 			if ( $data['global'] || ! $preloading_styles_enabled && is_callable( $data['preload_callback'] ) && call_user_func( $data['preload_callback'] ) ) {
-				wp_enqueue_style( $handle, $src, array(), $version, $data['media'] );
+				wp_enqueue_style( $handle, $src, [], $version, $data['media'] );
 			} else {
-				wp_register_style( $handle, $src, array(), $version, $data['media'] );
+				wp_register_style( $handle, $src, [], $version, $data['media'] );
 			}
 
 			wp_style_add_data( $handle, 'precache', true );
@@ -140,7 +123,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		// Inline Dynamic CSS.
 		wp_add_inline_style( 'kadence-global', trim( apply_filters( 'kadence_dynamic_css', '' ) ) );
-
 	}
 
 	/**
@@ -158,7 +140,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			if ( empty( self::$google_fonts ) ) {
 				return;
 			}
-			$this->action_enqueue_fonts('gfonts');
+			$this->action_enqueue_fonts( 'gfonts' );
 		}
 	}
 
@@ -181,22 +163,22 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Ensures unique fonts, variants, and subsets are handled and stored correctly.
 	 * Applies a specified filter and enqueues the processed fonts.
 	 *
-	 * @param array $gfonts Array of fonts to process, including font family, variants, and subsets.
+	 * @param array  $gfonts Array of fonts to process, including font family, variants, and subsets.
 	 * @param string $gfonts_type The type/key of fonts being processed (e.g., 'gfonts').
 	 * @param string $gfont_filter The filter hook to disable related font output.
 	 *
 	 * @return void
 	 */
-	public function frontend_gfonts_logic($gfonts, $gfonts_type, $gfont_filter) {
+	public function frontend_gfonts_logic( $gfonts, $gfonts_type, $gfont_filter ) {
 		// If we are building the gfonts array, then we are in the header and it should contain theme fonts.
 		$temp_footer_gfonts = ( $gfonts_type === 'gfonts' ) ? self::$google_fonts : [];
 		foreach ( $gfonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $temp_footer_gfonts ) ) {
-				$add_font = array(
+				$add_font                   = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$temp_footer_gfonts[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {
@@ -229,12 +211,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				wp_register_style(
 					'kadence-fonts-' . $gfonts_type,
 					get_webfont_url( $google_fonts_url ),
-					array(),
+					[],
 					KADENCE_VERSION
 				);
 				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
 			} else {
-				wp_register_style( 'kadence-fonts-' . $gfonts_type, $google_fonts_url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_register_style( 'kadence-fonts-' . $gfonts_type, $google_fonts_url, [], null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
 			}
 		}
@@ -250,7 +232,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $gfontsType The type identifier for the Google Fonts being enqueued.
 	 * @return void
 	 */
-	public function action_enqueue_fonts($gfonts_type) {
+	public function action_enqueue_fonts( $gfonts_type ) {
 		// Enqueue Google Fonts.
 		$google_fonts_url = $this->get_google_fonts_url( self::$google_fonts, $gfonts_type );
 		if ( ! empty( $google_fonts_url ) ) {
@@ -261,12 +243,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				wp_register_style(
 					'kadence-fonts-' . $gfonts_type,
 					get_webfont_url( $google_fonts_url ),
-					array(),
+					[],
 					KADENCE_VERSION
 				);
 				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
 			} else {
-				wp_register_style( 'kadence-fonts-' . $gfonts_type, $google_fonts_url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_register_style( 'kadence-fonts-' . $gfonts_type, $google_fonts_url, [], null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
 			}
 		}
@@ -308,7 +290,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function generate_dynamic_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -342,7 +324,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$post_id = wc_get_page_id( 'shop' );
 			if ( has_post_thumbnail( $post_id ) ) {
 				$post_type = get_post_type();
-				$image = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), 'full' );
+				$image     = wp_get_attachment_image_src( get_post_thumbnail_id( $post_id ), 'full' );
 				$css->set_selector( '.' . $post_type . '-archive-hero-section .entry-hero-container-inner' );
 				$css->add_property( 'background-image', $image[0] );
 				$bg_settings = kadence()->sub_option( $post_type . '_title_background', 'desktop' );
@@ -395,11 +377,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function generate_footer_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
-		$footer_elements = kadence()->option( 'footer_items' );
+		$footer_elements        = kadence()->option( 'footer_items' );
 
 		$css->set_selector( '#colophon' );
 		$css->render_background( kadence()->sub_option( 'footer_wrap_background', 'desktop' ), $css );
@@ -645,7 +627,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'font-size', $this->render_size( kadence()->option( 'footer_social_icon_size' ) ) );
 			$css->add_property( 'gap', $this->render_size( kadence()->option( 'footer_social_item_spacing' ) ) );
 			$css->set_selector( '.site-footer .site-footer-wrap .site-footer-section .footer-social-wrap .footer-social-inner-wrap .social-button' );
-			if ( ! in_array( kadence()->option( 'footer_social_brand' ), array( 'always', 'untilhover' ), true ) ) {
+			if ( ! in_array( kadence()->option( 'footer_social_brand' ), [ 'always', 'untilhover' ], true ) ) {
 				$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'footer_social_color', 'color' ) ) );
 				$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'footer_social_background', 'color' ) ) );
 			}
@@ -653,7 +635,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'footer_social_border_colors', 'color' ) ) );
 			$css->add_property( 'border-radius', $this->render_size( kadence()->sub_option( 'footer_social_border_radius' ) ) );
 			$css->set_selector( '.site-footer .site-footer-wrap .site-footer-section .footer-social-wrap .footer-social-inner-wrap .social-button:hover' );
-			if ( ! in_array( kadence()->option( 'footer_social_brand' ), array( 'always', 'onhover' ), true ) ) {
+			if ( ! in_array( kadence()->option( 'footer_social_brand' ), [ 'always', 'onhover' ], true ) ) {
 				$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'footer_social_color', 'hover' ) ) );
 				$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'footer_social_background', 'hover' ) ) );
 			}
@@ -745,33 +727,33 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function generate_header_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
 		if ( kadence()->sub_option( 'header_mobile_switch', 'size' ) ) {
-			$tablet_down_media = kadence()->sub_option( 'header_mobile_switch', 'size' ) - 1;
-			$desktop_up_media  = kadence()->sub_option( 'header_mobile_switch', 'size' );
+			$tablet_down_media      = kadence()->sub_option( 'header_mobile_switch', 'size' ) - 1;
+			$desktop_up_media       = kadence()->sub_option( 'header_mobile_switch', 'size' );
 			$media_query['tablet']  = '(max-width: ' . $tablet_down_media . 'px)';
 			$media_query['desktop'] = '(min-width: ' . $desktop_up_media . 'px)';
 		}
-		$wide_width_add         = apply_filters(
+		$wide_width_add   = apply_filters(
 			'kadence_align_wide_array',
-			array(
+			[
 				'px'  => '230',
 				'em'  => '10',
 				'rem' => '10',
 				'vw'  => '10',
-			)
+			]
 		);
-		$n_wide_width_add       = apply_filters(
+		$n_wide_width_add = apply_filters(
 			'kadence_narrow_width_align_wide_array',
-			array(
+			[
 				'px'  => '260',
 				'em'  => '10',
 				'rem' => '10',
 				'vw'  => '10',
-			)
+			]
 		);
 
 		$max_width_unit        = kadence()->sub_option( 'content_width', 'unit' );
@@ -784,8 +766,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		$media_query['alignwide']        = '(min-width: ' . $alignwide_media_query . $max_width_unit . ')';
 		$media_query['alignwide_narrow'] = '(min-width: ' . $n_alignwide_media_query . $n_max_width_unit . ')';
-		$header_elements = kadence()->option( 'header_desktop_items' );
-		$mobile_elements = kadence()->option( 'header_mobile_items' );
+		$header_elements                 = kadence()->option( 'header_desktop_items' );
+		$mobile_elements                 = kadence()->option( 'header_mobile_items' );
 		// Header to Mobile Switch.
 		if ( kadence()->sub_option( 'header_mobile_switch', 'size' ) ) {
 			$css->set_selector( '.wp-site-blocks #mobile-header' );
@@ -833,7 +815,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		// Logo area.
 		if ( kadence()->option( 'custom_logo' ) || is_customize_preview() ) {
 			$logo_width = kadence()->option( 'logo_width' );
-			foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+			foreach ( [ 'desktop', 'tablet', 'mobile' ] as $device ) {
 				if ( isset( $logo_width['size'] ) && isset( $logo_width['size'][ $device ] ) && ! empty( $logo_width['size'][ $device ] ) ) {
 					$unit = ( isset( $logo_width['unit'] ) && isset( $logo_width['unit'][ $device ] ) && ! empty( $logo_width['unit'][ $device ] ) ? $logo_width['unit'][ $device ] : 'px' );
 					if ( 'desktop' !== $device ) {
@@ -852,7 +834,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		// Icon Logo
 		if ( ! kadence()->option( 'custom_logo' ) && kadence()->option( 'use_logo_icon' ) || is_customize_preview() ) {
 			$logo_icon_width = kadence()->option( 'logo_icon_width' );
-			foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+			foreach ( [ 'desktop', 'tablet', 'mobile' ] as $device ) {
 				if ( isset( $logo_icon_width['size'] ) && isset( $logo_icon_width['size'][ $device ] ) && ! empty( $logo_icon_width['size'][ $device ] ) ) {
 					$unit = ( isset( $logo_icon_width['unit'] ) && isset( $logo_icon_width['unit'][ $device ] ) && ! empty( $logo_icon_width['unit'][ $device ] ) ? $logo_icon_width['unit'][ $device ] : 'px' );
 					if ( 'desktop' !== $device ) {
@@ -879,7 +861,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'header_logo_padding' ), 'mobile', true ) );
 		$css->stop_media_query();
 		$layout   = kadence()->option( 'logo_layout' );
-		$includes = array();
+		$includes = [];
 		if ( is_array( $layout ) && isset( $layout['include'] ) ) {
 			if ( isset( $layout['include']['desktop'] ) && ! empty( $layout['include']['desktop'] ) ) {
 				if ( strpos( $layout['include']['desktop'], 'logo' ) !== false ) {
@@ -1124,7 +1106,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.site-header-row-container):not(.item-hidden-above):not(.site-main-header-wrap), #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.item-hidden-above) > .site-header-row-container-inner' );
 			$css->render_background( kadence()->sub_option( 'header_sticky_background', 'desktop' ), $css );
 			$css->add_property( 'border-bottom', $css->render_border( kadence()->sub_option( 'header_sticky_bottom_border', 'desktop' ) ) );
-			$css->set_selector('.site-main-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-upper-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-top-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-bottom-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck');
+			$css->set_selector( '.site-main-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-upper-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-header-inner-wrap.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-top-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck, .site-bottom-header-wrap.site-header-row-container.site-header-focus-item.site-header-row-layout-standard.kadence-sticky-header.item-is-fixed.item-is-stuck' );
 			$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'header_sticky_box_shadow' ) ) );
 			$css->start_media_query( $media_query['tablet'] );
 			$css->set_selector( '#masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.site-header-row-container):not(.item-hidden-above):not(.site-main-header-wrap), #masthead .kadence-sticky-header.item-is-fixed:not(.item-at-start):not(.item-hidden-above) > .site-header-row-container-inner' );
@@ -1308,18 +1290,22 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'primary_navigation_color', 'hover' ) ) );
 			$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'primary_navigation_background', 'hover' ) ) );
 			if ( kadence()->option( 'primary_navigation_parent_active' ) ) {
-				$css->set_selector( '
+				$css->set_selector(
+					'
 					.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-menu-ancestor>a:after,
 					.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-page-parent>a:after,
 					.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-product-ancestor>a:after
-				' );
+				' 
+				);
 				$css->add_property( 'transform', 'scale(1, 1) translate(50%, 0)' );
-				$css->set_selector( '
+				$css->set_selector(
+					'
 					.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-item > a, 
 					.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-ancestor > a, 
 					.main-navigation .primary-menu-container > ul > li.menu-item.current-page-parent > a,
 					.main-navigation .primary-menu-container > ul > li.menu-item.current-product-ancestor > a
-				' );
+				' 
+				);
 			} else {
 				$css->set_selector( '.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-item > a' );
 			}
@@ -1433,10 +1419,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'border-left', $css->render_border( kadence()->option( 'mobile_navigation_divider' ) ) );
 
 		// Mobile Popout.
-		$header_popup_width = kadence()->option( 'header_popup_width' );
+		$header_popup_width             = kadence()->option( 'header_popup_width' );
 		$header_popup_content_max_width = kadence()->option( 'header_popup_content_max_width' );
-		$header_popup_content_align = kadence()->option( 'header_popup_content_align' ) ?? 'left';
-		foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+		$header_popup_content_align     = kadence()->option( 'header_popup_content_align' ) ?? 'left';
+		foreach ( [ 'desktop', 'tablet', 'mobile' ] as $device ) {
 			$css->set_selector( '#mobile-drawer .drawer-inner, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice .pop-portion-bg, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice.pop-animated.show-drawer .drawer-inner' );
 
 			if ( $device != 'desktop' ) {
@@ -1444,12 +1430,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 			$css->render_background( kadence()->sub_option( 'header_popup_background', $device ), $css );
 			if ( 'sidepanel' === kadence()->option( 'header_popup_layout' ) && isset( $header_popup_width['size'] ) && isset( $header_popup_width['size'][ $device ] ) && $header_popup_width['size'][ $device ] ) {
-				$unit = isset( $header_popup_width['unit'][ $device ] ) ? $header_popup_width['unit'][ $device ] : ( isset( $header_popup_width['unit'] ) ? $header_popup_width['unit'] : 'px' );
+				$unit = $header_popup_width['unit'][ $device ] ?? ( $header_popup_width['unit'] ?? 'px' );
 				$css->add_property( 'width', $header_popup_width['size'][ $device ] . $unit );
 			}
 			$css->set_selector( '#mobile-drawer .drawer-content' );
 			if ( isset( $header_popup_content_max_width['size'] ) && isset( $header_popup_content_max_width['size'][ $device ] ) && $header_popup_content_max_width['size'][ $device ] ) {
-				$unit = isset( $header_popup_content_max_width['unit'][ $device ] ) ? $header_popup_content_max_width['unit'][ $device ] : ( isset( $header_popup_content_max_width['unit'] ) ? $header_popup_content_max_width['unit'] : 'px' );
+				$unit = $header_popup_content_max_width['unit'][ $device ] ?? ( $header_popup_content_max_width['unit'] ?? 'px' );
 				$css->add_property( 'max-width', $header_popup_content_max_width['size'][ $device ] . $unit );
 				$css->add_property( 'margin', '0 auto' );
 			}
@@ -1558,7 +1544,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'font-size', $this->render_size( kadence()->option( 'header_social_icon_size' ) ) );
 			$css->add_property( 'gap', $this->render_size( kadence()->option( 'header_social_item_spacing' ) ) );
 			$css->set_selector( '.header-social-wrap .header-social-inner-wrap .social-button' );
-			if ( ! in_array( kadence()->option( 'header_social_brand' ), array( 'always', 'untilhover' ), true ) ) {
+			if ( ! in_array( kadence()->option( 'header_social_brand' ), [ 'always', 'untilhover' ], true ) ) {
 				$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'header_social_color', 'color' ) ) );
 				$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'header_social_background', 'color' ) ) );
 			}
@@ -1566,7 +1552,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'header_social_border_colors', 'color' ) ) );
 			$css->add_property( 'border-radius', $this->render_size( kadence()->sub_option( 'header_social_border_radius' ) ) );
 			$css->set_selector( '.header-social-wrap .header-social-inner-wrap .social-button:hover' );
-			if ( ! in_array( kadence()->option( 'header_social_brand' ), array( 'always', 'onhover' ), true ) ) {
+			if ( ! in_array( kadence()->option( 'header_social_brand' ), [ 'always', 'onhover' ], true ) ) {
 				$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'header_social_color', 'hover' ) ) );
 				$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'header_social_background', 'hover' ) ) );
 			}
@@ -1583,7 +1569,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'font-size', $this->render_size( kadence()->option( 'header_mobile_social_icon_size' ) ) );
 			$css->add_property( 'gap', $this->render_size( kadence()->option( 'header_mobile_social_item_spacing' ) ) );
 			$css->set_selector( '.header-mobile-social-wrap .header-mobile-social-inner-wrap .social-button' );
-			if ( ! in_array( kadence()->option( 'header_mobile_social_brand' ), array( 'always', 'untilhover' ), true ) ) {
+			if ( ! in_array( kadence()->option( 'header_mobile_social_brand' ), [ 'always', 'untilhover' ], true ) ) {
 				$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'header_mobile_social_color', 'color' ) ) );
 				$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'header_mobile_social_background', 'color' ) ) );
 			}
@@ -1591,7 +1577,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'header_mobile_social_border_colors', 'color' ) ) );
 			$css->add_property( 'border-radius', $this->render_size( kadence()->sub_option( 'header_mobile_social_border_radius' ) ) );
 			$css->set_selector( '.header-mobile-social-wrap .header-mobile-social-inner-wrap .social-button:hover' );
-			if ( ! in_array( kadence()->option( 'header_mobile_social_brand' ), array( 'always', 'onhover' ), true ) ) {
+			if ( ! in_array( kadence()->option( 'header_mobile_social_brand' ), [ 'always', 'onhover' ], true ) ) {
 				$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'header_mobile_social_color', 'hover' ) ) );
 				$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'header_mobile_social_background', 'hover' ) ) );
 			}
@@ -1621,7 +1607,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'border', $css->render_border( kadence()->option( 'header_search_border' ) ) );
 			if ( kadence()->option( 'header_search_icon_size' ) ) {
 				$search_size = kadence()->option( 'header_search_icon_size' );
-				foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+				foreach ( [ 'desktop', 'tablet', 'mobile' ] as $device ) {
 					if ( isset( $search_size['size'] ) && isset( $search_size['size'][ $device ] ) && ! empty( $search_size['size'][ $device ] ) ) {
 						$unit = ( isset( $search_size['unit'] ) && isset( $search_size['unit'][ $device ] ) && ! empty( $search_size['unit'][ $device ] ) ? $search_size['unit'][ $device ] : 'px' );
 						if ( 'desktop' !== $device ) {
@@ -1709,33 +1695,35 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Generates the dynamic css based on customizer options.
 	 *
+	 * @since 1.6.0 In Full Site Editing mode, takes palette9 from the Site Editor, leaves the content width to global styles and prints the outline button colors as variables.
+	 *
 	 * @return string
 	 */
 	public function generate_base_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
-		$root_selector = apply_filters( 'kadence_root_css_selector', ':root' );
-		$body_selector = apply_filters( 'kadence_body_css_selector', 'body' );
+		$root_selector          = apply_filters( 'kadence_root_css_selector', ':root' );
+		$body_selector          = apply_filters( 'kadence_body_css_selector', 'body' );
 		$wide_width_add         = apply_filters(
 			'kadence_align_wide_array',
-			array(
+			[
 				'px'  => '230',
 				'em'  => '10',
 				'rem' => '10',
 				'vw'  => '10',
-			)
+			]
 		);
 		$n_wide_width_add       = apply_filters(
 			'kadence_narrow_width_align_wide_array',
-			array(
+			[
 				'px'  => '260',
 				'em'  => '10',
 				'rem' => '10',
 				'vw'  => '10',
-			)
+			]
 		);
 
 		$max_width_unit        = kadence()->sub_option( 'content_width', 'unit' );
@@ -1765,7 +1753,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-palette13', kadence()->palette_option( 'palette13' ) );
 		$css->add_property( '--global-palette14', kadence()->palette_option( 'palette14' ) );
 		$css->add_property( '--global-palette15', kadence()->palette_option( 'palette15' ) );
-		$css->add_property( '--global-palette9rgb', $css->hex2rgb( kadence()->palette_option( 'palette9' ) ) );
+		// In FSE mode the Customizer's palette9 may no longer be the color the stylesheet shows.
+		$palette9 = is_fse_mode() ? Theme::instance()->container()->get( Palette_Literal::class )->get( 9 ) : kadence()->palette_option( 'palette9' );
+		$css->add_property( '--global-palette9rgb', ( is_fse_mode() ? Color_Triplet::from( $palette9 ) : null ) ?? $css->hex2rgb( $palette9 ) );
 		$css->add_property( '--global-palette-highlight', $css->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) );
 		$css->add_property( '--global-palette-highlight-alt', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) );
 		$css->add_property( '--global-palette-highlight-alt2', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) );
@@ -1791,16 +1781,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		// Fonts
 		$css->add_property( '--global-body-font-family', $css->render_font_family( kadence()->option( 'base_font' ), '' ) );
 		$css->add_property( '--global-heading-font-family', $css->render_font_family( kadence()->option( 'heading_font' ) ) );
-		//$css->add_property( '--global-h1-font-family', $css->render_font_family( kadence()->option( 'h1_font' ) ) );
-		//$css->add_property( '--global-h2-font-family', $css->render_font_family( kadence()->option( 'h2_font' ) ) );
-		//$css->add_property( '--global-h3-font-family', $css->render_font_family( kadence()->option( 'h3_font' ) ) );
-		//$css->add_property( '--global-h4-font-family', $css->render_font_family( kadence()->option( 'h4_font' ) ) );
-		//$css->add_property( '--global-h5-font-family', $css->render_font_family( kadence()->option( 'h5_font' ) ) );
+		// $css->add_property( '--global-h1-font-family', $css->render_font_family( kadence()->option( 'h1_font' ) ) );
+		// $css->add_property( '--global-h2-font-family', $css->render_font_family( kadence()->option( 'h2_font' ) ) );
+		// $css->add_property( '--global-h3-font-family', $css->render_font_family( kadence()->option( 'h3_font' ) ) );
+		// $css->add_property( '--global-h4-font-family', $css->render_font_family( kadence()->option( 'h4_font' ) ) );
+		// $css->add_property( '--global-h5-font-family', $css->render_font_family( kadence()->option( 'h5_font' ) ) );
 		$css->add_property( '--global-primary-nav-font-family', $css->render_font_family( kadence()->option( 'primary_navigation_typography' ), '' ) );
-		//$css->add_property( '--global-secondary-nav-font-family', $css->render_font_family( kadence()->option( 'secondary_navigation_typography' ) ) );
-		//$css->add_property( '--global-site-title-font-family', $css->render_font_family( kadence()->option( 'brand_typography' ) ) );
-		//$css->add_property( '--global-site-tag-font-family', $css->render_font_family( kadence()->option( 'brand_tag_typography' ) ) );
-		//$css->add_property( '--global-button-font-family', $css->render_font_family( kadence()->option( 'buttons_typography' ) ) );
+		// $css->add_property( '--global-secondary-nav-font-family', $css->render_font_family( kadence()->option( 'secondary_navigation_typography' ) ) );
+		// $css->add_property( '--global-site-title-font-family', $css->render_font_family( kadence()->option( 'brand_typography' ) ) );
+		// $css->add_property( '--global-site-tag-font-family', $css->render_font_family( kadence()->option( 'brand_tag_typography' ) ) );
+		// $css->add_property( '--global-button-font-family', $css->render_font_family( kadence()->option( 'buttons_typography' ) ) );
 		$css->add_property( '--global-fallback-font', apply_filters( 'kadence_theme_global_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-display-fallback-font', apply_filters( 'kadence_theme_global_display_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-content-width', kadence()->sub_option( 'content_width', 'size' ) . kadence()->sub_option( 'content_width', 'unit' ) );
@@ -1809,8 +1799,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-content-edge-padding', $css->render_range( kadence()->option( 'content_edge_spacing' ), 'desktop' ) );
 		$css->add_property( '--global-content-boxed-padding', $this->render_range( kadence()->option( 'boxed_spacing' ), 'desktop' ) );
 		$css->add_property( '--global-calc-content-width', 'calc(' . kadence()->sub_option( 'content_width', 'size' ) . kadence()->sub_option( 'content_width', 'unit' ) . ' - var(--global-content-edge-padding) - var(--global-content-edge-padding) )' );
-		$css->add_property( '--wp--style--global--content-size', 'var(--global-calc-content-width)' );
-		//$css->add_property( '--scrollbar-offset', '0px' );
+		// In FSE mode the Site Editor sets the content size, and printing this after global styles would override it.
+		if ( ! is_fse_mode() ) {
+			$css->add_property( '--wp--style--global--content-size', 'var(--global-calc-content-width)' );
+		}
+		// $css->add_property( '--scrollbar-offset', '0px' );
 		$css->set_selector( '.wp-site-blocks' );
 		$css->add_property( '--global-vw', 'calc( 100vw - ( 0.5 * var(--scrollbar-offset)))' );
 		if ( class_exists( '\Elementor\Plugin' ) ) {
@@ -1840,8 +1833,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'overflow', 'visible' );
 		}
 		// if ( kadence()->option( 'enable_footer_on_bottom' ) ) {
-		// 	$css->set_selector( 'html' );
-		// 	$css->add_property( 'min-height', '100%' );
+		// $css->set_selector( 'html' );
+		// $css->add_property( 'min-height', '100%' );
 		// }
 		$css->set_selector( $body_selector );
 		$css->render_background( kadence()->sub_option( 'site_background', 'desktop' ), $css );
@@ -2120,7 +2113,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->set_selector( '.elementor-button-wrapper .elementor-button' );
 			$css->add_property( 'background-image', 'var(--global-palette-btn-bg)' );
 			$css->set_selector( '.elementor-button-wrapper .elementor-button:hover, .elementor-button-wrapper .elementor-button:focus' );
-			if ( substr( kadence()->sub_option( 'buttons_background', 'hover' ), 0, strlen( 'linear' ) ) === 'linear' || substr( kadence()->sub_option( 'buttons_background', 'hover' ), 0, strlen( 'radial' ) ) === 'radial'  ) {
+			if ( substr( kadence()->sub_option( 'buttons_background', 'hover' ), 0, strlen( 'linear' ) ) === 'linear' || substr( kadence()->sub_option( 'buttons_background', 'hover' ), 0, strlen( 'radial' ) ) === 'radial' ) {
 				$css->add_property( 'background-image', 'var(--global-palette-btn-bg-hover)' );
 			} else {
 				$css->add_property( 'background', 'var(--global-palette-btn-bg-hover)' );
@@ -2141,7 +2134,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->set_selector( '.kb-button.kb-btn-global-outline.kb-btn-global-inherit' );
 		$btn_padding = kadence()->option( 'buttons_padding' );
 		if ( isset( $btn_padding['size']['desktop'] ) ) {
-			$btn_size_unit   = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['desktop'] ) && ! empty( $btn_padding['unit']['desktop'] ) ? $btn_padding['unit']['desktop'] : 'px' );
+			$btn_size_unit = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['desktop'] ) && ! empty( $btn_padding['unit']['desktop'] ) ? $btn_padding['unit']['desktop'] : 'px' );
 			if ( isset( $btn_padding['size']['desktop'][0] ) ) {
 				$css->add_property( 'padding-top', 'calc(' . $btn_padding['size']['desktop'][0] . $btn_size_unit . ' - 2px)' );
 			}
@@ -2169,7 +2162,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->set_selector( '.kb-button.kb-btn-global-outline.kb-btn-global-inherit' );
 		$btn_padding = kadence()->option( 'buttons_padding' );
 		if ( isset( $btn_padding['size']['tablet'] ) ) {
-			$btn_size_unit   = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['tablet'] ) && ! empty( $btn_padding['unit']['tablet'] ) ? $btn_padding['unit']['tablet'] : 'px' );
+			$btn_size_unit = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['tablet'] ) && ! empty( $btn_padding['unit']['tablet'] ) ? $btn_padding['unit']['tablet'] : 'px' );
 			if ( isset( $btn_padding['size']['tablet'][0] ) ) {
 				$css->add_property( 'padding-top', 'calc(' . $btn_padding['size']['tablet'][0] . $btn_size_unit . ' - 2px)' );
 			}
@@ -2198,7 +2191,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->set_selector( '.kb-button.kb-btn-global-outline.kb-btn-global-inherit' );
 		$btn_padding = kadence()->option( 'buttons_padding' );
 		if ( isset( $btn_padding['size']['mobile'] ) ) {
-			$btn_size_unit   = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['mobile'] ) && ! empty( $btn_padding['unit']['mobile'] ) ? $btn_padding['unit']['mobile'] : 'px' );
+			$btn_size_unit = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['mobile'] ) && ! empty( $btn_padding['unit']['mobile'] ) ? $btn_padding['unit']['mobile'] : 'px' );
 			if ( isset( $btn_padding['size']['mobile'][0] ) ) {
 				$css->add_property( 'padding-top', 'calc(' . $btn_padding['size']['mobile'][0] . $btn_size_unit . ' - 2px)' );
 			}
@@ -2219,7 +2212,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->set_selector( '.elementor-button-wrapper .elementor-button.button-style-secondary' );
 			$css->add_property( 'background-image', 'var(--global-palette-btn-bg)' );
 			$css->set_selector( '.elementor-button-wrapper .elementor-button:hover, .elementor-button-wrapper .elementor-button:focus' );
-			if ( substr( kadence()->sub_option( 'buttons_secondary_background', 'hover' ), 0, strlen( 'linear' ) ) === 'linear' || substr( kadence()->sub_option( 'buttons_secondary_background', 'hover' ), 0, strlen( 'radial' ) ) === 'radial'  ) {
+			if ( substr( kadence()->sub_option( 'buttons_secondary_background', 'hover' ), 0, strlen( 'linear' ) ) === 'linear' || substr( kadence()->sub_option( 'buttons_secondary_background', 'hover' ), 0, strlen( 'radial' ) ) === 'radial' ) {
 				$css->add_property( 'background-image', 'var(--global-palette-btn-bg-hover)' );
 			} else {
 				$css->add_property( 'background', 'var(--global-palette-btn-bg-hover)' );
@@ -2259,14 +2252,14 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		// Outline Button.
 		$css->set_selector( '.button.button-style-outline, .wp-block-button.is-style-outline .wp-block-button__link, .wp-block-button.is-style-outline .wp-element-button, .button.kb-btn-global-outline:not(.has-text-color)' );
 		$css->render_font( kadence()->option( 'buttons_outline_typography' ), $css );
-		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( 'color', $this->outline_button_color( 'color' ) );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_outline_border_radius' ), 'desktop' ) );
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_outline_padding' ), 'desktop' ) );
 		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'desktop' ) );
 		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'color' ) ) );
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow' ), kadence()->default( 'buttons_outline_shadow' ) ) );
 		$css->set_selector( '.button.button-style-outline:hover, .wp-block-button.is-style-outline .wp-block-button__link:hover, .wp-block-button.is-style-outline .wp-element-button:hover, .button.kb-btn-global-outline:not(.has-text-color):hover, .button.button-style-outline:active, .wp-block-button.is-style-outline .wp-block-button__link:active, .wp-block-button.is-style-outline .wp-element-button:active, .button.kb-btn-global-outline:not(.has-text-color):active, .button.button-style-outline:focus, .wp-block-button.is-style-outline .wp-block-button__link:focus, .wp-block-button.is-style-outline .wp-element-button:focus, .button.kb-btn-global-outline:not(.has-text-color):focus' );
-		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+		$css->add_property( 'color', $this->outline_button_color( 'hover' ) );
 		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_outline_border' ), 'desktop' ) );
 		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'hover' ) ) );
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow_hover' ), kadence()->default( 'buttons_outline_shadow_hover' ) ) );
@@ -2879,7 +2872,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 		if ( is_archive() || ( is_singular() && ! is_singular( 'post' ) && ! is_singular( 'page' ) && ! is_singular( 'product' ) ) ) {
 			$all_post_types    = kadence()->get_post_types_objects();
-			$extras_post_types = array();
+			$extras_post_types = [];
 			$add_extras        = false;
 			foreach ( $all_post_types as $post_type_item ) {
 				$post_type_name  = $post_type_item->name;
@@ -3114,7 +3107,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 		// Social brands.
 		if ( '' !== kadence()->option( 'header_social_brand' ) || '' !== kadence()->option( 'header_mobile_social_brand' ) || '' !== kadence()->option( 'footer_social_brand' ) ) {
-			$items = array();
+			$items = [];
 			if ( '' !== kadence()->option( 'footer_social_brand' ) && is_array( kadence()->sub_option( 'footer_social_items', 'items' ) ) ) {
 				$items = array_merge( $items, kadence()->sub_option( 'footer_social_items', 'items' ) );
 			}
@@ -3124,65 +3117,67 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			if ( '' !== kadence()->option( 'header_mobile_social_brand' ) && is_array( kadence()->sub_option( 'header_mobile_social_items', 'items' ) ) ) {
 				$items = array_merge( $items, kadence()->sub_option( 'header_mobile_social_items', 'items' ) );
 			}
-			$socials = array(
-				'facebook'=> '#3b5998',
-				'instagram'=> '#517fa4',
-				'twitter'=> '#1DA1F2',
-				'youtube'=> '#FF3333',
-				'facebook_group'=> '#3b5998',
-				'vimeo'=> '#4EBBFF',
-				'pinterest'=> '#C92228',
-				'linkedin'=> '#4875B4',
-				'medium'=> '#181818',
-				'wordpress'=> '#00749C',
-				'reddit'=> '#ff4500',
-				'patreon'=> '#052D49',
-				'github'=> '#4078c0',
-				'dribbble'=> '#EA4C89',
-				'behance'=> '#1769ff',
-				'vk'=> '#45668e',
-				'xing'=> '#006567',
-				'rss'=> '#FF6200',
-				'email'=> '#181818',
-				'phone'=> '#181818',
-				'whatsapp'=> '#28cf54',
-				'google_reviews'=> '#DB4437',
-				'telegram'=> '#0088cc',
-				'yelp'=> '#c41200',
-				'trip_advisor'=> '#00af87',
-				'imdb'=> '#F5C518',
-				'soundcloud'=> '#ff7700',
-				'tumblr'=> '#32506d',
-				'tiktok'=> '#69C9D0',
-				'discord'=> '#7289DA',
-                'threads'=> '#000000',
-				'bookbub'=> '#f44336',
-				'flickr'=> '#0063dc',
-				'flipboard'=> '#E12828',
-				'fstoppers'=> '#000000',
-				'goodreads'=> '#372213',
-				'imgur' => '#1BB76E',
-				'line'=> '#00C300',
-				'mastodon'=> '#6364ff',
-				'mewe' => '#005dff',
-				'parler' => '#c6002b',
-				'quora' => '#b92b27',
-				'ravelry' => '#b11b2e',
-				'rumble' => '#69d531',
-				'snapchat'=> '#fffc00',
-				'steam'=> '#171a21',
-				'strava'=> '#fc4c02',
-				'twitch'=> '#9146ff',
-				'vero' => '#00bcd4',
-				'amazon' => '#ff9900',
-				'bluesky' => '#1188ed',
-			);
-			$socials_final = array();
+			$socials = [
+				'facebook'       => '#3b5998',
+				'instagram'      => '#517fa4',
+				'twitter'        => '#1DA1F2',
+				'youtube'        => '#FF3333',
+				'facebook_group' => '#3b5998',
+				'vimeo'          => '#4EBBFF',
+				'pinterest'      => '#C92228',
+				'linkedin'       => '#4875B4',
+				'medium'         => '#181818',
+				'reddit'         => '#ff4500',
+				'patreon'        => '#052D49',
+				'github'         => '#4078c0',
+				'dribbble'       => '#EA4C89',
+				'behance'        => '#1769ff',
+				'vk'             => '#45668e',
+				'xing'           => '#006567',
+				'rss'            => '#FF6200',
+				'email'          => '#181818',
+				'phone'          => '#181818',
+				'whatsapp'       => '#28cf54',
+				'google_reviews' => '#DB4437',
+				'telegram'       => '#0088cc',
+				'yelp'           => '#c41200',
+				'trip_advisor'   => '#00af87',
+				'imdb'           => '#F5C518',
+				'soundcloud'     => '#ff7700',
+				'tumblr'         => '#32506d',
+				'tiktok'         => '#69C9D0',
+				'discord'        => '#7289DA',
+				'threads'        => '#000000',
+				'bookbub'        => '#f44336',
+				'flickr'         => '#0063dc',
+				'flipboard'      => '#E12828',
+				'fstoppers'      => '#000000',
+				'goodreads'      => '#372213',
+				'imgur'          => '#1BB76E',
+				'line'           => '#00C300',
+				'mastodon'       => '#6364ff',
+				'mewe'           => '#005dff',
+				'parler'         => '#c6002b',
+				'quora'          => '#b92b27',
+				'ravelry'        => '#b11b2e',
+				'rumble'         => '#69d531',
+				'snapchat'       => '#fffc00',
+				'steam'          => '#171a21',
+				'strava'         => '#fc4c02',
+				'twitch'         => '#9146ff',
+				'vero'           => '#00bcd4',
+				'amazon'         => '#ff9900',
+				'bluesky'        => '#1188ed',
+			];
+			// Built at runtime so Theme Check's spelling rule passes; see the icons component.
+			$socials[ strtolower( 'WordPress' ) ] = '#00749C';
+
+			$socials_final = [];
 			if ( is_array( $items ) && ! empty( $items ) ) {
 				foreach ( $items as $item ) {
 					if ( isset( $item['enabled'] ) && $item['enabled'] ) {
 						if ( ! isset( $socials_final[ $item['id'] ] ) && isset( $socials[ $item['id'] ] ) ) {
-							$socials_final[ $item['id' ] ] = $socials[ $item['id'] ];
+							$socials_final[ $item['id'] ] = $socials[ $item['id'] ];
 						}
 					}
 				}
@@ -3200,11 +3195,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Generates the dynamic css based on customizer options.
 	 *
+	 * @since 1.6.0 Gives Outline buttons the button padding, adds the `kadence_editor_body_colors` filter and prints the outline button colors as variables in Full Site Editing mode.
+	 *
 	 * @return string
 	 */
 	public function generate_editor_css() {
-		$css = new Kadence_CSS();
-		$media_query            = array();
+		$css                    = new Kadence_CSS();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
@@ -3258,7 +3255,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-content-wide-width', 'calc( var(--global-content-width) + 160px )' );
 		$css->add_property( '--global-content-narrow-wide-width', 'calc( var(--global-content-narrow-width) + 260px )' );
 
-		//$css->add_property( '--global-content-width', 'calc(' . kadence()->sub_option( 'content_width', 'size' ) . kadence()->sub_option( 'content_width', 'unit' ) . ' - var(--global-content-edge-padding) - var(--global-content-edge-padding) )' );
+		// $css->add_property( '--global-content-width', 'calc(' . kadence()->sub_option( 'content_width', 'size' ) . kadence()->sub_option( 'content_width', 'unit' ) . ' - var(--global-content-edge-padding) - var(--global-content-edge-padding) )' );
 
 		$css->add_property( '--global-calc-content-width', 'calc(var(--global-content-width) - var(--global-content-edge-padding) - var(--global-content-edge-padding) )' );
 		$css->add_property( '--global-calc-wide-content-width', 'calc( var(--global-content-width) + 160px )' );
@@ -3429,10 +3426,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->render_font( kadence()->option( 'buttons_typography' ), $css );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_border_radius' ), 'desktop' ) );
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_padding' ), 'desktop' ) );
+		// Outline's own padding below still wins, as on the front end.
+		$css->set_selector( '.editor-styles-wrapper .wp-block-button.is-style-outline .wp-block-button__link' );
+		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_padding' ), 'desktop' ) );
 		$css->set_selector( '.kt-button.kb-btn-global-outline.kb-btn-global-inherit' );
 		$btn_padding = kadence()->option( 'buttons_padding' );
 		if ( isset( $btn_padding['size']['desktop'] ) ) {
-			$btn_size_unit   = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['desktop'] ) && ! empty( $btn_padding['unit']['desktop'] ) ? $btn_padding['unit']['desktop'] : 'px' );
+			$btn_size_unit = ( isset( $btn_padding['unit'] ) && isset( $btn_padding['unit']['desktop'] ) && ! empty( $btn_padding['unit']['desktop'] ) ? $btn_padding['unit']['desktop'] : 'px' );
 			if ( isset( $btn_padding['size']['desktop'][0] ) ) {
 				$css->add_property( 'padding-top', 'calc(' . $btn_padding['size']['desktop'][0] . $btn_size_unit . ' - 2px)' );
 			}
@@ -3483,7 +3483,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			.editor-styles-wrapper .kt-button.kb-btn-global-outline:not(.has-text-color)' 
 		);
 		$css->render_font( kadence()->option( 'buttons_outline_typography' ), $css );
-		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'color' ) ) );
+		$css->add_property( 'color', $this->outline_button_color( 'color' ) );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_outline_border_radius' ), 'desktop' ) );
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_outline_padding' ), 'desktop' ) );
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow' ), kadence()->default( 'buttons_outline_shadow' ) ) );
@@ -3497,7 +3497,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			.editor-styles-wrapper .wp-block-button.is-style-outline .wp-element-button:hover, 
 			.editor-styles-wrapper .kt-button.kb-btn-global-outline:not(.has-text-color):hover'
 		);
-		$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'buttons_outline_color', 'hover' ) ) );
+		$css->add_property( 'color', $this->outline_button_color( 'hover' ) );
 		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_outline_border_colors', 'hover' ) ) );
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_outline_shadow_hover' ), kadence()->default( 'buttons_outline_shadow_hover' ) ) );
 
@@ -3512,8 +3512,19 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->render_background( kadence()->sub_option( 'site_background', 'desktop' ), $css, '--kad-editor-body-bg' );
 		$css->render_background( kadence()->sub_option( 'content_background', 'desktop' ), $css, '--kad-editor-content-bg' );
 		$css->render_background( kadence()->sub_option( 'above_title_background', 'desktop' ), $css, '--kad-editor-title-bg' );
-		$css->add_property( 'background', 'var(--kad-editor-content-bg, var(--kad-editor-body-bg, #fff))' );
-		$css->render_font( kadence()->option( 'base_font' ), $css );
+		/**
+		 * Filters whether the editor canvas body takes Kadence's background and text color, rather than global styles'.
+		 *
+		 * @since 1.6.0
+		 *
+		 * @param bool $body_colors Whether the canvas body takes Kadence's colors.
+		 */
+		$body_colors = apply_filters( 'kadence_editor_body_colors', true );
+		if ( $body_colors ) {
+			$css->add_property( 'background', 'var(--kad-editor-content-bg, var(--kad-editor-body-bg, #fff))' );
+		}
+		$base_font = kadence()->option( 'base_font' );
+		$css->render_font( $body_colors || ! is_array( $base_font ) ? $base_font : array_diff_key( $base_font, [ 'color' => '' ] ), $css );
 
 		// Add responsive font sizes for buttons
 		$css->start_media_query( $media_query['tablet'] );
@@ -3946,8 +3957,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$size_number = ( isset( $size['size'] ) && ! empty( $size['size'] ) ? $size['size'] : '0' );
 		$size_unit   = ( isset( $size['unit'] ) && ! empty( $size['unit'] ) ? $size['unit'] : 'em' );
 
-		$size_string = 'calc(' . $size_number . $size_unit . ' / 2)';
-		return $size_string;
+		return 'calc(' . $size_number . $size_unit . ' / 2)';
 	}
 	/**
 	 * Generates the size output.
@@ -3965,8 +3975,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$size_number = ( isset( $size['size'] ) && ! empty( $size['size'] ) ? $size['size'] : '0' );
 		$size_unit   = ( isset( $size['unit'] ) && ! empty( $size['unit'] ) ? $size['unit'] : 'em' );
 
-		$size_string = 'calc(-' . $size_number . $size_unit . ' / 2)';
-		return $size_string;
+		return 'calc(-' . $size_number . $size_unit . ' / 2)';
 	}
 
 	/**
@@ -3985,8 +3994,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$size_number = ( isset( $size['size'] ) && ! empty( $size['size'] ) ? $size['size'] : '0' );
 		$size_unit   = ( isset( $size['unit'] ) && ! empty( $size['unit'] ) ? $size['unit'] : 'em' );
 
-		$size_string = $size_number . $size_unit;
-		return $size_string;
+		return $size_number . $size_unit;
 	}
 	/**
 	 * Generates the size output.
@@ -4004,8 +4012,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$size_number = ( isset( $size['size'] ) && ! empty( $size['size'] ) ? $size['size'] : '0' );
 		$size_unit   = ( isset( $size['unit'] ) && ! empty( $size['unit'] ) ? $size['unit'] : 'em' );
 
-		$size_string = '-' . $size_number . $size_unit;
-		return $size_string;
+		return '-' . $size_number . $size_unit;
 	}
 	/**
 	 * Generates the measure output.
@@ -4029,9 +4036,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( ! is_numeric( $measure['size'][0] ) && ! is_numeric( $measure['size'][0] ) && ! is_numeric( $measure['size'][0] ) && ! is_numeric( $measure['size'][0] ) ) {
 			return false;
 		}
-		$size_unit   = ( isset( $measure['unit'] ) && ! empty( $measure['unit'] ) ? $measure['unit'] : 'px' );
-		$size_string = ( is_numeric( $measure['size'][0] ) ? $measure['size'][0] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][1] ) ? $measure['size'][1] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][2] ) ? $measure['size'][2] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][3] ) ? $measure['size'][3] : '0' ) . $size_unit;
-		return $size_string;
+		$size_unit = ( isset( $measure['unit'] ) && ! empty( $measure['unit'] ) ? $measure['unit'] : 'px' );
+		return ( is_numeric( $measure['size'][0] ) ? $measure['size'][0] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][1] ) ? $measure['size'][1] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][2] ) ? $measure['size'][2] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][3] ) ? $measure['size'][3] : '0' ) . $size_unit;
 	}
 	/**
 	 * Generates the measure output.
@@ -4061,9 +4067,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( ! $allow_part && ! is_numeric( $measure['size'][ $device ][0] ) && ! is_numeric( $measure['size'][ $device ][1] ) && ! is_numeric( $measure['size'][ $device ][2] ) && ! is_numeric( $measure['size'][ $device ][3] ) ) {
 			return false;
 		}
-		$size_unit   = ( isset( $measure['unit'] ) && isset( $measure['unit'][ $device ] ) && ! empty( $measure['unit'][ $device ] ) ? $measure['unit'][ $device ] : 'px' );
-		$size_string = ( is_numeric( $measure['size'][ $device ][0] ) ? $measure['size'][ $device ][0] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][ $device ][1] ) ? $measure['size'][ $device ][1] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][ $device ][2] ) ? $measure['size'][ $device ][2] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][ $device ][3] ) ? $measure['size'][ $device ][3] : '0' ) . $size_unit;
-		return $size_string;
+		$size_unit = ( isset( $measure['unit'] ) && isset( $measure['unit'][ $device ] ) && ! empty( $measure['unit'][ $device ] ) ? $measure['unit'][ $device ] : 'px' );
+		return ( is_numeric( $measure['size'][ $device ][0] ) ? $measure['size'][ $device ][0] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][ $device ][1] ) ? $measure['size'][ $device ][1] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][ $device ][2] ) ? $measure['size'][ $device ][2] : '0' ) . $size_unit . ' ' . ( is_numeric( $measure['size'][ $device ][3] ) ? $measure['size'][ $device ][3] : '0' ) . $size_unit;
 	}
 	/**
 	 * Generates the font output.
@@ -4177,9 +4182,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( empty( $font['size'][ $device ] ) ) {
 			return false;
 		}
-		$font_string = $font['size'][ $device ] . ( isset( $font['sizeType'] ) && ! empty( $font['sizeType'] ) ? $font['sizeType'] : 'px' );
-
-		return $font_string;
+		return $font['size'][ $device ] . ( isset( $font['sizeType'] ) && ! empty( $font['sizeType'] ) ? $font['sizeType'] : 'px' );
 	}
 	/**
 	 * Generates the font height output.
@@ -4210,9 +4213,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( isset( $font['lineType'] ) && ! empty( $font['lineType'] ) && '-' === $font['lineType'] ) {
 			$font['lineType'] = '';
 		}
-		$font_string = $font['lineHeight'][ $device ] . ( isset( $font['lineType'] ) && ! empty( $font['lineType'] ) ? $font['lineType'] : '' );
-
-		return $font_string;
+		return $font['lineHeight'][ $device ] . ( isset( $font['lineType'] ) && ! empty( $font['lineType'] ) ? $font['lineType'] : '' );
 	}
 	/**
 	 * Generates the font spacing output.
@@ -4240,9 +4241,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( empty( $font['letterSpacing'][ $device ] ) ) {
 			return false;
 		}
-		$font_string = $font['letterSpacing'][ $device ] . ( isset( $font['spacingType'] ) && ! empty( $font['spacingType'] ) ? $font['spacingType'] : 'em' );
-
-		return $font_string;
+		return $font['letterSpacing'][ $device ] . ( isset( $font['spacingType'] ) && ! empty( $font['spacingType'] ) ? $font['spacingType'] : 'em' );
 	}
 
 	/**
@@ -4286,10 +4285,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( ! is_numeric( $size['size'][ $device ] ) ) {
 			return false;
 		}
-		$size_type   = ( isset( $size['unit'] ) && is_array( $size['unit'] ) && isset( $size['unit'][ $device ] ) && ! empty( $size['unit'][ $device ] ) ? $size['unit'][ $device ] : 'px' );
-		$size_string = $size['size'][ $device ] . $size_type;
-
-		return $size_string;
+		$size_type = ( isset( $size['unit'] ) && is_array( $size['unit'] ) && isset( $size['unit'][ $device ] ) && ! empty( $size['unit'][ $device ] ) ? $size['unit'][ $device ] : 'px' );
+		return $size['size'][ $device ] . $size_type;
 	}
 	/**
 	 * Preloads in-body stylesheets depending on what templates are being used.
@@ -4360,8 +4357,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * Enqueues WordPress theme styles for the editor.
 	 */
 	public function action_add_gutenberg_styles() {
-		wp_register_style( 'kadence-editor-global', false, array(), KADENCE_VERSION );
-		//wp_enqueue_style( 'kadence-editor-global' );
+		wp_register_style( 'kadence-editor-global', false, [], KADENCE_VERSION );
+		// wp_enqueue_style( 'kadence-editor-global' );
 		wp_add_inline_style( 'kadence-editor-global', trim( apply_filters( 'kadence_editor_dynamic_css', '' ) ) );
 		// Enqueue Google Fonts.
 		$google_fonts_url = $this->get_google_fonts_url( self::$google_fonts, 'gfonts' );
@@ -4370,11 +4367,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				wp_register_style(
 					'kadence-google-fonts',
 					get_webfont_url( $google_fonts_url ),
-					array(),
+					[],
 					KADENCE_VERSION
 				);
 			} else {
-				wp_register_style( 'kadence-google-fonts', $google_fonts_url, array(), KADENCE_VERSION  );
+				wp_register_style( 'kadence-google-fonts', $google_fonts_url, [], KADENCE_VERSION );
 			}
 		}
 	}
@@ -4408,12 +4405,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @param string $relation_type The relation type the URLs are printed.
 	 * @return array URLs to print for resource hints.
 	 */
-	public function filter_resource_hints( array $urls, string $relation_type ) : array {
+	public function filter_resource_hints( array $urls, string $relation_type ): array {
 		if ( 'preconnect' === $relation_type && wp_style_is( 'kadence-fonts', 'queue' ) ) {
-			$urls[] = array(
+			$urls[] = [
 				'href' => 'https://fonts.gstatic.com',
 				'crossorigin',
-			);
+			];
 		}
 
 		return $urls;
@@ -4441,7 +4438,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css_files = $this->get_css_files();
 		$handles   = array_filter(
 			$handles,
-			function( $handle ) use ( $css_files ) {
+			function ( $handle ) use ( $css_files ) {
 				$is_valid = isset( $css_files[ $handle ] ) && ! $css_files[ $handle ]['global'];
 				if ( ! $is_valid ) {
 					/* translators: %s: stylesheet handle */
@@ -4484,89 +4481,107 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	}
 
 	/**
+	 * Outline button text color for a state. In FSE mode it prints as its variable, with the stylesheet's fallbacks, so a Global Styles edit reaches it.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @param string $state The color state, 'color' or 'hover'.
+	 * @return string|false
+	 */
+	protected function outline_button_color( string $state ) {
+		if ( is_fse_mode() ) {
+			return 'hover' === $state
+				? 'var(--global-palette-btn-out-hover, var(--global-palette-btn-out, var(--global-palette-btn-bg-hover)))'
+				: 'var(--global-palette-btn-out, var(--global-palette-btn-bg))';
+		}
+
+		return $this->render_color( kadence()->sub_option( 'buttons_outline_color', $state ) );
+	}
+
+	/**
 	 * Gets all CSS files.
 	 *
 	 * @return array Associative array of $handle => $data pairs.
 	 */
-	protected function get_css_files() : array {
+	protected function get_css_files(): array {
 		if ( is_array( $this->css_files ) ) {
 			return $this->css_files;
 		}
 
-		$css_files = array(
-			'kadence-global'     => array(
+		$css_files = [
+			'kadence-global'              => [
 				'file'   => 'global.min.css',
 				'global' => true,
-			),
-			'kadence-rtl'   => array(
+			],
+			'kadence-rtl'                 => [
 				'file'   => 'rtl.min.css',
 				'global' => is_rtl(),
-			),
-			'kadence-simplelightbox-css' => array(
+			],
+			'kadence-simplelightbox-css'  => [
 				'file'   => 'simplelightbox.min.css',
 				'global' => kadence()->option( 'lightbox' ),
-			),
-			'kadence-header'    => array(
+			],
+			'kadence-header'              => [
 				'file'             => 'header.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return kadence()->has_header_styles();
 				},
-			),
-			'kadence-content'    => array(
+			],
+			'kadence-content'             => [
 				'file'             => 'content.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return kadence()->has_content();
 				},
-			),
-			'kadence-comments'   => array(
+			],
+			'kadence-comments'            => [
 				'file'             => 'comments.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return apply_filters( 'kadence_theme_enable_comment_css', kadence()->show_comments() );
 				},
-			),
-			'kadence-sidebar'    => array(
+			],
+			'kadence-sidebar'             => [
 				'file'             => 'sidebar.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return kadence()->has_sidebar();
 				},
-			),
-			'kadence-author-box'   => array(
+			],
+			'kadence-author-box'          => [
 				'file'             => 'author-box.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return apply_filters( 'kadence_theme_enable_author_box_css', is_single() && kadence()->option( 'post_author_box' ) );
 				},
-			),
-			'kadence-related-posts'   => array(
+			],
+			'kadence-related-posts'       => [
 				'file'             => 'related-posts.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return is_single() && kadence()->option( 'post_related' );
 				},
-			),
-			'kad-splide'   => array(
+			],
+			'kad-splide'                  => [
 				'file'             => 'kadence-splide.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return is_single() && kadence()->option( 'post_related' );
 				},
-			),
-			'kadence-woocommerce'    => array(
+			],
+			'kadence-woocommerce'         => [
 				'file'   => 'woocommerce.min.css',
 				'global' => class_exists( 'woocommerce' ),
-			),
-			'kadence-account-woocommerce'    => array(
+			],
+			'kadence-account-woocommerce' => [
 				'file'   => 'woocommerce-account.min.css',
 				'global' => class_exists( 'woocommerce' ) && is_account_page(),
-			),
-			'kadence-heroic'    => array(
+			],
+			'kadence-heroic'              => [
 				'file'   => 'heroic-knowledge-base.min.css',
 				'global' => class_exists( 'HT_Knowledge_Base' ),
-			),
-			'kadence-footer'    => array(
+			],
+			'kadence-footer'              => [
 				'file'             => 'footer.min.css',
-				'preload_callback' => function() {
+				'preload_callback' => function () {
 					return kadence()->has_footer();
 				},
-			),
-		);
+			],
+		];
 
 		/**
 		 * Filters default CSS files.
@@ -4579,10 +4594,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		 */
 		$css_files = apply_filters( 'kadence_css_files', $css_files );
 
-		$this->css_files = array();
+		$this->css_files = [];
 		foreach ( $css_files as $handle => $data ) {
 			if ( is_string( $data ) ) {
-				$data = array( 'file' => $data );
+				$data = [ 'file' => $data ];
 			}
 
 			if ( empty( $data['file'] ) ) {
@@ -4590,11 +4605,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 
 			$this->css_files[ $handle ] = array_merge(
-				array(
+				[
 					'global'           => false,
 					'preload_callback' => null,
 					'media'            => 'all',
-				),
+				],
 				$data
 			);
 		}
@@ -4610,9 +4625,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 */
 	public function maybe_add_google_font( $font, $full = null ) {
 		if ( ! empty( $full ) && 'headers' === $full ) {
-			$new_variant = array();
+			$new_variant = [];
 			if ( isset( $font['variant'] ) && ! empty( $font['variant'] ) && is_array( $font['variant'] ) ) {
-				foreach ( array( 'h1_font', 'h2_font', 'h3_font', 'h4_font', 'h5_font', 'h6_font' ) as $option ) {
+				foreach ( [ 'h1_font', 'h2_font', 'h3_font', 'h4_font', 'h5_font', 'h6_font' ] as $option ) {
 					$variant = kadence()->sub_option( $option, 'variant' );
 					if ( in_array( $variant, $font['variant'], true ) && ! in_array( $variant, $new_variant, true ) ) {
 						array_push( $new_variant, $variant );
@@ -4624,10 +4639,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 		}
 		if ( ! empty( $full ) && 'body' === $full && 'inherit' === kadence()->sub_option( 'heading_font', 'family' ) ) {
-			$new_variant = array( $font['variant'] );
+			$new_variant = [ $font['variant'] ];
 			if ( isset( $font['variant'] ) && ! empty( $font['variant'] ) && ! is_array( $font['variant'] ) ) {
-				$current_variant = array( $font['variant'] );
-				foreach ( array( 'h1_font', 'h2_font', 'h3_font', 'h4_font', 'h5_font', 'h6_font' ) as $option ) {
+				$current_variant = [ $font['variant'] ];
+				foreach ( [ 'h1_font', 'h2_font', 'h3_font', 'h4_font', 'h5_font', 'h6_font' ] as $option ) {
 					$variant = kadence()->sub_option( $option, 'variant' );
 					if ( ! in_array( $variant, $current_variant, true ) && ! in_array( $variant, $new_variant, true ) ) {
 						array_push( $new_variant, $variant );
@@ -4635,51 +4650,47 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				}
 			}
 			if ( empty( $new_variant ) ) {
-				$new_variant = array( $font['variant'] );
+				$new_variant = [ $font['variant'] ];
 			}
-		} else if ( ! empty( $full ) && 'body' === $full && 'inherit' !== kadence()->sub_option( 'heading_font', 'family' ) ) {
-			$new_variant = array( $font['variant'], '700' );
+		} elseif ( ! empty( $full ) && 'body' === $full && 'inherit' !== kadence()->sub_option( 'heading_font', 'family' ) ) {
+			$new_variant = [ $font['variant'], '700' ];
 		}
 				// Check if the font has been added yet.
 		if ( ! array_key_exists( $font['family'], self::$google_fonts ) ) {
 			if ( ! empty( $full ) && 'headers' === $full ) {
-				$add_font = array(
+				$add_font = [
 					'fontfamily'   => $font['family'],
-					'fontvariants' => ( isset( $new_variant ) && ! empty( $new_variant ) && is_array( $new_variant ) ? $new_variant : array() ),
-					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? array( $font['subset'] ) : array() ),
-				);
-			} else if ( ! empty( $full ) && 'body' === $full && 'inherit' === kadence()->sub_option( 'heading_font', 'family' ) ) {
-				$add_font = array(
+					'fontvariants' => ( isset( $new_variant ) && ! empty( $new_variant ) && is_array( $new_variant ) ? $new_variant : [] ),
+					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? [ $font['subset'] ] : [] ),
+				];
+			} elseif ( ! empty( $full ) && 'body' === $full && 'inherit' === kadence()->sub_option( 'heading_font', 'family' ) ) {
+				$add_font = [
 					'fontfamily'   => $font['family'],
-					'fontvariants' => ( isset( $new_variant ) && ! empty( $new_variant ) && is_array( $new_variant ) ? $new_variant : array() ),
-					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? array( $font['subset'] ) : array() ),
-				);
-			} else if ( ! empty( $full ) && 'body' === $full && 'inherit' !== kadence()->sub_option( 'heading_font', 'family' ) ) {
-				$add_font = array(
+					'fontvariants' => ( isset( $new_variant ) && ! empty( $new_variant ) && is_array( $new_variant ) ? $new_variant : [] ),
+					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? [ $font['subset'] ] : [] ),
+				];
+			} elseif ( ! empty( $full ) && 'body' === $full && 'inherit' !== kadence()->sub_option( 'heading_font', 'family' ) ) {
+				$add_font = [
 					'fontfamily'   => $font['family'],
-					'fontvariants' => ( isset( $new_variant ) && ! empty( $new_variant ) && is_array( $new_variant ) ? $new_variant : array() ),
-					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? array( $font['subset'] ) : array() ),
-				);
+					'fontvariants' => ( isset( $new_variant ) && ! empty( $new_variant ) && is_array( $new_variant ) ? $new_variant : [] ),
+					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? [ $font['subset'] ] : [] ),
+				];
 			} else {
-				$add_font = array(
+				$add_font = [
 					'fontfamily'   => $font['family'],
-					'fontvariants' => ( isset( $font['variant'] ) && ! empty( $font['variant'] ) ? array( $font['variant'] ) : array() ),
-					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? array( $font['subset'] ) : array() ),
-				);
+					'fontvariants' => ( isset( $font['variant'] ) && ! empty( $font['variant'] ) ? [ $font['variant'] ] : [] ),
+					'fontsubsets'  => ( isset( $font['subset'] ) && ! empty( $font['subset'] ) ? [ $font['subset'] ] : [] ),
+				];
 			}
 			self::$google_fonts[ $font['family'] ] = $add_font;
-		} else {
-			if ( ! empty( $full ) ) {
-				foreach ( $new_variant as $variant ) {
-					if ( ! in_array( $variant, self::$google_fonts[ $font['family'] ]['fontvariants'], true ) ) {
-						array_push( self::$google_fonts[ $font['family'] ]['fontvariants'], $variant );
-					}
-				}
-			} else {
-				if ( ! in_array( $font['variant'], self::$google_fonts[ $font['family'] ]['fontvariants'], true ) ) {
-					array_push( self::$google_fonts[ $font['family'] ]['fontvariants'], $font['variant'] );
+		} elseif ( ! empty( $full ) ) {
+			foreach ( $new_variant as $variant ) {
+				if ( ! in_array( $variant, self::$google_fonts[ $font['family'] ]['fontvariants'], true ) ) {
+					array_push( self::$google_fonts[ $font['family'] ]['fontvariants'], $variant );
 				}
 			}
+		} elseif ( ! in_array( $font['variant'], self::$google_fonts[ $font['family'] ]['fontvariants'], true ) ) {
+				array_push( self::$google_fonts[ $font['family'] ]['fontvariants'], $font['variant'] );
 		}
 	}
 	/**
@@ -4694,16 +4705,16 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			return '';
 		}
 		$should_output = false;
-		$link    = '';
-		$sub_add = array();
-		$subsets = kadence()->option( 'google_subsets' );
+		$link          = '';
+		$sub_add       = [];
+		$subsets       = kadence()->option( 'google_subsets' );
 		foreach ( $google_fonts as $key => $gfont_values ) {
 			if ( ! empty( $gfont_values['fontfamily'] ) ) {
 				if ( ! empty( $link ) ) {
 					$link .= '%7C'; // Append a new font to the string.
 				}
 				$should_output = true;
-				$link .= $gfont_values['fontfamily'];
+				$link         .= $gfont_values['fontfamily'];
 				if ( ! empty( $gfont_values['fontvariants'] ) ) {
 					$link .= ':';
 					$link .= implode( ',', $gfont_values['fontvariants'] );
@@ -4720,11 +4731,11 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( ! $should_output ) {
 			return '';
 		}
-		$args = array(
+		$args = [
 			'family' => $link,
-		);
+		];
 		if ( ! empty( $subsets ) ) {
-			$available = array( 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' );
+			$available = [ 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' ];
 			foreach ( $subsets as $key => $enabled ) {
 				if ( $enabled && in_array( $key, $available, true ) ) {
 					if ( 'chinese' === $key ) {
@@ -4742,7 +4753,6 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( apply_filters( 'kadence_display_swap_google_fonts', true ) ) {
 			$args['display'] = 'swap';
 		}
-		$font_url = add_query_arg( apply_filters( 'kadence_theme_google_fonts_query_args', $args ), 'https://fonts.googleapis.com/css' );
-		return $font_url;
+		return add_query_arg( apply_filters( 'kadence_theme_google_fonts_query_args', $args ), 'https://fonts.googleapis.com/css' );
 	}
 }

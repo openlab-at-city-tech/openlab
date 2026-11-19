@@ -261,6 +261,7 @@ class RadioIconComponent extends Component {
 						</ButtonGroup>
 					</Fragment>
 				) }
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

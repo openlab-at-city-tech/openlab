@@ -12,7 +12,7 @@ namespace Kadence;
 if ( have_comments() ) {
 	do_action( 'kadence_before_comments_list' );
 
-	$title_output = '<h2 class="comments-title">';
+	$title_output  = '<h2 class="comments-title">';
 	$comment_count = (int) get_comments_number();
 	if ( 1 === $comment_count ) {
 		$title_output .= esc_html__( 'One Comment', 'kadence' );

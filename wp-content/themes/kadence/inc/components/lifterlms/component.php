@@ -14,11 +14,7 @@ use function Kadence\kadence;
 use function add_action;
 use function add_filter;
 use function add_theme_support;
-use function have_posts;
-use function the_post;
-use function is_search;
 use function get_template_part;
-use function get_post_type;
 
 /**
  * Class for adding LifterLMS plugin support.
@@ -31,14 +27,14 @@ class Component implements Component_Interface {
 	 *
 	 * @var array
 	 */
-	protected static $google_fonts = array();
+	protected static $google_fonts = [];
 
 	/**
 	 * Gets the unique identifier for the theme component.
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'lifterlms';
 	}
 
@@ -46,12 +42,12 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_filter( 'kadence_dynamic_css', array( $this, 'dynamic_css' ), 20 );
-		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 80 );
+		add_filter( 'kadence_dynamic_css', [ $this, 'dynamic_css' ], 20 );
+		add_action( 'wp_head', [ $this, 'frontend_gfonts' ], 80 );
 
-		add_action( 'after_setup_theme', array( $this, 'action_add_lifterlms_support' ) );
-		add_filter( 'llms_get_theme_default_sidebar', array( $this, 'llms_sidebar_function' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'lifterlms_styles' ), 60 );
+		add_action( 'after_setup_theme', [ $this, 'action_add_lifterlms_support' ] );
+		add_filter( 'llms_get_theme_default_sidebar', [ $this, 'llms_sidebar_function' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'lifterlms_styles' ], 60 );
 		// Remove Content Wrappers.
 		remove_action( 'lifterlms_before_main_content', 'lifterlms_output_content_wrapper' );
 		remove_action( 'lifterlms_after_main_content', 'lifterlms_output_content_wrapper_end' );
@@ -60,24 +56,24 @@ class Component implements Component_Interface {
 		// Remove Sidebar.
 		remove_action( 'lifterlms_sidebar', 'lifterlms_get_sidebar', 10 );
 		// Add Content wrappers.
-		add_action( 'lifterlms_before_main_content', array( $this, 'output_content_wrapper' ) );
-		add_action( 'lifterlms_after_main_content', array( $this, 'output_main_wrapper_end' ), 8 );
+		add_action( 'lifterlms_before_main_content', [ $this, 'output_content_wrapper' ] );
+		add_action( 'lifterlms_after_main_content', [ $this, 'output_main_wrapper_end' ], 8 );
 		add_action( 'lifterlms_after_main_content', 'lifterlms_get_sidebar', 9 );
-		add_action( 'lifterlms_after_main_content', array( $this, 'output_content_wrapper_end' ), 10 );
+		add_action( 'lifterlms_after_main_content', [ $this, 'output_content_wrapper_end' ], 10 );
 
-		add_filter( 'post_class', array( $this, 'set_lifter_entry_class' ), 10, 3 );
-		add_filter( 'llms_get_loop_list_classes', array( $this, 'set_lifter_grid_class' ) );
+		add_filter( 'post_class', [ $this, 'set_lifter_entry_class' ], 10, 3 );
+		add_filter( 'llms_get_loop_list_classes', [ $this, 'set_lifter_grid_class' ] );
 		// Change Lifter Columns.
-		add_filter( 'lifterlms_loop_columns', array( $this, 'set_lifter_columns' ) );
+		add_filter( 'lifterlms_loop_columns', [ $this, 'set_lifter_columns' ] );
 
 		// Remove normal archive Description.
 		remove_action( 'lifterlms_archive_description', 'lifterlms_archive_description' );
 
-		add_filter( 'llms_display_outline_thumbnails', array( $this, 'lifter_syllabus_thumbnails' ) );
+		add_filter( 'llms_display_outline_thumbnails', [ $this, 'lifter_syllabus_thumbnails' ] );
 		// Add div with class for Navigation Position.
-		add_action( 'lifterlms_before_student_dashboard', array( $this, 'dashboard_wrapper_open' ), 5 );
+		add_action( 'lifterlms_before_student_dashboard', [ $this, 'dashboard_wrapper_open' ], 5 );
 		// Close added div with class for Navigation Position.
-		add_action( 'lifterlms_after_student_dashboard', array( $this, 'dashboard_wrapper_close' ), 20 );
+		add_action( 'lifterlms_after_student_dashboard', [ $this, 'dashboard_wrapper_close' ], 20 );
 		// Could use to move the nav out of the header area, absolute position seems to work just as well though.
 		// remove_action( 'lifterlms_student_dashboard_header', 'lifterlms_template_student_dashboard_navigation' );
 		// add_action( 'lifterlms_before_student_dashboard_content', 'lifterlms_template_student_dashboard_navigation', 5 );
@@ -135,15 +131,15 @@ class Component implements Component_Interface {
 		if ( in_array( 'cols-4', $classes, true ) ) {
 			$classes[] = 'grid-sm-col-3';
 			$classes[] = 'grid-lg-col-4';
-			$classes   = array_diff( $classes, array( 'cols-4' ) );
+			$classes   = array_diff( $classes, [ 'cols-4' ] );
 		} elseif ( in_array( 'cols-2', $classes, true ) ) {
 			$classes[] = 'grid-sm-col-2';
 			$classes[] = 'grid-lg-col-2';
-			$classes   = array_diff( $classes, array( 'cols-2' ) );
+			$classes   = array_diff( $classes, [ 'cols-2' ] );
 		} else {
 			$classes[] = 'grid-sm-col-2';
 			$classes[] = 'grid-lg-col-3';
-			$classes   = array_diff( $classes, array( 'cols-3' ) );
+			$classes   = array_diff( $classes, [ 'cols-3' ] );
 		}
 		return $classes;
 	}
@@ -201,7 +197,7 @@ class Component implements Component_Interface {
 	 * Add some css styles for lifterLMS
 	 */
 	public function lifterlms_styles() {
-		wp_enqueue_style( 'kadence-lifterlms', get_theme_file_uri( '/assets/css/lifterlms.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-lifterlms', get_theme_file_uri( '/assets/css/lifterlms.min.css' ), [], KADENCE_VERSION );
 	}
 
 	/**
@@ -216,15 +212,13 @@ class Component implements Component_Interface {
 	 * Display LifterLMS Course and Lesson sidebars
 	 * on courses and lessons in place of the sidebar returned by
 	 * this function
+	 *
 	 * @param string $id default sidebar id (an empty string).
 	 * @return string
 	 */
 	public function llms_sidebar_function( $id ) {
 
-		$sidebar_id = 'primary-sidebar';
-
-		return $sidebar_id;
-
+		return 'primary-sidebar';
 	}
 	/**
 	 * Enqueue Frontend Fonts
@@ -237,11 +231,11 @@ class Component implements Component_Interface {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
 			foreach ( self::$google_fonts as $key => $font ) {
 				if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-					$add_font = array(
+					$add_font                           = [
 						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
+						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+					];
 					$ktblocks_instance::$gfonts[ $key ] = $add_font;
 				} else {
 					foreach ( $font['fontvariants'] as $variant ) {
@@ -252,7 +246,7 @@ class Component implements Component_Interface {
 				}
 			}
 		} else {
-			add_filter( 'kadence_theme_google_fonts_array', array( $this, 'filter_in_fonts' ) );
+			add_filter( 'kadence_theme_google_fonts_array', [ $this, 'filter_in_fonts' ] );
 		}
 	}
 	/**
@@ -265,11 +259,11 @@ class Component implements Component_Interface {
 		// Enqueue Google Fonts.
 		foreach ( self::$google_fonts as $key => $font ) {
 			if ( ! array_key_exists( $key, $font_array ) ) {
-				$add_font = array(
+				$add_font           = [
 					'fontfamily'   => $font['fontfamily'],
-					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-				);
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : [] ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : [] ),
+				];
 				$font_array[ $key ] = $add_font;
 			} else {
 				foreach ( $font['fontvariants'] as $variant ) {
@@ -301,7 +295,7 @@ class Component implements Component_Interface {
 	 */
 	public function generate_lifter_css() {
 		$css                    = new Kadence_CSS();
-		$media_query            = array();
+		$media_query            = [];
 		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
 		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
 		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );

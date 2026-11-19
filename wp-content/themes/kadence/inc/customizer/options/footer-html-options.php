@@ -21,244 +21,244 @@ ob_start(); ?>
 </div>
 <?php
 $compontent_tabs = ob_get_clean();
-$settings        = array(
-	'footer_html_tabs' => array(
+$settings        = [
+	'footer_html_tabs'           => [
 		'control_type' => 'kadence_blank_control',
 		'section'      => 'footer_html',
 		'settings'     => false,
 		'priority'     => 1,
 		'description'  => $compontent_tabs,
-	),
-	'footer_html_content' => array(
+	],
+	'footer_html_content'        => [
 		'control_type' => 'kadence_editor_control',
 		'sanitize'     => 'wp_kses_post',
 		'section'      => 'footer_html',
 		'description'  => esc_html__( 'Available Placeholders: {copyright} {year} {site-title} {theme-credit}', 'kadence' ),
 		'priority'     => 4,
 		'default'      => kadence()->default( 'footer_html_content' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'id' => 'footer_html',
-		),
-		'partial'      => array(
+		],
+		'partial'      => [
 			'selector'            => '.footer-html',
 			'container_inclusive' => true,
 			'render_callback'     => 'Kadence\footer_html',
-		),
-	),
-	'footer_html_align' => array(
+		],
+	],
+	'footer_html_align'          => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'footer_html',
 		'label'        => esc_html__( 'Content Align', 'kadence' ),
 		'priority'     => 5,
 		'default'      => kadence()->default( 'footer_html_align' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-info',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'content-align-$',
 					'tablet'  => 'content-tablet-align-$',
 					'mobile'  => 'content-mobile-align-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'left'   => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'left'   => [
 					'tooltip'  => __( 'Left Align', 'kadence' ),
 					'dashicon' => 'editor-alignleft',
-				),
-				'center' => array(
+				],
+				'center' => [
 					'tooltip'  => __( 'Center Align', 'kadence' ),
 					'dashicon' => 'editor-aligncenter',
-				),
-				'right'  => array(
+				],
+				'right'  => [
 					'tooltip'  => __( 'Right Align', 'kadence' ),
 					'dashicon' => 'editor-alignright',
-				),
-			),
+				],
+			],
 			'responsive' => true,
-		),
-	),
-	'footer_html_vertical_align' => array(
+		],
+	],
+	'footer_html_vertical_align' => [
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'footer_html',
 		'label'        => esc_html__( 'Content Vertical Align', 'kadence' ),
 		'priority'     => 5,
 		'default'      => kadence()->default( 'footer_html_vertical_align' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'general',
-			),
-		),
-		'live_method'  => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '.site-info',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => 'content-valign-$',
 					'tablet'  => 'content-tablet-valign-$',
 					'mobile'  => 'content-mobile-valign-$',
-				),
+				],
 				'key'      => '',
-			),
-		),
-		'input_attrs'  => array(
-			'layout' => array(
-				'top' => array(
+			],
+		],
+		'input_attrs'  => [
+			'layout'     => [
+				'top'    => [
 					'tooltip' => __( 'Top Align', 'kadence' ),
 					'icon'    => 'aligntop',
-				),
-				'middle' => array(
+				],
+				'middle' => [
 					'tooltip' => __( 'Middle Align', 'kadence' ),
 					'icon'    => 'alignmiddle',
-				),
-				'bottom' => array(
+				],
+				'bottom' => [
 					'tooltip' => __( 'Bottom Align', 'kadence' ),
 					'icon'    => 'alignbottom',
-				),
-			),
+				],
+			],
 			'responsive' => true,
-		),
-	),
-	'footer_html_typography' => array(
+		],
+	],
+	'footer_html_typography'     => [
 		'control_type' => 'kadence_typography_control',
 		'section'      => 'footer_html',
 		'label'        => esc_html__( 'Font', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
+			],
+		],
 		'default'      => kadence()->default( 'footer_html_typography' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css_typography',
 				'selector' => '#colophon .footer-html',
-				'pattern'  => array(
+				'pattern'  => [
 					'desktop' => '$',
 					'tablet'  => '$',
 					'mobile'  => '$',
-				),
+				],
 				'property' => 'font',
 				'key'      => 'typography',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'id' => 'footer_html_typography',
-		),
-	),
-	'footer_html_link_color' => array(
+		],
+	],
+	'footer_html_link_color'     => [
 		'control_type' => 'kadence_color_control',
 		'section'      => 'footer_html',
 		'label'        => esc_html__( 'Link Colors', 'kadence' ),
 		'default'      => kadence()->default( 'footer_html_link_color' ),
-		'live_method'     => array(
-			array(
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#colophon .site-footer-row-container .site-footer-row .footer-html a',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'color',
-			),
-			array(
+			],
+			[
 				'type'     => 'css',
 				'selector' => '#colophon .site-footer-row-container .site-footer-row .footer-html a:hover',
 				'property' => 'color',
 				'pattern'  => '$',
 				'key'      => 'hover',
-			),
-		),
-		'context'      => array(
-			array(
+			],
+		],
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'input_attrs'  => array(
-			'colors' => array(
-				'color' => array(
+			],
+		],
+		'input_attrs'  => [
+			'colors' => [
+				'color' => [
 					'tooltip' => __( 'Initial Color', 'kadence' ),
 					'palette' => true,
-				),
-				'hover' => array(
+				],
+				'hover' => [
 					'tooltip' => __( 'Hover Color', 'kadence' ),
 					'palette' => true,
-				),
-			),
-		),
-	),
-	'footer_html_link_style' => array(
+				],
+			],
+		],
+	],
+	'footer_html_link_style'     => [
 		'control_type' => 'kadence_select_control',
 		'section'      => 'footer_html',
 		'default'      => kadence()->default( 'footer_html_link_style' ),
 		'label'        => esc_html__( 'Link Style', 'kadence' ),
-		'input_attrs'  => array(
-			'options' => array(
-				'normal' => array(
+		'input_attrs'  => [
+			'options' => [
+				'normal' => [
 					'name' => __( 'Underline', 'kadence' ),
-				),
-				'plain' => array(
+				],
+				'plain'  => [
 					'name' => __( 'No Underline', 'kadence' ),
-				),
-			),
-		),
-		'context'      => array(
-			array(
+				],
+			],
+		],
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'class',
 				'selector' => '#colophon .footer-html',
 				'pattern'  => 'inner-link-style-$',
 				'key'      => '',
-			),
-		),
-	),
-	'footer_html_margin' => array(
+			],
+		],
+	],
+	'footer_html_margin'         => [
 		'control_type' => 'kadence_measure_control',
 		'section'      => 'footer_html',
 		'priority'     => 10,
 		'default'      => kadence()->default( 'footer_html_margin' ),
 		'label'        => esc_html__( 'Margin', 'kadence' ),
-		'context'      => array(
-			array(
+		'context'      => [
+			[
 				'setting' => '__current_tab',
 				'value'   => 'design',
-			),
-		),
-		'live_method'     => array(
-			array(
+			],
+		],
+		'live_method'  => [
+			[
 				'type'     => 'css',
 				'selector' => '#colophon .footer-html',
 				'property' => 'margin',
 				'pattern'  => '$',
 				'key'      => 'measure',
-			),
-		),
-		'input_attrs'  => array(
+			],
+		],
+		'input_attrs'  => [
 			'responsive' => false,
-		),
-	),
-);
+		],
+	],
+];
 
 Theme_Customizer::add_settings( $settings );
 

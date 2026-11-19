@@ -11,8 +11,8 @@ global $post;
 
 $item_type         = get_post_type();
 $elements          = kadence()->option( $item_type . '_title_element_meta' );
-$title_meta        = array();
-$meta_labels       = array();
+$title_meta        = [];
+$meta_labels       = [];
 $meta_divider      = 'dot';
 $author_image      = false;
 $author_link       = true;

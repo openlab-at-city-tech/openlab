@@ -8,7 +8,6 @@
 namespace Kadence;
 
 use function get_template_part;
-use function get_the_categories;
 use function comment_form;
 
 defined( 'ABSPATH' ) || exit;
@@ -35,65 +34,65 @@ function single_content() {
  */
 function get_related_posts_args( $post_id ) {
 	$orderby = kadence()->option( 'post_related_orderby' ) ?: 'rand';
-	$order = kadence()->option( 'post_related_order' ) ?: 'DESC';
+	$order   = kadence()->option( 'post_related_order' ) ?: 'DESC';
 
 	if ( apply_filters( 'kadence_related_posts_use_tags', true ) ) {
 		// Get categories.
 		$categories = get_the_terms( $post_id, 'category' );
 		if ( empty( $categories ) || is_wp_error( $categories ) ) {
-			$categories = array();
+			$categories = [];
 		}
 		$category_list = wp_list_pluck( $categories, 'slug' );
 		// Get Tags.
-		$tags     = get_the_terms( $post_id, 'post_tag' );
+		$tags = get_the_terms( $post_id, 'post_tag' );
 		if ( empty( $tags ) || is_wp_error( $tags ) ) {
-			$tags = array();
+			$tags = [];
 		}
 		$tag_list = wp_list_pluck( $tags, 'slug' );
 
-		$related_args = array(
-			'post_type'              => 'post',
-			'posts_per_page'         => 6,
-			'no_found_rows'          => true,
-			'post_status'            => 'publish',
+		$related_args = [
+			'post_type'      => 'post',
+			'posts_per_page' => 6,
+			'no_found_rows'  => true,
+			'post_status'    => 'publish',
 			// 'update_post_meta_cache' => false,
 			// 'update_post_term_cache' => false,
-			'post__not_in'           => array( $post_id ),
-			'orderby'                => $orderby,
-			'order'                  => $order,
-			'tax_query'              => array(
+			'post__not_in'   => [ $post_id ],
+			'orderby'        => $orderby,
+			'order'          => $order,
+			'tax_query'      => [
 				'relation' => 'OR',
-				array(
+				[
 					'taxonomy' => 'category',
 					'field'    => 'slug',
 					'terms'    => $category_list,
-				),
-				array(
+				],
+				[
 					'taxonomy' => 'post_tag',
 					'field'    => 'slug',
 					'terms'    => $tag_list,
-				),
-			),
-		);
+				],
+			],
+		];
 	} else {
 		$categories = get_the_terms( $post_id, 'category' );
 		if ( empty( $categories ) || is_wp_error( $categories ) ) {
-			$categories = array();
+			$categories = [];
 		}
 		$category_list = wp_list_pluck( $categories, 'term_id' );
-		$related_args = array(
-			'post_type'              => 'post',
-			'posts_per_page'         => 6,
-			'no_found_rows'          => true,
-			'post_status'            => 'publish',
+		$related_args  = [
+			'post_type'      => 'post',
+			'posts_per_page' => 6,
+			'no_found_rows'  => true,
+			'post_status'    => 'publish',
 			// 'update_post_meta_cache' => false,
 			// 'update_post_term_cache' => false,
-			'post__not_in'           => array( $post_id ),
-			'orderby'                => $orderby,
-			'order'                  => $order,
-			'category__in'           => $category_list,
+			'post__not_in'   => [ $post_id ],
+			'orderby'        => $orderby,
+			'order'          => $order,
+			'category__in'   => $category_list,
 
-		);
+		];
 	}
 	return apply_filters( 'kadence_related_posts_args', $related_args );
 }
@@ -106,51 +105,51 @@ function get_related_posts_args( $post_id ) {
 function get_related_posts_columns() {
 	if ( kadence()->option( 'post_related_columns' ) ) {
 		if ( kadence()->option( 'post_related_columns' ) == 2 ) {
-			$cols = array(
+			$cols = [
 				'xxl' => 2,
 				'xl'  => 2,
 				'md'  => 2,
 				'sm'  => 2,
 				'xs'  => 2,
 				'ss'  => 1,
-			);
-		} else if ( kadence()->option( 'post_related_columns' ) == 4 ) {
-			$cols = array(
+			];
+		} elseif ( kadence()->option( 'post_related_columns' ) == 4 ) {
+			$cols = [
 				'xxl' => 4,
 				'xl'  => 4,
 				'md'  => 4,
 				'sm'  => 3,
 				'xs'  => 2,
 				'ss'  => 2,
-			);
+			];
 		} else {
-			$cols = array(
+			$cols = [
 				'xxl' => 3,
 				'xl'  => 3,
 				'md'  => 3,
 				'sm'  => 2,
 				'xs'  => 2,
 				'ss'  => 1,
-			);
+			];
 		}
-	} else if ( kadence()->has_sidebar() ) {
-		$cols = array(
+	} elseif ( kadence()->has_sidebar() ) {
+		$cols = [
 			'xxl' => 2,
 			'xl'  => 2,
 			'md'  => 2,
 			'sm'  => 2,
 			'xs'  => 2,
 			'ss'  => 1,
-		);
+		];
 	} else {
-		$cols = array(
+		$cols = [
 			'xxl' => 3,
 			'xl'  => 3,
 			'md'  => 3,
 			'sm'  => 2,
 			'xs'  => 2,
 			'ss'  => 1,
-		);
+		];
 	}
 	return apply_filters( 'kadence_related_posts_carousel_columns', $cols );
 }
@@ -184,4 +183,3 @@ function comments_form() {
 function get_404_content() {
 	get_template_part( 'template-parts/content/error', '404' );
 }
-

@@ -21,7 +21,7 @@ if ( bbp_is_reply_edit() ) : ?>
 	<div class="kt-bbpress-clearfix"></div>
 	<div class="forum-topic-bg">
 		<div id="new-reply-<?php bbp_topic_id(); ?>" class="bbp-reply-form">
-			<form id="new-post" name="new-post" method="post" action="<?php bbp_reply_permalink() ?>">
+			<form id="new-post" name="new-post" method="post" action="<?php bbp_reply_permalink(); ?>">
 				<div class="bbpress-reply-head clearfix">
 					<?php
 					echo '<div class="bbpress-reply-head-abovetitle">' . __( 'Reply To:', 'kadence' ) . '</div>';
@@ -75,14 +75,14 @@ if ( bbp_is_reply_edit() ) : ?>
 
 					<?php do_action( 'bbp_theme_before_reply_form_content' ); ?>
 
-					<?php bbp_the_content( array( 'context' => 'reply' ) ); ?>
+					<?php bbp_the_content( [ 'context' => 'reply' ] ); ?>
 
 					<?php do_action( 'bbp_theme_after_reply_form_content' ); ?>
 
 					<?php if ( ! ( bbp_use_wp_editor() || current_user_can( 'unfiltered_html' ) ) ) : ?>
 
 						<p class="form-allowed-tags">
-							<label><?php esc_html_e( 'You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:','kadence' ); ?></label><br />
+							<label><?php esc_html_e( 'You may use these <abbr title="HyperText Markup Language">HTML</abbr> tags and attributes:', 'kadence' ); ?></label><br />
 							<code><?php bbp_allowed_tags(); ?></code>
 						</p>
 
@@ -224,15 +224,18 @@ if ( bbp_is_reply_edit() ) : ?>
 	<div id="no-reply-<?php bbp_topic_id(); ?>" class="bbp-no-reply">
 		<div class="bbp-template-notice">
 			<ul>
-				<li><?php is_user_logged_in()
-					? esc_html_e( 'You cannot reply to this topic.',               'kadence' )
+				<li>
+				<?php
+				is_user_logged_in()
+					? esc_html_e( 'You cannot reply to this topic.', 'kadence' )
 					: esc_html_e( 'You must be logged in to reply to this topic.', 'kadence' );
-				?></li>
+				?>
+				</li>
 			</ul>
 		</div>
 		<?php if ( ! is_user_logged_in() ) : ?>
 
-		<?php bbp_get_template_part( 'form', 'user-login' ); ?>
+			<?php bbp_get_template_part( 'form', 'user-login' ); ?>
 
 		<?php endif; ?>
 	</div>
@@ -243,4 +246,5 @@ if ( bbp_is_reply_edit() ) : ?>
 
 </div>
 
-<?php endif;
+	<?php
+endif;

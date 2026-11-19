@@ -10,7 +10,7 @@ namespace Kadence;
 use function tribe_get_event_label_plural;
 use function tribe_get_events_link;
 
-$label = esc_html_x( 'All %s', '%s Events plural label', 'kadence' );
+$label               = esc_html_x( 'All %s', '%s Events plural label', 'kadence' );
 $events_label_plural = tribe_get_event_label_plural();
 ?>
 <p class="tribe-events-back">

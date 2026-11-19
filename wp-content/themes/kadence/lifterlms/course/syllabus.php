@@ -2,10 +2,10 @@
 /**
  * Template for the Course Syllabus Displayed on individual course pages
  *
- * @author      LifterLMS
- * @package     LifterLMS/Templates
- * @since       1.0.0
- * @version     4.4.0
+ * @author LifterLMS
+ * @package LifterLMS/Templates
+ * @since 1.0.0
+ * @version 4.4.0
  */
 
 namespace Kadence;
@@ -21,9 +21,9 @@ $sections = $course->get_sections();
 
 <div class="clear"></div>
 <?php
-$columns = kadence()->option( 'course_syllabus_columns' );
+$columns       = kadence()->option( 'course_syllabus_columns' );
 $columns_class = '';
-$style = 'standard';
+$style         = 'standard';
 if ( '1' === $columns ) {
 	$columns_class = 'grid-sm-col-1 grid-lg-col-1';
 } elseif ( '2' === $columns ) {
@@ -59,11 +59,11 @@ if ( empty( $columns ) || '1' === $columns ) {
 						<?php
 						llms_get_template(
 							'course/lesson-preview.php',
-							array(
+							[
 								'lesson'        => $lesson,
 								'total_lessons' => count( $lessons ),
 								'order'         => ++$lesson_order,
-							)
+							]
 						);
 						?>
 

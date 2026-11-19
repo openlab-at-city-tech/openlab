@@ -7,7 +7,6 @@
 
 namespace Kadence;
 
-use function hkb_show_knowledgebase_search;
 use function hkb_get_knowledgebase_searchbox_placeholder_text;
 use function ht_knowledge_base_activate_live_search;
 use function get_search_query;

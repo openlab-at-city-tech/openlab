@@ -8,13 +8,7 @@
 namespace Kadence\Zoom_Recipe_Card;
 
 use Kadence\Component_Interface;
-use function Kadence\kadence;
 use function add_action;
-use function have_posts;
-use function the_post;
-use function is_search;
-use function get_template_part;
-use function get_post_type;
 
 /**
  * Class for adding Woocommerce plugin support.
@@ -25,7 +19,7 @@ class Component implements Component_Interface {
 	 *
 	 * @return string Component slug.
 	 */
-	public function get_slug() : string {
+	public function get_slug(): string {
 		return 'zoom_recipe_card';
 	}
 
@@ -33,8 +27,8 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
-		add_action( 'wp_enqueue_scripts', array( $this, 'zoom_recipe_card_styles' ), 60 );
-		add_action( 'after_setup_theme', array( $this, 'action_add_editor_styles' ) );
+		add_action( 'wp_enqueue_scripts', [ $this, 'zoom_recipe_card_styles' ], 60 );
+		add_action( 'after_setup_theme', [ $this, 'action_add_editor_styles' ] );
 	}
 	/**
 	 * Enqueues WordPress theme styles for the editor.
@@ -47,6 +41,6 @@ class Component implements Component_Interface {
 	 * Add some css styles for zoom_recipe_card
 	 */
 	public function zoom_recipe_card_styles() {
-		wp_enqueue_style( 'kadence-zoom-recipe-card', get_theme_file_uri( '/assets/css/zoom-recipe-card.min.css' ), array(), KADENCE_VERSION );
+		wp_enqueue_style( 'kadence-zoom-recipe-card', get_theme_file_uri( '/assets/css/zoom-recipe-card.min.css' ), [], KADENCE_VERSION );
 	}
 }

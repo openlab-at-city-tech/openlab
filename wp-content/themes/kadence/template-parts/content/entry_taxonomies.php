@@ -11,8 +11,8 @@ $elements = kadence()->option( get_post_type() . '_title_element_categories' );
 if ( isset( $elements ) && is_array( $elements ) && true === $elements['enabled'] ) {
 	$tax_slug = ( isset( $elements['taxonomy'] ) && ! empty( $elements['taxonomy'] ) ? $elements['taxonomy'] : 'category' );
 	if ( has_term( '', $tax_slug ) ) {
-		$divider  = ( isset( $elements['divider'] ) && ! empty( $elements['divider'] ) ? $elements['divider'] : 'vline' );
-		$style    = ( isset( $elements['style'] ) && ! empty( $elements['style'] ) ? $elements['style'] : 'normal' );
+		$divider = ( isset( $elements['divider'] ) && ! empty( $elements['divider'] ) ? $elements['divider'] : 'vline' );
+		$style   = ( isset( $elements['style'] ) && ! empty( $elements['style'] ) ? $elements['style'] : 'normal' );
 		switch ( $divider ) {
 			case 'dot':
 				$separator = ' &middot; ';

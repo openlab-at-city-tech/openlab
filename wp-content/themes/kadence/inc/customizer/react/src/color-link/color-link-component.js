@@ -147,6 +147,7 @@ class ColorLinkComponent extends Component {
 						)
 					} ) }
 				</div>
+				{ this.props.control.renderNotice() }
 			</Fragment>
 		);
 	}

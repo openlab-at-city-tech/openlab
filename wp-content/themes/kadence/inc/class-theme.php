@@ -8,6 +8,7 @@
 namespace Kadence;
 
 use InvalidArgumentException;
+use Kadence\StellarWP\ContainerContract\ContainerInterface;
 
 /**
  * Main class for the theme.
@@ -18,7 +19,7 @@ class Theme {
 	/**
 	 * Instance Control
 	 *
-	 * @var null
+	 * @var Theme|null
 	 */
 	private static $instance = null;
 
@@ -27,7 +28,7 @@ class Theme {
 	 *
 	 * @var array
 	 */
-	public $components = array();
+	public $components = [];
 
 	/**
 	 * The template tags instance, providing access to all available template tags.
@@ -35,6 +36,15 @@ class Theme {
 	 * @var Template_Tags
 	 */
 	protected $template_tags;
+
+	/**
+	 * The theme's service container.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @var Container
+	 */
+	private Container $container;
 
 	/**
 	 * Main Kadence\Theme Class Instance.
@@ -45,7 +55,7 @@ class Theme {
 	 * @static
 	 * @static var array $instance
 	 *
-	 * @return Kadence\Theme Class
+	 * @return Theme The theme instance.
 	 */
 	public static function instance() {
 
@@ -61,7 +71,6 @@ class Theme {
 
 		// Return the instance.
 		return self::$instance;
-
 	}
 
 	/**
@@ -95,14 +104,18 @@ class Theme {
 	 *
 	 * Sets the theme components.
 	 *
+	 * @since 1.6.0 Creates the service container.
+	 *
 	 * @param array $components Optional. List of theme components. Only intended for custom initialization, typically
 	 *                          the theme components are declared by the theme itself. Each theme component must
 	 *                          implement the Component_Interface interface.
 	 *
 	 * @throws InvalidArgumentException Thrown if one of the $components does not implement Component_Interface.
 	 */
-	public function __construct( array $components = array() ) {
-		spl_autoload_register( array( $this, 'autoload' ) );
+	public function __construct( array $components = [] ) {
+		spl_autoload_register( [ $this, 'autoload' ] );
+
+		$this->container = new Container();
 
 		if ( empty( $components ) ) {
 			$components = $this->get_default_components();
@@ -130,7 +143,7 @@ class Theme {
 		$this->template_tags = new Template_Tags(
 			array_filter(
 				$this->components,
-				function( Component_Interface $component ) {
+				function ( Component_Interface $component ) {
 					return $component instanceof Templating_Component_Interface;
 				}
 			)
@@ -193,14 +206,33 @@ class Theme {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 *
 	 * This method must only be called once in the request lifecycle.
+	 *
+	 * @since 1.6.0 Registers the service providers before the components.
 	 */
 	public function initialize() {
+		foreach ( $this->get_providers() as $provider_class ) {
+			$this->container->register( $provider_class );
+		}
+
 		array_walk(
 			$this->components,
-			function( Component_Interface $component ) {
+			function ( Component_Interface $component ) {
 				$component->initialize();
 			}
 		);
+	}
+
+	/**
+	 * Retrieves the theme's service container.
+	 *
+	 * This is the only way for code outside the service providers to reach the container.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return ContainerInterface The container.
+	 */
+	public function container(): ContainerInterface {
+		return $this->container;
 	}
 
 	/**
@@ -212,7 +244,7 @@ class Theme {
 	 *
 	 * @return Template_Tags Template tags instance.
 	 */
-	public function template_tags() : Template_Tags {
+	public function template_tags(): Template_Tags {
 		return $this->template_tags;
 	}
 
@@ -226,7 +258,7 @@ class Theme {
 	 *
 	 * @throws InvalidArgumentException Thrown when no theme component with the given slug exists.
 	 */
-	public function component( string $slug ) : Component_Interface {
+	public function component( string $slug ): Component_Interface {
 		if ( ! isset( $this->components[ $slug ] ) ) {
 			throw new InvalidArgumentException(
 				sprintf(
@@ -241,14 +273,27 @@ class Theme {
 	}
 
 	/**
+	 * Gets the service providers to register, in order.
+	 *
+	 * @since 1.6.0
+	 *
+	 * @return string[] Provider class names.
+	 */
+	private function get_providers(): array {
+		return [
+			FSE\FSE_Provider::class,
+		];
+	}
+
+	/**
 	 * Gets the default theme components.
 	 *
 	 * This method is called if no components are passed to the constructor, which is the common scenario.
 	 *
 	 * @return array List of theme components to use by default.
 	 */
-	protected function get_default_components() : array {
-		$components = array(
+	protected function get_default_components(): array {
+		$components = [
 			new Options\Component(),
 			new Localization\Component(),
 			new Base_Support\Component(),
@@ -257,7 +302,7 @@ class Theme {
 			new Image_Sizes\Component(),
 			new AMP\Component(),
 			new Microdata\Component(),
-			//new PWA\Component(),
+			// new PWA\Component(),
 			new Comments\Component(),
 			new Nav_Menus\Component(),
 			new Custom_Header\Component(),
@@ -275,7 +320,7 @@ class Theme {
 			new Archive_Title\Component(),
 			new Third_Party\Component(),
 			new Style_Guide\Component(),
-		);
+		];
 		if ( class_exists( '\Elementor\Plugin' ) ) {
 			$components[] = new Elementor\Component();
 		}

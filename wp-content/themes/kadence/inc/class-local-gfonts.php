@@ -4,12 +4,10 @@
  *
  * @package wptt/font-loader
  * @license https://opensource.org/licenses/MIT
- * @version  1.1
+ * @version 1.1
  */
 
 namespace Kadence;
-
-use function Kadence\kadence;
 
 if ( ! class_exists( 'WebFont_Loader' ) ) {
 	/**
@@ -129,7 +127,7 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 
 			// Add a cleanup routine.
 			$this->schedule_cleanup();
-			add_action( 'delete_fonts_folder', array( $this, 'delete_fonts_folder' ) );
+			add_action( 'delete_fonts_folder', [ $this, 'delete_fonts_folder' ] );
 		}
 
 		/**
@@ -227,7 +225,7 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 			$styles = $this->get_styles();
 
 			// Get an array of locally-hosted files.
-			$local = array();
+			$local      = [];
 			$font_files = $this->get_main_files_from_css( $styles );
 			foreach ( $font_files as $font_family => $files ) {
 				if ( is_array( $files ) ) {
@@ -250,11 +248,11 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 		 * @return array Returns an array of font-families and the font-files used.
 		 */
 		public function get_main_files_from_css( $css ) {
-			//Capture Latin Subsets.
+			// Capture Latin Subsets.
 			$main_fonts = explode( '* latin */', $css );
 			// Remove first item in array (that doesn't contain a latin subset).
 			array_shift( $main_fonts );
-			$result = array();
+			$result = [];
 			// Loop all our latin subset chucks declarations.
 			foreach ( $main_fonts as $key => $main_font ) {
 				// Capture sections by @font-face.
@@ -277,13 +275,13 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 					$font_family = 'unknown';
 					if ( isset( $matched_font_families[0] ) && isset( $matched_font_families[0][0] ) ) {
 						$font_family = rtrim( ltrim( $matched_font_families[0][0], 'font-family:' ), ';' );
-						$font_family = trim( str_replace( array( "'", ';' ), '', $font_family ) );
+						$font_family = trim( str_replace( [ "'", ';' ], '', $font_family ) );
 						$font_family = sanitize_key( strtolower( str_replace( ' ', '-', $font_family ) ) );
 					}
 
 					// Make sure the font-family is set in our array.
 					if ( ! isset( $result[ $font_family ] ) ) {
-						$result[ $font_family ] = array();
+						$result[ $font_family ] = [];
 					}
 
 					// Get files for this font-family and add them to the array.
@@ -352,7 +350,7 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 				$user_agent = 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:73.0) Gecko/20100101 Firefox/73.0';
 			}
 			// Get the response.
-			$response = wp_remote_get( $this->remote_url, array( 'user-agent' => $user_agent ) );
+			$response = wp_remote_get( $this->remote_url, [ 'user-agent' => $user_agent ] );
 			// Early exit if there was an error.
 			if ( is_wp_error( $response ) || 200 !== (int) wp_remote_retrieve_response_code( $response ) ) {
 				return '';
@@ -378,7 +376,7 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 		 */
 		public function get_local_files_from_css() {
 			$font_files = $this->get_remote_files_from_css();
-			$stored     = get_site_option( 'downloaded_font_files', array() );
+			$stored     = get_site_option( 'downloaded_font_files', [] );
 			$change     = false; // If in the end this is true, we need to update the cache option.
 
 			// If the fonts folder don't exist, create it.
@@ -470,7 +468,7 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 
 			$font_faces = explode( '@font-face', $this->remote_styles );
 
-			$result = array();
+			$result = [];
 
 			// Loop all our font-face declarations.
 			foreach ( $font_faces as $font_face ) {
@@ -493,13 +491,13 @@ if ( ! class_exists( 'WebFont_Loader' ) ) {
 				$font_family = 'unknown';
 				if ( isset( $matched_font_families[0] ) && isset( $matched_font_families[0][0] ) ) {
 					$font_family = rtrim( ltrim( $matched_font_families[0][0], 'font-family:' ), ';' );
-					$font_family = trim( str_replace( array( "'", ';' ), '', $font_family ) );
+					$font_family = trim( str_replace( [ "'", ';' ], '', $font_family ) );
 					$font_family = sanitize_key( strtolower( str_replace( ' ', '-', $font_family ) ) );
 				}
 
 				// Make sure the font-family is set in our array.
 				if ( ! isset( $result[ $font_family ] ) ) {
-					$result[ $font_family ] = array();
+					$result[ $font_family ] = [];
 				}
 
 				// Get files for this font-family and add them to the array.

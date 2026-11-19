@@ -110,6 +110,7 @@ class CheckIconComponent extends Component {
 						);
 					} )}
 				</ButtonGroup>
+				{ this.props.control.renderNotice() }
 			</div>
 		);
 	}

@@ -11,7 +11,8 @@ kadence()->print_styles( 'kadence-header' );
 ?>
 <header id="masthead" class="site-header" role="banner" <?php kadence()->print_microdata( 'header' ); ?>>
 	<div id="main-header" class="site-header-wrap">
-		<div class="site-header-inner-wrap<?php echo esc_attr( 'top_main_bottom' === kadence()->option( 'header_sticky' ) ? ' kadence-sticky-header' : '' ); ?>"<?php
+		<div class="site-header-inner-wrap<?php echo esc_attr( 'top_main_bottom' === kadence()->option( 'header_sticky' ) ? ' kadence-sticky-header' : '' ); ?>"
+		<?php
 		if ( 'top_main_bottom' === kadence()->option( 'header_sticky' ) ) {
 			echo ' data-reveal-scroll-up="' . ( kadence()->option( 'header_reveal_scroll_up' ) ? 'true' : 'false' ) . '"';
 			echo ' data-shrink="' . ( kadence()->option( 'header_sticky_shrink' ) ? 'true' : 'false' ) . '"';
@@ -19,9 +20,11 @@ kadence()->print_styles( 'kadence-header' );
 				echo ' data-shrink-height="' . esc_attr( kadence()->sub_option( 'header_sticky_main_shrink', 'size' ) ) . '"';
 			}
 		}
-		?>>
+		?>
+		>
 			<div class="site-header-upper-wrap">
-				<div class="site-header-upper-inner-wrap<?php echo esc_attr( 'top_main' === kadence()->option( 'header_sticky' ) ? ' kadence-sticky-header' : '' ); ?>"<?php
+				<div class="site-header-upper-inner-wrap<?php echo esc_attr( 'top_main' === kadence()->option( 'header_sticky' ) ? ' kadence-sticky-header' : '' ); ?>"
+				<?php
 				if ( 'top_main' === kadence()->option( 'header_sticky' ) ) {
 					echo ' data-reveal-scroll-up="' . ( kadence()->option( 'header_reveal_scroll_up' ) ? 'true' : 'false' ) . '"';
 					echo ' data-shrink="' . ( kadence()->option( 'header_sticky_shrink' ) ? 'true' : 'false' ) . '"';
@@ -29,7 +32,8 @@ kadence()->print_styles( 'kadence-header' );
 						echo ' data-shrink-height="' . esc_attr( kadence()->sub_option( 'header_sticky_main_shrink', 'size' ) ) . '"';
 					}
 				}
-				?>>
+				?>
+				>
 					<?php
 					/**
 					 * Kadence Top Header
