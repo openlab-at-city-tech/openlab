@@ -46,6 +46,7 @@ if ( ! class_exists( 'Astra_Beaver_Themer' ) ) {
 			add_action( 'wp', array( $this, 'theme_header_footer_render' ) );
 			add_filter( 'fl_theme_builder_part_hooks', array( $this, 'register_part_hooks' ) );
 			add_filter( 'post_class', array( $this, 'render_post_class' ), 99 );
+			add_action( 'astra_blog_archive_read_more_before', array( $this, 'reset_post_link_filter' ), 1 );
 			add_action( 'fl_theme_builder_before_render_content', array( $this, 'builder_before_render_content' ), 10, 1 );
 			add_action( 'fl_theme_builder_after_render_content', array( $this, 'builder_after_render_content' ), 10, 1 );
 			add_filter( 'astra_dynamic_theme_css', array( $this, 'beaver_themer_compatibility_styles' ) );
@@ -219,10 +220,22 @@ if ( ! class_exists( 'Astra_Beaver_Themer' ) ) {
 					)
 				);
 
+				// Reset via reset_post_link_filter() before Astra's own archive loop renders its Read More link.
 				add_filter( 'astra_post_link_enabled', '__return_false' );
 			}
 
 			return $classes;
+		}
+
+		/**
+		 * Remove the stale `astra_post_link_enabled` filter added while rendering a Beaver Builder posts module,
+		 * so Astra's own archive loop can render its Read More link.
+		 *
+		 * @return void
+		 * @since 4.13.9
+		 */
+		public function reset_post_link_filter() {
+			remove_filter( 'astra_post_link_enabled', '__return_false' );
 		}
 
 		/**

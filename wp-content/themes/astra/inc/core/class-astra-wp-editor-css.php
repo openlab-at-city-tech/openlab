@@ -559,7 +559,7 @@ class Astra_WP_Editor_CSS {
 			),
 
 			// Gutenberg button compatibility for default styling.
-			':where(.editor-styles-wrapper .wp-block-button:not(.is-style-outline)) :is(div, button, a).wp-block-button__link, .block-editor-writing-flow .wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button, .block-editor-writing-flow .wp-block-file .wp-block-file__button, .editor-styles-wrapper button.wc-block-components-button' => array(
+			':where(.editor-styles-wrapper .wp-block-button:not(.is-style-outline)) :is(div, button, a).wp-block-button__link, .block-editor-writing-flow .wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button, .block-editor-writing-flow .wp-block-file .wp-block-file__button, .editor-styles-wrapper button.wc-block-components-button, .wp-block-tab-list button' => array(
 				'border-style'               => $theme_btn_top_border || $theme_btn_right_border || $theme_btn_left_border || $theme_btn_bottom_border ? 'solid' : '',
 				'border-top-width'           => $theme_btn_top_border,
 				'border-right-width'         => $theme_btn_right_border,

@@ -169,7 +169,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 			remove_action( 'astra_masthead', 'astra_masthead_primary_template' );
 			remove_action( 'astra_masthead_content', 'astra_primary_navigation_markup', 10 );
 
-			remove_filter( 'wp_page_menu_args', 'astra_masthead_custom_page_menu_items', 10, 2 );
+			remove_filter( 'wp_page_menu_args', 'astra_masthead_custom_page_menu_items', 10 );
 			remove_filter( 'wp_nav_menu_items', 'astra_masthead_custom_nav_menu_items' );
 		}
 
@@ -435,6 +435,14 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 			$responsive_cart_action = astra_get_option( 'responsive-cart-click-action' );
 			$desktop_cart_action    = astra_get_option( 'woo-header-cart-click-action' );
 
+			/**
+			 * Filters whether the page requires the cart flyout, which then renders even when the header cart click actions redirect.
+			 *
+			 * @since 4.14.1
+			 * @param bool $flyout_required True when the shop Add To Cart action is "Slide In Cart".
+			 */
+			$flyout_required = apply_filters( 'astra_cart_flyout_required', class_exists( 'WooCommerce' ) && ! is_product() && 'slide_in_cart' === astra_get_option( 'shop-add-to-cart-action' ) );
+
 			// Hide cart flyout only if current page is checkout/cart or if redirect option is selected.
 			if (
 				(
@@ -443,7 +451,8 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 					! is_cart() &&
 					! is_checkout() &&
 					( 'redirect' !== $responsive_cart_action || // Prevent flyout markup when 'redirect' option is selected.
-					'redirect' !== $desktop_cart_action )
+					'redirect' !== $desktop_cart_action ||
+					$flyout_required )
 				) || ( Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) && class_exists( 'Easy_Digital_Downloads' ) )
 			) {
 				Astra_Builder_UI_Controller::render_mobile_cart_flyout_markup();

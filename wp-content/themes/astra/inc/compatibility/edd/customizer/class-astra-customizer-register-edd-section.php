@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
+// Bail if Customizer config base class does not exist.
+if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
+	return;
+}
+
 if ( ! class_exists( 'Astra_Customizer_Register_Edd_Section' ) ) {
 
 	/**
@@ -114,7 +119,7 @@ if ( ! class_exists( 'Astra_Customizer_Register_Edd_Section' ) ) {
 							'title' => __( 'Better product pages', 'astra' ),
 						),
 					),
-					'divider' => array( 'ast_class' => 'ast-top-section-divider' ),
+					'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
 				),
 				$args
 			);

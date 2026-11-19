@@ -53,6 +53,9 @@ if ( class_exists( 'Astra_WP_Background_Process' ) ) {
 				return false;
 			}
 
+			// Detach astra-settings option filters (e.g. WPML admin texts) so migrations read raw values and never persist translated strings back.
+			$detached_option_filters = astra_detach_option_filters();
+
 			do_action( 'astra_batch_process_task_' . $process, $process );
 
 			if ( function_exists( $process ) ) {
@@ -62,6 +65,8 @@ if ( class_exists( 'Astra_WP_Background_Process' ) ) {
 			if ( 'update_db_version' === $process ) {
 				Astra_Theme_Background_Updater::update_db_version();
 			}
+
+			astra_restore_option_filters( $detached_option_filters );
 
 			return false;
 		}

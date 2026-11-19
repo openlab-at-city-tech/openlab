@@ -67,9 +67,10 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 			$mobile_icon = '';
 
 			if ( isset( $args['pages_with_children'][ $page->ID ] ) ) {
-				$css_class[] = 'menu-item-has-children';
-				$icon        = Astra_Icons::get_icons( 'arrow' );
-				$icon        = '<span role="button" class="dropdown-menu-toggle ast-header-navigation-arrow" tabindex="0" aria-expanded="false" aria-haspopup="true">' . $icon . '</span>';
+				$css_class[]  = 'menu-item-has-children';
+				$icon         = Astra_Icons::get_icons( 'arrow' );
+				$toggle_label = astra_get_submenu_toggle_label( $page->post_title );
+				$icon         = '<span role="button" class="dropdown-menu-toggle ast-header-navigation-arrow" tabindex="0" aria-expanded="false" aria-haspopup="true" aria-label="' . esc_attr( $toggle_label ) . '">' . $icon . '</span>';
 				// Add toggle button if menu is from Astra.
 				if ( true === is_object( $args ) ) {
 					if ( isset( $args->theme_location ) &&
@@ -82,7 +83,7 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 							array(
 								'aria-expanded' => 'false',
 								'aria-haspopup' => 'true',
-								'aria-label'    => __( 'Toggle menu', 'astra' ),
+								'aria-label'    => $toggle_label,
 							),
 							$page
 						) . Astra_Icons::get_icons( 'arrow' ) . '</button>';
@@ -94,7 +95,7 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 							array(
 								'aria-expanded' => 'false',
 								'aria-haspopup' => 'true',
-								'aria-label'    => __( 'Toggle menu', 'astra' ),
+								'aria-label'    => $toggle_label,
 							),
 							$page
 						) . Astra_Icons::get_icons( 'arrow' ) . '</button>';
@@ -121,10 +122,14 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 			$args['link_before'] = empty( $args['link_before'] ) ? '' : $args['link_before'];
 			$args['link_after']  = empty( $args['link_after'] ) ? '' : $args['link_after'];
 
+			// Parent links report their submenu state like nav menu links; frontend.js keeps it in step.
+			$link_aria_expanded = isset( $args['pages_with_children'][ $page->ID ] ) ? ' aria-expanded="false"' : '';
+
 			$output .= sprintf(
-				'<li class="%s"><a href="%s" class="menu-link">%s%s%s%s</a>%s',
+				'<li class="%s"><a href="%s" class="menu-link"%s>%s%s%s%s</a>%s',
 				$css_classes,
 				get_permalink( $page->ID ),
+				$link_aria_expanded,
 				$args['link_before'],
 				apply_filters( 'the_title', $page->post_title, $page->ID ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 				$args['link_after'],

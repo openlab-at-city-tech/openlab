@@ -33,7 +33,7 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 		 * @var string
 		 * @since 1.2.0
 		 */
-		private static $version = '1.2.1';
+		private static $version = '1.2.3';
 
 		/**
 		 * Registered notices.
@@ -72,10 +72,25 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 		 * @since 1.2.0
 		 */
 		public function __construct() {
+			$this->maybe_migrate_notices_option();
 			add_action( 'admin_notices', array( $this, 'show_notices' ), 30 );
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 			add_action( 'wp_ajax_astra-notice-dismiss', array( $this, 'dismiss_notice' ) );
 			add_filter( 'wp_kses_allowed_html', array( $this, 'add_data_attributes' ), 10, 2 );
+		}
+
+		/**
+		 * Migrate allowed_astra_notices → astra_notices_allowed (one-time, on first load).
+		 *
+		 * @since 1.2.2
+		 * @return void
+		 */
+		private function maybe_migrate_notices_option() {
+			$old = get_option( 'allowed_astra_notices', false );
+			if ( false !== $old ) {
+				update_option( 'astra_notices_allowed', $old );
+				delete_option( 'allowed_astra_notices' );
+			}
 		}
 
 		/**
@@ -107,10 +122,10 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 			}
 
 			$notice_id = sanitize_key( $args['id'] ); // Notice ID.
-			$notices   = get_option( 'allowed_astra_notices', array() );
+			$notices   = get_option( 'astra_notices_allowed', array() );
 			if ( ! in_array( $notice_id, $notices, true ) ) {
 				$notices[] = $notice_id; // Add notice id to the array.
-				update_option( 'allowed_astra_notices', $notices ); // Update the option.
+				update_option( 'astra_notices_allowed', $notices ); // Update the option.
 			}
 		}
 
@@ -124,7 +139,7 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 			check_ajax_referer( 'astra-notices', 'nonce' );
 
 			$notice_id           = ( isset( $_POST['notice_id'] ) ) ? sanitize_key( wp_unslash( $_POST['notice_id'] ) ) : '';
-			$repeat_notice_after = ( isset( $_POST['repeat_notice_after'] ) ) ? absint( $_POST['repeat_notice_after'] ) : 0;
+			$repeat_notice_after = ( isset( $_POST['repeat_notice_after'] ) ) ? absint( wp_unslash( $_POST['repeat_notice_after'] ) ) : 0;
 			$notice              = $this->get_notice_by_id( $notice_id );
 			$capability          = isset( $notice['capability'] ) ? $notice['capability'] : 'manage_options';
 
@@ -144,7 +159,7 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 				wp_send_json_error( esc_html__( 'Permission denied.', 'astra' ) );
 			}
 
-			$allowed_notices = get_option( 'allowed_astra_notices', array() ); // Get allowed notices.
+			$allowed_notices = get_option( 'astra_notices_allowed', array() ); // Get allowed notices.
 
 			// Define restricted user meta keys using the dynamic table prefix.
 			global $wpdb;
@@ -187,11 +202,11 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 		 * @return void
 		 */
 		public function enqueue_scripts() {
-			wp_register_style( 'astra-notices', self::get_url() . 'notices.css', array(), self::$version );
-			wp_register_script( 'astra-notices', self::get_url() . 'notices.js', array( 'jquery' ), self::$version, true );
+			wp_register_style( 'bsf-astra-notices', self::get_url() . 'notices.css', array(), self::$version );
+			wp_register_script( 'bsf-astra-notices', self::get_url() . 'notices.js', array( 'jquery' ), self::$version, true );
 			wp_localize_script(
-				'astra-notices',
-				'astraNotices',
+				'bsf-astra-notices',
+				'bsfAstraNotices',
 				array(
 					'_notice_nonce' => wp_create_nonce( 'astra-notices' ),
 				)
@@ -313,8 +328,8 @@ if ( ! class_exists( 'BSF_Admin_Notices' ) ) :
 		 * @return void
 		 */
 		public static function markup( $notice = array() ) {
-			wp_enqueue_script( 'astra-notices' );
-			wp_enqueue_style( 'astra-notices' );
+			wp_enqueue_script( 'bsf-astra-notices' );
+			wp_enqueue_style( 'bsf-astra-notices' );
 
 			// Dual-emit: legacy (astra_notice_*) + new (bsf_admin_notice_*) hooks for backward compat.
 			// Note: consumers hooking BOTH names for the same event will be called twice.

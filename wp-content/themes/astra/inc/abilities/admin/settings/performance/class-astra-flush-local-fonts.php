@@ -115,10 +115,14 @@ class Astra_Flush_Local_Fonts extends Astra_Abstract_Ability {
 			);
 		}
 
-		$fonts_folder = $this->get_fonts_folder();
+		// Reuse the dashboard's flush: deletes the correct fonts folder and clears the cached font options.
+		$flushed = astra_webfont_loader_instance( '' )->astra_delete_fonts_folder();
 
-		if ( $fonts_folder && is_dir( $fonts_folder ) ) {
-			$this->delete_fonts_folder( $fonts_folder );
+		if ( ! $flushed ) {
+			return Astra_Abilities_Response::error(
+				__( 'Failed to flush local fonts cache.', 'astra' ),
+				__( 'Please try again later.', 'astra' )
+			);
 		}
 
 		do_action( 'astra_regenerate_fonts_folder' );
@@ -129,41 +133,6 @@ class Astra_Flush_Local_Fonts extends Astra_Abstract_Ability {
 				'flushed' => true,
 			)
 		);
-	}
-
-	/**
-	 * Get the fonts folder path.
-	 *
-	 * @return string Fonts folder path.
-	 */
-	private function get_fonts_folder() {
-		$upload_dir = wp_upload_dir();
-		return $upload_dir['basedir'] . '/astra-webfonts/';
-	}
-
-	/**
-	 * Recursively delete the fonts folder.
-	 *
-	 * @param string $folder Folder path to delete.
-	 * @return void
-	 */
-	private function delete_fonts_folder( $folder ) {
-		if ( ! is_dir( $folder ) ) {
-			return;
-		}
-
-		$files = array_diff( scandir( $folder ), array( '.', '..' ) );
-
-		foreach ( $files as $file ) {
-			$path = $folder . $file;
-			if ( is_dir( $path ) ) {
-				$this->delete_fonts_folder( $path . '/' );
-			} else {
-				wp_delete_file( $path );
-			}
-		}
-
-		rmdir( $folder );
 	}
 }
 

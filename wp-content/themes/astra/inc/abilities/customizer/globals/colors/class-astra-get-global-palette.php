@@ -71,6 +71,10 @@ class Astra_Get_Global_Palette extends Astra_Abstract_Ability {
 					'type'        => 'object',
 					'description' => 'All palettes (palette_1 through palette_4) with their colors when no specific palette is requested.',
 				),
+				'custom_colors'     => array(
+					'type'        => 'array',
+					'description' => 'User defined custom global colors (palette slots 9+), each with a name and a retired flag.',
+				),
 			)
 		);
 	}
@@ -159,7 +163,9 @@ class Astra_Get_Global_Palette extends Astra_Abstract_Ability {
 			foreach ( array( 'palette_1', 'palette_2', 'palette_3', 'palette_4' ) as $pid ) {
 				if ( isset( $palette_data['palettes'][ $pid ] ) ) {
 					$colors = array();
-					for ( $i = 0; $i <= 8; $i++ ) {
+					// Cover the 9 theme slots plus any user defined custom color slots.
+					$slot_count = max( 9, count( $palette_data['palettes'][ $pid ] ) );
+					for ( $i = 0; $i < $slot_count; $i++ ) {
 						$colors[ (string) $i ] = isset( $palette_data['palettes'][ $pid ][ $i ] ) ? $palette_data['palettes'][ $pid ][ $i ] : '';
 					}
 					$all_palettes[ $pid ] = array(
@@ -171,12 +177,18 @@ class Astra_Get_Global_Palette extends Astra_Abstract_Ability {
 		}
 
 		// Format current palette colors with labels.
+		$custom_colors            = class_exists( 'Astra_Global_Palette' ) ? Astra_Global_Palette::get_custom_colors() : array();
 		$formatted_current_colors = array();
 		foreach ( $palette_colors as $index => $color ) {
 			$formatted_current_colors[ (string) $index ] = array(
 				'hex'   => $color,
 				'label' => $this->get_color_label( $index ),
 			);
+
+			// Removed custom colors keep their stored value for revival but render nowhere.
+			if ( $index >= 9 && ! empty( $custom_colors[ $index - 9 ]['retired'] ) ) {
+				$formatted_current_colors[ (string) $index ]['retired'] = true;
+			}
 		}
 
 		return Astra_Abilities_Response::success(
@@ -198,6 +210,7 @@ class Astra_Get_Global_Palette extends Astra_Abstract_Ability {
 				'available_presets' => $available_presets,
 				'total_presets'     => count( $available_presets ),
 				'all_palettes'      => null !== $all_palettes ? $all_palettes : new stdClass(),
+				'custom_colors'     => class_exists( 'Astra_Global_Palette' ) ? Astra_Global_Palette::get_custom_colors() : array(),
 			)
 		);
 	}
@@ -221,7 +234,19 @@ class Astra_Get_Global_Palette extends Astra_Abstract_Ability {
 			8 => 'Other Supporting',
 		);
 
-		return isset( $labels[ $index ] ) ? $labels[ $index ] : sprintf( 'Color %d', $index );
+		if ( isset( $labels[ $index ] ) ) {
+			return $labels[ $index ];
+		}
+
+		// Slots 9+ are user defined custom colors.
+		if ( $index >= 9 && class_exists( 'Astra_Global_Palette' ) ) {
+			$custom_colors = Astra_Global_Palette::get_custom_colors();
+			if ( isset( $custom_colors[ $index - 9 ]['name'] ) ) {
+				return $custom_colors[ $index - 9 ]['name'];
+			}
+		}
+
+		return sprintf( 'Color %d', $index );
 	}
 }
 

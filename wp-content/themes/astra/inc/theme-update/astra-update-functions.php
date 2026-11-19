@@ -1302,7 +1302,8 @@ function astra_theme_background_updater_4_11_12() {
  * @return void
  */
 function astra_theme_background_updater_4_12_0() {
-	$theme_options = astra_get_options();
+	// Plain get_option, not astra_get_options — its request-static cache may hold a filtered copy that would bypass the updater filter detach.
+	$theme_options = get_option( 'astra-settings', array() );
 	// Migrate post card featured overlay color to background overlay setting which supports gradients.
 	if ( isset( $theme_options['post-card-featured-overlay'] ) ) {
 		$theme_options['post-card-background-overlay'] = array(
@@ -1331,5 +1332,20 @@ function astra_theme_background_updater_4_12_2() {
 		if ( ! get_site_option( $target ) && $status ) {
 			update_option( $target, $status );
 		}
+	}
+}
+
+/**
+ * Background updater function for theme v4.13.11
+ *
+ * @since 4.13.11
+ * @return void
+ */
+function astra_theme_background_updater_4_13_11() {
+	// Existing sites have been rendering excerpts without a truncation marker, so keep it that way.
+	$theme_options = get_option( 'astra-settings', array() );
+	if ( ! isset( $theme_options['blog-excerpt-marker'] ) ) {
+		$theme_options['blog-excerpt-marker'] = '';
+		update_option( 'astra-settings', $theme_options );
 	}
 }

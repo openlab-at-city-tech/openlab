@@ -450,6 +450,25 @@ function astra_get_theme_author_details() {
 }
 
 /**
+ * Get the accessible label for a submenu toggle, naming the menu item it controls.
+ *
+ * @since 4.14.1
+ * @param string $item_title Menu item title, may contain markup.
+ * @return string Toggle label, not escaped.
+ */
+function astra_get_submenu_toggle_label( $item_title ) {
+	$item_title = trim( wp_strip_all_tags( $item_title ) );
+
+	// Never return an empty label: astra_attr() drops falsy values, so the mobile button would lose aria-label entirely.
+	if ( '' === $item_title ) {
+		return __( 'Toggle submenu', 'astra' );
+	}
+
+	/* translators: %s: Menu item title. */
+	return sprintf( __( 'Toggle %s submenu', 'astra' ), $item_title );
+}
+
+/**
  * Add dropdown icon if menu item has children.
  *
  * @since 3.3.0
@@ -551,7 +570,8 @@ function astra_dropdown_icon_to_menu_link( $title, $item, $args, $depth ) {
 	// Render arrow icon for special menu appearance or on pro deactivation or nav menu extension deactivation.
 	if ( $is_special_menu || $is_nav_menu_extension_inactive || ! defined( 'ASTRA_EXT_VER' ) ) {
 		$custom_tabindex  = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'tabindex="0"' : '';
-		$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr__( 'Menu Toggle', 'astra' ) . '" aria-haspopup="true">' . $icon . '</span>';
+		$toggle_label     = astra_get_submenu_toggle_label( isset( $item->title ) ? $item->title : '' );
+		$astra_arrow_icon = '<span role="' . esc_attr( $role ) . '" class="dropdown-menu-toggle ast-header-navigation-arrow" ' . $custom_tabindex . ' aria-expanded="false" aria-label="' . esc_attr( $toggle_label ) . '" aria-haspopup="true">' . $icon . '</span>';
 	}
 
 	foreach ( $item->classes as $value ) {
@@ -1135,6 +1155,55 @@ function astra_search_static_css() {
  */
 function astra_showcase_upgrade_notices() {
 	return ! defined( 'ASTRA_EXT_VER' ) && astra_get_option( 'ast-disable-upgrade-notices', true ) ? true : false;
+}
+
+/**
+ * Unix timestamp (seconds, UTC) for the start of the BFCM sale window
+ * (16 Nov 2026, 12:00 PM IST → 6:30 AM UTC).
+ *
+ * @since 4.14.3
+ * @return int
+ */
+function astra_bfcm_sale_start_timestamp() {
+	return gmmktime( 6, 30, 0, 11, 16, 2026 );
+}
+
+/**
+ * Unix timestamp (seconds, UTC) for the end of the BFCM sale window
+ * (end of 6 Dec 2026 IST → 12:00 AM 7 Dec IST → 6:30 PM 6 Dec UTC).
+ *
+ * @since 4.14.3
+ * @return int
+ */
+function astra_bfcm_sale_end_timestamp() {
+	return gmmktime( 18, 30, 0, 12, 6, 2026 );
+}
+
+/**
+ * Whether the Black Friday / Cyber Monday promotional sale window is currently live.
+ *
+ * @since 4.14.3
+ * @return bool
+ */
+function astra_is_bfcm_sale_active() {
+	$now = time();
+	return $now >= astra_bfcm_sale_start_timestamp() && $now < astra_bfcm_sale_end_timestamp();
+}
+
+/**
+ * BFCM sale schedule + active flag, localized to the dashboard, customizer and
+ * metabox apps so the sale window is defined once (here) for every surface.
+ * Timestamps are in milliseconds for the JS Date() constructor.
+ *
+ * @since 4.14.3
+ * @return array<string, mixed>
+ */
+function astra_get_bfcm_sale_data() {
+	return array(
+		'start'  => astra_bfcm_sale_start_timestamp() * 1000,
+		'end'    => astra_bfcm_sale_end_timestamp() * 1000,
+		'active' => astra_is_bfcm_sale_active(),
+	);
 }
 
 /**

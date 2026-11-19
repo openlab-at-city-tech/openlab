@@ -38,6 +38,39 @@ class Astra_Header_Search_Component {
 	}
 
 	/**
+	 * Post types that are enabled for live search and publicly viewable.
+	 *
+	 * Mirrors the allow-list the enqueue path builds for the live-search script, so
+	 * the REST filter cannot be asked for a post type the site owner never enabled.
+	 *
+	 * @since 4.13.12
+	 * @return array
+	 */
+	public static function get_live_search_post_types() {
+		// Both surfaces store a map of post type => 0|1, so union the enabled keys instead of merging the arrays, where a 0 from one surface would drop a type the other has enabled.
+		$options = array(
+			astra_get_option( 'live-search-post-types', array() ),
+			astra_get_option( 'ast-search-live-search-post-types', array() ),
+		);
+
+		$allowed = array();
+
+		foreach ( $options as $enabled ) {
+			foreach ( (array) $enabled as $post_type => $value ) {
+				if ( ! $value || ! post_type_exists( $post_type ) ) {
+					continue;
+				}
+				if ( ! is_post_type_viewable( $post_type ) ) {
+					continue;
+				}
+				$allowed[] = $post_type;
+			}
+		}
+
+		return array_unique( $allowed );
+	}
+
+	/**
 	 * Update REST Post Query for live search.
 	 *
 	 * @since 4.4.0
@@ -49,16 +82,31 @@ class Astra_Header_Search_Component {
 		if (
 			isset( $request['post_type'] )
 			&&
+			is_string( $request['post_type'] )
+			&&
 			( strpos( $request['post_type'], 'ast_queried' ) !== false )
 		) {
 			$search_post_types = explode( ':', sanitize_text_field( $request['post_type'] ) );
 
-			$args = array(
+			// Restrict to the post types actually enabled for live search, else any show_in_rest type could be pulled through /wp/v2/posts.
+			$search_post_types = array_values( array_intersect( $search_post_types, self::get_live_search_post_types() ) );
+
+			if ( empty( $search_post_types ) ) {
+				return $args;
+			}
+
+			$live_search_args = array(
 				'posts_per_page' => ! empty( $args['posts_per_page'] ) ? $args['posts_per_page'] : 10,
 				'post_type'      => $search_post_types,
 				'paged'          => 1,
 				's'              => ! empty( $args['s'] ) ? $args['s'] : '',
 			);
+
+			// Merge over the core-built args instead of replacing them, so query vars set by other rest_post_query callbacks are not discarded.
+			$args = array_merge( $args, $live_search_args );
+
+			// The REST controller always sends orderby=date, which would override the relevance ordering WP_Query applies to search queries.
+			unset( $args['orderby'], $args['order'] );
 
 			if ( in_array( 'product', $search_post_types ) ) {
 				// Added product visibility checks, excluding hidden or shop-only visibility types.
@@ -69,6 +117,20 @@ class Astra_Header_Search_Component {
 					'operator' => 'NOT IN',
 				);
 			}
+
+			/**
+			 * Filters the query args used for the live search results.
+			 *
+			 * Live search runs through the REST API, where plugins that hook into the
+			 * main search query cannot reach it. This gives them a place to do so.
+			 *
+			 * @since 4.13.11
+			 * @param array           $args    Query args.
+			 * @param WP_REST_Request $request Request object.
+			 *
+			 * @psalm-suppress TooManyArguments
+			 */
+			$args = apply_filters( 'astra_live_search_query_args', $args, $request );
 		}
 
 		return $args;

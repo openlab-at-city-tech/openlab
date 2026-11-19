@@ -192,20 +192,25 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 				true
 			);
 
+			$localize_data = array(
+				'themeName'    => astra_get_theme_name(),
+				'themeIconUrl' => esc_url( apply_filters( 'astra_admin_menu_icon', ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg' ) ),
+				'postTitle'    => get_post_meta( intval( get_the_ID() ), 'site-post-title', true ),
+			);
+
+			// Sale countdown data, only for free users (the nudge markup is gated the same way).
+			if ( ! defined( 'ASTRA_EXT_VER' ) && astra_is_bfcm_sale_active() ) {
+				$localize_data['saleActive'] = true;
+				$localize_data['saleEnd']    = astra_bfcm_sale_end_timestamp() * 1000;
+			}
+
 			/**
 			 * Filter to modify the localized data for Astra astraElementor editor settings.
 			 *
 			 * @since 4.11.3
 			 * @param array $localize_data Localized data for astraElementor editor settings.
 			 */
-			$localize_data = apply_filters(
-				'astra_elementor_editor_localize_data',
-				array(
-					'themeName'    => astra_get_theme_name(),
-					'themeIconUrl' => esc_url( apply_filters( 'astra_admin_menu_icon', ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg' ) ),
-					'postTitle'    => get_post_meta( intval( get_the_ID() ), 'site-post-title', true ),
-				)
-			);
+			$localize_data = apply_filters( 'astra_elementor_editor_localize_data', $localize_data );
 
 			wp_localize_script( $handle, 'astraElementorEditor', $localize_data );
 		}
@@ -536,6 +541,8 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 			);
 
 			if ( ! defined( 'ASTRA_EXT_VER' ) ) {
+				$sale_active = astra_is_bfcm_sale_active();
+				$sale_html   = $sale_active ? $this->get_bfcm_sale_html() : '';
 				$document->add_control(
 					'ast-pro-notice',
 					array(
@@ -543,6 +550,7 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 						'raw'  => sprintf(
 							'<div class="ast-pro-upgrade-cta-wrapper">
 								<img src="%1$s" alt="%5$s">
+								%6$s
 								<p class="elementor-control-field-description">%2$s</p>
 								<a href="%3$s" class="ast-pro-upgrade-link" target="_blank" rel="noopener noreferrer">%4$s</a>
 							</div>',
@@ -550,7 +558,8 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 							esc_html__( 'Create beautiful pages faster with advanced design controls, ready templates, and full flexibility.', 'astra' ),
 							esc_url( astra_get_pro_url( '/pricing/', 'free-theme', 'elementor-editor', 'upgrade' ) ),
 							esc_html__( 'Upgrade Now', 'astra' ),
-							esc_attr__( 'Astra Logo', 'astra' )
+							esc_attr__( 'Astra Logo', 'astra' ),
+							$sale_html // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Built from escaped parts in get_bfcm_sale_html().
 						),
 					)
 				);
@@ -578,6 +587,45 @@ if ( ! class_exists( 'Astra_Elementor_Editor_Settings' ) ) {
 			);
 
 			$document->end_injection();
+		}
+
+		/**
+		 * Build the BFCM sale heading + live countdown HTML for the upgrade nudge.
+		 *
+		 * The countdown values are seeded server-side and then updated every second
+		 * by the Elementor editor script (build/elementor.js).
+		 *
+		 * @since 4.14.3
+		 * @return string
+		 */
+		private function get_bfcm_sale_html() {
+			$end_ms = astra_bfcm_sale_end_timestamp() * 1000;
+			$diff   = max( 0, astra_bfcm_sale_end_timestamp() - time() );
+			$units  = array(
+				'days'    => array( floor( $diff / 86400 ), __( 'DD', 'astra' ) ),
+				'hours'   => array( floor( ( $diff % 86400 ) / 3600 ), __( 'HRS', 'astra' ) ),
+				'minutes' => array( floor( ( $diff % 3600 ) / 60 ), __( 'MIN', 'astra' ) ),
+				'seconds' => array( $diff % 60, __( 'SEC', 'astra' ) ),
+			);
+
+			$boxes = '';
+			foreach ( $units as $unit => $data ) {
+				$boxes .= sprintf(
+					'<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;width:44px;height:44px;border-radius:8px;background:#F3EEFF;border:1px solid #E0C6F6;box-sizing:border-box;line-height:1;"><span data-ast-countdown="%1$s" style="font-size:16px;font-weight:700;line-height:1;color:#5C2EDE;">%2$s</span><span style="font-size:8px;font-weight:600;line-height:1;text-transform:uppercase;color:#8B7FB5;">%3$s</span></div>',
+					esc_attr( $unit ),
+					esc_html( str_pad( (string) $data[0], 2, '0', STR_PAD_LEFT ) ),
+					esc_html( $data[1] )
+				);
+			}
+
+			return sprintf(
+				'<p class="ast-metabox-sale-heading" style="margin:0 0 8px 0;font-weight:700;font-size:13px;line-height:1.4;text-align:center;">%1$s %2$s — <span style="color:#C30089;">%3$s</span></p><div class="ast-elementor-sale-countdown" data-sale-end="%4$s" style="display:flex;gap:6px;justify-content:center;width:100%%;margin:0 0 10px 0;">%5$s</div>',
+				'🔥',
+				esc_html__( 'Black Friday / Cyber Monday Sale', 'astra' ),
+				esc_html__( 'up to 47% off', 'astra' ),
+				esc_attr( (string) $end_ms ),
+				$boxes // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Boxes built from escaped parts above.
+			);
 		}
 
 		/**

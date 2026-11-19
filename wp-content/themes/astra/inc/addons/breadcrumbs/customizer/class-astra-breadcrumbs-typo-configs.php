@@ -144,14 +144,15 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Typo_Configs' ) ) {
 				 * Option: Breadcrumb Content Font Extras
 				 */
 				array(
-					'name'     => 'breadcrumb-font-extras',
-					'type'     => 'sub-control',
-					'parent'   => ASTRA_THEME_SETTINGS . '[section-breadcrumb-typo]',
-					'control'  => 'ast-font-extras',
-					'section'  => 'section-breadcrumb',
-					'priority' => 25,
-					'default'  => astra_get_option( 'breadcrumb-font-extras' ),
-					'title'    => esc_html__( 'Line Height', 'astra' ),
+					'name'              => 'breadcrumb-font-extras',
+					'type'              => 'sub-control',
+					'parent'            => ASTRA_THEME_SETTINGS . '[section-breadcrumb-typo]',
+					'control'           => 'ast-font-extras',
+					'section'           => 'section-breadcrumb',
+					'priority'          => 25,
+					'default'           => astra_get_option( 'breadcrumb-font-extras' ),
+					'title'             => esc_html__( 'Line Height', 'astra' ),
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_font_extras' ),
 				),
 
 			);

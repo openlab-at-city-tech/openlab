@@ -3,7 +3,7 @@
  * Font awesome icons array array file.
  *
  * @package Astra
- * @todo    If this icon file updates via grunt, it's default version is minified. But to get the icons label available on translate wordpress.org we need to unminify it. Use tool: https://beautifytools.com/php-beautifier.php
+ * @todo    If this icon file updates via grunt, it's default version is minified. But to get the icons label available on translate.wordpress.org we need to unminify it. Use tool: https://beautifytools.com/php-beautifier.php
  */
 
 if ( ! defined( 'ABSPATH' ) ) {

@@ -17,6 +17,7 @@ if ( ! function_exists( 'astra_do_action_deprecated' ) ) {
 	 *
 	 * @since 1.1.1
 	 * @param string $tag         The name of the filter hook.
+	 * @psalm-param non-empty-string $tag
 	 * @param array  $args        Array of additional function arguments to be passed to apply_filters().
 	 * @param string $version     The version of WordPress that deprecated the hook.
 	 * @param string $replacement Optional. The hook that should have been used. Default false.

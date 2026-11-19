@@ -1424,7 +1424,6 @@ class Astra_Breadcrumb_Trail {
 			}
 		}
 
-		/** @psalm-suppress TooManyArguments - WordPress apply_filters accepts variable arguments */
 		$translated_name = apply_filters( 'astra_breadcrumb_translated_term_name', $translated_name, $term );
 
 		return esc_html( $translated_name );

@@ -49,16 +49,16 @@ class Astra_Update_Transparent_Header extends Astra_Abstract_Ability {
 		return array(
 			'type'       => 'object',
 			'properties' => array(
-				'enabled'     => array(
+				'enabled'    => array(
 					'type'        => 'boolean',
 					'description' => 'Enable or disable the transparent header.',
 				),
-				'on_devices'  => array(
+				'on_devices' => array(
 					'type'        => 'string',
 					'description' => 'Show on which devices. Options: "both", "desktop", "mobile".',
 					'enum'        => array( 'both', 'desktop', 'mobile' ),
 				),
-				'logo'        => array(
+				'logo'       => array(
 					'type'        => 'object',
 					'description' => 'Logo configuration for transparent header.',
 					'properties'  => array(
@@ -84,7 +84,7 @@ class Astra_Update_Transparent_Header extends Astra_Abstract_Ability {
 						),
 					),
 				),
-				'border'      => array(
+				'border'     => array(
 					'type'        => 'object',
 					'description' => 'Header bottom border settings.',
 					'properties'  => array(
@@ -98,23 +98,23 @@ class Astra_Update_Transparent_Header extends Astra_Abstract_Ability {
 						),
 					),
 				),
-				'disable_on'  => array(
+				'disable_on' => array(
 					'type'        => 'object',
 					'description' => 'Disable transparent header on specific page types. Each property is a boolean (true = disabled on that page type).',
 					'properties'  => array(
-						'404_page'          => array(
+						'404_page'           => array(
 							'type'        => 'boolean',
 							'description' => 'Disable on 404 page.',
 						),
-						'search_page'       => array(
+						'search_page'        => array(
 							'type'        => 'boolean',
 							'description' => 'Disable on search results.',
 						),
-						'archive_pages'     => array(
+						'archive_pages'      => array(
 							'type'        => 'boolean',
 							'description' => 'Disable on archive pages.',
 						),
-						'blog_index'        => array(
+						'blog_index'         => array(
 							'type'        => 'boolean',
 							'description' => 'Disable on blog index page.',
 						),
@@ -122,17 +122,17 @@ class Astra_Update_Transparent_Header extends Astra_Abstract_Ability {
 							'type'        => 'boolean',
 							'description' => 'Disable on latest posts index.',
 						),
-						'pages'             => array(
+						'pages'              => array(
 							'type'        => 'boolean',
 							'description' => 'Disable on all pages.',
 						),
-						'posts'             => array(
+						'posts'              => array(
 							'type'        => 'boolean',
 							'description' => 'Disable on all single posts.',
 						),
 					),
 				),
-				'colors'      => array(
+				'colors'     => array(
 					'type'        => 'object',
 					'description' => 'Color settings for transparent header. All color values are responsive objects with desktop, tablet, mobile keys unless noted.',
 					'properties'  => array(
@@ -260,7 +260,7 @@ class Astra_Update_Transparent_Header extends Astra_Abstract_Ability {
 			}
 
 			astra_update_option( 'transparent-header-on-devices', $on_devices );
-			$updated           = true;
+			$updated = true;
 			/* translators: %s: device visibility value */
 			$update_messages[] = sprintf( __( 'Device visibility set to %s', 'astra' ), $on_devices );
 		}
@@ -319,13 +319,13 @@ class Astra_Update_Transparent_Header extends Astra_Abstract_Ability {
 
 		if ( isset( $args['disable_on'] ) && is_array( $args['disable_on'] ) ) {
 			$disable_map = array(
-				'404_page'          => 'transparent-header-disable-404-page',
-				'search_page'       => 'transparent-header-disable-search-page',
-				'archive_pages'     => 'transparent-header-disable-archive-pages',
-				'blog_index'        => 'transparent-header-disable-index',
+				'404_page'           => 'transparent-header-disable-404-page',
+				'search_page'        => 'transparent-header-disable-search-page',
+				'archive_pages'      => 'transparent-header-disable-archive-pages',
+				'blog_index'         => 'transparent-header-disable-index',
 				'latest_posts_index' => 'transparent-header-disable-latest-posts-index',
-				'pages'             => 'transparent-header-disable-page',
-				'posts'             => 'transparent-header-disable-posts',
+				'pages'              => 'transparent-header-disable-page',
+				'posts'              => 'transparent-header-disable-posts',
 			);
 
 			foreach ( $disable_map as $key => $option_key ) {

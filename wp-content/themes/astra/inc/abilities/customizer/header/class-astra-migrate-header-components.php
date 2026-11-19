@@ -104,7 +104,7 @@ class Astra_Migrate_Header_Components extends Astra_Abstract_Ability {
 
 		$dry_run = isset( $args['dry_run'] ) ? (bool) $args['dry_run'] : false;
 
-		$theme_options = get_option( ASTRA_THEME_SETTINGS, array() );
+		$theme_options = astra_get_raw_options();
 		if ( ! is_array( $theme_options ) ) {
 			$theme_options = array();
 		}

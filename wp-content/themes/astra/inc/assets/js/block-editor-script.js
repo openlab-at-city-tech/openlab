@@ -1,3 +1,27 @@
+/**
+ * Safely access an iframe's document, returning null if cross-origin.
+ *
+ * @since x.x.x
+ * @param {HTMLIFrameElement} iframe
+ * @return {Document|null}
+ */
+function astraGetIframeDoc( iframe ) {
+	if ( ! iframe ) {
+		return null;
+	}
+	try {
+		return iframe.contentWindow.document || iframe.contentDocument || null;
+	} catch ( e ) {
+		return null;
+	}
+}
+
+// Editor-chrome lookups must never match elements inside block content — saved block markup can carry
+// arbitrary classes, and a forged chrome class would capture Astra's injected UI and listeners.
+function astraQueryEditorChrome( doc, selector ) {
+	const element = doc ? doc.querySelector( selector ) : null;
+	return ( element && element.closest( '[data-block]' ) ) ? null : element;
+}
 
 window.addEventListener( 'load', function(e) {
 	astra_onload_function();
@@ -9,42 +33,9 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 });
 
-// Function to add block editor dynamic styles. 
-function blockEditorDynamicStyles() {
-	setTimeout(() => {
-		const iframes = document.getElementsByTagName('iframe');
-		if (!iframes?.length) return;
-
-		const cloneLinkElement = (id) => {
-			const element = document.getElementById(id);
-			return element ? element.cloneNode(true) : null;
-		}
-
-		const googleFontsStyle = cloneLinkElement('astra-google-fonts-css');
-
-		const appendLinkIfNotExists = (iframeDoc, clonedLink, linkId) => {
-			if (clonedLink && !iframeDoc.getElementById(linkId)) {
-				iframeDoc.head.appendChild(clonedLink);
-			}
-		}
-
-		for (const iframe of iframes) {
-			try {
-				const iframeDoc = iframe?.contentWindow?.document || iframe?.contentDocument;
-				if (iframeDoc?.head) {
-					appendLinkIfNotExists(iframeDoc, googleFontsStyle, 'astra-google-fonts-css');
-				}
-			} catch {
-				// Access denied to iframe document.
-			}
-		}
-	}, 1000);
-}
-
-
 function addTitleVisibility() {
-	let titleVisibility = document.querySelector( '.title-visibility' ),
-		titleBlock = document.querySelector( '.edit-post-visual-editor__post-title-wrapper' ),
+	let titleVisibility = astraQueryEditorChrome( document, '.title-visibility' ),
+		titleBlock = astraQueryEditorChrome( document, '.edit-post-visual-editor__post-title-wrapper' ),
 		editorDocument = document,
 		postTitleOption = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) && wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-post-title'] ) ? wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-post-title'] : '';
 
@@ -62,20 +53,20 @@ function addTitleVisibility() {
 
 		let iframe = undefined !== devicePreview ? devicePreview.getElementsByTagName('iframe')[0] : undefined;
 		if ( iframe && devicePreview.querySelector('iframe') !== null ) {
-			editorDocument = iframe.contentWindow.document || iframe.contentDocument;
+			editorDocument = astraGetIframeDoc( iframe ) || editorDocument;
 		}
 
-        // Addressed the WordPress 6.5 issue involving an extraneous iframe layer.
-        if ( ! iframe && astraColors.ast_wp_version_higher_6_4 ) {
-            let _iframe = document.querySelector('.editor-canvas__iframe') || document.querySelector('.block-editor-iframe__scale-container iframe[name="editor-canvas"]');
-            editorDocument = _iframe ? _iframe.contentWindow.document : editorDocument;
+		// Addressed the WordPress 6.5 issue involving an extraneous iframe layer.
+		if ( ! iframe && astraColors.ast_wp_version_higher_6_4 ) {
+			let _iframe = document.querySelector('.editor-canvas__iframe') || document.querySelector('.block-editor-iframe__scale-container iframe[name="editor-canvas"]');
+			editorDocument = astraGetIframeDoc( _iframe ) || editorDocument;
 
-            if (editorDocument) {
-                titleVisibility = editorDocument.querySelector('.title-visibility');
-                titleBlock = editorDocument.querySelector('.edit-post-visual-editor__post-title-wrapper');
-            }
-        }
-    }
+			if (editorDocument) {
+				titleVisibility = astraQueryEditorChrome( editorDocument, '.title-visibility' );
+				titleBlock = astraQueryEditorChrome( editorDocument, '.edit-post-visual-editor__post-title-wrapper' );
+			}
+		}
+	}
 
 	if( null !== titleBlock && null === titleVisibility ) {
 		let titleVisibilityTrigger = '<span class="ast-title title-visibility" data-tooltip="Disable Title"> <svg xmlns="http://www.w3.org/2000/svg" width="0px" viewBox="0 0 576 512"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"></path></svg> </span>';
@@ -84,20 +75,11 @@ function addTitleVisibility() {
 			titleVisibilityTrigger = '<span class="ast-title title-visibility" data-tooltip="Enable Title"> <svg xmlns="http://www.w3.org/2000/svg" width="0px" viewBox="0 0 640 512"><path d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z"></path></svg> </span>';
 		}
 
-		if ( null === titleVisibility ) {
-			titleBlock.insertAdjacentHTML( 'beforeend', titleVisibilityTrigger );
-		}
+		titleBlock.insertAdjacentHTML( 'beforeend', titleVisibilityTrigger );
 
-		let titleVisibilityTriggerElement = editorDocument.querySelector( '.title-visibility' ),
-			titleVisibilityWrapper = editorDocument.querySelector( '.edit-post-visual-editor__post-title-wrapper' );
+		let titleVisibilityTriggerElement = astraQueryEditorChrome( editorDocument, '.title-visibility' );
 
-        if (titleVisibilityWrapper) {
-            if ('disabled' === postTitleOption && !titleVisibilityWrapper.classList.contains('invisible')) {
-                titleVisibilityWrapper.classList.add('invisible');
-            } else {
-                titleVisibilityWrapper.classList.remove('invisible');
-            }
-
+		if (titleVisibilityTriggerElement) {
 		titleVisibilityTriggerElement.addEventListener("click", function() {
 			let metaTitleOptions = postTitleOption || '';
 			if ( this.parentNode.classList.contains( 'invisible' ) && ( 'disabled' === metaTitleOptions || '' === metaTitleOptions ) ) {
@@ -128,8 +110,17 @@ function addTitleVisibility() {
 				);
 			}
 		});
+		}
 	}
-}
+
+	// Sync the wrapper visibility from the meta on every run — undo/redo restores the meta without re-inserting the icon.
+	if ( null !== titleBlock ) {
+		if ( 'disabled' === postTitleOption && ! titleBlock.classList.contains('invisible') ) {
+			titleBlock.classList.add('invisible');
+		} else if ( 'disabled' !== postTitleOption && titleBlock.classList.contains('invisible') ) {
+			titleBlock.classList.remove('invisible');
+		}
+	}
 }
 
 function siteLogoImageChange() {
@@ -144,16 +135,18 @@ function siteLogoImageChange() {
 	let iframe = document.querySelector('.editor-canvas__iframe') || document.querySelector('.block-editor-iframe__scale-container iframe[name="editor-canvas"]');
 
 	if (iframe) {
-		let is_desktop = iframe.contentWindow.document.querySelector(
+		let iframeDoc = astraGetIframeDoc( iframe );
+		if ( ! iframeDoc ) {
+			return;
+		}
+		let is_desktop = iframeDoc.querySelector(
 			".is-desktop-preview"
 		);
 
 		if (!is_desktop) {
-			let iframeDoc =
-				iframe.contentDocument || iframe.contentWindow.document;
 			let logoElement = iframeDoc.querySelector(".custom-logo");
 
-			if (logoElement) {
+			if (logoElement && logoElement.getAttribute("src") !== mobileLogo) {
 				// Updating logo in the editor iframe preview with the mobile logo.
 				logoElement.setAttribute("src", mobileLogo);
 			}
@@ -188,51 +181,239 @@ function astra_onload_function() {
 		}
 	}
 
-	wp.data.subscribe(function () {
-		setTimeout( function () {
-			// Title visibility with new editor compatibility update.
-			var titleBlock = document.querySelector( '.edit-post-visual-editor__post-title-wrapper' ),
-				editorDocument = document;
+	// Replace 'VAR(--AST-GLOBAL-COLOR-X)' shown on the color palette custom color button with its color code.
+	// textContent instead of innerText — innerText is layout-dependent and forces a reflow.
+	// Live collection — only populated while a color picker popover is open, so per-notification syncs do no fresh DOM query.
+	const customColorPickerButtons = document.getElementsByClassName( 'components-color-palette__custom-color-value' );
 
-			// Excuting responsive site logo change function. 
-			siteLogoImageChange();
-			// Adding title visibility icon on wp.data.subscribe.
-			addTitleVisibility();
-			// Block editor dynamic style function.
-			blockEditorDynamicStyles();
-			if ( astraColors.ast_wp_version_higher_6_3 ) {
-				let desktopPreview = document.getElementsByClassName('is-desktop-preview'),
-					tabletPreview = document.getElementsByClassName('is-tablet-preview'),
-					mobilePreview = document.getElementsByClassName('is-mobile-preview'),
-					devicePreview = desktopPreview[0];
-
-				if ( tabletPreview.length > 0 ) {
-					devicePreview = tabletPreview[0];
-				} else if ( mobilePreview.length > 0 ) {
-					devicePreview = mobilePreview[0];
-				}
-
-				let iframe = undefined !== devicePreview ? devicePreview.getElementsByTagName('iframe')[0] : undefined;
-				if ( iframe && devicePreview.querySelector('iframe') !== null ) {
-					editorDocument = iframe.contentWindow.document || iframe.contentDocument;
-				}
-
-				// Addressed the WordPress 6.5 issue involving an extraneous iframe layer.
-				if ( ! iframe && astraColors.ast_wp_version_higher_6_4 ) {
-					const _iframe = document.querySelector('.editor-canvas__iframe') || document.querySelector('.block-editor-iframe__scale-container iframe[name="editor-canvas"]');					
-					
-					if ( !! _iframe ){
-						editorDocument = _iframe.contentWindow.document ;
-					}
-				}
-
-				titleBlock = editorDocument.querySelector( '.edit-post-visual-editor__post-title-wrapper' );
-
+	const astraUpdateColorPalettePlaceholders = function () {
+		for ( let btnCount = 0; btnCount < customColorPickerButtons.length; btnCount++ ) {
+			const colorCode = customColorPickerButtons[btnCount].textContent || '',
+				transformedCode = colorCode.toLowerCase();
+			// Uppercase needle match retained from the innerText implementation, where CSS text-transform uppercased the value.
+			if ( colorCode.toUpperCase().indexOf( 'VAR(--AST-GLOBAL-COLOR' ) > -1 && astraColors[ transformedCode ] ) {
+				customColorPickerButtons[btnCount].textContent = astraColors[ transformedCode ];
 			}
+		}
+	};
+
+	// Keeps 'ast-stacked-title-visibility' in sync with the canvas width without reading layout from the store-notification path.
+	const astraObserveCanvasWidth = function ( editorStylesWrapper ) {
+		if ( editorStylesWrapper.dataset.astWidthObserved ) {
+			return;
+		}
+		editorStylesWrapper.dataset.astWidthObserved = '1';
+
+		const syncStackedTitleVisibility = function ( width ) {
+			const shouldStack = width < 1350;
+			if ( shouldStack !== editorStylesWrapper.classList.contains( 'ast-stacked-title-visibility' ) ) {
+				editorStylesWrapper.classList.toggle( 'ast-stacked-title-visibility', shouldStack );
+			}
+		};
+
+		if ( 'undefined' !== typeof ResizeObserver ) {
+			new ResizeObserver( function ( entries ) {
+				// contentRect is delivered by the observer — reading it forces no layout.
+				syncStackedTitleVisibility( entries[0].contentRect.width );
+			} ).observe( editorStylesWrapper );
+		} else {
+			syncStackedTitleVisibility( parseInt( editorStylesWrapper.offsetWidth ) );
+		}
+	};
+
+	// Resolve the document the layout pass decorates — the device preview iframe on WP 6.3/6.4, the canvas iframe on WP 6.5+, the top document otherwise.
+	// The subscriber's canvas-identity bail and the pass itself must resolve identically, so both use this helper.
+	const astraResolveEditorDocument = function () {
+		let editorDocument = document;
+
+		if ( astraColors.ast_wp_version_higher_6_3 ) {
+			let desktopPreview = document.getElementsByClassName('is-desktop-preview'),
+				tabletPreview = document.getElementsByClassName('is-tablet-preview'),
+				mobilePreview = document.getElementsByClassName('is-mobile-preview'),
+				devicePreview = desktopPreview[0];
+
+			if ( tabletPreview.length > 0 ) {
+				devicePreview = tabletPreview[0];
+			} else if ( mobilePreview.length > 0 ) {
+				devicePreview = mobilePreview[0];
+			}
+
+			let iframe = undefined !== devicePreview ? devicePreview.getElementsByTagName('iframe')[0] : undefined;
+			if ( iframe && devicePreview.querySelector('iframe') !== null ) {
+				editorDocument = astraGetIframeDoc( iframe ) || editorDocument;
+			}
+
+			// Addressed the WordPress 6.5 issue involving an extraneous iframe layer.
+			if ( ! iframe && astraColors.ast_wp_version_higher_6_4 ) {
+				const _iframe = document.querySelector('.editor-canvas__iframe') || document.querySelector('.block-editor-iframe__scale-container iframe[name="editor-canvas"]');
+
+				if ( !! _iframe ){
+					editorDocument = astraGetIframeDoc( _iframe ) || editorDocument;
+				}
+			}
+		}
+
+		return editorDocument;
+	};
+
+	// Keep 'inherit-container-width' on root Group blocks using "Inherit default layout" in sync —
+	// React rewrites the wrapper's className on re-render (selection, alignment), dropping the class.
+	const astraSyncGroupInheritClasses = function ( editorDocument ) {
+		const blockEditorSelect = wp.data.select( 'core/block-editor' ) || null;
+		const rootClientIds = blockEditorSelect ? blockEditorSelect.getBlockOrder() : [];
+		for ( let blockNum = 0; blockNum < rootClientIds.length; blockNum++ ) {
+			if ( 'core/group' !== blockEditorSelect.getBlockName( rootClientIds[ blockNum ] ) ) {
+				continue;
+			}
+			const groupAttributes = blockEditorSelect.getBlockAttributes( rootClientIds[ blockNum ] );
+			if ( ! groupAttributes || ! groupAttributes.layout || undefined === groupAttributes.layout.inherit ) {
+				continue;
+			}
+			// The canvas is iframed on WP 6.5+ — query the canvas document and match by client id, not by index.
+			const groupElement = editorDocument.querySelector( '[data-block="' + CSS.escape( rootClientIds[ blockNum ] ) + '"]' );
+			if ( ! groupElement ) {
+				continue;
+			}
+			groupElement.classList.toggle( 'inherit-container-width', !! groupAttributes.layout.inherit );
+		}
+	};
+
+	// Preview device from the store — core/editor on WP 6.5+, core/edit-post before that; lowercase-normalized.
+	// Not from the DOM: during dispatch (and for a beat after) React has not committed the preview classes yet.
+	const astraGetPreviewDevice = function () {
+		const editorSelect = wp.data.select( 'core/editor' );
+		const editPostSelect = wp.data.select( 'core/edit-post' );
+		let device = 'desktop';
+		if ( editorSelect && 'function' === typeof editorSelect.getDeviceType ) {
+			device = editorSelect.getDeviceType();
+		} else if ( editPostSelect && 'function' === typeof editPostSelect.__experimentalGetPreviewDeviceType ) {
+			device = editPostSelect.__experimentalGetPreviewDeviceType();
+		} else if ( document.getElementsByClassName( 'is-tablet-preview' ).length > 0 ) {
+			device = 'tablet';
+		} else if ( document.getElementsByClassName( 'is-mobile-preview' ).length > 0 ) {
+			device = 'mobile';
+		}
+		return String( device ).toLowerCase();
+	};
+
+	// Cheap signature of every input the editor layout pass below depends on.
+	// The pass runs only when this changes — not on every store notification.
+	// KEEP IN SYNC: every post-meta key the pass (or updatePageBackground) reads must be listed here,
+	// or edits to that setting will stop reflecting live in the editor.
+	const astraGetEditorLayoutSignature = function () {
+		const editorSelect = wp.data.select( 'core/editor' );
+		if ( undefined === editorSelect || null === editorSelect ) {
+			return null;
+		}
+
+		const meta = editorSelect.getEditedPostAttribute( 'meta' ) || {};
+
+		const device = astraGetPreviewDevice();
+
+		return JSON.stringify( [
+			meta['ast-site-content-layout'] || '',
+			meta['site-content-style'] || '',
+			meta['site-sidebar-style'] || '',
+			meta['site-sidebar-layout'] || '',
+			meta['site-post-title'] || '',
+			meta['ast-page-background-enabled'] || '',
+			meta['ast-page-background-meta'] || '',
+			meta['ast-content-background-meta'] || '',
+			device,
+		] );
+	};
+
+	let astraLastLayoutSignature = null;
+	let astraLastCanvasWrapper = null;
+	let astraLayoutPassScheduled = false;
+	let astraLightSyncScheduled = false;
+
+	// Show post/page title wrapper outline & eye icon only when clicked. Bound once per rendered title
+	// input (astBound gate); called every light sync so a remounted title input re-binds.
+	const astraBindTitleVisibilityListeners = function ( editorDocument ) {
+		const titleBlock = astraQueryEditorChrome( editorDocument, '.edit-post-visual-editor__post-title-wrapper' );
+		const titleInput = astraQueryEditorChrome( editorDocument, '.editor-post-title__input' );
+		const visibilityIcon = astraQueryEditorChrome( editorDocument, '.title-visibility' );
+		if ( null == titleBlock || null == titleInput || null == visibilityIcon || titleInput.dataset.astBound ) {
+			return;
+		}
+		titleInput.dataset.astBound = '1';
+		// The injected icon can be recreated by later renders — resolve it at event time, not bind time.
+		const astraGetVisibilityIcon = function () {
+			return astraQueryEditorChrome( editorDocument, '.title-visibility' ) || visibilityIcon;
+		};
+		if ( ! astraColors.ast_wp_version_higher_6_3 ) {
+			editorDocument.addEventListener('click', function (event){
+				if( ! titleBlock.contains( event.target ) ){
+					astraGetVisibilityIcon().classList.remove('ast-show-visibility-icon');
+					titleInput.classList.remove('ast-show-editor-title-outline');
+				}
+			});
+		}
+		editorDocument.addEventListener('visibilitychange', function (){
+			astraGetVisibilityIcon().classList.remove('ast-show-visibility-icon');
+			titleInput.classList.remove('ast-show-editor-title-outline');
+		});
+		titleBlock.addEventListener('focusout', function (){
+			astraGetVisibilityIcon().classList.remove('ast-show-visibility-icon');
+			titleInput.classList.remove('ast-show-editor-title-outline');
+		});
+		titleBlock.addEventListener('click', function (){
+			astraGetVisibilityIcon().classList.add('ast-show-visibility-icon');
+			titleInput.classList.add('ast-show-editor-title-outline');
+		});
+		titleInput.addEventListener('input', function (){
+			astraGetVisibilityIcon().classList.add('ast-show-visibility-icon');
+			this.classList.add('ast-show-editor-title-outline');
+		});
+	};
+
+	// Cheap self-healing sync, run once per store-notification burst and deferred past React's commit:
+	// these pieces decorate DOM that renders can recreate without changing anything the signature tracks
+	// (selecting a Group rewrites its className, template toggles remount the logo/title, popovers mount late).
+	const astraRunEditorLightSync = function () {
+		astraLightSyncScheduled = false;
+		const editorDocument = astraResolveEditorDocument();
+		astraUpdateColorPalettePlaceholders();
+		siteLogoImageChange();
+		addTitleVisibility();
+		astraBindTitleVisibilityListeners( editorDocument );
+		astraSyncGroupInheritClasses( editorDocument );
+	};
+
+	wp.data.subscribe(function () {
+		if ( ! astraLightSyncScheduled ) {
+			astraLightSyncScheduled = true;
+			setTimeout( astraRunEditorLightSync, 1 );
+		}
+
+		const layoutSignature = astraGetEditorLayoutSignature();
+		if ( null === layoutSignature ) {
+			return;
+		}
+
+		// Bail when nothing this pass depends on changed AND the canvas it last decorated is still the one on screen —
+		// the overwhelming majority of notifications, including every keystroke. The identity check catches the canvas
+		// being remounted with an unchanged signature (code editor round-trip, iframe reload).
+		const currentCanvasWrapper = astraResolveEditorDocument().querySelector( '.editor-styles-wrapper' );
+		if ( layoutSignature === astraLastLayoutSignature && currentCanvasWrapper === astraLastCanvasWrapper ) {
+			return;
+		}
+		astraLastLayoutSignature = layoutSignature;
+
+		// Coalesce multiple store notifications for the same change into one pass.
+		if ( astraLayoutPassScheduled ) {
+			return;
+		}
+		astraLayoutPassScheduled = true;
+
+		setTimeout( function () {
+			astraLayoutPassScheduled = false;
+			var editorDocument = astraResolveEditorDocument();
 
 			// Compatibility for updating layout in editor with direct reflection.
 			const contentLayout = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) && wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['ast-site-content-layout'] ) ? wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['ast-site-content-layout'] : 'default',
-				bodyClass       = document.querySelector('body');
+				bodyClass       = document.querySelector('body'),
 				editorBodyClass = astraColors.ast_wp_version_higher_6_3 ? editorDocument.querySelector('html') : false;
 			const contentStyle = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) && wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-content-style'] ) ? wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-content-style'] : 'default';
 			const sidebarStyle = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' ) && wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-sidebar-style'] ) ? wp.data.select( 'core/editor' ).getEditedPostAttribute( 'meta' )['site-sidebar-style'] : 'default';
@@ -452,84 +633,18 @@ function astra_onload_function() {
 
 			const editorStylesWrapper = editorDocument.querySelector( '.editor-styles-wrapper' );
 
+			// Record which canvas this pass decorated (null when none was mounted) — the subscriber re-runs the pass
+			// when a different or newly mounted canvas appears, even with an unchanged signature.
+			astraLastCanvasWrapper = editorStylesWrapper;
+
 			if( null !== editorStylesWrapper ) {
-				const editorStylesWrapperWidth = parseInt( editorStylesWrapper.offsetWidth )
-				if( editorStylesWrapperWidth < 1350 ) {
-					editorStylesWrapper.classList.remove( 'ast-stacked-title-visibility' );
-					editorStylesWrapper.classList.add( 'ast-stacked-title-visibility' );
-				} else {
-					editorStylesWrapper.classList.remove( 'ast-stacked-title-visibility' );
-				}
+				astraObserveCanvasWidth( editorStylesWrapper );
 			}
 
-			/**
-			 * In WP-5.9 block editor comes up with color palette showing color-code canvas, but with theme var() CSS its appearing directly as it is. So updated them on wp.data event.
-			 */
-			const customColorPickerButtons = document.querySelectorAll( '.components-color-palette__custom-color-value' );
+			// Store-derived device — the DOM preview classes may not be committed yet when this pass runs.
+			const previewDevice = astraGetPreviewDevice();
+			document.body.classList.toggle( 'responsive-enabled', 'desktop' !== previewDevice );
 
-			for ( let btnCount = 0; btnCount < customColorPickerButtons.length; btnCount++ ) {
-				let colorCode = customColorPickerButtons[btnCount].innerText,
-					transformedCode = colorCode.toLowerCase();
-				if ( colorCode.indexOf( 'VAR(--AST-GLOBAL-COLOR' ) > -1 ) {
-					customColorPickerButtons[btnCount].innerHTML = astraColors[ transformedCode ];
-				}
-			}
-
-			// Show post/page title wrapper outline & eye icon only when clicked.
-			const titleInput     = editorDocument.querySelector('.editor-post-title__input');
-			const visibilityIcon = editorDocument.querySelector('.title-visibility');
-			if( null != titleInput && null != visibilityIcon ) {
-				if ( ! astraColors.ast_wp_version_higher_6_3 ) {
-					editorDocument.addEventListener('click', function (event){
-						if( ! titleBlock.contains( event.target ) ){
-							visibilityIcon.classList.remove('ast-show-visibility-icon');
-							titleInput.classList.remove('ast-show-editor-title-outline');
-						}
-					});
-				}
-				editorDocument.addEventListener('visibilitychange', function (){
-						visibilityIcon.classList.remove('ast-show-visibility-icon');
-						titleInput.classList.remove('ast-show-editor-title-outline');
-				});
-				titleBlock.addEventListener('focusout', function (){
-					visibilityIcon.classList.remove('ast-show-visibility-icon');
-					titleInput.classList.remove('ast-show-editor-title-outline');
-				});
-				titleBlock.addEventListener('click', function (){
-					visibilityIcon.classList.add('ast-show-visibility-icon');
-					titleInput.classList.add('ast-show-editor-title-outline');
-				});
-				titleInput.addEventListener('input', function (){
-					visibilityIcon.classList.add('ast-show-visibility-icon');
-					this.classList.add('ast-show-editor-title-outline');
-				});
-			}
-
-			var responsivePreview = document.querySelectorAll( '.is-tablet-preview, .is-mobile-preview' );
-			if( responsivePreview.length ) {
-				document.body.classList.add( 'responsive-enabled' );
-			} else {
-				document.body.classList.remove( 'responsive-enabled' );
-			}
-
-			// Adding 'inherit-container-width' width to Group block externally.
-			let postBlocks = ( undefined !== wp.data.select( 'core/editor' ) && null !== wp.data.select( 'core/editor' ) && undefined !== wp.data.select( 'core/editor' ).getCurrentPost() && undefined !== wp.data.select( 'core/block-editor' ).getBlocks() ) ? wp.data.select( 'core/block-editor' ).getBlocks() : false,
-				groupBlocks = document.querySelectorAll( '.block-editor-block-list__layout.is-root-container > .wp-block-group' );
-			if( postBlocks && groupBlocks ) {
-				for ( let blockNum = 0; blockNum < postBlocks.length; blockNum++ ) {
-					if( 'core/group' === postBlocks[blockNum].name && undefined !== postBlocks[blockNum].attributes && undefined !== postBlocks[blockNum].attributes.layout && undefined !== postBlocks[blockNum].attributes.layout.inherit ) {
-						if( undefined === groupBlocks[blockNum] ) {
-							return;
-						}
-						if( ! postBlocks[blockNum].attributes.layout.inherit ) {
-							groupBlocks[blockNum].classList.remove( 'inherit-container-width' );
-						}
-						if( postBlocks[blockNum].attributes.layout.inherit && ! groupBlocks[blockNum].classList.contains( 'inherit-container-width' ) ) {
-							groupBlocks[blockNum].classList.add( 'inherit-container-width' );
-						}
-					}
-				}
-			}
 
 			// Live reflections for page background setting.
 			if ( astraColors.is_astra_pro_colors_activated ) {
@@ -542,10 +657,10 @@ function astra_onload_function() {
 
 				if ( 'enabled' === backgroundToggle ) {
 					if ( isUnboxedContainer ) {
-						updatePageBackground( false, isUnboxedContainer );
+						updatePageBackground( false, isUnboxedContainer, previewDevice );
 					}
 					else {
-						updatePageBackground();
+						updatePageBackground( false, false, previewDevice );
 					}
 				}
 				else if ( 'default' === backgroundToggle ) {
@@ -575,15 +690,16 @@ function astra_onload_function() {
 /*
 * Updates the page background css from the color picker.
 */
-const updatePageBackground = ( apply_customizer_default = false, isUnboxedContainer = false ) => {
+const updatePageBackground = ( apply_customizer_default = false, isUnboxedContainer = false, device = 'desktop' ) => {
 
 	// Document as per wp version.
 	let editorDoc = document;
+	let is_boxed_based_layout = false;
 	
 	let _iframe = document.querySelector("#editor iframe.editor-canvas__iframe") || document.querySelector('.block-editor-iframe__scale-container iframe[name="editor-canvas"]');
 	
 	if (_iframe && astraColors.ast_wp_version_higher_6_4) {
-		editorDoc = _iframe.contentWindow.document;
+		editorDoc = astraGetIframeDoc( _iframe ) || editorDoc;
 	}
 
 	let desktopPreview = editorDoc.getElementsByClassName('is-desktop-preview'),
@@ -600,7 +716,7 @@ const updatePageBackground = ( apply_customizer_default = false, isUnboxedContai
 
 		let iframe = undefined !== devicePreview ? devicePreview.getElementsByTagName('iframe')[0] : undefined;
 		if ( iframe && devicePreview.querySelector('iframe') !== null ) {
-			editorDoc = iframe.contentWindow.document || iframe.contentDocument;
+			editorDoc = astraGetIframeDoc( iframe ) || editorDoc;
 		}
 	}
 
@@ -638,20 +754,20 @@ const updatePageBackground = ( apply_customizer_default = false, isUnboxedContai
 	}
 
 	let bgObj = (undefined !== wp.data.select('core/editor') &&
-    null !== wp.data.select('core/editor') &&
-    undefined !== wp.data.select('core/editor').getEditedPostAttribute('meta') &&
-    wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-page-background-meta'])
-    ? wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-page-background-meta']
-    : 'default';
+	null !== wp.data.select('core/editor') &&
+	undefined !== wp.data.select('core/editor').getEditedPostAttribute('meta') &&
+	wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-page-background-meta'])
+	? wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-page-background-meta']
+	: 'default';
 
 	let contentObj = (undefined !== wp.data.select('core/editor') &&
-    null !== wp.data.select('core/editor') &&
-    undefined !== wp.data.select('core/editor').getEditedPostAttribute('meta') &&
-    wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-content-background-meta'])
-    ? wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-content-background-meta']
-    : 'default';
+	null !== wp.data.select('core/editor') &&
+	undefined !== wp.data.select('core/editor').getEditedPostAttribute('meta') &&
+	wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-content-background-meta'])
+	? wp.data.select('core/editor').getEditedPostAttribute('meta')['ast-content-background-meta']
+	: 'default';
 
-	if ( desktopPreview.length > 0 ) {
+	if ( 'desktop' === device ) {
 
 		// Get the background object css values and update page background.
 		const desktopCSS = astraGetResponsiveBackgroundObj(bgObj, 'desktop');
@@ -699,7 +815,7 @@ const updatePageBackground = ( apply_customizer_default = false, isUnboxedContai
 		}
 
 	}
-	else if ( tabletPreview.length > 0 ) {
+	else if ( 'tablet' === device ) {
 
 		// Check current layout.
 		is_boxed_based_layout = false;
@@ -738,7 +854,7 @@ const updatePageBackground = ( apply_customizer_default = false, isUnboxedContai
 
 		}
 	}
-	else if ( mobilePreview.length > 0 ) {
+	else if ( 'mobile' === device ) {
 
 		// Check current layout.
 		is_boxed_based_layout = false;
@@ -787,10 +903,10 @@ function applyStylesToElement( selector, styles, docObj ) {
   if ( docObj ) {
 	  const element = docObj.querySelector(selector);
 	  if (element) {
-      // Remove any prior cache values if set already.
+	  // Remove any prior cache values if set already.
   	  element.style.backgroundImage = 'none';
 	  	Object.keys(styles).forEach((property) => {
-		    element.style[property] = styles[property];
+			element.style[property] = styles[property];
   		});
 	  } else {
 	  	console.error(`Element with selector "${selector}" not found.`);
@@ -898,67 +1014,3 @@ function astraGetResponsiveBackgroundObj(bgObjRes, device) {
 
   return genBgCss;
 }
-
-document.body.addEventListener('mousedown', function () {
-	var blockCssMode = document.querySelector('body').classList.contains('ast-block-legacy')
-	var fontCss = document.getElementById('astra-google-fonts-css');
-	if( true === blockCssMode ){
-		var blockCss = document.getElementById('astra-block-editor-styles-css');
-		var inlineCss = document.getElementById('astra-block-editor-styles-inline-css');
-	} else {
-		var blockCss = document.getElementById('astra-wp-editor-styles-css');
-		var inlineCss = document.getElementById('astra-wp-editor-styles-inline-css');
-	}
-
-	var blockFixCss = null !== blockCss ? blockCss.cloneNode(true) : null;
-	var blockInlineCss = null !== inlineCss ?  inlineCss.cloneNode(true) : null;
-	var blockfontCss = null !== fontCss ? fontCss.cloneNode(true) : null;
-
-	setTimeout( function() {
-
-		let tabletPreview = document.getElementsByClassName('is-tablet-preview');
-		let mobilePreview = document.getElementsByClassName('is-mobile-preview');
-
-		if (0 !== tabletPreview.length || 0 !== mobilePreview.length) {
-			var googleFontId = 'astra-google-fonts-css';
-			if( true === blockCssMode ){
-				var styleTagId = 'astra-block-editor-styles-inline-css';
-				var styleTagBlockId = 'astra-block-editor-styles-css';
-			} else {
-				var styleTagId = 'astra-wp-editor-styles-inline-css';
-				var styleTagBlockId = 'astra-wp-editor-styles-css';
-			}
-			var styleTagId = 'astra-block-editor-styles-inline-css';
-			var styleTagBlockId = 'astra-block-editor-styles-css';
-			googleFontId = 'astra-google-fonts-css';
-			let preview = tabletPreview[0] || mobilePreview[0];
-
-				let iframe = preview.getElementsByTagName('iframe')[0];
-				let iframeDocument = iframe.contentWindow.document || iframe.contentDocument;
-
-				let element = iframeDocument.getElementById(
-					styleTagId
-				);
-				let elementBlock = iframeDocument.getElementById(
-					styleTagBlockId
-				);
-				let elementGoogleFont = iframeDocument.getElementById(
-					googleFontId
-				);
-				if ( (null === element || undefined === element)) {
-
-						iframeDocument.head.appendChild( blockInlineCss );
-				}
-				if ( (null === elementBlock || undefined === elementBlock )) {
-
-					iframeDocument.head.appendChild( blockFixCss );
-				}
-				if ( (null === elementGoogleFont || undefined === elementGoogleFont ) && null !== fontCss) {
-
-					iframeDocument.head.appendChild( blockfontCss );
-				}
-
-		}
-	}, 1000);
-
-});

@@ -495,7 +495,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 			do_action( 'astra_meta_box_markup_after', $meta );
 
 			if ( astra_showcase_upgrade_notices() ) {
-				$nudge_copy = array(
+				$nudge_copy        = array(
 					'product' => __( 'Launch high-converting product pages faster - get 300+ templates and powerful design tools.', 'astra' ),
 					'default' => __( 'Go from blank page to live website faster - get 300+ templates and powerful design tools.', 'astra' ),
 				);
@@ -576,7 +576,6 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 
 					case 'FILTER_DEFAULT':
 						/**
-						 * @psalm-suppress TooManyArguments
 						 * @psalm-suppress PossiblyInvalidArgument
 						 */
 						$meta_value = apply_filters( 'astra_php_default_filter_input', ! empty( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '', $key );
@@ -729,9 +728,10 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 					'is_addon_activated'             => defined( 'ASTRA_EXT_VER' ) ? true : false,
 					'sticky_addon_enabled'           => $astra_ext_extension_class_exists && Astra_Ext_Extension::is_active( 'sticky-header' ) ? true : false,
 					'register_astra_metabox'         => apply_filters( 'astra_settings_metabox_register', $register_astra_metabox ),
-					'is_hide_contnet_layout_sidebar' => $ast_content_layout_sidebar,
+					'is_hide_content_layout_sidebar' => $ast_content_layout_sidebar,
 					'upgrade_pro_link'               => esc_url_raw( astra_get_pro_url( '/pricing/', 'free-theme', 'post-metabox', 'upgrade' ) ),
 					'show_upgrade_notice'            => astra_showcase_upgrade_notices(),
+					'sale'                           => astra_get_bfcm_sale_data(),
 					'logo_url'                       => esc_url( ASTRA_THEME_URI . 'inc/assets/images/astra-logo.svg' ),
 					// Flag needed to check whether user is old or new, true for old user, false for new.
 					'v4_1_6_migration'               => ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support(),
@@ -831,6 +831,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 					'page_bg_dynamic_title'          => $page_bg_dynamic_title,
 					'global_color_palette'           => $global_palette,
 					'color_palette_labels'           => Astra_Global_Palette::get_palette_labels(),
+					'custom_global_colors'           => Astra_Global_Palette::get_custom_colors(),
 				)
 			);
 

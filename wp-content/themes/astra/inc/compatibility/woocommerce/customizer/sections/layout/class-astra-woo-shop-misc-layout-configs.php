@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Bail if Customizer config base class does not exist.
+if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
+	return;
+}
+
 if ( ! class_exists( 'Astra_Woo_Shop_Misc_Layout_Configs' ) ) {
 
 	/**
@@ -62,11 +67,11 @@ if ( ! class_exists( 'Astra_Woo_Shop_Misc_Layout_Configs' ) ) {
 			if ( astra_showcase_upgrade_notices() ) {
 				// Learn More link if Astra Pro is not activated.
 				$_configs[] = array(
-					'name'      => ASTRA_THEME_SETTINGS . '[ast-woo-misc-pro-items]',
-					'type'      => 'control',
-					'control'   => 'ast-upgrade',
-					'campaign'  => 'woocommerce',
-					'choices'   => array(
+					'name'     => ASTRA_THEME_SETTINGS . '[ast-woo-misc-pro-items]',
+					'type'     => 'control',
+					'control'  => 'ast-upgrade',
+					'campaign' => 'woocommerce',
+					'choices'  => array(
 						// 'two'   => array(
 						// 'title' => __( 'Modern input style', 'astra' ),
 						// ),
@@ -88,23 +93,19 @@ if ( ! class_exists( 'Astra_Woo_Shop_Misc_Layout_Configs' ) ) {
 						// 'seven' => array(
 						// 'title' => __( 'Modern thank-you page design', 'astra' ),
 						// ),
-						'one'   => array(
+						'one' => array(
 							'title' => __( 'Advanced Input Field Styles & Border Radius', 'astra' ),
 						),
-						'two'   => array(
+						'two' => array(
 							'title' => __( 'Custom Coupon Text & Step Navigation', 'astra' ),
 						),
-						'three' => array(
-							'title' => __( 'Quantity Plus and Minus Buttons', 'astra' ),
-						),
 					),
-					'section'   => 'section-woo-misc',
-					'default'   => '',
-					'priority'  => 999,
-					'title'     => __( 'Get Sleek Storefront. Better UX', 'astra' ),
-					'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
-					'context'   => array(),
-					'thumbnail' => ASTRA_THEME_URI . 'inc/assets/images/customizer/woo-misc.png',
+					'section'  => 'section-woo-misc',
+					'default'  => '',
+					'priority' => 999,
+					'title'    => __( 'Get Sleek Storefront. Better UX', 'astra' ),
+					'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
+					'context'  => array(),
 				);
 			}
 

@@ -97,6 +97,7 @@ class Astra_Admin_Ajax {
 				'preload_local_fonts'   => 'bool',
 				'use_old_header_footer' => 'bool',
 				'show_learn_tab'        => 'bool',
+				'show_ai_assistant'     => 'bool',
 				'enable_abilities'      => 'bool',
 				'enable_edit_abilities' => 'bool',
 				'enable_mcp_server'     => 'bool',

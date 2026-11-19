@@ -1,3 +1,19 @@
+v1.1.31 - 15-October-2026
+- Improvement: Added `presto-capture` slug to UTM analytics.
+
+v1.1.30 - 29-September-2026
+- Fix: A failed feedback submission no longer blocks the deactivation. An expired nonce or an unreachable analytics API previously left the plugin active with the popup unusable. This applies to every product, not only those using `extra_options`.
+- New: Added an `extra_options` key to the deactivation survey so a product can surface one of its own settings in its popup. The library renders the control and posts the value; the product owns the storage and the capability check. The value is saved when the user commits by deactivating, so abandoning the popup changes nothing, and only a control the user changed is posted. If that save fails the value is left unchanged and a "Deactivate anyway" fallback is offered, so a failed save can never leave a plugin impossible to deactivate from the popup.
+
+v1.1.29 - 30-June-2026
+- Improvement: Added `spectra-blocks` slug to UTM analytics.
+
+v1.1.28 - 22-June-2026
+- Fix: Deactivation survey loaded a non-existent RTL stylesheet (`feedback.min-rtl.css`) producing a 404 in RTL locales. Registered the file suffix so the correct `feedback-rtl.min.css` is requested.
+
+v1.1.27 - 16-June-2026
+- Improvement: Added `SureDonation` slug to UTM analytics.
+
 v1.1.26 - 20-April-2026
 - Improvement: Switched from `Astra_Notices` to `BSF_Admin_Notices`.
 

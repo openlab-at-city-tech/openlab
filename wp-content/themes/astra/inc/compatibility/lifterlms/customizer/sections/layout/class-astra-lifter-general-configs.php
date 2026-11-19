@@ -11,6 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+// Bail if Customizer config base class does not exist.
+if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
+	return;
+}
+
 if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 
 	/**
@@ -107,17 +112,17 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 			if ( astra_showcase_upgrade_notices() ) {
 
 				$_configs[] = array(
-					'name'     => ASTRA_THEME_SETTINGS . '[llms-upgrade-link]',
-					'type'     => 'control',
-					'control'  => 'ast-upgrade',
-					'campaign' => 'lifterlms',
-					'section'  => $section,
-					'priority' => 999,
-					'default'  => '',
-					'context'  => array(),
-					'title'    => __( 'Running Online Courses?', 'astra' ),
+					'name'        => ASTRA_THEME_SETTINGS . '[llms-upgrade-link]',
+					'type'        => 'control',
+					'control'     => 'ast-upgrade',
+					'campaign'    => 'lifterlms',
+					'section'     => $section,
+					'priority'    => 999,
+					'default'     => '',
+					'context'     => array(),
+					'title'       => __( 'Running Online Courses?', 'astra' ),
 					'description' => __( 'Optimize your LMS for conversion & retention with Business Toolkit!', 'astra' ),
-					'choices'  => array(
+					'choices'     => array(
 						'one'   => array(
 							'title' => __( 'Automate management workflows with OttoKit', 'astra' ),
 						),
@@ -134,7 +139,7 @@ if ( ! class_exists( 'Astra_Lifter_General_Configs' ) ) {
 							'title' => __( 'Improved student engagement', 'astra' ),
 						),
 					),
-					'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
+					'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
 				);
 
 			}

@@ -75,6 +75,21 @@ function setWooDefaultAlignments() {
 }
 
 // Listen for the first insertion of a WooCommerce block
+let astraLastRootBlockOrder = null;
 wp.data.subscribe(() => {
+	const blockEditorSelect = wp.data.select( 'core/block-editor' );
+	if ( ! blockEditorSelect ) {
+		return;
+	}
+
+	// Root block order changes only on insert/remove/move — never while typing. The memoized selector
+	// returns the same array reference while the order is unchanged, so compare references.
+	// The alignment sync only targets root-level WooCommerce blocks, so skip every other notification.
+	const rootBlockOrder = blockEditorSelect.getBlockOrder();
+	if ( rootBlockOrder === astraLastRootBlockOrder ) {
+		return;
+	}
+	astraLastRootBlockOrder = rootBlockOrder;
+
 	setWooDefaultAlignments();
-});
+}, 'core/block-editor');

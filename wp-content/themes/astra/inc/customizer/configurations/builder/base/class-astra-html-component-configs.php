@@ -76,23 +76,24 @@ class Astra_Html_Component_Configs {
 				 * Option: Html Editor.
 				 */
 				array(
-					'name'        => ASTRA_THEME_SETTINGS . '[' . $builder_type . '-html-' . $index . ']',
-					'type'        => 'control',
-					'control'     => 'ast-html-editor',
-					'section'     => $_section,
-					'transport'   => 'postMessage',
-					'priority'    => 4,
-					'default'     => astra_get_option( $builder_type . '-html-' . $index ),
-					'input_attrs' => array(
+					'name'              => ASTRA_THEME_SETTINGS . '[' . $builder_type . '-html-' . $index . ']',
+					'type'              => 'control',
+					'control'           => 'ast-html-editor',
+					'section'           => $_section,
+					'transport'         => 'postMessage',
+					'priority'          => 4,
+					'default'           => astra_get_option( $builder_type . '-html-' . $index ),
+					'input_attrs'       => array(
 						'id' => $builder_type . '-html-' . $index,
 					),
-					'partial'     => array(
+					'partial'           => array(
 						'selector'         => '.ast-' . $builder_type . '-html-' . $index,
 						'render_callback'  => array( $class_obj, $builder_type . '_html_' . $index ),
 						'fallback_refresh' => false,
 					),
-					'context'     => Astra_Builder_Helper::$general_tab,
-					'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
+					'context'           => Astra_Builder_Helper::$general_tab,
+					'divider'           => array( 'ast_class' => 'ast-section-spacing' ),
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_html_widget' ),
 				),
 
 				/**

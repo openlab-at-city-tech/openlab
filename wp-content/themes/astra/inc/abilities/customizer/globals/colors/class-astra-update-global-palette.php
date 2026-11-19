@@ -58,55 +58,17 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 					'enum'        => array( 'palette_1', 'palette_2', 'palette_3', 'palette_4' ),
 				),
 				'colors'         => array(
-					'type'        => 'object',
-					'description' => 'Color values to update. Use color index (0-8) as keys and hex color values. Example: {"0": "#046bd2", "1": "#045cb4"}. These will override preset colors if both are provided.',
-					'properties'  => array(
-						'0' => array(
+					'type'                 => 'object',
+					'description'          => 'Color values to update. Use color index (0-8) as keys and hex color values. Example: {"0": "#046bd2", "1": "#045cb4"}. These will override preset colors if both are provided. Indices map to: 0 Primary, 1 Primary Hover, 2 Heading, 3 Text, 4 Background, 5 Secondary Background, 6 Border, 7 Secondary Border, 8 Accent.',
+					// Numeric named properties would serialize as a JSON array, and an object cast fatals WP core's validator.
+					'patternProperties'    => array(
+						'^[0-8]$' => array(
 							'type'        => 'string',
-							'description' => 'Color 0 - Primary color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'1' => array(
-							'type'        => 'string',
-							'description' => 'Color 1 - Primary hover color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'2' => array(
-							'type'        => 'string',
-							'description' => 'Color 2 - Heading color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'3' => array(
-							'type'        => 'string',
-							'description' => 'Color 3 - Text color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'4' => array(
-							'type'        => 'string',
-							'description' => 'Color 4 - Background color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'5' => array(
-							'type'        => 'string',
-							'description' => 'Color 5 - Secondary background color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'6' => array(
-							'type'        => 'string',
-							'description' => 'Color 6 - Border color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'7' => array(
-							'type'        => 'string',
-							'description' => 'Color 7 - Secondary border color (hex format)',
-							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
-						),
-						'8' => array(
-							'type'        => 'string',
-							'description' => 'Color 8 - Accent color (hex format)',
+							'description' => 'Palette color in hex format (e.g. "#046bd2").',
 							'pattern'     => '^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$',
 						),
 					),
+					'additionalProperties' => false,
 				),
 				'set_as_current' => array(
 					'type'        => 'boolean',
@@ -142,7 +104,7 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 					'description' => 'Labels for each color index.',
 				),
 				'applied_preset' => array(
-					'type'        => 'string',
+					'type'        => array( 'string', 'null' ),
 					'description' => 'Name of the preset applied, if any.',
 				),
 			)
@@ -204,8 +166,17 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 
 		$palette_data['palettes'] = isset( $palette_data['palettes'] ) && is_array( $palette_data['palettes'] ) ? $palette_data['palettes'] : array();
 
-		if ( ! isset( $palette_data['palettes'][ $palette_id ] ) ) {
-			$palette_data['palettes'][ $palette_id ] = array_fill( 0, 9, '#000000' );
+		$custom_colors_count = isset( $palette_data['customColors'] ) && is_array( $palette_data['customColors'] ) ? count( $palette_data['customColors'] ) : 0;
+
+		/** @psalm-suppress PossiblyUndefinedStringArrayOffset -- 'palettes' is guaranteed by the assignment above. */
+		if ( ! isset( $palette_data['palettes'][ $palette_id ] ) || ! is_array( $palette_data['palettes'][ $palette_id ] ) ) {
+			// A 9-slot seed would misalign the palette with the customColors metadata and truncate the live palette on apply.
+			$palette_data['palettes'][ $palette_id ] = array_merge( array_fill( 0, 9, '#000000' ), array_fill( 0, $custom_colors_count, '#FFFFFF' ) );
+		} elseif ( count( $palette_data['palettes'][ $palette_id ] ) < 9 + $custom_colors_count ) {
+			$palette_data['palettes'][ $palette_id ] = array_merge(
+				$palette_data['palettes'][ $palette_id ],
+				array_fill( 0, 9 + $custom_colors_count - count( $palette_data['palettes'][ $palette_id ] ), '#FFFFFF' )
+			);
 		}
 
 		$applied_preset = '';
@@ -226,7 +197,9 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 				}
 
 				if ( $preset_key && isset( $presets[ $preset_key ] ) ) {
-					$palette_data['palettes'][ $palette_id ] = $presets[ $preset_key ];
+					// Presets only carry the 9 theme slots - keep user defined custom colors ( slots 9+ ) intact.
+					$custom_slots                            = array_slice( $palette_data['palettes'][ $palette_id ], 9 );
+					$palette_data['palettes'][ $palette_id ] = array_merge( $presets[ $preset_key ], $custom_slots );
 					$applied_preset                          = $preset_key;
 				} else {
 					return Astra_Abilities_Response::error(
@@ -285,12 +258,13 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 				$global_palette['palette'] = array();
 			}
 
-			$active_palette = isset( $palettes[ $palette_id ] ) ? $palettes[ $palette_id ] : array();
-			foreach ( $active_palette as $index => $color ) {
-				$global_palette['palette'][ $index ] = $color;
-			}
+			$active_palette = isset( $palettes[ $palette_id ] ) && is_array( $palettes[ $palette_id ] ) ? $palettes[ $palette_id ] : array();
 
-			$theme_options = get_option( ASTRA_THEME_SETTINGS, array() );
+			// Replace wholesale - merging index-by-index would leave the previously active
+			// palette's custom color values ( slots 9+ ) live when the new palette has fewer slots.
+			$global_palette['palette'] = array_values( $active_palette );
+
+			$theme_options = astra_get_raw_options();
 			if ( ! is_array( $theme_options ) ) {
 				$theme_options = array();
 			}
@@ -307,6 +281,9 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 			$colors[ (string) $i ] = isset( $updated_palette[ $i ] ) ? $updated_palette[ $i ] : '';
 		}
 
+		// PHP normalizes the "0".."8" keys to integers, so json_encode would ship an array, not an object.
+		$colors = (object) $colors;
+
 		$message = ! empty( $applied_preset )
 			/* translators: %s: preset name */
 			? sprintf( __( 'Global palette updated successfully with %s preset.', 'astra' ), $applied_preset )
@@ -318,7 +295,7 @@ class Astra_Update_Global_Palette extends Astra_Abstract_Ability {
 				'palette_id'     => $palette_id,
 				'is_current'     => $is_current,
 				'colors'         => $colors,
-				'color_labels'   => array(
+				'color_labels'   => (object) array(
 					'0' => 'Primary',
 					'1' => 'Primary Hover',
 					'2' => 'Heading',

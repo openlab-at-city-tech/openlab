@@ -43,3 +43,9 @@ function astra_abilities_init() {
 
 // Initialize after theme setup so astra_get_option() is available.
 add_action( 'after_setup_theme', 'astra_abilities_init' );
+
+// Register WP-CLI commands unconditionally so they work regardless of abilities toggle state.
+if ( defined( 'WP_CLI' ) && WP_CLI ) {
+	require_once ASTRA_THEME_DIR . 'inc/abilities/class-astra-abilities-cli.php';
+	WP_CLI::add_command( 'astra abilities', 'Astra_Abilities_CLI' );
+}

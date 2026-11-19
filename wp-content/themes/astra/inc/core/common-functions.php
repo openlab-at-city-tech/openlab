@@ -164,7 +164,7 @@ if ( ! function_exists( 'astra_get_font_css_value' ) ) {
 	function astra_get_font_css_value( $value, $unit = 'px', $device = 'desktop' ) {
 
 		// If value is empty then return blank.
-		if ( '' == $value || ( 0 == $value && ! astra_zero_font_size_case() ) ) {
+		if ( '' === $value || 0 === $value || 0.0 === $value || ( 0 == $value && ! astra_zero_font_size_case() ) ) {
 			return '';
 		}
 
@@ -543,6 +543,85 @@ if ( ! function_exists( 'astra_get_options' ) ) {
 }
 
 /**
+ * Return theme options from the database, bypassing option filters.
+ */
+if ( ! function_exists( 'astra_get_raw_options' ) ) {
+
+	/**
+	 * Retrieve the astra-settings option value without `pre_option_` / `option_` filters applied.
+	 *
+	 * Plugins like WPML String Translation filter `option_astra-settings` to replace registered
+	 * admin texts (header/footer HTML, button labels, etc.) with translations for the current
+	 * language. Reading the option through that filter and writing the whole array back would
+	 * permanently save translated strings into the database. Any read-modify-write of the full
+	 * options array must read through this function instead of get_option().
+	 *
+	 * @param mixed $default_value Value to return if the option does not exist.
+	 * @return mixed The stored theme options array, or $default_value if not set.
+	 *
+	 * @since 4.13.9
+	 */
+	function astra_get_raw_options( $default_value = array() ) {
+		$detached      = astra_detach_option_filters();
+		$theme_options = get_option( ASTRA_THEME_SETTINGS, $default_value );
+		astra_restore_option_filters( $detached );
+
+		return $theme_options;
+	}
+}
+
+/**
+ * Detach the astra-settings option filters.
+ */
+if ( ! function_exists( 'astra_detach_option_filters' ) ) {
+
+	/**
+	 * Detach all `pre_option_` / `option_` filters registered for astra-settings.
+	 *
+	 * @return array Detached hooks, keyed by hook name. Pass to astra_restore_option_filters().
+	 *
+	 * @since 4.13.9
+	 */
+	function astra_detach_option_filters() {
+		global $wp_filter;
+
+		$hooks    = array( 'pre_option_' . ASTRA_THEME_SETTINGS, 'option_' . ASTRA_THEME_SETTINGS );
+		$detached = array();
+
+		foreach ( $hooks as $hook ) {
+			if ( isset( $wp_filter[ $hook ] ) ) {
+				$detached[ $hook ] = $wp_filter[ $hook ];
+				unset( $wp_filter[ $hook ] );
+			}
+		}
+
+		return $detached;
+	}
+}
+
+/**
+ * Restore previously detached astra-settings option filters.
+ */
+if ( ! function_exists( 'astra_restore_option_filters' ) ) {
+
+	/**
+	 * Re-attach option filters detached via astra_detach_option_filters().
+	 *
+	 * @param array $detached Detached hooks, keyed by hook name.
+	 * @return void
+	 *
+	 * @since 4.13.9
+	 */
+	function astra_restore_option_filters( $detached ) {
+		global $wp_filter;
+
+		foreach ( $detached as $hook => $callbacks ) {
+			$wp_filter[ $hook ] = $callbacks; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Restoring the filters detached in astra_detach_option_filters().
+		}
+	}
+}
+
+/**
  * Return Theme option.
  */
 if ( ! function_exists( 'astra_get_option' ) ) {
@@ -665,7 +744,7 @@ if ( ! function_exists( 'astra_update_option' ) ) {
 		do_action( "astra_before_update_option_{$option}", $value, $option );
 
 		// Get all customizer options.
-		$theme_options = get_option( ASTRA_THEME_SETTINGS );
+		$theme_options = astra_get_raw_options();
 
 		// Update value in options array.
 		if ( ! is_array( $theme_options ) ) {
@@ -692,7 +771,7 @@ if ( ! function_exists( 'astra_delete_option' ) ) {
 		do_action( "astra_before_delete_option_{$option}", $option );
 
 		// Get all customizer options.
-		$theme_options = get_option( ASTRA_THEME_SETTINGS );
+		$theme_options = astra_get_raw_options();
 
 		// Update value in options array.
 		unset( $theme_options[ $option ] );
@@ -759,7 +838,7 @@ if ( ! function_exists( 'astra_get_post_id' ) ) {
 	 * Get post ID.
 	 *
 	 * @param  string $post_id_override Get override post ID.
-	 * @return number                   Post ID.
+	 * @return int                      Post ID.
 	 */
 	function astra_get_post_id( $post_id_override = '' ) {
 
@@ -772,6 +851,7 @@ if ( ! function_exists( 'astra_get_post_id' ) ) {
 				$post_id = get_option( 'page_for_posts' );
 			} elseif (
 				function_exists( 'wc_get_page_id' ) &&
+				! is_search() &&
 				(
 					( function_exists( 'is_shop' ) && is_shop() ) ||
 					( function_exists( 'is_product_category' ) && is_product_category() ) ||
@@ -1620,6 +1700,32 @@ function astra_get_fonts_display_property() {
 }
 
 /**
+ * Strip characters that would let a CSS value escape its own declaration.
+ *
+ * astra_parse_css() concatenates values into "selector{property:value;}" with no
+ * CSS-context escaping, and esc_attr() does not neutralise ";", "{" or "}".
+ *
+ * @since 4.14.0
+ * @param mixed $value Raw CSS value.
+ * @return string Value safe to interpolate into a CSS declaration.
+ */
+function astra_sanitize_css_value( $value ) {
+	if ( ! is_scalar( $value ) ) {
+		return '';
+	}
+
+	$value = (string) $value;
+
+	// Loop until stable so a removed char can't let a forbidden sequence re-form (e.g. "/{*" -> "/*").
+	do {
+		$prev  = $value;
+		$value = str_replace( array( '/*', '*/', ';', '{', '}', '<', '>' ), '', $value );
+	} while ( $prev !== $value );
+
+	return trim( $value );
+}
+
+/**
  * Sanitize background meta object for post meta storage.
  *
  * @since 4.12.4
@@ -1639,7 +1745,7 @@ function astra_sanitize_background_meta( $meta_value ) {
 			continue;
 		}
 		foreach ( $meta_value[ $device ] as $key => $value ) {
-			$sanitized[ $device ][ $key ] = sanitize_text_field( $value );
+			$sanitized[ $device ][ $key ] = astra_sanitize_css_value( sanitize_text_field( $value ) );
 		}
 	}
 
@@ -1662,10 +1768,10 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 	}
 
 	$bg_obj      = isset( $bg_obj_res[ $device ] ) ? $bg_obj_res[ $device ] : array();
-	$bg_img      = isset( $bg_obj['background-image'] ) ? esc_attr( $bg_obj['background-image'] ) : '';
-	$bg_tab_img  = isset( $bg_obj_res['tablet']['background-image'] ) ? esc_attr( $bg_obj_res['tablet']['background-image'] ) : '';
-	$bg_desk_img = isset( $bg_obj_res['desktop']['background-image'] ) ? esc_attr( $bg_obj_res['desktop']['background-image'] ) : '';
-	$bg_color    = isset( $bg_obj['background-color'] ) ? esc_attr( $bg_obj['background-color'] ) : '';
+	$bg_img      = isset( $bg_obj['background-image'] ) ? astra_sanitize_css_value( esc_attr( $bg_obj['background-image'] ) ) : '';
+	$bg_tab_img  = isset( $bg_obj_res['tablet']['background-image'] ) ? astra_sanitize_css_value( esc_attr( $bg_obj_res['tablet']['background-image'] ) ) : '';
+	$bg_desk_img = isset( $bg_obj_res['desktop']['background-image'] ) ? astra_sanitize_css_value( esc_attr( $bg_obj_res['desktop']['background-image'] ) ) : '';
+	$bg_color    = isset( $bg_obj['background-color'] ) ? astra_sanitize_css_value( esc_attr( $bg_obj['background-color'] ) ) : '';
 	$tablet_css  = isset( $bg_obj_res['tablet']['background-image'] ) && $bg_obj_res['tablet']['background-image'] ? true : false;
 	$desktop_css = isset( $bg_obj_res['desktop']['background-image'] ) && $bg_obj_res['desktop']['background-image'] ? true : false;
 
@@ -1706,11 +1812,12 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				$overlay_type = isset( $bg_obj['overlay-type'] ) ? $bg_obj['overlay-type'] : 'none';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$overlay_color = isset( $bg_obj['overlay-color'] ) ? esc_attr( $bg_obj['overlay-color'] ) : '';
+				$overlay_color = isset( $bg_obj['overlay-color'] ) ? astra_sanitize_css_value( esc_attr( $bg_obj['overlay-color'] ) ) : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$overlay_grad = isset( $bg_obj['overlay-gradient'] ) ? esc_attr( $bg_obj['overlay-gradient'] ) : '';
+				$overlay_grad = isset( $bg_obj['overlay-gradient'] ) ? astra_sanitize_css_value( esc_attr( $bg_obj['overlay-gradient'] ) ) : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-				$overlay_opacity = isset( $bg_obj['overlay-opacity'] ) ? $bg_obj['overlay-opacity'] : '';
+				// Force numeric before it reaches astra_hex_to_rgba()'s abs().
+				$overlay_opacity = isset( $bg_obj['overlay-opacity'] ) && '' !== $bg_obj['overlay-opacity'] ? floatval( $bg_obj['overlay-opacity'] ) : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 				if ( '' !== $bg_img ) {
@@ -1759,19 +1866,19 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 
 	if ( '' !== $bg_img ) {
 		if ( isset( $bg_obj['background-repeat'] ) ) {
-			$gen_bg_css['background-repeat'] = esc_attr( $bg_obj['background-repeat'] );
+			$gen_bg_css['background-repeat'] = astra_sanitize_css_value( esc_attr( $bg_obj['background-repeat'] ) );
 		}
 
 		if ( isset( $bg_obj['background-position'] ) ) {
-			$gen_bg_css['background-position'] = esc_attr( $bg_obj['background-position'] );
+			$gen_bg_css['background-position'] = astra_sanitize_css_value( esc_attr( $bg_obj['background-position'] ) );
 		}
 
 		if ( isset( $bg_obj['background-size'] ) ) {
-			$gen_bg_css['background-size'] = esc_attr( $bg_obj['background-size'] );
+			$gen_bg_css['background-size'] = astra_sanitize_css_value( esc_attr( $bg_obj['background-size'] ) );
 		}
 
 		if ( isset( $bg_obj['background-attachment'] ) ) {
-			$gen_bg_css['background-attachment'] = esc_attr( $bg_obj['background-attachment'] );
+			$gen_bg_css['background-attachment'] = astra_sanitize_css_value( esc_attr( $bg_obj['background-attachment'] ) );
 		}
 	}
 
@@ -2331,5 +2438,82 @@ if ( ! function_exists( 'astra_flip_rtl_alignment' ) ) {
 			default:
 				return $alignment;
 		}
+	}
+}
+
+if ( ! function_exists( 'astra_get_html_widget_allowed_tags' ) ) {
+	/**
+	 * Allowed HTML tags for Header/Footer Builder HTML widget content.
+	 *
+	 * @param bool   $allow_iframe Whether to allow <iframe>.
+	 * @param string $content      Content being filtered, passed on to the filter.
+	 * @return array Allowed HTML tags and attributes.
+	 * @since 4.13.11
+	 */
+	function astra_get_html_widget_allowed_tags( $allow_iframe = true, $content = '' ) {
+
+		$allowed_html = wp_kses_allowed_html( 'post' );
+
+		// Add here additional tags that weren't working if you got something.
+		$additional_tags = array(
+			'select'   => array(
+				'name'     => true,
+				'id'       => true,
+				'class'    => true,
+				'multiple' => true,
+				'size'     => true,
+				'required' => true,
+				'disabled' => true,
+				'style'    => true,
+			),
+			'option'   => array(
+				'value'    => true,
+				'selected' => true,
+				'disabled' => true,
+				'class'    => true,
+				'id'       => true,
+			),
+			'optgroup' => array(
+				'label'    => true,
+				'disabled' => true,
+				'class'    => true,
+			),
+		);
+
+		if ( $allow_iframe ) {
+			$additional_tags['iframe'] = array(
+				'src'             => true,
+				'width'           => true,
+				'height'          => true,
+				'frameborder'     => true,
+				'allowfullscreen' => true,
+				'style'           => true,
+				'title'           => true,
+				'loading'         => true,
+				'referrerpolicy'  => true,
+				'sandbox'         => true,
+				'class'           => true,
+				'id'              => true,
+			);
+		}
+
+		$allowed_html = array_merge( $allowed_html, $additional_tags );
+
+		/**
+		 * Filter allowed HTML tags for HTML widget content.
+		 *
+		 * @param array $allowed_html Array of allowed HTML tags and attributes.
+		 * @param string $content The HTML content being filtered.
+		 * @param bool $allow_iframe Whether <iframe> is allowed for this caller.
+		 * @since 4.11.11
+		 */
+		$allowed_html = apply_filters( 'astra_html_widget_allowed_html', $allowed_html, $content, $allow_iframe );
+
+		// The gate stays authoritative: a filter callback cannot re-add <iframe> for an author without unfiltered_html.
+		if ( ! $allow_iframe ) {
+			unset( $allowed_html['iframe'] );
+		}
+
+		return $allowed_html;
 	}
 }

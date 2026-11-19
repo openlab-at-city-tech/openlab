@@ -104,8 +104,8 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 
 	$css_output_desktop = array(
 
-		$selector . ' .menu-item > .menu-link'             => astra_get_font_array_css( astra_get_option( 'header-mobile-menu-font-family' ), astra_get_option( 'header-mobile-menu-font-weight' ), array(), 'font-extras-header-mobile-menu' ),
-		$selector                                          => array(
+		$selector . ' .menu-item > .menu-link' => astra_get_font_array_css( astra_get_option( 'header-mobile-menu-font-family' ), astra_get_option( 'header-mobile-menu-font-weight' ), array(), 'font-extras-header-mobile-menu' ),
+		$selector                              => array(
 			'font-size' => astra_get_font_css_value( $menu_font_size_desktop, $menu_font_size_desktop_unit ),
 		),
 		$selector . ' .main-header-menu .menu-item > .menu-link' => array(
@@ -146,7 +146,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 			'content' => 'unset',
 		),
 		// Margin CSS.
-		$margin_selector                                   => array(
+		$margin_selector                       => array(
 			'margin-top'    => astra_responsive_spacing( $margin, 'top', 'desktop' ),
 			'margin-bottom' => astra_responsive_spacing( $margin, 'bottom', 'desktop' ),
 			'margin-left'   => astra_responsive_spacing( $margin, 'left', 'desktop' ),
@@ -161,7 +161,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 
 	$css_output_tablet = array(
 
-		$selector                                          => array(
+		$selector        => array(
 			'font-size' => astra_get_font_css_value( $menu_font_size_tablet, $menu_font_size_tablet_unit ),
 		),
 		$selector . ' .main-header-menu .menu-item > .menu-link' => array(
@@ -196,7 +196,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 			'content' => 'unset',
 		),
 		// Margin CSS.
-		$margin_selector                                   => array(
+		$margin_selector => array(
 			'margin-top'    => astra_responsive_spacing( $margin, 'top', 'tablet' ),
 			'margin-bottom' => astra_responsive_spacing( $margin, 'bottom', 'tablet' ),
 			'margin-left'   => astra_responsive_spacing( $margin, 'left', 'tablet' ),

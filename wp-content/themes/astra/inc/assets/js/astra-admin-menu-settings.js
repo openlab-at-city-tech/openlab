@@ -24,8 +24,8 @@
 		_bind: function()
 		{
 			$( document ).on('ast-after-plugin-active', AstraThemeAdmin._disableActivcationNotice );
-			$( document ).on('click' , '.astra-install-recommended-plugin', AstraThemeAdmin._installNow );
-			$( document ).on('click' , '.astra-activate-recommended-plugin', AstraThemeAdmin._activatePlugin);
+			$( document ).on('click', '.astra-install-recommended-plugin', AstraThemeAdmin._installNow );
+			$( document ).on('click', '.astra-activate-recommended-plugin', AstraThemeAdmin._activatePlugin);
 			$( document ).on('wp-plugin-install-success' , AstraThemeAdmin._activatePlugin);
 			$( document ).on('wp-plugin-install-error'   , AstraThemeAdmin._installError);
 			$( document ).on('wp-plugin-installing'      , AstraThemeAdmin._pluginInstalling);

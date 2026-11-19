@@ -500,11 +500,11 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 			$body_font_weight = astra_get_option( 'body-font-weight' );
 
 			if ( is_array( $body_font_size ) ) {
-				$body_font_size_desktop = isset( $body_font_size['desktop'] ) && '' != $body_font_size['desktop'] ? $body_font_size['desktop'] : 15;
+				$body_font_size_desktop = isset( $body_font_size['desktop'] ) && is_numeric( $body_font_size['desktop'] ) && 0.0 !== (float) $body_font_size['desktop'] ? $body_font_size['desktop'] : 15;
 				// Convert to appropriate pixels if the unit is 'rem'.
 				$body_font_size_desktop = ! empty( $body_font_size['desktop-unit'] ) && $body_font_size['desktop-unit'] === 'rem' ? $body_font_size_desktop * 16 : $body_font_size_desktop;
 			} else {
-				$body_font_size_desktop = '' != $body_font_size ? $body_font_size : 15;
+				$body_font_size_desktop = is_numeric( $body_font_size ) && 0.0 !== (float) $body_font_size ? $body_font_size : 15;
 			}
 			// check the selection color incase of empty/no theme color.
 			$selection_text_color = 'transparent' === $highlight_theme_color ? '' : $highlight_theme_color;
@@ -1013,9 +1013,15 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 				}
 			}
 
-			if ( false === $enable_site_accessibility ) {
+			if ( ! $enable_site_accessibility ) {
 				$css_output[ $html_selectors_focus_only_inputs . ', ' . $html_selectors_focus_visible ] = array(
 					'outline-style' => 'none',
+				);
+
+				// Static CSS uses :focus (not :focus-visible) for these elements; override explicitly.
+				$css_output['.ast-menu-toggle:focus, .ast-button-wrap .menu-toggle:focus'] = array(
+					'outline'      => 'none',
+					'border-color' => 'transparent',
 				);
 
 				$css_output['.ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-form, .ast-header-search .ast-search-menu-icon.ast-dropdown-active .search-field:focus'] = array(
@@ -1028,7 +1034,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 					'color' => 'var(--ast-global-color-1)',
 				);
 
-				if ( false === $enable_site_accessibility ) {
+				if ( ! $enable_site_accessibility ) {
 					$css_output['.ast-header-search .slide-search .search-form'] = array(
 						'border' => '2px solid var(--ast-global-color-0)',
 					);
@@ -1260,7 +1266,7 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						),
 					),
 					'',
-					number_format( absint( astra_get_tablet_breakpoint() ) + 0.9, 1, '.', '' )
+					number_format( absint( astra_get_tablet_breakpoint() ) + 0.98, 2, '.', '' )
 				);
 
 				$parse_css .= astra_parse_css(
@@ -2939,9 +2945,6 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 						),
 					);
-
-					/* Parse CSS from array() */
-					$parse_css .= astra_parse_css( $ele_btn_color_builder_desktop );
 				}
 
 				$global_button_page_builder_text_color_desktop = array(
@@ -2952,6 +2955,11 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 
 				/* Parse CSS from array() */
 				$parse_css .= astra_parse_css( $global_button_page_builder_text_color_desktop );
+
+				// Output hover rule after the :visited/base rule so hover wins the cascade (equal specificity, last rule wins).
+				if ( isset( $ele_btn_color_builder_desktop ) ) {
+					$parse_css .= astra_parse_css( $ele_btn_color_builder_desktop );
+				}
 
 				if ( 'color-typo' === self::elementor_default_color_font_setting() || 'typo' === self::elementor_default_color_font_setting() ) {
 					$ele_btn_typo_builder_desktop = array(
@@ -4959,6 +4967,11 @@ if ( ! class_exists( 'Astra_Dynamic_CSS' ) ) {
 						'display'             => '-moz-box',
 						'display'             => '-ms-flexbox',
 						'display'             => 'flex',
+					),
+					// Tap target for the top level dropdown toggle, safe only next to the flex rule above - on the inline-block fallback Firefox breaks the arrow onto its own row.
+					'#ast-desktop-header .main-header-menu > .menu-item.menu-item-has-children > .menu-link .ast-header-navigation-arrow' => array(
+						'padding-' . astra_flip_rtl_alignment( 'right' ) => '10px',
+						'margin-' . astra_flip_rtl_alignment( 'right' )  => '-10px',
 					),
 				);
 

@@ -29,6 +29,14 @@ class Astra_BSF_Analytics {
 	private static $events;
 
 	/**
+	 * Ability outcomes already recorded this request, keyed by name and status.
+	 *
+	 * @var array<string, bool>
+	 * @since 4.13.11
+	 */
+	private static $recorded_abilities = array();
+
+	/**
 	 * Class constructor.
 	 *
 	 * @return void
@@ -64,6 +72,10 @@ class Astra_BSF_Analytics {
 
 		// Track learn chapter progress.
 		add_action( 'astra_learn_progress_saved', array( $this, 'track_learn_chapter_progress' ) );
+
+		// Track Abilities API usage. Fires from WP_Ability::execute() on WP 6.9+;
+		// simply never fires on older versions, so no version guard is needed.
+		add_action( 'wp_after_execute_ability', array( $this, 'track_ability_used' ), 10, 3 );
 	}
 
 	/**
@@ -591,6 +603,23 @@ class Astra_BSF_Analytics {
 			)
 		);
 
+		// custom_global_colors_added: track once when the palette first has an active custom color.
+		if ( class_exists( 'Astra_Global_Palette' ) ) {
+			$custom_colors = Astra_Global_Palette::get_custom_colors();
+
+			foreach ( $custom_colors as $custom_color ) {
+				if ( empty( $custom_color['retired'] ) ) {
+					// Slots created, removed ones included -- shows how many of the nine a site uses.
+					self::$events->track(
+						'custom_global_colors_added',
+						ASTRA_THEME_VERSION,
+						array( 'custom_colors' => (string) count( $custom_colors ) )
+					);
+					break;
+				}
+			}
+		}
+
 		// Ensure events_record always exists in payload.
 		if ( ! isset( $astra_stats['events_record'] ) ) {
 			$astra_stats['events_record'] = array();
@@ -617,7 +646,7 @@ class Astra_BSF_Analytics {
 	public function track_onboarding_completed( $completion_data ) {
 		$properties = self::get_onboarding_properties( $completion_data );
 
-		$completion_screen              = isset( $completion_data['completion_screen'] ) ? sanitize_text_field( $completion_data['completion_screen'] ) : '';
+		$completion_screen               = isset( $completion_data['completion_screen'] ) ? sanitize_text_field( $completion_data['completion_screen'] ) : '';
 		$properties['completion_screen'] = $completion_screen;
 
 		// Starter Templates builder selection — only relevant if user reached that screen.
@@ -683,18 +712,18 @@ class Astra_BSF_Analytics {
 			);
 		}
 
-		$was_local_fonts_enabled  = ! empty( $old_value['self_hosted_gfonts'] );
-		$is_local_fonts_enabled   = ! empty( $new_value['self_hosted_gfonts'] );
-		$was_preload_enabled      = ! empty( $old_value['preload_local_fonts'] );
-		$is_preload_enabled       = ! empty( $new_value['preload_local_fonts'] );
+		$was_local_fonts_enabled = ! empty( $old_value['self_hosted_gfonts'] );
+		$is_local_fonts_enabled  = ! empty( $new_value['self_hosted_gfonts'] );
+		$was_preload_enabled     = ! empty( $old_value['preload_local_fonts'] );
+		$is_preload_enabled      = ! empty( $new_value['preload_local_fonts'] );
 
 		if ( $was_local_fonts_enabled !== $is_local_fonts_enabled || $was_preload_enabled !== $is_preload_enabled ) {
 			self::$events->track(
 				'local_fonts_toggled',
 				ASTRA_THEME_VERSION,
 				array(
-					'enabled'          => $is_local_fonts_enabled ? 'yes' : 'no',
-					'preload_enabled'  => $is_preload_enabled ? 'yes' : 'no',
+					'enabled'         => $is_local_fonts_enabled ? 'yes' : 'no',
+					'preload_enabled' => $is_preload_enabled ? 'yes' : 'no',
 				),
 				true
 			);
@@ -735,6 +764,19 @@ class Astra_BSF_Analytics {
 				'mcp_server_toggled',
 				ASTRA_THEME_VERSION,
 				array( 'enabled' => $is_mcp_server_enabled ? 'yes' : 'no' ),
+				true
+			);
+		}
+
+		// AI Assistant toggle.
+		$old_show_ai_assistant = ! isset( $old_value['show_ai_assistant'] ) ? true : ! empty( $old_value['show_ai_assistant'] );
+		$new_show_ai_assistant = ! isset( $new_value['show_ai_assistant'] ) ? true : ! empty( $new_value['show_ai_assistant'] );
+
+		if ( $old_show_ai_assistant !== $new_show_ai_assistant ) {
+			self::$events->track(
+				'ai_assistant_toggled',
+				ASTRA_THEME_VERSION,
+				array( 'enabled' => $new_show_ai_assistant ? 'yes' : 'no' ),
 				true
 			);
 		}
@@ -840,6 +882,56 @@ class Astra_BSF_Analytics {
 			'theme_updated',
 			ASTRA_THEME_VERSION,
 			array( 'from_version' => $previous_version ),
+			true
+		);
+	}
+
+	/**
+	 * Track use of an Astra ability as a re-trackable event.
+	 *
+	 * Hooked to wp_after_execute_ability, which fires past the permission check and
+	 * carries the result. Astra abilities return an Astra_Abilities_Response array
+	 * rather than a WP_Error, so soft failures are visible here as 'success' => false.
+	 *
+	 * @param string $ability_name Ability name, e.g. 'astra/get-font-body'.
+	 * @param mixed  $input        Ability input. Not recorded -- it can carry site content.
+	 * @param mixed  $result       Ability result.
+	 * @since 4.13.11
+	 * @return void
+	 */
+	public function track_ability_used( $ability_name, $input, $result ) {
+		// This action fires for every registered ability, not only Astra's.
+		if ( 0 !== strpos( $ability_name, 'astra/' ) ) {
+			return;
+		}
+
+		$status = is_array( $result ) && isset( $result['success'] ) && ! $result['success'] ? 'failed' : 'passed';
+
+		// Once per ability and outcome per request, to limit repeat option writes.
+		$guard_key = $ability_name . ':' . $status;
+
+		if ( isset( self::$recorded_abilities[ $guard_key ] ) ) {
+			return;
+		}
+
+		self::$recorded_abilities[ $guard_key ] = true;
+
+		$context = 'internal';
+		if ( defined( 'WP_CLI' ) && WP_CLI ) {
+			$context = 'cli';
+		} elseif ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			$context = 'rest';
+		}
+
+		// One shared event name keeps this to a single pending entry; $force = true stops
+		// usage_events_pushed from suppressing it after the first flush.
+		self::$events->track(
+			'ability_used',
+			$ability_name,
+			array(
+				'context' => $context,
+				'status'  => $status,
+			),
 			true
 		);
 	}

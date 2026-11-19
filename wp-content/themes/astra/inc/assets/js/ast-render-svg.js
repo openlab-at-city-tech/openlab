@@ -13,6 +13,12 @@ function renderSVG ( svg ) {
 
 	// Social icons are lazy-loaded; read from window global set by ensureSocialIcons().
 	const socialIcons = window.astraSocialIcons || {};
+
+	// Slugs renamed in 4.13.11 gained a "-logo" suffix; fall back so saved values still resolve.
+	if ( ! socialIcons[svg] && socialIcons[svg + '-logo'] ) {
+		svg = svg + '-logo'
+	}
+
 	const fontAwesome = socialIcons[svg]
 
 	if ( "undefined" != typeof fontAwesome ) {

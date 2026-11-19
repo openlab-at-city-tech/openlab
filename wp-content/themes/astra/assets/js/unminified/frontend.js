@@ -187,10 +187,12 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 	document.addEventListener('click', function (e) {
 		const button = e.target.closest('.menu-toggle');
 		if (button && mobileHeaderType === 'dropdown') {
-			button.classList.toggle('toggled');
+			if (typeof astraAddon === 'undefined') {
+				button.classList.toggle('toggled');
+				syncToggledClass();
+			}
 			const isToggled = button.classList.contains('toggled');
 			button.setAttribute('aria-expanded', isToggled ? 'true' : 'false');
-			syncToggledClass();
 		}
 	});
 	
@@ -472,12 +474,25 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 				}
 			}
 
-			// Close Popup on # link click inside Popup.
+			// Close Popup on # link click inside desktop dropdown.
 			if ( desktopDropdownContent ) {
 				var desktopLinks = desktopDropdownContent.getElementsByTagName( 'a' );
 				for ( link = 0, len = desktopLinks.length; link < len; link++ ) {
-					desktopLinks[ link ].addEventListener( 'click', triggerToggleClose, true );
-					desktopLinks[ link ].headerType = 'dropdown';
+					// Check if the link is not inside the tabs container.
+					const isNotInsideTabsContainer = desktopLinks[ link ].closest( '.wp-block-uagb-tabs' ) === null;
+
+					if (
+						null !== desktopLinks[ link ].getAttribute( 'href' ) &&
+						( desktopLinks[ link ].getAttribute( 'href' ).startsWith( '#' ) ||
+							-1 !== desktopLinks[ link ].getAttribute( 'href' ).search( '#' ) ) &&
+						( ! desktopLinks[ link ].parentElement.classList.contains( 'menu-item-has-children' ) ||
+							( desktopLinks[ link ].parentElement.classList.contains( 'menu-item-has-children' ) &&
+								document.querySelector( 'header.site-header' ).classList.contains( 'ast-builder-menu-toggle-icon' ) ) ) &&
+						isNotInsideTabsContainer
+					) {
+						desktopLinks[ link ].addEventListener( 'click', triggerToggleClose, true );
+						desktopLinks[ link ].headerType = 'dropdown';
+					}
 				}
 			}
 
@@ -602,28 +617,34 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 	var get_window_width = function () {
 
-		return document.documentElement.clientWidth;
+		return window.innerWidth;
 	}
 
 	/* Add break point Class and related trigger */
 	var updateHeaderBreakPoint = function () {
 
-		// Use clientWidth directly. The overflow:hidden trick previously used here
-		// caused a visible content jump (scrollbar flash) after the breakpoint class
-		// was pre-applied by the early inline script in wp_body_open. Since
-		// document.documentElement.clientWidth is not affected by content overflow
-		// (unlike window.innerWidth), the overflow manipulation is not needed.
 		var ww = get_window_width();
 
 		var break_point = astra.break_point;
 
 		/**
-		 * This case is when one hits a URL one after the other via `Open in New Tab` option
-		 * Chrome returns the value of outer width as 0 in this case.
-		 * This mis-calculates the width of the window and header seems invisible.
-		 * This could be fixed by using `0 === ww` condition below.
+		 * Use matchMedia to evaluate the breakpoint using the same CSS engine that
+		 * evaluates media queries. This guarantees JS and CSS always agree on which
+		 * header should be visible, eliminating any sub-pixel or scrollbar-width
+		 * mismatch between window.innerWidth and the actual CSS viewport width.
+		 *
+		 * The 0.98 offset mirrors the max-width: (break_point + 0.98)px rule used
+		 * in the PHP dynamic CSS, so the transition point is identical in both.
+		 * The offset must stay below 0.99: Chrome rounds a 921.99px threshold up
+		 * to 922px, so (max-width: 921.99px) matches a 922px viewport where
+		 * desktop styles apply, showing the mobile header with desktop styles.
+		 *
+		 * The 0 === ww guard handles a Chrome edge case where innerWidth returns 0
+		 * when opening a URL via "Open in New Tab" — force desktop mode in that case.
 		 */
-		if (ww > break_point || 0 === ww) {
+		var isMobile = window.matchMedia( '(max-width: ' + ( parseFloat( break_point ) + 0.98 ) + 'px)' ).matches;
+
+		if ( ! isMobile || 0 === ww ) {
 			//remove menu toggled class.
 			if ( menu_toggle_all.length > 0 ) {
 
@@ -653,14 +674,21 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 		event.preventDefault();
 
+		var parent_li = this.parentNode;
+
+		// In Link mode, stop the click from bubbling when toggling a parent menu
+		// item's submenu. Without this, the click propagates to document-level
+		// handlers that close the entire dropdown (desktop and mobile).
+		if ( parent_li.classList.contains( 'menu-item-has-children' ) &&
+			document.querySelector( 'header.site-header' ).classList.contains( 'ast-builder-menu-toggle-link' ) ) {
+			event.stopPropagation();
+		}
 
 		if ('false' === event.target.getAttribute('aria-expanded') || ! event.target.getAttribute('aria-expanded')) {
 			event.target.setAttribute('aria-expanded', 'true');
 		} else {
 			event.target.setAttribute('aria-expanded', 'false');
 		}
-
-		var parent_li = this.parentNode;
 
 		if ( parent_li.classList.contains('ast-submenu-expanded') && document.querySelector('header.site-header').classList.contains('ast-builder-menu-toggle-link') ) {
 
@@ -972,7 +1000,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 	// Tab navigation for accessibility.
 	function tabNavigation() {
-		const dropdownToggleLinks = document.querySelectorAll('nav.site-navigation .menu-item-has-children > a .ast-header-navigation-arrow');
+		const dropdownToggleLinks = document.querySelectorAll('nav.site-navigation .menu-item-has-children > .menu-link .ast-header-navigation-arrow');
 		const siteNavigationSubMenu = document.querySelectorAll('nav.site-navigation .sub-menu');
 		const menuLi = document.querySelectorAll('nav.site-navigation .menu-item-has-children');
 		const megaMenuFullWidth = document.querySelectorAll('.astra-full-megamenu-wrapper');
@@ -1007,6 +1035,63 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 						}, 10);
 					}
 				});
+
+				// The arrow sits inside the parent <a>; touch and screen reader clicks looked like mouse clicks and followed the link.
+				element.addEventListener('click', function (e) {
+					const arrow = e.currentTarget;
+
+					// Below the breakpoint the mobile menu has its own toggle.
+					if (!body.classList.contains('ast-desktop')) {
+						return;
+					}
+
+					const closestLi = arrow.closest('li');
+					const subMenu = closestLi && closestLi.querySelector('.sub-menu');
+
+					// Click-trigger mega menus are opened by Astra Pro from the link click.
+					if (!subMenu || 'click' === closestLi.dataset.megamenuTrigger) {
+						return;
+					}
+
+					e.preventDefault();
+
+					// Or the document listener below closes it in the same tick.
+					e.stopPropagation();
+
+					// Read before closing, which resets aria-expanded on every arrow.
+					const wasOpen = 'true' === arrow.getAttribute('aria-expanded');
+
+					// A nested arrow may only collapse its own level. Closing the whole
+					// menu strips toggled-on from the ancestor submenu that is displaying
+					// it, which takes the open dropdown offscreen with it.
+					const parentSubMenu = closestLi.parentNode.closest('.sub-menu');
+
+					if (parentSubMenu) {
+						closeNavigationMenu(
+							parentSubMenu.querySelectorAll('.sub-menu'),
+							parentSubMenu.querySelectorAll('.ast-header-navigation-arrow'),
+							parentSubMenu.querySelectorAll('.menu-item-has-children'),
+							parentSubMenu.querySelectorAll('.astra-full-megamenu-wrapper')
+						);
+					} else {
+						// Mouse and keyboard only ever leave one submenu open, so collapse
+						// the others here too.
+						closeNavigationMenu(siteNavigationSubMenu, dropdownToggleLinks, menuLi, megaMenuFullWidth);
+					}
+
+					if (!wasOpen) {
+						if (subMenu.classList.contains('astra-megamenu')) {
+							subMenu.classList.add('astra-megamenu-focus');
+							closestLi.querySelector('.astra-full-megamenu-wrapper')?.classList.add('astra-megamenu-wrapper-focus');
+							// Hover removes this on mouseenter; without it the mega menu stays display none.
+							closestLi.querySelectorAll('.ast-hidden').forEach(el => el.classList.remove('ast-hidden'));
+						} else {
+							subMenu.classList.add('toggled-on');
+						}
+						closestLi.classList.add('ast-menu-hover');
+						arrow.setAttribute('aria-expanded', 'true');
+					}
+				}, false);
 			});
 
 			if (siteNavigationSubMenu || menuLi) {
@@ -1022,7 +1107,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			}
 		}
 
-		const allParentMenu = document.querySelectorAll('nav.site-navigation .ast-nav-menu > .menu-item-has-children > a .ast-header-navigation-arrow');
+		const allParentMenu = document.querySelectorAll('nav.site-navigation .ast-nav-menu > .menu-item-has-children > .menu-link .ast-header-navigation-arrow');
 
 		if (allParentMenu) {
 			allParentMenu.forEach(element => {
@@ -1036,7 +1121,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 		const desktopMenu = document.querySelectorAll( '#ast-desktop-header .ast-builder-layout-element.ast-builder-menu' );
 		desktopMenu.forEach( menu => {
-			const desktopMenuItems = menu.querySelectorAll( '.main-header-menu .menu-item > a' );
+			const desktopMenuItems = menu.querySelectorAll( '.main-header-menu .menu-item > .menu-link' );
 			desktopMenuItems.forEach( ( item ) => {
 				item.addEventListener( 'focusout', function( e ) {
 					const nextFocus         = e.relatedTarget;
@@ -1296,6 +1381,11 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 						const scrollOffsetTop = elementOffsetTop - offset;
 						if( scrollOffsetTop ) {
 							astraSmoothScroll( e, scrollOffsetTop );
+
+							// Reflect the anchor in the URL so the section link stays shareable, matching native browser behavior.
+							if ( ! hash && href !== window.location.hash ) {
+								window.history.pushState( null, '', href );
+							}
 						}
 					}
 				}
@@ -1416,70 +1506,73 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 
 // Accessibility improvement for menu items.
 document.addEventListener('DOMContentLoaded', function () {
-    const submenuToggles = document.querySelectorAll('.menu-link .dropdown-menu-toggle');
+	/**
+	 * Keep each submenu toggle's `aria-expanded` in step with its submenu.
+	 *
+	 * Submenus open and close through classes set from several places, so follow the classes instead of each event:
+	 * - `toggled-on` / `astra-megamenu-focus` on the submenu: desktop keyboard, outside click and touch.
+	 * - `megamenu-active` on the item: Astra Pro mega menus set to open on click.
+	 * - `ast-submenu-expanded` on the item: the mobile menu, in both icon and link toggle modes.
+	 * Every class change recomputes the state from all of them, so no path can overwrite another with a stale value.
+	 * Hover opens submenus with CSS alone, so it is not reflected here.
+	 *
+	 * Synced on each item: the parent link (only when it carries `aria-expanded`, a disabled mega menu link is a span
+	 * and must not), the arrow inside it, and the mobile toggle button beside it.
+	 * Mega menus below the full width wrapper are still the first `.sub-menu` inside the item.
+	 */
+	const initSubmenuAriaSync = () => {
+		document.querySelectorAll('.menu-item-has-children > .menu-link').forEach(menuItemLink => {
+			const menuItem = menuItemLink.parentElement;
+			const submenu = menuItem.querySelector('.sub-menu');
 
-	const menuItemsWithSubmenu = document.querySelectorAll('.menu-item-has-children > a');
+			// Menus replaced by a Customizer partial refresh come back without this flag.
+			if (!submenu || menuItemLink.dataset.astAriaSync) {
+				return;
+			}
 
-	// Ensuring the submenu toggle action is handled with appropriate CSS, with cross browser compatibility for Enter key press.
-    menuItemsWithSubmenu.forEach(item => {
-        item.addEventListener('keydown', function(event) {
-            if (event.key === 'Enter') {
-                const submenu = item.nextElementSibling;
-                if (submenu && submenu.classList.contains('sub-menu')) {
-                    submenu.classList.toggle('ast-visible');
-                    const ariaExpanded = item.getAttribute('aria-expanded') === 'false' ? 'true' : 'false';
-                    item.setAttribute('aria-expanded', ariaExpanded);
-                }
-            }
-        });
-    });
+			menuItemLink.dataset.astAriaSync = 'true';
 
-    // Add event listeners for focus, blur, and keydown events.
-    submenuToggles.forEach(toggle => {
-        toggle.addEventListener('focus', () => updateAriaExpanded(toggle));
-        toggle.addEventListener('blur', () => updateAriaExpanded(toggle));
-        toggle.addEventListener('keydown', event => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault();
-                toggleAriaExpanded(toggle);
-            }
-        });
-    });
+			const syncLink = menuItemLink.hasAttribute('aria-expanded');
+			const arrow = menuItemLink.querySelector('.ast-header-navigation-arrow');
+			const mobileToggle = menuItem.querySelector(':scope > .ast-menu-toggle');
 
-    // Add event listener for Escape key press to close all submenus.
-    document.addEventListener('keydown', event => {
-        if (event.key === 'Escape') {
-            closeAllSubmenus();
-        }
-    });
+			const syncAriaExpanded = () => {
+				const isSubmenuOpen = submenu.classList.contains('toggled-on') ||
+					submenu.classList.contains('astra-megamenu-focus') ||
+					menuItem.classList.contains('megamenu-active') ||
+					menuItem.classList.contains('ast-submenu-expanded');
+				const ariaExpanded = isSubmenuOpen ? 'true' : 'false';
 
-    /**
-     * Updates the `aria-expanded` attribute based on submenu visibility.
-     * @param {HTMLElement} toggle - The toggle element.
-     */
-    function updateAriaExpanded(toggle) {
-        const menuItemLink = toggle.closest('.menu-link');
-        const submenu = menuItemLink.nextElementSibling;
-        const isSubmenuVisible = submenu.classList.contains('toggled-on');
-        menuItemLink.setAttribute('aria-expanded', isSubmenuVisible ? 'true' : 'false');
-    }
+				if (syncLink) {
+					menuItemLink.setAttribute('aria-expanded', ariaExpanded);
+				}
 
-    /**
-     * Toggles the `aria-expanded` attribute for a given toggle element.
-     * @param {HTMLElement} toggle - The toggle element.
-     */
-    function toggleAriaExpanded(toggle) {
-        const menuItemLink = toggle.closest('.menu-link');
-        const currentState = menuItemLink.getAttribute('aria-expanded');
-        menuItemLink.setAttribute('aria-expanded', currentState === 'true' ? 'false' : 'true');
-    }
+				if (arrow) {
+					arrow.setAttribute('aria-expanded', ariaExpanded);
+				}
 
-    /**
-     * Closes all submenus by updating the `aria-expanded` attribute.
-     */
-    function closeAllSubmenus() {
-        submenuToggles.forEach(toggle => updateAriaExpanded(toggle));
-    }
+				if (mobileToggle) {
+					mobileToggle.setAttribute('aria-expanded', ariaExpanded);
+				}
+			};
+
+			const observer = new MutationObserver(syncAriaExpanded);
+			observer.observe(submenu, { attributes: true, attributeFilter: ['class'] });
+			observer.observe(menuItem, { attributes: true, attributeFilter: ['class'] });
+
+			// The arrow acts as a button, so Space must not scroll the page and Enter must not follow the parent link.
+			if (arrow) {
+				arrow.addEventListener('keydown', event => {
+					if (event.key === 'Enter' || event.key === ' ') {
+						event.preventDefault();
+					}
+				});
+			}
+		});
+	};
+
+	initSubmenuAriaSync();
+	document.addEventListener('astPartialContentRendered', initSubmenuAriaSync);
 
 	// This event listener is triggered when the device orientation changes, and it dispatches a 'resize' event to ensure layout adjustments are made.
 	window.addEventListener( 'orientationchange', () => {

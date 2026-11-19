@@ -30,6 +30,15 @@ class Nps_Survey {
 	private static $instance = null;
 
 	/**
+	 * REST nonce, kept once any product rendering a survey on this page passes its capability check.
+	 *
+	 * @access private
+	 * @var string
+	 * @since 1.0.25
+	 */
+	private static $rest_nonce = '';
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 1.0.0
@@ -97,40 +106,21 @@ class Nps_Survey {
 			return;
 		}
 		// Loading script here to confirm if the screen is allowed or not.
-		self::editor_load_scripts( $show_on_screen );
+		self::editor_load_scripts( $show_on_screen, $plugin_slug );
 
 		?><div data-id="<?php echo esc_attr( $id ); ?>" class="nps-survey-root" data-vars="<?php echo esc_attr( strval( wp_json_encode( $vars ) ) ); ?>"></div>
 		<?php
 	}
 
 	/**
-	 * Generate and return the Google fonts url.
-	 *
-	 * @since 1.0.2
-	 * @return string
-	 */
-	public static function google_fonts_url() {
-
-		$font_families = array(
-			'Figtree:400,500,600,700',
-		);
-
-		$query_args = array(
-			'family' => rawurlencode( implode( '|', $font_families ) ),
-			'subset' => rawurlencode( 'latin,latin-ext' ),
-		);
-
-		return add_query_arg( $query_args, '//fonts.googleapis.com/css' );
-	}
-
-	/**
 	 * Load script.
 	 *
 	 * @param array<string> $show_on_screens An array of screen IDs where the scripts should be loaded.
+	 * @param string        $plugin_slug Slug of the product rendering the survey, used to scope the REST nonce capability check.
 	 * @since 1.0.0
 	 * @return void
 	 */
-	public static function editor_load_scripts( $show_on_screens ): void {
+	public static function editor_load_scripts( $show_on_screens, string $plugin_slug = '' ): void {
 
 		$admin_only = self::is_nps_survey_enabled_for_admin_only();
 		if ( $admin_only && ! is_admin() ) {
@@ -174,7 +164,7 @@ class Nps_Survey {
 			[
 				'ajaxurl'        => esc_url( admin_url( 'admin-ajax.php' ) ),
 				'_ajax_nonce'    => wp_create_nonce( 'nps-survey' ),
-				'rest_api_nonce' => current_user_can( 'manage_options' ) ? wp_create_nonce( 'wp_rest' ) : '',
+				'rest_api_nonce' => self::get_rest_nonce( $plugin_slug ),
 			]
 		);
 
@@ -187,7 +177,7 @@ class Nps_Survey {
 
 		wp_enqueue_style( 'nps-survey-style', $build_url . '/style-main.css', array(), NPS_SURVEY_VER );
 		wp_style_add_data( 'nps-survey-style', 'rtl', 'replace' );
-		wp_enqueue_style( 'nps-survey-google-fonts', self::google_fonts_url(), array(), 'all' );
+		wp_enqueue_style( 'nps-survey-fonts', NPS_SURVEY_URL . 'assets/fonts/figtree.css', array(), NPS_SURVEY_VER );
 	}
 
 	/**
@@ -210,7 +200,7 @@ class Nps_Survey {
 						'nps_id'      => array(
 							'type'              => 'string',
 							'required'          => true,
-							'sanitize_callback' => 'sanitize_text_field',
+							'sanitize_callback' => 'sanitize_key',
 						),
 						'rating'      => array(
 							'type'              => 'integer',
@@ -229,7 +219,7 @@ class Nps_Survey {
 						'plugin_slug' => array(
 							'type'              => 'string',
 							'required'          => true,
-							'sanitize_callback' => 'sanitize_text_field',
+							'sanitize_callback' => 'sanitize_key',
 						),
 					),
 				),
@@ -248,12 +238,12 @@ class Nps_Survey {
 						'nps_id'           => array(
 							'type'              => 'string',
 							'required'          => true,
-							'sanitize_callback' => 'sanitize_text_field',
+							'sanitize_callback' => 'sanitize_key',
 						),
 						'plugin_slug'      => array(
 							'type'              => 'string',
 							'required'          => true,
-							'sanitize_callback' => 'sanitize_text_field',
+							'sanitize_callback' => 'sanitize_key',
 						),
 						'dismiss_timespan' => array(
 							'type'              => 'integer',
@@ -308,7 +298,7 @@ class Nps_Survey {
 	/**
 	 * Check whether a given request has permission to read notes.
 	 *
-	 * @param  object $request WP_REST_Request Full details about the request.
+	 * @param  \WP_REST_Request<array<string,mixed>> $request Full details about the request.
 	 * @return object|bool
 	 */
 	public static function get_item_permissions_check( $request ) {
@@ -327,7 +317,7 @@ class Nps_Survey {
 			return true;
 		}
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( self::get_required_capability( $request ) ) ) {
 			return new \WP_Error(
 				'nps_survey_rest_cannot_access',
 				__( 'Sorry, you are not allowed to do that.', 'astra' ),
@@ -335,6 +325,70 @@ class Nps_Survey {
 			);
 		}
 		return true;
+	}
+
+	/**
+	 * Get the capability required to see and interact with the NPS survey.
+	 *
+	 * Defaults to `manage_options`, matching the library's original behavior, so nothing
+	 * changes for a bundling product unless it explicitly opts in via the filter below.
+	 *
+	 * A bundling product that shows the survey to a capability narrower than
+	 * `manage_options` (see `nps_survey_show_notice`) would otherwise hit a REST 403 on
+	 * every dismiss/rating call for those users. Rather than lowering the requirement for
+	 * every product sharing this library, this filter lets a product vouch for its own
+	 * narrower capability, scoped to its own calls only by checking
+	 * `$request->get_param( 'plugin_slug' )` -- every other product keeps `manage_options`.
+	 *
+	 * `$request` is always a `WP_REST_Request` carrying `plugin_slug`: the real request when
+	 * checking a REST call, and a slug-only stand-in when deciding whether the page gets a
+	 * REST nonce, so one callback covers both without a `null` check.
+	 *
+	 * A previous attempt (see PR #118) relaxed this globally to `is_user_logged_in()`
+	 * for every product at once and was reverted before merge: both REST endpoints
+	 * write to a single, site-wide (not per-user) option, so opening them to any
+	 * authenticated account -- rather than to a capability a specific product opts into --
+	 * lets a low-privilege account (e.g. a customer account) permanently silence the
+	 * survey for the entire site, or submit feedback under the site's identity to the
+	 * external metrics endpoint. Keep any new default here at `manage_options` or narrower.
+	 *
+	 * @since 1.0.25
+	 * @param \WP_REST_Request<array<string,mixed>> $request Real REST request, or a stand-in carrying only `plugin_slug`.
+	 * @return string
+	 */
+	public static function get_required_capability( $request ) {
+		return apply_filters( 'nps_survey_required_capability', 'manage_options', $request );
+	}
+
+	/**
+	 * Get the REST nonce for the current user, or an empty string if no product on this page vouches for them.
+	 *
+	 * The nonce is localized once per page and shared by every bundled product, so it is kept
+	 * as soon as any rendering product's capability check passes. Each REST call is still
+	 * checked against its own `plugin_slug`, so this never lets one product act for another.
+	 *
+	 * @param string $plugin_slug Slug of the product rendering the survey.
+	 * @since 1.0.25
+	 * @return string
+	 */
+	private static function get_rest_nonce( string $plugin_slug ): string {
+		if ( '' !== self::$rest_nonce ) {
+			return self::$rest_nonce;
+		}
+
+		/**
+		 * Stand-in request carrying only the slug.
+		 *
+		 * @var \WP_REST_Request<array<string,mixed>> $request
+		 */
+		$request = new \WP_REST_Request( 'POST', '/' . self::get_api_namespace() . '/dismiss-nps-survey/' );
+		$request->set_param( 'plugin_slug', sanitize_key( $plugin_slug ) );
+
+		if ( current_user_can( self::get_required_capability( $request ) ) ) {
+			self::$rest_nonce = wp_create_nonce( 'wp_rest' );
+		}
+
+		return self::$rest_nonce;
 	}
 
 	/**
@@ -372,9 +426,8 @@ class Nps_Survey {
 	/**
 	 * Submit Ratings.
 	 *
-	 * @param \WP_REST_Request $request Request object.
-	 * @return void
-	 * @phpstan-ignore-next-line
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public static function submit_rating( $request ) {
 
@@ -382,17 +435,22 @@ class Nps_Survey {
 
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( (string) $nonce ), 'wp_rest' ) ) {
-			wp_send_json_error(
-				array(
-					'data'   => __( 'Nonce verification failed.', 'astra' ),
-					'status' => false,
-
-				)
+			return new \WP_Error(
+				'nonce_verification_failed',
+				__( 'Nonce verification failed.', 'astra' ),
+				array( 'status' => 403 )
 			);
 		}
 
 		$current_user = wp_get_current_user();
-		$nps_id       = $request->get_param( 'nps_id' ) ?? '';
+		$raw_nps_id   = $request->get_param( 'nps_id' );
+		$raw_rating   = $request->get_param( 'rating' );
+		$raw_comment  = $request->get_param( 'comment' );
+		$raw_slug     = $request->get_param( 'plugin_slug' );
+		$nps_id       = sanitize_key( is_string( $raw_nps_id ) ? $raw_nps_id : '' );
+		$rating       = absint( is_numeric( $raw_rating ) ? $raw_rating : 0 );
+		$comment      = sanitize_text_field( is_string( $raw_comment ) ? $raw_comment : '' );
+		$plugin_slug  = sanitize_key( is_string( $raw_slug ) ? $raw_slug : '' );
 
 		/**
 		 * Filter the post data.
@@ -405,13 +463,13 @@ class Nps_Survey {
 		$post_data = apply_filters(
 			'nps_survey_post_data',
 			array(
-				'rating'      => ! empty( $request['rating'] ) ? sanitize_text_field( strval( $request['rating'] ) ) : '',
-				'comment'     => ! empty( $request['comment'] ) ? sanitize_text_field( strval( $request['comment'] ) ) : '',
+				'rating'      => $rating,
+				'comment'     => $comment,
 				'email'       => $current_user->user_email,
 				'first_name'  => ! empty( $current_user->first_name ) ? $current_user->first_name : $current_user->display_name,
 				'last_name'   => ! empty( $current_user->last_name ) ? $current_user->last_name : '',
-				'source'      => ! empty( $request['plugin_slug'] ) ? sanitize_text_field( strval( $request['plugin_slug'] ) ) : '',
-				'plugin_slug' => ! empty( $request['plugin_slug'] ) ? sanitize_text_field( strval( $request['plugin_slug'] ) ) : '',
+				'source'      => $plugin_slug,
+				'plugin_slug' => $plugin_slug,
 			),
 			$nps_id
 		);
@@ -442,12 +500,10 @@ class Nps_Survey {
 		$response = wp_safe_remote_post( $api_endpoint, $request_args );
 
 		if ( is_wp_error( $response ) ) {
-			// There was an error in the request.
-			wp_send_json_error(
-				array(
-					'data'   => 'Failed ' . $response->get_error_message(),
-					'status' => false,
-				)
+			return new \WP_Error(
+				'remote_request_failed',
+				__( 'Remote request failed.', 'astra' ),
+				array( 'status' => 500 )
 			);
 		}
 
@@ -457,7 +513,7 @@ class Nps_Survey {
 
 			// If the status update should be skipped, return success.
 			if ( self::should_skip_status_update( $nps_id, 'submit', $post_data ) ) {
-				wp_send_json_success(
+				return rest_ensure_response(
 					array(
 						'status' => true,
 					)
@@ -470,19 +526,19 @@ class Nps_Survey {
 				'dismiss_step'        => '',
 			);
 
-			update_option( self::get_nps_id( strval( $request['plugin_slug'] ) ), $nps_form_status, false );
+			update_option( self::get_nps_id( $plugin_slug ), $nps_form_status, false );
 
-			wp_send_json_success(
+			return rest_ensure_response(
 				array(
 					'status' => true,
 				)
 			);
 
 		} else {
-			wp_send_json_error(
-				array(
-					'status' => false,
-				)
+			return new \WP_Error(
+				'api_error',
+				__( 'Request failed.', 'astra' ),
+				array( 'status' => 500 )
 			);
 		}
 	}
@@ -490,9 +546,8 @@ class Nps_Survey {
 	/**
 	 * Dismiss NPS Survey.
 	 *
-	 * @param \WP_REST_Request $request Request object.
-	 * @return void
-	 * @phpstan-ignore-next-line
+	 * @param \WP_REST_Request<array<string,mixed>> $request Request object.
+	 * @return \WP_REST_Response|\WP_Error
 	 */
 	public static function dismiss_nps_survey_panel( $request ) {
 
@@ -500,45 +555,51 @@ class Nps_Survey {
 
 		// Verify the nonce.
 		if ( ! wp_verify_nonce( sanitize_text_field( (string) $nonce ), 'wp_rest' ) ) {
-			wp_send_json_error(
-				array(
-					'data'   => __( 'Nonce verification failed.', 'astra' ),
-					'status' => false,
-
-				)
+			return new \WP_Error(
+				'nonce_verification_failed',
+				__( 'Nonce verification failed.', 'astra' ),
+				array( 'status' => 403 )
 			);
 		}
 
 		// If the status update should be skipped, return success.
-		$nps_id = $request->get_param( 'nps_id' ) ?? '';
+		$raw_nps_id       = $request->get_param( 'nps_id' );
+		$raw_slug         = $request->get_param( 'plugin_slug' );
+		$raw_timespan     = $request->get_param( 'dismiss_timespan' );
+		$raw_step         = $request->get_param( 'current_step' );
+		$nps_id           = sanitize_key( is_string( $raw_nps_id ) ? $raw_nps_id : '' );
+		$plugin_slug      = sanitize_key( is_string( $raw_slug ) ? $raw_slug : '' );
+		$dismiss_timespan = absint( is_numeric( $raw_timespan ) ? $raw_timespan : 0 );
+		$current_step     = sanitize_text_field( is_string( $raw_step ) ? $raw_step : '' );
+
 		if ( self::should_skip_status_update( $nps_id, 'dismiss' ) ) {
-			wp_send_json_success(
+			return rest_ensure_response(
 				array(
 					'status' => true,
 				)
 			);
 		}
 
-		$nps_form_status = self::get_nps_survey_dismiss_status( strval( $request['plugin_slug'] ) );
+		$nps_form_status = self::get_nps_survey_dismiss_status( $plugin_slug );
 
 		// Add dismiss timespan.
-		$nps_form_status['dismiss_timespan'] = absint( $request['dismiss_timespan'] );
+		$nps_form_status['dismiss_timespan'] = $dismiss_timespan;
 
 		// Add dismiss date.
 		$nps_form_status['dismiss_time'] = time();
 
 		// Update dismiss count.
 		$nps_form_status['dismiss_count'] += 1;
-		$nps_form_status['dismiss_step']   = sanitize_text_field( strval( $request['current_step'] ) );
+		$nps_form_status['dismiss_step']   = $current_step;
 
 		// Dismiss Permanantly.
 		if ( $nps_form_status['dismiss_count'] >= 2 ) {
 			$nps_form_status['dismiss_permanently'] = true;
 		}
 
-		update_option( self::get_nps_id( strval( $request['plugin_slug'] ) ), $nps_form_status );
+		update_option( self::get_nps_id( $plugin_slug ), $nps_form_status, false );
 
-		wp_send_json_success(
+		return rest_ensure_response(
 			array(
 				'status' => true,
 			)

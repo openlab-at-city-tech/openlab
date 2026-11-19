@@ -437,7 +437,7 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 
 	/* Parse CSS from array() */
 	if ( 'both' === $transparent_header_devices || 'desktop' === $transparent_header_devices ) {
-		$css .= astra_parse_css( $transparent_header_base, strval( astra_get_tablet_breakpoint() ) );
+		$css .= astra_parse_css( $transparent_header_base, astra_get_tablet_breakpoint( '', 1 ) );
 
 		// If Transparent header is active on mobile + desktop, enqueue CSS without media queeries.
 		// If only for desktop add media query for the transparent header.
@@ -606,7 +606,7 @@ function astra_ext_transparent_header_dynamic_css( $dynamic_css, $dynamic_css_fi
 			);
 		}
 
-		$css .= astra_parse_css( $transparent_header_base, strval( astra_get_tablet_breakpoint() ) );
+		$css .= astra_parse_css( $transparent_header_base, astra_get_tablet_breakpoint( '', 1 ) );
 	}
 
 	$dynamic_css .= $css;

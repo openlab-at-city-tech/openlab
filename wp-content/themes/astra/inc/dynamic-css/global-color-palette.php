@@ -36,8 +36,16 @@ function astra_generate_global_palette_style( $dynamic_css ) {
 	 */
 	$global_palette = apply_filters( 'astra_global_current_palette', $global_palette );
 
+	$custom_colors = Astra_Global_Palette::get_custom_colors();
+
 	if ( isset( $global_palette['palette'] ) ) {
 		foreach ( $global_palette['palette'] as $key => $color ) {
+			// Removed custom colors stop being emitted everywhere - elements using
+			// them fall back to inherited styling until the color is added back.
+			if ( $key >= 9 && ( ! isset( $custom_colors[ $key - 9 ] ) || ! empty( $custom_colors[ $key - 9 ]['retired'] ) ) ) {
+				continue;
+			}
+
 			$palette_key = str_replace( '--', '-', $variable_prefix ) . $key;
 
 			$palette_style[ ':root .has' . $palette_key . '-color' ] = array(
