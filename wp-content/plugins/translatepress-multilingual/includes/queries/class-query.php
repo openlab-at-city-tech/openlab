@@ -704,52 +704,157 @@ class TRP_Query{
 
     /**
      * Function that makes sure that when new strings are inserted in dictionaries they are also inserted in original_strings table if they don't exist
+     *
+     * Returns the rows (with ->original and ->id) keyed by original string. The result can be partial: callers must check
+     * isset( $result[ $string ] ) and must not drop the other strings when one of them is missing.
+     *
      * @param $language_code
      * @param $new_strings
-     * @return array|object|null
+     * @return array
      */
     public function original_strings_sync( $language_code, $new_strings ){
-        if ( count($new_strings ) === 0 ){
+        if ( count($new_strings ) === 0 || $this->settings['default-language'] == $language_code ){
             return array();
         }
-        if ( $this->settings['default-language'] != $language_code ) {
 
-            $originals_table = $this->get_table_name_for_original_strings();
+        $originals_table = $this->get_table_name_for_original_strings();
+        $new_strings     = array_unique( array_map( 'strval', array_values( $new_strings ) ) );
 
-            $possible_new_strings = array();
-            foreach ( $new_strings as $string ) {
-                $possible_new_strings[] = 'CAST(' . $this->db->prepare( "%s",  $string ) . ' AS BINARY)';
+        $lookup        = $this->get_original_string_rows( $originals_table, $new_strings );
+        $original_rows = $lookup['found'];
+        // a string that couldn't be looked up may already exist, so inserting it could add a duplicate
+        $lookup_failed = array_flip( $lookup['lookup_failed'] );
+
+        $insert_strings = array();
+        foreach ( $new_strings as $string ) {
+            if ( !isset( $original_rows[ $string ] ) && !isset( $lookup_failed[ $string ] ) ) {
+                $insert_strings[ $string ] = $this->db->prepare( "(%s)", $string );
             }
+        }
 
-            $existing_strings = $this->db->get_results( "SELECT original FROM `$originals_table` WHERE $originals_table.original IN (".implode( ',', $possible_new_strings ).")", OBJECT_K );
+        if ( !empty( $insert_strings ) ) {
+            //insert the strings that are missing
+            $inserted = $this->db->query( "INSERT INTO `$originals_table` (original) VALUES " . implode( ',', $insert_strings ) );
 
-            if( !empty( $existing_strings ) ){
-                $existing_strings = array_keys($existing_strings);
-                $insert_strings = array_diff( $new_strings, $existing_strings );
-            }
-            else{
-                $insert_strings = $new_strings;
-            }
-
-            foreach ( $insert_strings as $k => $string ) {
-                $insert_strings[$k] = $this->db->prepare( "(%s)",  $string );
-            }
-
-            if( !empty( $insert_strings ) ) {
-                //insert the strings that are missing
-                $this->db->query("INSERT INTO `$originals_table` (original) VALUES " . implode(',', $insert_strings));
+            // one string the table rejects (e.g. longer than the TEXT column) fails the whole insert, so retry them one by one
+            if ( $inserted === false && count( $insert_strings ) > 1 ) {
+                foreach ( $insert_strings as $insert_string ) {
+                    $this->db->query( "INSERT INTO `$originals_table` (original) VALUES " . $insert_string );
+                }
             }
 
             //get the ids for all the new strings (new in dictionary)
-            $new_strings_in_dictionary_with_original_id = $this->db->get_results( "SELECT original,id FROM `$originals_table` WHERE $originals_table.original IN (".implode( ',', $possible_new_strings ).")", OBJECT_K );
+            $inserted_lookup = $this->get_original_string_rows( $originals_table, array_keys( $insert_strings ) );
+            $original_rows  += $inserted_lookup['found'];
+        }
 
-            if( count( $new_strings_in_dictionary_with_original_id ) === count( $new_strings ) ){
-                return $new_strings_in_dictionary_with_original_id;
+        if ( count( $original_rows ) < count( $new_strings ) ) {
+            $this->record_missing_original_ids( count( $new_strings ) - count( $original_rows ) );
+        }
+
+        return $original_rows;
+    }
+
+    /**
+     * Rows of the original strings table that exactly match the given strings, keyed by original string.
+     *
+     * The comparison happens in two steps on purpose. MySQL looks the strings up with the column collation, which
+     * converts the values from the connection character set correctly. Comparing CAST( value AS BINARY ) instead compares
+     * the bytes of the value in the connection character set, so non-ASCII strings never matched when the connection
+     * character set differed from the column one: the same strings were inserted again on every page load and their
+     * machine translations were never saved. The collation match can also return similar rows (other letter case, ß and ss),
+     * so the exact match is done in PHP, where the strings are compared byte by byte as PHP sent and received them.
+     *
+     * A string the column character set can't hold (an emoji in a utf8mb3 table, Cyrillic in a latin1 one) makes the
+     * whole query fail ("Illegal mix of collations"). The strings are then looked up one by one, so only that string
+     * ends up in 'lookup_failed'. Callers must not insert those strings: the lookup didn't say they are missing.
+     *
+     * @param string $originals_table
+     * @param array  $strings
+     * @return array 'found' => rows keyed by original string, 'lookup_failed' => strings that couldn't be looked up
+     */
+    protected function get_original_string_rows( $originals_table, $strings ){
+        $result = array( 'found' => array(), 'lookup_failed' => array() );
+        if ( empty( $strings ) ) {
+            return $result;
+        }
+        $strings = array_values( $strings );
+
+        $rows = $this->select_original_string_rows( $originals_table, $strings );
+        if ( $rows === false && count( $strings ) > 1 ) {
+            $rows                 = array();
+            $consecutive_failures = 0;
+            foreach ( $strings as $index => $string ) {
+                // several failures in a row point to the table or the connection, not to one string, so stop querying
+                if ( $consecutive_failures >= 3 ) {
+                    $result['lookup_failed'] = array_merge( $result['lookup_failed'], array_slice( $strings, $index ) );
+                    break;
+                }
+                $string_rows = $this->select_original_string_rows( $originals_table, array( $string ) );
+                if ( $string_rows === false ) {
+                    $result['lookup_failed'][] = $string;
+                    $consecutive_failures++;
+                } else {
+                    $rows                 = array_merge( $rows, $string_rows );
+                    $consecutive_failures = 0;
+                }
+            }
+        } elseif ( $rows === false ) {
+            $result['lookup_failed'] = $strings;
+            $rows                    = array();
+        }
+
+        $wanted = array_flip( $strings );
+        foreach ( $rows as $row ) {
+            $original = (string) $row->original;
+            if ( isset( $wanted[ $original ] ) && !isset( $result['found'][ $original ] ) ) {
+                $result['found'][ $original ] = $row;
             }
         }
 
-        return array();
+        return $result;
+    }
 
+    /**
+     * Run the collation lookup of get_original_string_rows().
+     *
+     * @param string $originals_table
+     * @param array  $strings
+     * @return array|false Matching rows, or false when the query failed
+     */
+    protected function select_original_string_rows( $originals_table, $strings ){
+        $placeholders = implode( ', ', array_fill( 0, count( $strings ), '%s' ) );
+        $rows         = $this->db->get_results( $this->db->prepare( "SELECT MIN(id) AS id, MIN(original) AS original FROM `$originals_table` WHERE original IN ( $placeholders ) GROUP BY CAST( original AS BINARY )", $strings ) );
+
+        // a failed query also returns an empty result, so check the error to tell it apart from "no rows"
+        if ( $this->db->last_error !== '' ) {
+            return false;
+        }
+
+        return (array) $rows;
+    }
+
+    /**
+     * Record that some strings got no original id, so it shows in the TranslatePress SQL errors page.
+     * Automatic translation stays enabled: the dictionary rows are still saved, only without an original_id.
+     *
+     * @param int $missing_count
+     */
+    protected function record_missing_original_ids( $missing_count ){
+        if ( get_transient( 'trp_missing_original_ids_recorded' ) ) {
+            return;
+        }
+        set_transient( 'trp_missing_original_ids_recorded', true, DAY_IN_SECONDS );
+
+        if ( !$this->error_manager ) {
+            $trp = TRP_Translate_Press::get_trp_instance();
+            $this->error_manager = $trp->get_component( 'error_manager' );
+        }
+        $this->error_manager->record_error( array(
+            'last_error'                     => $this->db->last_error,
+            'details'                        => sprintf( 'Could not find or create original string ids for %d strings in %s. Their translations are saved with original_id 0.', $missing_count, $this->get_table_name_for_original_strings() ),
+            'disable_automatic_translations' => false,
+        ) );
     }
 
     /**
@@ -949,10 +1054,11 @@ class TRP_Query{
 	 * @param array $update_strings                 Array of strings to update
 	 * @param string $language_code                 Language code
 	 * @param array $columns_to_update              Array with the name of columns to update id, original, translated, status, block_type, original_id
+	 * @param bool $invalidate_cache                False only for automatic first fills, which cannot replace cached positives.
 	 * @return bool                                 Whether the strings were written to the DB ( false when nothing was saved or the query failed )
      */
 
-	public function update_strings( $update_strings, $language_code, $columns_to_update = array('id','original', 'translated', 'status', 'block_type', 'original_id') ) {
+	public function update_strings( $update_strings, $language_code, $columns_to_update = array('id','original', 'translated', 'status', 'block_type', 'original_id'), $invalidate_cache = true ) {
 		if ( count( $update_strings ) == 0 ) {
 			return false;
 		}
@@ -986,11 +1092,31 @@ class TRP_Query{
 
 		$on_duplicate = ' ON DUPLICATE KEY UPDATE ';
 		$key_term_values = $this->is_values_accepted() ? 'VALUES' : 'VALUE';
-		foreach ( $columns_to_update as $column ) {
+		$duplicate_columns = $columns_to_update;
+		if ( !$invalidate_cache ) {
+			// Only the automatic first-fill caller opts out. Preserve a positive row if an
+			// editor saved it while the provider was working; assign status last.
+			$duplicate_columns = array_diff( $columns_to_update, array( 'status' ) );
+			if ( in_array( 'status', $columns_to_update, true ) ) {
+				$duplicate_columns[] = 'status';
+			}
+		}
+
+		foreach ( $duplicate_columns as $column ) {
 			if ( $column == 'id' ){
 				continue;
 			}
-			$on_duplicate .= $column . '=' . $key_term_values . '(' . $column . '),';
+
+			$value = $key_term_values . '(' . $column . ')';
+			if ( $column == 'original_id' ){
+				// 0 means the original id couldn't be found, so keep the one the row already has
+				$value = 'IF(' . $value . ' > 0, ' . $value . ', original_id)';
+			}
+			if ( !$invalidate_cache ) {
+				$value = 'IF(status=0,' . $value . ',' . $column . ')';
+			}
+
+			$on_duplicate .= $column . '=' . $value . ',';
 		}
 		$query .= implode( ', ', $place_holders );
 
@@ -1001,13 +1127,20 @@ class TRP_Query{
 		// but by using prepare you cannot insert NULL values.
 
 		$prepared_query = $this->db->prepare($query . ' ', $values);
-		$result = $this->db->query( $prepared_query );
+		$cache_table    = sanitize_text_field( $this->get_table_name( $language_code ) );
+		$cache_update   = TRP_Dynamic_Cache::before_update( $this->db, $cache_table, $update_strings, $columns_to_update, $invalidate_cache );
+		$result         = $this->db->query( $prepared_query );
+		$cache_changed  = TRP_Dynamic_Cache::after_update( $this->db, $cache_table, $cache_update, $result );
         if( !$this->check_invalid_text ){
             $trp = TRP_Translate_Press::get_trp_instance();
             $this->check_invalid_text = $trp->get_component( 'check_invalid_text' );
         }
-        $this->check_invalid_text->update_translations_without_invalid_text( $update_strings, $language_code, $columns_to_update );
+        $this->check_invalid_text->update_translations_without_invalid_text( $update_strings, $language_code, $columns_to_update, $invalidate_cache );
         $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running update_strings()' ) );
+
+        if ( $cache_changed && $result > 0 ) {
+            TRP_Dynamic_Cache::invalidate();
+        }
 
         return false !== $result;
 	}
@@ -1037,7 +1170,8 @@ class TRP_Query{
         $original_inserts = $this->original_strings_sync( $language_code, $new_strings );
 
         foreach ( $new_strings as $string ) {
-            array_push( $values, $string, NULL, self::NOT_TRANSLATED, $block_type, $original_inserts[$string]->id );
+            $original_id = isset( $original_inserts[ $string ] ) ? $original_inserts[ $string ]->id : 0;
+            array_push( $values, $string, NULL, self::NOT_TRANSLATED, $block_type, $original_id );
             $place_holders[] = "('%s','%s','%d','%d', %d)";
         }
 		$query .= implode( ', ', $place_holders );
@@ -1090,17 +1224,9 @@ class TRP_Query{
         if ( !is_array( $original_strings ) || count ( $original_strings ) == 0 ){
             return array();
         }
-        $query = "SELECT original,id FROM `" . $this->get_table_name_for_original_strings() . "` WHERE original IN ";
-
-        $placeholders = array();
-        $values = array();
-        foreach( $original_strings as $string ){
-            $placeholders[] = 'BINARY %s';
-            $values[] = $string;
-        }
-
-        $query .= "( " . implode ( ", ", $placeholders ) . " )";
-        $results = $this->db->get_results( $this->db->prepare( $query, $values ), OBJECT_K );
+        // see get_original_string_rows() for why this doesn't compare with BINARY in SQL
+        $lookup  = $this->get_original_string_rows( $this->get_table_name_for_original_strings(), array_unique( array_map( 'strval', array_values( $original_strings ) ) ) );
+        $results = $lookup['found'];
 
         $results_ids = array();
         if( !empty( $results ) && !empty( $original_strings ) ){
@@ -1306,13 +1432,44 @@ class TRP_Query{
         if ($inferior_limit == null && $batch_size ==null) {
             $dictionary = $this->db->get_results("SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field($this->get_gettext_table_name($language_code)) . "` AS tt LEFT JOIN `" . sanitize_text_field($this->get_table_name_for_gettext_original_strings()) . "` AS ot ON tt.original_id = ot.id", ARRAY_A);
         }else{
-            $dictionary = $this->db->get_results("SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field($this->get_gettext_table_name($language_code)) . "` AS tt LEFT JOIN `" . sanitize_text_field($this->get_table_name_for_gettext_original_strings()) . "` AS ot ON tt.original_id = ot.id LIMIT " . $inferior_limit . ", " . ($inferior_limit + $batch_size), ARRAY_A);
+            $dictionary = $this->db->get_results("SELECT tt.id, CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.original_id AS tt_original_id, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field($this->get_gettext_table_name($language_code)) . "` AS tt LEFT JOIN `" . sanitize_text_field($this->get_table_name_for_gettext_original_strings()) . "` AS ot ON tt.original_id = ot.id LIMIT " . (int) $inferior_limit . ", " . (int) $batch_size, ARRAY_A);
         }
         $this->maybe_record_automatic_translation_error(array( 'details' => 'Error running get_all_gettext_strings()' ) );
         if ( is_array( $dictionary ) && count( $dictionary ) === 0 && !$this->table_exists($this->get_gettext_table_name( $language_code )) ){
             // if table is missing then last_error is empty
             $this->maybe_record_automatic_translation_error(array( 'details' => 'Missing table ' . $this->get_gettext_table_name( $language_code ). ' . To regenerate tables, try going to Settings->TranslatePress->General tab and Save Settings.'), true );
         }
+        return $dictionary;
+    }
+
+    /**
+     * Return the gettext rows with a missing original_id ( NULL or 0 ) inside an id range.
+     *
+     * Batches by primary key range so every batch costs the same regardless of how far into the table it is.
+     *
+     * @param string $language_code  Language code of the gettext table.
+     * @param int    $inferior_limit Rows with an id strictly greater than this are returned.
+     * @param int    $batch_size     Width of the id range.
+     *
+     * @return array|null
+     */
+    public function get_gettext_strings_with_missing_original_id( $language_code, $inferior_limit, $batch_size ){
+        if( !$this->error_manager ){
+            $trp = TRP_Translate_Press::get_trp_instance();
+            $this->error_manager = $trp->get_component( 'error_manager' );
+        }
+
+        $dictionary = $this->db->get_results(
+            $this->db->prepare(
+                "SELECT tt.id, tt.original AS tt_original, tt.domain AS tt_domain, tt.original_id AS tt_original_id FROM `" . sanitize_text_field( $this->get_gettext_table_name( $language_code ) ) . "` AS tt WHERE ( tt.original_id IS NULL OR tt.original_id = 0 ) AND tt.id > %d AND tt.id <= %d",
+                $inferior_limit,
+                ( $inferior_limit + $batch_size )
+            ),
+            ARRAY_A
+        );
+        // The updater needs last_error to stop on a failed read, and a failed maintenance read shouldn't disable automatic translation.
+        $this->record_error_preserving_last_error( 'last_error_reading_gettext_strings_with_missing_original_id' );
+
         return $dictionary;
     }
 
@@ -1655,7 +1812,12 @@ class TRP_Query{
 		$placeholders = "( " . implode ( ", ", $placeholders ) . " )";
 		$query = 'UPDATE `' . implode( '`, `', $table_names ) . '` SET `' . implode( '`.block_type=' . $block_type . ', `', $table_names ) . '`.block_type=' . $block_type . ' WHERE `' . implode( '`.original IN ' . $placeholders . ' AND `', $table_names ) . '`.original IN ' . $placeholders ;
 
-		return $this->db->query( $this->db->prepare( $query, $values ) );
+		$result = $this->db->query( $this->db->prepare( $query, $values ) );
+		if ( $result > 0 ) {
+			TRP_Dynamic_Cache::invalidate();
+		}
+
+		return $result;
 	}
 
 	/**
@@ -1729,7 +1891,9 @@ class TRP_Query{
                 if (!empty($ids_to_delete)) {
                     $ids_string = implode(',', array_map('intval', $ids_to_delete));
                     $delete_query = "DELETE FROM $table_name WHERE id IN ($ids_string)";
-                    $this->db->query( $delete_query );
+                    if ( $this->db->query( $delete_query ) > 0 ) {
+                        TRP_Dynamic_Cache::invalidate();
+                    }
                 }
             }
 
@@ -1873,6 +2037,7 @@ class TRP_Query{
             $query = $this->get_remove_cdata_query($table_name, $batch_size);
             $rows_affected = $this->db->query( $query );
             if ( $rows_affected > 0 ) {
+                TRP_Dynamic_Cache::invalidate();
                 return false;
             }else{
                 return true;
@@ -2081,7 +2246,12 @@ class TRP_Query{
 
         $sql = "DELETE FROM `" . sanitize_text_field( $table_name ). "` WHERE " . implode( " OR ", $place_holders );
         $query = $this->db->prepare( $sql, $values );
-        return $this->db->query( $query );
+        $result = $this->db->query( $query );
+        if ( $string_type !== 'gettext' && $result > 0 ) {
+            TRP_Dynamic_Cache::invalidate();
+        }
+
+        return $result;
     }
 
     /**
@@ -2179,7 +2349,12 @@ class TRP_Query{
 
     public function drop_table($table_name){
         $sql = "DROP TABLE `" . sanitize_text_field( $table_name ). "`";
-        return $this->db->query( $sql );
+        $result = $this->db->query( $sql );
+        if ( $result !== false && strpos( $table_name, $this->db->prefix . 'trp_dictionary_' ) === 0 ) {
+            TRP_Dynamic_Cache::invalidate();
+        }
+
+        return $result;
     }
 
     /**

@@ -776,6 +776,10 @@ class TRP_Glossary_Queries {
 
         $result = $wpdb->query( $wpdb->prepare( $sql, array_merge( $case_args, $ids ) ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- table name validated; values are prepared placeholders.
 
+        if ( $result > 0 ) {
+            TRP_Dynamic_Cache::invalidate();
+        }
+
         return ( $result === false ) ? 0 : count( $changes );
     }
 

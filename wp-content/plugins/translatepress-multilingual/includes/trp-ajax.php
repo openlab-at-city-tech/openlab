@@ -53,7 +53,7 @@ class TRP_Ajax{
         }
 
         if ( $this->connect_to_db() ){
-
+            require_once dirname(__FILE__) . '/class-dynamic-cache-store.php';
             $this->output_translations(
             	$this->sanitize_strings( $_POST['originals'] ),//phpcs:ignore
             	$this->sanitize_strings( $_POST['skip_machine_translation'] ),//phpcs:ignore
@@ -261,7 +261,7 @@ class TRP_Ajax{
      * @param string $original_language Language to translate from. Default language.
      */
     protected function output_translations( $strings, $skip_machine_translation, $language, $original_language ){
-        $sql = 'SELECT original, translated, status FROM ' . $this->table_prefix . 'trp_dictionary_' . strtolower( $original_language ) . '_' . strtolower( $language ) . ' WHERE original IN (\'' . implode( "','", $strings ) .'\') AND status != 0';
+        $sql = 'SELECT original, translated, status FROM ' . TRP_Dynamic_Cache_Store::table_name( $this->table_prefix, $original_language, $language ) . ' WHERE original IN (\'' . implode( "','", $strings ) .'\') AND status != 0';
         try {
             $result = mysqli_query( $this->connection, $sql );
         }catch(Throwable $e){
@@ -280,7 +280,13 @@ class TRP_Ajax{
             }
 
 	        $dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'regular', 'dynamicstrings', null, null );
-            echo json_encode( $dictionary_by_original, self::SAFE_JSON_FLAGS );
+            $response = false;
+            if ( isset( $_POST['trp_cache_protocol'] ) && $_POST['trp_cache_protocol'] === '2' ) {
+                $store    = new TRP_Dynamic_Cache_Store( $this->connection, $this->table_prefix );
+                $response = $store->cache_rows( $dictionary_by_original, $original_language, $language, $skip_machine_translation );
+            }
+
+            echo json_encode( $response === false ? $dictionary_by_original : $response, self::SAFE_JSON_FLAGS );
         }
 
     }

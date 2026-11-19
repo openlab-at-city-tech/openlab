@@ -338,6 +338,18 @@ div.trp-switch .trp-switch-input {
     padding-left: 28px;
 }
 
+/* Advanced → Import & Export: a link to its own page, no checkbox column to align with */
+.trp-settings-container-import_export .trp-settings-options-item__nocheckbox{
+    padding-left: 0;
+}
+
+.trp-settings-container-import_export .trp-ie-open-tool{
+    display: inline-flex;
+    align-items: center;
+    margin-top: 12px;
+    text-decoration: none;
+}
+
 .trp-upgrade-notice-table__wrapper{
     width: 875px; /* Match the language table*/
     margin-top: 10px;

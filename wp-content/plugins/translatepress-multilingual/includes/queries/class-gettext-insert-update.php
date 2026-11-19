@@ -423,6 +423,41 @@ class TRP_Gettext_Insert_Update extends TRP_Query {
 	}
 
 	/**
+	 * Set the original_id of gettext rows that are missing one.
+	 *
+	 * Rows that would break the unique ( original_id, plural_form ) key are left as they are, without failing the
+	 * rest of the rows. They duplicate another row, so choosing which translation to keep is not decided here.
+	 *
+	 * @param array  $original_ids  Original ids, keyed by gettext row id.
+	 * @param string $language_code Language code of the gettext table.
+	 *
+	 * @return bool Whether the query ran successfully.
+	 */
+	public function update_missing_gettext_original_ids( $original_ids, $language_code ) {
+		if ( empty( $original_ids ) ) {
+			return true;
+		}
+
+		if ( ! $this->error_manager ) {
+			$trp                 = TRP_Translate_Press::get_trp_instance();
+			$this->error_manager = $trp->get_component( 'error_manager' );
+		}
+
+		$cases = '';
+		foreach ( $original_ids as $id => $original_id ) {
+			$cases .= ' WHEN ' . (int) $id . ' THEN ' . (int) $original_id;
+		}
+		$ids        = implode( ',', array_map( 'intval', array_keys( $original_ids ) ) );
+		$table_name = sanitize_text_field( $this->get_gettext_table_name( $language_code ) );
+
+		$result = $this->db->query( "UPDATE IGNORE `$table_name` SET original_id = CASE id$cases END WHERE id IN ($ids) AND ( original_id IS NULL OR original_id = 0 )" );
+
+		$this->record_error_preserving_last_error( 'last_error_updating_missing_gettext_original_ids' );
+
+		return false !== $result;
+	}
+
+	/**
 	 * Insert in the DB gettext_original_meta the pair meta_key = meta_value for all original ids
 	 *
 	 * If exact pair meta_key = meta_value exists then skip inserting

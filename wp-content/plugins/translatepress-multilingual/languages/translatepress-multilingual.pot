@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: TranslatePress Multilingual 3.3.8\n"
+"Project-Id-Version: TranslatePress Multilingual 3.3.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/translatepress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-03T10:40:42+02:00\n"
+"POT-Creation-Date: 2026-11-17T12:43:11+02:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: translatepress-multilingual\n"
@@ -77,8 +77,8 @@ msgstr ""
 #: includes/class-plugin-notices.php:715
 #: includes/class-reviews.php:129
 #: includes/class-reviews.php:132
-#: includes/class-upgrade.php:1525
-#: includes/class-upgrade.php:2234
+#: includes/class-upgrade.php:1527
+#: includes/class-upgrade.php:2215
 #: includes/upgrade/class-batch-processor.php:609
 #: includes/upgrade/class-batch-processor.php:1260
 msgid "Dismiss this notice."
@@ -256,6 +256,7 @@ msgstr ""
 #: add-ons-pro/automatic-language-detection/class-automatic-language-detection.php:71
 #: add-ons-pro/automatic-language-detection/partials/general-settings.php:6
 #: includes/class-translation-manager.php:170
+#: includes/import-export/class-import-export-writer.php:98
 #: includes/onboarding/class-addons.php:77
 #: partials/addons-settings-page.php:81
 msgid "Automatic User Language Detection"
@@ -916,6 +917,23 @@ msgstr ""
 msgid "Change lang attribute of the html tag to a format that includes country regional or not. <br>In HTML, the lang attribute (<html lang=\"en-US\">)  should be used to  specify the language of text content so that the  browser can correctly display or process  your content (eg. for  hyphenation, styling, spell checking, etc)."
 msgstr ""
 
+#: includes/advanced-settings/import-export.php:11
+msgid "Import & Export"
+msgstr ""
+
+#: includes/advanced-settings/import-export.php:30
+#: includes/import-export/class-import-export.php:429
+msgid "Import & Export Translations"
+msgstr ""
+
+#: includes/advanced-settings/import-export.php:38
+msgid "Move translations and settings to another site, e.g. from staging to production."
+msgstr ""
+
+#: includes/advanced-settings/import-export.php:39
+msgid "Open Import & Export"
+msgstr ""
+
 #: includes/advanced-settings/load-legacy-language-switcher.php:12
 msgid "Load legacy Language Switcher"
 msgstr ""
@@ -1073,6 +1091,7 @@ msgstr ""
 #: includes/class-abilities.php:59
 #: includes/class-elementor-language-for-blocks.php:100
 #: includes/class-wp-bakery-language-for-blocks.php:179
+#: includes/import-export/sources/class-import-source-translatepress.php:24
 msgid "TranslatePress"
 msgstr ""
 
@@ -1307,32 +1326,32 @@ msgstr ""
 msgid "Advanced"
 msgstr ""
 
-#: includes/class-advanced-tab.php:650
-#: includes/class-advanced-tab.php:712
-#: includes/class-advanced-tab.php:786
+#: includes/class-advanced-tab.php:666
+#: includes/class-advanced-tab.php:728
+#: includes/class-advanced-tab.php:802
 msgid "Are you sure you want to remove this item?"
 msgstr ""
 
-#: includes/class-advanced-tab.php:650
-#: includes/class-advanced-tab.php:712
-#: includes/class-advanced-tab.php:786
+#: includes/class-advanced-tab.php:666
+#: includes/class-advanced-tab.php:728
+#: includes/class-advanced-tab.php:802
 #: includes/onboarding/class-languages.php:124
 #: includes/onboarding/class-languages.php:151
 #: partials/main-settings-language-selector.php:127
 msgid "Remove"
 msgstr ""
 
-#: includes/class-advanced-tab.php:691
-#: includes/class-advanced-tab.php:756
-#: includes/class-advanced-tab.php:908
+#: includes/class-advanced-tab.php:707
+#: includes/class-advanced-tab.php:772
+#: includes/class-advanced-tab.php:924
 #: partials/main-settings-language-selector.php:182
 #: assets/js/trp-ald-popup-configurator.js:2
 #: assets/js/trp-lang-switcher-configurator.js:2
 msgid "Add"
 msgstr ""
 
-#: includes/class-advanced-tab.php:840
-#: includes/class-advanced-tab.php:890
+#: includes/class-advanced-tab.php:856
+#: includes/class-advanced-tab.php:906
 msgid "Select..."
 msgstr ""
 
@@ -1497,6 +1516,7 @@ msgid "These are the most recent 5 errors logged by TranslatePress:"
 msgstr ""
 
 #: includes/class-error-manager.php:196
+#: partials/import-export-page.php:221
 msgid "Yes"
 msgstr ""
 
@@ -2433,26 +2453,26 @@ msgstr ""
 
 #: includes/class-translation-manager.php:1023
 #: includes/class-translation-manager.php:1048
-#: includes/class-upgrade.php:436
+#: includes/class-upgrade.php:438
 msgid "IMPORTANT: It is strongly recommended to first backup the database!"
 msgstr ""
 
 #: includes/class-translation-manager.php:1024
 #: includes/class-translation-manager.php:1049
-#: includes/class-upgrade.php:437
+#: includes/class-upgrade.php:439
 msgid "Are you sure you want to continue?"
 msgstr ""
 
 #: includes/class-translation-manager.php:1029
 #: includes/class-translation-manager.php:1053
-#: includes/class-upgrade.php:447
-#: includes/class-upgrade.php:461
+#: includes/class-upgrade.php:449
+#: includes/class-upgrade.php:463
 msgid "TranslatePress data update"
 msgstr ""
 
 #: includes/class-translation-manager.php:1029
 #: includes/class-translation-manager.php:1053
-#: includes/class-upgrade.php:461
+#: includes/class-upgrade.php:463
 msgid "We need to update your translations database to the latest version."
 msgstr ""
 
@@ -2462,7 +2482,7 @@ msgstr ""
 
 #: includes/class-translation-manager.php:1032
 #: includes/class-translation-manager.php:1056
-#: includes/class-upgrade.php:462
+#: includes/class-upgrade.php:464
 msgid "Run the updater"
 msgstr ""
 
@@ -2574,228 +2594,232 @@ msgstr ""
 msgid "Twitter Image"
 msgstr ""
 
-#: includes/class-upgrade.php:229
+#: includes/class-upgrade.php:231
 #, php-format
 msgid "Removing cdata dictionary strings for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:230
+#: includes/class-upgrade.php:232
 #, php-format
 msgid "Removing untranslated dictionary links for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:231
+#: includes/class-upgrade.php:233
 #, php-format
 msgid "Removing duplicated gettext strings for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:232
+#: includes/class-upgrade.php:234
 #, php-format
 msgid "Removing duplicated dictionary strings for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:233
+#: includes/class-upgrade.php:235
 #, php-format
 msgid "Removing untranslated dictionary strings where translation is available for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:234
+#: includes/class-upgrade.php:236
 #, php-format
 msgid "Inserting original strings for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:235
+#: includes/class-upgrade.php:237
 #, php-format
 msgid "Cleaning original strings table for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:236
+#: includes/class-upgrade.php:238
 #, php-format
 msgid "Updating original string ids for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:237
+#: includes/class-upgrade.php:239
 #, php-format
 msgid "Regenerating original meta table for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:238
+#: includes/class-upgrade.php:240
 #, php-format
 msgid "Cleaning original meta table for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:239
+#: includes/class-upgrade.php:241
 #, php-format
 msgid "Replacing original id NULL with value for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:240
+#: includes/class-upgrade.php:242
 #, php-format
 msgid "Inserting gettext original strings for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:241
+#: includes/class-upgrade.php:243
 #, php-format
 msgid "Cleaning gettext original strings table for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:242
+#: includes/class-upgrade.php:244
 #, php-format
 msgid "Updating gettext original string ids for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:243
+#: includes/class-upgrade.php:245
 msgid "Starting gettext database optimization in the background..."
 msgstr ""
 
-#: includes/class-upgrade.php:244
+#: includes/class-upgrade.php:246
 msgid "Migrating taxonomy and post type base slugs to new table structure..."
 msgstr ""
 
-#: includes/class-upgrade.php:245
+#: includes/class-upgrade.php:247
 #, php-format
 msgid "Migrating post slugs to new table structure for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:246
+#: includes/class-upgrade.php:248
 #, php-format
 msgid "Migrating term slugs to new table structure for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:247
+#: includes/class-upgrade.php:249
 msgid "Finishing up..."
 msgstr ""
 
-#: includes/class-upgrade.php:447
+#: includes/class-upgrade.php:449
 msgid "TranslatePress needs to optimize gettext database tables. Translations continue to work while this runs in the background."
 msgstr ""
 
-#: includes/class-upgrade.php:448
+#: includes/class-upgrade.php:450
 msgid "Before starting, we strongly recommend creating a database backup."
 msgstr ""
 
-#: includes/class-upgrade.php:449
+#: includes/class-upgrade.php:451
 msgid "Start optimization"
 msgstr ""
 
-#: includes/class-upgrade.php:539
+#: includes/class-upgrade.php:541
 msgid "Update aborted! Could not schedule gettext database optimization."
 msgstr ""
 
-#: includes/class-upgrade.php:604
+#: includes/class-upgrade.php:606
 #, php-format
 msgid "Database optimization did not complete successfully. We recommend restoring the original database or <a href=\"%s\" >trying again.</a>"
 msgstr ""
 
-#: includes/class-upgrade.php:620
+#: includes/class-upgrade.php:622
 msgid "Update aborted! Your user account doesn't have the capability to perform database updates."
 msgstr ""
 
-#: includes/class-upgrade.php:625
+#: includes/class-upgrade.php:627
 msgid "Update aborted! Invalid nonce."
 msgstr ""
 
-#: includes/class-upgrade.php:647
-#: includes/class-upgrade.php:785
+#: includes/class-upgrade.php:649
+#: includes/class-upgrade.php:787
 msgid "Back to TranslatePress Settings"
 msgstr ""
 
-#: includes/class-upgrade.php:651
+#: includes/class-upgrade.php:653
 msgid "Successfully updated database!"
 msgstr ""
 
-#: includes/class-upgrade.php:661
+#: includes/class-upgrade.php:663
 #, php-format
 msgid "Updating database to version %s+"
 msgstr ""
 
-#: includes/class-upgrade.php:665
-#: includes/class-upgrade.php:746
+#: includes/class-upgrade.php:667
+#: includes/class-upgrade.php:748
 #, php-format
 msgid "Processing table for language %s..."
 msgstr ""
 
-#: includes/class-upgrade.php:674
+#: includes/class-upgrade.php:676
 msgid "Update aborted! Incorrect action."
 msgstr ""
 
-#: includes/class-upgrade.php:677
+#: includes/class-upgrade.php:679
 msgid "Update aborted! Start the gettext database optimization separately from the Advanced settings page."
 msgstr ""
 
-#: includes/class-upgrade.php:680
+#: includes/class-upgrade.php:682
 msgid "Update aborted! Incorrect language code."
 msgstr ""
 
-#: includes/class-upgrade.php:743
-#: includes/class-upgrade.php:751
+#: includes/class-upgrade.php:745
+#: includes/class-upgrade.php:753
 msgid " done."
 msgstr ""
 
-#: includes/class-upgrade.php:809
+#: includes/class-upgrade.php:811
 #: includes/upgrade/gettext-optimization/class-gettext-originals-lookup-hash-migration.php:1003
 #, php-format
 msgid "Update aborted while %1$s. SQL error: %2$s"
 msgstr ""
 
-#: includes/class-upgrade.php:892
+#: includes/class-upgrade.php:894
 msgid "inserting original strings"
 msgstr ""
 
-#: includes/class-upgrade.php:899
+#: includes/class-upgrade.php:901
 msgid "checking original string insertion progress"
 msgstr ""
 
-#: includes/class-upgrade.php:916
+#: includes/class-upgrade.php:918
 msgid "cleaning duplicate original strings"
 msgstr ""
 
-#: includes/class-upgrade.php:946
+#: includes/class-upgrade.php:948
 msgid "updating original string IDs"
 msgstr ""
 
-#: includes/class-upgrade.php:953
+#: includes/class-upgrade.php:955
 msgid "checking original string ID update progress"
 msgstr ""
 
-#: includes/class-upgrade.php:1218
+#: includes/class-upgrade.php:1220
 msgid "inserting gettext original strings"
 msgstr ""
 
-#: includes/class-upgrade.php:1225
+#: includes/class-upgrade.php:1227
 msgid "checking gettext original insertion progress"
 msgstr ""
 
-#: includes/class-upgrade.php:1251
+#: includes/class-upgrade.php:1253
 msgid "cleaning duplicate gettext original strings"
 msgstr ""
 
-#: includes/class-upgrade.php:1278
+#: includes/class-upgrade.php:1280
 msgid "updating gettext original string IDs"
 msgstr ""
 
-#: includes/class-upgrade.php:1285
+#: includes/class-upgrade.php:1287
 msgid "checking gettext original string ID update progress"
 msgstr ""
 
-#: includes/class-upgrade.php:1523
+#: includes/class-upgrade.php:1525
 #, php-format
 msgid "All individual TranslatePress add-on plugins <a href=\"%1$s\" target=\"_blank\">have been discontinued</a> and are now included in the premium Personal, Business and Developer versions of TranslatePress. Please log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download the new premium version and install it. Your individual addons settings will be ported over."
 msgstr ""
 
-#: includes/class-upgrade.php:2260
+#: includes/class-upgrade.php:1551
+msgid "reading gettext strings with missing original IDs"
+msgstr ""
+
+#: includes/class-upgrade.php:2241
 msgid "Brand-new Language Switcher Settings are here!"
 msgstr ""
 
-#: includes/class-upgrade.php:2263
+#: includes/class-upgrade.php:2244
 msgid "Explore pre-made templates, switch colors, flag styles, spacing, layouts & more. Use the live preview to perfect your switcher in seconds."
 msgstr ""
 
-#: includes/class-upgrade.php:2267
+#: includes/class-upgrade.php:2248
 msgid "Start customizing"
 msgstr ""
 
-#: includes/class-upgrade.php:2268
+#: includes/class-upgrade.php:2249
 msgid "Read documentation"
 msgstr ""
 
@@ -2803,7 +2827,7 @@ msgstr ""
 msgid "<strong>TranslatePress</strong> requires <strong><a href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP library</a></strong>. Please contact your server administrator to install it on your server."
 msgstr ""
 
-#: includes/compatibility-functions.php:2185
+#: includes/compatibility-functions.php:2186
 msgid "Detected long query limitation on WPEngine hosting. Some large pages may appear untranslated. You can remove limitation by adding the following to your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); "
 msgstr ""
 
@@ -2960,132 +2984,132 @@ msgstr ""
 msgid "The language switcher inherits styling options from shortcode. <a href=\"%s\" target=\"_blank\" rel=\"noopener noreferrer\">Open shortcode settings</a>."
 msgstr ""
 
-#: includes/functions.php:657
-#: includes/functions.php:679
+#: includes/functions.php:666
+#: includes/functions.php:688
 #: includes/mtapi/functions.php:8
 #: partials/glossary-settings-page.php:66
 msgid "TranslatePress AI"
 msgstr ""
 
-#: includes/functions.php:660
+#: includes/functions.php:669
 msgid "Your TranslatePress AI API Key is valid."
 msgstr ""
 
-#: includes/functions.php:661
+#: includes/functions.php:670
 msgid "Your TranslatePress AI API Key is invalid."
 msgstr ""
 
-#: includes/functions.php:662
+#: includes/functions.php:671
 msgid "Your TranslatePress AI API Key has expired."
 msgstr ""
 
-#: includes/functions.php:663
-#: includes/functions.php:689
+#: includes/functions.php:672
+#: includes/functions.php:698
 msgid "Activate API Key"
 msgstr ""
 
-#: includes/functions.php:664
+#: includes/functions.php:673
 msgid "Deactivate API Key"
 msgstr ""
 
-#: includes/functions.php:665
+#: includes/functions.php:674
 msgid "Add a TranslatePress AI API Key"
 msgstr ""
 
-#: includes/functions.php:666
 #: includes/functions.php:675
+#: includes/functions.php:684
 msgid "TranslatePress AI API Key"
 msgstr ""
 
-#: includes/functions.php:667
+#: includes/functions.php:676
 #, php-format
 msgid "Manage your TranslatePress AI API Key in your %1$s."
 msgstr ""
 
-#: includes/functions.php:668
+#: includes/functions.php:677
 msgid "Don’t have a TranslatePress AI API Key?"
 msgstr ""
 
-#: includes/functions.php:669
+#: includes/functions.php:678
 msgid "Get a free TranslatePress AI API Key Today"
 msgstr ""
 
-#: includes/functions.php:672
+#: includes/functions.php:681
 msgid "Add your TranslatePress AI API Key"
 msgstr ""
 
-#: includes/functions.php:673
+#: includes/functions.php:682
 msgid "Add your TranslatePress AI API Key to unlock all premium features. Find the TranslatePress AI API Key in your"
 msgstr ""
 
-#: includes/functions.php:674
+#: includes/functions.php:683
 msgid "Your TranslatePress AI API Key is valid and active."
 msgstr ""
 
-#: includes/functions.php:676
+#: includes/functions.php:685
 msgid "Activate TranslatePress AI API Key"
 msgstr ""
 
-#: includes/functions.php:682
+#: includes/functions.php:691
 msgid "No Active API Key Detected for this website."
 msgstr ""
 
-#: includes/functions.php:683
+#: includes/functions.php:692
 msgid "In order to enable Automatic Translation using TranslatePress AI, you need an API key by creating a free account."
 msgstr ""
 
-#: includes/functions.php:684
+#: includes/functions.php:693
 msgid "Enter your API key"
 msgstr ""
 
-#: includes/functions.php:687
+#: includes/functions.php:696
 msgid "In order to enable Automatic Translation using TranslatePress AI, please enter your API key from"
 msgstr ""
 
-#: includes/functions.php:688
+#: includes/functions.php:697
 msgid "API Key"
 msgstr ""
 
-#: includes/functions.php:690
+#: includes/functions.php:699
 msgid "No Active TranslatePress AI API Key Detected for this website."
 msgstr ""
 
-#: includes/functions.php:691
+#: includes/functions.php:700
 msgid "Get Your Free TranslatePress AI API Key"
 msgstr ""
 
-#: includes/functions.php:692
+#: includes/functions.php:701
 msgid "Generate API Key"
 msgstr ""
 
-#: includes/functions.php:693
+#: includes/functions.php:702
 #, php-format
 msgid "You have a valid %s <strong>API Key</strong>."
 msgstr ""
 
-#: includes/functions.php:694
+#: includes/functions.php:703
 #, php-format
 msgid "Manage your API Key & quota on the %s"
 msgstr ""
 
-#: includes/functions.php:697
+#: includes/functions.php:706
 msgid "Get a Free AI API Key"
 msgstr ""
 
-#: includes/functions.php:700
+#: includes/functions.php:709
 msgid "This website is already activated under a free API key. Each website can only use one free API key."
 msgstr ""
 
-#: includes/functions.php:701
+#: includes/functions.php:710
 #, php-format
 msgid "This website is already activated under a free API key. Each website can only use one free API key. Please upgrade to a premium plan for more TranslatePress AI words from %1$s your account %2$s."
 msgstr ""
 
-#: includes/functions.php:704
+#: includes/functions.php:713
 msgid "Debug Data for API Key Checking"
 msgstr ""
 
-#: includes/functions.php:705
+#: includes/functions.php:714
 msgid "Debug Data for API Key Activation"
 msgstr ""
 
@@ -3149,6 +3173,7 @@ msgstr ""
 
 #: includes/glossary/class-glossary-queries.php:157
 #: partials/glossary-replace-page.php:146
+#: partials/import-export-page.php:326
 #: assets/js/trp-ald-popup-configurator.js:2
 #: assets/js/trp-lang-switcher-configurator.js:2
 msgid "Cancel"
@@ -3307,6 +3332,575 @@ msgstr ""
 msgid "There was an error on the server processing your Google Translate key."
 msgstr ""
 
+#: includes/import-export/class-import-export-archive.php:25
+msgid "This .zip file isn't a TranslatePress export. On the other site, go to Settings → TranslatePress → Advanced → Import & Export and click Generate export file."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:26
+msgid "This file can't be opened as a .zip file. It may be damaged, or another kind of file renamed to .zip. Choose the .zip file made with Generate export file on the other site."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:27
+msgid "This export file is damaged. Generate a new one on the other site."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:28
+msgid "This export file is incomplete. Generate a new one on the other site."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:29
+msgid "This file is too large to import."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:30
+#: includes/import-export/sources/class-import-source-translatepress.php:205
+#: includes/import-export/sources/class-import-source-translatepress.php:208
+msgid "The file could not be uploaded. Please try again."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:31
+#: includes/import-export/class-import-export-job.php:83
+#: includes/import-export/sources/class-import-source-translatepress.php:46
+msgid "The file could not be saved on the server. Check that the uploads folder is writable."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:32
+msgid "The file could not be unpacked on the server. The server may be out of disk space, or the uploads folder may not be writable."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:33
+#: includes/import-export/class-import-export-exporter.php:258
+msgid "The export file could not be created. Check that the uploads folder is writable."
+msgstr ""
+
+#: includes/import-export/class-import-export-archive.php:34
+msgid "This file was made with a newer version of TranslatePress. Update TranslatePress on this site, then import it again."
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/class-import-export-exporter.php:79
+#, php-format
+msgid "Exporting page translations for %s"
+msgstr ""
+
+#: includes/import-export/class-import-export-exporter.php:82
+#: includes/import-export/sources/class-import-source-translatepress.php:315
+msgid "Finishing page translations"
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/class-import-export-exporter.php:86
+#, php-format
+msgid "Exporting theme and plugin strings for %s"
+msgstr ""
+
+#: includes/import-export/class-import-export-exporter.php:89
+#: includes/import-export/sources/class-import-source-translatepress.php:339
+msgid "Finishing theme and plugin strings"
+msgstr ""
+
+#: includes/import-export/class-import-export-exporter.php:92
+msgid "Exporting translated slugs"
+msgstr ""
+
+#: includes/import-export/class-import-export-exporter.php:175
+msgid "Exporting settings"
+msgstr ""
+
+#: includes/import-export/class-import-export-exporter.php:176
+msgid "Creating the export file"
+msgstr ""
+
+#: includes/import-export/class-import-export-exporter.php:254
+msgid "The export stopped because of a database error. Generate the export file again."
+msgstr ""
+
+#. translators: %d is a percentage.
+#: includes/import-export/class-import-export-exporter.php:543
+#, php-format
+msgid "Creating the export file: %d%%"
+msgstr ""
+
+#: includes/import-export/class-import-export-loader.php:40
+msgid "TranslatePress Import & Export Translations"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:95
+#: includes/onboarding/class-addons.php:51
+#: partials/addons-settings-page.php:41
+msgid "SEO Pack"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:96
+#: includes/onboarding/class-addons.php:57
+#: partials/addons-settings-page.php:58
+msgid "Multiple Languages"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:97
+#: includes/onboarding/class-addons.php:71
+#: partials/addons-settings-page.php:73
+msgid "DeepL Automatic Translation"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:99
+#: includes/onboarding/class-addons.php:83
+#: partials/addons-settings-page.php:89
+msgid "Translator Accounts"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:100
+#: includes/onboarding/class-addons.php:89
+#: partials/addons-settings-page.php:97
+msgid "Browse As User Role"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:101
+#: includes/onboarding/class-addons.php:95
+#: partials/addons-settings-page.php:105
+msgid "Navigation Based on Language"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:146
+msgid "TranslatePress license key"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:147
+msgid "Google Translate API key"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:148
+msgid "DeepL API key"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:178
+msgid "License key: imported and activated for this site."
+msgstr ""
+
+#. translators: %s is the reason, a short sentence.
+#: includes/import-export/class-import-export-writer.php:181
+#, php-format
+msgid "The license key was imported, but it could not be activated for this site. %s Check it in Settings → TranslatePress → License."
+msgstr ""
+
+#. translators: %s is the name of a key, e.g. "DeepL API key".
+#: includes/import-export/class-import-export-writer.php:191
+#, php-format
+msgid "%s: imported."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:205
+msgid "Automatic translation: on, with the engine of the other site."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:206
+msgid "Automatic translation: off, as on the other site."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:208
+msgid "The automatic translation engine of the other site can't be used on this site yet, so automatic translation was left as it is. Check it in Settings → TranslatePress → Automatic Translation."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:233
+msgid "The license has expired."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:234
+msgid "The license has been disabled."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:235
+msgid "The license is disabled for this site's address."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:236
+msgid "The license does not match the TranslatePress version installed on this site."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:237
+msgid "The license has reached its activation limit."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:239
+msgid "The license server did not accept it."
+msgstr ""
+
+#. translators: %s is a language code.
+#: includes/import-export/class-import-export-writer.php:361
+#, php-format
+msgid "Page translations for %s were not imported: it is not a valid language code."
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/class-import-export-writer.php:368
+#, php-format
+msgid "Page translations for %s were not imported: the language is not set up on this site."
+msgstr ""
+
+#. translators: %s is a language code.
+#: includes/import-export/class-import-export-writer.php:530
+#, php-format
+msgid "Theme and plugin strings for %s were not imported: it is not a valid language code."
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/class-import-export-writer.php:537
+#, php-format
+msgid "Theme and plugin strings for %s were not imported: the language is not set up on this site."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:693
+msgid "Translated slugs were not imported: they need the SEO Pack add-on, which is not active on this site."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:748
+msgid "The translated slugs could not be written to the database."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:815
+#: includes/import-export/class-import-export-writer.php:862
+msgid "Some translation details were not imported: their database table could not be created. Check that the database user is allowed to create tables, then import the file again."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1001
+msgid "The settings were not imported: the settings in the file are damaged."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1005
+msgid "The settings were not imported: the file does not contain the main TranslatePress settings."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1013
+msgid "The settings were not imported: the file has no valid default language."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1082
+msgid "Automatic User Language Detection settings were not imported: the add-on is not active on this site."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1089
+msgid "Automatic User Language Detection settings were not imported: the settings in the file are damaged."
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1105
+msgid "Translated post type and taxonomy slugs were not imported: the SEO Pack add-on is not active on this site."
+msgstr ""
+
+#. translators: 1: a number, 2: which language list, e.g. "the site languages".
+#: includes/import-export/class-import-export-writer.php:1168
+#, php-format
+msgid "Only the first %1$d language in %2$s was imported."
+msgid_plural "Only the first %1$d languages in %2$s were imported."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: which language list, e.g. "the site languages", 2: language codes.
+#: includes/import-export/class-import-export-writer.php:1184
+#, php-format
+msgid "A language in %1$s is not available on this site and was left out: %2$s."
+msgid_plural "Some languages in %1$s are not available on this site and were left out: %2$s."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/import-export/class-import-export-writer.php:1199
+msgid "the site languages"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1200
+msgid "the published languages"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1202
+msgid "the language settings"
+msgstr ""
+
+#. translators: %s is the reason the custom language codes were rejected.
+#: includes/import-export/class-import-export-writer.php:1408
+#, php-format
+msgid "The custom languages in the file were not imported: %s"
+msgstr ""
+
+#: includes/import-export/class-import-export-writer.php:1427
+msgid "Some advanced settings in the file are not used by this version of TranslatePress and were ignored."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:50
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:93
+msgid "The export was stopped before it finished, because the page was left while it was running. Generate the export file again."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:96
+msgid "The import was stopped before it finished, because the page was left while it was running. The translations imported so far are kept. Upload the file again to import the rest."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:117
+msgid "The tool is busy. Try again in a few seconds."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:159
+#: includes/import-export/class-import-export.php:420
+msgid "You do not have permission to perform this action."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:244
+#: partials/import-export-page.php:92
+msgid "Counting the translations…"
+msgstr ""
+
+#. translators: 1: rows done, 2: total rows.
+#: includes/import-export/class-import-export.php:253
+#, php-format
+msgid "%1$s of %2$s"
+msgstr ""
+
+#: includes/import-export/class-import-export.php:262
+msgid "The connection to the server was lost. Reload the page to continue."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:270
+msgid "JavaScript is needed to run this."
+msgstr ""
+
+#. translators: %s is a file size, e.g. 64 MB.
+#: includes/import-export/class-import-export.php:296
+#: includes/import-export/sources/class-import-source-translatepress.php:199
+#, php-format
+msgid "The uploaded file is larger than the maximum upload size allowed on this server (%s)."
+msgstr ""
+
+#. translators: %s is the step that was running.
+#: includes/import-export/class-import-export.php:301
+#, php-format
+msgid "The import stopped before it finished this step: %s."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:304
+msgid "The settings were already imported."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:315
+msgid "This kind of import isn't available on this site."
+msgstr ""
+
+#. translators: 1: a file name, 2: an error message.
+#: includes/import-export/class-import-export.php:345
+#, php-format
+msgid "%1$s: %2$s"
+msgstr ""
+
+#: includes/import-export/class-import-export.php:360
+msgid "Choose whether to import the keys this file holds, then start the import."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:428
+msgid "This export file is no longer on the server: it is deleted once it has been downloaded. Generate a new one."
+msgstr ""
+
+#: includes/import-export/class-import-export.php:433
+msgid "Back to Import & Export"
+msgstr ""
+
+#. translators: %s is a number.
+#: includes/import-export/class-import-export.php:469
+#, php-format
+msgid "%s translation could not be imported. The notes below say why."
+msgid_plural "%s translations could not be imported. The notes below say why."
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:71
+msgid "This file was exported from a paid version of TranslatePress, and this site runs the free version. The free version:"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:73
+msgid "This file needs a paid version of TranslatePress"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:75
+msgid "supports only two languages"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:76
+msgid "has no add-ons"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:77
+msgid "can't translate URL slugs"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:79
+msgid "Install and activate the paid TranslatePress plugin from your account at translatepress.com, then upload the file again."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:87
+msgid "This file has nothing that can be imported."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:195
+msgid "No file was uploaded."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:211
+msgid "The uploaded file is empty."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:221
+msgid "This isn't a .zip file. Choose the .zip file made with Generate export file on the other site."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:285
+#: includes/import-export/sources/class-import-source-translatepress.php:287
+msgid "Importing settings"
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:305
+#, php-format
+msgid "Importing page translations for %s"
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:308
+#, php-format
+msgid "%s: page translations"
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:330
+#, php-format
+msgid "Importing theme and plugin strings for %s"
+msgstr ""
+
+#. translators: %s is a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:333
+#, php-format
+msgid "%s: theme and plugin strings"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:348
+msgid "Translated slugs: they need the SEO Pack add-on, which isn't active on this site."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:350
+msgid "Importing translated slugs"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:350
+#: includes/import-export/sources/class-import-source-translatepress.php:381
+#: partials/import-export-page.php:172
+#: partials/import-export-summary.php:32
+msgid "Translated slugs"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:361
+msgid "Finishing up"
+msgstr ""
+
+#. translators: %s is a list of add-on names.
+#: includes/import-export/sources/class-import-source-translatepress.php:365
+#, php-format
+msgid "Add-ons that are not part of the TranslatePress version on this site, and their settings: %s."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:368
+msgid "Nothing in this file can be imported with these options."
+msgstr ""
+
+#. translators: 1: language names, 2: a language name, 3: a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:373
+#, php-format
+msgid "Page translations for %1$s: made from %2$s, but this site's default language is %3$s."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:379
+#: partials/import-export-page.php:172
+#: partials/import-export-summary.php:29
+msgid "Page translations"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:380
+#: partials/import-export-page.php:172
+#: partials/import-export-summary.php:30
+msgid "Theme and plugin strings"
+msgstr ""
+
+#. translators: 1: a kind of translation, e.g. "Page translations", 2: language names.
+#: includes/import-export/sources/class-import-source-translatepress.php:389
+#, php-format
+msgid "%1$s for %2$s: language not in the imported settings."
+msgstr ""
+
+#. translators: 1: a kind of translation, e.g. "Page translations", 2: language names.
+#: includes/import-export/sources/class-import-source-translatepress.php:391
+#, php-format
+msgid "%1$s for %2$s: language not on this site."
+msgstr ""
+
+#. translators: %s is a list of add-on names.
+#: includes/import-export/sources/class-import-source-translatepress.php:421
+#, php-format
+msgid "Add-ons activated: %s"
+msgstr ""
+
+#. translators: %s is a list of add-on names.
+#: includes/import-export/sources/class-import-source-translatepress.php:425
+#, php-format
+msgid "Add-ons deactivated: %s"
+msgstr ""
+
+#. translators: 1: a language name, 2: a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:429
+#, php-format
+msgid "Default language: %1$s → %2$s"
+msgstr ""
+
+#. translators: %s is a list of language names.
+#: includes/import-export/sources/class-import-source-translatepress.php:434
+#, php-format
+msgid "Languages added: %s"
+msgstr ""
+
+#. translators: %s is a list of language names.
+#: includes/import-export/sources/class-import-source-translatepress.php:439
+#, php-format
+msgid "Languages removed: %s"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:449
+msgid "To import them, also import the settings. Check what that changes on this site first."
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:469
+msgid "Importing the keys"
+msgstr ""
+
+#: includes/import-export/sources/class-import-source-translatepress.php:477
+msgid "This file has no settings to import."
+msgstr ""
+
+#. translators: 1: number of translations, 2: what was being imported, e.g. "French: page translations".
+#: includes/import-export/sources/class-import-source-translatepress.php:565
+#, php-format
+msgid "%2$s: %1$d translation in the file is damaged and was not imported."
+msgid_plural "%2$s: %1$d translations in the file are damaged and were not imported."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s is what was being imported, e.g. "French: page translations".
+#: includes/import-export/sources/class-import-source-translatepress.php:570
+#, php-format
+msgid "%s: a database error stopped some translations from being saved. Import the file again; translations already saved are not duplicated."
+msgstr ""
+
+#. translators: 1: a language name, 2: a language name.
+#: includes/import-export/sources/class-import-source-translatepress.php:670
+#, php-format
+msgid "Page translations were not imported: they were made from %1$s, but the default language in the imported settings is %2$s."
+msgstr ""
+
 #: includes/mtapi/class-mtapi-machine-translator.php:247
 msgid "Please check your TranslatePress license key."
 msgstr ""
@@ -3392,18 +3986,8 @@ msgstr ""
 msgid "These addons extend your translation plugin and are available in the Developer, Business and Personal plans."
 msgstr ""
 
-#: includes/onboarding/class-addons.php:51
-#: partials/addons-settings-page.php:41
-msgid "SEO Pack"
-msgstr ""
-
 #: includes/onboarding/class-addons.php:52
 msgid "SEO support for page slug, page title, description and Facebook and Twitter social graph information. The HTML lang attribute is properly set."
-msgstr ""
-
-#: includes/onboarding/class-addons.php:57
-#: partials/addons-settings-page.php:58
-msgid "Multiple Languages"
 msgstr ""
 
 #: includes/onboarding/class-addons.php:58
@@ -3421,11 +4005,6 @@ msgstr ""
 msgid "These addons extend your translation plugin and are available in the Business and Developer plans."
 msgstr ""
 
-#: includes/onboarding/class-addons.php:71
-#: partials/addons-settings-page.php:73
-msgid "DeepL Automatic Translation"
-msgstr ""
-
 #: includes/onboarding/class-addons.php:72
 #: partials/addons-settings-page.php:74
 msgid "Automatically translate your website through the DeepL API."
@@ -3436,29 +4015,14 @@ msgstr ""
 msgid "Prompts visitors to switch to their preferred language based on their browser settings or IP address and remembers the last visited language."
 msgstr ""
 
-#: includes/onboarding/class-addons.php:83
-#: partials/addons-settings-page.php:89
-msgid "Translator Accounts"
-msgstr ""
-
 #: includes/onboarding/class-addons.php:84
 #: partials/addons-settings-page.php:90
 msgid "Create translator accounts for new users or allow existing users that are not administrators to translate your website."
 msgstr ""
 
-#: includes/onboarding/class-addons.php:89
-#: partials/addons-settings-page.php:97
-msgid "Browse As User Role"
-msgstr ""
-
 #: includes/onboarding/class-addons.php:90
 #: partials/addons-settings-page.php:98
 msgid "Navigate your website just like a particular user role would. Really useful for dynamic content or hidden content that appears for particular users."
-msgstr ""
-
-#: includes/onboarding/class-addons.php:95
-#: partials/addons-settings-page.php:105
-msgid "Navigation Based on Language"
 msgstr ""
 
 #: includes/onboarding/class-addons.php:96
@@ -3773,6 +4337,10 @@ msgstr ""
 msgid "It takes less than a minute."
 msgstr ""
 
+#: includes/onboarding/class-welcome.php:45
+msgid "I have an export file from another site"
+msgstr ""
+
 #: includes/string-translation/class-gettext-scan.php:88
 #, php-format
 msgid "Scanning item %1$d of %2$d..."
@@ -3812,6 +4380,8 @@ msgstr ""
 
 #: includes/string-translation/class-string-translation.php:226
 #: partials/glossary-replace-page.php:115
+#: partials/import-export-page.php:205
+#: partials/import-export-summary.php:28
 #: partials/main-settings-language-selector.php:75
 msgid "Language"
 msgstr ""
@@ -4580,6 +5150,310 @@ msgstr ""
 #: partials/glossary-settings-page.php:182
 #, php-format
 msgid "To edit existing translations, use the %s."
+msgstr ""
+
+#: partials/import-export-page.php:37
+msgid "Export"
+msgstr ""
+
+#: partials/import-export-page.php:40
+msgid "Download this site's translations and settings as one .zip file."
+msgstr ""
+
+#: partials/import-export-page.php:51
+msgid "Your export file is ready."
+msgstr ""
+
+#: partials/import-export-page.php:53
+msgid "The file is deleted from this server once it has been downloaded."
+msgstr ""
+
+#. translators: %s is a list of keys, e.g. "TranslatePress license key and DeepL API key".
+#: partials/import-export-page.php:57
+#, php-format
+msgid "This file holds your %s. Only give it to people you trust."
+msgstr ""
+
+#. translators: %s is a list of keys, e.g. "TranslatePress license key and DeepL API key".
+#: partials/import-export-page.php:68
+#, php-format
+msgid "Include the %s"
+msgstr ""
+
+#. translators: %s is a list of keys, e.g. "TranslatePress license key and DeepL API key".
+#: partials/import-export-page.php:73
+#, php-format
+msgid "The export file will hold your %s. Only give it to people you trust."
+msgstr ""
+
+#: partials/import-export-page.php:78
+msgid "Download"
+msgstr ""
+
+#: partials/import-export-page.php:79
+msgid "Generate a new export file"
+msgstr ""
+
+#: partials/import-export-page.php:81
+msgid "Generate export file"
+msgstr ""
+
+#: partials/import-export-page.php:88
+msgid "What the export file contains"
+msgstr ""
+
+#: partials/import-export-page.php:95
+msgid "TranslatePress settings and which add-ons are active. The license key and API keys are left out unless you include them."
+msgstr ""
+
+#: partials/import-export-page.php:96
+msgid "For the default language, theme and plugin strings are the ones whose wording on this site differs from the original."
+msgstr ""
+
+#: partials/import-export-page.php:99
+msgid "The file may include translations of drafts and private pages, so share it with care."
+msgstr ""
+
+#: partials/import-export-page.php:103
+msgid "Import"
+msgstr ""
+
+#: partials/import-export-page.php:135
+msgid "Import from"
+msgstr ""
+
+#: partials/import-export-page.php:147
+msgid "No import sources are available."
+msgstr ""
+
+#: partials/import-export-page.php:151
+msgid "Choose an export file"
+msgstr ""
+
+#. translators: %s is the maximum upload size, e.g. 64 MB.
+#: partials/import-export-page.php:156
+#, php-format
+msgid "Up to %s."
+msgstr ""
+
+#: partials/import-export-page.php:159
+msgid "Upload and review"
+msgstr ""
+
+#. translators: %s is a file name.
+#: partials/import-export-page.php:183
+#, php-format
+msgid "Review %s"
+msgstr ""
+
+#. translators: 1: a site address, 2: a date and time, 3: a language name.
+#: partials/import-export-page.php:191
+#, php-format
+msgid "Exported from this site (%1$s) on %2$s, with %3$s as the default language."
+msgstr ""
+
+#. translators: 1: a site address, 2: a date and time, 3: a language name.
+#: partials/import-export-page.php:193
+#, php-format
+msgid "Exported from %1$s on %2$s, with %3$s as the default language."
+msgstr ""
+
+#: partials/import-export-page.php:201
+msgid "Languages in the file"
+msgstr ""
+
+#: partials/import-export-page.php:206
+msgid "On this site now"
+msgstr ""
+
+#: partials/import-export-page.php:218
+msgid "(the file's default language)"
+msgstr ""
+
+#: partials/import-export-page.php:221
+msgid "No"
+msgstr ""
+
+#: partials/import-export-page.php:232
+msgid "When a translation already exists on this site"
+msgstr ""
+
+#: partials/import-export-page.php:233
+msgid "Nothing on this site is deleted either way."
+msgstr ""
+
+#: partials/import-export-page.php:237
+msgid "Keep this site's translations"
+msgstr ""
+
+#: partials/import-export-page.php:238
+msgid "Adds what is missing. Automatic translations are replaced by reviewed ones from the file."
+msgstr ""
+
+#: partials/import-export-page.php:244
+msgid "Use the file's translations"
+msgstr ""
+
+#: partials/import-export-page.php:245
+msgid "The file's version replaces this site's, even reviewed ones."
+msgstr ""
+
+#: partials/import-export-page.php:255
+msgid "Also import the settings"
+msgstr ""
+
+#: partials/import-export-page.php:256
+msgid "Replaces:"
+msgstr ""
+
+#: partials/import-export-page.php:256
+msgid "languages, language URL codes (such as /fr/), which add-ons are active, language switcher, advanced options, automatic slug translation, the automatic translation log setting, language detection, glossary, post type and taxonomy slug translations."
+msgstr ""
+
+#: partials/import-export-page.php:257
+msgid "Keeps:"
+msgstr ""
+
+#: partials/import-export-page.php:260
+msgid "Multiple Domains, and the other automatic translation settings: whether it is on, its engine, word limit, crawler blocking and usage alerts. The license key and API keys are a separate choice."
+msgstr ""
+
+#: partials/import-export-page.php:262
+msgid "The other automatic translation settings: whether it is on, its engine, word limit, crawler blocking and usage alerts. The license key and API keys are a separate choice."
+msgstr ""
+
+#: partials/import-export-page.php:270
+msgid "If you import the settings:"
+msgstr ""
+
+#: partials/import-export-page.php:288
+msgid "Import the key"
+msgid_plural "Import the keys"
+msgstr[0] ""
+msgstr[1] ""
+
+#: partials/import-export-page.php:292
+msgid "The license is activated for this site, which uses one of its activations."
+msgstr ""
+
+#: partials/import-export-page.php:295
+msgid "Automatic translation is set as on the other site: on or off, and its engine."
+msgstr ""
+
+#: partials/import-export-page.php:303
+msgid "Don't import the key"
+msgid_plural "Don't import the keys"
+msgstr[0] ""
+msgstr[1] ""
+
+#: partials/import-export-page.php:304
+msgid "This site keeps its own license, API keys and automatic translation engine."
+msgstr ""
+
+#: partials/import-export-page.php:313
+msgid "Skipped with these options"
+msgstr ""
+
+#: partials/import-export-page.php:323
+msgid "An import can't be undone. Back up your database first."
+msgstr ""
+
+#: partials/import-export-page.php:325
+msgid "An import can't be undone. Back up your database first. Start the import?"
+msgstr ""
+
+#: partials/import-export-page.php:325
+msgid "Start import"
+msgstr ""
+
+#: partials/import-export-page.php:334
+msgid "New"
+msgstr ""
+
+#: partials/import-export-page.php:335
+msgid "Upgraded to reviewed"
+msgstr ""
+
+#: partials/import-export-page.php:335
+msgid "Replaced"
+msgstr ""
+
+#: partials/import-export-page.php:336
+msgid "Already up to date"
+msgstr ""
+
+#: partials/import-export-page.php:337
+msgid "Kept (this site's version differs)"
+msgstr ""
+
+#: partials/import-export-page.php:338
+msgid "Could not be imported"
+msgstr ""
+
+#: partials/import-export-page.php:345
+msgid "Settings changed"
+msgstr ""
+
+#: partials/import-export-page.php:346
+msgid "Skipped as planned"
+msgstr ""
+
+#: partials/import-export-page.php:347
+msgid "Notes"
+msgstr ""
+
+#. translators: %s is a file name.
+#: partials/import-export-page.php:354
+#, php-format
+msgid "%s imported."
+msgstr ""
+
+#. translators: %s is a date and time.
+#: partials/import-export-page.php:362
+#, php-format
+msgid "Finished on %s, keeping this site's translations where both had one."
+msgstr ""
+
+#. translators: %s is a date and time.
+#: partials/import-export-page.php:364
+#, php-format
+msgid "Finished on %s, using the file's translations where both had one."
+msgstr ""
+
+#: partials/import-export-page.php:366
+msgid "The settings were imported too."
+msgstr ""
+
+#: partials/import-export-page.php:392
+msgid "Details"
+msgstr ""
+
+#: partials/import-export-page.php:397
+msgid "Part of the file"
+msgstr ""
+
+#: partials/import-export-page.php:419
+msgid "Import another file"
+msgstr ""
+
+#: partials/import-export-page.php:421
+msgid "Check the languages in General settings"
+msgstr ""
+
+#: partials/import-export-page.php:422
+msgid "View the site"
+msgstr ""
+
+#: partials/import-export-summary.php:24
+msgid "Languages in the export file"
+msgstr ""
+
+#: partials/import-export-summary.php:39
+msgid "No translations yet."
+msgstr ""
+
+#: partials/import-export-summary.php:48
+msgid "(this site's default language)"
 msgstr ""
 
 #: partials/language-switcher-configurator-page.php:16

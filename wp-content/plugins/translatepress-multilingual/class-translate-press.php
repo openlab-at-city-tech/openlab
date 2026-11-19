@@ -28,6 +28,7 @@ class TRP_Translate_Press{
     protected $plugin_optin;
     protected $license_page;
     protected $advanced_tab;
+    protected $import_export;
     protected $translation_memory;
     protected $machine_translation_tab;
     protected $error_manager;
@@ -83,7 +84,7 @@ class TRP_Translate_Press{
         define( 'TRP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'TRP_PLUGIN_BASE', plugin_basename( __DIR__ . '/index.php' ) );
         define( 'TRP_PLUGIN_SLUG', 'translatepress-multilingual' );
-        define( 'TRP_PLUGIN_VERSION', '3.3.9' );
+        define( 'TRP_PLUGIN_VERSION', '3.4' );
 
 	    wp_cache_add_non_persistent_groups(array('trp'));
 
@@ -125,6 +126,7 @@ class TRP_Translate_Press{
         require_once TRP_PLUGIN_DIR . 'includes/glossary/class-glossary.php';
         require_once TRP_PLUGIN_DIR . 'includes/glossary/class-glossary-queries.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-query.php';
+        require_once TRP_PLUGIN_DIR . 'includes/class-dynamic-cache.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-normalization.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-table-creation.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-insert-update.php';
@@ -137,6 +139,7 @@ class TRP_Translate_Press{
 	    require_once TRP_PLUGIN_DIR . 'includes/upgrade/class-batch-processor.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-plugin-notices.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-advanced-tab.php';
+        require_once TRP_PLUGIN_DIR . 'includes/import-export/class-import-export-loader.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-translation-memory.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-error-manager.php';
         require_once TRP_PLUGIN_DIR . 'includes/external-functions.php';
@@ -188,6 +191,8 @@ class TRP_Translate_Press{
 
         $this->advanced_tab               = new TRP_Advanced_Tab($this->settings->get_settings());
         $this->advanced_tab->include_custom_codes();
+
+        $this->import_export              = new TRP_Import_Export_Loader( $this->settings->get_settings() );
 
         $this->machine_translation_tab    = new TRP_Machine_Translation_Tab( $this->settings->get_settings() );
         $this->machine_translation_tab->load_engines();
@@ -322,6 +327,13 @@ class TRP_Translate_Press{
 	    $this->loader->add_action( 'trp_before_output_advanced_settings_options', $this->advanced_tab, 'trp_advanced_settings_content_table' );
 	    $this->loader->add_action( 'admin_init', $this->advanced_tab, 'register_setting' );
 	    $this->loader->add_action( 'admin_notices', $this->advanced_tab, 'admin_notices' );
+
+	    // Import & Export Translations tool
+	    $this->loader->add_action( 'admin_menu', $this->import_export, 'add_submenu_page' );
+	    $this->loader->add_action( 'admin_enqueue_scripts', $this->import_export, 'enqueue_scripts_and_styles', 10, 1 );
+	    $this->loader->add_filter( 'trp_settings_active_tab', $this->import_export, 'highlight_advanced_tab', 10, 1 );
+	    $this->loader->add_action( 'load-admin_page_trp_import_export', $this->import_export, 'handle_request' );
+	    $this->loader->add_action( 'admin_post_trp_ie_download', $this->import_export, 'download' );
 
         //Machine Translation tab
         $this->loader->add_action( 'trp_settings_tabs', $this->machine_translation_tab, 'add_tab_to_navigation', 10, 1 );

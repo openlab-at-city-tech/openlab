@@ -234,7 +234,7 @@ function trp_do_shortcode($content){
 add_filter( 'trp_skip_gettext_processing', 'trp_woo_strip_gettext_from_print_products' );
 
 function trp_woo_strip_gettext_from_print_products( $bool ){
-    if ( isset( $_REQUEST['print-products'] ) && $_REQUEST['print-products'] == 'pdf' && class_exists('\WooCommerce_Print_Products') ) {
+    if ( isset( $_REQUEST['print-products'] ) && $_REQUEST['print-products'] == 'pdf' && trp_class_exists('\WooCommerce_Print_Products') ) {
         return true;
     }
     return $bool;
@@ -244,7 +244,7 @@ function trp_woo_strip_gettext_from_print_products( $bool ){
 add_filter('trp_stop_translating_page', 'trp_woo_pdf_print_products', 10, 2);
 
 function trp_woo_pdf_print_products( $bool, $output ){
-    if ( isset( $_REQUEST['print-products'] ) && $_REQUEST['print-products'] == 'pdf' && class_exists('\WooCommerce_Print_Products') ) {
+    if ( isset( $_REQUEST['print-products'] ) && $_REQUEST['print-products'] == 'pdf' && trp_class_exists('\WooCommerce_Print_Products') ) {
         return true;
     }
     return $bool;
@@ -260,7 +260,7 @@ add_filter( 'trp_skip_gettext_processing', 'trp_dk_pdf_strip_gettext_from_pdf' )
 
 function trp_dk_pdf_strip_gettext_from_pdf( $bool ){
 
-    if ( isset( $_GET['pdf'] ) && ( class_exists( 'DKPDF' ) || defined( 'DKPDF_VERSION' ) ) ){
+    if ( isset( $_GET['pdf'] ) && ( trp_class_exists( 'DKPDF' ) || defined( 'DKPDF_VERSION' ) ) ){
         return true;
     }
 
@@ -271,7 +271,7 @@ function trp_dk_pdf_strip_gettext_from_pdf( $bool ){
 add_filter('trp_stop_translating_page', 'trp_do_not_translate_dk_pdf', 10, 2);
 function trp_do_not_translate_dk_pdf($translate, $output){
 
-    if ( isset( $_GET['pdf'] ) && ( class_exists( 'DKPDF' ) || defined( 'DKPDF_VERSION' ) ) ){
+    if ( isset( $_GET['pdf'] ) && ( trp_class_exists( 'DKPDF' ) || defined( 'DKPDF_VERSION' ) ) ){
         return true;
     }
 
@@ -296,7 +296,7 @@ function trp_invoices_for_woocommerce_strip_gettext_from_pdf( $bool, $translatio
         ( $text == 'Cash on delivery' && $domain == 'woocommerce' )
     );
 
-    if ( $is_invoice_string && class_exists( '\BEWPI_Invoice' ) ) {
+    if ( $is_invoice_string && trp_class_exists( '\BEWPI_Invoice' ) ) {
         return true;
     }
     return $bool;
@@ -304,7 +304,7 @@ function trp_invoices_for_woocommerce_strip_gettext_from_pdf( $bool, $translatio
 
 add_filter('trp_stop_translating_page', 'trp_do_not_translate_pdf_param', 10, 2);
 function trp_do_not_translate_pdf_param($translate, $output){
-    if ( isset( $_GET['bewpi_action'] ) && class_exists( '\BEWPI_Invoice' ) ){
+    if ( isset( $_GET['bewpi_action'] ) && trp_class_exists( '\BEWPI_Invoice' ) ){
         return true;
     }
     return $translate;
@@ -323,7 +323,7 @@ add_filter( 'wpo_wcpdf_filename', 'trp_woo_pdf_invoices_and_packing_slips_compat
 // fix #trpgettext inside invoice pdf
 add_filter( 'wpo_wcpdf_get_html', 'trp_woo_pdf_invoices_and_packing_slips_compatibility');
 function trp_woo_pdf_invoices_and_packing_slips_compatibility($title){
-    if ( class_exists( 'TRP_Translation_Manager' ) ) {
+    if ( trp_class_exists( 'TRP_Translation_Manager' ) ) {
         return 	TRP_Translation_Manager::strip_gettext_tags($title);
     }
 }
@@ -348,13 +348,13 @@ add_filter( 'woocommerce_pdf_invoices_content', 'trp_woo_ultimate_pdf_invoices_c
 add_filter( 'woocommerce_pdf_invoices_order_data', 'trp_woo_ultimate_pdf_invoices_data_compatibility');
 
 function trp_woo_ultimate_pdf_invoices_compatibility($title){
-    if ( class_exists( 'TRP_Translation_Manager' ) ) {
+    if ( trp_class_exists( 'TRP_Translation_Manager' ) ) {
         return 	TRP_Translation_Manager::strip_gettext_tags($title);
     }
 }
 
 function trp_woo_ultimate_pdf_invoices_data_compatibility($data_array){
-    if ( class_exists( 'TRP_Translation_Manager' ) ) {
+    if ( trp_class_exists( 'TRP_Translation_Manager' ) ) {
         $data_array = array_map('TRP_Translation_Manager::strip_gettext_tags',$data_array );
     }
     return $data_array;
@@ -391,7 +391,7 @@ function trp_woo_strip_gettext_from_yith_pdf( $bool, $translation, $text, $domai
         ( $text == 'N/A' && $domain == 'woocommerce' )
     );
 
-    if ( $is_invoice_string && class_exists( 'YITH_Checkout_Addon' ) ) {
+    if ( $is_invoice_string && trp_class_exists( 'YITH_Checkout_Addon' ) ) {
         return true;
     }
     return $bool;
@@ -399,7 +399,7 @@ function trp_woo_strip_gettext_from_yith_pdf( $bool, $translation, $text, $domai
 
 add_filter( 'trp_stop_translating_page', 'trp_woo_pdf_invoices_compatibility_dont_translate_pdf', 10, 2 );
 function trp_woo_pdf_invoices_compatibility_dont_translate_pdf( $bool, $output ){
-    if ( isset( $_REQUEST['type'] ) && $_REQUEST['type'] == 'proforma' && class_exists( 'YITH_Checkout_Addon' ) ) {
+    if ( isset( $_REQUEST['type'] ) && $_REQUEST['type'] == 'proforma' && trp_class_exists( 'YITH_Checkout_Addon' ) ) {
         return true;
     }
     return $bool;
@@ -622,7 +622,7 @@ function trp_mec_post_meta_strip_trpst( $meta_id, $object_id, $meta_key, $meta_v
         return;
     }
 
-    if ( ! class_exists( 'TRP_Translation_Manager' ) ) {
+    if ( ! trp_class_exists( 'TRP_Translation_Manager' ) ) {
         return;
     }
 
@@ -644,7 +644,7 @@ function trp_mec_post_meta_strip_trpst( $meta_id, $object_id, $meta_key, $meta_v
  */
 add_filter( 'trp_skip_selectors_from_dynamic_translation', 'trp_woo_skip_dynamic_translation' );
 function trp_woo_skip_dynamic_translation( $skip_selectors ){
-    if( class_exists( 'WooCommerce' ) ) {
+    if( trp_class_exists( 'WooCommerce' ) ) {
         $add_skip_selectors = array( '#billing_country', '#shipping_country', '#billing_state', '#shipping_state', '#select2-billing_country-results',  '#select2-billing_state-results', '#select2-shipping_country-results', '#select2-shipping_state-results' );
         return array_merge( $skip_selectors, $add_skip_selectors );
     }
@@ -691,7 +691,7 @@ function trp_woo_wrap_variation($name, $product, $title_base, $title_suffix){
  */
 add_filter( 'woocommerce_layered_nav_any_label', 'trp_woo_rebuild_layered_nav_any_label', 10, 3 );
 function trp_woo_rebuild_layered_nav_any_label( $any_label, $taxonomy_label, $taxonomy ) {
-    if ( ! class_exists( 'TRP_Translation_Manager' ) ) {
+    if ( ! trp_class_exists( 'TRP_Translation_Manager' ) ) {
         return $any_label;
     }
 
@@ -761,7 +761,8 @@ function trp_force_include_scripts( $final_html, $TRP_LANGUAGE, $language_code, 
         $scripts_and_styles = apply_filters('trp_editor_missing_scripts_and_styles', array(
             'jquery'                        => "<script type='text/javascript' src='" . includes_url( '/js/jquery/jquery.js' ) . "'></script>",
             'trp-iframe-preview-script.js'  => "<script type='text/javascript' src='" . TRP_PLUGIN_URL . "assets/js/trp-iframe-preview-script.js'></script>",
-            'trp-translate-dom-changes.js'  => "<script>trp_data = '" . addslashes(json_encode($trp_data) ) . "'; trp_data = JSON.parse(trp_data);</script><script type='text/javascript' src='" . TRP_PLUGIN_URL . "assets/js/trp-translate-dom-changes.js'></script>",
+            // trp-translate-dom-changes.js depends on the cache and request scripts loaded before it
+            'trp-translate-dom-changes.js'  => "<script>trp_data = '" . addslashes(json_encode($trp_data) ) . "'; trp_data = JSON.parse(trp_data);</script><script type='text/javascript' src='" . TRP_PLUGIN_URL . "assets/js/trp-dynamic-cache.js'></script><script type='text/javascript' src='" . TRP_PLUGIN_URL . "assets/js/trp-translation-requests.js'></script><script type='text/javascript' src='" . TRP_PLUGIN_URL . "assets/js/trp-translate-dom-changes.js'></script>",
             'trp-preview-iframe-style-css'  => "<link rel='stylesheet' id='trp-preview-iframe-style-css'  href='" . TRP_PLUGIN_URL . "assets/css/trp-preview-iframe-style.css' type='text/css' media='all' />",
             'dashicons'                     => "<link rel='stylesheet' id='dashicons-css'  href='" . includes_url( '/css/dashicons.min.css' ) . "' type='text/css' media='all' />"
         ));
@@ -853,7 +854,7 @@ function trp_hummingbird_compatibility( $priority ){
  */
 add_filter( 'trp_start_output_buffer_priority', 'trp_nextgen_compatibility' );
 function trp_nextgen_compatibility( $priority ){
-    if ( class_exists( 'C_Photocrati_Resource_Manager' ) ) {
+    if ( trp_class_exists( 'C_Photocrati_Resource_Manager' ) ) {
         return '-2';
     }
     return $priority;
@@ -893,7 +894,7 @@ function trp_woo_translate_product_title_added_to_cart( ...$args ){
     }
 
 
-    if( class_exists( 'WooCommerce' ) ){
+    if( trp_class_exists( 'WooCommerce' ) ){
         if ( version_compare( PHP_VERSION, '5.4.0', '>=' ) ) {
             $callstack_functions = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 15);//set a limit if it is supported to improve performance
         }
@@ -947,7 +948,7 @@ if( class_exists( 'WooCommerce' ) ) {
  */
 add_action('init', 'trp_wootour_add_gettext_filter');
 function trp_wootour_add_gettext_filter(){
-    if ( class_exists( 'WooTour_Booking' ) ){
+    if ( trp_class_exists( 'WooTour_Booking' ) ){
         add_filter('gettext', 'trp_wootour_exclude_gettext_strings', 1000, 3 );
     }
 }
@@ -1035,7 +1036,7 @@ function trp_woo_wcpdf_translate_product_name( $data, $order, $type ){
  */
 add_action( 'woocommerce_cart_calculate_fees', 'trp_woo_checkout_add_ons_filter_trpstr', 10, 2);
 function trp_woo_checkout_add_ons_filter_trpstr(){
-    if ( class_exists('WC_Checkout_Add_Ons_Frontend') ) {
+    if ( trp_class_exists('WC_Checkout_Add_Ons_Frontend') ) {
         add_filter('trp_skip_gettext_processing', 'trp_woo_checkout_exclude_strings', 1000, 4);
     }
 }
@@ -1056,7 +1057,7 @@ function trp_woo_checkout_exclude_strings( $return, $translation, $text, $domain
  */
 add_action('init', 'trp_woo_fondy_payment_gateway_add_gettext_filter');
 function trp_woo_fondy_payment_gateway_add_gettext_filter(){
-    if ( class_exists( 'WC_fondy' ) ){
+    if ( trp_class_exists( 'WC_fondy' ) ){
         add_filter('gettext', 'trp_woo_fondy_payment_gateway_exclude_gettext_strings', 1000, 3 );
     }
 }
@@ -1085,7 +1086,7 @@ function trp_woo_fondy_payment_gateway_exclude_gettext_strings($translation, $te
 add_action( 'init', 'trp_woo_product_filters', 10 );
 
 function trp_woo_product_filters(){
-	if( isset( $GLOBALS['wcpf_plugin'] ) && class_exists( 'WooCommerce_Product_Filter_Plugin\Filters' ) ){
+	if( isset( $GLOBALS['wcpf_plugin'] ) && trp_class_exists( 'WooCommerce_Product_Filter_Plugin\Filters' ) ){
 		$wcpf_plugin = $GLOBALS['wcpf_plugin'];
 		$component_register = $wcpf_plugin->get_component_register();
 		$filters = $component_register->get('Filters');
@@ -1197,7 +1198,7 @@ function trp_add_user_prefered_language($user_id) {
  */
 add_action('wp_enqueue_scripts', 'trp_remove_dflip_defer_script', 9999);
 function trp_remove_dflip_defer_script(){
-	if(class_exists('DFlip')){
+	if(trp_class_exists('DFlip')){
 		$dflip_instance = DFlip::get_instance();
 		remove_filter( 'script_loader_tag', array( $dflip_instance, 'add_defer_attribute' ), 10, 2 );
 	}
@@ -1519,7 +1520,7 @@ function trp_aws_search_results_products_ids(  $posts_ids, $s ){
  */
 add_filter( 'wpml_current_language', 'trp_aws_current_language' );
 function trp_aws_current_language( $lang ) {
-    if ( class_exists( 'AWS_Main' ) ) {
+    if ( trp_class_exists( 'AWS_Main' ) ) {
         global $TRP_LANGUAGE;
         $lang = $TRP_LANGUAGE;
     }
@@ -1543,7 +1544,7 @@ function trp_aws_current_language( $lang ) {
  */
 add_action( 'pre_get_posts', 'trp_ivory_search_merge_results', 99999999 + 1 );
 function trp_ivory_search_merge_results( $query ) {
-    if ( ! class_exists( 'IS_Public' ) ) {
+    if ( ! trp_class_exists( 'IS_Public' ) ) {
         return;
     }
     if ( ! empty( $GLOBALS['trp_ivory_compat_running'] ) ) {
@@ -1702,7 +1703,7 @@ function trp_rtcl_autocomplete_search_results( $args, $request ){
 // Otherwise trp-post-container is not added
 add_action( 'wp_body_open', 'trp_overrule_main_query_condition', 10, 2 );
 function trp_overrule_main_query_condition(){
-    if ( class_exists('Rtcl') ) {
+    if ( trp_class_exists('Rtcl') ) {
         add_filter( 'trp_wrap_with_post_id_overrule', '__return_false' );
     }
 }
@@ -1781,7 +1782,7 @@ function trp_uncode_skip_dynamic_translation( $skip_selectors ){
 // first we need to disable adding the language to home_url() because the plugin is using it to construct a url.
 add_filter( 'trp_home_url', 'trp_skip_home_url_processing_for_pdfemb_server_url', 10, 5 );
 function trp_skip_home_url_processing_for_pdfemb_server_url(  $new_url, $abs_home, $TRP_LANGUAGE, $path, $url ){
-	if( class_exists( 'core_pdf_embedder' ) ){
+	if( trp_class_exists( 'core_pdf_embedder' ) ){
 		$callstack_functions = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS);
 
 		$list_of_functions =  array( 'modify_pdfurl' ) ;
@@ -2055,7 +2056,7 @@ function trp_force_search( $bool ){
         $bool = true;
 
     //compatibility with WooCommerce Product Search plugin
-    if( class_exists('WooCommerce_Product_Search_Service') ) {
+    if( trp_class_exists('WooCommerce_Product_Search_Service') ) {
         if (isset($_REQUEST['action']) && $_REQUEST['action'] === 'product_search')
             $bool = true;
     }
@@ -2139,7 +2140,7 @@ if( class_exists('WooCommerce_Product_Search_Service') ) {
  */
  add_action('init', 'trp_mylisting_hook_exclude_string' );
  function trp_mylisting_hook_exclude_string(){
-     if( class_exists( 'MyListing\\App' ) ){
+     if( trp_class_exists( 'MyListing\\App' ) ){
          add_filter('gettext_with_context', 'trp_mylisting_exclude_string', 101, 4 );
      }
  }
@@ -2563,7 +2564,7 @@ function trp_compatibility_for_adl_127_version( $settings ){
 }
 
 add_action( 'before_woocommerce_init', function() {
-    if ( class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+    if ( trp_class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
         \Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', TRP_PLUGIN_DIR . 'index.php', true );
     }
 } );
@@ -3130,7 +3131,7 @@ function trp_wpbackery_compatibility_remove_params_curpageurl($url) {
 
 function trp_wpbackery_compatibility_strip_params($url) {
     // Only proceed if WPBakery is active
-    if (!class_exists('Vc_Manager')) {
+    if (!trp_class_exists( 'Vc_Manager' )) {
         return $url;
     }
 
@@ -3644,7 +3645,7 @@ function trp_woodmart_compat__remove_layout_filters() {
     );
 
     foreach ( $layout_classes as $class ) {
-        if ( class_exists( $class ) ) {
+        if ( trp_class_exists( $class ) ) {
             $instance = $class::get_instance();
             remove_filter( 'template_include', array( $instance, 'override_template' ), 20 );
         }
@@ -3755,7 +3756,7 @@ function trp_rank_math_use_original_request_uri_for_redirections( $check, $uri, 
         return $check;
     }
 
-    if ( ! class_exists( '\RankMath\Redirections\DB' ) || ! class_exists( '\RankMath\Redirections\Redirection' ) ) {
+    if ( ! trp_class_exists( '\RankMath\Redirections\DB' ) || ! trp_class_exists( '\RankMath\Redirections\Redirection' ) ) {
         return $check;
     }
 
@@ -3863,7 +3864,7 @@ function trp_rank_math_category_redirect_language( $query_vars ) {
  * We provide the original request URI captured before TP rewrites it.
  */
 function trp_register_redirection_original_request_uri_filters() {
-    if ( ! class_exists( 'Redirection_Request' ) || ! function_exists( 'trp_get_original_request_uri' ) ) {
+    if ( ! trp_class_exists( 'Redirection_Request' ) || ! function_exists( 'trp_get_original_request_uri' ) ) {
         return;
     }
 
@@ -4017,7 +4018,7 @@ function trp_local_ga_js_stop_translating_page( $stop ){
  *  - request matching/redirect: by skipping the language subdirectory for the login slug path.
  */
 function trp_wps_hide_login_get_slug() {
-    if ( ! defined( 'WPS_HIDE_LOGIN_VERSION' ) && ! class_exists( 'WPS\WPS_Hide_Login\Plugin' ) ) {
+    if ( ! defined( 'WPS_HIDE_LOGIN_VERSION' ) && ! trp_class_exists( 'WPS\WPS_Hide_Login\Plugin' ) ) {
         return '';
     }
     $slug = get_option( 'whl_page' );

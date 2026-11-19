@@ -307,6 +307,7 @@ class TRP_Advanced_Tab {
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/separators.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/disable-languages-sitemap.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/remove-duplicates-from-db.php');
+        include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/import-export.php');
         include_once(TRP_PLUGIN_DIR . 'includes/advanced-settings/do-not-translate-certain-paths.php');
         include_once (TRP_PLUGIN_DIR . 'includes/advanced-settings/opposite-flag-shortcode.php');
         include_once (TRP_PLUGIN_DIR . 'includes/advanced-settings/open-language-switcher-shortcode-on-click.php');
@@ -335,13 +336,28 @@ class TRP_Advanced_Tab {
         $first_item = '';
         $other_items = '';
 
+        // Also printed on pages that are sub-tabs of their own (Import & Export): there every sub-tab is a link back to this page.
+        $current_page     = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : '';//phpcs:ignore
+        $on_advanced_page = ( $current_page === 'trp_advanced_page' );
+
         foreach ($advanced_settings_array as $setting) {
             if ($setting['type'] === 'separator') {
-                $tab_html = '<span class="trp_advanced_tab_content_table_item">
+                $url = isset( $setting['url'] ) ? $setting['url'] : ( $on_advanced_page ? '' : add_query_arg( 'tab', $setting['id'], admin_url( 'admin.php?page=trp_advanced_page' ) ) );
+                if ( $url !== '' ) {
+                    // Real-URL sub-tab: the anchor wraps the item span so the entire cell is clickable.
+                    $is_current = ! $on_advanced_page && isset( $setting['url'] ) && strpos( $setting['url'], 'page=' . $current_page ) !== false;
+                    $tab_html   = '<a href="' . esc_url( $url ) . '" class="' . esc_attr( $setting['id'] ) . '"' . ( $is_current ? ' aria-current="page"' : '' ) . '>
+                                    <span class="trp_advanced_tab_content_table_item' . ( $is_current ? ' trp-nav-active' : '' ) . '">
+                                        ' . esc_html( $setting['label'] ) . '
+                                    </span>
+                                </a>';
+                } else {
+                    $tab_html = '<span class="trp_advanced_tab_content_table_item">
                                 <a href="#' . esc_html($setting['id']) . '" class="' . esc_html($setting['id']) . '">
                                     ' . esc_html($setting['label']) . '
                                 </a>
                             </span>';
+                }
 
                 if ($setting['name'] === 'automatic_user_language_detection') {
                     $first_item = $tab_html; // Store this to add it first

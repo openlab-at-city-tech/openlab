@@ -156,6 +156,8 @@ class TRP_Upgrade {
 
         // don't update the db version unless they are different. Otherwise the query is run on every page load.
         if( version_compare( TRP_PLUGIN_VERSION, $stored_database_version, '!=' ) ){
+            // Any plugin version change discards browser caches, including manual (non-updater) updates.
+            TRP_Dynamic_Cache::invalidate();
             update_option( 'trp_plugin_version', TRP_PLUGIN_VERSION );
 		}
 	}
@@ -332,7 +334,7 @@ class TRP_Upgrade {
                     'version'           => '0', // independent of tp version, available only on demand
                     'option_name'       => 'trp_replace_original_id_null',
                     'callback'          => array( $this,'trp_replace_original_id_null'),
-                    'batch_size'        => 50,
+                    'batch_size'        => 1000,
                     'message_initial'   => '',
                 ),
                 'gettext_original_id_insert' => array(
@@ -1537,65 +1539,44 @@ class TRP_Upgrade {
     */
 
     public function trp_replace_original_id_null($language_code, $inferior_limit, $batch_size){
-        global $wpdb;
-        $db       = $wpdb;
-
-        $dictionary = array();
-        $gettext_with_null_original_id_array= array();
-        $original_id_get_ids_sync = array();
-        $insert_gettext_original_id = array();
-
         if ( ! $this->trp_query ) {
             $trp = TRP_Translate_Press::get_trp_instance();
             /* @var TRP_Query */
             $this->trp_query = $trp->get_component( 'query' );
         }
 
-        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_gettext_table_name( $language_code ) );
+        // Process a single id range per call. trp_update_database() keeps calling this until its time budget runs out,
+        // then hands the next batch to a new AJAX request, so no single request walks the whole table.
+        $dictionary = $this->trp_query->get_gettext_strings_with_missing_original_id( $language_code, $inferior_limit, $batch_size );
+        $error      = $this->get_legacy_database_update_error( __( 'reading gettext strings with missing original IDs', 'translatepress-multilingual' ) );
 
-        while ( $last_id > $inferior_limit ) {
-            $dictionary = $this->trp_query->get_all_gettext_strings($language_code, $inferior_limit, $batch_size);
-            $inferior_limit = $inferior_limit + $batch_size;
-
-
-            if (!empty($dictionary)) {
-                foreach ($dictionary as $current_language_string) {
-                    if ($current_language_string['tt_original_id'] == NULL || $current_language_string['tt_original_id'] == 0) {
-                        $gettext_with_null_original_id_array[] = array(
-                            'original' => $current_language_string['tt_original'],
-                            'id' => $current_language_string['id'],
-                            'domain' => $current_language_string['tt_domain'],
-                        );
-                    }
-                }
-
-                $gettext_insert_update = $this->trp_query->get_query_component('gettext_insert_update');
-
-                if (count($gettext_with_null_original_id_array) > 0) {
-                    foreach ($gettext_with_null_original_id_array as $item) {
-                        $original_id_get_ids_sync[] = $item;
-                    }
-                }
-                $original_ids_null = $gettext_insert_update->gettext_original_strings_sync($original_id_get_ids_sync, false);
-                if (count($original_ids_null) > 0) {
-                    foreach ($original_ids_null as $key => $value) {
-                        $insert_gettext_original_id[] = array(
-                            'id' => $gettext_with_null_original_id_array[$key]['id'],
-                            'original' => $gettext_with_null_original_id_array[$key]['original'],
-                            'original_id' => $value,
-                        );
-                    }
-                    $gettext_insert_update->update_gettext_strings($insert_gettext_original_id, $language_code, array('id', 'original', 'original_id'));
-                }
-            }
-
-
-            $original_id_get_ids_sync = array();
-            $gettext_with_null_original_id_array =array();
-
+        if ( $error ) {
+            return $error;
         }
 
-        return true;
+        if ( ! empty( $dictionary ) ) {
+            $gettext_with_null_original_id_array = array();
+            foreach ( $dictionary as $current_language_string ) {
+                $gettext_with_null_original_id_array[] = array(
+                    'original' => $current_language_string['tt_original'],
+                    'id'       => $current_language_string['id'],
+                    'domain'   => $current_language_string['tt_domain'],
+                );
+            }
+
+            $gettext_insert_update = $this->trp_query->get_query_component( 'gettext_insert_update' );
+            $original_ids_null     = $gettext_insert_update->gettext_original_strings_sync( $gettext_with_null_original_id_array, false );
+
+            $original_ids_to_update = array();
+            foreach ( $original_ids_null as $key => $value ) {
+                $original_ids_to_update[ $gettext_with_null_original_id_array[ $key ]['id'] ] = $value;
+            }
+            $gettext_insert_update->update_missing_gettext_original_ids( $original_ids_to_update, $language_code );
+        }
+
+        $last_id = $this->trp_query->get_last_id( $this->trp_query->get_gettext_table_name( $language_code ) );
+
+        return ( $inferior_limit + $batch_size ) >= $last_id;
     }
 
 

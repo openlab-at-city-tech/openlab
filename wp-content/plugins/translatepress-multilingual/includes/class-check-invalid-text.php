@@ -66,7 +66,7 @@ class TRP_Check_Invalid_Text{
 
     }
 
-    public function update_translations_without_invalid_text( $update_strings, $language_code, $block_type ){
+    public function update_translations_without_invalid_text( $update_strings, $language_code, $block_type, $invalidate_cache = true ){
         if ( $this->is_invalid_data_error() ){
             $count = count($update_strings);
             if ( $count <= 1 ){
@@ -77,8 +77,8 @@ class TRP_Check_Invalid_Text{
 
                 $half = floor( $count / 2 );
 
-                $trp_query->update_strings( array_slice( $update_strings, 0, $half ), $language_code, $block_type );
-                $trp_query->update_strings( array_slice( $update_strings, $half ), $language_code, $block_type );
+                $trp_query->update_strings( array_slice( $update_strings, 0, $half ), $language_code, $block_type, $invalidate_cache );
+                $trp_query->update_strings( array_slice( $update_strings, $half ), $language_code, $block_type, $invalidate_cache );
                 return;
             }
         }

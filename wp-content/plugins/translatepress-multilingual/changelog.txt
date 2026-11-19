@@ -1,3 +1,14 @@
+= 3.3.9 =
+* Improved translation quality on texts with placeholders and glossary terms
+* Fixed XSS by serving trp-ajax.php responses as inert JSON
+* Fixed stored XSS via PCRE backtrack bypass of URL-scheme neutralizer
+* Fixed gettext insert query fails on MySQL8 when having duplicate originals in the same batch
+* Small performance improvement on referer-less AJAX loopbacks
+* Fixed Chinese and other languages getting an ASCII punctuation after a native mark in new automatic translations
+* Fixed trp-ajax dynamic translation on multisites by querying the correct subsite tables
+* Fixed String Translation search with straight apostrophes
+* Fixed CSS issue with checkboxes in String Translation
+
 = 3.3.8 =
 * Fixed unauthenticated stored XSS via #TRPLINKPROCESSED. Thanks to daroo and the Wordfence team
 * Fixed missing translations in WooCommerce emails sent from the admin, including strings added by WooCommerce extensions

@@ -1129,6 +1129,7 @@ class TRP_Translation_Render{
                 if ( $current_node_accessor[ 'attribute' ] ){
                     $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->getAttribute( $accessor ) );
                     $node_manual['node']->setAttribute( $accessor, str_replace( $translateable_string_manual, esc_attr( $translated_strings_manual[$i] ), $node_manual['node']->getAttribute( $accessor ) ) );
+                    // the translation is passed unescaped, listeners must esc_attr() it ( see the docblock in translate_page() below )
                     do_action( 'trp_set_translation_for_attribute', $node_manual['node'], $accessor, $translated_strings_manual[$i] );
                 }else{
                     $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->$accessor );
@@ -1193,6 +1194,16 @@ class TRP_Translation_Render{
                 if ( $current_node_accessor[ 'attribute' ] ){
 	                $translateable_string = $this->maybe_correct_translatable_string( $translateable_string, $nodes[$i]['node']->getAttribute( $accessor ) );
                     $nodes[$i]['node']->setAttribute( $accessor, str_replace( $translateable_string, esc_attr( $translated_strings[$i] ), $nodes[$i]['node']->getAttribute( $accessor ) ) );
+                    /**
+                     * Fires after a translation was written into a node attribute.
+                     *
+                     * $translated_string is the raw dictionary value, NOT escaped for attribute context. Listeners that
+                     * write it ( or anything derived from it ) back into the node must esc_attr() it themselves.
+                     *
+                     * @param simple_html_dom_node $node
+                     * @param string               $accessor          Attribute name, e.g. src.
+                     * @param string               $translated_string Unescaped translation.
+                     */
                     do_action( 'trp_set_translation_for_attribute', $nodes[$i]['node'], $accessor, $translated_strings[$i] );
                 }else{
 	                $translateable_string = $this->maybe_correct_translatable_string( $translateable_string, $nodes[$i]['node']->$accessor );
@@ -1460,6 +1471,11 @@ class TRP_Translation_Render{
      * Update other image attributes (srcset) with the translated image
      *
      * Hooked to trp_set_translation_for_attribute
+     *
+     * Security: $translated_string is the raw dictionary value (only wp_kses_post'ed on save), not escaped for an
+     * attribute, and simple_html_dom writes setAttribute() values between double quotes verbatim. A translation
+     * containing a double quote would close the attribute and inject markup ( e.g. onerror= ), so every value
+     * written here goes through esc_attr(), the same as the src attribute itself in translate_page().
      */
     public function translate_image_srcset_attributes( $node, $accessor, $translated_string){
 	    if( $accessor === 'src' ) {
@@ -1476,10 +1492,10 @@ class TRP_Translation_Render{
 					    $translated_srcset = wp_get_attachment_image_srcset( $attachment_id, $width );
 				    }
 				    if ( $srcset ){
-					    $node->setAttribute( 'srcset', $translated_srcset );
+					    $node->setAttribute( 'srcset', esc_attr( $translated_srcset ) );
 				    }
 				    if ( $datasrcset ){
-					    $node->setAttribute( 'data-srcset', $translated_srcset );
+					    $node->setAttribute( 'data-srcset', esc_attr( $translated_srcset ) );
 				    }
 			    } else {
 				    $node->setAttribute( 'srcset', '' );
@@ -1487,7 +1503,7 @@ class TRP_Translation_Render{
 			    }
 		    }
 		    if ( $node->getAttribute( 'data-src' ) ) {
-			    $node->setAttribute( 'data-src', $translated_string );
+			    $node->setAttribute( 'data-src', esc_attr( $translated_string ) );
 		    }
 	    }
 
@@ -2193,13 +2209,12 @@ class TRP_Translation_Render{
                 $chunk_untranslated     = $this->trp_query->get_untranslated_strings( $chunk_originals, $language_code );
                 $chunk_update_strings   = array();
                 foreach ( $chunk_machine_strings as $original => $translated ) {
-                    if ( ! isset( $chunk_original_inserts[ $original ] ) ) {
-                        continue;
-                    }
+                    // The translation is already paid for, so save it even when the original id is missing.
+                    // Skipping it dropped the whole chunk and sent the same strings again on every page load.
                     $id = ( isset( $chunk_untranslated[ $original ] ) ) ? $chunk_untranslated[ $original ]->id : NULL;
                     $chunk_update_strings[] = array(
                         'id'          => $id,
-                        'original_id' => $chunk_original_inserts[ $original ]->id,
+                        'original_id' => isset( $chunk_original_inserts[ $original ] ) ? $chunk_original_inserts[ $original ]->id : 0,
                         'original'    => trp_sanitize_string( $original, false ),
                         'translated'  => trp_sanitize_string( $translated ),
                         'status'      => $this->trp_query->get_constant_machine_translated() );
@@ -2208,7 +2223,7 @@ class TRP_Translation_Render{
                 // skipped or fails, delete them so the strings can be retried right away
                 $chunk_saved = false;
                 if ( ! empty( $chunk_update_strings ) && apply_filters( 'trp_allow_string_saving', true, array(), $chunk_update_strings ) ) {
-                    $chunk_saved = $this->trp_query->update_strings( $chunk_update_strings, $language_code, array( 'id', 'original', 'translated', 'status', 'original_id' ) );
+                    $chunk_saved = $this->trp_query->update_strings( $chunk_update_strings, $language_code, array( 'id', 'original', 'translated', 'status', 'original_id' ), false );
                 }
                 $this->machine_translator->release_locks( $chunk_saved );
             }
@@ -2261,7 +2276,7 @@ class TRP_Translation_Render{
                         'original'    => $new_strings[$i],
                         'translated'  => trp_sanitize_string( $dictionary[$string]->translated ),
                         'status'      => $this->trp_query->get_constant_similar_translated(),
-                        'original_id' => $original_inserts[ $string ]->id) );
+                        'original_id' => isset( $original_inserts[ $string ] ) ? $original_inserts[ $string ]->id : 0 ) );
 
                     unset($new_strings[$i]);
                 }
@@ -2477,6 +2492,8 @@ class TRP_Translation_Render{
             'skip_strings_from_dynamic_translation'                => apply_filters( 'trp_skip_strings_from_dynamic_translation', array() ),
             'skip_strings_from_dynamic_translation_for_substrings' => apply_filters( 'trp_skip_strings_from_dynamic_translation_for_substrings', array( 'href' => array('amazon-adsystem', 'googleads', 'g.doubleclick') ) ),
             'duplicate_detections_allowed'                         => apply_filters( 'trp_duplicate_detections_allowed', 100 ),
+            'trp_share_dynamic_translation_requests'               => apply_filters( 'trp_share_dynamic_translation_requests', true ) ? 'yes' : 'no', // wp_localize_script turns false into ''
+            'trp_indexeddb_cache'                                  => TRP_Dynamic_Cache::config( $this->settings['default-language'], $language_to_query ),
             'trp_translate_numerals_opt'                           => isset ($this->settings["trp_advanced_settings"]["enable_numerals_translation"]) ? $this->settings["trp_advanced_settings"]["enable_numerals_translation"] : 'no',
             'trp_no_auto_translation_selectors'                    => apply_filters( 'trp_no_auto_translate_selectors', array( '[data-no-auto-translation]' ), $TRP_LANGUAGE )
 		);
@@ -2510,9 +2527,13 @@ class TRP_Translation_Render{
         $script_src     = TRP_PLUGIN_URL . 'assets/js/trp-translate-dom-changes.js';
         $trp_data       = $this->get_trp_data();
         $trp_plugin_ver = TRP_PLUGIN_VERSION;
+        $cache_script   = TRP_PLUGIN_URL . 'assets/js/trp-dynamic-cache.js';
+        $request_script = TRP_PLUGIN_URL . 'assets/js/trp-translation-requests.js';
 
-        $echo_scripts = function() use ( $script_src, $trp_data, $trp_plugin_ver ){
+        $echo_scripts = function() use ( $script_src, $trp_data, $trp_plugin_ver, $cache_script, $request_script ){
             echo '<script type="text/javascript" id="trp-dynamic-translator-js-extra"> var trp_data = ' . json_encode( $trp_data ) . ';</script>';
+            echo '<script src="' . esc_url( $cache_script ) . '?ver=' . esc_attr( $trp_plugin_ver ) . '"></script>';
+            echo '<script src="' . esc_url( $request_script ) . '?ver=' . esc_attr( $trp_plugin_ver ) . '"></script>';
             echo '<script src="' . esc_url( $script_src  ) . '?ver=' . esc_attr($trp_plugin_ver) .'" id="trp-dynamic-translator-js"></script>';
         };
 
@@ -2521,7 +2542,9 @@ class TRP_Translation_Render{
             return;
         }
 
-        wp_enqueue_script('trp-dynamic-translator', $script_src, array('jquery'), TRP_PLUGIN_VERSION, true );
+        wp_enqueue_script( 'trp-dynamic-cache', $cache_script, array(), TRP_PLUGIN_VERSION, true );
+        wp_enqueue_script( 'trp-translation-requests', $request_script, array( 'jquery', 'trp-dynamic-cache' ), TRP_PLUGIN_VERSION, true );
+        wp_enqueue_script( 'trp-dynamic-translator', $script_src, array( 'trp-translation-requests' ), TRP_PLUGIN_VERSION, true );
         wp_localize_script('trp-dynamic-translator', 'trp_data', $trp_data );
     }
 

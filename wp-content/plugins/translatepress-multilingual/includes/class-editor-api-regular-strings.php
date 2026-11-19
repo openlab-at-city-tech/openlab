@@ -158,6 +158,12 @@ class TRP_Editor_Api_Regular_Strings {
 		// languageForId = null: the response is keyed by original and carries no dictionary row ids.
 		$dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'regular', 'dynamicstrings', null );
 
+		if ( isset( $_POST['trp_cache_protocol'] ) && $_POST['trp_cache_protocol'] === '2' ) {
+			$dictionary_by_original = TRP_Dynamic_Cache::envelope(
+				$dictionary_by_original, $this->settings['default-language'], $current_language, $skip_machine_translation
+			);
+		}
+
 		echo trp_safe_json_encode( $dictionary_by_original );//phpcs:ignore
 
 		wp_die();

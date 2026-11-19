@@ -19,6 +19,17 @@ class TRP_Languages{
 	protected $editor_interface_locale;
 
     /**
+     * Drop the cached language lists.
+     *
+     * Needed after trp_advanced_settings changes within the same request, since custom
+     * languages are added to the list through the trp_wp_languages filter.
+     */
+    public function flush_cache(){
+        $this->languages    = array();
+        $this->wp_languages = null;
+    }
+
+    /**
      * Returns array of all possible languages.
      *
      * @param string $english_or_native_name    'english_name' | 'native_name'

@@ -81,7 +81,7 @@ class TRP_AI_API_Key_Check{
                     'edd_action' => 'activate_license',                  //as the license is already activated this does not do anything. We could use check_license action but it gives different results  so we can't use it consistently with the result we get from the moment we activate it
                     'license'    => $license,
                     'item_name'  => urlencode($active_pro_addon_name),   // the name of our product in EDD
-                    'url'        => home_url()
+                    'url'        => trp_get_license_site_url()
                 );
 
                 if($api_cache_bypass){
@@ -191,7 +191,7 @@ class TRP_AI_API_Key_Check{
                         'cache_bypass' => 'true',
                         'license'    => $license,
                         'item_name'  => urlencode( $active_pro_addon_name ), // the name of our product in EDD
-                        'url'        => home_url()
+                        'url'        => trp_get_license_site_url()
                     );
 
                     if( !empty( $license ) || get_option( 'trp_plugin_optin' ) == 'yes' ){
@@ -345,7 +345,7 @@ class TRP_AI_API_Key_Check{
                         'edd_action' => 'deactivate_license',
                         'license'    => $license,
                         'item_name'  => urlencode( $active_pro_addon_name ), // the name of our product in EDD
-                        'url'        => home_url()
+                        'url'        => trp_get_license_site_url()
                     );
 
                     // Call the custom API.

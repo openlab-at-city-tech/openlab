@@ -15,6 +15,15 @@ function trp_the_language_switcher(){
 }
 
 /**
+ * Site URL sent to translatepress.com and the MT API; home_url() is filtered per request (language slug, Multiple Domains).
+ *
+ * @return string
+ */
+function trp_get_license_site_url(){
+    return untrailingslashit( get_option( 'home' ) );
+}
+
+/**
  * Wrapper function for json_encode to eliminate possible UTF8 special character errors
  * @param $value
  * @return mixed|string|void
@@ -795,6 +804,27 @@ function trp_get_transient( $transient ){
         return false;
 
     return get_transient($transient);
+}
+
+/**
+ * class_exists() with a per-request cache, for checks on hot paths like home_url().
+ *
+ * A failed class_exists() reruns every registered autoloader, so negative results are cached too,
+ * but only after wp_loaded, when plugins and the theme have had the chance to define their classes.
+ *
+ * @param string $class_name
+ * @return bool
+ */
+function trp_class_exists( $class_name ) {
+    static $cache = array();
+    if ( isset( $cache[ $class_name ] ) ) {
+        return $cache[ $class_name ];
+    }
+    $exists = class_exists( $class_name );
+    if ( $exists || did_action( 'wp_loaded' ) ) {
+        $cache[ $class_name ] = $exists;
+    }
+    return $exists;
 }
 
 /**

@@ -730,7 +730,8 @@ function TRP_Advanced_Settings_Tabs() {
                 document.querySelectorAll(`.trp-settings-container-${targetClass}`);
 
             if (settingsSubmit) {
-                settingsSubmit.style.display = targetClass === 'ald_settings' && aldPopupConfigurator ? 'none' : '';
+                // The Import & Export sub-tab only links to its own page; it has nothing to save.
+                settingsSubmit.style.display = ( targetClass === 'ald_settings' && aldPopupConfigurator ) || targetClass === 'import_export' ? 'none' : '';
             }
 
             if (targetContainers.length > 0) {
