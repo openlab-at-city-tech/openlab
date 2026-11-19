@@ -202,9 +202,11 @@ class wp_xmlrpc_server extends IXR_Server {
 		 * Respect old get_option() filters left for back-compat when the 'enable_xmlrpc'
 		 * option was deprecated in 3.5.0. Use the {@see 'xmlrpc_enabled'} hook instead.
 		 */
-		$is_enabled = apply_filters( 'pre_option_enable_xmlrpc', false );
+		/** This filter is documented in wp-includes/option.php */
+		$is_enabled = apply_filters( 'pre_option_enable_xmlrpc', false, 'enable_xmlrpc', false );
 		if ( false === $is_enabled ) {
-			$is_enabled = apply_filters( 'option_enable_xmlrpc', true );
+			/** This filter is documented in wp-includes/option.php */
+			$is_enabled = apply_filters( 'option_enable_xmlrpc', true, 'enable_xmlrpc' );
 		}
 
 		/**
@@ -273,15 +275,20 @@ class wp_xmlrpc_server extends IXR_Server {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param array $args {
+	 * @param int[] $args {
 	 *     Method arguments. Note: arguments must be ordered as documented.
 	 *
 	 *     @type int $0 A number to add.
 	 *     @type int $1 A second number to add.
 	 * }
-	 * @return int Sum of the two given numbers.
+	 * @return int|IXR_Error Sum of the two given numbers.
 	 */
 	public function addTwoNumbers( $args ) {
+		if ( ! is_array( $args ) || count( $args ) !== 2 || ! is_int( $args[0] ) || ! is_int( $args[1] ) ) {
+			$this->error = new IXR_Error( 400, __( 'Invalid arguments passed to this XML-RPC method. Requires two integers.' ) );
+			return $this->error;
+		}
+
 		$number1 = $args[0];
 		$number2 = $args[1];
 		return $number1 + $number2;
@@ -302,7 +309,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$password
 	) {
 		if ( ! $this->is_enabled ) {
-			$this->error = new IXR_Error( 405, sprintf( __( 'XML-RPC services are disabled on this site.' ) ) );
+			$this->error = new IXR_Error( 405, __( 'XML-RPC services are disabled on this site.' ) );
 			return false;
 		}
 
@@ -359,7 +366,7 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * @since 1.5.2
 	 *
 	 * @param string|array $data Escape single string or array of strings.
-	 * @return string|void Returns with string is passed, alters by-reference
+	 * @return string|null Returns with string if passed, alters by-reference
 	 *                     when array is passed.
 	 */
 	public function escape( &$data ) {
@@ -374,6 +381,7 @@ class wp_xmlrpc_server extends IXR_Server {
 				$v = wp_slash( $v );
 			}
 		}
+		return null;
 	}
 
 	/**
@@ -1721,7 +1729,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		}
 
 		// Handle enclosures.
-		$enclosure = isset( $post_data['enclosure'] ) ? $post_data['enclosure'] : null;
+		$enclosure = $post_data['enclosure'] ?? null;
 		$this->add_enclosure_if_new( $post_id, $enclosure );
 
 		$this->attach_uploads( $post_id, $post_data['post_content'] );
@@ -2027,7 +2035,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$username = $args[1];
 		$password = $args[2];
-		$filter   = isset( $args[3] ) ? $args[3] : array();
+		$filter   = $args[3] ?? array();
 
 		if ( isset( $args[4] ) ) {
 			$fields = $args[4];
@@ -2248,7 +2256,9 @@ class wp_xmlrpc_server extends IXR_Server {
 		/** This action is documented in wp-includes/class-wp-xmlrpc-server.php */
 		do_action( 'xmlrpc_call', 'wp.editTerm', $args, $this );
 
-		if ( ! taxonomy_exists( $content_struct['taxonomy'] ) ) {
+		if ( ! isset( $content_struct['taxonomy'] )
+			|| ! taxonomy_exists( $content_struct['taxonomy'] )
+		) {
 			return new IXR_Error( 403, __( 'Invalid taxonomy.' ) );
 		}
 
@@ -2498,7 +2508,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$username = $args[1];
 		$password = $args[2];
 		$taxonomy = $args[3];
-		$filter   = isset( $args[4] ) ? $args[4] : array();
+		$filter   = $args[4] ?? array();
 
 		$user = $this->login( $username, $password );
 		if ( ! $user ) {
@@ -2656,7 +2666,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$username = $args[1];
 		$password = $args[2];
-		$filter   = isset( $args[3] ) ? $args[3] : array( 'public' => true );
+		$filter   = $args[3] ?? array( 'public' => true );
 
 		if ( isset( $args[4] ) ) {
 			$fields = $args[4];
@@ -2805,7 +2815,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$username = $args[1];
 		$password = $args[2];
-		$filter   = isset( $args[3] ) ? $args[3] : array();
+		$filter   = $args[3] ?? array();
 
 		if ( isset( $args[4] ) ) {
 			$fields = $args[4];
@@ -3699,7 +3709,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$username = $args[1];
 		$password = $args[2];
-		$struct   = isset( $args[3] ) ? $args[3] : array();
+		$struct   = $args[3] ?? array();
 
 		$user = $this->login( $username, $password );
 		if ( ! $user ) {
@@ -3709,11 +3719,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		/** This action is documented in wp-includes/class-wp-xmlrpc-server.php */
 		do_action( 'xmlrpc_call', 'wp.getComments', $args, $this );
 
-		if ( isset( $struct['status'] ) ) {
-			$status = $struct['status'];
-		} else {
-			$status = '';
-		}
+		$status = $struct['status'] ?? '';
 
 		$can_moderate = current_user_can( 'moderate_comments' );
 
@@ -4501,7 +4507,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$username = $args[1];
 		$password = $args[2];
-		$struct   = isset( $args[3] ) ? $args[3] : array();
+		$struct   = $args[3] ?? array();
 
 		$user = $this->login( $username, $password );
 		if ( ! $user ) {
@@ -4516,7 +4522,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		do_action( 'xmlrpc_call', 'wp.getMediaLibrary', $args, $this );
 
 		$parent_id = ( isset( $struct['parent_id'] ) ) ? absint( $struct['parent_id'] ) : '';
-		$mime_type = ( isset( $struct['mime_type'] ) ) ? $struct['mime_type'] : '';
+		$mime_type = $struct['mime_type'] ?? '';
 		$offset    = ( isset( $struct['offset'] ) ) ? absint( $struct['offset'] ) : 0;
 		$number    = ( isset( $struct['number'] ) ) ? absint( $struct['number'] ) : -1;
 
@@ -4692,7 +4698,7 @@ class wp_xmlrpc_server extends IXR_Server {
 
 		$username = $args[1];
 		$password = $args[2];
-		$filter   = isset( $args[3] ) ? $args[3] : array( 'public' => true );
+		$filter   = $args[3] ?? array( 'public' => true );
 
 		if ( isset( $args[4] ) ) {
 			$fields = $args[4];
@@ -4958,7 +4964,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$domain = $current_blog->domain;
 		$path   = $current_blog->path . 'xmlrpc.php';
 
-		$blogs = $this->wp_getUsersBlogs( $args );
+		$blogs = $this->wp_getUsersBlogs( array( $args[1], $args[2] ) );
 		if ( $blogs instanceof IXR_Error ) {
 			return $blogs;
 		}
@@ -5443,7 +5449,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$username       = $args[1];
 		$password       = $args[2];
 		$content_struct = $args[3];
-		$publish        = isset( $args[4] ) ? $args[4] : 0;
+		$publish        = $args[4] ?? 0;
 
 		$user = $this->login( $username, $password );
 		if ( ! $user ) {
@@ -5559,8 +5565,8 @@ class wp_xmlrpc_server extends IXR_Server {
 			$post_author = $content_struct['wp_author_id'];
 		}
 
-		$post_title   = isset( $content_struct['title'] ) ? $content_struct['title'] : '';
-		$post_content = isset( $content_struct['description'] ) ? $content_struct['description'] : '';
+		$post_title   = $content_struct['title'] ?? '';
+		$post_content = $content_struct['description'] ?? '';
 
 		$post_status = $publish ? 'publish' : 'draft';
 
@@ -5578,10 +5584,10 @@ class wp_xmlrpc_server extends IXR_Server {
 			}
 		}
 
-		$post_excerpt = isset( $content_struct['mt_excerpt'] ) ? $content_struct['mt_excerpt'] : '';
-		$post_more    = isset( $content_struct['mt_text_more'] ) ? $content_struct['mt_text_more'] : '';
+		$post_excerpt = $content_struct['mt_excerpt'] ?? '';
+		$post_more    = $content_struct['mt_text_more'] ?? '';
 
-		$tags_input = isset( $content_struct['mt_keywords'] ) ? $content_struct['mt_keywords'] : array();
+		$tags_input = $content_struct['mt_keywords'] ?? array();
 
 		if ( isset( $content_struct['mt_allow_comments'] ) ) {
 			if ( ! is_numeric( $content_struct['mt_allow_comments'] ) ) {
@@ -5729,7 +5735,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		}
 
 		// Handle enclosures.
-		$enclosure = isset( $content_struct['enclosure'] ) ? $content_struct['enclosure'] : null;
+		$enclosure = $content_struct['enclosure'] ?? null;
 		$this->add_enclosure_if_new( $post_id, $enclosure );
 
 		$this->attach_uploads( $post_id, $post_content );
@@ -5839,7 +5845,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$username       = $args[1];
 		$password       = $args[2];
 		$content_struct = $args[3];
-		$publish        = isset( $args[4] ) ? $args[4] : 0;
+		$publish        = $args[4] ?? 0;
 
 		$user = $this->login( $username, $password );
 		if ( ! $user ) {
@@ -6023,7 +6029,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			$post_excerpt = $content_struct['mt_excerpt'];
 		}
 
-		$post_more = isset( $content_struct['mt_text_more'] ) ? $content_struct['mt_text_more'] : '';
+		$post_more = $content_struct['mt_text_more'] ?? '';
 
 		$post_status = $publish ? 'publish' : 'draft';
 		if ( isset( $content_struct[ "{$post_type}_status" ] ) ) {
@@ -6040,7 +6046,7 @@ class wp_xmlrpc_server extends IXR_Server {
 			}
 		}
 
-		$tags_input = isset( $content_struct['mt_keywords'] ) ? $content_struct['mt_keywords'] : array();
+		$tags_input = $content_struct['mt_keywords'] ?? array();
 
 		if ( 'publish' === $post_status || 'private' === $post_status ) {
 			if ( 'page' === $post_type && ! current_user_can( 'publish_pages' ) ) {
@@ -6148,7 +6154,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		}
 
 		// Handle enclosures.
-		$enclosure = isset( $content_struct['enclosure'] ) ? $content_struct['enclosure'] : null;
+		$enclosure = $content_struct['enclosure'] ?? null;
 		$this->add_enclosure_if_new( $post_id, $enclosure );
 
 		$this->attach_uploads( $post_id, $post_content );
@@ -6502,23 +6508,32 @@ class wp_xmlrpc_server extends IXR_Server {
 	 * @since 1.5.0
 	 *
 	 * @param array $args {
-	 *     Method arguments. Note: arguments must be ordered as documented.
+	 *     Method arguments. Note: top-level arguments must be ordered as documented.
 	 *
 	 *     @type int    $0 Blog ID (unused).
 	 *     @type string $1 Username.
 	 *     @type string $2 Password.
-	 *     @type array  $3 Data.
+	 *     @type array  $3 {
+	 *         Data for the file to upload.
+	 *
+	 *         @type string $name    File name. Sanitized with sanitize_file_name().
+	 *         @type string $type    Optional. File MIME type, stored as the attachment's
+	 *                               post MIME type. Default empty string.
+	 *         @type string $bits    Optional. File contents. Default empty string.
+	 *         @type int    $post_id Optional. ID of the post to attach the file to.
+	 *                               Default 0.
+	 *     }
 	 * }
 	 * @return array|IXR_Error
 	 */
 	public function mw_newMediaObject( $args ) {
+		if ( ! $this->minimum_args( $args, 4 ) ) {
+			return $this->error;
+		}
+
 		$username = $this->escape( $args[1] );
 		$password = $this->escape( $args[2] );
 		$data     = $args[3];
-
-		$name = sanitize_file_name( $data['name'] );
-		$type = $data['type'];
-		$bits = $data['bits'];
 
 		$user = $this->login( $username, $password );
 		if ( ! $user ) {
@@ -6532,6 +6547,25 @@ class wp_xmlrpc_server extends IXR_Server {
 			$this->error = new IXR_Error( 401, __( 'Sorry, you are not allowed to upload files.' ) );
 			return $this->error;
 		}
+
+		if (
+			! is_array( $data ) ||
+			! is_string( $data['name'] ?? null ) ||
+			! is_string( $data['type'] ?? '' ) ||
+			! is_string( $data['bits'] ?? '' )
+		) {
+			return new IXR_Error( 400, __( 'Invalid attachment data.' ) );
+		}
+
+		$name = sanitize_file_name( $data['name'] );
+
+		// A name consisting only of characters the sanitizer strips leaves nothing to write to.
+		if ( '' === $name ) {
+			return new IXR_Error( 400, __( 'Invalid attachment data.' ) );
+		}
+
+		$type = $data['type'] ?? '';
+		$bits = $data['bits'] ?? '';
 
 		if ( is_multisite() && upload_is_user_over_quota( false ) ) {
 			$this->error = new IXR_Error(
@@ -7137,7 +7171,7 @@ class wp_xmlrpc_server extends IXR_Server {
 		$remote_source = preg_replace( '/<\/*(h1|h2|h3|h4|h5|h6|p|th|td|li|dt|dd|pre|caption|input|textarea|button|body)[^>]*>/', "\n\n", $remote_source );
 
 		preg_match( '|<title>([^<]*?)</title>|is', $remote_source, $matchtitle );
-		$title = isset( $matchtitle[1] ) ? $matchtitle[1] : '';
+		$title = $matchtitle[1] ?? '';
 		if ( empty( $title ) ) {
 			return $this->pingback_error( 32, __( 'A title on that page cannot be found.' ) );
 		}
