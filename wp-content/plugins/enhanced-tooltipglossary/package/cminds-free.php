@@ -160,41 +160,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         /**
-         * Authorize package AJAX requests before changing settings or sending feedback.
-         */
-        private function checkAdminAjaxRequest($nonceAction) {
-            if (!current_user_can('manage_options')) {
-                wp_die('Forbidden.', '', array('response' => 403));
-            }
-            if (!isset($_POST['cminds_nonce']) || !is_string($_POST['cminds_nonce'])) {
-                wp_die('Invalid security token.', '', array('response' => 403));
-            }
-            check_ajax_referer($nonceAction, 'cminds_nonce');
-        }
-
-        /**
-         * Scope visibility tokens to the plugin and the box being changed.
-         */
-        private function getVisibilityNonceAction($currentPlugin, $box) {
-            return 'cminds-' . $currentPlugin->getOption('plugin-short-slug') . '-' . $box . '-visibility';
-        }
-
-        private function hasVisibilityNonce($currentPlugin, $box) {
-            return current_user_can('manage_options')
-                && isset($_GET['cminds_visibility_nonce'])
-                && is_string($_GET['cminds_visibility_nonce'])
-                && wp_verify_nonce(wp_unslash($_GET['cminds_visibility_nonce']), $this->getVisibilityNonceAction($currentPlugin, $box));
-        }
-
-        private function getVisibilityUrl($currentPlugin, $box, $show) {
-            $url = remove_query_arg(array('cminds_' . $box . '_hide', 'cminds_' . $box . '_show', 'cminds_visibility_nonce'));
-            return add_query_arg(array(
-                'cminds_' . $box . ($show ? '_show' : '_hide') => 1,
-                'cminds_visibility_nonce' => wp_create_nonce($this->getVisibilityNonceAction($currentPlugin, $box)),
-            ), $url);
-        }
-
-        /**
          * Modify plugin's page action links collection.
          *
          * @author Vova Feldman (@svovaf)
@@ -253,7 +218,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
          * @since  1.1.2
          */
         function submitRegistrationEmail() {
-            $this->checkAdminAjaxRequest('cminds_register_free');
             $atts = array();
 
             if (empty($_POST['email'])) {
@@ -268,7 +232,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
          * @since  1.1.2
          */
         function submitDeregistration() {
-            $this->checkAdminAjaxRequest('cminds_register_free');
             $atts = array();
 
             $this->deregisterUser($atts);
@@ -279,7 +242,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
          * @since  1.1.2
          */
         function submitRegistrationSkip() {
-            $this->checkAdminAjaxRequest('cminds_register_free');
             if (empty($_POST)) {
                 exit;
             }
@@ -295,7 +257,11 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
          * @since  1.1.2
          */
         function submitUninstallReason() {
-            $this->checkAdminAjaxRequest('cminds_uninstall_reason');
+			
+			if(!current_user_can('manage_options')) {
+				exit;
+			}
+			
             if (empty($_POST['plugin_slug']) || empty($_POST['deactivation_reason'])) {
                 exit;
             }
@@ -1372,24 +1338,19 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function showGuide($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return '';
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
             $currentPlugin = !empty($atts['id']) ? $cmindsPluginPackage[$atts['id']] : $this;
 
             $optionName = 'cminds-' . $currentPlugin->getOption('plugin-short-slug') . '-guide-hidden';
-            if ($this->hasVisibilityNonce($currentPlugin, 'guide')) {
-                $guideHide = filter_input(INPUT_GET, 'cminds_guide_hide');
-                if ($guideHide) {
-                    update_option($optionName, 1);
-                }
-                $guideShow = filter_input(INPUT_GET, 'cminds_guide_show');
-                if ($guideShow) {
-                    update_option($optionName, 0);
-                }
+            $guideHide = filter_input(INPUT_GET, 'cminds_guide_hide');
+            if ($guideHide) {
+                update_option($optionName, 1);
+            }
+            $guideShow = filter_input(INPUT_GET, 'cminds_guide_show');
+            if ($guideShow) {
+                update_option($optionName, 0);
             }
             $guideHidden = get_option($optionName, 0);
 
@@ -1612,7 +1573,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
                 <?php else : ?>
                     <div class="cminds_guide_wrapper">
                         <div>
-                            <a class="cminds-guide-hide-button button" href="<?php echo esc_url($this->getVisibilityUrl($currentPlugin, 'guide', true)); ?>">Show Installation Guide Box</a>
+                            <a class="cminds-guide-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_guide_show' => 1), esc_url(remove_query_arg('cminds_guide_hide')))); ?>">Show Installation Guide Box</a>
                         </div>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
@@ -1627,9 +1588,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function showActivation($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return '';
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
@@ -1661,24 +1619,19 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function showUpgrade($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return '';
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
             $currentPlugin = !empty($atts['id']) ? $cmindsPluginPackage[$atts['id']] : $this;
 
             $optionName = 'cminds-' . $currentPlugin->getOption('plugin-short-slug') . '-upgrade-hidden';
-            if ($this->hasVisibilityNonce($currentPlugin, 'upgrade')) {
-                $upgradeHide = filter_input(INPUT_GET, 'cminds_upgrade_hide');
-                if ($upgradeHide) {
-                    update_option($optionName, 1);
-                }
-                $upgradeShow = filter_input(INPUT_GET, 'cminds_upgrade_show');
-                if ($upgradeShow) {
-                    update_option($optionName, 0);
-                }
+            $upgradeHide = filter_input(INPUT_GET, 'cminds_upgrade_hide');
+            if ($upgradeHide) {
+                update_option($optionName, 1);
+            }
+            $upgradeShow = filter_input(INPUT_GET, 'cminds_upgrade_show');
+            if ($upgradeShow) {
+                update_option($optionName, 0);
             }
             $upgradeHidden = get_option($optionName, 0);
             $isRegistered = $currentPlugin->isRegistered();
@@ -1983,7 +1936,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
                 <?php else : ?>
                     <div class="cminds_upgrade_wrapper">
                         <div>
-                            <a class="cminds-upgrade-hide-button button" href="<?php echo esc_url($this->getVisibilityUrl($currentPlugin, 'upgrade', true)); ?>">Why you shoud have the Premium Edition>></a>
+                            <a class="cminds-upgrade-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_upgrade_show' => 1), esc_url(remove_query_arg('cminds_upgrade_hide')))); ?>">Why you shoud have the Premium Edition>></a>
                         </div>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
@@ -2056,9 +2009,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function setWasRegistered($id = null) {
-            if (!current_user_can('manage_options')) {
-                return false;
-            }
             global $cmindsPluginPackage;
             $currentPlugin = !empty($id) ? $cmindsPluginPackage[$id] : $this;
             $optionName = 'cminds-' . $currentPlugin->getOption('plugin-short-slug') . '-was-registered';
@@ -2073,9 +2023,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
          * @return type
          */
         public function deregisterUser($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return;
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
@@ -2137,9 +2084,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function skipRegistration($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return;
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
@@ -2150,9 +2094,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function unskipRegistration($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return;
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
@@ -2171,9 +2112,6 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
          * @return type
          */
         public function registerUser($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return;
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
@@ -2236,24 +2174,19 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
         }
 
         public function showRegistration($atts = array()) {
-            if (!current_user_can('manage_options')) {
-                return '';
-            }
             global $cmindsPluginPackage;
 
             $atts = shortcode_atts(array('id' => null), $atts);
             $currentPlugin = !empty($atts['id']) ? $cmindsPluginPackage[$atts['id']] : $this;
 
             $optionName = 'cminds-' . $currentPlugin->getOption('plugin-short-slug') . '-registration-hidden';
-            if ($this->hasVisibilityNonce($currentPlugin, 'registration')) {
-                $registrationHide = filter_input(INPUT_GET, 'cminds_registration_hide');
-                if ($registrationHide) {
-                    update_option($optionName, 1);
-                }
-                $registrationShow = filter_input(INPUT_GET, 'cminds_registration_show');
-                if ($registrationShow) {
-                    delete_option($optionName);
-                }
+            $registrationHide = filter_input(INPUT_GET, 'cminds_registration_hide');
+            if ($registrationHide) {
+                update_option($optionName, 1);
+            }
+            $registrationShow = filter_input(INPUT_GET, 'cminds_registration_show');
+            if ($registrationShow) {
+                delete_option($optionName);
             }
             $registrationHidden = get_option($optionName);
 
@@ -2468,7 +2401,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
                                             ?>
                                             <input class="button button-primary" style="background-color:green;" type="submit" value="Register Your Copy" />
                                             <div class="no-registration">
-                                                <a class="cminds-registration-hide-button button" href="<?php echo esc_url($this->getVisibilityUrl($currentPlugin, 'registration', false)); ?>">I don't want to register now</a>
+                                                <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_hide' => 1), esc_url(remove_query_arg('cminds_registration_show')))); ?>">I don't want to register now</a>
                                             </div>
                                         </form>
                                     </td>
@@ -2489,7 +2422,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackageTT')) {
                 <?php else : ?>
                     <div class="cminds_registration_wrapper">
                         <div>
-                            <a class="cminds-registration-hide-button button" href="<?php echo esc_url($this->getVisibilityUrl($currentPlugin, 'registration', true)); ?>">Show registration box</a>
+                            <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_show' => 1), esc_url(remove_query_arg('cminds_registration_hide')))); ?>">Show registration box</a>
                             <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all CreativeMidns Plugins</a>
                             <a href="<?php echo $this->getStoreUrl(array('category' => 'Bundle')); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
                             <a href="<?php echo $this->getStoreUrl(array('category' => 'Add-On')); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>

@@ -1,4 +1,5 @@
 <?php
+
 class CMTT_Glossary_Index {
 
 	public static $shortcodeDisplayed = false;
@@ -1302,16 +1303,7 @@ class CMTT_Glossary_Index {
 
 		return $content;
 	}
-	
-	private static function normalizeTurkishLower($text) {
-		$text = str_replace(
-			array('I', 'İ'),
-			array('ı', 'i'),
-			$text
-		);
-		return mb_strtolower($text, 'UTF-8');
-	}
-	
+
 	/**
 	 * Detects the new letter in Glossary Index Page
 	 *
@@ -1339,8 +1331,9 @@ class CMTT_Glossary_Index {
 				$newIndexLetter = remove_accents( $newIndexLetter );
 			}
 
-			if (self::normalizeTurkishLower($newIndexLetter) !== $lastIndexLetter) {
-				$lastIndexLetter = self::normalizeTurkishLower($newIndexLetter);
+			if ( mb_strtolower( $newIndexLetter ) !== $lastIndexLetter ) {
+				$lastIndexLetter = mb_strtolower( $newIndexLetter );
+
 				return $lastIndexLetter;
 			}
 		}
@@ -2168,9 +2161,8 @@ class CMTT_Glossary_Index {
 			/*
 			 * This version doesn't support the two items with different meanings
 			 */
-			$s1 = self::normalizeTurkishLower(preg_replace('/\W/u', '', $obj1->post_title));
-			$s2 = self::normalizeTurkishLower(preg_replace('/\W/u', '', $obj2->post_title));
-
+			$s1 = mb_strtolower( preg_replace( '/\W/u', '', $obj1->post_title ) );
+			$s2 = mb_strtolower( preg_replace( '/\W/u', '', $obj2->post_title ) );
 		} else {
 			$s1 = urldecode( $obj1->post_name );
 			$s2 = urldecode( $obj2->post_name );

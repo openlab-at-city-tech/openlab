@@ -351,8 +351,7 @@
                 url: '<?php echo admin_url('admin-ajax.php'); ?>',
                 data: {
                     'action': 'cm-submit-registration-skip',
-                    'id': '<?php echo esc_attr($currentPlugin->getOption('plugin-abbrev')); ?>',
-                    'cminds_nonce': jQuery('#cminds_register_form input[name="cminds_nonce"]').val()
+                    'id': '<?php echo esc_attr($currentPlugin->getOption('plugin-abbrev')); ?>'
                 },
                 beforeSend: function () {
                 },

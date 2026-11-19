@@ -1,4 +1,5 @@
 <?php
+
 class GlossaryTooltipException extends Exception {
 
 }
@@ -507,15 +508,6 @@ class CMTT_Free {
 			$template_content = self::cmtt_glossary_parse( $template_content );
 		}
 	}
-	
-	private static function cmtt_turkish_regex($term) {
-		return strtr($term, array(
-			'İ' => '[İi]',
-			'i' => '[İi]',
-			'I' => '[Iı]',
-			'ı' => '[Iı]',
-		));
-	}
 
 	public static function cmtt_glossary_parse( $content, $force = false ) {
 		global $post, $wp_query, $replacedTerms;
@@ -749,22 +741,7 @@ class CMTT_Free {
 				foreach ( $glossarySearchStringArr as $chunk ) {
 					self::log( 'Going through $glossarySearchStringArr $chunk' );
 
-					//$glossarySearchString = '/' . ( ( $spaceSeparated ) ? '(?<=\P{L}|^)(?<!(\p{N}))' : '' ) . '(?!(<|&lt;))(' . ( ! $caseSensitive ? '(?i)' : '' ) . implode( '|', $chunk ) . ')(?!(>|&gt;))' . ( ( $spaceSeparated ) ? '(?=\P{L}|$)(?!(\p{N}))' : '' ) . '/u';
-					
-					$regexTerms = array_map(
-						array(__CLASS__, 'cmtt_turkish_regex'),
-						$chunk
-					);
-					$glossarySearchString =
-						'/'
-						. ( ( $spaceSeparated ) ? '(?<=\P{L}|^)(?<!(\p{N}))' : '' )
-						. '(?!(<|&lt;))('
-						. ( ! $caseSensitive ? '(?i)' : '' )
-						. implode('|', $regexTerms)
-						. ')(?!(>|&gt;))'
-						. ( ( $spaceSeparated ) ? '(?=\P{L}|$)(?!(\p{N}))' : '' )
-						. '/u';
-						
+					$glossarySearchString = '/' . ( ( $spaceSeparated ) ? '(?<=\P{L}|^)(?<!(\p{N}))' : '' ) . '(?!(<|&lt;))(' . ( ! $caseSensitive ? '(?i)' : '' ) . implode( '|', $chunk ) . ')(?!(>|&gt;))' . ( ( $spaceSeparated ) ? '(?=\P{L}|$)(?!(\p{N}))' : '' ) . '/u';
 					$content              = self::cmtt_str_replace( $content, $glossarySearchString );
 				}
 			}
@@ -1310,15 +1287,6 @@ class CMTT_Free {
 
 		return maybe_unserialize( $result );
 	}
-	
-	private static function normalizeTurkishLower($text) {
-		$text = str_replace(
-			array('I', 'İ'),
-			array('ı', 'i'),
-			$text
-		);
-		return mb_strtolower($text, 'UTF-8');
-	}
 
 	/**
 	 * @param string $title
@@ -1339,8 +1307,7 @@ class CMTT_Free {
 		);
 
 		if ( ! $caseSensitive ) {
-			// Turkish-aware conversion
-			return self::normalizeTurkishLower($normalizedTitle);
+			return mb_strtolower( $normalizedTitle );
 		}
 
 		return $normalizedTitle;
@@ -4697,12 +4664,7 @@ class CMTT_Free {
 
 		if ( $showResultsCount ) {
 			$resultsLabel         = __( \CM\CMTT_Settings::get( 'cmtt_index_resultsLabel', 'Results:' ), 'cm-tooltip-glossary' );
-			
-			//$foundResultsCount    = isset( $shortcodeAtts['letter'] ) ? $postCounts[ $shortcodeAtts['letter'] ] : $postCounts['all'];
-			
-			$selectedLetter = isset( $shortcodeAtts['letter'] ) && is_scalar( $shortcodeAtts['letter'] ) ? (string) $shortcodeAtts['letter'] : 'all';
-			$foundResultsCount = isset( $postCounts[ $selectedLetter ] ) ? (int) $postCounts[ $selectedLetter ] : 0;
-
+			$foundResultsCount    = isset( $shortcodeAtts['letter'] ) ? $postCounts[ $shortcodeAtts['letter'] ] : $postCounts['all'];
 			$listNavInsideContent .= '<div class="query-results-count">' . sprintf( '%s %d', $resultsLabel, $foundResultsCount ) . '</div>';
 		}
 
@@ -4755,7 +4717,7 @@ class CMTT_Free {
 		mb_internal_encoding( 'UTF-8' );
 
 		preg_match( '/\w/u', $what, $matches );
-		$letter = isset($matches[0]) ? self::normalizeTurkishLower($matches[0]) : 'al-num';
+		$letter = isset( $matches[0] ) ? mb_strtolower( $matches[0] ) : 'al-num';
 
 		if ( ! $exactly_first && preg_match( '/\d/', $letter ) ) {
 			$letter = 'al-num';
@@ -4797,34 +4759,30 @@ class CMTT_Free {
 	public static function refresh_permalinks_on_bad_404() {
 		global $wp;
 
-		// Already executed once.
-		if ( get_option( 'cmtt_free_refresh_404_permalinks_done' ) ) {
-			return;
-		}
-
 		if ( ! is_404() ) {
 			return;
 		}
 
-		if ( isset( $_GET['cm-flush'] ) ) {
+		if ( isset( $_GET['cm-flush'] ) ) { // WPCS: CSRF ok.
 			return;
 		}
 
-		$slug  = \CM\CMTT_Settings::get( 'cmtt_glossaryPermalink', 'glossary' );
-		$parts = explode( '/', $wp->request );
+		if ( false === get_transient( 'cm_refresh_404_permalinks' ) ) {
+			$slug  = \CM\CMTT_Settings::get( 'cmtt_glossaryPermalink', 'glossary' );
+			$parts = explode( '/', $wp->request );
 
-		if ( $slug !== $parts[0] ) {
-			return;
+			if ( $slug !== $parts[0] ) {
+				return;
+			}
+
+			flush_rewrite_rules( false );
+
+			set_transient( 'cm_refresh_404_permalinks', 1, HOUR_IN_SECONDS * 12 );
+
+			$redirect_url = home_url( add_query_arg( array( 'cm-flush' => 1 ), $wp->request ) );
+			wp_safe_redirect( esc_url_raw( $redirect_url ), 302 );
+			exit();
 		}
-
-		flush_rewrite_rules( false );
-
-		// Mark as completed.
-		update_option( 'cmtt_free_refresh_404_permalinks_done', 1 );
-
-		$redirect_url = home_url( add_query_arg( array( 'cm-flush' => 1 ), $wp->request ) );
-		wp_safe_redirect( esc_url_raw( $redirect_url ), 302 );
-		exit;
 	}
 
 	public static function outputLog( $content ) {
