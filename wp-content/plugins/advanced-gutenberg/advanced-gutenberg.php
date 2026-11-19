@@ -4,7 +4,7 @@
  * Plugin Name: PublishPress Blocks
  * Plugin URI: https://publishpress.com/blocks/
  * Description: PublishPress Blocks has everything you need to build professional websites with the Gutenberg editor.
- * Version: 3.7.0
+ * Version: 3.7.8
  * Author: PublishPress
  * Author URI: https://publishpress.com/
  * Text Domain: advanced-gutenberg
@@ -57,6 +57,13 @@ if (file_exists(__DIR__ . '/lib/vendor' . $includeFileRelativePath)) {
     require_once ADVANCED_GUTENBERG_LIB_VENDOR_PATH . $includeFileRelativePath;
 }
 
+$bundledTranslationsPath = '/publishpress/bundled-translations/core/include.php';
+if (file_exists(__DIR__ . '/lib/vendor' . $bundledTranslationsPath)) {
+    require_once __DIR__ . '/lib/vendor' . $bundledTranslationsPath;
+} elseif (defined('ADVANCED_GUTENBERG_LIB_VENDOR_PATH') && file_exists(ADVANCED_GUTENBERG_LIB_VENDOR_PATH . $bundledTranslationsPath)) {
+    require_once ADVANCED_GUTENBERG_LIB_VENDOR_PATH . $bundledTranslationsPath;
+}
+
 if (class_exists('PublishPressInstanceProtection\\Config')) {
     $pluginCheckerConfig             = new PublishPressInstanceProtection\Config();
     $pluginCheckerConfig->pluginSlug = 'advanced-gutenberg';
@@ -67,7 +74,7 @@ if (class_exists('PublishPressInstanceProtection\\Config')) {
 if (! defined('ADVANCED_GUTENBERG_LOADED')) {
     define('ADVANCED_GUTENBERG_LOADED', true);
     if (! defined('ADVANCED_GUTENBERG_VERSION')) {
-        define('ADVANCED_GUTENBERG_VERSION', '3.7.0');
+        define('ADVANCED_GUTENBERG_VERSION', '3.7.8');
     }
 
     if (! defined('ADVANCED_GUTENBERG_PLUGIN')) {
@@ -99,6 +106,18 @@ if (! defined('ADVANCED_GUTENBERG_LOADED')) {
     if (! defined('ADVANCED_GUTENBERG_PLUGIN_DIR_URL')) {
         define('ADVANCED_GUTENBERG_PLUGIN_DIR_URL', plugin_dir_url(__FILE__));
     }
+
+    add_action('plugins_loaded', function () {
+        if (class_exists('PublishPress\\BundledTranslations\\BundledTranslations')) {
+            $bundledTranslations = new PublishPress\BundledTranslations\BundledTranslations(
+                'advanced-gutenberg',
+                ADVANCED_GUTENBERG_BASE_PATH . '/languages',
+                ADVANCED_GUTENBERG_PLUGIN
+            );
+
+            $bundledTranslations->init();
+        }
+    }, 10);
 
     // Internal Vendor and Ask-for-Review
     if (! defined('ADVANCED_GUTENBERG_PRO_LOADED_LIB_VENDOR_PATH')) {

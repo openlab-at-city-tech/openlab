@@ -6,7 +6,10 @@ require_once(plugin_dir_path(__FILE__) . '/incl/utilities-main.php');
 require_once(plugin_dir_path(__FILE__) . '/incl/block-settings-main.php');
 require_once(plugin_dir_path(__FILE__) . '/incl/block-controls-main.php');
 require_once(plugin_dir_path(__FILE__) . '/incl/advanced-gutenberg-main.php');
+require_once(plugin_dir_path(__FILE__) . '/incl/class-frontend-accessibility.php');
+require_once(plugin_dir_path(__FILE__) . '/incl/abilities.php');
 new AdvancedGutenbergMain();
+require_once(plugin_dir_path(__FILE__) . '/incl/class-frontend-forms-accessibility.php');
 
 if (! function_exists('advg_language_domain_init')) {
     /**
@@ -19,12 +22,6 @@ if (! function_exists('advg_language_domain_init')) {
         $domain = 'advanced-gutenberg';
 
         load_plugin_textdomain($domain, false, dirname(plugin_basename(__FILE__)) . '/languages');
-
-        wp_set_script_translations(
-            'editor',
-            $domain,
-            plugin_dir_path(__FILE__) . 'languages'
-        );
     }
 }
 add_action('init', 'advg_language_domain_init', 0);
@@ -101,37 +98,32 @@ if (! function_exists('advgb_some_specific_updates')) {
             );
 
             if (! empty($profiles)) {
+                update_meta_cache('post', wp_list_pluck($profiles, 'ID'));
+
                 // Let's extract the user roles associated to Block Access profiles (we can't get all the user roles with regular WP way)
                 $user_role_accesses = array();
                 foreach ($profiles as $profile) {
                     $postID               = $profile->ID;
-                    $user_role_accesses[] = get_post_meta($postID, 'roles_access', true);
+                    $profile_role_access  = get_post_meta($postID, 'roles_access', true);
+
+                    if (is_array($profile_role_access)) {
+                        $user_role_accesses[] = $profile_role_access;
+                    }
                 }
 
-                $user_role_accesses = call_user_func_array('array_merge', $user_role_accesses);
-                $user_role_accesses = array_unique($user_role_accesses);
+                $user_role_accesses = empty($user_role_accesses) ? array() : call_user_func_array('array_merge', $user_role_accesses);
+                $user_role_accesses = array_unique(array_filter($user_role_accesses));
 
                 // Find the most recent profile of each user role
                 $blocks_by_role_access = array();
                 foreach ($user_role_accesses as $user_role_access) {
-                    $profiles = $wpdb->get_results(
-                        'SELECT * FROM ' . $wpdb->prefix . 'posts
-                        WHERE post_type="advgb_profiles" AND post_status="publish" ORDER BY post_date_gmt DESC'
-                    );
+                    foreach ($profiles as $profile) {
+                        $postID       = $profile->ID;
+                        $roles_access = get_post_meta($postID, 'roles_access', true);
 
-                    if (! empty($profiles)) {
-                        $centinel[ $user_role_access ] = false; // A boolean to get the first profile (newest) and skip the rest
-                        foreach ($profiles as $profile) {
-                            if ($centinel[ $user_role_access ] === false) {
-                                $postID       = $profile->ID;
-                                $roles_access = get_post_meta($postID, 'roles_access', true);
-                                $blocks       = get_post_meta($postID, 'blocks', true);
-
-                                if (in_array($user_role_access, $roles_access)) {
-                                    $blocks_by_role_access[ $user_role_access ] = $blocks;
-                                    $centinel[ $user_role_access ]              = true;
-                                }
-                            }
+                        if (is_array($roles_access) && in_array($user_role_access, $roles_access, true)) {
+                            $blocks_by_role_access[ $user_role_access ] = get_post_meta($postID, 'blocks', true);
+                            break;
                         }
                     }
                 }
@@ -141,6 +133,20 @@ if (! function_exists('advgb_some_specific_updates')) {
                     update_option('advgb_blocks_user_roles', $blocks_by_role_access, false);
                 }
             }
+        }
+
+        // Existing sites: keep legacy blocks and gallery lightbox enabled unless explicitly saved otherwise.
+        if (get_option('advgb_legacy_settings_migrated', false) === false && get_option('advgb_settings') !== false) {
+            AdvancedGutenbergMain::upgradeLegacySettings();
+            update_option('advgb_legacy_settings_migrated', 1, false);
+        }
+
+        if (
+            $advgb_current_version !== '0.0.0'
+            && version_compare($advgb_current_version, '3.7.6', 'lt')
+            && get_option('advgb_settings') !== false
+        ) {
+            AdvancedGutenbergMain::fillMissingLegacyBlocksState(true);
         }
 
         // Set version if needed

@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
         // Add lightbox for images with Link to: Media file
         if(item.find('a[href$=".jpg"], a[href$=".png"], a[href$=".gif"], a[href$=".webp"]').length) {
 
-            item.colorbox({
+            var settings = {
                 title: function () {
                     if (parseInt(advgb.imageCaption)) {
                         var imgCap = $(this).find('figcaption').text() || $(this).find('img').attr('alt');
@@ -44,7 +44,10 @@ jQuery(document).ready(function ($) {
                         .attr('alt', $(this).find('img').attr('alt'))
                         .attr('title', $(this).find('img').attr('title'));
                 }
-            });
+            };
+
+            // Return focus to the gallery link on close and label the dialog.
+            item.colorbox(window.advgbA11y ? window.advgbA11y.withColorbox(settings, 'image') : settings);
             galGroup++;
         }
     });

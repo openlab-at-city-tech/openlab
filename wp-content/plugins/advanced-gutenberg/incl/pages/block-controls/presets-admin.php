@@ -9,7 +9,7 @@
                     <div class="advgb-spinner">
                         <div class="advgb-spinner-circle"></div>
                     </div>
-                    <p><?php _e('Loading presets...', 'advanced-gutenberg'); ?></p>
+                    <p><?php esc_html_e('Loading presets...', 'advanced-gutenberg'); ?></p>
                 </div>
             </div>
         </div>

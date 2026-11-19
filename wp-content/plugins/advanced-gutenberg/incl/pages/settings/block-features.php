@@ -124,7 +124,7 @@ $setting_last_saved_role = $this->getOptionSetting('advgb_settings', 'setting_la
                 name="save_settings_block_features"
         >
                <?php
-                esc_html_e('Save Image Settings', 'advanced-gutenberg') ?>
+                esc_html_e('Save Block Features Settings', 'advanced-gutenberg') ?>
         </button>
     </div>
 </form>

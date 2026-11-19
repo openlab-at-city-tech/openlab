@@ -30,6 +30,89 @@ jQuery(document).ready(function ($) {
     $(".advgb-tab a:not(.ui-tabs-anchor)").unbind("click");
     $(".advgb-tabs-block").tabs();
 
+    var a11yUid = 0;
+
+    function getTabControl($tab) {
+        return $tab.children('button, a').first();
+    }
+
+    /**
+     * Runtime ARIA wiring (saved markup is left untouched):
+     * - the content (.advgb-tab-body) is the tabpanel, labelled by its tab;
+     * - the stacked mobile header becomes a disclosure button for that panel.
+     */
+    function setupTabsA11y($wrapper) {
+        var tabs = $wrapper.find('.advgb-tab');
+        var bodyContainers = $wrapper.find('.advgb-tab-body-container');
+
+        a11yUid++;
+        $wrapper.find('ul.advgb-tabs-panel').first().attr('role', 'tablist');
+
+        tabs.each(function (index) {
+            var $tab = $(this);
+            var $control = getTabControl($tab);
+            var $container = bodyContainers.eq(index);
+            var $header = $container.children('.advgb-tab-body-header');
+            var $body = $container.children('.advgb-tab-body');
+
+            if (!$control.length || !$body.length) {
+                return;
+            }
+
+            var controlId = $control.attr('id');
+            if (!controlId) {
+                controlId = 'advgb-tab-a11y-' + a11yUid + '-' + index;
+                $control.attr('id', controlId);
+            }
+
+            var bodyId = $body.attr('id');
+            if (!bodyId) {
+                bodyId = ($header.attr('id') || 'advgb-tab-panel-a11y-' + a11yUid + '-' + index) + '-content';
+                $body.attr('id', bodyId);
+            }
+
+            $tab.attr('role', 'presentation');
+            $control.attr({
+                role: 'tab',
+                'aria-controls': bodyId
+            });
+
+            $body.attr({
+                role: 'tabpanel',
+                'aria-labelledby': controlId,
+                tabindex: '0'
+            });
+
+            if ($header.length) {
+                $header
+                    .removeAttr('aria-labelledby')
+                    .attr({
+                        role: 'button',
+                        tabindex: '0',
+                        'aria-controls': bodyId,
+                        'aria-expanded': 'false'
+                    });
+            }
+        });
+    }
+
+    function syncTabsA11y($wrapper, index) {
+        var tabs = $wrapper.find('.advgb-tab');
+        var bodyHeaders = $wrapper.find('.advgb-tab-body-header');
+
+        tabs.each(function (i) {
+            var $control = getTabControl($(this));
+            $control.attr({
+                'aria-selected': i === index ? 'true' : 'false',
+                tabindex: i === index ? '0' : '-1'
+            });
+        });
+
+        bodyHeaders.each(function (i) {
+            $(this).attr('aria-expanded', i === index ? 'true' : 'false');
+        });
+    }
+
     function activateTab($wrapper, index) {
         var tabs = $wrapper.find('.advgb-tab');
         var bodyContainers = $wrapper.find('.advgb-tab-body-container');
@@ -42,6 +125,8 @@ jQuery(document).ready(function ($) {
         tabs.eq(index).addClass('advgb-tab-active ui-tabs-active ui-state-active');
         bodyContainers.eq(index).find('.advgb-tab-body').show();
         bodyHeaders.eq(index).addClass('header-active');
+
+        syncTabsA11y($wrapper, index);
 
         var $targetPanel = bodyContainers.eq(index);
         if ($targetPanel.find('.advgb-images-slider-block').length && $.fn.slick) {
@@ -89,9 +174,9 @@ jQuery(document).ready(function ($) {
 
                     // If this is a mobile header and it's hidden (on desktop view)
                     if ($target.is(':hidden')) {
-                        // Find the corresponding desktop tab button using aria-controls
-                        var panelId = $target.attr('id') || $target.closest('[id]').attr('id');
-                        $scrollTarget = $wrapper.find('[aria-controls="' + panelId + '"]');
+                        // Find the corresponding desktop tab button by position
+                        // (aria-controls now points at the tab content, not the header)
+                        $scrollTarget = getTabControl($wrapper.find('.advgb-tab').eq(index));
                     } else {
                         $scrollTarget = $target;
                     }
@@ -143,6 +228,62 @@ jQuery(document).ready(function ($) {
             activateTab($wrapper, $wrapper.find('.advgb-tab').index($currentTab));
         });
 
+        // Keyboard support for the tab list (Left/Right, Up/Down when vertical, Home/End)
+        var isVertical = /advgb-tab-vert-/.test($wrapper.attr('class') || '');
+        tabs.on('keydown', 'a, button', function(event) {
+            var $controls = tabs.map(function () { return getTabControl($(this)).get(0); });
+            var current = tabs.index($(this).closest('.advgb-tab'));
+            var last = tabs.length - 1;
+            var next = null;
+
+            switch (event.key) {
+                case 'ArrowRight':
+                case 'Right':
+                    next = current >= last ? 0 : current + 1;
+                    break;
+                case 'ArrowLeft':
+                case 'Left':
+                    next = current <= 0 ? last : current - 1;
+                    break;
+                case 'ArrowDown':
+                case 'Down':
+                    if (isVertical) {
+                        next = current >= last ? 0 : current + 1;
+                    }
+                    break;
+                case 'ArrowUp':
+                case 'Up':
+                    if (isVertical) {
+                        next = current <= 0 ? last : current - 1;
+                    }
+                    break;
+                case 'Home':
+                    next = 0;
+                    break;
+                case 'End':
+                    next = last;
+                    break;
+                case ' ':
+                case 'Spacebar':
+                    // Links (legacy markup) are not activated by Space natively.
+                    if ($(this).is('a')) {
+                        event.preventDefault();
+                        activateTab($wrapper, current);
+                    }
+                    return;
+            }
+
+            if (next === null) {
+                return;
+            }
+
+            event.preventDefault();
+            activateTab($wrapper, next);
+            if ($controls[next]) {
+                $controls[next].focus();
+            }
+        });
+
         // Header click handler (mobile)
         bodyHeaders.on('click', function() {
             var $header = $(this);
@@ -151,8 +292,20 @@ jQuery(document).ready(function ($) {
             $header[0].scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
 
+        // Mobile headers act as buttons: Enter/Space activate them
+        bodyHeaders.on('keydown', function(event) {
+            if (event.target !== this) {
+                return;
+            }
+            if (event.key === 'Enter' || event.key === ' ' || event.key === 'Spacebar') {
+                event.preventDefault();
+                $(this).trigger('click');
+            }
+        });
+
         // Initialize
         if (tabs.length) {
+            setupTabsA11y($wrapper);
             activateTab($wrapper, activeTab);
             bodyHeaders.css({
                 backgroundColor: tabStyles.bgColor,

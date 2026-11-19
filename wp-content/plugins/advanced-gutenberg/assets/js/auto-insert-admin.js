@@ -5,7 +5,35 @@
         initAutoInsertAdmin();
     });
 
+    /**
+     * Copy the label of each enhanced <select> (label[for], aria-label or aria-labelledby)
+     * to the select2 search input and selection, which are what keyboard users focus.
+     */
+    function labelSelect2SearchFields() {
+        $('.advg-insert-taxonomy-select2, .advg-insert-author-select2, .advg-insert-block-select2, .advg-insert-post-select2').each(function () {
+            var select = $(this);
+            var name = select.attr('aria-label') || '';
+            var id = select.attr('id');
+
+            if (!name && id) {
+                name = $.trim($('label[for="' + id + '"]').first().text());
+            }
+            if (!name && select.attr('aria-labelledby')) {
+                name = $.trim($('#' + select.attr('aria-labelledby')).text());
+            }
+            if (!name) {
+                return;
+            }
+
+            var container = select.next('.pp_select2-container, .select2-container');
+            container.find('.pp_select2-search__field, .select2-search__field').attr('aria-label', name);
+            container.find('.pp_select2-selection, .select2-selection').attr('aria-label', name);
+        });
+    }
+
     function initAutoInsertAdmin() {
+        setSelect2Translations();
+
         // taxonomy select2
         $('.advg-insert-taxonomy-select2').pp_select2({
             placeholder: $(this).data('placeholder'),
@@ -195,6 +223,11 @@
         // other select2
         $('.advgb-editor-aib-select2').pp_select2();
 
+        // Give select2 search fields the accessible name of their <select>
+        labelSelect2SearchFields();
+        $('.advg-insert-taxonomy-select2, .advg-insert-author-select2, .advg-insert-block-select2, .advg-insert-post-select2')
+            .on('change pp_select2:open pp_select2:close', labelSelect2SearchFields);
+
         // remove select2 title
         $('#advgb_block_id').on('pp_select2:open', function() {
             $('.pp_select2-results__option').removeAttr('title');
@@ -212,6 +245,57 @@
         // Initialize on page load
         toggleTaxonomyVisibility();
         togglePositionOptions();
+    }
+
+    function setSelect2Translations() {
+        if (! $.fn.pp_select2 || ! advgbAutoInsertI18n.select2) {
+            return;
+        }
+
+        var strings = advgbAutoInsertI18n.select2;
+
+        $.fn.pp_select2.defaults.set('language', {
+            errorLoading: function () {
+                return strings.errorLoading;
+            },
+            inputTooLong: function (args) {
+                var count = args.input.length - args.maximum;
+
+                return formatCountString(strings.inputTooLong, count);
+            },
+            inputTooShort: function (args) {
+                var count = args.minimum - args.input.length;
+
+                return formatCountString(strings.inputTooShort, count);
+            },
+            loadingMore: function () {
+                return strings.loadingMore;
+            },
+            maximumSelected: function (args) {
+                return formatCountString(strings.maximumSelected, args.maximum);
+            },
+            noResults: function () {
+                return strings.noResults;
+            },
+            searching: function () {
+                return strings.searching;
+            },
+            removeAllItems: function () {
+                return strings.removeAllItems;
+            },
+            removeItem: function () {
+                return strings.removeItem;
+            },
+            search: function () {
+                return strings.search;
+            }
+        });
+    }
+
+    function formatCountString(stringSet, count) {
+        var template = count === 1 ? stringSet.one : stringSet.other;
+
+        return template.replace('%s', count);
     }
 
     function toggleTaxonomyVisibility() {

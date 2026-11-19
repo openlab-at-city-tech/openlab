@@ -35,7 +35,7 @@ $contact_form_email_receiver = $this->getOptionSetting(
     wp_nonce_field('advgb_email_config_nonce', 'advgb_email_config_nonce_field') ?>
     <p>
         <?php
-        _e(
+        esc_html_e(
             'These email settings apply to messages sent through PublishPress Contact form block.',
             'advanced-gutenberg'
         )
@@ -44,11 +44,12 @@ $contact_form_email_receiver = $this->getOptionSetting(
     <table class="form-table">
         <tr>
             <th scope="row">
+                <label for="contact_form_sender_name">
                 <?php
-                _e('Sender name', 'advanced-gutenberg') ?>
+                esc_html_e('Sender name', 'advanced-gutenberg') ?>
+                </label>
             </th>
             <td>
-                <label>
                     <input type="text"
                            name="contact_form_sender_name"
                            id="contact_form_sender_name"
@@ -56,16 +57,16 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            value="<?php
                             echo esc_attr($contact_form_sender_name) ?>"
                     />
-                </label>
             </td>
         </tr>
         <tr>
             <th scope="row">
+                <label for="contact_form_sender_email">
                 <?php
-                _e('Sender email', 'advanced-gutenberg') ?>
+                esc_html_e('Sender email', 'advanced-gutenberg') ?>
+                </label>
             </th>
             <td>
-                <label>
                     <input type="email"
                            name="contact_form_sender_email"
                            id="contact_form_sender_email"
@@ -73,16 +74,16 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            value="<?php
                             echo esc_attr($contact_form_sender_email) ?>"
                     />
-                </label>
             </td>
         </tr>
         <tr>
             <th scope="row">
+                <label for="contact_form_email_title">
                 <?php
-                _e('Email title', 'advanced-gutenberg') ?>
+                esc_html_e('Email title', 'advanced-gutenberg') ?>
+                </label>
             </th>
             <td>
-                <label>
                     <input type="text"
                            name="contact_form_email_title"
                            id="contact_form_email_title"
@@ -90,16 +91,16 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            value="<?php
                             echo esc_attr($contact_form_email_title) ?>"
                     />
-                </label>
             </td>
         </tr>
         <tr>
             <th scope="row">
+                <label for="contact_form_email_receiver">
                 <?php
-                _e('Email receiver', 'advanced-gutenberg') ?>
+                esc_html_e('Email receiver', 'advanced-gutenberg') ?>
+                </label>
             </th>
             <td>
-                <label>
                     <input type="text"
                            name="contact_form_email_receiver"
                            id="contact_form_email_receiver"
@@ -107,7 +108,6 @@ $contact_form_email_receiver = $this->getOptionSetting(
                            value="<?php
                             echo esc_attr($contact_form_email_receiver) ?>"
                     />
-                </label>
             </td>
         </tr>
     </table>
