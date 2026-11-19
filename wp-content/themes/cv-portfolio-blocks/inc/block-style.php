@@ -2,7 +2,7 @@
 /**
  * Block Styles
  *
- * @link https://developer.wordpress.org/reference/functions/register_block_style/
+ * @link https://developer.WordPress.org/reference/functions/register_block_style/
  *
  * @package WordPress
  * @subpackage cv-portfolio-blocks

@@ -2,8 +2,8 @@
 Contributors: wpradiant
 Tags: grid-layout, one-column, two-columns, right-sidebar, left-sidebar, custom-colors, sticky-post, threaded-comments, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, rtl-language-support, news, portfolio, three-columns, four-columns, footer-widgets, education
 Requires at least: 6.0
-Tested up to: 6.9
-Stable tag: 1.4.2
+Tested up to: 7.1
+Stable tag: 1.4.4
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -12,9 +12,17 @@ CV Portfolio Blocks is like a stylish digital resume for people who want to show
 
 == Description ==
 
-CV Portfolio Blocks is a sleek and modern digital resume theme designed for job seekers, freelancers, consultants, and professionals looking to showcase their skills, experience, and work online. Ideal for creating a professional online presence, it supports sections for portfolios, CVs, resumes, career highlights, personal branding, networking, consultancy services, employment history, talent showcases, education, work experience, and expertise. With a clean, responsive design, CV Portfolio Blocks ensures your content is visually appealing and easily accessible across desktops, tablets, and mobile devices. The theme allows customization of colors, fonts, and layouts to reflect your personal style while offering intuitive sections for “About Me,” “Work Experience,” portfolios, and contact information. Visitors can quickly view your professional achievements, download your CV, or reach out via integrated contact forms, making it ideal for networking and career growth. Its user-friendly interface ensures even non-technical users can build a polished, professional website efficiently.
+CV Portfolio Blocks is a sleek and modern portfolio  theme designed as a professional cv and digital resume solution for job seekers, freelancers, consultants, and professionals who want to present their skills, experience, and work in a minimal and impactful way. Ideal for building a strong personal branding presence, it supports dedicated sections for portfolios, CVs, resumes, career highlights, consultancy services, employment history, education, expertise, and project showcases. With a clean, responsive, and mobile-friendly layout, CV Portfolio Blocks ensures your content remains professional and easily accessible across desktops, tablets, and smartphones. The theme allows full customization of colors, fonts, and layouts so users can create a unique yet minimal design that reflects their personality and career identity. It includes intuitive sections such as “About Me,” work experience timelines, portfolio galleries, and contact forms, enabling visitors to quickly explore achievements, download CVs, or get in touch for opportunities. Fully user-friendly and optimized for performance, it helps even non-technical users build a polished, modern, and professional online presence for career growth and networking.
 
 == Changelog ==
+
+= Version 1.4.4 =
+- Version Updated.
+
+= Version 1.4.3 =
+- Updated Description.
+- Added Support button in notice.
+- Added Support button in getstarted.
 
 = Version 1.4.2 =
 - Resolved css error.

@@ -447,11 +447,20 @@
         border-color: #135e96;
         color: #fff;
     }
-    .notice-success #go-pro-button{
-        background-color: #ef7213;
-        border-color: #ef7213;
-        color: #fff;
-    }
+.notice-success #go-pro-button{
+    background-color: #ef7213;
+    border-color: #ef7213;
+    color: #fff;
+}
+#form-button{
+    background: green;
+    box-shadow: 0px 3px 6px #00000029;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0 auto;
+    border: none;
+    color: #FFFFFF;
+}
     .notice-success #bundle-button{
         background-color: #5440d4;
         border-color: #5440d4;

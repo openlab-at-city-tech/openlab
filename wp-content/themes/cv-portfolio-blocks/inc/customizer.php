@@ -16,7 +16,7 @@ function cv_portfolio_blocks_customize_register( $wp_customize ) {
 	$wp_customize->add_section( new CV_Portfolio_Blocks_Upsell_Section($wp_customize,'upsell_section',array(
 		'title'            => __( 'CV Portfolio Blocks', 'cv-portfolio-blocks' ),
 		'button_text'      => __( 'Upgrade Pro', 'cv-portfolio-blocks' ),
-		'url'              => 'https://www.wpradiant.net/products/cv-wordpress-theme',
+		'url'              => 'https://www.wpradiant.net/products/cv-WordPress-theme',
 		'priority'         => 0,
 	)));
 }

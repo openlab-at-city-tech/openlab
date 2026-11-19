@@ -1,8 +1,8 @@
 <?php
 
-define('CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW',__('https://www.wpradiant.net/products/cv-wordpress-theme','cv-portfolio-blocks'));
+define('CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW',__('https://www.wpradiant.net/products/cv-WordPress-theme','cv-portfolio-blocks'));
 
-define('CV_PORTFOLIO_BLOCKS_BUY_BUNDLE',__('https://www.wpradiant.net/products/wordpress-theme-bundle','cv-portfolio-blocks'));
+define('CV_PORTFOLIO_BLOCKS_BUY_BUNDLE',__('https://www.wpradiant.net/products/WordPress-theme-bundle','cv-portfolio-blocks'));
 
 // Upsell
 if ( class_exists( 'WP_Customize_Section' ) ) {
@@ -90,7 +90,9 @@ function cv_portfolio_blocks_admin_notice() {
 
 	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW ); ?>" target="_blank" id="go-pro-button" class="button admin-button buy-now-button"><?php echo __('Buy Now ', 'cv-portfolio-blocks'); ?></a>
 
-	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_BUY_BUNDLE ); ?>" target="_blank" id="bundle-button" class="button admin-button bundle-button"><?php echo __('Get Bundle', 'cv-portfolio-blocks'); ?></a>
+	                        <a href="<?php echo esc_url( 'https://forms.gle/RhBK4jcPYRm1z38N6' ); ?>" target="_blank" rel="noopener noreferrer" id="form-button" class="button admin-button installation-form-button"><?php echo esc_html__( 'Free Theme Installation Support', 'cv-portfolio-blocks' ); ?></a>
+	                        
+							<a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_BUY_BUNDLE ); ?>" target="_blank" id="bundle-button" class="button admin-button bundle-button"><?php echo __('Get Bundle', 'cv-portfolio-blocks'); ?></a>
 
 	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_DOC_URL ); ?>" target="_blank" id="doc-button" class="button admin-button bundle-button"><?php echo __('Free Documentation', 'cv-portfolio-blocks'); ?></a>
 	            	</div>
