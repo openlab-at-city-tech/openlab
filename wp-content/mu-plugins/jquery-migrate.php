@@ -7,7 +7,8 @@ const CUTOFF_TIMESTAMP = 1628776800; // 2021-08-12 14:00:00
 add_action(
 	'plugins_loaded',
 	function() {
-		if ( bp_is_root_blog() ) {
+		// On multisite, `wp core update-db` and `wp core is-installed` load no plugins.
+		if ( ! function_exists( 'bp_is_root_blog' ) || bp_is_root_blog() ) {
 			return;
 		}
 
