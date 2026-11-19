@@ -10,7 +10,7 @@ su_add_shortcode(
 		'group' => 'content',
 		'atts' => array(
 			'data' => array(
-				'default' => '',
+				'default' => 'tel:+55555555555',
 				'name' => __('Data', 'shortcodes-ultimate'),
 				'desc' => sprintf(
 					// translators: %1$s and %2$s will be replaced with %CURRENT_URL% and %PERMALINK% tokens respectively
@@ -98,7 +98,7 @@ function su_shortcode_qrcode($atts = null, $content = null)
 
 	$atts = shortcode_atts(
 		array(
-			'data' => '',
+			'data' => 'tel:+55555555555',
 			'title' => '',
 			'size' => 200,
 			'margin' => 0,
@@ -117,14 +117,16 @@ function su_shortcode_qrcode($atts = null, $content = null)
 		return su_error_message('QR code', __('please specify the data', 'shortcodes-ultimate'));
 	}
 
+	$atts['data'] = sanitize_text_field($atts['data']);
+	$atts['data'] = su_do_attribute($atts['data'], true);
+
+	// Substitute URLs after shortcode processing so request data cannot execute shortcodes.
 	$atts['data'] = str_replace(
 		array('%CURRENT_URL%', '%PERMALINK%'),
 		array(su_get_current_url(), get_permalink()),
 		$atts['data']
 	);
 
-	$atts['data'] = sanitize_text_field($atts['data']);
-	$atts['data'] = su_do_attribute($atts['data'], true);
 	// https://core.trac.wordpress.org/ticket/11311
 	$atts['data'] = str_replace('&amp;', '&', $atts['data']);
 

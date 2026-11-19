@@ -3,7 +3,12 @@
 <div class="su-admin-settings wrap">
 
 	<?php if ( ! su_fs()->can_use_premium_code() && ! su_has_active_addons() ) : ?>
-		<?php su_partial( 'admin/partials/notices/pro.php', array( 'page' => 'settings' ) ); ?>
+		<?php // The original PRO notice is temporarily hidden. Change false to true to restore it. ?>
+		<?php if ( false ) : ?>
+			<?php su_partial( 'admin/partials/notices/pro.php', array( 'page' => 'settings' ) ); ?>
+		<?php endif; ?>
+
+		<?php su_partial( 'admin/partials/notices/vova-blocks.php' ); ?>
 	<?php endif; ?>
 
 	<h1 class="su-admin-settings-page-title">

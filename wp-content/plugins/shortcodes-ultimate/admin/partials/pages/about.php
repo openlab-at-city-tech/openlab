@@ -3,7 +3,12 @@
 <div class="su-admin-about-wrap wrap">
 
 	<?php if ( ! su_fs()->can_use_premium_code() && ! su_has_active_addons() ) : ?>
-		<?php su_partial( 'admin/partials/notices/pro.php', array( 'page' => 'about' ) ); ?>
+		<?php // The original PRO notice is temporarily hidden. Change false to true to restore it. ?>
+		<?php if ( false ) : ?>
+			<?php su_partial( 'admin/partials/notices/pro.php', array( 'page' => 'about' ) ); ?>
+		<?php endif; ?>
+
+		<?php su_partial( 'admin/partials/notices/vova-blocks.php' ); ?>
 	<?php endif; ?>
 
 	<div class="su-admin-about">
@@ -25,7 +30,7 @@
 					<svg clip-rule="evenodd" fill-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path fill="currentcolor" d="m16 0c8.831 0 16 7.169 16 16s-7.169 16-16 16-16-7.169-16-16 7.169-16 16-16zm-4 20.5c0 .501.273.962.712 1.203s.974.224 1.397-.045c2.049-1.304 5.128-3.263 7.072-4.5.396-.252.635-.689.635-1.158s-.239-.906-.635-1.158c-1.944-1.237-5.023-3.196-7.072-4.5-.423-.269-.958-.286-1.397-.045s-.712.702-.712 1.203z"/></svg>
 					<span><?php esc_html_e( 'See the plugin in action', 'shortcodes-ultimate' ); ?></span>
 				</button>
-				<iframe class="su-admin-about-getting-started-video-iframe su-admin-u-hidden" id="su-admin-about-getting-started-video-iframe" src="https://player.vimeo.com/video/507942335?color=0073D7&title=0&byline=0&portrait=0&dnt=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+				<iframe class="su-admin-about-getting-started-video-iframe su-admin-u-hidden" id="su-admin-about-getting-started-video-iframe" width="560" height="315" src="https://www.youtube.com/embed/74j34_QjvJk?si=-zE5mbMHbezJGQCh&vq=hd1080" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 			</div>
 		</div>
 

@@ -2,13 +2,13 @@
 
 <div class="notice notice-info shortcodes-ultimate-notice-rate">
 
-	<?php echo get_avatar( 'ano.vladimir@gmail.com', 60, '', __( 'Vladimir Anokhin', 'shortcodes-ultimate' ) ); ?>
+	<?php echo get_avatar( 'ano.vladimir@gmail.com', 60, '', __( 'Vova', 'shortcodes-ultimate' ) ); ?>
 
 	<div class="shortcodes-ultimate-notice-rate-content">
 
 		<div class="shortcodes-ultimate-notice-rate-content-text">
 			<p><?php esc_html_e( 'Hello', 'shortcodes-ultimate' ); ?>,</p>
-			<p><?php esc_html_e( 'my name is Vova Anokhin. I am the developer of the Shortcodes Ultimate plugin.<br>If you like this plugin, please write a few words about it at wordpress.org or twitter. Your opinion will help other people.', 'shortcodes-ultimate' ); ?></p>
+			<p><?php echo wp_kses( __( 'my name is Vova. I am the developer of the Shortcodes Ultimate plugin.<br>If you like this plugin, please write a few words about it at wordpress.org or twitter. Your opinion will help other people.', 'shortcodes-ultimate' ), array( 'br' => array() ) ); ?></p>
 			<p><?php esc_html_e( 'Thank you!', 'shortcodes-ultimate' ); ?></p>
 		</div>
 

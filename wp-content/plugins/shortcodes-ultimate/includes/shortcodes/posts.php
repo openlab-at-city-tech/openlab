@@ -7,7 +7,7 @@ su_add_shortcode(
 		'image'    => su_get_plugin_url() . 'admin/images/shortcodes/posts.svg',
 		'name'     => __( 'Posts', 'shortcodes-ultimate' ),
 		'type'     => 'single',
-		'group'    => 'other',
+		'group'    => 'content',
 		'article'  => 'https://getshortcodes.com/docs/posts/',
 		'atts'     => array(
 			'template'            => array(
@@ -209,6 +209,11 @@ su_add_shortcode(
 			'shortcodes-ultimate'
 		),
 		'icon'     => 'th-list',
+		'generator_cta' => sprintf(
+			'<span>%1$s</span><br><button type="button" class="button" onclick="document.querySelector(\'[data-shortcode=posts_grid]\').click(); return false;">%2$s &rarr;</button>',
+			__( 'This shortcode now has an enhanced version with significantly more customization options and powerful features, giving you much greater flexibility to create exactly the look and functionality you need.', 'shortcodes-ultimate' ),
+			__( 'Posts Grid', 'shortcodes-ultimate' )
+		),
 	)
 );
 

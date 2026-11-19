@@ -234,10 +234,7 @@ function su_shortcode_tooltip( $atts = null, $content = null ) {
 		'{{Z_INDEX}}'       => intval( $atts['z_index'] ),
 	);
 
-	return str_replace(
-		array_keys( $template_data ),
-		array_values( $template_data ),
-		$template
-	);
+	// Do not replace placeholders inside values already inserted into the template.
+	return strtr( $template, $template_data );
 
 }

@@ -60,6 +60,11 @@ function su_shortcode_lightbox($atts = null, $content = null)
 		'lightbox'
 	);
 
+	// Never expose Magnific Popup's AJAX mode to shortcode authors.
+	if ( ! in_array( $atts['type'], array( 'iframe', 'image', 'inline' ), true ) ) {
+		return su_error_message('Lightbox', __('please specify correct content type', 'shortcodes-ultimate'));
+	}
+
 	if ( !$atts['src'] ) {
 		return su_error_message('Lightbox', __('please specify correct source', 'shortcodes-ultimate'));
 	}

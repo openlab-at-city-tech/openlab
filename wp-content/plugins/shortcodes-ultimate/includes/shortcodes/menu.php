@@ -36,13 +36,15 @@ function su_shortcode_menu( $atts = null, $content = null ) {
 		$atts,
 		'menu'
 	);
+	// Escape percent signs in custom classes before WordPress formats items_wrap with sprintf().
+	$class  = str_replace( '%', '%%', su_get_css_class( $atts ) );
 	$return = wp_nav_menu(
 		array(
 			'echo'        => false,
 			'menu'        => $atts['name'],
 			'container'   => false,
 			'fallback_cb' => 'su_shortcode_menu_fallback',
-			'items_wrap'  => '<ul id="%1$s" class="%2$s' . su_get_css_class( $atts ) . '">%3$s</ul>',
+			'items_wrap'  => '<ul id="%1$s" class="%2$s' . $class . '">%3$s</ul>',
 		)
 	);
 	return ( $atts['name'] ) ? $return : false;
