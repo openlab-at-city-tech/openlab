@@ -1,19 +1,16 @@
 === Pager Widget ===
 Contributors: figureone
-Tags: pager, navigation, next, back, previous, menu, widget
-Tested up to: 6.2
-Stable tag: trunk
+Tags: pager, navigation, next, back, widget
+Tested up to: 7.0
+Stable tag: 1.8.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Prints "Parent | Previous | Next" links to navigate between pages at the same level in the page
-hierarchy (and up to the parent page).
+Prints "Parent | Previous | Next" links to navigate between pages at the same level in the page hierarchy (and up to the parent page).
 
 == Description ==
 
-Description: Widget that provides "Parent | Previous | Next" buttons to navigate between pages at the same
-hierarchy level (and up to the parent page). You can modify the settings to choose the words you want to
-use. To enable, first activate the plugin, then add the widget to a sidebar in the Widgets settings page.
+Description: Widget that provides "Parent | Previous | Next" buttons to navigate between pages at the same hierarchy level (and up to the parent page). You can modify the settings to choose the words you want to use. To enable, first activate the plugin, then add the widget to a sidebar in the Widgets settings page.
 
 View or contribute to the plugin source on github: [https://github.com/uhm-coe/pager-widget](https://github.com/uhm-coe/pager-widget)
 
@@ -29,6 +26,13 @@ View or contribute to the plugin source on github: [https://github.com/uhm-coe/p
 1. The Pager Widget added to the page bottom widget area.
 
 == Changelog ==
+
+= 1.8.5 =
+* Tested up to WordPress 7.0.
+
+= 1.8.4 =
+* Tested up to WordPress 6.9.
+* Enable plugin release confirmations (security).
 
 = 1.8.3 =
 * Fix log warnings about undefined sortStoryModeAlphabetically.
