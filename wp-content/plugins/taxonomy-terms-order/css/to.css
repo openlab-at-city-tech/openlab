@@ -40,11 +40,9 @@ h2.subtitle {font-size: 15px; font-weight: bold; padding: 20px 0 10px 0}
 .wp-list-taxonomy td, .wp-list-taxonomy th {    border-style: solid;    border-width: 1px 0;}
 .wp-list-taxonomy * {    word-wrap: break-word;}
 
-#cpt_info_box {padding: 0 10px; border: 1px dashed #6aadcc; background-color: #FFF; margin-top: 10px;
--webkit-box-shadow: 1px 1px 7px rgba(50, 50, 50, 0.17);
--moz-box-shadow:    1px 1px 7px rgba(50, 50, 50, 0.17);
-box-shadow:         1px 1px 7px rgba(50, 50, 50, 0.17);}
+#cpt_info_box {padding: 0 10px; border: 1px dashed #6aadcc; background-color: #FFF; margin-top: 10px;-webkit-box-shadow: 1px 1px 7px rgba(50, 50, 50, 0.17);-moz-box-shadow:    1px 1px 7px rgba(50, 50, 50, 0.17);box-shadow:         1px 1px 7px rgba(50, 50, 50, 0.17);}
 #cpt_info_box a {text-decoration: none}
+#cpt_info_box a img {padding: 10px;  background-color: #f0f0f0;  border-radius: 15px;}
 #cpt_info_box #donate_form {float: right;    padding: 10px 0 17px;    text-align: center;    width: 100%;}
 #p_right {float: right; background-color:#f5f5f5; border: 1px dashed #6aadcc; padding: 0px 10px; margin-top: 10px}
 .p_s_item {float: right; padding: 0px 5px; margin-top: 10px; margin-bottom: 5px; }

@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, categories sort
 Requires at least: 2.8
-Tested up to: 6.9
-Stable tag: 1.9.5
+Tested up to: 7.1.4
+Stable tag: 2.1
 
 Drag-and-drop ordering for Categories & any taxonomy (hierarchically) using a Drag and Drop Sortable JavaScript capability.
 
@@ -75,6 +75,30 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 Consider upgrading to our advanced version of this plugin at a very resonable price <a target="_blank" href="http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order Order</a>
 
 == Change Log ==
+
+= 2.1 =
+ - Improved the get_available_menu_locations(), for the plugin to create Taxonomy Order sub-menu on custom registered top menus.
+ - Process the options form earlier, to avoid the menu changes not reflecting in the just loaded page ( on options save ).
+ - WordPress 7.1.4 compatibility check and tag update 
+
+= 2.0 =
+ - Validate the AJAX handler against the current user’s capabilities to ensure that the saved data can only be submitted by users with the appropriate permissions.
+ - WordPress 7.1 compatibility check and tag update 
+
+= 1.9.9.1 =
+ - Fix: Wrong comparison operator for numeric / string. 
+
+= 1.9.9 =
+ - Fix: Uncaught Error: Call to undefined function is_plugin_active() 
+
+= 1.9.8 =
+ - XStore Core - compatibility file, add a Term Order option for the orderby argument, on the Brands widget. 
+ - Fix: Wrong comparison when AutoSort / AdminSort is active.
+
+= 1.9.7 =
+ - Load the required CSS and JavaScript assets, only in the plugin screens ( sorting and options area ).
+ - If admin rest route and AdminSort is active, apply the customized terms order. 
+ - WordPress 7.0 compatibility check and tag update.
 
 = 1.9.5 =
  - Add a Settings link for the plugin in the Plugins area to make it easier for users to access and get started.
