@@ -57,4 +57,3 @@ class WPFURIS_Product_Menu {
 	}
 }
 add_action( 'admin_menu' , array( 'WPFURIS_Product_Menu', 'create_menu' ) );
-?>

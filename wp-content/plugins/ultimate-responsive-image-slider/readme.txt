@@ -1,11 +1,11 @@
 === Ultimate Responsive Image Slider ===
-Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkhan007, sharikkhan007, zishlife, FARAZFRANK
+Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkhan007, sharikkhan007, zishlife
 Author: FARAZFRANK
 Tags: slider, image slider, responsive slider, photo gallery, carousel
-Requires at least: 4.0
-Tested up to: 6.8
+Requires at least: 4.9
+Tested up to: 7.1
 Requires PHP: 7.0
-Stable tag: 3.5.19
+Stable tag: 3.5.20
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: ultimate-responsive-image-slider
@@ -23,80 +23,88 @@ Create stunning responsive sliders in minutes. Drag-and-drop builder, unlimited 
 
 Trusted by **1.5+ million downloads** and rated **4.5 stars** by 246+ users, Ultimate Slider is the go-to solution for WordPress users who want professional results without the complexity.
 
-### 🚀 Why 100,000+ Websites Choose Ultimate Slider
+### Why 100,000+ Websites Choose Ultimate Slider
 
-**Perfect for:**
-✓ **E-commerce Stores** - Showcase products with eye-catching image carousels
-✓ **Photographers & Artists** - Display portfolios in stunning photo galleries
-✓ **Business Websites** - Create professional hero banners and promotional sliders
-✓ **Bloggers** - Highlight featured posts with engaging image sliders
-✓ **Real Estate** - Present property listings with beautiful image galleries
-✓ **Agencies** - Impress clients with modern, responsive sliders
+*Perfect for:*
+**E-commerce Stores** - Showcase products with eye-catching image carousels
+**Photographers & Artists** - Display portfolios in stunning photo galleries
+**Business Websites** - Create professional hero banners and promotional sliders
+**Bloggers** - Highlight featured posts with engaging image sliders
+**Real Estate** - Present property listings with beautiful image galleries
+**Agencies** - Impress clients with modern, responsive sliders
 
-### ⚡ Key Features That Make Ultimate Slider Stand Out
+### Key Features That Make Ultimate Slider Stand Out
 
-**🎨 Easy to Use - No Coding Required**
-- **Drag-and-Drop Builder** - Reorder slides effortlessly with intuitive interface
-- **WordPress Media Library Integration** - Upload images directly from your media library
-- **One-Click Shortcode** - Copy and paste shortcode anywhere on your site
-- **Live Preview** - See changes in real-time before publishing
-- **Beginner-Friendly** - Get started in under 5 minutes with our video tutorial
+*Easy to Use - No Coding Required*
+**Drag-and-Drop Builder** - Reorder slides effortlessly with an intuitive interface
+**WordPress Media Library Integration** - Upload images directly from your media library
+**One-Click Shortcode** - Copy and paste shortcode anywhere on your site
+**Live Preview** - See changes in real-time before publishing
+**Beginner-Friendly** - Get started in under 5 minutes with our video tutorial
 
-**📱 100% Responsive & Mobile-Optimized**
-- Automatically adapts to all screen sizes (desktop, tablet, mobile)
-- Touch-enabled swipe navigation for mobile devices
-- Retina-ready for crystal-clear images on high-resolution displays
-- Optimized for Core Web Vitals and page speed
+**100% Responsive & Mobile-Optimized**
 
-**🎯 Unlimited Creative Freedom**
-- **Unlimited Sliders** - Create as many sliders as you need
-- **Unlimited Slides** - Add unlimited images to each slider
-- **Custom Dimensions** - Set custom width and height for any layout
-- **Flexible Placement** - Use in posts, pages, widgets, or theme templates
+Automatically adapts to all screen sizes (desktop, tablet, mobile)
+Touch-enabled swipe navigation for mobile devices
+Retina-ready for crystal-clear images on high-resolution displays
+Optimized for Core Web Vitals and page speed
 
-**⚙️ Powerful Customization Options**
-- **Transition Effects** - Choose between Fade or Slide animations
-- **Auto-Play Control** - Enable/disable automatic slideshow
-- **Adjustable Speed** - Control slide transition timing (1-60 seconds)
-- **Navigation Styles** - Arrows, bullets, thumbnails, or combination
-- **Thumbnail Navigation** - Display clickable thumbnail previews
-- **Custom Colors** - Customize navigation colors to match your brand
-- **Font Options** - Choose from multiple font families
-- **Slide Ordering** - Display slides in ascending or descending order
+**Unlimited Creative Freedom**
 
-**🎬 Advanced Slide Features**
-- **Image Titles & Descriptions** - Add text overlays to slides
-- **Alt Text Support** - Improve SEO and accessibility
-- **Custom Links** - Make slides clickable (Pro version)
-- **Rich Text Editor** - Format descriptions with advanced styling
-- **Lazy Loading** - Optimize performance with lazy image loading
+**Unlimited Sliders** - Create as many sliders as you need
+**Unlimited Slides** - Add unlimited images to each slider
+**Custom Dimensions** - Set custom width and height for any layout
+**Flexible Placement** - Use in posts, pages, widgets, or theme templates
 
-**🔧 Developer-Friendly**
-- Clean, semantic HTML5 code
-- Custom CSS support for advanced styling
-- PHP shortcode for theme integration: `<?php echo do_shortcode('[URIS id=123]'); ?>`
-- Widget support for sidebar sliders
-- Translation-ready with .pot file included
+**Powerful Customization Options**
 
-**🌍 Multilingual & Translation Ready**
+**Transition Effects** - Choose between Fade or Slide animations
+**Auto-Play Control** - Enable/disable automatic slideshow
+**Adjustable Speed** - Control slide transition timing (1-60 seconds)
+**Navigation Styles** - Arrows, bullets, thumbnails, or combination
+**Thumbnail Navigation** - Display clickable thumbnail previews
+**Custom Colors** - Customize navigation colors to match your brand
+**Font Options** - Choose from multiple font families
+**Slide Ordering** - Display slides in ascending or descending order
+
+**Advanced Slide Features**
+
+**Image Titles & Descriptions** - Add text overlays to slides
+**Alt Text Support** - Improve SEO and accessibility
+**Custom Links** - Make slides clickable (Pro version)
+**Rich Text Editor** - Format descriptions with advanced styling
+**Lazy Loading** - Optimize performance with lazy image loading
+
+**Developer-Friendly**
+
+Clean, semantic HTML5 code
+Custom CSS support for advanced styling
+PHP shortcode for theme integration: `<?php echo do_shortcode('[URIS id=123]'); ?>`
+Widget support for sidebar sliders
+Translation-ready with .pot file included
+
+**Multilingual & Translation Ready**
+
 Available in 15+ languages including:
 Arabic, Chinese, Dutch, Finnish, French, German, Hindi, Hungarian, Indonesian, Italian, Japanese, Polish, Portuguese, Russian, Spanish
 *Easily translate to any language using .pot file*
 
-**⚡ Performance Optimized**
-- Lightweight code (minimal impact on page load speed)
-- Optimized for Google Core Web Vitals
-- Lazy loading support for faster initial page load
-- Clean, efficient JavaScript and CSS
-- No jQuery conflicts with other plugins
+**Performance Optimized**
 
-**🔒 Secure & Well-Maintained**
-- Regular security updates and vulnerability patches
-- Compatible with latest WordPress versions
-- Follows WordPress coding standards
-- Active support and development
+Lightweight code (minimal impact on page load speed)
+Optimized for Google Core Web Vitals
+Lazy loading support for faster initial page load
+Clean, efficient JavaScript and CSS
+No jQuery conflicts with other plugins
 
-### 🎯 Perfect Use Cases
+**Secure & Well-Maintained**
+
+Regular security updates and vulnerability patches
+Compatible with the latest WordPress versions
+Follows WordPress coding standards
+Active support and development
+
+### Perfect Use Cases
 
 **1. Hero Banners & Headers**
 Create stunning full-width hero sliders that grab attention and showcase your best content above the fold.
@@ -116,63 +124,67 @@ Perfect for showing transformations, renovations, or progress with side-by-side 
 **6. Featured Content**
 Highlight your best blog posts, news, or announcements in a rotating slider.
 
-### 📊 How to Create Your First Slider in 3 Easy Steps
+### How to Create Your First Slider in 3 Easy Steps
 
 **Step 1:** Install and activate Ultimate Slider
 **Step 2:** Go to "Ultimate Slider" in your WordPress dashboard, create a new slider, and upload images
 **Step 3:** Copy the shortcode `[URIS id=123]` and paste it into any page, post, or widget
 
-That's it! Your beautiful responsive slider is live.
+*That's it! Your beautiful responsive slider is live.*
 
-### 🎁 Free vs Pro Version
+### Free vs Pro Version
 
 **Free Version Includes:**
-✓ Unlimited sliders and slides
-✓ Responsive design
-✓ Drag-and-drop interface
-✓ 2 transition effects (Fade & Slide)
-✓ Navigation arrows and bullets
-✓ Thumbnail navigation
-✓ Auto-play with adjustable speed
-✓ Custom dimensions
-✓ Image titles and descriptions
-✓ Color customization
-✓ SEO-friendly alt text
+- Unlimited sliders and slides
+- Responsive design
+- Drag-and-drop interface
+- 2 transition effects (Fade & Slide)
+- Navigation arrows and bullets
+- Thumbnail navigation
+- Auto-play with adjustable speed
+- Custom dimensions
+- Image titles and descriptions
+- Color customization
+- SEO-friendly alt text
 
 **[Upgrade to Pro](http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro/) for Premium Features:**
-✓ **5 Elegant Design Layouts** - Choose from multiple professional templates
-✓ **Advanced Transition Effects** - 10+ stunning animation styles
-✓ **Clickable Slides** - Add custom links to any slide
-✓ **2 Lightbox Styles** - Open images in beautiful lightbox popups
-✓ **500+ Google Fonts** - Complete typography control
-✓ **Advanced Slide Ordering** - Multiple sorting options
-✓ **Priority Support** - Get help from our expert team
-✓ **Regular Updates** - New features added frequently
 
-[View Pro Demo](http://wpfrank.com/demo/ultimate-responsive-image-slider-pro/) | [Upgrade to Pro](http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro/)
+**5 Elegant Design Layouts** - Choose from multiple professional templates
+**Advanced Transition Effects** - 10+ stunning animation styles
+**Clickable Slides** - Add custom links to any slide
+**2 Lightbox Styles** - Open images in beautiful lightbox popups
+**500+ Google Fonts** - Complete typography control
+**Advanced Slide Ordering** - Multiple sorting options
+**Priority Support** - Get help from our expert team
+**Regular Updates** - New features added frequently
 
-### 💬 What Users Are Saying
+**[View Pro Demo](http://wpfrank.com/demo/ultimate-responsive-image-slider-pro/)** | **[Upgrade to Pro](http://wpfrank.com/account/signup/ultimate-responsive-image-slider-pro/)**
 
-> "The easiest slider plugin I've ever used. Works perfectly out of the box!" - ⭐⭐⭐⭐⭐
+### What Users Are Saying
 
-> "Lightweight and fast. Doesn't slow down my website like other slider plugins." - ⭐⭐⭐⭐⭐
+*"The easiest slider plugin I've ever used. Works perfectly out of the box!"*
+*- ⭐⭐⭐⭐⭐*
 
-> "Great support team! They helped me customize the slider exactly how I wanted." - ⭐⭐⭐⭐⭐
+*"Lightweight and fast. Doesn't slow down my website like other slider plugins."*
+*- ⭐⭐⭐⭐⭐*
 
-### 🆘 Need Help?
+*"Great support team! They helped me customize the slider exactly how I wanted."*
+*- ⭐⭐⭐⭐⭐*
+
+### Need Help?
 
 - **[Documentation](http://wpfrank.com/)** - Comprehensive guides and tutorials
 - **[Video Tutorial](https://www.youtube.com/watch?v=PzaAXzy21U4)** - Step-by-step video walkthrough
 - **[Support Forum](http://wordpress.org/support/plugin/ultimate-responsive-image-slider)** - Get help from our community
 - **[Contact Us](http://wpfrank.com/)** - Direct support for Pro users
 
-### 🔥 Get Started Today!
+### Get Started Today!
 
 Join thousands of satisfied users who have transformed their websites with Ultimate Slider. Download now and create your first stunning slider in minutes!
 
-### 🌟 Language Translation Contributors
+### Language Translation Contributors
 
-Hindi by Faraz Khan
+Hindi by [Faraz Khan](https://profiles.wordpress.org/farazfrank/)
 Spanish by [Kane Martin](https://profiles.wordpress.org/kuka7466/)
 
 *Want to contribute a translation? Contact us through the support forum!*
@@ -206,13 +218,13 @@ Use this PHP code in your theme files:
 == Frequently Asked Questions ==
 
 = How do I add a slider to my website page? =
-Simply copy the slider shortcode `[URIS id=123]` (replace 123 with your slider ID) and paste it into any page, post, or widget where you want the slider to appear. You can also use the shortcode block in Gutenberg editor.
+Simply copy the slider shortcode `[URIS id=123]` (replace 123 with your slider ID) and paste it into any page, post, or widget where you want the slider to appear. You can also use the shortcode block in the Gutenberg editor.
 
 = Is this slider plugin responsive? =
-Yes! Ultimate Slider is 100% responsive and mobile-friendly. It automatically adapts to all screen sizes including desktop, tablet, and mobile devices. The slider also supports touch-enabled swipe navigation for mobile users.
+Yes! Ultimate Slider is 100% responsive and mobile-friendly. It automatically adapts to all screen sizes, including desktop, tablet, and mobile devices. The slider also supports touch-enabled swipe navigation for mobile users.
 
 = Can I add unlimited slides to a slider? =
-Absolutely! You can add as many image slides as you want to each slider. There are no limitations on the number of slides in the free version.
+Absolutely! You can add as many image slides as you want to each slider. The free version has no limit on the number of slides.
 
 = Can I create multiple sliders? =
 Yes! You can create unlimited sliders with different settings and use them on different pages or posts throughout your website.
@@ -220,8 +232,28 @@ Yes! You can create unlimited sliders with different settings and use them on di
 = Will this plugin work with my WordPress theme? =
 Yes, Ultimate Slider is compatible with all WordPress themes that follow WordPress coding standards. It works seamlessly with popular themes and page builders like Elementor, Divi, Beaver Builder, and Gutenberg.
 
+= Is this plugin compatible with top WordPress themes? =
+Yes! Ultimate Responsive Image Slider is 100% compatible and tested with popular WordPress themes (including WordPress default Twenty-series themes). It runs smoothly without CSS or layout conflicts across:
+1. Astra
+2. OceanWP
+3. GeneratePress
+4. Kadence
+5. Neve
+6. Hello Elementor
+7. Divi
+8. Avada
+9. Blocksy
+10. Sydney
+11. Flatsome
+12. Hestia
+13. ColorMag
+14. Enfold
+15. Zakra
+
+Whether your theme is a lightweight block theme, multipurpose builder theme, or WooCommerce storefront, the slider conforms cleanly to your page containers and layout widths.
+
 = Is the plugin compatible with page builders? =
-Yes! Ultimate Slider works perfectly with all major page builders including:
+Yes! Ultimate Slider works perfectly with all major page builders, including:
 - Elementor (use shortcode widget)
 - Gutenberg (use shortcode block)
 - Divi Builder
@@ -262,7 +294,7 @@ Go to your slider settings and choose between "Fade" or "Slide" transition effec
 Clickable slides with custom links are available in the Pro version. This feature allows you to link each slide to any URL, making it perfect for promotional banners and call-to-action sliders.
 
 = Does the plugin support lazy loading? =
-Yes! Ultimate Slider includes lazy loading support to optimize performance and improve page load times. Note: Lazy loading is not supported by Safari browser.
+Yes! Ultimate Slider includes lazy loading support to optimize performance and improve page load times. Note: Lazy loading is not supported by the Safari browser.
 
 = Is the plugin SEO-friendly? =
 Yes! Ultimate Slider is built with SEO best practices:
@@ -276,9 +308,9 @@ Yes! Ultimate Slider is built with SEO best practices:
 The current version supports image sliders only. For video slider functionality, please check the Pro version or contact support for future updates.
 
 = How do I translate the plugin to my language? =
-Ultimate Slider is translation-ready and comes with a .pot file. You can use plugins like Loco Translate or WPML to translate it to any language. The plugin is already available in 15+ languages including Arabic, Chinese, Dutch, Finnish, French, German, Hindi, Hungarian, Indonesian, Italian, Japanese, Polish, Portuguese, Russian, and Spanish.
+Ultimate Slider is translation-ready and comes with a .pot file. You can use plugins like Loco Translate or WPML to translate it to any language. The plugin is already available in 15+ languages, including Arabic, Chinese, Dutch, Finnish, French, German, Hindi, Hungarian, Indonesian, Italian, Japanese, Polish, Portuguese, Russian, and Spanish.
 
-= What's the difference between free and Pro version? =
+= What's the difference between the free and Pro version? =
 The free version includes all essential features for creating beautiful sliders. The Pro version adds:
 - 5 elegant design layouts
 - Advanced transition effects
@@ -307,10 +339,20 @@ Visit our [upgrade page](http://wpfrank.com/account/signup/ultimate-responsive-i
 6. **Slider with Text Overlay** - Add compelling captions, titles, or descriptions directly on your slides for better storytelling
 7. **Carousel with Thumbnail Navigation** - Navigate through slides using clickable thumbnail previews for enhanced user experience
 8. **Intuitive Image Uploader** - Easily upload and manage images via WordPress Media Library with drag-and-drop functionality
-9. **Comprehensive Settings Options** - Customize every aspect of your sliders including transitions, speed, colors, and navigation styles
+9. **Comprehensive Settings Options** - Customize every aspect of your sliders, including transitions, speed, colors, and navigation styles
 10. **Easy Shortcode Generation** - Copy shortcodes directly from the dashboard and paste anywhere on your site
 
 == Changelog ==
+
+= 3.5.20 =
+* Enhancement: Added seamless database version tracking and upgrade migration hooks for future updates.
+* Fix: Resolved Slide Title and Description overlapping issue with dynamic flexbox stacking.
+* Fix: Resolved bullets pagination gap, alignment, and hover styling.
+* Fix: Enforced crisp square slide borders.
+* Fix: Eliminated theme layout and container width conflicts with native slider loading.
+* Fix: Corrected title contrast visibility and color picker defaults.
+* Compatibility: Fully backward compatible with existing v3.5.19 sliders.
+* Release date: October 28, 2026
 
 = 3.5.19 =
 **Security Update**: Fixed all plugin check errors and warnings
@@ -358,7 +400,7 @@ Visit our [upgrade page](http://wpfrank.com/account/signup/ultimate-responsive-i
 
 = 3.5.13 =
 * Added lazy loading tag for slide image optimization (improves page speed)
-* Note: Lazy loading not supported by Safari browser
+* Note: Lazy loading is not supported by the Safari browser
 * Added 7 new language translations:
   - Arabic (ar)
   - Chinese (zh_CN)
@@ -389,6 +431,9 @@ For the complete changelog of earlier versions, please visit our [website](http:
 
 == Upgrade Notice ==
 
+= 3.5.20 =
+Important update: Title/description layout overlap fix, bullet navigation styling improvements, and theme layout conflict resolution. 100% backward compatible.
+
 = 3.5.19 =
 Major README optimization update with enhanced descriptions, comprehensive FAQ, and improved SEO. Recommended for better plugin visibility.
 
@@ -416,7 +461,7 @@ Security update: Fixes WPScan vulnerability. Please update as soon as possible.
 
 **Why Choose Ultimate Slider?**
 
-With over 1.5 million downloads and a 4.5-star rating, Ultimate Slider has become the trusted choice for WordPress users worldwide. Whether you're a beginner or an experienced developer, our plugin offers the perfect balance of simplicity and power.
+With over 1.5 million downloads and a 4.5-star rating, Ultimate Slider is a trusted choice for WordPress users worldwide. Whether you're a beginner or an experienced developer, our plugin offers the perfect balance of simplicity and power.
 
 **Key Advantages:**
 - No coding skills required
@@ -480,4 +525,3 @@ If you love Ultimate Slider, please [leave us a 5-star review](https://wordpress
 If you encounter any issues or have suggestions, please don't hesitate to contact us through our [support forum](http://wordpress.org/support/plugin/ultimate-responsive-image-slider). We're here to help!
 
 **Thank you for choosing Ultimate Slider!**
-

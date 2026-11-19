@@ -16,7 +16,7 @@ $uris_gallery_settings = get_post_meta( $uris_post_id, $uris_gallery_settings_ke
 if(isset($uris_gallery_settings['WRIS_L3_Slide_Title']))
 	$WRIS_L3_Slide_Title				= $uris_gallery_settings['WRIS_L3_Slide_Title'];
 else
-	$WRIS_L3_Slide_Title				= 1;
+	$WRIS_L3_Slide_Title				= 0;
 
 if(isset($uris_gallery_settings['WRIS_L3_Show_Slide_Title']))
 	$WRIS_L3_Show_Slide_Title			= $uris_gallery_settings['WRIS_L3_Show_Slide_Title'];
@@ -141,7 +141,7 @@ else
 if(isset($uris_gallery_settings['WRIS_L3_Desc_BgColor']))
 	$WRIS_L3_Desc_BgColor				= $uris_gallery_settings['WRIS_L3_Desc_BgColor'];
 else
-	$WRIS_L3_Desc_BgColor				= "#00000";
+	$WRIS_L3_Desc_BgColor				= "#000000";
 
 if(isset($uris_gallery_settings['WRIS_L3_Navigation_Color']))
 	$WRIS_L3_Navigation_Color			= $uris_gallery_settings['WRIS_L3_Navigation_Color'];
@@ -231,7 +231,7 @@ jQuery(document).ready(function(){
 		<tr id="L3">
 			<th scope="row"><label><?php esc_html_e('Display Slider Post Title', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
-				<?php if(!isset($WRIS_L3_Slide_Title)) $WRIS_L3_Slide_Title = 1; ?>
+				<?php if(!isset($WRIS_L3_Slide_Title)) $WRIS_L3_Slide_Title = 0; ?>
 				<input type="radio" name="wl-l3-slide-title" value="1" <?php if($WRIS_L3_Slide_Title == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
 				<input type="radio" name="wl-l3-slide-title" value="0" <?php if($WRIS_L3_Slide_Title == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
